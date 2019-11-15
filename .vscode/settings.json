@@ -1,0 +1,32 @@
+{
+  "editor.formatOnSave": true,
+  "editor.detectIndentation": false,
+  "editor.trimAutoWhitespace": true,
+  "editor.insertSpaces": true,
+  "editor.tabSize": 2,
+
+  "eslint.enable": true,
+  "eslint.workingDirectories": [{ "mode": "auto" }], // infer working directory based on .eslintrc/package.json location
+
+  "files.trimTrailingWhitespace": true,
+  "files.watcherExclude": {
+    "**/.git/objects/**": true,
+    "**/.git/subtree-cache/**": true
+  },
+
+  "javascript.preferences.quoteStyle": "single",
+
+  "json.format.enable": false,
+
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+
+  "prettier.proseWrap": "always"
+}
