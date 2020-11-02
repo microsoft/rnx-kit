@@ -23,5 +23,8 @@
       "packages/**",
       "scripts"
     ]
+  },
+  "beachball": {
+    "disallowedChangeTypes": ["major"]
   }
 }
