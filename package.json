@@ -25,6 +25,16 @@
     ]
   },
   "beachball": {
-    "disallowedChangeTypes": ["major"]
+    "disallowedChangeTypes": [
+      "major"
+    ]
+  },
+  "lage": {
+    "npmClient": "yarn",
+    "pipeline": {
+      "build": [
+        "^build"
+      ]
+    }
   }
 }
