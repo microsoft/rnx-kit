@@ -1,0 +1,20 @@
+{
+  "name": "@rnx-kit/cli",
+  "version": "0.1.1",
+  "description": "Command line interface and APIs for rnx-kit tooling",
+  "main": "lib-commonjs/index.js",
+  "module": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "bin": {
+    "rnx-kit": "./lib/cli.js"
+  },
+  "scripts": {
+    "build": "rnx-kit-scripts build"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "rnx-kit-scripts": "0.1.1"
+  },
+  "author": "",
+  "license": "MIT"
+}
