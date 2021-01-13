@@ -16,7 +16,7 @@
     "update-api": "echo no api to update"
   },
   "devDependencies": {
-    "just-scripts": "^1.2.5",
-    "typescript": "^4.0.5"
+    "just-scripts": "^1.2.6",
+    "typescript": "^4.1.3"
   }
 }

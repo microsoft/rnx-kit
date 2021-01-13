@@ -1,7 +1,7 @@
 {
-  "name": "@rnx-kit/cli",
+  "name": "@rnx-kit/tools",
   "version": "0.1.1",
-  "description": "Command line interface and APIs for rnx-kit tooling",
+  "description": "Common tooling for the react-native-sdk",
   "main": "lib-commonjs/index.js",
   "module": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -11,7 +11,9 @@
   "scripts": {
     "build": "rnx-kit-scripts build"
   },
-  "dependencies": {},
+  "dependencies": {
+    "workspace-tools": "^0.10.2"
+  },
   "devDependencies": {
     "rnx-kit-scripts": "0.1.1"
   },
