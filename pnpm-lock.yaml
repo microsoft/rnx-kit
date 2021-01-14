@@ -10,10 +10,16 @@ importers:
     specifiers: {}
   packages/tools:
     dependencies:
+      fs: registry.npmjs.org/fs/0.0.1-security
+      path: registry.npmjs.org/path/0.12.7
       workspace-tools: registry.npmjs.org/workspace-tools/0.10.2
     devDependencies:
+      '@types/node': registry.npmjs.org/@types/node/14.14.20
       rnx-kit-scripts: 'link:../../scripts'
     specifiers:
+      '@types/node': ^14.14.20
+      fs: ^0.0.1-security
+      path: ^0.12.7
       rnx-kit-scripts: 0.1.1
       workspace-tools: ^0.10.2
   scripts:
@@ -476,6 +482,14 @@ packages:
       registry: 'https://registry.yarnpkg.com/'
       tarball: 'https://registry.npmjs.org/@types/node/-/node-10.17.46.tgz'
     version: 10.17.46
+  registry.npmjs.org/@types/node/14.14.20:
+    dev: true
+    name: '@types/node'
+    resolution:
+      integrity: sha512-Y93R97Ouif9JEOWPIUyU+eyIdyRqQR0I8Ez1dzku4hDx34NWh4HbtIc3WNzwB1Y9ULvNGeu5B8h8bVL5cAk4/A==
+      registry: 'https://registry.yarnpkg.com/'
+      tarball: 'https://registry.npmjs.org/@types/node/-/node-14.14.20.tgz'
+    version: 14.14.20
   registry.npmjs.org/@types/node/14.14.9:
     name: '@types/node'
     resolution:
@@ -2018,6 +2032,14 @@ packages:
       registry: 'https://registry.yarnpkg.com/'
       tarball: 'https://registry.npmjs.org/fs.realpath/-/fs.realpath-1.0.0.tgz'
     version: 1.0.0
+  registry.npmjs.org/fs/0.0.1-security:
+    dev: false
+    name: fs
+    resolution:
+      integrity: sha1-invTcYa23d84E/I4WLV+yq9eQdQ=
+      registry: 'https://registry.yarnpkg.com/'
+      tarball: 'https://registry.npmjs.org/fs/-/fs-0.0.1-security.tgz'
+    version: 0.0.1-security
   registry.npmjs.org/fsevents/2.1.3:
     dev: true
     engines:
@@ -2335,6 +2357,14 @@ packages:
       registry: 'https://registry.yarnpkg.com/'
       tarball: 'https://registry.npmjs.org/inflight/-/inflight-1.0.6.tgz'
     version: 1.0.6
+  registry.npmjs.org/inherits/2.0.3:
+    dev: false
+    name: inherits
+    resolution:
+      integrity: sha1-Yzwsg+PaQqUC9SRmAiSA9CCCYd4=
+      registry: 'https://registry.yarnpkg.com/'
+      tarball: 'https://registry.npmjs.org/inherits/-/inherits-2.0.3.tgz'
+    version: 2.0.3
   registry.npmjs.org/inherits/2.0.4:
     name: inherits
     resolution:
@@ -3546,6 +3576,17 @@ packages:
       registry: 'https://registry.yarnpkg.com/'
       tarball: 'https://registry.npmjs.org/path-type/-/path-type-4.0.0.tgz'
     version: 4.0.0
+  registry.npmjs.org/path/0.12.7:
+    dependencies:
+      process: registry.npmjs.org/process/0.11.10
+      util: registry.npmjs.org/util/0.10.4
+    dev: false
+    name: path
+    resolution:
+      integrity: sha1-1NwqUGxM4hl+tIHr/NWzbAFAsQ8=
+      registry: 'https://registry.yarnpkg.com/'
+      tarball: 'https://registry.npmjs.org/path/-/path-0.12.7.tgz'
+    version: 0.12.7
   registry.npmjs.org/picomatch/2.2.2:
     engines:
       node: '>=8.6'
@@ -3593,7 +3634,6 @@ packages:
       tarball: 'https://registry.npmjs.org/process-nextick-args/-/process-nextick-args-2.0.1.tgz'
     version: 2.0.1
   registry.npmjs.org/process/0.11.10:
-    dev: true
     engines:
       node: '>= 0.6.0'
     name: process
@@ -4651,6 +4691,16 @@ packages:
       registry: 'https://registry.yarnpkg.com/'
       tarball: 'https://registry.npmjs.org/util-deprecate/-/util-deprecate-1.0.2.tgz'
     version: 1.0.2
+  registry.npmjs.org/util/0.10.4:
+    dependencies:
+      inherits: registry.npmjs.org/inherits/2.0.3
+    dev: false
+    name: util
+    resolution:
+      integrity: sha512-0Pm9hTQ3se5ll1XihRic3FDIku70C+iHUdT/W926rSgHV5QgXsYbKZN8MSC3tJtSkhuROzvsQjAaFENRXr+19A==
+      registry: 'https://registry.yarnpkg.com/'
+      tarball: 'https://registry.npmjs.org/util/-/util-0.10.4.tgz'
+    version: 0.10.4
   registry.npmjs.org/uuid/8.3.1:
     dev: true
     hasBin: true
