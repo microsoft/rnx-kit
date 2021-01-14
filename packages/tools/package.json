@@ -1,0 +1,25 @@
+{
+  "name": "@rnx-kit/tools",
+  "version": "0.1.1",
+  "description": "Common tooling for the react-native-sdk",
+  "main": "lib-commonjs/index.js",
+  "module": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "bin": {
+    "rnx-kit": "./lib/cli.js"
+  },
+  "scripts": {
+    "build": "rnx-kit-scripts build"
+  },
+  "dependencies": {
+    "fs": "^0.0.1-security",
+    "path": "^0.12.7",
+    "workspace-tools": "^0.10.2"
+  },
+  "devDependencies": {
+    "@types/node": "^14.14.20",
+    "rnx-kit-scripts": "0.1.1"
+  },
+  "author": "",
+  "license": "MIT"
+}

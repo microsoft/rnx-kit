@@ -1,0 +1,41 @@
+{
+  "name": "@rnx-kit/mobile-app",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "android": "react-native run-android",
+    "build:android": "mkdirp dist/res && react-native bundle --entry-file index.js --platform android --dev true --bundle-output dist/main.android.jsbundle --assets-dest dist/res --reset-cache",
+    "build:ios": "mkdirp dist && react-native bundle --entry-file index.js --platform ios --dev true --bundle-output dist/main.ios.jsbundle --assets-dest dist --reset-cache",
+    "build:macos": "mkdirp dist && react-native bundle --entry-file index.js --platform macos --dev true --bundle-output dist/main.macos.jsbundle --assets-dest dist --reset-cache --config=metro.config.macos.js",
+    "build:windows": "mkdirp dist && react-native bundle --entry-file index.js --platform windows --dev true --bundle-output dist/main.windows.bundle --assets-dest dist --reset-cache --config=metro.config.windows.js",
+    "ios": "react-native run-ios --scheme ReactTestApp",
+    "lint": "eslint .",
+    "macos": "react-native run-macos --scheme ReactTestApp",
+    "start": "react-native start",
+    "start:macos": "react-native start --config=metro.config.macos.js",
+    "start:windows": "react-native start --config=metro.config.windows.js",
+    "test": "jest",
+    "windows": "react-native run-windows --sln windowsSampleCrossApp.sln"
+  },
+  "dependencies": {
+    "react": "16.11.0",
+    "react-native": "0.62.2",
+    "react-native-macos": "0.62.14",
+    "react-native-windows": "0.62.12"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.6.2",
+    "@babel/runtime": "^7.6.2",
+    "@react-native-community/eslint-config": "^0.0.5",
+    "babel-jest": "^24.9.0",
+    "eslint": "^6.5.1",
+    "jest": "^24.9.0",
+    "metro-react-native-babel-preset": "^0.58.0",
+    "mkdirp": "^1.0.0",
+    "react-native-test-app": "0.2.16",
+    "react-test-renderer": "16.11.0"
+  },
+  "jest": {
+    "preset": "react-native"
+  }
+}

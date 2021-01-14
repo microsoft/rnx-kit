@@ -1,0 +1,73 @@
+{
+  "editor.formatOnSave": true,
+  "editor.detectIndentation": false,
+  "editor.trimAutoWhitespace": true,
+  "editor.insertSpaces": true,
+  "editor.tabSize": 2,
+
+  "eslint.enable": true,
+  "eslint.workingDirectories": [{ "mode": "auto" }], // infer working directory based on .eslintrc/package.json location
+
+  "files.trimTrailingWhitespace": true,
+  "files.associations": {
+    "**/package.json.hbs": "json",
+    "**/*.json.hbs": "jsonc",
+    "**/README.md.hbs": "markdown"
+  },
+  "files.exclude": {
+    "**/lib-amd": true,
+    "**/lib-commonjs": true
+  },
+  "files.watcherExclude": {
+    "**/.git/objects/**": true,
+    "**/.git/subtree-cache/**": true,
+    "**/node_modules/**": true,
+    "**/.hg/store/**": true,
+    "**/lib": true,
+    "**/lib-commonjs": true,
+    "**/lib-amd": true
+  },
+
+  "javascript.preferences.quoteStyle": "single",
+
+  "json.format.enable": false,
+
+  "typescript.preferences.quoteStyle": "single",
+  "typescript.format.insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces": false,
+  "typescript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis": false,
+  "typescript.tsdk": "./node_modules/typescript/lib",
+
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/lib": true,
+    "**/lib-amd": true,
+    "**/lib-commonjs": true,
+    "**/dist": true
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[handlebars]": {
+    "editor.formatOnSave": false
+  },
+  "cSpell.words": [
+    "TESTPAGE",
+    "beachball",
+    "consts",
+    "fluentui",
+    "macos",
+    "nuget"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "name": "rnx-kit",
+  "version": "0.1.0",
+  "private": true,
+  "description": "",
+  "keywords": [],
+  "license": "MIT",
+  "author": "Jason Morse <jasonmo@microsoft.com>",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Microsoft/rnx-kit.git"
+  },
+  "scripts": {
+    "build": "lage build"
+  },
+  "devDependencies": {
+    "beachball": "^1.42.0",
+    "lage": "^0.24.0"
+  },
+  "workspaces": {
+    "packages": [
+      "packages/**",
+      "scripts"
+    ]
+  },
+  "beachball": {
+    "disallowedChangeTypes": [
+      "major"
+    ]
+  },
+  "lage": {
+    "npmClient": "yarn",
+    "pipeline": {
+      "build": [
+        "^build"
+      ]
+    }
+  }
+}

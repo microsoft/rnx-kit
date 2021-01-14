@@ -1,0 +1,22 @@
+{
+  "name": "rnx-kit-scripts",
+  "version": "0.1.1",
+  "private": true,
+  "main": "./index.js",
+  "bin": {
+    "rnx-kit-scripts": "./just-scripts.js"
+  },
+  "scripts": {
+    "build-tools": "just-scripts build",
+    "bundlesize": "bundlesize --debug",
+    "code-style": "node ./lib/just-scripts.js code-style",
+    "depcheck": "just-scripts depcheck",
+    "prettier": "node ./lib/just-scripts.js prettier",
+    "verify-api": "echo no api to verify",
+    "update-api": "echo no api to update"
+  },
+  "devDependencies": {
+    "just-scripts": "^1.2.6",
+    "typescript": "^4.1.3"
+  }
+}
