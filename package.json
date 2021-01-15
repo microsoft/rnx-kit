@@ -12,7 +12,9 @@
     "url": "https://github.com/Microsoft/rnx-kit.git"
   },
   "scripts": {
-    "build": "lage build"
+    "build": "lage build",
+    "fast": "node packages/yarn-fast",
+    "preinstall": "node scripts/tasks/preinstall.js"
   },
   "devDependencies": {
     "lage": "^0.27.0"
