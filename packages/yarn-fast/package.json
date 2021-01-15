@@ -1,11 +1,12 @@
 {
-  "name": "@1js/yarn-fast",
-  "description": "Package providing the install scripts for Midgard",
+  "name": "@rnx-kit/yarn-fast",
+  "description": "Package providing install scripts for using midgard-yarn instead of yarn",
   "license": "UNLICENSED",
+  "private": true,
   "repository": {
     "type": "git",
-    "url": "https://dev.azure.com/office/Office/_git/1JS",
-    "directory": "midgard/packages/yarn-fast"
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "packages/yarn-fast"
   },
   "version": "0.0.1",
   "main": "index.js"
