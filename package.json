@@ -15,8 +15,7 @@
     "build": "lage build"
   },
   "devDependencies": {
-    "beachball": "^1.42.0",
-    "lage": "^0.24.0"
+    "lage": "^0.27.0"
   },
   "workspaces": {
     "packages": [
