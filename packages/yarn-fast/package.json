@@ -1,0 +1,12 @@
+{
+  "name": "@1js/yarn-fast",
+  "description": "Package providing the install scripts for Midgard",
+  "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "https://dev.azure.com/office/Office/_git/1JS",
+    "directory": "midgard/packages/yarn-fast"
+  },
+  "version": "0.0.1",
+  "main": "index.js"
+}
