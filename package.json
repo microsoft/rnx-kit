@@ -13,7 +13,7 @@
   },
   "scripts": {
     "build": "lage build",
-    "fast": "node packages/yarn-fast",
+    "fast": "node scripts/tasks/fast-install.js",
     "preinstall": "node scripts/tasks/preinstall.js"
   },
   "devDependencies": {
