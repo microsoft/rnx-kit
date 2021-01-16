@@ -7,7 +7,7 @@ if (process.env.yarnFast !== "true" && process.stdout.isTTY) {
   console.error();
   console.error(`${openRed}${openBold}`);
   console.error(
-    "Hi! In order to increase install speed, Midgard uses a yarn fork. Please run `yarn fast` to install dependencies."
+    "Hi! In order to increase install speed, the rnx-kit uses a yarn fork. Please run `yarn fast` to install dependencies."
   );
   console.error(
     "See https://github.com/VincentBailly/yarn for technical details."
