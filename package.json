@@ -13,8 +13,7 @@
   },
   "scripts": {
     "build": "lage build",
-    "fast": "node scripts/tasks/fast-install.js",
-    "preinstall": "node scripts/tasks/preinstall.js"
+    "fast": "node scripts/tasks/fast-install.js"
   },
   "devDependencies": {
     "lage": "^0.27.0"
