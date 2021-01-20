@@ -1,0 +1,24 @@
+{
+  "name": "@rnx-kit/metro-config",
+  "description": "Metro config for monorepos",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "packages/metro-config"
+  },
+  "version": "0.0.1-dev",
+  "main": "src/index.js",
+  "scripts": {},
+  "dependencies": {
+    "@babel/core": "^7.0.0",
+    "@babel/helper-plugin-utils": "^7.0.0",
+    "@babel/types": "^7.0.0",
+    "babel-plugin-const-enum": "^1.0.0",
+    "fast-glob": "^3.2.2",
+    "find-up": "^4.1.0"
+  },
+  "peerDependencies": {
+    "metro-config": ">=0.58.0"
+  }
+}
