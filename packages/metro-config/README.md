@@ -52,10 +52,15 @@ yarn react-native bundle             \
 For more information on available commands and options, please see
 [React Native CLI documentation](https://github.com/react-native-community/cli/blob/v4.13.1/docs/commands.md).
 
-## Known Issues
+## Known Limitations
+
+While Metro is the de-facto standard, it lacks a few features that would make it optimal; here's our current wishlist, feel free to submit PRs if you want to help with them :)
 
 - Implement [Circular Dependency Plugin](https://github.com/aackerman/circular-dependency-plugin)
 - Implement [DuplicatesPlugin](https://github.com/FormidableLabs/inspectpack#plugin)
+- Implement [symlinks](https://github.com/facebook/metro/issues/1)
+  - *ideally this will be done directly upstream in Metro, but in the meantime we are open to "after-markets" solutions*
+- Implement treeshaking
 
 ### Error: EMFILE: too many open files, watch
 
