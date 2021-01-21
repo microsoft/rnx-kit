@@ -35,10 +35,10 @@ jobs:
         with:
           token: ${{ secrets.GIT_TOKEN }}
           persist-credentials: false
-      - name: Install Node ${{ matrix.node-version }}
+      - name: Install Node 15
         uses: actions/setup-node@v1
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 15.x
       - name: Install Yarn
         run: npm install -g yarn
       - name: Install package dependencies
