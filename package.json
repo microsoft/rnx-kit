@@ -1,8 +1,7 @@
 {
   "name": "rnx-kit",
   "version": "0.1.0",
-  "private": true,
-  "description": "",
+  "description": "React Native SDK",
   "keywords": [],
   "license": "MIT",
   "author": "Jason Morse <jasonmo@microsoft.com>",
