@@ -8,11 +8,15 @@ jobs:
   build_and_publish:
     runs-on: ubuntu-latest
     steps:
+      - name: Establish Git User
+        run: |
+          git config user.email "@example.com"
+          git config user.name "someone"
       - name: Git Checkout
         uses: actions/checkout@v2
         with:
           token: ${{ secrets.GIT_TOKEN }}
-          persist-credentials: false
+          persist-credentials: true
       - name: Install Node 15
         uses: actions/setup-node@v1
         with:
@@ -24,7 +28,4 @@ jobs:
       - name: Build packages
         run: yarn build
       - name: Publish
-        env:
-          GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: yarn run semantic-release
+        run: yarn run beachball:publish -n ${{ secrets.NPM_TOKEN }}

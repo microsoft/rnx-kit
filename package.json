@@ -12,25 +12,20 @@
     "url": "https://github.com/Microsoft/rnx-kit.git"
   },
   "scripts": {
-    "build": "lage build"
+    "build": "lage build",
+    "change": "beachball change",
+    "check": "beachball check",
+    "beachball:publish": "beachball publish"
   },
   "devDependencies": {
-    "@commitlint/cli": "^11.0.0",
-    "@commitlint/config-conventional": "^11.0.0",
-    "husky": "^4.3.8",
-    "lage": "^0.27.0",
-    "semantic-release": "^17.3.5"
+    "beachball": "^1.49.0",
+    "lage": "^0.27.0"
   },
   "workspaces": {
     "packages": [
       "packages/**",
       "scripts"
     ]
-  },
-  "husky": {
-    "hooks": {
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
-    }
   },
   "lage": {
     "npmClient": "yarn",
@@ -40,9 +35,11 @@
       ]
     }
   },
-  "release": {
-    "branches": [
-      "main"
-    ]
+  "beachball": {
+    "branch": "origin/main",
+    "disallowedChangeTypes": [
+      "major"
+    ],
+    "publish": false
   }
 }
