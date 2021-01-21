@@ -1,0 +1,28 @@
+name: Build, Publish and Release
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+# TODO: remove pull_request trigger
+
+jobs:
+  build_publish_release:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [15.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.GIT_TOKEN }}
+      - uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm install -g yarn
+      - run: yarn install
+      - run: yarn build
+# TODO: run tests
+# TODO: run semantic-release to create a release tag and publish to both GitHub and NPM
