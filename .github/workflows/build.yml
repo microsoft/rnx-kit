@@ -1,0 +1,35 @@
+name: Build, Publish and Release
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build_publish_release:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [15.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+    steps:
+      - name: Git Checkout
+        uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.GIT_TOKEN }}
+          persist-credentials: false
+      - name: Install Node ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Install Yarn
+        run: npm install -g yarn
+      - name: Install package dependencies
+        run: yarn --frozen-lockfile install
+      - name: Build packages
+        run: yarn build
+      - name: Release and Publish
+        env:
+          GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
+          NPM_TOKEN: not_yet_created
+        run: yarn run semantic-release

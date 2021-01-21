@@ -15,17 +15,13 @@
     "build": "lage build"
   },
   "devDependencies": {
-    "lage": "^0.27.0"
+    "lage": "^0.27.0",
+    "semantic-release": "^17.3.5"
   },
   "workspaces": {
     "packages": [
       "packages/**",
       "scripts"
-    ]
-  },
-  "beachball": {
-    "disallowedChangeTypes": [
-      "major"
     ]
   },
   "lage": {
@@ -35,5 +31,10 @@
         "^build"
       ]
     }
+  },
+  "release": {
+    "branches": [
+      "main"
+    ]
   }
 }
