@@ -93,8 +93,16 @@ function replaceDeclarationWith(path, source) {
 module.exports = declare((api, options) => {
   api.assertVersion(7);
 
-  const { scope } = options;
-  const re = new RegExp(`${scope}/(.*?)/lib`);
+  /** @type {{ test?: (source: string) => boolean; }} */
+  const { test } = options;
+  if (typeof test !== "function") {
+    throw new Error(
+      "Expected option `test` to be a function `(source: string) => boolean`"
+    );
+  }
+
+  const re = /(.*?)\/lib/;
+  const replacement = "$1/src";
 
   return {
     name: "import-path-remapper",
@@ -110,13 +118,13 @@ module.exports = declare((api, options) => {
 
         const arg = path.node.arguments[0];
         const sourcePath = arg && types.isStringLiteral(arg) && arg.value;
-        if (!sourcePath || !sourcePath.startsWith(`${scope}/`)) {
+        if (!sourcePath || !test(sourcePath)) {
           return;
         }
 
         if (sourcePath.includes("/lib")) {
           // Remaps @scope/example/lib/index.js -> @scope/example/src/index.ts
-          replaceCallWith(path, sourcePath.replace(re, `${scope}/$1/src`));
+          replaceCallWith(path, sourcePath.replace(re, replacement));
         } else {
           // Remaps @scope/example -> @scope/example/src/index.ts
           try {
@@ -138,16 +146,13 @@ module.exports = declare((api, options) => {
         }
 
         const sourcePath = path.node.source.value;
-        if (!sourcePath.startsWith(`${scope}/`)) {
+        if (!test(sourcePath)) {
           return;
         }
 
         if (sourcePath.includes("/lib")) {
           // Remaps @scope/example/lib/index.js -> @scope/example/src/index.ts
-          replaceDeclarationWith(
-            path,
-            sourcePath.replace(re, `${scope}/$1/src`)
-          );
+          replaceDeclarationWith(path, sourcePath.replace(re, replacement));
         } else {
           // Remaps @scope/example -> @scope/example/src/index.ts
           try {

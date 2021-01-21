@@ -1,29 +1,48 @@
+// @ts-check
+"use strict";
+
 describe("@rnx-kit/metro-config/src/babel-plugin-import-path-remapper", () => {
   const babel = require("@babel/core");
 
   /**
+   * Returns whether requested source is in @rnx-kit scope.
+   * @param {string} source
+   * @returns {boolean}
+   */
+  function isRNXKit(source) {
+    return source.startsWith("@rnx-kit/");
+  }
+
+  /**
    * Transforms the specified code.
    * @param {string} code
-   * @returns {string}
+   * @param {unknown=} test
+   * @returns {string | null | undefined}
    */
-  function transform(code) {
+  function transform(code, test = isRNXKit) {
     const result = babel.transformSync(code, {
-      plugins: [
-        ["src/babel-plugin-import-path-remapper.js", { scope: "@rnx-kit" }]
-      ]
+      plugins: [["src/babel-plugin-import-path-remapper.js", { test }]],
     });
-    return result.code;
+    return result && result.code;
   }
+
+  test("throws if no test function is specified", () => {
+    expect(() => transform("", null)).toThrowError(
+      "Expected option `test` to be a function"
+    );
+  });
 
   test("leaves unmatched import/export statements", () => {
     [
+      "export const zero = () => 0;",
       `export * from "@contoso/example/lib/index";`,
       `export { a, b } from "@contoso/example/lib/index";`,
       `import * as Example from "@contoso/example/lib/index";`,
       `import { a, b } from "@contoso/example/lib/index";`,
       `import("@contoso/example/lib/index");`,
-      `require("@contoso/example/lib/index");`
-    ].forEach(code => {
+      `require("@contoso/example/lib/index");`,
+      `require("fs").readFileSync("@contoso/example/lib/index");`,
+    ].forEach((code) => {
       expect(transform(code)).toBe(code);
     });
   });
