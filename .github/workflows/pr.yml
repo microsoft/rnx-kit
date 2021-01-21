@@ -1,4 +1,4 @@
-name: Build, Publish and Release
+name: Pull Request Build
 
 on: pull_request
 
