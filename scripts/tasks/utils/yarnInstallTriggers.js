@@ -16,18 +16,6 @@ function epermCallback() {
   process.exit(1);
 }
 
-function authCallback() {
-  redMessage([
-    `You have hit an auth issue, please refer to this wiki:`,
-    `https://dev.azure.com/office/Office/_wiki/wikis/1JS/23437/Getting-Started?anchor=setting-up-for-package-feed-authentication`,
-  ]);
-
-  process.exit(1);
-}
-
 // Because callbacks may decide to terminate the entire process,
 // the order of the triggers could have an impact in the behavior.
-module.exports = [
-  { pattern: /EPERM/, callback: epermCallback },
-  { pattern: /401 Unauthorized/, callback: authCallback },
-];
+module.exports = [{ pattern: /EPERM/, callback: epermCallback }];
