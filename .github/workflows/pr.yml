@@ -1,11 +1,9 @@
 name: Build, Publish and Release
 
-on:
-  push:
-    branches: [main]
+on: pull_request
 
 jobs:
-  build_publish_release:
+  pr:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -15,9 +13,6 @@ jobs:
     steps:
       - name: Git Checkout
         uses: actions/checkout@v2
-        with:
-          token: ${{ secrets.GIT_TOKEN }}
-          persist-credentials: false
       - name: Install Node ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:
@@ -28,8 +23,3 @@ jobs:
         run: yarn --frozen-lockfile install
       - name: Build packages
         run: yarn build
-      - name: Release and Publish
-        env:
-          GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
-          NPM_TOKEN: not_yet_created
-        run: yarn run semantic-release
