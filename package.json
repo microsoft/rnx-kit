@@ -16,7 +16,11 @@
     "fast": "node scripts/tasks/fast-install.js"
   },
   "devDependencies": {
-    "lage": "^0.27.0"
+    "@commitlint/cli": "^11.0.0",
+    "@commitlint/config-conventional": "^11.0.0",
+    "husky": "^4.3.8",
+    "lage": "^0.27.0",
+    "semantic-release": "^17.3.5"
   },
   "workspaces": {
     "packages": [
@@ -24,10 +28,10 @@
       "scripts"
     ]
   },
-  "beachball": {
-    "disallowedChangeTypes": [
-      "major"
-    ]
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
   },
   "lage": {
     "npmClient": "yarn",
@@ -36,5 +40,10 @@
         "^build"
       ]
     }
+  },
+  "release": {
+    "branches": [
+      "main"
+    ]
   }
 }

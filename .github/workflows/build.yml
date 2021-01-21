@@ -1,0 +1,30 @@
+name: Build and Publish
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build_and_publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Git Checkout
+        uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.GIT_TOKEN }}
+          persist-credentials: false
+      - name: Install Node 15
+        uses: actions/setup-node@v1
+        with:
+          node-version: 15.x
+      - name: Install Yarn
+        run: npm install -g yarn
+      - name: Install package dependencies
+        run: yarn --frozen-lockfile install
+      - name: Build packages
+        run: yarn build
+      - name: Publish
+        env:
+          GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: yarn run semantic-release

@@ -1,0 +1,25 @@
+name: Pull Request Build
+
+on: pull_request
+
+jobs:
+  pr:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [15.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+    steps:
+      - name: Git Checkout
+        uses: actions/checkout@v2
+      - name: Install Node ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Install Yarn
+        run: npm install -g yarn
+      - name: Install package dependencies
+        run: yarn --frozen-lockfile install
+      - name: Build packages
+        run: yarn build
