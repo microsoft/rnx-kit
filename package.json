@@ -15,6 +15,9 @@
     "build": "lage build"
   },
   "devDependencies": {
+    "@commitlint/cli": "^11.0.0",
+    "@commitlint/config-conventional": "^11.0.0",
+    "husky": "^4.3.8",
     "lage": "^0.27.0",
     "semantic-release": "^17.3.5"
   },
@@ -23,6 +26,11 @@
       "packages/**",
       "scripts"
     ]
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
   },
   "lage": {
     "npmClient": "yarn",
