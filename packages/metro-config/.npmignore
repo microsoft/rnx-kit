@@ -1,0 +1,4 @@
+*.tgz
+coverage/
+test/
+tsconfig.json

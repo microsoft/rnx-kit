@@ -9,7 +9,11 @@
   },
   "version": "0.0.1-dev",
   "main": "src/index.js",
-  "scripts": {},
+  "scripts": {
+    "build": "tsc",
+    "format": "prettier --write src/*.js",
+    "test": "jest"
+  },
   "dependencies": {
     "@babel/core": "^7.0.0",
     "@babel/helper-plugin-utils": "^7.0.0",
@@ -20,5 +24,20 @@
   },
   "peerDependencies": {
     "metro-config": ">=0.58.0"
+  },
+  "devDependencies": {
+    "@types/babel__core": "^7.0.0",
+    "@types/babel__helper-plugin-utils": "^7.0.0",
+    "@types/jest": "^26.0.0",
+    "jest": "^26.0.0",
+    "metro-config": "^0.58.0",
+    "prettier": "^2.0.0",
+    "typescript": "^4.0.0"
+  },
+  "jest": {
+    "roots": [
+      "test"
+    ],
+    "testRegex": "/test/.*\\.test\\.js$"
   }
 }
