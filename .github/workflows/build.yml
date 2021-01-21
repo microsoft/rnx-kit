@@ -15,14 +15,28 @@ jobs:
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
-      - uses: actions/checkout@v2
+      - name: Git Checkout
+        uses: actions/checkout@v2
         with:
           token: ${{ secrets.GIT_TOKEN }}
-      - uses: actions/setup-node@v1
+          persist-credentials: false
+      - name: Install Node ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-      - run: npm install -g yarn
-      - run: yarn install
-      - run: yarn build
+      - name: Install Yarn
+        run: npm install -g yarn
+      - name: Install package dependencies
+        run: yarn --frozen-lockfile install
+      - name: Build packages
+        run: yarn build
+      - name: Release and Publish
+        env:
+          GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
+          NPM_TOKEN: not_yet_created
+        run: yarn run semantic-release --dry-run
 # TODO: run tests
-# TODO: run semantic-release to create a release tag and publish to both GitHub and NPM
+#          GIT_AUTHOR_NAME: ?
+#          GIT_AUTHOR_EMAIL: ?
+#          GIT_COMMITTER_NAME: ?
+#          GIT_COMMITTER_EMAIL: ?
