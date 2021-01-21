@@ -1,11 +1,11 @@
-name: Build, Publish and Release
+name: Build and Publish
 
 on:
   push:
     branches: [main]
 
 jobs:
-  build_publish_release:
+  build:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -28,7 +28,12 @@ jobs:
         run: yarn --frozen-lockfile install
       - name: Build packages
         run: yarn build
-      - name: Release and Publish
+
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Publish
         env:
           GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
           NPM_TOKEN: not_yet_created
