@@ -26,5 +26,5 @@ jobs:
       - name: Publish
         env:
           GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
-          NPM_TOKEN: not_yet_created
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: yarn run semantic-release
