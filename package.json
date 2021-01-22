@@ -39,7 +39,6 @@
     "branch": "origin/main",
     "disallowedChangeTypes": [
       "major"
-    ],
-    "publish": false
+    ]
   }
 }
