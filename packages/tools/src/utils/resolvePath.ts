@@ -31,7 +31,6 @@ export function resolvePath(
 ): string {
   const { resolveFile, normalize, leaveSymlinks } = options || {};
   const requireOptions = { paths: [process.cwd()] };
-
   // get a path to either the module root or a file within the module
   let resolved = resolveFile
     ? path.resolve(require.resolve(name, requireOptions))
