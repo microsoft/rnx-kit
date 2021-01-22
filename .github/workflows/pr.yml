@@ -21,5 +21,7 @@ jobs:
         run: npm install -g yarn
       - name: Install package dependencies
         run: yarn --frozen-lockfile install
+      - name: Check for change files
+        run: yarn run check --branch origin/main --changehint "Run 'yarn change' from root of repo to generate a change file."
       - name: Build packages
         run: yarn build
