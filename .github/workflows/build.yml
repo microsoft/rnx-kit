@@ -29,4 +29,4 @@ jobs:
       - name: Build packages
         run: yarn build
       - name: Publish
-        run: yarn run beachball:publish -n ${{ secrets.NPM_TOKEN }}
+        run: yarn run beachball publish --yes --token ${{ secrets.NPM_TOKEN }}
