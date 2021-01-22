@@ -39,6 +39,7 @@
     "branch": "origin/main",
     "disallowedChangeTypes": [
       "major"
-    ]
+    ],
+    "access": "public"
   }
 }
