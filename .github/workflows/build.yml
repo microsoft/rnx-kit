@@ -24,8 +24,13 @@ jobs:
           node-version: 15.x
       - name: Install Yarn
         run: npm install -g yarn
+      - name: Cache /.yarn-offline-mirror
+        uses: actions/cache@v2
+        with:
+          path: .yarn-offline-mirror
+          key: ${{ hashFiles('yarn.lock') }}
       - name: Install package dependencies
-        run: yarn --frozen-lockfile install
+        run: yarn ci
       - name: Build packages
         run: yarn build
       - name: Publish
