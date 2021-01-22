@@ -1,0 +1,20 @@
+{
+  "name": "@rnx-kit/metro-config",
+  "entries": [
+    {
+      "date": "Fri, 22 Jan 2021 11:53:09 GMT",
+      "tag": "@rnx-kit/metro-config_v0.0.1-dev",
+      "version": "0.0.1-dev",
+      "comments": {
+        "none": [
+          {
+            "comment": "Added tests",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "1fb1dd3f9a5e46efed4f625d2f4f2af80746a086",
+            "package": "@rnx-kit/metro-config"
+          }
+        ]
+      }
+    }
+  ]
+}
