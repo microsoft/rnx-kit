@@ -1,0 +1,7 @@
+{
+  "type": "patch",
+  "comment": "Empty change to cause a version bump and a new release.",
+  "packageName": "@rnx-kit/tools",
+  "email": "afoxman@microsoft.com",
+  "dependentChangeType": "patch"
+}
