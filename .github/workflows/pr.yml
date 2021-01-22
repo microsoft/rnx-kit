@@ -13,6 +13,8 @@ jobs:
     steps:
       - name: Git Checkout
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
       - name: Install Node ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:
@@ -22,6 +24,6 @@ jobs:
       - name: Install package dependencies
         run: yarn --frozen-lockfile install
       - name: Check for change files
-        run: yarn run check --branch origin/main --changehint "Run 'yarn change' from root of repo to generate a change file."
+        run: yarn run check --branch origin/main --changehint "Run 'yarn run change' from root of repo to generate a change file."
       - name: Build packages
         run: yarn build
