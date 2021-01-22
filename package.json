@@ -13,14 +13,11 @@
   },
   "scripts": {
     "build": "lage build",
-<<<<<<< HEAD
-    "fast": "node scripts/tasks/fast-install.js"
-=======
+    "beachball:publish": "beachball publish",
     "change": "beachball change",
     "check": "beachball check",
-    "beachball:publish": "beachball publish",
+    "fast": "node scripts/tasks/fast-install.js",
     "test": "lage test --passWithNoTests"
->>>>>>> upstream/main
   },
   "devDependencies": {
     "beachball": "^1.49.0",
