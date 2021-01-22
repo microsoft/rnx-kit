@@ -1,10 +1,33 @@
 /* jshint esversion: 8, node: true */
-
+// @ts-check
 "use strict";
 
 const { types } = require("@babel/core");
 const { declare } = require("@babel/helper-plugin-utils");
 
+/**
+ * @template T
+ * @typedef {import("@babel/core").NodePath<T>} NodePath;
+ */
+
+/**
+ * @typedef {import("@babel/core").types.CallExpression} CallExpression;
+ * @typedef {import("@babel/core").types.ExportAllDeclaration} ExportAllDeclaration;
+ * @typedef {import("@babel/core").types.ExportNamedDeclaration} ExportNamedDeclaration;
+ * @typedef {import("@babel/core").types.ImportDeclaration} ImportDeclaration;
+ * @typedef {import("@babel/core").types.Node} Node;
+ * @typedef {
+ *   | NodePath<ExportAllDeclaration>
+ *   | NodePath<ExportNamedDeclaration>
+ *   | NodePath<ImportDeclaration>
+ * } ImportExportDeclarationNodePath;
+ */
+
+/**
+ * Finds the main source file in the specified package's manifest.
+ * @param {string} sourcePath
+ * @returns {string | undefined}
+ */
 function findMainSourceFile(sourcePath) {
   const { main } = require(`${sourcePath}/package.json`);
   if (!main) {
@@ -24,6 +47,11 @@ function findMainSourceFile(sourcePath) {
   }
 }
 
+/**
+ * Replaces the source string in specified call expression.
+ * @param {NodePath<CallExpression>} path
+ * @param {string} source
+ */
 function replaceCallWith(path, source) {
   const expression = types.isImport(path.node.callee)
     ? types.import()
@@ -33,6 +61,11 @@ function replaceCallWith(path, source) {
   );
 }
 
+/**
+ * Replaces the source string in specified import/export declaration.
+ * @param {NodePath<Node>} path
+ * @param {string} source
+ */
 function replaceDeclarationWith(path, source) {
   path.replaceWith(
     (() => {
@@ -69,13 +102,14 @@ module.exports = declare((api, options) => {
       CallExpression: (path, _state) => {
         if (
           !types.isImport(path.node.callee) &&
-          path.node.callee.name !== "require"
+          (!types.isIdentifier(path.node.callee) ||
+            path.node.callee.name !== "require")
         ) {
           return;
         }
 
-        const sourcePath =
-          path.node.arguments[0] && path.node.arguments[0].value;
+        const arg = path.node.arguments[0];
+        const sourcePath = arg && types.isStringLiteral(arg) && arg.value;
         if (!sourcePath || !sourcePath.startsWith(`${scope}/`)) {
           return;
         }
@@ -95,6 +129,8 @@ module.exports = declare((api, options) => {
           }
         }
       },
+
+      /** @type {(path: ImportExportDeclarationNodePath, state: unknown) => void} */
       "ImportDeclaration|ExportDeclaration": (path, _state) => {
         if (!path.node.source) {
           // Ignore non-re-export lines, e.g.: export const example = () => { ... }

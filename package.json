@@ -15,7 +15,8 @@
     "build": "lage build",
     "change": "beachball change",
     "check": "beachball check",
-    "beachball:publish": "beachball publish"
+    "beachball:publish": "beachball publish",
+    "test": "lage test --passWithNoTests"
   },
   "devDependencies": {
     "beachball": "^1.49.0",
@@ -23,7 +24,7 @@
   },
   "workspaces": {
     "packages": [
-      "packages/**",
+      "packages/*",
       "scripts"
     ]
   },

@@ -1,8 +1,37 @@
 /* jshint esversion: 8, node: true */
+// @ts-check
+
+/**
+ * @typedef {{
+ *   transform: {
+ *     experimentalImportSupport?: boolean;
+ *     inlineRequires?: boolean;
+ *     unstable_disableES6Transforms?: boolean;
+ *   },
+ *   preloadedModules?: boolean;
+ *   ramGroups?: string[];
+ * }} MetroTransformOptions;
+ *
+ * @typedef {{
+ *   projectRoot?: string;
+ *   resetCache?: boolean;
+ *   resolver?: {
+ *     blacklistRE?: RegExp;
+ *     blockList?: RegExp;
+ *     [key: string]: unknown;
+ *   },
+ *   transformer?: {
+ *     getTransformOptions: () => Promise<MetroTransformOptions>;
+ *     [key: string]: unknown;
+ *   }
+ *   watchFolders?: string[];
+ *   [key: string]: unknown;
+ * }} MetroConfig;
+ */
 
 /**
  * A minimum list of folders that should be watched by Metro.
- * @param {string?} projectRoot
+ * @param {string | undefined} projectRoot
  * @returns {string[]}
  */
 function defaultWatchFolders(projectRoot) {
@@ -11,7 +40,8 @@ function defaultWatchFolders(projectRoot) {
 
   // If `projectRoot` is not set, assume that `@rnx-kit/metro-config` lives in
   // the same monorepo as the target package.
-  const thisPackage = projectRoot || path.dirname(findUp.sync("package.json"));
+  const thisPackage =
+    projectRoot || path.dirname(findUp.sync("package.json") || "");
   const rootPackage = findUp.sync("package.json", {
     cwd: path.dirname(thisPackage),
   });
@@ -48,9 +78,11 @@ function defaultWatchFolders(projectRoot) {
 function exclusionList(additionalExclusions = []) {
   const exclusionList = (() => {
     try {
+      // @ts-ignore There are no type definition files for `metro-config`
       return require("metro-config/src/defaults/exclusionList");
     } catch (_) {
       // `blacklist` was renamed to `exclusionList` in 0.60
+      // @ts-ignore There are no type definition files for `metro-config`
       return require("metro-config/src/defaults/blacklist");
     }
   })();
@@ -76,7 +108,7 @@ module.exports = {
   /**
    * Helper function for configuring Babel.
    * @param {string[]=} additionalPlugins
-   * @returns {string[]}
+   * @returns {import("@babel/core").TransformOptions}
    */
   makeBabelConfig: (additionalPlugins = []) => {
     return {
@@ -99,10 +131,11 @@ module.exports = {
 
   /**
    * Helper function for configuring Metro.
-   * @param {Record<string, unknown>=} customConfig
-   * @returns {Record<string, object>}
+   * @param {MetroConfig=} customConfig
+   * @returns {MetroConfig}
    */
   makeMetroConfig: (customConfig = {}) => {
+    // @ts-ignore There are no type definition files for `metro-config`
     const { mergeConfig } = require("metro-config");
     return mergeConfig(
       {

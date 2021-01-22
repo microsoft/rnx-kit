@@ -27,3 +27,5 @@ jobs:
         run: yarn run check --branch origin/main --changehint "Run 'yarn run change' from root of repo to generate a change file."
       - name: Build packages
         run: yarn build
+      - name: Test
+        run: yarn test
