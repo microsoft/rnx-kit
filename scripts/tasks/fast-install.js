@@ -18,6 +18,10 @@ const executeWithTriggers = require("./utils/executeWithTriggers");
 // The user config is pinned in CI environments unless explicitly disabled
 const pinUserConfig = isCi && !unpinUserConfig;
 
+// grab the midgard yarn version from scripts/package.json
+const midgardYarnVersion =
+  require("../package.json").devDependencies["midgard-yarn"] || "1.23.24";
+
 const env = { yarnFast: "true" };
 // The env of yarn running the command is messing with the auth
 // of the nested yarn. So we create a new unspoiled env.
@@ -31,7 +35,7 @@ const cmd = [
   "npx",
   // When requested, force the use of the user's .npmrc file.
   pinUserConfig ? "--userconfig .npmrc" : "",
-  "midgard-yarn@1.23.22",
+  "midgard-yarn@" + midgardYarnVersion,
   // Force colors even though isTTY might be false.
   "--color=always",
   ...extraArguments,
