@@ -1,3 +1,6 @@
+// @ts-check
+"use strict";
+
 describe("@rnx-kit/metro-config", () => {
   const { spawnSync } = require("child_process");
   const path = require("path");
@@ -5,7 +8,7 @@ describe("@rnx-kit/metro-config", () => {
     defaultWatchFolders,
     exclusionList,
     makeBabelConfig,
-    makeMetroConfig
+    makeMetroConfig,
   } = require("../src");
 
   const babelConfigKeys = ["presets", "overrides"];
@@ -18,7 +21,7 @@ describe("@rnx-kit/metro-config", () => {
     "server",
     "symbolicator",
     "transformer",
-    "watchFolders"
+    "watchFolders",
   ];
 
   const currentWorkingDir = process.cwd();
@@ -58,12 +61,12 @@ describe("@rnx-kit/metro-config", () => {
     const repoRoot = path.dirname(path.dirname(process.cwd()));
     const folders = defaultWatchFolders(process.cwd());
 
-    const packages = ["conan", "dutch", "john", "quaid", "t-800"].map(p =>
+    const packages = ["conan", "dutch", "john", "quaid", "t-800"].map((p) =>
       path.join(repoRoot, "packages", p)
     );
     const expectedFolders = [
       path.join(repoRoot, "node_modules"),
-      ...packages
+      ...packages,
     ].sort();
     expect(folders.sort()).toEqual(expectedFolders);
   });
@@ -88,7 +91,7 @@ describe("@rnx-kit/metro-config", () => {
 
   test("makeBabelConfig() returns a Babel config with additional plugins", () => {
     const config = makeBabelConfig([
-      "../src/babel-plugin-import-path-remapper.js"
+      "src/babel-plugin-import-path-remapper.js",
     ]);
     expect(Object.keys(config)).toEqual(babelConfigKeys);
     expect(config.presets).toEqual(babelConfigPresets);
@@ -96,7 +99,7 @@ describe("@rnx-kit/metro-config", () => {
     expect(config.overrides[0].test.source).toBe(babelTypeScriptTest);
     expect(config.overrides[0].plugins).toEqual([
       "const-enum",
-      "../src/babel-plugin-import-path-remapper.js"
+      "src/babel-plugin-import-path-remapper.js",
     ]);
   });
 
@@ -111,7 +114,7 @@ describe("@rnx-kit/metro-config", () => {
     const transformerOptions = await config.transformer.getTransformOptions();
     expect(transformerOptions.transform).toEqual({
       experimentalImportSupport: false,
-      inlineRequires: false
+      inlineRequires: false,
     });
 
     expect(config.watchFolders.length).toBeGreaterThan(0);
@@ -120,7 +123,7 @@ describe("@rnx-kit/metro-config", () => {
   test("makeMetroConfig() merges Metro configs", async () => {
     const config = makeMetroConfig({
       projectRoot: __dirname,
-      resetCache: true
+      resetCache: true,
     });
 
     expect(Object.keys(config).sort()).toEqual(
@@ -137,7 +140,7 @@ describe("@rnx-kit/metro-config", () => {
     const transformerOptions = await config.transformer.getTransformOptions();
     expect(transformerOptions.transform).toEqual({
       experimentalImportSupport: false,
-      inlineRequires: false
+      inlineRequires: false,
     });
 
     expect(config.watchFolders.length).toBeGreaterThan(0);
@@ -150,11 +153,13 @@ describe("@rnx-kit/metro-config", () => {
         /[.\d]+k?B\s+([^\s]*)/g
       )
     );
-    expect(files.sort()).toEqual([
+    expect(
+      files.filter((file) => !file.startsWith("CHANGELOG")).sort()
+    ).toEqual([
       "README.md",
       "package.json",
       "src/babel-plugin-import-path-remapper.js",
-      "src/index.js"
+      "src/index.js",
     ]);
   });
 });
