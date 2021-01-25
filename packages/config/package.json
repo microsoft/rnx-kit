@@ -1,0 +1,23 @@
+{
+  "name": "@rnx-kit/config",
+  "version": "0.0.1",
+  "description": "Package for defining and querying information about rnx kits",
+  "main": "lib-commonjs/index.js",
+  "module": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "scripts": {
+    "build": "rnx-kit-scripts build"
+  },
+  "dependencies": {
+    "fs": "^0.0.1-security",
+    "path": "^0.12.7",
+    "workspace-tools": "^0.10.2",
+    "cosmiconfig": "^7.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^14.14.20",
+    "rnx-kit-scripts": "0.1.1"
+  },
+  "author": "",
+  "license": "MIT"
+}
