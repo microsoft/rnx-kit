@@ -2,6 +2,21 @@
   "name": "@rnx-kit/metro-config",
   "entries": [
     {
+      "date": "Mon, 25 Jan 2021 07:42:30 GMT",
+      "tag": "@rnx-kit/metro-config_v1.0.0",
+      "version": "1.0.0",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Replace scope option for a test function",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "f8ddc803c99279399bb20cef9d536e408a455308",
+            "package": "@rnx-kit/metro-config"
+          }
+        ]
+      }
+    },
+    {
       "date": "Fri, 22 Jan 2021 11:53:09 GMT",
       "tag": "@rnx-kit/metro-config_v0.0.1-dev",
       "version": "0.0.1-dev",
