@@ -17,6 +17,7 @@
   },
   "devDependencies": {
     "just-scripts": "^1.2.6",
+    "midgard-yarn": "^1.23.24",
     "typescript": "^4.1.3"
   }
 }

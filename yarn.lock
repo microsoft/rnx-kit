@@ -6799,6 +6799,11 @@ micromatch@^4.0.2:
     braces "^3.0.1"
     picomatch "^2.0.5"
 
+midgard-yarn@^1.23.24:
+  version "1.23.24"
+  resolved "https://registry.npmjs.org/midgard-yarn/-/midgard-yarn-1.23.24.tgz#09f7432f61b0e4272cf2e1049eda77de904d2f6a"
+  integrity sha512-opeyKfPdUgmzRoo15/JiU7bAF1f+ObR1ifs/gV8T8UVIRC6G3skTcSmemeOtVcald6HzJXWFxQaXQGduD4TTDw==
+
 mime-db@1.45.0, "mime-db@>= 1.43.0 < 2":
   version "1.45.0"
   resolved "https://registry.npmjs.org/mime-db/-/mime-db-1.45.0.tgz#cceeda21ccd7c3a745eba2decd55d4b73e7879ea"
