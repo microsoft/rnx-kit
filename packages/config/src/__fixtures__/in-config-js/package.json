@@ -2,6 +2,7 @@
   "name": "in-config-test-package",
   "version": "0.0.1",
   "description": "Package with kit options defined in config js file",
+  "private": true,
   "scripts": {},
   "dependencies": {
     "path": "^0.12.7"
