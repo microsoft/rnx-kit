@@ -1,3 +1,4 @@
+*.log
 *.tgz
 coverage/
 dist/
