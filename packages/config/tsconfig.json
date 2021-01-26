@@ -22,5 +22,6 @@
     "jsx": "react"
   },
   "baseUrl": ".",
-  "include": ["src"]
+  "include": ["src"],
+  "exclude": ["src/__fixtures__"]
 }
