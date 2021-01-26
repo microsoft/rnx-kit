@@ -1,0 +1,7 @@
+{
+  "type": "patch",
+  "comment": "add start of config package",
+  "packageName": "@rnx-kit/tools",
+  "email": "jasonmo@microsoft.com",
+  "dependentChangeType": "patch"
+}
