@@ -15,6 +15,7 @@
     "build": "lage build",
     "beachball:publish": "beachball publish",
     "change": "beachball change",
+    "ci": "yarn --cache-folder .yarn-offline-mirror --prefer-offline --frozen-lockfile --non-interactive",
     "check": "beachball check",
     "fast": "node scripts/tasks/fast-install.js",
     "test": "lage test --passWithNoTests"

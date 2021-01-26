@@ -21,8 +21,13 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - name: Install Yarn
         run: npm install -g yarn
+      - name: Cache /.yarn-offline-mirror
+        uses: actions/cache@v2
+        with:
+          path: .yarn-offline-mirror
+          key: ${{ hashFiles('yarn.lock') }}
       - name: Install package dependencies
-        run: yarn --frozen-lockfile install
+        run: yarn ci
       - name: Check for change files
         run: yarn run check --branch origin/main --changehint "Run 'yarn run change' from root of repo to generate a change file."
       - name: Build packages
