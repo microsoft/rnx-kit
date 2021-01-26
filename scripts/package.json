@@ -16,8 +16,11 @@
     "update-api": "echo no api to update"
   },
   "devDependencies": {
+    "@types/jest": "^26.0.0",
+    "jest": "^26.0.0",
     "just-scripts": "^1.2.6",
     "midgard-yarn": "^1.23.24",
+    "ts-jest": "^26.4.4",
     "typescript": "^4.1.3"
   }
 }

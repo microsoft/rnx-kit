@@ -6,13 +6,13 @@ import path from "path";
 
 describe("@rnx-kit/config tests", () => {
   const notPresentFixture = "not-present";
-  //  const inPackageFixture = 'in-package';
-  //  const inConfigFixture = 'in-config-js';
+  const inPackageFixture = "in-package";
+  const inConfigFixture = "in-config-js";
 
   const currentWorkingDir = process.cwd();
 
   function fixturePath(name: string): string {
-    return path.join(currentWorkingDir, "__fixtures__", name);
+    return path.join(currentWorkingDir, "src", "__fixtures__", name);
   }
 
   /**
@@ -28,5 +28,25 @@ describe("@rnx-kit/config tests", () => {
   test("not-present package correctly returns a null config", () => {
     setFixture(notPresentFixture);
     expect(getKitConfig()).toBeNull();
+  });
+
+  test("kit options can be found in package.json", () => {
+    setFixture(inPackageFixture);
+    const config = getKitConfig();
+    expect(config).not.toBeNull();
+    expect(config.platformBundle).toBeTruthy();
+    expect(config).toMatchSnapshot();
+  });
+
+  test("kit options can be found in config file", () => {
+    setFixture(inConfigFixture);
+    const config = getKitConfig();
+    expect(config).not.toBeNull();
+    expect(config).toMatchSnapshot();
+  });
+
+  test("kit options can be loaded via path", () => {
+    const config = getKitConfig({ cwd: fixturePath(inPackageFixture) });
+    expect(config).toMatchSnapshot();
   });
 });
