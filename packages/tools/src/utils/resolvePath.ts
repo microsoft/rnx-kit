@@ -35,7 +35,7 @@ export function resolvePath(
   let resolved = resolveFile
     ? path.resolve(require.resolve(name, requireOptions))
     : path.resolve(
-        require.resolve((name = "/package.json"), requireOptions),
+        require.resolve(name + "/package.json", requireOptions),
         ".."
       );
 

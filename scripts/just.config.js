@@ -6,10 +6,13 @@ const {
   parallel,
   option,
   argv,
+  jestTask,
   tscTask,
   cleanTask,
   eslintTask,
 } = require("just-scripts");
+
+const { jest } = require("./tasks/jest");
 
 const path = require("path");
 
@@ -36,4 +39,7 @@ task(
 task("lint", eslintTask({ files: ["src/."] }));
 task("clean", cleanTask([libPath]));
 task("build", series("clean", parallel("lint", "ts")));
+
+task("jest", jest);
+
 task("no-op", () => {});

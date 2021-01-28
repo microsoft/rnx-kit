@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`@rnx-kit/config tests kit options can be found in config file 1`] = `Object {}`;
+
+exports[`@rnx-kit/config tests kit options can be found in package.json 1`] = `
+Object {
+  "dependencies": Object {
+    "bar": "2.1.1",
+    "foo": "0.1.1",
+  },
+  "platformBundle": true,
+}
+`;
+
+exports[`@rnx-kit/config tests kit options can be loaded via path 1`] = `
+Object {
+  "dependencies": Object {
+    "bar": "2.1.1",
+    "foo": "0.1.1",
+  },
+  "platformBundle": true,
+}
+`;
