@@ -1221,7 +1221,7 @@
     hermes-profile-transformer "^0.0.6"
     ip "^1.1.5"
 
-"@react-native-community/cli-platform-android@^4.13.0", "@react-native-community/cli-platform-android@^4.5.1":
+"@react-native-community/cli-platform-android@^4.10.0", "@react-native-community/cli-platform-android@^4.13.0", "@react-native-community/cli-platform-android@^4.5.1":
   version "4.13.0"
   resolved "https://registry.npmjs.org/@react-native-community/cli-platform-android/-/cli-platform-android-4.13.0.tgz#922681ec82ee1aadd993598b814df1152118be02"
   integrity sha512-3i8sX8GklEytUZwPnojuoFbCjIRzMugCdzDIdZ9UNmi/OhD4/8mLGO0dgXfT4sMWjZwu3qjy45sFfk2zOAgHbA==
@@ -1237,7 +1237,7 @@
     slash "^3.0.0"
     xmldoc "^1.1.2"
 
-"@react-native-community/cli-platform-ios@^4.5.0":
+"@react-native-community/cli-platform-ios@^4.10.0", "@react-native-community/cli-platform-ios@^4.5.0":
   version "4.13.0"
   resolved "https://registry.npmjs.org/@react-native-community/cli-platform-ios/-/cli-platform-ios-4.13.0.tgz#a738915c68cac86df54e578b59a1311ea62b1aef"
   integrity sha512-6THlTu8zp62efkzimfGr3VIuQJ2514o+vScZERJCV1xgEi8XtV7mb/ZKt9o6Y9WGxKKkc0E0b/aVAtgy+L27CA==
@@ -1282,7 +1282,7 @@
   resolved "https://registry.npmjs.org/@react-native-community/cli-types/-/cli-types-4.10.1.tgz#d68a2dcd1649d3b3774823c64e5e9ce55bfbe1c9"
   integrity sha512-ael2f1onoPF3vF7YqHGWy7NnafzGu+yp88BbFbP0ydoCP2xGSUzmZVw0zakPTC040Id+JQ9WeFczujMkDy6jYQ==
 
-"@react-native-community/cli@^4.5.1":
+"@react-native-community/cli@^4.10.0", "@react-native-community/cli@^4.5.1":
   version "4.13.1"
   resolved "https://registry.npmjs.org/@react-native-community/cli/-/cli-4.13.1.tgz#60148723e77cafe3ae260317d6bffe91853a2d20"
   integrity sha512-+/TeRVToADpQPSprsPkwi9KY8x64YcuJpjzMBVISwWP+aWzsIDuWJmyMXTADlCg2EBMJqJR7bn1W/IkfzVRCWA==
@@ -7682,14 +7682,14 @@ react-native-macos@0.62.14:
     use-subscription "^1.0.0"
     whatwg-fetch "^3.0.0"
 
-react-native-test-app@0.2.16:
-  version "0.2.16"
-  resolved "https://registry.npmjs.org/react-native-test-app/-/react-native-test-app-0.2.16.tgz#4d9956b65cd453e855dd37481d3e1db68c8ab3b6"
-  integrity sha512-gzpBVRj4mJBJLi8QcGKaUgMDzOem+aILfBQwPdlcLRTfKh+I16Xc+velnq2dGSHLQOEYiCPtQVePj4Hc3bZhmQ==
+react-native-test-app@^0.3.11:
+  version "0.3.13"
+  resolved "https://registry.yarnpkg.com/react-native-test-app/-/react-native-test-app-0.3.13.tgz#ec4cd2d35110b4dbb079b4df91fb8127af359bb6"
+  integrity sha512-b+QoP3Wt+2XKvwQx1l6OqF17KhBQOvFoj+WVGNzFs+gVDumNUInFdzjKXo4G3ZTXJqTmGoBKYRpIuWEKoNJK9Q==
   dependencies:
-    "@react-native-community/cli" "^4.5.1"
-    "@react-native-community/cli-platform-android" "^4.5.1"
-    "@react-native-community/cli-platform-ios" "^4.5.0"
+    "@react-native-community/cli" "^4.10.0"
+    "@react-native-community/cli-platform-android" "^4.10.0"
+    "@react-native-community/cli-platform-ios" "^4.10.0"
     chalk "^4.1.0"
     plop "^2.6.0"
     yargs "^16.0.0"

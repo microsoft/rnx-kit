@@ -11,8 +11,8 @@
     "test": "rnx-kit-scripts test",
     "build:android": "mkdirp dist/res && react-native bundle --entry-file index.js --platform android --dev true --bundle-output dist/main.android.jsbundle --assets-dest dist/res --reset-cache",
     "build:ios": "mkdirp dist && react-native bundle --entry-file index.js --platform ios --dev true --bundle-output dist/main.ios.jsbundle --assets-dest dist --reset-cache",
-    "build:macos": "mkdirp dist && react-native bundle --entry-file index.js --platform macos --dev true --bundle-output dist/main.macos.jsbundle --assets-dest dist --reset-cache --config=metro.config.macos.js",
-    "build:windows": "mkdirp dist && react-native bundle --entry-file index.js --platform windows --dev true --bundle-output dist/main.windows.bundle --assets-dest dist --reset-cache --config=metro.config.windows.js",
+    "build:macos": "mkdirp dist && react-native bundle --entry-file index.js --platform macos --dev true --bundle-output dist/main.macos.jsbundle --assets-dest dist --reset-cache",
+    "build:windows": "mkdirp dist && react-native bundle --entry-file index.js --platform windows --dev true --bundle-output dist/main.windows.bundle --assets-dest dist --reset-cache",
     "android": "react-native run-android",
     "ios": "react-native run-ios --scheme ReactTestApp",
     "macos": "react-native run-macos --scheme ReactTestApp",
@@ -31,13 +31,14 @@
     "@babel/core": "^7.6.2",
     "@babel/runtime": "^7.6.2",
     "@react-native-community/eslint-config": "^0.0.5",
+    "@rnx-kit/metro-config": "*",
     "babel-jest": "^26.0.0",
     "eslint": "^6.5.1",
     "jest": "^26.0.0",
     "metro-react-native-babel-preset": "^0.58.0",
     "mkdirp": "^1.0.0",
-    "react-native-test-app": "0.2.16",
-    "react-test-renderer": "16.11.0",
+    "react-native-test-app": "^0.3.11",
+    "react-test-renderer": "16.11.0"
     "rnx-kit-scripts": "0.1.1"
   },
   "jest": {
