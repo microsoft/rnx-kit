@@ -1,10 +1,6 @@
 const path = require("path");
 
-if (process.argv.includes("--config=metro.config.macos.js")) {
-  module.exports = {
-    reactNativePath: "node_modules/react-native-macos",
-  };
-} else if (
+if (
   process.argv.includes("--config=metro.config.windows.js") ||
   process.argv.includes("run-windows")
 ) {

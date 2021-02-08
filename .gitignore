@@ -1,6 +1,12 @@
+**/app/build/
 *.log
 *.tgz
+*.xcworkspace/
+.gradle/
+.idea/
+Pods/
 coverage/
 dist/
 lib/
+local.properties
 node_modules/
