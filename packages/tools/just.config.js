@@ -1,1 +1,2 @@
-require("rnx-kit-scripts/just.config");
+const { configureJust } = require("rnx-kit-scripts");
+configureJust();

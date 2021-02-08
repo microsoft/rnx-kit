@@ -31,7 +31,9 @@ jobs:
           key: ${{ hashFiles('yarn.lock') }}
       - name: Install package dependencies
         run: yarn ci
-      - name: Build packages
-        run: yarn build
+      - name: Build and test packages
+        run: yarn buildci
+      - name: Bundle packages (NYI)
+        run: echo "Not yet implemented"
       - name: Publish
-        run: yarn run beachball publish --yes --token ${{ secrets.NPM_TOKEN }}
+        run: yarn run publish:beachball --yes --token ${{ secrets.NPM_TOKEN }}

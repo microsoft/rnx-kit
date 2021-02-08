@@ -29,8 +29,8 @@ jobs:
       - name: Install package dependencies
         run: yarn ci
       - name: Check for change files
-        run: yarn run check --branch origin/main --changehint "Run 'yarn run change' from root of repo to generate a change file."
-      - name: Build packages
-        run: yarn build
-      - name: Test
-        run: yarn test
+        run: yarn run check
+      - name: Build and test packages
+        run: yarn buildci
+      - name: Bundle packages (NYI)
+        run: echo "Not yet implemented"

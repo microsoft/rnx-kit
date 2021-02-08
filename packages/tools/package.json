@@ -6,7 +6,12 @@
   "module": "lib/index.js",
   "typings": "lib/index.d.ts",
   "scripts": {
-    "build": "rnx-kit-scripts build"
+    "build": "rnx-kit-scripts build",
+    "bundle": "rnx-kit-scripts bundle",
+    "clean": "rnx-kit-scripts clean",
+    "depcheck": "rnx-kit-scripts depcheck",
+    "lint": "rnx-kit-scripts lint",
+    "test": "rnx-kit-scripts test"
   },
   "dependencies": {
     "fs": "^0.0.1-security",
