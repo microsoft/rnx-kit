@@ -3,17 +3,23 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "android": "react-native run-android",
+    "build": "rnx-kit-scripts build",
+    "bundle": "rnx-kit-scripts bundle",
+    "clean": "rnx-kit-scripts clean",
+    "depcheck": "rnx-kit-scripts depcheck",
+    "lint": "rnx-kit-scripts lint",
+    "test": "rnx-kit-scripts test",
     "build:android": "mkdirp dist/res && react-native bundle --entry-file index.js --platform android --dev true --bundle-output dist/main.android.jsbundle --assets-dest dist/res --reset-cache",
     "build:ios": "mkdirp dist && react-native bundle --entry-file index.js --platform ios --dev true --bundle-output dist/main.ios.jsbundle --assets-dest dist --reset-cache",
     "build:macos": "mkdirp dist && react-native bundle --entry-file index.js --platform macos --dev true --bundle-output dist/main.macos.jsbundle --assets-dest dist --reset-cache",
     "build:windows": "mkdirp dist && react-native bundle --entry-file index.js --platform windows --dev true --bundle-output dist/main.windows.bundle --assets-dest dist --reset-cache",
+    "android": "react-native run-android",
     "ios": "react-native run-ios --scheme ReactTestApp",
-    "lint": "eslint .",
     "macos": "react-native run-macos --scheme ReactTestApp",
+    "windows": "react-native run-windows --sln windowsSampleCrossApp.sln",
     "start": "react-native start",
-    "test": "jest",
-    "windows": "react-native run-windows --sln windowsSampleCrossApp.sln"
+    "start:macos": "react-native start --config=metro.config.macos.js",
+    "start:windows": "react-native start --config=metro.config.windows.js"
   },
   "dependencies": {
     "react": "16.11.0",
@@ -32,7 +38,8 @@
     "metro-react-native-babel-preset": "^0.58.0",
     "mkdirp": "^1.0.0",
     "react-native-test-app": "^0.3.11",
-    "react-test-renderer": "16.11.0"
+    "react-test-renderer": "16.11.0",
+    "rnx-kit-scripts": "0.1.1"
   },
   "jest": {
     "preset": "react-native"

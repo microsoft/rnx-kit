@@ -3,43 +3,45 @@
 const {
   task,
   series,
-  parallel,
   option,
   argv,
-  jestTask,
   tscTask,
   cleanTask,
   eslintTask,
 } = require("just-scripts");
-
-const { jest } = require("./tasks/jest");
 
 const path = require("path");
 
 const srcPath = path.join(process.cwd(), "src");
 const libPath = path.join(process.cwd(), "lib");
 
-option("production");
+const checkPublishing = () => {
+  const { checkPublishingTask } = require("./lib/tasks/checkPublishingTask");
+  return checkPublishingTask();
+};
 
-task(
-  "ts",
-  tscTask({
-    pretty: true,
-    allowJs: true,
-    target: "es6",
-    outDir: "lib",
-    module: "commonjs",
-    ...(argv().production && {
-      inlineSources: true,
-      sourceRoot: path.relative(libPath, srcPath),
-    }),
-  })
-);
+module.exports = function preset() {
+  option("production");
 
-task("lint", eslintTask({ files: ["src/."] }));
-task("clean", cleanTask([libPath]));
-task("build", series("clean", parallel("lint", "ts")));
+  task("cleanlib", cleanTask({ paths: [libPath] }));
+  task("eslint", eslintTask({ files: ["src/."] }));
+  task(
+    "ts",
+    tscTask({
+      pretty: true,
+      allowJs: true,
+      target: "es6",
+      outDir: "lib",
+      module: "commonjs",
+      ...(argv().production && {
+        inlineSources: true,
+        sourceRoot: path.relative(libPath, srcPath),
+      }),
+    })
+  );
+  task("depcheck", checkPublishing);
+  task("no-op", () => {});
 
-task("jest", jest);
-
-task("no-op", () => {});
+  task("build", series("cleanlib", "eslint", "ts"));
+  task("clean", "no-op");
+};

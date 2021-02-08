@@ -1,0 +1,7 @@
+{
+  "type": "none",
+  "comment": "Add a build system and integrate with existing packages (except metro-config).",
+  "packageName": "@rnx-kit/config",
+  "email": "afoxman@microsoft.com",
+  "dependentChangeType": "none"
+}
