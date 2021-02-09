@@ -1,0 +1,23 @@
+{
+  "name": "@rnx-kit/cli",
+  "version": "0.0.1",
+  "description": "Command-line interface for rnx-kit tools and scripts",
+  "license": "MIT",
+  "files": [
+    "src/*"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "packages/cli"
+  },
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "scripts": {
+    "build": "rnx-kit-scripts build",
+    "test": "rnx-kit-scripts jest"
+  },
+  "devDependencies": {
+    "rnx-kit-scripts": "0.1.1"
+  }
+}
