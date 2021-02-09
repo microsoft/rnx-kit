@@ -22,10 +22,10 @@
     "start:windows": "react-native start --config=metro.config.windows.js"
   },
   "dependencies": {
-    "react": "16.11.0",
-    "react-native": "0.62.2",
-    "react-native-macos": "0.62.14",
-    "react-native-windows": "0.62.12"
+    "react": "16.13.1",
+    "react-native": "0.63.4",
+    "react-native-macos": "0.63.10",
+    "react-native-windows": "0.63.20"
   },
   "devDependencies": {
     "@babel/core": "^7.6.2",
@@ -35,10 +35,10 @@
     "babel-jest": "^26.0.0",
     "eslint": "^6.5.1",
     "jest": "^26.0.0",
-    "metro-react-native-babel-preset": "^0.58.0",
+    "metro-react-native-babel-preset": "^0.59.0",
     "mkdirp": "^1.0.0",
     "react-native-test-app": "^0.3.11",
-    "react-test-renderer": "16.11.0",
+    "react-test-renderer": "16.13.1",
     "rnx-kit-scripts": "0.1.1"
   },
   "jest": {

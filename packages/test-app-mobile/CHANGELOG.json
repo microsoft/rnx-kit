@@ -1,0 +1,20 @@
+{
+  "name": "@rnx-kit/mobile-app",
+  "entries": [
+    {
+      "date": "Tue, 09 Feb 2021 07:58:51 GMT",
+      "tag": "@rnx-kit/mobile-app_v0.0.1",
+      "version": "0.0.1",
+      "comments": {
+        "none": [
+          {
+            "comment": "Bump @rnx-kit/metro-config to v1.0.0",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "acbfb8256ff0477c59cb8e5001d3cbd8b5cf1207",
+            "package": "@rnx-kit/mobile-app"
+          }
+        ]
+      }
+    }
+  ]
+}
