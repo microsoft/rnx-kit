@@ -18,7 +18,6 @@
     "jest": "^26.0.0",
     "just-repo-utils": "^0.2.0",
     "just-scripts": "^1.2.6",
-    "metro": "^0.62.0",
     "midgard-yarn": "^1.23.24",
     "ts-jest": "^26.4.4",
     "typescript": "^4.1.3"
