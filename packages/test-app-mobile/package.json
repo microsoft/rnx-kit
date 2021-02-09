@@ -4,22 +4,20 @@
   "private": true,
   "scripts": {
     "build": "rnx-kit-scripts build",
-    "bundle": "rnx-kit-scripts bundle --dev true --reset-cache",
+    "bundle": "rnx-kit-scripts bundle --dev true",
     "clean": "rnx-kit-scripts clean",
     "depcheck": "rnx-kit-scripts depcheck",
     "lint": "rnx-kit-scripts lint",
     "test": "rnx-kit-scripts test",
-    "bundle:android": "rnx-kit-scripts bundle --dev true --reset-cache --platform android",
-    "bundle:ios": "rnx-kit-scripts bundle --dev true --reset-cache --platform ios",
-    "bundle:macos": "rnx-kit-scripts bundle --dev true --reset-cache --platform macos",
-    "bundle:windows": "rnx-kit-scripts bundle --dev true --reset-cache --platform windows",
+    "bundle:android": "rnx-kit-scripts bundle --dev true --platform android",
+    "bundle:ios": "rnx-kit-scripts bundle --dev true --platform ios",
+    "bundle:macos": "rnx-kit-scripts bundle --dev true --platform macos",
+    "bundle:windows": "rnx-kit-scripts bundle --dev true --platform windows",
     "android": "react-native run-android",
     "ios": "react-native run-ios --scheme ReactTestApp",
     "macos": "react-native run-macos --scheme ReactTestApp",
     "windows": "react-native run-windows --sln windowsSampleCrossApp.sln",
-    "start": "react-native start",
-    "start:macos": "react-native start --config=metro.config.macos.js",
-    "start:windows": "react-native start --config=metro.config.windows.js"
+    "start": "react-native start"
   },
   "dependencies": {
     "react": "16.13.1",
@@ -39,7 +37,8 @@
     "mkdirp": "^1.0.0",
     "react-native-test-app": "^0.3.11",
     "react-test-renderer": "16.13.1",
-    "rnx-kit-scripts": "0.1.1"
+    "rnx-kit-scripts": "0.1.1",
+    "@rnx-kit/cli": "^0.0.1"
   },
   "jest": {
     "preset": "react-native"
