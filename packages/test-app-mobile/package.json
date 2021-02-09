@@ -4,15 +4,15 @@
   "private": true,
   "scripts": {
     "build": "rnx-kit-scripts build",
-    "bundle": "rnx-kit-scripts bundle",
+    "bundle": "rnx-kit-scripts bundle --dev true --reset-cache",
     "clean": "rnx-kit-scripts clean",
     "depcheck": "rnx-kit-scripts depcheck",
     "lint": "rnx-kit-scripts lint",
     "test": "rnx-kit-scripts test",
-    "build:android": "mkdirp dist/res && react-native bundle --entry-file index.js --platform android --dev true --bundle-output dist/main.android.jsbundle --assets-dest dist/res --reset-cache",
-    "build:ios": "mkdirp dist && react-native bundle --entry-file index.js --platform ios --dev true --bundle-output dist/main.ios.jsbundle --assets-dest dist --reset-cache",
-    "build:macos": "mkdirp dist && react-native bundle --entry-file index.js --platform macos --dev true --bundle-output dist/main.macos.jsbundle --assets-dest dist --reset-cache",
-    "build:windows": "mkdirp dist && react-native bundle --entry-file index.js --platform windows --dev true --bundle-output dist/main.windows.bundle --assets-dest dist --reset-cache",
+    "bundle:android": "rnx-kit-scripts bundle --dev true --reset-cache --platform android",
+    "bundle:ios": "rnx-kit-scripts bundle --dev true --reset-cache --platform ios",
+    "bundle:macos": "rnx-kit-scripts bundle --dev true --reset-cache --platform macos",
+    "bundle:windows": "rnx-kit-scripts bundle --dev true --reset-cache --platform windows",
     "android": "react-native run-android",
     "ios": "react-native run-ios --scheme ReactTestApp",
     "macos": "react-native run-macos --scheme ReactTestApp",
@@ -43,5 +43,22 @@
   },
   "jest": {
     "preset": "react-native"
+  },
+  "metroBundles": {
+    "entry": "./index.js",
+    "outputPath": "./dist",
+    "assetsPath": "./dist",
+    "bundleName": "main",
+    "targets": [
+      "ios",
+      "android",
+      "macos",
+      "windows"
+    ],
+    "platforms": {
+      "android": {
+        "assetsPath": "./dist/res"
+      }
+    }
   }
 }

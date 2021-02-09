@@ -28,7 +28,6 @@ export function configureJust() {
   option("bundleName", { string: true });
   option("server");
   option("port", { number: true });
-  option("cli");
 
   // for options that have a check/fix switch this puts them into fix mode
   option("fix");
