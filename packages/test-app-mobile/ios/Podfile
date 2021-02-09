@@ -2,4 +2,10 @@ require_relative '../../../node_modules/react-native-test-app/test_app'
 
 workspace 'SampleCrossApp.xcworkspace'
 
+# Make sure Flipper-Folly stays on an older version to prevent
+# breaking build. This should be removed when the template is
+# bumped to a later version. For more details, see this issue:
+# https://github.com/facebook/react-native/issues/30836
+use_flipper!({ 'Flipper-Folly' => '2.3.0' })
+
 use_test_app!
