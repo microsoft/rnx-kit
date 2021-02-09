@@ -33,7 +33,7 @@ jobs:
         run: yarn ci
       - name: Build and test packages
         run: yarn buildci
-      - name: Bundle packages (NYI)
-        run: echo "Not yet implemented"
+      - name: Bundle packages
+        run: yarn bundle
       - name: Publish
         run: yarn run publish:beachball --yes --token ${{ secrets.NPM_TOKEN }}
