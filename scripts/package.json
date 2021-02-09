@@ -2,23 +2,23 @@
   "name": "rnx-kit-scripts",
   "version": "0.1.1",
   "private": true,
-  "main": "./index.js",
+  "main": "./lib/index.js",
   "bin": {
     "rnx-kit-scripts": "./just-scripts.js"
   },
   "scripts": {
     "build-tools": "just-scripts build",
-    "bundlesize": "bundlesize --debug",
     "code-style": "node ./lib/just-scripts.js code-style",
     "depcheck": "just-scripts depcheck",
-    "prettier": "node ./lib/just-scripts.js prettier",
-    "verify-api": "echo no api to verify",
-    "update-api": "echo no api to update"
+    "prettier": "node ./lib/just-scripts.js prettier"
   },
   "devDependencies": {
     "@types/jest": "^26.0.0",
+    "depcheck": "^1.0.0",
     "jest": "^26.0.0",
+    "just-repo-utils": "^0.2.0",
     "just-scripts": "^1.2.6",
+    "metro": "^0.62.0",
     "midgard-yarn": "^1.23.24",
     "ts-jest": "^26.4.4",
     "typescript": "^4.1.3"

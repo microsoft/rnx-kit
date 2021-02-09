@@ -22,5 +22,8 @@
     "jsx": "react"
   },
   "baseUrl": ".",
+  "paths": {
+    "*": ["src/*"]
+  },
   "include": ["src"]
 }
