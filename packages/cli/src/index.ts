@@ -7,6 +7,7 @@ export const rnxBundle = (
   console.log("__dirname: %s", __dirname);
   console.log("working directory: %s", process.cwd());
   console.log("argv: %o", argv);
+  config;
   // console.log("config: %o", config);
   console.log("options: %o", options);
 };
