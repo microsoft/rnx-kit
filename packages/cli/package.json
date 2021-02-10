@@ -1,0 +1,19 @@
+{
+  "name": "@rnx-kit/cli",
+  "version": "0.0.1",
+  "description": "Command-line interface for rnx-kit",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "scripts": {
+    "build": "rnx-kit-build build",
+    "bundle": "rnx-kit-build bundle --dev true",
+    "clean": "rnx-kit-build clean",
+    "depcheck": "rnx-kit-build depcheck",
+    "lint": "rnx-kit-build lint",
+    "test": "rnx-kit-build test"
+  },
+  "devDependencies": {
+    "@rnx-kit/build": "0.0.1"
+  }
+}
