@@ -20,11 +20,12 @@ const checkPublishing = () => {
   return checkPublishingTask();
 };
 
-module.exports = function preset() {
+module.exports = function configureJustForBuildTools() {
   option("production");
 
-  task("cleanlib", cleanTask({ paths: [libPath] }));
-  task("eslint", eslintTask({ files: ["src/."] }));
+  task("clean", cleanTask({ paths: [libPath] }));
+  task("depcheck", checkPublishing);
+  task("lint", eslintTask({ files: ["src/."] }));
   task(
     "ts",
     tscTask({
@@ -39,9 +40,6 @@ module.exports = function preset() {
       }),
     })
   );
-  task("depcheck", checkPublishing);
-  task("no-op", () => {});
 
-  task("build", series("cleanlib", "eslint", "ts"));
-  task("clean", "no-op");
+  task("build-tools", series("clean", "lint", "ts"));
 };

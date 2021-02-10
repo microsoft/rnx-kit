@@ -1,0 +1,33 @@
+{
+  "name": "@rnx-kit/build",
+  "version": "0.0.1",
+  "description": "Build system for rnx-kit packages",
+  "license": "MIT",
+  "main": "./lib/index.js",
+  "bin": {
+    "rnx-kit-build": "./just-scripts.js"
+  },
+  "scripts": {
+    "build-tools": "just-scripts build-tools",
+    "clean-tools": "just-scripts clean",
+    "depcheck": "just-scripts depcheck",
+    "lint": "just-scripts lint"
+  },
+  "dependencies": {
+    "depcheck": "^1.0.0",
+    "just-repo-utils": "^0.2.0",
+    "just-scripts": "^1.2.6"
+  },
+  "devDependencies": {
+    "@types/jest": "^26.0.0",
+    "jest": "^26.0.0",
+    "ts-jest": "^26.4.4",
+    "typescript": "^4.1.3"
+  },
+  "peerDependencies": {
+    "jest": ">= 26.0.0",
+    "ts-jest": ">= 26.0.0",
+    "react-native": ">= 0.60.0",
+    "typescript": ">= 4.0.0"
+  }
+}

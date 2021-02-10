@@ -1,3 +1,3 @@
 {
-  "extends": "rnx-kit-scripts/tsconfig.json"
+  "extends": "@rnx-kit/build/tsconfig.json"
 }

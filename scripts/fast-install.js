@@ -20,7 +20,7 @@ const pinUserConfig = isCi && !unpinUserConfig;
 
 // grab the midgard yarn version from scripts/package.json
 const midgardYarnVersion =
-  require("../package.json").devDependencies["midgard-yarn"] || "1.23.24";
+  require("./package.json").devDependencies["midgard-yarn"] || "1.23.24";
 
 const env = { yarnFast: "true" };
 // The env of yarn running the command is messing with the auth
