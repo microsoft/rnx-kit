@@ -33,24 +33,6 @@ if (path.basename(npmPath) !== "yarn.js") {
   process.exit(1);
 }
 
-checkRepositoryLocation();
-
-function checkRepositoryLocation() {
-  if (process.platform !== "win32") {
-    return;
-  }
-
-  const nodePath = path.parse(process.execPath);
-  const repositoryPath = path.parse(__dirname);
-
-  if (nodePath.root !== repositoryPath.root) {
-    console.warn(
-      "\x1b[33m%s\x1b[0m",
-      "Your repository is located on a different drive than node.exe. This may cause build failure when running Jest tests."
-    );
-  }
-}
-
 function detectYarnInstallation() {
   const yarnResult = spawnSync("yarn", ["--version"]);
   return yarnResult.status === 0;

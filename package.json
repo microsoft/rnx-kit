@@ -55,9 +55,6 @@
       "bundle": [
         "^build-tools"
       ],
-      "clean": [
-        "^build-tools"
-      ],
       "depcheck": [
         "^build-tools"
       ],
