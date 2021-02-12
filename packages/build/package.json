@@ -17,7 +17,9 @@
   "dependencies": {
     "depcheck": "^1.0.0",
     "just-repo-utils": "^0.2.0",
-    "just-scripts": "^1.2.6"
+    "just-scripts": "^1.2.6",
+    "just-scripts-utils": "^1.1.2",
+    "supports-color": "^8.1.0"
   },
   "devDependencies": {
     "@types/jest": "^26.0.0",

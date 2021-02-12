@@ -1,9 +1,25 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`@rnx-kit/config tests kit options can be found in config file 1`] = `Object {}`;
+exports[`@rnx-kit/config tests kit options can be found in config file 1`] = `
+Object {
+  "bundle": Object {
+    "id": "test-bundle",
+    "targets": Array [
+      "ios",
+      "android",
+    ],
+  },
+  "dependencies": [Function],
+  "platformBundle": Object {
+    "bundlePrefix": "fakeIndex",
+    "distPath": "./distro",
+  },
+}
+`;
 
 exports[`@rnx-kit/config tests kit options can be found in package.json 1`] = `
 Object {
+  "bundle": true,
   "dependencies": Object {
     "bar": "2.1.1",
     "foo": "0.1.1",
@@ -14,6 +30,7 @@ Object {
 
 exports[`@rnx-kit/config tests kit options can be loaded via path 1`] = `
 Object {
+  "bundle": true,
   "dependencies": Object {
     "bar": "2.1.1",
     "foo": "0.1.1",
