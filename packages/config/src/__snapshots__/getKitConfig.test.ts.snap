@@ -3,10 +3,21 @@
 exports[`@rnx-kit/config tests kit options can be found in config file 1`] = `
 Object {
   "bundle": Object {
-    "id": "test-bundle",
+    "assetsPath": "./build-out/assets",
+    "bundlePrefix": "main",
+    "distPath": "./build-out",
+    "entryPath": "./core-entry.js",
+    "id": "core",
+    "platforms": Object {
+      "android": Object {
+        "assetsPath": "./build-out/res",
+      },
+    },
     "targets": Array [
       "ios",
       "android",
+      "macos",
+      "windows",
     ],
   },
   "dependencies": [Function],

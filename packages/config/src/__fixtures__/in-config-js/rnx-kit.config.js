@@ -4,8 +4,17 @@ module.exports = {
     bundlePrefix: "fakeIndex",
   },
   bundle: {
-    id: "test-bundle",
-    targets: ["ios", "android"],
+    id: "core",
+    entryPath: "./core-entry.js",
+    distPath: "./build-out",
+    assetsPath: "./build-out/assets",
+    bundlePrefix: "main",
+    targets: ["ios", "android", "macos", "windows"],
+    platforms: {
+      android: {
+        assetsPath: "./build-out/res",
+      },
+    },
   },
   dependencies: () => ({
     foo: "1.2.3",
