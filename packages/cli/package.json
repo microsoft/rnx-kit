@@ -3,8 +3,8 @@
   "version": "0.0.1",
   "description": "Command-line interface for rnx-kit",
   "license": "MIT",
-  "main": "lib/index.js",
-  "typings": "lib/index.d.ts",
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
   "scripts": {
     "build": "rnx-kit-build build",
     "bundle": "rnx-kit-build bundle --dev true",

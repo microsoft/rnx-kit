@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
-    "outDir": "lib",
-    "target": "es2015",
+    "target": "es6",
     "module": "commonjs",
     "moduleResolution": "node",
     "declaration": true,
@@ -19,11 +18,9 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "sourceMap": true,
-    "jsx": "react"
-  },
-  "baseUrl": ".",
-  "paths": {
-    "*": ["src/*"]
+    "jsx": "react",
+    "allowJs": true,
+    "pretty": true
   },
   "include": ["src"]
 }

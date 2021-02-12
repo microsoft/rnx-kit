@@ -4,6 +4,7 @@
   "description": "Build system for rnx-kit packages",
   "license": "MIT",
   "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
   "bin": {
     "rnx-kit-build": "./just-scripts.js"
   },

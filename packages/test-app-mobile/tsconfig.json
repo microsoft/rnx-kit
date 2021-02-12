@@ -1,5 +1,4 @@
 {
   "extends": "@rnx-kit/build/tsconfig.json",
-  "baseUrl": "./",
   "include": ["./"]
 }

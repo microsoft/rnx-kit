@@ -29,11 +29,7 @@ module.exports = function configureJustForBuildTools() {
   task(
     "ts",
     tscTask({
-      pretty: true,
-      allowJs: true,
-      target: "es6",
       outDir: "lib",
-      module: "commonjs",
       ...(argv().production && {
         inlineSources: true,
         sourceRoot: path.relative(libPath, srcPath),

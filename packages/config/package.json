@@ -2,9 +2,8 @@
   "name": "@rnx-kit/config",
   "version": "0.0.2",
   "description": "Package for defining and querying information about rnx kits",
-  "main": "lib-commonjs/index.js",
-  "module": "lib/index.js",
-  "typings": "lib/index.d.ts",
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
   "scripts": {
     "build": "rnx-kit-build build",
     "bundle": "rnx-kit-build bundle",
