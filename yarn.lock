@@ -5733,7 +5733,7 @@ just-repo-utils@^0.2.0:
     jju "^1.4.0"
     just-task-logger ">=0.3.0 <1.0.0"
 
-"just-scripts-utils@>=1.1.2 <2.0.0":
+"just-scripts-utils@>=1.1.2 <2.0.0", just-scripts-utils@^1.1.2:
   version "1.1.2"
   resolved "https://registry.npmjs.org/just-scripts-utils/-/just-scripts-utils-1.1.2.tgz#288c329b207f380b4b5a2223910e4e6c2bf6bfa7"
   integrity sha512-IH0Qo2dg6dcvG/owVF5x0+TgWezCx7nrKsIQ80n8VdlowZAXMLlR6o8XT0b7rtoBvkbQUnUbNGQAB6EBhlpxHw==
