@@ -7,13 +7,17 @@
   "types": "./lib/index.d.ts",
   "scripts": {
     "build": "rnx-kit-build build",
-    "bundle": "rnx-kit-build bundle --dev true",
-    "clean": "rnx-kit-build clean",
     "depcheck": "rnx-kit-build depcheck",
     "lint": "rnx-kit-build lint",
     "test": "rnx-kit-build test"
   },
+  "dependencies": {
+    "@rnx-kit/config": "0.0.2"
+  },
   "devDependencies": {
     "@rnx-kit/build": "0.0.1"
+  },
+  "peerDependencies": {
+    "react-native": ">= 0.60.0"
   }
 }

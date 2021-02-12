@@ -13,7 +13,6 @@ import { clean } from "./tasks/clean";
 import { depcheck } from "./tasks/depcheck";
 import { eslint } from "./tasks/eslint";
 import { jest } from "./tasks/jest";
-import { metro } from "./tasks/metro";
 import { ts } from "./tasks/ts";
 
 export function configureJust() {
@@ -21,13 +20,6 @@ export function configureJust() {
   addResolvePath(__dirname);
 
   option("production");
-
-  //  metro options
-  option("dev");
-  option("platform", { string: true });
-  option("bundleName", { string: true });
-  option("server");
-  option("port", { number: true });
 
   // for options that have a check/fix switch this puts them into fix mode
   option("fix");
@@ -42,13 +34,11 @@ export function configureJust() {
   task("jest:macos", jest.macos);
   task("jest:win32", jest.win32);
   task("jest:windows", jest.windows);
-  task("metro", () => metro);
   task("no-op", () => {});
   task("prettier", () => (argv().fix ? prettierTask : prettierCheckTask));
   task("ts", ts);
 
   // hierarchical task definintions
-  task("bundle", series("metro"));
   task("build", series("clean", "lint", "ts"));
   task("code-style", series("prettier", "lint"));
   task(
