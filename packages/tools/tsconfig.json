@@ -1,26 +1,5 @@
 {
-  "compilerOptions": {
-    "outDir": "lib",
-    "target": "es2015",
-    "module": "commonjs",
-    "moduleResolution": "node",
-    "declaration": true,
-    "declarationMap": true,
-    "strict": true,
-    "strictBindCallApply": false,
-    "forceConsistentCasingInFileNames": true,
-    "strictNullChecks": false,
-    "noImplicitAny": false,
-    "noImplicitReturns": true,
-    "noImplicitThis": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "skipDefaultLibCheck": true,
-    "sourceMap": true,
-    "jsx": "react"
-  },
-  "baseUrl": ".",
+  "extends": "rnx-kit-scripts/tsconfig.json",
+  "baseUrl": "./",
   "include": ["src"]
 }

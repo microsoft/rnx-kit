@@ -1,19 +1,23 @@
 {
-  "name": "@rnx-kit/mobile-app",
+  "name": "@rnx-kit/test-app-mobile",
   "version": "0.0.1",
   "private": true,
   "scripts": {
+    "build": "rnx-kit-scripts build",
+    "bundle": "rnx-kit-scripts bundle --dev true --reset-cache",
+    "depcheck": "rnx-kit-scripts depcheck",
+    "lint": "rnx-kit-scripts lint",
+    "test": "rnx-kit-scripts test",
+    "bundle:android": "rnx-kit-scripts bundle --dev true --reset-cache --platform android",
+    "bundle:ios": "rnx-kit-scripts bundle --dev true --reset-cache --platform ios",
+    "bundle:macos": "rnx-kit-scripts bundle --dev true --reset-cache --platform macos",
+    "bundle:windows": "rnx-kit-scripts bundle --dev true --reset-cache --platform windows",
     "android": "react-native run-android",
-    "build:android": "mkdirp dist/res && react-native bundle --entry-file index.js --platform android --dev true --bundle-output dist/main.android.jsbundle --assets-dest dist/res --reset-cache",
-    "build:ios": "mkdirp dist && react-native bundle --entry-file index.js --platform ios --dev true --bundle-output dist/main.ios.jsbundle --assets-dest dist --reset-cache",
-    "build:macos": "mkdirp dist && react-native bundle --entry-file index.js --platform macos --dev true --bundle-output dist/main.macos.jsbundle --assets-dest dist --reset-cache",
-    "build:windows": "mkdirp dist && react-native bundle --entry-file index.js --platform windows --dev true --bundle-output dist/main.windows.bundle --assets-dest dist --reset-cache",
     "ios": "react-native run-ios --scheme ReactTestApp",
-    "lint": "eslint .",
     "macos": "react-native run-macos --scheme ReactTestApp",
+    "windows": "react-native run-windows --sln windows\\SampleCrossApp.sln",
     "start": "react-native start",
-    "test": "jest",
-    "windows": "react-native run-windows --sln windowsSampleCrossApp.sln"
+    "start:windows": "react-native start --config=metro.config.windows.js"
   },
   "dependencies": {
     "react": "16.13.1",
@@ -32,9 +36,27 @@
     "metro-react-native-babel-preset": "^0.59.0",
     "mkdirp": "^1.0.0",
     "react-native-test-app": "^0.3.11",
-    "react-test-renderer": "16.13.1"
+    "react-test-renderer": "16.13.1",
+    "rnx-kit-scripts": "0.1.1"
   },
   "jest": {
     "preset": "react-native"
+  },
+  "metroBundles": {
+    "entry": "./index.js",
+    "outputPath": "./dist",
+    "assetsPath": "./dist",
+    "bundleName": "main",
+    "targets": [
+      "ios",
+      "android",
+      "macos",
+      "windows"
+    ],
+    "platforms": {
+      "android": {
+        "assetsPath": "./dist/res"
+      }
+    }
   }
 }

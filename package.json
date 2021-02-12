@@ -12,13 +12,21 @@
     "url": "https://github.com/Microsoft/rnx-kit.git"
   },
   "scripts": {
-    "build": "lage build",
-    "beachball:publish": "beachball publish",
+    "build": "lage build --verbose --grouped",
+    "buildci": "lage buildci --verbose --grouped",
+    "build-tools": "lage build-tools --verbose --grouped",
+    "bump-versions": "beachball bump",
+    "bundle": "lage bundle --verbose --grouped",
     "change": "beachball change",
+    "check": "beachball check --branch origin/main --changehint \"Run 'yarn run change' from root of repo to generate a change file.\"",
     "ci": "yarn --cache-folder .yarn-offline-mirror --prefer-offline --frozen-lockfile --non-interactive",
-    "check": "beachball check",
-    "fast": "node scripts/tasks/fast-install.js",
-    "test": "lage test --passWithNoTests"
+    "clean": "lage clean --verbose --grouped",
+    "depcheck": "lage depcheck --verbose --grouped",
+    "lint": "lage lint --verbose --grouped",
+    "preinstall": "node ./scripts/preinstall.js",
+    "postinstall": "node ./scripts/postinstall.js",
+    "publish:beachball": "beachball publish --bump-deps -m\"📦 applying package updates ***NO_CI***\"",
+    "test": "lage test --verbose --grouped"
   },
   "devDependencies": {
     "beachball": "^1.49.0",
@@ -33,8 +41,29 @@
   "lage": {
     "npmClient": "yarn",
     "pipeline": {
+      "build-tools": [
+        "^build-tools"
+      ],
       "build": [
+        "build-tools",
         "^build"
+      ],
+      "buildci": [
+        "build",
+        "test"
+      ],
+      "bundle": [
+        "^build-tools"
+      ],
+      "depcheck": [
+        "^build-tools"
+      ],
+      "lint": [
+        "^build-tools"
+      ],
+      "test": [
+        "^build-tools",
+        "build"
       ]
     }
   },

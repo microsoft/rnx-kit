@@ -7,7 +7,10 @@
   "typings": "lib/index.d.ts",
   "scripts": {
     "build": "rnx-kit-scripts build",
-    "test": "rnx-kit-scripts jest"
+    "bundle": "rnx-kit-scripts bundle",
+    "depcheck": "rnx-kit-scripts depcheck",
+    "lint": "rnx-kit-scripts lint",
+    "test": "rnx-kit-scripts test"
   },
   "dependencies": {
     "fs": "^0.0.1-security",
