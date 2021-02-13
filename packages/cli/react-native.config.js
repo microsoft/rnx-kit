@@ -1,21 +1,60 @@
-const app = require("./lib/index");
+const cli = require("./lib/index");
 
 module.exports = {
   commands: [
     {
-      name: "rnx-bundle <first> [last]",
+      name: "rnx-bundle",
       description: "Bundle your react-native experience for offline use",
-      func: app.rnxBundle,
+      func: cli.rnxBundle,
       options: [
         {
-          name: "--path [bundlePath]",
-          description: "Path to the bundle file",
+          name: "--entryPath [file]",
+          description:
+            "Path to the root JS file, either absolute or relative to the package",
+        },
+        {
+          name: "--distPath [path]",
+          description:
+            "Path where the bundle is written, either absolute or relative to the package",
+        },
+        {
+          name: "--assetsPath [path]",
+          description:
+            "Path where bundle assets like images are written, either absolute or relative to the package",
+        },
+        {
+          name: "--bundlePrefix [prefix]",
+          description:
+            "Bundle file prefix, followed by the platform and bundle file extension",
+        },
+        {
+          name: "--id [id]",
+          description:
+            "Target bundle id, only needed when config describes multiple bundles",
+        },
+        {
+          name: "--platform [ios|android|windows|macos]",
+          description:
+            "Target platform; when not given, all platforms are bundled",
+          parse: cli.parsePlatform,
+        },
+        {
+          name: "--dev [boolean]",
+          description:
+            "If false, warnings are disabled and the bundle is minified",
+          default: true,
+          parse: cli.parseBoolean,
         },
       ],
-      examples: [
+    },
+    {
+      name: "rnx-start",
+      description: "Starts a bundle webserver for your react-native experience",
+      func: cli.rnxStart,
+      options: [
         {
-          desc: "Example 1 described here",
-          cmd: "rnx-bundle --path somewhere 1",
+          name: "--port [port]",
+          parse: parseInt,
         },
       ],
     },

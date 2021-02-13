@@ -12,7 +12,8 @@
     "test": "rnx-kit-build test"
   },
   "dependencies": {
-    "@rnx-kit/config": "0.0.2"
+    "@rnx-kit/config": "0.0.2",
+    "chalk": "^4.1.0"
   },
   "devDependencies": {
     "@rnx-kit/build": "0.0.1"

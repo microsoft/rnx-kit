@@ -5,14 +5,13 @@ import path from "path";
 import {
   AllPlatforms,
   BundleConfig,
+  BundleParameters,
   getBundleDefinition,
   getBundlePlatformDefinition,
 } from "@rnx-kit/config";
 
-// TODO: bring this over from FURN: import { addPlatformMetroConfig } from "../configs/configureMetro";
-
 /**
- * options for running metro bundling
+ * options for metro bundling
  */
 export interface MetroBundleOptions {
   /**
@@ -26,64 +25,35 @@ export interface MetroBundleOptions {
   platform?: AllPlatforms;
 
   /**
-   * whether to bundle in development mode
+   * whether to bundle in development mode. if false, warnings are disabled and the bundle is minified
    */
   dev?: boolean;
+}
 
+/**
+ * options for starting a metro server
+ */
+export interface MetroStartOptions {
   /**
-   * run metro in server mode
-   */
-  server?: boolean;
-
-  /**
-   * port override for server mode
+   * port override
    */
   port?: number;
 }
 
-function runMetroBundle(
-  platform: AllPlatforms,
-  entryPath: string,
-  bundlePath: string,
-  assetsPath: string,
-  dev: boolean,
-  server: boolean,
-  port?: number
-): void {
-  const yarnCmd = os.platform() === "win32" ? "yarn.cmd" : "yarn";
-  const options = { cwd: process.cwd(), stdio: "inherit" } as any;
-
-  let args: string[];
-  if (server) {
-    args = ["react-native", "start", ...(port && ["--port", port.toString()])];
-  } else {
-    const sourceMap = dev && bundlePath + ".map";
-    const devValue = dev ? "true" : "false";
-    args = [
-      "react-native",
-      "bundle",
-      "--platform",
-      platform,
-      "--entry-file",
-      entryPath,
-      "--bundle-output",
-      bundlePath,
-      "--dev",
-      devValue,
-      "--assets-dest",
-      assetsPath,
-      ...((sourceMap && ["--sourcemap-output", sourceMap]) || []),
-    ];
-  }
-
-  console.log("%s %s", yarnCmd, args.join(" "));
-  spawnSync(yarnCmd, args, options);
+function yarnSync(args: string[]): void {
+  const yarnCommand = os.platform() === "win32" ? "yarn.cmd" : "yarn";
+  const spawnOptions = { cwd: process.cwd(), stdio: "inherit" } as any;
+  spawnSync(yarnCommand, args, spawnOptions);
 }
 
-export function metroBundle(config: BundleConfig, options: MetroBundleOptions) {
-  const { id, platform, dev = false, server, port } = options;
+export function metroBundle(
+  config: BundleConfig,
+  options: MetroBundleOptions,
+  overrides: BundleParameters
+) {
+  const { id, platform, dev = false } = options;
 
-  console.log("Starting metro" + (id ? ` for bundle id ${id}...` : "..."));
+  console.log("Generating metro bundle(s)" + (id ? ` for id ${id}...` : "..."));
 
   // get the bundle definition
   const definition = getBundleDefinition(config, id);
@@ -101,12 +71,19 @@ export function metroBundle(config: BundleConfig, options: MetroBundleOptions) {
       targetPlatform
     );
 
+    //  apply overrides
+    const overrideDefinition = {
+      ...platformDefinition,
+      ...overrides,
+    };
+
+    //  extract the final values
     const {
       entryPath,
       distPath,
       assetsPath,
       bundlePrefix,
-    } = platformDefinition;
+    } = overrideDefinition;
 
     const bundleFile = `${bundlePrefix}.${targetPlatform}.${bundleExtension}`;
     const bundlePath = path.join(distPath, bundleFile);
@@ -119,14 +96,34 @@ export function metroBundle(config: BundleConfig, options: MetroBundleOptions) {
       mkdirSync(parentDirectory);
     }
 
-    runMetroBundle(
+    const devBool = !!dev;
+    const sourceMap = devBool && bundlePath + ".map";
+    yarnSync([
+      "react-native",
+      "bundle",
+      "--platform",
       targetPlatform,
+      "--entry-file",
       entryPath,
+      "--bundle-output",
       bundlePath,
+      "--dev",
+      devBool ? "true" : "false",
+      "--assets-dest",
       assetsPath,
-      !!dev,
-      server,
-      port
-    );
+      ...((sourceMap && ["--sourcemap-output", sourceMap]) || []),
+    ]);
   }
+}
+
+export function metroStart(options: MetroStartOptions): void {
+  const { port } = options;
+
+  console.log("Starting metro server...");
+
+  yarnSync([
+    "react-native",
+    "start",
+    ...(port ? ["--port", port.toString()] : []),
+  ]);
 }
