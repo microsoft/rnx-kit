@@ -1,0 +1,7 @@
+{
+  "type": "minor",
+  "comment": "Create a CLI to wrap metro commands.",
+  "packageName": "@rnx-kit/cli",
+  "email": "afoxman@microsoft.com",
+  "dependentChangeType": "patch"
+}

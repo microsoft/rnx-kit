@@ -1,0 +1,7 @@
+{
+  "type": "minor",
+  "comment": "Create a CLI to wrap metro commands. Move metro logic from the build into the CLI package.",
+  "packageName": "@rnx-kit/build",
+  "email": "afoxman@microsoft.com",
+  "dependentChangeType": "patch"
+}
