@@ -29,7 +29,7 @@ export interface BundleParameters {
   assetsPath?: string;
 
   /**
-   * Prefix for the bundle name, typically followed by the platform and either ".bundle" (win, android)
+   * Prefix for the bundle name, followed by the platform and either ".bundle" (win, android)
    * or ".jsbundle" (mac, ios).
    *
    * @default "index"
