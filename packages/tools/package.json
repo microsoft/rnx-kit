@@ -7,7 +7,6 @@
   "types": "./lib/index.d.ts",
   "scripts": {
     "build": "rnx-kit-build build",
-    "bundle": "rnx-kit-build bundle",
     "depcheck": "rnx-kit-build depcheck",
     "lint": "rnx-kit-build lint",
     "test": "rnx-kit-build test"
