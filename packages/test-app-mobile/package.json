@@ -4,20 +4,19 @@
   "private": true,
   "scripts": {
     "build": "rnx-kit-build build",
-    "bundle": "rnx-kit-build bundle --dev true",
     "depcheck": "rnx-kit-build depcheck",
     "lint": "rnx-kit-build lint",
     "test": "rnx-kit-build test",
-    "bundle:android": "rnx-kit-build bundle --dev true --platform android",
-    "bundle:ios": "rnx-kit-build bundle --dev true --platform ios",
-    "bundle:macos": "rnx-kit-build bundle --dev true --platform macos",
-    "bundle:windows": "rnx-kit-build bundle --dev true --platform windows",
+    "bundle": "react-native rnx-bundle",
+    "bundle:android": "react-native rnx-bundle --platform android",
+    "bundle:ios": "react-native rnx-bundle --platform ios",
+    "bundle:macos": "react-native rnx-bundle --platform macos",
+    "bundle:windows": "react-native rnx-bundle --platform windows",
     "android": "react-native run-android",
     "ios": "react-native run-ios --scheme ReactTestApp",
     "macos": "react-native run-macos --scheme ReactTestApp",
     "windows": "react-native run-windows --sln windows\\SampleCrossApp.sln",
-    "start": "react-native start",
-    "start:windows": "react-native start --config=metro.config.windows.js"
+    "start": "react-native rnx-start"
   },
   "dependencies": {
     "react": "16.13.1",
@@ -30,6 +29,7 @@
     "@babel/runtime": "^7.6.2",
     "@react-native-community/eslint-config": "^0.0.5",
     "@rnx-kit/build": "0.0.1",
+    "@rnx-kit/cli": "0.0.1",
     "@rnx-kit/metro-config": "1.0.0",
     "babel-jest": "^26.0.0",
     "eslint": "^6.5.1",
@@ -39,23 +39,22 @@
     "react-test-renderer": "16.13.1",
     "rnx-kit-scripts": "0.1.1"
   },
-  "jest": {
-    "preset": "react-native"
-  },
-  "metroBundles": {
-    "entry": "./index.js",
-    "outputPath": "./dist",
-    "assetsPath": "./dist",
-    "bundleName": "main",
-    "targets": [
-      "ios",
-      "android",
-      "macos",
-      "windows"
-    ],
-    "platforms": {
-      "android": {
-        "assetsPath": "./dist/res"
+  "rnx-kit": {
+    "bundle": {
+      "entryPath": "./lib/index.js",
+      "distPath": "./dist",
+      "assetsPath": "./dist",
+      "bundlePrefix": "main",
+      "targets": [
+        "ios",
+        "android",
+        "macos",
+        "windows"
+      ],
+      "platforms": {
+        "android": {
+          "assetsPath": "./dist/res"
+        }
       }
     }
   }
