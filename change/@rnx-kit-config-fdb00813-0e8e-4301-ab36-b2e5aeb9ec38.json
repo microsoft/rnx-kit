@@ -1,0 +1,7 @@
+{
+  "type": "patch",
+  "comment": "Create a CLI package which self-registers with @react-native-community/cli. Add bundling commands 'rnx-bundle' and 'rnx-start' which invoke metro. Move bundle code from build system to CLI package.",
+  "packageName": "@rnx-kit/config",
+  "email": "afoxman@microsoft.com",
+  "dependentChangeType": "patch"
+}
