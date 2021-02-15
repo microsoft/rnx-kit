@@ -2,9 +2,8 @@
   "name": "@rnx-kit/tools",
   "version": "0.1.3",
   "description": "Common tooling for the react-native-sdk",
-  "main": "lib-commonjs/index.js",
-  "module": "lib/index.js",
-  "typings": "lib/index.d.ts",
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
   "scripts": {
     "build": "rnx-kit-scripts build",
     "bundle": "rnx-kit-scripts bundle",
