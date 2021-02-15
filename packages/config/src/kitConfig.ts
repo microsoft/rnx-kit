@@ -1,3 +1,5 @@
+import { BundleConfig } from "./bundleConfig";
+
 export type DependencyVersions = { [key: string]: string };
 export type GetDependencyVersions = () => DependencyVersions;
 
@@ -22,6 +24,11 @@ export interface KitConfig {
          */
         bundlePrefix?: string;
       };
+
+  /**
+   * Specifies how the kit is bundled. When not defined, the kit cannot be bundled.
+   */
+  bundle?: BundleConfig;
 
   /**
    * Retrieve the dependencies for the kit, either via:

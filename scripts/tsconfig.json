@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "outDir": "lib",
     "target": "es2015",
     "module": "commonjs",
     "moduleResolution": "node",
@@ -18,12 +17,11 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
+    "resolveJsonModule": true,
     "sourceMap": true,
+    "allowJs": true,
+    "pretty": true,
     "jsx": "react"
-  },
-  "baseUrl": ".",
-  "paths": {
-    "*": ["src/*"]
   },
   "include": ["src"]
 }
