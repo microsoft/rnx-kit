@@ -42,7 +42,7 @@
     "preset": "react-native"
   },
   "metroBundles": {
-    "entry": "./index.js",
+    "entry": "./src/index.js",
     "outputPath": "./dist",
     "assetsPath": "./dist",
     "bundleName": "main",
