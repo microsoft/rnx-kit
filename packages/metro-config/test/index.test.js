@@ -158,7 +158,6 @@ describe("@rnx-kit/metro-config", () => {
     ).toEqual([
       "README.md",
       "package.json",
-      "src/babel-plugin-import-path-remapper.js",
       "src/index.js",
     ]);
   });
