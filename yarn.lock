@@ -1321,6 +1321,28 @@
   dependencies:
     applicationinsights "^1.8.8"
 
+"@rnx-kit/config@0.0.2":
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/@rnx-kit/config/-/config-0.0.2.tgz#26deef219889ef92f6f7988f1fdab78b31495a87"
+  integrity sha512-xVmuLKLY1CDAETRmRKcKz86VwHgzqhJevR64UgDhd/J0PyGfN5edaqo6OQnDAUheeofLEKvTeQiom+30wUbUPQ==
+  dependencies:
+    cosmiconfig "^7.0.0"
+    fs "^0.0.1-security"
+    path "^0.12.7"
+    workspace-tools "^0.10.2"
+
+"@rnx-kit/metro-config@1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@rnx-kit/metro-config/-/metro-config-1.0.0.tgz#e41e86b03657f77b289295ff8dba6b8689c579a5"
+  integrity sha512-evLSuXaryE1QfkMsXgbA9LMvAF1EBSetNQq/grndNp7pqUniAHwJwZT6SKf5Cj/D7OwiY75iikVNxR2b6Fkq7g==
+  dependencies:
+    "@babel/core" "^7.0.0"
+    "@babel/helper-plugin-utils" "^7.0.0"
+    "@babel/types" "^7.0.0"
+    babel-plugin-const-enum "^1.0.0"
+    fast-glob "^3.2.2"
+    find-up "^4.1.0"
+
 "@rushstack/node-core-library@3.35.2":
   version "3.35.2"
   resolved "https://registry.npmjs.org/@rushstack/node-core-library/-/node-core-library-3.35.2.tgz#21ca879b5051a5ebafa952fafcd648a07a142bcb"
