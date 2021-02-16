@@ -1,7 +1,7 @@
 // @ts-check
 "use strict";
 
-describe("@rnx-kit/metro-config/src/babel-plugin-import-path-remapper", () => {
+describe("@rnx-kit/babel-plugin-import-path-remapper", () => {
   const babel = require("@babel/core");
 
   /**
@@ -21,7 +21,7 @@ describe("@rnx-kit/metro-config/src/babel-plugin-import-path-remapper", () => {
    */
   function transform(code, test = isRNXKit) {
     const result = babel.transformSync(code, {
-      plugins: [["src/babel-plugin-import-path-remapper.js", { test }]],
+      plugins: [["src/index.js", { test }]],
     });
     return result && result.code;
   }

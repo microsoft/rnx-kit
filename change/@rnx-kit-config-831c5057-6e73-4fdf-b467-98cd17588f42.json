@@ -1,0 +1,7 @@
+{
+  "type": "minor",
+  "comment": "Add bundle config to the kit config.",
+  "packageName": "@rnx-kit/config",
+  "email": "afoxman@microsoft.com",
+  "dependentChangeType": "patch"
+}
