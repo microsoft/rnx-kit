@@ -2,6 +2,21 @@
   "name": "@rnx-kit/config",
   "entries": [
     {
+      "date": "Tue, 16 Feb 2021 19:15:57 GMT",
+      "tag": "@rnx-kit/config_v0.1.0",
+      "version": "0.1.0",
+      "comments": {
+        "minor": [
+          {
+            "comment": "Add bundle config to the kit config.",
+            "author": "afoxman@microsoft.com",
+            "commit": "13eab407c996b8b28d4c93ea827283353749bd4f",
+            "package": "@rnx-kit/config"
+          }
+        ]
+      }
+    },
+    {
       "date": "Tue, 16 Feb 2021 19:03:38 GMT",
       "tag": "@rnx-kit/config_v0.0.3",
       "version": "0.0.3",
