@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/config
 
-This log was last generated on Tue, 16 Feb 2021 19:03:38 GMT and should not be manually modified.
+This log was last generated on Tue, 16 Feb 2021 19:15:57 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 0.1.0
+
+Tue, 16 Feb 2021 19:15:57 GMT
+
+### Minor changes
+
+- Add bundle config to the kit config. (afoxman@microsoft.com)
 
 ## 0.0.3
 

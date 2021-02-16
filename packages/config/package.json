@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/config",
-  "version": "0.0.3",
+  "version": "0.1.0",
   "description": "Package for defining and querying information about rnx kits",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
