@@ -1,7 +1,0 @@
-{
-  "type": "patch",
-  "comment": "Move typescript settings from tscTask to tsconfig.json. Remove the use of baseUrl and paths, which we don't need. Fix path in fast-install script. Update test-app-mobile dependencies and move all source files into an 'src' directory.",
-  "packageName": "@rnx-kit/config",
-  "email": "afoxman@microsoft.com",
-  "dependentChangeType": "patch"
-}
