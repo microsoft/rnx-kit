@@ -34,16 +34,15 @@
     "eslint": "^6.5.1",
     "jest": "^26.0.0",
     "metro-react-native-babel-preset": "^0.59.0",
-    "mkdirp": "^1.0.0",
     "react-native-test-app": "^0.3.11",
     "react-test-renderer": "16.13.1",
-    "rnx-kit-scripts": "0.1.1"
+    "rnx-kit-scripts": "*"
   },
   "jest": {
     "preset": "react-native"
   },
   "metroBundles": {
-    "entry": "./index.js",
+    "entry": "./src/index.js",
     "outputPath": "./dist",
     "assetsPath": "./dist",
     "bundleName": "main",
