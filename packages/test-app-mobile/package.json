@@ -43,7 +43,7 @@
   },
   "rnx-kit": {
     "bundle": {
-      "entryPath": "./lib/index.js",
+      "entryPath": "./lib/src/index.js",
       "distPath": "./dist",
       "assetsPath": "./dist",
       "bundlePrefix": "main",
