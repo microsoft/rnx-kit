@@ -1,6 +1,21 @@
 {
-  "name": "@rnx-kit/mobile-app",
+  "name": "@rnx-kit/test-app-mobile",
   "entries": [
+    {
+      "date": "Tue, 16 Feb 2021 09:27:59 GMT",
+      "tag": "@rnx-kit/test-app-mobile_v0.0.1",
+      "version": "0.0.1",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Bump @rnx-kit/metro-config to v1.0.1",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "93d5f4d1b75e87f1ffc6d18b6d99c817a060045d",
+            "package": "@rnx-kit/test-app-mobile"
+          }
+        ]
+      }
+    },
     {
       "date": "Tue, 09 Feb 2021 07:58:51 GMT",
       "tag": "@rnx-kit/mobile-app_v0.0.1",

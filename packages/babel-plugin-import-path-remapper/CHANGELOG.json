@@ -1,0 +1,20 @@
+{
+  "name": "@rnx-kit/babel-plugin-import-path-remapper",
+  "entries": [
+    {
+      "date": "Tue, 16 Feb 2021 09:27:59 GMT",
+      "tag": "@rnx-kit/babel-plugin-import-path-remapper_v1.0.0",
+      "version": "1.0.0",
+      "comments": {
+        "minor": [
+          {
+            "comment": "Babel plugin for remapping 'lib/' imports to 'src/'",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "93d5f4d1b75e87f1ffc6d18b6d99c817a060045d",
+            "package": "@rnx-kit/babel-plugin-import-path-remapper"
+          }
+        ]
+      }
+    }
+  ]
+}
