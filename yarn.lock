@@ -1321,18 +1321,6 @@
   dependencies:
     applicationinsights "^1.8.8"
 
-"@rnx-kit/metro-config@1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@rnx-kit/metro-config/-/metro-config-1.0.0.tgz#e41e86b03657f77b289295ff8dba6b8689c579a5"
-  integrity sha512-evLSuXaryE1QfkMsXgbA9LMvAF1EBSetNQq/grndNp7pqUniAHwJwZT6SKf5Cj/D7OwiY75iikVNxR2b6Fkq7g==
-  dependencies:
-    "@babel/core" "^7.0.0"
-    "@babel/helper-plugin-utils" "^7.0.0"
-    "@babel/types" "^7.0.0"
-    babel-plugin-const-enum "^1.0.0"
-    fast-glob "^3.2.2"
-    find-up "^4.1.0"
-
 "@rushstack/node-core-library@3.35.2":
   version "3.35.2"
   resolved "https://registry.npmjs.org/@rushstack/node-core-library/-/node-core-library-3.35.2.tgz#21ca879b5051a5ebafa952fafcd648a07a142bcb"
