@@ -71,6 +71,38 @@ function defaultWatchFolders(projectRoot) {
 }
 
 /**
+ * Returns a list of installed react-native copies.
+ * @param {string} projectRoot
+ * @returns {string[]}
+ */
+function findReactNative(projectRoot) {
+  const findUp = require("find-up");
+  const path = require("path");
+
+  /** @type {string[]} */
+  const paths = [];
+
+  findUp.sync(
+    (directory) => {
+      const candidate = path.join(
+        directory,
+        "node_modules",
+        "react-native",
+        "package.json"
+      );
+      if (findUp.sync.exists(candidate)) {
+        paths.push(path.relative(projectRoot, path.dirname(candidate)));
+      }
+      return undefined;
+    },
+    {
+      cwd: projectRoot,
+    }
+  );
+  return paths;
+}
+
+/**
  * Helper function for generating a package exclusion list.
  * @param {(string | RegExp)[]=} additionalExclusions
  * @returns {RegExp}
@@ -88,6 +120,11 @@ function exclusionList(additionalExclusions = []) {
   })();
 
   return exclusionList([
+    // Ignore extra copies of react-native
+    ...findReactNative(process.cwd())
+      .slice(1)
+      .map((p) => new RegExp(`${p}/.*`)),
+
     // Ignore nested copies of react-native
     /node_modules\/.*\/node_modules\/react-native\/.*/,
 

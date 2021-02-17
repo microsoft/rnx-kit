@@ -10,3 +10,4 @@ dist/
 lib/
 local.properties
 node_modules/
+!**/__fixtures__/**/node_modules/
