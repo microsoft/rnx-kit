@@ -32,14 +32,10 @@ export function parsePlatform(val: string): AllPlatforms {
 }
 
 export function rnxBundle(
-  argv: Array<string>,
-  config /*: ConfigT*/,
+  _argv: Array<string>,
+  _config /*: ConfigT*/,
   options: Object
 ): void {
-  //  unused params
-  argv;
-  config;
-
   //  get the rnx kit config, and make sure bundling is enabled
   const kitConfig = getKitConfig();
   if (
@@ -89,13 +85,9 @@ export function rnxBundle(
 }
 
 export function rnxStart(
-  argv: Array<string>,
-  config /*: ConfigT*/,
+  _argv: Array<string>,
+  _config /*: ConfigT*/,
   options: Object
 ): void {
-  //  unused params
-  argv;
-  config;
-
   metroStart(options as MetroStartOptions);
 }

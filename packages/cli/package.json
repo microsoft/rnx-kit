@@ -16,7 +16,7 @@
     "chalk": "^4.1.0"
   },
   "devDependencies": {
-    "rnx-kit-scripts": "0.1.1"
+    "rnx-kit-scripts": "*"
   },
   "peerDependencies": {
     "react-native": ">= 0.60.0"
