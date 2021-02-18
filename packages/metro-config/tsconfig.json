@@ -1,15 +1,13 @@
 {
+  "extends": "rnx-kit-scripts/tsconfig.json",
   "compilerOptions": {
-    "target": "ESNext",
     "allowJs": true,
     "checkJs": true,
     "noEmit": true,
-    "strict": true,
-    "moduleResolution": "Node",
-    "noFallthroughCasesInSwitch": true,
-    "noImplicitReturns": true,
-    "noUnusedLocals": true,
-    "resolveJsonModule": true
+    "strictBindCallApply": true,
+    "strictNullChecks": true,
+    "noImplicitAny": true,
+    "noFallthroughCasesInSwitch": true
   },
-  "include": ["src/*.js"]
+  "include": ["src"]
 }

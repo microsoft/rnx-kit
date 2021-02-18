@@ -79,17 +79,22 @@ describe("@rnx-kit/metro-config", () => {
     const fixtureCopy = "..\\/..\\/node_modules\\/react-native\\/.*";
 
     // /rnx-kit/node_modules/react-native
-    const repoCopy = "..\\/..\\/..\\/..\\/..\\/..\\/..\\/node_modules\\/react-native\\/.*";
+    const repoCopy =
+      "..\\/..\\/..\\/..\\/..\\/..\\/..\\/node_modules\\/react-native\\/.*";
 
     // Conan does not have a local copy of react-native but since we're
     // in a monorepo, we'll find the repo's copy.
     setFixture("awesome-repo/packages/conan");
-    expect(exclusionList().source).toBe(`(${repoCopy}|${defaultExclusionList})$`);
+    expect(exclusionList().source).toBe(
+      `(${repoCopy}|${defaultExclusionList})$`
+    );
 
     // John has a local copy of react-native and should ignore the
     // hoisted copy (in addition to the repo's own copy).
     setFixture("awesome-repo/packages/john");
-    expect(exclusionList().source).toBe(`(${fixtureCopy}|${repoCopy}|${defaultExclusionList})$`);
+    expect(exclusionList().source).toBe(
+      `(${fixtureCopy}|${repoCopy}|${defaultExclusionList})$`
+    );
   });
 
   test("exclusionList() returns additional exclusions", () => {
