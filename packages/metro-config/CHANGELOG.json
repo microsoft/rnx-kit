@@ -2,6 +2,21 @@
   "name": "@rnx-kit/metro-config",
   "entries": [
     {
+      "date": "Thu, 18 Feb 2021 09:33:32 GMT",
+      "tag": "@rnx-kit/metro-config_v1.0.2",
+      "version": "1.0.2",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Ignore hoisted react-native if a local copy exists",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "7cd8fc3229dd9cecf57ab5e4f5c2e8228ca2aa43",
+            "package": "@rnx-kit/metro-config"
+          }
+        ]
+      }
+    },
+    {
       "date": "Tue, 16 Feb 2021 09:27:59 GMT",
       "tag": "@rnx-kit/metro-config_v1.0.1",
       "version": "1.0.1",

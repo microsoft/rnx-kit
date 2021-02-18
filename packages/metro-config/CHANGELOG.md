@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/metro-config
 
-This log was last generated on Tue, 16 Feb 2021 09:27:59 GMT and should not be manually modified.
+This log was last generated on Thu, 18 Feb 2021 09:33:32 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 1.0.2
+
+Thu, 18 Feb 2021 09:33:32 GMT
+
+### Patches
+
+- Ignore hoisted react-native if a local copy exists (4123478+tido64@users.noreply.github.com)
 
 ## 1.0.1
 
