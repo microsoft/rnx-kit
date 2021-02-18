@@ -8,7 +8,12 @@ function createJestTask(options, platform) {
 function getJestOptions() {
   const updateSnapshot =
     argv().u || argv().updateSnapshot ? { updateSnapshot: true } : undefined;
-  return { coverage: !!argv().production, runInBand: true, ...updateSnapshot };
+  return {
+    coverage: !!argv().production,
+    runInBand: true,
+    passWithNoTests: true,
+    ...updateSnapshot,
+  };
 }
 
 export const jest = {
