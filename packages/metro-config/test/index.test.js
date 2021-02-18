@@ -11,6 +11,9 @@ describe("@rnx-kit/metro-config", () => {
     makeMetroConfig,
   } = require("../src");
 
+  const defaultExclusionList =
+    "node_modules\\/.*\\/node_modules\\/react-native\\/.*|.*\\.ProjectImports\\.zip|node_modules\\/react\\/dist\\/.*|website\\/node_modules\\/.*|heapCapture\\/bundle\\.js|.*\\/__tests__\\/.*";
+
   const babelConfigKeys = ["presets", "overrides"];
   const babelConfigPresets = ["module:metro-react-native-babel-preset"];
   const babelTypeScriptTest = "\\.tsx?$";
@@ -71,10 +74,26 @@ describe("@rnx-kit/metro-config", () => {
     expect(folders.sort()).toEqual(expectedFolders);
   });
 
+  test("exclusionList() ignores hoisted react-native if a local copy exists", () => {
+    // /rnx-kit/packages/metro-config/test/__fixtures__/awesome-repo/node_modules/react-native
+    const fixtureCopy = "..\\/..\\/node_modules\\/react-native\\/.*";
+
+    // /rnx-kit/node_modules/react-native
+    const repoCopy = "..\\/..\\/..\\/..\\/..\\/..\\/..\\/node_modules\\/react-native\\/.*";
+
+    // Conan does not have a local copy of react-native but since we're
+    // in a monorepo, we'll find the repo's copy.
+    setFixture("awesome-repo/packages/conan");
+    expect(exclusionList().source).toBe(`(${repoCopy}|${defaultExclusionList})$`);
+
+    // John has a local copy of react-native and should ignore the
+    // hoisted copy (in addition to the repo's own copy).
+    setFixture("awesome-repo/packages/john");
+    expect(exclusionList().source).toBe(`(${fixtureCopy}|${repoCopy}|${defaultExclusionList})$`);
+  });
+
   test("exclusionList() returns additional exclusions", () => {
-    expect(exclusionList().source).toBe(
-      "(node_modules\\/.*\\/node_modules\\/react-native\\/.*|.*\\.ProjectImports\\.zip|node_modules\\/react\\/dist\\/.*|website\\/node_modules\\/.*|heapCapture\\/bundle\\.js|.*\\/__tests__\\/.*)$"
-    );
+    expect(exclusionList().source).toBe(`(${defaultExclusionList})$`);
     expect(exclusionList([/.*[\/\\]__fixtures__[\/\\].*/]).source).toBe(
       "(node_modules\\/.*\\/node_modules\\/react-native\\/.*|.*\\.ProjectImports\\.zip|.*[\\/\\\\]__fixtures__[\\/\\\\].*|node_modules\\/react\\/dist\\/.*|website\\/node_modules\\/.*|heapCapture\\/bundle\\.js|.*\\/__tests__\\/.*)$"
     );
@@ -155,10 +174,6 @@ describe("@rnx-kit/metro-config", () => {
     );
     expect(
       files.filter((file) => !file.startsWith("CHANGELOG")).sort()
-    ).toEqual([
-      "README.md",
-      "package.json",
-      "src/index.js",
-    ]);
+    ).toEqual(["README.md", "package.json", "src/index.js"]);
   });
 });
