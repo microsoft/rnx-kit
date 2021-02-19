@@ -1,4 +1,9 @@
-import { AllPlatforms, BundleConfig, BundleDefinition } from "./bundleConfig";
+import {
+  AllPlatforms,
+  BundleConfig,
+  BundleDefinition,
+  BundleDefinitionResolved,
+} from "./bundleConfig";
 
 function asArray<T>(opt: T | T[]): T[] {
   return Array.isArray(opt) ? opt : [opt || ({} as T)];
@@ -17,8 +22,8 @@ function asArray<T>(opt: T | T[]): T[] {
 export function getBundleDefinition(
   config: BundleConfig,
   id?: string
-): BundleDefinition {
-  const defaultDefinition: BundleDefinition = {
+): BundleDefinitionResolved {
+  const defaultDefinition: BundleDefinitionResolved = {
     entryPath: "./lib/index.js",
     distPath: "./dist",
     assetsPath: "./dist",
@@ -45,9 +50,9 @@ export function getBundleDefinition(
  * @returns bundle definition containing all platform-specific overrides
  */
 export function getBundlePlatformDefinition(
-  bundle: BundleDefinition,
+  bundle: BundleDefinitionResolved,
   platform: AllPlatforms
-): BundleDefinition {
+): BundleDefinitionResolved {
   const platformValues = bundle.platforms && bundle.platforms[platform];
   return platformValues ? { ...bundle, ...platformValues } : bundle;
 }

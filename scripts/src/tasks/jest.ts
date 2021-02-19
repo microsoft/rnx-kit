@@ -1,9 +1,10 @@
 import { argv, jestTask, JestTaskOptions } from "just-scripts";
-import { AllPlatforms } from "./metro";
+
+type JestPlatforms = "ios" | "android" | "windows" | "macos";
 
 function createJestTask(
   options: JestTaskOptions,
-  platform: AllPlatforms | undefined
+  platform: JestPlatforms | undefined
 ) {
   const config = platform ? `jest.config.${platform}.js` : "jest.config.js";
   return jestTask({ ...options, config: config });

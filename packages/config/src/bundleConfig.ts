@@ -59,6 +59,15 @@ export type BundleDefinition = BundleParameters & {
 };
 
 /**
+ * Bundle definition with all parameters resolved to user-provided values or defaults.
+ */
+export type BundleDefinitionResolved = Omit<
+  BundleDefinition,
+  keyof BundleParameters
+> &
+  Required<BundleParameters>;
+
+/**
  * Bundle configuration for a kit. If true, then all defaults will be used.
  * Otherwise, the bundle definition object(s) allow more detailed specification of bundling parameters.
  */
