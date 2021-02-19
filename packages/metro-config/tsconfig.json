@@ -1,9 +1,7 @@
 {
   "extends": "rnx-kit-scripts/tsconfig.json",
   "compilerOptions": {
-    "noEmit": true,
-    "strictNullChecks": true,
-    "noImplicitAny": true
+    "noEmit": true
   },
   "include": ["src"]
 }

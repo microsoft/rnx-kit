@@ -34,7 +34,8 @@ describe("@rnx-kit/config tests", () => {
     setFixture(inPackageFixture);
     const config = getKitConfig();
     expect(config).not.toBeNull();
-    expect(config.platformBundle).toBeTruthy();
+    expect(config && config.bundle).toBeTruthy();
+    expect(config && config.platformBundle).toBeTruthy();
     expect(config).toMatchSnapshot();
   });
 

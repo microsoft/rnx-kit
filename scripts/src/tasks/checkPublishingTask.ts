@@ -1,7 +1,10 @@
-import { TaskFunction, logger } from 'just-task';
-import { getPackageInfos, findGitRoot } from 'workspace-tools';
+import { TaskFunction, logger } from "just-task";
+import { getPackageInfos, findGitRoot } from "workspace-tools";
 
-export type DependencyType = 'dependencies' | 'devDependencies' | 'peerDependencies';
+export type DependencyType =
+  | "dependencies"
+  | "devDependencies"
+  | "peerDependencies";
 
 export interface CheckPublishingOptions {
   /**
@@ -16,18 +19,26 @@ export interface CheckPublishingOptions {
  *
  * @param options - options for configuring the task
  */
-export function checkPublishingTask(options: CheckPublishingOptions = {}): TaskFunction {
-  const dependencyTypes = options.dependencyTypes || ['dependencies'];
+export function checkPublishingTask(
+  options: CheckPublishingOptions = {}
+): TaskFunction {
+  const dependencyTypes = options.dependencyTypes || ["dependencies"];
   return function(done: (error?: Error) => void) {
-    const packageInfos = getPackageInfos(findGitRoot(process.cwd()));
-    logger.info('Starting scan for publishing errors');
+    const gitRoot = findGitRoot(process.cwd());
+    if (!gitRoot) {
+      throw `Cannot located Git root from ${process.cwd()}`;
+    }
+    const packageInfos = getPackageInfos(gitRoot);
+    logger.info("Starting scan for publishing errors");
     try {
-      Object.keys(packageInfos).forEach(pkg => {
+      Object.keys(packageInfos).forEach((pkg) => {
         if (!packageInfos[pkg].private) {
-          logger.verbose(`Scanning published package ${pkg} for private dependenies`);
-          dependencyTypes.forEach(dependencyType => {
+          logger.verbose(
+            `Scanning published package ${pkg} for private dependenies`
+          );
+          dependencyTypes.forEach((dependencyType) => {
             const deps = packageInfos[pkg][dependencyType];
-            Object.keys(deps || {}).forEach(dep => {
+            Object.keys(deps || {}).forEach((dep) => {
               if (packageInfos[dep] && packageInfos[dep].private) {
                 const errorMsg = `${pkg} has a ${dependencyType} on private package ${dep}`;
                 logger.error(errorMsg);
@@ -40,7 +51,7 @@ export function checkPublishingTask(options: CheckPublishingOptions = {}): TaskF
     } catch (err) {
       done(err);
     }
-    logger.info('No publishing errors found');
+    logger.info("No publishing errors found");
     done();
   };
 }

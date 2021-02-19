@@ -128,7 +128,11 @@ function runMetroFromCli(
   if (server) {
     spawnSync(
       yarnCmd,
-      ["react-native", "start", ...(port && ["--port", port.toString()])],
+      [
+        "react-native",
+        "start",
+        ...((port && ["--port", port.toString()]) || []),
+      ],
       options
     );
   } else {
@@ -210,7 +214,7 @@ function metroTask(options: MetroTaskOptions = {}): TaskFunction {
         bundlePath,
         assetsPath,
         !!dev,
-        server,
+        !!server,
         port
       );
     }

@@ -18,33 +18,39 @@ module.exports = function executeWithTriggers({ cmd, triggers, env, cwd }) {
       env: env || process.env,
       cwd: cwd || process.cwd(),
     });
-    child.stdout.on("data", (chunk) => {
-      process.stdout.write(chunk);
-      const output = chunk.toString();
+    if (!child) {
+      reject();
+    } else {
+      child.stdout &&
+        child.stdout.on("data", (chunk) => {
+          process.stdout.write(chunk);
+          const output = chunk.toString();
 
-      triggers
-        .filter((t) => output.match(t.pattern))
-        .forEach((t) => {
-          t.callback("stdout", output);
+          triggers
+            .filter((t) => output.match(t.pattern))
+            .forEach((t) => {
+              t.callback("stdout", output);
+            });
         });
-    });
-    child.stderr.on("data", (chunk) => {
-      process.stderr.write(chunk);
-      const output = chunk.toString();
+      child.stderr &&
+        child.stderr.on("data", (chunk) => {
+          process.stderr.write(chunk);
+          const output = chunk.toString();
 
-      triggers
-        .filter((t) => output.match(t.pattern))
-        .forEach((t) => {
-          t.callback("stderr", output);
+          triggers
+            .filter((t) => output.match(t.pattern))
+            .forEach((t) => {
+              t.callback("stderr", output);
+            });
         });
-    });
 
-    child.on("exit", () => {
-      if (child.exitCode !== 0) {
-        reject();
-      } else {
-        resolve();
-      }
-    });
+      child.on("exit", () => {
+        if (child.exitCode !== 0) {
+          reject();
+        } else {
+          resolve();
+        }
+      });
+    }
   });
 };

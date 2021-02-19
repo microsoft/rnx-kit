@@ -1,3 +1,7 @@
+/**
+ * @param {*} a
+ * @param {*} b
+ */
 function mergeOneLevel(a, b = {}) {
   const result = { ...a, ...b };
   Object.keys(a).forEach((key) => {
@@ -14,7 +18,10 @@ function scriptsDevDeps() {
 }
 
 function depcheckTask() {
-  return function(done) {
+  /**
+   * @param {(arg0: any) => void} done
+   */
+  const task = function(done) {
     const { logger } = require("just-scripts");
     const depcheck = require("depcheck");
     const path = require("path");
@@ -65,6 +72,7 @@ function depcheckTask() {
       }
     });
   };
+  return task;
 }
 
 module.exports.depcheck = depcheckTask;
