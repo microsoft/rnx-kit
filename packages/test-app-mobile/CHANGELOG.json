@@ -2,6 +2,21 @@
   "name": "@rnx-kit/test-app-mobile",
   "entries": [
     {
+      "date": "Fri, 19 Feb 2021 19:58:00 GMT",
+      "tag": "@rnx-kit/test-app-mobile_v0.0.1",
+      "version": "0.0.1",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Bump @rnx-kit/cli to v0.0.2",
+            "author": "afoxman@microsoft.com",
+            "commit": "5adefaed7d9a52f288f2929895d2a017187c8dbf",
+            "package": "@rnx-kit/test-app-mobile"
+          }
+        ]
+      }
+    },
+    {
       "date": "Fri, 19 Feb 2021 07:03:27 GMT",
       "tag": "@rnx-kit/test-app-mobile_v0.0.1",
       "version": "0.0.1",
