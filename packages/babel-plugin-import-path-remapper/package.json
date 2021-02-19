@@ -13,9 +13,9 @@
   "version": "1.0.0",
   "main": "src/index.js",
   "scripts": {
-    "build": "tsc",
+    "build": "rnx-kit-scripts build",
     "format": "prettier --write src/*.js test/*.js",
-    "test": "jest"
+    "test": "rnx-kit-scripts test"
   },
   "dependencies": {
     "@babel/core": "^7.0.0",
@@ -28,6 +28,7 @@
     "@types/jest": "^26.0.0",
     "jest": "^26.0.0",
     "prettier": "^2.0.0",
+    "rnx-kit-scripts": "*",
     "typescript": "^4.0.0"
   },
   "jest": {
