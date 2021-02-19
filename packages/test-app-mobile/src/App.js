@@ -25,6 +25,8 @@ import {
 } from "react-native/Libraries/NewAppScreen";
 
 const App = () => {
+  // @ts-ignore `HermesInternal` doesn't exist in `global`
+  const hermesDisabled = global.HermesInternal == null;
   return (
     <>
       <StatusBar barStyle="dark-content" />
@@ -34,7 +36,7 @@ const App = () => {
           style={styles.scrollView}
         >
           <Header />
-          {global.HermesInternal == null ? null : (
+          {hermesDisabled ? null : (
             <View style={styles.engine}>
               <Text style={styles.footer}>Engine: Hermes</Text>
             </View>

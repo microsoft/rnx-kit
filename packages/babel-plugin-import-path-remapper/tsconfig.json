@@ -1,13 +1,9 @@
 {
   "extends": "rnx-kit-scripts/tsconfig.json",
   "compilerOptions": {
-    "allowJs": true,
-    "checkJs": true,
     "noEmit": true,
-    "strictBindCallApply": true,
     "strictNullChecks": true,
-    "noImplicitAny": true,
-    "noFallthroughCasesInSwitch": true
+    "noImplicitAny": true
   },
   "include": ["src"]
 }
