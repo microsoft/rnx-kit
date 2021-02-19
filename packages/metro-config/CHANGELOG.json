@@ -2,6 +2,21 @@
   "name": "@rnx-kit/metro-config",
   "entries": [
     {
+      "date": "Fri, 19 Feb 2021 07:03:27 GMT",
+      "tag": "@rnx-kit/metro-config_v1.0.2",
+      "version": "1.0.2",
+      "comments": {
+        "none": [
+          {
+            "comment": "Align on build tools",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "9afadb4f2c5e9b5476d5575295b6ea0b909db760",
+            "package": "@rnx-kit/metro-config"
+          }
+        ]
+      }
+    },
+    {
       "date": "Thu, 18 Feb 2021 09:33:32 GMT",
       "tag": "@rnx-kit/metro-config_v1.0.2",
       "version": "1.0.2",
