@@ -1,0 +1,24 @@
+{
+  "name": "@rnx-kit/cli",
+  "version": "0.0.1",
+  "description": "Command-line interface for rnx-kit",
+  "license": "MIT",
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
+  "scripts": {
+    "build": "rnx-kit-scripts build",
+    "depcheck": "rnx-kit-scripts depcheck",
+    "lint": "rnx-kit-scripts lint",
+    "test": "rnx-kit-scripts test"
+  },
+  "dependencies": {
+    "@rnx-kit/config": "0.1.0",
+    "chalk": "^4.1.0"
+  },
+  "devDependencies": {
+    "rnx-kit-scripts": "*"
+  },
+  "peerDependencies": {
+    "react-native": ">= 0.60.0"
+  }
+}
