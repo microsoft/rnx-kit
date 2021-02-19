@@ -1,12 +1,11 @@
 {
   "name": "@rnx-kit/config",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Package for defining and querying information about rnx kits",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
   "scripts": {
     "build": "rnx-kit-scripts build",
-    "bundle": "rnx-kit-scripts bundle",
     "depcheck": "rnx-kit-scripts depcheck",
     "lint": "rnx-kit-scripts lint",
     "test": "rnx-kit-scripts test"

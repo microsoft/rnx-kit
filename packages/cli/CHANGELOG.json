@@ -1,0 +1,20 @@
+{
+  "name": "@rnx-kit/cli",
+  "entries": [
+    {
+      "date": "Fri, 19 Feb 2021 19:58:00 GMT",
+      "tag": "@rnx-kit/cli_v0.0.2",
+      "version": "0.0.2",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Create a CLI package which self-registers with @react-native-community/cli. Add bundling commands 'rnx-bundle' and 'rnx-start' which invoke metro. Move bundle code from build system to CLI package.",
+            "author": "afoxman@microsoft.com",
+            "commit": "5adefaed7d9a52f288f2929895d2a017187c8dbf",
+            "package": "@rnx-kit/cli"
+          }
+        ]
+      }
+    }
+  ]
+}
