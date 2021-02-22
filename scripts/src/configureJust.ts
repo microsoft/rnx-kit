@@ -32,7 +32,6 @@ export function configureJust() {
   task("jest:ios", jest.ios);
   task("jest:android", jest.android);
   task("jest:macos", jest.macos);
-  task("jest:win32", jest.win32);
   task("jest:windows", jest.windows);
   task("no-op", () => {});
   task("prettier", () => (argv().fix ? prettierTask : prettierCheckTask));
@@ -43,13 +42,7 @@ export function configureJust() {
   task("code-style", series("prettier", "lint"));
   task(
     "jest:platforms",
-    parallel(
-      "jest:ios",
-      "jest:android",
-      "jest:macos",
-      "jest:win32",
-      "jest:windows"
-    )
+    parallel("jest:ios", "jest:android", "jest:macos", "jest:windows")
   );
   task("test", series("jest:default", "jest:platforms"));
   task("validate", parallel("lint", "test"));

@@ -33,7 +33,7 @@ export function parsePlatform(val: string): AllPlatforms {
 
 export function rnxBundle(
   _argv: Array<string>,
-  _config /*: ConfigT*/,
+  _config: Object /*: ConfigT*/,
   options: Object
 ): void {
   //  get the rnx kit config, and make sure bundling is enabled
@@ -86,7 +86,7 @@ export function rnxBundle(
 
 export function rnxStart(
   _argv: Array<string>,
-  _config /*: ConfigT*/,
+  _config: Object /*: ConfigT*/,
   options: Object
 ): void {
   metroStart(options as MetroStartOptions);
