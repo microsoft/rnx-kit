@@ -1,7 +1,0 @@
-{
-  "type": "patch",
-  "comment": "Add strictNullChecks and noImplicitAny to the shared tsconfig. Remove from metro-config. Fix code to meet more strict type checks.",
-  "packageName": "@rnx-kit/cli",
-  "email": "afoxman@microsoft.com",
-  "dependentChangeType": "patch"
-}

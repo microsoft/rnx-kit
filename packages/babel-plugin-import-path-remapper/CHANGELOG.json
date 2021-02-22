@@ -2,6 +2,21 @@
   "name": "@rnx-kit/babel-plugin-import-path-remapper",
   "entries": [
     {
+      "date": "Mon, 22 Feb 2021 10:50:46 GMT",
+      "tag": "@rnx-kit/babel-plugin-import-path-remapper_v1.0.0",
+      "version": "1.0.0",
+      "comments": {
+        "none": [
+          {
+            "comment": "Enable stricter tsconfig options",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "1a3c54e876c6a7c25f423cebc4b2556b611c575a",
+            "package": "@rnx-kit/babel-plugin-import-path-remapper"
+          }
+        ]
+      }
+    },
+    {
       "date": "Fri, 19 Feb 2021 07:03:27 GMT",
       "tag": "@rnx-kit/babel-plugin-import-path-remapper_v1.0.0",
       "version": "1.0.0",

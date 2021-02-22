@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/test-app-mobile
 
-This log was last generated on Fri, 19 Feb 2021 19:58:00 GMT and should not be manually modified.
+This log was last generated on Mon, 22 Feb 2021 10:50:46 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 0.0.1
+
+Mon, 22 Feb 2021 10:50:46 GMT
+
+### Patches
+
+- Bump @rnx-kit/cli to v0.0.3 (afoxman@microsoft.com)
 
 ## 0.0.1
 
