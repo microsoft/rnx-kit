@@ -1,12 +1,14 @@
 /**
- * @param {*} a
- * @param {*} b
+ * @param {{ [key: string]: unknown }} a
+ * @param {{ [key: string]: unknown }} b
  */
 function mergeOneLevel(a, b = {}) {
   const result = { ...a, ...b };
   Object.keys(a).forEach((key) => {
-    if (Array.isArray(b[key]) && Array.isArray(a[key])) {
-      result[key] = [].concat(a[key], b[key]);
+    const val_a = a[key];
+    const val_b = b[key];
+    if (Array.isArray(val_b) && Array.isArray(val_a)) {
+      result[key] = [...val_a, ...val_b];
     }
   });
   return result;
