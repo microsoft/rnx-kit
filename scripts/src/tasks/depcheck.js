@@ -21,7 +21,7 @@ function scriptsDevDeps() {
 
 function depcheckTask() {
   /**
-   * @param {(arg0: any) => void} done
+   * @param {(err?: Error) => void} done
    */
   const task = function(done) {
     const { logger } = require("just-scripts");
