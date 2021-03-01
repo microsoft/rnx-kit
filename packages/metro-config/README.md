@@ -123,3 +123,31 @@ module.exports = makeMetroConfig({
   },
 });
 ```
+
+### [Flipper] React DevTools is disabled
+
+Flipper only enables React Native plugins if it detects a Metro "device". It
+detects one by opening `localhost:8081` and checking for some keywords like
+"React Native packager is running". However, if one of your packages have an
+`index.html` in the package root, Metro will serve that file instead. Flipper
+will then think that it's not dealing with a React Native app and disable all
+related plugins.
+
+The fix is to move `index.html` elsewhere, but if you cannot do that, you can
+work around this issue by filtering out the offending packages in
+`metro.config.js`:
+
+```js
+const { makeMetroConfig } = require("@rnx-kit/metro-config");
+const fs = require("fs");
+const path = require("path");
+
+const config = makeMetroConfig({ projectRoot: __dirname });
+
+module.exports = {
+  ...config,
+  watchFolders: config.watchFolders.filter(
+    (p) => !fs.existsSync(path.join(p, "index.html"))
+  ),
+};
+```
