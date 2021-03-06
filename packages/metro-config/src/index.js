@@ -16,6 +16,7 @@
  *   projectRoot?: string;
  *   resetCache?: boolean;
  *   resolver?: {
+ *     extraNodeModules?: Record<string, string>;
  *     blacklistRE?: RegExp;
  *     blockList?: RegExp;
  *     [key: string]: unknown;
@@ -28,6 +29,9 @@
  *   [key: string]: unknown;
  * }} MetroConfig;
  */
+
+/** Packages that must be resolved to one specific copy. */
+const UNIQUE_PACKAGES = ["react", "react-native"];
 
 /**
  * A minimum list of folders that should be watched by Metro.
@@ -71,43 +75,79 @@ function defaultWatchFolders(projectRoot) {
 }
 
 /**
- * Returns a list of installed react-native copies.
+ * Returns the path to specified module; `undefined` if not found.
+ * @param {string} name
  * @param {string} projectRoot
- * @returns {string[]}
+ * @returns {string | undefined}
  */
-function findReactNative(projectRoot) {
+function resolveModule(name, projectRoot) {
   const findUp = require("find-up");
   const path = require("path");
 
-  /** @type {string[]} */
-  const paths = [];
+  const result = findUp.sync(path.join("node_modules", name, "package.json"), {
+    cwd: projectRoot,
+  });
 
-  findUp.sync(
-    (directory) => {
-      const candidate = path.join(
-        directory,
-        "node_modules",
-        "react-native",
-        "package.json"
-      );
-      if (findUp.sync.exists(candidate)) {
-        paths.push(path.relative(projectRoot, path.dirname(candidate)));
-      }
-      return undefined;
-    },
-    {
-      cwd: projectRoot,
-    }
-  );
-  return paths;
+  // Strip `/package.json` from path before returning:
+  return result && path.dirname(result);
+}
+
+/**
+ * Returns a regex to exclude extra copies of specified package.
+ *
+ * Note that when using this function to exclude packages, you should also add
+ * the path to the correct copy in `extraNodeModules` so Metro can resolve them
+ * when referenced from modules that are siblings of the module that has them
+ * installed.
+ *
+ * @see exclusionList for further information.
+ *
+ * @param {string} packageName
+ * @param {string} projectRoot
+ * @returns {RegExp}
+ */
+function excludeExtraCopiesOf(packageName, projectRoot) {
+  const result = resolveModule(packageName, projectRoot);
+  if (!result) {
+    throw new Error(`Failed to find '${packageName}'`);
+  }
+
+  const path = require("path");
+
+  // Strip `/node_modules/${packageName}` from path:
+  const owningDir = path.dirname(path.dirname(result));
+
+  return new RegExp(`(?<!${owningDir})\\/node_modules\\/${packageName}\\/.*`);
 }
 
 /**
  * Helper function for generating a package exclusion list.
+ *
+ * One of the most important things this function does is to exclude extra
+ * copies of packages that cannot have duplicates, e.g. `react` and
+ * `react-native`. But with how Metro currently resolves modules, some packages
+ * will not be able to find them if a local copy exists. For instance, in the
+ * below scenario, Metro cannot resolve `react-native` in
+ * `another-awesome-package` because it does not look in `my-awesome-package`.
+ * To help Metro, we will also need to add a corresponding entry to
+ * `extraNodeModules`.
+ *
+ *     workspace
+ *     ├── node_modules
+ *     │   └── react-native@0.62.2  <-- should be ignored
+ *     └── packages
+ *         ├── my-awesome-package
+ *         │   └── node_modules
+ *         │       └── react-native@0.61.5  <-- should take precedence
+ *         └── another-awesome-package  <-- imported by my-awesome-package,
+ *                                          but uses workspace's react-native
+ *
  * @param {(string | RegExp)[]=} additionalExclusions
+ * @param {string=} projectRoot
  * @returns {RegExp}
  */
-function exclusionList(additionalExclusions = []) {
+function exclusionList(additionalExclusions = [], projectRoot = process.cwd()) {
+  /** @type {(additionalExclusions: (string | RegExp)[]) => RegExp} */
   const exclusionList = (() => {
     try {
       // @ts-ignore There are no type definition files for `metro-config`
@@ -120,13 +160,7 @@ function exclusionList(additionalExclusions = []) {
   })();
 
   return exclusionList([
-    // Ignore extra copies of react-native
-    ...findReactNative(process.cwd())
-      .slice(1)
-      .map((p) => new RegExp(`${p}/.*`)),
-
-    // Ignore nested copies of react-native
-    /node_modules\/.*\/node_modules\/react-native\/.*/,
+    ...UNIQUE_PACKAGES.map((name) => excludeExtraCopiesOf(name, projectRoot)),
 
     // Workaround for `EBUSY: resource busy or locked, open '~\msbuild.ProjectImports.zip'`
     // when building with `yarn windows --release`
@@ -136,10 +170,11 @@ function exclusionList(additionalExclusions = []) {
   ]);
 }
 
-const blockList = exclusionList();
-
 module.exports = {
+  UNIQUE_PACKAGES,
+
   defaultWatchFolders,
+  excludeExtraCopiesOf,
   exclusionList,
 
   /**
@@ -174,6 +209,9 @@ module.exports = {
   makeMetroConfig: (customConfig = {}) => {
     // @ts-ignore There are no type definition files for `metro-config`
     const { mergeConfig } = require("metro-config");
+
+    const projectRoot = customConfig.projectRoot || process.cwd();
+    const blockList = exclusionList([], projectRoot);
     return mergeConfig(
       {
         resolver: {
@@ -190,7 +228,29 @@ module.exports = {
         },
         watchFolders: defaultWatchFolders(customConfig.projectRoot),
       },
-      customConfig
+      {
+        ...customConfig,
+        resolver: {
+          ...customConfig.resolver,
+          extraNodeModules: {
+            /**
+             * Ensure that Metro is able to resolve packages that cannot be
+             * duplicated.
+             * @see exclusionList for further information.
+             */
+            ...UNIQUE_PACKAGES.reduce((extraModules, name) => {
+              const resolvedPath = resolveModule(name, projectRoot);
+              if (resolvedPath) {
+                extraModules[name] = resolvedPath;
+              }
+              return extraModules;
+            }, /** @type Record<string, string> */ ({})),
+            ...(customConfig.resolver
+              ? customConfig.resolver.extraNodeModules
+              : {}),
+          },
+        },
+      }
     );
   },
 };

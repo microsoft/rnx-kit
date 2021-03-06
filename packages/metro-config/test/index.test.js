@@ -5,14 +5,16 @@ describe("@rnx-kit/metro-config", () => {
   const { spawnSync } = require("child_process");
   const path = require("path");
   const {
+    UNIQUE_PACKAGES,
     defaultWatchFolders,
+    excludeExtraCopiesOf,
     exclusionList,
     makeBabelConfig,
     makeMetroConfig,
-  } = require("../src");
+  } = require("../src/index");
 
   const defaultExclusionList =
-    "node_modules\\/.*\\/node_modules\\/react-native\\/.*|.*\\.ProjectImports\\.zip|node_modules\\/react\\/dist\\/.*|website\\/node_modules\\/.*|heapCapture\\/bundle\\.js|.*\\/__tests__\\/.*";
+    ".*\\.ProjectImports\\.zip|node_modules\\/react\\/dist\\/.*|website\\/node_modules\\/.*|heapCapture\\/bundle\\.js|.*\\/__tests__\\/.*";
 
   const babelConfigKeys = ["presets", "overrides"];
   const babelConfigPresets = ["module:metro-react-native-babel-preset"];
@@ -44,11 +46,19 @@ describe("@rnx-kit/metro-config", () => {
   }
 
   /**
+   * Returns path to specified test fixture.
+   * @param {string} name
+   */
+  function fixturePath(name) {
+    return path.join(currentWorkingDir, "test", "__fixtures__", name);
+  }
+
+  /**
    * Sets current working directory to specified test fixture.
    * @param {string} name
    */
   function setFixture(name) {
-    process.chdir(path.join(currentWorkingDir, "test", "__fixtures__", name));
+    process.chdir(fixturePath(name));
   }
 
   afterEach(() => process.chdir(currentWorkingDir));
@@ -74,33 +84,57 @@ describe("@rnx-kit/metro-config", () => {
     expect(folders.sort()).toEqual(expectedFolders);
   });
 
-  test("exclusionList() ignores hoisted react-native if a local copy exists", () => {
+  test("excludeExtraCopiesOf() throws if a package is not found", () => {
+    expect(excludeExtraCopiesOf("jest", process.cwd())).toBeDefined();
+
+    const packageName = "this-package-does-not-exist";
+    expect(() => excludeExtraCopiesOf(packageName, process.cwd())).toThrowError(
+      `Failed to find '${packageName}'`
+    );
+  });
+
+  test("exclusionList() ignores extra copies of react and react-native", () => {
+    const repo = fixturePath("awesome-repo").replace(/\//g, "\\/");
+
+    // /rnx-kit/packages/metro-config/test/__fixtures__/awesome-repo/packages/john/node_modules/react-native
+    const packageCopy = `(?<!${repo}\\/packages\\/john)\\/node_modules\\/react-native\\/.*`;
+
+    // /rnx-kit/packages/metro-config/test/__fixtures__/awesome-repo/node_modules/react
+    const reactCopy = `(?<!${repo})\\/node_modules\\/react\\/.*`;
+
     // /rnx-kit/packages/metro-config/test/__fixtures__/awesome-repo/node_modules/react-native
-    const fixtureCopy = "..\\/..\\/node_modules\\/react-native\\/.*";
+    const projectCopy = `(?<!${repo})\\/node_modules\\/react-native\\/.*`;
 
-    // /rnx-kit/node_modules/react-native
-    const repoCopy =
-      "..\\/..\\/..\\/..\\/..\\/..\\/..\\/node_modules\\/react-native\\/.*";
-
-    // Conan does not have a local copy of react-native but since we're
-    // in a monorepo, we'll find the repo's copy.
+    // Conan does not have a local copy of react-native. It should
+    // exclude all but the repo's copy.
     setFixture("awesome-repo/packages/conan");
     expect(exclusionList().source).toBe(
-      `(${repoCopy}|${defaultExclusionList})$`
+      `(${reactCopy}|${projectCopy}|${defaultExclusionList})$`
     );
 
-    // John has a local copy of react-native and should ignore the
-    // hoisted copy (in addition to the repo's own copy).
+    // John has a local copy of react-native and should ignore all other copies.
     setFixture("awesome-repo/packages/john");
     expect(exclusionList().source).toBe(
-      `(${fixtureCopy}|${repoCopy}|${defaultExclusionList})$`
+      `(${reactCopy}|${packageCopy}|${defaultExclusionList})$`
     );
   });
 
   test("exclusionList() returns additional exclusions", () => {
-    expect(exclusionList().source).toBe(`(${defaultExclusionList})$`);
+    const repoReactNative = path.dirname(
+      require.resolve("react-native/package.json")
+    );
+    const repoRoot = path
+      .dirname(path.dirname(repoReactNative))
+      .replace(/\//g, "\\/");
+
+    const react = `(?<!${repoRoot})\\/node_modules\\/react\\/.*`;
+    const reactNative = `(?<!${repoRoot})\\/node_modules\\/react-native\\/.*`;
+
+    expect(exclusionList().source).toBe(
+      `(${react}|${reactNative}|${defaultExclusionList})$`
+    );
     expect(exclusionList([/.*[\/\\]__fixtures__[\/\\].*/]).source).toBe(
-      "(node_modules\\/.*\\/node_modules\\/react-native\\/.*|.*\\.ProjectImports\\.zip|.*[\\/\\\\]__fixtures__[\\/\\\\].*|node_modules\\/react\\/dist\\/.*|website\\/node_modules\\/.*|heapCapture\\/bundle\\.js|.*\\/__tests__\\/.*)$"
+      `(${react}|${reactNative}|.*\\.ProjectImports\\.zip|.*[\\/\\\\]__fixtures__[\\/\\\\].*|node_modules\\/react\\/dist\\/.*|website\\/node_modules\\/.*|heapCapture\\/bundle\\.js|.*\\/__tests__\\/.*)$`
     );
   });
 
@@ -108,7 +142,17 @@ describe("@rnx-kit/metro-config", () => {
     const config = makeBabelConfig();
     expect(Object.keys(config)).toEqual(babelConfigKeys);
     expect(config.presets).toEqual(babelConfigPresets);
+
+    if (!Array.isArray(config.overrides)) {
+      fail("Expected `config.overrides` to be an array");
+    }
+
     expect(config.overrides.length).toBe(1);
+
+    if (!(config.overrides[0].test instanceof RegExp)) {
+      fail("Expected `config.overrides[0]` to be a RegExp");
+    }
+
     expect(config.overrides[0].test.source).toBe(babelTypeScriptTest);
     expect(config.overrides[0].plugins).toEqual(["const-enum"]);
   });
@@ -119,7 +163,17 @@ describe("@rnx-kit/metro-config", () => {
     ]);
     expect(Object.keys(config)).toEqual(babelConfigKeys);
     expect(config.presets).toEqual(babelConfigPresets);
+
+    if (!Array.isArray(config.overrides)) {
+      fail("Expected `config.overrides` to be an array");
+    }
+
     expect(config.overrides.length).toBe(1);
+
+    if (!(config.overrides[0].test instanceof RegExp)) {
+      fail("Expected `config.overrides[0]` to be a RegExp");
+    }
+
     expect(config.overrides[0].test.source).toBe(babelTypeScriptTest);
     expect(config.overrides[0].plugins).toEqual([
       "const-enum",
@@ -130,6 +184,24 @@ describe("@rnx-kit/metro-config", () => {
   test("makeMetroConfig() returns a default Metro config", async () => {
     const config = makeMetroConfig();
     expect(Object.keys(config).sort()).toEqual(metroConfigKeys);
+
+    if (!config.resolver) {
+      fail("Expected `config.resolver` to be defined");
+    } else if (!config.resolver.extraNodeModules) {
+      fail("Expected `config.resolver.extraNodeModules` to be defined");
+    } else if (!(config.resolver.blacklistRE instanceof RegExp)) {
+      fail("Expected `config.resolver.blacklistRE` to be a RegExp");
+    } else if (!(config.resolver.blockList instanceof RegExp)) {
+      fail("Expected `config.resolver.blockList` to be a RegExp");
+    } else if (!config.transformer) {
+      fail("Expected `config.transformer` to be defined");
+    } else if (!Array.isArray(config.watchFolders)) {
+      fail("Expected `config.watchFolders` to be an array");
+    }
+
+    expect(Object.keys(config.resolver.extraNodeModules)).toEqual(
+      UNIQUE_PACKAGES
+    );
 
     const blockList = exclusionList().source;
     expect(config.resolver.blacklistRE.source).toBe(blockList);
@@ -157,6 +229,24 @@ describe("@rnx-kit/metro-config", () => {
     expect(config.projectRoot).toBe(__dirname);
     expect(config.resetCache).toBeTruthy();
 
+    if (!config.resolver) {
+      fail("Expected `config.resolver` to be defined");
+    } else if (!config.resolver.extraNodeModules) {
+      fail("Expected `config.resolver.extraNodeModules` to be defined");
+    } else if (!(config.resolver.blacklistRE instanceof RegExp)) {
+      fail("Expected `config.resolver.blacklistRE` to be a RegExp");
+    } else if (!(config.resolver.blockList instanceof RegExp)) {
+      fail("Expected `config.resolver.blockList` to be a RegExp");
+    } else if (!config.transformer) {
+      fail("Expected `config.transformer` to be defined");
+    } else if (!Array.isArray(config.watchFolders)) {
+      fail("Expected `config.watchFolders` to be an array");
+    }
+
+    expect(Object.keys(config.resolver.extraNodeModules)).toEqual(
+      UNIQUE_PACKAGES
+    );
+
     const blockList = exclusionList().source;
     expect(config.resolver.blacklistRE.source).toBe(blockList);
     expect(config.resolver.blockList.source).toBe(blockList);
@@ -168,6 +258,33 @@ describe("@rnx-kit/metro-config", () => {
     });
 
     expect(config.watchFolders.length).toBeGreaterThan(0);
+  });
+
+  test("makeMetroConfig() merges `extraNodeModules`", async () => {
+    const config = makeMetroConfig({
+      projectRoot: __dirname,
+      resolver: {
+        extraNodeModules: {
+          "my-awesome-package": "/skynet",
+          "react-native": "/skynet",
+        },
+      },
+    });
+
+    const extraNodeModules =
+      config.resolver && config.resolver.extraNodeModules;
+    if (!extraNodeModules) {
+      fail("Expected config.resolver.extraNodeModules to be set");
+    }
+
+    expect(Object.keys(extraNodeModules).sort()).toEqual([
+      "my-awesome-package",
+      "react",
+      "react-native",
+    ]);
+
+    expect(extraNodeModules["my-awesome-package"]).toBe("/skynet");
+    expect(extraNodeModules["react-native"]).toBe("/skynet");
   });
 
   test("packs only necessary files", () => {
