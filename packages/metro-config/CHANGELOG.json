@@ -2,6 +2,21 @@
   "name": "@rnx-kit/metro-config",
   "entries": [
     {
+      "date": "Mon, 08 Mar 2021 20:53:41 GMT",
+      "tag": "@rnx-kit/metro-config_v1.0.3",
+      "version": "1.0.3",
+      "comments": {
+        "none": [
+          {
+            "comment": "Update beachball to bring in bugfix when looking for package.json files to use for the monorepo graph. Undo automated changelog update that occurred when I was experimenting with beachball locally.",
+            "author": "afoxman@microsoft.com",
+            "commit": "75565553e5dc8440f18c3fb40bf48d008d83d5cf",
+            "package": "@rnx-kit/metro-config"
+          }
+        ]
+      }
+    },
+    {
       "date": "Mon, 08 Mar 2021 10:59:59 GMT",
       "tag": "@rnx-kit/metro-config_v1.0.3",
       "version": "1.0.3",
