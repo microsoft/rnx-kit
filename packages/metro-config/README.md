@@ -65,6 +65,54 @@ help with them :)
     meantime, we are adding all the symlinks to `watchFolders` as a workaround.
 - Implement tree-shaking
 
+### Ensuring a single instance of a package
+
+Normally, Metro resolves a module relative to the package it is currently
+residing in. For example, with a monorepo such as below, `my-awesome-package`
+would resolve `react-native-msal@2.0.3` while `another-awesome-package` would
+resolve `react-native-msal@3.1.0`. This would lead to duplicate packages in your
+bundle and may cause issues.
+
+    workspace
+    ├── node_modules
+    │   └── react-native-msal@3.1.0  <-- should be ignored
+    └── packages
+        ├── my-awesome-package
+        │   └── node_modules
+        │       └── react-native-msal@2.0.3  <-- should take precedence
+        └── another-awesome-package  <-- imported by my-awesome-package,
+                                         but uses workspace's react-native-msal
+
+If we simply exclude the workspace's copy, Metro will not be able to find
+`react-native-msal` from `another-awesome-package`. It also won't exclude copies
+that are installed in other packages. To help Metro resolve to the correct copy,
+we need to exclude all other copies, and also add a corresponding entry in
+`extraNodeModules`. `@rnx-kit/metro-config` contains functions to help you set
+this up correctly. Given the example above, our `metro.config.js` should look
+like this:
+
+```js
+const {
+  excludeExtraCopiesOf,
+  exclusionList,
+  makeMetroConfig,
+} = require("@rnx-kit/metro-config");
+
+const additionalExclusions = [excludeExtraCopiesOf("react-native-msal")];
+const blockList = exclusionList(additionalExclusions);
+
+module.exports = makeMetroConfig({
+  projectRoot: __dirname,
+  resolver: {
+    extraNodeModules: {
+      "react-native-msal": `${__dirname}/node_modules/react-native-msal`,
+    },
+    blacklistRE: blockList, // For Metro < 0.60
+    blockList, // For Metro >= 0.60
+  },
+});
+```
+
 ### Error: EMFILE: too many open files, watch
 
 If you're getting an error like below, you need to
