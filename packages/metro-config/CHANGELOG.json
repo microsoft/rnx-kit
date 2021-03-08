@@ -2,6 +2,21 @@
   "name": "@rnx-kit/metro-config",
   "entries": [
     {
+      "date": "Mon, 08 Mar 2021 19:58:23 GMT",
+      "tag": "@rnx-kit/metro-config_v1.0.2",
+      "version": "1.0.2",
+      "comments": {
+        "none": [
+          {
+            "comment": "Document fix for React DevTools' Flipper plugin being disabled",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "4b94373ba5a2c4071e199f759b15b449d66f4c0c",
+            "package": "@rnx-kit/metro-config"
+          }
+        ]
+      }
+    },
+    {
       "date": "Mon, 08 Mar 2021 10:59:59 GMT",
       "tag": "@rnx-kit/metro-config_v1.0.3",
       "version": "1.0.3",
