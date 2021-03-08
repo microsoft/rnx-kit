@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/metro-config
 
-This log was last generated on Thu, 18 Feb 2021 09:33:32 GMT and should not be manually modified.
+This log was last generated on Mon, 08 Mar 2021 10:59:59 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 1.0.3
+
+Mon, 08 Mar 2021 10:59:59 GMT
+
+### Patches
+
+- Fix sibling packages resolving to wrong react-native copy (4123478+tido64@users.noreply.github.com)
 
 ## 1.0.2
 
