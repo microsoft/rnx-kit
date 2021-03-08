@@ -181,8 +181,8 @@ detects one by opening `localhost:8081` and checking for some keywords like
 will then think that it's not dealing with a React Native app and disable all
 related plugins.
 
-The fix is to move `index.html` elsewhere, but if you cannot do that, you can
-work around this issue by filtering out the offending packages in
+The fix is to move `index.html` elsewhere, but if you cannot do that, you
+can work around this issue by filtering out the offending packages in
 `metro.config.js`:
 
 ```js

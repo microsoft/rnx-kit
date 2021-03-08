@@ -1,0 +1,7 @@
+{
+  "type": "none",
+  "comment": "Update beachball to bring in bugfix when looking for package.json files to use for the monorepo graph. Undo automated changelog update that occurred when I was experimenting with beachball locally.",
+  "packageName": "@rnx-kit/metro-config",
+  "email": "afoxman@microsoft.com",
+  "dependentChangeType": "none"
+}
