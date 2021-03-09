@@ -28,11 +28,7 @@ export function configureJust() {
   task("clean", clean);
   task("depcheck", depcheck);
   task("lint", eslint);
-  task("jest:default", jest.default);
-  task("jest:ios", jest.ios);
-  task("jest:android", jest.android);
-  task("jest:macos", jest.macos);
-  task("jest:windows", jest.windows);
+  task("jest", jest);
   task("no-op", () => {});
   task("prettier", () => (argv().fix ? prettierTask : prettierCheckTask));
   task("ts", ts);
@@ -40,10 +36,6 @@ export function configureJust() {
   // hierarchical task definintions
   task("build", series("clean", "lint", "ts"));
   task("code-style", series("prettier", "lint"));
-  task(
-    "jest:platforms",
-    parallel("jest:ios", "jest:android", "jest:macos", "jest:windows")
-  );
-  task("test", series("jest:default", "jest:platforms"));
+  task("test", jest);
   task("validate", parallel("lint", "test"));
 }

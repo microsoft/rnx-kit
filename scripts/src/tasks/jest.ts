@@ -1,19 +1,10 @@
 import { argv, jestTask, JestTaskOptions } from "just-scripts";
 
-type JestPlatforms = "ios" | "android" | "windows" | "macos";
-
-function createJestTask(
-  options: JestTaskOptions,
-  platform: JestPlatforms | undefined
-) {
-  const config = platform ? `jest.config.${platform}.js` : "jest.config.js";
-  return jestTask({ ...options, config: config });
-}
-
 function getJestOptions(): JestTaskOptions {
   const updateSnapshot =
     argv().u || argv().updateSnapshot ? { updateSnapshot: true } : undefined;
   return {
+    config: "jest.config.js",
     coverage: !!argv().production,
     runInBand: true,
     passWithNoTests: true,
@@ -21,25 +12,4 @@ function getJestOptions(): JestTaskOptions {
   };
 }
 
-export const jest = {
-  default: () => {
-    const options = getJestOptions();
-    return createJestTask(options, undefined);
-  },
-  ios: () => {
-    const options = getJestOptions();
-    return createJestTask(options, "ios");
-  },
-  android: () => {
-    const options = getJestOptions();
-    return createJestTask(options, "android");
-  },
-  macos: () => {
-    const options = getJestOptions();
-    return createJestTask(options, "macos");
-  },
-  windows: () => {
-    const options = getJestOptions();
-    return createJestTask(options, "windows");
-  },
-};
+export const jest = jestTask(getJestOptions());

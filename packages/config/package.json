@@ -17,6 +17,7 @@
     "cosmiconfig": "^7.0.0"
   },
   "devDependencies": {
+    "@types/jest": "^26.0.0",
     "@types/node": "^14.14.20",
     "rnx-kit-scripts": "0.1.1"
   },
