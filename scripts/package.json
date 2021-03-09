@@ -14,6 +14,7 @@
   },
   "devDependencies": {
     "@types/jest": "^26.0.0",
+    "chalk": "^4.1.0",
     "depcheck": "^1.0.0",
     "jest": "^26.0.0",
     "just-repo-utils": "^0.2.0",
