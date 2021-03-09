@@ -2,6 +2,21 @@
   "name": "@rnx-kit/cli",
   "entries": [
     {
+      "date": "Tue, 09 Mar 2021 20:34:23 GMT",
+      "tag": "@rnx-kit/cli_v0.0.5",
+      "version": "0.0.5",
+      "comments": {
+        "none": [
+          {
+            "comment": "Bump @rnx-kit/config to v0.1.2",
+            "author": "afoxman@microsoft.com",
+            "commit": "199a3ace5c54d83aaef163a3b09b5df01e4cf6b3",
+            "package": "@rnx-kit/cli"
+          }
+        ]
+      }
+    },
+    {
       "date": "Mon, 08 Mar 2021 10:59:59 GMT",
       "tag": "@rnx-kit/cli_v0.0.5",
       "version": "0.0.5",

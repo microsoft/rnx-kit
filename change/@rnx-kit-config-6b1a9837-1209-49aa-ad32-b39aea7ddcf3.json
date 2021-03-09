@@ -1,7 +1,0 @@
-{
-  "type": "none",
-  "comment": "Add Jest types to each package with tests to ensure TSC has access to type info during a build. Also ensures VSCode and other IDEs see type info.",
-  "packageName": "@rnx-kit/config",
-  "email": "afoxman@microsoft.com",
-  "dependentChangeType": "none"
-}

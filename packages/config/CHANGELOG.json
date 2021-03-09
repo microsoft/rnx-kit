@@ -2,6 +2,21 @@
   "name": "@rnx-kit/config",
   "entries": [
     {
+      "date": "Tue, 09 Mar 2021 20:34:23 GMT",
+      "tag": "@rnx-kit/config_v0.1.2",
+      "version": "0.1.2",
+      "comments": {
+        "none": [
+          {
+            "comment": "Add Jest types to each package with tests to ensure TSC has access to type info during a build. Also ensures VSCode and other IDEs see type info.",
+            "author": "afoxman@microsoft.com",
+            "commit": "199a3ace5c54d83aaef163a3b09b5df01e4cf6b3",
+            "package": "@rnx-kit/config"
+          }
+        ]
+      }
+    },
+    {
       "date": "Mon, 22 Feb 2021 10:50:46 GMT",
       "tag": "@rnx-kit/config_v0.1.2",
       "version": "0.1.2",

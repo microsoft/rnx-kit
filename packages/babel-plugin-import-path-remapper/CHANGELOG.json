@@ -2,6 +2,21 @@
   "name": "@rnx-kit/babel-plugin-import-path-remapper",
   "entries": [
     {
+      "date": "Tue, 09 Mar 2021 20:34:23 GMT",
+      "tag": "@rnx-kit/babel-plugin-import-path-remapper_v1.0.0",
+      "version": "1.0.0",
+      "comments": {
+        "none": [
+          {
+            "comment": "Remove platform-specific jest tasks. Clean up unneeded Jest dependencies.",
+            "author": "afoxman@microsoft.com",
+            "commit": "199a3ace5c54d83aaef163a3b09b5df01e4cf6b3",
+            "package": "@rnx-kit/babel-plugin-import-path-remapper"
+          }
+        ]
+      }
+    },
+    {
       "date": "Mon, 22 Feb 2021 10:50:46 GMT",
       "tag": "@rnx-kit/babel-plugin-import-path-remapper_v1.0.0",
       "version": "1.0.0",

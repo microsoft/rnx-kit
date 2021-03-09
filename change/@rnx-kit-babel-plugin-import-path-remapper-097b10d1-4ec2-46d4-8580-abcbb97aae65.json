@@ -1,7 +1,0 @@
-{
-  "type": "none",
-  "comment": "Remove platform-specific jest tasks. Clean up unneeded Jest dependencies.",
-  "packageName": "@rnx-kit/babel-plugin-import-path-remapper",
-  "email": "afoxman@microsoft.com",
-  "dependentChangeType": "none"
-}

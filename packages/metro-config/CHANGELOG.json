@@ -2,6 +2,21 @@
   "name": "@rnx-kit/metro-config",
   "entries": [
     {
+      "date": "Tue, 09 Mar 2021 20:34:23 GMT",
+      "tag": "@rnx-kit/metro-config_v1.0.4",
+      "version": "1.0.4",
+      "comments": {
+        "none": [
+          {
+            "comment": "Remove platform-specific jest tasks. Clean up unneeded Jest dependencies.",
+            "author": "afoxman@microsoft.com",
+            "commit": "199a3ace5c54d83aaef163a3b09b5df01e4cf6b3",
+            "package": "@rnx-kit/metro-config"
+          }
+        ]
+      }
+    },
+    {
       "date": "Tue, 09 Mar 2021 08:21:51 GMT",
       "tag": "@rnx-kit/metro-config_v1.0.4",
       "version": "1.0.4",

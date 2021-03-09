@@ -1,7 +1,0 @@
-{
-  "type": "none",
-  "comment": "Remove platform-specific jest tasks. Clean up unneeded Jest dependencies.",
-  "packageName": "@rnx-kit/metro-config",
-  "email": "afoxman@microsoft.com",
-  "dependentChangeType": "none"
-}
