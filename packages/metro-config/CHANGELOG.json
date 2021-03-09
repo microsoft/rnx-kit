@@ -2,6 +2,21 @@
   "name": "@rnx-kit/metro-config",
   "entries": [
     {
+      "date": "Tue, 09 Mar 2021 08:21:51 GMT",
+      "tag": "@rnx-kit/metro-config_v1.0.4",
+      "version": "1.0.4",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Exclusion rules should ignore symlinks",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "e680fda8c1b6829140a64c26280c31cf3143cf0d",
+            "package": "@rnx-kit/metro-config"
+          }
+        ]
+      }
+    },
+    {
       "date": "Mon, 08 Mar 2021 20:53:41 GMT",
       "tag": "@rnx-kit/metro-config_v1.0.3",
       "version": "1.0.3",

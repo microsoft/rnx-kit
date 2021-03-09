@@ -10,7 +10,7 @@
     "url": "https://github.com/microsoft/rnx-kit",
     "directory": "packages/metro-config"
   },
-  "version": "1.0.3",
+  "version": "1.0.4",
   "main": "src/index.js",
   "scripts": {
     "build": "rnx-kit-scripts build",

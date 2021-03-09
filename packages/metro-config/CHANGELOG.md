@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/metro-config
 
-This log was last generated on Mon, 08 Mar 2021 10:59:59 GMT and should not be manually modified.
+This log was last generated on Tue, 09 Mar 2021 08:21:51 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 1.0.4
+
+Tue, 09 Mar 2021 08:21:51 GMT
+
+### Patches
+
+- Exclusion rules should ignore symlinks (4123478+tido64@users.noreply.github.com)
 
 ## 1.0.3
 
