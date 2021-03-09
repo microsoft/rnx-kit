@@ -27,6 +27,7 @@
   },
   "devDependencies": {
     "@types/babel__core": "^7.0.0",
+    "@types/jest": "^26.0.0",
     "metro-config": "^0.59.0",
     "prettier": "^2.0.0",
     "rnx-kit-scripts": "*",
