@@ -3,6 +3,7 @@
 
 describe("@rnx-kit/metro-config", () => {
   const { spawnSync } = require("child_process");
+  const fs = require("fs");
   const path = require("path");
   const {
     UNIQUE_PACKAGES,
@@ -82,6 +83,21 @@ describe("@rnx-kit/metro-config", () => {
       ...packages,
     ].sort();
     expect(folders.sort()).toEqual(expectedFolders);
+  });
+
+  test("excludeExtraCopiesOf() ignores symlinks", () => {
+    setFixture("awesome-repo/packages/t-800");
+
+    expect(
+      fs.lstatSync("node_modules/react-native").isSymbolicLink()
+    ).toBeTruthy();
+
+    const expr = excludeExtraCopiesOf("react-native");
+    expect(
+      expr.source.endsWith(
+        "\\/awesome-repo)\\/node_modules\\/react-native\\/.*"
+      )
+    ).toBeTruthy();
   });
 
   test("excludeExtraCopiesOf() throws if a package is not found", () => {

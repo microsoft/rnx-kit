@@ -76,20 +76,24 @@ function defaultWatchFolders(projectRoot) {
 
 /**
  * Returns the path to specified module; `undefined` if not found.
+ *
+ * Note that this function ignores symlinks. When creating rules to
+ * exclude extra copies, Metro will be unable to resolve packages
+ * because it doesn't resolve symlinks and all real paths are excluded.
+ *
  * @param {string} name
- * @param {string} projectRoot
+ * @param {string=} projectRoot
  * @returns {string | undefined}
  */
 function resolveModule(name, projectRoot) {
   const findUp = require("find-up");
   const path = require("path");
 
-  const result = findUp.sync(path.join("node_modules", name, "package.json"), {
+  return findUp.sync(path.join("node_modules", name), {
     cwd: projectRoot,
+    type: "directory",
+    allowSymlinks: false,
   });
-
-  // Strip `/package.json` from path before returning:
-  return result && path.dirname(result);
 }
 
 /**
@@ -103,7 +107,7 @@ function resolveModule(name, projectRoot) {
  * @see exclusionList for further information.
  *
  * @param {string} packageName
- * @param {string} projectRoot
+ * @param {string=} projectRoot
  * @returns {RegExp}
  */
 function excludeExtraCopiesOf(packageName, projectRoot) {
