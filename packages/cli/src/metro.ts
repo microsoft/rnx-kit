@@ -59,7 +59,7 @@ export interface MetroBundleOptions {
   /**
    * Path to the metro CLI configuration file
    */
-  config?: string;
+  configPath?: string;
 }
 
 /**
@@ -107,7 +107,7 @@ export function metroBundle(
     maxWorkers,
     resetCache,
     readGlobalCache,
-    config: metroConfig,
+    configPath,
   } = options;
 
   console.log("Generating metro bundle(s)" + (id ? ` for id ${id}...` : "..."));
@@ -185,7 +185,7 @@ export function metroBundle(
       ),
       ...optionalFlag("--reset-cache", resetCache),
       ...optionalFlag("--read--global-cache", readGlobalCache),
-      ...optionalParam("--config", metroConfig),
+      ...optionalParam("--config", configPath),
     ]);
   }
 }

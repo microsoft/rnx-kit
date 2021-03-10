@@ -7,6 +7,30 @@ import {
 import { getKitConfig, AllPlatforms, BundleParameters } from "@rnx-kit/config";
 import chalk from "chalk";
 
+interface CliBundleOptions {
+  id?: string;
+  platform?: "ios" | "android" | "windows" | "win32" | "macos";
+  entryPath?: string;
+  distPath?: string;
+  assetsPath?: string;
+  bundlePrefix?: string;
+  bundleEncoding?: string;
+  transformer?: string;
+  dev: boolean;
+  minify?: boolean;
+  maxWorkers?: number;
+  sourcemapOutput?: string;
+  sourcemapSourcesRoot?: string;
+  sourcemapUseAbsolutePath?: boolean;
+  resetCache?: boolean;
+  readGlobalCache?: boolean;
+  config?: string;
+}
+
+interface CliStartOptions {
+  port?: number;
+}
+
 export function parseBoolean(val: string): boolean {
   if (val === "false") {
     return false;
@@ -35,7 +59,7 @@ export function parsePlatform(val: string): AllPlatforms {
 export function rnxBundle(
   _argv: Array<string>,
   _config: Object /*: ConfigT*/,
-  options: Object
+  options: CliBundleOptions
 ): void {
   //  get the rnx kit config, and make sure bundling is enabled
   const kitConfig = getKitConfig();
@@ -60,52 +84,39 @@ export function rnxBundle(
   }
   const bundleConfig = kitConfig.bundle;
 
-  //  construct override params from cmd-line options
-  const {
-    entryPath,
-    distPath,
-    assetsPath,
-    bundlePrefix,
-    bundleEncoding,
-    sourceMapPath,
-    sourceMapSourceRootPath,
-    sourceMapUseAbsolutePaths,
-  } = options as BundleParameters;
+  //  construct override params from cmd-line options, eliminating unspecified values
   const bundleOverrides: BundleParameters = {
-    ...(entryPath && { entryPath }),
-    ...(distPath && { distPath }),
-    ...(assetsPath && { assetsPath }),
-    ...(bundlePrefix && { bundlePrefix }),
-    ...(bundleEncoding && { bundleEncoding }),
-    ...(sourceMapPath && { sourceMapPath }),
-    ...(sourceMapSourceRootPath && { sourceMapSourceRootPath }),
-    ...(typeof sourceMapUseAbsolutePaths === "boolean" && {
-      sourceMapUseAbsolutePaths,
+    ...(options.entryPath && { entryPath: options.entryPath }),
+    ...(options.distPath && { distPath: options.distPath }),
+    ...(options.assetsPath && { assetsPath: options.assetsPath }),
+    ...(options.bundlePrefix && { bundlePrefix: options.bundlePrefix }),
+    ...(options.bundleEncoding && { bundleEncoding: options.bundleEncoding }),
+    ...(options.sourcemapOutput && { sourceMapPath: options.sourcemapOutput }),
+    ...(options.sourcemapSourcesRoot && {
+      sourceMapSourceRootPath: options.sourcemapSourcesRoot,
+    }),
+    ...(typeof options.sourcemapUseAbsolutePath === "boolean" && {
+      sourceMapUseAbsolutePaths: options.sourcemapUseAbsolutePath,
     }),
   };
 
-  //  construct metro options from cmd-line options
-  const {
-    id,
-    platform,
-    dev,
-    minify,
-    transformer,
-    maxWorkers,
-    resetCache,
-    readGlobalCache,
-    config,
-  } = options as MetroBundleOptions;
+  //  construct metro options from cmd-line options, eliminating unspecified values
   const bundleOptions: MetroBundleOptions = {
-    ...(id && { id }),
-    ...(platform && { platform }),
-    dev,
-    ...(typeof minify === "boolean" && { minify }),
-    ...(transformer && { transformer }),
-    ...(typeof maxWorkers === "number" && { maxWorkers }),
-    ...(typeof resetCache === "boolean" && { resetCache }),
-    ...(typeof readGlobalCache === "boolean" && { readGlobalCache }),
-    ...(config && { config }),
+    ...(options.id && { id: options.id }),
+    ...(options.platform && { platform: options.platform }),
+    dev: options.dev,
+    ...(typeof options.minify === "boolean" && { minify: options.minify }),
+    ...(options.transformer && { transformer: options.transformer }),
+    ...(typeof options.maxWorkers === "number" && {
+      maxWorkers: options.maxWorkers,
+    }),
+    ...(typeof options.resetCache === "boolean" && {
+      resetCache: options.resetCache,
+    }),
+    ...(typeof options.readGlobalCache === "boolean" && {
+      readGlobalCache: options.readGlobalCache,
+    }),
+    ...(options.config && { configPath: options.config }),
   };
 
   metroBundle(bundleConfig, bundleOptions, bundleOverrides);
@@ -114,7 +125,12 @@ export function rnxBundle(
 export function rnxStart(
   _argv: Array<string>,
   _config: Object /*: ConfigT*/,
-  options: Object
+  options: CliStartOptions
 ): void {
-  metroStart(options as MetroStartOptions);
+  //  construct metro options from cmd-line options, eliminating unspecified values
+  const startOptions: MetroStartOptions = {
+    ...(typeof options.port === "number" && { port: options.port }),
+  };
+
+  metroStart(startOptions);
 }
