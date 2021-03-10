@@ -1,7 +1,7 @@
 /**
  * List of supported kit platforms.
  */
-export type AllPlatforms = "ios" | "android" | "windows" | "macos";
+export type AllPlatforms = "ios" | "android" | "windows" | "win32" | "macos";
 
 /**
  * Parameters controlling how a bundle is constructed.
