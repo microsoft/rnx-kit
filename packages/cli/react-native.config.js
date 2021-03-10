@@ -69,12 +69,12 @@ module.exports = {
         {
           name: "--sourcemap-output [string]",
           description:
-            "File name where to store the sourcemap file for resulting bundle, ex. /tmp/groups.map",
+            "Path to the bundle source map, either absolute or relative to the dist-path.",
         },
         {
           name: "--sourcemap-sources-root [string]",
           description:
-            "Path to make sourcemap's sources entries relative to, ex. /root/dir",
+            "Path to use when relativizing entries in the bundle source map.",
         },
         {
           name: "--sourcemap-use-absolute-path",

@@ -147,18 +147,21 @@ export function metroBundle(
     } = overrideDefinition;
 
     const bundleFile = `${bundlePrefix}.${targetPlatform}.${bundleExtension}`;
-    const bundlePath = path.join(distPath as string, bundleFile);
+    const bundlePath = path.resolve(
+      process.cwd(),
+      path.join(distPath as string, bundleFile)
+    );
 
     // ensure the parent directory exists for the target output
-    const parentDirectory = path.dirname(
-      path.resolve(process.cwd(), bundlePath)
-    );
+    const parentDirectory = path.dirname(bundlePath);
     if (!existsSync(parentDirectory)) {
-      mkdirSync(parentDirectory);
+      mkdirSync(parentDirectory, { recursive: true });
     }
 
     const devBool = !!dev;
-    const sourceMap = sourceMapPath || (devBool && bundlePath + ".map");
+    const sourceMap = sourceMapPath || (devBool && bundleFile + ".map");
+    const sourceMapResolved =
+      sourceMap && path.resolve(distPath as string, sourceMap);
 
     yarnSync([
       "react-native",
@@ -177,7 +180,7 @@ export function metroBundle(
       devBool ? "true" : "false",
       ...optionalParam("--minify", minify),
       ...optionalParam("--max-workers", maxWorkers),
-      ...optionalParam("--sourcemap-output", sourceMap),
+      ...optionalParam("--sourcemap-output", sourceMapResolved),
       ...optionalParam("--sourcemap-sources-root", sourceMapSourceRootPath),
       ...optionalFlag(
         "--sourcemap-use-absolute-path",
