@@ -1,7 +1,0 @@
-{
-  "type": "minor",
-  "comment": "Change CLI args from camelCase to kebab-case. Add win32 as a platform.",
-  "packageName": "@rnx-kit/cli",
-  "email": "afoxman@microsoft.com",
-  "dependentChangeType": "patch"
-}

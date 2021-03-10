@@ -1,8 +1,20 @@
 # Change Log - @rnx-kit/cli
 
-This log was last generated on Mon, 08 Mar 2021 10:59:59 GMT and should not be manually modified.
+This log was last generated on Wed, 10 Mar 2021 18:05:17 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 0.1.0
+
+Wed, 10 Mar 2021 18:05:17 GMT
+
+### Minor changes
+
+- Change CLI args from camelCase to kebab-case. Add win32 as a platform. (afoxman@microsoft.com)
+
+### Patches
+
+- Bump @rnx-kit/config to v0.2.0 (afoxman@microsoft.com)
 
 ## 0.0.5
 

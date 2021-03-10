@@ -2,6 +2,21 @@
   "name": "@rnx-kit/config",
   "entries": [
     {
+      "date": "Wed, 10 Mar 2021 18:05:17 GMT",
+      "tag": "@rnx-kit/config_v0.2.0",
+      "version": "0.2.0",
+      "comments": {
+        "minor": [
+          {
+            "comment": "Change CLI args from camelCase to kebab-case. Add win32 as a platform.",
+            "author": "afoxman@microsoft.com",
+            "commit": "5e44f7b0db29b8ab20004b1d64d1cb09dc8bbd90",
+            "package": "@rnx-kit/config"
+          }
+        ]
+      }
+    },
+    {
       "date": "Tue, 09 Mar 2021 20:34:23 GMT",
       "tag": "@rnx-kit/config_v0.1.2",
       "version": "0.1.2",
