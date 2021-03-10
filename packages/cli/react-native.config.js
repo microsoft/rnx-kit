@@ -8,6 +8,17 @@ module.exports = {
       func: cli.rnxBundle,
       options: [
         {
+          name: "--id [id]",
+          description:
+            "Target bundle id, only needed when config describes multiple bundles",
+        },
+        {
+          name: "--platform [ios|android|windows|win32|macos]",
+          description:
+            "Target platform; when not given, all platforms are bundled",
+          parse: cli.parsePlatform,
+        },
+        {
           name: "--entry-path [file]",
           description:
             "Path to the root JS file, either absolute or relative to the package",
@@ -28,15 +39,13 @@ module.exports = {
             "Bundle file prefix, followed by the platform and bundle file extension",
         },
         {
-          name: "--id [id]",
+          name: "--bundle-encoding [string]",
           description:
-            "Target bundle id, only needed when config describes multiple bundles",
+            "Encoding the bundle should be written in (https://nodejs.org/api/buffer.html#buffer_buffers_and_character_encodings).",
         },
         {
-          name: "--platform [ios|android|windows|win32|macos]",
-          description:
-            "Target platform; when not given, all platforms are bundled",
-          parse: cli.parsePlatform,
+          name: "--transformer [string]",
+          description: "Specify a custom transformer to be used",
         },
         {
           name: "--dev [boolean]",
@@ -44,6 +53,45 @@ module.exports = {
             "If false, warnings are disabled and the bundle is minified",
           default: true,
           parse: cli.parseBoolean,
+        },
+        {
+          name: "--minify [boolean]",
+          description:
+            "Allows overriding whether bundle is minified. Disabling minification can be useful for speeding up production builds for testing purposes.",
+          parse: cli.parseBoolean,
+        },
+        {
+          name: "--max-workers [number]",
+          description:
+            "Specifies the maximum number of workers the worker-pool will spawn for transforming files. This defaults to the number of the cores available on your machine.",
+          parse: parseInt,
+        },
+        {
+          name: "--sourcemap-output [string]",
+          description:
+            "File name where to store the sourcemap file for resulting bundle, ex. /tmp/groups.map",
+        },
+        {
+          name: "--sourcemap-sources-root [string]",
+          description:
+            "Path to make sourcemap's sources entries relative to, ex. /root/dir",
+        },
+        {
+          name: "--sourcemap-use-absolute-path",
+          description: "Report SourceMapURL using its full path",
+        },
+        {
+          name: "--reset-cache",
+          description: "Removes cached files",
+        },
+        {
+          name: "--read-global-cache",
+          description:
+            "Try to fetch transformed JS code from the global cache, if configured.",
+        },
+        {
+          name: "--config [string]",
+          description: "Path to the metro CLI configuration file",
         },
       ],
     },

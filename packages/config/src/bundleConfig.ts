@@ -8,21 +8,24 @@ export type AllPlatforms = "ios" | "android" | "windows" | "win32" | "macos";
  */
 export interface BundleParameters {
   /**
-   * Relative path to the .js file which is the entry-point for building the bundle.
+   * Path to the .js file which is the entry-point for building the bundle.
+   * Either absolute, or relative to the package.
    *
    * @default "./lib/index.js"
    */
   entryPath?: string;
 
   /**
-   * Relative path where the bundle (and related files) are written.
+   * Path where the bundle and source map files are written.
+   * Either absolute, or relative to the package.
    *
    * @default "./dist"
    */
   distPath?: string;
 
   /**
-   * Relative path where all bundle assets (strings, images, fonts, sounds, ...) are written.
+   * Path where all bundle assets (strings, images, fonts, sounds, ...) are written.
+   * Either absolute, or relative to the package.
    *
    * @default "./dist"
    */
@@ -35,6 +38,29 @@ export interface BundleParameters {
    * @default "index"
    */
   bundlePrefix?: string;
+
+  /**
+   * Encoding scheme to use when writing the bundle file.
+   *
+   * @see "https://nodejs.org/api/buffer.html#buffer_buffers_and_character_encodings"
+   */
+  bundleEncoding?: string;
+
+  /**
+   * Path to use when creating the bundle source map file.
+   * Either absolute, or relative to the package.
+   */
+  sourceMapPath?: string;
+
+  /**
+   * Path to the package's source files. Used to make source-map paths relative and therefore portable.
+   */
+  sourceMapSourceRootPath?: string;
+
+  /**
+   * Whether to report SourceMapURL using its full path
+   */
+  sourceMapUseAbsolutePaths?: boolean;
 }
 
 /**
@@ -57,15 +83,6 @@ export type BundleDefinition = BundleParameters & {
    */
   platforms?: { [K in AllPlatforms]: BundleParameters };
 };
-
-/**
- * Bundle definition with all parameters resolved to user-provided values or defaults.
- */
-export type BundleDefinitionResolved = Omit<
-  BundleDefinition,
-  keyof BundleParameters
-> &
-  Required<BundleParameters>;
 
 /**
  * Bundle configuration for a kit. If true, then all defaults will be used.

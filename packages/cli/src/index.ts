@@ -66,20 +66,46 @@ export function rnxBundle(
     distPath,
     assetsPath,
     bundlePrefix,
+    bundleEncoding,
+    sourceMapPath,
+    sourceMapSourceRootPath,
+    sourceMapUseAbsolutePaths,
   } = options as BundleParameters;
   const bundleOverrides: BundleParameters = {
     ...(entryPath && { entryPath }),
     ...(distPath && { distPath }),
     ...(assetsPath && { assetsPath }),
     ...(bundlePrefix && { bundlePrefix }),
+    ...(bundleEncoding && { bundleEncoding }),
+    ...(sourceMapPath && { sourceMapPath }),
+    ...(sourceMapSourceRootPath && { sourceMapSourceRootPath }),
+    ...(typeof sourceMapUseAbsolutePaths === "boolean" && {
+      sourceMapUseAbsolutePaths,
+    }),
   };
 
   //  construct metro options from cmd-line options
-  const { id, platform, dev } = options as MetroBundleOptions;
+  const {
+    id,
+    platform,
+    dev,
+    minify,
+    transformer,
+    maxWorkers,
+    resetCache,
+    readGlobalCache,
+    config,
+  } = options as MetroBundleOptions;
   const bundleOptions: MetroBundleOptions = {
     ...(id && { id }),
     ...(platform && { platform }),
     dev,
+    ...(typeof minify === "boolean" && { minify }),
+    ...(transformer && { transformer }),
+    ...(typeof maxWorkers === "number" && { maxWorkers }),
+    ...(typeof resetCache === "boolean" && { resetCache }),
+    ...(typeof readGlobalCache === "boolean" && { readGlobalCache }),
+    ...(config && { config }),
   };
 
   metroBundle(bundleConfig, bundleOptions, bundleOverrides);
