@@ -24,6 +24,7 @@ export function parsePlatform(val: string): AllPlatforms {
     val === "ios" ||
     val === "android" ||
     val === "windows" ||
+    val === "win32" ||
     val === "macos"
   ) {
     return val;

@@ -8,22 +8,22 @@ module.exports = {
       func: cli.rnxBundle,
       options: [
         {
-          name: "--entryPath [file]",
+          name: "--entry-path [file]",
           description:
             "Path to the root JS file, either absolute or relative to the package",
         },
         {
-          name: "--distPath [path]",
+          name: "--dist-path [path]",
           description:
             "Path where the bundle is written, either absolute or relative to the package",
         },
         {
-          name: "--assetsPath [path]",
+          name: "--assets-path [path]",
           description:
             "Path where bundle assets like images are written, either absolute or relative to the package",
         },
         {
-          name: "--bundlePrefix [prefix]",
+          name: "--bundle-prefix [prefix]",
           description:
             "Bundle file prefix, followed by the platform and bundle file extension",
         },
@@ -33,7 +33,7 @@ module.exports = {
             "Target bundle id, only needed when config describes multiple bundles",
         },
         {
-          name: "--platform [ios|android|windows|macos]",
+          name: "--platform [ios|android|windows|win32|macos]",
           description:
             "Target platform; when not given, all platforms are bundled",
           parse: cli.parsePlatform,
