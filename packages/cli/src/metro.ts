@@ -28,6 +28,38 @@ export interface MetroBundleOptions {
    * whether to bundle in development mode. if false, warnings are disabled and the bundle is minified
    */
   dev?: boolean;
+
+  /**
+   * allows overriding whether bundle is minified.
+   * disabling minification can be useful for speeding up production builds for testing purposes.
+   */
+  minify?: boolean;
+
+  /**
+   * specify a custom transformer to be used
+   */
+  transformer?: string;
+
+  /**
+   * specifies the maximum number of workers the worker-pool will spawn for transforming files.
+   * this defaults to the number of the cores available on your machine.
+   */
+  maxWorkers?: number;
+
+  /**
+   * whether to remove cached files
+   */
+  resetCache?: boolean;
+
+  /**
+   * whether to try fetching transformed JS code from the global cache, if configured.
+   */
+  readGlobalCache?: boolean;
+
+  /**
+   * Path to the metro CLI configuration file
+   */
+  configPath?: string;
 }
 
 /**
@@ -46,12 +78,37 @@ function yarnSync(args: string[]): void {
   spawnSync(yarnCommand, args, spawnOptions);
 }
 
+function optionalParam(name: string, value: any): Array<any> {
+  if (typeof value === "number" || typeof value === "boolean") {
+    // value is a boolean or a number, meaning it has a real value that came from the
+    // rnx-kit cmdline. therefore, we don't need to test it before emitting it as a param.
+    // besides, doing so would eliminate 0 and false, since they both evaluate as 'falsey'.
+    // instead, just string-serialize the value given, and return it.
+    return [name, value.toString()];
+  }
+  return (value && [name, value]) || [];
+}
+
+function optionalFlag(name: string, value: any): Array<any> {
+  return (value && [name]) || [];
+}
+
 export function metroBundle(
   config: BundleConfig,
   options: MetroBundleOptions,
   overrides: BundleParameters
 ) {
-  const { id, platform, dev = false } = options;
+  const {
+    id,
+    platform,
+    dev = false,
+    minify,
+    transformer,
+    maxWorkers,
+    resetCache,
+    readGlobalCache,
+    configPath,
+  } = options;
 
   console.log("Generating metro bundle(s)" + (id ? ` for id ${id}...` : "..."));
 
@@ -83,35 +140,55 @@ export function metroBundle(
       distPath,
       assetsPath,
       bundlePrefix,
+      bundleEncoding,
+      sourceMapPath,
+      sourceMapSourceRootPath,
+      sourceMapUseAbsolutePaths,
     } = overrideDefinition;
 
     const bundleFile = `${bundlePrefix}.${targetPlatform}.${bundleExtension}`;
-    const bundlePath = path.join(distPath, bundleFile);
+    const bundlePath = path.resolve(
+      process.cwd(),
+      path.join(distPath as string, bundleFile)
+    );
 
     // ensure the parent directory exists for the target output
-    const parentDirectory = path.dirname(
-      path.resolve(process.cwd(), bundlePath)
-    );
+    const parentDirectory = path.dirname(bundlePath);
     if (!existsSync(parentDirectory)) {
-      mkdirSync(parentDirectory);
+      mkdirSync(parentDirectory, { recursive: true });
     }
 
     const devBool = !!dev;
-    const sourceMap = devBool && bundlePath + ".map";
+    const sourceMap = sourceMapPath || (devBool && bundleFile + ".map");
+    const sourceMapResolved =
+      sourceMap && path.resolve(distPath as string, sourceMap);
+
     yarnSync([
       "react-native",
       "bundle",
       "--platform",
       targetPlatform,
       "--entry-file",
-      entryPath,
+      entryPath as string,
       "--bundle-output",
-      bundlePath,
+      bundlePath as string,
+      ...optionalParam("--bundle-encoding", bundleEncoding),
+      ...optionalParam("--transformer", transformer),
+      "--assets-dest",
+      assetsPath as string,
       "--dev",
       devBool ? "true" : "false",
-      "--assets-dest",
-      assetsPath,
-      ...((sourceMap && ["--sourcemap-output", sourceMap]) || []),
+      ...optionalParam("--minify", minify),
+      ...optionalParam("--max-workers", maxWorkers),
+      ...optionalParam("--sourcemap-output", sourceMapResolved),
+      ...optionalParam("--sourcemap-sources-root", sourceMapSourceRootPath),
+      ...optionalFlag(
+        "--sourcemap-use-absolute-path",
+        sourceMapUseAbsolutePaths
+      ),
+      ...optionalFlag("--reset-cache", resetCache),
+      ...optionalFlag("--read--global-cache", readGlobalCache),
+      ...optionalParam("--config", configPath),
     ]);
   }
 }
@@ -121,9 +198,5 @@ export function metroStart(options: MetroStartOptions): void {
 
   console.log("Starting metro server...");
 
-  yarnSync([
-    "react-native",
-    "start",
-    ...(port ? ["--port", port.toString()] : []),
-  ]);
+  yarnSync(["react-native", "start", ...optionalParam("--port", port)]);
 }

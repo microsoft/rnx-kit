@@ -1,11 +1,30 @@
-import {
-  MetroBundleOptions,
-  MetroStartOptions,
-  metroBundle,
-  metroStart,
-} from "./metro";
+import { MetroBundleOptions, metroBundle, metroStart } from "./metro";
 import { getKitConfig, AllPlatforms, BundleParameters } from "@rnx-kit/config";
 import chalk from "chalk";
+
+interface CliBundleOptions {
+  id?: string;
+  platform?: "ios" | "android" | "windows" | "win32" | "macos";
+  entryPath?: string;
+  distPath?: string;
+  assetsPath?: string;
+  bundlePrefix?: string;
+  bundleEncoding?: string;
+  transformer?: string;
+  dev: boolean;
+  minify?: boolean;
+  maxWorkers?: number;
+  sourcemapOutput?: string;
+  sourcemapSourcesRoot?: string;
+  sourcemapUseAbsolutePath?: boolean;
+  resetCache?: boolean;
+  readGlobalCache?: boolean;
+  config?: string;
+}
+
+interface CliStartOptions {
+  port?: number;
+}
 
 export function parseBoolean(val: string): boolean {
   if (val === "false") {
@@ -35,7 +54,7 @@ export function parsePlatform(val: string): AllPlatforms {
 export function rnxBundle(
   _argv: Array<string>,
   _config: Object /*: ConfigT*/,
-  options: Object
+  options: CliBundleOptions
 ): void {
   //  get the rnx kit config, and make sure bundling is enabled
   const kitConfig = getKitConfig();
@@ -60,27 +79,26 @@ export function rnxBundle(
   }
   const bundleConfig = kitConfig.bundle;
 
-  //  construct override params from cmd-line options
-  const {
-    entryPath,
-    distPath,
-    assetsPath,
-    bundlePrefix,
-  } = options as BundleParameters;
+  //  construct override params from cmd-line options, eliminating unspecified values
   const bundleOverrides: BundleParameters = {
-    ...(entryPath && { entryPath }),
-    ...(distPath && { distPath }),
-    ...(assetsPath && { assetsPath }),
-    ...(bundlePrefix && { bundlePrefix }),
+    ...(options.entryPath && { entryPath: options.entryPath }),
+    ...(options.distPath && { distPath: options.distPath }),
+    ...(options.assetsPath && { assetsPath: options.assetsPath }),
+    ...(options.bundlePrefix && { bundlePrefix: options.bundlePrefix }),
+    ...(options.bundleEncoding && { bundleEncoding: options.bundleEncoding }),
+    ...(options.sourcemapOutput && { sourceMapPath: options.sourcemapOutput }),
+    ...(options.sourcemapSourcesRoot && {
+      sourceMapSourceRootPath: options.sourcemapSourcesRoot,
+    }),
+    ...(typeof options.sourcemapUseAbsolutePath === "boolean" && {
+      sourceMapUseAbsolutePaths: options.sourcemapUseAbsolutePath,
+    }),
   };
 
   //  construct metro options from cmd-line options
-  const { id, platform, dev } = options as MetroBundleOptions;
-  const bundleOptions: MetroBundleOptions = {
-    ...(id && { id }),
-    ...(platform && { platform }),
-    dev,
-  };
+  const bundleOptions: MetroBundleOptions = options;
+  //  handle renamed props
+  bundleOptions.configPath = options.config;
 
   metroBundle(bundleConfig, bundleOptions, bundleOverrides);
 }
@@ -88,7 +106,7 @@ export function rnxBundle(
 export function rnxStart(
   _argv: Array<string>,
   _config: Object /*: ConfigT*/,
-  options: Object
+  options: CliStartOptions
 ): void {
-  metroStart(options as MetroStartOptions);
+  metroStart(options);
 }
