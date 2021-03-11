@@ -23,8 +23,6 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 15.x
-      - name: Install Yarn
-        run: npm install -g yarn
       - name: Cache /.yarn-offline-mirror
         uses: actions/cache@v2
         with:
@@ -33,8 +31,8 @@ jobs:
       - name: Install package dependencies
         run: yarn ci
       - name: Build and test packages
-        run: yarn buildci
+        run: yarn build:ci
       - name: Bundle packages
-        run: yarn bundle
+        run: yarn bundle:ci
       - name: Publish
         run: yarn run publish:beachball --yes --token ${{ secrets.NPM_TOKEN }}

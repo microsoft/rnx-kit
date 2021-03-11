@@ -12,17 +12,18 @@
     "url": "https://github.com/Microsoft/rnx-kit.git"
   },
   "scripts": {
-    "build": "lage build --verbose --grouped",
-    "buildci": "lage buildci --verbose --grouped",
-    "build-tools": "lage build-tools --verbose --grouped",
+    "build": "lage build --grouped",
+    "build:ci": "lage build:ci --verbose --grouped",
+    "build-tools": "lage build-tools --log-level warn --grouped",
     "bump-versions": "beachball bump",
-    "bundle": "lage bundle --verbose --grouped",
+    "bundle": "lage bundle --grouped",
+    "bundle:ci": "lage bundle --verbose --grouped",
     "change": "beachball change",
     "check": "beachball check --branch origin/main --changehint \"Run 'yarn run change' from root of repo to generate a change file.\"",
     "ci": "yarn --cache-folder .yarn-offline-mirror --prefer-offline --frozen-lockfile --non-interactive",
-    "clean": "lage clean --verbose --grouped",
-    "depcheck": "lage depcheck --verbose --grouped",
-    "lint": "lage lint --verbose --grouped",
+    "clean": "lage clean --log-level warn --grouped",
+    "depcheck": "lage depcheck --log-level warn --grouped",
+    "lint": "lage lint --log-level warn --grouped",
     "preinstall": "node ./scripts/preinstall.js",
     "postinstall": "node ./scripts/postinstall.js",
     "publish:beachball": "beachball publish --bump-deps -m\"📦 applying package updates ***NO_CI***\"",
@@ -30,7 +31,7 @@
   },
   "devDependencies": {
     "beachball": "^1.53.1",
-    "lage": "^0.27.0"
+    "lage": "^0.29.0"
   },
   "workspaces": {
     "packages": [
@@ -48,7 +49,7 @@
         "build-tools",
         "^build"
       ],
-      "buildci": [
+      "build:ci": [
         "build",
         "test"
       ],
