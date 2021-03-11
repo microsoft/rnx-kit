@@ -2,6 +2,21 @@
   "name": "@rnx-kit/metro-config",
   "entries": [
     {
+      "date": "Thu, 11 Mar 2021 15:31:28 GMT",
+      "tag": "@rnx-kit/metro-config_v1.1.0",
+      "version": "1.1.0",
+      "comments": {
+        "minor": [
+          {
+            "comment": "Removes makeBabelConfig() for @rnx-kit/babel-preset-metro-react-native",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "f51c3a2734ba34d74ce0b784daba05b2deb85bcf",
+            "package": "@rnx-kit/metro-config"
+          }
+        ]
+      }
+    },
+    {
       "date": "Tue, 09 Mar 2021 20:34:23 GMT",
       "tag": "@rnx-kit/metro-config_v1.0.4",
       "version": "1.0.4",
