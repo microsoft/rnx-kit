@@ -1,9 +1,4 @@
-import {
-  MetroBundleOptions,
-  MetroStartOptions,
-  metroBundle,
-  metroStart,
-} from "./metro";
+import { MetroBundleOptions, metroBundle, metroStart } from "./metro";
 import { getKitConfig, AllPlatforms, BundleParameters } from "@rnx-kit/config";
 import chalk from "chalk";
 
@@ -100,24 +95,10 @@ export function rnxBundle(
     }),
   };
 
-  //  construct metro options from cmd-line options, eliminating unspecified values
-  const bundleOptions: MetroBundleOptions = {
-    ...(options.id && { id: options.id }),
-    ...(options.platform && { platform: options.platform }),
-    dev: options.dev,
-    ...(typeof options.minify === "boolean" && { minify: options.minify }),
-    ...(options.transformer && { transformer: options.transformer }),
-    ...(typeof options.maxWorkers === "number" && {
-      maxWorkers: options.maxWorkers,
-    }),
-    ...(typeof options.resetCache === "boolean" && {
-      resetCache: options.resetCache,
-    }),
-    ...(typeof options.readGlobalCache === "boolean" && {
-      readGlobalCache: options.readGlobalCache,
-    }),
-    ...(options.config && { configPath: options.config }),
-  };
+  //  construct metro options from cmd-line options
+  const bundleOptions: MetroBundleOptions = options;
+  //  handle renamed props
+  bundleOptions.configPath = options.config;
 
   metroBundle(bundleConfig, bundleOptions, bundleOverrides);
 }
@@ -127,10 +108,5 @@ export function rnxStart(
   _config: Object /*: ConfigT*/,
   options: CliStartOptions
 ): void {
-  //  construct metro options from cmd-line options, eliminating unspecified values
-  const startOptions: MetroStartOptions = {
-    ...(typeof options.port === "number" && { port: options.port }),
-  };
-
-  metroStart(startOptions);
+  metroStart(options);
 }
