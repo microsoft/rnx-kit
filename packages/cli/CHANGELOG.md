@@ -1,8 +1,20 @@
 # Change Log - @rnx-kit/cli
 
-This log was last generated on Wed, 10 Mar 2021 18:05:17 GMT and should not be manually modified.
+This log was last generated on Thu, 11 Mar 2021 22:58:41 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 0.2.0
+
+Thu, 11 Mar 2021 22:58:41 GMT
+
+### Minor changes
+
+- Add pass-through params to rnx-bundle, giving the caller control over all aspects of metro bundling. (afoxman@microsoft.com)
+
+### Patches
+
+- Bump @rnx-kit/config to v0.2.1 (afoxman@microsoft.com)
 
 ## 0.1.0
 

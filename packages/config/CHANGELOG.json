@@ -2,6 +2,21 @@
   "name": "@rnx-kit/config",
   "entries": [
     {
+      "date": "Thu, 11 Mar 2021 22:58:41 GMT",
+      "tag": "@rnx-kit/config_v0.2.1",
+      "version": "0.2.1",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Add pass-through params to rnx-bundle, giving the caller control over all aspects of metro bundling.",
+            "author": "afoxman@microsoft.com",
+            "commit": "cc013a092960b50c0c90a8ab5ad6e52e02b5d13d",
+            "package": "@rnx-kit/config"
+          }
+        ]
+      }
+    },
+    {
       "date": "Wed, 10 Mar 2021 18:05:17 GMT",
       "tag": "@rnx-kit/config_v0.2.0",
       "version": "0.2.0",

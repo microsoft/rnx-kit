@@ -1,7 +1,0 @@
-{
-  "type": "minor",
-  "comment": "Add pass-through params to rnx-bundle, giving the caller control over all aspects of metro bundling.",
-  "packageName": "@rnx-kit/cli",
-  "email": "afoxman@microsoft.com",
-  "dependentChangeType": "patch"
-}
