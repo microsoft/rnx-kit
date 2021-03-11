@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/metro-config
 
-This log was last generated on Thu, 11 Mar 2021 15:31:28 GMT and should not be manually modified.
+This log was last generated on Thu, 11 Mar 2021 22:51:12 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 1.1.1
+
+Thu, 11 Mar 2021 22:51:12 GMT
+
+### Patches
+
+- Fix fail to resolve react-native on Windows (4123478+tido64@users.noreply.github.com)
 
 ## 1.1.0
 

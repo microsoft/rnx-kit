@@ -2,6 +2,21 @@
   "name": "@rnx-kit/metro-config",
   "entries": [
     {
+      "date": "Thu, 11 Mar 2021 22:51:12 GMT",
+      "tag": "@rnx-kit/metro-config_v1.1.1",
+      "version": "1.1.1",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Fix fail to resolve react-native on Windows",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "e113d4f5b8737ce1fccc37c9c48d356a6fe28511",
+            "package": "@rnx-kit/metro-config"
+          }
+        ]
+      }
+    },
+    {
       "date": "Thu, 11 Mar 2021 15:31:28 GMT",
       "tag": "@rnx-kit/metro-config_v1.1.0",
       "version": "1.1.0",

@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/test-app
 
-This log was last generated on Thu, 11 Mar 2021 15:31:28 GMT and should not be manually modified.
+This log was last generated on Thu, 11 Mar 2021 22:51:12 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 0.0.1
+
+Thu, 11 Mar 2021 22:51:12 GMT
+
+### Patches
+
+- Bump @rnx-kit/metro-config to v1.1.1 (4123478+tido64@users.noreply.github.com)
 
 ## 0.0.1
 
