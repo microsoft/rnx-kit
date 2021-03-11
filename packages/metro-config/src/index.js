@@ -120,8 +120,11 @@ function excludeExtraCopiesOf(packageName, projectRoot) {
 
   // Strip `/node_modules/${packageName}` from path:
   const owningDir = path.dirname(path.dirname(result));
+  const escapedPath = owningDir.replace(/\\/g, "\\\\");
 
-  return new RegExp(`(?<!${owningDir})\\/node_modules\\/${packageName}\\/.*`);
+  return new RegExp(
+    `(?<!${escapedPath})[\\/\\\\]node_modules[\\/\\\\]${packageName}[\\/\\\\].*`
+  );
 }
 
 /**
