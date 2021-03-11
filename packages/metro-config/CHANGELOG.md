@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/metro-config
 
-This log was last generated on Thu, 11 Mar 2021 22:51:12 GMT and should not be manually modified.
+This log was last generated on Thu, 11 Mar 2021 23:54:05 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 1.1.2
+
+Thu, 11 Mar 2021 23:54:05 GMT
+
+### Patches
+
+- Fixed a typo in README (4123478+tido64@users.noreply.github.com)
 
 ## 1.1.1
 

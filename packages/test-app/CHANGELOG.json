@@ -2,6 +2,21 @@
   "name": "@rnx-kit/test-app",
   "entries": [
     {
+      "date": "Thu, 11 Mar 2021 23:54:05 GMT",
+      "tag": "@rnx-kit/test-app_v0.0.1",
+      "version": "0.0.1",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Bump @rnx-kit/babel-preset-metro-react-native to v1.0.1",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "ad889b0e030e217d9df940a3aa605da6387fbc19",
+            "package": "@rnx-kit/test-app"
+          }
+        ]
+      }
+    },
+    {
       "date": "Thu, 11 Mar 2021 22:58:41 GMT",
       "tag": "@rnx-kit/test-app_v0.0.1",
       "version": "0.0.1",

@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/test-app
 
-This log was last generated on Thu, 11 Mar 2021 22:58:41 GMT and should not be manually modified.
+This log was last generated on Thu, 11 Mar 2021 23:54:05 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 0.0.1
+
+Thu, 11 Mar 2021 23:54:05 GMT
+
+### Patches
+
+- Bump @rnx-kit/babel-preset-metro-react-native to v1.0.1 (4123478+tido64@users.noreply.github.com)
 
 ## 0.0.1
 
