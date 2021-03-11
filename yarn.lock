@@ -5863,10 +5863,10 @@ kleur@^3.0.2, kleur@^3.0.3:
   resolved "https://registry.npmjs.org/kleur/-/kleur-3.0.3.tgz#a79c9ecc86ee1ce3fa6206d1216c501f147fc07e"
   integrity sha512-eTIzlVOSUR+JxdDFepEYcBMtZ9Qqdef+rnzWdRZuMbOywu5tO2w2N7rqjoANZ5k9vywhL6Br1VRjUIgTQx4E8w==
 
-lage@^0.27.0:
-  version "0.27.1"
-  resolved "https://registry.npmjs.org/lage/-/lage-0.27.1.tgz#c8e26c5b86d8930dc7ac311b9273ca496773c9e5"
-  integrity sha512-hOqFVIzE2WW7+EkeEf2XO3I+DGX1KzFOrv0beoxgUTXnp+iwmVDOf/7i1UpU81HVLa6xg2SLDN/aIVLlgKaGBA==
+lage@^0.29.0:
+  version "0.29.0"
+  resolved "https://registry.yarnpkg.com/lage/-/lage-0.29.0.tgz#60820354be3abc8cf8ec5fb62eb0fbc23113c154"
+  integrity sha512-ePx6Hh3+q5nYrvO1FXrXKbr17j9ip4NioFDf2lJqXCA07ENz8CIpynI6WEaSOY3jfqyJfI25FQczGF7OtLFewg==
   dependencies:
     "@microsoft/task-scheduler" "^2.7.0"
     abort-controller "^3.0.0"

@@ -27,6 +27,6 @@ jobs:
       - name: Check for change files
         run: yarn run check
       - name: Build and test packages
-        run: yarn buildci
+        run: yarn build:ci
       - name: Bundle packages
-        run: yarn bundle
+        run: yarn bundle:ci
