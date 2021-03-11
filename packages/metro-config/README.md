@@ -11,7 +11,7 @@ First, we need to add two files to the target package, `babel.config.js` and
 ```js
 // babel.config.js
 module.exports = {
-  preset: ["@rnx-kit/babel-preset-metro-react-native"],
+  presets: ["@rnx-kit/babel-preset-metro-react-native"],
 };
 ```
 
