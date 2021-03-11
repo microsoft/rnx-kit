@@ -10,16 +10,11 @@ describe("@rnx-kit/metro-config", () => {
     defaultWatchFolders,
     excludeExtraCopiesOf,
     exclusionList,
-    makeBabelConfig,
     makeMetroConfig,
   } = require("../src/index");
 
   const defaultExclusionList =
     ".*\\.ProjectImports\\.zip|node_modules\\/react\\/dist\\/.*|website\\/node_modules\\/.*|heapCapture\\/bundle\\.js|.*\\/__tests__\\/.*";
-
-  const babelConfigKeys = ["presets", "overrides"];
-  const babelConfigPresets = ["module:metro-react-native-babel-preset"];
-  const babelTypeScriptTest = "\\.tsx?$";
 
   const metroConfigKeys = [
     "resolver",
@@ -152,49 +147,6 @@ describe("@rnx-kit/metro-config", () => {
     expect(exclusionList([/.*[\/\\]__fixtures__[\/\\].*/]).source).toBe(
       `(${react}|${reactNative}|.*\\.ProjectImports\\.zip|.*[\\/\\\\]__fixtures__[\\/\\\\].*|node_modules\\/react\\/dist\\/.*|website\\/node_modules\\/.*|heapCapture\\/bundle\\.js|.*\\/__tests__\\/.*)$`
     );
-  });
-
-  test("makeBabelConfig() returns default Babel config", () => {
-    const config = makeBabelConfig();
-    expect(Object.keys(config)).toEqual(babelConfigKeys);
-    expect(config.presets).toEqual(babelConfigPresets);
-
-    if (!Array.isArray(config.overrides)) {
-      fail("Expected `config.overrides` to be an array");
-    }
-
-    expect(config.overrides.length).toBe(1);
-
-    if (!(config.overrides[0].test instanceof RegExp)) {
-      fail("Expected `config.overrides[0]` to be a RegExp");
-    }
-
-    expect(config.overrides[0].test.source).toBe(babelTypeScriptTest);
-    expect(config.overrides[0].plugins).toEqual(["const-enum"]);
-  });
-
-  test("makeBabelConfig() returns a Babel config with additional plugins", () => {
-    const config = makeBabelConfig([
-      "src/babel-plugin-import-path-remapper.js",
-    ]);
-    expect(Object.keys(config)).toEqual(babelConfigKeys);
-    expect(config.presets).toEqual(babelConfigPresets);
-
-    if (!Array.isArray(config.overrides)) {
-      fail("Expected `config.overrides` to be an array");
-    }
-
-    expect(config.overrides.length).toBe(1);
-
-    if (!(config.overrides[0].test instanceof RegExp)) {
-      fail("Expected `config.overrides[0]` to be a RegExp");
-    }
-
-    expect(config.overrides[0].test.source).toBe(babelTypeScriptTest);
-    expect(config.overrides[0].plugins).toEqual([
-      "const-enum",
-      "src/babel-plugin-import-path-remapper.js",
-    ]);
   });
 
   test("makeMetroConfig() returns a default Metro config", async () => {

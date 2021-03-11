@@ -182,30 +182,6 @@ module.exports = {
   exclusionList,
 
   /**
-   * Helper function for configuring Babel.
-   * @param {string[]=} additionalPlugins
-   * @returns {import("@babel/core").TransformOptions}
-   */
-  makeBabelConfig: (additionalPlugins = []) => {
-    return {
-      presets: ["module:metro-react-native-babel-preset"],
-      overrides: [
-        {
-          test: /\.tsx?$/,
-          plugins: [
-            // @babel/plugin-transform-typescript doesn't support `const enum`s.
-            // See https://babeljs.io/docs/en/babel-plugin-transform-typescript#caveats
-            // for more details.
-            "const-enum",
-
-            ...additionalPlugins,
-          ],
-        },
-      ],
-    };
-  },
-
-  /**
    * Helper function for configuring Metro.
    * @param {MetroConfig=} customConfig
    * @returns {MetroConfig}
