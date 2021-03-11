@@ -1,0 +1,7 @@
+{
+  "type": "patch",
+  "comment": "Fixed a typo in README",
+  "packageName": "@rnx-kit/babel-preset-metro-react-native",
+  "email": "4123478+tido64@users.noreply.github.com",
+  "dependentChangeType": "patch"
+}

@@ -1,3 +1,3 @@
 module.exports = {
-  preset: ["@rnx-kit/babel-preset-metro-react-native"],
+  presets: ["@rnx-kit/babel-preset-metro-react-native"],
 };
