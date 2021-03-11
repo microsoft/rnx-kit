@@ -1,0 +1,7 @@
+{
+  "type": "minor",
+  "comment": "Removes makeBabelConfig() for @rnx-kit/babel-preset-metro-react-native",
+  "packageName": "@rnx-kit/metro-config",
+  "email": "4123478+tido64@users.noreply.github.com",
+  "dependentChangeType": "patch"
+}

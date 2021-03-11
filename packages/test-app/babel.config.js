@@ -1,2 +1,3 @@
-const { makeBabelConfig } = require("@rnx-kit/metro-config");
-module.exports = makeBabelConfig();
+module.exports = {
+  preset: ["@rnx-kit/babel-preset-metro-react-native"],
+};

@@ -1,17 +1,18 @@
 {
   "name": "@rnx-kit/babel-plugin-import-path-remapper",
+  "version": "1.0.0",
   "description": "Babel plugin for remapping 'lib/' imports to 'src/'",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/babel-plugin-import-path-remapper#rnx-kitbabel-plugin-import-path-remapper",
   "license": "MIT",
   "files": [
-    "src/*.js"
+    "src/*"
   ],
+  "main": "src/index.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/microsoft/rnx-kit",
     "directory": "packages/babel-plugin-import-path-remapper"
   },
-  "version": "1.0.0",
-  "main": "src/index.js",
   "scripts": {
     "build": "rnx-kit-scripts build",
     "format": "prettier --write src/*.js test/*.js",
