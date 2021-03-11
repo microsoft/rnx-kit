@@ -120,8 +120,11 @@ function excludeExtraCopiesOf(packageName, projectRoot) {
 
   // Strip `/node_modules/${packageName}` from path:
   const owningDir = path.dirname(path.dirname(result));
+  const escapedPath = owningDir.replace(/\\/g, "\\\\");
 
-  return new RegExp(`(?<!${owningDir})\\/node_modules\\/${packageName}\\/.*`);
+  return new RegExp(
+    `(?<!${escapedPath})[\\/\\\\]node_modules[\\/\\\\]${packageName}[\\/\\\\].*`
+  );
 }
 
 /**
@@ -180,30 +183,6 @@ module.exports = {
   defaultWatchFolders,
   excludeExtraCopiesOf,
   exclusionList,
-
-  /**
-   * Helper function for configuring Babel.
-   * @param {string[]=} additionalPlugins
-   * @returns {import("@babel/core").TransformOptions}
-   */
-  makeBabelConfig: (additionalPlugins = []) => {
-    return {
-      presets: ["module:metro-react-native-babel-preset"],
-      overrides: [
-        {
-          test: /\.tsx?$/,
-          plugins: [
-            // @babel/plugin-transform-typescript doesn't support `const enum`s.
-            // See https://babeljs.io/docs/en/babel-plugin-transform-typescript#caveats
-            // for more details.
-            "const-enum",
-
-            ...additionalPlugins,
-          ],
-        },
-      ],
-    };
-  },
 
   /**
    * Helper function for configuring Metro.

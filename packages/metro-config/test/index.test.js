@@ -2,7 +2,6 @@
 "use strict";
 
 describe("@rnx-kit/metro-config", () => {
-  const { spawnSync } = require("child_process");
   const fs = require("fs");
   const path = require("path");
   const {
@@ -10,16 +9,8 @@ describe("@rnx-kit/metro-config", () => {
     defaultWatchFolders,
     excludeExtraCopiesOf,
     exclusionList,
-    makeBabelConfig,
     makeMetroConfig,
   } = require("../src/index");
-
-  const defaultExclusionList =
-    ".*\\.ProjectImports\\.zip|node_modules\\/react\\/dist\\/.*|website\\/node_modules\\/.*|heapCapture\\/bundle\\.js|.*\\/__tests__\\/.*";
-
-  const babelConfigKeys = ["presets", "overrides"];
-  const babelConfigPresets = ["module:metro-react-native-babel-preset"];
-  const babelTypeScriptTest = "\\.tsx?$";
 
   const metroConfigKeys = [
     "resolver",
@@ -31,20 +22,6 @@ describe("@rnx-kit/metro-config", () => {
   ];
 
   const currentWorkingDir = process.cwd();
-
-  /**
-   * Generates a sequence from RegEx matches.
-   * @param {string} str
-   * @param {RegExp} regex
-   * @returns {Generator<string, void>}
-   */
-  function* generateSequence(str, regex) {
-    let m = regex.exec(str);
-    while (m) {
-      yield m[1];
-      m = regex.exec(str);
-    }
-  }
 
   /**
    * Returns path to specified test fixture.
@@ -86,18 +63,31 @@ describe("@rnx-kit/metro-config", () => {
   });
 
   test("excludeExtraCopiesOf() ignores symlinks", () => {
+    const repo = fixturePath("awesome-repo");
+    const packageCopy = path.join(
+      repo,
+      "packages",
+      "t-800",
+      "node_modules",
+      "react-native",
+      "package.json"
+    );
+    const projectCopy = path.join(
+      repo,
+      "node_modules",
+      "react-native",
+      "package.json"
+    );
+
     setFixture("awesome-repo/packages/t-800");
 
     expect(
       fs.lstatSync("node_modules/react-native").isSymbolicLink()
     ).toBeTruthy();
 
-    const expr = excludeExtraCopiesOf("react-native");
-    expect(
-      expr.source.endsWith(
-        "\\/awesome-repo)\\/node_modules\\/react-native\\/.*"
-      )
-    ).toBeTruthy();
+    const exclude = excludeExtraCopiesOf("react-native");
+    expect(exclude.test(packageCopy)).toBeTruthy();
+    expect(exclude.test(projectCopy)).toBeFalsy();
   });
 
   test("excludeExtraCopiesOf() throws if a package is not found", () => {
@@ -110,91 +100,65 @@ describe("@rnx-kit/metro-config", () => {
   });
 
   test("exclusionList() ignores extra copies of react and react-native", () => {
-    const repo = fixturePath("awesome-repo").replace(/\//g, "\\/");
-
-    // /rnx-kit/packages/metro-config/test/__fixtures__/awesome-repo/packages/john/node_modules/react-native
-    const packageCopy = `(?<!${repo}\\/packages\\/john)\\/node_modules\\/react-native\\/.*`;
-
-    // /rnx-kit/packages/metro-config/test/__fixtures__/awesome-repo/node_modules/react
-    const reactCopy = `(?<!${repo})\\/node_modules\\/react\\/.*`;
-
-    // /rnx-kit/packages/metro-config/test/__fixtures__/awesome-repo/node_modules/react-native
-    const projectCopy = `(?<!${repo})\\/node_modules\\/react-native\\/.*`;
+    const repo = fixturePath("awesome-repo");
+    const reactCopy = path.join(repo, "node_modules", "react", "package.json");
+    const packageCopy = path.join(
+      repo,
+      "packages",
+      "john",
+      "node_modules",
+      "react-native",
+      "package.json"
+    );
+    const projectCopy = path.join(
+      repo,
+      "node_modules",
+      "react-native",
+      "package.json"
+    );
 
     // Conan does not have a local copy of react-native. It should
     // exclude all but the repo's copy.
     setFixture("awesome-repo/packages/conan");
-    expect(exclusionList().source).toBe(
-      `(${reactCopy}|${projectCopy}|${defaultExclusionList})$`
-    );
+    const conanExclude = exclusionList();
+    expect(conanExclude.test(reactCopy)).toBeFalsy();
+    expect(conanExclude.test(packageCopy)).toBeTruthy();
+    expect(conanExclude.test(projectCopy)).toBeFalsy();
+    expect(conanExclude.test("Test.ProjectImports.zip")).toBeTruthy();
 
     // John has a local copy of react-native and should ignore all other copies.
     setFixture("awesome-repo/packages/john");
-    expect(exclusionList().source).toBe(
-      `(${reactCopy}|${packageCopy}|${defaultExclusionList})$`
-    );
+    const johnExclude = exclusionList();
+    expect(johnExclude.test(reactCopy)).toBeFalsy();
+    expect(johnExclude.test(packageCopy)).toBeFalsy();
+    expect(johnExclude.test(projectCopy)).toBeTruthy();
+    expect(johnExclude.test("Test.ProjectImports.zip")).toBeTruthy();
   });
 
   test("exclusionList() returns additional exclusions", () => {
-    const repoReactNative = path.dirname(
-      require.resolve("react-native/package.json")
+    const repo = fixturePath("awesome-repo");
+    const reactCopy = path.join(repo, "node_modules", "react", "package.json");
+    const packageCopy = path.join(
+      repo,
+      "packages",
+      "john",
+      "node_modules",
+      "react-native",
+      "package.json"
     );
-    const repoRoot = path
-      .dirname(path.dirname(repoReactNative))
-      .replace(/\//g, "\\/");
-
-    const react = `(?<!${repoRoot})\\/node_modules\\/react\\/.*`;
-    const reactNative = `(?<!${repoRoot})\\/node_modules\\/react-native\\/.*`;
-
-    expect(exclusionList().source).toBe(
-      `(${react}|${reactNative}|${defaultExclusionList})$`
+    const projectCopy = path.join(
+      repo,
+      "node_modules",
+      "react-native",
+      "package.json"
     );
-    expect(exclusionList([/.*[\/\\]__fixtures__[\/\\].*/]).source).toBe(
-      `(${react}|${reactNative}|.*\\.ProjectImports\\.zip|.*[\\/\\\\]__fixtures__[\\/\\\\].*|node_modules\\/react\\/dist\\/.*|website\\/node_modules\\/.*|heapCapture\\/bundle\\.js|.*\\/__tests__\\/.*)$`
-    );
-  });
 
-  test("makeBabelConfig() returns default Babel config", () => {
-    const config = makeBabelConfig();
-    expect(Object.keys(config)).toEqual(babelConfigKeys);
-    expect(config.presets).toEqual(babelConfigPresets);
-
-    if (!Array.isArray(config.overrides)) {
-      fail("Expected `config.overrides` to be an array");
-    }
-
-    expect(config.overrides.length).toBe(1);
-
-    if (!(config.overrides[0].test instanceof RegExp)) {
-      fail("Expected `config.overrides[0]` to be a RegExp");
-    }
-
-    expect(config.overrides[0].test.source).toBe(babelTypeScriptTest);
-    expect(config.overrides[0].plugins).toEqual(["const-enum"]);
-  });
-
-  test("makeBabelConfig() returns a Babel config with additional plugins", () => {
-    const config = makeBabelConfig([
-      "src/babel-plugin-import-path-remapper.js",
-    ]);
-    expect(Object.keys(config)).toEqual(babelConfigKeys);
-    expect(config.presets).toEqual(babelConfigPresets);
-
-    if (!Array.isArray(config.overrides)) {
-      fail("Expected `config.overrides` to be an array");
-    }
-
-    expect(config.overrides.length).toBe(1);
-
-    if (!(config.overrides[0].test instanceof RegExp)) {
-      fail("Expected `config.overrides[0]` to be a RegExp");
-    }
-
-    expect(config.overrides[0].test.source).toBe(babelTypeScriptTest);
-    expect(config.overrides[0].plugins).toEqual([
-      "const-enum",
-      "src/babel-plugin-import-path-remapper.js",
-    ]);
+    setFixture("awesome-repo/packages/conan");
+    const conanExclude = exclusionList([/.*[\/\\]__fixtures__[\/\\].*/]);
+    expect(conanExclude.test(reactCopy)).toBeTruthy();
+    expect(conanExclude.test(packageCopy)).toBeTruthy();
+    expect(conanExclude.test(projectCopy)).toBeTruthy();
+    expect(conanExclude.test("Test.ProjectImports.zip")).toBeTruthy();
   });
 
   test("makeMetroConfig() returns a default Metro config", async () => {
@@ -301,17 +265,5 @@ describe("@rnx-kit/metro-config", () => {
 
     expect(extraNodeModules["my-awesome-package"]).toBe("/skynet");
     expect(extraNodeModules["react-native"]).toBe("/skynet");
-  });
-
-  test("packs only necessary files", () => {
-    const files = Array.from(
-      generateSequence(
-        spawnSync("npm", ["pack", "--dry-run"]).output.toString(),
-        /[.\d]+k?B\s+([^\s]*)/g
-      )
-    );
-    expect(
-      files.filter((file) => !file.startsWith("CHANGELOG")).sort()
-    ).toEqual(["README.md", "package.json", "src/index.js"]);
   });
 });

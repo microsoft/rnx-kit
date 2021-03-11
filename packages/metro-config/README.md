@@ -10,8 +10,9 @@ First, we need to add two files to the target package, `babel.config.js` and
 
 ```js
 // babel.config.js
-const { makeBabelConfig } = require("@rnx-kit/metro-config");
-module.exports = makeBabelConfig();
+module.exports = {
+  preset: ["@rnx-kit/babel-preset-metro-react-native"],
+};
 ```
 
 ```js
@@ -20,7 +21,6 @@ const { makeMetroConfig } = require("@rnx-kit/metro-config");
 
 module.exports = makeMetroConfig({
   projectRoot: __dirname,
-  resetCache: true, // optional, but circumvents stale cache issues
 });
 ```
 

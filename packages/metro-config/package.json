@@ -1,24 +1,25 @@
 {
   "name": "@rnx-kit/metro-config",
+  "version": "1.1.0",
   "description": "Metro config for monorepos",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/metro-config#rnx-kitmetro-config",
   "license": "MIT",
   "files": [
     "src/*"
   ],
+  "main": "src/index.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/microsoft/rnx-kit",
     "directory": "packages/metro-config"
   },
-  "version": "1.0.4",
-  "main": "src/index.js",
   "scripts": {
     "build": "rnx-kit-scripts build",
     "format": "prettier --write src/*.js test/*.js",
     "test": "rnx-kit-scripts test"
   },
   "dependencies": {
-    "babel-plugin-const-enum": "^1.0.0",
+    "@rnx-kit/babel-preset-metro-react-native": "^1.0.0",
     "fast-glob": "^3.2.2",
     "find-up": "^4.1.0"
   },

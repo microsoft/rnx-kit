@@ -1,8 +1,8 @@
 {
-  "name": "@rnx-kit/babel-plugin-import-path-remapper",
+  "name": "@rnx-kit/babel-preset-metro-react-native",
   "version": "1.0.0",
-  "description": "Babel plugin for remapping 'lib/' imports to 'src/'",
-  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/babel-plugin-import-path-remapper#rnx-kitbabel-plugin-import-path-remapper",
+  "description": "Babel preset for React Native applications",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/babel-preset-metro-react-native#rnx-kitbabel-preset-metro-react-native",
   "license": "MIT",
   "files": [
     "src/*"
@@ -11,7 +11,7 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/microsoft/rnx-kit",
-    "directory": "packages/babel-plugin-import-path-remapper"
+    "directory": "packages/babel-preset-metro-react-native"
   },
   "scripts": {
     "build": "rnx-kit-scripts build",
@@ -19,13 +19,14 @@
     "test": "rnx-kit-scripts test"
   },
   "dependencies": {
+    "babel-plugin-const-enum": "^1.0.0"
+  },
+  "peerDependencies": {
     "@babel/core": "^7.0.0",
-    "@babel/helper-plugin-utils": "^7.0.0",
-    "@babel/types": "^7.0.0"
+    "metro-react-native-babel-preset": "*"
   },
   "devDependencies": {
     "@types/babel__core": "^7.0.0",
-    "@types/babel__helper-plugin-utils": "^7.0.0",
     "@types/jest": "^26.0.0",
     "prettier": "^2.0.0",
     "rnx-kit-scripts": "*",

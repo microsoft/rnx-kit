@@ -28,6 +28,7 @@
     "@babel/core": "^7.6.2",
     "@babel/runtime": "^7.6.2",
     "@react-native-community/eslint-config": "^0.0.5",
+    "@rnx-kit/babel-preset-metro-react-native": "*",
     "@rnx-kit/cli": "*",
     "@rnx-kit/metro-config": "*",
     "@types/react": "^17.0.2",

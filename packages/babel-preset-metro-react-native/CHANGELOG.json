@@ -1,0 +1,20 @@
+{
+  "name": "@rnx-kit/babel-preset-metro-react-native",
+  "entries": [
+    {
+      "date": "Thu, 11 Mar 2021 15:17:06 GMT",
+      "tag": "@rnx-kit/babel-preset-metro-react-native_v1.0.0",
+      "version": "1.0.0",
+      "comments": {
+        "minor": [
+          {
+            "comment": "Introduce Babel preset for React Native applications",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "69a7140e2bfbab0799d1339d62a4c7b989e02fcb",
+            "package": "@rnx-kit/babel-preset-metro-react-native"
+          }
+        ]
+      }
+    }
+  ]
+}
