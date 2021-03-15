@@ -18,7 +18,7 @@ If you want to add additional plugins, you can pass an options object:
 
 ```js
 module.exports = {
-  preset: [
+  presets: [
     [
       "@rnx-kit/babel-preset-metro-react-native",
       {
