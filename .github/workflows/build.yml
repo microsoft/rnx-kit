@@ -20,7 +20,7 @@ jobs:
           token: ${{ secrets.GIT_TOKEN }}
           persist-credentials: true
       - name: Install Node 15
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v2.1.5
         with:
           node-version: 15.x
       - name: Cache /.yarn-offline-mirror
