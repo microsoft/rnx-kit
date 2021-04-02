@@ -28,6 +28,7 @@
   "devDependencies": {
     "@types/babel__core": "^7.0.0",
     "@types/jest": "^26.0.0",
+    "@babel/core": "^7.0.0",
     "prettier": "^2.0.0",
     "rnx-kit-scripts": "*",
     "typescript": "^4.0.0"
