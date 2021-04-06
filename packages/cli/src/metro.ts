@@ -75,7 +75,10 @@ export interface MetroStartOptions {
 function yarnSync(args: string[]): void {
   const yarnCommand = os.platform() === "win32" ? "yarn.cmd" : "yarn";
   const spawnOptions = { cwd: process.cwd(), stdio: "inherit" } as any;
-  spawnSync(yarnCommand, args, spawnOptions);
+  const { status } = spawnSync(yarnCommand, args, spawnOptions);
+  if (status !== 0) {
+    process.exit(status || 1);
+  }
 }
 
 function optionalParam(name: string, value: any): Array<any> {
