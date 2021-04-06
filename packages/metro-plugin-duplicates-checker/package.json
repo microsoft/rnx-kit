@@ -1,0 +1,40 @@
+{
+  "name": "@rnx-kit/metro-plugin-duplicates-checker",
+  "version": "1.0.0-alpha",
+  "description": "Duplicate packages checker",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/metro-plugin-duplicates-checker#rnx-kitmetro-plugin-duplicates-checker",
+  "license": "MIT",
+  "files": [
+    "lib/*"
+  ],
+  "main": "lib/index.js",
+  "bin": {
+    "check-duplicates": "lib/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "packages/metro-plugin-duplicates-checker"
+  },
+  "scripts": {
+    "build": "rnx-kit-scripts build",
+    "format": "prettier --write src/*.ts test/*.ts",
+    "test": "rnx-kit-scripts test"
+  },
+  "dependencies": {
+    "pkg-dir": "^5.0.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^26.0.0",
+    "@types/node": "^12.0.0",
+    "prettier": "^2.0.0",
+    "rnx-kit-scripts": "*",
+    "typescript": "^4.0.0"
+  },
+  "jest": {
+    "roots": [
+      "test"
+    ],
+    "testRegex": "/test/.*\\.test\\.ts$"
+  }
+}
