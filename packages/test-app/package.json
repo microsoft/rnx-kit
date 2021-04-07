@@ -13,7 +13,7 @@
     "bundle:macos": "react-native rnx-bundle --platform macos",
     "bundle:windows": "react-native rnx-bundle --platform windows",
     "android": "react-native run-android",
-    "ios": "react-native run-ios --scheme ReactTestApp",
+    "ios": "react-native run-ios",
     "macos": "react-native run-macos --scheme ReactTestApp",
     "windows": "react-native run-windows --sln windows\\SampleCrossApp.sln",
     "start": "react-native rnx-start"
@@ -21,30 +21,31 @@
   "dependencies": {
     "react": "16.13.1",
     "react-native": "0.63.4",
-    "react-native-macos": "0.63.10",
-    "react-native-windows": "0.63.20"
+    "react-native-macos": "0.63.23",
+    "react-native-windows": "0.63.26"
   },
   "devDependencies": {
     "@babel/core": "^7.6.2",
     "@babel/runtime": "^7.6.2",
-    "@react-native-community/eslint-config": "^0.0.5",
+    "@react-native-community/eslint-config": "^2.0.0",
     "@rnx-kit/babel-preset-metro-react-native": "*",
     "@rnx-kit/cli": "*",
     "@rnx-kit/metro-config": "*",
     "@types/react": "^17.0.2",
     "@types/react-native": "^0.63.50",
-    "eslint": "^6.5.1",
+    "eslint": "^7.0.0",
     "metro-react-native-babel-preset": "^0.59.0",
-    "react-native-test-app": "^0.3.11",
+    "react-native-test-app": "^0.5.4",
     "react-test-renderer": "16.13.1",
-    "rnx-kit-scripts": "*"
+    "rnx-kit-scripts": "*",
+    "typescript": "^4.0.0"
   },
   "jest": {
     "preset": "react-native"
   },
   "rnx-kit": {
     "bundle": {
-      "entryPath": "./lib/src/index.js",
+      "entryPath": "../lib/src/index.js",
       "distPath": "./dist",
       "assetsPath": "./dist",
       "bundlePrefix": "main",
