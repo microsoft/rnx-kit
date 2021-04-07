@@ -2,6 +2,21 @@
   "name": "@rnx-kit/test-app",
   "entries": [
     {
+      "date": "Wed, 07 Apr 2021 16:29:26 GMT",
+      "tag": "@rnx-kit/test-app_v0.0.1",
+      "version": "0.0.1",
+      "comments": {
+        "none": [
+          {
+            "comment": "Bump @rnx-kit/metro-config to v1.1.2",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "85047602b77d9eb201c3aad51b8206d504a70eb3",
+            "package": "@rnx-kit/test-app"
+          }
+        ]
+      }
+    },
+    {
       "date": "Mon, 15 Mar 2021 07:09:22 GMT",
       "tag": "@rnx-kit/test-app_v0.0.1",
       "version": "0.0.1",
