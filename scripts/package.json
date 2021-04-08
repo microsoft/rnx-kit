@@ -12,8 +12,12 @@
     "depcheck": "just-scripts depcheck",
     "prettier": "node ./lib/just-scripts.js prettier"
   },
-  "devDependencies": {
+  "dependencies": {
+    "@babel/core": "^7.0.0",
+    "@babel/preset-env": "^7.0.0",
+    "@babel/preset-typescript": "^7.0.0",
     "@types/jest": "^26.0.0",
+    "babel-jest": "^26.6.3",
     "chalk": "^4.1.0",
     "depcheck": "^1.0.0",
     "jest": "^26.0.0",
