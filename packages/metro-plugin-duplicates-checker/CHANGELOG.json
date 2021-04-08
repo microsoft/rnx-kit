@@ -1,0 +1,20 @@
+{
+  "name": "@rnx-kit/metro-plugin-duplicates-checker",
+  "entries": [
+    {
+      "date": "Thu, 08 Apr 2021 17:28:37 GMT",
+      "tag": "@rnx-kit/metro-plugin-duplicates-checker_v1.0.0",
+      "version": "1.0.0",
+      "comments": {
+        "minor": [
+          {
+            "comment": "Tool for detecting duplicate packages in JS bundles",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "fd4a29e7788677fd6f1870f5e65f5c29e630067a",
+            "package": "@rnx-kit/metro-plugin-duplicates-checker"
+          }
+        ]
+      }
+    }
+  ]
+}
