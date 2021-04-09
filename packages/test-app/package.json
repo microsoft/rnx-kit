@@ -16,7 +16,7 @@
     "ios": "react-native run-ios",
     "macos": "react-native run-macos --scheme ReactTestApp",
     "windows": "react-native run-windows --sln windows\\SampleCrossApp.sln",
-    "start": "react-native rnx-start"
+    "start": "react-native start --projectRoot src"
   },
   "dependencies": {
     "react": "16.13.1",
@@ -45,9 +45,9 @@
   },
   "rnx-kit": {
     "bundle": {
-      "entryPath": "../lib/src/index.js",
-      "distPath": "./dist",
-      "assetsPath": "./dist",
+      "entryPath": "lib/src/index.js",
+      "distPath": "dist",
+      "assetsPath": "dist",
       "bundlePrefix": "main",
       "targets": [
         "ios",
@@ -57,7 +57,7 @@
       ],
       "platforms": {
         "android": {
-          "assetsPath": "./dist/res"
+          "assetsPath": "dist/res"
         }
       }
     }

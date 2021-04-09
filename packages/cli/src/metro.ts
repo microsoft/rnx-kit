@@ -10,10 +10,12 @@ import {
   getBundlePlatformDefinition,
 } from "@rnx-kit/config";
 
+export type OptionValue = string | boolean | number;
+
 /**
  * options for metro bundling
  */
-export interface MetroBundleOptions {
+export type MetroBundleOptions = {
   /**
    * id of the target bundle, can be blank if the package.json only includes one bundle
    */
@@ -60,28 +62,31 @@ export interface MetroBundleOptions {
    * Path to the metro CLI configuration file
    */
   configPath?: string;
-}
+};
 
 /**
  * options for starting a metro server
  */
-export interface MetroStartOptions {
+export type MetroStartOptions = {
   /**
    * port override
    */
   port?: number;
-}
+};
 
 function yarnSync(args: string[]): void {
   const yarnCommand = os.platform() === "win32" ? "yarn.cmd" : "yarn";
-  const spawnOptions = { cwd: process.cwd(), stdio: "inherit" } as any;
+  const spawnOptions = { cwd: process.cwd(), stdio: "inherit" as const };
   const { status } = spawnSync(yarnCommand, args, spawnOptions);
   if (status !== 0) {
     process.exit(status || 1);
   }
 }
 
-function optionalParam(name: string, value: any): Array<any> {
+function optionalParam(
+  name: string,
+  value: OptionValue | undefined
+): [string, string] | [] {
   if (typeof value === "number" || typeof value === "boolean") {
     // value is a boolean or a number, meaning it has a real value that came from the
     // rnx-kit cmdline. therefore, we don't need to test it before emitting it as a param.
@@ -89,11 +94,11 @@ function optionalParam(name: string, value: any): Array<any> {
     // instead, just string-serialize the value given, and return it.
     return [name, value.toString()];
   }
-  return (value && [name, value]) || [];
+  return value ? [name, value] : [];
 }
 
-function optionalFlag(name: string, value: any): Array<any> {
-  return (value && [name]) || [];
+function optionalFlag(name: string, value: OptionValue | undefined): string[] {
+  return value ? [name] : [];
 }
 
 export function metroBundle(
@@ -139,8 +144,8 @@ export function metroBundle(
 
     //  extract the final values
     const {
-      entryPath,
-      distPath,
+      entryPath = "index.js",
+      distPath = "dist",
       assetsPath,
       bundlePrefix,
       bundleEncoding,
@@ -150,10 +155,7 @@ export function metroBundle(
     } = overrideDefinition;
 
     const bundleFile = `${bundlePrefix}.${targetPlatform}.${bundleExtension}`;
-    const bundlePath = path.resolve(
-      process.cwd(),
-      path.join(distPath as string, bundleFile)
-    );
+    const bundlePath = path.join(distPath, bundleFile);
 
     // ensure the parent directory exists for the target output
     const parentDirectory = path.dirname(bundlePath);
@@ -161,10 +163,9 @@ export function metroBundle(
       mkdirSync(parentDirectory, { recursive: true });
     }
 
-    const devBool = !!dev;
+    const devBool = Boolean(dev);
     const sourceMap = sourceMapPath || (devBool && bundleFile + ".map");
-    const sourceMapResolved =
-      sourceMap && path.resolve(distPath as string, sourceMap);
+    const sourceMapResolved = sourceMap && path.join(distPath, sourceMap);
 
     yarnSync([
       "react-native",
@@ -172,15 +173,15 @@ export function metroBundle(
       "--platform",
       targetPlatform,
       "--entry-file",
-      entryPath as string,
+      entryPath,
       "--bundle-output",
-      bundlePath as string,
+      bundlePath,
       ...optionalParam("--bundle-encoding", bundleEncoding),
       ...optionalParam("--transformer", transformer),
       "--assets-dest",
-      assetsPath as string,
+      assetsPath || distPath,
       "--dev",
-      devBool ? "true" : "false",
+      devBool.toString(),
       ...optionalParam("--minify", minify),
       ...optionalParam("--max-workers", maxWorkers),
       ...optionalParam("--sourcemap-output", sourceMapResolved),
