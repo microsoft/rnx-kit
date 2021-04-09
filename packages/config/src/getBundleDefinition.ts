@@ -1,4 +1,12 @@
-import { AllPlatforms, BundleConfig, BundleDefinition } from "./bundleConfig";
+import type {
+  AllPlatforms,
+  BundleConfig,
+  BundleDefinition,
+  BundleRequiredParameters,
+} from "./bundleConfig";
+
+type BundleDefinitionWithRequiredParameters = BundleDefinition &
+  BundleRequiredParameters;
 
 function asArray<T>(opt: T | T[]): T[] {
   return Array.isArray(opt) ? opt : [opt || ({} as T)];
@@ -17,11 +25,11 @@ function asArray<T>(opt: T | T[]): T[] {
 export function getBundleDefinition(
   config: BundleConfig,
   id?: string
-): BundleDefinition {
-  const defaultDefinition: BundleDefinition = {
-    entryPath: "./lib/index.js",
-    distPath: "./dist",
-    assetsPath: "./dist",
+): BundleDefinitionWithRequiredParameters {
+  const defaultDefinition: BundleRequiredParameters = {
+    entryPath: "lib/index.js",
+    distPath: "dist",
+    assetsPath: "dist",
     bundlePrefix: "index",
   };
   if (typeof config === "boolean") {
@@ -45,9 +53,9 @@ export function getBundleDefinition(
  * @returns bundle definition containing all platform-specific overrides
  */
 export function getBundlePlatformDefinition(
-  bundle: BundleDefinition,
+  bundle: BundleDefinitionWithRequiredParameters,
   platform: AllPlatforms
-): BundleDefinition {
+): BundleDefinitionWithRequiredParameters {
   const platformValues = bundle.platforms && bundle.platforms[platform];
   return platformValues ? { ...bundle, ...platformValues } : bundle;
 }

@@ -1,7 +1,3 @@
-import os from "os";
-import { spawnSync } from "child_process";
-import { existsSync, mkdirSync } from "fs";
-import path from "path";
 import {
   AllPlatforms,
   BundleConfig,
@@ -9,6 +5,10 @@ import {
   getBundleDefinition,
   getBundlePlatformDefinition,
 } from "@rnx-kit/config";
+import { spawnSync } from "child_process";
+import { existsSync, mkdirSync } from "fs";
+import os from "os";
+import path from "path";
 
 export type OptionValue = string | boolean | number;
 
@@ -144,8 +144,8 @@ export function metroBundle(
 
     //  extract the final values
     const {
-      entryPath = "index.js",
-      distPath = "dist",
+      entryPath,
+      distPath,
       assetsPath,
       bundlePrefix,
       bundleEncoding,
@@ -179,7 +179,7 @@ export function metroBundle(
       ...optionalParam("--bundle-encoding", bundleEncoding),
       ...optionalParam("--transformer", transformer),
       "--assets-dest",
-      assetsPath || distPath,
+      assetsPath,
       "--dev",
       devBool.toString(),
       ...optionalParam("--minify", minify),

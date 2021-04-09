@@ -6,30 +6,30 @@ export type AllPlatforms = "ios" | "android" | "windows" | "win32" | "macos";
 /**
  * Parameters controlling how a bundle is constructed.
  */
-export interface BundleParameters {
+export type BundleRequiredParameters = {
   /**
    * Path to the .js file which is the entry-point for building the bundle.
    * Either absolute, or relative to the package.
    *
-   * @default "./lib/index.js"
+   * @default "lib/index.js"
    */
-  entryPath?: string;
+  entryPath: string;
 
   /**
    * Path where the bundle and source map files are written.
    * Either absolute, or relative to the package.
    *
-   * @default "./dist"
+   * @default "dist"
    */
-  distPath?: string;
+  distPath: string;
 
   /**
    * Path where all bundle assets (strings, images, fonts, sounds, ...) are written.
    * Either absolute, or relative to the package.
    *
-   * @default "./dist"
+   * @default "dist"
    */
-  assetsPath?: string;
+  assetsPath: string;
 
   /**
    * Prefix for the bundle name, followed by the platform and either ".bundle" (win, android)
@@ -37,8 +37,10 @@ export interface BundleParameters {
    *
    * @default "index"
    */
-  bundlePrefix?: string;
+  bundlePrefix: string;
+};
 
+export type BundleParameters = Partial<BundleRequiredParameters> & {
   /**
    * Encoding scheme to use when writing the bundle file.
    *
@@ -61,7 +63,7 @@ export interface BundleParameters {
    * Whether to report SourceMapURL using its full path
    */
   sourceMapUseAbsolutePaths?: boolean;
-}
+};
 
 /**
  * Defines how a kit is bundled. Includes shared bundling parameters with platform-specific overrides.
