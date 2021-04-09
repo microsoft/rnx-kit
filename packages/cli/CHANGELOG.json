@@ -2,6 +2,29 @@
   "name": "@rnx-kit/cli",
   "entries": [
     {
+      "date": "Fri, 09 Apr 2021 08:27:05 GMT",
+      "tag": "@rnx-kit/cli_v0.2.1",
+      "version": "0.2.1",
+      "comments": {
+        "none": [
+          {
+            "comment": "Fixed typings to avoid type casting",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "9983bb1a9bbee0ff45ca6fd7ca28c0fc57580e84",
+            "package": "@rnx-kit/cli"
+          }
+        ],
+        "patch": [
+          {
+            "comment": "Exit with code if an error was encountered",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "ff2b50c6e16b588316b44fc8efa3295befaf2ebc",
+            "package": "@rnx-kit/cli"
+          }
+        ]
+      }
+    },
+    {
       "date": "Thu, 11 Mar 2021 22:58:41 GMT",
       "tag": "@rnx-kit/cli_v0.2.0",
       "version": "0.2.0",
