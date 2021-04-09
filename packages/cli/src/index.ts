@@ -2,9 +2,9 @@ import { MetroBundleOptions, metroBundle, metroStart } from "./metro";
 import { getKitConfig, AllPlatforms, BundleParameters } from "@rnx-kit/config";
 import chalk from "chalk";
 
-interface CliBundleOptions {
+type CliBundleOptions = {
   id?: string;
-  platform?: "ios" | "android" | "windows" | "win32" | "macos";
+  platform?: AllPlatforms;
   entryPath?: string;
   distPath?: string;
   assetsPath?: string;
@@ -20,11 +20,11 @@ interface CliBundleOptions {
   resetCache?: boolean;
   readGlobalCache?: boolean;
   config?: string;
-}
+};
 
-interface CliStartOptions {
+type CliStartOptions = {
   port?: number;
-}
+};
 
 export function parseBoolean(val: string): boolean {
   if (val === "false") {
