@@ -1,0 +1,27 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`traverseDependencies() returns cycles in \`node_modules\` 1`] = `
+Object {
+  "/~/node_modules/react-native/index.js": Array [
+    "/~/packages/test-app/lib/src/index.js",
+    "/~/node_modules/react-native/index.js",
+    "/~/node_modules/react-native/Libraries/ReactNative/AppRegistry.js",
+    "/~/node_modules/react-native/Libraries/LogBox/LogBoxInspectorContainer.js",
+  ],
+  "/~/packages/test-app/lib/src/App.js": Array [
+    "/~/packages/test-app/lib/src/index.js",
+    "/~/packages/test-app/lib/src/App.js",
+    "/~/packages/test-app/lib/src/cyclicExample.js",
+  ],
+}
+`;
+
+exports[`traverseDependencies() returns import paths causing a cycle 1`] = `
+Object {
+  "/~/packages/test-app/lib/src/App.js": Array [
+    "/~/packages/test-app/lib/src/index.js",
+    "/~/packages/test-app/lib/src/App.js",
+    "/~/packages/test-app/lib/src/cyclicExample.js",
+  ],
+}
+`;
