@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/config
 
-This log was last generated on Thu, 11 Mar 2021 22:58:41 GMT and should not be manually modified.
+This log was last generated on Fri, 09 Apr 2021 21:41:43 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 0.2.2
+
+Fri, 09 Apr 2021 21:41:43 GMT
+
+### Patches
+
+- Fix return type of getBundleDefinition() and getBundlePlatformDefinition() (4123478+tido64@users.noreply.github.com)
 
 ## 0.2.1
 

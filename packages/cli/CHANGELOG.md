@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/cli
 
-This log was last generated on Fri, 09 Apr 2021 08:27:05 GMT and should not be manually modified.
+This log was last generated on Fri, 09 Apr 2021 21:41:43 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 0.2.2
+
+Fri, 09 Apr 2021 21:41:43 GMT
+
+### Patches
+
+- Remove default values that are no longer needed (4123478+tido64@users.noreply.github.com)
 
 ## 0.2.1
 

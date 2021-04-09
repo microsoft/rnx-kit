@@ -2,6 +2,21 @@
   "name": "@rnx-kit/config",
   "entries": [
     {
+      "date": "Fri, 09 Apr 2021 21:41:43 GMT",
+      "tag": "@rnx-kit/config_v0.2.2",
+      "version": "0.2.2",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Fix return type of getBundleDefinition() and getBundlePlatformDefinition()",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "c884313fa958e14113ee659ee01924589fd90f90",
+            "package": "@rnx-kit/config"
+          }
+        ]
+      }
+    },
+    {
       "date": "Thu, 11 Mar 2021 22:58:41 GMT",
       "tag": "@rnx-kit/config_v0.2.1",
       "version": "0.2.1",

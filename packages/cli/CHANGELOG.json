@@ -2,6 +2,21 @@
   "name": "@rnx-kit/cli",
   "entries": [
     {
+      "date": "Fri, 09 Apr 2021 21:41:43 GMT",
+      "tag": "@rnx-kit/cli_v0.2.2",
+      "version": "0.2.2",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Remove default values that are no longer needed",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "c884313fa958e14113ee659ee01924589fd90f90",
+            "package": "@rnx-kit/cli"
+          }
+        ]
+      }
+    },
+    {
       "date": "Fri, 09 Apr 2021 08:27:05 GMT",
       "tag": "@rnx-kit/cli_v0.2.1",
       "version": "0.2.1",
