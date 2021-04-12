@@ -34,7 +34,7 @@ export function traverseDependencies(
   cyclicDependencies: CyclicDependencies = {},
   stack: string[] = []
 ): CyclicDependencies {
-  if (!options.includeNodeModules && currentModule.includes("/node_modules/")) {
+  if (!options.includeNodeModules && currentModule.includes("node_modules")) {
     return cyclicDependencies;
   }
 
