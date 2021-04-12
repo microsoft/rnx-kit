@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/metro-plugin-cyclic-dependencies-detector
 
-This log was last generated on Mon, 12 Apr 2021 17:12:34 GMT and should not be manually modified.
+This log was last generated on Mon, 12 Apr 2021 18:24:47 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 1.0.1
+
+Mon, 12 Apr 2021 18:24:47 GMT
+
+### Patches
+
+- Check for node_modules fails on Windows (4123478+tido64@users.noreply.github.com)
 
 ## 1.0.0
 

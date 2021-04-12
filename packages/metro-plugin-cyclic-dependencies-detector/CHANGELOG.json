@@ -2,6 +2,21 @@
   "name": "@rnx-kit/metro-plugin-cyclic-dependencies-detector",
   "entries": [
     {
+      "date": "Mon, 12 Apr 2021 18:24:47 GMT",
+      "tag": "@rnx-kit/metro-plugin-cyclic-dependencies-detector_v1.0.1",
+      "version": "1.0.1",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Check for node_modules fails on Windows",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "a5dbb7309f19fafcbfa4c9be79a4e5defa50c6eb",
+            "package": "@rnx-kit/metro-plugin-cyclic-dependencies-detector"
+          }
+        ]
+      }
+    },
+    {
       "date": "Mon, 12 Apr 2021 17:12:34 GMT",
       "tag": "@rnx-kit/metro-plugin-cyclic-dependencies-detector_v1.0.0",
       "version": "1.0.0",
