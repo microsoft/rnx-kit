@@ -1,0 +1,40 @@
+{
+  "name": "@rnx-kit/metro-serializer",
+  "version": "1.0.0-alpha",
+  "description": "Metro's default JavaScript bundle serializer but with plugin support",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/metro-serializer#rnx-kitmetro-serializer",
+  "license": "MIT",
+  "files": [
+    "lib/*"
+  ],
+  "main": "lib/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "packages/metro-serializer"
+  },
+  "scripts": {
+    "build": "rnx-kit-scripts build",
+    "format": "prettier --write src/*.ts test/*.ts",
+    "test": "rnx-kit-scripts test"
+  },
+  "dependencies": {
+    "semver": "^7.0.0"
+  },
+  "peerDependencies": {
+    "metro": ">=0.58.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^26.0.0",
+    "@types/semver": "^7.0.0",
+    "prettier": "^2.0.0",
+    "rnx-kit-scripts": "*",
+    "typescript": "^4.0.0"
+  },
+  "jest": {
+    "roots": [
+      "test"
+    ],
+    "testRegex": "/test/.*\\.test\\.ts$"
+  }
+}
