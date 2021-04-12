@@ -1,7 +1,0 @@
-{
-  "type": "minor",
-  "comment": "MetroSerializer is Metro's default JavaScript bundle serializer but with plugin support",
-  "packageName": "@rnx-kit/metro-serializer",
-  "email": "4123478+tido64@users.noreply.github.com",
-  "dependentChangeType": "patch"
-}

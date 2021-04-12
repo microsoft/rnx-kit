@@ -1,0 +1,20 @@
+{
+  "name": "@rnx-kit/metro-serializer",
+  "entries": [
+    {
+      "date": "Mon, 12 Apr 2021 12:44:24 GMT",
+      "tag": "@rnx-kit/metro-serializer_v1.0.0",
+      "version": "1.0.0",
+      "comments": {
+        "minor": [
+          {
+            "comment": "MetroSerializer is Metro's default JavaScript bundle serializer but with plugin support",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "dfb56e105d32f597b82468e41c795246251e568d",
+            "package": "@rnx-kit/metro-serializer"
+          }
+        ]
+      }
+    }
+  ]
+}
