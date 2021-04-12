@@ -17,9 +17,3 @@ export type IndexMap = {
 };
 
 export type MixedSourceMap = IndexMap | BasicSourceMap;
-
-export type PostProcessBundleSourceMap = {
-  code: string | Buffer;
-  map: MixedSourceMap;
-  outFileName: string;
-};

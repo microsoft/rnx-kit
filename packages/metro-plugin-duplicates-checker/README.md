@@ -5,15 +5,34 @@ bundle.
 
 ## Usage
 
-There are several ways to use this package. You can check for duplicate packages
-after a bundle is created:
+There are several ways to use this package.
+
+The **recommended** way is to add it as a plugin in your `metro.config.js` using
+`@rnx-kit/metro-serializer`:
+
+```js
+const { makeMetroConfig } = require("@rnx-kit/metro-config");
+const {
+  DuplicateDependencies,
+} = require("@rnx-kit/metro-plugin-duplicates-checker");
+const { MetroSerializer } = require("@rnx-kit/metro-serializer");
+
+module.exports = makeMetroConfig({
+  projectRoot: __dirname,
+  serializer: {
+    customSerializer: MetroSerializer([DuplicateDependencies()]),
+  },
+});
+```
+
+You can also check for duplicate packages after a bundle is created:
 
 ```js
 const {
   checkForDuplicatePackagesInFile,
 } = require("@rnx-kit/metro-plugin-duplicates-checker");
 
-checkForDuplicatePackagesInFile(pathToSourceMap, {
+checkForDuplicatePackagesInFile(pathToSourceMapFile, {
   ignoredModules: [],
   bannedModules: [],
 });
@@ -35,7 +54,8 @@ checkForDuplicatePackages(mySourceMap, {
 
 ## Options
 
-| Key            | Type     | Default | Description                          |
-| :------------- | :------- | :------ | :----------------------------------- |
-| bannedModules  | string[] | `[]`    | List of modules that are banned.     |
-| ignoredModules | string[] | `[]`    | List of modules that can be ignored. |
+| Key            | Type     | Default | Description                                 |
+| :------------- | :------- | :------ | :------------------------------------------ |
+| bannedModules  | string[] | `[]`    | List of modules that are banned.            |
+| ignoredModules | string[] | `[]`    | List of modules that can be ignored.        |
+| throwOnError   | boolean  | `true`  | Whether to throw when duplicates are found. |

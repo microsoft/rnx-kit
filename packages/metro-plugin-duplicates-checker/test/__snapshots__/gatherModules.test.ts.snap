@@ -1,6 +1,13 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`gatherModules() builds module map from a basic source map 1`] = `
+exports[`gatherModulesFromGraph() builds module map from a basic source map 1`] = `
+Array [
+  "fbjs",
+  "react-native",
+]
+`;
+
+exports[`gatherModulesFromSourceMap() builds module map from a basic source map 1`] = `
 Array [
   "@babel/runtime",
   "abort-controller",
