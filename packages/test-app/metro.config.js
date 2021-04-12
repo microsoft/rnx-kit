@@ -1,6 +1,12 @@
 const { makeMetroConfig } = require("@rnx-kit/metro-config");
-const path = require("path");
+const {
+  CyclicDependencies,
+} = require("@rnx-kit/metro-plugin-cyclic-dependencies-detector");
+const { MetroSerializer } = require("@rnx-kit/metro-serializer");
 
 module.exports = makeMetroConfig({
   projectRoot: __dirname,
+  serializer: {
+    customSerializer: MetroSerializer([CyclicDependencies()]),
+  },
 });
