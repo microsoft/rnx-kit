@@ -7925,9 +7925,9 @@ react-native-macos@0.63.23:
     whatwg-fetch "^3.0.0"
 
 react-native-test-app@^0.5.4:
-  version "0.5.4"
-  resolved "https://registry.yarnpkg.com/react-native-test-app/-/react-native-test-app-0.5.4.tgz#a26de37b979be0a331b7dceb511d854c64339674"
-  integrity sha512-7aq69KnsOEyYbenFut8ouDVEeXArcjCDAfuDQ1g0qTNvxJpVARbTdJuAm5WhDlH1yVGKgzttvTgtlbux80+exg==
+  version "0.5.5"
+  resolved "https://registry.yarnpkg.com/react-native-test-app/-/react-native-test-app-0.5.5.tgz#43bcd5294ae1f5966145e215d6137e3a2283bbb4"
+  integrity sha512-eed6tgqq8R6y0urs1+lLvOOCrg0X8QcE0PACnuFxKQ7chOTHYp/Z9tz3x0VGy8X3HqxeVF7e7Q+Pb9gwvMdKRw==
   dependencies:
     "@react-native-community/cli" "^4.10.0"
     "@react-native-community/cli-platform-android" "^4.10.0"
