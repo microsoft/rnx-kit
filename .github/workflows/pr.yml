@@ -18,7 +18,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Cache /.yarn-offline-mirror
-        uses: actions/cache@v2.1.4
+        uses: actions/cache@v2.1.5
         with:
           path: .yarn-offline-mirror
           key: ${{ hashFiles('yarn.lock') }}
