@@ -1,9 +1,36 @@
 import {
+  checkForDuplicateDependencies,
+  checkForDuplicatePackages,
   countCopies,
   detectDuplicatePackages,
   Options,
   printDuplicates,
 } from "../src/checkForDuplicatePackages";
+import {
+  bundleGraph,
+  bundleGraphWithDuplicates,
+  bundleSourceMap,
+  bundleSourceMapWithDuplicates,
+  repoRoot,
+} from "./testData";
+
+jest.mock("fs");
+jest.mock("pkg-dir");
+
+// Under normal circumstances, this extra copy of 'fbjs' should not be installed.
+const extraFbjs = `${repoRoot.replace(
+  /\\/g,
+  "/"
+)}/packages/test-app/node_modules/fbjs`;
+require("pkg-dir").sync = jest.fn().mockImplementation((cwd) => {
+  switch (cwd) {
+    // Under normal circumstances, this extra copy of 'fbjs' should not be installed.
+    case `${extraFbjs}/lib/warning.js`:
+      return extraFbjs;
+    default:
+      return jest.requireActual("pkg-dir").sync(cwd);
+  }
+});
 
 const defaultOptions: Options = {
   ignoredModules: [],
@@ -109,5 +136,36 @@ describe("detectDuplicatePackages()", () => {
     detectDuplicatePackages(testModuleMap, defaultOptions);
     expect(consoleErrorSpy).toBeCalledTimes(2);
     expect(consoleWarnSpy).toBeCalledTimes(4);
+  });
+});
+
+describe("checkForDuplicateDependencies()", () => {
+  const consoleErrorSpy = jest.spyOn(global.console, "error");
+  const consoleWarnSpy = jest.spyOn(global.console, "warn");
+
+  beforeEach(() => {
+    consoleErrorSpy.mockReset();
+    consoleWarnSpy.mockReset();
+  });
+
+  afterAll(() => {
+    jest.clearAllMocks();
+  });
+
+  test("checkForDuplicateDependencies", () => {
+    expect(checkForDuplicateDependencies(bundleGraph)).toBe(0);
+    expect(consoleErrorSpy).not.toHaveBeenCalled();
+    expect(consoleWarnSpy).not.toHaveBeenCalled();
+
+    expect(checkForDuplicateDependencies(bundleGraphWithDuplicates)).toBe(1);
+    expect(consoleErrorSpy).toBeCalledTimes(1);
+    expect(consoleWarnSpy).toBeCalledTimes(2);
+  });
+});
+
+describe("checkForDuplicatePackages()", () => {
+  test("checkForDuplicatePackages", () => {
+    expect(checkForDuplicatePackages(bundleSourceMap)).toBe(0);
+    expect(checkForDuplicatePackages(bundleSourceMapWithDuplicates)).toBe(1);
   });
 });
