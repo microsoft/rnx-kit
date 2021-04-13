@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/test-app
 
-This log was last generated on Mon, 12 Apr 2021 18:24:47 GMT and should not be manually modified.
+This log was last generated on Tue, 13 Apr 2021 08:39:11 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 0.0.1
+
+Tue, 13 Apr 2021 08:39:11 GMT
+
+### Patches
+
+- Bump @rnx-kit/metro-plugin-duplicates-checker to v1.1.0 (4123478+tido64@users.noreply.github.com)
 
 ## 0.0.1
 
