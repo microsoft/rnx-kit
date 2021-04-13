@@ -1,6 +1,6 @@
 import type { Graph } from "@rnx-kit/metro-serializer";
 import * as fs from "fs";
-import { join } from "path";
+import * as path from "path";
 import pkgDir from "pkg-dir";
 import type { BasicSourceMap, IndexMap, MixedSourceMap } from "./SourceMap";
 
@@ -27,10 +27,14 @@ export function resolveModule(source: string): ModuleInfo {
   }
 
   const { name, version } = JSON.parse(
-    fs.readFileSync(join(pkg, "package.json"), { encoding: "utf-8" })
+    fs.readFileSync(path.join(pkg, "package.json"), { encoding: "utf-8" })
   );
   if (!name) {
-    throw new Error(`Unable to parse name of '${pkg}'`);
+    // Packages using [dual-publish](https://github.com/ai/dual-publish), like
+    // [nanoid](https://github.com/ai/nanoid), have a 'package.json' in _all_
+    // folders, confusing 'pkg-dir'. We have no choice but to try again with the
+    // parent directory.
+    return resolveModule(path.dirname(pkg));
   }
 
   return { name, version, absolutePath: fs.realpathSync.native(pkg) };
