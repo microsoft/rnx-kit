@@ -1,0 +1,7 @@
+{
+  "type": "patch",
+  "comment": "Allow forwarding options to Metro",
+  "packageName": "@rnx-kit/babel-preset-metro-react-native",
+  "email": "4123478+tido64@users.noreply.github.com",
+  "dependentChangeType": "patch"
+}

@@ -7,9 +7,16 @@ describe("@rnx-kit/babel-preset-metro-react-native", () => {
   const prettier = require("prettier");
   const preset = require("../src/index");
 
+  const optionsWithAdditionalPlugins = {
+    additionalPlugins: [
+      "my-extra-plugin",
+      ["additional-plugin", { options: {} }],
+    ],
+  };
+
   test("returns default Babel preset with one additional TypeScript plugin", () => {
-    expect(preset(undefined)).toEqual({
-      presets: ["module:metro-react-native-babel-preset"],
+    expect(preset()).toEqual({
+      presets: [["module:metro-react-native-babel-preset", {}]],
       overrides: [
         {
           test: /\.tsx?$/,
@@ -20,18 +27,47 @@ describe("@rnx-kit/babel-preset-metro-react-native", () => {
   });
 
   test("returns preset with additional TypeScript plugins", () => {
-    const opts = {
-      additionalPlugins: [
-        "my-extra-plugin",
-        ["additional-plugin", { options: {} }],
-      ],
-    };
-    expect(preset(undefined, opts)).toEqual({
-      presets: ["module:metro-react-native-babel-preset"],
+    expect(preset(undefined, optionsWithAdditionalPlugins)).toEqual({
+      presets: [["module:metro-react-native-babel-preset", {}]],
       overrides: [
         {
           test: /\.tsx?$/,
-          plugins: ["const-enum", ...opts.additionalPlugins],
+          plugins: [
+            "const-enum",
+            ...optionsWithAdditionalPlugins.additionalPlugins,
+          ],
+        },
+      ],
+    });
+  });
+
+  test("forwards options to `metro-react-native-babel-preset`", () => {
+    const metroOptions = { disableImportExportTransform: true };
+
+    expect(preset(undefined, metroOptions)).toEqual({
+      presets: [["module:metro-react-native-babel-preset", metroOptions]],
+      overrides: [
+        {
+          test: /\.tsx?$/,
+          plugins: ["const-enum"],
+        },
+      ],
+    });
+
+    expect(
+      preset(undefined, {
+        ...optionsWithAdditionalPlugins,
+        ...metroOptions,
+      })
+    ).toEqual({
+      presets: [["module:metro-react-native-babel-preset", metroOptions]],
+      overrides: [
+        {
+          test: /\.tsx?$/,
+          plugins: [
+            "const-enum",
+            ...optionsWithAdditionalPlugins.additionalPlugins,
+          ],
         },
       ],
     });
