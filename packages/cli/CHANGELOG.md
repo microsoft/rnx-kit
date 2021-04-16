@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/cli
 
-This log was last generated on Fri, 09 Apr 2021 21:41:43 GMT and should not be manually modified.
+This log was last generated on Fri, 16 Apr 2021 23:29:39 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 0.3.0
+
+Fri, 16 Apr 2021 23:29:39 GMT
+
+### Minor changes
+
+- Removed `rnx-start` (4123478+tido64@users.noreply.github.com)
 
 ## 0.2.2
 

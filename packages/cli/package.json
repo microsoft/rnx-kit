@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/cli",
-  "version": "0.2.2",
+  "version": "0.3.0",
   "description": "Command-line interface for rnx-kit",
   "license": "MIT",
   "main": "./lib/index.js",
