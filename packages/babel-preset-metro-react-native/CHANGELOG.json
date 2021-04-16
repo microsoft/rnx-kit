@@ -2,6 +2,21 @@
   "name": "@rnx-kit/babel-preset-metro-react-native",
   "entries": [
     {
+      "date": "Fri, 16 Apr 2021 12:03:52 GMT",
+      "tag": "@rnx-kit/babel-preset-metro-react-native_v1.0.2",
+      "version": "1.0.2",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Allow forwarding options to Metro",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "770100be65c0c06f380769ace3f287d27d4408c0",
+            "package": "@rnx-kit/babel-preset-metro-react-native"
+          }
+        ]
+      }
+    },
+    {
       "date": "Wed, 07 Apr 2021 16:29:26 GMT",
       "tag": "@rnx-kit/babel-preset-metro-react-native_v1.0.1",
       "version": "1.0.1",
