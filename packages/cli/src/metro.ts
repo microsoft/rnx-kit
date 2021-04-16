@@ -64,16 +64,6 @@ export type MetroBundleOptions = {
   configPath?: string;
 };
 
-/**
- * options for starting a metro server
- */
-export type MetroStartOptions = {
-  /**
-   * port override
-   */
-  port?: number;
-};
-
 function yarnSync(args: string[]): void {
   const yarnCommand = os.platform() === "win32" ? "yarn.cmd" : "yarn";
   const spawnOptions = { cwd: process.cwd(), stdio: "inherit" as const };
@@ -195,12 +185,4 @@ export function metroBundle(
       ...optionalParam("--config", configPath),
     ]);
   }
-}
-
-export function metroStart(options: MetroStartOptions): void {
-  const { port } = options;
-
-  console.log("Starting metro server...");
-
-  yarnSync(["react-native", "start", ...optionalParam("--port", port)]);
 }

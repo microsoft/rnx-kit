@@ -95,16 +95,5 @@ module.exports = {
         },
       ],
     },
-    {
-      name: "rnx-start",
-      description: "Starts a bundle webserver for your react-native experience",
-      func: cli.rnxStart,
-      options: [
-        {
-          name: "--port [port]",
-          parse: parseInt,
-        },
-      ],
-    },
   ],
 };

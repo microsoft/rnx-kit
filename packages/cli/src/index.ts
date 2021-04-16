@@ -1,4 +1,4 @@
-import { MetroBundleOptions, metroBundle, metroStart } from "./metro";
+import { MetroBundleOptions, metroBundle } from "./metro";
 import { getKitConfig, AllPlatforms, BundleParameters } from "@rnx-kit/config";
 import chalk from "chalk";
 
@@ -20,10 +20,6 @@ type CliBundleOptions = {
   resetCache?: boolean;
   readGlobalCache?: boolean;
   config?: string;
-};
-
-type CliStartOptions = {
-  port?: number;
 };
 
 export function parseBoolean(val: string): boolean {
@@ -101,12 +97,4 @@ export function rnxBundle(
   bundleOptions.configPath = options.config;
 
   metroBundle(bundleConfig, bundleOptions, bundleOverrides);
-}
-
-export function rnxStart(
-  _argv: Array<string>,
-  _config: Object /*: ConfigT*/,
-  options: CliStartOptions
-): void {
-  metroStart(options);
 }
