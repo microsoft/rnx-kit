@@ -1,0 +1,46 @@
+{
+  "name": "@rnx-kit/dep-check",
+  "version": "1.0.0-alpha",
+  "description": "Dependency checker for React Native apps",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/dep-check#rnx-kitdep-check",
+  "license": "MIT",
+  "files": [
+    "lib/*"
+  ],
+  "main": "lib/index.js",
+  "bin": {
+    "rnx-dep-check": "lib/cli.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "packages/dep-check"
+  },
+  "scripts": {
+    "build": "rnx-kit-scripts build",
+    "format": "prettier --write src/*.ts test/*.ts",
+    "test": "rnx-kit-scripts test"
+  },
+  "dependencies": {
+    "@rnx-kit/config": "^0.2.2",
+    "chalk": "^4.0.0",
+    "find-up": "^5.0.0",
+    "jest-diff": "^26.0.0",
+    "semver": "^7.0.0",
+    "yargs": "^16.0.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^26.0.0",
+    "@types/semver": "^7.0.0",
+    "@types/yargs": "^16.0.0",
+    "prettier": "^2.0.0",
+    "rnx-kit-scripts": "*",
+    "typescript": "^4.0.0"
+  },
+  "jest": {
+    "roots": [
+      "test"
+    ],
+    "testRegex": "/test/.*\\.test\\.ts$"
+  }
+}
