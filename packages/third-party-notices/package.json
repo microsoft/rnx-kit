@@ -1,0 +1,38 @@
+{
+  "name": "@rnx-kit/third-party-notices",
+  "version": "1.0.0",
+  "description": "Library and tool to build a third party notices file based on a js bundle's source map",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/third-party-notices#rnx-kitthird-party-notices",
+  "license": "MIT",
+  "files": [
+    "bin",
+    "lib"
+  ],
+  "main": "lib/index.js",
+  "bin": {
+    "build-tpn": "./bin/build-tpn.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "packages/third-party-notices"
+  },
+  "scripts": {
+    "build": "rnx-kit-scripts build",
+    "format": "prettier --write src/*.ts"
+  },
+  "dependencies": {
+    "browserify-licenses": "^1.4.7-1",
+    "chalk": "^2.4.1",
+    "eol": "^0.9.1",
+    "yargs": "^13.3.0"
+  },
+  "devDependencies": {
+    "@types/chalk": "^2.2.0",
+    "@types/jest": "^26.0.0",
+    "@types/yargs": "^15.0.5",
+    "prettier": "^2.0.0",
+    "rnx-kit-scripts": "*",
+    "typescript": "^4.0.0"
+  }
+}
