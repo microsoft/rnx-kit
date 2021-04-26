@@ -1,0 +1,7 @@
+{
+  "type": "minor",
+  "comment": "Simple tool for diffing the content of two bundles",
+  "packageName": "@rnx-kit/bundle-diff",
+  "email": "4123478+tido64@users.noreply.github.com",
+  "dependentChangeType": "patch"
+}

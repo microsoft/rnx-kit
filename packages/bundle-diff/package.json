@@ -1,0 +1,36 @@
+{
+  "name": "@rnx-kit/bundle-diff",
+  "version": "1.0.0-alpha",
+  "description": "Simple tool for diffing the content of two bundles",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/bundle-diff#rnx-kitbundle-diff",
+  "license": "MIT",
+  "files": [
+    "lib/*"
+  ],
+  "main": "lib/index.js",
+  "bin": {
+    "rnx-bundle-diff": "lib/cli.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "packages/bundle-diff"
+  },
+  "scripts": {
+    "build": "rnx-kit-scripts build",
+    "format": "prettier --write src/*.ts test/*.ts",
+    "test": "rnx-kit-scripts test"
+  },
+  "devDependencies": {
+    "@types/jest": "^26.0.0",
+    "prettier": "^2.0.0",
+    "rnx-kit-scripts": "*",
+    "typescript": "^4.0.0"
+  },
+  "jest": {
+    "roots": [
+      "test"
+    ],
+    "testRegex": "/test/.*\\.test\\.ts$"
+  }
+}

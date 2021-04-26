@@ -1,0 +1,56 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`diff() returns files that differ between two bundles 1`] = `
+Array [
+  Object {
+    "diff": -127,
+    "path": "/~/node_modules/querystring-es3/index.js",
+    "state": "removed",
+  },
+  Object {
+    "diff": 1,
+    "path": "/~/node_modules/react/index.js",
+    "state": "changed",
+  },
+  Object {
+    "diff": -286,
+    "path": "/~/node_modules/react-native/Libraries/Components/Picker/PickerAndroid.ios.js",
+    "state": "removed",
+  },
+  Object {
+    "diff": -592,
+    "path": "/~/node_modules/react-native/Libraries/Components/Sound/SoundManager.js",
+    "state": "removed",
+  },
+  Object {
+    "diff": NaN,
+    "path": "/~/packages/awesome-app/lib/index.js",
+    "state": "added",
+  },
+  Object {
+    "diff": 106,
+    "path": "/~/node_modules/@babel/runtime/helpers/arrayWithHoles.js",
+    "state": "added",
+  },
+  Object {
+    "diff": 49,
+    "path": "/~/node_modules/@babel/runtime/regenerator/index.js",
+    "state": "added",
+  },
+  Object {
+    "diff": 96,
+    "path": "/~/node_modules/lodash-es/_realNames.js",
+    "state": "added",
+  },
+]
+`;
+
+exports[`makeMap() creates a map of files with content 1`] = `
+Object {
+  "/~/node_modules/querystring-es3/index.js": 127,
+  "/~/node_modules/react-native/Libraries/Components/Picker/PickerAndroid.ios.js": 286,
+  "/~/node_modules/react-native/Libraries/Components/Sound/SoundManager.js": 592,
+  "/~/node_modules/react/index.js": 42,
+  "/~/packages/awesome-app/lib/index.js": NaN,
+}
+`;
