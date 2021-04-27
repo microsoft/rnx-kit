@@ -1,0 +1,28 @@
+{
+  "name": "@rnx-kit/dep-check",
+  "entries": [
+    {
+      "date": "Tue, 27 Apr 2021 19:43:40 GMT",
+      "tag": "@rnx-kit/dep-check_v1.0.0",
+      "version": "1.0.0",
+      "comments": {
+        "minor": [
+          {
+            "comment": "Initial dependency checker",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "87ec0aec3a1c1f0801f3d9f3da2b949bb0fd6d5e",
+            "package": "@rnx-kit/dep-check"
+          }
+        ],
+        "patch": [
+          {
+            "comment": "Bump @rnx-kit/config to v0.2.4",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "87ec0aec3a1c1f0801f3d9f3da2b949bb0fd6d5e",
+            "package": "@rnx-kit/dep-check"
+          }
+        ]
+      }
+    }
+  ]
+}
