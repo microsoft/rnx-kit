@@ -21,12 +21,12 @@ export function getKitConfig(
   options: GetKitConfigOptions = {}
 ): KitConfig | null {
   // use a working directory extracted from a module, specified in cwd, or from process.cwd
-  let cwd = options.module
-    ? path.resolve(require.resolve(options.module + "/package.json"), "..")
+  const cwd = options.module
+    ? path.dirname(require.resolve(options.module + "/package.json"))
     : options.cwd || process.cwd();
 
   // use the synchronous cosmiconfig load method to see if there is kit info present at the specified location
   const explorerSync = cosmiconfigSync("rnx-kit", { stopDir: cwd });
   const result = explorerSync.search(cwd);
-  return result ? result.config : null;
+  return result?.config ?? null;
 }

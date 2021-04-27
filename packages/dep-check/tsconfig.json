@@ -1,0 +1,7 @@
+{
+  "extends": "rnx-kit-scripts/tsconfig.json",
+  "compilerOptions": {
+    "lib": ["ES2019.Object"]
+  },
+  "include": ["src"]
+}
