@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/tools
 
-This log was last generated on Tue, 16 Feb 2021 19:03:38 GMT and should not be manually modified.
+This log was last generated on Tue, 27 Apr 2021 09:54:28 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 0.1.5
+
+Tue, 27 Apr 2021 09:54:28 GMT
+
+### Patches
+
+- Bump workspace-tools to 0.15.0 (4123478+tido64@users.noreply.github.com)
 
 ## 0.1.4
 
