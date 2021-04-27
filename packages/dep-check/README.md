@@ -23,19 +23,6 @@ rnx-dep-check [options] [/path/to/package.json]
 Providing a path to `package.json` is optional. If omitted, it will look for one
 using node module resolution.
 
-### `--check`
-
-This is a useful flag to use on CI pipelines to make sure your dependencies are
-conforming. Adding this flag will make `rnx-dep-check` return a non-zero exit
-code when changes are needed.
-
-#### Exit codes
-
-| Code | Description                    |
-| :--- | :----------------------------- |
-| 0    | Everything is fine and dandy.  |
-| 1    | Something needs to be changed. |
-
 ### `--write`
 
 Writes all changes to the specified `package.json`.

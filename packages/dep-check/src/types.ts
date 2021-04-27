@@ -3,7 +3,6 @@ import type { Capability } from "@rnx-kit/config";
 export type DependencyType = "direct" | "development" | "peer";
 
 export type Options = {
-  check?: boolean;
   write?: boolean;
 };
 

@@ -25,17 +25,15 @@ function minVersion(version: unknown): string {
 
 export function checkPackageManifest(
   manifestPath: string,
-  { check, write }: Options = {}
+  { write }: Options = {}
 ): number {
-  const errorCode = check ? 1 : 0;
-
   const manifestJson = fs.readFileSync(manifestPath, { encoding: "utf-8" });
   const manifest = JSON.parse(manifestJson);
   if (!isManifest(manifest)) {
     console.error(
       `error: '${manifestPath}' does not contain a valid package manifest`
     );
-    return errorCode;
+    return 1;
   }
 
   const kitConfig = getKitConfig({ cwd: path.dirname(manifestPath) });
@@ -57,14 +55,14 @@ export function checkPackageManifest(
     console.error(
       `error: '${reactNativeVersion}' is not a valid version range`
     );
-    return errorCode;
+    return 1;
   }
 
   if (!semver.satisfies(reactNativeDevVersion, reactNativeVersion)) {
     console.error(
       `error: '${reactNativeDevVersion}' does not satisfy supported version range '${reactNativeVersion}'`
     );
-    return errorCode;
+    return 1;
   }
 
   const badPackages = findBadPackages(manifest);
@@ -107,7 +105,7 @@ export function checkPackageManifest(
         }
       );
       console.log(diff);
-      return errorCode;
+      return 1;
     }
   }
 
