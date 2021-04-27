@@ -1,0 +1,7 @@
+{
+  "type": "patch",
+  "comment": "Bump workspace-tools to 0.15.0",
+  "packageName": "@rnx-kit/tools",
+  "email": "4123478+tido64@users.noreply.github.com",
+  "dependentChangeType": "patch"
+}
