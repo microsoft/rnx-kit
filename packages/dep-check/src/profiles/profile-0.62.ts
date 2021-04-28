@@ -26,6 +26,10 @@ const profile: Profile = {
     name: "react-native-windows",
     version: "^0.62.0",
   },
+  hermes: {
+    name: "hermes-engine",
+    version: "~0.4.0",
+  },
 };
 
 export default profile;

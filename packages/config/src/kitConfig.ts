@@ -14,6 +14,7 @@ export type Capability =
   | "filesystem"
   | "floating-action"
   | "gestures"
+  | "hermes"
   | "hooks"
   | "html"
   | "lazy-index"
