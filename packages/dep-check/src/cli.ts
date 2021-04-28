@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import path from "path";
 import pkgDir from "pkg-dir";
 import yargs from "yargs";
