@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/config
 
-This log was last generated on Tue, 27 Apr 2021 19:43:40 GMT and should not be manually modified.
+This log was last generated on Wed, 28 Apr 2021 15:54:06 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 0.2.5
+
+Wed, 28 Apr 2021 15:54:06 GMT
+
+### Patches
+
+- Add 'hermes' capability (4123478+tido64@users.noreply.github.com)
 
 ## 0.2.4
 
