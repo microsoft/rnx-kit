@@ -32,8 +32,8 @@ compilation options, indentation etc.
 
 ### I have a lot of unknown content sizes in my diff
 
-If you're using TypeScript, you need tell `tsc` to also include source content
-in the source map:
+If you're using TypeScript, you need to tell `tsc` to also include source
+content in the source map:
 
 ```json
 // tsconfig.json
