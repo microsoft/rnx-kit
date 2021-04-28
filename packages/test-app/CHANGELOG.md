@@ -1,8 +1,56 @@
 # Change Log - @rnx-kit/test-app
 
-This log was last generated on Tue, 13 Apr 2021 15:58:06 GMT and should not be manually modified.
+This log was last generated on Wed, 28 Apr 2021 17:08:34 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 0.0.1
+
+Wed, 28 Apr 2021 17:08:34 GMT
+
+### Patches
+
+- Bump @rnx-kit/cli to v0.4.0 (4123478+tido64@users.noreply.github.com)
+
+## 0.0.1
+
+Wed, 28 Apr 2021 15:54:06 GMT
+
+### Patches
+
+- Bump @rnx-kit/cli to v0.3.3 (4123478+tido64@users.noreply.github.com)
+
+## 0.0.1
+
+Tue, 27 Apr 2021 19:43:40 GMT
+
+### Patches
+
+- Bump @rnx-kit/cli to v0.3.2 (4123478+tido64@users.noreply.github.com)
+
+## 0.0.1
+
+Tue, 27 Apr 2021 09:54:28 GMT
+
+### Patches
+
+- Bump @rnx-kit/cli to v0.3.1 (4123478+tido64@users.noreply.github.com)
+
+## 0.0.1
+
+Fri, 16 Apr 2021 23:29:39 GMT
+
+### Patches
+
+- Bump @rnx-kit/cli to v0.3.0 (4123478+tido64@users.noreply.github.com)
+
+## 0.0.1
+
+Fri, 16 Apr 2021 12:03:52 GMT
+
+### Patches
+
+- Bump @rnx-kit/metro-config to v1.1.3 (4123478+tido64@users.noreply.github.com)
 
 ## 0.0.1
 

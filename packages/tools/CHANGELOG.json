@@ -2,6 +2,21 @@
   "name": "@rnx-kit/tools",
   "entries": [
     {
+      "date": "Tue, 27 Apr 2021 09:54:28 GMT",
+      "tag": "@rnx-kit/tools_v0.1.5",
+      "version": "0.1.5",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Bump workspace-tools to 0.15.0",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "936b4eb3a361e820ef4f830be55182aae1e36dbe",
+            "package": "@rnx-kit/tools"
+          }
+        ]
+      }
+    },
+    {
       "date": "Fri, 19 Feb 2021 19:58:00 GMT",
       "tag": "@rnx-kit/tools_v0.1.4",
       "version": "0.1.4",

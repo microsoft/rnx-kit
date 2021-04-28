@@ -1,12 +1,68 @@
-import { BundleConfig } from "./bundleConfig";
+import type { BundleConfig } from "./bundleConfig";
 
-export type DependencyVersions = { [key: string]: string };
+export type Capability =
+  | "core-android"
+  | "core-ios"
+  | "core-macos"
+  | "core-win32"
+  | "core-windows"
+  | "animation"
+  | "base64"
+  | "checkbox"
+  | "clipboard"
+  | "datetime-picker"
+  | "filesystem"
+  | "floating-action"
+  | "gestures"
+  | "hermes"
+  | "hooks"
+  | "html"
+  | "lazy-index"
+  | "masked-view"
+  | "modal"
+  | "navigation/native"
+  | "navigation/stack"
+  | "netinfo"
+  | "popover"
+  | "react"
+  | "safe-area"
+  | "screens"
+  | "shimmer"
+  | "sqlite"
+  | "storage"
+  | "svg"
+  | "test-app"
+  | "webview";
+
+export type DependencyVersions = Record<string, string>;
+
 export type GetDependencyVersions = () => DependencyVersions;
+
+export type KitType = "app" | "library";
 
 /**
  * Configuration information for an rnx-kit. This is retrieved via cosmi-config
  */
-export interface KitConfig {
+export type KitConfig = {
+  /**
+   * Whether this kit is an "app" or a "library".
+   * @default "library"
+   */
+  kitType?: KitType;
+
+  /**
+   * Supported versions of React Native. Must be parseable by
+   * [node-semver](https://github.com/npm/node-semver).
+   */
+  reactNativeVersion?: string;
+
+  /**
+   * The version of React Native to use for development. Must be parseable by
+   * [node-semver](https://github.com/npm/node-semver). If omitted, the minimum
+   * supported version will be used.
+   */
+  reactNativeDevVersion?: string;
+
   /**
    * Whether this kit produces a platform bundle. If true then all defaults will be used. Otherwise the object allows more detailed
    * specification of platform bundle functionality.
@@ -16,11 +72,13 @@ export interface KitConfig {
     | {
         /**
          * relative path for location within the package to find the built platform bundles. Defaults to './dist'
+         * @default "dist"
          */
         distPath?: string;
 
         /**
          * prefix for the bundle name. Defaults to 'index'
+         * @default "index"
          */
         bundlePrefix?: string;
       };
@@ -37,4 +95,9 @@ export interface KitConfig {
    * - GetDependencyVerions: A function which will retrieve the dependency versions on demand
    */
   dependencies?: string | DependencyVersions | GetDependencyVersions;
-}
+
+  /**
+   * Capabilities used by the kit.
+   */
+  capabilities?: Capability[];
+};

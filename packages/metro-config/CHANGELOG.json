@@ -2,6 +2,21 @@
   "name": "@rnx-kit/metro-config",
   "entries": [
     {
+      "date": "Fri, 16 Apr 2021 12:03:52 GMT",
+      "tag": "@rnx-kit/metro-config_v1.1.3",
+      "version": "1.1.3",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Bump @rnx-kit/babel-preset-metro-react-native to v1.0.2",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "770100be65c0c06f380769ace3f287d27d4408c0",
+            "package": "@rnx-kit/metro-config"
+          }
+        ]
+      }
+    },
+    {
       "date": "Wed, 07 Apr 2021 16:29:26 GMT",
       "tag": "@rnx-kit/metro-config_v1.1.2",
       "version": "1.1.2",

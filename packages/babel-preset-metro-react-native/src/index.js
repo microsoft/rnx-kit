@@ -6,13 +6,24 @@
  * @typedef {import("@babel/core").ConfigAPI} ConfigAPI
  * @typedef {import("@babel/core").PluginItem} PluginItem
  * @typedef {import("@babel/core").TransformOptions} TransformOptions
- * @typedef {{ additionalPlugins?: PluginItem[]; }} PresetOptions
+ *
+ * @typedef {{
+ *   dev?: boolean;
+ *   disableImportExportTransform?: boolean;
+ *   enableBabelRuntime?: boolean;
+ *   lazyImportExportTransform?: boolean | string[];
+ *   unstable_transformProfile?: "default" | "hermes-canary" | "hermes-stable";
+ *   useTransformReactJSXExperimental?: boolean;
+ *   withDevTools?: boolean;
+ * }} MetroPresetOptions
+ *
+ * @typedef {MetroPresetOptions & { additionalPlugins?: PluginItem[]; }} PresetOptions
  */
 
 /** @type {(api?: ConfigAPI, opts?: PresetOptions) => TransformOptions} */
-module.exports = (_, opts = {}) => {
+module.exports = (_, { additionalPlugins, ...options } = {}) => {
   return {
-    presets: ["module:metro-react-native-babel-preset"],
+    presets: [["module:metro-react-native-babel-preset", options]],
     overrides: [
       {
         test: /\.tsx?$/,
@@ -22,9 +33,7 @@ module.exports = (_, opts = {}) => {
           // for more details.
           "const-enum",
 
-          ...(Array.isArray(opts.additionalPlugins)
-            ? opts.additionalPlugins
-            : []),
+          ...(Array.isArray(additionalPlugins) ? additionalPlugins : []),
         ],
       },
     ],

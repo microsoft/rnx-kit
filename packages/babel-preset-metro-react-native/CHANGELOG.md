@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/babel-preset-metro-react-native
 
-This log was last generated on Thu, 11 Mar 2021 23:54:05 GMT and should not be manually modified.
+This log was last generated on Fri, 16 Apr 2021 12:03:52 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 1.0.2
+
+Fri, 16 Apr 2021 12:03:52 GMT
+
+### Patches
+
+- Allow forwarding options to Metro (4123478+tido64@users.noreply.github.com)
 
 ## 1.0.1
 

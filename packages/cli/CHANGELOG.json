@@ -2,6 +2,81 @@
   "name": "@rnx-kit/cli",
   "entries": [
     {
+      "date": "Wed, 28 Apr 2021 17:08:34 GMT",
+      "tag": "@rnx-kit/cli_v0.4.0",
+      "version": "0.4.0",
+      "comments": {
+        "minor": [
+          {
+            "comment": "Added `rnx-dep-check` command",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "39c57b8e5de28442b69a449d57a3f7834f52275b",
+            "package": "@rnx-kit/cli"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Wed, 28 Apr 2021 15:54:06 GMT",
+      "tag": "@rnx-kit/cli_v0.3.3",
+      "version": "0.3.3",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Bump @rnx-kit/config to v0.2.5",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "c79828791a6ac5cf19b4abfff6347542af49eaec",
+            "package": "@rnx-kit/cli"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Tue, 27 Apr 2021 19:43:40 GMT",
+      "tag": "@rnx-kit/cli_v0.3.2",
+      "version": "0.3.2",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Bump @rnx-kit/config to v0.2.4",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "87ec0aec3a1c1f0801f3d9f3da2b949bb0fd6d5e",
+            "package": "@rnx-kit/cli"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Tue, 27 Apr 2021 09:54:28 GMT",
+      "tag": "@rnx-kit/cli_v0.3.1",
+      "version": "0.3.1",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Bump @rnx-kit/config to v0.2.3",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "936b4eb3a361e820ef4f830be55182aae1e36dbe",
+            "package": "@rnx-kit/cli"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Fri, 16 Apr 2021 23:29:39 GMT",
+      "tag": "@rnx-kit/cli_v0.3.0",
+      "version": "0.3.0",
+      "comments": {
+        "minor": [
+          {
+            "comment": "Removed `rnx-start`",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "0358ff602565656ebf5f49a3f753974455158bbf",
+            "package": "@rnx-kit/cli"
+          }
+        ]
+      }
+    },
+    {
       "date": "Fri, 09 Apr 2021 21:41:43 GMT",
       "tag": "@rnx-kit/cli_v0.2.2",
       "version": "0.2.2",
