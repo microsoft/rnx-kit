@@ -60,7 +60,6 @@ export function writeThirdPartyNotices({
   preambleText,
   additionalText,
 }: IWriteThirdPartyNoticesOptions): Promise<void> {
-  const eol = require("eol");
   const os = require("os");
   const util = require("util");
 
@@ -161,7 +160,7 @@ export function writeThirdPartyNotices({
   };
 
   const writeMultipleLines = (s: string): void => {
-    const lines = eol.split(s);
+    const lines = s.split(/\r\n|\r|\n/g);
     lines.forEach((line: string) => {
       writeLine(line);
     });
