@@ -1,0 +1,7 @@
+{
+  "type": "patch",
+  "comment": "Create a typescript validation plugin for Metro. Add the plugin to our test-app package. Update test-app source files to typescript, and change the Metro entry file from lib (transpiled) to src.",
+  "packageName": "@rnx-kit/metro-plugin-typescript-validation",
+  "email": "afoxman@microsoft.com",
+  "dependentChangeType": "patch"
+}
