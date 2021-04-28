@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/cli
 
-This log was last generated on Wed, 28 Apr 2021 15:54:06 GMT and should not be manually modified.
+This log was last generated on Wed, 28 Apr 2021 17:08:34 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 0.4.0
+
+Wed, 28 Apr 2021 17:08:34 GMT
+
+### Minor changes
+
+- Added `rnx-dep-check` command (4123478+tido64@users.noreply.github.com)
 
 ## 0.3.3
 
