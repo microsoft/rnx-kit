@@ -1,0 +1,21 @@
+{
+  "name": "@rnx-kit/metro-plugin-typescript-validation",
+  "version": "1.0.0",
+  "description": "Typescript validation during Metro bundling",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "scripts": {
+    "build": "rnx-kit-scripts build",
+    "test": "rnx-kit-scripts test"
+  },
+  "dependencies": {
+    "@msfast/typescript-platform-resolution": "^4.2.4-midgard.0",
+    "yargs": "^16.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "^12.0.0",
+    "@types/yargs": "^16.0.1",
+    "@rnx-kit/metro-serializer": "*",
+    "rnx-kit-scripts": "*"
+  }
+}

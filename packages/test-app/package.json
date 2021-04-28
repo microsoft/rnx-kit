@@ -33,6 +33,7 @@
     "@rnx-kit/metro-config": "*",
     "@rnx-kit/metro-plugin-cyclic-dependencies-detector": "*",
     "@rnx-kit/metro-plugin-duplicates-checker": "*",
+    "@rnx-kit/metro-plugin-typescript-validation": "*",
     "@rnx-kit/metro-serializer": "*",
     "@types/react": "^17.0.2",
     "@types/react-native": "^0.63.50",
@@ -48,7 +49,7 @@
   },
   "rnx-kit": {
     "bundle": {
-      "entryPath": "lib/src/index.js",
+      "entryPath": "src/index.ts",
       "distPath": "dist",
       "assetsPath": "dist",
       "bundlePrefix": "main",
