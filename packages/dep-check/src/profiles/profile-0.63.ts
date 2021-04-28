@@ -36,6 +36,10 @@ const profile: Profile = {
     name: "react-native-gesture-handler",
     version: "^1.10.3",
   },
+  hermes: {
+    name: "hermes-engine",
+    version: "~0.5.0",
+  },
   "navigation/native": {
     name: "@react-navigation/native",
     version: "^5.9.6",
