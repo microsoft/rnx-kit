@@ -30,6 +30,23 @@ compilation options, indentation etc.
 
 ## Troubleshooting
 
+### I have a lot of unknown content sizes in my diff
+
+If you're using TypeScript, you need tell `tsc` to also include source content
+in the source map:
+
+```json
+// tsconfig.json
+{
+  "compilerOptions": {
+    "inlineSources": true
+  }
+}
+```
+
+
+### I have a lot of relative paths in my source map
+
 If your project is using TypeScript and Webpack, you may experience that your
 source maps don't properly map back to the source file. Try using
 [`source-map-loader`](https://webpack.js.org/loaders/source-map-loader/) to
