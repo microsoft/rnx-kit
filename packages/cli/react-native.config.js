@@ -1,11 +1,16 @@
-const cli = require("./lib/index");
+const {
+  parsePlatform,
+  parseBoolean,
+  rnxBundle,
+  rnxDepCheck,
+} = require("./lib/index");
 
 module.exports = {
   commands: [
     {
       name: "rnx-bundle",
       description: "Bundle your react-native experience for offline use",
-      func: cli.rnxBundle,
+      func: rnxBundle,
       options: [
         {
           name: "--id [id]",
@@ -16,7 +21,7 @@ module.exports = {
           name: "--platform [ios|android|windows|win32|macos]",
           description:
             "Target platform; when not given, all platforms are bundled",
-          parse: cli.parsePlatform,
+          parse: parsePlatform,
         },
         {
           name: "--entry-path [file]",
@@ -52,13 +57,13 @@ module.exports = {
           description:
             "If false, warnings are disabled and the bundle is minified",
           default: true,
-          parse: cli.parseBoolean,
+          parse: parseBoolean,
         },
         {
           name: "--minify [boolean]",
           description:
             "Allows overriding whether bundle is minified. Disabling minification can be useful for speeding up production builds for testing purposes.",
-          parse: cli.parseBoolean,
+          parse: parseBoolean,
         },
         {
           name: "--max-workers [number]",
@@ -92,6 +97,17 @@ module.exports = {
         {
           name: "--config [string]",
           description: "Path to the metro CLI configuration file",
+        },
+      ],
+    },
+    {
+      name: "rnx-dep-check",
+      description: "Dependency checker for React Native apps",
+      func: rnxDepCheck,
+      options: [
+        {
+          name: "--write",
+          description: "Writes all changes to the specified `package.json`",
         },
       ],
     },
