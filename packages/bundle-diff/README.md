@@ -44,7 +44,6 @@ in the source map:
 }
 ```
 
-
 ### I have a lot of relative paths in my source map
 
 If your project is using TypeScript and Webpack, you may experience that your
