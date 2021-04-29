@@ -1,0 +1,65 @@
+import {parseSourceMap, extractModuleNameToPathMap, IWriteThirdPartyNoticesOptions} from "../src/write-third-party-notices";
+
+jest.mock('fs')
+
+require("fs").existsSync = jest.fn().mockImplementation((path) => {
+  return path.indexOf("missing") == -1;
+});
+
+const options : IWriteThirdPartyNoticesOptions = {
+  rootPath: "o:\\src"
+}
+
+describe("parseModule", () => {
+
+  test("parseSourceMap", () => {
+    const sourceMap  = {
+      sources: [
+        "node_modules/myPackage/file.js",
+        "node_modules/myPackage/file2.js",
+        "node_modules/@scope/myOtherPackage/file.js"
+      ]
+    }
+    const map = new Map();
+    parseSourceMap(options, map, sourceMap);
+
+    expect(map.size).toBe(2);
+    expect(map.get('myPackage')).toBe("o:\\src\\node_modules\\myPackage")
+    expect(map.get('@scope/myOtherPackage')).toBe("o:\\src\\node_modules\\@scope\\myOtherPackage")
+  });
+
+  test("extractModuleNameToPathMap", () => {
+    const sourceMap  = {
+      sources: [
+        "node_modules/myPackage/file.js",
+        "node_modules/myPackage/file2.js",
+      ],
+      sections: [
+        {
+          map: {
+            sources: [
+              "node_modules/myPackage/file2.js",
+              "node_modules/myPackage2/file2.js",
+            ]
+          }
+        },
+        {
+          map: {
+            sources: [
+              "node_modules/@scope/myOtherPackage/file.js",
+              "node_modules/@scope2/myOtherPackage/file.js"
+            ]
+          }
+        }
+      ]
+    }
+    const map = extractModuleNameToPathMap(options, sourceMap);
+
+    expect(map.size).toBe(4);
+    expect(map.get('myPackage')).toBe("o:\\src\\node_modules\\myPackage");
+    expect(map.get('myPackage2')).toBe("o:\\src\\node_modules\\myPackage2");
+    expect(map.get('@scope/myOtherPackage')).toBe("o:\\src\\node_modules\\@scope\\myOtherPackage");
+    expect(map.get('@scope2/myOtherPackage')).toBe("o:\\src\\node_modules\\@scope2\\myOtherPackage");
+  });
+
+});
