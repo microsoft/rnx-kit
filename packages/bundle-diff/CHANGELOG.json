@@ -1,0 +1,20 @@
+{
+  "name": "@rnx-kit/bundle-diff",
+  "entries": [
+    {
+      "date": "Thu, 29 Apr 2021 12:34:45 GMT",
+      "tag": "@rnx-kit/bundle-diff_v1.0.0",
+      "version": "1.0.0",
+      "comments": {
+        "minor": [
+          {
+            "comment": "Simple tool for diffing the content of two bundles",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "2ee84ee361193306335278db7f6c2399155a54e2",
+            "package": "@rnx-kit/bundle-diff"
+          }
+        ]
+      }
+    }
+  ]
+}
