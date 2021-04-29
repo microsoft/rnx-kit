@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "build": "rnx-kit-scripts build",
-    "depcheck": "rnx-kit-scripts depcheck",
+    "depcheck": "react-native rnx-dep-check && rnx-kit-scripts depcheck",
     "lint": "rnx-kit-scripts lint",
     "test": "rnx-kit-scripts test",
     "bundle": "react-native rnx-bundle",
@@ -20,9 +20,9 @@
   },
   "dependencies": {
     "react": "16.13.1",
-    "react-native": "0.63.4",
-    "react-native-macos": "0.63.23",
-    "react-native-windows": "0.63.26"
+    "react-native": "^0.63.4",
+    "react-native-macos": "^0.63.0",
+    "react-native-windows": "^0.63.0"
   },
   "devDependencies": {
     "@babel/core": "^7.6.2",
@@ -47,6 +47,8 @@
     "preset": "react-native"
   },
   "rnx-kit": {
+    "reactNativeVersion": "^0.63",
+    "kitType": "app",
     "bundle": {
       "entryPath": "lib/src/index.js",
       "distPath": "dist",
@@ -63,6 +65,12 @@
           "assetsPath": "dist/res"
         }
       }
-    }
+    },
+    "capabilities": [
+      "core-android",
+      "core-ios",
+      "core-macos",
+      "core-windows"
+    ]
   }
 }
