@@ -181,7 +181,7 @@ describe("updateDependencies()", () => {
       updateDependencies(undefined, resolvedPackages, "development")
     ).toEqual({
       react: "16.13.1",
-      "react-native": "^0.63.2",
+      "react-native": "^0.63.4",
       "react-native-macos": "^0.63.0",
       "react-native-test-app": "^0.5.5",
       "react-native-windows": "^0.63.0",

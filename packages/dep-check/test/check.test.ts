@@ -194,7 +194,7 @@ describe("checkPackageManifest()", () => {
     fs.__setMockContent({
       ...mockManifest,
       peerDependencies: {
-        "react-native": "^0.62.2 || ^0.63.2 || ^0.64.0",
+        "react-native": "^0.62.2 || ^0.63.4 || ^0.64.0",
       },
       devDependencies: {
         "react-native": "^0.62.2",
@@ -215,10 +215,10 @@ describe("checkPackageManifest()", () => {
     fs.__setMockContent({
       ...mockManifest,
       peerDependencies: {
-        "react-native": "^0.62.2 || ^0.63.2 || ^0.64.0",
+        "react-native": "^0.62.2 || ^0.63.4 || ^0.64.0",
       },
       devDependencies: {
-        "react-native": "^0.63.2",
+        "react-native": "^0.63.4",
       },
     });
     rnxKitConfig.__setMockConfig({
