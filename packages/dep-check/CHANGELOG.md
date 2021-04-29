@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/dep-check
 
-This log was last generated on Wed, 28 Apr 2021 16:03:56 GMT and should not be manually modified.
+This log was last generated on Thu, 29 Apr 2021 13:47:02 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 1.0.3
+
+Thu, 29 Apr 2021 13:47:02 GMT
+
+### Patches
+
+- Bump react-native to latest 0.63.x (4123478+tido64@users.noreply.github.com)
 
 ## 1.0.2
 
