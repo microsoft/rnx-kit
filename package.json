@@ -30,7 +30,7 @@
     "test": "lage test --verbose --grouped"
   },
   "devDependencies": {
-    "beachball": "^1.53.1",
+    "beachball": "^2.2.0",
     "lage": "^0.29.0"
   },
   "workspaces": {
