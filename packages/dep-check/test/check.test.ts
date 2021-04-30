@@ -18,7 +18,7 @@ describe("isManifest()", () => {
   });
 });
 
-describe("checkPackageManifest()", () => {
+describe("checkPackageManifest({ kitType: 'library' })", () => {
   const rnxKitConfig = require("@rnx-kit/config");
   const fs = require("fs");
 
@@ -86,7 +86,7 @@ describe("checkPackageManifest()", () => {
 
     expect(checkPackageManifest("package.json")).toBe(0);
     expect(consoleErrorSpy).not.toBeCalled();
-    expect(consoleWarnSpy).toBeCalledTimes(2);
+    expect(consoleWarnSpy).toBeCalledTimes(1);
   });
 
   test("prints warnings when detecting bad packages (with version range)", () => {
@@ -98,7 +98,7 @@ describe("checkPackageManifest()", () => {
 
     expect(checkPackageManifest("package.json")).toBe(0);
     expect(consoleErrorSpy).not.toBeCalled();
-    expect(consoleWarnSpy).toBeCalledTimes(2);
+    expect(consoleWarnSpy).toBeCalledTimes(1);
   });
 
   test("returns early if no capabilities are defined", () => {
