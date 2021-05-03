@@ -131,8 +131,8 @@ describe("visitDependencies()", () => {
       "dutch",
       "john",
       "quaid",
-      "react-native",
       "react",
+      "react-native",
       "t-800",
     ]);
 
