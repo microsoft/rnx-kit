@@ -9,6 +9,11 @@ import {
 
 jest.unmock("@rnx-kit/config");
 
+const v0_61 = "0.61.9999";
+const v0_62 = "0.62.9999";
+const v0_63 = "0.63.9999";
+const v0_64 = "0.64.9999";
+
 function fixturePath(name: string) {
   return path.join(process.cwd(), "test", "__fixtures__", name);
 }
@@ -16,47 +21,41 @@ function fixturePath(name: string) {
 describe("intersection()", () => {
   test("matches single versions", () => {
     const targetVersions = targetReactNativeVersions();
-    expect(intersection(targetVersions, "0.61.0")).toEqual(["0.61.9999"]);
-    expect(intersection(targetVersions, "0.61.5")).toEqual(["0.61.9999"]);
-    expect(intersection(targetVersions, "0.62.0")).toEqual(["0.62.9999"]);
-    expect(intersection(targetVersions, "0.62.2")).toEqual(["0.62.9999"]);
-    expect(intersection(targetVersions, "0.63.0")).toEqual(["0.63.9999"]);
-    expect(intersection(targetVersions, "0.63.4")).toEqual(["0.63.9999"]);
-    expect(intersection(targetVersions, "0.64.0")).toEqual(["0.64.9999"]);
+    expect(intersection(targetVersions, "0.61.0")).toEqual([v0_61]);
+    expect(intersection(targetVersions, "0.61.5")).toEqual([v0_61]);
+    expect(intersection(targetVersions, "0.62.0")).toEqual([v0_62]);
+    expect(intersection(targetVersions, "0.62.2")).toEqual([v0_62]);
+    expect(intersection(targetVersions, "0.63.0")).toEqual([v0_63]);
+    expect(intersection(targetVersions, "0.63.4")).toEqual([v0_63]);
+    expect(intersection(targetVersions, "0.64.0")).toEqual([v0_64]);
   });
 
   test("matches version ranges", () => {
     const targetVersions = targetReactNativeVersions();
-    expect(intersection(targetVersions, "^0.61.0")).toEqual(["0.61.9999"]);
-    expect(intersection(targetVersions, "^0.61.5")).toEqual(["0.61.9999"]);
-    expect(intersection(targetVersions, "^0.62.0")).toEqual(["0.62.9999"]);
-    expect(intersection(targetVersions, "^0.62.2")).toEqual(["0.62.9999"]);
-    expect(intersection(targetVersions, "^0.63.0")).toEqual(["0.63.9999"]);
-    expect(intersection(targetVersions, "^0.63.4")).toEqual(["0.63.9999"]);
-    expect(intersection(targetVersions, "^0.64.0")).toEqual(["0.64.9999"]);
+    expect(intersection(targetVersions, "^0.61.0")).toEqual([v0_61]);
+    expect(intersection(targetVersions, "^0.61.5")).toEqual([v0_61]);
+    expect(intersection(targetVersions, "^0.62.0")).toEqual([v0_62]);
+    expect(intersection(targetVersions, "^0.62.2")).toEqual([v0_62]);
+    expect(intersection(targetVersions, "^0.63.0")).toEqual([v0_63]);
+    expect(intersection(targetVersions, "^0.63.4")).toEqual([v0_63]);
+    expect(intersection(targetVersions, "^0.64.0")).toEqual([v0_64]);
   });
 
   test("matches wider version ranges", () => {
     const targetVersions = targetReactNativeVersions();
 
     const v61_v62 = "^0.61.0 || ^0.62.0";
-    expect(intersection(targetVersions, v61_v62)).toEqual([
-      "0.61.9999",
-      "0.62.9999",
-    ]);
+    expect(intersection(targetVersions, v61_v62)).toEqual([v0_61, v0_62]);
 
     const v61_v62_v63 = "^0.61.0 || ^0.62.0 || ^0.63.0";
     expect(intersection(targetVersions, v61_v62_v63)).toEqual([
-      "0.61.9999",
-      "0.62.9999",
-      "0.63.9999",
+      v0_61,
+      v0_62,
+      v0_63,
     ]);
 
     const v62_v64 = "^0.62.0 || ^0.64.0";
-    expect(intersection(targetVersions, v62_v64)).toEqual([
-      "0.62.9999",
-      "0.64.9999",
-    ]);
+    expect(intersection(targetVersions, v62_v64)).toEqual([v0_62, v0_64]);
 
     expect(intersection(targetVersions, ">=0.61")).toEqual(targetVersions);
   });
