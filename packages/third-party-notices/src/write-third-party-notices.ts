@@ -79,15 +79,10 @@ export async function writeThirdPartyNotices(
 
 // helper functions
 export function normalizePath(p: string): string {
-  return p
-    .replace(/webpack:\/\/\//g, "")
-    .replace(/[\\]+/g, "/");
+  return p.replace(/webpack:\/\/\//g, "").replace(/[\\]+/g, "/");
 }
 
-export function splitSourcePath(
-  rootPath: string,
-  p: string
-): string[] {
+export function splitSourcePath(rootPath: string, p: string): string[] {
   //  find the root of the package, and extract the package name.
   //
   //  npm packages are laid out simply. pnpm packages have additional layers
@@ -138,7 +133,7 @@ export function parseModule(
   p: string
 ): void {
   const [moduleName, modulePath] = splitSourcePath(options.rootPath, p);
-  const fs = require('fs');
+  const fs = require("fs");
   if (
     (options.ignoreScopes &&
       options.ignoreScopes.some((scope: string) =>

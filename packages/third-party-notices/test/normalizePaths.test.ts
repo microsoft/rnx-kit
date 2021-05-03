@@ -1,13 +1,19 @@
-import {normalizePath} from "../src/write-third-party-notices";
+import { normalizePath } from "../src/write-third-party-notices";
+
+// this is different from the one in pathHelper due to this having to test cross platform path normalization.
+import os from "os";
+const absolutePathRoot = os.platform() === "win32" ? "o:/" : "/";
 
 describe("normalizePath", () => {
   // WebPack Urls
   test("webPackIgnored", () => {
     expect(
       normalizePath(
-        "webpack:///ignored|o:\\OW\\Build\\JsSrc\\wordjs_fluid_x64_debug\\node_modules\\yargs\\build|fs"
+        `webpack:///ignored|${absolutePathRoot}OW\\Build\\JsSrc\\wordjs_fluid_x64_debug\\node_modules\\yargs\\build|fs`
       )
-    ).toBe("ignored|o:/OW/Build/JsSrc/wordjs_fluid_x64_debug/node_modules/yargs/build|fs");
+    ).toBe(
+      `ignored|${absolutePathRoot}OW/Build/JsSrc/wordjs_fluid_x64_debug/node_modules/yargs/build|fs`
+    );
   });
 
   test("webPackAbsolute", () => {
@@ -28,18 +34,21 @@ describe("normalizePath", () => {
     expect(normalizePath("webpack:///webpack/startup")).toBe("webpack/startup");
   });
 
-
   // Paths
   test("relativePath", () => {
     expect(normalizePath("folder/file")).toBe("folder/file");
   });
 
   test("dotdotRelativePath", () => {
-    expect(normalizePath("../folder/../otherfolder/file")).toBe("../folder/../otherfolder/file");
+    expect(normalizePath("../folder/../otherfolder/file")).toBe(
+      "../folder/../otherfolder/file"
+    );
   });
 
   test("absolutePath", () => {
-    expect(normalizePath("o:/folder/file")).toBe("o:/folder/file");
+    expect(normalizePath(`${absolutePathRoot}folder/file`)).toBe(
+      `${absolutePathRoot}folder/file`
+    );
   });
 
   // Windows Paths
@@ -48,17 +57,19 @@ describe("normalizePath", () => {
   });
 
   test("dotdotRelativeWindowsPath", () => {
-    expect(normalizePath("..\\folder\\..\\otherfolder\\file")).toBe("../folder/../otherfolder/file");
+    expect(normalizePath("..\\folder\\..\\otherfolder\\file")).toBe(
+      "../folder/../otherfolder/file"
+    );
   });
 
   test("absoluteWindowsPath", () => {
-    expect(normalizePath("o:\\folder\\file")).toBe("o:/folder/file");
+    expect(normalizePath(`${absolutePathRoot}folder\\file`)).toBe(
+      `${absolutePathRoot}folder/file`
+    );
   });
 
   // Casing
   test("case perserving", () => {
     expect(normalizePath("FoLdeR/FiLe")).toBe("FoLdeR/FiLe");
   });
-
-
 });
