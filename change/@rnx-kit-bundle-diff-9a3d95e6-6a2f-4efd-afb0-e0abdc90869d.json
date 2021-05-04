@@ -1,0 +1,7 @@
+{
+  "type": "none",
+  "comment": "Use Babel preset for Jest + TypeScript",
+  "packageName": "@rnx-kit/bundle-diff",
+  "email": "4123478+tido64@users.noreply.github.com",
+  "dependentChangeType": "none"
+}
