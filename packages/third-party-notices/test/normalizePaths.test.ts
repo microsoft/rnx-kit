@@ -9,10 +9,10 @@ describe("normalizePath", () => {
   test("webPackIgnored", () => {
     expect(
       normalizePath(
-        `webpack:///ignored|${absolutePathRoot}OW\\Build\\JsSrc\\wordjs_fluid_x64_debug\\node_modules\\yargs\\build|fs`
+        `webpack:///ignored|${absolutePathRoot}project\\node_modules\\yargs\\build|fs`
       )
     ).toBe(
-      `ignored|${absolutePathRoot}OW/Build/JsSrc/wordjs_fluid_x64_debug/node_modules/yargs/build|fs`
+      `ignored|${absolutePathRoot}project/node_modules/yargs/build|fs`
     );
   });
 
