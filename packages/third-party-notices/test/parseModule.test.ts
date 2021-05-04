@@ -27,7 +27,9 @@ describe("parseModule", () => {
     parseModule(options, map, "node_modules/myPackage/file.js");
 
     expect(map.size).toBe(1);
-    expect(map.get("myPackage")).toBe(osSpecificPath(`${absolutePathRoot}src\\node_modules\\myPackage`));
+    expect(map.get("myPackage")).toBe(
+      osSpecificPath(`${absolutePathRoot}src\\node_modules\\myPackage`)
+    );
   });
 
   test("basicExistingWithScope", () => {
@@ -36,7 +38,9 @@ describe("parseModule", () => {
 
     expect(map.size).toBe(1);
     expect(map.get("@myScope/myPackage")).toBe(
-      osSpecificPath(`${absolutePathRoot}src\\node_modules\\@myScope\\myPackage`)
+      osSpecificPath(
+        `${absolutePathRoot}src\\node_modules\\@myScope\\myPackage`
+      )
     );
   });
 
@@ -64,7 +68,9 @@ describe("parseModule", () => {
 
     expect(map.size).toBe(1);
     expect(map.get("@scope/ignoredModule")).toBe(
-      osSpecificPath(`${absolutePathRoot}src\\node_modules\\@scope\\ignoredModule`)
+      osSpecificPath(
+        `${absolutePathRoot}src\\node_modules\\@scope\\ignoredModule`
+      )
     );
   });
 
@@ -89,7 +95,9 @@ describe("parseModule", () => {
 
     expect(map.size).toBe(1);
     expect(map.get("@ignoredScopeYetNot/myPackage")).toBe(
-      osSpecificPath(`${absolutePathRoot}src\\node_modules\\@ignoredScopeYetNot\\myPackage`)
+      osSpecificPath(
+        `${absolutePathRoot}src\\node_modules\\@ignoredScopeYetNot\\myPackage`
+      )
     );
   });
 });

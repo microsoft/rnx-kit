@@ -28,9 +28,13 @@ describe("parseModule", () => {
     parseSourceMap(options, map, sourceMap);
 
     expect(map.size).toBe(2);
-    expect(map.get("myPackage")).toBe(osSpecificPath(`${absolutePathRoot}src\\node_modules\\myPackage`));
+    expect(map.get("myPackage")).toBe(
+      osSpecificPath(`${absolutePathRoot}src\\node_modules\\myPackage`)
+    );
     expect(map.get("@scope/myOtherPackage")).toBe(
-      osSpecificPath(`${absolutePathRoot}src\\node_modules\\@scope\\myOtherPackage`)
+      osSpecificPath(
+        `${absolutePathRoot}src\\node_modules\\@scope\\myOtherPackage`
+      )
     );
   });
 
@@ -62,13 +66,21 @@ describe("parseModule", () => {
     const map = extractModuleNameToPathMap(options, sourceMap);
 
     expect(map.size).toBe(4);
-    expect(map.get("myPackage")).toBe(osSpecificPath(`${absolutePathRoot}src\\node_modules\\myPackage`));
-    expect(map.get("myPackage2")).toBe(osSpecificPath(`${absolutePathRoot}src\\node_modules\\myPackage2`));
+    expect(map.get("myPackage")).toBe(
+      osSpecificPath(`${absolutePathRoot}src\\node_modules\\myPackage`)
+    );
+    expect(map.get("myPackage2")).toBe(
+      osSpecificPath(`${absolutePathRoot}src\\node_modules\\myPackage2`)
+    );
     expect(map.get("@scope/myOtherPackage")).toBe(
-      osSpecificPath(`${absolutePathRoot}src\\node_modules\\@scope\\myOtherPackage`)
+      osSpecificPath(
+        `${absolutePathRoot}src\\node_modules\\@scope\\myOtherPackage`
+      )
     );
     expect(map.get("@scope2/myOtherPackage")).toBe(
-      osSpecificPath(`${absolutePathRoot}src\\node_modules\\@scope2\\myOtherPackage`)
+      osSpecificPath(
+        `${absolutePathRoot}src\\node_modules\\@scope2\\myOtherPackage`
+      )
     );
   });
 });
