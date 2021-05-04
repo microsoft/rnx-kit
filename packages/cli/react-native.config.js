@@ -3,6 +3,7 @@ const {
   parseBoolean,
   rnxBundle,
   rnxDepCheck,
+  rnxWriteThirdPartyNotices,
 } = require("./lib/index");
 
 module.exports = {
@@ -114,7 +115,7 @@ module.exports = {
     {
       name: "rnx-write-third-party-notices",
       description: "Writes third party notices based on the given bundle",
-      func: cli.rnxWriteThirdPartyNotices,
+      func: rnxWriteThirdPartyNotices,
       options: [
         {
           name: "--root-path <path>",
