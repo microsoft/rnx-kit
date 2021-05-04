@@ -6310,9 +6310,9 @@ kleur@^3.0.2, kleur@^3.0.3:
   integrity sha512-eTIzlVOSUR+JxdDFepEYcBMtZ9Qqdef+rnzWdRZuMbOywu5tO2w2N7rqjoANZ5k9vywhL6Br1VRjUIgTQx4E8w==
 
 lage@^0.29.0:
-  version "0.29.2"
-  resolved "https://registry.yarnpkg.com/lage/-/lage-0.29.2.tgz#6e4970c0511d8575617e8fff942042b9edb83c03"
-  integrity sha512-OObo0O3AnSC16ar3wIZPIQ6tYYAHsFu3xXrGtkg/hwKEX5dDKH/b2hU0oX9Q0rShP5OaFAPr49uFeJ6kTPl+3Q==
+  version "0.29.3"
+  resolved "https://registry.yarnpkg.com/lage/-/lage-0.29.3.tgz#8ca2dd17f675f81224f2a6da72f51d10ee9feac6"
+  integrity sha512-iiukiDKjUMzv5CEs8zzRj1U3r31SW+3gsMWO60WVMsS0xpnskYLGn1U09prRO5RGskVaoNgGWnfleJahlcgnXQ==
   dependencies:
     "@microsoft/task-scheduler" "^2.7.0"
     abort-controller "^3.0.0"
