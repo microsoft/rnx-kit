@@ -94,13 +94,11 @@ describe("splitSourcePath", () => {
     );
   });
 
-  // BUG: Code should normalize path before extracting package names
+  // BUG #188: Code should normalize path before extracting package names
   // test("relativePathsWithDotDotColldingOnNames", () => {
   //   const [moduleName, modulePath] = splitSourcePath(`${absolutePathRoot}src\\root", "../node_modules/../other/node_modules/wrongPackage/../myPackage/myFile.js");
   //   expect(moduleName).toBe("myPackage");
   //   expect(modulePath).toBe(`${absolutePathRoot}src\\other\\node_modules\\myPackage");
   // });
 
-  // BUG: Code should normalize path before extracting package names
-  //
 });
