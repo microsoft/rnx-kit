@@ -21,34 +21,34 @@ function getArgs(): IWriteThirdPartyNoticesOptions {
     },
     sourceMapFile: {
       type: "string",
-      describe: "The sourceMap file to generate licence contents for.",
+      describe: "The sourceMap file to generate license contents for.",
       require: true,
     },
     outputFile: {
       type: "string",
-      describe: "The output file to write the licence file to.",
+      describe: "The output file to write the license file to.",
     },
     ignoreScopes: {
       string: true,
       array: true,
-      describe: "Npm scopes to ignore and not emit licence information for",
+      describe: "Npm scopes to ignore and not emit license information for",
     },
     ignoreModules: {
       string: true,
       array: true,
-      describe: "Modules (js packages) to not emit licence information for ",
+      describe: "Modules (js packages) to not emit license information for ",
     },
     preambleText: {
       string: true,
       array: true,
       describe:
-        "A list of lines to prepend at the start of the generated licence file.",
+        "A list of lines to prepend at the start of the generated license file.",
     },
     additionalText: {
       string: true,
       array: true,
       describe:
-        "A list of lines to append at the end of the generated licence file.",
+        "A list of lines to append at the end of the generated license file.",
     },
   }).argv;
 

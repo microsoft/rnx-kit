@@ -117,31 +117,31 @@ module.exports = {
       func: cli.rnxWriteThirdPartyNotices,
       options: [
         {
-          name: "--rootPath <path>",
+          name: "--root-path <path>",
           description: "The root of the repo where to start resolving modules from.",
         },
         {
-          name: "--sourceMapFile <file>",
+          name: "--source-,ap-file <file>",
           description: "The sourceMap file to generate licence contents for.",
         },
         {
-          name: "--outputFile [file]",
+          name: "--output-file [file]",
           description: "The output file to write the licence file to.",
         },
         {
-          name: "--ignoreScopes [string]",
+          name: "--ignore-scopes [string]",
           description:  "Comma separated list of npm scopes to ignore and not emit licence information for",
         },
         {
-          name: "--ignoreModules [string]",
+          name: "--ignore-modules [string]",
           description: "Comma separated list of modules (js packages) to not emit licence information for ",
         },
         {
-          name: "--preambleText [string]",
+          name: "--preamble-text [string]",
           description: "A string to prepend at the start of the generated licence file.",
         },
         {
-          name: "--additionalText [path]",
+          name: "--additional-text [path]",
           description: "A string to append at the end of the generated licence file.",
         },
       ],

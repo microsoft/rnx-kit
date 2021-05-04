@@ -41,8 +41,8 @@ const modulesRoot = "node_modules/";
  * This function will read the sourcemap file and tries to find all files
  * that are referenced in the sourcemap by assuming that all dependencies are
  * represented as `node_modules\moduleName` or `node_modules\@scope\moduleName`
- * It will then look in the package.json file to see if it finds a licence declaration
- * or it will look for the file called `LICENCE` in the root. And aggregate all these
+ * It will then look in the package.json file to see if it finds a license declaration
+ * or it will look for the file called `LICENCE` or `LICENSE` in the root. And aggregate all these
  * files in the output file.
  *
  * This function works for npm, yarn and pnpm package layouts formats.
@@ -66,8 +66,8 @@ export async function writeThirdPartyNotices(
   const sourceMap: ISourceMap = JSON.parse(sourceMapJson);
 
   const moduleNameToPathMap = extractModuleNameToPathMap(options, sourceMap);
-  const licenses = extractLicences(moduleNameToPathMap);
-  const outputText = createLicenceFileContents(
+  const licenses = extractLicenses(moduleNameToPathMap);
+  const outputText = createLicenseFileContents(
     moduleNameToPathMap,
     licenses,
     options.preambleText,
@@ -90,7 +90,7 @@ export function splitSourcePath(rootPath: string, p: string): string[] {
   //
   //  ** example **
   //    npm:  <repo-root>/common/temp/node_modules/fbjs
-  //    pnpm: <repo-root>/common/temp/node_modules/.office.pkgs.visualstudio.com/fbjs/0.8.17/node_modules/fbjs
+  //    pnpm: <repo-root>/common/temp/node_modules/.yourProject.pkgs.visualstudio.com/fbjs/0.8.17/node_modules/fbjs
 
   let nodeModulesPath;
   let relativeSourcePath;
@@ -98,7 +98,7 @@ export function splitSourcePath(rootPath: string, p: string): string[] {
   //  bundles use WebPack's dll plugin to perform cross-bundle module retrieval.
   //  cross bundle modules' paths are appended with 'delegated ', which we need to remove from path.
   //  ** example **
-  //    delegated ../../../common/temp/node_modules/.office.pkgs.visualstudio.com/react-native/0.3003.5/react@16.0.0/node_modules/react-native/Libraries/EventEmitter/NativeEventEmitter.js from dll-reference runtime20
+  //    delegated ../../../common/temp/node_modules/.yourProject.pkgs.visualstudio.com/react-native/0.3003.5/react@16.0.0/node_modules/react-native/Libraries/EventEmitter/NativeEventEmitter.js from dll-reference runtime20
   const DELEGATED_PREFIX = "delegated ";
   if (p.startsWith(DELEGATED_PREFIX)) {
     p = p.substring(DELEGATED_PREFIX.length);
@@ -180,7 +180,7 @@ export function extractModuleNameToPathMap(
   return moduleNameToPathMap;
 }
 
-export function extractLicences(
+export function extractLicenses(
   moduleNameToPathMap: Map<string, string>
 ): ILicense[] {
   const licenseExtractors = require("browserify-licenses/app/extractors");
@@ -206,7 +206,7 @@ export function extractLicences(
   return licenseExtractors.nodeModule(moduleNamePathPairs);
 }
 
-export function createLicenceFileContents(
+export function createLicenseFileContents(
   moduleNameToPath: Map<string, string>,
   licenses: ILicense[],
   preambleText?: string[],
