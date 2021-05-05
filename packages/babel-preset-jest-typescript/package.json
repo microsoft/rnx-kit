@@ -1,0 +1,29 @@
+{
+  "private": "true",
+  "name": "@rnx-kit/babel-preset-jest-typescript",
+  "version": "0.0.1",
+  "description": "Babel preset for Jest tests written in TypeScript",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/babel-preset-jest-typescript#rnx-kitbabel-preset-jest-typescript",
+  "license": "MIT",
+  "files": [],
+  "main": "src/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "packages/babel-preset-jest-typescript"
+  },
+  "scripts": {
+    "build": "rnx-kit-scripts build",
+    "format": "prettier --write src/*.js"
+  },
+  "dependencies": {
+    "@babel/core": "^7.0.0",
+    "@babel/preset-env": "^7.0.0",
+    "@babel/preset-typescript": "^7.0.0"
+  },
+  "devDependencies": {
+    "prettier": "^2.0.0",
+    "rnx-kit-scripts": "*",
+    "typescript": "^4.0.0"
+  }
+}

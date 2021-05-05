@@ -30,6 +30,7 @@
     "yargs": "^16.0.0"
   },
   "devDependencies": {
+    "@rnx-kit/babel-preset-jest-typescript": "*",
     "@types/jest": "^26.0.0",
     "@types/semver": "^7.0.0",
     "@types/yargs": "^16.0.0",
