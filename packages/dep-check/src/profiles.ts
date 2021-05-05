@@ -3,15 +3,17 @@ import profile_0_61 from "./profiles/profile-0.61";
 import profile_0_62 from "./profiles/profile-0.62";
 import profile_0_63 from "./profiles/profile-0.63";
 import profile_0_64 from "./profiles/profile-0.64";
+import profile_0_65 from "./profiles/profile-0.65";
 import type { Profile } from "./types";
 
-export type ProfileVersion = "0.61" | "0.62" | "0.63" | "0.64";
+export type ProfileVersion = "0.61" | "0.62" | "0.63" | "0.64" | "0.65";
 
 const allProfiles: Record<ProfileVersion, Profile> = {
   "0.61": profile_0_61,
   "0.62": profile_0_62,
   "0.63": profile_0_63,
   "0.64": profile_0_64,
+  "0.65": profile_0_65,
 };
 
 function getVersionComparator(
