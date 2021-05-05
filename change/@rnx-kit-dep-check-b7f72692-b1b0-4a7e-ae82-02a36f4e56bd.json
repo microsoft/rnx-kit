@@ -1,6 +1,6 @@
 {
   "type": "minor",
-  "comment": "Gather requirements for apps",
+  "comment": "Apply transitive requirements",
   "packageName": "@rnx-kit/dep-check",
   "email": "4123478+tido64@users.noreply.github.com",
   "dependentChangeType": "patch"
