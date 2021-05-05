@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/test-app
 
-This log was last generated on Wed, 05 May 2021 19:51:01 GMT and should not be manually modified.
+This log was last generated on Wed, 05 May 2021 20:55:03 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 0.0.1
+
+Wed, 05 May 2021 20:55:03 GMT
+
+### Patches
+
+- Bump @rnx-kit/cli to v0.4.3 (4123478+tido64@users.noreply.github.com)
 
 ## 0.0.1
 

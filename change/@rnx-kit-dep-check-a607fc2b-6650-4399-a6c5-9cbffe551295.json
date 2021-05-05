@@ -1,7 +1,0 @@
-{
-  "type": "patch",
-  "comment": "Bump react-native to address build issues with Xcode 12.5",
-  "packageName": "@rnx-kit/dep-check",
-  "email": "4123478+tido64@users.noreply.github.com",
-  "dependentChangeType": "patch"
-}
