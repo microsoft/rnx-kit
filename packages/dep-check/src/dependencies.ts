@@ -7,7 +7,7 @@ import {
 import findUp from "find-up";
 import fs from "fs";
 import path from "path";
-import { warn } from "./console";
+import { error, warn } from "./console";
 import {
   getProfileVersionsFor,
   profilesSatisfying,
@@ -18,6 +18,12 @@ import type { PackageManifest } from "./types";
 type Requirements = Required<
   Pick<KitConfig, "reactNativeVersion" | "capabilities">
 >;
+
+type Trace = {
+  module: string;
+  reactNativeVersion: string;
+  profiles: ProfileVersion[];
+};
 
 export function visitDependencies(
   { dependencies }: PackageManifest,
@@ -67,8 +73,12 @@ export function getRequirements(
   }
 
   const allCapabilities = new Set<Capability>();
-  const trace: [string, ProfileVersion[]][] = [
-    [targetManifest.name, profileVersions],
+  const trace: Trace[] = [
+    {
+      module: targetManifest.name,
+      reactNativeVersion: targetReactNativeVersion,
+      profiles: profileVersions,
+    },
   ];
 
   visitDependencies(targetManifest, projectRoot, (module, modulePath) => {
@@ -79,12 +89,23 @@ export function getRequirements(
       );
 
       profileVersions = profilesSatisfying(profileVersions, reactNativeVersion);
-      if (profileVersions.length === 0) {
-        // TODO: Dump trace
-        throw new Error("No profile could satisfy all current dependencies");
+      if (profileVersions.length != trace[trace.length - 1].profiles.length) {
+        trace.push({ module, reactNativeVersion, profiles: profileVersions });
       }
 
-      trace.push([module, profileVersions]);
+      if (profileVersions.length === 0) {
+        const message =
+          "No React Native profile could satisfy all dependencies";
+        const fullTrace = [
+          message,
+          ...trace.map(({ module, reactNativeVersion, profiles }) => {
+            const satisfiedVersions = profiles.join(", ");
+            return `    [${satisfiedVersions}] satisfies '${module}' because it supports '${reactNativeVersion}'`;
+          }),
+        ].join("\n");
+        error(fullTrace);
+        throw new Error(message);
+      }
 
       if (Array.isArray(capabilities)) {
         capabilities.reduce((result, capability) => {
