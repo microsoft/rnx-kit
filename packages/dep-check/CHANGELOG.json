@@ -2,6 +2,29 @@
   "name": "@rnx-kit/dep-check",
   "entries": [
     {
+      "date": "Wed, 05 May 2021 19:51:01 GMT",
+      "tag": "@rnx-kit/dep-check_v1.1.0",
+      "version": "1.1.0",
+      "comments": {
+        "minor": [
+          {
+            "comment": "Apply transitive requirements",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "ae2e1aec823003e81003269160ba7dce04eb1714",
+            "package": "@rnx-kit/dep-check"
+          }
+        ],
+        "patch": [
+          {
+            "comment": "Bump @rnx-kit/config to v0.2.6",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "ae2e1aec823003e81003269160ba7dce04eb1714",
+            "package": "@rnx-kit/dep-check"
+          }
+        ]
+      }
+    },
+    {
       "date": "Wed, 05 May 2021 07:05:52 GMT",
       "tag": "@rnx-kit/dep-check_v1.0.3",
       "version": "1.0.3",

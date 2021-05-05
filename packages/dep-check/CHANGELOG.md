@@ -1,8 +1,20 @@
 # Change Log - @rnx-kit/dep-check
 
-This log was last generated on Thu, 29 Apr 2021 13:47:02 GMT and should not be manually modified.
+This log was last generated on Wed, 05 May 2021 19:51:01 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 1.1.0
+
+Wed, 05 May 2021 19:51:01 GMT
+
+### Minor changes
+
+- Apply transitive requirements (4123478+tido64@users.noreply.github.com)
+
+### Patches
+
+- Bump @rnx-kit/config to v0.2.6 (4123478+tido64@users.noreply.github.com)
 
 ## 1.0.3
 
