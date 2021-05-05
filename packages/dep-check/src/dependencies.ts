@@ -7,7 +7,6 @@ import {
 import findUp from "find-up";
 import fs from "fs";
 import path from "path";
-import semver from "semver";
 import { warn } from "./console";
 import {
   getProfileVersionsFor,
