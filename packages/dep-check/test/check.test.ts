@@ -1,4 +1,6 @@
 import { checkPackageManifest, isManifest } from "../src/check";
+import profile_0_62 from "../src/profiles/profile-0.62";
+import profile_0_63 from "../src/profiles/profile-0.63";
 import profile_0_64 from "../src/profiles/profile-0.64";
 
 jest.mock("fs");
@@ -31,6 +33,12 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
     name: "@rnx-kit/dep-check",
     version: "0.0.1",
   };
+
+  const v62_v63_v64 = [
+    profile_0_62["core-ios"].version,
+    profile_0_63["core-ios"].version,
+    profile_0_64["core-ios"].version,
+  ].join(" || ");
 
   beforeEach(() => {
     consoleErrorSpy.mockReset();
@@ -102,10 +110,10 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
     fs.__setMockContent({
       ...mockManifest,
       peerDependencies: {
-        "react-native": "^0.64.0",
+        "react-native": profile_0_64["core-ios"].version,
       },
       devDependencies: {
-        "react-native": "^0.64.0",
+        "react-native": profile_0_64["core-ios"].version,
       },
     });
     rnxKitConfig.__setMockConfig({
@@ -125,10 +133,10 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
     fs.__setMockContent({
       ...mockManifest,
       peerDependencies: {
-        "react-native": "^0.64.0",
+        "react-native": profile_0_64["core-ios"].version,
       },
       devDependencies: {
-        "react-native": "^0.64.0",
+        "react-native": profile_0_64["core-ios"].version,
       },
     });
     fs.__setMockFileWriter((p, _content) => {
@@ -182,10 +190,10 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
     fs.__setMockContent({
       ...mockManifest,
       peerDependencies: {
-        "react-native": "^0.62.2 || ^0.63.4 || ^0.64.0",
+        "react-native": v62_v63_v64,
       },
       devDependencies: {
-        "react-native": "^0.62.2",
+        "react-native": profile_0_62["core-ios"].version,
       },
     });
     rnxKitConfig.__setMockConfig({
@@ -203,10 +211,10 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
     fs.__setMockContent({
       ...mockManifest,
       peerDependencies: {
-        "react-native": "^0.62.2 || ^0.63.4 || ^0.64.0",
+        "react-native": v62_v63_v64,
       },
       devDependencies: {
-        "react-native": "^0.63.4",
+        "react-native": profile_0_63["core-ios"].version,
       },
     });
     rnxKitConfig.__setMockConfig({
