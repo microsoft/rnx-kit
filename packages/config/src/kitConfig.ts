@@ -60,6 +60,7 @@ export type KitConfig = {
    * The version of React Native to use for development. Must be parseable by
    * [node-semver](https://github.com/npm/node-semver). If omitted, the minimum
    * supported version will be used.
+   * @default minVersion(reactNativeVersion)
    */
   reactNativeDevVersion?: string;
 
@@ -98,6 +99,7 @@ export type KitConfig = {
 
   /**
    * Capabilities used by the kit.
+   * @default []
    */
   capabilities?: Capability[];
 };

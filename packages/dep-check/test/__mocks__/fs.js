@@ -1,4 +1,5 @@
 const fs = jest.createMockFromModule("fs");
+const actualFs = jest.requireActual("fs");
 
 let data = "";
 
@@ -10,7 +11,8 @@ fs.__setMockFileWriter = (writer) => {
   fs.writeFileSync = writer;
 };
 
-fs.readFileSync = () => data;
+fs.readFileSync = (...args) => data || actualFs.readFileSync(...args);
+fs.statSync = actualFs.statSync; // used by cosmiconfig
 fs.writeFileSync = undefined;
 
 module.exports = fs;
