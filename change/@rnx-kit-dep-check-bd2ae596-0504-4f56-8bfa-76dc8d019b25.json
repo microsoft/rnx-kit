@@ -1,7 +1,0 @@
-{
-  "type": "patch",
-  "comment": "Add preliminary profile for 0.65",
-  "packageName": "@rnx-kit/dep-check",
-  "email": "4123478+tido64@users.noreply.github.com",
-  "dependentChangeType": "patch"
-}
