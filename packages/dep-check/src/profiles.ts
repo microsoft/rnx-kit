@@ -5,40 +5,52 @@ import profile_0_63 from "./profiles/profile-0.63";
 import profile_0_64 from "./profiles/profile-0.64";
 import type { Profile } from "./types";
 
-export const allProfiles = {
+export type ProfileVersion = "0.61" | "0.62" | "0.63" | "0.64";
+
+const allProfiles: Record<ProfileVersion, Profile> = {
   "0.61": profile_0_61,
   "0.62": profile_0_62,
   "0.63": profile_0_63,
   "0.64": profile_0_64,
-} as const;
+};
 
 function getVersionComparator(
   versionOrRange: string
-): (versionOrRange: string) => boolean {
+): (profileVersion: ProfileVersion) => boolean {
+  const includePrerelease = { includePrerelease: true };
+
   const version = semver.valid(versionOrRange);
   if (version) {
-    return (versionRange: string) => semver.satisfies(version, versionRange);
+    return (profileVersion: ProfileVersion) =>
+      semver.satisfies(version, "^" + profileVersion, includePrerelease);
   }
 
   const range = semver.validRange(versionOrRange);
   if (range) {
-    return (versionRange: string) => semver.intersects(versionRange, range);
+    return (profileVersion: ProfileVersion) =>
+      semver.intersects("^" + profileVersion, range, includePrerelease);
   }
 
   throw new Error(`Invalid 'react-native' version range: ${versionOrRange}`);
 }
 
-export function getProfilesFor(reactVersionRange: string): Profile[] {
+export function getProfileVersionsFor(
+  reactVersionRange: string
+): ProfileVersion[] {
   const isSatifisedBy = getVersionComparator(reactVersionRange);
-
-  const allVersions = Object.keys(allProfiles) as (keyof typeof allProfiles)[];
-  const profiles = allVersions.reduce<Profile[]>((profiles, version) => {
-    if (isSatifisedBy(`^${version}`)) {
-      profiles.push(allProfiles[version]);
+  const allVersions = Object.keys(allProfiles) as ProfileVersion[];
+  return allVersions.reduce<ProfileVersion[]>((profiles, version) => {
+    if (isSatifisedBy(version)) {
+      profiles.push(version);
     }
     return profiles;
   }, []);
+}
 
+export function getProfilesFor(reactVersionRange: string): Profile[] {
+  const profiles = getProfileVersionsFor(reactVersionRange).map(
+    (version) => allProfiles[version]
+  );
   if (profiles.length === 0) {
     throw new Error(
       `Unsupported 'react-native' version/range: ${reactVersionRange}`
@@ -46,4 +58,12 @@ export function getProfilesFor(reactVersionRange: string): Profile[] {
   }
 
   return profiles;
+}
+
+export function profilesSatisfying(
+  profiles: ProfileVersion[],
+  versionOrRange: string
+): ProfileVersion[] {
+  const versions = getProfileVersionsFor(versionOrRange);
+  return profiles.filter((v) => versions.includes(v));
 }

@@ -1,11 +1,10 @@
-import { getKitConfig } from "@rnx-kit/config";
+import { getKitCapabilities, getKitConfig } from "@rnx-kit/config";
 import chalk from "chalk";
 import fs from "fs";
 import { diffLinesUnified } from "jest-diff";
 import path from "path";
-import semver from "semver";
-import { parseConfig } from "./config";
 import { error, warn } from "./console";
+import { getRequirements } from "./dependencies";
 import { findBadPackages } from "./findBadPackages";
 import { updatePackageManifest } from "./manifest";
 import { getProfilesFor } from "./profiles";
@@ -38,26 +37,17 @@ export function checkPackageManifest(
   }
 
   const {
-    capabilities,
-    kitType,
-    reactNativeVersion,
+    reactNativeVersion: targetReactNativeVersion,
     reactNativeDevVersion,
-  } = parseConfig(kitConfig, manifest, projectRoot);
-  if (
-    !reactNativeVersion ||
-    (!semver.valid(reactNativeVersion) &&
-      !semver.validRange(reactNativeVersion))
-  ) {
-    error(`'${reactNativeVersion}' is not a valid version range`);
-    return 1;
-  }
+    kitType,
+    capabilities: targetCapabilities,
+  } = getKitCapabilities(kitConfig);
 
-  if (!semver.satisfies(reactNativeDevVersion, reactNativeVersion)) {
-    error(
-      `'${reactNativeDevVersion}' does not satisfy supported version range '${reactNativeVersion}'`
-    );
-    return 1;
-  }
+  const {
+    reactNativeVersion,
+    capabilities: requiredCapabilities,
+  } = getRequirements(targetReactNativeVersion, manifest, projectRoot);
+  requiredCapabilities.push(...targetCapabilities);
 
   const badPackages = findBadPackages(manifest);
   if (badPackages) {
@@ -69,13 +59,13 @@ export function checkPackageManifest(
     );
   }
 
-  if (capabilities.length === 0) {
+  if (requiredCapabilities.length === 0) {
     return 0;
   }
 
   const updatedManifest = updatePackageManifest(
     manifest,
-    capabilities,
+    requiredCapabilities,
     getProfilesFor(reactNativeVersion),
     getProfilesFor(reactNativeDevVersion),
     kitType

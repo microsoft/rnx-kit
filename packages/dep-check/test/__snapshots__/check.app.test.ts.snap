@@ -6,6 +6,7 @@ exports[`checkPackageManifest({ kitType: 'app' }) adds required dependencies 1`]
   \\"version\\": \\"1.0.0\\",
   \\"dependencies\\": {
     \\"@react-native-async-storage/async-storage\\": \\"^1.15.3\\",
+    \\"@react-native-community/async-storage\\": \\"^1.12.1\\",
     \\"@react-native-community/netinfo\\": \\"^6.0.0\\",
     \\"conan\\": \\"1.0.0\\",
     \\"hermes-engine\\": \\"~0.7.0\\",
@@ -17,6 +18,7 @@ exports[`checkPackageManifest({ kitType: 'app' }) adds required dependencies 1`]
     \\"react-native-webview\\": \\"^11.4.2\\"
   },
   \\"rnx-kit\\": {
+    \\"reactNativeVersion\\": \\"^0.63 || ^0.64\\",
     \\"kitType\\": \\"app\\",
     \\"capabilities\\": [
       \\"hermes\\",

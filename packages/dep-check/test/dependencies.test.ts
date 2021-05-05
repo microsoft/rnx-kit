@@ -1,71 +1,12 @@
 import fs from "fs";
 import path from "path";
-import {
-  getRequirements,
-  intersection,
-  targetReactNativeVersions,
-  visitDependencies,
-} from "../src/dependencies";
+import { getRequirements, visitDependencies } from "../src/dependencies";
 
 jest.unmock("@rnx-kit/config");
-
-const v0_61 = "0.61.9999";
-const v0_62 = "0.62.9999";
-const v0_63 = "0.63.9999";
-const v0_64 = "0.64.9999";
 
 function fixturePath(name: string) {
   return path.join(process.cwd(), "test", "__fixtures__", name);
 }
-
-describe("intersection()", () => {
-  test("matches single versions", () => {
-    const targetVersions = targetReactNativeVersions();
-    expect(intersection(targetVersions, "0.61.0")).toEqual([v0_61]);
-    expect(intersection(targetVersions, "0.61.5")).toEqual([v0_61]);
-    expect(intersection(targetVersions, "0.62.0")).toEqual([v0_62]);
-    expect(intersection(targetVersions, "0.62.2")).toEqual([v0_62]);
-    expect(intersection(targetVersions, "0.63.0")).toEqual([v0_63]);
-    expect(intersection(targetVersions, "0.63.4")).toEqual([v0_63]);
-    expect(intersection(targetVersions, "0.64.0")).toEqual([v0_64]);
-  });
-
-  test("matches version ranges", () => {
-    const targetVersions = targetReactNativeVersions();
-    expect(intersection(targetVersions, "^0.61.0")).toEqual([v0_61]);
-    expect(intersection(targetVersions, "^0.61.5")).toEqual([v0_61]);
-    expect(intersection(targetVersions, "^0.62.0")).toEqual([v0_62]);
-    expect(intersection(targetVersions, "^0.62.2")).toEqual([v0_62]);
-    expect(intersection(targetVersions, "^0.63.0")).toEqual([v0_63]);
-    expect(intersection(targetVersions, "^0.63.4")).toEqual([v0_63]);
-    expect(intersection(targetVersions, "^0.64.0")).toEqual([v0_64]);
-  });
-
-  test("matches wider version ranges", () => {
-    const targetVersions = targetReactNativeVersions();
-
-    const v61_v62 = "^0.61.0 || ^0.62.0";
-    expect(intersection(targetVersions, v61_v62)).toEqual([v0_61, v0_62]);
-
-    const v61_v62_v63 = "^0.61.0 || ^0.62.0 || ^0.63.0";
-    expect(intersection(targetVersions, v61_v62_v63)).toEqual([
-      v0_61,
-      v0_62,
-      v0_63,
-    ]);
-
-    const v62_v64 = "^0.62.0 || ^0.64.0";
-    expect(intersection(targetVersions, v62_v64)).toEqual([v0_62, v0_64]);
-
-    expect(intersection(targetVersions, ">=0.61")).toEqual(targetVersions);
-  });
-
-  test("warns when the version or range cannot be satisfied", () => {
-    const targetVersions = targetReactNativeVersions();
-    expect(intersection(targetVersions, "0.60.6")).toBe(null);
-    expect(intersection(targetVersions, "^0.60.6")).toBe(null);
-  });
-});
 
 describe("visitDependencies()", () => {
   const consoleWarnSpy = jest.spyOn(global.console, "warn");
@@ -165,11 +106,12 @@ describe("getRequirements()", () => {
     });
     const manifest = JSON.parse(manifestJson);
     const { reactNativeVersion, capabilities } = getRequirements(
+      "^0.63 || ^0.64",
       manifest,
       fixture
     );
 
-    expect(reactNativeVersion).toBe("0.64.0");
+    expect(reactNativeVersion).toBe("^0.63 || ^0.64");
 
     expect(capabilities.sort()).toEqual([
       "animation",
@@ -179,5 +121,18 @@ describe("getRequirements()", () => {
       "storage",
       "webview",
     ]);
+  });
+
+  test("throws if no profiles can satisfy required React Native version", () => {
+    expect(() =>
+      getRequirements(
+        "0.60.6",
+        {
+          name: "@rnx-kit/dep-check",
+          version: "1.0.0",
+        },
+        ""
+      )
+    ).toThrow();
   });
 });

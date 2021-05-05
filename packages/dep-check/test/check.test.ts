@@ -1,4 +1,5 @@
 import { checkPackageManifest, isManifest } from "../src/check";
+import profile_0_64 from "../src/profiles/profile-0.64";
 
 jest.mock("fs");
 
@@ -58,35 +59,22 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
     expect(consoleWarnSpy).not.toBeCalled();
   });
 
-  test("returns error code if profile version is undefined", () => {
-    fs.__setMockContent(mockManifest);
-    rnxKitConfig.__setMockConfig({});
-
-    expect(checkPackageManifest("package.json")).not.toBe(0);
-    expect(consoleErrorSpy).toBeCalledTimes(1);
-  });
-
-  test("returns error code if development version is invalid", () => {
-    fs.__setMockContent(mockManifest);
-    rnxKitConfig.__setMockConfig({
-      reactNativeVersion: "^0.62 || ^0.63 || ^0.64",
-      reactNativeDevVersion: "0.61.5",
-    });
-
-    expect(checkPackageManifest("package.json")).not.toBe(0);
-    expect(consoleErrorSpy).toBeCalledTimes(1);
-  });
-
   test("prints warnings when detecting bad packages", () => {
     fs.__setMockContent({
       ...mockManifest,
       dependencies: { "react-native-linear-gradient": "0.0.0" },
+      peerDependencies: {
+        "react-native": profile_0_64["core-ios"],
+      },
+      devDependencies: {
+        "react-native": profile_0_64["core-ios"],
+      },
     });
     rnxKitConfig.__setMockConfig({ reactNativeVersion: "0.64.0" });
 
     expect(checkPackageManifest("package.json")).toBe(0);
     expect(consoleErrorSpy).not.toBeCalled();
-    expect(consoleWarnSpy).toBeCalledTimes(1);
+    expect(consoleWarnSpy.mock.calls).toMatchSnapshot();
   });
 
   test("prints warnings when detecting bad packages (with version range)", () => {
@@ -98,7 +86,7 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
 
     expect(checkPackageManifest("package.json")).toBe(0);
     expect(consoleErrorSpy).not.toBeCalled();
-    expect(consoleWarnSpy).toBeCalledTimes(1);
+    expect(consoleWarnSpy.mock.calls).toMatchSnapshot();
   });
 
   test("returns early if no capabilities are defined", () => {
