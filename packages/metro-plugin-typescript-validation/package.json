@@ -17,5 +17,11 @@
     "@types/yargs": "^16.0.1",
     "@rnx-kit/metro-serializer": "*",
     "rnx-kit-scripts": "*"
+  },
+  "jest": {
+    "roots": [
+      "test"
+    ],
+    "testRegex": "/test/.*\\.test\\.ts$"
   }
 }
