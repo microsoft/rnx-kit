@@ -230,7 +230,8 @@ export function createLicenseFileContents(
   }
 
   // Look up licenses and emit combined license text
-  moduleNameToPath.keys().sort().forEach((moduleName: string) => {
+
+  Array.from(moduleNameToPath.keys()).sort().forEach((moduleName: string) => {
     const modulePath = moduleNameToPath.get(moduleName);
     const license = licenses.find((_: ILicense) => _.path === modulePath);
     if (!license) {
