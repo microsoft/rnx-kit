@@ -28,6 +28,7 @@
     "yargs": "^16.2.0"
   },
   "devDependencies": {
+    "@rnx-kit/babel-preset-jest-typescript": "*",
     "@types/jest": "^26.0.0",
     "@types/yargs": "^15.0.0",
     "prettier": "^2.0.0",
