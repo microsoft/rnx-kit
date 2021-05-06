@@ -85,7 +85,9 @@ export async function visit(
   //  collect any file that is in scope, and keep its relative path
   if (modulePath.startsWith(scopePath)) {
     const p = modulePath.slice(scopePath.length);
-    files.push(p[0] === "/" ? p.slice(1) : p);
+    files.push(
+      [path.posix.sep, path.win32.sep].includes(p[0]) ? p.slice(1) : p
+    );
   }
 
   //  recursively visit children

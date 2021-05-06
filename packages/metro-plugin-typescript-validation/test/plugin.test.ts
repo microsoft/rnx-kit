@@ -26,16 +26,22 @@ jest.mock("yargs/helpers");
 
 //  test data
 
-const rootPath = "/repos/yoyodyne/packages/overthruster";
+const rootPathPosix = "/repos/yoyodyne/packages/overthruster";
+const rootPathWin32 = path.win32.normalize("C:" + rootPathPosix);
 
-const graph: Graph = {
+const graphPosix: Graph = {
   dependencies: new Map<string, Module<MixedOutput>>(),
   importBundleNames: new Set(),
-  entryPoints: [rootPath + "/src/main.ts"],
+  entryPoints: [rootPathPosix + "/src/main.ts"],
+};
+const graphWin32: Graph = {
+  dependencies: new Map<string, Module<MixedOutput>>(),
+  importBundleNames: new Set(),
+  entryPoints: [rootPathWin32 + "\\src\\main.ts"],
 };
 
-function addGraphDependency(modulePath: string) {
-  graph.dependencies.set(modulePath, {
+function addGraphDependency(g: Graph, modulePath: string) {
+  g.dependencies.set(modulePath, {
     dependencies: new Map<string, Dependency>(),
     inverseDependencies: new Set<string>(),
     output: [],
@@ -44,41 +50,86 @@ function addGraphDependency(modulePath: string) {
       return null;
     },
   });
-  return graph.dependencies.get(modulePath);
+  return g.dependencies.get(modulePath);
 }
 
-function addModuleDependency(parent, moduleName: string, modulePath: string) {
+function addModuleDependency(
+  g: Graph,
+  parent,
+  moduleName: string,
+  modulePath: string
+) {
   parent.dependencies.set(moduleName, {
     absolutePath: modulePath,
   });
 
-  return addGraphDependency(modulePath);
+  return addGraphDependency(g, modulePath);
 }
 
-const index_ts = addGraphDependency(rootPath + "/src/main.ts");
-const propulsion_ts = addModuleDependency(
-  index_ts,
+const index_ts_posix = addGraphDependency(
+  graphPosix,
+  rootPathPosix + "/src/main.ts"
+);
+const index_ts_win32 = addGraphDependency(
+  graphWin32,
+  rootPathWin32 + "\\src\\main.ts"
+);
+
+const propulsion_ts_posix = addModuleDependency(
+  graphPosix,
+  index_ts_posix,
   "./src/propulsion.ts",
-  rootPath + "/src/propulsion.ts"
+  rootPathPosix + "/src/propulsion.ts"
 );
-const dimension_ts = addModuleDependency(
-  index_ts,
+const propulsion_ts_win32 = addModuleDependency(
+  graphWin32,
+  index_ts_win32,
+  ".\\src\\propulsion.ts",
+  rootPathWin32 + "\\src\\propulsion.ts"
+);
+
+const dimension_ts_posix = addModuleDependency(
+  graphPosix,
+  index_ts_posix,
   "./src/dimensions.ts",
-  rootPath + "/src/dimensions.ts"
+  rootPathPosix + "/src/dimensions.ts"
 );
-const react_native = addModuleDependency(
-  index_ts,
+const dimension_ts_win32 = addModuleDependency(
+  graphWin32,
+  index_ts_win32,
+  ".\\src\\dimensions.ts",
+  rootPathWin32 + "\\src\\dimensions.ts"
+);
+
+const react_native_posix = addModuleDependency(
+  graphPosix,
+  index_ts_posix,
   "react-native",
   "/repos/yoyodyne/node_modules/react-native/index.js"
 );
+const react_native_win32 = addModuleDependency(
+  graphWin32,
+  index_ts_win32,
+  "react-native",
+  "C:\\repos\\yoyodyne\\node_modules\\react-native\\index.js"
+);
 
 //  create a circular dependency
-propulsion_ts.dependencies.set("./src/dimensions.ts", {
-  absolutePath: rootPath + "/src/dimensions.ts",
+propulsion_ts_posix.dependencies.set("./src/dimensions.ts", {
+  absolutePath: rootPathPosix + "/src/dimensions.ts",
   data: null,
 });
-dimension_ts.dependencies.set("./src/propulsion.ts", {
-  absolutePath: rootPath + "/src/propulsion.ts",
+propulsion_ts_win32.dependencies.set(".\\src\\dimensions.ts", {
+  absolutePath: rootPathWin32 + "\\src\\dimensions.ts",
+  data: null,
+});
+
+dimension_ts_posix.dependencies.set("./src/propulsion.ts", {
+  absolutePath: rootPathPosix + "/src/propulsion.ts",
+  data: null,
+});
+dimension_ts_win32.dependencies.set(".\\src\\propulsion.ts", {
+  absolutePath: rootPathPosix + "\\src\\propulsion.ts",
   data: null,
 });
 
@@ -233,19 +284,43 @@ describe("visit()", () => {
     jest.resetAllMocks();
   });
 
-  test("traverses the entire graph", () => {
+  test("traverses the entire graph (posix)", () => {
     const visited: Record<string, boolean> = {};
     const files: Array<string> = [];
 
-    graph.entryPoints.forEach((m) => visit(m, graph, rootPath, visited, files));
+    graphPosix.entryPoints.forEach((m) =>
+      visit(m, graphPosix, rootPathPosix, visited, files)
+    );
     expect(visited).toMatchSnapshot();
   });
 
-  test("returns a list of files in the current package", () => {
+  test("traverses the entire graph (win32)", () => {
     const visited: Record<string, boolean> = {};
     const files: Array<string> = [];
 
-    graph.entryPoints.forEach((m) => visit(m, graph, rootPath, visited, files));
+    graphWin32.entryPoints.forEach((m) =>
+      visit(m, graphWin32, rootPathWin32, visited, files)
+    );
+    expect(visited).toMatchSnapshot();
+  });
+
+  test("returns a list of files in the current package (posix)", () => {
+    const visited: Record<string, boolean> = {};
+    const files: Array<string> = [];
+
+    graphPosix.entryPoints.forEach((m) =>
+      visit(m, graphPosix, rootPathPosix, visited, files)
+    );
+    expect(files).toMatchSnapshot();
+  });
+
+  test("returns a list of files in the current package (win32)", () => {
+    const visited: Record<string, boolean> = {};
+    const files: Array<string> = [];
+
+    graphWin32.entryPoints.forEach((m) =>
+      visit(m, graphWin32, rootPathWin32, visited, files)
+    );
     expect(files).toMatchSnapshot();
   });
 });
@@ -274,8 +349,8 @@ describe("TypescriptValidation()", () => {
   });
 
   test("replaces file specification with list from graph", () => {
-    TypescriptValidation()(undefined, undefined, graph, {
-      projectRoot: rootPath,
+    TypescriptValidation()(undefined, undefined, graphPosix, {
+      projectRoot: rootPathPosix,
     } as SerializerOptions);
 
     expect(fs.writeFileSync).toBeCalledTimes(1);
@@ -288,8 +363,8 @@ describe("TypescriptValidation()", () => {
   });
 
   test("adds noEmit compiler option", () => {
-    TypescriptValidation()(undefined, undefined, graph, {
-      projectRoot: rootPath,
+    TypescriptValidation()(undefined, undefined, graphPosix, {
+      projectRoot: rootPathPosix,
     } as SerializerOptions);
 
     expect(fs.writeFileSync).toBeCalledTimes(1);
@@ -298,8 +373,8 @@ describe("TypescriptValidation()", () => {
   });
 
   test("adds list of resolution platforms", () => {
-    TypescriptValidation()(undefined, undefined, graph, {
-      projectRoot: rootPath,
+    TypescriptValidation()(undefined, undefined, graphPosix, {
+      projectRoot: rootPathPosix,
     } as SerializerOptions);
 
     expect(fs.writeFileSync).toBeCalledTimes(1);
@@ -311,8 +386,23 @@ describe("TypescriptValidation()", () => {
   });
 
   test("runs typescript compiler", () => {
-    TypescriptValidation()(undefined, undefined, graph, {
-      projectRoot: rootPath,
+    TypescriptValidation()(undefined, undefined, graphPosix, {
+      projectRoot: rootPathPosix,
+    } as SerializerOptions);
+
+    expect(child_process.spawnSync).toBeCalledTimes(1);
+    const spawnSyncParams = child_process.spawnSync.mock.calls[0];
+    const { [1]: args } = spawnSyncParams;
+    expect(args[0]).toEqual(
+      expect.stringMatching(
+        /[/\\]@msfast[/\\]typescript-platform-resolution.*[/\\]tsc.js$/
+      )
+    );
+  });
+
+  test("runs typescript compiler", () => {
+    TypescriptValidation()(undefined, undefined, graphPosix, {
+      projectRoot: rootPathPosix,
     } as SerializerOptions);
 
     expect(child_process.spawnSync).toBeCalledTimes(1);
@@ -326,8 +416,8 @@ describe("TypescriptValidation()", () => {
   });
 
   test("cleans up temporary tsconfig file when typescript compiler succeeds", () => {
-    TypescriptValidation()(undefined, undefined, graph, {
-      projectRoot: rootPath,
+    TypescriptValidation()(undefined, undefined, graphPosix, {
+      projectRoot: rootPathPosix,
     } as SerializerOptions);
 
     expect(fs.unlinkSync).toBeCalledTimes(1);
@@ -342,8 +432,8 @@ describe("TypescriptValidation()", () => {
     });
 
     expect(() => {
-      TypescriptValidation()(undefined, undefined, graph, {
-        projectRoot: rootPath,
+      TypescriptValidation()(undefined, undefined, graphPosix, {
+        projectRoot: rootPathPosix,
       } as SerializerOptions);
     }).toThrowError();
   });
