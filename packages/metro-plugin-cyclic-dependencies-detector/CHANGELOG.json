@@ -2,6 +2,21 @@
   "name": "@rnx-kit/metro-plugin-cyclic-dependencies-detector",
   "entries": [
     {
+      "date": "Wed, 05 May 2021 07:05:52 GMT",
+      "tag": "@rnx-kit/metro-plugin-cyclic-dependencies-detector_v1.0.1",
+      "version": "1.0.1",
+      "comments": {
+        "none": [
+          {
+            "comment": "Use Babel preset for Jest + TypeScript",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "c8ab12de29e878b96cb44fdff06aaf2e0ea868d7",
+            "package": "@rnx-kit/metro-plugin-cyclic-dependencies-detector"
+          }
+        ]
+      }
+    },
+    {
       "date": "Mon, 12 Apr 2021 18:24:47 GMT",
       "tag": "@rnx-kit/metro-plugin-cyclic-dependencies-detector_v1.0.1",
       "version": "1.0.1",

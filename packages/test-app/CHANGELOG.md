@@ -1,8 +1,48 @@
 # Change Log - @rnx-kit/test-app
 
-This log was last generated on Wed, 28 Apr 2021 17:08:34 GMT and should not be manually modified.
+This log was last generated on Thu, 06 May 2021 16:54:17 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 0.0.1
+
+Thu, 06 May 2021 16:54:17 GMT
+
+### Patches
+
+- Bump @rnx-kit/cli to v0.5.0 (dannyvv@microsoft.com)
+
+## 0.0.1
+
+Wed, 05 May 2021 21:00:14 GMT
+
+### Patches
+
+- Bump @rnx-kit/cli to v0.4.4 (4123478+tido64@users.noreply.github.com)
+
+## 0.0.1
+
+Wed, 05 May 2021 20:55:03 GMT
+
+### Patches
+
+- Bump @rnx-kit/cli to v0.4.3 (4123478+tido64@users.noreply.github.com)
+
+## 0.0.1
+
+Wed, 05 May 2021 19:51:01 GMT
+
+### Patches
+
+- Bump @rnx-kit/cli to v0.4.2 (4123478+tido64@users.noreply.github.com)
+
+## 0.0.1
+
+Thu, 29 Apr 2021 13:47:02 GMT
+
+### Patches
+
+- Bump @rnx-kit/cli to v0.4.1 (4123478+tido64@users.noreply.github.com)
 
 ## 0.0.1
 

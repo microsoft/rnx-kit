@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/config
 
-This log was last generated on Wed, 28 Apr 2021 15:54:06 GMT and should not be manually modified.
+This log was last generated on Wed, 05 May 2021 19:51:01 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 0.2.6
+
+Wed, 05 May 2021 19:51:01 GMT
+
+### Patches
+
+- Add getKitCapabilities() (4123478+tido64@users.noreply.github.com)
 
 ## 0.2.5
 

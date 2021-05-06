@@ -3,6 +3,7 @@ import path from "path";
 import pkgDir from "pkg-dir";
 import yargs from "yargs";
 import { checkPackageManifest } from "./check";
+import { error } from "./console";
 
 export type Args = {
   write: boolean;
@@ -23,7 +24,7 @@ export function cli({ write, "package-json": packageJson }: Args) {
     return undefined;
   })();
   if (!packageManifest) {
-    console.error("Could not find package manifest");
+    error("Could not find package manifest");
     process.exit(1);
   }
 

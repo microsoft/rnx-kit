@@ -1,3 +1,4 @@
+export * from "./getKitCapabilities";
 export * from "./getKitConfig";
 export * from "./kitConfig";
 export * from "./getBundleDefinition";

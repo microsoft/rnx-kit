@@ -2,6 +2,89 @@
   "name": "@rnx-kit/dep-check",
   "entries": [
     {
+      "date": "Wed, 05 May 2021 21:00:14 GMT",
+      "tag": "@rnx-kit/dep-check_v1.1.2",
+      "version": "1.1.2",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Add preliminary profile for 0.65",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "c20ff4cdd6e961c0a697fba52b61bf4d5f9aa1c6",
+            "package": "@rnx-kit/dep-check"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Wed, 05 May 2021 20:55:03 GMT",
+      "tag": "@rnx-kit/dep-check_v1.1.1",
+      "version": "1.1.1",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Bump react-native to address build issues with Xcode 12.5",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "029fced0d8da2f9745e687bfce42ef072bcb7bf4",
+            "package": "@rnx-kit/dep-check"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Wed, 05 May 2021 19:51:01 GMT",
+      "tag": "@rnx-kit/dep-check_v1.1.0",
+      "version": "1.1.0",
+      "comments": {
+        "minor": [
+          {
+            "comment": "Apply transitive requirements",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "ae2e1aec823003e81003269160ba7dce04eb1714",
+            "package": "@rnx-kit/dep-check"
+          }
+        ],
+        "patch": [
+          {
+            "comment": "Bump @rnx-kit/config to v0.2.6",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "ae2e1aec823003e81003269160ba7dce04eb1714",
+            "package": "@rnx-kit/dep-check"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Wed, 05 May 2021 07:05:52 GMT",
+      "tag": "@rnx-kit/dep-check_v1.0.3",
+      "version": "1.0.3",
+      "comments": {
+        "none": [
+          {
+            "comment": "Use Babel preset for Jest + TypeScript",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "c8ab12de29e878b96cb44fdff06aaf2e0ea868d7",
+            "package": "@rnx-kit/dep-check"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Thu, 29 Apr 2021 13:47:02 GMT",
+      "tag": "@rnx-kit/dep-check_v1.0.3",
+      "version": "1.0.3",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Bump react-native to latest 0.63.x",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "15c1e30a91a17422f6a45e1f34048540660fc7d9",
+            "package": "@rnx-kit/dep-check"
+          }
+        ]
+      }
+    },
+    {
       "date": "Wed, 28 Apr 2021 16:03:56 GMT",
       "tag": "@rnx-kit/dep-check_v1.0.2",
       "version": "1.0.2",

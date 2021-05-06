@@ -2,6 +2,21 @@
   "name": "@rnx-kit/metro-plugin-duplicates-checker",
   "entries": [
     {
+      "date": "Wed, 05 May 2021 07:05:52 GMT",
+      "tag": "@rnx-kit/metro-plugin-duplicates-checker_v1.1.1",
+      "version": "1.1.1",
+      "comments": {
+        "none": [
+          {
+            "comment": "Use Babel preset for Jest + TypeScript",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "c8ab12de29e878b96cb44fdff06aaf2e0ea868d7",
+            "package": "@rnx-kit/metro-plugin-duplicates-checker"
+          }
+        ]
+      }
+    },
+    {
       "date": "Tue, 13 Apr 2021 15:58:06 GMT",
       "tag": "@rnx-kit/metro-plugin-duplicates-checker_v1.1.1",
       "version": "1.1.1",

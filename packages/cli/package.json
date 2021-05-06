@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/cli",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "Command-line interface for rnx-kit",
   "license": "MIT",
   "main": "./lib/index.js",
@@ -12,8 +12,9 @@
     "test": "rnx-kit-scripts test"
   },
   "dependencies": {
-    "@rnx-kit/config": "0.2.5",
-    "@rnx-kit/dep-check": "^1.0.2",
+    "@rnx-kit/config": "0.2.6",
+    "@rnx-kit/dep-check": "^1.1.2",
+    "@rnx-kit/third-party-notices": "1.0.0",
     "chalk": "^4.1.0"
   },
   "devDependencies": {

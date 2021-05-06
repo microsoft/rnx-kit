@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/bundle-diff",
-  "version": "1.0.0-alpha",
+  "version": "1.0.0",
   "description": "Simple tool for diffing the content of two bundles",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/bundle-diff#rnx-kitbundle-diff",
   "license": "MIT",
@@ -22,6 +22,7 @@
     "test": "rnx-kit-scripts test"
   },
   "devDependencies": {
+    "@rnx-kit/babel-preset-jest-typescript": "*",
     "@types/jest": "^26.0.0",
     "prettier": "^2.0.0",
     "rnx-kit-scripts": "*",

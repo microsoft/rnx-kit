@@ -1,9 +1,10 @@
-import { getKitConfig } from "@rnx-kit/config";
+import { getKitCapabilities, getKitConfig } from "@rnx-kit/config";
 import chalk from "chalk";
 import fs from "fs";
 import { diffLinesUnified } from "jest-diff";
 import path from "path";
-import semver from "semver";
+import { error, warn } from "./console";
+import { getRequirements } from "./dependencies";
 import { findBadPackages } from "./findBadPackages";
 import { updatePackageManifest } from "./manifest";
 import { getProfilesFor } from "./profiles";
@@ -18,11 +19,6 @@ export function isManifest(manifest: unknown): manifest is PackageManifest {
   );
 }
 
-function minVersion(version: unknown): string {
-  const v = typeof version === "string" && semver.minVersion(version)?.version;
-  return v || "0.0.0";
-}
-
 export function checkPackageManifest(
   manifestPath: string,
   { write }: Options = {}
@@ -30,58 +26,46 @@ export function checkPackageManifest(
   const manifestJson = fs.readFileSync(manifestPath, { encoding: "utf-8" });
   const manifest = JSON.parse(manifestJson);
   if (!isManifest(manifest)) {
-    console.error(
-      `error: '${manifestPath}' does not contain a valid package manifest`
-    );
+    error(`'${manifestPath}' does not contain a valid package manifest`);
     return 1;
   }
 
-  const kitConfig = getKitConfig({ cwd: path.dirname(manifestPath) });
+  const projectRoot = path.dirname(manifestPath);
+  const kitConfig = getKitConfig({ cwd: projectRoot });
   if (!kitConfig) {
     return 0;
   }
 
   const {
-    capabilities,
-    kitType = "library",
-    reactNativeVersion,
-    reactNativeDevVersion = minVersion(reactNativeVersion),
-  } = kitConfig;
-  if (
-    !reactNativeVersion ||
-    (!semver.valid(reactNativeVersion) &&
-      !semver.validRange(reactNativeVersion))
-  ) {
-    console.error(
-      `error: '${reactNativeVersion}' is not a valid version range`
-    );
-    return 1;
-  }
+    reactNativeVersion: targetReactNativeVersion,
+    reactNativeDevVersion,
+    kitType,
+    capabilities: targetCapabilities,
+  } = getKitCapabilities(kitConfig);
 
-  if (!semver.satisfies(reactNativeDevVersion, reactNativeVersion)) {
-    console.error(
-      `error: '${reactNativeDevVersion}' does not satisfy supported version range '${reactNativeVersion}'`
-    );
-    return 1;
-  }
+  const {
+    reactNativeVersion,
+    capabilities: requiredCapabilities,
+  } = getRequirements(targetReactNativeVersion, manifest, projectRoot);
+  requiredCapabilities.push(...targetCapabilities);
 
   const badPackages = findBadPackages(manifest);
   if (badPackages) {
-    console.warn("Known bad packages are found:");
-    console.warn(
-      badPackages
-        .map((pkg) => `    ${pkg.name}@${pkg.version}: ${pkg.reason}`)
-        .join("\n")
+    warn(
+      "Known bad packages are found:\n" +
+        badPackages
+          .map((pkg) => `    ${pkg.name}@${pkg.version}: ${pkg.reason}`)
+          .join("\n")
     );
   }
 
-  if (!capabilities || capabilities.length === 0) {
+  if (requiredCapabilities.length === 0) {
     return 0;
   }
 
   const updatedManifest = updatePackageManifest(
     manifest,
-    capabilities,
+    requiredCapabilities,
     getProfilesFor(reactNativeVersion),
     getProfilesFor(reactNativeDevVersion),
     kitType

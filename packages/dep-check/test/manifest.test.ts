@@ -180,11 +180,11 @@ describe("updateDependencies()", () => {
     expect(
       updateDependencies(undefined, resolvedPackages, "development")
     ).toEqual({
-      react: "16.13.1",
-      "react-native": "^0.63.2",
-      "react-native-macos": "^0.63.0",
-      "react-native-test-app": "^0.5.5",
-      "react-native-windows": "^0.63.0",
+      react: profile_0_63["react"].version,
+      "react-native": profile_0_63["core-ios"].version,
+      "react-native-macos": profile_0_63["core-macos"].version,
+      "react-native-test-app": profile_0_63["test-app"].version,
+      "react-native-windows": profile_0_63["core-windows"].version,
     });
   });
 });

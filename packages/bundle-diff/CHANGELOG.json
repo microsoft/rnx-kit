@@ -1,0 +1,35 @@
+{
+  "name": "@rnx-kit/bundle-diff",
+  "entries": [
+    {
+      "date": "Wed, 05 May 2021 07:05:52 GMT",
+      "tag": "@rnx-kit/bundle-diff_v1.0.0",
+      "version": "1.0.0",
+      "comments": {
+        "none": [
+          {
+            "comment": "Use Babel preset for Jest + TypeScript",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "c8ab12de29e878b96cb44fdff06aaf2e0ea868d7",
+            "package": "@rnx-kit/bundle-diff"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Thu, 29 Apr 2021 12:34:45 GMT",
+      "tag": "@rnx-kit/bundle-diff_v1.0.0",
+      "version": "1.0.0",
+      "comments": {
+        "minor": [
+          {
+            "comment": "Simple tool for diffing the content of two bundles",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "2ee84ee361193306335278db7f6c2399155a54e2",
+            "package": "@rnx-kit/bundle-diff"
+          }
+        ]
+      }
+    }
+  ]
+}
