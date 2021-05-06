@@ -2,6 +2,35 @@
   "name": "@rnx-kit/cli",
   "entries": [
     {
+      "date": "Thu, 06 May 2021 16:54:17 GMT",
+      "tag": "@rnx-kit/cli_v0.5.0",
+      "version": "0.5.0",
+      "comments": {
+        "minor": [
+          {
+            "comment": "Port third-party-notice extraction logic to rnx-kit.",
+            "author": "dannyvv@microsoft.com",
+            "commit": "8c2571c17819157b37b1e59e337d9f5d43d9424b",
+            "package": "@rnx-kit/cli"
+          },
+          {
+            "comment": "Port third-party-notice extraction logic to rnx-kit",
+            "author": "dannyvv@microsoft.com",
+            "commit": "8c2571c17819157b37b1e59e337d9f5d43d9424b",
+            "package": "@rnx-kit/cli"
+          }
+        ],
+        "patch": [
+          {
+            "comment": "Bump @rnx-kit/third-party-notices to v1.0.0",
+            "author": "dannyvv@microsoft.com",
+            "commit": "8c2571c17819157b37b1e59e337d9f5d43d9424b",
+            "package": "@rnx-kit/cli"
+          }
+        ]
+      }
+    },
+    {
       "date": "Wed, 05 May 2021 21:00:14 GMT",
       "tag": "@rnx-kit/cli_v0.4.4",
       "version": "0.4.4",

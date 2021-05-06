@@ -1,0 +1,28 @@
+{
+  "name": "@rnx-kit/third-party-notices",
+  "entries": [
+    {
+      "date": "Thu, 06 May 2021 16:54:17 GMT",
+      "tag": "@rnx-kit/third-party-notices_v1.0.0",
+      "version": "1.0.0",
+      "comments": {
+        "prerelease": [
+          {
+            "comment": "Port third-party-notice extraction logic to rnx-kit",
+            "author": "dannyvv@microsoft.com",
+            "commit": "8c2571c17819157b37b1e59e337d9f5d43d9424b",
+            "package": "@rnx-kit/third-party-notices"
+          }
+        ],
+        "patch": [
+          {
+            "comment": "Port third-party-notice extraction logic to rnx-kit.",
+            "author": "dannyvv@microsoft.com",
+            "commit": "8c2571c17819157b37b1e59e337d9f5d43d9424b",
+            "package": "@rnx-kit/third-party-notices"
+          }
+        ]
+      }
+    }
+  ]
+}

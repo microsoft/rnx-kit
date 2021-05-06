@@ -1,8 +1,21 @@
 # Change Log - @rnx-kit/cli
 
-This log was last generated on Wed, 05 May 2021 21:00:14 GMT and should not be manually modified.
+This log was last generated on Thu, 06 May 2021 16:54:17 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 0.5.0
+
+Thu, 06 May 2021 16:54:17 GMT
+
+### Minor changes
+
+- Port third-party-notice extraction logic to rnx-kit. (dannyvv@microsoft.com)
+- Port third-party-notice extraction logic to rnx-kit (dannyvv@microsoft.com)
+
+### Patches
+
+- Bump @rnx-kit/third-party-notices to v1.0.0 (dannyvv@microsoft.com)
 
 ## 0.4.4
 

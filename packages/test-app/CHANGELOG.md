@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/test-app
 
-This log was last generated on Wed, 05 May 2021 21:00:14 GMT and should not be manually modified.
+This log was last generated on Thu, 06 May 2021 16:54:17 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 0.0.1
+
+Thu, 06 May 2021 16:54:17 GMT
+
+### Patches
+
+- Bump @rnx-kit/cli to v0.5.0 (dannyvv@microsoft.com)
 
 ## 0.0.1
 
