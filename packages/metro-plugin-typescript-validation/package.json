@@ -15,6 +15,7 @@
   "devDependencies": {
     "@types/node": "^12.0.0",
     "@types/yargs": "^16.0.1",
+    "@rnx-kit/babel-preset-jest-typescript": "*",
     "@rnx-kit/metro-serializer": "*",
     "rnx-kit-scripts": "*"
   },
