@@ -14,6 +14,7 @@
   "dependencies": {
     "@rnx-kit/config": "0.2.6",
     "@rnx-kit/dep-check": "^1.1.2",
+    "@rnx-kit/third-party-notices": "1.0.0-alpha",
     "chalk": "^4.1.0"
   },
   "devDependencies": {

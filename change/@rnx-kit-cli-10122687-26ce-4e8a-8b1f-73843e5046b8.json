@@ -1,0 +1,7 @@
+{
+  "type": "minor",
+  "comment": "Port third-party-notice extraction logic to rnx-kit",
+  "packageName": "@rnx-kit/cli",
+  "email": "dannyvv@microsoft.com",
+  "dependentChangeType": "patch"
+}

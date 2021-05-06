@@ -3,6 +3,7 @@ const {
   parseBoolean,
   rnxBundle,
   rnxDepCheck,
+  rnxWriteThirdPartyNotices,
 } = require("./lib/index");
 
 module.exports = {
@@ -108,6 +109,41 @@ module.exports = {
         {
           name: "--write",
           description: "Writes all changes to the specified `package.json`",
+        },
+      ],
+    },
+    {
+      name: "rnx-write-third-party-notices",
+      description: "Writes third party notices based on the given bundle",
+      func: rnxWriteThirdPartyNotices,
+      options: [
+        {
+          name: "--root-path <path>",
+          description: "The root of the repo where to start resolving modules from.",
+        },
+        {
+          name: "--source-,ap-file <file>",
+          description: "The sourceMap file to generate licence contents for.",
+        },
+        {
+          name: "--output-file [file]",
+          description: "The output file to write the licence file to.",
+        },
+        {
+          name: "--ignore-scopes [string]",
+          description:  "Comma separated list of npm scopes to ignore and not emit licence information for",
+        },
+        {
+          name: "--ignore-modules [string]",
+          description: "Comma separated list of modules (js packages) to not emit licence information for ",
+        },
+        {
+          name: "--preamble-text [string]",
+          description: "A string to prepend at the start of the generated licence file.",
+        },
+        {
+          name: "--additional-text [path]",
+          description: "A string to append at the end of the generated licence file.",
         },
       ],
     },
