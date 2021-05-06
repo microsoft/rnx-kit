@@ -1,0 +1,7 @@
+{
+  "type": "none",
+  "comment": "Split tsconfig options out into a shared file that can be included in all projects without specifying any source files.",
+  "packageName": "@rnx-kit/bundle-diff",
+  "email": "afoxman@microsoft.com",
+  "dependentChangeType": "none"
+}
