@@ -2,6 +2,21 @@
   "name": "@rnx-kit/metro-plugin-duplicates-checker",
   "entries": [
     {
+      "date": "Thu, 06 May 2021 20:37:55 GMT",
+      "tag": "@rnx-kit/metro-plugin-duplicates-checker_v1.1.1",
+      "version": "1.1.1",
+      "comments": {
+        "none": [
+          {
+            "comment": "Split tsconfig options out into a shared file that can be included in all projects without specifying any source files.",
+            "author": "afoxman@microsoft.com",
+            "commit": "c34ccb3ca74893ea0741603b46aa96a238d59831",
+            "package": "@rnx-kit/metro-plugin-duplicates-checker"
+          }
+        ]
+      }
+    },
+    {
       "date": "Wed, 05 May 2021 07:05:52 GMT",
       "tag": "@rnx-kit/metro-plugin-duplicates-checker_v1.1.1",
       "version": "1.1.1",
