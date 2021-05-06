@@ -1,7 +1,0 @@
-{
-  "type": "none",
-  "comment": "Split tsconfig into options and file-specs. Update all packages to import the options-only shared tsconfig, so they can specify their own source files.",
-  "packageName": "@rnx-kit/config",
-  "email": "afoxman@microsoft.com",
-  "dependentChangeType": "none"
-}
