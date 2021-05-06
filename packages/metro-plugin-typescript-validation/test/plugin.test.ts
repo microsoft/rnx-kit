@@ -13,6 +13,7 @@ import {
   visit,
   TypescriptValidation,
 } from "../src/plugin";
+import path from "path";
 const child_process = require("child_process");
 const fs = require("fs");
 const yargs = require("yargs/yargs");
@@ -92,7 +93,7 @@ describe("getModuleRoot()", () => {
 
   test("resolves to the root of @msfast/typescript-platform-resolution", () => {
     expect(getModuleRoot("@msfast/typescript-platform-resolution")).toEqual(
-      expect.stringMatching(/@msfast\/typescript-platform-resolution$/)
+      expect.stringMatching(/@msfast[/\\]typescript-platform-resolution$/)
     );
   });
 });
@@ -109,10 +110,12 @@ describe("readTsConfig()", () => {
         include: ["src"],
       })
     );
-    expect(readTsConfig("/path/to/file")).toMatchSnapshot();
+
+    const p = path.normalize("/path/to/file");
+    expect(readTsConfig(p)).toMatchSnapshot();
     expect(fs.readFileSync).toBeCalledTimes(1);
     expect(fs.readFileSync).toBeCalledWith(
-      "/path/to/file/tsconfig.json",
+      path.join(p, "tsconfig.json"),
       expect.anything()
     );
   });
@@ -131,9 +134,7 @@ describe("writeMetroTsConfig()", () => {
 
     expect(fs.writeFileSync).toBeCalledTimes(1);
     expect(fs.writeFileSync).toBeCalledWith(
-      expect.stringMatching(
-        /^\/root\/path\/here\/tsconfig-metro-[0-9A-Fa-f]{16}.json$/
-      ),
+      expect.stringMatching(/[/\\]tsconfig-metro-[0-9A-Fa-f]{16}.json$/),
       '{"a":123}'
     );
   });
@@ -168,7 +169,7 @@ describe("runTypeScriptCompiler()", () => {
     expect(executable).toEqual(process.execPath);
     expect(args[0]).toEqual(
       expect.stringMatching(
-        /\/@msfast\/typescript-platform-resolution.*\/tsc.js$/
+        /[/\\]@msfast[/\\]typescript-platform-resolution.*[/\\]tsc.js$/
       )
     );
   });
@@ -319,7 +320,7 @@ describe("TypescriptValidation()", () => {
     const { [1]: args } = spawnSyncParams;
     expect(args[0]).toEqual(
       expect.stringMatching(
-        /\/@msfast\/typescript-platform-resolution.*\/tsc.js$/
+        /[/\\]@msfast[/\\]typescript-platform-resolution.*[/\\]tsc.js$/
       )
     );
   });
@@ -331,7 +332,7 @@ describe("TypescriptValidation()", () => {
 
     expect(fs.unlinkSync).toBeCalledTimes(1);
     expect(fs.unlinkSync).toBeCalledWith(
-      expect.stringMatching(/\/tsconfig-metro-[0-9A-Fa-f]{16}.json$/)
+      expect.stringMatching(/[/\\]tsconfig-metro-[0-9A-Fa-f]{16}.json$/)
     );
   });
 

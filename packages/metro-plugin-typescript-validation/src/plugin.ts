@@ -13,8 +13,9 @@ import { hideBin } from "yargs/helpers";
 
 export function getModuleRoot(module: string): string {
   const p = require.resolve(module);
-  const index = p.indexOf(module);
-  return p.slice(0, index + module.length);
+  const moduleAsPathSegment = path.normalize(module);
+  const index = p.indexOf(moduleAsPathSegment);
+  return p.slice(0, index + moduleAsPathSegment.length);
 }
 
 export function readTsConfig(projectRoot: string) {
