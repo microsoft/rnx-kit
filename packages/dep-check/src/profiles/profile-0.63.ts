@@ -1,9 +1,9 @@
-import profile62 from "./profile-0.62";
 import type { Profile } from "../types";
+import profile62 from "./profile-0.62";
 
 const reactNative = {
   name: "react-native",
-  version: "^0.63.4",
+  version: "^0.63.2",
 };
 
 const profile: Profile = {

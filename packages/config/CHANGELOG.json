@@ -2,6 +2,21 @@
   "name": "@rnx-kit/config",
   "entries": [
     {
+      "date": "Wed, 05 May 2021 19:51:01 GMT",
+      "tag": "@rnx-kit/config_v0.2.6",
+      "version": "0.2.6",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Add getKitCapabilities()",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "ae2e1aec823003e81003269160ba7dce04eb1714",
+            "package": "@rnx-kit/config"
+          }
+        ]
+      }
+    },
+    {
       "date": "Wed, 28 Apr 2021 15:54:06 GMT",
       "tag": "@rnx-kit/config_v0.2.5",
       "version": "0.2.5",
