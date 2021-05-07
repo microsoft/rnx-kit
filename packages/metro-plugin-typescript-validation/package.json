@@ -1,0 +1,37 @@
+{
+  "name": "@rnx-kit/metro-plugin-typescript-validation",
+  "version": "1.0.0",
+  "description": "Typescript validation during Metro bundling",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/metro-plugin-typescript-validation#rnx-kitmetro-plugin-typescript-validation",
+  "license": "MIT",
+  "files": [
+    "lib/*"
+  ],
+  "main": "lib/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "packages/metro-plugin-typescript-validation"
+  },
+  "scripts": {
+    "build": "rnx-kit-scripts build",
+    "test": "rnx-kit-scripts test"
+  },
+  "dependencies": {
+    "@msfast/typescript-platform-resolution": "^4.2.4-midgard.0",
+    "yargs": "^16.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "^12.0.0",
+    "@types/yargs": "^16.0.0",
+    "@rnx-kit/babel-preset-jest-typescript": "*",
+    "@rnx-kit/metro-serializer": "*",
+    "rnx-kit-scripts": "*"
+  },
+  "jest": {
+    "roots": [
+      "test"
+    ],
+    "testRegex": "/test/.*\\.test\\.ts$"
+  }
+}

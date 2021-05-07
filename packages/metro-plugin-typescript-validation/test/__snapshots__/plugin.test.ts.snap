@@ -1,0 +1,55 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`readTsConfig() reads the contents of tsconfig.json 1`] = `
+Object {
+  "compilerOptions": Object {
+    "noEmit": true,
+  },
+  "include": Array [
+    "src",
+  ],
+}
+`;
+
+exports[`runTypeScriptCompiler() throws when the process crashes 1`] = `"TypeScript validation crashed due to SIGKILL"`;
+
+exports[`runTypeScriptCompiler() throws when the process exit code is non-zero 1`] = `"TypeScript validation failed with exit code 1"`;
+
+exports[`runTypeScriptCompiler() throws when the process exit code is non-zero and an error is given 1`] = `"simulated error message from typescript compiler"`;
+
+exports[`runTypeScriptCompiler() throws when the process exit code is non-zero and an error is given 2`] = `"simulated crash message caused by sending SIGKILL to the typescript compiler"`;
+
+exports[`visit() returns a list of files in the current package (posix) 1`] = `
+Array [
+  "/repos/yoyodyne/packages/overthruster/src/main.ts",
+  "/repos/yoyodyne/packages/overthruster/src/propulsion.ts",
+  "/repos/yoyodyne/packages/overthruster/src/dimensions.ts",
+]
+`;
+
+exports[`visit() returns a list of files in the current package (win32) 1`] = `
+Array [
+  "C:\\\\repos\\\\yoyodyne\\\\packages\\\\overthruster\\\\src\\\\main.ts",
+  "C:\\\\repos\\\\yoyodyne\\\\packages\\\\overthruster\\\\src\\\\propulsion.ts",
+  "C:\\\\repos\\\\yoyodyne\\\\packages\\\\overthruster\\\\src\\\\dimensions.ts",
+]
+`;
+
+exports[`visit() traverses the entire graph (posix) 1`] = `
+Object {
+  "/repos/yoyodyne/node_modules/react-native/index.js": true,
+  "/repos/yoyodyne/packages/overthruster/src/dimensions.ts": true,
+  "/repos/yoyodyne/packages/overthruster/src/main.ts": true,
+  "/repos/yoyodyne/packages/overthruster/src/propulsion.ts": true,
+}
+`;
+
+exports[`visit() traverses the entire graph (win32) 1`] = `
+Object {
+  "/repos/yoyodyne/packages/overthruster\\\\src\\\\propulsion.ts": true,
+  "C:\\\\repos\\\\yoyodyne\\\\node_modules\\\\react-native\\\\index.js": true,
+  "C:\\\\repos\\\\yoyodyne\\\\packages\\\\overthruster\\\\src\\\\dimensions.ts": true,
+  "C:\\\\repos\\\\yoyodyne\\\\packages\\\\overthruster\\\\src\\\\main.ts": true,
+  "C:\\\\repos\\\\yoyodyne\\\\packages\\\\overthruster\\\\src\\\\propulsion.ts": true,
+}
+`;
