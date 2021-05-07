@@ -2,8 +2,17 @@
   "name": "@rnx-kit/metro-plugin-typescript-validation",
   "version": "1.0.0",
   "description": "Typescript validation during Metro bundling",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/metro-plugin-typescript-validation#rnx-kitmetro-plugin-typescript-validation",
   "license": "MIT",
+  "files": [
+    "lib/*"
+  ],
   "main": "lib/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "packages/metro-plugin-typescript-validation"
+  },
   "scripts": {
     "build": "rnx-kit-scripts build",
     "test": "rnx-kit-scripts test"

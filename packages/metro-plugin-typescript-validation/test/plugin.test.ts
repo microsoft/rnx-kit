@@ -11,7 +11,7 @@ import {
   writeMetroTsConfig,
   runTypeScriptCompiler,
   visit,
-  TypescriptValidation,
+  TypeScriptValidation,
 } from "../src/plugin";
 import path from "path";
 const child_process = require("child_process");
@@ -177,7 +177,7 @@ describe("writeMetroTsConfig()", () => {
     jest.resetAllMocks();
   });
 
-  test("writes the contents of tsconfig to a temp file", () => {
+  test("writes the contents of tsconfig to a temp file in node_modules", () => {
     const projectRoot = "/root/path/here";
     const tsconfig = { a: 123 };
 
@@ -185,22 +185,9 @@ describe("writeMetroTsConfig()", () => {
 
     expect(fs.writeFileSync).toBeCalledTimes(1);
     expect(fs.writeFileSync).toBeCalledWith(
-      expect.stringMatching(/[/\\]tsconfig-metro-[0-9A-Fa-f]{16}.json$/),
+      expect.stringMatching(/[/\\]node_modules[/\\]tsconfig-metro.json$/),
       '{"a":123}'
     );
-  });
-
-  test("uses different temp file names each time it is called", () => {
-    const projectRoot = "/root/path/here";
-    const tsconfig = { a: 123 };
-
-    writeMetroTsConfig(projectRoot, tsconfig);
-    writeMetroTsConfig(projectRoot, tsconfig);
-    writeMetroTsConfig(projectRoot, tsconfig);
-
-    expect(fs.writeFileSync).toBeCalledTimes(3);
-    const fileNames = fs.writeFileSync.mock.calls.map((x) => x[0]);
-    expect(new Set(fileNames).size === fileNames.length).toBeTruthy();
   });
 });
 
@@ -325,7 +312,7 @@ describe("visit()", () => {
   });
 });
 
-describe("TypescriptValidation()", () => {
+describe("TypeScriptValidation()", () => {
   beforeEach(() => {
     yargs.mockReturnValue({
       argv: {
@@ -349,7 +336,7 @@ describe("TypescriptValidation()", () => {
   });
 
   test("replaces file specification with list from graph", () => {
-    TypescriptValidation()(undefined, undefined, graphPosix, {
+    TypeScriptValidation()(undefined, undefined, graphPosix, {
       projectRoot: rootPathPosix,
     } as SerializerOptions);
 
@@ -363,7 +350,7 @@ describe("TypescriptValidation()", () => {
   });
 
   test("adds noEmit compiler option", () => {
-    TypescriptValidation()(undefined, undefined, graphPosix, {
+    TypeScriptValidation()(undefined, undefined, graphPosix, {
       projectRoot: rootPathPosix,
     } as SerializerOptions);
 
@@ -372,21 +359,50 @@ describe("TypescriptValidation()", () => {
     expect(tsconfig?.compilerOptions?.noEmit).toBeTruthy();
   });
 
-  test("adds list of resolution platforms", () => {
-    TypescriptValidation()(undefined, undefined, graphPosix, {
+  function testResolutionPlatforms(
+    platform: string,
+    expectedPlatforms: string[]
+  ) {
+    yargs.mockReturnValue({
+      argv: {
+        platform,
+      },
+    });
+
+    TypeScriptValidation()(undefined, undefined, graphPosix, {
       projectRoot: rootPathPosix,
     } as SerializerOptions);
 
     expect(fs.writeFileSync).toBeCalledTimes(1);
     const tsconfig = JSON.parse(fs.writeFileSync.mock.calls[0][1]);
-    expect(tsconfig?.compilerOptions?.resolutionPlatforms).toEqual([
-      "test-platform",
-      "native",
-    ]);
-  });
+    expect(tsconfig?.compilerOptions?.resolutionPlatforms).toEqual(
+      expectedPlatforms
+    );
+  }
+
+  test("adds list of resolution platforms (android)", () =>
+    testResolutionPlatforms("android", ["android", "native"]));
+
+  test("adds list of resolution platforms (ios)", () =>
+    testResolutionPlatforms("ios", ["ios", "native"]));
+
+  test("adds list of resolution platforms (macos)", () =>
+    testResolutionPlatforms("macos", ["macos", "native"]));
+
+  test("adds list of resolution platforms (windows)", () =>
+    testResolutionPlatforms("windows", ["windows", "win", "native"]));
+
+  test("adds list of resolution platforms (win32)", () =>
+    testResolutionPlatforms("win32", ["win32", "win", "native"]));
+
+  test("adds list of resolution platforms (win)", () =>
+    testResolutionPlatforms("win", ["win", "native"]));
+
+  test("adds list of resolution platforms (FaKe-PLAtfORm)", () =>
+    testResolutionPlatforms("FaKe-PLAtfORm", ["fake-platform", "native"]));
 
   test("runs typescript compiler", () => {
-    TypescriptValidation()(undefined, undefined, graphPosix, {
+    TypeScriptValidation()(undefined, undefined, graphPosix, {
       projectRoot: rootPathPosix,
     } as SerializerOptions);
 
@@ -401,7 +417,7 @@ describe("TypescriptValidation()", () => {
   });
 
   test("runs typescript compiler", () => {
-    TypescriptValidation()(undefined, undefined, graphPosix, {
+    TypeScriptValidation()(undefined, undefined, graphPosix, {
       projectRoot: rootPathPosix,
     } as SerializerOptions);
 
@@ -416,13 +432,13 @@ describe("TypescriptValidation()", () => {
   });
 
   test("cleans up temporary tsconfig file when typescript compiler succeeds", () => {
-    TypescriptValidation()(undefined, undefined, graphPosix, {
+    TypeScriptValidation()(undefined, undefined, graphPosix, {
       projectRoot: rootPathPosix,
     } as SerializerOptions);
 
     expect(fs.unlinkSync).toBeCalledTimes(1);
     expect(fs.unlinkSync).toBeCalledWith(
-      expect.stringMatching(/[/\\]tsconfig-metro-[0-9A-Fa-f]{16}.json$/)
+      expect.stringMatching(/[/\\]node_modules[/\\]tsconfig-metro.json$/)
     );
   });
 
@@ -432,7 +448,7 @@ describe("TypescriptValidation()", () => {
     });
 
     expect(() => {
-      TypescriptValidation()(undefined, undefined, graphPosix, {
+      TypeScriptValidation()(undefined, undefined, graphPosix, {
         projectRoot: rootPathPosix,
       } as SerializerOptions);
     }).toThrowError();

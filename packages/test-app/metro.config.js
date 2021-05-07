@@ -7,7 +7,7 @@ const {
 } = require("@rnx-kit/metro-plugin-duplicates-checker");
 const { MetroSerializer } = require("@rnx-kit/metro-serializer");
 const {
-  TypescriptValidation,
+  TypeScriptValidation,
 } = require("@rnx-kit/metro-plugin-typescript-validation");
 
 module.exports = makeMetroConfig({
@@ -16,7 +16,7 @@ module.exports = makeMetroConfig({
     customSerializer: MetroSerializer([
       CyclicDependencies(),
       DuplicateDependencies(),
-      TypescriptValidation(),
+      TypeScriptValidation(),
     ]),
   },
 });

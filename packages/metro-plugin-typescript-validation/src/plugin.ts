@@ -7,15 +7,11 @@ import type {
 import * as fs from "fs";
 import * as path from "path";
 import * as child_process from "child_process";
-import * as crypto from "crypto";
 const yargs = require("yargs/yargs");
 import { hideBin } from "yargs/helpers";
 
 export function getModuleRoot(module: string): string {
-  const p = require.resolve(module);
-  const moduleAsPathSegment = path.normalize(module);
-  const index = p.indexOf(moduleAsPathSegment);
-  return p.slice(0, index + moduleAsPathSegment.length);
+  return path.dirname(require.resolve(module + "/package.json"));
 }
 
 export function readTsConfig(projectRoot: string) {
@@ -28,10 +24,10 @@ export function writeMetroTsConfig(
   tsconfig: object
 ): string {
   const json = JSON.stringify(tsconfig);
-  const uniqueId = crypto.randomBytes(8).toString("hex");
   const tsconfigMetroPath = path.join(
     projectRoot,
-    `tsconfig-metro-${uniqueId}.json`
+    "node_modules",
+    "tsconfig-metro.json"
   );
   fs.writeFileSync(tsconfigMetroPath, json);
   return tsconfigMetroPath;
@@ -82,12 +78,9 @@ export async function visit(
   }
   visited[modulePath] = true;
 
-  //  collect any file that is in scope, and keep its relative path
+  //  collect any file that is in scope
   if (modulePath.startsWith(scopePath)) {
-    const p = modulePath.slice(scopePath.length);
-    files.push(
-      [path.posix.sep, path.win32.sep].includes(p[0]) ? p.slice(1) : p
-    );
+    files.push(modulePath);
   }
 
   //  recursively visit children
@@ -98,10 +91,13 @@ export async function visit(
     );
 }
 
-export function TypescriptValidation(): MetroPlugin {
+export function TypeScriptValidation(): MetroPlugin {
   //  read the --platform argument from the Metro command-line
   const argv = yargs(hideBin(process.argv)).argv;
-  const platform = argv.platform;
+  const platform = argv.platform.toLowerCase();
+  const resolutionPlatforms = ["win32", "windows"].includes(platform)
+    ? [platform, "win", "native"]
+    : [platform, "native"];
 
   return (
     _entryPoint: string,
@@ -130,7 +126,7 @@ export function TypescriptValidation(): MetroPlugin {
     //    - resolve modules using platform overrides
     tsconfig.compilerOptions = tsconfig.compilerOptions || {};
     tsconfig.compilerOptions.noEmit = true;
-    tsconfig.compilerOptions.resolutionPlatforms = [platform, "native"];
+    tsconfig.compilerOptions.resolutionPlatforms = resolutionPlatforms;
 
     //  write the altered tsconfig, run TSC, and then cleanup the altered tsconfig
     const tsconfigMetroPath = writeMetroTsConfig(options.projectRoot, tsconfig);

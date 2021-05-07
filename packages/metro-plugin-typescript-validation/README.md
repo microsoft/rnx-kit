@@ -9,14 +9,14 @@ Add this plugin in your `metro.config.js` using `@rnx-kit/metro-serializer`:
 ```js
 const { makeMetroConfig } = require("@rnx-kit/metro-config");
 const {
-  TypescriptValidation,
+  TypeScriptValidation,
 } = require("@rnx-kit/metro-plugin-typescript-validation");
 const { MetroSerializer } = require("@rnx-kit/metro-serializer");
 
 module.exports = makeMetroConfig({
   projectRoot: __dirname,
   serializer: {
-    customSerializer: MetroSerializer([TypescriptValidation()]),
+    customSerializer: MetroSerializer([TypeScriptValidation()]),
   },
 });
 ```
