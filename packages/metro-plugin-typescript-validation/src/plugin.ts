@@ -1,6 +1,8 @@
 import type {
+  Dependencies,
   Graph,
   MetroPlugin,
+  MixedOutput,
   Module,
   SerializerOptions,
 } from "@rnx-kit/metro-serializer";
@@ -89,6 +91,25 @@ export async function visit(
     ?.dependencies?.forEach((m) =>
       visit(m.absolutePath, graph, scopePath, visited, files)
     );
+}
+
+export type Delta = {
+  added: Dependencies<MixedOutput>;
+  modified: Dependencies<MixedOutput>;
+  deleted: Set<string>;
+  reset: boolean;
+};
+export function experimentalSerializerHook(_graph: Graph, delta: Delta) {
+  console.log("HOOK: reset=%o", delta.reset);
+  delta?.added?.forEach((_module, moduleName) => {
+    console.log("  ADD: %o", moduleName);
+  });
+  delta?.modified?.forEach((_module, moduleName) => {
+    console.log("  MOD: %o", moduleName);
+  });
+  delta?.deleted?.forEach((moduleName) => {
+    console.log("  DEL: %o", moduleName);
+  });
 }
 
 export function TypeScriptValidation(): MetroPlugin {
