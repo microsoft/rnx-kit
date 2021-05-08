@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/dep-check
 
-This log was last generated on Wed, 05 May 2021 21:00:14 GMT and should not be manually modified.
+This log was last generated on Sat, 08 May 2021 20:35:26 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 1.1.3
+
+Sat, 08 May 2021 20:35:26 GMT
+
+### Patches
+
+- Fix a crash in react-native-lazy-index when non-JS files are read (4123478+tido64@users.noreply.github.com)
 
 ## 1.1.2
 
