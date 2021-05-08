@@ -71,7 +71,7 @@ const profile: Profile = {
   },
   "lazy-index": {
     name: "react-native-lazy-index",
-    version: "^2.0.0",
+    version: "^2.1.1",
   },
   "masked-view": {
     name: "@react-native-masked-view/masked-view",
