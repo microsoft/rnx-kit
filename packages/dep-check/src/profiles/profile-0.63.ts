@@ -59,7 +59,6 @@ const profile: Profile = {
   "test-app": {
     name: "react-native-test-app",
     version: "^0.5.5",
-    devOnly: true,
   },
   webview: {
     name: "react-native-webview",

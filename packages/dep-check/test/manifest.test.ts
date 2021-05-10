@@ -62,7 +62,7 @@ describe("updateDependencies()", () => {
       react: profile_0_64["react"].version,
       "react-native": profile_0_64["core-ios"].version,
       "react-native-macos": profile_0_64["core-macos"].version,
-      "react-native-test-app": "0.0.0",
+      "react-native-test-app": profile_0_64["test-app"].version,
       "react-native-windows": profile_0_64["core-windows"].version,
       typescript: "0.0.0",
     });
@@ -94,7 +94,7 @@ describe("updateDependencies()", () => {
       react: `${profile_0_63["react"].version} || ${profile_0_64["react"].version}`,
       "react-native": `${profile_0_63["core-ios"].version} || ${profile_0_64["core-ios"].version}`,
       "react-native-macos": `${profile_0_63["core-macos"].version} || ${profile_0_64["core-macos"].version}`,
-      "react-native-test-app": "0.0.0",
+      "react-native-test-app": profile_0_64["test-app"].version,
       "react-native-windows": `${profile_0_63["core-windows"].version} || ${profile_0_64["core-windows"].version}`,
       typescript: "0.0.0",
     });
@@ -123,7 +123,7 @@ describe("updateDependencies()", () => {
       react: profile_0_64["react"].version,
       "react-native": profile_0_64["core-ios"].version,
       "react-native-macos": profile_0_64["core-macos"].version,
-      "react-native-test-app": "0.0.0",
+      "react-native-test-app": profile_0_64["test-app"].version,
       "react-native-windows": profile_0_64["core-windows"].version,
       typescript: "0.0.0",
     });
@@ -157,7 +157,7 @@ describe("updateDependencies()", () => {
       react: `${profile_0_63["react"].version} || ${profile_0_64["react"].version}`,
       "react-native": `${profile_0_63["core-ios"].version} || ${profile_0_64["core-ios"].version}`,
       "react-native-macos": `${profile_0_63["core-macos"].version} || ${profile_0_64["core-macos"].version}`,
-      "react-native-test-app": "0.0.0",
+      "react-native-test-app": profile_0_64["test-app"].version,
       "react-native-windows": `${profile_0_63["core-windows"].version} || ${profile_0_64["core-windows"].version}`,
       typescript: "0.0.0",
     });
