@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/dep-check
 
-This log was last generated on Sat, 08 May 2021 20:35:26 GMT and should not be manually modified.
+This log was last generated on Mon, 10 May 2021 14:10:30 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 1.1.4
+
+Mon, 10 May 2021 14:10:30 GMT
+
+### Patches
+
+- Libraries should not re-declare transitive dependencies (4123478+tido64@users.noreply.github.com)
 
 ## 1.1.3
 

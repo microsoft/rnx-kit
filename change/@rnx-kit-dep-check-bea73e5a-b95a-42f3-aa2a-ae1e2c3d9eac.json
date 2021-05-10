@@ -1,7 +1,0 @@
-{
-  "type": "patch",
-  "comment": "Libraries should not re-declare transitive dependencies",
-  "packageName": "@rnx-kit/dep-check",
-  "email": "4123478+tido64@users.noreply.github.com",
-  "dependentChangeType": "patch"
-}

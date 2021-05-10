@@ -2,6 +2,21 @@
   "name": "@rnx-kit/dep-check",
   "entries": [
     {
+      "date": "Mon, 10 May 2021 14:10:30 GMT",
+      "tag": "@rnx-kit/dep-check_v1.1.4",
+      "version": "1.1.4",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Libraries should not re-declare transitive dependencies",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "2a699c896062bb627e62f3628f8773594e96661e",
+            "package": "@rnx-kit/dep-check"
+          }
+        ]
+      }
+    },
+    {
       "date": "Sat, 08 May 2021 20:35:26 GMT",
       "tag": "@rnx-kit/dep-check_v1.1.3",
       "version": "1.1.3",
