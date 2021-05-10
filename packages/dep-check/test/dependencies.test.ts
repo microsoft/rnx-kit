@@ -107,6 +107,7 @@ describe("getRequirements()", () => {
     const manifest = JSON.parse(manifestJson);
     const { reactNativeVersion, capabilities } = getRequirements(
       "^0.63 || ^0.64",
+      "app",
       manifest,
       fixture
     );
@@ -127,6 +128,7 @@ describe("getRequirements()", () => {
     expect(() =>
       getRequirements(
         "0.60.6",
+        "app",
         {
           name: "@rnx-kit/dep-check",
           version: "1.0.0",

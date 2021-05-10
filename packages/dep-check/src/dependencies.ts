@@ -3,6 +3,7 @@ import {
   getKitCapabilities,
   getKitConfig,
   KitConfig,
+  KitType,
 } from "@rnx-kit/config";
 import findUp from "find-up";
 import fs from "fs";
@@ -62,6 +63,7 @@ export function visitDependencies(
 
 export function getRequirements(
   targetReactNativeVersion: string,
+  kitType: KitType,
   targetManifest: PackageManifest,
   projectRoot: string
 ): Requirements {
@@ -73,48 +75,53 @@ export function getRequirements(
   }
 
   const allCapabilities = new Set<Capability>();
-  const trace: Trace[] = [
-    {
-      module: targetManifest.name,
-      reactNativeVersion: targetReactNativeVersion,
-      profiles: profileVersions,
-    },
-  ];
+  if (kitType === "app") {
+    const trace: Trace[] = [
+      {
+        module: targetManifest.name,
+        reactNativeVersion: targetReactNativeVersion,
+        profiles: profileVersions,
+      },
+    ];
 
-  visitDependencies(targetManifest, projectRoot, (module, modulePath) => {
-    const kitConfig = getKitConfig({ cwd: modulePath });
-    if (kitConfig) {
-      const { reactNativeVersion, capabilities } = getKitCapabilities(
-        kitConfig
-      );
+    visitDependencies(targetManifest, projectRoot, (module, modulePath) => {
+      const kitConfig = getKitConfig({ cwd: modulePath });
+      if (kitConfig) {
+        const { reactNativeVersion, capabilities } = getKitCapabilities(
+          kitConfig
+        );
 
-      profileVersions = profilesSatisfying(profileVersions, reactNativeVersion);
-      if (profileVersions.length != trace[trace.length - 1].profiles.length) {
-        trace.push({ module, reactNativeVersion, profiles: profileVersions });
+        profileVersions = profilesSatisfying(
+          profileVersions,
+          reactNativeVersion
+        );
+        if (profileVersions.length != trace[trace.length - 1].profiles.length) {
+          trace.push({ module, reactNativeVersion, profiles: profileVersions });
+        }
+
+        if (profileVersions.length === 0) {
+          const message =
+            "No React Native profile could satisfy all dependencies";
+          const fullTrace = [
+            message,
+            ...trace.map(({ module, reactNativeVersion, profiles }) => {
+              const satisfiedVersions = profiles.join(", ");
+              return `    [${satisfiedVersions}] satisfies '${module}' because it supports '${reactNativeVersion}'`;
+            }),
+          ].join("\n");
+          error(fullTrace);
+          throw new Error(message);
+        }
+
+        if (Array.isArray(capabilities)) {
+          capabilities.reduce((result, capability) => {
+            result.add(capability);
+            return result;
+          }, allCapabilities);
+        }
       }
-
-      if (profileVersions.length === 0) {
-        const message =
-          "No React Native profile could satisfy all dependencies";
-        const fullTrace = [
-          message,
-          ...trace.map(({ module, reactNativeVersion, profiles }) => {
-            const satisfiedVersions = profiles.join(", ");
-            return `    [${satisfiedVersions}] satisfies '${module}' because it supports '${reactNativeVersion}'`;
-          }),
-        ].join("\n");
-        error(fullTrace);
-        throw new Error(message);
-      }
-
-      if (Array.isArray(capabilities)) {
-        capabilities.reduce((result, capability) => {
-          result.add(capability);
-          return result;
-        }, allCapabilities);
-      }
-    }
-  });
+    });
+  }
 
   return {
     reactNativeVersion: "^" + profileVersions.join(" || ^"),
