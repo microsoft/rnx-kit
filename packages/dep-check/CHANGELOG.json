@@ -2,6 +2,21 @@
   "name": "@rnx-kit/dep-check",
   "entries": [
     {
+      "date": "Mon, 10 May 2021 21:58:48 GMT",
+      "tag": "@rnx-kit/dep-check_v1.1.5",
+      "version": "1.1.5",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Allow direct dependency on react-native-test-app",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "e085c163b72a693e3c588927319457705f3a54f6",
+            "package": "@rnx-kit/dep-check"
+          }
+        ]
+      }
+    },
+    {
       "date": "Mon, 10 May 2021 14:10:30 GMT",
       "tag": "@rnx-kit/dep-check_v1.1.4",
       "version": "1.1.4",

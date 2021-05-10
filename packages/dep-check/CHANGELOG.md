@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/dep-check
 
-This log was last generated on Mon, 10 May 2021 14:10:30 GMT and should not be manually modified.
+This log was last generated on Mon, 10 May 2021 21:58:48 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 1.1.5
+
+Mon, 10 May 2021 21:58:48 GMT
+
+### Patches
+
+- Allow direct dependency on react-native-test-app (4123478+tido64@users.noreply.github.com)
 
 ## 1.1.4
 
