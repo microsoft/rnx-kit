@@ -1,0 +1,7 @@
+{
+  "type": "minor",
+  "comment": "Added command for initializing a configuration",
+  "packageName": "@rnx-kit/dep-check",
+  "email": "4123478+tido64@users.noreply.github.com",
+  "dependentChangeType": "patch"
+}

@@ -1,5 +1,61 @@
-import type { Capability } from "@rnx-kit/config";
-import type { Package, Profile } from "./types";
+import type { Capability, KitCapabilities, KitType } from "@rnx-kit/config";
+import semver from "semver";
+import { getProfileVersionsFor, getProfilesFor } from "./profiles";
+import type { Package, PackageManifest, Profile } from "./types";
+
+export function capabilitiesFor(
+  { dependencies, devDependencies, peerDependencies }: PackageManifest,
+  kitType: KitType = "library"
+): Partial<KitCapabilities> | undefined {
+  const targetReactNativeVersion =
+    peerDependencies?.["react-native"] || dependencies?.["react-native"];
+  if (!targetReactNativeVersion) {
+    return undefined;
+  }
+
+  const profiles = getProfilesFor(targetReactNativeVersion);
+  const packageToCapabilityMap: Record<string, Capability[]> = {};
+  profiles.forEach((profile) => {
+    const capabilityNames = Object.keys(profile) as Capability[];
+    capabilityNames.reduce((result, capability) => {
+      const { name } = profile[capability];
+      if (!result[name]) {
+        result[name] = [capability];
+      } else {
+        result[name].push(capability);
+      }
+      return result;
+    }, packageToCapabilityMap);
+  });
+
+  const reactNativeVersion =
+    "^" + getProfileVersionsFor(targetReactNativeVersion).join(" || ^");
+
+  return {
+    reactNativeVersion,
+    ...(kitType === "library"
+      ? {
+          reactNativeDevVersion:
+            devDependencies?.["react-native"] ||
+            semver.minVersion(reactNativeVersion)?.version,
+        }
+      : { kitType }),
+    capabilities: Array.from(
+      Object.keys({
+        ...dependencies,
+        ...peerDependencies,
+        ...devDependencies,
+      }).reduce<Set<Capability>>((result, dependency) => {
+        if (dependency in packageToCapabilityMap) {
+          packageToCapabilityMap[dependency].forEach((capability) => {
+            result.add(capability);
+          });
+        }
+        return result;
+      }, new Set<Capability>())
+    ).sort(),
+  };
+}
 
 export function resolveCapabilities(
   capabilities: Capability[],
