@@ -8,6 +8,21 @@ import type {
   Profile,
 } from "./types";
 
+export function devOnlyPackages(
+  packages: Record<string, Package[]>
+): Record<string, Package[]> {
+  return Object.keys(packages).reduce<Record<string, Package[]>>(
+    (result, name) => {
+      const versions = packages[name];
+      if (versions.some((pkg) => Boolean(pkg.devOnly))) {
+        result[name] = versions;
+      }
+      return result;
+    },
+    {}
+  );
+}
+
 export function removeKeys(
   obj: Record<string, string> | undefined,
   keys: string[]
@@ -30,6 +45,11 @@ export function updateDependencies(
   dependencyType: DependencyType,
   nodeVersion: string = process.versions.node
 ): Record<string, string> | undefined {
+  const packageNames = Object.keys(packages);
+  if (packageNames.length === 0) {
+    return dependencies;
+  }
+
   const makeVersionRange = (() => {
     switch (dependencyType) {
       case "direct":
@@ -47,7 +67,7 @@ export function updateDependencies(
   // `Array.prototype.sort` is stable as of V8 7.0 (or Node 11). For users still
   // on Node 10 or below, we'll use a solution that throws away one more object.
   if (semver.satisfies(nodeVersion, ">=11")) {
-    const entries = Object.keys(packages).reduce((result, dependency) => {
+    const entries = packageNames.reduce((result, dependency) => {
       const packageRange = packages[dependency];
       if (shouldBeAdded(packageRange[0])) {
         result.push([dependency, makeVersionRange(packageRange)]);
@@ -56,7 +76,7 @@ export function updateDependencies(
     }, Object.entries(dependencies));
     return Object.fromEntries(entries.sort(([a], [b]) => a.localeCompare(b)));
   } else {
-    const copy = Object.keys(packages).reduce(
+    const copy = packageNames.reduce(
       (result, dependency) => {
         const packageRange = packages[dependency];
         if (shouldBeAdded(packageRange[0])) {
@@ -116,7 +136,11 @@ export function updatePackageManifest(
         ...manifest,
         dependencies: updateDependencies(dependencies, packages, "direct"),
         peerDependencies: removeKeys(peerDependencies, names),
-        devDependencies: removeKeys(devDependencies, names),
+        devDependencies: updateDependencies(
+          removeKeys(devDependencies, names),
+          devOnlyPackages(packages),
+          "development"
+        ),
       };
     case "library":
       return {
