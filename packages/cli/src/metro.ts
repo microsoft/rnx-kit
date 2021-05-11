@@ -155,7 +155,9 @@ export function metroBundle(
 
     const devBool = Boolean(dev);
     const sourceMap = sourceMapPath || (devBool && bundleFile + ".map");
-    const sourceMapResolved = sourceMap && path.join(distPath, sourceMap);
+    const sourceMapResolved = sourceMap
+      ? path.join(distPath, sourceMap)
+      : undefined;
 
     yarnSync([
       "react-native",
