@@ -2,6 +2,21 @@
   "name": "@rnx-kit/cli",
   "entries": [
     {
+      "date": "Tue, 11 May 2021 17:21:45 GMT",
+      "tag": "@rnx-kit/cli_v0.5.6",
+      "version": "0.5.6",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Fix a bug in handling the optional source map parameter.",
+            "author": "afoxman@microsoft.com",
+            "commit": "60cd10f49912d84c537121df8fe6a2ef340de6df",
+            "package": "@rnx-kit/cli"
+          }
+        ]
+      }
+    },
+    {
       "date": "Tue, 11 May 2021 15:41:12 GMT",
       "tag": "@rnx-kit/cli_v0.5.5",
       "version": "0.5.5",

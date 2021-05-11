@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/cli
 
-This log was last generated on Tue, 11 May 2021 15:41:12 GMT and should not be manually modified.
+This log was last generated on Tue, 11 May 2021 17:21:45 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 0.5.6
+
+Tue, 11 May 2021 17:21:45 GMT
+
+### Patches
+
+- Fix a bug in handling the optional source map parameter. (afoxman@microsoft.com)
 
 ## 0.5.5
 

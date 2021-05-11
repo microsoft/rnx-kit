@@ -1,7 +1,0 @@
-{
-  "type": "patch",
-  "comment": "Fix a bug in handling the optional source map parameter.",
-  "packageName": "@rnx-kit/cli",
-  "email": "afoxman@microsoft.com",
-  "dependentChangeType": "patch"
-}
