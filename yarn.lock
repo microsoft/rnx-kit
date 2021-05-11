@@ -8620,9 +8620,9 @@ react-native-test-app@^0.5.4:
     yargs "^16.0.0"
 
 react-native-windows@^0.63.0:
-  version "0.63.27"
-  resolved "https://registry.yarnpkg.com/react-native-windows/-/react-native-windows-0.63.27.tgz#fae0b876b10a9e58c563ba2df452bb40cb802238"
-  integrity sha512-uJ6aIOfhnJPfEcIBS+JQPlIgKPZlEO3e4PxZQU3ta9H60s+e6nGT7ZCE8s2LVFj6VKPoGQ4pe57+e/zQrq4pSA==
+  version "0.63.28"
+  resolved "https://registry.yarnpkg.com/react-native-windows/-/react-native-windows-0.63.28.tgz#b20c0a6e1dc43f2378346c47ca07f60362174a00"
+  integrity sha512-tatocsRivLc1WQ3iImpFx3Ua3v4i+NSfiAwJx41upves9CWDHx0Ari5f90ZEdm+rZ6h/lt1ywyGuTGG7dOZSfA==
   dependencies:
     "@babel/runtime" "^7.8.4"
     "@react-native-windows/cli" "0.63.11"
