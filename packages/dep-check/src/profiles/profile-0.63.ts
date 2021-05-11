@@ -42,7 +42,7 @@ const profile: Profile = {
   },
   "navigation/native": {
     name: "@react-navigation/native",
-    version: "^5.9.6",
+    version: "^5.9.4",
   },
   "navigation/stack": {
     name: "@react-navigation/stack",
