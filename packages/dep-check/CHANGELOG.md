@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/dep-check
 
-This log was last generated on Tue, 11 May 2021 15:28:18 GMT and should not be manually modified.
+This log was last generated on Tue, 11 May 2021 15:41:12 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 1.1.7
+
+Tue, 11 May 2021 15:41:12 GMT
+
+### Patches
+
+- Bump react-native-test-app for Xcode 12.5 fixes (4123478+tido64@users.noreply.github.com)
 
 ## 1.1.6
 
