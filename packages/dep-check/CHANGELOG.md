@@ -1,8 +1,17 @@
 # Change Log - @rnx-kit/dep-check
 
-This log was last generated on Mon, 10 May 2021 21:58:48 GMT and should not be manually modified.
+This log was last generated on Tue, 11 May 2021 15:28:18 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 1.1.6
+
+Tue, 11 May 2021 15:28:18 GMT
+
+### Patches
+
+- Allow dev-only dependencies should always be added (4123478+tido64@users.noreply.github.com)
+- Rollback @react-navigation/native as 5.9.6 doesn't exist (4123478+tido64@users.noreply.github.com)
 
 ## 1.1.5
 

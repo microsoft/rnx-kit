@@ -2,6 +2,27 @@
   "name": "@rnx-kit/dep-check",
   "entries": [
     {
+      "date": "Tue, 11 May 2021 15:28:18 GMT",
+      "tag": "@rnx-kit/dep-check_v1.1.6",
+      "version": "1.1.6",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Allow dev-only dependencies should always be added",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "f2d09f279b1d5f4eac5c81e2d4e9e260ae4bfa78",
+            "package": "@rnx-kit/dep-check"
+          },
+          {
+            "comment": "Rollback @react-navigation/native as 5.9.6 doesn't exist",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "a8946cd093128fc3e81c778e222e5a895cf9da65",
+            "package": "@rnx-kit/dep-check"
+          }
+        ]
+      }
+    },
+    {
       "date": "Mon, 10 May 2021 21:58:48 GMT",
       "tag": "@rnx-kit/dep-check_v1.1.5",
       "version": "1.1.5",
