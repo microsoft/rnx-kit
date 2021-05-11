@@ -3227,11 +3227,6 @@ buffer@~5.2.1:
     base64-js "^1.0.2"
     ieee754 "^1.1.4"
 
-builtin-modules@^3.1.0:
-  version "3.2.0"
-  resolved "https://registry.yarnpkg.com/builtin-modules/-/builtin-modules-3.2.0.tgz#45d5db99e7ee5e6bc4f362e008bf917ab5049887"
-  integrity sha512-lGzLKcioL90C7wMczpkY0n/oART3MbBa8R9OFGE1rJxoVI86u4WAGfEk8Wjv10eKSyTHVGkSo3bvBylCEtk7LA==
-
 builtin-status-codes@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/builtin-status-codes/-/builtin-status-codes-3.0.0.tgz#85982878e21b98e1c66425e03d0174788f569ee8"
@@ -4023,14 +4018,13 @@ denodeify@^1.2.1:
   integrity sha1-OjYof1A05pnnV3kBBSwubJQlFjE=
 
 depcheck@^1.0.0:
-  version "1.4.0"
-  resolved "https://registry.yarnpkg.com/depcheck/-/depcheck-1.4.0.tgz#1b49e0da4ce32f2e372da9be7ba25b139b7b9a00"
-  integrity sha512-zn63rsHvFfWVgHV/SW4wXT5vqjQpCIGukpnoU2IspU3Lp0Va8/9wFWAsd2V1VzU+AFiFZGdjHZU9nLZQra+1Tg==
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/depcheck/-/depcheck-1.4.1.tgz#1dfbac61ad6411ae407050a383e7411eb8933ad2"
+  integrity sha512-ecX8zIXE9TlVu14ebnZTwgIeP/t/Rq2WpowjWbMuqG6ayozVVf9zKW4EBEQ/HsS1dxhY+J9+UiRetu2UMxG9ww==
   dependencies:
     "@babel/parser" "^7.12.5"
     "@babel/traverse" "^7.12.5"
     "@vue/compiler-sfc" "^3.0.5"
-    builtin-modules "^3.1.0"
     camelcase "^6.2.0"
     cosmiconfig "^7.0.0"
     debug "^4.2.0"
