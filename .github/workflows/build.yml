@@ -22,7 +22,7 @@ jobs:
           token: ${{ secrets.GIT_TOKEN }}
           fetch-depth: 0
       - name: Cache /.yarn-offline-mirror
-        uses: actions/cache@v2
+        uses: actions/cache@v2.1.5
         with:
           path: .yarn-offline-mirror
           key: ${{ hashFiles('yarn.lock') }}
