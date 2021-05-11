@@ -2,6 +2,21 @@
   "name": "@rnx-kit/dep-check",
   "entries": [
     {
+      "date": "Tue, 11 May 2021 15:36:06 GMT",
+      "tag": "@rnx-kit/dep-check_v1.1.6",
+      "version": "1.1.6",
+      "comments": {
+        "none": [
+          {
+            "comment": "Added a section about the motivation behind dep-check",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "4a2fe040dc45b66c552e6f947eb8c0024a658406",
+            "package": "@rnx-kit/dep-check"
+          }
+        ]
+      }
+    },
+    {
       "date": "Tue, 11 May 2021 15:28:18 GMT",
       "tag": "@rnx-kit/dep-check_v1.1.6",
       "version": "1.1.6",
