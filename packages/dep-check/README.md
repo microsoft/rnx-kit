@@ -14,7 +14,7 @@ with this tool.
 need to be made. It can optionally also write said changes to the
 `package.json`. The configuration must be manually written by the package owner.
 It declares which React Native versions the package supports, and which
-capabilities it requires. For instance, lets say we have a package,
+capabilities it requires. For instance, lets say we have a library,
 `awesome-library`, which supports React Native versions 0.63 and 0.64, and needs
 something that provides network information. We would declare the following in
 our `package.json`:
