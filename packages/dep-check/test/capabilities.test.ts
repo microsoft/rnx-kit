@@ -33,13 +33,13 @@ describe("resolveCapabilities()", () => {
 
   test("dedupes package versions", () => {
     const packages = resolveCapabilities(
-      ["test-app"],
+      ["webview"],
       [profile_0_62, profile_0_63, profile_0_64]
     );
 
-    const { name } = profile_0_64["test-app"];
+    const { name } = profile_0_64["webview"];
     expect(packages).toEqual({
-      [name]: [profile_0_62["test-app"], profile_0_64["test-app"]],
+      [name]: [profile_0_62["webview"], profile_0_64["webview"]],
     });
 
     expect(consoleWarnSpy).not.toBeCalled();
