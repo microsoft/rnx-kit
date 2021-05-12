@@ -131,7 +131,7 @@ export function getRequirements(
             /**
              * Core capabilities are capabilities that must always be declared
              * by the hosting app and should not be included when gathering
-             * requirements. This is to avoid forcing apps to install
+             * requirements. This is to avoid forcing an app to install
              * dependencies it does not need, e.g. `react-native-windows` when
              * the app only supports iOS.
              */
