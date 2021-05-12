@@ -1,0 +1,7 @@
+{
+  "type": "patch",
+  "comment": "Avoid installing unnecessary core capabilities",
+  "packageName": "@rnx-kit/dep-check",
+  "email": "4123478+tido64@users.noreply.github.com",
+  "dependentChangeType": "patch"
+}
