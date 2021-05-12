@@ -2,6 +2,21 @@
   "name": "@rnx-kit/dep-check",
   "entries": [
     {
+      "date": "Wed, 12 May 2021 05:38:51 GMT",
+      "tag": "@rnx-kit/dep-check_v1.1.7",
+      "version": "1.1.7",
+      "comments": {
+        "none": [
+          {
+            "comment": "Add table of capabilities to README",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "4ebfac02941377da104bfed7eb114064acf25f7c",
+            "package": "@rnx-kit/dep-check"
+          }
+        ]
+      }
+    },
+    {
       "date": "Tue, 11 May 2021 15:41:12 GMT",
       "tag": "@rnx-kit/dep-check_v1.1.7",
       "version": "1.1.7",
