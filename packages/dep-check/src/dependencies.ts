@@ -87,9 +87,8 @@ export function getRequirements(
     visitDependencies(targetManifest, projectRoot, (module, modulePath) => {
       const kitConfig = getKitConfig({ cwd: modulePath });
       if (kitConfig) {
-        const { reactNativeVersion, capabilities } = getKitCapabilities(
-          kitConfig
-        );
+        const { reactNativeVersion, capabilities } =
+          getKitCapabilities(kitConfig);
 
         profileVersions = profilesSatisfying(
           profileVersions,

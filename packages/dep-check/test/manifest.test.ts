@@ -191,23 +191,20 @@ describe("updateDependencies()", () => {
 
 describe("updatePackageManifest()", () => {
   test("sets direct dependencies for apps", () => {
-    const {
-      dependencies,
-      devDependencies,
-      peerDependencies,
-    } = updatePackageManifest(
-      {
-        name: "Test",
-        version: "0.0.1",
-        dependencies: mockDependencies,
-        peerDependencies: {},
-        devDependencies: {},
-      },
-      ["core-android", "core-ios"],
-      [profile_0_63, profile_0_64],
-      [profile_0_64],
-      "app"
-    );
+    const { dependencies, devDependencies, peerDependencies } =
+      updatePackageManifest(
+        {
+          name: "Test",
+          version: "0.0.1",
+          dependencies: mockDependencies,
+          peerDependencies: {},
+          devDependencies: {},
+        },
+        ["core-android", "core-ios"],
+        [profile_0_63, profile_0_64],
+        [profile_0_64],
+        "app"
+      );
     expect(dependencies).toEqual({
       ...mockDependencies,
       "react-native": profile_0_64["core-ios"].version,
@@ -217,23 +214,20 @@ describe("updatePackageManifest()", () => {
   });
 
   test("removes dependencies from devDependencies for apps", () => {
-    const {
-      dependencies,
-      devDependencies,
-      peerDependencies,
-    } = updatePackageManifest(
-      {
-        name: "Test",
-        version: "0.0.1",
-        dependencies: {},
-        peerDependencies: {},
-        devDependencies: mockDependencies,
-      },
-      ["core-android", "core-ios", "react"],
-      [profile_0_63, profile_0_64],
-      [profile_0_64],
-      "app"
-    );
+    const { dependencies, devDependencies, peerDependencies } =
+      updatePackageManifest(
+        {
+          name: "Test",
+          version: "0.0.1",
+          dependencies: {},
+          peerDependencies: {},
+          devDependencies: mockDependencies,
+        },
+        ["core-android", "core-ios", "react"],
+        [profile_0_63, profile_0_64],
+        [profile_0_64],
+        "app"
+      );
     expect(dependencies).toEqual({
       react: profile_0_64["react"].version,
       "react-native": profile_0_64["core-ios"].version,
@@ -246,23 +240,20 @@ describe("updatePackageManifest()", () => {
   });
 
   test("removes dependencies from peerDependencies for apps", () => {
-    const {
-      dependencies,
-      devDependencies,
-      peerDependencies,
-    } = updatePackageManifest(
-      {
-        name: "Test",
-        version: "0.0.1",
-        dependencies: {},
-        peerDependencies: mockDependencies,
-        devDependencies: {},
-      },
-      ["core-android", "core-ios", "react"],
-      [profile_0_63, profile_0_64],
-      [profile_0_64],
-      "app"
-    );
+    const { dependencies, devDependencies, peerDependencies } =
+      updatePackageManifest(
+        {
+          name: "Test",
+          version: "0.0.1",
+          dependencies: {},
+          peerDependencies: mockDependencies,
+          devDependencies: {},
+        },
+        ["core-android", "core-ios", "react"],
+        [profile_0_63, profile_0_64],
+        [profile_0_64],
+        "app"
+      );
     expect(dependencies).toEqual({
       react: profile_0_64["react"].version,
       "react-native": profile_0_64["core-ios"].version,
@@ -275,22 +266,19 @@ describe("updatePackageManifest()", () => {
   });
 
   test("sets dev/peer dependencies for libraries", () => {
-    const {
-      dependencies,
-      devDependencies,
-      peerDependencies,
-    } = updatePackageManifest(
-      {
-        name: "Test",
-        version: "0.0.1",
-        dependencies: { "@rnx-kit/dep-check": "^1.0.0" },
-        peerDependencies: mockDependencies,
-      },
-      ["core-android", "core-ios"],
-      [profile_0_63, profile_0_64],
-      [profile_0_64],
-      "library"
-    );
+    const { dependencies, devDependencies, peerDependencies } =
+      updatePackageManifest(
+        {
+          name: "Test",
+          version: "0.0.1",
+          dependencies: { "@rnx-kit/dep-check": "^1.0.0" },
+          peerDependencies: mockDependencies,
+        },
+        ["core-android", "core-ios"],
+        [profile_0_63, profile_0_64],
+        [profile_0_64],
+        "library"
+      );
     expect(dependencies).toEqual({ "@rnx-kit/dep-check": "^1.0.0" });
     expect(peerDependencies).toEqual({
       ...mockDependencies,
@@ -305,26 +293,23 @@ describe("updatePackageManifest()", () => {
   });
 
   test("removes dependencies from direct dependencies for libraries", () => {
-    const {
-      dependencies,
-      devDependencies,
-      peerDependencies,
-    } = updatePackageManifest(
-      {
-        name: "Test",
-        version: "0.0.1",
-        dependencies: {
-          "@rnx-kit/dep-check": "^1.0.0",
-          "react-native": "0.0.0",
+    const { dependencies, devDependencies, peerDependencies } =
+      updatePackageManifest(
+        {
+          name: "Test",
+          version: "0.0.1",
+          dependencies: {
+            "@rnx-kit/dep-check": "^1.0.0",
+            "react-native": "0.0.0",
+          },
+          peerDependencies: mockDependencies,
+          devDependencies: {},
         },
-        peerDependencies: mockDependencies,
-        devDependencies: {},
-      },
-      ["core-android", "core-ios"],
-      [profile_0_64],
-      [profile_0_64],
-      "library"
-    );
+        ["core-android", "core-ios"],
+        [profile_0_64],
+        [profile_0_64],
+        "library"
+      );
     expect(dependencies).toEqual({ "@rnx-kit/dep-check": "^1.0.0" });
     expect(peerDependencies).toEqual({
       ...mockDependencies,
@@ -336,23 +321,20 @@ describe("updatePackageManifest()", () => {
   });
 
   test("always sets dev-only dependencies", () => {
-    const {
-      dependencies,
-      devDependencies,
-      peerDependencies,
-    } = updatePackageManifest(
-      {
-        name: "Test",
-        version: "0.0.1",
-        dependencies: mockDependencies,
-        peerDependencies: {},
-        devDependencies: {},
-      },
-      ["core-android", "core-ios", "test-app"],
-      [profile_0_63, profile_0_64],
-      [profile_0_64],
-      "app"
-    );
+    const { dependencies, devDependencies, peerDependencies } =
+      updatePackageManifest(
+        {
+          name: "Test",
+          version: "0.0.1",
+          dependencies: mockDependencies,
+          peerDependencies: {},
+          devDependencies: {},
+        },
+        ["core-android", "core-ios", "test-app"],
+        [profile_0_63, profile_0_64],
+        [profile_0_64],
+        "app"
+      );
     expect(dependencies).toEqual({
       ...mockDependencies,
       "react-native": profile_0_64["core-ios"].version,

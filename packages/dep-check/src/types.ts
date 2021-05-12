@@ -24,4 +24,4 @@ export type ExcludedPackage = Package & {
   reason: string;
 };
 
-export type Profile = Readonly<Partial<Record<Capability, Package>>>;
+export type Profile = Readonly<Record<Capability, Package>>;
