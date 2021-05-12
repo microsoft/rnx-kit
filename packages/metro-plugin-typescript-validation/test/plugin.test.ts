@@ -509,7 +509,9 @@ describe("TypeScriptValidation()", () => {
 
     expect(fs.writeFileSync).toBeCalledTimes(1);
     const tsconfig = JSON.parse(fs.writeFileSync.mock.calls[0][1]);
-    expect(tsconfig.extends).toEqual("../../../tsconfig.json");
+    expect(tsconfig.extends).toEqual(
+      expect.stringMatching(/^[.]{2}[/\\][.]{2}[/\\][.]{2}[/\\]tsconfig.json$/)
+    );
   });
 
   test("runs typescript compiler", () => {
