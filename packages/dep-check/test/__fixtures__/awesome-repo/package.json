@@ -11,6 +11,7 @@
     "reactNativeVersion": "^0.63 || ^0.64",
     "kitType": "app",
     "capabilities": [
+      "core-android",
       "hermes",
       "lazy-index"
     ]
