@@ -21,6 +21,7 @@ exports[`checkPackageManifest({ kitType: 'app' }) adds required dependencies 1`]
     \\"reactNativeVersion\\": \\"^0.63 || ^0.64\\",
     \\"kitType\\": \\"app\\",
     \\"capabilities\\": [
+      \\"core-android\\",
       \\"hermes\\",
       \\"lazy-index\\"
     ]

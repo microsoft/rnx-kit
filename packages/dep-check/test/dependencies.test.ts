@@ -116,8 +116,6 @@ describe("getRequirements()", () => {
 
     expect(capabilities.sort()).toEqual([
       "animation",
-      "core-android",
-      "core-ios",
       "netinfo",
       "storage",
       "webview",

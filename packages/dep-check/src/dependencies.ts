@@ -26,6 +26,20 @@ type Trace = {
   profiles: ProfileVersion[];
 };
 
+function isCoreCapability(capability: Capability): boolean {
+  switch (capability) {
+    case "core-android":
+    case "core-ios":
+    case "core-macos":
+    case "core-win32":
+    case "core-windows":
+      return true;
+
+    default:
+      return false;
+  }
+}
+
 export function visitDependencies(
   { dependencies }: PackageManifest,
   projectRoot: string,
@@ -114,7 +128,16 @@ export function getRequirements(
 
         if (Array.isArray(capabilities)) {
           capabilities.reduce((result, capability) => {
-            result.add(capability);
+            /**
+             * Core capabilities are capabilities that must always be declared
+             * by the hosting app and should not be included when gathering
+             * requirements. This is to avoid forcing an app to install
+             * dependencies it does not need, e.g. `react-native-windows` when
+             * the app only supports iOS.
+             */
+            if (!isCoreCapability(capability)) {
+              result.add(capability);
+            }
             return result;
           }, allCapabilities);
         }
