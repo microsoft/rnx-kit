@@ -2,6 +2,21 @@
   "name": "@rnx-kit/cli",
   "entries": [
     {
+      "date": "Wed, 12 May 2021 11:52:17 GMT",
+      "tag": "@rnx-kit/cli_v0.5.7",
+      "version": "0.5.7",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Bump @rnx-kit/dep-check to v1.1.8",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "0dec2500df992c740b32e5b624d513b56312792f",
+            "package": "@rnx-kit/cli"
+          }
+        ]
+      }
+    },
+    {
       "date": "Wed, 12 May 2021 05:38:51 GMT",
       "tag": "@rnx-kit/cli_v0.5.6",
       "version": "0.5.6",

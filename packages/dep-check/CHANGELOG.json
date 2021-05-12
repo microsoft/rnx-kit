@@ -2,6 +2,21 @@
   "name": "@rnx-kit/dep-check",
   "entries": [
     {
+      "date": "Wed, 12 May 2021 11:52:17 GMT",
+      "tag": "@rnx-kit/dep-check_v1.1.8",
+      "version": "1.1.8",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Avoid installing unnecessary core capabilities",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "0dec2500df992c740b32e5b624d513b56312792f",
+            "package": "@rnx-kit/dep-check"
+          }
+        ]
+      }
+    },
+    {
       "date": "Wed, 12 May 2021 05:38:51 GMT",
       "tag": "@rnx-kit/dep-check_v1.1.7",
       "version": "1.1.7",
