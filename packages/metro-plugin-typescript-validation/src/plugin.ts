@@ -19,7 +19,7 @@ export function readTsConfig(projectRoot: string) {
   return JSON.parse(fs.readFileSync(p, { encoding: "utf8" }));
 }
 
-export function writeMetroTsConfig(
+export function writeMetroTsConfigToNodeModules(
   projectRoot: string,
   tsconfig: object
 ): string {
@@ -119,7 +119,16 @@ export function TypeScriptValidation(): MetroPlugin {
     delete tsconfig.exclude;
 
     //  set the specific list of files to type-check
-    tsconfig.files = files;
+    const allowedExtensions = [".ts", ".tsx"];
+    if (
+      tsconfig.compilerOptions?.allowJs &&
+      tsconfig.compilerOptions?.checkJs
+    ) {
+      allowedExtensions.push(".js", ".jsx");
+    }
+    tsconfig.files = files.filter((f) =>
+      allowedExtensions.includes(path.extname(f).toLowerCase())
+    );
 
     //  compiler options:
     //    - don't emit any codegen files
@@ -128,8 +137,19 @@ export function TypeScriptValidation(): MetroPlugin {
     tsconfig.compilerOptions.noEmit = true;
     tsconfig.compilerOptions.resolutionPlatforms = resolutionPlatforms;
 
+    //  extends prop -- if given and a relative path, it is relative to
+    //  <projectRoot>, since that is where tsconfig.json came from. the
+    //  generated tsconfig for Metro will be in <projectRoot>/node_modules,
+    //  so we need to re-relativize it.
+    if (tsconfig.extends?.startsWith(".")) {
+      tsconfig.extends = path.join("..", tsconfig.extends);
+    }
+
     //  write the altered tsconfig, run TSC, and then cleanup the altered tsconfig
-    const tsconfigMetroPath = writeMetroTsConfig(options.projectRoot, tsconfig);
+    const tsconfigMetroPath = writeMetroTsConfigToNodeModules(
+      options.projectRoot,
+      tsconfig
+    );
     try {
       runTypeScriptCompiler(tsconfigMetroPath);
     } finally {
