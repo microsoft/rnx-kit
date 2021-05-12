@@ -1,7 +1,0 @@
-{
-  "type": "patch",
-  "comment": "Fixes for the Metro TypeScript plugin. 1. Filter the list of checked files to ts[x]. Include js[x] when both allowJs and checkJs compiler options are true. 2. When 'extends' tsconfig prop refers to relative file, re-relativize since our generated metro tsconfig will be in node_modules.",
-  "packageName": "@rnx-kit/metro-plugin-typescript-validation",
-  "email": "afoxman@microsoft.com",
-  "dependentChangeType": "patch"
-}
