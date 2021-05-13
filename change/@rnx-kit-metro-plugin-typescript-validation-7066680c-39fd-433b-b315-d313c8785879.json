@@ -1,0 +1,7 @@
+{
+  "type": "patch",
+  "comment": "When running TypeScript validation during bundle, check every file in the repository, not just the current package.",
+  "packageName": "@rnx-kit/metro-plugin-typescript-validation",
+  "email": "afoxman@microsoft.com",
+  "dependentChangeType": "patch"
+}
