@@ -31,10 +31,17 @@ function initializeConfig(
   const manifest = JSON.parse(
     fs.readFileSync(packageManifest, { encoding: "utf-8" })
   );
+  if (!manifest["rnx-kit"]?.["capabilities"]) {
+    return;
+  }
+
   const capabilities = capabilitiesFor(manifest, ensureKitType(kitType));
   const updatedManifest = {
     ...manifest,
-    "rnx-kit": capabilities,
+    "rnx-kit": {
+      ...manifest["rnx-kit"],
+      ...capabilities,
+    }
   };
   fs.writeFileSync(
     packageManifest,
