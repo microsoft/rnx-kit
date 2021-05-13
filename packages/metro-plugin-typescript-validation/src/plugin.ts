@@ -4,6 +4,7 @@ import type {
   Module,
   SerializerOptions,
 } from "@rnx-kit/metro-serializer";
+import { getWorkspaces } from "workspace-tools";
 import * as fs from "fs";
 import * as path from "path";
 import * as child_process from "child_process";
@@ -68,7 +69,7 @@ export function runTypeScriptCompiler(projectPath: string) {
 export async function visit(
   modulePath: string,
   graph: Graph,
-  scopePath: string,
+  scopePaths: string[],
   visited: Record<string, boolean>,
   files: Array<string>
 ) {
@@ -79,7 +80,7 @@ export async function visit(
   visited[modulePath] = true;
 
   //  collect any file that is in scope
-  if (modulePath.startsWith(scopePath)) {
+  if (scopePaths.some((scopePath) => modulePath.startsWith(scopePath))) {
     files.push(modulePath);
   }
 
@@ -87,7 +88,7 @@ export async function visit(
   graph.dependencies
     .get(modulePath)
     ?.dependencies?.forEach((m) =>
-      visit(m.absolutePath, graph, scopePath, visited, files)
+      visit(m.absolutePath, graph, scopePaths, visited, files)
     );
 }
 
@@ -105,11 +106,15 @@ export function TypeScriptValidation(): MetroPlugin {
     graph: Graph,
     options: SerializerOptions
   ) => {
+    const workspaces = getWorkspaces(options.projectRoot);
+    const scopePaths = workspaces.map((workspace) => workspace.path);
+    scopePaths.push(options.projectRoot);
+
     const visited: Record<string, boolean> = {};
     const files: Array<string> = [];
 
     graph.entryPoints.forEach((m) =>
-      visit(m, graph, options.projectRoot, visited, files)
+      visit(m, graph, scopePaths, visited, files)
     );
 
     const tsconfig = readTsConfig(options.projectRoot);
