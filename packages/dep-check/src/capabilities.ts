@@ -39,7 +39,8 @@ export function capabilitiesFor(
             devDependencies?.["react-native"] ||
             semver.minVersion(reactNativeVersion)?.version,
         }
-      : { kitType }),
+      : undefined),
+    kitType,
     capabilities: Array.from(
       Object.keys({
         ...dependencies,

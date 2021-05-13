@@ -31,6 +31,7 @@ describe("capabilitiesFor()", () => {
     expect(capabilitiesFor(manifest)).toEqual({
       reactNativeVersion: "^0.64",
       reactNativeDevVersion: "0.64.0",
+      kitType: "library",
       capabilities: ["core-android", "core-ios"],
     });
   });
