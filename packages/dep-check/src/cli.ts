@@ -1,53 +1,17 @@
 #!/usr/bin/env node
-import type { KitType } from "@rnx-kit/config";
-import fs from "fs";
+
 import path from "path";
 import pkgDir from "pkg-dir";
 import yargs from "yargs";
-import { capabilitiesFor } from "./capabilities";
 import { checkPackageManifest } from "./check";
 import { error } from "./console";
+import { initializeConfig } from "./initialize";
 
 export type Args = {
   init?: string;
   write: boolean;
   "package-json"?: string | number;
 };
-
-function ensureKitType(type: string | undefined): KitType | undefined {
-  switch (type) {
-    case "app":
-    case "library":
-      return type;
-    default:
-      return undefined;
-  }
-}
-
-function initializeConfig(
-  packageManifest: string,
-  kitType: string
-): void {
-  const manifest = JSON.parse(
-    fs.readFileSync(packageManifest, { encoding: "utf-8" })
-  );
-  if (manifest["rnx-kit"]?.["capabilities"]) {
-    return;
-  }
-
-  const capabilities = capabilitiesFor(manifest, ensureKitType(kitType));
-  const updatedManifest = {
-    ...manifest,
-    "rnx-kit": {
-      ...manifest["rnx-kit"],
-      ...capabilities,
-    }
-  };
-  fs.writeFileSync(
-    packageManifest,
-    JSON.stringify(updatedManifest, undefined, 2) + "\n"
-  );
-}
 
 export function cli({ init, write, "package-json": packageJson }: Args): void {
   if (init && write) {
