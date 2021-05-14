@@ -289,7 +289,7 @@ describe("visit()", () => {
     const files: Array<string> = [];
 
     graphPosix.entryPoints.forEach((m) =>
-      visit(m, graphPosix, rootPathPosix, visited, files)
+      visit(m, graphPosix, [rootPathPosix], visited, files)
     );
     expect(visited).toMatchSnapshot();
   });
@@ -299,7 +299,7 @@ describe("visit()", () => {
     const files: Array<string> = [];
 
     graphWin32.entryPoints.forEach((m) =>
-      visit(m, graphWin32, rootPathWin32, visited, files)
+      visit(m, graphWin32, [rootPathWin32], visited, files)
     );
     expect(visited).toMatchSnapshot();
   });
@@ -309,7 +309,7 @@ describe("visit()", () => {
     const files: Array<string> = [];
 
     graphPosix.entryPoints.forEach((m) =>
-      visit(m, graphPosix, rootPathPosix, visited, files)
+      visit(m, graphPosix, [rootPathPosix], visited, files)
     );
     expect(files).toMatchSnapshot();
   });
@@ -319,7 +319,39 @@ describe("visit()", () => {
     const files: Array<string> = [];
 
     graphWin32.entryPoints.forEach((m) =>
-      visit(m, graphWin32, rootPathWin32, visited, files)
+      visit(m, graphWin32, [rootPathWin32], visited, files)
+    );
+    expect(files).toMatchSnapshot();
+  });
+
+  test("returns a list of files including react-native (posix)", () => {
+    const visited: Record<string, boolean> = {};
+    const files: Array<string> = [];
+
+    graphPosix.entryPoints.forEach((m) =>
+      visit(
+        m,
+        graphPosix,
+        [rootPathPosix, react_native_posix.path],
+        visited,
+        files
+      )
+    );
+    expect(files).toMatchSnapshot();
+  });
+
+  test("returns a list of files including react-native (win32)", () => {
+    const visited: Record<string, boolean> = {};
+    const files: Array<string> = [];
+
+    graphWin32.entryPoints.forEach((m) =>
+      visit(
+        m,
+        graphWin32,
+        [rootPathWin32, react_native_win32.path],
+        visited,
+        files
+      )
     );
     expect(files).toMatchSnapshot();
   });
