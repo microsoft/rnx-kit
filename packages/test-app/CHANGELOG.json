@@ -2,6 +2,21 @@
   "name": "@rnx-kit/test-app",
   "entries": [
     {
+      "date": "Fri, 14 May 2021 07:34:43 GMT",
+      "tag": "@rnx-kit/test-app_v0.0.1",
+      "version": "0.0.1",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Bump @rnx-kit/metro-plugin-typescript-validation to v1.0.3",
+            "author": "afoxman@microsoft.com",
+            "commit": "b3f72c98d7d2bd52dd1e7c7c267c4d4934e83c75",
+            "package": "@rnx-kit/test-app"
+          }
+        ]
+      }
+    },
+    {
       "date": "Wed, 12 May 2021 11:52:17 GMT",
       "tag": "@rnx-kit/test-app_v0.0.1",
       "version": "0.0.1",

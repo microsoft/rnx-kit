@@ -2,6 +2,21 @@
   "name": "@rnx-kit/metro-plugin-typescript-validation",
   "entries": [
     {
+      "date": "Fri, 14 May 2021 07:34:43 GMT",
+      "tag": "@rnx-kit/metro-plugin-typescript-validation_v1.0.3",
+      "version": "1.0.3",
+      "comments": {
+        "patch": [
+          {
+            "comment": "When running TypeScript validation during bundle, check every file in the repository, not just the current package.",
+            "author": "afoxman@microsoft.com",
+            "commit": "b3f72c98d7d2bd52dd1e7c7c267c4d4934e83c75",
+            "package": "@rnx-kit/metro-plugin-typescript-validation"
+          }
+        ]
+      }
+    },
+    {
       "date": "Wed, 12 May 2021 05:52:23 GMT",
       "tag": "@rnx-kit/metro-plugin-typescript-validation_v1.0.2",
       "version": "1.0.2",

@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/metro-plugin-typescript-validation
 
-This log was last generated on Wed, 12 May 2021 05:52:23 GMT and should not be manually modified.
+This log was last generated on Fri, 14 May 2021 07:34:43 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 1.0.3
+
+Fri, 14 May 2021 07:34:43 GMT
+
+### Patches
+
+- When running TypeScript validation during bundle, check every file in the repository, not just the current package. (afoxman@microsoft.com)
 
 ## 1.0.2
 

@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/test-app
 
-This log was last generated on Wed, 12 May 2021 11:52:17 GMT and should not be manually modified.
+This log was last generated on Fri, 14 May 2021 07:34:43 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 0.0.1
+
+Fri, 14 May 2021 07:34:43 GMT
+
+### Patches
+
+- Bump @rnx-kit/metro-plugin-typescript-validation to v1.0.3 (afoxman@microsoft.com)
 
 ## 0.0.1
 
