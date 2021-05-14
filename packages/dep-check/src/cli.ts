@@ -31,7 +31,7 @@ function initializeConfig(
   const manifest = JSON.parse(
     fs.readFileSync(packageManifest, { encoding: "utf-8" })
   );
-  if (!manifest["rnx-kit"]?.["capabilities"]) {
+  if (manifest["rnx-kit"]?.["capabilities"]) {
     return;
   }
 
