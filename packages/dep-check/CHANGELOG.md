@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/dep-check
 
-This log was last generated on Sat, 15 May 2021 08:49:14 GMT and should not be manually modified.
+This log was last generated on Sat, 15 May 2021 08:55:08 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 1.1.10
+
+Sat, 15 May 2021 08:55:08 GMT
+
+### Patches
+
+- Print instructions when changes are needed. (4123478+tido64@users.noreply.github.com)
 
 ## 1.1.9
 
