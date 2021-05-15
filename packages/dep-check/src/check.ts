@@ -68,13 +68,14 @@ export function checkPackageManifest(
     getProfilesFor(reactNativeDevVersion),
     kitType
   );
-  const updatedManifestJson =
-    JSON.stringify(updatedManifest, undefined, 2) + "\n";
-  const normalizedManifestJson = manifestJson.replace(/\r/g, "");
+
+  // Don't fail when manifests only have whitespace differences.
+  const updatedManifestJson = JSON.stringify(updatedManifest, undefined, 2);
+  const normalizedManifestJson = JSON.stringify(manifest, undefined, 2);
 
   if (updatedManifestJson !== normalizedManifestJson) {
     if (write) {
-      fs.writeFileSync(manifestPath, updatedManifestJson);
+      fs.writeFileSync(manifestPath, updatedManifestJson + "\n");
     } else {
       const diff = diffLinesUnified(
         normalizedManifestJson.split("\n"),
