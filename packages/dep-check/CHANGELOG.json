@@ -2,6 +2,21 @@
   "name": "@rnx-kit/dep-check",
   "entries": [
     {
+      "date": "Sat, 15 May 2021 08:49:14 GMT",
+      "tag": "@rnx-kit/dep-check_v1.1.9",
+      "version": "1.1.9",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Exclude dev-only capabilities from requirements",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "d70e257508d6cb7207d5132e5cfb1323a569ca38",
+            "package": "@rnx-kit/dep-check"
+          }
+        ]
+      }
+    },
+    {
       "date": "Wed, 12 May 2021 11:52:17 GMT",
       "tag": "@rnx-kit/dep-check_v1.1.8",
       "version": "1.1.8",
