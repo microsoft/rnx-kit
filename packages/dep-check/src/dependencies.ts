@@ -10,6 +10,7 @@ import fs from "fs";
 import path from "path";
 import { error, warn } from "./console";
 import {
+  getAllProfiles,
   getProfileVersionsFor,
   profilesSatisfying,
   ProfileVersion,
@@ -38,6 +39,14 @@ function isCoreCapability(capability: Capability): boolean {
     default:
       return false;
   }
+}
+
+function isDevOnlyCapability(
+  capability: Capability,
+  versions: ProfileVersion[]
+): boolean {
+  const allProfiles = getAllProfiles();
+  return versions.some((version) => allProfiles[version][capability].devOnly);
 }
 
 export function visitDependencies(
@@ -135,7 +144,10 @@ export function getRequirements(
              * dependencies it does not need, e.g. `react-native-windows` when
              * the app only supports iOS.
              */
-            if (!isCoreCapability(capability)) {
+            if (
+              !isCoreCapability(capability) &&
+              !isDevOnlyCapability(capability, profileVersions)
+            ) {
               result.add(capability);
             }
             return result;
