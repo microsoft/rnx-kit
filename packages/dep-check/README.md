@@ -109,9 +109,16 @@ rnx-dep-check [options] [/path/to/package.json]
 Providing a path to `package.json` is optional. If omitted, it will look for one
 using node module resolution.
 
+### `--init <app | library>`
+
+When integrating `@rnx-kit/dep-check` for the first time, it may be a cumbersome
+to manually add all capabilities yourself. You can run this tool with `--init`,
+and it will try to add a sensible configuration based on what is currently
+defined in the specified `package.json`.
+
 ### `--write`
 
-Writes all changes to the specified `package.json`.
+Writes all proposed changes to the specified `package.json`.
 
 ## Configure
 
