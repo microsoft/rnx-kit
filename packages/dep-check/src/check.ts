@@ -87,6 +87,14 @@ export function checkPackageManifest(
         }
       );
       console.log(diff);
+
+      const [_, depCheckPath, ...args] = process.argv;
+      const bin = path.basename(depCheckPath);
+      const command = [bin, "--write", ...args].join(" ");
+      error(
+        `Changes are needed to satisfy all requirements. Run '${command}' to have ${bin} apply them.`
+      );
+
       return 1;
     }
   }
