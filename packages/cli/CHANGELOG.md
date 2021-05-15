@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/cli
 
-This log was last generated on Sat, 15 May 2021 08:55:08 GMT and should not be manually modified.
+This log was last generated on Sat, 15 May 2021 09:02:22 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 0.5.10
+
+Sat, 15 May 2021 09:02:22 GMT
+
+### Patches
+
+- dep-check: Added command for initializing a configuration (4123478+tido64@users.noreply.github.com)
 
 ## 0.5.9
 

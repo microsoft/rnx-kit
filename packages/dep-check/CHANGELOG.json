@@ -2,6 +2,21 @@
   "name": "@rnx-kit/dep-check",
   "entries": [
     {
+      "date": "Sat, 15 May 2021 09:02:22 GMT",
+      "tag": "@rnx-kit/dep-check_v1.2.0",
+      "version": "1.2.0",
+      "comments": {
+        "minor": [
+          {
+            "comment": "Added command for initializing a configuration",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "30eb2a9df003d7f71b61f78829d7f6dd83e6c2ea",
+            "package": "@rnx-kit/dep-check"
+          }
+        ]
+      }
+    },
+    {
       "date": "Sat, 15 May 2021 08:55:08 GMT",
       "tag": "@rnx-kit/dep-check_v1.1.10",
       "version": "1.1.10",

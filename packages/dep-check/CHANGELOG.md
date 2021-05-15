@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/dep-check
 
-This log was last generated on Sat, 15 May 2021 08:55:08 GMT and should not be manually modified.
+This log was last generated on Sat, 15 May 2021 09:02:22 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 1.2.0
+
+Sat, 15 May 2021 09:02:22 GMT
+
+### Minor changes
+
+- Added command for initializing a configuration (4123478+tido64@users.noreply.github.com)
 
 ## 1.1.10
 
