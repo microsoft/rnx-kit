@@ -2,6 +2,21 @@
   "name": "@rnx-kit/cli",
   "entries": [
     {
+      "date": "Tue, 18 May 2021 18:41:27 GMT",
+      "tag": "@rnx-kit/cli_v0.5.12",
+      "version": "0.5.12",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Removed unused react-native dependency",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "2f84e615438734d609d22cf4dee96bd7296a79cb",
+            "package": "@rnx-kit/cli"
+          }
+        ]
+      }
+    },
+    {
       "date": "Tue, 18 May 2021 09:25:17 GMT",
       "tag": "@rnx-kit/cli_v0.5.11",
       "version": "0.5.11",
