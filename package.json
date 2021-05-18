@@ -30,8 +30,12 @@
     "test": "lage test --verbose --grouped"
   },
   "devDependencies": {
+    "@babel/core": "^7.0.0",
     "beachball": "^2.2.0",
-    "lage": "^0.29.0"
+    "lage": "^0.29.0",
+    "metro": "^0.59.0",
+    "metro-config": "^0.59.0",
+    "metro-react-native-babel-preset": "^0.59.0"
   },
   "workspaces": {
     "packages": [
