@@ -2,6 +2,21 @@
   "name": "@rnx-kit/dep-check",
   "entries": [
     {
+      "date": "Tue, 18 May 2021 09:25:17 GMT",
+      "tag": "@rnx-kit/dep-check_v1.2.1",
+      "version": "1.2.1",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Ignore whitespace differences",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "986c9db076ab35e2f53f3b710ce0708cbb1899c3",
+            "package": "@rnx-kit/dep-check"
+          }
+        ]
+      }
+    },
+    {
       "date": "Sat, 15 May 2021 09:02:22 GMT",
       "tag": "@rnx-kit/dep-check_v1.2.0",
       "version": "1.2.0",
