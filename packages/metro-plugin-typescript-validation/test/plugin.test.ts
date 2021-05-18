@@ -8,7 +8,7 @@ import type {
 import {
   getModuleRoot,
   readTsConfig,
-  writeMetroTsConfig,
+  writeMetroTsConfigToNodeModules,
   runTypeScriptCompiler,
   visit,
   TypeScriptValidation,
@@ -88,17 +88,30 @@ const propulsion_ts_win32 = addModuleDependency(
   rootPathWin32 + "\\src\\propulsion.ts"
 );
 
-const dimension_ts_posix = addModuleDependency(
+const dimensions_ts_posix = addModuleDependency(
   graphPosix,
   index_ts_posix,
   "./src/dimensions.ts",
   rootPathPosix + "/src/dimensions.ts"
 );
-const dimension_ts_win32 = addModuleDependency(
+const dimensions_ts_win32 = addModuleDependency(
   graphWin32,
   index_ts_win32,
   ".\\src\\dimensions.ts",
   rootPathWin32 + "\\src\\dimensions.ts"
+);
+
+const lectroid_js_posix = addModuleDependency(
+  graphPosix,
+  index_ts_posix,
+  "./src/lectroid.js",
+  rootPathPosix + "/src/lectroid.js"
+);
+const lectroid_js_win32 = addModuleDependency(
+  graphWin32,
+  index_ts_win32,
+  ".\\src\\lectroid.js",
+  rootPathWin32 + "\\src\\lectroid.js"
 );
 
 const react_native_posix = addModuleDependency(
@@ -124,11 +137,11 @@ propulsion_ts_win32.dependencies.set(".\\src\\dimensions.ts", {
   data: null,
 });
 
-dimension_ts_posix.dependencies.set("./src/propulsion.ts", {
+dimensions_ts_posix.dependencies.set("./src/propulsion.ts", {
   absolutePath: rootPathPosix + "/src/propulsion.ts",
   data: null,
 });
-dimension_ts_win32.dependencies.set(".\\src\\propulsion.ts", {
+dimensions_ts_win32.dependencies.set(".\\src\\propulsion.ts", {
   absolutePath: rootPathPosix + "\\src\\propulsion.ts",
   data: null,
 });
@@ -172,7 +185,7 @@ describe("readTsConfig()", () => {
   });
 });
 
-describe("writeMetroTsConfig()", () => {
+describe("writeMetroTsConfigToNodeModules()", () => {
   afterEach(() => {
     jest.resetAllMocks();
   });
@@ -181,7 +194,7 @@ describe("writeMetroTsConfig()", () => {
     const projectRoot = "/root/path/here";
     const tsconfig = { a: 123 };
 
-    writeMetroTsConfig(projectRoot, tsconfig);
+    writeMetroTsConfigToNodeModules(projectRoot, tsconfig);
 
     expect(fs.writeFileSync).toBeCalledTimes(1);
     expect(fs.writeFileSync).toBeCalledWith(
@@ -276,7 +289,7 @@ describe("visit()", () => {
     const files: Array<string> = [];
 
     graphPosix.entryPoints.forEach((m) =>
-      visit(m, graphPosix, rootPathPosix, visited, files)
+      visit(m, graphPosix, [rootPathPosix], visited, files)
     );
     expect(visited).toMatchSnapshot();
   });
@@ -286,7 +299,7 @@ describe("visit()", () => {
     const files: Array<string> = [];
 
     graphWin32.entryPoints.forEach((m) =>
-      visit(m, graphWin32, rootPathWin32, visited, files)
+      visit(m, graphWin32, [rootPathWin32], visited, files)
     );
     expect(visited).toMatchSnapshot();
   });
@@ -296,7 +309,7 @@ describe("visit()", () => {
     const files: Array<string> = [];
 
     graphPosix.entryPoints.forEach((m) =>
-      visit(m, graphPosix, rootPathPosix, visited, files)
+      visit(m, graphPosix, [rootPathPosix], visited, files)
     );
     expect(files).toMatchSnapshot();
   });
@@ -306,7 +319,39 @@ describe("visit()", () => {
     const files: Array<string> = [];
 
     graphWin32.entryPoints.forEach((m) =>
-      visit(m, graphWin32, rootPathWin32, visited, files)
+      visit(m, graphWin32, [rootPathWin32], visited, files)
+    );
+    expect(files).toMatchSnapshot();
+  });
+
+  test("returns a list of files including react-native (posix)", () => {
+    const visited: Record<string, boolean> = {};
+    const files: Array<string> = [];
+
+    graphPosix.entryPoints.forEach((m) =>
+      visit(
+        m,
+        graphPosix,
+        [rootPathPosix, react_native_posix.path],
+        visited,
+        files
+      )
+    );
+    expect(files).toMatchSnapshot();
+  });
+
+  test("returns a list of files including react-native (win32)", () => {
+    const visited: Record<string, boolean> = {};
+    const files: Array<string> = [];
+
+    graphWin32.entryPoints.forEach((m) =>
+      visit(
+        m,
+        graphWin32,
+        [rootPathWin32, react_native_win32.path],
+        visited,
+        files
+      )
     );
     expect(files).toMatchSnapshot();
   });
@@ -347,6 +392,36 @@ describe("TypeScriptValidation()", () => {
     expect(tsconfig?.files).toBeTruthy();
     expect(Array.isArray(tsconfig.files)).toBeTruthy();
     expect(tsconfig.files.length).toBeGreaterThan(0);
+  });
+
+  test("includes only ts/tsx files when allowJs and checkJs are off", () => {
+    TypeScriptValidation()(undefined, undefined, graphPosix, {
+      projectRoot: rootPathPosix,
+    } as SerializerOptions);
+
+    expect(fs.writeFileSync).toBeCalledTimes(1);
+    const tsconfig = JSON.parse(fs.writeFileSync.mock.calls[0][1]);
+    expect(tsconfig.files).toMatchSnapshot();
+  });
+
+  test("includes ts/tsx and js/jsx files when allowJs and checkJs are on", () => {
+    fs.readFileSync.mockReturnValue(
+      JSON.stringify({
+        include: ["src"],
+        compilerOptions: {
+          allowJs: true,
+          checkJs: true,
+        },
+      })
+    );
+
+    TypeScriptValidation()(undefined, undefined, graphPosix, {
+      projectRoot: rootPathPosix,
+    } as SerializerOptions);
+
+    expect(fs.writeFileSync).toBeCalledTimes(1);
+    const tsconfig = JSON.parse(fs.writeFileSync.mock.calls[0][1]);
+    expect(tsconfig.files).toMatchSnapshot();
   });
 
   test("adds noEmit compiler option", () => {
@@ -413,6 +488,61 @@ describe("TypeScriptValidation()", () => {
       expect.stringMatching(
         /[/\\]@msfast[/\\]typescript-platform-resolution.*[/\\]tsc.js$/
       )
+    );
+  });
+
+  test("preserves extends prop when it refers to a package", () => {
+    fs.readFileSync.mockReturnValue(
+      JSON.stringify({
+        include: ["src"],
+        extends: "react-native/tsconfig.json",
+      })
+    );
+
+    TypeScriptValidation()(undefined, undefined, graphPosix, {
+      projectRoot: rootPathPosix,
+    } as SerializerOptions);
+
+    expect(fs.writeFileSync).toBeCalledTimes(1);
+    const tsconfig = JSON.parse(fs.writeFileSync.mock.calls[0][1]);
+    expect(tsconfig.extends).toEqual("react-native/tsconfig.json");
+  });
+
+  test("preserves extends prop when it is an absolute path", () => {
+    fs.readFileSync.mockReturnValue(
+      JSON.stringify({
+        include: ["src"],
+        extends: "/Users/lithgow/repos/react-native/tsconfig.json",
+      })
+    );
+
+    TypeScriptValidation()(undefined, undefined, graphPosix, {
+      projectRoot: rootPathPosix,
+    } as SerializerOptions);
+
+    expect(fs.writeFileSync).toBeCalledTimes(1);
+    const tsconfig = JSON.parse(fs.writeFileSync.mock.calls[0][1]);
+    expect(tsconfig.extends).toEqual(
+      "/Users/lithgow/repos/react-native/tsconfig.json"
+    );
+  });
+
+  test("re-relativizes extends prop when it is a relative path", () => {
+    fs.readFileSync.mockReturnValue(
+      JSON.stringify({
+        include: ["src"],
+        extends: "../../tsconfig.json",
+      })
+    );
+
+    TypeScriptValidation()(undefined, undefined, graphPosix, {
+      projectRoot: rootPathPosix,
+    } as SerializerOptions);
+
+    expect(fs.writeFileSync).toBeCalledTimes(1);
+    const tsconfig = JSON.parse(fs.writeFileSync.mock.calls[0][1]);
+    expect(tsconfig.extends).toEqual(
+      expect.stringMatching(/^[.]{2}[/\\][.]{2}[/\\][.]{2}[/\\]tsconfig.json$/)
     );
   });
 

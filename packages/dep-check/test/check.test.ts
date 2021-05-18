@@ -162,7 +162,7 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
     });
 
     expect(checkPackageManifest("package.json")).not.toBe(0);
-    expect(consoleErrorSpy).not.toBeCalled();
+    expect(consoleErrorSpy).toBeCalledTimes(1);
     expect(consoleWarnSpy).not.toBeCalled();
     expect(consoleLogSpy).toBeCalledTimes(1);
   });

@@ -13,7 +13,7 @@ exports[`checkPackageManifest({ kitType: 'app' }) adds required dependencies 1`]
     \\"quaid\\": \\"1.0.0\\",
     \\"react\\": \\"17.0.1\\",
     \\"react-native\\": \\"^0.64.1\\",
-    \\"react-native-lazy-index\\": \\"^2.0.0\\",
+    \\"react-native-lazy-index\\": \\"^2.1.1\\",
     \\"react-native-reanimated\\": \\"^2.1.0\\",
     \\"react-native-webview\\": \\"^11.4.2\\"
   },
@@ -21,10 +21,12 @@ exports[`checkPackageManifest({ kitType: 'app' }) adds required dependencies 1`]
     \\"reactNativeVersion\\": \\"^0.63 || ^0.64\\",
     \\"kitType\\": \\"app\\",
     \\"capabilities\\": [
+      \\"core-android\\",
       \\"hermes\\",
       \\"lazy-index\\"
     ]
-  }
+  },
+  \\"devDependencies\\": {}
 }
 "
 `;

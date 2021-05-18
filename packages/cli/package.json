@@ -1,10 +1,16 @@
 {
   "name": "@rnx-kit/cli",
-  "version": "0.5.0",
+  "version": "0.5.11",
   "description": "Command-line interface for rnx-kit",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/cli",
   "license": "MIT",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "packages/cli"
+  },
   "scripts": {
     "build": "rnx-kit-scripts build",
     "depcheck": "rnx-kit-scripts depcheck",
@@ -13,14 +19,11 @@
   },
   "dependencies": {
     "@rnx-kit/config": "0.2.6",
-    "@rnx-kit/dep-check": "^1.1.2",
+    "@rnx-kit/dep-check": "^1.2.1",
     "@rnx-kit/third-party-notices": "1.0.0",
     "chalk": "^4.1.0"
   },
   "devDependencies": {
     "rnx-kit-scripts": "*"
-  },
-  "peerDependencies": {
-    "react-native": ">= 0.60.0"
   }
 }

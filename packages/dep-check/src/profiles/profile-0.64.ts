@@ -71,7 +71,7 @@ const profile: Profile = {
   },
   "lazy-index": {
     name: "react-native-lazy-index",
-    version: "^2.0.0",
+    version: "^2.1.1",
   },
   "masked-view": {
     name: "@react-native-masked-view/masked-view",
@@ -83,7 +83,7 @@ const profile: Profile = {
   },
   "navigation/native": {
     name: "@react-navigation/native",
-    version: "^5.9.6",
+    version: "^5.9.4",
   },
   "navigation/stack": {
     name: "@react-navigation/stack",
@@ -123,7 +123,7 @@ const profile: Profile = {
   },
   "test-app": {
     name: "react-native-test-app",
-    version: "^0.5.5",
+    version: "^0.5.8",
     devOnly: true,
   },
   webview: {

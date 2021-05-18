@@ -16,6 +16,10 @@ const allProfiles: Record<ProfileVersion, Profile> = {
   "0.65": profile_0_65,
 };
 
+export function getAllProfiles(): Readonly<typeof allProfiles> {
+  return allProfiles;
+}
+
 function getVersionComparator(
   versionOrRange: string
 ): (profileVersion: ProfileVersion) => boolean {

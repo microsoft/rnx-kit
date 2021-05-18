@@ -3,12 +3,14 @@ import {
   getKitCapabilities,
   getKitConfig,
   KitConfig,
+  KitType,
 } from "@rnx-kit/config";
 import findUp from "find-up";
 import fs from "fs";
 import path from "path";
 import { error, warn } from "./console";
 import {
+  getAllProfiles,
   getProfileVersionsFor,
   profilesSatisfying,
   ProfileVersion,
@@ -24,6 +26,28 @@ type Trace = {
   reactNativeVersion: string;
   profiles: ProfileVersion[];
 };
+
+function isCoreCapability(capability: Capability): boolean {
+  switch (capability) {
+    case "core-android":
+    case "core-ios":
+    case "core-macos":
+    case "core-win32":
+    case "core-windows":
+      return true;
+
+    default:
+      return false;
+  }
+}
+
+function isDevOnlyCapability(
+  capability: Capability,
+  versions: ProfileVersion[]
+): boolean {
+  const allProfiles = getAllProfiles();
+  return versions.some((version) => allProfiles[version][capability].devOnly);
+}
 
 export function visitDependencies(
   { dependencies }: PackageManifest,
@@ -62,6 +86,7 @@ export function visitDependencies(
 
 export function getRequirements(
   targetReactNativeVersion: string,
+  kitType: KitType,
   targetManifest: PackageManifest,
   projectRoot: string
 ): Requirements {
@@ -73,48 +98,64 @@ export function getRequirements(
   }
 
   const allCapabilities = new Set<Capability>();
-  const trace: Trace[] = [
-    {
-      module: targetManifest.name,
-      reactNativeVersion: targetReactNativeVersion,
-      profiles: profileVersions,
-    },
-  ];
+  if (kitType === "app") {
+    const trace: Trace[] = [
+      {
+        module: targetManifest.name,
+        reactNativeVersion: targetReactNativeVersion,
+        profiles: profileVersions,
+      },
+    ];
 
-  visitDependencies(targetManifest, projectRoot, (module, modulePath) => {
-    const kitConfig = getKitConfig({ cwd: modulePath });
-    if (kitConfig) {
-      const { reactNativeVersion, capabilities } = getKitCapabilities(
-        kitConfig
-      );
+    visitDependencies(targetManifest, projectRoot, (module, modulePath) => {
+      const kitConfig = getKitConfig({ cwd: modulePath });
+      if (kitConfig) {
+        const { reactNativeVersion, capabilities } =
+          getKitCapabilities(kitConfig);
 
-      profileVersions = profilesSatisfying(profileVersions, reactNativeVersion);
-      if (profileVersions.length != trace[trace.length - 1].profiles.length) {
-        trace.push({ module, reactNativeVersion, profiles: profileVersions });
+        profileVersions = profilesSatisfying(
+          profileVersions,
+          reactNativeVersion
+        );
+        if (profileVersions.length != trace[trace.length - 1].profiles.length) {
+          trace.push({ module, reactNativeVersion, profiles: profileVersions });
+        }
+
+        if (profileVersions.length === 0) {
+          const message =
+            "No React Native profile could satisfy all dependencies";
+          const fullTrace = [
+            message,
+            ...trace.map(({ module, reactNativeVersion, profiles }) => {
+              const satisfiedVersions = profiles.join(", ");
+              return `    [${satisfiedVersions}] satisfies '${module}' because it supports '${reactNativeVersion}'`;
+            }),
+          ].join("\n");
+          error(fullTrace);
+          throw new Error(message);
+        }
+
+        if (Array.isArray(capabilities)) {
+          capabilities.reduce((result, capability) => {
+            /**
+             * Core capabilities are capabilities that must always be declared
+             * by the hosting app and should not be included when gathering
+             * requirements. This is to avoid forcing an app to install
+             * dependencies it does not need, e.g. `react-native-windows` when
+             * the app only supports iOS.
+             */
+            if (
+              !isCoreCapability(capability) &&
+              !isDevOnlyCapability(capability, profileVersions)
+            ) {
+              result.add(capability);
+            }
+            return result;
+          }, allCapabilities);
+        }
       }
-
-      if (profileVersions.length === 0) {
-        const message =
-          "No React Native profile could satisfy all dependencies";
-        const fullTrace = [
-          message,
-          ...trace.map(({ module, reactNativeVersion, profiles }) => {
-            const satisfiedVersions = profiles.join(", ");
-            return `    [${satisfiedVersions}] satisfies '${module}' because it supports '${reactNativeVersion}'`;
-          }),
-        ].join("\n");
-        error(fullTrace);
-        throw new Error(message);
-      }
-
-      if (Array.isArray(capabilities)) {
-        capabilities.reduce((result, capability) => {
-          result.add(capability);
-          return result;
-        }, allCapabilities);
-      }
-    }
-  });
+    });
+  }
 
   return {
     reactNativeVersion: "^" + profileVersions.join(" || ^"),

@@ -43,10 +43,8 @@ export function checkPackageManifest(
     capabilities: targetCapabilities,
   } = getKitCapabilities(kitConfig);
 
-  const {
-    reactNativeVersion,
-    capabilities: requiredCapabilities,
-  } = getRequirements(targetReactNativeVersion, manifest, projectRoot);
+  const { reactNativeVersion, capabilities: requiredCapabilities } =
+    getRequirements(targetReactNativeVersion, kitType, manifest, projectRoot);
   requiredCapabilities.push(...targetCapabilities);
 
   const badPackages = findBadPackages(manifest);
@@ -70,13 +68,14 @@ export function checkPackageManifest(
     getProfilesFor(reactNativeDevVersion),
     kitType
   );
-  const updatedManifestJson =
-    JSON.stringify(updatedManifest, undefined, 2) + "\n";
-  const normalizedManifestJson = manifestJson.replace(/\r/g, "");
+
+  // Don't fail when manifests only have whitespace differences.
+  const updatedManifestJson = JSON.stringify(updatedManifest, undefined, 2);
+  const normalizedManifestJson = JSON.stringify(manifest, undefined, 2);
 
   if (updatedManifestJson !== normalizedManifestJson) {
     if (write) {
-      fs.writeFileSync(manifestPath, updatedManifestJson);
+      fs.writeFileSync(manifestPath, updatedManifestJson + "\n");
     } else {
       const diff = diffLinesUnified(
         normalizedManifestJson.split("\n"),
@@ -89,6 +88,14 @@ export function checkPackageManifest(
         }
       );
       console.log(diff);
+
+      const [_, depCheckPath, ...args] = process.argv;
+      const bin = path.basename(depCheckPath);
+      const command = [bin, "--write", ...args].join(" ");
+      error(
+        `Changes are needed to satisfy all requirements. Run '${command}' to have ${bin} apply them.`
+      );
+
       return 1;
     }
   }

@@ -42,7 +42,7 @@ const profile: Profile = {
   },
   "navigation/native": {
     name: "@react-navigation/native",
-    version: "^5.9.6",
+    version: "^5.9.4",
   },
   "navigation/stack": {
     name: "@react-navigation/stack",
@@ -55,11 +55,6 @@ const profile: Profile = {
   screens: {
     name: "react-native-screens",
     version: "^2.18.1",
-  },
-  "test-app": {
-    name: "react-native-test-app",
-    version: "^0.5.5",
-    devOnly: true,
   },
   webview: {
     name: "react-native-webview",

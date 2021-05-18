@@ -1,5 +1,22 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`TypeScriptValidation() includes only ts/tsx files when allowJs and checkJs are off 1`] = `
+Array [
+  "/repos/yoyodyne/packages/overthruster/src/main.ts",
+  "/repos/yoyodyne/packages/overthruster/src/propulsion.ts",
+  "/repos/yoyodyne/packages/overthruster/src/dimensions.ts",
+]
+`;
+
+exports[`TypeScriptValidation() includes ts/tsx and js/jsx files when allowJs and checkJs are on 1`] = `
+Array [
+  "/repos/yoyodyne/packages/overthruster/src/main.ts",
+  "/repos/yoyodyne/packages/overthruster/src/propulsion.ts",
+  "/repos/yoyodyne/packages/overthruster/src/dimensions.ts",
+  "/repos/yoyodyne/packages/overthruster/src/lectroid.js",
+]
+`;
+
 exports[`readTsConfig() reads the contents of tsconfig.json 1`] = `
 Object {
   "compilerOptions": Object {
@@ -24,6 +41,7 @@ Array [
   "/repos/yoyodyne/packages/overthruster/src/main.ts",
   "/repos/yoyodyne/packages/overthruster/src/propulsion.ts",
   "/repos/yoyodyne/packages/overthruster/src/dimensions.ts",
+  "/repos/yoyodyne/packages/overthruster/src/lectroid.js",
 ]
 `;
 
@@ -32,6 +50,27 @@ Array [
   "C:\\\\repos\\\\yoyodyne\\\\packages\\\\overthruster\\\\src\\\\main.ts",
   "C:\\\\repos\\\\yoyodyne\\\\packages\\\\overthruster\\\\src\\\\propulsion.ts",
   "C:\\\\repos\\\\yoyodyne\\\\packages\\\\overthruster\\\\src\\\\dimensions.ts",
+  "C:\\\\repos\\\\yoyodyne\\\\packages\\\\overthruster\\\\src\\\\lectroid.js",
+]
+`;
+
+exports[`visit() returns a list of files including react-native (posix) 1`] = `
+Array [
+  "/repos/yoyodyne/packages/overthruster/src/main.ts",
+  "/repos/yoyodyne/packages/overthruster/src/propulsion.ts",
+  "/repos/yoyodyne/packages/overthruster/src/dimensions.ts",
+  "/repos/yoyodyne/packages/overthruster/src/lectroid.js",
+  "/repos/yoyodyne/node_modules/react-native/index.js",
+]
+`;
+
+exports[`visit() returns a list of files including react-native (win32) 1`] = `
+Array [
+  "C:\\\\repos\\\\yoyodyne\\\\packages\\\\overthruster\\\\src\\\\main.ts",
+  "C:\\\\repos\\\\yoyodyne\\\\packages\\\\overthruster\\\\src\\\\propulsion.ts",
+  "C:\\\\repos\\\\yoyodyne\\\\packages\\\\overthruster\\\\src\\\\dimensions.ts",
+  "C:\\\\repos\\\\yoyodyne\\\\packages\\\\overthruster\\\\src\\\\lectroid.js",
+  "C:\\\\repos\\\\yoyodyne\\\\node_modules\\\\react-native\\\\index.js",
 ]
 `;
 
@@ -39,6 +78,7 @@ exports[`visit() traverses the entire graph (posix) 1`] = `
 Object {
   "/repos/yoyodyne/node_modules/react-native/index.js": true,
   "/repos/yoyodyne/packages/overthruster/src/dimensions.ts": true,
+  "/repos/yoyodyne/packages/overthruster/src/lectroid.js": true,
   "/repos/yoyodyne/packages/overthruster/src/main.ts": true,
   "/repos/yoyodyne/packages/overthruster/src/propulsion.ts": true,
 }
@@ -49,6 +89,7 @@ Object {
   "/repos/yoyodyne/packages/overthruster\\\\src\\\\propulsion.ts": true,
   "C:\\\\repos\\\\yoyodyne\\\\node_modules\\\\react-native\\\\index.js": true,
   "C:\\\\repos\\\\yoyodyne\\\\packages\\\\overthruster\\\\src\\\\dimensions.ts": true,
+  "C:\\\\repos\\\\yoyodyne\\\\packages\\\\overthruster\\\\src\\\\lectroid.js": true,
   "C:\\\\repos\\\\yoyodyne\\\\packages\\\\overthruster\\\\src\\\\main.ts": true,
   "C:\\\\repos\\\\yoyodyne\\\\packages\\\\overthruster\\\\src\\\\propulsion.ts": true,
 }

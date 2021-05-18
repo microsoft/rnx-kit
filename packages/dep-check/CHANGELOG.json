@@ -2,6 +2,192 @@
   "name": "@rnx-kit/dep-check",
   "entries": [
     {
+      "date": "Tue, 18 May 2021 09:25:17 GMT",
+      "tag": "@rnx-kit/dep-check_v1.2.1",
+      "version": "1.2.1",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Ignore whitespace differences",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "986c9db076ab35e2f53f3b710ce0708cbb1899c3",
+            "package": "@rnx-kit/dep-check"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Sat, 15 May 2021 09:02:22 GMT",
+      "tag": "@rnx-kit/dep-check_v1.2.0",
+      "version": "1.2.0",
+      "comments": {
+        "minor": [
+          {
+            "comment": "Added command for initializing a configuration",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "30eb2a9df003d7f71b61f78829d7f6dd83e6c2ea",
+            "package": "@rnx-kit/dep-check"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Sat, 15 May 2021 08:55:08 GMT",
+      "tag": "@rnx-kit/dep-check_v1.1.10",
+      "version": "1.1.10",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Print instructions when changes are needed.",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "124a204b9dca475c66775de809ae436eb969a193",
+            "package": "@rnx-kit/dep-check"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Sat, 15 May 2021 08:49:14 GMT",
+      "tag": "@rnx-kit/dep-check_v1.1.9",
+      "version": "1.1.9",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Exclude dev-only capabilities from requirements",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "d70e257508d6cb7207d5132e5cfb1323a569ca38",
+            "package": "@rnx-kit/dep-check"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Wed, 12 May 2021 11:52:17 GMT",
+      "tag": "@rnx-kit/dep-check_v1.1.8",
+      "version": "1.1.8",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Avoid installing unnecessary core capabilities",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "0dec2500df992c740b32e5b624d513b56312792f",
+            "package": "@rnx-kit/dep-check"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Wed, 12 May 2021 05:38:51 GMT",
+      "tag": "@rnx-kit/dep-check_v1.1.7",
+      "version": "1.1.7",
+      "comments": {
+        "none": [
+          {
+            "comment": "Add table of capabilities to README",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "4ebfac02941377da104bfed7eb114064acf25f7c",
+            "package": "@rnx-kit/dep-check"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Tue, 11 May 2021 15:41:12 GMT",
+      "tag": "@rnx-kit/dep-check_v1.1.7",
+      "version": "1.1.7",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Bump react-native-test-app for Xcode 12.5 fixes",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "62d55105865a37216acc27e4399be2562c1deac6",
+            "package": "@rnx-kit/dep-check"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Tue, 11 May 2021 15:36:06 GMT",
+      "tag": "@rnx-kit/dep-check_v1.1.6",
+      "version": "1.1.6",
+      "comments": {
+        "none": [
+          {
+            "comment": "Added a section about the motivation behind dep-check",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "4a2fe040dc45b66c552e6f947eb8c0024a658406",
+            "package": "@rnx-kit/dep-check"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Tue, 11 May 2021 15:28:18 GMT",
+      "tag": "@rnx-kit/dep-check_v1.1.6",
+      "version": "1.1.6",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Allow dev-only dependencies should always be added",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "f2d09f279b1d5f4eac5c81e2d4e9e260ae4bfa78",
+            "package": "@rnx-kit/dep-check"
+          },
+          {
+            "comment": "Rollback @react-navigation/native as 5.9.6 doesn't exist",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "a8946cd093128fc3e81c778e222e5a895cf9da65",
+            "package": "@rnx-kit/dep-check"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Mon, 10 May 2021 21:58:48 GMT",
+      "tag": "@rnx-kit/dep-check_v1.1.5",
+      "version": "1.1.5",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Allow direct dependency on react-native-test-app",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "e085c163b72a693e3c588927319457705f3a54f6",
+            "package": "@rnx-kit/dep-check"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Mon, 10 May 2021 14:10:30 GMT",
+      "tag": "@rnx-kit/dep-check_v1.1.4",
+      "version": "1.1.4",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Libraries should not re-declare transitive dependencies",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "2a699c896062bb627e62f3628f8773594e96661e",
+            "package": "@rnx-kit/dep-check"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Sat, 08 May 2021 20:35:26 GMT",
+      "tag": "@rnx-kit/dep-check_v1.1.3",
+      "version": "1.1.3",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Fix a crash in react-native-lazy-index when non-JS files are read",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "5847a1e9383f0465e686ed15598a78831283aa7f",
+            "package": "@rnx-kit/dep-check"
+          }
+        ]
+      }
+    },
+    {
       "date": "Thu, 06 May 2021 20:37:55 GMT",
       "tag": "@rnx-kit/dep-check_v1.1.2",
       "version": "1.1.2",

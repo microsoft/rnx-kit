@@ -1,8 +1,96 @@
 # Change Log - @rnx-kit/cli
 
-This log was last generated on Thu, 06 May 2021 16:54:17 GMT and should not be manually modified.
+This log was last generated on Tue, 18 May 2021 09:25:17 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 0.5.11
+
+Tue, 18 May 2021 09:25:17 GMT
+
+### Patches
+
+- Bump @rnx-kit/dep-check to v1.2.1 (4123478+tido64@users.noreply.github.com)
+
+## 0.5.10
+
+Sat, 15 May 2021 09:02:22 GMT
+
+### Patches
+
+- dep-check: Added command for initializing a configuration (4123478+tido64@users.noreply.github.com)
+
+## 0.5.9
+
+Sat, 15 May 2021 08:55:08 GMT
+
+### Patches
+
+- Bump @rnx-kit/dep-check to v1.1.10 (4123478+tido64@users.noreply.github.com)
+
+## 0.5.8
+
+Sat, 15 May 2021 08:49:14 GMT
+
+### Patches
+
+- Bump @rnx-kit/dep-check to v1.1.9 (4123478+tido64@users.noreply.github.com)
+
+## 0.5.7
+
+Wed, 12 May 2021 11:52:17 GMT
+
+### Patches
+
+- Bump @rnx-kit/dep-check to v1.1.8 (4123478+tido64@users.noreply.github.com)
+
+## 0.5.6
+
+Tue, 11 May 2021 17:21:45 GMT
+
+### Patches
+
+- Fix a bug in handling the optional source map parameter. (afoxman@microsoft.com)
+
+## 0.5.5
+
+Tue, 11 May 2021 15:41:12 GMT
+
+### Patches
+
+- Bump @rnx-kit/dep-check to v1.1.7 (4123478+tido64@users.noreply.github.com)
+
+## 0.5.4
+
+Tue, 11 May 2021 15:28:18 GMT
+
+### Patches
+
+- Bump @rnx-kit/dep-check to v1.1.6 (4123478+tido64@users.noreply.github.com)
+
+## 0.5.3
+
+Mon, 10 May 2021 21:58:48 GMT
+
+### Patches
+
+- Bump @rnx-kit/dep-check to v1.1.5 (4123478+tido64@users.noreply.github.com)
+
+## 0.5.2
+
+Mon, 10 May 2021 14:10:30 GMT
+
+### Patches
+
+- Bump @rnx-kit/dep-check to v1.1.4 (4123478+tido64@users.noreply.github.com)
+
+## 0.5.1
+
+Sat, 08 May 2021 20:35:26 GMT
+
+### Patches
+
+- Bump @rnx-kit/dep-check to v1.1.3 (4123478+tido64@users.noreply.github.com)
 
 ## 0.5.0
 

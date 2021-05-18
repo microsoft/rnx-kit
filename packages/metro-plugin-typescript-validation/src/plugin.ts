@@ -6,6 +6,7 @@ import type {
   Module,
   SerializerOptions,
 } from "@rnx-kit/metro-serializer";
+import { getWorkspaces } from "workspace-tools";
 import * as fs from "fs";
 import * as path from "path";
 import * as child_process from "child_process";
@@ -21,7 +22,7 @@ export function readTsConfig(projectRoot: string) {
   return JSON.parse(fs.readFileSync(p, { encoding: "utf8" }));
 }
 
-export function writeMetroTsConfig(
+export function writeMetroTsConfigToNodeModules(
   projectRoot: string,
   tsconfig: object
 ): string {
@@ -70,7 +71,7 @@ export function runTypeScriptCompiler(projectPath: string) {
 export async function visit(
   modulePath: string,
   graph: Graph,
-  scopePath: string,
+  scopePaths: string[],
   visited: Record<string, boolean>,
   files: Array<string>
 ) {
@@ -81,7 +82,7 @@ export async function visit(
   visited[modulePath] = true;
 
   //  collect any file that is in scope
-  if (modulePath.startsWith(scopePath)) {
+  if (scopePaths.some((scopePath) => modulePath.startsWith(scopePath))) {
     files.push(modulePath);
   }
 
@@ -89,7 +90,7 @@ export async function visit(
   graph.dependencies
     .get(modulePath)
     ?.dependencies?.forEach((m) =>
-      visit(m.absolutePath, graph, scopePath, visited, files)
+      visit(m.absolutePath, graph, scopePaths, visited, files)
     );
 }
 
@@ -126,11 +127,15 @@ export function TypeScriptValidation(): MetroPlugin {
     graph: Graph,
     options: SerializerOptions
   ) => {
+    const workspaces = getWorkspaces(options.projectRoot);
+    const scopePaths = workspaces.map((workspace) => workspace.path);
+    scopePaths.push(options.projectRoot);
+
     const visited: Record<string, boolean> = {};
     const files: Array<string> = [];
 
     graph.entryPoints.forEach((m) =>
-      visit(m, graph, options.projectRoot, visited, files)
+      visit(m, graph, scopePaths, visited, files)
     );
 
     const tsconfig = readTsConfig(options.projectRoot);
@@ -140,7 +145,16 @@ export function TypeScriptValidation(): MetroPlugin {
     delete tsconfig.exclude;
 
     //  set the specific list of files to type-check
-    tsconfig.files = files;
+    const allowedExtensions = [".ts", ".tsx"];
+    if (
+      tsconfig.compilerOptions?.allowJs &&
+      tsconfig.compilerOptions?.checkJs
+    ) {
+      allowedExtensions.push(".js", ".jsx");
+    }
+    tsconfig.files = files.filter((f) =>
+      allowedExtensions.includes(path.extname(f).toLowerCase())
+    );
 
     //  compiler options:
     //    - don't emit any codegen files
@@ -149,8 +163,19 @@ export function TypeScriptValidation(): MetroPlugin {
     tsconfig.compilerOptions.noEmit = true;
     tsconfig.compilerOptions.resolutionPlatforms = resolutionPlatforms;
 
+    //  extends prop -- if given and a relative path, it is relative to
+    //  <projectRoot>, since that is where tsconfig.json came from. the
+    //  generated tsconfig for Metro will be in <projectRoot>/node_modules,
+    //  so we need to re-relativize it.
+    if (tsconfig.extends?.startsWith(".")) {
+      tsconfig.extends = path.join("..", tsconfig.extends);
+    }
+
     //  write the altered tsconfig, run TSC, and then cleanup the altered tsconfig
-    const tsconfigMetroPath = writeMetroTsConfig(options.projectRoot, tsconfig);
+    const tsconfigMetroPath = writeMetroTsConfigToNodeModules(
+      options.projectRoot,
+      tsconfig
+    );
     try {
       runTypeScriptCompiler(tsconfigMetroPath);
     } finally {

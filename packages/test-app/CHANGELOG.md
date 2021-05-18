@@ -1,8 +1,112 @@
 # Change Log - @rnx-kit/test-app
 
-This log was last generated on Fri, 07 May 2021 19:27:01 GMT and should not be manually modified.
+This log was last generated on Tue, 18 May 2021 09:25:17 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 0.0.1
+
+Tue, 18 May 2021 09:25:17 GMT
+
+### Patches
+
+- Bump @rnx-kit/cli to v0.5.11 (4123478+tido64@users.noreply.github.com)
+
+## 0.0.1
+
+Sat, 15 May 2021 09:02:22 GMT
+
+### Patches
+
+- Bump @rnx-kit/cli to v0.5.10 (4123478+tido64@users.noreply.github.com)
+
+## 0.0.1
+
+Sat, 15 May 2021 08:55:08 GMT
+
+### Patches
+
+- Bump @rnx-kit/cli to v0.5.9 (4123478+tido64@users.noreply.github.com)
+
+## 0.0.1
+
+Sat, 15 May 2021 08:49:14 GMT
+
+### Patches
+
+- Bump @rnx-kit/cli to v0.5.8 (4123478+tido64@users.noreply.github.com)
+
+## 0.0.1
+
+Fri, 14 May 2021 07:34:43 GMT
+
+### Patches
+
+- Bump @rnx-kit/metro-plugin-typescript-validation to v1.0.3 (afoxman@microsoft.com)
+
+## 0.0.1
+
+Wed, 12 May 2021 11:52:17 GMT
+
+### Patches
+
+- Bump @rnx-kit/cli to v0.5.7 (4123478+tido64@users.noreply.github.com)
+
+## 0.0.1
+
+Wed, 12 May 2021 05:52:23 GMT
+
+### Patches
+
+- Bump @rnx-kit/metro-plugin-typescript-validation to v1.0.2 (afoxman@microsoft.com)
+
+## 0.0.1
+
+Tue, 11 May 2021 17:21:45 GMT
+
+### Patches
+
+- Bump @rnx-kit/cli to v0.5.6 (afoxman@microsoft.com)
+
+## 0.0.1
+
+Tue, 11 May 2021 15:41:12 GMT
+
+### Patches
+
+- Bump @rnx-kit/cli to v0.5.5 (4123478+tido64@users.noreply.github.com)
+
+## 0.0.1
+
+Tue, 11 May 2021 15:28:18 GMT
+
+### Patches
+
+- Bump @rnx-kit/cli to v0.5.4 (4123478+tido64@users.noreply.github.com)
+
+## 0.0.1
+
+Mon, 10 May 2021 21:58:48 GMT
+
+### Patches
+
+- Bump @rnx-kit/cli to v0.5.3 (4123478+tido64@users.noreply.github.com)
+
+## 0.0.1
+
+Mon, 10 May 2021 14:10:30 GMT
+
+### Patches
+
+- Bump @rnx-kit/cli to v0.5.2 (4123478+tido64@users.noreply.github.com)
+
+## 0.0.1
+
+Sat, 08 May 2021 20:35:26 GMT
+
+### Patches
+
+- Bump @rnx-kit/cli to v0.5.1 (4123478+tido64@users.noreply.github.com)
 
 ## 0.0.1
 

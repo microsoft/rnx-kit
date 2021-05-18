@@ -1,18 +1,104 @@
 # @rnx-kit/dep-check
 
-## Configure
+`@rnx-kit/dep-check` manages React Native dependencies for a package, based on
+its needs and requirements.
 
-`@rnx-kit/dep-check` must first be configured before it can be used. It uses
-`@rnx-kit/config` to retrieve your kit configuration. Your configuration can be
-specified either in a file, `rnx-kit.config.js`, or in an `"rnx-kit"` section of
-your `package.json`.
+## Motivation
 
-| Option                  | Type                   | Default               | Description                                                                                                                                                        |
-| :---------------------- | :--------------------- | :-------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `kitType`               | `"app"` \| `"library"` | `"library"`           | Whether this kit is an "app" or a "library". Determines how dependencies are declared.                                                                             |
-| `reactNativeVersion`    | string                 | (required)            | Supported versions of React Native. The value can be a specific version or a range.                                                                                |
-| `reactNativeDevVersion` | string                 | `minVersion(version)` | The version of React Native to use for development. If omitted, the minimum supported version will be used.                                                        |
-| `capabilities`          | Capabilities[]         | `[]`                  | List of used/provided capabilities. A full list can be found in [`kitConfig.ts`](https://github.com/microsoft/rnx-kit/blob/main/packages/config/src/kitConfig.ts). |
+There is currently no centralised place where developers can go to and get a
+list of recommended packages, and which versions they should be using when
+targeting a specific version of React Native. We are trying to address this gap
+with this tool.
+
+`@rnx-kit/dep-check` works by reading a configuration, and suggests changes that
+need to be made. It can optionally also write said changes to the
+`package.json`. The configuration must be manually written by the package owner.
+It declares which React Native versions the package supports, and which
+capabilities it requires. For instance, lets say we have a library,
+`awesome-library`, which supports React Native versions 0.63 and 0.64, and needs
+something that provides network information. We would declare the following in
+our `package.json`:
+
+```json
+// package.json
+{
+  "name": "awesome-library",
+  "version": "1.0.0",
+  ...
+  "rnx-kit": {
+    "reactNativeVersion": "^0.63 || ^0.64",
+    "capabilities": [
+      "core-android",
+      "core-ios",
+      "netinfo"
+    ]
+  }
+}
+```
+
+If we run `@rnx-kit/dep-check` now, it will suggest that we change
+`peerDependencies` and `devDependencies` to the following:
+
+```json
+// package.json
+{
+  "name": "awesome-library",
+  "version": "1.0.0",
+  ...
+  "peerDependencies": {
+    "@react-native-community/netinfo": "^5.7.1 || ^6.0.0",
+    "react-native": "^0.63.2 || ^0.64.1"
+  },
+  "devDependencies": {
+    "@react-native-community/netinfo": "^5.7.1",
+    "react-native": "^0.63.2"
+  },
+  "rnx-kit": {
+    "reactNativeVersion": "^0.63 || ^0.64",
+    "capabilities": [
+      "core-android",
+      "core-ios",
+      "netinfo"
+    ]
+  }
+}
+```
+
+Now our `package.json` correctly declares that it supports React Native 0.63 and
+0.64 to consumers. It also added `@react-native-community/netinfo`, a package
+that provides network information. At the same time, it also sets the versions
+we'll need during development.
+
+For apps that use `@rnx-kit/dep-check`, the process is similar but you'll also
+need to declare that the package is an app by adding `"kitType": "app"`:
+
+```json
+// package.json
+{
+  "name": "awesome-app",
+  "version": "1.0.0",
+  ...
+  "dependencies": {
+    "@react-native-community/netinfo": "^6.0.0",
+    "awesome-library": "1.0.0",
+    "react-native": "^0.64.1"
+  },
+  "rnx-kit": {
+    "reactNativeVersion": "^0.64",
+    "kitType": "app",
+    "capabilities": [
+      "core-android",
+      "core-ios"
+    ]
+  }
+}
+```
+
+Now, we see that `@rnx-kit/dep-check` added `@react-native-community/netinfo`
+even though it wasn't declared in capabilities. This is because when a package
+is an app, it needs to fulfill the requirements of its dependencies. In this
+example, because `awesome-library` needs the `netinfo` capability, it gets added
+to `awesome-app`.
 
 ## Usage
 
@@ -23,9 +109,69 @@ rnx-dep-check [options] [/path/to/package.json]
 Providing a path to `package.json` is optional. If omitted, it will look for one
 using node module resolution.
 
+### `--init <app | library>`
+
+When integrating `@rnx-kit/dep-check` for the first time, it may be a cumbersome
+to manually add all capabilities yourself. You can run this tool with `--init`,
+and it will try to add a sensible configuration based on what is currently
+defined in the specified `package.json`.
+
 ### `--write`
 
-Writes all changes to the specified `package.json`.
+Writes all proposed changes to the specified `package.json`.
+
+## Configure
+
+`@rnx-kit/dep-check` must first be configured before it can be used. It uses
+`@rnx-kit/config` to retrieve your kit configuration. Your configuration can be
+specified either in a file, `rnx-kit.config.js`, or in an `"rnx-kit"` section of
+your `package.json`.
+
+| Option                  | Type                   | Default               | Description                                                                                                 |
+| :---------------------- | :--------------------- | :-------------------- | :---------------------------------------------------------------------------------------------------------- |
+| `kitType`               | `"app"` \| `"library"` | `"library"`           | Whether this kit is an "app" or a "library". Determines how dependencies are declared.                      |
+| `reactNativeVersion`    | string                 | (required)            | Supported versions of React Native. The value can be a specific version or a range.                         |
+| `reactNativeDevVersion` | string                 | `minVersion(version)` | The version of React Native to use for development. If omitted, the minimum supported version will be used. |
+| `capabilities`          | Capabilities[]         | `[]`                  | List of used/provided capabilities. A full list can be found below.                                         |
+
+## Capabilities
+
+<!-- This table is generated by running `node lib/capabilitiesTable.js` -->
+
+| Capability        | 0.65                                              | 0.64                                              | 0.63                                          | 0.62                                          | 0.61                                          |
+| ----------------- | ------------------------------------------------- | ------------------------------------------------- | --------------------------------------------- | --------------------------------------------- | --------------------------------------------- |
+| core-android      | react-native@^0.65.0-0                            | react-native@^0.64.1                              | react-native@^0.63.2                          | react-native@^0.62.3                          | react-native@^0.61.5                          |
+| core-ios          | react-native@^0.65.0-0                            | react-native@^0.64.1                              | react-native@^0.63.2                          | react-native@^0.62.3                          | react-native@^0.61.5                          |
+| core-macos        | react-native-macos@^0.65.0-0                      | react-native-macos@^0.64.0                        | react-native-macos@^0.63.0                    | react-native-macos@^0.62.0                    | react-native-macos@^0.61.0                    |
+| core-win32        | @office-iss/react-native-win32@^0.65.0-0          | @office-iss/react-native-win32@^0.64.0            | @office-iss/react-native-win32@^0.63.0        | @office-iss/react-native-win32@^0.62.0        | @office-iss/react-native-win32@^0.61.0        |
+| core-windows      | react-native-windows@^0.65.0-0                    | react-native-windows@^0.64.0                      | react-native-windows@^0.63.0                  | react-native-windows@^0.62.0                  | react-native-windows@^0.61.0                  |
+| animation         | react-native-reanimated@^2.1.0                    | react-native-reanimated@^2.1.0                    | react-native-reanimated@^1.13.3               | react-native-reanimated@^1.13.3               | react-native-reanimated@^1.13.3               |
+| base64            | react-native-base64@^0.2.1                        | react-native-base64@^0.2.1                        | react-native-base64@^0.2.1                    | react-native-base64@^0.2.1                    | react-native-base64@^0.2.1                    |
+| checkbox          | @react-native-community/checkbox@^0.5.7           | @react-native-community/checkbox@^0.5.7           | @react-native-community/checkbox@^0.5.7       | @react-native-community/checkbox@^0.5.7       | @react-native-community/checkbox@^0.5.7       |
+| clipboard         | @react-native-clipboard/clipboard@^1.7.3          | @react-native-clipboard/clipboard@^1.7.3          | @react-native-community/clipboard@^1.5.1      | @react-native-community/clipboard@^1.5.1      | @react-native-community/clipboard@^1.5.1      |
+| datetime-picker   | @react-native-community/datetimepicker@^3.4.6     | @react-native-community/datetimepicker@^3.4.6     | @react-native-community/datetimepicker@^3.0.9 | @react-native-community/datetimepicker@^3.0.9 | @react-native-community/datetimepicker@^3.0.9 |
+| filesystem        | react-native-fs@^2.17.0                           | react-native-fs@^2.17.0                           | react-native-fs@^2.16.6                       | react-native-fs@^2.16.6                       | react-native-fs@^2.16.6                       |
+| floating-action   | react-native-floating-action@^1.21.0              | react-native-floating-action@^1.21.0              | react-native-floating-action@^1.21.0          | react-native-floating-action@^1.18.0          | react-native-floating-action@^1.18.0          |
+| gestures          | react-native-gesture-handler@^1.10.3              | react-native-gesture-handler@^1.10.3              | react-native-gesture-handler@^1.10.3          | react-native-gesture-handler@^1.9.0           | react-native-gesture-handler@^1.9.0           |
+| hermes            | hermes-engine@~0.7.0                              | hermes-engine@~0.7.0                              | hermes-engine@~0.5.0                          | hermes-engine@~0.4.0                          | hermes-engine@^0.2.1                          |
+| hooks             | @react-native-community/hooks@^2.6.0              | @react-native-community/hooks@^2.6.0              | @react-native-community/hooks@^2.6.0          | @react-native-community/hooks@^2.6.0          | @react-native-community/hooks@^2.6.0          |
+| html              | react-native-render-html@^5.1.0                   | react-native-render-html@^5.1.0                   | react-native-render-html@^5.1.0               | react-native-render-html@^5.1.0               | react-native-render-html@^5.1.0               |
+| lazy-index        | react-native-lazy-index@^2.1.1                    | react-native-lazy-index@^2.1.1                    | react-native-lazy-index@^2.1.1                | react-native-lazy-index@^2.1.1                | react-native-lazy-index@^2.1.1                |
+| masked-view       | @react-native-masked-view/masked-view@^0.2.3      | @react-native-masked-view/masked-view@^0.2.3      | @react-native-community/masked-view@^0.1.10   | @react-native-community/masked-view@^0.1.10   | @react-native-community/masked-view@^0.1.10   |
+| modal             | react-native-modal@^11.10.0                       | react-native-modal@^11.10.0                       | react-native-modal@^11.5.6                    | react-native-modal@^11.5.6                    | react-native-modal@^11.5.6                    |
+| navigation/native | @react-navigation/native@^5.9.4                   | @react-navigation/native@^5.9.4                   | @react-navigation/native@^5.9.4               | @react-navigation/native@^5.7.6               | @react-navigation/native@^5.7.6               |
+| navigation/stack  | @react-navigation/stack@^5.14.4                   | @react-navigation/stack@^5.14.4                   | @react-navigation/stack@^5.14.4               | @react-navigation/stack@^5.9.3                | @react-navigation/stack@^5.9.3                |
+| netinfo           | @react-native-community/netinfo@^6.0.0            | @react-native-community/netinfo@^6.0.0            | @react-native-community/netinfo@^5.7.1        | @react-native-community/netinfo@^5.7.1        | @react-native-community/netinfo@^5.7.1        |
+| popover           | react-native-popover-view@^4.0.0                  | react-native-popover-view@^4.0.0                  | react-native-popover-view@^3.1.1              | react-native-popover-view@^3.1.1              | react-native-popover-view@^3.1.1              |
+| react             | react@17.0.2                                      | react@17.0.1                                      | react@16.13.1                                 | react@16.11.0                                 | react@16.9.0                                  |
+| safe-area         | react-native-safe-area-context@^3.2.0             | react-native-safe-area-context@^3.2.0             | react-native-safe-area-context@^3.2.0         | react-native-safe-area-context@^3.1.9         | react-native-safe-area-context@^3.1.9         |
+| screens           | react-native-screens@^3.1.1                       | react-native-screens@^3.1.1                       | react-native-screens@^2.18.1                  | react-native-screens@^2.10.1                  | react-native-screens@^2.10.1                  |
+| shimmer           | react-native-shimmer@^0.5.0                       | react-native-shimmer@^0.5.0                       | react-native-shimmer@^0.5.0                   | react-native-shimmer@^0.5.0                   | react-native-shimmer@^0.5.0                   |
+| sqlite            | react-native-sqlite-storage@^5.0.0                | react-native-sqlite-storage@^5.0.0                | react-native-sqlite-storage@^3.3.11           | react-native-sqlite-storage@^3.3.11           | react-native-sqlite-storage@^3.3.11           |
+| storage           | @react-native-async-storage/async-storage@^1.15.3 | @react-native-async-storage/async-storage@^1.15.3 | @react-native-community/async-storage@^1.12.1 | @react-native-community/async-storage@^1.12.1 | @react-native-community/async-storage@^1.12.1 |
+| svg               | react-native-svg@^12.1.1                          | react-native-svg@^12.1.1                          | react-native-svg@^12.1.1                      | react-native-svg@^12.1.1                      | react-native-svg@^12.1.1                      |
+| test-app          | react-native-test-app@^0.5.8                      | react-native-test-app@^0.5.8                      | react-native-test-app@^0.5.8                  | react-native-test-app@^0.5.8                  | react-native-test-app@^0.5.8                  |
+| webview           | react-native-webview@^11.4.2                      | react-native-webview@^11.4.2                      | react-native-webview@^11.4.2                  | react-native-webview@^11.0.3                  | react-native-webview@^11.0.3                  |
 
 ## Terminology
 
