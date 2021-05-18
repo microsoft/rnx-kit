@@ -18,7 +18,6 @@
     "test": "rnx-kit-scripts test"
   },
   "dependencies": {
-    "@react-native-community/cli": ">= 4.0.0",
     "@rnx-kit/config": "0.2.6",
     "@rnx-kit/dep-check": "^1.1.8",
     "@rnx-kit/third-party-notices": "1.0.0",
