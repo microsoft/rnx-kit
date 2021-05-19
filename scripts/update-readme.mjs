@@ -30,13 +30,14 @@ const packages = fs.readdirSync(PACKAGES).reduce((packages, packageDir) => {
   return packages;
 }, []);
 
-const table = markdownTable([
-  ["Name", "Description"],
-  ...packages,
-]);
+const table = markdownTable([["Name", "Description"], ...packages]);
 
 const readme = readFile(README);
-fs.writeFileSync(README, readme.replace(
+const updatedReadme = readme.replace(
   new RegExp(`${TOKEN_START}([^]+)${TOKEN_END}`),
-  `${TOKEN_START}\n\n${table}\n\n${TOKEN_END}`,
-));
+  `${TOKEN_START}\n\n${table}\n\n${TOKEN_END}`
+);
+
+if (updatedReadme !== readme) {
+  fs.writeFileSync(README, updatedReadme);
+}
