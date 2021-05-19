@@ -28,5 +28,10 @@ jobs:
         run: yarn run check
       - name: Build and test packages
         run: yarn build:ci
+      - name: Ensure READMEs are up-to-date
+        if: ${{ matrix.node-version == 14 && matrix.os == 'ubuntu-latest' }}
+        run: |
+          yarn update-readme
+          git diff | GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} yarn suggestion-bot
       - name: Bundle packages
         run: yarn bundle:ci
