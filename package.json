@@ -9,7 +9,7 @@
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Microsoft/rnx-kit.git"
+    "url": "https://github.com/microsoft/rnx-kit.git"
   },
   "scripts": {
     "build": "lage build --grouped",
@@ -27,12 +27,14 @@
     "preinstall": "node ./scripts/preinstall.js",
     "postinstall": "node ./scripts/postinstall.js",
     "publish:beachball": "beachball publish --bump-deps -m\"📦 applying package updates ***NO_CI***\"",
-    "test": "lage test --verbose --grouped"
+    "test": "lage test --verbose --grouped",
+    "update-readme": "node scripts/update-readme.js"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",
     "beachball": "^2.2.0",
     "lage": "^0.29.0",
+    "markdown-table": "^2.0.0",
     "metro": "^0.59.0",
     "metro-config": "^0.59.0",
     "metro-react-native-babel-preset": "^0.59.0"

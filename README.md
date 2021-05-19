@@ -1,3 +1,42 @@
+```
+   ▄████████ ███▄▄▄▄   ▀████    ▐████▀    ▄█   ▄█▄  ▄█      ███
+  ███    ███ ███▀▀▀██▄   ███▌   ████▀    ███ ▄███▀ ███  ▀█████████▄
+  ███    ███ ███   ███    ███  ▐███      ███▐██▀   ███▌    ▀███▀▀██
+ ▄███▄▄▄▄██▀ ███   ███    ▀███▄███▀     ▄█████▀    ███▌     ███   ▀
+▀▀███▀▀▀▀▀   ███   ███    ████▀██▄     ▀▀█████▄    ███▌     ███
+▀███████████ ███   ███   ▐███  ▀███      ███▐██▄   ███      ███
+  ███    ███ ███   ███  ▄███     ███▄    ███ ▀███▄ ███      ███
+  ███    ███  ▀█   █▀  ████       ███▄   ███   ▀█▀ █▀      ▄████▀
+  ███    ███                             ▀
+```
+
+# rnx-kit
+
+`rnx-kit` is a collection of tools that are useful for React Native apps and
+libraries.
+
+# Packages
+
+<!-- The following table can be updated by running `yarn update-readme` -->
+<!-- @rnx-kit start -->
+
+| Name                                                                                                                                                    | Description                                                                            |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| [@rnx-kit/babel-plugin-import-path-remapper](https://github.com/microsoft/rnx-kit/tree/main/packages/babel-plugin-import-path-remapper)                 | Babel plugin for remapping 'lib/' imports to 'src/'                                    |
+| [@rnx-kit/babel-preset-metro-react-native](https://github.com/microsoft/rnx-kit/tree/main/packages/babel-preset-metro-react-native)                     | Babel preset for React Native applications                                             |
+| [@rnx-kit/bundle-diff](https://github.com/microsoft/rnx-kit/tree/main/packages/bundle-diff)                                                             | Simple tool for diffing the content of two bundles                                     |
+| [@rnx-kit/cli](https://github.com/microsoft/rnx-kit/tree/main/packages/cli)                                                                             | Command-line interface for rnx-kit                                                     |
+| [@rnx-kit/config](https://github.com/microsoft/rnx-kit/tree/main/packages/config)                                                                       | Package for defining and querying information about rnx kits                           |
+| [@rnx-kit/dep-check](https://github.com/microsoft/rnx-kit/tree/main/packages/dep-check)                                                                 | Dependency checker for React Native apps                                               |
+| [@rnx-kit/metro-config](https://github.com/microsoft/rnx-kit/tree/main/packages/metro-config)                                                           | Metro config for monorepos                                                             |
+| [@rnx-kit/metro-plugin-cyclic-dependencies-detector](https://github.com/microsoft/rnx-kit/tree/main/packages/metro-plugin-cyclic-dependencies-detector) | Cyclic dependencies detector for Metro                                                 |
+| [@rnx-kit/metro-plugin-duplicates-checker](https://github.com/microsoft/rnx-kit/tree/main/packages/metro-plugin-duplicates-checker)                     | Duplicate packages checker                                                             |
+| [@rnx-kit/metro-plugin-typescript-validation](https://github.com/microsoft/rnx-kit/tree/main/packages/metro-plugin-typescript-validation)               | Typescript validation during Metro bundling                                            |
+| [@rnx-kit/metro-serializer](https://github.com/microsoft/rnx-kit/tree/main/packages/metro-serializer)                                                   | Metro's default JavaScript bundle serializer but with plugin support                   |
+| [@rnx-kit/third-party-notices](https://github.com/microsoft/rnx-kit/tree/main/packages/third-party-notices)                                             | Library and tool to build a third party notices file based on a js bundle's source map |
+| [@rnx-kit/tools](https://github.com/microsoft/rnx-kit/tree/main/packages/tools)                                                                         | Common tooling for the react-native-sdk                                                |
+
+<!-- @rnx-kit end -->
 
 # Contributing
 
