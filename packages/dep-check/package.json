@@ -24,12 +24,12 @@
     "update-readme": "node scripts/update-readme.js"
   },
   "dependencies": {
-    "@manypkg/get-packages": "^1.1.1",
     "@rnx-kit/config": "^0.2.6",
     "chalk": "^4.0.0",
     "find-up": "^5.0.0",
     "jest-diff": "^26.0.0",
     "semver": "^7.0.0",
+    "workspace-tools": "^0.15.1",
     "yargs": "^16.0.0"
   },
   "devDependencies": {

@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
-import { getPackagesSync } from "@manypkg/get-packages";
 import path from "path";
 import pkgDir from "pkg-dir";
+import { getAllPackageJsonFiles } from "workspace-tools";
 import yargs from "yargs";
 import { checkPackageManifest } from "./check";
 import { error } from "./console";
@@ -13,6 +13,8 @@ export type Args = {
   write: boolean;
   "package-json"?: string | number;
 };
+
+type Command = (manifest: string) => number;
 
 function getManifests(
   packageJson: string | number | undefined
@@ -27,12 +29,24 @@ function getManifests(
   }
 
   try {
-    const { packages } = getPackagesSync(packageDir);
-    return packages.map((pkg) => path.join(pkg.dir, "package.json"));
+    return getAllPackageJsonFiles(packageDir);
   } catch (e) {
     error(e.message);
     return undefined;
   }
+}
+
+function makeCheckCommand(write: boolean): Command {
+  return (manifest: string) => {
+    return checkPackageManifest(manifest, { write });
+  };
+}
+
+function makeInitializeCommand(kitType: string): Command {
+  return (manifest: string) => {
+    initializeConfig(manifest, kitType);
+    return 0;
+  };
 }
 
 export function cli({ init, write, "package-json": packageJson }: Args): void {
@@ -47,20 +61,23 @@ export function cli({ init, write, "package-json": packageJson }: Args): void {
     process.exit(1);
   }
 
-  const func: (exitCode: number, manifest: string) => number = (() => {
-    if (init) {
-      return (exitCode: number, manifest: string) => {
-        initializeConfig(manifest, init);
-        return exitCode;
-      };
+  const command = init ? makeInitializeCommand(init) : makeCheckCommand(write);
+
+  // We will optimistically run through all packages regardless of failures. In
+  // most scenarios, this should be fine: Both init and check+write write to
+  // disk only when everything is in order for the target package. Packages with
+  // invalid or missing configurations are skipped.
+  const exitCode = manifests.reduce((exitCode: number, manifest: string) => {
+    try {
+      return command(manifest) || exitCode;
+    } catch (e) {
+      const currentPackageJson = path.relative(process.cwd(), manifest);
+      error(`${currentPackageJson}: ${e.message}`);
+      return exitCode || 1;
     }
+  }, 0);
 
-    return (exitCode: number, manifest: string) => {
-      return checkPackageManifest(manifest, { write }) || exitCode;
-    };
-  })();
-
-  process.exit(manifests.reduce(func, 0));
+  process.exit(exitCode);
 }
 
 if (require.main === module) {
