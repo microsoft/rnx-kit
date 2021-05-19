@@ -1,6 +1,6 @@
-import * as fs from "fs";
-import { markdownTable } from "markdown-table";
-import * as path from "path";
+const fs = require("fs");
+const markdownTable = require("markdown-table");
+const path = require("path");
 
 const PACKAGE_JSON = "package.json";
 const PACKAGES = "packages";
