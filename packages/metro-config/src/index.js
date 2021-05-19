@@ -39,6 +39,7 @@ const UNIQUE_PACKAGES = ["react", "react-native"];
  * @returns {string[]}
  */
 function defaultWatchFolders(projectRoot) {
+  const { getPackagesSync } = require("@manypkg/get-packages");
   const findUp = require("find-up");
   const path = require("path");
 
@@ -46,32 +47,22 @@ function defaultWatchFolders(projectRoot) {
   // the same monorepo as the target package.
   const thisPackage =
     projectRoot || path.dirname(findUp.sync("package.json") || "");
-  const rootPackage = findUp.sync("package.json", {
-    cwd: path.dirname(thisPackage),
-  });
 
-  if (!rootPackage) {
+  try {
+    const { tool, root, packages } = getPackagesSync(thisPackage);
+    if (tool === "root") {
+      return [];
+    }
+
+    // In a monorepo, in particular when using Yarn workspaces, packages are
+    // symlinked in the root `node_modules` folder so it needs to be watched.
+    return [
+      path.join(root.dir, "node_modules"),
+      ...packages.map((pkg) => pkg.dir),
+    ];
+  } catch (_) {
     return [];
   }
-
-  // In a monorepo, in particular when using Yarn workspaces, packages are
-  // symlinked in the root `node_modules` folder so it needs to be watched.
-  const watchFolders = ["node_modules"];
-
-  const rootPath = path.dirname(rootPackage);
-  const manifest = require(rootPackage);
-  if (manifest.workspaces && manifest.workspaces.packages) {
-    const fg = require("fast-glob");
-    watchFolders.push(
-      ...fg.sync(manifest.workspaces.packages, {
-        cwd: rootPath,
-        onlyDirectories: true,
-        unique: true,
-      })
-    );
-  }
-
-  return watchFolders.map((p) => path.join(rootPath, p));
 }
 
 /**
