@@ -11,8 +11,6 @@
     "test": "rnx-kit-scripts test"
   },
   "dependencies": {
-    "fs": "^0.0.1-security",
-    "path": "^0.12.7",
     "workspace-tools": "^0.15.0"
   },
   "devDependencies": {
