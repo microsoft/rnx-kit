@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "@msfast/typescript-platform-resolution": "^4.2.4-midgard.0",
-    "workspace-tools": "^0.15.0",
+    "workspace-tools": "^0.15.1",
     "yargs": "^16.2.0"
   },
   "devDependencies": {

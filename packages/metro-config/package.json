@@ -19,9 +19,9 @@
     "test": "rnx-kit-scripts test"
   },
   "dependencies": {
-    "@manypkg/get-packages": "^1.1.1",
     "@rnx-kit/babel-preset-metro-react-native": "^1.0.3",
-    "find-up": "^4.1.0"
+    "find-up": "^4.1.0",
+    "workspace-tools": "^0.15.1"
   },
   "peerDependencies": {
     "metro-config": ">=0.58.0"
