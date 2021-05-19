@@ -65,7 +65,7 @@ function defaultWatchFolders(projectRoot) {
     // In a monorepo, in particular when using Yarn workspaces, packages are
     // symlinked in the root `node_modules` folder so it needs to be watched.
     return [
-      path.join(root, "node_modules").replace(/\\/g, "/"),
+      path.join(root, "node_modules"),
       ...packages.map((pkg) => path.dirname(pkg)),
     ];
   } catch (_) {

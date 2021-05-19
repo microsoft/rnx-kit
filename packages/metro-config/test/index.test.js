@@ -53,10 +53,10 @@ describe("@rnx-kit/metro-config", () => {
     const folders = defaultWatchFolders(process.cwd());
 
     const packages = ["conan", "dutch", "john", "quaid", "t-800"].map((p) =>
-      path.join(repoRoot, "packages", p).replace(/\\/g, "/")
+      path.join(repoRoot, "packages", p)
     );
     const expectedFolders = [
-      path.join(repoRoot, "node_modules").replace(/\\/g, "/"),
+      path.join(repoRoot, "node_modules"),
       ...packages,
     ].sort();
     expect(folders.sort()).toEqual(expectedFolders);
