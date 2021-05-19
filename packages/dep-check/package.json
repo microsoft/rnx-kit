@@ -20,7 +20,8 @@
   "scripts": {
     "build": "rnx-kit-scripts build",
     "format": "prettier --write src/*.ts test/*.ts",
-    "test": "rnx-kit-scripts test"
+    "test": "rnx-kit-scripts test",
+    "update-readme": "node scripts/update-readme.js"
   },
   "dependencies": {
     "@rnx-kit/config": "^0.2.6",
@@ -35,6 +36,7 @@
     "@types/jest": "^26.0.0",
     "@types/semver": "^7.0.0",
     "@types/yargs": "^16.0.0",
+    "markdown-table": "^2.0.0",
     "prettier": "^2.0.0",
     "rnx-kit-scripts": "*",
     "typescript": "^4.0.0"
