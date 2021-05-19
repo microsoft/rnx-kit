@@ -17,6 +17,7 @@ libraries.
 
 # Packages
 
+<!-- The following table can be updated by running `yarn update-readme` -->
 <!-- @rnx-kit start -->
 
 | Name                                                                                                                                                    | Description                                                                            |
