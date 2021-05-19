@@ -53,6 +53,18 @@ describe("initializeConfig()", () => {
     expect(didWrite).toBe(false);
   });
 
+  test("returns early if no capabilities are found", () => {
+    fs.__setMockContent({ name: "@rnx-kit/dep-check", version: "1.0.0-test" });
+
+    let didWrite = false;
+    fs.__setMockFileWriter(() => {
+      didWrite = true;
+    });
+
+    initializeConfig("package.json", "");
+    expect(didWrite).toBe(false);
+  });
+
   test("keeps existing config", () => {
     fs.__setMockContent({
       dependencies: {
