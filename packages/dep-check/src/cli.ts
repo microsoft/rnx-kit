@@ -2,7 +2,7 @@
 
 import path from "path";
 import pkgDir from "pkg-dir";
-import { getAllPackageJsonFiles } from "workspace-tools";
+import { getAllPackageJsonFiles, getWorkspaceRoot } from "workspace-tools";
 import yargs from "yargs";
 import { checkPackageManifest } from "./check";
 import { error } from "./console";
@@ -26,6 +26,17 @@ function getManifests(
   const packageDir = pkgDir.sync();
   if (!packageDir) {
     return undefined;
+  }
+
+  // Make sure we don't return all packages when dep-check is run inside a
+  // package that just happened to be part of a workspace.
+  const currentPackageJson = path.join(packageDir, "package.json");
+  try {
+    if (getWorkspaceRoot(packageDir) !== packageDir) {
+      return [currentPackageJson];
+    }
+  } catch (_) {
+    return [currentPackageJson];
   }
 
   try {
