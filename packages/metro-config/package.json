@@ -20,8 +20,8 @@
   },
   "dependencies": {
     "@rnx-kit/babel-preset-metro-react-native": "^1.0.3",
-    "fast-glob": "^3.2.2",
-    "find-up": "^4.1.0"
+    "find-up": "^4.1.0",
+    "workspace-tools": "^0.15.1"
   },
   "peerDependencies": {
     "metro-config": ">=0.58.0"
