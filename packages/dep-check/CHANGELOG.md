@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/dep-check
 
-This log was last generated on Thu, 20 May 2021 15:24:25 GMT and should not be manually modified.
+This log was last generated on Thu, 20 May 2021 16:06:43 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 1.3.0
+
+Thu, 20 May 2021 16:06:43 GMT
+
+### Minor changes
+
+- Add support for workspaces (4123478+tido64@users.noreply.github.com)
 
 ## 1.2.2
 

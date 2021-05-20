@@ -2,6 +2,21 @@
   "name": "@rnx-kit/dep-check",
   "entries": [
     {
+      "date": "Thu, 20 May 2021 16:06:43 GMT",
+      "tag": "@rnx-kit/dep-check_v1.3.0",
+      "version": "1.3.0",
+      "comments": {
+        "minor": [
+          {
+            "comment": "Add support for workspaces",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "8e1f94f63652f88208e19c5d67f0f513cf449332",
+            "package": "@rnx-kit/dep-check"
+          }
+        ]
+      }
+    },
+    {
       "date": "Thu, 20 May 2021 15:24:25 GMT",
       "tag": "@rnx-kit/dep-check_v1.2.2",
       "version": "1.2.2",
