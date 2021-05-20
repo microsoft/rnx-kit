@@ -2,6 +2,21 @@
   "name": "@rnx-kit/metro-config",
   "entries": [
     {
+      "date": "Thu, 20 May 2021 06:03:39 GMT",
+      "tag": "@rnx-kit/metro-config_v1.2.0",
+      "version": "1.2.0",
+      "comments": {
+        "minor": [
+          {
+            "comment": "Added support for Lerna, pnpm, Rush workspaces",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "4a9e6c2f48d9d0faa352bd4e28b9c3294a3de6b5",
+            "package": "@rnx-kit/metro-config"
+          }
+        ]
+      }
+    },
+    {
       "date": "Tue, 18 May 2021 19:20:51 GMT",
       "tag": "@rnx-kit/metro-config_v1.1.4",
       "version": "1.1.4",
