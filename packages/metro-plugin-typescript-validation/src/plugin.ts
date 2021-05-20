@@ -101,7 +101,8 @@ export type Delta = {
   reset: boolean;
 };
 export function experimentalSerializerHook(_graph: Graph, delta: Delta) {
-  console.log("HOOK: reset=%o", delta.reset);
+  // @ts-ignore
+  console.log("HOOK: reset=%o, platform=%o", delta.reset, delta.platform);
   delta?.added?.forEach((_module, moduleName) => {
     console.log("  ADD: %o", moduleName);
   });
