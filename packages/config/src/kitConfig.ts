@@ -102,4 +102,9 @@ export type KitConfig = {
    * @default []
    */
   capabilities?: Capability[];
+
+  /**
+   * Path to a custom capability resolver.
+   */
+  customCapabilityResolverPath?: string;
 };

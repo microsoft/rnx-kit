@@ -1,18 +1,23 @@
 import semver from "semver";
 import type { KitConfig } from "./kitConfig";
 
-export type KitCapabilities = Required<
+type RequiredConfig = Required<
   Pick<
     KitConfig,
     "capabilities" | "kitType" | "reactNativeVersion" | "reactNativeDevVersion"
   >
 >;
 
+type OptionalConfig = Pick<KitConfig, "customCapabilityResolverPath">;
+
+export type KitCapabilities = RequiredConfig & OptionalConfig;
+
 export function getKitCapabilities({
   capabilities = [],
   kitType = "library",
   reactNativeVersion,
   reactNativeDevVersion: rawDevVersion,
+  customCapabilityResolverPath,
 }: KitConfig): KitCapabilities {
   if (
     !reactNativeVersion ||
@@ -39,5 +44,6 @@ export function getKitCapabilities({
     kitType,
     reactNativeVersion,
     reactNativeDevVersion,
+    customCapabilityResolverPath,
   };
 }

@@ -86,7 +86,8 @@ describe("resolveCapabilities()", () => {
   test("dedupes packages", () => {
     const packages = resolveCapabilities(
       ["core-android", "core-ios", "test-app"],
-      [profile_0_64]
+      [profile_0_64],
+      undefined
     );
 
     const { name } = profile_0_64["core-ios"];
@@ -102,7 +103,8 @@ describe("resolveCapabilities()", () => {
   test("dedupes package versions", () => {
     const packages = resolveCapabilities(
       ["webview"],
-      [profile_0_62, profile_0_63, profile_0_64]
+      [profile_0_62, profile_0_63, profile_0_64],
+      undefined
     );
 
     const { name } = profile_0_64["webview"];
@@ -116,11 +118,46 @@ describe("resolveCapabilities()", () => {
   test("ignores missing/unknown capabilities", () => {
     const packages = resolveCapabilities(
       ["skynet" as Capability, "svg"],
-      [profile_0_62, profile_0_63, profile_0_64]
+      [profile_0_62, profile_0_63, profile_0_64],
+      undefined
     );
 
     const { name } = profile_0_64["svg"];
     expect(packages).toEqual({ [name]: [profile_0_64["svg"]] });
     expect(consoleWarnSpy).toBeCalledTimes(1);
+  });
+
+  test("throws if custom capability resolver is not a function", () => {
+    jest.mock("bad-capability-resolver", () => "bad-capability-resolver", {
+      virtual: true,
+    });
+
+    expect(() =>
+      resolveCapabilities([], [], "bad-capability-resolver")
+    ).toThrow();
+  });
+
+  test("calls custom capability resolver", () => {
+    const skynet = { name: "skynet", version: "1.0.0" };
+    jest.mock(
+      "mock-capability-resolver",
+      () => (capability: Capability) => capability === skynet.name && skynet,
+      {
+        virtual: true,
+      }
+    );
+
+    const packages = resolveCapabilities(
+      ["skynet" as Capability, "svg"],
+      [profile_0_62, profile_0_63, profile_0_64],
+      "mock-capability-resolver"
+    );
+
+    const svg = profile_0_64["svg"];
+    expect(packages).toEqual({
+      [svg.name]: [svg],
+      skynet: [skynet],
+    });
+    expect(consoleWarnSpy).not.toBeCalled();
   });
 });
