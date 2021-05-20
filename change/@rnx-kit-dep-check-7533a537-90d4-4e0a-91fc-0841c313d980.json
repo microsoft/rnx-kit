@@ -1,0 +1,7 @@
+{
+  "type": "minor",
+  "comment": "Add support for workspaces",
+  "packageName": "@rnx-kit/dep-check",
+  "email": "4123478+tido64@users.noreply.github.com",
+  "dependentChangeType": "patch"
+}

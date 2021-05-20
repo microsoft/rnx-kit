@@ -29,6 +29,7 @@
     "find-up": "^5.0.0",
     "jest-diff": "^26.0.0",
     "semver": "^7.0.0",
+    "workspace-tools": "^0.15.1",
     "yargs": "^16.0.0"
   },
   "devDependencies": {

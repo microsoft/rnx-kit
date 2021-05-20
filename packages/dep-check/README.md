@@ -107,7 +107,7 @@ rnx-dep-check [options] [/path/to/package.json]
 ```
 
 Providing a path to `package.json` is optional. If omitted, it will look for one
-using node module resolution.
+using Node module resolution.
 
 ### `--init <app | library>`
 

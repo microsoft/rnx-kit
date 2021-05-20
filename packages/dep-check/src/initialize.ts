@@ -24,6 +24,10 @@ export function initializeConfig(
   }
 
   const capabilities = capabilitiesFor(manifest, ensureKitType(kitType));
+  if (!capabilities?.capabilities?.length) {
+    return;
+  }
+
   const updatedManifest = {
     ...manifest,
     "rnx-kit": {
