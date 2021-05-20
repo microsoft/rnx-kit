@@ -1,0 +1,7 @@
+{
+  "type": "patch",
+  "comment": "Bump react-native-test-app to 0.5.9 to address an issue with linters complaining about an old version of Dagger being used.",
+  "packageName": "@rnx-kit/dep-check",
+  "email": "4123478+tido64@users.noreply.github.com",
+  "dependentChangeType": "patch"
+}
