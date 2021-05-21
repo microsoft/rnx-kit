@@ -2,6 +2,126 @@
   "name": "@rnx-kit/test-app",
   "entries": [
     {
+      "date": "Thu, 20 May 2021 16:06:43 GMT",
+      "tag": "@rnx-kit/test-app_v0.0.1",
+      "version": "0.0.1",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Bump @rnx-kit/cli to v0.5.14",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "8e1f94f63652f88208e19c5d67f0f513cf449332",
+            "package": "@rnx-kit/test-app"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Thu, 20 May 2021 15:24:25 GMT",
+      "tag": "@rnx-kit/test-app_v0.0.1",
+      "version": "0.0.1",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Bump @rnx-kit/cli to v0.5.13",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "84c927a1863af77c32c02cdedd29e2a30c2169ae",
+            "package": "@rnx-kit/test-app"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Thu, 20 May 2021 06:03:39 GMT",
+      "tag": "@rnx-kit/test-app_v0.0.1",
+      "version": "0.0.1",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Bump @rnx-kit/metro-config to v1.2.0",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "4a9e6c2f48d9d0faa352bd4e28b9c3294a3de6b5",
+            "package": "@rnx-kit/test-app"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Wed, 19 May 2021 20:37:27 GMT",
+      "tag": "@rnx-kit/test-app_v0.0.1",
+      "version": "0.0.1",
+      "comments": {
+        "none": [
+          {
+            "comment": "Bump @rnx-kit/cli to v0.5.12",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "64d928a0fa70b9ccdc2f1ddaf69207a5a45eb1ad",
+            "package": "@rnx-kit/test-app"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Wed, 19 May 2021 16:00:47 GMT",
+      "tag": "@rnx-kit/test-app_v0.0.1",
+      "version": "0.0.1",
+      "comments": {
+        "none": [
+          {
+            "comment": "Bump @rnx-kit/cli to v0.5.12",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "25050e7be5bd223a57940b02054ac288a6a8e0c2",
+            "package": "@rnx-kit/test-app"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Wed, 19 May 2021 15:58:50 GMT",
+      "tag": "@rnx-kit/test-app_v0.0.1",
+      "version": "0.0.1",
+      "comments": {
+        "none": [
+          {
+            "comment": "Bump @rnx-kit/cli to v0.5.12",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "25050e7be5bd223a57940b02054ac288a6a8e0c2",
+            "package": "@rnx-kit/test-app"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Tue, 18 May 2021 19:20:51 GMT",
+      "tag": "@rnx-kit/test-app_v0.0.1",
+      "version": "0.0.1",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Bump @rnx-kit/metro-config to v1.1.4",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "c767296fbf6f78fc5259cd6ddbd4d219891922e0",
+            "package": "@rnx-kit/test-app"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Tue, 18 May 2021 18:41:27 GMT",
+      "tag": "@rnx-kit/test-app_v0.0.1",
+      "version": "0.0.1",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Bump @rnx-kit/cli to v0.5.12",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "2f84e615438734d609d22cf4dee96bd7296a79cb",
+            "package": "@rnx-kit/test-app"
+          }
+        ]
+      }
+    },
+    {
       "date": "Tue, 18 May 2021 09:25:17 GMT",
       "tag": "@rnx-kit/test-app_v0.0.1",
       "version": "0.0.1",

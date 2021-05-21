@@ -2,6 +2,21 @@
   "name": "@rnx-kit/babel-preset-metro-react-native",
   "entries": [
     {
+      "date": "Tue, 18 May 2021 19:20:51 GMT",
+      "tag": "@rnx-kit/babel-preset-metro-react-native_v1.0.3",
+      "version": "1.0.3",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Move @babel/core to dependencies.",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "c767296fbf6f78fc5259cd6ddbd4d219891922e0",
+            "package": "@rnx-kit/babel-preset-metro-react-native"
+          }
+        ]
+      }
+    },
+    {
       "date": "Thu, 06 May 2021 20:37:55 GMT",
       "tag": "@rnx-kit/babel-preset-metro-react-native_v1.0.2",
       "version": "1.0.2",

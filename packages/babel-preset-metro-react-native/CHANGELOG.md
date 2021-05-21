@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/babel-preset-metro-react-native
 
-This log was last generated on Fri, 16 Apr 2021 12:03:52 GMT and should not be manually modified.
+This log was last generated on Tue, 18 May 2021 19:20:51 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 1.0.3
+
+Tue, 18 May 2021 19:20:51 GMT
+
+### Patches
+
+- Move @babel/core to dependencies. (4123478+tido64@users.noreply.github.com)
 
 ## 1.0.2
 

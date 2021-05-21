@@ -2,6 +2,96 @@
   "name": "@rnx-kit/cli",
   "entries": [
     {
+      "date": "Thu, 20 May 2021 16:06:43 GMT",
+      "tag": "@rnx-kit/cli_v0.5.14",
+      "version": "0.5.14",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Bump @rnx-kit/dep-check to v1.3.0",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "8e1f94f63652f88208e19c5d67f0f513cf449332",
+            "package": "@rnx-kit/cli"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Thu, 20 May 2021 15:24:25 GMT",
+      "tag": "@rnx-kit/cli_v0.5.13",
+      "version": "0.5.13",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Bump @rnx-kit/dep-check to v1.2.2",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "84c927a1863af77c32c02cdedd29e2a30c2169ae",
+            "package": "@rnx-kit/cli"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Wed, 19 May 2021 20:37:27 GMT",
+      "tag": "@rnx-kit/cli_v0.5.12",
+      "version": "0.5.12",
+      "comments": {
+        "none": [
+          {
+            "comment": "Bump @rnx-kit/dep-check to v1.2.1",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "64d928a0fa70b9ccdc2f1ddaf69207a5a45eb1ad",
+            "package": "@rnx-kit/cli"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Wed, 19 May 2021 16:00:47 GMT",
+      "tag": "@rnx-kit/cli_v0.5.12",
+      "version": "0.5.12",
+      "comments": {
+        "none": [
+          {
+            "comment": "Bump @rnx-kit/config to v0.2.6",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "25050e7be5bd223a57940b02054ac288a6a8e0c2",
+            "package": "@rnx-kit/cli"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Wed, 19 May 2021 15:58:50 GMT",
+      "tag": "@rnx-kit/cli_v0.5.12",
+      "version": "0.5.12",
+      "comments": {
+        "none": [
+          {
+            "comment": "Bump @rnx-kit/config to v0.2.6",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "25050e7be5bd223a57940b02054ac288a6a8e0c2",
+            "package": "@rnx-kit/cli"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Tue, 18 May 2021 18:41:27 GMT",
+      "tag": "@rnx-kit/cli_v0.5.12",
+      "version": "0.5.12",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Removed unused react-native dependency",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "2f84e615438734d609d22cf4dee96bd7296a79cb",
+            "package": "@rnx-kit/cli"
+          }
+        ]
+      }
+    },
+    {
       "date": "Tue, 18 May 2021 09:25:17 GMT",
       "tag": "@rnx-kit/cli_v0.5.11",
       "version": "0.5.11",

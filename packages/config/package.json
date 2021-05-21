@@ -11,11 +11,8 @@
     "test": "rnx-kit-scripts test"
   },
   "dependencies": {
-    "fs": "^0.0.1-security",
-    "path": "^0.12.7",
-    "semver": "^7.0.0",
-    "workspace-tools": "^0.15.0",
-    "cosmiconfig": "^7.0.0"
+    "cosmiconfig": "^7.0.0",
+    "semver": "^7.0.0"
   },
   "devDependencies": {
     "@types/jest": "^26.0.0",

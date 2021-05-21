@@ -41,37 +41,36 @@ const UNIQUE_PACKAGES = ["react", "react-native"];
 function defaultWatchFolders(projectRoot) {
   const findUp = require("find-up");
   const path = require("path");
+  const {
+    getAllPackageJsonFiles,
+    getWorkspaceRoot,
+  } = require("workspace-tools");
 
   // If `projectRoot` is not set, assume that `@rnx-kit/metro-config` lives in
   // the same monorepo as the target package.
   const thisPackage =
-    projectRoot || path.dirname(findUp.sync("package.json") || "");
-  const rootPackage = findUp.sync("package.json", {
-    cwd: path.dirname(thisPackage),
-  });
+    path.dirname(findUp.sync("package.json", { cwd: projectRoot }) || "");
 
-  if (!rootPackage) {
+  try {
+    const root = getWorkspaceRoot(thisPackage);
+    if (!root) {
+      return [];
+    }
+
+    const packages = getAllPackageJsonFiles(thisPackage);
+    if (!Array.isArray(packages) || packages.length === 0) {
+      return [];
+    }
+
+    // In a monorepo, in particular when using Yarn workspaces, packages are
+    // symlinked in the root `node_modules` folder so it needs to be watched.
+    return [
+      path.join(root, "node_modules"),
+      ...packages.map((pkg) => path.dirname(pkg)),
+    ];
+  } catch (_) {
     return [];
   }
-
-  // In a monorepo, in particular when using Yarn workspaces, packages are
-  // symlinked in the root `node_modules` folder so it needs to be watched.
-  const watchFolders = ["node_modules"];
-
-  const rootPath = path.dirname(rootPackage);
-  const manifest = require(rootPackage);
-  if (manifest.workspaces && manifest.workspaces.packages) {
-    const fg = require("fast-glob");
-    watchFolders.push(
-      ...fg.sync(manifest.workspaces.packages, {
-        cwd: rootPath,
-        onlyDirectories: true,
-        unique: true,
-      })
-    );
-  }
-
-  return watchFolders.map((p) => path.join(rootPath, p));
 }
 
 /**

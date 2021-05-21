@@ -1,8 +1,24 @@
 # Change Log - @rnx-kit/dep-check
 
-This log was last generated on Tue, 18 May 2021 09:25:17 GMT and should not be manually modified.
+This log was last generated on Thu, 20 May 2021 16:06:43 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 1.3.0
+
+Thu, 20 May 2021 16:06:43 GMT
+
+### Minor changes
+
+- Add support for workspaces (4123478+tido64@users.noreply.github.com)
+
+## 1.2.2
+
+Thu, 20 May 2021 15:24:25 GMT
+
+### Patches
+
+- Bump react-native-test-app to 0.5.9 to address an issue with linters complaining about an old version of Dagger being used. (4123478+tido64@users.noreply.github.com)
 
 ## 1.2.1
 

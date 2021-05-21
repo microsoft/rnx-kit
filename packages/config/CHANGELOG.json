@@ -2,6 +2,36 @@
   "name": "@rnx-kit/config",
   "entries": [
     {
+      "date": "Wed, 19 May 2021 16:00:47 GMT",
+      "tag": "@rnx-kit/config_v0.2.6",
+      "version": "0.2.6",
+      "comments": {
+        "none": [
+          {
+            "comment": "Removed unused dependencies.",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "25050e7be5bd223a57940b02054ac288a6a8e0c2",
+            "package": "@rnx-kit/config"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Wed, 19 May 2021 15:58:50 GMT",
+      "tag": "@rnx-kit/config_v0.2.6",
+      "version": "0.2.6",
+      "comments": {
+        "none": [
+          {
+            "comment": "Removed unused dependencies.",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "25050e7be5bd223a57940b02054ac288a6a8e0c2",
+            "package": "@rnx-kit/config"
+          }
+        ]
+      }
+    },
+    {
       "date": "Thu, 06 May 2021 20:37:55 GMT",
       "tag": "@rnx-kit/config_v0.2.6",
       "version": "0.2.6",
