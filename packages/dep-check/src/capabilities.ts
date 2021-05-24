@@ -3,7 +3,7 @@ import semver from "semver";
 import { getProfileVersionsFor, getProfilesFor } from "./profiles";
 import type { Package, PackageManifest, Profile } from "./types";
 
-type CapabilityResolver = (capability: Capability) => Package;
+type CapabilityResolver = (capability: Capability) => Package | undefined;
 
 export function capabilitiesFor(
   { dependencies, devDependencies, peerDependencies }: PackageManifest,
