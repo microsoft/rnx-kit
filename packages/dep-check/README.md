@@ -100,6 +100,8 @@ is an app, it needs to fulfill the requirements of its dependencies. In this
 example, because `awesome-library` needs the `netinfo` capability, it gets added
 to `awesome-app`.
 
+For a more detailed design document, see [`DESIGN.md`](./DESIGN.md).
+
 ## Usage
 
 ```sh
