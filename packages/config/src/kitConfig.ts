@@ -104,7 +104,27 @@ export type KitConfig = {
   capabilities?: Capability[];
 
   /**
-   * Path to custom profile provider.
+   * Path to custom profiles. This can be a path to a JSON file, a `.js` file,
+   * or a module name. The module must default export an object similar to the
+   * one below.
+   *
+   *     module.exports = {
+   *       "0.63": {
+   *         "my-capability": {
+   *           "name": "my-module",
+   *           "version": "1.0.0",
+   *         },
+   *       },
+   *       "0.64": {
+   *         "my-capability": {
+   *           "name": "my-module",
+   *           "version": "1.1.0",
+   *         },
+   *       },
+   *     };
+   *
+   * For a more complete example, please take a look at the default profiles:
+   * https://github.com/microsoft/rnx-kit/blob/769e9fa290929effd5111884f1637c21326b5a95/packages/dep-check/src/profiles.ts#L11
    */
   customProfiles?: string;
 };

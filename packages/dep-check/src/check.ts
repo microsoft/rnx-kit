@@ -84,7 +84,7 @@ export function checkPackageManifest(
         {
           aAnnotation: "Current",
           aColor: chalk.red,
-          bAnnotation: "Updated",
+          bAnnotation: "Expected",
           bColor: chalk.green,
         }
       );
