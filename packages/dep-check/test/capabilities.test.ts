@@ -1,5 +1,6 @@
 import type { Capability } from "@rnx-kit/config";
 import { capabilitiesFor, resolveCapabilities } from "../src/capabilities";
+import { getProfilesFor } from "../src/profiles";
 import profile_0_62 from "../src/profiles/profile-0.62";
 import profile_0_63 from "../src/profiles/profile-0.63";
 import profile_0_64 from "../src/profiles/profile-0.64";
@@ -44,7 +45,7 @@ describe("capabilitiesFor()", () => {
         "react-native": "^0.64.1",
       },
     };
-    expect(capabilitiesFor(manifest, "app")).toEqual({
+    expect(capabilitiesFor(manifest, { kitType: "app" })).toEqual({
       reactNativeVersion: "^0.64",
       kitType: "app",
       capabilities: ["core-android", "core-ios"],
@@ -64,7 +65,7 @@ describe("capabilitiesFor()", () => {
         "@rnx-kit/cli": "*",
       },
     };
-    expect(capabilitiesFor(manifest, "app")).toEqual({
+    expect(capabilitiesFor(manifest, { kitType: "app" })).toEqual({
       reactNativeVersion: "^0.64",
       kitType: "app",
       capabilities: ["core-android", "core-ios", "react"],
@@ -86,8 +87,7 @@ describe("resolveCapabilities()", () => {
   test("dedupes packages", () => {
     const packages = resolveCapabilities(
       ["core-android", "core-ios", "test-app"],
-      [profile_0_64],
-      undefined
+      [profile_0_64]
     );
 
     const { name } = profile_0_64["core-ios"];
@@ -103,8 +103,7 @@ describe("resolveCapabilities()", () => {
   test("dedupes package versions", () => {
     const packages = resolveCapabilities(
       ["webview"],
-      [profile_0_62, profile_0_63, profile_0_64],
-      undefined
+      [profile_0_62, profile_0_63, profile_0_64]
     );
 
     const { name } = profile_0_64["webview"];
@@ -118,8 +117,7 @@ describe("resolveCapabilities()", () => {
   test("ignores missing/unknown capabilities", () => {
     const packages = resolveCapabilities(
       ["skynet" as Capability, "svg"],
-      [profile_0_62, profile_0_63, profile_0_64],
-      undefined
+      [profile_0_62, profile_0_63, profile_0_64]
     );
 
     const { name } = profile_0_64["svg"];
@@ -127,37 +125,29 @@ describe("resolveCapabilities()", () => {
     expect(consoleWarnSpy).toBeCalledTimes(1);
   });
 
-  test("throws if custom capability resolver is not a function", () => {
-    jest.mock("bad-capability-resolver", () => "bad-capability-resolver", {
-      virtual: true,
-    });
-
-    expect(() =>
-      resolveCapabilities([], [], "bad-capability-resolver")
-    ).toThrow();
-  });
-
-  test("calls custom capability resolver", () => {
+  test("resolves custom capabilities", () => {
     const skynet = { name: "skynet", version: "1.0.0" };
     jest.mock(
-      "mock-capability-resolver",
-      () => (capability: Capability) => capability === skynet.name && skynet,
-      {
-        virtual: true,
-      }
+      "mock-custom-profiles-module",
+      () => ({ "0.62": { [skynet.name]: skynet } }),
+      { virtual: true }
+    );
+
+    const profiles = getProfilesFor(
+      "^0.62 || ^0.63 || ^0.64",
+      "mock-custom-profiles-module",
+      { moduleResolver: (() => "mock-custom-profiles-module") as any }
     );
 
     const packages = resolveCapabilities(
       ["skynet" as Capability, "svg"],
-      [profile_0_62, profile_0_63, profile_0_64],
-      "mock-capability-resolver"
+      profiles
     );
 
-    const svg = profile_0_64["svg"];
+    const { name } = profile_0_64["svg"];
     expect(packages).toEqual({
-      [svg.name]: [svg],
-      skynet: [skynet],
+      [name]: [profile_0_64["svg"]],
+      [skynet.name]: [skynet],
     });
-    expect(consoleWarnSpy).not.toBeCalled();
   });
 });

@@ -8,7 +8,7 @@ type RequiredConfig = Required<
   >
 >;
 
-type OptionalConfig = Pick<KitConfig, "customCapabilityResolverPath">;
+type OptionalConfig = Pick<KitConfig, "customProfiles">;
 
 export type KitCapabilities = RequiredConfig & OptionalConfig;
 
@@ -17,7 +17,7 @@ export function getKitCapabilities({
   kitType = "library",
   reactNativeVersion,
   reactNativeDevVersion: rawDevVersion,
-  customCapabilityResolverPath,
+  customProfiles,
 }: KitConfig): KitCapabilities {
   if (
     !reactNativeVersion ||
@@ -44,6 +44,6 @@ export function getKitCapabilities({
     kitType,
     reactNativeVersion,
     reactNativeDevVersion,
-    customCapabilityResolverPath,
+    customProfiles,
   };
 }

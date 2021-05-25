@@ -3,11 +3,14 @@ import semver from "semver";
 import { getProfileVersionsFor, getProfilesFor } from "./profiles";
 import type { Package, PackageManifest, Profile } from "./types";
 
-type CapabilityResolver = (capability: Capability) => Package | undefined;
+type Options = {
+  kitType?: KitType;
+  customProfilesPath?: string;
+};
 
 export function capabilitiesFor(
   { dependencies, devDependencies, peerDependencies }: PackageManifest,
-  kitType: KitType = "library"
+  { kitType = "library", customProfilesPath }: Options = {}
 ): Partial<KitCapabilities> | undefined {
   const targetReactNativeVersion =
     peerDependencies?.["react-native"] || dependencies?.["react-native"];
@@ -15,7 +18,7 @@ export function capabilitiesFor(
     return undefined;
   }
 
-  const profiles = getProfilesFor(targetReactNativeVersion);
+  const profiles = getProfilesFor(targetReactNativeVersion, customProfilesPath);
   const packageToCapabilityMap: Record<string, Capability[]> = {};
   profiles.forEach((profile) => {
     const capabilityNames = Object.keys(profile) as Capability[];
@@ -60,69 +63,34 @@ export function capabilitiesFor(
   };
 }
 
-function requireCustomResolver(
-  resolverPath: string | undefined
-): CapabilityResolver | undefined {
-  if (resolverPath) {
-    const resolver = require(resolverPath);
-    if (typeof resolver !== "function") {
-      throw new Error(
-        `'${resolverPath}' doesn't default export a function with signature '(capability: Capability) => Package'`
-      );
-    }
-    return require(resolverPath) as CapabilityResolver;
-  }
-
-  return undefined;
-}
-
 export function resolveCapabilities(
   capabilities: Capability[],
-  profiles: Profile[],
-  customCapabilityResolverPath: string | undefined
+  profiles: Profile[]
 ): Record<string, Package[]> {
   const unresolvedCapabilities = new Set<string>();
-
-  const defaultResolver = (
-    dependencies: Record<string, Package[]>,
-    capability: Capability
-  ) => {
-    profiles.forEach((profile) => {
-      const pkg = profile[capability];
-      if (!pkg) {
-        unresolvedCapabilities.add(capability);
-        return;
-      }
-
-      const { name, version } = pkg;
-      if (name in dependencies) {
-        const versions = dependencies[name];
-        if (!versions.find((current) => current.version === version)) {
-          versions.push(pkg);
+  const packages = capabilities.reduce<Record<string, Package[]>>(
+    (dependencies, capability) => {
+      profiles.forEach((profile) => {
+        const pkg = profile[capability];
+        if (!pkg) {
+          unresolvedCapabilities.add(capability);
+          return;
         }
-      } else {
-        dependencies[name] = [pkg];
-      }
-    });
-    return dependencies;
-  };
 
-  const customCapabilityResolver = requireCustomResolver(
-    customCapabilityResolverPath
+        const { name, version } = pkg;
+        if (name in dependencies) {
+          const versions = dependencies[name];
+          if (!versions.find((current) => current.version === version)) {
+            versions.push(pkg);
+          }
+        } else {
+          dependencies[name] = [pkg];
+        }
+      });
+      return dependencies;
+    },
+    {}
   );
-
-  const finalResolver = customCapabilityResolver
-    ? (dependencies: Record<string, Package[]>, capability: Capability) => {
-        const pkg = customCapabilityResolver(capability);
-        if (pkg) {
-          dependencies[pkg.name] = [pkg];
-          return dependencies;
-        }
-        return defaultResolver(dependencies, capability);
-      }
-    : defaultResolver;
-
-  const packages = capabilities.reduce(finalResolver, {});
 
   if (unresolvedCapabilities.size > 0) {
     const message = Array.from(unresolvedCapabilities).reduce(

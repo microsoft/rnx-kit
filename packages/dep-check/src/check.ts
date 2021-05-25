@@ -41,7 +41,7 @@ export function checkPackageManifest(
     reactNativeDevVersion,
     kitType,
     capabilities: targetCapabilities,
-    customCapabilityResolverPath,
+    customProfiles,
   } = getKitCapabilities(kitConfig);
 
   const { reactNativeVersion, capabilities: requiredCapabilities } =
@@ -65,10 +65,9 @@ export function checkPackageManifest(
   const updatedManifest = updatePackageManifest(
     manifest,
     requiredCapabilities,
-    getProfilesFor(reactNativeVersion),
-    getProfilesFor(reactNativeDevVersion),
-    kitType,
-    customCapabilityResolverPath
+    getProfilesFor(reactNativeVersion, customProfiles),
+    getProfilesFor(reactNativeDevVersion, customProfiles),
+    kitType
   );
 
   // Don't fail when manifests only have whitespace differences.

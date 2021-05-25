@@ -124,15 +124,10 @@ export function updatePackageManifest(
   capabilities: Capability[],
   profiles: Profile[],
   devProfiles: Profile[],
-  packageType: KitType,
-  customCapabilityResolverPath: string | undefined
+  packageType: KitType
 ): PackageManifest {
   const { dependencies, peerDependencies, devDependencies } = manifest;
-  const packages = resolveCapabilities(
-    capabilities,
-    profiles,
-    customCapabilityResolverPath
-  );
+  const packages = resolveCapabilities(capabilities, profiles);
   const names = Object.keys(packages);
 
   switch (packageType) {
@@ -158,11 +153,7 @@ export function updatePackageManifest(
         ),
         devDependencies: updateDependencies(
           devDependencies,
-          resolveCapabilities(
-            capabilities,
-            devProfiles,
-            customCapabilityResolverPath
-          ),
+          resolveCapabilities(capabilities, devProfiles),
           "development"
         ),
       };

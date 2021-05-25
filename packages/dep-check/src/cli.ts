@@ -55,7 +55,7 @@ function makeCheckCommand(write: boolean): Command {
 
 function makeInitializeCommand(kitType: string): Command {
   return (manifest: string) => {
-    initializeConfig(manifest, kitType);
+    initializeConfig(manifest, { kitType });
     return 0;
   };
 }

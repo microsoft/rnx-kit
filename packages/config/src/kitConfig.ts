@@ -104,7 +104,7 @@ export type KitConfig = {
   capabilities?: Capability[];
 
   /**
-   * Path to a custom capability resolver.
+   * Path to custom profile provider.
    */
-  customCapabilityResolverPath?: string;
+  customProfiles?: string;
 };

@@ -49,7 +49,7 @@ describe("initializeConfig()", () => {
       didWrite = true;
     });
 
-    initializeConfig("package.json", "");
+    initializeConfig("package.json", {});
     expect(didWrite).toBe(false);
   });
 
@@ -61,7 +61,7 @@ describe("initializeConfig()", () => {
       didWrite = true;
     });
 
-    initializeConfig("package.json", "");
+    initializeConfig("package.json", {});
     expect(didWrite).toBe(false);
   });
 
@@ -81,7 +81,7 @@ describe("initializeConfig()", () => {
       content = JSON.parse(data);
     });
 
-    initializeConfig("package.json", "");
+    initializeConfig("package.json", {});
 
     const kitConfig = content["rnx-kit"];
     if (!kitConfig) {
@@ -100,7 +100,7 @@ describe("initializeConfig()", () => {
       content = JSON.parse(data);
     });
 
-    initializeConfig("package.json", "app");
+    initializeConfig("package.json", { kitType: "app" });
 
     const kitConfig = content["rnx-kit"];
     if (!kitConfig) {
@@ -122,7 +122,7 @@ describe("initializeConfig()", () => {
       content = JSON.parse(data);
     });
 
-    initializeConfig("package.json", "library");
+    initializeConfig("package.json", { kitType: "library" });
 
     const kitConfig = content["rnx-kit"];
     if (!kitConfig) {
