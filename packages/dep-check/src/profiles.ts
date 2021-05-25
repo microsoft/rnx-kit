@@ -65,7 +65,8 @@ function loadCustomProfiles(
       moduleResolver(customProfilesPath)
     );
     if (moduleNotFound || !resolvedPath) {
-      const message = `Cannot find module '${customProfilesPath}'`;
+      const message =
+        moduleNotFound?.message ?? `Cannot find module '${customProfilesPath}'`;
       error(
         `${message}. Please make sure the path exists or is added to our 'package.json'.`
       );
