@@ -3,7 +3,7 @@
 
 const fs = require("fs");
 const markdownTable = require("markdown-table");
-const { getAllProfiles } = require("../lib/profiles");
+const { defaultProfiles } = require("../lib/profiles");
 
 const README = "README.md";
 const TOKEN_START = "<!-- @rnx-kit/dep-check/capabilities start -->";
@@ -31,12 +31,11 @@ function sortCoreFirst(lhs, rhs) {
   return lhs < rhs ? -1 : 1;
 }
 
-const allProfiles = getAllProfiles();
 const allVersions = /** @type {import("../src/profiles").ProfileVersion[]} */ (
-  Object.keys(allProfiles).reverse()
+  Object.keys(defaultProfiles).reverse()
 );
 const allCapabilities = /** @type {import("@rnx-kit/config").Capability[]} */ (
-  Object.keys(allProfiles["0.64"]).sort(sortCoreFirst)
+  Object.keys(defaultProfiles["0.64"]).sort(sortCoreFirst)
 );
 
 const table = markdownTable([
@@ -45,7 +44,7 @@ const table = markdownTable([
     return [
       capability,
       ...allVersions.map((profileVersion) => {
-        const { name, version } = allProfiles[profileVersion][capability];
+        const { name, version } = defaultProfiles[profileVersion][capability];
         return `${name}@${version}`;
       }),
     ];

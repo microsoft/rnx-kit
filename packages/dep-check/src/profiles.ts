@@ -12,17 +12,13 @@ export type ProfileVersion = "0.61" | "0.62" | "0.63" | "0.64" | "0.65";
 type ProfileMap = Record<ProfileVersion, Profile>;
 type ResolverOptions = { moduleResolver?: typeof require.resolve };
 
-const allProfiles: ProfileMap = {
+export const defaultProfiles: Readonly<ProfileMap> = {
   "0.61": profile_0_61,
   "0.62": profile_0_62,
   "0.63": profile_0_63,
   "0.64": profile_0_64,
   "0.65": profile_0_65,
 };
-
-export function getAllProfiles(): Readonly<typeof allProfiles> {
-  return allProfiles;
-}
 
 function getVersionComparator(
   versionOrRange: string
@@ -49,7 +45,7 @@ function isValidProfileMap(map: unknown): map is Partial<ProfileMap> {
     return false;
   }
 
-  return Object.keys(allProfiles).some((version) => version in map);
+  return Object.keys(defaultProfiles).some((version) => version in map);
 }
 
 function tryInvoke<T>(fn: () => T): [T, undefined] | [undefined, Error] {
@@ -106,7 +102,7 @@ export function getProfileVersionsFor(
   reactVersionRange: string
 ): ProfileVersion[] {
   const isSatifisedBy = getVersionComparator(reactVersionRange);
-  const allVersions = Object.keys(allProfiles) as ProfileVersion[];
+  const allVersions = Object.keys(defaultProfiles) as ProfileVersion[];
   return allVersions.reduce<ProfileVersion[]>((profiles, version) => {
     if (isSatifisedBy(version)) {
       profiles.push(version);
@@ -122,7 +118,7 @@ export function getProfilesFor(
 ): Profile[] {
   const customProfiles = loadCustomProfiles(customProfilesPath, options);
   const profiles = getProfileVersionsFor(reactVersionRange).map((version) => ({
-    ...allProfiles[version],
+    ...defaultProfiles[version],
     ...customProfiles[version],
   }));
   if (profiles.length === 0) {
