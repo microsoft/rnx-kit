@@ -32,7 +32,6 @@ function isCoreCapability(capability: Capability): boolean {
     case "core-android":
     case "core-ios":
     case "core-macos":
-    case "core-win32":
     case "core-windows":
       return true;
 
