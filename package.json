@@ -39,7 +39,7 @@
     "metro": "^0.59.0",
     "metro-config": "^0.59.0",
     "metro-react-native-babel-preset": "^0.59.0",
-    "suggestion-bot": "^1.1.9"
+    "suggestion-bot": "^1.1.10"
   },
   "workspaces": {
     "packages": [
