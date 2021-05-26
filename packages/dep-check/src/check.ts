@@ -41,6 +41,7 @@ export function checkPackageManifest(
     reactNativeDevVersion,
     kitType,
     capabilities: targetCapabilities,
+    customProfiles,
   } = getKitCapabilities(kitConfig);
 
   const { reactNativeVersion, capabilities: requiredCapabilities } =
@@ -64,8 +65,8 @@ export function checkPackageManifest(
   const updatedManifest = updatePackageManifest(
     manifest,
     requiredCapabilities,
-    getProfilesFor(reactNativeVersion),
-    getProfilesFor(reactNativeDevVersion),
+    getProfilesFor(reactNativeVersion, customProfiles),
+    getProfilesFor(reactNativeDevVersion, customProfiles),
     kitType
   );
 
@@ -83,7 +84,7 @@ export function checkPackageManifest(
         {
           aAnnotation: "Current",
           aColor: chalk.red,
-          bAnnotation: "Updated",
+          bAnnotation: "Expected",
           bColor: chalk.green,
         }
       );

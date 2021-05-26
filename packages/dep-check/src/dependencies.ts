@@ -10,7 +10,7 @@ import fs from "fs";
 import path from "path";
 import { error, warn } from "./console";
 import {
-  getAllProfiles,
+  defaultProfiles,
   getProfileVersionsFor,
   profilesSatisfying,
   ProfileVersion,
@@ -45,8 +45,9 @@ function isDevOnlyCapability(
   capability: Capability,
   versions: ProfileVersion[]
 ): boolean {
-  const allProfiles = getAllProfiles();
-  return versions.some((version) => allProfiles[version][capability].devOnly);
+  return versions.some(
+    (version) => defaultProfiles[version][capability].devOnly
+  );
 }
 
 export function visitDependencies(

@@ -3,9 +3,14 @@ import semver from "semver";
 import { getProfileVersionsFor, getProfilesFor } from "./profiles";
 import type { Package, PackageManifest, Profile } from "./types";
 
+type Options = {
+  kitType?: KitType;
+  customProfilesPath?: string;
+};
+
 export function capabilitiesFor(
   { dependencies, devDependencies, peerDependencies }: PackageManifest,
-  kitType: KitType = "library"
+  { kitType = "library", customProfilesPath }: Options = {}
 ): Partial<KitCapabilities> | undefined {
   const targetReactNativeVersion =
     peerDependencies?.["react-native"] || dependencies?.["react-native"];
@@ -13,7 +18,7 @@ export function capabilitiesFor(
     return undefined;
   }
 
-  const profiles = getProfilesFor(targetReactNativeVersion);
+  const profiles = getProfilesFor(targetReactNativeVersion, customProfilesPath);
   const packageToCapabilityMap: Record<string, Capability[]> = {};
   profiles.forEach((profile) => {
     const capabilityNames = Object.keys(profile) as Capability[];
@@ -62,13 +67,13 @@ export function resolveCapabilities(
   capabilities: Capability[],
   profiles: Profile[]
 ): Record<string, Package[]> {
-  const unresolvedCapabilities: string[] = [];
+  const unresolvedCapabilities = new Set<string>();
   const packages = capabilities.reduce<Record<string, Package[]>>(
     (dependencies, capability) => {
       profiles.forEach((profile) => {
         const pkg = profile[capability];
         if (!pkg) {
-          unresolvedCapabilities.push(capability);
+          unresolvedCapabilities.add(capability);
           return;
         }
 
@@ -87,8 +92,8 @@ export function resolveCapabilities(
     {}
   );
 
-  if (unresolvedCapabilities.length > 0) {
-    const message = unresolvedCapabilities.reduce(
+  if (unresolvedCapabilities.size > 0) {
+    const message = Array.from(unresolvedCapabilities).reduce(
       (lines, capability) => (lines += `\n    ${capability}`),
       "The following capabilities could not be resolved for one or more profiles:"
     );
