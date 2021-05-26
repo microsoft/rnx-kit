@@ -1,7 +1,0 @@
-{
-  "type": "patch",
-  "comment": "Removed core-win32 capability",
-  "packageName": "@rnx-kit/dep-check",
-  "email": "4123478+tido64@users.noreply.github.com",
-  "dependentChangeType": "patch"
-}

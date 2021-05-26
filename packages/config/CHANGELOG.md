@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/config
 
-This log was last generated on Wed, 26 May 2021 06:53:03 GMT and should not be manually modified.
+This log was last generated on Wed, 26 May 2021 13:22:22 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 0.2.8
+
+Wed, 26 May 2021 13:22:22 GMT
+
+### Patches
+
+- Removed core-win32 capability (4123478+tido64@users.noreply.github.com)
 
 ## 0.2.7
 
