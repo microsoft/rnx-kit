@@ -10,7 +10,8 @@ import type { Profile } from "./types";
 export type ProfileVersion = "0.61" | "0.62" | "0.63" | "0.64" | "0.65";
 
 type ProfileMap = Record<ProfileVersion, Profile>;
-type ResolverOptions = { moduleResolver?: typeof require.resolve };
+
+export type ResolverOptions = { moduleResolver?: typeof require.resolve };
 
 export const defaultProfiles: Readonly<ProfileMap> = {
   "0.61": profile_0_61,
@@ -65,13 +66,18 @@ function loadCustomProfiles(
       moduleResolver(customProfilesPath)
     );
     if (moduleNotFound || !resolvedPath) {
-      const message =
-        moduleNotFound?.message ?? `Cannot find module '${customProfilesPath}'`;
-      error(
-        `${message}. Please make sure the path exists or is added to our 'package.json'.`
-      );
-      const e = moduleNotFound || new Error(message);
-      throw e;
+      const helpMsg =
+        "Please make sure the path exists or is added to our 'package.json'.";
+
+      if (!moduleNotFound) {
+        const message = `Cannot find module '${customProfilesPath}'`;
+        error(`${message}. ${helpMsg}`);
+        throw new Error(message);
+      }
+
+      error(moduleNotFound.message);
+      error(helpMsg);
+      throw moduleNotFound;
     }
 
     const customProfiles: unknown = require(resolvedPath);
@@ -100,8 +106,12 @@ function loadCustomProfiles(
 }
 
 export function getProfileVersionsFor(
-  reactVersionRange: string
+  reactVersionRange: string | ProfileVersion[]
 ): ProfileVersion[] {
+  if (typeof reactVersionRange !== "string") {
+    return reactVersionRange;
+  }
+
   const isSatifisedBy = getVersionComparator(reactVersionRange);
   const allVersions = Object.keys(defaultProfiles) as ProfileVersion[];
   return allVersions.reduce<ProfileVersion[]>((profiles, version) => {
@@ -113,7 +123,7 @@ export function getProfileVersionsFor(
 }
 
 export function getProfilesFor(
-  reactVersionRange: string,
+  reactVersionRange: string | ProfileVersion[],
   customProfilesPath: string | undefined,
   options?: ResolverOptions
 ): Profile[] {
