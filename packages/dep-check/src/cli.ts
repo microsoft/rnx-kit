@@ -1,20 +1,14 @@
 #!/usr/bin/env node
 
-import path from "path";
+import * as path from "path";
 import pkgDir from "pkg-dir";
 import { getAllPackageJsonFiles, getWorkspaceRoot } from "workspace-tools";
 import yargs from "yargs";
 import { checkPackageManifest } from "./check";
 import { error } from "./console";
 import { initializeConfig } from "./initialize";
-
-export type Args = {
-  init?: string;
-  write: boolean;
-  "package-json"?: string | number;
-};
-
-type Command = (manifest: string) => number;
+import type { Args, Command } from "./types";
+import { makeVigilantCommand } from "./vigilant";
 
 function getManifests(
   packageJson: string | number | undefined
@@ -60,9 +54,34 @@ function makeInitializeCommand(kitType: string): Command {
   };
 }
 
-export function cli({ init, write, "package-json": packageJson }: Args): void {
-  if (init && write) {
+function makeCommand({
+  "custom-profiles": customProfiles,
+  init,
+  vigilant,
+  write,
+}: Args): Command | undefined {
+  if (init && vigilant) {
+    error("--init and --vigilant cannot both be specified at the same time.");
+    process.exit(1);
+  } else if (init && write) {
     error("--init and --write cannot both be specified at the same time.");
+    process.exit(1);
+  }
+
+  if (init) {
+    return makeInitializeCommand(init);
+  }
+
+  if (vigilant) {
+    return makeVigilantCommand(vigilant, write, customProfiles);
+  }
+
+  return makeCheckCommand(write);
+}
+
+export function cli({ "package-json": packageJson, ...args }: Args): void {
+  const command = makeCommand(args);
+  if (!command) {
     process.exit(1);
   }
 
@@ -71,8 +90,6 @@ export function cli({ init, write, "package-json": packageJson }: Args): void {
     error("Could not find package root");
     process.exit(1);
   }
-
-  const command = init ? makeInitializeCommand(init) : makeCheckCommand(write);
 
   // We will optimistically run through all packages regardless of failures. In
   // most scenarios, this should be fine: Both init and check+write write to
@@ -96,10 +113,18 @@ if (require.main === module) {
     "$0 [package-json]",
     "Dependency checker for React Native apps",
     {
+      "custom-profiles": {
+        description: "Path to custom profiles.",
+        type: "string",
+      },
       init: {
         description:
           "Writes an initial kit config to the specified 'package.json'.",
         choices: ["app", "library"],
+      },
+      vigilant: {
+        description: "Enter vigilant mode.",
+        type: "string",
       },
       write: {
         default: false,

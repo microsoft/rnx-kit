@@ -13,10 +13,13 @@ import {
   getProfilesFor,
   getProfileVersionsFor,
   profilesSatisfying,
+} from "./profiles";
+import type {
+  PackageManifest,
+  Profile,
   ProfileVersion,
   ResolverOptions,
-} from "./profiles";
-import type { PackageManifest, Profile } from "./types";
+} from "./types";
 
 type Requirements = Required<
   Pick<KitConfig, "reactNativeVersion" | "capabilities">

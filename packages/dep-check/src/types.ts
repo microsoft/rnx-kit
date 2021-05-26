@@ -1,8 +1,19 @@
 import type { Capability } from "@rnx-kit/config";
 
+export type Args = {
+  "custom-profiles"?: string | number;
+  "package-json"?: string | number;
+  init?: string;
+  vigilant?: string | number;
+  write: boolean;
+};
+
+export type Command = (manifest: string) => number;
+
 export type DependencyType = "direct" | "development" | "peer";
 
 export type Options = {
+  customProfiles?: string;
   write?: boolean;
 };
 
@@ -20,8 +31,12 @@ export type PackageManifest = {
   devDependencies?: Record<string, string>;
 };
 
+export type Profile = Readonly<Record<Capability, Package>>;
+
+export type ProfileVersion = "0.61" | "0.62" | "0.63" | "0.64" | "0.65";
+
+export type ResolverOptions = { moduleResolver?: typeof require.resolve };
+
 export type ExcludedPackage = Package & {
   reason: string;
 };
-
-export type Profile = Readonly<Record<Capability, Package>>;
