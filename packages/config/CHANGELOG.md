@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/config
 
-This log was last generated on Wed, 05 May 2021 19:51:01 GMT and should not be manually modified.
+This log was last generated on Wed, 26 May 2021 06:53:03 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 0.2.7
+
+Wed, 26 May 2021 06:53:03 GMT
+
+### Patches
+
+- Added support for custom profiles (4123478+tido64@users.noreply.github.com)
 
 ## 0.2.6
 

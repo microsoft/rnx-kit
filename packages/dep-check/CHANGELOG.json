@@ -2,6 +2,29 @@
   "name": "@rnx-kit/dep-check",
   "entries": [
     {
+      "date": "Wed, 26 May 2021 06:53:03 GMT",
+      "tag": "@rnx-kit/dep-check_v1.4.0",
+      "version": "1.4.0",
+      "comments": {
+        "minor": [
+          {
+            "comment": "Added support for custom profiles",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "d816342c652bfe239c8914e7048c9b6d20372589",
+            "package": "@rnx-kit/dep-check"
+          }
+        ],
+        "patch": [
+          {
+            "comment": "Bump @rnx-kit/config to v0.2.7",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "d816342c652bfe239c8914e7048c9b6d20372589",
+            "package": "@rnx-kit/dep-check"
+          }
+        ]
+      }
+    },
+    {
       "date": "Thu, 20 May 2021 16:06:43 GMT",
       "tag": "@rnx-kit/dep-check_v1.3.0",
       "version": "1.3.0",

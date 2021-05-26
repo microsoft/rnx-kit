@@ -1,8 +1,20 @@
 # Change Log - @rnx-kit/dep-check
 
-This log was last generated on Thu, 20 May 2021 16:06:43 GMT and should not be manually modified.
+This log was last generated on Wed, 26 May 2021 06:53:03 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 1.4.0
+
+Wed, 26 May 2021 06:53:03 GMT
+
+### Minor changes
+
+- Added support for custom profiles (4123478+tido64@users.noreply.github.com)
+
+### Patches
+
+- Bump @rnx-kit/config to v0.2.7 (4123478+tido64@users.noreply.github.com)
 
 ## 1.3.0
 
