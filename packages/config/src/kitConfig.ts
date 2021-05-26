@@ -4,7 +4,6 @@ export type Capability =
   | "core-android"
   | "core-ios"
   | "core-macos"
-  | "core-win32"
   | "core-windows"
   | "animation"
   | "base64"
