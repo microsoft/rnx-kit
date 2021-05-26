@@ -62,22 +62,22 @@ function loadCustomProfiles(
   { moduleResolver = require.resolve }: ResolverOptions = {}
 ): Partial<ProfileMap> {
   if (customProfilesPath) {
-    const [resolvedPath, moduleNotFound] = tryInvoke(() =>
+    const [resolvedPath, moduleNotFoundError] = tryInvoke(() =>
       moduleResolver(customProfilesPath)
     );
-    if (moduleNotFound || !resolvedPath) {
+    if (moduleNotFoundError || !resolvedPath) {
       const helpMsg =
-        "Please make sure the path exists or is added to our 'package.json'.";
+        "Please make sure the path exists or is added to your 'package.json'.";
 
-      if (!moduleNotFound) {
+      if (!moduleNotFoundError) {
         const message = `Cannot find module '${customProfilesPath}'`;
         error(`${message}. ${helpMsg}`);
         throw new Error(message);
       }
 
-      error(moduleNotFound.message);
+      error(moduleNotFoundError.message);
       error(helpMsg);
-      throw moduleNotFound;
+      throw moduleNotFoundError;
     }
 
     const customProfiles: unknown = require(resolvedPath);
