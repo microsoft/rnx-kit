@@ -1,11 +1,11 @@
 import type { Capability } from "@rnx-kit/config";
-import * as fs from "fs";
+import fs from "fs";
 import semver from "semver";
 import { resolveCapabilities } from "./capabilities";
 import { error } from "./console";
 import { updateDependencies } from "./manifest";
 import { getProfilesFor } from "./profiles";
-import type { Command, PackageManifest } from "./types";
+import type { Command, PackageManifest, ResolverOptions } from "./types";
 
 type Change = {
   name: string;
@@ -20,27 +20,28 @@ const allSections = [
   "devDependencies" as const,
 ];
 
-function buildProfile(
+export function buildManifestProfile(
   versions: string | number,
-  customProfilesPath: string | number | undefined
-): Required<PackageManifest> | undefined {
+  customProfilesPath: string | number | undefined,
+  options?: ResolverOptions
+): Required<PackageManifest> {
   const profileVersions = versions
     .toString()
     .split(",")
     .map((value) => "^" + semver.coerce(value));
+
   const supportedProfiles = getProfilesFor(
     profileVersions.join(" || "),
-    customProfilesPath?.toString()
+    customProfilesPath?.toString(),
+    options
   );
-  if (supportedProfiles.length === 0) {
-    error(`No profiles defined for '${versions}'`);
-    return undefined;
-  }
 
   const targetProfile = getProfilesFor(
     profileVersions[0],
-    customProfilesPath?.toString()
+    customProfilesPath?.toString(),
+    options
   );
+
   const allCapabilities = Object.keys(targetProfile[0]) as Capability[];
   const directDependencies = resolveCapabilities(
     allCapabilities,
@@ -61,7 +62,7 @@ function buildProfile(
   };
 }
 
-function inspect(
+export function inspect(
   manifest: PackageManifest,
   profile: Required<PackageManifest>,
   write: boolean
@@ -95,11 +96,7 @@ export function makeVigilantCommand(
   write: boolean,
   customProfilesPath: string | number | undefined
 ): Command | undefined {
-  const profile = buildProfile(versions, customProfilesPath);
-  if (!profile) {
-    return undefined;
-  }
-
+  const profile = buildManifestProfile(versions, customProfilesPath);
   return (manifestPath: string) => {
     const manifest = JSON.parse(
       fs.readFileSync(manifestPath, { encoding: "utf-8" })
@@ -121,6 +118,7 @@ export function makeVigilantCommand(
         error(
           `Found ${changes.length} violation(s) in ${manifest.name}:\n${violations}`
         );
+        return 1;
       }
     }
     return 0;
