@@ -1,7 +1,0 @@
-{
-  "type": "patch",
-  "comment": "Fix 'devOnly' being ignored in custom profiles",
-  "packageName": "@rnx-kit/dep-check",
-  "email": "4123478+tido64@users.noreply.github.com",
-  "dependentChangeType": "patch"
-}

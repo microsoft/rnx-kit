@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/dep-check
 
-This log was last generated on Wed, 26 May 2021 13:22:22 GMT and should not be manually modified.
+This log was last generated on Thu, 27 May 2021 06:09:59 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 1.4.2
+
+Thu, 27 May 2021 06:09:59 GMT
+
+### Patches
+
+- Fix 'devOnly' being ignored in custom profiles (4123478+tido64@users.noreply.github.com)
 
 ## 1.4.1
 

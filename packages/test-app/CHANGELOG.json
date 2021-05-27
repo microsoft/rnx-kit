@@ -2,6 +2,21 @@
   "name": "@rnx-kit/test-app",
   "entries": [
     {
+      "date": "Thu, 27 May 2021 06:09:59 GMT",
+      "tag": "@rnx-kit/test-app_v0.0.1",
+      "version": "0.0.1",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Bump @rnx-kit/cli to v0.5.17",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "5d0bb1baee85221f9bccf25e436a996738103de1",
+            "package": "@rnx-kit/test-app"
+          }
+        ]
+      }
+    },
+    {
       "date": "Wed, 26 May 2021 13:22:22 GMT",
       "tag": "@rnx-kit/test-app_v0.0.1",
       "version": "0.0.1",
