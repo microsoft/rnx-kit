@@ -101,7 +101,7 @@ describe("getProfilesFor()", () => {
       getProfilesFor("^0.59", "non-existent-profiles-module")
     ).toThrow(`Cannot find module 'non-existent-profiles-module'`);
 
-    expect(consoleErrorSpy).toBeCalledTimes(1);
+    expect(consoleErrorSpy).toBeCalledTimes(2);
   });
 
   test("throws if custom profiles module path is not returned", () => {

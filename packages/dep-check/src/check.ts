@@ -45,7 +45,13 @@ export function checkPackageManifest(
   } = getKitCapabilities(kitConfig);
 
   const { reactNativeVersion, capabilities: requiredCapabilities } =
-    getRequirements(targetReactNativeVersion, kitType, manifest, projectRoot);
+    getRequirements(
+      targetReactNativeVersion,
+      kitType,
+      manifest,
+      projectRoot,
+      customProfiles
+    );
   requiredCapabilities.push(...targetCapabilities);
 
   const badPackages = findBadPackages(manifest);
