@@ -401,8 +401,8 @@ This format is explicitly chosen to be compatible with `--vigilant`.
     capabilities.
   - From a cursory glance, it doesn't allow packages to support multiple
     versions of react-native.
-  - It supports version groups, which may be useful for usage scenarios, but are
-    potentially dangerous within react-native repos.
+  - It supports version groups, which may be useful for some usage scenarios,
+    but are potentially dangerous within react-native repos.
 
 <!-- References -->
 
