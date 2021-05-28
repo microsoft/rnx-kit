@@ -100,6 +100,11 @@ export function makeVigilantCommand(
   write: boolean,
   customProfilesPath: string | number | undefined
 ): Command | undefined {
+  if (!versions) {
+    error("A comma-separated list of profile versions must be specified.");
+    return undefined;
+  }
+
   const profile = buildManifestProfile(versions, customProfilesPath);
   return (manifestPath: string) => {
     const manifest = JSON.parse(

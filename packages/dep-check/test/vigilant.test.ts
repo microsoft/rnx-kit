@@ -183,6 +183,10 @@ describe("makeVigilantCommand()", () => {
     jest.clearAllMocks();
   });
 
+  test("returns no command if no versions are specified", () => {
+    expect(makeVigilantCommand("", false, undefined)).toBeUndefined();
+  });
+
   test("returns exit code 0 when there are no violations", () => {
     fs.__setMockContent({
       name: "@rnx-kit/dep-check",

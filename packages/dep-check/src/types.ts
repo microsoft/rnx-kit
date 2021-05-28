@@ -1,4 +1,4 @@
-import type { Capability } from "@rnx-kit/config";
+import type { Capability, KitType } from "@rnx-kit/config";
 
 export type Args = {
   "custom-profiles"?: string | number;
@@ -6,6 +6,11 @@ export type Args = {
   init?: string;
   vigilant?: string | number;
   write: boolean;
+};
+
+export type CapabilitiesOptions = {
+  kitType?: KitType;
+  customProfilesPath?: string;
 };
 
 export type Command = (manifest: string) => number;
