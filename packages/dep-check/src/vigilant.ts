@@ -43,22 +43,26 @@ export function buildManifestProfile(
   );
 
   const allCapabilities = Object.keys(targetProfile[0]) as Capability[];
-  const directDependencies = resolveCapabilities(
-    allCapabilities,
-    targetProfile
+
+  // Use "development" type so we can check for devOnly packages under
+  // `dependencies` as well.
+  const directDependencies = updateDependencies(
+    {},
+    resolveCapabilities(allCapabilities, targetProfile),
+    "development"
   );
 
   const { name, version } = require("../package.json");
   return {
     name,
     version,
-    dependencies: updateDependencies({}, directDependencies, "direct"),
+    dependencies: directDependencies,
     peerDependencies: updateDependencies(
       {},
       resolveCapabilities(allCapabilities, supportedProfiles),
       "peer"
     ),
-    devDependencies: updateDependencies({}, directDependencies, "development"),
+    devDependencies: directDependencies,
   };
 }
 

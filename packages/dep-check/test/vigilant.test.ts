@@ -21,6 +21,15 @@ describe("buildManifestProfile()", () => {
     expect(profile).toMatchSnapshot();
   });
 
+  test("includes devOnly packages under `dependencies`", () => {
+    const { dependencies, devDependencies, peerDependencies } =
+      buildManifestProfile("0.64", undefined);
+
+    expect("react-native-test-app" in dependencies).toBe(true);
+    expect("react-native-test-app" in peerDependencies).toBe(false);
+    expect("react-native-test-app" in devDependencies).toBe(true);
+  });
+
   test("includes custom profiles", () => {
     const skynet = { name: "skynet", version: "1.0.0" };
     jest.mock(
