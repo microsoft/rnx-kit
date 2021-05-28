@@ -1,6 +1,6 @@
 import fs from "fs";
 import { capabilitiesFor } from "./capabilities";
-import { CapabilitiesOptions } from "./types";
+import type { CapabilitiesOptions } from "./types";
 
 export function initializeConfig(
   packageManifest: string,
