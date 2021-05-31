@@ -32,16 +32,7 @@ type Trace = {
 };
 
 function isCoreCapability(capability: Capability): boolean {
-  switch (capability) {
-    case "core-android":
-    case "core-ios":
-    case "core-macos":
-    case "core-windows":
-      return true;
-
-    default:
-      return false;
-  }
+  return capability.startsWith("core-");
 }
 
 function isDevOnlyCapability(
