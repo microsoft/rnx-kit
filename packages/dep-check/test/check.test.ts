@@ -63,8 +63,9 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
       dependencies: { "react-native-linear-gradient": "0.0.0" },
     });
 
-    expect(checkPackageManifest("package.json")).toBe(0);
-    expect(consoleWarnSpy).not.toBeCalled();
+    const options = { uncheckedReturnCode: -1 };
+    expect(checkPackageManifest("package.json", options)).toBe(-1);
+    expect(consoleWarnSpy).toBeCalled();
   });
 
   test("prints warnings when detecting bad packages", () => {

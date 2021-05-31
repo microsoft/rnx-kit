@@ -19,6 +19,7 @@ export type DependencyType = "direct" | "development" | "peer";
 
 export type Options = {
   customProfiles?: string;
+  uncheckedReturnCode?: number;
   write?: boolean;
 };
 

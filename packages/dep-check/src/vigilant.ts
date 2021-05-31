@@ -2,6 +2,7 @@ import type { Capability } from "@rnx-kit/config";
 import fs from "fs";
 import semver from "semver";
 import { resolveCapabilities } from "./capabilities";
+import { checkPackageManifest } from "./check";
 import { error } from "./console";
 import { updateDependencies } from "./manifest";
 import { getProfilesFor } from "./profiles";
@@ -105,8 +106,20 @@ export function makeVigilantCommand(
     return undefined;
   }
 
+  const uncheckedReturnCode = -1;
+  const checkOptions = { uncheckedReturnCode, write };
+
   const profile = buildManifestProfile(versions, customProfilesPath);
   return (manifestPath: string) => {
+    try {
+      const checkReturnCode = checkPackageManifest(manifestPath, checkOptions);
+      if (checkReturnCode !== uncheckedReturnCode) {
+        return checkReturnCode;
+      }
+    } catch (_) {
+      // Ignore; retry with a full inspection
+    }
+
     const manifest = JSON.parse(
       fs.readFileSync(manifestPath, { encoding: "utf-8" })
     );
