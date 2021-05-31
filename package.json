@@ -82,5 +82,15 @@
       "major"
     ],
     "access": "public"
+  },
+  "prettier": {
+    "overrides": [
+      {
+        "files": "*.md",
+        "options": {
+          "proseWrap": "always"
+        }
+      }
+    ]
   }
 }
