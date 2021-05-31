@@ -149,9 +149,9 @@ defined in the specified `package.json`.
 
 ### `--vigilant`
 
-Inspects packages regardless of whether they've been configured. Specify a
-comma-separated list of profile versions to compare against, e.g. `0.63,0.64`.
-The first number specifies the target version.
+Also inspect packages that are not configured. Specify a comma-separated list of
+profile versions to compare against, e.g. `0.63,0.64`.  The first number
+specifies the target version.
 
 ### `--write`
 
