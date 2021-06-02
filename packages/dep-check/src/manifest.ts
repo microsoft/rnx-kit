@@ -44,7 +44,7 @@ export function updateDependencies(
   packages: Record<string, Package[]>,
   dependencyType: DependencyType,
   nodeVersion: string = process.versions.node
-): Record<string, string> | undefined {
+): Record<string, string> {
   const packageNames = Object.keys(packages);
   if (packageNames.length === 0) {
     return dependencies;

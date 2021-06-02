@@ -1,16 +1,16 @@
-import type { Capability, KitCapabilities, KitType } from "@rnx-kit/config";
+import type { Capability, KitCapabilities } from "@rnx-kit/config";
 import semver from "semver";
-import { getProfileVersionsFor, getProfilesFor } from "./profiles";
-import type { Package, PackageManifest, Profile } from "./types";
-
-type Options = {
-  kitType?: KitType;
-  customProfilesPath?: string;
-};
+import { getProfilesFor, getProfileVersionsFor } from "./profiles";
+import type {
+  CapabilitiesOptions,
+  Package,
+  PackageManifest,
+  Profile,
+} from "./types";
 
 export function capabilitiesFor(
   { dependencies, devDependencies, peerDependencies }: PackageManifest,
-  { kitType = "library", customProfilesPath }: Options = {}
+  { kitType = "library", customProfilesPath }: CapabilitiesOptions = {}
 ): Partial<KitCapabilities> | undefined {
   const targetReactNativeVersion =
     peerDependencies?.["react-native"] || dependencies?.["react-native"];

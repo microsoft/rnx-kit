@@ -111,12 +111,47 @@ rnx-dep-check [options] [/path/to/package.json]
 Providing a path to `package.json` is optional. If omitted, it will look for one
 using Node module resolution.
 
+### `--custom-profiles <module>`
+
+Path to custom profiles. This can be a path to a JSON file, a `.js` file, or a
+module name. The module must default export an object similar to the one below:
+
+```js
+module.exports = {
+  0.63: {
+    "my-capability": {
+      name: "my-module",
+      version: "1.0.0",
+    },
+  },
+  0.64: {
+    "my-capability": {
+      name: "my-module",
+      version: "1.1.0",
+    },
+  },
+};
+```
+
+For a more complete example, have a look at the
+[default profiles](https://github.com/microsoft/rnx-kit/blob/769e9fa290929effd5111884f1637c21326b5a95/packages/dep-check/src/profiles.ts#L11).
+
+This specific flag may only be used with `--vigilant`. You can specify custom
+profiles in normal mode by adding `customProfiles` to your package
+[configuration](#configure).
+
 ### `--init <app | library>`
 
 When integrating `@rnx-kit/dep-check` for the first time, it may be a cumbersome
 to manually add all capabilities yourself. You can run this tool with `--init`,
 and it will try to add a sensible configuration based on what is currently
 defined in the specified `package.json`.
+
+### `--vigilant`
+
+Also inspect packages that are not configured. Specify a comma-separated list of
+profile versions to compare against, e.g. `0.63,0.64`.  The first number
+specifies the target version.
 
 ### `--write`
 
@@ -135,6 +170,7 @@ your `package.json`.
 | `reactNativeVersion`    | string                 | (required)            | Supported versions of React Native. The value can be a specific version or a range.                         |
 | `reactNativeDevVersion` | string                 | `minVersion(version)` | The version of React Native to use for development. If omitted, the minimum supported version will be used. |
 | `capabilities`          | Capabilities[]         | `[]`                  | List of used/provided capabilities. A full list can be found below.                                         |
+| `customProfiles`        | string                 | `undefined`           | Path to custom profiles. This can be a path to a JSON file, a `.js` file, or a module name.                 |
 
 ## Capabilities
 

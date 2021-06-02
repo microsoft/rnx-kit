@@ -1,25 +1,10 @@
-import type { KitType } from "@rnx-kit/config";
 import fs from "fs";
 import { capabilitiesFor } from "./capabilities";
-
-type Options = {
-  kitType?: string;
-  customProfilesPath?: string;
-};
-
-function ensureKitType(type: string | undefined): KitType | undefined {
-  switch (type) {
-    case "app":
-    case "library":
-      return type;
-    default:
-      return undefined;
-  }
-}
+import type { CapabilitiesOptions } from "./types";
 
 export function initializeConfig(
   packageManifest: string,
-  options: Options
+  options: CapabilitiesOptions
 ): void {
   const manifest = JSON.parse(
     fs.readFileSync(packageManifest, { encoding: "utf-8" })
@@ -28,10 +13,7 @@ export function initializeConfig(
     return;
   }
 
-  const capabilities = capabilitiesFor(manifest, {
-    ...options,
-    kitType: ensureKitType(options.kitType),
-  });
+  const capabilities = capabilitiesFor(manifest, options);
   if (!capabilities?.capabilities?.length) {
     return;
   }

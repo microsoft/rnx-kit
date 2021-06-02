@@ -1,20 +1,25 @@
 #!/usr/bin/env node
 
-import path from "path";
+import type { KitType } from "@rnx-kit/config";
+import * as path from "path";
 import pkgDir from "pkg-dir";
 import { getAllPackageJsonFiles, getWorkspaceRoot } from "workspace-tools";
 import yargs from "yargs";
 import { checkPackageManifest } from "./check";
 import { error } from "./console";
 import { initializeConfig } from "./initialize";
+import type { Args, Command } from "./types";
+import { makeVigilantCommand } from "./vigilant";
 
-export type Args = {
-  init?: string;
-  write: boolean;
-  "package-json"?: string | number;
-};
-
-type Command = (manifest: string) => number;
+function ensureKitType(type: string): KitType | undefined {
+  switch (type) {
+    case "app":
+    case "library":
+      return type;
+    default:
+      return undefined;
+  }
+}
 
 function getManifests(
   packageJson: string | number | undefined
@@ -47,22 +52,65 @@ function getManifests(
   }
 }
 
+function isString(v: unknown): v is string {
+  return typeof v === "string";
+}
+
 function makeCheckCommand(write: boolean): Command {
   return (manifest: string) => {
     return checkPackageManifest(manifest, { write });
   };
 }
 
-function makeInitializeCommand(kitType: string): Command {
+function makeInitializeCommand(kitType: string): Command | undefined {
+  const verifiedKitType = ensureKitType(kitType);
+  if (!verifiedKitType) {
+    error(`Invalid kit type: '${kitType}'`);
+    return undefined;
+  }
+
+  const options = { kitType: verifiedKitType };
   return (manifest: string) => {
-    initializeConfig(manifest, { kitType });
+    initializeConfig(manifest, options);
     return 0;
   };
 }
 
-export function cli({ init, write, "package-json": packageJson }: Args): void {
-  if (init && write) {
-    error("--init and --write cannot both be specified at the same time.");
+function reportConflicts(conflicts: [string, string][], args: Args): boolean {
+  return conflicts.reduce<boolean>((result, [lhs, rhs]) => {
+    if (lhs in args && rhs in args) {
+      error(`--${lhs} and --${rhs} cannot both be specified at the same time.`);
+      return true;
+    }
+    return result;
+  }, false);
+}
+
+function makeCommand(args: Args): Command | undefined {
+  const conflicts: [string, string][] = [
+    ["init", "vigilant"],
+    ["init", args.write ? "write" : "no-write"],
+  ];
+  if (reportConflicts(conflicts, args)) {
+    return undefined;
+  }
+
+  const { "custom-profiles": customProfiles, init, vigilant, write } = args;
+
+  if (isString(init)) {
+    return makeInitializeCommand(init);
+  }
+
+  if (isString(vigilant)) {
+    return makeVigilantCommand(vigilant, write, customProfiles);
+  }
+
+  return makeCheckCommand(write);
+}
+
+export function cli({ "package-json": packageJson, ...args }: Args): void {
+  const command = makeCommand(args);
+  if (!command) {
     process.exit(1);
   }
 
@@ -71,8 +119,6 @@ export function cli({ init, write, "package-json": packageJson }: Args): void {
     error("Could not find package root");
     process.exit(1);
   }
-
-  const command = init ? makeInitializeCommand(init) : makeCheckCommand(write);
 
   // We will optimistically run through all packages regardless of failures. In
   // most scenarios, this should be fine: Both init and check+write write to
@@ -96,15 +142,31 @@ if (require.main === module) {
     "$0 [package-json]",
     "Dependency checker for React Native apps",
     {
+      "custom-profiles": {
+        description:
+          "Path to custom profiles. This can be a path to a JSON file, a `.js` file, or a module name.",
+        type: "string",
+        requiresArg: true,
+        implies: "vigilant",
+      },
       init: {
         description:
           "Writes an initial kit config to the specified 'package.json'.",
         choices: ["app", "library"],
+        conflicts: ["vigilant", "write"],
+      },
+      vigilant: {
+        description:
+          "Inspects packages regardless of whether they've been configured. Specify a comma-separated list of profile versions to compare against, e.g. `0.63,0.64`. The first number specifies the target version.",
+        type: "string",
+        requiresArg: true,
+        conflicts: ["init"],
       },
       write: {
         default: false,
         description: "Writes changes to the specified 'package.json'.",
         type: "boolean",
+        conflicts: ["init"],
       },
     },
     cli

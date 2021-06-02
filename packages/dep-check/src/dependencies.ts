@@ -13,10 +13,13 @@ import {
   getProfilesFor,
   getProfileVersionsFor,
   profilesSatisfying,
+} from "./profiles";
+import type {
+  PackageManifest,
+  Profile,
   ProfileVersion,
   ResolverOptions,
-} from "./profiles";
-import type { PackageManifest, Profile } from "./types";
+} from "./types";
 
 type Requirements = Required<
   Pick<KitConfig, "reactNativeVersion" | "capabilities">
@@ -29,16 +32,7 @@ type Trace = {
 };
 
 function isCoreCapability(capability: Capability): boolean {
-  switch (capability) {
-    case "core-android":
-    case "core-ios":
-    case "core-macos":
-    case "core-windows":
-      return true;
-
-    default:
-      return false;
-  }
+  return capability.startsWith("core-");
 }
 
 function isDevOnlyCapability(

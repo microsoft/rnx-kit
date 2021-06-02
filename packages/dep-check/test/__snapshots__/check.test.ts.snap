@@ -4,7 +4,7 @@ exports[`checkPackageManifest({ kitType: 'library' }) prints warnings when detec
 Array [
   Array [
     "warn",
-    "Known bad packages are found:
+    "Known bad packages are found in '@rnx-kit/dep-check':
     react-native-linear-gradient@*: This package is unmaintained and causes significant degradation in app start up time.",
   ],
 ]
@@ -14,7 +14,7 @@ exports[`checkPackageManifest({ kitType: 'library' }) prints warnings when detec
 Array [
   Array [
     "warn",
-    "Known bad packages are found:
+    "Known bad packages are found in '@rnx-kit/dep-check':
     react-native-linear-gradient@*: This package is unmaintained and causes significant degradation in app start up time.",
   ],
 ]
