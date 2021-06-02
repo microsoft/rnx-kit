@@ -15,6 +15,13 @@ type Change = {
   section: string;
 };
 
+type Options = {
+  versions: string | number;
+  write: boolean;
+  customProfilesPath?: string | number;
+  excludePackages?: string | number;
+};
+
 const allSections = [
   "dependencies" as const,
   "peerDependencies" as const,
@@ -96,11 +103,12 @@ export function inspect(
   return changes;
 }
 
-export function makeVigilantCommand(
-  versions: string | number,
-  write: boolean,
-  customProfilesPath: string | number | undefined
-): Command | undefined {
+export function makeVigilantCommand({
+  customProfilesPath,
+  excludePackages,
+  versions,
+  write,
+}: Options): Command | undefined {
   if (!versions) {
     error("A comma-separated list of profile versions must be specified.");
     return undefined;
@@ -108,6 +116,9 @@ export function makeVigilantCommand(
 
   const uncheckedReturnCode = -1;
   const checkOptions = { uncheckedReturnCode, write };
+
+  const exclusionList =
+    typeof excludePackages === "string" ? excludePackages.split(",") : [];
 
   const profile = buildManifestProfile(versions, customProfilesPath);
   return (manifestPath: string) => {
@@ -123,6 +134,10 @@ export function makeVigilantCommand(
     const manifest = JSON.parse(
       fs.readFileSync(manifestPath, { encoding: "utf-8" })
     );
+    if (exclusionList.includes(manifest.name)) {
+      return 0;
+    }
+
     const changes = inspect(manifest, profile, write);
     if (changes.length > 0) {
       if (write) {
@@ -134,7 +149,7 @@ export function makeVigilantCommand(
         const violations = changes
           .map(
             ({ name, from, to, section }) =>
-              `  ${name} "${from}" -> "${to}" (${section})`
+              `    ${name} "${from}" -> "${to}" (${section})`
           )
           .join("\n");
         error(

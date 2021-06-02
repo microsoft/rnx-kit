@@ -184,7 +184,7 @@ describe("makeVigilantCommand()", () => {
   });
 
   test("returns no command if no versions are specified", () => {
-    expect(makeVigilantCommand("", false, undefined)).toBeUndefined();
+    expect(makeVigilantCommand({ versions: "", write: false })).toBeUndefined();
   });
 
   test("returns exit code 0 when there are no violations", () => {
@@ -201,11 +201,9 @@ describe("makeVigilantCommand()", () => {
       didWrite = true;
     });
 
-    const result = makeVigilantCommand(
-      "0.63",
-      false,
-      undefined
-    )("package.json");
+    const result = makeVigilantCommand({ versions: "0.63", write: false })(
+      "package.json"
+    );
     expect(result).toBe(0);
     expect(didWrite).toBe(false);
     expect(consoleErrorSpy).not.toBeCalled();
@@ -225,11 +223,9 @@ describe("makeVigilantCommand()", () => {
       didWrite = true;
     });
 
-    const result = makeVigilantCommand(
-      "0.63",
-      false,
-      undefined
-    )("package.json");
+    const result = makeVigilantCommand({ versions: "0.63", write: false })(
+      "package.json"
+    );
     expect(result).not.toBe(0);
     expect(didWrite).toBe(false);
     expect(consoleErrorSpy).toBeCalledTimes(1);
@@ -249,9 +245,35 @@ describe("makeVigilantCommand()", () => {
       didWrite = true;
     });
 
-    const result = makeVigilantCommand("0.63", true, undefined)("package.json");
+    const result = makeVigilantCommand({ versions: "0.63", write: true })(
+      "package.json"
+    );
     expect(result).toBe(0);
     expect(didWrite).toBe(true);
+    expect(consoleErrorSpy).not.toBeCalled();
+  });
+
+  test("excludes specified packages", () => {
+    fs.__setMockContent({
+      name: "@rnx-kit/dep-check",
+      version: "1.0.0",
+      dependencies: {
+        "react-native": "0.59.10",
+      },
+    });
+
+    let didWrite = false;
+    fs.__setMockFileWriter(() => {
+      didWrite = true;
+    });
+
+    const result = makeVigilantCommand({
+      versions: "0.63",
+      write: false,
+      excludePackages: "@rnx-kit/dep-check",
+    })("package.json");
+    expect(result).toBe(0);
+    expect(didWrite).toBe(false);
     expect(consoleErrorSpy).not.toBeCalled();
   });
 });

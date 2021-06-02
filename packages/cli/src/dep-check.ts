@@ -13,6 +13,7 @@ export function rnxDepCheck(
 ): void {
   cli({
     ...pickValue("custom-profiles", args),
+    ...pickValue("exclude-packages", args),
     ...pickValue("init", args),
     ...pickValue("vigilant", args),
     write: Boolean(args.write),

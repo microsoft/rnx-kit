@@ -140,6 +140,11 @@ This specific flag may only be used with `--vigilant`. You can specify custom
 profiles in normal mode by adding `customProfiles` to your package
 [configuration](#configure).
 
+### `--exclude-packages`
+
+Comma-separated list of package names to exclude from inspection. This flag may
+only be used with `--vigilant`.
+
 ### `--init <app | library>`
 
 When integrating `@rnx-kit/dep-check` for the first time, it may be a cumbersome
