@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/dep-check
 
-This log was last generated on Thu, 27 May 2021 06:09:59 GMT and should not be manually modified.
+This log was last generated on Wed, 02 Jun 2021 17:08:58 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 1.5.0
+
+Wed, 02 Jun 2021 17:08:58 GMT
+
+### Minor changes
+
+- Add --vigilant flag for zero-config mode (4123478+tido64@users.noreply.github.com)
 
 ## 1.4.2
 

@@ -2,6 +2,21 @@
   "name": "@rnx-kit/dep-check",
   "entries": [
     {
+      "date": "Wed, 02 Jun 2021 17:08:58 GMT",
+      "tag": "@rnx-kit/dep-check_v1.5.0",
+      "version": "1.5.0",
+      "comments": {
+        "minor": [
+          {
+            "comment": "Add --vigilant flag for zero-config mode",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "26f466ce336fda0e8651582ce0c07873d0b7084e",
+            "package": "@rnx-kit/dep-check"
+          }
+        ]
+      }
+    },
+    {
       "date": "Mon, 31 May 2021 06:57:45 GMT",
       "tag": "@rnx-kit/dep-check_v1.4.2",
       "version": "1.4.2",
