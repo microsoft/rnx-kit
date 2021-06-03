@@ -1,7 +1,7 @@
 {
   "name": "@rnx-kit/typescript-server",
   "version": "1.0.0",
-  "description": "TypeScript server with a custom module resolver",
+  "description": "In-process TypeScript server with a custom module resolver",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/typescript-server#rnx-kittypescript-server",
   "license": "MIT",
   "files": [
@@ -17,7 +17,9 @@
     "build": "rnx-kit-scripts build",
     "test": "rnx-kit-scripts test"
   },
-  "dependencies": {},
+  "dependencies": {
+    "typescript": "^4.2.4"
+  },
   "devDependencies": {
     "@types/node": "^12.0.0",
     "@rnx-kit/babel-preset-jest-typescript": "*",
