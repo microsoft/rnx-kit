@@ -11,9 +11,7 @@ describe("normalizePath", () => {
       normalizePath(
         `webpack:///ignored|${absolutePathRoot}project\\node_modules\\yargs\\build|fs`
       )
-    ).toBe(
-      `ignored|${absolutePathRoot}project/node_modules/yargs/build|fs`
-    );
+    ).toBe(`ignored|${absolutePathRoot}project/node_modules/yargs/build|fs`);
   });
 
   test("webPackAbsolute", () => {

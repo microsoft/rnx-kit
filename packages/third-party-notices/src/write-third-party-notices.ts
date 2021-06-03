@@ -231,30 +231,32 @@ export function createLicenseFileContents(
 
   // Look up licenses and emit combined license text
 
-  Array.from(moduleNameToPath.keys()).sort().forEach((moduleName: string) => {
-    const modulePath = moduleNameToPath.get(moduleName);
-    const license = licenses.find((_: ILicense) => _.path === modulePath);
-    if (!license) {
-      throw new Error(`Cannot find license information for ${moduleName}`);
-    }
-    if (!license.licenseText) {
-      if (
-        !license.license &&
-        (!license.licenseURLs || license.licenseURLs.length === 0)
-      ) {
-        throw new Error(`No license text or URL for ${moduleName}`);
+  Array.from(moduleNameToPath.keys())
+    .sort()
+    .forEach((moduleName: string) => {
+      const modulePath = moduleNameToPath.get(moduleName);
+      const license = licenses.find((_: ILicense) => _.path === modulePath);
+      if (!license) {
+        throw new Error(`Cannot find license information for ${moduleName}`);
       }
-      license.licenseText = `${license.license} (${license.licenseURLs.join(
-        " "
-      )})`;
-    }
-    writeLine("================================================");
-    writeLine(`${moduleName} ${license.version}`);
-    writeLine("=====");
-    writeMultipleLines(license.licenseText.trim());
-    writeLine("================================================");
-    writeLine("");
-  });
+      if (!license.licenseText) {
+        if (
+          !license.license &&
+          (!license.licenseURLs || license.licenseURLs.length === 0)
+        ) {
+          throw new Error(`No license text or URL for ${moduleName}`);
+        }
+        license.licenseText = `${license.license} (${license.licenseURLs.join(
+          " "
+        )})`;
+      }
+      writeLine("================================================");
+      writeLine(`${moduleName} ${license.version}`);
+      writeLine("=====");
+      writeMultipleLines(license.licenseText.trim());
+      writeLine("================================================");
+      writeLine("");
+    });
 
   if (additionalText) {
     writeMultipleLines(additionalText.join(os.EOL));
