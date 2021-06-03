@@ -2,6 +2,21 @@
   "name": "@rnx-kit/cli",
   "entries": [
     {
+      "date": "Thu, 03 Jun 2021 10:15:50 GMT",
+      "tag": "@rnx-kit/cli_v0.5.18",
+      "version": "0.5.18",
+      "comments": {
+        "none": [
+          {
+            "comment": "Formatted all the things",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "693d313e7ab36dcc0f28ec81b889bbd4aa4a89fd",
+            "package": "@rnx-kit/cli"
+          }
+        ]
+      }
+    },
+    {
       "date": "Wed, 02 Jun 2021 17:08:58 GMT",
       "tag": "@rnx-kit/cli_v0.5.18",
       "version": "0.5.18",

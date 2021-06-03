@@ -2,6 +2,21 @@
   "name": "@rnx-kit/config",
   "entries": [
     {
+      "date": "Thu, 03 Jun 2021 10:15:50 GMT",
+      "tag": "@rnx-kit/config_v0.2.8",
+      "version": "0.2.8",
+      "comments": {
+        "none": [
+          {
+            "comment": "Formatted all the things",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "693d313e7ab36dcc0f28ec81b889bbd4aa4a89fd",
+            "package": "@rnx-kit/config"
+          }
+        ]
+      }
+    },
+    {
       "date": "Wed, 26 May 2021 13:22:22 GMT",
       "tag": "@rnx-kit/config_v0.2.8",
       "version": "0.2.8",
