@@ -1,6 +1,7 @@
 # @rnx-kit/metro-plugin-typescript-validation
 
-`@rnx-kit/metro-plugin-typescript-validation` checks TypeScript source files in your package for syntactic and semantic correctness.
+`@rnx-kit/metro-plugin-typescript-validation` checks TypeScript source files in
+your package for syntactic and semantic correctness.
 
 ## Usage
 
@@ -21,4 +22,5 @@ module.exports = makeMetroConfig({
 });
 ```
 
-This plugin runs as part of Metro bundling. When a type error occurs, it is displayed console output and bundle creation fails (no files are written).
+This plugin runs as part of Metro bundling. When a type error occurs, it is
+displayed console output and bundle creation fails (no files are written).

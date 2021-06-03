@@ -23,6 +23,7 @@
     "ci": "yarn --cache-folder .yarn-offline-mirror --prefer-offline --frozen-lockfile --non-interactive",
     "clean": "lage clean --log-level warn --grouped",
     "depcheck": "lage depcheck --log-level warn --grouped",
+    "format": "yarn prettier --write --loglevel warn '**/*.{js,json,jsx,md,ts,tsx}' '!**/{__fixtures__,lib}/**' '!**/CHANGELOG.*' '!{CODE_OF_CONDUCT,SECURITY}.md'",
     "lint": "lage lint --log-level warn --grouped",
     "preinstall": "node ./scripts/preinstall.js",
     "postinstall": "node ./scripts/postinstall.js",
@@ -39,6 +40,7 @@
     "metro": "^0.59.0",
     "metro-config": "^0.59.0",
     "metro-react-native-babel-preset": "^0.59.0",
+    "prettier": "^2.3.0",
     "suggestion-bot": "^1.1.10"
   },
   "workspaces": {
