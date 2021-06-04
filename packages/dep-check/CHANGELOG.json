@@ -2,6 +2,21 @@
   "name": "@rnx-kit/dep-check",
   "entries": [
     {
+      "date": "Fri, 04 Jun 2021 09:02:33 GMT",
+      "tag": "@rnx-kit/dep-check_v1.5.1",
+      "version": "1.5.1",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Added --exclude-packages to vigilant mode",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "fe5932b980aa4df8d081fe601c5bb553f54a3907",
+            "package": "@rnx-kit/dep-check"
+          }
+        ]
+      }
+    },
+    {
       "date": "Thu, 03 Jun 2021 10:15:50 GMT",
       "tag": "@rnx-kit/dep-check_v1.5.0",
       "version": "1.5.0",

@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/cli
 
-This log was last generated on Wed, 02 Jun 2021 17:08:58 GMT and should not be manually modified.
+This log was last generated on Fri, 04 Jun 2021 09:02:33 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 0.5.19
+
+Fri, 04 Jun 2021 09:02:33 GMT
+
+### Patches
+
+- dep-check: Added --exclude-packages to vigilant mode (4123478+tido64@users.noreply.github.com)
 
 ## 0.5.18
 
