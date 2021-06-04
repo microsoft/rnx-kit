@@ -112,6 +112,11 @@ module.exports = {
             "Path to custom profiles. This can be a path to a JSON file, a `.js` file, or a module name.",
         },
         {
+          name: "--exclude-packages [packages]",
+          description:
+            "Comma-separated list of package names to exclude from inspection.",
+        },
+        {
           name: "--init [app|library]",
           description: "Writes an initial kit config",
         },

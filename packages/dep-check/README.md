@@ -136,9 +136,21 @@ module.exports = {
 For a more complete example, have a look at the
 [default profiles](https://github.com/microsoft/rnx-kit/blob/769e9fa290929effd5111884f1637c21326b5a95/packages/dep-check/src/profiles.ts#L11).
 
-This specific flag may only be used with `--vigilant`. You can specify custom
-profiles in normal mode by adding `customProfiles` to your package
-[configuration](#configure).
+> #### Note
+>
+> This specific flag may only be used with `--vigilant`. You can specify custom
+> profiles in normal mode by adding `customProfiles` to your package
+> [configuration](#configure).
+
+### `--exclude-packages`
+
+Comma-separated list of package names to exclude from inspection.
+
+> #### Note
+>
+> `--exclude-packages` will only exclude packages that do not have a
+> configuration. Packages that have a configuration, will still be checked. This
+> flag may only be used with `--vigilant`.
 
 ### `--init <app | library>`
 

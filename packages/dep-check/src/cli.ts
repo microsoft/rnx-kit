@@ -95,14 +95,25 @@ function makeCommand(args: Args): Command | undefined {
     return undefined;
   }
 
-  const { "custom-profiles": customProfiles, init, vigilant, write } = args;
+  const {
+    "custom-profiles": customProfilesPath,
+    "exclude-packages": excludePackages,
+    init,
+    vigilant,
+    write,
+  } = args;
 
   if (isString(init)) {
     return makeInitializeCommand(init);
   }
 
   if (isString(vigilant)) {
-    return makeVigilantCommand(vigilant, write, customProfiles);
+    return makeVigilantCommand({
+      customProfilesPath,
+      excludePackages,
+      versions: vigilant,
+      write,
+    });
   }
 
   return makeCheckCommand(write);
@@ -145,6 +156,13 @@ if (require.main === module) {
       "custom-profiles": {
         description:
           "Path to custom profiles. This can be a path to a JSON file, a `.js` file, or a module name.",
+        type: "string",
+        requiresArg: true,
+        implies: "vigilant",
+      },
+      "exclude-packages": {
+        description:
+          "Comma-separated list of package names to exclude from inspection.",
         type: "string",
         requiresArg: true,
         implies: "vigilant",

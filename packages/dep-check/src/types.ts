@@ -2,6 +2,7 @@ import type { Capability, KitType } from "@rnx-kit/config";
 
 export type Args = {
   "custom-profiles"?: string | number;
+  "exclude-packages"?: string | number;
   "package-json"?: string | number;
   init?: string;
   vigilant?: string | number;
