@@ -1,7 +1,0 @@
-{
-  "type": "patch",
-  "comment": "Fixed error when React Native dev version is a range",
-  "packageName": "@rnx-kit/config",
-  "email": "4123478+tido64@users.noreply.github.com",
-  "dependentChangeType": "patch"
-}

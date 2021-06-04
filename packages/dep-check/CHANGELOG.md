@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/dep-check
 
-This log was last generated on Fri, 04 Jun 2021 09:02:33 GMT and should not be manually modified.
+This log was last generated on Fri, 04 Jun 2021 12:36:37 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 1.5.2
+
+Fri, 04 Jun 2021 12:36:37 GMT
+
+### Patches
+
+- Fixed older yargs versions not ignoring flags with default values when looking for conflicts (4123478+tido64@users.noreply.github.com)
 
 ## 1.5.1
 

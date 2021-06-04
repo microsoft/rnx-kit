@@ -1,7 +1,0 @@
-{
-  "type": "patch",
-  "comment": "Fixed older yargs versions not ignoring flags with default values when looking for conflicts",
-  "packageName": "@rnx-kit/dep-check",
-  "email": "4123478+tido64@users.noreply.github.com",
-  "dependentChangeType": "patch"
-}

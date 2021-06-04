@@ -2,6 +2,21 @@
   "name": "@rnx-kit/config",
   "entries": [
     {
+      "date": "Fri, 04 Jun 2021 12:36:37 GMT",
+      "tag": "@rnx-kit/config_v0.2.9",
+      "version": "0.2.9",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Fixed error when React Native dev version is a range",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "434c350f84c22f492f3e5f5065ba2bc2d31b2678",
+            "package": "@rnx-kit/config"
+          }
+        ]
+      }
+    },
+    {
       "date": "Thu, 03 Jun 2021 10:15:50 GMT",
       "tag": "@rnx-kit/config_v0.2.8",
       "version": "0.2.8",

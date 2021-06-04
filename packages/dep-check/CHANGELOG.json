@@ -2,6 +2,21 @@
   "name": "@rnx-kit/dep-check",
   "entries": [
     {
+      "date": "Fri, 04 Jun 2021 12:36:37 GMT",
+      "tag": "@rnx-kit/dep-check_v1.5.2",
+      "version": "1.5.2",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Fixed older yargs versions not ignoring flags with default values when looking for conflicts",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "434c350f84c22f492f3e5f5065ba2bc2d31b2678",
+            "package": "@rnx-kit/dep-check"
+          }
+        ]
+      }
+    },
+    {
       "date": "Fri, 04 Jun 2021 09:02:33 GMT",
       "tag": "@rnx-kit/dep-check_v1.5.1",
       "version": "1.5.1",
