@@ -32,7 +32,7 @@ export function getKitCapabilities({
 
   if (
     !reactNativeDevVersion ||
-    !semver.satisfies(reactNativeDevVersion, reactNativeVersion)
+    !semver.subset(reactNativeDevVersion, reactNativeVersion)
   ) {
     throw new Error(
       `'${reactNativeDevVersion}' is not a valid dev version because it does not satisfy supported version range '${reactNativeVersion}'`
