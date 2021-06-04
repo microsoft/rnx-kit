@@ -1,0 +1,7 @@
+{
+  "type": "patch",
+  "comment": "Fix ThirdPartyNotices, missing await",
+  "packageName": "@rnx-kit/third-party-notices",
+  "email": "dannyvv@microsoft.com",
+  "dependentChangeType": "patch"
+}
