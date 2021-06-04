@@ -8608,13 +8608,10 @@ react-native-macos@^0.63.0:
     whatwg-fetch "^3.0.0"
 
 react-native-test-app@^0.5.4:
-  version "0.5.9"
-  resolved "https://registry.yarnpkg.com/react-native-test-app/-/react-native-test-app-0.5.9.tgz#99c12f0770450a862c58b0f69272ab90790504f1"
-  integrity sha512-LWH7pqJFoRIWsfRhsa1Z/2ynpB2hA+oPKzcAK46j5ePazJScfLz9qqVyB96NVgFMmAI+emveEL+8K/vUO34GUA==
+  version "0.5.10"
+  resolved "https://registry.yarnpkg.com/react-native-test-app/-/react-native-test-app-0.5.10.tgz#a9e9f675501d84bfb6a454ddf8129938926b4c23"
+  integrity sha512-2tJ79IhJopV5j2YAl8umDfQHS0boqgD57Jy/X6BpQXKZ6HR8kWgsmUogeGGNLGQ7zkYhjfiIE0xmLsESUYpU1A==
   dependencies:
-    "@react-native-community/cli" "^4.10.0"
-    "@react-native-community/cli-platform-android" "^4.10.0"
-    "@react-native-community/cli-platform-ios" "^4.10.0"
     chalk "^4.1.0"
     prompts "^2.4.0"
     rimraf "^3.0.0"
