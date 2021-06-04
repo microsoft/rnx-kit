@@ -171,7 +171,7 @@ if (require.main === module) {
         description:
           "Writes an initial kit config to the specified 'package.json'.",
         choices: ["app", "library"],
-        conflicts: ["vigilant", "write"],
+        conflicts: ["vigilant"],
       },
       vigilant: {
         description:
@@ -184,7 +184,6 @@ if (require.main === module) {
         default: false,
         description: "Writes changes to the specified 'package.json'.",
         type: "boolean",
-        conflicts: ["init"],
       },
     },
     cli
