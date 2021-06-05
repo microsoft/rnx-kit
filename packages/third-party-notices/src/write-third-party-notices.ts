@@ -66,7 +66,7 @@ export async function writeThirdPartyNotices(
   const sourceMap: ISourceMap = JSON.parse(sourceMapJson);
 
   const moduleNameToPathMap = extractModuleNameToPathMap(options, sourceMap);
-  const licenses = extractLicenses(moduleNameToPathMap);
+  const licenses = await extractLicenses(moduleNameToPathMap);
   const outputText = createLicenseFileContents(
     moduleNameToPathMap,
     licenses,
@@ -180,9 +180,9 @@ export function extractModuleNameToPathMap(
   return moduleNameToPathMap;
 }
 
-export function extractLicenses(
+export async function extractLicenses(
   moduleNameToPathMap: Map<string, string>
-): ILicense[] {
+): Promise<ILicense[]> {
   const licenseExtractors = require("browserify-licenses/app/extractors");
 
   const moduleNamePathPairs: IModuleNamePathPair[] = [];
@@ -203,7 +203,7 @@ export function extractLicenses(
   });
 
   // Extract licenses of all modules we found
-  return licenseExtractors.nodeModule(moduleNamePathPairs);
+  return await licenseExtractors.nodeModule(moduleNamePathPairs);
 }
 
 export function createLicenseFileContents(
