@@ -2,6 +2,21 @@
   "name": "@rnx-kit/third-party-notices",
   "entries": [
     {
+      "date": "Sat, 05 Jun 2021 08:39:15 GMT",
+      "tag": "@rnx-kit/third-party-notices_v1.0.1",
+      "version": "1.0.1",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Fix ThirdPartyNotices, missing await",
+            "author": "dannyvv@microsoft.com",
+            "commit": "471ae7a5aac29188257996d1b09bea31e12475f0",
+            "package": "@rnx-kit/third-party-notices"
+          }
+        ]
+      }
+    },
+    {
       "date": "Thu, 03 Jun 2021 10:15:50 GMT",
       "tag": "@rnx-kit/third-party-notices_v1.0.0",
       "version": "1.0.0",
