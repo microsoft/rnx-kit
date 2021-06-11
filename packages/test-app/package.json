@@ -71,7 +71,6 @@
     "capabilities": [
       "core-android",
       "core-ios",
-      "core-macos",
       "core-windows"
     ]
   }

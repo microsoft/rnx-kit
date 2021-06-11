@@ -1,0 +1,7 @@
+{
+  "type": "patch",
+  "comment": "Bumped workspace-tools to 0.16.2",
+  "packageName": "@rnx-kit/metro-plugin-typescript-validation",
+  "email": "4123478+tido64@users.noreply.github.com",
+  "dependentChangeType": "patch"
+}
