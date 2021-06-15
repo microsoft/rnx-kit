@@ -16,9 +16,9 @@ function stripRepoRootFromPaths(
   const token = "/~";
   return Object.entries(cyclicDependencies).reduce<CyclicDependencies>(
     (cyclicDependencies, [modulePath, importPath]) => {
-      cyclicDependencies[
-        modulePath.replace(repoRoot, token)
-      ] = importPath.map((p) => p.replace(repoRoot, token));
+      cyclicDependencies[modulePath.replace(repoRoot, token)] = importPath.map(
+        (p) => p.replace(repoRoot, token)
+      );
       return cyclicDependencies;
     },
     {}

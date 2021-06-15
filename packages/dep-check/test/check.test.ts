@@ -63,8 +63,9 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
       dependencies: { "react-native-linear-gradient": "0.0.0" },
     });
 
-    expect(checkPackageManifest("package.json")).toBe(0);
-    expect(consoleWarnSpy).not.toBeCalled();
+    const options = { uncheckedReturnCode: -1 };
+    expect(checkPackageManifest("package.json", options)).toBe(-1);
+    expect(consoleWarnSpy).toBeCalled();
   });
 
   test("prints warnings when detecting bad packages", () => {
@@ -220,6 +221,28 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
     rnxKitConfig.__setMockConfig({
       reactNativeVersion: "^0.62 || ^0.63 || ^0.64",
       reactNativeDevVersion: "0.63.4",
+      capabilities: ["core-ios"],
+    });
+
+    expect(checkPackageManifest("package.json")).toBe(0);
+    expect(consoleErrorSpy).not.toBeCalled();
+    expect(consoleLogSpy).not.toBeCalled();
+    expect(consoleWarnSpy).not.toBeCalled();
+  });
+
+  test("handles development version ranges", () => {
+    fs.__setMockContent({
+      ...mockManifest,
+      peerDependencies: {
+        "react-native": v62_v63_v64,
+      },
+      devDependencies: {
+        "react-native": profile_0_63["core-ios"].version,
+      },
+    });
+    rnxKitConfig.__setMockConfig({
+      reactNativeVersion: "^0.62 || ^0.63 || ^0.64",
+      reactNativeDevVersion: "^0.63.4",
       capabilities: ["core-ios"],
     });
 

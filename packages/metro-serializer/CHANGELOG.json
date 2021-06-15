@@ -2,6 +2,21 @@
   "name": "@rnx-kit/metro-serializer",
   "entries": [
     {
+      "date": "Tue, 15 Jun 2021 13:13:23 GMT",
+      "tag": "@rnx-kit/metro-serializer_v1.0.0",
+      "version": "1.0.0",
+      "comments": {
+        "none": [
+          {
+            "comment": "Fixed homepage URL",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "9ce445ef026a922d2cdbd95b857e3957ba48624d",
+            "package": "@rnx-kit/metro-serializer"
+          }
+        ]
+      }
+    },
+    {
       "date": "Thu, 06 May 2021 20:37:55 GMT",
       "tag": "@rnx-kit/metro-serializer_v1.0.0",
       "version": "1.0.0",

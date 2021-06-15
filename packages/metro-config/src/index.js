@@ -48,8 +48,9 @@ function defaultWatchFolders(projectRoot) {
 
   // If `projectRoot` is not set, assume that `@rnx-kit/metro-config` lives in
   // the same monorepo as the target package.
-  const thisPackage =
-    path.dirname(findUp.sync("package.json", { cwd: projectRoot }) || "");
+  const thisPackage = path.dirname(
+    findUp.sync("package.json", { cwd: projectRoot }) || ""
+  );
 
   try {
     const root = getWorkspaceRoot(thisPackage);

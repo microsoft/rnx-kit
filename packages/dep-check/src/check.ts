@@ -21,7 +21,7 @@ export function isManifest(manifest: unknown): manifest is PackageManifest {
 
 export function checkPackageManifest(
   manifestPath: string,
-  { write }: Options = {}
+  { uncheckedReturnCode = 0, write }: Options = {}
 ): number {
   const manifestJson = fs.readFileSync(manifestPath, { encoding: "utf-8" });
   const manifest = JSON.parse(manifestJson);
@@ -30,10 +30,20 @@ export function checkPackageManifest(
     return 1;
   }
 
+  const badPackages = findBadPackages(manifest);
+  if (badPackages) {
+    warn(
+      `Known bad packages are found in '${manifest.name}':\n` +
+        badPackages
+          .map((pkg) => `    ${pkg.name}@${pkg.version}: ${pkg.reason}`)
+          .join("\n")
+    );
+  }
+
   const projectRoot = path.dirname(manifestPath);
   const kitConfig = getKitConfig({ cwd: projectRoot });
   if (!kitConfig) {
-    return 0;
+    return uncheckedReturnCode;
   }
 
   const {
@@ -41,31 +51,28 @@ export function checkPackageManifest(
     reactNativeDevVersion,
     kitType,
     capabilities: targetCapabilities,
+    customProfiles,
   } = getKitCapabilities(kitConfig);
 
   const { reactNativeVersion, capabilities: requiredCapabilities } =
-    getRequirements(targetReactNativeVersion, kitType, manifest, projectRoot);
+    getRequirements(
+      targetReactNativeVersion,
+      kitType,
+      manifest,
+      projectRoot,
+      customProfiles
+    );
   requiredCapabilities.push(...targetCapabilities);
 
-  const badPackages = findBadPackages(manifest);
-  if (badPackages) {
-    warn(
-      "Known bad packages are found:\n" +
-        badPackages
-          .map((pkg) => `    ${pkg.name}@${pkg.version}: ${pkg.reason}`)
-          .join("\n")
-    );
-  }
-
   if (requiredCapabilities.length === 0) {
-    return 0;
+    return uncheckedReturnCode;
   }
 
   const updatedManifest = updatePackageManifest(
     manifest,
     requiredCapabilities,
-    getProfilesFor(reactNativeVersion),
-    getProfilesFor(reactNativeDevVersion),
+    getProfilesFor(reactNativeVersion, customProfiles),
+    getProfilesFor(reactNativeDevVersion, customProfiles),
     kitType
   );
 
@@ -83,7 +90,7 @@ export function checkPackageManifest(
         {
           aAnnotation: "Current",
           aColor: chalk.red,
-          bAnnotation: "Updated",
+          bAnnotation: "Expected",
           bColor: chalk.green,
         }
       );

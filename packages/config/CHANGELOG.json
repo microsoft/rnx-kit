@@ -2,6 +2,66 @@
   "name": "@rnx-kit/config",
   "entries": [
     {
+      "date": "Fri, 04 Jun 2021 12:36:37 GMT",
+      "tag": "@rnx-kit/config_v0.2.9",
+      "version": "0.2.9",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Fixed error when React Native dev version is a range",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "434c350f84c22f492f3e5f5065ba2bc2d31b2678",
+            "package": "@rnx-kit/config"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Thu, 03 Jun 2021 10:15:50 GMT",
+      "tag": "@rnx-kit/config_v0.2.8",
+      "version": "0.2.8",
+      "comments": {
+        "none": [
+          {
+            "comment": "Formatted all the things",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "693d313e7ab36dcc0f28ec81b889bbd4aa4a89fd",
+            "package": "@rnx-kit/config"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Wed, 26 May 2021 13:22:22 GMT",
+      "tag": "@rnx-kit/config_v0.2.8",
+      "version": "0.2.8",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Removed core-win32 capability",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "dd572c96f42e6c477fbfc178afd9892935b213c3",
+            "package": "@rnx-kit/config"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Wed, 26 May 2021 06:53:03 GMT",
+      "tag": "@rnx-kit/config_v0.2.7",
+      "version": "0.2.7",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Added support for custom profiles",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "d816342c652bfe239c8914e7048c9b6d20372589",
+            "package": "@rnx-kit/config"
+          }
+        ]
+      }
+    },
+    {
       "date": "Wed, 19 May 2021 16:00:47 GMT",
       "tag": "@rnx-kit/config_v0.2.6",
       "version": "0.2.6",

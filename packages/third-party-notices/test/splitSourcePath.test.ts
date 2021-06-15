@@ -100,5 +100,4 @@ describe("splitSourcePath", () => {
   //   expect(moduleName).toBe("myPackage");
   //   expect(modulePath).toBe(`${absolutePathRoot}src\\other\\node_modules\\myPackage");
   // });
-
 });

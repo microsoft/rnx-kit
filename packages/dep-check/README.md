@@ -100,6 +100,8 @@ is an app, it needs to fulfill the requirements of its dependencies. In this
 example, because `awesome-library` needs the `netinfo` capability, it gets added
 to `awesome-app`.
 
+For a more detailed design document, see [`DESIGN.md`](./DESIGN.md).
+
 ## Usage
 
 ```sh
@@ -109,12 +111,59 @@ rnx-dep-check [options] [/path/to/package.json]
 Providing a path to `package.json` is optional. If omitted, it will look for one
 using Node module resolution.
 
+### `--custom-profiles <module>`
+
+Path to custom profiles. This can be a path to a JSON file, a `.js` file, or a
+module name. The module must default export an object similar to the one below:
+
+```js
+module.exports = {
+  0.63: {
+    "my-capability": {
+      name: "my-module",
+      version: "1.0.0",
+    },
+  },
+  0.64: {
+    "my-capability": {
+      name: "my-module",
+      version: "1.1.0",
+    },
+  },
+};
+```
+
+For a more complete example, have a look at the
+[default profiles](https://github.com/microsoft/rnx-kit/blob/769e9fa290929effd5111884f1637c21326b5a95/packages/dep-check/src/profiles.ts#L11).
+
+> #### Note
+>
+> This specific flag may only be used with `--vigilant`. You can specify custom
+> profiles in normal mode by adding `customProfiles` to your package
+> [configuration](#configure).
+
+### `--exclude-packages`
+
+Comma-separated list of package names to exclude from inspection.
+
+> #### Note
+>
+> `--exclude-packages` will only exclude packages that do not have a
+> configuration. Packages that have a configuration, will still be checked. This
+> flag may only be used with `--vigilant`.
+
 ### `--init <app | library>`
 
 When integrating `@rnx-kit/dep-check` for the first time, it may be a cumbersome
 to manually add all capabilities yourself. You can run this tool with `--init`,
 and it will try to add a sensible configuration based on what is currently
 defined in the specified `package.json`.
+
+### `--vigilant`
+
+Also inspect packages that are not configured. Specify a comma-separated list of
+profile versions to compare against, e.g. `0.63,0.64`. The first number
+specifies the target version.
 
 ### `--write`
 
@@ -133,6 +182,7 @@ your `package.json`.
 | `reactNativeVersion`    | string                 | (required)            | Supported versions of React Native. The value can be a specific version or a range.                         |
 | `reactNativeDevVersion` | string                 | `minVersion(version)` | The version of React Native to use for development. If omitted, the minimum supported version will be used. |
 | `capabilities`          | Capabilities[]         | `[]`                  | List of used/provided capabilities. A full list can be found below.                                         |
+| `customProfiles`        | string                 | `undefined`           | Path to custom profiles. This can be a path to a JSON file, a `.js` file, or a module name.                 |
 
 ## Capabilities
 
@@ -144,7 +194,6 @@ your `package.json`.
 | core-android      | react-native@^0.65.0-0                            | react-native@^0.64.1                              | react-native@^0.63.2                          | react-native@^0.62.3                          | react-native@^0.61.5                          |
 | core-ios          | react-native@^0.65.0-0                            | react-native@^0.64.1                              | react-native@^0.63.2                          | react-native@^0.62.3                          | react-native@^0.61.5                          |
 | core-macos        | react-native-macos@^0.65.0-0                      | react-native-macos@^0.64.0                        | react-native-macos@^0.63.0                    | react-native-macos@^0.62.0                    | react-native-macos@^0.61.0                    |
-| core-win32        | @office-iss/react-native-win32@^0.65.0-0          | @office-iss/react-native-win32@^0.64.0            | @office-iss/react-native-win32@^0.63.0        | @office-iss/react-native-win32@^0.62.0        | @office-iss/react-native-win32@^0.61.0        |
 | core-windows      | react-native-windows@^0.65.0-0                    | react-native-windows@^0.64.0                      | react-native-windows@^0.63.0                  | react-native-windows@^0.62.0                  | react-native-windows@^0.61.0                  |
 | animation         | react-native-reanimated@^2.1.0                    | react-native-reanimated@^2.1.0                    | react-native-reanimated@^1.13.3               | react-native-reanimated@^1.13.3               | react-native-reanimated@^1.13.3               |
 | base64            | react-native-base64@^0.2.1                        | react-native-base64@^0.2.1                        | react-native-base64@^0.2.1                    | react-native-base64@^0.2.1                    | react-native-base64@^0.2.1                    |
@@ -171,7 +220,7 @@ your `package.json`.
 | sqlite            | react-native-sqlite-storage@^5.0.0                | react-native-sqlite-storage@^5.0.0                | react-native-sqlite-storage@^3.3.11           | react-native-sqlite-storage@^3.3.11           | react-native-sqlite-storage@^3.3.11           |
 | storage           | @react-native-async-storage/async-storage@^1.15.3 | @react-native-async-storage/async-storage@^1.15.3 | @react-native-community/async-storage@^1.12.1 | @react-native-community/async-storage@^1.12.1 | @react-native-community/async-storage@^1.12.1 |
 | svg               | react-native-svg@^12.1.1                          | react-native-svg@^12.1.1                          | react-native-svg@^12.1.1                      | react-native-svg@^12.1.1                      | react-native-svg@^12.1.1                      |
-| test-app          | react-native-test-app@^0.5.8                      | react-native-test-app@^0.5.8                      | react-native-test-app@^0.5.8                  | react-native-test-app@^0.5.8                  | react-native-test-app@^0.5.8                  |
+| test-app          | react-native-test-app@^0.5.9                      | react-native-test-app@^0.5.9                      | react-native-test-app@^0.5.9                  | react-native-test-app@^0.5.9                  | react-native-test-app@^0.5.9                  |
 | webview           | react-native-webview@^11.4.2                      | react-native-webview@^11.4.2                      | react-native-webview@^11.4.2                  | react-native-webview@^11.0.3                  | react-native-webview@^11.0.3                  |
 
 <!-- @rnx-kit/dep-check/capabilities end -->

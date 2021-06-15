@@ -2,6 +2,141 @@
   "name": "@rnx-kit/cli",
   "entries": [
     {
+      "date": "Sat, 05 Jun 2021 08:39:15 GMT",
+      "tag": "@rnx-kit/cli_v0.5.21",
+      "version": "0.5.21",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Bump @rnx-kit/cli to v0.5.21",
+            "author": "dannyvv@microsoft.com",
+            "commit": "471ae7a5aac29188257996d1b09bea31e12475f0",
+            "package": "@rnx-kit/cli"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Fri, 04 Jun 2021 12:36:37 GMT",
+      "tag": "@rnx-kit/cli_v0.5.20",
+      "version": "0.5.20",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Bump @rnx-kit/config to v0.2.9",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "434c350f84c22f492f3e5f5065ba2bc2d31b2678",
+            "package": "@rnx-kit/cli"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Fri, 04 Jun 2021 09:02:33 GMT",
+      "tag": "@rnx-kit/cli_v0.5.19",
+      "version": "0.5.19",
+      "comments": {
+        "patch": [
+          {
+            "comment": "dep-check: Added --exclude-packages to vigilant mode",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "fe5932b980aa4df8d081fe601c5bb553f54a3907",
+            "package": "@rnx-kit/cli"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Thu, 03 Jun 2021 10:15:50 GMT",
+      "tag": "@rnx-kit/cli_v0.5.18",
+      "version": "0.5.18",
+      "comments": {
+        "none": [
+          {
+            "comment": "Formatted all the things",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "693d313e7ab36dcc0f28ec81b889bbd4aa4a89fd",
+            "package": "@rnx-kit/cli"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Wed, 02 Jun 2021 17:08:58 GMT",
+      "tag": "@rnx-kit/cli_v0.5.18",
+      "version": "0.5.18",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Forward --init, --vigilant, --custom-profiles flags dep-check",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "26f466ce336fda0e8651582ce0c07873d0b7084e",
+            "package": "@rnx-kit/cli"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Mon, 31 May 2021 06:57:45 GMT",
+      "tag": "@rnx-kit/cli_v0.5.17",
+      "version": "0.5.17",
+      "comments": {
+        "none": [
+          {
+            "comment": "Bump @rnx-kit/dep-check to v1.4.2",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "7dfb8067e76b561b035a1b81d3cb8ef41b0978e0",
+            "package": "@rnx-kit/cli"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Thu, 27 May 2021 06:09:59 GMT",
+      "tag": "@rnx-kit/cli_v0.5.17",
+      "version": "0.5.17",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Bump @rnx-kit/dep-check to v1.4.2",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "5d0bb1baee85221f9bccf25e436a996738103de1",
+            "package": "@rnx-kit/cli"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Wed, 26 May 2021 13:22:22 GMT",
+      "tag": "@rnx-kit/cli_v0.5.16",
+      "version": "0.5.16",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Bump @rnx-kit/config to v0.2.8",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "dd572c96f42e6c477fbfc178afd9892935b213c3",
+            "package": "@rnx-kit/cli"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Wed, 26 May 2021 06:53:03 GMT",
+      "tag": "@rnx-kit/cli_v0.5.15",
+      "version": "0.5.15",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Bump @rnx-kit/config to v0.2.7",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "d816342c652bfe239c8914e7048c9b6d20372589",
+            "package": "@rnx-kit/cli"
+          }
+        ]
+      }
+    },
+    {
       "date": "Thu, 20 May 2021 16:06:43 GMT",
       "tag": "@rnx-kit/cli_v0.5.14",
       "version": "0.5.14",

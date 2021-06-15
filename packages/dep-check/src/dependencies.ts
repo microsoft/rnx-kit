@@ -10,12 +10,16 @@ import fs from "fs";
 import path from "path";
 import { error, warn } from "./console";
 import {
-  getAllProfiles,
+  getProfilesFor,
   getProfileVersionsFor,
   profilesSatisfying,
-  ProfileVersion,
 } from "./profiles";
-import type { PackageManifest } from "./types";
+import type {
+  PackageManifest,
+  Profile,
+  ProfileVersion,
+  ResolverOptions,
+} from "./types";
 
 type Requirements = Required<
   Pick<KitConfig, "reactNativeVersion" | "capabilities">
@@ -28,25 +32,14 @@ type Trace = {
 };
 
 function isCoreCapability(capability: Capability): boolean {
-  switch (capability) {
-    case "core-android":
-    case "core-ios":
-    case "core-macos":
-    case "core-win32":
-    case "core-windows":
-      return true;
-
-    default:
-      return false;
-  }
+  return capability.startsWith("core-");
 }
 
 function isDevOnlyCapability(
   capability: Capability,
-  versions: ProfileVersion[]
+  profiles: Partial<Profile>[]
 ): boolean {
-  const allProfiles = getAllProfiles();
-  return versions.some((version) => allProfiles[version][capability].devOnly);
+  return profiles.some((profile) => profile[capability]?.devOnly);
 }
 
 export function visitDependencies(
@@ -88,7 +81,9 @@ export function getRequirements(
   targetReactNativeVersion: string,
   kitType: KitType,
   targetManifest: PackageManifest,
-  projectRoot: string
+  projectRoot: string,
+  customProfiles: string | undefined,
+  options?: ResolverOptions
 ): Requirements {
   let profileVersions = getProfileVersionsFor(targetReactNativeVersion);
   if (profileVersions.length === 0) {
@@ -136,23 +131,24 @@ export function getRequirements(
         }
 
         if (Array.isArray(capabilities)) {
-          capabilities.reduce((result, capability) => {
-            /**
-             * Core capabilities are capabilities that must always be declared
-             * by the hosting app and should not be included when gathering
-             * requirements. This is to avoid forcing an app to install
-             * dependencies it does not need, e.g. `react-native-windows` when
-             * the app only supports iOS.
-             */
-            if (
-              !isCoreCapability(capability) &&
-              !isDevOnlyCapability(capability, profileVersions)
-            ) {
-              result.add(capability);
-            }
-            return result;
-          }, allCapabilities);
+          capabilities.forEach((capability) => allCapabilities.add(capability));
         }
+      }
+    });
+
+    const profiles = getProfilesFor(profileVersions, customProfiles, options);
+    allCapabilities.forEach((capability) => {
+      /**
+       * Core capabilities are capabilities that must always be declared by the
+       * hosting app and should not be included when gathering requirements.
+       * This is to avoid forcing an app to install dependencies it does not
+       * need, e.g. `react-native-windows` when the app only supports iOS.
+       */
+      if (
+        isCoreCapability(capability) ||
+        isDevOnlyCapability(capability, profiles)
+      ) {
+        allCapabilities.delete(capability);
       }
     });
   }

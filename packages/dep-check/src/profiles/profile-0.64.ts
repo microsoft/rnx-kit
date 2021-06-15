@@ -16,10 +16,6 @@ const profile: Profile = {
     name: "react-native-macos",
     version: "^0.64.0",
   },
-  "core-win32": {
-    name: "@office-iss/react-native-win32",
-    version: "^0.64.0",
-  },
   "core-windows": {
     name: "react-native-windows",
     version: "^0.64.0",

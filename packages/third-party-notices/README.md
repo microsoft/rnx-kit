@@ -1,25 +1,26 @@
 # @rnx-kit/third-party-notices
 
 `@rnx-kit/third-party-notices` provides a helper library to create a
-third-party-notices text file based on a output bundle. It also provides
-a cli interface to the library for integration into build steps like just-scripts
+third-party-notices text file based on a output bundle. It also provides a cli
+interface to the library for integration into build steps like just-scripts
 
-This function will read the sourcemap file and tries to find all files
-that are referenced in the sourcemap by assuming that all dependencies are
-represented as `node_modules\moduleName` or `node_modules\@scope\moduleName`
-It will then look in the package.json file to see if it finds a licence claration
-or it will look for the file called `LICENCE` in the root. And aggregate all ese
-files in the output file.
+This function will read the sourcemap file and tries to find all files that are
+referenced in the sourcemap by assuming that all dependencies are represented as
+`node_modules\moduleName` or `node_modules\@scope\moduleName` It will then look
+in the package.json file to see if it finds a licence claration or it will look
+for the file called `LICENCE` in the root. And aggregate all ese files in the
+output file.
 
 This package works for npm, yarn and pnpm package layouts formats.
 
 At the moment this package only supports webpack based bundles, there is nothing
-preventing adding metro support, the current customers of this module are basedon
-webpack at the moment.
+preventing adding metro support, the current customers of this module are
+basedon webpack at the moment.
 
 ## Usage
 
 ### Commandline
+
 `npx @rnx-kit/third-party-notices --rootPath <myPackage> --sourceMapFile <myPackage/dist/myPackage.js.map>`
 
 ```
@@ -42,11 +43,12 @@ Options:
 ```
 
 ### As a library
+
 ```ts
-import {writeThirdPartyNotices} from "@rnx-kit/third-party-notices";
+import { writeThirdPartyNotices } from "@rnx-kit/third-party-notices";
 
 writeThirdPartyNotices({
   rootPath: ".",
-  sourceMapFile: "./dist/myPackage.js.map"
+  sourceMapFile: "./dist/myPackage.js.map",
 });
 ```
