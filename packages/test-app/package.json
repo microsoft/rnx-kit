@@ -20,16 +20,16 @@
   },
   "dependencies": {
     "react": "16.13.1",
-    "react-native": "^0.63.2",
+    "react-native": "^0.64.3",
     "react-native-macos": "^0.63.0",
     "react-native-windows": "^0.63.0"
   },
   "devDependencies": {
     "@babel/core": "^7.6.2",
     "@babel/runtime": "^7.6.2",
-    "@react-native-community/cli": "^4.10.0",
-    "@react-native-community/cli-platform-android": "^4.10.0",
-    "@react-native-community/cli-platform-ios": "^4.10.0",
+    "@react-native-community/cli": "^6.0.1",
+    "@react-native-community/cli-platform-android": "^6.0.1",
+    "@react-native-community/cli-platform-ios": "^6.0.1",
     "@react-native-community/eslint-config": "^2.0.0",
     "@rnx-kit/babel-preset-metro-react-native": "*",
     "@rnx-kit/cli": "*",

@@ -6,7 +6,8 @@ jest.mock("metro/src/lib/bundleToString");
 
 function isPromise<T>(obj: T | Promise<T>): obj is Promise<T> {
   return (
-    Object.prototype.hasOwnProperty.call(obj, "then") &&
+    typeof obj === "object" &&
+    "then" in obj &&
     typeof obj["then"] === "function"
   );
 }
