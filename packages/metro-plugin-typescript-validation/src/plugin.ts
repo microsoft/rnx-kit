@@ -100,9 +100,13 @@ export type Delta = {
   deleted: Set<string>;
   reset: boolean;
 };
-export function experimentalSerializerHook(_graph: Graph, delta: Delta) {
+export function experimentalSerializerHook(graph: Graph, delta: Delta) {
   // @ts-ignore
-  console.log("HOOK: reset=%o, platform=%o", delta.reset, delta.platform);
+  console.log(
+    "HOOK: reset=%o, platform=%o",
+    delta.reset,
+    graph.transformOptions.platform
+  );
   delta?.added?.forEach((_module, moduleName) => {
     console.log("  ADD: %o", moduleName);
   });

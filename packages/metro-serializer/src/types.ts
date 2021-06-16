@@ -26,10 +26,41 @@ export type Dependency = {
 
 export type Dependencies<T = MixedOutput> = Map<string, Module<T>>;
 
+export type CustomTransformOptions = {
+  [key: string]: unknown;
+  __proto__: null;
+};
+
+export type TransformTargetType = "script" | "module" | "asset";
+
+export type TransformProfile = "default" | "hermes-stable" | "hermes-canary";
+
+export type TransformOptions = Readonly<{
+  customTransformOptions?: CustomTransformOptions;
+  dev: boolean;
+  experimentalImportSupport?: boolean;
+  hot: boolean;
+  inlinePlatform: boolean;
+  inlineRequires: boolean;
+  minify: boolean;
+  nonInlinedRequires?: ReadonlyArray<string>;
+  platform?: string;
+  runtimeBytecodeVersion?: number;
+  type: TransformTargetType;
+  unstable_disableES6Transforms?: boolean;
+  unstable_transformProfile: TransformProfile;
+}>;
+
+export type TransformInputOptions = Omit<
+  TransformOptions,
+  "inlinePlatform" | "inlineRequires"
+>;
+
 export type Graph<T = MixedOutput> = {
   dependencies: Dependencies<T>;
   importBundleNames: Set<string>;
   entryPoints: ReadonlyArray<string>;
+  transformOptions: TransformInputOptions;
 };
 
 export type Module<T = MixedOutput> = {
