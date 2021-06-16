@@ -10,12 +10,21 @@ const {
   TypeScriptValidation,
 } = require("@rnx-kit/metro-plugin-typescript-validation");
 
+function isDev() {
+  const devFlag = process.argv.findIndex((arg) => arg === "--dev");
+  if (devFlag >= 0) {
+    return process.argv[devFlag + 1] === "true";
+  }
+
+  return false;
+}
+
 module.exports = makeMetroConfig({
   projectRoot: __dirname,
   serializer: {
     customSerializer: MetroSerializer([
       CyclicDependencies(),
-      DuplicateDependencies(),
+      DuplicateDependencies({ ignoredModules: isDev() ? ["react-is"] : [] }),
       TypeScriptValidation(),
     ]),
   },
