@@ -1,2 +1,2 @@
 #!/usr/bin/env node
-require('just-scripts/bin/just-scripts');
+require("just-scripts/bin/just-scripts");

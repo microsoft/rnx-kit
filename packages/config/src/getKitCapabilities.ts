@@ -1,18 +1,23 @@
 import semver from "semver";
 import type { KitConfig } from "./kitConfig";
 
-export type KitCapabilities = Required<
+type RequiredConfig = Required<
   Pick<
     KitConfig,
     "capabilities" | "kitType" | "reactNativeVersion" | "reactNativeDevVersion"
   >
 >;
 
+type OptionalConfig = Pick<KitConfig, "customProfiles">;
+
+export type KitCapabilities = RequiredConfig & OptionalConfig;
+
 export function getKitCapabilities({
   capabilities = [],
   kitType = "library",
   reactNativeVersion,
   reactNativeDevVersion: rawDevVersion,
+  customProfiles,
 }: KitConfig): KitCapabilities {
   if (
     !reactNativeVersion ||
@@ -27,7 +32,7 @@ export function getKitCapabilities({
 
   if (
     !reactNativeDevVersion ||
-    !semver.satisfies(reactNativeDevVersion, reactNativeVersion)
+    !semver.subset(reactNativeDevVersion, reactNativeVersion)
   ) {
     throw new Error(
       `'${reactNativeDevVersion}' is not a valid dev version because it does not satisfy supported version range '${reactNativeVersion}'`
@@ -39,5 +44,6 @@ export function getKitCapabilities({
     kitType,
     reactNativeVersion,
     reactNativeDevVersion,
+    customProfiles,
   };
 }

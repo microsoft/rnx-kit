@@ -23,7 +23,7 @@ function depcheckTask() {
   /**
    * @param {(err?: Error) => void} done
    */
-  const task = function(done) {
+  const task = function (done) {
     const { logger } = require("just-scripts");
     const depcheck = require("depcheck");
     const path = require("path");

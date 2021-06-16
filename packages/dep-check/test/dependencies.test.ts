@@ -109,7 +109,8 @@ describe("getRequirements()", () => {
       "^0.63 || ^0.64",
       "app",
       manifest,
-      fixture
+      fixture,
+      undefined
     );
 
     expect(reactNativeVersion).toBe("^0.63 || ^0.64");
@@ -117,6 +118,49 @@ describe("getRequirements()", () => {
     expect(capabilities.sort()).toEqual([
       "animation",
       "netinfo",
+      "storage",
+      "webview",
+    ]);
+  });
+
+  test("gets requirements from all dependencies with custom profiles", () => {
+    const cyberdyne = { name: "cyberdyne", version: "1.0.0", devOnly: true };
+    const skynet = { name: "skynet", version: "1.0.0" };
+    jest.mock(
+      "awesome-dep-check-profiles",
+      () => ({
+        "0.63": {
+          [cyberdyne.name]: cyberdyne,
+          [skynet.name]: skynet,
+        },
+        "0.64": {
+          [cyberdyne.name]: cyberdyne,
+          [skynet.name]: skynet,
+        },
+      }),
+      { virtual: true }
+    );
+
+    const fixture = fixturePath("awesome-repo-extended");
+    const manifestJson = fs.readFileSync(path.join(fixture, "package.json"), {
+      encoding: "utf-8",
+    });
+    const manifest = JSON.parse(manifestJson);
+    const { reactNativeVersion, capabilities } = getRequirements(
+      "^0.63 || ^0.64",
+      "app",
+      manifest,
+      fixture,
+      "awesome-dep-check-profiles",
+      { moduleResolver: (() => "awesome-dep-check-profiles") as any }
+    );
+
+    expect(reactNativeVersion).toBe("^0.63 || ^0.64");
+
+    expect(capabilities.sort()).toEqual([
+      "animation",
+      "netinfo",
+      "skynet",
       "storage",
       "webview",
     ]);
@@ -131,7 +175,8 @@ describe("getRequirements()", () => {
           name: "@rnx-kit/dep-check",
           version: "1.0.0",
         },
-        ""
+        "",
+        undefined
       )
     ).toThrow();
   });

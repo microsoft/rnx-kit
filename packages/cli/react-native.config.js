@@ -107,6 +107,25 @@ module.exports = {
       func: rnxDepCheck,
       options: [
         {
+          name: "--custom-profiles [module]",
+          description:
+            "Path to custom profiles. This can be a path to a JSON file, a `.js` file, or a module name.",
+        },
+        {
+          name: "--exclude-packages [packages]",
+          description:
+            "Comma-separated list of package names to exclude from inspection.",
+        },
+        {
+          name: "--init [app|library]",
+          description: "Writes an initial kit config",
+        },
+        {
+          name: "--vigilant [versions]",
+          description:
+            "Inspects packages regardless of whether they've been configured. Specify a comma-separated list of profile versions to compare against, e.g. `0.63,0.64`. The first number specifies the target version.",
+        },
+        {
           name: "--write",
           description: "Writes all changes to the specified `package.json`",
         },
@@ -119,7 +138,8 @@ module.exports = {
       options: [
         {
           name: "--root-path <path>",
-          description: "The root of the repo where to start resolving modules from.",
+          description:
+            "The root of the repo where to start resolving modules from.",
         },
         {
           name: "--source-,ap-file <file>",
@@ -131,19 +151,23 @@ module.exports = {
         },
         {
           name: "--ignore-scopes [string]",
-          description:  "Comma separated list of npm scopes to ignore and not emit licence information for",
+          description:
+            "Comma separated list of npm scopes to ignore and not emit licence information for",
         },
         {
           name: "--ignore-modules [string]",
-          description: "Comma separated list of modules (js packages) to not emit licence information for ",
+          description:
+            "Comma separated list of modules (js packages) to not emit licence information for ",
         },
         {
           name: "--preamble-text [string]",
-          description: "A string to prepend at the start of the generated licence file.",
+          description:
+            "A string to prepend at the start of the generated licence file.",
         },
         {
           name: "--additional-text [path]",
-          description: "A string to append at the end of the generated licence file.",
+          description:
+            "A string to append at the end of the generated licence file.",
         },
       ],
     },

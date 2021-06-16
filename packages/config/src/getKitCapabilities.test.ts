@@ -51,6 +51,21 @@ describe("getKitCapabilities()", () => {
     ).toBe("^0.63 || ^0.64");
   });
 
+  test("returns declared React Native dev version", () => {
+    expect(
+      getKitCapabilities({
+        reactNativeVersion: "^0.63 || ^0.64",
+        reactNativeDevVersion: "0.64.0",
+      }).reactNativeDevVersion
+    ).toBe("0.64.0");
+    expect(
+      getKitCapabilities({
+        reactNativeVersion: "^0.63 || ^0.64",
+        reactNativeDevVersion: "^0.64.0",
+      }).reactNativeDevVersion
+    ).toBe("^0.64.0");
+  });
+
   test("returns minimum supported React Native version as dev version when unspecified", () => {
     expect(
       getKitCapabilities({

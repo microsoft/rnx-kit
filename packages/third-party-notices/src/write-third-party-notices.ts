@@ -66,7 +66,7 @@ export async function writeThirdPartyNotices(
   const sourceMap: ISourceMap = JSON.parse(sourceMapJson);
 
   const moduleNameToPathMap = extractModuleNameToPathMap(options, sourceMap);
-  const licenses = extractLicenses(moduleNameToPathMap);
+  const licenses = await extractLicenses(moduleNameToPathMap);
   const outputText = createLicenseFileContents(
     moduleNameToPathMap,
     licenses,
@@ -180,9 +180,9 @@ export function extractModuleNameToPathMap(
   return moduleNameToPathMap;
 }
 
-export function extractLicenses(
+export async function extractLicenses(
   moduleNameToPathMap: Map<string, string>
-): ILicense[] {
+): Promise<ILicense[]> {
   const licenseExtractors = require("browserify-licenses/app/extractors");
 
   const moduleNamePathPairs: IModuleNamePathPair[] = [];
@@ -203,7 +203,7 @@ export function extractLicenses(
   });
 
   // Extract licenses of all modules we found
-  return licenseExtractors.nodeModule(moduleNamePathPairs);
+  return await licenseExtractors.nodeModule(moduleNamePathPairs);
 }
 
 export function createLicenseFileContents(
@@ -231,30 +231,32 @@ export function createLicenseFileContents(
 
   // Look up licenses and emit combined license text
 
-  Array.from(moduleNameToPath.keys()).sort().forEach((moduleName: string) => {
-    const modulePath = moduleNameToPath.get(moduleName);
-    const license = licenses.find((_: ILicense) => _.path === modulePath);
-    if (!license) {
-      throw new Error(`Cannot find license information for ${moduleName}`);
-    }
-    if (!license.licenseText) {
-      if (
-        !license.license &&
-        (!license.licenseURLs || license.licenseURLs.length === 0)
-      ) {
-        throw new Error(`No license text or URL for ${moduleName}`);
+  Array.from(moduleNameToPath.keys())
+    .sort()
+    .forEach((moduleName: string) => {
+      const modulePath = moduleNameToPath.get(moduleName);
+      const license = licenses.find((_: ILicense) => _.path === modulePath);
+      if (!license) {
+        throw new Error(`Cannot find license information for ${moduleName}`);
       }
-      license.licenseText = `${license.license} (${license.licenseURLs.join(
-        " "
-      )})`;
-    }
-    writeLine("================================================");
-    writeLine(`${moduleName} ${license.version}`);
-    writeLine("=====");
-    writeMultipleLines(license.licenseText.trim());
-    writeLine("================================================");
-    writeLine("");
-  });
+      if (!license.licenseText) {
+        if (
+          !license.license &&
+          (!license.licenseURLs || license.licenseURLs.length === 0)
+        ) {
+          throw new Error(`No license text or URL for ${moduleName}`);
+        }
+        license.licenseText = `${license.license} (${license.licenseURLs.join(
+          " "
+        )})`;
+      }
+      writeLine("================================================");
+      writeLine(`${moduleName} ${license.version}`);
+      writeLine("=====");
+      writeMultipleLines(license.licenseText.trim());
+      writeLine("================================================");
+      writeLine("");
+    });
 
   if (additionalText) {
     writeMultipleLines(additionalText.join(os.EOL));

@@ -1,8 +1,60 @@
 # Change Log - @rnx-kit/dep-check
 
-This log was last generated on Thu, 20 May 2021 16:06:43 GMT and should not be manually modified.
+This log was last generated on Fri, 04 Jun 2021 12:36:37 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 1.5.2
+
+Fri, 04 Jun 2021 12:36:37 GMT
+
+### Patches
+
+- Fixed older yargs versions not ignoring flags with default values when looking for conflicts (4123478+tido64@users.noreply.github.com)
+
+## 1.5.1
+
+Fri, 04 Jun 2021 09:02:33 GMT
+
+### Patches
+
+- Added --exclude-packages to vigilant mode (4123478+tido64@users.noreply.github.com)
+
+## 1.5.0
+
+Wed, 02 Jun 2021 17:08:58 GMT
+
+### Minor changes
+
+- Add --vigilant flag for zero-config mode (4123478+tido64@users.noreply.github.com)
+
+## 1.4.2
+
+Thu, 27 May 2021 06:09:59 GMT
+
+### Patches
+
+- Fix 'devOnly' being ignored in custom profiles (4123478+tido64@users.noreply.github.com)
+
+## 1.4.1
+
+Wed, 26 May 2021 13:22:22 GMT
+
+### Patches
+
+- Removed core-win32 capability (4123478+tido64@users.noreply.github.com)
+
+## 1.4.0
+
+Wed, 26 May 2021 06:53:03 GMT
+
+### Minor changes
+
+- Added support for custom profiles (4123478+tido64@users.noreply.github.com)
+
+### Patches
+
+- Bump @rnx-kit/config to v0.2.7 (4123478+tido64@users.noreply.github.com)
 
 ## 1.3.0
 

@@ -44,41 +44,106 @@ describe("getProfileVersionsFor()", () => {
 });
 
 describe("getProfilesFor()", () => {
+  const consoleErrorSpy = jest.spyOn(global.console, "error");
+
+  beforeEach(() => {
+    consoleErrorSpy.mockReset();
+  });
+
+  afterAll(() => {
+    jest.clearAllMocks();
+  });
+
   test("returns profile for specific version", () => {
-    const profiles = getProfilesFor("0.64.0");
+    const profiles = getProfilesFor("0.64.0", undefined);
     expect(profiles).toEqual([profile_0_64]);
+    expect(consoleErrorSpy).not.toBeCalled();
   });
 
   test("returns profile for one version range", () => {
-    expect(getProfilesFor("^0.62.2")).toEqual([profile_0_62]);
-    expect(getProfilesFor("^0.63.4")).toEqual([profile_0_63]);
-    expect(getProfilesFor("^0.64.0")).toEqual([profile_0_64]);
+    expect(getProfilesFor("^0.62.2", undefined)).toEqual([profile_0_62]);
+    expect(getProfilesFor("^0.63.4", undefined)).toEqual([profile_0_63]);
+    expect(getProfilesFor("^0.64.0", undefined)).toEqual([profile_0_64]);
   });
 
   test("returns profiles for bigger version ranges", () => {
-    const profiles = getProfilesFor(">=0.62.2");
+    const profiles = getProfilesFor(">=0.62.2", undefined);
     expect(profiles.slice(0, 3)).toEqual([
       profile_0_62,
       profile_0_63,
       profile_0_64,
     ]);
+    expect(consoleErrorSpy).not.toBeCalled();
   });
 
   test("returns profiles for multiple version ranges", () => {
-    const profiles = getProfilesFor("^0.63.0 || ^0.64.0");
+    const profiles = getProfilesFor("^0.63.0 || ^0.64.0", undefined);
     expect(profiles).toEqual([profile_0_63, profile_0_64]);
+    expect(consoleErrorSpy).not.toBeCalled();
   });
 
   test("throws when an unsupported version is provided", () => {
-    expect(() => getProfilesFor("^0.60.6")).toThrowError(
+    expect(() => getProfilesFor("^0.60.6", undefined)).toThrowError(
       "Unsupported 'react-native' version"
     );
+    expect(consoleErrorSpy).not.toBeCalled();
   });
 
   test("throws when an invalid version is provided", () => {
-    expect(() => getProfilesFor("invalid")).toThrowError(
+    expect(() => getProfilesFor("invalid", undefined)).toThrowError(
       "Invalid 'react-native' version"
     );
+    expect(consoleErrorSpy).not.toBeCalled();
+  });
+
+  test("throws if custom profiles module does not exist", () => {
+    expect(() =>
+      getProfilesFor("^0.59", "non-existent-profiles-module")
+    ).toThrow(`Cannot find module 'non-existent-profiles-module'`);
+
+    expect(consoleErrorSpy).toBeCalledTimes(2);
+  });
+
+  test("throws if custom profiles module path is not returned", () => {
+    expect(() =>
+      getProfilesFor("^0.59", "undefined-profiles-module", {
+        moduleResolver: (() => undefined) as any,
+      })
+    ).toThrow(`Cannot find module 'undefined-profiles-module'`);
+
+    expect(consoleErrorSpy).toBeCalledTimes(1);
+  });
+
+  test("throws if custom profiles module does not default export an object", () => {
+    jest.mock("bad-profiles-module", () => null, { virtual: true });
+
+    expect(() =>
+      getProfilesFor("^0.59", "bad-profiles-module", {
+        moduleResolver: (() => "bad-profiles-module") as any,
+      })
+    ).toThrow("'bad-profiles-module' doesn't default export profiles");
+
+    expect(consoleErrorSpy).toBeCalledTimes(1);
+  });
+
+  test("appends custom profiles", () => {
+    const skynet = { name: "skynet", version: "1.0.0" };
+    jest.mock(
+      "good-profiles-module",
+      () => ({ "0.62": { [skynet.name]: skynet } }),
+      { virtual: true }
+    );
+
+    const [profile_0_62, profile_0_63] = getProfilesFor(
+      "^0.62 || ^0.63",
+      "good-profiles-module",
+      { moduleResolver: (() => "good-profiles-module") as any }
+    );
+
+    expect(skynet.name in profile_0_62).toBe(true);
+    expect(skynet.name in profile_0_63).toBe(false);
+
+    expect(consoleErrorSpy).not.toBeCalled();
   });
 });
 

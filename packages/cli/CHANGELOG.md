@@ -1,8 +1,64 @@
 # Change Log - @rnx-kit/cli
 
-This log was last generated on Thu, 20 May 2021 16:06:43 GMT and should not be manually modified.
+This log was last generated on Sat, 05 Jun 2021 08:39:15 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 0.5.21
+
+Sat, 05 Jun 2021 08:39:15 GMT
+
+### Patches
+
+- Bump @rnx-kit/cli to v0.5.21 (dannyvv@microsoft.com)
+
+## 0.5.20
+
+Fri, 04 Jun 2021 12:36:37 GMT
+
+### Patches
+
+- Bump @rnx-kit/config to v0.2.9 (4123478+tido64@users.noreply.github.com)
+
+## 0.5.19
+
+Fri, 04 Jun 2021 09:02:33 GMT
+
+### Patches
+
+- dep-check: Added --exclude-packages to vigilant mode (4123478+tido64@users.noreply.github.com)
+
+## 0.5.18
+
+Wed, 02 Jun 2021 17:08:58 GMT
+
+### Patches
+
+- Forward --init, --vigilant, --custom-profiles flags dep-check (4123478+tido64@users.noreply.github.com)
+
+## 0.5.17
+
+Thu, 27 May 2021 06:09:59 GMT
+
+### Patches
+
+- Bump @rnx-kit/dep-check to v1.4.2 (4123478+tido64@users.noreply.github.com)
+
+## 0.5.16
+
+Wed, 26 May 2021 13:22:22 GMT
+
+### Patches
+
+- Bump @rnx-kit/config to v0.2.8 (4123478+tido64@users.noreply.github.com)
+
+## 0.5.15
+
+Wed, 26 May 2021 06:53:03 GMT
+
+### Patches
+
+- Bump @rnx-kit/config to v0.2.7 (4123478+tido64@users.noreply.github.com)
 
 ## 0.5.14
 
