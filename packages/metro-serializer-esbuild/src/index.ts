@@ -12,6 +12,10 @@ import * as semver from "semver";
 
 export * from "./esbuildTransformerConfig";
 
+type Options = Pick<BuildOptions, "logLevel" | "minify"> & {
+  fabric?: boolean;
+};
+
 function assertVersion(requiredVersion: string): void {
   const { version } = require("metro/package.json");
   if (!semver.satisfies(version, requiredVersion)) {
@@ -69,7 +73,7 @@ function unwrap(code: string): string {
  */
 export function MetroSerializer(
   plugins: MetroPlugin[] = [],
-  buildOptions?: Pick<BuildOptions, "logLevel" | "minify">
+  buildOptions?: Options
 ): Serializer {
   // TODO: This should be bumped to the version that contains all the changes
   // we'll need for this plugin to work.
@@ -87,9 +91,9 @@ export function MetroSerializer(
     const metroPlugin: Plugin = {
       name: require("../package.json").name,
       setup: (build) => {
-        const options = { filter: /.*/ };
+        const pluginOptions = { filter: /.*/ };
 
-        build.onResolve(options, (args) => {
+        build.onResolve(pluginOptions, (args) => {
           if (dependencies.has(args.path)) {
             return { path: args.path };
           }
@@ -99,12 +103,26 @@ export function MetroSerializer(
             return { path: parent.dependencies.get(args.path)?.absolutePath };
           }
 
+          if (preModules.find(({ path }) => path === args.path)) {
+            return { path: args.path };
+          }
+
           throw new Error(
             `Could not resolve '${args.path}' from '${args.importer}'`
           );
         });
 
-        build.onLoad(options, (args) => {
+        build.onLoad(pluginOptions, (args) => {
+          // Ideally, we should be adding external files to the options object
+          // that we pass to `esbuild.build()` below. Since it doesn't work for
+          // some reason, we'll filter them out here instead.
+          if (
+            buildOptions?.fabric !== true &&
+            args.path.endsWith("ReactFabric-prod.js")
+          ) {
+            return { contents: "" };
+          }
+
           const mod = dependencies.get(args.path);
           if (mod) {
             return { contents: unwrap(outputOf(mod) ?? "") };
@@ -117,12 +135,37 @@ export function MetroSerializer(
 
           if (args.path === __filename) {
             return {
-              // The `Function` constructor creates functions that execute in
-              // the global scope. We use this trait to ensure that `this`
-              // references the global object.
-              //
-              // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function#description
-              contents: `export const global = new Function("return this;")();`,
+              /**
+               * Add all the polyfills in this file. See the `inject` option
+               * below for more details.
+               */
+              contents: [
+                /**
+                 * Many React Native modules expect `global` to be passed with
+                 * Metro's `require` polyfill. We need to re-create it since
+                 * we're using esbuild's `require`.
+                 *
+                 * The `Function` constructor creates functions that execute in
+                 * the global scope. We use this trait to ensure that `this`
+                 * references the global object.
+                 *
+                 * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function#description
+                 */
+                `export const global = new Function("return this;")();`,
+
+                /** Polyfills */
+                ...preModules
+                  .filter(({ path }) => !isRedundantPolyfill(path))
+                  .map(({ path }) => `require("${path}");`),
+
+                /**
+                 * Ensure that `react-native/Libraries/Core/InitializeCore.js`
+                 * gets executed first.
+                 */
+                ...options.runBeforeMainModule.map(
+                  (value) => `require("${value}");`
+                ),
+              ].join("\n"),
             };
           }
 
@@ -131,6 +174,8 @@ export function MetroSerializer(
         });
       },
     };
+
+    const lodashTransformer = require("esbuild-plugin-lodash");
 
     return esbuild
       .build({
@@ -143,23 +188,20 @@ export function MetroSerializer(
         entryPoints: [entryPoint],
         inject: [
           /**
-           * Many React Native modules expect `global` to be passed with Metro's
-           * `require` polyfill. We need to re-create it since we're using
-           * esbuild's `require`.
+           * A require call is generated and prepended to _all_ modules for each
+           * injected file. This can increase the bundle size significantly if
+           * there are many polyfills and modules. For just four polyfills (e.g.
+           * `console.js`, `error-guard.js`, `Object.es7.js`, and
+           * `InitializeCore.js`), we've seen an increase of ~180 KB in a small
+           * to medium sized app. We can work around this issue by adding all
+           * the polyfills in a single file that we inject here.
            */
           __filename,
-
-          /** Polyfills */
-          ...preModules
-            .map(({ path }) => path)
-            .filter((module) => !isRedundantPolyfill(module)),
-
-          /** Executes `react-native/Libraries/Core/InitializeCore.js` first */
-          ...options.runBeforeMainModule,
         ],
+        legalComments: "none",
         logLevel: buildOptions?.logLevel ?? "error",
         minify: buildOptions?.minify ?? !Boolean(options.dev),
-        plugins: [metroPlugin],
+        plugins: [metroPlugin, lodashTransformer()],
         write: false,
       })
       .then(({ outputFiles }: BuildResult) => {
