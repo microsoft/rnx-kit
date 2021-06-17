@@ -19,14 +19,14 @@
     "start": "react-native start --projectRoot src"
   },
   "dependencies": {
-    "react": "16.13.1",
+    "react": "17.0.1",
     "react-native": "^0.64.3",
-    "react-native-macos": "^0.63.0",
-    "react-native-windows": "^0.63.0"
+    "react-native-windows": "^0.64.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.6.2",
-    "@babel/runtime": "^7.6.2",
+    "@babel/core": "^7.12.9",
+    "@babel/preset-env": "^7.1.6",
+    "@babel/runtime": "^7.12.5",
     "@react-native-community/cli": "^6.0.1",
     "@react-native-community/cli-platform-android": "^6.0.1",
     "@react-native-community/cli-platform-ios": "^6.0.1",
@@ -39,11 +39,10 @@
     "@rnx-kit/metro-plugin-typescript-validation": "*",
     "@rnx-kit/metro-serializer": "*",
     "@types/react": "^17.0.2",
-    "@types/react-native": "^0.63.50",
+    "@types/react-native": "^0.64.0",
     "eslint": "^7.0.0",
-    "metro-react-native-babel-preset": "^0.59.0",
+    "metro-react-native-babel-preset": "^0.66.0",
     "react-native-test-app": "^0.5.4",
-    "react-test-renderer": "16.13.1",
     "rnx-kit-scripts": "*",
     "typescript": "^4.0.0"
   },
@@ -51,7 +50,7 @@
     "preset": "react-native"
   },
   "rnx-kit": {
-    "reactNativeVersion": "^0.63",
+    "reactNativeVersion": "^0.64",
     "kitType": "app",
     "bundle": {
       "entryPath": "src/index.ts",
@@ -59,9 +58,8 @@
       "assetsPath": "dist",
       "bundlePrefix": "main",
       "targets": [
-        "ios",
         "android",
-        "macos",
+        "ios",
         "windows"
       ],
       "platforms": {
