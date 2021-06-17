@@ -38,7 +38,7 @@
     "@rnx-kit/metro-plugin-duplicates-checker": "*",
     "@rnx-kit/metro-plugin-typescript-validation": "*",
     "@rnx-kit/metro-serializer": "*",
-    "@types/react": "^17.0.0",
+    "@types/react": "^17.0.2",
     "@types/react-native": "^0.64.0",
     "eslint": "^7.0.0",
     "metro-react-native-babel-preset": "^0.66.0",
@@ -58,9 +58,8 @@
       "assetsPath": "dist",
       "bundlePrefix": "main",
       "targets": [
-        "ios",
         "android",
-        "macos",
+        "ios",
         "windows"
       ],
       "platforms": {
