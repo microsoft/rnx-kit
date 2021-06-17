@@ -13,6 +13,7 @@ describe("@rnx-kit/metro-config", () => {
   } = require("../src/index");
 
   const metroConfigKeys = [
+    "cacheStores",
     "resolver",
     "serializer",
     "server",

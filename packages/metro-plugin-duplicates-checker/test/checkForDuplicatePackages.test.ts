@@ -17,16 +17,18 @@ import {
 jest.mock("fs");
 jest.mock("pkg-dir");
 
-// Under normal circumstances, this extra copy of 'fbjs' should not be installed.
-const extraFbjs = `${repoRoot.replace(
+// Under normal circumstances, this extra copy of '@react-native/polyfills'
+// should not be installed.
+const extraPolyfills = `${repoRoot.replace(
   /\\/g,
   "/"
-)}/packages/test-app/node_modules/fbjs`;
+)}/packages/test-app/node_modules/@react-native/polyfills`;
 require("pkg-dir").sync = jest.fn().mockImplementation((cwd) => {
   switch (cwd) {
-    // Under normal circumstances, this extra copy of 'fbjs' should not be installed.
-    case `${extraFbjs}/lib/warning.js`:
-      return extraFbjs;
+    // Under normal circumstances, this extra copy of '@react-native/polyfills'
+    // should not be installed.
+    case `${extraPolyfills}/index.js`:
+      return extraPolyfills;
     default:
       return jest.requireActual("pkg-dir").sync(cwd);
   }
