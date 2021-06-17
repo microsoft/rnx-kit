@@ -4376,6 +4376,11 @@ es6-weak-map@^2.0.1:
     es6-iterator "^2.0.3"
     es6-symbol "^3.1.1"
 
+esbuild-plugin-lodash@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/esbuild-plugin-lodash/-/esbuild-plugin-lodash-1.0.3.tgz#579edd28c7f5c1d3c2fd0501ed5003a35928b8c7"
+  integrity sha512-qk6zYdUmQ1WjBJJ2OvPUqiYA4v5fjKsQ7tzAyQb9jL8/wxeN8aKxjNHzP/U+IBMSDWSICDm44djuXOamb9joqw==
+
 esbuild@^0.12.8:
   version "0.12.9"
   resolved "https://registry.yarnpkg.com/esbuild/-/esbuild-0.12.9.tgz#bed4e7087c286cd81d975631f77d47feb1660070"
