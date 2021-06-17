@@ -2,6 +2,21 @@
   "name": "@rnx-kit/metro-serializer-esbuild",
   "entries": [
     {
+      "date": "Thu, 17 Jun 2021 18:01:13 GMT",
+      "tag": "@rnx-kit/metro-serializer-esbuild_v0.0.2",
+      "version": "0.0.2",
+      "comments": {
+        "none": [
+          {
+            "comment": "Bump @rnx-kit/metro-serializer-esbuild to v0.0.2",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "3bcc48b08a5ee4ad203fe9ab55b9a324c0a244d0",
+            "package": "@rnx-kit/metro-serializer-esbuild"
+          }
+        ]
+      }
+    },
+    {
       "date": "Thu, 17 Jun 2021 09:08:01 GMT",
       "tag": "@rnx-kit/metro-serializer-esbuild_v0.0.2",
       "version": "0.0.2",

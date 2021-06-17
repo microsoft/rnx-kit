@@ -2,6 +2,21 @@
   "name": "@rnx-kit/metro-serializer",
   "entries": [
     {
+      "date": "Thu, 17 Jun 2021 18:01:13 GMT",
+      "tag": "@rnx-kit/metro-serializer_v1.0.0",
+      "version": "1.0.0",
+      "comments": {
+        "none": [
+          {
+            "comment": "Fix test not detecting Promises correctly",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "3bcc48b08a5ee4ad203fe9ab55b9a324c0a244d0",
+            "package": "@rnx-kit/metro-serializer"
+          }
+        ]
+      }
+    },
+    {
       "date": "Tue, 15 Jun 2021 13:13:23 GMT",
       "tag": "@rnx-kit/metro-serializer_v1.0.0",
       "version": "1.0.0",
