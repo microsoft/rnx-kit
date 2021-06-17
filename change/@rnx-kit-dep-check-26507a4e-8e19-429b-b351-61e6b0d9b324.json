@@ -1,7 +1,0 @@
-{
-  "type": "patch",
-  "comment": "Bumped react-native 0.64.1 -> 0.64.2",
-  "packageName": "@rnx-kit/dep-check",
-  "email": "4123478+tido64@users.noreply.github.com",
-  "dependentChangeType": "patch"
-}

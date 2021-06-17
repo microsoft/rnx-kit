@@ -2,6 +2,21 @@
   "name": "@rnx-kit/dep-check",
   "entries": [
     {
+      "date": "Thu, 17 Jun 2021 06:05:20 GMT",
+      "tag": "@rnx-kit/dep-check_v1.5.3",
+      "version": "1.5.3",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Bumped react-native 0.64.1 -> 0.64.2",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "1e9d77d5f6f95f3c9819f81081850beea5cecbf3",
+            "package": "@rnx-kit/dep-check"
+          }
+        ]
+      }
+    },
+    {
       "date": "Fri, 04 Jun 2021 12:36:37 GMT",
       "tag": "@rnx-kit/dep-check_v1.5.2",
       "version": "1.5.2",
