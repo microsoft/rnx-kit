@@ -2,6 +2,21 @@
   "name": "@rnx-kit/metro-serializer-esbuild",
   "entries": [
     {
+      "date": "Thu, 17 Jun 2021 09:08:01 GMT",
+      "tag": "@rnx-kit/metro-serializer-esbuild_v0.0.2",
+      "version": "0.0.2",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Help esbuild reduce the bundle size further",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "3c875dbd3025847a2d88dcd7370e3fd02d4a9e91",
+            "package": "@rnx-kit/metro-serializer-esbuild"
+          }
+        ]
+      }
+    },
+    {
       "date": "Tue, 15 Jun 2021 13:13:23 GMT",
       "tag": "@rnx-kit/metro-serializer-esbuild_v0.0.1",
       "version": "0.0.1",
