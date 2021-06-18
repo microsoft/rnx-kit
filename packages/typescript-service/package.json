@@ -1,8 +1,8 @@
 {
-  "name": "@rnx-kit/typescript-server",
+  "name": "@rnx-kit/typescript-service",
   "version": "1.0.0",
-  "description": "In-process TypeScript server with a custom module resolver",
-  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/typescript-server#rnx-kittypescript-server",
+  "description": "In-process TypeScript services",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/typescript-service#rnx-kittypescript-service",
   "license": "MIT",
   "files": [
     "lib/*"
@@ -11,7 +11,7 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/microsoft/rnx-kit",
-    "directory": "packages/typescript-server"
+    "directory": "packages/typescript-service"
   },
   "scripts": {
     "build": "rnx-kit-scripts build",
