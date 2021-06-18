@@ -20,14 +20,14 @@
   },
   "dependencies": {
     "react": "17.0.1",
-    "react-native": "^0.64.3",
+    "react-native": "^0.64.4",
     "react-native-windows": "^0.64.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
     "@babel/preset-env": "^7.1.6",
     "@babel/runtime": "^7.12.5",
-    "@react-native-community/cli": "^6.0.1",
+    "@react-native-community/cli": "^6.0.2",
     "@react-native-community/cli-platform-android": "^6.0.1",
     "@react-native-community/cli-platform-ios": "^6.0.1",
     "@react-native-community/eslint-config": "^2.0.0",
