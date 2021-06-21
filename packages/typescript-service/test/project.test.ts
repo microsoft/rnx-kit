@@ -46,13 +46,13 @@ describe("Project", () => {
 
   test("validateFile succeeds when given a valid source file", () => {
     const { project } = createProject();
-    project.validateFile(path.join(fixturePath, "a.ts"));
+    expect(project.validateFile(path.join(fixturePath, "a.ts"))).toBeTrue();
     expect(mockDiagnosticWriter.print).not.toBeCalled();
   });
 
   test("validateFile fails when given an invalid source file", () => {
     const { project } = createProject();
-    project.validateFile(path.join(fixturePath, "c.ts"));
+    expect(project.validateFile(path.join(fixturePath, "c.ts"))).toBeFalse();
     expect(mockDiagnosticWriter.print).toBeCalledWith(
       expect.toBeArrayOfSize(1)
     );
@@ -60,7 +60,7 @@ describe("Project", () => {
 
   test("validate reports errors from all source files", () => {
     const { project } = createProject();
-    project.validate();
+    expect(project.validate()).toBeFalse();
     expect(mockDiagnosticWriter.print).toBeCalledWith(
       expect.toBeArrayOfSize(1)
     );
@@ -69,7 +69,7 @@ describe("Project", () => {
   test("validate succeeds after removing a source file with errors", () => {
     const { project } = createProject();
     project.removeFile(path.join(fixturePath, "c.ts"));
-    project.validate();
+    expect(project.validate()).toBeTrue();
     expect(mockDiagnosticWriter.print).not.toBeCalled();
   });
 
@@ -79,7 +79,7 @@ describe("Project", () => {
       "export function c() { return 'c'; }"
     );
     project.updateFile(path.join(fixturePath, "c.ts"), snapshot);
-    project.validate();
+    expect(project.validate()).toBeTrue();
     expect(mockDiagnosticWriter.print).not.toBeCalled();
   });
 
@@ -89,7 +89,7 @@ describe("Project", () => {
     project.removeFile(path.join(fixturePath, "c.ts"));
 
     project.addFile(path.join(fixturePath, "b.ts"));
-    project.validate();
+    expect(project.validate()).toBeTrue();
     expect(mockDiagnosticWriter.print).not.toBeCalled();
   });
 });

@@ -127,15 +127,22 @@ export class Project {
     return diagnostics;
   }
 
-  validateFile(fileName: string) {
+  validateFile(fileName: string): boolean {
     const diagnostics = this.getFileDiagnostics(fileName);
     if (isNonEmptyArray(diagnostics)) {
       this.diagnosticWriter.print(diagnostics);
+      return false;
     }
+    return true;
   }
 
-  validate() {
-    this.projectFiles.getFileNames().forEach((f) => this.validateFile(f));
+  validate(): boolean {
+    let result = true;
+    this.projectFiles.getFileNames().forEach((f) => {
+      const fileResult = this.validateFile(f);
+      result = result && fileResult;
+    });
+    return result;
   }
 
   addFile(fileName: string) {

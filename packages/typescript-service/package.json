@@ -1,7 +1,7 @@
 {
   "name": "@rnx-kit/typescript-service",
   "version": "1.0.0",
-  "description": "In-process TypeScript services",
+  "description": "TypeScript language services with support for custom module resolution",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/typescript-service#rnx-kittypescript-service",
   "license": "MIT",
   "files": [
