@@ -2,6 +2,21 @@
   "name": "@rnx-kit/dep-check",
   "entries": [
     {
+      "date": "Mon, 21 Jun 2021 11:43:28 GMT",
+      "tag": "@rnx-kit/dep-check_v1.5.4",
+      "version": "1.5.4",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Warn about renamed packages: `@react-native-community/async-storage` -> `@react-native-async-storage/async-storage` and `@react-native-community/masked-view` -> `@react-native-masked-view/masked-view`",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "97e5ae4b804010fe2457075ff5c1969391097b61",
+            "package": "@rnx-kit/dep-check"
+          }
+        ]
+      }
+    },
+    {
       "date": "Thu, 17 Jun 2021 06:05:20 GMT",
       "tag": "@rnx-kit/dep-check_v1.5.3",
       "version": "1.5.3",

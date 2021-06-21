@@ -1,7 +1,0 @@
-{
-  "type": "patch",
-  "comment": "Warn about renamed packages: `@react-native-community/async-storage` -> `@react-native-async-storage/async-storage` and `@react-native-community/masked-view` -> `@react-native-masked-view/masked-view`",
-  "packageName": "@rnx-kit/dep-check",
-  "email": "4123478+tido64@users.noreply.github.com",
-  "dependentChangeType": "patch"
-}

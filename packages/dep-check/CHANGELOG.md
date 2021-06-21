@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/dep-check
 
-This log was last generated on Thu, 17 Jun 2021 06:05:20 GMT and should not be manually modified.
+This log was last generated on Mon, 21 Jun 2021 11:43:28 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 1.5.4
+
+Mon, 21 Jun 2021 11:43:28 GMT
+
+### Patches
+
+- Warn about renamed packages: `@react-native-community/async-storage` -> `@react-native-async-storage/async-storage` and `@react-native-community/masked-view` -> `@react-native-masked-view/masked-view` (4123478+tido64@users.noreply.github.com)
 
 ## 1.5.3
 
