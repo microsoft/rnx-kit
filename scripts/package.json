@@ -19,7 +19,7 @@
     "chalk": "^4.1.0",
     "depcheck": "^1.0.0",
     "jest": "^26.0.0",
-    "just-repo-utils": "^0.2.0",
+    "just-repo-utils": "^0.4.0",
     "just-scripts": "^1.4.1",
     "midgard-yarn": "^1.23.24",
     "ts-jest": "^26.4.4",
