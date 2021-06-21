@@ -94,9 +94,9 @@ describe("ExternalFileCache", () => {
     fs.readFileSync.mockReturnValueOnce("original file contents");
     fs.readFileSync.mockReturnValueOnce("the external file has changed");
     const cache = new ExternalFileCache();
-    let s = cache.getSnapshot("abc.ts");
+    const s = cache.getSnapshot("abc.ts");
     expect(s.getText(0, s.getLength())).toEqual("original file contents");
-    s = cache.getSnapshot("abc.ts");
-    expect(s.getText(0, s.getLength())).toEqual("original file contents");
+    const s2 = cache.getSnapshot("abc.ts");
+    expect(s2).toBe(s);
   });
 });

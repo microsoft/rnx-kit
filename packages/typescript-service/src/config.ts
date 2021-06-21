@@ -22,21 +22,14 @@ export class ProjectConfigLoader {
     this.extendedConfigCache = new Map();
   }
 
-  public load(
+  find(
     searchPath: string,
     fileName: string = "tsconfig.json"
-  ): ProjectConfig {
-    const configFileName = ts.findConfigFile(
-      searchPath,
-      ts.sys.fileExists,
-      fileName
-    );
-    if (!configFileName) {
-      throw new Error(
-        `Failed to find '${fileName}' under search-path '${searchPath}'`
-      );
-    }
+  ): string | undefined {
+    return ts.findConfigFile(searchPath, ts.sys.fileExists, fileName);
+  }
 
+  load(configFileName: string): ProjectConfig {
     const commandLine = ts.getParsedCommandLineOfConfigFile(
       configFileName,
       {}, // optionsToExtend
@@ -44,12 +37,12 @@ export class ProjectConfigLoader {
       this.extendedConfigCache
     );
     if (!commandLine) {
-      throw new Error(`Failed to load '${fileName}' (${configFileName})`);
+      throw new Error(`Failed to load '${configFileName}'`);
     }
 
     if (isNonEmptyArray(commandLine.errors)) {
       this.diagnosticWriter.print(commandLine.errors);
-      throw new Error(`Failed to load '${fileName}' (${configFileName})`);
+      throw new Error(`Failed to load '${configFileName}'`);
     }
 
     return commandLine;

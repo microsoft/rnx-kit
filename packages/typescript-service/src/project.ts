@@ -2,8 +2,11 @@ import * as ts from "typescript";
 import { ProjectFileCache, ExternalFileCache } from "./cache";
 import { Resolvers } from "./resolve";
 import { ProjectConfig } from "./config";
+import { DiagnosticWriter } from "./diagnostics";
+import { isNonEmptyArray } from "./util";
 
 export class Project {
+  private diagnosticWriter: DiagnosticWriter;
   private resolvers: Resolvers;
   private projectConfig: ProjectConfig;
 
@@ -14,9 +17,11 @@ export class Project {
 
   constructor(
     documentRegistry: ts.DocumentRegistry,
+    diagnosticWriter: DiagnosticWriter,
     resolvers: Resolvers,
     projectConfig: ProjectConfig
   ) {
+    this.diagnosticWriter = diagnosticWriter;
     this.resolvers = resolvers;
     this.projectConfig = projectConfig;
 
@@ -97,24 +102,40 @@ export class Project {
     );
   }
 
+  getConfig() {
+    return this.projectConfig;
+  }
+
   warmup() {
     this.languageService.getProgram();
   }
 
-  validateFile(fileName: string): ts.Diagnostic[] {
-    const syntax = this.languageService.getSyntacticDiagnostics(
-      fileName
-    ) as ts.Diagnostic[];
-    const semantics = this.languageService.getSemanticDiagnostics(fileName);
-    return syntax.concat(semantics);
+  private getFileDiagnostics(fileName: string): ts.Diagnostic[] {
+    const diagnostics: ts.Diagnostic[] = [];
+    Array.prototype.push.apply(
+      diagnostics,
+      this.languageService.getSyntacticDiagnostics(fileName)
+    );
+    Array.prototype.push.apply(
+      diagnostics,
+      this.languageService.getSemanticDiagnostics(fileName)
+    );
+    Array.prototype.push.apply(
+      diagnostics,
+      this.languageService.getSuggestionDiagnostics(fileName)
+    );
+    return diagnostics;
   }
 
-  validate(): ts.Diagnostic[] {
-    const diagnostics: ts.Diagnostic[] = [];
-    for (const fileName of this.projectFiles.getFileNames()) {
-      Array.prototype.push.apply(diagnostics, this.validateFile(fileName));
+  validateFile(fileName: string) {
+    const diagnostics = this.getFileDiagnostics(fileName);
+    if (isNonEmptyArray(diagnostics)) {
+      this.diagnosticWriter.print(diagnostics);
     }
-    return diagnostics;
+  }
+
+  validate() {
+    this.projectFiles.getFileNames().forEach((f) => this.validateFile(f));
   }
 
   addFile(fileName: string) {
@@ -127,5 +148,11 @@ export class Project {
 
   removeFile(fileName: string) {
     this.projectFiles.delete(fileName);
+  }
+
+  dispose() {
+    this.languageService.dispose();
+    // @ts-ignore
+    this.languageService = null; // LS cannot be used after calling dispose
   }
 }

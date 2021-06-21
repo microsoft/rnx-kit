@@ -1,8 +1,8 @@
 import "jest-extended";
 import path from "path";
 import ts from "typescript";
-import { createDiagnosticWriter, DiagnosticWriter } from "../src/diagnostics";
-import { ProjectConfigLoader } from "../src/config";
+import { DiagnosticWriter } from "../src/diagnostics";
+import { ProjectConfig, ProjectConfigLoader } from "../src/config";
 import { createResolvers } from "../src/resolve";
 import { Project } from "../src/project";
 
@@ -20,54 +20,76 @@ describe("Project", () => {
     jest.resetAllMocks();
   });
 
-  function createProject(
-    configFileName: string = "valid-tsconfig.json"
-  ): Project {
-    const projectConfig = projectConfigLoader.load(fixturePath, configFileName);
-    const resolvers = createResolvers(projectConfig.options);
-    return new Project(documentRegistry, resolvers, projectConfig);
+  function createProject(fileName: string = "valid-tsconfig.json"): {
+    config: ProjectConfig;
+    project: Project;
+  } {
+    const configFileName = projectConfigLoader.find(fixturePath, fileName);
+    const config = projectConfigLoader.load(configFileName);
+    const resolvers = createResolvers(config.options);
+    const project = new Project(
+      documentRegistry,
+      mockDiagnosticWriter,
+      resolvers,
+      config
+    );
+    return {
+      config,
+      project,
+    };
   }
 
+  test("getConfig returns the project config", () => {
+    const { config, project } = createProject();
+    expect(project.getConfig()).toBe(config);
+  });
+
   test("validateFile succeeds when given a valid source file", () => {
-    const project = createProject();
-    expect(
-      project.validateFile(path.join(fixturePath, "a.ts"))
-    ).toBeArrayOfSize(0);
+    const { project } = createProject();
+    project.validateFile(path.join(fixturePath, "a.ts"));
+    expect(mockDiagnosticWriter.print).not.toBeCalled();
   });
 
   test("validateFile fails when given an invalid source file", () => {
-    const project = createProject();
-    expect(
-      project.validateFile(path.join(fixturePath, "c.ts"))
-    ).toBeArrayOfSize(1);
+    const { project } = createProject();
+    project.validateFile(path.join(fixturePath, "c.ts"));
+    expect(mockDiagnosticWriter.print).toBeCalledWith(
+      expect.toBeArrayOfSize(1)
+    );
   });
 
   test("validate reports errors from all source files", () => {
-    const project = createProject();
-    expect(project.validate()).toBeArrayOfSize(1);
+    const { project } = createProject();
+    project.validate();
+    expect(mockDiagnosticWriter.print).toBeCalledWith(
+      expect.toBeArrayOfSize(1)
+    );
   });
 
   test("validate succeeds after removing a source file with errors", () => {
-    const project = createProject();
+    const { project } = createProject();
     project.removeFile(path.join(fixturePath, "c.ts"));
-    expect(project.validate()).toBeArrayOfSize(0);
+    project.validate();
+    expect(mockDiagnosticWriter.print).not.toBeCalled();
   });
 
   test("validate succeeds after replacing a source file with errors", () => {
-    const project = createProject();
+    const { project } = createProject();
     const snapshot = ts.ScriptSnapshot.fromString(
       "export function c() { return 'c'; }"
     );
     project.updateFile(path.join(fixturePath, "c.ts"), snapshot);
-    expect(project.validate()).toBeArrayOfSize(0);
+    project.validate();
+    expect(mockDiagnosticWriter.print).not.toBeCalled();
   });
 
   test("validate succeeds after removing and re-adding a source file", () => {
-    const project = createProject();
+    const { project } = createProject();
     project.removeFile(path.join(fixturePath, "b.ts"));
     project.removeFile(path.join(fixturePath, "c.ts"));
 
     project.addFile(path.join(fixturePath, "b.ts"));
-    expect(project.validate()).toBeArrayOfSize(0);
+    project.validate();
+    expect(mockDiagnosticWriter.print).not.toBeCalled();
   });
 });
