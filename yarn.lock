@@ -6528,10 +6528,10 @@ just-debounce@^1.0.0:
   resolved "https://registry.yarnpkg.com/just-debounce/-/just-debounce-1.1.0.tgz#2f81a3ad4121a76bc7cb45dbf704c0d76a8e5ddf"
   integrity sha512-qpcRocdkUmf+UTNBYx5w6dexX5J31AKK1OmPwH630a83DdVVUIngk55RSAiIGpQyoH0dlr872VHfPjnQnK1qDQ==
 
-just-repo-utils@^0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/just-repo-utils/-/just-repo-utils-0.2.0.tgz#2f4473900dcd3316753868ba0ef8b4dfb4760e1d"
-  integrity sha512-Gf+F7TGqwaDBNpHivQ7EbDzSHsA5Q/MQqoue4ulxt1uKWESQBHjZFmMyVqV+15C4JA80qrbnx62TcXaX7VDeDg==
+just-repo-utils@^0.4.0:
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/just-repo-utils/-/just-repo-utils-0.4.0.tgz#6be16a5d1d1ea23627f8722665942e25974cda75"
+  integrity sha512-2G+0KwDTS6jeusf/fSPAgOUQRlCZS29X8588+1F0Rc8j4YgEDkwNyrlfYYqmve74TebfLcNofbpezIcbnuGYTg==
   dependencies:
     fs-extra "^7.0.1"
     glob "^7.1.3"
