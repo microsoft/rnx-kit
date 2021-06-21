@@ -1,13 +1,18 @@
 import * as ts from "typescript";
 import { getCanonicalFileName } from "./util";
 
-export type IResolvers = {
+export type Resolvers = {
   resolveModuleNames: (
     moduleNames: string[],
     containingFile: string,
     _reusedNames: string[] | undefined,
     redirectedReference?: ts.ResolvedProjectReference
   ) => (ts.ResolvedModuleFull | undefined)[];
+
+  getResolvedModuleWithFailedLookupLocationsFromCache: (
+    modulename: string,
+    containingFile: string
+  ) => ts.ResolvedModuleWithFailedLookupLocations | undefined;
 
   resolveTypeReferenceDirectives: (
     typeDirectiveNames: string[],
@@ -16,7 +21,7 @@ export type IResolvers = {
   ) => (ts.ResolvedTypeReferenceDirective | undefined)[];
 };
 
-export function createResolvers(options: ts.CompilerOptions): IResolvers {
+export function createResolvers(options: ts.CompilerOptions): Resolvers {
   const moduleResolutionCache = ts.createModuleResolutionCache(
     ts.sys.getCurrentDirectory(),
     getCanonicalFileName,
@@ -48,6 +53,14 @@ export function createResolvers(options: ts.CompilerOptions): IResolvers {
     return resolvedModules;
   }
 
+  function getResolvedModuleWithFailedLookupLocationsFromCache(
+    _modulename: string,
+    _containingFile: string
+  ): ts.ResolvedModuleWithFailedLookupLocations | undefined {
+    // TODO: implement this
+    throw new Error("Not implemented");
+  }
+
   function resolveTypeReferenceDirectives(
     typeDirectiveNames: string[],
     containingFile: string,
@@ -72,6 +85,7 @@ export function createResolvers(options: ts.CompilerOptions): IResolvers {
 
   return {
     resolveModuleNames,
+    getResolvedModuleWithFailedLookupLocationsFromCache,
     resolveTypeReferenceDirectives,
   };
 }

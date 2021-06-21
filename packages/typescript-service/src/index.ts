@@ -1,9 +1,7 @@
-//create formal APIs for:
-//   starting/stopping,
-//   adding or updating a file (open and cache),
-//   removing a file (from cache),
-//   validating a file (get all diagnostics),
-//   formatting and/or printing an diagnostics
+export * from "./config";
+export * from "./diagnostics";
+export * from "./project";
+export * from "./resolve";
 
 import { main } from "./main";
 main();

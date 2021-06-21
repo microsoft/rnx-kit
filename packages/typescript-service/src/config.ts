@@ -1,49 +1,57 @@
 import * as ts from "typescript";
-import { IDiagnosticWriter } from "./diagnostics";
+import { DiagnosticWriter } from "./diagnostics";
+import { isNonEmptyArray } from "./util";
 
-export function createConfigLoader(diagnosticWriter: IDiagnosticWriter) {
-  const parseConfigFileHost: ts.ParseConfigFileHost = {
-    useCaseSensitiveFileNames: ts.sys.useCaseSensitiveFileNames,
-    readDirectory: ts.sys.readDirectory,
-    fileExists: ts.sys.fileExists,
-    readFile: ts.sys.readFile,
-    getCurrentDirectory: ts.sys.getCurrentDirectory,
-    onUnRecoverableConfigFileDiagnostic: diagnosticWriter.print,
-  };
+export type ProjectConfig = ts.ParsedCommandLine;
 
-  const extendedConfigCache: ts.ESMap<string, ts.ExtendedConfigCacheEntry> =
-    new Map();
+export class ProjectConfigLoader {
+  private diagnosticWriter: DiagnosticWriter;
+  private parseConfigFileHost: ts.ParseConfigFileHost;
+  private extendedConfigCache: ts.ESMap<string, ts.ExtendedConfigCacheEntry>;
 
-  function loadTSConfig(
+  constructor(diagnosticWriter: DiagnosticWriter) {
+    this.diagnosticWriter = diagnosticWriter;
+    this.parseConfigFileHost = {
+      useCaseSensitiveFileNames: ts.sys.useCaseSensitiveFileNames,
+      readDirectory: ts.sys.readDirectory,
+      fileExists: ts.sys.fileExists,
+      readFile: ts.sys.readFile,
+      getCurrentDirectory: ts.sys.getCurrentDirectory,
+      onUnRecoverableConfigFileDiagnostic: diagnosticWriter.print,
+    };
+    this.extendedConfigCache = new Map();
+  }
+
+  public load(
     searchPath: string,
     fileName: string = "tsconfig.json"
-  ): ts.ParsedCommandLine {
-    const p = ts.findConfigFile(searchPath, ts.sys.fileExists, fileName);
-    if (!p) {
+  ): ProjectConfig {
+    const configFileName = ts.findConfigFile(
+      searchPath,
+      ts.sys.fileExists,
+      fileName
+    );
+    if (!configFileName) {
       throw new Error(
         `Failed to find '${fileName}' under search-path '${searchPath}'`
       );
     }
 
     const commandLine = ts.getParsedCommandLineOfConfigFile(
-      p,
-      {},
-      parseConfigFileHost,
-      extendedConfigCache
+      configFileName,
+      {}, // optionsToExtend
+      this.parseConfigFileHost,
+      this.extendedConfigCache
     );
     if (!commandLine) {
-      throw new Error(`Failed to load/parse '${fileName}'`);
+      throw new Error(`Failed to load '${fileName}' (${configFileName})`);
     }
 
-    if (commandLine.errors && commandLine.errors.length > 0) {
-      diagnosticWriter.print(commandLine.errors);
-      throw new Error(`Failed to load/parse '${fileName}'`);
+    if (isNonEmptyArray(commandLine)) {
+      this.diagnosticWriter.print(commandLine.errors);
+      throw new Error(`Failed to load '${fileName}' (${configFileName})`);
     }
 
     return commandLine;
   }
-
-  return {
-    loadTSConfig,
-  };
 }

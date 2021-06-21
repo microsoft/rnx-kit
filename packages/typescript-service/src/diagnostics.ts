@@ -1,12 +1,12 @@
 import * as ts from "typescript";
 import { getCanonicalFileName, getNewLine } from "./util";
 
-export type IDiagnosticWriter = {
+export type DiagnosticWriter = {
   format: (diagnostic: ts.Diagnostic | ts.Diagnostic[]) => void;
   print: (diagnostic: ts.Diagnostic | ts.Diagnostic[]) => void;
 };
 
-export function createDiagnosticWriter(): IDiagnosticWriter {
+export function createDiagnosticWriter(): DiagnosticWriter {
   const formatDiagnosticsHost: ts.FormatDiagnosticsHost = {
     getCurrentDirectory: ts.sys.getCurrentDirectory,
     getCanonicalFileName,
