@@ -23,6 +23,16 @@
   "devDependencies": {
     "@types/node": "^12.0.0",
     "@rnx-kit/babel-preset-jest-typescript": "*",
+    "jest-extended": "^0.11.5",
     "rnx-kit-scripts": "*"
+  },
+  "jest": {
+    "setupFilesAfterEnv": [
+      "jest-extended"
+    ],
+    "roots": [
+      "test"
+    ],
+    "testRegex": "/test/.*\\.test\\.ts$"
   }
 }

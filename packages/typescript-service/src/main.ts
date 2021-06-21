@@ -5,6 +5,8 @@ import { createResolvers } from "./resolve";
 import { createDiagnosticWriter } from "./diagnostics";
 import { isNonEmptyArray } from "./util";
 
+// TODO: add documentation (README.md)
+// TODO: remove this file and hook it from index.ts
 export function main() {
   const diagnosticWriter = createDiagnosticWriter();
 
@@ -29,7 +31,7 @@ export function main() {
 
   // replace this file with some questionable code to generate errors
   console.log("re-loading file: %o", f);
-  project.addOrUpdateFile(
+  project.updateFile(
     f,
     ts.ScriptSnapshot.fromString("function foo(x: any) { return 1; }")
   );
@@ -45,7 +47,7 @@ export function main() {
   project.removeFile(f);
 
   console.log("re-adding file: %o", f);
-  project.addOrUpdateFile(f);
+  project.addFile(f);
 
   console.log("re-validating file: %o", f);
   diagnostics = project.validateFile(f);

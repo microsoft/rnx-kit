@@ -28,6 +28,7 @@ export function createResolvers(options: ts.CompilerOptions): Resolvers {
     options
   );
 
+  // TODO: this is the "default" behavior -- add config option for platform overrides and module name substitution
   function resolveModuleNames(
     moduleNames: string[],
     containingFile: string,
@@ -53,14 +54,15 @@ export function createResolvers(options: ts.CompilerOptions): Resolvers {
     return resolvedModules;
   }
 
+  // TODO: implement this
   function getResolvedModuleWithFailedLookupLocationsFromCache(
     _modulename: string,
     _containingFile: string
   ): ts.ResolvedModuleWithFailedLookupLocations | undefined {
-    // TODO: implement this
     throw new Error("Not implemented");
   }
 
+  // TODO: this is the "default" behavior -- add config option for platform overrides and module name substitution
   function resolveTypeReferenceDirectives(
     typeDirectiveNames: string[],
     containingFile: string,

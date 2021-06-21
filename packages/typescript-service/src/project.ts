@@ -1,46 +1,14 @@
-import * as fs from "fs";
 import * as ts from "typescript";
+import { ProjectFileCache, ExternalFileCache } from "./cache";
 import { Resolvers } from "./resolve";
 import { ProjectConfig } from "./config";
 
-class VersionedSnapshot {
-  fileName: string;
-  private version: number;
-  private snapshot?: ts.IScriptSnapshot;
-
-  constructor(fileName: string) {
-    this.fileName = fileName;
-    this.version = 1;
-  }
-
-  getVersion(): string {
-    return this.version.toString();
-  }
-
-  getSnapshot(): ts.IScriptSnapshot {
-    if (!this.snapshot) {
-      console.log("Loading File: %o", this.fileName);
-      const content = fs.readFileSync(this.fileName, "utf8");
-      this.snapshot = ts.ScriptSnapshot.fromString(content);
-    }
-    return this.snapshot;
-  }
-
-  update(snapshot?: ts.IScriptSnapshot) {
-    this.version++;
-    this.snapshot = snapshot;
-  }
-}
-
 export class Project {
-  private documentRegistry: ts.DocumentRegistry;
   private resolvers: Resolvers;
   private projectConfig: ProjectConfig;
 
-  private projectFiles: Map<string, VersionedSnapshot>;
-  private externalFiles: Map<string, VersionedSnapshot>;
-
-  private languageServiceHost: ts.LanguageServiceHost;
+  private projectFiles: ProjectFileCache;
+  private externalFiles: ExternalFileCache;
 
   private languageService: ts.LanguageService;
 
@@ -49,35 +17,23 @@ export class Project {
     resolvers: Resolvers,
     projectConfig: ProjectConfig
   ) {
-    this.documentRegistry = documentRegistry;
     this.resolvers = resolvers;
     this.projectConfig = projectConfig;
 
-    this.projectFiles = new Map();
-    projectConfig.fileNames.forEach((fileName) => {
-      this.projectFiles.set(fileName, new VersionedSnapshot(fileName));
-    });
+    this.projectFiles = new ProjectFileCache(projectConfig.fileNames);
+    this.externalFiles = new ExternalFileCache();
 
-    // TODO: the files in this list need to be file-watched. on add/mod/del, remove from this list and let the file be re-cached on demand
-    this.externalFiles = new Map();
-
-    this.languageServiceHost = {
+    const languageServiceHost: ts.LanguageServiceHost = {
       getCompilationSettings: () => this.projectConfig.options,
       //getNewLine?(): string;
       //getProjectVersion?(): string;
-      getScriptFileNames: () => Array.from(this.projectFiles.keys()),
+      getScriptFileNames: () => this.projectFiles.getFileNames(),
       //getScriptKind?(fileName: string): ts.ScriptKind;
       getScriptVersion: (fileName) =>
-        this.projectFiles.get(fileName)?.getVersion() ?? "0",
-      getScriptSnapshot: (fileName) => {
-        if (this.projectFiles.has(fileName)) {
-          return this.projectFiles.get(fileName)!.getSnapshot();
-        }
-        if (!this.externalFiles.has(fileName)) {
-          this.externalFiles.set(fileName, new VersionedSnapshot(fileName));
-        }
-        return this.externalFiles.get(fileName)!.getSnapshot();
-      },
+        this.projectFiles.getVersion(fileName) ?? "0",
+      getScriptSnapshot: (fileName) =>
+        this.projectFiles.getSnapshot(fileName) ??
+        this.externalFiles.getSnapshot(fileName),
       //getProjectReferences?(): readonly ProjectReference[] | undefined;
       //getLocalizedDiagnosticMessages?(): any;
       //getCancellationToken?(): HostCancellationToken;
@@ -136,31 +92,40 @@ export class Project {
     };
 
     this.languageService = ts.createLanguageService(
-      this.languageServiceHost,
-      this.documentRegistry
+      languageServiceHost,
+      documentRegistry
     );
   }
 
-  public warmup() {
+  warmup() {
     this.languageService.getProgram();
   }
 
-  public validateFile(fileName: string) {
-    return this.languageService
-      .getCompilerOptionsDiagnostics()
-      .concat(this.languageService.getSyntacticDiagnostics(fileName))
-      .concat(this.languageService.getSemanticDiagnostics(fileName));
+  validateFile(fileName: string): ts.Diagnostic[] {
+    const syntax = this.languageService.getSyntacticDiagnostics(
+      fileName
+    ) as ts.Diagnostic[];
+    const semantics = this.languageService.getSemanticDiagnostics(fileName);
+    return syntax.concat(semantics);
   }
 
-  public addOrUpdateFile(fileName: string, snapshot?: ts.IScriptSnapshot) {
-    if (this.projectFiles.has(fileName)) {
-      this.projectFiles.get(fileName)!.update(snapshot);
-    } else {
-      this.projectFiles.set(fileName, new VersionedSnapshot(fileName));
+  validate(): ts.Diagnostic[] {
+    const diagnostics: ts.Diagnostic[] = [];
+    for (const fileName of this.projectFiles.getFileNames()) {
+      Array.prototype.push.apply(diagnostics, this.validateFile(fileName));
     }
+    return diagnostics;
   }
 
-  public removeFile(fileName: string) {
+  addFile(fileName: string) {
+    this.projectFiles.add(fileName);
+  }
+
+  updateFile(fileName: string, snapshot?: ts.IScriptSnapshot) {
+    this.projectFiles.update(fileName, snapshot);
+  }
+
+  removeFile(fileName: string) {
     this.projectFiles.delete(fileName);
   }
 }
