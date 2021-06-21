@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/dep-check
 
-This log was last generated on Mon, 21 Jun 2021 11:43:28 GMT and should not be manually modified.
+This log was last generated on Mon, 21 Jun 2021 17:32:05 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 1.5.5
+
+Mon, 21 Jun 2021 17:32:05 GMT
+
+### Patches
+
+- Promote @react-native-masked-view/masked-view over @react-native-community/masked-view (4123478+tido64@users.noreply.github.com)
 
 ## 1.5.4
 
