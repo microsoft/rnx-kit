@@ -18,7 +18,7 @@
     "test": "rnx-kit-scripts test"
   },
   "dependencies": {
-    "typescript": "^4.2.4"
+    "typescript": "^4.0.0"
   },
   "devDependencies": {
     "@types/node": "^12.0.0",
