@@ -2,6 +2,21 @@
   "name": "@rnx-kit/dep-check",
   "entries": [
     {
+      "date": "Tue, 22 Jun 2021 15:04:23 GMT",
+      "tag": "@rnx-kit/dep-check_v1.5.6",
+      "version": "1.5.6",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Bumped chalk to 4.1.0, and workspace-tools to 0.16.2",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "fe36a9a52319cfac244fbbeb8c47a210af067366",
+            "package": "@rnx-kit/dep-check"
+          }
+        ]
+      }
+    },
+    {
       "date": "Mon, 21 Jun 2021 17:32:05 GMT",
       "tag": "@rnx-kit/dep-check_v1.5.5",
       "version": "1.5.5",

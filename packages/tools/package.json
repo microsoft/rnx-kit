@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/tools",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "Common tooling for the react-native-sdk",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
@@ -11,7 +11,7 @@
     "test": "rnx-kit-scripts test"
   },
   "dependencies": {
-    "workspace-tools": "^0.15.1"
+    "workspace-tools": "^0.16.2"
   },
   "devDependencies": {
     "@types/node": "^14.14.20",

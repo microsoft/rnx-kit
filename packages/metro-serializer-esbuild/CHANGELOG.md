@@ -1,8 +1,24 @@
 # Change Log - @rnx-kit/metro-serializer-esbuild
 
-This log was last generated on Thu, 17 Jun 2021 09:08:01 GMT and should not be manually modified.
+This log was last generated on Tue, 22 Jun 2021 15:04:23 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 0.0.4
+
+Tue, 22 Jun 2021 15:04:23 GMT
+
+### Patches
+
+- Bumped chalk to 4.1.0 (4123478+tido64@users.noreply.github.com)
+
+## 0.0.3
+
+Tue, 22 Jun 2021 14:59:18 GMT
+
+### Patches
+
+- Filter out modules from other platforms (4123478+tido64@users.noreply.github.com)
 
 ## 0.0.2
 

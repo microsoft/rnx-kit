@@ -2,6 +2,21 @@
   "name": "@rnx-kit/metro-config",
   "entries": [
     {
+      "date": "Tue, 22 Jun 2021 15:04:23 GMT",
+      "tag": "@rnx-kit/metro-config_v1.2.1",
+      "version": "1.2.1",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Bumped find-up to 5.0, and workspace-tools to 0.16.2",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "fe36a9a52319cfac244fbbeb8c47a210af067366",
+            "package": "@rnx-kit/metro-config"
+          }
+        ]
+      }
+    },
+    {
       "date": "Thu, 17 Jun 2021 18:01:13 GMT",
       "tag": "@rnx-kit/metro-config_v1.2.0",
       "version": "1.2.0",

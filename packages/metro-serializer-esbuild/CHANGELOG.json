@@ -2,6 +2,36 @@
   "name": "@rnx-kit/metro-serializer-esbuild",
   "entries": [
     {
+      "date": "Tue, 22 Jun 2021 15:04:23 GMT",
+      "tag": "@rnx-kit/metro-serializer-esbuild_v0.0.4",
+      "version": "0.0.4",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Bumped chalk to 4.1.0",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "fe36a9a52319cfac244fbbeb8c47a210af067366",
+            "package": "@rnx-kit/metro-serializer-esbuild"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Tue, 22 Jun 2021 14:59:18 GMT",
+      "tag": "@rnx-kit/metro-serializer-esbuild_v0.0.3",
+      "version": "0.0.3",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Filter out modules from other platforms",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "1e8b8f1c05556b77cdf6b21d84cc52e1a225b18e",
+            "package": "@rnx-kit/metro-serializer-esbuild"
+          }
+        ]
+      }
+    },
+    {
       "date": "Thu, 17 Jun 2021 18:01:13 GMT",
       "tag": "@rnx-kit/metro-serializer-esbuild_v0.0.2",
       "version": "0.0.2",

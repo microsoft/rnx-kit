@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/metro-plugin-typescript-validation
 
-This log was last generated on Thu, 20 May 2021 06:03:39 GMT and should not be manually modified.
+This log was last generated on Tue, 22 Jun 2021 15:04:23 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 1.0.5
+
+Tue, 22 Jun 2021 15:04:23 GMT
+
+### Patches
+
+- Bumped workspace-tools to 0.16.2 (4123478+tido64@users.noreply.github.com)
 
 ## 1.0.4
 

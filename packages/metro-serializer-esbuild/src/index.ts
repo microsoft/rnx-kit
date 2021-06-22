@@ -160,11 +160,12 @@ export function MetroSerializer(
 
                 /**
                  * Ensure that `react-native/Libraries/Core/InitializeCore.js`
-                 * gets executed first.
+                 * gets executed first. Note that this list may include modules
+                 * from platforms other than the one we're targeting.
                  */
-                ...options.runBeforeMainModule.map(
-                  (value) => `require("${value}");`
-                ),
+                ...options.runBeforeMainModule
+                  .filter((value) => dependencies.has(value))
+                  .map((value) => `require("${value}");`),
               ].join("\n"),
             };
           }
