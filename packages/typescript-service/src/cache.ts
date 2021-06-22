@@ -1,5 +1,6 @@
 import ts from "typescript";
 import { VersionedSnapshot } from "./snapshot";
+import { normalizePath } from "./util";
 
 export class ProjectFileCache {
   private files: Map<string, VersionedSnapshot> = new Map();
@@ -9,18 +10,21 @@ export class ProjectFileCache {
   }
 
   add(fileName: string) {
-    this.files.set(fileName, new VersionedSnapshot(fileName));
+    const normalized = normalizePath(fileName);
+    this.files.set(normalized, new VersionedSnapshot(normalized));
   }
 
   update(fileName: string, snapshot?: ts.IScriptSnapshot) {
-    if (!this.files.has(fileName)) {
+    const normalized = normalizePath(fileName);
+    if (!this.files.has(normalized)) {
       throw new Error(`Cannot update unknown project file ${fileName}`);
     }
-    this.files.get(fileName)!.update(snapshot);
+    this.files.get(normalized)!.update(snapshot);
   }
 
   delete(fileName: string) {
-    this.files.delete(fileName);
+    const normalized = normalizePath(fileName);
+    this.files.delete(normalized);
   }
 
   getFileNames(): string[] {
@@ -28,11 +32,13 @@ export class ProjectFileCache {
   }
 
   getVersion(fileName: string): string | undefined {
-    return this.files.get(fileName)?.getVersion();
+    const normalized = normalizePath(fileName);
+    return this.files.get(normalized)?.getVersion();
   }
 
   getSnapshot(fileName: string): ts.IScriptSnapshot | undefined {
-    return this.files.get(fileName)?.getSnapshot();
+    const normalized = normalizePath(fileName);
+    return this.files.get(normalized)?.getSnapshot();
   }
 }
 
@@ -41,10 +47,11 @@ export class ExternalFileCache {
   private files: Map<string, VersionedSnapshot> = new Map();
 
   getSnapshot(fileName: string): ts.IScriptSnapshot {
-    if (!this.files.has(fileName)) {
-      this.files.set(fileName, new VersionedSnapshot(fileName));
+    const normalized = normalizePath(fileName);
+    if (!this.files.has(normalized)) {
+      this.files.set(normalized, new VersionedSnapshot(normalized));
     }
 
-    return this.files.get(fileName)!.getSnapshot();
+    return this.files.get(normalized)!.getSnapshot();
   }
 }

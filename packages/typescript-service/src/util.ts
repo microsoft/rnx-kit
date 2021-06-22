@@ -11,3 +11,8 @@ export function getNewLine(): string {
 export function isNonEmptyArray(a: unknown) {
   return Array.isArray(a) && a.length > 0;
 }
+
+export function normalizePath(p: string) {
+  const fixedPathSeparators = p.replace(/\\/g, "/");
+  return getCanonicalFileName(fixedPathSeparators);
+}
