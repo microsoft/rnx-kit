@@ -1,9 +1,9 @@
 import type { Capability } from "@rnx-kit/config";
+import { error } from "@rnx-kit/console";
 import fs from "fs";
 import semver from "semver";
 import { resolveCapabilities } from "./capabilities";
 import { checkPackageManifest } from "./check";
-import { error } from "./console";
 import { updateDependencies } from "./manifest";
 import { getProfilesFor } from "./profiles";
 import type { Command, PackageManifest, ResolverOptions } from "./types";

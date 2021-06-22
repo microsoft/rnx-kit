@@ -1,3 +1,4 @@
+import { error } from "@rnx-kit/console";
 import type {
   Graph,
   MetroPlugin,
@@ -20,9 +21,9 @@ export function checkForDuplicatePackagesInFile(
   options: Options = defaultOptions
 ): Promise<void> {
   return new Promise((resolve, reject) =>
-    readFile(sourceMap, { encoding: "utf-8" }, (error, data) => {
-      if (error) {
-        reject(error);
+    readFile(sourceMap, { encoding: "utf-8" }, (e, data) => {
+      if (e) {
+        reject(e);
         return;
       }
 
@@ -33,7 +34,7 @@ export function checkForDuplicatePackagesInFile(
         if (throwOnError) {
           reject(new Error("Duplicates found"));
         } else {
-          console.error("❌ Duplicates found!");
+          error("Duplicates found!");
           resolve();
         }
       } else {
@@ -59,7 +60,7 @@ export function DuplicateDependencies(
         throw new Error("Duplicates found");
       }
 
-      console.error("❌ Duplicates found!");
+      error("Duplicates found!");
     }
   };
 }
@@ -67,7 +68,7 @@ export function DuplicateDependencies(
 if (require.main === module) {
   checkForDuplicatePackagesInFile(process.argv[2]).catch((error) => {
     if (error) {
-      console.error(error.message);
+      error(error.message);
       process.exit(1);
     }
   });

@@ -22,6 +22,7 @@
     "test": "rnx-kit-scripts test"
   },
   "dependencies": {
+    "@rnx-kit/console": "^1.0.0",
     "pkg-dir": "^5.0.0"
   },
   "devDependencies": {

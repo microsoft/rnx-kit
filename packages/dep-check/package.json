@@ -25,6 +25,7 @@
   },
   "dependencies": {
     "@rnx-kit/config": "^0.2.9",
+    "@rnx-kit/console": "^1.0.0",
     "chalk": "^4.1.0",
     "find-up": "^5.0.0",
     "jest-diff": "^26.0.0",

@@ -1,4 +1,5 @@
 import * as path from "path";
+import { error, warn } from "@rnx-kit/console";
 import type { Dependencies, Graph } from "@rnx-kit/metro-serializer";
 
 export type CyclicDependencies = Record<string, string[]>;
@@ -87,7 +88,7 @@ export function detectCycles(
 
   modulePaths.forEach((modulePath) => {
     const currentModule = packageRelativePath(modulePath, cachedPaths);
-    console.warn(currentModule);
+    warn(currentModule);
 
     const requirePath = cyclicDependencies[modulePath];
     const start = Math.max(requirePath.indexOf(modulePath) - linesOfContext, 0);
@@ -96,7 +97,7 @@ export function detectCycles(
       .reverse()
       .forEach((module, index) => {
         const requiredBy = packageRelativePath(module, cachedPaths);
-        console.warn(`${"    ".repeat(index)}└── ${requiredBy}`);
+        warn(`${"    ".repeat(index)}└── ${requiredBy}`);
       });
     console.log();
   });
@@ -104,7 +105,6 @@ export function detectCycles(
   if (throwOnError) {
     throw new Error("Import cycles detected");
   } else {
-    console.error("❌ Import cycles detected!");
-    console.log();
+    error("Import cycles detected!");
   }
 }

@@ -1,5 +1,5 @@
+import { error } from "@rnx-kit/console";
 import semver from "semver";
-import { error } from "./console";
 import profile_0_61 from "./profiles/profile-0.61";
 import profile_0_62 from "./profiles/profile-0.62";
 import profile_0_63 from "./profiles/profile-0.63";
