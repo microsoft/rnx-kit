@@ -28,7 +28,6 @@ export function createResolvers(options: ts.CompilerOptions): Resolvers {
     options
   );
 
-  // TODO: this is the "default" behavior -- add config option for platform overrides and module name substitution
   function resolveModuleNames(
     moduleNames: string[],
     containingFile: string,
@@ -62,22 +61,22 @@ export function createResolvers(options: ts.CompilerOptions): Resolvers {
     throw new Error("Not implemented");
   }
 
-  // TODO: this is the "default" behavior -- add config option for platform overrides and module name substitution
   function resolveTypeReferenceDirectives(
     typeDirectiveNames: string[],
     containingFile: string,
     redirectedReference?: ts.ResolvedProjectReference
   ): (ts.ResolvedTypeReferenceDirective | undefined)[] {
+    const host: ts.ModuleResolutionHost = {
+      fileExists: ts.sys.fileExists,
+      readFile: ts.sys.readFile,
+    };
     const resolved: (ts.ResolvedTypeReferenceDirective | undefined)[] = [];
     for (const name of typeDirectiveNames) {
       let result = ts.resolveTypeReferenceDirective(
         name,
         containingFile,
         options,
-        {
-          fileExists: ts.sys.fileExists,
-          readFile: ts.sys.readFile,
-        },
+        host,
         redirectedReference
       );
       resolved.push(result.resolvedTypeReferenceDirective);
