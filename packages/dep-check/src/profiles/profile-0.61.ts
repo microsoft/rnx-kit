@@ -70,8 +70,8 @@ const profile: Profile = {
     version: "^2.1.1",
   },
   "masked-view": {
-    name: "@react-native-community/masked-view",
-    version: "^0.1.10",
+    name: "@react-native-masked-view/masked-view",
+    version: "^0.2.4",
   },
   modal: {
     name: "react-native-modal",
