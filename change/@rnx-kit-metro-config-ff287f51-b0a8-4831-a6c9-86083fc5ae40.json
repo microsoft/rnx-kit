@@ -1,0 +1,7 @@
+{
+  "type": "patch",
+  "comment": "Bumped find-up to 5.0, and workspace-tools to 0.16.2",
+  "packageName": "@rnx-kit/metro-config",
+  "email": "4123478+tido64@users.noreply.github.com",
+  "dependentChangeType": "patch"
+}

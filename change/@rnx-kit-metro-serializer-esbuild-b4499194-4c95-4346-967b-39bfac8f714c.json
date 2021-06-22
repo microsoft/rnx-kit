@@ -1,0 +1,7 @@
+{
+  "type": "patch",
+  "comment": "Bumped chalk to 4.1.0",
+  "packageName": "@rnx-kit/metro-serializer-esbuild",
+  "email": "4123478+tido64@users.noreply.github.com",
+  "dependentChangeType": "patch"
+}

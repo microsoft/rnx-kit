@@ -18,7 +18,7 @@
     "format": "prettier --write src/*.ts test/*.ts"
   },
   "dependencies": {
-    "chalk": "^4.0.0",
+    "chalk": "^4.1.0",
     "esbuild": "^0.12.8",
     "esbuild-plugin-lodash": "^1.0.3",
     "semver": "^7.0.0"

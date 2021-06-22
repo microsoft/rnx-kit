@@ -11,7 +11,7 @@
     "test": "rnx-kit-scripts test"
   },
   "dependencies": {
-    "workspace-tools": "^0.15.1"
+    "workspace-tools": "^0.16.2"
   },
   "devDependencies": {
     "@types/node": "^14.14.20",

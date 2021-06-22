@@ -54,5 +54,7 @@ jobs:
         run: yarn ci
       - name: Format all the things
         run: yarn format
+      - name: Align dependencies
+        run: yarn rnx-dep-check --write
       - name: Report changes
         run: git diff | GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} yarn suggestion-bot
