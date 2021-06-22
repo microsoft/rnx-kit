@@ -1,0 +1,7 @@
+{
+  "type": "patch",
+  "comment": "Filter out modules from other platforms",
+  "packageName": "@rnx-kit/metro-serializer-esbuild",
+  "email": "4123478+tido64@users.noreply.github.com",
+  "dependentChangeType": "patch"
+}
