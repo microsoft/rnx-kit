@@ -1,4 +1,4 @@
-import * as ts from "typescript";
+import ts from "typescript";
 
 export function getCanonicalFileName(fileName: string): string {
   return ts.sys.useCaseSensitiveFileNames ? fileName : fileName.toLowerCase();
@@ -12,7 +12,7 @@ export function isNonEmptyArray(a: unknown) {
   return Array.isArray(a) && a.length > 0;
 }
 
-export function normalizePath(p: string) {
+export function normalizePath(p: string): string {
   const fixedPathSeparators = p.replace(/\\/g, "/");
   return getCanonicalFileName(fixedPathSeparators);
 }

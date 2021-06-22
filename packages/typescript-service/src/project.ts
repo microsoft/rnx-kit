@@ -1,4 +1,4 @@
-import * as ts from "typescript";
+import ts from "typescript";
 import { ProjectFileCache, ExternalFileCache } from "./cache";
 import { Resolvers } from "./resolve";
 import { ProjectConfig } from "./config";

@@ -1,5 +1,5 @@
-import * as fs from "fs";
-import * as ts from "typescript";
+import fs from "fs";
+import ts from "typescript";
 
 export class VersionedSnapshot {
   fileName: string;
@@ -17,7 +17,6 @@ export class VersionedSnapshot {
 
   getSnapshot(): ts.IScriptSnapshot {
     if (!this.snapshot) {
-      //console.log("Loading File: %o", this.fileName);
       const content = fs.readFileSync(this.fileName, "utf8");
       this.snapshot = ts.ScriptSnapshot.fromString(content);
     }

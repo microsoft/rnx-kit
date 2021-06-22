@@ -1,4 +1,4 @@
-import * as ts from "typescript";
+import ts from "typescript";
 import { getCanonicalFileName, getNewLine } from "./util";
 
 export type DiagnosticWriter = {

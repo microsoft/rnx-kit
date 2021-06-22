@@ -1,4 +1,4 @@
-import * as ts from "typescript";
+import ts from "typescript";
 import { createDiagnosticWriter } from "./diagnostics";
 import { ProjectConfigLoader } from "./config";
 import { Project } from "./project";
