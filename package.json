@@ -14,6 +14,7 @@
   "scripts": {
     "build": "lage build --grouped",
     "build:ci": "lage build:ci --verbose --grouped",
+    "build-scope": "lage build --grouped --log-level warn --no-deps --scope",
     "build-tools": "lage build-tools --log-level warn --grouped",
     "bump-versions": "beachball bump",
     "bundle": "lage bundle --grouped",
@@ -28,7 +29,7 @@
     "preinstall": "node ./scripts/preinstall.js",
     "postinstall": "node ./scripts/postinstall.js",
     "publish:beachball": "beachball publish --bump-deps -m\"📦 applying package updates ***NO_CI***\"",
-    "rnx-dep-check": "lage build --grouped --log-level warn --scope @rnx-kit/dep-check --no-deps && scripts/rnx-dep-check.js",
+    "rnx-dep-check": "yarn build-scope @rnx-kit/dep-check && scripts/rnx-dep-check.js",
     "test": "lage test --verbose --grouped",
     "update-readme": "yarn update-readme:main && lage update-readme",
     "update-readme:main": "node scripts/update-readme.js"
