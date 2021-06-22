@@ -1,4 +1,5 @@
 import "jest-extended";
+import ts from "typescript";
 import {
   getCanonicalFileName,
   getNewLine,
@@ -55,9 +56,11 @@ describe("Utility", () => {
     );
   });
 
-  test("normalizePath with upper-case returns lower-case", () => {
+  test("normalizePath converts to lower-case on case-insensitive file systems", () => {
     expect(normalizePath("D:\\THIS\\IS\\A\\TEST.txt")).toEqual(
-      "d:/this/is/a/test.txt"
+      ts.sys.useCaseSensitiveFileNames
+        ? "D:/THIS/IS/A/TEST.txt"
+        : "d:/this/is/a/test.txt"
     );
   });
 });
