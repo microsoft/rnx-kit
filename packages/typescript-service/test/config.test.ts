@@ -33,7 +33,7 @@ describe("ProjectConfigLoader", () => {
   test("load throws when it encounters an invalid config file", () => {
     const loader = new ProjectConfigLoader(writer);
     const configFileName = loader.find(fixturePath, "invalid-tsconfig.json");
-    expect(() => loader.load(configFileName)).toThrowErrorMatchingSnapshot();
+    expect(() => loader.load(configFileName)).toThrowError();
   });
 
   test("load prints at least one diagnostic when it encounters an invalid config file", () => {

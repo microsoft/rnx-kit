@@ -1,3 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`ProjectConfigLoader load throws when it encounters an invalid config file 1`] = `"Failed to load '/Users/afoxman/repos/rnx-kit/packages/typescript-service/test/__fixtures__/invalid-tsconfig.json'"`;
