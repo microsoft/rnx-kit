@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/metro-config
 
-This log was last generated on Thu, 20 May 2021 06:03:39 GMT and should not be manually modified.
+This log was last generated on Tue, 22 Jun 2021 15:04:23 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 1.2.1
+
+Tue, 22 Jun 2021 15:04:23 GMT
+
+### Patches
+
+- Bumped find-up to 5.0, and workspace-tools to 0.16.2 (4123478+tido64@users.noreply.github.com)
 
 ## 1.2.0
 
