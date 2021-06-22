@@ -7,7 +7,6 @@ import { isNonEmptyArray } from "./util";
 
 export class Project {
   private diagnosticWriter: DiagnosticWriter;
-  private resolvers: Resolvers;
   private projectConfig: ProjectConfig;
 
   private projectFiles: ProjectFileCache;
@@ -22,7 +21,6 @@ export class Project {
     projectConfig: ProjectConfig
   ) {
     this.diagnosticWriter = diagnosticWriter;
-    this.resolvers = resolvers;
     this.projectConfig = projectConfig;
 
     this.projectFiles = new ProjectFileCache(projectConfig.fileNames);
@@ -70,11 +68,10 @@ export class Project {
        *
        * If this is implemented, `getResolvedModuleWithFailedLookupLocationsFromCache` should be too.
        */
-      resolveModuleNames: this.resolvers.resolveModuleNames,
+      resolveModuleNames: resolvers.resolveModuleNames,
       getResolvedModuleWithFailedLookupLocationsFromCache:
-        this.resolvers.getResolvedModuleWithFailedLookupLocationsFromCache,
-      resolveTypeReferenceDirectives:
-        this.resolvers.resolveTypeReferenceDirectives,
+        resolvers.getResolvedModuleWithFailedLookupLocationsFromCache,
+      resolveTypeReferenceDirectives: resolvers.resolveTypeReferenceDirectives,
 
       /*
        * Required for full import and type reference completions.
