@@ -24,7 +24,7 @@
     "semver": "^7.0.0"
   },
   "peerDependencies": {
-    "metro": ">=0.66.2"
+    "metro": ">=0.67.0"
   },
   "devDependencies": {
     "@babel/types": "^7.0.0",
