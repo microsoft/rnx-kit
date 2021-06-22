@@ -1,0 +1,7 @@
+{
+  "type": "patch",
+  "comment": "Add a new package for using TypeScript language services",
+  "packageName": "@rnx-kit/typescript-service",
+  "email": "afoxman@microsoft.com",
+  "dependentChangeType": "patch"
+}
