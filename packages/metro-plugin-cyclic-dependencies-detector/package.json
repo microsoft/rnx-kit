@@ -28,7 +28,7 @@
     "@types/node": "^12.0.0",
     "prettier": "^2.0.0",
     "rnx-kit-scripts": "*",
-    "typescript": "^4.0.0"
+    "typescript": "^4.2.4"
   },
   "jest": {
     "roots": [
