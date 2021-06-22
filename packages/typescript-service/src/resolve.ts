@@ -28,6 +28,11 @@ export function createResolvers(options: ts.CompilerOptions): Resolvers {
     options
   );
 
+  const moduleResolutionHost: ts.ModuleResolutionHost = {
+    fileExists: ts.sys.fileExists,
+    readFile: ts.sys.readFile,
+  };
+
   function resolveModuleNames(
     moduleNames: string[],
     containingFile: string,
@@ -41,10 +46,7 @@ export function createResolvers(options: ts.CompilerOptions): Resolvers {
         moduleName,
         containingFile,
         options,
-        {
-          fileExists: ts.sys.fileExists,
-          readFile: ts.sys.readFile,
-        },
+        moduleResolutionHost,
         moduleResolutionCache,
         redirectedReference
       );
@@ -66,17 +68,13 @@ export function createResolvers(options: ts.CompilerOptions): Resolvers {
     containingFile: string,
     redirectedReference?: ts.ResolvedProjectReference
   ): (ts.ResolvedTypeReferenceDirective | undefined)[] {
-    const host: ts.ModuleResolutionHost = {
-      fileExists: ts.sys.fileExists,
-      readFile: ts.sys.readFile,
-    };
     const resolved: (ts.ResolvedTypeReferenceDirective | undefined)[] = [];
     for (const name of typeDirectiveNames) {
       let result = ts.resolveTypeReferenceDirective(
         name,
         containingFile,
         options,
-        host,
+        moduleResolutionHost,
         redirectedReference
       );
       resolved.push(result.resolvedTypeReferenceDirective);
