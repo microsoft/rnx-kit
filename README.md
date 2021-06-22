@@ -36,6 +36,7 @@ libraries.
 | [@rnx-kit/metro-serializer-esbuild](https://github.com/microsoft/rnx-kit/tree/main/packages/metro-serializer-esbuild)                                   | Experimental esbuild serializer for Metro                                              |
 | [@rnx-kit/third-party-notices](https://github.com/microsoft/rnx-kit/tree/main/packages/third-party-notices)                                             | Library and tool to build a third party notices file based on a js bundle's source map |
 | [@rnx-kit/tools](https://github.com/microsoft/rnx-kit/tree/main/packages/tools)                                                                         | Common tooling for the react-native-sdk                                                |
+| [@rnx-kit/typescript-service](https://github.com/microsoft/rnx-kit/tree/main/packages/typescript-service)                                               | TypeScript language services with support for custom module resolution                 |
 
 <!-- @rnx-kit end -->
 
