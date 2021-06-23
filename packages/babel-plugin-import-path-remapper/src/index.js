@@ -132,8 +132,8 @@ module.exports = declare((api, options) => {
             if (mainSourceFile) {
               replaceCallWith(path, mainSourceFile);
             }
-          } finally {
-            return;
+          } catch (_) {
+            /* ignore */
           }
         }
       },
@@ -160,8 +160,8 @@ module.exports = declare((api, options) => {
             if (mainSourceFile) {
               replaceDeclarationWith(path, mainSourceFile);
             }
-          } finally {
-            return;
+          } catch (_) {
+            /* ignore */
           }
         }
       },

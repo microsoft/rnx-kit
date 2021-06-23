@@ -42,7 +42,7 @@ export function createResolvers(options: ts.CompilerOptions): Resolvers {
     const resolvedModules: (ts.ResolvedModuleFull | undefined)[] = [];
     for (const moduleName of moduleNames) {
       // try to use standard resolution
-      let result = ts.resolveModuleName(
+      const result = ts.resolveModuleName(
         moduleName,
         containingFile,
         options,
@@ -70,7 +70,7 @@ export function createResolvers(options: ts.CompilerOptions): Resolvers {
   ): (ts.ResolvedTypeReferenceDirective | undefined)[] {
     const resolved: (ts.ResolvedTypeReferenceDirective | undefined)[] = [];
     for (const name of typeDirectiveNames) {
-      let result = ts.resolveTypeReferenceDirective(
+      const result = ts.resolveTypeReferenceDirective(
         name,
         containingFile,
         options,

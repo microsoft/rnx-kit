@@ -24,7 +24,7 @@ module.exports = function preset() {
   option("production");
 
   task("cleanlib", cleanTask({ paths: [libPath] }));
-  task("eslint", eslintTask({ files: ["src/."] }));
+  task("eslint", eslintTask({ files: ["src/*"] }));
   task(
     "ts",
     tscTask({

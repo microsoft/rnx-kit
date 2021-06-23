@@ -8,7 +8,7 @@ function getJestOptions(): JestTaskOptions {
     if (index !== -1) {
       args._.splice(index, 1);
     }
-    if (args.hasOwnProperty(element)) {
+    if (element in args) {
       delete args[element];
     }
   }

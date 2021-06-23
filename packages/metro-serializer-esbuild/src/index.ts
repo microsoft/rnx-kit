@@ -201,7 +201,7 @@ export function MetroSerializer(
         ],
         legalComments: "none",
         logLevel: buildOptions?.logLevel ?? "error",
-        minify: buildOptions?.minify ?? !Boolean(options.dev),
+        minify: buildOptions?.minify ?? !options.dev,
         plugins: [metroPlugin, lodashTransformer()],
         write: false,
       })

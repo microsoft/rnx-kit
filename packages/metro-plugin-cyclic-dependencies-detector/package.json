@@ -2,7 +2,7 @@
   "name": "@rnx-kit/metro-plugin-cyclic-dependencies-detector",
   "version": "1.0.1",
   "description": "Cyclic dependencies detector for Metro",
-  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/metro-plugin-cyclic-dependencies-detector#rnx-kitmetro-plugin-cyclic-dependencies-detector",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/metro-plugin-cyclic-dependencies-detector#readme",
   "license": "MIT",
   "files": [
     "lib/*"
@@ -29,6 +29,9 @@
     "prettier": "^2.0.0",
     "rnx-kit-scripts": "*",
     "typescript": "^4.0.0"
+  },
+  "eslintConfig": {
+    "extends": "@rnx-kit/eslint-config"
   },
   "jest": {
     "roots": [

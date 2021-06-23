@@ -2,7 +2,7 @@
   "name": "@rnx-kit/typescript-service",
   "version": "1.0.1",
   "description": "TypeScript language services with support for custom module resolution",
-  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/typescript-service#rnx-kittypescript-service",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/typescript-service#readme",
   "license": "MIT",
   "files": [
     "lib/*"
@@ -26,6 +26,9 @@
     "jest-extended": "^0.11.5",
     "jest-mock-console": "^1.1.0",
     "rnx-kit-scripts": "*"
+  },
+  "eslintConfig": {
+    "extends": "@rnx-kit/eslint-config"
   },
   "jest": {
     "setupFilesAfterEnv": [

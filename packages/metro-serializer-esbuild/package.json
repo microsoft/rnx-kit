@@ -15,7 +15,8 @@
   },
   "scripts": {
     "build": "rnx-kit-scripts build",
-    "format": "prettier --write src/*.ts test/*.ts"
+    "format": "prettier --write src/*.ts test/*.ts",
+    "lint": "rnx-kit-scripts lint"
   },
   "dependencies": {
     "chalk": "^4.1.0",
@@ -36,6 +37,9 @@
     "prettier": "^2.0.0",
     "rnx-kit-scripts": "*",
     "typescript": "^4.0.0"
+  },
+  "eslintConfig": {
+    "extends": "@rnx-kit/eslint-config"
   },
   "jest": {
     "roots": [

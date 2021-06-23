@@ -2,7 +2,7 @@
   "name": "@rnx-kit/bundle-diff",
   "version": "1.0.0",
   "description": "Simple tool for diffing the content of two bundles",
-  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/bundle-diff#rnx-kitbundle-diff",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/bundle-diff#readme",
   "license": "MIT",
   "files": [
     "lib/*"
@@ -27,6 +27,9 @@
     "prettier": "^2.0.0",
     "rnx-kit-scripts": "*",
     "typescript": "^4.0.0"
+  },
+  "eslintConfig": {
+    "extends": "@rnx-kit/eslint-config"
   },
   "jest": {
     "roots": [

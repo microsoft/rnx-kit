@@ -13,13 +13,15 @@ type CliThirdPartyNoticesOptions = {
   additionalText?: string;
 };
 
+type ConfigT = Record<string, unknown>;
+
 export function rnxWriteThirdPartyNotices(
   _argv: Array<string>,
-  _config: Object /*: ConfigT*/,
+  _config: ConfigT,
   options: CliThirdPartyNoticesOptions
-) {
+): void {
   // react-native-cli is not as rich as yargs, so we have to perform a mapping.
-  let args: IWriteThirdPartyNoticesOptions = {
+  const args: IWriteThirdPartyNoticesOptions = {
     rootPath: options.rootPath,
     sourceMapFile: options.sourceMapFile,
     outputFile: options.outputFile,
