@@ -1,9 +1,9 @@
 import { getKitCapabilities, getKitConfig } from "@rnx-kit/config";
+import { error, warn } from "@rnx-kit/console";
 import chalk from "chalk";
 import fs from "fs";
 import { diffLinesUnified } from "jest-diff";
 import path from "path";
-import { error, warn } from "./console";
 import { getRequirements } from "./dependencies";
 import { findBadPackages } from "./findBadPackages";
 import { updatePackageManifest } from "./manifest";

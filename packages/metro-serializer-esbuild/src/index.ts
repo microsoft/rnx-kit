@@ -1,3 +1,4 @@
+import { info, warn } from "@rnx-kit/console";
 import type {
   Graph,
   MetroPlugin,
@@ -5,7 +6,6 @@ import type {
   Serializer,
   SerializerOptions,
 } from "@rnx-kit/metro-serializer";
-import chalk from "chalk";
 import type { BuildOptions, BuildResult, Plugin } from "esbuild";
 import * as esbuild from "esbuild";
 import * as semver from "semver";
@@ -23,14 +23,6 @@ function assertVersion(requiredVersion: string): void {
       `Metro version ${requiredVersion} is required; got ${version}`
     );
   }
-}
-
-function info(...message: (string | number)[]): void {
-  console.log(chalk.blue.bold("info"), ...message);
-}
-
-function warn(...message: (string | number)[]): void {
-  console.warn(chalk.yellow.bold("warn"), ...message);
 }
 
 function isRedundantPolyfill(modulePath: string): boolean {
@@ -160,11 +152,12 @@ export function MetroSerializer(
 
                 /**
                  * Ensure that `react-native/Libraries/Core/InitializeCore.js`
-                 * gets executed first.
+                 * gets executed first. Note that this list may include modules
+                 * from platforms other than the one we're targeting.
                  */
-                ...options.runBeforeMainModule.map(
-                  (value) => `require("${value}");`
-                ),
+                ...options.runBeforeMainModule
+                  .filter((value) => dependencies.has(value))
+                  .map((value) => `require("${value}");`),
               ].join("\n"),
             };
           }
@@ -200,7 +193,7 @@ export function MetroSerializer(
         ],
         legalComments: "none",
         logLevel: buildOptions?.logLevel ?? "error",
-        minify: buildOptions?.minify ?? !Boolean(options.dev),
+        minify: buildOptions?.minify ?? !options.dev,
         plugins: [metroPlugin, lodashTransformer()],
         write: false,
       })

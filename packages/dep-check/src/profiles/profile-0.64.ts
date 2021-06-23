@@ -71,7 +71,7 @@ const profile: Profile = {
   },
   "masked-view": {
     name: "@react-native-masked-view/masked-view",
-    version: "^0.2.3",
+    version: "^0.2.4",
   },
   modal: {
     name: "react-native-modal",
@@ -111,7 +111,7 @@ const profile: Profile = {
   },
   storage: {
     name: "@react-native-async-storage/async-storage",
-    version: "^1.15.3",
+    version: "^1.15.5",
   },
   svg: {
     name: "react-native-svg",

@@ -1,8 +1,40 @@
 # Change Log - @rnx-kit/dep-check
 
-This log was last generated on Thu, 17 Jun 2021 06:05:20 GMT and should not be manually modified.
+This log was last generated on Wed, 23 Jun 2021 17:54:11 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 1.5.7
+
+Wed, 23 Jun 2021 17:54:11 GMT
+
+### Patches
+
+- Use common console logger (4123478+tido64@users.noreply.github.com)
+
+## 1.5.6
+
+Tue, 22 Jun 2021 15:04:23 GMT
+
+### Patches
+
+- Bumped chalk to 4.1.0, and workspace-tools to 0.16.2 (4123478+tido64@users.noreply.github.com)
+
+## 1.5.5
+
+Mon, 21 Jun 2021 17:32:05 GMT
+
+### Patches
+
+- Promote @react-native-masked-view/masked-view over @react-native-community/masked-view (4123478+tido64@users.noreply.github.com)
+
+## 1.5.4
+
+Mon, 21 Jun 2021 11:43:28 GMT
+
+### Patches
+
+- Warn about renamed packages: `@react-native-community/async-storage` -> `@react-native-async-storage/async-storage` and `@react-native-community/masked-view` -> `@react-native-masked-view/masked-view` (4123478+tido64@users.noreply.github.com)
 
 ## 1.5.3
 

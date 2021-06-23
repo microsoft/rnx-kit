@@ -1,0 +1,29 @@
+{
+  "private": "true",
+  "name": "@rnx-kit/eslint-config",
+  "version": "0.0.1",
+  "description": "Shareable ESLint config for @rnx-kit",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/eslint-config#readme",
+  "license": "MIT",
+  "files": [
+    "index.js"
+  ],
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "packages/eslint-config"
+  },
+  "scripts": {
+    "format": "prettier --write index.js"
+  },
+  "dependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.28.0",
+    "@typescript-eslint/parser": "^4.28.0",
+    "eslint": "^7.29.0",
+    "eslint-plugin-jest": "^24.3.6",
+    "eslint-plugin-prettier": "^3.4.0",
+    "eslint-plugin-react": "^7.24.0",
+    "typescript": "^4.0.0"
+  }
+}

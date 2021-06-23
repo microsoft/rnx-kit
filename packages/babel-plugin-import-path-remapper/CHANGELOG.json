@@ -2,6 +2,21 @@
   "name": "@rnx-kit/babel-plugin-import-path-remapper",
   "entries": [
     {
+      "date": "Wed, 23 Jun 2021 09:28:25 GMT",
+      "tag": "@rnx-kit/babel-plugin-import-path-remapper_v1.0.0",
+      "version": "1.0.0",
+      "comments": {
+        "none": [
+          {
+            "comment": "Added ESLint config",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "4701f7a40c050f8d376fbcfc84ce6e50f5fcf501",
+            "package": "@rnx-kit/babel-plugin-import-path-remapper"
+          }
+        ]
+      }
+    },
+    {
       "date": "Thu, 06 May 2021 20:37:55 GMT",
       "tag": "@rnx-kit/babel-plugin-import-path-remapper_v1.0.0",
       "version": "1.0.0",

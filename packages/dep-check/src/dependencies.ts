@@ -5,10 +5,10 @@ import {
   KitConfig,
   KitType,
 } from "@rnx-kit/config";
+import { error, warn } from "@rnx-kit/console";
 import findUp from "find-up";
 import fs from "fs";
 import path from "path";
-import { error, warn } from "./console";
 import {
   getProfilesFor,
   getProfileVersionsFor,

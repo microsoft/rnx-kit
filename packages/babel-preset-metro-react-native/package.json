@@ -2,7 +2,7 @@
   "name": "@rnx-kit/babel-preset-metro-react-native",
   "version": "1.0.3",
   "description": "Babel preset for React Native applications",
-  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/babel-preset-metro-react-native#rnx-kitbabel-preset-metro-react-native",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/babel-preset-metro-react-native#readme",
   "license": "MIT",
   "files": [
     "src/*"
@@ -32,6 +32,9 @@
     "prettier": "^2.0.0",
     "rnx-kit-scripts": "*",
     "typescript": "^4.0.0"
+  },
+  "eslintConfig": {
+    "extends": "@rnx-kit/eslint-config"
   },
   "jest": {
     "roots": [

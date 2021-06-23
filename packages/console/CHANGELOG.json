@@ -1,0 +1,20 @@
+{
+  "name": "@rnx-kit/console",
+  "entries": [
+    {
+      "date": "Wed, 23 Jun 2021 17:39:16 GMT",
+      "tag": "@rnx-kit/console_v1.0.0",
+      "version": "1.0.0",
+      "comments": {
+        "minor": [
+          {
+            "comment": "Introduce a common console logger",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "41bc87cda7c7c74084abf9f3f8039b0b670ab6ba",
+            "package": "@rnx-kit/console"
+          }
+        ]
+      }
+    }
+  ]
+}

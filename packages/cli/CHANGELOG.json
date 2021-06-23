@@ -2,6 +2,141 @@
   "name": "@rnx-kit/cli",
   "entries": [
     {
+      "date": "Wed, 23 Jun 2021 17:54:11 GMT",
+      "tag": "@rnx-kit/cli_v0.5.26",
+      "version": "0.5.26",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Bump @rnx-kit/cli to v0.5.26",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "48a9a57e0163eb1edef65240d1f0eb95f78f0850",
+            "package": "@rnx-kit/cli"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Wed, 23 Jun 2021 17:39:16 GMT",
+      "tag": "@rnx-kit/cli_v0.5.25",
+      "version": "0.5.25",
+      "comments": {
+        "none": [
+          {
+            "comment": "Bump @rnx-kit/cli to v0.5.25",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "41bc87cda7c7c74084abf9f3f8039b0b670ab6ba",
+            "package": "@rnx-kit/cli"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Wed, 23 Jun 2021 17:38:46 GMT",
+      "tag": "@rnx-kit/cli_v0.5.25",
+      "version": "0.5.25",
+      "comments": {
+        "none": [
+          {
+            "comment": "Bump @rnx-kit/cli to v0.5.25",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "c630c871d6747cb6631070f6f8ccba8d8933b353",
+            "package": "@rnx-kit/cli"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Wed, 23 Jun 2021 09:28:25 GMT",
+      "tag": "@rnx-kit/cli_v0.5.25",
+      "version": "0.5.25",
+      "comments": {
+        "none": [
+          {
+            "comment": "Bump @rnx-kit/cli to v0.5.25",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "4701f7a40c050f8d376fbcfc84ce6e50f5fcf501",
+            "package": "@rnx-kit/cli"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Wed, 23 Jun 2021 07:30:22 GMT",
+      "tag": "@rnx-kit/cli_v0.5.25",
+      "version": "0.5.25",
+      "comments": {
+        "none": [
+          {
+            "comment": "Bump @rnx-kit/cli to v0.5.25",
+            "author": "afoxman@microsoft.com",
+            "commit": "167081c3c6c2ef84c461b420a9875184358a8ded",
+            "package": "@rnx-kit/cli"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Wed, 23 Jun 2021 06:06:43 GMT",
+      "tag": "@rnx-kit/cli_v0.5.25",
+      "version": "0.5.25",
+      "comments": {
+        "none": [
+          {
+            "comment": "Bump @rnx-kit/cli to v0.5.25",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "45de83b3208bc137ae6eeb7451bcfde5a0b3779a",
+            "package": "@rnx-kit/cli"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Tue, 22 Jun 2021 15:04:23 GMT",
+      "tag": "@rnx-kit/cli_v0.5.25",
+      "version": "0.5.25",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Bump @rnx-kit/cli to v0.5.25",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "fe36a9a52319cfac244fbbeb8c47a210af067366",
+            "package": "@rnx-kit/cli"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Mon, 21 Jun 2021 17:32:05 GMT",
+      "tag": "@rnx-kit/cli_v0.5.24",
+      "version": "0.5.24",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Bump @rnx-kit/cli to v0.5.24",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "d2c832f866d64e595f8cceae5139bbbd033098b5",
+            "package": "@rnx-kit/cli"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Mon, 21 Jun 2021 11:43:28 GMT",
+      "tag": "@rnx-kit/cli_v0.5.23",
+      "version": "0.5.23",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Bump @rnx-kit/cli to v0.5.23",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "97e5ae4b804010fe2457075ff5c1969391097b61",
+            "package": "@rnx-kit/cli"
+          }
+        ]
+      }
+    },
+    {
       "date": "Thu, 17 Jun 2021 06:05:20 GMT",
       "tag": "@rnx-kit/cli_v0.5.22",
       "version": "0.5.22",

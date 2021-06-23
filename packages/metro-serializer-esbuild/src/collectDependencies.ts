@@ -20,7 +20,7 @@ type CollectedDependencies<TSplitCondition> = Readonly<{
   dependencies: ReadonlyArray<Dependency<TSplitCondition>>;
 }>;
 
-type Options = {};
+type Options = Record<string, unknown>;
 
 /**
  * Pass-through replacement for the `collectDependencies` function called by the

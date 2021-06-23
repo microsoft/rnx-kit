@@ -1,8 +1,8 @@
 {
   "name": "@rnx-kit/dep-check",
-  "version": "1.5.3",
+  "version": "1.5.7",
   "description": "Dependency checker for React Native apps",
-  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/dep-check#rnx-kitdep-check",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/dep-check#readme",
   "license": "MIT",
   "files": [
     "lib/*"
@@ -25,11 +25,12 @@
   },
   "dependencies": {
     "@rnx-kit/config": "^0.2.9",
-    "chalk": "^4.0.0",
+    "@rnx-kit/console": "^1.0.0",
+    "chalk": "^4.1.0",
     "find-up": "^5.0.0",
     "jest-diff": "^26.0.0",
     "semver": "^7.0.0",
-    "workspace-tools": "^0.15.1",
+    "workspace-tools": "^0.16.2",
     "yargs": "^16.0.0"
   },
   "devDependencies": {
@@ -41,6 +42,9 @@
     "prettier": "^2.0.0",
     "rnx-kit-scripts": "*",
     "typescript": "^4.0.0"
+  },
+  "eslintConfig": {
+    "extends": "@rnx-kit/eslint-config"
   },
   "jest": {
     "roots": [

@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/metro-plugin-duplicates-checker
 
-This log was last generated on Tue, 13 Apr 2021 15:58:06 GMT and should not be manually modified.
+This log was last generated on Wed, 23 Jun 2021 17:54:11 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 1.1.2
+
+Wed, 23 Jun 2021 17:54:11 GMT
+
+### Patches
+
+- Use common console logger (4123478+tido64@users.noreply.github.com)
 
 ## 1.1.1
 

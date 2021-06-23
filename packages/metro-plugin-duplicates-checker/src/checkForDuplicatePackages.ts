@@ -1,3 +1,4 @@
+import { error, warn } from "@rnx-kit/console";
 import type { Graph } from "@rnx-kit/metro-serializer";
 import {
   gatherModulesFromGraph,
@@ -30,7 +31,7 @@ export function printDuplicates(module: ModuleMap[string]): void {
     .forEach((version) => {
       Array.from(module[version])
         .sort()
-        .forEach((p) => console.warn(`  ${version} ${p}`));
+        .forEach((p) => warn(`  ${version} ${p}`));
     });
 }
 
@@ -46,14 +47,14 @@ export function detectDuplicatePackages(
     const currentModule = bundledModules[name];
 
     if (bannedModules.includes(name)) {
-      console.error(`${name} (banned)`);
+      error(`${name} (banned)`);
       printDuplicates(currentModule);
       return count + 1;
     }
 
     const numCopies = countCopies(currentModule);
     if (numCopies > 1) {
-      console.error(`${name} (found ${numCopies} copies)`);
+      error(`${name} (found ${numCopies} copies)`);
       printDuplicates(currentModule);
       return count + 1;
     }

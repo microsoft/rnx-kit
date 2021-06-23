@@ -2,6 +2,66 @@
   "name": "@rnx-kit/metro-plugin-cyclic-dependencies-detector",
   "entries": [
     {
+      "date": "Wed, 23 Jun 2021 17:54:11 GMT",
+      "tag": "@rnx-kit/metro-plugin-cyclic-dependencies-detector_v1.0.2",
+      "version": "1.0.2",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Use common console logger",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "48a9a57e0163eb1edef65240d1f0eb95f78f0850",
+            "package": "@rnx-kit/metro-plugin-cyclic-dependencies-detector"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Wed, 23 Jun 2021 17:39:16 GMT",
+      "tag": "@rnx-kit/metro-plugin-cyclic-dependencies-detector_v1.0.1",
+      "version": "1.0.1",
+      "comments": {
+        "none": [
+          {
+            "comment": "Bumped @types/node to 14.17.4",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "41bc87cda7c7c74084abf9f3f8039b0b670ab6ba",
+            "package": "@rnx-kit/metro-plugin-cyclic-dependencies-detector"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Wed, 23 Jun 2021 17:38:46 GMT",
+      "tag": "@rnx-kit/metro-plugin-cyclic-dependencies-detector_v1.0.1",
+      "version": "1.0.1",
+      "comments": {
+        "none": [
+          {
+            "comment": "Bumped @types/node to 14.17.4",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "c630c871d6747cb6631070f6f8ccba8d8933b353",
+            "package": "@rnx-kit/metro-plugin-cyclic-dependencies-detector"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Wed, 23 Jun 2021 09:28:25 GMT",
+      "tag": "@rnx-kit/metro-plugin-cyclic-dependencies-detector_v1.0.1",
+      "version": "1.0.1",
+      "comments": {
+        "none": [
+          {
+            "comment": "Bump @rnx-kit/metro-plugin-cyclic-dependencies-detector to v1.0.1",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "4701f7a40c050f8d376fbcfc84ce6e50f5fcf501",
+            "package": "@rnx-kit/metro-plugin-cyclic-dependencies-detector"
+          }
+        ]
+      }
+    },
+    {
       "date": "Thu, 17 Jun 2021 18:01:13 GMT",
       "tag": "@rnx-kit/metro-plugin-cyclic-dependencies-detector_v1.0.1",
       "version": "1.0.1",

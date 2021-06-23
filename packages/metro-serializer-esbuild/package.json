@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/metro-serializer-esbuild",
-  "version": "0.0.2",
+  "version": "0.0.5",
   "description": "Experimental esbuild serializer for Metro",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/metro-serializer-esbuild#readme",
   "license": "MIT",
@@ -15,10 +15,11 @@
   },
   "scripts": {
     "build": "rnx-kit-scripts build",
-    "format": "prettier --write src/*.ts test/*.ts"
+    "format": "prettier --write src/*.ts test/*.ts",
+    "lint": "rnx-kit-scripts lint"
   },
   "dependencies": {
-    "chalk": "^4.0.0",
+    "@rnx-kit/console": "^1.0.0",
     "esbuild": "^0.12.8",
     "esbuild-plugin-lodash": "^1.0.3",
     "semver": "^7.0.0"
@@ -31,11 +32,14 @@
     "@rnx-kit/babel-preset-jest-typescript": "*",
     "@rnx-kit/metro-serializer": "*",
     "@types/jest": "^26.0.0",
-    "@types/node": "^12.0.0",
+    "@types/node": "^14.15.0",
     "@types/semver": "^7.0.0",
     "prettier": "^2.0.0",
     "rnx-kit-scripts": "*",
     "typescript": "^4.0.0"
+  },
+  "eslintConfig": {
+    "extends": "@rnx-kit/eslint-config"
   },
   "jest": {
     "roots": [

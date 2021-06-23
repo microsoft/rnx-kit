@@ -24,7 +24,7 @@ export function readTsConfig(projectRoot: string) {
 
 export function writeMetroTsConfigToNodeModules(
   projectRoot: string,
-  tsconfig: object
+  tsconfig: Record<string, unknown>
 ): string {
   const json = JSON.stringify(tsconfig);
   const tsconfigMetroPath = path.join(
@@ -36,7 +36,7 @@ export function writeMetroTsConfigToNodeModules(
   return tsconfigMetroPath;
 }
 
-export function runTypeScriptCompiler(projectPath: string) {
+export function runTypeScriptCompiler(projectPath: string): void {
   const tscPath = path.join(
     getModuleRoot("@msfast/typescript-platform-resolution"),
     "lib",
@@ -74,7 +74,7 @@ export async function visit(
   scopePaths: string[],
   visited: Record<string, boolean>,
   files: Array<string>
-) {
+): Promise<void> {
   //  avoid circular references in the dependency graph
   if (modulePath in visited) {
     return;

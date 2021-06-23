@@ -1,0 +1,30 @@
+{
+  "name": "@rnx-kit/console",
+  "version": "1.0.0",
+  "description": "Simple console logger",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/console#readme",
+  "license": "MIT",
+  "files": [
+    "lib/*"
+  ],
+  "main": "lib/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "packages/console"
+  },
+  "scripts": {
+    "build": "rnx-kit-scripts build",
+    "format": "prettier --write src/*.ts test/*.ts"
+  },
+  "dependencies": {
+    "chalk": "^4.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^14.15.0",
+    "rnx-kit-scripts": "*"
+  },
+  "eslintConfig": {
+    "extends": "@rnx-kit/eslint-config"
+  }
+}

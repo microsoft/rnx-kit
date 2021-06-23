@@ -14,6 +14,7 @@
   "scripts": {
     "build": "lage build --grouped",
     "build:ci": "lage build:ci --verbose --grouped",
+    "build-scope": "lage build --grouped --log-level warn --no-deps --scope",
     "build-tools": "lage build-tools --log-level warn --grouped",
     "bump-versions": "beachball bump",
     "bundle": "lage bundle --grouped",
@@ -24,18 +25,20 @@
     "clean": "lage clean --log-level warn --grouped",
     "depcheck": "lage depcheck --log-level warn --grouped",
     "format": "yarn prettier --write --loglevel warn '**/*.{js,json,jsx,md,ts,tsx}' '!**/{__fixtures__,lib}/**' '!**/CHANGELOG.*' '!{CODE_OF_CONDUCT,SECURITY}.md'",
-    "lint": "lage lint --log-level warn --grouped",
+    "lint": "lage lint --verbose --grouped --no-cache",
     "preinstall": "node ./scripts/preinstall.js",
     "postinstall": "node ./scripts/postinstall.js",
     "publish:beachball": "beachball publish --bump-deps -m\"📦 applying package updates ***NO_CI***\"",
+    "rnx-dep-check": "yarn build-scope @rnx-kit/dep-check && scripts/rnx-dep-check.js",
     "test": "lage test --verbose --grouped",
     "update-readme": "yarn update-readme:main && lage update-readme",
     "update-readme:main": "node scripts/update-readme.js"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",
+    "@rnx-kit/dep-check": "*",
     "beachball": "^2.2.0",
-    "lage": "^0.29.0",
+    "lage": "^0.30.0",
     "markdown-table": "^2.0.0",
     "metro": "^0.66.2",
     "metro-config": "^0.66.2",
@@ -58,6 +61,16 @@
       "packages/*",
       "scripts"
     ]
+  },
+  "beachball": {
+    "branch": "origin/main",
+    "disallowedChangeTypes": [
+      "major"
+    ],
+    "access": "public"
+  },
+  "eslintConfig": {
+    "extends": "@rnx-kit/eslint-config"
   },
   "lage": {
     "npmClient": "yarn",
@@ -87,13 +100,6 @@
         "build"
       ]
     }
-  },
-  "beachball": {
-    "branch": "origin/main",
-    "disallowedChangeTypes": [
-      "major"
-    ],
-    "access": "public"
   },
   "prettier": {
     "overrides": [

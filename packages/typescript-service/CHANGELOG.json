@@ -1,0 +1,65 @@
+{
+  "name": "@rnx-kit/typescript-service",
+  "entries": [
+    {
+      "date": "Wed, 23 Jun 2021 17:39:16 GMT",
+      "tag": "@rnx-kit/typescript-service_v1.0.1",
+      "version": "1.0.1",
+      "comments": {
+        "none": [
+          {
+            "comment": "Bumped @types/node to 14.17.4",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "41bc87cda7c7c74084abf9f3f8039b0b670ab6ba",
+            "package": "@rnx-kit/typescript-service"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Wed, 23 Jun 2021 17:38:46 GMT",
+      "tag": "@rnx-kit/typescript-service_v1.0.1",
+      "version": "1.0.1",
+      "comments": {
+        "none": [
+          {
+            "comment": "Bumped @types/node to 14.17.4",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "c630c871d6747cb6631070f6f8ccba8d8933b353",
+            "package": "@rnx-kit/typescript-service"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Wed, 23 Jun 2021 09:28:25 GMT",
+      "tag": "@rnx-kit/typescript-service_v1.0.1",
+      "version": "1.0.1",
+      "comments": {
+        "none": [
+          {
+            "comment": "Added ESLint config",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "4701f7a40c050f8d376fbcfc84ce6e50f5fcf501",
+            "package": "@rnx-kit/typescript-service"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Wed, 23 Jun 2021 07:30:22 GMT",
+      "tag": "@rnx-kit/typescript-service_v1.0.1",
+      "version": "1.0.1",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Add a new package for using TypeScript language services",
+            "author": "afoxman@microsoft.com",
+            "commit": "167081c3c6c2ef84c461b420a9875184358a8ded",
+            "package": "@rnx-kit/typescript-service"
+          }
+        ]
+      }
+    }
+  ]
+}
