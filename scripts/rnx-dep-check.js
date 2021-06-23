@@ -3,6 +3,10 @@
 "use strict";
 
 const common = {
+  "@types/node": {
+    name: "@types/node",
+    version: "^14.15.0",
+  },
   chalk: {
     name: "chalk",
     version: "^4.1.0",
