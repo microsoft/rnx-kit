@@ -2,6 +2,21 @@
   "name": "@rnx-kit/dep-check",
   "entries": [
     {
+      "date": "Wed, 23 Jun 2021 17:54:11 GMT",
+      "tag": "@rnx-kit/dep-check_v1.5.7",
+      "version": "1.5.7",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Use common console logger",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "48a9a57e0163eb1edef65240d1f0eb95f78f0850",
+            "package": "@rnx-kit/dep-check"
+          }
+        ]
+      }
+    },
+    {
       "date": "Wed, 23 Jun 2021 17:39:16 GMT",
       "tag": "@rnx-kit/dep-check_v1.5.6",
       "version": "1.5.6",
