@@ -28,7 +28,7 @@ export function configureJust(): void {
   task("depcheck", depcheck);
   task("lint", eslint);
   task("jest", jest);
-  task("no-op", () => void 0);
+  task("no-op", () => undefined);
   task("prettier", () => (argv().fix ? prettierTask : prettierCheckTask));
   task("ts", ts);
 
