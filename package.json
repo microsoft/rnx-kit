@@ -62,6 +62,16 @@
       "scripts"
     ]
   },
+  "beachball": {
+    "branch": "origin/main",
+    "disallowedChangeTypes": [
+      "major"
+    ],
+    "access": "public"
+  },
+  "eslintConfig": {
+    "extends": "@rnx-kit/eslint-config"
+  },
   "lage": {
     "npmClient": "yarn",
     "pipeline": {
@@ -90,13 +100,6 @@
         "build"
       ]
     }
-  },
-  "beachball": {
-    "branch": "origin/main",
-    "disallowedChangeTypes": [
-      "major"
-    ],
-    "access": "public"
   },
   "prettier": {
     "overrides": [
