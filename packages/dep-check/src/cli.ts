@@ -1,12 +1,12 @@
 #!/usr/bin/env node
 
 import type { KitType } from "@rnx-kit/config";
+import { error } from "@rnx-kit/console";
 import * as path from "path";
 import pkgDir from "pkg-dir";
 import { getAllPackageJsonFiles, getWorkspaceRoot } from "workspace-tools";
 import yargs from "yargs";
 import { checkPackageManifest } from "./check";
-import { error } from "./console";
 import { initializeConfig } from "./initialize";
 import type { Args, Command } from "./types";
 import { makeVigilantCommand } from "./vigilant";

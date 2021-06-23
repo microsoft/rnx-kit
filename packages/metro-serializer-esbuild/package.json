@@ -19,7 +19,7 @@
     "lint": "rnx-kit-scripts lint"
   },
   "dependencies": {
-    "chalk": "^4.1.0",
+    "@rnx-kit/console": "^1.0.0",
     "esbuild": "^0.12.8",
     "esbuild-plugin-lodash": "^1.0.3",
     "semver": "^7.0.0"

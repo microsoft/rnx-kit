@@ -1,3 +1,4 @@
+import { info, warn } from "@rnx-kit/console";
 import type {
   Graph,
   MetroPlugin,
@@ -5,7 +6,6 @@ import type {
   Serializer,
   SerializerOptions,
 } from "@rnx-kit/metro-serializer";
-import chalk from "chalk";
 import type { BuildOptions, BuildResult, Plugin } from "esbuild";
 import * as esbuild from "esbuild";
 import * as semver from "semver";
@@ -23,14 +23,6 @@ function assertVersion(requiredVersion: string): void {
       `Metro version ${requiredVersion} is required; got ${version}`
     );
   }
-}
-
-function info(...message: (string | number)[]): void {
-  console.log(chalk.blue.bold("info"), ...message);
-}
-
-function warn(...message: (string | number)[]): void {
-  console.warn(chalk.yellow.bold("warn"), ...message);
 }
 
 function isRedundantPolyfill(modulePath: string): boolean {
