@@ -1,0 +1,20 @@
+{
+  "name": "@rnx-kit/typescript-service",
+  "entries": [
+    {
+      "date": "Wed, 23 Jun 2021 07:30:22 GMT",
+      "tag": "@rnx-kit/typescript-service_v1.0.1",
+      "version": "1.0.1",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Add a new package for using TypeScript language services",
+            "author": "afoxman@microsoft.com",
+            "commit": "167081c3c6c2ef84c461b420a9875184358a8ded",
+            "package": "@rnx-kit/typescript-service"
+          }
+        ]
+      }
+    }
+  ]
+}
