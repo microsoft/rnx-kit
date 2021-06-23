@@ -2,6 +2,21 @@
   "name": "@rnx-kit/dep-check",
   "entries": [
     {
+      "date": "Wed, 23 Jun 2021 09:28:25 GMT",
+      "tag": "@rnx-kit/dep-check_v1.5.6",
+      "version": "1.5.6",
+      "comments": {
+        "none": [
+          {
+            "comment": "Bump @rnx-kit/dep-check to v1.5.6",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "4701f7a40c050f8d376fbcfc84ce6e50f5fcf501",
+            "package": "@rnx-kit/dep-check"
+          }
+        ]
+      }
+    },
+    {
       "date": "Wed, 23 Jun 2021 07:30:22 GMT",
       "tag": "@rnx-kit/dep-check_v1.5.6",
       "version": "1.5.6",

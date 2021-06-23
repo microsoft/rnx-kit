@@ -2,6 +2,21 @@
   "name": "@rnx-kit/config",
   "entries": [
     {
+      "date": "Wed, 23 Jun 2021 09:28:25 GMT",
+      "tag": "@rnx-kit/config_v0.2.9",
+      "version": "0.2.9",
+      "comments": {
+        "none": [
+          {
+            "comment": "Added ESLint config",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "4701f7a40c050f8d376fbcfc84ce6e50f5fcf501",
+            "package": "@rnx-kit/config"
+          }
+        ]
+      }
+    },
+    {
       "date": "Fri, 04 Jun 2021 12:36:37 GMT",
       "tag": "@rnx-kit/config_v0.2.9",
       "version": "0.2.9",
