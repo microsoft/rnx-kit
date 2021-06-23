@@ -2,6 +2,21 @@
   "name": "@rnx-kit/metro-plugin-duplicates-checker",
   "entries": [
     {
+      "date": "Wed, 23 Jun 2021 17:39:16 GMT",
+      "tag": "@rnx-kit/metro-plugin-duplicates-checker_v1.1.1",
+      "version": "1.1.1",
+      "comments": {
+        "none": [
+          {
+            "comment": "Bumped @types/node to 14.17.4",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "41bc87cda7c7c74084abf9f3f8039b0b670ab6ba",
+            "package": "@rnx-kit/metro-plugin-duplicates-checker"
+          }
+        ]
+      }
+    },
+    {
       "date": "Wed, 23 Jun 2021 17:38:46 GMT",
       "tag": "@rnx-kit/metro-plugin-duplicates-checker_v1.1.1",
       "version": "1.1.1",

@@ -2,6 +2,21 @@
   "name": "@rnx-kit/config",
   "entries": [
     {
+      "date": "Wed, 23 Jun 2021 17:39:16 GMT",
+      "tag": "@rnx-kit/config_v0.2.9",
+      "version": "0.2.9",
+      "comments": {
+        "none": [
+          {
+            "comment": "Bumped @types/node to 14.17.4",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "41bc87cda7c7c74084abf9f3f8039b0b670ab6ba",
+            "package": "@rnx-kit/config"
+          }
+        ]
+      }
+    },
+    {
       "date": "Wed, 23 Jun 2021 17:38:46 GMT",
       "tag": "@rnx-kit/config_v0.2.9",
       "version": "0.2.9",
