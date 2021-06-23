@@ -42,6 +42,9 @@
     "rnx-kit-scripts": "*",
     "typescript": "^4.0.0"
   },
+  "eslintConfig": {
+    "extends": "@rnx-kit/eslint-config"
+  },
   "jest": {
     "roots": [
       "test"

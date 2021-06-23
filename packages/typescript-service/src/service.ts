@@ -17,7 +17,7 @@ export class Service {
 
   openProject(
     searchPath: string,
-    fileName: string = "tsconfig.json"
+    fileName = "tsconfig.json"
   ): Project | undefined {
     const configFileName = this.projectConfigLoader.find(searchPath, fileName);
     if (!configFileName) {

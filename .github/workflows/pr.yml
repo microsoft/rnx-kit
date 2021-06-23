@@ -24,8 +24,6 @@ jobs:
           key: ${{ hashFiles('yarn.lock') }}
       - name: Install package dependencies
         run: yarn ci
-      - name: Check for change files
-        run: yarn run check
       - name: Build and test packages
         run: yarn build:ci
       - name: Ensure READMEs are up-to-date
@@ -35,8 +33,8 @@ jobs:
           git diff | GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} yarn suggestion-bot
       - name: Bundle packages
         run: yarn bundle:ci
-  format:
-    name: "Format"
+  review:
+    name: "Review"
     runs-on: ubuntu-latest
     steps:
       - name: Set up Node 14
@@ -52,7 +50,11 @@ jobs:
           key: ${{ hashFiles('yarn.lock') }}
       - name: Install package dependencies
         run: yarn ci
-      - name: Format all the things
+      - name: Check for change files
+        run: yarn run check
+      - name: Lint
+        run: yarn lint
+      - name: Format
         run: yarn format
       - name: Align dependencies
         run: yarn rnx-dep-check --write

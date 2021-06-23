@@ -2,6 +2,7 @@
   "name": "@rnx-kit/config",
   "version": "0.2.9",
   "description": "Package for defining and querying information about rnx kits",
+  "license": "MIT",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
   "scripts": {
@@ -20,8 +21,9 @@
     "@types/semver": "^7.0.0",
     "rnx-kit-scripts": "0.1.1"
   },
-  "author": "",
-  "license": "MIT",
+  "eslintConfig": {
+    "extends": "@rnx-kit/eslint-config"
+  },
   "jest": {
     "preset": "ts-jest",
     "roots": [

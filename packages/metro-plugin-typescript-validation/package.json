@@ -29,6 +29,9 @@
     "@rnx-kit/metro-serializer": "*",
     "rnx-kit-scripts": "*"
   },
+  "eslintConfig": {
+    "extends": "@rnx-kit/eslint-config"
+  },
   "jest": {
     "roots": [
       "test"

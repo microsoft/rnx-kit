@@ -25,7 +25,7 @@
     "clean": "lage clean --log-level warn --grouped",
     "depcheck": "lage depcheck --log-level warn --grouped",
     "format": "yarn prettier --write --loglevel warn '**/*.{js,json,jsx,md,ts,tsx}' '!**/{__fixtures__,lib}/**' '!**/CHANGELOG.*' '!{CODE_OF_CONDUCT,SECURITY}.md'",
-    "lint": "lage lint --log-level warn --grouped",
+    "lint": "lage lint --verbose --grouped --no-cache",
     "preinstall": "node ./scripts/preinstall.js",
     "postinstall": "node ./scripts/postinstall.js",
     "publish:beachball": "beachball publish --bump-deps -m\"📦 applying package updates ***NO_CI***\"",

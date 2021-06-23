@@ -95,7 +95,7 @@ export function metroBundle(
   config: BundleConfig,
   options: MetroBundleOptions,
   overrides: BundleParameters
-) {
+): void {
   const {
     id,
     platform,

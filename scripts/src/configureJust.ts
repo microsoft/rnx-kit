@@ -1,21 +1,20 @@
 import {
-  task,
-  series,
-  parallel,
-  option,
-  argv,
   addResolvePath,
+  argv,
+  option,
+  parallel,
   prettierCheckTask,
   prettierTask,
+  series,
+  task,
 } from "just-scripts";
-
 import { clean } from "./tasks/clean";
 import { depcheck } from "./tasks/depcheck";
 import { eslint } from "./tasks/eslint";
 import { jest } from "./tasks/jest";
 import { ts } from "./tasks/ts";
 
-export function configureJust() {
+export function configureJust(): void {
   //  add a resolve path for the build tooling deps like TS from the scripts folder
   addResolvePath(__dirname);
 
@@ -29,7 +28,7 @@ export function configureJust() {
   task("depcheck", depcheck);
   task("lint", eslint);
   task("jest", jest);
-  task("no-op", () => {});
+  task("no-op", () => void 0);
   task("prettier", () => (argv().fix ? prettierTask : prettierCheckTask));
   task("ts", ts);
 

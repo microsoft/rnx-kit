@@ -1,7 +1,9 @@
 import { Args, cli } from "@rnx-kit/dep-check";
 
-type ConfigT = Object;
+type ConfigT = Record<string, unknown>;
 
+// TypeScript loses the type of `key` when return type is `T`.
+// eslint-disable-next-line @typescript-eslint/ban-types
 function pickValue<T>(key: keyof T, obj: T): {} | undefined {
   return typeof obj[key] !== "undefined" ? { [key]: obj[key] } : undefined;
 }

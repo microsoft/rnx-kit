@@ -25,5 +25,8 @@
   },
   "devDependencies": {
     "rnx-kit-scripts": "*"
+  },
+  "eslintConfig": {
+    "extends": "@rnx-kit/eslint-config"
   }
 }

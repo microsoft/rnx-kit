@@ -156,7 +156,9 @@ export class Project {
 
   dispose() {
     this.languageService.dispose();
-    // @ts-ignore
-    this.languageService = null; // LS cannot be used after calling dispose
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore `languageService` cannot be used after calling dispose
+    this.languageService = null;
   }
 }

@@ -22,9 +22,11 @@ type CliBundleOptions = {
   config?: string;
 };
 
+type ConfigT = Record<string, unknown>;
+
 export function rnxBundle(
   _argv: Array<string>,
-  _config: Object /*: ConfigT*/,
+  _config: ConfigT,
   options: CliBundleOptions
 ): void {
   //  get the rnx kit config, and make sure bundling is enabled

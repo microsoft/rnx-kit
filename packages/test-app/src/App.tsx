@@ -24,8 +24,9 @@ import {
   ReloadInstructions,
 } from "react-native/Libraries/NewAppScreen";
 
-const App = () => {
-  // @ts-ignore `HermesInternal` doesn't exist in `global`
+declare const global: { HermesInternal?: unknown };
+
+const App = (): React.ReactElement => {
   const hermesDisabled = global.HermesInternal == null;
   return (
     <>

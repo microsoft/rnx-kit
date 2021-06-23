@@ -22,10 +22,7 @@ export class ProjectConfigLoader {
     this.extendedConfigCache = new Map();
   }
 
-  find(
-    searchPath: string,
-    fileName: string = "tsconfig.json"
-  ): string | undefined {
+  find(searchPath: string, fileName = "tsconfig.json"): string | undefined {
     return ts.findConfigFile(searchPath, ts.sys.fileExists, fileName);
   }
 
