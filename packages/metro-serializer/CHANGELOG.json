@@ -2,6 +2,21 @@
   "name": "@rnx-kit/metro-serializer",
   "entries": [
     {
+      "date": "Thu, 24 Jun 2021 13:57:48 GMT",
+      "tag": "@rnx-kit/metro-serializer_v1.0.0",
+      "version": "1.0.0",
+      "comments": {
+        "none": [
+          {
+            "comment": "Use local type definitions for Metro",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "4d6844b9cfbe71feb15435e13496527c67ab225c",
+            "package": "@rnx-kit/metro-serializer"
+          }
+        ]
+      }
+    },
+    {
       "date": "Wed, 23 Jun 2021 09:28:25 GMT",
       "tag": "@rnx-kit/metro-serializer_v1.0.0",
       "version": "1.0.0",
