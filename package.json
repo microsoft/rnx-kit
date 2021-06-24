@@ -58,6 +58,7 @@
   },
   "workspaces": {
     "packages": [
+      "packages/@types/*",
       "packages/*",
       "scripts"
     ]

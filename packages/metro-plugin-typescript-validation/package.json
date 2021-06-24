@@ -23,10 +23,11 @@
     "yargs": "^16.0.0"
   },
   "devDependencies": {
-    "@types/node": "^14.15.0",
-    "@types/yargs": "^16.0.0",
     "@rnx-kit/babel-preset-jest-typescript": "*",
     "@rnx-kit/metro-serializer": "*",
+    "@types/metro": "*",
+    "@types/node": "^14.15.0",
+    "@types/yargs": "^16.0.0",
     "rnx-kit-scripts": "*"
   },
   "eslintConfig": {

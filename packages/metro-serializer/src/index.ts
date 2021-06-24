@@ -1,13 +1,13 @@
-import type {
-  Graph,
-  MetroPlugin,
-  Module,
-  Serializer,
-  SerializerOptions,
-} from "./types";
+import type { Graph, MixedOutput, Module, SerializerOptions } from "metro";
+import type { Serializer } from "metro-config";
 import * as semver from "semver";
 
-export * from "./types";
+export type MetroPlugin<T = MixedOutput> = (
+  entryPoint: string,
+  preModules: ReadonlyArray<Module<T>>,
+  graph: Graph<T>,
+  options: SerializerOptions<T>
+) => void;
 
 /**
  * Metro's default bundle serializer.
