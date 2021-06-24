@@ -1,8 +1,12 @@
-import type { Graph } from "@rnx-kit/metro-serializer";
 import * as fs from "fs";
+import type { Graph } from "metro";
+import type {
+  BasicSourceMap,
+  IndexMap,
+  MixedSourceMap,
+} from "metro-source-map";
 import * as path from "path";
 import pkgDir from "pkg-dir";
-import type { BasicSourceMap, IndexMap, MixedSourceMap } from "./SourceMap";
 
 type ModuleInfo = {
   name: string;

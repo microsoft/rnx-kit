@@ -29,6 +29,8 @@
     "@rnx-kit/babel-preset-jest-typescript": "*",
     "@rnx-kit/metro-serializer": "*",
     "@types/jest": "^26.0.0",
+    "@types/metro": "*",
+    "@types/metro-source-map": "*",
     "@types/node": "^14.15.0",
     "prettier": "^2.0.0",
     "rnx-kit-scripts": "*",

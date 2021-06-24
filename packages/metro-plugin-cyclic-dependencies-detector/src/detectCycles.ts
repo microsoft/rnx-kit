@@ -1,6 +1,6 @@
-import * as path from "path";
 import { error, warn } from "@rnx-kit/console";
-import type { Dependencies, Graph } from "@rnx-kit/metro-serializer";
+import type { Dependencies, Graph } from "metro";
+import * as path from "path";
 
 export type CyclicDependencies = Record<string, string[]>;
 

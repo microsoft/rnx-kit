@@ -1,13 +1,9 @@
 import { info, warn } from "@rnx-kit/console";
-import type {
-  Graph,
-  MetroPlugin,
-  Module,
-  Serializer,
-  SerializerOptions,
-} from "@rnx-kit/metro-serializer";
+import type { MetroPlugin } from "@rnx-kit/metro-serializer";
 import type { BuildOptions, BuildResult, Plugin } from "esbuild";
 import * as esbuild from "esbuild";
+import type { Graph, Module, SerializerOptions } from "metro";
+import type { Serializer } from "metro-config";
 import * as semver from "semver";
 
 export * from "./esbuildTransformerConfig";

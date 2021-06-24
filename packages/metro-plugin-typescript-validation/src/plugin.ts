@@ -1,15 +1,11 @@
-import type {
-  Graph,
-  MetroPlugin,
-  Module,
-  SerializerOptions,
-} from "@rnx-kit/metro-serializer";
-import { getWorkspaces } from "workspace-tools";
-import * as fs from "fs";
-import * as path from "path";
+import type { MetroPlugin } from "@rnx-kit/metro-serializer";
 import * as child_process from "child_process";
-const yargs = require("yargs/yargs");
+import * as fs from "fs";
+import type { Graph, Module, SerializerOptions } from "metro";
+import * as path from "path";
+import { getWorkspaces } from "workspace-tools";
 import { hideBin } from "yargs/helpers";
+const yargs = require("yargs/yargs");
 
 export function getModuleRoot(module: string): string {
   return path.dirname(require.resolve(module + "/package.json"));

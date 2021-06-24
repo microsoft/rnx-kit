@@ -1,0 +1,7 @@
+{
+  "type": "none",
+  "comment": "Use local type definitions for Metro",
+  "packageName": "@rnx-kit/metro-serializer-esbuild",
+  "email": "4123478+tido64@users.noreply.github.com",
+  "dependentChangeType": "none"
+}
