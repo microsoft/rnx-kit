@@ -18,15 +18,11 @@
     "test": "rnx-kit-scripts test"
   },
   "dependencies": {
-    "@msfast/typescript-platform-resolution": "^4.2.4-midgard.0",
-    "workspace-tools": "^0.16.2",
-    "yargs": "^16.0.0"
+    "@rnx-kit/typescript-service": "1.0.1"
   },
   "devDependencies": {
     "@types/node": "^14.15.0",
-    "@types/yargs": "^16.0.0",
     "@rnx-kit/babel-preset-jest-typescript": "*",
-    "@rnx-kit/metro-serializer": "*",
     "rnx-kit-scripts": "*"
   },
   "eslintConfig": {

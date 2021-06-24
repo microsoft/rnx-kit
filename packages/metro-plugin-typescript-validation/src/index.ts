@@ -1,1 +1,1 @@
-export { TypeScriptValidation, experimentalSerializerHook } from "./plugin";
+export * from "./plugin";
