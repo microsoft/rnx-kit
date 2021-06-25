@@ -1,1 +1,13 @@
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
+buildscript { scriptHandler ->
+    def androidTestAppDir = "../../../node_modules/react-native-test-app/android"
+    apply from: "$androidTestAppDir/dependencies.gradle"
+
+    repositories {
+        google()
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath "com.android.tools.build:gradle:$androidPluginVersion"
+    }
+}

@@ -41,7 +41,7 @@
     "@types/react": "^17.0.2",
     "@types/react-native": "^0.64.0",
     "metro-react-native-babel-preset": "^0.66.0",
-    "react-native-test-app": "^0.5.4",
+    "react-native-test-app": "^0.6.3",
     "rnx-kit-scripts": "*",
     "typescript": "^4.0.0"
   },
@@ -73,7 +73,8 @@
     "capabilities": [
       "core-android",
       "core-ios",
-      "core-windows"
+      "core-windows",
+      "test-app"
     ]
   }
 }
