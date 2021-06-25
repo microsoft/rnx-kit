@@ -2,6 +2,21 @@
   "name": "@rnx-kit/metro-serializer-esbuild",
   "entries": [
     {
+      "date": "Fri, 25 Jun 2021 14:10:29 GMT",
+      "tag": "@rnx-kit/metro-serializer-esbuild_v0.0.6",
+      "version": "0.0.6",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Use the new unstable_disableModuleWrapping flag",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "1af7bdb7844c7284505411938f09765415c4e896",
+            "package": "@rnx-kit/metro-serializer-esbuild"
+          }
+        ]
+      }
+    },
+    {
       "date": "Thu, 24 Jun 2021 13:57:48 GMT",
       "tag": "@rnx-kit/metro-serializer-esbuild_v0.0.5",
       "version": "0.0.5",
