@@ -37,6 +37,7 @@
     "@rnx-kit/metro-plugin-duplicates-checker": "*",
     "@rnx-kit/metro-plugin-typescript-validation": "*",
     "@rnx-kit/metro-serializer": "*",
+    "@rnx-kit/metro-serializer-esbuild": "*",
     "@types/react": "^17.0.2",
     "@types/react-native": "^0.64.0",
     "metro-react-native-babel-preset": "^0.66.0",
