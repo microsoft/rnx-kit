@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/dep-check
 
-This log was last generated on Wed, 23 Jun 2021 17:54:11 GMT and should not be manually modified.
+This log was last generated on Fri, 25 Jun 2021 16:53:16 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 1.5.8
+
+Fri, 25 Jun 2021 16:53:16 GMT
+
+### Patches
+
+- Bump react-native-test-app to 0.6.3 (4123478+tido64@users.noreply.github.com)
 
 ## 1.5.7
 
