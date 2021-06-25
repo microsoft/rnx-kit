@@ -26,13 +26,13 @@ function depcheckTask() {
     const options = mergeOneLevel(
       {
         ignorePatterns: ["/lib/*", "/lib-commonjs/*"],
-        ignoreMatches: [
-          "@rnx-kit/eslint-config",
-          "prettier",
-          "rnx-kit-scripts",
-          "typescript",
+        ignoreMatches: ["@rnx-kit/eslint-config", "rnx-kit-scripts"],
+        specials: [
+          depcheck.special.babel,
+          depcheck.special.eslint,
+          depcheck.special.jest,
+          depcheck.special.prettier,
         ],
-        specials: [depcheck.special.eslint, depcheck.special.jest],
       },
       config.depcheck
     );
