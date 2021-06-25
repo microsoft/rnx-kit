@@ -119,7 +119,7 @@ const profile: Profile = {
   },
   "test-app": {
     name: "react-native-test-app",
-    version: "^0.5.9",
+    version: "^0.6.3",
     devOnly: true,
   },
   webview: {
