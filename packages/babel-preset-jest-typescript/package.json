@@ -26,6 +26,13 @@
     "rnx-kit-scripts": "*",
     "typescript": "^4.0.0"
   },
+  "depcheck": {
+    "ignoreMatches": [
+      "@babel/core",
+      "@babel/preset-env",
+      "@babel/preset-typescript"
+    ]
+  },
   "eslintConfig": {
     "extends": "@rnx-kit/eslint-config"
   }

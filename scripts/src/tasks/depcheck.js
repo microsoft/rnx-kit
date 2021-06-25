@@ -14,11 +14,6 @@ function mergeOneLevel(a, b = {}) {
   return result;
 }
 
-function scriptsDeps() {
-  const config = require("rnx-kit-scripts/package.json");
-  return Object.keys(config.dependencies);
-}
-
 function depcheckTask() {
   /**
    * @param {(err?: Error) => void} done
@@ -30,13 +25,14 @@ function depcheckTask() {
     const config = require(path.join(process.cwd(), "package.json"));
     const options = mergeOneLevel(
       {
-        ignorePatterns: ["*eslint*", "/lib/*", "/lib-commonjs/*"],
-        ignoreMatches: ["rnx-kit-scripts", ...scriptsDeps()],
-        specials: [
-          depcheck.special.eslint,
-          depcheck.special.webpack,
-          depcheck.special.jest,
+        ignorePatterns: ["/lib/*", "/lib-commonjs/*"],
+        ignoreMatches: [
+          "@rnx-kit/eslint-config",
+          "prettier",
+          "rnx-kit-scripts",
+          "typescript",
         ],
+        specials: [depcheck.special.eslint, depcheck.special.jest],
       },
       config.depcheck
     );

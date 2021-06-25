@@ -52,8 +52,6 @@ jobs:
         run: yarn ci
       - name: Check for change files
         run: yarn run check
-      - name: Lint
-        run: yarn lint
       - name: Format
         run: yarn format
       - name: Align dependencies

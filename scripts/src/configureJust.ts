@@ -33,8 +33,8 @@ export function configureJust(): void {
   task("ts", ts);
 
   // hierarchical task definintions
-  task("build", series("clean", "lint", "ts"));
+  task("build", series("clean", "depcheck", "lint", "ts"));
   task("code-style", series("prettier", "lint"));
   task("test", jest);
-  task("validate", parallel("lint", "test"));
+  task("validate", parallel("depcheck", "lint", "test"));
 }

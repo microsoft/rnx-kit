@@ -19,19 +19,23 @@
     "test": "rnx-kit-scripts test"
   },
   "dependencies": {
-    "@babel/core": "^7.0.0",
     "babel-plugin-const-enum": "^1.0.0"
   },
   "peerDependencies": {
     "metro-react-native-babel-preset": "*"
   },
   "devDependencies": {
+    "@babel/core": "^7.0.0",
     "@types/babel__core": "^7.0.0",
     "@types/jest": "^26.0.0",
-    "@babel/core": "^7.0.0",
     "prettier": "^2.0.0",
     "rnx-kit-scripts": "*",
     "typescript": "^4.0.0"
+  },
+  "depcheck": {
+    "ignoreMatches": [
+      "babel-plugin-const-enum"
+    ]
   },
   "eslintConfig": {
     "extends": "@rnx-kit/eslint-config"

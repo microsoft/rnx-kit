@@ -36,6 +36,12 @@
     "rnx-kit-scripts": "*",
     "typescript": "^4.0.0"
   },
+  "depcheck": {
+    "ignoreMatches": [
+      "metro",
+      "metro-source-map"
+    ]
+  },
   "eslintConfig": {
     "extends": "@rnx-kit/eslint-config"
   },

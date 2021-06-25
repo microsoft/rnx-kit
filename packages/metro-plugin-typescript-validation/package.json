@@ -30,6 +30,12 @@
     "@types/yargs": "^16.0.0",
     "rnx-kit-scripts": "*"
   },
+  "depcheck": {
+    "ignoreMatches": [
+      "@msfast/typescript-platform-resolution",
+      "metro"
+    ]
+  },
   "eslintConfig": {
     "extends": "@rnx-kit/eslint-config"
   },
