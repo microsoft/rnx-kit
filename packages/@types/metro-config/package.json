@@ -18,7 +18,9 @@
     "format": "prettier --write *.d.ts"
   },
   "dependencies": {
-    "@types/metro": "*",
+    "@types/metro-cache": "*",
+    "@types/metro-resolver": "*",
+    "@types/metro-source-map": "*",
     "@types/metro-transform-worker": "*"
   }
 }

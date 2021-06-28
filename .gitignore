@@ -7,8 +7,9 @@
 .idea/
 Pods/
 coverage/
-dist/
-lib/
+/packages/*/dist/
+/packages/*/lib/
+/scripts/lib/
 local.properties
 node_modules/
 !**/__fixtures__/**/node_modules/

@@ -8,7 +8,7 @@
 import type { AllowOptionalDependencies, DynamicRequiresBehavior } from "metro";
 import type { BasicSourceMap } from "metro-source-map";
 
-export type MinifierConfig = Readonly<Record<string, unknown>>;
+type MinifierConfig = Readonly<Record<string, unknown>>;
 
 export type MinifierOptions = {
   code: string;
@@ -45,3 +45,5 @@ export type JsTransformerConfig = Readonly<{
   unstable_disableNormalizePseudoGlobals: boolean;
   unstable_compactOutput: boolean;
 }>;
+
+export type { CustomTransformOptions } from "metro-babel-transformer";
