@@ -1,0 +1,7 @@
+{
+  "type": "none",
+  "comment": "Fix types after metro type update",
+  "packageName": "@rnx-kit/metro-serializer",
+  "email": "afoxman@microsoft.com",
+  "dependentChangeType": "none"
+}
