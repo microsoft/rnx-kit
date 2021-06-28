@@ -29,6 +29,7 @@
     "chalk": "^4.1.0",
     "find-up": "^5.0.0",
     "jest-diff": "^26.0.0",
+    "pkg-dir": "^5.0.0",
     "semver": "^7.0.0",
     "workspace-tools": "^0.16.2",
     "yargs": "^16.0.0"
