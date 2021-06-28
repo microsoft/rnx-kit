@@ -1,0 +1,20 @@
+{
+  "private": "true",
+  "name": "@types/metro-resolver",
+  "version": "0.0.1",
+  "description": "TypeScript definition files for metro-resolver",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/@types/metro-resolver",
+  "license": "MIT",
+  "files": [
+    "*.d.ts"
+  ],
+  "main": "index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "packages/@types/metro-resolver"
+  },
+  "scripts": {
+    "format": "prettier --write *.d.ts"
+  }
+}

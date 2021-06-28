@@ -18,7 +18,7 @@
     "format": "prettier --write *.d.ts"
   },
   "dependencies": {
-    "@types/metro": "*",
+    "@types/metro-babel-transformer": "*",
     "@types/metro-source-map": "*"
   }
 }
