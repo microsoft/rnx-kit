@@ -1,15 +1,23 @@
-import { AllPlatforms, BundleParameters, getKitConfig } from "@rnx-kit/config";
 import chalk from "chalk";
-import { metroBundle, MetroBundleOptions } from "./metro";
+import fs from "fs";
+import path from "path";
+import {
+  AllPlatforms,
+  getKitConfig,
+  getBundleDefinition,
+  getBundlePlatformDefinition,
+} from "@rnx-kit/config";
+import type { Config as CLIConfig } from "@react-native-community/cli-types";
+import { loadMetroConfig, bundle, BundleArgs } from "@rnx-kit/metro-service";
 
-type CliBundleOptions = {
+type CLIBundleOptions = {
   id?: string;
   platform?: AllPlatforms;
   entryPath?: string;
   distPath?: string;
   assetsPath?: string;
   bundlePrefix?: string;
-  bundleEncoding?: string;
+  bundleEncoding?: BundleArgs["bundleEncoding"];
   transformer?: string;
   dev: boolean;
   minify?: boolean;
@@ -20,15 +28,16 @@ type CliBundleOptions = {
   resetCache?: boolean;
   readGlobalCache?: boolean;
   config?: string;
+  verbose: boolean;
 };
 
-type ConfigT = Record<string, unknown>;
+function ensureDirectoryExists(directoryPath: string): void {
+  if (!fs.existsSync(directoryPath)) {
+    fs.mkdirSync(directoryPath, { recursive: true });
+  }
+}
 
-export function rnxBundle(
-  _argv: Array<string>,
-  _config: ConfigT,
-  options: CliBundleOptions
-): void {
+function getKitConfigBundleDefinition(id?: string) {
   //  get the rnx kit config, and make sure bundling is enabled
   const kitConfig = getKitConfig();
   if (
@@ -41,37 +50,131 @@ export function rnxBundle(
         "No bundle configuration found for this react-native experience -- skipping bundling"
       )
     );
-    return;
+    return undefined;
   } else if (!kitConfig.bundle) {
     console.warn(
       chalk.yellow(
         "Bundling is disabled for this react-native experience -- skipping"
       )
     );
-    return;
+    return undefined;
   }
-  const bundleConfig = kitConfig.bundle;
 
-  //  construct override params from cmd-line options, eliminating unspecified values
-  const bundleOverrides: BundleParameters = {
-    ...(options.entryPath && { entryPath: options.entryPath }),
-    ...(options.distPath && { distPath: options.distPath }),
-    ...(options.assetsPath && { assetsPath: options.assetsPath }),
-    ...(options.bundlePrefix && { bundlePrefix: options.bundlePrefix }),
-    ...(options.bundleEncoding && { bundleEncoding: options.bundleEncoding }),
-    ...(options.sourcemapOutput && { sourceMapPath: options.sourcemapOutput }),
-    ...(options.sourcemapSourcesRoot && {
-      sourceMapSourceRootPath: options.sourcemapSourcesRoot,
-    }),
-    ...(typeof options.sourcemapUseAbsolutePath === "boolean" && {
-      sourceMapUseAbsolutePaths: options.sourcemapUseAbsolutePath,
-    }),
-  };
+  // get the bundle definition
+  return getBundleDefinition(kitConfig.bundle, id);
+}
 
-  //  construct metro options from cmd-line options
-  const bundleOptions: MetroBundleOptions = options;
-  //  handle renamed props
-  bundleOptions.configPath = options.config;
+export async function rnxBundle(
+  _argv: Array<string>,
+  cliConfig: CLIConfig,
+  cliBundleOptions: CLIBundleOptions
+): Promise<void> {
+  //  unpack the CLI options that will effect all bundles
+  const {
+    id,
+    dev,
+    minify,
+    transformer,
+    maxWorkers,
+    resetCache,
+    config,
+    verbose,
+  } = cliBundleOptions;
 
-  metroBundle(bundleConfig, bundleOptions, bundleOverrides);
+  //  load the Metro configuration
+  const metroConfig = await loadMetroConfig(cliConfig, {
+    config,
+    maxWorkers,
+    resetCache,
+  });
+
+  //  get the kit config's bundle definition using the optional id
+  const definition = getKitConfigBundleDefinition(id);
+  if (!definition) {
+    //  bundling is disabled, or the kit has no bundle definitions
+    return Promise.resolve();
+  }
+
+  console.log("Generating metro bundle(s)" + (id ? ` for id ${id}...` : "..."));
+
+  //  get the list of target platforms, favoring the command-line over the bundle definition
+  let targetPlatforms: AllPlatforms[] = [];
+  if (cliBundleOptions.platform) {
+    targetPlatforms.push(cliBundleOptions.platform);
+  } else if (definition.targets) {
+    targetPlatforms = definition.targets;
+  }
+
+  //  create a bundle for each target platform
+  for (const targetPlatform of targetPlatforms) {
+    //  unpack the platform-specific bundle definition
+    let {
+      entryPath,
+      distPath,
+      assetsPath,
+      bundlePrefix,
+      bundleEncoding,
+      sourceMapPath,
+      sourceMapSourceRootPath,
+      sourceMapUseAbsolutePaths,
+    } = getBundlePlatformDefinition(definition, targetPlatform);
+
+    //  apply command-line overrides to the platform-specific bundle definition
+    entryPath = cliBundleOptions.entryPath ?? entryPath;
+    distPath = cliBundleOptions.distPath ?? distPath;
+    assetsPath = cliBundleOptions.assetsPath ?? assetsPath;
+    bundlePrefix = cliBundleOptions.bundlePrefix ?? bundlePrefix;
+    bundleEncoding = cliBundleOptions.bundleEncoding ?? bundleEncoding;
+    sourceMapPath = cliBundleOptions.sourcemapOutput ?? sourceMapPath;
+    sourceMapSourceRootPath =
+      cliBundleOptions.sourcemapSourcesRoot ?? sourceMapSourceRootPath;
+    sourceMapUseAbsolutePaths =
+      cliBundleOptions.sourcemapUseAbsolutePath ?? sourceMapUseAbsolutePaths;
+
+    //  assemble the full path to the bundle file
+    const bundleExtension =
+      targetPlatform === "ios" || targetPlatform === "macos"
+        ? "jsbundle"
+        : "bundle";
+    const bundleFile = `${bundlePrefix}.${targetPlatform}.${bundleExtension}`;
+    const bundlePath = path.join(distPath, bundleFile);
+
+    //  always create a source-map in dev mode
+    if (dev) {
+      sourceMapPath = sourceMapPath ?? bundleFile + ".map";
+    }
+
+    //  assemble the full path the source map file
+    if (sourceMapPath) {
+      sourceMapPath = path.join(distPath, sourceMapPath);
+    }
+
+    //  ensure all output directories exist
+    ensureDirectoryExists(path.dirname(bundlePath));
+    sourceMapPath && ensureDirectoryExists(path.dirname(sourceMapPath));
+    assetsPath && ensureDirectoryExists(assetsPath);
+
+    //  create the bundle
+    return bundle(
+      {
+        assetsDest: assetsPath,
+        entryFile: entryPath,
+        resetCache: !!resetCache,
+        transformer,
+        minify,
+        config,
+        platform: targetPlatform,
+        dev,
+        bundleOutput: bundlePath,
+        bundleEncoding,
+        maxWorkers,
+        sourcemapOutput: sourceMapPath,
+        sourcemapSourcesRoot: sourceMapSourceRootPath,
+        sourcemapUseAbsolutePath: !!sourceMapUseAbsolutePaths,
+        verbose,
+        //unstableTransformProfile?: string;
+      },
+      metroConfig
+    );
+  }
 }

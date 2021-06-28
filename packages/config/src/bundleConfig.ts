@@ -42,11 +42,12 @@ export type BundleRequiredParameters = {
 
 export type BundleParameters = Partial<BundleRequiredParameters> & {
   /**
-   * Encoding scheme to use when writing the bundle file.
+   * Encoding scheme to use when writing the bundle file. Currently limited
+   * to UTF-8, UTF-16 (little endian), and 7-bit ASCII.
    *
    * @see "https://nodejs.org/api/buffer.html#buffer_buffers_and_character_encodings"
    */
-  bundleEncoding?: string;
+  bundleEncoding?: "utf8" | "utf16le" | "ascii";
 
   /**
    * Path to use when creating the bundle source map file.

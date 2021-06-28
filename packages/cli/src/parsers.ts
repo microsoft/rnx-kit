@@ -1,4 +1,4 @@
-import { AllPlatforms } from "@rnx-kit/config";
+import type { AllPlatforms } from "@rnx-kit/config";
 
 export function parseBoolean(val: string): boolean {
   if (val === "false") {

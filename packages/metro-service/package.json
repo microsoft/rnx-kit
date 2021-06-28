@@ -18,10 +18,10 @@
     "test": "rnx-kit-scripts test"
   },
   "dependencies": {
-    "mkdirp": "^0.5.1"
+    "mkdirp": "^0.5.3"
   },
   "devDependencies": {
-    "@types/mkdirp": "^0.5.1",
+    "@types/mkdirp": "^0.5.2",
     "@types/node": "^14.15.0",
     "@rnx-kit/babel-preset-jest-typescript": "*",
     "rnx-kit-scripts": "*"
