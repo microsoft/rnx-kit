@@ -3,7 +3,7 @@ import type { MetroPlugin } from "@rnx-kit/metro-serializer";
 import type { BuildOptions, BuildResult, Plugin } from "esbuild";
 import * as esbuild from "esbuild";
 import type { Graph, Module, SerializerOptions } from "metro";
-import type { Serializer } from "metro-config";
+import type { SerializerConfigT } from "metro-config";
 import * as semver from "semver";
 
 export * from "./esbuildTransformerConfig";
@@ -37,7 +37,7 @@ function outputOf(module: Module | undefined): string | undefined {
 export function MetroSerializer(
   plugins: MetroPlugin[] = [],
   buildOptions?: Options
-): Serializer {
+): SerializerConfigT["customSerializer"] {
   // TODO: This should be bumped to the version that contains all the changes
   // we'll need for this plugin to work.
   assertVersion(">=0.64.0");
