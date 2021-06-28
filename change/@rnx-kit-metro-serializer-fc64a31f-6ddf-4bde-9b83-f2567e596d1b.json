@@ -1,6 +1,6 @@
 {
   "type": "none",
-  "comment": "Fix types after metro type update",
+  "comment": "Adjust type definitions after updating in-repo @types for Metro. No change to the API, just type shuffling.",
   "packageName": "@rnx-kit/metro-serializer",
   "email": "afoxman@microsoft.com",
   "dependentChangeType": "none"
