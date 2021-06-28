@@ -2,6 +2,21 @@
   "name": "@rnx-kit/metro-serializer",
   "entries": [
     {
+      "date": "Mon, 28 Jun 2021 14:19:44 GMT",
+      "tag": "@rnx-kit/metro-serializer_v1.0.0",
+      "version": "1.0.0",
+      "comments": {
+        "none": [
+          {
+            "comment": "Ran depcheck and cleaned up dependencies",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "4794d9d1b5f8b9d1174dc0799291ff2e0a19b792",
+            "package": "@rnx-kit/metro-serializer"
+          }
+        ]
+      }
+    },
+    {
       "date": "Mon, 28 Jun 2021 08:19:07 GMT",
       "tag": "@rnx-kit/metro-serializer_v1.0.0",
       "version": "1.0.0",
