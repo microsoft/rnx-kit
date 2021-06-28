@@ -155,7 +155,7 @@ export async function rnxBundle(
     assetsPath && ensureDirectoryExists(assetsPath);
 
     //  create the bundle
-    return bundle(
+    await bundle(
       {
         assetsDest: assetsPath,
         entryFile: entryPath,
@@ -177,4 +177,6 @@ export async function rnxBundle(
       metroConfig
     );
   }
+
+  return Promise.resolve();
 }
