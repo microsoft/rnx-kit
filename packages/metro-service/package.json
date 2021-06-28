@@ -1,0 +1,29 @@
+{
+  "name": "@rnx-kit/metro-service",
+  "version": "1.0.0",
+  "description": "Metro service for bundling and bundle-serving",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/metro-service#readme",
+  "license": "MIT",
+  "files": [
+    "lib/*"
+  ],
+  "main": "lib/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "packages/metro-service"
+  },
+  "scripts": {
+    "build": "rnx-kit-scripts build",
+    "test": "rnx-kit-scripts test"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@types/node": "^14.15.0",
+    "@rnx-kit/babel-preset-jest-typescript": "*",
+    "rnx-kit-scripts": "*"
+  },
+  "eslintConfig": {
+    "extends": "@rnx-kit/eslint-config"
+  }
+}
