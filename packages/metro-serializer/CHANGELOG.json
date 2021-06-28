@@ -2,6 +2,21 @@
   "name": "@rnx-kit/metro-serializer",
   "entries": [
     {
+      "date": "Mon, 28 Jun 2021 08:19:07 GMT",
+      "tag": "@rnx-kit/metro-serializer_v1.0.0",
+      "version": "1.0.0",
+      "comments": {
+        "none": [
+          {
+            "comment": "Adjust type definitions after updating in-repo @types for Metro. No change to the API, just type shuffling.",
+            "author": "afoxman@microsoft.com",
+            "commit": "e683ddef5e260d395fe2a112437b36d1ec23002c",
+            "package": "@rnx-kit/metro-serializer"
+          }
+        ]
+      }
+    },
+    {
       "date": "Mon, 28 Jun 2021 07:03:31 GMT",
       "tag": "@rnx-kit/metro-serializer_v1.0.0",
       "version": "1.0.0",
