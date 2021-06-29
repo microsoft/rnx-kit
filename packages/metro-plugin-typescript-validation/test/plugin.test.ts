@@ -1,3 +1,4 @@
+import path from "path";
 import type {
   Dependency,
   Graph,
@@ -5,14 +6,8 @@ import type {
   MixedOutput,
   SerializerOptions,
   TransformInputOptions,
-} from "@rnx-kit/metro-serializer";
-// import {
-//   typescriptSerializerHook
-// } from "../src/plugin";
-import path from "path";
-const child_process = require("child_process");
-const fs = require("fs");
-const yargs = require("yargs/yargs");
+} from "metro";
+import { typescriptSerializerHook } from "../src/plugin";
 
 //  test data
 
@@ -151,6 +146,7 @@ dimensions_ts_win32.dependencies.set(".\\src\\propulsion.ts", {
 
 describe("typescriptSerializerHook", () => {
   test("x", () => {
+    typescriptSerializerHook;
     expect(graphWin32).not.toBeNull();
   });
 });

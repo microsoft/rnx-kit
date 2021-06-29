@@ -1,5 +1,5 @@
-import { MetroSerializer } from "../src/index";
-import type { BundleCode, Graph, SerializerOptions } from "../src/types";
+import { MetroSerializer, CustomSerializerResult } from "../src/index";
+import type { Graph, SerializerOptions } from "metro";
 
 jest.mock("metro/src/DeltaBundler/Serializers/baseJSBundle");
 jest.mock("metro/src/lib/bundleToString");
@@ -9,7 +9,7 @@ function isPromise<T>(obj: T | Promise<T>): obj is Promise<T> {
 }
 
 async function getBundleCode(
-  bundle: BundleCode | Promise<BundleCode>
+  bundle: CustomSerializerResult | Promise<CustomSerializerResult>
 ): Promise<string> {
   if (isPromise(bundle)) {
     return getBundleCode(await bundle);

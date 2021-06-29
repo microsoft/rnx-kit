@@ -7281,7 +7281,7 @@ metro-cache@0.66.0:
     mkdirp "^0.5.1"
     rimraf "^2.5.4"
 
-metro-config@0.66.2, metro-config@^0.64.0, metro-config@^0.66.2:
+metro-config@0.66.2, metro-config@^0.64.0, metro-config@^0.66.0, metro-config@^0.66.2:
   version "0.66.2"
   resolved "http://localhost:4873/metro-config/-/metro-config-0.66.2.tgz#8dc2eae84f4d8858acf56462dc5d6e83ba4e3d52"
   integrity sha512-CN0cRozWsd8s7oIxoKVYskd++TipjI/3ML+kKozLhxbXnSaTQsk+FiVyFL0jd4YLvq8NHjaWQhJI/wphrG5UVw==
@@ -7450,7 +7450,7 @@ metro-transform-worker@0.66.2:
     metro-transform-plugins "0.66.0"
     nullthrows "^1.1.1"
 
-metro@0.66.2, metro@^0.64.0, metro@^0.66.2:
+metro@0.66.2, metro@^0.64.0, metro@^0.66.0, metro@^0.66.2:
   version "0.66.2"
   resolved "http://localhost:4873/metro/-/metro-0.66.2.tgz#be9ef15ebb15526786376fdc9a468da6d0d395bf"
   integrity sha512-TNz401A7mVobrsLhwRIKeYSSxIxCqBx51Wt960K7TffS7rVWj2NEoOelGdK42wsDIqg5YpfM2NFNpJTO7P3fTA==

@@ -1,8 +1,9 @@
-import type {
-  Dependencies,
-  Graph,
-  MixedOutput,
-} from "@rnx-kit/metro-serializer";
+import type { Dependencies, Graph, MixedOutput } from "metro";
+import { Service } from "@rnx-kit/typescript-service";
+
+// eslint-disable-next-line
+// @ts-ignore
+const sss: Service = new Service();
 
 export type Delta = {
   added: Dependencies<MixedOutput>;

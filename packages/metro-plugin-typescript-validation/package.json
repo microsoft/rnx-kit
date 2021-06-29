@@ -22,15 +22,12 @@
   },
   "devDependencies": {
     "@rnx-kit/babel-preset-jest-typescript": "*",
-    "@rnx-kit/metro-serializer": "*",
     "@types/metro": "*",
     "@types/node": "^14.15.0",
-    "@types/yargs": "^16.0.0",
     "rnx-kit-scripts": "*"
   },
   "depcheck": {
     "ignoreMatches": [
-      "@msfast/typescript-platform-resolution",
       "metro"
     ]
   },
