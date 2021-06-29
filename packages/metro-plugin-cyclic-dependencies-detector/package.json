@@ -32,6 +32,11 @@
     "rnx-kit-scripts": "*",
     "typescript": "^4.0.0"
   },
+  "depcheck": {
+    "ignoreMatches": [
+      "metro"
+    ]
+  },
   "eslintConfig": {
     "extends": "@rnx-kit/eslint-config"
   },

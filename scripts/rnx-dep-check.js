@@ -19,6 +19,10 @@ const common = {
     name: "jest-diff",
     version: "^26.0.0",
   },
+  "pkg-dir": {
+    name: "pkg-dir",
+    version: "^5.0.0",
+  },
   semver: {
     name: "semver",
     version: "^7.0.0",

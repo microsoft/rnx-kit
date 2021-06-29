@@ -34,6 +34,11 @@
     "rnx-kit-scripts": "*",
     "typescript": "^4.0.0"
   },
+  "depcheck": {
+    "ignoreMatches": [
+      "@rnx-kit/babel-preset-metro-react-native"
+    ]
+  },
   "eslintConfig": {
     "extends": "@rnx-kit/eslint-config"
   },
