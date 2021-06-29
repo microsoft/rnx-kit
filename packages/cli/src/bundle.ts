@@ -3,6 +3,7 @@ import fs from "fs";
 import path from "path";
 import {
   AllPlatforms,
+  BundleDefinitionWithRequiredParameters,
   getKitConfig,
   getBundleDefinition,
   getBundlePlatformDefinition,
@@ -32,12 +33,12 @@ type CLIBundleOptions = {
 };
 
 function ensureDirectoryExists(directoryPath: string): void {
-  if (!fs.existsSync(directoryPath)) {
-    fs.mkdirSync(directoryPath, { recursive: true });
-  }
+  fs.mkdirSync(directoryPath, { recursive: true, mode: 0o755 });
 }
 
-function getKitConfigBundleDefinition(id?: string) {
+function getKitConfigBundleDefinition(
+  id?: string
+): BundleDefinitionWithRequiredParameters | undefined {
   //  get the rnx kit config, and make sure bundling is enabled
   const kitConfig = getKitConfig();
   if (
@@ -92,6 +93,9 @@ export async function rnxBundle(
   const definition = getKitConfigBundleDefinition(id);
   if (!definition) {
     //  bundling is disabled, or the kit has no bundle definitions
+    console.log(
+      "skipping bundle -- kit configuration does not defined any bundles"
+    );
     return Promise.resolve();
   }
 
