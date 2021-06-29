@@ -52,10 +52,19 @@ export type Module<T = MixedOutput> = {
 
 export type Dependencies<T = MixedOutput> = Map<string, Module<T>>;
 
+export type TransformInputOptions = Exclude<
+  JsTransformOptions,
+  {
+    inlinePlatform: boolean;
+    inlineRequires: boolean;
+  }
+>;
+
 export type Graph<T = MixedOutput> = {
   dependencies: Dependencies<T>;
   importBundleNames: Set<string>;
   readonly entryPoints: ReadonlyArray<string>;
+  readonly transformOptions: TransformInputOptions;
 };
 
 export type AllowOptionalDependenciesWithOptions = {
