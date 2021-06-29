@@ -14,6 +14,6 @@ module.exports = makeMetroConfig({
       CyclicDependencies(),
       DuplicateDependencies({ ignoredModules: ["react-is"] }),
     ]),
-    experimentalSerializerHook: typescriptSerializerHook,
+    //    experimentalSerializerHook: typescriptSerializerHook,
   },
 });
