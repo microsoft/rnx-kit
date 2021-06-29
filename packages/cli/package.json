@@ -20,17 +20,12 @@
   "dependencies": {
     "@rnx-kit/config": "0.2.9",
     "@rnx-kit/dep-check": "^1.5.8",
+    "@rnx-kit/metro-service": "1.0.1",
     "@rnx-kit/third-party-notices": "1.0.1",
-    "chalk": "^4.1.0",
-    "metro": "^0.66.0",
-    "metro-config": "^0.66.0",
-    "metro-resolver": "^0.66.0"
+    "chalk": "^4.1.0"
   },
   "devDependencies": {
-    "@types/metro": "*",
-    "@types/metro-config": "*",
     "@react-native-community/cli-types": "^5.0.1",
-    "@rnx-kit/metro-service": "*",
     "rnx-kit-scripts": "*"
   },
   "eslintConfig": {
