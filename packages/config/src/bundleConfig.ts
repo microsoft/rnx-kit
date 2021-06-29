@@ -1,3 +1,5 @@
+import type { OutputOptions } from "metro";
+
 /**
  * List of supported kit platforms.
  */
@@ -47,7 +49,7 @@ export type BundleParameters = Partial<BundleRequiredParameters> & {
    *
    * @see "https://nodejs.org/api/buffer.html#buffer_buffers_and_character_encodings"
    */
-  bundleEncoding?: "utf8" | "utf16le" | "ascii";
+  bundleEncoding?: OutputOptions["bundleEncoding"];
 
   /**
    * Path to use when creating the bundle source map file.
