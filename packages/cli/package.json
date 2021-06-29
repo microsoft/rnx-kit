@@ -20,10 +20,12 @@
   "dependencies": {
     "@rnx-kit/config": "0.2.9",
     "@rnx-kit/dep-check": "^1.5.9",
+    "@rnx-kit/metro-service": "1.0.1",
     "@rnx-kit/third-party-notices": "1.0.1",
     "chalk": "^4.1.0"
   },
   "devDependencies": {
+    "@react-native-community/cli-types": "^5.0.1",
     "rnx-kit-scripts": "*"
   },
   "eslintConfig": {

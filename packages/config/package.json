@@ -16,10 +16,15 @@
     "semver": "^7.0.0"
   },
   "devDependencies": {
-    "@types/jest": "^26.0.0",
+    "@types/metro": "*",
     "@types/node": "^14.15.0",
     "@types/semver": "^7.0.0",
     "rnx-kit-scripts": "0.1.1"
+  },
+  "depcheck": {
+    "ignoreMatches": [
+      "metro"
+    ]
   },
   "eslintConfig": {
     "extends": "@rnx-kit/eslint-config"

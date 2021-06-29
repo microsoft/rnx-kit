@@ -5,7 +5,7 @@ import type {
   BundleRequiredParameters,
 } from "./bundleConfig";
 
-type BundleDefinitionWithRequiredParameters = BundleDefinition &
+export type BundleDefinitionWithRequiredParameters = BundleDefinition &
   BundleRequiredParameters;
 
 function asArray<T>(opt: T | T[]): T[] {
