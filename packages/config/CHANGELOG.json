@@ -2,6 +2,21 @@
   "name": "@rnx-kit/config",
   "entries": [
     {
+      "date": "Tue, 29 Jun 2021 06:01:48 GMT",
+      "tag": "@rnx-kit/config_v0.2.9",
+      "version": "0.2.9",
+      "comments": {
+        "none": [
+          {
+            "comment": "Update type definitions",
+            "author": "afoxman@microsoft.com",
+            "commit": "0608b0120730c5cf0a78dd8bed80c18083851011",
+            "package": "@rnx-kit/config"
+          }
+        ]
+      }
+    },
+    {
       "date": "Wed, 23 Jun 2021 17:39:16 GMT",
       "tag": "@rnx-kit/config_v0.2.9",
       "version": "0.2.9",
