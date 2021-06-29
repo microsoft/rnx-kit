@@ -12,7 +12,7 @@ exports[`checkPackageManifest({ kitType: 'app' }) adds required dependencies 1`]
     \\"hermes-engine\\": \\"~0.7.0\\",
     \\"quaid\\": \\"1.0.0\\",
     \\"react\\": \\"17.0.1\\",
-    \\"react-native\\": \\"^0.64.3\\",
+    \\"react-native\\": \\"^0.64.2\\",
     \\"react-native-lazy-index\\": \\"^2.1.1\\",
     \\"react-native-reanimated\\": \\"^2.1.0\\",
     \\"react-native-webview\\": \\"^11.4.2\\"
