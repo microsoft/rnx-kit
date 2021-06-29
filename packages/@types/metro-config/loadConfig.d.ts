@@ -1,4 +1,4 @@
-import { YargArguments, InputConfigT, ConfigT } from "metro-config";
+import type { YargArguments, InputConfigT, ConfigT } from "metro-config";
 
 export function loadConfig(
   argv?: YargArguments = {},

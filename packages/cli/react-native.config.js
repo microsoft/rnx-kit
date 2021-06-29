@@ -99,6 +99,11 @@ module.exports = {
           name: "--config [string]",
           description: "Path to the metro CLI configuration file",
         },
+        {
+          name: "--verbose",
+          description: "Turn on verbose output",
+          default: false,
+        },
       ],
     },
     {

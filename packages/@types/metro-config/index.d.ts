@@ -2,8 +2,6 @@
 // Project: https://github.com/facebook/metro
 // Definitions by: Adam Foxman <https://github.com/afoxman/>
 //                 Tommy Nguyen <https://github.com/tido64/>
-// Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
-// Source: https://github.com/facebook/metro/blob/25be2a8e28a2d83a56ff74f27fda8b682b250890/packages/metro-config/src/configTypes.flow.js
 
 export * from "./configTypes";
 export * from "./loadConfig";

@@ -4,7 +4,7 @@ import chalk from "chalk";
 import type { AssetData, OutputOptions } from "metro";
 import type { TransformProfile } from "metro-babel-transformer";
 import type { ConfigT } from "metro-config";
-import { Server } from "metro/src/Server";
+import Server from "metro/src/Server";
 import Bundle from "metro/src/shared/output/bundle";
 
 import { saveAssets } from "./asset";
