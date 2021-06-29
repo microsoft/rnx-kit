@@ -1,7 +1,0 @@
-{
-  "type": "patch",
-  "comment": "Add a metro-service package for interacting with metro at an API level, rather than through its command-line interface.",
-  "packageName": "@rnx-kit/metro-service",
-  "email": "afoxman@microsoft.com",
-  "dependentChangeType": "patch"
-}
