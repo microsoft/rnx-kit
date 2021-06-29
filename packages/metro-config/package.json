@@ -29,7 +29,7 @@
   "devDependencies": {
     "@types/babel__core": "^7.0.0",
     "@types/jest": "^26.0.0",
-    "metro-config": "^0.66.0",
+    "@rnx-kit-metro/metro-config": "^0.66.0",
     "prettier": "^2.0.0",
     "rnx-kit-scripts": "*",
     "typescript": "^4.0.0"
