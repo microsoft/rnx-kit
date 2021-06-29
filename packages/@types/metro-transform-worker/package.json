@@ -1,0 +1,24 @@
+{
+  "private": "true",
+  "name": "@types/metro-transform-worker",
+  "version": "0.0.1",
+  "description": "TypeScript definition files for metro-transform-worker",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/@types/metro-transform-worker",
+  "license": "MIT",
+  "files": [
+    "*.d.ts"
+  ],
+  "main": "index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "packages/@types/metro-transform-worker"
+  },
+  "scripts": {
+    "format": "prettier --write *.d.ts"
+  },
+  "dependencies": {
+    "@types/metro-babel-transformer": "*",
+    "@types/metro-source-map": "*"
+  }
+}

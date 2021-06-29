@@ -1,11 +1,11 @@
 import { error, warn } from "@rnx-kit/console";
-import type { Graph } from "@rnx-kit/metro-serializer";
+import type { Graph } from "metro";
+import type { MixedSourceMap } from "metro-source-map";
 import {
   gatherModulesFromGraph,
   gatherModulesFromSourceMap,
   ModuleMap,
 } from "./gatherModules";
-import type { MixedSourceMap } from "./SourceMap";
 
 export type Options = {
   ignoredModules?: string[];

@@ -1,13 +1,9 @@
 import { info, warn } from "@rnx-kit/console";
-import type {
-  Graph,
-  MetroPlugin,
-  Module,
-  Serializer,
-  SerializerOptions,
-} from "@rnx-kit/metro-serializer";
+import type { MetroPlugin } from "@rnx-kit/metro-serializer";
 import type { BuildOptions, BuildResult, Plugin } from "esbuild";
 import * as esbuild from "esbuild";
+import type { Graph, Module, SerializerOptions } from "metro";
+import type { SerializerConfigT } from "metro-config";
 import * as semver from "semver";
 
 export * from "./esbuildTransformerConfig";
@@ -32,32 +28,7 @@ function isRedundantPolyfill(modulePath: string): boolean {
 }
 
 function outputOf(module: Module | undefined): string | undefined {
-  return module?.output?.map(({ data }) => (data as any).code).join("\n");
-}
-
-/**
- * Metro wraps each module inside
- * `__d((global, _$$_REQUIRE, _$$_IMPORT_DEFAULT, _$$_IMPORT_ALL, module, exports, _dependencyMap) => {})`.
- * This function attempts to remove the wrapper.
- *
- * @see https://github.com/facebook/metro/blob/4ccb059351313f78bc0b1f4419e6ff85dc911514/packages/metro-runtime/src/polyfills/require.js#L68
- *
- * @param code Code wrapped by Metro
- * @returns Unwrapped code
- */
-function unwrap(code: string): string {
-  if (!code.startsWith("__d(")) {
-    return code;
-  }
-
-  const lines = code.split("\n");
-  if (lines.length < 3) {
-    return code;
-  }
-
-  lines.pop();
-  lines.shift();
-  return lines.join("\n");
+  return module?.output?.map(({ data }) => data.code).join("\n");
 }
 
 /**
@@ -66,7 +37,7 @@ function unwrap(code: string): string {
 export function MetroSerializer(
   plugins: MetroPlugin[] = [],
   buildOptions?: Options
-): Serializer {
+): SerializerConfigT["customSerializer"] {
   // TODO: This should be bumped to the version that contains all the changes
   // we'll need for this plugin to work.
   assertVersion(">=0.64.0");
@@ -117,7 +88,7 @@ export function MetroSerializer(
 
           const mod = dependencies.get(args.path);
           if (mod) {
-            return { contents: unwrap(outputOf(mod) ?? "") };
+            return { contents: outputOf(mod) ?? "" };
           }
 
           const polyfill = preModules.find(({ path }) => path === args.path);

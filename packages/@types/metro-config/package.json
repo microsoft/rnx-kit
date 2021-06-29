@@ -1,0 +1,26 @@
+{
+  "private": "true",
+  "name": "@types/metro-config",
+  "version": "0.0.1",
+  "description": "TypeScript definition files for metro-config",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/@types/metro-config",
+  "license": "MIT",
+  "files": [
+    "*.d.ts"
+  ],
+  "main": "index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "packages/@types/metro-config"
+  },
+  "scripts": {
+    "format": "prettier --write *.d.ts"
+  },
+  "dependencies": {
+    "@types/metro-cache": "*",
+    "@types/metro-resolver": "*",
+    "@types/metro-source-map": "*",
+    "@types/metro-transform-worker": "*"
+  }
+}

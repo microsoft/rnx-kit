@@ -11,7 +11,7 @@ This plugin currently depends on some unstable features in an as yet unreleased
 version of Metro. The following features are presumed to exist in some form in
 0.67 (or later), but no guarantees are made.
 
-- [`transformer.unstable_collectDependenciesPath`](https://github.com/facebook/metro/commit/648224146e58bcc5e4a0a072daff34b0c42cafa6)
+- [`transformer.unstable_disableModuleWrapping`](https://github.com/facebook/metro/commit/598de6f537f4d7286cee89094bcdb7101e8e4f17)
 - [`transformer.unstable_disableNormalizePseudoGlobals`](https://github.com/facebook/metro/commit/5b913fa0cd30ce5b90e2b1f6318454fbdd170708)
 
 ## Usage
@@ -55,11 +55,3 @@ We can now create a bundle as usual, e.g.:
 ```sh
 react-native bundle --entry-file index.js --platform ios --dev false ...
 ```
-
-## TODO
-
-- Requires ability to set `dependencyTransformer` and pass it to
-  `collectDependencies`
-  - Currently solved by using `transformer.unstable_collectDependenciesPath`
-- JsFileWrapping: Ability to disable `renameRequires(ast)` call
-- Polyfills are also wrapped but currently cause no harm

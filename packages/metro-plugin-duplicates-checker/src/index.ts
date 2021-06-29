@@ -1,18 +1,14 @@
 import { error } from "@rnx-kit/console";
-import type {
-  Graph,
-  MetroPlugin,
-  Module,
-  SerializerOptions,
-} from "@rnx-kit/metro-serializer";
+import type { MetroPlugin } from "@rnx-kit/metro-serializer";
 import { readFile } from "fs";
+import type { Graph, Module, SerializerOptions } from "metro";
+import type { MixedSourceMap } from "metro-source-map";
 import {
   checkForDuplicateDependencies,
   checkForDuplicatePackages,
   defaultOptions,
   Options,
 } from "./checkForDuplicatePackages";
-import type { MixedSourceMap } from "./SourceMap";
 
 export { checkForDuplicatePackages };
 

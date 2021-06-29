@@ -1,0 +1,20 @@
+{
+  "name": "@rnx-kit/metro-service",
+  "entries": [
+    {
+      "date": "Mon, 28 Jun 2021 08:19:07 GMT",
+      "tag": "@rnx-kit/metro-service_v1.0.1",
+      "version": "1.0.1",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Add a metro-service package for interacting with metro at an API level, rather than through its command-line interface.",
+            "author": "afoxman@microsoft.com",
+            "commit": "e683ddef5e260d395fe2a112437b36d1ec23002c",
+            "package": "@rnx-kit/metro-service"
+          }
+        ]
+      }
+    }
+  ]
+}

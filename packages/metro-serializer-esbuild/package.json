@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/metro-serializer-esbuild",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Experimental esbuild serializer for Metro",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/metro-serializer-esbuild#readme",
   "license": "MIT",
@@ -28,15 +28,23 @@
     "metro": ">=0.67.0"
   },
   "devDependencies": {
-    "@babel/types": "^7.0.0",
     "@rnx-kit/babel-preset-jest-typescript": "*",
     "@rnx-kit/metro-serializer": "*",
     "@types/jest": "^26.0.0",
+    "@types/metro": "*",
+    "@types/metro-config": "*",
+    "@types/metro-transform-worker": "*",
     "@types/node": "^14.15.0",
     "@types/semver": "^7.0.0",
     "prettier": "^2.0.0",
     "rnx-kit-scripts": "*",
     "typescript": "^4.0.0"
+  },
+  "depcheck": {
+    "ignoreMatches": [
+      "metro-config",
+      "metro-transform-worker"
+    ]
   },
   "eslintConfig": {
     "extends": "@rnx-kit/eslint-config"

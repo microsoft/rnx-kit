@@ -1,0 +1,1 @@
+export { saveAssets } from "./write";

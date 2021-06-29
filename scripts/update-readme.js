@@ -1,9 +1,9 @@
 const fs = require("fs");
 const markdownTable = require("markdown-table");
 const path = require("path");
+const { getAllPackageJsonFiles, getWorkspaceRoot } = require("workspace-tools");
 
 const PACKAGE_JSON = "package.json";
-const PACKAGES = "packages";
 const README = "README.md";
 const TOKEN_START = "<!-- @rnx-kit start -->";
 const TOKEN_END = "<!-- @rnx-kit end -->";
@@ -17,18 +17,21 @@ const repoUrl = (() => {
   return manifest.repository.url.replace(/\.git$/, "");
 })();
 
-const packages = fs.readdirSync(PACKAGES).reduce((packages, packageDir) => {
-  const packagePath = path.join(PACKAGES, packageDir);
-  const manifestPath = path.join(packagePath, PACKAGE_JSON);
-  const content = readFile(manifestPath);
-  const manifest = JSON.parse(content);
-  if (!manifest["private"]) {
-    const { name, description } = manifest;
-    const link = `[${name}](${repoUrl}/tree/main/${packagePath})`;
-    packages.push([link, description]);
-  }
-  return packages;
-}, []);
+const repoRoot = getWorkspaceRoot();
+const packages = getAllPackageJsonFiles(repoRoot).reduce(
+  (packages, manifestPath) => {
+    const content = readFile(manifestPath);
+    const manifest = JSON.parse(content);
+    const { private, name, description } = manifest;
+    if (!private && !name.startsWith("@types/")) {
+      const packagePath = path.relative(repoRoot, path.dirname(manifestPath));
+      const link = `[${name}](${repoUrl}/tree/main/${packagePath})`;
+      packages.push([link, description]);
+    }
+    return packages;
+  },
+  []
+);
 
 const table = markdownTable([["Name", "Description"], ...packages]);
 
