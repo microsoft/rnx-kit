@@ -1,7 +1,0 @@
-{
-  "type": "patch",
-  "comment": "Update our CLI package to use @rnx-kit/metro-service, rather than invoking Metro in a seprate process.",
-  "packageName": "@rnx-kit/cli",
-  "email": "afoxman@microsoft.com",
-  "dependentChangeType": "patch"
-}
