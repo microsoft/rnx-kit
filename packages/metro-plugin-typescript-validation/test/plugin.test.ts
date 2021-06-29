@@ -4,7 +4,6 @@ import type {
   Graph,
   Module,
   MixedOutput,
-  SerializerOptions,
   TransformInputOptions,
 } from "metro";
 import { typescriptSerializerHook } from "../src/plugin";
