@@ -13,7 +13,7 @@ type Options = Pick<BuildOptions, "logLevel" | "minify"> & {
 };
 
 function assertVersion(requiredVersion: string): void {
-  const { version } = require("metro/package.json");
+  const { version } = require("@rnx-kit-metro/metro/package.json");
   if (!semver.satisfies(version, requiredVersion)) {
     throw new Error(
       `Metro version ${requiredVersion} is required; got ${version}`

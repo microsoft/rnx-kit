@@ -26,10 +26,10 @@ export type CustomSerializer = (
  * @see https://github.com/facebook/metro/blob/af23a1b27bcaaff2e43cb795744b003e145e78dd/packages/metro/src/Server.js#L228
  */
 export function MetroSerializer(plugins: MetroPlugin[]): CustomSerializer {
-  const baseJSBundle = require("metro/src/DeltaBundler/Serializers/baseJSBundle");
-  const bundleToString = require("metro/src/lib/bundleToString");
+  const baseJSBundle = require("@rnx-kit-metro/metro/src/DeltaBundler/Serializers/baseJSBundle");
+  const bundleToString = require("@rnx-kit-metro/metro/src/lib/bundleToString");
 
-  const { version } = require("metro/package.json");
+  const { version } = require("@rnx-kit-metro/metro/package.json");
   const shouldReturnPromise = semver.satisfies(version, ">=0.60.0");
 
   return (

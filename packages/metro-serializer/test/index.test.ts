@@ -1,8 +1,8 @@
 import { MetroSerializer, CustomSerializerResult } from "../src/index";
 import type { Graph, SerializerOptions } from "metro";
 
-jest.mock("metro/src/DeltaBundler/Serializers/baseJSBundle");
-jest.mock("metro/src/lib/bundleToString");
+jest.mock("@rnx-kit-metro/metro/src/DeltaBundler/Serializers/baseJSBundle");
+jest.mock("@rnx-kit-metro/metro/src/lib/bundleToString");
 
 function isPromise<T>(obj: T | Promise<T>): obj is Promise<T> {
   return typeof obj === "object" && typeof obj["then"] === "function";
@@ -23,10 +23,10 @@ async function getBundleCode(
 }
 
 describe("MetroSerializer", () => {
-  const baseJSBundle = require("metro/src/DeltaBundler/Serializers/baseJSBundle");
+  const baseJSBundle = require("@rnx-kit-metro/metro/src/DeltaBundler/Serializers/baseJSBundle");
   baseJSBundle.mockImplementation(() => undefined);
 
-  const bundleToString = require("metro/src/lib/bundleToString");
+  const bundleToString = require("@rnx-kit-metro/metro/src/lib/bundleToString");
   bundleToString.mockImplementation(() => ({
     code: "code",
     map: undefined,

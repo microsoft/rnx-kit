@@ -1,8 +1,10 @@
 import path from "path";
 import type { Config as CLIConfig } from "@react-native-community/cli-types";
 import type { Reporter } from "metro";
-import { loadConfig, ConfigT, InputConfigT } from "metro-config";
-import { resolve, Resolution } from "metro-resolver";
+import type { ConfigT, InputConfigT } from "metro-config";
+import { loadConfig } from "@rnx-kit-metro/metro-config";
+import type { Resolution } from "metro-resolver";
+import { resolve } from "@rnx-kit-metro/metro-resolver";
 
 const INTERNAL_CALLSITES_REGEX = new RegExp(
   [

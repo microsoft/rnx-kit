@@ -159,12 +159,12 @@ function exclusionList(additionalExclusions = [], projectRoot = process.cwd()) {
     try {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore There are no type definition files for `metro-config`
-      return require("metro-config/src/defaults/exclusionList");
+      return require("@rnx-kit-metro/metro-config/src/defaults/exclusionList");
     } catch (_) {
       // `blacklist` was renamed to `exclusionList` in 0.60
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore There are no type definition files for `metro-config`
-      return require("metro-config/src/defaults/blacklist");
+      return require("@rnx-kit-metro/metro-config/src/defaults/blacklist");
     }
   })();
 
@@ -194,7 +194,7 @@ module.exports = {
   makeMetroConfig: (customConfig = {}) => {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore There are no type definition files for `metro-config`
-    const { mergeConfig } = require("metro-config");
+    const { mergeConfig } = require("@rnx-kit-metro/metro-config");
 
     const projectRoot = customConfig.projectRoot || process.cwd();
     const blockList = exclusionList([], projectRoot);
