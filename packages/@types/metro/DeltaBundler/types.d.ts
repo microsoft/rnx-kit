@@ -1,4 +1,5 @@
 import type { SourceLocation } from "@babel/code-frame";
+import type { JsTransformOptions } from "metro-transform-worker";
 
 export type MixedOutput = {
   readonly data: { code: string };
@@ -52,12 +53,9 @@ export type Module<T = MixedOutput> = {
 
 export type Dependencies<T = MixedOutput> = Map<string, Module<T>>;
 
-export type TransformInputOptions = Exclude<
+export type TransformInputOptions = Omit<
   JsTransformOptions,
-  {
-    inlinePlatform: boolean;
-    inlineRequires: boolean;
-  }
+  "inlinePlatform" | "inlineRequires"
 >;
 
 export type Graph<T = MixedOutput> = {
