@@ -1,0 +1,7 @@
+{
+  "type": "patch",
+  "comment": "Fixed Windows paths not being escaped properly",
+  "packageName": "@rnx-kit/metro-serializer-esbuild",
+  "email": "4123478+tido64@users.noreply.github.com",
+  "dependentChangeType": "patch"
+}
