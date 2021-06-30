@@ -1,0 +1,7 @@
+{
+  "type": "patch",
+  "comment": "Add missing exports in typescript-service",
+  "packageName": "@rnx-kit/typescript-service",
+  "email": "afoxman@microsoft.com",
+  "dependentChangeType": "patch"
+}

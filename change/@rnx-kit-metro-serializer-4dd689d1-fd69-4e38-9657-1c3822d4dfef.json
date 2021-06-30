@@ -1,0 +1,7 @@
+{
+  "type": "patch",
+  "comment": "Transition to private fork of Metro",
+  "packageName": "@rnx-kit/metro-serializer",
+  "email": "afoxman@microsoft.com",
+  "dependentChangeType": "patch"
+}

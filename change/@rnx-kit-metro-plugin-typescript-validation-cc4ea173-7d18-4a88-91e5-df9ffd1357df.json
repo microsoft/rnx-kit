@@ -1,0 +1,7 @@
+{
+  "type": "patch",
+  "comment": "Transition to private fork of Metro. Remove serializer plugin which ran tsc as a separate process. Remove dependency on msfast typescript fork. Create a placeholder \"hook\" callback for integrating with Metro.",
+  "packageName": "@rnx-kit/metro-plugin-typescript-validation",
+  "email": "afoxman@microsoft.com",
+  "dependentChangeType": "patch"
+}
