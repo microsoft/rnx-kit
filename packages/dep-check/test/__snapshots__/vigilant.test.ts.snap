@@ -75,7 +75,7 @@ Object {
     "@react-native-community/clipboard": "^1.5.1",
     "@react-native-community/datetimepicker": "^3.0.9 || ^3.4.6",
     "@react-native-community/hooks": "^2.6.0",
-    "@react-native-community/netinfo": "^5.7.1 || ^6.0.0",
+    "@react-native-community/netinfo": "^5.9.10 || ^6.0.0",
     "@react-native-masked-view/masked-view": "^0.2.4",
     "@react-navigation/native": "^5.9.4",
     "@react-navigation/stack": "^5.14.4",

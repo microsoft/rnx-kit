@@ -26,6 +26,10 @@ const profile: Profile = {
     name: "hermes-engine",
     version: "~0.4.0",
   },
+  netinfo: {
+    name: "@react-native-community/netinfo",
+    version: "^5.9.10",
+  },
 };
 
 export default profile;
