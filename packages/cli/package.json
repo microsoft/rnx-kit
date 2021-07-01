@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/cli",
-  "version": "0.5.29",
+  "version": "0.5.30",
   "description": "Command-line interface for rnx-kit",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/cli",
   "license": "MIT",
@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "@rnx-kit/config": "0.2.9",
-    "@rnx-kit/dep-check": "^1.5.9",
+    "@rnx-kit/dep-check": "^1.5.10",
     "@rnx-kit/metro-service": "1.0.2",
     "@rnx-kit/third-party-notices": "1.0.1",
     "chalk": "^4.1.0"

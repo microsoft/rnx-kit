@@ -2,6 +2,21 @@
   "name": "@rnx-kit/dep-check",
   "entries": [
     {
+      "date": "Thu, 01 Jul 2021 13:59:39 GMT",
+      "tag": "@rnx-kit/dep-check_v1.5.10",
+      "version": "1.5.10",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Bump netinfo to 5.9.10",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "e06636db33664f9d57d598b445c4e6b437ee86ee",
+            "package": "@rnx-kit/dep-check"
+          }
+        ]
+      }
+    },
+    {
       "date": "Tue, 29 Jun 2021 06:01:48 GMT",
       "tag": "@rnx-kit/dep-check_v1.5.9",
       "version": "1.5.9",

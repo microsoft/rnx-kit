@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/dep-check
 
-This log was last generated on Mon, 28 Jun 2021 14:19:44 GMT and should not be manually modified.
+This log was last generated on Thu, 01 Jul 2021 13:59:39 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 1.5.10
+
+Thu, 01 Jul 2021 13:59:39 GMT
+
+### Patches
+
+- Bump netinfo to 5.9.10 (4123478+tido64@users.noreply.github.com)
 
 ## 1.5.9
 
