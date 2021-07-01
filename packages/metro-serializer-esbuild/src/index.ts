@@ -21,6 +21,10 @@ function assertVersion(requiredVersion: string): void {
   }
 }
 
+function escapePath(path: string): string {
+  return path.replace(/\\+/g, "\\\\");
+}
+
 function isRedundantPolyfill(modulePath: string): boolean {
   // __prelude__: The content of `__prelude__` is passed to esbuild with `define`
   // polyfills/require.js: `require` is already provided by esbuild
@@ -119,7 +123,7 @@ export function MetroSerializer(
                 /** Polyfills */
                 ...preModules
                   .filter(({ path }) => !isRedundantPolyfill(path))
-                  .map(({ path }) => `require("${path}");`),
+                  .map(({ path }) => `require("${escapePath(path)}");`),
 
                 /**
                  * Ensure that `react-native/Libraries/Core/InitializeCore.js`
@@ -128,7 +132,7 @@ export function MetroSerializer(
                  */
                 ...options.runBeforeMainModule
                   .filter((value) => dependencies.has(value))
-                  .map((value) => `require("${value}");`),
+                  .map((value) => `require("${escapePath(value)}");`),
               ].join("\n"),
             };
           }

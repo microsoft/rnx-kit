@@ -19,6 +19,7 @@
     "bump-versions": "beachball bump",
     "bundle": "lage bundle --grouped",
     "bundle:ci": "lage bundle --verbose --grouped",
+    "bundle+esbuild": "lage bundle+esbuild --verbose --grouped",
     "change": "beachball change",
     "check": "beachball check --branch origin/main --changehint \"Run 'yarn run change' from root of repo to generate a change file.\"",
     "ci": "yarn --cache-folder .yarn-offline-mirror --prefer-offline --frozen-lockfile --non-interactive",
