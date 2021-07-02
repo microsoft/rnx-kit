@@ -4351,9 +4351,9 @@ esbuild-plugin-lodash@^1.0.3:
   integrity sha512-iqu8waYw4noUXGze31GndmKzPa076VhpX90u66mvkHSfvRF7GXtI5E1+k51IylVIME3BD4Xparzn6GXzcdYa1Q==
 
 esbuild@^0.12.8:
-  version "0.12.13"
-  resolved "https://registry.yarnpkg.com/esbuild/-/esbuild-0.12.13.tgz#666e1e6c50dbde40c02824cc60296574ebd588c5"
-  integrity sha512-fnKinmXcW1DMYnf1Ol3ZO0yU7dBDCuPcE4XDwceIy2zqTvB4G0NfonqgdvPMJi/IXRoVi/w9r9O5xxg/SqiAxA==
+  version "0.12.14"
+  resolved "https://registry.yarnpkg.com/esbuild/-/esbuild-0.12.14.tgz#43157dbd0b36d939247d4eb4909a4886ac40f82e"
+  integrity sha512-z8p+6FGiplR7a3pPonXREbm+8IeXjBGvDpVidZmGB/AJMsJSfGCU+n7KOMCazA9AwvagadRWBhiKorC0w9WJvw==
 
 escalade@^3.1.1:
   version "3.1.1"
