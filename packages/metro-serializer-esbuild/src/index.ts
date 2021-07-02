@@ -42,9 +42,7 @@ export function MetroSerializer(
   plugins: MetroPlugin[] = [],
   buildOptions?: Options
 ): SerializerConfigT["customSerializer"] {
-  // TODO: This should be bumped to the version that contains all the changes
-  // we'll need for this plugin to work.
-  assertVersion(">=0.64.0");
+  assertVersion(">=0.66.1");
 
   return (
     entryPoint: string,
