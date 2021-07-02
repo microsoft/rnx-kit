@@ -33,4 +33,11 @@ jobs:
       - name: Bundle packages
         run: yarn bundle:ci
       - name: Publish
-        run: yarn run publish:beachball --yes --token ${{ secrets.NPM_TOKEN }}
+        run: |
+          if [[ $(git rev-parse HEAD) == $(git ls-remote --quiet | grep HEAD | cut -f 1) ]]; then
+            yarn run publish:beachball --yes --token ${{ secrets.NPM_TOKEN }}
+          else
+            # Branches stored in GITHUB_REF are prefixed with 'refs/heads/'. We
+            # strip it to make the message a bit more legible.
+            echo "The local branch of '${GITHUB_REF#refs/heads/}' is behind the remote one, therefore a new version won't be published."
+          fi
