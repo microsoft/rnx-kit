@@ -97,8 +97,8 @@ then try our plugins:
   is a plugin that detects cyclic imports. These can cause bugs that can be
   really confusing to debug.
 - [@rnx-kit/metro-plugin-duplicates-checker](https://github.com/microsoft/rnx-kit/tree/main/packages/metro-plugin-duplicates-checker)
-  detects whether you're bundling multiple copies of the same package in your
-  JS bundle.
+  detects whether you're bundling multiple copies of the same package in your JS
+  bundle.
 - [@rnx-kit/metro-plugin-typescript-validation](https://github.com/microsoft/rnx-kit/tree/main/packages/metro-plugin-typescript-validation)
   performs type checking of the TypeScript files being bundled. The Babel plugin
   for TypeScript that comes with `metro-react-native-babel-preset` only strips
