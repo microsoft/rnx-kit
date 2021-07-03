@@ -58,14 +58,54 @@ While Metro is the de-facto standard, it lacks a few features that would make it
 optimal; here's our current wishlist, feel free to submit PRs if you want to
 help with them :)
 
-- Implement
-  [Circular Dependency Plugin](https://github.com/aackerman/circular-dependency-plugin)
-- Implement
-  [DuplicatesPlugin](https://github.com/FormidableLabs/inspectpack#plugin)
 - Implement [symlinks](https://github.com/facebook/metro/issues/1)
   - Ideally this will be done directly upstream in Metro/Watchman. In the
     meantime, we are adding all the symlinks to `watchFolders` as a workaround.
-- Implement tree-shaking
+
+### Bundle size
+
+Metro currently does not implement tree shaking, i.e. it does not attempt to
+remove unused code from the JS bundle. For instance, given this code snippet:
+
+```ts
+import { partition } from "lodash";
+```
+
+Metro will bundle all of `lodash` in your bundle even though you're only using a
+small part of it. In `lodash`'s case, you can add
+[`babel-plugin-lodash`](https://github.com/lodash/babel-plugin-lodash#readme) to
+your Babel config to help Metro strip away some modules, but not all libraries
+will come with such helpers.
+
+If you're feeling adventurous, you can try an experimental Metro serializer
+we've built that adds support for tree shaking:
+[@rnx-kit/metro-serializer-esbuild](https://github.com/microsoft/rnx-kit/tree/main/packages/metro-serializer-esbuild#readme).
+Do note that you will need to be on React Native 0.64 or above, and use an as
+yet unreleased version of Metro.
+
+### Plugins
+
+Metro doesn't have a plugin system, but it does have hooks that allows you to
+implement something that functions similarly.
+[@rnx-kit/metro-serializer](https://github.com/microsoft/rnx-kit/tree/main/packages/metro-serializer#readme)
+implements a serializer that allows you to pass plugins that are run just before
+the JS bundle is serialized and written to disk. Follow the
+[instructions for installing it](https://github.com/microsoft/rnx-kit/tree/main/packages/metro-serializer#usage),
+then try our plugins:
+
+- [@rnx-kit/metro-plugin-cyclic-dependencies-detector](https://github.com/microsoft/rnx-kit/tree/main/packages/metro-plugin-cyclic-dependencies-detector)
+  is a plugin that detects cyclic imports. These can cause bugs that can be
+  really confusing to debug.
+- [@rnx-kit/metro-plugin-duplicates-checker](https://github.com/microsoft/rnx-kit/tree/main/packages/metro-plugin-duplicates-checker)
+  detects whether you're bundling multiple copies of the same package in your
+  JS bundle.
+- [@rnx-kit/metro-plugin-typescript-validation](https://github.com/microsoft/rnx-kit/tree/main/packages/metro-plugin-typescript-validation)
+  performs type checking of the TypeScript files being bundled. The Babel plugin
+  for TypeScript that comes with `metro-react-native-babel-preset` only strips
+  the types. Normally, one would run `tsc` separately to ensure that the code is
+  correct. This step can now be replaced with the plugin.
+
+You can of course also provide your own plugins.
 
 ### Ensuring a single instance of a package
 
