@@ -2636,10 +2636,11 @@ babel-jest@^26.6.3:
     slash "^3.0.0"
 
 babel-plugin-const-enum@^1.0.0:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/babel-plugin-const-enum/-/babel-plugin-const-enum-1.0.1.tgz#0d742faf9731be4f213c4d01d61fc4e93c44d159"
-  integrity sha512-6oGu63g1FS9psUPQyLCJM08ty6kGihGKTbzWGbAKHfUuCzCh7y9twh516cR6v0lM4d4NOoR+DgLb7uKVytyp6Q==
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/babel-plugin-const-enum/-/babel-plugin-const-enum-1.1.0.tgz#c0be36335bdc8504fc1d95d1161c82a6eea9047e"
+  integrity sha512-HcqyEOv8IUXY/pEe/4b/6yW2SfilxlII+2Ok4l5vkE8UrN4gFgGqhhSPFbVuX0dIyG8TSHvt+7qccOI1kjynUw==
   dependencies:
+    "@babel/generator" "^7.5.0"
     "@babel/helper-plugin-utils" "^7.0.0"
     "@babel/plugin-syntax-typescript" "^7.3.3"
 
