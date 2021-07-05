@@ -181,8 +181,8 @@ should be prompted to bump a few packages. For instance, besides bumping
 `@react-native-community/netinfo` to ^6.0.0. We also note that
 `@react-native-community/async-storage` was renamed to
 `@react-native-async-storage/async-storage`. While users are on older profiles,
-they should be warned of upcoming, potentially breaking changes such as this so
-they can be prepared.
+they should be warned of upcoming, potentially breaking changes so they can be
+prepared.
 
 Besides package renames, we can also recommend alternative modules that provide
 the same capability, or forks that include security fixes or shims for backwards
