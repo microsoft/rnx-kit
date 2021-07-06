@@ -6,6 +6,16 @@ function setFixture(name: string): void {
 }
 
 describe("jest-out-of-tree-resolver", () => {
+  const reactNativeMacOSPath =
+    path.sep + path.join("__fixtures__", "react-native-macos", "index.js");
+  const reactNativePath =
+    path.sep + path.join("node_modules", "react-native", "index.js");
+  const reactNativeWindowsLocalPath =
+    path.sep + path.join("__fixtures__", "react-native-windows", "index.js");
+  const reactNativeWindowsPath =
+    path.sep + path.join("node_modules", "react-native-windows", "index.js");
+  const reactPath = path.sep + path.join("node_modules", "react", "index.js");
+
   const consoleWarnSpy = jest.spyOn(global.console, "warn");
   const currentDir = process.cwd();
 
@@ -15,7 +25,10 @@ describe("jest-out-of-tree-resolver", () => {
   });
 
   test("throws if no package root is found", () => {
-    const root = os.platform == "win32" ? currentDir.split(path.sep)[0] : "/";
+    const root =
+      os.platform() === "win32"
+        ? currentDir.substr(0, currentDir.indexOf(path.sep) + 1)
+        : "/";
     process.chdir(root);
 
     jest.isolateModules(() => {
@@ -30,11 +43,9 @@ describe("jest-out-of-tree-resolver", () => {
       const jestResolver = require("../src/index");
 
       expect(jestResolver("react-native")).toEqual(
-        expect.stringContaining("/node_modules/react-native/index.js")
+        expect.stringContaining(reactNativePath)
       );
-      expect(jestResolver("react")).toEqual(
-        expect.stringContaining("/node_modules/react/index.js")
-      );
+      expect(jestResolver("react")).toEqual(expect.stringContaining(reactPath));
     });
 
     expect(consoleWarnSpy).not.toHaveBeenCalled();
@@ -47,11 +58,9 @@ describe("jest-out-of-tree-resolver", () => {
       const jestResolver = require("../src/index");
 
       expect(jestResolver("react-native")).toEqual(
-        expect.stringContaining("/node_modules/react-native/index.js")
+        expect.stringContaining(reactNativePath)
       );
-      expect(jestResolver("react")).toEqual(
-        expect.stringContaining("/node_modules/react/index.js")
-      );
+      expect(jestResolver("react")).toEqual(expect.stringContaining(reactPath));
     });
 
     expect(consoleWarnSpy).not.toHaveBeenCalled();
@@ -64,11 +73,9 @@ describe("jest-out-of-tree-resolver", () => {
       const jestResolver = require("../src/index");
 
       expect(jestResolver("react-native")).toEqual(
-        expect.stringContaining("/__fixtures__/react-native-windows/index.js")
+        expect.stringContaining(reactNativeWindowsLocalPath)
       );
-      expect(jestResolver("react")).toEqual(
-        expect.stringContaining("/node_modules/react/index.js")
-      );
+      expect(jestResolver("react")).toEqual(expect.stringContaining(reactPath));
     });
 
     expect(consoleWarnSpy).not.toHaveBeenCalled();
@@ -81,11 +88,9 @@ describe("jest-out-of-tree-resolver", () => {
       const jestResolver = require("../src/index");
 
       expect(jestResolver("react-native")).toEqual(
-        expect.stringContaining("/node_modules/react-native-windows/index.js")
+        expect.stringContaining(reactNativeWindowsPath)
       );
-      expect(jestResolver("react")).toEqual(
-        expect.stringContaining("/node_modules/react/index.js")
-      );
+      expect(jestResolver("react")).toEqual(expect.stringContaining(reactPath));
     });
 
     expect(consoleWarnSpy).not.toHaveBeenCalled();
@@ -98,11 +103,9 @@ describe("jest-out-of-tree-resolver", () => {
       const jestResolver = require("../src/index");
 
       expect(jestResolver("react-native")).toEqual(
-        expect.stringContaining("/__fixtures__/react-native-macos/index.js")
+        expect.stringContaining(reactNativeMacOSPath)
       );
-      expect(jestResolver("react")).toEqual(
-        expect.stringContaining("/node_modules/react/index.js")
-      );
+      expect(jestResolver("react")).toEqual(expect.stringContaining(reactPath));
     });
 
     expect(consoleWarnSpy).not.toHaveBeenCalled();
@@ -115,11 +118,9 @@ describe("jest-out-of-tree-resolver", () => {
       const jestResolver = require("../src/index");
 
       expect(jestResolver("react-native")).toEqual(
-        expect.stringContaining("/__fixtures__/react-native-macos/index.js")
+        expect.stringContaining(reactNativeMacOSPath)
       );
-      expect(jestResolver("react")).toEqual(
-        expect.stringContaining("/node_modules/react/index.js")
-      );
+      expect(jestResolver("react")).toEqual(expect.stringContaining(reactPath));
     });
 
     expect(consoleWarnSpy).toHaveBeenCalledTimes(1);
