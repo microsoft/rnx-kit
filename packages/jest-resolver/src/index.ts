@@ -26,9 +26,7 @@ function getReactNativePlatformPath(): string | undefined {
       (name) => typeof platforms[name].npmPackageName === "string"
     );
     if (names.length > 1) {
-      console.warn(
-        `Several platform configurations were found, picking the first one: ${names}`
-      );
+      console.warn(`Multiple platforms found; picking the first one: ${names}`);
     }
 
     const { npmPackageName } = platforms[names[0]];

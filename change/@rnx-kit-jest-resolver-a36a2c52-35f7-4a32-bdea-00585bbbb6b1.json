@@ -1,7 +1,7 @@
 {
   "type": "minor",
   "comment": "Jest resolver that supports out-of-tree platforms",
-  "packageName": "@rnx-kit/jest-out-of-tree-resolver",
+  "packageName": "@rnx-kit/jest-resolver",
   "email": "4123478+tido64@users.noreply.github.com",
   "dependentChangeType": "patch"
 }

@@ -1,8 +1,8 @@
 {
-  "name": "@rnx-kit/jest-out-of-tree-resolver",
-  "version": "1.0.0-alpha",
+  "name": "@rnx-kit/jest-resolver",
+  "version": "0.0.1",
   "description": "Jest resolver that supports out-of-tree platforms",
-  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/jest-out-of-tree-resolver#readme",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/jest-resolver#readme",
   "license": "MIT",
   "files": [
     "lib/*"
@@ -11,11 +11,11 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/microsoft/rnx-kit",
-    "directory": "packages/jest-out-of-tree-resolver"
+    "directory": "packages/jest-resolver"
   },
   "scripts": {
     "build": "rnx-kit-scripts build",
-    "format": "prettier --write src/*.ts test/*.ts",
+    "format": "rnx-kit-scripts format",
     "lint": "rnx-kit-scripts lint",
     "test": "rnx-kit-scripts test"
   },
@@ -37,6 +37,9 @@
     "extends": "@rnx-kit/eslint-config"
   },
   "jest": {
+    "collectCoverageFrom": [
+      "src/**"
+    ],
     "roots": [
       "test"
     ],

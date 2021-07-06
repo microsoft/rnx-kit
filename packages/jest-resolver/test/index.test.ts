@@ -5,7 +5,7 @@ function setFixture(name: string): void {
   process.chdir(path.join(__dirname, "__fixtures__", name));
 }
 
-describe("jest-out-of-tree-resolver", () => {
+describe("jest-resolver", () => {
   const reactNativeMacOSPath =
     path.sep + path.join("__fixtures__", "react-native-macos", "index.js");
   const reactNativePath =
