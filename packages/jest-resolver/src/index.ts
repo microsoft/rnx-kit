@@ -37,8 +37,30 @@ function getReactNativePlatformPath(): string | undefined {
   return undefined;
 }
 
+function getReactNativePath(): string | undefined {
+  // TODO: Figure out the mechanism for providing a target platform.
+  const targetPlatform = process.env["RN_TARGET_PLATFORM"];
+  if (!targetPlatform) {
+    // If no target platform is set, see if we're inside an out-of-tree
+    // platform package.
+    return getReactNativePlatformPath();
+  }
+
+  const loadConfig = require("@react-native-community/cli/build/tools/config");
+  const { platforms } = loadConfig();
+  const targetPlatformConfig = platforms[targetPlatform];
+  if (!targetPlatformConfig) {
+    const availablePlatforms = Object.keys(platforms).join(", ");
+    throw new Error(
+      `'${targetPlatform}' was not found among available platforms: ${availablePlatforms}`
+    );
+  }
+
+  return targetPlatformConfig.npmPackageName;
+}
+
 function makePathFilter(): Opts["pathFilter"] {
-  const platformPath = getReactNativePlatformPath();
+  const platformPath = getReactNativePath();
   if (!platformPath) {
     return (_pkg, _path, relativePath) => relativePath;
   }

@@ -24,7 +24,8 @@
     "resolve": "^1.20.0"
   },
   "peerDependencies": {
-    "react-native": "*"
+    "@react-native-community/cli": ">=4.10",
+    "react-native": ">=0.63"
   },
   "devDependencies": {
     "@rnx-kit/babel-preset-jest-typescript": "*",
