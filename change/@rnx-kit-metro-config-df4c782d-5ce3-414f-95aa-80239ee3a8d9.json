@@ -1,7 +1,0 @@
-{
-  "type": "patch",
-  "comment": "Transition to private fork of Metro",
-  "packageName": "@rnx-kit/metro-config",
-  "email": "afoxman@microsoft.com",
-  "dependentChangeType": "patch"
-}
