@@ -34,7 +34,7 @@
     "@types/metro-config": "*",
     "@types/metro-transform-worker": "*",
     "@types/semver": "^7.0.0",
-    "@rnx-kit-metro/metro": "^0.66.1",
+    "metro": "^0.66.1",
     "rnx-kit-scripts": "*"
   },
   "depcheck": {
