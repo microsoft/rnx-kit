@@ -63,8 +63,8 @@ export type JsTransformOptions = Readonly<{
   inlineRequires: boolean;
   minify: boolean;
   nonInlinedRequires?: ReadonlyArray<string>;
-  platform: ?string;
-  runtimeBytecodeVersion: ?number;
+  platform?: string;
+  runtimeBytecodeVersion?: number;
   type: Type;
   unstable_disableES6Transforms?: boolean;
   unstable_transformProfile: TransformProfile;
