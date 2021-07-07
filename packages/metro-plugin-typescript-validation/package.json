@@ -17,9 +17,7 @@
     "build": "rnx-kit-scripts build",
     "test": "rnx-kit-scripts test"
   },
-  "dependencies": {
-    "@rnx-kit/typescript-service": "1.0.1"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@rnx-kit/babel-preset-jest-typescript": "*",
     "@types/metro": "*",

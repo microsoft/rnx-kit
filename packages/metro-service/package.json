@@ -45,7 +45,9 @@
     "rnx-kit-scripts": "*"
   },
   "depcheck": {
-    "ignoreMatches": []
+    "ignoreMatches": [
+      "metro-babel-transformer"
+    ]
   },
   "eslintConfig": {
     "extends": "@rnx-kit/eslint-config"
