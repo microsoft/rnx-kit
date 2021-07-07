@@ -1,0 +1,7 @@
+{
+  "type": "none",
+  "comment": "Update Metro typescript plugin. Remove logic which runs 'tsc', and cleanup dependencies. Add \"hook\" to be used in metro config as experimentalSerializerHook. Update dependencies to use typescript-service package. Cleanup old tests.",
+  "packageName": "@rnx-kit/metro-config",
+  "email": "afoxman@microsoft.com",
+  "dependentChangeType": "none"
+}
