@@ -2,6 +2,36 @@
   "name": "@rnx-kit/dep-check",
   "entries": [
     {
+      "date": "Mon, 05 Jul 2021 15:15:06 GMT",
+      "tag": "@rnx-kit/dep-check_v1.5.10",
+      "version": "1.5.10",
+      "comments": {
+        "none": [
+          {
+            "comment": "Typos in DESIGN.md",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "53faa95399eaad7a8df9c758335380029d0d2041",
+            "package": "@rnx-kit/dep-check"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Thu, 01 Jul 2021 13:59:39 GMT",
+      "tag": "@rnx-kit/dep-check_v1.5.10",
+      "version": "1.5.10",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Bump netinfo to 5.9.10",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "e06636db33664f9d57d598b445c4e6b437ee86ee",
+            "package": "@rnx-kit/dep-check"
+          }
+        ]
+      }
+    },
+    {
       "date": "Tue, 29 Jun 2021 06:01:48 GMT",
       "tag": "@rnx-kit/dep-check_v1.5.9",
       "version": "1.5.9",

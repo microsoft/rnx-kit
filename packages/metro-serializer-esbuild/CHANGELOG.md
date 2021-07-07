@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/metro-serializer-esbuild
 
-This log was last generated on Fri, 25 Jun 2021 14:10:29 GMT and should not be manually modified.
+This log was last generated on Thu, 01 Jul 2021 13:59:39 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 0.0.7
+
+Thu, 01 Jul 2021 13:59:39 GMT
+
+### Patches
+
+- Fixed Windows paths not being escaped properly (4123478+tido64@users.noreply.github.com)
 
 ## 0.0.6
 

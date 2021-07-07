@@ -2,6 +2,21 @@
   "name": "@rnx-kit/metro-config",
   "entries": [
     {
+      "date": "Mon, 05 Jul 2021 15:15:06 GMT",
+      "tag": "@rnx-kit/metro-config_v1.2.1",
+      "version": "1.2.1",
+      "comments": {
+        "none": [
+          {
+            "comment": "Provide links to plugins in README",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "53faa95399eaad7a8df9c758335380029d0d2041",
+            "package": "@rnx-kit/metro-config"
+          }
+        ]
+      }
+    },
+    {
       "date": "Mon, 28 Jun 2021 14:19:44 GMT",
       "tag": "@rnx-kit/metro-config_v1.2.1",
       "version": "1.2.1",
