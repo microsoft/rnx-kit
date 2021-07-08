@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/metro-serializer-esbuild
 
-This log was last generated on Thu, 01 Jul 2021 13:59:39 GMT and should not be manually modified.
+This log was last generated on Thu, 08 Jul 2021 11:40:27 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 0.0.8
+
+Thu, 08 Jul 2021 11:40:27 GMT
+
+### Patches
+
+- Assert that Metro version is at least 0.66.1 (4123478+tido64@users.noreply.github.com)
 
 ## 0.0.7
 

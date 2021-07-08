@@ -2,6 +2,21 @@
   "name": "@rnx-kit/metro-serializer-esbuild",
   "entries": [
     {
+      "date": "Thu, 08 Jul 2021 11:40:27 GMT",
+      "tag": "@rnx-kit/metro-serializer-esbuild_v0.0.8",
+      "version": "0.0.8",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Assert that Metro version is at least 0.66.1",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "761a1994bbe5f39962ec28821c3411521fbf7190",
+            "package": "@rnx-kit/metro-serializer-esbuild"
+          }
+        ]
+      }
+    },
+    {
       "date": "Thu, 08 Jul 2021 09:26:30 GMT",
       "tag": "@rnx-kit/metro-serializer-esbuild_v0.0.7",
       "version": "0.0.7",
