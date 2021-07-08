@@ -1427,6 +1427,11 @@
     memory-streams "^0.1.3"
     p-graph "^1.1.0"
 
+"@msfast/typescript-platform-resolution@^4.2.4-midgard.0":
+  version "4.2.4-midgard.0"
+  resolved "https://registry.yarnpkg.com/@msfast/typescript-platform-resolution/-/typescript-platform-resolution-4.2.4-midgard.0.tgz#c29f4fbc7d7e772517f2eb207603831de6bfcff1"
+  integrity sha512-o0jiFEWlTVkvu3UbbF9rLel8sf1mMZBLpRrJl6wM3odYzXNZwbPXPGd6Nj3IYYAd+laEUkm1gqurDUJJWaiskQ==
+
 "@nodelib/fs.scandir@2.1.4":
   version "2.1.4"
   resolved "https://registry.yarnpkg.com/@nodelib/fs.scandir/-/fs.scandir-2.1.4.tgz#d4b3549a5db5de2683e0c1071ab4f140904bbf69"

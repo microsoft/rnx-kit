@@ -1,1 +1,1 @@
-export * from "./plugin";
+export { TypeScriptValidation } from "./plugin";
