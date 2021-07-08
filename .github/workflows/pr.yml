@@ -33,6 +33,8 @@ jobs:
           git diff | GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} yarn suggestion-bot
       - name: Bundle packages
         run: yarn bundle:ci
+      - name: Bundle packages with esbuild
+        run: yarn bundle+esbuild
   review:
     name: "Review"
     runs-on: ubuntu-latest
