@@ -20,13 +20,23 @@
   "dependencies": {
     "@rnx-kit/config": "0.2.9",
     "@rnx-kit/dep-check": "^1.5.10",
+    "@rnx-kit/metro-plugin-cyclic-dependencies-detector": "1.0.2",
+    "@rnx-kit/metro-plugin-duplicates-checker": "1.1.2",
+    "@rnx-kit/metro-serializer": "1.0.0",
     "@rnx-kit/metro-service": "1.0.2",
     "@rnx-kit/third-party-notices": "1.0.1",
     "chalk": "^4.1.0"
   },
   "devDependencies": {
     "@react-native-community/cli-types": "^5.0.1",
+    "@types/metro-config": "*",
     "rnx-kit-scripts": "*"
+  },
+  "depcheck": {
+    "ignoreMatches": [
+      "metro",
+      "metro-config"
+    ]
   },
   "eslintConfig": {
     "extends": "@rnx-kit/eslint-config"

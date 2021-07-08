@@ -1,6 +1,7 @@
 import chalk from "chalk";
 import fs from "fs";
 import path from "path";
+import type { Config as CLIConfig } from "@react-native-community/cli-types";
 import {
   AllPlatforms,
   BundleDefinitionWithRequiredParameters,
@@ -8,8 +9,8 @@ import {
   getBundleDefinition,
   getBundlePlatformDefinition,
 } from "@rnx-kit/config";
-import type { Config as CLIConfig } from "@react-native-community/cli-types";
 import { loadMetroConfig, bundle, BundleArgs } from "@rnx-kit/metro-service";
+import { validateMetroConfig, customizeMetroConfig } from "./metro-config";
 
 type CLIBundleOptions = {
   id?: string;
@@ -88,18 +89,19 @@ export async function rnxBundle(
     maxWorkers,
     resetCache,
   });
+  if (!validateMetroConfig(metroConfig)) {
+    return Promise.resolve();
+  }
 
   //  get the kit config's bundle definition using the optional id
   const definition = getKitConfigBundleDefinition(id);
   if (!definition) {
     //  bundling is disabled, or the kit has no bundle definitions
     console.log(
-      "skipping bundle -- kit configuration does not defined any bundles"
+      "skipping bundling -- kit configuration does not defined any bundles"
     );
     return Promise.resolve();
   }
-
-  console.log("Generating metro bundle(s)" + (id ? ` for id ${id}...` : "..."));
 
   //  get the list of target platforms, favoring the command-line over the bundle definition
   let targetPlatforms: AllPlatforms[] = [];
@@ -109,9 +111,18 @@ export async function rnxBundle(
     targetPlatforms = definition.targets;
   }
 
+  if (targetPlatforms.length === 0) {
+    console.warn("skipping bundling -- no target platforms given");
+    return Promise.resolve();
+  }
+
   //  create a bundle for each target platform
   for (const targetPlatform of targetPlatforms) {
     //  unpack the platform-specific bundle definition
+    const platformDefinition = getBundlePlatformDefinition(
+      definition,
+      targetPlatform
+    );
     let {
       entryPath,
       distPath,
@@ -121,7 +132,9 @@ export async function rnxBundle(
       sourceMapPath,
       sourceMapSourceRootPath,
       sourceMapUseAbsolutePaths,
-    } = getBundlePlatformDefinition(definition, targetPlatform);
+    } = platformDefinition;
+    const { detectCyclicDependencies, detectDuplicateDependencies } =
+      platformDefinition;
 
     //  apply command-line overrides to the platform-specific bundle definition
     entryPath = cliBundleOptions.entryPath ?? entryPath;
@@ -153,12 +166,19 @@ export async function rnxBundle(
       sourceMapPath = path.join(distPath, sourceMapPath);
     }
 
+    customizeMetroConfig(
+      metroConfig,
+      detectCyclicDependencies,
+      detectDuplicateDependencies
+    );
+
     //  ensure all output directories exist
     ensureDirectoryExists(path.dirname(bundlePath));
     sourceMapPath && ensureDirectoryExists(path.dirname(sourceMapPath));
     assetsPath && ensureDirectoryExists(assetsPath);
 
     //  create the bundle
+    console.log(`Bundling ${targetPlatform}...`);
     await bundle(
       {
         assetsDest: assetsPath,
