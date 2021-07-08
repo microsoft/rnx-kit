@@ -60,6 +60,13 @@
       "distPath": "dist",
       "assetsPath": "dist",
       "bundlePrefix": "main",
+      "detectCyclicDependencies": true,
+      "detectDuplicateDependencies": {
+        "ignoredModules": [
+          "react-is"
+        ]
+      },
+      "typescriptValidation": true,
       "targets": [
         "android",
         "ios",
