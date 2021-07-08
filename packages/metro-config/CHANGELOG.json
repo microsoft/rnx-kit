@@ -2,6 +2,21 @@
   "name": "@rnx-kit/metro-config",
   "entries": [
     {
+      "date": "Thu, 08 Jul 2021 09:26:30 GMT",
+      "tag": "@rnx-kit/metro-config_v1.2.1",
+      "version": "1.2.1",
+      "comments": {
+        "none": [
+          {
+            "comment": "Update Metro.",
+            "author": "afoxman@microsoft.com",
+            "commit": "dc1565a9c099dfb9fb336aec69ad41ecf05e0a8e",
+            "package": "@rnx-kit/metro-config"
+          }
+        ]
+      }
+    },
+    {
       "date": "Mon, 05 Jul 2021 15:15:06 GMT",
       "tag": "@rnx-kit/metro-config_v1.2.1",
       "version": "1.2.1",

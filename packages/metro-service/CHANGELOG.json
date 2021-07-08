@@ -2,6 +2,21 @@
   "name": "@rnx-kit/metro-service",
   "entries": [
     {
+      "date": "Thu, 08 Jul 2021 09:26:30 GMT",
+      "tag": "@rnx-kit/metro-service_v1.0.2",
+      "version": "1.0.2",
+      "comments": {
+        "none": [
+          {
+            "comment": "Update Metro. Fix dependencies.",
+            "author": "afoxman@microsoft.com",
+            "commit": "dc1565a9c099dfb9fb336aec69ad41ecf05e0a8e",
+            "package": "@rnx-kit/metro-service"
+          }
+        ]
+      }
+    },
+    {
       "date": "Tue, 29 Jun 2021 06:01:48 GMT",
       "tag": "@rnx-kit/metro-service_v1.0.2",
       "version": "1.0.2",

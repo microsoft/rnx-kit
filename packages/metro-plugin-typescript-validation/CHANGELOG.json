@@ -2,6 +2,21 @@
   "name": "@rnx-kit/metro-plugin-typescript-validation",
   "entries": [
     {
+      "date": "Thu, 08 Jul 2021 09:26:30 GMT",
+      "tag": "@rnx-kit/metro-plugin-typescript-validation_v1.0.5",
+      "version": "1.0.5",
+      "comments": {
+        "none": [
+          {
+            "comment": "Bump @rnx-kit/metro-plugin-typescript-validation to v1.0.5",
+            "author": "afoxman@microsoft.com",
+            "commit": "dc1565a9c099dfb9fb336aec69ad41ecf05e0a8e",
+            "package": "@rnx-kit/metro-plugin-typescript-validation"
+          }
+        ]
+      }
+    },
+    {
       "date": "Tue, 29 Jun 2021 06:01:48 GMT",
       "tag": "@rnx-kit/metro-plugin-typescript-validation_v1.0.5",
       "version": "1.0.5",
