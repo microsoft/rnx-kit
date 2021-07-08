@@ -7,6 +7,10 @@
 
 import type { AllowOptionalDependencies, DynamicRequiresBehavior } from "metro";
 import type { BasicSourceMap } from "metro-source-map";
+import type {
+  CustomTransformOptions,
+  TransformProfile,
+} from "metro-babel-transformer";
 
 type MinifierConfig = Readonly<Record<string, unknown>>;
 
@@ -22,6 +26,8 @@ export type MinifierResult = {
   code: string;
   map?: BasicSourceMap;
 };
+
+export type Type = "script" | "module" | "asset";
 
 export type JsTransformerConfig = Readonly<{
   assetPlugins: ReadonlyArray<string>;
@@ -47,3 +53,19 @@ export type JsTransformerConfig = Readonly<{
 }>;
 
 export type { CustomTransformOptions } from "metro-babel-transformer";
+
+export type JsTransformOptions = Readonly<{
+  customTransformOptions?: CustomTransformOptions;
+  dev: boolean;
+  experimentalImportSupport?: boolean;
+  hot: boolean;
+  inlinePlatform: boolean;
+  inlineRequires: boolean;
+  minify: boolean;
+  nonInlinedRequires?: ReadonlyArray<string>;
+  platform?: string;
+  runtimeBytecodeVersion?: number;
+  type: Type;
+  unstable_disableES6Transforms?: boolean;
+  unstable_transformProfile: TransformProfile;
+}>;

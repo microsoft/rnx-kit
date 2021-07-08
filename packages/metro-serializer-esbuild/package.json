@@ -30,15 +30,12 @@
   "devDependencies": {
     "@rnx-kit/babel-preset-jest-typescript": "*",
     "@rnx-kit/metro-serializer": "*",
-    "@types/jest": "^26.0.0",
     "@types/metro": "*",
     "@types/metro-config": "*",
     "@types/metro-transform-worker": "*",
-    "@types/node": "^14.15.0",
     "@types/semver": "^7.0.0",
-    "prettier": "^2.0.0",
-    "rnx-kit-scripts": "*",
-    "typescript": "^4.0.0"
+    "metro": "^0.66.1",
+    "rnx-kit-scripts": "*"
   },
   "depcheck": {
     "ignoreMatches": [

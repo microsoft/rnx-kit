@@ -1,0 +1,7 @@
+{
+  "type": "none",
+  "comment": "Update Metro. Fix dependencies.",
+  "packageName": "@rnx-kit/metro-serializer-esbuild",
+  "email": "afoxman@microsoft.com",
+  "dependentChangeType": "none"
+}
