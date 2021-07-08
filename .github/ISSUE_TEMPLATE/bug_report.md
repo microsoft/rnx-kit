@@ -26,14 +26,14 @@ assignees: ""
 
 ### Your environment
 
-* Affected package:
-* Version:
-* Tested platforms:
-  * [ ] Android
-  * [ ] iOS
-  * [ ] macOS
-  * [ ] Windows
-* System information:
+- Affected package:
+- Version:
+- Tested platforms:
+  - [ ] Android
+  - [ ] iOS
+  - [ ] macOS
+  - [ ] Windows
+- System information:
   ```
   # Run `npx react-native info` and paste the output here
   ```
