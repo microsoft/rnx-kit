@@ -6,9 +6,6 @@ const {
   DuplicateDependencies,
 } = require("@rnx-kit/metro-plugin-duplicates-checker");
 const {
-  typescriptSerializerHook,
-} = require("@rnx-kit/metro-plugin-typescript-validation");
-const {
   MetroSerializer,
   esbuildTransformerConfig,
 } = require("@rnx-kit/metro-serializer-esbuild");
@@ -20,7 +17,6 @@ module.exports = makeMetroConfig({
       CyclicDependencies(),
       DuplicateDependencies({ ignoredModules: ["react-is"] }),
     ]),
-    experimentalSerializerHook: typescriptSerializerHook,
   },
   transformer: esbuildTransformerConfig,
 });
