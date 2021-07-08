@@ -138,7 +138,7 @@ Array [
       "https://spdx.org/licenses/MIT.html",
     ],
     "name": "@rnx-kit/cli",
-    "path": "~/rnx-kit/node_modules/@rnx-kit/cli",
+    "path": "~/node_modules/@rnx-kit/cli",
     "version": "1.2.3-fixedVersionForTesting",
   },
   Object {
@@ -167,7 +167,7 @@ THE SOFTWARE.",
       "http://github.com/browserify/console-browserify/raw/master/LICENSE",
     ],
     "name": "console-browserify",
-    "path": "~/rnx-kit/node_modules/console-browserify",
+    "path": "~/node_modules/console-browserify",
     "version": "1.2.3-fixedVersionForTesting",
   },
   Object {
@@ -199,7 +199,7 @@ THE SOFTWARE.
       "https://spdx.org/licenses/MIT.html",
     ],
     "name": "md5.js",
-    "path": "~/rnx-kit/node_modules/md5.js",
+    "path": "~/node_modules/md5.js",
     "version": "1.2.3-fixedVersionForTesting",
   },
 ]
