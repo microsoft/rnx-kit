@@ -2,6 +2,21 @@
   "name": "@rnx-kit/cli",
   "entries": [
     {
+      "date": "Fri, 09 Jul 2021 12:17:59 GMT",
+      "tag": "@rnx-kit/cli_v0.5.31",
+      "version": "0.5.31",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Bump @rnx-kit/cli to v0.5.31",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "10beb208470cb3d1c8de4c12a829da41dbf8983a",
+            "package": "@rnx-kit/cli"
+          }
+        ]
+      }
+    },
+    {
       "date": "Thu, 08 Jul 2021 09:26:30 GMT",
       "tag": "@rnx-kit/cli_v0.5.30",
       "version": "0.5.30",
