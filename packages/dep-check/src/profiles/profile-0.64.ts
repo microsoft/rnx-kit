@@ -31,7 +31,7 @@ const profile: Profile = {
   },
   checkbox: {
     name: "@react-native-community/checkbox",
-    version: "^0.5.7",
+    version: "^0.5.8",
   },
   clipboard: {
     name: "@react-native-clipboard/clipboard",
@@ -119,7 +119,7 @@ const profile: Profile = {
   },
   "test-app": {
     name: "react-native-test-app",
-    version: "^0.6.3",
+    version: "^0.6.12",
     devOnly: true,
   },
   webview: {
