@@ -21,7 +21,7 @@ index d9daf8f..9ca1826 100644
    },
    "scripts": {
      "build": "rnx-kit-scripts build",
-     "format": "prettier --write src/*.ts test/*.ts",
+     "format": "rnx-kit-scripts format",
 +    "lint": "rnx-kit-scripts lint"
    },
    "dependencies": {

@@ -1,17 +1,9 @@
-import {
-  addResolvePath,
-  argv,
-  option,
-  parallel,
-  prettierCheckTask,
-  prettierTask,
-  series,
-  task,
-} from "just-scripts";
+import { addResolvePath, option, parallel, series, task } from "just-scripts";
 import { clean } from "./tasks/clean";
 import { depcheck } from "./tasks/depcheck";
 import { eslint } from "./tasks/eslint";
 import { jest } from "./tasks/jest";
+import { prettier } from "./tasks/prettier";
 import { ts } from "./tasks/ts";
 
 export function configureJust(): void {
@@ -29,12 +21,13 @@ export function configureJust(): void {
   task("lint", eslint);
   task("jest", jest);
   task("no-op", () => undefined);
-  task("prettier", () => (argv().fix ? prettierTask : prettierCheckTask));
+  task("prettier", prettier);
   task("ts", ts);
 
   // hierarchical task definintions
   task("build", series("clean", "depcheck", "lint", "ts"));
   task("code-style", series("prettier", "lint"));
+  task("format", prettier);
   task("test", jest);
   task("validate", parallel("depcheck", "lint", "test"));
 }

@@ -15,7 +15,7 @@
   },
   "scripts": {
     "build": "rnx-kit-scripts build",
-    "format": "prettier --write src/*.ts test/*.ts",
+    "format": "rnx-kit-scripts format",
     "test": "rnx-kit-scripts test"
   },
   "dependencies": {
