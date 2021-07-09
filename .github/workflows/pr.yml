@@ -45,6 +45,9 @@ jobs:
           node-version: 14
       - name: Checkout
         uses: actions/checkout@v2.3.4
+      - name: Deduplicate packages
+        run: |
+          npx yarn-deduplicate --list --fail
       - name: Cache /.yarn-offline-mirror
         uses: actions/cache@v2.1.6
         with:
