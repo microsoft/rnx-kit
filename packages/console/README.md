@@ -1,5 +1,8 @@
 # @rnx-kit/console
 
+[![Build](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml/badge.svg)](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml)
+[![npm version](https://img.shields.io/npm/v/@rnx-kit/console)](https://www.npmjs.com/package/@rnx-kit/console)
+
 `@rnx-kit/console` is a simple console logger that is a subset of the logger in
 [`@react-native-community/cli-tools`](https://github.com/react-native-community/cli/blob/6615eb30f37bec5bb25acc066c849c4aa2d8a4cd/packages/tools/src/logger.ts).
 It is used by
