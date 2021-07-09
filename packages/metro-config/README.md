@@ -83,8 +83,8 @@ will come with such helpers.
 If you're feeling adventurous, you can try an experimental Metro serializer
 we've built that adds support for tree shaking:
 [@rnx-kit/metro-serializer-esbuild](https://github.com/microsoft/rnx-kit/tree/main/packages/metro-serializer-esbuild#readme).
-Do note that you will need to be on React Native 0.64 or above, and use an as
-yet unreleased version of Metro.
+Do note that you will need to be on React Native 0.64 or above, and use Metro
+0.66.1.
 
 ### Plugins
 
