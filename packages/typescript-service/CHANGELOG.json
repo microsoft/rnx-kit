@@ -2,6 +2,21 @@
   "name": "@rnx-kit/typescript-service",
   "entries": [
     {
+      "date": "Fri, 09 Jul 2021 12:23:07 GMT",
+      "tag": "@rnx-kit/typescript-service_v1.0.2",
+      "version": "1.0.2",
+      "comments": {
+        "none": [
+          {
+            "comment": "Add badges for build status and version",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "f3ff6e5f5c20cf9e8c81ca25a4fae3f483925c59",
+            "package": "@rnx-kit/typescript-service"
+          }
+        ]
+      }
+    },
+    {
       "date": "Thu, 08 Jul 2021 09:26:30 GMT",
       "tag": "@rnx-kit/typescript-service_v1.0.2",
       "version": "1.0.2",

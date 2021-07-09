@@ -2,6 +2,21 @@
   "name": "@rnx-kit/bundle-diff",
   "entries": [
     {
+      "date": "Fri, 09 Jul 2021 12:23:07 GMT",
+      "tag": "@rnx-kit/bundle-diff_v1.0.0",
+      "version": "1.0.0",
+      "comments": {
+        "none": [
+          {
+            "comment": "Add badges for build status and version",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "f3ff6e5f5c20cf9e8c81ca25a4fae3f483925c59",
+            "package": "@rnx-kit/bundle-diff"
+          }
+        ]
+      }
+    },
+    {
       "date": "Wed, 23 Jun 2021 09:28:25 GMT",
       "tag": "@rnx-kit/bundle-diff_v1.0.0",
       "version": "1.0.0",
