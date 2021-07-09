@@ -1,5 +1,8 @@
 # @rnx-kit/third-party-notices
 
+[![Build](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml/badge.svg)](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml)
+[![npm version](https://img.shields.io/npm/v/@rnx-kit/third-party-notices)](https://www.npmjs.com/package/@rnx-kit/third-party-notices)
+
 `@rnx-kit/third-party-notices` provides a helper library to create a
 third-party-notices text file based on a output bundle. It also provides a cli
 interface to the library for integration into build steps like just-scripts
