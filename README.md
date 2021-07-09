@@ -11,7 +11,7 @@ libraries.
   - [Dependency Management](#Dependency-Management)
   - [Bundling](#Bundling)
   - [Licensing and Attribution](#Licensing-and-Attribution)
-- [Using Individual @rnx-kit Packages](#Using-Individual-%40rnx%2Dkit-Packages)
+- [Using Individual @rnx-kit Packages](#Using-Individual-rnx%2Dkit-Packages)
 
 > NOTE: `@rnx-kit` is still in the early stages of development. We are hard at
 > work, adding new packages and features on a regular basis. We welcome you to
