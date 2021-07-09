@@ -1,5 +1,8 @@
 # rnx-kit
 
+[![Open in Visual Studio Code](https://open.vscode.dev/badges/open-in-vscode.svg)](https://open.vscode.dev/microsoft/rnx-kit)
+[![Build](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml/badge.svg)](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml)
+
 `rnx-kit` is a collection of tools that are useful for React Native apps and
 libraries.
 
