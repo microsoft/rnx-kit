@@ -76,6 +76,7 @@
       "core-android",
       "core-ios",
       "core-windows",
+      "react",
       "test-app"
     ]
   }

@@ -1,5 +1,5 @@
 import { getKitCapabilities, getKitConfig } from "@rnx-kit/config";
-import { error, warn } from "@rnx-kit/console";
+import { error, info, warn } from "@rnx-kit/console";
 import chalk from "chalk";
 import fs from "fs";
 import { diffLinesUnified } from "jest-diff";
@@ -96,12 +96,12 @@ export function checkPackageManifest(
       );
       console.log(diff);
 
-      const [_, depCheckPath, ...args] = process.argv;
-      const bin = path.basename(depCheckPath);
-      const command = [bin, "--write", ...args].join(" ");
       error(
-        `Changes are needed to satisfy all requirements. Run '${command}' to have ${bin} apply them.`
+        "Changes are needed to satisfy all requirements. Re-run with `--write` to have dep-check apply them."
       );
+
+      const url = chalk.bold("https://aka.ms/dep-check");
+      info(`Visit ${url} for more information about dep-check.`);
 
       return 1;
     }
