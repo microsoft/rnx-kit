@@ -25,9 +25,7 @@ type CLIBundleOptions = {
   maxWorkers?: number;
   sourcemapOutput?: string;
   sourcemapSourcesRoot?: string;
-  sourcemapUseAbsolutePath?: boolean;
   resetCache?: boolean;
-  readGlobalCache?: boolean;
   config?: string;
   verbose: boolean;
 };
@@ -120,7 +118,6 @@ export async function rnxBundle(
       bundleEncoding,
       sourceMapPath,
       sourceMapSourceRootPath,
-      sourceMapUseAbsolutePaths,
     } = getBundlePlatformDefinition(definition, targetPlatform);
 
     //  apply command-line overrides to the platform-specific bundle definition
@@ -132,8 +129,6 @@ export async function rnxBundle(
     sourceMapPath = cliBundleOptions.sourcemapOutput ?? sourceMapPath;
     sourceMapSourceRootPath =
       cliBundleOptions.sourcemapSourcesRoot ?? sourceMapSourceRootPath;
-    sourceMapUseAbsolutePaths =
-      cliBundleOptions.sourcemapUseAbsolutePath ?? sourceMapUseAbsolutePaths;
 
     //  assemble the full path to the bundle file
     const bundleExtension =
@@ -174,7 +169,7 @@ export async function rnxBundle(
         maxWorkers,
         sourcemapOutput: sourceMapPath,
         sourcemapSourcesRoot: sourceMapSourceRootPath,
-        sourcemapUseAbsolutePath: !!sourceMapUseAbsolutePaths,
+        sourcemapUseAbsolutePath: false, // not actually used in Metro source code
         verbose,
         //unstableTransformProfile?: string;
       },

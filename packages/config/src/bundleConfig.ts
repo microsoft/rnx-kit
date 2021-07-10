@@ -61,11 +61,6 @@ export type BundleParameters = Partial<BundleRequiredParameters> & {
    * Path to the package's source files. Used to make source-map paths relative and therefore portable.
    */
   sourceMapSourceRootPath?: string;
-
-  /**
-   * Whether to report SourceMapURL using its full path
-   */
-  sourceMapUseAbsolutePaths?: boolean;
 };
 
 /**
