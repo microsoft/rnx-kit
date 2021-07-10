@@ -3,28 +3,26 @@
 [![Build](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml/badge.svg)](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml)
 [![npm version](https://img.shields.io/npm/v/@rnx-kit/config)](https://www.npmjs.com/package/@rnx-kit/config)
 
-A package for configuring and extracting configuration information about
-rnx-kits.
+Define and query information about a `kit` package.
 
-This is designed to be part of the tooling pipeline, thus it runs in the node
-environment.
+This is designed to be part of the tooling pipeline, so it assumes it is running
+in a node environment.
 
 ## `getKitConfig([options]): KitConfig | null`
 
-This is the core routine to retrieve information about an rnx-kit. By default
-this will load information about the current package. It will look for kit
-information in the current working directory using `cosmiconfig` to match either
-rnx-kit.config.js, a "rnx-kit" section of package.json, or any of the other
-standard ways of supplying configuration.
+Read configuration data for a `kit` package.
 
-### Additional Options
+| Option   | Description                                                                                                                                  |
+| -------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| `module` | Module name of the `kit` package. The module is located via `require.resolve`, which means it needs to be a visible dependency of some sort. |
+| `cwd`    | Path to the `kit` package, or a directory within it.                                                                                         |
 
-The routine can also be configured with the following options:
-
-| Option   | Description                                                                                                                                               |
-| -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `module` | Name of a module to look up kit information for. Note that this will be loaded via require, which means it needs to be a visible dependency of some sort. |
-| `cwd`    | Do the lookup from the specified working directory                                                                                                        |
+The `kit` package is located via `options.module`, `options.cwd`, or the current
+working directory (in that order). The location is then used as a starting-point
+for a `cosmiconfig` search using the key **"rnx-kit"**. `cosmiconfig` will match
+either `rnx-kit.config.js`, an "rnx-kit" section of `package.json`, or any of
+the other
+[standard ways of supplying configuration](https://github.com/davidtheclark/cosmiconfig#cosmiconfig).
 
 ## Future Work
 
