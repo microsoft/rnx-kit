@@ -2,6 +2,21 @@
   "name": "@rnx-kit/third-party-notices",
   "entries": [
     {
+      "date": "Sat, 10 Jul 2021 07:28:45 GMT",
+      "tag": "@rnx-kit/third-party-notices_v1.0.1",
+      "version": "1.0.1",
+      "comments": {
+        "none": [
+          {
+            "comment": "Added `format` script",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "eaedb2cae443a479e131cfd71fab5c1039daca9d",
+            "package": "@rnx-kit/third-party-notices"
+          }
+        ]
+      }
+    },
+    {
       "date": "Sat, 10 Jul 2021 07:28:25 GMT",
       "tag": "@rnx-kit/third-party-notices_v1.0.1",
       "version": "1.0.1",
