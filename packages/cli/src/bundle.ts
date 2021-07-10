@@ -1,16 +1,16 @@
-import chalk from "chalk";
-import fs from "fs";
-import path from "path";
 import type { Config as CLIConfig } from "@react-native-community/cli-types";
 import {
   AllPlatforms,
   BundleDefinitionWithRequiredParameters,
-  getKitConfig,
   getBundleDefinition,
   getBundlePlatformDefinition,
+  getKitConfig,
 } from "@rnx-kit/config";
-import { loadMetroConfig, bundle, BundleArgs } from "@rnx-kit/metro-service";
-import { validateMetroConfig, customizeMetroConfig } from "./metro-config";
+import { bundle, BundleArgs, loadMetroConfig } from "@rnx-kit/metro-service";
+import chalk from "chalk";
+import fs from "fs";
+import path from "path";
+import { customizeMetroConfig, validateMetroConfig } from "./metro-config";
 
 type CLIBundleOptions = {
   id?: string;
@@ -97,8 +97,8 @@ export async function rnxBundle(
   const definition = getKitConfigBundleDefinition(id);
   if (!definition) {
     //  bundling is disabled, or the kit has no bundle definitions
-    console.log(
-      "skipping bundling -- kit configuration does not defined any bundles"
+    console.warn(
+      "skipping bundling -- kit configuration does not define any bundles"
     );
     return Promise.resolve();
   }
@@ -112,8 +112,12 @@ export async function rnxBundle(
   }
 
   if (targetPlatforms.length === 0) {
-    console.warn("skipping bundling -- no target platforms given");
-    return Promise.resolve();
+    console.error("no target platforms given");
+    return Promise.reject(
+      new Error(
+        "No target platforms given. Update the kit configuration to include a target platform, or provide a target platform on the command-line."
+      )
+    );
   }
 
   //  create a bundle for each target platform

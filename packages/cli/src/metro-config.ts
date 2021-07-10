@@ -55,9 +55,9 @@ export function customizeMetroConfig(
     //  older and newer versions of Metro. Older versions expect a return
     //  value, while newer versions expect a promise.
     //
-    //  It's return type is the union of both the value and the promise.
+    //  Its return type is the union of both the value and the promise.
     //  This makes TypeScript upset because for any given version of Metro,
-    //  its one or the other. Not both.
+    //  it's one or the other. Not both.
     //
     //  Since it can handle either scenario, just coerce it to whatever
     //  the current version of Metro expects.
