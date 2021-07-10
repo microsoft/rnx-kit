@@ -101,8 +101,8 @@ $ yarn react-native rnx-write-third-party-notices
 ```
 
 > NOTE: A 3rd-party notice is a **legal document**. You are solely responsble
-> for its content, even if you used `@rnx-kit` to assist you in generating it.
-> You should consult an attorney to ensure your notice meets all legal
+> for its content, even if you use `@rnx-kit` to assist you in generating it.
+> You should consult with an attorney to ensure your notice meets all legal
 > requirements.
 
 ## Using Individual @rnx-kit Packages
