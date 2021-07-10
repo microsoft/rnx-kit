@@ -17,11 +17,12 @@ assignees: ""
   - Can you attach build logs?
   - Can you attach screenshots?
 
-  Please note that support for using rnx-kit packages outside of
-  Microsoft is still highly experimental. While we would be interested
-  to hear feedback if you run into issues, supporting external users is
-  not currently a high priority for the development team, so we
-  unfortunately cannot guarantee prompt support at this time.
+  Please note that rnx-kit is still in the early stages of development.
+  We are hard at work, adding new packages and features on a regular basis.
+  We welcome your feedback in this bug report. Given our focus on building
+  out the first "complete" version of @rnx-kit, supporting external users is
+  not currently a high priority, so we unfortunately cannot guarantee prompt
+  responses at this time.
 -->
 
 ### Your environment
