@@ -16,92 +16,83 @@ module.exports = {
         {
           name: "--id [id]",
           description:
-            "Target bundle id, only needed when config describes multiple bundles",
+            "Target bundle definition. This is only needed when the kit configuration has multiple bundle definitions.",
         },
         {
           name: "--platform [ios|android|windows|win32|macos]",
           description:
-            "Target platform; when not given, all platforms are bundled",
+            "Target platform. When not given, all platforms in the kit configuration are bundled.",
           parse: parsePlatform,
         },
         {
           name: "--entry-path [file]",
           description:
-            "Path to the root JS file, either absolute or relative to the package",
+            "Path to the root JavaScript file, either absolute or relative to the kit package.",
         },
         {
           name: "--dist-path [path]",
           description:
-            "Path where the bundle is written, either absolute or relative to the package",
+            "Path where the bundle is written, either absolute or relative to the kit package.",
         },
         {
           name: "--assets-path [path]",
           description:
-            "Path where bundle assets like images are written, either absolute or relative to the package",
+            "Path where bundle assets like images are written, either absolute or relative to the kit package.",
         },
         {
           name: "--bundle-prefix [prefix]",
           description:
-            "Bundle file prefix, followed by the platform and bundle file extension",
+            "Bundle file prefix. This is followed by the platform and bundle file extension.",
         },
         {
-          name: "--bundle-encoding [string]",
+          name: "--bundle-encoding [utf8|utf16le|ascii]",
           description:
-            "Encoding the bundle should be written in (https://nodejs.org/api/buffer.html#buffer_buffers_and_character_encodings).",
+            "Character encoding to use when writing the bundle file.",
         },
         {
           name: "--transformer [string]",
-          description: "Specify a custom transformer to be used",
+          description: "Specify a custom transformer to be used.",
         },
         {
           name: "--dev [boolean]",
           description:
-            "If false, warnings are disabled and the bundle is minified",
+            "If false, warnings are disabled and the bundle is minified.",
           default: true,
           parse: parseBoolean,
         },
         {
           name: "--minify [boolean]",
           description:
-            "Allows overriding whether bundle is minified. Disabling minification can be useful for speeding up production builds for testing purposes.",
+            "Controls whether or not the bundle is minified. Disabling minification is useful for test builds.",
           parse: parseBoolean,
         },
         {
           name: "--max-workers [number]",
           description:
-            "Specifies the maximum number of workers the worker-pool will spawn for transforming files. This defaults to the number of the cores available on your machine.",
+            "Specifies the maximum number of parallel worker threads to use for transforming files. This defaults to the number of cores available on your machine.",
           parse: parseInt,
         },
         {
           name: "--sourcemap-output [string]",
           description:
-            "Path to the bundle source map, either absolute or relative to the dist-path.",
+            "Path where the bundle source map is written, either absolute or relative to the dist-path.",
         },
         {
           name: "--sourcemap-sources-root [string]",
           description:
-            "Path to use when relativizing entries in the bundle source map.",
-        },
-        {
-          name: "--sourcemap-use-absolute-path",
-          description: "Report SourceMapURL using its full path",
+            "Path to use when relativizing file entries in the bundle source map.",
         },
         {
           name: "--reset-cache",
-          description: "Removes cached files",
-        },
-        {
-          name: "--read-global-cache",
-          description:
-            "Try to fetch transformed JS code from the global cache, if configured.",
+          description: "Reset the Metro cache.",
         },
         {
           name: "--config [string]",
-          description: "Path to the metro CLI configuration file",
+          description: "Path to the Metro configuration file.",
         },
         {
           name: "--verbose",
-          description: "Turn on verbose output",
+          description: "Turn on verbose output.",
           default: false,
         },
       ],
