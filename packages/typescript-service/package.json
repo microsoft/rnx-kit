@@ -15,6 +15,7 @@
   },
   "scripts": {
     "build": "rnx-kit-scripts build",
+    "format": "rnx-kit-scripts format",
     "test": "rnx-kit-scripts test"
   },
   "dependencies": {

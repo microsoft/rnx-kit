@@ -14,7 +14,7 @@
   },
   "scripts": {
     "build": "rnx-kit-scripts build",
-    "format": "prettier --write src/*.js"
+    "format": "rnx-kit-scripts format"
   },
   "dependencies": {
     "@babel/core": "^7.0.0",

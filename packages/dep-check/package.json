@@ -19,7 +19,7 @@
   },
   "scripts": {
     "build": "rnx-kit-scripts build",
-    "format": "prettier --write DESIGN.md README.md src/*.ts test/*.ts",
+    "format": "rnx-kit-scripts format",
     "test": "rnx-kit-scripts test",
     "update-readme": "node scripts/update-readme.js"
   },
