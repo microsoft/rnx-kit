@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/dep-check
 
-This log was last generated on Thu, 01 Jul 2021 13:59:39 GMT and should not be manually modified.
+This log was last generated on Fri, 09 Jul 2021 12:17:59 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 1.5.11
+
+Fri, 09 Jul 2021 12:17:59 GMT
+
+### Patches
+
+- Bump checkbox and test-app to latest (4123478+tido64@users.noreply.github.com)
 
 ## 1.5.10
 

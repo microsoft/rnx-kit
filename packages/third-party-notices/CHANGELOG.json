@@ -2,6 +2,36 @@
   "name": "@rnx-kit/third-party-notices",
   "entries": [
     {
+      "date": "Fri, 09 Jul 2021 12:23:47 GMT",
+      "tag": "@rnx-kit/third-party-notices_v1.0.1",
+      "version": "1.0.1",
+      "comments": {
+        "none": [
+          {
+            "comment": "Add badges for build status and version",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "2dc9fe456410eed10abbfa464ae7aa7e5cef7aef",
+            "package": "@rnx-kit/third-party-notices"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Fri, 09 Jul 2021 12:23:07 GMT",
+      "tag": "@rnx-kit/third-party-notices_v1.0.1",
+      "version": "1.0.1",
+      "comments": {
+        "none": [
+          {
+            "comment": "Add badges for build status and version",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "f3ff6e5f5c20cf9e8c81ca25a4fae3f483925c59",
+            "package": "@rnx-kit/third-party-notices"
+          }
+        ]
+      }
+    },
+    {
       "date": "Wed, 23 Jun 2021 09:28:25 GMT",
       "tag": "@rnx-kit/third-party-notices_v1.0.1",
       "version": "1.0.1",

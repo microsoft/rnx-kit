@@ -1,5 +1,8 @@
 # @rnx-kit/metro-config
 
+[![Build](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml/badge.svg)](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml)
+[![npm version](https://img.shields.io/npm/v/@rnx-kit/metro-config)](https://www.npmjs.com/package/@rnx-kit/metro-config)
+
 `@rnx-kit/metro-config` provides helper functions for creating a Metro config
 that works in a monorepo.
 
@@ -80,8 +83,8 @@ will come with such helpers.
 If you're feeling adventurous, you can try an experimental Metro serializer
 we've built that adds support for tree shaking:
 [@rnx-kit/metro-serializer-esbuild](https://github.com/microsoft/rnx-kit/tree/main/packages/metro-serializer-esbuild#readme).
-Do note that you will need to be on React Native 0.64 or above, and use an as
-yet unreleased version of Metro.
+Do note that you will need to be on React Native 0.64 or above, and use Metro
+0.66.1.
 
 ### Plugins
 

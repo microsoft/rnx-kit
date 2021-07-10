@@ -2,6 +2,66 @@
   "name": "@rnx-kit/dep-check",
   "entries": [
     {
+      "date": "Fri, 09 Jul 2021 12:23:47 GMT",
+      "tag": "@rnx-kit/dep-check_v1.5.11",
+      "version": "1.5.11",
+      "comments": {
+        "none": [
+          {
+            "comment": "Bump @rnx-kit/dep-check to v1.5.11",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "2dc9fe456410eed10abbfa464ae7aa7e5cef7aef",
+            "package": "@rnx-kit/dep-check"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Fri, 09 Jul 2021 12:23:07 GMT",
+      "tag": "@rnx-kit/dep-check_v1.5.11",
+      "version": "1.5.11",
+      "comments": {
+        "none": [
+          {
+            "comment": "Bump @rnx-kit/dep-check to v1.5.11",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "f3ff6e5f5c20cf9e8c81ca25a4fae3f483925c59",
+            "package": "@rnx-kit/dep-check"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Fri, 09 Jul 2021 12:21:45 GMT",
+      "tag": "@rnx-kit/dep-check_v1.5.11",
+      "version": "1.5.11",
+      "comments": {
+        "none": [
+          {
+            "comment": "Bump @rnx-kit/dep-check to v1.5.11",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "ea2c03568d7e64c763b9883072a7a75d5a445953",
+            "package": "@rnx-kit/dep-check"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Fri, 09 Jul 2021 12:17:59 GMT",
+      "tag": "@rnx-kit/dep-check_v1.5.11",
+      "version": "1.5.11",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Bump checkbox and test-app to latest",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "10beb208470cb3d1c8de4c12a829da41dbf8983a",
+            "package": "@rnx-kit/dep-check"
+          }
+        ]
+      }
+    },
+    {
       "date": "Mon, 05 Jul 2021 15:15:06 GMT",
       "tag": "@rnx-kit/dep-check_v1.5.10",
       "version": "1.5.10",

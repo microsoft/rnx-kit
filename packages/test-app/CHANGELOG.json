@@ -2,6 +2,81 @@
   "name": "@rnx-kit/test-app",
   "entries": [
     {
+      "date": "Fri, 09 Jul 2021 14:18:15 GMT",
+      "tag": "@rnx-kit/test-app_v0.0.1",
+      "version": "0.0.1",
+      "comments": {
+        "none": [
+          {
+            "comment": "Bump @rnx-kit/test-app to v0.0.1",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "a650a6ce4992a6245eb26bfec1f7cef7dcfcba4a",
+            "package": "@rnx-kit/test-app"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Fri, 09 Jul 2021 12:23:47 GMT",
+      "tag": "@rnx-kit/test-app_v0.0.1",
+      "version": "0.0.1",
+      "comments": {
+        "none": [
+          {
+            "comment": "Bump @rnx-kit/test-app to v0.0.1",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "2dc9fe456410eed10abbfa464ae7aa7e5cef7aef",
+            "package": "@rnx-kit/test-app"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Fri, 09 Jul 2021 12:23:07 GMT",
+      "tag": "@rnx-kit/test-app_v0.0.1",
+      "version": "0.0.1",
+      "comments": {
+        "none": [
+          {
+            "comment": "Bump @rnx-kit/test-app to v0.0.1",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "f3ff6e5f5c20cf9e8c81ca25a4fae3f483925c59",
+            "package": "@rnx-kit/test-app"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Fri, 09 Jul 2021 12:21:45 GMT",
+      "tag": "@rnx-kit/test-app_v0.0.1",
+      "version": "0.0.1",
+      "comments": {
+        "none": [
+          {
+            "comment": "Bump @rnx-kit/test-app to v0.0.1",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "ea2c03568d7e64c763b9883072a7a75d5a445953",
+            "package": "@rnx-kit/test-app"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Fri, 09 Jul 2021 12:17:59 GMT",
+      "tag": "@rnx-kit/test-app_v0.0.1",
+      "version": "0.0.1",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Bump @rnx-kit/test-app to v0.0.1",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "10beb208470cb3d1c8de4c12a829da41dbf8983a",
+            "package": "@rnx-kit/test-app"
+          }
+        ]
+      }
+    },
+    {
       "date": "Thu, 08 Jul 2021 11:40:27 GMT",
       "tag": "@rnx-kit/test-app_v0.0.1",
       "version": "0.0.1",

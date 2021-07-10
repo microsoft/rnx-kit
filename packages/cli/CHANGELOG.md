@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/cli
 
-This log was last generated on Thu, 01 Jul 2021 13:59:39 GMT and should not be manually modified.
+This log was last generated on Fri, 09 Jul 2021 12:17:59 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 0.5.31
+
+Fri, 09 Jul 2021 12:17:59 GMT
+
+### Patches
+
+- Bump @rnx-kit/cli to v0.5.31 (4123478+tido64@users.noreply.github.com)
 
 ## 0.5.30
 

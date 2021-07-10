@@ -2,6 +2,51 @@
   "name": "@rnx-kit/metro-config",
   "entries": [
     {
+      "date": "Fri, 09 Jul 2021 14:18:15 GMT",
+      "tag": "@rnx-kit/metro-config_v1.2.1",
+      "version": "1.2.1",
+      "comments": {
+        "none": [
+          {
+            "comment": "Updated READMEs to mention that metro-serializer-esbuild requires Metro 0.66.1",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "a650a6ce4992a6245eb26bfec1f7cef7dcfcba4a",
+            "package": "@rnx-kit/metro-config"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Fri, 09 Jul 2021 12:23:47 GMT",
+      "tag": "@rnx-kit/metro-config_v1.2.1",
+      "version": "1.2.1",
+      "comments": {
+        "none": [
+          {
+            "comment": "Bump @rnx-kit/metro-config to v1.2.1",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "2dc9fe456410eed10abbfa464ae7aa7e5cef7aef",
+            "package": "@rnx-kit/metro-config"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Fri, 09 Jul 2021 12:23:07 GMT",
+      "tag": "@rnx-kit/metro-config_v1.2.1",
+      "version": "1.2.1",
+      "comments": {
+        "none": [
+          {
+            "comment": "Bump @rnx-kit/metro-config to v1.2.1",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "f3ff6e5f5c20cf9e8c81ca25a4fae3f483925c59",
+            "package": "@rnx-kit/metro-config"
+          }
+        ]
+      }
+    },
+    {
       "date": "Thu, 08 Jul 2021 09:26:30 GMT",
       "tag": "@rnx-kit/metro-config_v1.2.1",
       "version": "1.2.1",

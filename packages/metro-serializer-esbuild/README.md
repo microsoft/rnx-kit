@@ -1,18 +1,39 @@
 # @rnx-kit/metro-serializer-esbuild
 
+[![Build](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml/badge.svg)](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml)
+![This plugin is highly experimental](https://img.shields.io/badge/state-experimental-critical)
+[![npm version](https://img.shields.io/npm/v/@rnx-kit/metro-serializer-esbuild)](https://www.npmjs.com/package/@rnx-kit/metro-serializer-esbuild)
+
 ⚠️ **THIS PLUGIN IS HIGHLY EXPERIMENTAL** ⚠️
 
 Allow Metro to use [esbuild](https://esbuild.github.io) for bundling and
 serialization.
 
+## Motivation
+
+Metro currently does not implement tree shaking, i.e. it does not attempt to
+remove unused code from the JS bundle. For instance, given this code snippet:
+
+```ts
+import { partition } from "lodash";
+```
+
+Metro will bundle all of `lodash` in your bundle even though you're only using a
+small part of it. In `lodash`'s case, you can add
+[`babel-plugin-lodash`](https://github.com/lodash/babel-plugin-lodash#readme) to
+your Babel config to help Metro strip away some modules, but not all libraries
+will come with such helpers. For more details, see issues
+[#227](https://github.com/facebook/metro/issues/227) and
+[#632](https://github.com/facebook/metro/issues/632).
+
+metro-serializer-esbuild addresses this by letting esbuild take over bundling.
+
 ## Requirements
 
-This plugin currently depends on some unstable features in an as yet unreleased
-version of Metro. The following features are presumed to exist in some form in
-0.67 (or later), but no guarantees are made.
-
-- [`transformer.unstable_disableModuleWrapping`](https://github.com/facebook/metro/commit/598de6f537f4d7286cee89094bcdb7101e8e4f17)
-- [`transformer.unstable_disableNormalizePseudoGlobals`](https://github.com/facebook/metro/commit/5b913fa0cd30ce5b90e2b1f6318454fbdd170708)
+This plugin currently depends on some unstable features introduced in Metro
+[0.66.1](https://github.com/facebook/metro/releases/tag/v0.66.1). Breaking
+changes were introduced in Metro 0.60, so this plugin will not work with React
+Native below 0.64.
 
 ## Usage
 
