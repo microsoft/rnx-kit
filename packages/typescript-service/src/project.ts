@@ -99,11 +99,11 @@ export class Project {
     );
   }
 
-  getConfig() {
+  getConfig(): ProjectConfig {
     return this.projectConfig;
   }
 
-  warmup() {
+  warmup(): void {
     this.languageService.getProgram();
   }
 
@@ -142,19 +142,19 @@ export class Project {
     return result;
   }
 
-  addFile(fileName: string) {
+  addFile(fileName: string): void {
     this.projectFiles.add(fileName);
   }
 
-  updateFile(fileName: string, snapshot?: ts.IScriptSnapshot) {
+  updateFile(fileName: string, snapshot?: ts.IScriptSnapshot): void {
     this.projectFiles.update(fileName, snapshot);
   }
 
-  removeFile(fileName: string) {
+  removeFile(fileName: string): void {
     this.projectFiles.delete(fileName);
   }
 
-  dispose() {
+  dispose(): void {
     this.languageService.dispose();
 
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment

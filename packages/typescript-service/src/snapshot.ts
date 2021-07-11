@@ -23,7 +23,7 @@ export class VersionedSnapshot {
     return this.snapshot;
   }
 
-  update(snapshot?: ts.IScriptSnapshot) {
+  update(snapshot?: ts.IScriptSnapshot): void {
     this.version++;
     this.snapshot = snapshot;
   }
