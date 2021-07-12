@@ -137,8 +137,12 @@ export async function rnxBundle(
       sourceMapSourceRootPath,
       sourceMapUseAbsolutePaths,
     } = platformDefinition;
-    const { detectCyclicDependencies, detectDuplicateDependencies } =
-      platformDefinition;
+
+    const {
+      detectCyclicDependencies,
+      detectDuplicateDependencies,
+      experimental_treeShake,
+    } = platformDefinition;
 
     //  apply command-line overrides to the platform-specific bundle definition
     entryPath = cliBundleOptions.entryPath ?? entryPath;
@@ -173,7 +177,8 @@ export async function rnxBundle(
     customizeMetroConfig(
       metroConfig,
       detectCyclicDependencies,
-      detectDuplicateDependencies
+      detectDuplicateDependencies,
+      experimental_treeShake
     );
 
     //  ensure all output directories exist

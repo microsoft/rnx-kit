@@ -1,0 +1,7 @@
+{
+  "type": "patch",
+  "comment": "Added flag for enabling experimental tree shake",
+  "packageName": "@rnx-kit/config",
+  "email": "4123478+tido64@users.noreply.github.com",
+  "dependentChangeType": "patch"
+}

@@ -1,4 +1,3 @@
-import type { ConfigT, InputConfigT, SerializerConfigT } from "metro-config";
 import {
   CyclicDependencies,
   PluginOptions as CyclicDetectorOptions,
@@ -8,6 +7,8 @@ import {
   Options as DuplicateDetectorOptions,
 } from "@rnx-kit/metro-plugin-duplicates-checker";
 import { MetroSerializer, MetroPlugin } from "@rnx-kit/metro-serializer";
+import { MetroSerializer as MetroSerializerEsbuild } from "@rnx-kit/metro-serializer-esbuild";
+import type { ConfigT, InputConfigT, SerializerConfigT } from "metro-config";
 
 function reportError(prop: string) {
   console.error(
@@ -32,7 +33,8 @@ export function validateMetroConfig(metroConfig: ConfigT): boolean {
 export function customizeMetroConfig(
   metroConfigReadonly: InputConfigT,
   detectCyclicDependencies: boolean | CyclicDetectorOptions,
-  detectDuplicateDependencies: boolean | DuplicateDetectorOptions
+  detectDuplicateDependencies: boolean | DuplicateDetectorOptions,
+  experimental_treeShake: boolean
 ): void {
   //  We will be making changes to the Metro configuration. Coerce from a
   //  type with readonly props to a type where the props are writeable.
@@ -61,9 +63,9 @@ export function customizeMetroConfig(
     //
     //  Since it can handle either scenario, just coerce it to whatever
     //  the current version of Metro expects.
-    const serializer = MetroSerializer(
-      plugins
-    ) as SerializerConfigT["customSerializer"];
+    const serializer = experimental_treeShake
+      ? MetroSerializerEsbuild(plugins)
+      : (MetroSerializer(plugins) as SerializerConfigT["customSerializer"]);
 
     metroConfig.serializer.customSerializer = serializer;
   } else {
