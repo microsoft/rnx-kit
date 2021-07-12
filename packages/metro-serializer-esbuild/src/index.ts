@@ -40,7 +40,7 @@ function fixSourceMap(outputPath: string, text: string): string {
     path.resolve(sourceRoot, file)
   );
 
-  return JSON.stringify({ ...sourcemap, sources }, undefined, 2);
+  return JSON.stringify({ ...sourcemap, sources });
 }
 
 function isRedundantPolyfill(modulePath: string): boolean {
