@@ -25,6 +25,24 @@ function escapePath(path: string): string {
   return path.replace(/\\+/g, "\\\\");
 }
 
+function fixSourceMap(outputPath: string, text: string): string {
+  const path = require("path");
+
+  /**
+   * All paths in the source map are relative to the directory
+   * containing the source map.
+   *
+   * See https://esbuild.github.io/api/#source-root
+   */
+  const sourceRoot = path.dirname(outputPath);
+  const sourcemap = JSON.parse(text);
+  const sources = sourcemap.sources.map((file: string) =>
+    path.resolve(sourceRoot, file)
+  );
+
+  return JSON.stringify({ ...sourcemap, sources });
+}
+
 function isRedundantPolyfill(modulePath: string): boolean {
   // __prelude__: The content of `__prelude__` is passed to esbuild with `define`
   // polyfills/require.js: `require` is already provided by esbuild
@@ -49,7 +67,7 @@ export function MetroSerializer(
     preModules: ReadonlyArray<Module>,
     graph: Graph,
     options: SerializerOptions
-  ): Promise<string> => {
+  ): ReturnType<Required<SerializerConfigT>["customSerializer"]> => {
     plugins.forEach((plugin) => plugin(entryPoint, preModules, graph, options));
 
     const { dependencies } = graph;
@@ -143,6 +161,13 @@ export function MetroSerializer(
 
     const lodashTransformer = require("esbuild-plugin-lodash");
 
+    // `outfile` is only meant to give esbuild a name it can use to generate
+    // the sourcemap and insert it into `BuildResult["outputFiles"]`. We've
+    // disabled writing to disk by setting `write: false`. Metro will handle
+    // the rest after we return code + sourcemap.
+    const outfile = "main.jsbundle";
+    const sourcemapfile = outfile + ".map";
+
     return esbuild
       .build({
         bundle: true,
@@ -167,13 +192,22 @@ export function MetroSerializer(
         legalComments: "none",
         logLevel: buildOptions?.logLevel ?? "error",
         minify: buildOptions?.minify ?? !options.dev,
+        outfile,
         plugins: [metroPlugin, lodashTransformer()],
+        sourcemap: "external",
         write: false,
       })
       .then(({ outputFiles }: BuildResult) => {
-        const output = outputFiles?.[0].text ?? "";
-        info("esbuild bundle size:", output.length);
-        return output;
+        const result = { code: "", map: "" };
+        outputFiles?.forEach(({ path: outputPath, text }) => {
+          if (outputPath === "<stdout>" || outputPath.endsWith(outfile)) {
+            result.code = text;
+          } else if (outputPath.endsWith(sourcemapfile)) {
+            result.map = fixSourceMap(outputPath, text);
+          }
+        });
+        info("esbuild bundle size:", result.code.length);
+        return result;
       });
   };
 }
