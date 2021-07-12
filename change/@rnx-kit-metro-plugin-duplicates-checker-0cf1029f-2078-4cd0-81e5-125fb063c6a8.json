@@ -1,0 +1,7 @@
+{
+  "type": "patch",
+  "comment": "Publish plugin options type",
+  "packageName": "@rnx-kit/metro-plugin-duplicates-checker",
+  "email": "afoxman@microsoft.com",
+  "dependentChangeType": "patch"
+}

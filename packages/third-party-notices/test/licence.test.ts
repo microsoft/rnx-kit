@@ -39,7 +39,7 @@ describe("license", () => {
     // normalize the paths for stable and cross platform snapshots
     for (let license of licenses) {
       license.path = license.path
-        .replace(path.resolve(__dirname, "../../../.."), "~")
+        .replace(path.resolve(__dirname, "../../.."), "~")
         .replace(/[/\\]/g, "/");
     }
 
