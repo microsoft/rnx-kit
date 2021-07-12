@@ -11,6 +11,7 @@ import {
 } from "./checkForDuplicatePackages";
 
 export { checkForDuplicatePackages };
+export type { Options };
 
 export function checkForDuplicatePackagesInFile(
   sourceMap: string,

@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/config
 
-This log was last generated on Fri, 04 Jun 2021 12:36:37 GMT and should not be manually modified.
+This log was last generated on Mon, 12 Jul 2021 07:51:46 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 0.3.0
+
+Mon, 12 Jul 2021 07:51:46 GMT
+
+### Minor changes
+
+- Bump @rnx-kit/config to v0.3.0 (afoxman@microsoft.com)
 
 ## 0.2.9
 

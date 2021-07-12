@@ -15,7 +15,7 @@
     "directory": "packages/eslint-config"
   },
   "scripts": {
-    "format": "prettier --write index.js"
+    "format": "rnx-kit-scripts format"
   },
   "dependencies": {
     "@typescript-eslint/eslint-plugin": "^4.28.0",

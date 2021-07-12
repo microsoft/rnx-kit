@@ -1,4 +1,6 @@
 import type { OutputOptions } from "metro";
+import type { PluginOptions as CyclicDetectorOptions } from "@rnx-kit/metro-plugin-cyclic-dependencies-detector";
+import type { Options as DuplicateDetectorOptions } from "@rnx-kit/metro-plugin-duplicates-checker";
 
 /**
  * List of supported kit platforms.
@@ -40,6 +42,36 @@ export type BundleRequiredParameters = {
    * @default "index"
    */
   bundlePrefix: string;
+
+  /**
+   * Choose whether to detect cycles in the dependency graph. If true, then a default set
+   * of options will be used. Otherwise the object allows for fine-grained control over
+   * the detection process.
+   *
+   * @default true
+   */
+  detectCyclicDependencies: boolean | CyclicDetectorOptions;
+
+  /**
+   * Choose whether to detect duplicate packages in the dependency graph.
+   *
+   * A duplicate error happens when a package is imported from two or more unique paths,
+   * even if the versions are all the same. Duplicate packages increase bundle size and
+   * can lead to unexpected errors.
+   *
+   * If true, then a default set of options will be used. Otherwise the object allows for
+   * fine-grained control over the detection process.
+   *
+   * @default true
+   */
+  detectDuplicateDependencies: boolean | DuplicateDetectorOptions;
+
+  /**
+   * Choose whether to type-check source files using TypeScript.
+   *
+   * @default true
+   */
+  typescriptValidation: boolean;
 };
 
 export type BundleParameters = Partial<BundleRequiredParameters> & {

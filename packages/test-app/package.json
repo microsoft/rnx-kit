@@ -5,6 +5,7 @@
   "scripts": {
     "build": "rnx-kit-scripts build",
     "depcheck": "react-native rnx-dep-check && rnx-kit-scripts depcheck",
+    "format": "rnx-kit-scripts format",
     "lint": "rnx-kit-scripts lint",
     "test": "rnx-kit-scripts test",
     "bundle": "react-native rnx-bundle",
@@ -60,6 +61,13 @@
       "distPath": "dist",
       "assetsPath": "dist",
       "bundlePrefix": "main",
+      "detectCyclicDependencies": true,
+      "detectDuplicateDependencies": {
+        "ignoredModules": [
+          "react-is"
+        ]
+      },
+      "typescriptValidation": true,
       "targets": [
         "android",
         "ios",
@@ -75,6 +83,7 @@
       "core-android",
       "core-ios",
       "core-windows",
+      "react",
       "test-app"
     ]
   }

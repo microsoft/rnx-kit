@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/metro-plugin-cyclic-dependencies-detector",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Cyclic dependencies detector for Metro",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/metro-plugin-cyclic-dependencies-detector#readme",
   "license": "MIT",
@@ -15,7 +15,8 @@
   },
   "scripts": {
     "build": "rnx-kit-scripts build",
-    "format": "prettier --write src/*.ts test/*.ts",
+    "format": "rnx-kit-scripts format",
+    "lint": "rnx-kit-scripts lint",
     "test": "rnx-kit-scripts test"
   },
   "dependencies": {

@@ -2,6 +2,66 @@
   "name": "@rnx-kit/metro-plugin-duplicates-checker",
   "entries": [
     {
+      "date": "Mon, 12 Jul 2021 09:53:10 GMT",
+      "tag": "@rnx-kit/metro-plugin-duplicates-checker_v1.1.3",
+      "version": "1.1.3",
+      "comments": {
+        "none": [
+          {
+            "comment": "Bump @rnx-kit/metro-plugin-duplicates-checker to v1.1.3",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "d5c36bb21e3482c24ff8b029cb60802d04e6bb64",
+            "package": "@rnx-kit/metro-plugin-duplicates-checker"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Mon, 12 Jul 2021 07:51:46 GMT",
+      "tag": "@rnx-kit/metro-plugin-duplicates-checker_v1.1.3",
+      "version": "1.1.3",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Publish plugin options type",
+            "author": "afoxman@microsoft.com",
+            "commit": "021cfdb3fe726b76a377b2a6cccbe16a6999bf7a",
+            "package": "@rnx-kit/metro-plugin-duplicates-checker"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Sat, 10 Jul 2021 07:28:45 GMT",
+      "tag": "@rnx-kit/metro-plugin-duplicates-checker_v1.1.2",
+      "version": "1.1.2",
+      "comments": {
+        "none": [
+          {
+            "comment": "Bump @rnx-kit/metro-plugin-duplicates-checker to v1.1.2",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "eaedb2cae443a479e131cfd71fab5c1039daca9d",
+            "package": "@rnx-kit/metro-plugin-duplicates-checker"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Sat, 10 Jul 2021 07:28:25 GMT",
+      "tag": "@rnx-kit/metro-plugin-duplicates-checker_v1.1.2",
+      "version": "1.1.2",
+      "comments": {
+        "none": [
+          {
+            "comment": "Bump @rnx-kit/metro-plugin-duplicates-checker to v1.1.2",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "12196abcec79794493615829c3783d35f5bfc364",
+            "package": "@rnx-kit/metro-plugin-duplicates-checker"
+          }
+        ]
+      }
+    },
+    {
       "date": "Fri, 09 Jul 2021 12:23:47 GMT",
       "tag": "@rnx-kit/metro-plugin-duplicates-checker_v1.1.2",
       "version": "1.1.2",

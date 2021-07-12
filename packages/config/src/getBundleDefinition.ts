@@ -31,6 +31,9 @@ export function getBundleDefinition(
     distPath: "dist",
     assetsPath: "dist",
     bundlePrefix: "index",
+    detectCyclicDependencies: true,
+    detectDuplicateDependencies: true,
+    typescriptValidation: true,
   };
   if (typeof config === "boolean") {
     return defaultDefinition;
