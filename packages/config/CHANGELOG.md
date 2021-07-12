@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/config
 
-This log was last generated on Mon, 12 Jul 2021 07:51:46 GMT and should not be manually modified.
+This log was last generated on Mon, 12 Jul 2021 17:30:15 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 0.3.1
+
+Mon, 12 Jul 2021 17:30:15 GMT
+
+### Patches
+
+- Added flag for enabling experimental tree shake (4123478+tido64@users.noreply.github.com)
 
 ## 0.3.0
 
