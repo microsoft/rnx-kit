@@ -2,6 +2,21 @@
   "name": "@rnx-kit/config",
   "entries": [
     {
+      "date": "Mon, 12 Jul 2021 09:53:10 GMT",
+      "tag": "@rnx-kit/config_v0.3.0",
+      "version": "0.3.0",
+      "comments": {
+        "none": [
+          {
+            "comment": "Bump @rnx-kit/config to v0.3.0",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "d5c36bb21e3482c24ff8b029cb60802d04e6bb64",
+            "package": "@rnx-kit/config"
+          }
+        ]
+      }
+    },
+    {
       "date": "Mon, 12 Jul 2021 07:51:46 GMT",
       "tag": "@rnx-kit/config_v0.3.0",
       "version": "0.3.0",

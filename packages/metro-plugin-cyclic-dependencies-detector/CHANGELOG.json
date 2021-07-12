@@ -2,6 +2,21 @@
   "name": "@rnx-kit/metro-plugin-cyclic-dependencies-detector",
   "entries": [
     {
+      "date": "Mon, 12 Jul 2021 09:53:10 GMT",
+      "tag": "@rnx-kit/metro-plugin-cyclic-dependencies-detector_v1.0.3",
+      "version": "1.0.3",
+      "comments": {
+        "none": [
+          {
+            "comment": "Bump @rnx-kit/metro-plugin-cyclic-dependencies-detector to v1.0.3",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "d5c36bb21e3482c24ff8b029cb60802d04e6bb64",
+            "package": "@rnx-kit/metro-plugin-cyclic-dependencies-detector"
+          }
+        ]
+      }
+    },
+    {
       "date": "Mon, 12 Jul 2021 07:51:46 GMT",
       "tag": "@rnx-kit/metro-plugin-cyclic-dependencies-detector_v1.0.3",
       "version": "1.0.3",

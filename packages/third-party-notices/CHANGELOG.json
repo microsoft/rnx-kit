@@ -2,6 +2,21 @@
   "name": "@rnx-kit/third-party-notices",
   "entries": [
     {
+      "date": "Mon, 12 Jul 2021 09:53:10 GMT",
+      "tag": "@rnx-kit/third-party-notices_v1.0.1",
+      "version": "1.0.1",
+      "comments": {
+        "none": [
+          {
+            "comment": "Added `lint` script",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "d5c36bb21e3482c24ff8b029cb60802d04e6bb64",
+            "package": "@rnx-kit/third-party-notices"
+          }
+        ]
+      }
+    },
+    {
       "date": "Mon, 12 Jul 2021 07:51:46 GMT",
       "tag": "@rnx-kit/third-party-notices_v1.0.1",
       "version": "1.0.1",
