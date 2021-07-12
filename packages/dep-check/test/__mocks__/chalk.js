@@ -4,6 +4,9 @@ function passthrough(s) {
   return s;
 }
 
+chalk.bold = passthrough;
+chalk.cyan = passthrough;
+chalk.cyan.bold = passthrough;
 chalk.dim = passthrough;
 chalk.green = passthrough;
 chalk.red = passthrough;

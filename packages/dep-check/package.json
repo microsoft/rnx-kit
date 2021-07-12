@@ -20,6 +20,7 @@
   "scripts": {
     "build": "rnx-kit-scripts build",
     "format": "rnx-kit-scripts format",
+    "lint": "rnx-kit-scripts lint",
     "test": "rnx-kit-scripts test",
     "update-readme": "node scripts/update-readme.js"
   },
