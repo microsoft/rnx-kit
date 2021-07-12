@@ -2,6 +2,21 @@
   "name": "@rnx-kit/dep-check",
   "entries": [
     {
+      "date": "Mon, 12 Jul 2021 08:34:12 GMT",
+      "tag": "@rnx-kit/dep-check_v1.5.13",
+      "version": "1.5.13",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Added link to documentation in output",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "10e9415e4120495665d6f3448d89948eacc100b8",
+            "package": "@rnx-kit/dep-check"
+          }
+        ]
+      }
+    },
+    {
       "date": "Mon, 12 Jul 2021 07:51:46 GMT",
       "tag": "@rnx-kit/dep-check_v1.5.12",
       "version": "1.5.12",
