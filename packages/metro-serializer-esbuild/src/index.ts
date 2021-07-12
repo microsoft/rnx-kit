@@ -195,7 +195,7 @@ export function MetroSerializer(
       .then(({ outputFiles }: BuildResult) => {
         const result = { code: "", map: "" };
         outputFiles?.forEach(({ path: outputPath, text }) => {
-          if (outputPath.endsWith(outfile)) {
+          if (outputPath === "<stdout>" || outputPath.endsWith(outfile)) {
             result.code = text;
           } else if (outputPath.endsWith(sourcemapfile)) {
             result.map = fixSourceMap(outputPath, text);
