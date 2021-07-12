@@ -169,7 +169,6 @@ export async function rnxBundle(
         maxWorkers,
         sourcemapOutput: sourceMapPath,
         sourcemapSourcesRoot: sourceMapSourceRootPath,
-        sourcemapUseAbsolutePath: false, // not actually used in Metro source code
         verbose,
         //unstableTransformProfile?: string;
       },
