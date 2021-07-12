@@ -35,9 +35,9 @@ jobs:
         run: yarn bundle:ci
       - name: Bundle packages with esbuild
         run: |
-          sed -i '' 's/"experimental_treeShake": false/"experimental_treeShake": true/' package.json
+          sed -i'' 's/"experimental_treeShake": false/"experimental_treeShake": true/' package.json
           yarn bundle+esbuild
-          sed -i '' 's/"experimental_treeShake": true/"experimental_treeShake": false/' package.json
+          sed -i'' 's/"experimental_treeShake": true/"experimental_treeShake": false/' package.json
         shell: bash
   review:
     name: "Review"
