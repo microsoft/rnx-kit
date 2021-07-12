@@ -33,12 +33,13 @@ jobs:
           git diff | GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} yarn suggestion-bot
       - name: Bundle packages
         run: yarn bundle:ci
-      - name: Bundle packages with esbuild
+      - name: Bundle test app with esbuild
         run: |
           sed -i'' 's/"experimental_treeShake": false/"experimental_treeShake": true/' package.json
           yarn bundle+esbuild
           sed -i'' 's/"experimental_treeShake": true/"experimental_treeShake": false/' package.json
         shell: bash
+        working-directory: packages/test-app
   review:
     name: "Review"
     runs-on: ubuntu-latest
