@@ -160,6 +160,11 @@ export function MetroSerializer(
     };
 
     const lodashTransformer = require("esbuild-plugin-lodash");
+
+    // `outfile` is only meant to give esbuild a name it can use to generate
+    // the sourcemap and insert it into `BuildResult["outputFiles"]`. We've
+    // disabled writing to disk by setting `write: false`. Metro will handle
+    // the rest after we return code + sourcemap.
     const outfile = "main.jsbundle";
     const sourcemapfile = outfile + ".map";
 
