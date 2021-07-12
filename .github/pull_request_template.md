@@ -25,7 +25,7 @@ Resolves #244.
     that your changes are working correctly.
   - Test any edge cases you can think of.
 
-  If changes to the local checkout is required for testing your PR, e.g.
+  If changes to the local checkout are required for testing your PR, e.g.
   bump `react-native` to a specific version, providing a diff your
   reviewers can apply will help a lot.
 -->

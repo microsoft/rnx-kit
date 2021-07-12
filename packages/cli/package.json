@@ -1,7 +1,7 @@
 {
   "name": "@rnx-kit/cli",
   "version": "0.5.33",
-  "description": "Command-line interface for rnx-kit",
+  "description": "Command-line interface for working with kit packages in your repo",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/cli",
   "license": "MIT",
   "main": "./lib/index.js",

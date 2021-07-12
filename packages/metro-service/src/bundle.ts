@@ -1,4 +1,3 @@
-import path from "path";
 import chalk from "chalk";
 
 import type { AssetData, OutputOptions } from "metro";
@@ -23,7 +22,6 @@ export interface BundleArgs {
   maxWorkers?: number;
   sourcemapOutput?: string;
   sourcemapSourcesRoot?: string;
-  sourcemapUseAbsolutePath: boolean;
   verbose: boolean;
   unstableTransformProfile?: TransformProfile;
 }
@@ -60,14 +58,9 @@ export async function bundle(args: BundleArgs, config: ConfigT): Promise<void> {
   // have other choice than defining it as an env variable here.
   process.env.NODE_ENV = args.dev ? "development" : "production";
 
-  let sourceMapUrl = args.sourcemapOutput;
-  if (sourceMapUrl && !args.sourcemapUseAbsolutePath) {
-    sourceMapUrl = path.basename(sourceMapUrl);
-  }
-
   const requestOpts: RequestOptions = {
     entryFile: args.entryFile,
-    sourceMapUrl,
+    sourceMapUrl: args.sourcemapOutput,
     dev: args.dev,
     minify: args.minify !== undefined ? args.minify : !args.dev,
     platform: args.platform,

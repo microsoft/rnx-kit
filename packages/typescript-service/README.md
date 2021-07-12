@@ -8,8 +8,8 @@ services, and lets you customize how module resolution occurs.
 
 ## Service
 
-`Service` is the starting point for using accessing TypeScript language
-services.. A process will typically only need one `Service`.
+`Service` is the starting point for accessing TypeScript language services. A
+process will typically only need one `Service`.
 
 The `Service` is used to open a `Project`.
 
