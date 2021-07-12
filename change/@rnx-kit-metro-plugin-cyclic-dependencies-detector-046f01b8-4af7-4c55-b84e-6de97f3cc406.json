@@ -1,7 +1,0 @@
-{
-  "type": "patch",
-  "comment": "Publish plugin options type",
-  "packageName": "@rnx-kit/metro-plugin-cyclic-dependencies-detector",
-  "email": "afoxman@microsoft.com",
-  "dependentChangeType": "patch"
-}

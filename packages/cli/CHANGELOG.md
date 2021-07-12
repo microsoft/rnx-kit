@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/cli
 
-This log was last generated on Fri, 09 Jul 2021 12:17:59 GMT and should not be manually modified.
+This log was last generated on Mon, 12 Jul 2021 07:51:46 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 0.5.32
+
+Mon, 12 Jul 2021 07:51:46 GMT
+
+### Patches
+
+- Bump @rnx-kit/cli to v0.5.32 (afoxman@microsoft.com)
 
 ## 0.5.31
 
