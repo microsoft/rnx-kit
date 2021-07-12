@@ -9,20 +9,21 @@ export class ProjectFileCache {
     fileNames.forEach((fileName) => this.add(fileName));
   }
 
-  add(fileName: string) {
+  add(fileName: string): void {
     const normalized = normalizePath(fileName);
     this.files.set(normalized, new VersionedSnapshot(normalized));
   }
 
-  update(fileName: string, snapshot?: ts.IScriptSnapshot) {
+  update(fileName: string, snapshot?: ts.IScriptSnapshot): void {
     const normalized = normalizePath(fileName);
-    if (!this.files.has(normalized)) {
+    const file = this.files.get(normalized);
+    if (!file) {
       throw new Error(`Cannot update unknown project file ${fileName}`);
     }
-    this.files.get(normalized)!.update(snapshot);
+    file.update(snapshot);
   }
 
-  delete(fileName: string) {
+  delete(fileName: string): void {
     const normalized = normalizePath(fileName);
     this.files.delete(normalized);
   }
@@ -48,10 +49,13 @@ export class ExternalFileCache {
 
   getSnapshot(fileName: string): ts.IScriptSnapshot {
     const normalized = normalizePath(fileName);
-    if (!this.files.has(normalized)) {
-      this.files.set(normalized, new VersionedSnapshot(normalized));
+
+    let file = this.files.get(normalized);
+    if (!file) {
+      file = new VersionedSnapshot(normalized);
+      this.files.set(normalized, file);
     }
 
-    return this.files.get(normalized)!.getSnapshot();
+    return file.getSnapshot();
   }
 }
