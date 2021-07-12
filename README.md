@@ -13,8 +13,6 @@ libraries.
   - [Licensing and Attribution](#Licensing-and-Attribution)
 - [Using Individual @rnx-kit Packages](#Using-Individual-rnx%2Dkit-Packages)
 - [Contributing](#Contributing)
-  - [Change Logs](#Change-Logs)
-  - [Releasing](#Releasing)
 
 ## The Basics
 
@@ -23,7 +21,10 @@ tools here aim to improve the developer experience throughout the lifecycle of
 React Native apps and libraries.
 
 An `rnx` is a **React Native user experience**. It's any code you've written
-using React Native. A `kit` is **the package you use to deliver this code**.
+using React Native. A `kit` is **the package you use to deliver this code**. For
+most common scenarios, such as a greenfield React Native app or a React Native
+libary, you can say that your project's folder is a `kit`, since you are writing
+the code and releasing it.
 
 A `kit` has
 [configuration](https://github.com/microsoft/rnx-kit/tree/main/packages/config)
@@ -144,38 +145,3 @@ for details.
 > building out the first "complete" version of `@rnx-kit`, supporting external
 > users is not currently a high priority, so we unfortunately cannot guarantee
 > prompt responses at this time.
-
-### Change Logs
-
-Each package in this monorepo contains a change log. The log is built from
-change descriptions submitted with each PR.
-
-```sh
-$ yarn change
-
-Checking for changes against "origin/main"
-fetching latest from remotes "origin/main"
-Found changes in the following packages:
-  @rnx-kit/cli
-  @rnx-kit/config
-  ...
-
-Please describe the changes for: @rnx-kit/cli
-? Change type › - Use arrow-keys. Return to submit.
-❯   Patch      - bug fixes; no API changes.
-    Minor      - small feature; backwards compatible API changes.
-    None       - this change does not affect the published package in any way.
-```
-
-Follow the prompts and describe the changes you are making to each package. This
-information is written in files under `/change`. Our CI loop uses these files to
-bump package versions and update package change logs. The entire process is
-coordinated by [Beachball](https://github.com/microsoft/beachball#beachball).
-
-### Releasing
-
-Our release process is fully automated by
-[Beachball](https://github.com/microsoft/beachball#beachball).
-
-When a PR is merged, our CI loop uses `Beachball` to version-bump each changed
-package and publish it to `npm`.
