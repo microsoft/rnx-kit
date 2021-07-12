@@ -2,7 +2,7 @@ import { info, warn } from "@rnx-kit/console";
 import type { MetroPlugin } from "@rnx-kit/metro-serializer";
 import type { BuildOptions, BuildResult, Plugin } from "esbuild";
 import * as esbuild from "esbuild";
-import type { Graph, Module, SerializerOptions } from "metro";
+import type { Dependencies, Graph, Module, SerializerOptions } from "metro";
 import type { SerializerConfigT } from "metro-config";
 import * as semver from "semver";
 
@@ -43,6 +43,16 @@ function fixSourceMap(outputPath: string, text: string): string {
   return JSON.stringify({ ...sourcemap, sources });
 }
 
+function isImporting(moduleName: string, dependencies: Dependencies): boolean {
+  const iterator = dependencies.keys();
+  for (let key = iterator.next(); !key.done; key = iterator.next()) {
+    if (key.value.includes(moduleName)) {
+      return true;
+    }
+  }
+  return false;
+}
+
 function isRedundantPolyfill(modulePath: string): boolean {
   // __prelude__: The content of `__prelude__` is passed to esbuild with `define`
   // polyfills/require.js: `require` is already provided by esbuild
@@ -57,7 +67,7 @@ function outputOf(module: Module | undefined): string | undefined {
  * esbuild bundler for Metro.
  */
 export function MetroSerializer(
-  plugins: MetroPlugin[] = [],
+  metroPlugins: MetroPlugin[] = [],
   buildOptions?: Options
 ): SerializerConfigT["customSerializer"] {
   assertVersion(">=0.66.1");
@@ -68,7 +78,9 @@ export function MetroSerializer(
     graph: Graph,
     options: SerializerOptions
   ): ReturnType<Required<SerializerConfigT>["customSerializer"]> => {
-    plugins.forEach((plugin) => plugin(entryPoint, preModules, graph, options));
+    metroPlugins.forEach((plugin) =>
+      plugin(entryPoint, preModules, graph, options)
+    );
 
     const { dependencies } = graph;
     const metroPlugin: Plugin = {
@@ -159,14 +171,18 @@ export function MetroSerializer(
       },
     };
 
-    const lodashTransformer = require("esbuild-plugin-lodash");
-
     // `outfile` is only meant to give esbuild a name it can use to generate
     // the sourcemap and insert it into `BuildResult["outputFiles"]`. We've
     // disabled writing to disk by setting `write: false`. Metro will handle
     // the rest after we return code + sourcemap.
     const outfile = "main.jsbundle";
     const sourcemapfile = outfile + ".map";
+
+    const plugins = [metroPlugin];
+    if (isImporting("lodash", dependencies)) {
+      const lodashTransformer = require("esbuild-plugin-lodash");
+      plugins.push(lodashTransformer());
+    }
 
     return esbuild
       .build({
@@ -193,7 +209,7 @@ export function MetroSerializer(
         logLevel: buildOptions?.logLevel ?? "error",
         minify: buildOptions?.minify ?? !options.dev,
         outfile,
-        plugins: [metroPlugin, lodashTransformer()],
+        plugins,
         sourcemap: "external",
         write: false,
       })
