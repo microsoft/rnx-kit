@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/metro-serializer-esbuild
 
-This log was last generated on Mon, 12 Jul 2021 17:30:15 GMT and should not be manually modified.
+This log was last generated on Mon, 12 Jul 2021 21:55:53 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 0.0.10
+
+Mon, 12 Jul 2021 21:55:53 GMT
+
+### Patches
+
+- Conditionally add lodash transformer (4123478+tido64@users.noreply.github.com)
 
 ## 0.0.9
 

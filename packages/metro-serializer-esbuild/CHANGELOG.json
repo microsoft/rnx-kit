@@ -2,6 +2,21 @@
   "name": "@rnx-kit/metro-serializer-esbuild",
   "entries": [
     {
+      "date": "Mon, 12 Jul 2021 21:55:53 GMT",
+      "tag": "@rnx-kit/metro-serializer-esbuild_v0.0.10",
+      "version": "0.0.10",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Conditionally add lodash transformer",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "0de555701c26b643e8c80457f105933e405b7e34",
+            "package": "@rnx-kit/metro-serializer-esbuild"
+          }
+        ]
+      }
+    },
+    {
       "date": "Mon, 12 Jul 2021 17:30:15 GMT",
       "tag": "@rnx-kit/metro-serializer-esbuild_v0.0.9",
       "version": "0.0.9",
