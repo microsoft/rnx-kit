@@ -25,7 +25,7 @@
     "semver": "^7.0.0"
   },
   "peerDependencies": {
-    "metro": ">=0.67.0"
+    "metro": ">=0.66.1"
   },
   "devDependencies": {
     "@rnx-kit/babel-preset-jest-typescript": "*",

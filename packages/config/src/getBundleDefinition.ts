@@ -34,6 +34,7 @@ export function getBundleDefinition(
     detectCyclicDependencies: true,
     detectDuplicateDependencies: true,
     typescriptValidation: true,
+    experimental_treeShake: false,
   };
   if (typeof config === "boolean") {
     return defaultDefinition;

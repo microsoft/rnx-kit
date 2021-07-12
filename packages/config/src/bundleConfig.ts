@@ -72,6 +72,15 @@ export type BundleRequiredParameters = {
    * @default true
    */
   typescriptValidation: boolean;
+
+  /**
+   * Choose whether to enable tree shaking.
+
+   * ⚠️ **THIS FEATURE IS HIGHLY EXPERIMENTAL** ⚠️
+   *
+   * @default false
+   */
+  experimental_treeShake: boolean;
 };
 
 export type BundleParameters = Partial<BundleRequiredParameters> & {
