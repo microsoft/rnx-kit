@@ -1,7 +1,7 @@
 # @rnx-kit/cli
 
 [![Build](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml/badge.svg)](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml)
-[![npm version](https://img.shields.io/npm/v/@rnx-kit/babel-plugin-import-path-remapper)](https://www.npmjs.com/package/@rnx-kit/babel-plugin-import-path-remapper)
+[![npm version](https://img.shields.io/npm/v/@rnx-kit/cli)](https://www.npmjs.com/package/@rnx-kit/cli)
 
 Command-line interface for working with `kit` packages in your repo.
 
