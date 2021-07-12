@@ -1,0 +1,7 @@
+{
+  "type": "patch",
+  "comment": "Conditionally add lodash transformer",
+  "packageName": "@rnx-kit/metro-serializer-esbuild",
+  "email": "4123478+tido64@users.noreply.github.com",
+  "dependentChangeType": "patch"
+}
