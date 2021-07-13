@@ -1,0 +1,7 @@
+{
+  "type": "patch",
+  "comment": "Remove dependency on mkdirp, and use nodejs \"fs\" instead. Add a tolerance when finding a matching scale factor for android. Move \"throw\" statement into scale search routine, so that it always returns a real value (or throws). Add tests.",
+  "packageName": "@rnx-kit/metro-service",
+  "email": "afoxman@microsoft.com",
+  "dependentChangeType": "patch"
+}
