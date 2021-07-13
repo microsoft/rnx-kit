@@ -20,7 +20,7 @@ describe("Project", () => {
     jest.resetAllMocks();
   });
 
-  function createProject(fileName: string = "valid-tsconfig.json"): {
+  function createProject(fileName = "valid-tsconfig.json"): {
     config: ProjectConfig;
     project: Project;
   } {

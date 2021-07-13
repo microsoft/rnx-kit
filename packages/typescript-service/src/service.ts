@@ -15,24 +15,14 @@ export class Service {
     this.projectConfigLoader = new ProjectConfigLoader(this.diagnosticWriter);
   }
 
-  openProject(
+  findProject(
     searchPath: string,
     fileName = "tsconfig.json"
-  ): Project | undefined {
-    const configFileName = this.projectConfigLoader.find(searchPath, fileName);
-    if (!configFileName) {
-      console.error(
-        "Cannot find project configuration file %o under search-path %o",
-        fileName,
-        searchPath
-      );
-      return undefined;
-    }
-
-    return this.openProjectByFile(configFileName);
+  ): string | undefined {
+    return this.projectConfigLoader.find(searchPath, fileName);
   }
 
-  openProjectByFile(configFileName: string): Project {
+  openProject(configFileName: string): Project {
     const config = this.projectConfigLoader.load(configFileName);
     const resolvers = createResolvers(config.options);
     return new Project(
