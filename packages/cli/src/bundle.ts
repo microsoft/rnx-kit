@@ -34,6 +34,34 @@ type CLIBundleOptions = {
   verbose: boolean;
 };
 
+function applyCommandLineOverrides(
+  params: BundleDefinitionWithRequiredParameters,
+  {
+    entryPath,
+    distPath,
+    assetsPath,
+    bundlePrefix,
+    bundleEncoding,
+    sourcemapOutput,
+    sourcemapSourcesRoot,
+    experimentalTreeShake,
+  }: CLIBundleOptions
+): BundleDefinitionWithRequiredParameters {
+  return {
+    ...params,
+    entryPath: entryPath ?? params.entryPath,
+    distPath: distPath ?? params.distPath,
+    assetsPath: assetsPath ?? params.assetsPath,
+    bundlePrefix: bundlePrefix ?? params.bundlePrefix,
+    bundleEncoding: bundleEncoding ?? params.bundleEncoding,
+    sourceMapPath: sourcemapOutput ?? params.sourceMapPath,
+    sourceMapSourceRootPath:
+      sourcemapSourcesRoot ?? params.sourceMapSourceRootPath,
+    experimental_treeShake:
+      experimentalTreeShake ?? params.experimental_treeShake,
+  };
+}
+
 function ensureDirectoryExists(directoryPath: string): void {
   fs.mkdirSync(directoryPath, { recursive: true, mode: 0o755 });
 }
@@ -80,34 +108,6 @@ function getTargetPlatforms(
   }
 
   return [];
-}
-
-function resolveBundleOptions(
-  params: BundleDefinitionWithRequiredParameters,
-  {
-    entryPath,
-    distPath,
-    assetsPath,
-    bundlePrefix,
-    bundleEncoding,
-    sourcemapOutput,
-    sourcemapSourcesRoot,
-    experimentalTreeShake,
-  }: CLIBundleOptions
-): BundleDefinitionWithRequiredParameters {
-  return {
-    ...params,
-    entryPath: entryPath ?? params.entryPath,
-    distPath: distPath ?? params.distPath,
-    assetsPath: assetsPath ?? params.assetsPath,
-    bundlePrefix: bundlePrefix ?? params.bundlePrefix,
-    bundleEncoding: bundleEncoding ?? params.bundleEncoding,
-    sourceMapPath: sourcemapOutput ?? params.sourceMapPath,
-    sourceMapSourceRootPath:
-      sourcemapSourcesRoot ?? params.sourceMapSourceRootPath,
-    experimental_treeShake:
-      experimentalTreeShake ?? params.experimental_treeShake,
-  };
 }
 
 export async function rnxBundle(
@@ -170,7 +170,10 @@ export async function rnxBundle(
       definition,
       targetPlatform
     );
-    const options = resolveBundleOptions(platformDefinition, cliBundleOptions);
+    const options = applyCommandLineOverrides(
+      platformDefinition,
+      cliBundleOptions
+    );
     const {
       entryPath,
       distPath,
