@@ -6,9 +6,11 @@ import {
   DuplicateDependencies,
   Options as DuplicateDetectorOptions,
 } from "@rnx-kit/metro-plugin-duplicates-checker";
-import { MetroSerializer, MetroPlugin } from "@rnx-kit/metro-serializer";
+import { MetroPlugin, MetroSerializer } from "@rnx-kit/metro-serializer";
 import { MetroSerializer as MetroSerializerEsbuild } from "@rnx-kit/metro-serializer-esbuild";
+import type { DeltaResult, Graph } from "metro";
 import type { ConfigT, InputConfigT, SerializerConfigT } from "metro-config";
+import type { TSProjectInfo } from "./types";
 
 function reportError(prop: string) {
   console.error(
@@ -29,11 +31,16 @@ export function validateMetroConfig(metroConfig: ConfigT): boolean {
   return true;
 }
 
+const emptySerializerHook = (_graph: Graph, _delta: DeltaResult): void => {
+  // nop
+};
+
 //  Customize the Metro configuration
 export function customizeMetroConfig(
   metroConfigReadonly: InputConfigT,
   detectCyclicDependencies: boolean | CyclicDetectorOptions,
   detectDuplicateDependencies: boolean | DuplicateDetectorOptions,
+  tsprojectInfo: TSProjectInfo | undefined,
   experimental_treeShake: boolean
 ): void {
   //  We will be making changes to the Metro configuration. Coerce from a
@@ -70,5 +77,38 @@ export function customizeMetroConfig(
     metroConfig.serializer.customSerializer = serializer;
   } else {
     delete metroConfig.serializer.customSerializer;
+  }
+
+  metroConfig.serializer.experimentalSerializerHook = emptySerializerHook;
+  if (tsprojectInfo) {
+    const { service, configFileName } = tsprojectInfo;
+
+    const tsproject = service.openProject(configFileName);
+    if (tsproject) {
+      //  start with an empty project, ignoring the file graph provided by tsconfig.json
+      tsproject.removeAllFiles();
+
+      const hook = (_graph: Graph, delta: DeltaResult): void => {
+        //  keep the TS project in sync with Metro's file graph
+        if (delta.reset) {
+          tsproject.removeAllFiles();
+        }
+
+        for (const module of delta.added.values()) {
+          tsproject.addFile(module.path);
+        }
+        for (const module of delta.modified.values()) {
+          tsproject.updateFile(module.path);
+        }
+        for (const module of delta.modified.values()) {
+          tsproject.removeFile(module.path);
+        }
+
+        //  validate the project, printing errors to the console
+        tsproject.validate();
+      };
+
+      metroConfig.serializer.experimentalSerializerHook = hook;
+    }
   }
 }
