@@ -57,8 +57,8 @@ describe("Utility", () => {
   });
 
   test("normalizePath does not change case", () => {
-    expect(normalizePath("D:\\THIS\\IS\\A\\TEST.txt")).toEqual(
-      "D:/THIS/IS/A/TEST.txt"
+    expect(normalizePath("D:\\This\\Is\\A\\teST.txt")).toEqual(
+      "D:/This/Is/A/teST.txt"
     );
   });
 });

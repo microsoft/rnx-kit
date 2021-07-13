@@ -83,9 +83,6 @@ export async function rnxBundle(
     verbose,
   } = cliBundleOptions;
 
-  //  create a typescript service
-  const tsservice = new Service();
-
   //  load the Metro configuration
   const metroConfig = await loadMetroConfig(cliConfig, {
     config,
@@ -122,6 +119,9 @@ export async function rnxBundle(
       )
     );
   }
+
+  //  create a typescript service
+  const tsservice = new Service();
 
   //  create a bundle for each target platform
   for (const targetPlatform of targetPlatforms) {
