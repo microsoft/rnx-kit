@@ -56,11 +56,9 @@ describe("Utility", () => {
     );
   });
 
-  test("normalizePath converts to lower-case on case-insensitive file systems", () => {
-    expect(normalizePath("D:\\THIS\\IS\\A\\TEST.txt")).toEqual(
-      ts.sys.useCaseSensitiveFileNames
-        ? "D:/THIS/IS/A/TEST.txt"
-        : "d:/this/is/a/test.txt"
+  test("normalizePath does not change case", () => {
+    expect(normalizePath("D:\\This\\Is\\A\\teST.txt")).toEqual(
+      "D:/This/Is/A/teST.txt"
     );
   });
 });

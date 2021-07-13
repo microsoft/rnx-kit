@@ -9,23 +9,41 @@ export class ProjectFileCache {
     fileNames.forEach((fileName) => this.add(fileName));
   }
 
-  add(fileName: string): void {
+  has(fileName: string): boolean {
     const normalized = normalizePath(fileName);
-    this.files.set(normalized, new VersionedSnapshot(normalized));
+    return this.files.has(normalized);
   }
 
-  update(fileName: string, snapshot?: ts.IScriptSnapshot): void {
+  add(fileName: string): boolean {
     const normalized = normalizePath(fileName);
-    const file = this.files.get(normalized);
-    if (!file) {
-      throw new Error(`Cannot update unknown project file ${fileName}`);
+    if (this.files.has(normalized)) {
+      return false;
     }
-    file.update(snapshot);
+    this.files.set(normalized, new VersionedSnapshot(normalized));
+    return true;
   }
 
-  delete(fileName: string): void {
+  update(fileName: string, snapshot?: ts.IScriptSnapshot): boolean {
     const normalized = normalizePath(fileName);
+    if (!this.files.has(normalized)) {
+      return false;
+    }
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- Map has the element, and we only store non-null objects
+    this.files.get(normalized)!.update(snapshot);
+    return true;
+  }
+
+  delete(fileName: string): boolean {
+    const normalized = normalizePath(fileName);
+    if (!this.files.has(normalized)) {
+      return false;
+    }
     this.files.delete(normalized);
+    return true;
+  }
+
+  deleteAll(): void {
+    this.files.clear();
   }
 
   getFileNames(): string[] {
@@ -56,6 +74,7 @@ export class ExternalFileCache {
       this.files.set(normalized, file);
     }
 
-    return file.getSnapshot();
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- Map has the element, and we only store non-null objects
+    return this.files.get(normalized)!.getSnapshot();
   }
 }

@@ -13,6 +13,5 @@ export function isNonEmptyArray(a: unknown): a is Array<unknown> {
 }
 
 export function normalizePath(p: string): string {
-  const fixedPathSeparators = p.replace(/\\/g, "/");
-  return getCanonicalFileName(fixedPathSeparators);
+  return p.replace(/\\/g, "/");
 }

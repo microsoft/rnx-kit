@@ -1,5 +1,4 @@
 import path from "path";
-import mockConsole from "jest-mock-console";
 import { Service } from "../src/service";
 const diagnostic = require("../src/diagnostics");
 
@@ -20,32 +19,31 @@ describe("Service", () => {
     jest.resetAllMocks();
   });
 
-  test("openProject fails when the config file does not exist", () => {
+  test("findProject returns undefined when the config file does not exist", () => {
     const service = new Service();
-
-    const restoreConsole = mockConsole();
-    expect(service.openProject(fixturePath, "does-not-exist")).toBeUndefined();
-    expect(console.error).toBeCalledTimes(1);
-    restoreConsole();
+    expect(service.findProject(fixturePath, "does-not-exist")).toBeUndefined();
   });
 
-  test("openProject succeeds when given a valid config file", () => {
+  test("findProject succeeds when given the config file exists", () => {
     const service = new Service();
-    const project = service.openProject(fixturePath, "valid-tsconfig.json");
-    expect(project).not.toBeNil();
-    expect(project).toBeObject();
+    const configFileName = service.findProject(
+      fixturePath,
+      "valid-tsconfig.json"
+    );
+    expect(configFileName).not.toBeNil();
+    expect(configFileName).toBeString();
   });
 
-  test("openProjectByFile fails when the config file is invalid", () => {
+  test("openProject fails when the config file is invalid", () => {
     const service = new Service();
     expect(() =>
-      service.openProjectByFile(path.join(fixturePath, "invalid-tsconfig.json"))
+      service.openProject(path.join(fixturePath, "invalid-tsconfig.json"))
     ).toThrowError();
   });
 
-  test("openProjectByFile succeeds", () => {
+  test("openProject succeeds", () => {
     const service = new Service();
-    const project = service.openProjectByFile(
+    const project = service.openProject(
       path.join(fixturePath, "valid-tsconfig.json")
     );
     expect(project).not.toBeNil();

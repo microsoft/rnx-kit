@@ -23,7 +23,7 @@
     "change": "beachball change",
     "check": "beachball check --branch origin/main --changehint \"Run 'yarn run change' from root of repo to generate a change file.\"",
     "ci": "yarn --cache-folder .yarn-offline-mirror --prefer-offline --frozen-lockfile --non-interactive",
-    "clean": "lage clean --log-level warn --grouped",
+    "clean": "lage cache --clear && lage clean --log-level warn --grouped",
     "depcheck": "lage depcheck --log-level warn --grouped",
     "format": "lage format --log-level warn --grouped",
     "lint": "lage lint --verbose --grouped --no-cache",

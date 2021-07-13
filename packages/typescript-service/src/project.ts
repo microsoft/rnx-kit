@@ -1,8 +1,8 @@
 import ts from "typescript";
-import { ProjectFileCache, ExternalFileCache } from "./cache";
-import { Resolvers } from "./resolve";
+import { ExternalFileCache, ProjectFileCache } from "./cache";
 import { ProjectConfig } from "./config";
 import { DiagnosticWriter } from "./diagnostics";
+import { Resolvers } from "./resolve";
 import { isNonEmptyArray } from "./util";
 
 export class Project {
@@ -134,24 +134,43 @@ export class Project {
   }
 
   validate(): boolean {
+    //  filter down the list of files to be checked
+    const matcher = this.projectConfig.options.checkJs
+      ? /[.][jt]sx?$/
+      : /[.]tsx?$/;
+    const files = this.projectFiles
+      .getFileNames()
+      .filter((f) => f.match(matcher));
+
+    //  check each file
     let result = true;
-    this.projectFiles.getFileNames().forEach((f) => {
-      const fileResult = this.validateFile(f);
+    for (const file of files) {
+      //  always validate the file, even if others have failed
+      const fileResult = this.validateFile(file);
+      //  combine this file's result with the aggregate result
       result = result && fileResult;
-    });
+    }
     return result;
   }
 
-  addFile(fileName: string): void {
-    this.projectFiles.add(fileName);
+  hasFile(fileName: string): boolean {
+    return this.projectFiles.has(fileName);
   }
 
-  updateFile(fileName: string, snapshot?: ts.IScriptSnapshot): void {
-    this.projectFiles.update(fileName, snapshot);
+  addFile(fileName: string): boolean {
+    return this.projectFiles.add(fileName);
   }
 
-  removeFile(fileName: string): void {
-    this.projectFiles.delete(fileName);
+  updateFile(fileName: string, snapshot?: ts.IScriptSnapshot): boolean {
+    return this.projectFiles.update(fileName, snapshot);
+  }
+
+  removeFile(fileName: string): boolean {
+    return this.projectFiles.delete(fileName);
+  }
+
+  removeAllFiles(): void {
+    this.projectFiles.deleteAll();
   }
 
   dispose(): void {

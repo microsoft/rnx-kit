@@ -12,6 +12,69 @@ describe("ProjectFileCache", () => {
     jest.resetAllMocks();
   });
 
+  test("has returns true when file is in the cache", () => {
+    const cache = new ProjectFileCache(fileNames);
+    expect(cache.has(fileNames[0])).toBeTrue();
+  });
+
+  test("has returns false when file is not in the cache", () => {
+    const cache = new ProjectFileCache(fileNames);
+    expect(cache.has("not a real file name")).toBeFalse();
+  });
+
+  test("add succeeds when file is not in the cache", () => {
+    const cache = new ProjectFileCache(fileNames);
+    expect(cache.add("new-file.ts")).toBeTrue();
+  });
+
+  test("add fails when file is already in the cache", () => {
+    const cache = new ProjectFileCache(fileNames);
+    expect(cache.add(fileNames[0])).toBeFalse();
+  });
+
+  test("update fails when file is not in the cache", () => {
+    const cache = new ProjectFileCache(fileNames);
+    expect(cache.update("unknown-file.ts")).toBeFalse();
+  });
+
+  test("update succeeds when file is in the cache", () => {
+    const cache = new ProjectFileCache(fileNames);
+    expect(cache.update(fileNames[0])).toBeTrue();
+  });
+
+  test("update increments the file version", () => {
+    const cache = new ProjectFileCache(fileNames);
+    cache.update(fileNames[0]);
+    expect(cache.getVersion(fileNames[0])).toEqual("2");
+  });
+
+  test("update replaces the file snapshot", () => {
+    const cache = new ProjectFileCache(fileNames);
+    cache.update(
+      fileNames[0],
+      ts.ScriptSnapshot.fromString("updated file contents")
+    );
+    const s = cache.getSnapshot(fileNames[0]);
+    expect(s.getText(0, s.getLength())).toEqual("updated file contents");
+    expect(fs.readFileSync).not.toBeCalled();
+  });
+
+  test("delete fails when file is not in the cache", () => {
+    const cache = new ProjectFileCache(fileNames);
+    expect(cache.delete("unknown-file.ts")).toBeFalse();
+  });
+
+  test("delete succeeds when file is in the cache", () => {
+    const cache = new ProjectFileCache(fileNames);
+    expect(cache.delete(fileNames[0])).toBeTrue();
+  });
+
+  test("deleteAll removes all files from the cache", () => {
+    const cache = new ProjectFileCache(fileNames);
+    cache.deleteAll();
+    expect(cache.getFileNames()).toBeArrayOfSize(0);
+  });
+
   test("getFileNames returns initial list of files", () => {
     const cache = new ProjectFileCache(fileNames);
     expect(cache.getFileNames()).toBeArrayOfSize(fileNames.length);
@@ -52,28 +115,6 @@ describe("ProjectFileCache", () => {
   test("getSnapshot returns undefined for a file that is not in the cache", () => {
     const cache = new ProjectFileCache(fileNames);
     expect(cache.getSnapshot("not-in-cache")).toBeUndefined();
-    expect(fs.readFileSync).not.toBeCalled();
-  });
-
-  test("update throws when the given file is not in the cache", () => {
-    const cache = new ProjectFileCache(fileNames);
-    expect(() => cache.update("not-in-cache")).toThrowError();
-  });
-
-  test("update increments the file version", () => {
-    const cache = new ProjectFileCache(fileNames);
-    cache.update(fileNames[0]);
-    expect(cache.getVersion(fileNames[0])).toEqual("2");
-  });
-
-  test("update replaces the file snapshot", () => {
-    const cache = new ProjectFileCache(fileNames);
-    cache.update(
-      fileNames[0],
-      ts.ScriptSnapshot.fromString("updated file contents")
-    );
-    const s = cache.getSnapshot(fileNames[0]);
-    expect(s.getText(0, s.getLength())).toEqual("updated file contents");
     expect(fs.readFileSync).not.toBeCalled();
   });
 });

@@ -17,10 +17,11 @@ The `Service` is used to open a `Project`.
 const service = new Service();
 
 // Find a project file and open it
-const project = service.openProject("./", "tsconfig.json");
+const configFileName = service.findProject("./", "tsconfig.json");
+const project = service.openProject(configFileName);
 
 // Open a project file directly
-const project = service.openProjectByFile(path.resolve("./tsconfig.json"));
+const project = service.openProject(path.resolve("./tsconfig.json"));
 ```
 
 ## Project

@@ -7,10 +7,12 @@ import {
   getKitConfig,
 } from "@rnx-kit/config";
 import { bundle, BundleArgs, loadMetroConfig } from "@rnx-kit/metro-service";
+import { Service } from "@rnx-kit/typescript-service";
 import chalk from "chalk";
 import fs from "fs";
 import path from "path";
 import { customizeMetroConfig, validateMetroConfig } from "./metro-config";
+import type { TSProjectInfo } from "./types";
 
 type CLIBundleOptions = {
   id?: string;
@@ -118,8 +120,13 @@ export async function rnxBundle(
     );
   }
 
+  //  create a typescript service
+  const tsservice = new Service();
+
   //  create a bundle for each target platform
   for (const targetPlatform of targetPlatforms) {
+    console.log(`Bundling ${targetPlatform}...`);
+
     //  unpack the platform-specific bundle definition
     const platformDefinition = getBundlePlatformDefinition(
       definition,
@@ -134,10 +141,10 @@ export async function rnxBundle(
       sourceMapPath,
       sourceMapSourceRootPath,
     } = platformDefinition;
-
     const {
       detectCyclicDependencies,
       detectDuplicateDependencies,
+      typescriptValidation,
       experimental_treeShake,
     } = platformDefinition;
 
@@ -169,10 +176,28 @@ export async function rnxBundle(
       sourceMapPath = path.join(distPath, sourceMapPath);
     }
 
+    let tsprojectInfo: TSProjectInfo | undefined;
+    if (typescriptValidation) {
+      const configFileName = tsservice.findProject(entryPath, "tsconfig.json");
+      if (!configFileName) {
+        console.warn(
+          "skipping TypeScript validation -- cannot find tsconfig.json for entry file %o",
+          entryPath
+        );
+      } else {
+        tsprojectInfo = {
+          platform: targetPlatform,
+          service: tsservice,
+          configFileName,
+        };
+      }
+    }
+
     customizeMetroConfig(
       metroConfig,
       detectCyclicDependencies,
       detectDuplicateDependencies,
+      tsprojectInfo,
       experimental_treeShake
     );
 
@@ -182,7 +207,6 @@ export async function rnxBundle(
     assetsPath && ensureDirectoryExists(assetsPath);
 
     //  create the bundle
-    console.log(`Bundling ${targetPlatform}...`);
     await bundle(
       {
         assetsDest: assetsPath,
