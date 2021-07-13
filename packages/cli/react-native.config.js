@@ -67,6 +67,11 @@ module.exports = {
           parse: parseBoolean,
         },
         {
+          name: "--experimental-tree-shake [boolean]",
+          description: "Experimental: Enable tree shaking.",
+          parse: parseBoolean,
+        },
+        {
           name: "--max-workers [number]",
           description:
             "Specifies the maximum number of parallel worker threads to use for transforming files. This defaults to the number of cores available on your machine.",

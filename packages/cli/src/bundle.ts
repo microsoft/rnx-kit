@@ -25,6 +25,7 @@ type CLIBundleOptions = {
   transformer?: string;
   dev: boolean;
   minify?: boolean;
+  experimentalTreeShake?: boolean;
   maxWorkers?: number;
   sourcemapOutput?: string;
   sourcemapSourcesRoot?: string;
@@ -32,6 +33,34 @@ type CLIBundleOptions = {
   config?: string;
   verbose: boolean;
 };
+
+function applyCommandLineOverrides(
+  params: BundleDefinitionWithRequiredParameters,
+  {
+    entryPath,
+    distPath,
+    assetsPath,
+    bundlePrefix,
+    bundleEncoding,
+    sourcemapOutput,
+    sourcemapSourcesRoot,
+    experimentalTreeShake,
+  }: CLIBundleOptions
+): BundleDefinitionWithRequiredParameters {
+  return {
+    ...params,
+    entryPath: entryPath ?? params.entryPath,
+    distPath: distPath ?? params.distPath,
+    assetsPath: assetsPath ?? params.assetsPath,
+    bundlePrefix: bundlePrefix ?? params.bundlePrefix,
+    bundleEncoding: bundleEncoding ?? params.bundleEncoding,
+    sourceMapPath: sourcemapOutput ?? params.sourceMapPath,
+    sourceMapSourceRootPath:
+      sourcemapSourcesRoot ?? params.sourceMapSourceRootPath,
+    experimental_treeShake:
+      experimentalTreeShake ?? params.experimental_treeShake,
+  };
+}
 
 function ensureDirectoryExists(directoryPath: string): void {
   fs.mkdirSync(directoryPath, { recursive: true, mode: 0o755 });
@@ -64,6 +93,21 @@ function getKitConfigBundleDefinition(
 
   // get the bundle definition
   return getBundleDefinition(kitConfig.bundle, id);
+}
+
+function getTargetPlatforms(
+  { platform }: CLIBundleOptions,
+  { targets }: BundleDefinitionWithRequiredParameters
+): AllPlatforms[] {
+  if (platform) {
+    return [platform];
+  }
+
+  if (targets) {
+    return targets;
+  }
+
+  return [];
 }
 
 export async function rnxBundle(
@@ -104,13 +148,7 @@ export async function rnxBundle(
   }
 
   //  get the list of target platforms, favoring the command-line over the bundle definition
-  let targetPlatforms: AllPlatforms[] = [];
-  if (cliBundleOptions.platform) {
-    targetPlatforms.push(cliBundleOptions.platform);
-  } else if (definition.targets) {
-    targetPlatforms = definition.targets;
-  }
-
+  const targetPlatforms = getTargetPlatforms(cliBundleOptions, definition);
   if (targetPlatforms.length === 0) {
     console.error("no target platforms given");
     return Promise.reject(
@@ -132,31 +170,22 @@ export async function rnxBundle(
       definition,
       targetPlatform
     );
-    let {
+    const options = applyCommandLineOverrides(
+      platformDefinition,
+      cliBundleOptions
+    );
+    const {
       entryPath,
       distPath,
       assetsPath,
       bundlePrefix,
       bundleEncoding,
-      sourceMapPath,
       sourceMapSourceRootPath,
-    } = platformDefinition;
-    const {
       detectCyclicDependencies,
       detectDuplicateDependencies,
       typescriptValidation,
       experimental_treeShake,
-    } = platformDefinition;
-
-    //  apply command-line overrides to the platform-specific bundle definition
-    entryPath = cliBundleOptions.entryPath ?? entryPath;
-    distPath = cliBundleOptions.distPath ?? distPath;
-    assetsPath = cliBundleOptions.assetsPath ?? assetsPath;
-    bundlePrefix = cliBundleOptions.bundlePrefix ?? bundlePrefix;
-    bundleEncoding = cliBundleOptions.bundleEncoding ?? bundleEncoding;
-    sourceMapPath = cliBundleOptions.sourcemapOutput ?? sourceMapPath;
-    sourceMapSourceRootPath =
-      cliBundleOptions.sourcemapSourcesRoot ?? sourceMapSourceRootPath;
+    } = options;
 
     //  assemble the full path to the bundle file
     const bundleExtension =
@@ -165,6 +194,8 @@ export async function rnxBundle(
         : "bundle";
     const bundleFile = `${bundlePrefix}.${targetPlatform}.${bundleExtension}`;
     const bundlePath = path.join(distPath, bundleFile);
+
+    let { sourceMapPath } = options;
 
     //  always create a source-map in dev mode
     if (dev) {

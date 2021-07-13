@@ -9,7 +9,7 @@
     "lint": "rnx-kit-scripts lint",
     "test": "rnx-kit-scripts test",
     "bundle": "react-native rnx-bundle",
-    "bundle+esbuild": "react-native rnx-bundle --bundle-prefix 'main+esbuild' --config metro+esbuild.config.js",
+    "bundle+esbuild": "react-native rnx-bundle --bundle-prefix 'main+esbuild' --config metro+esbuild.config.js --experimental-tree-shake",
     "bundle:android": "react-native rnx-bundle --platform android",
     "bundle:ios": "react-native rnx-bundle --platform ios",
     "bundle:macos": "react-native rnx-bundle --platform macos",
