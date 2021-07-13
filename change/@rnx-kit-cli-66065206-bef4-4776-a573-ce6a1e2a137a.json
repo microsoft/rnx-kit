@@ -1,7 +1,0 @@
-{
-  "type": "minor",
-  "comment": "Add typescript validation to CLI rnx-bundle call.",
-  "packageName": "@rnx-kit/cli",
-  "email": "afoxman@microsoft.com",
-  "dependentChangeType": "patch"
-}

@@ -2,6 +2,21 @@
   "name": "@rnx-kit/typescript-service",
   "entries": [
     {
+      "date": "Tue, 13 Jul 2021 17:03:23 GMT",
+      "tag": "@rnx-kit/typescript-service_v1.1.0",
+      "version": "1.1.0",
+      "comments": {
+        "minor": [
+          {
+            "comment": "Separate Project methods into \"find\" and \"open\", allowing caller to decide on the appropriate error-handling logic. Add filtering when validating Project files -- 0nly include ts[x] unless checkJs is enabled. Make cache methods return a true/false result, moving error-handling up and out to the caller (Project). Stop converting to lowercase during path normalization, as this confuses typescript.",
+            "author": "afoxman@microsoft.com",
+            "commit": "a95b353ad91c18ed040cff23079edcc489645ca1",
+            "package": "@rnx-kit/typescript-service"
+          }
+        ]
+      }
+    },
+    {
       "date": "Mon, 12 Jul 2021 09:53:10 GMT",
       "tag": "@rnx-kit/typescript-service_v1.0.2",
       "version": "1.0.2",
