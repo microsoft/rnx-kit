@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/dep-check
 
-This log was last generated on Mon, 12 Jul 2021 17:30:15 GMT and should not be manually modified.
+This log was last generated on Tue, 13 Jul 2021 13:40:11 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 1.5.15
+
+Tue, 13 Jul 2021 13:40:11 GMT
+
+### Patches
+
+- bump RNTA to 0.7 (lsciandra@microsoft.com)
 
 ## 1.5.14
 

@@ -1,7 +1,0 @@
-{
-  "type": "patch",
-  "comment": "bump RNTA to 0.7",
-  "packageName": "@rnx-kit/dep-check",
-  "email": "lsciandra@microsoft.com",
-  "dependentChangeType": "patch"
-}
