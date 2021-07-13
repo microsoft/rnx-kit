@@ -223,7 +223,7 @@ your `package.json`.
 | sqlite            | react-native-sqlite-storage@^5.0.0                | react-native-sqlite-storage@^5.0.0                | react-native-sqlite-storage@^3.3.11           | react-native-sqlite-storage@^3.3.11           | react-native-sqlite-storage@^3.3.11           |
 | storage           | @react-native-async-storage/async-storage@^1.15.5 | @react-native-async-storage/async-storage@^1.15.5 | @react-native-community/async-storage@^1.12.1 | @react-native-community/async-storage@^1.12.1 | @react-native-community/async-storage@^1.12.1 |
 | svg               | react-native-svg@^12.1.1                          | react-native-svg@^12.1.1                          | react-native-svg@^12.1.1                      | react-native-svg@^12.1.1                      | react-native-svg@^12.1.1                      |
-| test-app          | react-native-test-app@^0.6.12                     | react-native-test-app@^0.6.12                     | react-native-test-app@^0.6.12                 | react-native-test-app@^0.6.12                 | react-native-test-app@^0.6.12                 |
+| test-app          | react-native-test-app@^0.7.0                      | react-native-test-app@^0.7.0                      | react-native-test-app@^0.7.0                  | react-native-test-app@^0.7.0                  | react-native-test-app@^0.7.0                  |
 | webview           | react-native-webview@^11.4.2                      | react-native-webview@^11.4.2                      | react-native-webview@^11.4.2                  | react-native-webview@^11.0.3                  | react-native-webview@^11.0.3                  |
 
 <!-- @rnx-kit/dep-check/capabilities end -->
