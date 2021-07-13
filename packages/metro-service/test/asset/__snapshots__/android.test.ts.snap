@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MetroService getAndroidAssetSuffix throw for invalid scale 0.70 1`] = `"Don't know which android drawable suffix to use for asset: {\\"httpServerLocation\\":\\"https://my-server.com/assets\\",\\"name\\":\\"logo\\",\\"type\\":\\"jpg\\"}"`;
+
+exports[`MetroService getAndroidAssetSuffix throw for invalid scale 1.23 1`] = `"Don't know which android drawable suffix to use for asset: {\\"httpServerLocation\\":\\"https://my-server.com/assets\\",\\"name\\":\\"logo\\",\\"type\\":\\"jpg\\"}"`;

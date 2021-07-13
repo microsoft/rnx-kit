@@ -1,6 +1,5 @@
 import fs from "fs";
 import path from "path";
-import mkdirp from "mkdirp";
 
 import type { AssetData } from "metro";
 
@@ -8,48 +7,22 @@ import { getAssetDestPathAndroid } from "./android";
 import { getAssetDestPathIOS } from "./ios";
 import { filterPlatformAssetScales } from "./filter";
 
-function copy(
-  src: string,
-  dest: string,
-  callback: (error: NodeJS.ErrnoException) => void
-): void {
+function copy(src: string, dest: string): void {
   const destDir = path.dirname(dest);
-  mkdirp(destDir, (err?: NodeJS.ErrnoException) => {
-    if (err) {
-      callback(err);
-      return;
-    }
-    fs.createReadStream(src)
-      .pipe(fs.createWriteStream(dest))
-      .on("finish", callback);
-  });
+  fs.mkdirSync(destDir, { recursive: true });
+  fs.copyFileSync(src, dest);
 }
 
-async function copyAll(filesToCopy: Record<string, string>): Promise<void> {
+function copyAll(filesToCopy: Record<string, string>): void {
   const queue = Object.keys(filesToCopy);
   if (queue.length === 0) {
-    return Promise.resolve();
+    return;
   }
 
   console.info(`Copying ${queue.length} asset files`);
-  return new Promise((resolve, reject) => {
-    const copyNext = (error?: NodeJS.ErrnoException) => {
-      if (error) {
-        reject(error);
-        return;
-      }
-      if (queue.length === 0) {
-        console.info("Done copying assets");
-        resolve();
-      } else {
-        // queue.length === 0 is checked in previous branch, so this is string
-        const src = queue.shift() as string;
-        const dest = filesToCopy[src];
-        copy(src, dest, copyNext);
-      }
-    };
-    copyNext();
-  });
+  for (const src of queue) {
+    copy(src, filesToCopy[src]);
+  }
 }
 
 export async function saveAssets(
@@ -80,5 +53,6 @@ export async function saveAssets(
     });
   });
 
-  return copyAll(filesToCopy);
+  copyAll(filesToCopy);
+  return Promise.resolve();
 }

@@ -18,9 +18,11 @@
     "format": "rnx-kit-scripts format",
     "test": "rnx-kit-scripts test"
   },
+  "engines": {
+    "node": ">= 10.12"
+  },
   "dependencies": {
-    "chalk": "^4.1.0",
-    "mkdirp": "^0.5.3"
+    "chalk": "^4.1.0"
   },
   "peerDependencies": {
     "metro": ">=0.66.1",
@@ -36,7 +38,6 @@
     "@types/metro-babel-transformer": "*",
     "@types/metro-config": "*",
     "@types/metro-resolver": "*",
-    "@types/mkdirp": "^0.5.2",
     "@types/node": "^14.15.0",
     "metro": "^0.66.1",
     "metro-config": "^0.66.1",
@@ -52,5 +53,11 @@
   },
   "eslintConfig": {
     "extends": "@rnx-kit/eslint-config"
+  },
+  "jest": {
+    "roots": [
+      "test"
+    ],
+    "testRegex": "/test/.*\\.test\\.ts$"
   }
 }
