@@ -1,27 +1,38 @@
 import path from "path";
 import type { PackagerAsset } from "./types";
 
-/**
- * FIXME: using number to represent discrete scale numbers is fragile in essence because of
- * floating point numbers imprecision.
- */
-function getAndroidAssetSuffix(scale: number): string {
-  switch (scale) {
-    case 0.75:
-      return "ldpi";
-    case 1:
-      return "mdpi";
-    case 1.5:
-      return "hdpi";
-    case 2:
-      return "xhdpi";
-    case 3:
-      return "xxhdpi";
-    case 4:
-      return "xxxhdpi";
-    default:
-      return "";
+function isApproximatelyEqual(
+  f1: number,
+  f2: number,
+  tolerance: number
+): boolean {
+  return Math.abs(f1 - f2) < tolerance;
+}
+
+export function getAndroidAssetSuffix(
+  asset: PackagerAsset,
+  scale: number
+): string {
+  const tolerance = 0.01;
+  if (isApproximatelyEqual(scale, 0.75, tolerance)) {
+    return "ldpi";
+  } else if (isApproximatelyEqual(scale, 1, tolerance)) {
+    return "mdpi";
+  } else if (isApproximatelyEqual(scale, 1.5, tolerance)) {
+    return "hdpi";
+  } else if (isApproximatelyEqual(scale, 2, tolerance)) {
+    return "xhdpi";
+  } else if (isApproximatelyEqual(scale, 3, tolerance)) {
+    return "xxhdpi";
+  } else if (isApproximatelyEqual(scale, 4, tolerance)) {
+    return "xxxhdpi";
   }
+
+  throw new Error(
+    `Don't know which android drawable suffix to use for asset: ${JSON.stringify(
+      asset
+    )}`
+  );
 }
 
 // See https://developer.android.com/guide/topics/resources/drawable-resource.html
@@ -41,16 +52,7 @@ function getAndroidResourceFolderName(
   if (!drawableFileTypes.has(asset.type)) {
     return "raw";
   }
-  const suffix = getAndroidAssetSuffix(scale);
-  if (!suffix) {
-    throw new Error(
-      `Don't know which android drawable suffix to use for asset: ${JSON.stringify(
-        asset
-      )}`
-    );
-  }
-  const androidFolder = `drawable-${suffix}`;
-  return androidFolder;
+  return `drawable-${getAndroidAssetSuffix(asset, scale)}`;
 }
 
 function getBasePath(asset: PackagerAsset): string {
