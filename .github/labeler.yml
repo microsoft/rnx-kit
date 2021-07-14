@@ -1,0 +1,12 @@
+'feature: cli':
+  - packages/cli/**/*
+  - packages/config/**/*
+'feature: dep-check':
+  - packages/dep-check/**/*
+'feature: metro':
+  - packages/babel-plugin-import-path-remapper/**/*
+  - packages/babel-preset-metro-react-native/**/*
+  - packages/metro-*/**/*
+  - packages/typescript-service/**/*
+'feature: third party notices':
+  - packages/third-party-notices/**/*
