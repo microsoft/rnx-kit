@@ -2,6 +2,7 @@ name: Labeler
 on: [pull_request]
 jobs:
   label:
+    name: "Label"
     runs-on: ubuntu-latest
     permissions:
       contents: read
