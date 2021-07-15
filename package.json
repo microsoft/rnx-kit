@@ -39,7 +39,7 @@
     "@babel/core": "^7.0.0",
     "@rnx-kit/dep-check": "*",
     "beachball": "^2.2.0",
-    "lage": "^0.30.0",
+    "lage": "^0.31.0",
     "markdown-table": "^2.0.0",
     "metro": "^0.66.1",
     "metro-config": "^0.66.1",

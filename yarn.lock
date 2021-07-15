@@ -6744,10 +6744,10 @@ labeled-stream-splicer@^2.0.0:
     inherits "^2.0.1"
     stream-splicer "^2.0.0"
 
-lage@^0.30.0:
-  version "0.30.0"
-  resolved "https://registry.yarnpkg.com/lage/-/lage-0.30.0.tgz#128c2e7ab5e9b075efdca1c1cfba8de42d94a633"
-  integrity sha512-kXGAyd1oVzoBgXku5YxeFUO5K9X9wfvxWEkmHyXet6VAo3XLaI2sQfywef3aiVWuU5kQNe8pfPGlXaloTZS8Cg==
+lage@^0.31.0:
+  version "0.31.0"
+  resolved "https://registry.yarnpkg.com/lage/-/lage-0.31.0.tgz#f366d0acf9537b2a8451df3995c17f8673c3b9c3"
+  integrity sha512-PolpNI1UrMuWKbXyIJWh7dZ308VZB49N0izaheiUv24MJOyPLgFfbyUPE/MWmfO4TtVUMyEJX6imyiBFimoTlA==
   dependencies:
     "@microsoft/task-scheduler" "^2.7.1"
     abort-controller "^3.0.0"
