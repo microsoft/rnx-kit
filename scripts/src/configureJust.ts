@@ -1,4 +1,5 @@
 import { addResolvePath, option, parallel, series, task } from "just-scripts";
+import { build } from "./tasks/build";
 import { clean } from "./tasks/clean";
 import { depcheck } from "./tasks/depcheck";
 import { eslint } from "./tasks/eslint";
@@ -25,7 +26,7 @@ export function configureJust(): void {
   task("ts", ts);
 
   // hierarchical task definintions
-  task("build", series("clean", "depcheck", "lint", "ts"));
+  task("build", build("clean", "depcheck", "lint", "ts"));
   task("code-style", series("prettier", "lint"));
   task("format", prettier);
   task("test", jest);
