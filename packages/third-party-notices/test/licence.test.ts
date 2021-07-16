@@ -22,7 +22,7 @@ async function getSampleLicenseData(): Promise<{
   const licenses = await extractLicenses(map);
 
   // Hack versions to not depend on
-  for (let license of licenses) {
+  for (const license of licenses) {
     license.version = "1.2.3-fixedVersionForTesting";
   }
 
@@ -34,7 +34,7 @@ describe("license", () => {
     const { licenses } = await getSampleLicenseData();
 
     // normalize the paths for stable and cross platform snapshots
-    for (let license of licenses) {
+    for (const license of licenses) {
       license.path = license.path
         .replace(path.resolve(__dirname, "../../.."), "~")
         .replace(/[/\\]/g, "/");
