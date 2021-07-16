@@ -15,12 +15,9 @@ async function getSampleLicenseData(): Promise<{
   // License data in package.json
   map.set("@rnx-kit/cli", path.resolve("../../node_modules/@rnx-kit/cli"));
   // License data package.json and LICENCE file
-  map.set(
-    "console-browserify",
-    path.resolve("../../node_modules/console-browserify")
-  );
+  map.set("react-native", path.resolve("../../node_modules/react-native"));
   // License data package.json and LICENSE file
-  map.set("md5.js", path.resolve("../../node_modules/md5.js"));
+  map.set("react", path.resolve("../../node_modules/react"));
 
   const licenses = await extractLicenses(map);
 
