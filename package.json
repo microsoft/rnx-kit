@@ -28,7 +28,7 @@
     "format": "lage format --log-level warn --grouped",
     "lint": "lage lint --verbose --grouped --no-cache",
     "preinstall": "node ./scripts/preinstall.js",
-    "postinstall": "node ./scripts/postinstall.js",
+    "postinstall": "yarn build-tools",
     "publish:beachball": "beachball publish --bump-deps -m\"📦 applying package updates ***NO_CI***\"",
     "rnx-dep-check": "yarn build-scope @rnx-kit/dep-check && scripts/rnx-dep-check.js",
     "test": "lage test --verbose --grouped",
