@@ -24,8 +24,8 @@
     "test": "rnx-kit-scripts test"
   },
   "dependencies": {
-    "browserify-licenses": "^1.4.7-1",
     "chalk": "^4.1.0",
+    "spdx-expression-parse": "^3.0.1",
     "yargs": "^16.0.0"
   },
   "devDependencies": {
