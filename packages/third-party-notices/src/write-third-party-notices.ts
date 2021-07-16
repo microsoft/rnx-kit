@@ -183,7 +183,7 @@ export function extractModuleNameToPathMap(
 export async function extractLicenses(
   moduleNameToPathMap: Map<string, string>
 ): Promise<ILicense[]> {
-  const licenseExtractors = require("browserify-licenses/app/extractors");
+  const licenseExtractors = require("./extractors");
 
   const moduleNamePathPairs: IModuleNamePathPair[] = [];
   moduleNameToPathMap.forEach((modulePath: string, moduleName: string) => {
