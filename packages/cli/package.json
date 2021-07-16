@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/cli",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "description": "Command-line interface for working with kit packages in your repo",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/cli",
   "license": "MIT",
@@ -26,7 +26,7 @@
     "@rnx-kit/metro-serializer": "1.0.0",
     "@rnx-kit/metro-serializer-esbuild": "^0.0.10",
     "@rnx-kit/metro-service": "1.0.3",
-    "@rnx-kit/third-party-notices": "1.0.1",
+    "@rnx-kit/third-party-notices": "1.0.2",
     "@rnx-kit/typescript-service": "1.1.0",
     "chalk": "^4.1.0"
   },
