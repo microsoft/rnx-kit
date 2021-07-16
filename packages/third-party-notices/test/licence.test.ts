@@ -1,11 +1,9 @@
+import path from "path";
 import {
-  extractLicenses,
   createLicenseFileContents,
+  extractLicenses,
   ILicense,
 } from "../src/write-third-party-notices";
-
-import os from "os";
-import path from "path";
 
 async function getSampleLicenseData(): Promise<{
   licenses: ILicense[];
