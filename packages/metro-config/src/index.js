@@ -117,13 +117,28 @@ function excludeExtraCopiesOf(packageName, projectRoot) {
   }
 
   const path = require("path");
+  const findUp = require("find-up");
 
-  // Strip `/node_modules/${packageName}` from path:
-  const owningDir = path.dirname(path.dirname(result));
+  // Find the node_modules folder and account for cases when packages are
+  // nested within workspace folders. Examples:
+  // - path/to/node_modules/@babel/runtime
+  // - path/to/node_modules/prop-types
+  const nodeModules = findUp.sync("node_modules", {
+    cwd: path.dirname(result),
+    type: "directory",
+    allowSymlinks: false,
+  });
+
+  if (!nodeModules) {
+    throw new Error(`Couldn't resolve the node_modules folder for ${result}`);
+  }
+
+  const owningDir = path.dirname(nodeModules);
   const escapedPath = owningDir.replace(/\\/g, "\\\\");
+  const escapedPackageName = packageName.replace(/\\/g, "\\\\");
 
   return new RegExp(
-    `(?<!${escapedPath})[\\/\\\\]node_modules[\\/\\\\]${packageName}[\\/\\\\].*`
+    `(?<!${escapedPath})[\\/\\\\]node_modules[\\/\\\\]${escapedPackageName}[\\/\\\\].*`
   );
 }
 
