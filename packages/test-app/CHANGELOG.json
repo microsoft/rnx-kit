@@ -2,6 +2,21 @@
   "name": "@rnx-kit/test-app",
   "entries": [
     {
+      "date": "Tue, 20 Jul 2021 09:17:58 GMT",
+      "tag": "@rnx-kit/test-app_v0.0.1",
+      "version": "0.0.1",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Bump @rnx-kit/test-app to v0.0.1",
+            "author": "arabisho@microsoft.com",
+            "commit": "adda1c55902fc4bba4a6798b71053771e18131e6",
+            "package": "@rnx-kit/test-app"
+          }
+        ]
+      }
+    },
+    {
       "date": "Fri, 16 Jul 2021 21:45:40 GMT",
       "tag": "@rnx-kit/test-app_v0.0.1",
       "version": "0.0.1",

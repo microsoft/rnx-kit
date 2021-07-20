@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/metro-config
 
-This log was last generated on Tue, 22 Jun 2021 15:04:23 GMT and should not be manually modified.
+This log was last generated on Tue, 20 Jul 2021 09:17:58 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 1.2.2
+
+Tue, 20 Jul 2021 09:17:58 GMT
+
+### Patches
+
+- Fix handling of scoped dependencies in exclusions (arabisho@microsoft.com)
 
 ## 1.2.1
 
