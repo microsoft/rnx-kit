@@ -76,3 +76,12 @@ We can now create a bundle as usual, e.g.:
 ```sh
 react-native bundle --entry-file index.js --platform ios --dev false ...
 ```
+
+## Known Limitations
+
+- Dev server may not work with this serializer. To work around this limitation,
+  you can save the esbuild specific Metro config to a separate file and only
+  specify it when needed, e.g.:
+  ```sh
+  react-native bundle ... --config metro+esbuild.config.js
+  ```
