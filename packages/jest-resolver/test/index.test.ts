@@ -6,14 +6,10 @@ function setFixture(name: string): void {
 }
 
 describe("jest-resolver", () => {
-  const reactNativeMacOSPath =
-    path.sep + path.join("__fixtures__", "react-native-macos", "index.js");
   const reactNativePath =
     path.sep + path.join("node_modules", "react-native", "index.js");
-  const reactNativeWindowsLocalPath =
-    path.sep + path.join("__fixtures__", "react-native-windows", "index.js");
   const reactNativeWindowsPath =
-    path.sep + path.join("node_modules", "react-native-windows", "index.js");
+    path.sep + path.join("__fixtures__", "react-native-windows", "index.js");
   const reactPath = path.sep + path.join("node_modules", "react", "index.js");
 
   const consoleWarnSpy = jest.spyOn(global.console, "warn");
@@ -63,7 +59,7 @@ describe("jest-resolver", () => {
       expect(jestResolver("react")).toEqual(expect.stringContaining(reactPath));
     });
 
-    expect(consoleWarnSpy).not.toHaveBeenCalled();
+    expect(consoleWarnSpy).toHaveBeenCalledTimes(1);
   });
 
   test("resolves to the package at `reactNativePath`", () => {
@@ -73,7 +69,7 @@ describe("jest-resolver", () => {
       const jestResolver = require("../src/index");
 
       expect(jestResolver("react-native")).toEqual(
-        expect.stringContaining(reactNativeWindowsLocalPath)
+        expect.stringContaining(reactNativeWindowsPath)
       );
       expect(jestResolver("react")).toEqual(expect.stringContaining(reactPath));
     });
@@ -103,7 +99,9 @@ describe("jest-resolver", () => {
       const jestResolver = require("../src/index");
 
       expect(jestResolver("react-native")).toEqual(
-        expect.stringContaining(reactNativeMacOSPath)
+        expect.stringContaining(
+          path.sep + path.join("__fixtures__", "react-native-macos", "index.js")
+        )
       );
       expect(jestResolver("react")).toEqual(expect.stringContaining(reactPath));
     });
@@ -118,7 +116,9 @@ describe("jest-resolver", () => {
       const jestResolver = require("../src/index");
 
       expect(jestResolver("react-native")).toEqual(
-        expect.stringContaining(reactNativeMacOSPath)
+        expect.stringContaining(
+          path.sep + path.join("__fixtures__", "multi-platform", "index.js")
+        )
       );
       expect(jestResolver("react")).toEqual(expect.stringContaining(reactPath));
     });

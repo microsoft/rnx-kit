@@ -3,8 +3,15 @@ import path from "path";
 import pkgDir from "pkg-dir";
 import { Opts, sync as resolveSync } from "resolve";
 
-function getReactNativePlatformPath(): string | undefined {
-  const rootDir = pkgDir.sync();
+type PlatformPath = [string, string];
+
+/**
+ * Returns a `[platform, path]` pair if the current package is an out-of-tree
+ * platform package or is consuming one. Otherwise, `undefined` is returned.
+ */
+function getReactNativePlatformPath(
+  rootDir = pkgDir.sync()
+): PlatformPath | undefined {
   if (!rootDir) {
     throw new Error("Failed to resolve current package root");
   }
@@ -16,9 +23,12 @@ function getReactNativePlatformPath(): string | undefined {
 
   const { platforms, reactNativePath } = require(rnConfigPath);
   if (reactNativePath) {
-    return /^\.?\.[/\\]/.test(reactNativePath)
+    const resolvedPath = /^\.?\.[/\\]/.test(reactNativePath)
       ? path.resolve(rootDir, reactNativePath)
       : path.dirname(require.resolve(`${reactNativePath}/package.json`));
+    if (resolvedPath != rootDir) {
+      return getReactNativePlatformPath(resolvedPath);
+    }
   }
 
   if (platforms) {
@@ -29,15 +39,14 @@ function getReactNativePlatformPath(): string | undefined {
       console.warn(`Multiple platforms found; picking the first one: ${names}`);
     }
 
-    const { npmPackageName } = platforms[names[0]];
-    const resolvedPath = require.resolve(`${npmPackageName}/package.json`);
-    return path.dirname(resolvedPath);
+    return [names[0], rootDir];
   }
 
+  console.warn("No platforms found; picking a random one");
   return undefined;
 }
 
-function getReactNativePath(): string | undefined {
+function getTargetPlatform(): PlatformPath | undefined {
   // TODO: Figure out the mechanism for providing a target platform.
   const targetPlatform = process.env["RN_TARGET_PLATFORM"];
   if (!targetPlatform) {
@@ -56,15 +65,16 @@ function getReactNativePath(): string | undefined {
     );
   }
 
-  return targetPlatformConfig.npmPackageName;
+  return [targetPlatform, targetPlatformConfig.npmPackageName];
 }
 
 function makePathFilter(): Opts["pathFilter"] {
-  const platformPath = getReactNativePath();
-  if (!platformPath) {
+  const targetPlatform = getTargetPlatform();
+  if (!targetPlatform) {
     return (_pkg, _path, relativePath) => relativePath;
   }
 
+  const [_, platformPath] = targetPlatform;
   const reactNativePath = path.dirname(
     require.resolve("react-native/package.json")
   );
