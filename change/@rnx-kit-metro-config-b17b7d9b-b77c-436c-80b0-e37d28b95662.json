@@ -1,0 +1,7 @@
+{
+  "type": "patch",
+  "comment": "Fix handling of scoped dependencies in exclusions",
+  "packageName": "@rnx-kit/metro-config",
+  "email": "arabisho@microsoft.com",
+  "dependentChangeType": "patch"
+}

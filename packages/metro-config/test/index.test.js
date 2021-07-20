@@ -91,6 +91,51 @@ describe("@rnx-kit/metro-config", () => {
     expect(exclude.test(projectCopy)).toBeFalsy();
   });
 
+  test("excludeExtraCopiesOf() handles nested dependencies", () => {
+    const repo = fixturePath("awesome-repo");
+    const packageRnCopy = path.join(
+      repo,
+      "packages",
+      "john",
+      "node_modules",
+      "react-native",
+      "package.json"
+    );
+    const projectRnCopy = path.join(
+      repo,
+      "node_modules",
+      "react-native",
+      "package.json"
+    );
+
+    const packageMatrixCopy = path.join(
+      repo,
+      "packages",
+      "john",
+      "node_modules",
+      "@commando",
+      "matrix",
+      "package.json"
+    );
+    const projectMatrixCopy = path.join(
+      repo,
+      "node_modules",
+      "@commando",
+      "matrix",
+      "package.json"
+    );
+
+    setFixture("awesome-repo/packages/john");
+
+    const excludeReactNative = excludeExtraCopiesOf("react-native");
+    expect(excludeReactNative.test(packageRnCopy)).toBeFalsy();
+    expect(excludeReactNative.test(projectRnCopy)).toBeTruthy();
+
+    const excludeMatrix = excludeExtraCopiesOf("@commando/matrix");
+    expect(excludeMatrix.test(packageMatrixCopy)).toBeFalsy();
+    expect(excludeMatrix.test(projectMatrixCopy)).toBeTruthy();
+  });
+
   test("excludeExtraCopiesOf() throws if a package is not found", () => {
     expect(excludeExtraCopiesOf("jest", process.cwd())).toBeDefined();
 
