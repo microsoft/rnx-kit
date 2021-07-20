@@ -1,6 +1,6 @@
 {
   "type": "patch",
-  "comment": "fix(metro-config): handle workspace dependencies in exclusions",
+  "comment": "Fix handling of scoped dependencies in exclusions",
   "packageName": "@rnx-kit/metro-config",
   "email": "arabisho@microsoft.com",
   "dependentChangeType": "patch"
