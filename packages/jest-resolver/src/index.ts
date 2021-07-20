@@ -1,9 +1,24 @@
 import fs from "fs";
+import { defaults } from "jest-config";
 import path from "path";
 import pkgDir from "pkg-dir";
 import { Opts, sync as resolveSync } from "resolve";
 
 type PlatformPath = [string, string];
+
+function getPlatformExtensions(targetPlatform: string): string[] | undefined {
+  // TODO: Should probably read Jest config
+  const { moduleFileExtensions } = defaults;
+  if (!moduleFileExtensions || moduleFileExtensions.length === 0) {
+    return undefined;
+  }
+
+  return [
+    ...moduleFileExtensions.map((ext) => `.${targetPlatform}.${ext}`),
+    ...moduleFileExtensions.map((ext) => `.native.${ext}`),
+    ...moduleFileExtensions.map((ext) => `.${ext}`),
+  ];
+}
 
 /**
  * Returns a `[platform, path]` pair if the current package is an out-of-tree
@@ -68,34 +83,39 @@ function getTargetPlatform(): PlatformPath | undefined {
   return [targetPlatform, targetPlatformConfig.npmPackageName];
 }
 
-function makePathFilter(): Opts["pathFilter"] {
+function initialize(): [string[] | undefined, Opts["pathFilter"]] {
   const targetPlatform = getTargetPlatform();
   if (!targetPlatform) {
-    return (_pkg, _path, relativePath) => relativePath;
+    return [undefined, (_pkg, _path, relativePath) => relativePath];
   }
 
-  const [_, platformPath] = targetPlatform;
+  const [platformName, platformPath] = targetPlatform;
   const reactNativePath = path.dirname(
     require.resolve("react-native/package.json")
   );
-  return (pkg, _path, relativePath) => {
-    if (pkg.name === "react-native") {
-      return path.relative(
-        reactNativePath,
-        path.join(platformPath, relativePath)
-      );
-    } else {
-      return relativePath;
-    }
-  };
+
+  return [
+    getPlatformExtensions(platformName),
+    (pkg, _path, relativePath) => {
+      if (pkg.name === "react-native") {
+        return path.relative(
+          reactNativePath,
+          path.join(platformPath, relativePath)
+        );
+      } else {
+        return relativePath;
+      }
+    },
+  ];
 }
 
-const pathFilter = makePathFilter();
+const [extensions, pathFilter] = initialize();
 
 module.exports = (request: string, options: Opts) => {
   return resolveSync(request, {
     ...options,
-    preserveSymlinks: false,
+    extensions: extensions ?? options.extensions,
     pathFilter,
+    preserveSymlinks: false,
   });
 };

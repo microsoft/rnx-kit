@@ -38,10 +38,12 @@ describe("jest-resolver", () => {
     jest.isolateModules(() => {
       const jestResolver = require("../src/index");
 
-      expect(jestResolver("react-native")).toEqual(
+      expect(jestResolver("react-native", {})).toEqual(
         expect.stringContaining(reactNativePath)
       );
-      expect(jestResolver("react")).toEqual(expect.stringContaining(reactPath));
+      expect(jestResolver("react", {})).toEqual(
+        expect.stringContaining(reactPath)
+      );
     });
 
     expect(consoleWarnSpy).not.toHaveBeenCalled();
@@ -53,10 +55,12 @@ describe("jest-resolver", () => {
     jest.isolateModules(() => {
       const jestResolver = require("../src/index");
 
-      expect(jestResolver("react-native")).toEqual(
+      expect(jestResolver("react-native", {})).toEqual(
         expect.stringContaining(reactNativePath)
       );
-      expect(jestResolver("react")).toEqual(expect.stringContaining(reactPath));
+      expect(jestResolver("react", {})).toEqual(
+        expect.stringContaining(reactPath)
+      );
     });
 
     expect(consoleWarnSpy).toHaveBeenCalledTimes(1);

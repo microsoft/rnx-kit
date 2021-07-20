@@ -25,6 +25,7 @@
   },
   "peerDependencies": {
     "@react-native-community/cli": ">=4.10",
+    "jest-config": "^26.0.0 || ^27.0.0",
     "react-native": ">=0.63"
   },
   "devDependencies": {
