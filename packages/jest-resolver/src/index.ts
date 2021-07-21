@@ -40,7 +40,11 @@ function getReactNativePlatformPath(
   if (reactNativePath) {
     const resolvedPath = /^\.?\.[/\\]/.test(reactNativePath)
       ? path.resolve(rootDir, reactNativePath)
-      : path.dirname(require.resolve(`${reactNativePath}/package.json`));
+      : path.dirname(
+          require.resolve(`${reactNativePath}/package.json`, {
+            paths: [rootDir],
+          })
+        );
     if (resolvedPath != rootDir) {
       return getReactNativePlatformPath(resolvedPath);
     }
@@ -91,7 +95,7 @@ function initialize(): [string[] | undefined, Opts["pathFilter"]] {
 
   const [platformName, platformPath] = targetPlatform;
   const reactNativePath = path.dirname(
-    require.resolve("react-native/package.json")
+    require.resolve("react-native/package.json", { paths: [process.cwd()] })
   );
 
   return [
