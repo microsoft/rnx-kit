@@ -1,12 +1,20 @@
+import loadConfig from "@react-native-community/cli/build/tools/config";
 import fs from "fs";
 import { defaults } from "jest-config";
 import path from "path";
 import pkgDir from "pkg-dir";
 import { Opts, sync as resolveSync } from "resolve";
 
-type PlatformPath = [string, string];
+type PathFilter = Opts["pathFilter"];
+type PlatformPath = [string | undefined, string | undefined];
 
-function getPlatformExtensions(targetPlatform: string): string[] | undefined {
+function getPlatformExtensions(
+  targetPlatform: string | undefined
+): string[] | undefined {
+  if (!targetPlatform) {
+    return undefined;
+  }
+
   // TODO: Should probably read Jest config
   const { moduleFileExtensions } = defaults;
   if (!moduleFileExtensions || moduleFileExtensions.length === 0) {
@@ -24,16 +32,14 @@ function getPlatformExtensions(targetPlatform: string): string[] | undefined {
  * Returns a `[platform, path]` pair if the current package is an out-of-tree
  * platform package or is consuming one. Otherwise, `undefined` is returned.
  */
-function getReactNativePlatformPath(
-  rootDir = pkgDir.sync()
-): PlatformPath | undefined {
+function getReactNativePlatformPath(rootDir = pkgDir.sync()): PlatformPath {
   if (!rootDir) {
     throw new Error("Failed to resolve current package root");
   }
 
   const rnConfigPath = path.join(rootDir, "react-native.config.js");
   if (!fs.existsSync(rnConfigPath)) {
-    return undefined;
+    return [undefined, undefined];
   }
 
   const { platforms, reactNativePath } = require(rnConfigPath);
@@ -62,10 +68,10 @@ function getReactNativePlatformPath(
   }
 
   console.warn("No platforms found; picking a random one");
-  return undefined;
+  return [undefined, undefined];
 }
 
-function getTargetPlatform(): PlatformPath | undefined {
+function getTargetPlatform(): PlatformPath {
   // TODO: Figure out the mechanism for providing a target platform.
   const targetPlatform = process.env["RN_TARGET_PLATFORM"];
   if (!targetPlatform) {
@@ -74,7 +80,6 @@ function getTargetPlatform(): PlatformPath | undefined {
     return getReactNativePlatformPath();
   }
 
-  const loadConfig = require("@react-native-community/cli/build/tools/config");
   const { platforms } = loadConfig();
   const targetPlatformConfig = platforms[targetPlatform];
   if (!targetPlatformConfig) {
@@ -84,32 +89,42 @@ function getTargetPlatform(): PlatformPath | undefined {
     );
   }
 
-  return [targetPlatform, targetPlatformConfig.npmPackageName];
+  // `npmPackageName` is unset if target platform is in core.
+  const { npmPackageName } = targetPlatformConfig;
+  return [
+    targetPlatform,
+    npmPackageName
+      ? path.dirname(
+          require.resolve(`${npmPackageName}/package.json`, {
+            paths: [process.cwd()],
+          })
+        )
+      : undefined,
+  ];
 }
 
-function initialize(): [string[] | undefined, Opts["pathFilter"]] {
-  const targetPlatform = getTargetPlatform();
-  if (!targetPlatform) {
-    return [undefined, (_pkg, _path, relativePath) => relativePath];
-  }
+function initialize(): [string[] | undefined, PathFilter] {
+  const defaultPathFilter: PathFilter = (_pkg, _path, relativePath) =>
+    relativePath;
 
-  const [platformName, platformPath] = targetPlatform;
+  const [platformName, platformPath] = getTargetPlatform();
   const reactNativePath = path.dirname(
     require.resolve("react-native/package.json", { paths: [process.cwd()] })
   );
-
   return [
     getPlatformExtensions(platformName),
-    (pkg, _path, relativePath) => {
-      if (pkg.name === "react-native") {
-        return path.relative(
-          reactNativePath,
-          path.join(platformPath, relativePath)
-        );
-      } else {
-        return relativePath;
-      }
-    },
+    platformPath
+      ? (pkg, _path, relativePath) => {
+          if (pkg.name === "react-native") {
+            return path.relative(
+              reactNativePath,
+              path.join(platformPath, relativePath)
+            );
+          } else {
+            return relativePath;
+          }
+        }
+      : defaultPathFilter,
   ];
 }
 

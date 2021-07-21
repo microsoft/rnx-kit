@@ -8,6 +8,8 @@ function setFixture(name: string): void {
 describe("jest-resolver", () => {
   const reactNativePath =
     path.sep + path.join("node_modules", "react-native", "index.js");
+  const reactNativeMacOSPath =
+    path.sep + path.join("__fixtures__", "react-native-macos", "index.js");
   const reactNativeWindowsPath =
     path.sep + path.join("__fixtures__", "react-native-windows", "index.js");
   const reactPath = path.sep + path.join("node_modules", "react", "index.js");
@@ -18,6 +20,7 @@ describe("jest-resolver", () => {
   afterEach(() => {
     consoleWarnSpy.mockReset();
     process.chdir(currentDir);
+    delete process.env["RN_TARGET_PLATFORM"];
   });
 
   test("throws if no package root is found", () => {
@@ -28,13 +31,15 @@ describe("jest-resolver", () => {
     process.chdir(root);
 
     jest.isolateModules(() => {
-      expect(() => require("../src/index")).toThrow();
+      expect(() => require("../src/index")).toThrowError(
+        "Failed to resolve current package root"
+      );
     });
 
     expect(consoleWarnSpy).not.toHaveBeenCalled();
   });
 
-  test("returns `react-native` when no config is present", () => {
+  test("returns path when no config is present", () => {
     jest.isolateModules(() => {
       const jestResolver = require("../src/index");
 
@@ -49,7 +54,7 @@ describe("jest-resolver", () => {
     expect(consoleWarnSpy).not.toHaveBeenCalled();
   });
 
-  test("returns `react-native` when platform config or override are missing", () => {
+  test("returns path when platform config or override are missing", () => {
     setFixture("project-with-config");
 
     jest.isolateModules(() => {
@@ -103,9 +108,7 @@ describe("jest-resolver", () => {
       const jestResolver = require("../src/index");
 
       expect(jestResolver("react-native")).toEqual(
-        expect.stringContaining(
-          path.sep + path.join("__fixtures__", "react-native-macos", "index.js")
-        )
+        expect.stringContaining(reactNativeMacOSPath)
       );
       expect(jestResolver("react")).toEqual(expect.stringContaining(reactPath));
     });
@@ -128,5 +131,48 @@ describe("jest-resolver", () => {
     });
 
     expect(consoleWarnSpy).toHaveBeenCalledTimes(1);
+  });
+
+  test("throws if an unknown platform is targeted", () => {
+    const targetPlatform = "nextstep";
+    process.env["RN_TARGET_PLATFORM"] = targetPlatform;
+
+    jest.isolateModules(() => {
+      expect(() => require("../src/index")).toThrowError(
+        `'${targetPlatform}' was not found`
+      );
+    });
+  });
+
+  test("returns path for a core platform", () => {
+    setFixture("multi-platform");
+
+    process.env["RN_TARGET_PLATFORM"] = "ios";
+
+    jest.isolateModules(() => {
+      const jestResolver = require("../src/index");
+      expect(jestResolver("react", {})).toEqual(
+        expect.stringContaining(reactPath)
+      );
+      expect(jestResolver("react-native", {})).toEqual(
+        expect.stringContaining(reactNativePath)
+      );
+    });
+  });
+
+  test("returns path for an out-of-tree platform", () => {
+    setFixture("multi-platform");
+
+    process.env["RN_TARGET_PLATFORM"] = "macos";
+
+    jest.isolateModules(() => {
+      const jestResolver = require("../src/index");
+      expect(jestResolver("react", {})).toEqual(
+        expect.stringContaining(reactPath)
+      );
+      expect(jestResolver("react-native")).toEqual(
+        expect.stringContaining(reactNativeMacOSPath)
+      );
+    });
   });
 });
