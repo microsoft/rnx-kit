@@ -170,6 +170,11 @@ describe("@rnx-kit/metro-config", () => {
     expect(conanExclude.test(reactCopy)).toBeFalsy();
     expect(conanExclude.test(packageCopy)).toBeTruthy();
     expect(conanExclude.test(projectCopy)).toBeFalsy();
+    expect(
+      conanExclude.test(
+        path.join("conan", "windows", ".vs", "conan", "v16", "Browse.VC.db")
+      )
+    ).toBeTruthy();
     expect(conanExclude.test("Test.ProjectImports.zip")).toBeTruthy();
 
     // John has a local copy of react-native and should ignore all other copies.
@@ -178,6 +183,11 @@ describe("@rnx-kit/metro-config", () => {
     expect(johnExclude.test(reactCopy)).toBeFalsy();
     expect(johnExclude.test(packageCopy)).toBeFalsy();
     expect(johnExclude.test(projectCopy)).toBeTruthy();
+    expect(
+      johnExclude.test(
+        path.join("john", "windows", ".vs", "conan", "v16", "Browse.VC.db")
+      )
+    ).toBeTruthy();
     expect(johnExclude.test("Test.ProjectImports.zip")).toBeTruthy();
   });
 
@@ -204,6 +214,11 @@ describe("@rnx-kit/metro-config", () => {
     expect(conanExclude.test(reactCopy)).toBeTruthy();
     expect(conanExclude.test(packageCopy)).toBeTruthy();
     expect(conanExclude.test(projectCopy)).toBeTruthy();
+    expect(
+      conanExclude.test(
+        path.join("conan", "windows", ".vs", "conan", "v16", "Browse.VC.db")
+      )
+    ).toBeTruthy();
     expect(conanExclude.test("Test.ProjectImports.zip")).toBeTruthy();
   });
 
