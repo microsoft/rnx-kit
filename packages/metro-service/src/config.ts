@@ -48,6 +48,15 @@ function reactNativePlatformResolver(platformImplementations: {
   };
 }
 
+function getAsyncRequireModulePath(): string | undefined {
+  try {
+    // `metro-runtime` was introduced in 0.63
+    return require.resolve("metro-runtime/src/modules/asyncRequire");
+  } catch (_) {
+    return require.resolve("metro/src/lib/bundle-modules/asyncRequire");
+  }
+}
+
 function getDefaultConfig(cliConfig: CLIConfig): InputConfigT {
   const outOfTreePlatforms = Object.keys(cliConfig.platforms).filter(
     (platform) => cliConfig.platforms[platform].npmPackageName
@@ -111,9 +120,7 @@ function getDefaultConfig(cliConfig: CLIConfig): InputConfigT {
         "metro-react-native-babel-transformer"
       ),
       assetRegistryPath: "react-native/Libraries/Image/AssetRegistry",
-      asyncRequireModulePath: require.resolve(
-        "metro-runtime/src/modules/asyncRequire"
-      ),
+      asyncRequireModulePath: getAsyncRequireModulePath(),
     },
     watchFolders: [],
   };
