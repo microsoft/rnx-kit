@@ -2,6 +2,21 @@
   "name": "@rnx-kit/metro-service",
   "entries": [
     {
+      "date": "Thu, 22 Jul 2021 16:59:25 GMT",
+      "tag": "@rnx-kit/metro-service_v1.0.4",
+      "version": "1.0.4",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Support Metro <0.63",
+            "author": "4123478+tido64@users.noreply.github.com",
+            "commit": "722506bfdb7966d022c7804574812aa8543fc2de",
+            "package": "@rnx-kit/metro-service"
+          }
+        ]
+      }
+    },
+    {
       "date": "Tue, 13 Jul 2021 17:31:45 GMT",
       "tag": "@rnx-kit/metro-service_v1.0.3",
       "version": "1.0.3",

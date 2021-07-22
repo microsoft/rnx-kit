@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/metro-service
 
-This log was last generated on Tue, 13 Jul 2021 17:31:45 GMT and should not be manually modified.
+This log was last generated on Thu, 22 Jul 2021 16:59:25 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 1.0.4
+
+Thu, 22 Jul 2021 16:59:25 GMT
+
+### Patches
+
+- Support Metro <0.63 (4123478+tido64@users.noreply.github.com)
 
 ## 1.0.3
 
