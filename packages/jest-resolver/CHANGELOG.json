@@ -1,0 +1,20 @@
+{
+  "name": "@rnx-kit/jest-resolver",
+  "entries": [
+    {
+      "date": "Fri, 23 Jul 2021 19:49:04 GMT",
+      "tag": "@rnx-kit/jest-resolver_v0.1.0",
+      "version": "0.1.0",
+      "comments": {
+        "minor": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/jest-resolver",
+            "comment": "Jest resolver that supports out-of-tree platforms",
+            "commit": "c329f9ae519a9383d2020bbc8f2a90b799f6894e"
+          }
+        ]
+      }
+    }
+  ]
+}

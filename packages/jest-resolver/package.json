@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/jest-resolver",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Jest resolver that supports out-of-tree platforms",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/jest-resolver#readme",
   "license": "MIT",
