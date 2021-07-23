@@ -50,6 +50,7 @@ module.exports = {
 if (require.main === module) {
   require("@rnx-kit/dep-check").cli({
     "custom-profiles": __filename,
+    "exclude-packages": "@rnx-kit/jest-resolver", // jest-resolver supports multiple versions of react-native
     vigilant: "0.64",
     write: process.argv.includes("--write"),
   });
