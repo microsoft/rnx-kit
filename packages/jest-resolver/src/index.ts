@@ -8,6 +8,12 @@ import { Opts, sync as resolveSync } from "resolve";
 type PathFilter = Opts["pathFilter"];
 type PlatformPath = [string | undefined, string | undefined];
 
+/**
+ * Returns all extensions to look for when resolving modules for specified
+ * target platform.
+ * @param targetPlatform The target platform
+ * @returns List of extensions; `undefined` if `moduleFileExtensions` is empty.
+ */
 function getPlatformExtensions(
   targetPlatform: string | undefined
 ): string[] | undefined {
@@ -16,6 +22,7 @@ function getPlatformExtensions(
   }
 
   // TODO: Should probably read Jest config
+  // https://github.com/microsoft/rnx-kit/issues/424
   const { moduleFileExtensions } = defaults;
   if (!moduleFileExtensions || moduleFileExtensions.length === 0) {
     return undefined;
@@ -23,6 +30,9 @@ function getPlatformExtensions(
 
   return [
     ...moduleFileExtensions.map((ext) => `.${targetPlatform}.${ext}`),
+    ...(targetPlatform === "win32" || targetPlatform === "windows"
+      ? moduleFileExtensions.map((ext) => `.win.${ext}`)
+      : []),
     ...moduleFileExtensions.map((ext) => `.native.${ext}`),
     ...moduleFileExtensions.map((ext) => `.${ext}`),
   ];
@@ -71,8 +81,13 @@ function getReactNativePlatformPath(rootDir = pkgDir.sync()): PlatformPath {
   return [undefined, undefined];
 }
 
+/**
+ * Returns the platform name and path to the module providing the platform.
+ * @returns `[platformName, platformPath]` pair
+ */
 function getTargetPlatform(): PlatformPath {
   // TODO: Figure out the mechanism for providing a target platform.
+  // https://github.com/microsoft/rnx-kit/issues/425
   const targetPlatform = process.env["RN_TARGET_PLATFORM"];
   if (!targetPlatform) {
     // If no target platform is set, see if we're inside an out-of-tree
@@ -103,6 +118,11 @@ function getTargetPlatform(): PlatformPath {
   ];
 }
 
+/**
+ * Returns the list of file extensions Jest should use to resolve modules, and
+ * a path filter for mapping `react-native` to the correct path.
+ * @returns `[extensions, pathFilter]` pair
+ */
 function initialize(): [string[] | undefined, PathFilter] {
   const defaultPathFilter: PathFilter = (_pkg, _path, relativePath) =>
     relativePath;
