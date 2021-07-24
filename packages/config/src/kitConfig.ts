@@ -1,6 +1,7 @@
 import type { BundleConfig } from "./bundleConfig";
 
 export type Capability =
+  | "core"
   | "core-android"
   | "core-ios"
   | "core-macos"

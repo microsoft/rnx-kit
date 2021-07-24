@@ -12,6 +12,7 @@ const profile: Profile = {
     name: "react",
     version: "16.11.0",
   },
+  core: reactNative,
   "core-android": reactNative,
   "core-ios": reactNative,
   "core-macos": {

@@ -10,17 +10,26 @@ const TOKEN_START = "<!-- @rnx-kit/dep-check/capabilities start -->";
 const TOKEN_END = "<!-- @rnx-kit/dep-check/capabilities end -->";
 
 /**
+ * Returns whether specified capability is a core capability.
+ * @param capability {string}
+ * @returns {boolean}
+ */
+function isCoreCapability(capability) {
+  return capability === "core" || capability.startsWith("core-");
+}
+
+/**
  * Compare function that places core capabilities first.
  * @param lhs {string}
  * @param rhs {string}
  * @returns {number}
  */
 function sortCoreFirst(lhs, rhs) {
-  if (lhs.startsWith("core-")) {
-    if (!rhs.startsWith("core-")) {
+  if (isCoreCapability(lhs)) {
+    if (!isCoreCapability(rhs)) {
       return -1;
     }
-  } else if (rhs.startsWith("core-")) {
+  } else if (isCoreCapability(rhs)) {
     return 1;
   }
 

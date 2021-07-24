@@ -8,6 +8,7 @@ const reactNative = {
 
 const profile: Profile = {
   ...profile_0_64,
+  core: reactNative,
   "core-android": reactNative,
   "core-ios": reactNative,
   "core-macos": {

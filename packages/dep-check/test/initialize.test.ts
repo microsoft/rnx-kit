@@ -31,7 +31,13 @@ describe("initializeConfig()", () => {
     },
   };
 
-  const mockCapabilities = ["core-android", "core-ios", "netinfo", "webview"];
+  const mockCapabilities = [
+    "core",
+    "core-android",
+    "core-ios",
+    "netinfo",
+    "webview",
+  ];
 
   beforeEach(() => {
     const unset = () => {
