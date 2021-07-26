@@ -2,6 +2,21 @@
   "name": "@rnx-kit/config",
   "entries": [
     {
+      "date": "Mon, 26 Jul 2021 15:59:59 GMT",
+      "tag": "@rnx-kit/config_v0.3.2",
+      "version": "0.3.2",
+      "comments": {
+        "patch": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/config",
+            "comment": "Add 'core' as an alias for react-native for out-of-tree platform packages that have a dependency on `react-native` core code, and not the Android/iOS specific bits. Currently, one would have to add a random capability that resolves to `react-native`, e.g. `core-android`, despite the capability not really being used.",
+            "commit": "b02743b55c37ac6b32b11a747e01c2d43013f954"
+          }
+        ]
+      }
+    },
+    {
       "date": "Mon, 12 Jul 2021 17:30:15 GMT",
       "tag": "@rnx-kit/config_v0.3.1",
       "version": "0.3.1",

@@ -1,8 +1,17 @@
 # Change Log - @rnx-kit/dep-check
 
-This log was last generated on Tue, 13 Jul 2021 13:40:11 GMT and should not be manually modified.
+This log was last generated on Mon, 26 Jul 2021 15:59:59 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 1.5.16
+
+Mon, 26 Jul 2021 15:59:59 GMT
+
+### Patches
+
+- Add 'core' as an alias for react-native for out-of-tree platform packages that have a dependency on `react-native` core code, and not the Android/iOS specific bits. Currently, one would have to add a random capability that resolves to `react-native`, e.g. `core-android`, despite the capability not really being used. (4123478+tido64@users.noreply.github.com)
+- Bump @rnx-kit/dep-check to v1.5.16 (4123478+tido64@users.noreply.github.com)
 
 ## 1.5.15
 
