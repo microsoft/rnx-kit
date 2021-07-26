@@ -1,0 +1,56 @@
+{
+  "name": "@rnx-kit/jest-preset",
+  "version": "0.0.1",
+  "description": "Jest preset for React Native code bases",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/jest-preset#readme",
+  "license": "MIT",
+  "files": [
+    "jest-preset.js",
+    "src/*.js"
+  ],
+  "main": "src/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "packages/jest-preset"
+  },
+  "scripts": {
+    "build": "rnx-kit-scripts build",
+    "format": "rnx-kit-scripts format",
+    "test": "rnx-kit-scripts test"
+  },
+  "dependencies": {
+    "@babel/preset-env": "^7.0.0",
+    "@babel/preset-typescript": "^7.0.0",
+    "find-up": "^5.0.0"
+  },
+  "peerDependencies": {
+    "@react-native-community/cli": ">=4.10",
+    "react-native": "^0.0.0-0 || >=0.63"
+  },
+  "devDependencies": {
+    "@jest/types": "^27.0.0",
+    "@rnx-kit/eslint-config": "*",
+    "@types/node": "^14.15.0",
+    "rnx-kit-scripts": "*"
+  },
+  "depcheck": {
+    "ignoreMatches": [
+      "@babel/preset-env",
+      "@babel/preset-typescript"
+    ]
+  },
+  "eslintConfig": {
+    "extends": "@rnx-kit/eslint-config"
+  },
+  "jest": {
+    "preset": "@rnx-kit/jest-preset",
+    "collectCoverageFrom": [
+      "src/*.js"
+    ],
+    "roots": [
+      "test"
+    ],
+    "testRegex": "/test/.*\\.test\\.ts$"
+  }
+}

@@ -33,7 +33,7 @@
   },
   "devDependencies": {
     "@react-native-community/cli-types": "^5.0.1",
-    "@rnx-kit/babel-preset-jest-typescript": "*",
+    "@rnx-kit/jest-preset": "*",
     "@types/metro": "*",
     "@types/metro-babel-transformer": "*",
     "@types/metro-config": "*",
@@ -55,6 +55,7 @@
     "extends": "@rnx-kit/eslint-config"
   },
   "jest": {
+    "preset": "@rnx-kit/jest-preset",
     "roots": [
       "test"
     ],

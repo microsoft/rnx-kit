@@ -7,7 +7,7 @@
     "depcheck": "react-native rnx-dep-check && rnx-kit-scripts depcheck",
     "format": "rnx-kit-scripts format",
     "lint": "rnx-kit-scripts lint",
-    "test": "rnx-kit-scripts test",
+    "test": "react-native rnx-test --platform ios",
     "bundle": "react-native rnx-bundle",
     "bundle+esbuild": "react-native rnx-bundle --bundle-prefix 'main+esbuild' --config metro+esbuild.config.js --experimental-tree-shake",
     "bundle:android": "react-native rnx-bundle --platform android",
@@ -34,6 +34,7 @@
     "@react-native-community/cli-platform-ios": "^5.0.0-0",
     "@rnx-kit/babel-preset-metro-react-native": "*",
     "@rnx-kit/cli": "*",
+    "@rnx-kit/jest-preset": "*",
     "@rnx-kit/metro-config": "*",
     "@rnx-kit/metro-plugin-cyclic-dependencies-detector": "*",
     "@rnx-kit/metro-plugin-duplicates-checker": "*",
@@ -44,6 +45,7 @@
     "@types/react-native": "^0.64.0",
     "metro-react-native-babel-preset": "^0.66.1",
     "react-native-test-app": "^0.7.0",
+    "react-test-renderer": "^17.0.2",
     "rnx-kit-scripts": "*",
     "typescript": "^4.0.0"
   },
@@ -51,7 +53,11 @@
     "extends": "@rnx-kit/eslint-config"
   },
   "jest": {
-    "preset": "react-native"
+    "preset": "@rnx-kit/jest-preset",
+    "roots": [
+      "test"
+    ],
+    "testRegex": "/test/.*\\.test\\.tsx?$"
   },
   "rnx-kit": {
     "reactNativeVersion": "^0.64",

@@ -30,6 +30,9 @@
     "@rnx-kit/typescript-service": "1.1.0",
     "chalk": "^4.1.0"
   },
+  "peerDependencies": {
+    "jest-cli": "^26.0 || ^27.0"
+  },
   "devDependencies": {
     "@react-native-community/cli-types": "^5.0.1",
     "@types/metro-config": "*",
