@@ -33,7 +33,7 @@ describe("capabilitiesFor()", () => {
       reactNativeVersion: "^0.64",
       reactNativeDevVersion: "0.64.0",
       kitType: "library",
-      capabilities: ["core-android", "core-ios"],
+      capabilities: ["core", "core-android", "core-ios"],
     });
   });
 
@@ -48,7 +48,7 @@ describe("capabilitiesFor()", () => {
     expect(capabilitiesFor(manifest, { kitType: "app" })).toEqual({
       reactNativeVersion: "^0.64",
       kitType: "app",
-      capabilities: ["core-android", "core-ios"],
+      capabilities: ["core", "core-android", "core-ios"],
     });
   });
 
@@ -68,7 +68,7 @@ describe("capabilitiesFor()", () => {
     expect(capabilitiesFor(manifest, { kitType: "app" })).toEqual({
       reactNativeVersion: "^0.64",
       kitType: "app",
-      capabilities: ["core-android", "core-ios", "react"],
+      capabilities: ["core", "core-android", "core-ios", "react"],
     });
   });
 });
