@@ -1,10 +1,9 @@
+import type { Config as CLIConfig } from "@react-native-community/cli-types";
 import { parsePlatform } from "./parsers";
 
 type Args = {
   platform: "android" | "ios" | "macos" | "windows" | "win32";
 };
-
-type ConfigT = Record<string, unknown>;
 
 type Options = {
   name: string;
@@ -14,14 +13,14 @@ type Options = {
     | string
     | boolean
     | number
-    | ((config: ConfigT) => string | boolean | number);
+    | ((config: CLIConfig) => string | boolean | number);
 };
 
 const COMMAND_NAME = "rnx-test";
 
 export function rnxTest(
   _argv: string[],
-  _config: ConfigT,
+  _config: CLIConfig,
   { platform }: Args
 ): void {
   const platformIndex = process.argv.indexOf("--platform");
