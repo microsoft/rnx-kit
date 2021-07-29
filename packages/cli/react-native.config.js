@@ -3,6 +3,7 @@ const {
   parseBoolean,
   rnxBundle,
   rnxDepCheck,
+  rnxTestCommand,
   rnxWriteThirdPartyNotices,
 } = require("./lib/index");
 
@@ -132,6 +133,7 @@ module.exports = {
         },
       ],
     },
+    rnxTestCommand,
     {
       name: "rnx-write-third-party-notices",
       description: "Writes third party notices based on the given bundle",
@@ -143,7 +145,7 @@ module.exports = {
             "The root of the repo where to start resolving modules from.",
         },
         {
-          name: "--source-,ap-file <file>",
+          name: "--source-map-file <file>",
           description: "The sourceMap file to generate licence contents for.",
         },
         {

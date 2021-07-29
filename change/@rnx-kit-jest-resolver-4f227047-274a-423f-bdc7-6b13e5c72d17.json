@@ -1,0 +1,7 @@
+{
+  "type": "none",
+  "comment": "Deprecated in favour of @rnx-kit/jest-preset",
+  "packageName": "@rnx-kit/jest-resolver",
+  "email": "4123478+tido64@users.noreply.github.com",
+  "dependentChangeType": "none"
+}

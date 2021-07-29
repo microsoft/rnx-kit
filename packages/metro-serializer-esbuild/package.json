@@ -28,7 +28,6 @@
     "metro": ">=0.66.1"
   },
   "devDependencies": {
-    "@rnx-kit/babel-preset-jest-typescript": "*",
     "@rnx-kit/metro-serializer": "*",
     "@types/metro": "*",
     "@types/metro-config": "*",
