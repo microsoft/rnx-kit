@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/metro-plugin-typescript-validation
 
-This log was last generated on Tue, 22 Jun 2021 15:04:23 GMT and should not be manually modified.
+This log was last generated on Thu, 29 Jul 2021 19:42:04 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 1.0.6
+
+Thu, 29 Jul 2021 19:42:04 GMT
+
+### Patches
+
+- Bump @rnx-kit/metro-plugin-typescript-validation to v1.0.6 (4123478+tido64@users.noreply.github.com)
 
 ## 1.0.5
 

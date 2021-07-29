@@ -2,6 +2,29 @@
   "name": "@rnx-kit/typescript-service",
   "entries": [
     {
+      "date": "Thu, 29 Jul 2021 19:42:04 GMT",
+      "tag": "@rnx-kit/typescript-service_v1.1.1",
+      "version": "1.1.1",
+      "comments": {
+        "none": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/typescript-service",
+            "comment": "Replace @rnx-kit/babel-preset-jest-typescript with @rnx-kit/jest-preset",
+            "commit": "bf6cf5092d383a447d0075fcf4f2584bbb347236"
+          }
+        ],
+        "patch": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/typescript-service",
+            "commit": "bf6cf5092d383a447d0075fcf4f2584bbb347236",
+            "comment": "Bump @rnx-kit/typescript-service to v1.1.1"
+          }
+        ]
+      }
+    },
+    {
       "date": "Tue, 13 Jul 2021 17:03:23 GMT",
       "tag": "@rnx-kit/typescript-service_v1.1.0",
       "version": "1.1.0",

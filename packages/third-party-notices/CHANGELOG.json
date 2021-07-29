@@ -2,6 +2,29 @@
   "name": "@rnx-kit/third-party-notices",
   "entries": [
     {
+      "date": "Thu, 29 Jul 2021 19:42:04 GMT",
+      "tag": "@rnx-kit/third-party-notices_v1.0.3",
+      "version": "1.0.3",
+      "comments": {
+        "none": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/third-party-notices",
+            "comment": "Replace @rnx-kit/babel-preset-jest-typescript with @rnx-kit/jest-preset",
+            "commit": "bf6cf5092d383a447d0075fcf4f2584bbb347236"
+          }
+        ],
+        "patch": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/third-party-notices",
+            "commit": "bf6cf5092d383a447d0075fcf4f2584bbb347236",
+            "comment": "Bump @rnx-kit/third-party-notices to v1.0.3"
+          }
+        ]
+      }
+    },
+    {
       "date": "Fri, 16 Jul 2021 21:45:40 GMT",
       "tag": "@rnx-kit/third-party-notices_v1.0.2",
       "version": "1.0.2",

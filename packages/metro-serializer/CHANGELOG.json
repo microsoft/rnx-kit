@@ -2,6 +2,29 @@
   "name": "@rnx-kit/metro-serializer",
   "entries": [
     {
+      "date": "Thu, 29 Jul 2021 19:42:04 GMT",
+      "tag": "@rnx-kit/metro-serializer_v1.0.1",
+      "version": "1.0.1",
+      "comments": {
+        "none": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/metro-serializer",
+            "comment": "Replace @rnx-kit/babel-preset-jest-typescript with @rnx-kit/jest-preset",
+            "commit": "bf6cf5092d383a447d0075fcf4f2584bbb347236"
+          }
+        ],
+        "patch": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/metro-serializer",
+            "commit": "bf6cf5092d383a447d0075fcf4f2584bbb347236",
+            "comment": "Bump @rnx-kit/metro-serializer to v1.0.1"
+          }
+        ]
+      }
+    },
+    {
       "date": "Mon, 12 Jul 2021 09:53:10 GMT",
       "tag": "@rnx-kit/metro-serializer_v1.0.0",
       "version": "1.0.0",

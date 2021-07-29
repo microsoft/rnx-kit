@@ -2,6 +2,27 @@
   "name": "@rnx-kit/cli",
   "entries": [
     {
+      "date": "Thu, 29 Jul 2021 19:42:04 GMT",
+      "tag": "@rnx-kit/cli_v0.6.5",
+      "version": "0.6.5",
+      "comments": {
+        "patch": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/cli",
+            "comment": "Add `rnx-test` command for running Jest with React Native platform awareness",
+            "commit": "bf6cf5092d383a447d0075fcf4f2584bbb347236"
+          },
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/cli",
+            "commit": "bf6cf5092d383a447d0075fcf4f2584bbb347236",
+            "comment": "Bump @rnx-kit/cli to v0.6.5"
+          }
+        ]
+      }
+    },
+    {
       "date": "Mon, 26 Jul 2021 15:59:59 GMT",
       "tag": "@rnx-kit/cli_v0.6.4",
       "version": "0.6.4",
