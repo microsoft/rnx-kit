@@ -1,4 +1,5 @@
 import os from "os";
+
 export const absolutePathRoot = os.platform() === "win32" ? "o:\\" : "/";
 
 export function osSpecificPath(p: string): string {

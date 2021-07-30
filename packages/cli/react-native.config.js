@@ -149,6 +149,12 @@ module.exports = {
           description: "The sourceMap file to generate licence contents for.",
         },
         {
+          name: "--json",
+          description: "Output license information as a JSON",
+          default: true,
+          parse: parseBoolean,
+        },
+        {
           name: "--output-file [file]",
           description: "The output file to write the licence file to.",
         },

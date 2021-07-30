@@ -1,4 +1,5 @@
 export {
-  writeThirdPartyNotices,
-  IWriteThirdPartyNoticesOptions,
-} from "./write-third-party-notices";
+  WriteThirdPartyNoticesOptions as IWriteThirdPartyNoticesOptions,
+  WriteThirdPartyNoticesOptions,
+} from "./types";
+export { writeThirdPartyNotices } from "./write-third-party-notices";

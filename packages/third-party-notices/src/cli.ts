@@ -1,18 +1,15 @@
+import { error } from "@rnx-kit/console";
 import * as path from "path";
-import chalk from "chalk";
 import * as yargs from "yargs";
-
-import {
-  writeThirdPartyNotices,
-  IWriteThirdPartyNoticesOptions,
-} from "./write-third-party-notices";
+import type { WriteThirdPartyNoticesOptions } from "./types";
+import { writeThirdPartyNotices } from "./write-third-party-notices";
 
 function fail(message: string): never {
-  console.error(chalk.red(message));
+  error(message);
   process.exit(1);
 }
 
-function getArgs(): IWriteThirdPartyNoticesOptions {
+function getArgs(): WriteThirdPartyNoticesOptions {
   const argv = yargs.options({
     rootPath: {
       type: "string",
@@ -23,6 +20,11 @@ function getArgs(): IWriteThirdPartyNoticesOptions {
       type: "string",
       describe: "The sourceMap file to generate license contents for.",
       require: true,
+    },
+    json: {
+      type: "boolean",
+      describe: "Output license information as a JSON",
+      default: false,
     },
     outputFile: {
       type: "string",
@@ -52,7 +54,7 @@ function getArgs(): IWriteThirdPartyNoticesOptions {
     },
   }).argv;
 
-  const writeTpnArgs: IWriteThirdPartyNoticesOptions = argv;
+  const writeTpnArgs: WriteThirdPartyNoticesOptions = argv;
 
   if (!writeTpnArgs.outputFile) {
     writeTpnArgs.outputFile =
@@ -71,6 +73,4 @@ async function main(): Promise<void> {
   await writeThirdPartyNotices(writeTpnArgs);
 }
 
-main().catch((err: string) => {
-  fail(`Error encountered: ${err}`);
-});
+main().catch((err: string) => fail(err));

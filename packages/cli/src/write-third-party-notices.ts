@@ -1,11 +1,10 @@
-import {
-  writeThirdPartyNotices,
-  IWriteThirdPartyNoticesOptions,
-} from "@rnx-kit/third-party-notices";
+import type { Config as CLIConfig } from "@react-native-community/cli-types";
+import { writeThirdPartyNotices } from "@rnx-kit/third-party-notices";
 
 type CliThirdPartyNoticesOptions = {
   rootPath: string;
   sourceMapFile: string;
+  json: boolean;
   outputFile?: string;
   ignoreScopes?: string;
   ignoreModules?: string;
@@ -13,29 +12,29 @@ type CliThirdPartyNoticesOptions = {
   additionalText?: string;
 };
 
-type ConfigT = Record<string, unknown>;
-
 export function rnxWriteThirdPartyNotices(
   _argv: Array<string>,
-  _config: ConfigT,
-  options: CliThirdPartyNoticesOptions
+  _config: CLIConfig,
+  {
+    additionalText,
+    ignoreModules,
+    ignoreScopes,
+    json,
+    outputFile,
+    preambleText,
+    rootPath,
+    sourceMapFile,
+  }: CliThirdPartyNoticesOptions
 ): void {
   // react-native-cli is not as rich as yargs, so we have to perform a mapping.
-  const args: IWriteThirdPartyNoticesOptions = {
-    rootPath: options.rootPath,
-    sourceMapFile: options.sourceMapFile,
-    outputFile: options.outputFile,
-    ignoreScopes: options.ignoreScopes
-      ? options.ignoreScopes.split(",")
-      : undefined,
-    ignoreModules: options.ignoreModules
-      ? options.ignoreModules.split(",")
-      : undefined,
-    preambleText: options.preambleText ? [options.preambleText] : undefined,
-    additionalText: options.additionalText
-      ? [options.additionalText]
-      : undefined,
-  };
-
-  writeThirdPartyNotices(args);
+  writeThirdPartyNotices({
+    rootPath,
+    sourceMapFile,
+    json,
+    outputFile,
+    ignoreScopes: ignoreScopes?.split(","),
+    ignoreModules: ignoreModules?.split(","),
+    preambleText: preambleText ? [preambleText] : undefined,
+    additionalText: additionalText ? [additionalText] : undefined,
+  });
 }

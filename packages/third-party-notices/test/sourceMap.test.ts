@@ -1,7 +1,7 @@
+import type { WriteThirdPartyNoticesOptions } from "../src/types";
 import {
-  parseSourceMap,
   extractModuleNameToPathMap,
-  IWriteThirdPartyNoticesOptions,
+  parseSourceMap,
 } from "../src/write-third-party-notices";
 import { absolutePathRoot, osSpecificPath } from "./pathHelper";
 
@@ -11,8 +11,9 @@ require("fs").existsSync = jest.fn().mockImplementation((path) => {
   return path.indexOf("missing") == -1;
 });
 
-const options: IWriteThirdPartyNoticesOptions = {
+const options: WriteThirdPartyNoticesOptions = {
   rootPath: `${absolutePathRoot}src`,
+  json: false,
 };
 
 describe("parseModule", () => {
