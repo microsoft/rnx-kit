@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/third-party-notices
 
-This log was last generated on Thu, 29 Jul 2021 19:42:04 GMT and should not be manually modified.
+This log was last generated on Fri, 30 Jul 2021 18:00:51 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 1.1.0
+
+Fri, 30 Jul 2021 18:00:51 GMT
+
+### Minor changes
+
+- Add JSON output format (4123478+tido64@users.noreply.github.com)
 
 ## 1.0.3
 
