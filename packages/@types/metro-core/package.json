@@ -1,0 +1,23 @@
+{
+  "private": "true",
+  "name": "@types/metro-core",
+  "version": "0.0.1",
+  "description": "TypeScript definition files for metro-core",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/@types/metro-core",
+  "license": "MIT",
+  "files": [
+    "*.d.ts"
+  ],
+  "main": "index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "packages/@types/metro-core"
+  },
+  "scripts": {
+    "format": "prettier --write *.d.ts"
+  },
+  "dependencies": {
+    "@types/node": "^14.15.0"
+  }
+}
