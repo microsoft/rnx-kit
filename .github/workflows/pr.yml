@@ -24,7 +24,7 @@ jobs:
       - name: Install package dependencies
         run: yarn ci
       - name: Check for change files
-        run: yarn run beachball check --branch ${{ env.GITHUB_BASE_REF }} --changehint \"Run 'yarn run change' from root of repo to generate a change file.\"
+        run: yarn run beachball check --branch $GITHUB_BASE_REF --changehint \"Run 'yarn run change' from root of repo to generate a change file.\"
       - name: Format
         run: yarn format
       - name: Align dependencies
