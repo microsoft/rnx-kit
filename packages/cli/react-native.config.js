@@ -151,7 +151,7 @@ module.exports = {
         {
           name: "--json",
           description: "Output license information as a JSON",
-          default: true,
+          default: false,
           parse: parseBoolean,
         },
         {
