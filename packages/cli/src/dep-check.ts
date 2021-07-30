@@ -1,6 +1,5 @@
+import type { Config as CLIConfig } from "@react-native-community/cli-types";
 import { Args, cli } from "@rnx-kit/dep-check";
-
-type ConfigT = Record<string, unknown>;
 
 // TypeScript loses the type of `key` when return type is `T`.
 // eslint-disable-next-line @typescript-eslint/ban-types
@@ -10,7 +9,7 @@ function pickValue<T>(key: keyof T, obj: T): {} | undefined {
 
 export function rnxDepCheck(
   argv: string[],
-  _config: ConfigT,
+  _config: CLIConfig,
   args: Args
 ): void {
   cli({
