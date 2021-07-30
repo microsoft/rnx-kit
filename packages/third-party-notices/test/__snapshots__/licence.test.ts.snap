@@ -134,6 +134,31 @@ additional 2
 "
 `;
 
+exports[`license createLicenseJSON 1`] = `
+Object {
+  "packages": Array [
+    Object {
+      "copyright": "No copyright notice",
+      "license": "MIT",
+      "name": "@rnx-kit/cli",
+      "version": "1.2.3-fixedVersionForTesting",
+    },
+    Object {
+      "copyright": "Copyright (c) Facebook, Inc. and its affiliates.",
+      "license": "MIT",
+      "name": "react",
+      "version": "1.2.3-fixedVersionForTesting",
+    },
+    Object {
+      "copyright": "Copyright (c) Facebook, Inc. and its affiliates.",
+      "license": "MIT",
+      "name": "react-native",
+      "version": "1.2.3-fixedVersionForTesting",
+    },
+  ],
+}
+`;
+
 exports[`license extractLicenses 1`] = `
 Array [
   Object {
@@ -173,8 +198,8 @@ SOFTWARE.
     "licenseURLs": Array [
       "https://spdx.org/licenses/MIT.html",
     ],
-    "name": "react-native",
-    "path": "~/node_modules/react-native",
+    "name": "react",
+    "path": "~/node_modules/react",
     "version": "1.2.3-fixedVersionForTesting",
   },
   Object {
@@ -205,8 +230,8 @@ SOFTWARE.
     "licenseURLs": Array [
       "https://spdx.org/licenses/MIT.html",
     ],
-    "name": "react",
-    "path": "~/node_modules/react",
+    "name": "react-native",
+    "path": "~/node_modules/react-native",
     "version": "1.2.3-fixedVersionForTesting",
   },
 ]

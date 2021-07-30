@@ -1,37 +1,15 @@
+import fs from "fs";
 import { resolve } from "path";
-import os from "os";
-
-export interface IWriteThirdPartyNoticesOptions {
-  rootPath: string;
-  sourceMapFile?: string;
-  outputFile?: string;
-  ignoreScopes?: string[];
-  ignoreModules?: string[];
-  preambleText?: string[];
-  additionalText?: string[];
-}
-
-interface ISourceMap {
-  sources: string[];
-  sections?: ISourceSection[];
-}
-
-interface ISourceSection {
-  map: ISourceMap;
-}
-
-interface IModuleNamePathPair {
-  name: string;
-  path: string;
-}
-
-export interface ILicense {
-  path: string;
-  licenseURLs: string[];
-  licenseText?: string;
-  license?: string;
-  version: string;
-}
+import { promisify } from "util";
+import { createLicenseJSON } from "./output/json";
+import { createLicenseFileContents } from "./output/text";
+import type {
+  License,
+  ModuleNamePathPair,
+  SourceMap,
+  SourceSection,
+  WriteThirdPartyNoticesOptions,
+} from "./types";
 
 const modulesRoot = "node_modules/";
 
@@ -54,27 +32,29 @@ const modulesRoot = "node_modules/";
  * @param options See IWriteThirdPartyNoticesOptions for more details
  */
 export async function writeThirdPartyNotices(
-  options: IWriteThirdPartyNoticesOptions
+  options: WriteThirdPartyNoticesOptions
 ): Promise<void> {
-  const util = require("util");
-  const fs = require("fs");
-  const readFileAsync = util.promisify(fs.readFile);
-  const writeFileAsync = util.promisify(fs.writeFile);
+  const readFileAsync = promisify(fs.readFile);
+
+  const { additionalText, json, outputFile, preambleText, sourceMapFile } =
+    options;
 
   // Parse source map file
-  const sourceMapJson = await readFileAsync(options.sourceMapFile, "utf8");
-  const sourceMap: ISourceMap = JSON.parse(sourceMapJson);
+  const sourceMapJson = await readFileAsync(sourceMapFile, "utf8");
+  const sourceMap: SourceMap = JSON.parse(sourceMapJson);
 
   const moduleNameToPathMap = extractModuleNameToPathMap(options, sourceMap);
   const licenses = await extractLicenses(moduleNameToPathMap);
-  const outputText = createLicenseFileContents(
-    moduleNameToPathMap,
-    licenses,
-    options.preambleText,
-    options.additionalText
-  );
+  const outputText = json
+    ? createLicenseJSON(licenses)
+    : createLicenseFileContents(licenses, preambleText, additionalText);
 
-  await writeFileAsync(options.outputFile, outputText, "utf8");
+  if (outputFile) {
+    const writeFileAsync = promisify(fs.writeFile);
+    await writeFileAsync(outputFile, outputText, "utf8");
+  } else {
+    console.log(outputText);
+  }
 }
 
 // helper functions
@@ -128,7 +108,7 @@ export function splitSourcePath(rootPath: string, p: string): string[] {
 }
 
 export function parseModule(
-  options: IWriteThirdPartyNoticesOptions,
+  options: WriteThirdPartyNoticesOptions,
   moduleNameToPath: Map<string, string>,
   p: string
 ): void {
@@ -150,9 +130,9 @@ export function parseModule(
 }
 
 export function parseSourceMap(
-  options: IWriteThirdPartyNoticesOptions,
+  options: WriteThirdPartyNoticesOptions,
   moduleNameToPath: Map<string, string>,
-  sourceMap: ISourceMap
+  sourceMap: SourceMap
 ): void {
   sourceMap.sources.forEach((source: string) => {
     source = normalizePath(source);
@@ -163,8 +143,8 @@ export function parseSourceMap(
 }
 
 export function extractModuleNameToPathMap(
-  options: IWriteThirdPartyNoticesOptions,
-  sourceMap: ISourceMap
+  options: WriteThirdPartyNoticesOptions,
+  sourceMap: SourceMap
 ): Map<string, string> {
   const moduleNameToPathMap = new Map<string, string>();
 
@@ -172,7 +152,7 @@ export function extractModuleNameToPathMap(
     parseSourceMap(options, moduleNameToPathMap, sourceMap);
   }
   if (sourceMap.sections) {
-    sourceMap.sections.forEach((section: ISourceSection) => {
+    sourceMap.sections.forEach((section: SourceSection) => {
       parseSourceMap(options, moduleNameToPathMap, section.map);
     });
   }
@@ -182,10 +162,10 @@ export function extractModuleNameToPathMap(
 
 export async function extractLicenses(
   moduleNameToPathMap: Map<string, string>
-): Promise<ILicense[]> {
+): Promise<License[]> {
   const licenseExtractors = require("./extractors");
 
-  const moduleNamePathPairs: IModuleNamePathPair[] = [];
+  const moduleNamePathPairs: ModuleNamePathPair[] = [];
   moduleNameToPathMap.forEach((modulePath: string, moduleName: string) => {
     // If both foo and @foo/bar exist, only include the license for foo
     if (moduleName[0] === "@") {
@@ -203,64 +183,9 @@ export async function extractLicenses(
   });
 
   // Extract licenses of all modules we found
-  return await licenseExtractors.nodeModule(moduleNamePathPairs);
-}
-
-export function createLicenseFileContents(
-  moduleNameToPath: Map<string, string>,
-  licenses: ILicense[],
-  preambleText?: string[],
-  additionalText?: string[]
-): string {
-  let outputText = "";
-
-  const writeLine = (s: string): void => {
-    outputText += `${s || ""}${os.EOL}`;
-  };
-
-  const writeMultipleLines = (s: string): void => {
-    const lines = s.split(/\r\n|\r|\n/g);
-    lines.forEach((line: string) => {
-      writeLine(line);
-    });
-  };
-
-  if (preambleText) {
-    writeMultipleLines(preambleText.join(os.EOL));
-  }
-
-  // Look up licenses and emit combined license text
-
-  Array.from(moduleNameToPath.keys())
-    .sort()
-    .forEach((moduleName: string) => {
-      const modulePath = moduleNameToPath.get(moduleName);
-      const license = licenses.find((_: ILicense) => _.path === modulePath);
-      if (!license) {
-        throw new Error(`Cannot find license information for ${moduleName}`);
-      }
-      if (!license.licenseText) {
-        if (
-          !license.license &&
-          (!license.licenseURLs || license.licenseURLs.length === 0)
-        ) {
-          throw new Error(`No license text or URL for ${moduleName}`);
-        }
-        license.licenseText = `${license.license} (${license.licenseURLs.join(
-          " "
-        )})`;
-      }
-      writeLine("================================================");
-      writeLine(`${moduleName} ${license.version}`);
-      writeLine("=====");
-      writeMultipleLines(license.licenseText.trim());
-      writeLine("================================================");
-      writeLine("");
-    });
-
-  if (additionalText) {
-    writeMultipleLines(additionalText.join(os.EOL));
-  }
-
-  return outputText;
+  return await licenseExtractors.nodeModule(
+    moduleNamePathPairs.sort(({ name: lhs }, { name: rhs }) =>
+      lhs < rhs ? -1 : lhs > rhs ? 1 : 0
+    )
+  );
 }

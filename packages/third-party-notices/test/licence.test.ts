@@ -1,14 +1,10 @@
 import path from "path";
-import {
-  createLicenseFileContents,
-  extractLicenses,
-  ILicense,
-} from "../src/write-third-party-notices";
+import { createLicenseJSON } from "../src/output/json";
+import { createLicenseFileContents } from "../src/output/text";
+import type { License } from "../src/types";
+import { extractLicenses } from "../src/write-third-party-notices";
 
-async function getSampleLicenseData(): Promise<{
-  licenses: ILicense[];
-  map: Map<string, string>;
-}> {
+async function getSampleLicenseData(): Promise<License[]> {
   const map = new Map();
   // License data in package.json
   map.set("@rnx-kit/cli", path.resolve("../../node_modules/@rnx-kit/cli"));
@@ -24,12 +20,12 @@ async function getSampleLicenseData(): Promise<{
     license.version = "1.2.3-fixedVersionForTesting";
   }
 
-  return { licenses, map };
+  return licenses;
 }
 
 describe("license", () => {
   test("extractLicenses", async () => {
-    const { licenses } = await getSampleLicenseData();
+    const licenses = await getSampleLicenseData();
 
     // normalize the paths for stable and cross platform snapshots
     for (const license of licenses) {
@@ -42,23 +38,30 @@ describe("license", () => {
   });
 
   test("createLicenseFileContents", async () => {
-    const { licenses, map } = await getSampleLicenseData();
+    const licenses = await getSampleLicenseData();
 
-    const licenseText = createLicenseFileContents(map, licenses);
+    const licenseText = createLicenseFileContents(licenses);
 
     expect(licenseText).toMatchSnapshot();
   });
 
   test("createLicenseFileContentsWithWrappers", async () => {
-    const { licenses, map } = await getSampleLicenseData();
+    const licenses = await getSampleLicenseData();
 
     const licenseText = createLicenseFileContents(
-      map,
       licenses,
       ["preamble 1\n2\r\n3\r4", "Preamble 2"],
       ["additional 1\n2\r\n3\r4", "additional 2"]
     );
 
     expect(licenseText).toMatchSnapshot();
+  });
+
+  test("createLicenseJSON", async () => {
+    const licenses = await getSampleLicenseData();
+
+    const licenseText = createLicenseJSON(licenses);
+
+    expect(JSON.parse(licenseText)).toMatchSnapshot();
   });
 });
