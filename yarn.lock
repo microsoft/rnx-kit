@@ -8014,6 +8014,11 @@ readdirp@~3.5.0:
   dependencies:
     picomatch "^2.2.1"
 
+readline@^1.3.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/readline/-/readline-1.3.0.tgz#c580d77ef2cfc8752b132498060dc9793a7ac01c"
+  integrity sha1-xYDXfvLPyHUrEySYBg3JeTp6wBw=
+
 recast@^0.20.3:
   version "0.20.4"
   resolved "https://registry.yarnpkg.com/recast/-/recast-0.20.4.tgz#db55983eac70c46b3fff96c8e467d65ffb4a7abc"
