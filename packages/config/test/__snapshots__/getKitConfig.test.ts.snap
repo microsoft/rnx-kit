@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`@rnx-kit/config tests kit options can be found in config file 1`] = `
+exports[`getKitConfig() kit options can be found in config file 1`] = `
 Object {
   "bundle": Object {
     "assetsPath": "./build-out/assets",
@@ -28,7 +28,7 @@ Object {
 }
 `;
 
-exports[`@rnx-kit/config tests kit options can be found in package.json 1`] = `
+exports[`getKitConfig() kit options can be found in package.json 1`] = `
 Object {
   "bundle": true,
   "dependencies": Object {
@@ -39,7 +39,7 @@ Object {
 }
 `;
 
-exports[`@rnx-kit/config tests kit options can be loaded via path 1`] = `
+exports[`getKitConfig() kit options can be loaded via path 1`] = `
 Object {
   "bundle": true,
   "dependencies": Object {

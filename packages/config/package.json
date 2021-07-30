@@ -17,11 +17,13 @@
     "semver": "^7.0.0"
   },
   "devDependencies": {
+    "@rnx-kit/jest-preset": "*",
     "@rnx-kit/metro-plugin-cyclic-dependencies-detector": "*",
     "@rnx-kit/metro-plugin-duplicates-checker": "*",
     "@types/metro": "*",
     "@types/node": "^14.15.0",
     "@types/semver": "^7.0.0",
+    "jest-extended": "^0.11.5",
     "rnx-kit-scripts": "0.1.1"
   },
   "depcheck": {
@@ -33,10 +35,13 @@
     "extends": "@rnx-kit/eslint-config"
   },
   "jest": {
-    "preset": "ts-jest",
-    "roots": [
-      "src"
+    "preset": "@rnx-kit/jest-preset",
+    "setupFilesAfterEnv": [
+      "jest-extended"
     ],
-    "testRegex": ".*\\.test\\.ts$"
+    "roots": [
+      "test"
+    ],
+    "testRegex": "/test/.*\\.test\\.ts$"
   }
 }

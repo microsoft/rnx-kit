@@ -1,4 +1,4 @@
-import { getKitCapabilities } from "./getKitCapabilities";
+import { getKitCapabilities } from "../src/getKitCapabilities";
 
 describe("getKitCapabilities()", () => {
   test("throws when supported React Native versions is invalid", () => {

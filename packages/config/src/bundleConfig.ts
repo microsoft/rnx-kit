@@ -8,41 +8,9 @@ import type { Options as DuplicateDetectorOptions } from "@rnx-kit/metro-plugin-
 export type AllPlatforms = "ios" | "android" | "windows" | "win32" | "macos";
 
 /**
- * Parameters controlling how a bundle is constructed.
+ * Parameters controlling bundler behavior at runtime.
  */
-export type BundleRequiredParameters = {
-  /**
-   * Path to the .js file which is the entry-point for building the bundle.
-   * Either absolute, or relative to the package.
-   *
-   * @default "lib/index.js"
-   */
-  entryPath: string;
-
-  /**
-   * Path where the bundle and source map files are written.
-   * Either absolute, or relative to the package.
-   *
-   * @default "dist"
-   */
-  distPath: string;
-
-  /**
-   * Path where all bundle assets (strings, images, fonts, sounds, ...) are written.
-   * Either absolute, or relative to the package.
-   *
-   * @default "dist"
-   */
-  assetsPath: string;
-
-  /**
-   * Prefix for the bundle name, followed by the platform and either ".bundle" (win, android)
-   * or ".jsbundle" (mac, ios).
-   *
-   * @default "index"
-   */
-  bundlePrefix: string;
-
+export type BundlerRuntimeParameters = {
   /**
    * Choose whether to detect cycles in the dependency graph. If true, then a default set
    * of options will be used. Otherwise the object allows for fine-grained control over
@@ -74,13 +42,50 @@ export type BundleRequiredParameters = {
   typescriptValidation: boolean;
 
   /**
-   * Choose whether to enable tree shaking.
+    * Choose whether to enable tree shaking.
 
-   * ⚠️ **THIS FEATURE IS HIGHLY EXPERIMENTAL** ⚠️
-   *
-   * @default false
-   */
+    * ⚠️ **THIS FEATURE IS HIGHLY EXPERIMENTAL** ⚠️
+    *
+    * @default false
+    */
   experimental_treeShake: boolean;
+};
+
+/**
+ * Parameters controlling how a bundle is constructed.
+ */
+export type BundleRequiredParameters = BundlerRuntimeParameters & {
+  /**
+   * Path to the .js file which is the entry-point for building the bundle.
+   * Either absolute, or relative to the package.
+   *
+   * @default "lib/index.js"
+   */
+  entryPath: string;
+
+  /**
+   * Path where the bundle and source map files are written.
+   * Either absolute, or relative to the package.
+   *
+   * @default "dist"
+   */
+  distPath: string;
+
+  /**
+   * Path where all bundle assets (strings, images, fonts, sounds, ...) are written.
+   * Either absolute, or relative to the package.
+   *
+   * @default "dist"
+   */
+  assetsPath: string;
+
+  /**
+   * Prefix for the bundle name, followed by the platform and either ".bundle" (win, android)
+   * or ".jsbundle" (mac, ios).
+   *
+   * @default "index"
+   */
+  bundlePrefix: string;
 };
 
 export type BundleParameters = Partial<BundleRequiredParameters> & {
@@ -122,7 +127,7 @@ export type BundleDefinition = BundleParameters & {
    * Platform-specific overrides for bundling parameters. Any parameter not listed in an override gets
    * its value from the shared bundle definition, or falls back to defaults.
    */
-  platforms?: { [K in AllPlatforms]: BundleParameters };
+  platforms?: { [K in AllPlatforms]?: BundleParameters };
 };
 
 /**
