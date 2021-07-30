@@ -9,8 +9,6 @@ jobs:
         uses: actions/setup-node@v2.3.0
         with:
           node-version: 14
-      - name: env dump
-        run: env
       - name: Checkout
         uses: actions/checkout@v2.3.4
         with:
@@ -26,7 +24,7 @@ jobs:
       - name: Install package dependencies
         run: yarn ci
       - name: Check for change files
-        run: yarn run check
+        run: yarn run beachball check --branch ${{ env.GITHUB_BASE_REF }} --changehint \"Run 'yarn run change' from root of repo to generate a change file.\"
       - name: Format
         run: yarn format
       - name: Align dependencies
