@@ -17,14 +17,20 @@ type Options = {
     | ((config: CLIConfig) => string | boolean | number);
 };
 
+const COMMAND_NAME = "rnx-test";
+
 export function rnxTest(
   _argv: string[],
   _config: CLIConfig,
   { platform }: Args
 ): void {
-  // Copy and remove the first three arguments from
-  // `node react-native rnx-test ...`
-  const argv = process.argv.slice(3);
+  const commandIndex = process.argv.indexOf(COMMAND_NAME);
+  if (commandIndex < 0) {
+    throw new Error("Failed to parse command arguments");
+  }
+
+  // Copy and remove the first arguments from `node react-native rnx-test ...`
+  const argv = process.argv.slice(commandIndex + 1);
 
   const platformIndex = argv.indexOf("--platform");
   if (platformIndex < 0) {
@@ -52,7 +58,7 @@ function jestOptions(): Options[] {
 }
 
 export const rnxTestCommand = {
-  name: "rnx-test",
+  name: COMMAND_NAME,
   description: "Test runner for React Native apps",
   func: rnxTest,
   options: [
