@@ -116,16 +116,7 @@ export async function rnxBundle(
   cliBundleOptions: CLIBundleOptions
 ): Promise<void> {
   //  unpack the CLI options that will effect all bundles
-  const {
-    id,
-    dev,
-    minify,
-    transformer,
-    maxWorkers,
-    resetCache,
-    config,
-    verbose,
-  } = cliBundleOptions;
+  const { id, dev, minify, maxWorkers, resetCache, config } = cliBundleOptions;
 
   //  load the Metro configuration
   const metroConfig = await loadMetroConfig(cliConfig, {
@@ -242,19 +233,13 @@ export async function rnxBundle(
       {
         assetsDest: assetsPath,
         entryFile: entryPath,
-        resetCache: !!resetCache,
-        transformer,
         minify,
-        config,
         platform: targetPlatform,
         dev,
         bundleOutput: bundlePath,
         bundleEncoding,
-        maxWorkers,
         sourcemapOutput: sourceMapPath,
         sourcemapSourcesRoot: sourceMapSourceRootPath,
-        verbose,
-        //unstableTransformProfile?: string;
       },
       metroConfig
     );
