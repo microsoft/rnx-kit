@@ -1,7 +1,0 @@
-{
-  "type": "patch",
-  "comment": "Add JSON output format to `rnx-write-third-party-notices`",
-  "packageName": "@rnx-kit/cli",
-  "email": "4123478+tido64@users.noreply.github.com",
-  "dependentChangeType": "patch"
-}

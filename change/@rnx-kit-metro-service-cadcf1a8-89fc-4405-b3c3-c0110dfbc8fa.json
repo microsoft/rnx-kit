@@ -1,7 +1,0 @@
-{
-  "type": "minor",
-  "comment": "Remove props that have no effect from bundle API. Update loadMetroConfig to support more overrides. Export Metro's runServer API as startServer. Export createTerminal API which instantiates a new Metro terminal and terminal reporter.",
-  "packageName": "@rnx-kit/metro-service",
-  "email": "afoxman@microsoft.com",
-  "dependentChangeType": "patch"
-}
