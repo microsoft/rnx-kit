@@ -1,0 +1,7 @@
+{
+  "type": "minor",
+  "comment": "Add a custom write function for redirecting diagnostic output.",
+  "packageName": "@rnx-kit/typescript-service",
+  "email": "afoxman@microsoft.com",
+  "dependentChangeType": "patch"
+}
