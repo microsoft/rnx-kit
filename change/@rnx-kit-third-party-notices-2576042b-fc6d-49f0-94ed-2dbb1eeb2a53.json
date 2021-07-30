@@ -1,5 +1,5 @@
 {
-  "type": "patch",
+  "type": "minor",
   "comment": "Add JSON output format",
   "packageName": "@rnx-kit/third-party-notices",
   "email": "4123478+tido64@users.noreply.github.com",
