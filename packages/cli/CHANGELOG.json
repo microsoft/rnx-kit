@@ -2,6 +2,27 @@
   "name": "@rnx-kit/cli",
   "entries": [
     {
+      "date": "Mon, 02 Aug 2021 11:18:46 GMT",
+      "tag": "@rnx-kit/cli_v0.6.7",
+      "version": "0.6.7",
+      "comments": {
+        "patch": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/cli",
+            "comment": "jest-cli allows passing argv directly to run()",
+            "commit": "49774eaf30ab5f7e87f1464cc14d1d58c83fb037"
+          },
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/cli",
+            "commit": "49774eaf30ab5f7e87f1464cc14d1d58c83fb037",
+            "comment": "Bump @rnx-kit/cli to v0.6.7"
+          }
+        ]
+      }
+    },
+    {
       "date": "Fri, 30 Jul 2021 18:00:51 GMT",
       "tag": "@rnx-kit/cli_v0.6.6",
       "version": "0.6.6",
