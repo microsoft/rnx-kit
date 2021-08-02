@@ -24,7 +24,7 @@
     "test": "rnx-kit-scripts test"
   },
   "dependencies": {
-    "@rnx-kit/console": "^1.0.0",
+    "@rnx-kit/console": "^1.0.1",
     "spdx-expression-parse": "^3.0.1",
     "yargs": "^16.0.0"
   },
