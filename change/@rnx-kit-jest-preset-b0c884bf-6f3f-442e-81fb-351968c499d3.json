@@ -1,7 +1,0 @@
-{
-  "type": "patch",
-  "comment": "Fix incorrect peer dependencies: added `@babel/core` and made the others optional since this package can be used without react-native.",
-  "packageName": "@rnx-kit/jest-preset",
-  "email": "4123478+tido64@users.noreply.github.com",
-  "dependentChangeType": "patch"
-}

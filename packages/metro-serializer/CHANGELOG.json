@@ -2,6 +2,21 @@
   "name": "@rnx-kit/metro-serializer",
   "entries": [
     {
+      "date": "Wed, 04 Aug 2021 10:08:23 GMT",
+      "tag": "@rnx-kit/metro-serializer_v1.0.2",
+      "version": "1.0.2",
+      "comments": {
+        "patch": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/metro-serializer",
+            "commit": "1d13d5df2ec61bb3426521199cde4e588cb849b1",
+            "comment": "Bump @rnx-kit/metro-serializer to v1.0.2"
+          }
+        ]
+      }
+    },
+    {
       "date": "Thu, 29 Jul 2021 19:42:04 GMT",
       "tag": "@rnx-kit/metro-serializer_v1.0.1",
       "version": "1.0.1",

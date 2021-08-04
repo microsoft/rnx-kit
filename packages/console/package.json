@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/console",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Simple console logger",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/console#readme",
   "license": "MIT",
