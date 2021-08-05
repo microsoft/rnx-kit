@@ -1,4 +1,5 @@
 import type { Config as CLIConfig } from "@react-native-community/cli-types";
+import console from "@rnx-kit/console";
 import type { AllPlatforms } from "@rnx-kit/config";
 import { BundleArgs, bundle, loadMetroConfig } from "@rnx-kit/metro-service";
 import { Service } from "@rnx-kit/typescript-service";
@@ -76,7 +77,7 @@ export async function rnxBundle(
   const tsservice = new Service();
 
   for (const targetPlatform of targetPlatforms) {
-    console.log(`Bundling ${targetPlatform}...`);
+    console.info(`Bundling ${targetPlatform}...`);
 
     const platformDefinition = getKitBundlePlatformDefinition(
       bundleDefinition,

@@ -7,6 +7,7 @@ import {
   getBundlePlatformDefinition,
   getKitConfig,
 } from "@rnx-kit/config";
+import console from "@rnx-kit/console";
 import type { BundleArgs } from "@rnx-kit/metro-service";
 import chalk from "chalk";
 
