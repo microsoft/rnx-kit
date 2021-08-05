@@ -49,7 +49,7 @@ export async function rnxStart(
   // interactive mode requires raw access to stdin
   let interactive = cliOptions.interactive;
   if (interactive) {
-    interactive = Boolean(process.stdin.setRawMode);
+    interactive = process.stdin.isTTY;
     if (!interactive) {
       console.warn(
         chalk.yellow(
