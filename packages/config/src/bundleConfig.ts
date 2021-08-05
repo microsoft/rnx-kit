@@ -42,12 +42,12 @@ export type BundlerRuntimeParameters = {
   typescriptValidation: boolean;
 
   /**
-    * Choose whether to enable tree shaking.
+   * Choose whether to enable tree shaking.
 
-    * ⚠️ **THIS FEATURE IS HIGHLY EXPERIMENTAL** ⚠️
-    *
-    * @default false
-    */
+   * ⚠️ **THIS FEATURE IS HIGHLY EXPERIMENTAL** ⚠️
+   *
+   * @default false
+   */
   experimental_treeShake: boolean;
 };
 
