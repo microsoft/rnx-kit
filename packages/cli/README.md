@@ -6,7 +6,7 @@
 Command-line interface for working with `kit` packages in your repo.
 
 - [Bundle a kit](#Bundle-a-Kit)
-- [Start a Bundle server](#Start-a-Bundle-Server)
+- [Start a bundle server](#Start-a-Bundle-Server)
 - [Manage kit dependencies](#Manage-Kit-Dependencies)
 - [Generate a 3rd-party notice for a kit](#Generate-a-Third%2dParty-Notice-for-a-Kit)
 
