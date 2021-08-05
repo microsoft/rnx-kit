@@ -9,6 +9,7 @@ import {
   getKitConfig,
   getServerConfig,
 } from "@rnx-kit/config";
+import { warn } from "@rnx-kit/console";
 import type { BundleArgs } from "@rnx-kit/metro-service";
 import chalk from "chalk";
 
@@ -29,14 +30,14 @@ export function getKitBundleDefinition(
   }
 
   if (kitConfig.bundle === null || kitConfig.bundle === undefined) {
-    console.warn(
+    warn(
       chalk.yellow(
         "No bundle configuration found for this react-native experience -- skipping bundling"
       )
     );
     return undefined;
   } else if (!kitConfig.bundle) {
-    console.warn(
+    warn(
       chalk.yellow(
         "Bundling is disabled for this react-native experience -- skipping"
       )

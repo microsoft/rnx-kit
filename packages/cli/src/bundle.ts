@@ -1,4 +1,5 @@
 import type { Config as CLIConfig } from "@react-native-community/cli-types";
+import { info, warn } from "@rnx-kit/console";
 import type { AllPlatforms } from "@rnx-kit/config";
 import { BundleArgs, bundle, loadMetroConfig } from "@rnx-kit/metro-service";
 import { Service } from "@rnx-kit/typescript-service";
@@ -76,7 +77,7 @@ export async function rnxBundle(
   const tsservice = new Service();
 
   for (const targetPlatform of targetPlatforms) {
-    console.log(`Bundling ${targetPlatform}...`);
+    info(`Bundling ${targetPlatform}...`);
 
     const platformDefinition = getKitBundlePlatformDefinition(
       bundleDefinition,
@@ -120,7 +121,7 @@ export async function rnxBundle(
     if (typescriptValidation) {
       const configFileName = tsservice.findProject(entryPath, "tsconfig.json");
       if (!configFileName) {
-        console.warn(
+        warn(
           chalk.yellow(
             "skipping TypeScript validation -- cannot find tsconfig.json for entry file %o"
           ),
