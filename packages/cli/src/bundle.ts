@@ -1,20 +1,45 @@
 import type { Config as CLIConfig } from "@react-native-community/cli-types";
-import {
-  AllPlatforms,
-  BundleDefinitionWithRequiredParameters,
-  getBundleDefinition,
-  getBundlePlatformDefinition,
-  getKitConfig,
-} from "@rnx-kit/config";
-import { bundle, BundleArgs, loadMetroConfig } from "@rnx-kit/metro-service";
+import { info, warn } from "@rnx-kit/console";
+import type { AllPlatforms } from "@rnx-kit/config";
+import { BundleArgs, bundle, loadMetroConfig } from "@rnx-kit/metro-service";
 import { Service } from "@rnx-kit/typescript-service";
 import chalk from "chalk";
 import fs from "fs";
 import path from "path";
-import { customizeMetroConfig, validateMetroConfig } from "./metro-config";
+import {
+  getKitBundleDefinition,
+  getKitBundlePlatformDefinition,
+} from "./kit-config";
+import { customizeMetroConfig } from "./metro-config";
 import type { TSProjectInfo } from "./types";
 
-type CLIBundleOptions = {
+function ensureDirectoryExists(directoryPath: string): void {
+  fs.mkdirSync(directoryPath, { recursive: true, mode: 0o755 });
+}
+
+/**
+ * Get the list of target platforms for bundling.
+ *
+ * @param overridePlatform Override platform, typically from the command-line. When given, this overrides the list of target platforms.
+ * @param targetPlatforms Target platforms, typically from the kit configuration.
+ * @returns Array of target platforms
+ */
+function getTargetPlatforms(
+  overridePlatform?: AllPlatforms,
+  targetPlatforms?: AllPlatforms[]
+): AllPlatforms[] {
+  if (overridePlatform) {
+    return [overridePlatform];
+  }
+  if (targetPlatforms && targetPlatforms.length > 0) {
+    return targetPlatforms;
+  }
+  throw new Error(
+    "No target platforms given. Update the kit configuration to include a target platform, or provide a target platform on the command-line."
+  );
+}
+
+export type CLIBundleOptions = {
   id?: string;
   platform?: AllPlatforms;
   entryPath?: string;
@@ -22,7 +47,6 @@ type CLIBundleOptions = {
   assetsPath?: string;
   bundlePrefix?: string;
   bundleEncoding?: BundleArgs["bundleEncoding"];
-  transformer?: string;
   dev: boolean;
   minify?: boolean;
   experimentalTreeShake?: boolean;
@@ -31,139 +55,34 @@ type CLIBundleOptions = {
   sourcemapSourcesRoot?: string;
   resetCache?: boolean;
   config?: string;
-  verbose: boolean;
 };
-
-function applyCommandLineOverrides(
-  params: BundleDefinitionWithRequiredParameters,
-  {
-    entryPath,
-    distPath,
-    assetsPath,
-    bundlePrefix,
-    bundleEncoding,
-    sourcemapOutput,
-    sourcemapSourcesRoot,
-    experimentalTreeShake,
-  }: CLIBundleOptions
-): BundleDefinitionWithRequiredParameters {
-  return {
-    ...params,
-    entryPath: entryPath ?? params.entryPath,
-    distPath: distPath ?? params.distPath,
-    assetsPath: assetsPath ?? params.assetsPath,
-    bundlePrefix: bundlePrefix ?? params.bundlePrefix,
-    bundleEncoding: bundleEncoding ?? params.bundleEncoding,
-    sourceMapPath: sourcemapOutput ?? params.sourceMapPath,
-    sourceMapSourceRootPath:
-      sourcemapSourcesRoot ?? params.sourceMapSourceRootPath,
-    experimental_treeShake:
-      experimentalTreeShake ?? params.experimental_treeShake,
-  };
-}
-
-function ensureDirectoryExists(directoryPath: string): void {
-  fs.mkdirSync(directoryPath, { recursive: true, mode: 0o755 });
-}
-
-function getKitConfigBundleDefinition(
-  id?: string
-): BundleDefinitionWithRequiredParameters | undefined {
-  //  get the rnx kit config, and make sure bundling is enabled
-  const kitConfig = getKitConfig();
-  if (
-    !kitConfig ||
-    kitConfig.bundle === null ||
-    kitConfig.bundle === undefined
-  ) {
-    console.warn(
-      chalk.yellow(
-        "No bundle configuration found for this react-native experience -- skipping bundling"
-      )
-    );
-    return undefined;
-  } else if (!kitConfig.bundle) {
-    console.warn(
-      chalk.yellow(
-        "Bundling is disabled for this react-native experience -- skipping"
-      )
-    );
-    return undefined;
-  }
-
-  // get the bundle definition
-  return getBundleDefinition(kitConfig.bundle, id);
-}
-
-function getTargetPlatforms(
-  { platform }: CLIBundleOptions,
-  { targets }: BundleDefinitionWithRequiredParameters
-): AllPlatforms[] {
-  if (platform) {
-    return [platform];
-  }
-
-  if (targets) {
-    return targets;
-  }
-
-  return [];
-}
 
 export async function rnxBundle(
   _argv: Array<string>,
   cliConfig: CLIConfig,
-  cliBundleOptions: CLIBundleOptions
+  cliOptions: CLIBundleOptions
 ): Promise<void> {
-  //  unpack the CLI options that will effect all bundles
-  const { id, dev, minify, maxWorkers, resetCache, config } = cliBundleOptions;
+  const metroConfig = await loadMetroConfig(cliConfig, cliOptions);
 
-  //  load the Metro configuration
-  const metroConfig = await loadMetroConfig(cliConfig, {
-    config,
-    maxWorkers,
-    resetCache,
-  });
-  if (!validateMetroConfig(metroConfig)) {
+  const bundleDefinition = getKitBundleDefinition(cliOptions.id);
+  if (!bundleDefinition) {
     return Promise.resolve();
   }
 
-  //  get the kit config's bundle definition using the optional id
-  const definition = getKitConfigBundleDefinition(id);
-  if (!definition) {
-    //  bundling is disabled, or the kit has no bundle definitions
-    console.warn(
-      "skipping bundling -- kit configuration does not define any bundles"
-    );
-    return Promise.resolve();
-  }
+  const targetPlatforms = getTargetPlatforms(
+    cliOptions.platform,
+    Object.keys(bundleDefinition.platforms ?? {}) as AllPlatforms[]
+  );
 
-  //  get the list of target platforms, favoring the command-line over the bundle definition
-  const targetPlatforms = getTargetPlatforms(cliBundleOptions, definition);
-  if (targetPlatforms.length === 0) {
-    console.error("no target platforms given");
-    return Promise.reject(
-      new Error(
-        "No target platforms given. Update the kit configuration to include a target platform, or provide a target platform on the command-line."
-      )
-    );
-  }
-
-  //  create a typescript service
   const tsservice = new Service();
 
-  //  create a bundle for each target platform
   for (const targetPlatform of targetPlatforms) {
-    console.log(`Bundling ${targetPlatform}...`);
+    info(`Bundling ${targetPlatform}...`);
 
-    //  unpack the platform-specific bundle definition
-    const platformDefinition = getBundlePlatformDefinition(
-      definition,
-      targetPlatform
-    );
-    const options = applyCommandLineOverrides(
-      platformDefinition,
-      cliBundleOptions
+    const platformDefinition = getKitBundlePlatformDefinition(
+      bundleDefinition,
+      targetPlatform,
+      cliOptions
     );
     const {
       entryPath,
@@ -176,7 +95,7 @@ export async function rnxBundle(
       detectDuplicateDependencies,
       typescriptValidation,
       experimental_treeShake,
-    } = options;
+    } = platformDefinition;
 
     //  assemble the full path to the bundle file
     const bundleExtension =
@@ -186,14 +105,14 @@ export async function rnxBundle(
     const bundleFile = `${bundlePrefix}.${targetPlatform}.${bundleExtension}`;
     const bundlePath = path.join(distPath, bundleFile);
 
-    let { sourceMapPath } = options;
+    let { sourceMapPath } = platformDefinition;
 
     //  always create a source-map in dev mode
-    if (dev) {
+    if (cliOptions.dev) {
       sourceMapPath = sourceMapPath ?? bundleFile + ".map";
     }
 
-    //  assemble the full path the source map file
+    //  use an absolute path for the source map file
     if (sourceMapPath) {
       sourceMapPath = path.join(distPath, sourceMapPath);
     }
@@ -202,13 +121,14 @@ export async function rnxBundle(
     if (typescriptValidation) {
       const configFileName = tsservice.findProject(entryPath, "tsconfig.json");
       if (!configFileName) {
-        console.warn(
-          "skipping TypeScript validation -- cannot find tsconfig.json for entry file %o",
+        warn(
+          chalk.yellow(
+            "skipping TypeScript validation -- cannot find tsconfig.json for entry file %o"
+          ),
           entryPath
         );
       } else {
         tsprojectInfo = {
-          platform: targetPlatform,
           service: tsservice,
           configFileName,
         };
@@ -223,19 +143,19 @@ export async function rnxBundle(
       experimental_treeShake
     );
 
-    //  ensure all output directories exist
+    // ensure all output directories exist
     ensureDirectoryExists(path.dirname(bundlePath));
     sourceMapPath && ensureDirectoryExists(path.dirname(sourceMapPath));
     assetsPath && ensureDirectoryExists(assetsPath);
 
-    //  create the bundle
+    // create the bundle
     await bundle(
       {
         assetsDest: assetsPath,
         entryFile: entryPath,
-        minify,
+        minify: cliOptions.minify,
         platform: targetPlatform,
-        dev,
+        dev: cliOptions.dev,
         bundleOutput: bundlePath,
         bundleEncoding,
         sourcemapOutput: sourceMapPath,

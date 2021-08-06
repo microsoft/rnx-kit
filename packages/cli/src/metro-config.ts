@@ -6,30 +6,13 @@ import {
   DuplicateDependencies,
   Options as DuplicateDetectorOptions,
 } from "@rnx-kit/metro-plugin-duplicates-checker";
+import type { Project } from "@rnx-kit/typescript-service";
 import { MetroPlugin, MetroSerializer } from "@rnx-kit/metro-serializer";
 import { MetroSerializer as MetroSerializerEsbuild } from "@rnx-kit/metro-serializer-esbuild";
 import type { DeltaResult, Graph } from "metro";
-import type { ConfigT, InputConfigT, SerializerConfigT } from "metro-config";
+import type { InputConfigT, SerializerConfigT } from "metro-config";
+import { AllPlatforms } from "../../config/lib";
 import type { TSProjectInfo } from "./types";
-
-function reportError(prop: string) {
-  console.error(
-    "error: Metro configuration property '%o' should not be set. This command may overwrite it, based on command-line arguments or kit configuration.",
-    prop
-  );
-}
-
-//  Validate the Metro configuration. Make sure that any reserved
-//  fields haven't been set by the app. We reserve certain fields
-//  so that we can control them through configuration.
-export function validateMetroConfig(metroConfig: ConfigT): boolean {
-  if (metroConfig.serializer.customSerializer) {
-    reportError("customSerializer");
-    return false;
-  }
-
-  return true;
-}
 
 const emptySerializerHook = (_graph: Graph, _delta: DeltaResult): void => {
   // nop
@@ -82,33 +65,45 @@ export function customizeMetroConfig(
   metroConfig.serializer.experimentalSerializerHook = emptySerializerHook;
   if (tsprojectInfo) {
     const { service, configFileName } = tsprojectInfo;
+    const tsprojectByPlatform: Map<AllPlatforms, Project> = new Map();
 
-    const tsproject = service.openProject(configFileName);
-    if (tsproject) {
-      //  start with an empty project, ignoring the file graph provided by tsconfig.json
-      tsproject.removeAllFiles();
+    const hook = (graph: Graph, delta: DeltaResult): void => {
+      // get the target platform for this hook call
+      const platform = graph.transformOptions.platform as AllPlatforms;
+      if (!platform) {
+        return;
+      }
 
-      const hook = (_graph: Graph, delta: DeltaResult): void => {
-        //  keep the TS project in sync with Metro's file graph
-        if (delta.reset) {
-          tsproject.removeAllFiles();
-        }
+      // lookup the TS project for the target platform. if it doesn't exist, create it.
+      if (!tsprojectByPlatform.has(platform)) {
+        const tsproject = service.openProject(configFileName);
 
-        for (const module of delta.added.values()) {
-          tsproject.addFile(module.path);
-        }
-        for (const module of delta.modified.values()) {
-          tsproject.updateFile(module.path);
-        }
-        for (const module of delta.modified.values()) {
-          tsproject.removeFile(module.path);
-        }
+        //  start with an empty project, ignoring the file graph provided by tsconfig.json
+        tsproject.removeAllFiles();
 
-        //  validate the project, printing errors to the console
-        tsproject.validate();
-      };
+        tsprojectByPlatform.set(platform, tsproject);
+      }
+      const tsproject = tsprojectByPlatform.get(platform)!;
 
-      metroConfig.serializer.experimentalSerializerHook = hook;
-    }
+      //  keep the TS project in sync with Metro's file graph
+      if (delta.reset) {
+        tsproject.removeAllFiles();
+      }
+
+      for (const module of delta.added.values()) {
+        tsproject.addFile(module.path);
+      }
+      for (const module of delta.modified.values()) {
+        tsproject.updateFile(module.path);
+      }
+      for (const module of delta.deleted.values()) {
+        tsproject.removeFile(module);
+      }
+
+      //  validate the project, printing errors to the console
+      tsproject.validate();
+    };
+
+    metroConfig.serializer.experimentalSerializerHook = hook;
   }
 }
