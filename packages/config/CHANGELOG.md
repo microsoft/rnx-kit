@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/config
 
-This log was last generated on Wed, 04 Aug 2021 10:08:23 GMT and should not be manually modified.
+This log was last generated on Fri, 06 Aug 2021 18:05:53 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 0.3.5
+
+Fri, 06 Aug 2021 18:05:53 GMT
+
+### Patches
+
+- Refactor config types, pulling out bundler runtime parameters. This does not impact the package API, but is important for the upcoming Metro server work. Add tests for the bundle definition code. Move existing tests into their own directory, and update jest config and snapshots. (afoxman@microsoft.com)
 
 ## 0.3.4
 

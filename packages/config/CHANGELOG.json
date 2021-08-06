@@ -2,6 +2,21 @@
   "name": "@rnx-kit/config",
   "entries": [
     {
+      "date": "Fri, 06 Aug 2021 18:05:53 GMT",
+      "tag": "@rnx-kit/config_v0.3.5",
+      "version": "0.3.5",
+      "comments": {
+        "patch": [
+          {
+            "author": "afoxman@microsoft.com",
+            "package": "@rnx-kit/config",
+            "comment": "Refactor config types, pulling out bundler runtime parameters. This does not impact the package API, but is important for the upcoming Metro server work. Add tests for the bundle definition code. Move existing tests into their own directory, and update jest config and snapshots.",
+            "commit": "e0c49e3c2e2acb7327f81f42d3023667b3887b93"
+          }
+        ]
+      }
+    },
+    {
       "date": "Wed, 04 Aug 2021 10:08:23 GMT",
       "tag": "@rnx-kit/config_v0.3.4",
       "version": "0.3.4",

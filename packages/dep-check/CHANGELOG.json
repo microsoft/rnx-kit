@@ -2,6 +2,21 @@
   "name": "@rnx-kit/dep-check",
   "entries": [
     {
+      "date": "Fri, 06 Aug 2021 18:05:53 GMT",
+      "tag": "@rnx-kit/dep-check_v1.5.19",
+      "version": "1.5.19",
+      "comments": {
+        "patch": [
+          {
+            "author": "afoxman@microsoft.com",
+            "package": "@rnx-kit/dep-check",
+            "commit": "e0c49e3c2e2acb7327f81f42d3023667b3887b93",
+            "comment": "Bump @rnx-kit/dep-check to v1.5.19"
+          }
+        ]
+      }
+    },
+    {
       "date": "Wed, 04 Aug 2021 10:08:23 GMT",
       "tag": "@rnx-kit/dep-check_v1.5.18",
       "version": "1.5.18",

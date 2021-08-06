@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/cli",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "Command-line interface for working with kit packages in your repo",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/cli",
   "license": "MIT",
@@ -19,8 +19,8 @@
     "test": "rnx-kit-scripts test"
   },
   "dependencies": {
-    "@rnx-kit/config": "0.3.4",
-    "@rnx-kit/dep-check": "^1.5.18",
+    "@rnx-kit/config": "0.3.5",
+    "@rnx-kit/dep-check": "^1.5.19",
     "@rnx-kit/metro-plugin-cyclic-dependencies-detector": "1.0.5",
     "@rnx-kit/metro-plugin-duplicates-checker": "1.1.5",
     "@rnx-kit/metro-serializer": "1.0.2",
