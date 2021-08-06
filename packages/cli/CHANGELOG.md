@@ -1,8 +1,17 @@
 # Change Log - @rnx-kit/cli
 
-This log was last generated on Wed, 04 Aug 2021 10:08:23 GMT and should not be manually modified.
+This log was last generated on Fri, 06 Aug 2021 17:50:49 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 0.7.0
+
+Fri, 06 Aug 2021 17:50:49 GMT
+
+### Minor changes
+
+- Remove props which have no effect from bundle command. (afoxman@microsoft.com)
+- Bump @rnx-kit/cli to v0.7.0 (afoxman@microsoft.com)
 
 ## 0.6.8
 

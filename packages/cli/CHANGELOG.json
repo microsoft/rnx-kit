@@ -2,6 +2,27 @@
   "name": "@rnx-kit/cli",
   "entries": [
     {
+      "date": "Fri, 06 Aug 2021 17:50:49 GMT",
+      "tag": "@rnx-kit/cli_v0.7.0",
+      "version": "0.7.0",
+      "comments": {
+        "minor": [
+          {
+            "author": "afoxman@microsoft.com",
+            "package": "@rnx-kit/cli",
+            "comment": "Remove props which have no effect from bundle command.",
+            "commit": "97ec3dcb6845ec8b7e766d1916ed61728b80ef86"
+          },
+          {
+            "author": "afoxman@microsoft.com",
+            "package": "@rnx-kit/cli",
+            "commit": "97ec3dcb6845ec8b7e766d1916ed61728b80ef86",
+            "comment": "Bump @rnx-kit/cli to v0.7.0"
+          }
+        ]
+      }
+    },
+    {
       "date": "Wed, 04 Aug 2021 10:08:23 GMT",
       "tag": "@rnx-kit/cli_v0.6.8",
       "version": "0.6.8",
