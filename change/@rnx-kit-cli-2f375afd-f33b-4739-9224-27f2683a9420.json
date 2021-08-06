@@ -1,7 +1,0 @@
-{
-  "type": "minor",
-  "comment": "Add `rnx-start` command to CLI. Update docs",
-  "packageName": "@rnx-kit/cli",
-  "email": "afoxman@microsoft.com",
-  "dependentChangeType": "patch"
-}

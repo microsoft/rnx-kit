@@ -1,8 +1,17 @@
 # Change Log - @rnx-kit/cli
 
-This log was last generated on Fri, 06 Aug 2021 18:23:09 GMT and should not be manually modified.
+This log was last generated on Fri, 06 Aug 2021 22:07:45 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 0.9.0
+
+Fri, 06 Aug 2021 22:07:45 GMT
+
+### Minor changes
+
+- Add `rnx-start` command to CLI. Update docs (afoxman@microsoft.com)
+- Bump @rnx-kit/cli to v0.9.0 (afoxman@microsoft.com)
 
 ## 0.8.0
 

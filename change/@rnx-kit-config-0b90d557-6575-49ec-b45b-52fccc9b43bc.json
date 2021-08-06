@@ -1,7 +1,0 @@
-{
-  "type": "minor",
-  "comment": "Add server config types, functions and tests to kit config.",
-  "packageName": "@rnx-kit/config",
-  "email": "afoxman@microsoft.com",
-  "dependentChangeType": "patch"
-}

@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/dep-check
 
-This log was last generated on Fri, 06 Aug 2021 18:05:53 GMT and should not be manually modified.
+This log was last generated on Fri, 06 Aug 2021 22:07:45 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 1.5.20
+
+Fri, 06 Aug 2021 22:07:45 GMT
+
+### Patches
+
+- Bump @rnx-kit/dep-check to v1.5.20 (afoxman@microsoft.com)
 
 ## 1.5.19
 

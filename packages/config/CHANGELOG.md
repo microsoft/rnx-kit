@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/config
 
-This log was last generated on Fri, 06 Aug 2021 18:05:53 GMT and should not be manually modified.
+This log was last generated on Fri, 06 Aug 2021 22:07:45 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 0.4.0
+
+Fri, 06 Aug 2021 22:07:45 GMT
+
+### Minor changes
+
+- Add server config types, functions and tests to kit config. (afoxman@microsoft.com)
 
 ## 0.3.5
 

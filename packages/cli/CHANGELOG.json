@@ -2,6 +2,27 @@
   "name": "@rnx-kit/cli",
   "entries": [
     {
+      "date": "Fri, 06 Aug 2021 22:07:45 GMT",
+      "tag": "@rnx-kit/cli_v0.9.0",
+      "version": "0.9.0",
+      "comments": {
+        "minor": [
+          {
+            "author": "afoxman@microsoft.com",
+            "package": "@rnx-kit/cli",
+            "comment": "Add `rnx-start` command to CLI. Update docs",
+            "commit": "f8f9598f2be6df361dd6adb06921a05a46a1230b"
+          },
+          {
+            "author": "afoxman@microsoft.com",
+            "package": "@rnx-kit/cli",
+            "commit": "f8f9598f2be6df361dd6adb06921a05a46a1230b",
+            "comment": "Bump @rnx-kit/cli to v0.9.0"
+          }
+        ]
+      }
+    },
+    {
       "date": "Fri, 06 Aug 2021 18:23:09 GMT",
       "tag": "@rnx-kit/cli_v0.8.0",
       "version": "0.8.0",
