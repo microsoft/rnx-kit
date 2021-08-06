@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/cli
 
-This log was last generated on Fri, 06 Aug 2021 18:05:53 GMT and should not be manually modified.
+This log was last generated on Fri, 06 Aug 2021 18:23:09 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 0.8.0
+
+Fri, 06 Aug 2021 18:23:09 GMT
+
+### Minor changes
+
+- Refactor bundle command, moving kit and metro config logic to separate files. Add failure when no target platform is given. Remove command-line props which have no effect. Remove Metro config validation as it isn't workable with all the props we override. Update Metro hook function to track one TS project per platform. Fix Metro hook function: incorrectly using modified to delete file from TS project. Change @rnx-kit dependencies to semver ranges. (afoxman@microsoft.com)
 
 ## 0.7.1
 

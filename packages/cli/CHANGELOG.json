@@ -2,6 +2,21 @@
   "name": "@rnx-kit/cli",
   "entries": [
     {
+      "date": "Fri, 06 Aug 2021 18:23:09 GMT",
+      "tag": "@rnx-kit/cli_v0.8.0",
+      "version": "0.8.0",
+      "comments": {
+        "minor": [
+          {
+            "author": "afoxman@microsoft.com",
+            "package": "@rnx-kit/cli",
+            "comment": "Refactor bundle command, moving kit and metro config logic to separate files. Add failure when no target platform is given. Remove command-line props which have no effect. Remove Metro config validation as it isn't workable with all the props we override. Update Metro hook function to track one TS project per platform. Fix Metro hook function: incorrectly using modified to delete file from TS project. Change @rnx-kit dependencies to semver ranges.",
+            "commit": "d4cc9733fff683948473f181fe649a30c8747103"
+          }
+        ]
+      }
+    },
+    {
       "date": "Fri, 06 Aug 2021 18:05:53 GMT",
       "tag": "@rnx-kit/cli_v0.7.1",
       "version": "0.7.1",
