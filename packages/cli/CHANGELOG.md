@@ -1,8 +1,34 @@
 # Change Log - @rnx-kit/cli
 
-This log was last generated on Thu, 29 Jul 2021 19:42:04 GMT and should not be manually modified.
+This log was last generated on Wed, 04 Aug 2021 10:08:23 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 0.6.8
+
+Wed, 04 Aug 2021 10:08:23 GMT
+
+### Patches
+
+- Bump @rnx-kit/cli to v0.6.8 (4123478+tido64@users.noreply.github.com)
+
+## 0.6.7
+
+Mon, 02 Aug 2021 11:18:46 GMT
+
+### Patches
+
+- jest-cli allows passing argv directly to run() (4123478+tido64@users.noreply.github.com)
+- Bump @rnx-kit/cli to v0.6.7 (4123478+tido64@users.noreply.github.com)
+
+## 0.6.6
+
+Fri, 30 Jul 2021 18:00:51 GMT
+
+### Patches
+
+- Add JSON output format to `rnx-write-third-party-notices` (4123478+tido64@users.noreply.github.com)
+- Bump @rnx-kit/cli to v0.6.6 (4123478+tido64@users.noreply.github.com)
 
 ## 0.6.5
 
