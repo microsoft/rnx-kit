@@ -1,8 +1,59 @@
 # Change Log - @rnx-kit/cli
 
-This log was last generated on Thu, 29 Jul 2021 19:42:04 GMT and should not be manually modified.
+This log was last generated on Fri, 06 Aug 2021 18:23:09 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 0.8.0
+
+Fri, 06 Aug 2021 18:23:09 GMT
+
+### Minor changes
+
+- Refactor bundle command, moving kit and metro config logic to separate files. Add failure when no target platform is given. Remove command-line props which have no effect. Remove Metro config validation as it isn't workable with all the props we override. Update Metro hook function to track one TS project per platform. Fix Metro hook function: incorrectly using modified to delete file from TS project. Change @rnx-kit dependencies to semver ranges. (afoxman@microsoft.com)
+
+## 0.7.1
+
+Fri, 06 Aug 2021 18:05:53 GMT
+
+### Patches
+
+- Bump @rnx-kit/cli to v0.7.1 (afoxman@microsoft.com)
+
+## 0.7.0
+
+Fri, 06 Aug 2021 17:50:49 GMT
+
+### Minor changes
+
+- Remove props which have no effect from bundle command. (afoxman@microsoft.com)
+- Bump @rnx-kit/cli to v0.7.0 (afoxman@microsoft.com)
+
+## 0.6.8
+
+Wed, 04 Aug 2021 10:08:23 GMT
+
+### Patches
+
+- Bump @rnx-kit/cli to v0.6.8 (4123478+tido64@users.noreply.github.com)
+
+## 0.6.7
+
+Mon, 02 Aug 2021 11:18:46 GMT
+
+### Patches
+
+- jest-cli allows passing argv directly to run() (4123478+tido64@users.noreply.github.com)
+- Bump @rnx-kit/cli to v0.6.7 (4123478+tido64@users.noreply.github.com)
+
+## 0.6.6
+
+Fri, 30 Jul 2021 18:00:51 GMT
+
+### Patches
+
+- Add JSON output format to `rnx-write-third-party-notices` (4123478+tido64@users.noreply.github.com)
+- Bump @rnx-kit/cli to v0.6.6 (4123478+tido64@users.noreply.github.com)
 
 ## 0.6.5
 

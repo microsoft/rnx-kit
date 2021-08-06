@@ -1,8 +1,24 @@
 # Change Log - @rnx-kit/typescript-service
 
-This log was last generated on Thu, 29 Jul 2021 19:42:04 GMT and should not be manually modified.
+This log was last generated on Fri, 06 Aug 2021 17:50:49 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 1.2.0
+
+Fri, 06 Aug 2021 17:50:49 GMT
+
+### Minor changes
+
+- Add a custom write function for redirecting diagnostic output. (afoxman@microsoft.com)
+
+## 1.1.2
+
+Wed, 04 Aug 2021 10:08:23 GMT
+
+### Patches
+
+- Bump @rnx-kit/typescript-service to v1.1.2 (4123478+tido64@users.noreply.github.com)
 
 ## 1.1.1
 

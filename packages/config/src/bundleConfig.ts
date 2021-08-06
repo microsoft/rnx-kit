@@ -88,6 +88,43 @@ export type BundleRequiredParameters = BundlerRuntimeParameters & {
   bundlePrefix: string;
 };
 
+/**
+ * Parameters controlling how a bundle is constructed.
+ */
+export type BundleRequiredParameters = BundlerRuntimeParameters & {
+  /**
+   * Path to the .js file which is the entry-point for building the bundle.
+   * Either absolute, or relative to the package.
+   *
+   * @default "lib/index.js"
+   */
+  entryPath: string;
+
+  /**
+   * Path where the bundle and source map files are written.
+   * Either absolute, or relative to the package.
+   *
+   * @default "dist"
+   */
+  distPath: string;
+
+  /**
+   * Path where all bundle assets (strings, images, fonts, sounds, ...) are written.
+   * Either absolute, or relative to the package.
+   *
+   * @default "dist"
+   */
+  assetsPath: string;
+
+  /**
+   * Prefix for the bundle name, followed by the platform and either ".bundle" (win, android)
+   * or ".jsbundle" (mac, ios).
+   *
+   * @default "index"
+   */
+  bundlePrefix: string;
+};
+
 export type BundleParameters = Partial<BundleRequiredParameters> & {
   /**
    * Encoding scheme to use when writing the bundle file. Currently limited

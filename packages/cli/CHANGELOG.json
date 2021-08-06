@@ -2,6 +2,114 @@
   "name": "@rnx-kit/cli",
   "entries": [
     {
+      "date": "Fri, 06 Aug 2021 18:23:09 GMT",
+      "tag": "@rnx-kit/cli_v0.8.0",
+      "version": "0.8.0",
+      "comments": {
+        "minor": [
+          {
+            "author": "afoxman@microsoft.com",
+            "package": "@rnx-kit/cli",
+            "comment": "Refactor bundle command, moving kit and metro config logic to separate files. Add failure when no target platform is given. Remove command-line props which have no effect. Remove Metro config validation as it isn't workable with all the props we override. Update Metro hook function to track one TS project per platform. Fix Metro hook function: incorrectly using modified to delete file from TS project. Change @rnx-kit dependencies to semver ranges.",
+            "commit": "d4cc9733fff683948473f181fe649a30c8747103"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Fri, 06 Aug 2021 18:05:53 GMT",
+      "tag": "@rnx-kit/cli_v0.7.1",
+      "version": "0.7.1",
+      "comments": {
+        "patch": [
+          {
+            "author": "afoxman@microsoft.com",
+            "package": "@rnx-kit/cli",
+            "commit": "e0c49e3c2e2acb7327f81f42d3023667b3887b93",
+            "comment": "Bump @rnx-kit/cli to v0.7.1"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Fri, 06 Aug 2021 17:50:49 GMT",
+      "tag": "@rnx-kit/cli_v0.7.0",
+      "version": "0.7.0",
+      "comments": {
+        "minor": [
+          {
+            "author": "afoxman@microsoft.com",
+            "package": "@rnx-kit/cli",
+            "comment": "Remove props which have no effect from bundle command.",
+            "commit": "97ec3dcb6845ec8b7e766d1916ed61728b80ef86"
+          },
+          {
+            "author": "afoxman@microsoft.com",
+            "package": "@rnx-kit/cli",
+            "commit": "97ec3dcb6845ec8b7e766d1916ed61728b80ef86",
+            "comment": "Bump @rnx-kit/cli to v0.7.0"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Wed, 04 Aug 2021 10:08:23 GMT",
+      "tag": "@rnx-kit/cli_v0.6.8",
+      "version": "0.6.8",
+      "comments": {
+        "patch": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/cli",
+            "commit": "1d13d5df2ec61bb3426521199cde4e588cb849b1",
+            "comment": "Bump @rnx-kit/cli to v0.6.8"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Mon, 02 Aug 2021 11:18:46 GMT",
+      "tag": "@rnx-kit/cli_v0.6.7",
+      "version": "0.6.7",
+      "comments": {
+        "patch": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/cli",
+            "comment": "jest-cli allows passing argv directly to run()",
+            "commit": "49774eaf30ab5f7e87f1464cc14d1d58c83fb037"
+          },
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/cli",
+            "commit": "49774eaf30ab5f7e87f1464cc14d1d58c83fb037",
+            "comment": "Bump @rnx-kit/cli to v0.6.7"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Fri, 30 Jul 2021 18:00:51 GMT",
+      "tag": "@rnx-kit/cli_v0.6.6",
+      "version": "0.6.6",
+      "comments": {
+        "patch": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/cli",
+            "comment": "Add JSON output format to `rnx-write-third-party-notices`",
+            "commit": "dd66becefd2a7e26e96d06c607a127700ecda9bc"
+          },
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/cli",
+            "commit": "dd66becefd2a7e26e96d06c607a127700ecda9bc",
+            "comment": "Bump @rnx-kit/cli to v0.6.6"
+          }
+        ]
+      }
+    },
+    {
       "date": "Thu, 29 Jul 2021 19:42:04 GMT",
       "tag": "@rnx-kit/cli_v0.6.5",
       "version": "0.6.5",

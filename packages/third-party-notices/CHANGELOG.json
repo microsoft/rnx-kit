@@ -2,6 +2,51 @@
   "name": "@rnx-kit/third-party-notices",
   "entries": [
     {
+      "date": "Wed, 04 Aug 2021 10:08:23 GMT",
+      "tag": "@rnx-kit/third-party-notices_v1.1.1",
+      "version": "1.1.1",
+      "comments": {
+        "patch": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/third-party-notices",
+            "commit": "1d13d5df2ec61bb3426521199cde4e588cb849b1",
+            "comment": "Bump @rnx-kit/third-party-notices to v1.1.1"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Mon, 02 Aug 2021 11:18:46 GMT",
+      "tag": "@rnx-kit/third-party-notices_v1.1.0",
+      "version": "1.1.0",
+      "comments": {
+        "none": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/third-party-notices",
+            "comment": "Bump @rnx-kit/console to 1.0.1 so Beachball doesn't get confused during publishing",
+            "commit": "49774eaf30ab5f7e87f1464cc14d1d58c83fb037"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Fri, 30 Jul 2021 18:00:51 GMT",
+      "tag": "@rnx-kit/third-party-notices_v1.1.0",
+      "version": "1.1.0",
+      "comments": {
+        "minor": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/third-party-notices",
+            "comment": "Add JSON output format",
+            "commit": "dd66becefd2a7e26e96d06c607a127700ecda9bc"
+          }
+        ]
+      }
+    },
+    {
       "date": "Thu, 29 Jul 2021 19:42:04 GMT",
       "tag": "@rnx-kit/third-party-notices_v1.0.3",
       "version": "1.0.3",

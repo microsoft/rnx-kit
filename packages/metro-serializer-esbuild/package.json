@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/metro-serializer-esbuild",
-  "version": "0.0.11",
+  "version": "0.0.12",
   "description": "Experimental esbuild serializer for Metro",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/metro-serializer-esbuild#readme",
   "license": "MIT",
@@ -19,7 +19,7 @@
     "lint": "rnx-kit-scripts lint"
   },
   "dependencies": {
-    "@rnx-kit/console": "^1.0.1",
+    "@rnx-kit/console": "^1.0.2",
     "esbuild": "^0.12.8",
     "esbuild-plugin-lodash": "^1.0.3",
     "semver": "^7.0.0"

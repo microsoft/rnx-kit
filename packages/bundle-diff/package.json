@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/bundle-diff",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Simple tool for diffing the content of two bundles",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/bundle-diff#readme",
   "license": "MIT",

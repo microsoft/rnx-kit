@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/metro-service",
-  "version": "1.0.5",
+  "version": "1.1.0",
   "description": "Metro service for bundling and bundle-serving",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/metro-service#readme",
   "license": "MIT",

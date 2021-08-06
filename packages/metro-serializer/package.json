@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/metro-serializer",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Metro's default JavaScript bundle serializer but with plugin support",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/metro-serializer#readme",
   "license": "MIT",
