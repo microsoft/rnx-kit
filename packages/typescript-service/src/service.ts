@@ -9,9 +9,9 @@ export class Service {
   private diagnosticWriter;
   private projectConfigLoader;
 
-  constructor() {
+  constructor(write?: (message: string) => void) {
     this.documentRegistry = ts.createDocumentRegistry();
-    this.diagnosticWriter = createDiagnosticWriter();
+    this.diagnosticWriter = createDiagnosticWriter(write);
     this.projectConfigLoader = new ProjectConfigLoader(this.diagnosticWriter);
   }
 

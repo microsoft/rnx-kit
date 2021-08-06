@@ -107,7 +107,7 @@ export type MetalConfigT = {
 };
 
 export type ServerConfigT = {
-  enhanceMiddleware: (Middleware, Server) => Middleware;
+  enhanceMiddleware: (middleware: Middleware, server: Server) => Middleware;
   useGlobalHotkey: boolean;
   port: number;
   rewriteRequestUrl: (url: string) => string;

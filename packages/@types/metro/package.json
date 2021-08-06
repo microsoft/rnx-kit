@@ -21,6 +21,7 @@
     "@types/babel__code-frame": "^7.0.0",
     "@types/metro-babel-transformer": "*",
     "@types/metro-config": "*",
+    "@types/metro-core": "*",
     "@types/metro-source-map": "*",
     "@types/metro-transform-worker": "*"
   }

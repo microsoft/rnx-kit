@@ -6558,7 +6558,7 @@ metro-config@0.66.2, metro-config@^0.64.0, metro-config@^0.66.1, metro-config@^0
     metro-core "0.66.2"
     metro-runtime "0.66.2"
 
-metro-core@0.66.2, metro-core@^0.64.0, metro-core@^0.66.2:
+metro-core@0.66.2, metro-core@^0.64.0, metro-core@^0.66.1, metro-core@^0.66.2:
   version "0.66.2"
   resolved "https://registry.yarnpkg.com/metro-core/-/metro-core-0.66.2.tgz#ead776a17b3e5a307e6dc22259db30bf5c7e8490"
   integrity sha512-JieLZkef/516yxXYvQxWnf3OWw5rcgWRy76K8JV/wr/i8LGVGulPAXlIi445/QZzXVydzRVASKAEVqyxM5F4mA==

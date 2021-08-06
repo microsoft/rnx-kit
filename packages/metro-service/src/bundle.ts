@@ -11,18 +11,13 @@ import { saveAssets } from "./asset";
 export interface BundleArgs {
   assetsDest?: string;
   entryFile: string;
-  resetCache: boolean;
-  transformer?: string;
   minify?: boolean;
-  config?: string;
   platform: string;
   dev: boolean;
   bundleOutput: string;
   bundleEncoding?: OutputOptions["bundleEncoding"];
-  maxWorkers?: number;
   sourcemapOutput?: string;
   sourcemapSourcesRoot?: string;
-  verbose: boolean;
   unstableTransformProfile?: TransformProfile;
 }
 

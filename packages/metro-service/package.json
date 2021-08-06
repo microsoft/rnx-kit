@@ -27,6 +27,7 @@
   "peerDependencies": {
     "metro": ">=0.66.1",
     "metro-config": ">=0.66.1",
+    "metro-core": ">=0.66.1",
     "metro-react-native-babel-transformer": ">=0.66.1",
     "metro-resolver": ">=0.66.1",
     "metro-runtime": ">=0.66.1"
@@ -36,11 +37,13 @@
     "@rnx-kit/jest-preset": "*",
     "@types/metro": "*",
     "@types/metro-babel-transformer": "*",
+    "@types/metro-core": "*",
     "@types/metro-config": "*",
     "@types/metro-resolver": "*",
     "@types/node": "^14.15.0",
     "metro": "^0.66.1",
     "metro-config": "^0.66.1",
+    "metro-core": "^0.66.1",
     "metro-react-native-babel-transformer": "^0.66.1",
     "metro-resolver": "^0.66.1",
     "metro-runtime": "^0.66.1",
