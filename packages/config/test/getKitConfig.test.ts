@@ -1,10 +1,7 @@
-// @ts-check
-"use strict";
-
-import { getKitConfig } from "./getKitConfig";
+import { getKitConfig } from "../src/getKitConfig";
 import path from "path";
 
-describe("@rnx-kit/config tests", () => {
+describe("getKitConfig()", () => {
   const notPresentFixture = "not-present";
   const inPackageFixture = "in-package";
   const inConfigFixture = "in-config-js";
@@ -12,7 +9,7 @@ describe("@rnx-kit/config tests", () => {
   const currentWorkingDir = process.cwd();
 
   function fixturePath(name: string): string {
-    return path.join(currentWorkingDir, "src", "__fixtures__", name);
+    return path.join(currentWorkingDir, "test", "__fixtures__", name);
   }
 
   /**
