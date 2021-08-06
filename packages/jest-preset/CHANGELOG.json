@@ -2,6 +2,21 @@
   "name": "@rnx-kit/jest-preset",
   "entries": [
     {
+      "date": "Wed, 04 Aug 2021 10:08:23 GMT",
+      "tag": "@rnx-kit/jest-preset_v0.1.1",
+      "version": "0.1.1",
+      "comments": {
+        "patch": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/jest-preset",
+            "comment": "Fix incorrect peer dependencies: added `@babel/core` and made the others optional since this package can be used without react-native.",
+            "commit": "1d13d5df2ec61bb3426521199cde4e588cb849b1"
+          }
+        ]
+      }
+    },
+    {
       "date": "Thu, 29 Jul 2021 19:42:04 GMT",
       "tag": "@rnx-kit/jest-preset_v0.1.0",
       "version": "0.1.0",

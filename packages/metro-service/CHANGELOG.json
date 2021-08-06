@@ -2,6 +2,36 @@
   "name": "@rnx-kit/metro-service",
   "entries": [
     {
+      "date": "Fri, 06 Aug 2021 17:50:49 GMT",
+      "tag": "@rnx-kit/metro-service_v1.1.0",
+      "version": "1.1.0",
+      "comments": {
+        "minor": [
+          {
+            "author": "afoxman@microsoft.com",
+            "package": "@rnx-kit/metro-service",
+            "comment": "Remove props that have no effect from bundle API. Update loadMetroConfig to support more overrides. Export Metro's runServer API as startServer. Export createTerminal API which instantiates a new Metro terminal and terminal reporter.",
+            "commit": "97ec3dcb6845ec8b7e766d1916ed61728b80ef86"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Wed, 04 Aug 2021 10:08:23 GMT",
+      "tag": "@rnx-kit/metro-service_v1.0.6",
+      "version": "1.0.6",
+      "comments": {
+        "patch": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/metro-service",
+            "commit": "1d13d5df2ec61bb3426521199cde4e588cb849b1",
+            "comment": "Bump @rnx-kit/metro-service to v1.0.6"
+          }
+        ]
+      }
+    },
+    {
       "date": "Thu, 29 Jul 2021 19:42:04 GMT",
       "tag": "@rnx-kit/metro-service_v1.0.5",
       "version": "1.0.5",

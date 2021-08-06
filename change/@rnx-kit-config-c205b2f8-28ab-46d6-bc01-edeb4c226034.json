@@ -1,0 +1,7 @@
+{
+  "type": "patch",
+  "comment": "Refactor config types, pulling out bundler runtime parameters. This does not impact the package API, but is important for the upcoming Metro server work. Add tests for the bundle definition code. Move existing tests into their own directory, and update jest config and snapshots.",
+  "packageName": "@rnx-kit/config",
+  "email": "afoxman@microsoft.com",
+  "dependentChangeType": "patch"
+}

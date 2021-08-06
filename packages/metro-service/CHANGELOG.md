@@ -1,8 +1,24 @@
 # Change Log - @rnx-kit/metro-service
 
-This log was last generated on Thu, 29 Jul 2021 19:42:04 GMT and should not be manually modified.
+This log was last generated on Fri, 06 Aug 2021 17:50:49 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 1.1.0
+
+Fri, 06 Aug 2021 17:50:49 GMT
+
+### Minor changes
+
+- Remove props that have no effect from bundle API. Update loadMetroConfig to support more overrides. Export Metro's runServer API as startServer. Export createTerminal API which instantiates a new Metro terminal and terminal reporter. (afoxman@microsoft.com)
+
+## 1.0.6
+
+Wed, 04 Aug 2021 10:08:23 GMT
+
+### Patches
+
+- Bump @rnx-kit/metro-service to v1.0.6 (4123478+tido64@users.noreply.github.com)
 
 ## 1.0.5
 
