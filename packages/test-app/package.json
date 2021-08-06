@@ -18,7 +18,7 @@
     "ios": "react-native run-ios",
     "macos": "react-native run-macos --scheme ReactTestApp",
     "windows": "react-native run-windows --sln windows\\SampleCrossApp.sln",
-    "start": "react-native start --projectRoot src"
+    "start": "react-native rnx-start --project-root src"
   },
   "dependencies": {
     "react": "17.0.1",
@@ -84,6 +84,13 @@
         "android": {
           "assetsPath": "dist/res"
         }
+      }
+    },
+    "server": {
+      "detectDuplicateDependencies": {
+        "ignoredModules": [
+          "react-is"
+        ]
       }
     },
     "capabilities": [

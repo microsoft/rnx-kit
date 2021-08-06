@@ -1,4 +1,5 @@
 import type { BundleConfig } from "./bundleConfig";
+import type { ServerConfig } from "./serverConfig";
 
 export type Capability =
   | "core"
@@ -88,6 +89,12 @@ export type KitConfig = {
    * Specifies how the kit is bundled. When not defined, the kit cannot be bundled.
    */
   bundle?: BundleConfig;
+
+  /**
+   * Specifies how the kit's development bundle-server is configured. When not defined,
+   * the kit will be served using default values.
+   */
+  server?: ServerConfig;
 
   /**
    * Retrieve the dependencies for the kit, either via:

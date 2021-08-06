@@ -1,7 +1,10 @@
+const path = require("path");
+
 const {
   parsePlatform,
   parseBoolean,
   rnxBundle,
+  rnxStart,
   rnxDepCheck,
   rnxTestCommand,
   rnxWriteThirdPartyNotices,
@@ -91,6 +94,90 @@ module.exports = {
         {
           name: "--config [string]",
           description: "Path to the Metro configuration file.",
+        },
+      ],
+    },
+    {
+      name: "rnx-start",
+      func: rnxStart,
+      description:
+        "Start a bundle-server to host your react-native experience during development",
+      options: [
+        {
+          name: "--host [string]",
+          description:
+            "Host name or address to bind when listening for incoming server requests. When not given, requests from all addresses are accepted.",
+          default: "",
+        },
+        {
+          name: "--port [number]",
+          description:
+            "Host port to use when listening for incoming server requests.",
+          parse: parseInt,
+          default: 8081,
+        },
+        {
+          name: "--project-root [path]",
+          description:
+            "Path to the root of your react-native experience project. The bundle server uses this root path to resolve all web requests.",
+          parse: (val) => path.resolve(val),
+        },
+        {
+          name: "--watch-folders [paths]",
+          description:
+            "Additional folders which will be added to the file-watch list. Comma-separated. By default, Metro watches all project files, and triggers a bundle-reload when anything changes.",
+          parse: (val) => val.split(",").map((folder) => path.resolve(folder)),
+        },
+        {
+          name: "--asset-plugins [list]",
+          description:
+            "Additional asset plugins to be used by the Metro Babel transformer. Comma-separated list containing plugin modules and/or absolute paths to plugin packages.",
+          parse: (val) => val.split(","),
+        },
+        {
+          name: "--source-exts [list]",
+          description:
+            "Additional source-file extensions to include when generating bundles. Comma-separated list, excluding the leading dot.",
+          parse: (val) => val.split(","),
+        },
+        {
+          name: "--max-workers [number]",
+          description:
+            "Specifies the maximum number of parallel worker threads to use for transforming files. This defaults to the number of cores available on your machine.",
+          parse: parseInt,
+        },
+        {
+          name: "--custom-log-reporter-path [string]",
+          description:
+            "Path to a JavaScript file which exports a Metro 'TerminalReporter' function. This replaces the default reporter, which writes all messages to the Metro console.",
+        },
+        {
+          name: "--https",
+          description:
+            "Use a secure (https) web server. When not specified, an insecure (http) web server is used.",
+        },
+        {
+          name: "--key [path]",
+          description:
+            "Path to a custom SSL private key file to use for secure (https) communication.",
+        },
+        {
+          name: "--cert [path]",
+          description:
+            "Path to a custom SSL certificate file to use for secure (https) communication.",
+        },
+        {
+          name: "--reset-cache",
+          description: "Reset the Metro cache.",
+        },
+        {
+          name: "--config [string]",
+          description: "Path to the Metro configuration file.",
+          parse: (val) => path.resolve(val),
+        },
+        {
+          name: "--no-interactive",
+          description: "Disables interactive mode.",
         },
       ],
     },
