@@ -1,4 +1,6 @@
-const resolvePath = (path, resolveDir) => {
+import { Plugin } from "esbuild";
+
+const resolvePath = (path: string, resolveDir: string): string | undefined => {
   try {
     return require.resolve(path, { paths: [resolveDir] });
   } catch {
@@ -6,7 +8,10 @@ const resolvePath = (path, resolveDir) => {
   }
 };
 
-const findMainSourceFile = (sourcePath, resolveDir) => {
+const findMainSourceFile = (
+  sourcePath: string,
+  resolveDir: string
+): string | undefined => {
   const { main } = require(require.resolve(`${sourcePath}/package.json`, {
     paths: [resolveDir],
   }));
@@ -26,9 +31,15 @@ const findMainSourceFile = (sourcePath, resolveDir) => {
       return resolved;
     }
   }
+
+  return undefined;
 };
 
-const resolvePathToLib = (path, resolveDir, resolveExtensions = []) => {
+const resolvePathToLib = (
+  path: string,
+  resolveDir: string,
+  resolveExtensions: string[] = []
+): string | undefined => {
   const postFixList = [
     "",
     ...resolveExtensions,
@@ -41,9 +52,11 @@ const resolvePathToLib = (path, resolveDir, resolveExtensions = []) => {
       return resolved;
     }
   }
+
+  return undefined;
 };
 
-const ImportPathRemapperPlugin = (packagePrefix) => ({
+const ImportPathRemapperPlugin = (packagePrefix: string): Plugin => ({
   name: "resolve-typescript-source",
   setup(build) {
     // Resolve packageName/lib/* to packageName/src/*
