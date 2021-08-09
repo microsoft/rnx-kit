@@ -25,7 +25,7 @@ function depcheckTask() {
     const config = require(path.join(process.cwd(), "package.json"));
     const options = mergeOneLevel(
       {
-        ignorePatterns: ["/lib/*", "/lib-commonjs/*"],
+        ignorePatterns: ["/lib/*", "/lib-commonjs/*", "/test/input/*"],
         ignoreMatches: ["@rnx-kit/eslint-config", "rnx-kit-scripts"],
         specials: [
           depcheck.special.babel,
