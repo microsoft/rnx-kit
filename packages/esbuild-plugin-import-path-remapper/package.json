@@ -1,0 +1,35 @@
+{
+  "name": "@rnx-kit/esbuild-plugin-import-path-remapper",
+  "version": "1.0.0",
+  "description": "Esbuild plugin for remapping 'lib/' imports to 'src/'",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/esbuild-plugin-import-path-remapper#readme",
+  "license": "MIT",
+  "files": [
+    "src/*"
+  ],
+  "main": "src/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "packages/esbuild-plugin-import-path-remapper"
+  },
+  "scripts": {
+    "build": "rnx-kit-scripts build",
+    "format": "rnx-kit-scripts format",
+    "lint": "rnx-kit-scripts lint",
+    "test": "rnx-kit-scripts test"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "prettier": "^2.0.0"
+  },
+  "eslintConfig": {
+    "extends": "@rnx-kit/eslint-config"
+  },
+  "jest": {
+    "roots": [
+      "test"
+    ],
+    "testRegex": "/test/.*\\.test\\.js$"
+  }
+}
