@@ -1,0 +1,7 @@
+{
+  "type": "patch",
+  "comment": "Upgrade esbuild version",
+  "packageName": "@rnx-kit/metro-serializer-esbuild",
+  "email": "sverre.johansen@gmail.com",
+  "dependentChangeType": "patch"
+}

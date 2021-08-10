@@ -1,0 +1,7 @@
+{
+  "type": "patch",
+  "comment": "Added esbuild plugin for mapping lib/ imports to src/",
+  "packageName": "@rnx-kit/esbuild-plugin-import-path-remapper",
+  "email": "sverre.johansen@gmail.com",
+  "dependentChangeType": "patch"
+}
