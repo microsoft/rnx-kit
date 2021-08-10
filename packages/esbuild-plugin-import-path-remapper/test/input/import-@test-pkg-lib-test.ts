@@ -1,4 +1,4 @@
-import { location } from "@test/pkg/lib/test";
+import { location } from "@test/pkg/lib/file";
 
 export function init() {
   console.log(location);
