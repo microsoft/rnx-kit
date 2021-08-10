@@ -3,7 +3,7 @@
 
 describe("@rnx-kit/esbuild-plugin-import-path-remapper", () => {
   const esbuild = require("esbuild");
-  const ImportPathRemapperPlugin = require("../lib/index.js");
+  const ImportPathRemapperPlugin = require("../lib/index");
 
   test("remaps main imports from lib to src.", async () => {
     const result = await esbuild.build({
@@ -29,9 +29,9 @@ describe("@rnx-kit/esbuild-plugin-import-path-remapper", () => {
     });
 
     const output = String.fromCodePoint(...result.outputFiles[0].contents);
-    expect(output).toEqual(expect.stringContaining('location = "src/test"'));
+    expect(output).toEqual(expect.stringContaining('location = "src/file"'));
     expect(output).toEqual(
-      expect.not.stringContaining('location = "lib/test"')
+      expect.not.stringContaining('location = "lib/file"')
     );
   });
 
@@ -74,9 +74,9 @@ describe("@rnx-kit/esbuild-plugin-import-path-remapper", () => {
     });
 
     const output = String.fromCodePoint(...result.outputFiles[0].contents);
-    expect(output).toEqual(expect.stringContaining('location = "src/test"'));
+    expect(output).toEqual(expect.stringContaining('location = "src/file"'));
     expect(output).toEqual(
-      expect.not.stringContaining('location = "lib/test"')
+      expect.not.stringContaining('location = "lib/file"')
     );
   });
 
@@ -104,7 +104,6 @@ describe("@rnx-kit/esbuild-plugin-import-path-remapper", () => {
     });
 
     const output = String.fromCodePoint(...result.outputFiles[0].contents);
-    console.log(output);
     expect(output).toEqual(expect.stringContaining('location = "src/index"'));
     expect(output).toEqual(
       expect.not.stringContaining('location = "lib/index"')
