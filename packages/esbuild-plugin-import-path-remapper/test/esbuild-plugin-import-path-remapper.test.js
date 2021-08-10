@@ -3,7 +3,7 @@
 
 describe("@rnx-kit/esbuild-plugin-import-path-remapper", () => {
   const esbuild = require("esbuild");
-  const ImportPathRemapperPlugin = require("../src/index.ts");
+  const ImportPathRemapperPlugin = require("../lib/index.js");
 
   test("remaps main imports from lib to src.", async () => {
     const result = await esbuild.build({
