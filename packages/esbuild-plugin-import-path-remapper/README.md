@@ -15,6 +15,8 @@ For example, to remap all paths under the `@rnx-kit` scope:
 
 ```js
 // esbuild.js
+const ImportPathRemapperPlugin = require("@rnx-kit/esbuild-plugin-import-path-remapper");
+
 require("esbuild")
   .build({
     entryPoints: ["app.tsx"],
