@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/cli",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "description": "Command-line interface for working with kit packages in your repo",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/cli",
   "license": "MIT",
@@ -22,7 +22,7 @@
     "@react-native-community/cli-server-api": "^5.0.1",
     "@rnx-kit/config": "^0.4.0",
     "@rnx-kit/console": "^1.0.1",
-    "@rnx-kit/dep-check": "^1.5.20",
+    "@rnx-kit/dep-check": "^1.5.21",
     "@rnx-kit/metro-plugin-cyclic-dependencies-detector": "^1.0.5",
     "@rnx-kit/metro-plugin-duplicates-checker": "^1.1.5",
     "@rnx-kit/metro-serializer": "^1.0.2",
