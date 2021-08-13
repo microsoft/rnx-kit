@@ -1,0 +1,7 @@
+{
+  "type": "patch",
+  "comment": "Correct hermes-engine version for react-native 0.65",
+  "packageName": "@rnx-kit/dep-check",
+  "email": "4123478+tido64@users.noreply.github.com",
+  "dependentChangeType": "patch"
+}
