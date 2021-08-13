@@ -30,16 +30,16 @@ describe("makeSetVersionCommand()", () => {
   }
 
   const mockManifest = {
-      name: "@rnx-kit/dep-check",
-      version: "1.0.0-test",
-      dependencies: {
-        "react-native": "^0.63.2",
-      },
-      "rnx-kit": {
-        reactNativeVersion: "^0.63",
-        kitType: "app",
-        capabilities: ["core"],
-      },
+    name: "@rnx-kit/dep-check",
+    version: "1.0.0-test",
+    dependencies: {
+      "react-native": "^0.63.2",
+    },
+    "rnx-kit": {
+      reactNativeVersion: "^0.63",
+      kitType: "app",
+      capabilities: ["core"],
+    },
   };
 
   afterEach(() => {
