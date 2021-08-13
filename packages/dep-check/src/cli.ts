@@ -107,9 +107,9 @@ async function makeCommand(args: Args): Promise<Command | undefined> {
     return makeInitializeCommand(init);
   }
 
-  // When `--set-version` is without a value, `versions` is an empty string if
+  // When `--set-version` is without a value, `setVersion` is an empty string if
   // invoked directly. When invoked via `@react-native-community/cli`,
-  // `versions` is `true` instead.
+  // `setVersion` is `true` instead.
   if (setVersion || isString(setVersion)) {
     return makeSetVersionCommand(setVersion);
   }
@@ -185,7 +185,7 @@ if (require.main === module) {
       },
       "set-version": {
         description:
-          "Sets `reactNativeVersion` and `reactNativeDevVersion` for any configured package. The value should be a comma-separated list of `react-native` versions to set. The first number specifies the development version. Example: `0.64,0.63`",
+          "Sets `reactNativeVersion` and `reactNativeDevVersion` for any configured package. There is an interactive prompt if no value is provided. The value should be a comma-separated list of `react-native` versions to set, where the first number specifies the development version. Example: `0.64,0.63`",
         type: "string",
         conflicts: ["init", "vigilant"],
       },

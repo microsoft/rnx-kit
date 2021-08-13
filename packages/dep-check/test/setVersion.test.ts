@@ -1,11 +1,46 @@
 import prompts from "prompts";
 import { makeSetVersionCommand } from "../src/setVersion";
+import type { PackageManifest } from "../src/types";
 
 jest.mock("fs");
+
+type Result = {
+  didWrite: boolean;
+  manifest: Record<string, unknown>;
+};
 
 describe("makeSetVersionCommand()", () => {
   const rnxKitConfig = require("@rnx-kit/config");
   const fs = require("fs");
+
+  function setupMocks(manifest: PackageManifest): Result {
+    fs.__setMockContent(manifest);
+
+    const result: Result = { didWrite: false, manifest: {} };
+    fs.__setMockFileWriter((_: string, content: string) => {
+      const updatedManifest = JSON.parse(content);
+      fs.__setMockContent(updatedManifest);
+      rnxKitConfig.__setMockConfig(updatedManifest["rnx-kit"]);
+
+      result.didWrite = true;
+      result.manifest = updatedManifest;
+    });
+
+    return result;
+  }
+
+  const mockManifest = {
+      name: "@rnx-kit/dep-check",
+      version: "1.0.0-test",
+      dependencies: {
+        "react-native": "^0.63.2",
+      },
+      "rnx-kit": {
+        reactNativeVersion: "^0.63",
+        kitType: "app",
+        capabilities: ["core"],
+      },
+  };
 
   afterEach(() => {
     fs.__setMockContent({});
@@ -24,31 +59,12 @@ describe("makeSetVersionCommand()", () => {
   });
 
   test("updates dependencies", async () => {
-    const mockManifest = {
-      name: "@rnx-kit/dep-check",
-      version: "1.0.0-test",
-      dependencies: {
-        "react-native": "^0.63.2",
-      },
-      "rnx-kit": {
-        reactNativeVersion: "^0.63",
-        kitType: "app",
-        capabilities: ["core"],
-      },
-    };
-    fs.__setMockContent(mockManifest);
-
-    let updatedManifest: Record<string, unknown>;
-    fs.__setMockFileWriter((_: string, content: string) => {
-      updatedManifest = JSON.parse(content);
-      fs.__setMockContent(updatedManifest);
-      rnxKitConfig.__setMockConfig(updatedManifest["rnx-kit"]);
-    });
+    const result = setupMocks(mockManifest);
 
     const command = await makeSetVersionCommand("0.64,0.63");
     expect(typeof command).toBe("function");
     expect(command("package.json")).toBe(0);
-    expect(updatedManifest).toEqual({
+    expect(result.manifest).toEqual({
       ...mockManifest,
       dependencies: {
         "react-native": "^0.64.2",
@@ -63,33 +79,14 @@ describe("makeSetVersionCommand()", () => {
   });
 
   test("prompts the user if no version is specified", async () => {
-    const mockManifest = {
-      name: "@rnx-kit/dep-check",
-      version: "1.0.0-test",
-      dependencies: {
-        "react-native": "^0.63.2",
-      },
-      "rnx-kit": {
-        reactNativeVersion: "^0.63",
-        kitType: "app",
-        capabilities: ["core"],
-      },
-    };
-    fs.__setMockContent(mockManifest);
-
-    let updatedManifest: Record<string, unknown>;
-    fs.__setMockFileWriter((_: string, content: string) => {
-      updatedManifest = JSON.parse(content);
-      fs.__setMockContent(updatedManifest);
-      rnxKitConfig.__setMockConfig(updatedManifest["rnx-kit"]);
-    });
+    const result = setupMocks(mockManifest);
 
     prompts.inject([["0.63", "0.64"], "0.64"]);
 
     const command = await makeSetVersionCommand("");
     expect(typeof command).toBe("function");
     expect(command("package.json")).toBe(0);
-    expect(updatedManifest).toEqual({
+    expect(result.manifest).toEqual({
       ...mockManifest,
       dependencies: {
         "react-native": "^0.64.2",
@@ -104,33 +101,14 @@ describe("makeSetVersionCommand()", () => {
   });
 
   test("skips the second prompt if only one version is supported", async () => {
-    const mockManifest = {
-      name: "@rnx-kit/dep-check",
-      version: "1.0.0-test",
-      dependencies: {
-        "react-native": "^0.63.2",
-      },
-      "rnx-kit": {
-        reactNativeVersion: "^0.63",
-        kitType: "app",
-        capabilities: ["core"],
-      },
-    };
-    fs.__setMockContent(mockManifest);
-
-    let updatedManifest: Record<string, unknown>;
-    fs.__setMockFileWriter((_: string, content: string) => {
-      updatedManifest = JSON.parse(content);
-      fs.__setMockContent(updatedManifest);
-      rnxKitConfig.__setMockConfig(updatedManifest["rnx-kit"]);
-    });
+    const result = setupMocks(mockManifest);
 
     prompts.inject([["0.64"]]);
 
     const command = await makeSetVersionCommand("");
     expect(typeof command).toBe("function");
     expect(command("package.json")).toBe(0);
-    expect(updatedManifest).toEqual({
+    expect(result.manifest).toEqual({
       ...mockManifest,
       dependencies: {
         "react-native": "^0.64.2",
@@ -145,24 +123,12 @@ describe("makeSetVersionCommand()", () => {
   });
 
   test('skips "dirty" packages', async () => {
-    const mockManifest = {
-      name: "@rnx-kit/dep-check",
-      version: "1.0.0-test",
+    rnxKitConfig.__setMockConfig(mockManifest["rnx-kit"]);
+    const result = setupMocks({
+      ...mockManifest,
       dependencies: {
         "react-native": "^0.62.3",
       },
-      "rnx-kit": {
-        reactNativeVersion: "^0.63",
-        kitType: "app",
-        capabilities: ["core"],
-      },
-    };
-    fs.__setMockContent(mockManifest);
-    rnxKitConfig.__setMockConfig(mockManifest["rnx-kit"]);
-
-    let updatedManifest = false;
-    fs.__setMockFileWriter(() => {
-      updatedManifest = true;
     });
 
     prompts.inject([["0.64"]]);
@@ -170,31 +136,21 @@ describe("makeSetVersionCommand()", () => {
     const command = await makeSetVersionCommand("");
     expect(typeof command).toBe("function");
     expect(command("package.json")).not.toBe(0);
-    expect(updatedManifest).toBe(false);
+    expect(result.didWrite).toBe(false);
   });
 
   test("skips unconfigured packages", async () => {
-    const mockManifest = {
-      name: "@rnx-kit/dep-check",
-      version: "1.0.0-test",
-      dependencies: {
-        "react-native": "^0.63.2",
-      },
-    };
-    fs.__setMockContent(mockManifest);
-    rnxKitConfig.__setMockConfig(mockManifest["rnx-kit"]);
-
-    let updatedManifest = false;
-    fs.__setMockFileWriter(() => {
-      updatedManifest = true;
-    });
+    const result = setupMocks({
+      ...mockManifest,
+      "rnx-kit": undefined,
+    } as PackageManifest);
 
     prompts.inject([["0.64"]]);
 
     const command = await makeSetVersionCommand("");
     expect(typeof command).toBe("function");
     expect(command("package.json")).toBe(0);
-    expect(updatedManifest).toBe(false);
+    expect(result.didWrite).toBe(false);
   });
 
   test("exits if the user cancels during prompts", async () => {
