@@ -1,30 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`@rnx-kit/babel-preset-metro-react-native applies \`babel-plugin-const-enum\` 1`] = `
-"require(\\"./lib/remap-test\\");
-var Direction;
-(function (Direction) {
-  Direction[(Direction[\\"Up\\"] = 0)] = \\"Up\\";
-  Direction[(Direction[\\"Down\\"] = 1)] = \\"Down\\";
-  Direction[(Direction[\\"Left\\"] = 2)] = \\"Left\\";
-  Direction[(Direction[\\"Right\\"] = 3)] = \\"Right\\";
-})(Direction || (Direction = {}));
-function takeDirection(direction) {
-  switch (direction) {
-    case Direction.Up:
-      return \\"up\\";
-    case Direction.Down:
-      return \\"down\\";
-    case Direction.Left:
-      return \\"left\\";
-    case Direction.Right:
-      return \\"right\\";
-  }
-}
-console.log(takeDirection(Direction.Up));
-"
-`;
-
 exports[`@rnx-kit/babel-preset-metro-react-native applies additional plugins 1`] = `
 "require(\\"./src/remap-test\\");
 var Direction;
@@ -52,6 +27,31 @@ console.log(takeDirection(Direction.Up));
 
 exports[`@rnx-kit/babel-preset-metro-react-native can be further extended 1`] = `
 "require(\\"./src/remap-test\\");
+var Direction;
+(function (Direction) {
+  Direction[(Direction[\\"Up\\"] = 0)] = \\"Up\\";
+  Direction[(Direction[\\"Down\\"] = 1)] = \\"Down\\";
+  Direction[(Direction[\\"Left\\"] = 2)] = \\"Left\\";
+  Direction[(Direction[\\"Right\\"] = 3)] = \\"Right\\";
+})(Direction || (Direction = {}));
+function takeDirection(direction) {
+  switch (direction) {
+    case Direction.Up:
+      return \\"up\\";
+    case Direction.Down:
+      return \\"down\\";
+    case Direction.Left:
+      return \\"left\\";
+    case Direction.Right:
+      return \\"right\\";
+  }
+}
+console.log(takeDirection(Direction.Up));
+"
+`;
+
+exports[`@rnx-kit/babel-preset-metro-react-native transforms \`const enum\`s 1`] = `
+"require(\\"./lib/remap-test\\");
 var Direction;
 (function (Direction) {
   Direction[(Direction[\\"Up\\"] = 0)] = \\"Up\\";

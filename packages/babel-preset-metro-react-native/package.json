@@ -22,7 +22,13 @@
     "babel-plugin-const-enum": "^1.0.0"
   },
   "peerDependencies": {
+    "@babel/plugin-transform-typescript": "^7.0.0",
     "metro-react-native-babel-preset": "*"
+  },
+  "peerDependenciesMeta": {
+    "@babel/plugin-transform-typescript": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",

@@ -14,7 +14,15 @@ describe("@rnx-kit/babel-preset-metro-react-native", () => {
     ],
   };
 
-  test("returns default Babel preset with one additional TypeScript plugin", () => {
+  afterEach(() => {
+    jest.unmock("@babel/plugin-transform-typescript/package.json");
+  });
+
+  test("returns default Babel preset with one additional TypeScript plugin (<7.15)", () => {
+    jest.mock("@babel/plugin-transform-typescript/package.json", () => ({
+      version: "7.14.5",
+    }));
+
     expect(preset()).toEqual({
       presets: [["module:metro-react-native-babel-preset", {}]],
       overrides: [
@@ -26,7 +34,23 @@ describe("@rnx-kit/babel-preset-metro-react-native", () => {
     });
   });
 
-  test("returns preset with additional TypeScript plugins", () => {
+  test("returns default Babel preset with one additional TypeScript plugin (>=7.15)", () => {
+    expect(preset()).toEqual({
+      presets: [["module:metro-react-native-babel-preset", {}]],
+      overrides: [
+        {
+          test: /\.tsx?$/,
+          plugins: [],
+        },
+      ],
+    });
+  });
+
+  test("returns preset with additional TypeScript plugins (<7.15)", () => {
+    jest.mock("@babel/plugin-transform-typescript/package.json", () => ({
+      version: "7.14.5",
+    }));
+
     expect(preset(undefined, optionsWithAdditionalPlugins)).toEqual({
       presets: [["module:metro-react-native-babel-preset", {}]],
       overrides: [
@@ -41,17 +65,24 @@ describe("@rnx-kit/babel-preset-metro-react-native", () => {
     });
   });
 
+  test("returns preset with additional TypeScript plugins (>=7.15)", () => {
+    expect(preset(undefined, optionsWithAdditionalPlugins)).toEqual({
+      presets: [["module:metro-react-native-babel-preset", {}]],
+      overrides: [
+        {
+          test: /\.tsx?$/,
+          plugins: optionsWithAdditionalPlugins.additionalPlugins,
+        },
+      ],
+    });
+  });
+
   test("forwards options to `metro-react-native-babel-preset`", () => {
     const metroOptions = { disableImportExportTransform: true };
 
     expect(preset(undefined, metroOptions)).toEqual({
       presets: [["module:metro-react-native-babel-preset", metroOptions]],
-      overrides: [
-        {
-          test: /\.tsx?$/,
-          plugins: ["const-enum"],
-        },
-      ],
+      overrides: [{ test: /\.tsx?$/, plugins: [] }],
     });
 
     expect(
@@ -64,25 +95,15 @@ describe("@rnx-kit/babel-preset-metro-react-native", () => {
       overrides: [
         {
           test: /\.tsx?$/,
-          plugins: [
-            "const-enum",
-            ...optionsWithAdditionalPlugins.additionalPlugins,
-          ],
+          plugins: optionsWithAdditionalPlugins.additionalPlugins,
         },
       ],
     });
   });
 
-  test("applies `babel-plugin-const-enum`", () => {
+  test("transforms `const enum`s", () => {
     const cwd = path.join(__dirname, "__fixtures__");
     const app = path.join(cwd, "App.ts");
-
-    expect(() =>
-      babel.transformFileSync(app, {
-        cwd,
-        presets: ["module:metro-react-native-babel-preset"],
-      })
-    ).toThrowError("'const' enums are not supported");
 
     const output = babel.transformFileSync(app, {
       cwd,
