@@ -1,0 +1,7 @@
+{
+  "type": "patch",
+  "comment": "Bump @rnx-kit/console to 1.0.2",
+  "packageName": "@rnx-kit/cli",
+  "email": "4123478+tido64@users.noreply.github.com",
+  "dependentChangeType": "patch"
+}
