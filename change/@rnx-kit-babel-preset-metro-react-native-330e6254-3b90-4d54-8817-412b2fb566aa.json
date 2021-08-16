@@ -1,7 +1,0 @@
-{
-  "type": "patch",
-  "comment": "Add support for @babel/plugin-transform-typescript 7.15",
-  "packageName": "@rnx-kit/babel-preset-metro-react-native",
-  "email": "4123478+tido64@users.noreply.github.com",
-  "dependentChangeType": "patch"
-}

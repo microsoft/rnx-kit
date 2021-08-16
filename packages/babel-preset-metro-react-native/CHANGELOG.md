@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/babel-preset-metro-react-native
 
-This log was last generated on Tue, 18 May 2021 19:20:51 GMT and should not be manually modified.
+This log was last generated on Mon, 16 Aug 2021 14:17:13 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 1.0.4
+
+Mon, 16 Aug 2021 14:17:13 GMT
+
+### Patches
+
+- Add support for @babel/plugin-transform-typescript 7.15 (4123478+tido64@users.noreply.github.com)
 
 ## 1.0.3
 
