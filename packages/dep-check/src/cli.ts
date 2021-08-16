@@ -6,7 +6,7 @@ import * as path from "path";
 import pkgDir from "pkg-dir";
 import { getAllPackageJsonFiles, getWorkspaceRoot } from "workspace-tools";
 import yargs from "yargs";
-import { checkPackageManifest } from "./check";
+import { makeCheckCommand } from "./check";
 import { isString } from "./helpers";
 import { initializeConfig } from "./initialize";
 import { makeSetVersionCommand } from "./setVersion";
@@ -54,12 +54,6 @@ function getManifests(
   }
 }
 
-function makeCheckCommand(write: boolean): Command {
-  return (manifest: string) => {
-    return checkPackageManifest(manifest, { write });
-  };
-}
-
 function makeInitializeCommand(kitType: string): Command | undefined {
   const verifiedKitType = ensureKitType(kitType);
   if (!verifiedKitType) {
@@ -98,6 +92,7 @@ async function makeCommand(args: Args): Promise<Command | undefined> {
     "custom-profiles": customProfilesPath,
     "exclude-packages": excludePackages,
     init,
+    loose,
     "set-version": setVersion,
     vigilant,
     write,
@@ -116,14 +111,15 @@ async function makeCommand(args: Args): Promise<Command | undefined> {
 
   if (isString(vigilant)) {
     return makeVigilantCommand({
-      customProfilesPath,
-      excludePackages,
-      versions: vigilant,
+      customProfiles: customProfilesPath?.toString(),
+      excludePackages: excludePackages?.toString(),
+      loose,
+      versions: vigilant.toString(),
       write,
     });
   }
 
-  return makeCheckCommand(write);
+  return makeCheckCommand({ loose, write });
 }
 
 export async function cli({
@@ -182,6 +178,13 @@ if (require.main === module) {
           "Writes an initial kit config to the specified 'package.json'.",
         choices: ["app", "library"],
         conflicts: ["vigilant"],
+      },
+      loose: {
+        default: false,
+        description:
+          "Determines how strict the React Native version requirement should be. Useful for apps that depend on a newer React Native version than their dependencies declare support for.",
+        type: "boolean",
+        conflicts: ["init"],
       },
       "set-version": {
         description:

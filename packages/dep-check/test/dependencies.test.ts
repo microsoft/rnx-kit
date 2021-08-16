@@ -1,12 +1,17 @@
-import fs from "fs";
 import path from "path";
 import { getRequirements, visitDependencies } from "../src/dependencies";
 import { readJsonFile } from "../src/json";
+import type { PackageManifest } from "../src/types";
 
 jest.unmock("@rnx-kit/config");
 
 function fixturePath(name: string) {
   return path.join(process.cwd(), "test", "__fixtures__", name);
+}
+
+function useFixture(name: string): [string, PackageManifest] {
+  const fixture = fixturePath(name);
+  return [fixture, readJsonFile(path.join(fixture, "package.json"))];
 }
 
 describe("visitDependencies()", () => {
@@ -100,15 +105,17 @@ describe("visitDependencies()", () => {
 });
 
 describe("getRequirements()", () => {
+  const defaultOptions = { loose: false };
+
   test("gets requirements from all dependencies", () => {
-    const fixture = fixturePath("awesome-repo");
-    const manifest = readJsonFile(path.join(fixture, "package.json"));
+    const [fixture, manifest] = useFixture("awesome-repo");
     const { reactNativeVersion, capabilities } = getRequirements(
       "^0.63 || ^0.64",
       "app",
       manifest,
       fixture,
-      undefined
+      undefined,
+      defaultOptions
     );
 
     expect(reactNativeVersion).toBe("^0.63 || ^0.64");
@@ -139,14 +146,14 @@ describe("getRequirements()", () => {
       { virtual: true }
     );
 
-    const fixture = fixturePath("awesome-repo-extended");
-    const manifest = readJsonFile(path.join(fixture, "package.json"));
+    const [fixture, manifest] = useFixture("awesome-repo-extended");
     const { reactNativeVersion, capabilities } = getRequirements(
       "^0.63 || ^0.64",
       "app",
       manifest,
       fixture,
       "awesome-dep-check-profiles",
+      defaultOptions,
       { moduleResolver: (() => "awesome-dep-check-profiles") as any }
     );
 
@@ -171,8 +178,34 @@ describe("getRequirements()", () => {
           version: "1.0.0",
         },
         "",
-        undefined
+        undefined,
+        defaultOptions
       )
     ).toThrow();
+  });
+
+  test("throws if no profiles can satisfy requirement of dependencies", () => {
+    const [fixture, manifest] = useFixture("no-profile-satisfying-deps");
+    expect(() =>
+      getRequirements(
+        "^0.64",
+        "app",
+        manifest,
+        fixture,
+        undefined,
+        defaultOptions
+      )
+    ).toThrowError("No React Native profile could satisfy all dependencies");
+  });
+
+  test("does not throw if no profiles can satisfy requirement of dependencies in loose mode", () => {
+    const [fixture, manifest] = useFixture("no-profile-satisfying-deps");
+    expect(() =>
+      getRequirements("^0.64", "app", manifest, fixture, undefined, {
+        loose: true,
+      })
+    ).not.toThrowError(
+      "No React Native profile could satisfy all dependencies"
+    );
   });
 });
