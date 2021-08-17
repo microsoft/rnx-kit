@@ -21,14 +21,12 @@ const findMainSourceFile = (
   sourcePath: string,
   resolveDir: string
 ): string | undefined => {
-  const { main } = require(require.resolve(`${sourcePath}/package.json`, {
-    paths: [resolveDir],
-  }));
-
-  if (!main) {
-    return;
+  const packageJsonPath = resolvePath(`${sourcePath}/package.json`, resolveDir);
+  if (!packageJsonPath) {
+    return undefined;
   }
 
+  const { main } = require(packageJsonPath);
   const remappedPath = `${sourcePath}/${main.replace(
     /^(?:\.\/)?lib\/(.*)\.jsx?/,
     "src/$1"
