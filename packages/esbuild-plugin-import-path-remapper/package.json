@@ -26,6 +26,7 @@
     "extends": "@rnx-kit/eslint-config"
   },
   "jest": {
+    "preset": "@rnx-kit/jest-preset",
     "roots": [
       "test"
     ],
