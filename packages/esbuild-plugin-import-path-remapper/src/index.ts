@@ -43,6 +43,7 @@ const resolvePathToLib = (
   const postFixList = [
     "",
     ...resolveExtensions,
+    "/index",
     ...resolveExtensions.map((extension) => `/index${extension}`),
   ];
 
