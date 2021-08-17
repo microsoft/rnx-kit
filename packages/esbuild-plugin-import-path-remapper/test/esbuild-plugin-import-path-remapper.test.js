@@ -7,7 +7,7 @@ describe("@rnx-kit/esbuild-plugin-import-path-remapper", () => {
 
   test("remaps main imports from lib to src.", async () => {
     const result = await esbuild.build({
-      entryPoints: ["./test/input/import-@test-pkg.ts"],
+      entryPoints: ["./test/__fixtures__/import-@test-pkg.ts"],
       bundle: true,
       write: false,
       plugins: [ImportPathRemapperPlugin("@test")],
@@ -22,7 +22,7 @@ describe("@rnx-kit/esbuild-plugin-import-path-remapper", () => {
 
   test("remaps import paths from lib to src.", async () => {
     const result = await esbuild.build({
-      entryPoints: ["./test/input/import-@test-pkg-lib-test.ts"],
+      entryPoints: ["./test/__fixtures__/import-@test-pkg-lib-test.ts"],
       bundle: true,
       write: false,
       plugins: [ImportPathRemapperPlugin("@test")],
@@ -37,7 +37,7 @@ describe("@rnx-kit/esbuild-plugin-import-path-remapper", () => {
 
   test("leaves unmatched import/export statements.", async () => {
     const result = await esbuild.build({
-      entryPoints: ["./test/input/import-@test-pkg.ts"],
+      entryPoints: ["./test/__fixtures__/import-@test-pkg.ts"],
       bundle: true,
       write: false,
       plugins: [ImportPathRemapperPlugin("@unknown")],
@@ -52,7 +52,7 @@ describe("@rnx-kit/esbuild-plugin-import-path-remapper", () => {
 
   test("remaps main imports with trailing slash", async () => {
     const result = await esbuild.build({
-      entryPoints: ["./test/input/import-@test-pkg-slash.ts"],
+      entryPoints: ["./test/__fixtures__/import-@test-pkg-slash.ts"],
       bundle: true,
       write: false,
       plugins: [ImportPathRemapperPlugin("@test")],
@@ -67,7 +67,7 @@ describe("@rnx-kit/esbuild-plugin-import-path-remapper", () => {
 
   test("remaps lib imports when using require.", async () => {
     const result = await esbuild.build({
-      entryPoints: ["./test/input/require-@test-pkg-lib-test.ts"],
+      entryPoints: ["./test/__fixtures__/require-@test-pkg-lib-test.ts"],
       bundle: true,
       write: false,
       plugins: [ImportPathRemapperPlugin("@test")],
@@ -82,7 +82,7 @@ describe("@rnx-kit/esbuild-plugin-import-path-remapper", () => {
 
   test("remaps main imports from lib to src when using require.", async () => {
     const result = await esbuild.build({
-      entryPoints: ["./test/input/require-@test-pkg.ts"],
+      entryPoints: ["./test/__fixtures__/require-@test-pkg.ts"],
       bundle: true,
       write: false,
       plugins: [ImportPathRemapperPlugin("@test")],
@@ -97,7 +97,7 @@ describe("@rnx-kit/esbuild-plugin-import-path-remapper", () => {
 
   test("remaps export declarations.", async () => {
     const result = await esbuild.build({
-      entryPoints: ["./test/input/export-@test-pkg.ts"],
+      entryPoints: ["./test/__fixtures__/export-@test-pkg.ts"],
       bundle: true,
       write: false,
       plugins: [ImportPathRemapperPlugin("@test")],
