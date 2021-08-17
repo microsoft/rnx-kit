@@ -19,12 +19,6 @@
     "lint": "rnx-kit-scripts lint",
     "test": "rnx-kit-scripts test"
   },
-  "peerDependencies": {
-    "esbuild": "^0.12.19"
-  },
-  "dependencies": {
-    "esbuild": "^0.12.19"
-  },
   "devDependencies": {
     "prettier": "^2.0.0"
   },
