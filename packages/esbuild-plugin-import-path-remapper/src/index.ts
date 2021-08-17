@@ -21,7 +21,7 @@ const findMainSourceFile = (
   }
 
   const remappedPath = `${sourcePath}/${main.replace(
-    /^(?:\.\/)?lib\/(.*)\.js/,
+    /^(?:\.\/)?lib\/(.*)\.jsx?/,
     "src/$1"
   )}`;
 
