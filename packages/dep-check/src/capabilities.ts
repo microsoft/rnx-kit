@@ -1,6 +1,7 @@
 import type { Capability, KitCapabilities } from "@rnx-kit/config";
 import semver from "semver";
 import { getProfilesFor, getProfileVersionsFor } from "./profiles";
+import { concatVersionRanges, keysOf } from "./helpers";
 import type {
   CapabilitiesOptions,
   Package,
@@ -21,8 +22,7 @@ export function capabilitiesFor(
   const profiles = getProfilesFor(targetReactNativeVersion, customProfilesPath);
   const packageToCapabilityMap: Record<string, Capability[]> = {};
   profiles.forEach((profile) => {
-    const capabilityNames = Object.keys(profile) as Capability[];
-    capabilityNames.reduce((result, capability) => {
+    keysOf(profile).reduce((result, capability) => {
       const { name } = profile[capability];
       if (!result[name]) {
         result[name] = [capability];
@@ -33,8 +33,9 @@ export function capabilitiesFor(
     }, packageToCapabilityMap);
   });
 
-  const reactNativeVersion =
-    "^" + getProfileVersionsFor(targetReactNativeVersion).join(" || ^");
+  const reactNativeVersion = concatVersionRanges(
+    getProfileVersionsFor(targetReactNativeVersion)
+  );
 
   return {
     reactNativeVersion,
@@ -47,7 +48,7 @@ export function capabilitiesFor(
       : undefined),
     kitType,
     capabilities: Array.from(
-      Object.keys({
+      keysOf({
         ...dependencies,
         ...peerDependencies,
         ...devDependencies,

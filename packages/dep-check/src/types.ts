@@ -4,6 +4,7 @@ export type Args = {
   "custom-profiles"?: string | number;
   "exclude-packages"?: string | number;
   "package-json"?: string | number;
+  "set-version"?: string | number;
   init?: string;
   vigilant?: string | number;
   write: boolean;

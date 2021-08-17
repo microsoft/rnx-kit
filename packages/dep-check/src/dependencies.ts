@@ -7,8 +7,9 @@ import {
 } from "@rnx-kit/config";
 import { error, warn } from "@rnx-kit/console";
 import findUp from "find-up";
-import fs from "fs";
 import path from "path";
+import { concatVersionRanges } from "./helpers";
+import { readJsonFile } from "./json";
 import {
   getProfilesFor,
   getProfileVersionsFor,
@@ -71,8 +72,7 @@ export function visitDependencies(
     const packageRoot = path.dirname(packageJson);
     visitor(dependency, packageRoot);
 
-    const content = fs.readFileSync(packageJson, { encoding: "utf-8" });
-    const manifest: PackageManifest = JSON.parse(content);
+    const manifest = readJsonFile(packageJson);
     visitDependencies(manifest, packageRoot, visitor, visited);
   });
 }
@@ -154,7 +154,7 @@ export function getRequirements(
   }
 
   return {
-    reactNativeVersion: "^" + profileVersions.join(" || ^"),
+    reactNativeVersion: concatVersionRanges(profileVersions),
     capabilities: Array.from(allCapabilities),
   };
 }

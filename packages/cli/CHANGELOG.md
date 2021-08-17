@@ -1,8 +1,41 @@
 # Change Log - @rnx-kit/cli
 
-This log was last generated on Fri, 06 Aug 2021 22:07:45 GMT and should not be manually modified.
+This log was last generated on Tue, 17 Aug 2021 20:18:02 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 0.9.4
+
+Tue, 17 Aug 2021 20:18:02 GMT
+
+### Patches
+
+- Fix `rnx-test` failing under Jest 27 (4123478+tido64@users.noreply.github.com)
+
+## 0.9.3
+
+Tue, 17 Aug 2021 09:36:56 GMT
+
+### Patches
+
+- Fix arguments not being properly forwarded to dep-check (4123478+tido64@users.noreply.github.com)
+- Bump @rnx-kit/cli to v0.9.3 (4123478+tido64@users.noreply.github.com)
+
+## 0.9.2
+
+Mon, 16 Aug 2021 14:17:13 GMT
+
+### Patches
+
+- Bump @rnx-kit/console to 1.0.2 (4123478+tido64@users.noreply.github.com)
+
+## 0.9.1
+
+Fri, 13 Aug 2021 13:30:40 GMT
+
+### Patches
+
+- Bump @rnx-kit/cli to v0.9.1 (4123478+tido64@users.noreply.github.com)
 
 ## 0.9.0
 

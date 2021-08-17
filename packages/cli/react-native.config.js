@@ -5,7 +5,7 @@ const {
   parseBoolean,
   rnxBundle,
   rnxStart,
-  rnxDepCheck,
+  rnxDepCheckCommand,
   rnxTestCommand,
   rnxWriteThirdPartyNotices,
 } = require("./lib/index");
@@ -181,36 +181,7 @@ module.exports = {
         },
       ],
     },
-    {
-      name: "rnx-dep-check",
-      description: "Dependency checker for React Native apps",
-      func: rnxDepCheck,
-      options: [
-        {
-          name: "--custom-profiles [module]",
-          description:
-            "Path to custom profiles. This can be a path to a JSON file, a `.js` file, or a module name.",
-        },
-        {
-          name: "--exclude-packages [packages]",
-          description:
-            "Comma-separated list of package names to exclude from inspection.",
-        },
-        {
-          name: "--init [app|library]",
-          description: "Writes an initial kit config",
-        },
-        {
-          name: "--vigilant [versions]",
-          description:
-            "Inspects packages regardless of whether they've been configured. Specify a comma-separated list of profile versions to compare against, e.g. `0.63,0.64`. The first number specifies the target version.",
-        },
-        {
-          name: "--write",
-          description: "Writes all changes to the specified `package.json`",
-        },
-      ],
-    },
+    rnxDepCheckCommand,
     rnxTestCommand,
     {
       name: "rnx-write-third-party-notices",

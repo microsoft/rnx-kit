@@ -1,6 +1,7 @@
 import fs from "fs";
 import path from "path";
 import { getRequirements, visitDependencies } from "../src/dependencies";
+import { readJsonFile } from "../src/json";
 
 jest.unmock("@rnx-kit/config");
 
@@ -101,10 +102,7 @@ describe("visitDependencies()", () => {
 describe("getRequirements()", () => {
   test("gets requirements from all dependencies", () => {
     const fixture = fixturePath("awesome-repo");
-    const manifestJson = fs.readFileSync(path.join(fixture, "package.json"), {
-      encoding: "utf-8",
-    });
-    const manifest = JSON.parse(manifestJson);
+    const manifest = readJsonFile(path.join(fixture, "package.json"));
     const { reactNativeVersion, capabilities } = getRequirements(
       "^0.63 || ^0.64",
       "app",
@@ -142,10 +140,7 @@ describe("getRequirements()", () => {
     );
 
     const fixture = fixturePath("awesome-repo-extended");
-    const manifestJson = fs.readFileSync(path.join(fixture, "package.json"), {
-      encoding: "utf-8",
-    });
-    const manifest = JSON.parse(manifestJson);
+    const manifest = readJsonFile(path.join(fixture, "package.json"));
     const { reactNativeVersion, capabilities } = getRequirements(
       "^0.63 || ^0.64",
       "app",
