@@ -204,8 +204,6 @@ describe("getRequirements()", () => {
       getRequirements("^0.64", "app", manifest, fixture, undefined, {
         loose: true,
       })
-    ).not.toThrowError(
-      "No React Native profile could satisfy all dependencies"
-    );
+    ).not.toThrow();
   });
 });
