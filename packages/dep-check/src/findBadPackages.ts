@@ -1,6 +1,7 @@
+import type { PackageManifest } from "@rnx-kit/tools";
 import semver from "semver";
 import banned from "./profiles/banned";
-import type { ExcludedPackage, PackageManifest } from "./types";
+import type { ExcludedPackage } from "./types";
 
 function isBanned(name: string, version: string): ExcludedPackage | undefined {
   const info = banned.find((pkg) => pkg.name === name);

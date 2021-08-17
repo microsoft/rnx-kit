@@ -6,6 +6,7 @@ import {
   KitType,
 } from "@rnx-kit/config";
 import { error, warn } from "@rnx-kit/console";
+import type { PackageManifest } from "@rnx-kit/tools";
 import findUp from "find-up";
 import fs from "fs";
 import path from "path";
@@ -14,12 +15,7 @@ import {
   getProfileVersionsFor,
   profilesSatisfying,
 } from "./profiles";
-import type {
-  PackageManifest,
-  Profile,
-  ProfileVersion,
-  ResolverOptions,
-} from "./types";
+import type { Profile, ProfileVersion, ResolverOptions } from "./types";
 
 type Requirements = Required<
   Pick<KitConfig, "reactNativeVersion" | "capabilities">

@@ -1,5 +1,6 @@
+import type { AllPlatforms } from "@rnx-kit/tools";
+import _ from "lodash";
 import type {
-  AllPlatforms,
   BundleConfig,
   BundleDefinition,
   BundleRequiredParameters,
@@ -7,10 +8,6 @@ import type {
 
 export type BundleDefinitionWithRequiredParameters = BundleDefinition &
   BundleRequiredParameters;
-
-function asArray<T>(opt: T | T[]): T[] {
-  return Array.isArray(opt) ? opt : [opt || ({} as T)];
-}
 
 /**
  * Get a bundle definition from the kit config.
@@ -40,7 +37,7 @@ export function getBundleDefinition(
     return defaultDefinition;
   }
 
-  const bundles = asArray<BundleDefinition>(config);
+  const bundles = _.castArray(config);
   if (id) {
     const bundle = bundles.find((b) => b.id === id) || {};
     return { ...defaultDefinition, ...bundle };

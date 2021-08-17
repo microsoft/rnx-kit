@@ -1,5 +1,4 @@
 import type {
-  AllPlatforms,
   BundleDefinitionWithRequiredParameters,
   ServerWithRequiredParameters,
 } from "@rnx-kit/config";
@@ -11,7 +10,9 @@ import {
 } from "@rnx-kit/config";
 import { warn } from "@rnx-kit/console";
 import type { BundleArgs } from "@rnx-kit/metro-service";
+import type { AllPlatforms } from "@rnx-kit/tools";
 import chalk from "chalk";
+import _ from "lodash";
 
 /**
  * Get a bundle definition from the kit configuration.
@@ -75,22 +76,17 @@ export function getKitBundlePlatformDefinition(
 ): BundleDefinitionWithRequiredParameters {
   return {
     ...getBundlePlatformDefinition(bundleDefinition, targetPlatform),
-    ...(overrides.entryPath ? { entryPath: overrides.entryPath } : {}),
-    ...(overrides.distPath ? { distPath: overrides.distPath } : {}),
-    ...(overrides.assetsPath ? { assetsPath: overrides.assetsPath } : {}),
-    ...(overrides.bundlePrefix ? { bundlePrefix: overrides.bundlePrefix } : {}),
-    ...(overrides.bundleEncoding
-      ? { bundleEncoding: overrides.bundleEncoding }
-      : {}),
-    ...(overrides.sourcemapOutput
-      ? { sourceMapPath: overrides.sourcemapOutput }
-      : {}),
-    ...(overrides.sourcemapSourcesRoot
-      ? { sourceMapSourceRootPath: overrides.sourcemapSourcesRoot }
-      : {}),
-    ...(overrides.experimentalTreeShake
-      ? { experimentalTreeShake: overrides.experimentalTreeShake }
-      : {}),
+    ..._.pick(
+      overrides,
+      "entryPath",
+      "distPath",
+      "assetsPath",
+      "bundlePrefix",
+      "bundleEncoding",
+      "sourcemapOutput",
+      "sourcemapSourcesRoot",
+      "experimentalTreeShake"
+    ),
   };
 }
 
@@ -118,8 +114,6 @@ export function getKitServerConfig(
 
   return {
     ...getServerConfig(kitConfig),
-    ...(overrides.projectRoot ? { projectRoot: overrides.projectRoot } : {}),
-    ...(overrides.assetPlugins ? { assetPlugins: overrides.assetPlugins } : {}),
-    ...(overrides.sourceExts ? { sourceExts: overrides.sourceExts } : {}),
+    ..._.pick(overrides, "projectRoot", "assetPlugins", "sourceExts"),
   };
 }

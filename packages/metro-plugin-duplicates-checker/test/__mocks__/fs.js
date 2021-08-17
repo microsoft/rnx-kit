@@ -6,16 +6,7 @@ const actualFs = jest.requireActual("fs");
 const extraPolyfills =
   "/packages/test-app/node_modules/@react-native/polyfills";
 
-fs.readFileSync = (path, ...args) => {
-  if (path.replace(/\\/g, "/").includes(extraPolyfills)) {
-    return JSON.stringify({
-      name: "@react-native/polyfills",
-      version: "1.0.0",
-    });
-  } else {
-    return actualFs.readFileSync(path, ...args);
-  }
-};
+fs.readFileSync = actualFs.readFileSync;
 
 fs.realpathSync = actualFs.realpathSync;
 const actualRealpathSyncNative = actualFs.realpathSync.native;

@@ -1,12 +1,8 @@
 import type { Capability, KitCapabilities } from "@rnx-kit/config";
+import type { PackageManifest } from "@rnx-kit/tools";
 import semver from "semver";
 import { getProfilesFor, getProfileVersionsFor } from "./profiles";
-import type {
-  CapabilitiesOptions,
-  Package,
-  PackageManifest,
-  Profile,
-} from "./types";
+import type { CapabilitiesOptions, Package, Profile } from "./types";
 
 export function capabilitiesFor(
   { dependencies, devDependencies, peerDependencies }: PackageManifest,

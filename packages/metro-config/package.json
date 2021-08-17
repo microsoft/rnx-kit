@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "@rnx-kit/babel-preset-metro-react-native": "^1.0.3",
-    "find-up": "^5.0.0",
+    "@rnx-kit/tools": "^0.2.0",
     "workspace-tools": "^0.16.2"
   },
   "peerDependencies": {

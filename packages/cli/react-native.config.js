@@ -1,7 +1,6 @@
+const { parsePlatform } = require("@rnx-kit/tools");
 const path = require("path");
-
 const {
-  parsePlatform,
   parseBoolean,
   rnxBundle,
   rnxStart,

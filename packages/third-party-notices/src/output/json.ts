@@ -1,12 +1,17 @@
-import fs from "fs";
-import path from "path";
+import { findPackage, readPackage } from "@rnx-kit/tools";
 import type { License } from "../types";
 
 function getPackageAuthor(modulePath: string): string | undefined {
-  const packageJson = path.join(modulePath, "package.json");
-  const manifest = fs.readFileSync(packageJson, { encoding: "utf-8" });
-  const { author } = JSON.parse(manifest);
-  return typeof author === "string" ? author : author?.name;
+  const pkgFile = findPackage(modulePath);
+  if (pkgFile) {
+    const manifest = readPackage(pkgFile);
+    if (manifest) {
+      return typeof manifest.author === "string"
+        ? manifest.author
+        : manifest.author?.name;
+    }
+  }
+  return undefined;
 }
 
 function parseCopyright(

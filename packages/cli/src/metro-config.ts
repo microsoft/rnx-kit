@@ -9,9 +9,9 @@ import {
 import type { Project } from "@rnx-kit/typescript-service";
 import { MetroPlugin, MetroSerializer } from "@rnx-kit/metro-serializer";
 import { MetroSerializer as MetroSerializerEsbuild } from "@rnx-kit/metro-serializer-esbuild";
+import type { AllPlatforms } from "@rnx-kit/tools";
 import type { DeltaResult, Graph } from "metro";
 import type { InputConfigT, SerializerConfigT } from "metro-config";
-import { AllPlatforms } from "../../config/lib";
 import type { TSProjectInfo } from "./types";
 
 const emptySerializerHook = (_graph: Graph, _delta: DeltaResult): void => {

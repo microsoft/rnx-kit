@@ -1,3 +1,4 @@
+import { readPackage } from "@rnx-kit/tools";
 import fs from "fs";
 import { capabilitiesFor } from "./capabilities";
 import type { CapabilitiesOptions } from "./types";
@@ -6,9 +7,7 @@ export function initializeConfig(
   packageManifest: string,
   options: CapabilitiesOptions
 ): void {
-  const manifest = JSON.parse(
-    fs.readFileSync(packageManifest, { encoding: "utf-8" })
-  );
+  const manifest = readPackage(packageManifest);
   if (manifest["rnx-kit"]?.["capabilities"]) {
     return;
   }

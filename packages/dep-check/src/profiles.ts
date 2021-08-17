@@ -1,4 +1,6 @@
 import { error } from "@rnx-kit/console";
+import { tryInvoke } from "@rnx-kit/tools";
+
 import semver from "semver";
 import profile_0_61 from "./profiles/profile-0.61";
 import profile_0_62 from "./profiles/profile-0.62";
@@ -43,14 +45,6 @@ function isValidProfileMap(map: unknown): map is Partial<ProfileMap> {
   }
 
   return Object.keys(defaultProfiles).some((version) => version in map);
-}
-
-function tryInvoke<T>(fn: () => T): [T, undefined] | [undefined, Error] {
-  try {
-    return [fn(), undefined];
-  } catch (e) {
-    return [undefined, e];
-  }
 }
 
 function loadCustomProfiles(

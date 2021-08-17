@@ -1,12 +1,13 @@
 import type { Capability } from "@rnx-kit/config";
 import { error } from "@rnx-kit/console";
+import type { PackageManifest } from "@rnx-kit/tools";
 import fs from "fs";
 import semver from "semver";
 import { resolveCapabilities } from "./capabilities";
 import { checkPackageManifest } from "./check";
 import { updateDependencies } from "./manifest";
 import { getProfilesFor } from "./profiles";
-import type { Command, PackageManifest, ResolverOptions } from "./types";
+import type { Command, ManifestProfile, ResolverOptions } from "./types";
 
 type Change = {
   name: string;
@@ -32,7 +33,7 @@ export function buildManifestProfile(
   versions: string | number,
   customProfilesPath: string | number | undefined,
   options?: ResolverOptions
-): Required<PackageManifest> {
+): ManifestProfile {
   const profileVersions = versions
     .toString()
     .split(",")
@@ -76,7 +77,7 @@ export function buildManifestProfile(
 
 export function inspect(
   manifest: PackageManifest,
-  profile: Required<PackageManifest>,
+  profile: ManifestProfile,
   write: boolean
 ): Change[] {
   const changes: Change[] = [];

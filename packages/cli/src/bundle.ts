@@ -1,10 +1,10 @@
 import type { Config as CLIConfig } from "@react-native-community/cli-types";
 import { info, warn } from "@rnx-kit/console";
-import type { AllPlatforms } from "@rnx-kit/config";
 import { BundleArgs, bundle, loadMetroConfig } from "@rnx-kit/metro-service";
+import type { AllPlatforms } from "@rnx-kit/tools";
 import { Service } from "@rnx-kit/typescript-service";
 import chalk from "chalk";
-import fs from "fs";
+import makeDir from "make-dir";
 import path from "path";
 import {
   getKitBundleDefinition,
@@ -12,10 +12,6 @@ import {
 } from "./kit-config";
 import { customizeMetroConfig } from "./metro-config";
 import type { TSProjectInfo } from "./types";
-
-function ensureDirectoryExists(directoryPath: string): void {
-  fs.mkdirSync(directoryPath, { recursive: true, mode: 0o755 });
-}
 
 /**
  * Get the list of target platforms for bundling.
@@ -144,9 +140,9 @@ export async function rnxBundle(
     );
 
     // ensure all output directories exist
-    ensureDirectoryExists(path.dirname(bundlePath));
-    sourceMapPath && ensureDirectoryExists(path.dirname(sourceMapPath));
-    assetsPath && ensureDirectoryExists(assetsPath);
+    makeDir.sync(path.dirname(bundlePath));
+    sourceMapPath && makeDir.sync(path.dirname(sourceMapPath));
+    assetsPath && makeDir.sync(assetsPath);
 
     // create the bundle
     await bundle(

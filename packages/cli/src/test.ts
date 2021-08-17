@@ -1,6 +1,6 @@
 import type { Config as CLIConfig } from "@react-native-community/cli-types";
+import { parsePlatform } from "@rnx-kit/tools";
 import { run as runJest } from "jest-cli";
-import { parsePlatform } from "./parsers";
 
 type Args = {
   platform: "android" | "ios" | "macos" | "windows" | "win32";

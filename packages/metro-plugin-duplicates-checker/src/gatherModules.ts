@@ -1,3 +1,4 @@
+import { findPackageDir, readPackage } from "@rnx-kit/tools";
 import * as fs from "fs";
 import type { Graph } from "metro";
 import type {
@@ -6,7 +7,6 @@ import type {
   MixedSourceMap,
 } from "metro-source-map";
 import * as path from "path";
-import pkgDir from "pkg-dir";
 
 type ModuleInfo = {
   name: string;
@@ -25,14 +25,12 @@ export function normalizePath(p: string): string {
 }
 
 export function resolveModule(source: string): ModuleInfo {
-  const pkg = pkgDir.sync(source);
+  const pkg = findPackageDir(source);
   if (!pkg) {
     throw new Error(`Unable to find package '${pkg}'`);
   }
 
-  const { name, version } = JSON.parse(
-    fs.readFileSync(path.join(pkg, "package.json"), { encoding: "utf-8" })
-  );
+  const { name, version } = readPackage(pkg);
   if (!name) {
     // Packages using [dual-publish](https://github.com/ai/dual-publish), like
     // [nanoid](https://github.com/ai/nanoid), have a 'package.json' in _all_

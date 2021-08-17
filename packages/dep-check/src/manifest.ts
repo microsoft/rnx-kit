@@ -1,12 +1,9 @@
 import type { Capability, KitType } from "@rnx-kit/config";
+import type { PackageManifest } from "@rnx-kit/tools";
+import _ from "lodash";
 import semver from "semver";
 import { resolveCapabilities } from "./capabilities";
-import type {
-  DependencyType,
-  Package,
-  PackageManifest,
-  Profile,
-} from "./types";
+import type { DependencyType, Package, Profile } from "./types";
 
 export function devOnlyPackages(
   packages: Record<string, Package[]>
@@ -31,12 +28,7 @@ export function removeKeys(
     return obj;
   }
 
-  return Object.keys(obj).reduce<Record<string, string>>((copy, dependency) => {
-    if (!keys.includes(dependency)) {
-      copy[dependency] = obj[dependency];
-    }
-    return copy;
-  }, {});
+  return _.omit(obj, ...keys);
 }
 
 export function updateDependencies(

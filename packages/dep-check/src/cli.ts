@@ -2,6 +2,7 @@
 
 import type { KitType } from "@rnx-kit/config";
 import { error } from "@rnx-kit/console";
+import _ from "lodash";
 import * as path from "path";
 import pkgDir from "pkg-dir";
 import { getAllPackageJsonFiles, getWorkspaceRoot } from "workspace-tools";
@@ -52,10 +53,6 @@ function getManifests(
   }
 }
 
-function isString(v: unknown): v is string {
-  return typeof v === "string";
-}
-
 function makeCheckCommand(write: boolean): Command {
   return (manifest: string) => {
     return checkPackageManifest(manifest, { write });
@@ -103,11 +100,11 @@ function makeCommand(args: Args): Command | undefined {
     write,
   } = args;
 
-  if (isString(init)) {
+  if (_.isString(init)) {
     return makeInitializeCommand(init);
   }
 
-  if (isString(vigilant)) {
+  if (_.isString(vigilant)) {
     return makeVigilantCommand({
       customProfilesPath,
       excludePackages,

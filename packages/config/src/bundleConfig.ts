@@ -1,11 +1,7 @@
-import type { OutputOptions } from "metro";
+import type { AllPlatforms } from "@rnx-kit/tools";
 import type { PluginOptions as CyclicDetectorOptions } from "@rnx-kit/metro-plugin-cyclic-dependencies-detector";
 import type { Options as DuplicateDetectorOptions } from "@rnx-kit/metro-plugin-duplicates-checker";
-
-/**
- * List of supported kit platforms.
- */
-export type AllPlatforms = "ios" | "android" | "windows" | "win32" | "macos";
+import type { OutputOptions } from "metro";
 
 /**
  * Parameters controlling bundler behavior at runtime.
