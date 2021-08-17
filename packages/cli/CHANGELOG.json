@@ -2,6 +2,27 @@
   "name": "@rnx-kit/cli",
   "entries": [
     {
+      "date": "Tue, 17 Aug 2021 09:36:56 GMT",
+      "tag": "@rnx-kit/cli_v0.9.3",
+      "version": "0.9.3",
+      "comments": {
+        "patch": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/cli",
+            "comment": "Fix arguments not being properly forwarded to dep-check",
+            "commit": "150ed8e6ffca098c9bb72f5cd9e466a6d3ee393b"
+          },
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/cli",
+            "commit": "150ed8e6ffca098c9bb72f5cd9e466a6d3ee393b",
+            "comment": "Bump @rnx-kit/cli to v0.9.3"
+          }
+        ]
+      }
+    },
+    {
       "date": "Mon, 16 Aug 2021 14:17:13 GMT",
       "tag": "@rnx-kit/cli_v0.9.2",
       "version": "0.9.2",

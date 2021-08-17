@@ -1,8 +1,17 @@
 # Change Log - @rnx-kit/cli
 
-This log was last generated on Mon, 16 Aug 2021 14:17:13 GMT and should not be manually modified.
+This log was last generated on Tue, 17 Aug 2021 09:36:56 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 0.9.3
+
+Tue, 17 Aug 2021 09:36:56 GMT
+
+### Patches
+
+- Fix arguments not being properly forwarded to dep-check (4123478+tido64@users.noreply.github.com)
+- Bump @rnx-kit/cli to v0.9.3 (4123478+tido64@users.noreply.github.com)
 
 ## 0.9.2
 

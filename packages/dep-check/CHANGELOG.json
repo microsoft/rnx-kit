@@ -2,6 +2,21 @@
   "name": "@rnx-kit/dep-check",
   "entries": [
     {
+      "date": "Tue, 17 Aug 2021 09:36:56 GMT",
+      "tag": "@rnx-kit/dep-check_v1.6.0",
+      "version": "1.6.0",
+      "comments": {
+        "minor": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/dep-check",
+            "comment": "Add command for setting react-native version",
+            "commit": "150ed8e6ffca098c9bb72f5cd9e466a6d3ee393b"
+          }
+        ]
+      }
+    },
+    {
       "date": "Fri, 13 Aug 2021 13:30:40 GMT",
       "tag": "@rnx-kit/dep-check_v1.5.21",
       "version": "1.5.21",
