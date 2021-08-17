@@ -1,5 +1,14 @@
 import type { Plugin } from "esbuild";
 
+const ESBUILD_DEFAULT_EXTENSIONS = [
+  ".tsx",
+  ".ts",
+  ".jsx",
+  ".js",
+  ".css",
+  ".json",
+];
+
 const resolvePath = (path: string, resolveDir: string): string | undefined => {
   try {
     return require.resolve(path, { paths: [resolveDir] });
@@ -70,7 +79,7 @@ const ImportPathRemapperPlugin = (packagePrefix: string): Plugin => ({
             `${packagePrefix}/$1/src$2`
           ),
           resolveDir,
-          build.initialOptions.resolveExtensions
+          build.initialOptions.resolveExtensions ?? ESBUILD_DEFAULT_EXTENSIONS
         ),
       })
     );
