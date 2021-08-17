@@ -1,5 +1,6 @@
 import type { Config as CLIConfig } from "@react-native-community/cli-types";
 import { run as runJest } from "jest-cli";
+import path from "path";
 import { parsePlatform } from "./parsers";
 
 type Args = {
@@ -46,7 +47,16 @@ export function rnxTest(
 }
 
 function jestOptions(): Options[] {
-  const { options } = require("jest-cli/build/cli/args");
+  // Starting with Jest 27, we are getting this error:
+  //
+  // Package subpath './build/cli/args' is not defined by "exports" in
+  // /~/node_modules/jest-cli/package.json
+  //
+  // To work around this, resolve `jest-cli` first, then use the resolved path
+  // to import `./build/cli/args`.
+  const jestPath = require.resolve("jest-cli/package.json");
+  const { options } = require(`${path.dirname(jestPath)}/build/cli/args`);
+
   return Object.keys(options).map((option) => {
     const { default: defaultValue, description, type } = options[option];
     return {
