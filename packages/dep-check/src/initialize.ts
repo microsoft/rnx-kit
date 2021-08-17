@@ -1,5 +1,4 @@
-import { readPackage } from "@rnx-kit/tools";
-import fs from "fs";
+import { readPackage, writePackage } from "@rnx-kit/tools";
 import { capabilitiesFor } from "./capabilities";
 import type { CapabilitiesOptions } from "./types";
 
@@ -24,8 +23,5 @@ export function initializeConfig(
       ...capabilities,
     },
   };
-  fs.writeFileSync(
-    packageManifest,
-    JSON.stringify(updatedManifest, undefined, 2) + "\n"
-  );
+  writePackage(packageManifest, updatedManifest);
 }

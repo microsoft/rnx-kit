@@ -30,12 +30,14 @@ jobs:
       - name: Align dependencies
         run: yarn rnx-dep-check --write
       - name: Report changes
-        run: git diff | GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} yarn suggestion-bot
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: git diff | yarn suggestion-bot
   build:
     name: "Build"
     strategy:
       matrix:
-        node-version: [14, 15]
+        node-version: [14, 16]
         os: [ubuntu-latest, windows-latest]
     runs-on: ${{ matrix.os }}
     steps:
@@ -58,9 +60,11 @@ jobs:
         run: yarn build:ci
       - name: Ensure READMEs are up-to-date
         if: ${{ matrix.node-version == 14 && matrix.os == 'ubuntu-latest' }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           yarn update-readme
-          git diff | GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} yarn suggestion-bot
+          git diff | yarn suggestion-bot
       - name: Bundle packages
         run: yarn bundle:ci
       - name: Bundle test app with esbuild
@@ -79,3 +83,4 @@ jobs:
         with:
           repo-token: "${{ secrets.GITHUB_TOKEN }}"
           sync-labels: true
+        continue-on-error: true

@@ -1,12 +1,12 @@
-import type { Capability } from "@rnx-kit/config";
 import { error } from "@rnx-kit/console";
 import type { PackageManifest } from "@rnx-kit/tools";
-import fs from "fs";
-import semver from "semver";
+import { readPackage, writePackage } from "@rnx-kit/tools";
+import _ from "lodash";
 import { resolveCapabilities } from "./capabilities";
 import { checkPackageManifest } from "./check";
 import { updateDependencies } from "./manifest";
-import { getProfilesFor } from "./profiles";
+import { parseProfilesString } from "./profiles";
+import { keysOf } from "./helpers";
 import type { Command, ManifestProfile, ResolverOptions } from "./types";
 
 type Change = {
@@ -34,24 +34,13 @@ export function buildManifestProfile(
   customProfilesPath: string | number | undefined,
   options?: ResolverOptions
 ): ManifestProfile {
-  const profileVersions = versions
-    .toString()
-    .split(",")
-    .map((value) => "^" + semver.coerce(value));
-
-  const supportedProfiles = getProfilesFor(
-    profileVersions.join(" || "),
-    customProfilesPath?.toString(),
+  const { supportedProfiles, targetProfile } = parseProfilesString(
+    versions,
+    customProfilesPath,
     options
   );
 
-  const targetProfile = getProfilesFor(
-    profileVersions[0],
-    customProfilesPath?.toString(),
-    options
-  );
-
-  const allCapabilities = Object.keys(targetProfile[0]) as Capability[];
+  const allCapabilities = keysOf(targetProfile[0]);
 
   // Use "development" type so we can check for devOnly packages under
   // `dependencies` as well.
@@ -118,8 +107,9 @@ export function makeVigilantCommand({
   const uncheckedReturnCode = -1;
   const checkOptions = { uncheckedReturnCode, write };
 
-  const exclusionList =
-    typeof excludePackages === "string" ? excludePackages.split(",") : [];
+  const exclusionList = _.isString(excludePackages)
+    ? excludePackages.split(",")
+    : [];
 
   const profile = buildManifestProfile(versions, customProfilesPath);
   return (manifestPath: string) => {
@@ -132,9 +122,7 @@ export function makeVigilantCommand({
       // Ignore; retry with a full inspection
     }
 
-    const manifest = JSON.parse(
-      fs.readFileSync(manifestPath, { encoding: "utf-8" })
-    );
+    const manifest = readPackage(manifestPath);
     if (exclusionList.includes(manifest.name)) {
       return 0;
     }
@@ -142,10 +130,7 @@ export function makeVigilantCommand({
     const changes = inspect(manifest, profile, write);
     if (changes.length > 0) {
       if (write) {
-        fs.writeFileSync(
-          manifestPath,
-          JSON.stringify(manifest, undefined, 2) + "\n"
-        );
+        writePackage(manifestPath, manifest);
       } else {
         const violations = changes
           .map(

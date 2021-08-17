@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/babel-preset-metro-react-native",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Babel preset for React Native applications",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/babel-preset-metro-react-native#readme",
   "license": "MIT",
@@ -22,7 +22,13 @@
     "babel-plugin-const-enum": "^1.0.0"
   },
   "peerDependencies": {
+    "@babel/plugin-transform-typescript": "^7.0.0",
     "metro-react-native-babel-preset": "*"
+  },
+  "peerDependenciesMeta": {
+    "@babel/plugin-transform-typescript": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",

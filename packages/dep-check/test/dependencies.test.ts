@@ -1,4 +1,4 @@
-import fs from "fs";
+import { readPackage } from "@rnx-kit/tools";
 import path from "path";
 import { getRequirements, visitDependencies } from "../src/dependencies";
 
@@ -101,10 +101,7 @@ describe("visitDependencies()", () => {
 describe("getRequirements()", () => {
   test("gets requirements from all dependencies", () => {
     const fixture = fixturePath("awesome-repo");
-    const manifestJson = fs.readFileSync(path.join(fixture, "package.json"), {
-      encoding: "utf-8",
-    });
-    const manifest = JSON.parse(manifestJson);
+    const manifest = readPackage(path.join(fixture, "package.json"));
     const { reactNativeVersion, capabilities } = getRequirements(
       "^0.63 || ^0.64",
       "app",
@@ -142,10 +139,7 @@ describe("getRequirements()", () => {
     );
 
     const fixture = fixturePath("awesome-repo-extended");
-    const manifestJson = fs.readFileSync(path.join(fixture, "package.json"), {
-      encoding: "utf-8",
-    });
-    const manifest = JSON.parse(manifestJson);
+    const manifest = readPackage(path.join(fixture, "package.json"));
     const { reactNativeVersion, capabilities } = getRequirements(
       "^0.63 || ^0.64",
       "app",

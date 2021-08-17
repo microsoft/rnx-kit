@@ -7,9 +7,12 @@ import {
 } from "@rnx-kit/config";
 import { error, warn } from "@rnx-kit/console";
 import type { PackageManifest } from "@rnx-kit/tools";
-import findUp from "find-up";
-import fs from "fs";
-import path from "path";
+import {
+  findPackageDependencyDir,
+  parsePackageRef,
+  readPackage,
+} from "@rnx-kit/tools";
+import { concatVersionRanges } from "./helpers";
 import {
   getProfilesFor,
   getProfileVersionsFor,
@@ -55,21 +58,19 @@ export function visitDependencies(
 
     visited.add(dependency);
 
-    const packageJson = findUp.sync(
-      path.join("node_modules", dependency, "package.json"),
-      { cwd: projectRoot }
-    );
-    if (!packageJson) {
+    const packageRef = parsePackageRef(dependency);
+    const packageDir = findPackageDependencyDir(packageRef, {
+      startDir: projectRoot,
+    });
+    if (!packageDir) {
       warn(`Unable to resolve module '${dependency}'`);
       return;
     }
 
-    const packageRoot = path.dirname(packageJson);
-    visitor(dependency, packageRoot);
+    visitor(dependency, packageDir);
 
-    const content = fs.readFileSync(packageJson, { encoding: "utf-8" });
-    const manifest: PackageManifest = JSON.parse(content);
-    visitDependencies(manifest, packageRoot, visitor, visited);
+    const manifest = readPackage(packageDir);
+    visitDependencies(manifest, packageDir, visitor, visited);
   });
 }
 
@@ -150,7 +151,7 @@ export function getRequirements(
   }
 
   return {
-    reactNativeVersion: "^" + profileVersions.join(" || ^"),
+    reactNativeVersion: concatVersionRanges(profileVersions),
     capabilities: Array.from(allCapabilities),
   };
 }

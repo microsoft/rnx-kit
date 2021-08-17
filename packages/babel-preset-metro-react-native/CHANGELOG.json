@@ -2,6 +2,21 @@
   "name": "@rnx-kit/babel-preset-metro-react-native",
   "entries": [
     {
+      "date": "Mon, 16 Aug 2021 14:17:13 GMT",
+      "tag": "@rnx-kit/babel-preset-metro-react-native_v1.0.4",
+      "version": "1.0.4",
+      "comments": {
+        "patch": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/babel-preset-metro-react-native",
+            "comment": "Add support for @babel/plugin-transform-typescript 7.15",
+            "commit": "59fb7d424f11437a534812df67804544baddeacc"
+          }
+        ]
+      }
+    },
+    {
       "date": "Sat, 10 Jul 2021 07:28:45 GMT",
       "tag": "@rnx-kit/babel-preset-metro-react-native_v1.0.3",
       "version": "1.0.3",
