@@ -5,9 +5,17 @@ import profile_0_62 from "./profiles/profile-0.62";
 import profile_0_63 from "./profiles/profile-0.63";
 import profile_0_64 from "./profiles/profile-0.64";
 import profile_0_65 from "./profiles/profile-0.65";
+import { isString, keysOf } from "./helpers";
 import type { Profile, ProfileVersion, ResolverOptions } from "./types";
 
 type ProfileMap = Record<ProfileVersion, Profile>;
+
+type ProfilesInfo = {
+  supportedProfiles: Profile[];
+  supportedVersions: string;
+  targetProfile: Profile[];
+  targetVersion: string;
+};
 
 export const defaultProfiles: Readonly<ProfileMap> = {
   "0.61": profile_0_61,
@@ -104,12 +112,12 @@ function loadCustomProfiles(
 export function getProfileVersionsFor(
   reactVersionRange: string | ProfileVersion[]
 ): ProfileVersion[] {
-  if (typeof reactVersionRange !== "string") {
+  if (!isString(reactVersionRange)) {
     return reactVersionRange;
   }
 
   const isSatifisedBy = getVersionComparator(reactVersionRange);
-  const allVersions = Object.keys(defaultProfiles) as ProfileVersion[];
+  const allVersions = keysOf(defaultProfiles);
   return allVersions.reduce<ProfileVersion[]>((profiles, version) => {
     if (isSatifisedBy(version)) {
       profiles.push(version);
@@ -135,6 +143,36 @@ export function getProfilesFor(
   }
 
   return profiles;
+}
+
+export function parseProfilesString(
+  versions: string | number,
+  customProfilesPath?: string | number,
+  options?: ResolverOptions
+): ProfilesInfo {
+  const profileVersions = versions
+    .toString()
+    .split(",")
+    .map((value) => "^" + semver.coerce(value));
+  const targetVersion = profileVersions[0];
+
+  // Note: `.sort()` mutates the array
+  const supportedVersions = profileVersions.sort().join(" || ");
+
+  return {
+    supportedProfiles: getProfilesFor(
+      supportedVersions,
+      customProfilesPath?.toString(),
+      options
+    ),
+    supportedVersions,
+    targetProfile: getProfilesFor(
+      targetVersion,
+      customProfilesPath?.toString(),
+      options
+    ),
+    targetVersion,
+  };
 }
 
 export function profilesSatisfying(

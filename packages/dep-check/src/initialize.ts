@@ -1,14 +1,12 @@
-import fs from "fs";
 import { capabilitiesFor } from "./capabilities";
+import { readJsonFile, writeJsonFile } from "./json";
 import type { CapabilitiesOptions } from "./types";
 
 export function initializeConfig(
   packageManifest: string,
   options: CapabilitiesOptions
 ): void {
-  const manifest = JSON.parse(
-    fs.readFileSync(packageManifest, { encoding: "utf-8" })
-  );
+  const manifest = readJsonFile(packageManifest);
   if (manifest["rnx-kit"]?.["capabilities"]) {
     return;
   }
@@ -25,8 +23,5 @@ export function initializeConfig(
       ...capabilities,
     },
   };
-  fs.writeFileSync(
-    packageManifest,
-    JSON.stringify(updatedManifest, undefined, 2) + "\n"
-  );
+  writeJsonFile(packageManifest, updatedManifest);
 }

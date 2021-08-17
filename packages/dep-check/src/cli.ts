@@ -7,7 +7,9 @@ import pkgDir from "pkg-dir";
 import { getAllPackageJsonFiles, getWorkspaceRoot } from "workspace-tools";
 import yargs from "yargs";
 import { checkPackageManifest } from "./check";
+import { isString } from "./helpers";
 import { initializeConfig } from "./initialize";
+import { makeSetVersionCommand } from "./setVersion";
 import type { Args, Command } from "./types";
 import { makeVigilantCommand } from "./vigilant";
 
@@ -24,7 +26,7 @@ function ensureKitType(type: string): KitType | undefined {
 function getManifests(
   packageJson: string | number | undefined
 ): string[] | undefined {
-  if (typeof packageJson === "string" && packageJson) {
+  if (isString(packageJson) && packageJson) {
     return [packageJson];
   }
 
@@ -50,10 +52,6 @@ function getManifests(
     error(e.message);
     return undefined;
   }
-}
-
-function isString(v: unknown): v is string {
-  return typeof v === "string";
 }
 
 function makeCheckCommand(write: boolean): Command {
@@ -86,10 +84,11 @@ function reportConflicts(conflicts: [string, string][], args: Args): boolean {
   }, false);
 }
 
-function makeCommand(args: Args): Command | undefined {
+async function makeCommand(args: Args): Promise<Command | undefined> {
   const conflicts: [string, string][] = [
     ["init", "vigilant"],
     ["init", args.write ? "write" : "no-write"],
+    ["set-version", args.write ? "write" : "no-write"],
   ];
   if (reportConflicts(conflicts, args)) {
     return undefined;
@@ -99,12 +98,20 @@ function makeCommand(args: Args): Command | undefined {
     "custom-profiles": customProfilesPath,
     "exclude-packages": excludePackages,
     init,
+    "set-version": setVersion,
     vigilant,
     write,
   } = args;
 
   if (isString(init)) {
     return makeInitializeCommand(init);
+  }
+
+  // When `--set-version` is without a value, `setVersion` is an empty string if
+  // invoked directly. When invoked via `@react-native-community/cli`,
+  // `setVersion` is `true` instead.
+  if (setVersion || isString(setVersion)) {
+    return makeSetVersionCommand(setVersion);
   }
 
   if (isString(vigilant)) {
@@ -119,8 +126,11 @@ function makeCommand(args: Args): Command | undefined {
   return makeCheckCommand(write);
 }
 
-export function cli({ "package-json": packageJson, ...args }: Args): void {
-  const command = makeCommand(args);
+export async function cli({
+  "package-json": packageJson,
+  ...args
+}: Args): Promise<void> {
+  const command = await makeCommand(args);
   if (!command) {
     process.exit(1);
   }
@@ -172,6 +182,12 @@ if (require.main === module) {
           "Writes an initial kit config to the specified 'package.json'.",
         choices: ["app", "library"],
         conflicts: ["vigilant"],
+      },
+      "set-version": {
+        description:
+          "Sets `reactNativeVersion` and `reactNativeDevVersion` for any configured package. There is an interactive prompt if no value is provided. The value should be a comma-separated list of `react-native` versions to set, where the first number specifies the development version. Example: `0.64,0.63`",
+        type: "string",
+        conflicts: ["init", "vigilant"],
       },
       vigilant: {
         description:

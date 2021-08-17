@@ -6,6 +6,7 @@ import { diffLinesUnified } from "jest-diff";
 import path from "path";
 import { getRequirements } from "./dependencies";
 import { findBadPackages } from "./findBadPackages";
+import { readJsonFile } from "./json";
 import { updatePackageManifest } from "./manifest";
 import { getProfilesFor } from "./profiles";
 import type { Options, PackageManifest } from "./types";
@@ -23,8 +24,7 @@ export function checkPackageManifest(
   manifestPath: string,
   { uncheckedReturnCode = 0, write }: Options = {}
 ): number {
-  const manifestJson = fs.readFileSync(manifestPath, { encoding: "utf-8" });
-  const manifest = JSON.parse(manifestJson);
+  const manifest = readJsonFile(manifestPath);
   if (!isManifest(manifest)) {
     error(`'${manifestPath}' does not contain a valid package manifest`);
     return 1;
