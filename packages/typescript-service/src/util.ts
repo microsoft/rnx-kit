@@ -11,7 +11,3 @@ export function getNewLine(): string {
 export function isNonEmptyArray(a: unknown): a is Array<unknown> {
   return Array.isArray(a) && a.length > 0;
 }
-
-export function normalizePath(p: string): string {
-  return p.replace(/\\/g, "/");
-}

@@ -1,11 +1,5 @@
 import "jest-extended";
-import ts from "typescript";
-import {
-  getCanonicalFileName,
-  getNewLine,
-  isNonEmptyArray,
-  normalizePath,
-} from "../src/util";
+import { getCanonicalFileName, getNewLine, isNonEmptyArray } from "../src/util";
 
 describe("Utility", () => {
   test("getCanonicalFileName only changes upper/lower-case", () => {
@@ -44,21 +38,5 @@ describe("Utility", () => {
 
   test("isNonEmptyArray returns true when given object is an array with 2 elements", () => {
     expect(isNonEmptyArray([true, false])).toBeTrue();
-  });
-
-  test("normalizePath empty returns empty", () => {
-    expect(normalizePath("")).toEqual("");
-  });
-
-  test("normalizePath with backslashes returns forward slashes", () => {
-    expect(normalizePath("d:\\this\\is\\a\\test.txt")).toEqual(
-      "d:/this/is/a/test.txt"
-    );
-  });
-
-  test("normalizePath does not change case", () => {
-    expect(normalizePath("D:\\This\\Is\\A\\teST.txt")).toEqual(
-      "D:/This/Is/A/teST.txt"
-    );
   });
 });
