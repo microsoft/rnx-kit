@@ -1,4 +1,4 @@
-import { Plugin } from "esbuild";
+import type { Plugin } from "esbuild";
 
 const resolvePath = (path: string, resolveDir: string): string | undefined => {
   try {
