@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/cli
 
-This log was last generated on Tue, 17 Aug 2021 09:36:56 GMT and should not be manually modified.
+This log was last generated on Tue, 17 Aug 2021 20:18:02 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 0.9.4
+
+Tue, 17 Aug 2021 20:18:02 GMT
+
+### Patches
+
+- Fix `rnx-test` failing under Jest 27 (4123478+tido64@users.noreply.github.com)
 
 ## 0.9.3
 

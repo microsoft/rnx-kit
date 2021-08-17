@@ -2,6 +2,21 @@
   "name": "@rnx-kit/cli",
   "entries": [
     {
+      "date": "Tue, 17 Aug 2021 20:18:02 GMT",
+      "tag": "@rnx-kit/cli_v0.9.4",
+      "version": "0.9.4",
+      "comments": {
+        "patch": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/cli",
+            "comment": "Fix `rnx-test` failing under Jest 27",
+            "commit": "13dcd0c6da90c76db9ee188658b9f9aa5cb034d6"
+          }
+        ]
+      }
+    },
+    {
       "date": "Tue, 17 Aug 2021 09:36:56 GMT",
       "tag": "@rnx-kit/cli_v0.9.3",
       "version": "0.9.3",
