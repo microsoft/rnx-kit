@@ -20,7 +20,13 @@
     "test": "rnx-kit-scripts test"
   },
   "devDependencies": {
-    "prettier": "^2.0.0"
+    "prettier": "^2.0.0",
+    "esbuild": "^0.12.19"
+  },
+  "depcheck": {
+    "ignorePatterns": [
+      "/test/__fixtures__/*"
+    ]
   },
   "eslintConfig": {
     "extends": "@rnx-kit/eslint-config"
