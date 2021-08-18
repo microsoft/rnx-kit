@@ -1,11 +1,7 @@
-// config/src/bundleConfig.ts
-
 /**
  * List of supported react-native platforms.
  */
 export type AllPlatforms = "ios" | "android" | "windows" | "win32" | "macos";
-
-// cli/src/parsers.ts
 
 /**
  * Parse a string to ensure it maps to a valid react-native platform.
@@ -26,5 +22,3 @@ export function parsePlatform(val: string): AllPlatforms {
       throw new Error("Invalid platform '" + val + "'");
   }
 }
-
-// TODO: maybe add isPlatform(platform: string): x is AllPlatforms
