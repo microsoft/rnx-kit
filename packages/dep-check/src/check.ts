@@ -9,7 +9,7 @@ import { findBadPackages } from "./findBadPackages";
 import { readJsonFile } from "./json";
 import { updatePackageManifest } from "./manifest";
 import { getProfilesFor } from "./profiles";
-import type { Options, PackageManifest } from "./types";
+import type { CheckOptions, Command, PackageManifest } from "./types";
 
 export function isManifest(manifest: unknown): manifest is PackageManifest {
   return (
@@ -22,7 +22,7 @@ export function isManifest(manifest: unknown): manifest is PackageManifest {
 
 export function checkPackageManifest(
   manifestPath: string,
-  { uncheckedReturnCode = 0, write }: Options = {}
+  { loose, uncheckedReturnCode = 0, write }: CheckOptions
 ): number {
   const manifest = readJsonFile(manifestPath);
   if (!isManifest(manifest)) {
@@ -60,7 +60,8 @@ export function checkPackageManifest(
       kitType,
       manifest,
       projectRoot,
-      customProfiles
+      customProfiles,
+      { loose }
     );
   requiredCapabilities.push(...targetCapabilities);
 
@@ -108,4 +109,10 @@ export function checkPackageManifest(
   }
 
   return 0;
+}
+
+export function makeCheckCommand(options: CheckOptions): Command {
+  return (manifest: string) => {
+    return checkPackageManifest(manifest, options);
+  };
 }

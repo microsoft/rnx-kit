@@ -23,6 +23,7 @@ export function rnxDepCheck(
     ...pickValue<Args>("init", "init", args),
     ...pickValue<Args>("set-version", "setVersion", args),
     ...pickValue<Args>("vigilant", "vigilant", args),
+    loose: Boolean(args.loose),
     write: Boolean(args.write),
     "package-json": argv[0],
   });
@@ -46,6 +47,11 @@ export const rnxDepCheckCommand = {
     {
       name: "--init [app|library]",
       description: "Writes an initial kit config",
+    },
+    {
+      name: "--loose",
+      description:
+        "Determines how strict the React Native version requirement should be. Useful for apps that depend on a newer React Native version than their dependencies declare support for.",
     },
     {
       name: "--set-version [versions]",

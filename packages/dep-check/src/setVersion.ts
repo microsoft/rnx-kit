@@ -60,8 +60,11 @@ export async function makeSetVersionCommand(
     return undefined;
   }
 
+  const checkOnly = { loose: false, write: false };
+  const write = { loose: false, write: true };
+
   return (manifestPath: string) => {
-    const checkReturnCode = checkPackageManifest(manifestPath);
+    const checkReturnCode = checkPackageManifest(manifestPath, checkOnly);
     if (checkReturnCode !== 0) {
       return checkReturnCode;
     }
@@ -76,6 +79,6 @@ export async function makeSetVersionCommand(
     rnxKitConfig.reactNativeDevVersion = targetVersion;
 
     writeJsonFile(manifestPath, manifest);
-    return checkPackageManifest(manifestPath, { write: true });
+    return checkPackageManifest(manifestPath, write);
   };
 }

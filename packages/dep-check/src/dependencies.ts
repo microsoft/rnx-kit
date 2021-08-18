@@ -16,10 +16,11 @@ import {
   profilesSatisfying,
 } from "./profiles";
 import type {
+  CheckOptions,
   PackageManifest,
   Profile,
   ProfileVersion,
-  ResolverOptions,
+  TestOverrides,
 } from "./types";
 
 type Requirements = Required<
@@ -83,7 +84,8 @@ export function getRequirements(
   targetManifest: PackageManifest,
   projectRoot: string,
   customProfiles: string | undefined,
-  options?: ResolverOptions
+  { loose }: Pick<CheckOptions, "loose">,
+  testOverrides?: TestOverrides
 ): Requirements {
   let profileVersions = getProfileVersionsFor(targetReactNativeVersion);
   if (profileVersions.length === 0) {
@@ -104,39 +106,55 @@ export function getRequirements(
 
     visitDependencies(targetManifest, projectRoot, (module, modulePath) => {
       const kitConfig = getKitConfig({ cwd: modulePath });
-      if (kitConfig) {
-        const { reactNativeVersion, capabilities } =
-          getKitCapabilities(kitConfig);
+      if (!kitConfig) {
+        return;
+      }
 
-        profileVersions = profilesSatisfying(
-          profileVersions,
-          reactNativeVersion
-        );
-        if (profileVersions.length != trace[trace.length - 1].profiles.length) {
-          trace.push({ module, reactNativeVersion, profiles: profileVersions });
-        }
+      const { reactNativeVersion, capabilities } =
+        getKitCapabilities(kitConfig);
 
-        if (profileVersions.length === 0) {
-          const message =
-            "No React Native profile could satisfy all dependencies";
-          const fullTrace = [
-            message,
-            ...trace.map(({ module, reactNativeVersion, profiles }) => {
-              const satisfiedVersions = profiles.join(", ");
-              return `    [${satisfiedVersions}] satisfies '${module}' because it supports '${reactNativeVersion}'`;
-            }),
-          ].join("\n");
+      const validVersions = profilesSatisfying(
+        profileVersions,
+        reactNativeVersion
+      );
+      if (validVersions.length != profileVersions.length) {
+        trace.push({
+          module,
+          reactNativeVersion,
+          profiles: validVersions,
+        });
+      }
+
+      if (Array.isArray(capabilities)) {
+        capabilities.forEach((capability) => allCapabilities.add(capability));
+      }
+
+      if (validVersions.length === 0) {
+        const message =
+          "No React Native profile could satisfy all dependencies";
+        const fullTrace = [
+          message,
+          ...trace.map(({ module, reactNativeVersion, profiles }) => {
+            const satisfiedVersions = profiles.join(", ");
+            return `    [${satisfiedVersions}] satisfies '${module}' because it supports '${reactNativeVersion}'`;
+          }),
+        ].join("\n");
+        if (loose) {
+          warn(fullTrace);
+        } else {
           error(fullTrace);
           throw new Error(message);
         }
-
-        if (Array.isArray(capabilities)) {
-          capabilities.forEach((capability) => allCapabilities.add(capability));
-        }
+      } else {
+        profileVersions = validVersions;
       }
     });
 
-    const profiles = getProfilesFor(profileVersions, customProfiles, options);
+    const profiles = getProfilesFor(
+      profileVersions,
+      customProfiles,
+      testOverrides
+    );
     allCapabilities.forEach((capability) => {
       /**
        * Core capabilities are capabilities that must always be declared by the

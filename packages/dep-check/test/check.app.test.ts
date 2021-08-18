@@ -30,7 +30,9 @@ describe("checkPackageManifest({ kitType: 'app' })", () => {
       updatedManifest = content;
     });
 
-    expect(checkPackageManifest(manifestPath, { write: true })).toBe(0);
+    expect(
+      checkPackageManifest(manifestPath, { loose: false, write: true })
+    ).toBe(0);
     expect(consoleWarnSpy).not.toBeCalled();
     expect(destination).toBe(manifestPath);
     expect(updatedManifest).toMatchSnapshot();

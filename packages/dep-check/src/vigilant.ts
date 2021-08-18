@@ -5,20 +5,18 @@ import { readJsonFile, writeJsonFile } from "./json";
 import { updateDependencies } from "./manifest";
 import { parseProfilesString } from "./profiles";
 import { isString, keysOf } from "./helpers";
-import type { Command, PackageManifest, ResolverOptions } from "./types";
+import type {
+  Command,
+  PackageManifest,
+  TestOverrides,
+  VigilantOptions,
+} from "./types";
 
 type Change = {
   name: string;
   from: string;
   to: string;
   section: string;
-};
-
-type Options = {
-  versions: string | number;
-  write: boolean;
-  customProfilesPath?: string | number;
-  excludePackages?: string | number;
 };
 
 const allSections = [
@@ -28,14 +26,14 @@ const allSections = [
 ];
 
 export function buildManifestProfile(
-  versions: string | number,
-  customProfilesPath: string | number | undefined,
-  options?: ResolverOptions
+  versions: string,
+  customProfilesPath: string | undefined,
+  testOverrides?: TestOverrides
 ): Required<PackageManifest> {
   const { supportedProfiles, targetProfile } = parseProfilesString(
     versions,
     customProfilesPath,
-    options
+    testOverrides
   );
 
   const allCapabilities = keysOf(targetProfile[0]);
@@ -92,24 +90,25 @@ export function inspect(
 }
 
 export function makeVigilantCommand({
-  customProfilesPath,
+  customProfiles,
   excludePackages,
+  loose,
   versions,
   write,
-}: Options): Command | undefined {
+}: VigilantOptions): Command | undefined {
   if (!versions) {
     error("A comma-separated list of profile versions must be specified.");
     return undefined;
   }
 
   const uncheckedReturnCode = -1;
-  const checkOptions = { uncheckedReturnCode, write };
+  const checkOptions = { loose, uncheckedReturnCode, write };
 
   const exclusionList = isString(excludePackages)
     ? excludePackages.split(",")
     : [];
 
-  const profile = buildManifestProfile(versions, customProfilesPath);
+  const profile = buildManifestProfile(versions, customProfiles);
   return (manifestPath: string) => {
     try {
       const checkReturnCode = checkPackageManifest(manifestPath, checkOptions);

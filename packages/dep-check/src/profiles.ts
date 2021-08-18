@@ -6,7 +6,7 @@ import profile_0_63 from "./profiles/profile-0.63";
 import profile_0_64 from "./profiles/profile-0.64";
 import profile_0_65 from "./profiles/profile-0.65";
 import { isString, keysOf } from "./helpers";
-import type { Profile, ProfileVersion, ResolverOptions } from "./types";
+import type { Profile, ProfileVersion, TestOverrides } from "./types";
 
 type ProfileMap = Record<ProfileVersion, Profile>;
 
@@ -63,7 +63,7 @@ function tryInvoke<T>(fn: () => T): [T, undefined] | [undefined, Error] {
 
 function loadCustomProfiles(
   customProfilesPath: string | undefined,
-  { moduleResolver = require.resolve }: ResolverOptions = {}
+  { moduleResolver = require.resolve }: TestOverrides = {}
 ): Partial<ProfileMap> {
   if (customProfilesPath) {
     const [resolvedPath, moduleNotFoundError] = tryInvoke(() =>
@@ -129,9 +129,9 @@ export function getProfileVersionsFor(
 export function getProfilesFor(
   reactVersionRange: string | ProfileVersion[],
   customProfilesPath: string | undefined,
-  options?: ResolverOptions
+  testOverrides?: TestOverrides
 ): Profile[] {
-  const customProfiles = loadCustomProfiles(customProfilesPath, options);
+  const customProfiles = loadCustomProfiles(customProfilesPath, testOverrides);
   const profiles = getProfileVersionsFor(reactVersionRange).map((version) => ({
     ...defaultProfiles[version],
     ...customProfiles[version],
@@ -148,7 +148,7 @@ export function getProfilesFor(
 export function parseProfilesString(
   versions: string | number,
   customProfilesPath?: string | number,
-  options?: ResolverOptions
+  testOverrides?: TestOverrides
 ): ProfilesInfo {
   const profileVersions = versions
     .toString()
@@ -163,13 +163,13 @@ export function parseProfilesString(
     supportedProfiles: getProfilesFor(
       supportedVersions,
       customProfilesPath?.toString(),
-      options
+      testOverrides
     ),
     supportedVersions,
     targetProfile: getProfilesFor(
       targetVersion,
       customProfilesPath?.toString(),
-      options
+      testOverrides
     ),
     targetVersion,
   };
