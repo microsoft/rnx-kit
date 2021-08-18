@@ -30,6 +30,7 @@
     "@rnx-kit/metro-service": "^1.1.0",
     "@rnx-kit/third-party-notices": "^1.1.1",
     "@rnx-kit/tools-language": "^1.0.0",
+    "@rnx-kit/tools-node": "^1.0.0",
     "@rnx-kit/tools-react-native": "^1.0.0",
     "@rnx-kit/typescript-service": "^1.2.0",
     "chalk": "^4.1.0",
