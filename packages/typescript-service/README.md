@@ -26,7 +26,7 @@ const config = service.getProjectConfigLoader().load(configFileName);
 const resolverHost = createResolverHost(config);
 
 // Open the project
-const project = service.openProject(config, resolver);
+const project = service.openProject(config, resolverHost);
 ```
 
 ## Resolver Host
