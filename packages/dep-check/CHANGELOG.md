@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/dep-check
 
-This log was last generated on Tue, 17 Aug 2021 09:36:56 GMT and should not be manually modified.
+This log was last generated on Wed, 18 Aug 2021 14:54:20 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 1.7.0
+
+Wed, 18 Aug 2021 14:54:20 GMT
+
+### Minor changes
+
+- Allow apps to depend on a newer version of React Native than their dependencies declare support for via the `--loose` flag. (4123478+tido64@users.noreply.github.com)
 
 ## 1.6.0
 

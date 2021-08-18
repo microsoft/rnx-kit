@@ -184,7 +184,9 @@ describe("makeVigilantCommand()", () => {
   });
 
   test("returns no command if no versions are specified", () => {
-    expect(makeVigilantCommand({ versions: "", write: false })).toBeUndefined();
+    expect(
+      makeVigilantCommand({ versions: "", loose: false, write: false })
+    ).toBeUndefined();
   });
 
   test("returns exit code 0 when there are no violations", () => {
@@ -201,9 +203,11 @@ describe("makeVigilantCommand()", () => {
       didWrite = true;
     });
 
-    const result = makeVigilantCommand({ versions: "0.63", write: false })(
-      "package.json"
-    );
+    const result = makeVigilantCommand({
+      versions: "0.63",
+      loose: false,
+      write: false,
+    })("package.json");
     expect(result).toBe(0);
     expect(didWrite).toBe(false);
     expect(consoleErrorSpy).not.toBeCalled();
@@ -223,9 +227,11 @@ describe("makeVigilantCommand()", () => {
       didWrite = true;
     });
 
-    const result = makeVigilantCommand({ versions: "0.63", write: false })(
-      "package.json"
-    );
+    const result = makeVigilantCommand({
+      versions: "0.63",
+      loose: false,
+      write: false,
+    })("package.json");
     expect(result).not.toBe(0);
     expect(didWrite).toBe(false);
     expect(consoleErrorSpy).toBeCalledTimes(1);
@@ -245,9 +251,11 @@ describe("makeVigilantCommand()", () => {
       didWrite = true;
     });
 
-    const result = makeVigilantCommand({ versions: "0.63", write: true })(
-      "package.json"
-    );
+    const result = makeVigilantCommand({
+      versions: "0.63",
+      loose: false,
+      write: true,
+    })("package.json");
     expect(result).toBe(0);
     expect(didWrite).toBe(true);
     expect(consoleErrorSpy).not.toBeCalled();
@@ -271,6 +279,7 @@ describe("makeVigilantCommand()", () => {
       versions: "0.63",
       write: false,
       excludePackages: "@rnx-kit/dep-check",
+      loose: false,
     })("package.json");
     expect(result).toBe(0);
     expect(didWrite).toBe(false);

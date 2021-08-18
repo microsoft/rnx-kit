@@ -2,6 +2,27 @@
   "name": "@rnx-kit/cli",
   "entries": [
     {
+      "date": "Wed, 18 Aug 2021 14:54:20 GMT",
+      "tag": "@rnx-kit/cli_v0.9.5",
+      "version": "0.9.5",
+      "comments": {
+        "patch": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/cli",
+            "comment": "Allow apps to depend on a newer version of React Native than their dependencies declare support for via the `--loose` flag.",
+            "commit": "f6651e5391d69c5c77d495a447a546c0f9abba1e"
+          },
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/cli",
+            "commit": "f6651e5391d69c5c77d495a447a546c0f9abba1e",
+            "comment": "Bump @rnx-kit/cli to v0.9.5"
+          }
+        ]
+      }
+    },
+    {
       "date": "Tue, 17 Aug 2021 20:18:02 GMT",
       "tag": "@rnx-kit/cli_v0.9.4",
       "version": "0.9.4",

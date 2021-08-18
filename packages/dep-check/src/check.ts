@@ -8,11 +8,11 @@ import { getRequirements } from "./dependencies";
 import { findBadPackages } from "./findBadPackages";
 import { updatePackageManifest } from "./manifest";
 import { getProfilesFor } from "./profiles";
-import type { Options } from "./types";
+import type { CheckOptions, Command } from "./types";
 
 export function checkPackageManifest(
   manifestPath: string,
-  { uncheckedReturnCode = 0, write }: Options = {}
+  { loose, uncheckedReturnCode = 0, write }: CheckOptions
 ): number {
   const manifest = readPackage(manifestPath);
   if (!isPackageManifest(manifest)) {
@@ -50,7 +50,8 @@ export function checkPackageManifest(
       kitType,
       manifest,
       projectRoot,
-      customProfiles
+      customProfiles,
+      { loose }
     );
   requiredCapabilities.push(...targetCapabilities);
 
@@ -98,4 +99,10 @@ export function checkPackageManifest(
   }
 
   return 0;
+}
+
+export function makeCheckCommand(options: CheckOptions): Command {
+  return (manifest: string) => {
+    return checkPackageManifest(manifest, options);
+  };
 }
