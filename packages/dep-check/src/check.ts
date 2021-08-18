@@ -1,6 +1,10 @@
 import { getKitCapabilities, getKitConfig } from "@rnx-kit/config";
 import { error, info, warn } from "@rnx-kit/console";
-import { isPackageManifest, readPackage, writePackage } from "@rnx-kit/tools";
+import {
+  isPackageManifest,
+  readPackage,
+  writePackage,
+} from "@rnx-kit/tools-node";
 import chalk from "chalk";
 import { diffLinesUnified } from "jest-diff";
 import path from "path";

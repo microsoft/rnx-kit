@@ -11,7 +11,7 @@ import {
   parsePackageRef,
   readPackage,
   writePackage,
-} from "../../src/node/package";
+} from "../src/package";
 
 describe("Node > Package", () => {
   const fixtureDir = path.resolve(__dirname, "__fixtures__");

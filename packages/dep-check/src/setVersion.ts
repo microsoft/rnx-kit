@@ -1,4 +1,4 @@
-import { readPackage, writePackage } from "@rnx-kit/tools";
+import { readPackage, writePackage } from "@rnx-kit/tools-node";
 import isString from "lodash/isString";
 import prompts from "prompts";
 import { checkPackageManifest } from "./check";

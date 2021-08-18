@@ -1,35 +1,19 @@
-# @rnx-kit/typescript-service
+# @rnx-kit/tools-node
 
 [![Build](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml/badge.svg)](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml)
-[![npm version](https://img.shields.io/npm/v/@rnx-kit/typescript-service)](https://www.npmjs.com/package/@rnx-kit/tools)
+[![npm version](https://img.shields.io/npm/v/@rnx-kit/tools-node)](https://www.npmjs.com/package/@rnx-kit/tools-node)
 
-`@rnx-kit/tools` is a collection of functions and types which supplement
-JavaScript development.
+`@rnx-kit/tools-node` is a collection of supplemental NodeJS functions and
+types.
 
-The library is organized into categories:
-
-- [Language](#language)
-- [Node](#node)
-- [React Native](#react-native)
-
-## Language
-
-| Category | Function                                  | Description                                                                                                                                    |
-| -------- | ----------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| Function | `tryInvoke(fn)`                           | Invoke the given function, returning its result or a thrown error.                                                                             |
-| Math     | `isApproximatelyEqual(f1, f2, tolerance)` | Decide if two numbers, integer or decimal, are "approximately" equal. They're equal if they are close enough to be within the given tolerance. |
-
-## Node
-
-| Category                     | Type Name                      | Description                                                                                                                                                                        |
-| ---------------------------- | ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Package                      | `PackageRef`                   | Components of a package reference                                                                                                                                                  |
-| Package                      | `PackagePerson`                | Schema for a reference to a person in `package.json`.                                                                                                                              |
-| Package                      | `PackageManifest`              | Schema for the contents of a `package.json` manifest file.                                                                                                                         |
-| Package                      | `FindPackageDependencyOptions` | Options which control how package dependecies are located.                                                                                                                         |
-| Module                       | `PackageModuleRef`             | Module reference relative to a package, such as `react-native` or                                                                                                                  |
-| `@rnx-kit/tools/node/index`. |
-| Module                       | `FileModuleRef`                | \* Module reference rooted to a file system location, either relative to a directory, or as an absolute path. For example, `./index` or `/repos/rnx-kit/packages/tools/src/index`. |
+| Category | Type Name                      | Description                                                                                                                                                                     |
+| -------- | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Package  | `PackageRef`                   | Components of a package reference                                                                                                                                               |
+| Package  | `PackagePerson`                | Schema for a reference to a person in `package.json`.                                                                                                                           |
+| Package  | `PackageManifest`              | Schema for the contents of a `package.json` manifest file.                                                                                                                      |
+| Package  | `FindPackageDependencyOptions` | Options which control how package dependecies are located.                                                                                                                      |
+| Module   | `PackageModuleRef`             | Module reference relative to a package, such as `react-native` or `@rnx-kit/tools/node/index`.                                                                                  |
+| Module   | `FileModuleRef`                | Module reference rooted to a file system location, either relative to a directory, or as an absolute path. For example, `./index` or `/repos/rnx-kit/packages/tools/src/index`. |
 
 | Category    | Function                                      | Description                                                                                                                                                                                        |
 | ----------- | --------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -48,13 +32,3 @@ The library is organized into categories:
 | Module      | `isPackageModuleRef(r)`                       | Is the module reference a package module reference?                                                                                                                                                |
 | Module      | `isFileModuleRef(r)`                          | Is the module reference relative to a file location?                                                                                                                                               |
 | Module      | `getPackageModuleRefFromModulePath(p)`        | Convert a module path to a package module reference.                                                                                                                                               |
-
-## React Native
-
-| Category | Type Name      | Description                               |
-| -------- | -------------- | ----------------------------------------- |
-| Platform | `AllPlatforms` | List of supported react-native platforms. |
-
-| Category | Function           | Description                                                        |
-| -------- | ------------------ | ------------------------------------------------------------------ |
-| Platform | `parsePlatform(p)` | Parse a string to ensure it maps to a valid react-native platform. |

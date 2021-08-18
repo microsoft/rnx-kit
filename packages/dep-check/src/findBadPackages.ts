@@ -1,4 +1,4 @@
-import type { PackageManifest } from "@rnx-kit/tools";
+import type { PackageManifest } from "@rnx-kit/tools-node";
 import semver from "semver";
 import banned from "./profiles/banned";
 import type { ExcludedPackage } from "./types";

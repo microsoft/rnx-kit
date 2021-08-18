@@ -1,5 +1,5 @@
 import type { Capability, KitType } from "@rnx-kit/config";
-import type { PackageManifest } from "@rnx-kit/tools";
+import type { PackageManifest } from "@rnx-kit/tools-node";
 
 type Options = {
   customProfiles?: string;

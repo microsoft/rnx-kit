@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "@rnx-kit/console": "^1.0.2",
-    "@rnx-kit/tools": "^0.2.0"
+    "@rnx-kit/tools-node": "^1.0.0"
   },
   "devDependencies": {
     "@rnx-kit/jest-preset": "*",

@@ -1,6 +1,6 @@
 import type { Config as CLIConfig } from "@react-native-community/cli-types";
 import { cli } from "@rnx-kit/dep-check";
-import { pickValues } from "@rnx-kit/tools";
+import { pickValues } from "@rnx-kit/tools-language";
 
 type CLIArgs = Record<string, string | number | boolean | undefined>;
 

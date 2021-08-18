@@ -1,6 +1,9 @@
 import { error } from "@rnx-kit/console";
-import type { PackageManifest } from "@rnx-kit/tools";
-import { readPackage, writePackage } from "@rnx-kit/tools";
+import {
+  PackageManifest,
+  readPackage,
+  writePackage,
+} from "@rnx-kit/tools-node";
 import isString from "lodash/isString";
 import { resolveCapabilities } from "./capabilities";
 import { checkPackageManifest } from "./check";

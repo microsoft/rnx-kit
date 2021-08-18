@@ -1,5 +1,5 @@
 import "jest-extended";
-import { parsePlatform } from "../../src/react-native/platform";
+import { parsePlatform } from "../src/platform";
 
 describe("React Native > Platform", () => {
   test("parsePlatform() succeeds for all known platforms", () => {

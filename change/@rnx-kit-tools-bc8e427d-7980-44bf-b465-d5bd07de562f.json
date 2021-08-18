@@ -1,7 +1,0 @@
-{
-  "type": "patch",
-  "comment": "Create a tools package",
-  "packageName": "@rnx-kit/tools",
-  "email": "afoxman@microsoft.com",
-  "dependentChangeType": "patch"
-}

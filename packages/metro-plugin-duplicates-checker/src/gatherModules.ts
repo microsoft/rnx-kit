@@ -1,4 +1,4 @@
-import { findPackageDir, readPackage } from "@rnx-kit/tools";
+import { findPackageDir, readPackage } from "@rnx-kit/tools-node";
 import * as fs from "fs";
 import type { Graph } from "metro";
 import type {

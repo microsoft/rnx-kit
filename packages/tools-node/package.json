@@ -1,8 +1,8 @@
 {
-  "name": "@rnx-kit/tools",
-  "version": "0.2.0",
-  "description": "A collection of functions and types which supplement JavaScript development",
-  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/tools#readme",
+  "name": "@rnx-kit/tools-node",
+  "version": "1.0.0",
+  "description": "A collection of supplemental NodeJS functions and types",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/tools-node#readme",
   "license": "MIT",
   "files": [
     "lib/*"
@@ -11,7 +11,7 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/microsoft/rnx-kit",
-    "directory": "packages/tools"
+    "directory": "packages/tools-node"
   },
   "scripts": {
     "build": "rnx-kit-scripts build",

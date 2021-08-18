@@ -27,7 +27,8 @@
   "dependencies": {
     "@rnx-kit/config": "^0.4.0",
     "@rnx-kit/console": "^1.0.2",
-    "@rnx-kit/tools": "^0.2.0",
+    "@rnx-kit/tools-language": "^1.0.0",
+    "@rnx-kit/tools-node": "^1.0.0",
     "chalk": "^4.1.0",
     "jest-diff": "^26.0.0",
     "lodash": "^4.17.21",

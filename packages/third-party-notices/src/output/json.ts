@@ -1,4 +1,4 @@
-import { findPackage, readPackage } from "@rnx-kit/tools";
+import { findPackage, readPackage } from "@rnx-kit/tools-node";
 import type { License } from "../types";
 
 function getPackageAuthor(modulePath: string): string | undefined {

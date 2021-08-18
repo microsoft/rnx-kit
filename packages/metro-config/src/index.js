@@ -39,7 +39,7 @@ const UNIQUE_PACKAGES = ["react", "react-native"];
  * @returns {string[]}
  */
 function defaultWatchFolders(projectRoot) {
-  const { findPackage } = require("@rnx-kit/tools");
+  const { findPackage } = require("@rnx-kit/tools-node");
   const path = require("path");
   const {
     getAllPackageJsonFiles,
@@ -84,7 +84,7 @@ function defaultWatchFolders(projectRoot) {
  * @returns {string | undefined}
  */
 function resolveModule(name, projectRoot) {
-  const { findPackageDependencyDir } = require("@rnx-kit/tools");
+  const { findPackageDependencyDir } = require("@rnx-kit/tools-node");
   return findPackageDependencyDir(
     { name },
     { startDir: projectRoot, traverseSymlinks: true }

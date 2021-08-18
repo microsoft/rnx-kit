@@ -6,7 +6,7 @@ import {
   isPackageModuleRef,
   isFileModuleRef,
   getPackageModuleRefFromModulePath,
-} from "../../src/node/module";
+} from "../src/module";
 
 describe("Node > Module", () => {
   const fixtureDir = path.resolve(__dirname, "__fixtures__");

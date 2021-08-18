@@ -1,5 +1,5 @@
 import "jest-extended";
-import { isApproximatelyEqual } from "../../src/language/math";
+import { isApproximatelyEqual } from "../src/math";
 
 describe("Language > Math", () => {
   test("isApproximatelyEqual(1.25, 1.2499, tolerance=0.001) returns true", () => {
