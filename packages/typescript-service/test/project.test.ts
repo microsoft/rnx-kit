@@ -1,9 +1,10 @@
 import "jest-extended";
+import fs from "fs";
 import path from "path";
+import tempDir from "temp-dir";
 import ts from "typescript";
 import { DiagnosticWriter } from "../src/diagnostics";
 import { ProjectConfig, ProjectConfigLoader } from "../src/config";
-import type { ResolverHost } from "../src/resolve";
 import { createDefaultResolverHost } from "../src/resolve";
 import { Project } from "../src/project";
 
@@ -17,8 +18,17 @@ describe("Project", () => {
   const projectConfigLoader = new ProjectConfigLoader(mockDiagnosticWriter);
   const documentRegistry = ts.createDocumentRegistry();
 
+  let testTempDir: string;
+
+  beforeEach(() => {
+    testTempDir = fs.mkdtempSync(
+      path.join(tempDir, "rnx-kit-typescript-service-project-test-")
+    );
+  });
+
   afterEach(() => {
     jest.resetAllMocks();
+    fs.rmdirSync(testTempDir, { maxRetries: 5, recursive: true });
   });
 
   function createProject(fileName = "valid-tsconfig.json"): {
@@ -27,6 +37,10 @@ describe("Project", () => {
   } {
     const configFileName = projectConfigLoader.find(fixturePath, fileName);
     const config = projectConfigLoader.load(configFileName);
+    config.options.outDir = testTempDir;
+    config.options.sourceMap = true;
+    config.options.declaration = true;
+    config.options.declarationMap = true;
     const resolverHost = createDefaultResolverHost(config.options);
     const project = new Project(
       documentRegistry,
@@ -99,5 +113,37 @@ describe("Project", () => {
     project.setFile(path.join(fixturePath, "b.ts"));
     expect(project.validate()).toBeTrue();
     expect(mockDiagnosticWriter.print).not.toBeCalled();
+  });
+
+  test("emitFile successfully writes a transpiled javascript file", () => {
+    const { project } = createProject();
+    expect(project.emitFile(path.join(fixturePath, "a.ts"))).toBeTrue();
+    expect(fs.existsSync(path.join(testTempDir, "a.js"))).toBeTrue();
+  });
+
+  test("emitFile successfully writes a typescript declaration file", () => {
+    const { project } = createProject();
+    expect(project.emitFile(path.join(fixturePath, "a.ts"))).toBeTrue();
+    expect(fs.existsSync(path.join(testTempDir, "a.d.ts"))).toBeTrue();
+  });
+
+  test("emitFile successfully writes a sourcemap file", () => {
+    const { project } = createProject();
+    expect(project.emitFile(path.join(fixturePath, "a.ts"))).toBeTrue();
+    expect(fs.existsSync(path.join(testTempDir, "a.js.map"))).toBeTrue();
+  });
+
+  test("emitFile successfully writes a declaration sourcemap file", () => {
+    const { project } = createProject();
+    expect(project.emitFile(path.join(fixturePath, "a.ts"))).toBeTrue();
+    expect(fs.existsSync(path.join(testTempDir, "a.d.ts.map"))).toBeTrue();
+  });
+
+  test("emit successfully transpiles all project files", () => {
+    const { project } = createProject();
+    expect(project.emit()).toBeTrue();
+    expect(fs.existsSync(path.join(testTempDir, "a.js"))).toBeTrue();
+    expect(fs.existsSync(path.join(testTempDir, "b.js"))).toBeTrue();
+    expect(fs.existsSync(path.join(testTempDir, "c.js"))).toBeTrue();
   });
 });
