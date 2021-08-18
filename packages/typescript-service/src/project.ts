@@ -162,6 +162,30 @@ export class Project {
     return result;
   }
 
+  emitFile(fileName: string): boolean {
+    const output = this.languageService.getEmitOutput(fileName);
+    if (!output || output.emitSkipped) {
+      this.validateFile(fileName);
+      return false;
+    }
+    output.outputFiles.forEach((o) => {
+      ts.sys.writeFile(o.name, o.text);
+    });
+    return true;
+  }
+
+  emit(): boolean {
+    //  emit each file
+    let result = true;
+    for (const file of this.projectFiles.getFileNames()) {
+      //  always emit the file, even if others have failed
+      const fileResult = this.emitFile(file);
+      //  combine this file's result with the aggregate result
+      result = result && fileResult;
+    }
+    return result;
+  }
+
   hasFile(fileName: string): boolean {
     return this.projectFiles.has(fileName);
   }

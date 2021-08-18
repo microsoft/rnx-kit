@@ -66,14 +66,16 @@ usually named `tsconfig.json`.
 
 A `Project` is a collection of compiler options and source files.
 
-You can use a `Project` to validate source code, ensuring that it is type-safe:
+You can use a `Project` to validate source code and emit transpiled JavaScript:
 
 ```typescript
-// validate one file
+// validate
 const fileHasErrors = project.validateFile(fileName);
-
-// vaidate all files in the project
 const projectHasErrors = project.validate();
+
+// emit one file
+const fileEmitted = project.emitFile(fileName);
+const projectEmitted = project.emit();
 ```
 
 You can manipulate files in the project. This is typically done in response to
