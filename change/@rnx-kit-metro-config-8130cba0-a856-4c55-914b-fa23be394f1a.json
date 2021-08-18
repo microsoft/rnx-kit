@@ -1,7 +1,0 @@
-{
-  "type": "patch",
-  "comment": "Integrate tools package and other common libraries throughout monorepo, removing custom code.",
-  "packageName": "@rnx-kit/metro-config",
-  "email": "afoxman@microsoft.com",
-  "dependentChangeType": "patch"
-}
