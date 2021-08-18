@@ -2,11 +2,12 @@ import ts from "typescript";
 import { ExternalFileCache, ProjectFileCache } from "./cache";
 import { ProjectConfig } from "./config";
 import { DiagnosticWriter } from "./diagnostics";
-import { Resolvers } from "./resolve";
+import type { ResolverHost } from "./resolve";
 import { isNonEmptyArray } from "./util";
 
 export class Project {
   private diagnosticWriter: DiagnosticWriter;
+  private resolverHost: ResolverHost;
   private projectConfig: ProjectConfig;
 
   private projectFiles: ProjectFileCache;
@@ -17,10 +18,11 @@ export class Project {
   constructor(
     documentRegistry: ts.DocumentRegistry,
     diagnosticWriter: DiagnosticWriter,
-    resolvers: Resolvers,
+    resolverHost: ResolverHost,
     projectConfig: ProjectConfig
   ) {
     this.diagnosticWriter = diagnosticWriter;
+    this.resolverHost = resolverHost;
     this.projectConfig = projectConfig;
 
     this.projectFiles = new ProjectFileCache(projectConfig.fileNames);
@@ -68,10 +70,13 @@ export class Project {
        *
        * If this is implemented, `getResolvedModuleWithFailedLookupLocationsFromCache` should be too.
        */
-      resolveModuleNames: resolvers.resolveModuleNames,
+      resolveModuleNames: resolverHost.resolveModuleNames.bind(resolverHost),
       getResolvedModuleWithFailedLookupLocationsFromCache:
-        resolvers.getResolvedModuleWithFailedLookupLocationsFromCache,
-      resolveTypeReferenceDirectives: resolvers.resolveTypeReferenceDirectives,
+        resolverHost.getResolvedModuleWithFailedLookupLocationsFromCache.bind(
+          resolverHost
+        ),
+      resolveTypeReferenceDirectives:
+        resolverHost.resolveTypeReferenceDirectives.bind(resolverHost),
 
       /*
        * Required for full import and type reference completions.
@@ -97,6 +102,10 @@ export class Project {
       languageServiceHost,
       documentRegistry
     );
+  }
+
+  getResolverHost(): ResolverHost {
+    return this.resolverHost;
   }
 
   getConfig(): ProjectConfig {
@@ -157,20 +166,16 @@ export class Project {
     return this.projectFiles.has(fileName);
   }
 
-  addFile(fileName: string): boolean {
-    return this.projectFiles.add(fileName);
+  setFile(fileName: string, snapshot?: ts.IScriptSnapshot): void {
+    this.projectFiles.set(fileName, snapshot);
   }
 
-  updateFile(fileName: string, snapshot?: ts.IScriptSnapshot): boolean {
-    return this.projectFiles.update(fileName, snapshot);
-  }
-
-  removeFile(fileName: string): boolean {
-    return this.projectFiles.delete(fileName);
+  removeFile(fileName: string): void {
+    this.projectFiles.remove(fileName);
   }
 
   removeAllFiles(): void {
-    this.projectFiles.deleteAll();
+    this.projectFiles.removeAll();
   }
 
   dispose(): void {

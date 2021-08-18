@@ -27,7 +27,7 @@ describe("ProjectFileCache", () => {
     const cache = new ProjectFileCache(fileNames);
     cache.set("new-file.ts", snapshot);
     expect(cache.has("new-file.ts")).toBeTrue();
-    expect(cache.getVersion("new-file.ts")).toEqual(1);
+    expect(cache.getVersion("new-file.ts")).toEqual("1");
     expect(cache.getSnapshot("new-file.ts")).toBe(snapshot);
   });
 
@@ -35,7 +35,7 @@ describe("ProjectFileCache", () => {
     const cache = new ProjectFileCache(fileNames);
     cache.set(fileNames[0], snapshot);
     expect(cache.has(fileNames[0])).toBeTrue();
-    expect(cache.getVersion(fileNames[0])).toEqual(2);
+    expect(cache.getVersion(fileNames[0])).toEqual("2");
     expect(cache.getSnapshot(fileNames[0])).toBe(snapshot);
   });
 

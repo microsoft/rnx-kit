@@ -16,12 +16,46 @@ The `Service` is used to open a `Project`.
 ```typescript
 const service = new Service();
 
-// Find a project file and open it
-const configFileName = service.findProject("./", "tsconfig.json");
-const project = service.openProject(configFileName);
+// Find a project file and read its configuration
+const configFileName = service
+  .getProjectConfigLoader()
+  .find("./", "tsconfig.json");
+const config = service.getProjectConfigLoader().load(configFileName);
 
-// Open a project file directly
-const project = service.openProject(path.resolve("./tsconfig.json"));
+// Create a resolver host for the project
+const resolverHost = createResolverHost(config);
+
+// Open the project
+const project = service.openProject(config, resolver);
+```
+
+## Resolver Host
+
+`ResolverHost` is the interface which allows TypeScript to ask for module and
+type-reference resolution. You provide an implementation specific to your
+project.
+
+For example, in a react-native project, your implementation would start with
+normal Node resolution and add platform override support for files such as
+`foo.ios.ts` and `bar.native.tsx`. It might also add support for out-of-tree
+platforms by mapping `react-native` module references to `react-native-windows`
+or `react-native-macos`.
+
+```typescript
+function createResolverHost(config: ProjectConfig): ResolverHost {
+  const defaultResolverHost = createDefaultResolverHost(config);
+  return {
+    resolveModuleNames: reactNativeModuleResolver,
+    getResolvedModuleWithFailedLookupLocationsFromCache:
+      defaultResolverHost.getResolvedModuleWithFailedLookupLocationsFromCache.bind(defaultResolverHost),
+    resolveTypeReferenceDirectives:
+      defaultResolverHost.resolveTypeReferenceDirectives.bind(defaultResolverHost),
+  };
+}
+
+function reactNativeModuleResolver(...) {
+  // ... Node resolution with platform override support and out-of-tree platform support ...
+}
 ```
 
 ## Project

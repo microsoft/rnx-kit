@@ -44,7 +44,8 @@
     "@types/lodash": "^4.14.172",
     "@types/metro": "*",
     "@types/metro-config": "*",
-    "rnx-kit-scripts": "*"
+    "rnx-kit-scripts": "*",
+    "typescript": "^4.0.0"
   },
   "depcheck": {
     "ignoreMatches": [

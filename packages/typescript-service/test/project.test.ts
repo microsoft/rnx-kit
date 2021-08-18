@@ -3,7 +3,8 @@ import path from "path";
 import ts from "typescript";
 import { DiagnosticWriter } from "../src/diagnostics";
 import { ProjectConfig, ProjectConfigLoader } from "../src/config";
-import { createResolvers } from "../src/resolve";
+import type { ResolverHost } from "../src/resolve";
+import { createDefaultResolverHost } from "../src/resolve";
 import { Project } from "../src/project";
 
 describe("Project", () => {
@@ -26,11 +27,11 @@ describe("Project", () => {
   } {
     const configFileName = projectConfigLoader.find(fixturePath, fileName);
     const config = projectConfigLoader.load(configFileName);
-    const resolvers = createResolvers(config.options);
+    const resolverHost = createDefaultResolverHost(config.options);
     const project = new Project(
       documentRegistry,
       mockDiagnosticWriter,
-      resolvers,
+      resolverHost,
       config
     );
     return {
@@ -38,6 +39,13 @@ describe("Project", () => {
       project,
     };
   }
+
+  test("getResolverHost returns an object", () => {
+    const { config, project } = createProject();
+    const resolverHost = project.getResolverHost();
+    expect(resolverHost).not.toBeNil();
+    expect(resolverHost).toBeObject();
+  });
 
   test("getConfig returns the project config", () => {
     const { config, project } = createProject();
@@ -78,7 +86,7 @@ describe("Project", () => {
     const snapshot = ts.ScriptSnapshot.fromString(
       "export function c() { return 'c'; }"
     );
-    project.updateFile(path.join(fixturePath, "c.ts"), snapshot);
+    project.setFile(path.join(fixturePath, "c.ts"), snapshot);
     expect(project.validate()).toBeTrue();
     expect(mockDiagnosticWriter.print).not.toBeCalled();
   });
@@ -88,7 +96,7 @@ describe("Project", () => {
     project.removeFile(path.join(fixturePath, "b.ts"));
     project.removeFile(path.join(fixturePath, "c.ts"));
 
-    project.addFile(path.join(fixturePath, "b.ts"));
+    project.setFile(path.join(fixturePath, "b.ts"));
     expect(project.validate()).toBeTrue();
     expect(mockDiagnosticWriter.print).not.toBeCalled();
   });

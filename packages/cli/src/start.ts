@@ -110,10 +110,9 @@ export async function rnxStart(
   if (serverConfig.typescriptValidation) {
     const tsservice = new Service((message) => terminal.log(message));
 
-    const configFileName = tsservice.findProject(
-      metroConfig.projectRoot,
-      "tsconfig.json"
-    );
+    const configFileName = tsservice
+      .getProjectConfigLoader()
+      .find(metroConfig.projectRoot, "tsconfig.json");
     if (!configFileName) {
       terminal.log(
         chalk.yellow(
