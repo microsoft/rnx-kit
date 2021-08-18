@@ -105,7 +105,14 @@ describe("visitDependencies()", () => {
 });
 
 describe("getRequirements()", () => {
+  const consoleErrorSpy = jest.spyOn(global.console, "error");
+  const consoleWarnSpy = jest.spyOn(global.console, "warn");
   const defaultOptions = { loose: false };
+
+  afterEach(() => {
+    consoleErrorSpy.mockReset();
+    consoleWarnSpy.mockReset();
+  });
 
   test("gets requirements from all dependencies", () => {
     const [fixture, manifest] = useFixture("awesome-repo");
@@ -126,6 +133,9 @@ describe("getRequirements()", () => {
       "storage",
       "webview",
     ]);
+
+    expect(consoleErrorSpy).not.toBeCalled();
+    expect(consoleWarnSpy).not.toBeCalled();
   });
 
   test("gets requirements from all dependencies with custom profiles", () => {
@@ -166,6 +176,9 @@ describe("getRequirements()", () => {
       "storage",
       "webview",
     ]);
+
+    expect(consoleErrorSpy).not.toBeCalled();
+    expect(consoleWarnSpy).not.toBeCalled();
   });
 
   test("throws if no profiles can satisfy required React Native version", () => {
@@ -182,6 +195,9 @@ describe("getRequirements()", () => {
         defaultOptions
       )
     ).toThrow();
+
+    expect(consoleErrorSpy).not.toBeCalled();
+    expect(consoleWarnSpy).not.toBeCalled();
   });
 
   test("throws if no profiles can satisfy requirement of dependencies", () => {
@@ -196,6 +212,14 @@ describe("getRequirements()", () => {
         defaultOptions
       )
     ).toThrowError("No React Native profile could satisfy all dependencies");
+
+    expect(consoleErrorSpy).toBeCalledWith(
+      "error",
+      expect.stringContaining(
+        "No React Native profile could satisfy all dependencies"
+      )
+    );
+    expect(consoleWarnSpy).not.toBeCalled();
   });
 
   test("does not throw if no profiles can satisfy requirement of dependencies in loose mode", () => {
@@ -205,5 +229,13 @@ describe("getRequirements()", () => {
         loose: true,
       })
     ).not.toThrow();
+
+    expect(consoleErrorSpy).not.toBeCalled();
+    expect(consoleWarnSpy).toBeCalledWith(
+      "warn",
+      expect.stringContaining(
+        "No React Native profile could satisfy all dependencies"
+      )
+    );
   });
 });

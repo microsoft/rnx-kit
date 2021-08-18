@@ -139,8 +139,10 @@ export function getRequirements(
             return `    [${satisfiedVersions}] satisfies '${module}' because it supports '${reactNativeVersion}'`;
           }),
         ].join("\n");
-        error(fullTrace);
-        if (!loose) {
+        if (loose) {
+          warn(fullTrace);
+        } else {
+          error(fullTrace);
           throw new Error(message);
         }
       } else {
