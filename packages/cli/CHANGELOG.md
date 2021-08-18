@@ -1,8 +1,17 @@
 # Change Log - @rnx-kit/cli
 
-This log was last generated on Tue, 17 Aug 2021 20:18:02 GMT and should not be manually modified.
+This log was last generated on Wed, 18 Aug 2021 14:54:20 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 0.9.5
+
+Wed, 18 Aug 2021 14:54:20 GMT
+
+### Patches
+
+- Allow apps to depend on a newer version of React Native than their dependencies declare support for via the `--loose` flag. (4123478+tido64@users.noreply.github.com)
+- Bump @rnx-kit/cli to v0.9.5 (4123478+tido64@users.noreply.github.com)
 
 ## 0.9.4
 

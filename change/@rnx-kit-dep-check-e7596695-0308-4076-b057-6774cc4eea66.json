@@ -1,7 +1,0 @@
-{
-  "type": "minor",
-  "comment": "Allow apps to depend on a newer version of React Native than their dependencies declare support for via the `--loose` flag.",
-  "packageName": "@rnx-kit/dep-check",
-  "email": "4123478+tido64@users.noreply.github.com",
-  "dependentChangeType": "patch"
-}
