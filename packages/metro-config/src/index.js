@@ -87,7 +87,7 @@ function resolveModule(name, projectRoot) {
   const { findPackageDependencyDir } = require("@rnx-kit/tools-node");
   return findPackageDependencyDir(
     { name },
-    { startDir: projectRoot, traverseSymlinks: true }
+    { startDir: projectRoot, allowSymlinks: false }
   );
 }
 
