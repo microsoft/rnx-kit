@@ -1,4 +1,4 @@
-import { readPackage, writePackage } from "@rnx-kit/tools";
+import { readPackage, writePackage } from "@rnx-kit/tools-node";
 import { capabilitiesFor } from "./capabilities";
 import type { CapabilitiesOptions } from "./types";
 

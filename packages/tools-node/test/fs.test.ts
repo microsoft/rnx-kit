@@ -1,7 +1,7 @@
 import "jest-extended";
 import fs from "fs";
 import path from "path";
-import { findFirstFileExists } from "../../src/node/fs";
+import { findFirstFileExists } from "../src/fs";
 
 describe("Node > FS", () => {
   const fixtureDir = path.resolve(__dirname, "__fixtures__");

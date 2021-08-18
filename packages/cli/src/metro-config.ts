@@ -9,7 +9,6 @@ import {
 import { MetroPlugin, MetroSerializer } from "@rnx-kit/metro-serializer";
 import { MetroSerializer as MetroSerializerEsbuild } from "@rnx-kit/metro-serializer-esbuild";
 import {
-  AllPlatforms,
   findFirstFileExists,
   findPackageDependencyDir,
   findPackageDir,
@@ -18,12 +17,13 @@ import {
   PackageModuleRef,
   parseModuleRef,
   readPackage,
-} from "@rnx-kit/tools";
+} from "@rnx-kit/tools-node";
+import type { AllPlatforms } from "@rnx-kit/tools-react-native";
 import {
+  createDefaultResolverHost,
   Project,
   ProjectConfig,
   ResolverHost,
-  createDefaultResolverHost,
 } from "@rnx-kit/typescript-service";
 import fs from "fs";
 import type {

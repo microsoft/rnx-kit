@@ -15,7 +15,7 @@ import {
 } from "./testData";
 
 jest.mock("fs");
-jest.mock("@rnx-kit/tools");
+jest.mock("@rnx-kit/tools-node");
 
 // Under normal circumstances, this extra copy of '@react-native/polyfills'
 // should not be installed.
@@ -23,7 +23,7 @@ const extraPolyfills = `${repoRoot.replace(
   /\\/g,
   "/"
 )}/packages/test-app/node_modules/@react-native/polyfills`;
-require("@rnx-kit/tools").findPackageDir = jest
+require("@rnx-kit/tools-node").findPackageDir = jest
   .fn()
   .mockImplementation((startDir) => {
     switch (startDir) {
@@ -32,19 +32,23 @@ require("@rnx-kit/tools").findPackageDir = jest
       case `${extraPolyfills}/index.js`:
         return extraPolyfills;
       default:
-        return jest.requireActual("@rnx-kit/tools").findPackageDir(startDir);
+        return jest
+          .requireActual("@rnx-kit/tools-node")
+          .findPackageDir(startDir);
     }
   });
-require("@rnx-kit/tools").readPackage = jest.fn().mockImplementation((path) => {
-  if (path.replace(/\\/g, "/").includes(extraPolyfills)) {
-    return {
-      name: "@react-native/polyfills",
-      version: "1.0.0",
-    };
-  } else {
-    return jest.requireActual("@rnx-kit/tools").readPackage(path);
-  }
-});
+require("@rnx-kit/tools-node").readPackage = jest
+  .fn()
+  .mockImplementation((path) => {
+    if (path.replace(/\\/g, "/").includes(extraPolyfills)) {
+      return {
+        name: "@react-native/polyfills",
+        version: "1.0.0",
+      };
+    } else {
+      return jest.requireActual("@rnx-kit/tools-node").readPackage(path);
+    }
+  });
 
 const defaultOptions: Options = {
   ignoredModules: [],

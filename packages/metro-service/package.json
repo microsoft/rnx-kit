@@ -22,7 +22,7 @@
     "node": ">= 10.12"
   },
   "dependencies": {
-    "@rnx-kit/tools": "^0.2.0",
+    "@rnx-kit/tools-language": "^1.0.0",
     "chalk": "^4.1.0",
     "cp-file": "^9.1.0",
     "make-dir": "^3.1.0"

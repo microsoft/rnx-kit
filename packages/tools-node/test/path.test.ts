@@ -1,5 +1,5 @@
 import "jest-extended";
-import { escapePath, normalizePath } from "../../src/node/path";
+import { escapePath, normalizePath } from "../src/path";
 
 describe("Node > Path", () => {
   test("escapePath() changes all single-backslashes to double-backslashes", () => {

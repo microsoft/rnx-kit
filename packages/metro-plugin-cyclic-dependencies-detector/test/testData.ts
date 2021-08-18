@@ -1,7 +1,7 @@
 // istanbul ignore file
 
 import type { Dependency, Graph, Module } from "@rnx-kit/metro-serializer";
-import { findPackageDir } from "@rnx-kit/tools";
+import { findPackageDir } from "@rnx-kit/tools-node";
 
 export const repoRoot = findPackageDir("../../");
 export const entryPoint = `${repoRoot}/packages/test-app/lib/src/index.js`;

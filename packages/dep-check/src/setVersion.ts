@@ -1,5 +1,5 @@
-import { readPackage, writePackage } from "@rnx-kit/tools";
-import _ from "lodash";
+import { readPackage, writePackage } from "@rnx-kit/tools-node";
+import isString from "lodash/isString";
 import prompts from "prompts";
 import { checkPackageManifest } from "./check";
 import { defaultProfiles, parseProfilesString } from "./profiles";
@@ -17,7 +17,7 @@ async function parseInput(versions: string | number): Promise<{
   // When `--set-version` is without a value, `versions` is an empty string if
   // invoked directly. When invoked via `@react-native-community/cli`,
   // `versions` is `true` instead.
-  if (_.isString(versions) && versions) {
+  if (isString(versions) && versions) {
     return parseProfilesString(versions);
   }
 
@@ -61,8 +61,11 @@ export async function makeSetVersionCommand(
     return undefined;
   }
 
+  const checkOnly = { loose: false, write: false };
+  const write = { loose: false, write: true };
+
   return (manifestPath: string) => {
-    const checkReturnCode = checkPackageManifest(manifestPath);
+    const checkReturnCode = checkPackageManifest(manifestPath, checkOnly);
     if (checkReturnCode !== 0) {
       return checkReturnCode;
     }
@@ -77,6 +80,6 @@ export async function makeSetVersionCommand(
     rnxKitConfig.reactNativeDevVersion = targetVersion;
 
     writePackage(manifestPath, manifest);
-    return checkPackageManifest(manifestPath, { write: true });
+    return checkPackageManifest(manifestPath, write);
   };
 }

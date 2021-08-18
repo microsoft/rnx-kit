@@ -1,4 +1,4 @@
-import { normalizePath } from "@rnx-kit/tools";
+import { normalizePath } from "@rnx-kit/tools-node";
 import ts from "typescript";
 import { VersionedSnapshot } from "./snapshot";
 

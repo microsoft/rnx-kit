@@ -1,10 +1,10 @@
 import type { Config as CLIConfig } from "@react-native-community/cli-types";
 import { info, warn } from "@rnx-kit/console";
 import { BundleArgs, bundle, loadMetroConfig } from "@rnx-kit/metro-service";
-import type { AllPlatforms } from "@rnx-kit/tools";
+import type { AllPlatforms } from "@rnx-kit/tools-react-native";
 import { Service } from "@rnx-kit/typescript-service";
 import chalk from "chalk";
-import makeDir from "make-dir";
+import fs from "fs";
 import path from "path";
 import {
   getKitBundleDefinition,
@@ -142,9 +142,10 @@ export async function rnxBundle(
     );
 
     // ensure all output directories exist
-    makeDir.sync(path.dirname(bundlePath));
-    sourceMapPath && makeDir.sync(path.dirname(sourceMapPath));
-    assetsPath && makeDir.sync(assetsPath);
+    fs.mkdirSync(path.dirname(bundlePath), { recursive: true });
+    sourceMapPath &&
+      fs.mkdirSync(path.dirname(sourceMapPath), { recursive: true });
+    assetsPath && fs.mkdirSync(assetsPath, { recursive: true });
 
     // create the bundle
     await bundle(

@@ -11,7 +11,7 @@ import {
   parsePackageRef,
   readPackage,
   writePackage,
-} from "../../src/node/package";
+} from "../src/package";
 
 describe("Node > Package", () => {
   const fixtureDir = path.resolve(__dirname, "__fixtures__");
@@ -153,7 +153,7 @@ describe("Node > Package", () => {
     );
   });
 
-  test("findPackageDependencyDir() does not traverse symlinks by default", () => {
+  test("findPackageDependencyDir() finds a symlink package dir by default", () => {
     const coreLinkedPath = path.join(
       fixtureDir,
       "node_modules",
@@ -176,7 +176,7 @@ describe("Node > Package", () => {
     );
   });
 
-  test("findPackageDependencyDir() traverses symlinks when traverseSymlinks is true", () => {
+  test("findPackageDependencyDir() finds nothing when a symlink is the only valid result but allowSymlinks is false", () => {
     const coreLinkedPath = path.join(
       fixtureDir,
       "node_modules",
@@ -192,12 +192,10 @@ describe("Node > Package", () => {
       },
       {
         startDir: fixtureDir,
-        traverseSymlinks: false,
+        allowSymlinks: false,
       }
     );
-    expect(pkgDir).toEqual(
-      path.join(fixtureDir, "node_modules", "@babel", "core-linked")
-    );
+    expect(pkgDir).toBeUndefined();
   });
 
   test("findPackageDependencyDir() returns undefined when it does not find anything", () => {

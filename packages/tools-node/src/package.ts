@@ -1,3 +1,4 @@
+import { pickValues } from "@rnx-kit/tools-language";
 import findUp from "find-up";
 import fs from "fs";
 import path from "path";
@@ -180,9 +181,10 @@ export type FindPackageDependencyOptions = {
   startDir?: string;
 
   /**
-   * Optional flag controlling whether or not symlinks are traversed. Defaults to `false`.
+   * Optional flag controlling whether or symlinks can be found. Defaults to `true`.
+   * When false, the underlying target of the link is found.
    */
-  traverseSymlinks?: boolean;
+  allowSymlinks?: boolean;
 };
 
 /**
@@ -199,14 +201,12 @@ export function findPackageDependencyDir(
   ref: PackageRef,
   options?: FindPackageDependencyOptions
 ): string | undefined {
-  let traverseSymlinks = false;
-  if (options?.traverseSymlinks !== undefined) {
-    traverseSymlinks = options.traverseSymlinks;
-  }
-
   return findUp.sync(path.join("node_modules", ref.scope ?? "", ref.name), {
-    ...(options?.startDir ? { cwd: options.startDir } : {}),
+    ...pickValues(
+      options ?? {},
+      ["startDir", "allowSymlinks"],
+      ["cwd", "allowSymlinks"]
+    ),
     type: "directory",
-    allowSymlinks: !traverseSymlinks,
   });
 }

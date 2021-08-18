@@ -1,26 +1,27 @@
 import { error } from "@rnx-kit/console";
-import type { PackageManifest } from "@rnx-kit/tools";
-import { readPackage, writePackage } from "@rnx-kit/tools";
-import _ from "lodash";
+import {
+  PackageManifest,
+  readPackage,
+  writePackage,
+} from "@rnx-kit/tools-node";
+import isString from "lodash/isString";
 import { resolveCapabilities } from "./capabilities";
 import { checkPackageManifest } from "./check";
 import { updateDependencies } from "./manifest";
 import { parseProfilesString } from "./profiles";
 import { keysOf } from "./helpers";
-import type { Command, ManifestProfile, ResolverOptions } from "./types";
+import type {
+  Command,
+  ManifestProfile,
+  TestOverrides,
+  VigilantOptions,
+} from "./types";
 
 type Change = {
   name: string;
   from: string;
   to: string;
   section: string;
-};
-
-type Options = {
-  versions: string | number;
-  write: boolean;
-  customProfilesPath?: string | number;
-  excludePackages?: string | number;
 };
 
 const allSections = [
@@ -30,14 +31,14 @@ const allSections = [
 ];
 
 export function buildManifestProfile(
-  versions: string | number,
-  customProfilesPath: string | number | undefined,
-  options?: ResolverOptions
+  versions: string,
+  customProfilesPath: string | undefined,
+  testOverrides?: TestOverrides
 ): ManifestProfile {
   const { supportedProfiles, targetProfile } = parseProfilesString(
     versions,
     customProfilesPath,
-    options
+    testOverrides
   );
 
   const allCapabilities = keysOf(targetProfile[0]);
@@ -94,24 +95,25 @@ export function inspect(
 }
 
 export function makeVigilantCommand({
-  customProfilesPath,
+  customProfiles,
   excludePackages,
+  loose,
   versions,
   write,
-}: Options): Command | undefined {
+}: VigilantOptions): Command | undefined {
   if (!versions) {
     error("A comma-separated list of profile versions must be specified.");
     return undefined;
   }
 
   const uncheckedReturnCode = -1;
-  const checkOptions = { uncheckedReturnCode, write };
+  const checkOptions = { loose, uncheckedReturnCode, write };
 
-  const exclusionList = _.isString(excludePackages)
+  const exclusionList = isString(excludePackages)
     ? excludePackages.split(",")
     : [];
 
-  const profile = buildManifestProfile(versions, customProfilesPath);
+  const profile = buildManifestProfile(versions, customProfiles);
   return (manifestPath: string) => {
     try {
       const checkReturnCode = checkPackageManifest(manifestPath, checkOptions);

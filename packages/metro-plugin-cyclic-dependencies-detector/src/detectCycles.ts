@@ -1,5 +1,5 @@
 import { error, warn } from "@rnx-kit/console";
-import { getPackageModuleRefFromModulePath } from "@rnx-kit/tools";
+import { getPackageModuleRefFromModulePath } from "@rnx-kit/tools-node";
 import type { Dependencies, Graph } from "metro";
 import * as path from "path";
 

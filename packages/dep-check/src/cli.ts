@@ -2,12 +2,12 @@
 
 import type { KitType } from "@rnx-kit/config";
 import { error } from "@rnx-kit/console";
-import { findPackageDir } from "@rnx-kit/tools";
-import _ from "lodash";
+import { findPackageDir } from "@rnx-kit/tools-node";
+import isString from "lodash/isString";
 import * as path from "path";
 import { getAllPackageJsonFiles, getWorkspaceRoot } from "workspace-tools";
 import yargs from "yargs";
-import { checkPackageManifest } from "./check";
+import { makeCheckCommand } from "./check";
 import { initializeConfig } from "./initialize";
 import { makeSetVersionCommand } from "./setVersion";
 import type { Args, Command } from "./types";
@@ -26,7 +26,7 @@ function ensureKitType(type: string): KitType | undefined {
 function getManifests(
   packageJson: string | number | undefined
 ): string[] | undefined {
-  if (_.isString(packageJson) && packageJson) {
+  if (isString(packageJson) && packageJson) {
     return [packageJson];
   }
 
@@ -52,12 +52,6 @@ function getManifests(
     error(e.message);
     return undefined;
   }
-}
-
-function makeCheckCommand(write: boolean): Command {
-  return (manifest: string) => {
-    return checkPackageManifest(manifest, { write });
-  };
 }
 
 function makeInitializeCommand(kitType: string): Command | undefined {
@@ -98,32 +92,34 @@ async function makeCommand(args: Args): Promise<Command | undefined> {
     "custom-profiles": customProfilesPath,
     "exclude-packages": excludePackages,
     init,
+    loose,
     "set-version": setVersion,
     vigilant,
     write,
   } = args;
 
-  if (_.isString(init)) {
+  if (isString(init)) {
     return makeInitializeCommand(init);
   }
 
   // When `--set-version` is without a value, `setVersion` is an empty string if
   // invoked directly. When invoked via `@react-native-community/cli`,
   // `setVersion` is `true` instead.
-  if (setVersion || _.isString(setVersion)) {
+  if (setVersion || isString(setVersion)) {
     return makeSetVersionCommand(setVersion);
   }
 
-  if (_.isString(vigilant)) {
+  if (isString(vigilant)) {
     return makeVigilantCommand({
-      customProfilesPath,
-      excludePackages,
-      versions: vigilant,
+      customProfiles: customProfilesPath?.toString(),
+      excludePackages: excludePackages?.toString(),
+      loose,
+      versions: vigilant.toString(),
       write,
     });
   }
 
-  return makeCheckCommand(write);
+  return makeCheckCommand({ loose, write });
 }
 
 export async function cli({
@@ -182,6 +178,13 @@ if (require.main === module) {
           "Writes an initial kit config to the specified 'package.json'.",
         choices: ["app", "library"],
         conflicts: ["vigilant"],
+      },
+      loose: {
+        default: false,
+        description:
+          "Determines how strict the React Native version requirement should be. Useful for apps that depend on a newer React Native version than their dependencies declare support for.",
+        type: "boolean",
+        conflicts: ["init"],
       },
       "set-version": {
         description:

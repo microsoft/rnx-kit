@@ -1,5 +1,5 @@
 import "jest-extended";
-import { tryInvoke } from "../../src/language/function";
+import { tryInvoke } from "../src/function";
 
 describe("Language > Function", () => {
   test("tryInvoke() returns the result of the function on success", () => {
