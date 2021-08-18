@@ -1,6 +1,6 @@
 import { error } from "@rnx-kit/console";
 import { tryInvoke } from "@rnx-kit/tools";
-import _ from "lodash";
+import isString from "lodash/isString";
 import semver from "semver";
 import profile_0_61 from "./profiles/profile-0.61";
 import profile_0_62 from "./profiles/profile-0.62";
@@ -106,7 +106,7 @@ function loadCustomProfiles(
 export function getProfileVersionsFor(
   reactVersionRange: string | ProfileVersion[]
 ): ProfileVersion[] {
-  if (!_.isString(reactVersionRange)) {
+  if (!isString(reactVersionRange)) {
     return reactVersionRange;
   }
 

@@ -1,5 +1,5 @@
 import { readPackage, writePackage } from "@rnx-kit/tools";
-import _ from "lodash";
+import isString from "lodash/isString";
 import prompts from "prompts";
 import { checkPackageManifest } from "./check";
 import { defaultProfiles, parseProfilesString } from "./profiles";
@@ -17,7 +17,7 @@ async function parseInput(versions: string | number): Promise<{
   // When `--set-version` is without a value, `versions` is an empty string if
   // invoked directly. When invoked via `@react-native-community/cli`,
   // `versions` is `true` instead.
-  if (_.isString(versions) && versions) {
+  if (isString(versions) && versions) {
     return parseProfilesString(versions);
   }
 

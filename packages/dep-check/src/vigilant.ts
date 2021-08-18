@@ -1,7 +1,7 @@
 import { error } from "@rnx-kit/console";
 import type { PackageManifest } from "@rnx-kit/tools";
 import { readPackage, writePackage } from "@rnx-kit/tools";
-import _ from "lodash";
+import isString from "lodash/isString";
 import { resolveCapabilities } from "./capabilities";
 import { checkPackageManifest } from "./check";
 import { updateDependencies } from "./manifest";
@@ -107,7 +107,7 @@ export function makeVigilantCommand({
   const uncheckedReturnCode = -1;
   const checkOptions = { uncheckedReturnCode, write };
 
-  const exclusionList = _.isString(excludePackages)
+  const exclusionList = isString(excludePackages)
     ? excludePackages.split(",")
     : [];
 

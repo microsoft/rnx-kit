@@ -1,5 +1,5 @@
 import type { AllPlatforms } from "@rnx-kit/tools";
-import _ from "lodash";
+import castArray from "lodash/castArray";
 import type {
   BundleConfig,
   BundleDefinition,
@@ -37,7 +37,7 @@ export function getBundleDefinition(
     return defaultDefinition;
   }
 
-  const bundles = _.castArray(config);
+  const bundles = castArray(config);
   if (id) {
     const bundle = bundles.find((b) => b.id === id) || {};
     return { ...defaultDefinition, ...bundle };

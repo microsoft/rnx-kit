@@ -10,9 +10,8 @@ import {
 } from "@rnx-kit/config";
 import { warn } from "@rnx-kit/console";
 import type { BundleArgs } from "@rnx-kit/metro-service";
-import type { AllPlatforms } from "@rnx-kit/tools";
+import { AllPlatforms, pickValues } from "@rnx-kit/tools";
 import chalk from "chalk";
-import _ from "lodash";
 
 /**
  * Get a bundle definition from the kit configuration.
@@ -76,8 +75,7 @@ export function getKitBundlePlatformDefinition(
 ): BundleDefinitionWithRequiredParameters {
   return {
     ...getBundlePlatformDefinition(bundleDefinition, targetPlatform),
-    ..._.pick(
-      overrides,
+    ...pickValues(overrides, [
       "entryPath",
       "distPath",
       "assetsPath",
@@ -85,8 +83,8 @@ export function getKitBundlePlatformDefinition(
       "bundleEncoding",
       "sourcemapOutput",
       "sourcemapSourcesRoot",
-      "experimentalTreeShake"
-    ),
+      "experimentalTreeShake",
+    ]),
   };
 }
 
@@ -114,6 +112,6 @@ export function getKitServerConfig(
 
   return {
     ...getServerConfig(kitConfig),
-    ..._.pick(overrides, "projectRoot", "assetPlugins", "sourceExts"),
+    ...pickValues(overrides, ["projectRoot", "assetPlugins", "sourceExts"]),
   };
 }

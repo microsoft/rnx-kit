@@ -3,7 +3,7 @@
 import type { KitType } from "@rnx-kit/config";
 import { error } from "@rnx-kit/console";
 import { findPackageDir } from "@rnx-kit/tools";
-import _ from "lodash";
+import isString from "lodash/isString";
 import * as path from "path";
 import { getAllPackageJsonFiles, getWorkspaceRoot } from "workspace-tools";
 import yargs from "yargs";
@@ -26,7 +26,7 @@ function ensureKitType(type: string): KitType | undefined {
 function getManifests(
   packageJson: string | number | undefined
 ): string[] | undefined {
-  if (_.isString(packageJson) && packageJson) {
+  if (isString(packageJson) && packageJson) {
     return [packageJson];
   }
 
@@ -103,18 +103,18 @@ async function makeCommand(args: Args): Promise<Command | undefined> {
     write,
   } = args;
 
-  if (_.isString(init)) {
+  if (isString(init)) {
     return makeInitializeCommand(init);
   }
 
   // When `--set-version` is without a value, `setVersion` is an empty string if
   // invoked directly. When invoked via `@react-native-community/cli`,
   // `setVersion` is `true` instead.
-  if (setVersion || _.isString(setVersion)) {
+  if (setVersion || isString(setVersion)) {
     return makeSetVersionCommand(setVersion);
   }
 
-  if (_.isString(vigilant)) {
+  if (isString(vigilant)) {
     return makeVigilantCommand({
       customProfilesPath,
       excludePackages,
