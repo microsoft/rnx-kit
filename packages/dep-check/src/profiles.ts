@@ -1,5 +1,5 @@
 import { error } from "@rnx-kit/console";
-import { tryInvoke } from "@rnx-kit/tools-language";
+import { tryInvoke } from "@rnx-kit/tools-language/function";
 import isString from "lodash/isString";
 import semver from "semver";
 import profile_0_61 from "./profiles/profile-0.61";

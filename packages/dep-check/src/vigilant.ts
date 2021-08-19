@@ -3,7 +3,7 @@ import {
   PackageManifest,
   readPackage,
   writePackage,
-} from "@rnx-kit/tools-node";
+} from "@rnx-kit/tools-node/package";
 import isString from "lodash/isString";
 import { resolveCapabilities } from "./capabilities";
 import { checkPackageManifest } from "./check";

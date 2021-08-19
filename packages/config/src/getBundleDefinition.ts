@@ -1,4 +1,4 @@
-import type { AllPlatforms } from "@rnx-kit/tools-react-native";
+import type { AllPlatforms } from "@rnx-kit/tools-react-native/platform";
 import castArray from "lodash/castArray";
 import type {
   BundleConfig,

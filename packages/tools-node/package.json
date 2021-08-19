@@ -5,7 +5,15 @@
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/tools-node#readme",
   "license": "MIT",
   "files": [
-    "lib/*"
+    "lib/*",
+    "fs.js",
+    "fs.d.ts",
+    "module.js",
+    "module.d.ts",
+    "package.js",
+    "package.d.ts",
+    "path.js",
+    "path.d.ts"
   ],
   "main": "lib/index.js",
   "repository": {

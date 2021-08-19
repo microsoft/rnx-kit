@@ -6,6 +6,18 @@
 `@rnx-kit/tools-node` is a collection of supplemental NodeJS functions and
 types.
 
+You can import the entire package, or, to save space, import individual
+categories:
+
+```typescript
+import * from "@rnx-kit/tools-node";
+
+import * from "@rnx-kit/tools-node/fs";
+import * from "@rnx-kit/tools-node/module";
+import * from "@rnx-kit/tools-node/package";
+import * from "@rnx-kit/tools-node/path";
+```
+
 | Category | Type Name                      | Description                                                                                                                                                                     |
 | -------- | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Package  | `PackageRef`                   | Components of a package reference                                                                                                                                               |

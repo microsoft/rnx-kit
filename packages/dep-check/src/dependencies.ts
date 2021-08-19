@@ -11,7 +11,7 @@ import {
   findPackageDependencyDir,
   parsePackageRef,
   readPackage,
-} from "@rnx-kit/tools-node";
+} from "@rnx-kit/tools-node/package";
 import { concatVersionRanges } from "./helpers";
 import {
   getProfilesFor,

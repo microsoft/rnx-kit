@@ -9,7 +9,7 @@ import {
 import type { Project } from "@rnx-kit/typescript-service";
 import { MetroPlugin, MetroSerializer } from "@rnx-kit/metro-serializer";
 import { MetroSerializer as MetroSerializerEsbuild } from "@rnx-kit/metro-serializer-esbuild";
-import type { AllPlatforms } from "@rnx-kit/tools-react-native";
+import type { AllPlatforms } from "@rnx-kit/tools-react-native/platform";
 import type { DeltaResult, Graph } from "metro";
 import type { InputConfigT, SerializerConfigT } from "metro-config";
 import type { TSProjectInfo } from "./types";

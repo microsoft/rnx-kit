@@ -1,5 +1,5 @@
 import type { Capability, KitType } from "@rnx-kit/config";
-import type { PackageManifest } from "@rnx-kit/tools-node";
+import type { PackageManifest } from "@rnx-kit/tools-node/package";
 import omit from "lodash/omit";
 import semver from "semver";
 import { resolveCapabilities } from "./capabilities";
