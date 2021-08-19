@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/dep-check
 
-This log was last generated on Wed, 18 Aug 2021 14:54:20 GMT and should not be manually modified.
+This log was last generated on Thu, 19 Aug 2021 07:59:20 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 1.7.1
+
+Thu, 19 Aug 2021 07:59:20 GMT
+
+### Patches
+
+- Fix error messages accumulating when gathering requirements (4123478+tido64@users.noreply.github.com)
 
 ## 1.7.0
 
