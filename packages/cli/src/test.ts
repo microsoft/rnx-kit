@@ -1,5 +1,5 @@
 import type { Config as CLIConfig } from "@react-native-community/cli-types";
-import { parsePlatform } from "@rnx-kit/tools-react-native";
+import { parsePlatform } from "@rnx-kit/tools-react-native/platform";
 import { run as runJest } from "jest-cli";
 import path from "path";
 

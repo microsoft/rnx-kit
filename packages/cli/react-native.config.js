@@ -1,4 +1,4 @@
-const { parsePlatform } = require("@rnx-kit/tools-react-native");
+const { parsePlatform } = require("@rnx-kit/tools-react-native/platform");
 const path = require("path");
 const {
   parseBoolean,

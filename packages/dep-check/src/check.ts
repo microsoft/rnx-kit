@@ -4,7 +4,7 @@ import {
   isPackageManifest,
   readPackage,
   writePackage,
-} from "@rnx-kit/tools-node";
+} from "@rnx-kit/tools-node/package";
 import chalk from "chalk";
 import { diffLinesUnified } from "jest-diff";
 import path from "path";

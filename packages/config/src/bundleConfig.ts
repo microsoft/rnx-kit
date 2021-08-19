@@ -1,4 +1,4 @@
-import type { AllPlatforms } from "@rnx-kit/tools-react-native";
+import type { AllPlatforms } from "@rnx-kit/tools-react-native/platform";
 import type { PluginOptions as CyclicDetectorOptions } from "@rnx-kit/metro-plugin-cyclic-dependencies-detector";
 import type { Options as DuplicateDetectorOptions } from "@rnx-kit/metro-plugin-duplicates-checker";
 import type { OutputOptions } from "metro";

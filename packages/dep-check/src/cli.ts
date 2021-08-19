@@ -2,7 +2,7 @@
 
 import type { KitType } from "@rnx-kit/config";
 import { error } from "@rnx-kit/console";
-import { findPackageDir } from "@rnx-kit/tools-node";
+import { findPackageDir } from "@rnx-kit/tools-node/package";
 import isString from "lodash/isString";
 import * as path from "path";
 import { getAllPackageJsonFiles, getWorkspaceRoot } from "workspace-tools";

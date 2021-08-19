@@ -18,7 +18,7 @@ import {
   parseModuleRef,
   readPackage,
 } from "@rnx-kit/tools-node";
-import type { AllPlatforms } from "@rnx-kit/tools-react-native";
+import type { AllPlatforms } from "@rnx-kit/tools-react-native/platform";
 import {
   createDefaultResolverHost,
   Project,

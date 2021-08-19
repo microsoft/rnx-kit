@@ -10,8 +10,8 @@ import {
 } from "@rnx-kit/config";
 import { warn } from "@rnx-kit/console";
 import type { BundleArgs } from "@rnx-kit/metro-service";
-import { pickValues } from "@rnx-kit/tools-language";
-import type { AllPlatforms } from "@rnx-kit/tools-react-native";
+import { pickValues } from "@rnx-kit/tools-language/props";
+import type { AllPlatforms } from "@rnx-kit/tools-react-native/platform";
 import chalk from "chalk";
 
 /**

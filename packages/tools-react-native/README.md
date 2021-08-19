@@ -6,6 +6,15 @@
 `@rnx-kit/tools-react-native` is a collection of supplemental react-native
 functions and types.
 
+You can import the entire package, or, to save space, import individual
+categories:
+
+```typescript
+import * from "@rnx-kit/tools-react-native";
+
+import * from "@rnx-kit/tools-react-native/platform";
+```
+
 | Category | Type Name      | Description                               |
 | -------- | -------------- | ----------------------------------------- |
 | Platform | `AllPlatforms` | List of supported react-native platforms. |

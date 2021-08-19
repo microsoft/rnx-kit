@@ -38,7 +38,7 @@
 
 const path = require("path");
 const fs = require("fs");
-const { readPackage } = require("@rnx-kit/tools-node");
+const { readPackage } = require("@rnx-kit/tools-node/package");
 const spdxParse = require("spdx-expression-parse");
 
 function _getPackageJsonInformations(modules) {

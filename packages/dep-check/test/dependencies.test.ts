@@ -1,4 +1,4 @@
-import { PackageManifest, readPackage } from "@rnx-kit/tools-node";
+import { PackageManifest, readPackage } from "@rnx-kit/tools-node/package";
 import path from "path";
 import { getRequirements, visitDependencies } from "../src/dependencies";
 

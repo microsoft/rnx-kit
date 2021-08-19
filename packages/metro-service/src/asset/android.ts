@@ -1,4 +1,4 @@
-import { isApproximatelyEqual } from "@rnx-kit/tools-language";
+import { isApproximatelyEqual } from "@rnx-kit/tools-language/math";
 import path from "path";
 import type { PackagerAsset } from "./types";
 

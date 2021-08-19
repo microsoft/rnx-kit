@@ -1,5 +1,5 @@
 import type { Capability, KitCapabilities } from "@rnx-kit/config";
-import type { PackageManifest } from "@rnx-kit/tools-node";
+import type { PackageManifest } from "@rnx-kit/tools-node/package";
 import semver from "semver";
 import { getProfilesFor, getProfileVersionsFor } from "./profiles";
 import { concatVersionRanges, keysOf } from "./helpers";

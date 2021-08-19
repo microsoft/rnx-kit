@@ -5,7 +5,9 @@
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/tools-react-native#readme",
   "license": "MIT",
   "files": [
-    "lib/*"
+    "lib/*",
+    "platform.js",
+    "platform.d.ts"
   ],
   "main": "lib/index.js",
   "repository": {
