@@ -89,7 +89,7 @@ export function getKitBundlePlatformDefinition(
       ? { sourceMapSourceRootPath: overrides.sourcemapSourcesRoot }
       : {}),
     ...(overrides.experimentalTreeShake
-      ? { experimentalTreeShake: overrides.experimentalTreeShake }
+      ? { experimental_treeShake: overrides.experimentalTreeShake }
       : {}),
   };
 }
