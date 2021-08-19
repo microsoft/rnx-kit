@@ -129,26 +129,30 @@ export function getRequirements(
         capabilities.forEach((capability) => allCapabilities.add(capability));
       }
 
-      if (validVersions.length === 0) {
-        const message =
-          "No React Native profile could satisfy all dependencies";
-        const fullTrace = [
-          message,
-          ...trace.map(({ module, reactNativeVersion, profiles }) => {
-            const satisfiedVersions = profiles.join(", ");
-            return `    [${satisfiedVersions}] satisfies '${module}' because it supports '${reactNativeVersion}'`;
-          }),
-        ].join("\n");
-        if (loose) {
-          warn(fullTrace);
-        } else {
-          error(fullTrace);
-          throw new Error(message);
-        }
-      } else {
+      // In strict mode, we want to continue so we can catch all dependencies
+      // that cannot be satisfied. Whereas in loose mode, we can ignore them and
+      // carry on with the profiles that satisfy the rest.
+      if (validVersions.length > 0) {
         profileVersions = validVersions;
       }
     });
+
+    if (trace[trace.length - 1].profiles.length === 0) {
+      const message = "No React Native profile could satisfy all dependencies";
+      const fullTrace = [
+        message,
+        ...trace.map(({ module, reactNativeVersion, profiles }) => {
+          const satisfiedVersions = profiles.join(", ");
+          return `    [${satisfiedVersions}] satisfies '${module}' because it supports '${reactNativeVersion}'`;
+        }),
+      ].join("\n");
+      if (loose) {
+        warn(fullTrace);
+      } else {
+        error(fullTrace);
+        throw new Error(message);
+      }
+    }
 
     const profiles = getProfilesFor(
       profileVersions,
