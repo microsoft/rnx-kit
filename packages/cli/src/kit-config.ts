@@ -10,7 +10,7 @@ import {
 } from "@rnx-kit/config";
 import { warn } from "@rnx-kit/console";
 import type { BundleArgs } from "@rnx-kit/metro-service";
-import { pickValues } from "@rnx-kit/tools-language/props";
+import { pickValues } from "@rnx-kit/tools-language/properties";
 import type { AllPlatforms } from "@rnx-kit/tools-react-native/platform";
 import chalk from "chalk";
 
@@ -76,16 +76,29 @@ export function getKitBundlePlatformDefinition(
 ): BundleDefinitionWithRequiredParameters {
   return {
     ...getBundlePlatformDefinition(bundleDefinition, targetPlatform),
-    ...pickValues(overrides, [
-      "entryPath",
-      "distPath",
-      "assetsPath",
-      "bundlePrefix",
-      "bundleEncoding",
-      "sourcemapOutput",
-      "sourcemapSourcesRoot",
-      "experimentalTreeShake",
-    ]),
+    ...pickValues(
+      overrides,
+      [
+        "entryPath",
+        "distPath",
+        "assetsPath",
+        "bundlePrefix",
+        "bundleEncoding",
+        "sourcemapOutput",
+        "sourcemapSourcesRoot",
+        "experimentalTreeShake",
+      ],
+      [
+        "entryPath",
+        "distPath",
+        "assetsPath",
+        "bundlePrefix",
+        "bundleEncoding",
+        "sourcemapOutput",
+        "sourcemapSourcesRoot",
+        "experimental_treeShake",
+      ]
+    ),
   };
 }
 

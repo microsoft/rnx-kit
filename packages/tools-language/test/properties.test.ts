@@ -1,5 +1,5 @@
 import "jest-extended";
-import { pickValue, pickValues } from "../src/props";
+import { pickValue, pickValues } from "../src/properties";
 
 describe("Language > Props", () => {
   test("pickValue returns undefined when the key is not found", () => {

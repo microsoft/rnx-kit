@@ -2,6 +2,42 @@
   "name": "@rnx-kit/cli",
   "entries": [
     {
+      "date": "Fri, 20 Aug 2021 09:36:58 GMT",
+      "tag": "@rnx-kit/cli_v0.9.7",
+      "version": "0.9.7",
+      "comments": {
+        "patch": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/cli",
+            "comment": "Fix `--experimental-tree-shake` not being applied correctly",
+            "commit": "2deee7a9285f3899e99aca2135ecd123fc777de2"
+          },
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/cli",
+            "commit": "2deee7a9285f3899e99aca2135ecd123fc777de2",
+            "comment": "Bump @rnx-kit/cli to v0.9.7"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Thu, 19 Aug 2021 07:59:20 GMT",
+      "tag": "@rnx-kit/cli_v0.9.6",
+      "version": "0.9.6",
+      "comments": {
+        "patch": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/cli",
+            "commit": "84c80d34cad6f8452954f3fcbb7d0ad5457055d5",
+            "comment": "Bump @rnx-kit/cli to v0.9.6"
+          }
+        ]
+      }
+    },
+    {
       "date": "Wed, 18 Aug 2021 14:54:20 GMT",
       "tag": "@rnx-kit/cli_v0.9.5",
       "version": "0.9.5",

@@ -2,6 +2,21 @@
   "name": "@rnx-kit/dep-check",
   "entries": [
     {
+      "date": "Thu, 19 Aug 2021 07:59:20 GMT",
+      "tag": "@rnx-kit/dep-check_v1.7.1",
+      "version": "1.7.1",
+      "comments": {
+        "patch": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/dep-check",
+            "comment": "Fix error messages accumulating when gathering requirements",
+            "commit": "84c80d34cad6f8452954f3fcbb7d0ad5457055d5"
+          }
+        ]
+      }
+    },
+    {
       "date": "Wed, 18 Aug 2021 14:54:20 GMT",
       "tag": "@rnx-kit/dep-check_v1.7.0",
       "version": "1.7.0",
