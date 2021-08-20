@@ -1,0 +1,7 @@
+{
+  "type": "patch",
+  "comment": "Fix `--experimental-tree-shake` not being applied correctly",
+  "packageName": "@rnx-kit/cli",
+  "email": "4123478+tido64@users.noreply.github.com",
+  "dependentChangeType": "patch"
+}
