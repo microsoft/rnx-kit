@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/metro-config
 
-This log was last generated on Mon, 16 Aug 2021 14:17:13 GMT and should not be manually modified.
+This log was last generated on Fri, 20 Aug 2021 10:36:13 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 1.2.5
+
+Fri, 20 Aug 2021 10:36:13 GMT
+
+### Patches
+
+- Add react peer dependencies (asgramme@microsoft.com)
 
 ## 1.2.4
 

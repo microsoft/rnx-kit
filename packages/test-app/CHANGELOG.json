@@ -2,6 +2,51 @@
   "name": "@rnx-kit/test-app",
   "entries": [
     {
+      "date": "Fri, 20 Aug 2021 10:36:13 GMT",
+      "tag": "@rnx-kit/test-app_v0.0.1",
+      "version": "0.0.1",
+      "comments": {
+        "patch": [
+          {
+            "author": "asgramme@microsoft.com",
+            "package": "@rnx-kit/test-app",
+            "commit": "3f9a0bf27632a63d0b2b058282edc8283a4b1668",
+            "comment": "Bump @rnx-kit/test-app to v0.0.1"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Fri, 20 Aug 2021 09:36:58 GMT",
+      "tag": "@rnx-kit/test-app_v0.0.1",
+      "version": "0.0.1",
+      "comments": {
+        "patch": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/test-app",
+            "commit": "2deee7a9285f3899e99aca2135ecd123fc777de2",
+            "comment": "Bump @rnx-kit/test-app to v0.0.1"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Thu, 19 Aug 2021 07:59:20 GMT",
+      "tag": "@rnx-kit/test-app_v0.0.1",
+      "version": "0.0.1",
+      "comments": {
+        "patch": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/test-app",
+            "commit": "84c80d34cad6f8452954f3fcbb7d0ad5457055d5",
+            "comment": "Bump @rnx-kit/test-app to v0.0.1"
+          }
+        ]
+      }
+    },
+    {
       "date": "Wed, 18 Aug 2021 14:54:20 GMT",
       "tag": "@rnx-kit/test-app_v0.0.1",
       "version": "0.0.1",

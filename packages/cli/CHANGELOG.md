@@ -1,8 +1,25 @@
 # Change Log - @rnx-kit/cli
 
-This log was last generated on Wed, 18 Aug 2021 14:54:20 GMT and should not be manually modified.
+This log was last generated on Fri, 20 Aug 2021 09:36:58 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 0.9.7
+
+Fri, 20 Aug 2021 09:36:58 GMT
+
+### Patches
+
+- Fix `--experimental-tree-shake` not being applied correctly (4123478+tido64@users.noreply.github.com)
+- Bump @rnx-kit/cli to v0.9.7 (4123478+tido64@users.noreply.github.com)
+
+## 0.9.6
+
+Thu, 19 Aug 2021 07:59:20 GMT
+
+### Patches
+
+- Bump @rnx-kit/cli to v0.9.6 (4123478+tido64@users.noreply.github.com)
 
 ## 0.9.5
 
