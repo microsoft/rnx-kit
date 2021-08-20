@@ -2,6 +2,21 @@
   "name": "@rnx-kit/metro-config",
   "entries": [
     {
+      "date": "Fri, 20 Aug 2021 10:36:13 GMT",
+      "tag": "@rnx-kit/metro-config_v1.2.5",
+      "version": "1.2.5",
+      "comments": {
+        "patch": [
+          {
+            "author": "asgramme@microsoft.com",
+            "package": "@rnx-kit/metro-config",
+            "comment": "Add react peer dependencies",
+            "commit": "3f9a0bf27632a63d0b2b058282edc8283a4b1668"
+          }
+        ]
+      }
+    },
+    {
       "date": "Mon, 16 Aug 2021 14:17:13 GMT",
       "tag": "@rnx-kit/metro-config_v1.2.4",
       "version": "1.2.4",

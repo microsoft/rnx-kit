@@ -1,7 +1,0 @@
-{
-  "type": "patch",
-  "comment": "Add react peer dependencies",
-  "packageName": "@rnx-kit/metro-config",
-  "email": "asgramme@microsoft.com",
-  "dependentChangeType": "patch"
-}
