@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/metro-serializer-esbuild
 
-This log was last generated on Wed, 04 Aug 2021 10:08:23 GMT and should not be manually modified.
+This log was last generated on Fri, 20 Aug 2021 09:36:58 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 0.0.13
+
+Fri, 20 Aug 2021 09:36:58 GMT
+
+### Patches
+
+- Fix compatibility issues with Hermes (4123478+tido64@users.noreply.github.com)
 
 ## 0.0.12
 
