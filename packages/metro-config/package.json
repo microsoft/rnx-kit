@@ -25,7 +25,9 @@
     "workspace-tools": "^0.16.2"
   },
   "peerDependencies": {
-    "metro-config": ">=0.58.0"
+    "metro-config": ">=0.58.0",
+    "react": "*",
+    "react-native": "*"
   },
   "devDependencies": {
     "@types/babel__core": "^7.0.0",
