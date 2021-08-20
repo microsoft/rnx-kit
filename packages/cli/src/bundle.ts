@@ -140,10 +140,13 @@ export async function rnxBundle(
     );
 
     // ensure all output directories exist
-    fs.mkdirSync(path.dirname(bundlePath), { recursive: true });
+    fs.mkdirSync(path.dirname(bundlePath), { recursive: true, mode: 0o755 });
     sourceMapPath &&
-      fs.mkdirSync(path.dirname(sourceMapPath), { recursive: true });
-    assetsPath && fs.mkdirSync(assetsPath, { recursive: true });
+      fs.mkdirSync(path.dirname(sourceMapPath), {
+        recursive: true,
+        mode: 0o755,
+      });
+    assetsPath && fs.mkdirSync(assetsPath, { recursive: true, mode: 0o755 });
 
     // create the bundle
     await bundle(

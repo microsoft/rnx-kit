@@ -10,8 +10,8 @@
     "function.d.ts",
     "math.js",
     "math.d.ts",
-    "props.js",
-    "props.d.ts"
+    "properties.js",
+    "properties.d.ts"
   ],
   "main": "lib/index.js",
   "repository": {

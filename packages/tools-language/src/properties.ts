@@ -33,16 +33,18 @@ export function pickValues<T>(
   obj: T,
   keys: (keyof T)[],
   names?: string[]
-): { [name: string]: unknown } | undefined {
-  let results: { [name: string]: unknown } | undefined;
+): Record<string, unknown> | undefined {
+  const finalNames = names ?? keys;
+  const results: Record<string, unknown> = {};
+
+  let pickedValue = false;
   for (let index = 0; index < keys.length; ++index) {
     const value = obj[keys[index]];
     if (typeof value !== "undefined") {
-      results = {
-        ...results,
-        ...{ [names ? names[index] : keys[index]]: value },
-      };
+      results[finalNames[index].toString()] = value;
+      pickedValue = true;
     }
   }
-  return results;
+
+  return pickedValue ? results : undefined;
 }

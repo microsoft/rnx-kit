@@ -1,4 +1,4 @@
-import { pickValues } from "@rnx-kit/tools-language/props";
+import { pickValues } from "@rnx-kit/tools-language/properties";
 import findUp from "find-up";
 import fs from "fs";
 import path from "path";

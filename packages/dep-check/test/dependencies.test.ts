@@ -10,7 +10,7 @@ function fixturePath(name: string) {
 
 function useFixture(name: string): [string, PackageManifest] {
   const fixture = fixturePath(name);
-  return [fixture, readPackage(path.join(fixture, "package.json"))];
+  return [fixture, readPackage(fixture)];
 }
 
 describe("visitDependencies()", () => {
