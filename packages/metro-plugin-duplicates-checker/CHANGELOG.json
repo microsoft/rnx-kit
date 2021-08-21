@@ -2,6 +2,27 @@
   "name": "@rnx-kit/metro-plugin-duplicates-checker",
   "entries": [
     {
+      "date": "Sat, 21 Aug 2021 08:22:48 GMT",
+      "tag": "@rnx-kit/metro-plugin-duplicates-checker_v1.2.0",
+      "version": "1.2.0",
+      "comments": {
+        "minor": [
+          {
+            "author": "afoxman@microsoft.com",
+            "package": "@rnx-kit/metro-plugin-duplicates-checker",
+            "comment": "Integrate tools package and other common libraries throughout monorepo, removing custom code.",
+            "commit": "f65f706c734841c4339ca1f825b9c9505cea8941"
+          },
+          {
+            "author": "afoxman@microsoft.com",
+            "package": "@rnx-kit/metro-plugin-duplicates-checker",
+            "commit": "f65f706c734841c4339ca1f825b9c9505cea8941",
+            "comment": "Bump @rnx-kit/metro-plugin-duplicates-checker to v1.2.0"
+          }
+        ]
+      }
+    },
+    {
       "date": "Wed, 04 Aug 2021 10:08:23 GMT",
       "tag": "@rnx-kit/metro-plugin-duplicates-checker_v1.1.5",
       "version": "1.1.5",

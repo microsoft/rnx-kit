@@ -1,8 +1,17 @@
 # Change Log - @rnx-kit/cli
 
-This log was last generated on Fri, 20 Aug 2021 09:36:58 GMT and should not be manually modified.
+This log was last generated on Sat, 21 Aug 2021 08:22:48 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 0.9.8
+
+Sat, 21 Aug 2021 08:22:48 GMT
+
+### Patches
+
+- Integrate tools package and other common libraries throughout monorepo, removing custom code. (afoxman@microsoft.com)
+- Bump @rnx-kit/cli to v0.9.8 (afoxman@microsoft.com)
 
 ## 0.9.7
 

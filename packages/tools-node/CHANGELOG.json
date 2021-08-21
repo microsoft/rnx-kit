@@ -1,0 +1,26 @@
+{
+  "name": "@rnx-kit/tools-node",
+  "entries": [
+    {
+      "date": "Sat, 21 Aug 2021 08:22:48 GMT",
+      "tag": "@rnx-kit/tools-node_v1.0.1",
+      "version": "1.0.1",
+      "comments": {
+        "patch": [
+          {
+            "author": "afoxman@microsoft.com",
+            "package": "@rnx-kit/tools-node",
+            "comment": "Create a node tools package",
+            "commit": "f65f706c734841c4339ca1f825b9c9505cea8941"
+          },
+          {
+            "author": "afoxman@microsoft.com",
+            "package": "@rnx-kit/tools-node",
+            "commit": "f65f706c734841c4339ca1f825b9c9505cea8941",
+            "comment": "Bump @rnx-kit/tools-node to v1.0.1"
+          }
+        ]
+      }
+    }
+  ]
+}
