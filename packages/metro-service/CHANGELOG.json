@@ -2,6 +2,27 @@
   "name": "@rnx-kit/metro-service",
   "entries": [
     {
+      "date": "Sat, 21 Aug 2021 08:22:48 GMT",
+      "tag": "@rnx-kit/metro-service_v1.1.1",
+      "version": "1.1.1",
+      "comments": {
+        "patch": [
+          {
+            "author": "afoxman@microsoft.com",
+            "package": "@rnx-kit/metro-service",
+            "comment": "Integrate tools package and other common libraries throughout monorepo, removing custom code.",
+            "commit": "f65f706c734841c4339ca1f825b9c9505cea8941"
+          },
+          {
+            "author": "afoxman@microsoft.com",
+            "package": "@rnx-kit/metro-service",
+            "commit": "f65f706c734841c4339ca1f825b9c9505cea8941",
+            "comment": "Bump @rnx-kit/metro-service to v1.1.1"
+          }
+        ]
+      }
+    },
+    {
       "date": "Fri, 06 Aug 2021 17:50:49 GMT",
       "tag": "@rnx-kit/metro-service_v1.1.0",
       "version": "1.1.0",

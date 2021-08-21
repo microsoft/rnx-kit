@@ -1,8 +1,17 @@
 # Change Log - @rnx-kit/dep-check
 
-This log was last generated on Thu, 19 Aug 2021 07:59:20 GMT and should not be manually modified.
+This log was last generated on Sat, 21 Aug 2021 08:22:48 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 1.7.2
+
+Sat, 21 Aug 2021 08:22:48 GMT
+
+### Patches
+
+- Integrate tools package and other common libraries throughout monorepo, removing custom code. (afoxman@microsoft.com)
+- Bump @rnx-kit/dep-check to v1.7.2 (afoxman@microsoft.com)
 
 ## 1.7.1
 

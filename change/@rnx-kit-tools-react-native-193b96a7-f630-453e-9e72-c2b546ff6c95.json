@@ -1,7 +1,0 @@
-{
-  "type": "patch",
-  "comment": "Create a react-native tools package",
-  "packageName": "@rnx-kit/tools-react-native",
-  "email": "afoxman@microsoft.com",
-  "dependentChangeType": "patch"
-}

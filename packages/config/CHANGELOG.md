@@ -1,8 +1,17 @@
 # Change Log - @rnx-kit/config
 
-This log was last generated on Fri, 06 Aug 2021 22:07:45 GMT and should not be manually modified.
+This log was last generated on Sat, 21 Aug 2021 08:22:48 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 0.4.1
+
+Sat, 21 Aug 2021 08:22:48 GMT
+
+### Patches
+
+- Integrate tools package and other common libraries throughout monorepo, removing custom code. (afoxman@microsoft.com)
+- Bump @rnx-kit/config to v0.4.1 (afoxman@microsoft.com)
 
 ## 0.4.0
 

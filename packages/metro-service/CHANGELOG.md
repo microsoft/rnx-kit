@@ -1,8 +1,17 @@
 # Change Log - @rnx-kit/metro-service
 
-This log was last generated on Fri, 06 Aug 2021 17:50:49 GMT and should not be manually modified.
+This log was last generated on Sat, 21 Aug 2021 08:22:48 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 1.1.1
+
+Sat, 21 Aug 2021 08:22:48 GMT
+
+### Patches
+
+- Integrate tools package and other common libraries throughout monorepo, removing custom code. (afoxman@microsoft.com)
+- Bump @rnx-kit/metro-service to v1.1.1 (afoxman@microsoft.com)
 
 ## 1.1.0
 
