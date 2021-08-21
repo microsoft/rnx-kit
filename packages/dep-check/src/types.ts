@@ -1,4 +1,5 @@
 import type { Capability, KitType } from "@rnx-kit/config";
+import type { PackageManifest } from "@rnx-kit/tools-node/package";
 
 type Options = {
   customProfiles?: string;
@@ -39,12 +40,10 @@ export type Package = {
   devOnly?: boolean;
 };
 
-export type PackageManifest = {
-  name: string;
-  version: string;
-  dependencies?: Record<string, string>;
-  peerDependencies?: Record<string, string>;
-  devDependencies?: Record<string, string>;
+export type ManifestProfile = PackageManifest & {
+  dependencies: Record<string, string>;
+  peerDependencies: Record<string, string>;
+  devDependencies: Record<string, string>;
 };
 
 export type Profile = Readonly<Record<Capability, Package>>;

@@ -1,12 +1,12 @@
+import { readPackage, writePackage } from "@rnx-kit/tools-node/package";
 import { capabilitiesFor } from "./capabilities";
-import { readJsonFile, writeJsonFile } from "./json";
 import type { CapabilitiesOptions } from "./types";
 
 export function initializeConfig(
   packageManifest: string,
   options: CapabilitiesOptions
 ): void {
-  const manifest = readJsonFile(packageManifest);
+  const manifest = readPackage(packageManifest);
   if (manifest["rnx-kit"]?.["capabilities"]) {
     return;
   }
@@ -23,5 +23,5 @@ export function initializeConfig(
       ...capabilities,
     },
   };
-  writeJsonFile(packageManifest, updatedManifest);
+  writePackage(packageManifest, updatedManifest);
 }

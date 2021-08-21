@@ -1,7 +1,6 @@
+import { PackageManifest, readPackage } from "@rnx-kit/tools-node/package";
 import path from "path";
 import { getRequirements, visitDependencies } from "../src/dependencies";
-import { readJsonFile } from "../src/json";
-import type { PackageManifest } from "../src/types";
 
 jest.unmock("@rnx-kit/config");
 
@@ -11,7 +10,7 @@ function fixturePath(name: string) {
 
 function useFixture(name: string): [string, PackageManifest] {
   const fixture = fixturePath(name);
-  return [fixture, readJsonFile(path.join(fixture, "package.json"))];
+  return [fixture, readPackage(fixture)];
 }
 
 describe("visitDependencies()", () => {

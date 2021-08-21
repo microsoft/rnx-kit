@@ -1,13 +1,18 @@
 import { error } from "@rnx-kit/console";
+import {
+  PackageManifest,
+  readPackage,
+  writePackage,
+} from "@rnx-kit/tools-node/package";
+import isString from "lodash/isString";
 import { resolveCapabilities } from "./capabilities";
 import { checkPackageManifest } from "./check";
-import { readJsonFile, writeJsonFile } from "./json";
 import { updateDependencies } from "./manifest";
 import { parseProfilesString } from "./profiles";
-import { isString, keysOf } from "./helpers";
+import { keysOf } from "./helpers";
 import type {
   Command,
-  PackageManifest,
+  ManifestProfile,
   TestOverrides,
   VigilantOptions,
 } from "./types";
@@ -29,7 +34,7 @@ export function buildManifestProfile(
   versions: string,
   customProfilesPath: string | undefined,
   testOverrides?: TestOverrides
-): Required<PackageManifest> {
+): ManifestProfile {
   const { supportedProfiles, targetProfile } = parseProfilesString(
     versions,
     customProfilesPath,
@@ -62,7 +67,7 @@ export function buildManifestProfile(
 
 export function inspect(
   manifest: PackageManifest,
-  profile: Required<PackageManifest>,
+  profile: ManifestProfile,
   write: boolean
 ): Change[] {
   const changes: Change[] = [];
@@ -119,7 +124,7 @@ export function makeVigilantCommand({
       // Ignore; retry with a full inspection
     }
 
-    const manifest = readJsonFile(manifestPath);
+    const manifest = readPackage(manifestPath);
     if (exclusionList.includes(manifest.name)) {
       return 0;
     }
@@ -127,7 +132,7 @@ export function makeVigilantCommand({
     const changes = inspect(manifest, profile, write);
     if (changes.length > 0) {
       if (write) {
-        writeJsonFile(manifestPath, manifest);
+        writePackage(manifestPath, manifest);
       } else {
         const violations = changes
           .map(

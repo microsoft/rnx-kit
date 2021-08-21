@@ -1,0 +1,44 @@
+{
+  "name": "@rnx-kit/tools-react-native",
+  "version": "1.0.0",
+  "description": "A collection of supplemental react-native functions and types",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/tools-react-native#readme",
+  "license": "MIT",
+  "files": [
+    "lib/*",
+    "platform.js",
+    "platform.d.ts"
+  ],
+  "main": "lib/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "packages/tools-react-native"
+  },
+  "scripts": {
+    "build": "rnx-kit-scripts build",
+    "format": "rnx-kit-scripts format",
+    "lint": "rnx-kit-scripts lint",
+    "test": "rnx-kit-scripts test"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@rnx-kit/jest-preset": "*",
+    "@types/node": "^14.15.0",
+    "jest-extended": "^0.11.5",
+    "rnx-kit-scripts": "*"
+  },
+  "eslintConfig": {
+    "extends": "@rnx-kit/eslint-config"
+  },
+  "jest": {
+    "preset": "@rnx-kit/jest-preset",
+    "setupFilesAfterEnv": [
+      "jest-extended"
+    ],
+    "roots": [
+      "test"
+    ],
+    "testRegex": "/test/.*\\.test\\.ts$"
+  }
+}

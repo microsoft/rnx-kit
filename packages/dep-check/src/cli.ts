@@ -2,12 +2,12 @@
 
 import type { KitType } from "@rnx-kit/config";
 import { error } from "@rnx-kit/console";
+import { findPackageDir } from "@rnx-kit/tools-node/package";
+import isString from "lodash/isString";
 import * as path from "path";
-import pkgDir from "pkg-dir";
 import { getAllPackageJsonFiles, getWorkspaceRoot } from "workspace-tools";
 import yargs from "yargs";
 import { makeCheckCommand } from "./check";
-import { isString } from "./helpers";
 import { initializeConfig } from "./initialize";
 import { makeSetVersionCommand } from "./setVersion";
 import type { Args, Command } from "./types";
@@ -30,7 +30,7 @@ function getManifests(
     return [packageJson];
   }
 
-  const packageDir = pkgDir.sync();
+  const packageDir = findPackageDir();
   if (!packageDir) {
     return undefined;
   }

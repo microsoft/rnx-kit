@@ -1,5 +1,4 @@
 import type {
-  AllPlatforms,
   BundleDefinitionWithRequiredParameters,
   ServerWithRequiredParameters,
 } from "@rnx-kit/config";
@@ -11,6 +10,8 @@ import {
 } from "@rnx-kit/config";
 import { warn } from "@rnx-kit/console";
 import type { BundleArgs } from "@rnx-kit/metro-service";
+import { pickValues } from "@rnx-kit/tools-language/properties";
+import type { AllPlatforms } from "@rnx-kit/tools-react-native/platform";
 import chalk from "chalk";
 
 /**
@@ -75,22 +76,29 @@ export function getKitBundlePlatformDefinition(
 ): BundleDefinitionWithRequiredParameters {
   return {
     ...getBundlePlatformDefinition(bundleDefinition, targetPlatform),
-    ...(overrides.entryPath ? { entryPath: overrides.entryPath } : {}),
-    ...(overrides.distPath ? { distPath: overrides.distPath } : {}),
-    ...(overrides.assetsPath ? { assetsPath: overrides.assetsPath } : {}),
-    ...(overrides.bundlePrefix ? { bundlePrefix: overrides.bundlePrefix } : {}),
-    ...(overrides.bundleEncoding
-      ? { bundleEncoding: overrides.bundleEncoding }
-      : {}),
-    ...(overrides.sourcemapOutput
-      ? { sourceMapPath: overrides.sourcemapOutput }
-      : {}),
-    ...(overrides.sourcemapSourcesRoot
-      ? { sourceMapSourceRootPath: overrides.sourcemapSourcesRoot }
-      : {}),
-    ...(overrides.experimentalTreeShake
-      ? { experimental_treeShake: overrides.experimentalTreeShake }
-      : {}),
+    ...pickValues(
+      overrides,
+      [
+        "entryPath",
+        "distPath",
+        "assetsPath",
+        "bundlePrefix",
+        "bundleEncoding",
+        "sourcemapOutput",
+        "sourcemapSourcesRoot",
+        "experimentalTreeShake",
+      ],
+      [
+        "entryPath",
+        "distPath",
+        "assetsPath",
+        "bundlePrefix",
+        "bundleEncoding",
+        "sourcemapOutput",
+        "sourcemapSourcesRoot",
+        "experimental_treeShake",
+      ]
+    ),
   };
 }
 
@@ -118,8 +126,6 @@ export function getKitServerConfig(
 
   return {
     ...getServerConfig(kitConfig),
-    ...(overrides.projectRoot ? { projectRoot: overrides.projectRoot } : {}),
-    ...(overrides.assetPlugins ? { assetPlugins: overrides.assetPlugins } : {}),
-    ...(overrides.sourceExts ? { sourceExts: overrides.sourceExts } : {}),
+    ...pickValues(overrides, ["projectRoot", "assetPlugins", "sourceExts"]),
   };
 }

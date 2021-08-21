@@ -22,7 +22,10 @@
     "node": ">= 10.12"
   },
   "dependencies": {
-    "chalk": "^4.1.0"
+    "@rnx-kit/tools-language": "^1.0.0",
+    "chalk": "^4.1.0",
+    "cp-file": "^9.1.0",
+    "make-dir": "^3.1.0"
   },
   "peerDependencies": {
     "metro": ">=0.66.1",

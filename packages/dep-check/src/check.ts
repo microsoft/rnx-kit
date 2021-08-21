@@ -1,31 +1,25 @@
 import { getKitCapabilities, getKitConfig } from "@rnx-kit/config";
 import { error, info, warn } from "@rnx-kit/console";
+import {
+  isPackageManifest,
+  readPackage,
+  writePackage,
+} from "@rnx-kit/tools-node/package";
 import chalk from "chalk";
-import fs from "fs";
 import { diffLinesUnified } from "jest-diff";
 import path from "path";
 import { getRequirements } from "./dependencies";
 import { findBadPackages } from "./findBadPackages";
-import { readJsonFile } from "./json";
 import { updatePackageManifest } from "./manifest";
 import { getProfilesFor } from "./profiles";
-import type { CheckOptions, Command, PackageManifest } from "./types";
-
-export function isManifest(manifest: unknown): manifest is PackageManifest {
-  return (
-    typeof manifest === "object" &&
-    manifest !== null &&
-    "name" in manifest &&
-    "version" in manifest
-  );
-}
+import type { CheckOptions, Command } from "./types";
 
 export function checkPackageManifest(
   manifestPath: string,
   { loose, uncheckedReturnCode = 0, write }: CheckOptions
 ): number {
-  const manifest = readJsonFile(manifestPath);
-  if (!isManifest(manifest)) {
+  const manifest = readPackage(manifestPath);
+  if (!isPackageManifest(manifest)) {
     error(`'${manifestPath}' does not contain a valid package manifest`);
     return 1;
   }
@@ -83,7 +77,7 @@ export function checkPackageManifest(
 
   if (updatedManifestJson !== normalizedManifestJson) {
     if (write) {
-      fs.writeFileSync(manifestPath, updatedManifestJson + "\n");
+      writePackage(manifestPath, updatedManifest);
     } else {
       const diff = diffLinesUnified(
         normalizedManifestJson.split("\n"),

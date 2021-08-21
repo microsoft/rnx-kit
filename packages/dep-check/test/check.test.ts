@@ -1,25 +1,9 @@
-import { checkPackageManifest, isManifest } from "../src/check";
+import { checkPackageManifest } from "../src/check";
 import profile_0_62 from "../src/profiles/profile-0.62";
 import profile_0_63 from "../src/profiles/profile-0.63";
 import profile_0_64 from "../src/profiles/profile-0.64";
 
 jest.mock("fs");
-
-describe("isManifest()", () => {
-  test("returns true when something resembles a package manifest", () => {
-    expect(isManifest(undefined)).toBe(false);
-    expect(isManifest(null)).toBe(false);
-    expect(isManifest("string")).toBe(false);
-    expect(isManifest(9000)).toBe(false);
-    expect(isManifest(() => 0)).toBe(false);
-    expect(isManifest({})).toBe(false);
-    expect(isManifest({ name: "@rnx-kit/dep-check" })).toBe(false);
-    expect(isManifest({ version: "0.0.1" })).toBe(false);
-    expect(isManifest({ name: "@rnx-kit/dep-check", version: "0.0.1" })).toBe(
-      true
-    );
-  });
-});
 
 describe("checkPackageManifest({ kitType: 'library' })", () => {
   const rnxKitConfig = require("@rnx-kit/config");

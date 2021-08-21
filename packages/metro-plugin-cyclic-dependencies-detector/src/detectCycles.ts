@@ -1,4 +1,5 @@
 import { error, warn } from "@rnx-kit/console";
+import { getPackageModuleRefFromModulePath } from "@rnx-kit/tools-node/module";
 import type { Dependencies, Graph } from "metro";
 import * as path from "path";
 
@@ -19,11 +20,11 @@ export function packageRelativePath(
     return cachedPath;
   }
 
-  const pkgDir = require("pkg-dir");
+  const ref = getPackageModuleRefFromModulePath(modulePath);
+  const relativePath = ref
+    ? path.join(ref.scope ?? "", ref.name, ref.path ?? "")
+    : "";
 
-  const packagePath = pkgDir.sync(modulePath);
-  const { name } = require(path.join(packagePath, "package.json"));
-  const relativePath = `${name}/${path.relative(packagePath, modulePath)}`;
   cache[modulePath] = relativePath;
   return relativePath;
 }

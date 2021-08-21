@@ -1,11 +1,13 @@
 import { error } from "@rnx-kit/console";
+import { tryInvoke } from "@rnx-kit/tools-language/function";
+import isString from "lodash/isString";
 import semver from "semver";
 import profile_0_61 from "./profiles/profile-0.61";
 import profile_0_62 from "./profiles/profile-0.62";
 import profile_0_63 from "./profiles/profile-0.63";
 import profile_0_64 from "./profiles/profile-0.64";
 import profile_0_65 from "./profiles/profile-0.65";
-import { isString, keysOf } from "./helpers";
+import { keysOf } from "./helpers";
 import type { Profile, ProfileVersion, TestOverrides } from "./types";
 
 type ProfileMap = Record<ProfileVersion, Profile>;
@@ -51,14 +53,6 @@ function isValidProfileMap(map: unknown): map is Partial<ProfileMap> {
   }
 
   return Object.keys(defaultProfiles).some((version) => version in map);
-}
-
-function tryInvoke<T>(fn: () => T): [T, undefined] | [undefined, Error] {
-  try {
-    return [fn(), undefined];
-  } catch (e) {
-    return [undefined, e];
-  }
 }
 
 function loadCustomProfiles(

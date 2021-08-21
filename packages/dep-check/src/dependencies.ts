@@ -6,10 +6,13 @@ import {
   KitType,
 } from "@rnx-kit/config";
 import { error, warn } from "@rnx-kit/console";
-import findUp from "find-up";
-import path from "path";
+import {
+  PackageManifest,
+  findPackageDependencyDir,
+  parsePackageRef,
+  readPackage,
+} from "@rnx-kit/tools-node/package";
 import { concatVersionRanges } from "./helpers";
-import { readJsonFile } from "./json";
 import {
   getProfilesFor,
   getProfileVersionsFor,
@@ -17,7 +20,6 @@ import {
 } from "./profiles";
 import type {
   CheckOptions,
-  PackageManifest,
   Profile,
   ProfileVersion,
   TestOverrides,
@@ -61,20 +63,19 @@ export function visitDependencies(
 
     visited.add(dependency);
 
-    const packageJson = findUp.sync(
-      path.join("node_modules", dependency, "package.json"),
-      { cwd: projectRoot }
-    );
-    if (!packageJson) {
+    const packageRef = parsePackageRef(dependency);
+    const packageDir = findPackageDependencyDir(packageRef, {
+      startDir: projectRoot,
+    });
+    if (!packageDir) {
       warn(`Unable to resolve module '${dependency}'`);
       return;
     }
 
-    const packageRoot = path.dirname(packageJson);
-    visitor(dependency, packageRoot);
+    visitor(dependency, packageDir);
 
-    const manifest = readJsonFile(packageJson);
-    visitDependencies(manifest, packageRoot, visitor, visited);
+    const manifest = readPackage(packageDir);
+    visitDependencies(manifest, packageDir, visitor, visited);
   });
 }
 

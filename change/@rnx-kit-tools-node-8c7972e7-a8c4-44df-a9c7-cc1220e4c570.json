@@ -1,0 +1,7 @@
+{
+  "type": "patch",
+  "comment": "Create a node tools package",
+  "packageName": "@rnx-kit/tools-node",
+  "email": "afoxman@microsoft.com",
+  "dependentChangeType": "patch"
+}

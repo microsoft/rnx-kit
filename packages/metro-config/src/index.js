@@ -39,7 +39,7 @@ const UNIQUE_PACKAGES = ["react", "react-native"];
  * @returns {string[]}
  */
 function defaultWatchFolders(projectRoot) {
-  const findUp = require("find-up");
+  const { findPackage } = require("@rnx-kit/tools-node/package");
   const path = require("path");
   const {
     getAllPackageJsonFiles,
@@ -48,9 +48,7 @@ function defaultWatchFolders(projectRoot) {
 
   // If `projectRoot` is not set, assume that `@rnx-kit/metro-config` lives in
   // the same monorepo as the target package.
-  const thisPackage = path.dirname(
-    findUp.sync("package.json", { cwd: projectRoot }) || ""
-  );
+  const thisPackage = path.dirname(findPackage(projectRoot) || "");
 
   try {
     const root = getWorkspaceRoot(thisPackage);
@@ -86,14 +84,11 @@ function defaultWatchFolders(projectRoot) {
  * @returns {string | undefined}
  */
 function resolveModule(name, projectRoot) {
-  const findUp = require("find-up");
-  const path = require("path");
-
-  return findUp.sync(path.join("node_modules", name), {
-    cwd: projectRoot,
-    type: "directory",
-    allowSymlinks: false,
-  });
+  const { findPackageDependencyDir } = require("@rnx-kit/tools-node/package");
+  return findPackageDependencyDir(
+    { name },
+    { startDir: projectRoot, allowSymlinks: false }
+  );
 }
 
 /**
