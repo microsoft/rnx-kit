@@ -270,11 +270,11 @@ export function resolveModulesUsingMap(
             result = findDtsFileInAtTypesPackageDependency(ref, searchRoot);
           }
         }
-      }
 
-      if (!result) {
-        // Fall back to returning the module file name.
-        result = moduleFileName;
+        if (!result) {
+          // Fall back to returning the module file name.
+          result = moduleFileName;
+        }
       }
 
       resolved.push(result);
@@ -351,8 +351,6 @@ export class MetroTypeScriptResolverHost {
   ): (ResolvedModuleFull | undefined)[] {
     let resolved: (string | undefined)[] | undefined = undefined;
 
-    console.log(`${containingFile}`);
-
     const moduleMap = this.sourceFiles.get(containingFile);
     if (moduleMap) {
       // We have a module map for the containing file. Use it to resolve each
@@ -365,20 +363,17 @@ export class MetroTypeScriptResolverHost {
     }
 
     if (resolved) {
-      return resolved.map((r, i) => {
+      return resolved.map((r) => {
         if (r) {
-          console.log(`   ${moduleNames[i]} -> ${r}`);
           return {
             resolvedFileName: r,
             extension: path.extname(r) as Extension,
           };
         }
-        console.log(`   ${moduleNames[i]} -> NO RESOLUTION`);
         return undefined;
       });
     }
 
-    console.log(`   * -> NO RESOLUTION: containing file not in list`);
     return moduleNames.map((_) => undefined);
   }
 

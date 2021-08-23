@@ -68,8 +68,7 @@ export function createDefaultResolverHost(
       _reusedNames: string[] | undefined,
       redirectedReference?: ts.ResolvedProjectReference
     ): (ts.ResolvedModuleFull | undefined)[] => {
-      const resolved: (ts.ResolvedModuleFull | undefined)[] = [];
-      for (const name of moduleNames) {
+      return moduleNames.map((name) => {
         const result = ts.resolveModuleName(
           name,
           containingFile,
@@ -78,9 +77,8 @@ export function createDefaultResolverHost(
           undefined, // cache
           redirectedReference
         );
-        resolved.push(result.resolvedModule);
-      }
-      return resolved;
+        return result.resolvedModule;
+      });
     },
 
     getResolvedModuleWithFailedLookupLocationsFromCache: (
@@ -95,8 +93,7 @@ export function createDefaultResolverHost(
       containingFile: string,
       redirectedReference?: ts.ResolvedProjectReference
     ): (ts.ResolvedTypeReferenceDirective | undefined)[] => {
-      const resolved: (ts.ResolvedTypeReferenceDirective | undefined)[] = [];
-      for (const name of typeDirectiveNames) {
+      return typeDirectiveNames.map((name) => {
         const result = ts.resolveTypeReferenceDirective(
           name,
           containingFile,
@@ -104,9 +101,8 @@ export function createDefaultResolverHost(
           moduleResolutionHost,
           redirectedReference
         );
-        resolved.push(result.resolvedTypeReferenceDirective);
-      }
-      return resolved;
+        return result.resolvedTypeReferenceDirective;
+      });
     },
   };
 }

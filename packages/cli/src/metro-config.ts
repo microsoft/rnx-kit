@@ -9,7 +9,7 @@ import {
 import { MetroPlugin, MetroSerializer } from "@rnx-kit/metro-serializer";
 import { MetroSerializer as MetroSerializerEsbuild } from "@rnx-kit/metro-serializer-esbuild";
 import type { AllPlatforms } from "@rnx-kit/tools-react-native/platform";
-import { Project } from "@rnx-kit/typescript-service";
+import type { Project } from "@rnx-kit/typescript-service";
 import type { DeltaResult, Graph } from "metro";
 import type { InputConfigT, SerializerConfigT } from "metro-config";
 import { MetroTypeScriptResolverHost } from "./metro-ts-resolver";
