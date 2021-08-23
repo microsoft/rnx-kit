@@ -1,5 +1,5 @@
 import "jest-extended";
-import { BundleDefinitionWithRequiredParameters } from "../../../config/lib";
+import type { BundleDefinitionWithRequiredParameters } from "@rnx-kit/config";
 import {
   getKitBundleDefinition,
   getKitBundlePlatformDefinition,
