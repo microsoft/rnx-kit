@@ -1,0 +1,7 @@
+{
+  "type": "patch",
+  "comment": "Fix type-checking on windows",
+  "packageName": "@rnx-kit/cli",
+  "email": "afoxman@microsoft.com",
+  "dependentChangeType": "patch"
+}

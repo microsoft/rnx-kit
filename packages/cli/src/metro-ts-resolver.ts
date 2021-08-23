@@ -6,6 +6,7 @@ import {
   getMangledPackageName,
   isFileModuleRef,
   isPackageModuleRef,
+  normalizePath,
   PackageModuleRef,
   parseModuleRef,
   readPackage,
@@ -312,21 +313,25 @@ export class SourceFiles {
   }
 
   public get(fileName: string): ModuleMap | undefined {
-    return this.files[fileName];
+    const normalized = normalizePath(fileName);
+    return this.files[normalized];
   }
 
   public set(fileName: string, metroModules: Map<string, Dependency>): void {
+    const normalized = normalizePath(fileName);
+
     // extract each Metro dependency
     const modules: ModuleMap = {};
     metroModules.forEach((value: Dependency, key: string) => {
-      modules[key] = value.absolutePath;
+      modules[key] = normalizePath(value.absolutePath);
     });
 
-    this.files[fileName] = modules;
+    this.files[normalized] = modules;
   }
 
   public remove(fileName: string): void {
-    delete this.files[fileName];
+    const normalized = normalizePath(fileName);
+    delete this.files[normalized];
   }
 }
 
