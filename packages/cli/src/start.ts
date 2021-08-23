@@ -15,7 +15,7 @@ import type Server from "metro/src/Server";
 import type { Middleware } from "metro-config";
 import path from "path";
 import readline from "readline";
-import { getKitServerConfig } from "./kit-config";
+import { getKitServerConfig } from "./serve/kit-config";
 import { customizeMetroConfig } from "./metro-config";
 import type { TSProjectInfo } from "./types";
 
