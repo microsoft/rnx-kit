@@ -2,6 +2,21 @@
   "name": "@rnx-kit/cli",
   "entries": [
     {
+      "date": "Mon, 23 Aug 2021 08:49:21 GMT",
+      "tag": "@rnx-kit/cli_v0.9.9",
+      "version": "0.9.9",
+      "comments": {
+        "patch": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/cli",
+            "comment": "`--experimental-tree-shake` shouldn't need extra config",
+            "commit": "32ae291705cd20962bf4f315972d74ea088b7455"
+          }
+        ]
+      }
+    },
+    {
       "date": "Sat, 21 Aug 2021 08:22:48 GMT",
       "tag": "@rnx-kit/cli_v0.9.8",
       "version": "0.9.8",
