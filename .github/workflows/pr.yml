@@ -27,12 +27,20 @@ jobs:
         run: yarn run beachball check --branch origin/${{ github.base_ref }} --changehint \"Run 'yarn run change' from root of repo to generate a change file.\"
       - name: Format
         run: yarn format
-      - name: Align dependencies
-        run: yarn rnx-dep-check --write
-      - name: Report changes
+      - name: Report formatting changes
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: git diff | yarn suggestion-bot
+        run: |
+          git diff | yarn suggestion-bot -m 'Code formatting differences were found – did you forget to run `yarn format`?'
+          git checkout .
+      - name: Align dependencies
+        run: yarn rnx-dep-check --write
+      - name: Report dep-check changes
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git diff | yarn suggestion-bot -m 'Dependencies are potentially misaligned – run `yarn rnx-dep-check` locally for more details'
+          git checkout .
   build:
     name: "Build"
     strategy:
@@ -64,7 +72,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           yarn update-readme
-          git diff | yarn suggestion-bot
+          git diff | yarn suggestion-bot -m 'Changes were found in READMEs – did you forget to run `yarn update-readme`?'
       - name: Bundle packages
         run: yarn bundle:ci
       - name: Bundle test app with esbuild
