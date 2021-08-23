@@ -64,17 +64,23 @@ const resolvePathToLib = (
   return undefined;
 };
 
-const ImportPathRemapperPlugin = (packagePrefix: string): Plugin => ({
+const ImportPathRemapperPlugin = (packageNameFilter: RegExp): Plugin => ({
   name: "resolve-typescript-source",
   setup(build) {
     // Resolve packageName/lib/* to packageName/src/*
     build.onResolve(
-      { filter: new RegExp(`^${packagePrefix}[/]+[^/]+[/]+lib([/]+.*)`) },
+      {
+        filter: new RegExp(
+          `^${packageNameFilter.source}[/]+[^/]+[/]+lib([/]+.*)`
+        ),
+      },
       ({ path, resolveDir }) => ({
         path: resolvePathToLib(
           path.replace(
-            new RegExp(`^${packagePrefix}[/]+([^/]+)[/]+lib([/]+.*)`),
-            `${packagePrefix}/$1/src$2`
+            new RegExp(
+              `^${packageNameFilter.source}[/]+([^/]+)[/]+lib([/]+.*)`
+            ),
+            `${packageNameFilter.source}/$1/src$2`
           ),
           resolveDir,
           build.initialOptions.resolveExtensions ?? ESBUILD_DEFAULT_EXTENSIONS
@@ -85,7 +91,7 @@ const ImportPathRemapperPlugin = (packagePrefix: string): Plugin => ({
     // Resolve package imports to the TypeScript source of the package.json
     // `main` entry.
     build.onResolve(
-      { filter: new RegExp(`^${packagePrefix}[/]+[^/]+[/]*$`) },
+      { filter: new RegExp(`^${packageNameFilter.source}[/]+[^/]+[/]*$`) },
       ({ path, resolveDir }) => ({
         path: findMainSourceFile(path, resolveDir),
       })

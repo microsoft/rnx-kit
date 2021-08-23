@@ -10,7 +10,7 @@ describe("@rnx-kit/esbuild-plugin-import-path-remapper", () => {
       entryPoints: ["./test/__fixtures__/import-@test-pkg.ts"],
       bundle: true,
       write: false,
-      plugins: [ImportPathRemapperPlugin("@test")],
+      plugins: [ImportPathRemapperPlugin(/@test/)],
     });
 
     const output = String.fromCodePoint(...result.outputFiles[0].contents);
@@ -25,7 +25,7 @@ describe("@rnx-kit/esbuild-plugin-import-path-remapper", () => {
       entryPoints: ["./test/__fixtures__/import-@test-pkg-lib-test.ts"],
       bundle: true,
       write: false,
-      plugins: [ImportPathRemapperPlugin("@test")],
+      plugins: [ImportPathRemapperPlugin(/@test/)],
     });
 
     const output = String.fromCodePoint(...result.outputFiles[0].contents);
@@ -55,7 +55,7 @@ describe("@rnx-kit/esbuild-plugin-import-path-remapper", () => {
       entryPoints: ["./test/__fixtures__/import-@test-pkg-slash.ts"],
       bundle: true,
       write: false,
-      plugins: [ImportPathRemapperPlugin("@test")],
+      plugins: [ImportPathRemapperPlugin(/@test/)],
     });
 
     const output = String.fromCodePoint(...result.outputFiles[0].contents);
@@ -70,7 +70,7 @@ describe("@rnx-kit/esbuild-plugin-import-path-remapper", () => {
       entryPoints: ["./test/__fixtures__/require-@test-pkg-lib-test.ts"],
       bundle: true,
       write: false,
-      plugins: [ImportPathRemapperPlugin("@test")],
+      plugins: [ImportPathRemapperPlugin(/@test/)],
     });
 
     const output = String.fromCodePoint(...result.outputFiles[0].contents);
@@ -85,7 +85,7 @@ describe("@rnx-kit/esbuild-plugin-import-path-remapper", () => {
       entryPoints: ["./test/__fixtures__/require-@test-pkg.ts"],
       bundle: true,
       write: false,
-      plugins: [ImportPathRemapperPlugin("@test")],
+      plugins: [ImportPathRemapperPlugin(/@test/)],
     });
 
     const output = String.fromCodePoint(...result.outputFiles[0].contents);
@@ -100,7 +100,7 @@ describe("@rnx-kit/esbuild-plugin-import-path-remapper", () => {
       entryPoints: ["./test/__fixtures__/export-@test-pkg.ts"],
       bundle: true,
       write: false,
-      plugins: [ImportPathRemapperPlugin("@test")],
+      plugins: [ImportPathRemapperPlugin(/@test/)],
     });
 
     const output = String.fromCodePoint(...result.outputFiles[0].contents);
@@ -115,7 +115,7 @@ describe("@rnx-kit/esbuild-plugin-import-path-remapper", () => {
       entryPoints: ["./test/__fixtures__/import-@test-pkg-jsx.ts"],
       bundle: true,
       write: false,
-      plugins: [ImportPathRemapperPlugin("@test")],
+      plugins: [ImportPathRemapperPlugin(/@test/)],
     });
 
     const output = String.fromCodePoint(...result.outputFiles[0].contents);
