@@ -368,7 +368,7 @@ export class MetroTypeScriptResolverHost {
     }
 
     if (resolved) {
-      return resolved.map((r, i) => {
+      return resolved.map((r) => {
         if (r) {
           return {
             resolvedFileName: r,
