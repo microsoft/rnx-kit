@@ -1,0 +1,7 @@
+{
+  "type": "patch",
+  "comment": "Fix targeting bug in bundle command",
+  "packageName": "@rnx-kit/cli",
+  "email": "afoxman@microsoft.com",
+  "dependentChangeType": "patch"
+}
