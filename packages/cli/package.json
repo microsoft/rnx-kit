@@ -41,8 +41,10 @@
   },
   "devDependencies": {
     "@react-native-community/cli-types": "^5.0.1",
+    "@rnx-kit/jest-preset": "*",
     "@types/metro": "*",
     "@types/metro-config": "*",
+    "jest-extended": "^0.11.5",
     "rnx-kit-scripts": "*",
     "typescript": "^4.0.0"
   },
@@ -55,5 +57,15 @@
   },
   "eslintConfig": {
     "extends": "@rnx-kit/eslint-config"
+  },
+  "jest": {
+    "preset": "@rnx-kit/jest-preset",
+    "setupFilesAfterEnv": [
+      "jest-extended"
+    ],
+    "roots": [
+      "test"
+    ],
+    "testRegex": "/test/.*\\.test\\.ts$"
   }
 }
