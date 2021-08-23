@@ -1,5 +1,8 @@
+import "jest-extended";
 import path from "path";
+import ts from "typescript";
 import { Service } from "../src/service";
+import { createDefaultResolverHost } from "../src/resolve";
 const diagnostic = require("../src/diagnostics");
 
 diagnostic.createDiagnosticWriter = jest.fn();
@@ -19,32 +22,19 @@ describe("Service", () => {
     jest.resetAllMocks();
   });
 
-  test("findProject returns undefined when the config file does not exist", () => {
+  test("getProjectConfigLoader() returns a valid object", () => {
     const service = new Service();
-    expect(service.findProject(fixturePath, "does-not-exist")).toBeUndefined();
+    const loader = service.getProjectConfigLoader();
+    expect(loader).not.toBeNil();
+    expect(loader).toBeObject();
   });
 
-  test("findProject succeeds when given the config file exists", () => {
+  test("openProject() returns a valid object", () => {
     const service = new Service();
-    const configFileName = service.findProject(
-      fixturePath,
-      "valid-tsconfig.json"
-    );
-    expect(configFileName).not.toBeNil();
-    expect(configFileName).toBeString();
-  });
-
-  test("openProject fails when the config file is invalid", () => {
-    const service = new Service();
-    expect(() =>
-      service.openProject(path.join(fixturePath, "invalid-tsconfig.json"))
-    ).toThrowError();
-  });
-
-  test("openProject succeeds", () => {
-    const service = new Service();
+    const config = { fileNames: [] } as ts.ParsedCommandLine;
     const project = service.openProject(
-      path.join(fixturePath, "valid-tsconfig.json")
+      config,
+      createDefaultResolverHost(config.options)
     );
     expect(project).not.toBeNil();
     expect(project).toBeObject();
