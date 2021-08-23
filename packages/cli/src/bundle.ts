@@ -1,4 +1,5 @@
 import type { Config as CLIConfig } from "@react-native-community/cli-types";
+import { getBundlePlatformDefinition } from "@rnx-kit/config";
 import { info, warn } from "@rnx-kit/console";
 import { BundleArgs, bundle, loadMetroConfig } from "@rnx-kit/metro-service";
 import type { AllPlatforms } from "@rnx-kit/tools-react-native/platform";
@@ -6,10 +7,8 @@ import { Service } from "@rnx-kit/typescript-service";
 import chalk from "chalk";
 import fs from "fs";
 import path from "path";
-import {
-  getKitBundleDefinition,
-  getKitBundlePlatformDefinition,
-} from "./bundle/kit-config";
+import { getKitBundleDefinition } from "./bundle/kit-config";
+import { applyBundleDefinitionOverrides } from "./bundle/overrides";
 import { customizeMetroConfig } from "./metro-config";
 import type { TSProjectInfo } from "./types";
 
@@ -75,11 +74,12 @@ export async function rnxBundle(
   for (const targetPlatform of targetPlatforms) {
     info(`Bundling ${targetPlatform}...`);
 
-    const platformDefinition = getKitBundlePlatformDefinition(
+    const platformDefinition = getBundlePlatformDefinition(
       bundleDefinition,
-      targetPlatform,
-      cliOptions
+      targetPlatform
     );
+    applyBundleDefinitionOverrides(cliOptions, platformDefinition);
+
     const {
       entryPath,
       distPath,

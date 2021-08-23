@@ -1,13 +1,6 @@
 import type { BundleDefinitionWithRequiredParameters } from "@rnx-kit/config";
-import {
-  getBundleDefinition,
-  getBundlePlatformDefinition,
-  getKitConfig,
-} from "@rnx-kit/config";
+import { getBundleDefinition, getKitConfig } from "@rnx-kit/config";
 import { warn } from "@rnx-kit/console";
-import type { BundleArgs } from "@rnx-kit/metro-service";
-import { pickValues } from "@rnx-kit/tools-language/properties";
-import type { AllPlatforms } from "@rnx-kit/tools-react-native/platform";
 import chalk from "chalk";
 
 /**
@@ -44,56 +37,4 @@ export function getKitBundleDefinition(
 
   // get the bundle definition
   return getBundleDefinition(kitConfig.bundle, id);
-}
-
-export type BundleDefinitionOverrides = {
-  entryPath?: string;
-  distPath?: string;
-  assetsPath?: string;
-  bundlePrefix?: string;
-  bundleEncoding?: BundleArgs["bundleEncoding"];
-  sourcemapOutput?: string;
-  sourcemapSourcesRoot?: string;
-  experimentalTreeShake?: boolean;
-};
-
-/**
- * Build a platform-specific bundle definition. Apply any overrides.
- *
- * @param bundleDefinition Bundle definition to use as a basis for creating the plaform-specific bundle definition
- * @param targetPlatform Target platform
- * @param overrides Overrides to apply to the output bundle definition. These take precedence.
- * @returns Platform-specific, overriden bundle definition
- */
-export function getKitBundlePlatformDefinition(
-  bundleDefinition: BundleDefinitionWithRequiredParameters,
-  targetPlatform: AllPlatforms,
-  overrides: BundleDefinitionOverrides
-): BundleDefinitionWithRequiredParameters {
-  return {
-    ...getBundlePlatformDefinition(bundleDefinition, targetPlatform),
-    ...pickValues(
-      overrides,
-      [
-        "entryPath",
-        "distPath",
-        "assetsPath",
-        "bundlePrefix",
-        "bundleEncoding",
-        "sourcemapOutput",
-        "sourcemapSourcesRoot",
-        "experimentalTreeShake",
-      ],
-      [
-        "entryPath",
-        "distPath",
-        "assetsPath",
-        "bundlePrefix",
-        "bundleEncoding",
-        "sourcemapOutput",
-        "sourcemapSourcesRoot",
-        "experimental_treeShake",
-      ]
-    ),
-  };
 }
