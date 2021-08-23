@@ -2,6 +2,21 @@
   "name": "@rnx-kit/cli",
   "entries": [
     {
+      "date": "Mon, 23 Aug 2021 17:58:06 GMT",
+      "tag": "@rnx-kit/cli_v0.9.11",
+      "version": "0.9.11",
+      "comments": {
+        "none": [
+          {
+            "author": "afoxman@microsoft.com",
+            "package": "@rnx-kit/cli",
+            "comment": "Separate the retrieval of a platform bundle definition from applying overrides to it. Move override logic into its own source file. Move override tests to their own suite.",
+            "commit": "45341d8c509d074de7e45b9ea071a91babe12fae"
+          }
+        ]
+      }
+    },
+    {
       "date": "Mon, 23 Aug 2021 17:40:48 GMT",
       "tag": "@rnx-kit/cli_v0.9.11",
       "version": "0.9.11",

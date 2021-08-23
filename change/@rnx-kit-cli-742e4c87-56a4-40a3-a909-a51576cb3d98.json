@@ -1,7 +1,0 @@
-{
-  "type": "none",
-  "comment": "Separate the retrieval of a platform bundle definition from applying overrides to it. Move override logic into its own source file. Move override tests to their own suite.",
-  "packageName": "@rnx-kit/cli",
-  "email": "afoxman@microsoft.com",
-  "dependentChangeType": "none"
-}
