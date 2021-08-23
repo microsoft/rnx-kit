@@ -2,6 +2,21 @@
   "name": "@rnx-kit/cli",
   "entries": [
     {
+      "date": "Mon, 23 Aug 2021 18:18:31 GMT",
+      "tag": "@rnx-kit/cli_v0.9.12",
+      "version": "0.9.12",
+      "comments": {
+        "patch": [
+          {
+            "author": "afoxman@microsoft.com",
+            "package": "@rnx-kit/cli",
+            "comment": "Fix targeting bug in bundle command",
+            "commit": "0f3e59491a4c9f9389dacb32d4161031179da2ba"
+          }
+        ]
+      }
+    },
+    {
       "date": "Mon, 23 Aug 2021 17:58:06 GMT",
       "tag": "@rnx-kit/cli_v0.9.11",
       "version": "0.9.11",
