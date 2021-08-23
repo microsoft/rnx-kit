@@ -9000,7 +9000,7 @@ sudo-prompt@^9.0.0:
   resolved "https://registry.yarnpkg.com/sudo-prompt/-/sudo-prompt-9.2.1.tgz#77efb84309c9ca489527a4e749f287e6bdd52afd"
   integrity sha512-Mu7R0g4ig9TUuGSxJavny5Rv0egCEtpZRNMrZaYS1vxkiIxGiGUwoezU3LazIQ+KE04hTrTfNPgxU5gzi7F5Pw==
 
-suggestion-bot@^1.1.10:
+suggestion-bot@^1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/suggestion-bot/-/suggestion-bot-1.2.1.tgz#621d54e0c4b083c9ba9607bb0cd7b8789026f4af"
   integrity sha512-zL1zQVGWwcShnVx7vj12COguew5KUczjtDM8p27qXoBvgZ+NAgBaThZ/BrWrpALIHJbFjJTZ1gnWZGEcZEU4HQ==
