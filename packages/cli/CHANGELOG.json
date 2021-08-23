@@ -2,6 +2,21 @@
   "name": "@rnx-kit/cli",
   "entries": [
     {
+      "date": "Mon, 23 Aug 2021 17:18:07 GMT",
+      "tag": "@rnx-kit/cli_v0.9.10",
+      "version": "0.9.10",
+      "comments": {
+        "patch": [
+          {
+            "author": "sverre.johansen@gmail.com",
+            "package": "@rnx-kit/cli",
+            "commit": "7200426250deb288fb38a3d8da91bb74a0e71437",
+            "comment": "Bump @rnx-kit/cli to v0.9.10"
+          }
+        ]
+      }
+    },
+    {
       "date": "Mon, 23 Aug 2021 09:13:20 GMT",
       "tag": "@rnx-kit/cli_v0.9.9",
       "version": "0.9.9",

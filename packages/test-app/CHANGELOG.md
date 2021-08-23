@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/test-app
 
-This log was last generated on Mon, 23 Aug 2021 08:49:21 GMT and should not be manually modified.
+This log was last generated on Mon, 23 Aug 2021 17:18:07 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 0.0.1
+
+Mon, 23 Aug 2021 17:18:07 GMT
+
+### Patches
+
+- Bump @rnx-kit/test-app to v0.0.1 (sverre.johansen@gmail.com)
 
 ## 0.0.1
 
