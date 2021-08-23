@@ -70,16 +70,12 @@ const ImportPathRemapperPlugin = (packageNameFilter: RegExp): Plugin => ({
     // Resolve packageName/lib/* to packageName/src/*
     build.onResolve(
       {
-        filter: new RegExp(
-          `^${packageNameFilter.source}[/]+[^/]+[/]+lib([/]+.*)`
-        ),
+        filter: new RegExp(`^${packageNameFilter.source}[/]+[^/]+[/]+lib(.*)`),
       },
       ({ path, resolveDir }) => ({
         path: resolvePathToLib(
           path.replace(
-            new RegExp(
-              `^${packageNameFilter.source}[/]+([^/]+)[/]+lib([/]+.*)`
-            ),
+            new RegExp(`^${packageNameFilter.source}[/]+([^/]+)[/]+lib(.*)`),
             `${packageNameFilter.source}/$1/src$2`
           ),
           resolveDir,
