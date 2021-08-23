@@ -2,6 +2,21 @@
   "name": "@rnx-kit/metro-serializer-esbuild",
   "entries": [
     {
+      "date": "Mon, 23 Aug 2021 17:18:07 GMT",
+      "tag": "@rnx-kit/metro-serializer-esbuild_v0.0.14",
+      "version": "0.0.14",
+      "comments": {
+        "patch": [
+          {
+            "author": "sverre.johansen@gmail.com",
+            "package": "@rnx-kit/metro-serializer-esbuild",
+            "comment": "Upgrade esbuild version",
+            "commit": "7200426250deb288fb38a3d8da91bb74a0e71437"
+          }
+        ]
+      }
+    },
+    {
       "date": "Fri, 20 Aug 2021 09:36:58 GMT",
       "tag": "@rnx-kit/metro-serializer-esbuild_v0.0.13",
       "version": "0.0.13",

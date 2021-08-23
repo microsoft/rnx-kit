@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/cli",
-  "version": "0.9.8",
+  "version": "0.9.10",
   "description": "Command-line interface for working with kit packages in your repo",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/cli",
   "license": "MIT",
@@ -26,10 +26,11 @@
     "@rnx-kit/metro-plugin-cyclic-dependencies-detector": "^1.0.6",
     "@rnx-kit/metro-plugin-duplicates-checker": "^1.2.0",
     "@rnx-kit/metro-serializer": "^1.0.2",
-    "@rnx-kit/metro-serializer-esbuild": "^0.0.13",
+    "@rnx-kit/metro-serializer-esbuild": "^0.0.14",
     "@rnx-kit/metro-service": "^1.1.1",
     "@rnx-kit/third-party-notices": "^1.1.2",
     "@rnx-kit/tools-language": "^1.0.1",
+    "@rnx-kit/tools-node": "^1.0.1",
     "@rnx-kit/tools-react-native": "^1.0.1",
     "@rnx-kit/typescript-service": "^1.2.0",
     "chalk": "^4.1.0",
@@ -44,7 +45,8 @@
     "@types/metro": "*",
     "@types/metro-config": "*",
     "jest-extended": "^0.11.5",
-    "rnx-kit-scripts": "*"
+    "rnx-kit-scripts": "*",
+    "typescript": "^4.0.0"
   },
   "depcheck": {
     "ignoreMatches": [

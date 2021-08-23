@@ -1,0 +1,7 @@
+{
+  "extends": "rnx-kit-scripts/tsconfig-shared.json",
+  "include": ["src"],
+  "compilerOptions": {
+    "outDir": "lib"
+  }
+}

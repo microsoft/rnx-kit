@@ -1,0 +1,20 @@
+{
+  "name": "@rnx-kit/esbuild-plugin-import-path-remapper",
+  "entries": [
+    {
+      "date": "Mon, 23 Aug 2021 17:18:07 GMT",
+      "tag": "@rnx-kit/esbuild-plugin-import-path-remapper_v1.0.0",
+      "version": "1.0.0",
+      "comments": {
+        "minor": [
+          {
+            "author": "sverre.johansen@gmail.com",
+            "package": "@rnx-kit/esbuild-plugin-import-path-remapper",
+            "comment": "Added esbuild plugin for mapping lib/ imports to src/",
+            "commit": "7200426250deb288fb38a3d8da91bb74a0e71437"
+          }
+        ]
+      }
+    }
+  ]
+}

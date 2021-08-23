@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/metro-serializer-esbuild
 
-This log was last generated on Fri, 20 Aug 2021 09:36:58 GMT and should not be manually modified.
+This log was last generated on Mon, 23 Aug 2021 17:18:07 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 0.0.14
+
+Mon, 23 Aug 2021 17:18:07 GMT
+
+### Patches
+
+- Upgrade esbuild version (sverre.johansen@gmail.com)
 
 ## 0.0.13
 
