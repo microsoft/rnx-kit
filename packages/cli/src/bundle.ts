@@ -9,7 +9,7 @@ import path from "path";
 import {
   getKitBundleDefinition,
   getKitBundlePlatformDefinition,
-} from "./kit-config";
+} from "./bundle/kit-config";
 import { customizeMetroConfig } from "./metro-config";
 import type { TSProjectInfo } from "./types";
 

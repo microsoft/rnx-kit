@@ -7,7 +7,10 @@ import {
   Options as DuplicateDetectorOptions,
 } from "@rnx-kit/metro-plugin-duplicates-checker";
 import { MetroPlugin, MetroSerializer } from "@rnx-kit/metro-serializer";
-import { MetroSerializer as MetroSerializerEsbuild } from "@rnx-kit/metro-serializer-esbuild";
+import {
+  esbuildTransformerConfig,
+  MetroSerializer as MetroSerializerEsbuild,
+} from "@rnx-kit/metro-serializer-esbuild";
 import type { AllPlatforms } from "@rnx-kit/tools-react-native/platform";
 import type { Project } from "@rnx-kit/typescript-service";
 import type { DeltaResult, Graph } from "metro";
@@ -110,22 +113,23 @@ export function customizeMetroConfig(
     plugins.push(CyclicDependencies(detectCyclicDependencies));
   }
 
-  if (plugins.length > 0) {
-    //  MetroSerializer acts as a CustomSerializer, and it works with both
-    //  older and newer versions of Metro. Older versions expect a return
-    //  value, while newer versions expect a promise.
+  if (experimental_treeShake) {
+    metroConfig.serializer.customSerializer = MetroSerializerEsbuild(plugins);
+    Object.assign(metroConfig.transformer, esbuildTransformerConfig);
+  } else if (plugins.length > 0) {
+    // MetroSerializer acts as a CustomSerializer, and it works with both
+    // older and newer versions of Metro. Older versions expect a return
+    // value, while newer versions expect a promise.
     //
-    //  Its return type is the union of both the value and the promise.
-    //  This makes TypeScript upset because for any given version of Metro,
-    //  it's one or the other. Not both.
+    // Its return type is the union of both the value and the promise.
+    // This makes TypeScript upset because for any given version of Metro,
+    // it's one or the other. Not both.
     //
-    //  Since it can handle either scenario, just coerce it to whatever
-    //  the current version of Metro expects.
-    const serializer = experimental_treeShake
-      ? MetroSerializerEsbuild(plugins)
-      : (MetroSerializer(plugins) as SerializerConfigT["customSerializer"]);
-
-    metroConfig.serializer.customSerializer = serializer;
+    // Since it can handle either scenario, just coerce it to whatever
+    // the current version of Metro expects.
+    metroConfig.serializer.customSerializer = MetroSerializer(
+      plugins
+    ) as SerializerConfigT["customSerializer"];
   } else {
     delete metroConfig.serializer.customSerializer;
   }
