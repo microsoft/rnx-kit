@@ -1,7 +1,0 @@
-{
-  "type": "none",
-  "comment": "Mechanical change: move kit-config code into separate bundle and serve files. No code changes.",
-  "packageName": "@rnx-kit/cli",
-  "email": "afoxman@microsoft.com",
-  "dependentChangeType": "none"
-}

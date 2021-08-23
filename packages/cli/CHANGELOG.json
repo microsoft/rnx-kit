@@ -2,6 +2,21 @@
   "name": "@rnx-kit/cli",
   "entries": [
     {
+      "date": "Mon, 23 Aug 2021 09:13:20 GMT",
+      "tag": "@rnx-kit/cli_v0.9.9",
+      "version": "0.9.9",
+      "comments": {
+        "none": [
+          {
+            "author": "afoxman@microsoft.com",
+            "package": "@rnx-kit/cli",
+            "comment": "Mechanical change: move kit-config code into separate bundle and serve files. No code changes.",
+            "commit": "528f370fdcdd2db2523eaa9e0ade9ed6f100d775"
+          }
+        ]
+      }
+    },
+    {
       "date": "Mon, 23 Aug 2021 08:49:21 GMT",
       "tag": "@rnx-kit/cli_v0.9.9",
       "version": "0.9.9",
