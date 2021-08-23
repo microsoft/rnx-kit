@@ -1,7 +1,0 @@
-{
-  "type": "none",
-  "comment": "Add tests for bundle/kit-config",
-  "packageName": "@rnx-kit/cli",
-  "email": "afoxman@microsoft.com",
-  "dependentChangeType": "none"
-}
