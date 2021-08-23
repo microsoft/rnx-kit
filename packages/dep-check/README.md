@@ -114,6 +114,13 @@ your `package.json`.
 
 ## Capabilities
 
+To add new capabilities, first add it to
+[`/packages/config/src/kitConfig.ts`](https://github.com/microsoft/rnx-kit/blob/62da26011c9ff86a24eed63356c68f6999034d34/packages/config/src/kitConfig.ts#L4),
+then update the
+[profiles](https://github.com/microsoft/rnx-kit/tree/main/packages/dep-check/src/profiles).
+For an example, have a look at how the
+[`hermes` capability was added](https://github.com/microsoft/rnx-kit/commit/c79828791a6ac5cf19b4abfff6347542af49eaec).
+
 <!-- The following table can be updated by running `yarn update-readme` -->
 <!-- @rnx-kit/dep-check/capabilities start -->
 
@@ -157,7 +164,7 @@ your `package.json`.
 ## Terminology
 
 | Terminology      | Definition (as used in `dep-check`'s context)                                                                                                                                     |
-| ---------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| :--------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | capability       | A capability is in essence a feature that the kit uses. A capability is usually mapped to an npm package. Which versions of the package is determined by a profile (see below).   |
 | package manifest | This normally refers to a package's `package.json`.                                                                                                                               |
 | profile          | A profile is a mapping of capabilities to npm packages at a specific version or version range. Versions will vary depending on which React Native version a profile is meant for. |
