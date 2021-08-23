@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "@rnx-kit/console": "^1.0.2",
-    "esbuild": "^0.12.8",
+    "esbuild": "^0.12.19",
     "esbuild-plugin-lodash": "^1.0.3",
     "semver": "^7.0.0"
   },
