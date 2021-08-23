@@ -2,6 +2,21 @@
   "name": "@rnx-kit/cli",
   "entries": [
     {
+      "date": "Mon, 23 Aug 2021 18:57:47 GMT",
+      "tag": "@rnx-kit/cli_v0.9.13",
+      "version": "0.9.13",
+      "comments": {
+        "patch": [
+          {
+            "author": "afoxman@microsoft.com",
+            "package": "@rnx-kit/cli",
+            "comment": "Fix type-checking on windows",
+            "commit": "113f0631a2342c55ee52046ec3c70b14b9962303"
+          }
+        ]
+      }
+    },
+    {
       "date": "Mon, 23 Aug 2021 18:52:43 GMT",
       "tag": "@rnx-kit/cli_v0.9.12",
       "version": "0.9.12",

@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/cli
 
-This log was last generated on Mon, 23 Aug 2021 18:18:31 GMT and should not be manually modified.
+This log was last generated on Mon, 23 Aug 2021 18:57:47 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 0.9.13
+
+Mon, 23 Aug 2021 18:57:47 GMT
+
+### Patches
+
+- Fix type-checking on windows (afoxman@microsoft.com)
 
 ## 0.9.12
 
