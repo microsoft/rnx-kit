@@ -2,6 +2,35 @@
   "name": "@rnx-kit/cli",
   "entries": [
     {
+      "date": "Mon, 23 Aug 2021 17:40:48 GMT",
+      "tag": "@rnx-kit/cli_v0.9.11",
+      "version": "0.9.11",
+      "comments": {
+        "patch": [
+          {
+            "author": "afoxman@microsoft.com",
+            "package": "@rnx-kit/cli",
+            "comment": "Update serializer hook to do full TypeScript validation with platform override support as well as module-name substitution support",
+            "commit": "44540aa06df3f7ec554caf13bad7acd16a74a381"
+          },
+          {
+            "author": "afoxman@microsoft.com",
+            "package": "@rnx-kit/cli",
+            "commit": "44540aa06df3f7ec554caf13bad7acd16a74a381",
+            "comment": "Bump @rnx-kit/cli to v0.9.11"
+          }
+        ],
+        "none": [
+          {
+            "author": "afoxman@microsoft.com",
+            "package": "@rnx-kit/cli",
+            "comment": "Add tests for bundle/kit-config",
+            "commit": "44540aa06df3f7ec554caf13bad7acd16a74a381"
+          }
+        ]
+      }
+    },
+    {
       "date": "Mon, 23 Aug 2021 17:18:07 GMT",
       "tag": "@rnx-kit/cli_v0.9.10",
       "version": "0.9.10",

@@ -1,8 +1,17 @@
 # Change Log - @rnx-kit/cli
 
-This log was last generated on Mon, 23 Aug 2021 17:18:07 GMT and should not be manually modified.
+This log was last generated on Mon, 23 Aug 2021 17:40:48 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 0.9.11
+
+Mon, 23 Aug 2021 17:40:48 GMT
+
+### Patches
+
+- Update serializer hook to do full TypeScript validation with platform override support as well as module-name substitution support (afoxman@microsoft.com)
+- Bump @rnx-kit/cli to v0.9.11 (afoxman@microsoft.com)
 
 ## 0.9.10
 
