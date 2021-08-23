@@ -1,7 +1,0 @@
-{
-  "type": "patch",
-  "comment": "Update serializer hook to do full TypeScript validation with platform override support as well as module-name substitution support",
-  "packageName": "@rnx-kit/cli",
-  "email": "afoxman@microsoft.com",
-  "dependentChangeType": "patch"
-}

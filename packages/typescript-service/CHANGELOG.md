@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/typescript-service
 
-This log was last generated on Fri, 06 Aug 2021 17:50:49 GMT and should not be manually modified.
+This log was last generated on Mon, 23 Aug 2021 17:40:48 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 1.3.0
+
+Mon, 23 Aug 2021 17:40:48 GMT
+
+### Minor changes
+
+- Update Service, Project and Resolver APIs in support of TypeScript validation for Metro. (afoxman@microsoft.com)
 
 ## 1.2.0
 
