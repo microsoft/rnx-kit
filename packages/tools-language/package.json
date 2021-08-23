@@ -28,7 +28,6 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "@rnx-kit/jest-preset": "*",
     "@types/node": "^14.15.0",
     "jest-extended": "^0.11.5",
     "rnx-kit-scripts": "*"
@@ -37,13 +36,9 @@
     "extends": "@rnx-kit/eslint-config"
   },
   "jest": {
-    "preset": "@rnx-kit/jest-preset",
+    "preset": "rnx-kit-scripts",
     "setupFilesAfterEnv": [
       "jest-extended"
-    ],
-    "roots": [
-      "test"
-    ],
-    "testRegex": "/test/.*\\.test\\.ts$"
+    ]
   }
 }

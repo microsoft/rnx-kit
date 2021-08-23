@@ -25,7 +25,6 @@
     "yargs": "^16.0.0"
   },
   "devDependencies": {
-    "@rnx-kit/jest-preset": "*",
     "@rnx-kit/metro-serializer": "*",
     "@types/metro": "*",
     "@types/node": "^14.15.0",
@@ -42,10 +41,6 @@
     "extends": "@rnx-kit/eslint-config"
   },
   "jest": {
-    "preset": "@rnx-kit/jest-preset",
-    "roots": [
-      "test"
-    ],
-    "testRegex": "/test/.*\\.test\\.ts$"
+    "preset": "rnx-kit-scripts"
   }
 }

@@ -23,7 +23,6 @@
     "chalk": "^4.1.0"
   },
   "devDependencies": {
-    "@rnx-kit/jest-preset": "*",
     "@types/jest": "^26.0.0",
     "@types/node": "^14.15.0",
     "rnx-kit-scripts": "*"
@@ -32,10 +31,6 @@
     "extends": "@rnx-kit/eslint-config"
   },
   "jest": {
-    "preset": "@rnx-kit/jest-preset",
-    "roots": [
-      "test"
-    ],
-    "testRegex": "/test/.*\\.test\\.ts$"
+    "preset": "rnx-kit-scripts"
   }
 }

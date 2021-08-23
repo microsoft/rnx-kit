@@ -19,7 +19,6 @@
     "semver": "^7.0.0"
   },
   "devDependencies": {
-    "@rnx-kit/jest-preset": "*",
     "@rnx-kit/metro-plugin-cyclic-dependencies-detector": "*",
     "@rnx-kit/metro-plugin-duplicates-checker": "*",
     "@rnx-kit/tools-react-native": "*",
@@ -39,13 +38,9 @@
     "extends": "@rnx-kit/eslint-config"
   },
   "jest": {
-    "preset": "@rnx-kit/jest-preset",
+    "preset": "rnx-kit-scripts",
     "setupFilesAfterEnv": [
       "jest-extended"
-    ],
-    "roots": [
-      "test"
-    ],
-    "testRegex": "/test/.*\\.test\\.ts$"
+    ]
   }
 }
