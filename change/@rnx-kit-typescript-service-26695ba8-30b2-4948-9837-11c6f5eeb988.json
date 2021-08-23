@@ -1,0 +1,7 @@
+{
+  "type": "minor",
+  "comment": "Update Service, Project and Resolver APIs in support of TypeScript validation for Metro.",
+  "packageName": "@rnx-kit/typescript-service",
+  "email": "afoxman@microsoft.com",
+  "dependentChangeType": "patch"
+}

@@ -115,7 +115,9 @@ export async function rnxBundle(
 
     let tsprojectInfo: TSProjectInfo | undefined;
     if (typescriptValidation) {
-      const configFileName = tsservice.findProject(entryPath, "tsconfig.json");
+      const configFileName = tsservice
+        .getProjectConfigLoader()
+        .find(entryPath, "tsconfig.json");
       if (!configFileName) {
         warn(
           chalk.yellow(

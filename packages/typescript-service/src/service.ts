@@ -1,8 +1,8 @@
 import ts from "typescript";
 import { createDiagnosticWriter } from "./diagnostics";
-import { ProjectConfigLoader } from "./config";
+import { ProjectConfig, ProjectConfigLoader } from "./config";
 import { Project } from "./project";
-import { createResolvers } from "./resolve";
+import { ResolverHost } from "./resolve";
 
 export class Service {
   private documentRegistry;
@@ -15,20 +15,15 @@ export class Service {
     this.projectConfigLoader = new ProjectConfigLoader(this.diagnosticWriter);
   }
 
-  findProject(
-    searchPath: string,
-    fileName = "tsconfig.json"
-  ): string | undefined {
-    return this.projectConfigLoader.find(searchPath, fileName);
+  getProjectConfigLoader(): ProjectConfigLoader {
+    return this.projectConfigLoader;
   }
 
-  openProject(configFileName: string): Project {
-    const config = this.projectConfigLoader.load(configFileName);
-    const resolvers = createResolvers(config.options);
+  openProject(config: ProjectConfig, resolverHost: ResolverHost): Project {
     return new Project(
       this.documentRegistry,
       this.diagnosticWriter,
-      resolvers,
+      resolverHost,
       config
     );
   }

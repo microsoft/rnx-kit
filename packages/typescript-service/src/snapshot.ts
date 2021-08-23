@@ -6,9 +6,10 @@ export class VersionedSnapshot {
   private version: number;
   private snapshot?: ts.IScriptSnapshot;
 
-  constructor(fileName: string) {
+  constructor(fileName: string, snapshot?: ts.IScriptSnapshot) {
     this.fileName = fileName;
     this.version = 1;
+    this.snapshot = snapshot;
   }
 
   getVersion(): string {
