@@ -67,7 +67,7 @@ export async function rnxBundle(
 
   const targetPlatforms = getTargetPlatforms(
     cliOptions.platform,
-    Object.keys(bundleDefinition.platforms ?? {}) as AllPlatforms[]
+    bundleDefinition.targets
   );
 
   const tsservice = new Service();
