@@ -1,4 +1,5 @@
-import fs from "fs";
+import cpFile from "cp-file";
+import makeDir from "make-dir";
 import path from "path";
 
 import type { AssetData } from "metro";
@@ -9,8 +10,8 @@ import { filterPlatformAssetScales } from "./filter";
 
 function copy(src: string, dest: string): void {
   const destDir = path.dirname(dest);
-  fs.mkdirSync(destDir, { recursive: true });
-  fs.copyFileSync(src, dest);
+  makeDir.sync(destDir);
+  cpFile.sync(src, dest);
 }
 
 function copyAll(filesToCopy: Record<string, string>): void {

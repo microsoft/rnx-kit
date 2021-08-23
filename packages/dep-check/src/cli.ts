@@ -2,12 +2,12 @@
 
 import type { KitType } from "@rnx-kit/config";
 import { error } from "@rnx-kit/console";
+import { findPackageDir } from "@rnx-kit/tools-node/package";
+import isString from "lodash/isString";
 import * as path from "path";
-import pkgDir from "pkg-dir";
 import { getAllPackageJsonFiles, getWorkspaceRoot } from "workspace-tools";
 import yargs from "yargs";
-import { checkPackageManifest } from "./check";
-import { isString } from "./helpers";
+import { makeCheckCommand } from "./check";
 import { initializeConfig } from "./initialize";
 import { makeSetVersionCommand } from "./setVersion";
 import type { Args, Command } from "./types";
@@ -30,7 +30,7 @@ function getManifests(
     return [packageJson];
   }
 
-  const packageDir = pkgDir.sync();
+  const packageDir = findPackageDir();
   if (!packageDir) {
     return undefined;
   }
@@ -52,12 +52,6 @@ function getManifests(
     error(e.message);
     return undefined;
   }
-}
-
-function makeCheckCommand(write: boolean): Command {
-  return (manifest: string) => {
-    return checkPackageManifest(manifest, { write });
-  };
 }
 
 function makeInitializeCommand(kitType: string): Command | undefined {
@@ -98,6 +92,7 @@ async function makeCommand(args: Args): Promise<Command | undefined> {
     "custom-profiles": customProfilesPath,
     "exclude-packages": excludePackages,
     init,
+    loose,
     "set-version": setVersion,
     vigilant,
     write,
@@ -116,14 +111,15 @@ async function makeCommand(args: Args): Promise<Command | undefined> {
 
   if (isString(vigilant)) {
     return makeVigilantCommand({
-      customProfilesPath,
-      excludePackages,
-      versions: vigilant,
+      customProfiles: customProfilesPath?.toString(),
+      excludePackages: excludePackages?.toString(),
+      loose,
+      versions: vigilant.toString(),
       write,
     });
   }
 
-  return makeCheckCommand(write);
+  return makeCheckCommand({ loose, write });
 }
 
 export async function cli({
@@ -182,6 +178,13 @@ if (require.main === module) {
           "Writes an initial kit config to the specified 'package.json'.",
         choices: ["app", "library"],
         conflicts: ["vigilant"],
+      },
+      loose: {
+        default: false,
+        description:
+          "Determines how strict the React Native version requirement should be. Useful for apps that depend on a newer React Native version than their dependencies declare support for.",
+        type: "boolean",
+        conflicts: ["init"],
       },
       "set-version": {
         description:

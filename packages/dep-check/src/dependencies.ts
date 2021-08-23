@@ -6,20 +6,23 @@ import {
   KitType,
 } from "@rnx-kit/config";
 import { error, warn } from "@rnx-kit/console";
-import findUp from "find-up";
-import path from "path";
+import {
+  PackageManifest,
+  findPackageDependencyDir,
+  parsePackageRef,
+  readPackage,
+} from "@rnx-kit/tools-node/package";
 import { concatVersionRanges } from "./helpers";
-import { readJsonFile } from "./json";
 import {
   getProfilesFor,
   getProfileVersionsFor,
   profilesSatisfying,
 } from "./profiles";
 import type {
-  PackageManifest,
+  CheckOptions,
   Profile,
   ProfileVersion,
-  ResolverOptions,
+  TestOverrides,
 } from "./types";
 
 type Requirements = Required<
@@ -60,20 +63,19 @@ export function visitDependencies(
 
     visited.add(dependency);
 
-    const packageJson = findUp.sync(
-      path.join("node_modules", dependency, "package.json"),
-      { cwd: projectRoot }
-    );
-    if (!packageJson) {
+    const packageRef = parsePackageRef(dependency);
+    const packageDir = findPackageDependencyDir(packageRef, {
+      startDir: projectRoot,
+    });
+    if (!packageDir) {
       warn(`Unable to resolve module '${dependency}'`);
       return;
     }
 
-    const packageRoot = path.dirname(packageJson);
-    visitor(dependency, packageRoot);
+    visitor(dependency, packageDir);
 
-    const manifest = readJsonFile(packageJson);
-    visitDependencies(manifest, packageRoot, visitor, visited);
+    const manifest = readPackage(packageDir);
+    visitDependencies(manifest, packageDir, visitor, visited);
   });
 }
 
@@ -83,7 +85,8 @@ export function getRequirements(
   targetManifest: PackageManifest,
   projectRoot: string,
   customProfiles: string | undefined,
-  options?: ResolverOptions
+  { loose }: Pick<CheckOptions, "loose">,
+  testOverrides?: TestOverrides
 ): Requirements {
   let profileVersions = getProfileVersionsFor(targetReactNativeVersion);
   if (profileVersions.length === 0) {
@@ -104,39 +107,59 @@ export function getRequirements(
 
     visitDependencies(targetManifest, projectRoot, (module, modulePath) => {
       const kitConfig = getKitConfig({ cwd: modulePath });
-      if (kitConfig) {
-        const { reactNativeVersion, capabilities } =
-          getKitCapabilities(kitConfig);
+      if (!kitConfig) {
+        return;
+      }
 
-        profileVersions = profilesSatisfying(
-          profileVersions,
-          reactNativeVersion
-        );
-        if (profileVersions.length != trace[trace.length - 1].profiles.length) {
-          trace.push({ module, reactNativeVersion, profiles: profileVersions });
-        }
+      const { reactNativeVersion, capabilities } =
+        getKitCapabilities(kitConfig);
 
-        if (profileVersions.length === 0) {
-          const message =
-            "No React Native profile could satisfy all dependencies";
-          const fullTrace = [
-            message,
-            ...trace.map(({ module, reactNativeVersion, profiles }) => {
-              const satisfiedVersions = profiles.join(", ");
-              return `    [${satisfiedVersions}] satisfies '${module}' because it supports '${reactNativeVersion}'`;
-            }),
-          ].join("\n");
-          error(fullTrace);
-          throw new Error(message);
-        }
+      const validVersions = profilesSatisfying(
+        profileVersions,
+        reactNativeVersion
+      );
+      if (validVersions.length != profileVersions.length) {
+        trace.push({
+          module,
+          reactNativeVersion,
+          profiles: validVersions,
+        });
+      }
 
-        if (Array.isArray(capabilities)) {
-          capabilities.forEach((capability) => allCapabilities.add(capability));
-        }
+      if (Array.isArray(capabilities)) {
+        capabilities.forEach((capability) => allCapabilities.add(capability));
+      }
+
+      // In strict mode, we want to continue so we can catch all dependencies
+      // that cannot be satisfied. Whereas in loose mode, we can ignore them and
+      // carry on with the profiles that satisfy the rest.
+      if (validVersions.length > 0) {
+        profileVersions = validVersions;
       }
     });
 
-    const profiles = getProfilesFor(profileVersions, customProfiles, options);
+    if (trace[trace.length - 1].profiles.length === 0) {
+      const message = "No React Native profile could satisfy all dependencies";
+      const fullTrace = [
+        message,
+        ...trace.map(({ module, reactNativeVersion, profiles }) => {
+          const satisfiedVersions = profiles.join(", ");
+          return `    [${satisfiedVersions}] satisfies '${module}' because it supports '${reactNativeVersion}'`;
+        }),
+      ].join("\n");
+      if (loose) {
+        warn(fullTrace);
+      } else {
+        error(fullTrace);
+        throw new Error(message);
+      }
+    }
+
+    const profiles = getProfilesFor(
+      profileVersions,
+      customProfiles,
+      testOverrides
+    );
     allCapabilities.forEach((capability) => {
       /**
        * Core capabilities are capabilities that must always be declared by the

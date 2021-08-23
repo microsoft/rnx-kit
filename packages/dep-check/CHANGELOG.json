@@ -2,6 +2,57 @@
   "name": "@rnx-kit/dep-check",
   "entries": [
     {
+      "date": "Sat, 21 Aug 2021 08:22:48 GMT",
+      "tag": "@rnx-kit/dep-check_v1.7.2",
+      "version": "1.7.2",
+      "comments": {
+        "patch": [
+          {
+            "author": "afoxman@microsoft.com",
+            "package": "@rnx-kit/dep-check",
+            "comment": "Integrate tools package and other common libraries throughout monorepo, removing custom code.",
+            "commit": "f65f706c734841c4339ca1f825b9c9505cea8941"
+          },
+          {
+            "author": "afoxman@microsoft.com",
+            "package": "@rnx-kit/dep-check",
+            "commit": "f65f706c734841c4339ca1f825b9c9505cea8941",
+            "comment": "Bump @rnx-kit/dep-check to v1.7.2"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Thu, 19 Aug 2021 07:59:20 GMT",
+      "tag": "@rnx-kit/dep-check_v1.7.1",
+      "version": "1.7.1",
+      "comments": {
+        "patch": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/dep-check",
+            "comment": "Fix error messages accumulating when gathering requirements",
+            "commit": "84c80d34cad6f8452954f3fcbb7d0ad5457055d5"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Wed, 18 Aug 2021 14:54:20 GMT",
+      "tag": "@rnx-kit/dep-check_v1.7.0",
+      "version": "1.7.0",
+      "comments": {
+        "minor": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/dep-check",
+            "comment": "Allow apps to depend on a newer version of React Native than their dependencies declare support for via the `--loose` flag.",
+            "commit": "f6651e5391d69c5c77d495a447a546c0f9abba1e"
+          }
+        ]
+      }
+    },
+    {
       "date": "Tue, 17 Aug 2021 09:36:56 GMT",
       "tag": "@rnx-kit/dep-check_v1.6.0",
       "version": "1.6.0",

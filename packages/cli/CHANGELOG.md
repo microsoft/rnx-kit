@@ -1,8 +1,51 @@
 # Change Log - @rnx-kit/cli
 
-This log was last generated on Tue, 17 Aug 2021 20:18:02 GMT and should not be manually modified.
+This log was last generated on Mon, 23 Aug 2021 08:49:21 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 0.9.9
+
+Mon, 23 Aug 2021 08:49:21 GMT
+
+### Patches
+
+- `--experimental-tree-shake` shouldn't need extra config (4123478+tido64@users.noreply.github.com)
+
+## 0.9.8
+
+Sat, 21 Aug 2021 08:22:48 GMT
+
+### Patches
+
+- Integrate tools package and other common libraries throughout monorepo, removing custom code. (afoxman@microsoft.com)
+- Bump @rnx-kit/cli to v0.9.8 (afoxman@microsoft.com)
+
+## 0.9.7
+
+Fri, 20 Aug 2021 09:36:58 GMT
+
+### Patches
+
+- Fix `--experimental-tree-shake` not being applied correctly (4123478+tido64@users.noreply.github.com)
+- Bump @rnx-kit/cli to v0.9.7 (4123478+tido64@users.noreply.github.com)
+
+## 0.9.6
+
+Thu, 19 Aug 2021 07:59:20 GMT
+
+### Patches
+
+- Bump @rnx-kit/cli to v0.9.6 (4123478+tido64@users.noreply.github.com)
+
+## 0.9.5
+
+Wed, 18 Aug 2021 14:54:20 GMT
+
+### Patches
+
+- Allow apps to depend on a newer version of React Native than their dependencies declare support for via the `--loose` flag. (4123478+tido64@users.noreply.github.com)
+- Bump @rnx-kit/cli to v0.9.5 (4123478+tido64@users.noreply.github.com)
 
 ## 0.9.4
 

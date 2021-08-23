@@ -1,24 +1,27 @@
 import { error } from "@rnx-kit/console";
+import {
+  PackageManifest,
+  readPackage,
+  writePackage,
+} from "@rnx-kit/tools-node/package";
+import isString from "lodash/isString";
 import { resolveCapabilities } from "./capabilities";
 import { checkPackageManifest } from "./check";
-import { readJsonFile, writeJsonFile } from "./json";
 import { updateDependencies } from "./manifest";
 import { parseProfilesString } from "./profiles";
-import { isString, keysOf } from "./helpers";
-import type { Command, PackageManifest, ResolverOptions } from "./types";
+import { keysOf } from "./helpers";
+import type {
+  Command,
+  ManifestProfile,
+  TestOverrides,
+  VigilantOptions,
+} from "./types";
 
 type Change = {
   name: string;
   from: string;
   to: string;
   section: string;
-};
-
-type Options = {
-  versions: string | number;
-  write: boolean;
-  customProfilesPath?: string | number;
-  excludePackages?: string | number;
 };
 
 const allSections = [
@@ -28,14 +31,14 @@ const allSections = [
 ];
 
 export function buildManifestProfile(
-  versions: string | number,
-  customProfilesPath: string | number | undefined,
-  options?: ResolverOptions
-): Required<PackageManifest> {
+  versions: string,
+  customProfilesPath: string | undefined,
+  testOverrides?: TestOverrides
+): ManifestProfile {
   const { supportedProfiles, targetProfile } = parseProfilesString(
     versions,
     customProfilesPath,
-    options
+    testOverrides
   );
 
   const allCapabilities = keysOf(targetProfile[0]);
@@ -64,7 +67,7 @@ export function buildManifestProfile(
 
 export function inspect(
   manifest: PackageManifest,
-  profile: Required<PackageManifest>,
+  profile: ManifestProfile,
   write: boolean
 ): Change[] {
   const changes: Change[] = [];
@@ -92,24 +95,25 @@ export function inspect(
 }
 
 export function makeVigilantCommand({
-  customProfilesPath,
+  customProfiles,
   excludePackages,
+  loose,
   versions,
   write,
-}: Options): Command | undefined {
+}: VigilantOptions): Command | undefined {
   if (!versions) {
     error("A comma-separated list of profile versions must be specified.");
     return undefined;
   }
 
   const uncheckedReturnCode = -1;
-  const checkOptions = { uncheckedReturnCode, write };
+  const checkOptions = { loose, uncheckedReturnCode, write };
 
   const exclusionList = isString(excludePackages)
     ? excludePackages.split(",")
     : [];
 
-  const profile = buildManifestProfile(versions, customProfilesPath);
+  const profile = buildManifestProfile(versions, customProfiles);
   return (manifestPath: string) => {
     try {
       const checkReturnCode = checkPackageManifest(manifestPath, checkOptions);
@@ -120,7 +124,7 @@ export function makeVigilantCommand({
       // Ignore; retry with a full inspection
     }
 
-    const manifest = readJsonFile(manifestPath);
+    const manifest = readPackage(manifestPath);
     if (exclusionList.includes(manifest.name)) {
       return 0;
     }
@@ -128,7 +132,7 @@ export function makeVigilantCommand({
     const changes = inspect(manifest, profile, write);
     if (changes.length > 0) {
       if (write) {
-        writeJsonFile(manifestPath, manifest);
+        writePackage(manifestPath, manifest);
       } else {
         const violations = changes
           .map(

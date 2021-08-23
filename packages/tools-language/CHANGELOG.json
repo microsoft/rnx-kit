@@ -1,0 +1,20 @@
+{
+  "name": "@rnx-kit/tools-language",
+  "entries": [
+    {
+      "date": "Sat, 21 Aug 2021 08:22:48 GMT",
+      "tag": "@rnx-kit/tools-language_v1.0.1",
+      "version": "1.0.1",
+      "comments": {
+        "patch": [
+          {
+            "author": "afoxman@microsoft.com",
+            "package": "@rnx-kit/tools-language",
+            "comment": "Create a language tools package",
+            "commit": "f65f706c734841c4339ca1f825b9c9505cea8941"
+          }
+        ]
+      }
+    }
+  ]
+}

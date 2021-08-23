@@ -1,8 +1,25 @@
 # Change Log - @rnx-kit/metro-config
 
-This log was last generated on Mon, 16 Aug 2021 14:17:13 GMT and should not be manually modified.
+This log was last generated on Sat, 21 Aug 2021 08:22:48 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 1.2.6
+
+Sat, 21 Aug 2021 08:22:48 GMT
+
+### Patches
+
+- Integrate tools package and other common libraries throughout monorepo, removing custom code. (afoxman@microsoft.com)
+- Bump @rnx-kit/metro-config to v1.2.6 (afoxman@microsoft.com)
+
+## 1.2.5
+
+Fri, 20 Aug 2021 10:36:13 GMT
+
+### Patches
+
+- Add react peer dependencies (asgramme@microsoft.com)
 
 ## 1.2.4
 

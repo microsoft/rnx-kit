@@ -2,6 +2,27 @@
   "name": "@rnx-kit/config",
   "entries": [
     {
+      "date": "Sat, 21 Aug 2021 08:22:48 GMT",
+      "tag": "@rnx-kit/config_v0.4.1",
+      "version": "0.4.1",
+      "comments": {
+        "patch": [
+          {
+            "author": "afoxman@microsoft.com",
+            "package": "@rnx-kit/config",
+            "comment": "Integrate tools package and other common libraries throughout monorepo, removing custom code.",
+            "commit": "f65f706c734841c4339ca1f825b9c9505cea8941"
+          },
+          {
+            "author": "afoxman@microsoft.com",
+            "package": "@rnx-kit/config",
+            "commit": "f65f706c734841c4339ca1f825b9c9505cea8941",
+            "comment": "Bump @rnx-kit/config to v0.4.1"
+          }
+        ]
+      }
+    },
+    {
       "date": "Fri, 06 Aug 2021 22:07:45 GMT",
       "tag": "@rnx-kit/config_v0.4.0",
       "version": "0.4.0",

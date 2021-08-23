@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/metro-service",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Metro service for bundling and bundle-serving",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/metro-service#readme",
   "license": "MIT",
@@ -22,7 +22,10 @@
     "node": ">= 10.12"
   },
   "dependencies": {
-    "chalk": "^4.1.0"
+    "@rnx-kit/tools-language": "^1.0.1",
+    "chalk": "^4.1.0",
+    "cp-file": "^9.1.0",
+    "make-dir": "^3.1.0"
   },
   "peerDependencies": {
     "metro": ">=0.66.1",

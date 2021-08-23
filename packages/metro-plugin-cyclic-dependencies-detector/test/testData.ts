@@ -1,8 +1,9 @@
 // istanbul ignore file
 
 import type { Dependency, Graph, Module } from "@rnx-kit/metro-serializer";
+import { findPackageDir } from "@rnx-kit/tools-node/package";
 
-export const repoRoot = require("pkg-dir").sync("../../");
+export const repoRoot = findPackageDir("../../");
 export const entryPoint = `${repoRoot}/packages/test-app/lib/src/index.js`;
 
 export function graphWithCycles(): Graph {

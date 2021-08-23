@@ -1,8 +1,33 @@
 # Change Log - @rnx-kit/dep-check
 
-This log was last generated on Tue, 17 Aug 2021 09:36:56 GMT and should not be manually modified.
+This log was last generated on Sat, 21 Aug 2021 08:22:48 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 1.7.2
+
+Sat, 21 Aug 2021 08:22:48 GMT
+
+### Patches
+
+- Integrate tools package and other common libraries throughout monorepo, removing custom code. (afoxman@microsoft.com)
+- Bump @rnx-kit/dep-check to v1.7.2 (afoxman@microsoft.com)
+
+## 1.7.1
+
+Thu, 19 Aug 2021 07:59:20 GMT
+
+### Patches
+
+- Fix error messages accumulating when gathering requirements (4123478+tido64@users.noreply.github.com)
+
+## 1.7.0
+
+Wed, 18 Aug 2021 14:54:20 GMT
+
+### Minor changes
+
+- Allow apps to depend on a newer version of React Native than their dependencies declare support for via the `--loose` flag. (4123478+tido64@users.noreply.github.com)
 
 ## 1.6.0
 

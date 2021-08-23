@@ -1,13 +1,6 @@
+import { isApproximatelyEqual } from "@rnx-kit/tools-language/math";
 import path from "path";
 import type { PackagerAsset } from "./types";
-
-function isApproximatelyEqual(
-  f1: number,
-  f2: number,
-  tolerance: number
-): boolean {
-  return Math.abs(f1 - f2) < tolerance;
-}
 
 export function getAndroidAssetSuffix(
   asset: PackagerAsset,

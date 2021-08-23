@@ -1,16 +1,8 @@
 import type { Config as CLIConfig } from "@react-native-community/cli-types";
-import { Args, cli } from "@rnx-kit/dep-check";
+import { cli } from "@rnx-kit/dep-check";
+import { pickValues } from "@rnx-kit/tools-language/properties";
 
 type CLIArgs = Record<string, string | number | boolean | undefined>;
-
-function pickValue<T extends CLIArgs>(
-  name: keyof T,
-  key: string,
-  obj: CLIArgs
-): T | undefined {
-  const value = obj[key];
-  return typeof value !== "undefined" ? ({ [name]: value } as T) : undefined;
-}
 
 export function rnxDepCheck(
   argv: string[],
@@ -18,11 +10,18 @@ export function rnxDepCheck(
   args: CLIArgs
 ): void {
   cli({
-    ...pickValue<Args>("custom-profiles", "customProfiles", args),
-    ...pickValue<Args>("exclude-packages", "excludePackages", args),
-    ...pickValue<Args>("init", "init", args),
-    ...pickValue<Args>("set-version", "setVersion", args),
-    ...pickValue<Args>("vigilant", "vigilant", args),
+    ...pickValues(
+      args,
+      [
+        "custom-profiles",
+        "exclude-packages",
+        "init",
+        "set-version",
+        "vigilant",
+      ],
+      ["customProfiles", "excludePackages", "init", "setVersion", "vigilant"]
+    ),
+    loose: Boolean(args.loose),
     write: Boolean(args.write),
     "package-json": argv[0],
   });
@@ -46,6 +45,11 @@ export const rnxDepCheckCommand = {
     {
       name: "--init [app|library]",
       description: "Writes an initial kit config",
+    },
+    {
+      name: "--loose",
+      description:
+        "Determines how strict the React Native version requirement should be. Useful for apps that depend on a newer React Native version than their dependencies declare support for.",
     },
     {
       name: "--set-version [versions]",

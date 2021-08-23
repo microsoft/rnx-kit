@@ -2,6 +2,114 @@
   "name": "@rnx-kit/cli",
   "entries": [
     {
+      "date": "Mon, 23 Aug 2021 09:13:20 GMT",
+      "tag": "@rnx-kit/cli_v0.9.9",
+      "version": "0.9.9",
+      "comments": {
+        "none": [
+          {
+            "author": "afoxman@microsoft.com",
+            "package": "@rnx-kit/cli",
+            "comment": "Mechanical change: move kit-config code into separate bundle and serve files. No code changes.",
+            "commit": "528f370fdcdd2db2523eaa9e0ade9ed6f100d775"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Mon, 23 Aug 2021 08:49:21 GMT",
+      "tag": "@rnx-kit/cli_v0.9.9",
+      "version": "0.9.9",
+      "comments": {
+        "patch": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/cli",
+            "comment": "`--experimental-tree-shake` shouldn't need extra config",
+            "commit": "32ae291705cd20962bf4f315972d74ea088b7455"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Sat, 21 Aug 2021 08:22:48 GMT",
+      "tag": "@rnx-kit/cli_v0.9.8",
+      "version": "0.9.8",
+      "comments": {
+        "patch": [
+          {
+            "author": "afoxman@microsoft.com",
+            "package": "@rnx-kit/cli",
+            "comment": "Integrate tools package and other common libraries throughout monorepo, removing custom code.",
+            "commit": "f65f706c734841c4339ca1f825b9c9505cea8941"
+          },
+          {
+            "author": "afoxman@microsoft.com",
+            "package": "@rnx-kit/cli",
+            "commit": "f65f706c734841c4339ca1f825b9c9505cea8941",
+            "comment": "Bump @rnx-kit/cli to v0.9.8"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Fri, 20 Aug 2021 09:36:58 GMT",
+      "tag": "@rnx-kit/cli_v0.9.7",
+      "version": "0.9.7",
+      "comments": {
+        "patch": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/cli",
+            "comment": "Fix `--experimental-tree-shake` not being applied correctly",
+            "commit": "2deee7a9285f3899e99aca2135ecd123fc777de2"
+          },
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/cli",
+            "commit": "2deee7a9285f3899e99aca2135ecd123fc777de2",
+            "comment": "Bump @rnx-kit/cli to v0.9.7"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Thu, 19 Aug 2021 07:59:20 GMT",
+      "tag": "@rnx-kit/cli_v0.9.6",
+      "version": "0.9.6",
+      "comments": {
+        "patch": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/cli",
+            "commit": "84c80d34cad6f8452954f3fcbb7d0ad5457055d5",
+            "comment": "Bump @rnx-kit/cli to v0.9.6"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Wed, 18 Aug 2021 14:54:20 GMT",
+      "tag": "@rnx-kit/cli_v0.9.5",
+      "version": "0.9.5",
+      "comments": {
+        "patch": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/cli",
+            "comment": "Allow apps to depend on a newer version of React Native than their dependencies declare support for via the `--loose` flag.",
+            "commit": "f6651e5391d69c5c77d495a447a546c0f9abba1e"
+          },
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/cli",
+            "commit": "f6651e5391d69c5c77d495a447a546c0f9abba1e",
+            "comment": "Bump @rnx-kit/cli to v0.9.5"
+          }
+        ]
+      }
+    },
+    {
       "date": "Tue, 17 Aug 2021 20:18:02 GMT",
       "tag": "@rnx-kit/cli_v0.9.4",
       "version": "0.9.4",

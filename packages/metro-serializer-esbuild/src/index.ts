@@ -8,7 +8,7 @@ import * as semver from "semver";
 
 export * from "./esbuildTransformerConfig";
 
-type Options = Pick<BuildOptions, "logLevel" | "minify"> & {
+type Options = Pick<BuildOptions, "logLevel" | "minify" | "target"> & {
   fabric?: boolean;
 };
 
@@ -133,6 +133,10 @@ export function MetroSerializer(
               /**
                * Add all the polyfills in this file. See the `inject` option
                * below for more details.
+               *
+               * We must ensure that the content is ES5-friendly so esbuild
+               * doesn't blow up when targeting ES5, e.g. use `var` instead of
+               * `let` and `const`.
                */
               contents: [
                 /**
@@ -146,7 +150,7 @@ export function MetroSerializer(
                  *
                  * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function#description
                  */
-                `export const global = new Function("return this;")();`,
+                `export var global = new Function("return this;")();`,
 
                 /** Polyfills */
                 ...preModules
@@ -211,6 +215,12 @@ export function MetroSerializer(
         outfile,
         plugins,
         sourcemap: "external",
+
+        // To ensure that Hermes is able to consume this bundle, we must target
+        // ES5. Hermes is missing a bunch of ES6 features, such as block scoping
+        // (see https://github.com/facebook/hermes/issues/575).
+        target: buildOptions?.target ?? "es5",
+
         write: false,
       })
       .then(({ outputFiles }: BuildResult) => {
