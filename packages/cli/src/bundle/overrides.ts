@@ -1,8 +1,8 @@
-import type { BundleDefinitionWithRequiredParameters } from "@rnx-kit/config";
 import type { BundleArgs } from "@rnx-kit/metro-service";
 import { pickValues } from "@rnx-kit/tools-language/properties";
+import type { KitBundleConfig } from "../bundle/types";
 
-export type BundleDefinitionOverrides = {
+export type KitBundleConfigOverrides = {
   entryPath?: string;
   distPath?: string;
   assetsPath?: string;
@@ -14,14 +14,14 @@ export type BundleDefinitionOverrides = {
 };
 
 /**
- * Apply overrides, if any, to a bundle definition. Overrides are applied in-place.
+ * Apply overrides, if any, to a kit bundle config. Overrides are applied in-place.
  *
  * @param overrides Optional overrides to apply
- * @param bundleDefinition Bundle definition to override. This is modified if any overrides are applied.
+ * @param config Kit bundle config to override. This is modified if any overrides are applied.
  */
-export function applyBundleDefinitionOverrides(
-  overrides: BundleDefinitionOverrides,
-  bundleDefinition: BundleDefinitionWithRequiredParameters
+export function applyKitBundleConfigOverrides(
+  overrides: KitBundleConfigOverrides,
+  config: KitBundleConfig
 ): void {
   const overridesToApply = pickValues(
     overrides,
@@ -47,6 +47,6 @@ export function applyBundleDefinitionOverrides(
     ]
   );
   if (overridesToApply) {
-    Object.assign(bundleDefinition, overridesToApply);
+    Object.assign(config, overridesToApply);
   }
 }
