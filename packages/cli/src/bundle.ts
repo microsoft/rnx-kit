@@ -1,7 +1,7 @@
 import type { Config as CLIConfig } from "@react-native-community/cli-types";
 import { info, warn } from "@rnx-kit/console";
 import { bundle, BundleArgs, loadMetroConfig } from "@rnx-kit/metro-service";
-import { extendObjectArray } from "@rnx-kit/tools-node/properties";
+import { extendObjectArray } from "@rnx-kit/tools-language/properties";
 import type { AllPlatforms } from "@rnx-kit/tools-react-native/platform";
 import { Service } from "@rnx-kit/typescript-service";
 import chalk from "chalk";
