@@ -1,0 +1,7 @@
+{
+  "type": "none",
+  "comment": "Mechanical change -- move metro-specific bundling logic to its own file. No code canges.",
+  "packageName": "@rnx-kit/cli",
+  "email": "afoxman@microsoft.com",
+  "dependentChangeType": "none"
+}
