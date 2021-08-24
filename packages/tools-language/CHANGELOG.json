@@ -2,6 +2,21 @@
   "name": "@rnx-kit/tools-language",
   "entries": [
     {
+      "date": "Tue, 24 Aug 2021 08:09:36 GMT",
+      "tag": "@rnx-kit/tools-language_v1.0.1",
+      "version": "1.0.1",
+      "comments": {
+        "none": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/tools-language",
+            "commit": "ccf242e997e1b399f3dc7253f36e5639a3e64036",
+            "comment": "Bump @rnx-kit/tools-language to v1.0.1"
+          }
+        ]
+      }
+    },
+    {
       "date": "Sat, 21 Aug 2021 08:22:48 GMT",
       "tag": "@rnx-kit/tools-language_v1.0.1",
       "version": "1.0.1",
