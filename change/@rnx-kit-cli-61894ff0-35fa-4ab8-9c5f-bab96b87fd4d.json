@@ -1,7 +1,0 @@
-{
-  "type": "patch",
-  "comment": "Create type KitBundleConfig which combines a platform and its bundle configuration. Update rnxBundle to build a set of these, and apply command-line overrides to each one. Add/update related tests.",
-  "packageName": "@rnx-kit/cli",
-  "email": "afoxman@microsoft.com",
-  "dependentChangeType": "patch"
-}
