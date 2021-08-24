@@ -3,13 +3,13 @@ import type { BundleDefinitionWithRequiredParameters } from "@rnx-kit/config";
 import {
   getKitBundleConfigs,
   getKitBundleDefinition,
+  getTargetPlatforms,
 } from "../../src/bundle/kit-config";
-import { KitBundleConfig } from "../../src/bundle/types";
+
+const rnxKitConfig = require("@rnx-kit/config");
+const consoleWarnSpy = jest.spyOn(global.console, "warn");
 
 describe("CLI > Bundle > Kit Config > getKitBundleDefinition", () => {
-  const rnxKitConfig = require("@rnx-kit/config");
-  const consoleWarnSpy = jest.spyOn(global.console, "warn");
-
   beforeEach(() => {
     rnxKitConfig.__setMockConfig(undefined);
     consoleWarnSpy.mockReset();
@@ -49,6 +49,28 @@ describe("CLI > Bundle > Kit Config > getKitBundleDefinition", () => {
   });
 });
 
+describe("CLI > Bundle > Kit Config > getTargetPlatforms  ", () => {
+  test("returns the override platform", () => {
+    const platforms = getTargetPlatforms("ios", ["android", "ios", "windows"]);
+    expect(platforms).toBeArrayOfSize(1);
+    expect(platforms).toIncludeSameMembers(["ios"]);
+  });
+
+  test("returns the target platforms", () => {
+    const platforms = getTargetPlatforms(undefined, [
+      "android",
+      "ios",
+      "windows",
+    ]);
+    expect(platforms).toBeArrayOfSize(3);
+    expect(platforms).toIncludeSameMembers(["android", "ios", "windows"]);
+  });
+
+  test("throws when no override or target platform is given", () => {
+    expect(() => getTargetPlatforms()).toThrowError();
+  });
+});
+
 describe("CLI > Bundle > Kit Config > getKitBundleConfigs", () => {
   const definition: BundleDefinitionWithRequiredParameters = {
     entryPath: "start.js",
@@ -59,6 +81,7 @@ describe("CLI > Bundle > Kit Config > getKitBundleConfigs", () => {
     detectDuplicateDependencies: true,
     typescriptValidation: true,
     experimental_treeShake: true,
+    targets: ["ios", "android"],
     platforms: {
       ios: {
         entryPath: "entry.ios.js",
@@ -66,30 +89,36 @@ describe("CLI > Bundle > Kit Config > getKitBundleConfigs", () => {
     },
   };
 
-  test("returns no kit bundle configs when no platforms are given", () => {
-    const kitBundleConfigs = getKitBundleConfigs(definition, []);
-    expect(kitBundleConfigs).toBeArrayOfSize(0);
+  beforeEach(() => {
+    rnxKitConfig.__setMockConfig({
+      bundle: {
+        ...definition,
+      },
+    });
+    consoleWarnSpy.mockReset();
   });
 
-  test("returns one kit bundle config when one platform is given", () => {
-    const kitBundleConfigs = getKitBundleConfigs(definition, ["ios"]);
+  test("returns one kit bundle config when an override platform is given", () => {
+    const kitBundleConfigs = getKitBundleConfigs(undefined, "ios");
     expect(kitBundleConfigs).toBeArrayOfSize(1);
   });
 
   test("sets the platform property", () => {
-    const kitBundleConfigs = getKitBundleConfigs(definition, [
-      "ios",
-      "android",
-    ]);
+    const kitBundleConfigs = getKitBundleConfigs();
     expect(kitBundleConfigs).toBeArrayOfSize(2);
     expect(kitBundleConfigs[0].platform).toEqual("ios");
     expect(kitBundleConfigs[1].platform).toEqual("android");
   });
 
   test("sets all bundle definition properties", () => {
-    const kitBundleConfigs = getKitBundleConfigs(definition, ["android"]);
-    expect(kitBundleConfigs).toBeArrayOfSize(1);
+    const kitBundleConfigs = getKitBundleConfigs();
+    expect(kitBundleConfigs).toBeArrayOfSize(2);
     expect(kitBundleConfigs[0]).toEqual({
+      ...definition,
+      entryPath: "entry.ios.js",
+      platform: "ios",
+    });
+    expect(kitBundleConfigs[1]).toEqual({
       ...definition,
       platform: "android",
     });

@@ -46,18 +46,50 @@ export function getKitBundleDefinition(
 }
 
 /**
- * Create a set of kit bundle configurations, one per platform. Each kit bundle
- * config is built using the bundle definition and includes any platform-specific
- * overrides from the definition.
+ * Get the list of target platforms for bundling.
  *
- * @param bundleDefinition Bundle definition
- * @param platforms Platform list
- * @returns Arrary of kit bundle configurations, one per platform
+ * @param overridePlatform Override platform, typically from the command-line. When given, this overrides the list of target platforms.
+ * @param targetPlatforms Target platforms, typically from the kit configuration.
+ * @returns Array of target platforms
+ */
+export function getTargetPlatforms(
+  overridePlatform?: AllPlatforms,
+  targetPlatforms?: AllPlatforms[]
+): AllPlatforms[] {
+  if (overridePlatform) {
+    return [overridePlatform];
+  }
+  if (targetPlatforms && targetPlatforms.length > 0) {
+    return targetPlatforms;
+  }
+  throw new Error(
+    "No target platforms given. Update the kit configuration to include a target platform, or provide a target platform on the command-line."
+  );
+}
+
+/**
+ * Get bundle configuration and target platform(s) from kit config. Create
+ * one config per platform, applying any platform-specific customizations in
+ * the kit config.
+ *
+ * @param id Optional bundle definition id. Only needed when the kit config has more than one definition.
+ * @param overridePlatform Override platform, typically from the command-line. When given, this overrides the list of target platforms.
+ * @returns Arrary of kit bundle configurations, one per target platform, or `undefined` if bundling is disabled
  */
 export function getKitBundleConfigs(
-  bundleDefinition: BundleDefinitionWithRequiredParameters,
-  platforms: AllPlatforms[]
-): KitBundleConfig[] {
+  id?: string,
+  overridePlatform?: AllPlatforms
+): KitBundleConfig[] | undefined {
+  const bundleDefinition = getKitBundleDefinition(id);
+  if (!bundleDefinition) {
+    return undefined;
+  }
+
+  const platforms = getTargetPlatforms(
+    overridePlatform,
+    bundleDefinition.targets
+  );
+
   return platforms.map<KitBundleConfig>((platform) => {
     return {
       ...getBundlePlatformDefinition(bundleDefinition, platform),

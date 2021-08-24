@@ -1,40 +1,15 @@
 import type { Config as CLIConfig } from "@react-native-community/cli-types";
 import { info, warn } from "@rnx-kit/console";
-import { BundleArgs, bundle, loadMetroConfig } from "@rnx-kit/metro-service";
+import { bundle, BundleArgs, loadMetroConfig } from "@rnx-kit/metro-service";
 import type { AllPlatforms } from "@rnx-kit/tools-react-native/platform";
 import { Service } from "@rnx-kit/typescript-service";
 import chalk from "chalk";
 import fs from "fs";
 import path from "path";
-import {
-  getKitBundleDefinition,
-  getKitBundleConfigs,
-} from "./bundle/kit-config";
+import { getKitBundleConfigs } from "./bundle/kit-config";
 import { applyKitBundleConfigOverrides } from "./bundle/overrides";
 import { customizeMetroConfig } from "./metro-config";
 import type { TSProjectInfo } from "./types";
-
-/**
- * Get the list of target platforms for bundling.
- *
- * @param overridePlatform Override platform, typically from the command-line. When given, this overrides the list of target platforms.
- * @param targetPlatforms Target platforms, typically from the kit configuration.
- * @returns Array of target platforms
- */
-function getTargetPlatforms(
-  overridePlatform?: AllPlatforms,
-  targetPlatforms?: AllPlatforms[]
-): AllPlatforms[] {
-  if (overridePlatform) {
-    return [overridePlatform];
-  }
-  if (targetPlatforms && targetPlatforms.length > 0) {
-    return targetPlatforms;
-  }
-  throw new Error(
-    "No target platforms given. Update the kit configuration to include a target platform, or provide a target platform on the command-line."
-  );
-}
 
 export type CLIBundleOptions = {
   id?: string;
@@ -61,20 +36,15 @@ export async function rnxBundle(
 ): Promise<void> {
   const metroConfig = await loadMetroConfig(cliConfig, cliOptions);
 
-  const bundleDefinition = getKitBundleDefinition(cliOptions.id);
-  if (!bundleDefinition) {
+  const kitBundleConfigs = getKitBundleConfigs(
+    cliOptions.id,
+    cliOptions.platform
+  );
+  if (!kitBundleConfigs) {
     return Promise.resolve();
   }
 
-  const targetPlatforms = getTargetPlatforms(
-    cliOptions.platform,
-    bundleDefinition.targets
-  );
-
-  const kitBundleConfigs = getKitBundleConfigs(
-    bundleDefinition,
-    targetPlatforms
-  );
+  applyKitBundleConfigOverrides(cliOptions, kitBundleConfigs);
 
   const tsservice = new Service();
 
@@ -82,8 +52,6 @@ export async function rnxBundle(
     const targetPlatform = kitBundleConfig.platform;
 
     info(`Bundling ${targetPlatform}...`);
-
-    applyKitBundleConfigOverrides(cliOptions, kitBundleConfig);
 
     const {
       entryPath,
