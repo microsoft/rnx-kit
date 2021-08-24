@@ -1,0 +1,7 @@
+{
+  "type": "none",
+  "comment": "Suppress TypeScript error with CLI 6.x",
+  "packageName": "@rnx-kit/jest-preset",
+  "email": "4123478+tido64@users.noreply.github.com",
+  "dependentChangeType": "none"
+}
