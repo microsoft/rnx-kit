@@ -1,7 +1,0 @@
-{
-  "type": "minor",
-  "comment": "Add two new functions for extended objects and their types.",
-  "packageName": "@rnx-kit/tools-language",
-  "email": "afoxman@microsoft.com",
-  "dependentChangeType": "patch"
-}
