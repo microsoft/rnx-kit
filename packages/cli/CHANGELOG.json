@@ -2,6 +2,21 @@
   "name": "@rnx-kit/cli",
   "entries": [
     {
+      "date": "Tue, 24 Aug 2021 09:20:39 GMT",
+      "tag": "@rnx-kit/cli_v0.9.15",
+      "version": "0.9.15",
+      "comments": {
+        "patch": [
+          {
+            "author": "afoxman@microsoft.com",
+            "package": "@rnx-kit/cli",
+            "comment": "Combine all kit config retrieval under getKitBundleConfigs. Move \"apply overrides\" out of the config loop. When applying overrides, do it across all kit bundle configs, not just one at a time.",
+            "commit": "47bed722fef16852bd119dc460e500f4e6a5521e"
+          }
+        ]
+      }
+    },
+    {
       "date": "Tue, 24 Aug 2021 08:15:03 GMT",
       "tag": "@rnx-kit/cli_v0.9.14",
       "version": "0.9.14",

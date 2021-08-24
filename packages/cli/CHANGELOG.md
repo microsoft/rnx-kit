@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/cli
 
-This log was last generated on Tue, 24 Aug 2021 08:15:03 GMT and should not be manually modified.
+This log was last generated on Tue, 24 Aug 2021 09:20:39 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 0.9.15
+
+Tue, 24 Aug 2021 09:20:39 GMT
+
+### Patches
+
+- Combine all kit config retrieval under getKitBundleConfigs. Move "apply overrides" out of the config loop. When applying overrides, do it across all kit bundle configs, not just one at a time. (afoxman@microsoft.com)
 
 ## 0.9.14
 

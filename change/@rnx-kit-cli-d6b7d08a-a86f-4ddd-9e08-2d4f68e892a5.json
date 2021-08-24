@@ -1,7 +1,0 @@
-{
-  "type": "patch",
-  "comment": "Combine all kit config retrieval under getKitBundleConfigs. Move \"apply overrides\" out of the config loop. When applying overrides, do it across all kit bundle configs, not just one at a time.",
-  "packageName": "@rnx-kit/cli",
-  "email": "afoxman@microsoft.com",
-  "dependentChangeType": "patch"
-}
