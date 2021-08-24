@@ -15,9 +15,9 @@ describe("CLI > Bundle > Overrides > applyKitBundleConfigOverrides", () => {
     platform: "ios",
   };
 
-  test("returns bundle definition without any changes", () => {
+  test("has no effect when no overrides are given", () => {
     const copy = { ...config };
-    applyKitBundleConfigOverrides({}, copy);
+    applyKitBundleConfigOverrides({}, [copy]);
     expect(copy).toEqual(config);
   });
 
@@ -27,7 +27,7 @@ describe("CLI > Bundle > Overrides > applyKitBundleConfigOverrides", () => {
       {
         [name]: value,
       },
-      copy
+      [copy]
     );
     expect(copy).toEqual({
       ...config,
@@ -35,41 +35,41 @@ describe("CLI > Bundle > Overrides > applyKitBundleConfigOverrides", () => {
     });
   }
 
-  test("returns bundle definition with entryPath override", () => {
+  test("changes entryPath using an override", () => {
     testOverride("entryPath", "out/entry.js");
   });
 
-  test("returns bundle definition with distPath override", () => {
+  test("changes distPath using an override", () => {
     testOverride("distPath", "out");
   });
 
-  test("returns bundle definition with assetsPath override", () => {
+  test("changes assetsPath using an override", () => {
     testOverride("assetsPath", "out/assets");
   });
 
-  test("returns bundle definition with bundlePrefix override", () => {
+  test("changes bundlePrefix using an override", () => {
     testOverride("bundlePrefix", "main");
   });
 
-  test("returns bundle definition with bundleEncoding override", () => {
+  test("changes bundleEncoding using an override", () => {
     testOverride("bundleEncoding", "utf8");
   });
 
-  test("returns bundle definition with sourcemapOutput override", () => {
+  test("changes sourcemapOutput using an override", () => {
     testOverride("sourcemapOutput", "out/entry.map");
   });
 
-  test("returns bundle definition with sourcemapSourcesRoot override", () => {
+  test("changes sourcemapSourcesRoot using an override", () => {
     testOverride("sourcemapSourcesRoot", "out");
   });
 
-  test("returns bundle definition with experimentalTreeShake override", () => {
+  test("set experimental_treeShake using override experimentalTreeShake", () => {
     const copy = { ...config };
     applyKitBundleConfigOverrides(
       {
         experimentalTreeShake: true,
       },
-      copy
+      [copy]
     );
     expect(copy).toEqual({
       ...config,
