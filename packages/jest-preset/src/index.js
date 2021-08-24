@@ -5,6 +5,7 @@ const path = require("path");
  * @typedef {import("@jest/types").Config.HasteConfig} HasteConfig
  * @typedef {import("@jest/types").Config.InitialOptions} InitialOptions
  * @typedef {import("@jest/types").Config.TransformerConfig} TransformerConfig
+ * @typedef {import("@react-native-community/cli-types").Config} CLIConfig
  * @typedef {[string | undefined, string | undefined]} PlatformPath
  */
 
@@ -76,7 +77,10 @@ function getTargetPlatform(defaultPlatform) {
     return getReactNativePlatformPath();
   }
 
+  /** @type {() => CLIConfig} */
   const loadConfig =
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore could not find a declaration file
     require("@react-native-community/cli/build/tools/config").default;
 
   const { platforms } = loadConfig();

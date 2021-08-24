@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/cli
 
-This log was last generated on Mon, 23 Aug 2021 18:57:47 GMT and should not be manually modified.
+This log was last generated on Tue, 24 Aug 2021 08:15:03 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 0.9.14
+
+Tue, 24 Aug 2021 08:15:03 GMT
+
+### Patches
+
+- Create type KitBundleConfig which combines a platform and its bundle configuration. Update rnxBundle to build a set of these, and apply command-line overrides to each one. Add/update related tests. (afoxman@microsoft.com)
 
 ## 0.9.13
 

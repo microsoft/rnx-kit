@@ -2,6 +2,36 @@
   "name": "@rnx-kit/test-app",
   "entries": [
     {
+      "date": "Tue, 24 Aug 2021 08:15:03 GMT",
+      "tag": "@rnx-kit/test-app_v0.0.1",
+      "version": "0.0.1",
+      "comments": {
+        "patch": [
+          {
+            "author": "afoxman@microsoft.com",
+            "package": "@rnx-kit/test-app",
+            "commit": "b72c487ff1c4a6e5750a5c6156b4283e632683d4",
+            "comment": "Bump @rnx-kit/test-app to v0.0.1"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Tue, 24 Aug 2021 08:09:36 GMT",
+      "tag": "@rnx-kit/test-app_v0.0.1",
+      "version": "0.0.1",
+      "comments": {
+        "none": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/test-app",
+            "commit": "ccf242e997e1b399f3dc7253f36e5639a3e64036",
+            "comment": "Bump @rnx-kit/test-app to v0.0.1"
+          }
+        ]
+      }
+    },
+    {
       "date": "Mon, 23 Aug 2021 18:57:47 GMT",
       "tag": "@rnx-kit/test-app_v0.0.1",
       "version": "0.0.1",

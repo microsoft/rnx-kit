@@ -2,6 +2,21 @@
   "name": "@rnx-kit/third-party-notices",
   "entries": [
     {
+      "date": "Tue, 24 Aug 2021 08:09:36 GMT",
+      "tag": "@rnx-kit/third-party-notices_v1.1.2",
+      "version": "1.1.2",
+      "comments": {
+        "none": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/third-party-notices",
+            "commit": "ccf242e997e1b399f3dc7253f36e5639a3e64036",
+            "comment": "Bump @rnx-kit/third-party-notices to v1.1.2"
+          }
+        ]
+      }
+    },
+    {
       "date": "Sat, 21 Aug 2021 08:22:48 GMT",
       "tag": "@rnx-kit/third-party-notices_v1.1.2",
       "version": "1.1.2",
