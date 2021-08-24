@@ -1,7 +1,13 @@
 import type { BundleDefinitionWithRequiredParameters } from "@rnx-kit/config";
-import { getBundleDefinition, getKitConfig } from "@rnx-kit/config";
+import {
+  getBundleDefinition,
+  getBundlePlatformDefinition,
+  getKitConfig,
+} from "@rnx-kit/config";
 import { warn } from "@rnx-kit/console";
+import type { AllPlatforms } from "@rnx-kit/tools-react-native/platform";
 import chalk from "chalk";
+import type { KitBundleConfig } from "./types";
 
 /**
  * Get a bundle definition from the kit configuration.
@@ -37,4 +43,25 @@ export function getKitBundleDefinition(
 
   // get the bundle definition
   return getBundleDefinition(kitConfig.bundle, id);
+}
+
+/**
+ * Create a set of kit bundle configurations, one per platform. Each kit bundle
+ * config is built using the bundle definition and includes any platform-specific
+ * overrides from the definition.
+ *
+ * @param bundleDefinition Bundle definition
+ * @param platforms Platform list
+ * @returns Arrary of kit bundle configurations, one per platform
+ */
+export function getKitBundleConfigs(
+  bundleDefinition: BundleDefinitionWithRequiredParameters,
+  platforms: AllPlatforms[]
+): KitBundleConfig[] {
+  return platforms.map<KitBundleConfig>((platform) => {
+    return {
+      ...getBundlePlatformDefinition(bundleDefinition, platform),
+      platform,
+    };
+  });
 }

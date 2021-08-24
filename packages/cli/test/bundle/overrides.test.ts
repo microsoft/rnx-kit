@@ -1,9 +1,9 @@
 import "jest-extended";
-import type { BundleDefinitionWithRequiredParameters } from "@rnx-kit/config";
-import { applyBundleDefinitionOverrides } from "../../src/bundle/overrides";
+import { applyKitBundleConfigOverrides } from "../../src/bundle/overrides";
+import type { KitBundleConfig } from "../../src/bundle/types";
 
-describe("CLI > Bundle > Overrides > applyBundleDefinitionOverrides", () => {
-  const definition: BundleDefinitionWithRequiredParameters = {
+describe("CLI > Bundle > Overrides > applyKitBundleConfigOverrides", () => {
+  const config: KitBundleConfig = {
     detectCyclicDependencies: true,
     detectDuplicateDependencies: true,
     typescriptValidation: true,
@@ -12,24 +12,25 @@ describe("CLI > Bundle > Overrides > applyBundleDefinitionOverrides", () => {
     distPath: "dist",
     assetsPath: "dist",
     bundlePrefix: "main",
+    platform: "ios",
   };
 
   test("returns bundle definition without any changes", () => {
-    const copy = { ...definition };
-    applyBundleDefinitionOverrides({}, copy);
-    expect(copy).toEqual(definition);
+    const copy = { ...config };
+    applyKitBundleConfigOverrides({}, copy);
+    expect(copy).toEqual(config);
   });
 
   function testOverride(name: string, value: unknown) {
-    const copy = { ...definition };
-    applyBundleDefinitionOverrides(
+    const copy = { ...config };
+    applyKitBundleConfigOverrides(
       {
         [name]: value,
       },
       copy
     );
     expect(copy).toEqual({
-      ...definition,
+      ...config,
       [name]: value,
     });
   }
@@ -63,15 +64,15 @@ describe("CLI > Bundle > Overrides > applyBundleDefinitionOverrides", () => {
   });
 
   test("returns bundle definition with experimentalTreeShake override", () => {
-    const copy = { ...definition };
-    applyBundleDefinitionOverrides(
+    const copy = { ...config };
+    applyKitBundleConfigOverrides(
       {
         experimentalTreeShake: true,
       },
       copy
     );
     expect(copy).toEqual({
-      ...definition,
+      ...config,
       experimental_treeShake: true,
     });
   });

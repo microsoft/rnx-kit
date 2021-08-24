@@ -1,5 +1,4 @@
 import type { Config as CLIConfig } from "@react-native-community/cli-types";
-import { getBundlePlatformDefinition } from "@rnx-kit/config";
 import { info, warn } from "@rnx-kit/console";
 import { BundleArgs, bundle, loadMetroConfig } from "@rnx-kit/metro-service";
 import type { AllPlatforms } from "@rnx-kit/tools-react-native/platform";
@@ -7,8 +6,11 @@ import { Service } from "@rnx-kit/typescript-service";
 import chalk from "chalk";
 import fs from "fs";
 import path from "path";
-import { getKitBundleDefinition } from "./bundle/kit-config";
-import { applyBundleDefinitionOverrides } from "./bundle/overrides";
+import {
+  getKitBundleDefinition,
+  getKitBundleConfigs,
+} from "./bundle/kit-config";
+import { applyKitBundleConfigOverrides } from "./bundle/overrides";
 import { customizeMetroConfig } from "./metro-config";
 import type { TSProjectInfo } from "./types";
 
@@ -69,16 +71,19 @@ export async function rnxBundle(
     bundleDefinition.targets
   );
 
+  const kitBundleConfigs = getKitBundleConfigs(
+    bundleDefinition,
+    targetPlatforms
+  );
+
   const tsservice = new Service();
 
-  for (const targetPlatform of targetPlatforms) {
+  for (const kitBundleConfig of kitBundleConfigs) {
+    const targetPlatform = kitBundleConfig.platform;
+
     info(`Bundling ${targetPlatform}...`);
 
-    const platformDefinition = getBundlePlatformDefinition(
-      bundleDefinition,
-      targetPlatform
-    );
-    applyBundleDefinitionOverrides(cliOptions, platformDefinition);
+    applyKitBundleConfigOverrides(cliOptions, kitBundleConfig);
 
     const {
       entryPath,
@@ -91,7 +96,7 @@ export async function rnxBundle(
       detectDuplicateDependencies,
       typescriptValidation,
       experimental_treeShake,
-    } = platformDefinition;
+    } = kitBundleConfig;
 
     //  assemble the full path to the bundle file
     const bundleExtension =
@@ -101,7 +106,7 @@ export async function rnxBundle(
     const bundleFile = `${bundlePrefix}.${targetPlatform}.${bundleExtension}`;
     const bundlePath = path.join(distPath, bundleFile);
 
-    let { sourceMapPath } = platformDefinition;
+    let { sourceMapPath } = kitBundleConfig;
 
     //  always create a source-map in dev mode
     if (cliOptions.dev) {

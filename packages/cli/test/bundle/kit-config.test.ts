@@ -1,5 +1,10 @@
 import "jest-extended";
-import { getKitBundleDefinition } from "../../src/bundle/kit-config";
+import type { BundleDefinitionWithRequiredParameters } from "@rnx-kit/config";
+import {
+  getKitBundleConfigs,
+  getKitBundleDefinition,
+} from "../../src/bundle/kit-config";
+import { KitBundleConfig } from "../../src/bundle/types";
 
 describe("CLI > Bundle > Kit Config > getKitBundleDefinition", () => {
   const rnxKitConfig = require("@rnx-kit/config");
@@ -41,5 +46,52 @@ describe("CLI > Bundle > Kit Config > getKitBundleDefinition", () => {
     expect(definition).toBeObject();
     expect(definition.entryPath).toBeString();
     expect(definition.entryPath.length).toBeGreaterThan(0);
+  });
+});
+
+describe("CLI > Bundle > Kit Config > getKitBundleConfigs", () => {
+  const definition: BundleDefinitionWithRequiredParameters = {
+    entryPath: "start.js",
+    distPath: "out",
+    assetsPath: "out/assets",
+    bundlePrefix: "fabrikam",
+    detectCyclicDependencies: true,
+    detectDuplicateDependencies: true,
+    typescriptValidation: true,
+    experimental_treeShake: true,
+    platforms: {
+      ios: {
+        entryPath: "entry.ios.js",
+      },
+    },
+  };
+
+  test("returns no kit bundle configs when no platforms are given", () => {
+    const kitBundleConfigs = getKitBundleConfigs(definition, []);
+    expect(kitBundleConfigs).toBeArrayOfSize(0);
+  });
+
+  test("returns one kit bundle config when one platform is given", () => {
+    const kitBundleConfigs = getKitBundleConfigs(definition, ["ios"]);
+    expect(kitBundleConfigs).toBeArrayOfSize(1);
+  });
+
+  test("sets the platform property", () => {
+    const kitBundleConfigs = getKitBundleConfigs(definition, [
+      "ios",
+      "android",
+    ]);
+    expect(kitBundleConfigs).toBeArrayOfSize(2);
+    expect(kitBundleConfigs[0].platform).toEqual("ios");
+    expect(kitBundleConfigs[1].platform).toEqual("android");
+  });
+
+  test("sets all bundle definition properties", () => {
+    const kitBundleConfigs = getKitBundleConfigs(definition, ["android"]);
+    expect(kitBundleConfigs).toBeArrayOfSize(1);
+    expect(kitBundleConfigs[0]).toEqual({
+      ...definition,
+      platform: "android",
+    });
   });
 });
