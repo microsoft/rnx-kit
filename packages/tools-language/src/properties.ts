@@ -48,3 +48,36 @@ export function pickValues<T>(
 
   return pickedValue ? results : undefined;
 }
+
+/**
+ * Add properties to an object, changing it from its current type to an extended type.
+ *
+ * Properties are added in-place, and the original object reference is returned as the extended type.
+ *
+ * @param obj Object to extend
+ * @param extendedProps Properties to add to the object, extending it
+ * @returns The original object reference as the extended type
+ */
+export function extendObject<T, TExtended extends T>(
+  obj: T,
+  extendedProps: Omit<TExtended, keyof T>
+): TExtended {
+  return Object.assign(obj, extendedProps) as TExtended;
+}
+
+/**
+ * Add properties to each object in an array, changing the object from its current type to an extended type.
+ *
+ * Properties are added in-place, and the original object array reference is returned as the extended array type.
+ *
+ * @param arr Array of objects to extend
+ * @param extendedProps Properties to add to each object in the array, extending it
+ * @returns The original object array reference as the extended array type
+ */
+export function extendObjectArray<T, TExtended extends T>(
+  arr: T[],
+  extendedProps: Omit<TExtended, keyof T>
+): TExtended[] {
+  arr.map((obj) => Object.assign(obj, extendedProps));
+  return arr as TExtended[];
+}

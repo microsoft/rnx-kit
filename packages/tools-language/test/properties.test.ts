@@ -1,5 +1,10 @@
 import "jest-extended";
-import { pickValue, pickValues } from "../src/properties";
+import {
+  pickValue,
+  pickValues,
+  extendObject,
+  extendObjectArray,
+} from "../src/properties";
 
 describe("Language > Props", () => {
   test("pickValue returns undefined when the key is not found", () => {
@@ -89,5 +94,62 @@ describe("Language > Props", () => {
         ["x", "y", "foo"]
       )
     ).toEqual({ x: 123, y: "test" });
+  });
+
+  type BaseType = { base: string };
+  type ExtendedType = BaseType & { extended?: number };
+
+  const baseObj: BaseType = { base: "base object" };
+  const extendedProps: Omit<ExtendedType, keyof BaseType> = { extended: 12345 };
+
+  test("extendObject adds the extended props", () => {
+    const copy = { ...baseObj };
+    expect(extendObject<BaseType, ExtendedType>(copy, extendedProps)).toEqual({
+      ...baseObj,
+      ...extendedProps,
+    });
+  });
+
+  test("extendObject returns the original object reference", () => {
+    const copy = { ...baseObj };
+    expect(extendObject<BaseType, ExtendedType>(copy, extendedProps)).toBe(
+      copy
+    );
+  });
+
+  test("extendObject makes no changes when extended props are optional and are not given", () => {
+    const copy = { ...baseObj };
+    expect(extendObject<BaseType, ExtendedType>(copy, {})).toEqual(baseObj);
+  });
+
+  test("extendObjectArray adds the extended props to each object in the array", () => {
+    const copy = [{ ...baseObj }];
+    const extended = extendObjectArray<BaseType, ExtendedType>(
+      copy,
+      extendedProps
+    );
+    expect(extended).toBeArrayOfSize(1);
+    expect(extended).toIncludeSameMembers([
+      {
+        ...baseObj,
+        ...extendedProps,
+      },
+    ]);
+  });
+
+  test("extendObjectArray returns the original object array reference", () => {
+    const copy = [{ ...baseObj }];
+    const extended = extendObjectArray<BaseType, ExtendedType>(
+      copy,
+      extendedProps
+    );
+    expect(extended).toBe(copy);
+  });
+
+  test("extendObjectArray makes no changes when extended props are optional and are not given", () => {
+    const copy = [{ ...baseObj }];
+    const extended = extendObjectArray<BaseType, ExtendedType>(copy, {});
+    expect(extended).toBeArrayOfSize(1);
+    expect(extended).toIncludeSameMembers([baseObj]);
   });
 });
