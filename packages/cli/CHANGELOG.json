@@ -2,6 +2,21 @@
   "name": "@rnx-kit/cli",
   "entries": [
     {
+      "date": "Tue, 24 Aug 2021 08:15:03 GMT",
+      "tag": "@rnx-kit/cli_v0.9.14",
+      "version": "0.9.14",
+      "comments": {
+        "patch": [
+          {
+            "author": "afoxman@microsoft.com",
+            "package": "@rnx-kit/cli",
+            "comment": "Create type KitBundleConfig which combines a platform and its bundle configuration. Update rnxBundle to build a set of these, and apply command-line overrides to each one. Add/update related tests.",
+            "commit": "b72c487ff1c4a6e5750a5c6156b4283e632683d4"
+          }
+        ]
+      }
+    },
+    {
       "date": "Tue, 24 Aug 2021 08:09:36 GMT",
       "tag": "@rnx-kit/cli_v0.9.13",
       "version": "0.9.13",
