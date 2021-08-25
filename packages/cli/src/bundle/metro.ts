@@ -1,5 +1,5 @@
 import { info, warn } from "@rnx-kit/console";
-import { bundle } from "@rnx-kit/metro-service";
+import { bundle, BundleArgs as MetroBundleArgs } from "@rnx-kit/metro-service";
 import { createDirectory } from "@rnx-kit/tools-node/fs";
 import { Service } from "@rnx-kit/typescript-service";
 import chalk from "chalk";
@@ -10,40 +10,20 @@ import type { TSProjectInfo } from "../types";
 import type { BundleConfig } from "./types";
 
 /**
- * Run the Metro bundler.
+ * Create Metro bundler arguments from a bundle configuration.
  *
- * @param tsservice TypeScript service to use for type-checking (when enabled)
- * @param metroConfig Metro configuration
  * @param bundleConfig Bundle configuration
+ * @returns Metro bundle arguments
  */
-export async function metroBundle(
-  tsservice: Service,
-  metroConfig: ConfigT,
+export function createMetroBundleArgs(
   bundleConfig: BundleConfig
-): Promise<void> {
-  const targetPlatform = bundleConfig.platform;
-
-  info(`Bundling ${targetPlatform}...`);
-
-  const {
-    entryPath,
-    distPath,
-    assetsPath,
-    bundlePrefix,
-    bundleEncoding,
-    sourceMapSourceRootPath,
-    detectCyclicDependencies,
-    detectDuplicateDependencies,
-    typescriptValidation,
-    experimental_treeShake,
-  } = bundleConfig;
+): MetroBundleArgs {
+  const { platform, distPath } = bundleConfig;
 
   //  assemble the full path to the bundle file
   const bundleExtension =
-    targetPlatform === "ios" || targetPlatform === "macos"
-      ? "jsbundle"
-      : "bundle";
-  const bundleFile = `${bundlePrefix}.${targetPlatform}.${bundleExtension}`;
+    platform === "ios" || platform === "macos" ? "jsbundle" : "bundle";
+  const bundleFile = `${bundleConfig.bundlePrefix}.${platform}.${bundleExtension}`;
   const bundlePath = path.join(distPath, bundleFile);
 
   let { sourceMapPath } = bundleConfig;
@@ -58,17 +38,44 @@ export async function metroBundle(
     sourceMapPath = path.join(distPath, sourceMapPath);
   }
 
+  return {
+    assetsDest: bundleConfig.assetsPath,
+    entryFile: bundleConfig.entryPath,
+    minify: bundleConfig.minify,
+    platform,
+    dev: bundleConfig.dev,
+    bundleOutput: bundlePath,
+    bundleEncoding: bundleConfig.bundleEncoding,
+    sourcemapOutput: sourceMapPath,
+    sourcemapSourcesRoot: bundleConfig.sourceMapSourceRootPath,
+  };
+}
+
+/**
+ * Run the Metro bundler.
+ *
+ * @param tsservice TypeScript service to use for type-checking (when enabled)
+ * @param metroConfig Metro configuration
+ * @param bundleConfig Bundle configuration
+ */
+export async function metroBundle(
+  tsservice: Service,
+  metroConfig: ConfigT,
+  bundleConfig: BundleConfig
+): Promise<void> {
+  info(`Bundling ${bundleConfig.platform}...`);
+
   let tsprojectInfo: TSProjectInfo | undefined;
-  if (typescriptValidation) {
+  if (bundleConfig.typescriptValidation) {
     const configFileName = tsservice
       .getProjectConfigLoader()
-      .find(entryPath, "tsconfig.json");
+      .find(bundleConfig.entryPath, "tsconfig.json");
     if (!configFileName) {
       warn(
         chalk.yellow(
           "skipping TypeScript validation -- cannot find tsconfig.json for entry file %o"
         ),
-        entryPath
+        bundleConfig.entryPath
       );
     } else {
       tsprojectInfo = {
@@ -80,30 +87,20 @@ export async function metroBundle(
 
   customizeMetroConfig(
     metroConfig,
-    detectCyclicDependencies,
-    detectDuplicateDependencies,
+    bundleConfig.detectCyclicDependencies,
+    bundleConfig.detectDuplicateDependencies,
     tsprojectInfo,
-    experimental_treeShake
+    bundleConfig.experimental_treeShake
   );
+
+  const metroBundleArgs = createMetroBundleArgs(bundleConfig);
 
   // ensure all output directories exist
-  createDirectory(path.dirname(bundlePath));
-  sourceMapPath && createDirectory(path.dirname(sourceMapPath));
-  assetsPath && createDirectory(assetsPath);
+  createDirectory(path.dirname(metroBundleArgs.bundleOutput));
+  metroBundleArgs.sourcemapOutput &&
+    createDirectory(path.dirname(metroBundleArgs.sourcemapOutput));
+  metroBundleArgs.assetsDest && createDirectory(metroBundleArgs.assetsDest);
 
   // create the bundle
-  await bundle(
-    {
-      assetsDest: assetsPath,
-      entryFile: entryPath,
-      minify: bundleConfig.minify,
-      platform: targetPlatform,
-      dev: bundleConfig.dev,
-      bundleOutput: bundlePath,
-      bundleEncoding,
-      sourcemapOutput: sourceMapPath,
-      sourcemapSourcesRoot: sourceMapSourceRootPath,
-    },
-    metroConfig
-  );
+  await bundle(metroBundleArgs, metroConfig);
 }
