@@ -26,3 +26,12 @@ export function findFirstFileExists(
 
   return undefined;
 }
+
+/**
+ * Create a directory, and all missing parent directories.
+ *
+ * @param p Directory to create
+ */
+export function createDirectory(p: string): void {
+  fs.mkdirSync(p, { recursive: true, mode: 0o755 });
+}
