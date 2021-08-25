@@ -1,5 +1,4 @@
 import type { AllPlatforms } from "@rnx-kit/tools-react-native/platform";
-import "jest-extended";
 import path from "path";
 import { createMetroBundleArgs } from "../../src/bundle/metro";
 import { BundleConfig } from "../../src/bundle/types";
