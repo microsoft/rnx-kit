@@ -2,6 +2,21 @@
   "name": "@rnx-kit/tools-node",
   "entries": [
     {
+      "date": "Wed, 25 Aug 2021 08:52:48 GMT",
+      "tag": "@rnx-kit/tools-node_v1.1.0",
+      "version": "1.1.0",
+      "comments": {
+        "minor": [
+          {
+            "author": "afoxman@microsoft.com",
+            "package": "@rnx-kit/tools-node",
+            "comment": "Add a method to create a directory, including parent directories.",
+            "commit": "0e657ab7ff261ebf6873ef7418cbb40d6418ca8e"
+          }
+        ]
+      }
+    },
+    {
       "date": "Wed, 25 Aug 2021 07:32:57 GMT",
       "tag": "@rnx-kit/tools-node_v1.0.2",
       "version": "1.0.2",

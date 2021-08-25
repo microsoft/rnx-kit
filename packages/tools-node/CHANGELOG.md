@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/tools-node
 
-This log was last generated on Wed, 25 Aug 2021 07:32:57 GMT and should not be manually modified.
+This log was last generated on Wed, 25 Aug 2021 08:52:48 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 1.1.0
+
+Wed, 25 Aug 2021 08:52:48 GMT
+
+### Minor changes
+
+- Add a method to create a directory, including parent directories. (afoxman@microsoft.com)
 
 ## 1.0.2
 

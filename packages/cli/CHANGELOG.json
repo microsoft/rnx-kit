@@ -2,6 +2,35 @@
   "name": "@rnx-kit/cli",
   "entries": [
     {
+      "date": "Wed, 25 Aug 2021 08:52:48 GMT",
+      "tag": "@rnx-kit/cli_v0.9.18",
+      "version": "0.9.18",
+      "comments": {
+        "none": [
+          {
+            "author": "afoxman@microsoft.com",
+            "package": "@rnx-kit/cli",
+            "comment": "Mechanical change -- move metro-specific bundling logic to its own file. No code changes.",
+            "commit": "0e657ab7ff261ebf6873ef7418cbb40d6418ca8e"
+          },
+          {
+            "author": "afoxman@microsoft.com",
+            "package": "@rnx-kit/cli",
+            "comment": "Use createDirectory tools function",
+            "commit": "0e657ab7ff261ebf6873ef7418cbb40d6418ca8e"
+          }
+        ],
+        "patch": [
+          {
+            "author": "afoxman@microsoft.com",
+            "package": "@rnx-kit/cli",
+            "commit": "0e657ab7ff261ebf6873ef7418cbb40d6418ca8e",
+            "comment": "Bump @rnx-kit/cli to v0.9.18"
+          }
+        ]
+      }
+    },
+    {
       "date": "Wed, 25 Aug 2021 08:31:56 GMT",
       "tag": "@rnx-kit/cli_v0.9.17",
       "version": "0.9.17",
