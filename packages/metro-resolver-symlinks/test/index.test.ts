@@ -16,17 +16,24 @@ describe("getMetroResolver", () => {
     const p = useFixture("metro-resolver-duplicates");
     expect(getMetroResolver(p)({} as any, "", null)).toEqual(
       expect.stringContaining(
-        "metro-resolver-duplicates/node_modules/@react-native-community/cli/node_modules/metro-resolver"
+        path.join(
+          "metro-resolver-duplicates",
+          "node_modules",
+          "@react-native-community",
+          "cli",
+          "node_modules",
+          "metro-resolver"
+        )
       )
     );
   });
 
   test("throws if `metro-resolver` cannot be found", () => {
-    const cwd = process.cwd()
+    const cwd = process.cwd();
     const root = cwd.substr(0, cwd.indexOf(path.sep) + 1);
-    expect(() =>
-      getMetroResolver(root)({} as any, "", null)
-    ).toThrowError("Cannot find module");
+    expect(() => getMetroResolver(root)({} as any, "", null)).toThrowError(
+      "Cannot find module"
+    );
   });
 });
 
@@ -113,6 +120,6 @@ describe("resolveModulePath", () => {
         "react-native",
         path.join(p, "node_modules", "terminator")
       )
-    ).toBe("terminator/node_modules/react-native");
+    ).toBe(path.join("terminator", "node_modules", "react-native"));
   });
 });
