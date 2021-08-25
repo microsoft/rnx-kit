@@ -56,7 +56,7 @@ describe("Node > FS", () => {
     createDirectory(p);
     const stats = fs.statSync(p);
     expect(stats.isDirectory()).toBeTrue();
-    expect(stats.mode).toEqual(0o755);
+    expect(stats.mode & 0o755).toEqual(0o755);
   });
 
   test("createDirectory() creates a parent directory", () => {
@@ -74,6 +74,6 @@ describe("Node > FS", () => {
     createDirectory(p);
     const stats = fs.statSync(parent);
     expect(stats.isDirectory()).toBeTrue();
-    expect(stats.mode).toEqual(0o755);
+    expect(stats.mode & 0o755).toEqual(0o755);
   });
 });
