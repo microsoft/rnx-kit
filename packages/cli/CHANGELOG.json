@@ -2,6 +2,21 @@
   "name": "@rnx-kit/cli",
   "entries": [
     {
+      "date": "Wed, 25 Aug 2021 16:13:13 GMT",
+      "tag": "@rnx-kit/cli_v0.9.18",
+      "version": "0.9.18",
+      "comments": {
+        "none": [
+          {
+            "author": "afoxman@microsoft.com",
+            "package": "@rnx-kit/cli",
+            "comment": "Separate out the code which converts from a bundle config to Metro bundle args. Add tests for the conversion.",
+            "commit": "a66b07778871fffd7921acf14e697031432c424e"
+          }
+        ]
+      }
+    },
+    {
       "date": "Wed, 25 Aug 2021 08:52:48 GMT",
       "tag": "@rnx-kit/cli_v0.9.18",
       "version": "0.9.18",

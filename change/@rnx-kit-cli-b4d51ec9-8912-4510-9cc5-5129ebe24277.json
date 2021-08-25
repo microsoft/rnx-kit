@@ -1,7 +1,0 @@
-{
-  "type": "none",
-  "comment": "Separate out the code which converts from a bundle config to Metro bundle args. Add tests for the conversion.",
-  "packageName": "@rnx-kit/cli",
-  "email": "afoxman@microsoft.com",
-  "dependentChangeType": "none"
-}
