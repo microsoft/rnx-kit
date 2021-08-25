@@ -39,6 +39,11 @@
     "@react-native-community/cli-server-api": "^5.0.0-0 || ^6.0.0-0",
     "jest-cli": "^26.0 || ^27.0"
   },
+  "peerDependenciesMeta": {
+    "@react-native-community/cli-server-api": {
+      "optional": true
+    }
+  },
   "devDependencies": {
     "@react-native-community/cli-types": "^6.0.0",
     "@rnx-kit/jest-preset": "*",
