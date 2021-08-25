@@ -17,7 +17,9 @@ export type BundleConfig = KitBundleConfig & {
    * Choose whether or not this will be a "developer" bundle. The alternative is a "production" bundle.
    *
    * When `true`, warnings are enabled, and the bundle is not minified by default.
-   * When `false`, Warnings are disabled and the bundle is minified by default.
+   * Further, optimizations like constant folding are disabled.
+   *
+   * When `false`, warnings are disabled and the bundle is minified by default.
    */
   dev: boolean;
 
