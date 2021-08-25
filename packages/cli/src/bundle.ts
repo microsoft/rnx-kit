@@ -1,6 +1,7 @@
 import type { Config as CLIConfig } from "@react-native-community/cli-types";
 import { info, warn } from "@rnx-kit/console";
 import { bundle, BundleArgs, loadMetroConfig } from "@rnx-kit/metro-service";
+import { extendObjectArray } from "@rnx-kit/tools-language/properties";
 import type { AllPlatforms } from "@rnx-kit/tools-react-native/platform";
 import { Service } from "@rnx-kit/typescript-service";
 import chalk from "chalk";
@@ -8,6 +9,7 @@ import fs from "fs";
 import path from "path";
 import { getKitBundleConfigs } from "./bundle/kit-config";
 import { applyKitBundleConfigOverrides } from "./bundle/overrides";
+import type { BundleConfig, KitBundleConfig } from "./bundle/types";
 import { customizeMetroConfig } from "./metro-config";
 import type { TSProjectInfo } from "./types";
 
@@ -46,10 +48,18 @@ export async function rnxBundle(
 
   applyKitBundleConfigOverrides(cliOptions, kitBundleConfigs);
 
+  const bundleConfigs = extendObjectArray<KitBundleConfig, BundleConfig>(
+    kitBundleConfigs,
+    {
+      dev: cliOptions.dev,
+      minify: cliOptions.minify,
+    }
+  );
+
   const tsservice = new Service();
 
-  for (const kitBundleConfig of kitBundleConfigs) {
-    const targetPlatform = kitBundleConfig.platform;
+  for (const bundleConfig of bundleConfigs) {
+    const targetPlatform = bundleConfig.platform;
 
     info(`Bundling ${targetPlatform}...`);
 
@@ -64,7 +74,7 @@ export async function rnxBundle(
       detectDuplicateDependencies,
       typescriptValidation,
       experimental_treeShake,
-    } = kitBundleConfig;
+    } = bundleConfig;
 
     //  assemble the full path to the bundle file
     const bundleExtension =
@@ -74,10 +84,10 @@ export async function rnxBundle(
     const bundleFile = `${bundlePrefix}.${targetPlatform}.${bundleExtension}`;
     const bundlePath = path.join(distPath, bundleFile);
 
-    let { sourceMapPath } = kitBundleConfig;
+    let { sourceMapPath } = bundleConfig;
 
     //  always create a source-map in dev mode
-    if (cliOptions.dev) {
+    if (bundleConfig.dev) {
       sourceMapPath = sourceMapPath ?? bundleFile + ".map";
     }
 
@@ -128,9 +138,9 @@ export async function rnxBundle(
       {
         assetsDest: assetsPath,
         entryFile: entryPath,
-        minify: cliOptions.minify,
+        minify: bundleConfig.minify,
         platform: targetPlatform,
-        dev: cliOptions.dev,
+        dev: bundleConfig.dev,
         bundleOutput: bundlePath,
         bundleEncoding,
         sourcemapOutput: sourceMapPath,

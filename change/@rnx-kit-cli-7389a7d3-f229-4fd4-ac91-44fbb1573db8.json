@@ -1,0 +1,7 @@
+{
+  "type": "patch",
+  "comment": "Create a new type to encapsulate everything needed for bundling. Use this as the main type for driving metro bundle runs in the rnxBundle loop.",
+  "packageName": "@rnx-kit/cli",
+  "email": "afoxman@microsoft.com",
+  "dependentChangeType": "patch"
+}
