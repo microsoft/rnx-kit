@@ -2,6 +2,21 @@
   "name": "@rnx-kit/metro-service",
   "entries": [
     {
+      "date": "Wed, 25 Aug 2021 06:13:43 GMT",
+      "tag": "@rnx-kit/metro-service_v1.1.1",
+      "version": "1.1.1",
+      "comments": {
+        "none": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/metro-service",
+            "comment": "Bump @react-native-community/cli to 6.0",
+            "commit": "0ef422105802569f5ce0688aea238926c9570fe9"
+          }
+        ]
+      }
+    },
+    {
       "date": "Tue, 24 Aug 2021 08:09:36 GMT",
       "tag": "@rnx-kit/metro-service_v1.1.1",
       "version": "1.1.1",
