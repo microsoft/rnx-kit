@@ -15,39 +15,44 @@ import type { BundleConfig } from "./types";
  * @param bundleConfig Bundle configuration
  * @returns Metro bundle arguments
  */
-export function createMetroBundleArgs(
-  bundleConfig: BundleConfig
-): MetroBundleArgs {
-  const { platform, distPath } = bundleConfig;
-
+export function createMetroBundleArgs({
+  entryPath: entryFile,
+  distPath,
+  assetsPath: assetsDest,
+  bundlePrefix,
+  bundleEncoding,
+  sourceMapPath: sourcemapOutput,
+  sourceMapSourceRootPath: sourcemapSourcesRoot,
+  platform,
+  dev,
+  minify,
+}: BundleConfig): MetroBundleArgs {
   //  assemble the full path to the bundle file
   const bundleExtension =
     platform === "ios" || platform === "macos" ? "jsbundle" : "bundle";
-  const bundleFile = `${bundleConfig.bundlePrefix}.${platform}.${bundleExtension}`;
+  const bundleFile = `${bundlePrefix}.${platform}.${bundleExtension}`;
   const bundlePath = path.join(distPath, bundleFile);
 
-  let { sourceMapPath } = bundleConfig;
-
   //  always create a source-map in dev mode
-  if (bundleConfig.dev) {
-    sourceMapPath = sourceMapPath ?? bundleFile + ".map";
+  if (dev) {
+    sourcemapOutput = sourcemapOutput ?? bundleFile + ".map";
   }
 
   //  use an absolute path for the source map file
-  if (sourceMapPath) {
-    sourceMapPath = path.join(distPath, sourceMapPath);
+  if (sourcemapOutput) {
+    sourcemapOutput = path.join(distPath, sourcemapOutput);
   }
 
   return {
-    assetsDest: bundleConfig.assetsPath,
-    entryFile: bundleConfig.entryPath,
-    minify: bundleConfig.minify,
+    assetsDest,
+    entryFile,
+    minify,
     platform,
-    dev: bundleConfig.dev,
+    dev,
     bundleOutput: bundlePath,
-    bundleEncoding: bundleConfig.bundleEncoding,
-    sourcemapOutput: sourceMapPath,
-    sourcemapSourcesRoot: bundleConfig.sourceMapSourceRootPath,
+    bundleEncoding,
+    sourcemapOutput,
+    sourcemapSourcesRoot,
   };
 }
 

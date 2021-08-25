@@ -1,7 +1,7 @@
 import type { AllPlatforms } from "@rnx-kit/tools-react-native/platform";
 import path from "path";
 import { createMetroBundleArgs } from "../../src/bundle/metro";
-import { BundleConfig } from "../../src/bundle/types";
+import type { BundleConfig } from "../../src/bundle/types";
 
 describe("CLI > Bundle > Metro > createMetroBundleArgs", () => {
   const bundleConfig: BundleConfig = {
