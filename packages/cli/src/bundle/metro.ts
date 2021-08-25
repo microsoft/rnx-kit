@@ -1,8 +1,8 @@
 import { info, warn } from "@rnx-kit/console";
 import { bundle } from "@rnx-kit/metro-service";
+import { createDirectory } from "@rnx-kit/tools-node/fs";
 import { Service } from "@rnx-kit/typescript-service";
 import chalk from "chalk";
-import fs from "fs";
 import type { ConfigT } from "metro-config";
 import path from "path";
 import { customizeMetroConfig } from "../metro-config";
@@ -87,13 +87,9 @@ export async function metroBundle(
   );
 
   // ensure all output directories exist
-  fs.mkdirSync(path.dirname(bundlePath), { recursive: true, mode: 0o755 });
-  sourceMapPath &&
-    fs.mkdirSync(path.dirname(sourceMapPath), {
-      recursive: true,
-      mode: 0o755,
-    });
-  assetsPath && fs.mkdirSync(assetsPath, { recursive: true, mode: 0o755 });
+  createDirectory(path.dirname(bundlePath));
+  sourceMapPath && createDirectory(path.dirname(sourceMapPath));
+  assetsPath && createDirectory(assetsPath);
 
   // create the bundle
   await bundle(

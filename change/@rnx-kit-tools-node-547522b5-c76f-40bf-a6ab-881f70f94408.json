@@ -1,0 +1,7 @@
+{
+  "type": "minor",
+  "comment": "Add a method to create a directory, including parent directories.",
+  "packageName": "@rnx-kit/tools-node",
+  "email": "afoxman@microsoft.com",
+  "dependentChangeType": "patch"
+}

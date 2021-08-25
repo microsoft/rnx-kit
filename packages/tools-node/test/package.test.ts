@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 import tempDir from "temp-dir";
-import type { PackageManifest } from "../../src/node/package";
+import type { PackageManifest } from "../src/package";
 import {
   findPackage,
   findPackageDependencyDir,
