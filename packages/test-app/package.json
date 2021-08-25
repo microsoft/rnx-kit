@@ -21,17 +21,17 @@
     "start": "react-native rnx-start --project-root src"
   },
   "dependencies": {
-    "react": "17.0.1",
-    "react-native": "^0.64.2",
-    "react-native-windows": "^0.64.0"
+    "react": "17.0.2",
+    "react-native": "^0.65.0-0",
+    "react-native-windows": "^0.65.0-0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
     "@babel/preset-env": "^7.1.6",
     "@babel/runtime": "^7.12.5",
-    "@react-native-community/cli": "^5.0.0-0",
-    "@react-native-community/cli-platform-android": "^5.0.0-0",
-    "@react-native-community/cli-platform-ios": "^5.0.0-0",
+    "@react-native-community/cli": "^6.0.0-0",
+    "@react-native-community/cli-platform-android": "^6.0.0-0",
+    "@react-native-community/cli-platform-ios": "^6.0.0-0",
     "@rnx-kit/babel-preset-metro-react-native": "*",
     "@rnx-kit/cli": "*",
     "@rnx-kit/jest-preset": "*",
@@ -43,7 +43,8 @@
     "@rnx-kit/metro-serializer-esbuild": "*",
     "@types/react": "^17.0.2",
     "@types/react-native": "^0.64.0",
-    "metro-react-native-babel-preset": "^0.66.1",
+    "metro-react-native-babel-preset": "^0.66.2",
+    "react-native-codegen": "^0.0.7",
     "react-native-test-app": "^0.7.0",
     "react-test-renderer": "^17.0.2",
     "rnx-kit-scripts": "*",
@@ -60,7 +61,7 @@
     "testRegex": "/test/.*\\.test\\.tsx?$"
   },
   "rnx-kit": {
-    "reactNativeVersion": "^0.64",
+    "reactNativeVersion": "^0.65",
     "kitType": "app",
     "bundle": {
       "entryPath": "src/index.ts",

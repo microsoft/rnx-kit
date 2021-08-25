@@ -56,7 +56,7 @@ if (require.main === module) {
     "custom-profiles": __filename,
     // the following packages support multiple versions of react-native
     "exclude-packages": "@rnx-kit/jest-preset,@rnx-kit/metro-config",
-    vigilant: "0.64",
+    vigilant: "0.65",
     write: process.argv.includes("--write"),
   });
 }

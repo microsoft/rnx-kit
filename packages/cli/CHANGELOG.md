@@ -1,8 +1,25 @@
 # Change Log - @rnx-kit/cli
 
-This log was last generated on Tue, 24 Aug 2021 09:20:39 GMT and should not be manually modified.
+This log was last generated on Wed, 25 Aug 2021 08:31:56 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 0.9.17
+
+Wed, 25 Aug 2021 08:31:56 GMT
+
+### Patches
+
+- Make `@react-native-community/cli-server-api` optional. We want to prevent cli from installing an extra copy, and also not require the user to explicitly add it to their dependencies. Since we're running inside `@react-native-community/cli`, it is reasonable to assume that this package will be installed. And if it isn't, we need to update our code anyway. (4123478+tido64@users.noreply.github.com)
+
+## 0.9.16
+
+Wed, 25 Aug 2021 07:32:57 GMT
+
+### Patches
+
+- Create a new type to encapsulate everything needed for bundling. Use this as the main type for driving metro bundle runs in the rnxBundle loop. (afoxman@microsoft.com)
+- Bump @rnx-kit/cli to v0.9.16 (afoxman@microsoft.com)
 
 ## 0.9.15
 
