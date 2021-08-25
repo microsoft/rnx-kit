@@ -2,6 +2,21 @@
   "name": "@rnx-kit/config",
   "entries": [
     {
+      "date": "Wed, 25 Aug 2021 08:52:48 GMT",
+      "tag": "@rnx-kit/config_v0.4.3",
+      "version": "0.4.3",
+      "comments": {
+        "patch": [
+          {
+            "author": "afoxman@microsoft.com",
+            "package": "@rnx-kit/config",
+            "commit": "0e657ab7ff261ebf6873ef7418cbb40d6418ca8e",
+            "comment": "Bump @rnx-kit/config to v0.4.3"
+          }
+        ]
+      }
+    },
+    {
       "date": "Wed, 25 Aug 2021 07:32:57 GMT",
       "tag": "@rnx-kit/config_v0.4.2",
       "version": "0.4.2",
