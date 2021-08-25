@@ -1,8 +1,5 @@
+import type CliServerApi from "@react-native-community/cli-server-api";
 import type { Config as CLIConfig } from "@react-native-community/cli-types";
-import {
-  createDevServerMiddleware,
-  indexPageMiddleware,
-} from "@react-native-community/cli-server-api";
 import {
   createTerminal,
   loadMetroConfig,
@@ -36,6 +33,16 @@ export type CLIStartOptions = {
   interactive: boolean;
 };
 
+function friendlyRequire<T>(module: string): T {
+  try {
+    return require(module) as T;
+  } catch (_) {
+    throw new Error(
+      `Cannot find module '${module}'. This probably means that '@rnx-kit/cli' is not compatible with the version of '@react-native-community/cli' that you are currently using. Please update to the latest version and try again. If the issue still persists after the update, please file a bug at https://github.com/microsoft/rnx-kit/issues.`
+    );
+  }
+}
+
 export async function rnxStart(
   _argv: Array<string>,
   cliConfig: CLIConfig,
@@ -45,6 +52,10 @@ export async function rnxStart(
   if (!serverConfig) {
     return Promise.resolve();
   }
+
+  const { createDevServerMiddleware, indexPageMiddleware } = friendlyRequire<
+    typeof CliServerApi
+  >("@react-native-community/cli-server-api");
 
   // interactive mode requires raw access to stdin
   let interactive = cliOptions.interactive;
