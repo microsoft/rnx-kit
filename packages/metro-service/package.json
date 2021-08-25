@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/metro-service",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "Metro service for bundling and bundle-serving",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/metro-service#readme",
   "license": "MIT",
@@ -22,7 +22,7 @@
     "node": ">= 10.12"
   },
   "dependencies": {
-    "@rnx-kit/tools-language": "^1.0.1",
+    "@rnx-kit/tools-language": "^1.1.0",
     "chalk": "^4.1.0",
     "cp-file": "^9.1.0",
     "make-dir": "^3.1.0"
@@ -36,7 +36,7 @@
     "metro-runtime": ">=0.66.1"
   },
   "devDependencies": {
-    "@react-native-community/cli-types": "^5.0.1",
+    "@react-native-community/cli-types": "^6.0.0",
     "@rnx-kit/jest-preset": "*",
     "@types/metro": "*",
     "@types/metro-babel-transformer": "*",
