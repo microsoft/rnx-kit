@@ -2,6 +2,48 @@
   "name": "@rnx-kit/cli",
   "entries": [
     {
+      "date": "Wed, 25 Aug 2021 07:32:57 GMT",
+      "tag": "@rnx-kit/cli_v0.9.16",
+      "version": "0.9.16",
+      "comments": {
+        "patch": [
+          {
+            "author": "afoxman@microsoft.com",
+            "package": "@rnx-kit/cli",
+            "comment": "Create a new type to encapsulate everything needed for bundling. Use this as the main type for driving metro bundle runs in the rnxBundle loop.",
+            "commit": "b8093ce5af4bcdad1b2d91b45da54ee640fab8ae"
+          },
+          {
+            "author": "afoxman@microsoft.com",
+            "package": "@rnx-kit/cli",
+            "commit": "b8093ce5af4bcdad1b2d91b45da54ee640fab8ae",
+            "comment": "Bump @rnx-kit/cli to v0.9.16"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Wed, 25 Aug 2021 06:13:43 GMT",
+      "tag": "@rnx-kit/cli_v0.9.15",
+      "version": "0.9.15",
+      "comments": {
+        "none": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/cli",
+            "comment": "Bump @react-native-community/cli to 6.0",
+            "commit": "0ef422105802569f5ce0688aea238926c9570fe9"
+          },
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/cli",
+            "commit": "0ef422105802569f5ce0688aea238926c9570fe9",
+            "comment": "Bump @rnx-kit/cli to v0.9.15"
+          }
+        ]
+      }
+    },
+    {
       "date": "Tue, 24 Aug 2021 09:20:39 GMT",
       "tag": "@rnx-kit/cli_v0.9.15",
       "version": "0.9.15",
