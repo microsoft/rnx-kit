@@ -100,6 +100,7 @@ describe("Language > Props", () => {
   type ExtendedType = BaseType & { extended?: number };
 
   const baseObj: BaseType = { base: "base object" };
+  const baseObj2: BaseType = { base: "another base object" };
   const extendedProps: Omit<ExtendedType, keyof BaseType> = { extended: 12345 };
 
   test("extendObject adds the extended props", () => {
@@ -122,14 +123,14 @@ describe("Language > Props", () => {
     expect(extendObject<BaseType, ExtendedType>(copy, {})).toEqual(baseObj);
   });
 
-  test("extendObjectArray adds the extended props to each object in the array", () => {
+  test("extendObjectArray adds the extended props to each object in the 1-element array", () => {
     const copy = [{ ...baseObj }];
     const extended = extendObjectArray<BaseType, ExtendedType>(
       copy,
       extendedProps
     );
     expect(extended).toBeArrayOfSize(1);
-    expect(extended).toIncludeSameMembers([
+    expect(extended).toEqual([
       {
         ...baseObj,
         ...extendedProps,
@@ -137,8 +138,27 @@ describe("Language > Props", () => {
     ]);
   });
 
+  test("extendObjectArray adds the extended props to each object in the 2-element array", () => {
+    const copy = [{ ...baseObj }, { ...baseObj2 }];
+    const extended = extendObjectArray<BaseType, ExtendedType>(
+      copy,
+      extendedProps
+    );
+    expect(extended).toBeArrayOfSize(2);
+    expect(extended).toEqual([
+      {
+        ...baseObj,
+        ...extendedProps,
+      },
+      {
+        ...baseObj2,
+        ...extendedProps,
+      },
+    ]);
+  });
+
   test("extendObjectArray returns the original object array reference", () => {
-    const copy = [{ ...baseObj }];
+    const copy = [{ ...baseObj }, { ...baseObj2 }];
     const extended = extendObjectArray<BaseType, ExtendedType>(
       copy,
       extendedProps
@@ -147,9 +167,9 @@ describe("Language > Props", () => {
   });
 
   test("extendObjectArray makes no changes when extended props are optional and are not given", () => {
-    const copy = [{ ...baseObj }];
+    const copy = [{ ...baseObj }, { ...baseObj2 }];
     const extended = extendObjectArray<BaseType, ExtendedType>(copy, {});
-    expect(extended).toBeArrayOfSize(1);
-    expect(extended).toIncludeSameMembers([baseObj]);
+    expect(extended).toBeArrayOfSize(2);
+    expect(extended).toEqual([baseObj, baseObj2]);
   });
 });
