@@ -1,0 +1,118 @@
+import path from "path";
+import {
+  getMetroResolver,
+  getPackageName,
+  isRelativeModule,
+  remapReactNativeModule,
+  resolveModulePath,
+} from "../src/index";
+
+function useFixture(name: string): string {
+  return path.join(__dirname, "__fixtures__", name);
+}
+
+describe("getMetroResolver", () => {
+  test("returns `metro-resolver` installed by `react-native`", () => {
+    const p = useFixture("metro-resolver-duplicates");
+    expect(getMetroResolver(p)({} as any, "", null)).toEqual(
+      expect.stringContaining(
+        "metro-resolver-duplicates/node_modules/@react-native-community/cli/node_modules/metro-resolver"
+      )
+    );
+  });
+
+  test("throws if `metro-resolver` cannot be found", () => {
+    const cwd = process.cwd()
+    const root = cwd.substr(0, cwd.indexOf(path.sep) + 1);
+    expect(() =>
+      getMetroResolver(root)({} as any, "", null)
+    ).toThrowError("Cannot find module");
+  });
+});
+
+describe("getPackageName", () => {
+  test("returns module name", () => {
+    expect(getPackageName("arnold")).toBe("arnold");
+    expect(getPackageName("@arnold/terminator")).toBe("@arnold/terminator");
+  });
+
+  test("strips out file path part", () => {
+    expect(getPackageName("arnold/greatestMovies")).toBe("arnold");
+    expect(getPackageName("@arnold/terminator/models")).toBe(
+      "@arnold/terminator"
+    );
+  });
+});
+
+describe("isRelativeModule", () => {
+  test("returns true only for relative module paths", () => {
+    expect(isRelativeModule(".")).toBe(true);
+    expect(isRelativeModule("../../terminator")).toBe(true);
+    expect(isRelativeModule("../terminator")).toBe(true);
+    expect(isRelativeModule("./")).toBe(true);
+    expect(isRelativeModule("./terminator")).toBe(true);
+    expect(isRelativeModule("//terminator")).toBe(false);
+    expect(isRelativeModule("/terminator")).toBe(false);
+    expect(isRelativeModule("C:\\terminator")).toBe(false);
+    expect(isRelativeModule("terminator")).toBe(false);
+    expect(isRelativeModule("terminator/")).toBe(false);
+  });
+});
+
+describe("remapReactNativeModule", () => {
+  const availablePlatforms = {
+    macos: "react-native-macos",
+    win32: "@office-iss/react-native-win32",
+    windows: "react-native-windows",
+  };
+
+  test("remaps `react-native` if platform is supported", () => {
+    expect(
+      remapReactNativeModule("terminator", "macos", availablePlatforms)
+    ).toBe("terminator");
+
+    expect(
+      remapReactNativeModule("react-native", "nextstep", availablePlatforms)
+    ).toBe("react-native");
+
+    Object.entries(availablePlatforms).forEach(([platform, npmPackage]) => {
+      expect(
+        remapReactNativeModule("react-native", platform, availablePlatforms)
+      ).toBe(npmPackage);
+    });
+  });
+
+  test("remaps paths under `react-native` if platform is supported", () => {
+    const target = "react-native/index";
+
+    expect(remapReactNativeModule(target, "nextstep", availablePlatforms)).toBe(
+      target
+    );
+
+    Object.entries(availablePlatforms).forEach(([platform, npmPackage]) => {
+      expect(remapReactNativeModule(target, platform, availablePlatforms)).toBe(
+        `${npmPackage}/index`
+      );
+    });
+  });
+});
+
+describe("resolveModulePath", () => {
+  test("returns absolute/relative modules as is", () => {
+    expect(resolveModulePath("./terminator", "")).toBe("./terminator");
+    expect(resolveModulePath("/terminator", "")).toBe("/terminator");
+  });
+
+  test("resolves module path relative to requester", () => {
+    const p = useFixture("duplicates");
+    expect(resolveModulePath("react-native", p)).toBe(
+      "duplicates/node_modules/react-native"
+    );
+    expect(
+      resolveModulePath(
+        "react-native",
+        path.join(p, "node_modules", "terminator")
+      )
+    ).toBe("terminator/node_modules/react-native");
+  });
+});
