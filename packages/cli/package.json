@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/cli",
-  "version": "0.9.16",
+  "version": "0.9.17",
   "description": "Command-line interface for working with kit packages in your repo",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/cli",
   "license": "MIT",
@@ -38,6 +38,11 @@
   "peerDependencies": {
     "@react-native-community/cli-server-api": "^5.0.0-0 || ^6.0.0-0",
     "jest-cli": "^26.0 || ^27.0"
+  },
+  "peerDependenciesMeta": {
+    "@react-native-community/cli-server-api": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "@react-native-community/cli-types": "^6.0.0",
