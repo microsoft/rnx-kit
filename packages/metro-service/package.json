@@ -36,7 +36,7 @@
     "metro-runtime": ">=0.66.1"
   },
   "devDependencies": {
-    "@react-native-community/cli-types": "^5.0.1",
+    "@react-native-community/cli-types": "^6.0.0",
     "@rnx-kit/jest-preset": "*",
     "@types/metro": "*",
     "@types/metro-babel-transformer": "*",
