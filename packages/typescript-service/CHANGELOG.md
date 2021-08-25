@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/typescript-service
 
-This log was last generated on Mon, 23 Aug 2021 17:40:48 GMT and should not be manually modified.
+This log was last generated on Wed, 25 Aug 2021 07:32:57 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 1.3.1
+
+Wed, 25 Aug 2021 07:32:57 GMT
+
+### Patches
+
+- Bump @rnx-kit/typescript-service to v1.3.1 (afoxman@microsoft.com)
 
 ## 1.3.0
 

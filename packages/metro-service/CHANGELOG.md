@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/metro-service
 
-This log was last generated on Sat, 21 Aug 2021 08:22:48 GMT and should not be manually modified.
+This log was last generated on Wed, 25 Aug 2021 07:32:57 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 1.1.2
+
+Wed, 25 Aug 2021 07:32:57 GMT
+
+### Patches
+
+- Bump @rnx-kit/metro-service to v1.1.2 (afoxman@microsoft.com)
 
 ## 1.1.1
 
