@@ -2,6 +2,21 @@
   "name": "@rnx-kit/cli",
   "entries": [
     {
+      "date": "Wed, 25 Aug 2021 08:31:56 GMT",
+      "tag": "@rnx-kit/cli_v0.9.17",
+      "version": "0.9.17",
+      "comments": {
+        "patch": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/cli",
+            "comment": "Make `@react-native-community/cli-server-api` optional. We want to prevent cli from installing an extra copy, and also not require the user to explicitly add it to their dependencies. Since we're running inside `@react-native-community/cli`, it is reasonable to assume that this package will be installed. And if it isn't, we need to update our code anyway.",
+            "commit": "09e3ee0807e9558a0c46b252b2662c524095c41c"
+          }
+        ]
+      }
+    },
+    {
       "date": "Wed, 25 Aug 2021 07:32:57 GMT",
       "tag": "@rnx-kit/cli_v0.9.16",
       "version": "0.9.16",
