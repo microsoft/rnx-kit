@@ -3,27 +3,9 @@
 
 /**
  * @typedef {import("metro-config").ExtraTransformOptions} ExtraTransformOptions;
+ * @typedef {import("metro-config").InputConfigT} InputConfigT;
  * @typedef {import("metro-config").Middleware} Middleware;
- *
- * @typedef {{
- *   projectRoot?: string;
- *   resetCache?: boolean;
- *   resolver?: {
- *     extraNodeModules?: Record<string, string>;
- *     blacklistRE?: RegExp;
- *     blockList?: RegExp;
- *     [key: string]: unknown;
- *   };
- *   server?: {
- *     enhanceMiddleware?: (middleware: Middleware) => Middleware;
- *   };
- *   transformer?: {
- *     getTransformOptions: () => Promise<ExtraTransformOptions>;
- *     [key: string]: unknown;
- *   };
- *   watchFolders?: string[];
- *   [key: string]: unknown;
- * }} MetroConfig;
+ * @typedef {import("type-fest").PartialDeep<InputConfigT>} MetroConfig;
  */
 
 /** Packages that must be resolved to one specific copy. */

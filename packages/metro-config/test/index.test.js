@@ -248,8 +248,13 @@ describe("@rnx-kit/metro-config", () => {
     expect(config.resolver.blacklistRE.source).toBe(blockList);
     expect(config.resolver.blockList.source).toBe(blockList);
 
-    const transformerOptions = await config.transformer.getTransformOptions();
-    expect(transformerOptions.transform).toEqual({
+    const opts = { dev: false, hot: false };
+    const transformerOptions = await config.transformer?.getTransformOptions?.(
+      [],
+      opts,
+      () => Promise.resolve([])
+    );
+    expect(transformerOptions?.transform).toEqual({
       experimentalImportSupport: false,
       inlineRequires: false,
     });
@@ -292,8 +297,13 @@ describe("@rnx-kit/metro-config", () => {
     expect(config.resolver.blacklistRE.source).toBe(blockList);
     expect(config.resolver.blockList.source).toBe(blockList);
 
-    const transformerOptions = await config.transformer.getTransformOptions();
-    expect(transformerOptions.transform).toEqual({
+    const opts = { dev: false, hot: false };
+    const transformerOptions = await config.transformer?.getTransformOptions?.(
+      [],
+      opts,
+      () => Promise.resolve([])
+    );
+    expect(transformerOptions?.transform).toEqual({
       experimentalImportSupport: false,
       inlineRequires: false,
     });

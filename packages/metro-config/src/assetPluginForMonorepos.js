@@ -7,16 +7,9 @@
  * `server.enhanceMiddleware`.
  *
  * For more details, see https://github.com/facebook/metro/issues/290.
- */
-
-/**
- * @template T
- * @typedef {{-readonly [P in keyof T]: T[P]}} Mutable;
- */
-
-/**
+ *
  * @typedef {import("metro").AssetData} AssetData;
- * @type {(assetData: Mutable<AssetData>) => AssetData};
+ * @type {(assetData: import("type-fest").Mutable<AssetData>) => AssetData};
  */
 module.exports = (assetData) => {
   assetData.httpServerLocation = assetData.httpServerLocation.replace(
