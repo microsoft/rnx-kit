@@ -28,7 +28,7 @@ export function createLicenseFileContents(
     if (!licenseText) {
       if (!license && (!licenseURLs || licenseURLs.length === 0)) {
         throw new Error(
-          `No license information found for package '${name}'. Consider filing an issue for the project to properly advertise it's licence. Pass this module to the tool via '--ignoreModules ${name}' to suppress this message.`
+          `No license information found for package '${name}'. Consider filing an issue for the project to properly advertise its licence. Pass this module to the tool via '--ignoreModules ${name}' to suppress this message.`
         );
       }
       licenseText = `${license} (${licenseURLs.join(" ")})`;
