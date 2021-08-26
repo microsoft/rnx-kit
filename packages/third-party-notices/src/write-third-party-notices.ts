@@ -1,4 +1,5 @@
 import fs from "fs";
+import { findPackage, readPackage } from "@rnx-kit/tools-node/package";
 import { resolve } from "path";
 import { promisify } from "util";
 import { createLicenseJSON } from "./output/json";
@@ -43,7 +44,13 @@ export async function writeThirdPartyNotices(
   const sourceMapJson = await readFileAsync(sourceMapFile, "utf8");
   const sourceMap: SourceMap = JSON.parse(sourceMapJson);
 
-  const moduleNameToPathMap = extractModuleNameToPathMap(options, sourceMap);
+  const currentPackageId = await getCurrentPackageId(options.rootPath);
+
+  const moduleNameToPathMap = extractModuleNameToPathMap(
+    options,
+    currentPackageId,
+    sourceMap
+  );
   const licenses = await extractLicenses(moduleNameToPathMap);
   const outputText = json
     ? createLicenseJSON(licenses)
@@ -57,9 +64,30 @@ export async function writeThirdPartyNotices(
   }
 }
 
+export async function getCurrentPackageId(
+  rootPath: string
+): Promise<string | undefined> {
+  const pkgFile = findPackage(rootPath);
+  if (pkgFile) {
+    const manifest = readPackage(pkgFile);
+    return manifest?.name;
+  }
+
+  return undefined;
+}
+
 // helper functions
-export function normalizePath(p: string): string {
-  return p.replace(/webpack:\/\/\//g, "").replace(/[\\]+/g, "/");
+export function normalizePath(p: string, currentPackageId?: string): string {
+  let result = p.replace(/webpack:\/\/\//g, "");
+  if (currentPackageId) {
+    result = result.replace(
+      new RegExp(`webpack://${currentPackageId}/`, "g"),
+      ""
+    );
+  }
+  result = result.replace(/[\\]+/g, "/");
+
+  return result;
 }
 
 export function splitSourcePath(rootPath: string, p: string): string[] {
@@ -131,11 +159,12 @@ export function parseModule(
 
 export function parseSourceMap(
   options: WriteThirdPartyNoticesOptions,
+  currentPackageId: string | undefined,
   moduleNameToPath: Map<string, string>,
   sourceMap: SourceMap
 ): void {
   sourceMap.sources.forEach((source: string) => {
-    source = normalizePath(source);
+    source = normalizePath(source, currentPackageId);
     if (source.includes(modulesRoot)) {
       parseModule(options, moduleNameToPath, source);
     }
@@ -144,16 +173,22 @@ export function parseSourceMap(
 
 export function extractModuleNameToPathMap(
   options: WriteThirdPartyNoticesOptions,
+  currentPackageId: string | undefined,
   sourceMap: SourceMap
 ): Map<string, string> {
   const moduleNameToPathMap = new Map<string, string>();
 
   if (sourceMap.sources) {
-    parseSourceMap(options, moduleNameToPathMap, sourceMap);
+    parseSourceMap(options, currentPackageId, moduleNameToPathMap, sourceMap);
   }
   if (sourceMap.sections) {
     sourceMap.sections.forEach((section: SourceSection) => {
-      parseSourceMap(options, moduleNameToPathMap, section.map);
+      parseSourceMap(
+        options,
+        currentPackageId,
+        moduleNameToPathMap,
+        section.map
+      );
     });
   }
 

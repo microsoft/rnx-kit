@@ -32,6 +32,14 @@ describe("normalizePath", () => {
     expect(normalizePath("webpack:///webpack/startup")).toBe("webpack/startup");
   });
 
+  test("webPackPackage", () => {
+    expect(normalizePath("webpack://myPkg/path", "myPkg")).toBe("path");
+  });
+
+  test("webPackScopedPackage", () => {
+    expect(normalizePath("webpack://@scope/myPkg/path", "@scope/myPkg")).toBe("path");
+  });
+
   // Paths
   test("relativePath", () => {
     expect(normalizePath("folder/file")).toBe("folder/file");
