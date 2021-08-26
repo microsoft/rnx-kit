@@ -85,9 +85,7 @@ export function normalizePath(p: string, currentPackageId?: string): string {
       ""
     );
   }
-  result = result.replace(/[\\]+/g, "/");
-
-  return result;
+  return result.replace(/[\\]+/g, "/");
 }
 
 export function splitSourcePath(rootPath: string, p: string): string[] {
