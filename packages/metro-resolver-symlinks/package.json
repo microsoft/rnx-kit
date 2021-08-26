@@ -25,6 +25,7 @@
   "devDependencies": {
     "@rnx-kit/eslint-config": "*",
     "@rnx-kit/jest-preset": "*",
+    "@types/metro-resolver": "*",
     "@types/node": "^14.15.0",
     "rnx-kit-scripts": "*"
   },
