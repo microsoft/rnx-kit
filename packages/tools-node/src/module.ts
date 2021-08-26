@@ -27,7 +27,7 @@ export type FileModuleRef = {
  * @return Module components
  */
 export function parseModuleRef(r: string): PackageModuleRef | FileModuleRef {
-  if (r.startsWith(".") || r.startsWith("/")) {
+  if (r.startsWith(".") || path.isAbsolute(r)) {
     return {
       path: r,
     };

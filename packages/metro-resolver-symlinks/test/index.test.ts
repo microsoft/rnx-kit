@@ -37,35 +37,6 @@ describe("getMetroResolver", () => {
   });
 });
 
-describe("getPackageName", () => {
-  test("returns module name", () => {
-    expect(getPackageName("arnold")).toBe("arnold");
-    expect(getPackageName("@arnold/terminator")).toBe("@arnold/terminator");
-  });
-
-  test("strips out file path part", () => {
-    expect(getPackageName("arnold/greatestMovies")).toBe("arnold");
-    expect(getPackageName("@arnold/terminator/models")).toBe(
-      "@arnold/terminator"
-    );
-  });
-});
-
-describe("isRelativeModule", () => {
-  test("returns true only for relative module paths", () => {
-    expect(isRelativeModule(".")).toBe(true);
-    expect(isRelativeModule("../../terminator")).toBe(true);
-    expect(isRelativeModule("../terminator")).toBe(true);
-    expect(isRelativeModule("./")).toBe(true);
-    expect(isRelativeModule("./terminator")).toBe(true);
-    expect(isRelativeModule("//terminator")).toBe(false);
-    expect(isRelativeModule("/terminator")).toBe(false);
-    expect(isRelativeModule("C:\\terminator")).toBe(false);
-    expect(isRelativeModule("terminator")).toBe(false);
-    expect(isRelativeModule("terminator/")).toBe(false);
-  });
-});
-
 describe("remapReactNativeModule", () => {
   const availablePlatforms = {
     macos: "react-native-macos",

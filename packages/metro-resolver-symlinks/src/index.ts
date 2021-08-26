@@ -1,4 +1,8 @@
-import { normalizePath } from "@rnx-kit/tools-node";
+import {
+  isFileModuleRef,
+  normalizePath,
+  parseModuleRef,
+} from "@rnx-kit/tools-node";
 import path from "path";
 
 type MetroResolver = typeof import("metro-resolver").resolve;
@@ -32,17 +36,6 @@ export function getMetroResolver(fromDir = process.cwd()): MetroResolver {
   }
 }
 
-export function getPackageName(moduleName: string): string {
-  return moduleName
-    .split("/")
-    .slice(0, moduleName.startsWith("@") ? 2 : 1)
-    .join("/");
-}
-
-export function isRelativeModule(moduleName: string): boolean {
-  return moduleName.startsWith(".");
-}
-
 export function remapReactNativeModule(
   moduleName: string,
   platform: string,
@@ -64,11 +57,12 @@ export function resolveModulePath(
   originModulePath: string
 ): string {
   // Performance: Assume relative links are not going to hit symlinks
-  if (isRelativeModule(moduleName) || path.isAbsolute(moduleName)) {
+  const ref = parseModuleRef(moduleName);
+  if (isFileModuleRef(ref)) {
     return moduleName;
   }
 
-  const pkgName = getPackageName(moduleName);
+  const pkgName = ref.scope ? `${ref.scope}/${ref.name}` : ref.name;
   const pkgRoot = path.dirname(
     resolveFrom(path.join(pkgName, "package.json"), originModulePath)
   );
