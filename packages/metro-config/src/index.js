@@ -2,15 +2,8 @@
 // @ts-check
 
 /**
- * @typedef {{
- *   transform: {
- *     experimentalImportSupport?: boolean;
- *     inlineRequires?: boolean;
- *     unstable_disableES6Transforms?: boolean;
- *   },
- *   preloadedModules?: boolean;
- *   ramGroups?: string[];
- * }} MetroTransformOptions;
+ * @typedef {import("metro-config").ExtraTransformOptions} ExtraTransformOptions;
+ * @typedef {import("metro-config").Middleware} Middleware;
  *
  * @typedef {{
  *   projectRoot?: string;
@@ -20,11 +13,14 @@
  *     blacklistRE?: RegExp;
  *     blockList?: RegExp;
  *     [key: string]: unknown;
- *   },
+ *   };
+ *   server?: {
+ *     enhanceMiddleware?: (middleware: Middleware) => Middleware;
+ *   };
  *   transformer?: {
- *     getTransformOptions: () => Promise<MetroTransformOptions>;
+ *     getTransformOptions: () => Promise<ExtraTransformOptions>;
  *     [key: string]: unknown;
- *   }
+ *   };
  *   watchFolders?: string[];
  *   [key: string]: unknown;
  * }} MetroConfig;
@@ -207,7 +203,25 @@ module.exports = {
           blacklistRE: blockList, // For Metro < 0.60
           blockList, // For Metro >= 0.60
         },
+        server: {
+          /**
+           * This middleware restores `..` in asset URLs. See
+           * `assetPluginForMonorepos.js` for more details.
+           *
+           * @type {(middleware: Middleware) => Middleware}
+           */
+          enhanceMiddleware: (middleware) => {
+            return (req, res, next) => {
+              const { url } = req;
+              if (url && url.startsWith("/assets/@")) {
+                req.url = url.replace(/@@\//g, "../");
+              }
+              return middleware(req, res, next);
+            };
+          },
+        },
         transformer: {
+          assetPlugins: [require.resolve("./assetPluginForMonorepos")],
           getTransformOptions: async () => ({
             transform: {
               experimentalImportSupport: false,
