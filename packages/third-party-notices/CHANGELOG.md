@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/third-party-notices
 
-This log was last generated on Wed, 25 Aug 2021 08:52:48 GMT and should not be manually modified.
+This log was last generated on Thu, 26 Aug 2021 17:24:29 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 1.2.0
+
+Thu, 26 Aug 2021 17:24:29 GMT
+
+### Minor changes
+
+- Add support for webpack prefixing package names (dannyvv@microsoft.com)
 
 ## 1.1.4
 

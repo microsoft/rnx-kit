@@ -1,7 +1,0 @@
-{
-  "type": "minor",
-  "comment": "Add support for webpack prefixing package names",
-  "packageName": "@rnx-kit/third-party-notices",
-  "email": "dannyvv@microsoft.com",
-  "dependentChangeType": "patch"
-}
