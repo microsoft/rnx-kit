@@ -26,7 +26,7 @@ describe("parseModule", () => {
       ],
     };
     const map = new Map();
-    parseSourceMap(options, map, sourceMap);
+    parseSourceMap(options, undefined, map, sourceMap);
 
     expect(map.size).toBe(2);
     expect(map.get("myPackage")).toBe(
@@ -64,7 +64,7 @@ describe("parseModule", () => {
         },
       ],
     };
-    const map = extractModuleNameToPathMap(options, sourceMap);
+    const map = extractModuleNameToPathMap(options, undefined, sourceMap);
 
     expect(map.size).toBe(4);
     expect(map.get("myPackage")).toBe(
