@@ -81,3 +81,10 @@ export function extendObjectArray<T, TExtended extends T>(
   arr.map((obj) => Object.assign(obj, extendedProps));
   return arr as TExtended[];
 }
+
+export function hasProperty<Property extends string>(
+  obj: unknown,
+  property: Property
+): obj is Record<Property, unknown> {
+  return typeof obj === "object" && obj !== null && property in obj;
+}

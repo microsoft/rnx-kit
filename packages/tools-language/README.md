@@ -21,5 +21,6 @@ import * from "@rnx-kit/tools-language/properties";
 | ---------- | ----------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Function   | `tryInvoke(fn)`                           | Invoke the given function, returning its result or a thrown error.                                                                                          |
 | Math       | `isApproximatelyEqual(f1, f2, tolerance)` | Decide if two numbers, integer or decimal, are "approximately" equal. They're equal if they are close enough to be within the given tolerance.              |
+| Properties | `hasProperty(obj, name)`                  | Returns whether property `name` exists in `obj`.                                                                                                            |
 | Properties | `pickValue(obj, key, name)`               | Pick the value for property `key` from `obj` and return it in a new object. If `name` is given, use it in the new object, instead of `key`.                 |
 | Properties | `pickValues(obj, keys, names)`            | Pick the value for each `key` property from `obj` and return each one in a new object. If `names` are given, use them in the new object, instead of `keys`. |
