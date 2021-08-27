@@ -3,12 +3,17 @@ import {
   normalizePath,
   parseModuleRef,
 } from "@rnx-kit/tools-node";
+import type { ResolutionContext } from "metro-resolver";
 import path from "path";
 
 type MetroResolver = typeof import("metro-resolver").resolve;
 
 type Options = {
-  remapModule?: (moduleName: string, platform: string) => string;
+  remapModule?: (
+    context: ResolutionContext,
+    moduleName: string,
+    platform: string
+  ) => string;
 };
 
 function resolveFrom(moduleName: string, startDir: string): string {
@@ -64,14 +69,14 @@ export function resolveModulePath(
 
   const pkgName = ref.scope ? `${ref.scope}/${ref.name}` : ref.name;
   const pkgRoot = path.dirname(
-    resolveFrom(path.join(pkgName, "package.json"), originModulePath)
+    resolveFrom(`${pkgName}/package.json`, originModulePath)
   );
   const replaced = moduleName.replace(pkgName, pkgRoot);
   return path.relative(path.dirname(originModulePath), replaced);
 }
 
 export default function makeResolver({
-  remapModule = (moduleName, _) => moduleName,
+  remapModule = (_, moduleName, __) => moduleName,
 }: Options): MetroResolver {
   const resolve = getMetroResolver();
 
@@ -90,7 +95,7 @@ export default function makeResolver({
     const backupResolveRequest = context.resolveRequest;
     delete context.resolveRequest;
 
-    let modifiedModuleName = remapModule(moduleName, platform);
+    let modifiedModuleName = remapModule(context, moduleName, platform);
     modifiedModuleName = remapReactNativeModule(
       modifiedModuleName,
       platform,
