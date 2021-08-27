@@ -1,3 +1,7 @@
+import type { IncomingMessage, ServerResponse } from "http";
+import type { AssetData } from "metro";
+import type { Middleware } from "metro-config";
+
 describe("@rnx-kit/metro-config/assetPluginForMonorepos", () => {
   const assetPlugin = require("../src/assetPluginForMonorepos");
   const { enhanceMiddleware } = assetPlugin;
@@ -12,9 +16,7 @@ describe("@rnx-kit/metro-config/assetPluginForMonorepos", () => {
 
   test("escapes `..` in URLs", () => {
     Object.entries(cases).forEach(([input, output]) => {
-      const assetData = /** @type {import("metro").AssetData} */ ({
-        httpServerLocation: input,
-      });
+      const assetData = { httpServerLocation: input } as AssetData;
       expect(assetPlugin(assetData)).toEqual(
         expect.objectContaining({
           httpServerLocation: output,
@@ -25,15 +27,12 @@ describe("@rnx-kit/metro-config/assetPluginForMonorepos", () => {
 
   test("unescapes `..` in URLs", () => {
     Object.entries(cases).forEach(([output, input]) => {
-      /** @type {import("metro-config").Middleware} */
-      const middleware = (req) => {
+      const middleware: Middleware = (req) => {
         expect(req).toEqual(expect.objectContaining({ url: output }));
         return middleware;
       };
-      const incoming = /** @type {import("http").IncomingMessage} */ ({
-        url: input,
-      });
-      const response = /** @type {import("http").ServerResponse} */ ({});
+      const incoming = { url: input } as IncomingMessage;
+      const response = {} as ServerResponse;
       enhanceMiddleware(middleware)(incoming, response, () => undefined);
     });
   });

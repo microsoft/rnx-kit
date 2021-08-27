@@ -1,6 +1,3 @@
-// @ts-check
-"use strict";
-
 describe("@rnx-kit/metro-config", () => {
   const fs = require("fs");
   const path = require("path");
@@ -26,17 +23,15 @@ describe("@rnx-kit/metro-config", () => {
 
   /**
    * Returns path to specified test fixture.
-   * @param {string} name
    */
-  function fixturePath(name) {
+  function fixturePath(name: string): string {
     return path.join(currentWorkingDir, "test", "__fixtures__", name);
   }
 
   /**
    * Sets current working directory to specified test fixture.
-   * @param {string} name
    */
-  function setFixture(name) {
+  function setFixture(name: string): void {
     process.chdir(fixturePath(name));
   }
 
