@@ -77,7 +77,7 @@ export function resolveModulePath(
 
 export default function makeResolver({
   remapModule = (_, moduleName, __) => moduleName,
-}: Options): MetroResolver {
+}: Options = {}): MetroResolver {
   const resolve = getMetroResolver();
 
   // TODO: Read available platforms from `react-native config`.
