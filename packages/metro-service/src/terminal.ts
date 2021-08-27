@@ -11,6 +11,10 @@ export type MetroTerminal = {
   reporter: TerminalReporter;
 };
 
+function isErrorWithCode(err: unknown): err is ErrorWithCode {
+  return typeof err === "object" && err !== null && "code" in err;
+}
+
 function getTerminalReporterClass(
   customReporterPath: string | undefined
 ): typeof TerminalReporter {
@@ -22,10 +26,7 @@ function getTerminalReporterClass(
     // as expected. eg: require('my-package/reporter');
     return require(customReporterPath);
   } catch (e) {
-    if (
-      !(e instanceof Error) ||
-      (e as ErrorWithCode).code !== "MODULE_NOT_FOUND"
-    ) {
+    if (isErrorWithCode(e) && e.code !== "MODULE_NOT_FOUND") {
       throw e;
     }
     // If that doesn't work, then we next try relative to the cwd, eg:
