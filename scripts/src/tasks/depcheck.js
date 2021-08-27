@@ -65,8 +65,12 @@ function depcheckTask() {
 
           throw "Dependency checking failed";
         }
-      } catch (error) {
-        done(error);
+      } catch (err) {
+        if (err instanceof Error) {
+          done(err);
+        } else {
+          throw err;
+        }
       }
     });
   };

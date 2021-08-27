@@ -49,8 +49,12 @@ function getManifests(
   try {
     return getAllPackageJsonFiles(packageDir);
   } catch (e) {
-    error(e.message);
-    return undefined;
+    if (e instanceof Error) {
+      error(e.message);
+      return undefined;
+    }
+
+    throw e;
   }
 }
 
@@ -145,9 +149,13 @@ export async function cli({
     try {
       return command(manifest) || exitCode;
     } catch (e) {
-      const currentPackageJson = path.relative(process.cwd(), manifest);
-      error(`${currentPackageJson}: ${e.message}`);
-      return exitCode || 1;
+      if (e instanceof Error) {
+        const currentPackageJson = path.relative(process.cwd(), manifest);
+        error(`${currentPackageJson}: ${e.message}`);
+        return exitCode || 1;
+      }
+
+      throw e;
     }
   }, 0);
 

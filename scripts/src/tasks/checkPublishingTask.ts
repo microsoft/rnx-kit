@@ -23,7 +23,7 @@ export function checkPublishingTask(
   options: CheckPublishingOptions = {}
 ): TaskFunction {
   const dependencyTypes = options.dependencyTypes || ["dependencies"];
-  return function (done: (error?: Error) => void) {
+  return (done: (error?: Error) => void) => {
     const gitRoot = findGitRoot(process.cwd());
     if (!gitRoot) {
       throw `Cannot located Git root from ${process.cwd()}`;
@@ -48,8 +48,12 @@ export function checkPublishingTask(
           });
         }
       });
-    } catch (err) {
-      done(err);
+    } catch(err) {
+      if (err instanceof Error) {
+        done(err);
+      } else {
+        throw err;
+      }
     }
     logger.info("No publishing errors found");
     done();

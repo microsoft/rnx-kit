@@ -73,7 +73,9 @@ function loadCustomProfiles(
         throw new Error(message);
       }
 
-      error(moduleNotFoundError.message);
+      if (moduleNotFoundError instanceof Error) {
+        error(moduleNotFoundError.message);
+      }
       error(helpMsg);
       throw moduleNotFoundError;
     }
