@@ -4,7 +4,6 @@
 /**
  * @typedef {import("metro-config").ExtraTransformOptions} ExtraTransformOptions;
  * @typedef {import("metro-config").InputConfigT} InputConfigT;
- * @typedef {import("metro-config").Middleware} Middleware;
  * @typedef {import("type-fest").PartialDeep<InputConfigT>} MetroConfig;
  */
 
@@ -176,6 +175,7 @@ module.exports = {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore There are no type definition files for `metro-config`
     const { mergeConfig } = require("metro-config");
+    const { enhanceMiddleware } = require("./assetPluginForMonorepos");
 
     const projectRoot = customConfig.projectRoot || process.cwd();
     const blockList = exclusionList([], projectRoot);
@@ -186,21 +186,7 @@ module.exports = {
           blockList, // For Metro >= 0.60
         },
         server: {
-          /**
-           * This middleware restores `..` in asset URLs. See
-           * `assetPluginForMonorepos.js` for more details.
-           *
-           * @type {(middleware: Middleware) => Middleware}
-           */
-          enhanceMiddleware: (middleware) => {
-            return (req, res, next) => {
-              const { url } = req;
-              if (url && url.startsWith("/assets/@")) {
-                req.url = url.replace(/@@\//g, "../");
-              }
-              return middleware(req, res, next);
-            };
-          },
+          enhanceMiddleware,
         },
         transformer: {
           assetPlugins: [require.resolve("./assetPluginForMonorepos")],
