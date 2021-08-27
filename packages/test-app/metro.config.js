@@ -4,7 +4,7 @@ const { exclusionList, makeMetroConfig } = require("@rnx-kit/metro-config");
 const blockList = exclusionList([/.*__fixtures__.*/]);
 
 module.exports = makeMetroConfig({
-  projectRoot: __dirname,
+  projectRoot: __dirname + "/src",
   resolver: {
     blacklistRE: blockList,
     blockList,
