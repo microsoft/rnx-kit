@@ -7,7 +7,7 @@ import profile_0_62 from "./profiles/profile-0.62";
 import profile_0_63 from "./profiles/profile-0.63";
 import profile_0_64 from "./profiles/profile-0.64";
 import profile_0_65 from "./profiles/profile-0.65";
-import { keysOf } from "./helpers";
+import { hasMessage, keysOf } from "./helpers";
 import type { Profile, ProfileVersion, TestOverrides } from "./types";
 
 type ProfileMap = Record<ProfileVersion, Profile>;
@@ -73,14 +73,8 @@ function loadCustomProfiles(
         throw new Error(message);
       }
 
-      // It seems that `require.resolve` throws `ModuleNotFoundError` so we
-      // cannot use `instanceof Error` here. `ModuleNotFoundError` isn't in any
-      // type definition that I could find, and it is really difficult to narrow
-      // `unknown` to something useful. To make this not too complicated, we'll
-      // cast to `any` and check if the `message` property is set. That should
-      // be safe enough.
-      if ("message" in (moduleNotFoundError as any)) {
-        error((moduleNotFoundError as any).message);
+      if (hasMessage(moduleNotFoundError)) {
+        error(moduleNotFoundError.message);
       }
       error(helpMsg);
       throw moduleNotFoundError;

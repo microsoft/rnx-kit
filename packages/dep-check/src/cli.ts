@@ -8,6 +8,7 @@ import * as path from "path";
 import { getAllPackageJsonFiles, getWorkspaceRoot } from "workspace-tools";
 import yargs from "yargs";
 import { makeCheckCommand } from "./check";
+import { hasMessage } from "./helpers";
 import { initializeConfig } from "./initialize";
 import { makeSetVersionCommand } from "./setVersion";
 import type { Args, Command } from "./types";
@@ -49,7 +50,7 @@ function getManifests(
   try {
     return getAllPackageJsonFiles(packageDir);
   } catch (e) {
-    if (e instanceof Error) {
+    if (hasMessage(e)) {
       error(e.message);
       return undefined;
     }
@@ -149,7 +150,7 @@ export async function cli({
     try {
       return command(manifest) || exitCode;
     } catch (e) {
-      if (e instanceof Error) {
+      if (hasMessage(e)) {
         const currentPackageJson = path.relative(process.cwd(), manifest);
         error(`${currentPackageJson}: ${e.message}`);
         return exitCode || 1;
