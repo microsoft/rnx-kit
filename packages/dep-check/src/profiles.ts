@@ -73,8 +73,14 @@ function loadCustomProfiles(
         throw new Error(message);
       }
 
-      if (moduleNotFoundError instanceof Error) {
-        error(moduleNotFoundError.message);
+      // It seems that `require.resolve` throws `ModuleNotFoundError` so we
+      // cannot use `instanceof Error` here. `ModuleNotFoundError` isn't in any
+      // type definition that I could find, and it is really difficult to narrow
+      // `unknown` to something useful. To make this not too complicated, we'll
+      // cast to `any` and check if the `message` property is set. That should
+      // be safe enough.
+      if ("message" in (moduleNotFoundError as any)) {
+        error((moduleNotFoundError as any).message);
       }
       error(helpMsg);
       throw moduleNotFoundError;
