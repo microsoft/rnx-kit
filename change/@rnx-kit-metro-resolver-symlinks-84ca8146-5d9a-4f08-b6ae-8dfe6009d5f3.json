@@ -1,0 +1,7 @@
+{
+  "type": "minor",
+  "comment": "@rnx-kit/metro-resolver-symlinks is a Metro resolver with support for symlinks",
+  "packageName": "@rnx-kit/metro-resolver-symlinks",
+  "email": "4123478+tido64@users.noreply.github.com",
+  "dependentChangeType": "patch"
+}
