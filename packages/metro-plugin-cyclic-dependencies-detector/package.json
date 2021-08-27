@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/metro-plugin-cyclic-dependencies-detector",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "Cyclic dependencies detector for Metro",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/metro-plugin-cyclic-dependencies-detector#readme",
   "license": "MIT",
@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "@rnx-kit/console": "^1.0.2",
-    "@rnx-kit/tools-node": "^1.1.0"
+    "@rnx-kit/tools-node": "^1.1.1"
   },
   "devDependencies": {
     "@rnx-kit/jest-preset": "*",
