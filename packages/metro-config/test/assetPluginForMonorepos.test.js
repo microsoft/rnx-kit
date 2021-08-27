@@ -6,7 +6,8 @@ describe("@rnx-kit/metro-config/assetPluginForMonorepos", () => {
     "/assets/./node_modules": "/assets/./node_modules",
     "/assets/../node_modules": "/assets/@@/node_modules",
     "/assets/../../node_modules": "/assets/@@/@@/node_modules",
-    "/assets/node_modules/../../react-native": "/assets/node_modules/@@/@@/react-native",
+    "/assets/node_modules/../../react-native":
+      "/assets/node_modules/@@/@@/react-native",
   };
 
   test("escapes `..` in URLs", () => {
