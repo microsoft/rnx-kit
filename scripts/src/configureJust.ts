@@ -6,6 +6,7 @@ import { eslint } from "./tasks/eslint";
 import { jest } from "./tasks/jest";
 import { prettier } from "./tasks/prettier";
 import { ts } from "./tasks/ts";
+import { updateApiReadme } from "./tasks/updateApiReadme";
 
 export function configureJust(): void {
   //  add a resolve path for the build tooling deps like TS from the scripts folder
@@ -29,6 +30,7 @@ export function configureJust(): void {
   task("build", build("clean", "depcheck", "lint", "ts"));
   task("code-style", series("prettier", "lint"));
   task("format", prettier);
+  task("update-api-readme", updateApiReadme);
   task("test", jest);
   task("validate", parallel("depcheck", "lint", "test"));
 }
