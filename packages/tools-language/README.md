@@ -20,8 +20,6 @@ import * from "@rnx-kit/tools-language/properties";
 <!-- The following table can be updated by running `yarn update-readme` -->
 <!-- @rnx-kit/api start -->
 
-
-
 | Category   | Function                                  | Description                                                                                                                                                 |
 | ---------- | ----------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | function   | `tryInvoke(fn)`                           | Invoke the given function, returning its result or a thrown error.                                                                                          |

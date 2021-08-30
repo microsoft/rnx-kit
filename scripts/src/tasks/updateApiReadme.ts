@@ -26,11 +26,9 @@ type Context = {
 
 function extractBrief(summary: string): string {
   const newParagraph = summary.indexOf("\n\n");
-  return (
-    newParagraph > 0
-      ? summary.substring(0, newParagraph).replace(/\n/g, " ")
-      : summary
-  ).trim();
+  return (newParagraph > 0 ? summary.substring(0, newParagraph) : summary)
+    .trim()
+    .replace(/\n/g, " ");
 }
 
 function findLastBlockComment(
@@ -167,7 +165,9 @@ function updateReadme(
   const readme = fs.readFileSync(README, { encoding: "utf-8" });
   const updatedReadme = readme.replace(
     new RegExp(`${TOKEN_START}([^]+)${TOKEN_END}`),
-    `${TOKEN_START}\n\n${types}\n\n${functions}\n\n${TOKEN_END}`
+    `${TOKEN_START}\n\n${[types, functions]
+      .filter(Boolean)
+      .join("\n\n")}\n\n${TOKEN_END}`
   );
 
   if (updatedReadme !== readme) {

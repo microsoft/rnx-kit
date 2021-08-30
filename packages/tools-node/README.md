@@ -23,11 +23,8 @@ import * from "@rnx-kit/tools-node/path";
 
 | Category | Type Name                    | Description                                                                                                                                                                     |
 | -------- | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| module   | FileModuleRef                | Module reference rooted to a file system location, either relative
-to a directory, or as an absolute path. For example, `./index` or
-`/repos/rnx-kit/packages/tools/src/index`. |
-| module   | PackageModuleRef             | Module reference relative to a package, such as `react-native` or
-`@rnx-kit/tools/node/index`.                                                                                  |
+| module   | FileModuleRef                | Module reference rooted to a file system location, either relative to a directory, or as an absolute path. For example, `./index` or `/repos/rnx-kit/packages/tools/src/index`. |
+| module   | PackageModuleRef             | Module reference relative to a package, such as `react-native` or `@rnx-kit/tools/node/index`.                                                                                  |
 | package  | FindPackageDependencyOptions | Options which control how package dependecies are located.                                                                                                                      |
 | package  | PackageManifest              | Schema for the contents of a `package.json` manifest file.                                                                                                                      |
 | package  | PackagePerson                | Schema for a reference to a person in `package.json`.                                                                                                                           |
