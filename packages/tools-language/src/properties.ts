@@ -82,6 +82,13 @@ export function extendObjectArray<T, TExtended extends T>(
   return arr as TExtended[];
 }
 
+/**
+ * Returns whether `property` exists in `obj`.
+ *
+ * @param obj The object to examine
+ * @param property The property to look for
+ * @returns Whether `obj` contains `property`
+ */
 export function hasProperty<Property extends string>(
   obj: unknown,
   property: Property
