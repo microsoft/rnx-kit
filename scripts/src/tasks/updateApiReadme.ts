@@ -2,12 +2,10 @@ import * as babelParser from "@babel/parser";
 import {
   Comment,
   ExportNamedDeclaration,
-  FunctionDeclaration,
   isExportNamedDeclaration,
+  isFunctionDeclaration,
   isIdentifier,
   LVal,
-  TSInterfaceDeclaration,
-  TSTypeAliasDeclaration,
 } from "@babel/types";
 import { DocExcerpt, DocNode, TSDocParser } from "@microsoft/tsdoc";
 import * as fs from "fs";
@@ -17,12 +15,6 @@ import * as path from "path";
 const README = "README.md";
 const TOKEN_START = "<!-- @rnx-kit/api start -->";
 const TOKEN_END = "<!-- @rnx-kit/api end -->";
-
-type Context = {
-  identifier: string;
-  sourceFilename: string;
-  tsdocParser: TSDocParser;
-};
 
 function extractBrief(summary: string): string {
   const newParagraph = summary.indexOf("\n\n");
@@ -70,34 +62,19 @@ function findSourceFiles(): string[] {
   return [];
 }
 
-function getDescription(
-  { identifier, sourceFilename, tsdocParser }: Context,
-  node: ExportNamedDeclaration
-): string {
-  const commentBlock = findLastBlockComment(node.leadingComments);
-  if (!commentBlock) {
-    console.warn(
-      "WARN",
-      `${sourceFilename}:`,
-      `${identifier} is exported but undocumented`
-    );
-    return "";
+function getExportedName(node: ExportNamedDeclaration): string {
+  switch (node.declaration?.type) {
+    case "FunctionDeclaration":
+    case "TSInterfaceDeclaration":
+    case "TSTypeAliasDeclaration":
+      if (!isIdentifier(node.declaration.id)) {
+        // TODO: Unnamed functions are currently unsupported
+        return "";
+      }
+      return node.declaration.id.name;
+    default:
+      return "";
   }
-
-  const result = tsdocParser.parseString("/*" + commentBlock.value + "*/");
-  const summary = renderDocNode(result.docComment.summarySection);
-  return extractBrief(summary);
-}
-
-function getExportedName(
-  node: FunctionDeclaration | TSInterfaceDeclaration | TSTypeAliasDeclaration
-): string {
-  if (!isIdentifier(node.id)) {
-    // TODO: Unnamed functions are currently unsupported
-    return "";
-  }
-
-  return node.id.name;
 }
 
 function renderDocNode(docNode: DocNode): string {
@@ -194,54 +171,40 @@ export function updateApiReadme(): void {
           return;
         }
 
-        switch (node.declaration?.type) {
-          case "FunctionDeclaration": {
-            const name = getExportedName(node.declaration);
-            if (!name) {
-              return;
-            }
+        const name = getExportedName(node);
+        if (!name) {
+          return;
+        }
 
-            const identifier = `\`${name}(${node.declaration.params
+        const identifier = (() => {
+          if (isFunctionDeclaration(node.declaration)) {
+            return `\`${name}(${node.declaration.params
               .map(renderParamNode)
               .join(", ")})\``;
-
-            const description = getDescription(
-              {
-                identifier,
-                sourceFilename: file,
-                tsdocParser,
-              },
-              node
-            );
-            if (!description) {
-              return;
-            }
-
-            exportedFunctions.push([category, identifier, description]);
-            break;
           }
-          case "TSInterfaceDeclaration":
-          case "TSTypeAliasDeclaration": {
-            const identifier = getExportedName(node.declaration);
-            if (!identifier) {
-              return;
-            }
+          return name;
+        })();
 
-            const description = getDescription(
-              {
-                identifier,
-                sourceFilename: file,
-                tsdocParser,
-              },
-              node
-            );
-            if (!description) {
-              return;
-            }
+        const commentBlock = findLastBlockComment(node.leadingComments);
+        if (!commentBlock) {
+          console.warn(
+            "WARN",
+            `${file}:`,
+            `${identifier} is exported but undocumented`
+          );
+          return;
+        }
 
-            exportedTypes.push([category, identifier, description]);
-            break;
-          }
+        const result = tsdocParser.parseString(
+          "/*" + commentBlock.value + "*/"
+        );
+        const summary = renderDocNode(result.docComment.summarySection);
+        const description = extractBrief(summary);
+
+        if (isFunctionDeclaration(node.declaration)) {
+          exportedFunctions.push([category, identifier, description]);
+        } else {
+          exportedTypes.push([category, identifier, description]);
         }
       });
   });
