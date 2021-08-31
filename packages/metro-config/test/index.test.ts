@@ -5,6 +5,7 @@ describe("@rnx-kit/metro-config", () => {
     UNIQUE_PACKAGES,
     defaultRoots,
     defaultWatchFolders,
+    defaultWatchFoldersInRepo,
     excludeExtraCopiesOf,
     exclusionList,
     makeMetroConfig,
@@ -13,7 +14,6 @@ describe("@rnx-kit/metro-config", () => {
   const metroConfigKeys = [
     "cacheStores",
     "resolver",
-    "roots",
     "serializer",
     "server",
     "symbolicator",
@@ -49,32 +49,39 @@ describe("@rnx-kit/metro-config", () => {
     expect(defaultWatchFolders(root).length).toBe(0);
   });
 
-  test("defaultRoots() returns packages in a monorepo including the root node_modules", () => {
-    setFixture("awesome-repo/packages/t-800");
-
-    const repoRoot = path.dirname(path.dirname(process.cwd()));
-    const folders = defaultRoots(process.cwd());
-
-    const packages = ["conan", "dutch", "john", "quaid", "t-800"].map((p) =>
-      path.join(repoRoot, "packages", p)
-    );
-    const expectedFolders = [
-      path.join(repoRoot, "node_modules"),
-      ...packages,
-    ].sort();
-    expect(folders.sort()).toEqual(expectedFolders);
+  test("defaultWatchFoldersInRepo() returns an empty list outside a monorepo", () => {
+    const root = process.platform === "win32" ? "C:\\" : "/";
+    expect(defaultWatchFoldersInRepo(root).length).toBe(0);
   });
 
-  test("defaultWatchFolders() returns packages in a monorepo", () => {
+  function validatePackageRoots(
+    getRootFolders: (cwd: string) => string[],
+    expectExternalPackages: boolean
+  ) {
     setFixture("awesome-repo/packages/t-800");
 
     const repoRoot = path.dirname(path.dirname(process.cwd()));
-    const folders = defaultWatchFolders(process.cwd());
+    const folders = getRootFolders(process.cwd());
 
     const packages = ["conan", "dutch", "john", "quaid", "t-800"].map((p) =>
       path.join(repoRoot, "packages", p)
     );
-    expect(folders.sort()).toEqual(packages.sort());
+    const expectedFolders = expectExternalPackages
+      ? [path.join(repoRoot, "node_modules"), ...packages]
+      : [...packages];
+    expect(folders.sort()).toEqual(expectedFolders.sort());
+  }
+
+  test("defaultRoots() returns internal and external packages in a monorepo", () => {
+    validatePackageRoots(defaultRoots, true);
+  });
+
+  test("defaultWatchFolders() returns internal and external packages in a monorepo", () => {
+    validatePackageRoots(defaultWatchFolders, true);
+  });
+
+  test("defaultWatchFoldersInRepo() returns only internal packages in a monorepo", () => {
+    validatePackageRoots(defaultWatchFoldersInRepo, false);
   });
 
   test("excludeExtraCopiesOf() ignores symlinks", () => {
