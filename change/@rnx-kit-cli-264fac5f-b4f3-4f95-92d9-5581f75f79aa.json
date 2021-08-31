@@ -1,0 +1,7 @@
+{
+  "type": "patch",
+  "comment": "Add a Metro patch which lets us control package roots separately from watch folders. Use the patch during bundling and serving.",
+  "packageName": "@rnx-kit/cli",
+  "email": "afoxman@microsoft.com",
+  "dependentChangeType": "patch"
+}

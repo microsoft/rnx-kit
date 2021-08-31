@@ -1,0 +1,7 @@
+{
+  "type": "minor",
+  "comment": "Remove external packages from Metro config property \"watchFolders\", leaving only in-repo packages. Add a \"roots\" Metro config property containing both in-repo and external packages.",
+  "packageName": "@rnx-kit/metro-config",
+  "email": "afoxman@microsoft.com",
+  "dependentChangeType": "patch"
+}
