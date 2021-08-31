@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/config
 
-This log was last generated on Fri, 27 Aug 2021 18:41:43 GMT and should not be manually modified.
+This log was last generated on Tue, 31 Aug 2021 06:43:13 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 0.4.5
+
+Tue, 31 Aug 2021 06:43:13 GMT
+
+### Patches
+
+- Bump @rnx-kit/config to v0.4.5 (4123478+tido64@users.noreply.github.com)
 
 ## 0.4.4
 

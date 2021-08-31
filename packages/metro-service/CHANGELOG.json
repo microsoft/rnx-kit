@@ -2,6 +2,27 @@
   "name": "@rnx-kit/metro-service",
   "entries": [
     {
+      "date": "Tue, 31 Aug 2021 06:43:13 GMT",
+      "tag": "@rnx-kit/metro-service_v1.1.3",
+      "version": "1.1.3",
+      "comments": {
+        "patch": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/metro-service",
+            "comment": "Stricter handling of errors",
+            "commit": "25b936b3786f2a37dc6feacb4034e6afb56e343b"
+          },
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/metro-service",
+            "commit": "25b936b3786f2a37dc6feacb4034e6afb56e343b",
+            "comment": "Bump @rnx-kit/metro-service to v1.1.3"
+          }
+        ]
+      }
+    },
+    {
       "date": "Wed, 25 Aug 2021 07:32:57 GMT",
       "tag": "@rnx-kit/metro-service_v1.1.2",
       "version": "1.1.2",

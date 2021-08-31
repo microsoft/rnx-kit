@@ -2,6 +2,21 @@
   "name": "@rnx-kit/metro-resolver-symlinks",
   "entries": [
     {
+      "date": "Tue, 31 Aug 2021 06:43:13 GMT",
+      "tag": "@rnx-kit/metro-resolver-symlinks_v0.1.1",
+      "version": "0.1.1",
+      "comments": {
+        "patch": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/metro-resolver-symlinks",
+            "commit": "25b936b3786f2a37dc6feacb4034e6afb56e343b",
+            "comment": "Bump @rnx-kit/metro-resolver-symlinks to v0.1.1"
+          }
+        ]
+      }
+    },
+    {
       "date": "Fri, 27 Aug 2021 18:41:43 GMT",
       "tag": "@rnx-kit/metro-resolver-symlinks_v0.1.0",
       "version": "0.1.0",

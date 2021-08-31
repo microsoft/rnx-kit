@@ -2,6 +2,21 @@
   "name": "@rnx-kit/typescript-service",
   "entries": [
     {
+      "date": "Tue, 31 Aug 2021 06:43:13 GMT",
+      "tag": "@rnx-kit/typescript-service_v1.3.4",
+      "version": "1.3.4",
+      "comments": {
+        "patch": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/typescript-service",
+            "commit": "25b936b3786f2a37dc6feacb4034e6afb56e343b",
+            "comment": "Bump @rnx-kit/typescript-service to v1.3.4"
+          }
+        ]
+      }
+    },
+    {
       "date": "Fri, 27 Aug 2021 18:41:43 GMT",
       "tag": "@rnx-kit/typescript-service_v1.3.3",
       "version": "1.3.3",

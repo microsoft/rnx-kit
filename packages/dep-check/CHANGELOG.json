@@ -2,6 +2,27 @@
   "name": "@rnx-kit/dep-check",
   "entries": [
     {
+      "date": "Tue, 31 Aug 2021 06:43:13 GMT",
+      "tag": "@rnx-kit/dep-check_v1.7.6",
+      "version": "1.7.6",
+      "comments": {
+        "patch": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/dep-check",
+            "comment": "Stricter handling of errors",
+            "commit": "25b936b3786f2a37dc6feacb4034e6afb56e343b"
+          },
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/dep-check",
+            "commit": "25b936b3786f2a37dc6feacb4034e6afb56e343b",
+            "comment": "Bump @rnx-kit/dep-check to v1.7.6"
+          }
+        ]
+      }
+    },
+    {
       "date": "Fri, 27 Aug 2021 18:41:43 GMT",
       "tag": "@rnx-kit/dep-check_v1.7.5",
       "version": "1.7.5",

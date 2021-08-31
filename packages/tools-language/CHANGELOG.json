@@ -2,6 +2,21 @@
   "name": "@rnx-kit/tools-language",
   "entries": [
     {
+      "date": "Tue, 31 Aug 2021 06:43:13 GMT",
+      "tag": "@rnx-kit/tools-language_v1.1.1",
+      "version": "1.1.1",
+      "comments": {
+        "patch": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/tools-language",
+            "comment": "Stricter handling of errors",
+            "commit": "25b936b3786f2a37dc6feacb4034e6afb56e343b"
+          }
+        ]
+      }
+    },
+    {
       "date": "Wed, 25 Aug 2021 07:32:57 GMT",
       "tag": "@rnx-kit/tools-language_v1.1.0",
       "version": "1.1.0",
