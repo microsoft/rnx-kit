@@ -1,13 +1,14 @@
 import { error } from "@rnx-kit/console";
 import { tryInvoke } from "@rnx-kit/tools-language/function";
+import { hasProperty } from "@rnx-kit/tools-language/properties";
 import isString from "lodash/isString";
 import semver from "semver";
+import { keysOf } from "./helpers";
 import profile_0_61 from "./profiles/profile-0.61";
 import profile_0_62 from "./profiles/profile-0.62";
 import profile_0_63 from "./profiles/profile-0.63";
 import profile_0_64 from "./profiles/profile-0.64";
 import profile_0_65 from "./profiles/profile-0.65";
-import { keysOf } from "./helpers";
 import type { Profile, ProfileVersion, TestOverrides } from "./types";
 
 type ProfileMap = Record<ProfileVersion, Profile>;
@@ -73,7 +74,9 @@ function loadCustomProfiles(
         throw new Error(message);
       }
 
-      error(moduleNotFoundError.message);
+      if (hasProperty(moduleNotFoundError, "message")) {
+        error(moduleNotFoundError.message);
+      }
       error(helpMsg);
       throw moduleNotFoundError;
     }

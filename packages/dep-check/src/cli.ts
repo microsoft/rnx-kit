@@ -2,6 +2,7 @@
 
 import type { KitType } from "@rnx-kit/config";
 import { error } from "@rnx-kit/console";
+import { hasProperty } from "@rnx-kit/tools-language/properties";
 import { findPackageDir } from "@rnx-kit/tools-node/package";
 import isString from "lodash/isString";
 import * as path from "path";
@@ -49,8 +50,12 @@ function getManifests(
   try {
     return getAllPackageJsonFiles(packageDir);
   } catch (e) {
-    error(e.message);
-    return undefined;
+    if (hasProperty(e, "message")) {
+      error(e.message);
+      return undefined;
+    }
+
+    throw e;
   }
 }
 
@@ -145,9 +150,13 @@ export async function cli({
     try {
       return command(manifest) || exitCode;
     } catch (e) {
-      const currentPackageJson = path.relative(process.cwd(), manifest);
-      error(`${currentPackageJson}: ${e.message}`);
-      return exitCode || 1;
+      if (hasProperty(e, "message")) {
+        const currentPackageJson = path.relative(process.cwd(), manifest);
+        error(`${currentPackageJson}: ${e.message}`);
+        return exitCode || 1;
+      }
+
+      throw e;
     }
   }, 0);
 
