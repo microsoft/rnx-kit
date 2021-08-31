@@ -7,6 +7,7 @@ import { getKitBundleConfigs } from "./bundle/kit-config";
 import { metroBundle } from "./bundle/metro";
 import { applyKitBundleConfigOverrides } from "./bundle/overrides";
 import type { BundleConfig, KitBundleConfig } from "./bundle/types";
+const { setMetroRoots } = require("./metro-patch");
 
 export type CLIBundleOptions = {
   id?: string;
@@ -32,6 +33,14 @@ export async function rnxBundle(
   cliOptions: CLIBundleOptions
 ): Promise<void> {
   const metroConfig = await loadMetroConfig(cliConfig, cliOptions);
+
+  // Set Metro's package roots separately from its watch folders.
+  // This can be removed after Metro PR https://github.com/facebook/metro/pull/701
+  // is merged, published, and updated in our repo.
+  //
+  // eslint-disable-next-line
+  // @ts-ignore
+  setMetroRoots(metroConfig.roots);
 
   const kitBundleConfigs = getKitBundleConfigs(
     cliOptions.id,

@@ -15,6 +15,7 @@ import readline from "readline";
 import { getKitServerConfig } from "./serve/kit-config";
 import { customizeMetroConfig } from "./metro-config";
 import type { TSProjectInfo } from "./types";
+const { setMetroRoots } = require("./metro-patch");
 
 export type CLIStartOptions = {
   host: string;
@@ -115,6 +116,14 @@ export async function rnxStart(
         }
       : {}),
   });
+
+  // Set Metro's package roots separately from its watch folders.
+  // This can be removed after Metro PR https://github.com/facebook/metro/pull/701
+  // is merged, published, and updated in our repo.
+  //
+  // eslint-disable-next-line
+  // @ts-ignore
+  setMetroRoots(metroConfig.roots);
 
   // prepare for typescript validation, if requested
   let tsprojectInfo: TSProjectInfo | undefined;

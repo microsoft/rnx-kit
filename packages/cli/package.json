@@ -55,6 +55,7 @@
   },
   "depcheck": {
     "ignoreMatches": [
+      "jest-haste-map",
       "metro",
       "metro-config",
       "readline"
