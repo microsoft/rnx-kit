@@ -53,6 +53,11 @@
   "eslintConfig": {
     "extends": "@rnx-kit/eslint-config"
   },
+  "depcheck": {
+    "ignoreMatches": [
+      "jest-validate"
+    ]
+  },
   "jest": {
     "preset": "@rnx-kit/jest-preset",
     "roots": [

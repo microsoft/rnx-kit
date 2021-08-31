@@ -1,6 +1,10 @@
 const fs = require("fs");
 const path = require("path");
 
+// This can be removed after Metro PR https://github.com/facebook/metro/pull/701
+// is merged, published, and updated in our repo.
+require("./metro-patch-disable-warning");
+
 const windowsProjectFile = path.join(
   "node_modules",
   ".generated",
