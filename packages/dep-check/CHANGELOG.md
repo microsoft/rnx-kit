@@ -1,8 +1,33 @@
 # Change Log - @rnx-kit/dep-check
 
-This log was last generated on Wed, 25 Aug 2021 08:52:48 GMT and should not be manually modified.
+This log was last generated on Tue, 31 Aug 2021 10:50:41 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 1.7.7
+
+Tue, 31 Aug 2021 10:50:41 GMT
+
+### Patches
+
+- Bump @rnx-kit/dep-check to v1.7.7 (4123478+tido64@users.noreply.github.com)
+
+## 1.7.6
+
+Tue, 31 Aug 2021 06:43:13 GMT
+
+### Patches
+
+- Stricter handling of errors (4123478+tido64@users.noreply.github.com)
+- Bump @rnx-kit/dep-check to v1.7.6 (4123478+tido64@users.noreply.github.com)
+
+## 1.7.5
+
+Fri, 27 Aug 2021 18:41:43 GMT
+
+### Patches
+
+- Bump @rnx-kit/dep-check to v1.7.5 (4123478+tido64@users.noreply.github.com)
 
 ## 1.7.4
 

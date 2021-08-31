@@ -37,7 +37,9 @@ describe("normalizePath", () => {
   });
 
   test("webPackScopedPackage", () => {
-    expect(normalizePath("webpack://@scope/myPkg/path", "@scope/myPkg")).toBe("path");
+    expect(normalizePath("webpack://@scope/myPkg/path", "@scope/myPkg")).toBe(
+      "path"
+    );
   });
 
   // Paths

@@ -1,8 +1,32 @@
 # Change Log - @rnx-kit/metro-config
 
-This log was last generated on Wed, 25 Aug 2021 08:52:48 GMT and should not be manually modified.
+This log was last generated on Tue, 31 Aug 2021 06:43:13 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 1.2.11
+
+Tue, 31 Aug 2021 06:43:13 GMT
+
+### Patches
+
+- Bump @rnx-kit/metro-config to v1.2.11 (4123478+tido64@users.noreply.github.com)
+
+## 1.2.10
+
+Tue, 31 Aug 2021 06:21:44 GMT
+
+### Patches
+
+- Fix assets not resolving correctly in monorepos (4123478+tido64@users.noreply.github.com)
+
+## 1.2.9
+
+Fri, 27 Aug 2021 18:41:43 GMT
+
+### Patches
+
+- Bump @rnx-kit/metro-config to v1.2.9 (4123478+tido64@users.noreply.github.com)
 
 ## 1.2.8
 

@@ -1,5 +1,5 @@
-import "jest-extended";
 import fs from "fs";
+import os from "os";
 import path from "path";
 import {
   parseModuleRef,
@@ -12,7 +12,7 @@ describe("Node > Module", () => {
   const fixtureDir = path.resolve(__dirname, "__fixtures__");
 
   beforeAll(() => {
-    expect(fs.existsSync(fixtureDir)).toBeTrue();
+    expect(fs.existsSync(fixtureDir)).toBe(true);
   });
 
   test("parseModuleRef('react-native')", () => {
@@ -50,22 +50,27 @@ describe("Node > Module", () => {
     });
   });
 
-  test("parseModuleRef('./parser)", () => {
+  test("parseModuleRef('./parser')", () => {
     expect(parseModuleRef("./parser")).toEqual({
       path: "./parser",
     });
   });
 
-  test("parseModuleRef('../../src/parser)", () => {
+  test("parseModuleRef('../../src/parser')", () => {
     expect(parseModuleRef("../../src/parser")).toEqual({
       path: "../../src/parser",
     });
   });
 
-  test("parseModuleRef('/absolute/path/src/parser)", () => {
+  test("parseModuleRef('/absolute/path/src/parser')", () => {
     expect(parseModuleRef("/absolute/path/src/parser")).toEqual({
       path: "/absolute/path/src/parser",
     });
+    if (os.platform() === "win32") {
+      expect(parseModuleRef("C:/absolute/path/src/parser")).toEqual({
+        path: "C:/absolute/path/src/parser",
+      });
+    }
   });
 
   const packageModuleRefs: string[] = [
@@ -83,25 +88,25 @@ describe("Node > Module", () => {
 
   test("isPackageModuleRef() returns true for package-based refs", () => {
     for (const r of packageModuleRefs) {
-      expect(isPackageModuleRef(parseModuleRef(r))).toBeTrue();
+      expect(isPackageModuleRef(parseModuleRef(r))).toBe(true);
     }
   });
 
   test("isPackageModuleRef() returns false for file-based refs", () => {
     for (const r of fileModuleRefs) {
-      expect(isPackageModuleRef(parseModuleRef(r))).toBeFalse();
+      expect(isPackageModuleRef(parseModuleRef(r))).toBe(false);
     }
   });
 
   test("isFileModuleRef() returns true for file-based refs", () => {
     for (const r of fileModuleRefs) {
-      expect(isFileModuleRef(parseModuleRef(r))).toBeTrue();
+      expect(isFileModuleRef(parseModuleRef(r))).toBe(true);
     }
   });
 
   test("isFileModuleRef() returns false for package-based refs", () => {
     for (const r of packageModuleRefs) {
-      expect(isFileModuleRef(parseModuleRef(r))).toBeFalse();
+      expect(isFileModuleRef(parseModuleRef(r))).toBe(false);
     }
   });
 

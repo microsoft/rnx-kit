@@ -15,10 +15,15 @@ import * from "@rnx-kit/tools-react-native";
 import * from "@rnx-kit/tools-react-native/platform";
 ```
 
-| Category | Type Name      | Description                               |
-| -------- | -------------- | ----------------------------------------- |
-| Platform | `AllPlatforms` | List of supported react-native platforms. |
+<!-- The following table can be updated by running `yarn update-readme` -->
+<!-- @rnx-kit/api start -->
 
-| Category | Function           | Description                                                        |
-| -------- | ------------------ | ------------------------------------------------------------------ |
-| Platform | `parsePlatform(p)` | Parse a string to ensure it maps to a valid react-native platform. |
+| Category | Type Name    | Description                               |
+| -------- | ------------ | ----------------------------------------- |
+| platform | AllPlatforms | List of supported react-native platforms. |
+
+| Category | Function             | Description                                                        |
+| -------- | -------------------- | ------------------------------------------------------------------ |
+| platform | `parsePlatform(val)` | Parse a string to ensure it maps to a valid react-native platform. |
+
+<!-- @rnx-kit/api end -->

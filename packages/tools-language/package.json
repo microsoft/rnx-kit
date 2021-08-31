@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/tools-language",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "A collection of supplemental JavaScript functions and types",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/tools-language#readme",
   "license": "MIT",
@@ -23,7 +23,8 @@
     "build": "rnx-kit-scripts build",
     "format": "rnx-kit-scripts format",
     "lint": "rnx-kit-scripts lint",
-    "test": "rnx-kit-scripts test"
+    "test": "rnx-kit-scripts test",
+    "update-readme": "rnx-kit-scripts update-api-readme"
   },
   "dependencies": {},
   "devDependencies": {

@@ -2,6 +2,81 @@
   "name": "@rnx-kit/metro-config",
   "entries": [
     {
+      "date": "Tue, 31 Aug 2021 07:00:17 GMT",
+      "tag": "@rnx-kit/metro-config_v1.2.11",
+      "version": "1.2.11",
+      "comments": {
+        "none": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/metro-config",
+            "commit": "0eecc568dd8ff556cd3964772c614cbbf7eefb98",
+            "comment": "Bump @rnx-kit/metro-config to v1.2.11"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Tue, 31 Aug 2021 06:43:13 GMT",
+      "tag": "@rnx-kit/metro-config_v1.2.11",
+      "version": "1.2.11",
+      "comments": {
+        "patch": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/metro-config",
+            "commit": "25b936b3786f2a37dc6feacb4034e6afb56e343b",
+            "comment": "Bump @rnx-kit/metro-config to v1.2.11"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Tue, 31 Aug 2021 06:34:16 GMT",
+      "tag": "@rnx-kit/metro-config_v1.2.10",
+      "version": "1.2.10",
+      "comments": {
+        "none": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/metro-config",
+            "comment": "Converted tests to proper TypeScript",
+            "commit": "5b06c8ffb55eb06976fb2d7bdcfbca79fe12f7f9"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Tue, 31 Aug 2021 06:21:44 GMT",
+      "tag": "@rnx-kit/metro-config_v1.2.10",
+      "version": "1.2.10",
+      "comments": {
+        "patch": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/metro-config",
+            "comment": "Fix assets not resolving correctly in monorepos",
+            "commit": "eed680eae677e25f2b0b70e832319260271cc0e6"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Fri, 27 Aug 2021 18:41:43 GMT",
+      "tag": "@rnx-kit/metro-config_v1.2.9",
+      "version": "1.2.9",
+      "comments": {
+        "patch": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/metro-config",
+            "commit": "dcb826baf0cc3705b460776bdb31e19930f4f2dc",
+            "comment": "Bump @rnx-kit/metro-config to v1.2.9"
+          }
+        ]
+      }
+    },
+    {
       "date": "Wed, 25 Aug 2021 08:52:48 GMT",
       "tag": "@rnx-kit/metro-config_v1.2.8",
       "version": "1.2.8",

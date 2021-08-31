@@ -2,6 +2,66 @@
   "name": "@rnx-kit/third-party-notices",
   "entries": [
     {
+      "date": "Tue, 31 Aug 2021 07:00:17 GMT",
+      "tag": "@rnx-kit/third-party-notices_v1.2.2",
+      "version": "1.2.2",
+      "comments": {
+        "none": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/third-party-notices",
+            "commit": "0eecc568dd8ff556cd3964772c614cbbf7eefb98",
+            "comment": "Bump @rnx-kit/third-party-notices to v1.2.2"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Tue, 31 Aug 2021 06:43:13 GMT",
+      "tag": "@rnx-kit/third-party-notices_v1.2.2",
+      "version": "1.2.2",
+      "comments": {
+        "patch": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/third-party-notices",
+            "commit": "25b936b3786f2a37dc6feacb4034e6afb56e343b",
+            "comment": "Bump @rnx-kit/third-party-notices to v1.2.2"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Tue, 31 Aug 2021 06:21:44 GMT",
+      "tag": "@rnx-kit/third-party-notices_v1.2.1",
+      "version": "1.2.1",
+      "comments": {
+        "none": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/third-party-notices",
+            "comment": "Formatted test code",
+            "commit": "eed680eae677e25f2b0b70e832319260271cc0e6"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Fri, 27 Aug 2021 18:41:43 GMT",
+      "tag": "@rnx-kit/third-party-notices_v1.2.1",
+      "version": "1.2.1",
+      "comments": {
+        "patch": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/third-party-notices",
+            "commit": "dcb826baf0cc3705b460776bdb31e19930f4f2dc",
+            "comment": "Bump @rnx-kit/third-party-notices to v1.2.1"
+          }
+        ]
+      }
+    },
+    {
       "date": "Thu, 26 Aug 2021 17:24:29 GMT",
       "tag": "@rnx-kit/third-party-notices_v1.2.0",
       "version": "1.2.0",

@@ -2,6 +2,72 @@
   "name": "@rnx-kit/dep-check",
   "entries": [
     {
+      "date": "Tue, 31 Aug 2021 10:50:41 GMT",
+      "tag": "@rnx-kit/dep-check_v1.7.7",
+      "version": "1.7.7",
+      "comments": {
+        "patch": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/dep-check",
+            "commit": "ff12b97c1107ad1eb6d253f74ff0f3daa7ec1b26",
+            "comment": "Bump @rnx-kit/dep-check to v1.7.7"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Tue, 31 Aug 2021 07:00:17 GMT",
+      "tag": "@rnx-kit/dep-check_v1.7.6",
+      "version": "1.7.6",
+      "comments": {
+        "none": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/dep-check",
+            "commit": "0eecc568dd8ff556cd3964772c614cbbf7eefb98",
+            "comment": "Bump @rnx-kit/dep-check to v1.7.6"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Tue, 31 Aug 2021 06:43:13 GMT",
+      "tag": "@rnx-kit/dep-check_v1.7.6",
+      "version": "1.7.6",
+      "comments": {
+        "patch": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/dep-check",
+            "comment": "Stricter handling of errors",
+            "commit": "25b936b3786f2a37dc6feacb4034e6afb56e343b"
+          },
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/dep-check",
+            "commit": "25b936b3786f2a37dc6feacb4034e6afb56e343b",
+            "comment": "Bump @rnx-kit/dep-check to v1.7.6"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Fri, 27 Aug 2021 18:41:43 GMT",
+      "tag": "@rnx-kit/dep-check_v1.7.5",
+      "version": "1.7.5",
+      "comments": {
+        "patch": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/dep-check",
+            "commit": "dcb826baf0cc3705b460776bdb31e19930f4f2dc",
+            "comment": "Bump @rnx-kit/dep-check to v1.7.5"
+          }
+        ]
+      }
+    },
+    {
       "date": "Wed, 25 Aug 2021 08:52:48 GMT",
       "tag": "@rnx-kit/dep-check_v1.7.4",
       "version": "1.7.4",

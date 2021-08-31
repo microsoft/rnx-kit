@@ -1,5 +1,6 @@
-import type { TerminalReporter } from "metro/src/lib/TerminalReporter";
+import { hasProperty } from "@rnx-kit/tools-language/properties";
 import { Terminal } from "metro-core";
+import type { TerminalReporter } from "metro/src/lib/TerminalReporter";
 import path from "path";
 
 export type MetroTerminal = {
@@ -18,7 +19,7 @@ function getTerminalReporterClass(
     // as expected. eg: require('my-package/reporter');
     return require(customReporterPath);
   } catch (e) {
-    if (e.code !== "MODULE_NOT_FOUND") {
+    if (!hasProperty(e, "code") || e.code !== "MODULE_NOT_FOUND") {
       throw e;
     }
     // If that doesn't work, then we next try relative to the cwd, eg:

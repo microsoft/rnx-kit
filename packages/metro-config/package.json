@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/metro-config",
-  "version": "1.2.8",
+  "version": "1.2.11",
   "description": "Metro config for monorepos",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/metro-config#readme",
   "license": "MIT",
@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "@rnx-kit/babel-preset-metro-react-native": "^1.0.4",
-    "@rnx-kit/tools-node": "^1.1.0",
+    "@rnx-kit/tools-node": "^1.1.2",
     "workspace-tools": "^0.16.2"
   },
   "peerDependencies": {
@@ -30,26 +30,32 @@
     "react-native": "*"
   },
   "devDependencies": {
+    "@rnx-kit/jest-preset": "*",
     "@types/babel__core": "^7.0.0",
     "@types/jest": "^26.0.0",
-    "metro-config": "^0.66.1",
+    "@types/metro": "*",
+    "@types/metro-config": "*",
+    "metro-config": "^0.66.2",
     "prettier": "^2.0.0",
     "rnx-kit-scripts": "*",
+    "type-fest": "^2.1.0",
     "typescript": "^4.0.0"
   },
   "depcheck": {
     "ignoreMatches": [
       "@rnx-kit/babel-preset-metro-react-native",
-      "jest-validate"
+      "jest-validate",
+      "metro"
     ]
   },
   "eslintConfig": {
     "extends": "@rnx-kit/eslint-config"
   },
   "jest": {
+    "preset": "@rnx-kit/jest-preset",
     "roots": [
       "test"
     ],
-    "testRegex": "/test/.*\\.test\\.js$"
+    "testRegex": "/test/.*\\.test\\.ts$"
   }
 }

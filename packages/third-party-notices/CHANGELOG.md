@@ -1,8 +1,24 @@
 # Change Log - @rnx-kit/third-party-notices
 
-This log was last generated on Thu, 26 Aug 2021 17:24:29 GMT and should not be manually modified.
+This log was last generated on Tue, 31 Aug 2021 06:43:13 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 1.2.2
+
+Tue, 31 Aug 2021 06:43:13 GMT
+
+### Patches
+
+- Bump @rnx-kit/third-party-notices to v1.2.2 (4123478+tido64@users.noreply.github.com)
+
+## 1.2.1
+
+Fri, 27 Aug 2021 18:41:43 GMT
+
+### Patches
+
+- Bump @rnx-kit/third-party-notices to v1.2.1 (4123478+tido64@users.noreply.github.com)
 
 ## 1.2.0
 

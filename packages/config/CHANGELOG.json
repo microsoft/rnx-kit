@@ -2,6 +2,66 @@
   "name": "@rnx-kit/config",
   "entries": [
     {
+      "date": "Tue, 31 Aug 2021 10:50:41 GMT",
+      "tag": "@rnx-kit/config_v0.4.6",
+      "version": "0.4.6",
+      "comments": {
+        "patch": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/config",
+            "comment": "Warn when `reactNativeDevVersion` is set and `kitType` is `app`",
+            "commit": "ff12b97c1107ad1eb6d253f74ff0f3daa7ec1b26"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Tue, 31 Aug 2021 07:00:17 GMT",
+      "tag": "@rnx-kit/config_v0.4.5",
+      "version": "0.4.5",
+      "comments": {
+        "none": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/config",
+            "commit": "0eecc568dd8ff556cd3964772c614cbbf7eefb98",
+            "comment": "Bump @rnx-kit/config to v0.4.5"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Tue, 31 Aug 2021 06:43:13 GMT",
+      "tag": "@rnx-kit/config_v0.4.5",
+      "version": "0.4.5",
+      "comments": {
+        "patch": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/config",
+            "commit": "25b936b3786f2a37dc6feacb4034e6afb56e343b",
+            "comment": "Bump @rnx-kit/config to v0.4.5"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Fri, 27 Aug 2021 18:41:43 GMT",
+      "tag": "@rnx-kit/config_v0.4.4",
+      "version": "0.4.4",
+      "comments": {
+        "patch": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/config",
+            "commit": "dcb826baf0cc3705b460776bdb31e19930f4f2dc",
+            "comment": "Bump @rnx-kit/config to v0.4.4"
+          }
+        ]
+      }
+    },
+    {
       "date": "Wed, 25 Aug 2021 08:52:48 GMT",
       "tag": "@rnx-kit/config_v0.4.3",
       "version": "0.4.3",

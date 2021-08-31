@@ -1,8 +1,24 @@
 # Change Log - @rnx-kit/tools-node
 
-This log was last generated on Wed, 25 Aug 2021 08:52:48 GMT and should not be manually modified.
+This log was last generated on Tue, 31 Aug 2021 06:43:13 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 1.1.2
+
+Tue, 31 Aug 2021 06:43:13 GMT
+
+### Patches
+
+- Bump @rnx-kit/tools-node to v1.1.2 (4123478+tido64@users.noreply.github.com)
+
+## 1.1.1
+
+Fri, 27 Aug 2021 18:41:43 GMT
+
+### Patches
+
+- Fix Windows absolute paths not being handled correctly (4123478+tido64@users.noreply.github.com)
 
 ## 1.1.0
 
