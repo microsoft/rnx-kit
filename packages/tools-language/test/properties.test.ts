@@ -196,4 +196,12 @@ describe("Language > Props > hasProperty", () => {
     expect(hasProperty(testObj, "message")).toBe(true);
     expect(hasProperty(testObj, "stack")).toBe(false);
   });
+
+  test("returns true for objects with inherited property", () => {
+    const testProto = { message: "code", code: 0 };
+    const testObj = Object.create(testProto);
+    expect(hasProperty(testObj, "code")).toBe(true);
+    expect(hasProperty(testObj, "message")).toBe(true);
+    expect(hasProperty(testObj, "stack")).toBe(false);
+  });
 });
