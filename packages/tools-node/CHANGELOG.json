@@ -2,6 +2,27 @@
   "name": "@rnx-kit/tools-node",
   "entries": [
     {
+      "date": "Tue, 31 Aug 2021 07:00:17 GMT",
+      "tag": "@rnx-kit/tools-node_v1.1.2",
+      "version": "1.1.2",
+      "comments": {
+        "none": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/tools-node",
+            "comment": "Updated documentation",
+            "commit": "0eecc568dd8ff556cd3964772c614cbbf7eefb98"
+          },
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/tools-node",
+            "commit": "0eecc568dd8ff556cd3964772c614cbbf7eefb98",
+            "comment": "Bump @rnx-kit/tools-node to v1.1.2"
+          }
+        ]
+      }
+    },
+    {
       "date": "Tue, 31 Aug 2021 06:43:13 GMT",
       "tag": "@rnx-kit/tools-node_v1.1.2",
       "version": "1.1.2",
