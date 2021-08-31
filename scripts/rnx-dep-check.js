@@ -3,6 +3,10 @@
 "use strict";
 
 const common = {
+  "@types/jest": {
+    name: "@types/jest",
+    version: "^27.0.0",
+  },
   "@types/node": {
     name: "@types/node",
     version: "^14.15.0",

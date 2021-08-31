@@ -31,7 +31,7 @@
   },
   "devDependencies": {
     "@rnx-kit/eslint-config": "*",
-    "@types/jest": "^26.0.0",
+    "@types/jest": "^27.0.0",
     "@types/yargs": "^16.0.0",
     "rnx-kit-scripts": "*",
     "typescript": "^4.0.0"

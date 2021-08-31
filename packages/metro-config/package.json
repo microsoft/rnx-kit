@@ -31,7 +31,7 @@
   },
   "devDependencies": {
     "@types/babel__core": "^7.0.0",
-    "@types/jest": "^26.0.0",
+    "@types/jest": "^27.0.0",
     "@types/metro": "*",
     "@types/metro-config": "*",
     "metro-config": "^0.66.2",

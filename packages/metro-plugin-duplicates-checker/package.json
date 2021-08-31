@@ -28,7 +28,7 @@
   },
   "devDependencies": {
     "@rnx-kit/metro-serializer": "*",
-    "@types/jest": "^26.0.0",
+    "@types/jest": "^27.0.0",
     "@types/metro": "*",
     "@types/metro-source-map": "*",
     "@types/node": "^14.15.0",
