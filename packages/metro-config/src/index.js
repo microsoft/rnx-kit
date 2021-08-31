@@ -2,32 +2,9 @@
 // @ts-check
 
 /**
- * @typedef {{
- *   transform: {
- *     experimentalImportSupport?: boolean;
- *     inlineRequires?: boolean;
- *     unstable_disableES6Transforms?: boolean;
- *   },
- *   preloadedModules?: boolean;
- *   ramGroups?: string[];
- * }} MetroTransformOptions;
- *
- * @typedef {{
- *   projectRoot?: string;
- *   resetCache?: boolean;
- *   resolver?: {
- *     extraNodeModules?: Record<string, string>;
- *     blacklistRE?: RegExp;
- *     blockList?: RegExp;
- *     [key: string]: unknown;
- *   },
- *   transformer?: {
- *     getTransformOptions: () => Promise<MetroTransformOptions>;
- *     [key: string]: unknown;
- *   }
- *   watchFolders?: string[];
- *   [key: string]: unknown;
- * }} MetroConfig;
+ * @typedef {import("metro-config").ExtraTransformOptions} ExtraTransformOptions;
+ * @typedef {import("metro-config").InputConfigT} InputConfigT;
+ * @typedef {import("type-fest").PartialDeep<InputConfigT>} MetroConfig;
  */
 
 /** Packages that must be resolved to one specific copy. */
@@ -198,6 +175,7 @@ module.exports = {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore There are no type definition files for `metro-config`
     const { mergeConfig } = require("metro-config");
+    const { enhanceMiddleware } = require("./assetPluginForMonorepos");
 
     const projectRoot = customConfig.projectRoot || process.cwd();
     const blockList = exclusionList([], projectRoot);
@@ -207,7 +185,11 @@ module.exports = {
           blacklistRE: blockList, // For Metro < 0.60
           blockList, // For Metro >= 0.60
         },
+        server: {
+          enhanceMiddleware,
+        },
         transformer: {
+          assetPlugins: [require.resolve("./assetPluginForMonorepos")],
           getTransformOptions: async () => ({
             transform: {
               experimentalImportSupport: false,

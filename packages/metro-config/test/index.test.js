@@ -236,6 +236,8 @@ describe("@rnx-kit/metro-config", () => {
       fail("Expected `config.resolver.blockList` to be a RegExp");
     } else if (!config.transformer) {
       fail("Expected `config.transformer` to be defined");
+    } else if (!config.transformer.getTransformOptions) {
+      fail("Expected `config.transformer.getTransformOptions` to be defined");
     } else if (!Array.isArray(config.watchFolders)) {
       fail("Expected `config.watchFolders` to be an array");
     }
@@ -248,8 +250,13 @@ describe("@rnx-kit/metro-config", () => {
     expect(config.resolver.blacklistRE.source).toBe(blockList);
     expect(config.resolver.blockList.source).toBe(blockList);
 
-    const transformerOptions = await config.transformer.getTransformOptions();
-    expect(transformerOptions.transform).toEqual({
+    const opts = { dev: false, hot: false };
+    const transformerOptions = await config.transformer.getTransformOptions(
+      [],
+      opts,
+      () => Promise.resolve([])
+    );
+    expect(transformerOptions?.transform).toEqual({
       experimentalImportSupport: false,
       inlineRequires: false,
     });
@@ -280,6 +287,8 @@ describe("@rnx-kit/metro-config", () => {
       fail("Expected `config.resolver.blockList` to be a RegExp");
     } else if (!config.transformer) {
       fail("Expected `config.transformer` to be defined");
+    } else if (!config.transformer.getTransformOptions) {
+      fail("Expected `config.transformer.getTransformOptions` to be defined");
     } else if (!Array.isArray(config.watchFolders)) {
       fail("Expected `config.watchFolders` to be an array");
     }
@@ -292,8 +301,13 @@ describe("@rnx-kit/metro-config", () => {
     expect(config.resolver.blacklistRE.source).toBe(blockList);
     expect(config.resolver.blockList.source).toBe(blockList);
 
-    const transformerOptions = await config.transformer.getTransformOptions();
-    expect(transformerOptions.transform).toEqual({
+    const opts = { dev: false, hot: false };
+    const transformerOptions = await config.transformer.getTransformOptions(
+      [],
+      opts,
+      () => Promise.resolve([])
+    );
+    expect(transformerOptions?.transform).toEqual({
       experimentalImportSupport: false,
       inlineRequires: false,
     });
