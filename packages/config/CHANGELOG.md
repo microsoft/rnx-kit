@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/config
 
-This log was last generated on Tue, 31 Aug 2021 06:43:13 GMT and should not be manually modified.
+This log was last generated on Tue, 31 Aug 2021 10:50:41 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 0.4.6
+
+Tue, 31 Aug 2021 10:50:41 GMT
+
+### Patches
+
+- Warn when `reactNativeDevVersion` is set and `kitType` is `app` (4123478+tido64@users.noreply.github.com)
 
 ## 0.4.5
 

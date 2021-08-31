@@ -2,6 +2,21 @@
   "name": "@rnx-kit/config",
   "entries": [
     {
+      "date": "Tue, 31 Aug 2021 10:50:41 GMT",
+      "tag": "@rnx-kit/config_v0.4.6",
+      "version": "0.4.6",
+      "comments": {
+        "patch": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/config",
+            "comment": "Warn when `reactNativeDevVersion` is set and `kitType` is `app`",
+            "commit": "ff12b97c1107ad1eb6d253f74ff0f3daa7ec1b26"
+          }
+        ]
+      }
+    },
+    {
       "date": "Tue, 31 Aug 2021 07:00:17 GMT",
       "tag": "@rnx-kit/config_v0.4.5",
       "version": "0.4.5",
