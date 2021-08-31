@@ -160,7 +160,7 @@ export function findPackage(startDir?: string): string | undefined {
 /**
  * Find the parent directory of the nearest `package.json` manifest file. Search
  * upward through all parent directories.
- *yarn
+ *
  * If a starting directory is given, use it. Otherwise, use the current working
  * directory.
  *
