@@ -2,6 +2,21 @@
   "name": "@rnx-kit/metro-config",
   "entries": [
     {
+      "date": "Tue, 31 Aug 2021 06:21:44 GMT",
+      "tag": "@rnx-kit/metro-config_v1.2.10",
+      "version": "1.2.10",
+      "comments": {
+        "patch": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/metro-config",
+            "comment": "Fix assets not resolving correctly in monorepos",
+            "commit": "eed680eae677e25f2b0b70e832319260271cc0e6"
+          }
+        ]
+      }
+    },
+    {
       "date": "Fri, 27 Aug 2021 18:41:43 GMT",
       "tag": "@rnx-kit/metro-config_v1.2.9",
       "version": "1.2.9",
