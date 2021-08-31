@@ -2,6 +2,21 @@
   "name": "@rnx-kit/metro-config",
   "entries": [
     {
+      "date": "Tue, 31 Aug 2021 06:34:16 GMT",
+      "tag": "@rnx-kit/metro-config_v1.2.10",
+      "version": "1.2.10",
+      "comments": {
+        "none": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/metro-config",
+            "comment": "Converted tests to proper TypeScript",
+            "commit": "5b06c8ffb55eb06976fb2d7bdcfbca79fe12f7f9"
+          }
+        ]
+      }
+    },
+    {
       "date": "Tue, 31 Aug 2021 06:21:44 GMT",
       "tag": "@rnx-kit/metro-config_v1.2.10",
       "version": "1.2.10",
