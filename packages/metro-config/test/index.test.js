@@ -6,6 +6,7 @@ describe("@rnx-kit/metro-config", () => {
   const path = require("path");
   const {
     UNIQUE_PACKAGES,
+    defaultRoots,
     defaultWatchFolders,
     excludeExtraCopiesOf,
     exclusionList,
@@ -15,6 +16,7 @@ describe("@rnx-kit/metro-config", () => {
   const metroConfigKeys = [
     "cacheStores",
     "resolver",
+    "roots",
     "serializer",
     "server",
     "symbolicator",
@@ -42,9 +44,30 @@ describe("@rnx-kit/metro-config", () => {
 
   afterEach(() => process.chdir(currentWorkingDir));
 
+  test("defaultRoots() returns empty an empty list outside a monorepo", () => {
+    const root = process.platform === "win32" ? "C:\\" : "/";
+    expect(defaultRoots(root).length).toBe(0);
+  });
+
   test("defaultWatchFolders() returns an empty list outside a monorepo", () => {
     const root = process.platform === "win32" ? "C:\\" : "/";
     expect(defaultWatchFolders(root).length).toBe(0);
+  });
+
+  test("defaultRoots() returns packages in a monorepo including the root node_modules", () => {
+    setFixture("awesome-repo/packages/t-800");
+
+    const repoRoot = path.dirname(path.dirname(process.cwd()));
+    const folders = defaultRoots(process.cwd());
+
+    const packages = ["conan", "dutch", "john", "quaid", "t-800"].map((p) =>
+      path.join(repoRoot, "packages", p)
+    );
+    const expectedFolders = [
+      path.join(repoRoot, "node_modules"),
+      ...packages,
+    ].sort();
+    expect(folders.sort()).toEqual(expectedFolders);
   });
 
   test("defaultWatchFolders() returns packages in a monorepo", () => {
@@ -56,11 +79,7 @@ describe("@rnx-kit/metro-config", () => {
     const packages = ["conan", "dutch", "john", "quaid", "t-800"].map((p) =>
       path.join(repoRoot, "packages", p)
     );
-    const expectedFolders = [
-      path.join(repoRoot, "node_modules"),
-      ...packages,
-    ].sort();
-    expect(folders.sort()).toEqual(expectedFolders);
+    expect(folders.sort()).toEqual(packages.sort());
   });
 
   test("excludeExtraCopiesOf() ignores symlinks", () => {

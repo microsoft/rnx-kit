@@ -34,12 +34,25 @@
 const UNIQUE_PACKAGES = ["react", "react-native"];
 
 /**
+ * Get a path to `package.json` for the project root, or an empty
+ * string if nothing was found.
+ *
+ * @param {string | undefined} projectRoot
+ * @returns {string}
+ */
+function getProjectPackage(projectRoot) {
+  const { findPackage } = require("@rnx-kit/tools-node/package");
+  const path = require("path");
+
+  return path.dirname(findPackage(projectRoot) || "");
+}
+
+/**
  * A minimum list of folders that should be watched by Metro.
  * @param {string | undefined} projectRoot
  * @returns {string[]}
  */
 function defaultWatchFolders(projectRoot) {
-  const { findPackage } = require("@rnx-kit/tools-node/package");
   const path = require("path");
   const {
     getAllPackageJsonFiles,
@@ -48,7 +61,7 @@ function defaultWatchFolders(projectRoot) {
 
   // If `projectRoot` is not set, assume that `@rnx-kit/metro-config` lives in
   // the same monorepo as the target package.
-  const thisPackage = path.dirname(findPackage(projectRoot) || "");
+  const thisPackage = getProjectPackage(projectRoot);
 
   try {
     const root = getWorkspaceRoot(thisPackage);
@@ -61,12 +74,35 @@ function defaultWatchFolders(projectRoot) {
       return [];
     }
 
+    return packages.map((pkg) => path.dirname(pkg));
+  } catch (_) {
+    return [];
+  }
+}
+
+/**
+ * A minimum list of package root folders.
+ * @param {string | undefined} projectRoot
+ * @returns {string[]}
+ */
+function defaultRoots(projectRoot) {
+  const path = require("path");
+  const { getWorkspaceRoot } = require("workspace-tools");
+
+  try {
+    const root = getWorkspaceRoot(getProjectPackage(projectRoot));
+    if (!root) {
+      return [];
+    }
+
+    const watchFolders = defaultWatchFolders(projectRoot);
+    if (watchFolders.length === 0) {
+      return [];
+    }
+
     // In a monorepo, in particular when using Yarn workspaces, packages are
-    // symlinked in the root `node_modules` folder so it needs to be watched.
-    return [
-      path.join(root, "node_modules"),
-      ...packages.map((pkg) => path.dirname(pkg)),
-    ];
+    // symlinked in the root `node_modules` folder so it needs to be included.
+    return [path.join(root, "node_modules"), ...watchFolders];
   } catch (_) {
     return [];
   }
@@ -182,9 +218,32 @@ function exclusionList(additionalExclusions = [], projectRoot = process.cwd()) {
   ]);
 }
 
+/**
+ * Suppress Metro's warning that the "roots" property is unknown and should not
+ * be part of configuration.
+ *
+ * "roots" is a new Metro config property that hasn't been released yet. Customers
+ * using our metro-config package should not be exposed to this warning.
+ *
+ * This can be removed after Metro PR https://github.com/facebook/metro/pull/701
+ * is merged, published, and updated in our repo.
+ */
+const jestValidateUtils = require("jest-validate/build/utils");
+const logValidationWarningOriginal = jestValidateUtils.logValidationWarning;
+// eslint-disable-next-line
+// @ts-ignore
+jestValidateUtils.logValidationWarning = (name, message, comment) => {
+  // eslint-disable-next-line
+  if (message.match(/Unknown option \u001b\[1m"roots"/)) {
+    return;
+  }
+  logValidationWarningOriginal(name, message, comment);
+};
+
 module.exports = {
   UNIQUE_PACKAGES,
 
+  defaultRoots,
   defaultWatchFolders,
   excludeExtraCopiesOf,
   exclusionList,
@@ -216,6 +275,7 @@ module.exports = {
           }),
         },
         watchFolders: defaultWatchFolders(customConfig.projectRoot),
+        roots: defaultRoots(customConfig.projectRoot),
       },
       {
         ...customConfig,

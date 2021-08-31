@@ -39,7 +39,8 @@
   },
   "depcheck": {
     "ignoreMatches": [
-      "@rnx-kit/babel-preset-metro-react-native"
+      "@rnx-kit/babel-preset-metro-react-native",
+      "jest-validate"
     ]
   },
   "eslintConfig": {
