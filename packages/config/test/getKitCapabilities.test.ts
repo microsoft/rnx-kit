@@ -1,6 +1,12 @@
 import { getKitCapabilities } from "../src/getKitCapabilities";
 
 describe("getKitCapabilities()", () => {
+  const consoleWarnSpy = jest.spyOn(global.console, "warn");
+
+  afterEach(() => {
+    consoleWarnSpy.mockReset();
+  });
+
   test("throws when supported React Native versions is invalid", () => {
     expect(() => getKitCapabilities({})).toThrow();
     expect(() => getKitCapabilities({ reactNativeVersion: "" })).toThrow();
@@ -12,6 +18,7 @@ describe("getKitCapabilities()", () => {
     expect(() =>
       getKitCapabilities({ reactNativeVersion: "0.64.0" })
     ).not.toThrow();
+    expect(consoleWarnSpy).not.toHaveBeenCalled();
   });
 
   test("throws when React Native dev version does not satisfy supported versions", () => {
@@ -49,6 +56,8 @@ describe("getKitCapabilities()", () => {
         reactNativeDevVersion: "0.64.0",
       }).reactNativeVersion
     ).toBe("^0.63 || ^0.64");
+
+    expect(consoleWarnSpy).not.toHaveBeenCalled();
   });
 
   test("returns declared React Native dev version", () => {
@@ -64,6 +73,7 @@ describe("getKitCapabilities()", () => {
         reactNativeDevVersion: "^0.64.0",
       }).reactNativeDevVersion
     ).toBe("^0.64.0");
+    expect(consoleWarnSpy).not.toHaveBeenCalled();
   });
 
   test("returns minimum supported React Native version as dev version when unspecified", () => {
@@ -84,6 +94,8 @@ describe("getKitCapabilities()", () => {
         reactNativeVersion: "^0.63.4 || ^0.64.0",
       }).reactNativeDevVersion
     ).toBe("0.63.4");
+
+    expect(consoleWarnSpy).not.toHaveBeenCalled();
   });
 
   test("returns 'library' when 'kitType' is undefined", () => {
@@ -100,6 +112,8 @@ describe("getKitCapabilities()", () => {
       getKitCapabilities({ reactNativeVersion: "0.64.0", kitType: "app" })
         .kitType
     ).toBe("app");
+
+    expect(consoleWarnSpy).not.toHaveBeenCalled();
   });
 
   test("returns empty array when 'capabilities' is undefined", () => {
@@ -113,5 +127,20 @@ describe("getKitCapabilities()", () => {
         capabilities: ["core-ios"],
       }).capabilities
     ).toEqual(["core-ios"]);
+
+    expect(consoleWarnSpy).not.toHaveBeenCalled();
+  });
+
+  test("warns when 'reactNativeDevVersion' is set and 'kitType' is 'app'", () => {
+    getKitCapabilities({
+      reactNativeVersion: "^0.64",
+      reactNativeDevVersion: "0.64.2",
+      kitType: "app",
+      capabilities: ["core-ios"],
+    });
+    expect(consoleWarnSpy).toHaveBeenCalledWith(
+      expect.stringContaining("warn"),
+      "'reactNativeDevVersion' is not used when 'kitType' is 'app'"
+    );
   });
 });
