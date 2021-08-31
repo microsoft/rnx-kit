@@ -1,3 +1,4 @@
+import { warn } from "@rnx-kit/console";
 import semver from "semver";
 import type { KitConfig } from "./kitConfig";
 
@@ -25,6 +26,10 @@ export function getKitCapabilities({
       !semver.validRange(reactNativeVersion))
   ) {
     throw new Error(`'${reactNativeVersion}' is not a valid version range`);
+  }
+
+  if (kitType === "app" && rawDevVersion) {
+    warn("'reactNativeDevVersion' is not used when 'kitType' is 'app'");
   }
 
   const reactNativeDevVersion =
