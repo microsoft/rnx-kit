@@ -13,6 +13,8 @@ export function pickPackage(profile: Profile, capability: string): Package {
   const pkg = profile[capability];
   if (!pkg) {
     throw new Error(`Could not resolve '${capability}'`);
+  } else if (!("version" in pkg)) {
+    throw new Error(`'${capability}' is a meta package`);
   }
 
   return pkg;

@@ -3,7 +3,12 @@ import type { PackageManifest } from "@rnx-kit/tools-node/package";
 import semver from "semver";
 import { getProfilesFor, getProfileVersionsFor } from "./profiles";
 import { concatVersionRanges, keysOf } from "./helpers";
-import type { CapabilitiesOptions, Package, Profile } from "./types";
+import type {
+  CapabilitiesOptions,
+  MetaPackage,
+  Package,
+  Profile,
+} from "./types";
 
 export function capabilitiesFor(
   { dependencies, devDependencies, peerDependencies }: PackageManifest,
@@ -60,6 +65,53 @@ export function capabilitiesFor(
   };
 }
 
+function isMetaPackage(pkg: MetaPackage | Package): pkg is MetaPackage {
+  return pkg.name === "#meta" && Array.isArray(pkg.capabilities);
+}
+
+function resolveCapability(
+  capability: Capability,
+  profile: Profile,
+  dependencies: Record<string, Package[]>,
+  unresolvedCapabilities: Set<string>,
+  resolved = new Set<string>()
+): void {
+  if (resolved.has(capability)) {
+    return;
+  }
+
+  // Make sure we don't end in a loop
+  resolved.add(capability);
+
+  const pkg = profile[capability];
+  if (!pkg) {
+    unresolvedCapabilities.add(capability);
+    return;
+  }
+
+  pkg.capabilities?.forEach((capability) =>
+    resolveCapability(
+      capability,
+      profile,
+      dependencies,
+      unresolvedCapabilities,
+      resolved
+    )
+  );
+
+  if (!isMetaPackage(pkg)) {
+    const { name, version } = pkg;
+    if (name in dependencies) {
+      const versions = dependencies[name];
+      if (!versions.find((current) => current.version === version)) {
+        versions.push(pkg);
+      }
+    } else {
+      dependencies[name] = [pkg];
+    }
+  }
+}
+
 export function resolveCapabilities(
   capabilities: Capability[],
   profiles: Profile[]
@@ -68,21 +120,12 @@ export function resolveCapabilities(
   const packages = capabilities.reduce<Record<string, Package[]>>(
     (dependencies, capability) => {
       profiles.forEach((profile) => {
-        const pkg = profile[capability];
-        if (!pkg) {
-          unresolvedCapabilities.add(capability);
-          return;
-        }
-
-        const { name, version } = pkg;
-        if (name in dependencies) {
-          const versions = dependencies[name];
-          if (!versions.find((current) => current.version === version)) {
-            versions.push(pkg);
-          }
-        } else {
-          dependencies[name] = [pkg];
-        }
+        resolveCapability(
+          capability,
+          profile,
+          dependencies,
+          unresolvedCapabilities
+        );
       });
       return dependencies;
     },

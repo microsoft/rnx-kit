@@ -4,7 +4,7 @@ import { getProfilesFor } from "../src/profiles";
 import profile_0_62 from "../src/profiles/profile-0.62";
 import profile_0_63 from "../src/profiles/profile-0.63";
 import profile_0_64 from "../src/profiles/profile-0.64";
-import { mockResolver } from "./helpers";
+import { mockResolver, pickPackage } from "./helpers";
 
 describe("capabilitiesFor()", () => {
   test("returns `undefined` when react-native is not a dependency", () => {
@@ -149,6 +149,93 @@ describe("resolveCapabilities()", () => {
     expect(packages).toEqual({
       [name]: [profile_0_64["svg"]],
       [skynet.name]: [skynet],
+    });
+  });
+
+  test("resolves capabilities required by capabilities", () => {
+    const packages = resolveCapabilities(
+      ["core-windows"],
+      [profile_0_63, profile_0_64]
+    );
+
+    expect(packages).toEqual({
+      "react-native": [
+        pickPackage(profile_0_63, "core"),
+        pickPackage(profile_0_64, "core"),
+      ],
+      "react-native-windows": [
+        pickPackage(profile_0_63, "core-windows"),
+        pickPackage(profile_0_64, "core-windows"),
+      ],
+    });
+
+    expect(consoleWarnSpy).not.toBeCalled();
+  });
+
+  test("resolves meta packages", () => {
+    jest.mock(
+      "mock-meta-package",
+      () => ({
+        "0.64": {
+          "core/all": {
+            name: "#meta",
+            capabilities: [
+              "core-android",
+              "core-ios",
+              "core-macos",
+              "core-windows",
+            ],
+          },
+        },
+      }),
+      { virtual: true }
+    );
+
+    const packages = resolveCapabilities(
+      ["core/all" as Capability],
+      getProfilesFor("^0.64", "mock-meta-package", {
+        moduleResolver: mockResolver("mock-meta-package"),
+      })
+    );
+
+    expect(packages).toEqual({
+      "react-native": [pickPackage(profile_0_64, "core")],
+      "react-native-macos": [pickPackage(profile_0_64, "core-macos")],
+      "react-native-windows": [pickPackage(profile_0_64, "core-windows")],
+    });
+  });
+
+  test("resolves meta packages with loops", () => {
+    jest.mock(
+      "mock-meta-package-loop",
+      () => ({
+        "0.64": {
+          "connor": {
+            name: "#meta",
+            capabilities: ["core", "reese"],
+          },
+          "reese": {
+            name: "#meta",
+            capabilities: ["t-800"],
+          },
+          "t-800": {
+            name: "#meta",
+            capabilities: ["connor"],
+          },
+        },
+      }),
+      { virtual: true }
+    );
+
+    const packages = resolveCapabilities(
+      ["reese" as Capability],
+      getProfilesFor("^0.64", "mock-meta-package-loop", {
+        moduleResolver: mockResolver("mock-meta-package-loop"),
+      })
+    );
+
+    expect(packages).toEqual({
+      "react-native": [pickPackage(profile_0_64, "core")],
     });
   });
 });
