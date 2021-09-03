@@ -1,6 +1,6 @@
+import type { PackageManifest } from "@rnx-kit/tools-node/package";
 import prompts from "prompts";
 import { makeSetVersionCommand } from "../src/setVersion";
-import type { PackageManifest } from "../src/types";
 
 jest.mock("fs");
 

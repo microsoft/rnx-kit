@@ -45,7 +45,6 @@
     "@types/semver": "^7.0.0",
     "@types/yargs": "^16.0.0",
     "markdown-table": "^2.0.0",
-    "prettier": "^2.0.0",
     "rnx-kit-scripts": "*",
     "typescript": "^4.0.0"
   },
@@ -54,6 +53,9 @@
   },
   "jest": {
     "preset": "@rnx-kit/jest-preset",
+    "collectCoverageFrom": [
+      "src/**"
+    ],
     "roots": [
       "test"
     ],

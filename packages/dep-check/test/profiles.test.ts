@@ -9,6 +9,7 @@ import profile_0_62 from "../src/profiles/profile-0.62";
 import profile_0_63 from "../src/profiles/profile-0.63";
 import profile_0_64 from "../src/profiles/profile-0.64";
 import { ProfileVersion } from "../src/types";
+import { mockResolver } from "./helpers";
 
 describe("defaultProfiles", () => {
   test("matches react-native versions", () => {
@@ -18,9 +19,10 @@ describe("defaultProfiles", () => {
     Object.entries(defaultProfiles).forEach(([version, capabilities]) => {
       const versionRange = "^" + version;
       Object.entries(capabilities).forEach(([capability, pkg]) => {
-        if (capability === "core" || capability.startsWith("core-")) {
+        if (capability === "core") {
           expect(
-            semver.subset(pkg.version, versionRange, includePrerelease)
+            "version" in pkg &&
+              semver.subset(pkg.version, versionRange, includePrerelease)
           ).toBe(true);
         }
       });
@@ -127,7 +129,7 @@ describe("getProfilesFor()", () => {
   test("throws if custom profiles module path is not returned", () => {
     expect(() =>
       getProfilesFor("^0.59", "undefined-profiles-module", {
-        moduleResolver: (() => undefined) as any,
+        moduleResolver: mockResolver(),
       })
     ).toThrow(`Cannot find module 'undefined-profiles-module'`);
 
@@ -139,7 +141,7 @@ describe("getProfilesFor()", () => {
 
     expect(() =>
       getProfilesFor("^0.59", "bad-profiles-module", {
-        moduleResolver: (() => "bad-profiles-module") as any,
+        moduleResolver: mockResolver("bad-profiles-module"),
       })
     ).toThrow("'bad-profiles-module' doesn't default export profiles");
 
@@ -157,7 +159,7 @@ describe("getProfilesFor()", () => {
     const [profile_0_62, profile_0_63] = getProfilesFor(
       "^0.62 || ^0.63",
       "good-profiles-module",
-      { moduleResolver: (() => "good-profiles-module") as any }
+      { moduleResolver: mockResolver("good-profiles-module") }
     );
 
     expect(skynet.name in profile_0_62).toBe(true);

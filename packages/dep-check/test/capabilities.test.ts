@@ -4,6 +4,7 @@ import { getProfilesFor } from "../src/profiles";
 import profile_0_62 from "../src/profiles/profile-0.62";
 import profile_0_63 from "../src/profiles/profile-0.63";
 import profile_0_64 from "../src/profiles/profile-0.64";
+import { mockResolver } from "./helpers";
 
 describe("capabilitiesFor()", () => {
   test("returns `undefined` when react-native is not a dependency", () => {
@@ -86,14 +87,14 @@ describe("resolveCapabilities()", () => {
 
   test("dedupes packages", () => {
     const packages = resolveCapabilities(
-      ["core-android", "core-ios", "test-app"],
+      ["core", "core", "test-app"],
       [profile_0_64]
     );
 
-    const { name } = profile_0_64["core-ios"];
+    const { name } = profile_0_64["core"];
     const { name: testAppName } = profile_0_64["test-app"];
     expect(packages).toEqual({
-      [name]: [profile_0_64["core-ios"]],
+      [name]: [profile_0_64["core"]],
       [testAppName]: [profile_0_64["test-app"]],
     });
 
@@ -136,7 +137,7 @@ describe("resolveCapabilities()", () => {
     const profiles = getProfilesFor(
       "^0.62 || ^0.63 || ^0.64",
       "mock-custom-profiles-module",
-      { moduleResolver: (() => "mock-custom-profiles-module") as any }
+      { moduleResolver: mockResolver("mock-custom-profiles-module") }
     );
 
     const packages = resolveCapabilities(
