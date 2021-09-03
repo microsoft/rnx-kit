@@ -1,15 +1,12 @@
 import { getKitCapabilities, getKitConfig } from "@rnx-kit/config";
 import { error, info, warn } from "@rnx-kit/console";
-import {
-  isPackageManifest,
-  readPackage,
-  writePackage,
-} from "@rnx-kit/tools-node/package";
+import { isPackageManifest, readPackage } from "@rnx-kit/tools-node/package";
 import chalk from "chalk";
 import { diffLinesUnified } from "jest-diff";
 import path from "path";
 import { getRequirements } from "./dependencies";
 import { findBadPackages } from "./findBadPackages";
+import { modifyManifest } from "./helpers";
 import { updatePackageManifest } from "./manifest";
 import { getProfilesFor } from "./profiles";
 import type { CheckOptions, Command } from "./types";
@@ -77,7 +74,7 @@ export function checkPackageManifest(
 
   if (updatedManifestJson !== normalizedManifestJson) {
     if (write) {
-      writePackage(manifestPath, updatedManifest);
+      modifyManifest(manifestPath, updatedManifest);
     } else {
       const diff = diffLinesUnified(
         normalizedManifestJson.split("\n"),
