@@ -133,12 +133,17 @@ export function readPackage(pkgPath: string): PackageManifest {
  *
  * @param pkgPath Either a path directly to the target `package.json` file, or the directory containing it.
  * @param manifest Package manifest
+ * @param space Indentation to apply to the output
  */
-export function writePackage(pkgPath: string, manifest: PackageManifest): void {
+export function writePackage(
+  pkgPath: string,
+  manifest: PackageManifest,
+  space = "  "
+): void {
   const pkgFile = resolvePackagePath(pkgPath);
   fs.writeFileSync(
     pkgFile,
-    JSON.stringify(manifest, undefined, 2) + "\n",
+    JSON.stringify(manifest, undefined, space) + "\n",
     "utf-8"
   );
 }

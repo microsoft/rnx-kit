@@ -45,7 +45,7 @@ import * from "@rnx-kit/tools-node/path";
 | package  | `isPackageManifest(manifest)`                    | Determine if the given object is a `package.json` manifest.                                                                             |
 | package  | `parsePackageRef(r)`                             | Parse a package reference string. One exaple is `name` property found in `package.json`.                                                |
 | package  | `readPackage(pkgPath)`                           | Read a `package.json` manifest from a file.                                                                                             |
-| package  | `writePackage(pkgPath, manifest)`                | Write a `package.json` manifest to a file.                                                                                              |
+| package  | `writePackage(pkgPath, manifest, space)`         | Write a `package.json` manifest to a file.                                                                                              |
 | path     | `escapePath(p)`                                  | Escape a path by replacing each backslash ('\\') with a double-backslash ("\\\\").                                                      |
 | path     | `normalizePath(p)`                               | Normalize the separators in a path, converting each backslash ('\\') to a foreward slash ('/').                                         |
 

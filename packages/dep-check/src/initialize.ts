@@ -1,5 +1,6 @@
-import { readPackage, writePackage } from "@rnx-kit/tools-node/package";
+import { readPackage } from "@rnx-kit/tools-node/package";
 import { capabilitiesFor } from "./capabilities";
+import { modifyManifest } from "./helpers";
 import type { CapabilitiesOptions } from "./types";
 
 export function initializeConfig(
@@ -23,5 +24,5 @@ export function initializeConfig(
       ...capabilities,
     },
   };
-  writePackage(packageManifest, updatedManifest);
+  modifyManifest(packageManifest, updatedManifest);
 }

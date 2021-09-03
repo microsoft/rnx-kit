@@ -177,6 +177,27 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
     expect(consoleLogSpy).not.toBeCalled();
   });
 
+  test("preserves indentation in 'package.json'", () => {
+    let output = "";
+
+    fs.__setMockContent(mockManifest, "\t");
+    fs.__setMockFileWriter((_, content) => {
+      output = content;
+    });
+    rnxKitConfig.__setMockConfig({
+      reactNativeVersion: "0.64.0",
+      capabilities: ["core-ios"],
+    });
+
+    expect(
+      checkPackageManifest("package.json", { loose: false, write: true })
+    ).toBe(0);
+    expect(output).toMatchSnapshot();
+    expect(consoleErrorSpy).not.toBeCalled();
+    expect(consoleWarnSpy).not.toBeCalled();
+    expect(consoleLogSpy).not.toBeCalled();
+  });
+
   test("uses minimum supported version as development version", () => {
     fs.__setMockContent({
       ...mockManifest,

@@ -1,15 +1,11 @@
 import { error } from "@rnx-kit/console";
-import {
-  PackageManifest,
-  readPackage,
-  writePackage,
-} from "@rnx-kit/tools-node/package";
+import { PackageManifest, readPackage } from "@rnx-kit/tools-node/package";
 import isString from "lodash/isString";
 import { resolveCapabilities } from "./capabilities";
 import { checkPackageManifest } from "./check";
+import { keysOf, modifyManifest } from "./helpers";
 import { updateDependencies } from "./manifest";
 import { parseProfilesString } from "./profiles";
-import { keysOf } from "./helpers";
 import type {
   Command,
   ManifestProfile,
@@ -132,7 +128,7 @@ export function makeVigilantCommand({
     const changes = inspect(manifest, profile, write);
     if (changes.length > 0) {
       if (write) {
-        writePackage(manifestPath, manifest);
+        modifyManifest(manifestPath, manifest);
       } else {
         const violations = changes
           .map(

@@ -1,9 +1,9 @@
-import { readPackage, writePackage } from "@rnx-kit/tools-node/package";
+import { readPackage } from "@rnx-kit/tools-node/package";
 import isString from "lodash/isString";
 import prompts from "prompts";
 import { checkPackageManifest } from "./check";
+import { concatVersionRanges, keysOf, modifyManifest } from "./helpers";
 import { defaultProfiles, parseProfilesString } from "./profiles";
-import { concatVersionRanges, keysOf } from "./helpers";
 import type { Command, ProfileVersion } from "./types";
 
 function profileToChoice(version: ProfileVersion): prompts.Choice {
@@ -79,7 +79,7 @@ export async function makeSetVersionCommand(
     rnxKitConfig.reactNativeVersion = supportedVersions;
     rnxKitConfig.reactNativeDevVersion = targetVersion;
 
-    writePackage(manifestPath, manifest);
+    modifyManifest(manifestPath, manifest);
     return checkPackageManifest(manifestPath, write);
   };
 }

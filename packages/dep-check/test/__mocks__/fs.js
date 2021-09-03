@@ -3,8 +3,8 @@ const actualFs = jest.requireActual("fs");
 
 let data = "";
 
-fs.__setMockContent = (content) => {
-  data = JSON.stringify(content, undefined, 2) + "\n";
+fs.__setMockContent = (content, space = 2) => {
+  data = JSON.stringify(content, undefined, space) + "\n";
 };
 
 fs.__setMockFileWriter = (writer) => {
