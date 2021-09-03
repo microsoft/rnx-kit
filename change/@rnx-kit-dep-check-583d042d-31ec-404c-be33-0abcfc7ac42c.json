@@ -1,7 +1,0 @@
-{
-  "type": "patch",
-  "comment": "Fix broken `--init` due to loose and init being mutually exclusive, but `--loose` has a default value.",
-  "packageName": "@rnx-kit/dep-check",
-  "email": "4123478+tido64@users.noreply.github.com",
-  "dependentChangeType": "patch"
-}
