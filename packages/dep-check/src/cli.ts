@@ -193,7 +193,6 @@ if (require.main === module) {
         description:
           "Determines how strict the React Native version requirement should be. Useful for apps that depend on a newer React Native version than their dependencies declare support for.",
         type: "boolean",
-        conflicts: ["init"],
       },
       "set-version": {
         description:
