@@ -210,11 +210,11 @@ describe("resolveCapabilities()", () => {
       "mock-meta-package-loop",
       () => ({
         "0.64": {
-          "connor": {
+          connor: {
             name: "#meta",
             capabilities: ["core", "reese"],
           },
-          "reese": {
+          reese: {
             name: "#meta",
             capabilities: ["t-800"],
           },
