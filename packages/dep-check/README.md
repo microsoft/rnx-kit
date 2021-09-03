@@ -172,12 +172,12 @@ For an example, have a look at how the
 ## Custom Profiles
 
 A custom profile is a list of capabilities that map to specific versions of
-packages. It can be a JSON file, or a JS file wich default exports it. Custom
+packages. It can be a JSON file, or a JS file that default exports it. Custom
 profiles are consumed via the [`--custom-profiles`](#--custom-profiles-module)
 flag.
 
-For example, this a custom profile that adds `my-capability` to profile versions
-0.63 and 0.64:
+For example, this custom profile adds `my-capability` to profile versions 0.63
+and 0.64:
 
 ```js
 module.exports = {
