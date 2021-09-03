@@ -2,6 +2,27 @@
   "name": "@rnx-kit/dep-check",
   "entries": [
     {
+      "date": "Fri, 03 Sep 2021 12:18:30 GMT",
+      "tag": "@rnx-kit/dep-check_v1.7.9",
+      "version": "1.7.9",
+      "comments": {
+        "patch": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/dep-check",
+            "comment": "Preserve the indentation when modifying `package.json`",
+            "commit": "ced0ef438232d91f7fa527f51e23e6da9e7dbf2c"
+          },
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/dep-check",
+            "commit": "ced0ef438232d91f7fa527f51e23e6da9e7dbf2c",
+            "comment": "Bump @rnx-kit/dep-check to v1.7.9"
+          }
+        ]
+      }
+    },
+    {
       "date": "Fri, 03 Sep 2021 09:49:28 GMT",
       "tag": "@rnx-kit/dep-check_v1.7.8",
       "version": "1.7.8",

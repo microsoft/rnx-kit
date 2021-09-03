@@ -2,6 +2,21 @@
   "name": "@rnx-kit/tools-node",
   "entries": [
     {
+      "date": "Fri, 03 Sep 2021 12:18:30 GMT",
+      "tag": "@rnx-kit/tools-node_v1.1.3",
+      "version": "1.1.3",
+      "comments": {
+        "patch": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/tools-node",
+            "comment": "Allow indentation to be configured",
+            "commit": "ced0ef438232d91f7fa527f51e23e6da9e7dbf2c"
+          }
+        ]
+      }
+    },
+    {
       "date": "Tue, 31 Aug 2021 07:00:17 GMT",
       "tag": "@rnx-kit/tools-node_v1.1.2",
       "version": "1.1.2",
