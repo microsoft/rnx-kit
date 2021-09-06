@@ -213,7 +213,7 @@ is a capability that resolves to `react-native`:
 }
 ```
 
-A capability can depend on other capabilies. For example, we can ensure that
+A capability can depend on other capabilities. For example, we can ensure that
 `react-native` gets installed along with `react-native-windows` by declaring
 that `core-windows` depends on `core`:
 
