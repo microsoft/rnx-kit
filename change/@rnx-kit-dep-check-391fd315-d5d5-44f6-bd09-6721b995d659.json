@@ -1,7 +1,0 @@
-{
-  "type": "patch",
-  "comment": "When upgrading profile version, also remove `reactNativeDevVersion` if `kitType` is `app`",
-  "packageName": "@rnx-kit/dep-check",
-  "email": "4123478+tido64@users.noreply.github.com",
-  "dependentChangeType": "patch"
-}
