@@ -227,8 +227,8 @@ that `core-windows` depends on `core`:
 }
 ```
 
-You can also create "meta" capabilities that don't resolve to a package, but to
-a list of capabilities instead:
+You can also create capabilities that don't resolve to a package, but to a list
+of capabilities instead:
 
 ```js
 {
