@@ -59,7 +59,44 @@ describe("makeSetVersionCommand()", () => {
   });
 
   test("updates dependencies", async () => {
-    const result = setupMocks(mockManifest);
+    const result = setupMocks({
+      ...mockManifest,
+      "rnx-kit": {
+        ...mockManifest["rnx-kit"],
+        kitType: "library",
+        reactNativeDevVersion: "^0.63.0",
+      },
+    });
+
+    const command = await makeSetVersionCommand("0.64,0.63");
+    expect(typeof command).toBe("function");
+    expect(command("package.json")).toBe(0);
+    expect(result.manifest).toEqual({
+      ...mockManifest,
+      dependencies: {},
+      devDependencies: {
+        "react-native": "^0.64.2",
+      },
+      peerDependencies: {
+        "react-native": "^0.63.2 || ^0.64.2",
+      },
+      "rnx-kit": {
+        ...mockManifest["rnx-kit"],
+        kitType: "library",
+        reactNativeVersion: "^0.63.0 || ^0.64.0",
+        reactNativeDevVersion: "^0.64.0",
+      },
+    });
+  });
+
+  test("removes `reactNativeDevVersion` if `kitType` is `app`", async () => {
+    const result = setupMocks({
+      ...mockManifest,
+      "rnx-kit": {
+        ...mockManifest["rnx-kit"],
+        reactNativeDevVersion: "^0.63.0",
+      },
+    });
 
     const command = await makeSetVersionCommand("0.64,0.63");
     expect(typeof command).toBe("function");
@@ -73,7 +110,6 @@ describe("makeSetVersionCommand()", () => {
       "rnx-kit": {
         ...mockManifest["rnx-kit"],
         reactNativeVersion: "^0.63.0 || ^0.64.0",
-        reactNativeDevVersion: "^0.64.0",
       },
     });
   });
@@ -95,7 +131,6 @@ describe("makeSetVersionCommand()", () => {
       "rnx-kit": {
         ...mockManifest["rnx-kit"],
         reactNativeVersion: "^0.63 || ^0.64",
-        reactNativeDevVersion: "0.64",
       },
     });
   });
@@ -117,7 +152,6 @@ describe("makeSetVersionCommand()", () => {
       "rnx-kit": {
         ...mockManifest["rnx-kit"],
         reactNativeVersion: "^0.64",
-        reactNativeDevVersion: "0.64",
       },
     });
   });

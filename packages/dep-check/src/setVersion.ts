@@ -77,7 +77,11 @@ export async function makeSetVersionCommand(
     }
 
     rnxKitConfig.reactNativeVersion = supportedVersions;
-    rnxKitConfig.reactNativeDevVersion = targetVersion;
+    if (rnxKitConfig.kitType === "app") {
+      delete rnxKitConfig.reactNativeDevVersion;
+    } else {
+      rnxKitConfig.reactNativeDevVersion = targetVersion;
+    }
 
     modifyManifest(manifestPath, manifest);
     return checkPackageManifest(manifestPath, write);
