@@ -62,10 +62,11 @@ function defaultWatchFolders(projectRoot) {
  */
 function resolveModule(name, projectRoot) {
   const { findPackageDependencyDir } = require("@rnx-kit/tools-node/package");
-  return findPackageDependencyDir(
+  const result = findPackageDependencyDir(
     { name },
-    { startDir: projectRoot, allowSymlinks: false }
+    { startDir: projectRoot, allowSymlinks: true }
   );
+  return result && require("fs").realpathSync(result);
 }
 
 /**
