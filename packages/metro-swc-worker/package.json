@@ -1,0 +1,46 @@
+{
+  "name": "@rnx-kit/metro-swc-worker",
+  "version": "0.0.1",
+  "description": "Metro transform worker that uses swc under the hood",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/metro-swc-worker#readme",
+  "license": "MIT",
+  "files": [
+    "lib/*.d.ts",
+    "lib/*.js"
+  ],
+  "main": "lib/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "packages/metro-swc-worker"
+  },
+  "scripts": {
+    "build": "rnx-kit-scripts build",
+    "format": "rnx-kit-scripts format",
+    "test": "rnx-kit-scripts test"
+  },
+  "dependencies": {
+    "@rnx-kit/metro-serializer-esbuild": "^0.0.14",
+    "@swc/core": "^1.2.0"
+  },
+  "peerDependencies": {
+    "metro-transform-worker": ">=0.66.1"
+  },
+  "devDependencies": {
+    "@rnx-kit/eslint-config": "*",
+    "@types/metro": "*",
+    "@types/metro-transform-worker": "*",
+    "rnx-kit-scripts": "*"
+  },
+  "depcheck": {
+    "ignoreMatches": [
+      "metro"
+    ]
+  },
+  "eslintConfig": {
+    "extends": "@rnx-kit/eslint-config"
+  },
+  "jest": {
+    "preset": "rnx-kit-scripts"
+  }
+}
