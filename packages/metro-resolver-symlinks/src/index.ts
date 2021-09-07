@@ -24,7 +24,7 @@ function resolveFrom(moduleName: string, startDir: string): string {
  * Get `metro-resolver` from the cli to avoid adding another dependency that
  * needs to be kept in sync.
  */
-export function getMetroResolver(fromDir = process.cwd()): MetroResolver {
+function getMetroResolver(fromDir = process.cwd()): MetroResolver {
   try {
     const rnPath = path.dirname(
       resolveFrom("react-native/package.json", fromDir)
@@ -41,7 +41,7 @@ export function getMetroResolver(fromDir = process.cwd()): MetroResolver {
   }
 }
 
-export function remapReactNativeModule(
+function remapReactNativeModule(
   moduleName: string,
   platform: string,
   platformImplementations: Record<string, string>
@@ -57,7 +57,7 @@ export function remapReactNativeModule(
   return moduleName;
 }
 
-export function resolveModulePath(
+function resolveModulePath(
   moduleName: string,
   originModulePath: string
 ): string {
@@ -72,10 +72,13 @@ export function resolveModulePath(
     resolveFrom(`${pkgName}/package.json`, originModulePath)
   );
   const replaced = moduleName.replace(pkgName, pkgRoot);
-  return path.relative(path.dirname(originModulePath), replaced);
+  const relativePath = path.relative(path.dirname(originModulePath), replaced);
+  return relativePath.startsWith(".")
+    ? relativePath
+    : `.${path.sep}${relativePath}`;
 }
 
-export default function makeResolver({
+function makeResolver({
   remapModule = (_, moduleName, __) => moduleName,
 }: Options = {}): MetroResolver {
   const resolve = getMetroResolver();
@@ -115,3 +118,8 @@ export default function makeResolver({
     return resolution;
   };
 }
+
+module.exports = makeResolver;
+module.exports.getMetroResolver = getMetroResolver;
+module.exports.remapReactNativeModule = remapReactNativeModule;
+module.exports.resolveModulePath = resolveModulePath;
