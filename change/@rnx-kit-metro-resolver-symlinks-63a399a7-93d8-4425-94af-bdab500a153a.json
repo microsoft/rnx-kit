@@ -1,6 +1,6 @@
 {
   "type": "patch",
-  "comment": "Fix wrong resolved path when module is relative to current working directory",
+  "comment": "Fixed wrong resolved path when module is in a path within origin module path",
   "packageName": "@rnx-kit/metro-resolver-symlinks",
   "email": "4123478+tido64@users.noreply.github.com",
   "dependentChangeType": "patch"
