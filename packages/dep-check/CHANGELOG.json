@@ -2,6 +2,21 @@
   "name": "@rnx-kit/dep-check",
   "entries": [
     {
+      "date": "Wed, 08 Sep 2021 07:04:15 GMT",
+      "tag": "@rnx-kit/dep-check_v1.8.0",
+      "version": "1.8.0",
+      "comments": {
+        "minor": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/dep-check",
+            "comment": "Add support for dependencies and meta packages",
+            "commit": "a3f63fb86e5facc1f7251abc116e3d23aca37473"
+          }
+        ]
+      }
+    },
+    {
       "date": "Wed, 08 Sep 2021 06:42:50 GMT",
       "tag": "@rnx-kit/dep-check_v1.7.11",
       "version": "1.7.11",

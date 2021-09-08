@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/dep-check
 
-This log was last generated on Wed, 08 Sep 2021 06:42:50 GMT and should not be manually modified.
+This log was last generated on Wed, 08 Sep 2021 07:04:15 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 1.8.0
+
+Wed, 08 Sep 2021 07:04:15 GMT
+
+### Minor changes
+
+- Add support for dependencies and meta packages (4123478+tido64@users.noreply.github.com)
 
 ## 1.7.11
 
