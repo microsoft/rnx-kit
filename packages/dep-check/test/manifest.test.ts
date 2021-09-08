@@ -5,6 +5,8 @@ import {
 } from "../src/manifest";
 import profile_0_63 from "../src/profiles/profile-0.63";
 import profile_0_64 from "../src/profiles/profile-0.64";
+import type { Package } from "../src/types";
+import { packageVersion, pickPackage } from "./helpers";
 
 const mockDependencies = {
   typescript: "0.0.0",
@@ -38,17 +40,23 @@ describe("removeKeys()", () => {
 });
 
 describe("updateDependencies()", () => {
-  const resolvedPackages = {
-    react: [profile_0_63["react"], profile_0_64["react"]],
-    "react-native": [profile_0_63["core-ios"], profile_0_64["core-ios"]],
-    "react-native-macos": [
-      profile_0_63["core-macos"],
-      profile_0_64["core-macos"],
+  const resolvedPackages: Record<string, Package[]> = {
+    react: [
+      pickPackage(profile_0_63, "react"),
+      pickPackage(profile_0_64, "react"),
     ],
-    "react-native-test-app": [profile_0_64["test-app"]],
+    "react-native": [
+      pickPackage(profile_0_63, "core"),
+      pickPackage(profile_0_64, "core"),
+    ],
+    "react-native-macos": [
+      pickPackage(profile_0_63, "core-macos"),
+      pickPackage(profile_0_64, "core-macos"),
+    ],
+    "react-native-test-app": [pickPackage(profile_0_64, "test-app")],
     "react-native-windows": [
-      profile_0_63["core-windows"],
-      profile_0_64["core-windows"],
+      pickPackage(profile_0_63, "core-windows"),
+      pickPackage(profile_0_64, "core-windows"),
     ],
   };
 
@@ -59,11 +67,11 @@ describe("updateDependencies()", () => {
       "direct"
     );
     expect(updated).toEqual({
-      react: profile_0_64["react"].version,
-      "react-native": profile_0_64["core-ios"].version,
-      "react-native-macos": profile_0_64["core-macos"].version,
+      react: packageVersion(profile_0_64, "react"),
+      "react-native": packageVersion(profile_0_64, "core"),
+      "react-native-macos": packageVersion(profile_0_64, "core-macos"),
       "react-native-test-app": "0.0.0",
-      "react-native-windows": profile_0_64["core-windows"].version,
+      "react-native-windows": packageVersion(profile_0_64, "core-windows"),
       typescript: "0.0.0",
     });
   });
@@ -75,11 +83,11 @@ describe("updateDependencies()", () => {
       "development"
     );
     expect(updated).toEqual({
-      react: profile_0_63["react"].version,
-      "react-native": profile_0_63["core-ios"].version,
-      "react-native-macos": profile_0_63["core-macos"].version,
-      "react-native-test-app": profile_0_63["test-app"].version,
-      "react-native-windows": profile_0_63["core-windows"].version,
+      react: packageVersion(profile_0_63, "react"),
+      "react-native": packageVersion(profile_0_63, "core"),
+      "react-native-macos": packageVersion(profile_0_63, "core-macos"),
+      "react-native-test-app": packageVersion(profile_0_63, "test-app"),
+      "react-native-windows": packageVersion(profile_0_63, "core-windows"),
       typescript: "0.0.0",
     });
   });
@@ -91,11 +99,23 @@ describe("updateDependencies()", () => {
       "peer"
     );
     expect(updated).toEqual({
-      react: `${profile_0_63["react"].version} || ${profile_0_64["react"].version}`,
-      "react-native": `${profile_0_63["core-ios"].version} || ${profile_0_64["core-ios"].version}`,
-      "react-native-macos": `${profile_0_63["core-macos"].version} || ${profile_0_64["core-macos"].version}`,
+      react: `${packageVersion(profile_0_63, "react")} || ${packageVersion(
+        profile_0_64,
+        "react"
+      )}`,
+      "react-native": `${packageVersion(
+        profile_0_63,
+        "core"
+      )} || ${packageVersion(profile_0_64, "core")}`,
+      "react-native-macos": `${packageVersion(
+        profile_0_63,
+        "core-macos"
+      )} || ${packageVersion(profile_0_64, "core-macos")}`,
       "react-native-test-app": "0.0.0",
-      "react-native-windows": `${profile_0_63["core-windows"].version} || ${profile_0_64["core-windows"].version}`,
+      "react-native-windows": `${packageVersion(
+        profile_0_63,
+        "core-windows"
+      )} || ${packageVersion(profile_0_64, "core-windows")}`,
       typescript: "0.0.0",
     });
   });
@@ -120,11 +140,11 @@ describe("updateDependencies()", () => {
       "10.24.1"
     );
     expect(updated).toEqual({
-      react: profile_0_64["react"].version,
-      "react-native": profile_0_64["core-ios"].version,
-      "react-native-macos": profile_0_64["core-macos"].version,
+      react: packageVersion(profile_0_64, "react"),
+      "react-native": packageVersion(profile_0_64, "core"),
+      "react-native-macos": packageVersion(profile_0_64, "core-macos"),
       "react-native-test-app": "0.0.0",
-      "react-native-windows": profile_0_64["core-windows"].version,
+      "react-native-windows": packageVersion(profile_0_64, "core-windows"),
       typescript: "0.0.0",
     });
   });
@@ -137,11 +157,11 @@ describe("updateDependencies()", () => {
       "10.24.1"
     );
     expect(updated).toEqual({
-      react: profile_0_63["react"].version,
-      "react-native": profile_0_63["core-ios"].version,
-      "react-native-macos": profile_0_63["core-macos"].version,
-      "react-native-test-app": profile_0_63["test-app"].version,
-      "react-native-windows": profile_0_63["core-windows"].version,
+      react: packageVersion(profile_0_63, "react"),
+      "react-native": packageVersion(profile_0_63, "core"),
+      "react-native-macos": packageVersion(profile_0_63, "core-macos"),
+      "react-native-test-app": packageVersion(profile_0_63, "test-app"),
+      "react-native-windows": packageVersion(profile_0_63, "core-windows"),
       typescript: "0.0.0",
     });
   });
@@ -154,11 +174,23 @@ describe("updateDependencies()", () => {
       "10.24.1"
     );
     expect(updated).toEqual({
-      react: `${profile_0_63["react"].version} || ${profile_0_64["react"].version}`,
-      "react-native": `${profile_0_63["core-ios"].version} || ${profile_0_64["core-ios"].version}`,
-      "react-native-macos": `${profile_0_63["core-macos"].version} || ${profile_0_64["core-macos"].version}`,
+      react: `${packageVersion(profile_0_63, "react")} || ${packageVersion(
+        profile_0_64,
+        "react"
+      )}`,
+      "react-native": `${packageVersion(
+        profile_0_63,
+        "core"
+      )} || ${packageVersion(profile_0_64, "core")}`,
+      "react-native-macos": `${packageVersion(
+        profile_0_63,
+        "core-macos"
+      )} || ${packageVersion(profile_0_64, "core-macos")}`,
       "react-native-test-app": "0.0.0",
-      "react-native-windows": `${profile_0_63["core-windows"].version} || ${profile_0_64["core-windows"].version}`,
+      "react-native-windows": `${packageVersion(
+        profile_0_63,
+        "core-windows"
+      )} || ${packageVersion(profile_0_64, "core-windows")}`,
       typescript: "0.0.0",
     });
   });
@@ -180,11 +212,11 @@ describe("updateDependencies()", () => {
     expect(
       updateDependencies(undefined, resolvedPackages, "development")
     ).toEqual({
-      react: profile_0_63["react"].version,
-      "react-native": profile_0_63["core-ios"].version,
-      "react-native-macos": profile_0_63["core-macos"].version,
-      "react-native-test-app": profile_0_63["test-app"].version,
-      "react-native-windows": profile_0_63["core-windows"].version,
+      react: packageVersion(profile_0_63, "react"),
+      "react-native": packageVersion(profile_0_63, "core"),
+      "react-native-macos": packageVersion(profile_0_63, "core-macos"),
+      "react-native-test-app": packageVersion(profile_0_63, "test-app"),
+      "react-native-windows": packageVersion(profile_0_63, "core-windows"),
     });
   });
 });
@@ -207,7 +239,7 @@ describe("updatePackageManifest()", () => {
       );
     expect(dependencies).toEqual({
       ...mockDependencies,
-      "react-native": profile_0_64["core-ios"].version,
+      "react-native": packageVersion(profile_0_64, "core"),
     });
     expect(peerDependencies).toEqual({});
     expect(devDependencies).toEqual({});
@@ -229,8 +261,8 @@ describe("updatePackageManifest()", () => {
         "app"
       );
     expect(dependencies).toEqual({
-      react: profile_0_64["react"].version,
-      "react-native": profile_0_64["core-ios"].version,
+      react: packageVersion(profile_0_64, "react"),
+      "react-native": packageVersion(profile_0_64, "core"),
     });
     expect(peerDependencies).toEqual({});
     expect(devDependencies).toEqual({
@@ -255,8 +287,8 @@ describe("updatePackageManifest()", () => {
         "app"
       );
     expect(dependencies).toEqual({
-      react: profile_0_64["react"].version,
-      "react-native": profile_0_64["core-ios"].version,
+      react: packageVersion(profile_0_64, "react"),
+      "react-native": packageVersion(profile_0_64, "core"),
     });
     expect(peerDependencies).toEqual({
       "react-native-test-app": "0.0.0",
@@ -283,12 +315,12 @@ describe("updatePackageManifest()", () => {
     expect(peerDependencies).toEqual({
       ...mockDependencies,
       "react-native": [
-        profile_0_63["core-ios"].version,
-        profile_0_64["core-ios"].version,
+        packageVersion(profile_0_63, "core"),
+        packageVersion(profile_0_64, "core"),
       ].join(" || "),
     });
     expect(devDependencies).toEqual({
-      "react-native": profile_0_64["core-ios"].version,
+      "react-native": packageVersion(profile_0_64, "core"),
     });
   });
 
@@ -313,10 +345,10 @@ describe("updatePackageManifest()", () => {
     expect(dependencies).toEqual({ "@rnx-kit/dep-check": "^1.0.0" });
     expect(peerDependencies).toEqual({
       ...mockDependencies,
-      "react-native": profile_0_64["core-ios"].version,
+      "react-native": packageVersion(profile_0_64, "core"),
     });
     expect(devDependencies).toEqual({
-      "react-native": profile_0_64["core-ios"].version,
+      "react-native": packageVersion(profile_0_64, "core"),
     });
   });
 
@@ -337,11 +369,11 @@ describe("updatePackageManifest()", () => {
       );
     expect(dependencies).toEqual({
       ...mockDependencies,
-      "react-native": profile_0_64["core-ios"].version,
+      "react-native": packageVersion(profile_0_64, "core"),
     });
     expect(peerDependencies).toEqual({});
     expect(devDependencies).toEqual({
-      "react-native-test-app": profile_0_64["test-app"].version,
+      "react-native-test-app": packageVersion(profile_0_64, "test-app"),
     });
   });
 });
