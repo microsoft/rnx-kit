@@ -52,9 +52,8 @@ function defaultWatchFolders(projectRoot) {
 /**
  * Returns the path to specified module; `undefined` if not found.
  *
- * Note that this function ignores symlinks. When creating rules to
- * exclude extra copies, Metro will be unable to resolve packages
- * because it doesn't resolve symlinks and all real paths are excluded.
+ * Note that this function resolves symlinks. This is necessary for setups that
+ * only have symlinks under `node_modules` (e.g. with pnpm).
  *
  * @param {string} name
  * @param {string=} projectRoot
@@ -62,10 +61,11 @@ function defaultWatchFolders(projectRoot) {
  */
 function resolveModule(name, projectRoot) {
   const { findPackageDependencyDir } = require("@rnx-kit/tools-node/package");
-  return findPackageDependencyDir(
+  const result = findPackageDependencyDir(
     { name },
-    { startDir: projectRoot, allowSymlinks: false }
+    { startDir: projectRoot, allowSymlinks: true }
   );
+  return result && require("fs").realpathSync(result);
 }
 
 /**
