@@ -2,6 +2,21 @@
   "name": "@rnx-kit/esbuild-plugin-import-path-remapper",
   "entries": [
     {
+      "date": "Wed, 08 Sep 2021 06:42:50 GMT",
+      "tag": "@rnx-kit/esbuild-plugin-import-path-remapper_v1.0.0",
+      "version": "1.0.0",
+      "comments": {
+        "none": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/esbuild-plugin-import-path-remapper",
+            "comment": "Use repo Jest preset",
+            "commit": "01595b237b2d2c44857385bed84f7bd752e434b3"
+          }
+        ]
+      }
+    },
+    {
       "date": "Mon, 23 Aug 2021 17:18:07 GMT",
       "tag": "@rnx-kit/esbuild-plugin-import-path-remapper_v1.0.0",
       "version": "1.0.0",

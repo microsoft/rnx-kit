@@ -1,7 +1,0 @@
-{
-  "type": "none",
-  "comment": "Refactor tests for incoming meta packages feature",
-  "packageName": "@rnx-kit/dep-check",
-  "email": "4123478+tido64@users.noreply.github.com",
-  "dependentChangeType": "none"
-}

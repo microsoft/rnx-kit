@@ -2,6 +2,35 @@
   "name": "@rnx-kit/metro-config",
   "entries": [
     {
+      "date": "Wed, 08 Sep 2021 06:42:50 GMT",
+      "tag": "@rnx-kit/metro-config_v1.2.13",
+      "version": "1.2.13",
+      "comments": {
+        "patch": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/metro-config",
+            "comment": "Wrong module may be resolved because we're ignoring symlinks",
+            "commit": "01595b237b2d2c44857385bed84f7bd752e434b3"
+          },
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/metro-config",
+            "commit": "01595b237b2d2c44857385bed84f7bd752e434b3",
+            "comment": "Bump @rnx-kit/metro-config to v1.2.13"
+          }
+        ],
+        "none": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/metro-config",
+            "comment": "Use repo Jest preset",
+            "commit": "01595b237b2d2c44857385bed84f7bd752e434b3"
+          }
+        ]
+      }
+    },
+    {
       "date": "Fri, 03 Sep 2021 12:18:30 GMT",
       "tag": "@rnx-kit/metro-config_v1.2.12",
       "version": "1.2.12",

@@ -2,6 +2,21 @@
   "name": "@rnx-kit/tools-react-native",
   "entries": [
     {
+      "date": "Wed, 08 Sep 2021 06:42:50 GMT",
+      "tag": "@rnx-kit/tools-react-native_v1.0.1",
+      "version": "1.0.1",
+      "comments": {
+        "none": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/tools-react-native",
+            "comment": "Use repo Jest preset",
+            "commit": "01595b237b2d2c44857385bed84f7bd752e434b3"
+          }
+        ]
+      }
+    },
+    {
       "date": "Tue, 31 Aug 2021 07:00:17 GMT",
       "tag": "@rnx-kit/tools-react-native_v1.0.1",
       "version": "1.0.1",

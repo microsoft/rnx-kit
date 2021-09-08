@@ -1,8 +1,17 @@
 # Change Log - @rnx-kit/dep-check
 
-This log was last generated on Mon, 06 Sep 2021 06:57:59 GMT and should not be manually modified.
+This log was last generated on Wed, 08 Sep 2021 06:42:50 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 1.7.11
+
+Wed, 08 Sep 2021 06:42:50 GMT
+
+### Patches
+
+- Also check workspace root package (4123478+tido64@users.noreply.github.com)
+- Bump @rnx-kit/dep-check to v1.7.11 (4123478+tido64@users.noreply.github.com)
 
 ## 1.7.10
 

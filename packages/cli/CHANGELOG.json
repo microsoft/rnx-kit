@@ -2,6 +2,27 @@
   "name": "@rnx-kit/cli",
   "entries": [
     {
+      "date": "Wed, 08 Sep 2021 06:42:50 GMT",
+      "tag": "@rnx-kit/cli_v0.9.25",
+      "version": "0.9.25",
+      "comments": {
+        "none": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/cli",
+            "comment": "Use repo Jest preset",
+            "commit": "01595b237b2d2c44857385bed84f7bd752e434b3"
+          },
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/cli",
+            "commit": "01595b237b2d2c44857385bed84f7bd752e434b3",
+            "comment": "Bump @rnx-kit/cli to v0.9.25"
+          }
+        ]
+      }
+    },
+    {
       "date": "Mon, 06 Sep 2021 06:57:59 GMT",
       "tag": "@rnx-kit/cli_v0.9.25",
       "version": "0.9.25",

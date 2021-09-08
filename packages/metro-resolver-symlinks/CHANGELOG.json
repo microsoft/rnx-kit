@@ -2,6 +2,35 @@
   "name": "@rnx-kit/metro-resolver-symlinks",
   "entries": [
     {
+      "date": "Wed, 08 Sep 2021 06:42:50 GMT",
+      "tag": "@rnx-kit/metro-resolver-symlinks_v0.1.3",
+      "version": "0.1.3",
+      "comments": {
+        "patch": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/metro-resolver-symlinks",
+            "comment": "Fixed wrong resolved path when module is in a path within origin module path",
+            "commit": "01595b237b2d2c44857385bed84f7bd752e434b3"
+          },
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/metro-resolver-symlinks",
+            "commit": "01595b237b2d2c44857385bed84f7bd752e434b3",
+            "comment": "Bump @rnx-kit/metro-resolver-symlinks to v0.1.3"
+          }
+        ],
+        "none": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/metro-resolver-symlinks",
+            "comment": "Use repo Jest preset",
+            "commit": "01595b237b2d2c44857385bed84f7bd752e434b3"
+          }
+        ]
+      }
+    },
+    {
       "date": "Fri, 03 Sep 2021 12:18:30 GMT",
       "tag": "@rnx-kit/metro-resolver-symlinks_v0.1.2",
       "version": "0.1.2",

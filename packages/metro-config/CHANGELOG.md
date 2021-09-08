@@ -1,8 +1,17 @@
 # Change Log - @rnx-kit/metro-config
 
-This log was last generated on Fri, 03 Sep 2021 12:18:30 GMT and should not be manually modified.
+This log was last generated on Wed, 08 Sep 2021 06:42:50 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 1.2.13
+
+Wed, 08 Sep 2021 06:42:50 GMT
+
+### Patches
+
+- Wrong module may be resolved because we're ignoring symlinks (4123478+tido64@users.noreply.github.com)
+- Bump @rnx-kit/metro-config to v1.2.13 (4123478+tido64@users.noreply.github.com)
 
 ## 1.2.12
 

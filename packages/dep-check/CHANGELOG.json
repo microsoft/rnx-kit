@@ -2,6 +2,41 @@
   "name": "@rnx-kit/dep-check",
   "entries": [
     {
+      "date": "Wed, 08 Sep 2021 06:42:50 GMT",
+      "tag": "@rnx-kit/dep-check_v1.7.11",
+      "version": "1.7.11",
+      "comments": {
+        "none": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/dep-check",
+            "comment": "Use repo Jest preset",
+            "commit": "01595b237b2d2c44857385bed84f7bd752e434b3"
+          },
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/dep-check",
+            "comment": "Refactor tests for incoming meta packages feature",
+            "commit": "01595b237b2d2c44857385bed84f7bd752e434b3"
+          }
+        ],
+        "patch": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/dep-check",
+            "comment": "Also check workspace root package",
+            "commit": "01595b237b2d2c44857385bed84f7bd752e434b3"
+          },
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/dep-check",
+            "commit": "01595b237b2d2c44857385bed84f7bd752e434b3",
+            "comment": "Bump @rnx-kit/dep-check to v1.7.11"
+          }
+        ]
+      }
+    },
+    {
       "date": "Mon, 06 Sep 2021 06:57:59 GMT",
       "tag": "@rnx-kit/dep-check_v1.7.10",
       "version": "1.7.10",

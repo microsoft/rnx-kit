@@ -1,7 +1,0 @@
-{
-  "type": "patch",
-  "comment": "Wrong module may be resolved because we're ignoring symlinks",
-  "packageName": "@rnx-kit/metro-config",
-  "email": "4123478+tido64@users.noreply.github.com",
-  "dependentChangeType": "patch"
-}
