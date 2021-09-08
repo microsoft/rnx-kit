@@ -53,13 +53,6 @@
     "extends": "@rnx-kit/eslint-config"
   },
   "jest": {
-    "preset": "@rnx-kit/jest-preset",
-    "collectCoverageFrom": [
-      "src/*.js"
-    ],
-    "roots": [
-      "test"
-    ],
-    "testRegex": "/test/.*\\.test\\.ts$"
+    "preset": "rnx-kit-scripts"
   }
 }

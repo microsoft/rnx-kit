@@ -24,7 +24,6 @@
     "@rnx-kit/tools-node": "^1.1.3"
   },
   "devDependencies": {
-    "@rnx-kit/jest-preset": "*",
     "@rnx-kit/metro-serializer": "*",
     "@types/jest": "^26.0.0",
     "@types/metro": "*",
@@ -42,10 +41,6 @@
     "extends": "@rnx-kit/eslint-config"
   },
   "jest": {
-    "preset": "@rnx-kit/jest-preset",
-    "roots": [
-      "test"
-    ],
-    "testRegex": "/test/.*\\.test\\.ts$"
+    "preset": "rnx-kit-scripts"
   }
 }

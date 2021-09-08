@@ -39,7 +39,6 @@
     "yargs": "^16.0.0"
   },
   "devDependencies": {
-    "@rnx-kit/jest-preset": "*",
     "@types/jest": "^26.0.0",
     "@types/lodash": "^4.14.172",
     "@types/prompts": "^2.0.0",
@@ -53,13 +52,6 @@
     "extends": "@rnx-kit/eslint-config"
   },
   "jest": {
-    "preset": "@rnx-kit/jest-preset",
-    "collectCoverageFrom": [
-      "src/**"
-    ],
-    "roots": [
-      "test"
-    ],
-    "testRegex": "/test/.*\\.test\\.ts$"
+    "preset": "rnx-kit-scripts"
   }
 }

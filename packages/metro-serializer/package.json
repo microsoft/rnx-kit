@@ -26,7 +26,6 @@
     "metro": ">=0.58.0"
   },
   "devDependencies": {
-    "@rnx-kit/jest-preset": "*",
     "@types/metro": "*",
     "@types/semver": "^7.0.0",
     "metro": "^0.66.1",
@@ -39,10 +38,6 @@
     "extends": "@rnx-kit/eslint-config"
   },
   "jest": {
-    "preset": "@rnx-kit/jest-preset",
-    "roots": [
-      "test"
-    ],
-    "testRegex": "/test/.*\\.test\\.ts$"
+    "preset": "rnx-kit-scripts"
   }
 }
