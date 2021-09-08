@@ -114,12 +114,11 @@ your `package.json`.
 
 ## Capabilities
 
-To add new capabilities, first add it to
-[`/packages/config/src/kitConfig.ts`](https://github.com/microsoft/rnx-kit/blob/62da26011c9ff86a24eed63356c68f6999034d34/packages/config/src/kitConfig.ts#L4),
-then update the
-[profiles](https://github.com/microsoft/rnx-kit/tree/main/packages/dep-check/src/profiles).
-For an example, have a look at how the
-[`hermes` capability was added](https://github.com/microsoft/rnx-kit/commit/c79828791a6ac5cf19b4abfff6347542af49eaec).
+The following table contains the currently supported capabilities and what they
+resolve to:
+
+<details>
+<summary>Capabilities Table</summary>
 
 <!-- The following table can be updated by running `yarn update-readme` -->
 <!-- @rnx-kit/dep-check/capabilities start -->
@@ -160,6 +159,90 @@ For an example, have a look at how the
 | webview           | react-native-webview@^11.4.2                      | react-native-webview@^11.4.2                      | react-native-webview@^11.4.2                  | react-native-webview@^11.0.3                  | react-native-webview@^11.0.3                  |
 
 <!-- @rnx-kit/dep-check/capabilities end -->
+
+</details>
+
+To add new capabilities, first add it to
+[`/packages/config/src/kitConfig.ts`](https://github.com/microsoft/rnx-kit/blob/62da26011c9ff86a24eed63356c68f6999034d34/packages/config/src/kitConfig.ts#L4),
+then update the
+[profiles](https://github.com/microsoft/rnx-kit/tree/main/packages/dep-check/src/profiles).
+For an example, have a look at how the
+[`hermes` capability was added](https://github.com/microsoft/rnx-kit/commit/c79828791a6ac5cf19b4abfff6347542af49eaec).
+
+## Custom Profiles
+
+A custom profile is a list of capabilities that map to specific versions of
+packages. It can be a JSON file, or a JS file that default exports it. Custom
+profiles are consumed via the [`--custom-profiles`](#--custom-profiles-module)
+flag.
+
+For example, this custom profile adds `my-capability` to profile versions 0.63
+and 0.64:
+
+```js
+module.exports = {
+  0.63: {
+    "my-capability": {
+      name: "my-module",
+      version: "1.0.0",
+    },
+  },
+  0.64: {
+    "my-capability": {
+      name: "my-module",
+      version: "1.1.0",
+    },
+  },
+};
+```
+
+For a more complete example, have a look at the
+[default profiles](https://github.com/microsoft/rnx-kit/blob/769e9fa290929effd5111884f1637c21326b5a95/packages/dep-check/src/profiles.ts#L11).
+
+### Custom Capabilities
+
+Normally, a capability resolves to a version of a package. For instance, `core`
+is a capability that resolves to `react-native`:
+
+```js
+{
+  "core": {
+    name: "react-native",
+    version: "0.0.0",
+  },
+}
+```
+
+A capability can depend on other capabilities. For example, we can ensure that
+`react-native` gets installed along with `react-native-windows` by declaring
+that `core-windows` depends on `core`:
+
+```js
+{
+  "core-windows": {
+    name: "react-native-windows",
+    version: "0.0.0",
+    capabilities: ["core"],
+  },
+}
+```
+
+You can also create capabilities that don't resolve to a package, but to a list
+of capabilities instead:
+
+```js
+{
+  "core/all": {
+    name: "#meta",
+    capabilities: [
+      "core-android",
+      "core-ios",
+      "core-macos",
+      "core-windows",
+    ],
+  },
+}
+```
 
 ## Terminology
 

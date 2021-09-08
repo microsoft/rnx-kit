@@ -18,6 +18,7 @@ const profile: Profile = {
   "core-windows": {
     name: "react-native-windows",
     version: "^0.65.0-0",
+    capabilities: ["core"],
   },
   hermes: {
     name: "hermes-engine",

@@ -23,6 +23,7 @@ const profile: Profile = {
   "core-windows": {
     name: "react-native-windows",
     version: "^0.63.0",
+    capabilities: ["core"],
   },
 
   "floating-action": {
@@ -44,6 +45,7 @@ const profile: Profile = {
   "navigation/stack": {
     name: "@react-navigation/stack",
     version: "^5.14.4",
+    capabilities: ["navigation/native"],
   },
   "safe-area": {
     name: "react-native-safe-area-context",

@@ -34,9 +34,16 @@ export type Command = (manifest: string) => number;
 
 export type DependencyType = "direct" | "development" | "peer";
 
+export type MetaPackage = {
+  name: "#meta";
+  capabilities: Capability[];
+  devOnly?: boolean;
+};
+
 export type Package = {
   name: string;
   version: string;
+  capabilities?: Capability[];
   devOnly?: boolean;
 };
 
@@ -46,7 +53,7 @@ export type ManifestProfile = PackageManifest & {
   devDependencies: Record<string, string>;
 };
 
-export type Profile = Readonly<Record<Capability, Package>>;
+export type Profile = Readonly<Record<Capability, MetaPackage | Package>>;
 
 export type ProfileVersion = "0.61" | "0.62" | "0.63" | "0.64" | "0.65";
 
