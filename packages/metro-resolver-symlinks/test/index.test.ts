@@ -84,13 +84,15 @@ describe("resolveModulePath", () => {
   test("resolves module path relative to requester", () => {
     const p = useFixture("duplicates");
     expect(resolveModulePath("react-native", p)).toBe(
-      path.join("duplicates", "node_modules", "react-native")
+      `.${path.sep}${path.join("duplicates", "node_modules", "react-native")}`
     );
     expect(
       resolveModulePath(
         "react-native",
         path.join(p, "node_modules", "terminator")
       )
-    ).toBe(path.join("terminator", "node_modules", "react-native"));
+    ).toBe(
+      `.${path.sep}${path.join("terminator", "node_modules", "react-native")}`
+    );
   });
 });
