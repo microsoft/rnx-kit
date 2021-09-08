@@ -48,7 +48,9 @@ function getManifests(
   }
 
   try {
-    return getAllPackageJsonFiles(packageDir);
+    const allPackages = getAllPackageJsonFiles(packageDir) ?? [];
+    allPackages.push(currentPackageJson);
+    return allPackages;
   } catch (e) {
     if (hasProperty(e, "message")) {
       error(e.message);
