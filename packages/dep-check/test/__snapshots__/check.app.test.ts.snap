@@ -5,9 +5,9 @@ exports[`checkPackageManifest({ kitType: 'app' }) adds required dependencies 1`]
   \\"name\\": \\"awesome-repo\\",
   \\"version\\": \\"1.0.0\\",
   \\"dependencies\\": {
-    \\"@react-native-async-storage/async-storage\\": \\"^1.15.5\\",
+    \\"@react-native-async-storage/async-storage\\": \\"^1.15.7\\",
     \\"@react-native-community/async-storage\\": \\"^1.12.1\\",
-    \\"@react-native-community/netinfo\\": \\"^6.0.0\\",
+    \\"@react-native-community/netinfo\\": \\"^6.0.2\\",
     \\"conan\\": \\"1.0.0\\",
     \\"hermes-engine\\": \\"~0.7.0\\",
     \\"quaid\\": \\"1.0.0\\",
