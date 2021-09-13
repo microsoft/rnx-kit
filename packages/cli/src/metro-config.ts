@@ -102,15 +102,15 @@ export function customizeMetroConfig(
   const metroConfig = metroConfigReadonly as InputConfigT;
 
   const plugins: MetroPlugin[] = [];
-  if (typeof detectDuplicateDependencies === "boolean") {
-    plugins.push(DuplicateDependencies());
-  } else if (typeof detectDuplicateDependencies === "object") {
+  if (typeof detectDuplicateDependencies === "object") {
     plugins.push(DuplicateDependencies(detectDuplicateDependencies));
+  } else if (detectDuplicateDependencies !== false) {
+    plugins.push(DuplicateDependencies());
   }
-  if (typeof detectCyclicDependencies === "boolean") {
-    plugins.push(CyclicDependencies());
-  } else if (typeof detectCyclicDependencies === "object") {
+  if (typeof detectCyclicDependencies === "object") {
     plugins.push(CyclicDependencies(detectCyclicDependencies));
+  } else if (detectCyclicDependencies !== false) {
+    plugins.push(CyclicDependencies());
   }
 
   if (experimental_treeShake) {
