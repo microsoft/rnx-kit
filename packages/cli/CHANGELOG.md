@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/cli
 
-This log was last generated on Mon, 13 Sep 2021 17:38:26 GMT and should not be manually modified.
+This log was last generated on Mon, 13 Sep 2021 18:43:23 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 0.9.28
+
+Mon, 13 Sep 2021 18:43:23 GMT
+
+### Patches
+
+- Fix plugins cannot be disabled when bundling/serving (4123478+tido64@users.noreply.github.com)
 
 ## 0.9.27
 
