@@ -65,7 +65,7 @@ const profile: Profile = {
   },
   html: {
     name: "react-native-render-html",
-    version: "^5.1.0",
+    version: "^5.1.1",
   },
   "lazy-index": {
     name: "react-native-lazy-index",
@@ -81,20 +81,20 @@ const profile: Profile = {
   },
   "navigation/native": {
     name: "@react-navigation/native",
-    version: "^5.9.4",
+    version: "^5.9.8",
   },
   "navigation/stack": {
     name: "@react-navigation/stack",
-    version: "^5.14.4",
+    version: "^5.14.9",
     capabilities: ["navigation/native"],
   },
   netinfo: {
     name: "@react-native-community/netinfo",
-    version: "^6.0.0",
+    version: "^6.0.2",
   },
   popover: {
     name: "react-native-popover-view",
-    version: "^4.0.0",
+    version: "^4.0.3",
   },
   "safe-area": {
     name: "react-native-safe-area-context",
@@ -114,7 +114,7 @@ const profile: Profile = {
   },
   storage: {
     name: "@react-native-async-storage/async-storage",
-    version: "^1.15.5",
+    version: "^1.15.7",
   },
   svg: {
     name: "react-native-svg",
