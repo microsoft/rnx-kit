@@ -1,0 +1,7 @@
+{
+  "type": "patch",
+  "comment": "Fix plugins cannot be disabled when bundling/serving",
+  "packageName": "@rnx-kit/cli",
+  "email": "4123478+tido64@users.noreply.github.com",
+  "dependentChangeType": "patch"
+}
