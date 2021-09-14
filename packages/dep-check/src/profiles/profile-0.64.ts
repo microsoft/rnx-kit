@@ -114,7 +114,7 @@ const profile: Profile = {
   },
   storage: {
     name: "@react-native-async-storage/async-storage",
-    version: "^1.15.7",
+    version: "^1.15.8",
   },
   svg: {
     name: "react-native-svg",
