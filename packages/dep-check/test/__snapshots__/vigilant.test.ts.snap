@@ -3,7 +3,7 @@
 exports[`buildManifestProfile() builds a package manifest for a multiple profile versions 1`] = `
 Object {
   "dependencies": Object {
-    "@react-native-async-storage/async-storage": "^1.15.7",
+    "@react-native-async-storage/async-storage": "^1.15.8",
     "@react-native-clipboard/clipboard": "^1.7.3",
     "@react-native-community/checkbox": "^0.5.8",
     "@react-native-community/datetimepicker": "^3.4.6",
@@ -35,7 +35,7 @@ Object {
     "react-native-windows": "^0.64.0",
   },
   "devDependencies": Object {
-    "@react-native-async-storage/async-storage": "^1.15.7",
+    "@react-native-async-storage/async-storage": "^1.15.8",
     "@react-native-clipboard/clipboard": "^1.7.3",
     "@react-native-community/checkbox": "^0.5.8",
     "@react-native-community/datetimepicker": "^3.4.6",
@@ -68,7 +68,7 @@ Object {
   },
   "name": "@rnx-kit/dep-check",
   "peerDependencies": Object {
-    "@react-native-async-storage/async-storage": "^1.15.7",
+    "@react-native-async-storage/async-storage": "^1.15.8",
     "@react-native-clipboard/clipboard": "^1.7.3",
     "@react-native-community/async-storage": "^1.12.1",
     "@react-native-community/checkbox": "^0.5.7 || ^0.5.8",
@@ -107,7 +107,7 @@ Object {
 exports[`buildManifestProfile() builds a package manifest for a single profile version 1`] = `
 Object {
   "dependencies": Object {
-    "@react-native-async-storage/async-storage": "^1.15.7",
+    "@react-native-async-storage/async-storage": "^1.15.8",
     "@react-native-clipboard/clipboard": "^1.7.3",
     "@react-native-community/checkbox": "^0.5.8",
     "@react-native-community/datetimepicker": "^3.4.6",
@@ -139,7 +139,7 @@ Object {
     "react-native-windows": "^0.64.0",
   },
   "devDependencies": Object {
-    "@react-native-async-storage/async-storage": "^1.15.7",
+    "@react-native-async-storage/async-storage": "^1.15.8",
     "@react-native-clipboard/clipboard": "^1.7.3",
     "@react-native-community/checkbox": "^0.5.8",
     "@react-native-community/datetimepicker": "^3.4.6",
@@ -172,7 +172,7 @@ Object {
   },
   "name": "@rnx-kit/dep-check",
   "peerDependencies": Object {
-    "@react-native-async-storage/async-storage": "^1.15.7",
+    "@react-native-async-storage/async-storage": "^1.15.8",
     "@react-native-clipboard/clipboard": "^1.7.3",
     "@react-native-community/checkbox": "^0.5.8",
     "@react-native-community/datetimepicker": "^3.4.6",
