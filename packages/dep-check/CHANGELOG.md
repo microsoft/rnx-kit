@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/dep-check
 
-This log was last generated on Mon, 13 Sep 2021 17:38:26 GMT and should not be manually modified.
+This log was last generated on Tue, 14 Sep 2021 15:28:16 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 1.8.2
+
+Tue, 14 Sep 2021 15:28:16 GMT
+
+### Patches
+
+- Bump async-storage to 1.15.8. It contains fixes for building Android on react-native 0.65. (4123478+tido64@users.noreply.github.com)
 
 ## 1.8.1
 

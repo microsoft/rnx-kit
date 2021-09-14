@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/cli
 
-This log was last generated on Mon, 13 Sep 2021 18:43:23 GMT and should not be manually modified.
+This log was last generated on Tue, 14 Sep 2021 15:28:16 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 0.9.29
+
+Tue, 14 Sep 2021 15:28:16 GMT
+
+### Patches
+
+- Bump @rnx-kit/cli to v0.9.29 (4123478+tido64@users.noreply.github.com)
 
 ## 0.9.28
 
