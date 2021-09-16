@@ -2,6 +2,21 @@
   "name": "@rnx-kit/babel-plugin-import-path-remapper",
   "entries": [
     {
+      "date": "Thu, 16 Sep 2021 10:10:39 GMT",
+      "tag": "@rnx-kit/babel-plugin-import-path-remapper_v1.0.1",
+      "version": "1.0.1",
+      "comments": {
+        "patch": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/babel-plugin-import-path-remapper",
+            "comment": "Fixed all `lib` components in a path being incorrectly replaced",
+            "commit": "ac474077fa1675e2faaa74ced891ba1e1a6673f0"
+          }
+        ]
+      }
+    },
+    {
       "date": "Mon, 12 Jul 2021 09:53:10 GMT",
       "tag": "@rnx-kit/babel-plugin-import-path-remapper_v1.0.0",
       "version": "1.0.0",

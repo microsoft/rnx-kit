@@ -2,6 +2,29 @@
   "name": "@rnx-kit/babel-preset-metro-react-native",
   "entries": [
     {
+      "date": "Thu, 16 Sep 2021 10:10:39 GMT",
+      "tag": "@rnx-kit/babel-preset-metro-react-native_v1.0.5",
+      "version": "1.0.5",
+      "comments": {
+        "none": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/babel-preset-metro-react-native",
+            "comment": "Updated tests following a bug fix in `babel-plugin-import-path-remapper`",
+            "commit": "ac474077fa1675e2faaa74ced891ba1e1a6673f0"
+          }
+        ],
+        "patch": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/babel-preset-metro-react-native",
+            "commit": "ac474077fa1675e2faaa74ced891ba1e1a6673f0",
+            "comment": "Bump @rnx-kit/babel-preset-metro-react-native to v1.0.5"
+          }
+        ]
+      }
+    },
+    {
       "date": "Mon, 16 Aug 2021 14:17:13 GMT",
       "tag": "@rnx-kit/babel-preset-metro-react-native_v1.0.4",
       "version": "1.0.4",
