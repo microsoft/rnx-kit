@@ -24,9 +24,6 @@ const { parseModuleRef } = require("@rnx-kit/tools-node/module");
  * } ImportExportDeclarationNodePath;
  */
 
-const re = /(.*?)\/lib/;
-const replacement = "$1/src";
-
 /**
  * Finds the main source file in the specified package's manifest.
  * @param {string} sourcePath
@@ -107,7 +104,7 @@ function replace(sourcePath, path, replacer) {
     return;
   }
 
-  const { path: modulePath } = m;
+  const { scope, name: moduleName, path: modulePath } = m;
   if (!modulePath) {
     // Remaps @scope/example -> @scope/example/src/index.ts
     try {
@@ -118,9 +115,10 @@ function replace(sourcePath, path, replacer) {
     } catch (_) {
       /* ignore */
     }
-  } else if (modulePath.startsWith("lib/")) {
+  } else if (modulePath === "lib" || modulePath.startsWith("lib")) {
     // Remaps @scope/example/lib/index.js -> @scope/example/src/index.ts
-    replacer(path, sourcePath.replace(re, replacement));
+    const name = scope ? `${scope}/${moduleName}` : moduleName;
+    replacer(path, `${name}/${modulePath.replace("lib", "src")}`);
   }
 }
 
