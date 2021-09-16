@@ -103,7 +103,7 @@ function replaceDeclarationWith(path, source) {
 function replace(sourcePath, path, replacer) {
   const m = parseModuleRef(sourcePath);
   if (!("name" in m)) {
-    // This is not a file reference. Ignore.
+    // This is not a module reference. Ignore.
     return;
   }
 
