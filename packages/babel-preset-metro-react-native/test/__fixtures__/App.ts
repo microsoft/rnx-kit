@@ -1,4 +1,4 @@
-require("./lib/remap-test");
+require("typescript/lib/remap-test/lib/lib");
 
 const enum Direction {
   Up,

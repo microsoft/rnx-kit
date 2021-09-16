@@ -82,4 +82,16 @@ describe("@rnx-kit/babel-plugin-import-path-remapper", () => {
       transform(`export { a, b } from "@rnx-kit/example/lib/index";`)
     ).toBe(`export { a, b } from "@rnx-kit/example/src/index";`);
   });
+
+  test("remaps `lib` only", () => {
+    expect(transform(`import A from "@rnx-kit/example/lib";`)).toBe(
+      `import A from "@rnx-kit/example/src";`
+    );
+  });
+
+  test("ignores subsequent `lib` folders", () => {
+    expect(
+      transform(`import A from "@rnx-kit/example/lib/index/lib/index";`)
+    ).toBe(`import A from "@rnx-kit/example/src/index/lib/index";`);
+  });
 });

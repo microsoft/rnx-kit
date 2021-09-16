@@ -4,6 +4,7 @@
 
 const { types } = require("@babel/core");
 const { declare } = require("@babel/helper-plugin-utils");
+const { parseModuleRef } = require("@rnx-kit/tools-node/module");
 
 /**
  * @template T
@@ -90,6 +91,37 @@ function replaceDeclarationWith(path, source) {
   );
 }
 
+/**
+ * @template T
+ * @param {string} sourcePath
+ * @param {NodePath<T>} path
+ * @param {(path: NodePath<T>, source: string) => void} replacer
+ */
+function replace(sourcePath, path, replacer) {
+  const m = parseModuleRef(sourcePath);
+  if (!("name" in m)) {
+    // This is not a module reference. Ignore.
+    return;
+  }
+
+  const { scope, name: moduleName, path: modulePath } = m;
+  if (!modulePath) {
+    // Remaps @scope/example -> @scope/example/src/index.ts
+    try {
+      const mainSourceFile = findMainSourceFile(sourcePath);
+      if (mainSourceFile) {
+        replacer(path, mainSourceFile);
+      }
+    } catch (_) {
+      /* ignore */
+    }
+  } else if (modulePath === "lib" || modulePath.startsWith("lib")) {
+    // Remaps @scope/example/lib/index.js -> @scope/example/src/index.ts
+    const name = scope ? `${scope}/${moduleName}` : moduleName;
+    replacer(path, `${name}/${modulePath.replace("lib", "src")}`);
+  }
+}
+
 module.exports = declare((api, options) => {
   api.assertVersion(7);
 
@@ -100,9 +132,6 @@ module.exports = declare((api, options) => {
       "Expected option `test` to be a function `(source: string) => boolean`"
     );
   }
-
-  const re = /(.*?)\/lib/;
-  const replacement = "$1/src";
 
   return {
     name: "import-path-remapper",
@@ -122,20 +151,7 @@ module.exports = declare((api, options) => {
           return;
         }
 
-        if (sourcePath.includes("/lib")) {
-          // Remaps @scope/example/lib/index.js -> @scope/example/src/index.ts
-          replaceCallWith(path, sourcePath.replace(re, replacement));
-        } else {
-          // Remaps @scope/example -> @scope/example/src/index.ts
-          try {
-            const mainSourceFile = findMainSourceFile(sourcePath);
-            if (mainSourceFile) {
-              replaceCallWith(path, mainSourceFile);
-            }
-          } catch (_) {
-            /* ignore */
-          }
-        }
+        replace(sourcePath, path, replaceCallWith);
       },
 
       /** @type {(path: ImportExportDeclarationNodePath, state: unknown) => void} */
@@ -150,20 +166,7 @@ module.exports = declare((api, options) => {
           return;
         }
 
-        if (sourcePath.includes("/lib")) {
-          // Remaps @scope/example/lib/index.js -> @scope/example/src/index.ts
-          replaceDeclarationWith(path, sourcePath.replace(re, replacement));
-        } else {
-          // Remaps @scope/example -> @scope/example/src/index.ts
-          try {
-            const mainSourceFile = findMainSourceFile(sourcePath);
-            if (mainSourceFile) {
-              replaceDeclarationWith(path, mainSourceFile);
-            }
-          } catch (_) {
-            /* ignore */
-          }
-        }
+        replace(sourcePath, path, replaceDeclarationWith);
       },
     },
   };
