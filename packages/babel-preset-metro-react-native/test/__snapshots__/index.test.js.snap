@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`@rnx-kit/babel-preset-metro-react-native applies additional plugins 1`] = `
-"require(\\"./src/remap-test\\");
+"require(\\"typescript/src/remap-test/lib/lib\\");
 var Direction;
 (function (Direction) {
   Direction[(Direction[\\"Up\\"] = 0)] = \\"Up\\";
@@ -26,7 +26,7 @@ console.log(takeDirection(Direction.Up));
 `;
 
 exports[`@rnx-kit/babel-preset-metro-react-native can be further extended 1`] = `
-"require(\\"./src/remap-test\\");
+"require(\\"typescript/src/remap-test/lib/lib\\");
 var Direction;
 (function (Direction) {
   Direction[(Direction[\\"Up\\"] = 0)] = \\"Up\\";
@@ -51,7 +51,7 @@ console.log(takeDirection(Direction.Up));
 `;
 
 exports[`@rnx-kit/babel-preset-metro-react-native transforms \`const enum\`s 1`] = `
-"require(\\"./lib/remap-test\\");
+"require(\\"typescript/lib/remap-test/lib/lib\\");
 var Direction;
 (function (Direction) {
   Direction[(Direction[\\"Up\\"] = 0)] = \\"Up\\";
