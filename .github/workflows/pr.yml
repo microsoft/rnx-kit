@@ -31,7 +31,7 @@ jobs:
         env:
           CI_SKIP_GO: 1
       - name: Check for change files
-        run: yarn run beachball check --branch origin/${{ github.base_ref }} --changehint \"Run 'yarn run change' from root of repo to generate a change file.\"
+        run: yarn change:check --since origin/${{ github.base_ref }}
       - name: Format
         run: yarn format
       - name: Report formatting changes
