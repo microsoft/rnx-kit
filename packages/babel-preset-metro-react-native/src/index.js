@@ -42,10 +42,52 @@ function constEnumPlugin() {
   return ["const-enum"];
 }
 
+/**
+ * Returns additional options for `metro-react-native-babel-preset`.
+ * @param {string | undefined} transformProfile
+ * @returns {MetroPresetOptions | undefined}
+ */
+function overridesFor(transformProfile) {
+  switch (transformProfile) {
+    case "esbuild":
+      return {
+        disableImportExportTransform: true,
+        /**
+         * We use the `hermes-stable` profile to exclude most Babel plugins.
+         * Like the Hermes compiler, esbuild is able to parse incoming JS
+         * without too much transpilation.
+         *
+         * See https://github.com/facebook/metro/blob/a75e292f57a51dad0e476bfe7009fcc1a32233d9/packages/metro-react-native-babel-preset/src/configs/main.js#L85.
+         */
+        unstable_transformProfile: "hermes-stable",
+      };
+    default:
+      return transformProfile
+        ? {
+            unstable_transformProfile:
+              /** @type {MetroPresetOptions["unstable_transformProfile"]} */ (
+                transformProfile
+              ),
+          }
+        : undefined;
+  }
+}
+
 /** @type {(api?: ConfigAPI, opts?: PresetOptions) => TransformOptions} */
-module.exports = (_, { additionalPlugins, ...options } = {}) => {
+module.exports = (
+  _,
+  { additionalPlugins, unstable_transformProfile, ...options } = {}
+) => {
   return {
-    presets: [["module:metro-react-native-babel-preset", options]],
+    presets: [
+      [
+        "module:metro-react-native-babel-preset",
+        {
+          ...options,
+          ...overridesFor(unstable_transformProfile),
+        },
+      ],
+    ],
     overrides: [
       {
         test: /\.tsx?$/,

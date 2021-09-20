@@ -2,4 +2,5 @@ require_relative '../../../node_modules/react-native-test-app/test_app'
 
 workspace 'SampleCrossApp.xcworkspace'
 
+use_flipper! false
 use_test_app!
