@@ -1994,9 +1994,9 @@
     "@types/react" "*"
 
 "@types/react@*", "@types/react@^17.0.2":
-  version "17.0.21"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-17.0.21.tgz#069c43177cd419afaab5ce26bb4e9056549f7ea6"
-  integrity sha512-GzzXCpOthOjXvrAUFQwU/svyxu658cwu00Q9ugujS4qc1zXgLFaO0kS2SLOaMWLt2Jik781yuHCWB7UcYdGAeQ==
+  version "17.0.22"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-17.0.22.tgz#c80d1d0e87fe953bae3ab273bef451dea1a6291b"
+  integrity sha512-kq/BMeaAVLJM6Pynh8C2rnr/drCK+/5ksH0ch9asz+8FW3DscYCIEFtCeYTFeIx/ubvOsMXmRfy7qEJ76gM96A==
   dependencies:
     "@types/prop-types" "*"
     "@types/scheduler" "*"
@@ -7726,9 +7726,9 @@ react-native-codegen@^0.0.7:
     nullthrows "^1.1.1"
 
 react-native-test-app@^0.7.6:
-  version "0.7.7"
-  resolved "https://registry.yarnpkg.com/react-native-test-app/-/react-native-test-app-0.7.7.tgz#e1b26ea7f685b03c8ab80a767f051d0aaa905dde"
-  integrity sha512-RdSwdSQx+Reyt0DMmW8O0HazRVaZ5R+lUvikbOLFB9skzsel4IPhD/4YkRhBQY0/7eaxPe9yE9J13Du1zDm4dA==
+  version "0.7.8"
+  resolved "https://registry.yarnpkg.com/react-native-test-app/-/react-native-test-app-0.7.8.tgz#60b9f1717e4bdc0daec9d6262df1ae5a8b85679a"
+  integrity sha512-8/eGUm3ncUzPZPzjuatnjE4Hy5mjh+Hs3TsqjhPRX3TZcB/tDhPsr24klDRVfk7+mTx1vzskmwPFqt1fpsePQg==
   dependencies:
     chalk "^4.1.0"
     prompts "^2.4.0"
