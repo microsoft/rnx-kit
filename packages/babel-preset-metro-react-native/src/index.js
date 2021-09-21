@@ -52,15 +52,8 @@ function overridesFor(transformProfile) {
     case "esbuild":
       return {
         disableImportExportTransform: true,
-        /**
-         * We use the `hermes-stable` profile to exclude most Babel plugins.
-         * Like the Hermes compiler, esbuild is able to parse incoming JS
-         * without too much transpilation.
-         *
-         * See https://github.com/facebook/metro/blob/a75e292f57a51dad0e476bfe7009fcc1a32233d9/packages/metro-react-native-babel-preset/src/configs/main.js#L85.
-         */
-        unstable_transformProfile: "hermes-stable",
       };
+
     default:
       return transformProfile
         ? {
