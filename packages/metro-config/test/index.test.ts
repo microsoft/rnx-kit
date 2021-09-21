@@ -1,6 +1,7 @@
+import * as fs from "fs";
+import * as path from "path";
+
 describe("@rnx-kit/metro-config", () => {
-  const fs = require("fs");
-  const path = require("path");
   const {
     UNIQUE_PACKAGES,
     defaultWatchFolders,

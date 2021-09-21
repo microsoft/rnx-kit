@@ -1,4 +1,4 @@
-export {
+export type {
   WriteThirdPartyNoticesOptions as IWriteThirdPartyNoticesOptions,
   WriteThirdPartyNoticesOptions,
 } from "./types";
