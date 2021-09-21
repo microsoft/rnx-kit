@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/metro-resolver-symlinks
 
-This log was last generated on Wed, 08 Sep 2021 06:42:50 GMT and should not be manually modified.
+This log was last generated on Tue, 21 Sep 2021 16:12:12 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 0.1.4
+
+Tue, 21 Sep 2021 16:12:12 GMT
+
+### Patches
+
+- Fix type information not being generated correctly (4123478+tido64@users.noreply.github.com)
 
 ## 0.1.3
 

@@ -2,6 +2,21 @@
   "name": "@rnx-kit/metro-resolver-symlinks",
   "entries": [
     {
+      "date": "Tue, 21 Sep 2021 16:12:12 GMT",
+      "tag": "@rnx-kit/metro-resolver-symlinks_v0.1.4",
+      "version": "0.1.4",
+      "comments": {
+        "patch": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/metro-resolver-symlinks",
+            "comment": "Fix type information not being generated correctly",
+            "commit": "f1531b0461c4a3c22673fca366b3c57f65bfed38"
+          }
+        ]
+      }
+    },
+    {
       "date": "Wed, 08 Sep 2021 06:42:50 GMT",
       "tag": "@rnx-kit/metro-resolver-symlinks_v0.1.3",
       "version": "0.1.3",
