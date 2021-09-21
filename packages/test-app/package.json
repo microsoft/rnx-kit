@@ -38,6 +38,7 @@
     "@rnx-kit/metro-plugin-cyclic-dependencies-detector": "*",
     "@rnx-kit/metro-plugin-duplicates-checker": "*",
     "@rnx-kit/metro-plugin-typescript-validation": "*",
+    "@rnx-kit/metro-resolver-symlinks": "*",
     "@rnx-kit/metro-serializer": "*",
     "@rnx-kit/metro-serializer-esbuild": "*",
     "@types/react": "^17.0.2",

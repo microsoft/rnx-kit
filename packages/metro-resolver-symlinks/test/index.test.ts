@@ -1,11 +1,9 @@
 import path from "path";
 import {
   getMetroResolver,
-  getPackageName,
-  isRelativeModule,
   remapReactNativeModule,
   resolveModulePath,
-} from "../src/index";
+} from "../src/resolver";
 
 function useFixture(name: string): string {
   return path.join(__dirname, "__fixtures__", name);
