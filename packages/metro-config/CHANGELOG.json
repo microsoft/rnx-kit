@@ -2,6 +2,29 @@
   "name": "@rnx-kit/metro-config",
   "entries": [
     {
+      "date": "Tue, 21 Sep 2021 13:01:58 GMT",
+      "tag": "@rnx-kit/metro-config_v1.2.15",
+      "version": "1.2.15",
+      "comments": {
+        "none": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/metro-config",
+            "comment": "Enable `--isolatedModules` to ensure compatibility with transpilers that only operate on a single file at a time, e.g. Babel or esbuild.",
+            "commit": "862d756cce07a4403fcba65d8b0e1979c384fd01"
+          }
+        ],
+        "patch": [
+          {
+            "author": "beachball",
+            "package": "@rnx-kit/metro-config",
+            "comment": "Bump @rnx-kit/babel-preset-metro-react-native to v1.0.6",
+            "commit": "862d756cce07a4403fcba65d8b0e1979c384fd01"
+          }
+        ]
+      }
+    },
+    {
       "date": "Thu, 16 Sep 2021 10:10:39 GMT",
       "tag": "@rnx-kit/metro-config_v1.2.14",
       "version": "1.2.14",

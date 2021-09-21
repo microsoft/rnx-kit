@@ -1,7 +1,0 @@
-{
-  "type": "none",
-  "comment": "Enable `--isolatedModules` to ensure compatibility with transpilers that only operate on a single file at a time, e.g. Babel or esbuild.",
-  "packageName": "@rnx-kit/metro-config",
-  "email": "4123478+tido64@users.noreply.github.com",
-  "dependentChangeType": "none"
-}

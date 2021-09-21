@@ -2,6 +2,21 @@
   "name": "@rnx-kit/metro-serializer-esbuild",
   "entries": [
     {
+      "date": "Tue, 21 Sep 2021 13:01:58 GMT",
+      "tag": "@rnx-kit/metro-serializer-esbuild_v0.0.14",
+      "version": "0.0.14",
+      "comments": {
+        "none": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/metro-serializer-esbuild",
+            "comment": "Updated docs for users of `@rnx-kit/babel-preset-metro-react-native`",
+            "commit": "862d756cce07a4403fcba65d8b0e1979c384fd01"
+          }
+        ]
+      }
+    },
+    {
       "date": "Wed, 08 Sep 2021 06:42:50 GMT",
       "tag": "@rnx-kit/metro-serializer-esbuild_v0.0.14",
       "version": "0.0.14",

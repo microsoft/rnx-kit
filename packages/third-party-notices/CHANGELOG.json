@@ -2,6 +2,21 @@
   "name": "@rnx-kit/third-party-notices",
   "entries": [
     {
+      "date": "Tue, 21 Sep 2021 13:01:58 GMT",
+      "tag": "@rnx-kit/third-party-notices_v1.2.3",
+      "version": "1.2.3",
+      "comments": {
+        "none": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/third-party-notices",
+            "comment": "Enable `--isolatedModules` to ensure compatibility with transpilers that only operate on a single file at a time, e.g. Babel or esbuild.",
+            "commit": "862d756cce07a4403fcba65d8b0e1979c384fd01"
+          }
+        ]
+      }
+    },
+    {
       "date": "Wed, 08 Sep 2021 06:42:50 GMT",
       "tag": "@rnx-kit/third-party-notices_v1.2.3",
       "version": "1.2.3",
