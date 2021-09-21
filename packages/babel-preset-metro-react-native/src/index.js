@@ -42,10 +42,45 @@ function constEnumPlugin() {
   return ["const-enum"];
 }
 
+/**
+ * Returns additional options for `metro-react-native-babel-preset`.
+ * @param {string | undefined} transformProfile
+ * @returns {MetroPresetOptions | undefined}
+ */
+function overridesFor(transformProfile) {
+  switch (transformProfile) {
+    case "esbuild":
+      return {
+        disableImportExportTransform: true,
+      };
+
+    default:
+      return transformProfile
+        ? {
+            unstable_transformProfile:
+              /** @type {MetroPresetOptions["unstable_transformProfile"]} */ (
+                transformProfile
+              ),
+          }
+        : undefined;
+  }
+}
+
 /** @type {(api?: ConfigAPI, opts?: PresetOptions) => TransformOptions} */
-module.exports = (_, { additionalPlugins, ...options } = {}) => {
+module.exports = (
+  _,
+  { additionalPlugins, unstable_transformProfile, ...options } = {}
+) => {
   return {
-    presets: [["module:metro-react-native-babel-preset", options]],
+    presets: [
+      [
+        "module:metro-react-native-babel-preset",
+        {
+          ...options,
+          ...overridesFor(unstable_transformProfile),
+        },
+      ],
+    ],
     overrides: [
       {
         test: /\.tsx?$/,
