@@ -53,13 +53,8 @@ function findMainSourceFile(sourcePath) {
  * @param {NodePath<CallExpression>} path
  * @param {string} source
  */
-function replaceCallWith(path, source) {
-  const expression = types.isImport(path.node.callee)
-    ? types.import()
-    : types.identifier("require");
-  path.replaceWith(
-    types.callExpression(expression, [types.stringLiteral(source)])
-  );
+function updateCallWith(path, source) {
+  path.node.arguments[0].value = source;
 }
 
 /**
@@ -67,37 +62,17 @@ function replaceCallWith(path, source) {
  * @param {NodePath<Node>} path
  * @param {string} source
  */
-function replaceDeclarationWith(path, source) {
-  path.replaceWith(
-    (() => {
-      switch (path.node.type) {
-        case "ExportAllDeclaration":
-          return types.exportAllDeclaration(types.stringLiteral(source));
-        case "ExportNamedDeclaration":
-          return types.exportNamedDeclaration(
-            path.node.declaration,
-            path.node.specifiers,
-            types.stringLiteral(source)
-          );
-        case "ImportDeclaration":
-          return types.importDeclaration(
-            path.node.specifiers,
-            types.stringLiteral(source)
-          );
-        default:
-          throw new Error(`Unhandled declaration type: ${path.node.type}`);
-      }
-    })()
-  );
+function updateDeclarationWith(path, source) {
+  path.node.source.value = source;
 }
 
 /**
  * @template T
  * @param {string} sourcePath
  * @param {NodePath<T>} path
- * @param {(path: NodePath<T>, source: string) => void} replacer
+ * @param {(path: NodePath<T>, source: string) => void} updater
  */
-function replace(sourcePath, path, replacer) {
+function update(sourcePath, path, updater) {
   const m = parseModuleRef(sourcePath);
   if (!("name" in m)) {
     // This is not a module reference. Ignore.
@@ -110,7 +85,7 @@ function replace(sourcePath, path, replacer) {
     try {
       const mainSourceFile = findMainSourceFile(sourcePath);
       if (mainSourceFile) {
-        replacer(path, mainSourceFile);
+        updater(path, mainSourceFile);
       }
     } catch (_) {
       /* ignore */
@@ -118,7 +93,7 @@ function replace(sourcePath, path, replacer) {
   } else if (modulePath === "lib" || modulePath.startsWith("lib")) {
     // Remaps @scope/example/lib/index.js -> @scope/example/src/index.ts
     const name = scope ? `${scope}/${moduleName}` : moduleName;
-    replacer(path, `${name}/${modulePath.replace("lib", "src")}`);
+    updater(path, `${name}/${modulePath.replace("lib", "src")}`);
   }
 }
 
@@ -151,7 +126,7 @@ module.exports = declare((api, options) => {
           return;
         }
 
-        replace(sourcePath, path, replaceCallWith);
+        update(sourcePath, path, updateCallWith);
       },
 
       /** @type {(path: ImportExportDeclarationNodePath, state: unknown) => void} */
@@ -166,7 +141,7 @@ module.exports = declare((api, options) => {
           return;
         }
 
-        replace(sourcePath, path, replaceDeclarationWith);
+        update(sourcePath, path, updateDeclarationWith);
       },
     },
   };
