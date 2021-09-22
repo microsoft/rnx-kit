@@ -47,7 +47,30 @@
       "root": "packages/metro-resolver-symlinks"
     },
     "@rnx-kit/metro-serializer": {
-      "root": "packages/metro-serializer"
+      "root": "packages/metro-serializer",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/workspace:tsc",
+          "options": {
+            "main": "packages/metro-serializer/src/index.ts",
+            "outputPath": "packages/metro-serializer/lib",
+            "tsConfig": "packages/metro-serializer/tsconfig.json"
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["packages/metro-serializer/src/**"],
+            "eslintConfig": "packages/metro-serializer/package.json"
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "packages/metro-serializer/package.json"
+          }
+        }
+      }
     },
     "@rnx-kit/metro-serializer-esbuild": {
       "root": "packages/metro-serializer-esbuild"
