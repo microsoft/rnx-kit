@@ -2,6 +2,21 @@
   "name": "@rnx-kit/console",
   "entries": [
     {
+      "date": "Wed, 22 Sep 2021 16:05:55 GMT",
+      "tag": "@rnx-kit/console_v1.0.2",
+      "version": "1.0.2",
+      "comments": {
+        "none": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/console",
+            "comment": "Upgrade Jest to v27",
+            "commit": "4463a88285b37b622deb06717c92ff0f3c5451ad"
+          }
+        ]
+      }
+    },
+    {
       "date": "Wed, 08 Sep 2021 06:42:50 GMT",
       "tag": "@rnx-kit/console_v1.0.2",
       "version": "1.0.2",

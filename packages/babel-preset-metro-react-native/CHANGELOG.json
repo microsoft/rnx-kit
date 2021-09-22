@@ -2,6 +2,27 @@
   "name": "@rnx-kit/babel-preset-metro-react-native",
   "entries": [
     {
+      "date": "Wed, 22 Sep 2021 16:05:55 GMT",
+      "tag": "@rnx-kit/babel-preset-metro-react-native_v1.0.7",
+      "version": "1.0.7",
+      "comments": {
+        "none": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/babel-preset-metro-react-native",
+            "comment": "Added lint script",
+            "commit": "4463a88285b37b622deb06717c92ff0f3c5451ad"
+          },
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/babel-preset-metro-react-native",
+            "comment": "Upgrade Jest to v27",
+            "commit": "4463a88285b37b622deb06717c92ff0f3c5451ad"
+          }
+        ]
+      }
+    },
+    {
       "date": "Tue, 21 Sep 2021 13:01:58 GMT",
       "tag": "@rnx-kit/babel-preset-metro-react-native_v1.0.6",
       "version": "1.0.6",

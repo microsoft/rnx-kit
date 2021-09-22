@@ -2,6 +2,21 @@
   "name": "@rnx-kit/metro-config",
   "entries": [
     {
+      "date": "Wed, 22 Sep 2021 16:05:55 GMT",
+      "tag": "@rnx-kit/metro-config_v1.2.16",
+      "version": "1.2.16",
+      "comments": {
+        "none": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/metro-config",
+            "comment": "Upgrade Jest to v27",
+            "commit": "4463a88285b37b622deb06717c92ff0f3c5451ad"
+          }
+        ]
+      }
+    },
+    {
       "date": "Wed, 22 Sep 2021 08:38:38 GMT",
       "tag": "@rnx-kit/metro-config_v1.2.16",
       "version": "1.2.16",
