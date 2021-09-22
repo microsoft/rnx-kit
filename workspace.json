@@ -1,0 +1,104 @@
+{
+  "version": 2,
+  "projects": {
+    "@types/metro": {
+      "root": "packages/@types/metro"
+    },
+    "@types/metro-babel-transformer": {
+      "root": "packages/@types/metro-babel-transformer"
+    },
+    "@types/metro-cache": {
+      "root": "packages/@types/metro-cache"
+    },
+    "@types/metro-config": {
+      "root": "packages/@types/metro-config"
+    },
+    "@types/metro-core": {
+      "root": "packages/@types/metro-core"
+    },
+    "@types/metro-resolver": {
+      "root": "packages/@types/metro-resolver"
+    },
+    "@types/metro-source-map": {
+      "root": "packages/@types/metro-source-map"
+    },
+    "@types/metro-transform-worker": {
+      "root": "packages/@types/metro-transform-worker"
+    },
+    "@rnx-kit/babel-plugin-import-path-remapper": {
+      "root": "packages/babel-plugin-import-path-remapper"
+    },
+    "@rnx-kit/babel-preset-metro-react-native": {
+      "root": "packages/babel-preset-metro-react-native"
+    },
+    "@rnx-kit/bundle-diff": {
+      "root": "packages/bundle-diff"
+    },
+    "@rnx-kit/cli": {
+      "root": "packages/cli"
+    },
+    "@rnx-kit/config": {
+      "root": "packages/config"
+    },
+    "@rnx-kit/console": {
+      "root": "packages/console"
+    },
+    "@rnx-kit/dep-check": {
+      "root": "packages/dep-check"
+    },
+    "@rnx-kit/esbuild-plugin-import-path-remapper": {
+      "root": "packages/esbuild-plugin-import-path-remapper"
+    },
+    "@rnx-kit/eslint-config": {
+      "root": "packages/eslint-config"
+    },
+    "@rnx-kit/jest-preset": {
+      "root": "packages/jest-preset"
+    },
+    "@rnx-kit/metro-config": {
+      "root": "packages/metro-config"
+    },
+    "@rnx-kit/metro-plugin-cyclic-dependencies-detector": {
+      "root": "packages/metro-plugin-cyclic-dependencies-detector"
+    },
+    "@rnx-kit/metro-plugin-duplicates-checker": {
+      "root": "packages/metro-plugin-duplicates-checker"
+    },
+    "@rnx-kit/metro-plugin-typescript-validation": {
+      "root": "packages/metro-plugin-typescript-validation"
+    },
+    "@rnx-kit/metro-resolver-symlinks": {
+      "root": "packages/metro-resolver-symlinks"
+    },
+    "@rnx-kit/metro-serializer": {
+      "root": "packages/metro-serializer"
+    },
+    "@rnx-kit/metro-serializer-esbuild": {
+      "root": "packages/metro-serializer-esbuild"
+    },
+    "@rnx-kit/metro-service": {
+      "root": "packages/metro-service"
+    },
+    "@rnx-kit/test-app": {
+      "root": "packages/test-app"
+    },
+    "@rnx-kit/third-party-notices": {
+      "root": "packages/third-party-notices"
+    },
+    "@rnx-kit/tools-language": {
+      "root": "packages/tools-language"
+    },
+    "@rnx-kit/tools-node": {
+      "root": "packages/tools-node"
+    },
+    "@rnx-kit/tools-react-native": {
+      "root": "packages/tools-react-native"
+    },
+    "@rnx-kit/typescript-service": {
+      "root": "packages/typescript-service"
+    },
+    "rnx-kit-scripts": {
+      "root": "scripts"
+    }
+  }
+}

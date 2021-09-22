@@ -7,7 +7,7 @@
     "rnx-kit-scripts": "./just-scripts.js"
   },
   "scripts": {
-    "build-tools": "just-scripts build",
+    "build:tools": "just-scripts build",
     "code-style": "node ./lib/just-scripts.js code-style",
     "depcheck": "just-scripts depcheck",
     "prettier": "node ./lib/just-scripts.js prettier"

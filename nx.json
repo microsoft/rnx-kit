@@ -1,0 +1,56 @@
+{
+  "extends": "@nrwl/workspace/presets/npm.json",
+  "npmScope": "rnx-kit",
+  "tasksRunnerOptions": {
+    "default": {
+      "runner": "@nrwl/workspace/tasks-runners/default",
+      "options": {
+        "cacheableOperations": ["build", "test", "lint", "package", "prepare"],
+        "parallel": true
+      }
+    }
+  },
+  "implicitDependencies": {
+    "package.json": {
+      "devDependencies": "*"
+    },
+    "scripts/tsconfig-shared.json": "*"
+  },
+  "targetDependencies": {
+    "build": [
+      {
+        "target": "build",
+        "projects": "dependencies"
+      },
+      {
+        "target": "lint",
+        "projects": "self"
+      }
+    ],
+    "test": [
+      {
+        "target": "build",
+        "projects": "dependencies"
+      },
+      {
+        "target": "build",
+        "projects": "self"
+      }
+    ],
+    "prepare": [
+      {
+        "target": "prepare",
+        "projects": "dependencies"
+      }
+    ],
+    "package": [
+      {
+        "target": "package",
+        "projects": "dependencies"
+      }
+    ]
+  },
+  "affected": {
+    "defaultBase": "main"
+  }
+}
