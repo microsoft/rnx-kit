@@ -54,12 +54,15 @@ function findMainSourceFile(sourcePath) {
  * @param {string} source
  */
 function updateCallWith(path, source) {
-  path.node.arguments[0].value = source;
+  const firstArgument = path.node.arguments[0];
+  if (types.isStringLiteral(firstArgument)) {
+    firstArgument.value = source;
+  }
 }
 
 /**
  * Replaces the source string in specified import/export declaration.
- * @param {NodePath<Node>} path
+ * @param {NodePath<ImportExportDeclarationNodePath>} path
  * @param {string} source
  */
 function updateDeclarationWith(path, source) {
