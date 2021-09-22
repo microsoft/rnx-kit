@@ -1,7 +1,0 @@
-{
-  "type": "patch",
-  "comment": "Preserve Comments within require and import",
-  "packageName": "@rnx-kit/babel-plugin-import-path-remapper",
-  "email": "sverre.johansen@gmail.com",
-  "dependentChangeType": "patch"
-}
