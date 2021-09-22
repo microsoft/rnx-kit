@@ -18,6 +18,7 @@ Array [
   "metro",
   "nullthrows",
   "object-assign",
+  "pretty-format",
   "promise",
   "prop-types",
   "react",
