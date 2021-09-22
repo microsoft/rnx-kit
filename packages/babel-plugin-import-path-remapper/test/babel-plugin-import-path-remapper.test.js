@@ -94,4 +94,15 @@ describe("@rnx-kit/babel-plugin-import-path-remapper", () => {
       transform(`import A from "@rnx-kit/example/lib/index/lib/index";`)
     ).toBe(`import A from "@rnx-kit/example/src/index/lib/index";`);
   });
+
+  test("Preserves magic comments", () => {
+    expect(
+      transform(`import(/* webpackChunkName: "example" */ "@rnx-kit/example/lib/index");
+`)
+    ).toBe(
+      `import(
+/* webpackChunkName: "example" */
+"@rnx-kit/example/src/index");`
+    );
+  });
 });
