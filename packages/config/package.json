@@ -6,7 +6,7 @@
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
   "scripts": {
-    "build": "rnx-kit-scripts build",
+    "build": "tsc",
     "depcheck": "rnx-kit-scripts depcheck",
     "format": "rnx-kit-scripts format",
     "lint": "rnx-kit-scripts lint",

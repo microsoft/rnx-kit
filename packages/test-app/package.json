@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "build": "rnx-kit-scripts build",
+    "build": "tsc",
     "depcheck": "react-native rnx-dep-check && rnx-kit-scripts depcheck",
     "format": "rnx-kit-scripts format",
     "lint": "rnx-kit-scripts lint",

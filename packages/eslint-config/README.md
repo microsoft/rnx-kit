@@ -20,7 +20,7 @@ index d9daf8f..9ca1826 100644
 @@ -15,7 +15,8 @@
    },
    "scripts": {
-     "build": "rnx-kit-scripts build",
+     "build": "tsc",
      "format": "rnx-kit-scripts format",
 +    "lint": "rnx-kit-scripts lint"
    },

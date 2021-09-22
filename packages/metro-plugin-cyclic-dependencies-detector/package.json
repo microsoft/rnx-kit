@@ -14,7 +14,7 @@
     "directory": "packages/metro-plugin-cyclic-dependencies-detector"
   },
   "scripts": {
-    "build": "rnx-kit-scripts build",
+    "build": "tsc",
     "format": "rnx-kit-scripts format",
     "lint": "rnx-kit-scripts lint",
     "test": "rnx-kit-scripts test"

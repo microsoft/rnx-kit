@@ -14,7 +14,7 @@
     "directory": "packages/metro-serializer-esbuild"
   },
   "scripts": {
-    "build": "rnx-kit-scripts build",
+    "build": "tsc",
     "format": "rnx-kit-scripts format",
     "lint": "rnx-kit-scripts lint"
   },
