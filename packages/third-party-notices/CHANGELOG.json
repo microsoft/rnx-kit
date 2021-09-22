@@ -2,6 +2,21 @@
   "name": "@rnx-kit/third-party-notices",
   "entries": [
     {
+      "date": "Wed, 22 Sep 2021 16:06:09 GMT",
+      "tag": "@rnx-kit/third-party-notices_v1.2.3",
+      "version": "1.2.3",
+      "comments": {
+        "none": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/third-party-notices",
+            "comment": "Upgrade Jest to v27",
+            "commit": "f7b4eeebbd2576f83048ce5d2a0c538574d76c99"
+          }
+        ]
+      }
+    },
+    {
       "date": "Wed, 22 Sep 2021 16:05:55 GMT",
       "tag": "@rnx-kit/third-party-notices_v1.2.3",
       "version": "1.2.3",

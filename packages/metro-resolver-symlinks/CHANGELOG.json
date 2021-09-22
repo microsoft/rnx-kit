@@ -2,6 +2,21 @@
   "name": "@rnx-kit/metro-resolver-symlinks",
   "entries": [
     {
+      "date": "Wed, 22 Sep 2021 16:06:09 GMT",
+      "tag": "@rnx-kit/metro-resolver-symlinks_v0.1.4",
+      "version": "0.1.4",
+      "comments": {
+        "none": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/metro-resolver-symlinks",
+            "comment": "Added lint script",
+            "commit": "f7b4eeebbd2576f83048ce5d2a0c538574d76c99"
+          }
+        ]
+      }
+    },
+    {
       "date": "Wed, 22 Sep 2021 16:05:55 GMT",
       "tag": "@rnx-kit/metro-resolver-symlinks_v0.1.4",
       "version": "0.1.4",

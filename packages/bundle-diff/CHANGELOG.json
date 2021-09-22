@@ -2,6 +2,21 @@
   "name": "@rnx-kit/bundle-diff",
   "entries": [
     {
+      "date": "Wed, 22 Sep 2021 16:06:09 GMT",
+      "tag": "@rnx-kit/bundle-diff_v1.0.2",
+      "version": "1.0.2",
+      "comments": {
+        "none": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/bundle-diff",
+            "comment": "Upgrade Jest to v27",
+            "commit": "f7b4eeebbd2576f83048ce5d2a0c538574d76c99"
+          }
+        ]
+      }
+    },
+    {
       "date": "Wed, 22 Sep 2021 16:05:55 GMT",
       "tag": "@rnx-kit/bundle-diff_v1.0.2",
       "version": "1.0.2",

@@ -2,6 +2,21 @@
   "name": "@rnx-kit/metro-service",
   "entries": [
     {
+      "date": "Wed, 22 Sep 2021 16:06:09 GMT",
+      "tag": "@rnx-kit/metro-service_v1.1.3",
+      "version": "1.1.3",
+      "comments": {
+        "none": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/metro-service",
+            "comment": "Added lint script",
+            "commit": "f7b4eeebbd2576f83048ce5d2a0c538574d76c99"
+          }
+        ]
+      }
+    },
+    {
       "date": "Wed, 22 Sep 2021 16:05:55 GMT",
       "tag": "@rnx-kit/metro-service_v1.1.3",
       "version": "1.1.3",
