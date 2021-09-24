@@ -55,13 +55,7 @@ export type ManifestProfile = PackageManifest & {
 
 export type Profile = Readonly<Record<Capability, MetaPackage | Package>>;
 
-export type ProfileVersion =
-  | "0.61"
-  | "0.62"
-  | "0.63"
-  | "0.64"
-  | "0.65"
-  | "0.66";
+export type ProfileVersion = "0.61" | "0.62" | "0.63" | "0.64" | "0.65";
 
 export type TestOverrides = {
   moduleResolver?: typeof require.resolve;
