@@ -49,6 +49,10 @@ const profile: Profile = {
     name: "@react-native-masked-view/masked-view",
     version: "^0.2.6",
   },
+  "metro-babel": {
+    name: "metro-react-native-babel-preset",
+    version: "^0.66.0",
+  },
   modal: {
     name: "react-native-modal",
     version: "^13.0.0",

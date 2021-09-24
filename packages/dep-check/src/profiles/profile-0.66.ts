@@ -29,6 +29,10 @@ const profile: Profile = {
     name: "react-native-render-html",
     version: "^6.1.0",
   },
+  "metro-babel": {
+    name: "metro-react-native-babel-preset",
+    version: "^0.66.2",
+  },
   react: {
     name: "react",
     version: "17.0.2",
