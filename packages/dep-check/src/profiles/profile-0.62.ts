@@ -36,6 +36,10 @@ const profile: Profile = {
     name: "metro-react-native-babel-preset",
     version: "^0.58.0",
   },
+  metro: {
+    name: "metro",
+    version: "^0.58.0",
+  },
 };
 
 export default profile;

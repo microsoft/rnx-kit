@@ -42,6 +42,10 @@ const profile: Profile = {
     name: "metro-react-native-babel-preset",
     version: "^0.59.0",
   },
+  metro: {
+    name: "metro",
+    version: "^0.59.0",
+  },
   "navigation/native": {
     name: "@react-navigation/native",
     version: "^5.9.4",

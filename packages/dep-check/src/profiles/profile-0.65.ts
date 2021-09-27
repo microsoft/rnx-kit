@@ -53,6 +53,10 @@ const profile: Profile = {
     name: "metro-react-native-babel-preset",
     version: "^0.66.0",
   },
+  metro: {
+    name: "metro",
+    version: "^0.66.0",
+  },
   modal: {
     name: "react-native-modal",
     version: "^13.0.0",
