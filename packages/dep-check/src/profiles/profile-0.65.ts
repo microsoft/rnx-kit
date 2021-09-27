@@ -8,6 +8,21 @@ const reactNative = {
 
 const profile: Profile = {
   ...profile_0_64,
+  react: {
+    name: "react",
+    version: "17.0.2",
+  },
+  "react-dom": {
+    name: "react-dom",
+    version: "17.0.2",
+    capabilities: ["react"],
+  },
+  "react-test-renderer": {
+    name: "react-test-renderer",
+    version: "17.0.2",
+    capabilities: ["react"],
+    devOnly: true,
+  },
   core: reactNative,
   "core-android": reactNative,
   "core-ios": reactNative,
@@ -87,10 +102,6 @@ const profile: Profile = {
   modal: {
     name: "react-native-modal",
     version: "^13.0.0",
-  },
-  react: {
-    name: "react",
-    version: "17.0.2",
   },
   screens: {
     name: "react-native-screens",
