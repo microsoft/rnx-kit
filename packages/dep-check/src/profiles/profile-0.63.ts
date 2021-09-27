@@ -4,7 +4,6 @@ import profile62 from "./profile-0.62";
 const reactNative = {
   name: "react-native",
   version: "^0.63.2",
-  capabilities: ["react"],
 };
 
 const profile: Profile = {
