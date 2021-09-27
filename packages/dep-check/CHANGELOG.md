@@ -1,8 +1,17 @@
 # Change Log - @rnx-kit/dep-check
 
-This log was last generated on Mon, 27 Sep 2021 10:56:47 GMT and should not be manually modified.
+This log was last generated on Mon, 27 Sep 2021 12:28:41 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 1.8.4
+
+Mon, 27 Sep 2021 12:28:41 GMT
+
+### Patches
+
+- Add react dom and test renderer to capabilities (lsciandra@microsoft.com)
+- Bump @rnx-kit/config to v0.4.9
 
 ## 1.8.3
 

@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/config
 
-This log was last generated on Mon, 27 Sep 2021 10:56:47 GMT and should not be manually modified.
+This log was last generated on Mon, 27 Sep 2021 12:28:41 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 0.4.9
+
+Mon, 27 Sep 2021 12:28:41 GMT
+
+### Patches
+
+- Add react dom and test renderer to capabilities (lsciandra@microsoft.com)
 
 ## 0.4.8
 

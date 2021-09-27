@@ -2,6 +2,21 @@
   "name": "@rnx-kit/config",
   "entries": [
     {
+      "date": "Mon, 27 Sep 2021 12:28:41 GMT",
+      "tag": "@rnx-kit/config_v0.4.9",
+      "version": "0.4.9",
+      "comments": {
+        "patch": [
+          {
+            "author": "lsciandra@microsoft.com",
+            "package": "@rnx-kit/config",
+            "comment": "Add react dom and test renderer to capabilities",
+            "commit": "e0c30adaae8b368a6c5b2d66dc9e69fdab5b8c71"
+          }
+        ]
+      }
+    },
+    {
       "date": "Mon, 27 Sep 2021 10:56:47 GMT",
       "tag": "@rnx-kit/config_v0.4.8",
       "version": "0.4.8",
