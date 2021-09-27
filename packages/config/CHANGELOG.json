@@ -2,6 +2,21 @@
   "name": "@rnx-kit/config",
   "entries": [
     {
+      "date": "Mon, 27 Sep 2021 10:56:47 GMT",
+      "tag": "@rnx-kit/config_v0.4.8",
+      "version": "0.4.8",
+      "comments": {
+        "patch": [
+          {
+            "author": "lsciandra@microsoft.com",
+            "package": "@rnx-kit/config",
+            "comment": "Add metro babel preset to capabilities",
+            "commit": "d1640ad5e33316d66dbb969e8c8242b0c0ca9ffa"
+          }
+        ]
+      }
+    },
+    {
       "date": "Wed, 08 Sep 2021 06:42:50 GMT",
       "tag": "@rnx-kit/config_v0.4.7",
       "version": "0.4.7",

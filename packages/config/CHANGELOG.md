@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/config
 
-This log was last generated on Fri, 03 Sep 2021 12:18:30 GMT and should not be manually modified.
+This log was last generated on Mon, 27 Sep 2021 10:56:47 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 0.4.8
+
+Mon, 27 Sep 2021 10:56:47 GMT
+
+### Patches
+
+- Add metro babel preset to capabilities (lsciandra@microsoft.com)
 
 ## 0.4.7
 

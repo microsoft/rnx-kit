@@ -2,6 +2,27 @@
   "name": "@rnx-kit/dep-check",
   "entries": [
     {
+      "date": "Mon, 27 Sep 2021 10:56:47 GMT",
+      "tag": "@rnx-kit/dep-check_v1.8.3",
+      "version": "1.8.3",
+      "comments": {
+        "patch": [
+          {
+            "author": "lsciandra@microsoft.com",
+            "package": "@rnx-kit/dep-check",
+            "comment": "Add metro babel preset to capabilities",
+            "commit": "d1640ad5e33316d66dbb969e8c8242b0c0ca9ffa"
+          },
+          {
+            "author": "beachball",
+            "package": "@rnx-kit/dep-check",
+            "comment": "Bump @rnx-kit/config to v0.4.8",
+            "commit": "d1640ad5e33316d66dbb969e8c8242b0c0ca9ffa"
+          }
+        ]
+      }
+    },
+    {
       "date": "Wed, 22 Sep 2021 16:06:09 GMT",
       "tag": "@rnx-kit/dep-check_v1.8.2",
       "version": "1.8.2",

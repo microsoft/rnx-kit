@@ -1,8 +1,17 @@
 # Change Log - @rnx-kit/dep-check
 
-This log was last generated on Tue, 14 Sep 2021 15:28:16 GMT and should not be manually modified.
+This log was last generated on Mon, 27 Sep 2021 10:56:47 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 1.8.3
+
+Mon, 27 Sep 2021 10:56:47 GMT
+
+### Patches
+
+- Add metro babel preset to capabilities (lsciandra@microsoft.com)
+- Bump @rnx-kit/config to v0.4.8
 
 ## 1.8.2
 
