@@ -33,6 +33,8 @@ export type Capability =
   | "netinfo"
   | "popover"
   | "react"
+  | "react-dom"
+  | "react-test-renderer"
   | "safe-area"
   | "screens"
   | "shimmer"

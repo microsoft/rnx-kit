@@ -13,6 +13,17 @@ const profile: Profile = {
     name: "react",
     version: "16.13.1",
   },
+  "react-dom": {
+    name: "react-dom",
+    version: "16.13.1",
+    capabilities: ["react"],
+  },
+  "react-test-renderer": {
+    name: "react-test-renderer",
+    version: "16.13.1",
+    capabilities: ["react"],
+    devOnly: true,
+  },
   core: reactNative,
   "core-android": reactNative,
   "core-ios": reactNative,
