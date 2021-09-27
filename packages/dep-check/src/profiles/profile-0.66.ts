@@ -29,7 +29,7 @@ const profile: Profile = {
     name: "react-native-render-html",
     version: "^6.1.0",
   },
-  "metro-babel": {
+  "babel-preset-react-native": {
     name: "metro-react-native-babel-preset",
     version: "^0.66.2",
   },

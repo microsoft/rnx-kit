@@ -38,7 +38,7 @@ const profile: Profile = {
     name: "hermes-engine",
     version: "~0.5.0",
   },
-  "metro-babel": {
+  "babel-preset-react-native": {
     name: "metro-react-native-babel-preset",
     version: "^0.59.0",
   },

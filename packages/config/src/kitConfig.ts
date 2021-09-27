@@ -20,7 +20,7 @@ export type Capability =
   | "html"
   | "lazy-index"
   | "masked-view"
-  | "metro-babel"
+  | "babel-preset-react-native"
   | "modal"
   | "navigation/native"
   | "navigation/stack"
