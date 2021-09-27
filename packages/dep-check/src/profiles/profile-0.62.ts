@@ -35,10 +35,12 @@ const profile: Profile = {
   "babel-preset-react-native": {
     name: "metro-react-native-babel-preset",
     version: "^0.58.0",
+    devOnly: true,
   },
   metro: {
     name: "metro",
     version: "^0.58.0",
+    devOnly: true,
   },
 };
 
