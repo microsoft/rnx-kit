@@ -103,10 +103,6 @@ const profile: Profile = {
     name: "react-native-modal",
     version: "^13.0.0",
   },
-  react: {
-    name: "react",
-    version: "17.0.2",
-  },
   screens: {
     name: "react-native-screens",
     version: "^3.7.0",
