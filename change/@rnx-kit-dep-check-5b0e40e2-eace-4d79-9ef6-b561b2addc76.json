@@ -1,0 +1,7 @@
+{
+  "type": "patch",
+  "comment": "Add metro babel preset to capabilities",
+  "packageName": "@rnx-kit/dep-check",
+  "email": "lsciandra@microsoft.com",
+  "dependentChangeType": "patch"
+}
