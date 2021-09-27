@@ -39,6 +39,31 @@ const profile: Profile = {
     version: "^0.66.2",
     devOnly: true,
   },
+  "metro-config": {
+    name: "metro-config",
+    version: "^0.66.2",
+    devOnly: true,
+  },
+  "metro-core": {
+    name: "metro-core",
+    version: "^0.66.2",
+    devOnly: true,
+  },
+  "metro-react-native-babel-transformer": {
+    name: "metro-react-native-babel-transformer",
+    version: "^0.66.2",
+    devOnly: true,
+  },
+  "metro-resolver": {
+    name: "metro-resolver",
+    version: "^0.66.2",
+    devOnly: true,
+  },
+  "metro-runtime": {
+    name: "metro-runtime",
+    version: "^0.66.2",
+    devOnly: true,
+  },
   react: {
     name: "react",
     version: "17.0.2",
