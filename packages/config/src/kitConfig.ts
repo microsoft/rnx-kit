@@ -8,6 +8,7 @@ export type Capability =
   | "core-ios"
   | "core-macos"
   | "core-windows"
+  | "core/testing"
   | "animation"
   | "babel-preset-react-native"
   | "base64"
