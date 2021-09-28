@@ -40,7 +40,7 @@ function sortCoreFirst(lhs, rhs) {
   return lhs < rhs ? -1 : 1;
 }
 
-const allVersions = /** @type {import("../src/profiles").ProfileVersion[]} */ (
+const allVersions = /** @type {import("../src/types").ProfileVersion[]} */ (
   Object.keys(defaultProfiles).reverse()
 );
 const allCapabilities = /** @type {import("@rnx-kit/config").Capability[]} */ (
@@ -53,8 +53,13 @@ const table = markdownTable([
     return [
       capability,
       ...allVersions.map((profileVersion) => {
-        const { name, version } = defaultProfiles[profileVersion][capability];
-        return `${name}@${version}`;
+        const pkg = defaultProfiles[profileVersion][capability];
+        if ("version" in pkg) {
+          const { name, version } = pkg;
+          return `${name}@${version}`;
+        } else {
+          return `Meta package for installing ${pkg.capabilities.map((name) => `\`${name}\``).join(", ")}`;
+        }
       }),
     ];
   }),
