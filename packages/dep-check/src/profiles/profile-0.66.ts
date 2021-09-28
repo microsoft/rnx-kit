@@ -9,6 +9,21 @@ const profile: Profile = {
     version: "^0.66.0-0",
     capabilities: ["react"],
   },
+  react: {
+    name: "react",
+    version: "17.0.2",
+  },
+  "react-dom": {
+    name: "react-dom",
+    version: "17.0.2",
+    capabilities: ["react"],
+  },
+  "react-test-renderer": {
+    name: "react-test-renderer",
+    version: "17.0.2",
+    capabilities: ["react"],
+    devOnly: true,
+  },
   core: reactNativeMeta,
   "core-android": reactNativeMeta,
   "core-ios": reactNativeMeta,
