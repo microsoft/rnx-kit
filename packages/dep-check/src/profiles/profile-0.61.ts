@@ -28,6 +28,7 @@ const profile: Profile = {
   "core-macos": {
     name: "react-native-macos",
     version: "^0.61.0",
+    capabilities: ["react"],
   },
   "core-windows": {
     name: "react-native-windows",
