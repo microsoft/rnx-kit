@@ -2,7 +2,6 @@ import type { BundleConfig } from "./bundleConfig";
 import type { ServerConfig } from "./serverConfig";
 
 export type Capability =
-  | "react-native"
   | "core"
   | "core-android"
   | "core-ios"

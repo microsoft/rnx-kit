@@ -1,13 +1,14 @@
 import type { Profile } from "../types";
-import profile61, { reactNativeMeta } from "./profile-0.61";
+import profile61 from "./profile-0.61";
+
+const reactNative = {
+  name: "react-native",
+  version: "^0.62.3",
+  capabilities: ["react"],
+};
 
 const profile: Profile = {
   ...profile61,
-  "react-native": {
-    name: "react-native",
-    version: "^0.62.3",
-    capabilities: ["react"],
-  },
   react: {
     name: "react",
     version: "16.11.0",
@@ -23,13 +24,12 @@ const profile: Profile = {
     capabilities: ["react"],
     devOnly: true,
   },
-  core: reactNativeMeta,
-  "core-android": reactNativeMeta,
-  "core-ios": reactNativeMeta,
+  core: reactNative,
+  "core-android": reactNative,
+  "core-ios": reactNative,
   "core-macos": {
     name: "react-native-macos",
     version: "^0.62.0",
-    capabilities: ["react"],
   },
   "core-windows": {
     name: "react-native-windows",
