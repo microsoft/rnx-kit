@@ -1,13 +1,15 @@
 import type { BundleConfig } from "./bundleConfig";
 import type { ServerConfig } from "./serverConfig";
 
+export type MetaCapability = "core/testing";
+
 export type Capability =
+  | MetaCapability
   | "core"
   | "core-android"
   | "core-ios"
   | "core-macos"
   | "core-windows"
-  | "core/testing"
   | "animation"
   | "babel-preset-react-native"
   | "base64"
