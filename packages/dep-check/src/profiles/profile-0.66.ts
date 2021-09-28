@@ -81,10 +81,6 @@ const profile: Profile = {
     version: "^0.66.2",
     devOnly: true,
   },
-  react: {
-    name: "react",
-    version: "17.0.2",
-  },
 };
 
 export default profile;
