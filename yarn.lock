@@ -7768,9 +7768,9 @@ react-native-test-app@^0.7.6:
     yargs "^16.0.0"
 
 react-native-windows@^0.65.0-0:
-  version "0.65.2"
-  resolved "https://registry.yarnpkg.com/react-native-windows/-/react-native-windows-0.65.2.tgz#2e63bb6746fa6bced5c1fbfd4de4c24d7a549d4b"
-  integrity sha512-m8iEf9QaN3Z/FlqSMBIm6s6JWELUyUho4ZyuE6f3eV83jGP6uF1oUI1gTOTexahnGEipMU5e1/TVeoYL5+uV0Q==
+  version "0.65.3"
+  resolved "https://registry.yarnpkg.com/react-native-windows/-/react-native-windows-0.65.3.tgz#1bea3842e40c8b7379ba24fb067063020a502c1b"
+  integrity sha512-Y5hIPu+ZxPbTW4f6CLVKYZHaEIJJWvbElIfRNRcNrc3R9VIWn/8iDTF14eVnEYwvloTgZenFj1romIMUD9FGYQ==
   dependencies:
     "@babel/runtime" "^7.0.0"
     "@jest/create-cache-key-function" "^27.0.1"
