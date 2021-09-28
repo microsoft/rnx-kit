@@ -21,6 +21,7 @@ export type Capability =
   | "hooks"
   | "html"
   | "lazy-index"
+  | "jest"
   | "masked-view"
   | "metro"
   | "metro-config"

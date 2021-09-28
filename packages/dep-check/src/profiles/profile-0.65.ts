@@ -118,6 +118,10 @@ const profile: Profile = {
     name: "react-native-webview",
     version: "^11.13.0",
   },
+  jest: {
+    name: "jest",
+    version: "^26.6.3",
+  },
 };
 
 export default profile;

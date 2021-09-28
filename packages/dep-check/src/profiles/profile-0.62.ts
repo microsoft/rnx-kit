@@ -80,6 +80,10 @@ const profile: Profile = {
     version: "^0.58.0",
     devOnly: true,
   },
+  jest: {
+    name: "jest",
+    version: "^24.8.0",
+  },
 };
 
 export default profile;
