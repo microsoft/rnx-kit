@@ -1,4 +1,5 @@
 import type { Profile } from "../types";
+import metaPackages from "./meta-profiles";
 
 const reactNative = {
   name: "react-native",
@@ -7,6 +8,7 @@ const reactNative = {
 };
 
 const profile: Profile = {
+  ...metaPackages,
   react: {
     name: "react",
     version: "16.9.0",

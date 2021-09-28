@@ -1,8 +1,10 @@
-import type { MetaPackage } from "../types";
+import type { Profile } from "../types";
 
-export const coreTestingMeta: MetaPackage = {
+export const metaPackages: Profile = {
   "core/testing": {
     name: "#meta",
     capabilities: ["core", "jest", "react-test-renderer"],
   },
 };
+
+export default metaPackages;
