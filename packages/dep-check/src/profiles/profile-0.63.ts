@@ -110,6 +110,7 @@ const profile: Profile = {
   jest: {
     name: "jest",
     version: "^24.9.0",
+    devOnly: true,
   },
 };
 
