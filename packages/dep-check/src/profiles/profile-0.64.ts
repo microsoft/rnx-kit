@@ -7,6 +7,7 @@ const reactNative = {
 };
 
 const profile: Profile = {
+  ...profile63,
   react: {
     name: "react",
     version: "17.0.1",
