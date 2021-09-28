@@ -1,7 +1,7 @@
-import type { Profile } from "../types";
+import type { Profile, Package } from "../types";
 import profile_0_65 from "./profile-0.65";
 
-const reactNative = {
+const reactNative: Package = {
   name: "react-native",
   version: "^0.66.0-0",
   capabilities: ["react"],
