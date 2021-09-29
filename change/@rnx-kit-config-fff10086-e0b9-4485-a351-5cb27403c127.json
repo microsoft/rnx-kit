@@ -1,0 +1,7 @@
+{
+  "type": "patch",
+  "comment": "add jest, add meta for core testing, stabilize core with react capability",
+  "packageName": "@rnx-kit/config",
+  "email": "lsciandra@microsoft.com",
+  "dependentChangeType": "patch"
+}
