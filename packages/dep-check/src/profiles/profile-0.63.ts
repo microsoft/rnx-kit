@@ -3,7 +3,7 @@ import profile62 from "./profile-0.62";
 
 const reactNative: Package = {
   name: "react-native",
-  version: "^0.63.2",
+  version: "^0.63.4",
   capabilities: ["react"],
 };
 

@@ -3,7 +3,7 @@ import profile_0_64 from "./profile-0.64";
 
 const reactNative: Package = {
   name: "react-native",
-  version: "^0.65.0-0",
+  version: "^0.65.1",
   capabilities: ["react"],
 };
 
