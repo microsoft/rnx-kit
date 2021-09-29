@@ -1,8 +1,17 @@
 # Change Log - @rnx-kit/cli
 
-This log was last generated on Wed, 29 Sep 2021 09:09:11 GMT and should not be manually modified.
+This log was last generated on Wed, 29 Sep 2021 11:02:41 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 0.9.33
+
+Wed, 29 Sep 2021 11:02:41 GMT
+
+### Patches
+
+- Bump @rnx-kit/config to v0.4.10
+- Bump @rnx-kit/dep-check to v1.8.6
 
 ## 0.9.32
 

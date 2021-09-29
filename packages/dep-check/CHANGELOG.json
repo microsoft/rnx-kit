@@ -2,6 +2,27 @@
   "name": "@rnx-kit/dep-check",
   "entries": [
     {
+      "date": "Wed, 29 Sep 2021 11:02:41 GMT",
+      "tag": "@rnx-kit/dep-check_v1.8.6",
+      "version": "1.8.6",
+      "comments": {
+        "patch": [
+          {
+            "author": "lsciandra@microsoft.com",
+            "package": "@rnx-kit/dep-check",
+            "comment": "add jest, add meta for core testing, stabilize core with react capability",
+            "commit": "9cc04af545d3c278daa05687277adbdabcff6eed"
+          },
+          {
+            "author": "beachball",
+            "package": "@rnx-kit/dep-check",
+            "comment": "Bump @rnx-kit/config to v0.4.10",
+            "commit": "9cc04af545d3c278daa05687277adbdabcff6eed"
+          }
+        ]
+      }
+    },
+    {
       "date": "Wed, 29 Sep 2021 09:09:11 GMT",
       "tag": "@rnx-kit/dep-check_v1.8.5",
       "version": "1.8.5",

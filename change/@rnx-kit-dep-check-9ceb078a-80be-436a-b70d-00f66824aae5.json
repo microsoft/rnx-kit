@@ -1,7 +1,0 @@
-{
-  "type": "patch",
-  "comment": "add jest, add meta for core testing, stabilize core with react capability",
-  "packageName": "@rnx-kit/dep-check",
-  "email": "lsciandra@microsoft.com",
-  "dependentChangeType": "patch"
-}

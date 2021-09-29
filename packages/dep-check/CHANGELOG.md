@@ -1,8 +1,17 @@
 # Change Log - @rnx-kit/dep-check
 
-This log was last generated on Wed, 29 Sep 2021 09:09:11 GMT and should not be manually modified.
+This log was last generated on Wed, 29 Sep 2021 11:02:41 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 1.8.6
+
+Wed, 29 Sep 2021 11:02:41 GMT
+
+### Patches
+
+- add jest, add meta for core testing, stabilize core with react capability (lsciandra@microsoft.com)
+- Bump @rnx-kit/config to v0.4.10
 
 ## 1.8.5
 

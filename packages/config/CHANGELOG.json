@@ -2,6 +2,21 @@
   "name": "@rnx-kit/config",
   "entries": [
     {
+      "date": "Wed, 29 Sep 2021 11:02:41 GMT",
+      "tag": "@rnx-kit/config_v0.4.10",
+      "version": "0.4.10",
+      "comments": {
+        "patch": [
+          {
+            "author": "lsciandra@microsoft.com",
+            "package": "@rnx-kit/config",
+            "comment": "add jest, add meta for core testing, stabilize core with react capability",
+            "commit": "9cc04af545d3c278daa05687277adbdabcff6eed"
+          }
+        ]
+      }
+    },
+    {
       "date": "Mon, 27 Sep 2021 12:28:41 GMT",
       "tag": "@rnx-kit/config_v0.4.9",
       "version": "0.4.9",
