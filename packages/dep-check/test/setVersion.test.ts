@@ -34,7 +34,7 @@ describe("makeSetVersionCommand()", () => {
     version: "1.0.0-test",
     dependencies: {
       react: "16.13.1",
-      "react-native": "^0.63.2",
+      "react-native": "^0.63.4",
     },
     devDependencies: {},
     "rnx-kit": {
@@ -82,7 +82,7 @@ describe("makeSetVersionCommand()", () => {
       },
       peerDependencies: {
         react: "16.13.1 || 17.0.1",
-        "react-native": "^0.63.2 || ^0.64.2",
+        "react-native": "^0.63.4 || ^0.64.2",
       },
       "rnx-kit": {
         ...mockManifest["rnx-kit"],

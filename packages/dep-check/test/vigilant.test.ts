@@ -195,7 +195,7 @@ describe("makeVigilantCommand()", () => {
       name: "@rnx-kit/dep-check",
       version: "1.0.0",
       dependencies: {
-        "react-native": "^0.63.2",
+        "react-native": "^0.63.4",
       },
     });
 
