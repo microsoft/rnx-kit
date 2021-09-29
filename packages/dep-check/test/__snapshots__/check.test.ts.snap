@@ -5,9 +5,11 @@ exports[`checkPackageManifest({ kitType: 'library' }) preserves indentation in '
 	\\"name\\": \\"@rnx-kit/dep-check\\",
 	\\"version\\": \\"0.0.1\\",
 	\\"peerDependencies\\": {
+		\\"react\\": \\"17.0.1\\",
 		\\"react-native\\": \\"^0.64.2\\"
 	},
 	\\"devDependencies\\": {
+		\\"react\\": \\"17.0.1\\",
 		\\"react-native\\": \\"^0.64.2\\"
 	}
 }

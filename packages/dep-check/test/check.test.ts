@@ -21,6 +21,12 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
     version: "0.0.1",
   };
 
+  const react_v62_v63_v64 = [
+    packageVersion(profile_0_62, "react"),
+    packageVersion(profile_0_63, "react"),
+    packageVersion(profile_0_64, "react"),
+  ].join(" || ");
+
   const v62_v63_v64 = [
     packageVersion(profile_0_62, "core"),
     packageVersion(profile_0_63, "core"),
@@ -98,9 +104,11 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
     fs.__setMockContent({
       ...mockManifest,
       peerDependencies: {
+        react: packageVersion(profile_0_64, "react"),
         "react-native": packageVersion(profile_0_64, "core"),
       },
       devDependencies: {
+        react: packageVersion(profile_0_64, "react"),
         "react-native": packageVersion(profile_0_64, "core"),
       },
     });
@@ -121,9 +129,11 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
     fs.__setMockContent({
       ...mockManifest,
       peerDependencies: {
+        react: packageVersion(profile_0_64, "react"),
         "react-native": packageVersion(profile_0_64, "core"),
       },
       devDependencies: {
+        react: packageVersion(profile_0_64, "react"),
         "react-native": packageVersion(profile_0_64, "core"),
       },
     });
@@ -203,9 +213,11 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
     fs.__setMockContent({
       ...mockManifest,
       peerDependencies: {
+        react: react_v62_v63_v64,
         "react-native": v62_v63_v64,
       },
       devDependencies: {
+        react: packageVersion(profile_0_62, "react"),
         "react-native": packageVersion(profile_0_62, "core"),
       },
     });
@@ -224,9 +236,11 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
     fs.__setMockContent({
       ...mockManifest,
       peerDependencies: {
+        react: react_v62_v63_v64,
         "react-native": v62_v63_v64,
       },
       devDependencies: {
+        react: packageVersion(profile_0_63, "react"),
         "react-native": packageVersion(profile_0_63, "core"),
       },
     });
@@ -246,9 +260,11 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
     fs.__setMockContent({
       ...mockManifest,
       peerDependencies: {
+        react: react_v62_v63_v64,
         "react-native": v62_v63_v64,
       },
       devDependencies: {
+        react: packageVersion(profile_0_63, "react"),
         "react-native": packageVersion(profile_0_63, "core"),
       },
     });

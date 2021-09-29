@@ -33,8 +33,10 @@ describe("makeSetVersionCommand()", () => {
     name: "@rnx-kit/dep-check",
     version: "1.0.0-test",
     dependencies: {
+      react: "16.13.1",
       "react-native": "^0.63.2",
     },
+    devDependencies: {},
     "rnx-kit": {
       reactNativeVersion: "^0.63",
       kitType: "app",
@@ -75,9 +77,11 @@ describe("makeSetVersionCommand()", () => {
       ...mockManifest,
       dependencies: {},
       devDependencies: {
+        react: "17.0.1",
         "react-native": "^0.64.2",
       },
       peerDependencies: {
+        react: "16.13.1 || 17.0.1",
         "react-native": "^0.63.2 || ^0.64.2",
       },
       "rnx-kit": {
@@ -104,6 +108,7 @@ describe("makeSetVersionCommand()", () => {
     expect(result.manifest).toEqual({
       ...mockManifest,
       dependencies: {
+        react: "17.0.1",
         "react-native": "^0.64.2",
       },
       devDependencies: {},
@@ -125,6 +130,7 @@ describe("makeSetVersionCommand()", () => {
     expect(result.manifest).toEqual({
       ...mockManifest,
       dependencies: {
+        react: "17.0.1",
         "react-native": "^0.64.2",
       },
       devDependencies: {},
@@ -146,6 +152,7 @@ describe("makeSetVersionCommand()", () => {
     expect(result.manifest).toEqual({
       ...mockManifest,
       dependencies: {
+        react: "17.0.1",
         "react-native": "^0.64.2",
       },
       devDependencies: {},
