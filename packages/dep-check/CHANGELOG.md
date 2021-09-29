@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/dep-check
 
-This log was last generated on Mon, 27 Sep 2021 12:28:41 GMT and should not be manually modified.
+This log was last generated on Wed, 29 Sep 2021 09:09:11 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 1.8.5
+
+Wed, 29 Sep 2021 09:09:11 GMT
+
+### Patches
+
+- Make profile for 0.66 public (4123478+tido64@users.noreply.github.com)
 
 ## 1.8.4
 

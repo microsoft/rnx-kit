@@ -2,6 +2,21 @@
   "name": "@rnx-kit/dep-check",
   "entries": [
     {
+      "date": "Wed, 29 Sep 2021 09:09:11 GMT",
+      "tag": "@rnx-kit/dep-check_v1.8.5",
+      "version": "1.8.5",
+      "comments": {
+        "patch": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/dep-check",
+            "comment": "Make profile for 0.66 public",
+            "commit": "67b92e575fa8a8ed4d631a1f953009fe5582f33d"
+          }
+        ]
+      }
+    },
+    {
       "date": "Mon, 27 Sep 2021 12:28:41 GMT",
       "tag": "@rnx-kit/dep-check_v1.8.4",
       "version": "1.8.4",
