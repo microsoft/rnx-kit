@@ -1,0 +1,7 @@
+{
+  "type": "patch",
+  "comment": "bump patch versions of certain versions to latest available",
+  "packageName": "@rnx-kit/dep-check",
+  "email": "lsciandra@microsoft.com",
+  "dependentChangeType": "patch"
+}
