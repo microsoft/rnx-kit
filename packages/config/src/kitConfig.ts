@@ -1,7 +1,10 @@
 import type { BundleConfig } from "./bundleConfig";
 import type { ServerConfig } from "./serverConfig";
 
+export type MetaCapability = "core/testing";
+
 export type Capability =
+  | MetaCapability
   | "core"
   | "core-android"
   | "core-ios"
@@ -19,6 +22,7 @@ export type Capability =
   | "hermes"
   | "hooks"
   | "html"
+  | "jest"
   | "lazy-index"
   | "masked-view"
   | "metro"

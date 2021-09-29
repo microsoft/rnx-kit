@@ -1,9 +1,10 @@
-import type { Profile } from "../types";
+import type { Profile, Package } from "../types";
 import profile_0_64 from "./profile-0.64";
 
-const reactNative = {
+const reactNative: Package = {
   name: "react-native",
   version: "^0.65.0-0",
+  capabilities: ["react"],
 };
 
 const profile: Profile = {
@@ -29,6 +30,7 @@ const profile: Profile = {
   "core-macos": {
     name: "react-native-macos",
     version: "^0.65.0-0",
+    capabilities: ["react"],
   },
   "core-windows": {
     name: "react-native-windows",
@@ -115,6 +117,11 @@ const profile: Profile = {
   webview: {
     name: "react-native-webview",
     version: "^11.13.0",
+  },
+  jest: {
+    name: "jest",
+    version: "^26.6.3",
+    devOnly: true,
   },
 };
 

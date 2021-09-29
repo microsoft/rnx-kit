@@ -239,6 +239,7 @@ describe("updatePackageManifest()", () => {
       );
     expect(dependencies).toEqual({
       ...mockDependencies,
+      react: packageVersion(profile_0_64, "react"),
       "react-native": packageVersion(profile_0_64, "core"),
     });
     expect(peerDependencies).toEqual({});
@@ -314,12 +315,17 @@ describe("updatePackageManifest()", () => {
     expect(dependencies).toEqual({ "@rnx-kit/dep-check": "^1.0.0" });
     expect(peerDependencies).toEqual({
       ...mockDependencies,
+      react: [
+        packageVersion(profile_0_63, "react"),
+        packageVersion(profile_0_64, "react"),
+      ].join(" || "),
       "react-native": [
         packageVersion(profile_0_63, "core"),
         packageVersion(profile_0_64, "core"),
       ].join(" || "),
     });
     expect(devDependencies).toEqual({
+      react: packageVersion(profile_0_64, "react"),
       "react-native": packageVersion(profile_0_64, "core"),
     });
   });
@@ -345,9 +351,11 @@ describe("updatePackageManifest()", () => {
     expect(dependencies).toEqual({ "@rnx-kit/dep-check": "^1.0.0" });
     expect(peerDependencies).toEqual({
       ...mockDependencies,
+      react: packageVersion(profile_0_64, "react"),
       "react-native": packageVersion(profile_0_64, "core"),
     });
     expect(devDependencies).toEqual({
+      react: packageVersion(profile_0_64, "react"),
       "react-native": packageVersion(profile_0_64, "core"),
     });
   });
@@ -369,6 +377,7 @@ describe("updatePackageManifest()", () => {
       );
     expect(dependencies).toEqual({
       ...mockDependencies,
+      react: packageVersion(profile_0_64, "react"),
       "react-native": packageVersion(profile_0_64, "core"),
     });
     expect(peerDependencies).toEqual({});

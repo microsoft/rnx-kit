@@ -92,9 +92,11 @@ describe("resolveCapabilities()", () => {
     );
 
     const { name } = profile_0_64["core"];
+    const { name: reactName } = profile_0_64["react"];
     const { name: testAppName } = profile_0_64["test-app"];
     expect(packages).toEqual({
       [name]: [profile_0_64["core"]],
+      [reactName]: [profile_0_64["react"]],
       [testAppName]: [profile_0_64["test-app"]],
     });
 
@@ -159,6 +161,10 @@ describe("resolveCapabilities()", () => {
     );
 
     expect(packages).toEqual({
+      react: [
+        pickPackage(profile_0_63, "react"),
+        pickPackage(profile_0_64, "react"),
+      ],
       "react-native": [
         pickPackage(profile_0_63, "core"),
         pickPackage(profile_0_64, "core"),
@@ -199,6 +205,7 @@ describe("resolveCapabilities()", () => {
     );
 
     expect(packages).toEqual({
+      react: [pickPackage(profile_0_64, "react")],
       "react-native": [pickPackage(profile_0_64, "core")],
       "react-native-macos": [pickPackage(profile_0_64, "core-macos")],
       "react-native-windows": [pickPackage(profile_0_64, "core-windows")],
@@ -235,6 +242,7 @@ describe("resolveCapabilities()", () => {
     );
 
     expect(packages).toEqual({
+      react: [pickPackage(profile_0_64, "react")],
       "react-native": [pickPackage(profile_0_64, "core")],
     });
   });

@@ -1,9 +1,10 @@
-import type { Profile } from "../types";
+import type { Profile, Package } from "../types";
 import profile61 from "./profile-0.61";
 
-const reactNative = {
+const reactNative: Package = {
   name: "react-native",
   version: "^0.62.3",
+  capabilities: ["react"],
 };
 
 const profile: Profile = {
@@ -29,6 +30,7 @@ const profile: Profile = {
   "core-macos": {
     name: "react-native-macos",
     version: "^0.62.0",
+    capabilities: ["react"],
   },
   "core-windows": {
     name: "react-native-windows",
@@ -76,6 +78,11 @@ const profile: Profile = {
   "metro-runtime": {
     name: "metro-runtime",
     version: "^0.58.0",
+    devOnly: true,
+  },
+  jest: {
+    name: "jest",
+    version: "^24.8.0",
     devOnly: true,
   },
 };
