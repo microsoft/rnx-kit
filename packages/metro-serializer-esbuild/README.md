@@ -99,3 +99,7 @@ react-native bundle --entry-file index.js --platform ios --dev false ...
   ```sh
   react-native bundle ... --config metro+esbuild.config.js
   ```
+- esbuild does not properly tree-shake `export *`. This is a known limitation
+  (see https://github.com/evanw/esbuild/issues/1420). It is also not recommended
+  to use `export *` in your code as they may lead to duplicate exports (see
+  https://github.com/microsoft/fluentui/issues/20178).
