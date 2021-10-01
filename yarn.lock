@@ -8757,9 +8757,9 @@ sudo-prompt@^9.0.0:
   integrity sha512-Mu7R0g4ig9TUuGSxJavny5Rv0egCEtpZRNMrZaYS1vxkiIxGiGUwoezU3LazIQ+KE04hTrTfNPgxU5gzi7F5Pw==
 
 suggestion-bot@^1.2.2:
-  version "1.2.4"
-  resolved "https://registry.yarnpkg.com/suggestion-bot/-/suggestion-bot-1.2.4.tgz#3b3e88f8d85ad6517dda7a2a7b83b0681ab444ba"
-  integrity sha512-QLIrBVxlejbRQ8ynulRdLxa9t1XTRuNE6oNoXQ0ORfuIv1mkT0/BN1QXTNR15JnCYtQA/vbVD3BiQ8D2kfY92A==
+  version "1.2.5"
+  resolved "https://registry.yarnpkg.com/suggestion-bot/-/suggestion-bot-1.2.5.tgz#160a2144dc12a5af9a226c01a0693642551d82c2"
+  integrity sha512-xHoX/D5wREWeJSIrT1MZA8c6c07m4uQGOI042EV1ja+6k6w7LL0Ee9tg9EFqqv3hGw4rDYpHmFIBqf1krIUFRA==
   dependencies:
     "@octokit/rest" "^18.0.0"
     azure-devops-node-api "^11.0.0"
