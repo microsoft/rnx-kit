@@ -28,7 +28,7 @@
   "devDependencies": {
     "@types/metro": "*",
     "@types/semver": "^7.0.0",
-    "metro": "^0.66.1",
+    "metro": "^0.66.2",
     "rnx-kit-scripts": "*"
   },
   "depcheck": {
