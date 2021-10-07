@@ -6774,9 +6774,9 @@ micromatch@^4.0.2, micromatch@^4.0.4:
     picomatch "^2.2.3"
 
 midgard-yarn@^1.23.24:
-  version "1.23.30"
-  resolved "https://registry.yarnpkg.com/midgard-yarn/-/midgard-yarn-1.23.30.tgz#2fb5c00ba501b10d8d9edad89b54d1cd49c8298c"
-  integrity sha512-tXea+5dMrrGyyO34W9YKjo9AfzYlxWNCRqm8yyHEzlFDmJL34p2/AlBDTxPWGccVk3Ko28sAgqRFstvo8jphJA==
+  version "1.23.33"
+  resolved "https://registry.yarnpkg.com/midgard-yarn/-/midgard-yarn-1.23.33.tgz#696babf08ebb2ed98df3dae44a37478d3c339edf"
+  integrity sha512-MOTtNItx5iMA4gFH6RX4VUdF8KfN3lycyok09qXgiriWKFRiUHZCkWO1j+M5P7YDqEk3oY9k5MPxtwaEPqI3Hg==
 
 mime-db@1.48.0, "mime-db@>= 1.43.0 < 2":
   version "1.48.0"
