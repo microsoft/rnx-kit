@@ -19,9 +19,17 @@ const common = {
     name: "chalk",
     version: "^4.1.0",
   },
+  "esbuild": {
+    name: "esbuild",
+    version: "^0.13.4",
+  },
   "find-up": {
     name: "find-up",
     version: "^5.0.0",
+  },
+  "jest": {
+    name: "jest",
+    version: "^27.0.0",
   },
   "jest-diff": {
     name: "jest-diff",

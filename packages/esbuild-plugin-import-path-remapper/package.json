@@ -21,7 +21,7 @@
   },
   "devDependencies": {
     "prettier": "^2.0.0",
-    "esbuild": "^0.12.19"
+    "esbuild": "^0.13.4"
   },
   "depcheck": {
     "ignorePatterns": [
