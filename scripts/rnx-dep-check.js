@@ -61,6 +61,7 @@ module.exports = {
   0.63: common,
   0.64: common,
   0.65: common,
+  0.66: common,
 };
 
 if (require.main === module) {
@@ -68,7 +69,7 @@ if (require.main === module) {
     "custom-profiles": __filename,
     // the following packages support multiple versions of react-native
     "exclude-packages": "@rnx-kit/jest-preset,@rnx-kit/metro-config",
-    vigilant: "0.65",
+    vigilant: "0.66",
     write: process.argv.includes("--write"),
   });
 }
