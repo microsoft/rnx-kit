@@ -2,6 +2,21 @@
   "name": "@rnx-kit/metro-service",
   "entries": [
     {
+      "date": "Tue, 12 Oct 2021 08:11:07 GMT",
+      "tag": "@rnx-kit/metro-service_v1.1.3",
+      "version": "1.1.3",
+      "comments": {
+        "none": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/metro-service",
+            "comment": "Bump react-native to 0.66",
+            "commit": "21aa5e4a868e067872c80d313a997ddae2c307e0"
+          }
+        ]
+      }
+    },
+    {
       "date": "Wed, 22 Sep 2021 16:06:09 GMT",
       "tag": "@rnx-kit/metro-service_v1.1.3",
       "version": "1.1.3",

@@ -2,6 +2,21 @@
   "name": "@rnx-kit/metro-serializer-esbuild",
   "entries": [
     {
+      "date": "Tue, 12 Oct 2021 08:11:07 GMT",
+      "tag": "@rnx-kit/metro-serializer-esbuild_v0.0.14",
+      "version": "0.0.14",
+      "comments": {
+        "none": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/metro-serializer-esbuild",
+            "comment": "Bump react-native to 0.66",
+            "commit": "21aa5e4a868e067872c80d313a997ddae2c307e0"
+          }
+        ]
+      }
+    },
+    {
       "date": "Mon, 11 Oct 2021 18:12:04 GMT",
       "tag": "@rnx-kit/metro-serializer-esbuild_v0.0.14",
       "version": "0.0.14",
