@@ -10,7 +10,7 @@
   ],
   "main": "lib/index.js",
   "bin": {
-    "build-tpn": "./bin/build-tpn.js"
+    "build-tpn": "./lib/build-tpn.js"
   },
   "repository": {
     "type": "git",
