@@ -109,11 +109,6 @@ const profile: Profile = {
     name: "react-native-screens",
     version: "^3.7.0",
   },
-  "test-app": {
-    name: "react-native-test-app",
-    version: "^0.9.0",
-    devOnly: true,
-  },
   webview: {
     name: "react-native-webview",
     version: "^11.13.0",

@@ -170,11 +170,6 @@ const profile: Profile = {
     name: "react-native-svg",
     version: "^12.1.1",
   },
-  "test-app": {
-    name: "react-native-test-app",
-    version: "^0.9.0",
-    devOnly: true,
-  },
   webview: {
     name: "react-native-webview",
     version: "^11.4.2",
