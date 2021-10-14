@@ -2,6 +2,21 @@
   "name": "@rnx-kit/cli",
   "entries": [
     {
+      "date": "Thu, 14 Oct 2021 07:54:03 GMT",
+      "tag": "@rnx-kit/cli_v0.9.34",
+      "version": "0.9.34",
+      "comments": {
+        "patch": [
+          {
+            "author": "beachball",
+            "package": "@rnx-kit/cli",
+            "comment": "Bump @rnx-kit/dep-check to v1.8.7",
+            "commit": "0e1c7f2ede6feeaa12df3b43b33516df7fb88f95"
+          }
+        ]
+      }
+    },
+    {
       "date": "Wed, 29 Sep 2021 11:02:41 GMT",
       "tag": "@rnx-kit/cli_v0.9.33",
       "version": "0.9.33",
