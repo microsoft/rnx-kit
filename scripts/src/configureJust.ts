@@ -29,7 +29,8 @@ export function configureJust(): void {
   task("no-op", () => undefined);
   task("prettier", prettier);
   task("ts", ts);
-  task("go-hello", goTask(path.join(scriptsBinDir, "hello"), "a", "b", "c"));
+
+  task("hello", goTask(path.join(scriptsBinDir, "hello"), "a", "b", "c"));
 
   // hierarchical task definintions
   task("build", build("clean", "depcheck", "lint", "ts"));
