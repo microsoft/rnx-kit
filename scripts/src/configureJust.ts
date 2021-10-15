@@ -1,3 +1,4 @@
+import path from "path";
 import { addResolvePath, option, parallel, series, task } from "just-scripts";
 import { build } from "./tasks/build";
 import { clean } from "./tasks/clean";
@@ -7,6 +8,9 @@ import { jest } from "./tasks/jest";
 import { prettier } from "./tasks/prettier";
 import { ts } from "./tasks/ts";
 import { updateApiReadme } from "./tasks/updateApiReadme";
+import { goTask } from "./tasks/go";
+
+const scriptsBinDir = path.join(__dirname, "..", "bin");
 
 export function configureJust(): void {
   //  add a resolve path for the build tooling deps like TS from the scripts folder
@@ -25,6 +29,7 @@ export function configureJust(): void {
   task("no-op", () => undefined);
   task("prettier", prettier);
   task("ts", ts);
+  task("go-hello", goTask(path.join(scriptsBinDir, "hello"), "a", "b", "c"));
 
   // hierarchical task definintions
   task("build", build("clean", "depcheck", "lint", "ts"));

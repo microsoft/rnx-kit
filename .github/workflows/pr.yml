@@ -23,6 +23,8 @@ jobs:
           key: ${{ hashFiles('yarn.lock') }}
       - name: Install package dependencies
         run: yarn ci
+        env:
+          CI_SKIP_GO: 1
       - name: Check for change files
         run: yarn run beachball check --branch origin/${{ github.base_ref }} --changehint \"Run 'yarn run change' from root of repo to generate a change file.\"
       - name: Format
@@ -53,6 +55,9 @@ jobs:
         uses: actions/setup-node@v2.4.1
         with:
           node-version: ${{ matrix.node-version }}
+      - uses: actions/setup-go@v2
+        with:
+          go-version: "^1.14.0"
       - name: Checkout
         uses: actions/checkout@v2.3.4
         with:

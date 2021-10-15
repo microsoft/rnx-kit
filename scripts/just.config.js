@@ -12,8 +12,11 @@ const {
 
 const path = require("path");
 
+const { goInstallTask, goBuildTask } = require("./src/tasks/go");
+
 const srcPath = path.join(process.cwd(), "src");
 const libPath = path.join(process.cwd(), "lib");
+const binPath = path.join(process.cwd(), "bin");
 
 const checkPublishing = () => {
   const { checkPublishingTask } = require("./lib/tasks/checkPublishingTask");
@@ -23,8 +26,13 @@ const checkPublishing = () => {
 module.exports = function preset() {
   option("production");
 
-  task("cleanlib", cleanTask({ paths: [libPath] }));
+  task("cleanlib", cleanTask({ paths: [binPath, libPath] }));
   task("eslint", eslintTask({ files: ["src/*"] }));
+
+  task("go:install", goInstallTask());
+  task("go:build", goBuildTask());
+  task("go", series("go:install", "go:build"));
+
   task(
     "ts",
     tscTask({
@@ -42,6 +50,10 @@ module.exports = function preset() {
   task("depcheck", checkPublishing);
   task("no-op", () => {});
 
-  task("build", series("cleanlib", "eslint", "ts"));
+  if (process.env["CI_SKIP_GO"]) {
+    task("build", series("cleanlib", "eslint", "ts"));
+  } else {
+    task("build", series("cleanlib", "go", "eslint", "ts"));
+  }
   task("clean", "no-op");
 };
