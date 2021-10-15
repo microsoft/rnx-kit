@@ -97,13 +97,14 @@ function getWorkspaceCacheDir() {
  * Go is available through the system PATH.
  */
 function getGoExecutable() {
+  const goExecutableFileName = process.platform === "win32" ? "go.exe" : "go";
   const goLocalExecutable = path.join(
     getWorkspaceCacheDir(),
     // The "go" subdirectory comes from unpacking the Go archive. It is part
     // of the Go distribution.
     "go",
     "bin",
-    "go"
+    goExecutableFileName
   );
   if (fs.existsSync(goLocalExecutable)) {
     return goLocalExecutable;
