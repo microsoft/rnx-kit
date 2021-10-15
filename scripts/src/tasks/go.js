@@ -69,7 +69,11 @@ const goDistributions = {
  * @returns {GoDistribution | undefined} Go distribution info, or `undefined` if a distribution isn't available.
  */
 function getGoDistribution() {
-  return goDistributions[process.platform]?.[process.arch];
+  const p = goDistributions[process.platform];
+  if (p) {
+    return p[process.arch];
+  }
+  return undefined;
 }
 
 /**
