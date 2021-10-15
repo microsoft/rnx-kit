@@ -49,7 +49,7 @@ const goDistributions = {
       hash: "a5a43c9cdabdb9f371d56951b14290eba8ce2f9b0db48fb5fc657943984fd4fc",
     },
   },
-  windows: {
+  win32: {
     x32: {
       url: "https://golang.org/dl/go1.17.2.windows-386.zip",
       hashAlgorithm: "sha256",
