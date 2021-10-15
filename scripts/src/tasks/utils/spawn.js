@@ -12,7 +12,7 @@ const { logger } = require("just-scripts");
  * @returns Contents of stdout.
  */
 function spawn(command, args, cwd) {
-  logger.info(`Executing: ${command} ${args?.join(" ")}`);
+  logger.info(`Executing: ${command} ${args ? args.join(" ") : ""}`);
   const cp = child_process.spawnSync(command, args, {
     stdio: ["ignore", "pipe", "pipe"],
     ...(cwd ? { cwd } : undefined),
