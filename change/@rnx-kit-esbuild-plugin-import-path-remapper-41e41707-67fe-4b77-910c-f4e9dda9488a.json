@@ -1,0 +1,7 @@
+{
+  "type": "none",
+  "comment": "Add missing dependency",
+  "packageName": "@rnx-kit/esbuild-plugin-import-path-remapper",
+  "email": "afoxman@microsoft.com",
+  "dependentChangeType": "none"
+}
