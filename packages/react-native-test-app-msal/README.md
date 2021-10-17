@@ -19,16 +19,18 @@ npm add --save-dev @rnx-kit/react-native-test-app-msal
 
 ### iOS/macOS
 
-Add `use_frameworks!` to your `Podfile`, e.g.:
+Add `MSAL` to your `Podfile`, e.g.:
 
 ```diff
  require_relative '../node_modules/react-native-test-app/test_app'
 
  workspace 'MyTestApp.xcworkspace'
 
-+use_frameworks!
-+use_flipper! false
- use_test_app!
++use_test_app! do |target|
++  target.app do
++    pod 'MSAL', :modular_headers => true
++  end
++end
 ```
 
 ## Usage

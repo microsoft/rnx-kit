@@ -120,7 +120,7 @@ struct AccountsView: View {
 
         let mutableSelf = self
         TokenBroker.shared.acquireToken(
-            with: config.scopes(for: accountType),
+            scopes: config.scopes(for: accountType),
             userPrincipalName: nil,
             accountType: accountType,
             sender: hostingController.hostingController

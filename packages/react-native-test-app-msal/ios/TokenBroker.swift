@@ -11,8 +11,8 @@ public final class TokenBroker: NSObject {
         static let RedirectURI = "msauth.\(Bundle.main.bundleIdentifier ?? "")://auth"
     }
 
-    @objc
-    public static var shared = TokenBroker()
+    @objc(sharedBroker)
+    public static let shared = TokenBroker()
 
     @objc
     public var currentAccount: Account?
@@ -44,7 +44,7 @@ public final class TokenBroker: NSObject {
 
     @objc
     public func acquireToken(
-        with scopes: [String],
+        scopes: [String],
         sender: UIViewController,
         onTokenAcquired: @escaping TokenAcquiredHandler
     ) {
@@ -54,7 +54,7 @@ public final class TokenBroker: NSObject {
         }
 
         acquireToken(
-            with: scopes,
+            scopes: scopes,
             userPrincipalName: currentAccount.userPrincipalName,
             accountType: currentAccount.accountType,
             sender: sender,
@@ -64,7 +64,7 @@ public final class TokenBroker: NSObject {
 
     @objc
     public func acquireToken(
-        with scopes: [String],
+        scopes: [String],
         userPrincipalName: String?,
         accountType: AccountType,
         sender: UIViewController,
@@ -72,7 +72,7 @@ public final class TokenBroker: NSObject {
     ) {
         dispatchQueue.async {
             self.acquireTokenSilent(
-                with: scopes,
+                scopes: scopes,
                 userPrincipalName: userPrincipalName,
                 accountType: accountType,
                 sender: sender,
@@ -119,7 +119,7 @@ public final class TokenBroker: NSObject {
     }
 
     @objc
-    public func signOut(onComplete: @escaping (_ success: Bool, _ error: Error?) -> Void) {
+    public func signOut(completion: @escaping (_ success: Bool, _ error: Error?) -> Void) {
         defer {
             currentAccount = nil
         }
@@ -128,18 +128,18 @@ public final class TokenBroker: NSObject {
               let application = publicClientApplication,
               let account = try? application.account(forUsername: currentAccount.userPrincipalName)
         else {
-            onComplete(true, nil)
+            completion(true, nil)
             return
         }
 
         application.signout(with: account, signoutParameters: MSALSignoutParameters()) { success, error in
             try? application.remove(account)
-            onComplete(success, error)
+            completion(success, error)
         }
     }
 
     private func acquireTokenInteractive(
-        with scopes: [String],
+        scopes: [String],
         userPrincipalName _: String?,
         accountType: AccountType,
         sender: UIViewController,
@@ -172,7 +172,7 @@ public final class TokenBroker: NSObject {
     }
 
     private func acquireTokenSilent(
-        with scopes: [String],
+        scopes: [String],
         userPrincipalName: String?,
         accountType: AccountType,
         sender: UIViewController,
@@ -186,7 +186,7 @@ public final class TokenBroker: NSObject {
               let cachedAccount = try? application.account(forUsername: userPrincipalName)
         else {
             acquireTokenInteractive(
-                with: scopes,
+                scopes: scopes,
                 userPrincipalName: nil,
                 accountType: accountType,
                 sender: sender,
@@ -203,7 +203,7 @@ public final class TokenBroker: NSObject {
                 if let error = error as NSError? {
                     if error.domain == MSALErrorDomain, error.code == MSALError.interactionRequired.rawValue {
                         self.acquireTokenInteractive(
-                            with: scopes,
+                            scopes: scopes,
                             userPrincipalName: userPrincipalName,
                             accountType: accountType,
                             sender: sender,
@@ -219,7 +219,7 @@ public final class TokenBroker: NSObject {
                         // navigating to the initial component.
                         if error.isMissingPresentationContextError() {
                             self.acquireToken(
-                                with: scopes,
+                                scopes: scopes,
                                 userPrincipalName: userPrincipalName,
                                 accountType: accountType,
                                 sender: sender,
