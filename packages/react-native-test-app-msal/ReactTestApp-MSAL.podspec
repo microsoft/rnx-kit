@@ -13,13 +13,11 @@ Pod::Spec.new do |s|
   s.summary   = package['description']
 
   s.ios.deployment_target = '14.0'
-  s.osx.deployment_target = '10.15'
+  s.osx.deployment_target = '11.0'
 
   s.dependency 'MSAL'
-  s.dependency 'React-Core'
 
   s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES' }
 
   s.source_files         = 'ios/*.swift'
-  s.public_header_files  = 'ios/*.h'
 end

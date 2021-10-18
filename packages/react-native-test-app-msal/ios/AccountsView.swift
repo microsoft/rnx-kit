@@ -23,7 +23,7 @@ struct AccountsView: View {
     var body: some View {
         Form {
             Section {
-                Picker("Account", selection: $selectedAccount) {
+                Picker("Account:", selection: $selectedAccount) {
                     ForEach(accounts) { account in
                         VStack(alignment: .leading) {
                             Text(account.userPrincipalName)
@@ -31,7 +31,7 @@ struct AccountsView: View {
                                 .truncationMode(.middle)
                             Text("Account type: \(account.accountType.description)")
                                 .font(.subheadline)
-                                .foregroundColor(Color(UIColor.secondaryLabel))
+                                .foregroundColor(Color.secondary)
                                 .lineLimit(1)
                                 .truncationMode(.middle)
                         }
@@ -44,41 +44,62 @@ struct AccountsView: View {
                     onAccountChanged($0)
                 }
                 .disabled(accounts.isEmpty)
-                Button("Add Account…") { selectAccountType = true }
-                    .actionSheet(isPresented: $selectAccountType) {
-                        ActionSheet(title: Text("Select account type"), buttons: [
-                            .default(Text("Personal")) {
-                                var mutableSelf = self
-                                mutableSelf.onAddAccount(accountType: .microsoftAccount)
-                            },
-                            .default(Text("Work or School")) {
-                                var mutableSelf = self
-                                mutableSelf.onAddAccount(accountType: .organizational)
-                            },
-                            .cancel(),
-                        ])
+                #if os(iOS)
+                    Button("Add Account…") { selectAccountType = true }
+                        .actionSheet(isPresented: $selectAccountType) {
+                            ActionSheet(title: Text("Select account type"), buttons: [
+                                .default(Text("Personal")) {
+                                    var mutableSelf = self
+                                    mutableSelf.onAddAccount(accountType: .microsoftAccount)
+                                },
+                                .default(Text("Work or School")) {
+                                    var mutableSelf = self
+                                    mutableSelf.onAddAccount(accountType: .organizational)
+                                },
+                                .cancel(),
+                            ])
+                        }
+                #else
+                    Button("Add Personal Account…") {
+                        var mutableSelf = self
+                        mutableSelf.onAddAccount(accountType: .microsoftAccount)
                     }
+                    Button("Add Work or School Account…") {
+                        var mutableSelf = self
+                        mutableSelf.onAddAccount(accountType: .organizational)
+                    }
+                #endif
             }
             if selectedAccount != nil {
                 Section {
-                    if #available(iOS 15.0, *) {
-                        Button("Sign Out", role: .destructive) { onSignOut() }
-                    } else {
+                    #if os(iOS)
+                        if #available(iOS 15.0, *) {
+                            Button("Sign Out", role: .destructive) { onSignOut() }
+                        } else {
+                            Button("Sign Out") { onSignOut() }
+                                .foregroundColor(Color.red)
+                        }
+                    #else
                         Button("Sign Out") { onSignOut() }
                             .foregroundColor(Color.red)
-                    }
+                    #endif
                 }
             }
             if accounts.count > 1 {
                 Section {
-                    if #available(iOS 15.0, *) {
-                        Button("Remove All Accounts", role: .destructive) {
-                            onRemoveAllAccounts()
+                    #if os(iOS)
+                        if #available(iOS 15.0, *) {
+                            Button("Remove All Accounts", role: .destructive) {
+                                onRemoveAllAccounts()
+                            }
+                        } else {
+                            Button("Remove All Accounts") { onRemoveAllAccounts() }
+                                .foregroundColor(Color.red)
                         }
-                    } else {
+                    #else
                         Button("Remove All Accounts") { onRemoveAllAccounts() }
                             .foregroundColor(Color.red)
-                    }
+                    #endif
                 }
             }
         }

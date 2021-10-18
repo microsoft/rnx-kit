@@ -45,7 +45,7 @@ public final class TokenBroker: NSObject {
     @objc
     public func acquireToken(
         scopes: [String],
-        sender: UIViewController,
+        sender: RTAViewController,
         onTokenAcquired: @escaping TokenAcquiredHandler
     ) {
         guard let currentAccount = currentAccount else {
@@ -67,7 +67,7 @@ public final class TokenBroker: NSObject {
         scopes: [String],
         userPrincipalName: String?,
         accountType: AccountType,
-        sender: UIViewController,
+        sender: RTAViewController,
         onTokenAcquired: @escaping TokenAcquiredHandler
     ) {
         dispatchQueue.async {
@@ -102,7 +102,7 @@ public final class TokenBroker: NSObject {
     }
 
     @objc
-    public func removeAllAccounts(sender: UIViewController) {
+    public func removeAllAccounts(sender: RTAViewController) {
         defer {
             currentAccount = nil
         }
@@ -121,7 +121,7 @@ public final class TokenBroker: NSObject {
 
     @objc
     public func signOut(
-        sender: UIViewController,
+        sender: RTAViewController,
         completion: @escaping (_ success: Bool, _ error: Error?) -> Void
     ) {
         defer {
@@ -139,7 +139,7 @@ public final class TokenBroker: NSObject {
 
     private func signOut(
         account: MSALAccount,
-        sender: UIViewController,
+        sender: RTAViewController,
         completion: @escaping (_ success: Bool, _ error: Error?) -> Void
     ) {
         guard let application = publicClientApplication else {
@@ -163,7 +163,7 @@ public final class TokenBroker: NSObject {
         scopes: [String],
         userPrincipalName _: String?,
         accountType: AccountType,
-        sender: UIViewController,
+        sender: RTAViewController,
         onTokenAcquired: @escaping TokenAcquiredHandler
     ) {
         guard let application = publicClientApplication else {
@@ -196,7 +196,7 @@ public final class TokenBroker: NSObject {
         scopes: [String],
         userPrincipalName: String?,
         accountType: AccountType,
-        sender: UIViewController,
+        sender: RTAViewController,
         onTokenAcquired: @escaping TokenAcquiredHandler
     ) {
         guard let application = publicClientApplication else {
