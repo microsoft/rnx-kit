@@ -7858,14 +7858,15 @@ react-native-codegen@^0.0.7:
     nullthrows "^1.1.1"
 
 react-native-test-app@^0.9.0:
-  version "0.9.4"
-  resolved "https://registry.yarnpkg.com/react-native-test-app/-/react-native-test-app-0.9.4.tgz#7cbed2cc6a775b1100e0e393588474d734bd51e4"
-  integrity sha512-hkCfBFzR/zidcYJ9MpghF86z4CPzzNgUtkZj28MkhPdVd4zpToVM1nW3CeWMeCZkcqz02cLBo2ITmZYciZg/TA==
+  version "0.9.8"
+  resolved "https://registry.yarnpkg.com/react-native-test-app/-/react-native-test-app-0.9.8.tgz#5e823aedc26fcc6f6ad40beea6bb3b5864ae9ea5"
+  integrity sha512-ZeAZmnD97SCt/P53mvs0gCXXLizHxmzhO88xiUy+zqpG10Pd+CT1MGARJjExnRkFDTnd4LeDlPzhDdVnLPB42A==
   dependencies:
     chalk "^4.1.0"
     prompts "^2.4.0"
     rimraf "^3.0.0"
     semver "^7.3.5"
+    uuid "^8.3.2"
     yargs "^16.0.0"
 
 react-native-windows@^0.66.0-0:
@@ -9327,7 +9328,7 @@ uuid@^3.3.2:
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.4.0.tgz#b23e4358afa8a202fe7a100af1f5f883f02007ee"
   integrity sha512-HjSDRw6gZE5JMggctHBcjVak08+KEVhSIiDzFnT9S9aegmp85S/bReBVTb4QTFaRNptJ9kuYaNhnbNEOkbKb/A==
 
-uuid@^8.3.0, uuid@^8.3.1:
+uuid@^8.3.0, uuid@^8.3.1, uuid@^8.3.2:
   version "8.3.2"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-8.3.2.tgz#80d5b5ced271bb9af6c445f21a1a04c606cefbe2"
   integrity sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==
