@@ -3,7 +3,9 @@ import React
 import SwiftUI
 
 final class ObservableHostingController: ObservableObject {
+    // swiftlint:disable:next identifier_name
     @Published var id: Int = 0
+
     let hostingController: UIViewController
 
     init(_ hostingController: UIViewController) {

@@ -5,7 +5,8 @@ public enum AccountType: Int, CaseIterable {
 }
 
 @objc
-final public class Account: NSObject, Identifiable {
+public final class Account: NSObject, Identifiable {
+    // swiftlint:disable:next identifier_name
     public var id: String {
         "\(accountType.description):\(userPrincipalName)"
     }

@@ -25,7 +25,7 @@ public final class TokenBroker: NSObject {
     private var _publicClientApplication: MSALPublicClientApplication?
 
     private var publicClientApplication: MSALPublicClientApplication? {
-        if (_publicClientApplication == nil) {
+        if _publicClientApplication == nil {
             do {
                 _publicClientApplication = try MSALPublicClientApplication(
                     configuration: MSALPublicClientApplicationConfig(
@@ -113,7 +113,7 @@ public final class TokenBroker: NSObject {
             return
         }
 
-        let completion = { (_ success: Bool, _ error: Error?) in }
+        let completion = { (_: Bool, _: Error?) in }
         accounts.forEach {
             signOut(account: $0, sender: sender, completion: completion)
         }

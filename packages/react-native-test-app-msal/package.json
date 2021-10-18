@@ -14,9 +14,11 @@
     "directory": "packages/react-native-test-app-msal"
   },
   "scripts": {
-    "build": "rnx-kit-scripts build",
-    "format": "rnx-kit-scripts format",
-    "lint": "rnx-kit-scripts lint"
+    "build": "echo Build done.",
+    "format": "echo Format done.",
+    "format:swift": "swiftformat --swiftversion 5.5 ios",
+    "lint": "echo Lint done.",
+    "lint:swift": "swiftlint"
   },
   "peerDependencies": {
     "react-native-test-app": "*"
