@@ -1,7 +1,7 @@
 {
   "name": "@rnx-kit/react-native-test-app-msal",
   "version": "0.0.1",
-  "description": "MSAL module for react-native-test-app",
+  "description": "Microsoft Authentication Library (MSAL) module for react-native-test-app",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/react-native-test-app-msal#readme",
   "license": "MIT",
   "author": {
@@ -21,9 +21,6 @@
     "lint:swift": "swiftlint"
   },
   "peerDependencies": {
-    "react-native-test-app": "*"
-  },
-  "devDependencies": {
-    "rnx-kit-scripts": "*"
+    "react-native-test-app": ">=0.9.7"
   }
 }

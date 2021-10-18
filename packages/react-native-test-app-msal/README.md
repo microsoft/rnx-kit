@@ -1,6 +1,6 @@
 # @rnx-kit/react-native-test-app-msal
 
-[Microsoft Authentication Library](http://aka.ms/aadv2) module for
+[Microsoft Authentication Library](http://aka.ms/aadv2) (MSAL) module for
 [React Native Test App](https://github.com/microsoft/react-native-test-app#readme).
 
 ## Install
