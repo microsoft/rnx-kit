@@ -131,6 +131,7 @@ public final class TokenBroker: NSObject {
         guard let username = currentAccount?.userPrincipalName,
               let account = try? publicClientApplication?.account(forUsername: username)
         else {
+            completion(true, nil)
             return
         }
 
@@ -181,13 +182,9 @@ public final class TokenBroker: NSObject {
             application.acquireToken(with: parameters) { result, error in
                 self.condition.signal()
 
-                let username = result?.account.username
+                let username = result?.account.username ?? ""
                 let accessToken = result?.accessToken
-                if username != nil, accessToken != nil {
-                    // save token
-                }
-
-                onTokenAcquired(username ?? "", accessToken, error?.localizedDescription)
+                onTokenAcquired(username, accessToken, error?.localizedDescription)
             }
         }
     }

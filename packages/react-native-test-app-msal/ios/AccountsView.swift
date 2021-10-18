@@ -25,17 +25,24 @@ struct AccountsView: View {
             Section {
                 Picker("Account:", selection: $selectedAccount) {
                     ForEach(accounts) { account in
-                        VStack(alignment: .leading) {
-                            Text(account.userPrincipalName)
+                        #if os(iOS)
+                            VStack(alignment: .leading) {
+                                Text(account.userPrincipalName)
+                                    .lineLimit(1)
+                                    .truncationMode(.middle)
+                                Text("Account type: \(account.accountType.description)")
+                                    .font(.subheadline)
+                                    .foregroundColor(Color.secondary)
+                                    .lineLimit(1)
+                                    .truncationMode(.middle)
+                            }
+                            .tag(account as Account?)
+                        #else
+                            Text("\(account.userPrincipalName) (\(account.accountType.description))")
                                 .lineLimit(1)
                                 .truncationMode(.middle)
-                            Text("Account type: \(account.accountType.description)")
-                                .font(.subheadline)
-                                .foregroundColor(Color.secondary)
-                                .lineLimit(1)
-                                .truncationMode(.middle)
-                        }
-                        .tag(account as Account?)
+                                .tag(account as Account?)
+                        #endif
                     }
                     .truncationMode(.middle)
                 }
@@ -73,7 +80,7 @@ struct AccountsView: View {
             if selectedAccount != nil {
                 Section {
                     #if os(iOS)
-                        if #available(iOS 15.0, *) {
+                        if #available(iOS 15.0, macOS 12.0, *) {
                             Button("Sign Out", role: .destructive) { onSignOut() }
                         } else {
                             Button("Sign Out") { onSignOut() }
@@ -88,7 +95,7 @@ struct AccountsView: View {
             if accounts.count > 1 {
                 Section {
                     #if os(iOS)
-                        if #available(iOS 15.0, *) {
+                        if #available(iOS 15.0, macOS 12.0, *) {
                             Button("Remove All Accounts", role: .destructive) {
                                 onRemoveAllAccounts()
                             }
