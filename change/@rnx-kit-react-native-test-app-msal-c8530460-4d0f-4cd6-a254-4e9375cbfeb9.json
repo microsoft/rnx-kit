@@ -1,0 +1,7 @@
+{
+  "type": "minor",
+  "comment": "MSAL module for react-native-test-app",
+  "packageName": "@rnx-kit/react-native-test-app-msal",
+  "email": "4123478+tido64@users.noreply.github.com",
+  "dependentChangeType": "patch"
+}
