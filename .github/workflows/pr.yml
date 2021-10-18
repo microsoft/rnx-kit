@@ -10,7 +10,7 @@ jobs:
         with:
           node-version: 14
       - name: Checkout
-        uses: actions/checkout@v2.3.4
+        uses: actions/checkout@v2.3.5
         with:
           fetch-depth: 0
       - name: Deduplicate packages
@@ -54,7 +54,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - name: Checkout
-        uses: actions/checkout@v2.3.4
+        uses: actions/checkout@v2.3.5
         with:
           fetch-depth: 0
       - name: Cache /.yarn-offline-mirror
