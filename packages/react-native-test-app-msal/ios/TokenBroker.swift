@@ -102,38 +102,59 @@ public final class TokenBroker: NSObject {
     }
 
     @objc
-    public func removeAllAccounts() {
+    public func removeAllAccounts(sender: UIViewController) {
         defer {
             currentAccount = nil
         }
 
-        AccountType.allCases.forEach { accountType in
-            if let application = publicClientApplication,
-               let accounts = try? application.allAccounts()
-            {
-                accounts.forEach {
-                    try? application.remove($0)
-                }
-            }
+        guard let application = publicClientApplication,
+              let accounts = try? application.allAccounts()
+        else {
+            return
+        }
+
+        let completion = { (_ success: Bool, _ error: Error?) in }
+        accounts.forEach {
+            signOut(account: $0, sender: sender, completion: completion)
         }
     }
 
     @objc
-    public func signOut(completion: @escaping (_ success: Bool, _ error: Error?) -> Void) {
+    public func signOut(
+        sender: UIViewController,
+        completion: @escaping (_ success: Bool, _ error: Error?) -> Void
+    ) {
         defer {
             currentAccount = nil
         }
 
-        guard let currentAccount = currentAccount,
-              let application = publicClientApplication,
-              let account = try? application.account(forUsername: currentAccount.userPrincipalName)
+        guard let username = currentAccount?.userPrincipalName,
+              let account = try? publicClientApplication?.account(forUsername: username)
         else {
+            return
+        }
+
+        signOut(account: account, sender: sender, completion: completion)
+    }
+
+    private func signOut(
+        account: MSALAccount,
+        sender: UIViewController,
+        completion: @escaping (_ success: Bool, _ error: Error?) -> Void
+    ) {
+        guard let application = publicClientApplication else {
             completion(true, nil)
             return
         }
 
-        application.signout(with: account, signoutParameters: MSALSignoutParameters()) { success, error in
-            try? application.remove(account)
+        let webviewParameters = MSALWebviewParameters(authPresentationViewController: sender)
+        let signoutParameters = MSALSignoutParameters(webviewParameters: webviewParameters)
+        signoutParameters.wipeAccount = true
+
+        application.signout(with: account, signoutParameters: signoutParameters) { success, error in
+            if success {
+                try? application.remove(account)
+            }
             completion(success, error)
         }
     }

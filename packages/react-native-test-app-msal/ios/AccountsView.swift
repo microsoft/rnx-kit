@@ -138,7 +138,7 @@ struct AccountsView: View {
     private func onRemoveAllAccounts() {
         formDisabled = true
 
-        TokenBroker.shared.removeAllAccounts()
+        TokenBroker.shared.removeAllAccounts(sender: hostingController.hostingController)
 
         accounts = []
         selectedAccount = nil
@@ -148,7 +148,7 @@ struct AccountsView: View {
     private func onSignOut() {
         formDisabled = true
 
-        TokenBroker.shared.signOut { _, _ in
+        TokenBroker.shared.signOut(sender: hostingController.hostingController) { _, _ in
             accounts = TokenBroker.shared.allAccounts()
             selectedAccount = nil
             formDisabled = false
