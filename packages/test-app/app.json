@@ -5,6 +5,9 @@
     {
       "appKey": "SampleCrossApp",
       "displayName": "SampleCrossApp"
+    },
+    {
+      "appKey": "MicrosoftAccounts"
     }
   ],
   "resources": {

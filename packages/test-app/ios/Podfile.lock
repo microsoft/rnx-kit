@@ -11,6 +11,9 @@ PODS:
     - ReactCommon/turbomodule/core (= 0.66.1)
   - fmt (6.2.1)
   - glog (0.3.5)
+  - MSAL (1.1.22):
+    - MSAL/app-lib (= 1.1.22)
+  - MSAL/app-lib (1.1.22)
   - QRCodeReader.swift (10.1.0)
   - RCT-Folly (2021.06.28.00-v2):
     - boost
@@ -275,9 +278,11 @@ PODS:
     - React-jsi (= 0.66.1)
     - React-logger (= 0.66.1)
     - React-perflogger (= 0.66.1)
-  - ReactTestApp-DevSupport (0.9.8):
+  - ReactTestApp-DevSupport (0.9.11):
     - React-Core
     - React-jsi
+  - ReactTestApp-MSAL (0.0.1):
+    - MSAL
   - ReactTestApp-Resources (1.0.0-dev)
   - SwiftLint (0.44.0)
   - Yoga (1.14.0)
@@ -288,6 +293,7 @@ DEPENDENCIES:
   - FBLazyVector (from `../../../node_modules/react-native/Libraries/FBLazyVector`)
   - FBReactNativeSpec (from `../../../node_modules/react-native/React/FBReactNativeSpec`)
   - glog (from `../../../node_modules/react-native/third-party-podspecs/glog.podspec`)
+  - MSAL
   - QRCodeReader.swift
   - RCT-Folly (from `../../../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec`)
   - RCTRequired (from `../../../node_modules/react-native/Libraries/RCTRequired`)
@@ -316,6 +322,7 @@ DEPENDENCIES:
   - React-runtimeexecutor (from `../../../node_modules/react-native/ReactCommon/runtimeexecutor`)
   - ReactCommon/turbomodule/core (from `../../../node_modules/react-native/ReactCommon`)
   - ReactTestApp-DevSupport (from `../../../node_modules/react-native-test-app`)
+  - ReactTestApp-MSAL (from `../../react-native-test-app-msal`)
   - ReactTestApp-Resources (from `..`)
   - SwiftLint
   - Yoga (from `../../../node_modules/react-native/ReactCommon/yoga`)
@@ -323,6 +330,7 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - fmt
+    - MSAL
     - QRCodeReader.swift
     - SwiftLint
 
@@ -387,6 +395,8 @@ EXTERNAL SOURCES:
     :path: "../../../node_modules/react-native/ReactCommon"
   ReactTestApp-DevSupport:
     :path: "../../../node_modules/react-native-test-app"
+  ReactTestApp-MSAL:
+    :path: "../../react-native-test-app-msal"
   ReactTestApp-Resources:
     :path: ".."
   Yoga:
@@ -399,6 +409,7 @@ SPEC CHECKSUMS:
   FBReactNativeSpec: 74c869e2cffa2ffec685cd1bac6788c021da6005
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
   glog: 5337263514dd6f09803962437687240c5dc39aa4
+  MSAL: 0d88c5430e0ffb8863f41e9f45248981a38a7610
   QRCodeReader.swift: 373a389fe9a22d513c879a32a6f647c58f4ef572
   RCT-Folly: a21c126816d8025b547704b777a2ba552f3d9fa9
   RCTRequired: 3cc065b52aa18db729268b9bd78a2feffb4d0f91
@@ -424,11 +435,12 @@ SPEC CHECKSUMS:
   React-RCTVibration: 6600b5eed7c0fda4a433fa1198d1cb2690151791
   React-runtimeexecutor: 33a949a51bec5f8a3c9e8d8092deb259600d761e
   ReactCommon: 620442811dc6f707b4bf5e3b27d4f19c12d5a821
-  ReactTestApp-DevSupport: c0546bccf7c0fb5ec7102a5af4cc6d20359d0154
+  ReactTestApp-DevSupport: 01c78db18948245da37893bf6390f7fc7459617b
+  ReactTestApp-MSAL: e957be17b0f9419113a1f521d35f70b36440bf2e
   ReactTestApp-Resources: 74a1cf509f4e7962b16361ea4e73cba3648fff5d
   SwiftLint: e96c0a8c770c7ebbc4d36c55baf9096bb65c4584
   Yoga: 2b4a01651f42a32f82e6cef3830a3ba48088237f
 
-PODFILE CHECKSUM: 71b08e582fb06a8ccbdbaed0cfe518f40b10bffc
+PODFILE CHECKSUM: d42888eb03ca7eac15b23817b1a07f9b4264db11
 
 COCOAPODS: 1.11.2

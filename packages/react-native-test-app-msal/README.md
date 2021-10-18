@@ -17,11 +17,12 @@ or if you're using `npm`:
 npm add --save-dev @rnx-kit/react-native-test-app-msal
 ```
 
-### iOS/macOS
+### iOS
 
-Add `MSAL` to your `Podfile`, e.g.:
+Set iOS deployment target to 14.0, and add `MSAL` to your `Podfile`, e.g.:
 
 ```diff
++platform :ios, '14.0'
  require_relative '../node_modules/react-native-test-app/test_app'
 
  workspace 'MyTestApp.xcworkspace'
@@ -58,9 +59,10 @@ Add an entry for the account switcher in your `app.json`, e.g.:
  }
 ```
 
-Set up your unique bundle identifier
-([how to get your unique bundle identifier](https://docs.microsoft.com/en-gb/azure/active-directory/develop/quickstart-v2-ios#register-and-download-your-quickstart-app)),
-and the scopes that you want access to:
+Register your app with a unique bundle identifier to get your Azure Active
+Directory client identifier and related scopes
+([quickstart here](https://docs.microsoft.com/en-gb/azure/active-directory/develop/quickstart-v2-ios#register-and-download-your-quickstart-app)),
+then fill out the following fields in `app.json`:
 
 ```diff
  {
