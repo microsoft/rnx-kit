@@ -33,15 +33,17 @@ Examples:
   ```sh
   yarn rnx-dep-check --vigilant 0.64
   ```
-- Initialize a config for current library package:
+- Initialize a config for your app (or library):
   ```sh
-  yarn rnx-dep-check --init library
+  yarn rnx-dep-check --init app
+  # or specify `library` for a library
   ```
 - Apply changes suggested by dep-check:
   ```sh
   yarn rnx-dep-check --write
   ```
-- Update supported react-native versions or bump version used for development:
+- Interactively update supported react-native versions (or bump version used for
+  development):
   ```sh
   yarn rnx-dep-check --set-version
   ```
