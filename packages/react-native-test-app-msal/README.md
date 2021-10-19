@@ -17,18 +17,22 @@ or if you're using `npm`:
 npm add --save-dev @rnx-kit/react-native-test-app-msal
 ```
 
-### iOS
+### iOS/macOS
 
-Set iOS deployment target to 14.0, and add `MSAL` to your `Podfile`, e.g.:
+We need to set the deployment target for iOS and macOS to 14.0 and 11.0
+respectively, and add `MSAL` to `Podfile`:
 
 ```diff
-+platform :ios, '14.0'
++platform :ios, '14.0'    # If targeting iOS, discard the line below
++platform :macos, '11.0'  # If targeting macOS, discard the line above
++
  require_relative '../node_modules/react-native-test-app/test_app'
 
  workspace 'MyTestApp.xcworkspace'
 
 +use_test_app! do |target|
 +  target.app do
++    # We must use modular headers here otherwise Swift compiler will fail
 +    pod 'MSAL', :modular_headers => true
 +  end
 +end
