@@ -6,14 +6,47 @@
 `@rnx-kit/dep-check` manages React Native dependencies for a package, based on
 its needs and requirements.
 
+## Installation
+
+```sh
+yarn add @rnx-kit/dep-check --dev
+```
+
+or if you're using npm
+
+```sh
+npm add --save-dev @rnx-kit/dep-check
+```
+
 ## Usage
 
 ```sh
-rnx-dep-check [options] [/path/to/package.json]
+yarn rnx-dep-check [options] [/path/to/package.json]
 ```
 
 Providing a path to `package.json` is optional. If omitted, it will look for one
 using Node module resolution.
+
+Examples:
+
+- Ensure dependencies are compatible with react-native 0.64 without a config:
+  ```sh
+  yarn rnx-dep-check --vigilant 0.64
+  ```
+- Initialize a config for your app (or library):
+  ```sh
+  yarn rnx-dep-check --init app
+  # or specify `library` for a library
+  ```
+- Apply changes suggested by dep-check:
+  ```sh
+  yarn rnx-dep-check --write
+  ```
+- Interactively update supported react-native versions (or bump version used for
+  development):
+  ```sh
+  yarn rnx-dep-check --set-version
+  ```
 
 ### `--custom-profiles <module>`
 
