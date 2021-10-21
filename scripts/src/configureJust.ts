@@ -1,5 +1,12 @@
 import path from "path";
-import { addResolvePath, option, parallel, series, task } from "just-scripts";
+import {
+  addResolvePath,
+  option,
+  parallel,
+  series,
+  task,
+  logger,
+} from "just-scripts";
 import { build } from "./tasks/build";
 import { clean } from "./tasks/clean";
 import { depcheck } from "./tasks/depcheck";
@@ -8,7 +15,7 @@ import { jest } from "./tasks/jest";
 import { prettier } from "./tasks/prettier";
 import { ts } from "./tasks/ts";
 import { updateApiReadme } from "./tasks/updateApiReadme";
-import { goBuildTask, goTask } from "./tasks/go";
+import { goBuildTask, goTask } from "@rnx-kit/go";
 
 const scriptsBinDir = path.join(__dirname, "..", "bin");
 
@@ -29,9 +36,12 @@ export function configureJust(): void {
   task("no-op", () => undefined);
   task("prettier", prettier);
   task("ts", ts);
-  task("go:build", goBuildTask());
+  task("go:build", goBuildTask(logger));
 
-  task("hello", goTask(path.join(scriptsBinDir, "hello"), "a", "b", "c"));
+  task(
+    "hello",
+    goTask(logger, path.join(scriptsBinDir, "hello"), "a", "b", "c")
+  );
 
   // hierarchical task definintions
   task("build", build("clean", "go:build", "depcheck", "lint", "ts"));

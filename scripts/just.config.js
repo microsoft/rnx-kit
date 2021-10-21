@@ -8,11 +8,12 @@ const {
   tscTask,
   cleanTask,
   eslintTask,
+  logger,
 } = require("just-scripts");
 
 const path = require("path");
 
-const { goInstallTask, goBuildTask } = require("./src/tasks/go");
+const { goInstallTask, goBuildTask } = require("@rnx-kit/go");
 
 const srcPath = path.join(process.cwd(), "src");
 const libPath = path.join(process.cwd(), "lib");
@@ -29,8 +30,8 @@ module.exports = function preset() {
   task("cleanlib", cleanTask({ paths: [binPath, libPath] }));
   task("eslint", eslintTask({ files: ["src/*"] }));
 
-  task("go:install", goInstallTask());
-  task("go:build", goBuildTask());
+  task("go:install", goInstallTask(logger));
+  task("go:build", goBuildTask(logger));
   task("go", series("go:install", "go:build"));
 
   task(

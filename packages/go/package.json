@@ -1,0 +1,37 @@
+{
+  "name": "@rnx-kit/go",
+  "version": "0.1.0",
+  "description": "Integrate Go into your monorepo and create native apps that accelerate development and CI builds",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/go#readme",
+  "license": "MIT",
+  "files": [
+    "src/*"
+  ],
+  "main": "src/index.js",
+  "types": "src/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "packages/go"
+  },
+  "scripts": {
+    "build": "tsc",
+    "format": "prettier --write src/**/*.js",
+    "lint": "eslint src/* --ext .js,.jsx,.ts,.tsx --config package.json --color"
+  },
+  "dependencies": {
+    "@rnx-kit/eslint-config": "^0.0.1",
+    "eslint": "^8.0.0",
+    "got": "^11.8.2",
+    "hasha": "^5.2.2",
+    "prettier": "^2.0.0",
+    "typescript": "^4.0.0",
+    "workspace-tools": "^0.16.2"
+  },
+  "devDependencies": {
+    "@types/node": "^14.15.0"
+  },
+  "eslintConfig": {
+    "extends": "@rnx-kit/eslint-config"
+  }
+}

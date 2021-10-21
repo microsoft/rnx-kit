@@ -1,16 +1,16 @@
 // @ts-check
 
 const fs = require("fs");
-const { logger } = require("just-scripts");
 const path = require("path");
 const { getWorkspaceRoot } = require("workspace-tools");
 
 const { downloadTask } = require("./download");
 const { unpackTask } = require("./unpack");
-const { spawn } = require("./utils/spawn");
+const { spawn } = require("./spawn");
 
 /**
  * @typedef {{url: string, hashAlgorithm: string, hash: string }} GoDistribution
+ * @typedef {{ info: (m: string) => void; warn: (m: string) => void; error: (m: string) => void; }} Logger
  */
 
 /**
@@ -115,23 +115,25 @@ function getGoExecutable() {
 /**
  * Ensure that Go is installed and available for building Go projects via
  * `goBuildTask()`.
+ *
+ * @param {Logger | undefined} logger Optional logger to use when reporting progress
  */
-function goInstallTask() {
+function goInstallTask(logger) {
   return async function goInstall() {
-    logger.info("Looking for an installation of Go");
+    logger?.info("Looking for an installation of Go");
 
     try {
-      spawn("go", ["version"]).trim();
-      logger.info("Found Go in the system PATH");
+      spawn(logger, "go", ["version"]).trim();
+      logger?.info("Found Go in the system PATH");
       return Promise.resolve();
     } catch (_) {
       // nop
     }
-    logger.info("Go is not installed on this machine");
+    logger?.info("Go is not installed on this machine");
 
     const goDistribution = getGoDistribution();
     if (!goDistribution) {
-      logger.error(
+      logger?.error(
         `This build system requires Go, but there isn't currently a distribution for your build machine architecture '${process.platform}-${process.arch}'. Common architectures like 64-bit linux, windows, and mac are all supported. If you can't use those types of systems and require support for '${process.platform}-${process.arch}', please open an issue: https://github.com/microsoft/rnx-kit/issues.`
       );
       throw new Error(
@@ -145,6 +147,7 @@ function goInstallTask() {
       path.basename(goDistribution.url)
     );
     await downloadTask(
+      logger,
       goDistribution.url,
       downloadFile,
       goDistribution.hashAlgorithm,
@@ -155,9 +158,9 @@ function goInstallTask() {
     // The "go" subdirectory comes from unpacking the archive. It is part of
     // the Go distribution.
     const probeDir = path.join(unpackDir, "go");
-    await unpackTask(downloadFile, unpackDir, probeDir)();
+    await unpackTask(logger, downloadFile, unpackDir, probeDir)();
 
-    logger.info(`Installed Go: ${probeDir}`);
+    logger?.info(`Installed Go: ${probeDir}`);
     return Promise.resolve();
   };
 }
@@ -170,9 +173,10 @@ module.exports.goInstallTask = goInstallTask;
  *
  * Built binaries are stored under <packageRoot>/bin.
  *
+ * @param {Logger | undefined} logger Optional logger to use when reporting progress
  * @returns Task function for use with Just.
  */
-function goBuildTask() {
+function goBuildTask(logger) {
   const goSourceRoot = path.join(process.cwd(), "go");
   const binPath = path.join(process.cwd(), "bin");
 
@@ -192,10 +196,10 @@ function goBuildTask() {
       fs.mkdirSync(binPath, { recursive: true });
 
       for (const projectDir of projectDirs) {
-        logger.info(`Building Go project '${projectDir}'`);
+        logger?.info(`Building Go project '${projectDir}'`);
 
         const cwd = path.join(goSourceRoot, projectDir);
-        spawn(goExecutable, ["build", "-o", binPath], cwd);
+        spawn(logger, goExecutable, ["build", "-o", binPath], cwd);
       }
 
       return Promise.resolve();
@@ -203,7 +207,7 @@ function goBuildTask() {
   }
 
   return async function skipBuildGo() {
-    logger.info("No projects found -- skipping");
+    logger?.info("No projects found -- skipping");
   };
 }
 module.exports.goBuildTask = goBuildTask;
@@ -211,14 +215,15 @@ module.exports.goBuildTask = goBuildTask;
 /**
  * Execute a Go program with optional arguments.
  *
+ * @param {Logger | undefined} logger Optional logger to use when reporting progress
  * @param {string} name Path to the Go program file. Relative paths are resolved to the current package's "bin" directory.
  * @param {string[]} args Optional program arguments.
  * @returns Task function for use with Just.
  */
-function goTask(name, ...args) {
+function goTask(logger, name, ...args) {
   return async function go() {
     const executable = path.resolve(path.join(process.cwd(), "bin"), name);
-    spawn(executable, args);
+    spawn(logger, executable, args);
     return Promise.resolve();
   };
 }
