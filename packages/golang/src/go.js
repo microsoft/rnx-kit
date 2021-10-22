@@ -1,5 +1,6 @@
 // @ts-check
 
+const findUp = require("find-up");
 const fs = require("fs");
 const path = require("path");
 const { getWorkspaceRoot } = require("workspace-tools");
@@ -82,7 +83,20 @@ function getGoDistribution() {
  * @returns {string} Path to the root node_modules/.cache directory
  */
 function getWorkspaceCacheDir() {
-  const workspaceRoot = getWorkspaceRoot(process.cwd());
+  let workspaceRoot;
+  try {
+    workspaceRoot = getWorkspaceRoot(process.cwd());
+  } catch (_) {
+    // not a monorepo
+  }
+
+  if (!workspaceRoot) {
+    workspaceRoot = findUp.sync("package-lock.json");
+    if (workspaceRoot) {
+      workspaceRoot = path.dirname(workspaceRoot);
+    }
+  }
+
   if (!workspaceRoot) {
     throw new Error("Cannot find the root of the repository");
   }
