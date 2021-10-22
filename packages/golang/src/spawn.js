@@ -43,4 +43,4 @@ function spawn(logger, command, args, cwd) {
 
   return stdout;
 }
-module.exports.spawn = spawn;
+exports.spawn = spawn;

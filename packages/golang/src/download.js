@@ -77,4 +77,4 @@ function downloadTask(logger, url, targetFile, hashAlgorithm, expectedHash) {
     return Promise.resolve();
   };
 }
-module.exports.downloadTask = downloadTask;
+exports.downloadTask = downloadTask;

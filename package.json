@@ -15,7 +15,7 @@
     "build": "lage build --grouped",
     "build:ci": "lage build:ci --verbose --grouped",
     "build-scope": "lage build --grouped --log-level warn --no-deps --scope",
-    "build-tools": "lage build-tools --verbose --grouped",
+    "build-tools": "lage build-tools --log-level warn --grouped",
     "bump-versions": "beachball bump",
     "bundle": "lage bundle --grouped",
     "bundle:ci": "lage bundle --verbose --grouped",

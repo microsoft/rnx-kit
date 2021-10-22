@@ -1,7 +1,7 @@
-# @rnx-kit/go
+# @rnx-kit/golang
 
 [![Build](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml/badge.svg)](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml)
-[![npm version](https://img.shields.io/npm/v/@rnx-kit/go)](https://www.npmjs.com/package/@rnx-kit/go)
+[![npm version](https://img.shields.io/npm/v/@rnx-kit/golang)](https://www.npmjs.com/package/@rnx-kit/golang)
 
 Integrate [Go](https://golang.org) into your monorepo and create native apps
 that accelerate development and CI builds.
@@ -52,6 +52,11 @@ binaries under ./bin. Each app is built using the command "go build -o
 The Go execution task looks for the named binary in ./bin and executes it with
 an optional set of arguments.
 
+### Pre-requisites
+
+Windows 10 in a minimum requirement. This package uses `tar` which ships with
+that version of Windows.
+
 ### Build Tasks
 
 The three functions are task factories. They each return a function that you can
@@ -60,7 +65,7 @@ run as a build step in systems like [Just](https://microsoft.github.io/just) or
 
 ```typescript
 import { task, logger } from "just-scripts";
-import { goBuildTask, goTask } from "@rnx-kit/go";
+import { goBuildTask, goTask } from "@rnx-kit/golang";
 
 // Make new Just tasks to install Go and build Go programs
 task("go:install", goInstallTask(logger));

@@ -164,7 +164,7 @@ function goInstallTask(logger) {
     return Promise.resolve();
   };
 }
-module.exports.goInstallTask = goInstallTask;
+exports.goInstallTask = goInstallTask;
 
 /**
  * Build all Go projects in the current package.
@@ -210,7 +210,7 @@ function goBuildTask(logger) {
     logger?.info("No projects found -- skipping");
   };
 }
-module.exports.goBuildTask = goBuildTask;
+exports.goBuildTask = goBuildTask;
 
 /**
  * Execute a Go program with optional arguments.
@@ -227,4 +227,4 @@ function goTask(logger, name, ...args) {
     return Promise.resolve();
   };
 }
-module.exports.goTask = goTask;
+exports.goTask = goTask;

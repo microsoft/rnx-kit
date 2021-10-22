@@ -13,7 +13,7 @@ const {
 
 const path = require("path");
 
-const { goInstallTask, goBuildTask } = require("@rnx-kit/go");
+const { goInstallTask, goBuildTask } = require("@rnx-kit/golang");
 
 const srcPath = path.join(process.cwd(), "src");
 const libPath = path.join(process.cwd(), "lib");

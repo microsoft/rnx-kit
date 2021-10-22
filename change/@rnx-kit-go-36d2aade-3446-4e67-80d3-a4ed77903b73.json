@@ -1,7 +1,7 @@
 {
   "type": "none",
   "comment": "Move Go infra into its own package so other repos can use it. Add documentation. Remove dependency on just-scripts.",
-  "packageName": "@rnx-kit/go",
+  "packageName": "@rnx-kit/golang",
   "email": "afoxman@microsoft.com",
   "dependentChangeType": "none"
 }

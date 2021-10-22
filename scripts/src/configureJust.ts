@@ -15,7 +15,7 @@ import { jest } from "./tasks/jest";
 import { prettier } from "./tasks/prettier";
 import { ts } from "./tasks/ts";
 import { updateApiReadme } from "./tasks/updateApiReadme";
-import { goBuildTask, goTask } from "@rnx-kit/go";
+import { goBuildTask, goTask } from "@rnx-kit/golang";
 
 const scriptsBinDir = path.join(__dirname, "..", "bin");
 

@@ -32,4 +32,4 @@ function unpackTask(logger, archiveFile, targetDir, probeDir) {
     return Promise.resolve();
   };
 }
-module.exports.unpackTask = unpackTask;
+exports.unpackTask = unpackTask;
