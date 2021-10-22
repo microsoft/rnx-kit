@@ -23,7 +23,7 @@
     "lint": "eslint src/* --ext .js,.jsx,.ts,.tsx --config package.json --color"
   },
   "dependencies": {
-    "find-up": "^4.1.0",
+    "find-up": "^5.0.0",
     "got": "^11.8.2",
     "hasha": "^5.2.2",
     "typescript": "^4.0.0",
