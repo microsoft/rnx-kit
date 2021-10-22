@@ -114,7 +114,7 @@ node_modules/
 
 ### `clean` build task
 
-It's a good idea to clean out each pacakge's `bin` directory when running a
+It's a good idea to clean out each package's `bin` directory when running a
 `clean` build task. This removes any stale Go apps, which will be rebuilt as
 needed.
 
