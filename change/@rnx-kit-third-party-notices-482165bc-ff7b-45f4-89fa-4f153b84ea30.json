@@ -1,7 +1,0 @@
-{
-  "type": "none",
-  "comment": "Move TPN CLI from bin to lib and publish from there.",
-  "packageName": "@rnx-kit/third-party-notices",
-  "email": "afoxman@microsoft.com",
-  "dependentChangeType": "none"
-}

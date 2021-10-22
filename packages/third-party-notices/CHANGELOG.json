@@ -2,6 +2,21 @@
   "name": "@rnx-kit/third-party-notices",
   "entries": [
     {
+      "date": "Fri, 22 Oct 2021 18:31:09 GMT",
+      "tag": "@rnx-kit/third-party-notices_v1.2.3",
+      "version": "1.2.3",
+      "comments": {
+        "none": [
+          {
+            "author": "afoxman@microsoft.com",
+            "package": "@rnx-kit/third-party-notices",
+            "commit": "3c965a3209c03b06f145f9edad4b07a230a0f058",
+            "comment": "Move TPN CLI from bin to lib and publish from there."
+          }
+        ]
+      }
+    },
+    {
       "date": "Wed, 22 Sep 2021 16:06:09 GMT",
       "tag": "@rnx-kit/third-party-notices_v1.2.3",
       "version": "1.2.3",

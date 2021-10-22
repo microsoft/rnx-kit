@@ -2,6 +2,21 @@
   "name": "@rnx-kit/esbuild-plugin-import-path-remapper",
   "entries": [
     {
+      "date": "Fri, 22 Oct 2021 18:31:09 GMT",
+      "tag": "@rnx-kit/esbuild-plugin-import-path-remapper_v1.1.0",
+      "version": "1.1.0",
+      "comments": {
+        "none": [
+          {
+            "author": "afoxman@microsoft.com",
+            "package": "@rnx-kit/esbuild-plugin-import-path-remapper",
+            "commit": "3c965a3209c03b06f145f9edad4b07a230a0f058",
+            "comment": "Add missing dependency"
+          }
+        ]
+      }
+    },
+    {
       "date": "Mon, 11 Oct 2021 18:12:04 GMT",
       "tag": "@rnx-kit/esbuild-plugin-import-path-remapper_v1.1.0",
       "version": "1.1.0",

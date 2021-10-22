@@ -1,0 +1,20 @@
+{
+  "name": "@rnx-kit/golang",
+  "entries": [
+    {
+      "date": "Fri, 22 Oct 2021 18:31:09 GMT",
+      "tag": "@rnx-kit/golang_v0.1.0",
+      "version": "0.1.0",
+      "comments": {
+        "none": [
+          {
+            "author": "afoxman@microsoft.com",
+            "package": "@rnx-kit/golang",
+            "commit": "3c965a3209c03b06f145f9edad4b07a230a0f058",
+            "comment": "Move Go infra into its own package so other repos can use it. Add documentation. Remove dependency on just-scripts."
+          }
+        ]
+      }
+    }
+  ]
+}
