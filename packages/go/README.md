@@ -107,9 +107,9 @@ package:
 
 ```diff
 +/packages/*/bin/
-/packages/*/dist/
-/packages/*/lib/
-node_modules/
+ /packages/*/dist/
+ /packages/*/lib/
+ node_modules/
 ```
 
 ### `clean` build task
