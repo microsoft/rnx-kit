@@ -7,8 +7,10 @@
 .idea/
 Pods/
 coverage/
+/packages/*/bin/
 /packages/*/dist/
 /packages/*/lib/
+/scripts/bin/
 /scripts/lib/
 local.properties
 node_modules/

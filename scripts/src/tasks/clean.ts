@@ -3,6 +3,7 @@ import { cleanTask } from "just-scripts";
 
 export const clean = cleanTask({
   paths: [
+    "bin",
     "coverage",
     "dist",
     "lib",
