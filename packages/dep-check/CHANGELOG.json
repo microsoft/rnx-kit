@@ -2,6 +2,21 @@
   "name": "@rnx-kit/dep-check",
   "entries": [
     {
+      "date": "Tue, 26 Oct 2021 17:22:16 GMT",
+      "tag": "@rnx-kit/dep-check_v1.8.8",
+      "version": "1.8.8",
+      "comments": {
+        "patch": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/dep-check",
+            "commit": "feff223563721779580bf96e6b1c71db4c3081c9",
+            "comment": "Bumped react-native-reanimated for 0.66, and added profile for 0.67"
+          }
+        ]
+      }
+    },
+    {
       "date": "Wed, 20 Oct 2021 09:30:14 GMT",
       "tag": "@rnx-kit/dep-check_v1.8.7",
       "version": "1.8.7",

@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/dep-check
 
-This log was last generated on Thu, 14 Oct 2021 07:54:03 GMT and should not be manually modified.
+This log was last generated on Tue, 26 Oct 2021 17:22:16 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 1.8.8
+
+Tue, 26 Oct 2021 17:22:16 GMT
+
+### Patches
+
+- Bumped react-native-reanimated for 0.66, and added profile for 0.67 (4123478+tido64@users.noreply.github.com)
 
 ## 1.8.7
 
