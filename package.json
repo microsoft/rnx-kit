@@ -50,6 +50,9 @@
     "prettier": "^2.3.0",
     "suggestion-bot": "^1.2.2"
   },
+  "resolutions": {
+    "micromatch": "^4.0.0"
+  },
   "workspaces": {
     "packages": [
       "packages/@types/*",
