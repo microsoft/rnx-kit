@@ -12,6 +12,11 @@
     "lint": "rnx-kit-scripts lint",
     "test": "rnx-kit-scripts test"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit.git",
+    "directory": "packages/config"
+  },
   "dependencies": {
     "@rnx-kit/console": "^1.0.2",
     "cosmiconfig": "^7.0.0",
