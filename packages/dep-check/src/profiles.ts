@@ -10,6 +10,7 @@ import profile_0_63 from "./profiles/profile-0.63";
 import profile_0_64 from "./profiles/profile-0.64";
 import profile_0_65 from "./profiles/profile-0.65";
 import profile_0_66 from "./profiles/profile-0.66";
+import profile_0_67 from "./profiles/profile-0.67";
 import type { Profile, ProfileVersion, TestOverrides } from "./types";
 
 type ProfileMap = Record<ProfileVersion, Profile>;
@@ -28,6 +29,7 @@ export const defaultProfiles: Readonly<ProfileMap> = {
   "0.64": profile_0_64,
   "0.65": profile_0_65,
   "0.66": profile_0_66,
+  "0.67": profile_0_67,
 };
 
 function getVersionComparator(
