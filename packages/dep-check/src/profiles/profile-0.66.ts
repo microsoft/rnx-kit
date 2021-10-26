@@ -38,17 +38,26 @@ const profile: Profile = {
     capabilities: ["core"],
   },
 
+  animation: {
+    name: "react-native-reanimated",
+    version: "^2.2.3",
+  },
   hermes: {
     name: "hermes-engine",
     version: "~0.9.0",
+  },
+  "babel-preset-react-native": {
+    name: "metro-react-native-babel-preset",
+    version: "^0.66.2",
+    devOnly: true,
   },
   html: {
     name: "react-native-render-html",
     version: "^6.1.0",
   },
-  "babel-preset-react-native": {
-    name: "metro-react-native-babel-preset",
-    version: "^0.66.2",
+  jest: {
+    name: "jest",
+    version: "^26.6.3",
     devOnly: true,
   },
   metro: {
@@ -79,11 +88,6 @@ const profile: Profile = {
   "metro-runtime": {
     name: "metro-runtime",
     version: "^0.66.2",
-    devOnly: true,
-  },
-  jest: {
-    name: "jest",
-    version: "^26.6.3",
     devOnly: true,
   },
 };

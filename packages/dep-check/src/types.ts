@@ -61,7 +61,8 @@ export type ProfileVersion =
   | "0.63"
   | "0.64"
   | "0.65"
-  | "0.66";
+  | "0.66"
+  | "0.67";
 
 export type TestOverrides = {
   moduleResolver?: typeof require.resolve;
