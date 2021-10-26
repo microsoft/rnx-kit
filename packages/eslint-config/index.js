@@ -16,16 +16,10 @@ module.exports = {
     ecmaVersion: 2018,
     sourceType: "module",
   },
-  plugins: ["@typescript-eslint", "prettier"],
+  plugins: ["@typescript-eslint"],
   rules: {
     "@typescript-eslint/no-unused-vars": "off", // too many false-positives with optional chaining
     "@typescript-eslint/no-var-requires": "off",
-    "prettier/prettier": [
-      "error",
-      {
-        endOfLine: "auto",
-      },
-    ],
     "react/prop-types": "off",
   },
   settings: {
