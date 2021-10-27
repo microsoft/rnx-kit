@@ -41,8 +41,8 @@ best effect, we also need to disable Babel's import/export transformation in
  };
 ```
 
-Next, we configure Metro to use the esbuild serializer and swc as transformer
-in `metro.config.js`:
+Next, we configure Metro to use the esbuild serializer and swc as transformer in
+`metro.config.js`:
 
 ```diff
  const { makeMetroConfig } = require("@rnx-kit/metro-config");

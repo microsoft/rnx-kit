@@ -17,7 +17,7 @@
   "scripts": {
     "build": "rnx-kit-scripts build",
     "format": "rnx-kit-scripts format",
-    "test": "rnx-kit-scripts test"
+    "lint": "rnx-kit-scripts lint"
   },
   "dependencies": {
     "@rnx-kit/metro-serializer-esbuild": "^0.0.14",
