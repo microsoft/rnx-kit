@@ -8,7 +8,7 @@ import Bundle from "metro/src/shared/output/bundle";
 
 import { saveAssets } from "./asset";
 
-export interface BundleArgs {
+export type BundleArgs = {
   assetsDest?: string;
   entryFile: string;
   minify?: boolean;
@@ -19,16 +19,16 @@ export interface BundleArgs {
   sourcemapOutput?: string;
   sourcemapSourcesRoot?: string;
   unstableTransformProfile?: TransformProfile;
-}
+};
 
-interface RequestOptions {
+type RequestOptions = {
   entryFile: string;
   sourceMapUrl?: string;
   dev: boolean;
   minify: boolean;
   platform: string;
   unstable_transformProfile?: TransformProfile;
-}
+};
 
 export async function bundle(args: BundleArgs, config: ConfigT): Promise<void> {
   if (config.resolver.platforms.indexOf(args.platform) === -1) {
