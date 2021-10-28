@@ -6,7 +6,8 @@
     "eslint",
     "eslintplugin",
     "react",
-    "react-native"
+    "react-native",
+    "typescript"
   ],
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/eslint-plugin#readme",
   "license": "MIT",
