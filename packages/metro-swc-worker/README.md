@@ -62,6 +62,11 @@ Next, we configure Metro to use the esbuild serializer and swc as transformer in
 
 ## Known Limitations
 
+- Similar to
+  [Babel](https://babeljs.io/docs/en/babel-plugin-transform-typescript#typescript-compiler-options),
+  your TypeScript code needs to be compilable with
+  [Isolated Modules](https://www.typescriptlang.org/tsconfig#isolatedModules)
+  enabled.
 - Since this worker requires the esbuild serializer, it inherits all the
   limitations listed in the
   [README](https://github.com/microsoft/rnx-kit/tree/main/packages/metro-serializer-esbuild#known-limitations).
