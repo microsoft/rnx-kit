@@ -1,7 +1,0 @@
-{
-  "type": "patch",
-  "comment": "Recommend react-native-reanimated@^2.2.4 for 0.67",
-  "packageName": "@rnx-kit/dep-check",
-  "email": "4123478+tido64@users.noreply.github.com",
-  "dependentChangeType": "patch"
-}

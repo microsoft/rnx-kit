@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/dep-check
 
-This log was last generated on Fri, 29 Oct 2021 12:14:31 GMT and should not be manually modified.
+This log was last generated on Fri, 29 Oct 2021 14:13:32 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 1.8.12
+
+Fri, 29 Oct 2021 14:13:32 GMT
+
+### Patches
+
+- Recommend react-native-reanimated@^2.2.4 for 0.67 (4123478+tido64@users.noreply.github.com)
 
 ## 1.8.11
 
