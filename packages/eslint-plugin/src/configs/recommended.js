@@ -22,7 +22,7 @@ module.exports = {
   plugins: ["@rnx-kit", "@typescript-eslint"],
   rules: {
     "@rnx-kit/no-export-all": "warn",
-    "@typescript-eslint/no-unused-vars": "off", // too many false-positives with optional chaining
+    "@typescript-eslint/no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
     "@typescript-eslint/no-var-requires": "off",
     "react/prop-types": "off",
   },
