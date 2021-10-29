@@ -2,6 +2,27 @@
   "name": "@rnx-kit/metro-config",
   "entries": [
     {
+      "date": "Fri, 29 Oct 2021 08:51:30 GMT",
+      "tag": "@rnx-kit/metro-config_v1.2.17",
+      "version": "1.2.17",
+      "comments": {
+        "patch": [
+          {
+            "author": "beachball",
+            "package": "@rnx-kit/metro-config",
+            "comment": "Bump @rnx-kit/babel-preset-metro-react-native to v1.0.8",
+            "commit": "04ebb242c7c48691ff4ffb84a6c508def06e42f7"
+          },
+          {
+            "author": "beachball",
+            "package": "@rnx-kit/metro-config",
+            "comment": "Bump @rnx-kit/tools-node to v1.1.4",
+            "commit": "04ebb242c7c48691ff4ffb84a6c508def06e42f7"
+          }
+        ]
+      }
+    },
+    {
       "date": "Wed, 22 Sep 2021 16:06:09 GMT",
       "tag": "@rnx-kit/metro-config_v1.2.16",
       "version": "1.2.16",

@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/babel-plugin-import-path-remapper
 
-This log was last generated on Wed, 22 Sep 2021 08:38:38 GMT and should not be manually modified.
+This log was last generated on Fri, 29 Oct 2021 08:51:30 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 1.0.3
+
+Fri, 29 Oct 2021 08:51:30 GMT
+
+### Patches
+
+- Bump @rnx-kit/tools-node to v1.1.4
 
 ## 1.0.2
 

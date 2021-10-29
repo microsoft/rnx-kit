@@ -1,0 +1,20 @@
+{
+  "name": "@rnx-kit/eslint-plugin",
+  "entries": [
+    {
+      "date": "Fri, 29 Oct 2021 08:51:30 GMT",
+      "tag": "@rnx-kit/eslint-plugin_v0.1.0",
+      "version": "0.1.0",
+      "comments": {
+        "minor": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/eslint-plugin",
+            "commit": "04ebb242c7c48691ff4ffb84a6c508def06e42f7",
+            "comment": "@rnx-kit/eslint-plugin recommended ESLint rules for React devs"
+          }
+        ]
+      }
+    }
+  ]
+}
