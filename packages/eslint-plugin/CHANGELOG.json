@@ -2,6 +2,21 @@
   "name": "@rnx-kit/eslint-plugin",
   "entries": [
     {
+      "date": "Fri, 29 Oct 2021 10:31:10 GMT",
+      "tag": "@rnx-kit/eslint-plugin_v0.1.1",
+      "version": "0.1.1",
+      "comments": {
+        "patch": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/eslint-plugin",
+            "commit": "0c7c668b4041ec34c1a86ed3d33879b7c222a584",
+            "comment": "Re-enable no-unused-vars. It looks like optional chaining is no longer causing false positives."
+          }
+        ]
+      }
+    },
+    {
       "date": "Fri, 29 Oct 2021 08:51:30 GMT",
       "tag": "@rnx-kit/eslint-plugin_v0.1.0",
       "version": "0.1.0",

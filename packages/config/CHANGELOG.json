@@ -2,6 +2,21 @@
   "name": "@rnx-kit/config",
   "entries": [
     {
+      "date": "Fri, 29 Oct 2021 10:31:10 GMT",
+      "tag": "@rnx-kit/config_v0.4.12",
+      "version": "0.4.12",
+      "comments": {
+        "patch": [
+          {
+            "author": "beachball",
+            "package": "@rnx-kit/config",
+            "comment": "Bump @rnx-kit/console to v1.0.4",
+            "commit": "0c7c668b4041ec34c1a86ed3d33879b7c222a584"
+          }
+        ]
+      }
+    },
+    {
       "date": "Fri, 29 Oct 2021 09:04:41 GMT",
       "tag": "@rnx-kit/config_v0.4.11",
       "version": "0.4.11",

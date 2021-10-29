@@ -2,6 +2,21 @@
   "name": "@rnx-kit/babel-plugin-import-path-remapper",
   "entries": [
     {
+      "date": "Fri, 29 Oct 2021 10:31:10 GMT",
+      "tag": "@rnx-kit/babel-plugin-import-path-remapper_v1.0.4",
+      "version": "1.0.4",
+      "comments": {
+        "patch": [
+          {
+            "author": "beachball",
+            "package": "@rnx-kit/babel-plugin-import-path-remapper",
+            "comment": "Bump @rnx-kit/tools-node to v1.1.5",
+            "commit": "0c7c668b4041ec34c1a86ed3d33879b7c222a584"
+          }
+        ]
+      }
+    },
+    {
       "date": "Fri, 29 Oct 2021 08:51:30 GMT",
       "tag": "@rnx-kit/babel-plugin-import-path-remapper_v1.0.3",
       "version": "1.0.3",

@@ -2,6 +2,21 @@
   "name": "@rnx-kit/metro-serializer-esbuild",
   "entries": [
     {
+      "date": "Fri, 29 Oct 2021 10:31:10 GMT",
+      "tag": "@rnx-kit/metro-serializer-esbuild_v0.0.16",
+      "version": "0.0.16",
+      "comments": {
+        "patch": [
+          {
+            "author": "beachball",
+            "package": "@rnx-kit/metro-serializer-esbuild",
+            "comment": "Bump @rnx-kit/console to v1.0.4",
+            "commit": "0c7c668b4041ec34c1a86ed3d33879b7c222a584"
+          }
+        ]
+      }
+    },
+    {
       "date": "Fri, 29 Oct 2021 09:04:41 GMT",
       "tag": "@rnx-kit/metro-serializer-esbuild_v0.0.15",
       "version": "0.0.15",
