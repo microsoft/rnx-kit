@@ -1,5 +1,5 @@
-export interface PackagerAsset {
+export type PackagerAsset = {
   httpServerLocation: string;
   name: string;
   type: string;
-}
+};

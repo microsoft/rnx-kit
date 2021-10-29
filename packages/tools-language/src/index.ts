@@ -1,3 +1,9 @@
-export * from "./function";
-export * from "./math";
-export * from "./properties";
+export { tryInvoke } from "./function";
+export { isApproximatelyEqual } from "./math";
+export {
+  extendObject,
+  extendObjectArray,
+  hasProperty,
+  pickValue,
+  pickValues,
+} from "./properties";

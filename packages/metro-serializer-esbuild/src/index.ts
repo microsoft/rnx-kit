@@ -6,7 +6,7 @@ import type { Dependencies, Graph, Module, SerializerOptions } from "metro";
 import type { SerializerConfigT } from "metro-config";
 import * as semver from "semver";
 
-export * from "./esbuildTransformerConfig";
+export { esbuildTransformerConfig } from "./esbuildTransformerConfig";
 
 type Options = Pick<BuildOptions, "logLevel" | "minify" | "target"> & {
   fabric?: boolean;

@@ -5,7 +5,7 @@ import { cosmiconfigSync } from "cosmiconfig";
 /**
  * Options for retrieving a kit config. The default is equivalanet to passing { cwd: process.cwd() }
  */
-export interface GetKitConfigOptions {
+export type GetKitConfigOptions = {
   /**
    * Retrieve the kit config options, if they exist, from the specified module.
    */
@@ -15,7 +15,7 @@ export interface GetKitConfigOptions {
    * Retrive teh kit config options, using the target working directory.
    */
   cwd?: string;
-}
+};
 
 export function getKitConfig(
   options: GetKitConfigOptions = {}

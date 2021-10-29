@@ -1,1 +1,2 @@
-export * from "./platform";
+export { parsePlatform } from "./platform";
+export type { AllPlatforms } from "./platform";
