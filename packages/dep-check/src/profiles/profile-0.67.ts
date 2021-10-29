@@ -37,6 +37,10 @@ const profile: Profile = {
     version: "^0.67.0-0",
     capabilities: ["core"],
   },
+  animation: {
+    name: "react-native-reanimated",
+    version: "^2.2.4",
+  },
 };
 
 export default profile;
