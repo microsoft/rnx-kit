@@ -2,6 +2,39 @@
   "name": "@rnx-kit/dep-check",
   "entries": [
     {
+      "date": "Fri, 29 Oct 2021 12:14:31 GMT",
+      "tag": "@rnx-kit/dep-check_v1.8.11",
+      "version": "1.8.11",
+      "comments": {
+        "patch": [
+          {
+            "author": "beachball",
+            "package": "@rnx-kit/dep-check",
+            "comment": "Bump @rnx-kit/config to v0.4.13",
+            "commit": "8b9c88041612fcd365898c087cf6da4344dd3ffa"
+          },
+          {
+            "author": "beachball",
+            "package": "@rnx-kit/dep-check",
+            "comment": "Bump @rnx-kit/console to v1.0.5",
+            "commit": "8b9c88041612fcd365898c087cf6da4344dd3ffa"
+          },
+          {
+            "author": "beachball",
+            "package": "@rnx-kit/dep-check",
+            "comment": "Bump @rnx-kit/tools-language to v1.1.4",
+            "commit": "8b9c88041612fcd365898c087cf6da4344dd3ffa"
+          },
+          {
+            "author": "beachball",
+            "package": "@rnx-kit/dep-check",
+            "comment": "Bump @rnx-kit/tools-node to v1.1.6",
+            "commit": "8b9c88041612fcd365898c087cf6da4344dd3ffa"
+          }
+        ]
+      }
+    },
+    {
       "date": "Fri, 29 Oct 2021 10:31:10 GMT",
       "tag": "@rnx-kit/dep-check_v1.8.10",
       "version": "1.8.10",

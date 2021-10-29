@@ -2,6 +2,21 @@
   "name": "@rnx-kit/eslint-plugin",
   "entries": [
     {
+      "date": "Fri, 29 Oct 2021 12:14:31 GMT",
+      "tag": "@rnx-kit/eslint-plugin_v0.1.2",
+      "version": "0.1.2",
+      "comments": {
+        "patch": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/eslint-plugin",
+            "commit": "8b9c88041612fcd365898c087cf6da4344dd3ffa",
+            "comment": "Enable `ignoreRestSiblings` to allow prop omission"
+          }
+        ]
+      }
+    },
+    {
       "date": "Fri, 29 Oct 2021 10:31:10 GMT",
       "tag": "@rnx-kit/eslint-plugin_v0.1.1",
       "version": "0.1.1",
