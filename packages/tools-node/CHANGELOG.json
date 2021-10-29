@@ -2,6 +2,21 @@
   "name": "@rnx-kit/tools-node",
   "entries": [
     {
+      "date": "Fri, 29 Oct 2021 09:04:42 GMT",
+      "tag": "@rnx-kit/tools-node_v1.1.4",
+      "version": "1.1.4",
+      "comments": {
+        "none": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/tools-node",
+            "commit": "5361bf5151fb8f8ad2aaa35989a7c80be1c59aa3",
+            "comment": "Prefer named exports"
+          }
+        ]
+      }
+    },
+    {
       "date": "Fri, 29 Oct 2021 08:51:30 GMT",
       "tag": "@rnx-kit/tools-node_v1.1.4",
       "version": "1.1.4",

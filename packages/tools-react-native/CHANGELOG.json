@@ -2,6 +2,21 @@
   "name": "@rnx-kit/tools-react-native",
   "entries": [
     {
+      "date": "Fri, 29 Oct 2021 09:04:42 GMT",
+      "tag": "@rnx-kit/tools-react-native_v1.0.2",
+      "version": "1.0.2",
+      "comments": {
+        "none": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/tools-react-native",
+            "commit": "5361bf5151fb8f8ad2aaa35989a7c80be1c59aa3",
+            "comment": "Prefer named exports"
+          }
+        ]
+      }
+    },
+    {
       "date": "Wed, 08 Sep 2021 06:42:50 GMT",
       "tag": "@rnx-kit/tools-react-native_v1.0.1",
       "version": "1.0.1",
