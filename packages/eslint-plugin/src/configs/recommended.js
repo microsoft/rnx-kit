@@ -22,7 +22,13 @@ module.exports = {
   plugins: ["@rnx-kit", "@typescript-eslint"],
   rules: {
     "@rnx-kit/no-export-all": "warn",
-    "@typescript-eslint/no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
+    "@typescript-eslint/no-unused-vars": [
+      "error",
+      {
+        argsIgnorePattern: "^_",
+        ignoreRestSiblings: true,
+      },
+    ],
     "@typescript-eslint/no-var-requires": "off",
     "react/prop-types": "off",
   },
