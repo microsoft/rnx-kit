@@ -1,0 +1,56 @@
+{
+  "name": "@rnx-kit/eslint-plugin",
+  "version": "0.0.1",
+  "description": "A set of ESLint rules for React developers",
+  "keywords": [
+    "eslint",
+    "eslintplugin",
+    "react",
+    "react-native",
+    "typescript"
+  ],
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/eslint-plugin#readme",
+  "license": "MIT",
+  "files": [
+    "src/*"
+  ],
+  "main": "src/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "packages/eslint-plugin"
+  },
+  "scripts": {
+    "build": "rnx-kit-scripts build",
+    "format": "rnx-kit-scripts format",
+    "lint": "rnx-kit-scripts lint",
+    "test": "rnx-kit-scripts test"
+  },
+  "dependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.0.0",
+    "@typescript-eslint/parser": "^5.0.0",
+    "eslint-plugin-jest": "^25.0.0",
+    "eslint-plugin-react": "^7.26.0"
+  },
+  "peerDependencies": {
+    "eslint": ">=6.0.0"
+  },
+  "devDependencies": {
+    "@types/eslint": "^7.28.0",
+    "eslint": "^8.0.0"
+  },
+  "depcheck": {
+    "ignoreMatches": [
+      "@typescript-eslint/eslint-plugin",
+      "@typescript-eslint/parser",
+      "eslint-plugin-jest",
+      "eslint-plugin-react"
+    ]
+  },
+  "eslintConfig": {
+    "extends": "@rnx-kit/eslint-config"
+  },
+  "jest": {
+    "preset": "rnx-kit-scripts"
+  }
+}
