@@ -1,0 +1,1 @@
+const main = true;
