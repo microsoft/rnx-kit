@@ -1,4 +1,10 @@
-export { createDirectory, findFirstFileExists } from "./fs";
+export {
+  createDirectory,
+  findFirstFileExists,
+  isDirectory,
+  isFile,
+  statSync,
+} from "./fs";
 
 export {
   getPackageModuleRefFromModulePath,
