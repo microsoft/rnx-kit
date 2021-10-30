@@ -1,0 +1,7 @@
+{
+  "type": "patch",
+  "comment": "Normalize main and types fields across all packages which use them.",
+  "packageName": "@rnx-kit/metro-serializer-esbuild",
+  "email": "afoxman@microsoft.com",
+  "dependentChangeType": "patch"
+}
