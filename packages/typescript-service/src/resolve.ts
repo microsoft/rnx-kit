@@ -54,7 +54,7 @@ export type ResolverHost = {
  *
  * @returns Default module resolution host implementation
  */
- export function createDefaultModuleResolutionHost(): ts.ModuleResolutionHost {
+export function createDefaultModuleResolutionHost(): ts.ModuleResolutionHost {
   return {
     fileExists: ts.sys.fileExists,
     readFile: ts.sys.readFile,
