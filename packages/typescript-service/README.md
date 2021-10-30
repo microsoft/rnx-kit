@@ -67,7 +67,7 @@ function reactNativeModuleResolver(...) {
 }
 ```
 
-## Language Service
+## Language Services
 
 TypeScript's language service allow you to work with source code iteratively,
 unlike the TypeScript compiler, which makes a single pass through the code. The
