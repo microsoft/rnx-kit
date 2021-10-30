@@ -34,6 +34,9 @@ import * from "@rnx-kit/tools-node/path";
 | -------- | ------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------- |
 | fs       | `createDirectory(p)`                             | Create a directory, and all missing parent directories.                                                                                 |
 | fs       | `findFirstFileExists(rootDir, ...relativeFiles)` | Combine the root directory with each relative file, testing whether or not the file exists. Stop and return as soon as a file is found. |
+| fs       | `isDirectory(p)`                                 | Determine if the target path refers to a directory.                                                                                     |
+| fs       | `isFile(p)`                                      | Determine if the target path refers to a file.                                                                                          |
+| fs       | `statSync(p)`                                    | Get stats (detailed information) for the target path.                                                                                   |
 | module   | `getPackageModuleRefFromModulePath(modulePath)`  | Convert a module path to a package module reference.                                                                                    |
 | module   | `isFileModuleRef(r)`                             | Is the module reference relative to a file location?                                                                                    |
 | module   | `isPackageModuleRef(r)`                          | Is the module reference a package module reference?                                                                                     |
@@ -43,7 +46,7 @@ import * from "@rnx-kit/tools-node/path";
 | package  | `findPackageDir(startDir)`                       | Find the parent directory of the nearest `package.json` manifest file. Search upward through all parent directories.                    |
 | package  | `getMangledPackageName(ref)`                     | Get the mangled name for a package reference.                                                                                           |
 | package  | `isPackageManifest(manifest)`                    | Determine if the given object is a `package.json` manifest.                                                                             |
-| package  | `parsePackageRef(r)`                             | Parse a package reference string. One exaple is `name` property found in `package.json`.                                                |
+| package  | `parsePackageRef(r)`                             | Parse a package reference string. An example reference is the `name` property found in `package.json`.                                  |
 | package  | `readPackage(pkgPath)`                           | Read a `package.json` manifest from a file.                                                                                             |
 | package  | `writePackage(pkgPath, manifest, space)`         | Write a `package.json` manifest to a file.                                                                                              |
 | path     | `escapePath(p)`                                  | Escape a path by replacing each backslash ('\\') with a double-backslash ("\\\\").                                                      |
