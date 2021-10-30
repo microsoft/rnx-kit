@@ -8,6 +8,7 @@
     "lib/*"
   ],
   "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/microsoft/rnx-kit",
@@ -20,14 +21,17 @@
     "test": "rnx-kit-scripts test"
   },
   "dependencies": {
-    "@rnx-kit/tools-node": "^1.1.6",
-    "typescript": "^4.0.0"
+    "@rnx-kit/tools-node": "^1.1.6"
   },
   "devDependencies": {
     "@types/node": "^14.15.0",
     "jest-extended": "^0.11.5",
     "rnx-kit-scripts": "*",
-    "temp-dir": "^2.0.0"
+    "temp-dir": "^2.0.0",
+    "typescript": "^4.0.0"
+  },
+  "peerDependencies": {
+    "typescript": "^4.0.0"
   },
   "eslintConfig": {
     "extends": "@rnx-kit/eslint-config"

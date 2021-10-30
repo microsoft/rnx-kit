@@ -9,6 +9,7 @@
     "lib"
   ],
   "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "bin": {
     "build-tpn": "./lib/build-tpn.js"
   },

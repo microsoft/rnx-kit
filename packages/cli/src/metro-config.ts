@@ -12,7 +12,11 @@ import {
   MetroSerializer as MetroSerializerEsbuild,
 } from "@rnx-kit/metro-serializer-esbuild";
 import type { AllPlatforms } from "@rnx-kit/tools-react-native/platform";
-import type { Project } from "@rnx-kit/typescript-service";
+import {
+  Project,
+  readConfigFile,
+  createDiagnosticWriter,
+} from "@rnx-kit/typescript-service";
 import type { DeltaResult, Graph } from "metro";
 import type { InputConfigT, SerializerConfigT } from "metro-config";
 import { MetroTypeScriptResolverHost } from "./metro-ts-resolver";
@@ -33,9 +37,17 @@ function createSerializerHook({ service, configFileName }: TSProjectInfo) {
     let tsproject = tsprojectByPlatform.get(platform);
     if (!tsproject) {
       // start with an empty project, ignoring the file graph provided by tsconfig.json
-      const config = service.getProjectConfigLoader().load(configFileName);
-      const resolverHost = new MetroTypeScriptResolverHost(config);
-      tsproject = service.openProject(config, resolverHost);
+      const cmdLine = readConfigFile(configFileName);
+      if (!cmdLine) {
+        throw new Error(`Failed to load '${configFileName}'`);
+      } else if (cmdLine.errors.length > 0) {
+        const writer = createDiagnosticWriter();
+        cmdLine.errors.forEach((e) => writer.print(e));
+        throw new Error(`Failed to load '${configFileName}'`);
+      }
+
+      const resolverHost = new MetroTypeScriptResolverHost(cmdLine);
+      tsproject = service.openProject(cmdLine, resolverHost);
       tsproject.removeAllFiles();
 
       tsprojectByPlatform.set(platform, tsproject);
