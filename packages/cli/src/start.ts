@@ -5,7 +5,7 @@ import {
   loadMetroConfig,
   startServer,
 } from "@rnx-kit/metro-service";
-import { Service } from "@rnx-kit/typescript-service";
+import { findConfigFile, Service } from "@rnx-kit/typescript-service";
 import chalk from "chalk";
 import type { Reporter, ReportableEvent } from "metro";
 import type Server from "metro/src/Server";
@@ -121,9 +121,10 @@ export async function rnxStart(
   if (serverConfig.typescriptValidation) {
     const tsservice = new Service((message) => terminal.log(message));
 
-    const configFileName = tsservice
-      .getProjectConfigLoader()
-      .find(metroConfig.projectRoot, "tsconfig.json");
+    const configFileName = findConfigFile(
+      metroConfig.projectRoot,
+      "tsconfig.json"
+    );
     if (!configFileName) {
       terminal.log(
         chalk.yellow(

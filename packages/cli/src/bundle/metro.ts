@@ -1,7 +1,7 @@
 import { info, warn } from "@rnx-kit/console";
 import { bundle, BundleArgs as MetroBundleArgs } from "@rnx-kit/metro-service";
 import { createDirectory } from "@rnx-kit/tools-node/fs";
-import { Service } from "@rnx-kit/typescript-service";
+import { findConfigFile, Service } from "@rnx-kit/typescript-service";
 import chalk from "chalk";
 import type { ConfigT } from "metro-config";
 import path from "path";
@@ -72,9 +72,10 @@ export async function metroBundle(
 
   let tsprojectInfo: TSProjectInfo | undefined;
   if (bundleConfig.typescriptValidation) {
-    const configFileName = tsservice
-      .getProjectConfigLoader()
-      .find(bundleConfig.entryPath, "tsconfig.json");
+    const configFileName = findConfigFile(
+      bundleConfig.entryPath,
+      "tsconfig.json"
+    );
     if (!configFileName) {
       warn(
         chalk.yellow(
