@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/metro-resolver-symlinks
 
-This log was last generated on Fri, 29 Oct 2021 12:14:31 GMT and should not be manually modified.
+This log was last generated on Sat, 30 Oct 2021 07:50:51 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 0.1.8
+
+Sat, 30 Oct 2021 07:50:51 GMT
+
+### Patches
+
+- Bump @rnx-kit/tools-node to v1.2.0
 
 ## 0.1.7
 

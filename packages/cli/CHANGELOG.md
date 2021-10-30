@@ -1,8 +1,24 @@
 # Change Log - @rnx-kit/cli
 
-This log was last generated on Fri, 29 Oct 2021 14:13:32 GMT and should not be manually modified.
+This log was last generated on Sat, 30 Oct 2021 07:50:51 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 0.9.40
+
+Sat, 30 Oct 2021 07:50:51 GMT
+
+### Patches
+
+- Bump @rnx-kit/config to v0.4.14
+- Bump @rnx-kit/dep-check to v1.8.13
+- Bump @rnx-kit/metro-plugin-cyclic-dependencies-detector to v1.0.15
+- Bump @rnx-kit/metro-plugin-duplicates-checker to v1.2.9
+- Bump @rnx-kit/metro-service to v1.1.7
+- Bump @rnx-kit/third-party-notices to v1.2.7
+- Bump @rnx-kit/tools-language to v1.2.0
+- Bump @rnx-kit/tools-node to v1.2.0
+- Bump @rnx-kit/typescript-service to v1.3.9
 
 ## 0.9.39
 

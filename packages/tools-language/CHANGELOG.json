@@ -2,6 +2,21 @@
   "name": "@rnx-kit/tools-language",
   "entries": [
     {
+      "date": "Sat, 30 Oct 2021 07:50:51 GMT",
+      "tag": "@rnx-kit/tools-language_v1.2.0",
+      "version": "1.2.0",
+      "comments": {
+        "minor": [
+          {
+            "author": "afoxman@microsoft.com",
+            "package": "@rnx-kit/tools-language",
+            "commit": "6133f8fe0298611e4c736e94b46f32752d139e76",
+            "comment": "Add new language and node functions to the tools packages."
+          }
+        ]
+      }
+    },
+    {
       "date": "Fri, 29 Oct 2021 09:04:42 GMT",
       "tag": "@rnx-kit/tools-language_v1.1.2",
       "version": "1.1.2",

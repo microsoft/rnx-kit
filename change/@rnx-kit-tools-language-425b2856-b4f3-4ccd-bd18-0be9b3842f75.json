@@ -1,7 +1,0 @@
-{
-  "type": "minor",
-  "comment": "Add new language and node functions to the tools packages.",
-  "packageName": "@rnx-kit/tools-language",
-  "email": "afoxman@microsoft.com",
-  "dependentChangeType": "patch"
-}

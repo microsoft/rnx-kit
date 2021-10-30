@@ -1,8 +1,17 @@
 # Change Log - @rnx-kit/tools-node
 
-This log was last generated on Fri, 29 Oct 2021 12:14:31 GMT and should not be manually modified.
+This log was last generated on Sat, 30 Oct 2021 07:50:51 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 1.2.0
+
+Sat, 30 Oct 2021 07:50:51 GMT
+
+### Minor changes
+
+- Add new language and node functions to the tools packages. (afoxman@microsoft.com)
+- Bump @rnx-kit/tools-language to v1.2.0
 
 ## 1.1.6
 
