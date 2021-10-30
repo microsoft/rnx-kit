@@ -6,27 +6,36 @@
 `@rnx-kit/typescript-service` gives you access to TypeScript's language
 services, and lets you customize how module resolution occurs.
 
-## Service
+## Configuration
 
-`Service` is the starting point for accessing TypeScript language services. A
-process will typically only need one `Service`.
+The starting point for working with TypeScript is reading configuration from the
+command line, or from a
+[configuration file](https://www.typescriptlang.org/docs/handbook/tsconfig-json.html)
+like `tsconfig.json`.
 
-The `Service` is used to open a `Project`.
+Both methods yeild a `ParedCommandLine` object, offering the same level of
+control over how TypeScript behaves.
 
 ```typescript
-const service = new Service();
+import ts from "typescript";
 
-// Find a project file and read its configuration
-const configFileName = service
-  .getProjectConfigLoader()
-  .find("./", "tsconfig.json");
-const config = service.getProjectConfigLoader().load(configFileName);
+// Read configuration from a NodeJS command-line
+const cmdLine = ts.parseCommandLine(process.argv.slice(2));
 
-// Create a resolver host for the project
-const resolverHost = createResolverHost(config);
+// Read configuration from a project file (parsed into a TypeScript command-line object)
+const configFileName = findConfigFile(searchPath);
+if (!configFileName) {
+  throw new Error(`Failed to find config file under ${searchPath}`);
+}
+const cmdLine = readConfigFile(configFileName);
+if (!cmdLine) {
+  throw new Error(`Failed to read config file ${configFileName}`);
+}
 
-// Open the project
-const project = service.openProject(config, resolverHost);
+// For either method, handle errors
+if (cmdLine.errors.length > 0) {
+  ...
+}
 ```
 
 ## Resolver Host
@@ -58,29 +67,37 @@ function reactNativeModuleResolver(...) {
 }
 ```
 
-## Project
+## Language Service
 
-`Project` is a TypeScript project, built from a
-[configuration file](https://www.typescriptlang.org/docs/handbook/tsconfig-json.html)
-usually named `tsconfig.json`.
+TypeScript's language service allow you to work with source code iteratively,
+unlike the TypeScript compiler, which makes a single pass through the code. The
+language service tends to load only what is needed to fulfill the current
+request. This saves time and memory, when full source validation isn't needed.
 
-A `Project` is a collection of compiler options and source files.
+The language service is accessible through the `Service` and `Project` classes.
+`Service` manages shared state across all projects, and is meant to be a
+singleton. `Project` contains a TypeScript configuration, which includes a list
+of source files. TypeScript configuration comes from either the command line or
+a file like `tsconfig.json`.
 
-You can use a `Project` to validate source code and emit transpiled JavaScript:
+You can use a `Project` to validate code, and emit transpiled JavaScript:
 
 ```typescript
+const service = new Service();
+const project = service.openProject(cmdLine, resolverHost);
+
 // validate
 const fileHasErrors = project.validateFile(fileName);
 const projectHasErrors = project.validate();
 
-// emit one file
+// emit
 const fileEmitted = project.emitFile(fileName);
 const projectEmitted = project.emit();
 ```
 
-You can manipulate files in the project. This is typically done in response to
-an external event, like a callback notifying you that a file has been added,
-updated or removed:
+You can also change which files are in a project. This is typically done in
+response to an external event, like a callback notifying you that a file has
+been added, updated or removed:
 
 ```typescript
 import ts from "typescript";
@@ -98,15 +115,6 @@ function onFileEvent(eventType: string, fileName: string, payload?: string) {
   }
 }
 ```
-
-`Project` only loads source files and type declarations when needed. If you want
-to "warm up" the project by pre-loading everything, you can:
-
-```typescript
-project.warmup();
-```
-
-This will lead to consistently fast validation calls.
 
 When you're finished working with a `Project`, you must `dispose` of it to
 properly release all internal resources:

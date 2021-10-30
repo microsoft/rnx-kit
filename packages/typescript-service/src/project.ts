@@ -1,6 +1,5 @@
 import ts from "typescript";
 import { ExternalFileCache, ProjectFileCache } from "./cache";
-import { ProjectConfig } from "./config";
 import { DiagnosticWriter } from "./diagnostics";
 import type { ResolverHost } from "./resolve";
 import { isNonEmptyArray } from "./util";
@@ -8,7 +7,7 @@ import { isNonEmptyArray } from "./util";
 export class Project {
   private diagnosticWriter: DiagnosticWriter;
   private resolverHost: ResolverHost;
-  private projectConfig: ProjectConfig;
+  private cmdLine: ts.ParsedCommandLine;
 
   private projectFiles: ProjectFileCache;
   private externalFiles: ExternalFileCache;
@@ -19,17 +18,17 @@ export class Project {
     documentRegistry: ts.DocumentRegistry,
     diagnosticWriter: DiagnosticWriter,
     resolverHost: ResolverHost,
-    projectConfig: ProjectConfig
+    cmdLine: ts.ParsedCommandLine
   ) {
     this.diagnosticWriter = diagnosticWriter;
     this.resolverHost = resolverHost;
-    this.projectConfig = projectConfig;
+    this.cmdLine = cmdLine;
 
-    this.projectFiles = new ProjectFileCache(projectConfig.fileNames);
+    this.projectFiles = new ProjectFileCache(cmdLine.fileNames);
     this.externalFiles = new ExternalFileCache();
 
     const languageServiceHost: ts.LanguageServiceHost = {
-      getCompilationSettings: () => this.projectConfig.options,
+      getCompilationSettings: () => this.cmdLine.options,
       //getNewLine?(): string;
       //getProjectVersion?(): string;
       getScriptFileNames: () => this.projectFiles.getFileNames(),
@@ -108,12 +107,8 @@ export class Project {
     return this.resolverHost;
   }
 
-  getConfig(): ProjectConfig {
-    return this.projectConfig;
-  }
-
-  warmup(): void {
-    this.languageService.getProgram();
+  getCommandLine(): ts.ParsedCommandLine {
+    return this.cmdLine;
   }
 
   private getFileDiagnostics(fileName: string): ts.Diagnostic[] {
@@ -136,7 +131,7 @@ export class Project {
   validateFile(fileName: string): boolean {
     const diagnostics = this.getFileDiagnostics(fileName);
     if (isNonEmptyArray(diagnostics)) {
-      this.diagnosticWriter.print(diagnostics);
+      diagnostics.forEach((d) => this.diagnosticWriter.print(d));
       return false;
     }
     return true;
@@ -144,9 +139,7 @@ export class Project {
 
   validate(): boolean {
     //  filter down the list of files to be checked
-    const matcher = this.projectConfig.options.checkJs
-      ? /[.][jt]sx?$/
-      : /[.]tsx?$/;
+    const matcher = this.cmdLine.options.checkJs ? /[.][jt]sx?$/ : /[.]tsx?$/;
     const files = this.projectFiles
       .getFileNames()
       .filter((f) => f.match(matcher));

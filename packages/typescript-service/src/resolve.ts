@@ -48,19 +48,35 @@ export type ResolverHost = {
 };
 
 /**
+ * Create a default implementation of TypeScript's module resolution host.
+ *
+ * TypeScript uses this host to ask questions during module resolution. It also uses this host to report resolution trace messages.
+ *
+ * @returns Default module resolution host implementation
+ */
+ export function createDefaultModuleResolutionHost(): ts.ModuleResolutionHost {
+  return {
+    fileExists: ts.sys.fileExists,
+    readFile: ts.sys.readFile,
+    trace: ts.sys.write,
+    directoryExists: ts.sys.directoryExists,
+    realpath: ts.sys.realpath,
+    getCurrentDirectory: ts.sys.getCurrentDirectory,
+    getDirectories: ts.sys.getDirectories,
+  };
+}
+
+/**
  * Create a default resolver host which follows TypeScript's resolution rules.
  *
  * @param options TypeScript compiler options
+ * @param moduleResolutionHost Optional TypeScript module resolution host. When not given, a default resolution host is used.
  * @returns Default resolver host implementation
  */
 export function createDefaultResolverHost(
-  options: ts.CompilerOptions
+  options: ts.CompilerOptions,
+  moduleResolutionHost: ts.ModuleResolutionHost = createDefaultModuleResolutionHost()
 ): ResolverHost {
-  const moduleResolutionHost: ts.ModuleResolutionHost = {
-    fileExists: ts.sys.fileExists,
-    readFile: ts.sys.readFile,
-  };
-
   return {
     resolveModuleNames: (
       moduleNames: string[],
