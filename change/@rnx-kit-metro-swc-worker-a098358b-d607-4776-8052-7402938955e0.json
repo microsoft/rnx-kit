@@ -1,7 +1,0 @@
-{
-  "type": "minor",
-  "comment": "Metro transform worker that uses swc under the hood",
-  "packageName": "@rnx-kit/metro-swc-worker",
-  "email": "4123478+tido64@users.noreply.github.com",
-  "dependentChangeType": "patch"
-}
