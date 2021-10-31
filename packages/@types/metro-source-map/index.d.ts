@@ -32,3 +32,17 @@ export type IndexMapSection = {
 };
 
 export type MixedSourceMap = IndexMap | BasicSourceMap;
+
+type GeneratedCodeMapping = [number, number];
+type SourceMapping = [number, number, number, number];
+type SourceMappingWithName = [number, number, number, number, string];
+
+export type MetroSourceMapSegmentTuple =
+  | SourceMappingWithName
+  | SourceMapping
+  | GeneratedCodeMapping;
+
+export type FBSourceFunctionMap = {
+  readonly names: ReadonlyArray<string>;
+  readonly mappings: string;
+};
