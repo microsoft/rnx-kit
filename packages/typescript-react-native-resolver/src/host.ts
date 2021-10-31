@@ -133,7 +133,7 @@ export function resolveModuleName(
         resolvedFileName === module.resolvedFileName
           ? undefined
           : module.resolvedFileName;
-      Object.assign({}, module, { resolvedFileName, originalPath });
+      Object.assign(module, { resolvedFileName, originalPath });
     }
   }
 
