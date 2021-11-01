@@ -69,10 +69,12 @@ function reactNativeModuleResolver(...) {
 
 ## Language Services
 
-TypeScript's language service allow you to work with source code iteratively,
+TypeScript's language service allow you to work with source code continuously,
 unlike the TypeScript compiler, which makes a single pass through the code. The
 language service tends to load only what is needed to fulfill the current
-request. This saves time and memory, when full source validation isn't needed.
+request, such as getting diagnostics for a particular source file, or re-loading
+a changed file being watched. This saves time and memory, when full source
+validation isn't needed.
 
 The language service is accessible through the `Service` and `Project` classes.
 `Service` manages shared state across all projects, and is meant to be a
