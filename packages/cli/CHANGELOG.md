@@ -1,8 +1,17 @@
 # Change Log - @rnx-kit/cli
 
-This log was last generated on Mon, 01 Nov 2021 13:46:12 GMT and should not be manually modified.
+This log was last generated on Mon, 01 Nov 2021 15:07:43 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 0.9.42
+
+Mon, 01 Nov 2021 15:07:43 GMT
+
+### Patches
+
+- Update the CLI, adjusting it to use the new typescript-service package. (afoxman@microsoft.com)
+- Bump @rnx-kit/typescript-service to v1.4.0
 
 ## 0.9.41
 

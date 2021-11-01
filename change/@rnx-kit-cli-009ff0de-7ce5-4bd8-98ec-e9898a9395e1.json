@@ -1,7 +1,0 @@
-{
-  "type": "patch",
-  "comment": "Update the CLI, adjusting it to use the new typescript-service package.",
-  "packageName": "@rnx-kit/cli",
-  "email": "afoxman@microsoft.com",
-  "dependentChangeType": "patch"
-}

@@ -2,6 +2,27 @@
   "name": "@rnx-kit/cli",
   "entries": [
     {
+      "date": "Mon, 01 Nov 2021 15:07:43 GMT",
+      "tag": "@rnx-kit/cli_v0.9.42",
+      "version": "0.9.42",
+      "comments": {
+        "patch": [
+          {
+            "author": "afoxman@microsoft.com",
+            "package": "@rnx-kit/cli",
+            "commit": "a45168c5c37cde1565d91cf6b4f7f24e50696a0e",
+            "comment": "Update the CLI, adjusting it to use the new typescript-service package."
+          },
+          {
+            "author": "beachball",
+            "package": "@rnx-kit/cli",
+            "comment": "Bump @rnx-kit/typescript-service to v1.4.0",
+            "commit": "a45168c5c37cde1565d91cf6b4f7f24e50696a0e"
+          }
+        ]
+      }
+    },
+    {
       "date": "Mon, 01 Nov 2021 13:46:12 GMT",
       "tag": "@rnx-kit/cli_v0.9.41",
       "version": "0.9.41",

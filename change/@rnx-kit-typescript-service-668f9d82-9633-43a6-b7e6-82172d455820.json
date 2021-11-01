@@ -1,7 +1,0 @@
-{
-  "type": "minor",
-  "comment": "Refactor typescript-service API to make it more flexible for use in other projects/packages.",
-  "packageName": "@rnx-kit/typescript-service",
-  "email": "afoxman@microsoft.com",
-  "dependentChangeType": "patch"
-}

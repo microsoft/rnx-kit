@@ -2,6 +2,27 @@
   "name": "@rnx-kit/typescript-service",
   "entries": [
     {
+      "date": "Mon, 01 Nov 2021 15:07:43 GMT",
+      "tag": "@rnx-kit/typescript-service_v1.4.0",
+      "version": "1.4.0",
+      "comments": {
+        "minor": [
+          {
+            "author": "afoxman@microsoft.com",
+            "package": "@rnx-kit/typescript-service",
+            "commit": "a45168c5c37cde1565d91cf6b4f7f24e50696a0e",
+            "comment": "Refactor typescript-service API to make it more flexible for use in other projects/packages."
+          },
+          {
+            "author": "beachball",
+            "package": "@rnx-kit/typescript-service",
+            "comment": "Bump @rnx-kit/tools-node to v1.2.1",
+            "commit": "a45168c5c37cde1565d91cf6b4f7f24e50696a0e"
+          }
+        ]
+      }
+    },
+    {
       "date": "Mon, 01 Nov 2021 13:46:13 GMT",
       "tag": "@rnx-kit/typescript-service_v1.3.10",
       "version": "1.3.10",
