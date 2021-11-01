@@ -12,10 +12,11 @@ const path = require("path");
  * Parses specified file and returns an AST.
  * @param {import("eslint").Rule.RuleContext} context
  * @param {string} moduleName
+ * @returns {Node | null}
  */
 function parse(context, moduleName) {
-  const { parse } = require(context.parserPath);
-  if (typeof parse !== "function") {
+  const { parse: esParse } = require(context.parserPath);
+  if (typeof esParse !== "function") {
     return null;
   }
 
@@ -27,7 +28,7 @@ function parse(context, moduleName) {
             paths: [path.dirname(context.getFilename())],
           });
     const code = fs.readFileSync(p, { encoding: "utf-8" });
-    return parse(code, context.parserOptions);
+    return esParse(code, context.parserOptions);
   } catch (_) {
     /* ignore */
   }
