@@ -1,11 +1,14 @@
 import { RuleTester } from "eslint";
 import rule from "../src/rules/no-export-all";
 
+jest.mock("fs");
+
 const config = {
   env: {
     es6: true,
     node: true,
   },
+  parser: require.resolve("@typescript-eslint/parser"),
   parserOptions: {
     ecmaFeatures: {
       jsx: true,
@@ -30,6 +33,10 @@ describe("disallows `export *`", () => {
       {
         code: "export * from 'chopper';",
         errors: 1,
+        output: [
+          "export { Chopper, escape, escapeRe, name, nameRe } from 'chopper';",
+          "export type { Alias, AliasRe, IChopper, IChopperRe } from 'chopper';",
+        ].join("\n"),
       },
     ],
   });

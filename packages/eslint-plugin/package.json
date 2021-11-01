@@ -37,6 +37,7 @@
   },
   "devDependencies": {
     "@types/eslint": "^7.28.0",
+    "@types/jest": "^27.0.0",
     "eslint": "^8.0.0"
   },
   "depcheck": {
