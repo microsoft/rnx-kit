@@ -1121,11 +1121,11 @@
     globals "^11.1.0"
 
 "@babel/types@^7.0.0", "@babel/types@^7.12.0", "@babel/types@^7.13.0", "@babel/types@^7.13.12", "@babel/types@^7.14.5", "@babel/types@^7.15.4", "@babel/types@^7.15.6", "@babel/types@^7.3.0", "@babel/types@^7.3.3", "@babel/types@^7.4.4":
-  version "7.15.6"
-  resolved "https://registry.yarnpkg.com/@babel/types/-/types-7.15.6.tgz#99abdc48218b2881c058dd0a7ab05b99c9be758f"
-  integrity sha512-BPU+7QhqNjmWyDO0/vitH/CuhpV8ZmK1wpKva8nuyNF5MJfuRNWMc+hc14+u9xT93kvykMdncrJT19h74uB1Ig==
+  version "7.16.0"
+  resolved "https://registry.yarnpkg.com/@babel/types/-/types-7.16.0.tgz#db3b313804f96aadd0b776c4823e127ad67289ba"
+  integrity sha512-PJgg/k3SdLsGb3hhisFvtLOw5ts113klrpLuIPtCJIU+BB24fqq6lf8RWqKJEjzqXR9AEH1rIb5XTqwBHB+kQg==
   dependencies:
-    "@babel/helper-validator-identifier" "^7.14.9"
+    "@babel/helper-validator-identifier" "^7.15.7"
     to-fast-properties "^2.0.0"
 
 "@bcoe/v8-coverage@^0.2.3":
@@ -1803,6 +1803,16 @@
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/@react-native/polyfills/-/polyfills-2.0.0.tgz#4c40b74655c83982c8cf47530ee7dc13d957b6aa"
   integrity sha512-K0aGNn1TjalKj+65D7ycc1//H9roAQ51GJVk5ZJQFb2teECGmzd86bYDC0aYdbRf7gtovescq4Zt6FR0tgXiHQ==
+
+"@rnx-kit/metro-serializer-esbuild@^0.0.14":
+  version "0.0.14"
+  resolved "https://registry.yarnpkg.com/@rnx-kit/metro-serializer-esbuild/-/metro-serializer-esbuild-0.0.14.tgz#3772130fadce872b60daa7e62de39c78b2f75fda"
+  integrity sha512-jDvP1XwUZAXKzpTz5euRW9SXAA1dBFnrcQMqCQB3inhKIp4WnlarzbYsBP7b4DpveG1KpX8c+4Uu5b1ZBWSRLw==
+  dependencies:
+    "@rnx-kit/console" "^1.0.2"
+    esbuild "^0.12.19"
+    esbuild-plugin-lodash "^1.0.3"
+    semver "^7.0.0"
 
 "@rushstack/node-core-library@3.35.2":
   version "3.35.2"
@@ -4061,7 +4071,7 @@ esbuild-openbsd-64@0.13.10:
   resolved "https://registry.yarnpkg.com/esbuild-openbsd-64/-/esbuild-openbsd-64-0.13.10.tgz#3a6950b1d955de921ac52f7af0b4865e89d6e4f1"
   integrity sha512-OuCYc+bNKumBvxflga+nFzZvxsgmWQW+z4rMGIjM5XIW0nNbGgRc5p/0PSDv0rTdxAmwCpV69fezal0xjrDaaA==
 
-esbuild-plugin-lodash@^1.1.0:
+esbuild-plugin-lodash@^1.0.3, esbuild-plugin-lodash@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/esbuild-plugin-lodash/-/esbuild-plugin-lodash-1.1.0.tgz#ffe3b3020c1131357ba4d21bf3f735e032184b4f"
   integrity sha512-DtvAnHuALecQguNWeIf2Ea3bCp0Pe9t+knjJNxHJE9PHagorZR92B1Xmx2cLKJz5fzkBzXLFnegiTdWYUi1AyQ==
@@ -4085,6 +4095,11 @@ esbuild-windows-arm64@0.13.10:
   version "0.13.10"
   resolved "https://registry.yarnpkg.com/esbuild-windows-arm64/-/esbuild-windows-arm64-0.13.10.tgz#85a2d338aaa8b0cd1d8ecbe9150def9a608e8947"
   integrity sha512-xTqM/XKhORo6u9S5I0dNJWEdWoemFjogLUTVLkQMVyUV3ZuMChahVA+bCqKHdyX55pCFxD/8v2fm3/sfFMWN+g==
+
+esbuild@^0.12.19:
+  version "0.12.29"
+  resolved "https://registry.yarnpkg.com/esbuild/-/esbuild-0.12.29.tgz#be602db7c4dc78944a9dbde0d1ea19d36c1f882d"
+  integrity sha512-w/XuoBCSwepyiZtIRsKsetiLDUVGPVw1E/R3VTFSecIy8UR7Cq3SOtwKHJMFoVqqVG36aGkzh4e8BvpO1Fdc7g==
 
 esbuild@^0.13.4:
   version "0.13.10"
