@@ -1,10 +1,10 @@
 {
   "name": "@rnx-kit/config",
-  "version": "0.4.13",
+  "version": "0.4.15",
   "description": "Define and query information about a kit package",
   "license": "MIT",
-  "main": "./lib/index.js",
-  "types": "./lib/index.d.ts",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "scripts": {
     "build": "rnx-kit-scripts build",
     "depcheck": "rnx-kit-scripts depcheck",
@@ -13,7 +13,7 @@
     "test": "rnx-kit-scripts test"
   },
   "dependencies": {
-    "@rnx-kit/console": "^1.0.5",
+    "@rnx-kit/console": "^1.0.6",
     "cosmiconfig": "^7.0.0",
     "lodash": "^4.17.21",
     "semver": "^7.0.0"

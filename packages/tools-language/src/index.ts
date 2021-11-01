@@ -1,3 +1,4 @@
+export { toIndex, addRange } from "./array";
 export { tryInvoke } from "./function";
 export { isApproximatelyEqual } from "./math";
 export {

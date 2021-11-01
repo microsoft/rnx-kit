@@ -2,6 +2,162 @@
   "name": "@rnx-kit/cli",
   "entries": [
     {
+      "date": "Mon, 01 Nov 2021 13:46:12 GMT",
+      "tag": "@rnx-kit/cli_v0.9.41",
+      "version": "0.9.41",
+      "comments": {
+        "patch": [
+          {
+            "author": "afoxman@microsoft.com",
+            "package": "@rnx-kit/cli",
+            "commit": "b4558421f2dd05b05e9460cb81332d702f1addcb",
+            "comment": "Normalize main and types fields across all packages which use them."
+          },
+          {
+            "author": "beachball",
+            "package": "@rnx-kit/cli",
+            "comment": "Bump @rnx-kit/config to v0.4.15",
+            "commit": "b4558421f2dd05b05e9460cb81332d702f1addcb"
+          },
+          {
+            "author": "beachball",
+            "package": "@rnx-kit/cli",
+            "comment": "Bump @rnx-kit/console to v1.0.6",
+            "commit": "b4558421f2dd05b05e9460cb81332d702f1addcb"
+          },
+          {
+            "author": "beachball",
+            "package": "@rnx-kit/cli",
+            "comment": "Bump @rnx-kit/dep-check to v1.8.14",
+            "commit": "b4558421f2dd05b05e9460cb81332d702f1addcb"
+          },
+          {
+            "author": "beachball",
+            "package": "@rnx-kit/cli",
+            "comment": "Bump @rnx-kit/metro-plugin-cyclic-dependencies-detector to v1.0.16",
+            "commit": "b4558421f2dd05b05e9460cb81332d702f1addcb"
+          },
+          {
+            "author": "beachball",
+            "package": "@rnx-kit/cli",
+            "comment": "Bump @rnx-kit/metro-plugin-duplicates-checker to v1.2.10",
+            "commit": "b4558421f2dd05b05e9460cb81332d702f1addcb"
+          },
+          {
+            "author": "beachball",
+            "package": "@rnx-kit/cli",
+            "comment": "Bump @rnx-kit/metro-serializer to v1.0.6",
+            "commit": "b4558421f2dd05b05e9460cb81332d702f1addcb"
+          },
+          {
+            "author": "beachball",
+            "package": "@rnx-kit/cli",
+            "comment": "Bump @rnx-kit/metro-serializer-esbuild to v0.0.18",
+            "commit": "b4558421f2dd05b05e9460cb81332d702f1addcb"
+          },
+          {
+            "author": "beachball",
+            "package": "@rnx-kit/cli",
+            "comment": "Bump @rnx-kit/metro-service to v1.1.8",
+            "commit": "b4558421f2dd05b05e9460cb81332d702f1addcb"
+          },
+          {
+            "author": "beachball",
+            "package": "@rnx-kit/cli",
+            "comment": "Bump @rnx-kit/third-party-notices to v1.2.8",
+            "commit": "b4558421f2dd05b05e9460cb81332d702f1addcb"
+          },
+          {
+            "author": "beachball",
+            "package": "@rnx-kit/cli",
+            "comment": "Bump @rnx-kit/tools-language to v1.2.1",
+            "commit": "b4558421f2dd05b05e9460cb81332d702f1addcb"
+          },
+          {
+            "author": "beachball",
+            "package": "@rnx-kit/cli",
+            "comment": "Bump @rnx-kit/tools-node to v1.2.1",
+            "commit": "b4558421f2dd05b05e9460cb81332d702f1addcb"
+          },
+          {
+            "author": "beachball",
+            "package": "@rnx-kit/cli",
+            "comment": "Bump @rnx-kit/tools-react-native to v1.0.5",
+            "commit": "b4558421f2dd05b05e9460cb81332d702f1addcb"
+          },
+          {
+            "author": "beachball",
+            "package": "@rnx-kit/cli",
+            "comment": "Bump @rnx-kit/typescript-service to v1.3.10",
+            "commit": "b4558421f2dd05b05e9460cb81332d702f1addcb"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Sat, 30 Oct 2021 07:50:51 GMT",
+      "tag": "@rnx-kit/cli_v0.9.40",
+      "version": "0.9.40",
+      "comments": {
+        "patch": [
+          {
+            "author": "beachball",
+            "package": "@rnx-kit/cli",
+            "comment": "Bump @rnx-kit/config to v0.4.14",
+            "commit": "6133f8fe0298611e4c736e94b46f32752d139e76"
+          },
+          {
+            "author": "beachball",
+            "package": "@rnx-kit/cli",
+            "comment": "Bump @rnx-kit/dep-check to v1.8.13",
+            "commit": "6133f8fe0298611e4c736e94b46f32752d139e76"
+          },
+          {
+            "author": "beachball",
+            "package": "@rnx-kit/cli",
+            "comment": "Bump @rnx-kit/metro-plugin-cyclic-dependencies-detector to v1.0.15",
+            "commit": "6133f8fe0298611e4c736e94b46f32752d139e76"
+          },
+          {
+            "author": "beachball",
+            "package": "@rnx-kit/cli",
+            "comment": "Bump @rnx-kit/metro-plugin-duplicates-checker to v1.2.9",
+            "commit": "6133f8fe0298611e4c736e94b46f32752d139e76"
+          },
+          {
+            "author": "beachball",
+            "package": "@rnx-kit/cli",
+            "comment": "Bump @rnx-kit/metro-service to v1.1.7",
+            "commit": "6133f8fe0298611e4c736e94b46f32752d139e76"
+          },
+          {
+            "author": "beachball",
+            "package": "@rnx-kit/cli",
+            "comment": "Bump @rnx-kit/third-party-notices to v1.2.7",
+            "commit": "6133f8fe0298611e4c736e94b46f32752d139e76"
+          },
+          {
+            "author": "beachball",
+            "package": "@rnx-kit/cli",
+            "comment": "Bump @rnx-kit/tools-language to v1.2.0",
+            "commit": "6133f8fe0298611e4c736e94b46f32752d139e76"
+          },
+          {
+            "author": "beachball",
+            "package": "@rnx-kit/cli",
+            "comment": "Bump @rnx-kit/tools-node to v1.2.0",
+            "commit": "6133f8fe0298611e4c736e94b46f32752d139e76"
+          },
+          {
+            "author": "beachball",
+            "package": "@rnx-kit/cli",
+            "comment": "Bump @rnx-kit/typescript-service to v1.3.9",
+            "commit": "6133f8fe0298611e4c736e94b46f32752d139e76"
+          }
+        ]
+      }
+    },
+    {
       "date": "Fri, 29 Oct 2021 14:13:32 GMT",
       "tag": "@rnx-kit/cli_v0.9.39",
       "version": "0.9.39",

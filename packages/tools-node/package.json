@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/tools-node",
-  "version": "1.1.6",
+  "version": "1.2.1",
   "description": "A collection of supplemental NodeJS functions and types",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/tools-node#readme",
   "license": "MIT",
@@ -16,6 +16,7 @@
     "path.d.ts"
   ],
   "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/microsoft/rnx-kit",
@@ -29,7 +30,7 @@
     "update-readme": "rnx-kit-scripts update-api-readme"
   },
   "dependencies": {
-    "@rnx-kit/tools-language": "^1.1.4",
+    "@rnx-kit/tools-language": "^1.2.1",
     "find-up": "^5.0.0",
     "pkg-dir": "^5.0.0",
     "pkg-up": "^3.1.0"

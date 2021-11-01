@@ -5,12 +5,20 @@
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
 // Source: https://github.com/facebook/metro/blob/25be2a8e28a2d83a56ff74f27fda8b682b250890/packages/metro-transform-worker/src/index.js
 
-import type { AllowOptionalDependencies, DynamicRequiresBehavior } from "metro";
-import type { BasicSourceMap } from "metro-source-map";
+import type {
+  AllowOptionalDependencies,
+  DynamicRequiresBehavior,
+  TransformResultDependency,
+} from "metro";
 import type {
   CustomTransformOptions,
   TransformProfile,
 } from "metro-babel-transformer";
+import type {
+  BasicSourceMap,
+  FBSourceFunctionMap,
+  MetroSourceMapSegmentTuple,
+} from "metro-source-map";
 
 type MinifierConfig = Readonly<Record<string, unknown>>;
 
@@ -69,3 +77,33 @@ export type JsTransformOptions = Readonly<{
   unstable_disableES6Transforms?: boolean;
   unstable_transformProfile: TransformProfile;
 }>;
+
+type JSFileType = "js/script" | "js/module" | "js/module/asset";
+
+export type JsOutput = Readonly<{
+  data: Readonly<{
+    code: string;
+    lineCount: number;
+    map: Array<MetroSourceMapSegmentTuple>;
+    functionMap?: FBSourceFunctionMap;
+  }>;
+  type: JSFileType;
+}>;
+
+// Hermes byte-code output type
+export type BytecodeOutput = unknown;
+
+type TransformResponse = Readonly<{
+  dependencies: ReadonlyArray<TransformResultDependency>;
+  output: ReadonlyArray<JsOutput | BytecodeOutput>;
+}>;
+
+export function transform(
+  config: JsTransformerConfig,
+  projectRoot: string,
+  filename: string,
+  data: Buffer,
+  options: JsTransformOptions
+): Promise<TransformResponse>;
+
+export function getCacheKey(config: JsTransformerConfig): string;

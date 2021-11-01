@@ -2,6 +2,21 @@
   "name": "@rnx-kit/esbuild-plugin-import-path-remapper",
   "entries": [
     {
+      "date": "Mon, 01 Nov 2021 13:46:12 GMT",
+      "tag": "@rnx-kit/esbuild-plugin-import-path-remapper_v1.1.4",
+      "version": "1.1.4",
+      "comments": {
+        "patch": [
+          {
+            "author": "afoxman@microsoft.com",
+            "package": "@rnx-kit/esbuild-plugin-import-path-remapper",
+            "commit": "b4558421f2dd05b05e9460cb81332d702f1addcb",
+            "comment": "Normalize main and types fields across all packages which use them."
+          }
+        ]
+      }
+    },
+    {
       "date": "Fri, 22 Oct 2021 18:31:09 GMT",
       "tag": "@rnx-kit/esbuild-plugin-import-path-remapper_v1.1.0",
       "version": "1.1.0",

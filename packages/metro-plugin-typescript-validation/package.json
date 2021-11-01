@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/metro-plugin-typescript-validation",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "description": "Typescript validation during Metro bundling",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/metro-plugin-typescript-validation#readme",
   "license": "MIT",
@@ -8,6 +8,7 @@
     "lib/*"
   ],
   "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/microsoft/rnx-kit",

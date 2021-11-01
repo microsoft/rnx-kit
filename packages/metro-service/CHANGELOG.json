@@ -2,6 +2,42 @@
   "name": "@rnx-kit/metro-service",
   "entries": [
     {
+      "date": "Mon, 01 Nov 2021 13:46:13 GMT",
+      "tag": "@rnx-kit/metro-service_v1.1.8",
+      "version": "1.1.8",
+      "comments": {
+        "patch": [
+          {
+            "author": "afoxman@microsoft.com",
+            "package": "@rnx-kit/metro-service",
+            "commit": "b4558421f2dd05b05e9460cb81332d702f1addcb",
+            "comment": "Normalize main and types fields across all packages which use them."
+          },
+          {
+            "author": "beachball",
+            "package": "@rnx-kit/metro-service",
+            "comment": "Bump @rnx-kit/tools-language to v1.2.1",
+            "commit": "b4558421f2dd05b05e9460cb81332d702f1addcb"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Sat, 30 Oct 2021 07:50:51 GMT",
+      "tag": "@rnx-kit/metro-service_v1.1.7",
+      "version": "1.1.7",
+      "comments": {
+        "patch": [
+          {
+            "author": "beachball",
+            "package": "@rnx-kit/metro-service",
+            "comment": "Bump @rnx-kit/tools-language to v1.2.0",
+            "commit": "6133f8fe0298611e4c736e94b46f32752d139e76"
+          }
+        ]
+      }
+    },
+    {
       "date": "Fri, 29 Oct 2021 12:14:31 GMT",
       "tag": "@rnx-kit/metro-service_v1.1.6",
       "version": "1.1.6",

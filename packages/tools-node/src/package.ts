@@ -14,7 +14,8 @@ export type PackageRef = {
 };
 
 /**
- * Parse a package reference string. One exaple is `name` property found in `package.json`.
+ * Parse a package reference string. An example reference is the `name`
+ * property found in `package.json`.
  *
  * @param r Package reference string
  * @returns Parsed package reference object
@@ -187,7 +188,8 @@ export type FindPackageDependencyOptions = {
 
   /**
    * Optional flag controlling whether or symlinks can be found. Defaults to `true`.
-   * When false, the underlying target of the link is found.
+   * When `false`, and the package dependency directory is a symlink, it will not
+   * be found.
    */
   allowSymlinks?: boolean;
 };

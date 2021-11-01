@@ -1,8 +1,26 @@
 # Change Log - @rnx-kit/metro-plugin-cyclic-dependencies-detector
 
-This log was last generated on Fri, 29 Oct 2021 12:14:31 GMT and should not be manually modified.
+This log was last generated on Mon, 01 Nov 2021 13:46:12 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 1.0.16
+
+Mon, 01 Nov 2021 13:46:12 GMT
+
+### Patches
+
+- Normalize main and types fields across all packages which use them. (afoxman@microsoft.com)
+- Bump @rnx-kit/console to v1.0.6
+- Bump @rnx-kit/tools-node to v1.2.1
+
+## 1.0.15
+
+Sat, 30 Oct 2021 07:50:51 GMT
+
+### Patches
+
+- Bump @rnx-kit/tools-node to v1.2.0
 
 ## 1.0.14
 
