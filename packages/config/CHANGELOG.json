@@ -2,6 +2,27 @@
   "name": "@rnx-kit/config",
   "entries": [
     {
+      "date": "Mon, 01 Nov 2021 13:46:12 GMT",
+      "tag": "@rnx-kit/config_v0.4.15",
+      "version": "0.4.15",
+      "comments": {
+        "patch": [
+          {
+            "author": "afoxman@microsoft.com",
+            "package": "@rnx-kit/config",
+            "commit": "b4558421f2dd05b05e9460cb81332d702f1addcb",
+            "comment": "Normalize main and types fields across all packages which use them."
+          },
+          {
+            "author": "beachball",
+            "package": "@rnx-kit/config",
+            "comment": "Bump @rnx-kit/console to v1.0.6",
+            "commit": "b4558421f2dd05b05e9460cb81332d702f1addcb"
+          }
+        ]
+      }
+    },
+    {
       "date": "Fri, 29 Oct 2021 12:14:31 GMT",
       "tag": "@rnx-kit/config_v0.4.13",
       "version": "0.4.13",

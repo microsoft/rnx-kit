@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/tools-language
 
-This log was last generated on Sat, 30 Oct 2021 07:50:51 GMT and should not be manually modified.
+This log was last generated on Mon, 01 Nov 2021 13:46:13 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 1.2.1
+
+Mon, 01 Nov 2021 13:46:13 GMT
+
+### Patches
+
+- Normalize main and types fields across all packages which use them. (afoxman@microsoft.com)
 
 ## 1.2.0
 

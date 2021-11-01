@@ -2,6 +2,21 @@
   "name": "@rnx-kit/tools-react-native",
   "entries": [
     {
+      "date": "Mon, 01 Nov 2021 13:46:13 GMT",
+      "tag": "@rnx-kit/tools-react-native_v1.0.5",
+      "version": "1.0.5",
+      "comments": {
+        "patch": [
+          {
+            "author": "afoxman@microsoft.com",
+            "package": "@rnx-kit/tools-react-native",
+            "commit": "b4558421f2dd05b05e9460cb81332d702f1addcb",
+            "comment": "Normalize main and types fields across all packages which use them."
+          }
+        ]
+      }
+    },
+    {
       "date": "Fri, 29 Oct 2021 09:04:42 GMT",
       "tag": "@rnx-kit/tools-react-native_v1.0.2",
       "version": "1.0.2",
