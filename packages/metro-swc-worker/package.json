@@ -20,7 +20,7 @@
     "lint": "rnx-kit-scripts lint"
   },
   "dependencies": {
-    "@rnx-kit/metro-serializer-esbuild": "^0.0.14",
+    "@rnx-kit/metro-serializer-esbuild": "^0.0.17",
     "@swc/core": "^1.2.0"
   },
   "peerDependencies": {
