@@ -13,7 +13,6 @@ import {
 } from "@rnx-kit/tools-node";
 import {
   createDefaultResolverHost,
-  ProjectConfig,
   ResolverHost,
 } from "@rnx-kit/typescript-service";
 import fs from "fs";
@@ -22,6 +21,7 @@ import module from "module";
 import path from "path";
 import type {
   Extension,
+  ParsedCommandLine,
   ResolvedModuleFull,
   ResolvedModuleWithFailedLookupLocations,
   ResolvedProjectReference,
@@ -339,9 +339,9 @@ export class MetroTypeScriptResolverHost {
   private sourceFiles: SourceFiles;
   private defaultResolverHost: ResolverHost;
 
-  constructor(config: ProjectConfig) {
+  constructor(cmdLine: ParsedCommandLine) {
     this.sourceFiles = new SourceFiles();
-    this.defaultResolverHost = createDefaultResolverHost(config.options);
+    this.defaultResolverHost = createDefaultResolverHost(cmdLine.options);
   }
 
   public getSourceFiles(): SourceFiles {

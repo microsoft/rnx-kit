@@ -1,16 +1,17 @@
-export { ProjectFileCache, ExternalFileCache } from "./cache";
-
-export { ProjectConfigLoader } from "./config";
-export type { ProjectConfig } from "./config";
-
-export { createDiagnosticWriter } from "./diagnostics";
+// Diagnostics
 export type { DiagnosticWriter } from "./diagnostics";
+export { createDiagnosticWriter } from "./diagnostics";
 
-export { Project } from "./project";
+// Configuration
+export { findConfigFile, readConfigFile } from "./config";
 
-export { createDefaultResolverHost } from "./resolve";
+// Module resolution
 export type { ResolverHost } from "./resolve";
+export {
+  createDefaultResolverHost,
+  createDefaultModuleResolutionHost,
+} from "./resolve";
 
-export { VersionedSnapshot } from "./snapshot";
-
+// Language services
 export { Service } from "./service";
+export { Project } from "./project";
