@@ -2,6 +2,21 @@
   "name": "@rnx-kit/metro-serializer",
   "entries": [
     {
+      "date": "Mon, 01 Nov 2021 13:46:13 GMT",
+      "tag": "@rnx-kit/metro-serializer_v1.0.6",
+      "version": "1.0.6",
+      "comments": {
+        "patch": [
+          {
+            "author": "afoxman@microsoft.com",
+            "package": "@rnx-kit/metro-serializer",
+            "commit": "b4558421f2dd05b05e9460cb81332d702f1addcb",
+            "comment": "Normalize main and types fields across all packages which use them."
+          }
+        ]
+      }
+    },
+    {
       "date": "Tue, 12 Oct 2021 08:11:07 GMT",
       "tag": "@rnx-kit/metro-serializer_v1.0.2",
       "version": "1.0.2",

@@ -1,0 +1,56 @@
+{
+  "name": "@rnx-kit/metro-swc-worker",
+  "entries": [
+    {
+      "date": "Mon, 01 Nov 2021 13:46:13 GMT",
+      "tag": "@rnx-kit/metro-swc-worker_v0.1.1",
+      "version": "0.1.1",
+      "comments": {
+        "patch": [
+          {
+            "author": "beachball",
+            "package": "@rnx-kit/metro-swc-worker",
+            "comment": "Bump @rnx-kit/metro-serializer-esbuild to v0.0.18",
+            "commit": "b4558421f2dd05b05e9460cb81332d702f1addcb"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Mon, 01 Nov 2021 12:39:24 GMT",
+      "tag": "@rnx-kit/metro-swc-worker_v0.1.0",
+      "version": "0.1.0",
+      "comments": {
+        "none": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/metro-swc-worker",
+            "commit": "4636318255fea865d5824cb1402def6068551642",
+            "comment": "Bump @rnx-kit/metro-serializer-esbuild to avoid dupes in the repo"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Sun, 31 Oct 2021 08:16:31 GMT",
+      "tag": "@rnx-kit/metro-swc-worker_v0.1.0",
+      "version": "0.1.0",
+      "comments": {
+        "minor": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/metro-swc-worker",
+            "commit": "d97e2b9d3ab7313aaa3671df1aa6a101edbac9ed",
+            "comment": "Metro transform worker that uses swc under the hood"
+          },
+          {
+            "author": "beachball",
+            "package": "@rnx-kit/metro-swc-worker",
+            "comment": "Bump @rnx-kit/metro-serializer-esbuild to v0.0.17",
+            "commit": "d97e2b9d3ab7313aaa3671df1aa6a101edbac9ed"
+          }
+        ]
+      }
+    }
+  ]
+}

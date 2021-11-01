@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/typescript-service",
-  "version": "1.3.8",
+  "version": "1.4.0",
   "description": "TypeScript language services with support for custom module resolution",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/typescript-service#readme",
   "license": "MIT",

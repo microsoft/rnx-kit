@@ -1,8 +1,17 @@
 # Change Log - @rnx-kit/config
 
-This log was last generated on Fri, 29 Oct 2021 12:14:31 GMT and should not be manually modified.
+This log was last generated on Mon, 01 Nov 2021 13:46:12 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 0.4.15
+
+Mon, 01 Nov 2021 13:46:12 GMT
+
+### Patches
+
+- Normalize main and types fields across all packages which use them. (afoxman@microsoft.com)
+- Bump @rnx-kit/console to v1.0.6
 
 ## 0.4.13
 

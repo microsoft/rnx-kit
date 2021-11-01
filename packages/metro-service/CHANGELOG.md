@@ -1,8 +1,25 @@
 # Change Log - @rnx-kit/metro-service
 
-This log was last generated on Fri, 29 Oct 2021 12:14:31 GMT and should not be manually modified.
+This log was last generated on Mon, 01 Nov 2021 13:46:13 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 1.1.8
+
+Mon, 01 Nov 2021 13:46:13 GMT
+
+### Patches
+
+- Normalize main and types fields across all packages which use them. (afoxman@microsoft.com)
+- Bump @rnx-kit/tools-language to v1.2.1
+
+## 1.1.7
+
+Sat, 30 Oct 2021 07:50:51 GMT
+
+### Patches
+
+- Bump @rnx-kit/tools-language to v1.2.0
 
 ## 1.1.6
 

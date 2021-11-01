@@ -12,5 +12,6 @@ export {
   createDefaultModuleResolutionHost,
 } from "./resolve";
 
+// Language services
 export { Service } from "./service";
 export { Project } from "./project";
