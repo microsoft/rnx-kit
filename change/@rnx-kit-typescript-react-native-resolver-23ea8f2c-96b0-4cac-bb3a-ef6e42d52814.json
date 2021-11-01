@@ -1,0 +1,7 @@
+{
+  "type": "patch",
+  "comment": "Create the typescript-react-native-resolver package",
+  "packageName": "@rnx-kit/typescript-react-native-resolver",
+  "email": "afoxman@microsoft.com",
+  "dependentChangeType": "patch"
+}
