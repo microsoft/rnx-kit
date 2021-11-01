@@ -1,0 +1,7 @@
+{
+  "type": "none",
+  "comment": "Bump @rnx-kit/metro-serializer-esbuild to avoid dupes in the repo",
+  "packageName": "@rnx-kit/metro-swc-worker",
+  "email": "4123478+tido64@users.noreply.github.com",
+  "dependentChangeType": "none"
+}
