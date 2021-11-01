@@ -8,6 +8,7 @@
     "lib/*"
   ],
   "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "bin": {
     "check-duplicates": "lib/index.js"
   },

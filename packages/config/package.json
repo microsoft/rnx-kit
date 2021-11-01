@@ -3,8 +3,8 @@
   "version": "0.4.14",
   "description": "Define and query information about a kit package",
   "license": "MIT",
-  "main": "./lib/index.js",
-  "types": "./lib/index.d.ts",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "scripts": {
     "build": "rnx-kit-scripts build",
     "depcheck": "rnx-kit-scripts depcheck",
