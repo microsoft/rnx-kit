@@ -3,10 +3,23 @@
 
 /**
  * @typedef {import("@typescript-eslint/types").TSESTree.Node} Node
+ * @typedef {{ exports: string[], types: string[] }} NamedExports
  */
 
 const fs = require("fs");
 const path = require("path");
+
+/**
+ * Returns whether there are any named exports.
+ * @param {NamedExports?} namedExports
+ * @returns {namedExports is null}
+ */
+function isEmpty(namedExports) {
+  return (
+    !namedExports ||
+    (namedExports.exports.length === 0 && namedExports.types.length === 0)
+  );
+}
 
 /**
  * Parses specified file and returns an AST.
@@ -40,7 +53,7 @@ function parse(context, moduleName) {
  * Extracts exports from specified file.
  * @param {import("eslint").Rule.RuleContext} context
  * @param {unknown} moduleName
- * @returns {{ exports: string[], types: string[] } | null}
+ * @returns {NamedExports | null}
  */
 function extractExports(context, moduleName) {
   if (typeof moduleName !== "string") {
@@ -53,7 +66,7 @@ function extractExports(context, moduleName) {
   }
 
   try {
-    /** @type {{ exports: string[], types: string[] }} */
+    /** @type {NamedExports} */
     const result = { exports: [], types: [] };
 
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -142,10 +155,15 @@ module.exports = {
           node,
           message:
             "Prefer explicit exports over `export *` to avoid name clashes, and improve tree-shakeability.",
-          fix: result
-            ? (fixer) => {
-                const names = result.exports.sort().join(", ");
-                const lines = [`export { ${names} } from ${node.source.raw};`];
+          fix: isEmpty(result)
+            ? null
+            : (fixer) => {
+                /** @type {string[]} */
+                const lines = [];
+                if (result.exports.length > 0) {
+                  const names = result.exports.sort().join(", ");
+                  lines.push(`export { ${names} } from ${node.source.raw};`);
+                }
                 if (result.types.length > 0) {
                   const types = result.types.sort().join(", ");
                   lines.push(
@@ -153,8 +171,7 @@ module.exports = {
                   );
                 }
                 return fixer.replaceText(node, lines.join("\n"));
-              }
-            : null,
+              },
         });
       },
     };
