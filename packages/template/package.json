@@ -1,0 +1,37 @@
+{
+  "name": "@rnx-kit/template",
+  "version": "0.0.1",
+  "description": "Template folder to use as baseline for new packages in rnx-kit",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/template#readme",
+  "license": "MIT",
+  "files": [
+    "src/*"
+  ],
+  "main": "src/index.ts",
+  "types": "src/types.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "packages/template"
+  },
+  "engines": {
+    "node": ">= 14"
+  },
+  "scripts": {
+    "build": "tsc",
+    "format": "prettier --write src/",
+    "lint": "eslint src/* --ext .js,.jsx,.ts,.tsx --config package.json --color"
+  },
+  "dependencies": {
+    "typescript": "^4.0.0",
+    "workspace-tools": "^0.16.2"
+  },
+  "devDependencies": {
+    "@rnx-kit/eslint-config": "^0.0.1",
+    "eslint": "^8.0.0",
+    "prettier": "^2.0.0"
+  },
+  "eslintConfig": {
+    "extends": "@rnx-kit/eslint-config"
+  }
+}
