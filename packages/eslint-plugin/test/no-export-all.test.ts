@@ -78,7 +78,7 @@ describe("disallows `export *`", () => {
       {
         code: "export * from 'types';",
         errors: 1,
-        output: ["export type { IChopper, Predator } from 'types';"].join("\n"),
+        output: "export type { IChopper, Predator } from 'types';",
       },
     ],
   });
