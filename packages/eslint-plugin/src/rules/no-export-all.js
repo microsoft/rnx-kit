@@ -39,8 +39,6 @@ function isEmpty(namedExports) {
  * @returns {{ break: () => void; traverse: (node: Node, options: {}) => void}}
  */
 function makeTraverser() {
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
   const Traverser = require(path.join(
     path.dirname(require.resolve("eslint/package.json")),
     "lib",
