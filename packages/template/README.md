@@ -17,3 +17,15 @@ Copy/paste this folder and change all the relevant files to match your new
 addition (so, change name of folder, in the package.json, etc).
 
 It's not ideal but at least it's a start.
+
+### What does every file do?
+
+- `src` folder - contains two files bla bla bla
+  - `index.ts` bla bla bla
+  - `types.ts` bla bla bla
+- `CHANGELOG.json` bla bla bla
+- `CHANGELOG.md` bla bla bla
+- `just.config.js` bla bla bla
+- `package.json` bla bla bla
+- `README.md` bla bla bla
+- `tsconfig.json` bla bla bla
