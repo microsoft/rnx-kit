@@ -1,0 +1,7 @@
+{
+  "type": "none",
+  "comment": "base template folder",
+  "packageName": "@rnx-kit/template",
+  "email": "lsciandra@microsoft.com",
+  "dependentChangeType": "none"
+}
