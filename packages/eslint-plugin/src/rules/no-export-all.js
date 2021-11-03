@@ -63,29 +63,30 @@ function makeTraverser() {
 
 /**
  * Resolves specified `moduleId` starting from `fromDir`.
- * @param {string} fromDir
- * @param {string} moduleId
- * @returns {string}
  */
-function resolveFrom(fromDir, moduleId) {
-  if (process.env.NODE_ENV === "test") {
-    return moduleId;
-  }
+const resolveFrom =
+  /** @type {() => (fromDir: string, moduleId: string) => string} */
+  (
+    () => {
+      if (process.env.NODE_ENV === "test") {
+        return (_, moduleId) => moduleId;
+      }
 
-  if (moduleId.startsWith(".")) {
-    const p = path.join(fromDir, moduleId);
-    const ext = [".ts", ".tsx", ".js", ".jsx"].find((ext) =>
-      fs.existsSync(p + ext)
-    );
-    if (ext) {
-      return p + ext;
-    } else if (fs.statSync(p).isDirectory()) {
-      return resolveFrom(fromDir, moduleId + "/index");
+      const resolve = require("enhanced-resolve").create.sync({
+        extensions: [".ts", ".tsx", ".js", ".jsx"],
+      });
+
+      return (fromDir, moduleId) => {
+        const m = resolve(fromDir, moduleId);
+        if (!m) {
+          throw new Error(
+            `Module not found: ${moduleId} (start path: ${fromDir})`
+          );
+        }
+        return m;
+      };
     }
-  }
-
-  return require.resolve(moduleId, { paths: [fromDir] });
-}
+  )();
 
 /**
  * Converts ESLint's `RuleContext` to our `RuleContext`.
