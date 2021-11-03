@@ -3,7 +3,18 @@
 
 /**
  * @typedef {import("@typescript-eslint/types").TSESTree.Node} Node
+ * @typedef {import("eslint").Rule.RuleContext} ESLintRuleContext
  * @typedef {{ exports: string[], types: string[] }} NamedExports
+ *
+ * @typedef {{
+ *   id: ESLintRuleContext["id"];
+ *   options: ESLintRuleContext["options"];
+ *   settings: ESLintRuleContext["settings"];
+ *   parserPath: ESLintRuleContext["parserPath"];
+ *   parserOptions: ESLintRuleContext["parserOptions"];
+ *   parserServices: ESLintRuleContext["parserServices"];
+ *   filename: string;
+ * }} RuleContext
  */
 
 const fs = require("fs");
@@ -22,6 +33,8 @@ const DEFAULT_CONFIG = {
   eslintScopeManager: true,
 };
 
+const MAX_DEPTH = 5;
+
 /**
  * Returns whether there are any named exports.
  * @param {NamedExports?} namedExports
@@ -36,7 +49,7 @@ function isEmpty(namedExports) {
 
 /**
  * Creates and returns an ES tree traverser.
- * @returns {{ break: () => void; traverse: (node: Node, options: {}) => void}}
+ * @returns {{ traverse: (node: Node, options: {}) => void; }}
  */
 function makeTraverser() {
   const Traverser = require(path.join(
@@ -49,7 +62,7 @@ function makeTraverser() {
 }
 
 /**
- * Resolves specified `moduleId` relative to `fromDir`.
+ * Resolves specified `moduleId` starting from `fromDir`.
  * @param {string} fromDir
  * @param {string} moduleId
  * @returns {string}
@@ -71,26 +84,46 @@ function resolveFrom(fromDir, moduleId) {
 }
 
 /**
- * Parses specified file and returns an AST.
- * @param {import("eslint").Rule.RuleContext} context
- * @param {string} moduleId
- * @returns {Node | null}
+ * Converts ESLint's `RuleContext` to our `RuleContext`.
+ * @param {ESLintRuleContext} context
+ * @returns {RuleContext}
  */
-function parse(context, moduleId) {
-  const { parseForESLint } = require(context.parserPath);
+function toRuleContext(context) {
+  return {
+    id: context.id,
+    options: context.options,
+    settings: context.settings,
+    parserPath: context.parserPath,
+    parserOptions: context.parserOptions,
+    parserServices: context.parserServices,
+    filename: context.getFilename(),
+  };
+}
+
+/**
+ * Parses specified file and returns an AST.
+ * @param {RuleContext} context
+ * @param {string} moduleId
+ * @returns {{ ast: Node; filename: string; } | null}
+ */
+function parse({ filename, parserPath, parserOptions }, moduleId) {
+  const { parseForESLint } = require(parserPath);
   if (typeof parseForESLint !== "function") {
     return null;
   }
 
   try {
-    const parentDir = path.dirname(context.getFilename());
-    const filePath = resolveFrom(parentDir, moduleId);
-    const code = fs.readFileSync(filePath, { encoding: "utf-8" });
-    return parseForESLint(code, {
-      ...DEFAULT_CONFIG,
-      ...context.parserOptions,
-      filePath,
-    }).ast;
+    const parentDir = path.dirname(filename);
+    const modulePath = resolveFrom(parentDir, moduleId);
+    const code = fs.readFileSync(modulePath, { encoding: "utf-8" });
+    return {
+      ast: parseForESLint(code, {
+        ...DEFAULT_CONFIG,
+        ...parserOptions,
+        filePath: modulePath,
+      }).ast,
+      filename: modulePath,
+    };
   } catch (_) {
     /* ignore */
   }
@@ -100,20 +133,22 @@ function parse(context, moduleId) {
 
 /**
  * Extracts exports from specified file.
- * @param {import("eslint").Rule.RuleContext} context
+ * @param {RuleContext} context
  * @param {unknown} moduleId
+ * @param {number=} depth
  * @returns {NamedExports | null}
  */
-function extractExports(context, moduleId) {
-  if (typeof moduleId !== "string") {
+function extractExports(context, moduleId, depth = 0) {
+  if (depth >= MAX_DEPTH || typeof moduleId !== "string") {
     return null;
   }
 
-  const ast = parse(context, moduleId);
-  if (!ast) {
+  const parseResult = parse(context, moduleId);
+  if (!parseResult?.ast) {
     return null;
   }
 
+  const { ast, filename } = parseResult;
   try {
     /** @type {NamedExports} */
     const result = { exports: [], types: [] };
@@ -165,9 +200,21 @@ function extractExports(context, moduleId) {
             }
             break;
 
-          case "ExportAllDeclaration":
-            traverser.break();
-            return;
+          case "ExportAllDeclaration": {
+            const source = node.source?.value;
+            if (source) {
+              const namedExports = extractExports(
+                { ...context, filename },
+                source,
+                depth + 1
+              );
+              if (namedExports) {
+                result.exports.push(...namedExports.exports);
+                result.types.push(...namedExports.types);
+              }
+            }
+            break;
+          }
         }
       },
     });
@@ -195,7 +242,10 @@ module.exports = {
   create: (context) => {
     return {
       ExportAllDeclaration: (node) => {
-        const result = extractExports(context, node.source.value);
+        const result = extractExports(
+          toRuleContext(context),
+          node.source.value
+        );
         context.report({
           node,
           message:

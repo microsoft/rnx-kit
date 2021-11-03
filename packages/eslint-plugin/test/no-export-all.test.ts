@@ -4,6 +4,7 @@ import rule from "../src/rules/no-export-all";
 jest.mock("fs");
 
 require("fs").__setMocks({
+  barbarian: "export const name = 'Conan';",
   chopper: `
 export type Predator = { kind: "$predator" };
 
@@ -70,10 +71,12 @@ describe("disallows `export *`", () => {
       {
         code: "export * from 'conquerer';",
         errors: 1,
+        output: "export { name } from 'conquerer';",
       },
       {
         code: "export * from 'this-package-does-not-exist';",
         errors: 1,
+        output: "export * from 'this-package-does-not-exist';",
       },
       {
         code: "export * from 'types';",
