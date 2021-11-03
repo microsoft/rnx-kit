@@ -1,4 +1,3 @@
-import "jest-extended";
 import { toIndex, addRange } from "../src/array";
 
 describe("Language > Array > toIndex()", () => {

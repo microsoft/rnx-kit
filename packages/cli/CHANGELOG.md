@@ -1,8 +1,54 @@
 # Change Log - @rnx-kit/cli
 
-This log was last generated on Fri, 29 Oct 2021 14:13:32 GMT and should not be manually modified.
+This log was last generated on Mon, 01 Nov 2021 15:07:43 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 0.9.42
+
+Mon, 01 Nov 2021 15:07:43 GMT
+
+### Patches
+
+- Update the CLI, adjusting it to use the new typescript-service package. (afoxman@microsoft.com)
+- Bump @rnx-kit/typescript-service to v1.4.0
+
+## 0.9.41
+
+Mon, 01 Nov 2021 13:46:12 GMT
+
+### Patches
+
+- Normalize main and types fields across all packages which use them. (afoxman@microsoft.com)
+- Bump @rnx-kit/config to v0.4.15
+- Bump @rnx-kit/console to v1.0.6
+- Bump @rnx-kit/dep-check to v1.8.14
+- Bump @rnx-kit/metro-plugin-cyclic-dependencies-detector to v1.0.16
+- Bump @rnx-kit/metro-plugin-duplicates-checker to v1.2.10
+- Bump @rnx-kit/metro-serializer to v1.0.6
+- Bump @rnx-kit/metro-serializer-esbuild to v0.0.18
+- Bump @rnx-kit/metro-service to v1.1.8
+- Bump @rnx-kit/third-party-notices to v1.2.8
+- Bump @rnx-kit/tools-language to v1.2.1
+- Bump @rnx-kit/tools-node to v1.2.1
+- Bump @rnx-kit/tools-react-native to v1.0.5
+- Bump @rnx-kit/typescript-service to v1.3.10
+
+## 0.9.40
+
+Sat, 30 Oct 2021 07:50:51 GMT
+
+### Patches
+
+- Bump @rnx-kit/config to v0.4.14
+- Bump @rnx-kit/dep-check to v1.8.13
+- Bump @rnx-kit/metro-plugin-cyclic-dependencies-detector to v1.0.15
+- Bump @rnx-kit/metro-plugin-duplicates-checker to v1.2.9
+- Bump @rnx-kit/metro-service to v1.1.7
+- Bump @rnx-kit/third-party-notices to v1.2.7
+- Bump @rnx-kit/tools-language to v1.2.0
+- Bump @rnx-kit/tools-node to v1.2.0
+- Bump @rnx-kit/typescript-service to v1.3.9
 
 ## 0.9.39
 

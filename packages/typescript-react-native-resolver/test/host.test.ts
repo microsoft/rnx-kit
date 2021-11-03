@@ -15,15 +15,15 @@ import { ResolverLog, ResolverLogMode } from "../src/log";
 
 describe("Host > changeCompilerHostToUseReactNativeResolver", () => {
   function testChangeCompilerHost(host: ts.CompilerHost): void {
-    changeCompilerHostToUseReactNativeResolver(
+    changeCompilerHostToUseReactNativeResolver({
       host,
-      {}, // compiler options
-      "ios",
-      ["native"],
-      false, // enable RN substitution?
-      false, // enable error-tracing?
-      undefined // trace file
-    );
+      options: {}, // compiler options
+      platform: "ios",
+      platformExtensionNames: ["native"],
+      disableReactNativePackageSubstitution: false, // enable RN substitution?
+      traceReactNativeModuleResolutionErrors: false, // enable error-tracing?
+      traceResolutionLog: undefined, // trace file
+    });
   }
 
   test("sets the trace function to ensure trace logging is possible", () => {

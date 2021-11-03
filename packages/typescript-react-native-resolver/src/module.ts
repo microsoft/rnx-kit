@@ -78,8 +78,6 @@ export function findModuleFile(
   modulePath: string,
   extensions: ts.Extension[]
 ): ts.ResolvedModuleFull | undefined {
-  // TODO: security: if join(searchDir, modulePath) takes you outside of searchDir, return undefined without touching the disk
-
   const { host } = context;
 
   //

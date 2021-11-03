@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/metro-plugin-typescript-validation
 
-This log was last generated on Wed, 04 Aug 2021 10:08:23 GMT and should not be manually modified.
+This log was last generated on Mon, 01 Nov 2021 13:46:13 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 1.0.11
+
+Mon, 01 Nov 2021 13:46:13 GMT
+
+### Patches
+
+- Normalize main and types fields across all packages which use them. (afoxman@microsoft.com)
 
 ## 1.0.7
 

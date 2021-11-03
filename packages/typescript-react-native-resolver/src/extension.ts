@@ -16,7 +16,7 @@ export const ExtensionsTypeScript = [
 ];
 
 export function hasExtension(p: string, ext: ts.Extension): boolean {
-  return p.length > ext.length && p.endsWith(ext);
+  return p.endsWith(ext);
 }
 
 export function getExtensionFromPath(p: string): ts.Extension | undefined {

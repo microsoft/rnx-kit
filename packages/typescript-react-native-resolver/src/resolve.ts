@@ -141,7 +141,6 @@ export function resolvePackageModule(
     searchDir
   );
   const pkgDir = findPackageDependencyDir(context, moduleRef, searchDir);
-  // TODO: stopDir ==> workspace root? security & perf
   if (pkgDir) {
     log.log("Loading module from external package '%s'.", pkgDir);
 
