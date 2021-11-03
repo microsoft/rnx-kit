@@ -24,10 +24,6 @@
     "lint": "rnx-kit-scripts lint",
     "test": "rnx-kit-scripts test",
   },
-  "dependencies": {
-    "typescript": "^4.0.0",
-    "workspace-tools": "^0.16.2"
-  },
   "devDependencies": {
     "@rnx-kit/eslint-config": "^0.0.1",
     "eslint": "^8.0.0",
