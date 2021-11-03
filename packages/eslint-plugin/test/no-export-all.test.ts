@@ -24,6 +24,7 @@ export type { IChopper as IChopperRe, Predator as PredatorRe };
 `,
   conquerer: "export * from 'destroyer'",
   destroyer: "export * from 'barbarian'",
+  recall: "export * from 'recall'",
   types: `
 export type Predator = { kind: "$predator" };
 
@@ -72,6 +73,11 @@ describe("disallows `export *`", () => {
         code: "export * from 'conquerer';",
         errors: 1,
         output: "export { name } from 'conquerer';",
+      },
+      {
+        code: "export * from 'recall';",
+        errors: 1,
+        output: "export * from 'recall';",
       },
       {
         code: "export * from 'this-package-does-not-exist';",
