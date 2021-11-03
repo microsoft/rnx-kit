@@ -10,7 +10,7 @@ jobs:
         with:
           node-version: 14
       - name: Checkout
-        uses: actions/checkout@v2.3.5
+        uses: actions/checkout@v2.4.0
         with:
           fetch-depth: 0
       - name: Deduplicate packages
@@ -59,7 +59,7 @@ jobs:
         with:
           go-version: "^1.14.0"
       - name: Checkout
-        uses: actions/checkout@v2.3.5
+        uses: actions/checkout@v2.4.0
         with:
           fetch-depth: 0
       - name: Cache /.yarn-offline-mirror
