@@ -19,9 +19,10 @@
     "node": ">= 14"
   },
   "scripts": {
-    "build": "tsc",
-    "format": "prettier --write src/",
-    "lint": "eslint src/* --ext .js,.jsx,.ts,.tsx --config package.json --color"
+    "build": "rnx-kit-scripts build",
+    "format": "rnx-kit-scripts format",
+    "lint": "rnx-kit-scripts lint",
+    "test": "rnx-kit-scripts test",
   },
   "dependencies": {
     "typescript": "^4.0.0",
