@@ -35,15 +35,23 @@ import type { ResolverContext, ModuleResolutionHostLike } from "./types";
  * @param traceReactNativeModuleResolutionErrors Flag to enable trace logging when a resolver error occurs. All messages involved in the failed module resolution are aggregated and logged.
  * @param traceResolutionLog Optional file to use for logging trace message. When not present, log messages go to the console.
  */
-export function changeCompilerHostToUseReactNativeResolver(
-  host: ts.CompilerHost,
-  options: ts.ParsedCommandLine["options"],
-  platform: string,
-  platformExtensionNames: string[] | undefined,
-  disableReactNativePackageSubstitution: boolean,
-  traceReactNativeModuleResolutionErrors: boolean,
-  traceResolutionLog: string | undefined
-): void {
+export function changeCompilerHostToUseReactNativeResolver({
+  host,
+  options,
+  platform,
+  platformExtensionNames,
+  disableReactNativePackageSubstitution,
+  traceReactNativeModuleResolutionErrors,
+  traceResolutionLog,
+}: {
+  host: ts.CompilerHost;
+  options: ts.ParsedCommandLine["options"];
+  platform: string;
+  platformExtensionNames: string[] | undefined;
+  disableReactNativePackageSubstitution: boolean;
+  traceReactNativeModuleResolutionErrors: boolean;
+  traceResolutionLog: string | undefined;
+}): void {
   let mode = ResolverLogMode.Never;
   if (options.traceResolution) {
     mode = ResolverLogMode.Always;
