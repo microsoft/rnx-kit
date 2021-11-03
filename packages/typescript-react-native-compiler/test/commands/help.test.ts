@@ -1,5 +1,3 @@
-import "jest-extended";
-
 import { showAllHelp, showHelp } from "../../src/commands";
 import { tsc } from "../../src/commands/tsc";
 

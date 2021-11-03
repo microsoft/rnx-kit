@@ -1,4 +1,3 @@
-import "jest-extended";
 import {
   parseCommandLineRnTs,
   parseCommandLineTs,

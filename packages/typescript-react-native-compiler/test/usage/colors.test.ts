@@ -1,5 +1,3 @@
-import "jest-extended";
-
 import { createUsageColors, UsageColorMode } from "../../src/usage/colors";
 
 describe("Usage > Colors > createUsageColors", () => {

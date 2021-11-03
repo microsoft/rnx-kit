@@ -1,5 +1,3 @@
-import "jest-extended";
-
 import os from "os";
 
 import { showVersion } from "../../src/commands";
