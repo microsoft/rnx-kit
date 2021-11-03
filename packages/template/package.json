@@ -28,6 +28,6 @@
     "rnx-kit-scripts": "*",
   },
   "eslintConfig": {
-    "extends": "@rnx-kit/eslint-config"
+    "extends": "rnx-kit-scripts"
   }
 }
