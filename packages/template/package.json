@@ -6,7 +6,7 @@
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/template#readme",
   "license": "MIT",
   "files": [
-    "src/*"
+    "lib/*"
   ],
   "main": "src/index.ts",
   "types": "src/types.ts",
