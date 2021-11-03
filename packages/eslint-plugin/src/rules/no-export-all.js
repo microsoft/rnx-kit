@@ -77,7 +77,11 @@ function resolveFrom(fromDir, moduleId) {
     const ext = [".ts", ".tsx", ".js", ".jsx"].find((ext) =>
       fs.existsSync(p + ext)
     );
-    return p + ext;
+    if (ext) {
+      return p + ext;
+    } else if (fs.statSync(p).isDirectory()) {
+      return resolveFrom(fromDir, moduleId + "/index");
+    }
   }
 
   return require.resolve(moduleId, { paths: [fromDir] });
