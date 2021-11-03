@@ -25,15 +25,17 @@ function configureCompilerHost(
     //  TypeScript resolver. This includes configuring a react-native trace
     //  message handler.
     //
-    changeCompilerHostToUseReactNativeResolver(
-      compilerHost,
-      cmdLine.ts.options,
+    changeCompilerHostToUseReactNativeResolver({
+      host: compilerHost,
+      options: cmdLine.ts.options,
       platform,
-      platformExtensions,
-      !!disableReactNativePackageSubstitution,
-      !!traceReactNativeModuleResolutionErrors,
-      traceResolutionLog
-    );
+      platformExtensionNames: platformExtensions,
+      disableReactNativePackageSubstitution:
+        !!disableReactNativePackageSubstitution,
+      traceReactNativeModuleResolutionErrors:
+        !!traceReactNativeModuleResolutionErrors,
+      traceResolutionLog,
+    });
   } else {
     //  No react-native platform was specified. Use the standard TypeScript
     //  resolver.
