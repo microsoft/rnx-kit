@@ -1,0 +1,4 @@
+disabled_rules:
+  - function_body_length
+  - opening_brace # Conflicts with SwiftFormat
+  - trailing_comma
