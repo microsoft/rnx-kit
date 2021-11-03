@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/dep-check",
-  "version": "1.8.14",
+  "version": "1.8.15",
   "description": "Dependency checker for React Native apps",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/dep-check#readme",
   "license": "MIT",
@@ -25,10 +25,10 @@
     "update-readme": "node scripts/update-readme.js"
   },
   "dependencies": {
-    "@rnx-kit/config": "^0.4.15",
-    "@rnx-kit/console": "^1.0.6",
-    "@rnx-kit/tools-language": "^1.2.1",
-    "@rnx-kit/tools-node": "^1.2.1",
+    "@rnx-kit/config": "^0.4.16",
+    "@rnx-kit/console": "^1.0.7",
+    "@rnx-kit/tools-language": "^1.2.2",
+    "@rnx-kit/tools-node": "^1.2.2",
     "chalk": "^4.1.0",
     "detect-indent": "^6.0.0",
     "jest-diff": "^26.0.0",

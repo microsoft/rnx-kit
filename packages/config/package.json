@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/config",
-  "version": "0.4.15",
+  "version": "0.4.16",
   "description": "Define and query information about a kit package",
   "license": "MIT",
   "main": "lib/index.js",
@@ -13,7 +13,7 @@
     "test": "rnx-kit-scripts test"
   },
   "dependencies": {
-    "@rnx-kit/console": "^1.0.6",
+    "@rnx-kit/console": "^1.0.7",
     "cosmiconfig": "^7.0.0",
     "lodash": "^4.17.21",
     "semver": "^7.0.0"

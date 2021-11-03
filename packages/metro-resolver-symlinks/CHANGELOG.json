@@ -2,6 +2,21 @@
   "name": "@rnx-kit/metro-resolver-symlinks",
   "entries": [
     {
+      "date": "Wed, 03 Nov 2021 18:15:39 GMT",
+      "tag": "@rnx-kit/metro-resolver-symlinks_v0.1.10",
+      "version": "0.1.10",
+      "comments": {
+        "patch": [
+          {
+            "author": "beachball",
+            "package": "@rnx-kit/metro-resolver-symlinks",
+            "comment": "Bump @rnx-kit/tools-node to v1.2.2",
+            "commit": "acebdc3d387fc38e11b487736e1d7ba065131f1d"
+          }
+        ]
+      }
+    },
+    {
       "date": "Mon, 01 Nov 2021 13:46:13 GMT",
       "tag": "@rnx-kit/metro-resolver-symlinks_v0.1.9",
       "version": "0.1.9",

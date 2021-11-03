@@ -2,6 +2,21 @@
   "name": "@rnx-kit/eslint-plugin",
   "entries": [
     {
+      "date": "Wed, 03 Nov 2021 18:15:39 GMT",
+      "tag": "@rnx-kit/eslint-plugin_v0.2.0",
+      "version": "0.2.0",
+      "comments": {
+        "minor": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/eslint-plugin",
+            "commit": "acebdc3d387fc38e11b487736e1d7ba065131f1d",
+            "comment": "Implemented fixer for `no-export-all`"
+          }
+        ]
+      }
+    },
+    {
       "date": "Fri, 29 Oct 2021 12:14:31 GMT",
       "tag": "@rnx-kit/eslint-plugin_v0.1.2",
       "version": "0.1.2",
