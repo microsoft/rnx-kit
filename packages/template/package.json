@@ -29,5 +29,8 @@
   },
   "eslintConfig": {
     "extends": "rnx-kit-scripts"
+  },
+  "jest": {
+    "preset": "rnx-kit-scripts"
   }
 }
