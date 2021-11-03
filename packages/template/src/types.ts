@@ -1,1 +1,1 @@
-export declare type FakeMethod = (message: string) => void;
+export type FakeMethod = (message: string) => void;
