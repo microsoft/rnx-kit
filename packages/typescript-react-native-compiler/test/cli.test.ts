@@ -1,8 +1,6 @@
-import "jest-extended";
 import fs from "fs";
 import path from "path";
 import tempDir from "temp-dir";
-import ts from "typescript";
 
 import { showAllHelp, showHelp, showVersion } from "../src/commands";
 import { compile } from "../src/compile";

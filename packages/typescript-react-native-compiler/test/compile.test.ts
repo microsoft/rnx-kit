@@ -1,5 +1,3 @@
-import "jest-extended";
-
 import { createDiagnosticWriter } from "@rnx-kit/typescript-service";
 
 import { compile } from "../src/compile";
