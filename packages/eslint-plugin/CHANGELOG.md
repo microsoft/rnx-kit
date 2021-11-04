@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/eslint-plugin
 
-This log was last generated on Wed, 03 Nov 2021 18:15:39 GMT and should not be manually modified.
+This log was last generated on Thu, 04 Nov 2021 17:54:44 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 0.2.1
+
+Thu, 04 Nov 2021 17:54:44 GMT
+
+### Patches
+
+- Adds `module` to the list of main fields to consider, and options for setting max depth and enabling debug output. (4123478+tido64@users.noreply.github.com)
 
 ## 0.2.0
 
