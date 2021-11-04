@@ -5,7 +5,7 @@ import { resolveFileModule, resolvePackageModule } from "../src/resolve";
 jest.mock("../src/resolve");
 
 import {
-  changeCompilerHostToUseReactNativeResolver,
+  changeHostToUseReactNativeResolver,
   resolveModuleName,
   resolveModuleNames,
   resolveTypeReferenceDirectives,
@@ -15,7 +15,7 @@ import { ResolverLog, ResolverLogMode } from "../src/log";
 
 describe("Host > changeCompilerHostToUseReactNativeResolver", () => {
   function testChangeCompilerHost(host: ts.CompilerHost): void {
-    changeCompilerHostToUseReactNativeResolver(
+    changeHostToUseReactNativeResolver(
       host,
       {}, // compiler options
       "ios",

@@ -38,38 +38,9 @@ if (cmdLine.errors.length > 0) {
 }
 ```
 
-## Resolver Host
-
-`ResolverHost` is the interface which allows TypeScript to ask for module and
-type-reference resolution. You provide an implementation specific to your
-project.
-
-For example, in a react-native project, your implementation would start with
-normal Node resolution and add platform override support for files such as
-`foo.ios.ts` and `bar.native.tsx`. It might also add support for out-of-tree
-platforms by mapping `react-native` module references to `react-native-windows`
-or `react-native-macos`.
-
-```typescript
-function createResolverHost(config: ProjectConfig): ResolverHost {
-  const defaultResolverHost = createDefaultResolverHost(config);
-  return {
-    resolveModuleNames: reactNativeModuleResolver,
-    getResolvedModuleWithFailedLookupLocationsFromCache:
-      defaultResolverHost.getResolvedModuleWithFailedLookupLocationsFromCache.bind(defaultResolverHost),
-    resolveTypeReferenceDirectives:
-      defaultResolverHost.resolveTypeReferenceDirectives.bind(defaultResolverHost),
-  };
-}
-
-function reactNativeModuleResolver(...) {
-  // ... Node resolution with platform override support and out-of-tree platform support ...
-}
-```
-
 ## Language Services
 
-TypeScript's language service allow you to work with source code continuously,
+TypeScript's language service allows you to work with source code continuously,
 unlike the TypeScript compiler, which makes a single pass through the code. The
 language service tends to load only what is needed to fulfill the current
 request, such as getting diagnostics for a particular source file, or re-loading
@@ -86,7 +57,7 @@ You can use a `Project` to validate code, and emit transpiled JavaScript:
 
 ```typescript
 const service = new Service();
-const project = service.openProject(cmdLine, resolverHost);
+const project = service.openProject(cmdLine);
 
 // validate
 const fileHasErrors = project.validateFile(fileName);
@@ -123,4 +94,47 @@ properly release all internal resources:
 
 ```typescript
 project.dispose();
+```
+
+## Customizing the Language Service
+
+The language service is initialized using a host interface. You can customize
+the host interface to change the way TypeScript works:
+
+```typescript
+const enhanceLanguageServiceHost = (host: ts.LanguageServiceHost): void => {
+  // change host functions in here
+};
+
+const service = new Service();
+const project = service.openProject(cmdLine, enhanceLanguageServiceHost);
+```
+
+For example, you can replace the functions which control how modules and type
+references are resolved to files:
+
+```typescript
+function resolveModuleNames(
+  moduleNames: string[],
+  containingFile: string,
+  reusedNames: string[] | undefined,
+  redirectedReference: ResolvedProjectReference | undefined,
+  options: CompilerOptions
+): (ResolvedModule | undefined)[] {
+  /* ... */
+}
+
+function resolveTypeReferenceDirectives(
+  typeDirectiveNames: string[],
+  containingFile: string,
+  redirectedReference: ResolvedProjectReference | undefined,
+  options: CompilerOptions
+): (ResolvedTypeReferenceDirective | undefined)[] {
+  /* ... */
+}
+
+const enhanceLanguageServiceHost = (host: ts.LanguageServiceHost): void => {
+  host.resolveModuleNames = resolveModuleNames;
+  host.resolveTypeReferenceDirectives = resolveTypeReferenceDirectives;
+};
 ```

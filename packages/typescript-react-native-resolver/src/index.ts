@@ -1,1 +1,1 @@
-export { changeCompilerHostToUseReactNativeResolver } from "./host";
+export { changeHostToUseReactNativeResolver } from "./host";

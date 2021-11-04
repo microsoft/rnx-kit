@@ -1,12 +1,11 @@
+import chalk from "chalk";
 import ts from "typescript";
 import { ExternalFileCache, ProjectFileCache } from "./cache";
 import { DiagnosticWriter } from "./diagnostics";
-import type { ResolverHost } from "./resolve";
 import { isNonEmptyArray } from "./util";
 
 export class Project {
   private diagnosticWriter: DiagnosticWriter;
-  private resolverHost: ResolverHost;
   private cmdLine: ts.ParsedCommandLine;
 
   private projectFiles: ProjectFileCache;
@@ -17,11 +16,10 @@ export class Project {
   constructor(
     documentRegistry: ts.DocumentRegistry,
     diagnosticWriter: DiagnosticWriter,
-    resolverHost: ResolverHost,
-    cmdLine: ts.ParsedCommandLine
+    cmdLine: ts.ParsedCommandLine,
+    enhanceLanguageServiceHost?: (host: ts.LanguageServiceHost) => void
   ) {
     this.diagnosticWriter = diagnosticWriter;
-    this.resolverHost = resolverHost;
     this.cmdLine = cmdLine;
 
     this.projectFiles = new ProjectFileCache(cmdLine.fileNames);
@@ -38,14 +36,15 @@ export class Project {
       getScriptSnapshot: (fileName) =>
         this.projectFiles.getSnapshot(fileName) ??
         this.externalFiles.getSnapshot(fileName),
-      //getProjectReferences?(): readonly ProjectReference[] | undefined;
+      getProjectReferences: (): readonly ts.ProjectReference[] | undefined =>
+        cmdLine.projectReferences,
       //getLocalizedDiagnosticMessages?(): any;
       //getCancellationToken?(): HostCancellationToken;
       getCurrentDirectory: () => process.cwd(),
       getDefaultLibFileName: (o) => ts.getDefaultLibFilePath(o),
-      //log?(s: string): void;
-      //trace?(s: string): void;
-      //error?(s: string): void;
+      log: (s: string): void => console.log(chalk.cyanBright(s)),
+      trace: (s: string): void => console.log(chalk.greenBright(s)),
+      error: (s: string): void => console.error(chalk.redBright(s)),
       //useCaseSensitiveFileNames?(): boolean;
 
       /*
@@ -69,13 +68,9 @@ export class Project {
        *
        * If this is implemented, `getResolvedModuleWithFailedLookupLocationsFromCache` should be too.
        */
-      resolveModuleNames: resolverHost.resolveModuleNames.bind(resolverHost),
-      getResolvedModuleWithFailedLookupLocationsFromCache:
-        resolverHost.getResolvedModuleWithFailedLookupLocationsFromCache.bind(
-          resolverHost
-        ),
-      resolveTypeReferenceDirectives:
-        resolverHost.resolveTypeReferenceDirectives.bind(resolverHost),
+      //resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames: string[] | undefined, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions): (ResolvedModule | undefined)[];
+      //getResolvedModuleWithFailedLookupLocationsFromCache?(modulename: string, containingFile: string): ResolvedModuleWithFailedLookupLocations | undefined;
+      //resolveTypeReferenceDirectives?(typeDirectiveNames: string[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions): (ResolvedTypeReferenceDirective | undefined)[];
 
       /*
        * Required for full import and type reference completions.
@@ -97,14 +92,14 @@ export class Project {
       directoryExists: ts.sys.directoryExists,
     };
 
+    if (enhanceLanguageServiceHost) {
+      enhanceLanguageServiceHost(languageServiceHost);
+    }
+
     this.languageService = ts.createLanguageService(
       languageServiceHost,
       documentRegistry
     );
-  }
-
-  getResolverHost(): ResolverHost {
-    return this.resolverHost;
   }
 
   getCommandLine(): ts.ParsedCommandLine {

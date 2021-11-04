@@ -1,7 +1,6 @@
 import ts from "typescript";
 import { createDiagnosticWriter } from "./diagnostics";
 import { Project } from "./project";
-import { ResolverHost } from "./resolve";
 
 export class Service {
   private documentRegistry;
@@ -14,13 +13,13 @@ export class Service {
 
   openProject(
     cmdLine: ts.ParsedCommandLine,
-    resolverHost: ResolverHost
+    enhanceLanguageServiceHost?: (host: ts.LanguageServiceHost) => void
   ): Project {
     return new Project(
       this.documentRegistry,
       this.diagnosticWriter,
-      resolverHost,
-      cmdLine
+      cmdLine,
+      enhanceLanguageServiceHost
     );
   }
 }
