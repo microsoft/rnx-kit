@@ -8,7 +8,10 @@
  *
  * @typedef {{
  *   id: ESLintRuleContext["id"];
- *   options: ESLintRuleContext["options"];
+ *   options: {
+ *     debug: boolean;
+ *     maxDepth: number;
+ *   };
  *   settings: ESLintRuleContext["settings"];
  *   parserPath: ESLintRuleContext["parserPath"];
  *   parserOptions: ESLintRuleContext["parserOptions"];
@@ -32,8 +35,6 @@ const DEFAULT_CONFIG = {
   eslintVisitorKeys: true,
   eslintScopeManager: true,
 };
-
-const MAX_DEPTH = 5;
 
 /**
  * Returns whether there are any named exports.
@@ -74,6 +75,7 @@ const resolveFrom =
 
       const resolve = require("enhanced-resolve").create.sync({
         extensions: [".ts", ".tsx", ".js", ".jsx"],
+        mainFields: ["module", "main"],
       });
 
       return (fromDir, moduleId) => {
@@ -94,9 +96,17 @@ const resolveFrom =
  * @returns {RuleContext}
  */
 function toRuleContext(context) {
+  const defaultOptions = {
+    debug: false,
+    maxDepth: 5,
+  };
+
   return {
     id: context.id,
-    options: context.options,
+    options: {
+      ...defaultOptions,
+      ...(context.options && context.options[0]),
+    },
     settings: context.settings,
     parserPath: context.parserPath,
     parserOptions: context.parserOptions,
@@ -111,7 +121,7 @@ function toRuleContext(context) {
  * @param {string} moduleId
  * @returns {{ ast: Node; filename: string; } | null}
  */
-function parse({ filename, parserPath, parserOptions }, moduleId) {
+function parse({ filename, options, parserPath, parserOptions }, moduleId) {
   const { parseForESLint } = require(parserPath);
   if (typeof parseForESLint !== "function") {
     return null;
@@ -129,8 +139,10 @@ function parse({ filename, parserPath, parserOptions }, moduleId) {
       }).ast,
       filename: modulePath,
     };
-  } catch (_) {
-    /* ignore */
+  } catch (e) {
+    if (options.debug) {
+      console.error(e);
+    }
   }
 
   return null;
@@ -140,16 +152,16 @@ function parse({ filename, parserPath, parserOptions }, moduleId) {
  * Extracts exports from specified file.
  * @param {RuleContext} context
  * @param {unknown} moduleId
- * @param {number=} depth
+ * @param {number} depth
  * @returns {NamedExports | null}
  */
-function extractExports(context, moduleId, depth = 0) {
-  if (depth >= MAX_DEPTH || typeof moduleId !== "string") {
+function extractExports(context, moduleId, depth) {
+  if (depth === 0 || typeof moduleId !== "string") {
     return null;
   }
 
   const parseResult = parse(context, moduleId);
-  if (!parseResult?.ast) {
+  if (!parseResult || !parseResult.ast) {
     return null;
   }
 
@@ -211,7 +223,7 @@ function extractExports(context, moduleId, depth = 0) {
               const namedExports = extractExports(
                 { ...context, filename },
                 source,
-                depth + 1
+                depth - 1
               );
               if (namedExports) {
                 result.exports.push(...namedExports.exports);
@@ -224,8 +236,10 @@ function extractExports(context, moduleId, depth = 0) {
       },
     });
     return result;
-  } catch (_) {
-    /* ignore */
+  } catch (e) {
+    if (context.options.debug) {
+      console.error(e);
+    }
   }
 
   return null;
@@ -242,14 +256,29 @@ module.exports = {
       url: require("../../package.json").homepage,
     },
     fixable: "code",
-    schema: [], // no options
+    schema: [
+      {
+        type: "object",
+        properties: {
+          debug: {
+            type: "boolean",
+          },
+          maxDepth: {
+            type: "number",
+          },
+        },
+        additionalProperties: false,
+      },
+    ],
   },
   create: (context) => {
+    const ruleContext = toRuleContext(context);
     return {
       ExportAllDeclaration: (node) => {
         const result = extractExports(
-          toRuleContext(context),
-          node.source.value
+          ruleContext,
+          node.source.value,
+          ruleContext.options.maxDepth
         );
         context.report({
           node,
