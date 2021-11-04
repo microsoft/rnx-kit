@@ -180,8 +180,7 @@ function extractExports(context, moduleId, depth) {
                 case "ClassDeclaration":
                 // fallthrough
                 case "FunctionDeclaration": {
-                  const id = node.declaration.id;
-                  const name = id && id.name;
+                  const name = node.declaration.id?.name;
                   if (name) {
                     result.exports.push(name);
                   }
@@ -191,8 +190,7 @@ function extractExports(context, moduleId, depth) {
                 case "TSInterfaceDeclaration":
                 // fallthrough
                 case "TSTypeAliasDeclaration": {
-                  const id = node.declaration.id;
-                  const name = id && id.name;
+                  const name = node.declaration.id?.name;
                   if (name) {
                     result.types.push(name);
                   }
@@ -220,7 +218,7 @@ function extractExports(context, moduleId, depth) {
             break;
 
           case "ExportAllDeclaration": {
-            const source = node.source && node.source.value;
+            const source = node.source?.value;
             if (source) {
               const namedExports = extractExports(
                 { ...context, filename },
