@@ -59,6 +59,10 @@ describe("disallows `export *`", () => {
       "export default 'Arnold';",
       "const name = 'Arnold'; export { name as default };",
       "export { escape } from 'chopper';",
+      {
+        code: "export * from './internal';",
+        options: [{ expand: "external-only" }],
+      },
     ],
     invalid: [
       {
@@ -88,6 +92,13 @@ describe("disallows `export *`", () => {
         code: "export * from 'types';",
         errors: 1,
         output: "export type { IChopper, Predator } from 'types';",
+      },
+      {
+        code: "export * from './internal'; export * from 'types';",
+        errors: 1,
+        output:
+          "export * from './internal'; export type { IChopper, Predator } from 'types';",
+        options: [{ expand: "external-only" }],
       },
     ],
   });

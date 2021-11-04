@@ -10,6 +10,7 @@
  *   id: ESLintRuleContext["id"];
  *   options: {
  *     debug: boolean;
+ *     expand: "all" | "external-only";
  *     maxDepth: number;
  *   };
  *   settings: ESLintRuleContext["settings"];
@@ -45,6 +46,19 @@ function isEmpty(namedExports) {
   return (
     !namedExports ||
     (namedExports.exports.length === 0 && namedExports.types.length === 0)
+  );
+}
+
+/**
+ * Returns whether a module likely belongs to a project.
+ * @param {string?} project
+ * @param {string} modulePath
+ */
+function isLikelyInProject(project, modulePath) {
+  return (
+    project &&
+    (modulePath.endsWith(".ts") || modulePath.endsWith(".tsx")) &&
+    !path.relative(path.dirname(project), modulePath).startsWith("..")
   );
 }
 
@@ -96,8 +110,10 @@ const resolveFrom =
  * @returns {RuleContext}
  */
 function toRuleContext(context) {
+  /** @type {RuleContext["options"]} */
   const defaultOptions = {
     debug: false,
+    expand: "all",
     maxDepth: 5,
   };
 
@@ -131,11 +147,22 @@ function parse({ filename, options, parserPath, parserOptions }, moduleId) {
     const parentDir = path.dirname(filename);
     const modulePath = resolveFrom(parentDir, moduleId);
     const code = fs.readFileSync(modulePath, { encoding: "utf-8" });
+    const { project } = parserOptions;
     return {
       ast: parseForESLint(code, {
         ...DEFAULT_CONFIG,
         ...parserOptions,
         filePath: modulePath,
+
+        /**
+         * Unset `project` if we're trying to parse files outside the project,
+         * otherwise `@typescript-eslint/parser` will complain:
+         *
+         *   Error: "parserOptions.project" has been set for X.
+         *   The file does not match your project config: Y.
+         *   The file must be included in at least one of the projects provided.
+         */
+        project: isLikelyInProject(project, modulePath) ? project : undefined,
       }).ast,
       filename: modulePath,
     };
@@ -260,12 +287,9 @@ module.exports = {
       {
         type: "object",
         properties: {
-          debug: {
-            type: "boolean",
-          },
-          maxDepth: {
-            type: "number",
-          },
+          debug: { type: "boolean" },
+          expand: { enum: ["all", "external-only"] },
+          maxDepth: { type: "number" },
         },
         additionalProperties: false,
       },
@@ -273,13 +297,15 @@ module.exports = {
   },
   create: (context) => {
     const ruleContext = toRuleContext(context);
+    const { expand, maxDepth } = ruleContext.options;
     return {
       ExportAllDeclaration: (node) => {
-        const result = extractExports(
-          ruleContext,
-          node.source.value,
-          ruleContext.options.maxDepth
-        );
+        const source = node.source.value;
+        if (expand === "external-only" && source?.toString().startsWith(".")) {
+          return;
+        }
+
+        const result = extractExports(ruleContext, source, maxDepth);
         context.report({
           node,
           message:
