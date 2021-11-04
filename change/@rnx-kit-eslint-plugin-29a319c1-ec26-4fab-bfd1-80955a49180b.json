@@ -1,0 +1,7 @@
+{
+  "type": "patch",
+  "comment": "Adds `module` to the list of main fields to consider, and options for setting max depth and enabling debug output.",
+  "packageName": "@rnx-kit/eslint-plugin",
+  "email": "4123478+tido64@users.noreply.github.com",
+  "dependentChangeType": "none"
+}
