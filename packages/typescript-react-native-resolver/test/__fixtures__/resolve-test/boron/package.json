@@ -1,0 +1,5 @@
+{
+  "name": "boron",
+  "version": "1",
+  "main": "./main.ts"
+}

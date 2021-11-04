@@ -1,0 +1,5 @@
+{
+  "name": "jade",
+  "version": "1",
+  "types": "./enlightenment.d.ts"
+}
