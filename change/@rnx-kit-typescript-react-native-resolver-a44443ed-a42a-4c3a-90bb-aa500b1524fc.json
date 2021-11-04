@@ -1,0 +1,7 @@
+{
+  "type": "none",
+  "comment": "Use regex test method instead of match.",
+  "packageName": "@rnx-kit/typescript-react-native-resolver",
+  "email": "afoxman@microsoft.com",
+  "dependentChangeType": "none"
+}
