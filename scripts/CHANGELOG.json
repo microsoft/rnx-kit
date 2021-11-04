@@ -2,6 +2,21 @@
   "name": "rnx-kit-scripts",
   "entries": [
     {
+      "date": "Wed, 03 Nov 2021 18:15:39 GMT",
+      "tag": "rnx-kit-scripts_v0.1.1",
+      "version": "0.1.1",
+      "comments": {
+        "patch": [
+          {
+            "author": "beachball",
+            "package": "rnx-kit-scripts",
+            "comment": "Bump @rnx-kit/golang to v0.1.4",
+            "commit": "acebdc3d387fc38e11b487736e1d7ba065131f1d"
+          }
+        ]
+      }
+    },
+    {
       "date": "Fri, 29 Oct 2021 12:14:31 GMT",
       "tag": "rnx-kit-scripts_v0.1.1",
       "version": "0.1.1",

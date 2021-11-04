@@ -1,6 +1,11 @@
+platform :ios, '14.0'
 require_relative '../../../node_modules/react-native-test-app/test_app'
 
 workspace 'SampleCrossApp.xcworkspace'
 
 use_flipper! false
-use_test_app!
+use_test_app! do |target|
+  target.app do
+    pod 'MSAL', :modular_headers => true
+  end
+end

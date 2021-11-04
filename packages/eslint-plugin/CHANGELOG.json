@@ -2,6 +2,36 @@
   "name": "@rnx-kit/eslint-plugin",
   "entries": [
     {
+      "date": "Thu, 04 Nov 2021 17:54:44 GMT",
+      "tag": "@rnx-kit/eslint-plugin_v0.2.1",
+      "version": "0.2.1",
+      "comments": {
+        "patch": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/eslint-plugin",
+            "commit": "fc715196af54c32633a25179229a4f32b68580ca",
+            "comment": "Adds `module` to the list of main fields to consider, and options for setting max depth and enabling debug output."
+          }
+        ]
+      }
+    },
+    {
+      "date": "Wed, 03 Nov 2021 18:15:39 GMT",
+      "tag": "@rnx-kit/eslint-plugin_v0.2.0",
+      "version": "0.2.0",
+      "comments": {
+        "minor": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/eslint-plugin",
+            "commit": "acebdc3d387fc38e11b487736e1d7ba065131f1d",
+            "comment": "Implemented fixer for `no-export-all`"
+          }
+        ]
+      }
+    },
+    {
       "date": "Fri, 29 Oct 2021 12:14:31 GMT",
       "tag": "@rnx-kit/eslint-plugin_v0.1.2",
       "version": "0.1.2",
