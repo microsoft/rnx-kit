@@ -1442,11 +1442,6 @@
   resolved "https://registry.yarnpkg.com/@microsoft/tsdoc/-/tsdoc-0.13.2.tgz#3b0efb6d3903bd49edb073696f60e90df08efb26"
   integrity sha512-WrHvO8PDL8wd8T2+zBGKrMwVL5IyzR3ryWUsl0PXgEV0QHup4mTLi0QcATefGI6Gx9Anu7vthPyyyLpY0EpiQg==
 
-"@msfast/typescript-platform-resolution@^4.2.4-midgard.0":
-  version "4.2.4-midgard.0"
-  resolved "https://registry.yarnpkg.com/@msfast/typescript-platform-resolution/-/typescript-platform-resolution-4.2.4-midgard.0.tgz#c29f4fbc7d7e772517f2eb207603831de6bfcff1"
-  integrity sha512-o0jiFEWlTVkvu3UbbF9rLel8sf1mMZBLpRrJl6wM3odYzXNZwbPXPGd6Nj3IYYAd+laEUkm1gqurDUJJWaiskQ==
-
 "@napi-rs/triples@^1.0.3":
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/@napi-rs/triples/-/triples-1.0.3.tgz#76d6d0c3f4d16013c61e45dfca5ff1e6c31ae53c"

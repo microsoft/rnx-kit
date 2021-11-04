@@ -1,1 +1,0 @@
-export { TypeScriptValidation } from "./plugin";
