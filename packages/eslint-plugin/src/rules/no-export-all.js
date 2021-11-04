@@ -97,8 +97,8 @@ const resolveFrom =
  */
 function toRuleContext(context) {
   const defaultOptions = {
+    debug: false,
     maxDepth: 5,
-    verbose: false,
   };
 
   return {
@@ -260,11 +260,11 @@ module.exports = {
       {
         type: "object",
         properties: {
+          debug: {
+            type: "boolean",
+          },
           maxDepth: {
             type: "number",
-          },
-          verbose: {
-            type: "boolean",
           },
         },
         additionalProperties: false,
