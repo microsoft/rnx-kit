@@ -1,0 +1,7 @@
+{
+  "type": "patch",
+  "comment": "Fix no-export-all failing to parse files that are outside the TypeScript project",
+  "packageName": "@rnx-kit/eslint-plugin",
+  "email": "4123478+tido64@users.noreply.github.com",
+  "dependentChangeType": "patch"
+}
