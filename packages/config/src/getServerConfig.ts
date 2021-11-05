@@ -14,7 +14,6 @@ export function getServerConfig(
   config: KitConfig
 ): ServerWithRequiredParameters {
   const defaultConfig: ServerWithRequiredParameters = {
-    projectRoot: process.cwd(),
     detectCyclicDependencies: true,
     detectDuplicateDependencies: true,
     typescriptValidation: true,

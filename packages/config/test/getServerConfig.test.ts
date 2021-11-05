@@ -23,13 +23,12 @@ const kitConfigWithServer: KitConfig = {
 
 function validateDefaultConfig(c: ServerConfig) {
   expect(c).toContainAllKeys([
-    "projectRoot",
     "detectCyclicDependencies",
     "detectDuplicateDependencies",
     "typescriptValidation",
     "experimental_treeShake",
   ]);
-  expect(c.projectRoot).toEqual(process.cwd());
+  expect(c.projectRoot).toBeUndefined();
   expect(c.detectCyclicDependencies).toBeTrue();
   expect(c.detectDuplicateDependencies).toBeTrue();
   expect(c.typescriptValidation).toBeTrue();
