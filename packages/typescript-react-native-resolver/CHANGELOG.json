@@ -2,6 +2,21 @@
   "name": "@rnx-kit/typescript-react-native-resolver",
   "entries": [
     {
+      "date": "Fri, 05 Nov 2021 19:44:16 GMT",
+      "tag": "@rnx-kit/typescript-react-native-resolver_v0.0.5",
+      "version": "0.0.5",
+      "comments": {
+        "patch": [
+          {
+            "author": "afoxman@microsoft.com",
+            "package": "@rnx-kit/typescript-react-native-resolver",
+            "commit": "53609bb80f9556c390d4cff0040adbe75aa5c1bb",
+            "comment": "update package dependencies"
+          }
+        ]
+      }
+    },
+    {
       "date": "Fri, 05 Nov 2021 19:24:49 GMT",
       "tag": "@rnx-kit/typescript-react-native-resolver_v0.0.4",
       "version": "0.0.4",

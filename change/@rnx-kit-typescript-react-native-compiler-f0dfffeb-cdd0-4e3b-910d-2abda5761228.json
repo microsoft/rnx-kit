@@ -1,7 +1,0 @@
-{
-  "type": "patch",
-  "comment": "Create the typescript-react-native-compiler package",
-  "packageName": "@rnx-kit/typescript-react-native-compiler",
-  "email": "afoxman@microsoft.com",
-  "dependentChangeType": "patch"
-}
