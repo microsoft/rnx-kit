@@ -6,12 +6,12 @@ function reportParameterDependencyViolation(
   dependee: string
 ): never {
   throw new Error(
-    `${dependent} can only be used in conjunction with ${dependee}`
+    `--${dependent} can only be used in conjunction with --${dependee}`
   );
 }
 
 function reportUnsupportTscCliArgument(argName: string): never {
-  throw new Error(`tsc command-line parameter '${argName}' is not supported`);
+  throw new Error(`tsc command-line parameter '--${argName}' is not supported`);
 }
 
 export type ParsedCommandLineRnTs = {
@@ -33,41 +33,41 @@ export function parseCommandLineRnTs(args: string[]): {
 } {
   const argsCopy = [...args];
 
-  const platform = extractParameterValue(argsCopy, "--platform");
+  const platform = extractParameterValue(argsCopy, "platform");
 
   const platformExtensions = extractParameterValue(
     argsCopy,
-    "--platformExtensions"
+    "platformExtensions"
   )?.split(",");
   if (!platform && platformExtensions) {
-    reportParameterDependencyViolation("--platformExtensions", "--platform");
+    reportParameterDependencyViolation("platformExtensions", "platform");
   }
 
   const disableReactNativePackageSubstitution = extractParameterFlag(
     argsCopy,
-    "--disableReactNativePackageSubstitution"
+    "disableReactNativePackageSubstitution"
   );
   if (!platform && disableReactNativePackageSubstitution) {
     reportParameterDependencyViolation(
-      "--disableReactNativePackageSubstitution",
-      "--platform"
+      "disableReactNativePackageSubstitution",
+      "platform"
     );
   }
 
   const traceReactNativeModuleResolutionErrors = extractParameterFlag(
     argsCopy,
-    "--traceReactNativeModuleResolutionErrors"
+    "traceReactNativeModuleResolutionErrors"
   );
   if (!platform && traceReactNativeModuleResolutionErrors) {
     reportParameterDependencyViolation(
-      "--traceReactNativeModuleResolutionErrors",
-      "--platform"
+      "traceReactNativeModuleResolutionErrors",
+      "platform"
     );
   }
 
   const traceResolutionLog = extractParameterValue(
     argsCopy,
-    "--traceResolutionLog"
+    "traceResolutionLog"
   );
 
   return {
