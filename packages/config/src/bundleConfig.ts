@@ -8,17 +8,6 @@ import type { OutputOptions } from "metro";
  */
 export type BundlerRuntimeParameters = {
   /**
-   * Path to the root of your react-native experience project. The bundle server uses
-   * this root path to resolve all web requests. Either absolute, or relative to the
-   * package.
-   *
-   * Note that `projectRoot` should also contain your Babel config, otherwise
-   * Metro won't be able to find it. For details, see
-   * https://github.com/microsoft/rnx-kit/issues/706.
-   */
-  projectRoot?: string;
-
-  /**
    * Choose whether to detect cycles in the dependency graph. If true, then a default set
    * of options will be used. Otherwise the object allows for fine-grained control over
    * the detection process.
