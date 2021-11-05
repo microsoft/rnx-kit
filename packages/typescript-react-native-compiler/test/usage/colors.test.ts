@@ -1,8 +1,8 @@
-import { createUsageColors, UsageColorMode } from "../../src/usage/colors";
+import { createUsageColors } from "../../src/usage/colors";
 
 describe("Usage > Colors > createUsageColors", () => {
   test("creates a colorless implementation", () => {
-    const colors = createUsageColors(UsageColorMode.None);
+    const colors = createUsageColors("none");
     expect(colors.bold("test")).toEqual("test");
     expect(colors.blue("test")).toEqual("test");
     expect(colors.blueBackground("test")).toEqual("test");
@@ -10,7 +10,7 @@ describe("Usage > Colors > createUsageColors", () => {
   });
 
   test("creates a colorful implementation", () => {
-    const colors = createUsageColors(UsageColorMode.Rich);
+    const colors = createUsageColors("rich");
     expect(colors.bold("test")).not.toEqual("test");
     expect(colors.bold("test")).toEqual(expect.stringContaining("test"));
     expect(colors.blue("test")).not.toEqual("test");

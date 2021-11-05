@@ -7,16 +7,11 @@ export interface UsageColors {
   blueBackground(s: string): string;
 }
 
-export const enum UsageColorMode {
-  None,
-  Limited,
-  Normal,
-  Rich,
-}
+export type UsageColorMode = "none" | "limited" | "normal" | "rich";
 
 export function getUsageColorMode(): UsageColorMode {
   if (!process.stdout.isTTY || process.env["NO_COLOR"]) {
-    return UsageColorMode.None;
+    return "none";
   }
 
   const isWindows =
@@ -26,23 +21,23 @@ export function getUsageColorMode(): UsageColorMode {
   const isVSCode =
     process.env["TERM_PROGRAM"] && process.env["TERM_PROGRAM"] === "vscode";
   if (isWindows && !isWindowsTerminal && !isVSCode) {
-    return UsageColorMode.Limited;
+    return "limited";
   }
 
   if (
     process.env["COLORTERM"] === "truecolor" ||
     process.env["TERM"] === "xterm-256color"
   ) {
-    return UsageColorMode.Rich;
+    return "rich";
   }
 
-  return UsageColorMode.Normal;
+  return "normal";
 }
 
 export function createUsageColors(
   mode: UsageColorMode = getUsageColorMode()
 ): UsageColors {
-  if (mode === UsageColorMode.None) {
+  if (mode === "none") {
     const nop = (s: string): string => {
       return s;
     };
@@ -59,7 +54,7 @@ export function createUsageColors(
   }
 
   function blue(s: string): string {
-    if (mode === UsageColorMode.Limited) {
+    if (mode === "limited") {
       return brightWhite(s);
     }
     return "\u001B[94m" + s + "\u001B[39m";
@@ -70,7 +65,7 @@ export function createUsageColors(
   }
 
   function blueBackground(s: string): string {
-    if (mode === UsageColorMode.Rich) {
+    if (mode === "rich") {
       return "\u001B[48;5;68m" + s + "\u001B[39;49m";
     } else {
       return "\u001B[44m" + s + "\u001B[39;49m";
