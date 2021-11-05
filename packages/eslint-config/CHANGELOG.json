@@ -2,6 +2,21 @@
   "name": "@rnx-kit/eslint-config",
   "entries": [
     {
+      "date": "Fri, 05 Nov 2021 19:24:49 GMT",
+      "tag": "@rnx-kit/eslint-config_v0.0.1",
+      "version": "0.0.1",
+      "comments": {
+        "patch": [
+          {
+            "author": "beachball",
+            "package": "@rnx-kit/eslint-config",
+            "comment": "Bump @rnx-kit/eslint-plugin to v0.2.2",
+            "commit": "103d8c85f90a43985b56aa0364c9d568bcf56b05"
+          }
+        ]
+      }
+    },
+    {
       "date": "Thu, 04 Nov 2021 17:54:44 GMT",
       "tag": "@rnx-kit/eslint-config_v0.0.1",
       "version": "0.0.1",

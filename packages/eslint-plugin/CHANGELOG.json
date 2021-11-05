@@ -2,6 +2,21 @@
   "name": "@rnx-kit/eslint-plugin",
   "entries": [
     {
+      "date": "Fri, 05 Nov 2021 19:24:49 GMT",
+      "tag": "@rnx-kit/eslint-plugin_v0.2.2",
+      "version": "0.2.2",
+      "comments": {
+        "patch": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/eslint-plugin",
+            "commit": "103d8c85f90a43985b56aa0364c9d568bcf56b05",
+            "comment": "Fix no-export-all failing to parse files that are outside the TypeScript project"
+          }
+        ]
+      }
+    },
+    {
       "date": "Thu, 04 Nov 2021 17:54:44 GMT",
       "tag": "@rnx-kit/eslint-plugin_v0.2.1",
       "version": "0.2.1",

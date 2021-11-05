@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/eslint-plugin
 
-This log was last generated on Thu, 04 Nov 2021 17:54:44 GMT and should not be manually modified.
+This log was last generated on Fri, 05 Nov 2021 19:24:49 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 0.2.2
+
+Fri, 05 Nov 2021 19:24:49 GMT
+
+### Patches
+
+- Fix no-export-all failing to parse files that are outside the TypeScript project (4123478+tido64@users.noreply.github.com)
 
 ## 0.2.1
 

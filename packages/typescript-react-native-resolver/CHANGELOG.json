@@ -2,6 +2,21 @@
   "name": "@rnx-kit/typescript-react-native-resolver",
   "entries": [
     {
+      "date": "Fri, 05 Nov 2021 19:24:49 GMT",
+      "tag": "@rnx-kit/typescript-react-native-resolver_v0.0.4",
+      "version": "0.0.4",
+      "comments": {
+        "patch": [
+          {
+            "author": "beachball",
+            "package": "@rnx-kit/typescript-react-native-resolver",
+            "comment": "Bump @rnx-kit/tools-node to v1.2.4",
+            "commit": "103d8c85f90a43985b56aa0364c9d568bcf56b05"
+          }
+        ]
+      }
+    },
+    {
       "date": "Fri, 05 Nov 2021 07:33:42 GMT",
       "tag": "@rnx-kit/typescript-react-native-resolver_v0.0.3",
       "version": "0.0.3",

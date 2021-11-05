@@ -1,8 +1,17 @@
 # Change Log - @rnx-kit/metro-config
 
-This log was last generated on Fri, 05 Nov 2021 07:33:42 GMT and should not be manually modified.
+This log was last generated on Fri, 05 Nov 2021 19:24:49 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 1.2.24
+
+Fri, 05 Nov 2021 19:24:49 GMT
+
+### Patches
+
+- Bump @rnx-kit/babel-preset-metro-react-native to v1.0.15
+- Bump @rnx-kit/tools-node to v1.2.4
 
 ## 1.2.23
 
