@@ -57,6 +57,21 @@ function configureCompilerHost(
   }
 }
 
+function getProgramOptions(
+  cmdLine: CommandLine,
+  host: ts.CompilerHost
+): ts.CreateProgramOptions {
+  return {
+    rootNames: cmdLine.ts.fileNames,
+    options: cmdLine.ts.options,
+    projectReferences: cmdLine.ts.projectReferences,
+    host,
+    configFileParsingDiagnostics: ts.getConfigFileParsingDiagnostics(
+      cmdLine.ts
+    ),
+  };
+}
+
 /**
  * Create a TypeScript program object using the given command line.
  *
@@ -73,17 +88,7 @@ export function createProgram(cmdLine: CommandLine): ts.Program {
 
   configureCompilerHost(host, cmdLine);
 
-  const programOptions = {
-    rootNames: cmdLine.ts.fileNames,
-    options: cmdLine.ts.options,
-    projectReferences: cmdLine.ts.projectReferences,
-    host,
-    configFileParsingDiagnostics: ts.getConfigFileParsingDiagnostics(
-      cmdLine.ts
-    ),
-  };
-
-  const program = ts.createProgram(programOptions);
+  const program = ts.createProgram(getProgramOptions(cmdLine, host));
   return program;
 }
 
@@ -105,15 +110,6 @@ export function createIncrementalProgram(
 
   configureCompilerHost(host, cmdLine);
 
-  const programOptions = {
-    rootNames: cmdLine.ts.fileNames,
-    options: cmdLine.ts.options,
-    projectReferences: cmdLine.ts.projectReferences,
-    host,
-    configFileParsingDiagnostics: ts.getConfigFileParsingDiagnostics(
-      cmdLine.ts
-    ),
-  };
-  const program = ts.createIncrementalProgram(programOptions);
+  const program = ts.createIncrementalProgram(getProgramOptions(cmdLine, host));
   return program;
 }
