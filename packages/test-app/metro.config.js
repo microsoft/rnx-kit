@@ -5,7 +5,6 @@ const MetroSymlinksResolver = require("@rnx-kit/metro-resolver-symlinks");
 const blockList = exclusionList([/.*__fixtures__.*/]);
 
 module.exports = makeMetroConfig({
-  projectRoot: __dirname + "/src",
   resolver: {
     blacklistRE: blockList,
     blockList,
