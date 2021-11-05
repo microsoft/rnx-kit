@@ -29,7 +29,7 @@ function validateDefaultConfig(c: ServerConfig) {
     "typescriptValidation",
     "experimental_treeShake",
   ]);
-  expect(c.projectRoot).toEqual("src");
+  expect(c.projectRoot).toEqual(process.cwd());
   expect(c.detectCyclicDependencies).toBeTrue();
   expect(c.detectDuplicateDependencies).toBeTrue();
   expect(c.typescriptValidation).toBeTrue();

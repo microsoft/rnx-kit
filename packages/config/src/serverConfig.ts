@@ -6,7 +6,11 @@ export type ServerRequiredParameters = BundlerRuntimeParameters & {
    * this root path to resolve all web requests. Either absolute, or relative to the
    * package.
    *
-   * @default "src"
+   * Note that `projectRoot` should also contain your Babel config, otherwise
+   * Metro won't be able to find it. For details, see
+   * https://github.com/microsoft/rnx-kit/issues/706.
+   *
+   * @default `process.cwd()`
    */
   projectRoot: string;
 };

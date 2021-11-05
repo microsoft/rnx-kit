@@ -62,7 +62,7 @@
     "reactNativeVersion": "^0.66",
     "kitType": "app",
     "bundle": {
-      "entryPath": "index.ts",
+      "entryPath": "src/index.ts",
       "distPath": "dist",
       "assetsPath": "dist",
       "bundlePrefix": "main",
