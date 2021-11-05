@@ -1,7 +1,0 @@
-{
-  "type": "patch",
-  "comment": "Move typescript to a dev dependency.",
-  "packageName": "@rnx-kit/golang",
-  "email": "afoxman@microsoft.com",
-  "dependentChangeType": "patch"
-}

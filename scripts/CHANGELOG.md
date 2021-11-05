@@ -1,8 +1,16 @@
 # Change Log - rnx-kit-scripts
 
-This log was last generated on Wed, 03 Nov 2021 18:15:39 GMT and should not be manually modified.
+This log was last generated on Fri, 05 Nov 2021 07:33:42 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 0.1.1
+
+Fri, 05 Nov 2021 07:33:42 GMT
+
+### Patches
+
+- Bump @rnx-kit/golang to v0.1.5
 
 ## 0.1.1
 

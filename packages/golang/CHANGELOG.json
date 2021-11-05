@@ -2,6 +2,21 @@
   "name": "@rnx-kit/golang",
   "entries": [
     {
+      "date": "Fri, 05 Nov 2021 07:33:42 GMT",
+      "tag": "@rnx-kit/golang_v0.1.5",
+      "version": "0.1.5",
+      "comments": {
+        "patch": [
+          {
+            "author": "afoxman@microsoft.com",
+            "package": "@rnx-kit/golang",
+            "commit": "52adbb5f16d429cd38d8ec12a7b47dea357fdd81",
+            "comment": "Move typescript to a dev dependency."
+          }
+        ]
+      }
+    },
+    {
       "date": "Fri, 22 Oct 2021 18:31:09 GMT",
       "tag": "@rnx-kit/golang_v0.1.0",
       "version": "0.1.0",
