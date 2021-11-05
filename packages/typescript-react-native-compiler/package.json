@@ -1,18 +1,21 @@
 {
-  "name": "@rnx-kit/typescript-react-native-resolver",
-  "version": "0.0.4",
-  "description": "TypeScript module resolver for use with react-native projects",
-  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/typescript-react-native-resolver#readme",
+  "name": "@rnx-kit/typescript-react-native-compiler",
+  "version": "0.0.1",
+  "description": "TypeScript compiler with a custom module resolver for react-native projects",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/typescript-react-native-compiler#readme",
   "license": "MIT",
   "files": [
     "lib/*"
   ],
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
+  "bin": {
+    "rn-tsc": "lib/rn-tsc.js"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/microsoft/rnx-kit",
-    "directory": "packages/typescript-react-native-resolver"
+    "directory": "packages/typescript-react-native-compiler"
   },
   "scripts": {
     "build": "rnx-kit-scripts build",
@@ -21,12 +24,17 @@
     "test": "rnx-kit-scripts test"
   },
   "dependencies": {
-    "@rnx-kit/tools-node": "^1.2.4"
+    "@rnx-kit/tools-language": "^1.2.3",
+    "@rnx-kit/tools-node": "^1.2.3",
+    "@rnx-kit/typescript-react-native-resolver": "^0.0.3",
+    "@rnx-kit/typescript-service": "^1.4.2",
+    "chalk": "^4.1.0"
   },
   "devDependencies": {
     "@types/node": "^14.15.0",
     "jest-extended": "^0.11.5",
     "rnx-kit-scripts": "*",
+    "temp-dir": "^2.0.0",
     "typescript": "^4.0.0"
   },
   "peerDependencies": {
