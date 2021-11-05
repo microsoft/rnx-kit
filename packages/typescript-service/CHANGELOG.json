@@ -2,6 +2,21 @@
   "name": "@rnx-kit/typescript-service",
   "entries": [
     {
+      "date": "Fri, 05 Nov 2021 07:33:42 GMT",
+      "tag": "@rnx-kit/typescript-service_v1.4.2",
+      "version": "1.4.2",
+      "comments": {
+        "patch": [
+          {
+            "author": "beachball",
+            "package": "@rnx-kit/typescript-service",
+            "comment": "Bump @rnx-kit/tools-node to v1.2.3",
+            "commit": "52adbb5f16d429cd38d8ec12a7b47dea357fdd81"
+          }
+        ]
+      }
+    },
+    {
       "date": "Wed, 03 Nov 2021 18:15:39 GMT",
       "tag": "@rnx-kit/typescript-service_v1.4.1",
       "version": "1.4.1",

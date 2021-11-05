@@ -130,8 +130,8 @@ export function resolveModuleName(
     module = resolveFileModule(context, moduleRef, searchDir, extensions);
   }
   if (module) {
-    module.isExternalLibraryImport = !!module.resolvedFileName.match(
-      /[/\\]node_modules[/\\]/
+    module.isExternalLibraryImport = /[/\\]node_modules[/\\]/.test(
+      module.resolvedFileName
     );
 
     const { host, options } = context;

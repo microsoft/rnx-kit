@@ -17,7 +17,7 @@
     "@babel/parser": "^7.0.0",
     "@babel/types": "^7.0.0",
     "@microsoft/tsdoc": "^0.13.0",
-    "@rnx-kit/golang": "^0.1.4",
+    "@rnx-kit/golang": "^0.1.5",
     "chalk": "^4.1.0",
     "depcheck": "^1.0.0",
     "glob": "^7.0.0",

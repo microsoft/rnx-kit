@@ -2,6 +2,21 @@
   "name": "@rnx-kit/tools-node",
   "entries": [
     {
+      "date": "Fri, 05 Nov 2021 07:33:42 GMT",
+      "tag": "@rnx-kit/tools-node_v1.2.3",
+      "version": "1.2.3",
+      "comments": {
+        "patch": [
+          {
+            "author": "beachball",
+            "package": "@rnx-kit/tools-node",
+            "comment": "Bump @rnx-kit/tools-language to v1.2.3",
+            "commit": "52adbb5f16d429cd38d8ec12a7b47dea357fdd81"
+          }
+        ]
+      }
+    },
+    {
       "date": "Wed, 03 Nov 2021 18:15:39 GMT",
       "tag": "@rnx-kit/tools-node_v1.2.2",
       "version": "1.2.2",
