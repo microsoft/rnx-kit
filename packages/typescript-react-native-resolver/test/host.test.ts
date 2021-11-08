@@ -13,22 +13,22 @@ import {
 import type { ModuleResolutionHostLike, ResolverContext } from "../src/types";
 import { ResolverLog, ResolverLogMode } from "../src/log";
 
-describe("Host > changeCompilerHostToUseReactNativeResolver", () => {
-  function testChangeCompilerHost(host: ts.CompilerHost): void {
-    changeHostToUseReactNativeResolver(
+describe("Host > changeHostToUseReactNativeResolver", () => {
+  function testChangeHost(host: ts.CompilerHost): void {
+    changeHostToUseReactNativeResolver({
       host,
-      {}, // compiler options
-      "ios",
-      ["native"],
-      false, // enable RN substitution?
-      false, // enable error-tracing?
-      undefined // trace file
-    );
+      options: {},
+      platform: "ios",
+      platformExtensionNames: ["native"],
+      disableReactNativePackageSubstitution: false,
+      traceReactNativeModuleResolutionErrors: false,
+      traceResolutionLog: undefined,
+    });
   }
 
   test("sets the trace function to ensure trace logging is possible", () => {
     const host = {} as unknown as ts.CompilerHost;
-    testChangeCompilerHost(host);
+    testChangeHost(host);
     expect(host.trace).toBeFunction();
   });
 
@@ -37,7 +37,7 @@ describe("Host > changeCompilerHostToUseReactNativeResolver", () => {
     const host = {
       fileExists: mock,
     } as unknown as ts.CompilerHost;
-    testChangeCompilerHost(host);
+    testChangeHost(host);
     expect(host.fileExists).toBeFunction();
     expect(host.fileExists).not.toBe(mock);
     host.fileExists("alpha");
@@ -49,7 +49,7 @@ describe("Host > changeCompilerHostToUseReactNativeResolver", () => {
     const host = {
       readFile: mock,
     } as unknown as ts.CompilerHost;
-    testChangeCompilerHost(host);
+    testChangeHost(host);
     expect(host.readFile).toBeFunction();
     expect(host.readFile).not.toBe(mock);
     host.readFile("beta");
@@ -61,7 +61,7 @@ describe("Host > changeCompilerHostToUseReactNativeResolver", () => {
     const host = {
       directoryExists: mock,
     } as unknown as ts.CompilerHost;
-    testChangeCompilerHost(host);
+    testChangeHost(host);
     expect(host.directoryExists).toBeFunction();
     expect(host.directoryExists).not.toBe(mock);
     host.directoryExists("gamma");
@@ -73,7 +73,7 @@ describe("Host > changeCompilerHostToUseReactNativeResolver", () => {
     const host = {
       realpath: mock,
     } as unknown as ts.CompilerHost;
-    testChangeCompilerHost(host);
+    testChangeHost(host);
     expect(host.realpath).toBeFunction();
     expect(host.realpath).not.toBe(mock);
     host.realpath("delta");
@@ -85,7 +85,7 @@ describe("Host > changeCompilerHostToUseReactNativeResolver", () => {
     const host = {
       getDirectories: mock,
     } as unknown as ts.CompilerHost;
-    testChangeCompilerHost(host);
+    testChangeHost(host);
     expect(host.getDirectories).toBeFunction();
     expect(host.getDirectories).not.toBe(mock);
     host.getDirectories("epsilon");
@@ -94,13 +94,13 @@ describe("Host > changeCompilerHostToUseReactNativeResolver", () => {
 
   test("sets resolveModuleNames", () => {
     const host = {} as unknown as ts.CompilerHost;
-    testChangeCompilerHost(host);
+    testChangeHost(host);
     expect(host.resolveModuleNames).toBeFunction();
   });
 
   test("sets resolveTypeReferenceDirectives", () => {
     const host = {} as unknown as ts.CompilerHost;
-    testChangeCompilerHost(host);
+    testChangeHost(host);
     expect(host.resolveTypeReferenceDirectives).toBeFunction();
   });
 });

@@ -35,15 +35,23 @@ import type { ResolverContext, ModuleResolutionHostLike } from "./types";
  * @param traceReactNativeModuleResolutionErrors Flag to enable trace logging when a resolver error occurs. All messages involved in the failed module resolution are aggregated and logged.
  * @param traceResolutionLog Optional file to use for logging trace message. When not present, log messages go to the console.
  */
-export function changeHostToUseReactNativeResolver(
-  host: ts.CompilerHost | ts.LanguageServiceHost,
-  options: ts.ParsedCommandLine["options"],
-  platform: string,
-  platformExtensionNames: string[] | undefined,
-  disableReactNativePackageSubstitution: boolean,
-  traceReactNativeModuleResolutionErrors: boolean,
-  traceResolutionLog: string | undefined
-): void {
+export function changeHostToUseReactNativeResolver({
+  host,
+  options,
+  platform,
+  platformExtensionNames,
+  disableReactNativePackageSubstitution,
+  traceReactNativeModuleResolutionErrors,
+  traceResolutionLog,
+}: {
+  host: ts.CompilerHost | ts.LanguageServiceHost;
+  options: ts.ParsedCommandLine["options"];
+  platform: string;
+  platformExtensionNames: string[] | undefined;
+  disableReactNativePackageSubstitution: boolean;
+  traceReactNativeModuleResolutionErrors: boolean;
+  traceResolutionLog: string | undefined;
+}): void {
   let mode = ResolverLogMode.Never;
   if (options.traceResolution) {
     mode = ResolverLogMode.Always;
@@ -122,8 +130,8 @@ export function resolveModuleName(
     module = resolveFileModule(context, moduleRef, searchDir, extensions);
   }
   if (module) {
-    module.isExternalLibraryImport = !!module.resolvedFileName.match(
-      /[/\\]node_modules[/\\]/
+    module.isExternalLibraryImport = /[/\\]node_modules[/\\]/.test(
+      module.resolvedFileName
     );
 
     const { host, options } = context;

@@ -1,8 +1,35 @@
 # Change Log - @rnx-kit/metro-plugin-duplicates-checker
 
-This log was last generated on Mon, 01 Nov 2021 13:46:12 GMT and should not be manually modified.
+This log was last generated on Fri, 05 Nov 2021 19:24:49 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 1.2.13
+
+Fri, 05 Nov 2021 19:24:49 GMT
+
+### Patches
+
+- Bump @rnx-kit/console to v1.0.9
+- Bump @rnx-kit/tools-node to v1.2.4
+
+## 1.2.12
+
+Fri, 05 Nov 2021 07:33:42 GMT
+
+### Patches
+
+- Bump @rnx-kit/console to v1.0.8
+- Bump @rnx-kit/tools-node to v1.2.3
+
+## 1.2.11
+
+Wed, 03 Nov 2021 18:15:39 GMT
+
+### Patches
+
+- Bump @rnx-kit/console to v1.0.7
+- Bump @rnx-kit/tools-node to v1.2.2
 
 ## 1.2.10
 

@@ -2,6 +2,69 @@
   "name": "@rnx-kit/metro-plugin-cyclic-dependencies-detector",
   "entries": [
     {
+      "date": "Fri, 05 Nov 2021 19:24:49 GMT",
+      "tag": "@rnx-kit/metro-plugin-cyclic-dependencies-detector_v1.0.19",
+      "version": "1.0.19",
+      "comments": {
+        "patch": [
+          {
+            "author": "beachball",
+            "package": "@rnx-kit/metro-plugin-cyclic-dependencies-detector",
+            "comment": "Bump @rnx-kit/console to v1.0.9",
+            "commit": "103d8c85f90a43985b56aa0364c9d568bcf56b05"
+          },
+          {
+            "author": "beachball",
+            "package": "@rnx-kit/metro-plugin-cyclic-dependencies-detector",
+            "comment": "Bump @rnx-kit/tools-node to v1.2.4",
+            "commit": "103d8c85f90a43985b56aa0364c9d568bcf56b05"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Fri, 05 Nov 2021 07:33:42 GMT",
+      "tag": "@rnx-kit/metro-plugin-cyclic-dependencies-detector_v1.0.18",
+      "version": "1.0.18",
+      "comments": {
+        "patch": [
+          {
+            "author": "beachball",
+            "package": "@rnx-kit/metro-plugin-cyclic-dependencies-detector",
+            "comment": "Bump @rnx-kit/console to v1.0.8",
+            "commit": "52adbb5f16d429cd38d8ec12a7b47dea357fdd81"
+          },
+          {
+            "author": "beachball",
+            "package": "@rnx-kit/metro-plugin-cyclic-dependencies-detector",
+            "comment": "Bump @rnx-kit/tools-node to v1.2.3",
+            "commit": "52adbb5f16d429cd38d8ec12a7b47dea357fdd81"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Wed, 03 Nov 2021 18:15:39 GMT",
+      "tag": "@rnx-kit/metro-plugin-cyclic-dependencies-detector_v1.0.17",
+      "version": "1.0.17",
+      "comments": {
+        "patch": [
+          {
+            "author": "beachball",
+            "package": "@rnx-kit/metro-plugin-cyclic-dependencies-detector",
+            "comment": "Bump @rnx-kit/console to v1.0.7",
+            "commit": "acebdc3d387fc38e11b487736e1d7ba065131f1d"
+          },
+          {
+            "author": "beachball",
+            "package": "@rnx-kit/metro-plugin-cyclic-dependencies-detector",
+            "comment": "Bump @rnx-kit/tools-node to v1.2.2",
+            "commit": "acebdc3d387fc38e11b487736e1d7ba065131f1d"
+          }
+        ]
+      }
+    },
+    {
       "date": "Mon, 01 Nov 2021 13:46:12 GMT",
       "tag": "@rnx-kit/metro-plugin-cyclic-dependencies-detector_v1.0.16",
       "version": "1.0.16",

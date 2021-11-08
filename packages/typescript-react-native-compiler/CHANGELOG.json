@@ -1,0 +1,44 @@
+{
+  "name": "@rnx-kit/typescript-react-native-compiler",
+  "entries": [
+    {
+      "date": "Fri, 05 Nov 2021 19:44:16 GMT",
+      "tag": "@rnx-kit/typescript-react-native-compiler_v0.0.2",
+      "version": "0.0.2",
+      "comments": {
+        "patch": [
+          {
+            "author": "afoxman@microsoft.com",
+            "package": "@rnx-kit/typescript-react-native-compiler",
+            "commit": "53609bb80f9556c390d4cff0040adbe75aa5c1bb",
+            "comment": "Create the typescript-react-native-compiler package"
+          },
+          {
+            "author": "beachball",
+            "package": "@rnx-kit/typescript-react-native-compiler",
+            "comment": "Bump @rnx-kit/tools-language to v1.2.4",
+            "commit": "53609bb80f9556c390d4cff0040adbe75aa5c1bb"
+          },
+          {
+            "author": "beachball",
+            "package": "@rnx-kit/typescript-react-native-compiler",
+            "comment": "Bump @rnx-kit/tools-node to v1.2.4",
+            "commit": "53609bb80f9556c390d4cff0040adbe75aa5c1bb"
+          },
+          {
+            "author": "beachball",
+            "package": "@rnx-kit/typescript-react-native-compiler",
+            "comment": "Bump @rnx-kit/typescript-react-native-resolver to v0.0.5",
+            "commit": "53609bb80f9556c390d4cff0040adbe75aa5c1bb"
+          },
+          {
+            "author": "beachball",
+            "package": "@rnx-kit/typescript-react-native-compiler",
+            "comment": "Bump @rnx-kit/typescript-service to v1.4.3",
+            "commit": "53609bb80f9556c390d4cff0040adbe75aa5c1bb"
+          }
+        ]
+      }
+    }
+  ]
+}

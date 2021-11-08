@@ -2,6 +2,51 @@
   "name": "rnx-kit-scripts",
   "entries": [
     {
+      "date": "Fri, 05 Nov 2021 19:24:49 GMT",
+      "tag": "rnx-kit-scripts_v0.1.1",
+      "version": "0.1.1",
+      "comments": {
+        "patch": [
+          {
+            "author": "beachball",
+            "package": "rnx-kit-scripts",
+            "comment": "Bump @rnx-kit/golang to v0.1.6",
+            "commit": "103d8c85f90a43985b56aa0364c9d568bcf56b05"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Fri, 05 Nov 2021 07:33:42 GMT",
+      "tag": "rnx-kit-scripts_v0.1.1",
+      "version": "0.1.1",
+      "comments": {
+        "patch": [
+          {
+            "author": "beachball",
+            "package": "rnx-kit-scripts",
+            "comment": "Bump @rnx-kit/golang to v0.1.5",
+            "commit": "52adbb5f16d429cd38d8ec12a7b47dea357fdd81"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Wed, 03 Nov 2021 18:15:39 GMT",
+      "tag": "rnx-kit-scripts_v0.1.1",
+      "version": "0.1.1",
+      "comments": {
+        "patch": [
+          {
+            "author": "beachball",
+            "package": "rnx-kit-scripts",
+            "comment": "Bump @rnx-kit/golang to v0.1.4",
+            "commit": "acebdc3d387fc38e11b487736e1d7ba065131f1d"
+          }
+        ]
+      }
+    },
+    {
       "date": "Fri, 29 Oct 2021 12:14:31 GMT",
       "tag": "rnx-kit-scripts_v0.1.1",
       "version": "0.1.1",

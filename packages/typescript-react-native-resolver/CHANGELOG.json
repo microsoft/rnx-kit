@@ -1,0 +1,77 @@
+{
+  "name": "@rnx-kit/typescript-react-native-resolver",
+  "entries": [
+    {
+      "date": "Fri, 05 Nov 2021 19:44:16 GMT",
+      "tag": "@rnx-kit/typescript-react-native-resolver_v0.0.5",
+      "version": "0.0.5",
+      "comments": {
+        "patch": [
+          {
+            "author": "afoxman@microsoft.com",
+            "package": "@rnx-kit/typescript-react-native-resolver",
+            "commit": "53609bb80f9556c390d4cff0040adbe75aa5c1bb",
+            "comment": "update package dependencies"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Fri, 05 Nov 2021 19:24:49 GMT",
+      "tag": "@rnx-kit/typescript-react-native-resolver_v0.0.4",
+      "version": "0.0.4",
+      "comments": {
+        "patch": [
+          {
+            "author": "beachball",
+            "package": "@rnx-kit/typescript-react-native-resolver",
+            "comment": "Bump @rnx-kit/tools-node to v1.2.4",
+            "commit": "103d8c85f90a43985b56aa0364c9d568bcf56b05"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Fri, 05 Nov 2021 07:33:42 GMT",
+      "tag": "@rnx-kit/typescript-react-native-resolver_v0.0.3",
+      "version": "0.0.3",
+      "comments": {
+        "patch": [
+          {
+            "author": "afoxman@microsoft.com",
+            "package": "@rnx-kit/typescript-react-native-resolver",
+            "commit": "52adbb5f16d429cd38d8ec12a7b47dea357fdd81",
+            "comment": "Use regex test method instead of match."
+          },
+          {
+            "author": "beachball",
+            "package": "@rnx-kit/typescript-react-native-resolver",
+            "comment": "Bump @rnx-kit/tools-node to v1.2.3",
+            "commit": "52adbb5f16d429cd38d8ec12a7b47dea357fdd81"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Thu, 04 Nov 2021 22:26:34 GMT",
+      "tag": "@rnx-kit/typescript-react-native-resolver_v0.0.2",
+      "version": "0.0.2",
+      "comments": {
+        "patch": [
+          {
+            "author": "afoxman@microsoft.com",
+            "package": "@rnx-kit/typescript-react-native-resolver",
+            "commit": "fba0df37b18c9f1807d50ac9bae6071742067ea0",
+            "comment": "Create the typescript-react-native-resolver package"
+          },
+          {
+            "author": "beachball",
+            "package": "@rnx-kit/typescript-react-native-resolver",
+            "comment": "Bump @rnx-kit/tools-node to v1.2.2",
+            "commit": "fba0df37b18c9f1807d50ac9bae6071742067ea0"
+          }
+        ]
+      }
+    }
+  ]
+}

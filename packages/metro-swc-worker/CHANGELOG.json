@@ -2,6 +2,51 @@
   "name": "@rnx-kit/metro-swc-worker",
   "entries": [
     {
+      "date": "Fri, 05 Nov 2021 19:24:49 GMT",
+      "tag": "@rnx-kit/metro-swc-worker_v0.1.4",
+      "version": "0.1.4",
+      "comments": {
+        "patch": [
+          {
+            "author": "beachball",
+            "package": "@rnx-kit/metro-swc-worker",
+            "comment": "Bump @rnx-kit/metro-serializer-esbuild to v0.0.21",
+            "commit": "103d8c85f90a43985b56aa0364c9d568bcf56b05"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Fri, 05 Nov 2021 07:33:42 GMT",
+      "tag": "@rnx-kit/metro-swc-worker_v0.1.3",
+      "version": "0.1.3",
+      "comments": {
+        "patch": [
+          {
+            "author": "beachball",
+            "package": "@rnx-kit/metro-swc-worker",
+            "comment": "Bump @rnx-kit/metro-serializer-esbuild to v0.0.20",
+            "commit": "52adbb5f16d429cd38d8ec12a7b47dea357fdd81"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Wed, 03 Nov 2021 18:15:39 GMT",
+      "tag": "@rnx-kit/metro-swc-worker_v0.1.2",
+      "version": "0.1.2",
+      "comments": {
+        "patch": [
+          {
+            "author": "beachball",
+            "package": "@rnx-kit/metro-swc-worker",
+            "comment": "Bump @rnx-kit/metro-serializer-esbuild to v0.0.19",
+            "commit": "acebdc3d387fc38e11b487736e1d7ba065131f1d"
+          }
+        ]
+      }
+    },
+    {
       "date": "Mon, 01 Nov 2021 13:46:13 GMT",
       "tag": "@rnx-kit/metro-swc-worker_v0.1.1",
       "version": "0.1.1",

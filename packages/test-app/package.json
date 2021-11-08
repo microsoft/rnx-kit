@@ -18,7 +18,7 @@
     "ios": "react-native run-ios",
     "macos": "react-native run-macos --scheme ReactTestApp",
     "windows": "react-native run-windows --sln windows\\SampleCrossApp.sln",
-    "start": "react-native rnx-start --project-root src"
+    "start": "react-native rnx-start"
   },
   "dependencies": {
     "react": "17.0.2",
@@ -41,6 +41,7 @@
     "@rnx-kit/metro-serializer": "*",
     "@rnx-kit/metro-serializer-esbuild": "*",
     "@rnx-kit/metro-swc-worker": "*",
+    "@rnx-kit/react-native-test-app-msal": "*",
     "@types/react": "^17.0.2",
     "@types/react-native": "^0.64.0",
     "metro-react-native-babel-preset": "^0.66.2",
@@ -60,7 +61,7 @@
     "reactNativeVersion": "^0.66",
     "kitType": "app",
     "bundle": {
-      "entryPath": "index.ts",
+      "entryPath": "src/index.ts",
       "distPath": "dist",
       "assetsPath": "dist",
       "bundlePrefix": "main",
@@ -84,6 +85,7 @@
       }
     },
     "server": {
+      "projectRoot": "src",
       "detectDuplicateDependencies": {
         "ignoredModules": [
           "react-is"

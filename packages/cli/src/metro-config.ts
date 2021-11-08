@@ -51,22 +51,22 @@ function createSerializerHook({ service, configFileName }: TSProjectInfo) {
       const enhanceLanguageServiceHost = (
         host: ts.LanguageServiceHost
       ): void => {
-        const platformExtensions =
+        const platformExtensionNames =
           platform === "windows" || platform === "win32"
             ? ["win", "native"]
             : ["native"];
         const disableReactNativePackageSubstitution = true;
         const traceReactNativeModuleResolutionErrors = false;
         const traceResolutionLog = undefined;
-        changeHostToUseReactNativeResolver(
+        changeHostToUseReactNativeResolver({
           host,
-          cmdLine.options,
+          options: cmdLine.options,
           platform,
-          platformExtensions,
+          platformExtensionNames,
           disableReactNativePackageSubstitution,
           traceReactNativeModuleResolutionErrors,
-          traceResolutionLog
-        );
+          traceResolutionLog,
+        });
       };
 
       tsproject = service.openProject(cmdLine, enhanceLanguageServiceHost);

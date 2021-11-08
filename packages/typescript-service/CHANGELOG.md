@@ -1,8 +1,32 @@
 # Change Log - @rnx-kit/typescript-service
 
-This log was last generated on Mon, 01 Nov 2021 15:07:43 GMT and should not be manually modified.
+This log was last generated on Fri, 05 Nov 2021 19:24:49 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 1.4.3
+
+Fri, 05 Nov 2021 19:24:49 GMT
+
+### Patches
+
+- Bump @rnx-kit/tools-node to v1.2.4
+
+## 1.4.2
+
+Fri, 05 Nov 2021 07:33:42 GMT
+
+### Patches
+
+- Bump @rnx-kit/tools-node to v1.2.3
+
+## 1.4.1
+
+Wed, 03 Nov 2021 18:15:39 GMT
+
+### Patches
+
+- Bump @rnx-kit/tools-node to v1.2.2
 
 ## 1.4.0
 

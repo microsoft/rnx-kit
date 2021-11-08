@@ -1,17 +1,19 @@
 import type { BundlerRuntimeParameters } from "./bundleConfig";
 
-export type ServerRequiredParameters = BundlerRuntimeParameters & {
+export type ServerRequiredParameters = BundlerRuntimeParameters;
+
+export type ServerParameters = Partial<ServerRequiredParameters> & {
   /**
    * Path to the root of your react-native experience project. The bundle server uses
    * this root path to resolve all web requests. Either absolute, or relative to the
    * package.
    *
-   * @default "src"
+   * Note that `projectRoot` should also contain your Babel config, otherwise
+   * Metro won't be able to find it. For details, see
+   * https://github.com/microsoft/rnx-kit/issues/706.
    */
-  projectRoot: string;
-};
+  projectRoot?: string;
 
-export type ServerParameters = Partial<ServerRequiredParameters> & {
   /**
    * Additional asset plugins to be used by the Metro Babel transformer. Comma-separated
    * list containing plugin modules and/or absolute paths to plugin packages.

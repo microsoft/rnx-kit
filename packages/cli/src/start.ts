@@ -104,16 +104,20 @@ export async function rnxStart(
   // load Metro configuration, applying overrides from the command line
   const metroConfig = await loadMetroConfig(cliConfig, {
     ...cliOptions,
-    projectRoot: path.resolve(serverConfig.projectRoot),
+    ...(serverConfig.projectRoot
+      ? { projectRoot: path.resolve(serverConfig.projectRoot) }
+      : undefined),
     reporter,
-    ...(serverConfig.sourceExts ? { sourceExts: serverConfig.sourceExts } : {}),
+    ...(serverConfig.sourceExts
+      ? { sourceExts: serverConfig.sourceExts }
+      : undefined),
     ...(serverConfig.assetPlugins
       ? {
           assetPlugins: serverConfig.assetPlugins.map((p) =>
             require.resolve(p)
           ),
         }
-      : {}),
+      : undefined),
   });
 
   // prepare for typescript validation, if requested
