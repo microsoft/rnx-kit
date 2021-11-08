@@ -1,7 +1,0 @@
-{
-  "type": "none",
-  "comment": "Transition from using our private Metro @types packages to the officially published @types packages.",
-  "packageName": "@rnx-kit/metro-plugin-typescript-validation",
-  "email": "afoxman@microsoft.com",
-  "dependentChangeType": "none"
-}

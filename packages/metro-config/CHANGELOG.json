@@ -2,6 +2,21 @@
   "name": "@rnx-kit/metro-config",
   "entries": [
     {
+      "date": "Mon, 08 Nov 2021 16:31:46 GMT",
+      "tag": "@rnx-kit/metro-config_v1.2.24",
+      "version": "1.2.24",
+      "comments": {
+        "none": [
+          {
+            "author": "afoxman@microsoft.com",
+            "package": "@rnx-kit/metro-config",
+            "commit": "9c3acf4028bb449e60340b1096993b3f3fe462d5",
+            "comment": "Transition from using our private Metro @types packages to the officially published @types packages."
+          }
+        ]
+      }
+    },
+    {
       "date": "Fri, 05 Nov 2021 19:24:49 GMT",
       "tag": "@rnx-kit/metro-config_v1.2.24",
       "version": "1.2.24",

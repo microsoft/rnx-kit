@@ -2,6 +2,21 @@
   "name": "@rnx-kit/metro-serializer",
   "entries": [
     {
+      "date": "Mon, 08 Nov 2021 16:31:46 GMT",
+      "tag": "@rnx-kit/metro-serializer_v1.0.9",
+      "version": "1.0.9",
+      "comments": {
+        "none": [
+          {
+            "author": "afoxman@microsoft.com",
+            "package": "@rnx-kit/metro-serializer",
+            "commit": "9c3acf4028bb449e60340b1096993b3f3fe462d5",
+            "comment": "Transition from using our private Metro @types packages to the officially published @types packages."
+          }
+        ]
+      }
+    },
+    {
       "date": "Mon, 01 Nov 2021 13:46:13 GMT",
       "tag": "@rnx-kit/metro-serializer_v1.0.6",
       "version": "1.0.6",
