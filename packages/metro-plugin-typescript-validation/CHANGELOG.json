@@ -2,6 +2,21 @@
   "name": "@rnx-kit/metro-plugin-typescript-validation",
   "entries": [
     {
+      "date": "Mon, 08 Nov 2021 16:33:53 GMT",
+      "tag": "@rnx-kit/metro-plugin-typescript-validation_v1.0.14",
+      "version": "1.0.14",
+      "comments": {
+        "none": [
+          {
+            "author": "afoxman@microsoft.com",
+            "package": "@rnx-kit/metro-plugin-typescript-validation",
+            "commit": "not available",
+            "comment": "Transition from using our private Metro @types packages to the officially published @types packages."
+          }
+        ]
+      }
+    },
+    {
       "date": "Mon, 08 Nov 2021 16:31:46 GMT",
       "tag": "@rnx-kit/metro-plugin-typescript-validation_v1.0.14",
       "version": "1.0.14",

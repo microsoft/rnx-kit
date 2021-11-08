@@ -2,6 +2,21 @@
   "name": "@rnx-kit/metro-plugin-cyclic-dependencies-detector",
   "entries": [
     {
+      "date": "Mon, 08 Nov 2021 16:33:53 GMT",
+      "tag": "@rnx-kit/metro-plugin-cyclic-dependencies-detector_v1.0.19",
+      "version": "1.0.19",
+      "comments": {
+        "none": [
+          {
+            "author": "afoxman@microsoft.com",
+            "package": "@rnx-kit/metro-plugin-cyclic-dependencies-detector",
+            "commit": "not available",
+            "comment": "Transition from using our private Metro @types packages to the officially published @types packages."
+          }
+        ]
+      }
+    },
+    {
       "date": "Mon, 08 Nov 2021 16:31:46 GMT",
       "tag": "@rnx-kit/metro-plugin-cyclic-dependencies-detector_v1.0.19",
       "version": "1.0.19",

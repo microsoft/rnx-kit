@@ -2,6 +2,27 @@
   "name": "@rnx-kit/config",
   "entries": [
     {
+      "date": "Mon, 08 Nov 2021 16:33:53 GMT",
+      "tag": "@rnx-kit/config_v0.4.19",
+      "version": "0.4.19",
+      "comments": {
+        "none": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/config",
+            "commit": "596d899f3d73d8f5eaec9039594365d55232ef9c",
+            "comment": "Add missing repo information"
+          },
+          {
+            "author": "afoxman@microsoft.com",
+            "package": "@rnx-kit/config",
+            "commit": "not available",
+            "comment": "Transition from using our private Metro @types packages to the officially published @types packages."
+          }
+        ]
+      }
+    },
+    {
       "date": "Mon, 08 Nov 2021 16:31:46 GMT",
       "tag": "@rnx-kit/config_v0.4.19",
       "version": "0.4.19",
