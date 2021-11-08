@@ -1,10 +1,15 @@
 {
   "name": "@rnx-kit/config",
-  "version": "0.4.18",
+  "version": "0.4.19",
   "description": "Define and query information about a kit package",
   "license": "MIT",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "packages/config"
+  },
   "scripts": {
     "build": "rnx-kit-scripts build",
     "depcheck": "rnx-kit-scripts depcheck",
@@ -23,7 +28,7 @@
     "@rnx-kit/metro-plugin-duplicates-checker": "*",
     "@rnx-kit/tools-react-native": "*",
     "@types/lodash": "^4.14.172",
-    "@types/metro": "*",
+    "@types/metro": "^0.66.0",
     "@types/node": "^14.15.0",
     "@types/semver": "^7.0.0",
     "jest-extended": "^0.11.5",

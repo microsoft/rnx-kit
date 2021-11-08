@@ -1,7 +1,0 @@
-{
-  "type": "patch",
-  "comment": "Default value for `projectRoot` overrides value in Metro config",
-  "packageName": "@rnx-kit/cli",
-  "email": "4123478+tido64@users.noreply.github.com",
-  "dependentChangeType": "patch"
-}

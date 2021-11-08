@@ -2,6 +2,57 @@
   "name": "@rnx-kit/config",
   "entries": [
     {
+      "date": "Mon, 08 Nov 2021 16:33:53 GMT",
+      "tag": "@rnx-kit/config_v0.4.19",
+      "version": "0.4.19",
+      "comments": {
+        "none": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/config",
+            "commit": "596d899f3d73d8f5eaec9039594365d55232ef9c",
+            "comment": "Add missing repo information"
+          },
+          {
+            "author": "afoxman@microsoft.com",
+            "package": "@rnx-kit/config",
+            "commit": "not available",
+            "comment": "Transition from using our private Metro @types packages to the officially published @types packages."
+          }
+        ]
+      }
+    },
+    {
+      "date": "Mon, 08 Nov 2021 16:31:46 GMT",
+      "tag": "@rnx-kit/config_v0.4.19",
+      "version": "0.4.19",
+      "comments": {
+        "none": [
+          {
+            "author": "afoxman@microsoft.com",
+            "package": "@rnx-kit/config",
+            "commit": "9c3acf4028bb449e60340b1096993b3f3fe462d5",
+            "comment": "Transition from using our private Metro @types packages to the officially published @types packages."
+          }
+        ]
+      }
+    },
+    {
+      "date": "Mon, 08 Nov 2021 10:20:15 GMT",
+      "tag": "@rnx-kit/config_v0.4.19",
+      "version": "0.4.19",
+      "comments": {
+        "patch": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/config",
+            "commit": "3b0b310ba9394c145fd1570043c0649f1f9200e7",
+            "comment": "Default value for `projectRoot` overrides value in Metro config"
+          }
+        ]
+      }
+    },
+    {
       "date": "Fri, 05 Nov 2021 19:24:49 GMT",
       "tag": "@rnx-kit/config_v0.4.18",
       "version": "0.4.18",
