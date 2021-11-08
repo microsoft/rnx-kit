@@ -2,6 +2,21 @@
   "name": "@rnx-kit/typescript-react-native-compiler",
   "entries": [
     {
+      "date": "Mon, 08 Nov 2021 10:20:15 GMT",
+      "tag": "@rnx-kit/typescript-react-native-compiler_v0.0.2",
+      "version": "0.0.2",
+      "comments": {
+        "none": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/typescript-react-native-compiler",
+            "commit": "62e605f399f6c0817054a16d7e398d9876d9bbc2",
+            "comment": "Re-align dependencies to make Beachball happy"
+          }
+        ]
+      }
+    },
+    {
       "date": "Fri, 05 Nov 2021 19:44:16 GMT",
       "tag": "@rnx-kit/typescript-react-native-compiler_v0.0.2",
       "version": "0.0.2",

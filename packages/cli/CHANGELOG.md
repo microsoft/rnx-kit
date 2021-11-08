@@ -1,8 +1,18 @@
 # Change Log - @rnx-kit/cli
 
-This log was last generated on Fri, 05 Nov 2021 19:24:49 GMT and should not be manually modified.
+This log was last generated on Mon, 08 Nov 2021 10:20:15 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 0.9.46
+
+Mon, 08 Nov 2021 10:20:15 GMT
+
+### Patches
+
+- Default value for `projectRoot` overrides value in Metro config (4123478+tido64@users.noreply.github.com)
+- Bump @rnx-kit/config to v0.4.19
+- Bump @rnx-kit/dep-check to v1.8.18
 
 ## 0.9.45
 

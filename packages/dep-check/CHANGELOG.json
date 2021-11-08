@@ -2,6 +2,21 @@
   "name": "@rnx-kit/dep-check",
   "entries": [
     {
+      "date": "Mon, 08 Nov 2021 10:20:15 GMT",
+      "tag": "@rnx-kit/dep-check_v1.8.18",
+      "version": "1.8.18",
+      "comments": {
+        "patch": [
+          {
+            "author": "beachball",
+            "package": "@rnx-kit/dep-check",
+            "comment": "Bump @rnx-kit/config to v0.4.19",
+            "commit": "62e605f399f6c0817054a16d7e398d9876d9bbc2"
+          }
+        ]
+      }
+    },
+    {
       "date": "Fri, 05 Nov 2021 19:24:49 GMT",
       "tag": "@rnx-kit/dep-check_v1.8.17",
       "version": "1.8.17",

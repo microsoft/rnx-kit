@@ -2,6 +2,33 @@
   "name": "@rnx-kit/cli",
   "entries": [
     {
+      "date": "Mon, 08 Nov 2021 10:20:15 GMT",
+      "tag": "@rnx-kit/cli_v0.9.46",
+      "version": "0.9.46",
+      "comments": {
+        "patch": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/cli",
+            "commit": "3b0b310ba9394c145fd1570043c0649f1f9200e7",
+            "comment": "Default value for `projectRoot` overrides value in Metro config"
+          },
+          {
+            "author": "beachball",
+            "package": "@rnx-kit/cli",
+            "comment": "Bump @rnx-kit/config to v0.4.19",
+            "commit": "62e605f399f6c0817054a16d7e398d9876d9bbc2"
+          },
+          {
+            "author": "beachball",
+            "package": "@rnx-kit/cli",
+            "comment": "Bump @rnx-kit/dep-check to v1.8.18",
+            "commit": "62e605f399f6c0817054a16d7e398d9876d9bbc2"
+          }
+        ]
+      }
+    },
+    {
       "date": "Fri, 05 Nov 2021 19:24:49 GMT",
       "tag": "@rnx-kit/cli_v0.9.45",
       "version": "0.9.45",
