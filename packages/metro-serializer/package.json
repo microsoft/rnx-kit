@@ -27,7 +27,7 @@
     "metro": ">=0.58.0"
   },
   "devDependencies": {
-    "@types/metro": "*",
+    "@types/metro": "^0.66.0",
     "@types/semver": "^7.0.0",
     "metro": "^0.66.2",
     "rnx-kit-scripts": "*"
