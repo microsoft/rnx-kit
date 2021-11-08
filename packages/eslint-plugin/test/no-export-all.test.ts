@@ -31,6 +31,8 @@ export type Predator = { kind: "$predator" };
 export interface IChopper {
   kind: "$helicopter"
 };
+
+export declare function escape(): void;
 `,
 });
 
@@ -48,6 +50,10 @@ const config = {
     sourceType: "module",
   },
 };
+
+function lines(...strings: string[]): string {
+  return strings.join("\n");
+}
 
 describe("disallows `export *`", () => {
   const ruleTester = new RuleTester(config);
@@ -68,10 +74,10 @@ describe("disallows `export *`", () => {
       {
         code: "export * from 'chopper';",
         errors: 1,
-        output: [
+        output: lines(
           "export { Chopper, escape, escapeRe, name, nameRe } from 'chopper';",
-          "export type { IChopper, IChopperRe, Predator, PredatorRe } from 'chopper';",
-        ].join("\n"),
+          "export type { IChopper, IChopperRe, Predator, PredatorRe } from 'chopper';"
+        ),
       },
       {
         code: "export * from 'conquerer';",
@@ -91,13 +97,19 @@ describe("disallows `export *`", () => {
       {
         code: "export * from 'types';",
         errors: 1,
-        output: "export type { IChopper, Predator } from 'types';",
+        output: lines(
+          "export { escape } from 'types';",
+          "export type { IChopper, Predator } from 'types';"
+        ),
       },
       {
-        code: "export * from './internal'; export * from 'types';",
+        code: lines("export * from './internal';", "export * from 'types';"),
         errors: 1,
-        output:
-          "export * from './internal'; export type { IChopper, Predator } from 'types';",
+        output: lines(
+          "export * from './internal';",
+          "export { escape } from 'types';",
+          "export type { IChopper, Predator } from 'types';"
+        ),
         options: [{ expand: "external-only" }],
       },
     ],
