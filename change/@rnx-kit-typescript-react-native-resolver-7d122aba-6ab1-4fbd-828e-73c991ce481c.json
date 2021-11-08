@@ -1,0 +1,6 @@
+{
+  "type": "patch",
+  "packageName": "@rnx-kit/typescript-react-native-resolver",
+  "email": "afoxman@microsoft.com",
+  "dependentChangeType": "patch"
+}
