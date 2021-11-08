@@ -19,9 +19,9 @@
     "test": "rnx-kit-scripts test"
   },
   "dependencies": {
-    "@rnx-kit/config": "^0.4.19",
+    "@rnx-kit/config": "^0.4.18",
     "@rnx-kit/console": "^1.0.9",
-    "@rnx-kit/dep-check": "^1.8.18",
+    "@rnx-kit/dep-check": "^1.8.17",
     "@rnx-kit/metro-plugin-cyclic-dependencies-detector": "^1.0.19",
     "@rnx-kit/metro-plugin-duplicates-checker": "^1.2.13",
     "@rnx-kit/metro-serializer": "^1.0.9",
