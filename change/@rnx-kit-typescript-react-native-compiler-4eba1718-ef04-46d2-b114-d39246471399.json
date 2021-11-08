@@ -1,0 +1,7 @@
+{
+  "type": "none",
+  "comment": "Re-align dependencies to make Beachball happy",
+  "packageName": "@rnx-kit/typescript-react-native-compiler",
+  "email": "4123478+tido64@users.noreply.github.com",
+  "dependentChangeType": "none"
+}
