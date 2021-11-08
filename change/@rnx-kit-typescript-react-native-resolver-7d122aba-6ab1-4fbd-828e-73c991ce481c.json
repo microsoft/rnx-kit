@@ -1,5 +1,6 @@
 {
-  "type": "patch",
+  "type": "minor",
+  "comment": "Update the CLI's Metro/TS integration to use the new, generalized resolver in @rnx-kit/typescript-react-native-resolver. Remove the unneeded \"default\" resolver.",
   "packageName": "@rnx-kit/typescript-react-native-resolver",
   "email": "afoxman@microsoft.com",
   "dependentChangeType": "patch"
