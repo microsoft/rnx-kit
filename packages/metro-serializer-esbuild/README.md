@@ -101,5 +101,7 @@ react-native bundle --entry-file index.js --platform ios --dev false ...
   ```
 - esbuild does not properly tree-shake `export *`. This is a known limitation
   (see https://github.com/evanw/esbuild/issues/1420). It is also not recommended
-  to use `export *` in your code as they may lead to duplicate exports (see
-  https://github.com/microsoft/fluentui/issues/20178).
+  to use `export *` in your code as they may lead to duplicate exports. For more
+  details, read https://hackmd.io/Z021hgSGStKlYLwsqNMOcg. This can be mitigated
+  with an ESLint rule, such as `no-export-all` from
+  [`@rnx-kit/eslint-plugin`](https://github.com/microsoft/rnx-kit/tree/main/packages/eslint-plugin#readme).
