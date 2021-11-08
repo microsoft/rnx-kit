@@ -24,10 +24,10 @@
     "test": "rnx-kit-scripts test"
   },
   "dependencies": {
-    "@rnx-kit/tools-language": "^1.2.3",
-    "@rnx-kit/tools-node": "^1.2.3",
+    "@rnx-kit/tools-language": "^1.2.4",
+    "@rnx-kit/tools-node": "^1.2.4",
     "@rnx-kit/typescript-react-native-resolver": "^0.0.5",
-    "@rnx-kit/typescript-service": "^1.4.2",
+    "@rnx-kit/typescript-service": "^1.4.3",
     "chalk": "^4.1.0"
   },
   "devDependencies": {
