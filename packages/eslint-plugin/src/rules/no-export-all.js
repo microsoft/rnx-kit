@@ -51,15 +51,20 @@ function isEmpty(namedExports) {
 
 /**
  * Returns whether a module likely belongs to a project.
- * @param {string?} project
+ * @param {(string | string[])?} project
  * @param {string} modulePath
+ * @returns {boolean}
  */
 function isLikelyInProject(project, modulePath) {
-  return (
-    project &&
-    (modulePath.endsWith(".ts") || modulePath.endsWith(".tsx")) &&
-    !path.relative(path.dirname(project), modulePath).startsWith("..")
-  );
+  if (
+    !project ||
+    (!modulePath.endsWith(".ts") && !modulePath.endsWith(".tsx"))
+  ) {
+    return false;
+  }
+
+  const tsconfig = typeof project === "string" ? project : project[0];
+  return !path.relative(path.dirname(tsconfig), modulePath).startsWith("..");
 }
 
 /**
@@ -217,7 +222,9 @@ function extractExports(context, moduleId, depth) {
                 // fallthrough
                 case "FunctionDeclaration":
                 // fallthrough
-                case "TSDeclareFunction": {
+                case "TSDeclareFunction":
+                // fallthrough
+                case "TSEnumDeclaration": {
                   const name = node.declaration.id?.name;
                   if (name) {
                     result.exports.push(name);

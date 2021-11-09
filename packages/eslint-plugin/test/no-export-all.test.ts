@@ -6,10 +6,15 @@ jest.mock("fs");
 require("fs").__setMocks({
   barbarian: "export const name = 'Conan';",
   chopper: `
-export type Predator = { kind: "$predator" };
+export enum Kind {
+  Predator = 0,
+  Helicopter,
+}
+
+export type Predator = { kind: Kind.Predator };
 
 export interface IChopper {
-  kind: "$helicopter"
+  kind: Kind.Helicopter
 };
 
 export class Chopper implements IChopper {};
@@ -84,7 +89,7 @@ describe("disallows `export *`", () => {
         code: "export * from 'chopper';",
         errors: 1,
         output: lines(
-          "export { Chopper, escape, escapeRe, name, nameRe } from 'chopper';",
+          "export { Chopper, Kind, escape, escapeRe, name, nameRe } from 'chopper';",
           "export type { IChopper, IChopperRe, Predator, PredatorRe } from 'chopper';"
         ),
       },
