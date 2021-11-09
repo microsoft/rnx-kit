@@ -34,6 +34,15 @@ export interface IChopper {
 
 export declare function escape(): void;
 `,
+  "@fluentui/react-focus": `
+export declare const FocusZoneTabbableElements: {
+  none: 0;
+  all: 1;
+  inputOnly: 2;
+};
+
+export declare type FocusZoneTabbableElements = typeof FocusZoneTabbableElements[keyof typeof FocusZoneTabbableElements];
+`,
 });
 
 const config = {
@@ -111,6 +120,12 @@ describe("disallows `export *`", () => {
           "export type { IChopper, Predator } from 'types';"
         ),
         options: [{ expand: "external-only" }],
+      },
+      {
+        code: "export * from '@fluentui/react-focus';",
+        errors: 1,
+        output:
+          "export { FocusZoneTabbableElements } from '@fluentui/react-focus';",
       },
     ],
   });

@@ -331,10 +331,15 @@ module.exports = {
                   lines.push(`export { ${names} } from ${node.source.raw};`);
                 }
                 if (result.types.length > 0) {
-                  const types = result.types.sort().join(", ");
-                  lines.push(
-                    `export type { ${types} } from ${node.source.raw};`
+                  const uniqueTypes = result.types.filter(
+                    (type) => !result.exports.includes(type)
                   );
+                  if (uniqueTypes.length > 0) {
+                    const types = uniqueTypes.sort().join(", ");
+                    lines.push(
+                      `export type { ${types} } from ${node.source.raw};`
+                    );
+                  }
                 }
                 return fixer.replaceText(node, lines.join("\n"));
               },
