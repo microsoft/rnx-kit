@@ -77,7 +77,8 @@ function makeTraverser() {
 }
 
 /**
- * Resolves specified `moduleId` starting from `fromDir`.
+ * Resolves specified `moduleId` starting from `fromDir`. When possible, prefers
+ * `.d.ts` over `.js` as the latter does not contain type information.
  */
 const resolveFrom =
   /** @type {() => (fromDir: string, moduleId: string) => string} */
@@ -98,6 +99,14 @@ const resolveFrom =
           throw new Error(
             `Module not found: ${moduleId} (start path: ${fromDir})`
           );
+        }
+        if (m.endsWith(".js")) {
+          // `.js` files don't contain type information. If we find a `.d.ts`
+          // next to it, we should use that instead.
+          const typedef = m.replace(/\.js$/, ".d.ts");
+          if (fs.existsSync(typedef)) {
+            return typedef;
+          }
         }
         return m;
       };
@@ -206,7 +215,9 @@ function extractExports(context, moduleId, depth) {
               switch (node.declaration.type) {
                 case "ClassDeclaration":
                 // fallthrough
-                case "FunctionDeclaration": {
+                case "FunctionDeclaration":
+                // fallthrough
+                case "TSDeclareFunction": {
                   const name = node.declaration.id?.name;
                   if (name) {
                     result.exports.push(name);
@@ -320,10 +331,15 @@ module.exports = {
                   lines.push(`export { ${names} } from ${node.source.raw};`);
                 }
                 if (result.types.length > 0) {
-                  const types = result.types.sort().join(", ");
-                  lines.push(
-                    `export type { ${types} } from ${node.source.raw};`
+                  const uniqueTypes = result.types.filter(
+                    (type) => !result.exports.includes(type)
                   );
+                  if (uniqueTypes.length > 0) {
+                    const types = uniqueTypes.sort().join(", ");
+                    lines.push(
+                      `export type { ${types} } from ${node.source.raw};`
+                    );
+                  }
                 }
                 return fixer.replaceText(node, lines.join("\n"));
               },
