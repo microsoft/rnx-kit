@@ -12,6 +12,7 @@ import {
   MetroSerializer as MetroSerializerEsbuild,
 } from "@rnx-kit/metro-serializer-esbuild";
 import type { AllPlatforms } from "@rnx-kit/tools-react-native/platform";
+import { changeHostToUseReactNativeResolver } from "@rnx-kit/typescript-react-native-resolver";
 import {
   Project,
   readConfigFile,
@@ -19,7 +20,8 @@ import {
 } from "@rnx-kit/typescript-service";
 import type { DeltaResult, Graph } from "metro";
 import type { InputConfigT, SerializerConfigT } from "metro-config";
-import { MetroTypeScriptResolverHost } from "./metro-ts-resolver";
+import type { LanguageServiceHost } from "typescript";
+
 import type { TSProjectInfo } from "./types";
 
 function createSerializerHook({ service, configFileName }: TSProjectInfo) {
@@ -46,8 +48,26 @@ function createSerializerHook({ service, configFileName }: TSProjectInfo) {
         throw new Error(`Failed to load '${configFileName}'`);
       }
 
-      const resolverHost = new MetroTypeScriptResolverHost(cmdLine);
-      tsproject = service.openProject(cmdLine, resolverHost);
+      const enhanceLanguageServiceHost = (host: LanguageServiceHost): void => {
+        const platformExtensionNames =
+          platform === "windows" || platform === "win32"
+            ? ["win", "native"]
+            : ["native"];
+        const disableReactNativePackageSubstitution = true;
+        const traceReactNativeModuleResolutionErrors = false;
+        const traceResolutionLog = undefined;
+        changeHostToUseReactNativeResolver({
+          host,
+          options: cmdLine.options,
+          platform,
+          platformExtensionNames,
+          disableReactNativePackageSubstitution,
+          traceReactNativeModuleResolutionErrors,
+          traceResolutionLog,
+        });
+      };
+
+      tsproject = service.openProject(cmdLine, enhanceLanguageServiceHost);
       tsproject.removeAllFiles();
 
       tsprojectByPlatform.set(platform, tsproject);
@@ -56,7 +76,6 @@ function createSerializerHook({ service, configFileName }: TSProjectInfo) {
   }
 
   const hook = (graph: Graph, delta: DeltaResult): void => {
-    // get the target platform for this hook call
     const platform = graph.transformOptions.platform as AllPlatforms;
     if (platform) {
       if (delta.reset) {
@@ -64,24 +83,21 @@ function createSerializerHook({ service, configFileName }: TSProjectInfo) {
       }
 
       const tsproject = getProject(platform);
-      const resolverHost =
-        tsproject.getResolverHost() as MetroTypeScriptResolverHost;
-      const sourceFiles = resolverHost.getSourceFiles();
 
+      //  Apply delta change changes to the TypeScript project. New files are
+      //  added to the project file list. Updated files have their cached
+      //  snapshot cleared, causing the file to be reloaded. Deleted files
+      //  are removed from the project file list.
       for (const module of delta.added.values()) {
         tsproject.setFile(module.path);
-        sourceFiles.set(module.path, module.dependencies);
       }
       for (const module of delta.modified.values()) {
         tsproject.setFile(module.path);
-        sourceFiles.set(module.path, module.dependencies);
       }
       for (const module of delta.deleted.values()) {
         tsproject.removeFile(module);
-        sourceFiles.remove(module);
       }
 
-      //  validate the project, printing errors to the console
       tsproject.validate();
     }
   };

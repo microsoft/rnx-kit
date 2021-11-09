@@ -19,15 +19,15 @@ import { resolveFileModule, resolvePackageModule } from "./resolve";
 import type { ResolverContext, ModuleResolutionHostLike } from "./types";
 
 /**
- * Change the TypeScript `CompilerHost` implementation so it makes use of
- * react-native module resolution.
+ * Change the TypeScript `CompilerHost` or `LanguageServiceHost` so it makes
+ * use of react-native module resolution.
  *
  * This includes binding the `trace` method to a react-native trace logger.
  * The logger is active when the compiler option `traceResolution` is true, or
  * when react-native error tracing is enabled. All file and directory reads
  * are logged, making it easy to see what the resolver is doing.
  *
- * @param host Compiler host
+ * @param host Compiler host or language service host
  * @param options Compiler options
  * @param platform Target platform
  * @param platformExtensionNames Optional list of platform file extensions, from highest precedence (index 0) to lowest. Example: `["ios", "mobile", "native"]`.
@@ -35,7 +35,7 @@ import type { ResolverContext, ModuleResolutionHostLike } from "./types";
  * @param traceReactNativeModuleResolutionErrors Flag to enable trace logging when a resolver error occurs. All messages involved in the failed module resolution are aggregated and logged.
  * @param traceResolutionLog Optional file to use for logging trace message. When not present, log messages go to the console.
  */
-export function changeCompilerHostToUseReactNativeResolver({
+export function changeHostToUseReactNativeResolver({
   host,
   options,
   platform,
@@ -44,7 +44,7 @@ export function changeCompilerHostToUseReactNativeResolver({
   traceReactNativeModuleResolutionErrors,
   traceResolutionLog,
 }: {
-  host: ts.CompilerHost;
+  host: ts.CompilerHost | ts.LanguageServiceHost;
   options: ts.ParsedCommandLine["options"];
   platform: string;
   platformExtensionNames: string[] | undefined;

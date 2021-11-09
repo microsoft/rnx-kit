@@ -1,4 +1,4 @@
-import { changeCompilerHostToUseReactNativeResolver } from "@rnx-kit/typescript-react-native-resolver";
+import { changeHostToUseReactNativeResolver } from "@rnx-kit/typescript-react-native-resolver";
 import fs from "fs";
 import os from "os";
 import ts from "typescript";
@@ -25,7 +25,7 @@ function configureCompilerHost(
     //  TypeScript resolver. This includes configuring a react-native trace
     //  message handler.
     //
-    changeCompilerHostToUseReactNativeResolver({
+    changeHostToUseReactNativeResolver({
       host: compilerHost,
       options: cmdLine.ts.options,
       platform,

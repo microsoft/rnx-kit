@@ -37,22 +37,13 @@ describe("Project", () => {
     cmdLine.options.sourceMap = true;
     cmdLine.options.declaration = true;
     cmdLine.options.declarationMap = true;
-    const resolverHost = createDefaultResolverHost(cmdLine.options);
     const project = new Project(
       documentRegistry,
       mockDiagnosticWriter,
-      resolverHost,
       cmdLine
     );
     return project;
   }
-
-  test("getResolverHost returns an object", () => {
-    const project = createProject();
-    const resolverHost = project.getResolverHost();
-    expect(resolverHost).not.toBeNil();
-    expect(resolverHost).toBeObject();
-  });
 
   test("getConfig returns the project config", () => {
     const project = createProject();
