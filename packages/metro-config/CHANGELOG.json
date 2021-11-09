@@ -2,6 +2,21 @@
   "name": "@rnx-kit/metro-config",
   "entries": [
     {
+      "date": "Tue, 09 Nov 2021 19:26:57 GMT",
+      "tag": "@rnx-kit/metro-config_v1.2.24",
+      "version": "1.2.24",
+      "comments": {
+        "none": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/metro-config",
+            "commit": "not available",
+            "comment": "Renamed rnx-kit-scripts package to @rnx-kit/scripts to prevent hijacking"
+          }
+        ]
+      }
+    },
+    {
       "date": "Tue, 09 Nov 2021 19:26:33 GMT",
       "tag": "@rnx-kit/metro-config_v1.2.24",
       "version": "1.2.24",

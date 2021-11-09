@@ -2,6 +2,21 @@
   "name": "@rnx-kit/babel-preset-metro-react-native",
   "entries": [
     {
+      "date": "Tue, 09 Nov 2021 19:26:57 GMT",
+      "tag": "@rnx-kit/babel-preset-metro-react-native_v1.0.15",
+      "version": "1.0.15",
+      "comments": {
+        "none": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/babel-preset-metro-react-native",
+            "commit": "not available",
+            "comment": "Renamed rnx-kit-scripts package to @rnx-kit/scripts to prevent hijacking"
+          }
+        ]
+      }
+    },
+    {
       "date": "Tue, 09 Nov 2021 19:26:33 GMT",
       "tag": "@rnx-kit/babel-preset-metro-react-native_v1.0.15",
       "version": "1.0.15",

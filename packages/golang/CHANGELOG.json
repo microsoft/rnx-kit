@@ -2,6 +2,21 @@
   "name": "@rnx-kit/golang",
   "entries": [
     {
+      "date": "Tue, 09 Nov 2021 19:26:57 GMT",
+      "tag": "@rnx-kit/golang_v0.1.6",
+      "version": "0.1.6",
+      "comments": {
+        "none": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/golang",
+            "commit": "not available",
+            "comment": "Renamed rnx-kit-scripts package to @rnx-kit/scripts to prevent hijacking"
+          }
+        ]
+      }
+    },
+    {
       "date": "Tue, 09 Nov 2021 19:26:33 GMT",
       "tag": "@rnx-kit/golang_v0.1.6",
       "version": "0.1.6",

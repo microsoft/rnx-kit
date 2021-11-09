@@ -2,6 +2,29 @@
   "name": "@rnx-kit/eslint-plugin",
   "entries": [
     {
+      "date": "Tue, 09 Nov 2021 19:26:57 GMT",
+      "tag": "@rnx-kit/eslint-plugin_v0.2.4",
+      "version": "0.2.4",
+      "comments": {
+        "patch": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/eslint-plugin",
+            "commit": "ff8ab19c5121d3feadfe7e41332b5ccb2d8763a9",
+            "comment": "Handle `project` field sometimes returning an array of strings, and add support for enums."
+          }
+        ],
+        "none": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/eslint-plugin",
+            "commit": "not available",
+            "comment": "Renamed rnx-kit-scripts package to @rnx-kit/scripts to prevent hijacking"
+          }
+        ]
+      }
+    },
+    {
       "date": "Tue, 09 Nov 2021 19:26:33 GMT",
       "tag": "@rnx-kit/eslint-plugin_v0.2.3",
       "version": "0.2.3",
