@@ -1,8 +1,18 @@
 # Change Log - @rnx-kit/cli
 
-This log was last generated on Mon, 08 Nov 2021 10:20:15 GMT and should not be manually modified.
+This log was last generated on Tue, 09 Nov 2021 21:11:31 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 0.9.47
+
+Tue, 09 Nov 2021 21:11:31 GMT
+
+### Patches
+
+- Update the CLI's Metro/TS integration to use the new, generalized resolver in @rnx-kit/typescript-react-native-resolver. Remove the unneeded "default" resolver. (afoxman@microsoft.com)
+- Bump @rnx-kit/typescript-react-native-resolver to v0.1.0
+- Bump @rnx-kit/typescript-service to v1.5.0
 
 ## 0.9.46
 

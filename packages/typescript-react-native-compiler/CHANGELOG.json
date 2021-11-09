@@ -2,6 +2,33 @@
   "name": "@rnx-kit/typescript-react-native-compiler",
   "entries": [
     {
+      "date": "Tue, 09 Nov 2021 21:11:31 GMT",
+      "tag": "@rnx-kit/typescript-react-native-compiler_v0.0.3",
+      "version": "0.0.3",
+      "comments": {
+        "patch": [
+          {
+            "author": "afoxman@microsoft.com",
+            "package": "@rnx-kit/typescript-react-native-compiler",
+            "commit": "f75a209043f131e09b32b8783bf912a8c14f26f7",
+            "comment": "Update the CLI's Metro/TS integration to use the new, generalized resolver in @rnx-kit/typescript-react-native-resolver. Remove the unneeded \"default\" resolver."
+          },
+          {
+            "author": "beachball",
+            "package": "@rnx-kit/typescript-react-native-compiler",
+            "comment": "Bump @rnx-kit/typescript-react-native-resolver to v0.1.0",
+            "commit": "f75a209043f131e09b32b8783bf912a8c14f26f7"
+          },
+          {
+            "author": "beachball",
+            "package": "@rnx-kit/typescript-react-native-compiler",
+            "comment": "Bump @rnx-kit/typescript-service to v1.5.0",
+            "commit": "f75a209043f131e09b32b8783bf912a8c14f26f7"
+          }
+        ]
+      }
+    },
+    {
       "date": "Tue, 09 Nov 2021 19:26:57 GMT",
       "tag": "@rnx-kit/typescript-react-native-compiler_v0.0.2",
       "version": "0.0.2",
