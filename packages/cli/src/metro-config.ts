@@ -20,7 +20,7 @@ import {
 } from "@rnx-kit/typescript-service";
 import type { DeltaResult, Graph } from "metro";
 import type { InputConfigT, SerializerConfigT } from "metro-config";
-import ts from "typescript";
+import type { LanguageServiceHost } from "typescript";
 
 import type { TSProjectInfo } from "./types";
 
@@ -48,9 +48,7 @@ function createSerializerHook({ service, configFileName }: TSProjectInfo) {
         throw new Error(`Failed to load '${configFileName}'`);
       }
 
-      const enhanceLanguageServiceHost = (
-        host: ts.LanguageServiceHost
-      ): void => {
+      const enhanceLanguageServiceHost = (host: LanguageServiceHost): void => {
         const platformExtensionNames =
           platform === "windows" || platform === "win32"
             ? ["win", "native"]
