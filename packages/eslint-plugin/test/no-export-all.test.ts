@@ -6,10 +6,15 @@ jest.mock("fs");
 require("fs").__setMocks({
   barbarian: "export const name = 'Conan';",
   chopper: `
-export type Predator = { kind: "$predator" };
+export enum Kind {
+  Predator = 0,
+  Helicopter,
+}
+
+export type Predator = { kind: Kind.Predator };
 
 export interface IChopper {
-  kind: "$helicopter"
+  kind: Kind.Helicopter
 };
 
 export class Chopper implements IChopper {};
@@ -31,6 +36,17 @@ export type Predator = { kind: "$predator" };
 export interface IChopper {
   kind: "$helicopter"
 };
+
+export declare function escape(): void;
+`,
+  "@fluentui/react-focus": `
+export declare const FocusZoneTabbableElements: {
+  none: 0;
+  all: 1;
+  inputOnly: 2;
+};
+
+export declare type FocusZoneTabbableElements = typeof FocusZoneTabbableElements[keyof typeof FocusZoneTabbableElements];
 `,
 });
 
@@ -48,6 +64,10 @@ const config = {
     sourceType: "module",
   },
 };
+
+function lines(...strings: string[]): string {
+  return strings.join("\n");
+}
 
 describe("disallows `export *`", () => {
   const ruleTester = new RuleTester(config);
@@ -68,10 +88,10 @@ describe("disallows `export *`", () => {
       {
         code: "export * from 'chopper';",
         errors: 1,
-        output: [
-          "export { Chopper, escape, escapeRe, name, nameRe } from 'chopper';",
-          "export type { IChopper, IChopperRe, Predator, PredatorRe } from 'chopper';",
-        ].join("\n"),
+        output: lines(
+          "export { Chopper, Kind, escape, escapeRe, name, nameRe } from 'chopper';",
+          "export type { IChopper, IChopperRe, Predator, PredatorRe } from 'chopper';"
+        ),
       },
       {
         code: "export * from 'conquerer';",
@@ -91,14 +111,26 @@ describe("disallows `export *`", () => {
       {
         code: "export * from 'types';",
         errors: 1,
-        output: "export type { IChopper, Predator } from 'types';",
+        output: lines(
+          "export { escape } from 'types';",
+          "export type { IChopper, Predator } from 'types';"
+        ),
       },
       {
-        code: "export * from './internal'; export * from 'types';",
+        code: lines("export * from './internal';", "export * from 'types';"),
+        errors: 1,
+        output: lines(
+          "export * from './internal';",
+          "export { escape } from 'types';",
+          "export type { IChopper, Predator } from 'types';"
+        ),
+        options: [{ expand: "external-only" }],
+      },
+      {
+        code: "export * from '@fluentui/react-focus';",
         errors: 1,
         output:
-          "export * from './internal'; export type { IChopper, Predator } from 'types';",
-        options: [{ expand: "external-only" }],
+          "export { FocusZoneTabbableElements } from '@fluentui/react-focus';",
       },
     ],
   });

@@ -39,6 +39,7 @@
   },
   "devDependencies": {
     "@react-native-community/cli-types": "^6.0.0",
+    "@rnx-kit/scripts": "*",
     "@types/metro": "^0.66.0",
     "@types/metro-babel-transformer": "^0.66.0",
     "@types/metro-core": "^0.66.0",
@@ -50,8 +51,7 @@
     "metro-core": "^0.66.2",
     "metro-react-native-babel-transformer": "^0.66.2",
     "metro-resolver": "^0.66.2",
-    "metro-runtime": "^0.66.2",
-    "rnx-kit-scripts": "*"
+    "metro-runtime": "^0.66.2"
   },
   "depcheck": {
     "ignoreMatches": [
@@ -62,6 +62,6 @@
     "extends": "@rnx-kit/eslint-config"
   },
   "jest": {
-    "preset": "rnx-kit-scripts"
+    "preset": "@rnx-kit/scripts"
   }
 }

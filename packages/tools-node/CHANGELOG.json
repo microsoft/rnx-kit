@@ -2,6 +2,36 @@
   "name": "@rnx-kit/tools-node",
   "entries": [
     {
+      "date": "Tue, 09 Nov 2021 19:26:57 GMT",
+      "tag": "@rnx-kit/tools-node_v1.2.4",
+      "version": "1.2.4",
+      "comments": {
+        "none": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/tools-node",
+            "commit": "not available",
+            "comment": "Renamed rnx-kit-scripts package to @rnx-kit/scripts to prevent hijacking"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Tue, 09 Nov 2021 19:26:33 GMT",
+      "tag": "@rnx-kit/tools-node_v1.2.4",
+      "version": "1.2.4",
+      "comments": {
+        "none": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/tools-node",
+            "commit": "83db2a2f3de04ec602286f6c67dea16977e2828a",
+            "comment": "Renamed rnx-kit-scripts package to @rnx-kit/scripts to prevent hijacking"
+          }
+        ]
+      }
+    },
+    {
       "date": "Fri, 05 Nov 2021 19:24:49 GMT",
       "tag": "@rnx-kit/tools-node_v1.2.4",
       "version": "1.2.4",

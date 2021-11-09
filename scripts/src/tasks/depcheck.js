@@ -26,7 +26,7 @@ function depcheckTask() {
     const options = mergeOneLevel(
       {
         ignorePatterns: ["/lib/*", "/lib-commonjs/*"],
-        ignoreMatches: ["@rnx-kit/eslint-config", "rnx-kit-scripts"],
+        ignoreMatches: ["@rnx-kit/eslint-config", "@rnx-kit/scripts"],
         specials: [
           depcheck.special.babel,
           depcheck.special.eslint,

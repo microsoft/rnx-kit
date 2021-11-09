@@ -47,10 +47,10 @@
   },
   "devDependencies": {
     "@react-native-community/cli-types": "^6.0.0",
+    "@rnx-kit/scripts": "*",
     "@types/metro": "^0.66.0",
     "@types/metro-config": "^0.66.0",
     "jest-extended": "^0.11.5",
-    "rnx-kit-scripts": "*",
     "typescript": "^4.0.0"
   },
   "depcheck": {
@@ -64,7 +64,7 @@
     "extends": "@rnx-kit/eslint-config"
   },
   "jest": {
-    "preset": "rnx-kit-scripts",
+    "preset": "@rnx-kit/scripts",
     "setupFilesAfterEnv": [
       "jest-extended"
     ]

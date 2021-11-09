@@ -42,20 +42,20 @@
     "@rnx-kit/metro-serializer-esbuild": "*",
     "@rnx-kit/metro-swc-worker": "*",
     "@rnx-kit/react-native-test-app-msal": "*",
+    "@rnx-kit/scripts": "*",
     "@types/react": "^17.0.2",
     "@types/react-native": "^0.64.0",
     "metro-react-native-babel-preset": "^0.66.2",
     "react-native-codegen": "^0.0.7",
     "react-native-test-app": "^0.9.0",
     "react-test-renderer": "^17.0.2",
-    "rnx-kit-scripts": "*",
     "typescript": "^4.0.0"
   },
   "eslintConfig": {
     "extends": "@rnx-kit/eslint-config"
   },
   "jest": {
-    "preset": "rnx-kit-scripts"
+    "preset": "@rnx-kit/scripts"
   },
   "rnx-kit": {
     "reactNativeVersion": "^0.66",

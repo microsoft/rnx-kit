@@ -2,6 +2,36 @@
   "name": "@rnx-kit/typescript-react-native-compiler",
   "entries": [
     {
+      "date": "Tue, 09 Nov 2021 19:26:57 GMT",
+      "tag": "@rnx-kit/typescript-react-native-compiler_v0.0.2",
+      "version": "0.0.2",
+      "comments": {
+        "none": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/typescript-react-native-compiler",
+            "commit": "not available",
+            "comment": "Renamed rnx-kit-scripts package to @rnx-kit/scripts to prevent hijacking"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Tue, 09 Nov 2021 19:26:33 GMT",
+      "tag": "@rnx-kit/typescript-react-native-compiler_v0.0.2",
+      "version": "0.0.2",
+      "comments": {
+        "none": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/typescript-react-native-compiler",
+            "commit": "83db2a2f3de04ec602286f6c67dea16977e2828a",
+            "comment": "Renamed rnx-kit-scripts package to @rnx-kit/scripts to prevent hijacking"
+          }
+        ]
+      }
+    },
+    {
       "date": "Mon, 08 Nov 2021 10:20:15 GMT",
       "tag": "@rnx-kit/typescript-react-native-compiler_v0.0.2",
       "version": "0.0.2",

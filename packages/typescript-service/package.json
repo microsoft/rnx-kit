@@ -25,9 +25,9 @@
     "chalk": "^4.1.0"
   },
   "devDependencies": {
+    "@rnx-kit/scripts": "*",
     "@types/node": "^14.15.0",
     "jest-extended": "^0.11.5",
-    "rnx-kit-scripts": "*",
     "temp-dir": "^2.0.0",
     "typescript": "^4.0.0"
   },
@@ -38,7 +38,7 @@
     "extends": "@rnx-kit/eslint-config"
   },
   "jest": {
-    "preset": "rnx-kit-scripts",
+    "preset": "@rnx-kit/scripts",
     "setupFilesAfterEnv": [
       "jest-extended"
     ]

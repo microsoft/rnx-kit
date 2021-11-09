@@ -1,6 +1,6 @@
 {
-  "name": "rnx-kit-scripts",
-  "version": "0.1.1",
+  "name": "@rnx-kit/scripts",
+  "version": "1.0.0",
   "private": true,
   "main": "./lib/index.js",
   "bin": {
