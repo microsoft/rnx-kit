@@ -2,6 +2,21 @@
   "name": "@rnx-kit/third-party-notices",
   "entries": [
     {
+      "date": "Tue, 09 Nov 2021 19:26:33 GMT",
+      "tag": "@rnx-kit/third-party-notices_v1.2.11",
+      "version": "1.2.11",
+      "comments": {
+        "none": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/third-party-notices",
+            "commit": "83db2a2f3de04ec602286f6c67dea16977e2828a",
+            "comment": "Renamed rnx-kit-scripts package to @rnx-kit/scripts to prevent hijacking"
+          }
+        ]
+      }
+    },
+    {
       "date": "Fri, 05 Nov 2021 19:24:49 GMT",
       "tag": "@rnx-kit/third-party-notices_v1.2.11",
       "version": "1.2.11",

@@ -2,6 +2,21 @@
   "name": "@rnx-kit/cli",
   "entries": [
     {
+      "date": "Tue, 09 Nov 2021 19:26:33 GMT",
+      "tag": "@rnx-kit/cli_v0.9.46",
+      "version": "0.9.46",
+      "comments": {
+        "none": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/cli",
+            "commit": "83db2a2f3de04ec602286f6c67dea16977e2828a",
+            "comment": "Renamed rnx-kit-scripts package to @rnx-kit/scripts to prevent hijacking"
+          }
+        ]
+      }
+    },
+    {
       "date": "Mon, 08 Nov 2021 16:33:53 GMT",
       "tag": "@rnx-kit/cli_v0.9.46",
       "version": "0.9.46",
