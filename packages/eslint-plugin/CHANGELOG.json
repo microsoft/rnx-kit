@@ -2,6 +2,21 @@
   "name": "@rnx-kit/eslint-plugin",
   "entries": [
     {
+      "date": "Tue, 09 Nov 2021 08:21:42 GMT",
+      "tag": "@rnx-kit/eslint-plugin_v0.2.3",
+      "version": "0.2.3",
+      "comments": {
+        "patch": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/eslint-plugin",
+            "commit": "9945c072e41b4ebff48e493f145eeff490fe0699",
+            "comment": "Prefer parsing `.d.ts` over `.js` so we don't lose type information"
+          }
+        ]
+      }
+    },
+    {
       "date": "Fri, 05 Nov 2021 19:24:49 GMT",
       "tag": "@rnx-kit/eslint-plugin_v0.2.2",
       "version": "0.2.2",

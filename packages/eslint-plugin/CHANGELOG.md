@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/eslint-plugin
 
-This log was last generated on Fri, 05 Nov 2021 19:24:49 GMT and should not be manually modified.
+This log was last generated on Tue, 09 Nov 2021 08:21:42 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 0.2.3
+
+Tue, 09 Nov 2021 08:21:42 GMT
+
+### Patches
+
+- Prefer parsing `.d.ts` over `.js` so we don't lose type information (4123478+tido64@users.noreply.github.com)
 
 ## 0.2.2
 
