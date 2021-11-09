@@ -15,7 +15,9 @@ jobs:
           fetch-depth: 0
       - name: Ensure rnx-kit packages come from our repository
         run: |
-          grep rnx-kit yarn.lock 1> /dev/null && exit 1
+          if grep rnx-kit yarn.lock; then
+            exit 1
+          fi
       - name: Deduplicate packages
         run: |
           npx yarn-deduplicate --list --fail
