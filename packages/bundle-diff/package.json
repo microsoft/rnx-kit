@@ -24,15 +24,15 @@
     "test": "rnx-kit-scripts test"
   },
   "devDependencies": {
+    "@rnx-kit/scripts": "*",
     "@types/jest": "^27.0.0",
     "prettier": "^2.0.0",
-    "rnx-kit-scripts": "*",
     "typescript": "^4.0.0"
   },
   "eslintConfig": {
     "extends": "@rnx-kit/eslint-config"
   },
   "jest": {
-    "preset": "rnx-kit-scripts"
+    "preset": "@rnx-kit/scripts"
   }
 }
