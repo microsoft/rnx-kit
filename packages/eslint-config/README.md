@@ -27,7 +27,7 @@ index d9daf8f..9ca1826 100644
    "dependencies": {
      "chalk": "^4.1.0",
 @@ -37,6 +39,9 @@
-     "rnx-kit-scripts": "*",
+     "@rnx-kit/scripts": "*",
      "typescript": "^4.0.0"
    },
 +  "eslintConfig": {

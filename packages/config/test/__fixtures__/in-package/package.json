@@ -3,14 +3,6 @@
   "version": "0.0.1",
   "description": "Package with kit behavior defined in package json",
   "private": true,
-  "scripts": {},
-  "dependencies": {
-    "path": "^0.12.7"
-  },
-  "devDependencies": {
-    "@types/node": "^14.14.20",
-    "rnx-kit-scripts": "0.1.1"
-  },
   "author": "",
   "license": "MIT",
   "rnx-kit": {

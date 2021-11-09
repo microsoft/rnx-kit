@@ -41,8 +41,8 @@
   "devDependencies": {
     "@jest/types": "^27.0.0",
     "@rnx-kit/eslint-config": "*",
-    "@types/node": "^14.15.0",
-    "rnx-kit-scripts": "*"
+    "@rnx-kit/scripts": "*",
+    "@types/node": "^14.15.0"
   },
   "depcheck": {
     "ignoreMatches": [
@@ -54,6 +54,6 @@
     "extends": "@rnx-kit/eslint-config"
   },
   "jest": {
-    "preset": "rnx-kit-scripts"
+    "preset": "@rnx-kit/scripts"
   }
 }

@@ -13,6 +13,11 @@ jobs:
         uses: actions/checkout@v2.4.0
         with:
           fetch-depth: 0
+      - name: Ensure rnx-kit packages come from our repository
+        run: |
+          if grep rnx-kit yarn.lock; then
+            exit 1
+          fi
       - name: Deduplicate packages
         run: |
           npx yarn-deduplicate --list --fail

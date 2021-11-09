@@ -1,0 +1,7 @@
+{
+  "type": "none",
+  "comment": "Renamed rnx-kit-scripts package to @rnx-kit/scripts to prevent hijacking",
+  "packageName": "@rnx-kit/babel-plugin-import-path-remapper",
+  "email": "4123478+tido64@users.noreply.github.com",
+  "dependentChangeType": "none"
+}

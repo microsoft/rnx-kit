@@ -21,9 +21,9 @@
     "test": "rnx-kit-scripts test"
   },
   "devDependencies": {
+    "@rnx-kit/scripts": "*",
     "prettier": "^2.0.0",
-    "esbuild": "^0.13.4",
-    "rnx-kit-scripts": "*"
+    "esbuild": "^0.13.4"
   },
   "depcheck": {
     "ignorePatterns": [
@@ -34,6 +34,6 @@
     "extends": "@rnx-kit/eslint-config"
   },
   "jest": {
-    "preset": "rnx-kit-scripts"
+    "preset": "@rnx-kit/scripts"
   }
 }
