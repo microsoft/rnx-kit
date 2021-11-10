@@ -2,6 +2,21 @@
   "name": "@rnx-kit/dep-check",
   "entries": [
     {
+      "date": "Wed, 10 Nov 2021 12:46:32 GMT",
+      "tag": "@rnx-kit/dep-check_v1.8.18",
+      "version": "1.8.18",
+      "comments": {
+        "none": [
+          {
+            "author": "lsciandra@microsoft.com",
+            "package": "@rnx-kit/dep-check",
+            "commit": "983681253ba2157b7c9fe9831aaf323c5021547c",
+            "comment": "add rneu mention"
+          }
+        ]
+      }
+    },
+    {
       "date": "Tue, 09 Nov 2021 19:26:57 GMT",
       "tag": "@rnx-kit/dep-check_v1.8.18",
       "version": "1.8.18",
