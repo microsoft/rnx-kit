@@ -6,6 +6,11 @@
 `@rnx-kit/dep-check` manages React Native dependencies for a package, based on
 its needs and requirements.
 
+If you want to learn how dep-check is used at Microsoft, and see a demo of how
+it works in a monorepo - you can watch the
+["Improve all the repos – exploring Microsoft’s DevExp"](https://youtu.be/DAEnPV78rQc?t=1085)
+talk by @kelset and @tido64 from React Native Europe 2021.
+
 ## Installation
 
 ```sh
