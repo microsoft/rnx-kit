@@ -10,8 +10,9 @@ This is a sample folder to use as base for generating new packages for
 
 ## Motivation
 
-We tend to add new packages to the monorepo without any clear guidelines; this
-wants to start introducing something in that direction.
+We want new packages to follow an existing set of patterns and guidelines; via
+this package, we can enforce easily allow new folders to stick to at least a
+common starting point.
 
 ## Usage
 
