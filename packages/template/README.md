@@ -15,10 +15,13 @@ wants to start introducing something in that direction.
 
 ## Usage
 
-Copy/paste this folder and change all the relevant files to match your new
-addition (so, change name of folder, in the package.json, etc).
+Simply run from rnx-kit root
 
-It's not ideal but at least it's a start.
+```sh
+yarn new-package newPackageName
+```
+
+To generate a sample project for you to use.
 
 <!--
 ### What does every file do?
