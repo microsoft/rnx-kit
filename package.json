@@ -26,6 +26,7 @@
     "clean": "lage cache --clear && lage clean --log-level warn --grouped",
     "depcheck": "lage depcheck --log-level warn --grouped",
     "format": "lage format --log-level warn --grouped",
+    "new-package": "node scripts/new-package.js",
     "lint": "lage lint --verbose --grouped --no-cache",
     "preinstall": "node ./scripts/preinstall.js",
     "postinstall": "yarn build-tools",
