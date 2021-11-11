@@ -1,7 +1,8 @@
 {
   "extends": "@rnx-kit/scripts/tsconfig-shared.json",
   "compilerOptions": {
-    "lib": ["ES2019.Object"]
+    "lib": ["ES2019.Object"],
+    "emitDeclarationOnly": true
   },
   "include": ["src"]
 }
