@@ -36,7 +36,7 @@ if (process.argv.length === 3) {
     "#readme";
   packageJson.repository.directory = "packages/" + cleanProjectName;
 
-  fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2));
+  fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2) + "\n");
 
   // change the README.md file to the new name
   const readmePath = path.join(newProjectPath, "README.md");
