@@ -19,10 +19,9 @@
     "directory": "packages/dep-check"
   },
   "scripts": {
-    "build": "rnx-kit-scripts build",
+    "build": "rnx-kit-scripts build && rnx-kit-scripts bundle",
     "format": "rnx-kit-scripts format",
     "lint": "rnx-kit-scripts lint",
-    "prepack": "rnx-kit-scripts bundle",
     "test": "rnx-kit-scripts test",
     "update-readme": "node scripts/update-readme.js"
   },
