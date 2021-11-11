@@ -23,7 +23,17 @@ if (process.argv.length === 3) {
   );
 
   // copy the template folder to the new project folder
-  fse.copySync(templatePath, newProjectPath, { dereference: true });
+  try {
+    fse.copySync(templatePath, newProjectPath, {
+      dereference: true,
+      overwrite: false,
+      errorOnExist: true,
+    });
+  } catch (error) {
+    console.error(
+      "ERROR: There's already a directory matching that package name!"
+    );
+  }
 
   // change the package.json file to the new name
   const packageJsonPath = path.join(newProjectPath, "package.json");
@@ -36,7 +46,10 @@ if (process.argv.length === 3) {
     "#readme";
   packageJson.repository.directory = "packages/" + cleanProjectName;
 
-  fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2) + "\n");
+  fs.writeFileSync(
+    packageJsonPath,
+    JSON.stringify(packageJson, null, 2) + "\n"
+  );
 
   // change the README.md file to the new name
   const readmePath = path.join(newProjectPath, "README.md");
