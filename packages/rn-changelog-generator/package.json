@@ -21,11 +21,21 @@
   "scripts": {
     "build": "rnx-kit-scripts build",
     "format": "rnx-kit-scripts format",
+    "generate": "env TS_NODE_TRANSPILE_ONLY=true node $_NODE_OPTS -r ts-node/register ./src/changelog-generator.ts",
+    "generate:debug": "env _NODE_OPTS=--inspect-brk yarn -s generate",
     "lint": "rnx-kit-scripts lint",
     "test": "rnx-kit-scripts test"
   },
   "devDependencies": {
-    "@rnx-kit/scripts": "*"
+    "@octokit/rest": "^18.5.3",
+    "@rnx-kit/scripts": "*",
+    "chalk": "^3.0.0",
+    "deepmerge": "^4.2.2",
+    "fast-levenshtein": "^2.0.6",
+    "p-limit": "^2.2.2",
+    "simple-git": "^2.39.0",
+    "ts-node": "^8.6.2",
+    "yargs": "13.2.2"
   },
   "eslintConfig": {
     "extends": "@rnx-kit/eslint-config"

@@ -1,0 +1,139 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`functions that hit GitHub's commits API run fetches commits, filters them, and generates markdown 1`] = `
+"
+
+## 35300147ca66677f42e8544264be72ac0e9d1b45
+
+### Breaking
+
+
+
+#### Android specific
+
+
+
+#### iOS specific
+
+
+
+### Added
+
+- Added a default Prettier config for new projects ([7254bab0b3](https://github.com/facebook/react-native/commit/7254bab0b3fa129cd238783ab993fbae1102d60a) by [@jpdriver](https://github.com/jpdriver))
+
+#### Android specific
+
+- Add showSoftInputOnFocus to TextInput ([d88e4701fc](https://github.com/facebook/react-native/commit/d88e4701fc46b028861ddcfa3e6ffb141b3ede3d))
+
+#### iOS specific
+
+
+
+### Changed
+
+- Bump CLI to 2.0.0-rc.2 ([6c0eccd46d](https://github.com/facebook/react-native/commit/6c0eccd46d157804fde767263ec8856ff8c99cfb) by [@thymikee](https://github.com/thymikee))
+- Bump CLI to 2.0.0-rc.0 ([ea090a10e6](https://github.com/facebook/react-native/commit/ea090a10e63bb75ab9446ed2bd84647bf3d28bd7) by [@thymikee](https://github.com/thymikee))
+- Remove vendored fetch polyfill, update to whatwg-fetch@3.0 ([bccc92dfdd](https://github.com/facebook/react-native/commit/bccc92dfdd2d85933f2a9cb5c8d1773affb7acba) by [@janicduplessis](https://github.com/janicduplessis))
+
+#### Android specific
+
+- Bump Fresco to 2.0.0, supports AndroidX ([0af25a8ea5](https://github.com/facebook/react-native/commit/0af25a8ea56e38b6306737a55ce8bfd98edf1cfb) by [@dulmandakh](https://github.com/dulmandakh))
+- Add custom font weight support to Text component on Android, only on P(API 28) and above versions. ([3915c0fa61](https://github.com/facebook/react-native/commit/3915c0fa6178fbb8aa9b8bd54881cfdbde8fde70) by [@dulmandakh](https://github.com/dulmandakh))
+- Bump android gradle plugin to 3.4.1 ([fbc6d8caff](https://github.com/facebook/react-native/commit/fbc6d8caff3f40996ec8b8918625ef2ed864a824) by [@dulmandakh](https://github.com/dulmandakh))
+
+#### iOS specific
+
+
+
+### Deprecated
+
+
+
+#### Android specific
+
+
+
+#### iOS specific
+
+
+
+### Removed
+
+
+
+#### Android specific
+
+
+
+#### iOS specific
+
+
+
+### Fixed
+
+- Fix of Android's bug that doesn't let override ScrollView's Style with custom RefreshControl. ([d9a8ac5071](https://github.com/facebook/react-native/commit/d9a8ac5071d23275c5d4a8e9936f391b967416d7) by [@Nizarius](https://github.com/Nizarius))
+- Fix accessibilityActions accessors ([afc142bc76](https://github.com/facebook/react-native/commit/afc142bc76d5cfddcacf55a1f3770e6b6ea15996) by [@xuelgong](https://github.com/xuelgong))
+
+#### Android specific
+
+- Check if mCurrentActivity is set according to LifecycleState ([fb550e9e84](https://github.com/facebook/react-native/commit/fb550e9e8405870167dea9bd3bc3f50fbbae5ae5) by [@RoJoHub](https://github.com/RoJoHub))
+- Fix some languages wrapped texts are cut off. ([76c50c1db1](https://github.com/facebook/react-native/commit/76c50c1db15a1040b185770072d960652e7974a3) by [@soh335](https://github.com/soh335))
+- \`react-native run-android --port <x>\` correctly connects to dev server and related error messages display the correct port ([995b4d3049](https://github.com/facebook/react-native/commit/995b4d30491d2336fed4a975e965668d9c8d5b7c) by [@nhunzaker](https://github.com/nhunzaker))
+- Fix indexed RAM bundle ([d8fa1206c3](https://github.com/facebook/react-native/commit/d8fa1206c3fecd494b0f6abb63c66488e6ced5e0) by [@dratwas](https://github.com/dratwas))
+- Fix missing whitespace in debug instructions ([b45d3b8697](https://github.com/facebook/react-native/commit/b45d3b8697c6ed2ce5c6e4eac7bfd14553c79ed8) by [@mjmasn](https://github.com/mjmasn))
+- Show proper error message instead of throwing a NullReferenceException if Gradle cannot find the NDK ([2aca234dee](https://github.com/facebook/react-native/commit/2aca234dee6a4c1e710b93dce341528279797c34) by [@petterh](https://github.com/petterh))
+- This branch checks also for \`ACTION_NDEF_DISCOVERED\` intent matches to set the initialURL ([54abe1f599](https://github.com/facebook/react-native/commit/54abe1f5990b8f5f57da3231d1bb1fd83966f064) by [@cimitan](https://github.com/cimitan))
+- Fix backgroundColor top level prop of TextInput ([fb6cf2552a](https://github.com/facebook/react-native/commit/fb6cf2552a0ab19d4e96d7d3a586de36c792c1a4) by [@makovkastar](https://github.com/makovkastar))
+
+#### iOS specific
+
+- Don't call sharedApplication in App Extension ([c5ea18f738](https://github.com/facebook/react-native/commit/c5ea18f7389fe821e7a9882e4b1b30b0a1b266f4) by [@zhongwuzw](https://github.com/zhongwuzw))
+- Use CALayers to draw text, fixes rendering for long text ([690e85db04](https://github.com/facebook/react-native/commit/690e85db0487c10ec3880c503632548aca65ff1c) by [@janicduplessis](https://github.com/janicduplessis))
+- Removed autoresizing mask for modal host container view ([2dd7dd8e45](https://github.com/facebook/react-native/commit/2dd7dd8e45f9d4a1086f84d5b70ea66406d98439) by [@zhongwuzw](https://github.com/zhongwuzw))
+- Xcode 11 beta build ([46c7ada535](https://github.com/facebook/react-native/commit/46c7ada535f8d87f325ccbd96c24993dd522165d) by [@ericlewis](https://github.com/ericlewis))
+
+### Security
+
+
+
+#### Android specific
+
+
+
+#### iOS specific
+
+
+
+### Unknown
+
+- Ensure right version of Metro bundler is used ([1bb197afb1](https://github.com/facebook/react-native/commit/1bb197afb191eab134354386700053914f1ac181) by [@kelset](https://github.com/kelset))
+- Generate correct source map if hermes not enabled ([b1f81be4bc](https://github.com/facebook/react-native/commit/b1f81be4bc21eb9baa39dd7ef97709d9927ad407) by [@HazAT](https://github.com/HazAT))
+- Fix Hermes binary path ([348b8f0082](https://github.com/facebook/react-native/commit/348b8f0082cb9b019ecc05d703e1ab8c155a9185) by [@zoontek](https://github.com/zoontek))
+- Fix path to Hermes package. ([0738fe5738](https://github.com/facebook/react-native/commit/0738fe5738c21463da93e3551f8f78ddcb6545e3) by [@cpojer](https://github.com/cpojer))
+- Add Hermes support to React Native 0.60 ([e857d7066b](https://github.com/facebook/react-native/commit/e857d7066be504a9e90042be8ff919d62939895f) by [@cpojer](https://github.com/cpojer))
+- Bump CLI ([35aeb8c027](https://github.com/facebook/react-native/commit/35aeb8c027583010956e2670a5cb924cc079859e) by [@kelset](https://github.com/kelset))
+- Bump jsc dep ([db1d60fa95](https://github.com/facebook/react-native/commit/db1d60fa95586929cf90a918e6af0e5a90f1db89) by [@kelset](https://github.com/kelset))
+- Bump CLI rc ([93c83181fb](https://github.com/facebook/react-native/commit/93c83181fbb479836f407051bdcc4d2749bd78ad) by [@kelset](https://github.com/kelset))
+- Bump version in template to match repo ([53cec2dc1f](https://github.com/facebook/react-native/commit/53cec2dc1f1f5d143d0bb9752629b72350ebd112) by [@kelset](https://github.com/kelset))
+- Move scheduler to dependencies ([503df2c69a](https://github.com/facebook/react-native/commit/503df2c69ab793bca1d055700a328e3214e456ad) by [@rickhanlonii](https://github.com/rickhanlonii))
+- Bump versions to match the requirements ([5ecc87bf3e](https://github.com/facebook/react-native/commit/5ecc87bf3e9a8b5e87048c47d5027c02a573f0a1) by [@kelset](https://github.com/kelset))
+- Re-add the hasteImpl ([7082c3e449](https://github.com/facebook/react-native/commit/7082c3e44979e0b83fcf67c0e90f92e7d670f60d) by [@kelset](https://github.com/kelset))
+
+#### Android Unknown
+
+- Correctly set the border radius on android ([b432b8f13b](https://github.com/facebook/react-native/commit/b432b8f13b4871dcafd690e57d37298662712b50) by [@cabelitos](https://github.com/cabelitos))
+- Fix addition of comma at the end of accessibility labels on Android. ([812abfdbba](https://github.com/facebook/react-native/commit/812abfdbba7c27978a5c2b7041fc4a900f3203ae) by [@marcmulcahy](https://github.com/marcmulcahy))
+- Fix \`ClassNotFound\` exception in Android during Release builds ([ffdf3f22c6](https://github.com/facebook/react-native/commit/ffdf3f22c68583fe77517f78dd97bd2e97ff1b9e) by [@thecodrr](https://github.com/thecodrr))
+- Generate source maps outside of assets/ ([60e75dc1ab](https://github.com/facebook/react-native/commit/60e75dc1ab73b2893ec2e25c0320f32b3cf12b80) by [@motiz88](https://github.com/motiz88))
+- Implement changes to enable native modules auto linking ([261197d857](https://github.com/facebook/react-native/commit/261197d85705dad1a362cc4637aa308c0382dcbe) by [@Salakar](https://github.com/Salakar))
+- Remove duplicate Android SDK steps already present in container ([53e32a47e4](https://github.com/facebook/react-native/commit/53e32a47e4062f428f8d714333236cedbe05b482) by [@hramos](https://github.com/hramos))
+
+#### iOS Unknown
+
+- Delete fishhook ([46bdb4161c](https://github.com/facebook/react-native/commit/46bdb4161c84b33f1d0612e9c7cdd824462a31fd) by [@mmmulani](https://github.com/mmmulani))
+
+#### Failed to parse
+
+
+"
+`;
