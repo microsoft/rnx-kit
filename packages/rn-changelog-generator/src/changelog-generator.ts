@@ -10,7 +10,6 @@ import deepmerge from "deepmerge";
 import https from "https";
 import child_process from "child_process";
 import { IncomingHttpHeaders } from "http";
-import yargs from "yargs";
 
 const execFile = util.promisify(child_process.execFile);
 
@@ -236,13 +235,12 @@ function filterPreviouslyPickedCommits(
 //#region GIT INTERACTIONS
 //*****************************************************************************
 
-export function git(gitDir: string, ...args: string[]) {
-  return execFile("git", [`--git-dir=${gitDir}`, ...args]).then((out) => {
-    if (out.stderr) {
-      throw new Error(out.stderr);
-    }
-    return out.stdout.trimRight();
-  });
+export async function git(gitDir: string, ...args: string[]) {
+  const out = await execFile("git", [`--git-dir=${gitDir}`, ...args]);
+  if (out.stderr) {
+    throw new Error(out.stderr);
+  }
+  return out.stdout.trimRight();
 }
 
 /**
@@ -251,40 +249,39 @@ export function git(gitDir: string, ...args: string[]) {
  * branch. This ensures that we always use the canonical commit ref as it
  * exists in the `main` branch, rather than a new cherry-picked commit ref.
  */
-export function getOriginalCommit(
+export async function getOriginalCommit(
   gitDir: string,
   item: Commit
 ): Promise<Commit | null> {
   const match = item.commit.message.match(/Differential Revision: (D\d+)/m);
   if (match) {
-    return git(
+    const sha = await git(
       gitDir,
       "log",
       "main",
       "--pretty=format:%H",
       `--grep=${match[0]}`
-    ).then((sha) => {
-      if (sha === "") {
-        throw new Error(
-          `Expected a commit to match ${match[1]}, is your \`main\` branch out of date?`
-        );
-      }
-      if (sha.includes("\n")) {
-        throw new Error(
-          `Expected a single commit to match ${match[1]}, but got: ${sha
-            .split("\n")
-            .join(", ")}`
-        );
-      }
-      console.warn(
-        chalk.yellow(
-          `${formatCommitLink(item.sha)} -> ${match[1]} -> ${formatCommitLink(
-            sha
-          )}`
-        )
+    );
+    if (sha === "") {
+      throw new Error(
+        `Expected a commit to match ${match[1]}, is your \`main\` branch out of date?`
       );
-      return { ...item, sha } as Commit;
-    });
+    }
+    if (sha.includes("\n")) {
+      throw new Error(
+        `Expected a single commit to match ${match[1]}, but got: ${sha
+          .split("\n")
+          .join(", ")}`
+      );
+    }
+    console.warn(
+      chalk.yellow(
+        `${formatCommitLink(item.sha)} -> ${match[1]} -> ${formatCommitLink(
+          sha
+        )}`
+      )
+    );
+    return { ...item, sha } as Commit;
   } else {
     return Promise.resolve(null);
   }
@@ -295,7 +292,7 @@ export function getOriginalCommit(
  *
  * @see {getOriginalCommit}
  */
-function getOriginalCommits(
+async function getOriginalCommits(
   gitDir: string,
   commits: Commit[],
   concurrentProcesses: number
@@ -304,54 +301,56 @@ function getOriginalCommits(
   console.group();
   const unresolved: string[] = [];
   const limit = pLimit(concurrentProcesses);
-  return Promise.all(
-    commits.map((original) => {
-      return limit(() =>
-        getOriginalCommit(gitDir, original).then((resolved) => {
-          if (resolved === null) {
-            unresolved.push(original.sha);
-          }
-          return resolved || original;
-        })
+  try {
+    const results = await Promise.all(
+      commits.map((original) => {
+        return limit(() =>
+          getOriginalCommit(gitDir, original).then((resolved) => {
+            if (resolved === null) {
+              unresolved.push(original.sha);
+            }
+            return resolved || original;
+          })
+        );
+      })
+    );
+    if (unresolved.length > 0) {
+      console.error(
+        chalk.redBright(
+          "Unable to find differential revisions for the following commits. If these were made on the release branch only, be sure to update the CHANGELOG entries to point to the commit on the main branch after back-porting."
+        )
       );
-    })
-  )
-    .then((results) => {
-      if (unresolved.length > 0) {
-        console.error(
-          chalk.redBright(
-            "Unable to find differential revisions for the following commits. If these were made on the release branch only, be sure to update the CHANGELOG entries to point to the commit on the main branch after back-porting."
-          )
-        );
-        console.group();
-        unresolved.forEach((sha) =>
-          console.warn(chalk.red(formatCommitLink(sha)))
-        );
-        console.groupEnd();
-      }
+      console.group();
+      unresolved.forEach((sha) =>
+        console.warn(chalk.red(formatCommitLink(sha)))
+      );
       console.groupEnd();
-      return results;
-    })
-    .catch((e) => {
-      console.groupEnd();
-      throw e;
-    });
+    }
+    console.groupEnd();
+    return results;
+  } catch (e) {
+    console.groupEnd();
+    throw e;
+  }
 }
 
 /**
  * Resolves the ref to the first commit after the tree was forked from the
  * `main` branch.
  */
-export function getFirstCommitAfterForkingFromMain(
+export async function getFirstCommitAfterForkingFromMain(
   gitDir: string,
   ref: string
 ) {
-  return git(gitDir, "rev-list", `^${ref}`, "--first-parent", "main").then(
-    (out) => {
-      const components = out.split("\n");
-      return components[components.length - 1];
-    }
+  const out = await git(
+    gitDir,
+    "rev-list",
+    `^${ref}`,
+    "--first-parent",
+    "main"
   );
+  const components = out.split("\n");
+  return components[components.length - 1];
 }
 
 /**
@@ -360,33 +359,27 @@ export function getFirstCommitAfterForkingFromMain(
  * between the two is in the PATCH version range and we should *not* use the
  * offset, as the changes we need to consider are all in the `compare` tree.
  */
-export function getOffsetBaseCommit(
+export async function getOffsetBaseCommit(
   gitDir: string,
   base: string,
   compare: string
 ) {
   console.warn(chalk.green("Resolve base commit"));
   console.group();
-  return Promise.all([
-    getFirstCommitAfterForkingFromMain(gitDir, base),
-    getFirstCommitAfterForkingFromMain(gitDir, compare),
-  ])
-    .then(([offsetBase, offsetCompare]) => {
-      if (offsetBase === offsetCompare) {
-        return git(gitDir, "rev-list", "-n", "1", base);
-      } else {
-        return offsetBase;
-      }
-    })
-    .then((sha) => {
-      console.warn(chalk.yellow(formatCommitLink(sha)));
-      console.groupEnd();
-      return sha;
-    })
-    .catch((e) => {
-      console.groupEnd();
-      throw e;
-    });
+  try {
+    const [offsetBase, offsetCompare] = await Promise.all([
+      getFirstCommitAfterForkingFromMain(gitDir, base),
+      getFirstCommitAfterForkingFromMain(gitDir, compare),
+    ]);
+    if (offsetBase === offsetCompare) {
+      return git(gitDir, "rev-list", "-n", "1", base);
+    } else {
+      return offsetBase;
+    }
+  } catch (e) {
+    console.groupEnd();
+    throw e;
+  }
 }
 
 //*****************************************************************************
@@ -717,7 +710,7 @@ ${data.failed.general.join("\n")}
 //#region MAIN
 //*****************************************************************************
 
-export function getAllChangelogDescriptions(
+export async function getAllChangelogDescriptions(
   commits: Commit[],
   options: {
     gitDir: string;
@@ -727,34 +720,43 @@ export function getAllChangelogDescriptions(
     renderOnlyMessage?: boolean;
   }
 ) {
-  return Promise.resolve(commits)
-    .then(filterCICommits)
-    .then(filterRevertCommits)
-    .then((commits) =>
-      getOriginalCommits(options.gitDir, commits, options.maxWorkers)
-    )
-    .then((commits) =>
-      filterPreviouslyPickedCommits(options.existingChangelogData, commits)
-    )
-    .then((commits) =>
-      getChangelogDesc(commits, !!options.verbose, !!options.renderOnlyMessage)
-    );
+  const commits_1 = await Promise.resolve(commits);
+  const commits_2 = await filterCICommits(commits_1);
+  const commits_3 = await filterRevertCommits(commits_2);
+  const commits_4 = await getOriginalCommits(
+    options.gitDir,
+    commits_3,
+    options.maxWorkers
+  );
+  const commits_5 = filterPreviouslyPickedCommits(
+    options.existingChangelogData,
+    commits_4
+  );
+  return getChangelogDesc(
+    commits_5,
+    !!options.verbose,
+    !!options.renderOnlyMessage
+  );
 }
 
-export function run(
+export async function run(
   options: Parameters<typeof getAllChangelogDescriptions>[1] & {
     token: string;
     base: string;
     compare: string;
   }
 ) {
-  return fetchCommits(options.token, options.base, options.compare)
-    .then((commits) => getAllChangelogDescriptions(commits, options))
-    .then((changes) => buildMarkDown(options.compare, changes));
+  const commits_1 = await fetchCommits(
+    options.token,
+    options.base,
+    options.compare
+  );
+  const changes = await getAllChangelogDescriptions(commits_1, options);
+  return buildMarkDown(options.compare, changes);
 }
 
-if (!module["parent"]) {
-  const argv = yargs
+if (require.main === module) {
+  const argv = require("yargs")
     .usage(
       "$0 [args]",
       "Generate a React Native changelog from the commits and PRs"
@@ -820,11 +822,11 @@ if (!module["parent"]) {
         "Specified path to react-native repo is not a valid git repo."
       );
     })
-    .then(() => {
+    .then(async () => {
       const existingChangelogData = fs.readFileSync(argv.changelog, "utf-8");
-      return getOffsetBaseCommit(gitDir, argv.base, argv.compare)
-        .then((base) => run({ ...argv, base, gitDir, existingChangelogData }))
-        .then((data) => console.log(data));
+      const base = await getOffsetBaseCommit(gitDir, argv.base, argv.compare);
+      const data = await run({ ...argv, base, gitDir, existingChangelogData });
+      return console.log(data);
     })
     .catch((e) => {
       console.error(e);
