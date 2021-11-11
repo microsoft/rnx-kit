@@ -19,5 +19,5 @@ Pod::Spec.new do |s|
 
   s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES' }
 
-  s.source_files         = 'ios/*.swift'
+  s.source_files = 'ios/*.swift'
 end

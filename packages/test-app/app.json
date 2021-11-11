@@ -10,6 +10,12 @@
       "appKey": "MicrosoftAccounts"
     }
   ],
+  "react-native-test-app-msal": {
+    "clientId": "00000000-0000-0000-0000-000000000000",
+    "msaScopes": ["user.read"],
+    "orgScopes": ["user.read"],
+    "userPrincipalName": "arnold@contoso.com"
+  },
   "resources": {
     "android": ["dist/res", "dist/main.android.jsbundle"],
     "ios": ["dist/assets", "dist/main.ios.jsbundle"],
