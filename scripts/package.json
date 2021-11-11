@@ -20,6 +20,7 @@
     "@rnx-kit/golang": "^0.1.6",
     "chalk": "^4.1.0",
     "depcheck": "^1.0.0",
+    "fs-extra": "^10.0.0",
     "glob": "^7.0.0",
     "jest": "^27.0.0",
     "just-scripts": "^1.4.1",
