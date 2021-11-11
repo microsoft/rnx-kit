@@ -8,6 +8,7 @@ import {
   logger,
 } from "just-scripts";
 import { build } from "./tasks/build";
+import { bundle } from "./tasks/bundle";
 import { clean } from "./tasks/clean";
 import { depcheck } from "./tasks/depcheck";
 import { eslint } from "./tasks/eslint";
@@ -30,6 +31,7 @@ export function configureJust(): void {
 
   // leaf-level task definitions
   task("clean", clean);
+  task("bundle", bundle);
   task("depcheck", depcheck);
   task("lint", eslint);
   task("jest", jest);

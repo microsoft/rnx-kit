@@ -7,7 +7,6 @@ import { findPackageDir } from "@rnx-kit/tools-node/package";
 import isString from "lodash/isString";
 import * as path from "path";
 import { getAllPackageJsonFiles, getWorkspaceRoot } from "workspace-tools";
-import yargs from "yargs";
 import { makeCheckCommand } from "./check";
 import { initializeConfig } from "./initialize";
 import { makeSetVersionCommand } from "./setVersion";
@@ -166,7 +165,7 @@ export async function cli({
 }
 
 if (require.main === module) {
-  yargs.usage(
+  require("yargs").usage(
     "$0 [package-json]",
     "Dependency checker for React Native apps",
     {
