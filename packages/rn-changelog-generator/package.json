@@ -1,5 +1,4 @@
 {
-  "private": true,
   "name": "@rnx-kit/rn-changelog-generator",
   "version": "0.0.1",
   "description": "New package called rn-changelog-generator",
@@ -21,7 +20,7 @@
   "scripts": {
     "build": "rnx-kit-scripts build",
     "format": "rnx-kit-scripts format",
-    "generate": "env TS_NODE_TRANSPILE_ONLY=true node $_NODE_OPTS -r ts-node/register ./src/changelog-generator.ts",
+    "generate": "env TS_NODE_TRANSPILE_ONLY=true node $_NODE_OPTS -r ts-node/register ./lib/changelog-generator.js",
     "generate:debug": "env _NODE_OPTS=--inspect-brk yarn -s generate",
     "lint": "rnx-kit-scripts lint",
     "test": "rnx-kit-scripts test"
@@ -29,13 +28,14 @@
   "devDependencies": {
     "@octokit/rest": "^18.5.3",
     "@rnx-kit/scripts": "*",
-    "chalk": "^3.0.0",
+    "@types/fast-levenshtein": "0.0.2",
+    "chalk": "^4.1.0",
     "deepmerge": "^4.2.2",
-    "fast-levenshtein": "^2.0.6",
-    "p-limit": "^2.2.2",
+    "p-limit": "^3.1.0",
+    "fast-levenshtein": "^3.0.0",
     "simple-git": "^2.39.0",
-    "ts-node": "^8.6.2",
-    "yargs": "13.2.2"
+    "ts-node": "^10.4.0",
+    "yargs": "^16.0.0"
   },
   "eslintConfig": {
     "extends": "@rnx-kit/eslint-config"

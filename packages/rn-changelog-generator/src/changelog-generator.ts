@@ -41,7 +41,7 @@ export const CHANGES_TEMPLATE: Changes = Object.freeze(
 ) as Changes;
 
 const CHANGELOG_LINE_REGEXP = new RegExp(
-  `(\\[(${[...CHANGE_TYPE, ...CHANGE_CATEGORY].join("|")})\\]\s*)+`,
+  `(\\[(${[...CHANGE_TYPE, ...CHANGE_CATEGORY].join("|")})\\]s*)+`,
   "i"
 );
 
@@ -181,7 +181,7 @@ function filterRevertCommits(commits: Commit[]) {
       return true;
     })
     .filter((item) => {
-      let text = item.commit.message.split("\n")[0].toLowerCase();
+      const text = item.commit.message.split("\n")[0].toLowerCase();
       revertCommits.forEach((revertCommit) => {
         if (levenshtein.get(text, revertCommit) < 0.5 * revertCommit.length) {
           revertCommits = revertCommits.filter(function (e) {
@@ -189,6 +189,7 @@ function filterRevertCommits(commits: Commit[]) {
           });
           return false;
         }
+        return false;
       });
       return true;
     });
@@ -460,7 +461,7 @@ function formatCommitLink(sha: string) {
   return `https://github.com/facebook/react-native/commit/${sha}`;
 }
 
-export function getChangeMessage(item: Commit, onlyMessage: boolean = false) {
+export function getChangeMessage(item: Commit, onlyMessage = false) {
   const commitMessage = item.commit.message.split("\n");
   let entry =
     commitMessage
@@ -468,7 +469,7 @@ export function getChangeMessage(item: Commit, onlyMessage: boolean = false) {
       .find((a) => /\[ios\]|\[android\]|\[general\]/i.test(a)) ||
     commitMessage.reverse()[0];
   entry = entry.replace(/^((changelog:\s*)?(\[\w+\]\s?)+[\s-]*)/i, ""); //Remove the [General] [whatever]
-  entry = entry.replace(/ \(\#\d*\)$/i, ""); //Remove the PR number if it's on the end
+  entry = entry.replace(/ \(#\d*\)$/i, ""); //Remove the PR number if it's on the end
 
   // Capitalize
   if (/^[a-z]/.test(entry)) {
@@ -496,7 +497,7 @@ export function getChangeMessage(item: Commit, onlyMessage: boolean = false) {
 export function getChangelogDesc(
   commits: Commit[],
   verbose: boolean,
-  onlyMessage: boolean = false
+  onlyMessage = false
 ) {
   const acc = deepmerge(CHANGES_TEMPLATE, {});
   const commitsWithoutExactChangelogTemplate: string[] = [];
