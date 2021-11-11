@@ -1,7 +1,0 @@
-{
-  "type": "minor",
-  "comment": "Bundle dep-check to avoid conflicting dependencies, and to make the installation footprint smaller.",
-  "packageName": "@rnx-kit/dep-check",
-  "email": "4123478+tido64@users.noreply.github.com",
-  "dependentChangeType": "patch"
-}

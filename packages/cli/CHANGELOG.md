@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/cli
 
-This log was last generated on Tue, 09 Nov 2021 21:11:31 GMT and should not be manually modified.
+This log was last generated on Thu, 11 Nov 2021 17:49:21 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 0.9.48
+
+Thu, 11 Nov 2021 17:49:21 GMT
+
+### Patches
+
+- Bump @rnx-kit/dep-check to v1.9.0
 
 ## 0.9.47
 

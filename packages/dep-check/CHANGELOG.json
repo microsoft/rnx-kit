@@ -2,6 +2,21 @@
   "name": "@rnx-kit/dep-check",
   "entries": [
     {
+      "date": "Thu, 11 Nov 2021 17:49:21 GMT",
+      "tag": "@rnx-kit/dep-check_v1.9.0",
+      "version": "1.9.0",
+      "comments": {
+        "minor": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/dep-check",
+            "commit": "c40418e51589ab5b862989e25b7708fba62ba5c1",
+            "comment": "Bundle dep-check to avoid conflicting dependencies, and to make the installation footprint smaller."
+          }
+        ]
+      }
+    },
+    {
       "date": "Wed, 10 Nov 2021 12:46:32 GMT",
       "tag": "@rnx-kit/dep-check_v1.8.18",
       "version": "1.8.18",
