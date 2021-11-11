@@ -101,6 +101,20 @@ current working directory.
 | `yarn lint`                 | Lints **all** packages in the repository              | Lints the **current** package only                  |
 | `yarn test`                 | Tests **all** packages in the repository              | Tests the **current** package only                  |
 
+## Adding a new package
+
+To ensure that there is consistency and shared practices across the monorepo, we
+have introduced a small script to easily allow for new packages generation.
+
+Simply run
+
+```sh
+yarn new-package newPackageName
+```
+
+To generate a sample project for you to use; this is based on
+`packages/template`.
+
 ## Change Logs
 
 Each package in this monorepo contains a change log. The log is built from

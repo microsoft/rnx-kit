@@ -1,0 +1,36 @@
+{
+  "private": true,
+  "name": "@rnx-kit/template",
+  "version": "0.0.1",
+  "description": "Template folder to use as baseline for new packages in rnx-kit",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/template#readme",
+  "license": "MIT",
+  "files": [
+    "lib/*"
+  ],
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "packages/template"
+  },
+  "engines": {
+    "node": ">= 14"
+  },
+  "scripts": {
+    "build": "rnx-kit-scripts build",
+    "format": "rnx-kit-scripts format",
+    "lint": "rnx-kit-scripts lint",
+    "test": "rnx-kit-scripts test"
+  },
+  "devDependencies": {
+    "@rnx-kit/scripts": "*"
+  },
+  "eslintConfig": {
+    "extends": "@rnx-kit/eslint-config"
+  },
+  "jest": {
+    "preset": "@rnx-kit/scripts"
+  }
+}

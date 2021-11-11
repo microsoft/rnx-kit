@@ -21,6 +21,7 @@
     "chalk": "^4.1.0",
     "depcheck": "^1.0.0",
     "esbuild": "^0.13.4",
+    "fs-extra": "^10.0.0",
     "glob": "^7.0.0",
     "jest": "^27.0.0",
     "just-scripts": "^1.4.1",
