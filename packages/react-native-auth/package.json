@@ -1,0 +1,53 @@
+{
+  "name": "@rnx-kit/react-native-auth",
+  "version": "0.0.1",
+  "description": "@rnx-kit/react-native-auth provides a cross-app uniform API for user authentication",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/react-native-auth#readme",
+  "license": "MIT",
+  "author": {
+    "name": "Microsoft Open Source",
+    "email": "microsoftopensource@users.noreply.github.com"
+  },
+  "files": [
+    "*.podspec",
+    "android",
+    "ios",
+    "lib/index.d.ts",
+    "lib/index.js"
+  ],
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "packages/react-native-auth"
+  },
+  "scripts": {
+    "build": "rnx-kit-scripts build",
+    "format": "rnx-kit-scripts format",
+    "format:c": "clang-format -i $(git ls-files '*.h' '*.m')",
+    "lint": "rnx-kit-scripts lint",
+    "lint:kt": "ktlint --relative --verbose 'android/src/**/*.kt'"
+  },
+  "peerDependencies": {
+    "react": "16.11.0 || 16.13.1 || 17.0.1 || 17.0.2",
+    "react-native": "^0.62.3 || ^0.63.2 || ^0.64.2 || ^0.65.0-0 || ^0.66.0-0 || ^0.67.0-0 || ^0.68.0-0"
+  },
+  "devDependencies": {
+    "@rnx-kit/scripts": "*",
+    "@types/react-native": "^0.64.0",
+    "react": "17.0.2",
+    "react-native": "^0.66.0-0"
+  },
+  "eslintConfig": {
+    "extends": "@rnx-kit/eslint-config"
+  },
+  "rnx-kit": {
+    "reactNativeVersion": ">=0.62 <1.0",
+    "reactNativeDevVersion": "^0.66",
+    "capabilities": [
+      "core-android",
+      "core-ios"
+    ]
+  }
+}

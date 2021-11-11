@@ -1,5 +1,7 @@
+import { acquireToken } from "@rnx-kit/react-native-auth";
 import * as React from "react";
 import {
+  Button,
   SafeAreaView,
   ScrollView,
   StatusBar,
@@ -14,8 +16,26 @@ import {
   LearnMoreLinks,
   ReloadInstructions,
 } from "react-native/Libraries/NewAppScreen";
+import manifest from "../app.json";
 
 const App = (): React.ReactElement => {
+  const startAcquireToken = React.useCallback(async () => {
+    try {
+      const authConfig = manifest["react-native-test-app-msal"];
+      const result = await acquireToken(
+        authConfig.orgScopes,
+        authConfig.userPrincipalName,
+        "Organizational"
+      );
+      console.log(JSON.stringify(result, undefined, 2));
+    } catch (e) {
+      const error =
+        typeof e === "object" && e !== null && "code" in e
+          ? JSON.stringify(e, undefined, 2)
+          : e;
+      console.log(error);
+    }
+  }, []);
   return (
     <>
       <StatusBar barStyle="dark-content" />
@@ -26,6 +46,7 @@ const App = (): React.ReactElement => {
         >
           <Header />
           <View style={styles.body}>
+            <Button title="Acquire Token" onPress={startAcquireToken} />
             <View style={styles.sectionContainer}>
               <Text style={styles.sectionTitle}>Step One</Text>
               <Text style={styles.sectionDescription}>

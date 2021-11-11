@@ -16,12 +16,19 @@
   "scripts": {
     "build": "echo Build done.",
     "format": "echo Format done.",
+    "format:c": "clang-format -i $(git ls-files '*.h' '*.m')",
     "format:swift": "swiftformat --swiftversion 5.5 ios",
     "lint": "echo Lint done.",
     "lint:kt": "ktlint --relative --verbose 'android/src/**/*.kt'",
     "lint:swift": "swiftlint"
   },
   "peerDependencies": {
+    "@rnx-kit/react-native-auth": "*",
     "react-native-test-app": ">=0.9.16"
+  },
+  "peerDependenciesMeta": {
+    "@rnx-kit/react-native-auth": {
+      "optional": true
+    }
   }
 }
