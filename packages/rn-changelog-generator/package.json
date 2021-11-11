@@ -5,10 +5,14 @@
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/rn-changelog-generator#readme",
   "license": "MIT",
   "files": [
-    "lib/*"
+    "lib/**/*.d.ts",
+    "lib/changelog-generator.js"
   ],
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
+  "bin": {
+    "rn-changelog-generator": "lib/index.js"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/microsoft/rnx-kit",
