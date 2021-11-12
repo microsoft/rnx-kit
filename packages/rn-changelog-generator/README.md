@@ -9,8 +9,7 @@ and has moved here as part of deprecating that repo.
 
 ## Motivation
 
-This is a script used to generate a markdown formatted list of changes between
-two given
+This script generates a markdown-formatted list of changes between two given
 [git references](https://git-scm.com/book/en/v2/Git-Internals-Git-References)
 (e.g. tags).
 
