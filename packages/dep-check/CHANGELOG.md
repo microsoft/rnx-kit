@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/dep-check
 
-This log was last generated on Thu, 11 Nov 2021 17:49:21 GMT and should not be manually modified.
+This log was last generated on Fri, 12 Nov 2021 13:04:39 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 1.9.1
+
+Fri, 12 Nov 2021 13:04:39 GMT
+
+### Patches
+
+- Fix dep-check not being executable (4123478+tido64@users.noreply.github.com)
 
 ## 1.9.0
 
