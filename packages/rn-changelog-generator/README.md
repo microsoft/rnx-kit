@@ -23,7 +23,7 @@ reasons:
 - Due to how react-native’s
   [release process](https://github.com/facebook/react-native/wiki/Release-Process)
   works, we want to be able to exclude previously cherry-picked commits from the
-  changelog entry of a next version.
+  changelog entry of the next version.
 
   However, with `git`, cherry-picked commits will have different commit hashes
   than their original counterparts–as they exist in the `main` branch. Because
