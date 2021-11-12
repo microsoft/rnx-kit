@@ -22,7 +22,7 @@
     "node": ">= 14"
   },
   "scripts": {
-    "build": "rnx-kit-scripts build",
+    "build": "rnx-kit-scripts build && rnx-kit-scripts bundle",
     "format": "rnx-kit-scripts format",
     "generate": "env TS_NODE_TRANSPILE_ONLY=true node $_NODE_OPTS -r ts-node/register ./lib/changelog-generator.js",
     "generate:debug": "env _NODE_OPTS=--inspect-brk yarn -s generate",
