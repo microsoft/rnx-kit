@@ -31,8 +31,8 @@ reasons:
   except using their _original_ commit hash. This makes it impossible to exclude
   these commits without further work.
 
-  For this reason, the script will parse the ‘referential revision’–which is
-  added to each commit message by Facebook’s infrastructure–and use it to
+  For this reason, the script will parse the ‘referential revision’ – which is
+  added to each commit message by Facebook’s infrastructure – and use it to
   resolve to the original commit in the `main` branch. This resolved commit’s
   hash is then used in the changelog entry, so the script can find and exclude
   it from the next version’s entry.
@@ -52,7 +52,7 @@ folder:
 git clone https://github.com/facebook/react-native.git
 ```
 
-…otherwise ensure it’s up-to-date:
+Ensure the repo is up-to-date:
 
 ```bash
 pushd react-native
@@ -70,11 +70,10 @@ fetch commit metadata from the GitHub API.
 
 ## Usage
 
-Simply run:
+Generate a changelog for `react-native` commits between versions 0.65.0 and 0.66.0:
 
 ```sh
 npx rn-changelog-generator --base v0.65.0 --compare v0.66.0 --repo ../../../react-native --changelog ../../../react-native/CHANGELOG.md --token [GH_TOKEN] > NEW_CHANGES.md
 ```
 
-As explained above, you will need to have a local clone of the react-native core
-repo to refer in the command to make it work (along with the GH token).
+As explained above, you will need to have a local clone of `react-native`, which is referenced by the `--repo` parameter. You'll also need to provide a GitHub personal access token for the `--token` parameter.

@@ -1,7 +1,7 @@
 {
   "name": "@rnx-kit/rn-changelog-generator",
   "version": "0.0.1",
-  "description": "New package called rn-changelog-generator",
+  "description": "Generate a markdown-formatted list of changes between two version of react-native",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/rn-changelog-generator#readme",
   "license": "MIT",
   "files": [
