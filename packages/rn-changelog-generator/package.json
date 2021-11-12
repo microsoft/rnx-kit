@@ -35,7 +35,6 @@
     "deepmerge": "^4.2.2",
     "p-limit": "^3.1.0",
     "fast-levenshtein": "^3.0.0",
-    "simple-git": "^2.39.0",
     "yargs": "^16.0.0"
   },
   "eslintConfig": {
