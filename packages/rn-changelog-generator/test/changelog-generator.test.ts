@@ -14,12 +14,13 @@ import {
   fetchCommits,
   getAllChangelogDescriptions,
   getChangeMessage,
+  getChangelogDesc,
   getOffsetBaseCommit,
   getOriginalCommit,
   getFirstCommitAfterForkingFromMain,
   Changes,
   PlatformChanges,
-} from "../src/index";
+} from "../src/changelog-generator";
 
 if (!process.env.RN_REPO) {
   throw new Error(
