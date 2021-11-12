@@ -26,7 +26,7 @@ reasons:
   changelog entry of the next version.
 
   However, with `git`, cherry-picked commits will have different commit hashes
-  than their original counterparts–as they exist in the `main` branch. Because
+  than their original counterparts – as they exist in the `main` branch. Because
   of this, the next version’s stable branch will include the same changes,
   except using their _original_ commit hash. This makes it impossible to exclude
   these commits without further work.
