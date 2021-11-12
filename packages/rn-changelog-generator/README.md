@@ -3,10 +3,8 @@
 [![Build](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml/badge.svg)](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml)
 [![npm version](https://img.shields.io/npm/v/@rnx-kit/rn-changelog-generator)](https://www.npmjs.com/package/@rnx-kit/rn-changelog-generator)
 
-This script used to live in the
-[RNC/releases repo](https://github.com/react-native-community/releases/blob/master/scripts/changelog-generator.ts)
-but since we are deprecating it, we wanted to keep the script alive somewhere
-where a good infra was present, so here we are!
+This script used to live in
+[react-native-community/releases](https://github.com/react-native-community/releases/blob/master/scripts/changelog-generator.ts), and has moved here as part of deprecating that repo.
 
 ## Motivation
 
