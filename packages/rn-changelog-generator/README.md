@@ -1,5 +1,3 @@
-<!-- We recommend that the first beachball change report for a new package is of type "none" -->
-
 # React Native core changelog generator
 
 [![Build](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml/badge.svg)](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml)
