@@ -5,6 +5,10 @@
   "description": "Template folder to use as baseline for new packages in rnx-kit",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/template#readme",
   "license": "MIT",
+  "author": {
+    "name": "Microsoft Open Source",
+    "email": "microsoftopensource@users.noreply.github.com"
+  },
   "files": [
     "lib/*"
   ],
