@@ -1,0 +1,20 @@
+{
+  "name": "@rnx-kit/rn-changelog-generator",
+  "entries": [
+    {
+      "date": "Fri, 12 Nov 2021 18:30:41 GMT",
+      "tag": "@rnx-kit/rn-changelog-generator_v0.1.0",
+      "version": "0.1.0",
+      "comments": {
+        "minor": [
+          {
+            "author": "lsciandra@microsoft.com",
+            "package": "@rnx-kit/rn-changelog-generator",
+            "commit": "71e4bc28d48bcb3e4a9b4236676fb709c5419dac",
+            "comment": "create rn-changelog-generator package"
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,7 +1,0 @@
-{
-  "type": "minor",
-  "comment": "create rn-changelog-generator package",
-  "packageName": "@rnx-kit/rn-changelog-generator",
-  "email": "lsciandra@microsoft.com",
-  "dependentChangeType": "patch"
-}
