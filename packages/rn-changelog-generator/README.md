@@ -17,7 +17,7 @@ The script is a little more complex than one might expect for the following
 reasons:
 
 - Attributing changes to the author’s github handle requires fetching the commit
-  metadata from the github API, rather than rely on a local clone of the
+  metadata from the github API, rather than relying on a local clone of the
   react-native repo.
 
 - Due to how react-native’s
