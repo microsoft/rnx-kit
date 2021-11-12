@@ -70,10 +70,13 @@ fetch commit metadata from the GitHub API.
 
 ## Usage
 
-Generate a changelog for `react-native` commits between versions 0.65.0 and 0.66.0:
+Generate a changelog for `react-native` commits between versions 0.65.0 and
+0.66.0:
 
 ```sh
 npx rn-changelog-generator --base v0.65.0 --compare v0.66.0 --repo ../../../react-native --changelog ../../../react-native/CHANGELOG.md --token [GH_TOKEN] > NEW_CHANGES.md
 ```
 
-As explained above, you will need to have a local clone of `react-native`, which is referenced by the `--repo` parameter. You'll also need to provide a GitHub personal access token for the `--token` parameter.
+As explained above, you will need to have a local clone of `react-native`, which
+is referenced by the `--repo` parameter. You'll also need to provide a GitHub
+personal access token for the `--token` parameter.
