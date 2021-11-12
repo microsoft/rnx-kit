@@ -13,7 +13,7 @@ export function bundle(): void {
     bundle: true,
     entryPoints: ["src/index.ts"],
     external: [
-      ...(dependencies && Object.keys(dependencies)),
+      ...(dependencies ? Object.keys(dependencies) : []),
       "./package.json",
     ],
     minify,
