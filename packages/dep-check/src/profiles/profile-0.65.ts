@@ -44,7 +44,7 @@ const profile: Profile = {
   },
   clipboard: {
     name: "@react-native-clipboard/clipboard",
-    version: "^1.8.4",
+    version: "^1.9.0",
   },
   "datetime-picker": {
     name: "@react-native-community/datetimepicker",
