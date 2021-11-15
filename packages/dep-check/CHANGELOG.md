@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/dep-check
 
-This log was last generated on Fri, 12 Nov 2021 13:04:39 GMT and should not be manually modified.
+This log was last generated on Mon, 15 Nov 2021 12:33:07 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 1.9.2
+
+Mon, 15 Nov 2021 12:33:07 GMT
+
+### Patches
+
+- Bump clipboard for react-native update fixes (4123478+tido64@users.noreply.github.com)
 
 ## 1.9.1
 
