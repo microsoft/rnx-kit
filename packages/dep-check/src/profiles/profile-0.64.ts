@@ -42,6 +42,11 @@ const profile: Profile = {
     name: "react-native-reanimated",
     version: "^2.1.0",
   },
+  "babel-preset-react-native": {
+    name: "metro-react-native-babel-preset",
+    version: "^0.64.0",
+    devOnly: true,
+  },
   base64: {
     name: "react-native-base64",
     version: "^0.2.1",
@@ -82,6 +87,11 @@ const profile: Profile = {
     name: "react-native-render-html",
     version: "^5.1.1",
   },
+  jest: {
+    name: "jest",
+    version: "^26.5.2",
+    devOnly: true,
+  },
   "lazy-index": {
     name: "react-native-lazy-index",
     version: "^2.1.1",
@@ -89,11 +99,6 @@ const profile: Profile = {
   "masked-view": {
     name: "@react-native-masked-view/masked-view",
     version: "^0.2.4",
-  },
-  "babel-preset-react-native": {
-    name: "metro-react-native-babel-preset",
-    version: "^0.64.0",
-    devOnly: true,
   },
   metro: {
     name: "metro",
@@ -173,11 +178,6 @@ const profile: Profile = {
   webview: {
     name: "react-native-webview",
     version: "^11.4.2",
-  },
-  jest: {
-    name: "jest",
-    version: "^26.5.2",
-    devOnly: true,
   },
 };
 
