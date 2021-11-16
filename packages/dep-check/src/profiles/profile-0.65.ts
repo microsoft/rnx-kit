@@ -42,6 +42,11 @@ const profile: Profile = {
     name: "react-native-reanimated",
     version: "^2.2.1",
   },
+  "babel-preset-react-native": {
+    name: "metro-react-native-babel-preset",
+    version: "^0.66.0",
+    devOnly: true,
+  },
   clipboard: {
     name: "@react-native-clipboard/clipboard",
     version: "^1.9.0",
@@ -62,14 +67,14 @@ const profile: Profile = {
     name: "hermes-engine",
     version: "~0.8.1",
   },
+  jest: {
+    name: "jest",
+    version: "^26.6.3",
+    devOnly: true,
+  },
   "masked-view": {
     name: "@react-native-masked-view/masked-view",
     version: "^0.2.6",
-  },
-  "babel-preset-react-native": {
-    name: "metro-react-native-babel-preset",
-    version: "^0.66.0",
-    devOnly: true,
   },
   metro: {
     name: "metro",
@@ -105,6 +110,10 @@ const profile: Profile = {
     name: "react-native-modal",
     version: "^13.0.0",
   },
+  netinfo: {
+    name: "@react-native-community/netinfo",
+    version: "^7.0.0",
+  },
   screens: {
     name: "react-native-screens",
     version: "^3.7.0",
@@ -112,11 +121,6 @@ const profile: Profile = {
   webview: {
     name: "react-native-webview",
     version: "^11.13.0",
-  },
-  jest: {
-    name: "jest",
-    version: "^26.6.3",
-    devOnly: true,
   },
 };
 
