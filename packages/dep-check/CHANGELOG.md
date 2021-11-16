@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/dep-check
 
-This log was last generated on Mon, 15 Nov 2021 12:33:07 GMT and should not be manually modified.
+This log was last generated on Tue, 16 Nov 2021 14:33:15 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 1.9.3
+
+Tue, 16 Nov 2021 14:33:15 GMT
+
+### Patches
+
+- Bump netinfo to fix autolinking on Windows (4123478+tido64@users.noreply.github.com)
 
 ## 1.9.2
 

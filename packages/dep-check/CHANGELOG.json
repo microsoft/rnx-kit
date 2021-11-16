@@ -2,6 +2,21 @@
   "name": "@rnx-kit/dep-check",
   "entries": [
     {
+      "date": "Tue, 16 Nov 2021 14:33:15 GMT",
+      "tag": "@rnx-kit/dep-check_v1.9.3",
+      "version": "1.9.3",
+      "comments": {
+        "patch": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/dep-check",
+            "commit": "5e6b37004875b8778dbb7c889aee715a7952bf0b",
+            "comment": "Bump netinfo to fix autolinking on Windows"
+          }
+        ]
+      }
+    },
+    {
       "date": "Mon, 15 Nov 2021 12:33:07 GMT",
       "tag": "@rnx-kit/dep-check_v1.9.2",
       "version": "1.9.2",
