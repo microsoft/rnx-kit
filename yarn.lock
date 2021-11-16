@@ -1737,10 +1737,10 @@
     sudo-prompt "^9.0.0"
     wcwidth "^1.0.1"
 
-"@react-native-windows/cli@0.66.0":
-  version "0.66.0"
-  resolved "https://registry.yarnpkg.com/@react-native-windows/cli/-/cli-0.66.0.tgz#68c6919cf9546478ff36a38d9c89bf118f480e5e"
-  integrity sha512-+mzm3k+X1AXQe+OqYZxPPeoY4r/plaPKXe+P7y3tjWZN77ia+pdrKShJuQaAYRG3MhkEtNQpXRoJqb35AM7xrA==
+"@react-native-windows/cli@0.66.1":
+  version "0.66.1"
+  resolved "https://registry.yarnpkg.com/@react-native-windows/cli/-/cli-0.66.1.tgz#613ed9889d1c45fcd7e0f643fae5d6ed182522a4"
+  integrity sha512-lEFpn+EVphz9GkeSdQsNWBgaeXlLrml8rD2GLep/gd53wwBSXs4mqU3UXZ5XyJi7GOgLe2pD7VNYt0YIpNgK2w==
   dependencies:
     "@react-native-windows/package-utils" "0.66.0"
     "@react-native-windows/telemetry" "0.66.0"
@@ -7811,16 +7811,16 @@ react-native-test-app@^0.9.0:
     yargs "^16.0.0"
 
 react-native-windows@^0.66.0-0:
-  version "0.66.3"
-  resolved "https://registry.yarnpkg.com/react-native-windows/-/react-native-windows-0.66.3.tgz#16f7605570110d3542f63c2791912017d62baa11"
-  integrity sha512-eKC94vBz2PArFcn5C1vVsZsB8mgl/DP/BkC+cgBqWJ2lYZzZmD+42HKbtgj88rq0PzApiVvLXOl6rGghFdkZ8Q==
+  version "0.66.4"
+  resolved "https://registry.yarnpkg.com/react-native-windows/-/react-native-windows-0.66.4.tgz#2a787abc837b0f3cf67dd77de2c22a01f51d05bd"
+  integrity sha512-LiVh1kIitTYX6AKDzZj8ZaDuG3RwZf/7jkzwGOhsK1VyZXUQsBeE/DU9oaZBjOSGX3x87evDG5T6zYMCd7vtrw==
   dependencies:
     "@babel/runtime" "^7.0.0"
     "@jest/create-cache-key-function" "^27.0.1"
     "@react-native-community/cli" "^6.0.0"
     "@react-native-community/cli-platform-android" "^6.0.0"
     "@react-native-community/cli-platform-ios" "^6.0.0"
-    "@react-native-windows/cli" "0.66.0"
+    "@react-native-windows/cli" "0.66.1"
     "@react-native-windows/virtualized-list" "0.66.0"
     "@react-native/assets" "1.0.0"
     "@react-native/normalize-color" "1.0.0"
