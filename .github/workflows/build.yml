@@ -5,7 +5,6 @@ on:
 jobs:
   build_and_publish:
     runs-on: ubuntu-latest
-    if: "!contains(github.event.head_commit.message, '***NO_CI***')"
     steps:
       - name: Set up Git
         run: |
