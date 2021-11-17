@@ -30,7 +30,7 @@
     "lint": "lage lint --verbose --grouped --no-cache",
     "preinstall": "node ./scripts/preinstall.js",
     "postinstall": "yarn build-tools",
-    "publish:beachball": "beachball publish --verbose --bump-deps -m\"📦 applying package updates ***NO_CI***\"",
+    "publish:beachball": "beachball publish --verbose --bump-deps -m\"📦 applying package updates [skip ci]\"",
     "rnx-dep-check": "yarn build-scope @rnx-kit/dep-check && scripts/rnx-dep-check.js",
     "test": "lage test --verbose --grouped",
     "update-readme": "yarn update-readme:main && lage update-readme",
