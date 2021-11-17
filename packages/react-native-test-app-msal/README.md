@@ -51,7 +51,12 @@ Add an entry for the account switcher in your `app.json`, e.g.:
        "appKey": "MyTestApp",
 +    },
 +    {
-+      "appKey": "MicrosoftAccounts"
++      "appKey": "com.microsoft.reacttestapp.msal.MicrosoftAccountsActivity",
++      "displayName": "MicrosoftAccounts (Android)"
++    },
++    {
++      "appKey": "MicrosoftAccounts",
++      "displayName": "MicrosoftAccounts (iOS/macOS)"
      }
    ],
    "resources": {
@@ -77,16 +82,28 @@ then fill out the following fields in `app.json`:
        "appKey": "MyTestApp",
      },
      {
-       "appKey": "MicrosoftAccounts"
+       "appKey": "com.microsoft.reacttestapp.msal.MicrosoftAccountsActivity",
+       "displayName": "MicrosoftAccounts (Android)"
+     },
+     {
+       "appKey": "MicrosoftAccounts",
+       "displayName": "MicrosoftAccounts (iOS/macOS)"
      }
    ],
++  "android": {
++    "package": "com.contoso.MyTestApp"
++  },
 +  "ios": {
 +    "bundleIdentifier": "com.contoso.MyTestApp"
 +  },
++  "macos": {
++    "bundleIdentifier": "com.contoso.MyTestApp"
++  },
 +  "react-native-test-app-msal": {
-+    "clientId": "00000000-0000-0000-0000-000000000000",
++    "clientId": "4b0db8c2-9f26-4417-8bde-3f0e3656f8e0",
 +    "msaScopes": ["user.read"],
-+    "orgScopes": ["<Application ID URL>/scope"]
++    "orgScopes": ["user.read"],
++    "signatureHash": "1wIqXSqBj7w+h11ZifsnqwgyKrY="
 +  },
    "resources": {
      "android": ["dist/res", "dist/main.android.jsbundle"],

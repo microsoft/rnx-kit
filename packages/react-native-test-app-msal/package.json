@@ -18,6 +18,7 @@
     "format": "echo Format done.",
     "format:swift": "swiftformat --swiftversion 5.5 ios",
     "lint": "echo Lint done.",
+    "lint:kt": "ktlint --relative --verbose 'android/src/**/*.kt'",
     "lint:swift": "swiftlint"
   },
   "peerDependencies": {
