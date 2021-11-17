@@ -1,8 +1,10 @@
-import * as esbuild from "esbuild";
-import * as fs from "fs";
-import { argv } from "just-task";
+// @ts-check
 
-export function bundle(): void {
+const esbuild = require("esbuild");
+const fs = require("fs");
+const { argv } = require("just-task");
+
+function bundle() {
   const { minify, platform } = argv();
 
   const manifest = fs.readFileSync("package.json", { encoding: "utf-8" });
@@ -23,3 +25,5 @@ export function bundle(): void {
       targetPlatform === "node" ? { js: "#!/usr/bin/env node" } : undefined,
   });
 }
+
+exports.bundle = bundle;

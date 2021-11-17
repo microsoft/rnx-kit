@@ -1,5 +1,8 @@
+// @ts-check
+
 const { eslintTask } = require("just-scripts");
-export const eslint = eslintTask({
+
+exports.eslint = eslintTask({
   configPath: "package.json",
   files: ["src/*"],
 });

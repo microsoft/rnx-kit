@@ -1,10 +1,12 @@
-import path from "path";
-import { tscTask, argv } from "just-scripts";
+// @ts-check
+
+const { argv, tscTask } = require("just-scripts");
+const path = require("path");
 
 const libPath = path.resolve(process.cwd(), "lib");
 const srcPath = path.resolve(process.cwd(), "src");
 
-export const ts = tscTask({
+exports.ts = tscTask({
   outDir: "lib",
   ...(argv().production && {
     inlineSources: true,

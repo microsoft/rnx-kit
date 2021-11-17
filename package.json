@@ -15,7 +15,6 @@
     "build": "lage build --grouped",
     "build:ci": "lage build:ci --verbose --grouped",
     "build-scope": "lage build --grouped --log-level warn --no-deps --scope",
-    "build-tools": "lage build-tools --log-level warn --grouped",
     "bump-versions": "beachball bump",
     "bundle": "lage bundle --grouped",
     "bundle:ci": "lage bundle --verbose --grouped",
@@ -28,8 +27,6 @@
     "format": "lage format --log-level warn --grouped",
     "new-package": "node scripts/new-package.js",
     "lint": "lage lint --verbose --grouped --no-cache",
-    "preinstall": "node ./scripts/preinstall.js",
-    "postinstall": "yarn build-tools",
     "publish:beachball": "beachball publish --verbose --bump-deps -m\"📦 applying package updates [skip ci]\"",
     "rnx-dep-check": "yarn build-scope @rnx-kit/dep-check && scripts/rnx-dep-check.js",
     "test": "lage test --verbose --grouped",
@@ -77,28 +74,14 @@
   "lage": {
     "npmClient": "yarn",
     "pipeline": {
-      "build-tools": [
-        "^build-tools"
-      ],
       "build": [
-        "build-tools",
         "^build"
       ],
       "build:ci": [
         "build",
         "test"
       ],
-      "bundle": [
-        "^build-tools"
-      ],
-      "depcheck": [
-        "^build-tools"
-      ],
-      "lint": [
-        "^build-tools"
-      ],
       "test": [
-        "^build-tools",
         "build"
       ]
     }

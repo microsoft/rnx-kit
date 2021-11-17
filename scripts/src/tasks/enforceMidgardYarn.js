@@ -1,3 +1,5 @@
+// @ts-check
+
 if (process.env.yarnFast !== "true" && process.stdout.isTTY) {
   const openRed = `\u001B[91m`;
   const closeRed = `\u001B[39m`;
