@@ -1,6 +1,6 @@
+import { cosmiconfigSync } from "cosmiconfig";
 import path from "path";
 import { KitConfig } from "./kitConfig";
-import { cosmiconfigSync } from "cosmiconfig";
 
 /**
  * Options for retrieving a kit config. The default is equivalanet to passing { cwd: process.cwd() }

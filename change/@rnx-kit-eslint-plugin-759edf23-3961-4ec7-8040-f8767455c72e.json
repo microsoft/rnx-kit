@@ -1,0 +1,7 @@
+{
+  "type": "none",
+  "comment": "Replace just-scripts with something that is hopefully easier to debug og make changes to.",
+  "packageName": "@rnx-kit/eslint-plugin",
+  "email": "4123478+tido64@users.noreply.github.com",
+  "dependentChangeType": "none"
+}
