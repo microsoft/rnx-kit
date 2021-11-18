@@ -1,6 +1,6 @@
 {
   "type": "none",
-  "comment": "Replace just-scripts with something that is hopefully easier to debug og make changes to.",
+  "comment": "Replace just-scripts with something that is easier to debug and make changes to.",
   "packageName": "@rnx-kit/dep-check",
   "email": "4123478+tido64@users.noreply.github.com",
   "dependentChangeType": "none"
