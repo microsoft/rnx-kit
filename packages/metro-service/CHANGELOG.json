@@ -2,6 +2,29 @@
   "name": "@rnx-kit/metro-service",
   "entries": [
     {
+      "date": "Thu, 18 Nov 2021 20:51:05 GMT",
+      "tag": "@rnx-kit/metro-service_v1.1.12",
+      "version": "1.1.12",
+      "comments": {
+        "none": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/metro-service",
+            "commit": "856118d45ba9f4bf4cf8dabffe1a152229688465",
+            "comment": "Replace just-scripts with something that is easier to debug and make changes to."
+          }
+        ],
+        "patch": [
+          {
+            "author": "beachball",
+            "package": "@rnx-kit/metro-service",
+            "comment": "Bump @rnx-kit/tools-language to v1.2.5",
+            "commit": "856118d45ba9f4bf4cf8dabffe1a152229688465"
+          }
+        ]
+      }
+    },
+    {
       "date": "Tue, 09 Nov 2021 19:26:57 GMT",
       "tag": "@rnx-kit/metro-service_v1.1.11",
       "version": "1.1.11",

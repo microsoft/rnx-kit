@@ -1,8 +1,19 @@
 # Change Log - @rnx-kit/typescript-react-native-compiler
 
-This log was last generated on Tue, 09 Nov 2021 21:11:31 GMT and should not be manually modified.
+This log was last generated on Thu, 18 Nov 2021 20:51:05 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 0.0.4
+
+Thu, 18 Nov 2021 20:51:05 GMT
+
+### Patches
+
+- Bump @rnx-kit/tools-language to v1.2.5
+- Bump @rnx-kit/tools-node to v1.2.5
+- Bump @rnx-kit/typescript-react-native-resolver to v0.1.1
+- Bump @rnx-kit/typescript-service to v1.5.1
 
 ## 0.0.3
 

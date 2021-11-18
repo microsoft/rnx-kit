@@ -2,6 +2,29 @@
   "name": "@rnx-kit/typescript-service",
   "entries": [
     {
+      "date": "Thu, 18 Nov 2021 20:51:05 GMT",
+      "tag": "@rnx-kit/typescript-service_v1.5.1",
+      "version": "1.5.1",
+      "comments": {
+        "none": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/typescript-service",
+            "commit": "856118d45ba9f4bf4cf8dabffe1a152229688465",
+            "comment": "Replace just-scripts with something that is easier to debug and make changes to."
+          }
+        ],
+        "patch": [
+          {
+            "author": "beachball",
+            "package": "@rnx-kit/typescript-service",
+            "comment": "Bump @rnx-kit/tools-node to v1.2.5",
+            "commit": "856118d45ba9f4bf4cf8dabffe1a152229688465"
+          }
+        ]
+      }
+    },
+    {
       "date": "Tue, 09 Nov 2021 21:11:31 GMT",
       "tag": "@rnx-kit/typescript-service_v1.5.0",
       "version": "1.5.0",

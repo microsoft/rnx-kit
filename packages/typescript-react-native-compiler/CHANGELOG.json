@@ -2,6 +2,47 @@
   "name": "@rnx-kit/typescript-react-native-compiler",
   "entries": [
     {
+      "date": "Thu, 18 Nov 2021 20:51:05 GMT",
+      "tag": "@rnx-kit/typescript-react-native-compiler_v0.0.4",
+      "version": "0.0.4",
+      "comments": {
+        "none": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/typescript-react-native-compiler",
+            "commit": "856118d45ba9f4bf4cf8dabffe1a152229688465",
+            "comment": "Replace just-scripts with something that is easier to debug and make changes to."
+          }
+        ],
+        "patch": [
+          {
+            "author": "beachball",
+            "package": "@rnx-kit/typescript-react-native-compiler",
+            "comment": "Bump @rnx-kit/tools-language to v1.2.5",
+            "commit": "856118d45ba9f4bf4cf8dabffe1a152229688465"
+          },
+          {
+            "author": "beachball",
+            "package": "@rnx-kit/typescript-react-native-compiler",
+            "comment": "Bump @rnx-kit/tools-node to v1.2.5",
+            "commit": "856118d45ba9f4bf4cf8dabffe1a152229688465"
+          },
+          {
+            "author": "beachball",
+            "package": "@rnx-kit/typescript-react-native-compiler",
+            "comment": "Bump @rnx-kit/typescript-react-native-resolver to v0.1.1",
+            "commit": "856118d45ba9f4bf4cf8dabffe1a152229688465"
+          },
+          {
+            "author": "beachball",
+            "package": "@rnx-kit/typescript-react-native-compiler",
+            "comment": "Bump @rnx-kit/typescript-service to v1.5.1",
+            "commit": "856118d45ba9f4bf4cf8dabffe1a152229688465"
+          }
+        ]
+      }
+    },
+    {
       "date": "Tue, 09 Nov 2021 21:11:31 GMT",
       "tag": "@rnx-kit/typescript-react-native-compiler_v0.0.3",
       "version": "0.0.3",

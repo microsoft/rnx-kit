@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/typescript-react-native-resolver",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "TypeScript module resolver for use with react-native projects",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/typescript-react-native-resolver#readme",
   "license": "MIT",
@@ -21,7 +21,7 @@
     "test": "rnx-kit-scripts test"
   },
   "dependencies": {
-    "@rnx-kit/tools-node": "^1.2.4"
+    "@rnx-kit/tools-node": "^1.2.5"
   },
   "devDependencies": {
     "@rnx-kit/scripts": "*",

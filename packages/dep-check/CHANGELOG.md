@@ -1,8 +1,18 @@
 # Change Log - @rnx-kit/dep-check
 
-This log was last generated on Tue, 16 Nov 2021 14:33:15 GMT and should not be manually modified.
+This log was last generated on Thu, 18 Nov 2021 20:51:05 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 1.9.4
+
+Thu, 18 Nov 2021 20:51:05 GMT
+
+### Patches
+
+- Bump @rnx-kit/console to v1.0.10
+- Bump @rnx-kit/tools-language to v1.2.5
+- Bump @rnx-kit/tools-node to v1.2.5
 
 ## 1.9.3
 

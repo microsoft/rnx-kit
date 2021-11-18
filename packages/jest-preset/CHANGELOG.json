@@ -2,6 +2,21 @@
   "name": "@rnx-kit/jest-preset",
   "entries": [
     {
+      "date": "Thu, 18 Nov 2021 20:51:05 GMT",
+      "tag": "@rnx-kit/jest-preset_v0.1.8",
+      "version": "0.1.8",
+      "comments": {
+        "none": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/jest-preset",
+            "commit": "856118d45ba9f4bf4cf8dabffe1a152229688465",
+            "comment": "Replace just-scripts with something that is easier to debug and make changes to."
+          }
+        ]
+      }
+    },
+    {
       "date": "Tue, 09 Nov 2021 19:26:57 GMT",
       "tag": "@rnx-kit/jest-preset_v0.1.7",
       "version": "0.1.7",

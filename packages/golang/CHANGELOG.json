@@ -2,6 +2,21 @@
   "name": "@rnx-kit/golang",
   "entries": [
     {
+      "date": "Thu, 18 Nov 2021 20:51:05 GMT",
+      "tag": "@rnx-kit/golang_v0.1.7",
+      "version": "0.1.7",
+      "comments": {
+        "patch": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/golang",
+            "commit": "856118d45ba9f4bf4cf8dabffe1a152229688465",
+            "comment": "Exit earlier if we've already installed Go"
+          }
+        ]
+      }
+    },
+    {
       "date": "Tue, 09 Nov 2021 19:26:57 GMT",
       "tag": "@rnx-kit/golang_v0.1.6",
       "version": "0.1.6",
