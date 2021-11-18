@@ -1,7 +1,19 @@
 // @ts-check
 
-const { execute } = require("../process");
-
 /** @type {import("../process").Command} */
-module.exports = () =>
-  execute("git", "clean", "-dfqX", "--exclude=node_modules");
+module.exports = () => {
+  const fs = require("fs-extra");
+  return Promise.all(
+    [
+      "bin",
+      "coverage",
+      "dist",
+      "lib",
+      "lib-amd",
+      "lib-commonjs",
+      "lib-es2015",
+      "lib-es6",
+      "temp",
+    ].map((dir) => fs.remove(dir))
+  ).then(() => undefined);
+};

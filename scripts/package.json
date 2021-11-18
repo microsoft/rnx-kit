@@ -31,6 +31,7 @@
     "yargs": "^16.0.0"
   },
   "devDependencies": {
+    "@types/fs-extra": "^9.0.0",
     "@types/glob": "^7.0.0",
     "@types/jest": "^27.0.0"
   },
