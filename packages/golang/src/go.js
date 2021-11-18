@@ -134,15 +134,23 @@ function getGoExecutable() {
  */
 function goInstallTask(logger) {
   return async function goInstall() {
-    logger?.info("Looking for an installation of Go");
-
     try {
-      spawn(logger, "go", ["version"]).trim();
+      spawn(undefined, "go", ["version"]).trim();
       logger?.info("Found Go in the system PATH");
       return Promise.resolve();
     } catch (_) {
       // nop
     }
+
+    const unpackDir = getWorkspaceCacheDir();
+    // The "go" subdirectory comes from unpacking the archive. It is part of
+    // the Go distribution.
+    const probeDir = path.join(unpackDir, "go");
+    if (fs.existsSync(probeDir)) {
+      logger?.info(`Found Go: ${probeDir}`);
+      return Promise.resolve();
+    }
+
     logger?.info("Go is not installed on this machine");
 
     const goDistribution = getGoDistribution();
@@ -168,10 +176,6 @@ function goInstallTask(logger) {
       goDistribution.hash
     )();
 
-    const unpackDir = getWorkspaceCacheDir();
-    // The "go" subdirectory comes from unpacking the archive. It is part of
-    // the Go distribution.
-    const probeDir = path.join(unpackDir, "go");
     await unpackTask(logger, downloadFile, unpackDir, probeDir)();
 
     logger?.info(`Installed Go: ${probeDir}`);

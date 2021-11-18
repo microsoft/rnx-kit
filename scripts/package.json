@@ -4,13 +4,14 @@
   "private": true,
   "main": "src/index.js",
   "bin": {
-    "rnx-kit-scripts": "./just-scripts.js"
+    "rnx-kit-scripts": "src/index.js"
   },
   "scripts": {
-    "build:ci": "just-scripts build",
-    "depcheck": "just-scripts depcheck",
-    "format": "just-scripts format",
-    "lint": "just-scripts lint"
+    "build": "rnx-kit-scripts build",
+    "build:go": "rnx-kit-scripts go",
+    "depcheck": "rnx-kit-scripts depcheck",
+    "format": "rnx-kit-scripts format",
+    "lint": "rnx-kit-scripts lint"
   },
   "dependencies": {
     "@babel/core": "^7.0.0",
@@ -18,20 +19,33 @@
     "@babel/types": "^7.0.0",
     "@microsoft/tsdoc": "^0.13.0",
     "@rnx-kit/golang": "^0.1.6",
-    "chalk": "^4.1.0",
     "depcheck": "^1.0.0",
     "esbuild": "^0.13.4",
     "fs-extra": "^10.0.0",
     "glob": "^7.0.0",
     "jest": "^27.0.0",
-    "just-scripts": "^1.4.1",
     "markdown-table": "^2.0.0",
     "midgard-yarn": "^1.23.24",
     "typescript": "^4.0.0",
-    "workspace-tools": "^0.16.2"
+    "workspace-tools": "^0.16.2",
+    "yargs": "^16.0.0"
   },
   "devDependencies": {
+    "@types/fs-extra": "^9.0.0",
     "@types/glob": "^7.0.0",
     "@types/jest": "^27.0.0"
+  },
+  "depcheck": {
+    "ignoreMatches": [
+      "@rnx-kit/dep-check",
+      "@rnx-kit/jest-preset",
+      "jest",
+      "midgard-yarn",
+      "typescript",
+      "workspace-tools"
+    ]
+  },
+  "eslintConfig": {
+    "extends": "@rnx-kit/eslint-config"
   }
 }
