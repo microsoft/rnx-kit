@@ -5,13 +5,13 @@
  */
 
 const { spawn } = require("child_process");
+const os = require("os");
 
 function discardResult() {
   return undefined;
 }
 
 /**
- *
  * @param {string} command
  * @param {...string} args
  * @returns {Promise<void>}
@@ -29,7 +29,16 @@ function execute(command, ...args) {
 }
 
 /**
- *
+ * @param {string} command
+ * @param {...string} args
+ * @returns {Promise<void>}
+ */
+function runScript(command, ...args) {
+  const yarn = os.platform() === "win32" ? "yarn.cmd" : "yarn";
+  return execute(yarn, "--silent", command, ...args);
+}
+
+/**
  * @param {...() => Promise<void>} scripts
  * @returns {Promise<void>}
  */
@@ -42,4 +51,5 @@ function sequence(...scripts) {
 
 exports.discardResult = discardResult;
 exports.execute = execute;
+exports.runScript = runScript;
 exports.sequence = sequence;

@@ -3,7 +3,6 @@
 const { discardResult } = require("../process");
 
 /**
- *
  * @param {Record<string, unknown>=} args
  */
 function bundle({ minify, platform } = { minify: false, platform: "node" }) {

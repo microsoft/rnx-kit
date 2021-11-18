@@ -1,7 +1,7 @@
 // @ts-check
 
-const { execute } = require("../process");
+const { runScript } = require("../process");
 
 /** @type {import("../process").Command} */
 module.exports = (_args, rawArgs = []) =>
-  execute("tsc", "--outDir", "lib", ...rawArgs);
+  runScript("tsc", "--outDir", "lib", ...rawArgs);

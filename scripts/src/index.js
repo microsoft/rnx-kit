@@ -8,7 +8,6 @@ const lint = require("./commands/lint");
 const { sequence } = require("./process");
 
 /**
- *
  * @param {Record<string, { description: string; command: import("./process").Command }>} commands
  * @returns
  */

@@ -1,10 +1,10 @@
 // @ts-check
 
-const { execute } = require("../process");
+const { runScript } = require("../process");
 
 /** @type {import("../process").Command} */
 module.exports = () =>
-  execute(
+  runScript(
     "prettier",
     "--write",
     "--loglevel",
