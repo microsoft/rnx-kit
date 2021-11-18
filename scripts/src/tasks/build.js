@@ -1,9 +1,15 @@
-import fs from "fs";
-import { encodeArgs, spawn } from "just-scripts-utils";
-import { argv, logger, series } from "just-task";
-import { getWorkspaceRoot } from "workspace-tools";
+// @ts-check
 
-export function build(...tasks: string[]): () => Promise<void> {
+const fs = require("fs");
+const { encodeArgs, spawn } = require("just-scripts-utils");
+const { argv, logger, series } = require("just-task");
+const { getWorkspaceRoot } = require("workspace-tools");
+
+/**
+ * @param {string[]} tasks
+ * @returns {ReturnType<series>}
+ */
+function build(...tasks) {
   const { dependencies } = argv();
   if (!dependencies) {
     return series(...tasks);
@@ -31,3 +37,5 @@ export function build(...tasks: string[]): () => Promise<void> {
     });
   };
 }
+
+exports.build = build;

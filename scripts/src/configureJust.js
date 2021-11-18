@@ -1,26 +1,28 @@
-import path from "path";
-import {
+// @ts-check
+
+const { goBuildTask, goTask } = require("@rnx-kit/golang");
+const path = require("path");
+const {
   addResolvePath,
   option,
   parallel,
   series,
   task,
   logger,
-} from "just-scripts";
-import { build } from "./tasks/build";
-import { bundle } from "./tasks/bundle";
-import { clean } from "./tasks/clean";
-import { depcheck } from "./tasks/depcheck";
-import { eslint } from "./tasks/eslint";
-import { jest } from "./tasks/jest";
-import { prettier } from "./tasks/prettier";
-import { ts } from "./tasks/ts";
-import { updateApiReadme } from "./tasks/updateApiReadme";
-import { goBuildTask, goTask } from "@rnx-kit/golang";
+} = require("just-scripts");
+const { build } = require("./tasks/build");
+const { bundle } = require("./tasks/bundle");
+const { clean } = require("./tasks/clean");
+const { depcheck } = require("./tasks/depcheck");
+const { eslint } = require("./tasks/eslint");
+const { jest } = require("./tasks/jest");
+const { prettier } = require("./tasks/prettier");
+const { ts } = require("./tasks/ts");
+const { updateApiReadme } = require("./tasks/updateApiReadme");
 
 const scriptsBinDir = path.join(__dirname, "..", "bin");
 
-export function configureJust(): void {
+function configureJust() {
   //  add a resolve path for the build tooling deps like TS from the scripts folder
   addResolvePath(__dirname);
 
@@ -53,3 +55,5 @@ export function configureJust(): void {
   task("test", jest);
   task("validate", parallel("depcheck", "lint", "test"));
 }
+
+exports.configureJust = configureJust;

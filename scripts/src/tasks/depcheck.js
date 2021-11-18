@@ -1,3 +1,5 @@
+// @ts-check
+
 /**
  * @param {{ [key: string]: unknown }} a
  * @param {{ [key: string]: unknown }} b

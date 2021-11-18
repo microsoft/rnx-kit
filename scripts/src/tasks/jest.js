@@ -1,6 +1,11 @@
-import { argv, jestTask, JestTaskOptions } from "just-scripts";
+// @ts-check
 
-function getJestOptions(): JestTaskOptions {
+const { argv, jestTask } = require("just-scripts");
+
+/**
+ * @returns {import("just-scripts").JestTaskOptions}
+ */
+function getJestOptions() {
   //  pass through everything but the "test" / "jest" task name
   const args = argv();
   for (const element of ["jest", "test"]) {
@@ -22,4 +27,4 @@ function getJestOptions(): JestTaskOptions {
   };
 }
 
-export const jest = jestTask(getJestOptions());
+exports.jest = jestTask(getJestOptions());

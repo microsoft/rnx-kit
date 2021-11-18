@@ -1,29 +1,29 @@
-import { TaskFunction, logger } from "just-task";
-import { getPackageInfos, findGitRoot } from "workspace-tools";
+// @ts-check
 
-export type DependencyType =
-  | "dependencies"
-  | "devDependencies"
-  | "peerDependencies";
-
-export interface CheckPublishingOptions {
-  /**
-   * An array of fields to check for private internal dependencies, by default this is just dependencies
-   */
-  dependencyTypes?: DependencyType[];
-}
+const { logger } = require("just-task");
+const { findGitRoot, getPackageInfos } = require("workspace-tools");
 
 /**
- * Task to check the matrix of packages for publishing errors. In particular this checks for published packages that
- * have a dependency on a private package
+ * @typedef {"dependencies" | "devDependencies" | "peerDependencies"} DependencyType
  *
- * @param options - options for configuring the task
+ * @typedef {{
+ *   dependencyTypes?: DependencyType[];
+ * }} CheckPublishingOptions
  */
-export function checkPublishingTask(
-  options: CheckPublishingOptions = {}
-): TaskFunction {
+
+/**
+ * Task to check the matrix of packages for publishing errors. In particular
+ * this checks for published packages that have a dependency on a private
+ * package.
+ *
+ * @param {CheckPublishingOptions=} options - options for configuring the task
+ * @returns {import("just-task").TaskFunction}
+ */
+function checkPublishingTask(options = {}) {
   const dependencyTypes = options.dependencyTypes || ["dependencies"];
-  return (done: (error?: Error) => void) => {
+
+  /** @type {(done: (error?: Error) => void) => void} */
+  return (done) => {
     const gitRoot = findGitRoot(process.cwd());
     if (!gitRoot) {
       throw `Cannot located Git root from ${process.cwd()}`;
@@ -48,7 +48,7 @@ export function checkPublishingTask(
           });
         }
       });
-    } catch(err) {
+    } catch (err) {
       if (err instanceof Error) {
         done(err);
       } else {
@@ -59,3 +59,5 @@ export function checkPublishingTask(
     done();
   };
 }
+
+exports.checkPublishingTask = checkPublishingTask;

@@ -1,31 +1,35 @@
-import * as babelParser from "@babel/parser";
-import {
-  Comment,
-  ExportNamedDeclaration,
+// @ts-check
+const babelParser = require("@babel/parser");
+const {
   isExportNamedDeclaration,
   isFunctionDeclaration,
   isIdentifier,
-  LVal,
-} from "@babel/types";
-import { DocExcerpt, DocNode, TSDocParser } from "@microsoft/tsdoc";
-import * as fs from "fs";
-import glob from "glob";
-import * as path from "path";
+} = require("@babel/types");
+const { DocExcerpt, TSDocParser } = require("@microsoft/tsdoc");
+const fs = require("fs");
+const glob = require("glob");
+const path = require("path");
 
 const README = "README.md";
 const TOKEN_START = "<!-- @rnx-kit/api start -->";
 const TOKEN_END = "<!-- @rnx-kit/api end -->";
 
-function extractBrief(summary: string): string {
+/**
+ * @param {string} summary
+ * @returns {string}
+ */
+function extractBrief(summary) {
   const newParagraph = summary.indexOf("\n\n");
   return (newParagraph > 0 ? summary.substring(0, newParagraph) : summary)
     .trim()
     .replace(/\n/g, " ");
 }
 
-function findLastBlockComment(
-  comments: readonly Comment[] | null
-): Comment | null {
+/**
+ * @param {readonly import("@babel/types").Comment[] | null} comments
+ * @returns {import("@babel/types").Comment | null}
+ */
+function findLastBlockComment(comments) {
   if (comments) {
     for (let i = comments.length - 1; i >= 0; --i) {
       if (comments[i].type === "CommentBlock") {
@@ -36,14 +40,17 @@ function findLastBlockComment(
   return null;
 }
 
-function findSourceFiles(): string[] {
+/**
+ * @returns {string[]}
+ */
+function findSourceFiles() {
   try {
     const tsconfig = require.resolve("./tsconfig.json", {
       paths: [process.cwd()],
     });
     const { include } = require(tsconfig);
     if (Array.isArray(include)) {
-      return include.reduce<string[]>((result, pattern) => {
+      return include.reduce((result, pattern) => {
         if (fs.existsSync(pattern)) {
           if (fs.statSync(pattern).isDirectory()) {
             result.push(...glob.sync(`${pattern}/**/*.ts`));
@@ -54,7 +61,7 @@ function findSourceFiles(): string[] {
           result.push(...glob.sync(pattern));
         }
         return result;
-      }, []);
+      }, /** @type {string[]} */ ([]));
     }
   } catch (_) {
     /* ignore */
@@ -62,7 +69,11 @@ function findSourceFiles(): string[] {
   return [];
 }
 
-function getExportedName(node: ExportNamedDeclaration): string {
+/**
+ * @param {import("@babel/types").ExportNamedDeclaration} node
+ * @returns {string}
+ */
+function getExportedName(node) {
   switch (node.declaration?.type) {
     case "FunctionDeclaration":
     case "TSInterfaceDeclaration":
@@ -77,8 +88,13 @@ function getExportedName(node: ExportNamedDeclaration): string {
   }
 }
 
-function renderDocNode(docNode: DocNode): string {
-  const content: string[] = [];
+/**
+ * @param {import("@microsoft/tsdoc").DocNode} docNode
+ * @returns {string}
+ */
+function renderDocNode(docNode) {
+  /** @type {string[]} */
+  const content = [];
   if (docNode) {
     if (docNode instanceof DocExcerpt) {
       content.push(docNode.content.toString());
@@ -90,7 +106,11 @@ function renderDocNode(docNode: DocNode): string {
   return content.join("");
 }
 
-function renderParamNode(node: LVal): string {
+/**
+ * @param {import("@babel/types").LVal} node
+ * @returns {string}
+ */
+function renderParamNode(node) {
   switch (node.type) {
     case "ArrayPattern":
       return "[]";
@@ -109,24 +129,28 @@ function renderParamNode(node: LVal): string {
   }
 }
 
-function updateReadme(
-  exportedTypes: [string, string, string][],
-  exportedFunctions: [string, string, string][]
-): void {
-  const sortByCategory = (
-    lhs: [string, string, string],
-    rhs: [string, string, string]
-  ) => {
+/**
+ * @param {[string, string, string][]} exportedTypes
+ * @param {[string, string, string][]} exportedFunctions
+ */
+function updateReadme(exportedTypes, exportedFunctions) {
+  /** @type {(lhs: [string, string, string], rhs: [string, string, string]) => -1 | 0 | 1} */
+  const sortByCategory = (lhs, rhs) => {
     if (lhs[0] !== rhs[0]) {
       return lhs[0] < rhs[0] ? -1 : 1;
     }
     return lhs[1] === rhs[1] ? 0 : lhs[1] < rhs[1] ? -1 : 1;
   };
 
+  /** @type {(table: string[][], options?: {}) => string} */
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  const markdownTable = require("markdown-table");
+
   const types =
     exportedTypes.length === 0
       ? ""
-      : require("markdown-table")([
+      : markdownTable([
           ["Category", "Type Name", "Description"],
           ...exportedTypes.sort(sortByCategory),
         ]);
@@ -134,7 +158,7 @@ function updateReadme(
   const functions =
     exportedFunctions.length === 0
       ? ""
-      : require("markdown-table")([
+      : markdownTable([
           ["Category", "Function", "Description"],
           ...exportedFunctions.sort(sortByCategory),
         ]);
@@ -152,11 +176,15 @@ function updateReadme(
   }
 }
 
-export function updateApiReadme(): void {
+function updateApiReadme() {
   const tsdocParser = new TSDocParser();
 
-  const exportedFunctions: [string, string, string][] = [];
-  const exportedTypes: [string, string, string][] = [];
+  /** @type {[string, string, string][]} */
+  const exportedFunctions = [];
+
+  /** @type {[string, string, string][]} */
+  const exportedTypes = [];
+
   findSourceFiles().forEach((file) => {
     const category = path.basename(file, ".ts");
     const content = fs.readFileSync(file, { encoding: "utf-8" });
@@ -211,3 +239,5 @@ export function updateApiReadme(): void {
 
   updateReadme(exportedTypes, exportedFunctions);
 }
+
+exports.updateApiReadme = updateApiReadme;

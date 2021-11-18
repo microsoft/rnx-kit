@@ -1,7 +1,9 @@
-import path from "path";
-import { cleanTask } from "just-scripts";
+// @ts-check
 
-export const clean = cleanTask({
+const { cleanTask } = require("just-scripts");
+const path = require("path");
+
+exports.clean = cleanTask({
   paths: [
     "bin",
     "coverage",

@@ -2,15 +2,15 @@
   "name": "@rnx-kit/scripts",
   "version": "1.0.0",
   "private": true,
-  "main": "./lib/index.js",
+  "main": "src/index.js",
   "bin": {
     "rnx-kit-scripts": "./just-scripts.js"
   },
   "scripts": {
-    "build-tools": "just-scripts build",
-    "code-style": "node ./lib/just-scripts.js code-style",
+    "build:ci": "just-scripts build",
     "depcheck": "just-scripts depcheck",
-    "prettier": "node ./lib/just-scripts.js prettier"
+    "format": "just-scripts format",
+    "lint": "just-scripts lint"
   },
   "dependencies": {
     "@babel/core": "^7.0.0",
