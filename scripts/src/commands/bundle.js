@@ -1,5 +1,7 @@
 // @ts-check
 
+const { discardResult } = require("../process");
+
 /**
  *
  * @param {Record<string, unknown>=} args
@@ -36,7 +38,7 @@ function bundle({ minify, platform } = { minify: false, platform: "node" }) {
       banner:
         targetPlatform === "node" ? { js: "#!/usr/bin/env node" } : undefined,
     })
-    .then(() => undefined);
+    .then(discardResult);
 }
 
 module.exports = bundle;

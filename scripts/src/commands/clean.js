@@ -1,5 +1,7 @@
 // @ts-check
 
+const { discardResult } = require("../process");
+
 /** @type {import("../process").Command} */
 module.exports = () => {
   const fs = require("fs-extra");
@@ -15,5 +17,5 @@ module.exports = () => {
       "lib-es6",
       "temp",
     ].map((dir) => fs.remove(dir))
-  ).then(() => undefined);
+  ).then(discardResult);
 };

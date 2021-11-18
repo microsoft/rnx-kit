@@ -6,6 +6,10 @@
 
 const { spawn } = require("child_process");
 
+function discardResult() {
+  return undefined;
+}
+
 /**
  *
  * @param {string} command
@@ -36,5 +40,6 @@ function sequence(...scripts) {
   );
 }
 
+exports.discardResult = discardResult;
 exports.execute = execute;
 exports.sequence = sequence;
