@@ -3,6 +3,8 @@
   - packages/config/**/*
 'feature: dep-check':
   - packages/dep-check/**/*
+'feature: eslint':
+  - packages/eslint-*/**/*
 'feature: jest':
   - packages/jest-*/**/*
 'feature: metro':

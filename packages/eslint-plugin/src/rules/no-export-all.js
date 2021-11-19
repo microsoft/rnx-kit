@@ -208,8 +208,11 @@ function extractExports(context, moduleId, depth) {
 
   const { ast, filename } = parseResult;
   try {
-    /** @type {NamedExports} */
-    const result = { exports: [], types: [] };
+    /** @type {Set<string>} */
+    const exports = new Set();
+    /** @type {Set<string>} */
+    const types = new Set();
+
     const traverser = makeTraverser();
     traverser.traverse(ast, {
       /** @type {(node: Node, parent: Node) => void} */
@@ -227,7 +230,7 @@ function extractExports(context, moduleId, depth) {
                 case "TSEnumDeclaration": {
                   const name = node.declaration.id?.name;
                   if (name) {
-                    result.exports.push(name);
+                    exports.add(name);
                   }
                   break;
                 }
@@ -237,7 +240,7 @@ function extractExports(context, moduleId, depth) {
                 case "TSTypeAliasDeclaration": {
                   const name = node.declaration.id?.name;
                   if (name) {
-                    result.types.push(name);
+                    types.add(name);
                   }
                   break;
                 }
@@ -245,18 +248,17 @@ function extractExports(context, moduleId, depth) {
                 case "VariableDeclaration":
                   node.declaration.declarations.forEach((declaration) => {
                     if (declaration.id.type === "Identifier") {
-                      result.exports.push(declaration.id.name);
+                      exports.add(declaration.id.name);
                     }
                   });
                   break;
               }
             } else {
-              const list =
-                node.exportKind === "type" ? result.types : result.exports;
+              const set = node.exportKind === "type" ? types : exports;
               node.specifiers.forEach((spec) => {
                 const name = spec.exported.name;
                 if (name !== "default") {
-                  list.push(name);
+                  set.add(name);
                 }
               });
             }
@@ -271,8 +273,8 @@ function extractExports(context, moduleId, depth) {
                 depth - 1
               );
               if (namedExports) {
-                result.exports.push(...namedExports.exports);
-                result.types.push(...namedExports.types);
+                namedExports.exports.forEach((name) => exports.add(name));
+                namedExports.types.forEach((name) => types.add(name));
               }
             }
             break;
@@ -280,7 +282,10 @@ function extractExports(context, moduleId, depth) {
         }
       },
     });
-    return result;
+    return {
+      exports: [...exports],
+      types: [...types],
+    };
   } catch (e) {
     if (context.options.debug) {
       console.error(e);
