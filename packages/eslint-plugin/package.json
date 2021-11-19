@@ -41,6 +41,9 @@
     "@types/jest": "^27.0.0",
     "eslint": "^8.0.0"
   },
+  "engines": {
+    "node": ">=14.15"
+  },
   "depcheck": {
     "ignoreMatches": [
       "@typescript-eslint/eslint-plugin",
