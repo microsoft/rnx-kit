@@ -52,6 +52,12 @@ export function changeHostToUseReactNativeResolver({
   traceReactNativeModuleResolutionErrors: boolean;
   traceResolutionLog: string | undefined;
 }): void {
+  // Ensure that optional methods have an implementation so they can be hooked
+  // for logging, and so we can use them in the resolver.
+  host.directoryExists = host.directoryExists ?? ts.sys.directoryExists;
+  host.realpath = host.realpath ?? ts.sys.realpath;
+  host.getDirectories = host.getDirectories ?? ts.sys.getDirectories;
+
   let mode = ResolverLogMode.Never;
   if (options.traceResolution) {
     mode = ResolverLogMode.Always;
@@ -59,17 +65,12 @@ export function changeHostToUseReactNativeResolver({
     mode = ResolverLogMode.OnFailure;
   }
   const log = new ResolverLog(mode, traceResolutionLog);
-  host.trace = log.log.bind(log);
-
-  // Ensure that optional methods have an implementation so they can be hooked
-  // for logging.
-  host.directoryExists = host.directoryExists ?? ts.sys.directoryExists;
-  host.realpath = host.realpath ?? ts.sys.realpath;
-  host.getDirectories = host.getDirectories ?? ts.sys.getDirectories;
-
-  changeModuleResolutionHostToLogFileSystemReads(
-    host as ModuleResolutionHostLike
-  );
+  if (mode !== ResolverLogMode.Never) {
+    host.trace = log.log.bind(log);
+    changeModuleResolutionHostToLogFileSystemReads(
+      host as ModuleResolutionHostLike
+    );
+  }
 
   const allowedExtensions = [...ExtensionsTypeScript];
   if (options.checkJs) {

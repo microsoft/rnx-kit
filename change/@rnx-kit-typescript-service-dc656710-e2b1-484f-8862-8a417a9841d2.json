@@ -1,0 +1,7 @@
+{
+  "type": "patch",
+  "comment": "Don't format/print \"suggestion\" diagnostics. Doing so hits an internal debug assert in TypeScript.",
+  "packageName": "@rnx-kit/typescript-service",
+  "email": "afoxman@microsoft.com",
+  "dependentChangeType": "patch"
+}

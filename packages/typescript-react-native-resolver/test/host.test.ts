@@ -14,93 +14,87 @@ import type { ModuleResolutionHostLike, ResolverContext } from "../src/types";
 import { ResolverLog, ResolverLogMode } from "../src/log";
 
 describe("Host > changeHostToUseReactNativeResolver", () => {
-  function testChangeHost(host: ts.CompilerHost): void {
+  const mockFileExists = jest.fn();
+  const mockReadFile = jest.fn();
+  const mockDirectoryExists = jest.fn();
+  const mockRealpath = jest.fn();
+  const mockGetDirectories = jest.fn();
+  const host = {
+    fileExists: mockFileExists,
+    readFile: mockReadFile,
+    directoryExists: mockDirectoryExists,
+    realpath: mockRealpath,
+    getDirectories: mockGetDirectories,
+  } as unknown as ts.CompilerHost;
+
+  afterEach(() => {
+    jest.resetAllMocks();
+  });
+
+  function testChangeHost(): void {
     changeHostToUseReactNativeResolver({
       host,
       options: {},
       platform: "ios",
       platformExtensionNames: ["native"],
       disableReactNativePackageSubstitution: false,
-      traceReactNativeModuleResolutionErrors: false,
+      traceReactNativeModuleResolutionErrors: true,
       traceResolutionLog: undefined,
     });
   }
 
   test("sets the trace function to ensure trace logging is possible", () => {
-    const host = {} as unknown as ts.CompilerHost;
-    testChangeHost(host);
+    testChangeHost();
     expect(host.trace).toBeFunction();
   });
 
   test("hooks fileExists with a function that calls the original function", () => {
-    const mock = jest.fn();
-    const host = {
-      fileExists: mock,
-    } as unknown as ts.CompilerHost;
-    testChangeHost(host);
+    testChangeHost();
     expect(host.fileExists).toBeFunction();
-    expect(host.fileExists).not.toBe(mock);
+    expect(host.fileExists).not.toBe(mockFileExists);
     host.fileExists("alpha");
-    expect(mock).toBeCalledWith("alpha");
+    expect(mockFileExists).toBeCalledWith("alpha");
   });
 
   test("hooks readFile with a function that calls the original function", () => {
-    const mock = jest.fn();
-    const host = {
-      readFile: mock,
-    } as unknown as ts.CompilerHost;
-    testChangeHost(host);
+    testChangeHost();
     expect(host.readFile).toBeFunction();
-    expect(host.readFile).not.toBe(mock);
+    expect(host.readFile).not.toBe(mockReadFile);
     host.readFile("beta");
-    expect(mock).toBeCalledWith("beta");
+    expect(mockReadFile).toBeCalledWith("beta");
   });
 
   test("hooks directoryExists with a function that calls the original function", () => {
-    const mock = jest.fn();
-    const host = {
-      directoryExists: mock,
-    } as unknown as ts.CompilerHost;
-    testChangeHost(host);
+    testChangeHost();
     expect(host.directoryExists).toBeFunction();
-    expect(host.directoryExists).not.toBe(mock);
+    expect(host.directoryExists).not.toBe(mockDirectoryExists);
     host.directoryExists("gamma");
-    expect(mock).toBeCalledWith("gamma");
+    expect(mockDirectoryExists).toBeCalledWith("gamma");
   });
 
   test("hooks realpath with a function that calls the original function", () => {
-    const mock = jest.fn();
-    const host = {
-      realpath: mock,
-    } as unknown as ts.CompilerHost;
-    testChangeHost(host);
+    testChangeHost();
     expect(host.realpath).toBeFunction();
-    expect(host.realpath).not.toBe(mock);
+    expect(host.realpath).not.toBe(mockRealpath);
     host.realpath("delta");
-    expect(mock).toBeCalledWith("delta");
+    expect(mockRealpath).toBeCalledWith("delta");
   });
 
   test("hooks getDirectories with a function that calls the original function", () => {
-    const mock = jest.fn();
-    const host = {
-      getDirectories: mock,
-    } as unknown as ts.CompilerHost;
-    testChangeHost(host);
+    testChangeHost();
     expect(host.getDirectories).toBeFunction();
-    expect(host.getDirectories).not.toBe(mock);
+    expect(host.getDirectories).not.toBe(mockGetDirectories);
     host.getDirectories("epsilon");
-    expect(mock).toBeCalledWith("epsilon");
+    expect(mockGetDirectories).toBeCalledWith("epsilon");
   });
 
   test("sets resolveModuleNames", () => {
-    const host = {} as unknown as ts.CompilerHost;
-    testChangeHost(host);
+    testChangeHost();
     expect(host.resolveModuleNames).toBeFunction();
   });
 
   test("sets resolveTypeReferenceDirectives", () => {
-    const host = {} as unknown as ts.CompilerHost;
-    testChangeHost(host);
+    testChangeHost();
     expect(host.resolveTypeReferenceDirectives).toBeFunction();
   });
 });
