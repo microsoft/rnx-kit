@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/eslint-plugin
 
-This log was last generated on Tue, 09 Nov 2021 19:26:57 GMT and should not be manually modified.
+This log was last generated on Fri, 19 Nov 2021 09:22:42 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 0.2.5
+
+Fri, 19 Nov 2021 09:22:42 GMT
+
+### Patches
+
+- no-export-all: Fix dupes sometimes showing up in fixed code (4123478+tido64@users.noreply.github.com)
 
 ## 0.2.4
 

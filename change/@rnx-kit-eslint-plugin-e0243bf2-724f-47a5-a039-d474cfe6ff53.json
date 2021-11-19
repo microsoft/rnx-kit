@@ -1,7 +1,0 @@
-{
-  "type": "patch",
-  "comment": "no-export-all: Fix dupes sometimes showing up in fixed code",
-  "packageName": "@rnx-kit/eslint-plugin",
-  "email": "4123478+tido64@users.noreply.github.com",
-  "dependentChangeType": "none"
-}
