@@ -1,8 +1,17 @@
 # Change Log - @rnx-kit/cli
 
-This log was last generated on Thu, 18 Nov 2021 20:51:04 GMT and should not be manually modified.
+This log was last generated on Fri, 19 Nov 2021 16:08:47 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 0.9.53
+
+Fri, 19 Nov 2021 16:08:47 GMT
+
+### Patches
+
+- Bump @rnx-kit/typescript-react-native-resolver to v0.1.2
+- Bump @rnx-kit/typescript-service to v1.5.2
 
 ## 0.9.52
 

@@ -2,6 +2,21 @@
   "name": "@rnx-kit/typescript-react-native-resolver",
   "entries": [
     {
+      "date": "Fri, 19 Nov 2021 16:08:47 GMT",
+      "tag": "@rnx-kit/typescript-react-native-resolver_v0.1.2",
+      "version": "0.1.2",
+      "comments": {
+        "patch": [
+          {
+            "author": "afoxman@microsoft.com",
+            "package": "@rnx-kit/typescript-react-native-resolver",
+            "commit": "0654e1e1433ba6ae20f5696aa78529e0c0d6e415",
+            "comment": "When modifying a TypeScript host, only change trace() when logging is enabled. Also, when changing file/directory APIs, bind the original calls to the host so that the 'this' reference is set properly."
+          }
+        ]
+      }
+    },
+    {
       "date": "Thu, 18 Nov 2021 20:51:05 GMT",
       "tag": "@rnx-kit/typescript-react-native-resolver_v0.1.1",
       "version": "0.1.1",

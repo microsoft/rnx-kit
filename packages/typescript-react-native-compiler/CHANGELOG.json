@@ -2,6 +2,27 @@
   "name": "@rnx-kit/typescript-react-native-compiler",
   "entries": [
     {
+      "date": "Fri, 19 Nov 2021 16:08:47 GMT",
+      "tag": "@rnx-kit/typescript-react-native-compiler_v0.0.5",
+      "version": "0.0.5",
+      "comments": {
+        "patch": [
+          {
+            "author": "beachball",
+            "package": "@rnx-kit/typescript-react-native-compiler",
+            "comment": "Bump @rnx-kit/typescript-react-native-resolver to v0.1.2",
+            "commit": "0654e1e1433ba6ae20f5696aa78529e0c0d6e415"
+          },
+          {
+            "author": "beachball",
+            "package": "@rnx-kit/typescript-react-native-compiler",
+            "comment": "Bump @rnx-kit/typescript-service to v1.5.2",
+            "commit": "0654e1e1433ba6ae20f5696aa78529e0c0d6e415"
+          }
+        ]
+      }
+    },
+    {
       "date": "Thu, 18 Nov 2021 20:51:05 GMT",
       "tag": "@rnx-kit/typescript-react-native-compiler_v0.0.4",
       "version": "0.0.4",

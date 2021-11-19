@@ -1,7 +1,0 @@
-{
-  "type": "patch",
-  "comment": "When modifying a TypeScript host, only change trace() when logging is enabled. Also, when changing file/directory APIs, bind the original calls to the host so that the 'this' reference is set properly.",
-  "packageName": "@rnx-kit/typescript-react-native-resolver",
-  "email": "afoxman@microsoft.com",
-  "dependentChangeType": "patch"
-}

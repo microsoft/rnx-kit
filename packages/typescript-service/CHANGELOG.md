@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/typescript-service
 
-This log was last generated on Thu, 18 Nov 2021 20:51:05 GMT and should not be manually modified.
+This log was last generated on Fri, 19 Nov 2021 16:08:47 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 1.5.2
+
+Fri, 19 Nov 2021 16:08:47 GMT
+
+### Patches
+
+- Don't format/print "suggestion" diagnostics. Doing so hits an internal debug assert in TypeScript. (afoxman@microsoft.com)
 
 ## 1.5.1
 
