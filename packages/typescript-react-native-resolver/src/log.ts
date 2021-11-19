@@ -89,11 +89,11 @@ export class ResolverLog {
 export function changeModuleResolutionHostToLogFileSystemReads(
   host: ModuleResolutionHostLike
 ): void {
-  const originalFileExists = host.fileExists;
-  const originalReadFile = host.readFile;
-  const originalDirectoryExists = host.directoryExists;
-  const originalRealpath = host.realpath;
-  const originalGetDirectories = host.getDirectories;
+  const originalFileExists = host.fileExists.bind(host);
+  const originalReadFile = host.readFile.bind(host);
+  const originalDirectoryExists = host.directoryExists.bind(host);
+  const originalRealpath = host.realpath ? host.realpath.bind(host) : undefined;
+  const originalGetDirectories = host.getDirectories.bind(host);
 
   host.fileExists = (fileName: string): boolean => {
     const result = originalFileExists(fileName);
