@@ -1,12 +1,7 @@
-@objc
-public enum AccountType: Int, CaseIterable {
-    case microsoftAccount
-    case organizational
-}
+import Foundation
 
 @objc
 public final class Account: NSObject, Identifiable {
-    // swiftlint:disable:next identifier_name
     public var id: String {
         "\(accountType.description):\(userPrincipalName)"
     }
@@ -17,36 +12,6 @@ public final class Account: NSObject, Identifiable {
     init(userPrincipalName: String, accountType: AccountType) {
         self.userPrincipalName = userPrincipalName
         self.accountType = accountType
-    }
-}
-
-extension AccountType {
-    static func from(issuer: String) -> AccountType {
-        issuer.contains(TokenBroker.Constants.MicrosoftAccountTenant)
-            ? .microsoftAccount
-            : .organizational
-    }
-
-    static func from(string: String) -> AccountType {
-        allCases.first { $0.description == string } ?? .organizational
-    }
-
-    var authority: URL! {
-        switch self {
-        case .microsoftAccount:
-            return URL(string: "https://login.microsoftonline.com/consumers/oauth2/v2.0/authorize")
-        case .organizational:
-            return URL(string: "https://login.microsoftonline.com/common/")
-        }
-    }
-
-    var description: String {
-        switch self {
-        case .microsoftAccount:
-            return "personal"
-        case .organizational:
-            return "work"
-        }
     }
 }
 

@@ -152,11 +152,11 @@ struct AccountsView: View {
             userPrincipalName: nil,
             accountType: accountType,
             sender: hostingController.hostingController
-        ) { userPrincipalName, _, _ in
+        ) { result, _ in
             let allAccounts = TokenBroker.shared.allAccounts()
             mutableSelf.accounts = allAccounts
             mutableSelf.selectedAccount = allAccounts.find(
-                userPrincipalName: userPrincipalName,
+                userPrincipalName: result?.username ?? "",
                 accountType: accountType
             )
             mutableSelf.formDisabled = false

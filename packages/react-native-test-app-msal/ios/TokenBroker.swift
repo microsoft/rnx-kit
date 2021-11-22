@@ -1,11 +1,13 @@
 import Foundation
 import MSAL
 
-public typealias TokenAcquiredHandler = (_ accountUPN: String, _ accessToken: String?, _ error: String?) -> Void
+public typealias TokenAcquiredHandler = (_ result: AuthResult?, _ error: AuthError?) -> Void
 
 @objc(TokenBroker)
 public final class TokenBroker: NSObject {
     enum Constants {
+        static let EmptyGUID = "00000000-0000-0000-0000-000000000000"
+
         // Source: https://docs.microsoft.com/en-us/azure/active-directory/develop/id-tokens
         static let MicrosoftAccountTenant = "9188040d-6c67-4c5b-b112-36a304b66dad"
         static let RedirectURI = "msauth.\(Bundle.main.bundleIdentifier ?? "")://auth"
@@ -49,7 +51,12 @@ public final class TokenBroker: NSObject {
         onTokenAcquired: @escaping TokenAcquiredHandler
     ) {
         guard let currentAccount = currentAccount else {
-            onTokenAcquired("", nil, "No current account")
+            let error = AuthError(
+                type: .preconditionViolated,
+                correlationID: Constants.EmptyGUID,
+                message: "No current account"
+            )
+            onTokenAcquired(nil, error)
             return
         }
 
@@ -182,9 +189,12 @@ public final class TokenBroker: NSObject {
             application.acquireToken(with: parameters) { result, error in
                 self.condition.signal()
 
-                let username = result?.account.username ?? ""
-                let accessToken = result?.accessToken
-                onTokenAcquired(username, accessToken, error?.localizedDescription)
+                guard let result = result else {
+                    onTokenAcquired(nil, AuthError(error: error as NSError?))
+                    return
+                }
+
+                onTokenAcquired(AuthResult(result: result), nil)
             }
         }
     }
@@ -218,47 +228,58 @@ public final class TokenBroker: NSObject {
 
         DispatchQueue.main.async {
             application.acquireTokenSilent(with: parameters) { result, error in
-                if let error = error as NSError? {
-                    if error.domain == MSALErrorDomain, error.code == MSALError.interactionRequired.rawValue {
-                        self.acquireTokenInteractive(
-                            scopes: scopes,
-                            userPrincipalName: userPrincipalName,
-                            accountType: accountType,
-                            sender: sender,
-                            onTokenAcquired: onTokenAcquired
-                        )
-                    } else {
-                        self.condition.signal()
-
-                        // Handle "Cannot start ASWebAuthenticationSession
-                        // without providing presentation context. Set
-                        // presentationContextProvider before calling
-                        // -start." This can occur while the test app is
-                        // navigating to the initial component.
-                        if error.isMissingPresentationContextError() {
-                            self.acquireToken(
+                guard let result = result else {
+                    if let error = error as NSError? {
+                        if error.isInteractionRequiredError() {
+                            self.acquireTokenInteractive(
                                 scopes: scopes,
                                 userPrincipalName: userPrincipalName,
                                 accountType: accountType,
                                 sender: sender,
                                 onTokenAcquired: onTokenAcquired
                             )
-                            return
-                        }
+                        } else {
+                            self.condition.signal()
 
-                        onTokenAcquired("", nil, error.localizedDescription)
+                            // Handle "Cannot start ASWebAuthenticationSession
+                            // without providing presentation context. Set
+                            // presentationContextProvider before calling
+                            // -start." This can occur while the test app is
+                            // navigating to the initial component.
+                            if error.isMissingPresentationContextError() {
+                                self.acquireToken(
+                                    scopes: scopes,
+                                    userPrincipalName: userPrincipalName,
+                                    accountType: accountType,
+                                    sender: sender,
+                                    onTokenAcquired: onTokenAcquired
+                                )
+                                return
+                            }
+
+                            onTokenAcquired(nil, AuthError(error: error))
+                        }
+                    } else {
+                        self.condition.signal()
+                        onTokenAcquired(nil, AuthError(error: nil))
                     }
+
                     return
                 }
 
                 self.condition.signal()
-                onTokenAcquired(userPrincipalName, result?.accessToken, nil)
+
+                onTokenAcquired(AuthResult(result: result), nil)
             }
         }
     }
 }
 
 extension NSError {
+    func isInteractionRequiredError() -> Bool {
+        domain == MSALErrorDomain && code == MSALError.interactionRequired.rawValue
+    }
+
     func isMissingPresentationContextError() -> Bool {
         let domain = "com.apple.AuthenticationServices.WebAuthenticationSession"
         return self.domain == domain && code == 2
