@@ -48,6 +48,12 @@ export declare const FocusZoneTabbableElements: {
 
 export declare type FocusZoneTabbableElements = typeof FocusZoneTabbableElements[keyof typeof FocusZoneTabbableElements];
 `,
+  "@fluentui/style-utilities": `
+export namespace ZIndexes {
+  export const Nav = 1;
+  export const ScrollablePane = 1;
+}
+`,
 });
 
 const config = {
@@ -131,6 +137,11 @@ describe("disallows `export *`", () => {
         errors: 1,
         output:
           "export { FocusZoneTabbableElements } from '@fluentui/react-focus';",
+      },
+      {
+        code: "export * from '@fluentui/style-utilities';",
+        errors: 1,
+        output: "export { ZIndexes } from '@fluentui/style-utilities';",
       },
     ],
   });

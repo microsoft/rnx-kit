@@ -216,9 +216,14 @@ function extractExports(context, moduleId, depth) {
     const traverser = makeTraverser();
     traverser.traverse(ast, {
       /** @type {(node: Node, parent: Node) => void} */
-      enter: (node, _parent) => {
+      enter: (node, parent) => {
         switch (node.type) {
           case "ExportNamedDeclaration":
+            if (parent.type === "TSModuleBlock") {
+              // The module or namespace is already exported.
+              return;
+            }
+
             if (node.declaration) {
               switch (node.declaration.type) {
                 case "ClassDeclaration":
@@ -231,6 +236,23 @@ function extractExports(context, moduleId, depth) {
                   const name = node.declaration.id?.name;
                   if (name) {
                     exports.add(name);
+                  }
+                  break;
+                }
+
+                // export namespace N { ... }
+                case "TSModuleDeclaration": {
+                  switch (node.declaration.id.type) {
+                    case "Identifier":
+                      exports.add(node.declaration.id.name);
+                      break;
+                    case "Literal": {
+                      const name = node.declaration.id.value;
+                      if (typeof name === "string") {
+                        exports.add(name);
+                      }
+                      break;
+                    }
                   }
                   break;
                 }
