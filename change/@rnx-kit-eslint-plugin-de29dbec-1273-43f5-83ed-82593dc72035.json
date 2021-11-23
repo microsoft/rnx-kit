@@ -1,0 +1,7 @@
+{
+  "type": "patch",
+  "comment": "Updated minimum node requirement in package.json.",
+  "packageName": "@rnx-kit/eslint-plugin",
+  "email": "dzearing@microsoft.com",
+  "dependentChangeType": "patch"
+}
