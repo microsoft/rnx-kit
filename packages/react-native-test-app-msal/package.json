@@ -22,6 +22,6 @@
     "lint:swift": "swiftlint"
   },
   "peerDependencies": {
-    "react-native-test-app": ">=0.9.8"
+    "react-native-test-app": ">=0.9.16"
   }
 }
