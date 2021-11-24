@@ -25,6 +25,10 @@ class MicrosoftAccountsActivity : AppCompatActivity() {
         findViewById(R.id.accounts_dropdown)
     }
 
+    private val addAccountButton: Button by lazy {
+        findViewById(R.id.add_account)
+    }
+
     private val executorService: ExecutorService by lazy {
         Executors.newSingleThreadExecutor()
     }
@@ -48,17 +52,9 @@ class MicrosoftAccountsActivity : AppCompatActivity() {
             }
             setAdapter(accountsAdapter)
         }
-        findViewById<TextView>(R.id.add_account).apply {
-            setOnClickListener {
-                this@MicrosoftAccountsActivity.onAddAccount()
-            }
-        }
-        signOutButton.setOnClickListener {
-            onSignOut()
-        }
-        signOutAllButton.setOnClickListener {
-            onSignOutAllAccounts()
-        }
+        addAccountButton.setOnClickListener { onAddAccount() }
+        signOutButton.setOnClickListener { onSignOut() }
+        signOutAllButton.setOnClickListener { onSignOutAllAccounts() }
 
         withTokenBroker { tokenBroker ->
             val allAccounts = tokenBroker.allAccounts()
@@ -73,6 +69,8 @@ class MicrosoftAccountsActivity : AppCompatActivity() {
     }
 
     private fun addAccount(accountType: AccountType) {
+        addAccountButton.isEnabled = false
+
         withTokenBroker { tokenBroker ->
             tokenBroker.acquireToken(
                 this,
@@ -80,6 +78,10 @@ class MicrosoftAccountsActivity : AppCompatActivity() {
                 null,
                 accountType
             ) { result: AuthResult?, error: AuthError? ->
+                runOnUiThread {
+                    addAccountButton.isEnabled = true
+                }
+
                 when {
                     error != null -> showErrorMessage(
                         error.message ?: resources.getString(R.string.error_sign_in)
