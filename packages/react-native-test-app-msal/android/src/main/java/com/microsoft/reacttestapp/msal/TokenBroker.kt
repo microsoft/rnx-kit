@@ -31,7 +31,7 @@ class TokenBroker private constructor(context: Context) {
             }
     }
 
-    var currentAccount: Account? = null
+    var selectedAccount: Account? = null
 
     private var multiAccountApp: IMultipleAccountPublicClientApplication
 
@@ -68,14 +68,14 @@ class TokenBroker private constructor(context: Context) {
     }
 
     fun removeAllAccounts() {
-        currentAccount = null
+        selectedAccount = null
         multiAccountApp.accounts.forEach {
             multiAccountApp.removeAccount(it)
         }
     }
 
     fun signOut(onCompleted: (exception: Exception?) -> Unit) {
-        val account = currentAccount?.let {
+        val account = selectedAccount?.let {
             multiAccountApp.accounts.find(it.userPrincipalName, it.accountType)
         }
         when (account) {
@@ -93,7 +93,7 @@ class TokenBroker private constructor(context: Context) {
                 }
             )
         }
-        currentAccount = null
+        selectedAccount = null
     }
 
     private fun acquireTokenInteractive(

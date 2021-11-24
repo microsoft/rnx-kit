@@ -46,7 +46,7 @@ class MicrosoftAccountsActivity : AppCompatActivity() {
 
         (accountsDropdown.editText as? AutoCompleteTextView)?.apply {
             onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
-                onSwitchAccount(position)
+                onAccountSelected(position)
             }
             setAdapter(accountsAdapter)
         }
@@ -78,7 +78,7 @@ class MicrosoftAccountsActivity : AppCompatActivity() {
                     result == null -> showErrorMessage(R.string.error_sign_in)
                     else -> {
                         val allAccounts = tokenBroker.allAccounts()
-                        tokenBroker.currentAccount = allAccounts.findLast {
+                        tokenBroker.selectedAccount = allAccounts.findLast {
                             it.accountType == accountType && it.userPrincipalName == result.username
                         }
                         accounts.clear()
@@ -89,6 +89,34 @@ class MicrosoftAccountsActivity : AppCompatActivity() {
                             accountsDropdown.isEnabled = allAccounts.isNotEmpty()
                             signOutAllButton.isEnabled = allAccounts.size > 1
                         }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun onAccountSelected(index: Int) {
+        withTokenBroker { tokenBroker ->
+            runOnUiThread {
+                signOutButton.isEnabled = true
+            }
+
+            val account = accounts[index]
+            tokenBroker.selectedAccount = account
+
+            val scopes = Config.scopesFor(account.accountType)
+            if (scopes.isNotEmpty()) {
+                tokenBroker.acquireToken(
+                    this,
+                    scopes,
+                    account.userPrincipalName,
+                    account.accountType
+                ) { result: AuthResult?, error: AuthError? ->
+                    when {
+                        error != null -> showErrorMessage(
+                            error.message ?: resources.getString(R.string.error_refresh)
+                        )
+                        result == null -> showErrorMessage(R.string.error_refresh)
                     }
                 }
             }
@@ -115,7 +143,7 @@ class MicrosoftAccountsActivity : AppCompatActivity() {
             tokenBroker.signOut { exception ->
                 when (exception) {
                     null -> {
-                        val index = accounts.indexOf(tokenBroker.currentAccount)
+                        val index = accounts.indexOf(tokenBroker.selectedAccount)
                         accounts.removeAt(index)
                         accountsAdapter.notifyDataSetChanged()
 
@@ -141,34 +169,6 @@ class MicrosoftAccountsActivity : AppCompatActivity() {
             tokenBroker.removeAllAccounts()
             accounts.clear()
             accountsAdapter.notifyDataSetChanged()
-        }
-    }
-
-    private fun onSwitchAccount(index: Int) {
-        withTokenBroker { tokenBroker ->
-            runOnUiThread {
-                signOutButton.isEnabled = true
-            }
-
-            val account = accounts[index]
-            tokenBroker.currentAccount = account
-
-            val scopes = Config.scopesFor(account.accountType)
-            if (scopes.isNotEmpty()) {
-                tokenBroker.acquireToken(
-                    this,
-                    scopes,
-                    account.userPrincipalName,
-                    account.accountType
-                ) { result: AuthResult?, error: AuthError? ->
-                    when {
-                        error != null -> showErrorMessage(
-                            error.message ?: resources.getString(R.string.error_refresh)
-                        )
-                        result == null -> showErrorMessage(R.string.error_refresh)
-                    }
-                }
-            }
         }
     }
 

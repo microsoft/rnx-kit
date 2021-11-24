@@ -17,7 +17,7 @@ public final class TokenBroker: NSObject {
     public static let shared = TokenBroker()
 
     @objc
-    public var currentAccount: Account?
+    public var selectedAccount: Account?
 
     private let condition = NSCondition()
     private let dispatchQueue = DispatchQueue(label: "com.microsoft.ReactTestApp-MSAL.TokenBroker")
@@ -50,11 +50,11 @@ public final class TokenBroker: NSObject {
         sender: RTAViewController,
         onTokenAcquired: @escaping TokenAcquiredHandler
     ) {
-        guard let currentAccount = currentAccount else {
+        guard let selectedAccount = selectedAccount else {
             let error = AuthError(
                 type: .preconditionViolated,
                 correlationID: Constants.EmptyGUID,
-                message: "No current account"
+                message: "No selected account"
             )
             onTokenAcquired(nil, error)
             return
@@ -62,8 +62,8 @@ public final class TokenBroker: NSObject {
 
         acquireToken(
             scopes: scopes,
-            userPrincipalName: currentAccount.userPrincipalName,
-            accountType: currentAccount.accountType,
+            userPrincipalName: selectedAccount.userPrincipalName,
+            accountType: selectedAccount.accountType,
             sender: sender,
             onTokenAcquired: onTokenAcquired
         )
@@ -111,7 +111,7 @@ public final class TokenBroker: NSObject {
     @objc
     public func removeAllAccounts(sender: RTAViewController) {
         defer {
-            currentAccount = nil
+            selectedAccount = nil
         }
 
         guard let application = publicClientApplication,
@@ -132,10 +132,10 @@ public final class TokenBroker: NSObject {
         completion: @escaping (_ success: Bool, _ error: Error?) -> Void
     ) {
         defer {
-            currentAccount = nil
+            selectedAccount = nil
         }
 
-        guard let username = currentAccount?.userPrincipalName,
+        guard let username = selectedAccount?.userPrincipalName,
               let account = try? publicClientApplication?.account(forUsername: username)
         else {
             completion(true, nil)
