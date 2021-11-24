@@ -15,9 +15,7 @@ import java.util.concurrent.Executors
 
 @Suppress("unused")
 class MicrosoftAccountsActivity : AppCompatActivity() {
-    private val accounts: MutableList<Account> = mutableListOf(
-        Account("arnold@contoso.com", AccountType.MICROSOFT_ACCOUNT)
-    )
+    private val accounts: MutableList<Account> = mutableListOf()
 
     private val accountsAdapter: AccountsAdapter by lazy {
         AccountsAdapter(this, accounts)
@@ -60,6 +58,17 @@ class MicrosoftAccountsActivity : AppCompatActivity() {
         }
         signOutAllButton.setOnClickListener {
             onSignOutAllAccounts()
+        }
+
+        withTokenBroker { tokenBroker ->
+            val allAccounts = tokenBroker.allAccounts()
+            if (allAccounts.isNotEmpty()) {
+                accounts.addAll(allAccounts)
+                accountsAdapter.notifyDataSetChanged()
+                runOnUiThread {
+                    accountsDropdown.isEnabled = true
+                }
+            }
         }
     }
 
