@@ -22,7 +22,7 @@
     "clientId": "4b0db8c2-9f26-4417-8bde-3f0e3656f8e0",
     "msaScopes": ["user.read"],
     "orgScopes": ["user.read"],
-    "signatureHash": "RkoBBuhjNghl/EqKUoHB3yF3/IM=",
+    "signatureHash": "1wIqXSqBj7w+h11ZifsnqwgyKrY=",
     "userPrincipalName": "arnold@contoso.com"
   },
   "resources": {

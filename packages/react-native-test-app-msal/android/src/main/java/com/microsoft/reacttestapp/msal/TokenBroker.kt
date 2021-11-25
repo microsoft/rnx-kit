@@ -106,6 +106,7 @@ class TokenBroker private constructor(context: Context) {
         val parameters = AcquireTokenParameters.Builder()
             .startAuthorizationFromActivity(activity)
             .withScopes(scopes.toMutableList())
+            .fromAuthority(Config.authorityFor(accountType))
             .withCallback(object : AuthenticationCallback {
                 override fun onSuccess(result: IAuthenticationResult) {
                     val redirectUri = multiAccountApp.configuration.redirectUri

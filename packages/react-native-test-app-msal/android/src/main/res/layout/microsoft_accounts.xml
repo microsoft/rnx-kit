@@ -21,8 +21,10 @@
 
         <AutoCompleteTextView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
             android:inputType="none"
+            android:singleLine="true"
             tools:text="@tools:sample/full_names" />
 
     </com.google.android.material.textfield.TextInputLayout>

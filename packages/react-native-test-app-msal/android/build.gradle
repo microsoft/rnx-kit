@@ -38,8 +38,8 @@ buildscript {
 
     ext.getStringArray = { config, property ->
         return (!config.containsKey(property) || config[property].size() == 0)
-                ? ""
-                : "\"${config[property].join('", "')}\""
+            ? ""
+            : "\"${config[property].join('", "')}\""
     }
 
     ext.kotlinVersion = getExtProp('kotlinVersion', '1.5.31')
@@ -89,14 +89,14 @@ android {
         targetSdkVersion getExtProp('targetSdkVersion', 29)
 
         buildConfigField "String[]",
-                "ReactTestAppMSAL_msaScopes",
-                "new String[]{${getStringArray(config, "msaScopes")}}"
+            "ReactTestAppMSAL_msaScopes",
+            "new String[]{${getStringArray(config, "msaScopes")}}"
         buildConfigField "String[]",
-                "ReactTestAppMSAL_orgScopes",
-                "new String[]{${getStringArray(config, "orgScopes")}}"
+            "ReactTestAppMSAL_orgScopes",
+            "new String[]{${getStringArray(config, "orgScopes")}}"
 
         manifestPlaceholders = [
-                msalRedirectUriPath: "/$signatureHash"
+            msalRedirectUriPath: "/$signatureHash"
         ]
     }
     sourceSets {
@@ -116,25 +116,25 @@ android {
             def msalConfig = file("$temporaryDir/msal_config.json")
             msalConfig.withWriter {
                 it << JsonOutput.toJson([
-                        authorities                   : [
-                                [
-                                        type    : "AAD",
-                                        audience: [
-                                                type: "AzureADandPersonalMicrosoftAccount"
-                                        ],
-                                        default : true
-                                ],
-                                [
-                                        type    : "AAD",
-                                        audience: [
-                                                type: "PersonalMicrosoftAccount"
-                                        ],
-                                ],
+                    authorities: [
+                        [
+                            type: "AAD",
+                            audience: [
+                                type: "AzureADandPersonalMicrosoftAccount"
+                            ],
+                            default: true
                         ],
-                        client_id                     : clientId,
-                        redirect_uri                  : redirectUri,
-                        broker_redirect_uri_registered: true,
-                        account_mode                  : "MULTIPLE"
+                        [
+                            type: "AAD",
+                            audience: [
+                                type: "PersonalMicrosoftAccount"
+                            ],
+                        ],
+                    ],
+                    client_id: clientId,
+                    redirect_uri: redirectUri,
+                    broker_redirect_uri_registered: false,
+                    account_mode: "MULTIPLE"
                 ])
             }
 
