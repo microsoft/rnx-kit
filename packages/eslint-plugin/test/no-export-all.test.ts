@@ -142,8 +142,7 @@ describe("disallows `export *`", () => {
       {
         code: "export * from '@fluentui/font-icons-mdl2';",
         errors: 1,
-        output:
-          "export type { IconNames } from '@fluentui/font-icons-mdl2';",
+        output: "export type { IconNames } from '@fluentui/font-icons-mdl2';",
       },
       {
         code: "export * from '@fluentui/react-focus';",
