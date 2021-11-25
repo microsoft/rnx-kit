@@ -39,6 +39,13 @@ export interface IChopper {
 
 export declare function escape(): void;
 `,
+  "@fluentui/font-icons-mdl2": `
+export const enum IconNames {
+  PageLink = 'PageLink',
+  CommentSolid = 'CommentSolid',
+  ChangeEntitlements = 'ChangeEntitlements',
+}
+`,
   "@fluentui/react-focus": `
 export declare const FocusZoneTabbableElements: {
   none: 0;
@@ -131,6 +138,12 @@ describe("disallows `export *`", () => {
           "export type { IChopper, Predator } from 'types';"
         ),
         options: [{ expand: "external-only" }],
+      },
+      {
+        code: "export * from '@fluentui/font-icons-mdl2';",
+        errors: 1,
+        output:
+          "export type { IconNames } from '@fluentui/font-icons-mdl2';",
       },
       {
         code: "export * from '@fluentui/react-focus';",
