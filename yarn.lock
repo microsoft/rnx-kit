@@ -7401,9 +7401,9 @@ react-native-codegen@^0.0.7:
     nullthrows "^1.1.1"
 
 react-native-test-app@^0.9.0:
-  version "0.9.15"
-  resolved "https://registry.yarnpkg.com/react-native-test-app/-/react-native-test-app-0.9.15.tgz#d5f3dd8daa85f692270088edf331ae5ec2b704c5"
-  integrity sha512-L9Fl/yMKvn4fmu5AHaCLjdi+fhfZ5kpNPktwsR7V9G1AnuAZhZH7oBNvdAPLeSrJM2ZhcfRQKYIsrN/LH4JoQw==
+  version "0.9.16"
+  resolved "https://registry.yarnpkg.com/react-native-test-app/-/react-native-test-app-0.9.16.tgz#aa96e5cf6542a994caefebd7451f345a9d0cd604"
+  integrity sha512-vmvuc6/33samzQpvZIPDvOeQ74kFun62HP3EJyZcq3Pbmo7kI+IoOOpELf7tB8RkcbE8tCp/Z4wS6TzFrp+x7Q==
   dependencies:
     chalk "^4.1.0"
     prompts "^2.4.0"
