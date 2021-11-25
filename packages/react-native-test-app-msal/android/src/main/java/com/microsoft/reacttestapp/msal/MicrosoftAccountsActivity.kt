@@ -1,10 +1,10 @@
 package com.microsoft.reacttestapp.msal
 
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.AdapterView
 import android.widget.AutoCompleteTextView
 import android.widget.Button
-import android.widget.TextView
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -15,6 +15,11 @@ import java.util.concurrent.Executors
 
 @Suppress("unused")
 class MicrosoftAccountsActivity : AppCompatActivity() {
+    companion object {
+        private const val ACCOUNT_TYPE_KEY = "selected_account_type"
+        private const val USERNAME_KEY = "selected_user_principal_name"
+    }
+
     private val accounts: MutableList<Account> = mutableListOf()
 
     private val accountsAdapter: AccountsAdapter by lazy {
@@ -31,6 +36,10 @@ class MicrosoftAccountsActivity : AppCompatActivity() {
 
     private val executorService: ExecutorService by lazy {
         Executors.newSingleThreadExecutor()
+    }
+
+    private val sharedPreferences: SharedPreferences by lazy {
+        getPreferences(MODE_PRIVATE)
     }
 
     private val signOutButton: Button by lazy {
@@ -59,8 +68,15 @@ class MicrosoftAccountsActivity : AppCompatActivity() {
         withTokenBroker { tokenBroker ->
             val allAccounts = tokenBroker.allAccounts()
             if (allAccounts.isNotEmpty()) {
+                val userPrincipalName = sharedPreferences.getString(USERNAME_KEY, null)
+                val accountType = sharedPreferences.getString(ACCOUNT_TYPE_KEY, null)
+                tokenBroker.selectedAccount = allAccounts.find {
+                    it.userPrincipalName == userPrincipalName && it.accountType.toString() == accountType
+                }
+
                 accounts.addAll(allAccounts)
                 accountsAdapter.notifyDataSetChanged()
+
                 runOnUiThread {
                     accountsDropdown.isEnabled = true
                 }
@@ -114,6 +130,11 @@ class MicrosoftAccountsActivity : AppCompatActivity() {
 
             val account = accounts[index]
             tokenBroker.selectedAccount = account
+
+            sharedPreferences.edit()
+                .putString(USERNAME_KEY, account.userPrincipalName)
+                .putString(ACCOUNT_TYPE_KEY, account.accountType.toString())
+                .apply()
 
             val scopes = Config.scopesFor(account.accountType)
             if (scopes.isNotEmpty()) {
