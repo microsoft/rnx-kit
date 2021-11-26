@@ -2,6 +2,21 @@
   "name": "@rnx-kit/eslint-plugin",
   "entries": [
     {
+      "date": "Fri, 26 Nov 2021 09:20:19 GMT",
+      "tag": "@rnx-kit/eslint-plugin_v0.2.7",
+      "version": "0.2.7",
+      "comments": {
+        "patch": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/eslint-plugin",
+            "commit": "67c93019f3c30f57f695a4f198f0c3d41dfb1b8e",
+            "comment": "Add proper support for `const` enums"
+          }
+        ]
+      }
+    },
+    {
       "date": "Tue, 23 Nov 2021 07:25:36 GMT",
       "tag": "@rnx-kit/eslint-plugin_v0.2.6",
       "version": "0.2.6",
