@@ -2,7 +2,6 @@ package com.microsoft.reacttestapp.msal
 
 import android.content.ClipData
 import android.content.ClipboardManager
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.AdapterView
 import android.widget.AutoCompleteTextView
