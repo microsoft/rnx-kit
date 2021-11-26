@@ -74,26 +74,29 @@ class TokenBroker private constructor(context: Context) {
         }
     }
 
-    fun signOut(onCompleted: (exception: Exception?) -> Unit) {
+    fun signOut(onCompleted: (account: Account?, exception: Exception?) -> Unit) {
         val account = selectedAccount?.let {
             multiAccountApp.accounts.find(it.userPrincipalName, it.accountType)
         }
         when (account) {
-            null -> onCompleted(null)
+            null -> {
+                onCompleted(selectedAccount, null)
+                selectedAccount = null
+            }
             else -> multiAccountApp.removeAccount(
                 account,
                 object : IMultipleAccountPublicClientApplication.RemoveAccountCallback {
                     override fun onRemoved() {
-                        onCompleted(null)
+                        onCompleted(selectedAccount, null)
+                        selectedAccount = null
                     }
 
                     override fun onError(exception: MsalException) {
-                        onCompleted(exception)
+                        onCompleted(selectedAccount, exception)
                     }
                 }
             )
         }
-        selectedAccount = null
     }
 
     private fun acquireTokenInteractive(
