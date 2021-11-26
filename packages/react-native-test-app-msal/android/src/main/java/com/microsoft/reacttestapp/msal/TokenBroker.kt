@@ -17,9 +17,6 @@ class TokenBroker private constructor(context: Context) {
     companion object {
         const val EMPTY_GUID = "00000000-0000-0000-0000-000000000000"
 
-        // Source: https://docs.microsoft.com/en-us/azure/active-directory/develop/id-tokens
-        const val MSA_TENANT = "9188040d-6c67-4c5b-b112-36a304b66dad"
-
         @Volatile
         private var INSTANCE: TokenBroker? = null
 
