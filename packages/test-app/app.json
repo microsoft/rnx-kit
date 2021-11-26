@@ -12,7 +12,7 @@
     },
     {
       "appKey": "MicrosoftAccounts",
-      "displayName": "MicrosoftAccounts (iOS)"
+      "displayName": "MicrosoftAccounts (iOS/macOS)"
     }
   ],
   "android": {
