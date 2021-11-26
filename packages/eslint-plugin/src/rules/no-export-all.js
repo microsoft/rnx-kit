@@ -224,30 +224,38 @@ function extractExports(context, moduleId, depth) {
               return;
             }
 
-            if (node.declaration) {
-              switch (node.declaration.type) {
+            const declaration = node.declaration;
+            if (declaration) {
+              switch (declaration.type) {
                 case "ClassDeclaration":
                 // fallthrough
                 case "FunctionDeclaration":
                 // fallthrough
-                case "TSDeclareFunction":
-                // fallthrough
-                case "TSEnumDeclaration": {
-                  const name = node.declaration.id?.name;
+                case "TSDeclareFunction": {
+                  const name = declaration.id?.name;
                   if (name) {
                     exports.add(name);
                   }
                   break;
                 }
 
+                case "TSEnumDeclaration": {
+                  const name = declaration.id?.name;
+                  if (name) {
+                    const ex = declaration.const ? types : exports;
+                    ex.add(name);
+                  }
+                  break;
+                }
+
                 // export namespace N { ... }
                 case "TSModuleDeclaration": {
-                  switch (node.declaration.id.type) {
+                  switch (declaration.id.type) {
                     case "Identifier":
-                      exports.add(node.declaration.id.name);
+                      exports.add(declaration.id.name);
                       break;
                     case "Literal": {
-                      const name = node.declaration.id.value;
+                      const name = declaration.id.value;
                       if (typeof name === "string") {
                         exports.add(name);
                       }
@@ -260,7 +268,7 @@ function extractExports(context, moduleId, depth) {
                 case "TSInterfaceDeclaration":
                 // fallthrough
                 case "TSTypeAliasDeclaration": {
-                  const name = node.declaration.id?.name;
+                  const name = declaration.id?.name;
                   if (name) {
                     types.add(name);
                   }
@@ -268,7 +276,7 @@ function extractExports(context, moduleId, depth) {
                 }
 
                 case "VariableDeclaration":
-                  node.declaration.declarations.forEach((declaration) => {
+                  declaration.declarations.forEach((declaration) => {
                     if (declaration.id.type === "Identifier") {
                       exports.add(declaration.id.name);
                     }
