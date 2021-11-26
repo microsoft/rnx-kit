@@ -19,6 +19,15 @@ struct Config: Decodable {
         return manifest.msalConfig
     }
 
+    public func authority(for accountType: AccountType) -> URL! {
+        switch accountType {
+        case .microsoftAccount:
+            return URL(string: "https://login.microsoftonline.com/consumers/oauth2/v2.0/authorize")
+        case .organizational:
+            return URL(string: "https://login.microsoftonline.com/common/")
+        }
+    }
+
     public func scopes(for accountType: AccountType) -> [String] {
         switch accountType {
         case .microsoftAccount:
