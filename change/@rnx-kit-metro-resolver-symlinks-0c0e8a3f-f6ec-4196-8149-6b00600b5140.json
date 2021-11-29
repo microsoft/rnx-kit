@@ -1,0 +1,7 @@
+{
+  "type": "patch",
+  "comment": "Refactored resolvers to conform to a single interface. Added a utility import path remapper. Updated README.",
+  "packageName": "@rnx-kit/metro-resolver-symlinks",
+  "email": "4123478+tido64@users.noreply.github.com",
+  "dependentChangeType": "patch"
+}
