@@ -1,12 +1,6 @@
 #!/usr/bin/env node
 // @ts-check
 
-const build = require("./commands/build");
-const clean = require("./commands/clean");
-const depcheck = require("./commands/depcheck");
-const lint = require("./commands/lint");
-const { sequence } = require("./process");
-
 /**
  * @param {Record<string, { description: string; command: import("./process").Command }>} commands
  * @returns
@@ -29,8 +23,7 @@ function init(commands) {
 init({
   build: {
     description: "Builds the current package",
-    command: (args, rawArgs) =>
-      sequence(clean, depcheck, lint, () => build(args, rawArgs)),
+    command: require("./commands/build"),
   },
   bundle: {
     description: "Bundles the current package",
@@ -38,11 +31,11 @@ init({
   },
   clean: {
     description: "Removes build and test artifacts",
-    command: clean,
+    command: require("./commands/clean"),
   },
   depcheck: {
     description: "Scans package for unused or missing dependencies",
-    command: depcheck,
+    command: require("./commands/depcheck"),
   },
   format: {
     description: "Formats source files",
@@ -54,7 +47,7 @@ init({
   },
   lint: {
     description: "Lints source files",
-    command: lint,
+    command: require("./commands/lint"),
   },
   test: {
     description: "Runs tests",
