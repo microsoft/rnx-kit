@@ -26,7 +26,10 @@ const path = require("path");
 
 const DEFAULT_CONFIG = {
   ecmaVersion: 9,
-  ecmaFeatures: { globalReturn: false, jsx: true },
+  ecmaFeatures: {
+    globalReturn: false,
+    jsx: true,
+  },
   sourceType: "module",
   loc: true,
   range: true,
@@ -232,7 +235,7 @@ function extractExports(context, moduleId, depth) {
                 case "FunctionDeclaration":
                 // fallthrough
                 case "TSDeclareFunction": {
-                  const name = declaration.id?.name;
+                  const name = declaration.id && declaration.id.name;
                   if (name) {
                     exports.add(name);
                   }
@@ -240,7 +243,7 @@ function extractExports(context, moduleId, depth) {
                 }
 
                 case "TSEnumDeclaration": {
-                  const name = declaration.id?.name;
+                  const name = declaration.id && declaration.id.name;
                   if (name) {
                     const ex = declaration.const ? types : exports;
                     ex.add(name);
@@ -268,7 +271,7 @@ function extractExports(context, moduleId, depth) {
                 case "TSInterfaceDeclaration":
                 // fallthrough
                 case "TSTypeAliasDeclaration": {
-                  const name = declaration.id?.name;
+                  const name = declaration.id && declaration.id.name;
                   if (name) {
                     types.add(name);
                   }
@@ -295,7 +298,7 @@ function extractExports(context, moduleId, depth) {
             break;
 
           case "ExportAllDeclaration": {
-            const source = node.source?.value;
+            const source = node.source && node.source.value;
             if (source) {
               const namedExports = extractExports(
                 { ...context, filename },
@@ -354,7 +357,11 @@ module.exports = {
     return {
       ExportAllDeclaration: (node) => {
         const source = node.source.value;
-        if (expand === "external-only" && source?.toString().startsWith(".")) {
+        if (
+          expand === "external-only" &&
+          source &&
+          source.toString().startsWith(".")
+        ) {
           return;
         }
 
