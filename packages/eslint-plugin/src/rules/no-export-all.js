@@ -221,7 +221,7 @@ function extractExports(context, moduleId, depth) {
       /** @type {(node: Node, parent: Node) => void} */
       enter: (node, parent) => {
         switch (node.type) {
-          case "ExportNamedDeclaration":
+          case "ExportNamedDeclaration": {
             if (parent.type === "TSModuleBlock") {
               // The module or namespace is already exported.
               return;
@@ -296,6 +296,7 @@ function extractExports(context, moduleId, depth) {
               });
             }
             break;
+          }
 
           case "ExportAllDeclaration": {
             const source = node.source && node.source.value;
