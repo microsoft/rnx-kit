@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/config
 
-This log was last generated on Thu, 18 Nov 2021 20:51:04 GMT and should not be manually modified.
+This log was last generated on Tue, 30 Nov 2021 17:24:14 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 0.4.21
+
+Tue, 30 Nov 2021 17:24:14 GMT
+
+### Patches
+
+- Bump @rnx-kit/console to v1.0.11
 
 ## 0.4.20
 

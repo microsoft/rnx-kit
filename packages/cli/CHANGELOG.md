@@ -1,8 +1,29 @@
 # Change Log - @rnx-kit/cli
 
-This log was last generated on Fri, 19 Nov 2021 16:08:47 GMT and should not be manually modified.
+This log was last generated on Tue, 30 Nov 2021 17:24:14 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 0.9.54
+
+Tue, 30 Nov 2021 17:24:14 GMT
+
+### Patches
+
+- Bump @rnx-kit/config to v0.4.21
+- Bump @rnx-kit/console to v1.0.11
+- Bump @rnx-kit/dep-check to v1.9.5
+- Bump @rnx-kit/metro-plugin-cyclic-dependencies-detector to v1.0.21
+- Bump @rnx-kit/metro-plugin-duplicates-checker to v1.2.15
+- Bump @rnx-kit/metro-serializer to v1.0.11
+- Bump @rnx-kit/metro-serializer-esbuild to v0.0.23
+- Bump @rnx-kit/metro-service to v1.1.13
+- Bump @rnx-kit/third-party-notices to v1.2.13
+- Bump @rnx-kit/tools-language to v1.2.6
+- Bump @rnx-kit/tools-node to v1.2.6
+- Bump @rnx-kit/tools-react-native to v1.0.10
+- Bump @rnx-kit/typescript-react-native-resolver to v0.1.3
+- Bump @rnx-kit/typescript-service to v1.5.3
 
 ## 0.9.53
 

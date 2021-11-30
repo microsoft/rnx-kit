@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/tools-node
 
-This log was last generated on Thu, 18 Nov 2021 20:51:05 GMT and should not be manually modified.
+This log was last generated on Tue, 30 Nov 2021 17:24:14 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 1.2.6
+
+Tue, 30 Nov 2021 17:24:14 GMT
+
+### Patches
+
+- Bump @rnx-kit/tools-language to v1.2.6
 
 ## 1.2.5
 

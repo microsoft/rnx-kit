@@ -2,6 +2,27 @@
   "name": "@rnx-kit/third-party-notices",
   "entries": [
     {
+      "date": "Tue, 30 Nov 2021 17:24:14 GMT",
+      "tag": "@rnx-kit/third-party-notices_v1.2.13",
+      "version": "1.2.13",
+      "comments": {
+        "patch": [
+          {
+            "author": "beachball",
+            "package": "@rnx-kit/third-party-notices",
+            "comment": "Bump @rnx-kit/console to v1.0.11",
+            "commit": "0143911ce2ded7b06469c70510ef24d939a33bc0"
+          },
+          {
+            "author": "beachball",
+            "package": "@rnx-kit/third-party-notices",
+            "comment": "Bump @rnx-kit/tools-node to v1.2.6",
+            "commit": "0143911ce2ded7b06469c70510ef24d939a33bc0"
+          }
+        ]
+      }
+    },
+    {
       "date": "Thu, 18 Nov 2021 20:51:05 GMT",
       "tag": "@rnx-kit/third-party-notices_v1.2.12",
       "version": "1.2.12",

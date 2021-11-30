@@ -1,8 +1,16 @@
 # Change Log - @rnx-kit/typescript-react-native-resolver
 
-This log was last generated on Fri, 19 Nov 2021 16:08:47 GMT and should not be manually modified.
+This log was last generated on Tue, 30 Nov 2021 17:24:14 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 0.1.3
+
+Tue, 30 Nov 2021 17:24:14 GMT
+
+### Patches
+
+- Bump @rnx-kit/tools-node to v1.2.6
 
 ## 0.1.2
 

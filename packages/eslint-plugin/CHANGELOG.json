@@ -2,6 +2,21 @@
   "name": "@rnx-kit/eslint-plugin",
   "entries": [
     {
+      "date": "Tue, 30 Nov 2021 17:24:14 GMT",
+      "tag": "@rnx-kit/eslint-plugin_v0.2.8",
+      "version": "0.2.8",
+      "comments": {
+        "patch": [
+          {
+            "author": "4123478+tido64@users.noreply.github.com",
+            "package": "@rnx-kit/eslint-plugin",
+            "commit": "0143911ce2ded7b06469c70510ef24d939a33bc0",
+            "comment": "Drop optional chaining to support older Node versions"
+          }
+        ]
+      }
+    },
+    {
       "date": "Fri, 26 Nov 2021 09:20:19 GMT",
       "tag": "@rnx-kit/eslint-plugin_v0.2.7",
       "version": "0.2.7",
