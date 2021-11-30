@@ -1,3 +1,4 @@
+import * as path from "path";
 import { remapImportPath } from "../src/utils/remapImportPath";
 
 describe("remap-import-path", () => {
@@ -36,10 +37,13 @@ describe("remap-import-path", () => {
     [
       ["./lib/index", "./lib/index"],
       ["@rnx-kit/metro-resolver-symlinks", "@rnx-kit/metro-resolver-symlinks"],
-      ["@contoso/example", "node_modules/@contoso/example/src/index.tsx"],
+      [
+        "@contoso/example",
+        path.join("node_modules", "@contoso", "example", "src", "index.tsx"),
+      ],
       [
         "@contoso/example/lib/index",
-        "node_modules/@contoso/example/src/index.tsx",
+        path.join("node_modules", "@contoso", "example", "src", "index.tsx"),
       ],
       ["@contoso/example/dist/index", "@contoso/example/dist/index"],
     ].forEach(([request, resolved]) => {
@@ -66,22 +70,32 @@ describe("remap-import-path", () => {
       );
       expect(result).toEqual(
         expect.stringContaining(
-          `node_modules/@contoso/platform/src/index.${expected}.ts`
+          path.join(
+            "node_modules",
+            "@contoso",
+            "platform",
+            "src",
+            `index.${expected}.ts`
+          )
         )
       );
     });
   });
 
   test("resolves with custom main fields", () => {
+    expect(() => plugin(mockContext, "@contoso/exotic", "ios")).toThrow(
+      "A main field (e.g. module, main) is missing"
+    );
+
     const customPlugin = remapImportPath({
       test: (source) => source.startsWith("@contoso/"),
       mainFields: ["react-native"],
     });
-    expect(() => plugin(mockContext, "@contoso/exotic", "ios")).toThrow(
-      "A main field (e.g. module, main) is missing"
-    );
+
     expect(customPlugin(mockContext, "@contoso/exotic", "ios")).toEqual(
-      expect.stringContaining("node_modules/@contoso/exotic/src/index.ts")
+      expect.stringContaining(
+        path.join("node_modules", "@contoso", "exotic", "src", "index.ts")
+      )
     );
   });
 });
