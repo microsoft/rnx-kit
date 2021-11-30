@@ -35,8 +35,8 @@ jobs:
         run: yarn build:ci
       - name: Bundle packages
         run: yarn bundle:ci
-      - name: Publish
-        uses: changesets/action@master
+      - name: Create release PR or publish to npm
+        uses: changesets/action@v1
         with:
           publish: yarn publish:changesets
         env:
