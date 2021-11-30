@@ -140,14 +140,14 @@ Please describe the changes for: @rnx-kit/cli
 Follow the prompts and describe the changes you are making to each package. This
 information is written in files under `/change`. Our CI loop uses these files to
 bump package versions and update package change logs. The entire process is
-coordinated by [Beachball](https://github.com/microsoft/beachball#beachball).
+coordinated by [Changesets](https://github.com/atlassian/changesets#readme).
 
 ## Releases
 
 Our release process is fully automated by
-[Beachball](https://github.com/microsoft/beachball#beachball).
+[Changesets](https://github.com/atlassian/changesets#readme).
 
-When a PR is merged, our CI loop uses `Beachball` to version-bump each changed
+When a PR is merged, our CI loop uses `Changesets` to version-bump each changed
 package and publish it to `npm`.
 
 ## Style Guide

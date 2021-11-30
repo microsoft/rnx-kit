@@ -15,28 +15,28 @@
     "build": "lage build --grouped",
     "build:ci": "lage build:ci --verbose --grouped",
     "build-scope": "lage build --grouped --log-level warn --no-deps --scope",
-    "bump-versions": "beachball bump",
     "bundle": "lage bundle --grouped",
     "bundle:ci": "lage bundle --verbose --grouped",
     "bundle+esbuild": "lage bundle+esbuild --verbose --grouped",
-    "change": "beachball change",
-    "check": "beachball check --branch origin/main --changehint \"Run 'yarn run change' from root of repo to generate a change file.\"",
+    "change": "changeset add",
+    "change:check": "changeset status",
     "ci": "yarn --cache-folder .yarn-offline-mirror --prefer-offline --frozen-lockfile --non-interactive",
     "clean": "lage cache --clear && lage clean --log-level warn --grouped",
     "depcheck": "lage depcheck --log-level warn --grouped",
     "format": "lage format --log-level warn --grouped",
     "new-package": "node scripts/new-package.js",
     "lint": "lage lint --verbose --grouped --no-cache",
-    "publish:beachball": "beachball publish --verbose --bump-deps -m\"📦 applying package updates [skip ci]\"",
+    "publish:changesets": "changeset publish",
     "rnx-dep-check": "yarn build-scope @rnx-kit/dep-check && scripts/rnx-dep-check.js",
     "test": "lage test --verbose --grouped",
     "update-readme": "yarn update-readme:main && lage update-readme",
-    "update-readme:main": "node scripts/update-readme.js"
+    "update-readme:main": "node scripts/update-readme.js",
+    "version:changesets": "changeset version"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",
+    "@changesets/cli": "^2.18.0",
     "@rnx-kit/dep-check": "*",
-    "beachball": "^2.2.0",
     "cosmiconfig": "^7.0.0",
     "lage": "^0.31.0",
     "metro": "^0.66.2",
@@ -61,13 +61,6 @@
       "packages/*",
       "scripts"
     ]
-  },
-  "beachball": {
-    "branch": "origin/main",
-    "disallowedChangeTypes": [
-      "major"
-    ],
-    "access": "public"
   },
   "eslintConfig": {
     "extends": "@rnx-kit/eslint-config"

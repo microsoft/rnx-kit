@@ -1,3 +1,10 @@
+'chore':
+  - .github/**/*
+  - .gitignore
+  - .npmrc
+  - .yarnrc
+  - package.json
+  - scripts/**/*
 'feature: cli':
   - packages/cli/**/*
   - packages/config/**/*

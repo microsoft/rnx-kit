@@ -4,6 +4,7 @@ on:
     branches: [main]
 jobs:
   build_and_publish:
+    name: "Build and publish"
     runs-on: ubuntu-latest
     steps:
       - name: Set up Git
@@ -35,4 +36,9 @@ jobs:
       - name: Bundle packages
         run: yarn bundle:ci
       - name: Publish
-        run: yarn run publish:beachball --yes --token ${{ secrets.NPM_TOKEN }}
+        uses: changesets/action@master
+        with:
+          publish: yarn publish:changesets
+        env:
+          GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
