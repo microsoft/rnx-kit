@@ -42,7 +42,7 @@
     "eslint": "^8.0.0"
   },
   "engines": {
-    "node": ">=14.15"
+    "node": ">=12.13"
   },
   "depcheck": {
     "ignoreMatches": [
