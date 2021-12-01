@@ -1,4 +1,5 @@
-import path from "path";
+import { AVAILABLE_PLATFORMS } from "@rnx-kit/tools-react-native";
+import * as path from "path";
 import {
   getMetroResolver,
   remapReactNativeModule,
@@ -39,12 +40,6 @@ describe("getMetroResolver", () => {
 });
 
 describe("remapReactNativeModule", () => {
-  const availablePlatforms = {
-    macos: "react-native-macos",
-    win32: "@office-iss/react-native-win32",
-    windows: "react-native-windows",
-  };
-
   const context = {
     originModulePath: "",
   };
@@ -58,7 +53,7 @@ describe("remapReactNativeModule", () => {
       "react-native"
     );
 
-    Object.entries(availablePlatforms).forEach(([platform, npmPackage]) => {
+    Object.entries(AVAILABLE_PLATFORMS).forEach(([platform, npmPackage]) => {
       expect(remapReactNativeModule(context, "react-native", platform)).toBe(
         npmPackage
       );
@@ -70,7 +65,7 @@ describe("remapReactNativeModule", () => {
 
     expect(remapReactNativeModule(context, target, "nextstep")).toBe(target);
 
-    Object.entries(availablePlatforms).forEach(([platform, npmPackage]) => {
+    Object.entries(AVAILABLE_PLATFORMS).forEach(([platform, npmPackage]) => {
       expect(remapReactNativeModule(context, target, platform)).toBe(
         `${npmPackage}/index`
       );
