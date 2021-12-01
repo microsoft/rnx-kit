@@ -1,6 +1,4 @@
 import { error } from "@rnx-kit/console";
-import { tryInvoke } from "@rnx-kit/tools-language/function";
-import { hasProperty } from "@rnx-kit/tools-language/properties";
 import isString from "lodash/isString";
 import semver from "semver";
 import { keysOf } from "./helpers";
@@ -11,7 +9,7 @@ import profile_0_64 from "./profiles/profile-0.64";
 import profile_0_65 from "./profiles/profile-0.65";
 import profile_0_66 from "./profiles/profile-0.66";
 import profile_0_67 from "./profiles/profile-0.67";
-import type { Profile, ProfileVersion, TestOverrides } from "./types";
+import type { Profile, ProfileVersion } from "./types";
 
 type ProfileMap = Record<ProfileVersion, Profile>;
 
@@ -61,36 +59,15 @@ function isValidProfileMap(map: unknown): map is Partial<ProfileMap> {
 }
 
 function loadCustomProfiles(
-  customProfilesPath: string | undefined,
-  { moduleResolver = require.resolve }: TestOverrides = {}
+  customProfilesPath: string | undefined
 ): Partial<ProfileMap> {
   if (customProfilesPath) {
-    const [resolvedPath, moduleNotFoundError] = tryInvoke(() =>
-      moduleResolver(customProfilesPath)
-    );
-    if (moduleNotFoundError || !resolvedPath) {
-      const helpMsg =
-        "Please make sure the path exists or is added to your 'package.json'.";
-
-      if (!moduleNotFoundError) {
-        const message = `Cannot find module '${customProfilesPath}'`;
-        error(`${message}. ${helpMsg}`);
-        throw new Error(message);
-      }
-
-      if (hasProperty(moduleNotFoundError, "message")) {
-        error(moduleNotFoundError.message);
-      }
-      error(helpMsg);
-      throw moduleNotFoundError;
-    }
-
-    const customProfiles: unknown = require(resolvedPath);
+    const customProfiles: unknown = require(customProfilesPath);
     if (!isValidProfileMap(customProfiles)) {
       const message = `'${customProfilesPath}' doesn't default export profiles`;
       error(
         [
-          "${message}. Please make sure that it exports an object with a shape similar to:",
+          `${message}. Please make sure that it exports an object with a shape similar to:`,
           "",
           "    module.exports = {",
           '      "0.63": {',
@@ -100,6 +77,7 @@ function loadCustomProfiles(
           "        },",
           "      },",
           "    };",
+          "",
         ].join("\n")
       );
       throw new Error(message);
@@ -129,10 +107,9 @@ export function getProfileVersionsFor(
 
 export function getProfilesFor(
   reactVersionRange: string | ProfileVersion[],
-  customProfilesPath: string | undefined,
-  testOverrides?: TestOverrides
+  customProfilesPath: string | undefined
 ): Profile[] {
-  const customProfiles = loadCustomProfiles(customProfilesPath, testOverrides);
+  const customProfiles = loadCustomProfiles(customProfilesPath);
   const profiles = getProfileVersionsFor(reactVersionRange).map((version) => ({
     ...defaultProfiles[version],
     ...customProfiles[version],
@@ -148,8 +125,7 @@ export function getProfilesFor(
 
 export function parseProfilesString(
   versions: string | number,
-  customProfilesPath?: string | number,
-  testOverrides?: TestOverrides
+  customProfilesPath?: string | number
 ): ProfilesInfo {
   const profileVersions = versions
     .toString()
@@ -163,14 +139,12 @@ export function parseProfilesString(
   return {
     supportedProfiles: getProfilesFor(
       supportedVersions,
-      customProfilesPath?.toString(),
-      testOverrides
+      customProfilesPath?.toString()
     ),
     supportedVersions,
     targetProfile: getProfilesFor(
       targetVersion,
-      customProfilesPath?.toString(),
-      testOverrides
+      customProfilesPath?.toString()
     ),
     targetVersion,
   };
@@ -182,4 +156,13 @@ export function profilesSatisfying(
 ): ProfileVersion[] {
   const versions = getProfileVersionsFor(versionOrRange);
   return profiles.filter((v) => versions.includes(v));
+}
+
+export function resolveCustomProfiles(
+  projectRoot: string,
+  profilesPath: string | undefined
+): string | undefined {
+  return profilesPath
+    ? require.resolve(profilesPath, { paths: [projectRoot] })
+    : undefined;
 }

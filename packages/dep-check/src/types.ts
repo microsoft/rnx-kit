@@ -64,10 +64,6 @@ export type ProfileVersion =
   | "0.66"
   | "0.67";
 
-export type TestOverrides = {
-  moduleResolver?: typeof require.resolve;
-};
-
 export type ExcludedPackage = Package & {
   reason: string;
 };

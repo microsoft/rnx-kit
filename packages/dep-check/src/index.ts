@@ -15,6 +15,5 @@ export type {
   Package,
   Profile,
   ProfileVersion,
-  TestOverrides,
   VigilantOptions,
 } from "./types";

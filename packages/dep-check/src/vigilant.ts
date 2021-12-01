@@ -6,12 +6,7 @@ import { checkPackageManifest } from "./check";
 import { keysOf, modifyManifest } from "./helpers";
 import { updateDependencies } from "./manifest";
 import { parseProfilesString } from "./profiles";
-import type {
-  Command,
-  ManifestProfile,
-  TestOverrides,
-  VigilantOptions,
-} from "./types";
+import type { Command, ManifestProfile, VigilantOptions } from "./types";
 
 type Change = {
   name: string;
@@ -28,13 +23,11 @@ const allSections = [
 
 export function buildManifestProfile(
   versions: string,
-  customProfilesPath: string | undefined,
-  testOverrides?: TestOverrides
+  customProfilesPath: string | undefined
 ): ManifestProfile {
   const { supportedProfiles, targetProfile } = parseProfilesString(
     versions,
-    customProfilesPath,
-    testOverrides
+    customProfilesPath
   );
 
   const allCapabilities = keysOf(targetProfile[0]);

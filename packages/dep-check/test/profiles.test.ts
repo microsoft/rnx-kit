@@ -1,15 +1,16 @@
+import * as path from "path";
 import semver from "semver";
 import {
   defaultProfiles,
   getProfilesFor,
   getProfileVersionsFor,
   profilesSatisfying,
+  resolveCustomProfiles,
 } from "../src/profiles";
 import profile_0_62 from "../src/profiles/profile-0.62";
 import profile_0_63 from "../src/profiles/profile-0.63";
 import profile_0_64 from "../src/profiles/profile-0.64";
 import { ProfileVersion } from "../src/types";
-import { mockResolver } from "./helpers";
 
 describe("defaultProfiles", () => {
   test("matches react-native versions", () => {
@@ -122,28 +123,14 @@ describe("getProfilesFor()", () => {
     expect(() =>
       getProfilesFor("^0.59", "non-existent-profiles-module")
     ).toThrow(`Cannot find module 'non-existent-profiles-module'`);
-
-    expect(consoleErrorSpy).toBeCalledTimes(2);
-  });
-
-  test("throws if custom profiles module path is not returned", () => {
-    expect(() =>
-      getProfilesFor("^0.59", "undefined-profiles-module", {
-        moduleResolver: mockResolver(),
-      })
-    ).toThrow(`Cannot find module 'undefined-profiles-module'`);
-
-    expect(consoleErrorSpy).toBeCalledTimes(1);
   });
 
   test("throws if custom profiles module does not default export an object", () => {
     jest.mock("bad-profiles-module", () => null, { virtual: true });
 
-    expect(() =>
-      getProfilesFor("^0.59", "bad-profiles-module", {
-        moduleResolver: mockResolver("bad-profiles-module"),
-      })
-    ).toThrow("'bad-profiles-module' doesn't default export profiles");
+    expect(() => getProfilesFor("^0.59", "bad-profiles-module")).toThrow(
+      "'bad-profiles-module' doesn't default export profiles"
+    );
 
     expect(consoleErrorSpy).toBeCalledTimes(1);
   });
@@ -158,8 +145,7 @@ describe("getProfilesFor()", () => {
 
     const [profile_0_62, profile_0_63] = getProfilesFor(
       "^0.62 || ^0.63",
-      "good-profiles-module",
-      { moduleResolver: mockResolver("good-profiles-module") }
+      "good-profiles-module"
     );
 
     expect(skynet.name in profile_0_62).toBe(true);
@@ -191,5 +177,43 @@ describe("profilesSatisfying()", () => {
       "0.63",
       "0.64",
     ]);
+  });
+});
+
+describe("resolveCustomProfiles()", () => {
+  const projectRoot = `${__dirname}/__fixtures__/custom-profiles`;
+
+  test("handles undefined and empty strings", () => {
+    expect(resolveCustomProfiles(projectRoot, undefined)).toBeUndefined();
+    expect(resolveCustomProfiles(projectRoot, "")).toBeUndefined();
+  });
+
+  test("throws if the module cannot be resolved", () => {
+    expect(() =>
+      resolveCustomProfiles(projectRoot, "non-existent-custom-profiles")
+    ).toThrow("Cannot resolve module");
+  });
+
+  test("returns absolute path for module ids", () => {
+    const profilesPkg = "custom-profiles-package";
+    expect(resolveCustomProfiles(projectRoot, profilesPkg)).toEqual(
+      expect.stringContaining(
+        path.join(
+          "__fixtures__",
+          "custom-profiles",
+          "node_modules",
+          profilesPkg,
+          "index.js"
+        )
+      )
+    );
+  });
+
+  test("returns absolute path for relative paths", () => {
+    expect(resolveCustomProfiles(projectRoot, "./local-profiles.js")).toEqual(
+      expect.stringContaining(
+        path.join("__fixtures__", "custom-profiles", "local-profiles.js")
+      )
+    );
   });
 });

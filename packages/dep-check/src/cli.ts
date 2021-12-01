@@ -9,6 +9,7 @@ import * as path from "path";
 import { getAllPackageJsonFiles, getWorkspaceRoot } from "workspace-tools";
 import { makeCheckCommand } from "./check";
 import { initializeConfig } from "./initialize";
+import { resolveCustomProfiles } from "./profiles";
 import { makeSetVersionCommand } from "./setVersion";
 import type { Args, Command } from "./types";
 import { makeVigilantCommand } from "./vigilant";
@@ -95,7 +96,7 @@ async function makeCommand(args: Args): Promise<Command | undefined> {
   }
 
   const {
-    "custom-profiles": customProfilesPath,
+    "custom-profiles": customProfiles,
     "exclude-packages": excludePackages,
     init,
     loose,
@@ -116,8 +117,12 @@ async function makeCommand(args: Args): Promise<Command | undefined> {
   }
 
   if (isString(vigilant)) {
+    const customProfilesPath = resolveCustomProfiles(
+      process.cwd(),
+      customProfiles?.toString()
+    );
     return makeVigilantCommand({
-      customProfiles: customProfilesPath?.toString(),
+      customProfiles: customProfilesPath,
       excludePackages: excludePackages?.toString(),
       loose,
       versions: vigilant.toString(),

@@ -3,7 +3,6 @@ import {
   inspect,
   makeVigilantCommand,
 } from "../src/vigilant";
-import { mockResolver } from "./helpers";
 
 jest.mock("fs");
 
@@ -40,9 +39,7 @@ describe("buildManifestProfile()", () => {
     );
 
     const { dependencies, devDependencies, peerDependencies } =
-      buildManifestProfile("0.64", "vigilant-custom-profiles", {
-        moduleResolver: mockResolver("vigilant-custom-profiles"),
-      });
+      buildManifestProfile("0.64", "vigilant-custom-profiles");
 
     expect(skynet.name in dependencies).toBe(true);
     expect(skynet.name in peerDependencies).toBe(true);

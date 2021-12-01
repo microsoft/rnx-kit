@@ -8,7 +8,7 @@ import { getRequirements } from "./dependencies";
 import { findBadPackages } from "./findBadPackages";
 import { modifyManifest } from "./helpers";
 import { updatePackageManifest } from "./manifest";
-import { getProfilesFor } from "./profiles";
+import { getProfilesFor, resolveCustomProfiles } from "./profiles";
 import type { CheckOptions, Command } from "./types";
 
 export function checkPackageManifest(
@@ -45,13 +45,15 @@ export function checkPackageManifest(
     customProfiles,
   } = getKitCapabilities(kitConfig);
 
+  const customProfilesPath = resolveCustomProfiles(projectRoot, customProfiles);
+
   const { reactNativeVersion, capabilities: requiredCapabilities } =
     getRequirements(
       targetReactNativeVersion,
       kitType,
       manifest,
       projectRoot,
-      customProfiles,
+      customProfilesPath,
       { loose }
     );
   requiredCapabilities.push(...targetCapabilities);
@@ -63,8 +65,8 @@ export function checkPackageManifest(
   const updatedManifest = updatePackageManifest(
     manifest,
     requiredCapabilities,
-    getProfilesFor(reactNativeVersion, customProfiles),
-    getProfilesFor(reactNativeDevVersion, customProfiles),
+    getProfilesFor(reactNativeVersion, customProfilesPath),
+    getProfilesFor(reactNativeDevVersion, customProfilesPath),
     kitType
   );
 
