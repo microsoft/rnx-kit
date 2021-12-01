@@ -1,14 +1,7 @@
 import { isFileModuleRef, parseModuleRef } from "@rnx-kit/tools-node";
+import { AVAILABLE_PLATFORMS } from "@rnx-kit/tools-react-native";
 import * as path from "path";
 import type { MetroResolver, ModuleResolver } from "./types";
-
-// TODO: `react-native config` is too slow. Hard-coding this list until we
-// figure out a better solution.
-const availablePlatforms: Record<string, string> = {
-  macos: "react-native-macos",
-  win32: "@office-iss/react-native-win32",
-  windows: "react-native-windows",
-};
 
 function resolveFrom(moduleName: string, startDir: string): string {
   return require.resolve(moduleName, { paths: [startDir] });
@@ -40,7 +33,7 @@ export const remapReactNativeModule: ModuleResolver = (
   moduleName,
   platform
 ) => {
-  const platformImpl = availablePlatforms[platform];
+  const platformImpl = AVAILABLE_PLATFORMS[platform];
   if (platformImpl) {
     if (moduleName === "react-native") {
       return platformImpl;

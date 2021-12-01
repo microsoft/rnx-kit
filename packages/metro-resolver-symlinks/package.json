@@ -23,6 +23,7 @@
   },
   "dependencies": {
     "@rnx-kit/tools-node": "^1.2.6",
+    "@rnx-kit/tools-react-native": "^1.0.10",
     "enhanced-resolve": "^5.8.3"
   },
   "devDependencies": {

@@ -21,6 +21,10 @@ describe("remap-import-path", () => {
   });
 
   test("throws if test function is missing", () => {
+    // @ts-ignore
+    expect(() => remapImportPath()).toThrow(
+      "A test function is required for this plugin"
+    );
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     expect(() => remapImportPath({} as any)).toThrow(
       "Expected option `test` to be a function"
@@ -46,6 +50,10 @@ describe("remap-import-path", () => {
         path.join("node_modules", "@contoso", "example", "src", "index.tsx"),
       ],
       ["@contoso/example/dist/index", "@contoso/example/dist/index"],
+      [
+        "@contoso/relative",
+        path.join("node_modules", "@contoso", "relative", "src", "index.ts"),
+      ],
     ].forEach(([request, resolved]) => {
       const result = plugin(mockContext, request, "ios");
       expect(result).toEqual(expect.stringContaining(resolved));

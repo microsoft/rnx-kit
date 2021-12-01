@@ -1,5 +1,6 @@
 import type { PackageModuleRef } from "@rnx-kit/tools-node";
 import { isFileModuleRef, parseModuleRef } from "@rnx-kit/tools-node";
+import { expandPlatformExtensions } from "@rnx-kit/tools-react-native";
 import * as fs from "fs";
 import * as path from "path";
 import type { ModuleResolver, ResolutionContext } from "../types";
@@ -20,38 +21,12 @@ const DEFAULT_OPTIONS = {
   mainFields: ["module", "main"],
 };
 
-export function expandPlatformExtensions(
-  platform: string,
-  extensions: string[]
-): string[] {
-  const platforms = (() => {
-    switch (platform) {
-      case "win32":
-      case "windows":
-        return [platform, "win", "native"];
-      default:
-        return [platform, "native"];
-    }
-  })();
-
-  const platformExtensions = platforms.reduce<string[]>(
-    (platformExtensions, platform) => {
-      platformExtensions.push(...extensions.map((ext) => `.${platform}${ext}`));
-      return platformExtensions;
-    },
-    []
-  );
-
-  platformExtensions.push(...extensions);
-  return platformExtensions;
-}
-
 export function remapLibToSrc(
   { originModulePath }: ResolutionContext,
   ref: PackageModuleRef,
   resolver: Resolver
 ): string | undefined {
-  const pattern = /^[./]*lib\b/;
+  const pattern = /^(.\/)?lib\b/;
   const { name, scope, path: modulePath } = ref;
   if (!modulePath || !pattern.test(modulePath)) {
     return undefined;
@@ -112,7 +87,12 @@ export function resolveModulePath(
   };
 }
 
-export function remapImportPath({ test, ...options }: Options): ModuleResolver {
+export function remapImportPath(pluginOptions: Options): ModuleResolver {
+  if (!pluginOptions) {
+    throw new Error("A test function is required for this plugin");
+  }
+
+  const { test, ...options } = pluginOptions;
   if (typeof test !== "function") {
     throw new Error(
       "Expected option `test` to be a function `(moduleId: string) => boolean`"

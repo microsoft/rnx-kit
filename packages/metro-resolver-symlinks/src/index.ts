@@ -5,6 +5,7 @@ import {
   resolveModulePath,
 } from "./resolver";
 import type { MetroResolver, Options } from "./types";
+import { remapImportPath } from "./utils/remapImportPath";
 
 function makeResolver({
   remapModule = (_, moduleName, __) => moduleName,
@@ -37,5 +38,7 @@ function makeResolver({
     return resolution;
   };
 }
+
+makeResolver.remapImportPath = remapImportPath;
 
 export = makeResolver;

@@ -1,24 +1,5 @@
+import { AVAILABLE_PLATFORMS } from "@rnx-kit/tools-react-native";
 import type { ResolverLog } from "./log";
-
-/**
- * Get the name of an out-of-tree platform's react-native package.
- *
- * @param platform Platform
- * @returns Name of the out-of-tree platform's react-native package, or `undefined` if it is in-tree or unknown.
- */
-export function getReactNativePlatformPackageName(
-  platform: string
-): string | undefined {
-  switch (platform) {
-    case "windows":
-      return "react-native-windows";
-    case "macos":
-      return "react-native-macos";
-    case "win32":
-      return "@office-iss/react-native-win32";
-  }
-  return undefined;
-}
 
 const DEFAULT_PACKAGE_NAME = "react-native";
 
@@ -37,7 +18,7 @@ export function createReactNativePackageNameReplacer(
   disableReactNativePackageSubstitution: boolean,
   log: ResolverLog
 ): (m: string) => string {
-  const platformPackageName = getReactNativePlatformPackageName(platform);
+  const platformPackageName = AVAILABLE_PLATFORMS[platform];
   if (!platformPackageName || disableReactNativePackageSubstitution) {
     return (m: string) => m;
   }

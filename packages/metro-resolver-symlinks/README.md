@@ -45,22 +45,19 @@ module.exports = makeMetroConfig({
 ### `remapModule`
 
 `remapModule` allows additional remapping of modules. For instance, there is a
-`lib/utils/remapImportPath.js` that remaps requests of `lib/**/*.js` to
+`remapImportPath` utility that remaps requests of `lib/**/*.js` to
 `src/**/*.ts`. This is useful for packages that don't correctly export
 everything in their main JS file.
 
 ```diff
  const { makeMetroConfig } = require("@rnx-kit/metro-config");
  const MetroSymlinksResolver = require("@rnx-kit/metro-resolver-symlinks");
-+const {
-+  remapImportPath,
-+} = require("@rnx-kit/metro-resolver-symlinks/lib/utils/remapImportPath");
 
  module.exports = makeMetroConfig({
    projectRoot: __dirname,
    resolver: {
      resolveRequest: MetroSymlinksResolver({
-+      remapModule: remapImportPath({
++      remapModule: MetroSymlinksResolver.remapImportPath({
 +        test: (moduleId) => moduleId.startsWith("@rnx-kit/"),
 +        extensions: [".ts", ".tsx"],     # optional
 +        mainFields: ["module", "main"],  # optional
