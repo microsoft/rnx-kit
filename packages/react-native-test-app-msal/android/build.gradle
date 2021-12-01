@@ -85,7 +85,7 @@ android {
 
     compileSdkVersion getExtProp('compileSdkVersion', 31)
     defaultConfig {
-        minSdkVersion getExtProp('minSdkVersion', 21)
+        minSdkVersion getExtProp('minSdkVersion', 23)
         targetSdkVersion getExtProp('targetSdkVersion', 29)
 
         buildConfigField "String[]",
