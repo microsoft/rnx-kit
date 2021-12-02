@@ -1,0 +1,255 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "allOf": [{ "$ref": "https://json.schemastore.org/package.json" }],
+  "definitions": {
+    "bundleParameters": {
+      "allOf": [{ "$ref": "#/definitions/bundlerRuntimeParameters" }],
+      "type": "object",
+      "properties": {
+        "entryPath": {
+          "description": "Path to the .js file which is the entry-point for building the bundle. Either absolute, or relative to the package.",
+          "type": "string"
+        },
+        "distPath": {
+          "description": "Path where the bundle and source map files are written. Either absolute, or relative to the package.",
+          "type": "string",
+          "default": "dist"
+        },
+        "assetsPath": {
+          "description": "Path where all bundle assets (strings, images, fonts, sounds, ...) are written. Either absolute, or relative to the package.",
+          "type": "string",
+          "default": "dist"
+        },
+        "bundlePrefix": {
+          "description": "Prefix for the bundle name, followed by the platform and either \".bundle\" (win, android) or \".jsbundle\" (mac, ios).",
+          "type": "string",
+          "default": "index"
+        },
+        "bundleEncoding": {
+          "description": "Encoding scheme to use when writing the bundle file. Currently limited to UTF-8, UTF-16 (little endian), and 7-bit ASCII.",
+          "type": "string",
+          "enum": ["utf8", "utf16le", "ascii"]
+        },
+        "sourceMapPath": {
+          "description": "Path to use when creating the bundle source map file. Either absolute, or relative to the package.",
+          "type": "string"
+        },
+        "sourceMapSourceRootPath": {
+          "description": "Path to the package's source files. Used to make source-map paths relative and therefore portable.",
+          "type": "string"
+        }
+      }
+    },
+    "bundlerRuntimeParameters": {
+      "type": "object",
+      "properties": {
+        "detectCyclicDependencies": {
+          "description": "Choose whether to detect cycles in the dependency graph. If true, then a default set of options will be used. Otherwise the object allows for fine-grained control over the detection process.",
+          "oneOf": [
+            { "type": "boolean" },
+            {
+              "type": "object",
+              "properties": {
+                "includeNodeModules": { "type": "boolean" },
+                "linesOfContext": { "type": "number" },
+                "throwOnError": { "type": "boolean" }
+              }
+            }
+          ],
+          "default": true
+        },
+        "detectDuplicateDependencies": {
+          "description": "Choose whether to detect duplicate packages in the dependency graph.",
+          "oneOf": [
+            { "type": "boolean" },
+            {
+              "type": "object",
+              "properties": {
+                "ignoredModules": {
+                  "type": "array",
+                  "items": { "type": "string" }
+                },
+                "bannedModules": {
+                  "type": "array",
+                  "items": { "type": "string" }
+                },
+                "throwOnError": { "type": "boolean" }
+              }
+            }
+          ],
+          "default": true
+        },
+        "typescriptValidation": {
+          "description": "Choose whether to type-check source files using TypeScript.",
+          "type": "boolean",
+          "default": true
+        },
+        "experimental_treeShake": {
+          "description": "Choose whether to enable tree shaking.",
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
+    "depCheckConfig": {
+      "type": "object",
+      "properties": {
+        "kitType": {
+          "description": "Whether this kit is an \"app\" or a \"library\".",
+          "type": "string",
+          "enum": ["app", "library"]
+        },
+        "reactNativeVersion": {
+          "description": "Supported versions of React Native. Must be parseable by https://github.com/npm/node-semver.",
+          "type": "string"
+        },
+        "reactNativeDevVersion": {
+          "description": "The version of React Native to use for development. Must be parseable by https://github.com/npm/node-semver. If omitted, the minimum supported version will be used.",
+          "type": "string"
+        },
+        "capabilities": {
+          "description": "Capabilities used by the kit.",
+          "type": "array",
+          "items": {
+            "anyOf": [
+              { "type": "string" },
+              {
+                "type": "string",
+                "enum": [
+                  "core",
+                  "core-android",
+                  "core-ios",
+                  "core-macos",
+                  "core-windows",
+                  "core/testing",
+                  "animation",
+                  "babel-preset-react-native",
+                  "base64",
+                  "checkbox",
+                  "clipboard",
+                  "datetime-picker",
+                  "filesystem",
+                  "floating-action",
+                  "gestures",
+                  "hermes",
+                  "hooks",
+                  "html",
+                  "jest",
+                  "lazy-index",
+                  "masked-view",
+                  "metro",
+                  "metro-config",
+                  "metro-core",
+                  "metro-react-native-babel-transformer",
+                  "metro-resolver",
+                  "metro-runtime",
+                  "modal",
+                  "navigation/native",
+                  "navigation/stack",
+                  "netinfo",
+                  "popover",
+                  "react",
+                  "react-dom",
+                  "react-test-renderer",
+                  "safe-area",
+                  "screens",
+                  "shimmer",
+                  "sqlite",
+                  "storage",
+                  "svg",
+                  "test-app",
+                  "webview"
+                ]
+              }
+            ]
+          }
+        },
+        "customProfiles": {
+          "description": "Path to custom profiles. This can be a path to a JSON file, a `.js` file, or a module name.",
+          "type": "string"
+        }
+      }
+    }
+  },
+  "type": "object",
+  "properties": {
+    "rnx-kit": {
+      "description": "Configuration for an rnx-kit package",
+      "allOf": [{ "$ref": "#/definitions/depCheckConfig" }],
+      "type": "object",
+      "properties": {
+        "bundle": {
+          "description": "Defines how a kit is bundled. Includes shared bundling parameters with platform-specific overrides.",
+          "allOf": [{ "$ref": "#/definitions/bundleParameters" }],
+          "type": "object",
+          "properties": {
+            "id": {
+              "description": "Unique identifier for this bundle definition. Only used as a reference within the kit build system.",
+              "type": "string"
+            },
+            "targets": {
+              "description": "The platform(s) for which this kit may be bundled.",
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": ["android", "ios", "macos", "win32", "windows"]
+              }
+            },
+            "platforms": {
+              "description": "Platform-specific overrides for bundling parameters. Any parameter not listed in an override gets its value from the shared bundle definition, or falls back to defaults.",
+              "type": "object",
+              "properties": {
+                "android": { "$ref": "#/definitions/bundleParameters" },
+                "ios": { "$ref": "#/definitions/bundleParameters" },
+                "macos": { "$ref": "#/definitions/bundleParameters" },
+                "win32": { "$ref": "#/definitions/bundleParameters" },
+                "windows": { "$ref": "#/definitions/bundleParameters" }
+              }
+            }
+          }
+        },
+        "server": {
+          "allOf": [{ "$ref": "#/definitions/bundlerRuntimeParameters" }],
+          "type": "object",
+          "properties": {
+            "projectRoot": {
+              "description": "Path to the root of your react-native experience project. The bundle server uses this root path to resolve all web requests. Either absolute, or relative to the package.",
+              "type": "string"
+            },
+            "assetPlugins": {
+              "description": "Additional asset plugins to be used by the Metro Babel transformer. Comma-separated list containing plugin modules and/or absolute paths to plugin packages.",
+              "type": "array",
+              "items": { "type": "string" }
+            },
+            "sourceExts": {
+              "description": "Additional source-file extensions to include when generating bundles. Comma-separated list, excluding the leading dot.",
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          }
+        },
+        "platformBundle": {
+          "description": "Whether this kit produces a platform bundle. If true then all defaults will be used. Otherwise the object allows more detailed specification of platform bundle functionality.",
+          "oneOf": [
+            { "type": "string" },
+            {
+              "type": "object",
+              "properties": {
+                "distPath": {
+                  "description": "Relative path for location within the package to find the built platform bundles.",
+                  "type": "string",
+                  "default": "./dist"
+                },
+                "bundlePrefix": {
+                  "description": "Prefix for the bundle name.",
+                  "type": "string",
+                  "default": "index"
+                }
+              }
+            }
+          ]
+        }
+      }
+    }
+  }
+}
