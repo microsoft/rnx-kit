@@ -1,9 +1,5 @@
 # Change Log - @rnx-kit/metro-config
 
-This log was last generated on Tue, 30 Nov 2021 17:24:14 GMT and should not be manually modified.
-
-<!-- Start content -->
-
 ## 1.2.26
 
 Tue, 30 Nov 2021 17:24:14 GMT
