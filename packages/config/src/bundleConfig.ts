@@ -39,7 +39,7 @@ export type BundlerRuntimeParameters = {
 
   /**
    * Choose whether to enable tree shaking.
-
+   *
    * ⚠️ **THIS FEATURE IS HIGHLY EXPERIMENTAL** ⚠️
    *
    * @default false
