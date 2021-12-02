@@ -1,7 +1,6 @@
 import { PackageManifest, readPackage } from "@rnx-kit/tools-node/package";
 import path from "path";
 import { getRequirements, visitDependencies } from "../src/dependencies";
-import { mockResolver } from "./helpers";
 
 jest.unmock("@rnx-kit/config");
 
@@ -163,8 +162,7 @@ describe("getRequirements()", () => {
       manifest,
       fixture,
       "awesome-dep-check-profiles",
-      defaultOptions,
-      { moduleResolver: mockResolver("awesome-dep-check-profiles") }
+      defaultOptions
     );
 
     expect(reactNativeVersion).toBe("^0.63 || ^0.64");

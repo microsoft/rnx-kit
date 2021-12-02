@@ -4,7 +4,7 @@ import { getProfilesFor } from "../src/profiles";
 import profile_0_62 from "../src/profiles/profile-0.62";
 import profile_0_63 from "../src/profiles/profile-0.63";
 import profile_0_64 from "../src/profiles/profile-0.64";
-import { mockResolver, pickPackage } from "./helpers";
+import { pickPackage } from "./helpers";
 
 describe("capabilitiesFor()", () => {
   test("returns `undefined` when react-native is not a dependency", () => {
@@ -138,8 +138,7 @@ describe("resolveCapabilities()", () => {
 
     const profiles = getProfilesFor(
       "^0.62 || ^0.63 || ^0.64",
-      "mock-custom-profiles-module",
-      { moduleResolver: mockResolver("mock-custom-profiles-module") }
+      "mock-custom-profiles-module"
     );
 
     const packages = resolveCapabilities(
@@ -199,9 +198,7 @@ describe("resolveCapabilities()", () => {
 
     const packages = resolveCapabilities(
       ["core/all" as Capability],
-      getProfilesFor("^0.64", "mock-meta-package", {
-        moduleResolver: mockResolver("mock-meta-package"),
-      })
+      getProfilesFor("^0.64", "mock-meta-package")
     );
 
     expect(packages).toEqual({
@@ -236,9 +233,7 @@ describe("resolveCapabilities()", () => {
 
     const packages = resolveCapabilities(
       ["reese" as Capability],
-      getProfilesFor("^0.64", "mock-meta-package-loop", {
-        moduleResolver: mockResolver("mock-meta-package-loop"),
-      })
+      getProfilesFor("^0.64", "mock-meta-package-loop")
     );
 
     expect(packages).toEqual({

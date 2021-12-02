@@ -18,12 +18,7 @@ import {
   getProfileVersionsFor,
   profilesSatisfying,
 } from "./profiles";
-import type {
-  CheckOptions,
-  Profile,
-  ProfileVersion,
-  TestOverrides,
-} from "./types";
+import type { CheckOptions, Profile, ProfileVersion } from "./types";
 
 type Requirements = Required<
   Pick<KitConfig, "reactNativeVersion" | "capabilities">
@@ -85,8 +80,7 @@ export function getRequirements(
   targetManifest: PackageManifest,
   projectRoot: string,
   customProfiles: string | undefined,
-  { loose }: Pick<CheckOptions, "loose">,
-  testOverrides?: TestOverrides
+  { loose }: Pick<CheckOptions, "loose">
 ): Requirements {
   let profileVersions = getProfileVersionsFor(targetReactNativeVersion);
   if (profileVersions.length === 0) {
@@ -155,11 +149,7 @@ export function getRequirements(
       }
     }
 
-    const profiles = getProfilesFor(
-      profileVersions,
-      customProfiles,
-      testOverrides
-    );
+    const profiles = getProfilesFor(profileVersions, customProfiles);
     allCapabilities.forEach((capability) => {
       /**
        * Core capabilities are capabilities that must always be declared by the
