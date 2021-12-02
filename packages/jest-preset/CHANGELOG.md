@@ -1,9 +1,5 @@
 # Change Log - @rnx-kit/jest-preset
 
-This log was last generated on Wed, 04 Aug 2021 10:08:23 GMT and should not be manually modified.
-
-<!-- Start content -->
-
 ## 0.1.1
 
 Wed, 04 Aug 2021 10:08:23 GMT

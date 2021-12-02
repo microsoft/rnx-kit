@@ -1,9 +1,5 @@
 # Change Log - @rnx-kit/babel-preset-metro-react-native
 
-This log was last generated on Tue, 21 Sep 2021 13:01:58 GMT and should not be manually modified.
-
-<!-- Start content -->
-
 ## 1.0.6
 
 Tue, 21 Sep 2021 13:01:58 GMT

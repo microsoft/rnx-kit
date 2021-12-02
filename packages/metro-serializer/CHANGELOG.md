@@ -1,9 +1,5 @@
 # Change Log - @rnx-kit/metro-serializer
 
-This log was last generated on Mon, 01 Nov 2021 13:46:13 GMT and should not be manually modified.
-
-<!-- Start content -->
-
 ## 1.0.6
 
 Mon, 01 Nov 2021 13:46:13 GMT

@@ -1,9 +1,5 @@
 # Change Log - @rnx-kit/dep-check
 
-This log was last generated on Tue, 30 Nov 2021 17:24:14 GMT and should not be manually modified.
-
-<!-- Start content -->
-
 ## 1.9.5
 
 Tue, 30 Nov 2021 17:24:14 GMT
