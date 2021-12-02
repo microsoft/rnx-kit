@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/tools-react-native
 
+## 1.1.0
+
+### Minor Changes
+
+- 1a2cf67: Added functions for retrieving platform extensions
+
 ## 1.0.5
 
 Mon, 01 Nov 2021 13:46:13 GMT

@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/dep-check
 
+## 1.9.6
+
+### Patch Changes
+
+- 9816461: Fix loading of custom profiles from relative paths
+
 ## 1.9.5
 
 Tue, 30 Nov 2021 17:24:14 GMT

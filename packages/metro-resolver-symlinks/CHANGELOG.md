@@ -1,5 +1,15 @@
 # Change Log - @rnx-kit/metro-resolver-symlinks
 
+## 0.1.15
+
+### Patch Changes
+
+- 1a2cf67: - Refactored resolvers to conform to a single interface
+  - Added a utility for remapping import paths (akin to babel-plugin-import-path-remapper)
+  - Updated README
+- Updated dependencies [1a2cf67]
+  - @rnx-kit/tools-react-native@1.1.0
+
 ## 0.1.14
 
 Tue, 30 Nov 2021 17:24:14 GMT
