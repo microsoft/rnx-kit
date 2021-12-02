@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/config
 
+## 0.4.22
+
+### Patch Changes
+
+- e0b078e: Added a JSON schema for the config
+
 ## 0.4.21
 
 Tue, 30 Nov 2021 17:24:14 GMT
