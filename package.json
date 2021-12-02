@@ -31,7 +31,7 @@
     "test": "lage test --verbose --grouped",
     "update-readme": "yarn update-readme:main && lage update-readme",
     "update-readme:main": "node scripts/update-readme.js",
-    "version:changesets": "node scripts/version.js"
+    "version:changesets": "node scripts/disableChangesetsCommitAndBumpPackages.js"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",
