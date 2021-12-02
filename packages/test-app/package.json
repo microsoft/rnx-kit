@@ -1,5 +1,5 @@
 {
-  "$schema": "https://raw.githubusercontent.com/microsoft/rnx-kit/main/config/schema.json",
+  "$schema": "https://raw.githubusercontent.com/microsoft/rnx-kit/main/packages/config/schema.json",
   "name": "@rnx-kit/test-app",
   "version": "0.0.1",
   "private": true,
