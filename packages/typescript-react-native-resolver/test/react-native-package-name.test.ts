@@ -1,28 +1,5 @@
 import { ResolverLog, ResolverLogMode } from "../src/log";
-import {
-  getReactNativePlatformPackageName,
-  createReactNativePackageNameReplacer,
-} from "../src/react-native-package-name";
-
-describe("React-Native Package Name > getReactNativePlatformPackageName", () => {
-  test("returns Windows out-of-tree package", () => {
-    expect(getReactNativePlatformPackageName("windows")).toEqual(
-      "react-native-windows"
-    );
-  });
-
-  test("returns Win32 out-of-tree package", () => {
-    expect(getReactNativePlatformPackageName("win32")).toEqual(
-      "@office-iss/react-native-win32"
-    );
-  });
-
-  test("returns MacOS out-of-tree package", () => {
-    expect(getReactNativePlatformPackageName("macos")).toEqual(
-      "react-native-macos"
-    );
-  });
-});
+import { createReactNativePackageNameReplacer } from "../src/react-native-package-name";
 
 describe("React-Native Package Name > createReactNativePackageNameReplacer > Disabled", () => {
   test("returns the input module without substitution", () => {

@@ -1,7 +1,7 @@
 import { isFileModuleRef, parseModuleRef } from "@rnx-kit/tools-node";
-import path from "path";
-
-export type MetroResolver = typeof import("metro-resolver").resolve;
+import { AVAILABLE_PLATFORMS } from "@rnx-kit/tools-react-native";
+import * as path from "path";
+import type { MetroResolver, ModuleResolver } from "./types";
 
 function resolveFrom(moduleName: string, startDir: string): string {
   return require.resolve(moduleName, { paths: [startDir] });
@@ -28,12 +28,12 @@ export function getMetroResolver(fromDir = process.cwd()): MetroResolver {
   }
 }
 
-export function remapReactNativeModule(
-  moduleName: string,
-  platform: string,
-  platformImplementations: Record<string, string>
-): string {
-  const platformImpl = platformImplementations[platform];
+export const remapReactNativeModule: ModuleResolver = (
+  _context,
+  moduleName,
+  platform
+) => {
+  const platformImpl = AVAILABLE_PLATFORMS[platform];
   if (platformImpl) {
     if (moduleName === "react-native") {
       return platformImpl;
@@ -42,12 +42,13 @@ export function remapReactNativeModule(
     }
   }
   return moduleName;
-}
+};
 
-export function resolveModulePath(
-  moduleName: string,
-  originModulePath: string
-): string {
+export const resolveModulePath: ModuleResolver = (
+  { originModulePath },
+  moduleName,
+  _platform
+) => {
   // Performance: Assume relative links are not going to hit symlinks
   const ref = parseModuleRef(moduleName);
   if (isFileModuleRef(ref)) {
@@ -63,4 +64,4 @@ export function resolveModulePath(
   return relativePath.startsWith(".")
     ? relativePath
     : `.${path.sep}${relativePath}`;
-}
+};

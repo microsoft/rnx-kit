@@ -5,8 +5,8 @@
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/metro-resolver-symlinks#readme",
   "license": "MIT",
   "files": [
-    "lib/*.d.ts",
-    "lib/*.js"
+    "lib/**/*.d.ts",
+    "lib/**/*.js"
   ],
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -22,7 +22,9 @@
     "test": "rnx-kit-scripts test"
   },
   "dependencies": {
-    "@rnx-kit/tools-node": "^1.2.6"
+    "@rnx-kit/tools-node": "^1.2.6",
+    "@rnx-kit/tools-react-native": "^1.0.10",
+    "enhanced-resolve": "^5.8.3"
   },
   "devDependencies": {
     "@rnx-kit/eslint-config": "*",

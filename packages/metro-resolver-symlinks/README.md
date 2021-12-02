@@ -7,9 +7,21 @@
 symlinks. This is especially useful in monorepos, or repos using package
 managers that make heavy use of symlinks (such as pnpm).
 
+## Installation
+
+```sh
+yarn add @rnx-kit/metro-resolver-symlinks --dev
+```
+
+or if you're using npm
+
+```sh
+npm add --save-dev @rnx-kit/metro-resolver-symlinks
+```
+
 ## Usage
 
-Import and set the resolver to `resolver.resolveRequest` in your
+Import and assign the resolver to `resolver.resolveRequest` in your
 `metro.config.js`:
 
 ```js
@@ -23,3 +35,40 @@ module.exports = makeMetroConfig({
   },
 });
 ```
+
+## Options
+
+| Option      | Type                           | Description                                         |
+| :---------- | :----------------------------- | :-------------------------------------------------- |
+| remapModule | `(moduleId: string) => string` | A custom function for remapping additional modules. |
+
+### `remapModule`
+
+`remapModule` allows additional remapping of modules. For instance, there is a
+`remapImportPath` utility that remaps requests of `lib/**/*.js` to
+`src/**/*.ts`. This is useful for packages that don't correctly export
+everything in their main JS file.
+
+```diff
+ const { makeMetroConfig } = require("@rnx-kit/metro-config");
+ const MetroSymlinksResolver = require("@rnx-kit/metro-resolver-symlinks");
+
+ module.exports = makeMetroConfig({
+   projectRoot: __dirname,
+   resolver: {
+     resolveRequest: MetroSymlinksResolver({
++      remapModule: MetroSymlinksResolver.remapImportPath({
++        test: (moduleId) => moduleId.startsWith("@rnx-kit/"),
++        extensions: [".ts", ".tsx"],     # optional
++        mainFields: ["module", "main"],  # optional
++      }),
+     }),
+   },
+ });
+```
+
+> **Sidenote:** When Metro releases a version with the ability to set a
+> [custom resolver for Haste requests](https://github.com/facebook/metro/commit/96fb6e904e1660b37f4d1f5353ca1e5477c4afbf),
+> this way of remapping modules is preferable over
+> `@rnx-kit/babel-plugin-import-path-remapper`. The Babel plugin mutates the AST
+> and requires a second pass.
