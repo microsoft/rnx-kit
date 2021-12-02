@@ -5,6 +5,7 @@ export type AllPlatforms = "ios" | "android" | "windows" | "win32" | "macos";
 
 // TODO: `react-native config` is too slow. Hard-coding this list until we can
 // figure out a better solution.
+// See https://github.com/microsoft/rnx-kit/issues/925
 export const AVAILABLE_PLATFORMS: Record<string, string> = {
   macos: "react-native-macos",
   win32: "@office-iss/react-native-win32",
