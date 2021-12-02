@@ -7,10 +7,6 @@ jobs:
     name: "Build and publish"
     runs-on: ubuntu-latest
     steps:
-      - name: Set up Git
-        run: |
-          git config --global user.email "53619745+rnbot@users.noreply.github.com"
-          git config --global user.name "React Native Bot"
       - name: Set up Node 14
         uses: actions/setup-node@v2.5.0
         with:
@@ -21,8 +17,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2.4.0
         with:
-          ref: main
-          token: ${{ secrets.GIT_TOKEN }}
           fetch-depth: 0
       - name: Cache /.yarn-offline-mirror
         uses: actions/cache@v2.1.7
@@ -40,5 +34,5 @@ jobs:
         with:
           publish: yarn publish:changesets
         env:
-          GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
