@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/dep-check
 
+## 1.10.0
+
+### Minor Changes
+
+- 32b681b: All dependencies of all packages, including configured ones, should be checked when `--vigilant` is specified.
+
 ## 1.9.6
 
 ### Patch Changes
