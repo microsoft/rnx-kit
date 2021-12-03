@@ -1,5 +1,6 @@
 import {
   buildManifestProfile,
+  buildProfileFromConfig,
   inspect,
   makeVigilantCommand,
 } from "../src/vigilant";
@@ -15,7 +16,7 @@ describe("buildManifestProfile()", () => {
     expect(profile).toMatchSnapshot();
   });
 
-  test("builds a package manifest for a multiple profile versions", () => {
+  test("builds a package manifest for multiple profile versions", () => {
     const profile = buildManifestProfile("0.64,0.63", undefined);
     profile.version = testVersion;
     expect(profile).toMatchSnapshot();
@@ -49,6 +50,55 @@ describe("buildManifestProfile()", () => {
   test("throws when no profiles match the requested versions", () => {
     expect(() => buildManifestProfile("0.59", undefined)).toThrow();
     expect(() => buildManifestProfile("0.59,0.64", undefined)).toThrow();
+  });
+});
+
+describe("buildProfileFromConfig()", () => {
+  const defaultProfile = buildManifestProfile("0.64", undefined);
+
+  test("returns default profile if there is no config", () => {
+    expect(buildProfileFromConfig(0, defaultProfile)).toBe(defaultProfile);
+  });
+
+  test("filters out managed capabilities", () => {
+    const dependencies = [
+      "dependencies",
+      "peerDependencies",
+      "devDependencies",
+    ] as const;
+    const config = {
+      kitType: "library" as const,
+      reactNativeVersion: "0.64",
+      reactNativeDevVersion: "0.64",
+      capabilities: [],
+      manifest: {
+        name: "@rnx-kit/dep-check",
+        version: "1.0.0",
+        dependencies: {
+          "react-native": "^0.64.0",
+        },
+      },
+    };
+    const profile = buildProfileFromConfig(config, defaultProfile);
+    dependencies.forEach((section) => {
+      expect(Object.keys(profile[section])).toContain("react");
+      expect(Object.keys(profile[section])).toContain("react-native");
+    });
+
+    const withCapabilities = buildProfileFromConfig(
+      {
+        ...config,
+        capabilities: ["core-android", "core-ios"],
+      },
+      defaultProfile
+    );
+
+    dependencies.forEach((section) => {
+      expect(Object.keys(withCapabilities[section])).not.toContain("react");
+      expect(Object.keys(withCapabilities[section])).not.toContain(
+        "react-native"
+      );
+    });
   });
 });
 
