@@ -1,8 +1,9 @@
+import { Capability } from "@rnx-kit/config";
 import { error } from "@rnx-kit/console";
 import { PackageManifest, readPackage } from "@rnx-kit/tools-node/package";
 import isString from "lodash/isString";
 import { resolveCapabilities } from "./capabilities";
-import { checkPackageManifest } from "./check";
+import { checkPackageManifest, getCheckConfig } from "./check";
 import { keysOf, modifyManifest } from "./helpers";
 import { updateDependencies } from "./manifest";
 import { parseProfilesString } from "./profiles";
@@ -21,9 +22,25 @@ const allSections = [
   "devDependencies" as const,
 ];
 
+export function removeManagedDependencies(
+  dependencies: Record<string, string>,
+  managed: string[]
+): Record<string, string> {
+  managed.forEach((name) => delete dependencies[name]);
+  return dependencies;
+}
+
+/**
+ * Builds a profile targeting specified versions.
+ * @param versions Supported versions
+ * @param customProfilesPath Path to custom profiles
+ * @param managedCapabilities Capabilities that are already managed and can be skipped
+ * @returns A profile containing dependencies to compare against
+ */
 export function buildManifestProfile(
   versions: string,
-  customProfilesPath: string | undefined
+  customProfilesPath: string | undefined,
+  managedCapabilities: Capability[] = []
 ): ManifestProfile {
   const { supportedProfiles, targetProfile } = parseProfilesString(
     versions,
@@ -31,13 +48,19 @@ export function buildManifestProfile(
   );
 
   const allCapabilities = keysOf(targetProfile[0]);
+  const managedDependencies = Object.keys(
+    resolveCapabilities(managedCapabilities, targetProfile)
+  );
 
   // Use "development" type so we can check for devOnly packages under
   // `dependencies` as well.
-  const directDependencies = updateDependencies(
-    {},
-    resolveCapabilities(allCapabilities, targetProfile),
-    "development"
+  const directDependencies = removeManagedDependencies(
+    updateDependencies(
+      {},
+      resolveCapabilities(allCapabilities, targetProfile),
+      "development"
+    ),
+    managedDependencies
   );
 
   const { name, version } = require("../package.json");
@@ -45,13 +68,37 @@ export function buildManifestProfile(
     name,
     version,
     dependencies: directDependencies,
-    peerDependencies: updateDependencies(
-      {},
-      resolveCapabilities(allCapabilities, supportedProfiles),
-      "peer"
+    peerDependencies: removeManagedDependencies(
+      updateDependencies(
+        {},
+        resolveCapabilities(allCapabilities, supportedProfiles),
+        "peer"
+      ),
+      managedDependencies
     ),
     devDependencies: directDependencies,
   };
+}
+
+export function buildProfileFromConfig(
+  config: ReturnType<typeof getCheckConfig>,
+  defaultProfile: ManifestProfile
+): ManifestProfile {
+  if (typeof config === "number") {
+    return defaultProfile;
+  }
+
+  const {
+    capabilities,
+    customProfilesPath,
+    reactNativeDevVersion,
+    reactNativeVersion,
+  } = config;
+
+  const supportedVersions = reactNativeVersion.replace(/ [|]{2} /g, ",");
+  const versions = `${reactNativeDevVersion},${supportedVersions}`;
+
+  return buildManifestProfile(versions, customProfilesPath, capabilities);
 }
 
 export function inspect(
@@ -95,20 +142,17 @@ export function makeVigilantCommand({
     return undefined;
   }
 
-  const uncheckedReturnCode = -1;
-  const checkOptions = { loose, uncheckedReturnCode, write };
+  const checkOptions = { loose, write };
 
   const exclusionList = isString(excludePackages)
     ? excludePackages.split(",")
     : [];
 
-  const profile = buildManifestProfile(versions, customProfiles);
+  const inputProfile = buildManifestProfile(versions, customProfiles);
   return (manifestPath: string) => {
+    const config = getCheckConfig(manifestPath, checkOptions);
     try {
-      const checkReturnCode = checkPackageManifest(manifestPath, checkOptions);
-      if (checkReturnCode !== uncheckedReturnCode) {
-        return checkReturnCode;
-      }
+      checkPackageManifest(manifestPath, { ...checkOptions, config });
     } catch (_) {
       // Ignore; retry with a full inspection
     }
@@ -118,7 +162,8 @@ export function makeVigilantCommand({
       return 0;
     }
 
-    const changes = inspect(manifest, profile, write);
+    const currentProfile = buildProfileFromConfig(config, inputProfile);
+    const changes = inspect(manifest, currentProfile, write);
     if (changes.length > 0) {
       if (write) {
         modifyManifest(manifestPath, manifest);

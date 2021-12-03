@@ -9,12 +9,12 @@ import { findBadPackages } from "./findBadPackages";
 import { modifyManifest } from "./helpers";
 import { updatePackageManifest } from "./manifest";
 import { getProfilesFor, resolveCustomProfiles } from "./profiles";
-import type { CheckOptions, Command } from "./types";
+import type { CheckConfig, CheckOptions, Command } from "./types";
 
-export function checkPackageManifest(
+export function getCheckConfig(
   manifestPath: string,
-  { loose, uncheckedReturnCode = 0, write }: CheckOptions
-): number {
+  { loose, uncheckedReturnCode = 0 }: CheckOptions
+): number | CheckConfig {
   const manifest = readPackage(manifestPath);
   if (!isPackageManifest(manifest)) {
     error(`'${manifestPath}' does not contain a valid package manifest`);
@@ -58,13 +58,41 @@ export function checkPackageManifest(
     );
   requiredCapabilities.push(...targetCapabilities);
 
-  if (requiredCapabilities.length === 0) {
-    return uncheckedReturnCode;
+  return {
+    kitType,
+    reactNativeVersion,
+    reactNativeDevVersion,
+    capabilities: requiredCapabilities,
+    customProfilesPath,
+    manifest,
+  };
+}
+
+export function checkPackageManifest(
+  manifestPath: string,
+  options: CheckOptions
+): number {
+  const result = options.config || getCheckConfig(manifestPath, options);
+  if (typeof result === "number") {
+    return result;
+  }
+
+  const {
+    kitType,
+    reactNativeVersion,
+    reactNativeDevVersion,
+    capabilities,
+    customProfilesPath,
+    manifest,
+  } = result;
+
+  if (capabilities.length === 0) {
+    return options.uncheckedReturnCode || 0;
   }
 
   const updatedManifest = updatePackageManifest(
     manifest,
-    requiredCapabilities,
+    capabilities,
     getProfilesFor(reactNativeVersion, customProfilesPath),
     getProfilesFor(reactNativeDevVersion, customProfilesPath),
     kitType
@@ -75,7 +103,7 @@ export function checkPackageManifest(
   const normalizedManifestJson = JSON.stringify(manifest, undefined, 2);
 
   if (updatedManifestJson !== normalizedManifestJson) {
-    if (write) {
+    if (options.write) {
       modifyManifest(manifestPath, updatedManifest);
     } else {
       const diff = diffLinesUnified(

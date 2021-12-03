@@ -17,8 +17,18 @@ export type Args = Options & {
   vigilant?: string | number;
 };
 
+export type CheckConfig = {
+  kitType: KitType;
+  reactNativeVersion: string;
+  reactNativeDevVersion: string;
+  capabilities: Capability[];
+  customProfilesPath?: string;
+  manifest: PackageManifest;
+};
+
 export type CheckOptions = Options & {
   uncheckedReturnCode?: number;
+  config?: number | CheckConfig;
 };
 
 export type VigilantOptions = Options & {
