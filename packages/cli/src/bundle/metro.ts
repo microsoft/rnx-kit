@@ -1,13 +1,11 @@
-import { info, warn } from "@rnx-kit/console";
+import { info } from "@rnx-kit/console";
 import { bundle, BundleArgs as MetroBundleArgs } from "@rnx-kit/metro-service";
 import { createDirectory } from "@rnx-kit/tools-node/fs";
-import { findConfigFile, Service } from "@rnx-kit/typescript-service";
-import chalk from "chalk";
 import type { ConfigT } from "metro-config";
 import path from "path";
 import { customizeMetroConfig } from "../metro-config";
-import type { TSProjectInfo } from "../types";
 import type { BundleConfig } from "./types";
+import type { TypeScriptValidationOptions } from "../types";
 
 /**
  * Create Metro bundler arguments from a bundle configuration.
@@ -64,38 +62,19 @@ export function createMetroBundleArgs({
  * @param bundleConfig Bundle configuration
  */
 export async function metroBundle(
-  tsservice: Service,
   metroConfig: ConfigT,
   bundleConfig: BundleConfig
 ): Promise<void> {
   info(`Bundling ${bundleConfig.platform}...`);
 
-  let tsprojectInfo: TSProjectInfo | undefined;
-  if (bundleConfig.typescriptValidation) {
-    const configFileName = findConfigFile(
-      bundleConfig.entryPath,
-      "tsconfig.json"
-    );
-    if (!configFileName) {
-      warn(
-        chalk.yellow(
-          "skipping TypeScript validation -- cannot find tsconfig.json for entry file %o"
-        ),
-        bundleConfig.entryPath
-      );
-    } else {
-      tsprojectInfo = {
-        service: tsservice,
-        configFileName,
-      };
-    }
-  }
-
+  const typescriptValidationOptions: TypeScriptValidationOptions = {
+    throwOnError: true,
+  };
   customizeMetroConfig(
     metroConfig,
     bundleConfig.detectCyclicDependencies,
     bundleConfig.detectDuplicateDependencies,
-    tsprojectInfo,
+    bundleConfig.typescriptValidation ? typescriptValidationOptions : false,
     bundleConfig.experimental_treeShake
   );
 

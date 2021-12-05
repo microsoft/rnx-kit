@@ -11,94 +11,82 @@ import {
   esbuildTransformerConfig,
   MetroSerializer as MetroSerializerEsbuild,
 } from "@rnx-kit/metro-serializer-esbuild";
-import type { AllPlatforms } from "@rnx-kit/tools-react-native/platform";
-import { changeHostToUseReactNativeResolver } from "@rnx-kit/typescript-react-native-resolver";
-import {
-  Project,
-  readConfigFile,
-  createDiagnosticWriter,
-} from "@rnx-kit/typescript-service";
+import { AllPlatforms } from "@rnx-kit/tools-react-native/platform";
+import { Project } from "@rnx-kit/typescript-service";
+
+import { createProjectCache } from "./typescript/project-cache";
+import type { TypeScriptValidationOptions } from "./types";
+
 import type { DeltaResult, Graph } from "metro";
 import type { InputConfigT, SerializerConfigT } from "metro-config";
-import type { LanguageServiceHost } from "typescript";
 
-import type { TSProjectInfo } from "./types";
+/**
+ * Create a hook function to be registered with Metro during serialization.
+ * Each serialization pass runs the hook which type-checks each added/updated
+ * source file.
+ *
+ * Source file in node_modules (external packages) are ignored.
+ *
+ * @param options TypeScript validation options
+ * @returns Hook function
+ */
+function createSerializerHook(options: TypeScriptValidationOptions) {
+  const projectCache = createProjectCache(options.print);
 
-function createSerializerHook({ service, configFileName }: TSProjectInfo) {
-  const tsprojectByPlatform: Map<AllPlatforms, Project> = new Map();
-
-  function resetProject(platform: AllPlatforms): void {
-    const tsproject = tsprojectByPlatform.get(platform);
-    if (tsproject) {
-      tsproject.dispose();
-      tsprojectByPlatform.delete(platform);
-    }
-  }
-
-  function getProject(platform: AllPlatforms): Project {
-    let tsproject = tsprojectByPlatform.get(platform);
-    if (!tsproject) {
-      // start with an empty project, ignoring the file graph provided by tsconfig.json
-      const cmdLine = readConfigFile(configFileName);
-      if (!cmdLine) {
-        throw new Error(`Failed to load '${configFileName}'`);
-      } else if (cmdLine.errors.length > 0) {
-        const writer = createDiagnosticWriter();
-        cmdLine.errors.forEach((e) => writer.print(e));
-        throw new Error(`Failed to load '${configFileName}'`);
-      }
-
-      const enhanceLanguageServiceHost = (host: LanguageServiceHost): void => {
-        const platformExtensionNames =
-          platform === "windows" || platform === "win32"
-            ? ["win", "native"]
-            : ["native"];
-        const disableReactNativePackageSubstitution = true;
-        const traceReactNativeModuleResolutionErrors = false;
-        const traceResolutionLog = undefined;
-        changeHostToUseReactNativeResolver({
-          host,
-          options: cmdLine.options,
-          platform,
-          platformExtensionNames,
-          disableReactNativePackageSubstitution,
-          traceReactNativeModuleResolutionErrors,
-          traceResolutionLog,
-        });
-      };
-
-      tsproject = service.openProject(cmdLine, enhanceLanguageServiceHost);
-      tsproject.removeAllFiles();
-
-      tsprojectByPlatform.set(platform, tsproject);
-    }
-    return tsproject;
-  }
+  const patternNodeModules = /[/\\]node_modules[/\\]/;
+  const excludeNodeModules = (p: string) => !patternNodeModules.test(p);
 
   const hook = (graph: Graph, delta: DeltaResult): void => {
     const platform = graph.transformOptions.platform as AllPlatforms;
     if (platform) {
       if (delta.reset) {
-        resetProject(platform);
+        //  Metro is signaling that all cached data for this Graph should be
+        //  thrown out. Each Graph is scoped to one platform, so discard all
+        //  of that platform's projects.
+        projectCache.clearPlatform(platform);
       }
 
-      const tsproject = getProject(platform);
+      //  Filter adds, updates, and deletes coming from Metro. Do not look at
+      //  anything in an external package (e.g. under node_modules).
+      const adds = Array.from(
+        delta.added.values(),
+        (module) => module.path
+      ).filter(excludeNodeModules);
 
-      //  Apply delta change changes to the TypeScript project. New files are
-      //  added to the project file list. Updated files have their cached
-      //  snapshot cleared, causing the file to be reloaded. Deleted files
-      //  are removed from the project file list.
-      for (const module of delta.added.values()) {
-        tsproject.setFile(module.path);
-      }
-      for (const module of delta.modified.values()) {
-        tsproject.setFile(module.path);
-      }
-      for (const module of delta.deleted.values()) {
-        tsproject.removeFile(module);
-      }
+      const updates = Array.from(
+        delta.modified.values(),
+        (module) => module.path
+      ).filter(excludeNodeModules);
 
-      tsproject.validate();
+      const deletes = Array.from(delta.deleted.values()).filter(
+        excludeNodeModules
+      );
+
+      //  Map each file to a TypeScript project, and apply its delta operation.
+      const tsprojectsToValidate: Set<Project> = new Set();
+      adds.concat(updates).forEach((sourceFile) => {
+        const tsproject = projectCache.getProject(sourceFile, platform);
+        tsproject.setFile(sourceFile);
+        tsprojectsToValidate.add(tsproject);
+      });
+      deletes.forEach((sourceFile) => {
+        const tsproject = projectCache.getProject(sourceFile, platform);
+        tsproject.removeFile(sourceFile);
+        tsprojectsToValidate.add(tsproject);
+      });
+
+      //  Validate all projects which changed, printing all type errors.
+      let isValid = true;
+      tsprojectsToValidate.forEach((p) => {
+        if (!p.validate()) {
+          isValid = false;
+        }
+      });
+
+      if (!isValid && options.throwOnError) {
+        // Type-checking failed. Fail the Metro operation (bundling or serving).
+        throw new Error("Type validation failed");
+      }
     }
   };
 
@@ -115,14 +103,14 @@ const emptySerializerHook = (_graph: Graph, _delta: DeltaResult): void => {
  * @param metroConfigReadonly Metro configuration
  * @param detectCyclicDependencies When true, cyclic dependency checking is enabled with a default set of options. Otherwise the object allows for fine-grained control over the detection process.
  * @param detectDuplicateDependencies When true, duplicate dependency checking is enabled with a default set of options. Otherwise, the object allows for fine-grained control over the detection process.
- * @param tsprojectInfo When set, TypeScript validation is enabled during bundling and serving.
+ * @param typescriptValidation When true, TypeScript type-checking is enabled with a default set of options. Otherwise, the object allows for fine-grained control over the type-checking process.
  * @param experimental_treeShake When true, experimental tree-shaking is enabled.
  */
 export function customizeMetroConfig(
   metroConfigReadonly: InputConfigT,
   detectCyclicDependencies: boolean | CyclicDetectorOptions,
   detectDuplicateDependencies: boolean | DuplicateDetectorOptions,
-  tsprojectInfo: TSProjectInfo | undefined,
+  typescriptValidation: boolean | TypeScriptValidationOptions,
   experimental_treeShake: boolean
 ): void {
   //  We will be making changes to the Metro configuration. Coerce from a
@@ -162,7 +150,11 @@ export function customizeMetroConfig(
     delete metroConfig.serializer.customSerializer;
   }
 
-  metroConfig.serializer.experimentalSerializerHook = tsprojectInfo
-    ? createSerializerHook(tsprojectInfo)
-    : emptySerializerHook;
+  let hook = emptySerializerHook;
+  if (typeof typescriptValidation === "object") {
+    hook = createSerializerHook(typescriptValidation);
+  } else if (typescriptValidation !== false) {
+    hook = createSerializerHook({});
+  }
+  metroConfig.serializer.experimentalSerializerHook = hook;
 }
