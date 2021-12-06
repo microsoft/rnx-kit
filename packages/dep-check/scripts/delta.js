@@ -1,6 +1,13 @@
 #!/usr/bin/env node
 // @ts-check
 
+/**
+ * Displays a table of all capabilities that resolve to a package, its current
+ * version, and the latest available version.
+ *
+ * Note that this script spawns a new process for each capability in parallel.
+ * It currently does not honor throttling hints of any kind.
+ */
 (async () => {
   const { isMetaPackage } = require("../lib/capabilities");
   const { defaultProfiles } = require("../lib/profiles");
