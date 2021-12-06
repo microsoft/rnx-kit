@@ -138,8 +138,9 @@ export function createProjectCache(
 
   function clearPlatform(platform: AllPlatforms): void {
     Object.values(projects).forEach((projectsByPlatform) => {
-      if (projectsByPlatform[platform]) {
-        projectsByPlatform[platform]!.dispose();
+      const project = projectsByPlatform[platform];
+      if (project) {
+        project.dispose();
         delete projectsByPlatform[platform];
       }
     });
