@@ -1814,7 +1814,7 @@
     hermes-profile-transformer "^0.0.6"
     ip "^1.1.5"
 
-"@react-native-community/cli-platform-android@^6.0.0", "@react-native-community/cli-platform-android@^6.0.0-0", "@react-native-community/cli-platform-android@^6.2.0":
+"@react-native-community/cli-platform-android@^6.0.0", "@react-native-community/cli-platform-android@^6.2.0":
   version "6.2.0"
   resolved "https://registry.yarnpkg.com/@react-native-community/cli-platform-android/-/cli-platform-android-6.2.0.tgz#788a138bb19bc040f68d2a12531d56ab28ffa3d1"
   integrity sha512-QLxwClcbxVhuIGsQiIpqRnoJzRdpN2B+y/Yt2OGgDHXGbuOXulgt4D+8AhvZXrB4jyAcEUlFg/048v3RGQQudw==
@@ -1830,7 +1830,7 @@
     slash "^3.0.0"
     xmldoc "^1.1.2"
 
-"@react-native-community/cli-platform-ios@^6.0.0", "@react-native-community/cli-platform-ios@^6.0.0-0":
+"@react-native-community/cli-platform-ios@^6.0.0":
   version "6.2.0"
   resolved "https://registry.yarnpkg.com/@react-native-community/cli-platform-ios/-/cli-platform-ios-6.2.0.tgz#ceaa23995511a8e400b506632ac7e6a66a17ec2a"
   integrity sha512-k15MhExxLiLDDZOeuPgvTxbp0CsoLQQpk2Du0HjZDePqqWcKJylQqMZru1o8HuQHPcEr+b71HIs5V+lKyFYpfg==
@@ -1896,7 +1896,7 @@
   dependencies:
     ora "^3.4.0"
 
-"@react-native-community/cli@^6.0.0", "@react-native-community/cli@^6.0.0-0":
+"@react-native-community/cli@^6.0.0":
   version "6.2.0"
   resolved "https://registry.yarnpkg.com/@react-native-community/cli/-/cli-6.2.0.tgz#dfbdcefaaa44fdeb24b1cd1c195fa302f10e5d83"
   integrity sha512-dQMkpg8wLTtUg9YIGqm7OXNw558d5Cb/ehd8Z0Sx2WSXjj/d1Tm0eK8aL4/QFEUBI10CO6VGFTTe/8dIDxWSFg==
@@ -8013,9 +8013,9 @@ react-native-codegen@^0.0.7:
     nullthrows "^1.1.1"
 
 react-native-test-app@^0.9.0:
-  version "0.9.16"
-  resolved "https://registry.yarnpkg.com/react-native-test-app/-/react-native-test-app-0.9.16.tgz#aa96e5cf6542a994caefebd7451f345a9d0cd604"
-  integrity sha512-vmvuc6/33samzQpvZIPDvOeQ74kFun62HP3EJyZcq3Pbmo7kI+IoOOpELf7tB8RkcbE8tCp/Z4wS6TzFrp+x7Q==
+  version "0.9.18"
+  resolved "https://registry.yarnpkg.com/react-native-test-app/-/react-native-test-app-0.9.18.tgz#8b8f4b6a361a2aa2e5cbadfc7a63d752772e74cb"
+  integrity sha512-M0ayKiisX37KAVlEHNuJex1gcx9IDXxKze4v+mZqx8B08pDFCW1pOApE3oo2PXcD7JyOoJcZbl/IRYKMOxAthQ==
   dependencies:
     chalk "^4.1.0"
     prompts "^2.4.0"
