@@ -218,6 +218,9 @@ then update the
 For an example, have a look at how the
 [`hermes` capability was added](https://github.com/microsoft/rnx-kit/commit/c79828791a6ac5cf19b4abfff6347542af49eaec).
 
+If you're looking to update capabilities to a more recent version, use
+`scripts/delta.js` to help determine whether we need to bump any packages.
+
 ## Custom Profiles
 
 A custom profile is a list of capabilities that map to specific versions of

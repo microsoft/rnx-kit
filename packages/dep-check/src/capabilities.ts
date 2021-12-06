@@ -65,7 +65,7 @@ export function capabilitiesFor(
   };
 }
 
-function isMetaPackage(pkg: MetaPackage | Package): pkg is MetaPackage {
+export function isMetaPackage(pkg: MetaPackage | Package): pkg is MetaPackage {
   return pkg.name === "#meta" && Array.isArray(pkg.capabilities);
 }
 
