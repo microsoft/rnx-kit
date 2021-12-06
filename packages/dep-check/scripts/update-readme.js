@@ -44,7 +44,7 @@ const allVersions = /** @type {import("../src/types").ProfileVersion[]} */ (
   Object.keys(defaultProfiles).reverse()
 );
 const allCapabilities = /** @type {import("@rnx-kit/config").Capability[]} */ (
-  Object.keys(defaultProfiles["0.64"]).sort(sortCoreFirst)
+  Object.keys(defaultProfiles[allVersions[0]]).sort(sortCoreFirst)
 );
 
 const table = markdownTable([
