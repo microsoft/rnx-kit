@@ -5,7 +5,6 @@ import {
   loadMetroConfig,
   startServer,
 } from "@rnx-kit/metro-service";
-import { findConfigFile, Service } from "@rnx-kit/typescript-service";
 import chalk from "chalk";
 import type { Reporter, ReportableEvent } from "metro";
 import type Server from "metro/src/Server";
@@ -14,7 +13,7 @@ import path from "path";
 import readline from "readline";
 import { getKitServerConfig } from "./serve/kit-config";
 import { customizeMetroConfig } from "./metro-config";
-import type { TSProjectInfo } from "./types";
+import type { TypeScriptValidationOptions } from "./types";
 
 export type CLIStartOptions = {
   host: string;
@@ -120,35 +119,17 @@ export async function rnxStart(
       : undefined),
   });
 
-  // prepare for typescript validation, if requested
-  let tsprojectInfo: TSProjectInfo | undefined;
-  if (serverConfig.typescriptValidation) {
-    const tsservice = new Service((message) => terminal.log(message));
-
-    const configFileName = findConfigFile(
-      metroConfig.projectRoot,
-      "tsconfig.json"
-    );
-    if (!configFileName) {
-      terminal.log(
-        chalk.yellow(
-          `Warning: cannot find tsconfig.json under project root '${metroConfig.projectRoot}' -- skipping TypeScript validation`
-        )
-      );
-    } else {
-      tsprojectInfo = {
-        service: tsservice,
-        configFileName,
-      };
-    }
-  }
-
   // customize the metro config to include plugins, presets, etc.
+  const typescriptValidationOptions: TypeScriptValidationOptions = {
+    print: (message: string): void => {
+      terminal.log(message);
+    },
+  };
   customizeMetroConfig(
     metroConfig,
     serverConfig.detectCyclicDependencies,
     serverConfig.detectDuplicateDependencies,
-    tsprojectInfo,
+    serverConfig.typescriptValidation ? typescriptValidationOptions : false,
     serverConfig.experimental_treeShake
   );
 

@@ -2,7 +2,6 @@ import type { Config as CLIConfig } from "@react-native-community/cli-types";
 import { BundleArgs, loadMetroConfig } from "@rnx-kit/metro-service";
 import { extendObjectArray } from "@rnx-kit/tools-language/properties";
 import type { AllPlatforms } from "@rnx-kit/tools-react-native/platform";
-import { Service } from "@rnx-kit/typescript-service";
 import { getKitBundleConfigs } from "./bundle/kit-config";
 import { metroBundle } from "./bundle/metro";
 import { applyKitBundleConfigOverrides } from "./bundle/overrides";
@@ -51,10 +50,8 @@ export async function rnxBundle(
     }
   );
 
-  const tsservice = new Service();
-
   for (const bundleConfig of bundleConfigs) {
-    await metroBundle(tsservice, metroConfig, bundleConfig);
+    await metroBundle(metroConfig, bundleConfig);
   }
 
   return Promise.resolve();
