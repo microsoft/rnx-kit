@@ -296,9 +296,12 @@ of capabilities instead:
 }
 ```
 
-We call these **meta** capabilities. Note that the name needs to be `#meta` to
-differentiate them from "regular" capabilities. Otherwise, you'll use them as
-any other capabilities. For instance:
+We call these **meta** capabilities. To make it easier to identify them (both
+for humans and machines), the `name` field must be set to `#meta`, and the
+`capabilities` field must be a non-empty array of other capabilities. The
+`version` field is no longer used and can be dropped. To use a meta capability
+in your rnx-kit configuration, there's nothing specific to be done — for
+instance:
 
 ```diff
  {
