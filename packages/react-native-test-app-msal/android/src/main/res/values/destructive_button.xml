@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <style name="Widget.ReactNativeTestAppMsal.DestructiveButton" parent="Widget.MaterialComponents.Button">
+        <item name="android:textColor">@color/destructive_btn_text_color_selector</item>
+        <item name="backgroundTint">@color/destructive_btn_bg_color_selector</item>
+    </style>
+
+</resources>

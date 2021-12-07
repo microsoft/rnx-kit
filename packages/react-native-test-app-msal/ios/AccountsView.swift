@@ -12,7 +12,7 @@ struct AccountsView: View {
 
     @State private var selectedAccount: Account? {
         didSet {
-            onAccountChanged(selectedAccount)
+            onAccountSelected(selectedAccount)
         }
     }
 
@@ -48,7 +48,7 @@ struct AccountsView: View {
                 }
                 .onChange(of: selectedAccount) {
                     // `didSet` is not called when selection is changed
-                    onAccountChanged($0)
+                    onAccountSelected($0)
                 }
                 .disabled(accounts.isEmpty)
                 #if os(iOS)
@@ -128,12 +128,12 @@ struct AccountsView: View {
         .disabled(formDisabled)
     }
 
-    private func onAccountChanged(_ account: Account?) {
+    private func onAccountSelected(_ account: Account?) {
         guard didLoad else {
             return
         }
 
-        TokenBroker.shared.currentAccount = account
+        TokenBroker.shared.selectedAccount = account
 
         guard let accountId = account?.id else {
             SecretStore.remove()
