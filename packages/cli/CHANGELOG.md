@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/cli
 
+## 0.9.55
+
+### Patch Changes
+
+- d4c21eb: Update the CLI to support type-checking across many projects in a monorepo. Further, when bundling, fail on type errors. On serving, print type errors but continue without failure.
+
 ## 0.9.54
 
 Tue, 30 Nov 2021 17:24:14 GMT

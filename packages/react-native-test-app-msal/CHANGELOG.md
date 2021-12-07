@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/react-native-test-app-msal
 
+## 0.3.0
+
+### Minor Changes
+
+- 1c5e36d: Added support for Android
+
 ## 0.2.0
 
 Mon, 22 Nov 2021 12:15:07 GMT
