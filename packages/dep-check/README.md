@@ -296,6 +296,24 @@ of capabilities instead:
 }
 ```
 
+We call these **meta** capabilities. Note that the name needs to be `#meta` to
+differentiate them from "regular" capabilities. Otherwise, you'll use them as
+any other capabilities. For instance:
+
+```diff
+ {
+   "name": "my-package",
+   ...
+   "rnx-kit": {
+     "reactNativeVersion": "0.64",
+     "capabilities": [
++      "core/all"
+     ],
+     "customProfiles": "my-custom-profiles"
+   }
+ }
+```
+
 ## Terminology
 
 | Terminology      | Definition (as used in `dep-check`'s context)                                                                                                                                     |
