@@ -58,10 +58,7 @@ class TokenBroker private constructor(context: Context) {
     }
 
     fun allAccounts(): List<Account> = multiAccountApp.accounts.map {
-        Account(
-            it.username,
-            AccountType.fromIssuer(it.claims?.get("iss").toString())
-        )
+        Account(it.username, it.accountType())
     }
 
     fun removeAllAccounts() {
