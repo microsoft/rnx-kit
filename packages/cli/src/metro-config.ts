@@ -65,12 +65,17 @@ function createSerializerHook(options: TypeScriptValidationOptions) {
       //  Map each file to a TypeScript project, and apply its delta operation.
       const tsprojectsToValidate: Set<Project> = new Set();
       adds.concat(updates).forEach((sourceFile) => {
-        const tsproject = projectCache.getProject(sourceFile, platform);
-        tsproject.setFile(sourceFile);
-        tsprojectsToValidate.add(tsproject);
+        const { tsproject, tssourceFiles } = projectCache.getProjectInfo(
+          sourceFile,
+          platform
+        );
+        if (tssourceFiles.has(sourceFile)) {
+          tsproject.setFile(sourceFile);
+          tsprojectsToValidate.add(tsproject);
+        }
       });
       deletes.forEach((sourceFile) => {
-        const tsproject = projectCache.getProject(sourceFile, platform);
+        const { tsproject } = projectCache.getProjectInfo(sourceFile, platform);
         tsproject.removeFile(sourceFile);
         tsprojectsToValidate.add(tsproject);
       });

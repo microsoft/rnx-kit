@@ -12,6 +12,11 @@ import {
 import path from "path";
 import ts from "typescript";
 
+export type ProjectInfo = {
+  tsproject: Project;
+  tssourceFiles: Set<string>;
+};
+
 /**
  * Collection of TypeScript projects, separated by their target platform.
  *
@@ -32,14 +37,14 @@ export interface ProjectCache {
   clearPlatform(platform: AllPlatforms): void;
 
   /**
-   * Get the project which targets a specific platform and contains a specific
+   * Get info on the project which targets a specific platform and contains a specific
    * source file. If the project is not cached, load it and add it to the cache.
    *
    * @param platform Target platform
    * @param sourceFile Source file
    * @returns Project targeting the given platform and containing the given source file
    */
-  getProject(sourceFile: string, platform: AllPlatforms): Project;
+  getProjectInfo(sourceFile: string, platform: AllPlatforms): ProjectInfo;
 }
 
 /**
@@ -55,7 +60,10 @@ export function createProjectCache(
   const diagnosticWriter = createDiagnosticWriter(print);
 
   // Collection of projects organized by root directory, then by platform.
-  const projects: Record<string, Partial<Record<AllPlatforms, Project>>> = {};
+  const projects: Record<
+    string,
+    Partial<Record<AllPlatforms, ProjectInfo>>
+  > = {};
 
   function findProjectRoot(sourceFile: string): string {
     // Search known root directories to see if the source file is in one of them.
@@ -91,7 +99,10 @@ export function createProjectCache(
     return cmdLine;
   }
 
-  function createProject(root: string, platform: AllPlatforms): Project {
+  function createProjectInfo(
+    root: string,
+    platform: AllPlatforms
+  ): ProjectInfo {
     // Load the TypeScript configuration file for this project.
     const cmdLine = readTSConfig(root);
 
@@ -119,28 +130,42 @@ export function createProjectCache(
       enhanceLanguageServiceHost
     );
 
-    // Start with an empty project, ignoring the file graph from tsconfig.json.
+    //  Store TypeScript's source file list for this project. We'll use it later
+    //  to filter files from Metro's file graph. We only want to check files that
+    //  TypeScript considers to be source code, and not transpiled output.
+    const tssourceFiles = new Set(cmdLine.fileNames);
+
+    // Start with an empty project
     tsproject.removeAllFiles();
 
-    return tsproject;
+    return {
+      tsproject,
+      tssourceFiles,
+    };
   }
 
-  function getProject(sourceFile: string, platform: AllPlatforms): Project {
+  function getProjectInfo(
+    sourceFile: string,
+    platform: AllPlatforms
+  ): ProjectInfo {
     const root = findProjectRoot(sourceFile);
-    if (!projects[root]) {
-      projects[root] = {};
+    projects[root] ||= {};
+
+    let info = projects[root][platform];
+    if (!info) {
+      info = createProjectInfo(root, platform);
+      projects[root][platform] = info;
     }
-    if (!projects[root][platform]) {
-      projects[root][platform] = createProject(root, platform);
-    }
-    return projects[root][platform]!;
+    return info;
   }
 
   function clearPlatform(platform: AllPlatforms): void {
     Object.values(projects).forEach((projectsByPlatform) => {
-      const project = projectsByPlatform[platform];
-      if (project) {
-        project.dispose();
+      const info = projectsByPlatform[platform];
+      if (info) {
+        if (info.tsproject) {
+          info.tsproject.dispose();
+        }
         delete projectsByPlatform[platform];
       }
     });
@@ -148,6 +173,6 @@ export function createProjectCache(
 
   return {
     clearPlatform,
-    getProject,
+    getProjectInfo,
   };
 }
