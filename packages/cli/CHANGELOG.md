@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/cli
 
+## 0.9.56
+
+### Patch Changes
+
+- 51bc530: Scope Metro type-checking to files that TypeScript views as source code (ignore transpiled files).
+
 ## 0.9.55
 
 ### Patch Changes
