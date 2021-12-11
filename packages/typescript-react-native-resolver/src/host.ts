@@ -173,11 +173,15 @@ export function resolveModuleNames(
 
   //
   //  If the containing file is a type file (.d.ts), it can only import
-  //  other type files. Search for both .d.ts and .ts files, as some
+  //  other type files and JSON files. Also allow .ts files, as some
   //  modules import as "foo.d" with the intent to resolve to "foo.d.ts".
   //
+  const allowedExtensionsDts = [ts.Extension.Dts, ts.Extension.Ts];
+  if (options.resolveJsonModule) {
+    allowedExtensionsDts.push(ts.Extension.Json);
+  }
   const extensions = hasExtension(containingFile, ts.Extension.Dts)
-    ? [ts.Extension.Dts, ts.Extension.Ts]
+    ? allowedExtensionsDts
     : allowedExtensions;
 
   const resolutions: (ts.ResolvedModuleFull | undefined)[] = [];
