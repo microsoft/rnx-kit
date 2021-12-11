@@ -106,6 +106,18 @@ export function createProjectCache(
     // Load the TypeScript configuration file for this project.
     const cmdLine = readTSConfig(root);
 
+    //  Trim down the list of source files found by TypeScript. This ensures
+    //  that only explicitly added files are loaded and parsed by TypeScript.
+    //  This is a perf optimization. We don't want to spend cycles on files
+    //  that won't be used, such as *.android.ts when bundling for ios.
+    //
+    //  The exception to this rule are .d.ts files. They hold global types,
+    //  modules and namespaces, and having them in the project is the only
+    //  way they can be loaded.
+
+    const tssourceFiles = new Set(cmdLine.fileNames);
+    cmdLine.fileNames = cmdLine.fileNames.filter((f) => f.endsWith(".d.ts"));
+
     // Create a TypeScript project using the configuration file. Enhance the
     // underlying TS language service with our react-native module resolver.
     const enhanceLanguageServiceHost = (host: ts.LanguageServiceHost): void => {
@@ -129,14 +141,6 @@ export function createProjectCache(
       cmdLine,
       enhanceLanguageServiceHost
     );
-
-    //  Store TypeScript's source file list for this project. We'll use it later
-    //  to filter files from Metro's file graph. We only want to check files that
-    //  TypeScript considers to be source code, and not transpiled output.
-    const tssourceFiles = new Set(cmdLine.fileNames);
-
-    // Start with an empty project
-    tsproject.removeAllFiles();
 
     return {
       tsproject,
