@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/cli
 
+## 0.9.57
+
+### Patch Changes
+
+- bea8385: Keep .d.ts files in the list when opening a TypeScript project.
+
 ## 0.9.56
 
 ### Patch Changes
