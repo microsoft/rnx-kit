@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/typescript-react-native-resolver
 
+## 0.1.4
+
+### Patch Changes
+
+- bea8385: When resolving imports in a .d.ts file, allow .json files when compilerOptions.resolveJsonModule is true.
+
 ## 0.1.3
 
 Tue, 30 Nov 2021 17:24:14 GMT
