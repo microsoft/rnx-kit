@@ -68,12 +68,6 @@ export type ResolverContext = {
   readonly platformExtensions: string[];
 
   /**
-   * List of file extensions that can be used when resolving a module to a
-   * file. Controlled by compiler options `checkJs` and `resolveJsonModule`.
-   */
-  readonly allowedExtensions: ts.Extension[];
-
-  /**
    * Function which *may* replace references to the `react-native` module with
    * the target platform's out-of-tree NPM package name. For example, on
    * Windows, the replacement would be `react-native-windows`.

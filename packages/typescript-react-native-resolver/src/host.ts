@@ -6,16 +6,21 @@ import {
 import path from "path";
 import ts from "typescript";
 
-import { ExtensionsTypeScript, hasExtension } from "./extension";
 import {
-  ResolverLog,
-  ResolverLogMode,
+  ExtensionsJavaScript,
+  ExtensionsJSON,
+  ExtensionsTypeScript,
+} from "./extension";
+import {
   changeModuleResolutionHostToLogFileSystemReads,
   logModuleBegin,
   logModuleEnd,
+  ResolverLog,
+  ResolverLogMode,
 } from "./log";
 import { createReactNativePackageNameReplacer } from "./react-native-package-name";
 import { resolveFileModule, resolvePackageModule } from "./resolve";
+
 import type { ResolverContext, ModuleResolutionHostLike } from "./types";
 
 /**
@@ -72,14 +77,6 @@ export function changeHostToUseReactNativeResolver({
     );
   }
 
-  const allowedExtensions = [...ExtensionsTypeScript];
-  if (options.checkJs) {
-    allowedExtensions.push(ts.Extension.Js, ts.Extension.Jsx);
-  }
-  if (options.resolveJsonModule) {
-    allowedExtensions.push(ts.Extension.Json);
-  }
-
   const context: ResolverContext = {
     host: host as ModuleResolutionHostLike,
     options,
@@ -89,7 +86,6 @@ export function changeHostToUseReactNativeResolver({
     platformExtensions: [platform, ...(platformExtensionNames || [])].map(
       (e) => `.${e}` // prepend a '.' to each name to make it a file extension
     ),
-    allowedExtensions,
     replaceReactNativePackageName: createReactNativePackageNameReplacer(
       platform,
       disableReactNativePackageSubstitution,
@@ -158,7 +154,6 @@ export function resolveModuleName(
  * @param context Resolver context
  * @param moduleNames List of module names, as they appear in each require/import statement
  * @param containingFile File from which the modules were all required/imported
- * @param extensions List of allowed file extensions to use when resolving each module to a file
  * @returns Array of results. Each entry will have resolved module information, or will be `undefined` if resolution failed. The array will have one element for each entry in the module name list.
  */
 export function resolveModuleNames(
@@ -168,33 +163,51 @@ export function resolveModuleNames(
   _reusedNames: string[] | undefined,
   _redirectedReference?: ts.ResolvedProjectReference
 ): (ts.ResolvedModuleFull | undefined)[] {
-  const { options, log, allowedExtensions, replaceReactNativePackageName } =
-    context;
-
-  //
-  //  If the containing file is a type file (.d.ts), it can only import
-  //  other type files and JSON files. Also allow .ts files, as some
-  //  modules import as "foo.d" with the intent to resolve to "foo.d.ts".
-  //
-  const allowedExtensionsDts = [ts.Extension.Dts, ts.Extension.Ts];
-  if (options.resolveJsonModule) {
-    allowedExtensionsDts.push(ts.Extension.Json);
-  }
-  const extensions = hasExtension(containingFile, ts.Extension.Dts)
-    ? allowedExtensionsDts
-    : allowedExtensions;
-
+  const { options, log, replaceReactNativePackageName } = context;
   const resolutions: (ts.ResolvedModuleFull | undefined)[] = [];
 
   for (const moduleName of moduleNames) {
     logModuleBegin(log, moduleName, containingFile);
 
-    const module = resolveModuleName(
-      context,
-      replaceReactNativePackageName(moduleName),
-      containingFile,
-      extensions
+    const finalModuleName = replaceReactNativePackageName(moduleName);
+
+    //  First, try to resolve the module to a TypeScript file. Then, fall back
+    //  to looking for a JavaScript file. Finally, if JSON modules are allowed,
+    //  try resolving to one of them.
+    log.log(
+      "Searching for module '%s' with target file type 'TypeScript'",
+      finalModuleName
     );
+    let module = resolveModuleName(
+      context,
+      finalModuleName,
+      containingFile,
+      ExtensionsTypeScript
+    );
+    if (!module) {
+      log.log(
+        "Searching for module '%s' with target file type 'JavaScript'",
+        finalModuleName
+      );
+      module = resolveModuleName(
+        context,
+        finalModuleName,
+        containingFile,
+        ExtensionsJavaScript
+      );
+      if (!module && options.resolveJsonModule) {
+        log.log(
+          "Searching for module '%s' with target file type 'JSON'",
+          finalModuleName
+        );
+        module = resolveModuleName(
+          context,
+          finalModuleName,
+          containingFile,
+          ExtensionsJSON
+        );
+      }
+    }
 
     resolutions.push(module);
     logModuleEnd(log, options, moduleName, module);
