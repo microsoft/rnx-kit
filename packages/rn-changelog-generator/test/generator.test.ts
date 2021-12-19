@@ -11,10 +11,8 @@ import {
   CHANGES_TEMPLATE,
   git,
   run,
-  fetchCommits,
   getAllChangelogDescriptions,
   getChangeMessage,
-  getChangelogDesc,
   getOffsetBaseCommit,
   getOriginalCommit,
   getFirstCommitAfterForkingFromMain,
@@ -136,20 +134,6 @@ describe("functions that hit GitHub's commits API", () => {
       }
     });
     Object.defineProperty(https, "get", { value: getMock });
-  });
-
-  describe(fetchCommits, () => {
-    it("paginates back from `compare` to `base`", () => {
-      return fetchCommits("authn-token", base, compare).then((commits) => {
-        expect(commits.length).toEqual(59);
-        expect(commits[0].sha).toEqual(
-          "35300147ca66677f42e8544264be72ac0e9d1b45"
-        );
-        expect(commits[30].sha).toEqual(
-          "99bc31cfa609e838779c29343684365a2ed6169f"
-        );
-      });
-    });
   });
 
   describe(run, () => {
