@@ -10,6 +10,7 @@ import deepmerge from "deepmerge";
 import https from "https";
 import child_process from "child_process";
 import { IncomingHttpHeaders } from "http";
+import { GenerateArgs } from "./utils/args";
 
 const execFile = util.promisify(child_process.execFile);
 
@@ -759,67 +760,7 @@ export async function run(
   return buildMarkDown(options.compare, changes);
 }
 
-if (require.main === module) {
-  const argv = require("yargs")
-    .usage(
-      "$0 [args]",
-      "Generate a React Native changelog from the commits and PRs"
-    )
-    .options({
-      base: {
-        alias: "b",
-        string: true,
-        describe:
-          "The base branch/tag/commit to compare against (most likely the previous stable version)",
-        demandOption: true,
-      },
-      compare: {
-        alias: "c",
-        string: true,
-        describe:
-          "The new version branch/tag/commit (most likely the latest release candidate)",
-        demandOption: true,
-      },
-      repo: {
-        alias: "r",
-        string: true,
-        describe: "The path to an up-to-date clone of the react-native repo",
-        demandOption: true,
-      },
-      changelog: {
-        alias: "f",
-        string: true,
-        describe: "The path to the existing CHANGELOG.md file",
-        demandOption: true,
-        default: path.resolve(__dirname, "../CHANGELOG.md"),
-      },
-      token: {
-        alias: "t",
-        string: true,
-        describe:
-          "A GitHub token that has `public_repo` access (generate at https://github.com/settings/tokens)",
-        demandOption: false,
-        default: null,
-      },
-      maxWorkers: {
-        alias: "w",
-        number: true,
-        describe:
-          "Specifies the maximum number of concurrent sub-processes that will be spawned",
-        default: 10,
-      },
-      verbose: {
-        alias: "v",
-        boolean: true,
-        describe:
-          "Verbose listing, includes internal changes as well as public-facing changes",
-        demandOption: false,
-        default: false,
-      },
-    })
-    .version(false)
-    .help("help").argv;
-
+export default function (argv: GenerateArgs) {
   const gitDir = path.join(argv.repo, ".git");
   git(gitDir, "rev-parse")
     .catch(() => {

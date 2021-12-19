@@ -20,7 +20,7 @@ import {
   getFirstCommitAfterForkingFromMain,
   Changes,
   PlatformChanges,
-} from "../src/changelog-generator";
+} from "../src/generator";
 
 if (!process.env.RN_REPO) {
   throw new Error(
