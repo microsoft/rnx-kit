@@ -61,22 +61,28 @@ git pull
 popd
 ```
 
-Then create a GitHub ‘personal access token’ that can be used by the script to
-fetch commit metadata from the GitHub API.
-
-1. Visit the [token settings page](https://github.com/settings/tokens).
-1. Generate a new token and **only** give it the `public_repo` scope.
-1. Store this token somewhere secure for future usage.
-
 ## Usage
 
 Generate a changelog for `react-native` commits between versions 0.65.0 and
 0.66.0:
 
 ```sh
-npx rn-changelog-generator --base v0.65.0 --compare v0.66.0 --repo ../../../react-native --changelog ../../../react-native/CHANGELOG.md --token [GH_TOKEN] > NEW_CHANGES.md
+npx rn-changelog-generator --base v0.65.0 --compare v0.66.0 --repo ../../../react-native --changelog ../../../react-native/CHANGELOG.md > NEW_CHANGES.md
 ```
 
 As explained above, you will need to have a local clone of `react-native`, which
-is referenced by the `--repo` parameter. You'll also need to provide a GitHub
-personal access token for the `--token` parameter.
+is referenced by the `--repo` parameter.
+
+### [Optional] Get a Github 'personal acccess token'
+
+This script uses the Github API to fetch commit metadata. This data is
+accessable without authentication as its public.
+
+You can optionally provide a GitHub personal access token for the `--token`
+parameter which may be necessary in case Github API rate-limits your requests.
+
+Instructions to create a GitHub ‘personal access token’:
+
+1. Visit the [token settings page](https://github.com/settings/tokens).
+1. Generate a new token and **only** give it the `public_repo` scope.
+1. Store this token somewhere secure for future usage.

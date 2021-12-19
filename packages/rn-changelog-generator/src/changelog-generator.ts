@@ -57,7 +57,7 @@ export type Changes = Record<typeof CHANGE_TYPE[number], PlatformChanges>;
 //#region NETWORK
 //*****************************************************************************
 
-function fetchJSON<T>(token: string, path: string) {
+function fetchJSON<T>(token: string | null, path: string) {
   const host = "api.github.com";
   console.warn(chalk.yellow(`https://${host}${path}`));
   return new Promise<{ json: T; headers: IncomingHttpHeaders }>(
@@ -69,7 +69,7 @@ function fetchJSON<T>(token: string, path: string) {
           host,
           path,
           headers: {
-            Authorization: `token ${token}`,
+            ...(token != null ? { Authorization: `token ${token}` } : null),
             "User-Agent":
               "https://github.com/react-native-community/releases/blob/master/scripts/changelog-generator.js",
           },
@@ -101,7 +101,11 @@ function fetchJSON<T>(token: string, path: string) {
   );
 }
 
-export function fetchCommits(token: string, base: string, compare: string) {
+export function fetchCommits(
+  token: string | null,
+  base: string,
+  compare: string
+) {
   console.warn(chalk.green("Fetch commit data"));
   console.group();
   const commits: Commit[] = [];
@@ -741,7 +745,7 @@ export async function getAllChangelogDescriptions(
 
 export async function run(
   options: Parameters<typeof getAllChangelogDescriptions>[1] & {
-    token: string;
+    token: string | null;
     base: string;
     compare: string;
   }
@@ -794,7 +798,8 @@ if (require.main === module) {
         string: true,
         describe:
           "A GitHub token that has `public_repo` access (generate at https://github.com/settings/tokens)",
-        demandOption: true,
+        demandOption: false,
+        default: null,
       },
       maxWorkers: {
         alias: "w",
