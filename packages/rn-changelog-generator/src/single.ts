@@ -1,4 +1,5 @@
 import { fetchCommit } from "./utils/commits";
+import getChangeDimensions from "./utils/getChangeDimensions";
 import getChangeMessage from "./utils/getChangeMessage";
 interface SingleArgs {
   commit: string;
@@ -8,6 +9,7 @@ interface SingleArgs {
 async function handler(argv: SingleArgs) {
   const commitData = await fetchCommit(argv.token, argv.commit);
   console.log(getChangeMessage(commitData));
+  console.log(getChangeDimensions(commitData));
 }
 
 export default {

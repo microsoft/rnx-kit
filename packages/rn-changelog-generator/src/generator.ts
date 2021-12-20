@@ -11,22 +11,14 @@ import child_process from "child_process";
 import { fetchCommits, Commit } from "./utils/commits";
 import getChangeMessage from "./utils/getChangeMessage";
 import formatCommitLink from "./utils/formatCommitLink";
+import getChangeDimensions, {
+  CHANGE_TYPE,
+  CHANGE_CATEGORY,
+  ChangeType,
+  ChangeCategory,
+} from "./utils/getChangeDimensions";
 
 const execFile = util.promisify(child_process.execFile);
-
-const CHANGE_TYPE = [
-  "breaking",
-  "added",
-  "changed",
-  "deprecated",
-  "removed",
-  "fixed",
-  "security",
-  "unknown",
-  "failed",
-] as const;
-
-const CHANGE_CATEGORY = ["android", "ios", "general", "internal"] as const;
 
 export const CHANGES_TEMPLATE: Changes = Object.freeze(
   CHANGE_TYPE.reduce(
@@ -40,14 +32,9 @@ export const CHANGES_TEMPLATE: Changes = Object.freeze(
   )
 ) as Changes;
 
-const CHANGELOG_LINE_REGEXP = new RegExp(
-  `(\\[(${[...CHANGE_TYPE, ...CHANGE_CATEGORY].join("|")})\\]s*)+`,
-  "i"
-);
+export type PlatformChanges = Record<ChangeCategory, string[]>;
 
-export type PlatformChanges = Record<typeof CHANGE_CATEGORY[number], string[]>;
-
-export type Changes = Record<typeof CHANGE_TYPE[number], PlatformChanges>;
+export type Changes = Record<ChangeType, PlatformChanges>;
 
 //#region FILTER COMMITS
 //*****************************************************************************
@@ -295,68 +282,6 @@ export async function getOffsetBaseCommit(
 //*****************************************************************************
 //#endregion
 
-//#region UTILITIES
-//*****************************************************************************
-
-function isAndroidCommit(change: string) {
-  return (
-    !/(\[ios\]|\[general\])/i.test(change) &&
-    (/\b(android|java)\b/i.test(change) || /android/i.test(change))
-  );
-}
-
-function isIOSCommit(change: string) {
-  return (
-    !/(\[android\]|\[general\])/i.test(change) &&
-    (/\b(ios|xcode|swift|objective-c|iphone|ipad)\b/i.test(change) ||
-      /ios\b/i.test(change) ||
-      /\brct/i.test(change))
-  );
-}
-
-function isBreaking(change: string) {
-  return /\b(breaking)\b/i.test(change);
-}
-
-function isAdded(change: string) {
-  return /\b(added)\b/i.test(change);
-}
-
-function isChanged(change: string) {
-  return /\b(changed)\b/i.test(change);
-}
-
-function isDeprecated(change: string) {
-  return /\b(deprecated)\b/i.test(change);
-}
-
-function isRemoved(change: string) {
-  return /\b(removed)\b/i.test(change);
-}
-
-function isFixed(change: string) {
-  return /\b(fixed)\b/i.test(change);
-}
-
-function isSecurity(change: string) {
-  return /\b(security)\b/i.test(change);
-}
-
-function isFabric(change: string) {
-  return /\b(fabric)\b/i.test(change);
-}
-
-function isTurboModules(change: string) {
-  return /\b(tm)\b/i.test(change);
-}
-
-function isInternal(change: string) {
-  return /\[internal\]/i.test(change);
-}
-
-//*****************************************************************************
-//#endregion
-
 //#region FORMATTING
 //*****************************************************************************
 
@@ -369,88 +294,28 @@ export function getChangelogDesc(
   const commitsWithoutExactChangelogTemplate: string[] = [];
 
   commits.forEach((item) => {
-    let change = item.commit.message.split("\n").find((line) => {
-      return CHANGELOG_LINE_REGEXP.test(line);
-    });
-    if (!change) {
+    const {
+      changeCategory,
+      changeType,
+      doesNotFollowTemplate,
+      fabric,
+      internal,
+      turboModules,
+    } = getChangeDimensions(item);
+
+    if (doesNotFollowTemplate) {
       commitsWithoutExactChangelogTemplate.push(item.sha);
-      change = item.commit.message;
     }
 
+    if (!verbose && (fabric || turboModules || internal)) {
+      return;
+    }
     const message = getChangeMessage(item, onlyMessage);
 
-    if (!verbose) {
-      if (isFabric(change.split("\n")[0])) return;
-      if (isTurboModules(change.split("\n")[0])) return;
-      if (isInternal(change)) return;
-    }
-
-    if (isBreaking(change)) {
-      if (isAndroidCommit(change)) {
-        acc.breaking.android.push(message);
-      } else if (isIOSCommit(change)) {
-        acc.breaking.ios.push(message);
-      } else {
-        acc.breaking.general.push(message);
-      }
-    } else if (isAdded(change)) {
-      if (isAndroidCommit(change)) {
-        acc.added.android.push(message);
-      } else if (isIOSCommit(change)) {
-        acc.added.ios.push(message);
-      } else {
-        acc.added.general.push(message);
-      }
-    } else if (isChanged(change)) {
-      if (isAndroidCommit(change)) {
-        acc.changed.android.push(message);
-      } else if (isIOSCommit(change)) {
-        acc.changed.ios.push(message);
-      } else {
-        acc.changed.general.push(message);
-      }
-    } else if (isFixed(change)) {
-      if (isAndroidCommit(change)) {
-        acc.fixed.android.push(message);
-      } else if (isIOSCommit(change)) {
-        acc.fixed.ios.push(message);
-      } else {
-        acc.fixed.general.push(message);
-      }
-    } else if (isRemoved(change)) {
-      if (isAndroidCommit(change)) {
-        acc.removed.android.push(message);
-      } else if (isIOSCommit(change)) {
-        acc.removed.ios.push(message);
-      } else {
-        acc.removed.general.push(message);
-      }
-    } else if (isDeprecated(change)) {
-      if (isAndroidCommit(change)) {
-        acc.deprecated.android.push(message);
-      } else if (isIOSCommit(change)) {
-        acc.deprecated.ios.push(message);
-      } else {
-        acc.deprecated.general.push(message);
-      }
-    } else if (isSecurity(change)) {
-      if (isAndroidCommit(change)) {
-        acc.security.android.push(message);
-      } else if (isIOSCommit(change)) {
-        acc.security.ios.push(message);
-      } else {
-        acc.security.general.push(message);
-      }
-    } else if (item.commit.message.match(/changelog/i)) {
-      acc.failed.general.push(message);
+    if (changeType === "failed") {
+      acc[changeType].general.push(message);
     } else {
-      if (isAndroidCommit(change)) {
-        acc.unknown.android.push(message);
-      } else if (isIOSCommit(change)) {
-        acc.unknown.ios.push(message);
-      } else {
-        acc.unknown.general.push(message);
-      }
+      acc[changeType][changeCategory].push(message);
     }
   });
 
