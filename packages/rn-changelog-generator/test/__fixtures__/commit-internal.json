@@ -1,0 +1,110 @@
+{
+  "sha": "50e109c78d3ae9c10d8472d2f4888d7f59214fdd",
+  "node_id": "C_kwDOAbrxp9oAKDUwZTEwOWM3OGQzYWU5YzEwZDg0NzJkMmY0ODg4ZDdmNTkyMTRmZGQ",
+  "commit": {
+    "author": {
+      "name": "Luna Wei",
+      "email": "luwe@fb.com",
+      "date": "2021-12-18T02:35:48Z"
+    },
+    "committer": {
+      "name": "Facebook GitHub Bot",
+      "email": "facebook-github-bot@users.noreply.github.com",
+      "date": "2021-12-18T02:37:37Z"
+    },
+    "message": "Fix test_js/test_js_prev_lts\n\nSummary:\nChangelog: [Internal] Remove un-necessary package installs which was using `npm install flow-bin --save-dev` which was wiping out our `node_modules` from the circleCI yarn install.\n\nIt was un-necessary as we already have `flow-bin` as a dependency in our current set-up.\n\nIn addtion, we were running `npm pack` without properly copying over our package.json dependencies (which occurs in `prepare-package-for-release`) for a consumable react-native package.\n\nThis may not have caused issue but technically we were creating an \"incomplete\" package to do our e2e testing on.\n\nReviewed By: charlesbdudley\n\nDifferential Revision: D33197965\n\nfbshipit-source-id: 6583ef1f8e17333c0f27ecc37635c36ae5a0bb62",
+    "tree": {
+      "sha": "bc76306afa2dda29080c242f8fd999cf47499b1f",
+      "url": "https://api.github.com/repos/facebook/react-native/git/trees/bc76306afa2dda29080c242f8fd999cf47499b1f"
+    },
+    "url": "https://api.github.com/repos/facebook/react-native/git/commits/50e109c78d3ae9c10d8472d2f4888d7f59214fdd",
+    "comment_count": 0,
+    "verification": {
+      "verified": false,
+      "reason": "unsigned",
+      "signature": null,
+      "payload": null
+    }
+  },
+  "url": "https://api.github.com/repos/facebook/react-native/commits/50e109c78d3ae9c10d8472d2f4888d7f59214fdd",
+  "html_url": "https://github.com/facebook/react-native/commit/50e109c78d3ae9c10d8472d2f4888d7f59214fdd",
+  "comments_url": "https://api.github.com/repos/facebook/react-native/commits/50e109c78d3ae9c10d8472d2f4888d7f59214fdd/comments",
+  "author": {
+    "login": "lunaleaps",
+    "id": 1309636,
+    "node_id": "MDQ6VXNlcjEzMDk2MzY=",
+    "avatar_url": "https://avatars.githubusercontent.com/u/1309636?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/lunaleaps",
+    "html_url": "https://github.com/lunaleaps",
+    "followers_url": "https://api.github.com/users/lunaleaps/followers",
+    "following_url": "https://api.github.com/users/lunaleaps/following{/other_user}",
+    "gists_url": "https://api.github.com/users/lunaleaps/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/lunaleaps/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/lunaleaps/subscriptions",
+    "organizations_url": "https://api.github.com/users/lunaleaps/orgs",
+    "repos_url": "https://api.github.com/users/lunaleaps/repos",
+    "events_url": "https://api.github.com/users/lunaleaps/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/lunaleaps/received_events",
+    "type": "User",
+    "site_admin": false
+  },
+  "committer": {
+    "login": "facebook-github-bot",
+    "id": 6422482,
+    "node_id": "MDQ6VXNlcjY0MjI0ODI=",
+    "avatar_url": "https://avatars.githubusercontent.com/u/6422482?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/facebook-github-bot",
+    "html_url": "https://github.com/facebook-github-bot",
+    "followers_url": "https://api.github.com/users/facebook-github-bot/followers",
+    "following_url": "https://api.github.com/users/facebook-github-bot/following{/other_user}",
+    "gists_url": "https://api.github.com/users/facebook-github-bot/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/facebook-github-bot/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/facebook-github-bot/subscriptions",
+    "organizations_url": "https://api.github.com/users/facebook-github-bot/orgs",
+    "repos_url": "https://api.github.com/users/facebook-github-bot/repos",
+    "events_url": "https://api.github.com/users/facebook-github-bot/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/facebook-github-bot/received_events",
+    "type": "User",
+    "site_admin": false
+  },
+  "parents": [
+    {
+      "sha": "d1e359a15a9398ad64335b7e135c187bb7442373",
+      "url": "https://api.github.com/repos/facebook/react-native/commits/d1e359a15a9398ad64335b7e135c187bb7442373",
+      "html_url": "https://github.com/facebook/react-native/commit/d1e359a15a9398ad64335b7e135c187bb7442373"
+    }
+  ],
+  "stats": {
+    "total": 26,
+    "additions": 7,
+    "deletions": 19
+  },
+  "files": [
+    {
+      "sha": "9129098dce574b342aa7d9223041f80806e51306",
+      "filename": ".circleci/config.yml",
+      "status": "modified",
+      "additions": 2,
+      "deletions": 2,
+      "changes": 4,
+      "blob_url": "https://github.com/facebook/react-native/blob/50e109c78d3ae9c10d8472d2f4888d7f59214fdd/.circleci/config.yml",
+      "raw_url": "https://github.com/facebook/react-native/raw/50e109c78d3ae9c10d8472d2f4888d7f59214fdd/.circleci/config.yml",
+      "contents_url": "https://api.github.com/repos/facebook/react-native/contents/.circleci/config.yml?ref=50e109c78d3ae9c10d8472d2f4888d7f59214fdd",
+      "patch": "@@ -78,7 +78,7 @@ commands:\n     steps:\n       - restore_cache:\n           keys:\n-            - v4-yarn-cache-{{ arch }}-{{ checksum \"yarn.lock\" }}\n+            - v5-yarn-cache-{{ arch }}-{{ checksum \"yarn.lock\" }}\n       - run:\n           name: \"Yarn: Install Dependencies\"\n           command: |\n@@ -90,7 +90,7 @@ commands:\n       - save_cache:\n           paths:\n             - ~/.cache/yarn\n-          key: v4-yarn-cache-{{ arch }}-{{ checksum \"yarn.lock\" }}\n+          key: v5-yarn-cache-{{ arch }}-{{ checksum \"yarn.lock\" }}\n \n   install_buck_tooling:\n     steps:"
+    },
+    {
+      "sha": "fa7fe3f6e556ef24a986ebcaf6a4160a62761ac9",
+      "filename": "scripts/run-ci-e2e-tests.js",
+      "status": "modified",
+      "additions": 5,
+      "deletions": 17,
+      "changes": 22,
+      "blob_url": "https://github.com/facebook/react-native/blob/50e109c78d3ae9c10d8472d2f4888d7f59214fdd/scripts/run-ci-e2e-tests.js",
+      "raw_url": "https://github.com/facebook/react-native/raw/50e109c78d3ae9c10d8472d2f4888d7f59214fdd/scripts/run-ci-e2e-tests.js",
+      "contents_url": "https://api.github.com/repos/facebook/react-native/contents/scripts/run-ci-e2e-tests.js?ref=50e109c78d3ae9c10d8472d2f4888d7f59214fdd",
+      "patch": "@@ -56,25 +56,13 @@ try {\n     }\n   }\n \n-  if (argv.js) {\n-    describe('Install Flow');\n-    if (\n-      tryExecNTimes(\n-        () => {\n-          return exec('npm install --save-dev flow-bin').code;\n-        },\n-        numberOfRetries,\n-        () => exec('sleep 10s'),\n-      )\n-    ) {\n-      echo('Failed to install Flow');\n-      echo('Most common reason is npm registry connectivity, try again');\n-      exitCode = 1;\n-      throw Error(exitCode);\n-    }\n+  describe('Create react-native package');\n+  if (exec('node ./scripts/set-rn-version.js --version 1000.0.0').code) {\n+    echo('Failed to set version and update package.json ready for release');\n+    exitCode = 1;\n+    throw Error(exitCode);\n   }\n \n-  describe('Create react-native package');\n   if (exec('npm pack').code) {\n     echo('Failed to pack react-native');\n     exitCode = 1;"
+    }
+  ]
+}

@@ -5,7 +5,7 @@ import path from "path";
 import util from "util";
 
 const readFile = util.promisify(fs.readFile);
-import fetchCommits from "../src/utils/fetchCommits";
+import { fetchCommits, fetchCommit } from "../../src/utils/commits";
 
 console.warn = () => {};
 console.error = () => {};
@@ -17,7 +17,7 @@ function requestWithFixtureResponse(fixture: string) {
   (responseEmitter as any).headers = { link: 'rel="next"' };
   setImmediate(() => {
     requestEmitter.emit("response", responseEmitter);
-    readFile(path.join(__dirname, "__fixtures__", fixture), "utf-8").then(
+    readFile(path.join(__dirname, "..", "__fixtures__", fixture), "utf-8").then(
       (data) => {
         responseEmitter.emit("data", data);
         responseEmitter.emit("end");
@@ -33,6 +33,7 @@ describe("functions that hit GitHub's commits API", () => {
   // The first commit in commits-v0.60.5-page-1.json, which is the last chronologically as the
   // GH API returns commits in DESC order.
   const compare = "35300147ca66677f42e8544264be72ac0e9d1b45";
+  const internalCommit = "50e109c78d3ae9c10d8472d2f4888d7f59214fdd";
 
   beforeAll(() => {
     const getMock = jest.fn((uri) => {
@@ -46,6 +47,10 @@ describe("functions that hit GitHub's commits API", () => {
         `/repos/facebook/react-native/commits?sha=${compare}&page=2`
       ) {
         return requestWithFixtureResponse("commits-v0.60.5-page-2.json");
+      } else if (
+        uri.path === `/repos/facebook/react-native/commits/${internalCommit}`
+      ) {
+        return requestWithFixtureResponse("commit-internal.json");
       } else {
         throw new Error(`Unexpected request: ${uri.path}`);
       }
@@ -63,6 +68,14 @@ describe("functions that hit GitHub's commits API", () => {
         expect(commits[30].sha).toEqual(
           "99bc31cfa609e838779c29343684365a2ed6169f"
         );
+      });
+    });
+  });
+
+  describe(fetchCommit, () => {
+    it("returns metadata for single commit", () => {
+      return fetchCommit(null, internalCommit).then((commitMetadata) => {
+        expect(commitMetadata.sha).toEqual(internalCommit);
       });
     });
   });

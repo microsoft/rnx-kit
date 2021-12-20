@@ -8,7 +8,9 @@ import chalk from "chalk";
 import pLimit from "p-limit";
 import deepmerge from "deepmerge";
 import child_process from "child_process";
-import fetchCommits, { Commit } from "./utils/fetchCommits";
+import { fetchCommits, Commit } from "./utils/commits";
+import getChangeMessage from "./utils/getChangeMessage";
+import formatCommitLink from "./utils/formatCommitLink";
 
 const execFile = util.promisify(child_process.execFile);
 
@@ -357,43 +359,6 @@ function isInternal(change: string) {
 
 //#region FORMATTING
 //*****************************************************************************
-
-function formatCommitLink(sha: string) {
-  return `https://github.com/facebook/react-native/commit/${sha}`;
-}
-
-export function getChangeMessage(item: Commit, onlyMessage = false) {
-  const commitMessage = item.commit.message.split("\n");
-  let entry =
-    commitMessage
-      .reverse()
-      .find((a) => /\[ios\]|\[android\]|\[general\]/i.test(a)) ||
-    commitMessage.reverse()[0];
-  entry = entry.replace(/^((changelog:\s*)?(\[\w+\]\s?)+[\s-]*)/i, ""); //Remove the [General] [whatever]
-  entry = entry.replace(/ \(#\d*\)$/i, ""); //Remove the PR number if it's on the end
-
-  // Capitalize
-  if (/^[a-z]/.test(entry)) {
-    entry = entry.slice(0, 1).toUpperCase() + entry.slice(1);
-  }
-
-  if (onlyMessage) {
-    return entry;
-  }
-
-  const authorSection = `([${item.sha.slice(0, 10)}](${formatCommitLink(
-    item.sha
-  )})${
-    item.author
-      ? " by [@" +
-        item.author.login +
-        "](https://github.com/" +
-        item.author.login +
-        ")"
-      : ""
-  })`;
-  return `- ${entry} ${authorSection}`;
-}
 
 export function getChangelogDesc(
   commits: Commit[],

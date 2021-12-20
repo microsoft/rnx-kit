@@ -51,7 +51,8 @@ function fetchJSON<T>(token: string | null, path: string) {
     }
   );
 }
-export default function fetchCommits(
+
+export function fetchCommits(
   token: string | null,
   base: string,
   compare: string
@@ -87,5 +88,18 @@ export default function fetchCommits(
         });
     };
     fetchPage();
+  });
+}
+
+export function fetchCommit(token: string | null, sha: string) {
+  return new Promise<Commit>((resolve, reject) => {
+    fetchJSON<Commit>(token, `/repos/facebook/react-native/commits/${sha}`)
+      .then(({ json }) => {
+        resolve(json);
+      })
+      .catch((e) => {
+        console.error(e);
+        reject(e);
+      });
   });
 }

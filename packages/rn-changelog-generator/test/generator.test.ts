@@ -12,7 +12,6 @@ import {
   git,
   run,
   getAllChangelogDescriptions,
-  getChangeMessage,
   getOffsetBaseCommit,
   getOriginalCommit,
   getFirstCommitAfterForkingFromMain,
@@ -90,23 +89,6 @@ describe(getOffsetBaseCommit, () => {
     return getOffsetBaseCommit(RN_REPO, "v0.60.5", "v0.60.6").then((sha) => {
       expect(sha).toEqual("35300147ca66677f42e8544264be72ac0e9d1b45");
     });
-  });
-});
-
-describe(getChangeMessage, () => {
-  it("formats a changelog entry", () => {
-    expect(
-      getChangeMessage({
-        sha: "abcde123456789",
-        commit: {
-          message:
-            "Some ignored commit message\n\n[iOS] [Fixed] - Some great fixes! (#42)",
-        },
-        author: { login: "alloy" },
-      })
-    ).toEqual(
-      "- Some great fixes! ([abcde12345](https://github.com/facebook/react-native/commit/abcde123456789) by [@alloy](https://github.com/alloy))"
-    );
   });
 });
 
