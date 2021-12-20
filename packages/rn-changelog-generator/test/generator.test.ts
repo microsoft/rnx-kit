@@ -1,11 +1,8 @@
 import https from "https";
 import { EventEmitter } from "events";
-import fs from "fs";
+import { promises as fs } from "fs";
 import path from "path";
-import util from "util";
 import deepmerge from "deepmerge";
-
-const readFile = util.promisify(fs.readFile);
 
 import {
   CHANGES_TEMPLATE,
@@ -36,7 +33,7 @@ function requestWithFixtureResponse(fixture: string) {
   (responseEmitter as any).headers = { link: 'rel="next"' };
   setImmediate(() => {
     requestEmitter.emit("response", responseEmitter);
-    readFile(path.join(__dirname, "__fixtures__", fixture), "utf-8").then(
+    fs.readFile(path.join(__dirname, "__fixtures__", fixture), "utf-8").then(
       (data) => {
         responseEmitter.emit("data", data);
         responseEmitter.emit("end");

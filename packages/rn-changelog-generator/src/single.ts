@@ -1,6 +1,7 @@
 import { fetchCommit } from "./utils/commits";
 import getChangeDimensions from "./utils/getChangeDimensions";
 import getChangeMessage from "./utils/getChangeMessage";
+
 interface SingleArgs {
   commit: string;
   token: string | null;
