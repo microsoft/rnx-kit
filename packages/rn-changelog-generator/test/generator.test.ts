@@ -1,26 +1,20 @@
 import https from "https";
 import { EventEmitter } from "events";
-import fs from "fs";
+import { promises as fs } from "fs";
 import path from "path";
-import util from "util";
 import deepmerge from "deepmerge";
-
-const readFile = util.promisify(fs.readFile);
 
 import {
   CHANGES_TEMPLATE,
   git,
   run,
-  fetchCommits,
   getAllChangelogDescriptions,
-  getChangeMessage,
-  getChangelogDesc,
   getOffsetBaseCommit,
   getOriginalCommit,
   getFirstCommitAfterForkingFromMain,
   Changes,
   PlatformChanges,
-} from "../src/changelog-generator";
+} from "../src/generator";
 
 if (!process.env.RN_REPO) {
   throw new Error(
@@ -39,7 +33,7 @@ function requestWithFixtureResponse(fixture: string) {
   (responseEmitter as any).headers = { link: 'rel="next"' };
   setImmediate(() => {
     requestEmitter.emit("response", responseEmitter);
-    readFile(path.join(__dirname, "__fixtures__", fixture), "utf-8").then(
+    fs.readFile(path.join(__dirname, "__fixtures__", fixture), "utf-8").then(
       (data) => {
         responseEmitter.emit("data", data);
         responseEmitter.emit("end");
@@ -95,23 +89,6 @@ describe(getOffsetBaseCommit, () => {
   });
 });
 
-describe(getChangeMessage, () => {
-  it("formats a changelog entry", () => {
-    expect(
-      getChangeMessage({
-        sha: "abcde123456789",
-        commit: {
-          message:
-            "Some ignored commit message\n\n[iOS] [Fixed] - Some great fixes! (#42)",
-        },
-        author: { login: "alloy" },
-      })
-    ).toEqual(
-      "- Some great fixes! ([abcde12345](https://github.com/facebook/react-native/commit/abcde123456789) by [@alloy](https://github.com/alloy))"
-    );
-  });
-});
-
 describe("functions that hit GitHub's commits API", () => {
   // The 2nd to last commit in commits-v0.60.5-page-2.json, which is the 59th commit.
   const base = "53e32a47e4062f428f8d714333236cedbe05b482";
@@ -136,20 +113,6 @@ describe("functions that hit GitHub's commits API", () => {
       }
     });
     Object.defineProperty(https, "get", { value: getMock });
-  });
-
-  describe(fetchCommits, () => {
-    it("paginates back from `compare` to `base`", () => {
-      return fetchCommits("authn-token", base, compare).then((commits) => {
-        expect(commits.length).toEqual(59);
-        expect(commits[0].sha).toEqual(
-          "35300147ca66677f42e8544264be72ac0e9d1b45"
-        );
-        expect(commits[30].sha).toEqual(
-          "99bc31cfa609e838779c29343684365a2ed6169f"
-        );
-      });
-    });
   });
 
   describe(run, () => {

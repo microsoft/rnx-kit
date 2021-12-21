@@ -7,25 +7,18 @@ import fs from "fs";
 import chalk from "chalk";
 import pLimit from "p-limit";
 import deepmerge from "deepmerge";
-import https from "https";
 import child_process from "child_process";
-import { IncomingHttpHeaders } from "http";
+import { fetchCommits, Commit } from "./utils/commits";
+import getChangeMessage from "./utils/getChangeMessage";
+import formatCommitLink from "./utils/formatCommitLink";
+import getChangeDimensions, {
+  CHANGE_TYPE,
+  CHANGE_CATEGORY,
+  ChangeType,
+  ChangeCategory,
+} from "./utils/getChangeDimensions";
 
 const execFile = util.promisify(child_process.execFile);
-
-const CHANGE_TYPE = [
-  "breaking",
-  "added",
-  "changed",
-  "deprecated",
-  "removed",
-  "fixed",
-  "security",
-  "unknown",
-  "failed",
-] as const;
-
-const CHANGE_CATEGORY = ["android", "ios", "general", "internal"] as const;
 
 export const CHANGES_TEMPLATE: Changes = Object.freeze(
   CHANGE_TYPE.reduce(
@@ -39,105 +32,9 @@ export const CHANGES_TEMPLATE: Changes = Object.freeze(
   )
 ) as Changes;
 
-const CHANGELOG_LINE_REGEXP = new RegExp(
-  `(\\[(${[...CHANGE_TYPE, ...CHANGE_CATEGORY].join("|")})\\]s*)+`,
-  "i"
-);
+export type PlatformChanges = Record<ChangeCategory, string[]>;
 
-export interface Commit {
-  sha: string;
-  commit: { message: string };
-  author?: { login: string };
-}
-
-export type PlatformChanges = Record<typeof CHANGE_CATEGORY[number], string[]>;
-
-export type Changes = Record<typeof CHANGE_TYPE[number], PlatformChanges>;
-
-//#region NETWORK
-//*****************************************************************************
-
-function fetchJSON<T>(token: string, path: string) {
-  const host = "api.github.com";
-  console.warn(chalk.yellow(`https://${host}${path}`));
-  return new Promise<{ json: T; headers: IncomingHttpHeaders }>(
-    (resolve, reject) => {
-      let data = "";
-
-      https
-        .get({
-          host,
-          path,
-          headers: {
-            Authorization: `token ${token}`,
-            "User-Agent":
-              "https://github.com/react-native-community/releases/blob/master/scripts/changelog-generator.js",
-          },
-        })
-        .on("response", (response) => {
-          if (response.statusCode !== 200) {
-            return reject(
-              new Error(`[!] Got HTTP status: ${response.statusCode}`)
-            );
-          }
-
-          response.on("data", (chunk) => {
-            data += chunk;
-          });
-
-          response.on("end", () => {
-            try {
-              resolve({ json: JSON.parse(data), headers: response.headers });
-            } catch (e) {
-              reject(e);
-            }
-          });
-
-          response.on("error", (error) => {
-            reject(error);
-          });
-        });
-    }
-  );
-}
-
-export function fetchCommits(token: string, base: string, compare: string) {
-  console.warn(chalk.green("Fetch commit data"));
-  console.group();
-  const commits: Commit[] = [];
-  let page = 1;
-  return new Promise<Commit[]>((resolve, reject) => {
-    const fetchPage = () => {
-      fetchJSON<Commit[]>(
-        token,
-        `/repos/facebook/react-native/commits?sha=${compare}&page=${page++}`
-      )
-        .then(({ json, headers }) => {
-          for (const commit of json) {
-            commits.push(commit);
-            if (commit.sha === base) {
-              console.groupEnd();
-              return resolve(commits);
-            }
-          }
-          if (!(headers["link"] as string).includes("next")) {
-            throw new Error(
-              "Did not find commit after paging through all commits"
-            );
-          }
-          setImmediate(fetchPage);
-        })
-        .catch((e) => {
-          console.groupEnd();
-          reject(e);
-        });
-    };
-    fetchPage();
-  });
-}
-
-//*****************************************************************************
-//#endregion
+export type Changes = Record<ChangeType, PlatformChanges>;
 
 //#region FILTER COMMITS
 //*****************************************************************************
@@ -385,107 +282,8 @@ export async function getOffsetBaseCommit(
 //*****************************************************************************
 //#endregion
 
-//#region UTILITIES
-//*****************************************************************************
-
-function isAndroidCommit(change: string) {
-  return (
-    !/(\[ios\]|\[general\])/i.test(change) &&
-    (/\b(android|java)\b/i.test(change) || /android/i.test(change))
-  );
-}
-
-function isIOSCommit(change: string) {
-  return (
-    !/(\[android\]|\[general\])/i.test(change) &&
-    (/\b(ios|xcode|swift|objective-c|iphone|ipad)\b/i.test(change) ||
-      /ios\b/i.test(change) ||
-      /\brct/i.test(change))
-  );
-}
-
-function isBreaking(change: string) {
-  return /\b(breaking)\b/i.test(change);
-}
-
-function isAdded(change: string) {
-  return /\b(added)\b/i.test(change);
-}
-
-function isChanged(change: string) {
-  return /\b(changed)\b/i.test(change);
-}
-
-function isDeprecated(change: string) {
-  return /\b(deprecated)\b/i.test(change);
-}
-
-function isRemoved(change: string) {
-  return /\b(removed)\b/i.test(change);
-}
-
-function isFixed(change: string) {
-  return /\b(fixed)\b/i.test(change);
-}
-
-function isSecurity(change: string) {
-  return /\b(security)\b/i.test(change);
-}
-
-function isFabric(change: string) {
-  return /\b(fabric)\b/i.test(change);
-}
-
-function isTurboModules(change: string) {
-  return /\b(tm)\b/i.test(change);
-}
-
-function isInternal(change: string) {
-  return /\[internal\]/i.test(change);
-}
-
-//*****************************************************************************
-//#endregion
-
 //#region FORMATTING
 //*****************************************************************************
-
-function formatCommitLink(sha: string) {
-  return `https://github.com/facebook/react-native/commit/${sha}`;
-}
-
-export function getChangeMessage(item: Commit, onlyMessage = false) {
-  const commitMessage = item.commit.message.split("\n");
-  let entry =
-    commitMessage
-      .reverse()
-      .find((a) => /\[ios\]|\[android\]|\[general\]/i.test(a)) ||
-    commitMessage.reverse()[0];
-  entry = entry.replace(/^((changelog:\s*)?(\[\w+\]\s?)+[\s-]*)/i, ""); //Remove the [General] [whatever]
-  entry = entry.replace(/ \(#\d*\)$/i, ""); //Remove the PR number if it's on the end
-
-  // Capitalize
-  if (/^[a-z]/.test(entry)) {
-    entry = entry.slice(0, 1).toUpperCase() + entry.slice(1);
-  }
-
-  if (onlyMessage) {
-    return entry;
-  }
-
-  const authorSection = `([${item.sha.slice(0, 10)}](${formatCommitLink(
-    item.sha
-  )})${
-    item.author
-      ? " by [@" +
-        item.author.login +
-        "](https://github.com/" +
-        item.author.login +
-        ")"
-      : ""
-  })`;
-  return `- ${entry} ${authorSection}`;
-}
 
 export function getChangelogDesc(
   commits: Commit[],
@@ -496,88 +294,28 @@ export function getChangelogDesc(
   const commitsWithoutExactChangelogTemplate: string[] = [];
 
   commits.forEach((item) => {
-    let change = item.commit.message.split("\n").find((line) => {
-      return CHANGELOG_LINE_REGEXP.test(line);
-    });
-    if (!change) {
+    const {
+      changeCategory,
+      changeType,
+      doesNotFollowTemplate,
+      fabric,
+      internal,
+      turboModules,
+    } = getChangeDimensions(item);
+
+    if (doesNotFollowTemplate) {
       commitsWithoutExactChangelogTemplate.push(item.sha);
-      change = item.commit.message;
     }
 
+    if (!verbose && (fabric || turboModules || internal)) {
+      return;
+    }
     const message = getChangeMessage(item, onlyMessage);
 
-    if (!verbose) {
-      if (isFabric(change.split("\n")[0])) return;
-      if (isTurboModules(change.split("\n")[0])) return;
-      if (isInternal(change)) return;
-    }
-
-    if (isBreaking(change)) {
-      if (isAndroidCommit(change)) {
-        acc.breaking.android.push(message);
-      } else if (isIOSCommit(change)) {
-        acc.breaking.ios.push(message);
-      } else {
-        acc.breaking.general.push(message);
-      }
-    } else if (isAdded(change)) {
-      if (isAndroidCommit(change)) {
-        acc.added.android.push(message);
-      } else if (isIOSCommit(change)) {
-        acc.added.ios.push(message);
-      } else {
-        acc.added.general.push(message);
-      }
-    } else if (isChanged(change)) {
-      if (isAndroidCommit(change)) {
-        acc.changed.android.push(message);
-      } else if (isIOSCommit(change)) {
-        acc.changed.ios.push(message);
-      } else {
-        acc.changed.general.push(message);
-      }
-    } else if (isFixed(change)) {
-      if (isAndroidCommit(change)) {
-        acc.fixed.android.push(message);
-      } else if (isIOSCommit(change)) {
-        acc.fixed.ios.push(message);
-      } else {
-        acc.fixed.general.push(message);
-      }
-    } else if (isRemoved(change)) {
-      if (isAndroidCommit(change)) {
-        acc.removed.android.push(message);
-      } else if (isIOSCommit(change)) {
-        acc.removed.ios.push(message);
-      } else {
-        acc.removed.general.push(message);
-      }
-    } else if (isDeprecated(change)) {
-      if (isAndroidCommit(change)) {
-        acc.deprecated.android.push(message);
-      } else if (isIOSCommit(change)) {
-        acc.deprecated.ios.push(message);
-      } else {
-        acc.deprecated.general.push(message);
-      }
-    } else if (isSecurity(change)) {
-      if (isAndroidCommit(change)) {
-        acc.security.android.push(message);
-      } else if (isIOSCommit(change)) {
-        acc.security.ios.push(message);
-      } else {
-        acc.security.general.push(message);
-      }
-    } else if (item.commit.message.match(/changelog/i)) {
-      acc.failed.general.push(message);
+    if (changeType === "failed") {
+      acc[changeType].general.push(message);
     } else {
-      if (isAndroidCommit(change)) {
-        acc.unknown.android.push(message);
-      } else if (isIOSCommit(change)) {
-        acc.unknown.ios.push(message);
-      } else {
-        acc.unknown.general.push(message);
-      }
+      acc[changeType][changeCategory].push(message);
     }
   });
 
@@ -741,7 +479,7 @@ export async function getAllChangelogDescriptions(
 
 export async function run(
   options: Parameters<typeof getAllChangelogDescriptions>[1] & {
-    token: string;
+    token: string | null;
     base: string;
     compare: string;
   }
@@ -755,66 +493,17 @@ export async function run(
   return buildMarkDown(options.compare, changes);
 }
 
-if (require.main === module) {
-  const argv = require("yargs")
-    .usage(
-      "$0 [args]",
-      "Generate a React Native changelog from the commits and PRs"
-    )
-    .options({
-      base: {
-        alias: "b",
-        string: true,
-        describe:
-          "The base branch/tag/commit to compare against (most likely the previous stable version)",
-        demandOption: true,
-      },
-      compare: {
-        alias: "c",
-        string: true,
-        describe:
-          "The new version branch/tag/commit (most likely the latest release candidate)",
-        demandOption: true,
-      },
-      repo: {
-        alias: "r",
-        string: true,
-        describe: "The path to an up-to-date clone of the react-native repo",
-        demandOption: true,
-      },
-      changelog: {
-        alias: "f",
-        string: true,
-        describe: "The path to the existing CHANGELOG.md file",
-        demandOption: true,
-        default: path.resolve(__dirname, "../CHANGELOG.md"),
-      },
-      token: {
-        alias: "t",
-        string: true,
-        describe:
-          "A GitHub token that has `public_repo` access (generate at https://github.com/settings/tokens)",
-        demandOption: true,
-      },
-      maxWorkers: {
-        alias: "w",
-        number: true,
-        describe:
-          "Specifies the maximum number of concurrent sub-processes that will be spawned",
-        default: 10,
-      },
-      verbose: {
-        alias: "v",
-        boolean: true,
-        describe:
-          "Verbose listing, includes internal changes as well as public-facing changes",
-        demandOption: false,
-        default: false,
-      },
-    })
-    .version(false)
-    .help("help").argv;
+interface GenerateArgs {
+  base: string;
+  compare: string;
+  repo: string;
+  changelog: string;
+  token: string | null;
+  maxWorkers: number;
+  verbose: boolean;
+}
 
+function handler(argv: GenerateArgs) {
   const gitDir = path.join(argv.repo, ".git");
   git(gitDir, "rev-parse")
     .catch(() => {
@@ -833,6 +522,62 @@ if (require.main === module) {
       process.exit(1);
     });
 }
+
+export default {
+  handler,
+  args: {
+    base: {
+      alias: "b",
+      string: true,
+      describe:
+        "The base branch/tag/commit to compare against (most likely the previous stable version)",
+      demandOption: true,
+    },
+    compare: {
+      alias: "c",
+      string: true,
+      describe:
+        "The new version branch/tag/commit (most likely the latest release candidate)",
+      demandOption: true,
+    },
+    repo: {
+      alias: "r",
+      string: true,
+      describe: "The path to an up-to-date clone of the react-native repo",
+      demandOption: true,
+    },
+    changelog: {
+      alias: "f",
+      string: true,
+      describe: "The path to the existing CHANGELOG.md file",
+      demandOption: true,
+      default: path.resolve(__dirname, "../CHANGELOG.md"),
+    },
+    token: {
+      alias: "t",
+      string: true,
+      describe:
+        "A GitHub token that has `public_repo` access (generate at https://github.com/settings/tokens)",
+      demandOption: false,
+      default: null,
+    },
+    maxWorkers: {
+      alias: "w",
+      number: true,
+      describe:
+        "Specifies the maximum number of concurrent sub-processes that will be spawned",
+      default: 10,
+    },
+    verbose: {
+      alias: "v",
+      boolean: true,
+      describe:
+        "Verbose listing, includes internal changes as well as public-facing changes",
+      demandOption: false,
+      default: false,
+    },
+  },
+};
 
 //*****************************************************************************
 //#endregion
