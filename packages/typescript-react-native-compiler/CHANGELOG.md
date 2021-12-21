@@ -1,5 +1,12 @@
 # Change Log - @rnx-kit/typescript-react-native-compiler
 
+## 0.0.7
+
+### Patch Changes
+
+- Updated dependencies [28f632a]
+  - @rnx-kit/typescript-react-native-resolver@0.2.0
+
 ## 0.0.6
 
 Tue, 30 Nov 2021 17:24:14 GMT

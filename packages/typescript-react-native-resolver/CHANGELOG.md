@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/typescript-react-native-resolver
 
+## 0.2.0
+
+### Minor Changes
+
+- 28f632a: Resolve modules in 3 passes - TS, then JS, then JSON. Also, always resolve to JS files -- don't gate on checkJs anymore.
+
 ## 0.1.4
 
 ### Patch Changes
