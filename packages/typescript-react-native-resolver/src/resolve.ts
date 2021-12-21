@@ -6,6 +6,7 @@ import {
 import path from "path";
 import ts from "typescript";
 
+import { ExtensionsTypeScript } from "./extension";
 import { findModuleFile } from "./module";
 import { ResolverContext } from "./types";
 
@@ -150,33 +151,24 @@ export function resolvePackageModule(
       // same file layout as the corresponding source code modules. For
       // example, type info could be in a single, hand-crafted file, while
       // the source code is spread across many files.
-      //
-      // Search for both .d.ts and .ts files, as some type modules import
-      // as "foo.d" with the intent to resolve to "foo.d.ts".
-      //
-      module = resolveModule(context, pkgDir, undefined, [
-        ts.Extension.Dts,
-        ts.Extension.Ts,
-      ]);
+      module = resolveModule(context, pkgDir, undefined, ExtensionsTypeScript);
     }
   }
 
   if (!module && moduleRef.scope !== "@types") {
     // The module wasn't resolved using the given package reference. Try again,
     // looking for a corresponding @types package.
-    //
-    // Allow both .d.ts and .ts file extensions, as some type modules import
-    // as "foo.d" with the intent to resolve to "foo.d.ts".
-    //
     const typesModuleRef: PackageModuleRef = {
       scope: "@types",
       name: getMangledPackageName(moduleRef),
       path: moduleRef.path,
     };
-    module = resolvePackageModule(context, typesModuleRef, searchDir, [
-      ts.Extension.Dts,
-      ts.Extension.Ts,
-    ]);
+    module = resolvePackageModule(
+      context,
+      typesModuleRef,
+      searchDir,
+      ExtensionsTypeScript
+    );
   }
 
   return module;

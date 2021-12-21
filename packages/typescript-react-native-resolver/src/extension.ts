@@ -15,6 +15,10 @@ export const ExtensionsTypeScript = [
   ts.Extension.Dts,
 ];
 
+export const ExtensionsJavaScript = [ts.Extension.Js, ts.Extension.Jsx];
+
+export const ExtensionsJSON = [ts.Extension.Json];
+
 export function hasExtension(p: string, ext: ts.Extension): boolean {
   return p.endsWith(ext);
 }

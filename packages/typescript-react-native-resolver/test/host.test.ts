@@ -12,6 +12,11 @@ import {
 } from "../src/host";
 import type { ModuleResolutionHostLike, ResolverContext } from "../src/types";
 import { ResolverLog, ResolverLogMode } from "../src/log";
+import {
+  ExtensionsTypeScript,
+  ExtensionsJavaScript,
+  ExtensionsJSON,
+} from "../src/extension";
 
 describe("Host > changeHostToUseReactNativeResolver", () => {
   const mockFileExists = jest.fn();
@@ -182,7 +187,9 @@ describe("Host > resolveModuleNames", () => {
     host: {
       realpath: mockRealpath,
     } as unknown as ModuleResolutionHostLike,
-    options: {},
+    options: {
+      resolveJsonModule: true,
+    },
     log: new ResolverLog(ResolverLogMode.Never),
     replaceReactNativePackageName: (x: string) => x + "-replaced",
   } as unknown as ResolverContext;
@@ -200,7 +207,7 @@ describe("Host > resolveModuleNames", () => {
       context,
       ["pkg-dir", "pkg-up"],
       "/repos/rnx-kit/packages/test-app/src/app.ts",
-      []
+      undefined
     );
     expect(modules).not.toBeNil();
     expect(modules).toBeArrayOfSize(2);
@@ -217,7 +224,7 @@ describe("Host > resolveModuleNames", () => {
       context,
       ["pkg-dir", "pkg-up"],
       "/repos/rnx-kit/packages/test-app/src/app.ts",
-      []
+      undefined
     );
 
     expect(resolvePackageModule).toBeCalledTimes(2);
@@ -225,6 +232,22 @@ describe("Host > resolveModuleNames", () => {
     // 2nd argument: PackageModuleRef
     expect(calls[0][1]).toEqual({ name: "pkg-dir-replaced" });
     expect(calls[1][1]).toEqual({ name: "pkg-up-replaced" });
+  });
+
+  test("tries TypeScript, then JavaScript, then JSON module resolution", () => {
+    resolveModuleNames(
+      context,
+      ["pkg-dir"],
+      "/repos/rnx-kit/packages/test-app/src/app.ts",
+      undefined
+    );
+
+    expect(resolvePackageModule).toBeCalledTimes(3);
+    const calls = (resolvePackageModule as jest.Mock).mock.calls;
+    // 4th argument: ts.Extension[]
+    expect(calls[0][3]).toEqual(ExtensionsTypeScript);
+    expect(calls[1][3]).toEqual(ExtensionsJavaScript);
+    expect(calls[2][3]).toEqual(ExtensionsJSON);
   });
 });
 

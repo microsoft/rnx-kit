@@ -1,3 +1,4 @@
+import "jest-extended";
 import ts from "typescript";
 import { hasExtension, getExtensionFromPath } from "../src/extension";
 
