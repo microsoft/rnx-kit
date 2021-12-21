@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/cli",
-  "version": "0.9.57",
+  "version": "0.9.58",
   "description": "Command-line interface for working with kit packages in your repo",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/cli",
   "license": "MIT",
@@ -31,7 +31,7 @@
     "@rnx-kit/tools-language": "^1.2.6",
     "@rnx-kit/tools-node": "^1.2.6",
     "@rnx-kit/tools-react-native": "^1.0.10",
-    "@rnx-kit/typescript-react-native-resolver": "^0.1.3",
+    "@rnx-kit/typescript-react-native-resolver": "^0.2.0",
     "@rnx-kit/typescript-service": "^1.5.3",
     "chalk": "^4.1.0",
     "readline": "^1.3.0"

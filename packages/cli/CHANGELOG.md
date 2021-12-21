@@ -1,5 +1,12 @@
 # Change Log - @rnx-kit/cli
 
+## 0.9.58
+
+### Patch Changes
+
+- Updated dependencies [28f632a]
+  - @rnx-kit/typescript-react-native-resolver@0.2.0
+
 ## 0.9.57
 
 ### Patch Changes
