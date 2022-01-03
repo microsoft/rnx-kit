@@ -10,7 +10,7 @@ const getPlatformImplementations = (() => {
       platforms = getAvailablePlatforms();
     }
     return platforms;
-  }
+  };
 })();
 
 function resolveFrom(moduleName: string, startDir: string): string {
