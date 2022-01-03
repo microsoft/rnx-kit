@@ -1,3 +1,6 @@
+import * as fs from "fs";
+import * as path from "path";
+
 /**
  * List of supported react-native platforms.
  */
@@ -32,6 +35,54 @@ export function expandPlatformExtensions(
 
   expanded.push(...extensions);
   return expanded;
+}
+
+/**
+ * Returns a map of available React Native platforms.
+ */
+export function getAvailablePlatforms(
+  packageRoot = process.cwd(),
+  platformMap: Record<string, string> = { android: "", ios: "" }
+): Record<string, string> {
+  const packageJson = path.join(packageRoot, "package.json");
+  if (!fs.existsSync(packageJson)) {
+    const parent = path.dirname(packageRoot);
+    return parent === packageRoot
+      ? platformMap
+      : getAvailablePlatforms(path.dirname(packageRoot), platformMap);
+  }
+
+  const resolveOptions = { paths: [packageRoot] };
+  const { dependencies, devDependencies } = require(packageJson);
+  [
+    ...(dependencies ? Object.keys(dependencies) : []),
+    ...(devDependencies ? Object.keys(devDependencies) : []),
+  ].forEach((pkgName) => {
+    if (!pkgName.startsWith("react-native-")) {
+      return;
+    }
+
+    const pkgPath = path.dirname(
+      require.resolve(`${pkgName}/package.json`, resolveOptions)
+    );
+
+    const configPath = path.join(pkgPath, "react-native.config.js");
+    if (fs.existsSync(configPath)) {
+      const { platforms } = require(configPath);
+      if (platforms) {
+        Object.keys(platforms).forEach((platform) => {
+          if (typeof platformMap[platform] === "undefined") {
+            const { npmPackageName } = platforms[platform];
+            if (npmPackageName) {
+              platformMap[platform] = npmPackageName;
+            }
+          }
+        });
+      }
+    }
+  });
+
+  return platformMap;
 }
 
 /**

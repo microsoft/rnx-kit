@@ -32,7 +32,7 @@ describe("getMetroResolver", () => {
 
   test("throws if `metro-resolver` cannot be found", () => {
     const cwd = process.cwd();
-    const root = cwd.substr(0, cwd.indexOf(path.sep) + 1);
+    const root = cwd.substring(0, cwd.indexOf(path.sep) + 1);
     expect(() => getMetroResolver(root)(context, "", null)).toThrowError(
       "Cannot find module"
     );
@@ -43,6 +43,16 @@ describe("remapReactNativeModule", () => {
   const context = {
     originModulePath: "",
   };
+
+  const currentDir = process.cwd();
+
+  beforeAll(() => {
+    process.chdir(useFixture("remap-platforms"));
+  });
+
+  afterAll(() => {
+    process.chdir(currentDir);
+  });
 
   test("remaps `react-native` if platform is supported", () => {
     expect(remapReactNativeModule(context, "terminator", "macos")).toBe(

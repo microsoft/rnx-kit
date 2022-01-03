@@ -1,5 +1,7 @@
+import * as path from "path";
 import {
   expandPlatformExtensions,
+  getAvailablePlatforms,
   parsePlatform,
   platformExtensions,
 } from "../src/platform";
@@ -24,6 +26,47 @@ describe("React Native > Platform", () => {
       ".ts",
       ".tsx",
     ]);
+  });
+
+  test("getAvailablePlatforms() returns available platforms", () => {
+    const fixture = path.join(__dirname, "__fixtures__", "available-platforms");
+    expect(getAvailablePlatforms(fixture)).toMatchInlineSnapshot(`
+      Object {
+        "android": "",
+        "ios": "",
+        "macos": "react-native-macos",
+        "win32": "@office-iss/react-native-win32",
+        "windows": "react-native-windows",
+      }
+    `);
+  });
+
+  test("getAvailablePlatforms() finds package root", () => {
+    const fixture = path.join(
+      __dirname,
+      "__fixtures__",
+      "available-platforms",
+      "node_modules",
+      "react-native"
+    );
+    expect(getAvailablePlatforms(fixture)).toMatchInlineSnapshot(`
+      Object {
+        "android": "",
+        "ios": "",
+        "macos": "react-native-macos",
+        "win32": "@office-iss/react-native-win32",
+        "windows": "react-native-windows",
+      }
+    `);
+  });
+
+  test("getAvailablePlatforms() handles 'missing' package root", () => {
+    expect(getAvailablePlatforms()).toMatchInlineSnapshot(`
+      Object {
+        "android": "",
+        "ios": "",
+      }
+    `);
   });
 
   test("parsePlatform() succeeds for all known platforms", () => {
