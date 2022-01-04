@@ -1,7 +1,7 @@
 import * as path from "path";
 import {
   expandPlatformExtensions,
-  getAvailablePlatformsUncached as getAvailablePlatforms,
+  getAvailablePlatformsUncached,
   parsePlatform,
   platformExtensions,
 } from "../src/platform";
@@ -28,9 +28,9 @@ describe("React Native > Platform", () => {
     ]);
   });
 
-  test("getAvailablePlatforms() returns available platforms", () => {
+  test("getAvailablePlatformsUncached() returns available platforms", () => {
     const fixture = path.join(__dirname, "__fixtures__", "available-platforms");
-    expect(getAvailablePlatforms(fixture)).toMatchInlineSnapshot(`
+    expect(getAvailablePlatformsUncached(fixture)).toMatchInlineSnapshot(`
       Object {
         "android": "",
         "ios": "",
@@ -41,7 +41,7 @@ describe("React Native > Platform", () => {
     `);
   });
 
-  test("getAvailablePlatforms() finds package root", () => {
+  test("getAvailablePlatformsUncached() finds package root", () => {
     const fixture = path.join(
       __dirname,
       "__fixtures__",
@@ -49,7 +49,7 @@ describe("React Native > Platform", () => {
       "node_modules",
       "react-native"
     );
-    expect(getAvailablePlatforms(fixture)).toMatchInlineSnapshot(`
+    expect(getAvailablePlatformsUncached(fixture)).toMatchInlineSnapshot(`
       Object {
         "android": "",
         "ios": "",
@@ -60,8 +60,8 @@ describe("React Native > Platform", () => {
     `);
   });
 
-  test("getAvailablePlatforms() handles 'missing' package root", () => {
-    expect(getAvailablePlatforms()).toMatchInlineSnapshot(`
+  test("getAvailablePlatformsUncached() handles 'missing' package root", () => {
+    expect(getAvailablePlatformsUncached()).toMatchInlineSnapshot(`
       Object {
         "android": "",
         "ios": "",
