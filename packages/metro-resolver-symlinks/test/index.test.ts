@@ -1,10 +1,15 @@
-import { AVAILABLE_PLATFORMS } from "@rnx-kit/tools-react-native";
 import * as path from "path";
 import {
   getMetroResolver,
   remapReactNativeModule,
   resolveModulePath,
 } from "../src/resolver";
+
+const AVAILABLE_PLATFORMS = {
+  macos: "react-native-macos",
+  win32: "@office-iss/react-native-win32",
+  windows: "react-native-windows",
+};
 
 function useFixture(name: string): string {
   return path.join(__dirname, "__fixtures__", name);

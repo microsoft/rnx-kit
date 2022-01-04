@@ -1,7 +1,7 @@
 import * as path from "path";
 import {
   expandPlatformExtensions,
-  getAvailablePlatforms,
+  getAvailablePlatformsUncached as getAvailablePlatforms,
   parsePlatform,
   platformExtensions,
 } from "../src/platform";

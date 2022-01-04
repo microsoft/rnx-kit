@@ -3,16 +3,6 @@ import { getAvailablePlatforms } from "@rnx-kit/tools-react-native";
 import * as path from "path";
 import type { MetroResolver, ModuleResolver } from "./types";
 
-const getPlatformImplementations = (() => {
-  let platforms: Record<string, string> | undefined = undefined;
-  return () => {
-    if (!platforms) {
-      platforms = getAvailablePlatforms();
-    }
-    return platforms;
-  };
-})();
-
 function resolveFrom(moduleName: string, startDir: string): string {
   return require.resolve(moduleName, { paths: [startDir] });
 }
@@ -43,7 +33,7 @@ export const remapReactNativeModule: ModuleResolver = (
   moduleName,
   platform
 ) => {
-  const platformImpl = getPlatformImplementations()[platform];
+  const platformImpl = getAvailablePlatforms()[platform];
   if (platformImpl) {
     if (moduleName === "react-native") {
       return platformImpl;

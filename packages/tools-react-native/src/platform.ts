@@ -6,15 +6,6 @@ import * as path from "path";
  */
 export type AllPlatforms = "ios" | "android" | "windows" | "win32" | "macos";
 
-// TODO: `react-native config` is too slow. Hard-coding this list until we can
-// figure out a better solution.
-// See https://github.com/microsoft/rnx-kit/issues/925
-export const AVAILABLE_PLATFORMS: Record<string, string> = {
-  macos: "react-native-macos",
-  win32: "@office-iss/react-native-win32",
-  windows: "react-native-windows",
-};
-
 /**
  * Returns a list of extensions that should be tried for the target platform in
  * prioritized order.
@@ -38,30 +29,45 @@ export function expandPlatformExtensions(
 }
 
 /**
- * Returns a map of available React Native platforms.
+ * Returns a map of available React Native platforms. The result is cached.
+ * @privateRemarks is-arrow-function
+ * @param startDir The directory to look for react-native platforms from
+ * @returns A platform-to-npm-package map, excluding "core" platforms.
  */
-export function getAvailablePlatforms(
-  packageRoot = process.cwd(),
+export const getAvailablePlatforms = (() => {
+  let platformMap: Record<string, string> | undefined = undefined;
+  return (startDir: string = process.cwd()) => {
+    if (!platformMap) {
+      platformMap = getAvailablePlatformsUncached(startDir);
+    }
+    return platformMap;
+  };
+})();
+
+/**
+ * Returns a map of available React Native platforms. The result is NOT cached.
+ * @param startDir The directory to look for react-native platforms from
+ * @param platformMap A platform-to-npm-package map of known packages
+ * @returns A platform-to-npm-package map, excluding "core" platforms.
+ */
+export function getAvailablePlatformsUncached(
+  startDir = process.cwd(),
   platformMap: Record<string, string> = { android: "", ios: "" }
 ): Record<string, string> {
-  const packageJson = path.join(packageRoot, "package.json");
+  const packageJson = path.join(startDir, "package.json");
   if (!fs.existsSync(packageJson)) {
-    const parent = path.dirname(packageRoot);
-    return parent === packageRoot
+    const parent = path.dirname(startDir);
+    return parent === startDir
       ? platformMap
-      : getAvailablePlatforms(path.dirname(packageRoot), platformMap);
+      : getAvailablePlatformsUncached(path.dirname(startDir), platformMap);
   }
 
-  const resolveOptions = { paths: [packageRoot] };
+  const resolveOptions = { paths: [startDir] };
   const { dependencies, devDependencies } = require(packageJson);
   [
     ...(dependencies ? Object.keys(dependencies) : []),
     ...(devDependencies ? Object.keys(devDependencies) : []),
   ].forEach((pkgName) => {
-    if (!pkgName.startsWith("react-native-")) {
-      return;
-    }
-
     const pkgPath = path.dirname(
       require.resolve(`${pkgName}/package.json`, resolveOptions)
     );

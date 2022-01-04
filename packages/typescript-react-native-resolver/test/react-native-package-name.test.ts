@@ -1,9 +1,17 @@
+import * as path from "path";
 import { ResolverLog, ResolverLogMode } from "../src/log";
 import { createReactNativePackageNameReplacer } from "../src/react-native-package-name";
+
+const fixture = path.join(
+  __dirname,
+  "__fixtures__",
+  "react-native-package-name-test"
+);
 
 describe("React-Native Package Name > createReactNativePackageNameReplacer > Disabled", () => {
   test("returns the input module without substitution", () => {
     const replacer = createReactNativePackageNameReplacer(
+      fixture,
       "windows",
       true,
       new ResolverLog(ResolverLogMode.Never)
@@ -16,6 +24,7 @@ describe("React-Native Package Name > createReactNativePackageNameReplacer > Dis
 describe("React-Native Package Name > createReactNativePackageNameReplacer > In-tree Platform", () => {
   test("returns the input module without substitution", () => {
     const replacer = createReactNativePackageNameReplacer(
+      fixture,
       "ios",
       false,
       new ResolverLog(ResolverLogMode.Never)
@@ -32,6 +41,7 @@ describe("React-Native Package Name > createReactNativePackageNameReplacer > Out
   };
 
   const replacer = createReactNativePackageNameReplacer(
+    fixture,
     "windows",
     false,
     resolverLog as ResolverLog
