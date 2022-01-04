@@ -1,10 +1,15 @@
-import { AVAILABLE_PLATFORMS } from "@rnx-kit/tools-react-native";
 import * as path from "path";
 import {
   getMetroResolver,
   remapReactNativeModule,
   resolveModulePath,
 } from "../src/resolver";
+
+const AVAILABLE_PLATFORMS = {
+  macos: "react-native-macos",
+  win32: "@office-iss/react-native-win32",
+  windows: "react-native-windows",
+};
 
 function useFixture(name: string): string {
   return path.join(__dirname, "__fixtures__", name);
@@ -32,7 +37,7 @@ describe("getMetroResolver", () => {
 
   test("throws if `metro-resolver` cannot be found", () => {
     const cwd = process.cwd();
-    const root = cwd.substr(0, cwd.indexOf(path.sep) + 1);
+    const root = cwd.substring(0, cwd.indexOf(path.sep) + 1);
     expect(() => getMetroResolver(root)(context, "", null)).toThrowError(
       "Cannot find module"
     );
@@ -43,6 +48,16 @@ describe("remapReactNativeModule", () => {
   const context = {
     originModulePath: "",
   };
+
+  const currentDir = process.cwd();
+
+  beforeAll(() => {
+    process.chdir(useFixture("remap-platforms"));
+  });
+
+  afterAll(() => {
+    process.chdir(currentDir);
+  });
 
   test("remaps `react-native` if platform is supported", () => {
     expect(remapReactNativeModule(context, "terminator", "macos")).toBe(

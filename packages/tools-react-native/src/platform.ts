@@ -1,16 +1,10 @@
+import * as fs from "fs";
+import * as path from "path";
+
 /**
  * List of supported react-native platforms.
  */
 export type AllPlatforms = "ios" | "android" | "windows" | "win32" | "macos";
-
-// TODO: `react-native config` is too slow. Hard-coding this list until we can
-// figure out a better solution.
-// See https://github.com/microsoft/rnx-kit/issues/925
-export const AVAILABLE_PLATFORMS: Record<string, string> = {
-  macos: "react-native-macos",
-  win32: "@office-iss/react-native-win32",
-  windows: "react-native-windows",
-};
 
 /**
  * Returns a list of extensions that should be tried for the target platform in
@@ -32,6 +26,69 @@ export function expandPlatformExtensions(
 
   expanded.push(...extensions);
   return expanded;
+}
+
+/**
+ * Returns a map of available React Native platforms. The result is cached.
+ * @privateRemarks is-arrow-function
+ * @param startDir The directory to look for react-native platforms from
+ * @returns A platform-to-npm-package map, excluding "core" platforms.
+ */
+export const getAvailablePlatforms = (() => {
+  let platformMap: Record<string, string> | undefined = undefined;
+  return (startDir: string = process.cwd()) => {
+    if (!platformMap) {
+      platformMap = getAvailablePlatformsUncached(startDir);
+    }
+    return platformMap;
+  };
+})();
+
+/**
+ * Returns a map of available React Native platforms. The result is NOT cached.
+ * @param startDir The directory to look for react-native platforms from
+ * @param platformMap A platform-to-npm-package map of known packages
+ * @returns A platform-to-npm-package map, excluding "core" platforms.
+ */
+export function getAvailablePlatformsUncached(
+  startDir = process.cwd(),
+  platformMap: Record<string, string> = { android: "", ios: "" }
+): Record<string, string> {
+  const packageJson = path.join(startDir, "package.json");
+  if (!fs.existsSync(packageJson)) {
+    const parent = path.dirname(startDir);
+    return parent === startDir
+      ? platformMap
+      : getAvailablePlatformsUncached(path.dirname(startDir), platformMap);
+  }
+
+  const resolveOptions = { paths: [startDir] };
+  const { dependencies, devDependencies } = require(packageJson);
+  [
+    ...(dependencies ? Object.keys(dependencies) : []),
+    ...(devDependencies ? Object.keys(devDependencies) : []),
+  ].forEach((pkgName) => {
+    const pkgPath = path.dirname(
+      require.resolve(`${pkgName}/package.json`, resolveOptions)
+    );
+
+    const configPath = path.join(pkgPath, "react-native.config.js");
+    if (fs.existsSync(configPath)) {
+      const { platforms } = require(configPath);
+      if (platforms) {
+        Object.keys(platforms).forEach((platform) => {
+          if (typeof platformMap[platform] === "undefined") {
+            const { npmPackageName } = platforms[platform];
+            if (npmPackageName) {
+              platformMap[platform] = npmPackageName;
+            }
+          }
+        });
+      }
+    }
+  });
+
+  return platformMap;
 }
 
 /**

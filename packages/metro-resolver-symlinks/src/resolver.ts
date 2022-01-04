@@ -1,5 +1,5 @@
 import { isFileModuleRef, parseModuleRef } from "@rnx-kit/tools-node";
-import { AVAILABLE_PLATFORMS } from "@rnx-kit/tools-react-native";
+import { getAvailablePlatforms } from "@rnx-kit/tools-react-native";
 import * as path from "path";
 import type { MetroResolver, ModuleResolver } from "./types";
 
@@ -33,7 +33,7 @@ export const remapReactNativeModule: ModuleResolver = (
   moduleName,
   platform
 ) => {
-  const platformImpl = AVAILABLE_PLATFORMS[platform];
+  const platformImpl = getAvailablePlatforms()[platform];
   if (platformImpl) {
     if (moduleName === "react-native") {
       return platformImpl;

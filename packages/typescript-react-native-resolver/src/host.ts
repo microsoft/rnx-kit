@@ -87,6 +87,7 @@ export function changeHostToUseReactNativeResolver({
       (e) => `.${e}` // prepend a '.' to each name to make it a file extension
     ),
     replaceReactNativePackageName: createReactNativePackageNameReplacer(
+      host.getCurrentDirectory(),
       platform,
       disableReactNativePackageSubstitution,
       log

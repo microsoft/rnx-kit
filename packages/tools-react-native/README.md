@@ -22,10 +22,12 @@ import * from "@rnx-kit/tools-react-native/platform";
 | -------- | ------------ | ----------------------------------------- |
 | platform | AllPlatforms | List of supported react-native platforms. |
 
-| Category | Function                                         | Description                                                                                     |
-| -------- | ------------------------------------------------ | ----------------------------------------------------------------------------------------------- |
-| platform | `expandPlatformExtensions(platform, extensions)` | Returns a list of extensions that should be tried for the target platform in prioritized order. |
-| platform | `parsePlatform(val)`                             | Parse a string to ensure it maps to a valid react-native platform.                              |
-| platform | `platformExtensions(platform)`                   | Returns file extensions that can be mapped to the target platform.                              |
+| Category | Function                                               | Description                                                                                     |
+| -------- | ------------------------------------------------------ | ----------------------------------------------------------------------------------------------- |
+| platform | `expandPlatformExtensions(platform, extensions)`       | Returns a list of extensions that should be tried for the target platform in prioritized order. |
+| platform | `getAvailablePlatforms(startDir)`                      | Returns a map of available React Native platforms. The result is cached.                        |
+| platform | `getAvailablePlatformsUncached(startDir, platformMap)` | Returns a map of available React Native platforms. The result is NOT cached.                    |
+| platform | `parsePlatform(val)`                                   | Parse a string to ensure it maps to a valid react-native platform.                              |
+| platform | `platformExtensions(platform)`                         | Returns file extensions that can be mapped to the target platform.                              |
 
 <!-- @rnx-kit/api end -->

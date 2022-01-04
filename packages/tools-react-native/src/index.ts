@@ -1,6 +1,7 @@
 export {
-  AVAILABLE_PLATFORMS,
   expandPlatformExtensions,
+  getAvailablePlatforms,
+  getAvailablePlatformsUncached,
   parsePlatform,
   platformExtensions,
 } from "./platform";

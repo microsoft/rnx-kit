@@ -19,17 +19,19 @@ import {
 } from "../src/extension";
 
 describe("Host > changeHostToUseReactNativeResolver", () => {
-  const mockFileExists = jest.fn();
-  const mockReadFile = jest.fn();
   const mockDirectoryExists = jest.fn();
-  const mockRealpath = jest.fn();
+  const mockFileExists = jest.fn();
+  const mockGetCurrentDirectory = jest.fn();
   const mockGetDirectories = jest.fn();
+  const mockReadFile = jest.fn();
+  const mockRealpath = jest.fn();
   const host = {
-    fileExists: mockFileExists,
-    readFile: mockReadFile,
     directoryExists: mockDirectoryExists,
-    realpath: mockRealpath,
+    fileExists: mockFileExists,
+    getCurrentDirectory: mockGetCurrentDirectory,
     getDirectories: mockGetDirectories,
+    readFile: mockReadFile,
+    realpath: mockRealpath,
   } as unknown as ts.CompilerHost;
 
   afterEach(() => {
