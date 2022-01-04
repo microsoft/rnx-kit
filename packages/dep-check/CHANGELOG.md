@@ -1,5 +1,12 @@
 # Change Log - @rnx-kit/dep-check
 
+## 1.10.1
+
+### Patch Changes
+
+- 80a9e64: Bump react-native-test-app to 0.10.2
+- 8f868c4: Bump react-native-test-app to 0.10.1
+
 ## 1.10.0
 
 ### Minor Changes
