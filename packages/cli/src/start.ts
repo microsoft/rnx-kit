@@ -6,13 +6,15 @@ import {
   startServer,
 } from "@rnx-kit/metro-service";
 import chalk from "chalk";
-import type { Reporter, ReportableEvent } from "metro";
-import type Server from "metro/src/Server";
+import type { ReportableEvent, Reporter } from "metro";
 import type { Middleware } from "metro-config";
+import type Server from "metro/src/Server";
+import os from "os";
 import path from "path";
+import qrcode from "qrcode";
 import readline from "readline";
-import { getKitServerConfig } from "./serve/kit-config";
 import { customizeMetroConfig } from "./metro-config";
+import { getKitServerConfig } from "./serve/kit-config";
 import type { TypeScriptValidationOptions } from "./types";
 
 export type CLIStartOptions = {
@@ -85,17 +87,16 @@ export async function rnxStart(
         reportEventDelegate(event);
       }
       if (interactive && event.type === "dep_graph_loading") {
-        terminal.log("To reload the app press '" + chalk.cyanBright("r") + "'");
-        terminal.log(
-          "To open developer menu press '" + chalk.cyanBright("d") + "'"
-        );
-        terminal.log(
-          "To quit, press '" +
-            chalk.cyanBright("control") +
-            "-" +
-            chalk.cyanBright("c") +
-            "'"
-        );
+        const dim = chalk.dim;
+        const press = dim(" › Press ");
+        [
+          ["r", "reload the app"],
+          ["d", "open developer menu"],
+          ["a", "show bundler address QR code"],
+          ["ctrl-c", "quit"],
+        ].forEach(([key, description]) => {
+          terminal.log(press + key + dim(` to ${description}.`));
+        });
       }
     },
   };
@@ -199,14 +200,31 @@ export async function rnxStart(
             process.emit("SIGTSTP", "SIGTSTP");
             break;
         }
-      } else if (name === "r") {
-        terminal.log(chalk.green("Reloading app..."));
-        messageSocket.broadcast("reload", undefined);
-      } else if (name === "d") {
-        terminal.log(chalk.green("Opening developer menu..."));
-        messageSocket.broadcast("devMenu", undefined);
       } else {
-        terminal.log(chalk.grey(_key));
+        switch (name) {
+          case "a": {
+            const protocol = cliOptions.https ? "https" : "http";
+            const host = cliOptions.host || os.hostname();
+            const port = metroConfig.server.port;
+            const url = `${protocol}://${host}:${port}/index.bundle`;
+            qrcode.toString(url, { type: "terminal" }, (_err, qr) => {
+              terminal.log("");
+              terminal.log(url + ":");
+              terminal.log(qr);
+            });
+            break;
+          }
+
+          case "d":
+            terminal.log(chalk.green("Opening developer menu..."));
+            messageSocket.broadcast("devMenu", undefined);
+            break;
+
+          case "r":
+            terminal.log(chalk.green("Reloading app..."));
+            messageSocket.broadcast("reload", undefined);
+            break;
+        }
       }
     });
   }
