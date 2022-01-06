@@ -92,7 +92,7 @@ export async function rnxStart(
         [
           ["r", "reload the app"],
           ["d", "open developer menu"],
-          ["a", "show QR code"],
+          ["a", "show bundler address QR code"],
           ["ctrl-c", "quit"],
         ].forEach(([key, description]) => {
           terminal.log(press + key + dim(` to ${description}.`));
@@ -204,30 +204,13 @@ export async function rnxStart(
         switch (name) {
           case "a": {
             const protocol = cliOptions.https ? "https" : "http";
+            const host = cliOptions.host || os.hostname();
             const port = metroConfig.server.port;
-            const hosts = cliOptions.host
-              ? [cliOptions.host]
-              : Object.entries(os.networkInterfaces()).reduce<string[]>(
-                  (hosts, [name, intf]) => {
-                    // Skip interfaces used for tunneling, e.g. VPNs
-                    if (intf && !name.startsWith("utun")) {
-                      intf.forEach(({ address, family, internal }) => {
-                        if (family === "IPv4" && !internal) {
-                          hosts.push(address);
-                        }
-                      });
-                    }
-                    return hosts;
-                  },
-                  []
-                );
-            hosts.forEach((address) => {
-              const url = `${protocol}://${address}:${port}/index.bundle`;
-              qrcode.toString(url, { type: "terminal" }, (_err, qr) => {
-                terminal.log("");
-                terminal.log(url + ":");
-                terminal.log(qr);
-              });
+            const url = `${protocol}://${host}:${port}/index.bundle`;
+            qrcode.toString(url, { type: "terminal" }, (_err, qr) => {
+              terminal.log("");
+              terminal.log(url + ":");
+              terminal.log(qr);
             });
             break;
           }
