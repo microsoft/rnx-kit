@@ -202,27 +202,35 @@ export async function rnxStart(
         }
       } else {
         switch (name) {
-          case "a":
-            Object.entries(os.networkInterfaces()).forEach(([name, intf]) => {
-              if (!intf || name.startsWith("utun")) {
-                // Skip interfaces used for tunneling, e.g. VPNs
-                return;
-              }
-
-              intf.forEach(({ address, family, internal }) => {
-                if (family === "IPv4" && !internal) {
-                  const protocol = cliOptions.https ? "https" : "http";
-                  const port = metroConfig.server.port;
-                  const url = `${protocol}://${address}:${port}/index.bundle`;
-                  qrcode.toString(url, { type: "terminal" }, (_err, qr) => {
-                    terminal.log("");
-                    terminal.log(url + ":");
-                    terminal.log(qr);
-                  });
-                }
+          case "a": {
+            const protocol = cliOptions.https ? "https" : "http";
+            const port = metroConfig.server.port;
+            const hosts = cliOptions.host
+              ? [cliOptions.host]
+              : Object.entries(os.networkInterfaces()).reduce<string[]>(
+                  (hosts, [name, intf]) => {
+                    // Skip interfaces used for tunneling, e.g. VPNs
+                    if (intf && !name.startsWith("utun")) {
+                      intf.forEach(({ address, family, internal }) => {
+                        if (family === "IPv4" && !internal) {
+                          hosts.push(address);
+                        }
+                      });
+                    }
+                    return hosts;
+                  },
+                  []
+                );
+            hosts.forEach((address) => {
+              const url = `${protocol}://${address}:${port}/index.bundle`;
+              qrcode.toString(url, { type: "terminal" }, (_err, qr) => {
+                terminal.log("");
+                terminal.log(url + ":");
+                terminal.log(qr);
               });
             });
             break;
+          }
 
           case "d":
             terminal.log(chalk.green("Opening developer menu..."));
