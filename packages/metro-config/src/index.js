@@ -182,6 +182,7 @@ module.exports = {
     return mergeConfig(
       {
         resolver: {
+          resolverMainFields: ["module", "browser", "main"],
           blacklistRE: blockList, // For Metro < 0.60
           blockList, // For Metro >= 0.60
         },
