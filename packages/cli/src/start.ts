@@ -211,8 +211,9 @@ export async function rnxStart(
 
               intf.forEach(({ address, family, internal }) => {
                 if (family === "IPv4" && !internal) {
+                  const protocol = cliOptions.https ? "https" : "http";
                   const port = metroConfig.server.port;
-                  const url = `http://${address}:${port}/index.bundle`;
+                  const url = `${protocol}://${address}:${port}/index.bundle`;
                   qrcode.toString(url, { type: "terminal" }, (_err, qr) => {
                     terminal.log("");
                     terminal.log(url + ":");
