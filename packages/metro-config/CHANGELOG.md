@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-config
 
+## 1.2.27
+
+### Patch Changes
+
+- 09edaab: Prefer `module` main field
+
 ## 1.2.26
 
 Tue, 30 Nov 2021 17:24:14 GMT

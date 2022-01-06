@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/tools-react-native
 
+## 1.2.0
+
+### Minor Changes
+
+- adf6feb: Added a function to get available React Native platforms
+
 ## 1.1.0
 
 ### Minor Changes
