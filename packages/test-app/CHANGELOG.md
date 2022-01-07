@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/test-app
 
+## 0.0.2
+
+### Patch Changes
+
+- feb1613: fix(dep-check): bump react-native-test-app to 0.11.0
+
 ## 0.0.1
 
 Thu, 16 Sep 2021 10:10:39 GMT
