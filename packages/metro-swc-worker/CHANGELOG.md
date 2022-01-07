@@ -1,5 +1,12 @@
 # Change Log - @rnx-kit/metro-swc-worker
 
+## 0.1.7
+
+### Patch Changes
+
+- Updated dependencies [a50e4a3]
+  - @rnx-kit/metro-serializer-esbuild@0.1.0
+
 ## 0.1.6
 
 Tue, 30 Nov 2021 17:24:14 GMT

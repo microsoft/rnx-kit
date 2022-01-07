@@ -1,5 +1,13 @@
 # Change Log - @rnx-kit/typescript-react-native-resolver
 
+## 0.2.1
+
+### Patch Changes
+
+- adf6feb: Get available platforms from disk instead of using a hard-coded list
+- Updated dependencies [adf6feb]
+  - @rnx-kit/tools-react-native@1.2.0
+
 ## 0.2.0
 
 ### Minor Changes
