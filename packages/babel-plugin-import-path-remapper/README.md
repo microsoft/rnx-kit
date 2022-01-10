@@ -48,3 +48,10 @@ module.exports = makeBabelConfig([
   ],
 ]);
 ```
+
+### Options
+
+| Option | Type                                           | Description                                                                                                                |
+| :----- | :--------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------- |
+| test   | `(source: string) => boolean`                  | **[Required]** A function returning whether the passed source should be redirected to another module.                      |
+| remap  | `(moduleName: string, path: string) => string` | **[Optional]** A function returning the module that should be used instead, e.g. `contoso/index.js` -> `contoso/index.ts`. |

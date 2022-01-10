@@ -3,6 +3,9 @@
 
 describe("@rnx-kit/babel-plugin-import-path-remapper", () => {
   const babel = require("@babel/core");
+  const path = require("path");
+
+  const currentWorkingDir = process.cwd();
 
   /**
    * Returns whether requested source is in @rnx-kit scope.
@@ -16,20 +19,30 @@ describe("@rnx-kit/babel-plugin-import-path-remapper", () => {
   /**
    * Transforms the specified code.
    * @param {string} code
-   * @param {unknown=} test
+   * @param {unknown=} options
    * @returns {string | null | undefined}
    */
-  function transform(code, test = isRNXKit) {
+  function transform(code, options = { test: isRNXKit }) {
     const result = babel.transformSync(code, {
-      plugins: [["src/index.js", { test }]],
+      plugins: [[path.join(__dirname, "..", "src", "index.js"), options]],
     });
     return result && result.code;
   }
 
+  afterEach(() => {
+    process.chdir(currentWorkingDir);
+  });
+
   test("throws if no test function is specified", () => {
-    expect(() => transform("", null)).toThrowError(
+    expect(() => transform("", {})).toThrowError(
       "Expected option `test` to be a function"
     );
+  });
+
+  test("throws if remap is not a function", () => {
+    expect(() =>
+      transform("", { test: isRNXKit, remap: "error" })
+    ).toThrowError("Expected option `remap` to be undefined or a function");
   });
 
   test("leaves unmatched import/export statements", () => {
@@ -95,14 +108,54 @@ describe("@rnx-kit/babel-plugin-import-path-remapper", () => {
     ).toBe(`import A from "@rnx-kit/example/src/index/lib/index";`);
   });
 
-  test("Preserves magic comments", () => {
+  test("preserves magic comments", () => {
     expect(
-      transform(`import(/* webpackChunkName: "example" */ "@rnx-kit/example/lib/index");
-`)
+      transform(
+        `import(/* webpackChunkName: "example" */ "@rnx-kit/example/lib/index");`
+      )
     ).toBe(
       `import(
 /* webpackChunkName: "example" */
 "@rnx-kit/example/src/index");`
+    );
+  });
+
+  test("uses custom remap function when importing a module without path", () => {
+    process.chdir("test/__fixtures__/with-main");
+    expect(
+      transform(
+        `import(/* webpackChunkName: "example" */ "@rnx-kit/example");`,
+        {
+          test: isRNXKit,
+          remap: (
+            /** @type {string} */ moduleName,
+            /** @type {string} */ path
+          ) => `${moduleName}/__mocks__/${path}`,
+        }
+      )
+    ).toBe(
+      `import(
+/* webpackChunkName: "example" */
+"@rnx-kit/example/__mocks__/index.js");`
+    );
+  });
+
+  test("uses custom remap function when importing a module with path", () => {
+    expect(
+      transform(
+        `import(/* webpackChunkName: "example" */ "@rnx-kit/example/lib/index");`,
+        {
+          test: isRNXKit,
+          remap: (
+            /** @type {string} */ moduleName,
+            /** @type {string} */ path
+          ) => `${moduleName}/__mocks__/${path}`,
+        }
+      )
+    ).toBe(
+      `import(
+/* webpackChunkName: "example" */
+"@rnx-kit/example/__mocks__/lib/index");`
     );
   });
 });
