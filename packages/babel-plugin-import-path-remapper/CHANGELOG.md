@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/babel-plugin-import-path-remapper
 
+## 1.1.0
+
+### Minor Changes
+
+- f88f8a6: Add ability to set custom remapper
+
 ## 1.0.12
 
 Tue, 30 Nov 2021 17:24:14 GMT
