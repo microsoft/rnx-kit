@@ -7,6 +7,7 @@ const {
   rnxDepCheckCommand,
   rnxTestCommand,
   rnxWriteThirdPartyNotices,
+  rnxClean,
 } = require("./lib/index");
 
 module.exports = {
@@ -225,6 +226,22 @@ module.exports = {
           name: "--additional-text [path]",
           description:
             "A string to append at the end of the generated licence file.",
+        },
+      ],
+    },
+    {
+      name: "rnx-clean",
+      func: rnxClean,
+      description: "Clear React Native Caches",
+      options: [
+        {
+          name: "--platform [string]",
+          description: "Platform to clean android | ios ",
+        },
+        {
+          name: "--project-root [string]",
+          description: "Root path to your React Native project",
+          parse: (val) => path.resolve(val),
         },
       ],
     },
