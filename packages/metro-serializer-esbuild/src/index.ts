@@ -1,5 +1,6 @@
 import { info, warn } from "@rnx-kit/console";
 import type { MetroPlugin } from "@rnx-kit/metro-serializer";
+import { findPackage } from "@rnx-kit/tools-node";
 import type { BuildOptions, BuildResult, Plugin } from "esbuild";
 import * as esbuild from "esbuild";
 import type { Dependencies, Graph, Module, SerializerOptions } from "metro";
@@ -41,6 +42,16 @@ function fixSourceMap(outputPath: string, text: string): string {
   );
 
   return JSON.stringify({ ...sourcemap, sources });
+}
+
+function getSideEffects(modulePath: string): boolean | undefined {
+  const pkgJson = findPackage(modulePath);
+  if (!pkgJson) {
+    return undefined;
+  }
+
+  const { sideEffects } = require(pkgJson);
+  return sideEffects;
 }
 
 function isImporting(moduleName: string, dependencies: Dependencies): boolean {
@@ -90,16 +101,28 @@ export function MetroSerializer(
 
         build.onResolve(pluginOptions, (args) => {
           if (dependencies.has(args.path)) {
-            return { path: args.path };
+            return {
+              path: args.path,
+              sideEffects: getSideEffects(args.path),
+              pluginData: args.pluginData,
+            };
           }
 
           const parent = dependencies.get(args.importer);
           if (parent) {
-            return { path: parent.dependencies.get(args.path)?.absolutePath };
+            const path = parent.dependencies.get(args.path)?.absolutePath;
+            return {
+              path,
+              sideEffects: path ? getSideEffects(path) : undefined,
+              pluginData: args.pluginData,
+            };
           }
 
           if (preModules.find(({ path }) => path === args.path)) {
-            return { path: args.path };
+            return {
+              path: args.path,
+              pluginData: args.pluginData,
+            };
           }
 
           throw new Error(
@@ -120,12 +143,18 @@ export function MetroSerializer(
 
           const mod = dependencies.get(args.path);
           if (mod) {
-            return { contents: outputOf(mod) ?? "" };
+            return {
+              contents: outputOf(mod) ?? "",
+              pluginData: args.pluginData,
+            };
           }
 
           const polyfill = preModules.find(({ path }) => path === args.path);
           if (polyfill) {
-            return { contents: outputOf(polyfill) ?? "" };
+            return {
+              contents: outputOf(polyfill) ?? "",
+              pluginData: args.pluginData,
+            };
           }
 
           if (args.path === __filename) {
