@@ -36,9 +36,7 @@
     "extends": "@rnx-kit/eslint-config"
   },
   "jest": {
-    "roots": [
-      "test"
-    ],
+    "preset": "@rnx-kit/scripts",
     "testRegex": "/test/.*\\.test\\.js$"
   }
 }

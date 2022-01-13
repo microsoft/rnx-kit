@@ -22,15 +22,27 @@ const { parseModuleRef } = require("@rnx-kit/tools-node/module");
  *   | NodePath<ExportNamedDeclaration>
  *   | NodePath<ImportDeclaration>
  * } ImportExportDeclarationNodePath;
+ *
+ * @typedef {(moduleName: string, path: string) => string} CustomRemapper;
  */
 
 /**
  * Finds the main source file in the specified package's manifest.
  * @param {string} sourcePath
+ * @param {CustomRemapper | undefined} customRemap
  * @returns {string | undefined}
  */
-function findMainSourceFile(sourcePath) {
-  const { main } = require(`${sourcePath}/package.json`);
+function findMainSourceFile(sourcePath, customRemap) {
+  const resolveOptions = { paths: [process.cwd()] };
+  const manifestPath = require.resolve(
+    `${sourcePath}/package.json`,
+    resolveOptions
+  );
+  const { main } = require(manifestPath);
+  if (customRemap) {
+    return customRemap(sourcePath, main);
+  }
+
   if (!main) {
     return;
   }
@@ -41,7 +53,7 @@ function findMainSourceFile(sourcePath) {
   )}`;
   try {
     const tsx = `${remappedPath}x`;
-    require.resolve(tsx);
+    require.resolve(tsx, resolveOptions);
     return tsx;
   } catch (_) {
     return remappedPath;
@@ -74,11 +86,15 @@ function updateDeclarationWith(path, source) {
  * @param {string} sourcePath
  * @param {NodePath<T>} path
  * @param {(path: NodePath<T>, source: string) => void} updater
+ * @param {CustomRemapper | undefined} customRemap
  */
-function update(sourcePath, path, updater) {
+function update(sourcePath, path, updater, customRemap) {
   const m = parseModuleRef(sourcePath);
   if (!("name" in m)) {
-    // This is not a module reference. Ignore.
+    // This is not a module reference. Ignore unless we have a custom remapper.
+    if (customRemap) {
+      updater(path, customRemap("", m.path));
+    }
     return;
   }
 
@@ -86,16 +102,21 @@ function update(sourcePath, path, updater) {
   if (!modulePath) {
     // Remaps @scope/example -> @scope/example/src/index.ts
     try {
-      const mainSourceFile = findMainSourceFile(sourcePath);
+      const mainSourceFile = findMainSourceFile(sourcePath, customRemap);
       if (mainSourceFile) {
         updater(path, mainSourceFile);
       }
     } catch (_) {
       /* ignore */
     }
+    return;
+  }
+
+  const name = scope ? `${scope}/${moduleName}` : moduleName;
+  if (customRemap) {
+    updater(path, customRemap(name, modulePath));
   } else if (modulePath === "lib" || modulePath.startsWith("lib")) {
     // Remaps @scope/example/lib/index.js -> @scope/example/src/index.ts
-    const name = scope ? `${scope}/${moduleName}` : moduleName;
     updater(path, `${name}/${modulePath.replace("lib", "src")}`);
   }
 }
@@ -103,11 +124,21 @@ function update(sourcePath, path, updater) {
 module.exports = declare((api, options) => {
   api.assertVersion(7);
 
-  /** @type {{ test?: (source: string) => boolean; }} */
-  const { test } = options;
+  /**
+   * @type {{
+   *   test?: (source: string) => boolean;
+   *   remap?: (moduleName: string, path: string) => string;
+   * }}
+   */
+  const { test, remap } = options;
   if (typeof test !== "function") {
     throw new Error(
       "Expected option `test` to be a function `(source: string) => boolean`"
+    );
+  }
+  if (remap && typeof remap !== "function") {
+    throw new Error(
+      "Expected option `remap` to be undefined or a function `(moduleName: string, path: string) => string`"
     );
   }
 
@@ -129,7 +160,7 @@ module.exports = declare((api, options) => {
           return;
         }
 
-        update(sourcePath, path, updateCallWith);
+        update(sourcePath, path, updateCallWith, remap);
       },
 
       /** @type {(path: ImportExportDeclarationNodePath, state: unknown) => void} */
@@ -144,7 +175,7 @@ module.exports = declare((api, options) => {
           return;
         }
 
-        update(sourcePath, path, updateDeclarationWith);
+        update(sourcePath, path, updateDeclarationWith, remap);
       },
     },
   };
