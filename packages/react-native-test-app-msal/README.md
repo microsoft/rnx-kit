@@ -19,8 +19,8 @@ npm add --save-dev @rnx-kit/react-native-test-app-msal
 
 ### iOS/macOS
 
-We need to set the deployment target for iOS and macOS to 14.0 and 11.0
-respectively, and add `MSAL` to `Podfile`:
+We need to set the deployment target for iOS and macOS to 14.0 and 11.0 (or
+higher) respectively, and add `MSAL` to `Podfile`:
 
 ```diff
 +platform :ios, '14.0'    # If targeting iOS, discard the line below
@@ -112,4 +112,36 @@ then fill out the following fields in `app.json`:
      "windows": ["dist/assets", "dist/main.windows.bundle"]
    }
  }
+```
+
+## Getting a Token from Native Code
+
+A token can be acquired from native code using the `TokenBroker` singleton.
+
+### Android
+
+On Android, we will need the `Context` to retrieve the singleton, and the
+current `Activity` to acquire a token. We need the `Activity` in case we need to
+ask the user to log in:
+
+```kotlin
+import com.microsoft.reacttestapp.msal.TokenBroker
+
+TokenBroker.getInstance(context).acquireToken(context.currentActivity, ...) { result, error ->
+  // handle result here
+}
+```
+
+### iOS/macOS
+
+On iOS/macOS, we will need the current `UIViewController` (iOS) or
+`NSViewController` (macOS) to acquire a token in case we need to ask the user to
+log in:
+
+```swift
+import ReactTestApp_MSAL
+
+TokenBroker.shared.acquireToken(scopes: ..., sender: viewController) { result, error ->
+  // handle result here
+}
 ```
