@@ -215,6 +215,7 @@ describe("inspect()", () => {
 });
 
 describe("makeVigilantCommand()", () => {
+  const rnxKitConfig = require("@rnx-kit/config");
   const fs = require("fs");
 
   const consoleErrorSpy = jest.spyOn(global.console, "error");
@@ -332,5 +333,42 @@ describe("makeVigilantCommand()", () => {
     expect(result).toBe(0);
     expect(didWrite).toBe(false);
     expect(consoleErrorSpy).not.toBeCalled();
+  });
+
+  test("uses package-specific custom profiles", () => {
+    const fixture = `${__dirname}/__fixtures__/config-custom-profiles-only`;
+    const kitConfig = {
+      customProfiles: `${fixture}/packageSpecificProfiles.js`,
+    };
+
+    rnxKitConfig.__setMockConfig(kitConfig);
+
+    fs.__setMockContent({
+      name: "@rnx-kit/dep-check",
+      version: "1.0.0",
+      dependencies: {
+        react: "17.0.1",
+        "react-native": "0.64.0",
+      },
+      "rnx-kit": kitConfig,
+    });
+
+    const dependencies = {};
+    fs.__setMockFileWriter((_, content) => {
+      const { dependencies: newDependencies } = JSON.parse(content);
+      Object.keys(newDependencies).forEach((pkgName) => {
+        dependencies[pkgName] = newDependencies[pkgName];
+      });
+    });
+
+    const result = makeVigilantCommand({
+      versions: "0.64",
+      loose: false,
+      write: true,
+    })("package.json");
+    expect(result).toBe(0);
+    expect(consoleErrorSpy).not.toBeCalled();
+    expect(dependencies["react"]).toBe("17.0.2");
+    expect(dependencies["react-native"]).toBe("0.64.3");
   });
 });

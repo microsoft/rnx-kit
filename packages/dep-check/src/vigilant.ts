@@ -142,7 +142,7 @@ export function makeVigilantCommand({
     return undefined;
   }
 
-  const checkOptions = { loose, write };
+  const checkOptions = { loose, write, versions };
 
   const exclusionList = isString(excludePackages)
     ? excludePackages.split(",")
