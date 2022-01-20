@@ -44,6 +44,8 @@ export function getCheckConfig(
     capabilities: targetCapabilities,
     customProfiles,
   } = getKitCapabilities({
+    // React Native versions declared in the package's config should always
+    // override the ones specified with the `--vigilant` flag.
     ...(versions ? { reactNativeVersion: versions } : undefined),
     ...kitConfig,
   });

@@ -6,6 +6,7 @@ import { resolveCapabilities } from "./capabilities";
 import { checkPackageManifest, getCheckConfig } from "./check";
 import { keysOf, modifyManifest } from "./helpers";
 import { updateDependencies } from "./manifest";
+import type { ProfilesInfo } from "./profiles";
 import { parseProfilesString } from "./profiles";
 import type { Command, ManifestProfile, VigilantOptions } from "./types";
 
@@ -38,15 +39,9 @@ export function removeManagedDependencies(
  * @returns A profile containing dependencies to compare against
  */
 export function buildManifestProfile(
-  versions: string,
-  customProfilesPath: string | undefined,
+  { supportedProfiles, targetProfile }: ProfilesInfo,
   managedCapabilities: Capability[] = []
 ): ManifestProfile {
-  const { supportedProfiles, targetProfile } = parseProfilesString(
-    versions,
-    customProfilesPath
-  );
-
   const allCapabilities = keysOf(targetProfile[0]);
   const managedDependencies = Object.keys(
     resolveCapabilities(managedCapabilities, targetProfile)
@@ -97,8 +92,9 @@ export function buildProfileFromConfig(
 
   const supportedVersions = reactNativeVersion.replace(/ [|]{2} /g, ",");
   const versions = `${reactNativeDevVersion},${supportedVersions}`;
+  const profilesInfo = parseProfilesString(versions, customProfilesPath);
 
-  return buildManifestProfile(versions, customProfilesPath, capabilities);
+  return buildManifestProfile(profilesInfo, capabilities);
 }
 
 export function inspect(
@@ -142,13 +138,19 @@ export function makeVigilantCommand({
     return undefined;
   }
 
-  const checkOptions = { loose, write, versions };
+  const profilesInfo = parseProfilesString(versions, customProfiles);
+
+  const checkOptions = {
+    loose,
+    write,
+    versions: profilesInfo.supportedVersions,
+  };
 
   const exclusionList = isString(excludePackages)
     ? excludePackages.split(",")
     : [];
 
-  const inputProfile = buildManifestProfile(versions, customProfiles);
+  const inputProfile = buildManifestProfile(profilesInfo);
   return (manifestPath: string) => {
     const config = getCheckConfig(manifestPath, checkOptions);
     try {

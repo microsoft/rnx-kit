@@ -1,3 +1,4 @@
+import { parseProfilesString } from "../src/profiles";
 import {
   buildManifestProfile,
   buildProfileFromConfig,
@@ -11,20 +12,23 @@ describe("buildManifestProfile()", () => {
   const testVersion = "1.0.0-test";
 
   test("builds a package manifest for a single profile version", () => {
-    const profile = buildManifestProfile("0.64", undefined);
+    const profiles = parseProfilesString("0.64", undefined);
+    const profile = buildManifestProfile(profiles);
     profile.version = testVersion;
     expect(profile).toMatchSnapshot();
   });
 
   test("builds a package manifest for multiple profile versions", () => {
-    const profile = buildManifestProfile("0.64,0.63", undefined);
+    const profiles = parseProfilesString("0.64,0.63", undefined);
+    const profile = buildManifestProfile(profiles);
     profile.version = testVersion;
     expect(profile).toMatchSnapshot();
   });
 
   test("includes devOnly packages under `dependencies`", () => {
+    const profiles = parseProfilesString("0.64", undefined);
     const { dependencies, devDependencies, peerDependencies } =
-      buildManifestProfile("0.64", undefined);
+      buildManifestProfile(profiles);
 
     expect("react-native-test-app" in dependencies).toBe(true);
     expect("react-native-test-app" in peerDependencies).toBe(false);
@@ -39,8 +43,9 @@ describe("buildManifestProfile()", () => {
       { virtual: true }
     );
 
+    const profiles = parseProfilesString("0.64", "vigilant-custom-profiles");
     const { dependencies, devDependencies, peerDependencies } =
-      buildManifestProfile("0.64", "vigilant-custom-profiles");
+      buildManifestProfile(profiles);
 
     expect(skynet.name in dependencies).toBe(true);
     expect(skynet.name in peerDependencies).toBe(true);
@@ -48,13 +53,14 @@ describe("buildManifestProfile()", () => {
   });
 
   test("throws when no profiles match the requested versions", () => {
-    expect(() => buildManifestProfile("0.59", undefined)).toThrow();
-    expect(() => buildManifestProfile("0.59,0.64", undefined)).toThrow();
+    expect(() => parseProfilesString("0.59", undefined)).toThrow();
+    expect(() => parseProfilesString("0.59,0.64", undefined)).toThrow();
   });
 });
 
 describe("buildProfileFromConfig()", () => {
-  const defaultProfile = buildManifestProfile("0.64", undefined);
+  const profiles = parseProfilesString("0.64", undefined);
+  const defaultProfile = buildManifestProfile(profiles);
 
   test("returns default profile if there is no config", () => {
     expect(buildProfileFromConfig(0, defaultProfile)).toBe(defaultProfile);
@@ -346,29 +352,44 @@ describe("makeVigilantCommand()", () => {
     fs.__setMockContent({
       name: "@rnx-kit/dep-check",
       version: "1.0.0",
-      dependencies: {
+      peerDependencies: {
+        react: "17.0.1",
+        "react-native": "0.64.0",
+      },
+      devDependencies: {
         react: "17.0.1",
         "react-native": "0.64.0",
       },
       "rnx-kit": kitConfig,
     });
 
-    const dependencies = {};
+    const devDependencies = {};
+    const peerDependencies = {};
     fs.__setMockFileWriter((_, content) => {
-      const { dependencies: newDependencies } = JSON.parse(content);
-      Object.keys(newDependencies).forEach((pkgName) => {
-        dependencies[pkgName] = newDependencies[pkgName];
+      const {
+        devDependencies: newDevDependencies,
+        peerDependencies: newPeerDependencies,
+      } = JSON.parse(content);
+      Object.entries(newPeerDependencies).forEach(([pkgName, value]) => {
+        peerDependencies[pkgName] = value;
+      });
+      Object.entries(newDevDependencies).forEach(([pkgName, value]) => {
+        devDependencies[pkgName] = value;
       });
     });
 
     const result = makeVigilantCommand({
-      versions: "0.64",
+      versions: "0.64,0.65",
       loose: false,
       write: true,
     })("package.json");
     expect(result).toBe(0);
     expect(consoleErrorSpy).not.toBeCalled();
-    expect(dependencies["react"]).toBe("17.0.2");
-    expect(dependencies["react-native"]).toBe("0.64.3");
+    expect(devDependencies["react"]).toBe("17.0.2");
+    expect(devDependencies["react-native"]).toBe("0.64.3");
+    expect(peerDependencies["react"]).toBe("17.0.2");
+    expect(peerDependencies["react-native"]).toBe(
+      "0.64.3 || 0.65.2 || ^0.64.2 || ^0.65.0-0"
+    );
   });
 });

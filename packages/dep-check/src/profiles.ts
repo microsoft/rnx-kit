@@ -13,7 +13,7 @@ import type { Profile, ProfileVersion } from "./types";
 
 type ProfileMap = Record<ProfileVersion, Profile>;
 
-type ProfilesInfo = {
+export type ProfilesInfo = {
   supportedProfiles: Profile[];
   supportedVersions: string;
   targetProfile: Profile[];
