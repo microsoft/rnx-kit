@@ -67,7 +67,7 @@ export function rnxClean(
   const allCommands = [
     {
       name: "Kill watchman",
-      command: os.platform() === "windows" ? "tskill" : "killall",
+      command: os.platform() === "win32" ? "tskill" : "killall",
       args: ["watchman"],
     },
     {
