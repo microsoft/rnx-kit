@@ -17,10 +17,12 @@
   "scripts": {
     "build": "rnx-kit-scripts build",
     "format": "rnx-kit-scripts format",
-    "lint": "rnx-kit-scripts lint"
+    "lint": "rnx-kit-scripts lint",
+    "test": "rnx-kit-scripts test"
   },
   "dependencies": {
     "@rnx-kit/console": "^1.0.11",
+    "@rnx-kit/tools-node": "^1.2.6",
     "esbuild": "^0.14.10",
     "esbuild-plugin-lodash": "^1.1.0",
     "semver": "^7.0.0"
@@ -29,13 +31,17 @@
     "metro": ">=0.66.1"
   },
   "devDependencies": {
+    "@react-native-community/cli-plugin-metro": "^6.2.0",
+    "@rnx-kit/metro-config": "*",
     "@rnx-kit/metro-serializer": "*",
     "@rnx-kit/scripts": "*",
     "@types/metro": "^0.66.0",
     "@types/metro-config": "^0.66.0",
     "@types/metro-transform-worker": "^0.66.0",
     "@types/semver": "^7.0.0",
-    "metro": "^0.66.2"
+    "lodash-es": "^4.17.21",
+    "metro": "^0.66.2",
+    "react-native": "^0.66.0-0"
   },
   "depcheck": {
     "ignoreMatches": [
