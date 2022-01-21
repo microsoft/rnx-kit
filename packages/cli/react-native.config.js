@@ -232,16 +232,31 @@ module.exports = {
     {
       name: "rnx-clean",
       func: rnxClean,
-      description: "Clear React Native Caches",
+      description: "Clears React Native project related caches",
       options: [
         {
-          name: "--platform [string]",
-          description: "Platform to clean android | ios ",
+          name: "--platform [ios|android|macos]",
+          description:
+            "Target Platform to clean. When not specified , only non-module specific caches are cleared.",
+          parse: parsePlatform,
         },
         {
-          name: "--project-root [string]",
-          description: "Root path to your React Native project",
+          name: "--project-root <path>",
+          description: "Root path to your React Native project (*Required)",
           parse: (val) => path.resolve(val),
+        },
+        {
+          name: "--best-effort [boolean]",
+          description:
+            "Best Effort.If set to false cleaning will stop when there is an error.",
+          default: true,
+          parse: parseBoolean,
+        },
+        {
+          name: "--keep-node-modules [boolean]",
+          description: "Specifies wether or not to remove npm node_modules",
+          default: false,
+          parse: parseBoolean,
         },
       ],
     },
