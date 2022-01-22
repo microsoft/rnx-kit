@@ -15,7 +15,7 @@ describe("metro-serializer-esbuild", () => {
         bundleOutput: ".test-output.jsbundle",
         dev: true,
         platform: "native",
-        resetCache: true,
+        resetCache: false,
         resetGlobalCache: false,
         sourcemapUseAbsolutePath: true,
         verbose: false,
