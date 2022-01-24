@@ -47,7 +47,7 @@ function fixSourceMap(outputPath: string, text: string): string {
 const getSideEffects = (() => {
   const pkgCache: Record<string, boolean | string[]> = {};
   const getSideEffects = (pkgJson: string) => {
-    if (!pkgCache[pkgJson]) {
+    if (!(pkgJson in pkgCache)) {
       const content = fs.readFileSync(pkgJson, { encoding: "utf-8" });
       const { sideEffects } = JSON.parse(content);
       if (Array.isArray(sideEffects)) {
