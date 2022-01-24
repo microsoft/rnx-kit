@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-serializer-esbuild
 
+## 0.1.1
+
+### Patch Changes
+
+- 7334bdb: Forward `sideEffects` property to help esbuild tree-shake more unused code
+
 ## 0.1.0
 
 ### Minor Changes

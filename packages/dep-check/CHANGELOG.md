@@ -1,5 +1,15 @@
 # Change Log - @rnx-kit/dep-check
 
+## 1.11.0
+
+### Minor Changes
+
+- ca8c634: dep-check should pick up `customProfiles` when running in `--vigilant` mode to allow individual packages to use different profiles without having to re-declare which React Native versions they support.
+
+### Patch Changes
+
+- 0f7793e: Bump react-native-test-app 0.11.2 to support react-native 0.67
+
 ## 1.10.2
 
 ### Patch Changes
