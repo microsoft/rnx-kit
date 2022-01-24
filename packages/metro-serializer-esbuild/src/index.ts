@@ -1,6 +1,6 @@
 import { info, warn } from "@rnx-kit/console";
 import type { MetroPlugin } from "@rnx-kit/metro-serializer";
-import { findPackage } from "@rnx-kit/tools-node";
+import { findPackage, readPackage } from "@rnx-kit/tools-node";
 import type { BuildOptions, BuildResult, Plugin } from "esbuild";
 import * as esbuild from "esbuild";
 import * as fs from "fs";
@@ -44,12 +44,20 @@ function fixSourceMap(outputPath: string, text: string): string {
   return JSON.stringify({ ...sourcemap, sources });
 }
 
+/**
+ * Returns whether the specified module has any side effects.
+ *
+ * For details on how this field works, please see
+ * https://webpack.js.org/guides/tree-shaking/.
+ *
+ * @param modulePath Absolute path to a module
+ * @returns Whether the specified module has any side effects.
+ */
 const getSideEffects = (() => {
-  const pkgCache: Record<string, boolean | string[]> = {};
-  const getSideEffects = (pkgJson: string) => {
+  const pkgCache: Record<string, boolean | string[] | undefined> = {};
+  const getSideEffectsFromCache = (pkgJson: string) => {
     if (!(pkgJson in pkgCache)) {
-      const content = fs.readFileSync(pkgJson, { encoding: "utf-8" });
-      const { sideEffects } = JSON.parse(content);
+      const { sideEffects } = readPackage(pkgJson);
       if (Array.isArray(sideEffects)) {
         const fg = require("fast-glob");
         pkgCache[pkgJson] = fg
@@ -58,8 +66,10 @@ const getSideEffects = (() => {
             absolute: true,
           })
           .map((p: string) => p.replace(/[/\\]/g, path.sep));
-      } else {
+      } else if (typeof sideEffects === "boolean") {
         pkgCache[pkgJson] = sideEffects;
+      } else {
+        pkgCache[pkgJson] = undefined;
       }
     }
     return pkgCache[pkgJson];
@@ -70,7 +80,7 @@ const getSideEffects = (() => {
       return undefined;
     }
 
-    const sideEffects = getSideEffects(pkgJson);
+    const sideEffects = getSideEffectsFromCache(pkgJson);
     return Array.isArray(sideEffects)
       ? sideEffects.includes(modulePath)
       : sideEffects;
