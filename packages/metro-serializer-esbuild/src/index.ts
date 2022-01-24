@@ -52,10 +52,12 @@ const getSideEffects = (() => {
       const { sideEffects } = JSON.parse(content);
       if (Array.isArray(sideEffects)) {
         const fg = require("fast-glob");
-        pkgCache[pkgJson] = fg.sync(sideEffects, {
-          cwd: path.dirname(pkgJson),
-          absolute: true,
-        });
+        pkgCache[pkgJson] = fg
+          .sync(sideEffects, {
+            cwd: path.dirname(pkgJson),
+            absolute: true,
+          })
+          .map((p: string) => p.replace(/[/\\]/g, path.sep));
       } else {
         pkgCache[pkgJson] = sideEffects;
       }
