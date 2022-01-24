@@ -3,7 +3,6 @@ import type { MetroPlugin } from "@rnx-kit/metro-serializer";
 import { findPackage, readPackage } from "@rnx-kit/tools-node";
 import type { BuildOptions, BuildResult, Plugin } from "esbuild";
 import * as esbuild from "esbuild";
-import * as fs from "fs";
 import type { Dependencies, Graph, Module, SerializerOptions } from "metro";
 import type { SerializerConfigT } from "metro-config";
 import * as path from "path";
