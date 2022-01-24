@@ -3,8 +3,10 @@ import type { MetroPlugin } from "@rnx-kit/metro-serializer";
 import { findPackage } from "@rnx-kit/tools-node";
 import type { BuildOptions, BuildResult, Plugin } from "esbuild";
 import * as esbuild from "esbuild";
+import * as fs from "fs";
 import type { Dependencies, Graph, Module, SerializerOptions } from "metro";
 import type { SerializerConfigT } from "metro-config";
+import * as path from "path";
 import * as semver from "semver";
 
 export { esbuildTransformerConfig } from "./esbuildTransformerConfig";
@@ -27,8 +29,6 @@ function escapePath(path: string): string {
 }
 
 function fixSourceMap(outputPath: string, text: string): string {
-  const path = require("path");
-
   /**
    * All paths in the source map are relative to the directory
    * containing the source map.
@@ -44,15 +44,36 @@ function fixSourceMap(outputPath: string, text: string): string {
   return JSON.stringify({ ...sourcemap, sources });
 }
 
-function getSideEffects(modulePath: string): boolean | undefined {
-  const pkgJson = findPackage(modulePath);
-  if (!pkgJson) {
-    return undefined;
-  }
+const getSideEffects = (() => {
+  const pkgCache: Record<string, boolean | string[]> = {};
+  const getSideEffects = (pkgJson: string) => {
+    if (!pkgCache[pkgJson]) {
+      const content = fs.readFileSync(pkgJson, { encoding: "utf-8" });
+      const { sideEffects } = JSON.parse(content);
+      if (Array.isArray(sideEffects)) {
+        const fg = require("fast-glob");
+        pkgCache[pkgJson] = fg.sync(sideEffects, {
+          cwd: path.dirname(pkgJson),
+          absolute: true,
+        });
+      } else {
+        pkgCache[pkgJson] = sideEffects;
+      }
+    }
+    return pkgCache[pkgJson];
+  };
+  return (modulePath: string): boolean | undefined => {
+    const pkgJson = findPackage(modulePath);
+    if (!pkgJson) {
+      return undefined;
+    }
 
-  const { sideEffects } = require(pkgJson);
-  return sideEffects;
-}
+    const sideEffects = getSideEffects(pkgJson);
+    return Array.isArray(sideEffects)
+      ? sideEffects.includes(modulePath)
+      : sideEffects;
+  };
+})();
 
 function isImporting(moduleName: string, dependencies: Dependencies): boolean {
   const iterator = dependencies.keys();

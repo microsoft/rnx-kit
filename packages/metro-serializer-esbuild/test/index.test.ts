@@ -171,4 +171,45 @@ describe("metro-serializer-esbuild", () => {
       "
     `);
   });
+
+  test("handles `sideEffects` array", async () => {
+    const result = await bundle("test/__fixtures__/sideEffectsArray.ts");
+    expect(result).toMatchInlineSnapshot(`
+      "\\"use strict\\";
+      (function() {
+        var __getOwnPropNames = Object.getOwnPropertyNames;
+        var __esm = function(fn, res) {
+          return function __init() {
+            return fn && (res = (0, fn[__getOwnPropNames(fn)[0]])(fn = 0)), res;
+          };
+        };
+
+        // lib/index.js
+        var global;
+        var init_lib = __esm({
+          \\"lib/index.js\\": function() {
+            global = new Function(\\"return this;\\")();
+          }
+        });
+
+        // test/__fixtures__/sideEffectsArray.ts
+        init_lib();
+
+        // ../../node_modules/@fluentui/utilities/lib/warn/warn.js
+        init_lib();
+        var _warningCallback = void 0;
+        function warn(message) {
+          if (_warningCallback && true) {
+            _warningCallback(message);
+          } else if (console && console.warn) {
+            console.warn(message);
+          }
+        }
+
+        // test/__fixtures__/sideEffectsArray.ts
+        warn(\\"this should _not_ be removed\\");
+      })();
+      "
+    `);
+  });
 });
