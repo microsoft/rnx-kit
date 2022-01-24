@@ -1,3 +1,4 @@
+import { parseProfilesString } from "../src/profiles";
 import {
   buildManifestProfile,
   buildProfileFromConfig,
@@ -11,20 +12,23 @@ describe("buildManifestProfile()", () => {
   const testVersion = "1.0.0-test";
 
   test("builds a package manifest for a single profile version", () => {
-    const profile = buildManifestProfile("0.64", undefined);
+    const profiles = parseProfilesString("0.64", undefined);
+    const profile = buildManifestProfile(profiles);
     profile.version = testVersion;
     expect(profile).toMatchSnapshot();
   });
 
   test("builds a package manifest for multiple profile versions", () => {
-    const profile = buildManifestProfile("0.64,0.63", undefined);
+    const profiles = parseProfilesString("0.64,0.63", undefined);
+    const profile = buildManifestProfile(profiles);
     profile.version = testVersion;
     expect(profile).toMatchSnapshot();
   });
 
   test("includes devOnly packages under `dependencies`", () => {
+    const profiles = parseProfilesString("0.64", undefined);
     const { dependencies, devDependencies, peerDependencies } =
-      buildManifestProfile("0.64", undefined);
+      buildManifestProfile(profiles);
 
     expect("react-native-test-app" in dependencies).toBe(true);
     expect("react-native-test-app" in peerDependencies).toBe(false);
@@ -39,8 +43,9 @@ describe("buildManifestProfile()", () => {
       { virtual: true }
     );
 
+    const profiles = parseProfilesString("0.64", "vigilant-custom-profiles");
     const { dependencies, devDependencies, peerDependencies } =
-      buildManifestProfile("0.64", "vigilant-custom-profiles");
+      buildManifestProfile(profiles);
 
     expect(skynet.name in dependencies).toBe(true);
     expect(skynet.name in peerDependencies).toBe(true);
@@ -48,13 +53,14 @@ describe("buildManifestProfile()", () => {
   });
 
   test("throws when no profiles match the requested versions", () => {
-    expect(() => buildManifestProfile("0.59", undefined)).toThrow();
-    expect(() => buildManifestProfile("0.59,0.64", undefined)).toThrow();
+    expect(() => parseProfilesString("0.59", undefined)).toThrow();
+    expect(() => parseProfilesString("0.59,0.64", undefined)).toThrow();
   });
 });
 
 describe("buildProfileFromConfig()", () => {
-  const defaultProfile = buildManifestProfile("0.64", undefined);
+  const profiles = parseProfilesString("0.64", undefined);
+  const defaultProfile = buildManifestProfile(profiles);
 
   test("returns default profile if there is no config", () => {
     expect(buildProfileFromConfig(0, defaultProfile)).toBe(defaultProfile);
@@ -215,6 +221,7 @@ describe("inspect()", () => {
 });
 
 describe("makeVigilantCommand()", () => {
+  const rnxKitConfig = require("@rnx-kit/config");
   const fs = require("fs");
 
   const consoleErrorSpy = jest.spyOn(global.console, "error");
@@ -332,5 +339,100 @@ describe("makeVigilantCommand()", () => {
     expect(result).toBe(0);
     expect(didWrite).toBe(false);
     expect(consoleErrorSpy).not.toBeCalled();
+  });
+
+  test("uses package-specific custom profiles", () => {
+    const fixture = `${__dirname}/__fixtures__/config-custom-profiles-only`;
+    const kitConfig = {
+      customProfiles: `${fixture}/packageSpecificProfiles.js`,
+    };
+    const inputManifest = {
+      name: "@rnx-kit/dep-check",
+      version: "1.0.0",
+      peerDependencies: {
+        react: "17.0.1",
+        "react-native": "0.64.0",
+      },
+      devDependencies: {
+        react: "17.0.1",
+        "react-native": "0.64.0",
+      },
+      "rnx-kit": kitConfig,
+    };
+
+    rnxKitConfig.__setMockConfig(kitConfig);
+    fs.__setMockContent(inputManifest);
+
+    let manifest = undefined;
+    fs.__setMockFileWriter((_, content) => {
+      manifest = JSON.parse(content);
+    });
+
+    const result = makeVigilantCommand({
+      versions: "0.64,0.65",
+      loose: false,
+      write: true,
+    })("package.json");
+    expect(result).toBe(0);
+    expect(consoleErrorSpy).not.toBeCalled();
+    expect(manifest).toEqual({
+      ...inputManifest,
+      devDependencies: {
+        react: "17.0.2",
+        "react-native": "0.64.3",
+      },
+      peerDependencies: {
+        react: "17.0.2",
+        "react-native": "0.64.3 || 0.65.2 || ^0.64.2 || ^0.65.0-0",
+      },
+    });
+  });
+
+  test("prefers package-specific React Native versions", () => {
+    const fixture = `${__dirname}/__fixtures__/config-custom-profiles-only`;
+    const kitConfig = {
+      reactNativeVersion: "0.64",
+      customProfiles: `${fixture}/packageSpecificProfiles.js`,
+    };
+    const inputManifest = {
+      name: "@rnx-kit/dep-check",
+      version: "1.0.0",
+      peerDependencies: {
+        react: "17.0.1",
+        "react-native": "0.64.0",
+      },
+      devDependencies: {
+        react: "17.0.1",
+        "react-native": "0.64.0",
+      },
+      "rnx-kit": kitConfig,
+    };
+
+    rnxKitConfig.__setMockConfig(kitConfig);
+    fs.__setMockContent(inputManifest);
+
+    let manifest = undefined;
+    fs.__setMockFileWriter((_, content) => {
+      manifest = JSON.parse(content);
+    });
+
+    const result = makeVigilantCommand({
+      versions: "0.64,0.65",
+      loose: false,
+      write: true,
+    })("package.json");
+    expect(result).toBe(0);
+    expect(consoleErrorSpy).not.toBeCalled();
+    expect(manifest).toEqual({
+      ...inputManifest,
+      devDependencies: {
+        react: "17.0.2",
+        "react-native": "0.64.3",
+      },
+      peerDependencies: {
+        react: "17.0.2",
+        "react-native": "0.64.3 || ^0.64.2",
+      },
+    });
   });
 });
