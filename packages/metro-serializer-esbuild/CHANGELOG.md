@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-serializer-esbuild
 
+## 0.1.2
+
+### Patch Changes
+
+- 1630d25: Manually handle `sideEffects` set to an array of globs as esbuild only accepts boolean values.
+
 ## 0.1.1
 
 ### Patch Changes
