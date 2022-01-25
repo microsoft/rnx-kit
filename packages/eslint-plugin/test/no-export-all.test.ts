@@ -33,6 +33,10 @@ export type { IChopper as IChopperRe, Predator as PredatorRe };
   types: `
 export type Predator = { kind: "$predator" };
 
+export declare class Helicopter {
+  private kind: "$helicopter";
+}
+
 export interface IChopper {
   kind: "$helicopter"
 };
@@ -124,18 +128,15 @@ describe("disallows `export *`", () => {
       {
         code: "export * from 'types';",
         errors: 1,
-        output: lines(
-          "export { escape } from 'types';",
-          "export type { IChopper, Predator } from 'types';"
-        ),
+        output:
+          "export type { Helicopter, IChopper, Predator, escape } from 'types';",
       },
       {
         code: lines("export * from './internal';", "export * from 'types';"),
         errors: 1,
         output: lines(
           "export * from './internal';",
-          "export { escape } from 'types';",
-          "export type { IChopper, Predator } from 'types';"
+          "export type { Helicopter, IChopper, Predator, escape } from 'types';"
         ),
         options: [{ expand: "external-only" }],
       },

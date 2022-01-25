@@ -237,7 +237,8 @@ function extractExports(context, moduleId, depth) {
                 case "TSDeclareFunction": {
                   const name = declaration.id && declaration.id.name;
                   if (name) {
-                    exports.add(name);
+                    const set = declaration.declare ? types : exports;
+                    set.add(name);
                   }
                   break;
                 }
