@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/eslint-plugin
 
+## 0.2.9
+
+### Patch Changes
+
+- e0e19ad: Declarations should be exported as types
+
 ## 0.2.8
 
 Tue, 30 Nov 2021 17:24:14 GMT
