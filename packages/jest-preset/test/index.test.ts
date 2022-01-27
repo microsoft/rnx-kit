@@ -37,7 +37,7 @@ describe("jest-preset", () => {
     },
   };
 
-  const jestMacOSPreset = {
+  const jestMacOSPreset = (reactNativeMacOSPath: string) => ({
     haste: {
       defaultPlatform: "macos",
       platforms: ["macos", "native"],
@@ -64,7 +64,7 @@ describe("jest-preset", () => {
         },
       ],
     },
-  };
+  });
 
   const jestMultiPlatformPreset = {
     haste: {
@@ -139,7 +139,7 @@ describe("jest-preset", () => {
   test("throws if no package root is found", () => {
     const root =
       os.platform() === "win32"
-        ? currentDir.substr(0, currentDir.indexOf(path.sep) + 1)
+        ? currentDir.substring(0, currentDir.indexOf(path.sep) + 1)
         : "/";
     process.chdir(root);
 
@@ -191,7 +191,9 @@ describe("jest-preset", () => {
   test("picks the first package with `npmPackageName` defined", () => {
     setFixture("react-native-macos");
 
-    expect(jestPreset()).toEqual(expect.objectContaining(jestMacOSPreset));
+    expect(jestPreset()).toEqual(
+      expect.objectContaining(jestMacOSPreset(reactNativeMacOSPath))
+    );
     expect(consoleWarnSpy).not.toHaveBeenCalled();
   });
 
@@ -221,7 +223,7 @@ describe("jest-preset", () => {
     setFixture("multi-platform");
 
     expect(jestPreset("macos")).toEqual(
-      expect.objectContaining(jestMacOSPreset)
+      expect.objectContaining(jestMacOSPreset(path.sep + "react-native-macos"))
     );
   });
 });
