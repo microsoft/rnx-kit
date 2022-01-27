@@ -283,7 +283,7 @@ PODS:
   - ReactTestApp-MSAL (0.3.0):
     - MSAL
   - ReactTestApp-Resources (1.0.0-dev)
-  - SwiftLint (0.45.1)
+  - SwiftLint (0.46.1)
   - Yoga (1.14.0)
 
 DEPENDENCIES:
@@ -434,9 +434,9 @@ SPEC CHECKSUMS:
   ReactTestApp-DevSupport: 7f939b5a515c0aa69bd68ca7a30c72a9ec930cac
   ReactTestApp-MSAL: 049fa048692e225b95b61bc8af9c20b236d8e11f
   ReactTestApp-Resources: 74a1cf509f4e7962b16361ea4e73cba3648fff5d
-  SwiftLint: 06ac37e4d38c7068e0935bb30cda95f093bec761
+  SwiftLint: aaa29a9f649316095a9079595cb60906bd899353
   Yoga: e7dc4e71caba6472ff48ad7d234389b91dadc280
 
-PODFILE CHECKSUM: d42888eb03ca7eac15b23817b1a07f9b4264db11
+PODFILE CHECKSUM: 438d9afb225dc2a99c6750449d7231544f5ad6f3
 
 COCOAPODS: 1.11.2
