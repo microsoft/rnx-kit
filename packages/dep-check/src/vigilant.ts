@@ -6,9 +6,13 @@ import { resolveCapabilities } from "./capabilities";
 import { checkPackageManifest, getCheckConfig } from "./check";
 import { keysOf, modifyManifest } from "./helpers";
 import { updateDependencies } from "./manifest";
-import type { ProfilesInfo } from "./profiles";
 import { parseProfilesString } from "./profiles";
-import type { Command, ManifestProfile, VigilantOptions } from "./types";
+import type {
+  Command,
+  ManifestProfile,
+  ProfilesInfo,
+  VigilantOptions,
+} from "./types";
 
 type Change = {
   name: string;
@@ -33,8 +37,7 @@ export function removeManagedDependencies(
 
 /**
  * Builds a profile targeting specified versions.
- * @param versions Supported versions
- * @param customProfilesPath Path to custom profiles
+ * @param profilesInfo Resolved target and supported profile versions
  * @param managedCapabilities Capabilities that are already managed and can be skipped
  * @returns A profile containing dependencies to compare against
  */
