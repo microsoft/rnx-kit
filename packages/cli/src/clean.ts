@@ -1,27 +1,19 @@
 import type { Config as CLIConfig } from "@react-native-community/cli-types";
-import path from "path";
 import chalk from "chalk";
+import path from "path";
+import fs from "fs";
+import os from "os";
+import { info, warn, error } from "@rnx-kit/console";
 
 type Args = {
-  platform: "android" | "ios" | "macos";
+  include: string;
   projectRoot: string;
-  bestEffort: boolean;
-  keepNodeModules: boolean;
 };
 
 type CLICommand = {
-  name: string;
-  command: string;
-  args: string[];
+  [key: string]: { label: string; action: () => void }[];
 };
 
-type CachePath = {
-  name: string;
-  path: string;
-};
-
-const fs = require("fs");
-const os = require("os");
 const npm = os.platform() === "win32" ? "npm.cmd" : "npm";
 const yarn = os.platform() === "win32" ? "yarn.cmd" : "yarn";
 
@@ -30,138 +22,149 @@ export function rnxClean(
   _config: CLIConfig,
   cliOptions: Args
 ): void {
-  //validate root path
-  if (!dirExists(cliOptions.projectRoot)) {
-    console.log(
-      chalk.red("error:"),
-      "Invalid path provided! " + cliOptions.projectRoot
-    );
+  const currentWorkingDirectory = cliOptions.projectRoot ?? process.cwd();
 
-    return;
+  //validate root path
+  if (!fs.existsSync(currentWorkingDirectory)) {
+    throw new Error(`Invalid path provided! ${currentWorkingDirectory}`);
   }
 
-  const cachePaths: CachePath[] = [
-    {
-      name: "React native cache",
-      path: "$TMPDIR/react-*",
-    },
-    {
-      name: "Metro cache",
-      path: "$TMPDIR/metro-*",
-    },
-    {
-      name: "Haste cache",
-      path: "$TMPDIR/haste-map-*",
-    },
-    {
-      name: "node_modules",
-      path: `${cliOptions.projectRoot}/node_modules`,
-    },
-  ];
+  const COMMANDS: CLICommand = {
+    android: [
+      {
+        label: "Cleaning Android Cache",
+        action: () => {
+          findPath(
+            currentWorkingDirectory,
+            "gradlew",
+            "android",
+            (path: string) => {
+              execute("./gradlew", ["clean"], path);
+            }
+          );
+        },
+      },
+    ],
+    ios: [
+      {
+        label: "Cleaning IOS Caches ",
+        action: () => {
+          findPath(
+            currentWorkingDirectory,
+            "Podfile",
+            "ios",
+            (path: string) => {
+              execute("pod", ["cache", "clean", "--all"], path);
+            }
+          );
+        },
+      },
+    ],
+    haste: [
+      {
+        label: "Cleaning Haste Cache",
+        action: () => {
+          cleanDir("$TMPDIR/haste-map-*");
+        },
+      },
+    ],
+    npm: [
+      {
+        label: "Removing node_modules",
+        action: () => {
+          cleanDir(`${currentWorkingDirectory}/node_modules`);
+        },
+      },
+      {
+        label: "Verifying npm Cache",
+        action: () => {
+          execute(npm, ["cache", "verify"], currentWorkingDirectory);
+        },
+      },
+    ],
+    macos: [
+      {
+        label: "Cleaning MacOS Caches ",
+        action: () => {
+          findPath(
+            currentWorkingDirectory,
+            "Podfile",
+            "macos",
+            (path: string) => {
+              execute("pod", ["cache", "clean", "--all"], path);
+            }
+          );
+        },
+      },
+    ],
+    metro: [
+      {
+        label: "Cleaning Metro Cache",
+        action: () => {
+          cleanDir("$TMPDIR/metro-*");
+        },
+      },
+    ],
+    react: [
+      {
+        label: "Cleaning React Native Cache",
+        action: () => {
+          cleanDir("$TMPDIR/react-*");
+        },
+      },
+    ],
+    watchman: [
+      {
+        label: "Stopping watchman",
+        action: () => {
+          execute(
+            os.platform() === "win32" ? "tskill" : "killall",
+            ["watchman"],
+            currentWorkingDirectory
+          );
+        },
+      },
+      {
+        label: "Deleting watchman Cache",
+        action: () => {
+          execute("watchman", ["watchman-del-all"], currentWorkingDirectory);
+        },
+      },
+    ],
+    yarn: [
+      {
+        label: "Cleaning Yarn Cache",
+        action: () => {
+          execute(yarn, ["cache", "clean"], currentWorkingDirectory);
+        },
+      },
+    ],
+  };
 
-  cachePaths.forEach((item) => {
-    if (item.name !== "node_modules") cleanDir(item);
-    else if (!cliOptions.keepNodeModules) cleanDir(item);
-  });
+  const categories = (
+    cliOptions.include
+      ? cliOptions.include
+      : "haste,npm,metro,react,watchman,yarn"
+  ).split(",");
 
-  const allCommands = [
-    {
-      name: "Kill watchman",
-      command: os.platform() === "windows" ? "tskill" : "killall",
-      args: ["watchman"],
-    },
-    {
-      name: "Clear watchman caches",
-      command: "watchman",
-      args: ["watchman-del-all"],
-    },
-    {
-      name: "Clean yarn cache",
-      command: yarn,
-      args: ["cache", "clean"],
-    },
-    {
-      name: "Verify npm cache",
-      command: npm,
-      args: ["cache", "verify"],
-    },
-  ];
-
-  for (let i = 0; i < allCommands.length; i++) {
-    const item = allCommands[i];
-
-    const myPromise = QueryPromise(
-      execute(
-        { name: item.name, command: item.command, args: item.args },
-        cliOptions.projectRoot
-      )
-    );
-
-    if (!cliOptions.bestEffort && !myPromise.isFulfilled()) {
+  categories.forEach((category) => {
+    const commands = COMMANDS[category];
+    if (!commands) {
+      warn("Unknown category:", category);
       return;
     }
-  }
 
-  switch (cliOptions.platform) {
-    case "android": {
-      findPath(cliOptions.projectRoot, "gradlew", (androidPath: string) => {
-        execute(
-          {
-            name: "Gradle Clean",
-            command: androidPath + "/gradlew",
-            args: ["clean"],
-          },
-          cliOptions.projectRoot
-        );
-      });
-      break;
-    }
-    case "ios": {
-      findPath(
-        cliOptions.projectRoot,
-        "LaunchScreen.storyboard",
-        (path: string) => {
-          const iosPath = path.substring(0, path.lastIndexOf("/"));
-
-          cleanDir({ name: "Pods Cache", path: `${iosPath}/Pods` });
-          cleanDir({ name: "CocoaPods cache", path: "~/.cocoapods" });
-          execute(
-            {
-              name: "Clean Pod Cache",
-              command: "pod",
-              args: ["cache", "clean", "--all"],
-            },
-            iosPath
-          );
-        }
-      );
-
-      break;
-    }
-    case "macos": {
-      findPath(cliOptions.projectRoot, "-macOS", (path: string) => {
-        const macosPath = path.substring(0, path.lastIndexOf("/"));
-
-        cleanDir({ name: "Pods Cache", path: `${macosPath}/Pods` });
-        cleanDir({ name: "CocoaPods cache", path: "~/.cocoapods" });
-        execute(
-          {
-            name: "Clean Pod Cache",
-            command: "pod",
-            args: ["cache", "clean", "--all"],
-          },
-          macosPath
-        );
-      });
-
-      break;
-    }
-  }
+    commands.forEach(({ label, action }) => {
+      info(label);
+      action();
+    });
+  });
 }
 
 function findPath(
   startPath: string,
   filter: string,
+  platform: string,
   callback: (path: string) => void
 ) {
   const files = fs.readdirSync(startPath);
@@ -170,112 +173,45 @@ function findPath(
     const filename = path.join(startPath, files[i]);
 
     const stat = fs.lstatSync(filename);
-    if (stat.isDirectory()) {
-      //no need to check these dirs
-      if (
-        filename.indexOf(".git") >= 0 ||
-        filename.indexOf(".xcodeproj") >= 0 ||
-        filename.indexOf(".xcworkspace") >= 0 ||
-        filename.indexOf(".xcassets") >= 0
-      )
-        continue;
 
-      findPath(filename, filter, callback); //recurse
+    if (stat.isDirectory() && files[i] === platform) {
+      findPath(filename, filter, platform, callback); //recurse
+      return;
     } else if (filename.indexOf(filter) >= 0) {
       callback(startPath);
-      break;
+      return;
     }
   }
+
+  warn(`Could not find ${platform} path in ${startPath}`);
 }
 
-function cleanDir(item: CachePath) {
-  console.log(chalk.cyan("info"), `Cleaning ${item.name}`);
-
-  if (!dirExists(item.path)) {
-    console.log(chalk.yellow("warning:"), `No such directory : ${item.path}`);
-
+function cleanDir(path: string) {
+  if (!fs.existsSync(path)) {
     return;
   }
 
-  fs.rmdirSync(item.path, { recursive: true });
-  console.log(chalk.cyan("info"), `Successfully cleaned: ${item.name}`);
+  fs.rmdirSync(path, { recursive: true });
+  info(`Successfully cleaned: ${path}`);
 }
 
-function execute(item: CLICommand, rootPath: string) {
-  return new Promise((resolve, reject) => {
-    console.log(chalk.cyan("info"), item.name);
-    console.log(chalk.dim(`${item.command} ${item.args.join(" ")}`));
+function execute(command: string, args: string[], rootPath: string) {
+  info(chalk.dim(`${command} ${args.join(" ")}`));
 
-    const { spawnSync } = require("child_process");
+  const { spawnSync } = require("child_process");
 
-    const task = spawnSync(item.command, item.args, {
-      cwd: rootPath ? path.resolve(rootPath) : undefined,
-      stdio: "inherit",
-    });
-
-    if (task.error && task.error.code == "ENOENT") {
-      console.log(
-        chalk.red.bold("Error"),
-        `${item.command} Failed! Command not found`
-      );
-      reject();
-    } else if (task.error) {
-      console.log(chalk.red.bold("Error"), task.error);
-      reject();
-    } else if (task.signal) {
-      console.log(
-        chalk.red.bold("Error"),
-        `Failed with signal ${task.signal}'`
-      );
-      reject();
-    } else if (task.status !== 0) {
-      console.log(
-        chalk.red.bold("Error"),
-        `Failed with exit code ${task.status}'`
-      );
-      reject();
-    }
-
-    console.log(`${item.name} completed successfully!`);
-    resolve(task.status);
+  const task = spawnSync(command, args, {
+    cwd: rootPath ? path.resolve(rootPath) : undefined,
+    stdio: "inherit",
   });
-}
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function QueryPromise(promise: any) {
-  // Don't modify any promise that has been already modified.
-  if (promise.isFulfilled) return promise;
-
-  // Set initial state
-  let isPending = false;
-  let isRejected = false;
-  let isFulfilled = false;
-
-  // Observe the promise, saving the fulfillment in a closure scope.
-  const result = promise.then(
-    function () {
-      isFulfilled = true;
-      isPending = false;
-    },
-    function () {
-      isRejected = true;
-      isPending = true;
-    }
-  );
-
-  result.isFulfilled = function () {
-    return isFulfilled;
-  };
-  result.isPending = function () {
-    return isPending;
-  };
-  result.isRejected = function () {
-    return isRejected;
-  };
-
-  return result;
-}
-
-function dirExists(directoryName: string) {
-  return !fs.existsSync(directoryName) ? false : true;
+  if (task.error && task.error.code == "ENOENT") {
+    warn(`${command} Failed! Command not found`);
+  } else if (task.error) {
+    error(task.error);
+  } else if (task.signal) {
+    error(`Failed with signal ${task.signal}'`);
+  } else if (task.status !== 0) {
+    error(`Failed with exit code ${task.status}'`);
+  }
 }

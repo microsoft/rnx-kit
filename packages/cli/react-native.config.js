@@ -235,28 +235,14 @@ module.exports = {
       description: "Clears React Native project related caches",
       options: [
         {
-          name: "--platform [ios|android|macos]",
+          name: "--include [android,ios,haste,npm,macos,metro,react,watchman,yarn]",
           description:
-            "Target Platform to clean. When not specified , only non-module specific caches are cleared.",
-          parse: parsePlatform,
+            "Comma-separated flag of caches to clear e.g npm,yarn . When not specified , only non-platform specific caches are cleared.",
         },
         {
           name: "--project-root <path>",
-          description: "Root path to your React Native project (*Required)",
+          description: "Root path to your React Native project (optional)",
           parse: (val) => path.resolve(val),
-        },
-        {
-          name: "--best-effort [boolean]",
-          description:
-            "Best Effort.If set to false cleaning will stop when there is an error.",
-          default: true,
-          parse: parseBoolean,
-        },
-        {
-          name: "--keep-node-modules [boolean]",
-          description: "Specifies wether or not to remove npm node_modules",
-          default: false,
-          parse: parseBoolean,
         },
       ],
     },
