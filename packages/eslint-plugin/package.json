@@ -30,7 +30,6 @@
     "@typescript-eslint/eslint-plugin": "^5.0.0",
     "@typescript-eslint/parser": "^5.0.0",
     "enhanced-resolve": "^5.8.3",
-    "eslint-plugin-jest": "^25.0.0",
     "eslint-plugin-react": "^7.26.0"
   },
   "peerDependencies": {
@@ -48,7 +47,6 @@
     "ignoreMatches": [
       "@typescript-eslint/eslint-plugin",
       "@typescript-eslint/parser",
-      "eslint-plugin-jest",
       "eslint-plugin-react"
     ]
   },
