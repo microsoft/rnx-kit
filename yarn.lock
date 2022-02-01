@@ -1671,18 +1671,6 @@
   resolved "https://registry.yarnpkg.com/@microsoft/tsdoc/-/tsdoc-0.13.2.tgz#3b0efb6d3903bd49edb073696f60e90df08efb26"
   integrity sha512-WrHvO8PDL8wd8T2+zBGKrMwVL5IyzR3ryWUsl0PXgEV0QHup4mTLi0QcATefGI6Gx9Anu7vthPyyyLpY0EpiQg==
 
-"@napi-rs/triples@^1.0.3":
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/@napi-rs/triples/-/triples-1.0.3.tgz#76d6d0c3f4d16013c61e45dfca5ff1e6c31ae53c"
-  integrity sha512-jDJTpta+P4p1NZTFVLHJ/TLFVYVcOqv6l8xwOeBKNPMgY/zDYH/YH7SJbvrr/h1RcS9GzbPcLKGzpuK9cV56UA==
-
-"@node-rs/helper@^1.0.0":
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/@node-rs/helper/-/helper-1.2.1.tgz#e079b05f21ff4329d82c4e1f71c0290e4ecdc70c"
-  integrity sha512-R5wEmm8nbuQU0YGGmYVjEc0OHtYsuXdpRG+Ut/3wZ9XAvQWyThN08bTh2cBJgoZxHQUPtvRfeQuxcAgLuiBISg==
-  dependencies:
-    "@napi-rs/triples" "^1.0.3"
-
 "@nodelib/fs.scandir@2.1.4":
   version "2.1.4"
   resolved "https://registry.yarnpkg.com/@nodelib/fs.scandir/-/fs.scandir-2.1.4.tgz#d4b3549a5db5de2683e0c1071ab4f140904bbf69"
@@ -1964,13 +1952,13 @@
     sudo-prompt "^9.0.0"
     wcwidth "^1.0.1"
 
-"@react-native-windows/cli@0.66.1":
-  version "0.66.1"
-  resolved "https://registry.yarnpkg.com/@react-native-windows/cli/-/cli-0.66.1.tgz#613ed9889d1c45fcd7e0f643fae5d6ed182522a4"
-  integrity sha512-lEFpn+EVphz9GkeSdQsNWBgaeXlLrml8rD2GLep/gd53wwBSXs4mqU3UXZ5XyJi7GOgLe2pD7VNYt0YIpNgK2w==
+"@react-native-windows/cli@0.66.2":
+  version "0.66.2"
+  resolved "https://registry.yarnpkg.com/@react-native-windows/cli/-/cli-0.66.2.tgz#8c088200ca1f036f8328ec7fc3c6b571c43e78fc"
+  integrity sha512-2BryCC0+SqY/ZZph2hzlY4v9GKt5x3Mvk4TqQoBu2ru0D0QkXeadNk+o8T5srYAvldmHPVnaAEMj9wW1Et8//Q==
   dependencies:
-    "@react-native-windows/package-utils" "0.66.0"
-    "@react-native-windows/telemetry" "0.66.0"
+    "@react-native-windows/package-utils" "0.66.1"
+    "@react-native-windows/telemetry" "0.66.1"
     "@xmldom/xmldom" "^0.7.5"
     chalk "^4.1.0"
     cli-spinners "^2.2.0"
@@ -1989,33 +1977,33 @@
     xml-parser "^1.2.1"
     xpath "^0.0.27"
 
-"@react-native-windows/find-repo-root@0.66.0":
-  version "0.66.0"
-  resolved "https://registry.yarnpkg.com/@react-native-windows/find-repo-root/-/find-repo-root-0.66.0.tgz#b837e8e92d8edef37fd336c8a1676a19509e985a"
-  integrity sha512-VJj/VvbPZ361Y0D9k53eyRo8ESDKaBaSkO3OHdV7yPr9W9UDHpQyw92fQ4EUz/4z91exyb0BceUS+5cDw8usPw==
+"@react-native-windows/find-repo-root@0.66.1":
+  version "0.66.1"
+  resolved "https://registry.yarnpkg.com/@react-native-windows/find-repo-root/-/find-repo-root-0.66.1.tgz#221e3abae0a698de2a244095b6c16bfae94d2080"
+  integrity sha512-oStJBtcKUldi5mZClxvNZHs0QsjglLUDmQclpDRGyvQkMsU4BWayAECx02yyptWNJ1B/fXEHbnaWQ/mo1+WRsQ==
   dependencies:
     find-up "^4.1.0"
 
-"@react-native-windows/package-utils@0.66.0":
-  version "0.66.0"
-  resolved "https://registry.yarnpkg.com/@react-native-windows/package-utils/-/package-utils-0.66.0.tgz#9d273a838001929d566010175ff691b974669671"
-  integrity sha512-hh+WuSZEsni3KTxi7SAMYJY/xZx55XmBV3/LI8t87WlfEs1jsFDEkDgJ8RZa5z1CKv+OGTVoMprYUzk0xqz1aA==
+"@react-native-windows/package-utils@0.66.1":
+  version "0.66.1"
+  resolved "https://registry.yarnpkg.com/@react-native-windows/package-utils/-/package-utils-0.66.1.tgz#1037a512184fc19240580772728f0a1e5e7859d3"
+  integrity sha512-SQuHGsvLdiqXWGQgkzFXvE5DBtGQwRhsuVvSc/4WokcNlQKdflDly/njh7IZnBoB8LIBelO4cguH0zBWiP6QOw==
   dependencies:
-    "@react-native-windows/find-repo-root" "0.66.0"
+    "@react-native-windows/find-repo-root" "0.66.1"
     get-monorepo-packages "^1.2.0"
     lodash "^4.17.15"
 
-"@react-native-windows/telemetry@0.66.0":
-  version "0.66.0"
-  resolved "https://registry.yarnpkg.com/@react-native-windows/telemetry/-/telemetry-0.66.0.tgz#968a7ba443cd5393d9b1040700f59b1dd564668b"
-  integrity sha512-SxN0o1GkqT5Vpw+3GlFXpiKXgaOhDetqtqf6pbxfiykKPODKduOO8qneS6zzW7Mbw30yXtNOrKBM0CxNRQQeOg==
+"@react-native-windows/telemetry@0.66.1":
+  version "0.66.1"
+  resolved "https://registry.yarnpkg.com/@react-native-windows/telemetry/-/telemetry-0.66.1.tgz#833951080b307cc8c5ce6bcab065d7154c5e79dd"
+  integrity sha512-11Dfll0emyOpnW21yiQmUwOQEa4jiJbBjYTU9/9KbCHIKePHAGZCvSsASlQ7L2rZHHwRc9dyxJC0dacSgx1Ygw==
   dependencies:
     applicationinsights "^1.8.8"
 
-"@react-native-windows/virtualized-list@0.66.0":
-  version "0.66.0"
-  resolved "https://registry.yarnpkg.com/@react-native-windows/virtualized-list/-/virtualized-list-0.66.0.tgz#6d8d1a9fc75360e47e2bd8223e58f10f5fd620ac"
-  integrity sha512-DXve8EACESyBbTykaJykvvgptaXaosBJVgkyHOzn4xOr/aywmn9TU92OPyn7D9Ya2+axK/ZOwyl70ZHjlqpHNA==
+"@react-native-windows/virtualized-list@0.66.1":
+  version "0.66.1"
+  resolved "https://registry.yarnpkg.com/@react-native-windows/virtualized-list/-/virtualized-list-0.66.1.tgz#6dc7e2389b19b22bdf38e743451478162c1f8e81"
+  integrity sha512-B1pIjbUC/JrA6KP9rDogtoIPaOxAXyHqzDTa/IGyvVy7eOsqD1BeugxxXwfVmLNhwGdBBExQbf7uKzSsBP09FQ==
   dependencies:
     invariant "^2.2.4"
 
@@ -2092,85 +2080,89 @@
   dependencies:
     "@sinonjs/commons" "^1.7.0"
 
-"@swc/core-android-arm64@^1.2.120":
-  version "1.2.120"
-  resolved "https://registry.yarnpkg.com/@swc/core-android-arm64/-/core-android-arm64-1.2.120.tgz#1cc98f0136ce7b6f932f7c4cf469f2fa44497384"
-  integrity sha512-WrXVXDAVpjPKhySuyC6mei4sW+gjv0m58kNOQ3D7hVfWGSKc3PtnQLHMwKEJKPJ4DKXEhe1twdUY60yzRcyMLg==
+"@swc/core-android-arm-eabi@1.2.135":
+  version "1.2.135"
+  resolved "https://registry.yarnpkg.com/@swc/core-android-arm-eabi/-/core-android-arm-eabi-1.2.135.tgz#11a53c1e55d66cc281b5de8abbe8560465e268ab"
+  integrity sha512-Qx5PXLzedOVSWHIY88iTxEa6m5RONs7bDIF05mNH1qaXsOkBD52MZ+mFDW6uGZ2OnOuMjD2OY08877429atBgA==
 
-"@swc/core-darwin-arm64@^1.2.120":
-  version "1.2.120"
-  resolved "https://registry.yarnpkg.com/@swc/core-darwin-arm64/-/core-darwin-arm64-1.2.120.tgz#bd32cd8fc68241b33a2a8be68737866c2614d02e"
-  integrity sha512-OqR+j4NmkwszLsqLGt4FMc4aXlLPxqtXGe7QdnJDM6i7btTi2MjqkF2CuEnwE+UX6DHw8M/z1uJliHU5kllvgw==
+"@swc/core-android-arm64@1.2.135":
+  version "1.2.135"
+  resolved "https://registry.yarnpkg.com/@swc/core-android-arm64/-/core-android-arm64-1.2.135.tgz#cddcd82d45229b82c0aa4aecca83dcc1c6667d61"
+  integrity sha512-XeZN9Efr44hGPOnHnrcNvdYU0Yn1UQOgR1LReS19aFJT7vWdI6Boe900V22J2K2ccJaOYqmic9BR6kRtDO7gGg==
 
-"@swc/core-darwin-x64@^1.2.120":
-  version "1.2.120"
-  resolved "https://registry.yarnpkg.com/@swc/core-darwin-x64/-/core-darwin-x64-1.2.120.tgz#0f302694d20ed746577ecfb6259d983655965acd"
-  integrity sha512-lX639zOJ0agdpdCrPiQk1bmEh3oAcbrEhNEgJROxU0mVhO6xkzPCdmy27LDSOzJS9GLrP/4cMewcaYRmv9VAbA==
+"@swc/core-darwin-arm64@1.2.135":
+  version "1.2.135"
+  resolved "https://registry.yarnpkg.com/@swc/core-darwin-arm64/-/core-darwin-arm64-1.2.135.tgz#1fc8b9028660374c3ef78ca862c08b1b659df72f"
+  integrity sha512-2DSs8IuGbu86B+ENnJVTAtn57HU4KSw9FJTGQfA+5IWBuUHJgpANcfQ3Xp19MtolfLW+Z4Xy8HCvdFljiQONRQ==
 
-"@swc/core-freebsd-x64@^1.2.120":
-  version "1.2.120"
-  resolved "https://registry.yarnpkg.com/@swc/core-freebsd-x64/-/core-freebsd-x64-1.2.120.tgz#5968df7b64d9a3610e0d1ed210331dc0fb332877"
-  integrity sha512-93VXbYmXYKuAwqKUTzNEYbnQbGF4fkDt+drfjk6+/EpCTrpw2mhZeKp1TxgKlQa4KLmXNg1A8XYrXOhG80tGbA==
+"@swc/core-darwin-x64@1.2.135":
+  version "1.2.135"
+  resolved "https://registry.yarnpkg.com/@swc/core-darwin-x64/-/core-darwin-x64-1.2.135.tgz#f0af5c49128d91eebd9f2428c660d8a2d066b7d0"
+  integrity sha512-nS32iLbaW7g6ILlvWCZp1pwfLSndDGragsFcuw9xo6KR58KeDNdG54GQ6CwugqWiCEgzD+ZCvYmfcTjlgGJt/Q==
 
-"@swc/core-linux-arm-gnueabihf@^1.2.120":
-  version "1.2.120"
-  resolved "https://registry.yarnpkg.com/@swc/core-linux-arm-gnueabihf/-/core-linux-arm-gnueabihf-1.2.120.tgz#4d2e6724b8540be90a0b812a6ce352fbc02f6a3f"
-  integrity sha512-WXpjEtvj+VE7bnhyhGcs7X/d5wPHVhdyv4IsF64ycWSWaZo1LmKlXtWFH1SWczSDffisd3HCwGDhqGVZb9cZaA==
+"@swc/core-freebsd-x64@1.2.135":
+  version "1.2.135"
+  resolved "https://registry.yarnpkg.com/@swc/core-freebsd-x64/-/core-freebsd-x64-1.2.135.tgz#aa126c82e36ca47895fe68e2072fa93aebaa3c80"
+  integrity sha512-8tM7eOFsOT7bNlx1u0GoldopMVigPM9sLzKfwdRm4doDsE/DeUXumQI2mb8JTqzHpcjYxEiFBaNy8L7wf8wAEQ==
 
-"@swc/core-linux-arm64-gnu@^1.2.120":
-  version "1.2.120"
-  resolved "https://registry.yarnpkg.com/@swc/core-linux-arm64-gnu/-/core-linux-arm64-gnu-1.2.120.tgz#f60d0d3ae36e255fc2df278631334918c779ee15"
-  integrity sha512-iugMs6AuFxs9H0TnWy+kejF3UGvHF7TSropGeCOj6VooUkx4PQd4xVnn/DF8NNJy8ReI38FsHVj7brS1AsRNyg==
+"@swc/core-linux-arm-gnueabihf@1.2.135":
+  version "1.2.135"
+  resolved "https://registry.yarnpkg.com/@swc/core-linux-arm-gnueabihf/-/core-linux-arm-gnueabihf-1.2.135.tgz#56cead34686a2233a36d6e546f7dd096f2c90b7a"
+  integrity sha512-sppILSuR/HClz9mzZuxziAH7/QSUSgM3gSxGKlXzC8AItcBZFJ/7ygqg0TjCFFcQ+n0BdNltUIMztdv+5qwRSg==
 
-"@swc/core-linux-arm64-musl@^1.2.120":
-  version "1.2.120"
-  resolved "https://registry.yarnpkg.com/@swc/core-linux-arm64-musl/-/core-linux-arm64-musl-1.2.120.tgz#8597bfa37ab317e2f610339b651ed4b19c36822d"
-  integrity sha512-HdD++mlst1C4APVPIxeCr3lKEaGPXJSsKHvrJ+NDp+E5SIEvcHJfekUgC62xG+y0WI6Ix36Sun83MnEEPwFN1A==
+"@swc/core-linux-arm64-gnu@1.2.135":
+  version "1.2.135"
+  resolved "https://registry.yarnpkg.com/@swc/core-linux-arm64-gnu/-/core-linux-arm64-gnu-1.2.135.tgz#0ec99ccdda78aa7e0d018a6928691632eb84bff8"
+  integrity sha512-inu6jZCHiHw+3kSvmBRGUIDLMi/XFsIyMOue3QJReOuL5BTIQJ/I1oYhLsaSGcmEZM2Mo7QJ2jDBB3SjM5YzeA==
 
-"@swc/core-linux-x64-gnu@^1.2.120":
-  version "1.2.120"
-  resolved "https://registry.yarnpkg.com/@swc/core-linux-x64-gnu/-/core-linux-x64-gnu-1.2.120.tgz#328224dbee46181e24e13056b3d4151e782b1abd"
-  integrity sha512-VYU2esPrdyfZTwwSUmHBIcmasa16+dyZMA1CZyW8m/4gppH3QvPreofVL+mu8+CG52ZRGs3g69runRN140ipSQ==
+"@swc/core-linux-arm64-musl@1.2.135":
+  version "1.2.135"
+  resolved "https://registry.yarnpkg.com/@swc/core-linux-arm64-musl/-/core-linux-arm64-musl-1.2.135.tgz#e41cad8df03b5f8b9eeb124a2d723992061d4026"
+  integrity sha512-hPGetFUhez77OUgig1XmNHZbUmpKGt72u9cN0AX5NtmFdfYYu4p6l+6YB6jg6/TrPmyJlJD5vroVz8JR/pZS+w==
 
-"@swc/core-linux-x64-musl@^1.2.120":
-  version "1.2.120"
-  resolved "https://registry.yarnpkg.com/@swc/core-linux-x64-musl/-/core-linux-x64-musl-1.2.120.tgz#c94b123ea74efdd35caceebfb52a52ab22d2c19f"
-  integrity sha512-hfBgSoAP4PGkHUqFDMi+iIvjyO4/GZg64ba+rECWW5ygAQ0cb+5QH+pWoOnixu0QDj2nbmziX/5v4OK4uRDpDw==
+"@swc/core-linux-x64-gnu@1.2.135":
+  version "1.2.135"
+  resolved "https://registry.yarnpkg.com/@swc/core-linux-x64-gnu/-/core-linux-x64-gnu-1.2.135.tgz#c2fd5206b0a40760f4f878f367a21033473c2d12"
+  integrity sha512-PTEzzMWvUaXI/sInu8oPo7yYj2WPgfl4QL3wo2OEEKwE27xFjUmKv80pXGIFD9/Xn33Xz8cA0d8yGTWYD+tOIg==
 
-"@swc/core-win32-arm64-msvc@^1.2.120":
-  version "1.2.120"
-  resolved "https://registry.yarnpkg.com/@swc/core-win32-arm64-msvc/-/core-win32-arm64-msvc-1.2.120.tgz#ddf2446c57a1084f22d19bfeab30087f161f0aea"
-  integrity sha512-tYv0pGdDXBlyldqO5ywghzklQ/BVce/qZlXAwpEJrcLUWNRvLlv8czPCw/rhPPK7M67CuAmskAix7RRRQAoY2g==
+"@swc/core-linux-x64-musl@1.2.135":
+  version "1.2.135"
+  resolved "https://registry.yarnpkg.com/@swc/core-linux-x64-musl/-/core-linux-x64-musl-1.2.135.tgz#fc12e424921dbffee0ef9d025dd162f8aaa45b74"
+  integrity sha512-6zqf/1x1QYIhYFIPRRo5ArHIvWVWfH8fuRE6AwL1nQz/Y19SAJx3PXgwlAjtu4CZfciuUqY99PeFtTOu1Dnjhg==
 
-"@swc/core-win32-ia32-msvc@^1.2.120":
-  version "1.2.120"
-  resolved "https://registry.yarnpkg.com/@swc/core-win32-ia32-msvc/-/core-win32-ia32-msvc-1.2.120.tgz#f6f25a27513288f14fc75f1f03d714cc3fc9eace"
-  integrity sha512-zz9xhjp/fJEOFhG2pPhj2yEm5PE2XLUwGrVoi7+oHT6VHNaJAVmExRyKKYpzJIQt53k483jD8YvuAjWUvriy0A==
+"@swc/core-win32-arm64-msvc@1.2.135":
+  version "1.2.135"
+  resolved "https://registry.yarnpkg.com/@swc/core-win32-arm64-msvc/-/core-win32-arm64-msvc-1.2.135.tgz#c65a44f48e6c48105460265a25dcebb5babe5315"
+  integrity sha512-vEMQSsvYMhdT5MS0pXRNmtMxfe3Bf/TZxMeezadLcOfSdYbeshQ8t41UdVsU1xvUvRA0fmbAcipXgNmwC14ACg==
 
-"@swc/core-win32-x64-msvc@^1.2.120":
-  version "1.2.120"
-  resolved "https://registry.yarnpkg.com/@swc/core-win32-x64-msvc/-/core-win32-x64-msvc-1.2.120.tgz#593f44a45213d8161b94eeeb1c23ade0c352731b"
-  integrity sha512-GfuWWhxjoAoQGJrkaZgrrv/XQucg7M00dpIOsS0FT2eA4p5nrQ+aoaCS3hejWzgL9cNhKrpYRB6+lunK52yeNg==
+"@swc/core-win32-ia32-msvc@1.2.135":
+  version "1.2.135"
+  resolved "https://registry.yarnpkg.com/@swc/core-win32-ia32-msvc/-/core-win32-ia32-msvc-1.2.135.tgz#cd92bb983c729f05128c9abe9b74c01467c0afe3"
+  integrity sha512-w1XwAGHaFNhhDOQgwy36GB0oXKi/0DKj0mmWol263YehMQic5f+usNF9EGfgFkWf8EnRpdP/oEAXpsDfniBmww==
+
+"@swc/core-win32-x64-msvc@1.2.135":
+  version "1.2.135"
+  resolved "https://registry.yarnpkg.com/@swc/core-win32-x64-msvc/-/core-win32-x64-msvc-1.2.135.tgz#ff293654b5ac3715782c9e6677cf5a188bb83597"
+  integrity sha512-hGSoHDbq7mGGb5gg1hTtzxXiqrhmEO02/oAVqSVTX7zsOnVSu9hBxim72R4a8/hqGaCGDIfeXmibwvhcYzrwfg==
 
 "@swc/core@^1.2.0":
-  version "1.2.120"
-  resolved "https://registry.yarnpkg.com/@swc/core/-/core-1.2.120.tgz#69719e265e6702da654ba6d0b53f71cdf8edb8d8"
-  integrity sha512-9bSN4ZdDQsAiKEdNT0lv/8o0/70xkGFieq/I4cKdA9dQibAtfagzRyLPkCm54XKqd9NwvI9neAfYydbesyY/nw==
-  dependencies:
-    "@node-rs/helper" "^1.0.0"
+  version "1.2.135"
+  resolved "https://registry.yarnpkg.com/@swc/core/-/core-1.2.135.tgz#ab29d549385790d779e78066bb10e0849241c5e8"
+  integrity sha512-YaltU0YygEo+pmy28GIEuHgTIKP5mzUXbgathdU2AoKytM+rNTP6QtJLewUgK86CZuu1nDpH42srhgXWIUWz2g==
   optionalDependencies:
-    "@swc/core-android-arm64" "^1.2.120"
-    "@swc/core-darwin-arm64" "^1.2.120"
-    "@swc/core-darwin-x64" "^1.2.120"
-    "@swc/core-freebsd-x64" "^1.2.120"
-    "@swc/core-linux-arm-gnueabihf" "^1.2.120"
-    "@swc/core-linux-arm64-gnu" "^1.2.120"
-    "@swc/core-linux-arm64-musl" "^1.2.120"
-    "@swc/core-linux-x64-gnu" "^1.2.120"
-    "@swc/core-linux-x64-musl" "^1.2.120"
-    "@swc/core-win32-arm64-msvc" "^1.2.120"
-    "@swc/core-win32-ia32-msvc" "^1.2.120"
-    "@swc/core-win32-x64-msvc" "^1.2.120"
+    "@swc/core-android-arm-eabi" "1.2.135"
+    "@swc/core-android-arm64" "1.2.135"
+    "@swc/core-darwin-arm64" "1.2.135"
+    "@swc/core-darwin-x64" "1.2.135"
+    "@swc/core-freebsd-x64" "1.2.135"
+    "@swc/core-linux-arm-gnueabihf" "1.2.135"
+    "@swc/core-linux-arm64-gnu" "1.2.135"
+    "@swc/core-linux-arm64-musl" "1.2.135"
+    "@swc/core-linux-x64-gnu" "1.2.135"
+    "@swc/core-linux-x64-musl" "1.2.135"
+    "@swc/core-win32-arm64-msvc" "1.2.135"
+    "@swc/core-win32-ia32-msvc" "1.2.135"
+    "@swc/core-win32-x64-msvc" "1.2.135"
 
 "@szmarczak/http-timer@^4.0.5":
   version "4.0.6"
@@ -8137,17 +8129,17 @@ react-native-test-app@^0.11.4:
     yargs "^16.0.0"
 
 react-native-windows@^0.66.0-0:
-  version "0.66.5"
-  resolved "https://registry.yarnpkg.com/react-native-windows/-/react-native-windows-0.66.5.tgz#440d7b11e9b5c5761151c2744001453e3f858ae4"
-  integrity sha512-iHsKgZBXasyXyKmbEeSNEivEnwR7EBm5H9pJRxeV2VLLug216TL6BKRqouwEP4Bw2/lbtrW5Wzb5oayGvTFRUg==
+  version "0.66.9"
+  resolved "https://registry.yarnpkg.com/react-native-windows/-/react-native-windows-0.66.9.tgz#33e4ce6b146efeb31be10342227d02c1777f2ff7"
+  integrity sha512-QhSvW7vblbKFYgYl0J6ssYU4KKsKAFRLrUE5IbiTx3iF5Kcf2dWB2i84bKQeQpmjjhyUczCpn5+Pncp8CFVklg==
   dependencies:
     "@babel/runtime" "^7.0.0"
     "@jest/create-cache-key-function" "^27.0.1"
     "@react-native-community/cli" "^6.0.0"
     "@react-native-community/cli-platform-android" "^6.0.0"
     "@react-native-community/cli-platform-ios" "^6.0.0"
-    "@react-native-windows/cli" "0.66.1"
-    "@react-native-windows/virtualized-list" "0.66.0"
+    "@react-native-windows/cli" "0.66.2"
+    "@react-native-windows/virtualized-list" "0.66.1"
     "@react-native/assets" "1.0.0"
     "@react-native/normalize-color" "1.0.0"
     "@react-native/polyfills" "2.0.0"
@@ -9398,9 +9390,9 @@ type-fest@^0.8.0, type-fest@^0.8.1:
   integrity sha512-4dbzIzqvjtgiM5rw1k5rEHtBANKmdudhGyBEajN01fEyhaAIhsoKNy6y7+IN93IfpFtwY9iqi7kD+xwKhQsNJA==
 
 type-fest@^2.1.0:
-  version "2.8.0"
-  resolved "https://registry.yarnpkg.com/type-fest/-/type-fest-2.8.0.tgz#39d7c9f9c508df8d6ce1cf5a966b0e6568dcc50d"
-  integrity sha512-O+V9pAshf9C6loGaH0idwsmugI2LxVNR7DtS40gVo2EXZVYFgz9OuNtOhgHLdHdapOEWNdvz9Ob/eeuaWwwlxA==
+  version "2.11.1"
+  resolved "https://registry.yarnpkg.com/type-fest/-/type-fest-2.11.1.tgz#04ddf5c0dbbd403fb8270d98ad1b4857e7ff7b24"
+  integrity sha512-fPcV5KLAqFfmhHobtAUwEpbpfYhVF7wSLVgbG/7mIGe/Pete7ky/bPAPRkzbWdrj0/EkswFAAR2feJCgigkUKg==
 
 typed-rest-client@^1.8.4:
   version "1.8.4"
