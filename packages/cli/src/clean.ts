@@ -1,10 +1,10 @@
 import type { Config as CLIConfig } from "@react-native-community/cli-types";
+import { error, info, warn } from "@rnx-kit/console";
 import chalk from "chalk";
-import path from "path";
+import { spawnSync } from "child_process";
 import fs from "fs";
 import os from "os";
-import { info, warn, error } from "@rnx-kit/console";
-import { spawnSync } from "child_process";
+import path from "path";
 
 type Args = {
   include: string;
@@ -113,7 +113,7 @@ export function rnxClean(
       {
         label: "Deleting watchman Cache",
         action: () => {
-          execute("watchman", ["watchman-del-all"], currentWorkingDirectory);
+          execute("watchman", ["watch-del-all"], currentWorkingDirectory);
         },
       },
     ],
