@@ -9,6 +9,7 @@ Command-line interface for working with `kit` packages in your repo.
 - [Start a bundle server](#Start-a-Bundle-Server)
 - [Manage kit dependencies](#Manage-Kit-Dependencies)
 - [Generate a 3rd-party notice for a kit](#Generate-a-Third%2dParty-Notice-for-a-Kit)
+- [Clean a React Native Project](#Clean-a-React-Native-Project)
 
 ## Bundle a Kit
 
@@ -103,3 +104,16 @@ $ yarn react-native rnx-write-third-party-notices [options]
 | --ignore-modules [string] | Comma-separated list of modules to ignore when traversing the source map dependency graph.                                      |
 | --preamble-text [string]  | A string to prepend to the start of the 3rd-party notice.                                                                       |
 | --additional-text [path]  | A string to append to the end of the 3rd-party notice.                                                                          |
+
+## Clean a React Native Project
+
+Cleans your project by removing React Native related caches and modules.
+
+```
+$ yarn react-native rnx-clean [options]
+```
+
+| Option                | Description                                                                                                                                                            |
+| --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| --include [string]    | Comma-separated flag of caches to clear e.g npm,yarn . When not specified , only non-platform specific caches are cleared. [android,cocoapods,npm,metro,watchman,yarn] |
+| --project-root [path] | Root path to your React Native project. When not specified, defaults to current working directory                                                                      |

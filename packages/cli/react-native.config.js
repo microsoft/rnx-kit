@@ -7,6 +7,7 @@ const {
   rnxDepCheckCommand,
   rnxTestCommand,
   rnxWriteThirdPartyNotices,
+  rnxClean,
 } = require("./lib/index");
 
 module.exports = {
@@ -225,6 +226,23 @@ module.exports = {
           name: "--additional-text [path]",
           description:
             "A string to append at the end of the generated licence file.",
+        },
+      ],
+    },
+    {
+      name: "rnx-clean",
+      func: rnxClean,
+      description: "Clears React Native project related caches",
+      options: [
+        {
+          name: "--include [android,cocoapods,npm,metro,watchman,yarn]",
+          description:
+            "Comma-separated flag of caches to clear e.g npm,yarn . When not specified , only non-platform specific caches are cleared.",
+        },
+        {
+          name: "--project-root <path>",
+          description: "Root path to your React Native project (optional)",
+          parse: (val) => path.resolve(val),
         },
       ],
     },

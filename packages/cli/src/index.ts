@@ -4,3 +4,4 @@ export { rnxStart } from "./start";
 export { rnxTest, rnxTestCommand } from "./test";
 export { rnxWriteThirdPartyNotices } from "./write-third-party-notices";
 export { parseBoolean } from "./parsers";
+export { rnxClean } from "./clean";
