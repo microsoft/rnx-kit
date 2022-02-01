@@ -18,12 +18,30 @@ or if you're using npm:
 npm add --save-dev @rnx-kit/eslint-plugin
 ```
 
-## Usage
+## Recommended Configs
 
-Add `@rnx-kit/eslint-plugin` to your ESLint configuration file:
+This ESLint plugin exports
+[`@rnx-kit/recommended`](https://github.com/microsoft/rnx-kit/blob/main/packages/eslint-plugin/src/configs/recommended.js)
+configuration. To enable it, add it to the `extends` section of your ESLint
+config file:
 
-```js
-module.exports = {
-  extends: ["plugin:@rnx-kit/recommended"],
-};
+```json
+{
+  "extends": ["plugin:@rnx-kit/recommended"]
+}
 ```
+
+`@rnx-kit/recommended` currently extends:
+
+- [`eslint:recommended`](https://eslint.org/docs/rules/)
+- [`plugin:@typescript-eslint/recommended`](https://github.com/typescript-eslint/typescript-eslint/tree/main/packages/eslint-plugin#supported-rules)
+- [`plugin:react/recommended`](https://github.com/yannickcr/eslint-plugin-react#recommended)
+
+## Supported Rules
+
+- ✓: Enabled with `@rnx-kit/recommended`
+- 🔧: Fixable with `--fix`
+
+|  ✓  | 🔧  | Rule                                                                                                                         | Description         |
+| :-: | :-: | :--------------------------------------------------------------------------------------------------------------------------- | :------------------ |
+|  ✓  | 🔧  | [`@rnx-kit/no-export-all`](https://github.com/microsoft/rnx-kit/blob/main/packages/eslint-plugin/src/rules/no-export-all.js) | disallow `export *` |
