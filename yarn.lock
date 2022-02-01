@@ -2386,9 +2386,9 @@
     "@types/metro-source-map" "*"
 
 "@types/metro@*", "@types/metro@^0.66.0":
-  version "0.66.0"
-  resolved "https://registry.yarnpkg.com/@types/metro/-/metro-0.66.0.tgz#4b2623400c57a2d35365de7b9b35ad8ee9f7366d"
-  integrity sha512-qetMTHNhDeIwV7BK4ubyyiBV/UAPwrspe+Z76xbwKaFC7rGLGsna8FdbyKh9C7WaN2jQIYOkEW8YOJSIenlXOw==
+  version "0.66.1"
+  resolved "https://registry.yarnpkg.com/@types/metro/-/metro-0.66.1.tgz#f619bc21ff2a459eff2222ca13a58693dd0ebfe3"
+  integrity sha512-dwmII5ifXDuBDT3w7fWYKLT/TPsVcU3I8ydj3uoLmUFNTpsc3H+2I6ovDIiQKlx/GI1mE4LswzLo/zkqMFu5AQ==
   dependencies:
     "@types/babel__code-frame" "*"
     "@types/metro-babel-transformer" "*"
