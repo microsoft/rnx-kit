@@ -1952,13 +1952,13 @@
     sudo-prompt "^9.0.0"
     wcwidth "^1.0.1"
 
-"@react-native-windows/cli@0.66.1":
-  version "0.66.1"
-  resolved "https://registry.yarnpkg.com/@react-native-windows/cli/-/cli-0.66.1.tgz#613ed9889d1c45fcd7e0f643fae5d6ed182522a4"
-  integrity sha512-lEFpn+EVphz9GkeSdQsNWBgaeXlLrml8rD2GLep/gd53wwBSXs4mqU3UXZ5XyJi7GOgLe2pD7VNYt0YIpNgK2w==
+"@react-native-windows/cli@0.66.2":
+  version "0.66.2"
+  resolved "https://registry.yarnpkg.com/@react-native-windows/cli/-/cli-0.66.2.tgz#8c088200ca1f036f8328ec7fc3c6b571c43e78fc"
+  integrity sha512-2BryCC0+SqY/ZZph2hzlY4v9GKt5x3Mvk4TqQoBu2ru0D0QkXeadNk+o8T5srYAvldmHPVnaAEMj9wW1Et8//Q==
   dependencies:
-    "@react-native-windows/package-utils" "0.66.0"
-    "@react-native-windows/telemetry" "0.66.0"
+    "@react-native-windows/package-utils" "0.66.1"
+    "@react-native-windows/telemetry" "0.66.1"
     "@xmldom/xmldom" "^0.7.5"
     chalk "^4.1.0"
     cli-spinners "^2.2.0"
@@ -1977,33 +1977,33 @@
     xml-parser "^1.2.1"
     xpath "^0.0.27"
 
-"@react-native-windows/find-repo-root@0.66.0":
-  version "0.66.0"
-  resolved "https://registry.yarnpkg.com/@react-native-windows/find-repo-root/-/find-repo-root-0.66.0.tgz#b837e8e92d8edef37fd336c8a1676a19509e985a"
-  integrity sha512-VJj/VvbPZ361Y0D9k53eyRo8ESDKaBaSkO3OHdV7yPr9W9UDHpQyw92fQ4EUz/4z91exyb0BceUS+5cDw8usPw==
+"@react-native-windows/find-repo-root@0.66.1":
+  version "0.66.1"
+  resolved "https://registry.yarnpkg.com/@react-native-windows/find-repo-root/-/find-repo-root-0.66.1.tgz#221e3abae0a698de2a244095b6c16bfae94d2080"
+  integrity sha512-oStJBtcKUldi5mZClxvNZHs0QsjglLUDmQclpDRGyvQkMsU4BWayAECx02yyptWNJ1B/fXEHbnaWQ/mo1+WRsQ==
   dependencies:
     find-up "^4.1.0"
 
-"@react-native-windows/package-utils@0.66.0":
-  version "0.66.0"
-  resolved "https://registry.yarnpkg.com/@react-native-windows/package-utils/-/package-utils-0.66.0.tgz#9d273a838001929d566010175ff691b974669671"
-  integrity sha512-hh+WuSZEsni3KTxi7SAMYJY/xZx55XmBV3/LI8t87WlfEs1jsFDEkDgJ8RZa5z1CKv+OGTVoMprYUzk0xqz1aA==
+"@react-native-windows/package-utils@0.66.1":
+  version "0.66.1"
+  resolved "https://registry.yarnpkg.com/@react-native-windows/package-utils/-/package-utils-0.66.1.tgz#1037a512184fc19240580772728f0a1e5e7859d3"
+  integrity sha512-SQuHGsvLdiqXWGQgkzFXvE5DBtGQwRhsuVvSc/4WokcNlQKdflDly/njh7IZnBoB8LIBelO4cguH0zBWiP6QOw==
   dependencies:
-    "@react-native-windows/find-repo-root" "0.66.0"
+    "@react-native-windows/find-repo-root" "0.66.1"
     get-monorepo-packages "^1.2.0"
     lodash "^4.17.15"
 
-"@react-native-windows/telemetry@0.66.0":
-  version "0.66.0"
-  resolved "https://registry.yarnpkg.com/@react-native-windows/telemetry/-/telemetry-0.66.0.tgz#968a7ba443cd5393d9b1040700f59b1dd564668b"
-  integrity sha512-SxN0o1GkqT5Vpw+3GlFXpiKXgaOhDetqtqf6pbxfiykKPODKduOO8qneS6zzW7Mbw30yXtNOrKBM0CxNRQQeOg==
+"@react-native-windows/telemetry@0.66.1":
+  version "0.66.1"
+  resolved "https://registry.yarnpkg.com/@react-native-windows/telemetry/-/telemetry-0.66.1.tgz#833951080b307cc8c5ce6bcab065d7154c5e79dd"
+  integrity sha512-11Dfll0emyOpnW21yiQmUwOQEa4jiJbBjYTU9/9KbCHIKePHAGZCvSsASlQ7L2rZHHwRc9dyxJC0dacSgx1Ygw==
   dependencies:
     applicationinsights "^1.8.8"
 
-"@react-native-windows/virtualized-list@0.66.0":
-  version "0.66.0"
-  resolved "https://registry.yarnpkg.com/@react-native-windows/virtualized-list/-/virtualized-list-0.66.0.tgz#6d8d1a9fc75360e47e2bd8223e58f10f5fd620ac"
-  integrity sha512-DXve8EACESyBbTykaJykvvgptaXaosBJVgkyHOzn4xOr/aywmn9TU92OPyn7D9Ya2+axK/ZOwyl70ZHjlqpHNA==
+"@react-native-windows/virtualized-list@0.66.1":
+  version "0.66.1"
+  resolved "https://registry.yarnpkg.com/@react-native-windows/virtualized-list/-/virtualized-list-0.66.1.tgz#6dc7e2389b19b22bdf38e743451478162c1f8e81"
+  integrity sha512-B1pIjbUC/JrA6KP9rDogtoIPaOxAXyHqzDTa/IGyvVy7eOsqD1BeugxxXwfVmLNhwGdBBExQbf7uKzSsBP09FQ==
   dependencies:
     invariant "^2.2.4"
 
@@ -8087,17 +8087,17 @@ react-native-test-app@^0.11.4:
     yargs "^16.0.0"
 
 react-native-windows@^0.66.0-0:
-  version "0.66.5"
-  resolved "https://registry.yarnpkg.com/react-native-windows/-/react-native-windows-0.66.5.tgz#440d7b11e9b5c5761151c2744001453e3f858ae4"
-  integrity sha512-iHsKgZBXasyXyKmbEeSNEivEnwR7EBm5H9pJRxeV2VLLug216TL6BKRqouwEP4Bw2/lbtrW5Wzb5oayGvTFRUg==
+  version "0.66.9"
+  resolved "https://registry.yarnpkg.com/react-native-windows/-/react-native-windows-0.66.9.tgz#33e4ce6b146efeb31be10342227d02c1777f2ff7"
+  integrity sha512-QhSvW7vblbKFYgYl0J6ssYU4KKsKAFRLrUE5IbiTx3iF5Kcf2dWB2i84bKQeQpmjjhyUczCpn5+Pncp8CFVklg==
   dependencies:
     "@babel/runtime" "^7.0.0"
     "@jest/create-cache-key-function" "^27.0.1"
     "@react-native-community/cli" "^6.0.0"
     "@react-native-community/cli-platform-android" "^6.0.0"
     "@react-native-community/cli-platform-ios" "^6.0.0"
-    "@react-native-windows/cli" "0.66.1"
-    "@react-native-windows/virtualized-list" "0.66.0"
+    "@react-native-windows/cli" "0.66.2"
+    "@react-native-windows/virtualized-list" "0.66.1"
     "@react-native/assets" "1.0.0"
     "@react-native/normalize-color" "1.0.0"
     "@react-native/polyfills" "2.0.0"
