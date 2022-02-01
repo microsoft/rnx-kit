@@ -9,7 +9,7 @@ Command-line interface for working with `kit` packages in your repo.
 - [Start a bundle server](#Start-a-Bundle-Server)
 - [Manage kit dependencies](#Manage-Kit-Dependencies)
 - [Generate a 3rd-party notice for a kit](#Generate-a-Third%2dParty-Notice-for-a-Kit)
-- [Clean React Native Caches](#Clean-React-Native-Cache)
+- [Clean a React Native Project](#Clean-a-React-Native-Project)
 
 ## Bundle a Kit
 
