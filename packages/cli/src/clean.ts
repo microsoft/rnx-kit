@@ -4,6 +4,7 @@ import path from "path";
 import fs from "fs";
 import os from "os";
 import { info, warn, error } from "@rnx-kit/console";
+import { spawnSync } from "child_process";
 
 type Args = {
   include: string;
@@ -45,26 +46,22 @@ export function rnxClean(
         },
       },
     ],
-    ios: [
+    cocoapods: [
       {
-        label: "Cleaning IOS Caches ",
+        label: "Cleaning Cocoapods Cache",
         action: () => {
-          findPath(
-            currentWorkingDirectory,
-            "Podfile",
-            "ios",
-            (path: string) => {
-              execute("pod", ["cache", "clean", "--all"], path);
-            }
-          );
-        },
-      },
-    ],
-    haste: [
-      {
-        label: "Cleaning Haste Cache",
-        action: () => {
-          cleanDir("$TMPDIR/haste-map-*");
+          //clean both ios & macos platforms if present
+          const platforms = ["ios", "macos"];
+          platforms.forEach((platform) => {
+            findPath(
+              currentWorkingDirectory,
+              "Podfile",
+              platform,
+              (path: string) => {
+                execute("pod", ["cache", "clean", "--all"], path);
+              }
+            );
+          });
         },
       },
     ],
@@ -82,21 +79,6 @@ export function rnxClean(
         },
       },
     ],
-    macos: [
-      {
-        label: "Cleaning MacOS Caches ",
-        action: () => {
-          findPath(
-            currentWorkingDirectory,
-            "Podfile",
-            "macos",
-            (path: string) => {
-              execute("pod", ["cache", "clean", "--all"], path);
-            }
-          );
-        },
-      },
-    ],
     metro: [
       {
         label: "Cleaning Metro Cache",
@@ -104,8 +86,12 @@ export function rnxClean(
           cleanDir("$TMPDIR/metro-*");
         },
       },
-    ],
-    react: [
+      {
+        label: "Cleaning Haste Cache",
+        action: () => {
+          cleanDir("$TMPDIR/haste-map-*");
+        },
+      },
       {
         label: "Cleaning React Native Cache",
         action: () => {
@@ -141,11 +127,12 @@ export function rnxClean(
     ],
   };
 
-  const categories = (
-    cliOptions.include
-      ? cliOptions.include
-      : "haste,npm,metro,react,watchman,yarn"
-  ).split(",");
+  const categories = cliOptions.include?.split(",") ?? [
+    "metro",
+    "npm",
+    "watchman",
+    "yarn",
+  ];
 
   categories.forEach((category) => {
     const commands = COMMANDS[category];
@@ -198,16 +185,12 @@ function cleanDir(path: string) {
 function execute(command: string, args: string[], rootPath: string) {
   info(chalk.dim(`${command} ${args.join(" ")}`));
 
-  const { spawnSync } = require("child_process");
-
   const task = spawnSync(command, args, {
     cwd: rootPath ? path.resolve(rootPath) : undefined,
     stdio: "inherit",
   });
 
-  if (task.error && task.error.code == "ENOENT") {
-    warn(`${command} Failed! Command not found`);
-  } else if (task.error) {
+  if (task.error) {
     error(task.error);
   } else if (task.signal) {
     error(`Failed with signal ${task.signal}'`);

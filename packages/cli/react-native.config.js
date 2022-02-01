@@ -235,7 +235,7 @@ module.exports = {
       description: "Clears React Native project related caches",
       options: [
         {
-          name: "--include [android,ios,haste,npm,macos,metro,react,watchman,yarn]",
+          name: "--include [android,cocoapods,npm,metro,watchman,yarn]",
           description:
             "Comma-separated flag of caches to clear e.g npm,yarn . When not specified , only non-platform specific caches are cleared.",
         },
