@@ -1,128 +1,110 @@
 import type { Config as CLIConfig } from "@react-native-community/cli-types";
-import { error, info, warn } from "@rnx-kit/console";
-import chalk from "chalk";
-import { spawnSync } from "child_process";
-import fs from "fs";
+import { spawn } from "child_process";
+import { existsSync as fileExists } from "fs";
+import fs from "fs/promises";
+import ora from "ora";
 import os from "os";
 import path from "path";
 
 type Args = {
-  include: string;
-  projectRoot: string;
+  include?: string;
+  projectRoot?: string;
+};
+
+type Task = {
+  label: string;
+  action: () => Promise<void>;
 };
 
 type CLICommand = {
-  [key: string]: { label: string; action: () => void }[];
+  [key: string]: Task[];
 };
 
-const npm = os.platform() === "win32" ? "npm.cmd" : "npm";
-const yarn = os.platform() === "win32" ? "yarn.cmd" : "yarn";
-
-export function rnxClean(
+export async function rnxClean(
   _argv: string[],
   _config: CLIConfig,
   cliOptions: Args
-): void {
-  const currentWorkingDirectory = cliOptions.projectRoot ?? process.cwd();
-
-  //validate root path
-  if (!fs.existsSync(currentWorkingDirectory)) {
-    throw new Error(`Invalid path provided! ${currentWorkingDirectory}`);
+): Promise<void> {
+  const projectRoot = cliOptions.projectRoot ?? process.cwd();
+  if (!fileExists(projectRoot)) {
+    throw new Error(`Invalid path provided! ${projectRoot}`);
   }
+
+  const npm = os.platform() === "win32" ? "npm.cmd" : "npm";
+  const yarn = os.platform() === "win32" ? "yarn.cmd" : "yarn";
 
   const COMMANDS: CLICommand = {
     android: [
       {
-        label: "Cleaning Android Cache",
+        label: "Clean Gradle cache",
         action: () => {
-          findPath(
-            currentWorkingDirectory,
-            "gradlew",
-            "android",
-            (path: string) => {
-              execute("./gradlew", ["clean"], path);
-            }
-          );
+          const candidates =
+            os.platform() === "win32"
+              ? ["android/gradlew.bat", "gradlew.bat"]
+              : ["android/gradlew", "gradlew"];
+          const gradlew = findPath(projectRoot, candidates);
+          if (gradlew) {
+            const script = path.basename(gradlew);
+            return execute(
+              os.platform() === "win32" ? script : `./${script}`,
+              ["clean"],
+              path.dirname(gradlew)
+            );
+          } else {
+            return Promise.resolve();
+          }
         },
       },
     ],
     cocoapods: [
       {
-        label: "Cleaning Cocoapods Cache",
-        action: () => {
-          //clean both ios & macos platforms if present
-          const platforms = ["ios", "macos"];
-          platforms.forEach((platform) => {
-            findPath(
-              currentWorkingDirectory,
-              "Podfile",
-              platform,
-              (path: string) => {
-                execute("pod", ["cache", "clean", "--all"], path);
-              }
-            );
-          });
-        },
+        label: "Clean CocoaPods cache",
+        action: () => execute("pod", ["cache", "clean", "--all"], projectRoot),
       },
     ],
     npm: [
       {
-        label: "Removing node_modules",
-        action: () => {
-          cleanDir(`${currentWorkingDirectory}/node_modules`);
-        },
+        label: "Remove node_modules",
+        action: () => cleanDir(`${projectRoot}/node_modules`),
       },
       {
-        label: "Verifying npm Cache",
-        action: () => {
-          execute(npm, ["cache", "verify"], currentWorkingDirectory);
-        },
+        label: "Verify npm cache",
+        action: () => execute(npm, ["cache", "verify"], projectRoot),
       },
     ],
     metro: [
       {
-        label: "Cleaning Metro Cache",
-        action: () => {
-          cleanDir("$TMPDIR/metro-*");
-        },
+        label: "Clean Metro cache",
+        action: () => cleanDir(`${os.tmpdir()}/metro-*`),
       },
       {
-        label: "Cleaning Haste Cache",
-        action: () => {
-          cleanDir("$TMPDIR/haste-map-*");
-        },
+        label: "Clean Haste cache",
+        action: () => cleanDir(`${os.tmpdir()}/haste-map-*`),
       },
       {
-        label: "Cleaning React Native Cache",
-        action: () => {
-          cleanDir("$TMPDIR/react-*");
-        },
+        label: "Clean React Native cache",
+        action: () => cleanDir(`${os.tmpdir()}/react-*`),
       },
     ],
     watchman: [
       {
-        label: "Stopping watchman",
-        action: () => {
+        label: "Stop Watchman",
+        action: () =>
           execute(
             os.platform() === "win32" ? "tskill" : "killall",
             ["watchman"],
-            currentWorkingDirectory
-          );
-        },
+            projectRoot
+          ),
       },
       {
-        label: "Deleting watchman Cache",
-        action: () => {
-          execute("watchman", ["watch-del-all"], currentWorkingDirectory);
-        },
+        label: "Delete Watchman cache",
+        action: () => execute("watchman", ["watch-del-all"], projectRoot),
       },
     ],
     yarn: [
       {
-        label: "Cleaning Yarn Cache",
-        action: () => {
-          execute(yarn, ["cache", "clean"], currentWorkingDirectory);
-        },
+        label: "Clean Yarn cache",
+        action: () => execute(yarn, ["cache", "clean"], projectRoot),
       },
     ],
   };
@@ -134,67 +116,69 @@ export function rnxClean(
     "yarn",
   ];
 
-  categories.forEach((category) => {
+  const spinner = ora();
+  for (const category of categories) {
     const commands = COMMANDS[category];
     if (!commands) {
-      warn("Unknown category:", category);
+      spinner.warn(`Unknown category: ${category}`);
       return;
     }
 
-    commands.forEach(({ label, action }) => {
-      info(label);
-      action();
+    for (const { action, label } of commands) {
+      spinner.start(label);
+      await action()
+        .then(() => {
+          spinner.succeed();
+        })
+        .catch((e) => {
+          spinner.fail(`${label} » ${e}`);
+        });
+    }
+  }
+}
+
+function cleanDir(path: string): Promise<void> {
+  if (!fileExists(path)) {
+    return Promise.resolve();
+  }
+
+  return fs.rmdir(path, { maxRetries: 3, recursive: true });
+}
+
+function findPath(startPath: string, files: string[]): string | undefined {
+  // TODO: Find project files via `@react-native-community/cli`
+  for (const file of files) {
+    const filename = path.resolve(startPath, file);
+    if (fileExists(filename)) {
+      return filename;
+    }
+  }
+
+  return undefined;
+}
+
+function execute(command: string, args: string[], cwd: string): Promise<void> {
+  return new Promise((resolve, reject) => {
+    const process = spawn(command, args, {
+      cwd,
+      stdio: ["inherit", null, null],
+    });
+
+    const stderr: Buffer[] = [];
+    process.stderr.on("data", (data) => {
+      stderr.push(data);
+    });
+
+    process.on("close", (code, signal) => {
+      if (code === 0) {
+        resolve();
+      } else if (stderr) {
+        reject(Buffer.concat(stderr).toString().trimEnd());
+      } else if (signal) {
+        reject(`Failed with signal ${signal}`);
+      } else {
+        reject(`Failed with exit code ${code}`);
+      }
     });
   });
-}
-
-function findPath(
-  startPath: string,
-  filter: string,
-  platform: string,
-  callback: (path: string) => void
-) {
-  const files = fs.readdirSync(startPath);
-
-  for (let i = 0; i < files.length; i++) {
-    const filename = path.join(startPath, files[i]);
-
-    const stat = fs.lstatSync(filename);
-
-    if (stat.isDirectory() && files[i] === platform) {
-      findPath(filename, filter, platform, callback); //recurse
-      return;
-    } else if (filename.indexOf(filter) >= 0) {
-      callback(startPath);
-      return;
-    }
-  }
-
-  warn(`Could not find ${platform} path in ${startPath}`);
-}
-
-function cleanDir(path: string) {
-  if (!fs.existsSync(path)) {
-    return;
-  }
-
-  fs.rmdirSync(path, { recursive: true });
-  info(`Successfully cleaned: ${path}`);
-}
-
-function execute(command: string, args: string[], rootPath: string) {
-  info(chalk.dim(`${command} ${args.join(" ")}`));
-
-  const task = spawnSync(command, args, {
-    cwd: rootPath ? path.resolve(rootPath) : undefined,
-    stdio: "inherit",
-  });
-
-  if (task.error) {
-    error(task.error);
-  } else if (task.signal) {
-    error(`Failed with signal ${task.signal}'`);
-  } else if (task.status !== 0) {
-    error(`Failed with exit code ${task.status}'`);
-  }
 }
