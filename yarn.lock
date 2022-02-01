@@ -7591,10 +7591,10 @@ parent-module@^1.0.0:
   dependencies:
     callsites "^3.0.0"
 
-parse-diff@^0.8.0:
-  version "0.8.1"
-  resolved "https://registry.yarnpkg.com/parse-diff/-/parse-diff-0.8.1.tgz#d8d3d11a97da7a0dc6c657bbb72024c0738359cd"
-  integrity sha512-0QG0HqwXCC/zMohOlaxkQmV1igZq1LQ6xsv/ziex6TDbY0GFxr3TDJN+/aHjWH3s2WTysSW3Bhs9Yfh6DOelFA==
+parse-diff@^0.9.0:
+  version "0.9.0"
+  resolved "https://registry.yarnpkg.com/parse-diff/-/parse-diff-0.9.0.tgz#2e71b5dc5d8f4b9c19c471fd6325646dc9f21724"
+  integrity sha512-Jn+VZORAezkfOXR6B40EZcXxdJBamtgBpfeoFH6hxD+p0e74nVaCL9SWlQj1ggc8b6AexgPKlDiiE0CMMZDSbQ==
 
 parse-json@^4.0.0:
   version "4.0.0"
@@ -9058,14 +9058,14 @@ sudo-prompt@^9.0.0:
   integrity sha512-Mu7R0g4ig9TUuGSxJavny5Rv0egCEtpZRNMrZaYS1vxkiIxGiGUwoezU3LazIQ+KE04hTrTfNPgxU5gzi7F5Pw==
 
 suggestion-bot@^1.2.2:
-  version "1.2.7"
-  resolved "https://registry.yarnpkg.com/suggestion-bot/-/suggestion-bot-1.2.7.tgz#65c2962a4d87831817c2e641aadf1ff930c20864"
-  integrity sha512-ho1Vlex1hCsWnqv3gs6gj3mhDSkARLOkddMKyZ0UTDcRgkaIoYXiVDPyTz60QPE5IVkVEQ7Gk74zxBjCdFSSKQ==
+  version "1.2.8"
+  resolved "https://registry.yarnpkg.com/suggestion-bot/-/suggestion-bot-1.2.8.tgz#924918c11b0013d57fb03763d19a009e7791e0a0"
+  integrity sha512-zXZzKZBkmLWt6lMA4AEQBZvcKZlWvsjx8779oKrAC1iJYe3ODTWFEGbE4uGc+0Au8wBNwJWxRi41H3FNkH9/zA==
   dependencies:
     "@octokit/rest" "^18.0.0"
     azure-devops-node-api "^11.0.0"
     commander "^8.1.0"
-    parse-diff "^0.8.0"
+    parse-diff "^0.9.0"
 
 supports-color@^5.3.0:
   version "5.5.0"
