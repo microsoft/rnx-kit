@@ -94,11 +94,6 @@ jobs:
     name: "Build Android"
     runs-on: ubuntu-latest
     steps:
-      - name: Set up JDK
-        uses: actions/setup-java@v2.5.0
-        with:
-          distribution: temurin
-          java-version: 11
       - name: Set up Node 14
         uses: actions/setup-node@v2.5.1
         with:
