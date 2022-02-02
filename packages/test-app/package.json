@@ -15,10 +15,10 @@
     "bundle:ios": "react-native rnx-bundle --platform ios",
     "bundle:macos": "react-native rnx-bundle --platform macos",
     "bundle:windows": "react-native rnx-bundle --platform windows",
-    "android": "react-native run-android",
-    "ios": "react-native run-ios",
-    "macos": "react-native run-macos --scheme ReactTestApp",
-    "windows": "react-native run-windows --sln windows\\SampleCrossApp.sln",
+    "android": "react-native run-android --no-packager",
+    "ios": "react-native run-ios --no-packager",
+    "macos": "react-native run-macos --scheme ReactTestApp --no-packager",
+    "windows": "react-native run-windows --no-packager --sln windows\\SampleCrossApp.sln",
     "start": "react-native rnx-start"
   },
   "dependencies": {
@@ -46,7 +46,7 @@
     "@types/react-native": "^0.64.0",
     "metro-react-native-babel-preset": "^0.66.2",
     "react-native-codegen": "^0.0.7",
-    "react-native-test-app": "^0.11.4",
+    "react-native-test-app": "^1.0.5",
     "react-test-renderer": "17.0.2",
     "typescript": "^4.0.0"
   },

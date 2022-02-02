@@ -90,6 +90,11 @@ const profile: Profile = {
     version: "^0.66.2",
     devOnly: true,
   },
+  "test-app": {
+    name: "react-native-test-app",
+    version: "^1.0.5",
+    devOnly: true,
+  },
 };
 
 export default profile;

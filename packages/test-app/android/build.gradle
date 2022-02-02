@@ -1,10 +1,10 @@
-buildscript { scriptHandler ->
+buildscript {
     def androidTestAppDir = "../../../node_modules/react-native-test-app/android"
-    apply from: "$androidTestAppDir/dependencies.gradle"
+    apply(from: "${androidTestAppDir}/dependencies.gradle")
 
     repositories {
-        google()
         mavenCentral()
+        google()
     }
 
     dependencies {
