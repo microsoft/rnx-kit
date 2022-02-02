@@ -4,6 +4,7 @@ import {
   defaultProfiles,
   getProfilesFor,
   getProfileVersionsFor,
+  loadCustomProfiles,
   profilesSatisfying,
   resolveCustomProfiles,
 } from "../src/profiles";
@@ -152,6 +153,51 @@ describe("getProfilesFor()", () => {
     expect(skynet.name in profile_0_63).toBe(false);
 
     expect(consoleErrorSpy).not.toBeCalled();
+  });
+});
+
+describe("loadCustomProfiles()", () => {
+  test("returns any empty object if no custom profiles are specified", () => {
+    expect(loadCustomProfiles(undefined)).toEqual({});
+  });
+
+  test("throws if custom profiles are not the right shape", () => {
+    expect(() =>
+      loadCustomProfiles(
+        path.join(
+          __dirname,
+          "__fixtures__",
+          "custom-profiles",
+          "local-profiles.js"
+        )
+      )
+    ).toThrow("doesn't default export profiles");
+  });
+
+  test("loads valid custom profiles", () => {
+    expect(
+      loadCustomProfiles(
+        path.join(
+          __dirname,
+          "__fixtures__",
+          "custom-profiles",
+          "valid-profiles.js"
+        )
+      )
+    ).toMatchSnapshot();
+  });
+
+  test("prepends root-level capabilities to all profiles", () => {
+    expect(
+      loadCustomProfiles(
+        path.join(
+          __dirname,
+          "__fixtures__",
+          "custom-profiles",
+          "root-level-profiles.js"
+        )
+      )
+    ).toMatchSnapshot();
   });
 });
 

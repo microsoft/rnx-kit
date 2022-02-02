@@ -75,6 +75,13 @@ export type ProfileVersion =
   | "0.66"
   | "0.67";
 
+export type ProfilesInfo = {
+  supportedProfiles: Profile[];
+  supportedVersions: string;
+  targetProfile: Profile[];
+  targetVersion: string;
+};
+
 export type ExcludedPackage = Package & {
   reason: string;
 };

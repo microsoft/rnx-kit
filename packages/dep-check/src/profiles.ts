@@ -9,16 +9,16 @@ import profile_0_64 from "./profiles/profile-0.64";
 import profile_0_65 from "./profiles/profile-0.65";
 import profile_0_66 from "./profiles/profile-0.66";
 import profile_0_67 from "./profiles/profile-0.67";
-import type { Profile, ProfileVersion } from "./types";
+import type {
+  MetaPackage,
+  Package,
+  Profile,
+  ProfilesInfo,
+  ProfileVersion,
+} from "./types";
 
+type Capabilities = Record<string, MetaPackage | Package>;
 type ProfileMap = Record<ProfileVersion, Profile>;
-
-export type ProfilesInfo = {
-  supportedProfiles: Profile[];
-  supportedVersions: string;
-  targetProfile: Profile[];
-  targetVersion: string;
-};
 
 export const defaultProfiles: Readonly<ProfileMap> = {
   "0.61": profile_0_61,
@@ -50,7 +50,9 @@ function getVersionComparator(
   throw new Error(`Invalid 'react-native' version range: ${versionOrRange}`);
 }
 
-function isValidProfileMap(map: unknown): map is Partial<ProfileMap> {
+function isValidProfileMap(
+  map: unknown
+): map is Partial<ProfileMap> & Capabilities {
   if (typeof map !== "object" || map === null) {
     return false;
   }
@@ -58,7 +60,11 @@ function isValidProfileMap(map: unknown): map is Partial<ProfileMap> {
   return Object.keys(defaultProfiles).some((version) => version in map);
 }
 
-function loadCustomProfiles(
+function isValidProfileVersion(v: string): v is ProfileVersion {
+  return v in defaultProfiles;
+}
+
+export function loadCustomProfiles(
   customProfilesPath: string | undefined
 ): Partial<ProfileMap> {
   if (customProfilesPath) {
@@ -70,7 +76,7 @@ function loadCustomProfiles(
           `${message}. Please make sure that it exports an object with a shape similar to:`,
           "",
           "    module.exports = {",
-          '      "0.63": {',
+          '      "0.67": {',
           '        "my-capability": {',
           '          "name": "my-module",',
           '          "version": "1.0.0",',
@@ -82,6 +88,37 @@ function loadCustomProfiles(
       );
       throw new Error(message);
     }
+
+    // Root-level capabilities should be prepended to all profiles to allow
+    // version-specific capabilities to override them.
+    const commonCapabilities: Capabilities = {};
+    const hasCommonCapabilities = Object.keys(customProfiles).reduce(
+      (hasCommonCapabilities, key) => {
+        if (isValidProfileVersion(key)) {
+          return hasCommonCapabilities;
+        }
+
+        commonCapabilities[key] = customProfiles[key];
+        return true;
+      },
+      false
+    );
+    if (hasCommonCapabilities) {
+      const allVersions = Object.keys(defaultProfiles) as ProfileVersion[];
+      return allVersions.reduce<
+        Record<string, Record<string, MetaPackage | Package>>
+      >((expandedProfiles, version) => {
+        const profile = customProfiles[version];
+        expandedProfiles[version] = profile
+          ? {
+              ...commonCapabilities,
+              ...profile,
+            }
+          : commonCapabilities;
+        return expandedProfiles;
+      }, {});
+    }
+
     return customProfiles;
   }
 

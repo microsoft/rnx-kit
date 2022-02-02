@@ -248,6 +248,25 @@ module.exports = {
 };
 ```
 
+If you have capabilities that should be the same across all versions, you can
+declare them at the root level like below:
+
+```js
+module.exports = {
+  "my-capability": {
+    name: "my-module",
+    version: "1.0.0",
+  },
+  0.64: {
+    // This entry will override the common version
+    "my-capability": {
+      name: "my-module",
+      version: "1.1.0",
+    },
+  },
+};
+```
+
 For a more complete example, have a look at the
 [default profiles](https://github.com/microsoft/rnx-kit/blob/769e9fa290929effd5111884f1637c21326b5a95/packages/dep-check/src/profiles.ts#L11).
 

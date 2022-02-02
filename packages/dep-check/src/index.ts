@@ -14,6 +14,7 @@ export type {
   MetaPackage,
   Package,
   Profile,
+  ProfilesInfo,
   ProfileVersion,
   VigilantOptions,
 } from "./types";
