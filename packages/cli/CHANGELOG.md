@@ -1,5 +1,23 @@
 # Change Log - @rnx-kit/cli
 
+## 0.11.0
+
+### Minor Changes
+
+- 2036ac7: Added Generic rnxClean script.This is responsible for clearing all react native related caches.
+
+### Patch Changes
+
+- 6f659dd: Fix `rnx-clean` not clearing Gradle cache on Windows
+- 6f659dd: Use `os.tmpdir()` instead of relying on an environment variable
+- 6f659dd: Integrate `ora` to make the output of `rnx-clean` prettier
+- 6f659dd: `pod cache clean` only needs to be run once
+- c15102f: Fix "watchman::CommandValidationError: failed to validate command: unknown command watchman-del-all" when running `rnx-clean`
+- Updated dependencies [f385a26]
+- Updated dependencies [868be32]
+- Updated dependencies [d10f4b0]
+  - @rnx-kit/dep-check@1.12.0
+
 ## 0.10.0
 
 ### Minor Changes
