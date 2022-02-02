@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/eslint-plugin
 
+## 0.2.10
+
+### Patch Changes
+
+- b3308e9: Remove unused `eslint-plugin-jest`
+
 ## 0.2.9
 
 ### Patch Changes

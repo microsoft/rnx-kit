@@ -1,5 +1,16 @@
 # Change Log - @rnx-kit/dep-check
 
+## 1.12.0
+
+### Minor Changes
+
+- f385a26: Allow declaring common capabilities at the root level
+
+### Patch Changes
+
+- 868be32: Bump react-native-test-app to 0.11.4 to support react-native-macos 0.66
+- d10f4b0: Use react-native-test-app 1.0 from react-native 0.66+
+
 ## 1.11.0
 
 ### Minor Changes
