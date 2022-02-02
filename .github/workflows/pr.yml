@@ -92,7 +92,7 @@ jobs:
         working-directory: packages/test-app
   build-android:
     name: "Build Android"
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     steps:
       - name: Set up JDK
         uses: actions/setup-java@v2.5.0
