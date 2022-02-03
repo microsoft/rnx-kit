@@ -1354,10 +1354,10 @@
     "@fluentui/set-version" "^8.1.5"
     tslib "^2.1.0"
 
-"@fluentui/merge-styles@^8.2.3":
-  version "8.2.3"
-  resolved "https://registry.yarnpkg.com/@fluentui/merge-styles/-/merge-styles-8.2.3.tgz#3cd596fc0d83d3f23edcd57d69a50b6e18e4ffa3"
-  integrity sha512-kwjY56C0ACMkYUikOX6krIwfuEworq6+A7V4zE1w8jRc7RSYHQfyfavu6ptNVgPPR/Bmho3AgriyhnnoFq+6fQ==
+"@fluentui/merge-styles@^8.3.0":
+  version "8.3.0"
+  resolved "https://registry.yarnpkg.com/@fluentui/merge-styles/-/merge-styles-8.3.0.tgz#e27581dd43cbe1b5d54d7325e619924883dd0fd5"
+  integrity sha512-qI61vWnmSuZYopMfWbEkTuDmnedmOYmsphTwflG6zif1EPV6h5u3dDUfHnmHMahywNOLOv5MOa+zVU0SCEHSAg==
   dependencies:
     "@fluentui/set-version" "^8.1.5"
     tslib "^2.1.0"
@@ -1370,12 +1370,12 @@
     tslib "^2.1.0"
 
 "@fluentui/utilities@^8.3.9":
-  version "8.3.9"
-  resolved "https://registry.yarnpkg.com/@fluentui/utilities/-/utilities-8.3.9.tgz#d5dad90b03b26a947c066800a2db18ba7d3f9c65"
-  integrity sha512-UNz/5RjEmCtllzpCXEUkK/ScxjYkEG5tHIdUqxe+vg70UL92qlcSLo7E2NKuCuD7HM3z/tVbbE18ZEKJM6AOFg==
+  version "8.3.10"
+  resolved "https://registry.yarnpkg.com/@fluentui/utilities/-/utilities-8.3.10.tgz#0242cfd594772574bc245c0acbfac486f130cc46"
+  integrity sha512-GZaeS1kHMFfMRDN4MM/+Y0HYIQPaYAOwEzQF/T6NvfqHT5A98VEeIZsSzJGQPSVZKmhFa+H/bQYQRS8rgywSzQ==
   dependencies:
     "@fluentui/dom-utilities" "^2.1.5"
-    "@fluentui/merge-styles" "^8.2.3"
+    "@fluentui/merge-styles" "^8.3.0"
     "@fluentui/set-version" "^8.1.5"
     tslib "^2.1.0"
 
