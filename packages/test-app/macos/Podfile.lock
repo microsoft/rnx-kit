@@ -278,7 +278,7 @@ PODS:
     - React-jsi (= 0.66.8)
     - React-logger (= 0.66.8)
     - React-perflogger (= 0.66.8)
-  - ReactTestApp-DevSupport (1.0.5):
+  - ReactTestApp-DevSupport (1.0.6):
     - React-Core
     - React-jsi
   - ReactTestApp-MSAL (0.3.0):
@@ -436,7 +436,7 @@ SPEC CHECKSUMS:
   React-RCTVibration: c299740bfe96297d905e635edae637f129287792
   React-runtimeexecutor: eee1ead713ca75114e5be538ef68e706ee9925b7
   ReactCommon: 59aa8053f2fba6cb469d57c1c17b3720ba582793
-  ReactTestApp-DevSupport: 8bc369e05e317d129989887e6b8baed0e92c877e
+  ReactTestApp-DevSupport: 56072de174bf59b71c402ab0aa85c0d7196c5547
   ReactTestApp-MSAL: 049fa048692e225b95b61bc8af9c20b236d8e11f
   ReactTestApp-Resources: bb546b3a5dca4b7931bee423d4ef28cd94b346cf
   SwiftLint: aaa29a9f649316095a9079595cb60906bd899353
