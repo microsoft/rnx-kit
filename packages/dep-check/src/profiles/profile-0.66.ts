@@ -92,7 +92,7 @@ const profile: Profile = {
   },
   "test-app": {
     name: "react-native-test-app",
-    version: "^1.0.5",
+    version: "^1.0.6",
     devOnly: true,
   },
 };

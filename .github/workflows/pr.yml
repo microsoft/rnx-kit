@@ -120,7 +120,7 @@ jobs:
         env:
           JVM_ARGS: org.gradle.jvmargs=-Xmx4g -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8
         run: |
-          ./gradlew --stacktrace --exclude-task lint --exclude-task lintVitalRelease clean build
+          ./gradlew --stacktrace clean build
         working-directory: packages/test-app/android
   build-ios:
     name: "Build iOS"
