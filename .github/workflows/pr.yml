@@ -25,7 +25,7 @@ jobs:
         uses: actions/cache@v2.1.7
         with:
           path: .yarn-offline-mirror
-          key: ${{ runner.os }}-${{ hashFiles('yarn.lock') }}-3
+          key: ${{ runner.os }}-${{ hashFiles('yarn.lock') }}-4
       - name: Install package dependencies
         run: yarn ci
         env:
@@ -71,7 +71,7 @@ jobs:
         uses: actions/cache@v2.1.7
         with:
           path: .yarn-offline-mirror
-          key: ${{ runner.os }}-${{ hashFiles('yarn.lock') }}-3
+          key: ${{ runner.os }}-${{ hashFiles('yarn.lock') }}-4
       - name: Install package dependencies
         run: yarn ci
       - name: Build and test packages
@@ -111,7 +111,7 @@ jobs:
         uses: actions/cache@v2.1.7
         with:
           path: .yarn-offline-mirror
-          key: ${{ runner.os }}-${{ hashFiles('yarn.lock') }}-3
+          key: ${{ runner.os }}-${{ hashFiles('yarn.lock') }}-4
       - name: Install npm dependencies
         run: yarn ci
         env:
@@ -136,7 +136,7 @@ jobs:
         uses: actions/cache@v2.1.7
         with:
           path: .yarn-offline-mirror
-          key: ${{ runner.os }}-${{ hashFiles('yarn.lock') }}-3
+          key: ${{ runner.os }}-${{ hashFiles('yarn.lock') }}-4
       - name: Install npm dependencies
         run: yarn ci
         env:
