@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/cli
 
+## 0.11.1
+
+### Patch Changes
+
+- a1f0417: `rnx-clean`: Make cache integrity verification optional
+
 ## 0.11.0
 
 ### Minor Changes
