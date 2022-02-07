@@ -242,8 +242,14 @@ module.exports = {
         },
         {
           name: "--project-root <path>",
-          description: "Root path to your React Native project (optional)",
+          description: "Root path to your React Native project",
+          default: process.cwd(),
           parse: (val) => path.resolve(val),
+        },
+        {
+          name: "--verify",
+          description: "Whether to verify the integrity of the cache",
+          default: false,
         },
       ],
     },
