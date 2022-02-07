@@ -9,6 +9,7 @@ import path from "path";
 type Args = {
   include?: string;
   projectRoot?: string;
+  verify?: boolean;
 };
 
 type Task = {
@@ -62,16 +63,6 @@ export async function rnxClean(
         action: () => execute("pod", ["cache", "clean", "--all"], projectRoot),
       },
     ],
-    npm: [
-      {
-        label: "Remove node_modules",
-        action: () => cleanDir(`${projectRoot}/node_modules`),
-      },
-      {
-        label: "Verify npm cache",
-        action: () => execute(npm, ["cache", "verify"], projectRoot),
-      },
-    ],
     metro: [
       {
         label: "Clean Metro cache",
@@ -85,6 +76,20 @@ export async function rnxClean(
         label: "Clean React Native cache",
         action: () => cleanDir(`${os.tmpdir()}/react-*`),
       },
+    ],
+    npm: [
+      {
+        label: "Remove node_modules",
+        action: () => cleanDir(`${projectRoot}/node_modules`),
+      },
+      ...(cliOptions.verify
+        ? [
+            {
+              label: "Verify npm cache",
+              action: () => execute(npm, ["cache", "verify"], projectRoot),
+            },
+          ]
+        : []),
     ],
     watchman: [
       {
