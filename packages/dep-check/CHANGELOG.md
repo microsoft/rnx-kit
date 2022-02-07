@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/dep-check
 
+## 1.12.1
+
+### Patch Changes
+
+- 55106b7: Bump react-native-test-app to 1.0.6 to fix Gradle running out of heap space during the lint task on some machines.
+
 ## 1.12.0
 
 ### Minor Changes
