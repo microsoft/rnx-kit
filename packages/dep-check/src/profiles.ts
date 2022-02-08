@@ -53,11 +53,9 @@ function getVersionComparator(
 function isValidProfileMap(
   map: unknown
 ): map is Partial<ProfileMap> & Capabilities {
-  if (typeof map !== "object" || map === null) {
-    return false;
-  }
-
-  return Object.keys(defaultProfiles).some((version) => version in map);
+  // Just make sure we've got a dictionary since custom profiles can contain
+  // only common dependencies.
+  return typeof map === "object" && map !== null && map.constructor === Object;
 }
 
 function isValidProfileVersion(v: string): v is ProfileVersion {
@@ -108,7 +106,10 @@ export function loadCustomProfiles(
       return allVersions.reduce<
         Record<string, Record<string, MetaPackage | Package>>
       >((expandedProfiles, version) => {
-        const profile = customProfiles[version];
+        // Check whether property exists otherwise Node will complain:
+        // Accessing non-existent property '0.67' of module exports inside circular dependency
+        const profile =
+          version in customProfiles ? customProfiles[version] : undefined;
         expandedProfiles[version] = profile
           ? {
               ...commonCapabilities,
