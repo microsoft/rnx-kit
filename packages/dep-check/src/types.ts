@@ -73,7 +73,8 @@ export type ProfileVersion =
   | "0.64"
   | "0.65"
   | "0.66"
-  | "0.67";
+  | "0.67"
+  | "0.68";
 
 export type ProfilesInfo = {
   supportedProfiles: Profile[];

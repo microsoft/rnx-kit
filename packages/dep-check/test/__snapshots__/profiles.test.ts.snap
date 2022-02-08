@@ -87,5 +87,12 @@ Object {
       "version": "27.0",
     },
   },
+  "0.68": Object {
+    "format": Object {
+      "devOnly": true,
+      "name": "prettier",
+      "version": "^2.5.1",
+    },
+  },
 }
 `;

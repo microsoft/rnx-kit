@@ -9,6 +9,7 @@ import profile_0_64 from "./profiles/profile-0.64";
 import profile_0_65 from "./profiles/profile-0.65";
 import profile_0_66 from "./profiles/profile-0.66";
 import profile_0_67 from "./profiles/profile-0.67";
+import profile_0_68 from "./profiles/profile-0.68";
 import type {
   MetaPackage,
   Package,
@@ -28,6 +29,7 @@ export const defaultProfiles: Readonly<ProfileMap> = {
   "0.65": profile_0_65,
   "0.66": profile_0_66,
   "0.67": profile_0_67,
+  "0.68": profile_0_68,
 };
 
 function getVersionComparator(
