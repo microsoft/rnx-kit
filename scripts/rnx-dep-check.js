@@ -2,18 +2,26 @@
 
 "use strict";
 
-const common = {
+module.exports = {
   "@types/jest": {
     name: "@types/jest",
     version: "^27.0.0",
+    devOnly: true,
   },
   "@types/node": {
     name: "@types/node",
-    version: "^14.15.0",
+    version: "^16.0.0",
+    devOnly: true,
+  },
+  "@types/react-native": {
+    name: "@types/react-native",
+    version: "^0.66.0",
+    devOnly: true,
   },
   "@types/yargs": {
     name: "@types/node",
     version: "^16.0.0",
+    devOnly: true,
   },
   chalk: {
     name: "chalk",
@@ -55,13 +63,6 @@ const common = {
     name: "yargs",
     version: "^16.0.0",
   },
-};
-
-module.exports = {
-  0.63: common,
-  0.64: common,
-  0.65: common,
-  0.66: common,
 };
 
 if (require.main === module) {
