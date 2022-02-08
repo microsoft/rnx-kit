@@ -27,7 +27,7 @@
       }
 
       const { name, version } = pkg;
-      return pacote.manifest(name).then((manifest) => {
+      return pacote.manifest(name, { fullMetadata: true }).then((manifest) => {
         delta[capability] = {
           name,
           version,
