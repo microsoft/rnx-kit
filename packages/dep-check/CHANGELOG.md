@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/dep-check
 
+## 1.12.2
+
+### Patch Changes
+
+- b7e60e9: Don't fail on profiles that contain only common dependencies
+
 ## 1.12.1
 
 ### Patch Changes
