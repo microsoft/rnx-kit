@@ -4213,9 +4213,9 @@ end-of-stream@^1.1.0, end-of-stream@^1.4.1:
     once "^1.4.0"
 
 enhanced-resolve@^5.8.3:
-  version "5.8.3"
-  resolved "https://registry.yarnpkg.com/enhanced-resolve/-/enhanced-resolve-5.8.3.tgz#6d552d465cce0423f5b3d718511ea53826a7b2f0"
-  integrity sha512-EGAbGvH7j7Xt2nc0E7D99La1OiEs8LnyimkRgwExpUMScN6O+3x9tIWs7PLQZVNx4YD+00skHXPXi1yQHpAmZA==
+  version "5.9.0"
+  resolved "https://registry.yarnpkg.com/enhanced-resolve/-/enhanced-resolve-5.9.0.tgz#49ac24953ac8452ed8fed2ef1340fc8e043667ee"
+  integrity sha512-weDYmzbBygL7HzGGS26M3hGQx68vehdEg6VUmqSOaFzXExFqlnKuSvsEJCVGQHScS8CQMbrAqftT+AzzHNt/YA==
   dependencies:
     graceful-fs "^4.2.4"
     tapable "^2.2.0"
@@ -8103,9 +8103,9 @@ react-native-codegen@^0.0.7:
     nullthrows "^1.1.1"
 
 react-native-macos@^0.66.0-0:
-  version "0.66.8"
-  resolved "https://registry.yarnpkg.com/react-native-macos/-/react-native-macos-0.66.8.tgz#aefa44186a635a2b798288549cdc0352141af7bf"
-  integrity sha512-H++EruLqjlsVllxYb6xsv5rb4kIb9/ZCs02Cy8iFmASxjmCQvWlrOfVUMHkDnzDTBTqCLDPN6GPsu+4i3HzgAA==
+  version "0.66.9"
+  resolved "https://registry.yarnpkg.com/react-native-macos/-/react-native-macos-0.66.9.tgz#e5f2912d1f24e61b80d9f0d0b48e2e536e3efc3d"
+  integrity sha512-eaNhowIXjTeYvYtgr2hh+M1cKmsx3AklJ4dnFzvgZzyt5r9g8hzYHaxc7IyxUGARwKMdX2KQfPappDUXGtamVA==
   dependencies:
     "@jest/create-cache-key-function" "^27.0.1"
     "@react-native-community/cli" "^6.0.0"
