@@ -10,7 +10,8 @@ import * as semver from "semver";
 
 export { esbuildTransformerConfig } from "./esbuildTransformerConfig";
 
-type Options = Pick<BuildOptions, "logLevel" | "minify" | "target"> & {
+export type Options = Pick<BuildOptions, "logLevel" | "minify" | "target"> & {
+  analyze?: boolean | "verbose";
   fabric?: boolean;
 };
 
@@ -272,6 +273,7 @@ export function MetroSerializer(
         ],
         legalComments: "none",
         logLevel: buildOptions?.logLevel ?? "error",
+        metafile: Boolean(buildOptions?.analyze),
         minify: buildOptions?.minify ?? !options.dev,
         outfile,
         plugins,
@@ -284,7 +286,7 @@ export function MetroSerializer(
 
         write: false,
       })
-      .then(({ outputFiles }: BuildResult) => {
+      .then(({ metafile, outputFiles }: BuildResult) => {
         const result = { code: "", map: "" };
         outputFiles?.forEach(({ path: outputPath, text }) => {
           if (outputPath === "<stdout>" || outputPath.endsWith(outfile)) {
@@ -293,7 +295,15 @@ export function MetroSerializer(
             result.map = fixSourceMap(outputPath, text);
           }
         });
-        info("esbuild bundle size:", result.code.length);
+        if (metafile) {
+          esbuild
+            .analyzeMetafile(metafile, {
+              verbose: buildOptions?.analyze === "verbose",
+            })
+            .then((text) => info(text));
+        } else {
+          info("esbuild bundle size:", result.code.length);
+        }
         return result;
       });
   };
