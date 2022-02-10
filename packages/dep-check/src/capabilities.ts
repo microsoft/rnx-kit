@@ -15,7 +15,9 @@ export function capabilitiesFor(
   { kitType = "library", customProfilesPath }: CapabilitiesOptions = {}
 ): Partial<KitCapabilities> | undefined {
   const targetReactNativeVersion =
-    peerDependencies?.["react-native"] || dependencies?.["react-native"];
+    peerDependencies?.["react-native"] ||
+    dependencies?.["react-native"] ||
+    devDependencies?.["react-native"];
   if (!targetReactNativeVersion) {
     return undefined;
   }
