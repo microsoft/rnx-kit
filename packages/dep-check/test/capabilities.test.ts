@@ -22,7 +22,23 @@ describe("capabilitiesFor()", () => {
     ).toBeUndefined();
   });
 
-  test("returns both core-android and core-ios for react-native", () => {
+  test("returns capabilities when react-native is under dependencies", () => {
+    const manifest = {
+      name: "@rnx-kit/dep-check",
+      version: "1.0.0",
+      dependencies: {
+        "react-native": "^0.64.1",
+      },
+    };
+    expect(capabilitiesFor(manifest)).toEqual({
+      reactNativeVersion: "^0.64",
+      reactNativeDevVersion: "0.64.0",
+      kitType: "library",
+      capabilities: ["core", "core-android", "core-ios"],
+    });
+  });
+
+  test("returns capabilities when react-native is under peerDependencies", () => {
     const manifest = {
       name: "@rnx-kit/dep-check",
       version: "1.0.0",
@@ -38,7 +54,23 @@ describe("capabilitiesFor()", () => {
     });
   });
 
-  test("returns kit config with type instead of dev version", () => {
+  test("returns capabilities when react-native is under devDependencies", () => {
+    const manifest = {
+      name: "@rnx-kit/dep-check",
+      version: "1.0.0",
+      devDependencies: {
+        "react-native": "^0.64.1",
+      },
+    };
+    expect(capabilitiesFor(manifest)).toEqual({
+      reactNativeVersion: "^0.64",
+      reactNativeDevVersion: "^0.64.1",
+      kitType: "library",
+      capabilities: ["core", "core-android", "core-ios"],
+    });
+  });
+
+  test("returns kit config with app type instead of dev version", () => {
     const manifest = {
       name: "@rnx-kit/dep-check",
       version: "1.0.0",
