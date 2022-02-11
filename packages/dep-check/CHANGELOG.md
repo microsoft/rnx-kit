@@ -1,5 +1,12 @@
 # Change Log - @rnx-kit/dep-check
 
+## 1.12.3
+
+### Patch Changes
+
+- 4c747fd: Add profile for react-native 0.68
+- 730a167: Also look for react-native under `devDependencies`
+
 ## 1.12.2
 
 ### Patch Changes
