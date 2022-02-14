@@ -37,6 +37,10 @@ const profile: Profile = {
     version: "^0.68.0-0",
     capabilities: ["core"],
   },
+  animation: {
+    name: "react-native-reanimated",
+    version: "^2.4.1",
+  },
   "babel-preset-react-native": {
     name: "metro-react-native-babel-preset",
     version: "^0.67.0",
