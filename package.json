@@ -53,6 +53,7 @@
     "node": ">=14.15"
   },
   "resolutions": {
+    "eslint-plugin-react": "^7.26.0",
     "micromatch": "^4.0.0"
   },
   "workspaces": {

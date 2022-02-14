@@ -18,10 +18,8 @@
     "format": "rnx-kit-scripts format"
   },
   "dependencies": {
-    "@microsoft/eslint-plugin-sdl": "^0.1.8",
+    "@microsoft/eslint-plugin-sdl": "^0.1.9",
     "@rnx-kit/eslint-plugin": "*",
-    "eslint": "^8.0.0",
-    "eslint-plugin-node": "11.1.0",
-    "eslint-plugin-security": "1.4.0"
+    "eslint": "^8.0.0"
   }
 }
