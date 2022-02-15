@@ -5,7 +5,7 @@ NS_ASSUME_NONNULL_BEGIN
 typedef NS_ENUM(NSInteger, RNXAccountType) {
     RNXAccountTypeMicrosoftAccount,
     RNXAccountTypeOrganizational,
-    RNXAccountTypeCount
+    RNXAccountTypeInvalid
 };
 
 RNXAccountType RNXAccountTypeFromString(NSString *);
