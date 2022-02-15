@@ -1,3 +1,7 @@
+// TODO: This file will be generated from the TypeScript type definitions. For
+// documentation, please go to
+// https://github.com/microsoft/rnx-kit/blob/main/packages/react-native-auth/src/index.ts
+
 #import <Foundation/Foundation.h>
 
 NS_ASSUME_NONNULL_BEGIN
