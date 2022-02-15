@@ -3,6 +3,7 @@ package com.microsoft.reacttestapp.msal
 import com.microsoft.identity.client.IAccount
 
 enum class AccountType(val type: String) {
+    INVALID("Invalid"),
     MICROSOFT_ACCOUNT("MicrosoftAccount"),
     ORGANIZATIONAL("Organizational");
 
@@ -20,6 +21,7 @@ enum class AccountType(val type: String) {
 
     fun description(): String {
         return when (this) {
+            INVALID -> "invalid"
             MICROSOFT_ACCOUNT -> "personal"
             ORGANIZATIONAL -> "work"
         }

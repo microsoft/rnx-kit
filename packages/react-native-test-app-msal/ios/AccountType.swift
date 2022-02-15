@@ -2,6 +2,7 @@ import Foundation
 
 @objc
 public enum AccountType: Int, CaseIterable {
+    case invalid
     case microsoftAccount
     case organizational
 }
@@ -24,6 +25,8 @@ extension AccountType {
 
     var description: String {
         switch self {
+        case .invalid:
+            return "invalid"
         case .microsoftAccount:
             return "personal"
         case .organizational:

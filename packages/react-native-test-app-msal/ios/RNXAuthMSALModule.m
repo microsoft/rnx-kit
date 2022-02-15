@@ -95,10 +95,12 @@ RNXAuthErrorType RNXAuthErrorTypeFromAuthErrorType(AuthErrorType type)
 AccountType RTAMSALAccountTypeFromRNXAccountType(RNXAccountType type)
 {
     switch (type) {
+        case RNXAccountTypeMicrosoftAccount:
+            return AccountTypeMicrosoftAccount;
         case RNXAccountTypeOrganizational:
             return AccountTypeOrganizational;
         default:
-            return AccountTypeMicrosoftAccount;
+            return AccountTypeInvalid;
     }
 }
 

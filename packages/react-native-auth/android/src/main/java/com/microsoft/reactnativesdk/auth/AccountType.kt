@@ -1,6 +1,7 @@
 package com.microsoft.reactnativesdk.auth
 
 enum class AccountType(val type: String) {
+    INVALID("Invalid"),
     MICROSOFT_ACCOUNT("MicrosoftAccount"),
     ORGANIZATIONAL("Organizational");
 
@@ -9,7 +10,7 @@ enum class AccountType(val type: String) {
             return when (string) {
                 "MicrosoftAccount" -> MICROSOFT_ACCOUNT
                 "Organizational" -> ORGANIZATIONAL
-                else -> ORGANIZATIONAL
+                else -> INVALID
             }
         }
     }

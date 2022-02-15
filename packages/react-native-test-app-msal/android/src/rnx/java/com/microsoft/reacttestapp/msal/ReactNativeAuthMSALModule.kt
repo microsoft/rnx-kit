@@ -68,6 +68,7 @@ fun AuthResult.toRnxAuthResult(): RnxAuthResult = RnxAuthResult(
 )
 
 fun RnxAccountType.toAccountType(): AccountType = when (this) {
+    RnxAccountType.INVALID -> AccountType.INVALID
     RnxAccountType.MICROSOFT_ACCOUNT -> AccountType.MICROSOFT_ACCOUNT
     RnxAccountType.ORGANIZATIONAL -> AccountType.ORGANIZATIONAL
 }
