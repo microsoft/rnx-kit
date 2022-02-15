@@ -21,7 +21,7 @@ export type AuthErrorType =
   | "UserCanceled"
   | "WorkplaceJoinRequired";
 
-export type AuthError = {
+export type AuthErrorUserInfo = {
   type: AuthErrorType;
   correlationId: string;
   message?: string;
@@ -30,7 +30,7 @@ export type AuthError = {
 export type AuthErrorAndroid = {
   code: AuthErrorType;
   message: string;
-  userInfo: AuthError;
+  userInfo: AuthErrorUserInfo;
   nativeStackAndroid?: string[];
 };
 
@@ -38,7 +38,7 @@ export type AuthErrorIOS = {
   code: AuthErrorType;
   message?: string;
   domain: "RNX_AUTH";
-  userInfo: AuthError;
+  userInfo: AuthErrorUserInfo;
   nativeStackIOS?: string[];
 };
 
