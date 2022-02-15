@@ -9,11 +9,10 @@
     "email": "microsoftopensource@users.noreply.github.com"
   },
   "files": [
-    "*.podspec",
-    "android",
+    "RNXAuth.podspec",
+    "android/{build.gradle,gradle.properties,src}",
     "ios",
-    "lib/index.d.ts",
-    "lib/index.js"
+    "lib"
   ],
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
