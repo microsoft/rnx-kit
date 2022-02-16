@@ -520,12 +520,20 @@ function handler(argv: GenerateArgs) {
         gitDir,
         existingChangelogData,
       });
-      const fd = fs.openSync(argv.changelog, "w+");
-      const insert = Buffer.from(newChangeLogData + existingChangelogData);
-      fs.writeSync(fd, insert, 0, insert.length, 0);
-      fs.close(fd, (err) => {
-        if (err) throw err;
+
+      const changelogHeader = "# Changelog";
+      fs.writeFileSync(argv.changelog, changelogHeader, {
+        encoding: "utf8",
+        flag: "w",
       });
+      fs.appendFileSync(argv.changelog, newChangeLogData);
+      fs.appendFileSync(
+        argv.changelog,
+        existingChangelogData.substring(
+          existingChangelogData.indexOf(changelogHeader) +
+            changelogHeader.length
+        )
+      );
     })
     .catch((e) => {
       console.error(e);
