@@ -57,7 +57,7 @@ module.exports = {
   },
   "workspace-tools": {
     name: "workspace-tools",
-    version: "^0.16.2",
+    version: "^0.18.2",
   },
   yargs: {
     name: "yargs",

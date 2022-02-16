@@ -38,7 +38,7 @@
     "@changesets/cli": "^2.18.0",
     "@rnx-kit/dep-check": "*",
     "cosmiconfig": "^7.0.0",
-    "lage": "~1.1.0",
+    "lage": "~1.5.0",
     "metro": "^0.66.2",
     "metro-config": "^0.66.2",
     "metro-core": "^0.66.2",

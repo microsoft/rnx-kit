@@ -39,8 +39,8 @@ describe("@rnx-kit/metro-config", () => {
   afterEach(() => process.chdir(currentWorkingDir));
 
   test("defaultWatchFolders() returns an empty list outside a monorepo", () => {
-    const root = process.platform === "win32" ? "C:\\" : "/";
-    expect(defaultWatchFolders(root).length).toBe(0);
+    setFixture("app-repo");
+    expect(defaultWatchFolders().length).toBe(0);
   });
 
   test("defaultWatchFolders() returns packages in a monorepo", () => {

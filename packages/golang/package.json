@@ -26,7 +26,7 @@
     "find-up": "^5.0.0",
     "got": "^11.8.2",
     "hasha": "^5.2.2",
-    "workspace-tools": "^0.16.2"
+    "workspace-tools": "^0.18.2"
   },
   "devDependencies": {
     "@rnx-kit/eslint-config": "^0.0.1",
