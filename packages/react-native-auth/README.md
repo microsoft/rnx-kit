@@ -34,12 +34,17 @@ const result = await acquireToken(
 
 ## Motivation
 
-Many features built at Microsoft require authentication. Most teams have their
-own solution for providing access tokens to their features during the
-development loop, or they rely on their hosting app to provide such a solution.
-Solutions are often custom-made for their apps and cannot be shared with others
-without significant effort. They will also have to duplicate this effort when
-integrating into other apps.
+Many features built at Microsoft require authentication. The tricky thing about
+authentication in brownfield apps (i.e. a native app hosting a React Native
+instance) is that we want to reuse the auth code that the hosting app already
+has to access the keychain and enable single sign-on. This excludes the use of
+most React Native auth libraries out there since they are more geared towards
+standalone use. Additionally, all apps implement this in different ways, so most
+feature teams implement their own solution for providing access tokens to their
+features during the development loop, or they rely on their hosting app to
+provide such a solution. Solutions are often custom-made for the current app and
+cannot be shared with others without significant effort. They will also have to
+duplicate this effort when integrating into other apps.
 
 This module aims to define a standard way to acquire access tokens so that React
 Native feature authors no longer have to care about the underlying

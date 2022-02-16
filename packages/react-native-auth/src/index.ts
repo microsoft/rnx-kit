@@ -7,8 +7,9 @@ if (!NativeModules.RNXAuth) {
 }
 
 /**
- * Microsoft account type. Valid types are Microsoft accounts (or MSA), and
- * organizational (M365).
+ * Account types. Current valid types are Microsoft accounts (or MSA) and
+ * organizational (M365), but can be extended to support other types, e.g.
+ * Apple, Google, etc.
  */
 export type AccountType = "MicrosoftAccount" | "Organizational";
 
@@ -29,7 +30,10 @@ export type AuthErrorType =
   | "WorkplaceJoinRequired";
 
 /**
- * Authentication error details provided by the underlying implementation.
+ * Authentication error details provided by the underlying implementation. This
+ * object can be used to provide the inner exception, or a more user friendly
+ * error message.
+ *
  * @property type The type of error that occurred during authentication
  * @property correlationId The unique id for identifying the authentication attempt
  * @property message The error message
@@ -42,6 +46,11 @@ export type AuthErrorUserInfo = {
 
 /**
  * Authentication error object thrown by {@link acquireToken}.
+ *
+ * @note This object is populated by React Native when the underlying
+ *       implementation returns an `Exception` (Android) or `NSError`
+ *       (iOS/macOS).
+ *
  * @property code The type of error that occurred during authentication
  * @property message The error message
  * @property userInfo Error details provided by the underlying implementation
@@ -54,6 +63,10 @@ export type AuthErrorBase = {
 
 /**
  * The authentication error object contains a stack trace on Android.
+ *
+ * @note This object is populated by React Native when the underlying
+ *       implementation returns an `Exception`.
+ *
  * @property nativeStackAndroid Android stack trace
  */
 export type AuthErrorAndroid = AuthErrorBase & {
@@ -62,6 +75,10 @@ export type AuthErrorAndroid = AuthErrorBase & {
 
 /**
  * The authentication error object contains a stack trace on iOS.
+ *
+ * @note This object is populated by React Native when the underlying
+ *       implementation returns an `NSError`.
+ *
  * @property nativeStackIOS iOS stack trace
  */
 export type AuthErrorIOS = AuthErrorBase & {
@@ -73,6 +90,7 @@ export type AuthErrorNative = AuthErrorAndroid | AuthErrorIOS;
 
 /**
  * Authentication result returned on success.
+ *
  * @property accessToken The access token
  * @property expirationTime The time at which the access token expires
  * @property redirectUri The redirect URI that should be used if the access token is forwarded to a second service
@@ -86,7 +104,7 @@ export type AuthResult = {
 /**
  * Acquires a token with specified scopes.
  *
- * Note that this function may return a cached token.
+ * @note This function may return a cached token.
  *
  * @param scopes Permission scopes to acquire a token for.
  * @param userPrincipalName The user principal name to acquire a token for. Typically an email address.

@@ -19,5 +19,7 @@
   - packages/babel-preset-metro-react-native/**/*
   - packages/metro-*/**/*
   - packages/typescript-service/**/*
+'feature: sdk':
+  - packages/react-native-*/**/*
 'feature: third party notices':
   - packages/third-party-notices/**/*
