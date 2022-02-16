@@ -514,8 +514,18 @@ function handler(argv: GenerateArgs) {
     .then(async () => {
       const existingChangelogData = fs.readFileSync(argv.changelog, "utf-8");
       const base = await getOffsetBaseCommit(gitDir, argv.base, argv.compare);
-      const data = await run({ ...argv, base, gitDir, existingChangelogData });
-      return console.log(data);
+      const newChangeLogData = await run({
+        ...argv,
+        base,
+        gitDir,
+        existingChangelogData,
+      });
+      const fd = fs.openSync(argv.changelog, "w+");
+      const insert = Buffer.from(newChangeLogData + existingChangelogData);
+      fs.writeSync(fd, insert, 0, insert.length, 0);
+      fs.close(fd, (err) => {
+        if (err) throw err;
+      });
     })
     .catch((e) => {
       console.error(e);
