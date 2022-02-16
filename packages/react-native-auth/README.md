@@ -34,7 +34,7 @@ const result = await acquireToken(
 
 ## Motivation
 
-Many features built at Microsoft require authentication. The tricky thing about
+Many features we build require authentication. The tricky thing about
 authentication in brownfield apps (i.e. a native app hosting a React Native
 instance) is that we want to reuse the auth code that the hosting app already
 has to access the keychain and enable single sign-on. This excludes the use of
