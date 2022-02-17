@@ -11,9 +11,9 @@ PODS:
     - ReactCommon/turbomodule/core (= 0.66.4)
   - fmt (6.2.1)
   - glog (0.3.5)
-  - MSAL (1.1.25):
-    - MSAL/app-lib (= 1.1.25)
-  - MSAL/app-lib (1.1.25)
+  - MSAL (1.1.26):
+    - MSAL/app-lib (= 1.1.26)
+  - MSAL/app-lib (1.1.26)
   - RCT-Folly (2021.06.28.00-v2):
     - boost
     - DoubleConversion
@@ -277,13 +277,16 @@ PODS:
     - React-jsi (= 0.66.4)
     - React-logger (= 0.66.4)
     - React-perflogger (= 0.66.4)
-  - ReactTestApp-DevSupport (1.0.6):
+  - ReactTestApp-DevSupport (1.0.12):
     - React-Core
     - React-jsi
   - ReactTestApp-MSAL (0.3.0):
     - MSAL
+    - RNXAuth
   - ReactTestApp-Resources (1.0.0-dev)
-  - SwiftLint (0.46.1)
+  - RNXAuth (0.0.1):
+    - React-Core
+  - SwiftLint (0.46.2)
   - Yoga (1.14.0)
 
 DEPENDENCIES:
@@ -322,6 +325,7 @@ DEPENDENCIES:
   - ReactTestApp-DevSupport (from `../../../node_modules/react-native-test-app`)
   - ReactTestApp-MSAL (from `../../react-native-test-app-msal`)
   - ReactTestApp-Resources (from `..`)
+  - RNXAuth (from `../../react-native-auth`)
   - SwiftLint
   - Yoga (from `../../../node_modules/react-native/ReactCommon/yoga`)
 
@@ -396,6 +400,8 @@ EXTERNAL SOURCES:
     :path: "../../react-native-test-app-msal"
   ReactTestApp-Resources:
     :path: ".."
+  RNXAuth:
+    :path: "../../react-native-auth"
   Yoga:
     :path: "../../../node_modules/react-native/ReactCommon/yoga"
 
@@ -406,7 +412,7 @@ SPEC CHECKSUMS:
   FBReactNativeSpec: fe08c1cd7e2e205718d77ad14b34957cce949b58
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
   glog: 5337263514dd6f09803962437687240c5dc39aa4
-  MSAL: e6996d8971d96ee0d1b95df8dd2599a541285744
+  MSAL: b479d8f1f62c71c34f7ff27cc441065b099856a6
   RCT-Folly: a21c126816d8025b547704b777a2ba552f3d9fa9
   RCTRequired: 4bf86c70714490bca4bf2696148638284622644b
   RCTTypeSafety: c475a7059eb77935fa53d2c17db299893f057d5d
@@ -431,10 +437,11 @@ SPEC CHECKSUMS:
   React-RCTVibration: e3ffca672dd3772536cb844274094b0e2c31b187
   React-runtimeexecutor: dec32ee6f2e2a26e13e58152271535fadff5455a
   ReactCommon: 57b69f6383eafcbd7da625bfa6003810332313c4
-  ReactTestApp-DevSupport: 56072de174bf59b71c402ab0aa85c0d7196c5547
-  ReactTestApp-MSAL: 049fa048692e225b95b61bc8af9c20b236d8e11f
+  ReactTestApp-DevSupport: 5c964974cab58dfc9ce22a36ddb3924fc97518fa
+  ReactTestApp-MSAL: 8c59d1d08f77e3ee9d92a556596a91730c6af880
   ReactTestApp-Resources: 74a1cf509f4e7962b16361ea4e73cba3648fff5d
-  SwiftLint: aaa29a9f649316095a9079595cb60906bd899353
+  RNXAuth: f2627d71c7a6bef751ea9b4466ccdc82d24c9ea7
+  SwiftLint: 6bc52a21f0fd44cab9aa2dc8e534fb9f5e3ec507
   Yoga: e7dc4e71caba6472ff48ad7d234389b91dadc280
 
 PODFILE CHECKSUM: 438d9afb225dc2a99c6750449d7231544f5ad6f3

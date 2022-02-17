@@ -21,6 +21,8 @@ struct Config: Decodable {
 
     public func authority(for accountType: AccountType) -> URL! {
         switch accountType {
+        case .invalid:
+            fatalError("An invalid account type was passed")
         case .microsoftAccount:
             return URL(string: "https://login.microsoftonline.com/consumers/oauth2/v2.0/authorize")
         case .organizational:
@@ -30,6 +32,8 @@ struct Config: Decodable {
 
     public func scopes(for accountType: AccountType) -> [String] {
         switch accountType {
+        case .invalid:
+            fatalError("An invalid account type was passed")
         case .microsoftAccount:
             return msaScopes ?? []
         case .organizational:

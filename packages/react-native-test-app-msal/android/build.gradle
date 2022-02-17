@@ -29,7 +29,7 @@ buildscript {
     }
 
     ext.findNodeModulesPath = { packageName ->
-        return findFile(Paths.get('node_modules', packageName).toString())
+        return findFile(Paths.get("node_modules", packageName).toString())
     }
 
     ext.getExtProp = { prop, defaultValue ->
@@ -42,7 +42,7 @@ buildscript {
             : "\"${config[property].join('", "')}\""
     }
 
-    ext.kotlinVersion = getExtProp('kotlinVersion', '1.5.31')
+    ext.kotlinVersion = getExtProp("kotlinVersion", "1.5.31")
 
     repositories {
         google()
@@ -74,8 +74,10 @@ repositories {
     }
 }
 
+def rnxAuth = findNodeModulesPath("@rnx-kit/react-native-auth")
+
 android {
-    def manifest = new JsonSlurper().parseText(findFile('app.json').text)
+    def manifest = new JsonSlurper().parseText(findFile("app.json").text)
     def config = manifest["react-native-test-app-msal"]
     if (config == null) {
         throw new MissingPropertyException("Missing 'react-native-test-app-msal' field in 'app.json'")
@@ -83,10 +85,10 @@ android {
 
     def signatureHash = ensureProperty(config, "signatureHash")
 
-    compileSdkVersion getExtProp('compileSdkVersion', 31)
+    compileSdkVersion getExtProp("compileSdkVersion", 31)
     defaultConfig {
-        minSdkVersion getExtProp('minSdkVersion', 23)
-        targetSdkVersion getExtProp('targetSdkVersion', 29)
+        minSdkVersion getExtProp("minSdkVersion", 23)
+        targetSdkVersion getExtProp("targetSdkVersion", 29)
 
         buildConfigField "String[]",
             "ReactTestAppMSAL_msaScopes",
@@ -98,6 +100,9 @@ android {
         manifestPlaceholders = [
             msalRedirectUriPath: "/$signatureHash"
         ]
+    }
+    lintOptions {
+        abortOnError false
     }
     sourceSets {
         def clientId = ensureProperty(config, "clientId")
@@ -145,6 +150,12 @@ android {
         preBuild.dependsOn(copyMsalConfig)
 
         main.res.srcDirs += generatedResDir
+
+        if (rnxAuth == null) {
+            main.java.srcDirs += "src/nornx/java"
+        } else {
+            main.java.srcDirs += "src/rnx/java"
+        }
     }
 }
 
@@ -153,10 +164,14 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
     implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
 
-    implementation 'androidx.activity:activity-ktx:1.4.0'
-    implementation 'com.google.android.material:material:1.4.0'
-    implementation 'com.microsoft.identity.client:msal:2.2.1'
+    implementation "androidx.activity:activity-ktx:1.4.0"
+    implementation "com.google.android.material:material:1.4.0"
+    implementation "com.microsoft.identity.client:msal:2.2.1"
 
     //noinspection GradleDynamicVersion
-    implementation 'com.facebook.react:react-native:+'
+    implementation "com.facebook.react:react-native:+"
+
+    if (rnxAuth != null) {
+        implementation project(path: ":rnx-kit_react-native-auth")
+    }
 }
