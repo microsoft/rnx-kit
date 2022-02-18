@@ -90,6 +90,10 @@ const profile: Profile = {
     version: "^0.66.2",
     devOnly: true,
   },
+  screens: {
+    name: "react-native-screens",
+    version: "^3.9.0",
+  },
   "test-app": {
     name: "react-native-test-app",
     version: "^1.0.6",
