@@ -1,5 +1,13 @@
 # Change Log - @rnx-kit/react-native-test-app-msal
 
+## 1.0.0
+
+### Patch Changes
+
+- 6507cb5: Adds support for @rnx-kit/react-native-auth module
+- Updated dependencies [6507cb5]
+  - @rnx-kit/react-native-auth@0.1.0
+
 ## 0.3.0
 
 ### Minor Changes

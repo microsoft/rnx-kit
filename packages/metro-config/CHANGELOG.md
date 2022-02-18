@@ -1,5 +1,12 @@
 # Change Log - @rnx-kit/metro-config
 
+## 1.2.28
+
+### Patch Changes
+
+- 0eb8b8b: Bump workspace-tools to 0.18.2 for performance improvements
+- 8ffd299: Ignore .tlog files to avoid crashing the dev server while building the Windows app
+
 ## 1.2.27
 
 ### Patch Changes
