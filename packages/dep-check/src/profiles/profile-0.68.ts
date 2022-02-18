@@ -76,6 +76,10 @@ const profile: Profile = {
     version: "^0.67.0",
     devOnly: true,
   },
+  screens: {
+    name: "react-native-screens",
+    version: "^3.12.0",
+  },
 };
 
 export default profile;
