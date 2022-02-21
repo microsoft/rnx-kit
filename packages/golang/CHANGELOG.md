@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/golang
 
+## 0.1.9
+
+### Patch Changes
+
+- 0eb8b8b: Bump workspace-tools to 0.18.2 for performance improvements
+
 ## 0.1.7
 
 Thu, 18 Nov 2021 20:51:05 GMT

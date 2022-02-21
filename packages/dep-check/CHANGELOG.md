@@ -1,5 +1,12 @@
 # Change Log - @rnx-kit/dep-check
 
+## 1.12.4
+
+### Patch Changes
+
+- 0eb8b8b: Bump workspace-tools to 0.18.2 for performance improvements
+- 64ce5a1: Bump react-native-screens for 0.66 and 0.68
+
 ## 1.12.3
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-serializer-esbuild
 
+## 0.1.3
+
+### Patch Changes
+
+- b7cc4c5: Add `analyze` option to output a report about the contents of the bundle
+
 ## 0.1.2
 
 ### Patch Changes
