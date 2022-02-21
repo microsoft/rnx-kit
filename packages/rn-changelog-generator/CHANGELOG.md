@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/rn-changelog-generator
 
+## 0.3.0
+
+### Minor Changes
+
+- 37b980b: prepend the newly generated changelog to the supplied --changelog file
+
 ## 0.2.0
 
 ### Minor Changes
