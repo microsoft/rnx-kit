@@ -67,7 +67,7 @@ Generate a changelog for `react-native` commits between versions 0.65.0 and
 0.66.0:
 
 ```sh
-npx rn-changelog-generator --base v0.65.0 --compare v0.66.0 --repo ../../../react-native --changelog ../../../react-native/CHANGELOG.md > NEW_CHANGES.md
+npx @rnx-kit/rn-changelog-generator --base v0.65.0 --compare v0.66.0 --repo ../../../react-native --changelog ../../../react-native/CHANGELOG.md
 ```
 
 As explained above, you will need to have a local clone of `react-native`, which
