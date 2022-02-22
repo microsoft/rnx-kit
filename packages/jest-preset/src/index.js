@@ -107,6 +107,18 @@ function getTargetPlatform(defaultPlatform) {
 }
 
 /**
+ * Returns whether `@swc/jest` is available.
+ * @returns {boolean}
+ */
+function isSwcJestAvailable() {
+  try {
+    return Boolean(require.resolve("@swc/jest"));
+  } catch (_) {
+    return false;
+  }
+}
+
+/**
  * Returns Babel presets for React Native.
  * @param {string | undefined} targetPlatform
  * @returns {(string | TransformerConfig)[]}
@@ -195,6 +207,7 @@ module.exports = (
   } = {}
 ) => {
   const [targetPlatform, platformPath] = getTargetPlatform(defaultPlatform);
+  const babelJestPluginOptions = { presets: babelPresets(targetPlatform) };
   return {
     haste: haste(targetPlatform),
     moduleNameMapper: {
@@ -203,7 +216,16 @@ module.exports = (
     },
     setupFiles: setupFiles(targetPlatform, platformPath),
     transform: {
-      "\\.[jt]sx?$": ["babel-jest", { presets: babelPresets(targetPlatform) }],
+      ...(isSwcJestAvailable()
+        ? {
+            // We cannot use `@swc/jest` on `react-native` because it currently
+            // does not transpile Flow.
+            "react-native.*\\.jsx?$": ["babel-jest", babelJestPluginOptions],
+            "\\.[jt]sx?$": ["@swc/jest", { jsc: { target: "es2022" } }],
+          }
+        : {
+            "\\.[jt]sx?$": ["babel-jest", babelJestPluginOptions],
+          }),
       ...transformRules(targetPlatform, platformPath),
       ...userTransform,
     },

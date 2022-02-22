@@ -153,7 +153,7 @@ export function createProjectCache(
     platform: AllPlatforms
   ): ProjectInfo {
     const root = findProjectRoot(sourceFile);
-    projects[root] ||= {};
+    projects[root] = projects[root] || {};
 
     let info = projects[root][platform];
     if (!info) {

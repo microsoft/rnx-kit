@@ -28,12 +28,13 @@ describe("jest-preset", () => {
       "\\.(bmp|gif|jpg|jpeg|mp4|png|psd|svg|webp)$": expect.stringContaining(
         path.join(reactNativePath, "jest", "assetFileTransformer.js")
       ),
-      "\\.[jt]sx?$": [
+      "react-native.*\\.jsx?$": [
         "babel-jest",
         {
           presets: ["module:metro-react-native-babel-preset"],
         },
       ],
+      "\\.[jt]sx?$": ["@swc/jest", { jsc: { target: "es2022" } }],
     },
   };
 
@@ -57,12 +58,13 @@ describe("jest-preset", () => {
       "\\.(bmp|gif|jpg|jpeg|mp4|png|psd|svg|webp)$": expect.stringContaining(
         path.join(reactNativeMacOSPath, "jest", "assetFileTransformer.js")
       ),
-      "\\.[jt]sx?$": [
+      "react-native.*\\.jsx?$": [
         "babel-jest",
         {
           presets: ["module:metro-react-native-babel-preset"],
         },
       ],
+      "\\.[jt]sx?$": ["@swc/jest", { jsc: { target: "es2022" } }],
     },
   });
 
@@ -90,12 +92,13 @@ describe("jest-preset", () => {
           "assetFileTransformer.js"
         )
       ),
-      "\\.[jt]sx?$": [
+      "react-native.*\\.jsx?$": [
         "babel-jest",
         {
           presets: ["module:metro-react-native-babel-preset"],
         },
       ],
+      "\\.[jt]sx?$": ["@swc/jest", { jsc: { target: "es2022" } }],
     },
   };
 
@@ -119,12 +122,13 @@ describe("jest-preset", () => {
       "\\.(bmp|gif|jpg|jpeg|mp4|png|psd|svg|webp)$": expect.stringContaining(
         path.join(reactNativeWindowsPath, "jest", "assetFileTransformer.js")
       ),
-      "\\.[jt]sx?$": [
+      "react-native.*\\.jsx?$": [
         "babel-jest",
         {
           presets: ["module:metro-react-native-babel-preset"],
         },
       ],
+      "\\.[jt]sx?$": ["@swc/jest", { jsc: { target: "es2022" } }],
     },
   };
 
@@ -159,7 +163,7 @@ describe("jest-preset", () => {
         moduleNameMapper: {},
         setupFiles: undefined,
         transform: {
-          "\\.[jt]sx?$": [
+          "react-native.*\\.jsx?$": [
             "babel-jest",
             {
               presets: [
@@ -168,7 +172,11 @@ describe("jest-preset", () => {
               ],
             },
           ],
+          "\\.[jt]sx?$": ["@swc/jest", { jsc: { target: "es2022" } }],
         },
+        transformIgnorePatterns: [
+          "node_modules/(?!((jest-)?react-native|@react-native(-community)?)/)",
+        ],
       })
     );
     expect(consoleWarnSpy).toHaveBeenCalledTimes(1);
