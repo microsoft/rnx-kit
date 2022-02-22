@@ -35,6 +35,7 @@ config file:
 
 - [`eslint:recommended`](https://eslint.org/docs/rules/)
 - [`plugin:@typescript-eslint/recommended`](https://github.com/typescript-eslint/typescript-eslint/tree/main/packages/eslint-plugin#supported-rules)
+- [`plugin:react-hooks/recommended`](https://github.com/facebook/react/blob/main/packages/eslint-plugin-react-hooks/src/index.js)
 - [`plugin:react/recommended`](https://github.com/yannickcr/eslint-plugin-react#recommended)
 
 ## Supported Rules
