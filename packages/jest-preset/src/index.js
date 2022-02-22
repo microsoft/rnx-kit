@@ -169,6 +169,31 @@ function setupFiles(targetPlatform, reactNativePlatformPath) {
 }
 
 /**
+ * Returns TypeScript transformer.
+ * @param {string | undefined} targetPlatform
+ * @returns {Record<string, string | TransformerConfig>}
+ */
+function tsTransform(targetPlatform) {
+  /** @type {TransformerConfig} */
+  const babelJestPlugin = [
+    require.resolve("babel-jest"),
+    { presets: babelPresets(targetPlatform) },
+  ];
+
+  try {
+    return {
+      "react-native.*\\.jsx?$": babelJestPlugin,
+      "\\.[jt]sx?$": [
+        require.resolve("@swc/jest"),
+        { jsc: { target: "es2022" } },
+      ],
+    };
+  } catch (_) {
+    return { "\\.[jt]sx?$": babelJestPlugin };
+  }
+}
+
+/**
  * Returns transform rules for React Native.
  * @param {string | undefined} targetPlatform
  * @param {string | undefined} reactNativePlatformPath
@@ -204,7 +229,7 @@ module.exports = (
     },
     setupFiles: setupFiles(targetPlatform, platformPath),
     transform: {
-      "\\.[jt]sx?$": ["babel-jest", { presets: babelPresets(targetPlatform) }],
+      ...tsTransform(targetPlatform),
       ...transformRules(targetPlatform, platformPath),
       ...userTransform,
     },

@@ -28,11 +28,15 @@ describe("jest-preset", () => {
       "\\.(bmp|gif|jpg|jpeg|mp4|png|psd|svg|webp)$": expect.stringContaining(
         path.join(reactNativePath, "jest", "assetFileTransformer.js")
       ),
-      "\\.[jt]sx?$": [
-        "babel-jest",
+      "react-native.*\\.jsx?$": [
+        expect.stringContaining("babel-jest"),
         {
           presets: ["module:metro-react-native-babel-preset"],
         },
+      ],
+      "\\.[jt]sx?$": [
+        expect.stringMatching(/@swc[/\\]jest/),
+        { jsc: { target: "es2022" } },
       ],
     },
   };
@@ -57,11 +61,15 @@ describe("jest-preset", () => {
       "\\.(bmp|gif|jpg|jpeg|mp4|png|psd|svg|webp)$": expect.stringContaining(
         path.join(reactNativeMacOSPath, "jest", "assetFileTransformer.js")
       ),
-      "\\.[jt]sx?$": [
-        "babel-jest",
+      "react-native.*\\.jsx?$": [
+        expect.stringContaining("babel-jest"),
         {
           presets: ["module:metro-react-native-babel-preset"],
         },
+      ],
+      "\\.[jt]sx?$": [
+        expect.stringMatching(/@swc[/\\]jest/),
+        { jsc: { target: "es2022" } },
       ],
     },
   });
@@ -90,11 +98,15 @@ describe("jest-preset", () => {
           "assetFileTransformer.js"
         )
       ),
-      "\\.[jt]sx?$": [
-        "babel-jest",
+      "react-native.*\\.jsx?$": [
+        expect.stringContaining("babel-jest"),
         {
           presets: ["module:metro-react-native-babel-preset"],
         },
+      ],
+      "\\.[jt]sx?$": [
+        expect.stringMatching(/@swc[/\\]jest/),
+        { jsc: { target: "es2022" } },
       ],
     },
   };
@@ -119,11 +131,15 @@ describe("jest-preset", () => {
       "\\.(bmp|gif|jpg|jpeg|mp4|png|psd|svg|webp)$": expect.stringContaining(
         path.join(reactNativeWindowsPath, "jest", "assetFileTransformer.js")
       ),
-      "\\.[jt]sx?$": [
-        "babel-jest",
+      "react-native.*\\.jsx?$": [
+        expect.stringContaining("babel-jest"),
         {
           presets: ["module:metro-react-native-babel-preset"],
         },
+      ],
+      "\\.[jt]sx?$": [
+        expect.stringMatching(/@swc[/\\]jest/),
+        { jsc: { target: "es2022" } },
       ],
     },
   };
@@ -159,8 +175,8 @@ describe("jest-preset", () => {
         moduleNameMapper: {},
         setupFiles: undefined,
         transform: {
-          "\\.[jt]sx?$": [
-            "babel-jest",
+          "react-native.*\\.jsx?$": [
+            expect.stringContaining("babel-jest"),
             {
               presets: [
                 ["@babel/preset-env", { targets: { node: "current" } }],
@@ -168,7 +184,14 @@ describe("jest-preset", () => {
               ],
             },
           ],
+          "\\.[jt]sx?$": [
+            expect.stringMatching(/@swc[/\\]jest/),
+            { jsc: { target: "es2022" } },
+          ],
         },
+        transformIgnorePatterns: [
+          "node_modules/(?!((jest-)?react-native|@react-native(-community)?)/)",
+        ],
       })
     );
     expect(consoleWarnSpy).toHaveBeenCalledTimes(1);

@@ -172,7 +172,7 @@ export function createProjectCache(
     platform: AllPlatforms
   ): ProjectInfo | undefined {
     const root = findProjectRoot(sourceFile);
-    projects[root] ||= {};
+    projects[root] = projects[root] || {};
 
     const platforms = projects[root];
 
