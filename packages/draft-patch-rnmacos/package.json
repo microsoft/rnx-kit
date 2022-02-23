@@ -1,0 +1,49 @@
+{
+  "name": "@rnx-kit/patch-rnmacos",
+  "version": "0.0.1",
+  "description": "A tool to generate patches and apply them to a codebase",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/patch-rnmacos#readme",
+  "license": "MIT",
+  "author": {
+    "name": "Microsoft Open Source",
+    "email": "microsoftopensource@users.noreply.github.com"
+  },
+  "files": [
+    "lib/*"
+  ],
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "packages/draft-patch-rnmacos"
+  },
+  "engines": {
+    "node": ">= 14"
+  },
+  "scripts": {
+    "build": "rnx-kit-scripts build",
+    "format": "rnx-kit-scripts format",
+    "lint": "rnx-kit-scripts lint",
+    "test": "rnx-kit-scripts test"
+  },
+  "devDependencies": {
+    "@rnx-kit/scripts": "*",
+    "@types/fs-extra": "^9.0.0",
+    "@types/istextorbinary": "^2.3.0",
+    "@types/node": "^16.0.0",
+    "@types/winston": "^2.4.4"
+  },
+  "dependencies": {
+    "commander": "^4.1.1",
+    "fs-extra": "^10.0.0",
+    "istextorbinary": "^3.3.0",
+    "winston": "^3.2.1"
+  },
+  "eslintConfig": {
+    "extends": "@rnx-kit/eslint-config"
+  },
+  "jest": {
+    "preset": "@rnx-kit/scripts"
+  }
+}

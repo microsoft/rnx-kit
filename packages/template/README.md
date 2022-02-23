@@ -6,7 +6,8 @@
 [![npm version](https://img.shields.io/npm/v/@rnx-kit/template)](https://www.npmjs.com/package/@rnx-kit/template)
 
 This is a sample folder to use as base for generating new packages for
-`rnx-kit`.
+`rnx-kit`. If you don't want this package to show up in the main table, modify
+its folder name by adding in front `draft-`.
 
 ## Motivation
 

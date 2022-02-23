@@ -18,8 +18,9 @@ const repoUrl = (() => {
 })();
 
 const repoRoot = getWorkspaceRoot();
-const packages = getAllPackageJsonFiles(repoRoot).reduce(
-  (packages, manifestPath) => {
+const packages = getAllPackageJsonFiles(repoRoot)
+  .filter((p) => !p.includes("packages/draft-"))
+  .reduce((packages, manifestPath) => {
     const content = readFile(manifestPath);
     const manifest = JSON.parse(content);
     const { private, name, description } = manifest;
@@ -29,9 +30,7 @@ const packages = getAllPackageJsonFiles(repoRoot).reduce(
       packages.push([link, description]);
     }
     return packages;
-  },
-  []
-);
+  }, []);
 
 const table = markdownTable([["Name", "Description"], ...packages]);
 
