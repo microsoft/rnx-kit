@@ -58,6 +58,7 @@
   },
   "workspaces": {
     "packages": [
+      "docsite",
       "packages/@types/*",
       "packages/*",
       "scripts"
