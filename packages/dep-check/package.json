@@ -50,6 +50,9 @@
     "workspace-tools": "^0.18.2",
     "yargs": "^16.0.0"
   },
+  "engines": {
+    "node": ">=12.13"
+  },
   "eslintConfig": {
     "extends": "@rnx-kit/eslint-config"
   },
