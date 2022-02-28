@@ -13,10 +13,19 @@
   --ifm-color-primary-light: #0f5bd0;
   --ifm-color-primary-lighter: #105fd9;
   --ifm-color-primary-lightest: #1a6eee;
+
   --ifm-code-font-size: 95%;
 
-  --github-mark-36px-bg: url("../../static/img/GitHub-Mark-Black-36px.png")
-    no-repeat;
+  --ifm-link-decoration: none;
+  --ifm-link-hover-color: var(--ifm-link-color);
+  --ifm-link-hover-decoration: none;
+
+  --ifm-navbar-item-padding-vertical: 4px;
+  --ifm-navbar-item-padding-horizontal: 18px;
+
+  --react-native-color: 97, 218, 251;
+
+  --github-mark-bg: url("data:image/svg+xml;charset=utf-8,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='%23111315' d='M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12'/%3E%3C/svg%3E");
 }
 
 /* For readability concerns, you should choose a lighter palette in dark mode. */
@@ -30,10 +39,26 @@ html[data-theme="dark"] {
   --ifm-color-primary-lightest: #5db7fe;
   --ifm-background-color: #111315;
 
-  --github-mark-36px-bg: url("../../static/img/GitHub-Mark-White-36px.png")
-    no-repeat;
+  --github-mark-bg: url("data:image/svg+xml;charset=utf-8,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='%23f5f6f7' d='M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12'/%3E%3C/svg%3E");
 }
 
+/*
+ * Icons
+ */
+.github-mark-24px::after {
+  background-image: var(--github-mark-bg);
+  background-position: 50%;
+  background-repeat: no-repeat;
+  content: "";
+  display: flex;
+  transition: opacity 0.2s;
+  width: 24px;
+  height: 24px;
+}
+
+/*
+ * Code blocks
+ */
 .docusaurus-highlight-code-line {
   background-color: rgba(0, 0, 0, 0.1);
   display: block;
@@ -41,12 +66,49 @@ html[data-theme="dark"] {
   padding: 0 var(--ifm-pre-padding);
 }
 
-.github-mark-32px {
-  background: var(--github-mark-36px-bg);
-  padding: 18px;
-  margin-right: 6px;
+/* Code in links should have just the link background, not the gray code bg */
+a code {
+  background: none;
 }
 
 html[data-theme="dark"] .docusaurus-highlight-code-line {
   background-color: rgba(0, 0, 0, 0.3);
+}
+
+/*
+ * Navbar
+ */
+html[data-theme="light"] .navbar {
+  box-shadow: 0 10px 15px rgb(0 0 0 / 19%);
+}
+
+/*
+ * Links
+ */
+.markdown p a,
+.markdown li a {
+  background-color: rgba(187, 239, 253, 0.3);
+  border-bottom: 1px solid var(--ifm-hr-border-color);
+  color: var(--ifm-font-color-base);
+  display: initial;
+  line-height: calc(var(--ifm-font-size-base) + 4px);
+}
+
+.markdown p a:hover,
+.markdown li a:hover {
+  background-color: rgb(211, 245, 253);
+  color: var(--ifm-font-color-base);
+  border-bottom: 1px solid var(--ifm-hr-border-color);
+}
+
+html[data-theme="dark"] .markdown p a,
+html[data-theme="dark"] .markdown li a {
+  background-color: rgba(var(--react-native-color), 0.12);
+  border-bottom-color: rgba(var(--react-native-color), 0.3);
+}
+
+html[data-theme="dark"] .markdown p a:hover,
+html[data-theme="dark"] .markdown li a:hover {
+  background-color: rgba(var(--react-native-color), 0.4);
+  border-bottom-color: rgb(var(--react-native-color));
 }

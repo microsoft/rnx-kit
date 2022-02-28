@@ -1,8 +1,10 @@
 // @ts-check
 // Note: type annotations allow type checking and IDEs autocompletion
 
-const lightCodeTheme = require("prism-react-renderer/themes/github");
-const darkCodeTheme = require("prism-react-renderer/themes/dracula");
+// Always use VSCode dark-theme for code blocks. The light theme looks
+// bad on top of our site's light theme (no contrast).
+const darkCodeTheme = require("prism-react-renderer/themes/vsDark");
+const lightCodeTheme = darkCodeTheme;
 
 const organizationName = "microsoft";
 const projectName = "rnx-kit";
@@ -65,7 +67,7 @@ const config = {
           { to: "/blog", label: "Blog", position: "left" },
           {
             href: mainReadmeUrl,
-            className: "github-mark-32px",
+            className: "github-mark-24px",
             position: "right",
             "aria-label": "GitHub repository",
           },
@@ -73,47 +75,47 @@ const config = {
       },
       footer: {
         style: "dark",
-        links: [
-          {
-            title: "Docs",
-            items: [
-              {
-                label: "Tutorial",
-                to: "/docs/intro",
-              },
-            ],
-          },
-          {
-            title: "Community",
-            items: [
-              {
-                label: "Stack Overflow",
-                href: "https://stackoverflow.com/questions/tagged/docusaurus",
-              },
-              {
-                label: "Discord",
-                href: "https://discordapp.com/invite/docusaurus",
-              },
-              {
-                label: "Twitter",
-                href: "https://twitter.com/docusaurus",
-              },
-            ],
-          },
-          {
-            title: "More",
-            items: [
-              {
-                label: "Blog",
-                to: "/blog",
-              },
-              {
-                label: "GitHub",
-                href: mainReadmeUrl,
-              },
-            ],
-          },
-        ],
+        // links: [
+        //   {
+        //     title: "Docs",
+        //     items: [
+        //       {
+        //         label: "Tutorial",
+        //         to: "/docs/intro",
+        //       },
+        //     ],
+        //   },
+        //   {
+        //     title: "Community",
+        //     items: [
+        //       {
+        //         label: "Stack Overflow",
+        //         href: "https://stackoverflow.com/questions/tagged/docusaurus",
+        //       },
+        //       {
+        //         label: "Discord",
+        //         href: "https://discordapp.com/invite/docusaurus",
+        //       },
+        //       {
+        //         label: "Twitter",
+        //         href: "https://twitter.com/docusaurus",
+        //       },
+        //     ],
+        //   },
+        //   {
+        //     title: "More",
+        //     items: [
+        //       {
+        //         label: "Blog",
+        //         to: "/blog",
+        //       },
+        //       {
+        //         label: "GitHub",
+        //         href: mainReadmeUrl,
+        //       },
+        //     ],
+        //   },
+        // ],
         copyright: `Copyright © ${new Date().getFullYear()} Microsoft`,
       },
       prism: {
