@@ -1,5 +1,12 @@
 # Change Log - @rnx-kit/dep-check
 
+## 1.12.5
+
+### Patch Changes
+
+- 3b43647: Keep version ranges defined in `peerDependencies` if they are a superset
+- 6bddfc6: Fix dev version not being set correctly in `--vigilant` mode
+
 ## 1.12.4
 
 ### Patch Changes
