@@ -13,7 +13,12 @@ import type { CheckConfig, CheckOptions, Command } from "./types";
 
 export function getCheckConfig(
   manifestPath: string,
-  { loose, uncheckedReturnCode = 0, versions }: CheckOptions
+  {
+    loose,
+    uncheckedReturnCode = 0,
+    supportedVersions,
+    targetVersion,
+  }: CheckOptions
 ): number | CheckConfig {
   const manifest = readPackage(manifestPath);
   if (!isPackageManifest(manifest)) {
@@ -46,7 +51,10 @@ export function getCheckConfig(
   } = getKitCapabilities({
     // React Native versions declared in the package's config should always
     // override the ones specified with the `--vigilant` flag.
-    ...(versions ? { reactNativeVersion: versions } : undefined),
+    ...(supportedVersions
+      ? { reactNativeVersion: supportedVersions }
+      : undefined),
+    ...(targetVersion ? { reactNativeDevVersion: targetVersion } : undefined),
     ...kitConfig,
   });
 
