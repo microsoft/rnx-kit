@@ -1,7 +1,6 @@
 import type { Capability, KitType } from "@rnx-kit/config";
 import type { PackageManifest } from "@rnx-kit/tools-node/package";
 import omit from "lodash/omit";
-import semverSatisfies from "semver/functions/satisfies";
 import { resolveCapabilities } from "./capabilities";
 import type { DependencyType, Package, Profile } from "./types";
 
@@ -34,8 +33,7 @@ export function removeKeys(
 export function updateDependencies(
   dependencies: Record<string, string> = {},
   packages: Record<string, Package[]>,
-  dependencyType: DependencyType,
-  nodeVersion: string = process.versions.node
+  dependencyType: DependencyType
 ): Record<string, string> {
   const packageNames = Object.keys(packages);
   if (packageNames.length === 0) {
@@ -56,35 +54,14 @@ export function updateDependencies(
   const shouldBeAdded = (pkg: Package) =>
     !pkg.devOnly || dependencyType === "development";
 
-  // `Array.prototype.sort` is stable as of V8 7.0 (or Node 11). For users still
-  // on Node 10 or below, we'll use a solution that throws away one more object.
-  if (semverSatisfies(nodeVersion, ">=11")) {
-    const entries = packageNames.reduce((result, dependency) => {
-      const packageRange = packages[dependency];
-      if (shouldBeAdded(packageRange[0])) {
-        result.push([dependency, makeVersionRange(packageRange)]);
-      }
-      return result;
-    }, Object.entries(dependencies));
-    return Object.fromEntries(entries.sort(([a], [b]) => a.localeCompare(b)));
-  } else {
-    const copy = packageNames.reduce(
-      (result, dependency) => {
-        const packageRange = packages[dependency];
-        if (shouldBeAdded(packageRange[0])) {
-          result[dependency] = makeVersionRange(packageRange);
-        }
-        return result;
-      },
-      { ...dependencies }
-    );
-    return Object.keys(copy)
-      .sort()
-      .reduce<Record<string, string>>((result, dependency) => {
-        result[dependency] = copy[dependency];
-        return result;
-      }, {});
-  }
+  const entries = packageNames.reduce((result, dependency) => {
+    const packageRange = packages[dependency];
+    if (shouldBeAdded(packageRange[0])) {
+      result.push([dependency, makeVersionRange(packageRange)]);
+    }
+    return result;
+  }, Object.entries(dependencies));
+  return Object.fromEntries(entries.sort(([a], [b]) => a.localeCompare(b)));
 }
 
 /**
