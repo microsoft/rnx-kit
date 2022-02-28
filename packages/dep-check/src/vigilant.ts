@@ -146,7 +146,8 @@ export function makeVigilantCommand({
   const checkOptions = {
     loose,
     write,
-    versions: profilesInfo.supportedVersions,
+    supportedVersions: profilesInfo.supportedVersions,
+    targetVersion: profilesInfo.targetVersion,
   };
 
   const exclusionList = isString(excludePackages)
