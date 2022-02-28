@@ -52,7 +52,7 @@ const config = {
       navbar: {
         title: projectName,
         logo: {
-          alt: "react logo",
+          alt: "blue atomic symbol",
           src: "img/react-logo.svg",
         },
         items: [
@@ -66,8 +66,8 @@ const config = {
           {
             href: mainReadmeUrl,
             className: "github-mark-32px",
-            //label: "GitHub",
             position: "right",
+            "aria-label": "GitHub repository",
           },
         ],
       },
