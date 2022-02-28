@@ -1,11 +1,11 @@
 import type { PackageManifest } from "@rnx-kit/tools-node/package";
-import semver from "semver";
+import semverSubset from "semver/ranges/subset";
 import banned from "./profiles/banned";
 import type { ExcludedPackage } from "./types";
 
 function isBanned(name: string, version: string): ExcludedPackage | undefined {
   const info = banned.find((pkg) => pkg.name === name);
-  return info && semver.subset(version, info.version) ? info : undefined;
+  return info && semverSubset(version, info.version) ? info : undefined;
 }
 
 export function findBadPackages({

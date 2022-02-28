@@ -1,14 +1,9 @@
-import {
-  Capability,
-  getKitCapabilities,
-  getKitConfig,
-  KitConfig,
-  KitType,
-} from "@rnx-kit/config";
+import type { Capability, KitConfig, KitType } from "@rnx-kit/config";
+import { getKitCapabilities, getKitConfig } from "@rnx-kit/config";
 import { error, warn } from "@rnx-kit/console";
 import {
-  PackageManifest,
   findPackageDependencyDir,
+  PackageManifest,
   parsePackageRef,
   readPackage,
 } from "@rnx-kit/tools-node/package";
@@ -101,7 +96,7 @@ export function getRequirements(
 
     visitDependencies(targetManifest, projectRoot, (module, modulePath) => {
       const kitConfig = getKitConfig({ cwd: modulePath });
-      if (!kitConfig) {
+      if (!kitConfig?.reactNativeVersion) {
         return;
       }
 

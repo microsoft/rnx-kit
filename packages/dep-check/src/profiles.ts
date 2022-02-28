@@ -1,6 +1,10 @@
 import { error } from "@rnx-kit/console";
 import isString from "lodash/isString";
-import semver from "semver";
+import semverCoerce from "semver/functions/coerce";
+import semverSatisfies from "semver/functions/satisfies";
+import semverValid from "semver/functions/valid";
+import semverIntersects from "semver/ranges/intersects";
+import semverValidRange from "semver/ranges/valid";
 import { keysOf } from "./helpers";
 import profile_0_61 from "./profiles/profile-0.61";
 import profile_0_62 from "./profiles/profile-0.62";
@@ -37,16 +41,16 @@ function getVersionComparator(
 ): (profileVersion: ProfileVersion) => boolean {
   const includePrerelease = { includePrerelease: true };
 
-  const version = semver.valid(versionOrRange);
+  const version = semverValid(versionOrRange);
   if (version) {
     return (profileVersion: ProfileVersion) =>
-      semver.satisfies(version, "^" + profileVersion, includePrerelease);
+      semverSatisfies(version, "^" + profileVersion, includePrerelease);
   }
 
-  const range = semver.validRange(versionOrRange);
+  const range = semverValidRange(versionOrRange);
   if (range) {
     return (profileVersion: ProfileVersion) =>
-      semver.intersects("^" + profileVersion, range, includePrerelease);
+      semverIntersects("^" + profileVersion, range, includePrerelease);
   }
 
   throw new Error(`Invalid 'react-native' version range: ${versionOrRange}`);
@@ -170,7 +174,7 @@ export function parseProfilesString(
   const profileVersions = versions
     .toString()
     .split(",")
-    .map((value) => "^" + semver.coerce(value));
+    .map((value) => "^" + semverCoerce(value));
   const targetVersion = profileVersions[0];
 
   // Note: `.sort()` mutates the array

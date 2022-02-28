@@ -2,6 +2,7 @@ import { Capability } from "@rnx-kit/config";
 import { error } from "@rnx-kit/console";
 import { PackageManifest, readPackage } from "@rnx-kit/tools-node/package";
 import isString from "lodash/isString";
+import semverSubset from "semver/ranges/subset";
 import { resolveCapabilities } from "./capabilities";
 import { checkPackageManifest, getCheckConfig } from "./check";
 import { keysOf, modifyManifest } from "./helpers";
@@ -105,6 +106,10 @@ export function inspect(
   profile: ManifestProfile,
   write: boolean
 ): Change[] {
+  const isMisalignedDirect = (from: string, to: string) => from !== to;
+  const isMisalignedPeer = (from: string, to: string) =>
+    from !== to && !semverSubset(to, from, { includePrerelease: true });
+
   const changes: Change[] = [];
   allSections.forEach((section) => {
     const dependencies = manifest[section];
@@ -112,12 +117,14 @@ export function inspect(
       return;
     }
 
+    const isMisaligned =
+      section === "peerDependencies" ? isMisalignedPeer : isMisalignedDirect;
     const desiredDependencies = profile[section];
     Object.keys(dependencies).forEach((name) => {
       if (name in desiredDependencies) {
         const from = dependencies[name];
         const to = desiredDependencies[name];
-        if (from !== to) {
+        if (isMisaligned(from, to)) {
           changes.push({ name, from, to, section });
           if (write) {
             dependencies[name] = to;
