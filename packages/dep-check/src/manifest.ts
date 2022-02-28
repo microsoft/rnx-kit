@@ -1,7 +1,7 @@
 import type { Capability, KitType } from "@rnx-kit/config";
 import type { PackageManifest } from "@rnx-kit/tools-node/package";
 import omit from "lodash/omit";
-import semver from "semver";
+import semverSatisfies from "semver/functions/satisfies";
 import { resolveCapabilities } from "./capabilities";
 import type { DependencyType, Package, Profile } from "./types";
 
@@ -58,7 +58,7 @@ export function updateDependencies(
 
   // `Array.prototype.sort` is stable as of V8 7.0 (or Node 11). For users still
   // on Node 10 or below, we'll use a solution that throws away one more object.
-  if (semver.satisfies(nodeVersion, ">=11")) {
+  if (semverSatisfies(nodeVersion, ">=11")) {
     const entries = packageNames.reduce((result, dependency) => {
       const packageRange = packages[dependency];
       if (shouldBeAdded(packageRange[0])) {

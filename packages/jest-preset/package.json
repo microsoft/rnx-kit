@@ -55,5 +55,8 @@
   },
   "jest": {
     "preset": "@rnx-kit/scripts"
+  },
+  "rnx-kit": {
+    "customProfiles": "@rnx-kit/scripts/rnx-dep-check.js"
   }
 }

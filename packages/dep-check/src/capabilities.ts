@@ -1,6 +1,6 @@
 import type { Capability, KitCapabilities } from "@rnx-kit/config";
 import type { PackageManifest } from "@rnx-kit/tools-node/package";
-import semver from "semver";
+import semverMinVersion from "semver/ranges/min-version";
 import { getProfilesFor, getProfileVersionsFor } from "./profiles";
 import { concatVersionRanges, keysOf } from "./helpers";
 import type {
@@ -46,7 +46,7 @@ export function capabilitiesFor(
       ? {
           reactNativeDevVersion:
             devDependencies?.["react-native"] ||
-            semver.minVersion(reactNativeVersion)?.version,
+            semverMinVersion(reactNativeVersion)?.version,
         }
       : undefined),
     kitType,

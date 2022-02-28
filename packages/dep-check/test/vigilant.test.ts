@@ -218,6 +218,45 @@ describe("inspect()", () => {
     );
     expect(manifest.dependencies).not.toEqual(dependencies);
   });
+
+  test("does not rewrite peerDependencies if superset", () => {
+    const manifest = {
+      name: "@rnx-kit/dep-check",
+      version: "1.0.0",
+      dependencies: {
+        react: "^16.8.1",
+      },
+      peerDependencies: {
+        metro: "*",
+        react: ">=16.8.0 <18.0.0",
+        "react-native": ">=0.64",
+      },
+      devDependencies: {},
+    };
+    const profile = {
+      name: "@rnx-kit/dep-check",
+      version: "1.0.0",
+      dependencies: {
+        react: "~17.0.1",
+      },
+      peerDependencies: {
+        metro: "^0.66.2",
+        react: "~17.0.1",
+        "react-native": "^0.66.0-0",
+      },
+      devDependencies: {},
+    };
+    const expectedChanges = [
+      {
+        name: "react",
+        from: manifest.dependencies["react"],
+        to: profile.dependencies["react"],
+        section: "dependencies",
+      },
+    ];
+
+    expect(inspect(manifest, profile, false)).toEqual(expectedChanges);
+  });
 });
 
 describe("makeVigilantCommand()", () => {
