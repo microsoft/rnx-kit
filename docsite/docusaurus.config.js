@@ -7,6 +7,7 @@ const darkCodeTheme = require("prism-react-renderer/themes/dracula");
 const organizationName = "microsoft";
 const projectName = "rnx-kit";
 const githubUrl = "https://github.com/" + organizationName + "/" + projectName;
+const mainReadmeUrl = githubUrl + "/#react-native-developer-tools";
 const mainBranchUrl = githubUrl + "/tree/main";
 const docsiteUrl = mainBranchUrl + "/docsite";
 
@@ -16,7 +17,7 @@ const title = "React Native Developer Tools";
 const config = {
   title,
   tagline:
-    "Tools which help developers build, deliver, and maintain React Native apps and libraries.",
+    "Helping developers build, deliver, and maintain React Native apps and libraries",
   url: "https://" + organizationName + ".github.io",
   baseUrl: "/" + projectName + "/",
   onBrokenLinks: "throw",
@@ -63,8 +64,9 @@ const config = {
           },
           { to: "/blog", label: "Blog", position: "left" },
           {
-            href: githubUrl,
-            label: "GitHub",
+            href: mainReadmeUrl,
+            className: "github-mark-32px",
+            //label: "GitHub",
             position: "right",
           },
         ],
@@ -107,7 +109,7 @@ const config = {
               },
               {
                 label: "GitHub",
-                href: githubUrl,
+                href: mainReadmeUrl,
               },
             ],
           },
