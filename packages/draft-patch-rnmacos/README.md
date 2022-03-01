@@ -3,6 +3,16 @@
 [![Build](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml/badge.svg)](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml)
 [![npm version](https://img.shields.io/npm/v/@rnx-kit/patch-rnmacos)](https://www.npmjs.com/package/@rnx-kit/patch-rnmacos)
 
+🚧🚧🚧🚧🚧
+
+_This tool is still incomplete - please refer
+[to this issue](https://github.com/microsoft/rnx-kit/issues/1156) for the list
+of wanted improvements._
+
+🚧🚧🚧🚧🚧
+
+### Context
+
 This tool is an updated & cleaned up version of
 https://github.com/mganandraj/office-android-patches. This tool was created a
 few years ago, heavily inspired by
@@ -55,7 +65,7 @@ A complete example of this script on macos is the following:
 npx @rnx-kit/patch-rnmacos diff ../../../react-native-macos-main/ ../../../react-native-macos-clean-copy --inclusionList-dirs ./ReactAndroid --patch-name TEST --log-folder ./logs --git-executable /usr/local/bin/git --diff-executable /usr/local/Cellar/git/2.34.0/libexec/git-core/git-diff
 ```
 
-### **patch**
+### **`patch`**
 
 This command allows to apply to the codebase all the various folder patches (via
 their names) - like so:
@@ -72,3 +82,14 @@ A complete example of this script on macos is the following:
 ```sh
 npx @rnx-kit/patch-rnmacos patch ../../../react-native-macos-main Build OfficeRNHost V8 Focus MAC ImageColor --patch-store ../../../react-native-macos-main/android-patches/patches --log-folder ../../../react-native-macos-main/android-patches/logs --confirm true
 ```
+
+### **`patchfile`**
+
+This command is similar to `patch`, but targets a specific file:
+
+```
+patchfile [options] <targetFilePath> <patchFilePath>
+```
+
+More details can be found via `npx @rnx-kit/patch-rnmacos patchfile --help`.
+It's not widely used.
