@@ -3,10 +3,10 @@
 *.log
 *.tgz
 *.xcworkspace/
+.DS_Store
 .gradle/
 .idea/
-Pods/
-coverage/
+.yarnrc
 /packages/*/bin/
 /packages/*/dist/
 /packages/*/lib/
@@ -15,7 +15,9 @@ coverage/
 /incubator/*/lib/
 /scripts/bin/
 /scripts/lib/
+Pods/
+coverage/
 local.properties
 node_modules/
 !**/__fixtures__/**/node_modules/
-.DS_Store
+yarn.lock

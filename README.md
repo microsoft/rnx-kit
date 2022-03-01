@@ -110,7 +110,7 @@ Most packages are designed to be used on their own, having a documented API, a
 suite of tests, and a log of changes. Packages are updated and released
 individually, as features are added and fixes are made.
 
-<!-- The following table can be updated by running `yarn update-readme` -->
+<!-- The following table can be updated by running `npm run update-readme` -->
 <!-- @rnx-kit start -->
 
 | Name                                                                                                                                                    | Description                                                                                      |

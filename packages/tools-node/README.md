@@ -18,7 +18,7 @@ import * from "@rnx-kit/tools-node/package";
 import * from "@rnx-kit/tools-node/path";
 ```
 
-<!-- The following table can be updated by running `yarn update-readme` -->
+<!-- The following table can be updated by running `npm run update-readme` -->
 <!-- @rnx-kit/api start -->
 
 | Category | Type Name                    | Description                                                                                                                                                                     |

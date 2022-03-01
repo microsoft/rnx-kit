@@ -5,48 +5,38 @@ jobs:
     name: "Review"
     runs-on: ubuntu-latest
     steps:
-      - name: Set up Node 14
-        uses: actions/setup-node@v3.0.0
-        with:
-          node-version: 14
       - name: Checkout
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      - name: Ensure rnx-kit packages come from our repository
-        run: |
-          if grep rnx-kit yarn.lock; then
-            exit 1
-          fi
-      - name: Deduplicate packages
-        run: |
-          npx yarn-deduplicate --list --fail
-      - name: Cache /.yarn-offline-mirror
-        uses: actions/cache@v2.1.7
+      - name: Set up Node 16
+        uses: actions/setup-node@v3.0.0
         with:
-          path: .yarn-offline-mirror
-          key: ${{ runner.os }}-${{ hashFiles('yarn.lock') }}-6
-      - name: Install package dependencies
-        run: yarn ci
-        env:
-          CI_SKIP_GO: 1
+          node-version: 16
+          cache: npm
+      - name: Ensure rnx-kit packages come from our repository
+        run: node scripts/validate-package-lock.mjs
+      - name: Deduplicate packages
+        run: npm find-dupes --no-audit --no-fund
+      - name: Install npm dependencies
+        run: npm ci
       - name: Check for change files
-        run: yarn change:check --since origin/${{ github.base_ref }}
+        run: npm run change:check -- --since origin/${{ github.base_ref }}
       - name: Format
-        run: yarn format
+        run: npm run format
       - name: Report formatting changes
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          git diff | yarn suggestion-bot -m 'Code formatting differences were found – did you forget to run `yarn format`?'
+          git diff | npx suggestion-bot -m 'Code formatting differences were found – did you forget to run `npm run format`?'
           git checkout .
       - name: Align dependencies
-        run: yarn rnx-dep-check --write
+        run: npm run rnx-dep-check -- --write
       - name: Report dep-check changes
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          git diff | yarn suggestion-bot -m 'Dependencies are potentially misaligned – run `yarn rnx-dep-check` locally for more details'
+          git diff | npx suggestion-bot -m 'Dependencies are potentially misaligned – run `npm run rnx-dep-check` locally for more details'
           git checkout .
   build:
     name: "Build"
@@ -56,66 +46,69 @@ jobs:
         os: [ubuntu-latest, windows-latest]
     runs-on: ${{ matrix.os }}
     steps:
-      - name: Set up Node ${{ matrix.node-version }}
-        uses: actions/setup-node@v3.0.0
-        with:
-          node-version: ${{ matrix.node-version }}
-      - uses: actions/setup-go@v2
-        with:
-          go-version: "^1.14.0"
       - name: Checkout
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      - name: Cache /.yarn-offline-mirror
-        uses: actions/cache@v2.1.7
+      - name: Set up Go ^1.14.0
+        uses: actions/setup-go@v2
         with:
-          path: .yarn-offline-mirror
-          key: ${{ runner.os }}-${{ hashFiles('yarn.lock') }}-6
-      - name: Install package dependencies
-        run: yarn ci
+          go-version: "^1.14.0"
+      - name: Set up Node ${{ matrix.node-version }}
+        uses: actions/setup-node@v3.0.0
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: npm
+      - name: Install npm 8
+        if: ${{ matrix.node-version == 14 }}
+        run: |
+          # Lock version to workaround EPERM on Windows. For more details, see
+          # https://github.com/actions/setup-node/issues/411
+          npm i -g npm@8.3.1
+        shell: bash
+      - name: Install npm dependencies
+        run: |
+          npm ci
+          # `npm ci` does not install optional dependencies. We have to manually
+          # invoke postinstall scripts to make that happen.
+          node -e 'require("esbuild/install")'
+        shell: bash
       - name: Build and test packages
-        run: yarn build:ci
+        run: npm run build:ci
       - name: Ensure READMEs are up-to-date
-        if: ${{ matrix.node-version == 14 && matrix.os == 'ubuntu-latest' }}
+        if: ${{ matrix.node-version == 16 && matrix.os == 'ubuntu-latest' }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          yarn update-readme
-          git diff | yarn suggestion-bot -m 'Changes were found in READMEs – did you forget to run `yarn update-readme`?'
+          npm run update-readme
+          git diff | npx suggestion-bot -m 'Changes were found in READMEs – did you forget to run `npm run update-readme`?'
       - name: Bundle packages
-        run: yarn bundle:ci
+        run: npm run bundle:ci
       - name: Bundle test app with esbuild
         run: |
-          yarn bundle+esbuild
+          npm run bundle+esbuild
         shell: bash
         working-directory: packages/test-app
   build-android:
     name: "Build Android"
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2.4.0
+        with:
+          fetch-depth: 0
       - name: Set up JDK
         uses: actions/setup-java@v3.0.0
         with:
           distribution: temurin
           java-version: 11
-      - name: Set up Node 14
+      - name: Set up Node 16
         uses: actions/setup-node@v3.0.0
         with:
-          node-version: 14
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-      - name: Cache /.yarn-offline-mirror
-        uses: actions/cache@v2.1.7
-        with:
-          path: .yarn-offline-mirror
-          key: ${{ runner.os }}-${{ hashFiles('yarn.lock') }}-6
+          node-version: 16
+          cache: npm
       - name: Install npm dependencies
-        run: yarn ci
-        env:
-          CI_SKIP_GO: 1
+        run: npm ci
       - name: Build Android app
         run: |
           ./gradlew clean build
@@ -124,23 +117,17 @@ jobs:
     name: "Build iOS"
     runs-on: macos-11
     steps:
-      - name: Set up Node 14
-        uses: actions/setup-node@v3.0.0
-        with:
-          node-version: 14
       - name: Checkout
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      - name: Cache /.yarn-offline-mirror
-        uses: actions/cache@v2.1.7
+      - name: Set up Node 16
+        uses: actions/setup-node@v3.0.0
         with:
-          path: .yarn-offline-mirror
-          key: ${{ runner.os }}-${{ hashFiles('yarn.lock') }}-6
+          node-version: 16
+          cache: npm
       - name: Install npm dependencies
-        run: yarn ci
-        env:
-          CI_SKIP_GO: 1
+        run: npm ci
       - name: Install Pods
         run: pod install --project-directory=ios
         working-directory: packages/test-app

@@ -7,33 +7,32 @@ jobs:
     name: "Build and publish"
     runs-on: ubuntu-latest
     steps:
-      - name: Set up Node 14
-        uses: actions/setup-node@v3.0.0
-        with:
-          node-version: 14
-      - uses: actions/setup-go@v2
-        with:
-          go-version: "^1.14.0"
       - name: Checkout
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      - name: Cache /.yarn-offline-mirror
-        uses: actions/cache@v2.1.7
+      - name: Set up Go ^1.14.0
+        uses: actions/setup-go@v2
         with:
-          path: .yarn-offline-mirror
-          key: ${{ hashFiles('yarn.lock') }}
-      - name: Install package dependencies
-        run: yarn ci
+          go-version: "^1.14.0"
+      - name: Set up Node 16
+        uses: actions/setup-node@v3.0.0
+        with:
+          node-version: 16
+          cache: npm
+      - name: Install npm dependencies
+        run: |
+          npm ci
+          node -e 'require("esbuild/install")'
       - name: Build and test packages
-        run: yarn build:ci
+        run: npm run build:ci
       - name: Bundle packages
-        run: yarn bundle:ci
+        run: npm run bundle:ci
       - name: Create release PR or publish to npm
         uses: changesets/action@v1
         with:
-          publish: yarn publish:changesets
-          version: yarn version:changesets
+          publish: npm run publish:changesets
+          version: npm run version:changesets
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

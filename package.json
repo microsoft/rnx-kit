@@ -20,16 +20,15 @@
     "bundle+esbuild": "lage bundle+esbuild --verbose --grouped",
     "change": "changeset add",
     "change:check": "changeset status",
-    "ci": "yarn --cache-folder .yarn-offline-mirror --prefer-offline --frozen-lockfile --non-interactive",
     "clean": "lage cache --clear && lage clean --log-level warn --grouped",
     "depcheck": "lage depcheck --log-level warn --grouped",
     "format": "lage format --log-level warn --grouped",
     "new-package": "node scripts/new-package.js",
     "lint": "lage lint --verbose --grouped --no-cache",
     "publish:changesets": "changeset publish",
-    "rnx-dep-check": "yarn build-scope @rnx-kit/dep-check && scripts/rnx-dep-check.js",
+    "rnx-dep-check": "npm run build-scope -- @rnx-kit/dep-check && scripts/rnx-dep-check.js",
     "test": "lage test --verbose --grouped",
-    "update-readme": "yarn update-readme:main && lage update-readme",
+    "update-readme": "npm run update-readme:main && lage update-readme",
     "update-readme:main": "node scripts/update-readme.js",
     "version:changesets": "node scripts/disableChangesetsCommitAndBumpPackages.js"
   },
@@ -52,7 +51,8 @@
   "engines": {
     "node": ">=14.15"
   },
-  "resolutions": {
+  "packageManager": "npm@8.3.1",
+  "overrides": {
     "eslint-plugin-react": "^7.26.0",
     "micromatch": "^4.0.0"
   },
@@ -69,7 +69,7 @@
     "extends": "@rnx-kit/eslint-config"
   },
   "lage": {
-    "npmClient": "yarn",
+    "npmClient": "npm",
     "pipeline": {
       "build": [
         "^build"

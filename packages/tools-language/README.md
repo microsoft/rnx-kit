@@ -17,7 +17,7 @@ import * from "@rnx-kit/tools-language/math";
 import * from "@rnx-kit/tools-language/properties";
 ```
 
-<!-- The following table can be updated by running `yarn update-readme` -->
+<!-- The following table can be updated by running `npm run update-readme` -->
 <!-- @rnx-kit/api start -->
 
 | Category   | Function                                  | Description                                                                                                                                                 |

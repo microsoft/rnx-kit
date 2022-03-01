@@ -34,7 +34,7 @@ additional questions or comments.
 
 - Node LTS (see [releases](https://nodejs.org/en/about/releases/) for specific
   versions)
-- [Yarn Classic](https://classic.yarnpkg.com/)
+- [npm](https://docs.npmjs.com/cli/v8/commands/npm) 8.3+
 
 ### Optional
 
@@ -56,10 +56,10 @@ additional questions or comments.
 
 ## Build
 
-We use Yarn to install npm dependencies. From the repo root, run:
+We use npm to install dependencies. From the repo root, run:
 
 ```sh
-yarn
+npm install
 ```
 
 This will also take care of building any tools that you might need. Once it's
@@ -69,20 +69,20 @@ interested in.
 If you want to build all packages, you should run:
 
 ```
-yarn build
+npm run build
 ```
 
 Otherwise, you can specify which package to build, e.g. `@rnx-kit/cli`:
 
 ```sh
-yarn build-scope @rnx-kit/cli
+npm run build-scope -- @rnx-kit/cli
 ```
 
 Alternatively, you can navigate to the package folder and run:
 
 ```sh
 cd packages/cli
-yarn build --dependencies
+npm run build -- --dependencies
 ```
 
 Both the repository level `build-scope` and the package local
@@ -92,14 +92,14 @@ package.
 Below is a table of commonly used commands and what they do depending on your
 current working directory.
 
-| Command                     | Repository Level                                      | Package Level                                       |
-| :-------------------------- | :---------------------------------------------------- | :-------------------------------------------------- |
-| `yarn build`                | Builds **all** packages in the repository             | Builds the **current** package only                 |
-| `yarn build --dependencies` | --                                                    | Builds the **current** package and its dependencies |
-| `yarn build-scope`          | Builds the **specified** package and its dependencies | --                                                  |
-| `yarn format`               | Formats **all** packages in the repository            | Formats the **current** package only                |
-| `yarn lint`                 | Lints **all** packages in the repository              | Lints the **current** package only                  |
-| `yarn test`                 | Tests **all** packages in the repository              | Tests the **current** package only                  |
+| Command                           | Repository Level                                      | Package Level                                       |
+| :-------------------------------- | :---------------------------------------------------- | :-------------------------------------------------- |
+| `npm run build`                   | Builds **all** packages in the repository             | Builds the **current** package only                 |
+| `npm run build -- --dependencies` | --                                                    | Builds the **current** package and its dependencies |
+| `npm run build-scope`             | Builds the **specified** package and its dependencies | --                                                  |
+| `npm run format`                  | Formats **all** packages in the repository            | Formats the **current** package only                |
+| `npm run lint`                    | Lints **all** packages in the repository              | Lints the **current** package only                  |
+| `npm test`                        | Tests **all** packages in the repository              | Tests the **current** package only                  |
 
 ## Adding a new package
 
@@ -109,7 +109,7 @@ have introduced a small script to easily allow for new packages generation.
 Simply run
 
 ```sh
-yarn new-package --name TEST
+npm run new-package newPackageName
 ```
 
 To generate a sample project for you to use; this is based on
@@ -122,7 +122,7 @@ Each package in this monorepo contains a change log. The log is built from
 change descriptions submitted with each PR.
 
 ```
-$ yarn change
+$ npm run change
 
 Checking for changes against "origin/main"
 fetching latest from remotes "origin/main"
@@ -156,5 +156,5 @@ package and publish it to `npm`.
 Most files are formatted with [Prettier](https://prettier.io/). We also use
 [ESLint](https://eslint.org/) to lint all JavaScript code.
 
-You can trigger formatting by running `yarn format`, and linting with
-`yarn lint`.
+You can trigger formatting by running `npm run format`, and linting with
+`npm run lint`.
