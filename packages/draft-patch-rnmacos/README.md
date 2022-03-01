@@ -65,6 +65,9 @@ A complete example of this script on macos is the following:
 npx @rnx-kit/patch-rnmacos diff ../../../react-native-macos-main/ ../../../react-native-macos-clean-copy --inclusion-list-dirs ./ReactAndroid --patch-name TEST --log-folder ./logs --git-executable /usr/local/bin/git --diff-executable /usr/local/Cellar/git/2.34.0/libexec/git-core/git-diff
 ```
 
+A more complete explanation of all the params can be found via
+`npx @rnx-kit/patch-rnmacos diff --help`.
+
 ### **`patch`**
 
 This command allows to apply to the codebase all the various folder patches (via
@@ -83,6 +86,9 @@ A complete example of this script on macos is the following:
 npx @rnx-kit/patch-rnmacos patch ../../../react-native-macos-main Build OfficeRNHost V8 Focus MAC ImageColor --patch-store ../../../react-native-macos-main/android-patches/patches --log-folder ../../../react-native-macos-main/android-patches/logs --confirm true
 ```
 
+A more complete explanation of all the params can be found via
+`npx @rnx-kit/patch-rnmacos patch --help`.
+
 ### **`patchfile`**
 
 This command is similar to `patch`, but targets a specific file:
@@ -91,5 +97,5 @@ This command is similar to `patch`, but targets a specific file:
 patchfile [options] <targetFilePath> <patchFilePath>
 ```
 
-More details can be found via `npx @rnx-kit/patch-rnmacos patchfile --help`.
-It's not widely used.
+A more complete explanation of all the params can be found via
+`npx @rnx-kit/patch-rnmacos patchfile --help`.
