@@ -54,11 +54,7 @@ export function applyPatchTool(
   }
 
   const patch = spawn(patchExecutable, patchArgs);
-  log.info(
-    "Patch",
-    "Calling C:\\Program Files\\Git\\usr\\bin\\patch.exe " +
-      patchArgs.toString()
-  );
+  log.info("Patch", `Calling ${patchExecutable} ` + patchArgs.toString());
 
   patch.on("message", (message: string) => {
     callback(`Patch message: ${message}`);
