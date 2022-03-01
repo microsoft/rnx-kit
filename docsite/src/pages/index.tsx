@@ -4,7 +4,7 @@ import Layout from "@theme/Layout";
 import Link from "@docusaurus/Link";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import styles from "./index.module.css";
-//import HomepageFeatures from "../components/HomepageFeatures";
+import HomepageFeatures from "../components/HomepageFeatures";
 
 function HomepageHeader() {
   const { siteConfig } = useDocusaurusContext();
@@ -16,7 +16,7 @@ function HomepageHeader() {
         <div className={styles.buttons}>
           <Link
             className="button button--secondary button--lg"
-            to="/docs/intro"
+            to="/docs/tutorial-basics/intro"
           >
             Get Started
           </Link>
@@ -31,7 +31,9 @@ export default function Home(): JSX.Element {
   return (
     <Layout title={"Home"} description={siteConfig.tagline}>
       <HomepageHeader />
-      <main></main>
+      <main>
+        <HomepageFeatures />
+      </main>
     </Layout>
   );
 }

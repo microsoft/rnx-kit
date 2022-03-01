@@ -60,11 +60,11 @@ const config = {
         items: [
           {
             type: "doc",
-            docId: "intro",
-            position: "left",
+            docId: "tutorial-basics/intro",
+            position: "right",
             label: "Tutorial",
           },
-          { to: "/blog", label: "Blog", position: "left" },
+          { to: "/blog", label: "Blog", position: "right" },
           {
             href: mainReadmeUrl,
             className: "github-mark-24px",
