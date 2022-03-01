@@ -70,7 +70,7 @@ const diffRepos: DiffReposFuncType = (
     const fileNameExtension = getFileNameExtension(dirtyRepoFileAbsPath);
     if (options.exclusionListExts.includes(fileNameExtension)) {
       log.info(
-        "diffRNFork",
+        "diffFork",
         `Ignoring {dirtyRepoFileAbsPath} based on file name extension.`
       );
       return;
@@ -80,20 +80,20 @@ const diffRepos: DiffReposFuncType = (
         writeFile(patchStorePath, forkFileRelativePath, `${patch}`, "");
       };
       const callbackOnError = (error: string) => {
-        log.error("diffRNFork", error);
+        log.error("diffFork", error);
       };
       const callbackOnBinaryFilesCompare = (same: boolean) => {
         if (!same) {
           copyFile2(patchStorePath, forkFileRelativePath, dirtyRepoFileAbsPath);
         } else {
           log.info(
-            "diffRNFork",
+            "diffFork",
             `Skip copying identical binary files: ${forkFileRelativePath}`
           );
         }
       };
       const callbackOnBinaryFilesCompareError = (result: string) => {
-        log.error("diffRNFork", `callbackOnBinaryFilesCompareError: ${result}`);
+        log.error("diffFork", `callbackOnBinaryFilesCompareError: ${result}`);
       };
 
       const handleBinaryFileInFork = () => {
@@ -124,7 +124,7 @@ const diffRepos: DiffReposFuncType = (
         writeFile(patchStorePath, forkFileRelativePath, `${patch}`, "");
       };
       const callbackOnError = (error: string) => {
-        log.error("diffRNFork", error);
+        log.error("diffFork", error);
       };
       const handleBinaryFileInFork = () => {
         copyFile2(patchStorePath, forkFileRelativePath, dirtyRepoFileAbsPath);
@@ -181,7 +181,7 @@ const diffRepos: DiffReposFuncType = (
         )
       ) {
         log.info(
-          "diffRNFork",
+          "diffFork",
           `${dir} is present in both inclusionList as well as exclusionList. Ignoring it.`
         );
       } else {
