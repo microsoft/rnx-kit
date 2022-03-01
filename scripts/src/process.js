@@ -34,8 +34,8 @@ function execute(command, ...args) {
  * @returns {Promise<void>}
  */
 function runScript(command, ...args) {
-  const yarn = os.platform() === "win32" ? "yarn.cmd" : "yarn";
-  return execute(yarn, "--silent", command, ...args);
+  const npx = os.platform() === "win32" ? "npx.cmd" : "npx";
+  return execute(npx, "--silent", command, ...args);
 }
 
 /**

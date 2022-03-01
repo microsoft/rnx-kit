@@ -18,13 +18,13 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      - name: Cache /.yarn-offline-mirror
+      - name: Cache /.yarn/cache
         uses: actions/cache@v2.1.7
         with:
-          path: .yarn-offline-mirror
+          path: .yarn/cache
           key: ${{ hashFiles('yarn.lock') }}
-      - name: Install package dependencies
-        run: yarn ci
+      - name: Install npm dependencies
+        run: yarn
       - name: Build and test packages
         run: yarn build:ci
       - name: Bundle packages

@@ -5,6 +5,9 @@
 *.xcworkspace/
 .gradle/
 .idea/
+.npmrc
+.yarn/*
+!.yarn/releases/
 Pods/
 coverage/
 /packages/*/bin/

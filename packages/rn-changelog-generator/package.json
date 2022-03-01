@@ -10,9 +10,7 @@
   ],
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
-  "bin": {
-    "rn-changelog-generator": "lib/index.js"
-  },
+  "bin": "lib/index.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/microsoft/rnx-kit",

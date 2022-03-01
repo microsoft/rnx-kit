@@ -20,7 +20,6 @@
     "bundle+esbuild": "lage bundle+esbuild --verbose --grouped",
     "change": "changeset add",
     "change:check": "changeset status",
-    "ci": "yarn --cache-folder .yarn-offline-mirror --prefer-offline --frozen-lockfile --non-interactive",
     "clean": "lage cache --clear && lage clean --log-level warn --grouped",
     "depcheck": "lage depcheck --log-level warn --grouped",
     "format": "lage format --log-level warn --grouped",
@@ -52,17 +51,16 @@
   "engines": {
     "node": ">=14.15"
   },
+  "packageManager": "yarn@3.1.1",
   "resolutions": {
     "eslint-plugin-react": "^7.26.0",
     "micromatch": "^4.0.0"
   },
-  "workspaces": {
-    "packages": [
-      "packages/@types/*",
-      "packages/*",
-      "scripts"
-    ]
-  },
+  "workspaces": [
+    "packages/@types/*",
+    "packages/*",
+    "scripts"
+  ],
   "eslintConfig": {
     "extends": "@rnx-kit/eslint-config"
   },
