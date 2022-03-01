@@ -3,13 +3,13 @@
 [![Build](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml/badge.svg)](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml)
 [![npm version](https://img.shields.io/npm/v/@rnx-kit/patch-rnmacos)](https://www.npmjs.com/package/@rnx-kit/patch-rnmacos)
 
-🚧🚧🚧🚧🚧
+🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧
 
 _This tool is still incomplete - please refer
 [to this issue](https://github.com/microsoft/rnx-kit/issues/1156) for the list
-of wanted improvements._
+of wanted improvements. DO NOT use it unless know what you are doing._
 
-🚧🚧🚧🚧🚧
+🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧
 
 ### Context
 
@@ -35,6 +35,11 @@ This tool has mainly two commands, `diff` and `patch`. You can find the full
 list of functionalities by invoking the command
 `npx @rnx-kit/patch-rnmacos --help`.
 
+The commands have an option `--log-folder` that allows the user to point a
+folder in which a set of files with different levels of logging will be stored.
+According to each level of gravity, the files are going to be `error.log`,
+`all.log`, `warn.log`, and `exceptions.log`.
+
 ### `diff`
 
 This command will take a folder and a "clean-copy" of it _(that needs to be
@@ -52,8 +57,7 @@ Along with these core options, you might want to pass the following params:
 
 - `--inclusion-list-dirs`, relative path within the folder with the changes to
   focus on (instead of having the tool look everywhere inside it)
-- `--log-folder`, absolute path in which to store logs of the execution of this
-  command
+- `--log-folder`, path in which to store logs of the execution of this command
 - `--git-executable` and `--diff-executable`, these by default try to find the
   Git tool in Windows. So, if you are in a Unix-based solution like macos, you
   will want to pass something like

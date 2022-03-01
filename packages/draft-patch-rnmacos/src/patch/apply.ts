@@ -26,7 +26,7 @@ export const executeEffects = (
         break;
       case "rename":
         if (dryRun) {
-          // TODO: see what patch files look like if moving to exising path
+          // TODO: see what patch files look like if moving to existing path
           if (!fs.existsSync(eff.fromPath)) {
             throw new Error(
               "Trying to move file that doesn't exist: " + eff.fromPath
