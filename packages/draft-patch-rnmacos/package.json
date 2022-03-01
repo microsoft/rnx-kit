@@ -1,8 +1,8 @@
 {
-  "name": "@rnx-kit/patch-rnmacos",
+  "name": "@rnx-kit/draft-patch-rnmacos",
   "version": "0.0.1",
   "description": "A tool to generate patches and apply them to a codebase",
-  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/patch-rnmacos#readme",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/draft-patch-rnmacos#readme",
   "license": "MIT",
   "author": {
     "name": "Microsoft Open Source",
