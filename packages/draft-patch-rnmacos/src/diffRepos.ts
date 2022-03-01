@@ -3,7 +3,7 @@ import {
   writeFile,
   getRelativePath,
   lookUpRelativePath,
-  initDirectory,
+  eraseAndRecreateDirectory,
   resolvePath,
   copyFile2,
   getFileNameExtension,
@@ -52,9 +52,9 @@ const diffRepos: DiffReposFuncType = (
   // const forkOnlyPath = resolvePath(patchStorePath, 'fork-only');
 
   // Init output directory
-  // initDirectory(bothPath);
-  // initDirectory(forkOnlyPath);
-  initDirectory(patchStorePath);
+  // eraseAndRecreateDirectory(bothPath);
+  // eraseAndRecreateDirectory(forkOnlyPath);
+  eraseAndRecreateDirectory(patchStorePath);
 
   if (options.cleanupRepos) {
     cleanRepoSync(options.baseFork, options.gitExecutable);

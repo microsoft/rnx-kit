@@ -158,11 +158,11 @@ export function lookUpRelativePath(
   }
 }
 
-export function initDirectory(path: string) {
+export function eraseAndRecreateDirectory(path: string) {
   fse.removeSync(path);
   if (fse.existsSync(path)) {
     log.error(
-      "FS:initDirectory",
+      "FS:eraseAndRecreateDirectory",
       `Output directory can't be nuked !! (${path})`
     );
   }
