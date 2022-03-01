@@ -193,11 +193,6 @@ html[data-theme="dark"] .markdown li a:hover {
  * Footer
  */
 .footer__logo {
-  opacity: 0.5;
   width: 300px;
   max-width: unset;
-}
-
-.footer__logo:hover {
-  opacity: 1;
 }
