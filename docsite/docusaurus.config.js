@@ -116,6 +116,11 @@ const config = {
         //     ],
         //   },
         // ],
+        logo: {
+          src: "img/Microsoft-Open-Source-logo.svg",
+          alt: "Microsoft Open Source logo",
+          href: "https://opensource.microsoft.com",
+        },
         copyright: `Copyright © ${new Date().getFullYear()} Microsoft`,
       },
       prism: {
