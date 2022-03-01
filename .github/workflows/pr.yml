@@ -159,7 +159,7 @@ jobs:
       contents: read
       pull-requests: write
     steps:
-      - uses: actions/labeler@v3.0.2
+      - uses: actions/labeler@v3.1.0
         with:
           repo-token: "${{ secrets.GITHUB_TOKEN }}"
           sync-labels: true
