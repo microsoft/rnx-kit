@@ -118,7 +118,7 @@ function applyPatch(
 
   // modifying the file in place
   let fileContents = "";
-  let mode = 0o666; // For files not yet created, give them read/write permissions
+  let mode = 0o644; // For files not yet created, give them read/write permissions
   if (fs.existsSync(targetFilePathOverride)) {
     fileContents = fs.readFileSync(targetFilePathOverride).toString();
     mode = fs.statSync(targetFilePathOverride).mode;
