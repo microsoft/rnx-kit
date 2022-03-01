@@ -46,6 +46,10 @@ const profile: Profile = {
     version: "^0.67.0",
     devOnly: true,
   },
+  gestures: {
+    name: "react-native-gesture-handler",
+    version: "^2.3.0",
+  },
   hermes: {
     name: "hermes-engine",
     version: "~0.11.0",
