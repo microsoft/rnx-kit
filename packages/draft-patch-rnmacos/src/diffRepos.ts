@@ -75,7 +75,7 @@ const diffRepos: DiffReposFuncType = (
       );
       return;
     }
-    const callbackOnHit = (fbRepoFileAbsPath: string) => {
+    const callbackOnHit = (sourceRepoFileAbsPath: string) => {
       const callbackOnDiffCreated = (patch: string) => {
         writeFile(patchStorePath, forkFileRelativePath, `${patch}`, "");
       };
@@ -98,7 +98,7 @@ const diffRepos: DiffReposFuncType = (
 
       const handleBinaryFileInFork = () => {
         compareFiles(
-          fbRepoFileAbsPath,
+          sourceRepoFileAbsPath,
           dirtyRepoFileAbsPath,
           callbackOnBinaryFilesCompare,
           callbackOnBinaryFilesCompareError
@@ -109,7 +109,7 @@ const diffRepos: DiffReposFuncType = (
         handleBinaryFileInFork();
       } else {
         diffFiles(
-          fbRepoFileAbsPath,
+          sourceRepoFileAbsPath,
           false /* new file*/,
           dirtyRepoFileAbsPath,
           callbackOnDiffCreated,
@@ -119,7 +119,7 @@ const diffRepos: DiffReposFuncType = (
       }
     };
 
-    const callbackOnMiss = (fbRepoFileAbsPath: string) => {
+    const callbackOnMiss = (sourceRepoFileAbsPath: string) => {
       const callbackOnDiffCreated = (patch: string) => {
         writeFile(patchStorePath, forkFileRelativePath, `${patch}`, "");
       };
@@ -133,7 +133,7 @@ const diffRepos: DiffReposFuncType = (
         handleBinaryFileInFork();
       } else {
         diffFiles(
-          fbRepoFileAbsPath,
+          sourceRepoFileAbsPath,
           true /* new file*/,
           dirtyRepoFileAbsPath,
           callbackOnDiffCreated,

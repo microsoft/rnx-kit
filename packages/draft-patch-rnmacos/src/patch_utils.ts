@@ -11,8 +11,8 @@ import { readPatch } from "./patch/read";
 // const diffExecutable = getArgs().diffExecutable;
 
 // Returns patch between files as string
-// For our use case, the first path is the FB/base repo and the second path is the dirtry fork.
-// For files which doesn't exist in the FB/base repo, the path1IsNew should be set so that we create path for 'new file'
+// For our use case, the first path is the base repo and the second path is the dirty fork.
+// For files which doesn't exist in the base repo, the path1IsNew should be set so that we create path for 'new file'
 // Return empty string when files are identical
 export function diffFiles(
   path1: string,
