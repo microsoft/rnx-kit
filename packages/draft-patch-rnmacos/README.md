@@ -50,7 +50,7 @@ npx @rnx-kit/patch-rnmacos diff <path-of-folder> <path-of-clean-copy-folder> --p
 
 Along with these core options, you might want to pass the following params:
 
-- `--inclusionList-dirs`, relative path within the folder with the changes to
+- `--inclusion-list-dirs`, relative path within the folder with the changes to
   focus on (instead of having the tool look everywhere inside it)
 - `--log-folder`, absolute path in which to store logs of the execution of this
   command
@@ -62,7 +62,7 @@ Along with these core options, you might want to pass the following params:
 A complete example of this script on macos is the following:
 
 ```sh
-npx @rnx-kit/patch-rnmacos diff ../../../react-native-macos-main/ ../../../react-native-macos-clean-copy --inclusionList-dirs ./ReactAndroid --patch-name TEST --log-folder ./logs --git-executable /usr/local/bin/git --diff-executable /usr/local/Cellar/git/2.34.0/libexec/git-core/git-diff
+npx @rnx-kit/patch-rnmacos diff ../../../react-native-macos-main/ ../../../react-native-macos-clean-copy --inclusion-list-dirs ./ReactAndroid --patch-name TEST --log-folder ./logs --git-executable /usr/local/bin/git --diff-executable /usr/local/Cellar/git/2.34.0/libexec/git-core/git-diff
 ```
 
 ### **`patch`**

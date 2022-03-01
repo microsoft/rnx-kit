@@ -127,19 +127,19 @@ export function initCli(
       true
     )
     .option(
-      "--exclusionList-dirs <paths>",
+      "--exclusion-list-dirs <paths>",
       "Paths in dirty repo to be excluded from the patch creation and application",
       commaSeparatedList,
       defaultExclusionListDirs
     )
     .option(
-      "--exclusionList-exts <exts>",
+      "--exclusion-list-exts <exts>",
       "File name extensions in dirty repo to be excluded from the patch creation and application",
       commaSeparatedList,
       defaultExclusionListExts
     )
     .option(
-      "--inclusionList-dirs <paths>",
+      "--inclusion-list-dirs <paths>",
       "Paths in dirty repo to be included in the patch creation and application",
       commaSeparatedList,
       defaultInclusionListDirs
