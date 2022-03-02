@@ -40,9 +40,9 @@ const FeatureList: FeatureItem[] = [
     image: "/img/flask.svg",
     description: [
       <p key="test1">
-        From unit tests to deployment in large monorepos, each tool is{" "}
-        <em>thoroughly validated</em>. Microsoft has engineers dedicated to this
-        project, which they use to ship React Native apps to millions of
+        From unit tests to deployments in large monorepos, each tool is{" "}
+        <strong>thoroughly validated</strong>. Microsoft has engineers dedicated
+        to this project, using it to ship React Native apps to millions of
         customers.
       </p>,
     ],
