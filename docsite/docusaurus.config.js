@@ -34,12 +34,13 @@ const config = {
       /** @type {import('@docusaurus/preset-classic').Options} */
       ({
         docs: {
+          breadcrumbs: false,
           sidebarPath: require.resolve("./sidebars.js"),
-          editUrl: docsiteUrl + "/docs/",
+          editUrl: docsiteUrl + "/",
         },
         blog: {
           showReadingTime: true,
-          editUrl: docsiteUrl + "/blog/",
+          editUrl: docsiteUrl + "/",
         },
         theme: {
           customCss: require.resolve("./src/css/custom.css"),
