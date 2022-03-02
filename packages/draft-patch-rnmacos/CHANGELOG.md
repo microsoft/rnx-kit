@@ -1,5 +1,11 @@
 # @rnx-kit/draft-patch-rnmacos
 
+## 0.1.2
+
+### Patch Changes
+
+- f2d88c3: Add missing shebang to invoke with node
+
 ## 0.1.1
 
 ### Patch Changes
