@@ -22,8 +22,8 @@
   },
   "devDependencies": {
     "@rnx-kit/scripts": "*",
-    "prettier": "^2.0.0",
-    "esbuild": "^0.14.10"
+    "esbuild": "^0.14.10",
+    "prettier": "^2.0.0"
   },
   "depcheck": {
     "ignorePatterns": [
