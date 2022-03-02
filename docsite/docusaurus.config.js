@@ -66,6 +66,7 @@ const config = {
           },
           { to: "/blog", label: "Blog", position: "right" },
           {
+            src: "img/github-logo.svg",
             href: mainReadmeUrl,
             className: "github-mark-24px",
             position: "right",

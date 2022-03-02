@@ -6,6 +6,16 @@
 }
 
 .featureSvg {
-  height: 200px;
-  width: 200px;
+  height: 120px;
+  opacity: 0.85;
+}
+
+html[data-theme="dark"] .featureSvg {
+  filter: invert();
+  opacity: 0.9;
+}
+
+.featureText h3 {
+  color: var(--ifm-color-primary);
+  font-size: calc(var(--ifm-h3-font-size) * 0.97);
 }

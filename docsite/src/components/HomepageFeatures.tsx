@@ -1,50 +1,57 @@
-import useBaseUrl from '@docusaurus/useBaseUrl';
-import React from 'react';
-import clsx from 'clsx';
-import styles from './HomepageFeatures.module.css';
+import useBaseUrl from "@docusaurus/useBaseUrl";
+import React from "react";
+import clsx from "clsx";
+import styles from "./HomepageFeatures.module.css";
 
 type FeatureItem = {
   title: string;
   image: string;
-  description: JSX.Element;
+  description: JSX.Element[];
 };
 
 const FeatureList: FeatureItem[] = [
   {
-    title: 'Easy to Use',
-    image: '/img/undraw_docusaurus_mountain.svg',
-    description: (
-      <>
-        Docusaurus was designed from the ground up to be easily installed and
-        used to get your website up and running quickly.
-      </>
-    ),
+    title: "Made by developers, for developers.",
+    image: "/img/code-pull-request.svg",
+    description: [
+      <p key="dev1">
+        Every tool is <strong>purpose-built</strong> to make your React Native
+        developer experience better. Simple, efficient tools make all the
+        difference.
+      </p>,
+    ],
   },
   {
-    title: 'Focus on What Matters',
-    image: '/img/undraw_docusaurus_tree.svg',
-    description: (
-      <>
-        Docusaurus lets you focus on your docs, and we&apos;ll do the chores. Go
-        ahead and move your docs into the <code>docs</code> directory.
-      </>
-    ),
+    title: "Community first.",
+    image: "/img/user-gear.svg",
+    description: [
+      <p key="com1">
+        Created as a <strong>GitHub-first</strong> project for the React Native
+        community. Integrated with tools you already use: Metro, TypeScript,
+        Jest, and more.
+      </p>,
+      <p key="com2">
+        Join in! Your contributions are <em>always</em> welcome.
+      </p>,
+    ],
   },
   {
-    title: 'Powered by React',
-    image: '/img/undraw_docusaurus_react.svg',
-    description: (
-      <>
-        Extend or customize your website layout by reusing React. Docusaurus can
-        be extended while reusing the same header and footer.
-      </>
-    ),
+    title: "Tested at scale. Supported by Microsoft.",
+    image: "/img/flask.svg",
+    description: [
+      <p key="test1">
+        From unit tests to deployment in large monorepos, each tool is{" "}
+        <em>thoroughly validated</em>. Microsoft has engineers dedicated to this
+        project, which they use to ship React Native apps to millions of
+        customers.
+      </p>,
+    ],
   },
 ];
 
-function Feature({title, image, description}: FeatureItem) {
+function Feature({ title, image, description }: FeatureItem) {
   return (
-    <div className={clsx('col col--4')}>
+    <div className={clsx("col col--4")}>
       <div className="text--center">
         <img
           className={styles.featureSvg}
@@ -52,9 +59,14 @@ function Feature({title, image, description}: FeatureItem) {
           src={useBaseUrl(image)}
         />
       </div>
-      <div className="text--center padding-horiz--md">
+      <div
+        className={clsx(
+          "text--center padding-horiz--md padding-top--md",
+          styles.featureText
+        )}
+      >
         <h3>{title}</h3>
-        <p>{description}</p>
+        {description}
       </div>
     </div>
   );
