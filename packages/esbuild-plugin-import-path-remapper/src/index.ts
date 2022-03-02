@@ -5,7 +5,6 @@ const ESBUILD_DEFAULT_EXTENSIONS = [
   ".ts",
   ".jsx",
   ".js",
-  ".mjs",
   ".css",
   ".json",
 ];
