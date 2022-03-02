@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import diffRepos from "./diffRepos";
 import patchRepo from "./patchRepo";
 import patchFile from "./patchFile";
