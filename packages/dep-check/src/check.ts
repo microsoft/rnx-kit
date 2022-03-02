@@ -54,7 +54,11 @@ export function getCheckConfig(
     ...(supportedVersions
       ? { reactNativeVersion: supportedVersions }
       : undefined),
-    ...(targetVersion ? { reactNativeDevVersion: targetVersion } : undefined),
+    // We should not set dev version if the package is configured. It may have
+    // been intentionally left out to reuse `reactNativeVersion`.
+    ...(!kitConfig.reactNativeVersion && targetVersion
+      ? { reactNativeDevVersion: targetVersion }
+      : undefined),
     ...kitConfig,
   });
 
