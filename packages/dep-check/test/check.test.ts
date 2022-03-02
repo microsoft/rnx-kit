@@ -1,4 +1,5 @@
-import { checkPackageManifest } from "../src/check";
+import semverCoerce from "semver/functions/coerce";
+import { checkPackageManifest, getCheckConfig } from "../src/check";
 import profile_0_62 from "../src/profiles/profile-0.62";
 import profile_0_63 from "../src/profiles/profile-0.63";
 import profile_0_64 from "../src/profiles/profile-0.64";
@@ -278,5 +279,81 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
     expect(consoleErrorSpy).not.toBeCalled();
     expect(consoleLogSpy).not.toBeCalled();
     expect(consoleWarnSpy).not.toBeCalled();
+  });
+});
+
+describe("getCheckConfig", () => {
+  const rnxKitConfig = require("@rnx-kit/config");
+  const fs = require("fs");
+
+  const mockManifest = {
+    name: "@rnx-kit/dep-check",
+    version: "0.0.1",
+  };
+
+  const defaultOptions = { loose: false, write: false };
+
+  beforeEach(() => {
+    fs.__setMockContent(mockManifest);
+    rnxKitConfig.__setMockConfig();
+  });
+
+  afterAll(() => {
+    jest.clearAllMocks();
+  });
+
+  test("returns early if the package is unconfigured", () => {
+    expect(getCheckConfig("package.json", defaultOptions)).toBe(0);
+  });
+
+  test("returns default values given react-native version", () => {
+    const reactNativeVersion = "^0.64";
+    rnxKitConfig.__setMockConfig({ reactNativeVersion });
+
+    expect(getCheckConfig("package.json", defaultOptions)).toEqual({
+      capabilities: [],
+      kitType: "library",
+      manifest: mockManifest,
+      reactNativeVersion,
+      reactNativeDevVersion: semverCoerce(reactNativeVersion).version,
+    });
+  });
+
+  test("uses react-native version provided by vigilant flag if unspecified", () => {
+    const reactNativeVersion = "^0.64";
+    rnxKitConfig.__setMockConfig({ customProfiles: "" });
+
+    expect(
+      getCheckConfig("package.json", {
+        ...defaultOptions,
+        supportedVersions: reactNativeVersion,
+        targetVersion: reactNativeVersion,
+      })
+    ).toEqual({
+      capabilities: [],
+      kitType: "library",
+      manifest: mockManifest,
+      reactNativeVersion,
+      reactNativeDevVersion: reactNativeVersion,
+    });
+  });
+
+  test("does not overwrite existing config with the version provided by vigilant flag", () => {
+    const reactNativeVersion = "^0.64";
+    rnxKitConfig.__setMockConfig({ reactNativeVersion });
+
+    expect(
+      getCheckConfig("package.json", {
+        ...defaultOptions,
+        supportedVersions: "1000.0",
+        targetVersion: "1000.0",
+      })
+    ).toEqual({
+      capabilities: [],
+      kitType: "library",
+      manifest: mockManifest,
+      reactNativeVersion,
+      reactNativeDevVersion: semverCoerce(reactNativeVersion).version,
+    });
   });
 });
