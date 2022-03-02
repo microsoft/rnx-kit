@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/draft-patch-rnmacos",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "A tool to generate patches and apply them to a codebase",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/draft-patch-rnmacos#readme",
   "license": "MIT",
