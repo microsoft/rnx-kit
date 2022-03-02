@@ -140,4 +140,26 @@ describe("@rnx-kit/esbuild-plugin-import-path-remapper", () => {
       expect.not.stringContaining('location = "lib/index"')
     );
   });
+
+  test("does not remap externals.", async () => {
+    const result = await esbuild.build({
+      entryPoints: ["./test/__fixtures__/import-@test-pkg.ts"],
+
+      bundle: true,
+      write: false,
+      plugins: [ImportPathRemapperPlugin(/@test/)],
+      external: ["@test/pkg"],
+    });
+
+    const output = String.fromCodePoint(...result.outputFiles[0].contents);
+    expect(output).toEqual(
+      expect.stringContaining('var import_pkg = __require("@test/pkg");')
+    );
+    expect(output).toEqual(
+      expect.not.stringContaining('location = "src/index"')
+    );
+    expect(output).toEqual(
+      expect.not.stringContaining('location = "lib/index"')
+    );
+  });
 });
