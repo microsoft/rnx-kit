@@ -19,7 +19,8 @@
     "directory": "packages/dep-check"
   },
   "scripts": {
-    "build": "rnx-kit-scripts build && rnx-kit-scripts bundle",
+    "build": "rnx-kit-scripts build",
+    "bundle": "rnx-kit-scripts bundle",
     "format": "rnx-kit-scripts format",
     "lint": "rnx-kit-scripts lint",
     "test": "rnx-kit-scripts test",
