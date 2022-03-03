@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/esbuild-plugin-import-path-remapper
 
+## 1.2.0
+
+### Minor Changes
+
+- 4fce2cf: Do not remap externals.
+
 ## 1.1.4
 
 Mon, 01 Nov 2021 13:46:12 GMT
