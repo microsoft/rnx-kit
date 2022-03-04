@@ -59,6 +59,7 @@
   "workspaces": {
     "packages": [
       "docsite",
+      "incubator/*",
       "packages/@types/*",
       "packages/*",
       "scripts"
