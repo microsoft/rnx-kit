@@ -27,6 +27,24 @@
     "**/lib-commonjs": true,
     "**/lib-amd": true
   },
+  "go.inferGopath": false,
+  "go.buildOnSave": "workspace",
+  "go.lintOnSave": "package",
+  "go.vetOnSave": "package",
+  "go.buildFlags": [],
+  "go.lintFlags": [],
+  "go.vetFlags": [],
+  "go.coverOnSave": false,
+  "go.gocodeAutoBuild": false,
+  "go.useLanguageServer": true,
+  "go.alternateTools": {
+    "go-langserver": "gopls"
+  },
+  "[go]": {
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": true
+    }
+  },
 
   "javascript.preferences.quoteStyle": "single",
 
