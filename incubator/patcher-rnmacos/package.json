@@ -1,8 +1,8 @@
 {
-  "name": "@rnx-kit/draft-patch-rnmacos",
+  "name": "@rnx-kit/patcher-rnmacos",
   "version": "0.1.2",
   "description": "A tool to generate patches and apply them to a codebase",
-  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/draft-patch-rnmacos#readme",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/patcher-rnmacos#readme",
   "license": "MIT",
   "author": {
     "name": "Microsoft Open Source",
@@ -14,12 +14,12 @@
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "bin": {
-    "draft-patch-rnmacos": "lib/index.js"
+    "patcher-rnmacos": "lib/index.js"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/microsoft/rnx-kit",
-    "directory": "packages/draft-patch-rnmacos"
+    "directory": "packages/patcher-rnmacos"
   },
   "engines": {
     "node": ">= 14"
