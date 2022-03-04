@@ -22,6 +22,7 @@
     "node": ">= 14"
   },
   "scripts": {
+    "prepare": "echo '⚠️ rn-changelog-generator is EXPERIMENTAL - USE WITH CAUTION  ⚠️'",
     "build": "rnx-kit-scripts build",
     "bundle": "rnx-kit-scripts bundle",
     "format": "rnx-kit-scripts format",

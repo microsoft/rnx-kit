@@ -25,6 +25,7 @@
     "node": ">= 14"
   },
   "scripts": {
+    "prepare": "echo '⚠️ patcher-rnmacos is EXPERIMENTAL - USE WITH CAUTION  ⚠️'",
     "build": "rnx-kit-scripts build",
     "format": "rnx-kit-scripts format",
     "lint": "rnx-kit-scripts lint",
