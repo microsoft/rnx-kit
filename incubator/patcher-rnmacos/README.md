@@ -5,9 +5,11 @@
 
 🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧
 
-_This tool is still incomplete - please refer
-[to this issue](https://github.com/microsoft/rnx-kit/issues/1156) for the list
-of wanted improvements. DO NOT use it unless know what you are doing._
+### This tool is EXPERIMENTAL - USE WITH CAUTION
+
+Please refer [to this issue](https://github.com/microsoft/rnx-kit/issues/1156)
+for the list of wanted improvements. DO NOT use it unless know what you are
+doing.
 
 🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧
 
