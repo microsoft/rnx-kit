@@ -22,7 +22,9 @@ export function getCheckConfig(
 ): number | CheckConfig {
   const manifest = readPackage(manifestPath);
   if (!isPackageManifest(manifest)) {
-    error(`'${manifestPath}' does not contain a valid package manifest`);
+    error(
+      `'${manifestPath}' does not contain a valid package manifest - please make sure it's not missing 'name' or 'version'`
+    );
     return 1;
   }
 
