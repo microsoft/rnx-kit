@@ -147,7 +147,7 @@ const config = {
             type: "doc",
             docId: "architecture-overview",
             position: "right",
-            label: "Architeture",
+            label: "Architecture",
           },
           { to: "/blog", label: "Blog", position: "right" },
           {
