@@ -1,7 +1,3 @@
----
-sidebar_position: 3
----
-
 # Create a Document
 
 Documents are **groups of pages** connected through:

@@ -127,7 +127,7 @@ const config = {
       navbar: {
         title: projectName,
         logo: {
-          alt: "blue atomic symbol",
+          alt: "react native logo",
           src: "img/react-logo.svg",
         },
         items: [
@@ -135,7 +135,19 @@ const config = {
             type: "doc",
             docId: "tutorial-basics/intro",
             position: "right",
-            label: "Tutorial",
+            label: "Docs",
+          },
+          {
+            type: "doc",
+            docId: "babel-plugin-import-path-remapper",
+            position: "right",
+            label: "API",
+          },
+          {
+            type: "doc",
+            docId: "architecture-overview",
+            position: "right",
+            label: "Architeture",
           },
           { to: "/blog", label: "Blog", position: "right" },
           {

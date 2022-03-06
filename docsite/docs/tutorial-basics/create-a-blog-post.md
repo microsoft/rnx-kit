@@ -1,7 +1,3 @@
----
-sidebar_position: 4
----
-
 # Create a Blog Post
 
 Docusaurus creates a **page for each blog post**, but also a **blog index
