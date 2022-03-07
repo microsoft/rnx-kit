@@ -74,7 +74,8 @@ function resolveModule(name, startDir) {
  * Note that when using this function to exclude packages, you should also add
  * the path to the correct copy in `extraNodeModules` so Metro can resolve them
  * when referenced from modules that are siblings of the module that has them
- * installed.
+ * installed. You should also restart Watchman and reset Metro cache if you're
+ * adding/removing excludes.
  *
  * @see exclusionList for further information.
  *
