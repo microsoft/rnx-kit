@@ -24,4 +24,11 @@ func main() {
 
 	duration := time.Since(startTime)
 	fmt.Printf("Elapsed time: %d\n", duration.Milliseconds())
+
+	if len(packageInfo.Workspaces.Packages) > 0 {
+		packages := paths.FindWithGlob("package.json", root, packageInfo.Workspaces.Packages)
+		for _, pkg := range packages {
+			fmt.Printf("%s\n", pkg)
+		}
+	}
 }
