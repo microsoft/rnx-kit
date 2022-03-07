@@ -54,8 +54,7 @@ describe("metro-serializer-esbuild", () => {
   test("removes unused code", async () => {
     const result = await bundle("test/__fixtures__/direct.ts");
     expect(result).toMatchInlineSnapshot(`
-      "\\"use strict\\";
-      (function() {
+      "(function() {
         // lib/index.js
         var global = new Function(\\"return this;\\")();
 
@@ -74,8 +73,7 @@ describe("metro-serializer-esbuild", () => {
   test("removes unused code (export *)", async () => {
     const result = await bundle("test/__fixtures__/exportAll.ts");
     expect(result).toMatchInlineSnapshot(`
-      "\\"use strict\\";
-      (function() {
+      "(function() {
         // lib/index.js
         var global = new Function(\\"return this;\\")();
 
@@ -94,8 +92,7 @@ describe("metro-serializer-esbuild", () => {
   test("removes unused code (nested export *)", async () => {
     const result = await bundle("test/__fixtures__/nestedExportAll.ts");
     expect(result).toMatchInlineSnapshot(`
-      "\\"use strict\\";
-      (function() {
+      "(function() {
         // lib/index.js
         var global = new Function(\\"return this;\\")();
 
@@ -114,8 +111,7 @@ describe("metro-serializer-esbuild", () => {
   test("removes unused code (import *)", async () => {
     const result = await bundle("test/__fixtures__/importAll.ts");
     expect(result).toMatchInlineSnapshot(`
-      "\\"use strict\\";
-      (function() {
+      "(function() {
         // lib/index.js
         var global = new Function(\\"return this;\\")();
 
@@ -134,8 +130,7 @@ describe("metro-serializer-esbuild", () => {
   test("removes unused code (import * <- export *)", async () => {
     const result = await bundle("test/__fixtures__/importExportAll.ts");
     expect(result).toMatchInlineSnapshot(`
-      "\\"use strict\\";
-      (function() {
+      "(function() {
         // lib/index.js
         var global = new Function(\\"return this;\\")();
 
@@ -154,8 +149,7 @@ describe("metro-serializer-esbuild", () => {
   test("tree-shakes lodash-es", async () => {
     const result = await bundle("test/__fixtures__/lodash-es.ts");
     expect(result).toMatchInlineSnapshot(`
-      "\\"use strict\\";
-      (function() {
+      "(function() {
         // lib/index.js
         var global = new Function(\\"return this;\\")();
 
@@ -175,8 +169,7 @@ describe("metro-serializer-esbuild", () => {
   test("handles `sideEffects` array", async () => {
     const result = await bundle("test/__fixtures__/sideEffectsArray.ts");
     expect(result).toMatchInlineSnapshot(`
-      "\\"use strict\\";
-      (function() {
+      "(function() {
         var __getOwnPropNames = Object.getOwnPropertyNames;
         var __esm = function(fn, res) {
           return function __init() {
