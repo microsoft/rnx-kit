@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/dep-check
 
+## 1.12.7
+
+### Patch Changes
+
+- 2169c8f: Add more descriptive error message when validating manifest
+
 ## 1.12.6
 
 ### Patch Changes
