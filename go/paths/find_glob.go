@@ -15,8 +15,7 @@ func safeSlice(base string, start int, end int) string {
 	return base[start:end]
 }
 
-func FindWithGlob(name string, root string, globs []string) []string {
-	found := []string{}
+func FindWithGlobFunc(name string, root string, globs []string, found func(path string, d fs.DirEntry)) {
 	filepath.WalkDir(root, func(path string, d fs.DirEntry, err error) error {
 		if d.IsDir() {
 			pathChunk := safeSlice(path, len(root)+1, len(path))
@@ -30,13 +29,20 @@ func FindWithGlob(name string, root string, globs []string) []string {
 			pathChunk := safeSlice(path, len(root)+1, len(path)-len(d.Name())-1)
 			for _, glob := range globs {
 				if MatchGlob(pathChunk, glob) {
-					found = append(found, path)
+					found(path, d)
 					break
 				}
 			}
 		}
 
 		return nil
+	})
+}
+
+func FindWithGlob(name string, root string, globs []string) []string {
+	found := []string{}
+	FindWithGlobFunc(name, root, globs, func(path string, d fs.DirEntry) {
+		found = append(found, path)
 	})
 	return found
 }
