@@ -222,6 +222,10 @@ html[data-theme="light"] .navbar {
   box-shadow: 0 10px 15px rgb(0 0 0 / 19%);
 }
 
+html[data-theme="dark"] .navbar {
+  box-shadow: 0 10px 15px rgb(0 0 0 / 60%);
+}
+
 /*
  * Links
  */
