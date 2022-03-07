@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/eslint-plugin
 
+## 0.2.11
+
+### Patch Changes
+
+- 5f2e378: Enable `react-hooks/recommended`
+
 ## 0.2.10
 
 ### Patch Changes

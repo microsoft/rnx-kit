@@ -88,9 +88,16 @@ const ImportPathRemapperPlugin = (packageNameFilter: RegExp): Plugin => ({
     // `main` entry.
     build.onResolve(
       { filter: new RegExp(`^${packageNameFilter.source}[/]+[^/]+[/]*$`) },
-      ({ path, resolveDir }) => ({
-        path: findMainSourceFile(path, resolveDir),
-      })
+      ({ path, resolveDir }) => {
+        // Check if the package being resolved is marked as external. If so, it should stay external
+        // and we should not try to resolve it to a TypeScript module.
+        const external = Boolean(build.initialOptions.external?.includes(path));
+        if (external) {
+          return { path, external };
+        } else {
+          return { path: findMainSourceFile(path, resolveDir), external };
+        }
+      }
     );
   },
 });

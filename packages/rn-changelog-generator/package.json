@@ -22,19 +22,19 @@
     "node": ">= 14"
   },
   "scripts": {
-    "build": "rnx-kit-scripts build && rnx-kit-scripts bundle",
+    "build": "rnx-kit-scripts build",
+    "bundle": "rnx-kit-scripts bundle",
     "format": "rnx-kit-scripts format",
     "lint": "rnx-kit-scripts lint",
     "test:local": "rnx-kit-scripts test"
   },
   "devDependencies": {
-    "@octokit/rest": "^18.5.3",
     "@rnx-kit/scripts": "*",
     "@types/fast-levenshtein": "0.0.2",
     "chalk": "^4.1.0",
     "deepmerge": "^4.2.2",
-    "p-limit": "^3.1.0",
     "fast-levenshtein": "^3.0.0",
+    "p-limit": "^3.1.0",
     "yargs": "^16.0.0"
   },
   "eslintConfig": {
