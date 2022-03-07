@@ -56,14 +56,14 @@ function defaultWatchFolders(projectRoot) {
  * only have symlinks under `node_modules` (e.g. with pnpm).
  *
  * @param {string} name
- * @param {string=} projectRoot
+ * @param {string=} startDir
  * @returns {string | undefined}
  */
-function resolveModule(name, projectRoot) {
+function resolveModule(name, startDir) {
   const { findPackageDependencyDir } = require("@rnx-kit/tools-node/package");
   const result = findPackageDependencyDir(
     { name },
-    { startDir: projectRoot, allowSymlinks: true }
+    { startDir, allowSymlinks: true }
   );
   return result && require("fs").realpathSync(result);
 }
@@ -74,16 +74,17 @@ function resolveModule(name, projectRoot) {
  * Note that when using this function to exclude packages, you should also add
  * the path to the correct copy in `extraNodeModules` so Metro can resolve them
  * when referenced from modules that are siblings of the module that has them
- * installed.
+ * installed. You should also restart Watchman and reset Metro cache if you're
+ * adding/removing excludes.
  *
  * @see exclusionList for further information.
  *
- * @param {string} packageName
- * @param {string=} projectRoot
+ * @param {string} packageName Name of the package to exclude extra copies of
+ * @param {string=} searchStartDir Directory to resolve the correct module location from
  * @returns {RegExp}
  */
-function excludeExtraCopiesOf(packageName, projectRoot) {
-  const result = resolveModule(packageName, projectRoot);
+function excludeExtraCopiesOf(packageName, searchStartDir) {
+  const result = resolveModule(packageName, searchStartDir);
   if (!result) {
     throw new Error(`Failed to find '${packageName}'`);
   }
@@ -99,7 +100,7 @@ function excludeExtraCopiesOf(packageName, projectRoot) {
   const escapedPackageName = path.normalize(packageName).replace(/\\/g, "\\\\");
 
   return new RegExp(
-    `(?<!${escapedPath})[\\/\\\\]node_modules[\\/\\\\]${escapedPackageName}[\\/\\\\].*`
+    `(?<!${escapedPath})[/\\\\]node_modules[/\\\\]${escapedPackageName}[/\\\\].*`
   );
 }
 
@@ -181,6 +182,9 @@ module.exports = {
 
     const projectRoot = customConfig.projectRoot || process.cwd();
     const blockList = exclusionList([], projectRoot);
+    const customBlockList =
+      customConfig.resolver &&
+      (customConfig.resolver.blockList || customConfig.resolver.blacklistRE);
     return mergeConfig(
       {
         resolver: {
@@ -206,6 +210,15 @@ module.exports = {
         ...customConfig,
         resolver: {
           ...customConfig.resolver,
+          ...(customBlockList
+            ? {
+                // Metro introduced `blockList` in 0.60, but still prefers
+                // `blacklistRE` if it is also set. We set both to ensure that
+                // the blocks get applied.
+                blacklistRE: customBlockList,
+                blockList: customBlockList,
+              }
+            : {}),
           extraNodeModules: {
             /**
              * Ensure that Metro is able to resolve packages that cannot be

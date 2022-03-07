@@ -311,7 +311,7 @@ describe("@rnx-kit/metro-config", () => {
     expect(config.watchFolders.length).toBeGreaterThan(0);
   });
 
-  test("makeMetroConfig() merges `extraNodeModules`", async () => {
+  test("makeMetroConfig() merges `extraNodeModules`", () => {
     const config = makeMetroConfig({
       projectRoot: __dirname,
       resolver: {
@@ -322,8 +322,7 @@ describe("@rnx-kit/metro-config", () => {
       },
     });
 
-    const extraNodeModules =
-      config.resolver && config.resolver.extraNodeModules;
+    const extraNodeModules = config.resolver?.extraNodeModules;
     if (!extraNodeModules) {
       fail("Expected config.resolver.extraNodeModules to be set");
     }
@@ -336,5 +335,27 @@ describe("@rnx-kit/metro-config", () => {
 
     expect(extraNodeModules["my-awesome-package"]).toBe("/skynet");
     expect(extraNodeModules["react-native"]).toBe("/skynet");
+  });
+
+  test("makeMetroConfig() sets both `blacklistRE` and `blockList`", () => {
+    const configWithBlacklist = makeMetroConfig({
+      resolver: {
+        blacklistRE: /.*/,
+      },
+    });
+    const blacklistRE = configWithBlacklist.resolver?.blacklistRE;
+
+    expect(blacklistRE).not.toBeUndefined();
+    expect(blacklistRE).toBe(configWithBlacklist.resolver?.blockList);
+
+    const configWithBlockList = makeMetroConfig({
+      resolver: {
+        blockList: /.*/,
+      },
+    });
+    const blockList = configWithBlockList.resolver?.blockList;
+
+    expect(blockList).not.toBeUndefined();
+    expect(blockList).toBe(configWithBlockList.resolver?.blacklistRE);
   });
 });
