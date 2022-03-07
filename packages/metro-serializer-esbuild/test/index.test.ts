@@ -6,14 +6,14 @@ describe("metro-serializer-esbuild", () => {
 
   const consoleWarnSpy = jest.spyOn(global.console, "warn");
 
-  async function bundle(entryFile: string): Promise<string> {
+  async function bundle(entryFile: string, dev = true): Promise<string> {
     let result: string | undefined = undefined;
     await buildBundle(
       {
         entryFile,
         bundleEncoding: "utf8",
         bundleOutput: ".test-output.jsbundle",
-        dev: true,
+        dev,
         platform: "native",
         resetCache: false,
         resetGlobalCache: false,
@@ -209,6 +209,14 @@ describe("metro-serializer-esbuild", () => {
         // test/__fixtures__/sideEffectsArray.ts
         warn(\\"this should _not_ be removed\\");
       })();
+      "
+    `);
+  });
+
+  test('strips out `"use strict"`', async () => {
+    const result = await bundle("test/__fixtures__/direct.ts", false);
+    expect(result).toMatchInlineSnapshot(`
+      "(function(){var e=new Function(\\"return this;\\")();})();
       "
     `);
   });
