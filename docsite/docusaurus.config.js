@@ -133,19 +133,19 @@ const config = {
         items: [
           {
             type: "doc",
-            docId: "tutorial-basics/intro",
+            docId: "introduction",
             position: "right",
             label: "Docs",
           },
           {
             type: "doc",
-            docId: "babel-plugin-import-path-remapper",
+            docId: "packages/babel-plugin-import-path-remapper",
             position: "right",
-            label: "API",
+            label: "Tools",
           },
           {
             type: "doc",
-            docId: "architecture-overview",
+            docId: "architecture/overview",
             position: "right",
             label: "Architecture",
           },
