@@ -79,7 +79,7 @@ function resolveModule(name, startDir) {
  * @see exclusionList for further information.
  *
  * @param {string} packageName Name of the package to exclude extra copies of
- * @param {string=} searchStartDir Starting directory to search for the correct copy
+ * @param {string=} searchStartDir Directory to resolve the correct module location from
  * @returns {RegExp}
  */
 function excludeExtraCopiesOf(packageName, searchStartDir) {
