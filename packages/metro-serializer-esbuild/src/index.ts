@@ -126,21 +126,16 @@ export function MetroSerializer(
       plugin(entryPoint, preModules, graph, options)
     );
 
-    // To ensure that Hermes is able to consume this bundle, we must target ES5.
-    // Hermes is missing a bunch of ES6 features, such as block scoping (see
-    // https://github.com/facebook/hermes/issues/575).
-    const target = buildOptions?.target ?? "es5";
-
     const { dependencies } = graph;
     const metroPlugin: Plugin = {
       name: require("../package.json").name,
       setup: (build) => {
         const pluginOptions = { filter: /.*/ };
 
-        // Metro does not inject `"use strict"`, but esbuild does. If we're
-        // targeting ES5, we should strip them out. See also
+        // Metro does not inject `"use strict"`, but esbuild does. We should
+        // strip them out like Metro does. See also
         // https://github.com/facebook/metro/blob/0fe1253cc4f76aa2a7683cfb2ad0253d0a768c83/packages/metro-react-native-babel-preset/src/configs/main.js#L68
-        if (!options.dev && target === "es5") {
+        if (!options.dev) {
           const encoder = new TextEncoder();
           build.onEnd(({ outputFiles }) => {
             outputFiles?.forEach(({ path, text }, index) => {
@@ -300,7 +295,12 @@ export function MetroSerializer(
         outfile,
         plugins,
         sourcemap: "external",
-        target,
+
+        // To ensure that Hermes is able to consume this bundle, we must target
+        // ES5. Hermes is missing a bunch of ES6 features, such as block scoping
+        // (see https://github.com/facebook/hermes/issues/575).
+        target: buildOptions?.target ?? "es5",
+
         write: false,
       })
       .then(({ metafile, outputFiles }: BuildResult) => {
