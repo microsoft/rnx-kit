@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-serializer-esbuild
 
+## 0.1.4
+
+### Patch Changes
+
+- 48e0c96: Metro does not inject `"use strict"`, but esbuild does. If we're targeting ES5, we should strip them out.
+
 ## 0.1.3
 
 ### Patch Changes

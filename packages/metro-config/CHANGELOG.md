@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-config
 
+## 1.2.29
+
+### Patch Changes
+
+- 0e703fe: Metro introduced `blockList` in 0.60, but still prefers `blacklistRE` if it is also set.
+
 ## 1.2.28
 
 ### Patch Changes
