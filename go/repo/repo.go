@@ -11,10 +11,11 @@ type Repo struct {
 	RootPath    string
 	RootPackage *configs.PackageInfo
 	Workspaces  []string
-	Packages    map[string]*configs.PackageInfo
+	Packages    map[string]*RepoPkg
 }
 
-func initRepo(rootPath string) *Repo {
+func initRepo(rootPath string) (*Repo, error) {
+	var err error = nil
 	var repo Repo = Repo{RootPath: rootPath}
 
 	// find the root package json and open it
@@ -25,18 +26,19 @@ func initRepo(rootPath string) *Repo {
 	repo.Workspaces = repo.RootPackage.Workspaces.Packages
 
 	// find packages in the repo
-	repo.Packages = LoadPackages(rootPath, repo.Workspaces)
+	repo.Packages, err = LoadPackages(rootPath, repo.Workspaces)
 
-	return &repo
+	return &repo, err
 }
 
 var repos map[string]*Repo = make(map[string]*Repo)
 
-func LoadRepo(wd string) *Repo {
+func LoadRepo(wd string) (*Repo, error) {
+	var err error = nil
 	root := paths.FindRepoRoot()
 	_, hasValue := repos[root]
 	if !hasValue {
-		repos[root] = initRepo(root)
+		repos[root], err = initRepo(root)
 	}
-	return repos[root]
+	return repos[root], err
 }

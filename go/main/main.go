@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"time"
 
 	"github.com/microsoft/rnx_kit/go/repo"
@@ -10,11 +11,18 @@ import (
 func main() {
 	startTime := time.Now()
 
-	repo := repo.LoadRepo("")
+	repo, err := repo.LoadRepo("")
+	if err != nil {
+		fmt.Printf("Error loading repo: \n%s\n", err.Error())
+		log.Fatal()
+	}
 	fmt.Printf("found %d packages\n", len(repo.Packages))
 
 	for _, pkg := range repo.Packages {
-		fmt.Printf("Loading package %s\n", pkg.Name)
+		fmt.Printf("%s\n", pkg.Name())
+		for _, depPkg := range pkg.Deps {
+			fmt.Printf(" - %s\n", depPkg.Name())
+		}
 	}
 
 	duration := time.Since(startTime)
