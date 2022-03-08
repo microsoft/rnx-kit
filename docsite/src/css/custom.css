@@ -1,0 +1,383 @@
+/**
+ * Any CSS included here will be global. The classic template
+ * bundles Infima by default. Infima is a CSS framework designed to
+ * work well for content-centric websites.
+ */
+
+/* You can override the default Infima variables here. */
+:root {
+  /* Our vars */
+  --react-native-color-rgb: 97, 218, 251;
+  --background-surface-color-rgb: 255, 255, 255;
+  --color-primary-rgb: 14, 83, 189;
+  --font-color-base-rgb: 28, 30, 33;
+  --hover-overlay-rgb: 0, 0, 0;
+  --hover-overlay-alpha: 0.15;
+  --github-mark-bg: url("../../static/img/github-logo.svg");
+
+  /* Infima vars */
+  --ifm-background-surface-color: rgb(var(--background-surface-color-rgb));
+
+  --ifm-color-primary: rgb(var(--color-primary-rgb));
+  --ifm-color-primary-dark: #0d4baa;
+  --ifm-color-primary-darker: #0c47a1;
+  --ifm-color-primary-darkest: #0a3a84;
+  --ifm-color-primary-light: #0f5bd0;
+  --ifm-color-primary-lighter: #105fd9;
+  --ifm-color-primary-lightest: #1a6eee;
+
+  --ifm-code-padding-horizontal: 0.25rem;
+  --ifm-code-padding-vertical: 0.25rem;
+  --ifm-code-font-size: 95%;
+
+  --ifm-font-color-base: rgb(var(--font-color-base-rgb));
+
+  --ifm-hover-overlay: rgba(
+    var(--hover-overlay-rgb),
+    var(--hover-overlay-alpha)
+  );
+
+  --ifm-link-decoration: none;
+  --ifm-link-hover-color: var(--ifm-link-color);
+  --ifm-link-hover-decoration: none;
+
+  --ifm-navbar-item-padding-vertical: 4px;
+  --ifm-navbar-item-padding-horizontal: 18px;
+
+  --ifm-transition-fast: 100ms;
+  --ifm-transition-slow: 300ms;
+
+  /** Algolia Search vars
+   *
+   * All are flagged !important because Docusaurus or the Algolia preset
+   * (can't tell which) pulls in the Algolia CSS *after* this file, causing
+   * all of our '--aa-*' var definitions be over-written.
+   */
+  --aa-base-unit: 14 !important;
+
+  --aa-icon-size: 16px !important;
+  --aa-input-icon-size: 16px !important;
+  --aa-icon-color-rgb: var(--font-color-base-rgb) !important;
+  --aa-icon-color-alpha: 1 !important;
+  --aa-action-icon-size: var(--icon-size) !important;
+
+  --aa-text-color-rgb: var(--font-color-base-rgb) !important;
+  --aa-text-color-alpha: 1 !important;
+  --aa-primary-color-rgb: var(--color-primary-rgb) !important;
+  --aa-primary-color-alpha: 1 !important;
+  --aa-muted-color-rgb: var(--font-color-base-rgb) !important;
+  --aa-muted-color-alpha: 0.5 !important;
+
+  --aa-panel-border-color-rgb: var(--font-color-base-rgb) !important;
+  --aa-panel-border-color-alpha: 1 !important;
+  --aa-input-border-color-rgb: var(--font-color-base-rgb) !important;
+  --aa-input-border-color-alpha: 1 !important;
+
+  --aa-background-color-rgb: var(--background-surface-color-rgb) !important;
+  --aa-background-color-alpha: 1 !important;
+  --aa-input-background-color-rgb: var(
+    --background-surface-color-rgb
+  ) !important;
+  --aa-input-background-color-alpha: 1 !important;
+  --aa-selected-color-rgb: var(--hover-overlay-rgb) !important;
+  --aa-selected-color-alpha: var(--hover-overlay-alpha) !important;
+  --aa-description-highlight-background-color-rgb: var(
+    --background-surface-color-rgb
+  ) !important;
+  --aa-description-highlight-background-color-alpha: 1 !important;
+
+  --aa-overlay-color-rgb: var(--hover-overlay-rgb) !important;
+  --aa-overlay-color-alpha: 0.5 !important;
+
+  --aa-search-input-height: 32px !important;
+
+  --aa-panel-shadow: 0 6px 16px -4px rgba(var(--background-surface-color-rgb), 0.25) !important;
+}
+
+/* For readability concerns, you should choose a lighter palette in dark mode. */
+html[data-theme="dark"] {
+  /* Our vars */
+  --background-color-rgb: 10, 11, 12;
+  --background-surface-color-rgb: 36, 37, 38;
+  --color-primary-rgb: 14, 147, 253;
+  --font-color-base-rgb: 245, 246, 247;
+  --hover-overlay-rgb: 255, 255, 255;
+
+  /* Infima vars */
+  --ifm-background-color: rgb(var(--background-color-rgb));
+  --ifm-background-surface-color: rgb(var(--background-surface-color-rgb));
+
+  --ifm-color-primary: rgb(var(--color-primary-rgb));
+  --ifm-color-primary-dark: #0285ee;
+  --ifm-color-primary-darker: #027ee1;
+  --ifm-color-primary-darkest: #0268b9;
+  --ifm-color-primary-light: #289ffd;
+  --ifm-color-primary-lighter: #36a5fd;
+  --ifm-color-primary-lightest: #5db7fe;
+
+  --ifm-hover-overlay: rgba(
+    var(--hover-overlay-rgb),
+    var(--hover-overlay-alpha)
+  );
+}
+
+body[data-theme="dark"] {
+  /** Algolia Search vars
+   *
+   * All are flagged !important because Docusaurus or the Algolia preset
+   * (can't tell which) pulls in the Algolia CSS *after* this file, causing
+   * all of our '--aa-*' var definitions be over-written.
+   */
+  --aa-icon-color-rgb: var(--font-color-base-rgb) !important;
+
+  --aa-text-color-rgb: var(--font-color-base-rgb) !important;
+  --aa-text-color-alpha: 1 !important;
+  --aa-primary-color-rgb: var(--color-primary-rgb) !important;
+  --aa-primary-color-alpha: 1 !important;
+  --aa-muted-color-rgb: var(--font-color-base-rgb) !important;
+  --aa-muted-color-alpha: 0.5 !important;
+
+  --aa-panel-border-color-rgb: var(--font-color-base-rgb) !important;
+  --aa-panel-border-color-alpha: 1 !important;
+  --aa-input-border-color-rgb: var(--font-color-base-rgb) !important;
+  --aa-input-border-color-alpha: 1 !important;
+
+  --aa-background-color-rgb: var(--background-surface-color-rgb) !important;
+  --aa-background-color-alpha: 1 !important;
+  --aa-input-background-color-rgb: var(
+    --background-surface-color-rgb
+  ) !important;
+  --aa-input-background-color-alpha: 1 !important;
+  --aa-selected-color-rgb: var(--hover-overlay-rgb) !important;
+  --aa-selected-color-alpha: var(--hover-overlay-alpha) !important;
+  --aa-description-highlight-background-color-rgb: var(
+    --background-surface-color-rgb
+  ) !important;
+  --aa-description-highlight-background-color-alpha: 1 !important;
+
+  --aa-overlay-color-rgb: var(--hover-overlay-rgb) !important;
+  --aa-overlay-color-alpha: 0.5 !important;
+
+  --aa-panel-shadow: 0 6px 16px -4px rgba(var(--background-surface-color-rgb), 1) !important;
+}
+
+/*
+ * Icons
+ */
+.github-mark-24px::after {
+  background-image: var(--github-mark-bg);
+  background-position: 50%;
+  background-repeat: no-repeat;
+  content: "";
+  display: flex;
+  width: 24px;
+  height: 24px;
+  opacity: 0.9;
+}
+
+html[data-theme="dark"] .github-mark-24px::after {
+  filter: invert();
+}
+
+/*
+ * Code blocks
+ */
+.docusaurus-highlight-code-line {
+  background-color: rgba(0, 0, 0, 0.1);
+  display: block;
+  margin: 0 calc(-1 * var(--ifm-pre-padding));
+  padding: 0 var(--ifm-pre-padding);
+}
+
+html[data-theme="dark"] .docusaurus-highlight-code-line {
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+code {
+  border: none;
+}
+
+/* Code in links should have just the link background, not the gray code bg */
+a code {
+  background: none;
+}
+
+/*
+ * Navbar
+ */
+.navbar .navbar__link--active::after {
+  background: var(--ifm-navbar-link-hover-color);
+  content: "";
+  display: flex;
+  height: 4px;
+  margin-left: -20px;
+  margin-right: -20px;
+  margin-top: -4px;
+  position: relative;
+  top: 18px;
+  width: calc(100% + 40px);
+}
+
+html[data-theme="light"] .navbar {
+  box-shadow: 0 10px 15px rgb(0 0 0 / 19%);
+}
+
+html[data-theme="dark"] .navbar {
+  box-shadow: 0 10px 15px rgb(0 0 0 / 60%);
+}
+
+/*
+ * Links
+ */
+.markdown p a,
+.markdown li a {
+  background-color: rgba(187, 239, 253, 0.3);
+  border-bottom: 1px solid var(--ifm-hr-border-color);
+  color: var(--ifm-font-color-base);
+  display: initial;
+  line-height: calc(var(--ifm-font-size-base) + 4px);
+}
+
+.markdown p a:hover,
+.markdown li a:hover {
+  background-color: rgb(211, 245, 253);
+  color: var(--ifm-font-color-base);
+  border-bottom: 1px solid var(--ifm-hr-border-color);
+}
+
+html[data-theme="dark"] .markdown p a,
+html[data-theme="dark"] .markdown li a {
+  background-color: rgba(var(--react-native-color-rgb), 0.12);
+  border-bottom-color: rgba(var(--react-native-color-rgb), 0.3);
+}
+
+html[data-theme="dark"] .markdown p a:hover,
+html[data-theme="dark"] .markdown li a:hover {
+  background-color: rgba(var(--react-native-color-rgb), 0.4);
+  border-bottom-color: rgb(var(--react-native-color-rgb));
+}
+
+/*
+ * Menus
+ */
+.menu li,
+.menu li:hover,
+.menu a,
+.menu a:hover {
+  color: var(--ifm-font-color-base);
+}
+
+/* dropdown menu titles */
+.menu__list-item-collapsible {
+  font-size: 16px;
+  font-weight: var(--ifm-font-weight-bold);
+  padding: 5px 12px;
+}
+
+/* child items under a dropdown menu title */
+.menu__list .menu__list .menu__link {
+  font-size: 13px;
+  font-weight: var(--ifm-font-weight-normal);
+  line-height: 16px;
+  padding: 3px 12px;
+}
+
+/* selected child item */
+.menu__list .menu__list .menu__link--active {
+  border-left-color: var(--ifm-menu-color-active);
+  border-left-style: solid;
+  border-left-width: 4px;
+  color: var(--ifm-font-color-base);
+  font-weight: var(--ifm-font-weight-bold);
+  padding-left: 8px;
+}
+
+/*
+ * Table of contents
+ */
+.table-of-contents {
+  font-size: 80%;
+  line-height: 1.4;
+}
+
+.table-of-contents__link--active {
+  border-left: 4px solid var(--ifm-menu-color-active);
+  color: var(--ifm-font-color-base);
+  font-weight: var(--ifm-font-weight-bold);
+  margin-left: -16px;
+  padding-left: 12px;
+  pointer-events: none;
+}
+
+/*
+ * Footer
+ */
+.footer__logo {
+  width: 300px;
+  max-width: unset;
+}
+
+/*
+ * Search
+ */
+.aa-SubmitIcon,
+.aa-LoadingIcon,
+.aa-ClearIcon {
+  fill: rgb(var(--font-color-base-rgb)) !important;
+  width: var(--aa-icon-size) !important;
+  height: var(--aa-icon-size) !important;
+}
+
+.dsla-search-wrapper {
+  margin-left: 0 !important;
+  padding: var(--ifm-navbar-item-padding-vertical)
+    var(--ifm-navbar-item-padding-horizontal) !important;
+}
+
+.aa-DetachedSearchButton,
+.aa-Form {
+  border: var(--ifm-global-border-width) solid
+    rgba(var(--aa-input-border-color-rgb), var(--aa-input-border-color-alpha)) !important;
+  border-radius: var(--ifm-global-radius) !important;
+  padding: var(--aa-spacing-half) !important;
+}
+
+.aa-Form {
+  align-items: initial !important;
+  box-shadow: inherit !important;
+  height: var(--aa-search-input-height) !important;
+}
+
+.aa-DetachedFormContainer {
+  border-bottom: none !important;
+}
+
+.aa-DetachedSearchButton:focus {
+  box-shadow: inherit !important;
+}
+
+.aa-DetachedSearchButtonIcon {
+  width: initial !important;
+  padding-right: var(--aa-spacing-half) !important;
+}
+
+.aa-LoadingIndicator,
+.aa-SubmitButton {
+  padding-left: 0 !important;
+  padding-right: var(--aa-spacing-half) !important;
+  width: auto !important;
+}
+
+.aa-InputWrapperPrefix,
+.aa-Input,
+.aa-InputWrapperSuffix {
+  height: auto !important;
+}
+
+.aa-ClearButton {
+  padding: 0 !important;
+}
+
+.aa-ItemLink:hover {
+  color: var(--ifm-font-color-base);
+}

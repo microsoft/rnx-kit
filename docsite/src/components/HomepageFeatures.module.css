@@ -1,0 +1,21 @@
+.features {
+  display: flex;
+  align-items: center;
+  padding: 2rem 0;
+  width: 100%;
+}
+
+.featureSvg {
+  height: 120px;
+  opacity: 0.85;
+}
+
+html[data-theme="dark"] .featureSvg {
+  filter: invert();
+  opacity: 0.9;
+}
+
+.featureText h3 {
+  color: var(--ifm-color-primary);
+  font-size: calc(var(--ifm-h3-font-size) * 0.97);
+}
