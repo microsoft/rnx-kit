@@ -7974,6 +7974,11 @@ he@^1.2.0:
   resolved "https://registry.yarnpkg.com/he/-/he-1.2.0.tgz#84ae65fa7eafb165fddb61566ae14baf05664f0f"
   integrity sha512-F/1DnUGPopORZi0ni+CvrCgHQ5FyEAHRLSApuYWMmrbSwoN2Mn/7k+Gl38gJnR7yyDZk6WLXwiGod1JOWNDKGw==
 
+hermes-engine@~0.10.0:
+  version "0.10.0"
+  resolved "https://registry.yarnpkg.com/hermes-engine/-/hermes-engine-0.10.0.tgz#3a8eca6bbde31e0a2881f265f7c3216ae44c4015"
+  integrity sha512-SiBo9rvuWetTIQGPPYwRHP0Omo/Iw/yd0sujWR0bW08+syIO0qDpo/fgx7GrY5PEy8wLcVz8v7adET2i5DOmJg==
+
 hermes-engine@~0.9.0:
   version "0.9.0"
   resolved "https://registry.yarnpkg.com/hermes-engine/-/hermes-engine-0.9.0.tgz#84d9cfe84e8f6b1b2020d6e71b350cec84ed982f"
@@ -12415,9 +12420,9 @@ react-native-codegen@^0.0.7:
     nullthrows "^1.1.1"
 
 react-native-macos@^0.66.0-0:
-  version "0.66.20"
-  resolved "https://registry.yarnpkg.com/react-native-macos/-/react-native-macos-0.66.20.tgz#23f388c7bc1932c040fa414dd864cc91336aa610"
-  integrity sha512-reHgM7PdmA/iG0NUVHMXUbODuqxRzY/jRHszSTzYgEp+EOL7fdXahkdHO0dmcGOzLtaZVM2C4RJ/e4YGbB+56A==
+  version "0.66.28"
+  resolved "https://registry.yarnpkg.com/react-native-macos/-/react-native-macos-0.66.28.tgz#f7354cda06d3bde5845a8892cda5a16ce5ba0e9f"
+  integrity sha512-ZbxZojK9Ii8Svf/OhcuCDiQT8pDHGpRz0RP3NrSv8SkxKzj3Up65cENOM3G/enlt8vM3w4a7ZXqMerPDMv/bJw==
   dependencies:
     "@jest/create-cache-key-function" "^27.0.1"
     "@react-native-community/cli" "^6.0.0"
@@ -12430,7 +12435,7 @@ react-native-macos@^0.66.0-0:
     anser "^1.4.9"
     base64-js "^1.1.2"
     event-target-shim "^5.0.1"
-    hermes-engine "~0.9.0"
+    hermes-engine "~0.10.0"
     invariant "^2.2.4"
     jsc-android "^250230.2.1"
     metro-babel-register "0.66.2"
