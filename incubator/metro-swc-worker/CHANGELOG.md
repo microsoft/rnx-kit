@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-swc-worker
 
+## 0.1.8
+
+### Patch Changes
+
+- 4a15331: Mark as experimental
+
 ## 0.1.7
 
 ### Patch Changes

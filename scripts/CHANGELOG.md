@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/scripts
 
+## 1.1.0
+
+### Minor Changes
+
+- 648ce3c: remove draft- extra logic
+
 ## 1.0.1
 
 ### Patch Changes

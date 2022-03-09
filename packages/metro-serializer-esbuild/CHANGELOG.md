@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-serializer-esbuild
 
+## 0.1.5
+
+### Patch Changes
+
+- 174a608: Strip out `"use strict"` even when targeting ES6+
+
 ## 0.1.4
 
 ### Patch Changes
