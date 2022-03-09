@@ -133,7 +133,6 @@ individually, as features are added and fixes are made.
 | [@rnx-kit/metro-serializer](https://github.com/microsoft/rnx-kit/tree/main/packages/metro-serializer)                                                   | Metro's default JavaScript bundle serializer but with plugin support                             |
 | [@rnx-kit/metro-serializer-esbuild](https://github.com/microsoft/rnx-kit/tree/main/packages/metro-serializer-esbuild)                                   | Experimental esbuild serializer for Metro                                                        |
 | [@rnx-kit/metro-service](https://github.com/microsoft/rnx-kit/tree/main/packages/metro-service)                                                         | Metro service for bundling and bundle-serving                                                    |
-| [@rnx-kit/metro-swc-worker](https://github.com/microsoft/rnx-kit/tree/main/packages/metro-swc-worker)                                                   | Metro transform worker that uses swc under the hood                                              |
 | [@rnx-kit/react-native-auth](https://github.com/microsoft/rnx-kit/tree/main/packages/react-native-auth)                                                 | @rnx-kit/react-native-auth provides a cross-app uniform API for user authentication              |
 | [@rnx-kit/react-native-test-app-msal](https://github.com/microsoft/rnx-kit/tree/main/packages/react-native-test-app-msal)                               | Microsoft Authentication Library (MSAL) module for react-native-test-app                         |
 | [@rnx-kit/third-party-notices](https://github.com/microsoft/rnx-kit/tree/main/packages/third-party-notices)                                             | Library and tool to build a third party notices file based on a js bundle's source map           |
@@ -155,6 +154,7 @@ collected here are not to be used by the general audience.
 
 | Name                                                                                                               | Description                                                                       |
 | ------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------- |
+| [@rnx-kit/metro-swc-worker](https://github.com/microsoft/rnx-kit/tree/main/incubator/metro-swc-worker)             | wc under the hood                                                                 |
 | [@rnx-kit/patcher-rnmacos](https://github.com/microsoft/rnx-kit/tree/main/incubator/patcher-rnmacos)               | A tool to generate patches and apply them to a codebase                           |
 | [@rnx-kit/rn-changelog-generator](https://github.com/microsoft/rnx-kit/tree/main/incubator/rn-changelog-generator) | Generate a markdown-formatted list of changes between two version of react-native |
 
