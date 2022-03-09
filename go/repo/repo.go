@@ -47,6 +47,11 @@ func initRepo(rootPath string) (*Repo, error) {
 
 var repos map[string]*Repo = make(map[string]*Repo)
 
+/*
+	Load the Repo struct given the provided working directory. Repos are cached according to
+	their root path, so subsequent calls that share the same repo root dir will receive the same
+	instance
+*/
 func LoadRepo(wd string) (*Repo, error) {
 	var err error = nil
 	root := paths.FindRepoRoot()
@@ -57,6 +62,9 @@ func LoadRepo(wd string) (*Repo, error) {
 	return repos[root], err
 }
 
+/*
+	Execute a command in the repository, either globally or scoped to a given package
+*/
 func (r *Repo) RunTask(command string, pkg string) error {
 	tasklist := tasks.BuildTaskList(r.TaskLookup, command, pkg)
 	return tasklist.Execute()

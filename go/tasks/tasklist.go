@@ -2,16 +2,27 @@ package tasks
 
 import "fmt"
 
+/*
+	A map ot Tasks, keyed on task name (generally package:verb)
+*/
 type TaskMap map[string]*Task
 
+/*
+	A list of tasks to be executed
+*/
 type TaskList struct {
 	tasks TaskMap
 }
 
+/* Initialize the TaskList */
 func (t *TaskList) Init() {
 	t.tasks = make(TaskMap)
 }
 
+/*
+	Queue a task in the task list. Will also traverse prerequisite tasks to ensure this
+	task executes correctly
+*/
 func (t *TaskList) QueueTask(taskName string, task *Task, lookup TaskMap) {
 	_, alreadyAdded := t.tasks[taskName]
 	if !alreadyAdded {
@@ -25,6 +36,9 @@ func (t *TaskList) QueueTask(taskName string, task *Task, lookup TaskMap) {
 	}
 }
 
+/*
+	Check to see if a task in the TaskList is ready to execute
+*/
 func (t *TaskList) canExecute(task *Task) bool {
 	for _, prereq := range task.Prereqs() {
 		if _, foundPrereq := t.tasks[prereq]; foundPrereq {
@@ -34,6 +48,9 @@ func (t *TaskList) canExecute(task *Task) bool {
 	return true
 }
 
+/*
+	Execute this task list, returning the first error encountered (which will stop execution)
+*/
 func (t *TaskList) Execute() error {
 	var err error = nil
 	running := 0
@@ -69,6 +86,10 @@ func (t *TaskList) Execute() error {
 	return err
 }
 
+/*
+	Create a TaskList given the global list of tasks, the command to execute, and an optional starting
+	package to work from. If startPkg is empty it will execute the command globally
+*/
 func BuildTaskList(globalList TaskMap, command string, startPkg string) *TaskList {
 	tasks := new(TaskList)
 	tasks.Init()
