@@ -10,12 +10,18 @@ const experimental_label =
 const process = require("process");
 
 var argv = require("yargs/yargs")(process.argv.slice(2))
-  .usage("Usage: $0 --name [string] --experimental")
+  .usage("Usage: new-package <name> --experimental")
+  .example(
+    "new-package my-package --experimental",
+    "Create a new package named my-package"
+  )
+  .demandCommand(1)
+  .string("name")
   .boolean("experimental")
-  .default("experimental", false)
-  .demandOption(["name"]).argv;
+  .default("experimental", false).argv;
 
-var projectName = argv.name;
+// this is less than ideal, but the only way to make positional working with v16 of yargs
+var projectName = argv["_"][0];
 var experimental = argv.experimental;
 
 // do some quick sanitization
@@ -27,9 +33,12 @@ const fse = require("fs-extra");
 const fs = require("fs");
 const path = require("path");
 const templatePath = path.join(__dirname, "../packages/template");
+
+const targetFolderPath = experimental ? "incubator" : "packages";
+
 const newProjectPath = path.join(
   __dirname,
-  `../${experimental ? "incubator" : "packages"}/` + cleanProjectName
+  `../${targetFolderPath}/` + cleanProjectName
 );
 
 // copy the template folder to the new project folder
@@ -57,20 +66,25 @@ packageJson.description =
   }` + cleanProjectName;
 
 packageJson.homepage =
-  `https://github.com/microsoft/rnx-kit/tree/main/${
-    experimental ? "incubator" : "packages"
-  }/` +
+  `https://github.com/microsoft/rnx-kit/tree/main/${targetFolderPath}/` +
   cleanProjectName +
   "#readme";
 
-packageJson.repository.directory =
-  `${experimental ? "incubator" : "packages"}/` + cleanProjectName;
+packageJson.repository.directory = `${targetFolderPath}/` + cleanProjectName;
 
 if (experimental) {
   packageJson.experimental = true;
 }
 
 fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2) + "\n");
+
+// don't keep the changelog from template
+const changelogPath = path.join(newProjectPath, "CHANGELOG.md");
+try {
+  fs.unlinkSync(changelogPath);
+} catch (err) {
+  console.error(err);
+}
 
 // change the README.md file to the new name
 const readmePath = path.join(newProjectPath, "README.md");
@@ -79,12 +93,13 @@ const readme = fs.readFileSync(readmePath, "utf8");
 
 const newReadme = readme.replace(/template/g, cleanProjectName);
 
-if (experimental) {
-  const updatedExperimentalReadme = readme.replace(
-    new RegExp(`${TOKEN_START}([^]+)${TOKEN_END}`),
-    `${TOKEN_START}\n\n${experimental_label}\n\n${TOKEN_END}`
-  );
-  fs.writeFileSync(readmePath, updatedExperimentalReadme);
-} else {
-  fs.writeFileSync(readmePath, newReadme);
-}
+const replaceInReadmeWith = experimental
+  ? `${TOKEN_START}\n\n${experimental_label}\n\n${TOKEN_END}`
+  : "";
+
+const updatedExperimentalReadme = newReadme.replace(
+  new RegExp(`${TOKEN_START}([^]+)${TOKEN_END}`),
+  replaceInReadmeWith
+);
+
+fs.writeFileSync(readmePath, updatedExperimentalReadme);
