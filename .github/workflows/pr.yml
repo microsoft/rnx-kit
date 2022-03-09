@@ -10,7 +10,7 @@ jobs:
         with:
           node-version: 14
       - name: Checkout
-        uses: actions/checkout@v2.4.0
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
       - name: Ensure rnx-kit packages come from our repository
@@ -25,7 +25,7 @@ jobs:
         uses: actions/cache@v2.1.7
         with:
           path: .yarn-offline-mirror
-          key: ${{ runner.os }}-${{ hashFiles('yarn.lock') }}-5
+          key: ${{ runner.os }}-${{ hashFiles('yarn.lock') }}-6
       - name: Install package dependencies
         run: yarn ci
         env:
@@ -64,14 +64,14 @@ jobs:
         with:
           go-version: "^1.14.0"
       - name: Checkout
-        uses: actions/checkout@v2.4.0
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
       - name: Cache /.yarn-offline-mirror
         uses: actions/cache@v2.1.7
         with:
           path: .yarn-offline-mirror
-          key: ${{ runner.os }}-${{ hashFiles('yarn.lock') }}-5
+          key: ${{ runner.os }}-${{ hashFiles('yarn.lock') }}-6
       - name: Install package dependencies
         run: yarn ci
       - name: Build and test packages
@@ -104,14 +104,14 @@ jobs:
         with:
           node-version: 14
       - name: Checkout
-        uses: actions/checkout@v2.4.0
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
       - name: Cache /.yarn-offline-mirror
         uses: actions/cache@v2.1.7
         with:
           path: .yarn-offline-mirror
-          key: ${{ runner.os }}-${{ hashFiles('yarn.lock') }}-5
+          key: ${{ runner.os }}-${{ hashFiles('yarn.lock') }}-6
       - name: Install npm dependencies
         run: yarn ci
         env:
@@ -129,14 +129,14 @@ jobs:
         with:
           node-version: 14
       - name: Checkout
-        uses: actions/checkout@v2.4.0
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
       - name: Cache /.yarn-offline-mirror
         uses: actions/cache@v2.1.7
         with:
           path: .yarn-offline-mirror
-          key: ${{ runner.os }}-${{ hashFiles('yarn.lock') }}-5
+          key: ${{ runner.os }}-${{ hashFiles('yarn.lock') }}-6
       - name: Install npm dependencies
         run: yarn ci
         env:
@@ -159,7 +159,7 @@ jobs:
       contents: read
       pull-requests: write
     steps:
-      - uses: actions/labeler@v3.1.0
+      - uses: actions/labeler@v4
         with:
           repo-token: "${{ secrets.GITHUB_TOKEN }}"
           sync-labels: true

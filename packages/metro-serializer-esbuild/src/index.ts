@@ -132,6 +132,23 @@ export function MetroSerializer(
       setup: (build) => {
         const pluginOptions = { filter: /.*/ };
 
+        // Metro does not inject `"use strict"`, but esbuild does. We should
+        // strip them out like Metro does. See also
+        // https://github.com/facebook/metro/blob/0fe1253cc4f76aa2a7683cfb2ad0253d0a768c83/packages/metro-react-native-babel-preset/src/configs/main.js#L68
+        if (!options.dev) {
+          const encoder = new TextEncoder();
+          build.onEnd(({ outputFiles }) => {
+            outputFiles?.forEach(({ path, text }, index) => {
+              const newText = text.replace(/"use strict";\s*/g, "");
+              outputFiles[index] = {
+                path,
+                contents: encoder.encode(newText),
+                text: newText,
+              };
+            });
+          });
+        }
+
         build.onResolve(pluginOptions, (args) => {
           if (dependencies.has(args.path)) {
             return {

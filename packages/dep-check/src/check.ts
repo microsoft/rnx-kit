@@ -22,7 +22,9 @@ export function getCheckConfig(
 ): number | CheckConfig {
   const manifest = readPackage(manifestPath);
   if (!isPackageManifest(manifest)) {
-    error(`'${manifestPath}' does not contain a valid package manifest`);
+    error(
+      `'${manifestPath}' does not contain a valid package manifest - please make sure it's not missing 'name' or 'version'`
+    );
     return 1;
   }
 
@@ -54,7 +56,11 @@ export function getCheckConfig(
     ...(supportedVersions
       ? { reactNativeVersion: supportedVersions }
       : undefined),
-    ...(targetVersion ? { reactNativeDevVersion: targetVersion } : undefined),
+    // We should not set dev version if the package is configured. It may have
+    // been intentionally left out to reuse `reactNativeVersion`.
+    ...(!kitConfig.reactNativeVersion && targetVersion
+      ? { reactNativeDevVersion: targetVersion }
+      : undefined),
     ...kitConfig,
   });
 

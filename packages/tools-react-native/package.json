@@ -23,7 +23,6 @@
     "test": "rnx-kit-scripts test",
     "update-readme": "rnx-kit-scripts update-api-readme"
   },
-  "dependencies": {},
   "devDependencies": {
     "@rnx-kit/scripts": "*",
     "@types/node": "^16.0.0",

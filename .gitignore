@@ -10,6 +10,9 @@ coverage/
 /packages/*/bin/
 /packages/*/dist/
 /packages/*/lib/
+/incubator/*/bin/
+/incubator/*/dist/
+/incubator/*/lib/
 /scripts/bin/
 /scripts/lib/
 local.properties
