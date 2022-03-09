@@ -11,20 +11,20 @@ import (
 func main() {
 	startTime := time.Now()
 
-	repo, err := repo.LoadRepo("")
+	repository, err := repo.LoadRepo("")
 	if err != nil {
 		fmt.Printf("Error loading repo: \n%s\n", err.Error())
 		log.Fatal()
 	}
-	fmt.Printf("found %d packages\n", len(repo.Packages))
+	fmt.Printf("found %d packages\n", len(repository.Packages))
 
-	for _, pkg := range repo.Packages {
-		fmt.Printf("%s\n", pkg.Name())
-		for _, depPkg := range pkg.Deps {
-			fmt.Printf(" - %s\n", depPkg.Name())
-		}
+	for _, pkg := range repository.Packages {
+		fmt.Printf("%s\n", pkg.Name)
 	}
 
+	fmt.Println("Starting simulated build:")
+	repository.RunTask("build", "")
+
 	duration := time.Since(startTime)
-	fmt.Printf("Elapsed time: %d\n", duration.Milliseconds())
+	fmt.Printf("Elapsed time: %f seconds\n", duration.Seconds())
 }

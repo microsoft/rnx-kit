@@ -5,27 +5,32 @@ import (
 	"strings"
 
 	"github.com/microsoft/rnx_kit/go/configs"
+	"github.com/microsoft/rnx_kit/go/tasks"
 )
 
 type RepoPkg struct {
-	name     string
-	root     string
+	tasks.TaskPkgInfo
 	pkgJson  *configs.PackageInfo
 	Deps     map[string]*RepoPkg
-	Verbs    map[string]string
+	Tasks    tasks.TaskMap
 	NodeDeps map[string]string
 }
 
+func (r *RepoPkg) Init(name string, root string, pkgJson *configs.PackageInfo) {
+	r.Name = name
+	r.Root = root
+	r.pkgJson = pkgJson
+	r.Deps = make(map[string]*RepoPkg)
+	r.Tasks = make(tasks.TaskMap)
+	r.NodeDeps = make(map[string]string)
+}
+
 func CreateRepoPkg(rootPath string, pkgJson *configs.PackageInfo) *RepoPkg {
-	pkg := RepoPkg{name: pkgJson.Name, root: rootPath, pkgJson: pkgJson}
-	pkg.Deps = make(map[string]*RepoPkg)
-	pkg.Verbs = make(map[string]string)
-	pkg.NodeDeps = make(map[string]string)
+	pkg := RepoPkg{}
+	pkg.Init(pkgJson.Name, rootPath, pkgJson)
 	return &pkg
 }
 
-func (r *RepoPkg) Name() string                  { return r.name }
-func (r *RepoPkg) Root() string                  { return r.root }
 func (r *RepoPkg) PkgJson() *configs.PackageInfo { return r.pkgJson }
 
 type WalkResult uint16
@@ -52,9 +57,9 @@ func (r *RepoPkg) WalkDeps(callback func(pkg *RepoPkg, stack []*RepoPkg) WalkRes
 func (r *RepoPkg) FindDep(pkgName string) []string {
 	result := []string{}
 	r.WalkDeps(func(pkg *RepoPkg, stack []*RepoPkg) WalkResult {
-		if pkg.name == pkgName {
+		if pkg.Name == pkgName {
 			for _, pathPart := range stack {
-				result = append(result, pathPart.name)
+				result = append(result, pathPart.Name)
 			}
 			return Stop
 		}
@@ -65,13 +70,13 @@ func (r *RepoPkg) FindDep(pkgName string) []string {
 
 func addDependencies(pkg *RepoPkg, packages map[string]*RepoPkg, depMap map[string]string) error {
 	// process the list of dependencies/devDependencies and split them into repo packages and node packages
-	for dep, _ := range depMap {
+	for dep := range depMap {
 		pkgRef, inRepo := packages[dep]
 		if inRepo {
 			// try to find this package in the tree already to ensure we don't add a cycle
-			cycle := pkgRef.FindDep(pkg.name)
+			cycle := pkgRef.FindDep(pkg.Name)
 			if len(cycle) > 0 {
-				return errors.New("Cycle detected: " + pkg.name + " -> " + strings.Join(cycle, " -> ") + " -> " + pkg.name)
+				return errors.New("Cycle detected: " + pkg.Name + " -> " + strings.Join(cycle, " -> ") + " -> " + pkg.Name)
 			}
 			pkg.Deps[dep] = pkgRef
 		} else {
@@ -95,4 +100,23 @@ func BuildDepTree(packages map[string]*RepoPkg) error {
 		}
 	}
 	return nil
+}
+
+func (r *RepoPkg) BuildTasks(pipeline PipelineMap) {
+	for script, command := range r.pkgJson.Scripts {
+		task := tasks.MakeTask(&r.TaskPkgInfo, script, command)
+		pipe, exists := pipeline[script]
+		if exists {
+			for _, directive := range pipe {
+				if directive.Cascade {
+					for dep := range r.Deps {
+						task.AddPrereq(tasks.GetTaskName(directive.Command, dep))
+					}
+				} else if directive.Command != script {
+					task.AddPrereq(tasks.GetTaskName(directive.Command, r.Name))
+				}
+			}
+		}
+		r.Tasks[script] = task
+	}
 }
