@@ -1,13 +1,15 @@
-# draft-patch-rnmacos
+# patcher-rnmacos
 
 [![Build](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml/badge.svg)](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml)
-[![npm version](https://img.shields.io/npm/v/@rnx-kit/draft-patch-rnmacos)](https://www.npmjs.com/package/@rnx-kit/draft-patch-rnmacos)
+[![npm version](https://img.shields.io/npm/v/@rnx-kit/patcher-rnmacos)](https://www.npmjs.com/package/@rnx-kit/patcher-rnmacos)
 
 🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧
 
-_This tool is still incomplete - please refer
-[to this issue](https://github.com/microsoft/rnx-kit/issues/1156) for the list
-of wanted improvements. DO NOT use it unless know what you are doing._
+### This tool is EXPERIMENTAL - USE WITH CAUTION
+
+Please refer [to this issue](https://github.com/microsoft/rnx-kit/issues/1156)
+for the list of wanted improvements. DO NOT use it unless you know what you are
+doing.
 
 🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧
 
@@ -33,7 +35,7 @@ You can find more details about how it's used by `react-native-macos`
 
 This tool has mainly two commands, `diff` and `patch`. You can find the full
 list of functionalities by invoking the command
-`npx @rnx-kit/draft-patch-rnmacos --help`.
+`npx @rnx-kit/patcher-rnmacos --help`.
 
 The commands have an option `--log-folder` that allows the user to point a
 folder in which a set of files with different levels of logging will be stored.
@@ -50,7 +52,7 @@ When using this command, you will need to pass a series of parameters to ensure
 it's successful:
 
 ```sh
-npx @rnx-kit/draft-patch-rnmacos diff <path-of-folder> <path-of-clean-copy-folder> --patch-name <name-for-patch-folder>
+npx @rnx-kit/patcher-rnmacos diff <path-of-folder> <path-of-clean-copy-folder> --patch-name <name-for-patch-folder>
 ```
 
 Along with these core options, you might want to pass the following params:
@@ -66,11 +68,11 @@ Along with these core options, you might want to pass the following params:
 A complete example of this script on macos is the following:
 
 ```sh
-npx @rnx-kit/draft-patch-rnmacos diff ../../../react-native-macos-main/ ../../../react-native-macos-clean-copy --inclusion-list-dirs ./ReactAndroid --patch-name TEST --log-folder ./logs --git-executable /usr/local/bin/git --diff-executable /usr/local/Cellar/git/2.34.0/libexec/git-core/git-diff
+npx @rnx-kit/patcher-rnmacos diff ../../../react-native-macos-main/ ../../../react-native-macos-clean-copy --inclusion-list-dirs ./ReactAndroid --patch-name TEST --log-folder ./logs --git-executable /usr/local/bin/git --diff-executable /usr/local/Cellar/git/2.34.0/libexec/git-core/git-diff
 ```
 
 A more complete explanation of all the params can be found via
-`npx @rnx-kit/draft-patch-rnmacos diff --help`.
+`npx @rnx-kit/patcher-rnmacos diff --help`.
 
 ### **`patch`**
 
@@ -78,7 +80,7 @@ This command allows to apply to the codebase all the various folder patches (via
 their names) - like so:
 
 ```sh
-npx @rnx-kit/draft-patch-rnmacos patch <path-of-codebase> <array-of-patches-folder-names> --patch-store <path-of-folder-containing-patches> --log-folder <path-to-folder-where-to-store-logs> --confirm true
+npx @rnx-kit/patcher-rnmacos patch <path-of-codebase> <array-of-patches-folder-names> --patch-store <path-of-folder-containing-patches> --log-folder <path-to-folder-where-to-store-logs> --confirm true
 ```
 
 The `--confirm true` param at the end is necessary to allow the tool write the
@@ -87,11 +89,11 @@ changes.
 A complete example of this script on macos is the following:
 
 ```sh
-npx @rnx-kit/draft-patch-rnmacos patch ../../../react-native-macos-main Build OfficeRNHost V8 Focus MAC ImageColor --patch-store ../../../react-native-macos-main/android-patches/patches --log-folder ../../../react-native-macos-main/android-patches/logs --confirm true
+npx @rnx-kit/patcher-rnmacos patch ../../../react-native-macos-main Build OfficeRNHost V8 Focus MAC ImageColor --patch-store ../../../react-native-macos-main/android-patches/patches --log-folder ../../../react-native-macos-main/android-patches/logs --confirm true
 ```
 
 A more complete explanation of all the params can be found via
-`npx @rnx-kit/draft-patch-rnmacos patch --help`.
+`npx @rnx-kit/patcher-rnmacos patch --help`.
 
 ### **`patchfile`**
 
@@ -102,4 +104,4 @@ patchfile [options] <targetFilePath> <patchFilePath>
 ```
 
 A more complete explanation of all the params can be found via
-`npx @rnx-kit/draft-patch-rnmacos patchfile --help`.
+`npx @rnx-kit/patcher-rnmacos patchfile --help`.

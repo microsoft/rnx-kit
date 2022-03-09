@@ -1,8 +1,9 @@
 {
-  "name": "@rnx-kit/draft-patch-rnmacos",
+  "name": "@rnx-kit/patcher-rnmacos",
   "version": "0.1.2",
-  "description": "A tool to generate patches and apply them to a codebase",
-  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/draft-patch-rnmacos#readme",
+  "experimental": true,
+  "description": "EXPERIMENTAL - USE WITH CAUTION - A tool to generate patches and apply them to a codebase",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/incubator/patcher-rnmacos#readme",
   "license": "MIT",
   "author": {
     "name": "Microsoft Open Source",
@@ -13,18 +14,17 @@
   ],
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
-  "bin": {
-    "draft-patch-rnmacos": "lib/index.js"
-  },
+  "bin": "lib/index.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/microsoft/rnx-kit",
-    "directory": "packages/draft-patch-rnmacos"
+    "directory": "incubator/patcher-rnmacos"
   },
   "engines": {
     "node": ">= 14"
   },
   "scripts": {
+    "prepare": "echo '⚠️ patcher-rnmacos is EXPERIMENTAL - USE WITH CAUTION  ⚠️'",
     "build": "rnx-kit-scripts build",
     "format": "rnx-kit-scripts format",
     "lint": "rnx-kit-scripts lint",

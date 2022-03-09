@@ -1,4 +1,4 @@
-# @rnx-kit/draft-patch-rnmacos
+# @rnx-kit/patcher-rnmacos
 
 ## 0.1.2
 
@@ -16,4 +16,4 @@
 
 ### Minor Changes
 
-- f9c6049: Introducing draft-patch-rnmacos
+- f9c6049: Introducing patcher-rnmacos

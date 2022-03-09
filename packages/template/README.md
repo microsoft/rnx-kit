@@ -5,9 +5,11 @@
 [![Build](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml/badge.svg)](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml)
 [![npm version](https://img.shields.io/npm/v/@rnx-kit/template)](https://www.npmjs.com/package/@rnx-kit/template)
 
+<!-- experimental-warning start -->
+<!-- experimental-warning end -->
+
 This is a sample folder to use as base for generating new packages for
-`rnx-kit`. If you don't want this package to show up in the main table, modify
-its folder name by adding in front `draft-`.
+`rnx-kit`.
 
 ## Motivation
 

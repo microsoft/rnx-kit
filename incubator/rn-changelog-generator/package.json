@@ -1,8 +1,9 @@
 {
   "name": "@rnx-kit/rn-changelog-generator",
   "version": "0.3.0",
-  "description": "Generate a markdown-formatted list of changes between two version of react-native",
-  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/rn-changelog-generator#readme",
+  "experimental": true,
+  "description": "EXPERIMENTAL - USE WITH CAUTION - Generate a markdown-formatted list of changes between two version of react-native",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/incubator/rn-changelog-generator#readme",
   "license": "MIT",
   "files": [
     "lib/**/*.d.ts",
@@ -10,18 +11,17 @@
   ],
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
-  "bin": {
-    "rn-changelog-generator": "lib/index.js"
-  },
+  "bin": "lib/index.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/microsoft/rnx-kit",
-    "directory": "packages/rn-changelog-generator"
+    "directory": "incubator/rn-changelog-generator"
   },
   "engines": {
     "node": ">= 14"
   },
   "scripts": {
+    "prepare": "echo '⚠️ rn-changelog-generator is EXPERIMENTAL - USE WITH CAUTION  ⚠️'",
     "build": "rnx-kit-scripts build",
     "bundle": "rnx-kit-scripts bundle",
     "format": "rnx-kit-scripts format",

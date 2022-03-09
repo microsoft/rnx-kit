@@ -23,8 +23,8 @@ React Native apps and libraries.
 An `rnx` is a **React Native user experience**. It's any code you've written
 using React Native. A `kit` is **the package you use to deliver this code**. For
 most common scenarios, such as a greenfield React Native app or a React Native
-libary, you can say that your project's folder is a `kit`, since you are writing
-the code and releasing it.
+library, you can say that your project's folder is a `kit`, since you are
+writing the code and releasing it.
 
 A `kit` has
 [configuration](https://github.com/microsoft/rnx-kit/tree/main/packages/config)
@@ -58,8 +58,8 @@ monorepos.
 You can manage dependencies using the
 [command-line interface](https://github.com/microsoft/rnx-kit/tree/main/packages/cli):
 
-```
-$ yarn react-native rnx-dep-check [options] [/path/to/package.json]
+```sh
+yarn react-native rnx-dep-check [options] [/path/to/package.json]
 ```
 
 ### Bundling
@@ -73,8 +73,8 @@ all of your `kit` packages, is difficult. `@rnx-kit` has a number of plugins,
 presets, services to make this easier, all wrapped up in the
 [command-line interface](https://github.com/microsoft/rnx-kit/tree/main/packages/cli):
 
-```
-$ yarn react-native rnx-bundle
+```sh
+yarn react-native rnx-bundle
 ```
 
 The bundling process is controlled by
@@ -93,8 +93,8 @@ You can use the
 [command-line interface](https://github.com/microsoft/rnx-kit/tree/main/packages/cli)
 to _assist you_ in building this 3rd-party notice:
 
-```
-$ yarn react-native rnx-write-third-party-notices
+```sh
+yarn react-native rnx-write-third-party-notices
 ```
 
 > NOTE: A 3rd-party notice is a **legal document**. You are solely responsble
@@ -136,7 +136,6 @@ individually, as features are added and fixes are made.
 | [@rnx-kit/metro-swc-worker](https://github.com/microsoft/rnx-kit/tree/main/packages/metro-swc-worker)                                                   | Metro transform worker that uses swc under the hood                                              |
 | [@rnx-kit/react-native-auth](https://github.com/microsoft/rnx-kit/tree/main/packages/react-native-auth)                                                 | @rnx-kit/react-native-auth provides a cross-app uniform API for user authentication              |
 | [@rnx-kit/react-native-test-app-msal](https://github.com/microsoft/rnx-kit/tree/main/packages/react-native-test-app-msal)                               | Microsoft Authentication Library (MSAL) module for react-native-test-app                         |
-| [@rnx-kit/rn-changelog-generator](https://github.com/microsoft/rnx-kit/tree/main/packages/rn-changelog-generator)                                       | Generate a markdown-formatted list of changes between two version of react-native                |
 | [@rnx-kit/third-party-notices](https://github.com/microsoft/rnx-kit/tree/main/packages/third-party-notices)                                             | Library and tool to build a third party notices file based on a js bundle's source map           |
 | [@rnx-kit/tools-language](https://github.com/microsoft/rnx-kit/tree/main/packages/tools-language)                                                       | A collection of supplemental JavaScript functions and types                                      |
 | [@rnx-kit/tools-node](https://github.com/microsoft/rnx-kit/tree/main/packages/tools-node)                                                               | A collection of supplemental NodeJS functions and types                                          |
@@ -146,6 +145,20 @@ individually, as features are added and fixes are made.
 | [@rnx-kit/typescript-service](https://github.com/microsoft/rnx-kit/tree/main/packages/typescript-service)                                               | TypeScript language services with support for custom module resolution                           |
 
 <!-- @rnx-kit end -->
+
+### Incubator
+
+For experimental work we have a dedicated folder, `incubator` - the packages
+collected here are not to be used by the general audience.
+
+<!-- @rnx-kit experimental start -->
+
+| Name                                                                                                               | Description                                                                       |
+| ------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------- |
+| [@rnx-kit/patcher-rnmacos](https://github.com/microsoft/rnx-kit/tree/main/incubator/patcher-rnmacos)               | A tool to generate patches and apply them to a codebase                           |
+| [@rnx-kit/rn-changelog-generator](https://github.com/microsoft/rnx-kit/tree/main/incubator/rn-changelog-generator) | Generate a markdown-formatted list of changes between two version of react-native |
+
+<!-- @rnx-kit experimental end -->
 
 ## Contributing
 
