@@ -37,6 +37,34 @@ module.exports = {
 If you're looking to reduce the bundle size, here are a couple of things you can
 try.
 
+### Enable compiler assumptions
+
+Since 7.13.0, Babel can make certain assumptions about your code to reduce the
+amount of generated code. You can read more about it at
+<https://babeljs.io/docs/en/assumptions>.
+
+### Enable loose mode when transforming classes
+
+If you make heavy use of classes, but can't use compiler assumptions, you can
+enable `looseClassTransform` to remove helper functions:
+
+```js
+module.exports = {
+  presets: [
+    [
+      "@rnx-kit/babel-preset-metro-react-native",
+      {
+        looseClassTransform: true,
+      },
+    ],
+  ],
+};
+```
+
+This is equivalent to passing
+[`{ loose: true }`](https://babeljs.io/docs/en/babel-plugin-transform-classes#loose)
+to `@babel/plugin-transform-classes`.
+
 ### Enable experimental import/export support
 
 In your `metro.config.js`, enable `experimentalImportSupport`:
