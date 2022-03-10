@@ -90,13 +90,15 @@ func (t *TaskList) Execute() error {
 	Create a TaskList given the global list of tasks, the command to execute, and an optional starting
 	package to work from. If startPkg is empty it will execute the command globally
 */
-func BuildTaskList(globalList TaskMap, command string, startPkg string) *TaskList {
+func BuildTaskList(globalList TaskMap, commands []string, startPkg string) *TaskList {
 	tasks := new(TaskList)
 	tasks.Init()
-	// go through the global list and queue as appropriate
-	for taskName, task := range globalList {
-		if task.CmdName() == command && (startPkg == "" || task.PkgName() == startPkg) {
-			tasks.QueueTask(taskName, task, globalList)
+	for _, command := range commands {
+		// go through the global list and queue as appropriate
+		for taskName, task := range globalList {
+			if task.CmdName() == command && (startPkg == "" || task.PkgName() == startPkg) {
+				tasks.QueueTask(taskName, task, globalList)
+			}
 		}
 	}
 	return tasks

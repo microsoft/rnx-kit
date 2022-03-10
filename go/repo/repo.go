@@ -66,6 +66,15 @@ func LoadRepo(wd string) (*Repo, error) {
 	Execute a command in the repository, either globally or scoped to a given package
 */
 func (r *Repo) RunTask(command string, pkg string) error {
-	tasklist := tasks.BuildTaskList(r.TaskLookup, command, pkg)
+	commands := []string{command}
+	// add any commands from the pipeline in case it is a synthetic command (i.e. not one that exists in packages)
+	if r.Pipeline[command] != nil {
+		for _, directive := range r.Pipeline[command] {
+			if directive.Command != command {
+				commands = append(commands, directive.Command)
+			}
+		}
+	}
+	tasklist := tasks.BuildTaskList(r.TaskLookup, commands, pkg)
 	return tasklist.Execute()
 }
