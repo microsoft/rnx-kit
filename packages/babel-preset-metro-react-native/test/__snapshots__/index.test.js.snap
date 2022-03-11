@@ -1,7 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`@rnx-kit/babel-preset-metro-react-native applies additional plugins 1`] = `
-"require(\\"typescript/src/remap-test/lib/lib\\");
+"Object.defineProperty(exports, \\"__esModule\\", { value: true });
+exports.takeDirection = takeDirection;
+require(\\"typescript/src/remap-test/lib/lib\\");
 var Direction;
 (function (Direction) {
   Direction[(Direction[\\"Up\\"] = 0)] = \\"Up\\";
@@ -26,7 +28,9 @@ console.log(takeDirection(Direction.Up));
 `;
 
 exports[`@rnx-kit/babel-preset-metro-react-native can be further extended 1`] = `
-"require(\\"typescript/src/remap-test/lib/lib\\");
+"Object.defineProperty(exports, \\"__esModule\\", { value: true });
+exports.takeDirection = takeDirection;
+require(\\"typescript/src/remap-test/lib/lib\\");
 var Direction;
 (function (Direction) {
   Direction[(Direction[\\"Up\\"] = 0)] = \\"Up\\";
@@ -50,8 +54,41 @@ console.log(takeDirection(Direction.Up));
 "
 `;
 
-exports[`@rnx-kit/babel-preset-metro-react-native transforms \`const enum\`s 1`] = `
+exports[`@rnx-kit/babel-preset-metro-react-native forwards options to \`metro-react-native-babel-preset\` 1`] = `
 "require(\\"typescript/lib/remap-test/lib/lib\\");
+var Direction;
+(function (Direction) {
+  Direction[(Direction[\\"Up\\"] = 0)] = \\"Up\\";
+  Direction[(Direction[\\"Down\\"] = 1)] = \\"Down\\";
+  Direction[(Direction[\\"Left\\"] = 2)] = \\"Left\\";
+  Direction[(Direction[\\"Right\\"] = 3)] = \\"Right\\";
+})(Direction || (Direction = {}));
+function takeDirection(direction) {
+  switch (direction) {
+    case Direction.Up:
+      return \\"up\\";
+    case Direction.Down:
+      return \\"down\\";
+    case Direction.Left:
+      return \\"left\\";
+    case Direction.Right:
+      return \\"right\\";
+  }
+}
+console.log(takeDirection(Direction.Up));
+export { takeDirection };
+"
+`;
+
+exports[`@rnx-kit/babel-preset-metro-react-native passes \`loose: true\` to \`@babel/plugin-transform-classes\` 1`] = `
+"export var Foo = function Foo() {};
+"
+`;
+
+exports[`@rnx-kit/babel-preset-metro-react-native transforms \`const enum\`s 1`] = `
+"Object.defineProperty(exports, \\"__esModule\\", { value: true });
+exports.takeDirection = takeDirection;
+require(\\"typescript/lib/remap-test/lib/lib\\");
 var Direction;
 (function (Direction) {
   Direction[(Direction[\\"Up\\"] = 0)] = \\"Up\\";

@@ -2,6 +2,11 @@
 // @ts-check
 "use strict";
 
+const { getPreset } = require(require.resolve(
+  "metro-react-native-babel-preset",
+  { paths: [process.cwd()] }
+));
+
 /**
  * @typedef {import("@babel/core").ConfigAPI} ConfigAPI
  * @typedef {import("@babel/core").PluginItem} PluginItem
@@ -17,7 +22,12 @@
  *   withDevTools?: boolean;
  * }} MetroPresetOptions
  *
- * @typedef {MetroPresetOptions & { additionalPlugins?: PluginItem[]; }} PresetOptions
+ * @typedef {{
+ *   additionalPlugins?: PluginItem[];
+ *   looseClassTransform?: boolean;
+ * }} RnxPresetOptions
+ *
+ * @typedef {MetroPresetOptions & RnxPresetOptions} PresetOptions
  */
 
 /**
@@ -66,29 +76,72 @@ function overridesFor(transformProfile) {
   }
 }
 
-/** @type {(api?: ConfigAPI, opts?: PresetOptions) => TransformOptions} */
+/**
+ * It's not documented thoroughly in Babel's documentation
+ * (https://babeljs.io/docs/en/configuration#how-babel-merges-config-items),
+ * but while poking in Babel's internals, we found that overrides get prepended
+ * to any preset's overrides. For instance:
+ *
+ *   ```json
+ *   {
+ *     "presets": ["metro-react-native-babel-preset"],
+ *     "overrides": {
+ *       "plugins": [
+ *         ["@babel/plugin-transform-classes", { "loose": true }]
+ *       ]
+ *     }
+ *   }
+ *   ```
+ *
+ * Turns into:
+ *
+ *   ```json
+ *   {
+ *     "plugins": [
+ *       ["@babel/plugin-transform-classes", { "loose": true }],
+ *       // other plugin overrides by `metro-react-native-babel-preset` here
+ *     ]
+ *   }
+ *   ```
+ *
+ * This means that we cannot override `metro-react-native-babel-preset` using
+ * the `overrides` field. Luckily, it does export a `getPreset()` function that
+ * we can call and modify the config.
+ *
+ * @type {(api?: ConfigAPI, opts?: PresetOptions) => TransformOptions}
+ */
 module.exports = (
   _,
-  { additionalPlugins, unstable_transformProfile, ...options } = {}
+  {
+    additionalPlugins,
+    looseClassTransform,
+    unstable_transformProfile,
+    ...options
+  } = {}
 ) => {
-  return {
-    presets: [
-      [
-        "module:metro-react-native-babel-preset",
-        {
-          ...options,
-          ...overridesFor(unstable_transformProfile),
-        },
-      ],
+  const env = process.env.BABEL_ENV || process.env.NODE_ENV;
+  const metroPreset = getPreset(null, {
+    ...(options.withDevTools == null
+      ? { dev: env !== "production" }
+      : undefined),
+    ...options,
+    ...overridesFor(unstable_transformProfile),
+  });
+  const overrides = metroPreset.overrides;
+
+  overrides.push({
+    test: /\.tsx?$/,
+    plugins: [
+      ...constEnumPlugin(),
+      ...(Array.isArray(additionalPlugins) ? additionalPlugins : []),
     ],
-    overrides: [
-      {
-        test: /\.tsx?$/,
-        plugins: [
-          ...constEnumPlugin(),
-          ...(Array.isArray(additionalPlugins) ? additionalPlugins : []),
-        ],
-      },
-    ],
-  };
+  });
+
+  if (looseClassTransform) {
+    overrides.push({
+      plugins: [["@babel/plugin-transform-classes", { loose: true }]],
+    });
+  }
+
+  return metroPreset;
 };
