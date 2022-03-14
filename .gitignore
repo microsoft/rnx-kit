@@ -6,7 +6,7 @@
 .DS_Store
 .gradle/
 .idea/
-.yarnrc
+.yarn*
 /packages/*/bin/
 /packages/*/dist/
 /packages/*/lib/
