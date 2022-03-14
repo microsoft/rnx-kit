@@ -70,7 +70,7 @@ repositories {
 
     // https://github.com/AzureAD/microsoft-authentication-library-for-android#step-1-declare-dependency-on-msal
     maven {
-        url 'https://pkgs.dev.azure.com/MicrosoftDeviceSDK/DuoSDK-Public/_packaging/Duo-SDK-Feed/maven/v1'
+        url "https://pkgs.dev.azure.com/MicrosoftDeviceSDK/DuoSDK-Public/_packaging/Duo-SDK-Feed/maven/v1"
     }
 }
 
@@ -109,42 +109,40 @@ android {
 
         def appProject = rootProject.subprojects.find { it.name == "app" }
         def applicationId = appProject.android.defaultConfig.applicationId
-        def redirectUri = "msauth://$applicationId/${URLEncoder.encode(signatureHash, "UTF-8")}"
+        def redirectUri = "msauth://${applicationId}/${URLEncoder.encode(signatureHash, "UTF-8")}"
 
-        def generatedResDir = file("$buildDir/generated/react-native-test-app-msal/src/main/res/")
-        generatedResDir.mkdirs()
+        def generatedResDir = file("${appProject.buildDir}/generated/react-native-test-app-msal/src/main/res")
+        def generatedRawDir = file("${generatedResDir}/raw")
 
-        task copyMsalConfig(type: Copy) {
-            def generatedRawDir = file("$generatedResDir/raw")
-            generatedRawDir.mkdirs()
+        task copyMsalConfig {
+            mustRunAfter(":app:clean")
+            doLast {
+                generatedRawDir.mkdirs()
 
-            def msalConfig = file("$temporaryDir/msal_config.json")
-            msalConfig.withWriter {
-                it << JsonOutput.toJson([
-                    authorities: [
-                        [
-                            type: "AAD",
-                            audience: [
-                                type: "AzureADandPersonalMicrosoftAccount"
+                new FileTreeBuilder(generatedRawDir).file("msal_config.json").newWriter().withWriter {
+                    it << JsonOutput.toJson([
+                        authorities: [
+                            [
+                                type: "AAD",
+                                audience: [
+                                    type: "AzureADandPersonalMicrosoftAccount"
+                                ],
+                                default: true
                             ],
-                            default: true
-                        ],
-                        [
-                            type: "AAD",
-                            audience: [
-                                type: "PersonalMicrosoftAccount"
+                            [
+                                type: "AAD",
+                                audience: [
+                                    type: "PersonalMicrosoftAccount"
+                                ],
                             ],
                         ],
-                    ],
-                    client_id: clientId,
-                    redirect_uri: redirectUri,
-                    broker_redirect_uri_registered: false,
-                    account_mode: "MULTIPLE"
-                ])
+                        client_id: clientId,
+                        redirect_uri: redirectUri,
+                        broker_redirect_uri_registered: false,
+                        account_mode: "MULTIPLE"
+                    ])
+                }
             }
-
-            from msalConfig
-            into generatedRawDir
         }
 
         preBuild.dependsOn(copyMsalConfig)
