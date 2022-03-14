@@ -112,11 +112,11 @@ android {
         def redirectUri = "msauth://${applicationId}/${URLEncoder.encode(signatureHash, "UTF-8")}"
 
         def generatedResDir = file("${appProject.buildDir}/generated/react-native-test-app-msal/src/main/res")
-        def generatedRawDir = file("${generatedResDir}/raw")
 
         task copyMsalConfig {
             mustRunAfter(":app:clean")
             doLast {
+                def generatedRawDir = file("${generatedResDir}/raw")
                 generatedRawDir.mkdirs()
 
                 new FileTreeBuilder(generatedRawDir).file("msal_config.json").newWriter().withWriter {
