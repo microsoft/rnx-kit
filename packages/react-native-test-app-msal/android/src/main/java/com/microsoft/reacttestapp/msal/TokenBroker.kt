@@ -2,6 +2,7 @@ package com.microsoft.reacttestapp.msal
 
 import android.app.Activity
 import android.content.Context
+import android.content.res.Resources.NotFoundException
 import com.microsoft.identity.client.AcquireTokenParameters
 import com.microsoft.identity.client.AuthenticationCallback
 import com.microsoft.identity.client.IAuthenticationResult
@@ -35,6 +36,9 @@ class TokenBroker private constructor(context: Context) {
     init {
         val configFileResourceId = context.resources
             .getIdentifier("raw/msal_config", null, context.packageName)
+        if (configFileResourceId == 0) {
+            throw NotFoundException("Can't find MSAL configuration file")
+        }
         multiAccountApp = PublicClientApplication.createMultipleAccountPublicClientApplication(
             context,
             configFileResourceId
