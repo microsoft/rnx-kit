@@ -1,5 +1,12 @@
 # Change Log - @rnx-kit/react-native-test-app-msal
 
+## 1.0.1
+
+### Patch Changes
+
+- 8c62b6a: Fixed `msal_config.json` being generated before the `:app:clean` task is run, causing MSAL to throw an exception on initialisation because of the missing configuration file.
+- 521505c: Throw if `msal_config.json` is missing, otherwise Android will throw a cryptic/generic exception that's hard to debug.
+
 ## 1.0.0
 
 ### Patch Changes

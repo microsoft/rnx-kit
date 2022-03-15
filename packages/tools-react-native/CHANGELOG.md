@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/tools-react-native
 
+## 1.2.1
+
+### Patch Changes
+
+- 3232fdd: Fix `ERR_PACKAGE_PATH_NOT_EXPORTED` when importing packages using the `exports` field
+
 ## 1.2.0
 
 ### Minor Changes
