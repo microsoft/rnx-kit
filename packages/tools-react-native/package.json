@@ -24,7 +24,7 @@
     "update-readme": "rnx-kit-scripts update-api-readme"
   },
   "dependencies": {
-    "@rnx-kit/tools-node": "^1.2.6"
+    "@rnx-kit/tools-node": "^1.2.7"
   },
   "devDependencies": {
     "@rnx-kit/scripts": "*",
