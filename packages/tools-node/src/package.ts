@@ -205,10 +205,12 @@ export type FindPackageDependencyOptions = {
  * @returns Path to the package dependency's directory, or `undefined` if not found.
  */
 export function findPackageDependencyDir(
-  ref: PackageRef,
+  ref: string | PackageRef,
   options?: FindPackageDependencyOptions
 ): string | undefined {
-  return findUp.sync(path.join("node_modules", ref.scope ?? "", ref.name), {
+  const pkgName =
+    typeof ref === "string" ? ref : path.join(ref.scope ?? "", ref.name);
+  return findUp.sync(path.join("node_modules", pkgName), {
     ...pickValues(
       options ?? {},
       ["startDir", "allowSymlinks"],
