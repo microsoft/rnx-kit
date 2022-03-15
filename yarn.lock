@@ -2044,10 +2044,10 @@
   dependencies:
     tslib "^2.1.0"
 
-"@fluentui/utilities@^8.3.9":
-  version "8.8.0"
-  resolved "https://registry.yarnpkg.com/@fluentui/utilities/-/utilities-8.8.0.tgz#765887a0596c73cb5330fb12c1a17d6ff72cf315"
-  integrity sha512-IwKN9ZkYMJApzcvJUlJd4ZURJCMwZG8FNsep05GAcDzynZygvH2Y1ECpIFn9VTSsrKxMKYFIQ61Rwg+AW/eBcw==
+"@fluentui/utilities@8.8.1":
+  version "8.8.1"
+  resolved "https://registry.yarnpkg.com/@fluentui/utilities/-/utilities-8.8.1.tgz#063c1aebfe83b7fb6aad38b6a6d9b1d44f3fc301"
+  integrity sha512-JtICpdTINvifiyjp/LxxuDiU8BMkU73mzAP/3mz5KIhqPn3QjKG9ZeaBLPpoUXNOP/I6i9AYbAQHDvQI/ZK5tg==
   dependencies:
     "@fluentui/dom-utilities" "^2.2.0"
     "@fluentui/merge-styles" "^8.5.0"
