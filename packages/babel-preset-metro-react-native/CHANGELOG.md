@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/babel-preset-metro-react-native
 
+## 1.1.0
+
+### Minor Changes
+
+- 79e4f8c: Allow enabling loose mode on `@babel/plugin-transform-classes`
+
 ## 1.0.6
 
 Tue, 21 Sep 2021 13:01:58 GMT

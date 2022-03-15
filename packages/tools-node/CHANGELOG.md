@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/tools-node
 
+## 1.2.7
+
+### Patch Changes
+
+- ae87498: `findPackageDependencyDir` now also accepts package names
+
 ## 1.2.6
 
 Tue, 30 Nov 2021 17:24:14 GMT
