@@ -1,5 +1,12 @@
 # Change Log - @rnx-kit/scripts
 
+## 1.1.1
+
+### Patch Changes
+
+- Updated dependencies [56fc3eb]
+  - @rnx-kit/golang@0.2.0
+
 ## 1.1.0
 
 ### Minor Changes

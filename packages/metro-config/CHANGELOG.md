@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-config
 
+## 1.2.30
+
+### Patch Changes
+
+- d1df99c: Add a helper function that returns both the path to a specified package and a regex pattern that excludes other copies of it.
+
 ## 1.2.29
 
 ### Patch Changes
