@@ -138,19 +138,20 @@ like this:
 
 ```js
 const {
-  excludeExtraCopiesOf,
   exclusionList,
   makeMetroConfig,
+  resolveUniqueModule,
 } = require("@rnx-kit/metro-config");
 
-const additionalExclusions = [excludeExtraCopiesOf("react-native-msal")];
+const [msalPath, msalExcludePattern] = resolveUniqueModule("react-native-msal");
+const additionalExclusions = [msalExcludePattern];
 const blockList = exclusionList(additionalExclusions);
 
 module.exports = makeMetroConfig({
   projectRoot: __dirname,
   resolver: {
     extraNodeModules: {
-      "react-native-msal": `${__dirname}/node_modules/react-native-msal`,
+      "react-native-msal": msalPath,
     },
     blacklistRE: blockList, // For Metro < 0.60
     blockList, // For Metro >= 0.60

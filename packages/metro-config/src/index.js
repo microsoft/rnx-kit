@@ -61,11 +61,48 @@ function defaultWatchFolders(projectRoot) {
  */
 function resolveModule(name, startDir) {
   const { findPackageDependencyDir } = require("@rnx-kit/tools-node/package");
-  const result = findPackageDependencyDir(
-    { name },
-    { startDir, allowSymlinks: true }
-  );
+  const result = findPackageDependencyDir(name, {
+    startDir,
+    allowSymlinks: true,
+  });
   return result && require("fs").realpathSync(result);
+}
+
+/**
+ * Returns the path to specified package, and a regex to exclude extra copies of
+ * it.
+ *
+ * The regex pattern should be added to the blocklist, while the path should be
+ * added to `extraNodeModules` so Metro can resolve the correct copy regardless
+ * of where it might be installed. You should also restart Watchman and reset
+ * Metro cache if you're adding/removing excludes.
+ *
+ * @see exclusionList for further information.
+ *
+ * @param {string} packageName Name of the package to exclude extra copies of
+ * @param {string=} searchStartDir Directory to resolve the correct module location from
+ * @returns {[string, RegExp]}
+ */
+function resolveUniqueModule(packageName, searchStartDir) {
+  const result = resolveModule(packageName, searchStartDir);
+  if (!result) {
+    throw new Error(`Cannot find module '${packageName}'`);
+  }
+
+  const path = require("path");
+
+  // Find the node_modules folder and account for cases when packages are
+  // nested within workspace folders. Examples:
+  // - path/to/node_modules/@babel/runtime
+  // - path/to/node_modules/prop-types
+  const owningDir = path.dirname(result.slice(0, -packageName.length));
+  const escapedPath = owningDir.replace(/\\/g, "\\\\");
+  const escapedPackageName = path.normalize(packageName).replace(/\\/g, "\\\\");
+
+  const exclusionRE = new RegExp(
+    `(?<!${escapedPath})[/\\\\]node_modules[/\\\\]${escapedPackageName}[/\\\\].*`
+  );
+  return [result, exclusionRE];
 }
 
 /**
@@ -84,24 +121,8 @@ function resolveModule(name, startDir) {
  * @returns {RegExp}
  */
 function excludeExtraCopiesOf(packageName, searchStartDir) {
-  const result = resolveModule(packageName, searchStartDir);
-  if (!result) {
-    throw new Error(`Failed to find '${packageName}'`);
-  }
-
-  const path = require("path");
-
-  // Find the node_modules folder and account for cases when packages are
-  // nested within workspace folders. Examples:
-  // - path/to/node_modules/@babel/runtime
-  // - path/to/node_modules/prop-types
-  const owningDir = path.dirname(result.slice(0, -packageName.length));
-  const escapedPath = owningDir.replace(/\\/g, "\\\\");
-  const escapedPackageName = path.normalize(packageName).replace(/\\/g, "\\\\");
-
-  return new RegExp(
-    `(?<!${escapedPath})[/\\\\]node_modules[/\\\\]${escapedPackageName}[/\\\\].*`
-  );
+  const [, exclusionRE] = resolveUniqueModule(packageName, searchStartDir);
+  return exclusionRE;
 }
 
 /**
@@ -168,6 +189,7 @@ module.exports = {
   defaultWatchFolders,
   excludeExtraCopiesOf,
   exclusionList,
+  resolveUniqueModule,
 
   /**
    * Helper function for configuring Metro.
