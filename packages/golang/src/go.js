@@ -15,54 +15,19 @@ const { spawn } = require("./spawn");
  */
 
 /**
- * Listing of known Go binary distributions, indexed by NodeJs process.platform
- * then further indexed by process.arch.
- *
- * @type {{[platform: string]: {[architecture: string]: GoDistribution }}}
+ * Returns the architecture that we should fetch Go binaries for.
+ * @returns {string}
  */
-const goDistributions = {
-  darwin: {
-    arm64: {
-      url: "https://golang.org/dl/go1.17.2.darwin-arm64.tar.gz",
-      hashAlgorithm: "sha256",
-      hash: "ce8771bd3edfb5b28104084b56bbb532eeb47fbb7769c3e664c6223712c30904",
-    },
-    x64: {
-      url: "https://golang.org/dl/go1.17.2.darwin-amd64.tar.gz",
-      hashAlgorithm: "sha256",
-      hash: "7914497a302a132a465d33f5ee044ce05568bacdb390ab805cb75a3435a23f94",
-    },
-  },
-  linux: {
-    x32: {
-      url: "https://golang.org/dl/go1.17.2.linux-386.tar.gz",
-      hashAlgorithm: "sha256",
-      hash: "8617f2e40d51076983502894181ae639d1d8101bfbc4d7463a2b442f239f5596",
-    },
-    x64: {
-      url: "https://golang.org/dl/go1.17.2.linux-amd64.tar.gz",
-      hashAlgorithm: "sha256",
-      hash: "f242a9db6a0ad1846de7b6d94d507915d14062660616a61ef7c808a76e4f1676",
-    },
-    arm64: {
-      url: "https://golang.org/dl/go1.17.2.linux-arm64.tar.gz",
-      hashAlgorithm: "sha256",
-      hash: "a5a43c9cdabdb9f371d56951b14290eba8ce2f9b0db48fb5fc657943984fd4fc",
-    },
-  },
-  win32: {
-    x32: {
-      url: "https://golang.org/dl/go1.17.2.windows-386.zip",
-      hashAlgorithm: "sha256",
-      hash: "8a85257a351996fdf045fe95ed5fdd6917dd48636d562dd11dedf193005a53e0",
-    },
-    x64: {
-      url: "https://golang.org/dl/go1.17.2.windows-amd64.zip",
-      hashAlgorithm: "sha256",
-      hash: "fa6da0b829a66f5fab7e4e312fd6aa1b2d8f045c7ecee83b3d00f6fe5306759a",
-    },
-  },
-};
+function getCurrentArchitecture() {
+  switch (process.arch) {
+    case "x32":
+      return "386";
+    case "x64":
+      return "amd64";
+    default:
+      return process.arch;
+  }
+}
 
 /**
  * Get info on the Go distrubution matching the current plaform/architecture.
@@ -70,11 +35,29 @@ const goDistributions = {
  * @returns {GoDistribution | undefined} Go distribution info, or `undefined` if a distribution isn't available.
  */
 function getGoDistribution() {
-  const p = goDistributions[process.platform];
-  if (p) {
-    return p[process.arch];
+  const manifest = JSON.parse(
+    fs.readFileSync(path.join(__dirname, "..", "package.json"), {
+      encoding: "utf-8",
+    })
+  );
+  const { version, hashAlgorithm, checksums } = manifest[manifest.name];
+  const p = checksums[process.platform];
+  if (!p) {
+    return undefined;
   }
-  return undefined;
+
+  const hash = p[process.arch];
+  if (!hash) {
+    return undefined;
+  }
+
+  const platform = process.platform === "win32" ? "windows" : process.platform;
+  const extension = p === "win32" ? "zip" : "tar.gz";
+  return {
+    url: `https://golang.org/dl/go${version}.${platform}-${getCurrentArchitecture()}.${extension}`,
+    hash,
+    hashAlgorithm,
+  };
 }
 
 /**
