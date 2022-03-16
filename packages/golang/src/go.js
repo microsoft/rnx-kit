@@ -40,7 +40,7 @@ function getGoDistribution() {
       encoding: "utf-8",
     })
   );
-  const { version, hashAlgorithm, checksums } = manifest[manifest.name];
+  const { version, hashAlgorithm, checksums } = manifest["go-release"];
   const p = checksums[process.platform];
   if (!p) {
     return undefined;

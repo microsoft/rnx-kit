@@ -34,7 +34,10 @@
     "prettier": "^2.0.0",
     "typescript": "^4.0.0"
   },
-  "@rnx-kit/golang": {
+  "eslintConfig": {
+    "extends": "@rnx-kit/eslint-config"
+  },
+  "go-release": {
     "version": "1.18",
     "hashAlgorithm": "sha256",
     "checksums": {
@@ -53,8 +56,5 @@
         "x64": "65c5c0c709a7ca1b357091b10b795b439d8b50e579d3893edab4c7e9b384f435"
       }
     }
-  },
-  "eslintConfig": {
-    "extends": "@rnx-kit/eslint-config"
   }
 }
