@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/scripts",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "private": true,
   "main": "src/index.js",
   "bin": {
@@ -18,7 +18,7 @@
     "@babel/parser": "^7.0.0",
     "@babel/types": "^7.0.0",
     "@microsoft/tsdoc": "^0.13.0",
-    "@rnx-kit/golang": "^0.1.8",
+    "@rnx-kit/golang": "^0.2.0",
     "depcheck": "^1.0.0",
     "esbuild": "^0.14.10",
     "fs-extra": "^10.0.0",
