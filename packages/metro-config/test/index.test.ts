@@ -5,9 +5,9 @@ describe("@rnx-kit/metro-config", () => {
   const {
     UNIQUE_PACKAGES,
     defaultWatchFolders,
-    excludeExtraCopiesOf,
     exclusionList,
     makeMetroConfig,
+    resolveUniqueModule,
   } = require("../src/index");
 
   const metroConfigKeys = [
@@ -59,7 +59,7 @@ describe("@rnx-kit/metro-config", () => {
     expect(folders.sort()).toEqual(expectedFolders);
   });
 
-  test("excludeExtraCopiesOf() ignores symlinks", () => {
+  test("resolveUniqueModule() ignores symlinks", () => {
     const repo = fixturePath("awesome-repo");
     const packageCopy = path.join(
       repo,
@@ -82,12 +82,13 @@ describe("@rnx-kit/metro-config", () => {
       fs.lstatSync("node_modules/react-native").isSymbolicLink()
     ).toBeTruthy();
 
-    const exclude = excludeExtraCopiesOf("react-native");
+    const [reactNativePath, exclude] = resolveUniqueModule("react-native");
+    expect(reactNativePath).toBe(path.dirname(projectCopy));
     expect(exclude.test(packageCopy)).toBeTruthy();
     expect(exclude.test(projectCopy)).toBeFalsy();
   });
 
-  test("excludeExtraCopiesOf() handles nested dependencies", () => {
+  test("resolveUniqueModule() handles nested dependencies", () => {
     const repo = fixturePath("awesome-repo");
     const packageRnCopy = path.join(
       repo,
@@ -123,21 +124,24 @@ describe("@rnx-kit/metro-config", () => {
 
     setFixture("awesome-repo/packages/john");
 
-    const excludeReactNative = excludeExtraCopiesOf("react-native");
+    const [reactNativePath, excludeReactNative] =
+      resolveUniqueModule("react-native");
+    expect(reactNativePath).toBe(path.dirname(packageRnCopy));
     expect(excludeReactNative.test(packageRnCopy)).toBeFalsy();
     expect(excludeReactNative.test(projectRnCopy)).toBeTruthy();
 
-    const excludeMatrix = excludeExtraCopiesOf("@commando/matrix");
+    const [matrixPath, excludeMatrix] = resolveUniqueModule("@commando/matrix");
+    expect(matrixPath).toBe(path.dirname(packageMatrixCopy));
     expect(excludeMatrix.test(packageMatrixCopy)).toBeFalsy();
     expect(excludeMatrix.test(projectMatrixCopy)).toBeTruthy();
   });
 
-  test("excludeExtraCopiesOf() throws if a package is not found", () => {
-    expect(excludeExtraCopiesOf("jest", process.cwd())).toBeDefined();
+  test("resolveUniqueModule() throws if a package is not found", () => {
+    expect(resolveUniqueModule("jest", process.cwd())).toBeDefined();
 
     const packageName = "this-package-does-not-exist";
-    expect(() => excludeExtraCopiesOf(packageName, process.cwd())).toThrowError(
-      `Failed to find '${packageName}'`
+    expect(() => resolveUniqueModule(packageName, process.cwd())).toThrowError(
+      `Cannot find module '${packageName}'`
     );
   });
 
@@ -206,7 +210,7 @@ describe("@rnx-kit/metro-config", () => {
     );
 
     setFixture("awesome-repo/packages/conan");
-    const conanExclude = exclusionList([/.*[\/\\]__fixtures__[\/\\].*/]);
+    const conanExclude = exclusionList([/.*[/\\]__fixtures__[/\\].*/]);
     expect(conanExclude.test(reactCopy)).toBeTruthy();
     expect(conanExclude.test(packageCopy)).toBeTruthy();
     expect(conanExclude.test(projectCopy)).toBeTruthy();
