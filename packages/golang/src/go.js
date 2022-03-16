@@ -52,7 +52,7 @@ function getGoDistribution() {
   }
 
   const platform = process.platform === "win32" ? "windows" : process.platform;
-  const extension = p === "win32" ? "zip" : "tar.gz";
+  const extension = process.platform === "win32" ? "zip" : "tar.gz";
   return {
     url: `https://golang.org/dl/go${version}.${platform}-${getCurrentArchitecture()}.${extension}`,
     hash,
