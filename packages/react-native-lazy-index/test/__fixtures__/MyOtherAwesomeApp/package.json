@@ -1,0 +1,9 @@
+{
+  "experiences": {
+    "callable:YetAnotherFeature": "@awesome-app/yet-another-feature",
+    "callable:YetAnotherFeatureLazy": "@awesome-app/yet-another-feature",
+    "callable:AnotherFeature": "@awesome-app/another-feature",
+    "SomeFeature": "@awesome-app/some-feature",
+    "FinalFeature": "@awesome-app/final-feature"
+  }
+}
