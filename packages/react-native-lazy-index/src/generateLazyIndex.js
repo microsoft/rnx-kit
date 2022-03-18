@@ -23,12 +23,13 @@ function generateIndex(components) {
 
   const lines = Object.keys(components).reduce((index, name) => {
     const { type, moduleId, source } = components[name];
+    const normalizedSourcePath = source.replace(/\\/g, "/");
     switch (type) {
       case "app":
         shouldImportAppRegistry = true;
         index.push(
           `AppRegistry.registerComponent("${name}", () => {`,
-          `  // Source: ${source}`,
+          `  // Source: ${normalizedSourcePath}`,
           `  require("${moduleId}");`,
           `  return AppRegistry.getRunnable("${name}").componentProvider();`,
           `});`
@@ -38,7 +39,7 @@ function generateIndex(components) {
         shouldImportBatchedBridge = true;
         index.push(
           `BatchedBridge.registerLazyCallableModule("${name}", () => {`,
-          `  // Source: ${source}`,
+          `  // Source: ${normalizedSourcePath}`,
           `  require("${moduleId}");`,
           `  return BatchedBridge.getCallableModule("${name}");`,
           `});`

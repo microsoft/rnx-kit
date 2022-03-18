@@ -59,22 +59,4 @@ describe("react-native-lazy-index", () => {
     expect(result).toBeTruthy();
     expect(result?.code).toMatchSnapshot();
   });
-
-  test("packs only necessary files", () => {
-    const files = Array.from(
-      generateSequence(
-        spawnSync("npm", ["pack", "--dry-run"]).output.toString(),
-        /[.\d]+k?B\s+([^\s]*)/g
-      )
-    );
-    expect(files.sort()).toEqual([
-      "LICENSE",
-      "README.md",
-      "package.json",
-      "src/experiences.js",
-      "src/generateLazyIndex.js",
-      "src/index.js",
-      "src/module.js",
-    ]);
-  });
 });
