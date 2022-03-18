@@ -86,7 +86,7 @@ const profile: Profile = {
   },
   screens: {
     name: "react-native-screens",
-    version: "^3.12.0",
+    version: "^3.13.1",
   },
 };
 
