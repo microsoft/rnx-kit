@@ -22,7 +22,7 @@ jobs:
         run: |
           npx yarn-deduplicate --list --fail
       - name: Cache /.yarn-offline-mirror
-        uses: actions/cache@v2.1.7
+        uses: actions/cache@v3
         with:
           path: .yarn-offline-mirror
           key: ${{ runner.os }}-${{ hashFiles('yarn.lock') }}-6
@@ -68,7 +68,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Cache /.yarn-offline-mirror
-        uses: actions/cache@v2.1.7
+        uses: actions/cache@v3
         with:
           path: .yarn-offline-mirror
           key: ${{ runner.os }}-${{ hashFiles('yarn.lock') }}-6
@@ -108,7 +108,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Cache /.yarn-offline-mirror
-        uses: actions/cache@v2.1.7
+        uses: actions/cache@v3
         with:
           path: .yarn-offline-mirror
           key: ${{ runner.os }}-${{ hashFiles('yarn.lock') }}-6
@@ -133,7 +133,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Cache /.yarn-offline-mirror
-        uses: actions/cache@v2.1.7
+        uses: actions/cache@v3
         with:
           path: .yarn-offline-mirror
           key: ${{ runner.os }}-${{ hashFiles('yarn.lock') }}-6
