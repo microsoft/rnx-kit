@@ -153,6 +153,15 @@ describe("Node > Package", () => {
     );
   });
 
+  test("findPackageDependencyDir() accepts strings", () => {
+    const pkgDir = findPackageDependencyDir("@babel/core", {
+      startDir: fixtureDir,
+    });
+    expect(pkgDir).toEqual(
+      path.join(fixtureDir, "node_modules", "@babel/core")
+    );
+  });
+
   test("findPackageDependencyDir() finds a symlink package dir by default", () => {
     const coreLinkedPath = path.join(
       fixtureDir,

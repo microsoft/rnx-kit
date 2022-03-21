@@ -1,8 +1,9 @@
 {
   "name": "@rnx-kit/rn-changelog-generator",
-  "version": "0.3.0",
-  "description": "Generate a markdown-formatted list of changes between two version of react-native",
-  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/rn-changelog-generator#readme",
+  "version": "0.3.1",
+  "experimental": true,
+  "description": "EXPERIMENTAL - USE WITH CAUTION - Generate a markdown-formatted list of changes between two version of react-native",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/incubator/rn-changelog-generator#readme",
   "license": "MIT",
   "files": [
     "lib/**/*.d.ts",
@@ -10,31 +11,30 @@
   ],
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
-  "bin": {
-    "rn-changelog-generator": "lib/index.js"
-  },
+  "bin": "lib/index.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/microsoft/rnx-kit",
-    "directory": "packages/rn-changelog-generator"
+    "directory": "incubator/rn-changelog-generator"
   },
   "engines": {
     "node": ">= 14"
   },
   "scripts": {
-    "build": "rnx-kit-scripts build && rnx-kit-scripts bundle",
+    "prepare": "echo '⚠️ rn-changelog-generator is EXPERIMENTAL - USE WITH CAUTION  ⚠️'",
+    "build": "rnx-kit-scripts build",
+    "bundle": "rnx-kit-scripts bundle",
     "format": "rnx-kit-scripts format",
     "lint": "rnx-kit-scripts lint",
     "test:local": "rnx-kit-scripts test"
   },
   "devDependencies": {
-    "@octokit/rest": "^18.5.3",
     "@rnx-kit/scripts": "*",
     "@types/fast-levenshtein": "0.0.2",
     "chalk": "^4.1.0",
     "deepmerge": "^4.2.2",
-    "p-limit": "^3.1.0",
     "fast-levenshtein": "^3.0.0",
+    "p-limit": "^3.1.0",
     "yargs": "^16.0.0"
   },
   "eslintConfig": {

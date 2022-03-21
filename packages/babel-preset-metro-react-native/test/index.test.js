@@ -14,6 +14,20 @@ describe("@rnx-kit/babel-preset-metro-react-native", () => {
     ],
   };
 
+  /**
+   *
+   * @param {string} filename
+   * @param {import("@babel/core").TransformOptions} opts
+   * @returns {string | null}
+   */
+  function transform(filename, opts) {
+    const output = babel.transformFileSync(filename, opts);
+    return output?.code
+      ? // Format the code to make the snapshot more legible.
+        prettier.format(output.code, { parser: "babel" })
+      : null;
+  }
+
   afterEach(() => {
     jest.unmock("@babel/plugin-transform-typescript/package.json");
   });
@@ -23,27 +37,29 @@ describe("@rnx-kit/babel-preset-metro-react-native", () => {
       version: "7.14.5",
     }));
 
-    expect(preset()).toEqual({
-      presets: [["module:metro-react-native-babel-preset", {}]],
-      overrides: [
-        {
-          test: /\.tsx?$/,
-          plugins: ["const-enum"],
-        },
-      ],
-    });
+    expect(preset()).toEqual(
+      expect.objectContaining({
+        overrides: expect.arrayContaining([
+          {
+            test: /\.tsx?$/,
+            plugins: ["const-enum"],
+          },
+        ]),
+      })
+    );
   });
 
   test("returns default Babel preset with one additional TypeScript plugin (>=7.15)", () => {
-    expect(preset()).toEqual({
-      presets: [["module:metro-react-native-babel-preset", {}]],
-      overrides: [
-        {
-          test: /\.tsx?$/,
-          plugins: [],
-        },
-      ],
-    });
+    expect(preset()).toEqual(
+      expect.objectContaining({
+        overrides: expect.arrayContaining([
+          {
+            test: /\.tsx?$/,
+            plugins: [],
+          },
+        ]),
+      })
+    );
   });
 
   test("returns preset with additional TypeScript plugins (<7.15)", () => {
@@ -51,71 +67,68 @@ describe("@rnx-kit/babel-preset-metro-react-native", () => {
       version: "7.14.5",
     }));
 
-    expect(preset(undefined, optionsWithAdditionalPlugins)).toEqual({
-      presets: [["module:metro-react-native-babel-preset", {}]],
-      overrides: [
-        {
-          test: /\.tsx?$/,
-          plugins: [
-            "const-enum",
-            ...optionsWithAdditionalPlugins.additionalPlugins,
-          ],
-        },
-      ],
-    });
+    expect(preset(undefined, optionsWithAdditionalPlugins)).toEqual(
+      expect.objectContaining({
+        overrides: expect.arrayContaining([
+          {
+            test: /\.tsx?$/,
+            plugins: [
+              "const-enum",
+              ...optionsWithAdditionalPlugins.additionalPlugins,
+            ],
+          },
+        ]),
+      })
+    );
   });
 
   test("returns preset with additional TypeScript plugins (>=7.15)", () => {
-    expect(preset(undefined, optionsWithAdditionalPlugins)).toEqual({
-      presets: [["module:metro-react-native-babel-preset", {}]],
-      overrides: [
-        {
-          test: /\.tsx?$/,
-          plugins: optionsWithAdditionalPlugins.additionalPlugins,
-        },
-      ],
-    });
+    expect(preset(undefined, optionsWithAdditionalPlugins)).toEqual(
+      expect.objectContaining({
+        overrides: expect.arrayContaining([
+          {
+            test: /\.tsx?$/,
+            plugins: optionsWithAdditionalPlugins.additionalPlugins,
+          },
+        ]),
+      })
+    );
   });
 
   test("forwards options to `metro-react-native-babel-preset`", () => {
-    const metroOptions = { disableImportExportTransform: true };
+    const cwd = path.join(__dirname, "__fixtures__");
+    const app = path.join(cwd, "App.ts");
 
-    expect(preset(undefined, metroOptions)).toEqual({
-      presets: [["module:metro-react-native-babel-preset", metroOptions]],
-      overrides: [{ test: /\.tsx?$/, plugins: [] }],
-    });
-
-    expect(
-      preset(undefined, {
-        ...optionsWithAdditionalPlugins,
-        ...metroOptions,
-      })
-    ).toEqual({
-      presets: [["module:metro-react-native-babel-preset", metroOptions]],
-      overrides: [
-        {
-          test: /\.tsx?$/,
-          plugins: optionsWithAdditionalPlugins.additionalPlugins,
-        },
+    const code = transform(app, {
+      cwd,
+      presets: [
+        [
+          "@rnx-kit/babel-preset-metro-react-native",
+          { disableImportExportTransform: true },
+        ],
       ],
     });
+
+    if (!code) {
+      fail("Failed to transform `App.ts`");
+    }
+
+    expect(code).toMatchSnapshot();
   });
 
   test("transforms `const enum`s", () => {
     const cwd = path.join(__dirname, "__fixtures__");
     const app = path.join(cwd, "App.ts");
 
-    const output = babel.transformFileSync(app, {
+    const code = transform(app, {
       cwd,
       presets: ["@rnx-kit/babel-preset-metro-react-native"],
     });
 
-    if (!output || !output.code) {
+    if (!code) {
       fail("Failed to transform `App.ts`");
     }
 
-    // Format the code to make the snapshot more legible.
-    const code = prettier.format(output.code, { parser: "babel" });
     expect(code).toMatchSnapshot();
   });
 
@@ -123,7 +136,7 @@ describe("@rnx-kit/babel-preset-metro-react-native", () => {
     const cwd = path.join(__dirname, "__fixtures__");
     const app = path.join(cwd, "App.ts");
 
-    const output = babel.transformFileSync(app, {
+    const code = transform(app, {
       cwd,
       presets: [
         [
@@ -140,12 +153,10 @@ describe("@rnx-kit/babel-preset-metro-react-native", () => {
       ],
     });
 
-    if (!output || !output.code) {
+    if (!code) {
       fail("Failed to transform `App.ts`");
     }
 
-    // Format the code to make the snapshot more legible.
-    const code = prettier.format(output.code, { parser: "babel" });
     expect(code).toMatchSnapshot();
   });
 
@@ -169,17 +180,39 @@ describe("@rnx-kit/babel-preset-metro-react-native", () => {
       ],
     });
 
-    const output = babel.transformFileSync(app, {
+    const code = transform(app, {
       cwd,
       presets: [customPreset],
     });
 
-    if (!output || !output.code) {
+    if (!code) {
       fail("Failed to transform `App.ts`");
     }
 
-    // Format the code to make the snapshot more legible.
-    const code = prettier.format(output.code, { parser: "babel" });
+    expect(code).toMatchSnapshot();
+  });
+
+  test("passes `loose: true` to `@babel/plugin-transform-classes`", () => {
+    const cwd = path.join(__dirname, "__fixtures__");
+    const app = path.join(cwd, "Class.ts");
+
+    const code = transform(app, {
+      cwd,
+      presets: [
+        [
+          "@rnx-kit/babel-preset-metro-react-native",
+          {
+            disableImportExportTransform: true,
+            looseClassTransform: true,
+          },
+        ],
+      ],
+    });
+
+    if (!code) {
+      fail("Failed to transform `Class.ts`");
+    }
+
     expect(code).toMatchSnapshot();
   });
 });

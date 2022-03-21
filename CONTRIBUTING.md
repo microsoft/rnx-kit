@@ -109,11 +109,12 @@ have introduced a small script to easily allow for new packages generation.
 Simply run
 
 ```sh
-yarn new-package newPackageName
+yarn new-package --name TEST
 ```
 
 To generate a sample project for you to use; this is based on
-`packages/template`.
+`packages/template`. You can pass the extra flag `--experimental` to send the
+package in the `incubator` folder - files will be tweaked as necessary.
 
 ## Change Logs
 

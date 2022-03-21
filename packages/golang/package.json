@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/golang",
-  "version": "0.1.9",
+  "version": "0.2.0",
   "description": "Integrate Go into your monorepo and create native apps that accelerate development and CI builds",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/golang#readme",
   "license": "MIT",
@@ -29,7 +29,6 @@
     "workspace-tools": "^0.18.2"
   },
   "devDependencies": {
-    "@rnx-kit/eslint-config": "^0.0.1",
     "@types/node": "^16.0.0",
     "eslint": "^8.0.0",
     "prettier": "^2.0.0",
@@ -37,5 +36,25 @@
   },
   "eslintConfig": {
     "extends": "@rnx-kit/eslint-config"
+  },
+  "go-release": {
+    "version": "1.18",
+    "hashAlgorithm": "sha256",
+    "checksums": {
+      "darwin": {
+        "arm64": "9cab6123af9ffade905525d79fc9ee76651e716c85f1f215872b5f2976782480",
+        "x64": "70bb4a066997535e346c8bfa3e0dfe250d61100b17ccc5676274642447834969"
+      },
+      "linux": {
+        "arm64": "7ac7b396a691e588c5fb57687759e6c4db84a2a3bbebb0765f4b38e5b1c5b00e",
+        "x32": "1c04cf4440b323a66328e0df95d409f955b9b475e58eae235fdd3d1f1cf02f4f",
+        "x64": "e85278e98f57cdb150fe8409e6e5df5343ecb13cebf03a5d5ff12bd55a80264f"
+      },
+      "win32": {
+        "arm64": "1c454eb60c64d481965a165c623ff1ed6cf32d68c6b31f36069c8768d908f093",
+        "x32": "e23fd2a0509690fe7e63b2b1bcd4c39ed57b46ccde76f35dc0d16ca7fdbc5aaa",
+        "x64": "65c5c0c709a7ca1b357091b10b795b439d8b50e579d3893edab4c7e9b384f435"
+      }
+    }
   }
 }

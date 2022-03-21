@@ -1,5 +1,24 @@
 # Change Log - @rnx-kit/scripts
 
+## 1.1.1
+
+### Patch Changes
+
+- Updated dependencies [56fc3eb]
+  - @rnx-kit/golang@0.2.0
+
+## 1.1.0
+
+### Minor Changes
+
+- 648ce3c: remove draft- extra logic
+
+## 1.0.1
+
+### Patch Changes
+
+- f9c6049: add possibility to filter out packages that have folder name starting with draft-
+
 ## 1.0.0
 
 Tue, 30 Nov 2021 17:24:14 GMT

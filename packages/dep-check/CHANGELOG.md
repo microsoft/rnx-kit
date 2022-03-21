@@ -1,5 +1,25 @@
 # Change Log - @rnx-kit/dep-check
 
+## 1.12.7
+
+### Patch Changes
+
+- 2169c8f: Add more descriptive error message when validating manifest
+
+## 1.12.6
+
+### Patch Changes
+
+- a4988f1: Explicitly declare support for Node 12+
+- 89af18f: Fix dev version being set regardless of whether a package was configured when running in `--vigilant` mode
+
+## 1.12.5
+
+### Patch Changes
+
+- 3b43647: Keep version ranges defined in `peerDependencies` if they are a superset
+- 6bddfc6: Fix dev version not being set correctly in `--vigilant` mode
+
 ## 1.12.4
 
 ### Patch Changes

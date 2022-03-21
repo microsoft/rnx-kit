@@ -29,7 +29,8 @@ export type CheckConfig = {
 export type CheckOptions = Options & {
   uncheckedReturnCode?: number;
   config?: number | CheckConfig;
-  versions?: string;
+  supportedVersions?: string;
+  targetVersion?: string;
 };
 
 export type VigilantOptions = Options & {

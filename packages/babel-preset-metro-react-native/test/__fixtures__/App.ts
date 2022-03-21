@@ -22,3 +22,5 @@ function takeDirection(direction: Direction): string {
 }
 
 console.log(takeDirection(Direction.Up));
+
+export { takeDirection };

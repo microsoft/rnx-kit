@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/esbuild-plugin-import-path-remapper",
-  "version": "1.1.9",
+  "version": "1.2.0",
   "description": "Esbuild plugin for remapping 'lib/' imports to 'src/'",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/esbuild-plugin-import-path-remapper#readme",
   "license": "MIT",
@@ -22,8 +22,8 @@
   },
   "devDependencies": {
     "@rnx-kit/scripts": "*",
-    "prettier": "^2.0.0",
-    "esbuild": "^0.14.10"
+    "esbuild": "^0.14.10",
+    "prettier": "^2.0.0"
   },
   "depcheck": {
     "ignorePatterns": [

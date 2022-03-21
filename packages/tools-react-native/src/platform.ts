@@ -1,3 +1,4 @@
+import { findPackageDependencyDir } from "@rnx-kit/tools-node";
 import * as fs from "fs";
 import * as path from "path";
 
@@ -62,15 +63,19 @@ export function getAvailablePlatformsUncached(
       : getAvailablePlatformsUncached(path.dirname(startDir), platformMap);
   }
 
-  const resolveOptions = { paths: [startDir] };
-  const { dependencies, devDependencies } = require(packageJson);
+  const options = { startDir };
+  const { dependencies, devDependencies } = JSON.parse(
+    fs.readFileSync(packageJson, { encoding: "utf-8" })
+  );
+
   [
     ...(dependencies ? Object.keys(dependencies) : []),
     ...(devDependencies ? Object.keys(devDependencies) : []),
   ].forEach((pkgName) => {
-    const pkgPath = path.dirname(
-      require.resolve(`${pkgName}/package.json`, resolveOptions)
-    );
+    const pkgPath = findPackageDependencyDir(pkgName, options);
+    if (!pkgPath) {
+      return;
+    }
 
     const configPath = path.join(pkgPath, "react-native.config.js");
     if (fs.existsSync(configPath)) {

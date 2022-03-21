@@ -6,14 +6,14 @@ describe("metro-serializer-esbuild", () => {
 
   const consoleWarnSpy = jest.spyOn(global.console, "warn");
 
-  async function bundle(entryFile: string): Promise<string> {
+  async function bundle(entryFile: string, dev = true): Promise<string> {
     let result: string | undefined = undefined;
     await buildBundle(
       {
         entryFile,
         bundleEncoding: "utf8",
         bundleOutput: ".test-output.jsbundle",
-        dev: true,
+        dev,
         platform: "native",
         resetCache: false,
         resetGlobalCache: false,
@@ -195,6 +195,34 @@ describe("metro-serializer-esbuild", () => {
         // test/__fixtures__/sideEffectsArray.ts
         init_lib();
 
+        // ../../node_modules/@fluentui/utilities/lib/index.js
+        init_lib();
+
+        // ../../node_modules/@fluentui/set-version/lib/index.js
+        init_lib();
+
+        // ../../node_modules/@fluentui/set-version/lib/setVersion.js
+        init_lib();
+        var packagesCache = {};
+        var _win = void 0;
+        try {
+          _win = window;
+        } catch (e) {
+        }
+        function setVersion(packageName, packageVersion) {
+          if (typeof _win !== \\"undefined\\") {
+            var packages = _win.__packages__ = _win.__packages__ || {};
+            if (!packages[packageName] || !packagesCache[packageName]) {
+              packagesCache[packageName] = packageVersion;
+              var versions = packages[packageName] = packages[packageName] || [];
+              versions.push(packageVersion);
+            }
+          }
+        }
+
+        // ../../node_modules/@fluentui/set-version/lib/index.js
+        setVersion(\\"@fluentui/set-version\\", \\"6.0.0\\");
+
         // ../../node_modules/@fluentui/utilities/lib/warn/warn.js
         init_lib();
         var _warningCallback = void 0;
@@ -206,9 +234,24 @@ describe("metro-serializer-esbuild", () => {
           }
         }
 
+        // ../../node_modules/@fluentui/utilities/lib/warn.js
+        init_lib();
+
+        // ../../node_modules/@fluentui/utilities/lib/version.js
+        init_lib();
+        setVersion(\\"@fluentui/utilities\\", \\"8.8.1\\");
+
         // test/__fixtures__/sideEffectsArray.ts
         warn(\\"this should _not_ be removed\\");
       })();
+      "
+    `);
+  });
+
+  test('strips out `"use strict"`', async () => {
+    const result = await bundle("test/__fixtures__/direct.ts", false);
+    expect(result).toMatchInlineSnapshot(`
+      "(function(){var e=new Function(\\"return this;\\")();})();
       "
     `);
   });

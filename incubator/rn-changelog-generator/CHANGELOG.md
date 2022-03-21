@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/rn-changelog-generator
 
+## 0.3.1
+
+### Patch Changes
+
+- 648ce3c: moving into incubator and consequent work
+
 ## 0.3.0
 
 ### Minor Changes

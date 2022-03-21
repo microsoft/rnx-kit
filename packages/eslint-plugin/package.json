@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/eslint-plugin",
-  "version": "0.2.10",
+  "version": "0.2.11",
   "description": "A set of ESLint rules for React developers",
   "keywords": [
     "eslint",
@@ -37,6 +37,7 @@
     "eslint": ">=6.0.0"
   },
   "devDependencies": {
+    "@rnx-kit/scripts": "*",
     "@types/eslint": "^7.28.0",
     "@types/jest": "^27.0.0",
     "eslint": "^8.0.0"
