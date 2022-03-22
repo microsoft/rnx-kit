@@ -62,7 +62,7 @@ const profile: Profile = {
   },
   "lazy-index": {
     name: "@rnx-kit/react-native-lazy-index",
-    version: "^2.1.1",
+    version: "^2.1.7",
   },
   metro: {
     name: "metro",
