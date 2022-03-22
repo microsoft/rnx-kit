@@ -15,9 +15,8 @@ const FeatureList: FeatureItem[] = [
     image: "/img/code-pull-request.svg",
     description: [
       <p key="dev1">
-        Every tool is <strong>purpose-built</strong> to make your React Native
-        developer experience better. Simple, efficient tools make all the
-        difference.
+        Every tool is <strong>purpose-built</strong> to make your experience
+        better. Simple, efficient tools make all the difference.
       </p>,
     ],
   },

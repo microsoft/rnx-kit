@@ -3,7 +3,7 @@
  * and scoped locally.
  */
 
-.heroBanner {
+.headerBanner {
   padding: 4rem 0;
   text-align: center;
   position: relative;
@@ -11,13 +11,22 @@
 }
 
 @media screen and (max-width: 966px) {
-  .heroBanner {
+  .headerBanner {
     padding: 2rem;
   }
 }
 
-.buttons {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.headerTitle {
+  color: var(--ifm-font-color-base);
+  font-weight: var(--ifm-font-weight-bold);
+  font-size: 6rem;
+}
+
+.headerTagline {
+  color: var(--ifm-font-color-base);
+  font-size: 1.8rem;
+}
+
+.headerButton {
+  margin-top: 0.5rem;
 }

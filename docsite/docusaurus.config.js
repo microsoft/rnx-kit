@@ -13,17 +13,14 @@ const mainReadmeUrl = githubUrl + "/#react-native-developer-tools";
 const mainBranchUrl = githubUrl + "/tree/main";
 const docsiteUrl = mainBranchUrl + "/docsite";
 
-const title = "React Native Developer Tools";
-
 /**
  * @typedef {ReturnType<import("@cmfcmf/docusaurus-search-local/lib/server").validateOptions>} SearchPluginOptions
  */
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title,
-  tagline:
-    "Helping developers build, deliver, and maintain React Native apps and libraries",
+  title: "React Native Engineering",
+  tagline: "Modern, scalable tools. Exceptional developer experience.",
   url: "https://" + organizationName + ".github.io",
   baseUrl: "/" + projectName + "/",
   onBrokenLinks: "throw",
@@ -115,6 +112,18 @@ const config = {
             docId: "architecture/overview",
             position: "right",
             label: "Architecture",
+          },
+          {
+            type: "doc",
+            docId: "resources",
+            position: "right",
+            label: "Resources",
+          },
+          {
+            type: "doc",
+            docId: "contributing",
+            position: "right",
+            label: "Contributing",
           },
           { to: "/blog", label: "Blog", position: "right" },
           {

@@ -36,10 +36,10 @@ const sidebars = {
     },
   ],
 
-  packagesSidebar: [
+  toolsSidebar: [
     {
       type: "category",
-      label: "@rnx-kit Packages",
+      label: "Tools",
       items: [
         "packages/babel-plugin-import-path-remapper",
         "packages/babel-preset-metro-react-native",
