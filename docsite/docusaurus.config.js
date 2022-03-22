@@ -17,9 +17,12 @@ const docsiteUrl = mainBranchUrl + "/docsite";
  * @typedef {ReturnType<import("@cmfcmf/docusaurus-search-local/lib/server").validateOptions>} SearchPluginOptions
  */
 
+const title1 = "React Native";
+const title2 = "Engineering";
+
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: "React Native Engineering",
+  title: title1 + " " + title2,
   tagline: "Modern, scalable tools. Exceptional developer experience.",
   url: "https://" + organizationName + ".github.io",
   baseUrl: "/" + projectName + "/",
@@ -28,6 +31,11 @@ const config = {
   favicon: "img/favicon.ico",
   organizationName,
   projectName,
+
+  customFields: {
+    title1,
+    title2,
+  },
 
   plugins: [
     [
@@ -136,9 +144,9 @@ const config = {
         ],
       },
       footer: {
-        style: "dark",
         logo: {
-          src: "img/Microsoft-Open-Source-logo.svg",
+          src: "img/msoss-light.png",
+          srcDark: "img/msoss-dark.png",
           alt: "Microsoft Open Source logo",
           href: "https://opensource.microsoft.com",
         },
