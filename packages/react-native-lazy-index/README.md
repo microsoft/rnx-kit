@@ -1,7 +1,7 @@
-# react-native-lazy-index
+# @rnx-kit/react-native-lazy-index
 
 [![Build](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml/badge.svg)](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml)
-[![npm version](https://img.shields.io/npm/v/react-native-lazy-index)](https://www.npmjs.com/package/react-native-lazy-index)
+[![npm version](https://img.shields.io/npm/v/@rnx-kit/react-native-lazy-index)](https://www.npmjs.com/package/@rnx-kit/react-native-lazy-index)
 
 `react-native-lazy-index` is a RAM bundle friendly, bundle-time generated
 `index.js`. Improve your app startup time by only loading features you'll use on
@@ -16,7 +16,7 @@ If you use [Haul](https://github.com/callstack/haul), also take a look at their
 ## Installation
 
 ```sh
-npm install --save react-native-lazy-index
+npm install --save @rnx-kit/react-native-lazy-index
 ```
 
 ## Usage
@@ -48,9 +48,9 @@ that should be lazy loaded. In the example below, we've listed four packages:
      "@awesome-app/another-feature": "*",
      "@awesome-app/yet-another-feature": "*",
      "@awesome-app/final-feature": "*",
+     "@rnx-kit/react-native-lazy-index": "^2.0.0",
      "react": "16.13.1",
-     "react-native": "0.63.4",
-     "react-native-lazy-index": "^2.0.0"
+     "react-native": "0.63.4"
    },
 +  "experiences": [
 +    "@awesome-app/some-feature",
@@ -59,6 +59,12 @@ that should be lazy loaded. In the example below, we've listed four packages:
 +    "@awesome-app/final-feature"
 +  ]
  }
+```
+
+Finally, replace the content of your `index.js` with:
+
+```js
+import "@rnx-kit/react-native-lazy-index";
 ```
 
 That's it!
