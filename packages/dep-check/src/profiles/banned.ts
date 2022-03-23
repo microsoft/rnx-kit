@@ -20,6 +20,12 @@ const bannedPackages: ExcludedPackage[] = [
       "This package is unmaintained and causes significant degradation in app start up time.",
   },
   {
+    name: "react-native-lazy-index",
+    version: "*",
+    reason:
+      "This package was renamed to '@rnx-kit/react-native-lazy-index'. The new package will be recommended in 0.66.",
+  },
+  {
     name: "react-native-netinfo",
     version: "*",
     reason:
