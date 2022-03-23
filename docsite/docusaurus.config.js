@@ -18,7 +18,7 @@ const docsiteUrl = mainBranchUrl + "/docsite";
  */
 
 const title1 = "React Native";
-const title2 = "Engineering";
+const title2 = "Developer Tools";
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {

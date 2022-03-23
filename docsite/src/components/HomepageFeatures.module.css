@@ -1,7 +1,7 @@
 .features {
   display: flex;
   align-items: center;
-  padding: 2rem 0;
+  padding: 3rem 0;
   width: 100%;
 }
 
@@ -21,6 +21,10 @@ html[data-theme="dark"] .featureSvg {
 }
 
 @media screen and (max-width: 996px) {
+  .features {
+    padding: 1rem 0;
+  }
+
   .featureSvg {
     height: 70px;
   }
