@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/dep-check
 
+## 1.12.8
+
+### Patch Changes
+
+- 4a2bd9a: react-native-lazy-index was renamed to @rnx-kit/react-native-lazy-index
+
 ## 1.12.7
 
 ### Patch Changes
