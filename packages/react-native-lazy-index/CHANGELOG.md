@@ -1,5 +1,11 @@
 # @rnx-kit/react-native-lazy-index
 
+## 2.1.7
+
+### Patch Changes
+
+- 4a2bd9a: Moved `react-native-lazy-index` into its new home
+
 ## [2.1.6](https://github.com/microsoft/react-native-lazy-index/compare/2.1.5...2.1.6) (2022-03-15)
 
 ### Bug Fixes
