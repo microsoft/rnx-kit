@@ -28,9 +28,18 @@ function HomepageHeader() {
               "button button--primary button--lg",
               styles.headerButton
             )}
-            to="/docs/tutorial-basics/intro"
+            to="/docs/guides/getting-started"
           >
             Get Started
+          </Link>
+          <Link
+            className={clsx(
+              "button button--link button--lg",
+              styles.headerLink
+            )}
+            to="/docs/introduction"
+          >
+            Learn the Basics
           </Link>
         </div>
       </div>

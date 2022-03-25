@@ -111,7 +111,7 @@ const config = {
           },
           {
             type: "doc",
-            docId: "packages/babel-plugin-import-path-remapper",
+            docId: "packages/overview",
             position: "right",
             label: "Tools",
           },

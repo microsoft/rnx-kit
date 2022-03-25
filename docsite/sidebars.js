@@ -17,7 +17,16 @@ const sidebars = {
     {
       type: "category",
       label: "The Basics",
-      items: ["introduction"],
+      items: ["introduction", "dependencies", "type-safety"],
+    },
+    {
+      type: "category",
+      label: "Guides",
+      items: [
+        "guides/getting-started",
+        "guides/dependency-management",
+        "guides/bundling",
+      ],
     },
     {
       type: "category",
@@ -41,6 +50,7 @@ const sidebars = {
       type: "category",
       label: "Tools",
       items: [
+        "packages/overview",
         "packages/babel-plugin-import-path-remapper",
         "packages/babel-preset-metro-react-native",
         "packages/bundle-diff",

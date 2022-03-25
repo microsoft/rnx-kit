@@ -22,8 +22,19 @@
   font-size: 26px;
 }
 
-.headerButton {
+.headerButton,
+.headerLink {
   margin-top: 0.5rem;
+}
+
+.headerLink:after {
+  content: "›";
+  font-size: 20px;
+  margin-left: 4px;
+}
+
+.headerLink:hover {
+  color: var(--ifm-color-primary-lighter);
 }
 
 @media screen and (max-width: 996px) {
