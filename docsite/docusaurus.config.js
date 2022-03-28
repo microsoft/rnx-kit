@@ -55,7 +55,7 @@ const config = {
         indexDocSidebarParentCategories: 0,
 
         // whether to index blog pages
-        indexBlog: true,
+        indexBlog: false,
 
         // whether to index static pages
         // /404.html is never indexed
@@ -80,10 +80,6 @@ const config = {
         docs: {
           breadcrumbs: false,
           sidebarPath: require.resolve("./sidebars.js"),
-          editUrl: docsiteUrl + "/",
-        },
-        blog: {
-          showReadingTime: true,
           editUrl: docsiteUrl + "/",
         },
         theme: {
@@ -133,7 +129,6 @@ const config = {
             position: "right",
             label: "Contributing",
           },
-          { to: "/blog", label: "Blog", position: "right" },
           {
             src: "img/github-logo.svg",
             href: mainReadmeUrl,
