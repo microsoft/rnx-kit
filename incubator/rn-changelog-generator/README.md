@@ -1,4 +1,4 @@
-# @rnx-kit/rn-changelog-generator
+# React Native core changelog generator
 
 [![Build](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml/badge.svg)](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml)
 [![npm version](https://img.shields.io/npm/v/@rnx-kit/rn-changelog-generator)](https://www.npmjs.com/package/@rnx-kit/rn-changelog-generator)
