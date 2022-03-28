@@ -1,6 +1,6 @@
 # React Native Developer Tools
 
-[![Open in Visual Studio Code](https://open.vscode.dev/badges/open-in-vscode.svg)](https://open.vscode.dev/microsoft/rnx-kit)
+[![Open in Visual Studio Code](https://img.shields.io/static/v1?logo=visualstudiocode&label=&message=Open%20in%20Visual%20Studio%20Code&color=007acc&labelColor=444444&logoColor=007acc)](https://vscode.dev/github/microsoft/rnx-kit)
 [![Build](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml/badge.svg)](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml)
 
 Tools which help developers build, deliver, and maintain React Native apps and
@@ -134,6 +134,7 @@ individually, as features are added and fixes are made.
 | [@rnx-kit/metro-serializer-esbuild](https://github.com/microsoft/rnx-kit/tree/main/packages/metro-serializer-esbuild)                                   | Experimental esbuild serializer for Metro                                                        |
 | [@rnx-kit/metro-service](https://github.com/microsoft/rnx-kit/tree/main/packages/metro-service)                                                         | Metro service for bundling and bundle-serving                                                    |
 | [@rnx-kit/react-native-auth](https://github.com/microsoft/rnx-kit/tree/main/packages/react-native-auth)                                                 | @rnx-kit/react-native-auth provides a cross-app uniform API for user authentication              |
+| [@rnx-kit/react-native-lazy-index](https://github.com/microsoft/rnx-kit/tree/main/packages/react-native-lazy-index)                                     | RAM bundle friendly index.js with on-demand loaded modules                                       |
 | [@rnx-kit/react-native-test-app-msal](https://github.com/microsoft/rnx-kit/tree/main/packages/react-native-test-app-msal)                               | Microsoft Authentication Library (MSAL) module for react-native-test-app                         |
 | [@rnx-kit/third-party-notices](https://github.com/microsoft/rnx-kit/tree/main/packages/third-party-notices)                                             | Library and tool to build a third party notices file based on a js bundle's source map           |
 | [@rnx-kit/tools-language](https://github.com/microsoft/rnx-kit/tree/main/packages/tools-language)                                                       | A collection of supplemental JavaScript functions and types                                      |
