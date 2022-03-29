@@ -72,9 +72,9 @@ const profile_0_67: Profile = {
 ## Configuration
 
 A package tells the dependency manager about itself using configuration. It
-answers questions, like is the package an `app` or a `library`? Which version(s)
-of React Native is the package targeting? What capabilities does the package
-require?
+answers questions such as: Is the package an `app` or a `library`? Which
+version(s) of React Native is the package targeting? What capabilities does the
+package require?
 
 ```json title=package.json
 {
