@@ -37,10 +37,18 @@ const profile: Profile = {
     version: "^0.68.0-0",
     capabilities: ["core"],
   },
+  animation: {
+    name: "react-native-reanimated",
+    version: "^2.5.0",
+  },
   "babel-preset-react-native": {
     name: "metro-react-native-babel-preset",
     version: "^0.67.0",
     devOnly: true,
+  },
+  gestures: {
+    name: "react-native-gesture-handler",
+    version: "^2.3.2",
   },
   hermes: {
     name: "hermes-engine",
@@ -78,7 +86,7 @@ const profile: Profile = {
   },
   screens: {
     name: "react-native-screens",
-    version: "^3.12.0",
+    version: "^3.13.1",
   },
 };
 
