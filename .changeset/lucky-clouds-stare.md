@@ -2,4 +2,4 @@
 "@rnx-kit/dep-check": patch
 ---
 
-reanimated 2.4.1 works with react-native 0.68
+reanimated 2.5.0 supports react-native 0.68

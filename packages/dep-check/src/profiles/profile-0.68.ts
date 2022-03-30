@@ -39,7 +39,7 @@ const profile: Profile = {
   },
   animation: {
     name: "react-native-reanimated",
-    version: "^2.4.1",
+    version: "^2.5.0",
   },
   "babel-preset-react-native": {
     name: "metro-react-native-babel-preset",
@@ -48,7 +48,7 @@ const profile: Profile = {
   },
   gestures: {
     name: "react-native-gesture-handler",
-    version: "^2.3.0",
+    version: "^2.3.2",
   },
   hermes: {
     name: "hermes-engine",
