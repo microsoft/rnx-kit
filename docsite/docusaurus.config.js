@@ -13,17 +13,17 @@ const mainReadmeUrl = githubUrl + "/#react-native-developer-tools";
 const mainBranchUrl = githubUrl + "/tree/main";
 const docsiteUrl = mainBranchUrl + "/docsite";
 
-const title = "React Native Developer Tools";
-
 /**
  * @typedef {ReturnType<import("@cmfcmf/docusaurus-search-local/lib/server").validateOptions>} SearchPluginOptions
  */
 
+const title1 = "React Native";
+const title2 = "Developer Tools";
+
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title,
-  tagline:
-    "Helping developers build, deliver, and maintain React Native apps and libraries",
+  title: title1 + " " + title2,
+  tagline: "Modern, scalable tools. Exceptional developer experience.",
   url: "https://" + organizationName + ".github.io",
   baseUrl: "/" + projectName + "/",
   onBrokenLinks: "throw",
@@ -31,6 +31,11 @@ const config = {
   favicon: "img/favicon.ico",
   organizationName,
   projectName,
+
+  customFields: {
+    title1,
+    title2,
+  },
 
   plugins: [
     [
@@ -50,7 +55,7 @@ const config = {
         indexDocSidebarParentCategories: 0,
 
         // whether to index blog pages
-        indexBlog: true,
+        indexBlog: false,
 
         // whether to index static pages
         // /404.html is never indexed
@@ -77,10 +82,6 @@ const config = {
           sidebarPath: require.resolve("./sidebars.js"),
           editUrl: docsiteUrl + "/",
         },
-        blog: {
-          showReadingTime: true,
-          editUrl: docsiteUrl + "/",
-        },
         theme: {
           customCss: require.resolve("./src/css/custom.css"),
         },
@@ -100,11 +101,34 @@ const config = {
         items: [
           {
             type: "doc",
-            docId: "docs",
+            docId: "introduction",
             position: "right",
             label: "Docs",
           },
-          { to: "/blog", label: "Blog", position: "right" },
+          {
+            type: "doc",
+            docId: "packages/overview",
+            position: "right",
+            label: "Tools",
+          },
+          {
+            type: "doc",
+            docId: "architecture/overview",
+            position: "right",
+            label: "Architecture",
+          },
+          {
+            type: "doc",
+            docId: "resources",
+            position: "right",
+            label: "Resources",
+          },
+          {
+            type: "doc",
+            docId: "contributing",
+            position: "right",
+            label: "Contributing",
+          },
           {
             src: "img/github-logo.svg",
             href: mainReadmeUrl,
@@ -115,9 +139,9 @@ const config = {
         ],
       },
       footer: {
-        style: "dark",
         logo: {
-          src: "img/Microsoft-Open-Source-logo.svg",
+          src: "img/msoss-light.png",
+          srcDark: "img/msoss-dark.png",
           alt: "Microsoft Open Source logo",
           href: "https://opensource.microsoft.com",
         },

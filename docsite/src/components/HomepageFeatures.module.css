@@ -1,12 +1,12 @@
 .features {
   display: flex;
   align-items: center;
-  padding: 2rem 0;
+  padding: 3rem 0;
   width: 100%;
 }
 
 .featureSvg {
-  height: 120px;
+  height: 100px;
   opacity: 0.85;
 }
 
@@ -18,4 +18,20 @@ html[data-theme="dark"] .featureSvg {
 .featureText h3 {
   color: var(--ifm-color-primary);
   font-size: calc(var(--ifm-h3-font-size) * 0.97);
+}
+
+@media screen and (max-width: 996px) {
+  .features {
+    padding: 1rem 0;
+  }
+
+  .featureSvg {
+    height: 70px;
+  }
+}
+
+@media screen and (max-width: 696px) {
+  .featureSvg {
+    height: 55px;
+  }
 }

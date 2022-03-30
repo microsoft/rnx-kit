@@ -1,0 +1,98 @@
+import useBaseUrl from "@docusaurus/useBaseUrl";
+
+# Type Safety
+
+## A Tale of Two Type Systems
+
+React Native is built on JavaScript, which does not have a type system. This is
+a problem, because React Native is a large, complex platform. Without a type
+system, developers can't easily reason about the source code or use static
+analysis tools to find bugs.
+
+When developers at Meta created React Native, they chose their own type system
+named [Flow](https://flow.org). Many open-source projects at Meta use Flow. It
+is part of their engineering system and culture. Flow is not used much outside
+of Meta.
+
+The JavaScript community has largely embraced
+[TypeScript](https://www.typescriptlang.org). This includes the React Native
+developer community as well. React Native applications are written in
+TypeScript. Integrations with React Native -- plugins, presets, templates, etc
+-- are also written in TypeScript.
+
+The tools in this project are written in TypeScript, too. Further, tools in this
+project which perform type-checking do so using the TypeScript language.
+
+## Platform-Specific Code
+
+React Native introduces the concept of
+[platform-specific extensions](https://reactnative.dev/docs/platform-specific-code#platform-specific-extensions)
+so that developers can write per-platform code in their applications.
+Platform-specific extensions require a specialized module resolver, capable of
+matching a module import to a file such as `<module>.ios.js` or
+`<module>.native.js`. Metro, the React Native bundler, has a resolver which
+supports this. TypeScript does not, making it impossible to properly type-check
+a specific platform, or get accurate Intellisense.
+
+We are actively working with the TypeScript team to
+[expand the resolver](https://github.com/microsoft/TypeScript/pull/48189) to
+enable this scenario.
+
+In the interim, we have a
+[drop-in replacement for `tsc` which supports React Native module resolution](/docs/packages/typescript-react-native-compiler).
+Developers can use it in lieu of direct support from TypeScript.
+
+## Module Substitution
+
+React Native is implemented on many platforms which span several NPM packages.
+`ios` and `android` implementations are in the `react-native` NPM package, which
+is maintained by Meta. `windows` is under `react-native-windows` and `macos` is
+under `react-native-macos`, both of which are maintained by Microsoft. `win32`
+is an Office-specific platform under `@office-iss/react-native-win32`.
+
+`windows`, `macos`, and `win32` are all considered to be
+[out-of-tree platforms](https://microsoft.github.io/react-native-windows/docs/metro-config-out-tree-platforms)
+because they aren't part of the core `react-native` distribution. Each platform
+package is a complete implementation of React Native, and has (or should have)
+associated TypeScript types.
+
+To avoid having "forked" references to the various NPM package names in code,
+developers are encouraged to always use `import 'react-native'`. Metro, the
+React Native bundler, substitutes 'react-native' with the target platform's
+out-of-tree NPM package. For MacOS, `import 'react-native'` becomes
+`import 'react-native-macos'`.
+
+We are working with the TypeScript team to support a similar "module substution"
+mechanism for type-checking and IntelliSense. Emitted code should preserve the
+original module import.
+
+TypeScript support is most beneficial when integrated with an editor like
+VSCode. Seeing platform-specific type-safety errors, during development, helps
+keep bugs out of the shared source tree.
+
+This feature
+[continues to be a work in progress](https://github.com/microsoft/rnx-kit/issues/1273).
+
+## Type-Safe Bundling
+
+Metro, the React Native bundler, supports TypeScript source files, but it only
+transpiles them to JavaScript. Metro does not do any type-checking.
+
+Our CLI combines Metro and TypeScript to solve this problem. Through
+configuration, you can enable type-checking while running the `rnx-bundle` and
+`rnx-start` commands. Warnings and errors from TypeScript appear on the console:
+
+```typescript title="Unused function with missing type information"
+function foo(x) {
+  return x + 2;
+}
+```
+
+<img
+  src={useBaseUrl("/img/type-safe-bundling-output.png")}
+  alt="Image showing TypeScript errors. Foo is declared but never used. Parameter x implicitly has an 'any' type."
+  width="700"
+/>
+
+The [Bundling guide](/docs/guides/bundling) shows you how to enable type-safe
+bundling.

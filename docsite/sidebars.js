@@ -16,8 +16,33 @@ const sidebars = {
   docsSidebar: [
     {
       type: "category",
-      label: "Docs",
-      items: ["docs"],
+      label: "The Basics",
+      items: ["introduction", "dependencies", "type-safety"],
+    },
+    {
+      type: "category",
+      label: "Guides",
+      items: [
+        "guides/getting-started",
+        "guides/dependency-management",
+        "guides/bundling",
+      ],
+    },
+  ],
+
+  toolsSidebar: [
+    {
+      type: "category",
+      label: "Tools",
+      items: ["packages/overview", "packages/typescript-react-native-compiler"],
+    },
+  ],
+
+  architectureSidebar: [
+    {
+      type: "category",
+      label: "Architecture",
+      items: ["architecture/overview", "architecture/dependency-management"],
     },
   ],
 };

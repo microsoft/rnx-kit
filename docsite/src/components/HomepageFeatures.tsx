@@ -15,10 +15,11 @@ const FeatureList: FeatureItem[] = [
     image: "/img/code-pull-request.svg",
     description: [
       <p key="dev1">
-        Every tool is <strong>purpose-built</strong> to make your React Native
-        developer experience better. Simple, efficient tools make all the
-        difference.
+        <strong>Purpose-built</strong> for React Native engineers. Focused on
+        developer experience. Designed to fit into <em>any</em> project, no
+        matter how large or complex.
       </p>,
+      <p key="dev2">Great tools make all the difference.</p>,
     ],
   },
   {
@@ -26,9 +27,9 @@ const FeatureList: FeatureItem[] = [
     image: "/img/user-gear.svg",
     description: [
       <p key="com1">
-        Created as a <strong>GitHub-first</strong> project for the React Native
-        community. Integrated with tools you already use: Metro, TypeScript,
-        Jest, and more.
+        Created as a <strong>GitHub-first</strong> repository for the React
+        Native community. Integrated with tools you already use: Metro,
+        TypeScript, Jest, and more.
       </p>,
       <p key="com2">
         Join in! Your contributions are <em>always</em> welcome.

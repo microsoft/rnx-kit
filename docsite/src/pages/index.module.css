@@ -3,21 +3,56 @@
  * and scoped locally.
  */
 
-.heroBanner {
-  padding: 4rem 0;
+.headerBanner {
+  padding: 3rem 0;
   text-align: center;
   position: relative;
   overflow: hidden;
 }
 
-@media screen and (max-width: 966px) {
-  .heroBanner {
-    padding: 2rem;
+.headerTitle {
+  color: var(--ifm-font-color-base);
+  font-weight: 800;
+  font-size: 100px;
+  line-height: 1;
+}
+
+.headerTagline {
+  color: var(--ifm-font-color-base);
+  font-size: 26px;
+}
+
+.headerButton,
+.headerLink {
+  margin-top: 0.5rem;
+}
+
+.headerLink:after {
+  content: "›";
+  font-size: 20px;
+  margin-left: 4px;
+}
+
+.headerLink:hover {
+  color: var(--ifm-color-primary-lighter);
+}
+
+@media screen and (max-width: 996px) {
+  .headerTitle {
+    font-size: 70px;
+  }
+
+  .headerTagline {
+    font-size: 22px;
   }
 }
 
-.buttons {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+@media screen and (max-width: 696px) {
+  .headerTitle {
+    font-size: 40px;
+  }
+
+  .headerTagline {
+    font-size: 16px;
+  }
 }

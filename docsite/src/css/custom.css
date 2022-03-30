@@ -11,6 +11,7 @@
   --background-surface-color-rgb: 255, 255, 255;
   --color-primary-rgb: 14, 83, 189;
   --font-color-base-rgb: 28, 30, 33;
+  --footer-background-color-rgb: 235, 235, 235;
   --hover-overlay-rgb: 0, 0, 0;
   --hover-overlay-alpha: 0.15;
   --github-mark-bg: url("../../static/img/github-logo.svg");
@@ -43,6 +44,8 @@
 
   --ifm-navbar-item-padding-vertical: 4px;
   --ifm-navbar-item-padding-horizontal: 18px;
+
+  --ifm-footer-background-color: rgb(var(--footer-background-color-rgb));
 
   --ifm-transition-fast: 100ms;
   --ifm-transition-slow: 300ms;
@@ -101,6 +104,7 @@ html[data-theme="dark"] {
   --background-surface-color-rgb: 36, 37, 38;
   --color-primary-rgb: 14, 147, 253;
   --font-color-base-rgb: 245, 246, 247;
+  --footer-background-color-rgb: 20, 21, 22;
   --hover-overlay-rgb: 255, 255, 255;
 
   /* Infima vars */
@@ -119,6 +123,8 @@ html[data-theme="dark"] {
     var(--hover-overlay-rgb),
     var(--hover-overlay-alpha)
   );
+
+  --ifm-footer-background-color: rgb(var(--footer-background-color-rgb));
 }
 
 body[data-theme="dark"] {
