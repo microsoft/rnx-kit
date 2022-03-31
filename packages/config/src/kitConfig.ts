@@ -79,26 +79,6 @@ export type KitConfig = {
   reactNativeDevVersion?: string;
 
   /**
-   * Whether this kit produces a platform bundle. If true then all defaults will be used. Otherwise the object allows more detailed
-   * specification of platform bundle functionality.
-   */
-  platformBundle?:
-    | boolean
-    | {
-        /**
-         * relative path for location within the package to find the built platform bundles. Defaults to './dist'
-         * @default "dist"
-         */
-        distPath?: string;
-
-        /**
-         * prefix for the bundle name. Defaults to 'index'
-         * @default "index"
-         */
-        bundlePrefix?: string;
-      };
-
-  /**
    * Specifies how the kit is bundled. When not defined, the kit cannot be bundled.
    */
   bundle?: BundleConfig;
@@ -108,14 +88,6 @@ export type KitConfig = {
    * the kit will be served using default values.
    */
   server?: ServerConfig;
-
-  /**
-   * Retrieve the dependencies for the kit, either via:
-   * - string: A file target to open via require
-   * - DependencyVersions: An explicit list of versions to treat as part of the kit
-   * - GetDependencyVerions: A function which will retrieve the dependency versions on demand
-   */
-  dependencies?: string | DependencyVersions | GetDependencyVersions;
 
   /**
    * Capabilities used by the kit.
