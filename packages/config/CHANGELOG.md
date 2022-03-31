@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/config
 
+## 0.4.23
+
+### Patch Changes
+
+- e81d50d: Update READMEs. Remove dead configuration types.
+
 ## 0.4.22
 
 ### Patch Changes
