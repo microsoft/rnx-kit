@@ -1,5 +1,13 @@
 # Change Log - @rnx-kit/dep-check
 
+## 1.12.9
+
+### Patch Changes
+
+- b09c0bb: react-native-gestures 2.3.0 works with react-native 0.68
+- b09c0bb: reanimated 2.5.0 supports react-native 0.68
+- b09c0bb: react-native-screens 3.13.1 now supports Fabric
+
 ## 1.12.8
 
 ### Patch Changes
