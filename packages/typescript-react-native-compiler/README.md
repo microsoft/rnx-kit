@@ -18,13 +18,21 @@ replacement for `tsc` with a few additional command-line parameters.
 ## Example Commands
 
 ```bash
-$ yarn run rn-tsc --platform ios --platformExtensions mobile,native
+yarn run rn-tsc --platform ios --platformExtensions mobile,native
+```
 
-$ yarn run rn-tsc --platform macos --platformExtensions native --disableReactNativePackageSubstitution
+```bash
+yarn run rn-tsc --platform macos --platformExtensions native --disableReactNativePackageSubstitution
+```
 
-// Run a normal build without using the custom module resolver
-$ yarn run rn-tsc
+Run a normal build without using the custom module resolver:
 
-// Get a full listing of all command-line parameters
-$ yarn run rn-tsc --help
+```bash
+yarn run rn-tsc
+```
+
+Get a full listing of all command-line parameters:
+
+```bash
+yarn run rn-tsc --help
 ```

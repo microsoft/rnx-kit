@@ -21,11 +21,15 @@ and optional command-line overrides.
 ### Example Commands
 
 ```bash
-$ yarn react-native rnx-bundle
+yarn react-native rnx-bundle
+```
 
-$ yarn react-native rnx-bundle --platform ios --dev false --minify true
+```bash
+yarn react-native rnx-bundle --platform ios --dev false --minify true
+```
 
-$ yarn react-native rnx-bundle --bundle-prefix test-app --experimental-tree-shake true
+```bash
+yarn react-native rnx-bundle --bundle-prefix test-app --experimental-tree-shake true
 ```
 
 ### Example Configuration
@@ -89,9 +93,11 @@ and optional command-line overrides.
 ### Example Commands
 
 ```bash
-$ yarn react-native rnx-start
+yarn react-native rnx-start
+```
 
-$ yarn react-native rnx-start --host localhost --port 8812
+```bash
+yarn react-native rnx-start --host localhost --port 8812
 ```
 
 ### Example Configuration
