@@ -13,14 +13,52 @@ Command-line interface for working with `kit` packages in your repo.
 
 ## Bundle a Kit
 
-Bundle a `kit` package using [Metro](https://facebook.github.io/metro). The
+Bundle an application using [Metro](https://facebook.github.io/metro). The
 bundling process is controlled by
-[kit configuration](https://github.com/microsoft/rnx-kit/tree/main/packages/config)
+[configuration](https://github.com/microsoft/rnx-kit/tree/main/packages/config)
 and optional command-line overrides.
 
+### Example Commands
+
+```bash
+$ yarn react-native rnx-bundle
+
+$ yarn react-native rnx-bundle --platform ios --dev false --minify true
+
+$ yarn react-native rnx-bundle --bundle-prefix test-app --experimental-tree-shake true
 ```
-$ yarn react-native rnx-bundle [options]
+
+### Example Configuration
+
+```json
+{
+  "rnx-kit": {
+    "bundle": {
+      "entryPath": "src/index.ts",
+      "distPath": "dist",
+      "assetsPath": "dist",
+      "bundlePrefix": "main",
+      "detectCyclicDependencies": true,
+      "detectDuplicateDependencies": {
+        "ignoredModules": ["react-is"]
+      },
+      "typescriptValidation": true,
+      "experimental_treeShake": true,
+      "targets": ["ios", "android", "windows", "macos"],
+      "platforms": {
+        "android": {
+          "assetsPath": "dist/reså"
+        },
+        "macos": {
+          "typescriptValidation": false
+        }
+      }
+    }
+  }
+}
 ```
+
+### Command-Line Overrides
 
 | Override                                                                           | Description                                                                                                                                                         |
 | ---------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -43,14 +81,39 @@ $ yarn react-native rnx-bundle [options]
 
 ## Start a Bundle Server
 
-Start a bundle server for a `kit` package using
+Start a bundle server for an application using
 [Metro](https://facebook.github.io/metro). The server is controlled by
-[kit configuration](https://github.com/microsoft/rnx-kit/tree/main/packages/config)
+[configuration](https://github.com/microsoft/rnx-kit/tree/main/packages/config)
 and optional command-line overrides.
 
+### Example Commands
+
+```bash
+$ yarn react-native rnx-start
+
+$ yarn react-native rnx-start --host localhost --port 8812
 ```
-$ yarn react-native rnx-start [options]
+
+### Example Configuration
+
+```json
+{
+  "rnx-kit": {
+    "server": {
+      "projectRoot": "src",
+      "detectCyclicDependencies": true,
+      "detectDuplicateDependencies": {
+        "ignoredModules": ["react-is"],
+        "throwOnError": false
+      },
+      "typescriptValidation": true,
+      "experimental_treeShake": true
+    }
+  }
+}
 ```
+
+### Command-Line Overrides
 
 | Override                            | Description                                                                                                                                                                      |
 | ----------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
