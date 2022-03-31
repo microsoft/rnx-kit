@@ -1,5 +1,5 @@
 {
-  "name": "docsite",
+  "name": "@rnx-kit/docsite",
   "version": "0.0.1",
   "private": true,
   "scripts": {

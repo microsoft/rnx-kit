@@ -1,4 +1,4 @@
-# docsite
+# @rnx-kit/docsite
 
 ## 0.0.1
 
