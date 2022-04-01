@@ -6,7 +6,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Set up Node 14
-        uses: actions/setup-node@v3.0.0
+        uses: actions/setup-node@v3.1.0
         with:
           node-version: 14
       - name: Checkout
@@ -57,7 +57,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - name: Set up Node ${{ matrix.node-version }}
-        uses: actions/setup-node@v3.0.0
+        uses: actions/setup-node@v3.1.0
         with:
           node-version: ${{ matrix.node-version }}
       - uses: actions/setup-go@v2
@@ -100,7 +100,7 @@ jobs:
           distribution: temurin
           java-version: 11
       - name: Set up Node 14
-        uses: actions/setup-node@v3.0.0
+        uses: actions/setup-node@v3.1.0
         with:
           node-version: 14
       - name: Checkout
@@ -125,7 +125,7 @@ jobs:
     runs-on: macos-11
     steps:
       - name: Set up Node 14
-        uses: actions/setup-node@v3.0.0
+        uses: actions/setup-node@v3.1.0
         with:
           node-version: 14
       - name: Checkout
