@@ -47,6 +47,9 @@
 
   --ifm-footer-background-color: rgb(var(--footer-background-color-rgb));
 
+  --ifm-tabs-padding-horizontal: 1rem;
+  --ifm-tabs-padding-vertical: 0.2rem;
+
   --ifm-transition-fast: 100ms;
   --ifm-transition-slow: 300ms;
 
@@ -277,15 +280,23 @@ html[data-theme="dark"] .markdown li a:hover {
 .menu__list-item-collapsible {
   font-size: 16px;
   font-weight: var(--ifm-font-weight-bold);
-  padding: 5px 12px;
+  padding: 0px 12px;
 }
 
 /* child items under a dropdown menu title */
+.menu__list .menu__list {
+  margin-top: 0.15rem;
+}
+
 .menu__list .menu__list .menu__link {
   font-size: 13px;
   font-weight: var(--ifm-font-weight-normal);
   line-height: 16px;
   padding: 3px 12px;
+}
+
+.menu__list-item:not(:first-child) {
+  margin-top: 0.15rem;
 }
 
 /* selected child item */
