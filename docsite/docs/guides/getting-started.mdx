@@ -1,0 +1,96 @@
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
+# Getting Started
+
+Welcome! To get started, choose a package that uses React Native and open a
+terminal window. This guide walks you through configuring your package to use
+the dependency manager, which helps you keep your React Native dependencies
+up-to-date and compatible with each other. It's simple, it's automated, and it's
+(usually) painless.
+
+:::tip
+
+If you want to learn more about this project before jumping in, head to the
+[introduction](/docs/introduction) page.
+
+:::
+
+Add the dependency manager to your package.
+
+<Tabs groupId="package-manager">
+<TabItem value="yarn" label="Yarn" default>
+
+```sh
+yarn add @rnx-kit/dep-check --dev
+```
+
+</TabItem>
+<TabItem value="npm" label="npm">
+
+```sh
+npm add --save-dev @rnx-kit/dep-check
+```
+
+</TabItem>
+</Tabs>
+
+Initialize your package's dependency manager configuration. If your package
+produces a bundle, it's an application. Otherwise, it's a library.
+
+<Tabs groupId="package-manager">
+<TabItem value="yarn" label="Yarn" default>
+
+```sh
+yarn rnx-dep-check --init app
+```
+
+```sh
+yarn rnx-dep-check --init library
+```
+
+</TabItem>
+<TabItem value="npm" label="npm">
+
+```sh
+npx rnx-dep-check --init app
+```
+
+```sh
+npx rnx-dep-check --init library
+```
+
+</TabItem>
+</Tabs>
+
+Adjust any React Native dependencies that might have compatibility issues.
+
+<Tabs groupId="package-manager">
+<TabItem value="yarn" label="Yarn" default>
+
+```sh
+yarn rnx-dep-check --write
+```
+
+</TabItem>
+<TabItem value="npm" label="npm">
+
+```sh
+npx rnx-dep-check --write
+```
+
+</TabItem>
+</Tabs>
+
+Review the changes. They should be limited to package.json and your Yarn / npm lock file.
+
+:::info Trust, But Verify
+
+If any React Native dependency versions were changed, test your package to be sure
+everything is still in working order.
+
+:::
+
+Congratulations! You can now automatically maintain your package as the React Native
+ecosystem grows and changes. Take a look at the
+[dependency management](/docs/guides/dependency-management) guide to learn how.
