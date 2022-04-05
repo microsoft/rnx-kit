@@ -8,11 +8,17 @@ throughout the lifecycle of your React Native apps and libraries.
 
 Then you're in the right place! There are lots of tools here to help you.
 
-Have you struggled to find the right combination of React Native dependencies that work well together and are compatble with each other? *And* that match the React Native release you're using? There's a tool for that! It's all automated, too.
+Have you struggled to find the right combination of React Native dependencies
+that work well together and are compatble with each other? _And_ that match the
+React Native release you're using? There's a tool for that! It's all automated,
+too.
 
-Can't use Metro because it doesn't understand symlinks? Yarn, npm, and pmpm all use symlinks these days. There's a tool for that! A few lines of configuration, and you're ready to go.
+Can't use Metro because it doesn't understand symlinks? Yarn, npm, and pmpm all
+use symlinks these days. There's a tool for that! A few lines of configuration,
+and you're ready to go.
 
-Do you use Metro and miss type-safe bundling and bundle-serving? There's a tool for that!
+Do you use Metro and miss type-safe bundling and bundle-serving? There's a tool
+for that!
 
 This just scratches the surface, and more are being built all the time.
 
