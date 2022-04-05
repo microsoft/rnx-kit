@@ -27,6 +27,7 @@ import * from "@rnx-kit/tools-language/properties";
 | Category   | Function                                  | Description                                                                                                                                                 |
 | ---------- | ----------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | array      | `addRange(to, from, start, end)`          | Add elements from one array to another, returning the resulting array.                                                                                      |
+| array      | `isNonEmptyArray(array)`                  | Returns whether the specified object is a non-empty array.                                                                                                  |
 | array      | `toIndex(array, offset)`                  | Convert an array offset to an array index. An offset can be positive or negative, while an index is always positive.                                        |
 | function   | `tryInvoke(fn)`                           | Invoke the given function, returning its result or a thrown error.                                                                                          |
 | math       | `isApproximatelyEqual(f1, f2, tolerance)` | Decide if two numbers, integer or decimal, are "approximately" equal. They're equal if they are close enough to be within the given tolerance.              |
