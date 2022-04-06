@@ -61,16 +61,21 @@ function getManifests(
   }
 }
 
-function makeInitializeCommand(kitType: string): Command | undefined {
+function makeInitializeCommand(
+  kitType: string,
+  customProfiles: string | undefined
+): Command | undefined {
   const verifiedKitType = ensureKitType(kitType);
   if (!verifiedKitType) {
     error(`Invalid kit type: '${kitType}'`);
     return undefined;
   }
 
-  const options = { kitType: verifiedKitType };
   return (manifest: string) => {
-    initializeConfig(manifest, options);
+    initializeConfig(manifest, {
+      kitType: verifiedKitType,
+      customProfilesPath: customProfiles,
+    });
     return 0;
   };
 }
@@ -106,7 +111,7 @@ async function makeCommand(args: Args): Promise<Command | undefined> {
   } = args;
 
   if (isString(init)) {
-    return makeInitializeCommand(init);
+    return makeInitializeCommand(init, customProfiles?.toString());
   }
 
   // When `--set-version` is without a value, `setVersion` is an empty string if
@@ -179,7 +184,6 @@ if (require.main === module) {
           "Path to custom profiles. This can be a path to a JSON file, a `.js` file, or a module name.",
         type: "string",
         requiresArg: true,
-        implies: "vigilant",
       },
       "exclude-packages": {
         description:

@@ -22,6 +22,9 @@ export function initializeConfig(
     "rnx-kit": {
       ...manifest["rnx-kit"],
       ...capabilities,
+      ...(options.customProfilesPath
+        ? { customProfiles: options.customProfilesPath }
+        : undefined),
     },
   };
   modifyManifest(packageManifest, updatedManifest);
