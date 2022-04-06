@@ -12433,7 +12433,7 @@ react-native-codegen@^0.0.7:
     jscodeshift "^0.11.0"
     nullthrows "^1.1.1"
 
-react-native-macos@^0.66.0-0:
+react-native-macos@^0.66.1:
   version "0.66.38"
   resolved "https://registry.yarnpkg.com/react-native-macos/-/react-native-macos-0.66.38.tgz#649829dc1191aae3be1638e02d4d55e6530d2899"
   integrity sha512-NY9dLJ2OSkfSzyW48xIHXbWQv6ow+31SzlSl1sccbtwf3V7tV3JywZ7KvhADYONvfaHkjJZhRxFxkr0Onbhm5Q==
@@ -12483,10 +12483,10 @@ react-native-test-app@^1.0.6:
     uuid "^8.3.2"
     yargs "^16.0.0"
 
-react-native-windows@^0.66.0-0:
-  version "0.66.15"
-  resolved "https://registry.yarnpkg.com/react-native-windows/-/react-native-windows-0.66.15.tgz#7b44cc775ca115228c1ea0ec70dce044d8db5902"
-  integrity sha512-U81dPIEdmVRYAc+40MyEiFW4JNYZdBZONzGfF7f4yr2ljzbGuf2LE/Miv8uryM7Z0v6M568lSn+4NnXnE1ubHw==
+react-native-windows@^0.66.1:
+  version "0.66.16"
+  resolved "https://registry.yarnpkg.com/react-native-windows/-/react-native-windows-0.66.16.tgz#d894b5df835d26d7fb43e190b0fbb42aeb8f218a"
+  integrity sha512-mC0TuomJ/R6p8anJrwAEDG6W7GO/JrufTSPqVgpqZtW8xcohQ0lKjBu/LGxge0fcWyrY+qWv0w0KQx2Do/TEVQ==
   dependencies:
     "@babel/runtime" "^7.0.0"
     "@jest/create-cache-key-function" "^27.0.1"
@@ -12524,7 +12524,7 @@ react-native-windows@^0.66.0-0:
     whatwg-fetch "^3.0.0"
     ws "^6.1.4"
 
-react-native@^0.66.0-0:
+react-native@^0.66.0-0, react-native@^0.66.1:
   version "0.66.4"
   resolved "https://registry.yarnpkg.com/react-native/-/react-native-0.66.4.tgz#bf89a5fb18bd23046d889fb4de4ea2822a4d7805"
   integrity sha512-9vx5dlSfQlKbbDtr8+xMon6qsmSu7jvjdXWZpEKh3XVKpUidbbODv7048gwVKX8YAel1egeR7hN8vzSeI6ssTw==
