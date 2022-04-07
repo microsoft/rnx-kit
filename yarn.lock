@@ -556,9 +556,9 @@
     js-tokens "^4.0.0"
 
 "@babel/parser@^7.0.0", "@babel/parser@^7.1.0", "@babel/parser@^7.1.6", "@babel/parser@^7.12.0", "@babel/parser@^7.12.5", "@babel/parser@^7.12.7", "@babel/parser@^7.13.9", "@babel/parser@^7.14.0", "@babel/parser@^7.14.7", "@babel/parser@^7.16.7", "@babel/parser@^7.17.3", "@babel/parser@^7.17.8":
-  version "7.17.8"
-  resolved "https://registry.yarnpkg.com/@babel/parser/-/parser-7.17.8.tgz#2817fb9d885dd8132ea0f8eb615a6388cca1c240"
-  integrity sha512-BoHhDJrJXqcg+ZL16Xv39H9n+AqJ4pcDrQBGZN+wHxIysrLZ3/ECwCBUch/1zUNhnsXULcONU3Ei5Hmkfk6kiQ==
+  version "7.17.9"
+  resolved "https://registry.yarnpkg.com/@babel/parser/-/parser-7.17.9.tgz#9c94189a6062f0291418ca021077983058e171ef"
+  integrity sha512-vqUSBLP8dQHFPdPi9bc5GK9vRkYHJ49fsZdtoJ8EQ8ibpwk5rPKfvNIwChB0KVXcIjcepEBBd2VHC5r9Gy8ueg==
 
 "@babel/plugin-bugfix-safari-id-destructuring-collision-in-function-expression@^7.16.7":
   version "7.16.7"
@@ -12434,9 +12434,9 @@ react-native-codegen@^0.0.7:
     nullthrows "^1.1.1"
 
 react-native-macos@^0.66.0-0:
-  version "0.66.38"
-  resolved "https://registry.yarnpkg.com/react-native-macos/-/react-native-macos-0.66.38.tgz#649829dc1191aae3be1638e02d4d55e6530d2899"
-  integrity sha512-NY9dLJ2OSkfSzyW48xIHXbWQv6ow+31SzlSl1sccbtwf3V7tV3JywZ7KvhADYONvfaHkjJZhRxFxkr0Onbhm5Q==
+  version "0.66.39"
+  resolved "https://registry.yarnpkg.com/react-native-macos/-/react-native-macos-0.66.39.tgz#92a9331f1e8507506ea87b959f328613bd4dd483"
+  integrity sha512-rfejiN/j67Lehrkkik4E0F3wqnoik+SCGKc5fdb5xtuUl9QctdtxgGM1gUv01utboUXLdhmC1LuXQT5GT5UZQw==
   dependencies:
     "@jest/create-cache-key-function" "^27.0.1"
     "@react-native-community/cli" "^6.0.0"
