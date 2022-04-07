@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/cli
 
+## 0.11.2
+
+### Patch Changes
+
+- b1dfbe3: `rnx-clean` has been upstreamed to `@react-native-community/cli`. Print a warning if `cli-clean` can be found.
+
 ## 0.11.1
 
 ### Patch Changes

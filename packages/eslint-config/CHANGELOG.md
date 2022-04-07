@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/eslint-config
 
+## 0.0.2
+
+### Patch Changes
+
+- b85a754: Bump @microsoft/eslint-plugin-sdl to 0.2.0
+
 ## 0.0.1
 
 Tue, 30 Nov 2021 17:24:14 GMT
