@@ -2405,10 +2405,10 @@
   resolved "https://registry.yarnpkg.com/@mdx-js/util/-/util-1.6.22.tgz#219dfd89ae5b97a8801f015323ffa4b62f45718b"
   integrity sha512-H1rQc1ZOHANWBvPcW+JpGwr+juXSxM8Q8YCkm3GhZd8REu1fHR3z99CErO1p9pkcfcxZnMdIZdIsXkOHY0NilA==
 
-"@microsoft/eslint-plugin-sdl@^0.1.9":
-  version "0.1.9"
-  resolved "https://registry.yarnpkg.com/@microsoft/eslint-plugin-sdl/-/eslint-plugin-sdl-0.1.9.tgz#6f831c5a039dccc37844197c5a67c7d1ca0dc8df"
-  integrity sha512-g3XwhU/p/N9yzNWHm8453qraT74LOyCHY39ntHq+zNRn4B0KxSvKh6iXqhnnOYTZBNgsxSpFcejBmdzO47N3oA==
+"@microsoft/eslint-plugin-sdl@^0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@microsoft/eslint-plugin-sdl/-/eslint-plugin-sdl-0.2.0.tgz#a23a5cf89a1f8a44791334d595c3211651744176"
+  integrity sha512-CsYI1A+d3W5lw4BBJsKtKdxtf5wI+m7SH1ByCBard2aPbGgTFipGXSNZYaScR1VLhnHXpRJyRECyOIPflb0AyA==
   dependencies:
     eslint-plugin-node "11.1.0"
     eslint-plugin-react "7.24.0"
