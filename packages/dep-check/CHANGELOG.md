@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/dep-check
 
+## 1.12.10
+
+### Patch Changes
+
+- d48475b: Allow specifying `--custom-profiles` with `--init`
+
 ## 1.12.9
 
 ### Patch Changes
