@@ -35,19 +35,11 @@ jobs:
       - name: Format
         run: yarn format
       - name: Report formatting changes
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          git diff | yarn suggestion-bot -m 'Code formatting differences were found – did you forget to run `yarn format`?'
-          git checkout .
+        run: git diff --exit-code
       - name: Align dependencies
         run: yarn rnx-dep-check --write
-      - name: Report dep-check changes
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          git diff | yarn suggestion-bot -m 'Dependencies are potentially misaligned – run `yarn rnx-dep-check` locally for more details'
-          git checkout .
+      - name: Report dependency changes
+        run: git diff --exit-code
   build:
     name: "Build"
     strategy:
@@ -78,11 +70,9 @@ jobs:
         run: yarn build:ci
       - name: Ensure READMEs are up-to-date
         if: ${{ matrix.node-version == 14 && matrix.os == 'ubuntu-latest' }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           yarn update-readme
-          git diff | yarn suggestion-bot -m 'Changes were found in READMEs – did you forget to run `yarn update-readme`?'
+          git diff --exit-code
       - name: Bundle packages
         run: yarn bundle:ci
       - name: Bundle test app with esbuild
