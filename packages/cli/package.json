@@ -58,6 +58,7 @@
   },
   "depcheck": {
     "ignoreMatches": [
+      "@react-native-community/cli-clean",
       "metro",
       "metro-config",
       "readline"
