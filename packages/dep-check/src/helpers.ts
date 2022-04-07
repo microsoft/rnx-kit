@@ -4,9 +4,9 @@ import detectIndent from "detect-indent";
 import fs from "fs";
 
 export function compare<T>(lhs: T, rhs: T): -1 | 0 | 1 {
-  if (lhs == rhs) {
+  if (lhs === rhs) {
     return 0;
-  } else if (lhs == null || lhs < rhs) {
+  } else if (lhs < rhs) {
     return -1;
   } else {
     return 1;
