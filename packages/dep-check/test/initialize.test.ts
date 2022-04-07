@@ -118,6 +118,7 @@ describe("initializeConfig()", () => {
     expect(kitConfig["reactNativeDevVersion"]).toBeUndefined();
     expect(kitConfig["kitType"]).toEqual("app");
     expect(kitConfig["capabilities"]).toEqual(mockCapabilities);
+    expect(kitConfig["customProfiles"]).toBeUndefined();
   });
 
   test('adds config with type "library"', () => {
@@ -140,5 +141,29 @@ describe("initializeConfig()", () => {
     expect(kitConfig["reactNativeDevVersion"]).toEqual("0.64.0");
     expect(kitConfig["kitType"]).toEqual("library");
     expect(kitConfig["capabilities"]).toEqual(mockCapabilities);
+    expect(kitConfig["customProfiles"]).toBeUndefined();
+  });
+
+  test("adds config with custom profiles", () => {
+    fs.__setMockContent(mockManifest);
+
+    let content = {};
+    fs.__setMockFileWriter((_: string, data: string) => {
+      content = JSON.parse(data);
+    });
+
+    initializeConfig("package.json", {
+      kitType: "library",
+      customProfilesPath: "@rnx-kit/scripts/rnx-dep-check.js",
+    });
+
+    const kitConfig = content["rnx-kit"];
+    if (!kitConfig) {
+      fail();
+    }
+
+    expect(kitConfig["customProfiles"]).toEqual(
+      "@rnx-kit/scripts/rnx-dep-check.js"
+    );
   });
 });

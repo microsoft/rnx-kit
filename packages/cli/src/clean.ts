@@ -31,6 +31,16 @@ export async function rnxClean(
     throw new Error(`Invalid path provided! ${projectRoot}`);
   }
 
+  const spinner = ora();
+  try {
+    require.resolve("@react-native-community/cli-clean");
+    spinner.warn(
+      "`rnx-clean` has been upstreamed to `@react-native-community/cli`. Please use `npx react-native clean` instead."
+    );
+  } catch (_) {
+    // Ignore
+  }
+
   const npm = os.platform() === "win32" ? "npm.cmd" : "npm";
   const yarn = os.platform() === "win32" ? "yarn.cmd" : "yarn";
 
@@ -121,7 +131,6 @@ export async function rnxClean(
     "yarn",
   ];
 
-  const spinner = ora();
   for (const category of categories) {
     const commands = COMMANDS[category];
     if (!commands) {

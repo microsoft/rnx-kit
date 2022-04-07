@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/eslint-config",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "private": true,
   "description": "Shareable ESLint config for @rnx-kit",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/eslint-config#readme",
@@ -18,7 +18,7 @@
     "format": "rnx-kit-scripts format"
   },
   "dependencies": {
-    "@microsoft/eslint-plugin-sdl": "^0.1.9",
+    "@microsoft/eslint-plugin-sdl": "^0.2.0",
     "@rnx-kit/eslint-plugin": "*"
   }
 }
