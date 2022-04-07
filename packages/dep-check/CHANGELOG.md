@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/dep-check
 
+## 1.12.11
+
+### Patch Changes
+
+- d950055: Dependencies should be sorted lexicographically
+
 ## 1.12.10
 
 ### Patch Changes
