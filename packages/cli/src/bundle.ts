@@ -7,7 +7,8 @@ import { metroBundle } from "./bundle/metro";
 import { applyKitBundleConfigOverrides } from "./bundle/overrides";
 import type { BundleConfig, KitBundleConfig } from "./bundle/types";
 
-export type CLIBundleOptions = {
+  export type CLIBundleOptions = 
+{
   id?: string;
   platform?: AllPlatforms;
   entryPath?: string;
