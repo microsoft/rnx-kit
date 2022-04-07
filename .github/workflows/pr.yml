@@ -32,14 +32,14 @@ jobs:
           CI_SKIP_GO: 1
       - name: Check for change files
         run: yarn change:check --since origin/${{ github.base_ref }}
-      - name: Format
-        run: yarn format
-      - name: Report formatting changes
-        run: git diff --exit-code
-      - name: Align dependencies
-        run: yarn rnx-dep-check --write
-      - name: Report dependency changes
-        run: git diff --exit-code
+      - name: Report formatting problems
+        run: |
+          yarn format
+          git diff --exit-code
+      - name: Report dependency problems
+        run: |
+          yarn rnx-dep-check --write
+          git diff --exit-code
   build:
     name: "Build"
     strategy:
