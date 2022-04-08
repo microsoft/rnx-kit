@@ -116,6 +116,11 @@ const resolveFrom =
             if (fs.existsSync(typedef)) {
               return typedef;
             }
+            // Alternatively, the `.ts` is just as good.
+            const source = m.replace(/\.js$/, ".ts");
+            if (fs.existsSync(source)) {
+              return source;
+            }
           }
           return m;
         } catch (e) {
