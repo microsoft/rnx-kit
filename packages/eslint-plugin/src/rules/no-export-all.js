@@ -102,21 +102,35 @@ const resolveFrom =
       });
 
       return (fromDir, moduleId) => {
-        const m = resolve(fromDir, moduleId);
-        if (!m) {
-          throw new Error(
-            `Module not found: ${moduleId} (start path: ${fromDir})`
-          );
-        }
-        if (m.endsWith(".js")) {
-          // `.js` files don't contain type information. If we find a `.d.ts`
-          // next to it, we should use that instead.
-          const typedef = m.replace(/\.js$/, ".d.ts");
-          if (fs.existsSync(typedef)) {
-            return typedef;
+        try {
+          const m = resolve(fromDir, moduleId);
+          if (!m) {
+            throw new Error(
+              `Module not found: ${moduleId} (start path: ${fromDir})`
+            );
           }
+          if (m.endsWith(".js")) {
+            // `.js` files don't contain type information. If we find a `.d.ts`
+            // next to it, we should use that instead.
+            const typedef = m.replace(/\.js$/, ".d.ts");
+            if (fs.existsSync(typedef)) {
+              return typedef;
+            }
+          }
+          return m;
+        } catch (e) {
+          // If the module id contains the `.js` extension due to ESM,
+          // retry with `.ts`
+          if (moduleId.endsWith(".js")) {
+            try {
+              return resolve(fromDir, moduleId.replace(/\.js$/, ".ts"));
+            } catch (_) {
+              // Ignore the exception from the `.ts` file and rethrow
+              // the `.js` one to avoid confusion
+            }
+          }
+          throw e;
         }
-        return m;
       };
     }
   )();
