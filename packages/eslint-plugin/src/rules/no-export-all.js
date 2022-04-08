@@ -112,12 +112,9 @@ const resolveFrom =
           if (m.endsWith(".js")) {
             // `.js` files don't contain type information. If we find a `.d.ts`
             // next to it, we should use that instead.
-            const alternatives = [".d.ts", ".ts", ".tsx"];
-            for (const alt of alternatives) {
-              const source = m.replace(/\.js$/, alt);
-              if (fs.existsSync(source)) {
-                return source;
-              }
+            const typedef = m.replace(/\.js$/, ".d.ts");
+            if (fs.existsSync(typedef)) {
+              return typedef;
             }
           }
           return m;
