@@ -112,14 +112,12 @@ const resolveFrom =
           if (m.endsWith(".js")) {
             // `.js` files don't contain type information. If we find a `.d.ts`
             // next to it, we should use that instead.
-            const typedef = m.replace(/\.js$/, ".d.ts");
-            if (fs.existsSync(typedef)) {
-              return typedef;
-            }
-            // Alternatively, the `.ts` is just as good.
-            const source = m.replace(/\.js$/, ".ts");
-            if (fs.existsSync(source)) {
-              return source;
+            const alternatives = [".d.ts", ".ts", ".tsx"];
+            for (const alt of alternatives) {
+              const source = m.replace(/\.js$/, alt);
+              if (fs.existsSync(source)) {
+                return source;
+              }
             }
           }
           return m;
@@ -127,11 +125,14 @@ const resolveFrom =
           // If the module id contains the `.js` extension due to ESM,
           // retry with `.ts`
           if (moduleId.endsWith(".js")) {
-            try {
-              return resolve(fromDir, moduleId.replace(/\.js$/, ".ts"));
-            } catch (_) {
-              // Ignore the exception from the `.ts` file and rethrow
-              // the `.js` one to avoid confusion
+            const alternatives = [".ts", ".tsx"];
+            for (const alt of alternatives) {
+              try {
+                return resolve(fromDir, moduleId.replace(/\.js$/, alt));
+              } catch (_) {
+                // Ignore the exception from the `.ts` file and rethrow
+                // the `.js` one to avoid confusion
+              }
             }
           }
           throw e;
