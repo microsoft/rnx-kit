@@ -5,6 +5,7 @@ on:
 jobs:
   build_and_publish:
     name: "Build and publish"
+    if: github.repository == "microsoft/rnx-kit"
     runs-on: ubuntu-latest
     steps:
       - name: Set up Node 14
