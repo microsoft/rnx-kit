@@ -27,6 +27,7 @@
   --ifm-color-primary-lighter: #105fd9;
   --ifm-color-primary-lightest: #1a6eee;
 
+  --ifm-code-background: rgb(226, 227, 228);
   --ifm-code-padding-horizontal: 0.25rem;
   --ifm-code-padding-vertical: 0.25rem;
   --ifm-code-font-size: 95%;
