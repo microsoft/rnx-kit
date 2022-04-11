@@ -266,6 +266,10 @@ html[data-theme="dark"] .markdown li a:hover {
   border-bottom-color: rgb(var(--react-native-color-rgb));
 }
 
+.alert a {
+  --ifm-link-decoration: none;
+}
+
 /*
  * Menus
  */
