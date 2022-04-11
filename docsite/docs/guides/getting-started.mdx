@@ -1,5 +1,6 @@
-import Tabs from "@theme/Tabs";
-import TabItem from "@theme/TabItem";
+import DepCheckInit from "./_dep-check-init.mdx";
+import PackageCommand from "./_package-command.mdx";
+import PackageRunCommand from "./_package-run-command.mdx";
 
 # Getting Started
 
@@ -7,8 +8,8 @@ Welcome! A good place to start with any React Native package is the dependency
 manager. It keeps your React Native dependencies up-to-date and healthy using
 **automation** that ties into your developer workflows.
 
-This guide gets you off an running with the dependency manager. Choose a
-package that uses React Native and open a terminal window to begin.
+This guide gets you off and running with the dependency manager. To begin,
+choose a package that uses React Native and open a terminal window.
 
 :::tip
 
@@ -17,81 +18,33 @@ If you want to learn more about this project before jumping in, head to the
 
 :::
 
-First, add the dependency manager to your package.
+Start by adding the dependency manager to your package.
 
-<Tabs groupId="package-manager">
-<TabItem value="yarn" label="Yarn" default>
+<PackageCommand
+  yarnArgs="add @rnx-kit/dep-check --dev"
+  pnpmArgs="add -D @rnx-kit/dep-check"
+  npmArgs="add --save-dev @rnx-kit/dep-check"
+/>
 
-```sh
-yarn add @rnx-kit/dep-check --dev
-```
+Next, generate the dependency manager configuration for your package. If your
+package produces a bundle, it's an `app`. Otherwise, it's a `library`.
 
-</TabItem>
-<TabItem value="npm" label="npm">
+<DepCheckInit />
 
-```sh
-npm add --save-dev @rnx-kit/dep-check
-```
+Fix any React Native package versions that might have compatibility issues.
 
-</TabItem>
-</Tabs>
+<PackageRunCommand args="rnx-dep-check --write" />
 
-Next, create a dependency manager configuration for your package. If your package
-produces a bundle, it's an `app`. Otherwise, it's a `library`.
+Review the changes. They should be limited to package.json and your Yarn / npm /
+pnpm lock file.
 
-<Tabs groupId="package-manager">
-<TabItem value="yarn" label="Yarn" default>
+:::info Test Your Package
 
-```sh
-yarn rnx-dep-check --init app
-```
-
-```sh
-yarn rnx-dep-check --init library
-```
-
-</TabItem>
-<TabItem value="npm" label="npm">
-
-```sh
-npx rnx-dep-check --init app
-```
-
-```sh
-npx rnx-dep-check --init library
-```
-
-</TabItem>
-</Tabs>
-
-Adjust any React Native dependencies that might have compatibility issues.
-
-<Tabs groupId="package-manager">
-<TabItem value="yarn" label="Yarn" default>
-
-```sh
-yarn rnx-dep-check --write
-```
-
-</TabItem>
-<TabItem value="npm" label="npm">
-
-```sh
-npx rnx-dep-check --write
-```
-
-</TabItem>
-</Tabs>
-
-Review the changes. They should be limited to package.json and your Yarn / npm lock file.
-
-:::info Trust, But Verify
-
-If any React Native dependency versions were changed, test your package to be sure
-everything is still in working order.
+If any dependency versions changed, test your package to be sure everything is
+still in working order.
 
 :::
 
-Congratulations! You can now automatically maintain your package as the React Native
-ecosystem grows and changes. Take a look at the
+Congratulations! You can now automatically maintain your package as the React
+Native ecosystem grows and changes. Take a look at the
 [dependency management](/docs/guides/dependency-management) guide to learn how.
