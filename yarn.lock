@@ -14966,9 +14966,9 @@ word-wrap@^1.2.3, word-wrap@~1.2.3:
   integrity sha512-Hz/mrNwitNRh/HUAtM/VT/5VH+ygD6DV7mYKZAtHOrbs8U7lvPS6xf7EJKMF0uW1KJCl0H701g3ZGus+muE5vQ==
 
 workspace-tools@^0.18.2:
-  version "0.18.2"
-  resolved "https://registry.yarnpkg.com/workspace-tools/-/workspace-tools-0.18.2.tgz#59753b5fb7c709f72250c8fbf5ccfe1903033a7d"
-  integrity sha512-XEW7VrD5XmYNLli89cHGQESf6Jgh45ELlKJQHbAAwd67XfC+Tf+hpJZ+GLFsKPIzJ+xIUvnJE6F71ScsMfu7KA==
+  version "0.18.3"
+  resolved "https://registry.yarnpkg.com/workspace-tools/-/workspace-tools-0.18.3.tgz#55864c76a92b50556ddcd756cf0c6db5618b0cb1"
+  integrity sha512-AsUScmMM+HrDzBjbxlpc041VNLRnP9EzAOk0YxZHxAT0wnVtZmoe+FgKPOGX4s7oRUobwKqBRhaJDAuaAP78ZQ==
   dependencies:
     "@yarnpkg/lockfile" "^1.1.0"
     find-up "^4.1.0"
