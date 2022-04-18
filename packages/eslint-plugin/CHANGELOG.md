@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/eslint-plugin
 
+## 0.2.12
+
+### Patch Changes
+
+- dec7c60: Fix no-export-all getting confused when the module id contains the `.js` extension due to how ESM works
+
 ## 0.2.11
 
 ### Patch Changes
