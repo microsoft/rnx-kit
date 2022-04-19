@@ -14965,7 +14965,7 @@ word-wrap@^1.2.3, word-wrap@~1.2.3:
   resolved "https://registry.yarnpkg.com/word-wrap/-/word-wrap-1.2.3.tgz#610636f6b1f703891bd34771ccb17fb93b47079c"
   integrity sha512-Hz/mrNwitNRh/HUAtM/VT/5VH+ygD6DV7mYKZAtHOrbs8U7lvPS6xf7EJKMF0uW1KJCl0H701g3ZGus+muE5vQ==
 
-workspace-tools@^0.18.2:
+workspace-tools@^0.18.2, workspace-tools@^0.18.3:
   version "0.18.3"
   resolved "https://registry.yarnpkg.com/workspace-tools/-/workspace-tools-0.18.3.tgz#55864c76a92b50556ddcd756cf0c6db5618b0cb1"
   integrity sha512-AsUScmMM+HrDzBjbxlpc041VNLRnP9EzAOk0YxZHxAT0wnVtZmoe+FgKPOGX4s7oRUobwKqBRhaJDAuaAP78ZQ==
