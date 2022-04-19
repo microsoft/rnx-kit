@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/scripts
 
+## 1.1.2
+
+### Patch Changes
+
+- 3ee09f6: Fix Rush workspaces not being detected when set up as a post-install step
+
 ## 1.1.1
 
 ### Patch Changes

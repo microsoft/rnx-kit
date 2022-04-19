@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-config
 
+## 1.2.31
+
+### Patch Changes
+
+- 3ee09f6: Fix Rush workspaces not being detected when set up as a post-install step
+
 ## 1.2.30
 
 ### Patch Changes

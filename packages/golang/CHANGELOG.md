@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/golang
 
+## 0.2.1
+
+### Patch Changes
+
+- 3ee09f6: Fix Rush workspaces not being detected when set up as a post-install step
+
 ## 0.2.0
 
 ### Minor Changes
