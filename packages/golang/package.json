@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/golang",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Integrate Go into your monorepo and create native apps that accelerate development and CI builds",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/golang#readme",
   "license": "MIT",
@@ -26,7 +26,7 @@
     "find-up": "^5.0.0",
     "got": "^11.8.2",
     "hasha": "^5.2.2",
-    "workspace-tools": "^0.18.2"
+    "workspace-tools": "^0.18.3"
   },
   "devDependencies": {
     "@types/node": "^16.0.0",

@@ -2,6 +2,7 @@ import type { Capability, KitType } from "@rnx-kit/config";
 import type { PackageManifest } from "@rnx-kit/tools-node/package";
 import omit from "lodash/omit";
 import { resolveCapabilities } from "./capabilities";
+import { compare } from "./helpers";
 import type { DependencyType, Package, Profile } from "./types";
 
 export function devOnlyPackages(
@@ -61,7 +62,7 @@ export function updateDependencies(
     }
     return result;
   }, Object.entries(dependencies));
-  return Object.fromEntries(entries.sort(([a], [b]) => a.localeCompare(b)));
+  return Object.fromEntries(entries.sort(([a], [b]) => compare(a, b)));
 }
 
 /**

@@ -3,6 +3,16 @@ import { writePackage } from "@rnx-kit/tools-node/package";
 import detectIndent from "detect-indent";
 import fs from "fs";
 
+export function compare<T>(lhs: T, rhs: T): -1 | 0 | 1 {
+  if (lhs === rhs) {
+    return 0;
+  } else if (lhs < rhs) {
+    return -1;
+  } else {
+    return 1;
+  }
+}
+
 export function concatVersionRanges(versions: string[]): string {
   return "^" + versions.join(" || ^");
 }

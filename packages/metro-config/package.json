@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/metro-config",
-  "version": "1.2.30",
+  "version": "1.2.31",
   "description": "Metro config for monorepos",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/metro-config#readme",
   "license": "MIT",
@@ -22,7 +22,7 @@
   "dependencies": {
     "@rnx-kit/babel-preset-metro-react-native": "^1.0.17",
     "@rnx-kit/tools-node": "^1.2.7",
-    "workspace-tools": "^0.18.2"
+    "workspace-tools": "^0.18.3"
   },
   "peerDependencies": {
     "metro-config": ">=0.58.0",

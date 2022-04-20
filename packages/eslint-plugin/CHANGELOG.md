@@ -1,5 +1,17 @@
 # Change Log - @rnx-kit/eslint-plugin
 
+## 0.2.13
+
+### Patch Changes
+
+- 3ee09f6: Fix Rush workspaces not being detected when set up as a post-install step
+
+## 0.2.12
+
+### Patch Changes
+
+- dec7c60: Fix no-export-all getting confused when the module id contains the `.js` extension due to how ESM works
+
 ## 0.2.11
 
 ### Patch Changes
