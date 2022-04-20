@@ -1,0 +1,50 @@
+import DepCheckInit from "./_dep-check-init.mdx";
+import PackageCommand from "./_package-command.mdx";
+import PackageRunCommand from "./_package-run-command.mdx";
+
+# Getting Started
+
+Welcome! A good place to start with any React Native package is the dependency
+manager. It keeps your React Native dependencies up-to-date and healthy using
+**automation** that ties into your developer workflows.
+
+This guide gets you off and running with the dependency manager. To begin,
+choose a package that uses React Native and open a terminal window.
+
+:::tip
+
+If you want to learn more about this project before jumping in, head to the
+[introduction](/docs/introduction) page.
+
+:::
+
+Start by adding the dependency manager to your package.
+
+<PackageCommand
+  yarnArgs="add @rnx-kit/dep-check --dev"
+  pnpmArgs="add -D @rnx-kit/dep-check"
+  npmArgs="add --save-dev @rnx-kit/dep-check"
+/>
+
+Next, generate the dependency manager configuration for your package. If your
+package produces a bundle, it's an `app`. Otherwise, it's a `library`.
+
+<DepCheckInit />
+
+Fix any React Native package versions that might have compatibility issues.
+
+<PackageRunCommand args="rnx-dep-check --write" />
+
+Review the changes. They should be limited to package.json and your Yarn / npm /
+pnpm lock file.
+
+:::info Test Your Package
+
+If any dependency versions changed, test your package to be sure everything is
+still in working order.
+
+:::
+
+Congratulations! You can now automatically maintain your package as the React
+Native ecosystem grows and changes. Take a look at the
+[dependency management](/docs/guides/dependency-management) guide to learn how.

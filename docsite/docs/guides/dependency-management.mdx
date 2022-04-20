@@ -1,0 +1,315 @@
+import DepCheckInit from "./_dep-check-init.mdx";
+import PackageCommand from "./_package-command.mdx";
+import PackageRunCommand from "./_package-run-command.mdx";
+import AmplifyCallout from "../_amplify-callout.mdx";
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
+# Dependency Management
+
+Ready for some magic? This guide will fundamentally change the way you maintain
+your React Native applications and libraries. It all centers on one tool -- the
+dependency manager.
+
+:::tip
+
+Not quite ready to make the leap? Learn more about
+[dependencies](/docs/dependencies) first.
+
+:::
+
+## Onboarding
+
+The first order of business is onboarding your React Native packages to the
+dependency manager. Do this for every React Native package you have. It can be
+done all at once, or gradually over multiple PRs.
+
+First, add the dependency manager to your package.
+
+<PackageCommand
+  yarnArgs="add @rnx-kit/dep-check --dev"
+  pnpmArgs="add -D @rnx-kit/dep-check"
+  npmArgs="add --save-dev @rnx-kit/dep-check"
+/>
+
+Add new script commands for convenience. We'll use these later.
+
+```json title="package.json"
+{
+  "scripts": {
+    "check-dependencies": "rnx-dep-check",
+    "fix-dependencies": "rnx-dep-check --write"
+  }
+}
+```
+
+Next, generate the dependency manager configuration for your package. If your
+package produces a bundle, it's an `app`. Otherwise, it's a `library`.
+
+<DepCheckInit />
+
+Fix any React Native package versions that might have compatibility issues.
+
+<PackageRunCommand args="fix-dependencies" />
+
+**Review** and **test** your changes before committing. This is important, even
+for seemingly harmless updates.
+
+## Automating Everything
+
+Once onboarding is done, you're ready to set up automation.
+
+Automation validates your React Native dependencies during builds and PRs. It
+also keeps the dependency manager up-to-date, including the built-in list of
+known/good React Native package versions and releases. This list can change
+frequently, based on the volatility of the React Native ecosystem.
+
+### Builds
+
+To validate dependencies during a build, you'll integrate the
+`check-dependencies` command into your build workflow.
+
+In each of your React Native packages, add it to the `build` command:
+
+```json title="package.json"
+{
+  "scripts": {
+    "build": "... existing-stuff ... && yarn fix-dependencies"
+  }
+}
+```
+
+_Replace `yarn` with `npm run` or `pnpm`, depending on your package manager._
+
+When the validation process finds a compatibility problem, it fails with a
+detailed message, showing you what went wrong before you commit to the repo.
+
+:::tip Using a Task Runner?
+
+If you're using a task runner like [Lage](https://microsoft.github.io/lage) or
+[Gulp](https://gulpjs.com), you can go for a more sophisticated integration. The
+advantage being that `fix-dependencies` could run in its own "step" with
+isolated logging and error handling. And, you can run it in parallel with other
+tasks.
+
+:::
+
+### Pull Requests
+
+To validate dependencies during PRs, you'll use the dependency manager to check
+every package in your repo.
+
+Add the dependency manager to your repo's root package.json.
+
+<PackageCommand
+  yarnArgs="add @rnx-kit/dep-check --dev -W"
+  pnpmArgs="add -D @rnx-kit/dep-check"
+  npmArgs="add --save-dev @rnx-kit/dep-check"
+/>
+
+Next, add this command to your PR loop. It runs the dependency manager from the
+root of the repo, scanning all packages. This include packages which haven't
+onboarded yet. For those, `--vigilant [version]` controls the target React
+Native release to use when checking compatibility.
+
+<PackageRunCommand args="rnx-dep-check --vigilant 0.66" />
+
+When a compatibility problem is found, the command fails with a non-zero exit
+code, which causes the PR loop to fail. This protects the repo from risky
+changes.
+
+In the PR logs, you'll see a detailed report, in `diff` format, explaining what
+went wrong.
+
+```diff
+error Found 3 violation(s) in @rnts/app:
+    react-native "^0.66.0" -> "^0.66.0-0" (dependencies)
+    react-native-macos "^0.66.0" -> "^0.66.0-0" (dependencies)
+    react-native-windows "^0.66.0" -> "^0.66.0-0" (dependencies)
+- Current
++ Expected
+
+  {
+    "name": "@rnts/button",
+    "version": "0.0.1",
+    "private": true,
+    "license": "MIT",
+    "main": "src/index.ts",
+    "typings": "lib/index.d.ts",
+    "scripts": {
+      "clean": "rimraf ./lib",
+      "build": "yarn run clean && yarn run tsc && yarn run api-extract",
+      "api-extract": "api-extractor run --local --verbose"
+    },
+    "devDependencies": {
+      "@microsoft/api-extractor": "^7.19.4",
+      "@office-iss/react-native-win32": "^0.66.0",
+      "@rnx-kit/dep-check": "^1.12.9",
+      "@types/react-native": "^0.66.0",
+-     "rimraf": "^3.0.2",
+      "react": "17.0.2",
+-     "react-native": "^0.66.0",
+-     "react-native-macos": "^0.66.0",
+-     "react-native-windows": "^0.66.0",
++     "react-native": "^0.66.0-0",
++     "react-native-macos": "^0.66.0-0",
++     "react-native-windows": "^0.66.0-0",
++     "rimraf": "^3.0.2",
+      "typescript": "^4.5.5"
+    },
+    "rnx-kit": {
+      "reactNativeVersion": "^0.66",
+      "reactNativeDevVersion": "^0.66.0",
+      "kitType": "library",
+      "capabilities": [
+        "core",
+        "core-android",
+        "core-ios",
+        "core-macos",
+        "core-windows",
+        "react"
+      ]
++   },
++   "peerDependencies": {
++     "react": "17.0.2",
++     "react-native": "^0.66.0-0",
++     "react-native-macos": "^0.66.0-0",
++     "react-native-windows": "^0.66.0-0"
+    }
+  }
+error Changes are needed to satisfy all requirements. Re-run with `--write` to have dep-check apply them.
+info Visit https://aka.ms/dep-check for more information about dep-check.
+error Command failed with exit code 1.
+info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
+```
+
+Fixing problems is automated, too! From your development terminal, run the same
+command with a `--write` parameter.
+
+<PackageRunCommand args="rnx-dep-check --vigilant 0.66 --write" />
+
+**Review** and **test** the fixes before pushing them to your PR.
+
+### Dependency Manager Updates
+
+The dependency manager comes with a built-in list of known/good React Native
+package versions and releases. Keeping the dependency manager up-to-date gives
+you the latest compatibilty data.
+
+If you are in GitHub, use
+[Dependabot](https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/about-dependabot-version-updates)
+to keep your packages up-to-date, including the dependency manager. If you host
+your repo elsewhere, you can use tools like [Snyk](https://snyk.io) instead.
+
+When a dependency manager update happens, the associated PR loop may fail with
+incompatible package errors. This is OK. It means the built-in list of React
+Native package versions has changed, and you need to update your packages in
+response.
+
+Run this command from the root of your repo. It uses the dependency manager to
+make the fixes automatically.
+
+<PackageRunCommand args="rnx-dep-check --write" />
+
+**Review** and **test** the fixes before pushing them to the PR with the
+dependency manager update.
+
+## Upgrading React Native
+
+When you're ready to upgrade to a new release of React Native (or downgrade to
+an old release), you can use the dependency manager to help you out.
+
+First, update your PR loop definition. Find the
+`rnx-dep-check --vigilant [version]` command and change the target React Native
+version.
+
+Then, run these commands from the root of your repo to change your React Native
+version and adjust all React Native dependencies to be compatible. Replace
+`[version]` with your target React Native version in `major.minor` format, such
+as "0.66" or "0.68".
+
+<PackageRunCommand args="rnx-dep-check --set-version [version]" />
+
+<PackageRunCommand args="rnx-dep-check --vigilant [version] --write" />
+
+**Review** and **test** your packages thoroughly before merging these changes.
+
+## Customization
+
+Did you know that you can add your own packages to the dependency manager's
+built-in list?
+
+If your repo uses React Native packages that aren't known to the dependency
+manager, add them to the list! Or if you want to align other dependencies
+automatically, add them to the list too!
+
+First, write the list of packages you want to manage. Each one is expressed as a
+[capability](/docs/dependencies#capabilities-and-profiles). You can use a `.js`
+module, a `.json` file, or a module name.
+
+```json title="dependency-profile.json"
+{
+  "@types/node": {
+    "name": "@types/node",
+    "version": "^16.0.0",
+    "devOnly": true
+  },
+  "chalk": {
+    "name": "chalk",
+    "version": "^4.1.0"
+  },
+  "0.63": {
+    "native-base": {
+      "name": "native-base",
+      "version": "^3.3.11",
+      "capabilities": ["react"]
+    }
+  }
+}
+```
+
+:::note
+
+Look at `native-base` in the example above. It's wrapped in a `0.63` version
+tag. That means it only applies to React Native 0.63 and above.
+
+:::
+
+Next, configure each of your onboarded React Native packages to use the list.
+
+```json title="package.json"
+{
+  "rnx-kit": {
+    "customProfiles": "path/to/dependency-profile.json"
+  }
+}
+```
+
+Now its time to use the list. Run the dependency manager to update all of your
+packages.
+
+<PackageRunCommand args="rnx-dep-check --vigilant 0.66 --customProfiles path/to/dependency-profile.json --write" />
+
+**Review** and **test** the changes before continuing.
+
+The last step is updating the automation. Each command needs an extra
+`--customProfiles [path]` parameter.
+
+- Pull Requests: Change the `rnx-dep-check --vigilant [version]` command
+- Dependency Manager Updates: Change the `rnx-dep-check --write` command
+- Upgrading React Native: Change the
+  `rnx-dep-check --vigilant [version] --write` command
+
+## Finish Line
+
+Congratulations! Your React Native apps and libraries are now up-to-date and
+compatible with each other! And they should stay that way thanks to the
+automation you've put in place!
+
+<AmplifyCallout />
+
+And, if you customized your list of dependencies, please consider
+[contributing](/docs/contributing) your work so that everyone can use it
+(including you). You can
+[create an **issue** with your customizations](https://github.com/microsoft/rnx-kit/issues/new?title=Dependency%20Manager%20Customizations&body=%3c%21--%20Please%20add%20your%20custom%20dependency%20list%20here.%20--%3e%0a%0a)
+or even [submit a **pull-request**](https://github.com/microsoft/rnx-kit).

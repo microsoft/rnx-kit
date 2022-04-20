@@ -86,7 +86,10 @@
   "prettier": {
     "overrides": [
       {
-        "files": "*.md",
+        "files": [
+          "*.md",
+          "*.mdx"
+        ],
         "options": {
           "proseWrap": "always"
         }

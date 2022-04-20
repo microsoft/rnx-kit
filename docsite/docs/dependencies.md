@@ -69,6 +69,27 @@ const profile_0_67: Profile = {
 };
 ```
 
+## Meta Capabilities
+
+Meta capabilities let you group capabilities together:
+
+```typescript
+{
+  "core/all": {
+    name: "#meta",
+    capabilities: [
+      "core-android",
+      "core-ios",
+      "core-macos",
+      "core-windows",
+    ],
+  },
+}
+```
+
+Mata capabilities aren't versioned, and always have `#meta` in the name
+property.
+
 ## Configuration
 
 A package tells the dependency manager about itself using configuration. It
