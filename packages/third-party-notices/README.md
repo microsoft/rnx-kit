@@ -36,7 +36,7 @@ Options:
                                                              [string] [required]
   --outputFile      The output file to write the licence file to.       [string]
   --json            Output license information as a JSON
-                                                      [boolean] [default: false]  
+                                                      [boolean] [default: false]
   --ignoreScopes    Npm scopes to ignore and not emit licence information for
                                                                          [array]
   --ignoreModules   Modules (js packages) to not emit licence information for
