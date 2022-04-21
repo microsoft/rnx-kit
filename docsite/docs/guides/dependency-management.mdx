@@ -1,6 +1,7 @@
 import DepCheckInit from "./_dep-check-init.mdx";
 import PackageCommand from "./_package-command.mdx";
 import PackageRunCommand from "./_package-run-command.mdx";
+import AmplifyCallout from "../_amplify-callout.mdx";
 import Tabs from "@theme/Tabs";
 import TabItem from "@theme/TabItem";
 
@@ -17,9 +18,9 @@ Not quite ready to make the leap? Learn more about
 
 :::
 
-## On-boarding
+## Onboarding
 
-The first order of business is on-boarding your React Native packages to the
+The first order of business is onboarding your React Native packages to the
 dependency manager. Do this for every React Native package you have. It can be
 done all at once, or gradually over multiple PRs.
 
@@ -56,7 +57,7 @@ for seemingly harmless updates.
 
 ## Automating Everything
 
-Once on-boarding is done, you're ready to set up automation.
+Once onboarding is done, you're ready to set up automation.
 
 Automation validates your React Native dependencies during builds and PRs. It
 also keeps the dependency manager up-to-date, including the built-in list of
@@ -86,7 +87,7 @@ detailed message, showing you what went wrong before you commit to the repo.
 :::tip Using a Task Runner?
 
 If you're using a task runner like [Lage](https://microsoft.github.io/lage) or
-[Gulp](https://gulpjs.com), you can go for a more sophistocated integration. The
+[Gulp](https://gulpjs.com), you can go for a more sophisticated integration. The
 advantage being that `fix-dependencies` could run in its own "step" with
 isolated logging and error handling. And, you can run it in parallel with other
 tasks.
@@ -108,7 +109,7 @@ Add the dependency manager to your repo's root package.json.
 
 Next, add this command to your PR loop. It runs the dependency manager from the
 root of the repo, scanning all packages. This include packages which haven't
-on-boarded yet. For those, `--vigilant [version]` controls the target React
+onboarded yet. For those, `--vigilant [version]` controls the target React
 Native release to use when checking compatibility.
 
 <PackageRunCommand args="rnx-dep-check --vigilant 0.66" />
@@ -216,7 +217,7 @@ dependency manager update.
 ## Upgrading React Native
 
 When you're ready to upgrade to a new release of React Native (or downgrade to
-an old release), you can use the dependency manager to do the heavy lifting.
+an old release), you can use the dependency manager to help you out.
 
 First, update your PR loop definition. Find the
 `rnx-dep-check --vigilant [version]` command and change the target React Native
@@ -274,7 +275,7 @@ tag. That means it only applies to React Native 0.63 and above.
 
 :::
 
-Next, configure each of your on-boarded React Native packages to use the list.
+Next, configure each of your onboarded React Native packages to use the list.
 
 ```json title="package.json"
 {
@@ -305,8 +306,7 @@ Congratulations! Your React Native apps and libraries are now up-to-date and
 compatible with each other! And they should stay that way thanks to the
 automation you've put in place!
 
-Was this guide helpful? Spread the word on [Twitter](https://twitter.com):
-`@ReactNativeMSFT` `#rnxkit`
+<AmplifyCallout />
 
 And, if you customized your list of dependencies, please consider
 [contributing](/docs/contributing) your work so that everyone can use it

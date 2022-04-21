@@ -34,7 +34,11 @@ const sidebars = {
     {
       type: "category",
       label: "Tools",
-      items: ["packages/overview", "packages/typescript-react-native-compiler"],
+      items: [
+        "packages/overview",
+        "packages/metro-resolver-symlinks",
+        "packages/typescript-react-native-compiler",
+      ],
     },
   ],
 
