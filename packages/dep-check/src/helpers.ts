@@ -29,3 +29,14 @@ export function modifyManifest(
   const indent = detectIndent(content).indent || "  ";
   writePackage(pkgPath, manifest, indent);
 }
+
+export function omitEmptySections(manifest: PackageManifest): PackageManifest {
+  const sections = ["dependencies", "peerDependencies", "devDependencies"];
+  for (const sectionName of sections) {
+    const section = manifest[sectionName];
+    if (typeof section === "object" && Object.keys(section).length === 0) {
+      delete manifest[sectionName];
+    }
+  }
+  return manifest;
+}

@@ -2,7 +2,7 @@ import type { Capability, KitType } from "@rnx-kit/config";
 import type { PackageManifest } from "@rnx-kit/tools-node/package";
 import omit from "lodash/omit";
 import { resolveCapabilities } from "./capabilities";
-import { compare } from "./helpers";
+import { compare, omitEmptySections } from "./helpers";
 import type { DependencyType, Package, Profile } from "./types";
 
 export function devOnlyPackages(
@@ -102,7 +102,7 @@ export function updatePackageManifest(
 
   switch (packageType) {
     case "app":
-      return {
+      return omitEmptySections({
         ...manifest,
         dependencies: updateDependencies(dependencies, packages, "direct"),
         peerDependencies: removeKeys(peerDependencies, names),
@@ -111,9 +111,9 @@ export function updatePackageManifest(
           devOnlyPackages(packages),
           "development"
         ),
-      };
+      });
     case "library":
-      return {
+      return omitEmptySections({
         ...manifest,
         dependencies: removeKeys(dependencies, names),
         peerDependencies: updateDependencies(
@@ -126,6 +126,6 @@ export function updatePackageManifest(
           resolveCapabilities(capabilities, devProfiles),
           "development"
         ),
-      };
+      });
   }
 }

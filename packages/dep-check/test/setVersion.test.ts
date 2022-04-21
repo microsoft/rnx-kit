@@ -75,7 +75,7 @@ describe("makeSetVersionCommand()", () => {
     expect(command("package.json")).toBe(0);
     expect(result.manifest).toEqual({
       ...mockManifest,
-      dependencies: {},
+      dependencies: undefined,
       devDependencies: {
         react: "17.0.1",
         "react-native": "^0.64.2",
@@ -111,7 +111,7 @@ describe("makeSetVersionCommand()", () => {
         react: "17.0.1",
         "react-native": "^0.64.2",
       },
-      devDependencies: {},
+      devDependencies: undefined,
       "rnx-kit": {
         ...mockManifest["rnx-kit"],
         reactNativeVersion: "^0.63.0 || ^0.64.0",
@@ -133,7 +133,7 @@ describe("makeSetVersionCommand()", () => {
         react: "17.0.1",
         "react-native": "^0.64.2",
       },
-      devDependencies: {},
+      devDependencies: undefined,
       "rnx-kit": {
         ...mockManifest["rnx-kit"],
         reactNativeVersion: "^0.63 || ^0.64",
@@ -155,7 +155,7 @@ describe("makeSetVersionCommand()", () => {
         react: "17.0.1",
         "react-native": "^0.64.2",
       },
-      devDependencies: {},
+      devDependencies: undefined,
       "rnx-kit": {
         ...mockManifest["rnx-kit"],
         reactNativeVersion: "^0.64",

@@ -25,8 +25,7 @@ exports[`checkPackageManifest({ kitType: 'app' }) adds required dependencies 1`]
       \\"hermes\\",
       \\"lazy-index\\"
     ]
-  },
-  \\"devDependencies\\": {}
+  }
 }
 "
 `;
