@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/dep-check
 
+## 1.12.13
+
+### Patch Changes
+
+- cb795e3: Omit empty sections from the manifest
+
 ## 1.12.12
 
 ### Patch Changes
