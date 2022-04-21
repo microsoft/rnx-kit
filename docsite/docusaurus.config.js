@@ -1,10 +1,18 @@
 // @ts-check
 // Note: type annotations allow type checking and IDEs autocompletion
 
-// Always use VSCode dark-theme for code blocks. The light theme looks
-// bad on top of our site's light theme (no contrast).
+/**
+ * @typedef {{plain: Record<string, string>; styles: Array<{types: string[], style: { color: string; }}>}} CodeTheme
+ */
+
 const darkCodeTheme = require("prism-react-renderer/themes/vsDark");
-const lightCodeTheme = darkCodeTheme;
+
+/**
+ * @type {CodeTheme}
+ */
+const lightCodeTheme = require("prism-react-renderer/themes/vsLight");
+lightCodeTheme.plain.color = "rgb(28, 30, 33)"; // from CSS --font-color-base-rgb
+lightCodeTheme.plain.backgroundColor = "#ffffff";
 
 const organizationName = "microsoft";
 const projectName = "rnx-kit";
