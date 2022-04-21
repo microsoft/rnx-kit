@@ -166,8 +166,8 @@ describe("updatePackageManifest()", () => {
       react: packageVersion(profile_0_64, "react"),
       "react-native": packageVersion(profile_0_64, "core"),
     });
-    expect(peerDependencies).toEqual({});
-    expect(devDependencies).toEqual({});
+    expect(peerDependencies).toBeUndefined();
+    expect(devDependencies).toBeUndefined();
   });
 
   test("removes dependencies from devDependencies for apps", () => {
@@ -189,7 +189,7 @@ describe("updatePackageManifest()", () => {
       react: packageVersion(profile_0_64, "react"),
       "react-native": packageVersion(profile_0_64, "core"),
     });
-    expect(peerDependencies).toEqual({});
+    expect(peerDependencies).toBeUndefined();
     expect(devDependencies).toEqual({
       "react-native-test-app": "0.0.0",
       typescript: "0.0.0",
@@ -219,7 +219,7 @@ describe("updatePackageManifest()", () => {
       "react-native-test-app": "0.0.0",
       typescript: "0.0.0",
     });
-    expect(devDependencies).toEqual({});
+    expect(devDependencies).toBeUndefined();
   });
 
   test("sets dev/peer dependencies for libraries", () => {
@@ -304,7 +304,7 @@ describe("updatePackageManifest()", () => {
       react: packageVersion(profile_0_64, "react"),
       "react-native": packageVersion(profile_0_64, "core"),
     });
-    expect(peerDependencies).toEqual({});
+    expect(peerDependencies).toBeUndefined();
     expect(devDependencies).toEqual({
       "react-native-test-app": packageVersion(profile_0_64, "test-app"),
     });
