@@ -38,6 +38,7 @@ const sidebars = {
         "packages/overview",
         "packages/config",
         "packages/cli",
+        "packages/dep-check",
         "packages/metro-plugin-cyclic-dependencies-detector",
         "packages/metro-plugin-duplicates-checker",
         "packages/metro-resolver-symlinks",
