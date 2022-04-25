@@ -31,16 +31,12 @@ so that developers can write per-platform code in their applications.
 Platform-specific extensions require a specialized module resolver, capable of
 matching a module import to a file such as `<module>.ios.js` or
 `<module>.native.js`. Metro, the React Native bundler, has a resolver which
-supports this. TypeScript does not, making it impossible to properly type-check
-a specific platform, or get accurate Intellisense.
+supports this.
 
-We are actively working with the TypeScript team to
-[expand the resolver](https://github.com/microsoft/TypeScript/pull/48189) to
-enable this scenario.
-
-In the interim, we have a
-[drop-in replacement for `tsc` which supports React Native module resolution](/docs/packages/typescript-react-native-compiler).
-Developers can use it in lieu of direct support from TypeScript.
+TypeScript version 4.7 also supports style of module resolution via the compiler
+option `moduleSuffixes`. See the
+[announcement](https://devblogs.microsoft.com/typescript/announcing-typescript-4-7-beta/#resolution-customization-with-modulesuffixes)
+for details.
 
 ## Module Substitution
 
@@ -63,8 +59,7 @@ out-of-tree NPM package. For MacOS, `import 'react-native'` becomes
 `import 'react-native-macos'`.
 
 We are working with the TypeScript team to support a similar "module substution"
-mechanism for type-checking and IntelliSense. Emitted code should preserve the
-original module import.
+mechanism for type-checking and IntelliSense.
 
 TypeScript support is most beneficial when integrated with an editor like
 VSCode. Seeing platform-specific type-safety errors, during development, helps
