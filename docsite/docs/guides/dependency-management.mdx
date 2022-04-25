@@ -2,8 +2,6 @@ import DepCheckInit from "./_dep-check-init.mdx";
 import PackageCommand from "./_package-command.mdx";
 import PackageRunCommand from "./_package-run-command.mdx";
 import AmplifyCallout from "../_amplify-callout.mdx";
-import Tabs from "@theme/Tabs";
-import TabItem from "@theme/TabItem";
 
 # Dependency Management
 
@@ -88,9 +86,8 @@ detailed message, showing you what went wrong before you commit to the repo.
 
 If you're using a task runner like [Lage](https://microsoft.github.io/lage) or
 [Gulp](https://gulpjs.com), you can go for a more sophisticated integration. The
-advantage being that `fix-dependencies` could run in its own "step" with
-isolated logging and error handling. And, you can run it in parallel with other
-tasks.
+advantage being that `fix-dependencies` could run as its own task with isolated
+logging and error handling. And, you can run it in parallel with other tasks.
 
 :::
 
@@ -312,4 +309,4 @@ And, if you customized your list of dependencies, please consider
 [contributing](/docs/contributing) your work so that everyone can use it
 (including you). You can
 [create an **issue** with your customizations](https://github.com/microsoft/rnx-kit/issues/new?title=Dependency%20Manager%20Customizations&body=%3c%21--%20Please%20add%20your%20custom%20dependency%20list%20here.%20--%3e%0a%0a)
-or even [submit a **pull-request**](https://github.com/microsoft/rnx-kit).
+or even [submit a **pull-request**](https://github.com/microsoft/rnx-kit/pulls).
