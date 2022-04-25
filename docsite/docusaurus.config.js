@@ -88,6 +88,7 @@ const config = {
         docs: {
           breadcrumbs: false,
           sidebarPath: require.resolve("./sidebars.js"),
+          sidebarCollapsed: false,
           editUrl: docsiteUrl + "/",
         },
         theme: {
