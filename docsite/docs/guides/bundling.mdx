@@ -157,15 +157,15 @@ Add a command to each of your app packages which bundles all target platforms:
 }
 ```
 
-If you use [Lerna](https://lerna.js.org), you can run one command from the root
-of your repo to bundle all packages:
+If you use Lerna, you can run one command from the root of your repo to bundle
+all packages:
 
 <PackageRunCommand args="lerna run bundle" />
 
-If you're using a task runner like [Lage](https://microsoft.github.io/lage) or
-[Gulp](https://gulpjs.com), you can go for a more sophisticated integration. The
-advantage being that `bundle` runs as its own task with isolated logging and
-error handling. And, you can run it in parallel with other tasks.
+If you're using a task runner like Lage or Gulp, you can go for a more
+sophisticated integration. The advantage being that `bundle` runs as its own
+task with isolated logging and error handling. And, you can run it in parallel
+with other tasks.
 
 Now that you have a top-level command figured out, add it to your top-level
 package.json:
@@ -246,8 +246,8 @@ share what you are seeing in
 
 With tree shaking, Metro will produce your app bundles faster!
 
-Metro calls out to ESBuild to create your tree-shaken app bundle from individual
-package files. Metro (a JavaScript application) is not nearly as fast as ESBuild
+Metro calls out to esbuild to create your tree shaken app bundle from individual
+package files. Metro (a JavaScript application) is not nearly as fast as esbuild
 (a native application).
 
 :::
