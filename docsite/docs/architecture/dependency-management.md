@@ -103,8 +103,7 @@ capabilities it requires. For instance, lets say we have a library,
 something that provides network information. We would declare the following in
 our `package.json`:
 
-```json
-// package.json
+```json title="package.json"
 {
   "name": "awesome-library",
   "version": "1.0.0",
@@ -123,8 +122,7 @@ our `package.json`:
 If we run `@rnx-kit/dep-check` now, it will suggest that we change
 `peerDependencies` and `devDependencies` to the following:
 
-```json
-// package.json
+```json title="package.json"
 {
   "name": "awesome-library",
   "version": "1.0.0",
@@ -156,8 +154,7 @@ we'll need during development.
 For apps that use `@rnx-kit/dep-check`, the process is similar but you'll also
 need to declare that the package is an app by adding `"kitType": "app"`:
 
-```json
-// package.json
+```json title="package.json"
 {
   "name": "awesome-app",
   "version": "1.0.0",
