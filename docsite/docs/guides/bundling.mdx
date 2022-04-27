@@ -39,7 +39,6 @@ const { makeMetroConfig } = require("@rnx-kit/metro-config");
 const MetroSymlinksResolver = require("@rnx-kit/metro-resolver-symlinks");
 
 module.exports = makeMetroConfig({
-  projectRoot: __dirname,
   resolver: {
     resolveRequest: MetroSymlinksResolver(),
   },
@@ -76,12 +75,12 @@ files and command-lines that needs to be preserved.
 
 You might have a `bundle` script command in package.json that looks like this:
 
-```
-react-native bundle
-  --entry-file ./index.js
-  --platform ios
-  --dev false
-  --bundle-output ./dist/app-metro.ios.jsbundle
+```sh
+react-native bundle \
+  --entry-file ./index.js \
+  --platform ios \
+  --dev false \
+  --bundle-output ./dist/app-metro.ios.jsbundle \
   --sourcemap-output ./dist/app-metro.ios.map"
 ```
 
@@ -121,7 +120,7 @@ Review your Haul configuration and command-line scripts. Compare it to the
 If you need a bundling feature that isn't supported, please make your voice
 heard! :speech_balloon: You can
 [create an **issue**](https://github.com/microsoft/rnx-kit/issues/new?title=Bundling%20Feature%20Request&body=%3c%21--%20Describe%20the%20feature%20your%20need%20here.%20--%3e%0a%0a)
-or even [submit a **pull-request**](https://github.com/microsoft/rnx-kit). All
+or even [submit a **pull request**](https://github.com/microsoft/rnx-kit). All
 [contributions](../contributing) are welcome!
 
 :::
@@ -157,15 +156,15 @@ Add a command to each of your app packages which bundles all target platforms:
 }
 ```
 
-If you use [Lerna](https://lerna.js.org), you can run one command from the root
-of your repo to bundle all packages:
+If you use Lerna, you can run one command from the root of your repo to bundle
+all packages:
 
 <PackageRunCommand args="lerna run bundle" />
 
-If you're using a task runner like [Lage](https://microsoft.github.io/lage) or
-[Gulp](https://gulpjs.com), you can go for a more sophisticated integration. The
-advantage being that `bundle` runs as its own task with isolated logging and
-error handling. And, you can run it in parallel with other tasks.
+If you're using a task runner like Lage or Gulp, you can go for a more
+sophisticated integration. The advantage being that `bundle` runs as its own
+task with isolated logging and error handling. And, you can run it in parallel
+with other tasks.
 
 Now that you have a top-level command figured out, add it to your top-level
 package.json:
@@ -246,8 +245,8 @@ share what you are seeing in
 
 With tree shaking, Metro will produce your app bundles faster!
 
-Metro calls out to ESBuild to create your tree-shaken app bundle from individual
-package files. Metro (a JavaScript application) is not nearly as fast as ESBuild
+Metro calls out to esbuild to create your tree shaken app bundle from individual
+package files. Metro (a JavaScript application) is not nearly as fast as esbuild
 (a native application).
 
 :::
@@ -276,7 +275,7 @@ your app bundle. Don't panic!
 You can use fine-grained configuration to "live with" the duplicates you have,
 until they can be fixed:
 
-```json
+```js
 {
   "rnx-kit": {
     "bundle": {
@@ -315,12 +314,12 @@ dependency tree. It's ok!
 Use fine-grained configuration to "live with" the cycles you have, until they
 can be fixed.
 
-```json
+```js
 {
   "rnx-kit": {
     "bundle": {
       "detectCyclicDependencies": {
-        "includeNodeModules": true,
+        "includeNodeModules": false,
         "linesOfContext": 5,
         "throwOnError": false // Set this to true after making fixes
       }
@@ -363,9 +362,8 @@ detection.
 }
 ```
 
-Take a look at the
-[config schema](http://localhost:3000/rnx-kit/docs/packages/config#schema) to
-see what is available.
+Take a look at the [config schema](../packages/config#schema) to see what is
+available.
 
 Command-line parameters take precedence over your app's configuration. This is
 useful when making using specialized commands in script blocks or at your
@@ -386,4 +384,4 @@ thank you when their download size drops thanks to tree shaking!
 
 See room for improvement? Great! [Contribute](/docs/contributing) your ideas in
 [a new issue](https://github.com/microsoft/rnx-kit/issues/new/choose) or through
-[a pull-request](https://github.com/microsoft/rnx-kit/pulls).
+[a pull request](https://github.com/microsoft/rnx-kit/pulls).

@@ -84,10 +84,10 @@ detailed message, showing you what went wrong before you commit to the repo.
 
 :::tip Using a Task Runner?
 
-If you're using a task runner like [Lage](https://microsoft.github.io/lage) or
-[Gulp](https://gulpjs.com), you can go for a more sophisticated integration. The
-advantage being that `fix-dependencies` could run as its own task with isolated
-logging and error handling. And, you can run it in parallel with other tasks.
+If you're using a task runner like Lage or Gulp, you can go for a more
+sophisticated integration. The advantage being that `fix-dependencies` could run
+as its own task with isolated logging and error handling. And, you can run it in
+parallel with other tasks.
 
 :::
 
@@ -193,10 +193,9 @@ The dependency manager comes with a built-in list of known/good React Native
 package versions and releases. Keeping the dependency manager up-to-date gives
 you the latest compatibilty data.
 
-If you are in GitHub, use
-[Dependabot](https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/about-dependabot-version-updates)
-to keep your packages up-to-date, including the dependency manager. If you host
-your repo elsewhere, you can use tools like [Snyk](https://snyk.io) instead.
+If you are in GitHub, use Dependabot to keep your packages up-to-date, including
+the dependency manager. If you host your repo elsewhere, you can use tools like
+Snyk instead.
 
 When a dependency manager update happens, the associated PR loop may fail with
 incompatible package errors. This is OK. It means the built-in list of React
@@ -309,4 +308,4 @@ And, if you customized your list of dependencies, please consider
 [contributing](/docs/contributing) your work so that everyone can use it
 (including you). You can
 [create an **issue** with your customizations](https://github.com/microsoft/rnx-kit/issues/new?title=Dependency%20Manager%20Customizations&body=%3c%21--%20Please%20add%20your%20custom%20dependency%20list%20here.%20--%3e%0a%0a)
-or even [submit a **pull-request**](https://github.com/microsoft/rnx-kit/pulls).
+or even [submit a **pull request**](https://github.com/microsoft/rnx-kit/pulls).
