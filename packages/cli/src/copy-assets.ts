@@ -158,6 +158,59 @@ export async function gatherConfigs({
   return assetConfigs;
 }
 
+/**
+ * Copies additional assets not picked by bundlers into desired directory.
+ *
+ * The way this works is by scanning all direct dependencies of the current
+ * project for a file, `react-native.config.js`, whose contents include a
+ * field, `nativeAssets`, and a function that returns assets to copy:
+ *
+ * ```js
+ * // react-native.config.js
+ * module.exports = {
+ *   nativeAssets: {
+ *     getAssets: (context) => {
+ *       return {
+ *         assets: [],
+ *         strings: [],
+ *         xcassets: [],
+ *       };
+ *     }
+ *   }
+ * };
+ * ```
+ *
+ * We also allow the project itself to override this where applicable. The
+ * format is similar and looks like this:
+ *
+ * ```js
+ * // react-native.config.js
+ * module.exports = {
+ *   nativeAssets: {
+ *     "some-library": {
+ *       getAssets: (context) => {
+ *         return {
+ *           assets: [],
+ *           strings: [],
+ *           xcassets: [],
+ *         };
+ *       }
+ *     },
+ *     "another-library": {
+ *       getAssets: (context) => {
+ *         return {
+ *           assets: [],
+ *           strings: [],
+ *           xcassets: [],
+ *         };
+ *       }
+ *     }
+ *   }
+ * };
+ * ```
+ *
+ * @param options Options dictate what gets copied where
+ */
 export async function copyProjectAssets(options: Options): Promise<void> {
   const projectRoot = findPackageDir() || process.cwd();
   const content = await fs.readFile(`${projectRoot}/package.json`, {
