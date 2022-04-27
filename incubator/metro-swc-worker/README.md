@@ -33,7 +33,7 @@ npm add --save-dev @rnx-kit/metro-swc-worker
 ## Usage
 
 `@rnx-kit/metro-swc-worker` falls back to Babel for assets and Flow files, and
-relies on esbuild to perform import/export transformation and tree-shaking. For
+relies on esbuild to perform import/export transformation and tree shaking. For
 best effect, we also need to disable Babel's import/export transformation in
 `babel.config.js`:
 

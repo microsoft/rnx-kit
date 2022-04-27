@@ -18,8 +18,8 @@ use symlinks these days. There's
 [a tool for that](./packages/metro-resolver-symlinks)! A few lines of
 configuration, and you're ready to go.
 
-Do you use Metro and miss type-safe bundling and bundle-serving? There's a tool
-for that!
+Do you use Metro and miss the type-safe bundling and bundle-serving in Haul and
+Webpack? There's [a tool for that](./guides/bundling)!
 
 This just scratches the surface, and more are being built all the time.
 

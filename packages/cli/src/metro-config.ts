@@ -109,7 +109,7 @@ const emptySerializerHook = (_graph: Graph, _delta: DeltaResult): void => {
  * @param detectCyclicDependencies When true, cyclic dependency checking is enabled with a default set of options. Otherwise the object allows for fine-grained control over the detection process.
  * @param detectDuplicateDependencies When true, duplicate dependency checking is enabled with a default set of options. Otherwise, the object allows for fine-grained control over the detection process.
  * @param typescriptValidation When true, TypeScript type-checking is enabled with a default set of options. Otherwise, the object allows for fine-grained control over the type-checking process.
- * @param experimental_treeShake When true, experimental tree-shaking is enabled.
+ * @param experimental_treeShake When true, experimental tree shaking is enabled.
  */
 export function customizeMetroConfig(
   metroConfigReadonly: InputConfigT,

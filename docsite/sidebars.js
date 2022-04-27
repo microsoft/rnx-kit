@@ -36,6 +36,10 @@ const sidebars = {
       label: "Tools",
       items: [
         "packages/overview",
+        "packages/config",
+        "packages/cli",
+        "packages/metro-plugin-cyclic-dependencies-detector",
+        "packages/metro-plugin-duplicates-checker",
         "packages/metro-resolver-symlinks",
         "packages/typescript-react-native-compiler",
       ],

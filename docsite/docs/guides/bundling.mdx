@@ -1,0 +1,387 @@
+import PackageCommand from "./_package-command.mdx";
+import PackageRunCommand from "./_package-run-command.mdx";
+import AmplifyCallout from "../_amplify-callout.mdx";
+
+# Bundling
+
+When you're done here, you'll be able to bundle and ship your apps with Metro,
+the React Native bundler. The tools you'll use in this guide _enhance_ Metro,
+making it easier to use, type-safe, and fast.
+
+This guide is meant to be used with one React Native app at a time, though you
+can repeat it for all of your apps.
+
+## Setting up the Tools
+
+Install the tools you'll need for bundling.
+
+<PackageCommand
+  yarnArgs="add @rnx-kit/cli @rnx-kit/babel-preset-metro-react-native @rnx-kit/metro-config @rnx-kit/metro-resolver-symlinks --dev"
+  pnpmArgs="add -D @rnx-kit/cli @rnx-kit/babel-preset-metro-react-native @rnx-kit/metro-config @rnx-kit/metro-resolver-symlinks"
+  npmArgs="add --save-dev @rnx-kit/cli @rnx-kit/babel-preset-metro-react-native @rnx-kit/metro-config @rnx-kit/metro-resolver-symlinks"
+/>
+
+Add `@rnx-kit/babel-preset-metro-react-native` as a preset in your Babel
+configuration:
+
+```js title="babel.config.js"
+module.exports = {
+  presets: ["@rnx-kit/babel-preset-metro-react-native"],
+};
+```
+
+Update your Metro configuration, using `@rnx-kit/metro-config` to create the
+baseline config. Add support for symlinks, too, which all major package managers
+(Yarn, pnpm, npm) use today.
+
+```js title="metro.config.js"
+const { makeMetroConfig } = require("@rnx-kit/metro-config");
+const MetroSymlinksResolver = require("@rnx-kit/metro-resolver-symlinks");
+
+module.exports = makeMetroConfig({
+  resolver: {
+    resolveRequest: MetroSymlinksResolver(),
+  },
+  // Add your existing Metro configuration here! It will be merged in.
+});
+```
+
+:::tip
+
+If you were using Metro before, you probably have some mappings in place which
+work around the fact that Metro doesn't support symlinks. You can get rid of all
+that now! :tada:
+
+:::
+
+## Configuring Your App
+
+Configure your app for bundling from the command-line:
+
+```json title="package.json"
+{
+  "rnx-kit": {
+    "bundle": true
+  }
+}
+```
+
+This turns on bundling with a
+[default configuration](../packages/config#default-configuration).
+
+Chances are you've already got a working bundler for your app. Maybe it's Metro,
+or maybe it's Haul or Re.Pack. You have valuable information encoded in config
+files and command-lines that needs to be preserved.
+
+You might have a `bundle` script command in package.json that looks like this:
+
+```sh
+react-native bundle \
+  --entry-file ./index.js \
+  --platform ios \
+  --dev false \
+  --bundle-output ./dist/app-metro.ios.jsbundle \
+  --sourcemap-output ./dist/app-metro.ios.map"
+```
+
+Good news! Nearly all `react-native bundle` command-line options can be set in
+your `rnx-kit` bundle config. Take a look at the
+[config schema](../packages/config#schema) to see what's available.
+
+```json title="package.json with an updated script command and bundle config"
+{
+  "scripts": {
+    "bundle": "react-native rnx-bundle --dev false"
+  },
+  "rnx-kit": {
+    "bundle": {
+      "entryPath": "./index.js",
+      "bundlePrefix": "app-metro",
+      "targets": ["ios"],
+      "platforms": {
+        "ios": {
+          "sourceMapPath": "app-metro.ios.map"
+        }
+      }
+    }
+  }
+}
+```
+
+Maybe you are using Haul? Haul configuration is complex and may be hard to
+"port" to `rnx-kit` bundle config. After all, Metro doesn't support everything
+Haul does, most notably Webpack plugins.
+
+Review your Haul configuration and command-line scripts. Compare it to the
+[config schema](../packages/config#schema), mapping what fits.
+
+:::info Need a missing feature?
+
+If you need a bundling feature that isn't supported, please make your voice
+heard! :speech_balloon: You can
+[create an **issue**](https://github.com/microsoft/rnx-kit/issues/new?title=Bundling%20Feature%20Request&body=%3c%21--%20Describe%20the%20feature%20your%20need%20here.%20--%3e%0a%0a)
+or even [submit a **pull request**](https://github.com/microsoft/rnx-kit). All
+[contributions](../contributing) are welcome!
+
+:::
+
+## Running the Bundler
+
+Now that your app is configured and has the right tools, you can bundle it using
+the [CLI](../packages/cli):
+
+<PackageRunCommand args="react-native rnx-bundle" />
+
+Unless you changed the output directory, the bundle file and all asset files
+will be under the "./dist" directory.
+
+You can override parts of your configuration using command-line parameters. This
+is useful when making script command shortcuts, such as per-platform bundle
+creation. And, there are some parameters which can only be set via the
+command-line, such as developer-mode and minification.
+
+You can see the full list of parameters by running:
+
+<PackageRunCommand args="react-native rnx-bundle --help" />
+
+## Integrating With PRs and Builds
+
+Add a command to each of your app packages which bundles all target platforms:
+
+```json title="package.json"
+{
+  "scripts": {
+    "bundle": "react-native rnx-bundle --dev false"
+  }
+}
+```
+
+If you use Lerna, you can run one command from the root of your repo to bundle
+all packages:
+
+<PackageRunCommand args="lerna run bundle" />
+
+If you're using a task runner like Lage or Gulp, you can go for a more
+sophisticated integration. The advantage being that `bundle` runs as its own
+task with isolated logging and error handling. And, you can run it in parallel
+with other tasks.
+
+Now that you have a top-level command figured out, add it to your top-level
+package.json:
+
+```json title="package.json"
+{
+  "scripts": {
+    "bundle": "lerna run bundle"
+  }
+}
+```
+
+And then call that top-level command from your PR and Build CI loop definitions:
+
+```yml title="GitHub Actions Example"
+jobs:
+  build:
+    steps:
+      - name: Bundle all packages
+        run: yarn bundle
+```
+
+Easy, right? Now your PRs and Builds will protect the source tree from code that
+breaks bundling!
+
+## Enhancing the Bundler
+
+Remember that bit at the start of this guide about _enhancing_ Metro? You've
+arrived.
+
+### Type Safety
+
+Let's start with **type-safe bundling**. That's right -- TypeScript validation
+in Metro. :sunglasses:
+
+```json
+{
+  "rnx-kit": {
+    "bundle": {
+      "typescriptValidation": true
+    }
+  }
+}
+```
+
+When you first turn this on, it may reveal some type errors. You can work
+through them now, or put them on your backlog and add a new issue to "turn on
+type-safe bundling" as the last step.
+
+Once you have type-safe bundling enabled, developers will see type errors right
+away in their local builds. And, type errors will be kept _out_ of the main
+branch because they'll fail PRs.
+
+### Tree Shaking
+
+Next up is tree shaking, which makes your app bundle smaller by eliminating
+unused code. Some times, your app bundle gets A LOT smaller.
+
+```json
+{
+  "rnx-kit": {
+    "bundle": {
+      "experimental_treeShake": true
+    }
+  }
+}
+```
+
+This feature is marked as `experimental` because it occasionally produces larger
+bundles when used with code-splitting (an internal project which hasn't shipped
+yet).
+
+Double-check that your app bundle is smaller. If you run into trouble, please
+share what you are seeing in
+[a new issue](https://github.com/microsoft/rnx-kit/issues/new/choose).
+
+:::info Performance Gain
+
+With tree shaking, Metro will produce your app bundles faster!
+
+Metro calls out to esbuild to create your tree shaken app bundle from individual
+package files. Metro (a JavaScript application) is not nearly as fast as esbuild
+(a native application).
+
+:::
+
+### Duplicate Dependencies
+
+Duplicate dependencies can cause runtime problems. Metro won't warn you about
+them, and tree shaking won't get rid of them.
+
+Turn on the
+[duplicate dependency checker](../packages/metro-plugin-duplicates-checker):
+
+```json
+{
+  "rnx-kit": {
+    "bundle": {
+      "detectDuplicateDependencies": true
+    }
+  }
+}
+```
+
+When you first turn this on, it may reveal that you already have duplicates in
+your app bundle. Don't panic!
+
+You can use fine-grained configuration to "live with" the duplicates you have,
+until they can be fixed:
+
+```js
+{
+  "rnx-kit": {
+    "bundle": {
+      "detectDuplicateDependencies": {
+        // List each duplicate here to ignore it
+        "ignoredModules": ["react-is"],
+        "throwOnError": true
+      }
+    }
+  }
+}
+```
+
+### Cyclic Dependencies
+
+Cyclic dependencies are a "loop" in your dependency tree: logger >
+file-appender > fs-utils > logger. Like duplicate dependencies, they, too, can
+cause runtime problems.
+
+Find them using the
+[cyclic dependency detector](../packages/metro-plugin-cyclic-dependencies-detector):
+
+```json
+{
+  "rnx-kit": {
+    "bundle": {
+      "detectCyclicDependencies": true
+    }
+  }
+}
+```
+
+After turning this on, you might discover that you already have cycles in your
+dependency tree. It's ok!
+
+Use fine-grained configuration to "live with" the cycles you have, until they
+can be fixed.
+
+```js
+{
+  "rnx-kit": {
+    "bundle": {
+      "detectCyclicDependencies": {
+        "includeNodeModules": false,
+        "linesOfContext": 5,
+        "throwOnError": false // Set this to true after making fixes
+      }
+    }
+  }
+}
+```
+
+## Running the Bundle Server
+
+Create a new script command in your app which runs the bundle server:
+
+```json title="package.json"
+{
+  "scripts": {
+    "start": "react-native rnx-start"
+  }
+}
+```
+
+This [CLI](../packages/cli) command is very similar to `react-native start`.
+
+You can see the full list of command-line parameters by running:
+
+<PackageRunCommand args="react-native rnx-start --help" />
+
+You can control default server properties for you app through configuration. For
+example, you can enable enhancements like type-safety or duplicate dependency
+detection.
+
+```json title="package.json"
+{
+  "rnx-kit": {
+    "server": {
+      "detectCyclicDependencies": true,
+      "detectDuplicateDependencies": true,
+      "typescriptValidation": true
+    }
+  }
+}
+```
+
+Take a look at the [config schema](../packages/config#schema) to see what is
+available.
+
+Command-line parameters take precedence over your app's configuration. This is
+useful when making using specialized commands in script blocks or at your
+development terminal.
+
+Once the server is running, it reports status and error messages to the terminal
+window. It also accepts input commands. For example, you can force the client to
+reload its bundle or open its developer menu. You can also quit the server with
+`Control-C`.
+
+## Wrapping Up
+
+You've done it! You're bundling and serving your React Native apps with Metro,
+using _enhancements_ to make the process fast and safe! And your customers will
+thank you when their download size drops thanks to tree shaking!
+
+<AmplifyCallout />
+
+See room for improvement? Great! [Contribute](/docs/contributing) your ideas in
+[a new issue](https://github.com/microsoft/rnx-kit/issues/new/choose) or through
+[a pull request](https://github.com/microsoft/rnx-kit/pulls).
