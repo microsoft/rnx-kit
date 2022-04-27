@@ -124,7 +124,7 @@ export async function gatherConfigs({
   }
 
   const resolveOptions = { paths: [projectRoot] };
-  const assetConfigs: Record<string, AssetsConfig | null> = {};
+  const assetsConfigs: Record<string, AssetsConfig | null> = {};
 
   for (const pkg of packages) {
     try {
@@ -135,7 +135,7 @@ export async function gatherConfigs({
       if (await fs.pathExists(reactNativeConfig)) {
         const { nativeAssets } = require(reactNativeConfig);
         if (nativeAssets) {
-          assetConfigs[pkg] = nativeAssets;
+          assetsConfigs[pkg] = nativeAssets;
         }
       }
     } catch (err) {
@@ -150,12 +150,12 @@ export async function gatherConfigs({
     const overrides = Object.entries(nativeAssets);
     for (const [pkgName, config] of overrides) {
       if (config === null || isAssetsConfig(config)) {
-        assetConfigs[pkgName] = config;
+        assetsConfigs[pkgName] = config;
       }
     }
   }
 
-  return assetConfigs;
+  return assetsConfigs;
 }
 
 /**
