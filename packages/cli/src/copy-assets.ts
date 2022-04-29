@@ -235,12 +235,12 @@ export async function copyProjectAssets(options: Options): Promise<void> {
       continue;
     }
 
-    info(`Copying assets for "${packageName}"`);
-
     const assets = await getAssets(context);
-    await copyAssets(context, packageName, assets);
     if (options.bundleAar) {
       assembleAarBundle(context, packageName, assets);
+    } else {
+      info(`Copying assets for "${packageName}"`);
+      await copyAssets(context, packageName, assets);
     }
   }
 }
