@@ -5,16 +5,23 @@ import type { PackageManifest } from "@rnx-kit/tools-node/package";
 import { findPackageDir } from "@rnx-kit/tools-node/package";
 import type { AllPlatforms } from "@rnx-kit/tools-react-native";
 import { parsePlatform } from "@rnx-kit/tools-react-native";
+import { spawnSync } from "child_process";
 import * as fs from "fs-extra";
+import * as os from "os";
 import * as path from "path";
+
+export type AndroidArchive = {
+  targetName: string;
+  version?: string;
+  output?: string;
+};
 
 export type NativeAssets = {
   assets?: string[];
   strings?: string[];
-  aar?: {
-    targetName: string;
-    version?: string;
+  aar?: AndroidArchive & {
     env?: Record<string, string | number>;
+    dependencies?: Record<string, AndroidArchive>;
   };
   xcassets?: string[];
 };
@@ -27,14 +34,14 @@ export type Options = {
   [key: string]: unknown;
 };
 
-export type AssetsConfig = {
-  getAssets?: (context: Context) => Promise<NativeAssets>;
-};
-
 export type Context = {
   projectRoot: string;
   manifest: PackageManifest;
   options: Options;
+};
+
+export type AssetsConfig = {
+  getAssets?: (context: Context) => Promise<NativeAssets>;
 };
 
 function ensureOption(options: Options, opt: string, flag = opt) {
@@ -42,6 +49,16 @@ function ensureOption(options: Options, opt: string, flag = opt) {
     error(`Missing required option: --${flag}`);
     process.exit(1);
   }
+}
+
+function findGradleProject(projectRoot: string): string | undefined {
+  if (fs.existsSync(path.join(projectRoot, "android", "build.gradle"))) {
+    return path.join(projectRoot, "android");
+  }
+  if (fs.existsSync(path.join(projectRoot, "build.gradle"))) {
+    return projectRoot;
+  }
+  return undefined;
 }
 
 function isAssetsConfig(config: unknown): config is AssetsConfig {
@@ -52,17 +69,135 @@ function keysOf(record: Record<string, unknown> | undefined): string[] {
   return record ? Object.keys(record) : [];
 }
 
+function versionOf(pkgName: string): string {
+  const { version } = require(`${pkgName}/package.json`);
+  return version;
+}
+
+function getAndroidPaths(
+  context: Context,
+  packageName: string,
+  { targetName, version, output }: AndroidArchive
+) {
+  const projectRoot = path.dirname(
+    require.resolve(`${packageName}/package.json`)
+  );
+
+  switch (packageName) {
+    case "hermes-engine":
+      return {
+        projectRoot,
+        output: path.join(projectRoot, "android", "hermes-release.aar"),
+        destination: path.join(
+          context.options.assetsDest,
+          "aar",
+          `hermes-release-${versionOf(packageName)}.aar`
+        ),
+      };
+
+    case "react-native":
+      return {
+        projectRoot,
+        output: path.join(projectRoot, "android"),
+        destination: path.join(
+          context.options.assetsDest,
+          "aar",
+          "react-native"
+        ),
+      };
+
+    default: {
+      const androidProject = findGradleProject(projectRoot);
+      return {
+        projectRoot,
+        androidProject,
+        output:
+          output ||
+          (androidProject &&
+            path.join(
+              androidProject,
+              "build",
+              "outputs",
+              "aar",
+              `${targetName}-release.aar`
+            )),
+        destination: path.join(
+          context.options.assetsDest,
+          "aar",
+          `${targetName}-${version || versionOf(packageName)}.aar`
+        ),
+      };
+    }
+  }
+}
+
 async function assembleAarBundle(
-  _context: Context,
-  _packageName: string,
+  context: Context,
+  packageName: string,
   { aar }: NativeAssets
 ): Promise<void> {
   if (!aar) {
     return;
   }
 
-  const { targetName } = aar;
-  console.log(`./gradlew :${targetName}:assembleRelease`);
+  const findUp = require("find-up");
+  const gradlew = await findUp(
+    os.platform() === "win32" ? "gradlew.bat" : "gradlew"
+  );
+  if (!gradlew) {
+    warn(`Skipped \`${packageName}\`: cannot find \`gradlew\``);
+    return;
+  }
+
+  const { androidProject, output } = getAndroidPaths(context, packageName, aar);
+  if (!androidProject || !output) {
+    warn(`Skipped \`${packageName}\`: cannot find \`build.gradle\``);
+    return;
+  }
+
+  const { targetName, version, env, dependencies } = aar;
+  const targets = [`:${targetName}:assembleRelease`];
+  const targetsToCopy: [string, string][] = [];
+  if (dependencies) {
+    for (const [dependencyName, aar] of Object.entries(dependencies)) {
+      const { output, destination } = getAndroidPaths(
+        context,
+        dependencyName,
+        aar
+      );
+      if (output) {
+        if (!fs.existsSync(output)) {
+          targets.push(`:${aar?.targetName}:assembleRelease`);
+          targetsToCopy.push([output, destination]);
+        } else if (!fs.existsSync(destination)) {
+          targetsToCopy.push([output, destination]);
+        }
+      }
+    }
+  }
+
+  // Run only one Gradle task at a time
+  spawnSync(gradlew, targets, {
+    cwd: androidProject,
+    stdio: "inherit",
+    env: {
+      ENABLE_HERMES: "true",
+      NODE_MODULES_PATH: path.join(process.cwd(), "node_modules"),
+      REACT_NATIVE_VERSION: versionOf("react-native"),
+      ...process.env,
+      ...env,
+    },
+  });
+
+  const destination = path.join(context.options.assetsDest, "aar");
+  await fs.ensureDir(destination);
+
+  const aarVersion = version || versionOf(packageName);
+  const dest = path.join(destination, `${targetName}-${aarVersion}.aar`);
+  await Promise.all([
+    fs.copy(output, dest),
+    ...targetsToCopy.map(([src, dest]) => fs.copy(src, dest)),
+  ]);
 }
 
 async function copyFiles(files: unknown, destination: string): Promise<void> {
@@ -132,7 +267,7 @@ export async function gatherConfigs({
         require.resolve(`${pkg}/package.json`, resolveOptions)
       );
       const reactNativeConfig = `${pkgPath}/react-native.config.js`;
-      if (await fs.pathExists(reactNativeConfig)) {
+      if (fs.existsSync(reactNativeConfig)) {
         const { nativeAssets } = require(reactNativeConfig);
         if (nativeAssets) {
           assetsConfigs[pkg] = nativeAssets;
@@ -145,7 +280,7 @@ export async function gatherConfigs({
 
   // Overrides from project config
   const reactNativeConfig = `${projectRoot}/react-native.config.js`;
-  if (await fs.pathExists(reactNativeConfig)) {
+  if (fs.existsSync(reactNativeConfig)) {
     const { nativeAssets } = require(reactNativeConfig);
     const overrides = Object.entries(nativeAssets);
     for (const [pkgName, config] of overrides) {
@@ -231,17 +366,38 @@ export async function copyProjectAssets(options: Options): Promise<void> {
 
     const { getAssets } = config;
     if (typeof getAssets !== "function") {
-      warn(`Skipped "${packageName}": getAssets is not a function`);
+      warn(`Skipped \`${packageName}\`: getAssets is not a function`);
       continue;
     }
 
     const assets = await getAssets(context);
-    if (options.bundleAar) {
-      assembleAarBundle(context, packageName, assets);
+    if (options.bundleAar && assets.aar) {
+      info(`Assembling "${packageName}"`);
+      await assembleAarBundle(context, packageName, assets);
     } else {
       info(`Copying assets for "${packageName}"`);
       await copyAssets(context, packageName, assets);
     }
+  }
+
+  if (options.bundleAar) {
+    const dummyAar = { targetName: "dummy" };
+    const copyTasks = [];
+    for (const dependencyName of ["hermes-engine", "react-native"]) {
+      const { output, destination } = getAndroidPaths(
+        context,
+        dependencyName,
+        dummyAar
+      );
+      if (
+        output &&
+        (!fs.existsSync(destination) || fs.statSync(destination).isDirectory())
+      ) {
+        info(`Copying Android Archive of "${dependencyName}"`);
+        copyTasks.push(fs.copy(output, destination));
+      }
+    }
+    await Promise.all(copyTasks);
   }
 }
 
