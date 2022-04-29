@@ -46,6 +46,7 @@ const config = {
   },
 
   plugins: [
+    "./plugins/docusaurus/docusaurus-plugin-monorepo-markdown-processor",
     [
       require.resolve("@cmfcmf/docusaurus-search-local"),
       /** @type {SearchPluginOptions} */
