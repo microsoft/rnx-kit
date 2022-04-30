@@ -1,8 +1,12 @@
+<!--remove-block start-->
+
 # @rnx-kit/metro-serializer-esbuild
 
 [![Build](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml/badge.svg)](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml)
 ![This plugin is highly experimental](https://img.shields.io/badge/state-experimental-critical)
 [![npm version](https://img.shields.io/npm/v/@rnx-kit/metro-serializer-esbuild)](https://www.npmjs.com/package/@rnx-kit/metro-serializer-esbuild)
+
+<!--remove-block end-->
 
 ⚠️ **THIS PLUGIN IS HIGHLY EXPERIMENTAL** ⚠️
 

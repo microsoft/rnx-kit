@@ -1,7 +1,11 @@
+<!--remove-block start-->
+
 # @rnx-kit/golang
 
 [![Build](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml/badge.svg)](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml)
 [![npm version](https://img.shields.io/npm/v/@rnx-kit/golang)](https://www.npmjs.com/package/@rnx-kit/golang)
+
+<!--remove-block end-->
 
 Integrate [Go](https://golang.org) into your monorepo and create native apps
 that accelerate development and CI builds.
