@@ -243,8 +243,7 @@ html[data-theme="dark"] .navbar {
 /*
  * Links
  */
-.markdown p a,
-.markdown li a {
+.markdown a {
   background-color: rgba(187, 239, 253, 0.3);
   border-bottom: 1px solid var(--ifm-hr-border-color);
   color: var(--ifm-font-color-base);
@@ -252,21 +251,18 @@ html[data-theme="dark"] .navbar {
   line-height: calc(var(--ifm-font-size-base) + 4px);
 }
 
-.markdown p a:hover,
-.markdown li a:hover {
+.markdown a:hover {
   background-color: rgb(211, 245, 253);
   color: var(--ifm-font-color-base);
   border-bottom: 1px solid var(--ifm-hr-border-color);
 }
 
-html[data-theme="dark"] .markdown p a,
-html[data-theme="dark"] .markdown li a {
+html[data-theme="dark"] .markdown a {
   background-color: rgba(var(--react-native-color-rgb), 0.12);
   border-bottom-color: rgba(var(--react-native-color-rgb), 0.3);
 }
 
-html[data-theme="dark"] .markdown p a:hover,
-html[data-theme="dark"] .markdown li a:hover {
+html[data-theme="dark"] .markdown a:hover {
   background-color: rgba(var(--react-native-color-rgb), 0.4);
   border-bottom-color: rgb(var(--react-native-color-rgb));
 }
@@ -288,7 +284,6 @@ html[data-theme="dark"] .markdown li a:hover {
 /* dropdown menu titles */
 .menu__list-item-collapsible {
   font-size: 16px;
-  font-weight: var(--ifm-font-weight-bold);
   padding: 0px 12px;
 }
 
@@ -314,7 +309,6 @@ html[data-theme="dark"] .markdown li a:hover {
   border-left-style: solid;
   border-left-width: 4px;
   color: var(--ifm-font-color-base);
-  font-weight: var(--ifm-font-weight-bold);
   padding-left: 8px;
 }
 

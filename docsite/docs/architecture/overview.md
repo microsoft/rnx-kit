@@ -1,10 +1,11 @@
 # Architecture Overview
 
-:::danger Draft Content
+If you're here, it means you want to learn more about the tools themselves. You
+want to understand **why**. What's going on inside of a particular tool? What
+decisions led to that design?
 
-This page needs to be converted from a draft to real content.
-
-:::
-
-This area goes explores the architecture of different packages, and the library
-as a whole.
+Don't see the topic you're looking for? Do you have specific questions that
+aren't answered here? Take a look at the [Resources](../resources) area. You'll
+find talks, podcasts, recorded streaming sessions, and other materials that may
+help you out. You'll also find links to the developer community where you can
+ask questions and get help.

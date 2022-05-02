@@ -26,8 +26,17 @@
   },
   "devDependencies": {
     "@docusaurus/module-type-aliases": "2.0.0-beta.18",
+    "@mdx-js/util": "1.6.22",
     "@tsconfig/docusaurus": "^1.0.5",
-    "typescript": "^4.0.0"
+    "mdast-zone": "^4.0.1",
+    "remark-footnotes": "2.0.0",
+    "remark-mdx": "1.6.22",
+    "remark-parse": "8.0.3",
+    "remark-squeeze-paragraphs": "4.0.0",
+    "typescript": "^4.0.0",
+    "unified": "9.2.0",
+    "unist-util-visit": "^2.0.3",
+    "vfile": "^4.0.0"
   },
   "browserslist": {
     "production": [

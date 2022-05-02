@@ -66,8 +66,8 @@ Configure your app for bundling from the command-line:
 }
 ```
 
-This turns on bundling with a
-[default configuration](../packages/config#default-configuration).
+This turns on bundling using a default configuration. The
+[config schema](../tools/config#schema) shows all properties and their defaults.
 
 Chances are you've already got a working bundler for your app. Maybe it's Metro,
 or maybe it's Haul or Re.Pack. You have valuable information encoded in config
@@ -86,7 +86,7 @@ react-native bundle \
 
 Good news! Nearly all `react-native bundle` command-line options can be set in
 your `rnx-kit` bundle config. Take a look at the
-[config schema](../packages/config#schema) to see what's available.
+[config schema](../tools/config#schema) to see what's available.
 
 ```json title="package.json with an updated script command and bundle config"
 {
@@ -113,7 +113,7 @@ Maybe you are using Haul? Haul configuration is complex and may be hard to
 Haul does, most notably Webpack plugins.
 
 Review your Haul configuration and command-line scripts. Compare it to the
-[config schema](../packages/config#schema), mapping what fits.
+[config schema](../tools/config#schema), mapping what fits.
 
 :::info Need a missing feature?
 
@@ -128,7 +128,7 @@ or even [submit a **pull request**](https://github.com/microsoft/rnx-kit). All
 ## Running the Bundler
 
 Now that your app is configured and has the right tools, you can bundle it using
-the [CLI](../packages/cli):
+the [CLI](../tools/cli):
 
 <PackageRunCommand args="react-native rnx-bundle" />
 
@@ -257,7 +257,7 @@ Duplicate dependencies can cause runtime problems. Metro won't warn you about
 them, and tree shaking won't get rid of them.
 
 Turn on the
-[duplicate dependency checker](../packages/metro-plugin-duplicates-checker):
+[duplicate dependency checker](../tools/metro-plugin-duplicates-checker):
 
 ```json
 {
@@ -296,7 +296,7 @@ file-appender > fs-utils > logger. Like duplicate dependencies, they, too, can
 cause runtime problems.
 
 Find them using the
-[cyclic dependency detector](../packages/metro-plugin-cyclic-dependencies-detector):
+[cyclic dependency detector](../tools/metro-plugin-cyclic-dependencies-detector):
 
 ```json
 {
@@ -340,7 +340,7 @@ Create a new script command in your app which runs the bundle server:
 }
 ```
 
-This [CLI](../packages/cli) command is very similar to `react-native start`.
+This [CLI](../tools/cli) command is very similar to `react-native start`.
 
 You can see the full list of command-line parameters by running:
 
@@ -362,7 +362,7 @@ detection.
 }
 ```
 
-Take a look at the [config schema](../packages/config#schema) to see what is
+Take a look at the [config schema](../tools/config#schema) to see what is
 available.
 
 Command-line parameters take precedence over your app's configuration. This is

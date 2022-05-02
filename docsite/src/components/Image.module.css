@@ -1,0 +1,21 @@
+.container {
+  display: flex;
+  align-items: center;
+  line-height: 0;
+}
+
+.container img {
+  max-width: unset;
+}
+
+.image {
+}
+
+html[data-theme="dark"] .imageInvertable {
+  filter: invert();
+}
+
+.text {
+  padding-left: 5px;
+  line-height: normal;
+}

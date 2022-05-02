@@ -1,5 +1,7 @@
 // @ts-check
-// Note: type annotations allow type checking and IDEs autocompletion
+
+const remarkInclude = require("./plugins/remark-include");
+const remarkRemoveBlock = require("./plugins/remark-remove-block");
 
 /**
  * @typedef {{plain: Record<string, string>; styles: Array<{types: string[], style: { color: string; }}>}} CodeTheme
@@ -90,6 +92,17 @@ const config = {
           sidebarPath: require.resolve("./sidebars.js"),
           sidebarCollapsed: false,
           editUrl: docsiteUrl + "/",
+          beforeDefaultRemarkPlugins: [remarkInclude, remarkRemoveBlock],
+        },
+        blog: {
+          blogTitle: "Blog",
+          postsPerPage: "ALL",
+          blogSidebarTitle: "Posts",
+          blogSidebarCount: "ALL",
+          feedOptions: {
+            type: ["atom", "rss"],
+            copyright: `Copyright © ${new Date().getFullYear()} Microsoft`,
+          },
         },
         theme: {
           customCss: require.resolve("./src/css/custom.css"),
@@ -116,7 +129,7 @@ const config = {
           },
           {
             type: "doc",
-            docId: "packages/overview",
+            docId: "tools/overview",
             position: "right",
             label: "Tools",
           },
@@ -137,6 +150,11 @@ const config = {
             docId: "contributing",
             position: "right",
             label: "Contributing",
+          },
+          {
+            to: "blog",
+            label: "Blog",
+            position: "right",
           },
           {
             src: "img/github-logo.svg",
