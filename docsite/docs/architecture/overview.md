@@ -1,13 +1,11 @@
-# Overview
-
-This area dives into the architecture of the tools.
+# Architecture Overview
 
 If you're here, it means you want to learn more about the tools themselves. You
-want to understand their detailed inner workings, the decisions that led there,
-and where the tools are headed in the future.
+want to understand **why**. What's going on inside of a particular tool? What
+decisions led to that design?
 
-Don't see the topic you're looking for? Ask for it in
-[a new issue](https://github.com/microsoft/rnx-kit/issues/new/choose). If you
-have specific questions, you might find answers in the [resources](../resources)
-area. There are talks, podcasts, recorded streaming sessions, and other
-materials there there, including links to the React Native community.
+Don't see the topic you're looking for? Do you have specific questions that
+aren't answered here? Take a look at the [Resources](../resources) area. You'll
+find talks, podcasts, recorded streaming sessions, and other materials that may
+help you out. You'll also find links to the developer community where you can
+ask questions and get help.

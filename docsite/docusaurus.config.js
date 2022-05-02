@@ -118,7 +118,7 @@ const config = {
           },
           {
             type: "doc",
-            docId: "packages/overview",
+            docId: "tools/overview",
             position: "right",
             label: "Tools",
           },

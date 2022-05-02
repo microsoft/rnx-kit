@@ -15,7 +15,7 @@ React Native release you're using? There's
 
 Can't use Metro because it doesn't understand symlinks? Yarn, npm, and pmpm all
 use symlinks these days. There's
-[a tool for that](./packages/metro-resolver-symlinks)! A few lines of
+[a tool for that](./tools/metro-resolver-symlinks)! A few lines of
 configuration, and you're ready to go.
 
 Do you use Metro and miss the type-safe bundling and bundle-serving in Haul and
@@ -82,8 +82,8 @@ $ yarn react-native rnx-dep-check --vigilant 0.66
 ### Choosing Individual Tools
 
 The tools are designed to be used individually. You can choose
-[specific tools](./packages/overview), and use them however and wherever they
-are needed. Mix and match with other tools and the CLI.
+[specific tools](./tools/overview), and use them however and wherever they are
+needed. Mix and match with other tools and the CLI.
 
 Each tool has its own TypeScript API. There is plenty of documentation,
 including How-To guides and examples to get you going.

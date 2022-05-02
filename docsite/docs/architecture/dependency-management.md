@@ -1,7 +1,7 @@
 # Dependency Management
 
-[dep-check](../packages/dep-check) is a dependency manager and linter that aims
-to bring alignment to all React Native developers who are working in any-size
+[dep-check](../tools/dep-check) is a dependency manager and linter that aims to
+bring alignment to all React Native developers who are working in any-size
 repositories, from small self-contained repositories to big, enterprise
 monorepos.
 
