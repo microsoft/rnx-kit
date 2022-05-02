@@ -1,5 +1,7 @@
 // @ts-check
-// Note: type annotations allow type checking and IDEs autocompletion
+
+const remarkInclude = require("./plugins/remark/remark-include");
+const remarkRemoveBlock = require("./plugins/remark/remark-remove-block");
 
 /**
  * @typedef {{plain: Record<string, string>; styles: Array<{types: string[], style: { color: string; }}>}} CodeTheme
@@ -46,7 +48,6 @@ const config = {
   },
 
   plugins: [
-    "./plugins/docusaurus/docusaurus-plugin-monorepo-markdown-processor",
     [
       require.resolve("@cmfcmf/docusaurus-search-local"),
       /** @type {SearchPluginOptions} */
