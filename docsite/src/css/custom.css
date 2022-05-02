@@ -284,7 +284,6 @@ html[data-theme="dark"] .markdown a:hover {
 /* dropdown menu titles */
 .menu__list-item-collapsible {
   font-size: 16px;
-  font-weight: var(--ifm-font-weight-bold);
   padding: 0px 12px;
 }
 
@@ -310,7 +309,6 @@ html[data-theme="dark"] .markdown a:hover {
   border-left-style: solid;
   border-left-width: 4px;
   color: var(--ifm-font-color-base);
-  font-weight: var(--ifm-font-weight-bold);
   padding-left: 8px;
 }
 
