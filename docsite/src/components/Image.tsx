@@ -12,7 +12,7 @@ export interface ImageProps {
 
 export default function Image(props: ImageProps): JSX.Element {
   const children = props.children;
-  const invertable = props.invertable ?? false;
+  const invertable = Boolean(props.invertable);
 
   const imageProps = { ...props, src: useBaseUrl(props.src) };
   delete imageProps.children;
