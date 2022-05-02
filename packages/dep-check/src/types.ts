@@ -75,7 +75,8 @@ export type ProfileVersion =
   | "0.65"
   | "0.66"
   | "0.67"
-  | "0.68";
+  | "0.68"
+  | "0.69";
 
 export type ProfileMap = Record<ProfileVersion, Profile>;
 

@@ -422,7 +422,7 @@ describe("makeVigilantCommand()", () => {
       },
       peerDependencies: {
         react: "17.0.2",
-        "react-native": "0.64.3 || 0.65.2 || ^0.64.2 || ^0.65.0-0",
+        "react-native": "0.64.3 || 0.65.2 || ^0.64.2 || ^0.65.0",
       },
     });
   });

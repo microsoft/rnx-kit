@@ -3,7 +3,7 @@ import profile_0_64 from "./profile-0.64";
 
 const reactNative: Package = {
   name: "react-native",
-  version: "^0.65.0-0",
+  version: "^0.65.0",
   capabilities: ["react"],
 };
 
@@ -30,12 +30,12 @@ const profile: Profile = {
   "core-ios": reactNative,
   "core-macos": {
     name: "react-native-macos",
-    version: "^0.65.0-0",
+    version: "^0.65.0",
     capabilities: ["react"],
   },
   "core-windows": {
     name: "react-native-windows",
-    version: "^0.65.0-0",
+    version: "^0.65.0",
     capabilities: ["core"],
   },
 
@@ -67,6 +67,10 @@ const profile: Profile = {
   hermes: {
     name: "hermes-engine",
     version: "~0.8.1",
+  },
+  hooks: {
+    name: "@react-native-community/hooks",
+    version: "^2.8.0",
   },
   jest: {
     name: "jest",
