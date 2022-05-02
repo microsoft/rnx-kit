@@ -1,5 +1,12 @@
 # @rnx-kit/docsite
 
+## 0.1.2
+
+### Patch Changes
+
+- e905856: Add bundling guide. Polish existing web pages. Add placeholder pages for some tools packages (needed by bundling guide).
+- ac38af7: Upgrade Docusaurus. Change code-block theme to vsLight when in light mode, and fix the font-color and shadows so the code stands out.
+
 ## 0.1.1
 
 ### Patch Changes
