@@ -92,6 +92,17 @@ const config = {
           sidebarPath: require.resolve("./sidebars.js"),
           sidebarCollapsed: false,
           editUrl: docsiteUrl + "/",
+          beforeDefaultRemarkPlugins: [remarkInclude, remarkRemoveBlock],
+        },
+        blog: {
+          blogTitle: "Blog",
+          postsPerPage: "ALL",
+          blogSidebarTitle: "Posts",
+          blogSidebarCount: "ALL",
+          feedOptions: {
+            type: ["atom", "rss"],
+            copyright: `Copyright © ${new Date().getFullYear()} Microsoft`,
+          },
         },
         theme: {
           customCss: require.resolve("./src/css/custom.css"),
@@ -139,6 +150,11 @@ const config = {
             docId: "contributing",
             position: "right",
             label: "Contributing",
+          },
+          {
+            to: "blog",
+            label: "Blog",
+            position: "right",
           },
           {
             src: "img/github-logo.svg",
