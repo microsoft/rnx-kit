@@ -1,7 +1,7 @@
 // @ts-check
 
-const remarkInclude = require("./plugins/remark/remark-include");
-const remarkRemoveBlock = require("./plugins/remark/remark-remove-block");
+const remarkInclude = require("./plugins/remark-include");
+const remarkRemoveBlock = require("./plugins/remark-remove-block");
 
 /**
  * @typedef {{plain: Record<string, string>; styles: Array<{types: string[], style: { color: string; }}>}} CodeTheme

@@ -1,6 +1,21 @@
+<!--remove-block start-->
+
 # Contributing
 
-This project welcomes contributions and suggestions!
+<!--remove-block end-->
+
+Thank you for your interest in this project! We welcome all contributions and
+suggestions!
+
+You can
+[open a new issue](https://github.com/microsoft/rnx-kit/issues/new/choose) to
+report a bug, share an idea, or request a feature. If you're more hands-on, you
+can [submit a pull-request](https://github.com/microsoft/rnx-kit/pulls).
+
+As a contributor, you're expected to follow the
+[code of conduct](https://github.com/microsoft/rnx-kit/blob/main/CODE_OF_CONDUCT.md).
+
+<!--remove-block start-->
 
 - [Contributor License Agreement](#Contributor-License-Agreement)
 - [Code of Conduct](#Code-of-Conduct)
@@ -9,6 +24,8 @@ This project welcomes contributions and suggestions!
 - [Change Logs](#Change-Logs)
 - [Releases](#Releases)
 - [Style Guide](#Style-Guide)
+
+<!--remove-block end-->
 
 ## Contributor License Agreement
 
@@ -20,15 +37,6 @@ When you submit a pull request, a CLA bot will automatically determine whether
 you need to provide a CLA and decorate the PR appropriately (e.g., status check,
 comment). Simply follow the instructions provided by the bot. You will only need
 to do this once across all repos using our CLA.
-
-## Code of Conduct
-
-This project has adopted the
-[Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/).
-For more information see the
-[Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or
-contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any
-additional questions or comments.
 
 ## Requirements
 
@@ -101,7 +109,7 @@ current working directory.
 | `yarn lint`                 | Lints **all** packages in the repository              | Lints the **current** package only                  |
 | `yarn test`                 | Tests **all** packages in the repository              | Tests the **current** package only                  |
 
-## Adding a new package
+## Adding a New Package
 
 To ensure that there is consistency and shared practices across the monorepo, we
 have introduced a small script to easily allow for new packages generation.
@@ -123,25 +131,14 @@ change descriptions submitted with each PR.
 
 ```
 $ yarn change
-
-Checking for changes against "origin/main"
-fetching latest from remotes "origin/main"
-Found changes in the following packages:
-  @rnx-kit/cli
-  @rnx-kit/config
-  ...
-
-Please describe the changes for: @rnx-kit/cli
-? Change type › - Use arrow-keys. Return to submit.
-❯   Patch      - bug fixes; no API changes.
-    Minor      - small feature; backwards compatible API changes.
-    None       - this change does not affect the published package in any way.
 ```
 
+This launches [Changesets](https://github.com/atlassian/changesets#readme),
+which collects and records information about your change.
+
 Follow the prompts and describe the changes you are making to each package. This
-information is written in files under `/change`. Our CI loop uses these files to
-bump package versions and update package change logs. The entire process is
-coordinated by [Changesets](https://github.com/atlassian/changesets#readme).
+information is written in files under `/.changeset`. Our CI loop uses these
+files to bump package versions and update package change logs.
 
 ## Releases
 
