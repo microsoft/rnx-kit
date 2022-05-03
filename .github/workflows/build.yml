@@ -8,10 +8,10 @@ jobs:
     if: ${{ github.repository == 'microsoft/rnx-kit' }}
     runs-on: ubuntu-latest
     steps:
-      - name: Set up Node 14
+      - name: Set up Node 16
         uses: actions/setup-node@v3.1.1
         with:
-          node-version: 14
+          node-version: 16
       - uses: actions/setup-go@v3
         with:
           go-version: "^1.14.0"
@@ -30,6 +30,9 @@ jobs:
         run: yarn build:ci
       - name: Bundle packages
         run: yarn bundle:ci
+      - name: Build website
+        run: yarn build
+        working-directory: docsite
       - name: Create release PR or publish to npm
         uses: changesets/action@v1
         with:
@@ -38,3 +41,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Deploy website
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docsite/build
+        user_name: github-actions[bot]
+          user_email: 41898282+github-actions[bot]@users.noreply.github.com

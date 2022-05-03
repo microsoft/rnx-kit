@@ -142,6 +142,30 @@ jobs:
           [[ $device =~ $re ]] || exit 1
           xcodebuild -workspace SampleCrossApp.xcworkspace -scheme ReactTestApp -destination "platform=iOS Simulator,id=${BASH_REMATCH[1]}" CODE_SIGNING_ALLOWED=NO COMPILER_INDEX_STORE_ENABLE=NO build | xcpretty
         working-directory: packages/test-app/ios
+  build-website:
+    name: "Build the website"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Node 16
+        uses: actions/setup-node@v3.1.1
+        with:
+          node-version: 16
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Cache /.yarn-offline-mirror
+        uses: actions/cache@v3
+        with:
+          path: .yarn-offline-mirror
+          key: ${{ runner.os }}-${{ hashFiles('yarn.lock') }}-6
+      - name: Install package dependencies
+        run: yarn ci
+        env:
+          CI_SKIP_GO: 1
+      - name: Build website
+        run: yarn build
+        working-directory: docsite
   label:
     name: "Label"
     runs-on: ubuntu-latest
