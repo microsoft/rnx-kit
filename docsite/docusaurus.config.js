@@ -41,6 +41,8 @@ const config = {
   favicon: "img/favicon.ico",
   organizationName,
   projectName,
+  deploymentBranch: "gh-pages",
+  trailingSlash: false,
 
   customFields: {
     title1,
