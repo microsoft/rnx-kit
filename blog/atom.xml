@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <id>https://microsoft.github.io/rnx-kit/blog</id>
+    <title>React Native Developer Tools Blog</title>
+    <updated>2022-05-04T00:00:00.000Z</updated>
+    <generator>https://github.com/jpmonette/feed</generator>
+    <link rel="alternate" href="https://microsoft.github.io/rnx-kit/blog"/>
+    <subtitle>React Native Developer Tools Blog</subtitle>
+    <icon>https://microsoft.github.io/rnx-kit/img/favicon.ico</icon>
+    <rights>Copyright © 2022 Microsoft</rights>
+    <entry>
+        <title type="html"><![CDATA[React Native Developer Tools]]></title>
+        <id>react-native-developer-tools</id>
+        <link href="https://microsoft.github.io/rnx-kit/blog/react-native-developer-tools"/>
+        <updated>2022-05-04T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[Hi! Today, we are launching a React Native Developer Tools project!]]></summary>
+        <content type="html"><![CDATA[<p>Hi! Today, we are launching a React Native Developer Tools project! 🚀</p><p>It is a set of <strong>modern</strong>, <strong>scalable tools</strong> focused on providing an
+<strong>exceptional developer experience</strong>.</p><p>Our hope is that this project helps you with your React Native apps, and that
+you'll help spread the word! <code>#rnxkit</code></p><p><a href="https://aka.ms/rnxkit" target="_blank" rel="noopener noreferrer">https://aka.ms/rnxkit</a></p><h2 class="anchor anchorWithStickyNavbar_YDjN" id="made-by-developers-for-developers">Made by Developers, for Developers<a class="hash-link" href="#made-by-developers-for-developers" title="Direct link to heading">​</a></h2><p>This project is purpose-built for React Native engineers. It is focused on
+developer experience, and designed to fit into projects of all shapes and sizes.</p><p>We know that great tools make all the difference.</p><h2 class="anchor anchorWithStickyNavbar_YDjN" id="community-first">Community First<a class="hash-link" href="#community-first" title="Direct link to heading">​</a></h2><p>We created this as a GitHub-first repository for the React Native community. The
+tools in this project integrate with tools you already use: Metro, TypeScript,
+Jest, and more.</p><p>Your contributions are always welcome! The more this project grows, the more it
+will help the React Native community.</p><p>A rising tide lifts all boats.</p><h2 class="anchor anchorWithStickyNavbar_YDjN" id="tested-at-scale-supported-by-microsoft">Tested at Scale, Supported by Microsoft<a class="hash-link" href="#tested-at-scale-supported-by-microsoft" title="Direct link to heading">​</a></h2><p>From unit tests to deployments in large monorepos, each tool is thoroughly
+validated. Microsoft has engineers dedicated to this project, using it to ship
+React Native apps to millions of customers.</p><p>The tools here are used in Office, Xbox, Teams, and other product groups.</p><h2 class="anchor anchorWithStickyNavbar_YDjN" id="ready-to-go">Ready to Go?<a class="hash-link" href="#ready-to-go" title="Direct link to heading">​</a></h2><p>Jump in with the <a href="/rnx-kit/docs/guides/getting-started">Getting Started</a> guide, or take
+it a bit slower and read the <a href="/rnx-kit/docs/introduction">Introduction</a> first.</p>]]></content>
+        <author>
+            <name>Adam Foxman</name>
+            <uri>https://twitter.com/afoxman4</uri>
+        </author>
+        <category label="launch" term="launch"/>
+        <category label="social" term="social"/>
+    </entry>
+</feed>
