@@ -6,6 +6,7 @@ import styles from "./HomepageFeatures.module.css";
 type FeatureItem = {
   title: string;
   image: string;
+  alt: string;
   description: JSX.Element[];
 };
 
@@ -13,6 +14,7 @@ const FeatureList: FeatureItem[] = [
   {
     title: "Made by developers, for developers.",
     image: "/img/code-pull-request.svg",
+    alt: "Pull-request icon",
     description: [
       <p key="dev1">
         <strong>Purpose-built</strong> for React Native engineers. Focused on
@@ -25,6 +27,7 @@ const FeatureList: FeatureItem[] = [
   {
     title: "Community first.",
     image: "/img/user-gear.svg",
+    alt: "User with a gear icon",
     description: [
       <p key="com1">
         Created as a <strong>GitHub-first</strong> repository for the React
@@ -39,6 +42,7 @@ const FeatureList: FeatureItem[] = [
   {
     title: "Tested at scale. Supported by Microsoft.",
     image: "/img/flask.svg",
+    alt: "Flask icon",
     description: [
       <p key="test1">
         From unit tests to deployments in large monorepos, each tool is{" "}
@@ -50,15 +54,11 @@ const FeatureList: FeatureItem[] = [
   },
 ];
 
-function Feature({ title, image, description }: FeatureItem) {
+function Feature({ title, alt, image, description }: FeatureItem) {
   return (
     <div className={clsx("col col--4")}>
       <div className="text--center">
-        <img
-          className={styles.featureSvg}
-          alt={title}
-          src={useBaseUrl(image)}
-        />
+        <img className={styles.featureSvg} alt={alt} src={useBaseUrl(image)} />
       </div>
       <div
         className={clsx(

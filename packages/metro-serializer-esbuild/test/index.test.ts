@@ -2,7 +2,7 @@ import buildBundle from "@react-native-community/cli-plugin-metro/build/commands
 import * as path from "path";
 
 describe("metro-serializer-esbuild", () => {
-  jest.setTimeout(60000);
+  jest.setTimeout(90000);
 
   const consoleWarnSpy = jest.spyOn(global.console, "warn");
 
