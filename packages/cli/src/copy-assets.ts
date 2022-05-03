@@ -2,7 +2,7 @@ import type { Config as CLIConfig } from "@react-native-community/cli-types";
 import { error, info, warn } from "@rnx-kit/console";
 import { isNonEmptyArray } from "@rnx-kit/tools-language/array";
 import type { PackageManifest } from "@rnx-kit/tools-node/package";
-import { findPackageDir } from "@rnx-kit/tools-node/package";
+import { findPackageDir, readPackage } from "@rnx-kit/tools-node/package";
 import type { AllPlatforms } from "@rnx-kit/tools-react-native";
 import { parsePlatform } from "@rnx-kit/tools-react-native";
 import { spawnSync } from "child_process";
@@ -70,7 +70,7 @@ function keysOf(record: Record<string, unknown> | undefined): string[] {
 }
 
 function versionOf(pkgName: string): string {
-  const { version } = require(`${pkgName}/package.json`);
+  const { version } = readPackage(`${pkgName}/package.json`);
   return version;
 }
 
@@ -167,7 +167,7 @@ async function assembleAarBundle(
       );
       if (output) {
         if (!fs.existsSync(output)) {
-          targets.push(`:${aar?.targetName}:assembleRelease`);
+          targets.push(`:${aar.targetName}:assembleRelease`);
           targetsToCopy.push([output, destination]);
         } else if (!fs.existsSync(destination)) {
           targetsToCopy.push([output, destination]);
