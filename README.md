@@ -1,10 +1,25 @@
+<style>
+td, th {
+   border: none!important;
+}
+</style>
+
 # React Native Developer Tools
 
 [![Open in Visual Studio Code](https://img.shields.io/static/v1?logo=visualstudiocode&label=&message=Open%20in%20Visual%20Studio%20Code&color=007acc&labelColor=444444&logoColor=007acc)](https://vscode.dev/github/microsoft/rnx-kit)
 [![Build](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml/badge.svg)](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml)
 
-Tools which help developers build, deliver, and maintain React Native apps and
-libraries.
+Modern, scalable tools. Exceptional developer experience.
+
+<i class="fa-solid fa-code-pull-request"></i>
+
+<i class="fa-solid fa-user-gear"></i>
+
+<i class="fa-solid fa-flask"></i>
+
+|                                                                           Made by Developers, for Developers.                                                                            |                                                                                           Community First.                                                                                            |                                                                               Tested at scale. Supported by Microsoft.                                                                                |
+| :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+| Purpose-built for React Native engineers. Focused on developer experience. Designed to fit into any project, no matter how large or complex.<br><br>Great tools make all the difference. | Created as a GitHub-first repository for the React Native community. Integrated with tools you already use: Metro, TypeScript, Jest, and more.<br><br>Join in! Your contributions are always welcome. | From unit tests to deployments in large monorepos, each tool is thoroughly validated. Microsoft has engineers dedicated to this project, using it to ship React Native apps to millions of customers. |
 
 - [The Basics](#The-Basics)
 - [Working with Kits](#Working-with-Kits)
