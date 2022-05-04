@@ -3,6 +3,7 @@ const path = require("path");
 const {
   parseBoolean,
   rnxBundle,
+  rnxCopyAssetsCommand,
   rnxStart,
   rnxDepCheckCommand,
   rnxTestCommand,
@@ -181,6 +182,7 @@ module.exports = {
         },
       ],
     },
+    rnxCopyAssetsCommand,
     rnxDepCheckCommand,
     rnxTestCommand,
     {

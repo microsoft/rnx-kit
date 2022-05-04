@@ -59,7 +59,7 @@ yarn react-native rnx-bundle --bundle-prefix test-app --experimental-tree-shake 
       "targets": ["ios", "android", "windows", "macos"],
       "platforms": {
         "android": {
-          "assetsPath": "dist/reså"
+          "assetsPath": "dist/res"
         },
         "macos": {
           "typescriptValidation": false
