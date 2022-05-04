@@ -5,13 +5,15 @@
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/tools-language#readme",
   "license": "MIT",
   "files": [
-    "lib/*",
-    "function.js",
+    "array.d.ts",
+    "array.js",
     "function.d.ts",
-    "math.js",
+    "function.js",
+    "lib/*",
     "math.d.ts",
-    "properties.js",
-    "properties.d.ts"
+    "math.js",
+    "properties.d.ts",
+    "properties.js"
   ],
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
