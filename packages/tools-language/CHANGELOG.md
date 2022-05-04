@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/tools-language
 
+## 1.3.1
+
+### Patch Changes
+
+- 0c58c49: Fix missing `array` module
+
 ## 1.3.0
 
 ### Minor Changes
