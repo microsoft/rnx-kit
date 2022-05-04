@@ -1,5 +1,16 @@
 # Change Log - @rnx-kit/cli
 
+## 0.12.0
+
+### Minor Changes
+
+- d9e63f0: Add a command, `rnx-copy-assets`, to copy assets that are not referenced from JS. Usually, Metro copies imported assets for you, but sometimes you need additional files if they are only accessed from native modules.
+
+### Patch Changes
+
+- Updated dependencies [d9e63f0]
+  - @rnx-kit/tools-language@1.3.0
+
 ## 0.11.2
 
 ### Patch Changes
