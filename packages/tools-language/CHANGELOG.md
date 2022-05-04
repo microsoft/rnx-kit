@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/tools-language
 
+## 1.3.0
+
+### Minor Changes
+
+- d9e63f0: Add `isNonEmptyArray()`
+
 ## 1.2.1
 
 Mon, 01 Nov 2021 13:46:13 GMT
