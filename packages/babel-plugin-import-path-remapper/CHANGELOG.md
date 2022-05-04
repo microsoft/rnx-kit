@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/babel-plugin-import-path-remapper
 
+## 1.1.1
+
+### Patch Changes
+
+- b56b490: Resolve modules starting from the requester's path
+
 ## 1.1.0
 
 ### Minor Changes
