@@ -69,8 +69,8 @@ function keysOf(record: Record<string, unknown> | undefined): string[] {
   return record ? Object.keys(record) : [];
 }
 
-function versionOf(pkgName: string): string {
-  const { version } = readPackage(`${pkgName}/package.json`);
+export function versionOf(pkgName: string): string {
+  const { version } = readPackage(require.resolve(`${pkgName}/package.json`));
   return version;
 }
 
