@@ -1,6 +1,6 @@
 import fs from "fs-extra";
 import * as path from "path";
-import { copyAssets, gatherConfigs } from "../src/copy-assets";
+import { copyAssets, gatherConfigs, versionOf } from "../src/copy-assets";
 
 const options = {
   platform: "ios" as const,
@@ -109,5 +109,15 @@ describe("copyAssets", () => {
 describe("gatherConfigs", () => {
   test("returns early if there is nothing to copy", async () => {
     expect(await gatherConfigs(context)).toBeUndefined();
+  });
+});
+
+describe("versionOf", () => {
+  test("returns the version of specified package", () => {
+    expect(versionOf("@rnx-kit/tools-node")).toMatch(/^\d+[.\d]+$/);
+  });
+
+  test("throws if package is not installed", () => {
+    expect(() => versionOf("some-package-that-does-not-exist")).toThrow();
   });
 });
