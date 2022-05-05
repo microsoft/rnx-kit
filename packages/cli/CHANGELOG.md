@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/cli
 
+## 0.12.1
+
+### Patch Changes
+
+- d3e2877: Fix `copy-assets` failing to resolve dependencies
+
 ## 0.12.0
 
 ### Minor Changes
