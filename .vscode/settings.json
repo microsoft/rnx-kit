@@ -67,7 +67,14 @@
     "beachball",
     "consts",
     "fluentui",
+    "Lage",
     "macos",
-    "nuget"
+    "netinfo",
+    "nuget",
+    "onboarded",
+    "pnpm",
+    "syncpack",
+    "transpiles",
+    "unconfigured"
   ]
 }

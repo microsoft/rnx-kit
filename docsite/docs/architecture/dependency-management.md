@@ -21,7 +21,7 @@ The design of `dep-check` is driven mainly by the following questions:
 
 ### 1. Which packages should I use?
 
-There is currently no centralised place where developers can go to and get a
+There is currently no centralized place where developers can go to and get a
 list of recommended modules, and which versions they should be using when
 targeting a specific version of React Native. How do you know whether a module
 is still maintained? Are the maintainers still around to review PRs? Is the
@@ -183,7 +183,7 @@ to `awesome-app`.
 
 ## Design
 
-`dep-check` attempts to solve these issues by aligning users on a centralised
+`dep-check` attempts to solve these issues by aligning users on a centralized
 repository of dependencies. Initially, the repository will be seeded with
 popular packages, but the goal for it is to become crowd-sourced so that we all
 can benefit from the latest fixes and features without all having to be
