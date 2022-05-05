@@ -87,7 +87,7 @@ Meta capabilities let you group capabilities together:
 }
 ```
 
-Mata capabilities aren't versioned, and always have `#meta` in the name
+Meta capabilities aren't versioned, and always have `#meta` in the name
 property.
 
 ## Configuration
@@ -125,7 +125,7 @@ though it can be used to validate unconfigured packages.
 
 Configured package validation starts with the target React Native version(s).
 The dependency manager gets the corresponding profile(s) and cross-references
-them with the package's capabilties. Now it knows which dependencies (and
+them with the package's capabilities. Now it knows which dependencies (and
 versions) the package _should_ have. It checks `dependencies`,
 `devDependencies`, and `peerDependencies`, looking for incompatible or missing
 packages. If anything is wrong, it reports detailed information to the console.

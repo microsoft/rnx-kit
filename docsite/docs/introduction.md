@@ -9,7 +9,7 @@ throughout the lifecycle of your React Native apps and libraries.
 Then you're in the right place! There are lots of tools here to help you.
 
 Have you struggled to find the right combination of React Native dependencies
-that work well together and are compatble with each other? _And_ that match the
+that work well together and are compatible with each other? _And_ that match the
 React Native release you're using? There's
 [a tool for that](./guides/dependency-management)! It's all automated, too.
 
@@ -43,7 +43,7 @@ terminal, and fits nicely into CI loops and package script blocks.
 
 The CLI is controlled by command-line parameters and
 [package configuration](https://github.com/microsoft/rnx-kit/tree/main/packages/config).
-Command-line parameters are optional, but always take predecedence. Think of
+Command-line parameters are optional, but always take precedence. Think of
 them as overrides. Package configuration is _also_ optional, though it is
 recommended. Configuration is how a package tells the CLI about itself. For
 example, a package can describe the options and paths to use during bundling.

@@ -63,11 +63,17 @@
     "editor.formatOnSave": false
   },
   "cSpell.words": [
-    "TESTPAGE",
     "beachball",
     "consts",
     "fluentui",
+    "Lage",
     "macos",
-    "nuget"
+    "netinfo",
+    "nuget",
+    "onboarded",
+    "pnpm",
+    "syncpack",
+    "transpiles",
+    "unconfigured"
   ]
 }
