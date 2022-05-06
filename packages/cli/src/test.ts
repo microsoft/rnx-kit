@@ -1,7 +1,7 @@
 import type { Config as CLIConfig } from "@react-native-community/cli-types";
+import { findPackageDependencyDir } from "@rnx-kit/tools-node";
 import { parsePlatform } from "@rnx-kit/tools-react-native/platform";
 import { run as runJest } from "jest-cli";
-import path from "path";
 
 type Args = {
   platform: "android" | "ios" | "macos" | "windows" | "win32";
@@ -54,8 +54,8 @@ function jestOptions(): Options[] {
   //
   // To work around this, resolve `jest-cli` first, then use the resolved path
   // to import `./build/cli/args`.
-  const jestPath = require.resolve("jest-cli/package.json");
-  const { options } = require(`${path.dirname(jestPath)}/build/cli/args`);
+  const jestPath = findPackageDependencyDir("jest-cli") || "jest-cli";
+  const { options } = require(`${jestPath}/build/cli/args`);
 
   return Object.keys(options).map((option) => {
     const { default: defaultValue, description, type } = options[option];
