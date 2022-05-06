@@ -5,7 +5,6 @@ import {
   readPackage,
 } from "@rnx-kit/tools-node";
 import { expandPlatformExtensions } from "@rnx-kit/tools-react-native";
-import * as fs from "fs";
 import * as path from "path";
 import type { ModuleResolver, ResolutionContext } from "../types";
 
@@ -56,7 +55,7 @@ export function resolveModule(
   const manifest = readPackage(manifestPath);
   for (const mainField of mainFields) {
     const main = manifest[mainField];
-    if (main) {
+    if (typeof main === "string") {
       return main;
     }
   }
