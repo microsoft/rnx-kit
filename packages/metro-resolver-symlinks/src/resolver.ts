@@ -1,10 +1,18 @@
-import { isFileModuleRef, parseModuleRef } from "@rnx-kit/tools-node";
+import {
+  findPackageDependencyDir,
+  isFileModuleRef,
+  parseModuleRef,
+} from "@rnx-kit/tools-node";
 import { getAvailablePlatforms } from "@rnx-kit/tools-react-native";
 import * as path from "path";
 import type { MetroResolver, ModuleResolver } from "./types";
 
 function resolveFrom(moduleName: string, startDir: string): string {
-  return require.resolve(moduleName, { paths: [startDir] });
+  const p = findPackageDependencyDir(moduleName, { startDir });
+  if (!p) {
+    throw new Error(`Cannot find module '${moduleName}'`);
+  }
+  return p;
 }
 
 /**
@@ -13,12 +21,8 @@ function resolveFrom(moduleName: string, startDir: string): string {
  */
 export function getMetroResolver(fromDir = process.cwd()): MetroResolver {
   try {
-    const rnPath = path.dirname(
-      resolveFrom("react-native/package.json", fromDir)
-    );
-    const rncliPath = path.dirname(
-      resolveFrom("@react-native-community/cli/package.json", rnPath)
-    );
+    const rnPath = resolveFrom("react-native", fromDir);
+    const rncliPath = resolveFrom("@react-native-community/cli", rnPath);
     const metroResolverPath = resolveFrom("metro-resolver", rncliPath);
     return require(metroResolverPath).resolve;
   } catch (_) {
@@ -56,9 +60,7 @@ export const resolveModulePath: ModuleResolver = (
   }
 
   const pkgName = ref.scope ? `${ref.scope}/${ref.name}` : ref.name;
-  const pkgRoot = path.dirname(
-    resolveFrom(`${pkgName}/package.json`, originModulePath)
-  );
+  const pkgRoot = resolveFrom(pkgName, originModulePath);
   const replaced = moduleName.replace(pkgName, pkgRoot);
   const relativePath = path.relative(path.dirname(originModulePath), replaced);
   return relativePath.startsWith(".")

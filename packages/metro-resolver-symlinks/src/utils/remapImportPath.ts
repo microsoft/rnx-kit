@@ -1,7 +1,10 @@
 import type { PackageModuleRef } from "@rnx-kit/tools-node";
-import { isFileModuleRef, parseModuleRef } from "@rnx-kit/tools-node";
+import {
+  isFileModuleRef,
+  parseModuleRef,
+  readPackage,
+} from "@rnx-kit/tools-node";
 import { expandPlatformExtensions } from "@rnx-kit/tools-react-native";
-import * as fs from "fs";
 import * as path from "path";
 import type { ModuleResolver, ResolutionContext } from "../types";
 
@@ -49,11 +52,10 @@ export function resolveModule(
   { mainFields }: ResolverOptions
 ): string {
   const manifestPath = resolver(fromDir, moduleId + "/package.json");
-  const content = fs.readFileSync(manifestPath, { encoding: "utf-8" });
-  const manifest = JSON.parse(content);
+  const manifest = readPackage(manifestPath);
   for (const mainField of mainFields) {
     const main = manifest[mainField];
-    if (main) {
+    if (typeof main === "string") {
       return main;
     }
   }
