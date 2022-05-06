@@ -37,7 +37,7 @@ yarn react-native rnx-bundle --platform ios --dev false --minify true
 ```
 
 ```bash
-yarn react-native rnx-bundle --bundle-prefix test-app --experimental-tree-shake true
+yarn react-native rnx-bundle --bundle-prefix test-app --tree-shake true
 ```
 
 ### Example Configuration
@@ -55,7 +55,7 @@ yarn react-native rnx-bundle --bundle-prefix test-app --experimental-tree-shake 
         "ignoredModules": ["react-is"]
       },
       "typescriptValidation": true,
-      "experimental_treeShake": true,
+      "treeShake": true,
       "targets": ["ios", "android", "windows", "macos"],
       "platforms": {
         "android": {
@@ -72,24 +72,24 @@ yarn react-native rnx-bundle --bundle-prefix test-app --experimental-tree-shake 
 
 ### Command-Line Overrides
 
-| Override                                                                           | Description                                                                                                                                                         |
-| ---------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| --id [id]                                                                          | Target bundle definition. This is only needed when the kit configuration has multiple bundle definitions.                                                           |
-| --platform [`ios` &#124; `android` &#124; `windows` &#124; `win32` &#124; `macos`] | Target platform. When not given, all platforms in the kit configuration are bundled.                                                                                |
-| --entry-path [file]                                                                | Path to the root JavaScript file, either absolute or relative to the kit package.                                                                                   |
-| --dist-path [path]                                                                 | Path where the bundle is written, either absolute or relative to the kit package.                                                                                   |
-| --assets-path [path]                                                               | Path where bundle assets like images are written, either absolute or relative to the kit package.                                                                   |
-| --bundle-prefix [prefix]                                                           | Bundle file prefix. This is followed by the platform and bundle file extension.                                                                                     |
-| --bundle-encoding [`utf8` &#124; `utf16le` &#124; `ascii`]                         | [Character encoding](https://nodejs.org/api/buffer.html#buffer_buffers_and_character_encodings) to use when writing the bundle file.                                |
-| --dev [boolean]                                                                    | If false, warnings are disabled and the bundle is minified (default: true).                                                                                         |
-| --minify [boolean]                                                                 | Controls whether or not the bundle is minified. Disabling minification is useful for test builds.                                                                   |
-| --experimental-tree-shake [boolean]                                                | Controls whether or not the bundle is tree shaken. Enabling it turns on dead-code elimination, potentially making the bundle smaller. This feature is experimental. |
-| --max-workers [number]                                                             | Specifies the maximum number of parallel worker threads to use for transforming files. This defaults to the number of cores available on your machine.              |
-| --sourcemap-output [string]                                                        | Path where the bundle source map is written, either absolute or relative to the dist-path.                                                                          |
-| --sourcemap-sources-root [string]                                                  | Path to use when relativizing file entries in the bundle source map.                                                                                                |
-| --reset-cache                                                                      | Reset the Metro cache.                                                                                                                                              |
-| --config [string]                                                                  | Path to the Metro configuration file.                                                                                                                               |
-| -h, --help                                                                         | Show usage information.                                                                                                                                             |
+| Override                                                                           | Description                                                                                                                                            |
+| ---------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| --id [id]                                                                          | Target bundle definition. This is only needed when the kit configuration has multiple bundle definitions.                                              |
+| --platform [`ios` &#124; `android` &#124; `windows` &#124; `win32` &#124; `macos`] | Target platform. When not given, all platforms in the kit configuration are bundled.                                                                   |
+| --entry-path [file]                                                                | Path to the root JavaScript file, either absolute or relative to the kit package.                                                                      |
+| --dist-path [path]                                                                 | Path where the bundle is written, either absolute or relative to the kit package.                                                                      |
+| --assets-path [path]                                                               | Path where bundle assets like images are written, either absolute or relative to the kit package.                                                      |
+| --bundle-prefix [prefix]                                                           | Bundle file prefix. This is followed by the platform and bundle file extension.                                                                        |
+| --bundle-encoding [`utf8` &#124; `utf16le` &#124; `ascii`]                         | [Character encoding](https://nodejs.org/api/buffer.html#buffer_buffers_and_character_encodings) to use when writing the bundle file.                   |
+| --dev [boolean]                                                                    | If false, warnings are disabled and the bundle is minified (default: true).                                                                            |
+| --minify [boolean]                                                                 | Controls whether or not the bundle is minified. Disabling minification is useful for test builds.                                                      |
+| --tree-shake [boolean]                                                             | Controls whether or not the bundle is tree shaken. Enabling it turns on dead-code elimination, potentially making the bundle smaller.                  |
+| --max-workers [number]                                                             | Specifies the maximum number of parallel worker threads to use for transforming files. This defaults to the number of cores available on your machine. |
+| --sourcemap-output [string]                                                        | Path where the bundle source map is written, either absolute or relative to the dist-path.                                                             |
+| --sourcemap-sources-root [string]                                                  | Path to use when relativizing file entries in the bundle source map.                                                                                   |
+| --reset-cache                                                                      | Reset the Metro cache.                                                                                                                                 |
+| --config [string]                                                                  | Path to the Metro configuration file.                                                                                                                  |
+| -h, --help                                                                         | Show usage information.                                                                                                                                |
 
 ## Start a Bundle Server
 
@@ -121,7 +121,7 @@ yarn react-native rnx-start --host localhost --port 8812
         "throwOnError": false
       },
       "typescriptValidation": true,
-      "experimental_treeShake": true
+      "treeShake": true
     }
   }
 }

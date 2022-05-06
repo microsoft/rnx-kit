@@ -63,11 +63,11 @@ describe("CLI > Bundle > Overrides > applyKitBundleConfigOverrides", () => {
     testOverride("sourcemapSourcesRoot", "out");
   });
 
-  test("set experimental_treeShake using override experimentalTreeShake", () => {
+  test("set experimental_treeShake using override treeShake", () => {
     const copy = { ...config };
     applyKitBundleConfigOverrides(
       {
-        experimentalTreeShake: true,
+        treeShake: true,
       },
       [copy]
     );
