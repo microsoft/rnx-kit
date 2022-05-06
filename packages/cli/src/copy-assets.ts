@@ -241,24 +241,41 @@ async function assembleAarBundle(
     // Run only one Gradle task at a time
     spawnSync(gradlew, targets, { cwd: androidProject, stdio: "inherit", env });
   } else {
+    const reactNativePath = findPackageDependencyDir("react-native");
+    if (!reactNativePath) {
+      throw new Error("Could not find 'react-native'");
+    }
+
+    const buildDir = path.join(
+      process.cwd(),
+      "node_modules",
+      ".rnx-gradle-build",
+      targetName
+    );
+
+    const compileSdkVersion =
+      android?.compileSdkVersion ?? defaultAndroidConfig.compileSdkVersion;
+    const minSdkVersion =
+      android?.defaultConfig?.minSdkVersion ??
+      defaultAndroidConfig.defaultConfig.minSdkVersion;
+    const targetSdkVersion =
+      android?.defaultConfig?.targetSdkVersion ??
+      defaultAndroidConfig.defaultConfig.targetSdkVersion;
+    const androidPluginVersion =
+      android?.androidPluginVersion ??
+      defaultAndroidConfig.androidPluginVersion;
+    const buildRelativeReactNativePath = path.relative(
+      buildDir,
+      reactNativePath
+    );
+
     const buildGradle = [
       "buildscript {",
       "  ext {",
-      `      compileSdkVersion = ${
-        android?.compileSdkVersion ?? defaultAndroidConfig.compileSdkVersion
-      }`,
-      `      minSdkVersion = ${
-        android?.defaultConfig?.minSdkVersion ??
-        defaultAndroidConfig.defaultConfig.minSdkVersion
-      }`,
-      `      targetSdkVersion = ${
-        android?.defaultConfig?.targetSdkVersion ??
-        defaultAndroidConfig.defaultConfig.targetSdkVersion
-      }`,
-      `      androidPluginVersion = "${
-        android?.androidPluginVersion ??
-        defaultAndroidConfig.androidPluginVersion
-      }"`,
+      `      compileSdkVersion = ${compileSdkVersion}`,
+      `      minSdkVersion = ${minSdkVersion}`,
+      `      targetSdkVersion = ${targetSdkVersion}`,
+      `      androidPluginVersion = "${androidPluginVersion}"`,
       "  }",
       "",
       "  repositories {",
@@ -275,7 +292,7 @@ async function assembleAarBundle(
       "  repositories {",
       "      maven {",
       "          // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm",
-      '          url("${rootDir}/../../react-native/android")',
+      `          url("\${rootDir}/${buildRelativeReactNativePath}/android")`,
       "      }",
       "      mavenCentral()",
       "      google()",
@@ -291,13 +308,6 @@ async function assembleAarBundle(
       `project(":${targetName}").projectDir = file("${androidProject}")`,
       "",
     ].join("\n");
-
-    const buildDir = path.join(
-      process.cwd(),
-      "node_modules",
-      ".rnx-gradle-build",
-      targetName
-    );
 
     await fs.ensureDir(buildDir);
     await fs.writeFile(path.join(buildDir, "build.gradle"), buildGradle);
