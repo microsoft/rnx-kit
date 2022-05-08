@@ -15,7 +15,7 @@ const kitConfigWithServer: KitConfig = {
     detectCyclicDependencies: true,
     detectDuplicateDependencies: false,
     typescriptValidation: true,
-    experimental_treeShake: false,
+    treeShake: false,
     assetPlugins: ["asset-plugin-package"],
     sourceExts: ["json", "jsrc"],
   },
@@ -26,13 +26,13 @@ function validateDefaultConfig(c: ServerConfig) {
     "detectCyclicDependencies",
     "detectDuplicateDependencies",
     "typescriptValidation",
-    "experimental_treeShake",
+    "treeShake",
   ]);
   expect(c.projectRoot).toBeUndefined();
   expect(c.detectCyclicDependencies).toBeTrue();
   expect(c.detectDuplicateDependencies).toBeTrue();
   expect(c.typescriptValidation).toBeTrue();
-  expect(c.experimental_treeShake).toBeFalse();
+  expect(c.treeShake).toBeFalse();
 }
 
 describe("getServerConfig()", () => {
@@ -52,7 +52,7 @@ describe("getServerConfig()", () => {
     expect(c.detectCyclicDependencies).toBeTrue();
     expect(c.detectDuplicateDependencies).toBeFalse();
     expect(c.typescriptValidation).toBeTrue();
-    expect(c.experimental_treeShake).toBeFalse();
+    expect(c.treeShake).toBeFalse();
     expect(c.assetPlugins).toBeArrayOfSize(1);
     expect(c.assetPlugins).toIncludeSameMembers(["asset-plugin-package"]);
     expect(c.sourceExts).toBeArrayOfSize(2);

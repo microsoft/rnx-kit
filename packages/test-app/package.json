@@ -72,7 +72,7 @@
         ]
       },
       "typescriptValidation": true,
-      "experimental_treeShake": false,
+      "treeShake": false,
       "targets": [
         "android",
         "ios",

@@ -43,7 +43,7 @@ export function applyKitBundleConfigOverrides(
       "bundleEncoding",
       "sourcemapOutput",
       "sourcemapSourcesRoot",
-      "experimental_treeShake",
+      "treeShake",
     ]
   );
   if (overridesToApply) {

@@ -84,7 +84,7 @@
           "type": "boolean",
           "default": true
         },
-        "experimental_treeShake": {
+        "treeShake": {
           "description": "Choose whether to enable tree shaking.",
           "type": "boolean",
           "default": false
