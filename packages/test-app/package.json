@@ -10,7 +10,7 @@
     "lint": "rnx-kit-scripts lint",
     "test": "react-native rnx-test --platform ios",
     "bundle": "react-native rnx-bundle",
-    "bundle+esbuild": "react-native rnx-bundle --bundle-prefix 'main+esbuild' --experimental-tree-shake",
+    "bundle+esbuild": "react-native rnx-bundle --bundle-prefix 'main+esbuild' --tree-shake",
     "bundle:android": "react-native rnx-bundle --platform android",
     "bundle:ios": "react-native rnx-bundle --platform ios",
     "bundle:macos": "react-native rnx-bundle --platform macos",

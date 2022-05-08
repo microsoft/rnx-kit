@@ -31,14 +31,16 @@ export async function rnxBundle(
   cliConfig: CLIConfig,
   cliOptions: CLIBundleOptions
 ): Promise<void> {
-  // experimentalTreeShake is Deprecated. Only use it when treeShake is not specified.
-  if (
-    cliOptions.experimentalTreeShake !== undefined &&
-    cliOptions.treeShake === undefined
-  ) {
-    cliOptions.treeShake = cliOptions.experimentalTreeShake;
+  // experimentalTreeShake is deprecated. Only use it when treeShake is not specified.
+  if (cliOptions.experimentalTreeShake !== undefined) {
+    console.warn(
+      "Warning: The command-line parameter '--experimental-tree-shake' is deprecated. Use `--tree-shake` instead."
+    );
+    if (cliOptions.treeShake === undefined) {
+      cliOptions.treeShake = cliOptions.experimentalTreeShake;
+    }
+    delete cliOptions.experimentalTreeShake;
   }
-  delete cliOptions.experimentalTreeShake;
 
   const metroConfig = await loadMetroConfig(cliConfig, cliOptions);
 
