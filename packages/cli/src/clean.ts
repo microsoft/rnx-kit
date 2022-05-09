@@ -1,10 +1,10 @@
 import type { Config as CLIConfig } from "@react-native-community/cli-types";
 import { spawn } from "child_process";
 import { existsSync as fileExists } from "fs";
-import fs from "fs/promises";
+import * as fs from "fs-extra";
 import ora from "ora";
-import os from "os";
-import path from "path";
+import * as os from "os";
+import * as path from "path";
 
 type Args = {
   include?: string;
