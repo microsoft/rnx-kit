@@ -1,5 +1,12 @@
 # Change Log - @rnx-kit/cli
 
+## 0.12.2
+
+### Patch Changes
+
+- e352f4c: Transition tree shaking from experimental to production. Deprecate experimental config/cmdline props, while still supporting them for this major version. They will be removed on the next major version bump. Update documentation and tests.
+- 32eab87: Avoid `fs/promises` to be compatible with Node 12
+
 ## 0.12.1
 
 ### Patch Changes

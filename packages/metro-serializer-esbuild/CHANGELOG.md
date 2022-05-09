@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-serializer-esbuild
 
+## 0.1.6
+
+### Patch Changes
+
+- e352f4c: Transition tree shaking from experimental to production. Deprecate experimental config/cmdline props, while still supporting them for this major version. They will be removed on the next major version bump. Update documentation and tests.
+
 ## 0.1.5
 
 ### Patch Changes

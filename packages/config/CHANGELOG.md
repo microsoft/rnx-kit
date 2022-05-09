@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/config
 
+## 0.4.24
+
+### Patch Changes
+
+- e352f4c: Transition tree shaking from experimental to production. Deprecate experimental config/cmdline props, while still supporting them for this major version. They will be removed on the next major version bump. Update documentation and tests.
+
 ## 0.4.23
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-resolver-symlinks
 
+## 0.1.17
+
+### Patch Changes
+
+- 8ee836b: Fix `Package subpath './package.json' is not defined by "exports"`
+
 ## 0.1.16
 
 ### Patch Changes
