@@ -115,7 +115,7 @@ describe("assembleAarBundle", () => {
 
     expect(consoleWarnSpy).not.toHaveBeenCalled();
     expect(spawnSync).toHaveBeenCalledWith(
-      expect.stringMatching(/[/\\]gradlew$/),
+      expect.stringMatching(/[/\\]gradlew(?:\.bat)?$/),
       [":rnx-kit_react-native-auth:assembleRelease"],
       expect.objectContaining({
         cwd: expect.stringMatching(
@@ -201,7 +201,7 @@ describe("assembleAarBundle", () => {
 
     expect(consoleWarnSpy).not.toHaveBeenCalled();
     expect(spawnSync).toHaveBeenCalledWith(
-      expect.stringMatching(/[/\\]gradlew$/),
+      expect.stringMatching(/[/\\]gradlew(?:\.bat)?$/),
       [":rnx-kit_react-native-auth:assembleRelease"],
       expect.objectContaining({
         cwd: expect.stringMatching(
