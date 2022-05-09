@@ -173,7 +173,7 @@ function getAndroidPaths(
   }
 }
 
-async function assembleAarBundle(
+export async function assembleAarBundle(
   context: Context,
   packageName: string,
   { aar }: NativeAssets
@@ -203,7 +203,6 @@ async function assembleAarBundle(
 
   const { env: customEnv, dependencies, android } = aar;
   const env = {
-    ENABLE_HERMES: "true",
     NODE_MODULES_PATH: path.join(process.cwd(), "node_modules"),
     REACT_NATIVE_VERSION: versionOf("react-native"),
     ...process.env,
