@@ -227,19 +227,11 @@ unused code. Some times, your app bundle gets A LOT smaller.
 {
   "rnx-kit": {
     "bundle": {
-      "experimental_treeShake": true
+      "treeShake": true
     }
   }
 }
 ```
-
-This feature is marked as `experimental` because it occasionally produces larger
-bundles when used with code-splitting (an internal project which hasn't shipped
-yet).
-
-Double-check that your app bundle is smaller. If you run into trouble, please
-share what you are seeing in
-[a new issue](https://github.com/microsoft/rnx-kit/issues/new/choose).
 
 :::info Performance Gain
 

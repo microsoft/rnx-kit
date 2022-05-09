@@ -80,7 +80,7 @@ describe("CLI > Bundle > Kit Config > getKitBundleConfigs", () => {
     detectCyclicDependencies: true,
     detectDuplicateDependencies: true,
     typescriptValidation: true,
-    experimental_treeShake: true,
+    treeShake: true,
     targets: ["ios", "android"],
     platforms: {
       ios: {
@@ -122,5 +122,27 @@ describe("CLI > Bundle > Kit Config > getKitBundleConfigs", () => {
       ...definition,
       platform: "android",
     });
+  });
+
+  test("uses deprecated experimental_treeShake", () => {
+    const d: Record<string, unknown> = { ...definition };
+    delete d.treeShake;
+    d.experimental_treeShake = true;
+    rnxKitConfig.__setMockConfig({
+      bundle: {
+        ...d,
+      },
+    });
+    consoleWarnSpy.mockReset();
+
+    const kitBundleConfigs = getKitBundleConfigs(undefined, "ios");
+    expect(kitBundleConfigs[0].treeShake).toBe(true);
+    expect(consoleWarnSpy).toBeCalledTimes(1);
+    expect(consoleWarnSpy).toBeCalledWith(
+      expect.stringContaining("deprecated")
+    );
+    expect(consoleWarnSpy).toBeCalledWith(
+      expect.stringContaining("experimental_treeShake")
+    );
   });
 });

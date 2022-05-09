@@ -75,7 +75,7 @@ export async function metroBundle(
     bundleConfig.detectCyclicDependencies,
     bundleConfig.detectDuplicateDependencies,
     bundleConfig.typescriptValidation ? typescriptValidationOptions : false,
-    bundleConfig.experimental_treeShake
+    bundleConfig.treeShake
   );
 
   const metroBundleArgs = createMetroBundleArgs(bundleConfig);

@@ -10,7 +10,7 @@ export type KitBundleConfigOverrides = {
   bundleEncoding?: BundleArgs["bundleEncoding"];
   sourcemapOutput?: string;
   sourcemapSourcesRoot?: string;
-  experimentalTreeShake?: boolean;
+  treeShake?: boolean;
 };
 
 /**
@@ -33,7 +33,7 @@ export function applyKitBundleConfigOverrides(
       "bundleEncoding",
       "sourcemapOutput",
       "sourcemapSourcesRoot",
-      "experimentalTreeShake",
+      "treeShake",
     ],
     [
       "entryPath",
@@ -43,7 +43,7 @@ export function applyKitBundleConfigOverrides(
       "bundleEncoding",
       "sourcemapOutput",
       "sourcemapSourcesRoot",
-      "experimental_treeShake",
+      "treeShake",
     ]
   );
   if (overridesToApply) {

@@ -8,7 +8,7 @@ describe("CLI > Bundle > Metro > createMetroBundleArgs", () => {
     detectCyclicDependencies: true,
     detectDuplicateDependencies: true,
     typescriptValidation: true,
-    experimental_treeShake: true,
+    treeShake: true,
     entryPath: "out/entry.js",
     distPath: "out",
     assetsPath: "out/assets",

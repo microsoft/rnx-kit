@@ -6,6 +6,8 @@ import {
   getBundlePlatformDefinition,
 } from "../src/getBundleDefinition";
 
+const consoleWarnSpy = jest.spyOn(global.console, "warn");
+
 const bundleConfig: BundleConfig = [
   {
     id: "8",
@@ -26,7 +28,7 @@ function validateDefaultDefinition(d: BundleDefinition) {
     "detectCyclicDependencies",
     "detectDuplicateDependencies",
     "typescriptValidation",
-    "experimental_treeShake",
+    "treeShake",
   ]);
   expect(d.entryPath).toEqual("lib/index.js");
   expect(d.distPath).toEqual("dist");
@@ -35,10 +37,14 @@ function validateDefaultDefinition(d: BundleDefinition) {
   expect(d.detectCyclicDependencies).toBeTruthy();
   expect(d.detectDuplicateDependencies).toBeTruthy();
   expect(d.typescriptValidation).toBeTruthy();
-  expect(d.experimental_treeShake).toBeFalsy();
+  expect(d.treeShake).toBeFalsy();
 }
 
 describe("getBundleDefinition()", () => {
+  beforeEach(() => {
+    consoleWarnSpy.mockReset();
+  });
+
   test("returns defaults when bundle config is a boolean", () => {
     const d = getBundleDefinition(true);
     validateDefaultDefinition(d);
@@ -62,6 +68,25 @@ describe("getBundleDefinition()", () => {
     expect(d.targets).toBeArrayOfSize(1);
     expect(d.targets).toIncludeSameMembers(["windows"]);
   });
+
+  test("returns the value for experimental_treeShake in property treeShake", () => {
+    const bundleConfigCopy = [...bundleConfig];
+    (bundleConfigCopy[0] as Record<string, unknown>).experimental_treeShake =
+      true;
+
+    const d = getBundleDefinition(bundleConfigCopy);
+    expect(d.id).toEqual("8");
+    expect(d).toContainKey("treeShake");
+    expect(d).not.toContainKey("experimental_treeShake");
+    expect(d.treeShake).toEqual(true);
+    expect(consoleWarnSpy).toBeCalledTimes(1);
+    expect(consoleWarnSpy).toBeCalledWith(
+      expect.stringContaining("deprecated")
+    );
+    expect(consoleWarnSpy).toBeCalledWith(
+      expect.stringContaining("experimental_treeShake")
+    );
+  });
 });
 
 const bundleDefinitionWithoutPlatforms: BundleDefinitionWithRequiredParameters =
@@ -73,7 +98,7 @@ const bundleDefinitionWithoutPlatforms: BundleDefinitionWithRequiredParameters =
     detectCyclicDependencies: true,
     detectDuplicateDependencies: true,
     typescriptValidation: true,
-    experimental_treeShake: true,
+    treeShake: true,
   };
 
 const bundleDefinition: BundleDefinitionWithRequiredParameters = {

@@ -17,7 +17,7 @@ export function getServerConfig(
     detectCyclicDependencies: true,
     detectDuplicateDependencies: true,
     typescriptValidation: true,
-    experimental_treeShake: false,
+    treeShake: false,
   };
 
   return { ...defaultConfig, ...(config.server ?? {}) };

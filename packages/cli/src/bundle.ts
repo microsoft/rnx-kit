@@ -17,7 +17,8 @@ export type CLIBundleOptions = {
   bundleEncoding?: BundleArgs["bundleEncoding"];
   dev: boolean;
   minify?: boolean;
-  experimentalTreeShake?: boolean;
+  experimentalTreeShake?: boolean; // Deprecated
+  treeShake?: boolean;
   maxWorkers?: number;
   sourcemapOutput?: string;
   sourcemapSourcesRoot?: string;
@@ -30,6 +31,17 @@ export async function rnxBundle(
   cliConfig: CLIConfig,
   cliOptions: CLIBundleOptions
 ): Promise<void> {
+  // experimentalTreeShake is deprecated. Only use it when treeShake is not specified.
+  if (cliOptions.experimentalTreeShake !== undefined) {
+    console.warn(
+      "Warning: The command-line parameter '--experimental-tree-shake' is deprecated. Use `--tree-shake` instead."
+    );
+    if (cliOptions.treeShake === undefined) {
+      cliOptions.treeShake = cliOptions.experimentalTreeShake;
+    }
+    delete cliOptions.experimentalTreeShake;
+  }
+
   const metroConfig = await loadMetroConfig(cliConfig, cliOptions);
 
   const kitBundleConfigs = getKitBundleConfigs(

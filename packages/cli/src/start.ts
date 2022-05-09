@@ -131,7 +131,7 @@ export async function rnxStart(
     serverConfig.detectCyclicDependencies,
     serverConfig.detectDuplicateDependencies,
     serverConfig.typescriptValidation ? typescriptValidationOptions : false,
-    serverConfig.experimental_treeShake
+    serverConfig.treeShake
   );
 
   // create middleware -- a collection of plugins which handle incoming

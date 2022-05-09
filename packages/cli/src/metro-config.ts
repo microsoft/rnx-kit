@@ -109,14 +109,14 @@ const emptySerializerHook = (_graph: Graph, _delta: DeltaResult): void => {
  * @param detectCyclicDependencies When true, cyclic dependency checking is enabled with a default set of options. Otherwise the object allows for fine-grained control over the detection process.
  * @param detectDuplicateDependencies When true, duplicate dependency checking is enabled with a default set of options. Otherwise, the object allows for fine-grained control over the detection process.
  * @param typescriptValidation When true, TypeScript type-checking is enabled with a default set of options. Otherwise, the object allows for fine-grained control over the type-checking process.
- * @param experimental_treeShake When true, experimental tree shaking is enabled.
+ * @param treeShake When true, tree shaking is enabled.
  */
 export function customizeMetroConfig(
   metroConfigReadonly: InputConfigT,
   detectCyclicDependencies: boolean | CyclicDetectorOptions,
   detectDuplicateDependencies: boolean | DuplicateDetectorOptions,
   typescriptValidation: boolean | TypeScriptValidationOptions,
-  experimental_treeShake: boolean
+  treeShake: boolean
 ): void {
   //  We will be making changes to the Metro configuration. Coerce from a
   //  type with readonly props to a type where the props are writeable.
@@ -134,7 +134,7 @@ export function customizeMetroConfig(
     plugins.push(CyclicDependencies());
   }
 
-  if (experimental_treeShake) {
+  if (treeShake) {
     metroConfig.serializer.customSerializer = MetroSerializerEsbuild(plugins);
     Object.assign(metroConfig.transformer, esbuildTransformerConfig);
   } else if (plugins.length > 0) {

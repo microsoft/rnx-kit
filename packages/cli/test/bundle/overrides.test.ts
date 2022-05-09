@@ -7,7 +7,7 @@ describe("CLI > Bundle > Overrides > applyKitBundleConfigOverrides", () => {
     detectCyclicDependencies: true,
     detectDuplicateDependencies: true,
     typescriptValidation: true,
-    experimental_treeShake: true,
+    treeShake: true,
     entryPath: "dist/index.js",
     distPath: "dist",
     assetsPath: "dist",
@@ -63,17 +63,7 @@ describe("CLI > Bundle > Overrides > applyKitBundleConfigOverrides", () => {
     testOverride("sourcemapSourcesRoot", "out");
   });
 
-  test("set experimental_treeShake using override experimentalTreeShake", () => {
-    const copy = { ...config };
-    applyKitBundleConfigOverrides(
-      {
-        experimentalTreeShake: true,
-      },
-      [copy]
-    );
-    expect(copy).toEqual({
-      ...config,
-      experimental_treeShake: true,
-    });
+  test("changes treeShake using an override", () => {
+    testOverride("treeShake", true);
   });
 });

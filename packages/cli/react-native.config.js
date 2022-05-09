@@ -69,7 +69,12 @@ module.exports = {
         },
         {
           name: "--experimental-tree-shake [boolean]",
-          description: "Experimental: Enable tree shaking.",
+          description: "Deprecated. Use --tree-shake [boolean] instead.",
+          parse: parseBoolean,
+        },
+        {
+          name: "--tree-shake [boolean]",
+          description: "Enable tree shaking.",
           parse: parseBoolean,
         },
         {

@@ -3,15 +3,16 @@
 # @rnx-kit/metro-serializer-esbuild
 
 [![Build](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml/badge.svg)](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml)
-![This plugin is highly experimental](https://img.shields.io/badge/state-experimental-critical)
 [![npm version](https://img.shields.io/npm/v/@rnx-kit/metro-serializer-esbuild)](https://www.npmjs.com/package/@rnx-kit/metro-serializer-esbuild)
+![Stability Beta](https://img.shields.io/badge/Stability-Beta-3bf)
 
 <!--remove-block end-->
 
-⚠️ **THIS PLUGIN IS HIGHLY EXPERIMENTAL** ⚠️
-
 Allow Metro to use [esbuild](https://esbuild.github.io) for bundling and
 serialization.
+
+This tool is in Beta, and has been yielding good results so far. See the list of
+known issues below for more information.
 
 ## Motivation
 

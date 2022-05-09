@@ -60,7 +60,7 @@ Union of: "ios", "android", "windows", "win32", "macos"
 | detectCyclicDependencies    | boolean, `CyclicDetectorOptions`, undefined    | true    | Choose whether to detect cycles in the dependency graph. If true, then a default set of options will be used. If `CyclicDetectorOptions` is given, the object is a detailed specification of cyclic detector configuration.                       |
 | detectDuplicateDependencies | boolean, `DuplicateDetectorOptions`, undefined | true    | Choose whether to detect duplicate packages in the dependency graph. If true, then a default set of options will be used. If `DuplicateDetectorOptions` is given, the object is a detailed specification of the duplicate detector configuration. |
 | typescriptValidation        | boolean, undefined                             | true    | Choose whether to type-check the application during bundling and serving.                                                                                                                                                                         |
-| experimental_treeShake      | boolean, undefined                             | false   | **EXPERIMENTAL** -- Choose whether to enable tree shaking.                                                                                                                                                                                        |
+| treeShake                   | boolean, undefined                             | false   | Choose whether to enable tree shaking.                                                                                                                                                                                                            |
 
 ### `CyclicDetectorOptions`
 
