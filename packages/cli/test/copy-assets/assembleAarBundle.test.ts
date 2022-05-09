@@ -250,4 +250,57 @@ describe("assembleAarBundle", () => {
       ],
     ]);
   });
+
+  test("allows the generated Android project to be configured", async () => {
+    mockFiles({
+      gradlew: "",
+      "gradlew.bat": "",
+      "node_modules/@rnx-kit/react-native-auth/android/build.gradle":
+        "build.gradle",
+      "node_modules/@rnx-kit/react-native-auth/android/build/outputs/aar/rnx-kit_react-native-auth-release.aar":
+        "rnx-kit_react-native-auth-release.aar",
+      "node_modules/@rnx-kit/react-native-auth/package.json": JSON.stringify({
+        version: "0.0.0-dev",
+      }),
+      "node_modules/react-native/package.json": JSON.stringify({
+        version: "1000.0.0-dev",
+      }),
+    });
+
+    await assembleAarBundle(context, "@rnx-kit/react-native-auth", {
+      aar: {
+        android: {
+          androidPluginVersion: "7.1.3",
+          compileSdkVersion: 31,
+          defaultConfig: {
+            minSdkVersion: 26,
+            targetSdkVersion: 30,
+          },
+        },
+      },
+    });
+
+    expect(consoleWarnSpy).not.toHaveBeenCalled();
+    expect(spawnSync).toHaveBeenCalledWith(
+      expect.stringMatching(/[/\\]gradlew(?:\.bat)?$/),
+      [":rnx-kit_react-native-auth:assembleRelease"],
+      expect.objectContaining({
+        cwd: expect.stringMatching(
+          /[/\\]node_modules[/\\].rnx-gradle-build[/\\]rnx-kit_react-native-auth$/
+        ),
+      })
+    );
+    expect(findFiles()).toEqual(
+      expect.arrayContaining([
+        [
+          expect.stringMatching(
+            /[/\\]node_modules[/\\].rnx-gradle-build[/\\]rnx-kit_react-native-auth[/\\]build.gradle$/
+          ),
+          expect.stringMatching(
+            /compileSdkVersion = 31\s+minSdkVersion = 26\s+targetSdkVersion = 30\s+androidPluginVersion = "7\.1\.3"/
+          ),
+        ],
+      ])
+    );
+  });
 });
