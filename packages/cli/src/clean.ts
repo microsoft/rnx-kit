@@ -1,6 +1,5 @@
 import type { Config as CLIConfig } from "@react-native-community/cli-types";
 import { spawn } from "child_process";
-import { existsSync as fileExists } from "fs";
 import * as fs from "fs-extra";
 import ora from "ora";
 import * as os from "os";
@@ -27,7 +26,7 @@ export async function rnxClean(
   cliOptions: Args
 ): Promise<void> {
   const projectRoot = cliOptions.projectRoot ?? process.cwd();
-  if (!fileExists(projectRoot)) {
+  if (!fs.existsSync(projectRoot)) {
     throw new Error(`Invalid path provided! ${projectRoot}`);
   }
 
@@ -152,7 +151,7 @@ export async function rnxClean(
 }
 
 function cleanDir(path: string): Promise<void> {
-  if (!fileExists(path)) {
+  if (!fs.existsSync(path)) {
     return Promise.resolve();
   }
 
@@ -163,7 +162,7 @@ function findPath(startPath: string, files: string[]): string | undefined {
   // TODO: Find project files via `@react-native-community/cli`
   for (const file of files) {
     const filename = path.resolve(startPath, file);
-    if (fileExists(filename)) {
+    if (fs.existsSync(filename)) {
       return filename;
     }
   }
