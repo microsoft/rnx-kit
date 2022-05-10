@@ -17,6 +17,19 @@ import { customizeMetroConfig } from "./metro-config";
 import { getKitServerConfig } from "./serve/kit-config";
 import type { TypeScriptValidationOptions } from "./types";
 
+type DevServerMiddleware = ReturnType<
+  typeof CliServerApi["createDevServerMiddleware"]
+>;
+
+type DevServer = ReturnType<DevServerMiddleware["attachToServer"]>;
+
+type DevServerMiddleware7 = Pick<DevServerMiddleware, "middleware"> & {
+  websocketEndpoints: unknown;
+  debuggerProxyEndpoint: DevServer["debuggerProxy"];
+  messageSocketEndpoint: DevServer["messageSocket"];
+  eventsSocketEndpoint: DevServer["eventsSocket"];
+};
+
 export type CLIStartOptions = {
   host: string;
   port: number;
@@ -42,6 +55,12 @@ function friendlyRequire<T>(module: string): T {
       `Cannot find module '${module}'. This probably means that '@rnx-kit/cli' is not compatible with the version of '@react-native-community/cli' that you are currently using. Please update to the latest version and try again. If the issue still persists after the update, please file a bug at https://github.com/microsoft/rnx-kit/issues.`
     );
   }
+}
+
+function hasWebsocketEndpoints(
+  devServer: DevServerMiddleware | DevServerMiddleware7
+): devServer is DevServerMiddleware7 {
+  return !("attachToServer" in devServer);
 }
 
 export async function rnxStart(
@@ -136,11 +155,12 @@ export async function rnxStart(
 
   // create middleware -- a collection of plugins which handle incoming
   // http(s) requests, routing them to static pages or JS functions.
-  const { middleware, attachToServer } = createDevServerMiddleware({
+  const devServer = createDevServerMiddleware({
     host: cliOptions.host,
     port: metroConfig.server.port,
     watchFolders: metroConfig.watchFolders,
   });
+  const middleware = devServer.middleware;
   middleware.use(indexPageMiddleware);
 
   // merge the Metro config middleware with our middleware
@@ -158,17 +178,37 @@ export async function rnxStart(
     );
   };
 
+  // `createDevServerMiddleware` changed its return type in
+  // https://github.com/react-native-community/cli/pull/1560
+  let websocketEndpoints: unknown = undefined;
+  let messageSocketEndpoint: DevServer["messageSocket"];
+
+  if (hasWebsocketEndpoints(devServer)) {
+    websocketEndpoints = devServer.websocketEndpoints;
+    messageSocketEndpoint = devServer.messageSocketEndpoint;
+
+    // bind our `reportEvent` delegate to the Metro server
+    reportEventDelegate = devServer.eventsSocketEndpoint.reportEvent;
+  }
+
   // start the Metro server
-  const serverInstance = await startServer(metroConfig, {
+  const serverOptions = {
     host: cliOptions.host,
     secure: cliOptions.https,
     secureCert: cliOptions.cert,
     secureKey: cliOptions.key,
-  });
-  const { messageSocket, eventsSocket } = attachToServer(serverInstance);
+    websocketEndpoints,
+  };
+  const serverInstance = await startServer(metroConfig, serverOptions);
 
-  // bind our `reportEvent` delegate to the Metro server
-  reportEventDelegate = eventsSocket.reportEvent;
+  if (!hasWebsocketEndpoints(devServer)) {
+    const { messageSocket, eventsSocket } =
+      devServer.attachToServer(serverInstance);
+    messageSocketEndpoint = messageSocket;
+
+    // bind our `reportEvent` delegate to the Metro server
+    reportEventDelegate = eventsSocket.reportEvent;
+  }
 
   // In Node 8, the default keep-alive for an HTTP connection is 5 seconds. In
   // early versions of Node 8, this was implemented in a buggy way which caused
@@ -217,12 +257,12 @@ export async function rnxStart(
 
           case "d":
             terminal.log(chalk.green("Opening developer menu..."));
-            messageSocket.broadcast("devMenu", undefined);
+            messageSocketEndpoint.broadcast("devMenu", undefined);
             break;
 
           case "r":
             terminal.log(chalk.green("Reloading app..."));
-            messageSocket.broadcast("reload", undefined);
+            messageSocketEndpoint.broadcast("reload", undefined);
             break;
         }
       }
