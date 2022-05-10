@@ -1,5 +1,12 @@
 # Change Log - @rnx-kit/cli
 
+## 0.12.3
+
+### Patch Changes
+
+- 9921b7a: test: don't require `package.json` directly as it may not be exported
+- 9921b7a: copy-assets: Allow assembling arbitrary modules
+
 ## 0.12.2
 
 ### Patch Changes
