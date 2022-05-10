@@ -2,7 +2,11 @@ import type { Config as CLIConfig } from "@react-native-community/cli-types";
 import { error, info, warn } from "@rnx-kit/console";
 import { isNonEmptyArray } from "@rnx-kit/tools-language/array";
 import type { PackageManifest } from "@rnx-kit/tools-node/package";
-import { findPackageDir, readPackage } from "@rnx-kit/tools-node/package";
+import {
+  findPackageDependencyDir,
+  findPackageDir,
+  readPackage,
+} from "@rnx-kit/tools-node/package";
 import type { AllPlatforms } from "@rnx-kit/tools-react-native";
 import { parsePlatform } from "@rnx-kit/tools-react-native";
 import { spawnSync } from "child_process";
@@ -11,9 +15,17 @@ import * as os from "os";
 import * as path from "path";
 
 export type AndroidArchive = {
-  targetName: string;
+  targetName?: string;
   version?: string;
   output?: string;
+  android?: {
+    androidPluginVersion?: string;
+    compileSdkVersion?: number;
+    defaultConfig?: {
+      minSdkVersion?: number;
+      targetSdkVersion?: number;
+    };
+  };
 };
 
 export type NativeAssets = {
@@ -44,6 +56,15 @@ export type AssetsConfig = {
   getAssets?: (context: Context) => Promise<NativeAssets>;
 };
 
+const defaultAndroidConfig: Required<Required<AndroidArchive>["android"]> = {
+  androidPluginVersion: "7.1.3",
+  compileSdkVersion: 31,
+  defaultConfig: {
+    minSdkVersion: 23,
+    targetSdkVersion: 29,
+  },
+};
+
 function ensureOption(options: Options, opt: string, flag = opt) {
   if (options[opt] == null) {
     error(`Missing required option: --${flag}`);
@@ -61,6 +82,12 @@ function findGradleProject(projectRoot: string): string | undefined {
   return undefined;
 }
 
+function gradleTargetName(packageName: string): string {
+  return (
+    packageName.startsWith("@") ? packageName.slice(1) : packageName
+  ).replace(/[^\w\-.]+/g, "_");
+}
+
 function isAssetsConfig(config: unknown): config is AssetsConfig {
   return typeof config === "object" && config !== null && "getAssets" in config;
 }
@@ -70,7 +97,12 @@ function keysOf(record: Record<string, unknown> | undefined): string[] {
 }
 
 export function versionOf(pkgName: string): string {
-  const { version } = readPackage(require.resolve(`${pkgName}/package.json`));
+  const packageDir = findPackageDependencyDir(pkgName);
+  if (!packageDir) {
+    throw new Error(`Could not find module '${pkgName}'`);
+  }
+
+  const { version } = readPackage(packageDir);
   return version;
 }
 
@@ -79,13 +111,19 @@ function getAndroidPaths(
   packageName: string,
   { targetName, version, output }: AndroidArchive
 ) {
-  const projectRoot = path.dirname(
-    require.resolve(`${packageName}/package.json`)
-  );
+  const projectRoot = findPackageDependencyDir(packageName);
+  if (!projectRoot) {
+    throw new Error(`Could not find module '${packageName}'`);
+  }
+
+  const gradleFriendlyName = targetName || gradleTargetName(packageName);
+  const aarVersion = version || versionOf(packageName);
 
   switch (packageName) {
     case "hermes-engine":
       return {
+        targetName: gradleFriendlyName,
+        version: aarVersion,
         projectRoot,
         output: path.join(projectRoot, "android", "hermes-release.aar"),
         destination: path.join(
@@ -97,6 +135,8 @@ function getAndroidPaths(
 
     case "react-native":
       return {
+        targetName: gradleFriendlyName,
+        version: aarVersion,
         projectRoot,
         output: path.join(projectRoot, "android"),
         destination: path.join(
@@ -109,6 +149,8 @@ function getAndroidPaths(
     default: {
       const androidProject = findGradleProject(projectRoot);
       return {
+        targetName: gradleFriendlyName,
+        version: aarVersion,
         projectRoot,
         androidProject,
         output:
@@ -119,19 +161,19 @@ function getAndroidPaths(
               "build",
               "outputs",
               "aar",
-              `${targetName}-release.aar`
+              `${gradleFriendlyName}-release.aar`
             )),
         destination: path.join(
           context.options.assetsDest,
           "aar",
-          `${targetName}-${version || versionOf(packageName)}.aar`
+          `${gradleFriendlyName}-${aarVersion}.aar`
         ),
       };
     }
   }
 }
 
-async function assembleAarBundle(
+export async function assembleAarBundle(
   context: Context,
   packageName: string,
   { aar }: NativeAssets
@@ -149,55 +191,136 @@ async function assembleAarBundle(
     return;
   }
 
-  const { androidProject, output } = getAndroidPaths(context, packageName, aar);
+  const { targetName, version, androidProject, output } = getAndroidPaths(
+    context,
+    packageName,
+    aar
+  );
   if (!androidProject || !output) {
     warn(`Skipped \`${packageName}\`: cannot find \`build.gradle\``);
     return;
   }
 
-  const { targetName, version, env, dependencies } = aar;
+  const { env: customEnv, dependencies, android } = aar;
+  const env = {
+    NODE_MODULES_PATH: path.join(process.cwd(), "node_modules"),
+    REACT_NATIVE_VERSION: versionOf("react-native"),
+    ...process.env,
+    ...customEnv,
+  };
+
+  const outputDir = path.join(context.options.assetsDest, "aar");
+  await fs.ensureDir(outputDir);
+
+  const dest = path.join(outputDir, `${targetName}-${version}.aar`);
+
   const targets = [`:${targetName}:assembleRelease`];
-  const targetsToCopy: [string, string][] = [];
-  if (dependencies) {
-    for (const [dependencyName, aar] of Object.entries(dependencies)) {
-      const { output, destination } = getAndroidPaths(
-        context,
-        dependencyName,
-        aar
-      );
-      if (output) {
-        if (!fs.existsSync(output)) {
-          targets.push(`:${aar.targetName}:assembleRelease`);
-          targetsToCopy.push([output, destination]);
-        } else if (!fs.existsSync(destination)) {
-          targetsToCopy.push([output, destination]);
+  const targetsToCopy: [string, string][] = [[output, dest]];
+
+  const settings = path.join(androidProject, "settings.gradle");
+  if (fs.existsSync(settings)) {
+    if (dependencies) {
+      for (const [dependencyName, aar] of Object.entries(dependencies)) {
+        const { targetName, output, destination } = getAndroidPaths(
+          context,
+          dependencyName,
+          aar
+        );
+        if (output) {
+          if (!fs.existsSync(output)) {
+            targets.push(`:${targetName}:assembleRelease`);
+            targetsToCopy.push([output, destination]);
+          } else if (!fs.existsSync(destination)) {
+            targetsToCopy.push([output, destination]);
+          }
         }
       }
     }
+
+    // Run only one Gradle task at a time
+    spawnSync(gradlew, targets, { cwd: androidProject, stdio: "inherit", env });
+  } else {
+    const reactNativePath = findPackageDependencyDir("react-native");
+    if (!reactNativePath) {
+      throw new Error("Could not find 'react-native'");
+    }
+
+    const buildDir = path.join(
+      process.cwd(),
+      "node_modules",
+      ".rnx-gradle-build",
+      targetName
+    );
+
+    const compileSdkVersion =
+      android?.compileSdkVersion ?? defaultAndroidConfig.compileSdkVersion;
+    const minSdkVersion =
+      android?.defaultConfig?.minSdkVersion ??
+      defaultAndroidConfig.defaultConfig.minSdkVersion;
+    const targetSdkVersion =
+      android?.defaultConfig?.targetSdkVersion ??
+      defaultAndroidConfig.defaultConfig.targetSdkVersion;
+    const androidPluginVersion =
+      android?.androidPluginVersion ??
+      defaultAndroidConfig.androidPluginVersion;
+    const buildRelativeReactNativePath = path.relative(
+      buildDir,
+      reactNativePath
+    );
+
+    const buildGradle = [
+      "buildscript {",
+      "  ext {",
+      `      compileSdkVersion = ${compileSdkVersion}`,
+      `      minSdkVersion = ${minSdkVersion}`,
+      `      targetSdkVersion = ${targetSdkVersion}`,
+      `      androidPluginVersion = "${androidPluginVersion}"`,
+      "  }",
+      "",
+      "  repositories {",
+      "      mavenCentral()",
+      "      google()",
+      "  }",
+      "",
+      "  dependencies {",
+      '      classpath("com.android.tools.build:gradle:${project.ext.androidPluginVersion}")',
+      "  }",
+      "}",
+      "",
+      "allprojects {",
+      "  repositories {",
+      "      maven {",
+      "          // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm",
+      `          url("\${rootDir}/${buildRelativeReactNativePath}/android")`,
+      "      }",
+      "      mavenCentral()",
+      "      google()",
+      "  }",
+      "}",
+      "",
+    ].join("\n");
+
+    const gradleProperties = "android.useAndroidX=true\n";
+
+    const settingsGradle = [
+      `include(":${targetName}")`,
+      `project(":${targetName}").projectDir = file("${androidProject}")`,
+      "",
+    ].join("\n");
+
+    await fs.ensureDir(buildDir);
+    await fs.writeFile(path.join(buildDir, "build.gradle"), buildGradle);
+    await fs.writeFile(
+      path.join(buildDir, "gradle.properties"),
+      gradleProperties
+    );
+    await fs.writeFile(path.join(buildDir, "settings.gradle"), settingsGradle);
+
+    // Run only one Gradle task at a time
+    spawnSync(gradlew, targets, { cwd: buildDir, stdio: "inherit", env });
   }
 
-  // Run only one Gradle task at a time
-  spawnSync(gradlew, targets, {
-    cwd: androidProject,
-    stdio: "inherit",
-    env: {
-      ENABLE_HERMES: "true",
-      NODE_MODULES_PATH: path.join(process.cwd(), "node_modules"),
-      REACT_NATIVE_VERSION: versionOf("react-native"),
-      ...process.env,
-      ...env,
-    },
-  });
-
-  const destination = path.join(context.options.assetsDest, "aar");
-  await fs.ensureDir(destination);
-
-  const aarVersion = version || versionOf(packageName);
-  const dest = path.join(destination, `${targetName}-${aarVersion}.aar`);
-  await Promise.all([
-    fs.copy(output, dest),
-    ...targetsToCopy.map(([src, dest]) => fs.copy(src, dest)),
-  ]);
+  await Promise.all(targetsToCopy.map(([src, dest]) => fs.copy(src, dest)));
 }
 
 async function copyFiles(files: unknown, destination: string): Promise<void> {
