@@ -58,6 +58,15 @@ function getAsyncRequireModulePath(): string | undefined {
 }
 
 function getDefaultConfig(cliConfig: CLIConfig): InputConfigT {
+  try {
+    const {
+      getDefaultConfig,
+    } = require("@react-native-community/cli-plugin-metro");
+    return getDefaultConfig(cliConfig);
+  } catch (_) {
+    // Retry with our custom logic
+  }
+
   const outOfTreePlatforms = Object.keys(cliConfig.platforms).filter(
     (platform) => cliConfig.platforms[platform].npmPackageName
   );
@@ -164,11 +173,5 @@ export function loadMetroConfig(
     defaultConfig.transformer.assetPlugins = assetPlugins;
   }
 
-  return loadConfig(
-    {
-      cwd: cliConfig.root,
-      ...overrides,
-    },
-    defaultConfig
-  );
+  return loadConfig({ cwd: cliConfig.root, ...overrides }, defaultConfig);
 }
