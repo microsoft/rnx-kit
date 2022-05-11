@@ -1,4 +1,5 @@
 import { normalizePath } from "@rnx-kit/tools-node";
+import type { CustomResolver } from "metro-resolver";
 import {
   getMetroResolver,
   remapReactNativeModule,
@@ -10,33 +11,40 @@ import { remapImportPath } from "./utils/remapImportPath";
 function makeResolver({
   remapModule = (_, moduleName, __) => moduleName,
 }: Options = {}): MetroResolver {
-  const resolve = getMetroResolver();
+  const metroResolver = getMetroResolver();
   const resolvers = [remapModule, remapReactNativeModule, resolveModulePath];
 
-  return (context, moduleName, platform) => {
+  const resolver: MetroResolver = (context, moduleName, platform) => {
     if (!platform) {
       throw new Error("No platform was specified");
     }
 
-    const backupResolveRequest = context.resolveRequest;
-    delete context.resolveRequest;
+    let resolve: CustomResolver = metroResolver;
+    const resolveRequest = context.resolveRequest;
+    if (resolveRequest === resolver) {
+      delete context.resolveRequest;
+    } else if (resolveRequest) {
+      resolve = resolveRequest;
+    }
 
-    const modifiedModuleName = resolvers.reduce(
-      (modifiedName, remap) => remap(context, modifiedName, platform),
-      moduleName
-    );
+    try {
+      const modifiedModuleName = resolvers.reduce(
+        (modifiedName, remap) => remap(context, modifiedName, platform),
+        moduleName
+      );
 
-    const resolution = resolve(
-      context,
-      normalizePath(modifiedModuleName),
-      platform
-    );
-
-    // Restoring `resolveRequest` must happen last
-    context.resolveRequest = backupResolveRequest;
-
-    return resolution;
+      return resolve(
+        context,
+        normalizePath(modifiedModuleName),
+        platform,
+        null
+      );
+    } finally {
+      // Restoring `resolveRequest` must happen last
+      context.resolveRequest = resolveRequest;
+    }
   };
+  return resolver;
 }
 
 makeResolver.remapImportPath = remapImportPath;
