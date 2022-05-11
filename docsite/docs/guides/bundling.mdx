@@ -223,7 +223,7 @@ branch because they'll fail PRs.
 Next up is tree shaking, which makes your app bundle smaller by eliminating
 unused code. Some times, your app bundle gets A LOT smaller.
 
-```json
+```json title="package.json"
 {
   "rnx-kit": {
     "bundle": {
@@ -231,6 +231,20 @@ unused code. Some times, your app bundle gets A LOT smaller.
     }
   }
 }
+```
+
+In order for tree shaking to work properly, we will also need to enable
+`disableImportExportTransform` in our Babel config:
+
+```js title="babel.config.js"
+module.exports = {
+  presets: [
+    [
+      "@rnx-kit/babel-preset-metro-react-native",
+      { disableImportExportTransform: true },
+    ],
+  ],
+};
 ```
 
 :::info Performance Gain
