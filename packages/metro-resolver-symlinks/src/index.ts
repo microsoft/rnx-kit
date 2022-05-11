@@ -12,23 +12,23 @@ function makeResolver({
   remapModule = (_, moduleName, __) => moduleName,
 }: Options = {}): MetroResolver {
   const metroResolver = getMetroResolver();
-  const resolvers = [remapModule, remapReactNativeModule, resolveModulePath];
+  const remappers = [remapModule, remapReactNativeModule, resolveModulePath];
 
-  const resolver: MetroResolver = (context, moduleName, platform) => {
+  const symlinkResolver: MetroResolver = (context, moduleName, platform) => {
     if (!platform) {
       throw new Error("No platform was specified");
     }
 
     let resolve: CustomResolver = metroResolver;
     const resolveRequest = context.resolveRequest;
-    if (resolveRequest === resolver) {
+    if (resolveRequest === symlinkResolver) {
       delete context.resolveRequest;
     } else if (resolveRequest) {
       resolve = resolveRequest;
     }
 
     try {
-      const modifiedModuleName = resolvers.reduce(
+      const modifiedModuleName = remappers.reduce(
         (modifiedName, remap) => remap(context, modifiedName, platform),
         moduleName
       );
@@ -44,7 +44,7 @@ function makeResolver({
       context.resolveRequest = resolveRequest;
     }
   };
-  return resolver;
+  return symlinkResolver;
 }
 
 makeResolver.remapImportPath = remapImportPath;
