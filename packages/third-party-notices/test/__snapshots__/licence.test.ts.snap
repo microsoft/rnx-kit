@@ -3,13 +3,13 @@
 exports[`license createLicenseFileContents 1`] = `
 "================================================
 @rnx-kit/cli 1.2.3-fixedVersionForTesting
-=====
+--
 MIT (https://spdx.org/licenses/MIT.html)
 ================================================
 
 ================================================
 react 1.2.3-fixedVersionForTesting
-=====
+--
 MIT License
 
 Copyright (c) Facebook, Inc. and its affiliates.
@@ -35,7 +35,7 @@ SOFTWARE.
 
 ================================================
 react-native 1.2.3-fixedVersionForTesting
-=====
+--
 MIT License
 
 Copyright (c) Facebook, Inc. and its affiliates.
@@ -70,13 +70,13 @@ exports[`license createLicenseFileContentsWithWrappers 1`] = `
 Preamble 2
 ================================================
 @rnx-kit/cli 1.2.3-fixedVersionForTesting
-=====
+--
 MIT (https://spdx.org/licenses/MIT.html)
 ================================================
 
 ================================================
 react 1.2.3-fixedVersionForTesting
-=====
+--
 MIT License
 
 Copyright (c) Facebook, Inc. and its affiliates.
@@ -102,7 +102,7 @@ SOFTWARE.
 
 ================================================
 react-native 1.2.3-fixedVersionForTesting
-=====
+--
 MIT License
 
 Copyright (c) Facebook, Inc. and its affiliates.
@@ -154,6 +154,12 @@ Object {
       "license": "MIT",
       "name": "react-native",
       "version": "1.2.3-fixedVersionForTesting",
+    },
+    Object {
+      "copyright": "No copyright notice",
+      "license": "Unlicensed",
+      "name": "private-package",
+      "version": "1.0.0",
     },
   ],
 }
@@ -233,6 +239,13 @@ SOFTWARE.
     "name": "react-native",
     "path": "~/node_modules/react-native",
     "version": "1.2.3-fixedVersionForTesting",
+  },
+  Object {
+    "license": "Unlicensed",
+    "licenseURLs": Array [],
+    "name": "private-package",
+    "path": ".",
+    "version": "1.0.0",
   },
 ]
 `;
