@@ -21,7 +21,7 @@ async function getSampleLicenseData(): Promise<License[]> {
     license.version = "1.2.3-fixedVersionForTesting";
   }
 
-  // Private packages should excluded from text output
+  // Private packages should be excluded from text output
   licenses.push({
     name: "private-package",
     version: "1.0.0",
