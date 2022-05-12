@@ -5,13 +5,14 @@ import type { License } from "../src/types";
 import { extractLicenses } from "../src/write-third-party-notices";
 
 async function getSampleLicenseData(): Promise<License[]> {
-  const map = new Map();
-  // License data in package.json
-  map.set("@rnx-kit/cli", path.resolve("../../node_modules/@rnx-kit/cli"));
-  // License data package.json and LICENCE file
-  map.set("react-native", path.resolve("../../node_modules/react-native"));
-  // License data package.json and LICENSE file
-  map.set("react", path.resolve("../../node_modules/react"));
+  const map = new Map([
+    // License data in package.json
+    ["@rnx-kit/cli", path.resolve("../../node_modules/@rnx-kit/cli")],
+    // License data package.json and LICENCE file
+    ["react-native", path.resolve("../../node_modules/react-native")],
+    // License data package.json and LICENSE file
+    ["react", path.resolve("../../node_modules/react")],
+  ]);
 
   const licenses = await extractLicenses(map);
 
@@ -19,6 +20,15 @@ async function getSampleLicenseData(): Promise<License[]> {
   for (const license of licenses) {
     license.version = "1.2.3-fixedVersionForTesting";
   }
+
+  // Private packages should be excluded from text output
+  licenses.push({
+    name: "private-package",
+    version: "1.0.0",
+    license: "Unlicensed",
+    licenseURLs: [],
+    path: ".",
+  });
 
   return licenses;
 }
