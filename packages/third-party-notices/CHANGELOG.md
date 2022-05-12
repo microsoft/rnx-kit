@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/third-party-notices
 
+## 1.2.14
+
+### Patch Changes
+
+- 7253220: Ignore packages that are explicitly unlicensed
+
 ## 1.2.13
 
 Tue, 30 Nov 2021 17:24:14 GMT
