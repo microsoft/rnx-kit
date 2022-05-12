@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/cli
 
+## 0.12.4
+
+### Patch Changes
+
+- b864d94: Add support for `@react-native-community/cli` 7.0.3
+
 ## 0.12.3
 
 ### Patch Changes
