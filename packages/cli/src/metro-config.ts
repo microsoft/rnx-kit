@@ -62,22 +62,28 @@ function createSerializerHook(options: TypeScriptValidationOptions) {
         excludeNodeModules
       );
 
-      //  Map each file to a TypeScript project, and apply its delta operation.
+      //  Try to map each file to a TypeScript project, and apply its delta operation.
+      //  Some projects may not actually be TypeScript projects (ignore those).
       const tsprojectsToValidate: Set<Project> = new Set();
       adds.concat(updates).forEach((sourceFile) => {
-        const { tsproject, tssourceFiles } = projectCache.getProjectInfo(
-          sourceFile,
-          platform
-        );
-        if (tssourceFiles.has(sourceFile)) {
-          tsproject.setFile(sourceFile);
-          tsprojectsToValidate.add(tsproject);
+        const projectInfo = projectCache.getProjectInfo(sourceFile, platform);
+        if (projectInfo) {
+          // This is a TypeScript project. Validate it.
+          const { tsproject, tssourceFiles } = projectInfo;
+          if (tssourceFiles.has(sourceFile)) {
+            tsproject.setFile(sourceFile);
+            tsprojectsToValidate.add(tsproject);
+          }
         }
       });
       deletes.forEach((sourceFile) => {
-        const { tsproject } = projectCache.getProjectInfo(sourceFile, platform);
-        tsproject.removeFile(sourceFile);
-        tsprojectsToValidate.add(tsproject);
+        const projectInfo = projectCache.getProjectInfo(sourceFile, platform);
+        if (projectInfo) {
+          // This is a TypeScript project. Validate it.
+          const { tsproject } = projectInfo;
+          tsproject.removeFile(sourceFile);
+          tsprojectsToValidate.add(tsproject);
+        }
       });
 
       //  Validate all projects which changed, printing all type errors.

@@ -9,6 +9,7 @@ import {
   Project,
   readConfigFile,
 } from "@rnx-kit/typescript-service";
+import fs from "fs";
 import path from "path";
 import ts from "typescript";
 
@@ -44,7 +45,10 @@ export interface ProjectCache {
    * @param sourceFile Source file
    * @returns Project targeting the given platform and containing the given source file
    */
-  getProjectInfo(sourceFile: string, platform: AllPlatforms): ProjectInfo;
+  getProjectInfo(
+    sourceFile: string,
+    platform: AllPlatforms
+  ): ProjectInfo | undefined;
 }
 
 /**
@@ -84,8 +88,19 @@ export function createProjectCache(
     return root;
   }
 
-  function readTSConfig(root: string): ts.ParsedCommandLine {
+  function readTSConfig(root: string): ts.ParsedCommandLine | undefined {
     const configFileName = path.join(root, "tsconfig.json");
+    if (!fs.existsSync(configFileName)) {
+      // Allow for packages that aren't TypeScript.
+      //
+      // Example: Users who enable bundling with all the config defaults will
+      // have type validation enabled automatically. They may not actually be
+      // using TypeScript.
+      //
+      // We shouldn't break them. We should use TS validation only for TS packages.
+      //
+      return undefined;
+    }
 
     const cmdLine = readConfigFile(configFileName);
     if (!cmdLine) {
@@ -102,9 +117,13 @@ export function createProjectCache(
   function createProjectInfo(
     root: string,
     platform: AllPlatforms
-  ): ProjectInfo {
+  ): ProjectInfo | undefined {
     // Load the TypeScript configuration file for this project.
     const cmdLine = readTSConfig(root);
+    if (!cmdLine) {
+      // Not a TypeScript project
+      return undefined;
+    }
 
     //  Trim down the list of source files found by TypeScript. This ensures
     //  that only explicitly added files are loaded and parsed by TypeScript.
@@ -151,15 +170,23 @@ export function createProjectCache(
   function getProjectInfo(
     sourceFile: string,
     platform: AllPlatforms
-  ): ProjectInfo {
+  ): ProjectInfo | undefined {
     const root = findProjectRoot(sourceFile);
     projects[root] ||= {};
 
-    let info = projects[root][platform];
-    if (!info) {
-      info = createProjectInfo(root, platform);
-      projects[root][platform] = info;
+    const platforms = projects[root];
+
+    // Have we seen the project/platform for this source file before,
+    // even if what we saw is 'undefined' (e.g. not a TS project)?
+    if (Object.prototype.hasOwnProperty.call(platforms, platform)) {
+      return platforms[platform];
     }
+
+    // We haven't seen this project/platform before. Try to load it,
+    // even if it isn't a TS project. Cache the result so we don't
+    // do this again.
+    const info = createProjectInfo(root, platform);
+    platforms[platform] = info;
     return info;
   }
 
