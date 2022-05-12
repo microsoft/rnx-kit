@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/cli
 
+## 0.12.5
+
+### Patch Changes
+
+- 20e4518: When doing typescript validation during bundling, ignore non-TS projects rather than failing.
+
 ## 0.12.4
 
 ### Patch Changes
