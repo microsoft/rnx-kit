@@ -61,11 +61,13 @@ function _getPackageJsonInformations(modules) {
     module.licenseURLs = [];
     if (pkg.license && typeof pkg.license == "string") {
       module.license = pkg.license;
-      _getSpdxLicenseInformation(module.license).forEach(function (license) {
-        module.licenseURLs.push(
-          "https://spdx.org/licenses/" + license + ".html"
-        );
-      });
+      _getSpdxLicenseInformation(module.license, module.name).forEach(
+        (license) => {
+          module.licenseURLs.push(
+            "https://spdx.org/licenses/" + license + ".html"
+          );
+        }
+      );
     } else if (
       (pkg.license && Array.isArray(pkg.license)) ||
       (pkg.licenses && Array.isArray(pkg.licenses))
@@ -107,7 +109,7 @@ function _findLicenseFiles(modules) {
   return modules;
 }
 
-function _getSpdxLicenseInformation(license) {
+function _getSpdxLicenseInformation(license, moduleName) {
   var licenses = [];
   try {
     var tree;
@@ -126,7 +128,11 @@ function _getSpdxLicenseInformation(license) {
       licenses = licenses.concat(_getSpdxLicenseInformation(tree.right));
     }
   } catch (e) {
-    console.warn(`WARNING: Unable to parse license "${license}"`);
+    if (license.toUpperCase() !== "UNLICENSED") {
+      console.warn(
+        `WARNING: Unable to parse license "${license}" in ${moduleName}`
+      );
+    }
   }
   return licenses;
 }
