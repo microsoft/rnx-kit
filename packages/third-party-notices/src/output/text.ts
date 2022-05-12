@@ -25,6 +25,11 @@ export function createLicenseFileContents(
 
   // Emit combined license text
   licenses.forEach(({ name, version, license, licenseText, licenseURLs }) => {
+    if (license?.toUpperCase() === "UNLICENSED") {
+      // Ignore unlicensed/private packages
+      return;
+    }
+
     if (!licenseText) {
       if (!license && (!licenseURLs || licenseURLs.length === 0)) {
         throw new Error(
@@ -35,7 +40,7 @@ export function createLicenseFileContents(
     }
     writeLine("================================================");
     writeLine(`${name} ${version}`);
-    writeLine("=====");
+    writeLine("--");
     writeMultipleLines(licenseText.trim());
     writeLine("================================================");
     writeLine("");

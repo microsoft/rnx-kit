@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/tools-react-native
 
+## 1.2.2
+
+### Patch Changes
+
+- 2fc666f: Ignore errors in `react-native.config.js`
+
 ## 1.2.1
 
 ### Patch Changes

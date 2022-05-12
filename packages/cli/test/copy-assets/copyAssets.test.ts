@@ -1,6 +1,6 @@
-import fs from "fs-extra";
 import * as path from "path";
-import { copyAssets, gatherConfigs, versionOf } from "../src/copy-assets";
+import { findFiles, mockFiles } from "./helpers";
+import { copyAssets, gatherConfigs, versionOf } from "../../src/copy-assets";
 
 const options = {
   platform: "ios" as const,
@@ -10,23 +10,13 @@ const options = {
 };
 
 const context = {
-  projectRoot: path.resolve(__dirname, ".."),
+  projectRoot: path.resolve(__dirname, "..", ".."),
   manifest: {
     name: "@rnx-kit/cli",
     version: "0.0.0-dev",
   },
   options,
 };
-
-function findFiles() {
-  // @ts-ignore `__toJSON`
-  return Object.entries(fs.__toJSON());
-}
-
-function mockFiles(files: Record<string, string> = {}) {
-  // @ts-ignore `__setMockFiles`
-  fs.__setMockFiles(files);
-}
 
 describe("copyAssets", () => {
   afterEach(() => {

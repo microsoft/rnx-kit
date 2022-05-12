@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/third-party-notices",
-  "version": "1.2.13",
+  "version": "1.2.14",
   "description": "Library and tool to build a third party notices file based on a js bundle's source map",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/third-party-notices#readme",
   "license": "MIT",
@@ -34,8 +34,7 @@
     "@rnx-kit/eslint-config": "*",
     "@rnx-kit/scripts": "*",
     "@types/jest": "^27.0.0",
-    "@types/yargs": "^16.0.0",
-    "typescript": "^4.0.0"
+    "@types/yargs": "^16.0.0"
   },
   "eslintConfig": {
     "extends": "@rnx-kit/eslint-config"

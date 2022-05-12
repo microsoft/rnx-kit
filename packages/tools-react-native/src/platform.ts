@@ -79,16 +79,20 @@ export function getAvailablePlatformsUncached(
 
     const configPath = path.join(pkgPath, "react-native.config.js");
     if (fs.existsSync(configPath)) {
-      const { platforms } = require(configPath);
-      if (platforms) {
-        Object.keys(platforms).forEach((platform) => {
-          if (typeof platformMap[platform] === "undefined") {
-            const { npmPackageName } = platforms[platform];
-            if (npmPackageName) {
-              platformMap[platform] = npmPackageName;
+      try {
+        const { platforms } = require(configPath);
+        if (platforms) {
+          Object.keys(platforms).forEach((platform) => {
+            if (typeof platformMap[platform] === "undefined") {
+              const { npmPackageName } = platforms[platform];
+              if (npmPackageName) {
+                platformMap[platform] = npmPackageName;
+              }
             }
-          }
-        });
+          });
+        }
+      } catch (_) {
+        // ignore
       }
     }
   });
