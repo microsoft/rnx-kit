@@ -1,120 +1,52 @@
+import type { CustomResolver, ResolutionContext } from "metro-resolver";
+import { resolve } from "metro-resolver";
 import * as path from "path";
-import {
-  getMetroResolver,
-  remapReactNativeModule,
-  resolveModulePath,
-} from "../src/resolver";
+import { makeResolver } from "../src/symlinkResolver";
+import { useFixture } from "./fixtures";
 
-const AVAILABLE_PLATFORMS = {
-  macos: "react-native-macos",
-  win32: "@office-iss/react-native-win32",
-  windows: "react-native-windows",
-};
-
-function useFixture(name: string): string {
-  return path.join(__dirname, "__fixtures__", name);
-}
-
-describe("getMetroResolver", () => {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const context: any = {};
-
-  test("returns `metro-resolver` installed by `react-native`", () => {
-    const p = useFixture("metro-resolver-duplicates");
-    expect(getMetroResolver(p)(context, "", null)).toEqual(
-      expect.stringContaining(
-        path.join(
-          "metro-resolver-duplicates",
-          "node_modules",
-          "@react-native-community",
-          "cli",
-          "node_modules",
-          "metro-resolver"
-        )
-      )
-    );
-  });
-
-  test("throws if `metro-resolver` cannot be found", () => {
-    const cwd = process.cwd();
-    const root = cwd.substring(0, cwd.indexOf(path.sep) + 1);
-    expect(() => getMetroResolver(root)(context, "", null)).toThrowError(
-      "Cannot find module"
-    );
-  });
-});
-
-describe("remapReactNativeModule", () => {
+function makeContext(
+  resolveRequest: CustomResolver,
+  freeze = false
+): ResolutionContext {
   const context = {
     originModulePath: "",
-  };
+    doesFileExist: () => true,
+    isAssetFile: () => false,
+    nodeModulesPaths: [".", "..", "../.."],
+    redirectModulePath: (modulePath: string) => modulePath,
+    resolveRequest,
+  } as unknown as ResolutionContext;
+  return freeze ? Object.freeze(context) : context;
+}
 
-  const currentDir = process.cwd();
+describe("makeResolver", () => {
+  const currentWorkingDirectory = process.cwd();
 
-  beforeAll(() => {
-    process.chdir(useFixture("remap-platforms"));
+  afterEach(() => {
+    process.chdir(currentWorkingDirectory);
   });
 
-  afterAll(() => {
-    process.chdir(currentDir);
-  });
+  test("returns `react-native` with Metro <0.68", () => {
+    process.chdir(useFixture("duplicates"));
 
-  test("remaps `react-native` if platform is supported", () => {
-    expect(remapReactNativeModule(context, "terminator", "macos")).toBe(
-      "terminator"
-    );
+    const resolveRequest = makeResolver();
+    const context = makeContext(resolveRequest);
 
-    expect(remapReactNativeModule(context, "react-native", "nextstep")).toBe(
-      "react-native"
-    );
-
-    Object.entries(AVAILABLE_PLATFORMS).forEach(([platform, npmPackage]) => {
-      expect(remapReactNativeModule(context, "react-native", platform)).toBe(
-        npmPackage
-      );
+    expect(resolveRequest(context, "react-native", "ios")).toEqual({
+      filePath: path.join("node_modules", "react-native"),
+      type: "sourceFile",
     });
   });
 
-  test("remaps paths under `react-native` if platform is supported", () => {
-    const target = "react-native/index";
+  test("returns `react-native` with Metro >=0.68", () => {
+    process.chdir(useFixture("duplicates"));
 
-    expect(remapReactNativeModule(context, target, "nextstep")).toBe(target);
+    const resolveRequest = makeResolver();
+    const context = makeContext(resolve, true);
 
-    Object.entries(AVAILABLE_PLATFORMS).forEach(([platform, npmPackage]) => {
-      expect(remapReactNativeModule(context, target, platform)).toBe(
-        `${npmPackage}/index`
-      );
+    expect(resolveRequest(context, "react-native", "ios")).toEqual({
+      filePath: path.join("node_modules", "react-native"),
+      type: "sourceFile",
     });
-  });
-});
-
-describe("resolveModulePath", () => {
-  function makeContext(originModulePath) {
-    return { originModulePath };
-  }
-
-  test("returns absolute/relative modules as is", () => {
-    expect(resolveModulePath(makeContext(""), "./terminator", "")).toBe(
-      "./terminator"
-    );
-    expect(resolveModulePath(makeContext(""), "/terminator", "")).toBe(
-      "/terminator"
-    );
-  });
-
-  test("resolves module path relative to requester", () => {
-    const p = useFixture("duplicates");
-    expect(resolveModulePath(makeContext(p), "react-native", "")).toBe(
-      `.${path.sep}${path.join("duplicates", "node_modules", "react-native")}`
-    );
-    expect(
-      resolveModulePath(
-        makeContext(path.join(p, "node_modules", "terminator")),
-        "react-native",
-        ""
-      )
-    ).toBe(
-      `.${path.sep}${path.join("terminator", "node_modules", "react-native")}`
-    );
   });
 });
