@@ -4,6 +4,7 @@ import {
   parseModuleRef,
 } from "@rnx-kit/tools-node";
 import { getAvailablePlatforms } from "@rnx-kit/tools-react-native";
+import * as fs from "fs";
 import * as path from "path";
 import type { MetroResolver, ModuleResolver } from "./types";
 
@@ -12,7 +13,7 @@ function resolveFrom(moduleName: string, startDir: string): string {
   if (!p) {
     throw new Error(`Cannot find module '${moduleName}'`);
   }
-  return p;
+  return fs.lstatSync(p).isSymbolicLink() ? fs.readlinkSync(p) : p;
 }
 
 /**
