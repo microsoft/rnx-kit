@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/cli
 
+## 0.12.6
+
+### Patch Changes
+
+- f5d91ef: rnx-copy-assets: exit if encountering an error
+
 ## 0.12.5
 
 ### Patch Changes
