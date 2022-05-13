@@ -9,6 +9,7 @@ import {
 } from "@rnx-kit/tools-node/package";
 import type { AllPlatforms } from "@rnx-kit/tools-react-native";
 import { parsePlatform } from "@rnx-kit/tools-react-native";
+import type { SpawnSyncOptions } from "child_process";
 import { spawnSync } from "child_process";
 import * as fs from "fs-extra";
 import * as os from "os";
@@ -173,6 +174,13 @@ function getAndroidPaths(
   }
 }
 
+function run(command: string, args: string[], options: SpawnSyncOptions) {
+  const { status } = spawnSync(command, args, options);
+  if (status !== 0) {
+    process.exit(status || 1);
+  }
+}
+
 export async function assembleAarBundle(
   context: Context,
   packageName: string,
@@ -238,7 +246,7 @@ export async function assembleAarBundle(
     }
 
     // Run only one Gradle task at a time
-    spawnSync(gradlew, targets, { cwd: androidProject, stdio: "inherit", env });
+    run(gradlew, targets, { cwd: androidProject, stdio: "inherit", env });
   } else {
     const reactNativePath = findPackageDependencyDir("react-native");
     if (!reactNativePath) {
@@ -317,7 +325,7 @@ export async function assembleAarBundle(
     await fs.writeFile(path.join(buildDir, "settings.gradle"), settingsGradle);
 
     // Run only one Gradle task at a time
-    spawnSync(gradlew, targets, { cwd: buildDir, stdio: "inherit", env });
+    run(gradlew, targets, { cwd: buildDir, stdio: "inherit", env });
   }
 
   await Promise.all(targetsToCopy.map(([src, dest]) => fs.copy(src, dest)));

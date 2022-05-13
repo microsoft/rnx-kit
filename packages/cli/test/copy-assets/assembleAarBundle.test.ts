@@ -23,11 +23,11 @@ export const context = {
 
 describe("assembleAarBundle", () => {
   const consoleWarnSpy = jest.spyOn(global.console, "warn");
+  const spawnSyncSpy = jest.spyOn(require("child_process"), "spawnSync");
 
   afterEach(() => {
     mockFiles();
     consoleWarnSpy.mockReset();
-    spawnSync.mockReset();
   });
 
   afterAll(() => {
@@ -48,7 +48,7 @@ describe("assembleAarBundle", () => {
       expect.anything(),
       expect.stringMatching(/cannot find `gradlew`$/)
     );
-    expect(spawnSync).not.toHaveBeenCalled();
+    expect(spawnSyncSpy).not.toHaveBeenCalled();
     expect(findFiles()).toEqual([]);
   });
 
@@ -82,7 +82,7 @@ describe("assembleAarBundle", () => {
       expect.anything(),
       expect.stringMatching(/cannot find `build.gradle`/)
     );
-    expect(spawnSync).not.toHaveBeenCalled();
+    expect(spawnSyncSpy).not.toHaveBeenCalled();
     expect(findFiles()).toEqual([
       [expect.stringMatching(/[/\\]gradlew$/), ""],
       [expect.stringMatching(/[/\\]gradlew.bat$/), ""],
@@ -114,7 +114,7 @@ describe("assembleAarBundle", () => {
     await assembleAarBundle(context, "@rnx-kit/react-native-auth", { aar: {} });
 
     expect(consoleWarnSpy).not.toHaveBeenCalled();
-    expect(spawnSync).toHaveBeenCalledWith(
+    expect(spawnSyncSpy).toHaveBeenCalledWith(
       expect.stringMatching(/[/\\]gradlew(?:\.bat)?$/),
       [":rnx-kit_react-native-auth:assembleRelease"],
       expect.objectContaining({
@@ -200,7 +200,7 @@ describe("assembleAarBundle", () => {
     await assembleAarBundle(context, "@rnx-kit/react-native-auth", { aar: {} });
 
     expect(consoleWarnSpy).not.toHaveBeenCalled();
-    expect(spawnSync).toHaveBeenCalledWith(
+    expect(spawnSyncSpy).toHaveBeenCalledWith(
       expect.stringMatching(/[/\\]gradlew(?:\.bat)?$/),
       [":rnx-kit_react-native-auth:assembleRelease"],
       expect.objectContaining({
@@ -281,7 +281,7 @@ describe("assembleAarBundle", () => {
     });
 
     expect(consoleWarnSpy).not.toHaveBeenCalled();
-    expect(spawnSync).toHaveBeenCalledWith(
+    expect(spawnSyncSpy).toHaveBeenCalledWith(
       expect.stringMatching(/[/\\]gradlew(?:\.bat)?$/),
       [":rnx-kit_react-native-auth:assembleRelease"],
       expect.objectContaining({
