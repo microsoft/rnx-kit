@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-resolver-symlinks
 
+## 0.1.18
+
+### Patch Changes
+
+- fd95827: Fix symlinks not being resolved
+
 ## 0.1.17
 
 ### Patch Changes
