@@ -2,7 +2,12 @@ import path from "path";
 import type { Config as CLIConfig } from "@react-native-community/cli-types";
 import type { Reporter } from "metro";
 import { loadConfig, ConfigT, InputConfigT } from "metro-config";
-import { resolve, Resolution } from "metro-resolver";
+import type {
+  CustomResolver,
+  Resolution,
+  ResolutionContext,
+} from "metro-resolver";
+import { resolve as metroResolver } from "metro-resolver";
 
 const INTERNAL_CALLSITES_REGEX = new RegExp(
   [
@@ -20,32 +25,39 @@ const INTERNAL_CALLSITES_REGEX = new RegExp(
 function reactNativePlatformResolver(platformImplementations: {
   [platform: string]: string;
 }) {
-  return (
-    context: any, // eslint-disable-line
-    _realModuleName: string,
-    platform: string,
-    moduleName: string
+  const platformResolver = (
+    context: ResolutionContext,
+    moduleName: string,
+    platform: string
   ): Resolution => {
-    const backupResolveRequest = context.resolveRequest;
-    delete context.resolveRequest;
+    let resolve: CustomResolver = metroResolver;
+    const resolveRequest = context.resolveRequest;
+    if (platformResolver === resolveRequest) {
+      delete context.resolveRequest;
+    } else if (resolveRequest) {
+      resolve = resolveRequest;
+    }
 
     try {
       let modifiedModuleName = moduleName;
-      if (platformImplementations[platform]) {
+      const reactNativePlatform = platformImplementations[platform];
+      if (reactNativePlatform) {
         if (moduleName === "react-native") {
-          modifiedModuleName = platformImplementations[platform];
+          modifiedModuleName = reactNativePlatform;
         } else if (moduleName.startsWith("react-native/")) {
-          modifiedModuleName = `${
-            platformImplementations[platform]
-          }/${modifiedModuleName.slice("react-native/".length)}`;
+          modifiedModuleName = `${reactNativePlatform}/${modifiedModuleName.slice(
+            "react-native/".length
+          )}`;
         }
       }
-      const result = resolve(context, modifiedModuleName, platform);
-      return result;
+      return resolve(context, modifiedModuleName, platform, null);
     } finally {
-      context.resolveRequest = backupResolveRequest;
+      if (!context.resolveRequest) {
+        context.resolveRequest = resolveRequest;
+      }
     }
   };
+  return platformResolver;
 }
 
 function getAsyncRequireModulePath(): string | undefined {
