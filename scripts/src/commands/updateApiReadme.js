@@ -24,7 +24,7 @@ function extractBrief(summary) {
 }
 
 /**
- * @param {readonly import("@babel/types").Comment[] | null} comments
+ * @param {readonly import("@babel/types").Comment[] | null | undefined} comments
  * @returns {import("@babel/types").Comment | null}
  */
 function findLastBlockComment(comments) {
@@ -150,6 +150,9 @@ function renderParamNode(node) {
     case "RestElement":
       return `...${renderParamNode(node.argument)}`;
     case "TSParameterProperty":
+    case "TSAsExpression":
+    case "TSNonNullExpression":
+    case "TSTypeAssertion":
       throw new Error(`Unsupported parameter type: ${node.type}`);
   }
 }
