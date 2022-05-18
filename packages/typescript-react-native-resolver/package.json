@@ -21,7 +21,7 @@
     "test": "rnx-kit-scripts test"
   },
   "dependencies": {
-    "@rnx-kit/tools-node": "^1.2.6",
+    "@rnx-kit/tools-node": "^1.2.7",
     "@rnx-kit/tools-react-native": "^1.2.0"
   },
   "devDependencies": {
