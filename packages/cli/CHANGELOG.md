@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/cli
 
+## 0.12.7
+
+### Patch Changes
+
+- 569a099: Bump @rnx-kit/tools-node to v1.2.7
+
 ## 0.12.6
 
 ### Patch Changes
