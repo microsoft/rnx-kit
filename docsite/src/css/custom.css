@@ -53,52 +53,6 @@
 
   --ifm-transition-fast: 100ms;
   --ifm-transition-slow: 300ms;
-
-  /** Algolia Search vars
-   *
-   * All are flagged !important because Docusaurus or the Algolia preset
-   * (can't tell which) pulls in the Algolia CSS *after* this file, causing
-   * all of our '--aa-*' var definitions be over-written.
-   */
-  --aa-base-unit: 14 !important;
-
-  --aa-icon-size: 16px !important;
-  --aa-input-icon-size: 16px !important;
-  --aa-icon-color-rgb: var(--font-color-base-rgb) !important;
-  --aa-icon-color-alpha: 1 !important;
-  --aa-action-icon-size: var(--icon-size) !important;
-
-  --aa-text-color-rgb: var(--font-color-base-rgb) !important;
-  --aa-text-color-alpha: 1 !important;
-  --aa-primary-color-rgb: var(--color-primary-rgb) !important;
-  --aa-primary-color-alpha: 1 !important;
-  --aa-muted-color-rgb: var(--font-color-base-rgb) !important;
-  --aa-muted-color-alpha: 0.5 !important;
-
-  --aa-panel-border-color-rgb: var(--font-color-base-rgb) !important;
-  --aa-panel-border-color-alpha: 1 !important;
-  --aa-input-border-color-rgb: var(--font-color-base-rgb) !important;
-  --aa-input-border-color-alpha: 1 !important;
-
-  --aa-background-color-rgb: var(--background-surface-color-rgb) !important;
-  --aa-background-color-alpha: 1 !important;
-  --aa-input-background-color-rgb: var(
-    --background-surface-color-rgb
-  ) !important;
-  --aa-input-background-color-alpha: 1 !important;
-  --aa-selected-color-rgb: var(--hover-overlay-rgb) !important;
-  --aa-selected-color-alpha: var(--hover-overlay-alpha) !important;
-  --aa-description-highlight-background-color-rgb: var(
-    --background-surface-color-rgb
-  ) !important;
-  --aa-description-highlight-background-color-alpha: 1 !important;
-
-  --aa-overlay-color-rgb: var(--hover-overlay-rgb) !important;
-  --aa-overlay-color-alpha: 0.5 !important;
-
-  --aa-search-input-height: 32px !important;
-
-  --aa-panel-shadow: 0 6px 16px -4px rgba(var(--background-surface-color-rgb), 0.25) !important;
 }
 
 /* For readability concerns, you should choose a lighter palette in dark mode. */
@@ -131,46 +85,45 @@ html[data-theme="dark"] {
   --ifm-footer-background-color: rgb(var(--footer-background-color-rgb));
 }
 
-body[data-theme="dark"] {
-  /** Algolia Search vars
-   *
-   * All are flagged !important because Docusaurus or the Algolia preset
-   * (can't tell which) pulls in the Algolia CSS *after* this file, causing
-   * all of our '--aa-*' var definitions be over-written.
-   */
-  --aa-icon-color-rgb: var(--font-color-base-rgb) !important;
-
-  --aa-text-color-rgb: var(--font-color-base-rgb) !important;
-  --aa-text-color-alpha: 1 !important;
-  --aa-primary-color-rgb: var(--color-primary-rgb) !important;
-  --aa-primary-color-alpha: 1 !important;
-  --aa-muted-color-rgb: var(--font-color-base-rgb) !important;
-  --aa-muted-color-alpha: 0.5 !important;
-
-  --aa-panel-border-color-rgb: var(--font-color-base-rgb) !important;
-  --aa-panel-border-color-alpha: 1 !important;
-  --aa-input-border-color-rgb: var(--font-color-base-rgb) !important;
-  --aa-input-border-color-alpha: 1 !important;
-
-  --aa-background-color-rgb: var(--background-surface-color-rgb) !important;
-  --aa-background-color-alpha: 1 !important;
-  --aa-input-background-color-rgb: var(
-    --background-surface-color-rgb
-  ) !important;
-  --aa-input-background-color-alpha: 1 !important;
-  --aa-selected-color-rgb: var(--hover-overlay-rgb) !important;
-  --aa-selected-color-alpha: var(--hover-overlay-alpha) !important;
-  --aa-description-highlight-background-color-rgb: var(
-    --background-surface-color-rgb
-  ) !important;
-  --aa-description-highlight-background-color-alpha: 1 !important;
-
-  --aa-overlay-color-rgb: var(--hover-overlay-rgb) !important;
-  --aa-overlay-color-alpha: 0.5 !important;
-
-  --aa-panel-shadow: 0 6px 16px -4px rgba(var(--background-surface-color-rgb), 1) !important;
+[data-theme='light'] .DocSearch {
+  --docsearch-primary-color: var(--ifm-color-primary);
+  --docsearch-text-color: var(--ifm-font-color-base);
+  --docsearch-muted-color: var(--ifm-color-secondary-darkest);
+  --docsearch-container-background: rgba(94, 100, 112, 0.7);
+  /* Modal */
+  --docsearch-modal-background: var(--ifm-color-secondary-lighter);
+  /* Search box */
+  --docsearch-searchbox-background: var(--ifm-color-secondary);
+  --docsearch-searchbox-focus-background: var(--ifm-color-white);
+  /* Hit */
+  --docsearch-hit-color: var(--ifm-font-color-base);
+  --docsearch-hit-active-color: var(--ifm-color-white);
+  --docsearch-hit-background: var(--ifm-color-white);
+  /* Footer */
+  --docsearch-footer-background: var(--ifm-color-white);
 }
 
+[data-theme='dark'] .DocSearch {
+  --docsearch-text-color: var(--ifm-font-color-base);
+  --docsearch-muted-color: var(--ifm-color-secondary-darkest);
+  --docsearch-container-background: rgba(47, 55, 69, 0.7);
+  /* Modal */
+  --docsearch-modal-background: var(--ifm-background-color);
+  /* Search box */
+  --docsearch-searchbox-background: var(--ifm-background-color);
+  --docsearch-searchbox-focus-background: var(--ifm-color-black);
+  /* Hit */
+  --docsearch-hit-color: var(--ifm-font-color-base);
+  --docsearch-hit-active-color: var(--ifm-color-white);
+  --docsearch-hit-background: var(--ifm-color-emphasis-100);
+  /* Footer */
+  --docsearch-footer-background: var(--ifm-background-surface-color);
+  --docsearch-key-gradient: linear-gradient(
+    -26.5deg,
+    var(--ifm-color-emphasis-200) 0%,
+    var(--ifm-color-emphasis-100) 100%
+  );
+}
 /*
  * Icons
  */
@@ -335,69 +288,4 @@ html[data-theme="dark"] .markdown a:hover {
 .footer__logo {
   width: 300px;
   max-width: unset;
-}
-
-/*
- * Search
- */
-.aa-SubmitIcon,
-.aa-LoadingIcon,
-.aa-ClearIcon {
-  fill: rgb(var(--font-color-base-rgb)) !important;
-  width: var(--aa-icon-size) !important;
-  height: var(--aa-icon-size) !important;
-}
-
-.dsla-search-wrapper {
-  margin-left: 0 !important;
-  padding: var(--ifm-navbar-item-padding-vertical)
-    var(--ifm-navbar-item-padding-horizontal) !important;
-}
-
-.aa-DetachedSearchButton,
-.aa-Form {
-  border: var(--ifm-global-border-width) solid
-    rgba(var(--aa-input-border-color-rgb), var(--aa-input-border-color-alpha)) !important;
-  border-radius: var(--ifm-global-radius) !important;
-  padding: var(--aa-spacing-half) !important;
-}
-
-.aa-Form {
-  align-items: initial !important;
-  box-shadow: inherit !important;
-  height: var(--aa-search-input-height) !important;
-}
-
-.aa-DetachedFormContainer {
-  border-bottom: none !important;
-}
-
-.aa-DetachedSearchButton:focus {
-  box-shadow: inherit !important;
-}
-
-.aa-DetachedSearchButtonIcon {
-  width: initial !important;
-  padding-right: var(--aa-spacing-half) !important;
-}
-
-.aa-LoadingIndicator,
-.aa-SubmitButton {
-  padding-left: 0 !important;
-  padding-right: var(--aa-spacing-half) !important;
-  width: auto !important;
-}
-
-.aa-InputWrapperPrefix,
-.aa-Input,
-.aa-InputWrapperSuffix {
-  height: auto !important;
-}
-
-.aa-ClearButton {
-  padding: 0 !important;
-}
-
-.aa-ItemLink:hover {
-  color: var(--ifm-font-color-base);
 }
