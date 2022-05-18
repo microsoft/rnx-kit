@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-service
 
+## 1.1.14
+
+### Patch Changes
+
+- fff5081: Use `@react-native-community/cli-plugin-metro` if installed
+
 ## 1.1.13
 
 Tue, 30 Nov 2021 17:24:14 GMT

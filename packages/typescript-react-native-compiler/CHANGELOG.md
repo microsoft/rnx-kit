@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/typescript-react-native-compiler
 
+## 0.0.8
+
+### Patch Changes
+
+- 569a099: Bump @rnx-kit/tools-node to v1.2.7
+
 ## 0.0.7
 
 ### Patch Changes

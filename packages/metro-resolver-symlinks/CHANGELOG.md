@@ -1,5 +1,12 @@
 # Change Log - @rnx-kit/metro-resolver-symlinks
 
+## 0.1.19
+
+### Patch Changes
+
+- ba4aaac: Updated to support Metro 0.68+
+- 569a099: Bump @rnx-kit/tools-node to v1.2.7
+
 ## 0.1.18
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/dep-check
 
+## 1.12.14
+
+### Patch Changes
+
+- 569a099: Bump @rnx-kit/tools-node to v1.2.7
+
 ## 1.12.13
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/typescript-service
 
+## 1.5.4
+
+### Patch Changes
+
+- 569a099: Bump @rnx-kit/tools-node to v1.2.7
+
 ## 1.5.3
 
 Tue, 30 Nov 2021 17:24:14 GMT

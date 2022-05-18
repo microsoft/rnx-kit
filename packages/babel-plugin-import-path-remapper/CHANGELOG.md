@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/babel-plugin-import-path-remapper
 
+## 1.1.2
+
+### Patch Changes
+
+- 569a099: Bump @rnx-kit/tools-node to v1.2.7
+
 ## 1.1.1
 
 ### Patch Changes
