@@ -49,41 +49,6 @@ const config = {
     title2,
   },
 
-  plugins: [
-    [
-      require.resolve("@cmfcmf/docusaurus-search-local"),
-      /** @type {SearchPluginOptions} */
-      ({
-        // whether to index docs pages
-        indexDocs: true,
-
-        // Whether to also index the titles of the parent categories in the sidebar of a doc page.
-        // 0 disables this feature.
-        // 1 indexes the direct parent category in the sidebar of a doc page
-        // 2 indexes up to two nested parent categories of a doc page
-        // 3...
-        //
-        // Do _not_ use Infinity, the value must be a JSON-serializable integer.
-        indexDocSidebarParentCategories: 0,
-
-        // whether to index blog pages
-        indexBlog: false,
-
-        // whether to index static pages
-        // /404.html is never indexed
-        indexPages: false,
-
-        // language of your documentation, see next section
-        language: "en",
-
-        // setting this to "none" will prevent the default CSS to be included. The default CSS
-        // comes from autocomplete-theme-classic, which you can read more about here:
-        // https://www.algolia.com/doc/ui-libraries/autocomplete/api-reference/autocomplete-theme-classic/
-        style: undefined,
-      }),
-    ],
-  ],
-
   presets: [
     [
       "classic",
@@ -120,6 +85,39 @@ const config = {
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
+      algolia: {
+        // ------------
+        //
+        // Docusaurus's Algolia plugin properties
+        //
+        appId: "47BE8NTWGA",
+        apiKey: "db4f13fdceb9b39d4ddb0b3746ecb99e",
+        indexName: "rnx-kit",
+        contextualSearch: true,
+
+        // Optional: Specify domains where the navigation should occur through window.location instead on history.push. Useful when our Algolia config crawls multiple documentation sites and we want to navigate with window.location.href to them.
+        //externalUrlRegex: "external\\.com|domain\\.com",
+
+        // Optional: path for search page that enabled by default (`false` to disable it)
+        searchPagePath: "search",
+
+        // ----------
+        //
+        // Algolia search parameters
+        // Reference: https://www.algolia.com/doc/api-reference/search-api-parameters
+        //
+        // ** These are all OPTIONAL **
+        //
+        searchParameters: {},
+
+        // ----------
+        //
+        // Algolia DocSearch API properties
+        // Reference: https://docsearch.algolia.com/docs/api
+        //
+        // ** All properties are OPTIONAL, and should be listed below here **
+        //
+      },
       navbar: {
         title: projectName,
         logo: {
