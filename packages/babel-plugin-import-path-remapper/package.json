@@ -22,7 +22,7 @@
   "dependencies": {
     "@babel/core": "^7.0.0",
     "@babel/helper-plugin-utils": "^7.0.0",
-    "@rnx-kit/tools-node": "^1.2.6"
+    "@rnx-kit/tools-node": "^1.2.7"
   },
   "devDependencies": {
     "@rnx-kit/scripts": "*",

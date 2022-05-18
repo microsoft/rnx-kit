@@ -25,7 +25,7 @@
   },
   "dependencies": {
     "@rnx-kit/tools-language": "^1.2.6",
-    "@rnx-kit/tools-node": "^1.2.6",
+    "@rnx-kit/tools-node": "^1.2.7",
     "@rnx-kit/typescript-react-native-resolver": "^0.2.0",
     "@rnx-kit/typescript-service": "^1.5.3",
     "chalk": "^4.1.0"

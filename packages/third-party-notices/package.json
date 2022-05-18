@@ -26,7 +26,7 @@
   },
   "dependencies": {
     "@rnx-kit/console": "^1.0.11",
-    "@rnx-kit/tools-node": "^1.2.6",
+    "@rnx-kit/tools-node": "^1.2.7",
     "spdx-expression-parse": "^3.0.1",
     "yargs": "^16.0.0"
   },
