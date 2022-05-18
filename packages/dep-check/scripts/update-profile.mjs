@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 // @ts-check
 
+import { existsSync as fileExists } from "fs";
 import * as fs from "fs/promises";
 import markdownTable from "markdown-table";
 import pacote from "pacote";
@@ -71,6 +72,16 @@ function generateFromTemplate({
   const currentVersion = `${nextVersionCoerced.major}.${
     nextVersionCoerced.minor - 1
   }`;
+
+  const currentProfile = path.join(
+    "src",
+    "profiles",
+    `profile-${currentVersion}.ts`
+  );
+  if (!fileExists(currentProfile)) {
+    throw new Error(`Could not find '${currentProfile}'`);
+  }
+
   const currentVersionVarName = `${nextVersionCoerced.major}_${
     nextVersionCoerced.minor - 1
   }`;
@@ -258,15 +269,19 @@ async function main(targetVersion = "") {
         });
       }
     } catch (e) {
-      console.error(
-        [
-          e.message,
-          "Available tags:",
-          ...Object.entries(e.distTags).map(
-            ([tag, version]) => `  - ${tag}: ${version}`
-          ),
-        ].join("\n")
-      );
+      if (e.distTags) {
+        console.error(
+          [
+            e.message,
+            "Available tags:",
+            ...Object.entries(e.distTags).map(
+              ([tag, version]) => `  - ${tag}: ${version}`
+            ),
+          ].join("\n")
+        );
+      } else {
+        console.error(e);
+      }
       process.exit(1);
     }
   }
