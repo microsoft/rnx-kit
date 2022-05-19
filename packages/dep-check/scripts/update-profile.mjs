@@ -7,6 +7,7 @@ import markdownTable from "markdown-table";
 import pacote from "pacote";
 import * as path from "path";
 import semverCoerce from "semver/functions/coerce.js";
+import semverCompare from "semver/functions/compare.js";
 import { fileURLToPath } from "url";
 import { isMetaPackage } from "../lib/capabilities.js";
 import { defaultProfiles } from "../lib/profiles.js";
@@ -170,6 +171,19 @@ export default profile;
 }
 
 /**
+ * @param {string} packageName
+ * @param {Record<string, string>?} dependencies
+ * @returns {string}
+ */
+function getPackageVersion(packageName, dependencies) {
+  const packageVersion = dependencies?.[packageName];
+  if (!packageVersion) {
+    throw new Error(`Failed to get '${packageName}' version`);
+  }
+  return semverCoerce(packageVersion).version;
+}
+
+/**
  * Fetches package versions for specified react-native version.
  * @param {string} targetVersion
  * @param {Profile} latestProfile
@@ -187,49 +201,38 @@ async function makeProfile(targetVersion, latestProfile) {
     `^${targetVersion}.0-0`
   );
   if (!reactNativeInfo) {
-    return undefined;
+    throw new Error(`Failed to get manifest of 'react-native@${targetVersion}`);
   }
 
-  const getPackageVersion = (packageName, dependencies) =>
-    dependencies[packageName]
-      ? semverCoerce(dependencies[packageName]).version
-      : null;
   const { dependencies, peerDependencies } = reactNativeInfo;
-
-  if (peerDependencies) {
-    newProfile.reactVersion = getPackageVersion("react", peerDependencies);
+  if (!dependencies) {
+    throw new Error(
+      `Failed to get dependencies of 'react-native@${targetVersion}`
+    );
+  }
+  if (!peerDependencies) {
+    throw new Error(
+      `Failed to get peer dependencies of 'react-native@${targetVersion}`
+    );
   }
 
-  if (dependencies) {
-    newProfile.hermesVersion = getPackageVersion("hermes-engine", dependencies);
+  newProfile.reactVersion = getPackageVersion("react", peerDependencies);
+  newProfile.hermesVersion = getPackageVersion("hermes-engine", dependencies);
 
-    // Fetch `metro` version from `@react-native-community/cli-plugin-metro` > `@react-native-community/cli`
-    const rnCliVersion = dependencies["@react-native-community/cli"];
-    if (rnCliVersion) {
-      const rnCliInfo = await pacote.manifest("@react-native-community/cli", {
-        defaultTag: rnCliVersion,
-        fullMetadata: true,
-      });
-      if (
-        rnCliInfo.dependencies?.["@react-native-community/cli-plugin-metro"]
-      ) {
-        const rnCliMetroVersion =
-          rnCliInfo.dependencies["@react-native-community/cli-plugin-metro"];
-        const rnCliMetroInfo = await pacote.manifest(
-          "@react-native-community/cli-plugin-metro",
-          {
-            defaultTag: rnCliMetroVersion,
-            fullMetadata: true,
-          }
-        );
-        if (rnCliMetroInfo.dependencies?.metro) {
-          newProfile.metroVersion = semverCoerce(
-            rnCliMetroInfo.dependencies.metro
-          ).version;
-        }
-      }
-    }
-  }
+  // Fetch `metro` version from `@react-native-community/cli-plugin-metro` > `@react-native-community/cli`
+  const cliMetroPluginDependencies = await [
+    "@react-native-community/cli",
+    "@react-native-community/cli-plugin-metro",
+  ].reduce(async (dependencies, packageName) => {
+    const packageInfo = await pacote.manifest(packageName, {
+      defaultTag: getPackageVersion(packageName, await dependencies),
+      fullMetadata: true,
+    });
+    return packageInfo.dependencies;
+  }, Promise.resolve(dependencies));
+
+  const metroVersion = getPackageVersion("metro", cliMetroPluginDependencies);
+  newProfile.metroVersion = semverCoerce(metroVersion).version;
 
   return generateFromTemplate(newProfile);
 }
@@ -243,29 +246,41 @@ async function makeProfile(targetVersion, latestProfile) {
  * Note that this script spawns a new process for each capability in parallel.
  * It currently does not honor throttling hints of any kind.
  *
- * @param {string=} targetVersion
+ * @param {{ targetVersion?: string; force?: boolean; }} options
  */
-async function main(targetVersion = "") {
+async function main({ targetVersion = "", force }) {
   const allVersions = /** @type {import("../src/types").ProfileVersion[]} */ (
-    Object.keys(defaultProfiles).reverse()
+    Object.keys(defaultProfiles)
+      .sort((lhs, rhs) => semverCompare(semverCoerce(lhs), semverCoerce(rhs)))
+      .reverse()
   );
 
   const latestProfile = defaultProfiles[allVersions[0]];
 
   if (targetVersion) {
+    if (!force && defaultProfiles[targetVersion]) {
+      console.error(
+        `Profile for '${targetVersion}' already exists. To overwrite it anyway, re-run with '--force'.`
+      );
+      process.exit(1);
+    }
+
     try {
       const newProfile = await makeProfile(targetVersion, latestProfile);
       if (newProfile) {
         const __dirname = path.dirname(fileURLToPath(import.meta.url));
-        const dst = path.join(
-          __dirname,
-          "..",
-          "src",
-          "profiles",
-          `profile-${targetVersion}.ts`
+        const dst = path.relative(
+          process.cwd(),
+          path.join(
+            __dirname,
+            "..",
+            "src",
+            "profiles",
+            `profile-${targetVersion}.ts`
+          )
         );
         fs.writeFile(dst, newProfile).then(() => {
-          console.log(`Wrote to '${path.relative(process.cwd(), dst)}'`);
+          console.log(`Wrote to '${dst}'`);
         });
       }
     } catch (e) {
@@ -316,5 +331,25 @@ async function main(targetVersion = "") {
   console.log(table);
 }
 
-const { [2]: targetVersion } = process.argv;
-main(targetVersion);
+const options = (() => {
+  const options = {};
+  process.argv.slice(2).forEach((arg) => {
+    switch (arg) {
+      case "--force":
+        options.force = true;
+        break;
+      default:
+        if (!/^\d+\.\d+$/.test(arg)) {
+          console.error(
+            `Expected version in the format '<major>.<minor>', got: ${arg}`
+          );
+          process.exit(1);
+        }
+        options.targetVersion = arg;
+        break;
+    }
+  });
+  return options;
+})();
+
+main(options);
