@@ -190,12 +190,6 @@ function getPackageVersion(packageName, dependencies) {
  * @returns {Promise<string | undefined>}
  */
 async function makeProfile(targetVersion, latestProfile) {
-  const newProfile = {
-    targetVersion,
-    reactVersion: /** @type {Package} */ (latestProfile.react).version,
-    hermesVersion: /** @type {Package} */ (latestProfile.hermes).version,
-    metroVersion: /** @type {Package} */ (latestProfile.metro).version,
-  };
   const reactNativeInfo = await fetchPackageInfo(
     latestProfile["core"],
     `^${targetVersion}.0-0`
@@ -216,9 +210,6 @@ async function makeProfile(targetVersion, latestProfile) {
     );
   }
 
-  newProfile.reactVersion = getPackageVersion("react", peerDependencies);
-  newProfile.hermesVersion = getPackageVersion("hermes-engine", dependencies);
-
   // Fetch `metro` version from `@react-native-community/cli-plugin-metro` > `@react-native-community/cli`
   const cliMetroPluginDependencies = await [
     "@react-native-community/cli",
@@ -231,10 +222,12 @@ async function makeProfile(targetVersion, latestProfile) {
     return packageInfo.dependencies;
   }, Promise.resolve(dependencies));
 
-  const metroVersion = getPackageVersion("metro", cliMetroPluginDependencies);
-  newProfile.metroVersion = semverCoerce(metroVersion).version;
-
-  return generateFromTemplate(newProfile);
+  return generateFromTemplate({
+    targetVersion,
+    reactVersion: getPackageVersion("react", peerDependencies),
+    hermesVersion: getPackageVersion("hermes-engine", dependencies),
+    metroVersion: getPackageVersion("metro", cliMetroPluginDependencies),
+  });
 }
 
 /**
