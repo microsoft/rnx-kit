@@ -54,6 +54,38 @@ async function fetchPackageInfo(pkg, defaultTag = "latest") {
 }
 
 /**
+ * @param {string} packageName
+ * @param {Record<string, string>?} dependencies
+ * @returns {string}
+ */
+function getPackageVersion(packageName, dependencies) {
+  const packageVersion = dependencies?.[packageName];
+  if (!packageVersion) {
+    throw new Error(`Failed to get '${packageName}' version`);
+  }
+  return semverCoerce(packageVersion).version;
+}
+
+/**
+ * Returns the path to a profile.
+ * @param {string} profileVersion
+ * @returns {string}
+ */
+function getProfilePath(profileVersion) {
+  const __dirname = path.dirname(fileURLToPath(import.meta.url));
+  return path.relative(
+    process.cwd(),
+    path.join(
+      __dirname,
+      "..",
+      "src",
+      "profiles",
+      `profile-${profileVersion}.ts`
+    )
+  );
+}
+
+/**
  * Generates a profile.
  * @param {{
  *   targetVersion: string;
@@ -74,11 +106,7 @@ function generateFromTemplate({
     nextVersionCoerced.minor - 1
   }`;
 
-  const currentProfile = path.join(
-    "src",
-    "profiles",
-    `profile-${currentVersion}.ts`
-  );
+  const currentProfile = getProfilePath(currentVersion);
   if (!fileExists(currentProfile)) {
     throw new Error(`Could not find '${currentProfile}'`);
   }
@@ -171,19 +199,6 @@ export default profile;
 }
 
 /**
- * @param {string} packageName
- * @param {Record<string, string>?} dependencies
- * @returns {string}
- */
-function getPackageVersion(packageName, dependencies) {
-  const packageVersion = dependencies?.[packageName];
-  if (!packageVersion) {
-    throw new Error(`Failed to get '${packageName}' version`);
-  }
-  return semverCoerce(packageVersion).version;
-}
-
-/**
  * Fetches package versions for specified react-native version.
  * @param {string} targetVersion
  * @param {Profile} latestProfile
@@ -261,17 +276,7 @@ async function main({ targetVersion = "", force }) {
     try {
       const newProfile = await makeProfile(targetVersion, latestProfile);
       if (newProfile) {
-        const __dirname = path.dirname(fileURLToPath(import.meta.url));
-        const dst = path.relative(
-          process.cwd(),
-          path.join(
-            __dirname,
-            "..",
-            "src",
-            "profiles",
-            `profile-${targetVersion}.ts`
-          )
-        );
+        const dst = getProfilePath(targetVersion);
         fs.writeFile(dst, newProfile).then(() => {
           console.log(`Wrote to '${dst}'`);
         });
