@@ -90,7 +90,6 @@ function getProfilePath(profileVersion) {
  * @param {{
  *   targetVersion: string;
  *   reactVersion: string;
- *   hermesVersion: string;
  *   metroVersion: string;
  * }} versions
  * @returns {string}
@@ -98,7 +97,6 @@ function getProfilePath(profileVersion) {
 function generateFromTemplate({
   targetVersion,
   reactVersion,
-  hermesVersion,
   metroVersion,
 }) {
   const nextVersionCoerced = semverCoerce(targetVersion);
@@ -157,10 +155,6 @@ const profile: Profile = {
     name: "metro-react-native-babel-preset",
     version: "^${metroVersion}",
     devOnly: true,
-  },
-  hermes: {
-    name: "hermes-engine",
-    version: "~${hermesVersion}",
   },
   metro: {
     name: "metro",
@@ -240,7 +234,6 @@ async function makeProfile(targetVersion, latestProfile) {
   return generateFromTemplate({
     targetVersion,
     reactVersion: getPackageVersion("react", peerDependencies),
-    hermesVersion: getPackageVersion("hermes-engine", dependencies),
     metroVersion: getPackageVersion("metro", cliMetroPluginDependencies),
   });
 }
