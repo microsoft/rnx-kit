@@ -347,3 +347,46 @@ instance:
 | capability       | A capability is in essence a feature that the kit uses. A capability is usually mapped to an npm package. Which versions of the package is determined by a profile (see below).   |
 | package manifest | This normally refers to a package's `package.json`.                                                                                                                               |
 | profile          | A profile is a mapping of capabilities to npm packages at a specific version or version range. Versions will vary depending on which React Native version a profile is meant for. |
+
+## Contribution
+
+### Updating an Existing Profile
+
+Updating an existing profile is unfortunately a manual process.
+
+We have a script that fetches the latest version of all capabilities and
+presents them in a table together with the current versions.
+
+```sh
+yarn update-profile
+```
+
+Outputs something like:
+
+```
+| Capability   | Name          | Version   | Latest | Homepage                                        |
+| ------------ | ------------- | --------- | ------ | ----------------------------------------------- |
+| core         | react-native  | ^0.68.0-0 | 0.68.2 | https://github.com/facebook/react-native#readme |
+| core-android | react-native  | ^0.68.0-0 | 0.68.2 | https://github.com/facebook/react-native#readme |
+| core-ios     | react-native  | ^0.68.0-0 | 0.68.2 | https://github.com/facebook/react-native#readme |
+| hermes       | hermes-engine | ~0.11.0   | =      |                                                 |
+| react        | react         | 17.0.2    | 18.1.0 | https://reactjs.org/                            |
+| ...                                                                                                 |
+```
+
+With this information, we can see which packages have been updated since the
+last profile, and scan their change logs for interesting changes that may affect
+compatibility.
+
+### Adding a Profile for a New Version of `react-native`
+
+The `update-profile` script can also be used to add a profile. For instance, to
+add a profile for `react-native` 0.69, run:
+
+```sh
+yarn update-profile 0.69
+```
+
+The script will try to figure out what version of `react`, `metro`, etc. should
+be set to, and write to `src/profiles/profile-0.69.ts`. Please verify that this
+profile looks correct before checking it in.
