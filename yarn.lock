@@ -6583,9 +6583,9 @@ esbuild-openbsd-64@0.14.39:
   integrity sha512-secQU+EpgUPpYjJe3OecoeGKVvRMLeKUxSMGHnK+aK5uQM3n1FPXNJzyz1LHFOo0WOyw+uoCxBYdM4O10oaCAA==
 
 esbuild-plugin-lodash@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/esbuild-plugin-lodash/-/esbuild-plugin-lodash-1.1.0.tgz#ffe3b3020c1131357ba4d21bf3f735e032184b4f"
-  integrity sha512-DtvAnHuALecQguNWeIf2Ea3bCp0Pe9t+knjJNxHJE9PHagorZR92B1Xmx2cLKJz5fzkBzXLFnegiTdWYUi1AyQ==
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/esbuild-plugin-lodash/-/esbuild-plugin-lodash-1.2.0.tgz#6395b64cbb9b23a1bee3e37fbbdd98c50bd0b53a"
+  integrity sha512-8CyR67Z/VMvcJ4ABYYSaR2hhioeuoFVII1IsyPb6AwAKN57VQW8jFXyY27OwH4FGU3h3OVwwQ/GVNbo+RgpTGA==
 
 esbuild-sunos-64@0.14.39:
   version "0.14.39"
