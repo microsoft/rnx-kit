@@ -12326,9 +12326,9 @@ react-native-macos@^0.66.0-0:
     ws "^6.1.4"
 
 react-native-test-app@^1.0.6:
-  version "1.3.7"
-  resolved "https://registry.yarnpkg.com/react-native-test-app/-/react-native-test-app-1.3.7.tgz#1ddd77806f3624796e099efa9cec5cfb03410e71"
-  integrity sha512-7bY26LUj3rTOoa1QaWh5cS91rZ+1Q3pgQFQI5c2dtpixnM7Fd/cDTTDf0mYeTCusGW0pKKZlu9NsB6Ehenr1gQ==
+  version "1.3.8"
+  resolved "https://registry.yarnpkg.com/react-native-test-app/-/react-native-test-app-1.3.8.tgz#a25c3729a9e6b2a3beb37653d05265a39b5df5ef"
+  integrity sha512-JxPgJ2FsYT9lUMo9bRGpNtTkMZIKpEkXskpdLEk6CliZvO0z5n8z7tlVDDP4AVjJrOlss/OGvfenU88YbLzDfg==
   dependencies:
     ajv "^8.0.0"
     chalk "^4.1.0"
