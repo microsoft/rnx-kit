@@ -1,0 +1,5 @@
+---
+"@rnx-kit/cli": minor
+---
+
+Breaking-change update to config package:(1) Only search for rnx-kit configuration in package.json. We no longer search for config in places like rnx-kit.config.js (e.g. no more cosmiconfig). Why this change? In all the places we use rnx-kit internally, no one is using this mechanism. Further, in external forums, there have been general complaints about JS devs having to manage too many config files -- package.json is the preferred single source. It didn't seem worth it to continue carrying comsmiconfig as a dependency, since we aren't using it.(2) Remove defaults from the config package. They are going into the CLI where they can be conditionally defined based on variables like the current platform. This is needed for bundleOutput. As a result, all config is now optional.(3) Function that get bundle and server config now validate input and fail accordingly.(4) Server config can now be absent when bundling is enabled, and it will default to using the bundle configuration. This is a convenience, and will
