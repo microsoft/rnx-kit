@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/dep-check
 
+## 1.12.15
+
+### Patch Changes
+
+- 4b777cf9: Bumps `@react-navigation/native` and `@react-navigation/stack` to 6.0.8 and 6.2.0 respectively for 0.66.
+
 ## 1.12.14
 
 ### Patch Changes
