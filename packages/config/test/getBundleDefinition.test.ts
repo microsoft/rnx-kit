@@ -1,111 +1,150 @@
 import "jest-extended";
-import { BundleConfig, BundleDefinition } from "../src/bundleConfig";
+import type { KitConfig } from "../src/kitConfig";
+import type { BundleDefinition } from "../src/bundleConfig";
 import {
-  BundleDefinitionWithRequiredParameters,
   getBundleDefinition,
   getBundlePlatformDefinition,
 } from "../src/getBundleDefinition";
 
-const consoleWarnSpy = jest.spyOn(global.console, "warn");
-
-const bundleConfig: BundleConfig = [
-  {
-    id: "8",
-    targets: ["windows"],
-  },
-  {
-    id: "123abc",
-    targets: ["ios", "android", "windows"],
-  },
-];
-
-function validateDefaultDefinition(d: BundleDefinition) {
-  expect(d).toContainAllKeys([
-    "entryPath",
-    "distPath",
-    "assetsPath",
-    "bundlePrefix",
-    "detectCyclicDependencies",
-    "detectDuplicateDependencies",
-    "typescriptValidation",
-    "treeShake",
-  ]);
-  expect(d.entryPath).toEqual("lib/index.js");
-  expect(d.distPath).toEqual("dist");
-  expect(d.assetsPath).toEqual("dist");
-  expect(d.bundlePrefix).toEqual("index");
-  expect(d.detectCyclicDependencies).toBeTruthy();
-  expect(d.detectDuplicateDependencies).toBeTruthy();
-  expect(d.typescriptValidation).toBeTruthy();
-  expect(d.treeShake).toBeFalsy();
-}
+const kitConfig: KitConfig = {
+  bundle: [
+    {
+      id: "8",
+      targets: ["windows"],
+    },
+    {
+      id: "123abc",
+      targets: ["ios", "android", "windows"],
+    },
+  ],
+};
 
 describe("getBundleDefinition()", () => {
-  beforeEach(() => {
-    consoleWarnSpy.mockReset();
+  test("fails when bundle property is not set", () => {
+    expect(() => getBundleDefinition({})).toThrowError(
+      /Bundling is not enabled/i
+    );
   });
 
-  test("returns defaults when bundle config is a boolean", () => {
-    const d = getBundleDefinition(true);
-    validateDefaultDefinition(d);
+  test("fails when bundle is set to undefined", () => {
+    expect(() => getBundleDefinition({ bundle: undefined })).toThrowError(
+      /Bundling is explicitly disabled/i
+    );
+  });
+
+  test("fails when bundle is set to null", () => {
+    expect(() => getBundleDefinition({ bundle: null })).toThrowError(
+      /Bundling is explicitly disabled/i
+    );
+  });
+
+  test("fails when bundle is set to false", () => {
+    expect(() => getBundleDefinition({ bundle: false })).toThrowError(
+      /Bundling is explicitly disabled/i
+    );
+  });
+
+  test("returns default config (empty) when bundle is set to true", () => {
+    expect(getBundleDefinition({ bundle: true })).toEqual({});
   });
 
   test("returns the bundle definition associated with the given id", () => {
-    const d = getBundleDefinition(bundleConfig, "123abc");
+    const d = getBundleDefinition(kitConfig, "123abc");
     expect(d.id).toEqual("123abc");
     expect(d.targets).toBeArrayOfSize(3);
     expect(d.targets).toIncludeSameMembers(["ios", "android", "windows"]);
   });
 
-  test("returns default when the given bundle id is does not exist", () => {
-    const d = getBundleDefinition(bundleConfig, "does-not-exist");
-    validateDefaultDefinition(d);
+  test("fails when bundle id is not found", () => {
+    expect(() => getBundleDefinition(kitConfig, "does-not-exist")).toThrowError(
+      /Bundle definition with id 'does-not-exist'/i
+    );
+  });
+
+  test("fails when trying to find the first bundle and none are defined in config", () => {
+    expect(() => getBundleDefinition({ bundle: [] })).toThrowError(
+      /No bundle definitions were found/i
+    );
   });
 
   test("returns the first bundle definition when an id is not given", () => {
-    const d = getBundleDefinition(bundleConfig);
+    const d = getBundleDefinition(kitConfig);
     expect(d.id).toEqual("8");
     expect(d.targets).toBeArrayOfSize(1);
     expect(d.targets).toIncludeSameMembers(["windows"]);
   });
 
-  test("returns the value for experimental_treeShake in property treeShake", () => {
-    const bundleConfigCopy = [...bundleConfig];
-    (bundleConfigCopy[0] as Record<string, unknown>).experimental_treeShake =
-      true;
-
-    const d = getBundleDefinition(bundleConfigCopy);
-    expect(d.id).toEqual("8");
-    expect(d).toContainKey("treeShake");
-    expect(d).not.toContainKey("experimental_treeShake");
-    expect(d.treeShake).toEqual(true);
-    expect(consoleWarnSpy).toBeCalledTimes(1);
-    expect(consoleWarnSpy).toBeCalledWith(
-      expect.stringContaining("deprecated")
+  test("fails when config contains renamed property experimental_treeShake", () => {
+    expect(() =>
+      getBundleDefinition({
+        bundle: { experimental_treeShake: true } as BundleDefinition,
+      })
+    ).toThrowError(
+      /The 'experimental_treeShake' configuration property is no longer supported. Use 'treeShake' instead./i
     );
-    expect(consoleWarnSpy).toBeCalledWith(
-      expect.stringContaining("experimental_treeShake")
+  });
+
+  test("fails when config contains renamed property entryPath", () => {
+    expect(() =>
+      getBundleDefinition({
+        bundle: { entryPath: "x" } as BundleDefinition,
+      })
+    ).toThrowError(
+      /The 'entryPath' configuration property is no longer supported. Use 'entryFile' instead./i
+    );
+  });
+
+  test("fails when config contains renamed property sourceMapPath", () => {
+    expect(() =>
+      getBundleDefinition({
+        bundle: { sourceMapPath: "x" } as BundleDefinition,
+      })
+    ).toThrowError(
+      /The 'sourceMapPath' configuration property is no longer supported. Use 'sourcemapOutput' instead./i
+    );
+  });
+
+  test("fails when config contains renamed property sourceMapSourceRootPath", () => {
+    expect(() =>
+      getBundleDefinition({
+        bundle: { sourceMapSourceRootPath: "x" } as BundleDefinition,
+      })
+    ).toThrowError(
+      /The 'sourceMapSourceRootPath' configuration property is no longer supported. Use 'sourcemapSourcesRoot' instead./i
+    );
+  });
+
+  test("fails when config contains defunct property distPath", () => {
+    expect(() =>
+      getBundleDefinition({
+        bundle: { distPath: "x" } as BundleDefinition,
+      })
+    ).toThrowError(
+      /The 'distPath' configuration property is no longer supported./i
+    );
+  });
+
+  test("fails when config contains defunct property bundlePrefix", () => {
+    expect(() =>
+      getBundleDefinition({
+        bundle: { bundlePrefix: "x" } as BundleDefinition,
+      })
+    ).toThrowError(
+      /The 'bundlePrefix' configuration property is no longer supported./i
     );
   });
 });
 
-const bundleDefinitionWithoutPlatforms: BundleDefinitionWithRequiredParameters =
-  {
-    entryPath: "entry.js",
-    distPath: "dist",
-    assetsPath: "assets",
-    bundlePrefix: "mybundle",
-    detectCyclicDependencies: true,
-    detectDuplicateDependencies: true,
-    typescriptValidation: true,
-    treeShake: true,
-  };
+const bundleDefinitionWithoutPlatforms: BundleDefinition = {
+  entryFile: "main.js",
+  bundleOutput: "main.bundle",
+};
 
-const bundleDefinition: BundleDefinitionWithRequiredParameters = {
+const bundleDefinition: BundleDefinition = {
   ...bundleDefinitionWithoutPlatforms,
   platforms: {
     ios: {
-      bundlePrefix: "ios-bundle",
+      bundleOutput: "main.ios.jsbundle",
     },
   },
 };
@@ -126,6 +165,6 @@ describe("getBundlePlatformDefinition()", () => {
 
   test("returns the an overridden bundle definition", () => {
     const d = getBundlePlatformDefinition(bundleDefinition, "ios");
-    expect(d.bundlePrefix).toEqual("ios-bundle");
+    expect(d.bundleOutput).toEqual("main.ios.jsbundle");
   });
 });

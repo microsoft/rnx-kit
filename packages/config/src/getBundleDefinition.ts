@@ -1,87 +1,127 @@
 import type { AllPlatforms } from "@rnx-kit/tools-react-native/platform";
 import castArray from "lodash/castArray";
-import type {
-  BundleConfig,
-  BundleDefinition,
-  BundleRequiredParameters,
-} from "./bundleConfig";
+import type { KitConfig } from "./kitConfig";
+import type { BundleDefinition } from "./bundleConfig";
 
-export type BundleDefinitionWithRequiredParameters = BundleDefinition &
-  BundleRequiredParameters;
-
-function collapseDeprecatedExperimentalTreeShake(
-  bundle: BundleDefinition
-): BundleDefinition {
-  const bundleLocal: BundleDefinition & { experimental_treeShake?: boolean } =
-    bundle;
-  if (bundleLocal.experimental_treeShake !== undefined) {
-    console.warn(
-      "Warning: The bundle configuration property 'experimental_treeShake' is deprecated. Use `treeShake` instead."
+function failOnUnsupportedDefinitionProp(
+  o: unknown,
+  name: string,
+  message: string
+): void {
+  if (Object.prototype.hasOwnProperty.call(o, name)) {
+    throw new Error(
+      `The '${name}' configuration property is no longer supported. ${message}`
     );
-    const copy = { ...bundleLocal };
-    if (bundle.treeShake === undefined) {
-      copy.treeShake = copy.experimental_treeShake;
-    }
-    delete copy.experimental_treeShake;
-    return copy;
   }
-  return bundle;
+}
+
+function failOnRenamedDefinitionProp(
+  o: unknown,
+  oldName: string,
+  newName: string
+): void {
+  failOnUnsupportedDefinitionProp(o, oldName, `Use '${newName}' instead.`);
+}
+
+function failOnUnsupportedDefinitionProps(bundle: BundleDefinition): void {
+  failOnRenamedDefinitionProp(bundle, "experimental_treeShake", "treeShake");
+
+  failOnRenamedDefinitionProp(bundle, "entryPath", "entryFile");
+  failOnRenamedDefinitionProp(bundle, "sourceMapPath", "sourcemapOutput");
+  failOnRenamedDefinitionProp(
+    bundle,
+    "sourceMapSourceRootPath",
+    "sourcemapSourcesRoot"
+  );
+  failOnRenamedDefinitionProp(bundle, "assetsPath", "assetsDest");
+
+  failOnUnsupportedDefinitionProp(
+    bundle,
+    "distPath",
+    "You can control the bundle path and source-map path using 'bundleOutput' and 'sourcemapOutput', respectively."
+  );
+  failOnUnsupportedDefinitionProp(
+    bundle,
+    "bundlePrefix",
+    "You can control the bundle file name using 'bundleOutput'."
+  );
 }
 
 /**
- * Get a bundle definition from the kit config.
+ * Get a bundle definition from the rnx-kit configuration.
  *
- * If an id is given, search for the matching bundle and return it. Otherwise, return the first bundle
- * in the kit config.
+ * If an id is given, search for the matching bundle definition. Otherwise, use the first bundle definition.
  *
- * @param config bundle configuration, typically retrieved from the kit configuration
- * @param id target bundle definition to use -- not needed if only one bundle definition exists
- * @returns bundle definition with defaults for any missing values that have them
+ * @param config rnx-kit configuration
+ * @param id Optional identity of the target bundle definition to return
+ * @returns Bundle definition
  */
 export function getBundleDefinition(
-  config: BundleConfig,
+  config: KitConfig,
   id?: string
-): BundleDefinitionWithRequiredParameters {
-  const defaultDefinition: BundleRequiredParameters = {
-    entryPath: "lib/index.js",
-    distPath: "dist",
-    assetsPath: "dist",
-    bundlePrefix: "index",
-    detectCyclicDependencies: true,
-    detectDuplicateDependencies: true,
-    typescriptValidation: true,
-    treeShake: false,
-  };
-  if (typeof config === "boolean") {
-    return defaultDefinition;
+): BundleDefinition {
+  // 'bundle' property not set?
+  if (!Object.prototype.hasOwnProperty.call(config, "bundle")) {
+    throw new Error(
+      "Bundling is not enabled in the rnx-kit configuration for this package."
+    );
   }
 
-  const bundles = castArray(config);
+  // 'bundle' property explicitly set to null/undefined/false?
+  if (
+    config.bundle === undefined ||
+    config.bundle === null ||
+    config.bundle === false
+  ) {
+    throw new Error(
+      "Bundling is explicitly disabled in the rnx-kit configuration for this package."
+    );
+  }
+
+  // default bundle config?
+  if (config.bundle === true) {
+    return {}; // empty -> default config
+  }
+
+  const bundles = castArray(config.bundle);
+
+  let bundle: BundleDefinition | undefined;
   if (id) {
-    const bundle = bundles.find((b) => b.id === id) || {};
-    return {
-      ...defaultDefinition,
-      ...collapseDeprecatedExperimentalTreeShake(bundle),
-    };
+    bundle = bundles.find((b) => b.id === id);
+    if (!bundle) {
+      throw new Error(
+        `Bundle definition with id '${id}' was not found in the rnx-kit configuration for this package.`
+      );
+    }
+  } else {
+    bundle = bundles.length > 0 ? bundles[0] : undefined;
+    if (!bundle) {
+      throw new Error(
+        "No bundle definitions were found in the rnx-kit configuration for this package."
+      );
+    }
   }
 
-  return {
-    ...defaultDefinition,
-    ...collapseDeprecatedExperimentalTreeShake(bundles[0]),
-  };
+  // 5/20/2022: fail when there are signs of the old config format
+  //            remove on the next 0.x bump or when going to 1.0, whichever comes first
+  failOnUnsupportedDefinitionProps(bundle);
+
+  return bundle;
 }
 
 /**
  * Resolves the platform selector for a bundle definition
  *
- * @param bundle - bundle definition, potentially including a platform selector
- * @param platform - current platform target
- * @returns bundle definition containing all platform-specific overrides
+ * @param bundle Bundle definition to resolve (includes the optional platform selectors)
+ * @param platform Target platform
+ * @returns Bundle definition containing platform-specific overrides
  */
 export function getBundlePlatformDefinition(
-  bundle: BundleDefinitionWithRequiredParameters,
+  bundle: BundleDefinition,
   platform: AllPlatforms
-): BundleDefinitionWithRequiredParameters {
-  const platformValues = bundle.platforms && bundle.platforms[platform];
+): BundleDefinition {
+  const platformValues = bundle.platforms
+    ? bundle.platforms[platform]
+    : undefined;
   return platformValues ? { ...bundle, ...platformValues } : bundle;
 }

@@ -1,61 +1,38 @@
 import "jest-extended";
-import type { KitConfig } from "../src/kitConfig";
-import type { ServerConfig } from "../src/serverConfig";
 import { getServerConfig } from "../src/getServerConfig";
 
-const kitConfigNoServer: KitConfig = {};
-
-const kitConfigEmptyServer: KitConfig = {
-  server: {},
-};
-
-const kitConfigWithServer: KitConfig = {
-  server: {
-    projectRoot: "my-project-root",
-    detectCyclicDependencies: true,
-    detectDuplicateDependencies: false,
-    typescriptValidation: true,
-    treeShake: false,
-    assetPlugins: ["asset-plugin-package"],
-    sourceExts: ["json", "jsrc"],
-  },
-};
-
-function validateDefaultConfig(c: ServerConfig) {
-  expect(c).toContainAllKeys([
-    "detectCyclicDependencies",
-    "detectDuplicateDependencies",
-    "typescriptValidation",
-    "treeShake",
-  ]);
-  expect(c.projectRoot).toBeUndefined();
-  expect(c.detectCyclicDependencies).toBeTrue();
-  expect(c.detectDuplicateDependencies).toBeTrue();
-  expect(c.typescriptValidation).toBeTrue();
-  expect(c.treeShake).toBeFalse();
-}
-
 describe("getServerConfig()", () => {
-  test("returns defaults when the kit has no server config", () => {
-    const c = getServerConfig(kitConfigNoServer);
-    validateDefaultConfig(c);
+  test("fails when server is not present and bundling is not present", () => {
+    expect(() => getServerConfig({})).toThrowError(
+      /The rnx-kit configuration for this package has no server config, nor does it have bundling config to use as a baseline for running the bundle server./i
+    );
   });
 
-  test("returns defaults when the kit has an empty server config", () => {
-    const c = getServerConfig(kitConfigEmptyServer);
-    validateDefaultConfig(c);
+  test("fails when server is not present and bundling is disabled", () => {
+    expect(() => getServerConfig({ bundle: false })).toThrowError(
+      /The rnx-kit configuration for this package has no server config, nor does it have bundling config to use as a baseline for running the bundle server./i
+    );
   });
 
-  test("returns server config from kit config", () => {
-    const c = getServerConfig(kitConfigWithServer);
-    expect(c.projectRoot).toEqual("my-project-root");
-    expect(c.detectCyclicDependencies).toBeTrue();
-    expect(c.detectDuplicateDependencies).toBeFalse();
-    expect(c.typescriptValidation).toBeTrue();
-    expect(c.treeShake).toBeFalse();
-    expect(c.assetPlugins).toBeArrayOfSize(1);
-    expect(c.assetPlugins).toIncludeSameMembers(["asset-plugin-package"]);
-    expect(c.sourceExts).toBeArrayOfSize(2);
-    expect(c.sourceExts).toIncludeSameMembers(["json", "jsrc"]);
+  test("fails when server is set to undefined", () => {
+    expect(() => getServerConfig({ server: undefined })).toThrowError(
+      /Bundle serving is explicitly disabled/i
+    );
+  });
+
+  test("returns bundle config data when server is not set but bundling is", () => {
+    const config = getServerConfig({
+      bundle: { entryFile: "x", detectCyclicDependencies: true },
+    });
+    expect(config).not.toHaveProperty("entryFile");
+    expect(config.detectCyclicDependencies).toBeTrue();
+  });
+
+  test("returns server config", () => {
+    const config = getServerConfig({
+      server: { projectRoot: "x", treeShake: false },
+    });
+    expect(config.projectRoot).toBe("x");
+    expect(config.treeShake).toBeFalse();
   });
 });
