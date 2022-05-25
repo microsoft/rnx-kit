@@ -12339,9 +12339,9 @@ react-native-test-app@^1.0.6:
     yargs "^16.0.0"
 
 react-native-windows@^0.66.0-0:
-  version "0.66.18"
-  resolved "https://registry.yarnpkg.com/react-native-windows/-/react-native-windows-0.66.18.tgz#09f8faeb36bf9d0aba2c265129cb04a4289f0349"
-  integrity sha512-BJVUQ8Py28twQzz6e0KnY7nQDKPsP5tB0XtVJwcrX6BhkPL2Lyg8+XNw3DEhe/QaaoxP734qNxBct7Rkfb8fJA==
+  version "0.66.19"
+  resolved "https://registry.yarnpkg.com/react-native-windows/-/react-native-windows-0.66.19.tgz#319a186157ae191f3a07f53a515deb6555a3b10d"
+  integrity sha512-q1FvZSBt83BWYE9knAP4RYzzW59clpIvaOqlVRjkR3YHeWuswPacyL6O9cx37z7DbKMt/x+HExwGJEocscWYlQ==
   dependencies:
     "@babel/runtime" "^7.0.0"
     "@jest/create-cache-key-function" "^27.0.1"
@@ -14233,9 +14233,9 @@ type-fest@^0.8.0, type-fest@^0.8.1:
   integrity sha512-4dbzIzqvjtgiM5rw1k5rEHtBANKmdudhGyBEajN01fEyhaAIhsoKNy6y7+IN93IfpFtwY9iqi7kD+xwKhQsNJA==
 
 type-fest@^2.1.0, type-fest@^2.5.0:
-  version "2.12.2"
-  resolved "https://registry.yarnpkg.com/type-fest/-/type-fest-2.12.2.tgz#80a53614e6b9b475eb9077472fb7498dc7aa51d0"
-  integrity sha512-qt6ylCGpLjZ7AaODxbpyBZSs9fCI9SkL3Z9q2oxMBQhs/uyY+VD8jHA8ULCGmWQJlBgqvO3EJeAngOHD8zQCrQ==
+  version "2.13.0"
+  resolved "https://registry.yarnpkg.com/type-fest/-/type-fest-2.13.0.tgz#d1ecee38af29eb2e863b22299a3d68ef30d2abfb"
+  integrity sha512-lPfAm42MxE4/456+QyIaaVBAwgpJb6xZ8PRu09utnhPdWwcyj9vgy6Sq0Z5yNbJ21EdxB5dRU/Qg8bsyAMtlcw==
 
 type-is@~1.6.18:
   version "1.6.18"
