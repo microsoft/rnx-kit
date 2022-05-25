@@ -195,8 +195,8 @@ resolve to:
 | metro-resolver                       | metro-resolver@^0.67.0                                            | metro-resolver@^0.66.2                                            | metro-resolver@^0.66.2                                            | metro-resolver@^0.66.0                                            | metro-resolver@^0.64.0                                            | metro-resolver@^0.59.0                                            | metro-resolver@^0.58.0                                            | metro-resolver@^0.56.0                                            |
 | metro-runtime                        | metro-runtime@^0.67.0                                             | metro-runtime@^0.66.2                                             | metro-runtime@^0.66.2                                             | metro-runtime@^0.66.0                                             | metro-runtime@^0.64.0                                             | metro-runtime@^0.59.0                                             | metro-runtime@^0.58.0                                             | metro-runtime@^0.56.0                                             |
 | modal                                | react-native-modal@^13.0.0                                        | react-native-modal@^13.0.0                                        | react-native-modal@^13.0.0                                        | react-native-modal@^13.0.0                                        | react-native-modal@^11.10.0                                       | react-native-modal@^11.5.6                                        | react-native-modal@^11.5.6                                        | react-native-modal@^11.5.6                                        |
-| navigation/native                    | @react-navigation/native@^5.9.8                                   | @react-navigation/native@^5.9.8                                   | @react-navigation/native@^5.9.8                                   | @react-navigation/native@^5.9.8                                   | @react-navigation/native@^5.9.8                                   | @react-navigation/native@^5.9.4                                   | @react-navigation/native@^5.7.6                                   | @react-navigation/native@^5.7.6                                   |
-| navigation/stack                     | @react-navigation/stack@^5.14.9                                   | @react-navigation/stack@^5.14.9                                   | @react-navigation/stack@^5.14.9                                   | @react-navigation/stack@^5.14.9                                   | @react-navigation/stack@^5.14.9                                   | @react-navigation/stack@^5.14.4                                   | @react-navigation/stack@^5.9.3                                    | @react-navigation/stack@^5.9.3                                    |
+| navigation/native                    | @react-navigation/native@^6.0.8                                   | @react-navigation/native@^6.0.8                                   | @react-navigation/native@^6.0.8                                   | @react-navigation/native@^5.9.8                                   | @react-navigation/native@^5.9.8                                   | @react-navigation/native@^5.9.4                                   | @react-navigation/native@^5.7.6                                   | @react-navigation/native@^5.7.6                                   |
+| navigation/stack                     | @react-navigation/stack@^6.2.0                                    | @react-navigation/stack@^6.2.0                                    | @react-navigation/stack@^6.2.0                                    | @react-navigation/stack@^5.14.9                                   | @react-navigation/stack@^5.14.9                                   | @react-navigation/stack@^5.14.4                                   | @react-navigation/stack@^5.9.3                                    | @react-navigation/stack@^5.9.3                                    |
 | netinfo                              | @react-native-community/netinfo@^7.0.0                            | @react-native-community/netinfo@^7.0.0                            | @react-native-community/netinfo@^7.0.0                            | @react-native-community/netinfo@^7.0.0                            | @react-native-community/netinfo@^6.0.2                            | @react-native-community/netinfo@^5.9.10                           | @react-native-community/netinfo@^5.9.10                           | @react-native-community/netinfo@^5.7.1                            |
 | popover                              | react-native-popover-view@^4.0.3                                  | react-native-popover-view@^4.0.3                                  | react-native-popover-view@^4.0.3                                  | react-native-popover-view@^4.0.3                                  | react-native-popover-view@^4.0.3                                  | react-native-popover-view@^3.1.1                                  | react-native-popover-view@^3.1.1                                  | react-native-popover-view@^3.1.1                                  |
 | react                                | react@17.0.2                                                      | react@17.0.2                                                      | react@17.0.2                                                      | react@17.0.2                                                      | react@17.0.1                                                      | react@16.13.1                                                     | react@16.11.0                                                     | react@16.9.0                                                      |
@@ -347,3 +347,46 @@ instance:
 | capability       | A capability is in essence a feature that the kit uses. A capability is usually mapped to an npm package. Which versions of the package is determined by a profile (see below).   |
 | package manifest | This normally refers to a package's `package.json`.                                                                                                                               |
 | profile          | A profile is a mapping of capabilities to npm packages at a specific version or version range. Versions will vary depending on which React Native version a profile is meant for. |
+
+## Contribution
+
+### Updating an Existing Profile
+
+Updating an existing profile is unfortunately a manual process.
+
+We have a script that fetches the latest version of all capabilities and
+presents them in a table together with the current versions.
+
+```sh
+yarn update-profile
+```
+
+Outputs something like:
+
+```
+| Capability   | Name          | Version   | Latest | Homepage                                        |
+| ------------ | ------------- | --------- | ------ | ----------------------------------------------- |
+| core         | react-native  | ^0.68.0-0 | 0.68.2 | https://github.com/facebook/react-native#readme |
+| core-android | react-native  | ^0.68.0-0 | 0.68.2 | https://github.com/facebook/react-native#readme |
+| core-ios     | react-native  | ^0.68.0-0 | 0.68.2 | https://github.com/facebook/react-native#readme |
+| hermes       | hermes-engine | ~0.11.0   | =      |                                                 |
+| react        | react         | 17.0.2    | 18.1.0 | https://reactjs.org/                            |
+| ...                                                                                                 |
+```
+
+With this information, we can see which packages have been updated since the
+last profile, and scan their change logs for interesting changes that may affect
+compatibility.
+
+### Adding a Profile for a New Version of `react-native`
+
+The `update-profile` script can also be used to add a profile. For instance, to
+add a profile for `react-native` 0.69, run:
+
+```sh
+yarn update-profile 0.69
+```
+
+The script will try to figure out what version of `react`, `metro`, etc. should
+be set to, and write to `src/profiles/profile-0.69.ts`. Please verify that this
+profile looks correct before checking it in.

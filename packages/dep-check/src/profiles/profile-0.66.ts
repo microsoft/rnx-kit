@@ -94,6 +94,15 @@ const profile: Profile = {
     version: "^0.66.2",
     devOnly: true,
   },
+  "navigation/native": {
+    name: "@react-navigation/native",
+    version: "^6.0.8",
+  },
+  "navigation/stack": {
+    name: "@react-navigation/stack",
+    version: "^6.2.0",
+    capabilities: ["navigation/native"],
+  },
   screens: {
     name: "react-native-screens",
     version: "^3.9.0",
