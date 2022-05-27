@@ -243,11 +243,11 @@ export function resolveTypeReferenceDirectives(
   context: ResolverContext,
   typeDirectiveNames: string[] | readonly ts.FileReference[],
   containingFile: string,
-  redirectedReference: ts.ResolvedProjectReference | undefined,
-  options: ts.CompilerOptions,
-  containingFileMode?: ts.SourceFile["impliedNodeFormat"] | undefined
+  redirectedReference: ts.ResolvedProjectReference,
+  _compilerOptions?: ts.CompilerOptions,
+  containingFileMode?: ts.SourceFile["impliedNodeFormat"]
 ): (ts.ResolvedTypeReferenceDirective | undefined)[] {
-  const { host, log } = context;
+  const { host, options, log } = context;
 
   const resolutions: (ts.ResolvedTypeReferenceDirective | undefined)[] = [];
 
