@@ -235,13 +235,17 @@ export function resolveModuleNames(
  * @param typeDirectiveNames List of type names, as they appear in each type reference directive
  * @param containingFile File from which the type names were all referenced
  * @param redirectedReference Head node in the program's graph of type references
+ * @param options Compiler options
+ * @param containingFileMode Indicates whether the containing file is an ESNext module or a CommonJS module
  * @returns Array of results. Each entry will have resolved type information, or will be `undefined` if resolution failed. The array will have one element for each entry in the type name list.
  */
 export function resolveTypeReferenceDirectives(
   context: ResolverContext,
-  typeDirectiveNames: string[],
+  typeDirectiveNames: string[] | readonly ts.FileReference[],
   containingFile: string,
-  redirectedReference?: ts.ResolvedProjectReference
+  redirectedReference: ts.ResolvedProjectReference,
+  _compilerOptions?: ts.CompilerOptions,
+  containingFileMode?: ts.SourceFile["impliedNodeFormat"]
 ): (ts.ResolvedTypeReferenceDirective | undefined)[] {
   const { host, options, log } = context;
 
@@ -261,13 +265,19 @@ export function resolveTypeReferenceDirectives(
       log.begin();
     }
 
+    const name =
+      typeof typeDirectiveName === "string"
+        ? typeDirectiveName
+        : typeDirectiveName.fileName.toLowerCase();
     const { resolvedTypeReferenceDirective: directive } =
       ts.resolveTypeReferenceDirective(
-        typeDirectiveName,
+        name,
         containingFile,
         options,
         host,
-        redirectedReference
+        redirectedReference,
+        undefined, // for caching, create with ts.createTypeReferenceDirectiveResolutionCache(...)
+        containingFileMode
       );
 
     resolutions.push(directive);
