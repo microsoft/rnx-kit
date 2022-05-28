@@ -4,14 +4,7 @@
     "default": {
       "runner": "nx/tasks-runners/default",
       "options": {
-        "cacheableOperations": [
-          "build",
-          "build:ci",
-          "lint",
-          "package",
-          "prepare",
-          "test"
-        ],
+        "cacheableOperations": ["build", "build:ci", "lint", "test"],
         "parallel": 8
       }
     }
@@ -24,18 +17,7 @@
       }
     ],
     "bundle": ["build"],
-    "prepare": [
-      {
-        "target": "prepare",
-        "projects": "dependencies"
-      }
-    ],
-    "package": [
-      {
-        "target": "package",
-        "projects": "dependencies"
-      }
-    ],
+    "bundle+esbuild": ["build"],
     "test": ["build"],
     "update-readme": ["build"]
   },
