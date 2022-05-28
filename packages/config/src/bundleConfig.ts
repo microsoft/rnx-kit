@@ -91,7 +91,7 @@ export type BundleParameters = BundlerRuntimeParameters & {
 /**
  * Defines how a kit is bundled. Includes shared bundling parameters with platform-specific overrides.
  */
-export type BundleDefinition = BundleParameters & {
+export type BundleConfig = BundleParameters & {
   /**
    * Unique identifier for this bundle definition. Only used as a reference within the kit build system.
    */
@@ -108,9 +108,3 @@ export type BundleDefinition = BundleParameters & {
    */
   platforms?: { [K in AllPlatforms]?: BundleParameters };
 };
-
-/**
- * Bundle configuration for a kit. If true, then all defaults will be used.
- * Otherwise, the bundle definition object(s) allow more detailed specification of bundling parameters.
- */
-export type BundleConfig = boolean | BundleDefinition | BundleDefinition[];

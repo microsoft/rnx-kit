@@ -1,40 +1,35 @@
 import type { KitConfig } from "./kitConfig";
 import type { ServerConfig } from "./serverConfig";
 import { pickValues } from "@rnx-kit/tools-language";
-import { getBundleDefinition } from "./getBundleDefinition";
+import { getBundleConfig } from "./getBundleConfig";
 
 /**
  * Get server configuration from the rnx-kit configuration.
  *
  * @param config rnx-kit configuration
- * @returns Server configuration
+ * @returns Server configuration, or `undefined` if bundle serving is disabled
  */
-export function getServerConfig(config: KitConfig): ServerConfig {
+export function getServerConfig(config: KitConfig): ServerConfig | undefined {
   // 'server' property not set?
   if (!Object.prototype.hasOwnProperty.call(config, "server")) {
-    // if bundling is enabled, use the bundle definition to control the server
-    try {
-      const bundleDefinition = getBundleDefinition(config);
+    // no explicit server config, which means we can only run the server when
+    // bundling is enabled. use bundle config as server config.
+    const bundleConfig = getBundleConfig(config);
+    if (bundleConfig) {
       return {
-        ...pickValues(bundleDefinition, [
+        ...pickValues(bundleConfig, [
           "detectCyclicDependencies",
           "detectDuplicateDependencies",
           "typescriptValidation",
           "treeShake",
         ]),
       };
-    } catch {
-      throw new Error(
-        "Bundle serving is not enabled. The rnx-kit configuration for this package has no server config, nor does it have bundling config to use as a baseline for running the bundle server."
-      );
     }
   }
 
   // 'server' property explicitly set to undefined?
   if (config.server === undefined) {
-    throw new Error(
-      "Bundle serving is explicitly disabled in the rnx-kit configuration for this package."
-    );
+    return undefined;
   }
 
   return config.server;

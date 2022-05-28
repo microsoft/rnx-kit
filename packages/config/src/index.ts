@@ -1,15 +1,11 @@
 export type {
   BundleConfig,
-  BundleDefinition,
   BundleParameters,
   BundlerRuntimeParameters,
   TypeScriptValidationOptions,
 } from "./bundleConfig";
 
-export {
-  getBundleDefinition,
-  getBundlePlatformDefinition,
-} from "./getBundleDefinition";
+export { getBundleConfig, getBundlePlatformConfig } from "./getBundleConfig";
 
 export { getKitCapabilities } from "./getKitCapabilities";
 export type { KitCapabilities } from "./getKitCapabilities";

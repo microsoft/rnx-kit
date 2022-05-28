@@ -2,25 +2,19 @@ import "jest-extended";
 import { getServerConfig } from "../src/getServerConfig";
 
 describe("getServerConfig()", () => {
-  test("fails when server is not present and bundling is not present", () => {
-    expect(() => getServerConfig({})).toThrowError(
-      /The rnx-kit configuration for this package has no server config, nor does it have bundling config to use as a baseline for running the bundle server./i
-    );
+  test("returns undefined when both the server and bundle properties are not present", () => {
+    expect(getServerConfig({})).toBeUndefined();
   });
 
-  test("fails when server is not present and bundling is disabled", () => {
-    expect(() => getServerConfig({ bundle: false })).toThrowError(
-      /The rnx-kit configuration for this package has no server config, nor does it have bundling config to use as a baseline for running the bundle server./i
-    );
+  test("returns undefined when the server property is not present and bundling is disabled", () => {
+    expect(getServerConfig({ bundle: false })).toBeUndefined();
   });
 
-  test("fails when server is set to undefined", () => {
-    expect(() => getServerConfig({ server: undefined })).toThrowError(
-      /Bundle serving is explicitly disabled/i
-    );
+  test("returns when the server property is set to undefined", () => {
+    expect(getServerConfig({ server: undefined })).toBeUndefined();
   });
 
-  test("returns bundle config data when server is not set but bundling is", () => {
+  test("returns bundle config data when the server property is not present", () => {
     const config = getServerConfig({
       bundle: { entryFile: "x", detectCyclicDependencies: true },
     });

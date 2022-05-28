@@ -80,9 +80,13 @@ export type KitConfig = {
   reactNativeDevVersion?: string;
 
   /**
-   * Specifies how the package is bundled. When not defined, the package cannot be bundled.
+   * Specifies how the package is bundled. If true, then a default set of
+   * options will be used. Otherwise the object allows for fine-grained
+   * control over the bundling process.
+   *
+   * When not defined or `false`, the package cannot be bundled.
    */
-  bundle?: BundleConfig;
+  bundle?: boolean | BundleConfig | BundleConfig[];
 
   /**
    * Specifies how the package's bundle server is configured. This is only useful during development.
