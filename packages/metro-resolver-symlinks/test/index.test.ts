@@ -4,6 +4,8 @@ import * as path from "path";
 import { makeResolver } from "../src/symlinkResolver";
 import { useFixture } from "./fixtures";
 
+jest.unmock("find-up");
+
 function makeContext(
   resolveRequest: CustomResolver,
   freeze = false

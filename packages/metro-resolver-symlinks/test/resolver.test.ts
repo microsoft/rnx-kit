@@ -32,6 +32,15 @@ describe("getMetroResolver", () => {
     );
   });
 
+  test("returns `metro-resolver` from a central storage", () => {
+    const p = useFixture("pnpm");
+    expect(getMetroResolver(p)(context, "", null)).toEqual(
+      expect.stringContaining(
+        path.join("pnpm", "node_modules", ".pnpm", "metro-resolver")
+      )
+    );
+  });
+
   test("throws if `metro-resolver` cannot be found", () => {
     const cwd = process.cwd();
     const root = cwd.substring(0, cwd.indexOf(path.sep) + 1);
@@ -86,7 +95,7 @@ describe("remapReactNativeModule", () => {
 });
 
 describe("resolveModulePath", () => {
-  function makeContext(originModulePath) {
+  function makeContext(originModulePath: string) {
     return { originModulePath };
   }
 
