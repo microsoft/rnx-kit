@@ -1,8 +1,8 @@
 import semverCoerce from "semver/functions/coerce";
 import { checkPackageManifest, getCheckConfig } from "../src/check";
-import profile_0_62 from "../src/profiles/profile-0.62";
-import profile_0_63 from "../src/profiles/profile-0.63";
-import profile_0_64 from "../src/profiles/profile-0.64";
+import profile_0_62 from "../src/presets/microsoft/profile-0.62";
+import profile_0_63 from "../src/presets/microsoft/profile-0.63";
+import profile_0_64 from "../src/presets/microsoft/profile-0.64";
 import { packageVersion } from "./helpers";
 
 jest.mock("fs");

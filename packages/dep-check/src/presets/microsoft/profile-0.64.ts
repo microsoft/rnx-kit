@@ -1,4 +1,4 @@
-import type { Profile, Package } from "../types";
+import type { Package, Profile } from "../../types";
 import profile63 from "./profile-0.63";
 
 const reactNative: Package = {
@@ -24,6 +24,7 @@ const profile: Profile = {
     capabilities: ["react"],
     devOnly: true,
   },
+
   core: reactNative,
   "core-android": reactNative,
   "core-ios": reactNative,

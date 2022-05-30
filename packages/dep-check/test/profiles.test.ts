@@ -1,24 +1,24 @@
 import * as path from "path";
 import semver from "semver";
+import preset from "../src/presets/microsoft";
+import profile_0_62 from "../src/presets/microsoft/profile-0.62";
+import profile_0_63 from "../src/presets/microsoft/profile-0.63";
+import profile_0_64 from "../src/presets/microsoft/profile-0.64";
 import {
-  defaultProfiles,
   getProfilesFor,
   getProfileVersionsFor,
   loadCustomProfiles,
   profilesSatisfying,
   resolveCustomProfiles,
 } from "../src/profiles";
-import profile_0_62 from "../src/profiles/profile-0.62";
-import profile_0_63 from "../src/profiles/profile-0.63";
-import profile_0_64 from "../src/profiles/profile-0.64";
 import { ProfileVersion } from "../src/types";
 
-describe("defaultProfiles", () => {
+describe("Microsoft preset", () => {
   test("matches react-native versions", () => {
     const includePrerelease = {
       includePrerelease: true,
     };
-    Object.entries(defaultProfiles).forEach(([version, capabilities]) => {
+    Object.entries(preset).forEach(([version, capabilities]) => {
       const versionRange = "^" + version;
       Object.entries(capabilities).forEach(([capability, pkg]) => {
         if (capability === "core") {
