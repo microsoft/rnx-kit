@@ -13,8 +13,8 @@
   },
   "scripts": {
     "build": "nx run-many --target build --all",
-    "build:ci": "nx affected --target test --parallel 2",
-    "build:ci:all": "nx run-many --target test --parallel 2 --all",
+    "build:ci": "nx affected --target test",
+    "build:ci:all": "nx run-many --target test --all",
     "build-scope": "nx build",
     "bundle": "nx run-many --target bundle --all",
     "bundle+esbuild": "nx run-many --target bundle+esbuild --all",

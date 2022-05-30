@@ -57,6 +57,7 @@ module.exports = () => {
           "@rnx-kit/eslint-config",
           "@rnx-kit/scripts",
           "@types/*",
+          "nx",
         ],
         specials: [
           depcheck.special.babel,

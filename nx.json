@@ -2,10 +2,10 @@
   "extends": "nx/presets/npm.json",
   "tasksRunnerOptions": {
     "default": {
-      "runner": "nx/tasks-runners/default",
+      "runner": "@rnx-kit/scripts/nx-tasks-runner",
       "options": {
         "cacheableOperations": ["build", "build:ci", "lint", "test"],
-        "parallel": 8
+        "parallel": 0
       }
     }
   },
