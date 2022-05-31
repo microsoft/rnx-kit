@@ -21,6 +21,9 @@
     "test": ["build"],
     "update-readme": ["build"]
   },
+  "implicitDependencies": {
+    "yarn.lock": "*"
+  },
   "affected": {
     "defaultBase": "main"
   },
