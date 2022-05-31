@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-resolver-symlinks
 
+## 0.1.20
+
+### Patch Changes
+
+- 77b9f0d9: Fix symlinks with relative paths not being resolved correctly
+
 ## 0.1.19
 
 ### Patch Changes
