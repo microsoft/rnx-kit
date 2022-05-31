@@ -2,6 +2,7 @@ require 'json'
 
 package = JSON.parse(File.read(File.join(__dir__, 'package.json')))
 version = package['version']
+repository = package['repository']
 
 Pod::Spec.new do |s|
   s.name      = 'RNXAuth'
@@ -9,7 +10,7 @@ Pod::Spec.new do |s|
   s.author    = { package['author']['name'] => package['author']['email'] }
   s.license   = package['license']
   s.homepage  = package['homepage']
-  s.source    = { :git => package['repository']['url'], :tag => "#{package['name']}@#{version}" }
+  s.source    = { :git => repository['url'], :tag => "#{package['name']}@#{version}" }
   s.summary   = package['description']
 
   s.ios.deployment_target = '13.0'
@@ -23,7 +24,7 @@ Pod::Spec.new do |s|
   # be consumed from both a local path, and as a podspec outside a spec
   # repository.
   s.source_files         = 'ios/*.{h,m}',                            # :path
-                           'packages/react-native-auth/ios/*.{h,m}'  # :podspec
+                           "#{repository['directory']}/ios/*.{h,m}"  # :podspec
   s.public_header_files  = 'ios/*.h',                                # :path
-                           'packages/react-native-auth/ios/*.h'      # :podspec
+                           "#{repository['directory']}/ios/*.h"      # :podspec
 end
