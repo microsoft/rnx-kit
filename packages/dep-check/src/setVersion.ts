@@ -3,7 +3,8 @@ import isString from "lodash/isString";
 import prompts from "prompts";
 import { checkPackageManifest } from "./check";
 import { concatVersionRanges, keysOf, modifyManifest } from "./helpers";
-import { defaultProfiles, parseProfilesString } from "./profiles";
+import { default as defaultPreset } from "./presets/microsoft";
+import { parseProfilesString } from "./profiles";
 import type { Command, ProfileVersion } from "./types";
 
 function profileToChoice(version: ProfileVersion): prompts.Choice {
@@ -25,7 +26,7 @@ async function parseInput(versions: string | number): Promise<{
     type: "multiselect",
     name: "supportedVersions",
     message: "Select all supported versions of `react-native`",
-    choices: keysOf(defaultProfiles).map(profileToChoice),
+    choices: keysOf(defaultPreset).map(profileToChoice),
     min: 1,
   });
   if (!Array.isArray(supportedVersions)) {

@@ -1,4 +1,4 @@
-import type { Profile, Package } from "../types";
+import type { Package, Profile } from "../../types";
 import profile_0_67 from "./profile-0.67";
 
 const reactNative: Package = {
@@ -24,6 +24,7 @@ const profile: Profile = {
     capabilities: ["react"],
     devOnly: true,
   },
+
   core: reactNative,
   "core-android": reactNative,
   "core-ios": reactNative,
@@ -37,6 +38,7 @@ const profile: Profile = {
     version: "^0.68.0-0",
     capabilities: ["core"],
   },
+
   animation: {
     name: "react-native-reanimated",
     version: "^2.5.0",

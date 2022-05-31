@@ -1,5 +1,5 @@
-import type { Profile, Package } from "../types";
-import metaPackages from "./meta-profiles";
+import type { Package, Profile } from "../../types";
+import baseCapabilities from "./baseCapabilities";
 
 const reactNative: Package = {
   name: "react-native",
@@ -8,7 +8,7 @@ const reactNative: Package = {
 };
 
 const profile: Profile = {
-  ...metaPackages,
+  ...baseCapabilities,
   react: {
     name: "react",
     version: "16.9.0",
@@ -24,6 +24,7 @@ const profile: Profile = {
     capabilities: ["react"],
     devOnly: true,
   },
+
   core: reactNative,
   "core-android": reactNative,
   "core-ios": reactNative,
@@ -41,6 +42,11 @@ const profile: Profile = {
   animation: {
     name: "react-native-reanimated",
     version: "^1.13.3",
+  },
+  "babel-preset-react-native": {
+    name: "metro-react-native-babel-preset",
+    version: "^0.56.0",
+    devOnly: true,
   },
   base64: {
     name: "react-native-base64",
@@ -82,6 +88,11 @@ const profile: Profile = {
     name: "react-native-render-html",
     version: "^5.1.0",
   },
+  jest: {
+    name: "jest",
+    version: "^24.8.0",
+    devOnly: true,
+  },
   "lazy-index": {
     name: "react-native-lazy-index",
     version: "^2.1.1",
@@ -89,11 +100,6 @@ const profile: Profile = {
   "masked-view": {
     name: "@react-native-masked-view/masked-view",
     version: "^0.2.4",
-  },
-  "babel-preset-react-native": {
-    name: "metro-react-native-babel-preset",
-    version: "^0.56.0",
-    devOnly: true,
   },
   metro: {
     name: "metro",
@@ -178,11 +184,6 @@ const profile: Profile = {
   webview: {
     name: "react-native-webview",
     version: "^11.0.3",
-  },
-  jest: {
-    name: "jest",
-    version: "^24.8.0",
-    devOnly: true,
   },
 };
 

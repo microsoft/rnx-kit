@@ -3,7 +3,7 @@
 
 const fs = require("fs");
 const markdownTable = require("markdown-table");
-const { defaultProfiles } = require("../lib/profiles");
+const { preset } = require("../lib/presets/microsoft");
 
 const README = "README.md";
 const TOKEN_START = "<!-- @rnx-kit/dep-check/capabilities start -->";
@@ -41,10 +41,10 @@ function sortCoreFirst(lhs, rhs) {
 }
 
 const allVersions = /** @type {import("../src/types").ProfileVersion[]} */ (
-  Object.keys(defaultProfiles).reverse()
+  Object.keys(preset).reverse()
 );
 const allCapabilities = /** @type {import("@rnx-kit/config").Capability[]} */ (
-  Object.keys(defaultProfiles[allVersions[0]]).sort(sortCoreFirst)
+  Object.keys(preset[allVersions[0]]).sort(sortCoreFirst)
 );
 
 const table = markdownTable([
@@ -53,7 +53,7 @@ const table = markdownTable([
     return [
       capability,
       ...allVersions.map((profileVersion) => {
-        const pkg = defaultProfiles[profileVersion][capability];
+        const pkg = preset[profileVersion][capability];
         if ("version" in pkg) {
           const { name, version } = pkg;
           return `${name}@${version}`;

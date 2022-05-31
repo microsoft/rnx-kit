@@ -10,7 +10,6 @@ import semverCoerce from "semver/functions/coerce.js";
 import semverCompare from "semver/functions/compare.js";
 import { fileURLToPath } from "url";
 import { isMetaPackage } from "../lib/capabilities.js";
-import { defaultProfiles } from "../lib/profiles.js";
 
 /**
  * @typedef {import("../src/types").MetaPackage} MetaPackage
@@ -68,10 +67,11 @@ function getPackageVersion(packageName, dependencies) {
 
 /**
  * Returns the path to a profile.
+ * @param {string} preset
  * @param {string} profileVersion
  * @returns {string}
  */
-function getProfilePath(profileVersion) {
+function getProfilePath(preset, profileVersion) {
   const __dirname = path.dirname(fileURLToPath(import.meta.url));
   return path.relative(
     process.cwd(),
@@ -79,7 +79,8 @@ function getProfilePath(profileVersion) {
       __dirname,
       "..",
       "src",
-      "profiles",
+      "presets",
+      preset,
       `profile-${profileVersion}.ts`
     )
   );
@@ -88,6 +89,7 @@ function getProfilePath(profileVersion) {
 /**
  * Generates a profile.
  * @param {{
+ *   preset: string;
  *   targetVersion: string;
  *   reactVersion: string;
  *   metroVersion: string;
@@ -95,6 +97,7 @@ function getProfilePath(profileVersion) {
  * @returns {string}
  */
 function generateFromTemplate({
+  preset,
   targetVersion,
   reactVersion,
   metroVersion,
@@ -104,7 +107,7 @@ function generateFromTemplate({
     nextVersionCoerced.minor - 1
   }`;
 
-  const currentProfile = getProfilePath(currentVersion);
+  const currentProfile = getProfilePath(preset, currentVersion);
   if (!fileExists(currentProfile)) {
     throw new Error(`Could not find '${currentProfile}'`);
   }
@@ -112,7 +115,7 @@ function generateFromTemplate({
   const currentVersionVarName = `${nextVersionCoerced.major}_${
     nextVersionCoerced.minor - 1
   }`;
-  return `import type { Profile, Package } from "../types";
+  return `import type { Profile, Package } from "../../types";
 import profile_${currentVersionVarName} from "./profile-${currentVersion}";
 
 const reactNative: Package = {
@@ -138,6 +141,7 @@ const profile: Profile = {
     capabilities: ["react"],
     devOnly: true,
   },
+
   core: reactNative,
   "core-android": reactNative,
   "core-ios": reactNative,
@@ -151,6 +155,7 @@ const profile: Profile = {
     version: "^${targetVersion}.0",
     capabilities: ["core"],
   },
+
   "babel-preset-react-native": {
     name: "metro-react-native-babel-preset",
     version: "^${metroVersion}",
@@ -194,11 +199,12 @@ export default profile;
 
 /**
  * Fetches package versions for specified react-native version.
+ * @param {string} preset
  * @param {string} targetVersion
  * @param {Profile} latestProfile
  * @returns {Promise<string | undefined>}
  */
-async function makeProfile(targetVersion, latestProfile) {
+async function makeProfile(preset, targetVersion, latestProfile) {
   const reactNativeInfo = await fetchPackageInfo(
     latestProfile["core"],
     `^${targetVersion}.0-0`
@@ -232,6 +238,7 @@ async function makeProfile(targetVersion, latestProfile) {
   }, Promise.resolve(dependencies));
 
   return generateFromTemplate({
+    preset,
     targetVersion,
     reactVersion: getPackageVersion("react", peerDependencies),
     metroVersion: getPackageVersion("metro", cliMetroPluginDependencies),
@@ -247,19 +254,24 @@ async function makeProfile(targetVersion, latestProfile) {
  * Note that this script spawns a new process for each capability in parallel.
  * It currently does not honor throttling hints of any kind.
  *
- * @param {{ targetVersion?: string; force?: boolean; }} options
+ * @param {{ preset?: string; targetVersion?: string; force?: boolean; }} options
  */
-async function main({ targetVersion = "", force }) {
+async function main({
+  preset: presetName = "microsoft",
+  targetVersion = "",
+  force,
+}) {
+  const { preset } = await import(`../lib/presets/${presetName}/index.js`);
   const allVersions = /** @type {import("../src/types").ProfileVersion[]} */ (
-    Object.keys(defaultProfiles)
+    Object.keys(preset)
       .sort((lhs, rhs) => semverCompare(semverCoerce(lhs), semverCoerce(rhs)))
       .reverse()
   );
 
-  const latestProfile = defaultProfiles[allVersions[0]];
+  const latestProfile = preset[allVersions[0]];
 
   if (targetVersion) {
-    if (!force && defaultProfiles[targetVersion]) {
+    if (!force && preset[targetVersion]) {
       console.error(
         `Profile for '${targetVersion}' already exists. To overwrite it anyway, re-run with '--force'.`
       );
@@ -267,9 +279,13 @@ async function main({ targetVersion = "", force }) {
     }
 
     try {
-      const newProfile = await makeProfile(targetVersion, latestProfile);
+      const newProfile = await makeProfile(
+        presetName,
+        targetVersion,
+        latestProfile
+      );
       if (newProfile) {
-        const dst = getProfilePath(targetVersion);
+        const dst = getProfilePath(presetName, targetVersion);
         fs.writeFile(dst, newProfile).then(() => {
           console.log(`Wrote to '${dst}'`);
         });

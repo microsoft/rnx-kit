@@ -1,4 +1,4 @@
-import type { Profile, Package } from "../types";
+import type { Package, Profile } from "../../types";
 import profile61 from "./profile-0.61";
 
 const reactNative: Package = {
@@ -24,6 +24,7 @@ const profile: Profile = {
     capabilities: ["react"],
     devOnly: true,
   },
+
   core: reactNative,
   "core-android": reactNative,
   "core-ios": reactNative,
@@ -37,18 +38,24 @@ const profile: Profile = {
     version: "^0.62.0",
     capabilities: ["core"],
   },
-  hermes: {
-    name: "hermes-engine",
-    version: "~0.4.0",
-  },
-  netinfo: {
-    name: "@react-native-community/netinfo",
-    version: "^5.9.10",
-  },
+
   "babel-preset-react-native": {
     name: "metro-react-native-babel-preset",
     version: "^0.58.0",
     devOnly: true,
+  },
+  hermes: {
+    name: "hermes-engine",
+    version: "~0.4.0",
+  },
+  jest: {
+    name: "jest",
+    version: "^24.8.0",
+    devOnly: true,
+  },
+  netinfo: {
+    name: "@react-native-community/netinfo",
+    version: "^5.9.10",
   },
   metro: {
     name: "metro",
@@ -78,11 +85,6 @@ const profile: Profile = {
   "metro-runtime": {
     name: "metro-runtime",
     version: "^0.58.0",
-    devOnly: true,
-  },
-  jest: {
-    name: "jest",
-    version: "^24.8.0",
     devOnly: true,
   },
 };
