@@ -19,6 +19,11 @@ Pod::Spec.new do |s|
 
   s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES' }
 
-  s.source_files         = 'ios/*.{h,m}'
-  s.public_header_files  = 'ios/*.h'
+  # Include both package and repository relative paths to allow the podspec to
+  # be consumed from both a local path, and as a podspec outside a spec
+  # repository.
+  s.source_files         = 'ios/*.{h,m}',                            # :path
+                           'packages/react-native-auth/ios/*.{h,m}'  # :podspec
+  s.public_header_files  = 'ios/*.h',                                # :path
+                           'packages/react-native-auth/ios/*.h'      # :podspec
 end
