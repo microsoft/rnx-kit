@@ -277,10 +277,10 @@ PODS:
     - React-jsi (= 0.66.4)
     - React-logger (= 0.66.4)
     - React-perflogger (= 0.66.4)
-  - ReactTestApp-DevSupport (1.1.2):
+  - ReactTestApp-DevSupport (1.3.8):
     - React-Core
     - React-jsi
-  - ReactTestApp-MSAL (1.0.0):
+  - ReactTestApp-MSAL (1.0.1):
     - MSAL
     - RNXAuth
   - ReactTestApp-Resources (1.0.0-dev)
@@ -437,13 +437,13 @@ SPEC CHECKSUMS:
   React-RCTVibration: e3ffca672dd3772536cb844274094b0e2c31b187
   React-runtimeexecutor: dec32ee6f2e2a26e13e58152271535fadff5455a
   ReactCommon: 57b69f6383eafcbd7da625bfa6003810332313c4
-  ReactTestApp-DevSupport: d838d01f9bd91eacfd5822cc78007429a7b72b38
-  ReactTestApp-MSAL: dc409154809b3a6c56d72026f063a444a8cd919f
+  ReactTestApp-DevSupport: 1075d13c9f78457e4e7365dffb30f131e5b16a5b
+  ReactTestApp-MSAL: 01ce59a7dccd3b099f6de76d1bc0b1ea9b24d88a
   ReactTestApp-Resources: 74a1cf509f4e7962b16361ea4e73cba3648fff5d
-  RNXAuth: c6f636730e4abf5b0c5406c50eb76d45306d1226
+  RNXAuth: 82475320d7e6463b1dc4875b9560af90041f66fb
   SwiftLint: 6bc52a21f0fd44cab9aa2dc8e534fb9f5e3ec507
   Yoga: e7dc4e71caba6472ff48ad7d234389b91dadc280
 
 PODFILE CHECKSUM: 438d9afb225dc2a99c6750449d7231544f5ad6f3
 
-COCOAPODS: 1.11.2
+COCOAPODS: 1.11.3
