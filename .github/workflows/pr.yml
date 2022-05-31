@@ -67,14 +67,14 @@ jobs:
       - name: Install package dependencies
         run: yarn ci
       - name: Build and test packages
-        run: yarn build:ci
+        run: yarn build:ci --base origin/${{ github.base_ref }}
       - name: Ensure READMEs are up-to-date
         if: ${{ matrix.node-version == 14 && matrix.os == 'ubuntu-latest' }}
         run: |
           yarn update-readme
           git diff --exit-code
       - name: Bundle packages
-        run: yarn bundle:ci
+        run: yarn bundle
       - name: Bundle test app with esbuild
         run: |
           yarn bundle+esbuild

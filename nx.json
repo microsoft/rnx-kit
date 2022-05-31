@@ -1,0 +1,32 @@
+{
+  "extends": "nx/presets/npm.json",
+  "tasksRunnerOptions": {
+    "default": {
+      "runner": "@rnx-kit/scripts/nx-tasks-runner",
+      "options": {
+        "cacheableOperations": ["build", "build:ci", "lint", "test"],
+        "parallel": 0
+      }
+    }
+  },
+  "targetDependencies": {
+    "build": [
+      {
+        "target": "build",
+        "projects": "dependencies"
+      }
+    ],
+    "bundle": ["build"],
+    "bundle+esbuild": ["build"],
+    "test": ["build"],
+    "update-readme": ["build"]
+  },
+  "affected": {
+    "defaultBase": "main"
+  },
+  "pluginsConfig": {
+    "@nrwl/js": {
+      "analyzeSourceFiles": false
+    }
+  }
+}

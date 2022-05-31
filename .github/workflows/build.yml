@@ -27,9 +27,9 @@ jobs:
       - name: Install package dependencies
         run: yarn ci
       - name: Build and test packages
-        run: yarn build:ci
+        run: yarn build:ci:all
       - name: Bundle packages
-        run: yarn bundle:ci
+        run: yarn bundle
       - name: Build website
         run: yarn build
         working-directory: docsite
