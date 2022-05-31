@@ -1,3 +1,4 @@
+import * as os from "os";
 import * as path from "path";
 import {
   getMetroResolver,
@@ -11,6 +12,8 @@ const AVAILABLE_PLATFORMS = {
   win32: "@office-iss/react-native-win32",
   windows: "react-native-windows",
 };
+
+const nixOnlyTest = os.platform() === "win32" ? test.skip : test;
 
 describe("getMetroResolver", () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -32,7 +35,8 @@ describe("getMetroResolver", () => {
     );
   });
 
-  test("returns `metro-resolver` from a central storage", () => {
+  // The symlinks under `pnpm` don't work on Windows
+  nixOnlyTest("returns `metro-resolver` from a central storage", () => {
     const p = useFixture("pnpm");
     expect(getMetroResolver(p)(context, "", null)).toEqual(
       expect.stringContaining(
