@@ -1,6 +1,9 @@
 /* jshint esversion: 8, node: true */
 // @ts-check
 
+const fs = require("fs");
+const path = require("path");
+
 /**
  * @typedef {import("metro-config").ExtraTransformOptions} ExtraTransformOptions;
  * @typedef {import("metro-config").InputConfigT} InputConfigT;
@@ -17,7 +20,6 @@ const UNIQUE_PACKAGES = ["react", "react-native"];
  */
 function defaultWatchFolders(projectRoot) {
   const { findPackage } = require("@rnx-kit/tools-node/package");
-  const path = require("path");
   const {
     getAllPackageJsonFiles,
     getWorkspaceRoot,
@@ -65,7 +67,13 @@ function resolveModule(name, startDir) {
     startDir,
     allowSymlinks: true,
   });
-  return result && require("fs").realpathSync(result);
+  if (!result) {
+    return undefined;
+  }
+
+  return fs.lstatSync(result).isSymbolicLink()
+    ? path.resolve(path.dirname(result), fs.readlinkSync(result))
+    : result;
 }
 
 /**
@@ -88,8 +96,6 @@ function resolveUniqueModule(packageName, searchStartDir) {
   if (!result) {
     throw new Error(`Cannot find module '${packageName}'`);
   }
-
-  const path = require("path");
 
   // Find the node_modules folder and account for cases when packages are
   // nested within workspace folders. Examples:
