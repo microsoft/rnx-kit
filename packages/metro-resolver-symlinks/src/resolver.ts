@@ -2,6 +2,7 @@ import {
   findPackageDependencyDir,
   isFileModuleRef,
   parseModuleRef,
+  readPackage,
 } from "@rnx-kit/tools-node";
 import { getAvailablePlatforms } from "@rnx-kit/tools-react-native";
 import * as fs from "fs";
@@ -13,7 +14,10 @@ function resolveFrom(moduleName: string, startDir: string): string {
   if (!p) {
     throw new Error(`Cannot find module '${moduleName}'`);
   }
-  return fs.lstatSync(p).isSymbolicLink() ? fs.readlinkSync(p) : p;
+
+  return fs.lstatSync(p).isSymbolicLink()
+    ? path.resolve(path.dirname(p), fs.readlinkSync(p))
+    : p;
 }
 
 /**
@@ -24,7 +28,17 @@ export function getMetroResolver(fromDir = process.cwd()): MetroResolver {
   try {
     const rnPath = resolveFrom("react-native", fromDir);
     const rncliPath = resolveFrom("@react-native-community/cli", rnPath);
-    const metroResolverPath = resolveFrom("metro-resolver", rncliPath);
+
+    const { dependencies = {} } = readPackage(rncliPath);
+    const metroResolverSearchPath =
+      "@react-native-community/cli-plugin-metro" in dependencies
+        ? resolveFrom("@react-native-community/cli-plugin-metro", rncliPath)
+        : rncliPath;
+
+    const metroResolverPath = resolveFrom(
+      "metro-resolver",
+      metroResolverSearchPath
+    );
     return require(metroResolverPath).resolve;
   } catch (_) {
     throw new Error(
