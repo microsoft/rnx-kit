@@ -3,7 +3,7 @@ import type { KitConfig } from "../src/kitConfig";
 import type { BundleConfig } from "../src/bundleConfig";
 import {
   getBundleConfig,
-  getBundlePlatformConfig,
+  getPlatformBundleConfig,
 } from "../src/getBundleConfig";
 
 const kitConfig: KitConfig = {
@@ -28,16 +28,12 @@ describe("getBundleConfig()", () => {
     expect(getBundleConfig({ bundle: undefined })).toBeUndefined();
   });
 
-  test("returns undefined when the bundle property is set to null", () => {
-    expect(getBundleConfig({ bundle: null })).toBeUndefined();
-  });
-
-  test("returns undefined when the bundle property is set to false", () => {
-    expect(getBundleConfig({ bundle: false })).toBeUndefined();
-  });
-
-  test("returns default config (empty) when the bundle property is set to true", () => {
-    expect(getBundleConfig({ bundle: true })).toEqual({});
+  test("fails when the bundle property is set to true (no longer supported)", () => {
+    expect(() =>
+      getBundleConfig({ bundle: true as BundleConfig })
+    ).toThrowError(
+      /The rnx-kit configuration property 'bundle' no longer supports boolean values./i
+    );
   });
 
   test("returns the bundle config associated with the given id", () => {
@@ -139,17 +135,17 @@ const bundleConfig: BundleConfig = {
 
 describe("getBundlePlatformConfig()", () => {
   test("returns the input bundle config when no platform overrides exist", () => {
-    const d = getBundlePlatformConfig(bundleConfigWithoutPlatforms, "android");
+    const d = getPlatformBundleConfig(bundleConfigWithoutPlatforms, "android");
     expect(d).toBe(bundleConfigWithoutPlatforms);
   });
 
   test("returns the input bundle config when the given platform doesn't have any overrides", () => {
-    const d = getBundlePlatformConfig(bundleConfig, "android");
+    const d = getPlatformBundleConfig(bundleConfig, "android");
     expect(d).toBe(bundleConfig);
   });
 
   test("returns the a platform-specific bundle config", () => {
-    const d = getBundlePlatformConfig(bundleConfig, "ios");
+    const d = getPlatformBundleConfig(bundleConfig, "ios");
     expect(d.bundleOutput).toEqual("main.ios.jsbundle");
   });
 });

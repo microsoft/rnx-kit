@@ -52,31 +52,24 @@ function failOnUnsupportedProps(parameters: BundleParameters): void {
  *
  * If an id is given, search for the matching bundle definition. Otherwise, use the first bundle definition.
  *
- * @param config rnx-kit configuration
- * @param id Optional identity of the target bundle parameters to return
- * @returns Bundle configuration, or `undefined` if bundling is not configured or disabled.
+ * @param config The package's rnx-kit configuration
+ * @param id Optional identity of the target bundle configuration
+ * @returns Bundle configuration, or `undefined` if nothing was found.
  */
 export function getBundleConfig(
   config: KitConfig,
   id?: string
 ): BundleConfig | undefined {
-  // 'bundle' property not set?
-  if (!Object.prototype.hasOwnProperty.call(config, "bundle")) {
+  if (!config.bundle) {
     return undefined;
   }
 
-  // 'bundle' property explicitly set to null/undefined/false?
-  if (
-    config.bundle === undefined ||
-    config.bundle === null ||
-    config.bundle === false
-  ) {
-    return undefined;
-  }
-
-  // default bundle config?
+  // 5/20/2022: fail when `bundle` is set to true, which is from the old config format
+  //            remove on the next 0.x bump or when going to 1.0, whichever comes first
   if (config.bundle === true) {
-    return {}; // empty -> default config
+    throw new Error(
+      `The rnx-kit configuration property 'bundle' no longer supports boolean values. Bundling is always enabled with sensible defaults. You should remove the 'bundle' property to make use of the defaults, or specify the bundle configuration as an object.`
+    );
   }
 
   const bundles = castArray(config.bundle);
@@ -105,7 +98,7 @@ export function getBundleConfig(
  * @param platform Target platform
  * @returns Bundle config containing platform-specific overrides
  */
-export function getBundlePlatformConfig(
+export function getPlatformBundleConfig(
   bundle: BundleConfig,
   platform: AllPlatforms
 ): BundleConfig {

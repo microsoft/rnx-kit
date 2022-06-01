@@ -7,10 +7,10 @@ describe("getServerConfig()", () => {
   });
 
   test("returns undefined when the server property is not present and bundling is disabled", () => {
-    expect(getServerConfig({ bundle: false })).toBeUndefined();
+    expect(getServerConfig({ bundle: undefined })).toBeUndefined();
   });
 
-  test("returns when the server property is set to undefined", () => {
+  test("returns undefined when the server property is set to undefined", () => {
     expect(getServerConfig({ server: undefined })).toBeUndefined();
   });
 

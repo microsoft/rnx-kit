@@ -55,8 +55,7 @@ export type GetDependencyVersions = () => DependencyVersions;
 export type KitType = "app" | "library";
 
 /**
- * Configuration information for an rnx-kit package. This is retrieved from
- * 'rnx-kit' in package.json.
+ * Configuration information for an rnx-kit package. This is retrieved from 'rnx-kit' in package.json.
  */
 export type KitConfig = {
   /**
@@ -80,19 +79,12 @@ export type KitConfig = {
   reactNativeDevVersion?: string;
 
   /**
-   * Specifies how the package is bundled. If true, then a default set of
-   * options will be used. Otherwise the object allows for fine-grained
-   * control over the bundling process.
-   *
-   * When not defined or `false`, the package cannot be bundled.
+   * Specifies how the package is bundled.
    */
-  bundle?: boolean | BundleConfig | BundleConfig[];
+  bundle?: BundleConfig | BundleConfig[];
 
   /**
-   * Specifies how the package's bundle server is configured. This is only useful during development.
-   *
-   * When not defined, the package will only be served if bundling is enabled. In this scenario,
-   * the bundle configuration is used to control the bundle-server.
+   * Specifies how the package's bundle server is configured.
    */
   server?: ServerConfig;
 

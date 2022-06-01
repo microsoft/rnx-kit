@@ -17,6 +17,12 @@ export type GetKitConfigOptions = {
   cwd?: string;
 };
 
+/**
+ * Query for a package's rnx-kit configuration.
+ *
+ * @param options Options for retrieving the configuration.
+ * @returns
+ */
 export function getKitConfig(
   options: GetKitConfigOptions = {}
 ): KitConfig | undefined {

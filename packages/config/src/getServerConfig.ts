@@ -4,9 +4,11 @@ import { pickValues } from "@rnx-kit/tools-language";
 import { getBundleConfig } from "./getBundleConfig";
 
 /**
- * Get server configuration from the rnx-kit configuration.
+ * Get server configuration from the rnx-kit configuration. If no server
+ * configuration is found, a default server configuration is created from
+ * the package's bundle configuration.
  *
- * @param config rnx-kit configuration
+ * @param config The package's rnx-kit configuration
  * @returns Server configuration, or `undefined` if bundle serving is disabled
  */
 export function getServerConfig(config: KitConfig): ServerConfig | undefined {
