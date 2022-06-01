@@ -56,6 +56,7 @@ export function visitDependencies(
     const packageRef = parsePackageRef(dependency);
     const packageDir = findPackageDependencyDir(packageRef, {
       startDir: projectRoot,
+      resolveSymlinks: true,
     });
     if (!packageDir) {
       warn(`Unable to resolve module '${dependency}'`);
