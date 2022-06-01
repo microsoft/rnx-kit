@@ -158,11 +158,9 @@ Get capability information from the package configuration.
 
 ### `getServerConfig(config)`
 
-Get server configuration from the rnx-kit configuration. If no server
-configuration is found, a default server configuration is created from the
-package's bundle configuration.
+Get server configuration from the rnx-kit configuration.
 
-| Parameter | Type           | Description                                                        |
-| --------- | -------------- | ------------------------------------------------------------------ |
-| config    | `KitConfig`    | The package's rnx-kit configuration                                |
-| [Return]  | `ServerConfig` | Server configuration, or `undefined` if bundle serving is disabled |
+| Parameter | Type           | Description                                               |
+| --------- | -------------- | --------------------------------------------------------- |
+| config    | `KitConfig`    | The package's rnx-kit configuration                       |
+| [Return]  | `ServerConfig` | Server configuration, or `undefined` if nothing was found |

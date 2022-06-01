@@ -48,7 +48,8 @@ continue carrying `comsmiconfig` as a dependency.
 
 ### getBundleDefinition() -> getBundleConfig()
 
-Now requires rnx-kit configuration as input, and outputs a bundle configuration.
+Now takes rnx-kit configuration as input, and outputs a bundle configuration
+(which has changed in this release).
 
 No longer provides default values. Returns only what is in configuration.
 Defaults have moved into the CLI, which is our opinionated view of how config
@@ -66,14 +67,11 @@ No longer provides default values. Returns only what is in configuration.
 Defaults have moved into the CLI, which is our opinionated view of how config
 should be interpreted.
 
-### getServerConfig(): default server config derived from bundle config
+### getServerConfig()
 
-When server config is not present, it is now derived from bundle config.
-Properties common to both, such as `BundlePlugin` props like
-`detectCyclicDependencies` and `treeShake`, will be used.
-
-This is a convenience, and will help devs avoid duplicating config between
-bundle and server props.
+No longer provides default values. Returns only what is in configuration.
+Defaults have moved into the CLI, which is our opinionated view of how config
+should be interpreted.
 
 ## Non-breaking Changes
 
