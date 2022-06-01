@@ -1,5 +1,5 @@
 ---
-"@rnx-kit/cli": none
+"@rnx-kit/config": none
 ---
 
 ## Breaking Changes
