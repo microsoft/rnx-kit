@@ -2,9 +2,9 @@
 "@rnx-kit/config": none
 ---
 
-## Breaking Changes
+# Breaking Changes
 
-### Schema: align property names with @react-native-community/cli
+## Schema: align property names with @react-native-community/cli
 
 Add, rename, and remove properties in @rnx-kit/config to fully align with the
 well-known names used in @react-native-community/cli. This change will ripple
@@ -27,6 +27,7 @@ Add:
 
 Remove:
 
+- bundlePrefix
 - distPath
 
 Rename:
@@ -36,7 +37,7 @@ Rename:
 - sourceMapSourcesRootPath -> sourcemapSourcesRoot
 - assetsPath -> assetsDest
 
-### getKitConfig(): only search for rnx-kit configuration in package.json
+## getKitConfig(): only search for rnx-kit configuration in package.json
 
 We no longer search for config in places like rnx-kit.config.js (e.g. no more
 `cosmiconfig`).
@@ -47,7 +48,7 @@ complaints from JS devs about having too many config files -- package.json is
 the preferred "single source". In light of this, it didn't seem worthwhile to
 continue carrying `comsmiconfig` as a dependency.
 
-### getBundleDefinition() -> getBundleConfig()
+## getBundleDefinition() -> getBundleConfig()
 
 Now takes rnx-kit configuration as input, and outputs a bundle configuration
 (which has changed in this release).
@@ -59,7 +60,7 @@ should be interpreted.
 Drops support for a previously deprecated property `experimental_treeShake`,
 which has since been replaced with `treeShake`.
 
-### getBundlePlatformDefinition() -> getPlatformBundleConfig()
+## getBundlePlatformDefinition() -> getPlatformBundleConfig()
 
 Now requires a bundle configuration as input, and outputs a platform-specific
 bundle configuration.
@@ -68,14 +69,14 @@ No longer provides default values. Returns only what is in configuration.
 Defaults have moved into the CLI, which is our opinionated view of how config
 should be interpreted.
 
-### getServerConfig()
+## getServerConfig()
 
 No longer provides default values. Returns only what is in configuration.
 Defaults have moved into the CLI, which is our opinionated view of how config
 should be interpreted.
 
-## Non-breaking Changes
+# Non-breaking Changes
 
-### Add fine-grained control for typescriptValidation
+## Add fine-grained control for typescriptValidation
 
 Give developers fine-grained control over how TypeScript validation behaves.
