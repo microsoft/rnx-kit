@@ -5,19 +5,18 @@ import {
   readPackage,
 } from "@rnx-kit/tools-node";
 import { getAvailablePlatforms } from "@rnx-kit/tools-react-native";
-import * as fs from "fs";
 import * as path from "path";
 import type { MetroResolver, ModuleResolver } from "./types";
 
 function resolveFrom(moduleName: string, startDir: string): string {
-  const p = findPackageDependencyDir(moduleName, { startDir });
+  const p = findPackageDependencyDir(moduleName, {
+    startDir,
+    resolveSymlinks: true,
+  });
   if (!p) {
     throw new Error(`Cannot find module '${moduleName}'`);
   }
-
-  return fs.lstatSync(p).isSymbolicLink()
-    ? path.resolve(path.dirname(p), fs.readlinkSync(p))
-    : p;
+  return p;
 }
 
 /**
