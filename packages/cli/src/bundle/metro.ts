@@ -4,81 +4,40 @@ import { createDirectory } from "@rnx-kit/tools-node/fs";
 import type { ConfigT } from "metro-config";
 import path from "path";
 import { customizeMetroConfig } from "../metro-config";
-import type { BundleConfig } from "./types";
-import type { TypeScriptValidationOptions } from "../types";
-
-/**
- * Create Metro bundler arguments from a bundle configuration.
- *
- * @param bundleConfig Bundle configuration
- * @returns Metro bundle arguments
- */
-export function createMetroBundleArgs({
-  entryPath: entryFile,
-  distPath,
-  assetsPath: assetsDest,
-  bundlePrefix,
-  bundleEncoding,
-  sourceMapPath: sourcemapOutput,
-  sourceMapSourceRootPath: sourcemapSourcesRoot,
-  platform,
-  dev,
-  minify,
-}: BundleConfig): MetroBundleArgs {
-  //  assemble the full path to the bundle file
-  const bundleExtension =
-    platform === "ios" || platform === "macos" ? "jsbundle" : "bundle";
-  const bundleFile = `${bundlePrefix}.${platform}.${bundleExtension}`;
-  const bundlePath = path.join(distPath, bundleFile);
-
-  //  always create a source-map in dev mode
-  if (dev) {
-    sourcemapOutput = sourcemapOutput ?? bundleFile + ".map";
-  }
-
-  //  use an absolute path for the source map file
-  if (sourcemapOutput) {
-    sourcemapOutput = path.join(distPath, sourcemapOutput);
-  }
-
-  return {
-    assetsDest,
-    entryFile,
-    minify,
-    platform,
-    dev,
-    bundleOutput: bundlePath,
-    bundleEncoding,
-    sourcemapOutput,
-    sourcemapSourcesRoot,
-  };
-}
+import type { CliPlatformBundleConfig } from "./types";
 
 /**
  * Run the Metro bundler.
  *
- * @param tsservice TypeScript service to use for type-checking (when enabled)
  * @param metroConfig Metro configuration
  * @param bundleConfig Bundle configuration
+ * @param dev Choose whether or not this will be a "developer" bundle. The alternative is a "production" bundle.
+ *            When `true`, warnings are enabled, and the bundle is not minified by default.
+ *            Further, optimizations like constant folding are disabled.
+ *            When `false`, warnings are disabled and the bundle is minified by default.
+ * @param minify Optionally choose whether or not the bundle is minified. When not set, minification is controlled by the `dev` property.
  */
 export async function metroBundle(
   metroConfig: ConfigT,
-  bundleConfig: BundleConfig
+  bundleConfig: CliPlatformBundleConfig,
+  dev: boolean,
+  minify?: boolean
 ): Promise<void> {
   info(`Bundling ${bundleConfig.platform}...`);
 
-  const typescriptValidationOptions: TypeScriptValidationOptions = {
-    throwOnError: true,
-  };
   customizeMetroConfig(
     metroConfig,
     bundleConfig.detectCyclicDependencies,
     bundleConfig.detectDuplicateDependencies,
-    bundleConfig.typescriptValidation ? typescriptValidationOptions : false,
+    bundleConfig.typescriptValidation,
     bundleConfig.treeShake
   );
 
-  const metroBundleArgs = createMetroBundleArgs(bundleConfig);
+  const metroBundleArgs: MetroBundleArgs = {
+    ...bundleConfig,
+    dev,
+    minify,
+  };
 
   // ensure all output directories exist
   createDirectory(path.dirname(metroBundleArgs.bundleOutput));

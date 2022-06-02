@@ -1,115 +1,75 @@
-import type { AllPlatforms } from "@rnx-kit/tools-react-native/platform";
-import path from "path";
-import { createMetroBundleArgs } from "../../src/bundle/metro";
-import type { BundleConfig } from "../../src/bundle/types";
+import "jest-extended";
+import { metroBundle } from "../../src/bundle/metro";
+import type { CliPlatformBundleConfig } from "../../src/bundle/types";
 
-describe("CLI > Bundle > Metro > createMetroBundleArgs", () => {
-  const bundleConfig: BundleConfig = {
+const { getDefaultConfig } = require("metro-config");
+
+const mockCreateDirectory = jest.fn();
+const toolsNodeFS = require("@rnx-kit/tools-node/fs");
+toolsNodeFS.createDirectory = mockCreateDirectory;
+
+const metroService = require("@rnx-kit/metro-service");
+const mockBundle = metroService.bundle;
+
+describe("CLI > Bundle > Metro > metroBundle", () => {
+  afterEach(() => {
+    jest.resetAllMocks();
+  });
+
+  const bundleConfigNoPlugins: CliPlatformBundleConfig = {
+    entryFile: "out/entry.js",
+    bundleOutput: "src/main.jsbundle",
+    detectCyclicDependencies: false,
+    detectDuplicateDependencies: false,
+    typescriptValidation: false,
+    treeShake: false,
+    platform: "ios",
+    sourcemapOutput: "map/main.map",
+    sourcemapSourcesRoot: "root-path-for-source-maps",
+    sourcemapUseAbsolutePath: false,
+    assetsDest: "dist",
+  };
+
+  const bundleConfig: CliPlatformBundleConfig = {
+    ...bundleConfigNoPlugins,
     detectCyclicDependencies: true,
     detectDuplicateDependencies: true,
     typescriptValidation: true,
     treeShake: true,
-    entryPath: "out/entry.js",
-    distPath: "out",
-    assetsPath: "out/assets",
-    bundlePrefix: "my-app",
-    platform: "ios",
-    dev: true,
-    minify: true,
-    sourceMapPath: "abc.map",
-    sourceMapSourceRootPath: "root-path-for-source-maps",
   };
 
-  test("sets assetsDest", () => {
-    expect(createMetroBundleArgs(bundleConfig).assetsDest).toEqual(
-      bundleConfig.assetsPath
-    );
+  const dev = true;
+  const minify = true;
+
+  it("does not use a custom serializer when all plugins are disabled", async () => {
+    const metroConfig = await getDefaultConfig();
+    expect(metroConfig.serializer.customSerializer).toBeNil();
+    await metroBundle(metroConfig, bundleConfigNoPlugins, dev, minify);
+    expect(metroConfig.serializer.customSerializer).toBeNil();
   });
 
-  test("sets entryFile", () => {
-    expect(createMetroBundleArgs(bundleConfig).entryFile).toEqual(
-      bundleConfig.entryPath
-    );
+  it("uses a custom serializer when at least one plugin is enabled", async () => {
+    const metroConfig = await getDefaultConfig();
+    expect(metroConfig.serializer.customSerializer).toBeNil();
+    await metroBundle(metroConfig, bundleConfig, dev, minify);
+    expect(metroConfig.serializer.customSerializer).not.toBeNil();
   });
 
-  test("sets minify", () => {
-    expect(createMetroBundleArgs(bundleConfig).minify).toEqual(
-      bundleConfig.minify
-    );
+  it("creates directories for the bundle, the source map, and assets", async () => {
+    await metroBundle(await getDefaultConfig(), bundleConfig, dev, minify);
+    expect(mockCreateDirectory).toHaveBeenCalledTimes(3);
+    expect(mockCreateDirectory).toHaveBeenNthCalledWith(1, "src");
+    expect(mockCreateDirectory).toHaveBeenNthCalledWith(2, "map");
+    expect(mockCreateDirectory).toHaveBeenNthCalledWith(3, "dist");
   });
 
-  test("sets platform", () => {
-    expect(createMetroBundleArgs(bundleConfig).platform).toEqual(
-      bundleConfig.platform
-    );
-  });
-
-  test("sets dev", () => {
-    expect(createMetroBundleArgs(bundleConfig).dev).toEqual(bundleConfig.dev);
-  });
-
-  function testBundleFileExtension(
-    platform: AllPlatforms,
-    expectedExtension: string
-  ): void {
-    const copy: BundleConfig = { ...bundleConfig, platform };
-    const args = createMetroBundleArgs(copy);
-    expect(path.extname(args.bundleOutput).toLowerCase()).toEqual(
-      expectedExtension
-    );
-  }
-
-  test("sets bundle file extension to .bundle for android", () => {
-    testBundleFileExtension("android", ".bundle");
-  });
-
-  test("sets bundle file extension to .jsbundle for ios", () => {
-    testBundleFileExtension("ios", ".jsbundle");
-  });
-
-  test("sets bundle file extension to .jsbundle for macos", () => {
-    testBundleFileExtension("macos", ".jsbundle");
-  });
-
-  test("sets bundle file extension to .bundle for windows", () => {
-    testBundleFileExtension("windows", ".bundle");
-  });
-
-  test("sets bundle file extension to .bundle for win32", () => {
-    testBundleFileExtension("win32", ".bundle");
-  });
-
-  test("sets bundleOutput to prefix + platform + extension under distPath", () => {
-    expect(createMetroBundleArgs(bundleConfig).bundleOutput).toEqual(
-      path.join(bundleConfig.distPath, "my-app.ios.jsbundle")
-    );
-  });
-
-  test("sets bundleEncoding", () => {
-    expect(createMetroBundleArgs(bundleConfig).bundleEncoding).toEqual(
-      bundleConfig.bundleEncoding
-    );
-  });
-
-  test("always sets sourcemapOutput in dev mode", () => {
-    const copy: BundleConfig = { ...bundleConfig, dev: true };
-    delete copy.sourceMapPath;
-
-    const args = createMetroBundleArgs(copy);
-    expect(args.sourcemapOutput).toEqual(args.bundleOutput + ".map");
-  });
-
-  test("sets sourcemapOutput in production mode", () => {
-    const copy: BundleConfig = { ...bundleConfig, dev: false };
-    const args = createMetroBundleArgs(copy);
-    expect(args.sourcemapOutput).toEqual(
-      path.join(bundleConfig.distPath, bundleConfig.sourceMapPath)
-    );
-  });
-
-  test("sets sourcemapSourcesRoot", () => {
-    expect(createMetroBundleArgs(bundleConfig).sourcemapSourcesRoot).toEqual(
-      bundleConfig.sourceMapSourceRootPath
-    );
+  it("invokes the Metro bundler using all input parameters", async () => {
+    await metroBundle(await getDefaultConfig(), bundleConfig, dev, minify);
+    expect(mockBundle).toHaveBeenCalledTimes(1);
+    expect(mockBundle.mock.calls[0][0]).toEqual({
+      ...bundleConfig,
+      dev,
+      minify,
+    });
   });
 });

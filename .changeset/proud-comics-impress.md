@@ -23,6 +23,7 @@ be updated (which seems better than silently ignoring it).
 Add:
 
 - bundleOutput
+- sourcemapUseAbsolutePath
 
 Remove:
 

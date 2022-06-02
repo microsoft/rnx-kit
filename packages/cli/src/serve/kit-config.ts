@@ -1,5 +1,6 @@
-import type { ServerWithRequiredParameters } from "@rnx-kit/config";
+import type { ServerConfig, BundlerPlugins } from "@rnx-kit/config";
 import { getKitConfig, getServerConfig } from "@rnx-kit/config";
+import { getDefaultBundlerPlugins } from "../bundler-plugin-defaults";
 import { pickValues } from "@rnx-kit/tools-language/properties";
 
 export type ServerConfigOverrides = {
@@ -8,24 +9,24 @@ export type ServerConfigOverrides = {
   sourceExts?: string[];
 };
 
+export type CliServerConfig = ServerConfig & Required<BundlerPlugins>;
+
 /**
- * Get the kit's server configuration. Apply any overrides.
+ * Get the server configuration from the rnx-kit configuration. Apply any overrides.
  *
- * @param overrides Overrides to apply to the output server configuration. These take precedence over the values in the kit config.
- * @returns Overridden server configuration
+ * @param overrides Overrides to apply. These take precedence over the values in the rnx-kit configuration.
+ * @returns Server configuration
  */
 export function getKitServerConfig(
   overrides: ServerConfigOverrides
-): ServerWithRequiredParameters {
+): CliServerConfig {
   const kitConfig = getKitConfig();
-  if (!kitConfig) {
-    throw new Error(
-      "No kit configuration found for this react-native experience"
-    );
-  }
+  const maybeServerConfig = kitConfig ? getServerConfig(kitConfig) : undefined;
+  const serverConfig = maybeServerConfig ?? {};
 
   return {
-    ...getServerConfig(kitConfig),
+    ...getDefaultBundlerPlugins(),
+    ...serverConfig,
     ...pickValues(overrides, ["projectRoot", "assetPlugins", "sourceExts"]),
   };
 }

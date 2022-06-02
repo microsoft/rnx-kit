@@ -7,24 +7,31 @@
 
 <!--remove-block end-->
 
-Command-line interface for working with `kit` packages in your repo.
+Command-line interface for working with packages in your repo.
 
 <!--remove-block start-->
 
-- [Bundle a kit](#Bundle-a-Kit)
-- [Start a bundle server](#Start-a-Bundle-Server)
-- [Manage kit dependencies](#Manage-Kit-Dependencies)
-- [Generate a 3rd-party notice for a kit](#Generate-a-Third%2dParty-Notice-for-a-Kit)
-- [Clean a React Native Project](#Clean-a-React-Native-Project)
+- [Bundle a package](#bundle-a-package)
+- [Start a bundle server](#start-a-bundle-server)
+- [Manage dependencies](#manage-dependencies)
+- [Generate a 3rd-party notice for a package](#generate-a-third%2dparty-notice-for-a-package)
+- [Clean a React Native project](#clean-a-react-native-project)
 
 <!--remove-block end-->
 
-## Bundle a Kit
+## Bundle a Package
 
-Bundle an application using [Metro](https://facebook.github.io/metro). The
-bundling process is controlled by
+Bundle a package using [Metro](https://facebook.github.io/metro). The bundling
+process uses optional
 [configuration](https://github.com/microsoft/rnx-kit/tree/main/packages/config)
-and optional command-line overrides.
+parameters and command-line overrides.
+
+The command `react-native rnx-bundle` is meant to be a drop-in replacement for
+`react-native bundle`. If `rnx-bundle` ever becomes widely accepted, we will
+work on upstreaming it to `@react-native-community/cli`, along with supporting
+libraries for package configuration and Metro plugins.
+
+TODO: add support for --transformer (will this conflict with --tree-shake?)
 
 ### Example Commands
 
@@ -33,33 +40,26 @@ yarn react-native rnx-bundle
 ```
 
 ```bash
-yarn react-native rnx-bundle --platform ios --dev false --minify true
+yarn react-native rnx-bundle --entry-file src/index.ts --bundle-output main.jsbundle --platform ios --dev false --minify true
 ```
 
-```bash
-yarn react-native rnx-bundle --bundle-prefix test-app --tree-shake true
-```
-
-### Example Configuration
+### Example Configuration (Optional)
 
 ```json
 {
   "rnx-kit": {
     "bundle": {
-      "entryPath": "src/index.ts",
-      "distPath": "dist",
-      "assetsPath": "dist",
-      "bundlePrefix": "main",
+      "entryFile": "entry.js",
+      "assetsDest": "dist",
       "detectCyclicDependencies": true,
       "detectDuplicateDependencies": {
         "ignoredModules": ["react-is"]
       },
       "typescriptValidation": true,
-      "treeShake": true,
       "targets": ["ios", "android", "windows", "macos"],
       "platforms": {
         "android": {
-          "assetsPath": "dist/res"
+          "assetsDest": "dist/res"
         },
         "macos": {
           "typescriptValidation": false
@@ -70,33 +70,56 @@ yarn react-native rnx-bundle --bundle-prefix test-app --tree-shake true
 }
 ```
 
+### Bundle Defaults
+
+When certain parameters aren't specified in configuration or on the
+command-line, they are explicitly set to default values.
+
+| Parameter                   | Default Value                                                                                 |
+| --------------------------- | --------------------------------------------------------------------------------------------- |
+| entryFile                   | "index.js"                                                                                    |
+| bundleOutput                | "index.<`platform`>.bundle" (Windows, Android), or "index.<`platform`>.jsbundle" (iOS, MacOS) |
+| detectCyclicDependencies    | `true`                                                                                        |
+| detectDuplicateDependencies | `true`                                                                                        |
+| typescriptValidation        | `true`                                                                                        |
+| treeShake                   | `false`                                                                                       |
+
+Other parameters have implicit defaults, buried deep in Metro or its
+dependencies.
+
 ### Command-Line Overrides
 
 | Override                                                                           | Description                                                                                                                                            |
 | ---------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| --id [id]                                                                          | Target bundle definition. This is only needed when the kit configuration has multiple bundle definitions.                                              |
-| --platform [`ios` &#124; `android` &#124; `windows` &#124; `win32` &#124; `macos`] | Target platform. When not given, all platforms in the kit configuration are bundled.                                                                   |
-| --entry-path [file]                                                                | Path to the root JavaScript file, either absolute or relative to the kit package.                                                                      |
-| --dist-path [path]                                                                 | Path where the bundle is written, either absolute or relative to the kit package.                                                                      |
-| --assets-path [path]                                                               | Path where bundle assets like images are written, either absolute or relative to the kit package.                                                      |
-| --bundle-prefix [prefix]                                                           | Bundle file prefix. This is followed by the platform and bundle file extension.                                                                        |
-| --bundle-encoding [`utf8` &#124; `utf16le` &#124; `ascii`]                         | [Character encoding](https://nodejs.org/api/buffer.html#buffer_buffers_and_character_encodings) to use when writing the bundle file.                   |
+| --id [id]                                                                          | Target bundle definition. This is only needed when the rnx-kit configuration has multiple bundle definitions.                                          |
+| --entry-file [file]                                                                | Path to the root JavaScript or TypeScript file, either absolute or relative to the package.                                                            |
+| --platform [`ios` &#124; `android` &#124; `windows` &#124; `win32` &#124; `macos`] | Target platform. When not given, all platforms in the rnx-kit configuration are bundled.                                                               |
 | --dev [boolean]                                                                    | If false, warnings are disabled and the bundle is minified (default: true).                                                                            |
 | --minify [boolean]                                                                 | Controls whether or not the bundle is minified. Disabling minification is useful for test builds.                                                      |
-| --tree-shake [boolean]                                                             | Controls whether or not the bundle is tree shaken. Enabling it turns on dead-code elimination, potentially making the bundle smaller.                  |
+| --bundle-output [path]                                                             | Path to the output bundle file, either absolute or relative to the package.                                                                            |
+| --bundle-encoding [`utf8` &#124; `utf16le` &#124; `ascii`]                         | [Character encoding](https://nodejs.org/api/buffer.html#buffer_buffers_and_character_encodings) to use when writing the bundle file.                   |
 | --max-workers [number]                                                             | Specifies the maximum number of parallel worker threads to use for transforming files. This defaults to the number of cores available on your machine. |
-| --sourcemap-output [string]                                                        | Path where the bundle source map is written, either absolute or relative to the dist-path.                                                             |
+| --sourcemap-output [string]                                                        | Path where the bundle source map is written, either absolute or relative to the package.                                                               |
 | --sourcemap-sources-root [string]                                                  | Path to use when relativizing file entries in the bundle source map.                                                                                   |
+| --assets-dest [path]                                                               | Path where bundle assets like images are written, either absolute or relative to the package. If not given, assets are ignored.                        |
+| --tree-shake [boolean]                                                             | Enable tree shaking to remove unused code and reduce the bundle size.                                                                                  |
 | --reset-cache                                                                      | Reset the Metro cache.                                                                                                                                 |
 | --config [string]                                                                  | Path to the Metro configuration file.                                                                                                                  |
 | -h, --help                                                                         | Show usage information.                                                                                                                                |
 
 ## Start a Bundle Server
 
-Start a bundle server for an application using
-[Metro](https://facebook.github.io/metro). The server is controlled by
+Start a bundle server for a package using
+[Metro](https://facebook.github.io/metro). The bundle server uses optional
 [configuration](https://github.com/microsoft/rnx-kit/tree/main/packages/config)
-and optional command-line overrides.
+parameters and command-line overrides.
+
+The command `react-native rnx-start` is meant to be a drop-in replacement for
+`react-native start`. If `rnx-start` ever becomes widely accepted, we will work
+on upstreaming it to `@react-native-community/cli`, along with supporting
+libraries for package configuration and Metro plugins.
+
+TODO: add support for --transformer (will this conflict with --tree-shake?)
 
 ### Example Commands
 
@@ -127,28 +150,33 @@ yarn react-native rnx-start --host localhost --port 8812
 }
 ```
 
+### Server Defaults
+
+If the server configuration is not defined, it is implicitly created at runtime
+from the bundle configuration (or its [defaults](#bundle-defaults)).
+
 ### Command-Line Overrides
 
-| Override                            | Description                                                                                                                                                                      |
-| ----------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| --host [string]                     | Host name or address to bind when listening for incoming server requests. When not given, requests from all addresses are accepted.                                              |
-| --port [number]                     | Host port to use when listening for incoming server requests.                                                                                                                    |
-| --project-root [path]               | Path to the root of your react-native experience project. The bundle server uses this root path to resolve all web requests.                                                     |
-| --watch-folders [paths]             | Additional folders which will be added to the file-watch list. Comma-separated. By default, Metro watches all project files, and triggers a bundle-reload when anything changes. |
-| --asset-plugins [list]              | Additional asset plugins to be used by the Metro Babel transformer. Comma-separated list containing plugin modules and/or absolute paths to plugin packages.                     |
-| --source-exts [list]                | Additional source-file extensions to include when generating bundles. Comma-separated list, excluding the leading dot.                                                           |
-| --max-workers [number]              | Specifies the maximum number of parallel worker threads to use for transforming files. This defaults to the number of cores available on your machine.                           |
-| --custom-log-reporter-path [string] | Path to a JavaScript file which exports a Metro 'TerminalReporter' function. This replaces the default reporter, which writes all messages to the Metro console.                 |
-| --https                             | Use a secure (https) web server. When not specified, an insecure (http) web server is used.                                                                                      |
-| --key [path]                        | Path to a custom SSL private key file to use for secure (https) communication.                                                                                                   |
-| --cert [path]                       | Path to a custom SSL certificate file to use for secure (https) communication.                                                                                                   |
-| --reset-cache                       | Reset the Metro cache.                                                                                                                                                           |
-| --config [string]                   | Path to the Metro configuration file.                                                                                                                                            |
-| --no-interactive                    | Disables interactive mode.                                                                                                                                                       |
+| Override                            | Description                                                                                                                                                      |
+| ----------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| --port [number]                     | Host port to use when listening for incoming server requests.                                                                                                    |
+| --host [string]                     | Host name or address to bind when listening for incoming server requests. When not given, requests from all addresses are accepted.                              |
+| --projectRoot [path]                | Path to the root of your react-native project. The bundle server uses this root path to resolve all web requests.                                                |
+| --watchFolders [paths]              | Additional folders which will be added to the file-watch list. Comma-separated. By default, Metro watches all project files.                                     |
+| --assetPlugins [list]               | Additional asset plugins to be used by the Metro Babel transformer. Comma-separated list containing plugin module names or absolute paths to plugin packages.    |
+| --sourceExts [list]                 | Additional source-file extensions to include when generating bundles. Comma-separated list, excluding the leading dot.                                           |
+| --max-workers [number]              | Specifies the maximum number of parallel worker threads to use for transforming files. This defaults to the number of cores available on your machine.           |
+| --reset-cache                       | Reset the Metro cache.                                                                                                                                           |
+| --custom-log-reporter-path [string] | Path to a JavaScript file which exports a Metro `TerminalReporter` function. This replaces the default reporter, which writes all messages to the Metro console. |
+| --https                             | Use a secure (https) web server. When not specified, an insecure (http) web server is used.                                                                      |
+| --key [path]                        | Path to a custom SSL private key file to use for secure (https) communication.                                                                                   |
+| --cert [path]                       | Path to a custom SSL certificate file to use for secure (https) communication.                                                                                   |
+| --config [string]                   | Path to the Metro configuration file.                                                                                                                            |
+| --no-interactive                    | Disables interactive mode.                                                                                                                                       |
 
-## Manage Kit Dependencies
+## Manage Dependencies
 
-Manage your `kit` package's dependencies.
+Manage your package's dependencies.
 
 ```
 $ yarn react-native rnx-dep-check [options] [/path/to/package.json]
@@ -158,10 +186,10 @@ Refer to
 [@rnx-kit/dep-check](https://github.com/microsoft/rnx-kit/tree/main/packages/dep-check)
 for details.
 
-## Generate a Third-Party Notice for a Kit
+## Generate a Third-Party Notice for a Package
 
 Generate a 3rd-party notice, which is an aggregation of all the LICENSE files
-from your `kit` package's dependencies.
+from your package's dependencies.
 
 > NOTE: A 3rd-party notice is a **legal document**. You are solely responsble
 > for its content, even if you use `@rnx-kit` to assist you in generating it.
@@ -172,15 +200,16 @@ from your `kit` package's dependencies.
 $ yarn react-native rnx-write-third-party-notices [options]
 ```
 
-| Option                    | Description                                                                                                                     |
-| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| --source-map-file [file]  | The source map file associated with the `kit` package's entry file. This source map eventually leads to all `kit` dependencies. |
-| --output-file [file]      | The path to use when writing the 3rd-party notice file.                                                                         |
-| --root-path [path]        | The root of the repo. This is the starting point for finding each module in the source map dependency graph.                    |
-| --ignore-scopes [string]  | Comma-separated list of `npm` scopes to ignore when traversing the source map dependency graph.                                 |
-| --ignore-modules [string] | Comma-separated list of modules to ignore when traversing the source map dependency graph.                                      |
-| --preamble-text [string]  | A string to prepend to the start of the 3rd-party notice.                                                                       |
-| --additional-text [path]  | A string to append to the end of the 3rd-party notice.                                                                          |
+| Option                    | Description                                                                                                                                    |
+| ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| --source-map-file [file]  | The source map file associated with the package's entry file. This source map eventually leads to all package dependencies and their licenses. |
+| --output-file [file]      | The path to use when writing the 3rd-party notice file.                                                                                        |
+| --root-path [path]        | The root of the repo. This is the starting point for finding each module in the source map dependency graph.                                   |
+| --ignore-scopes [string]  | Comma-separated list of `npm` scopes to ignore when traversing the source map dependency graph.                                                |
+| --ignore-modules [string] | Comma-separated list of modules to ignore when traversing the source map dependency graph.                                                     |
+| --preamble-text [string]  | A string to prepend to the start of the 3rd-party notice.                                                                                      |
+| --additional-text [path]  | A string to append to the end of the 3rd-party notice.                                                                                         |
+| --json                    | Format the 3rd-party notice file as JSON instead of text.                                                                                      |
 
 ## Clean a React Native Project
 

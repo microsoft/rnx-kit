@@ -1,27 +1,26 @@
+import type { TransformProfile } from "metro-babel-transformer";
 import type { Config as CLIConfig } from "@react-native-community/cli-types";
 import { BundleArgs, loadMetroConfig } from "@rnx-kit/metro-service";
-import { extendObjectArray } from "@rnx-kit/tools-language/properties";
 import type { AllPlatforms } from "@rnx-kit/tools-react-native/platform";
-import { getKitBundleConfigs } from "./bundle/kit-config";
+import { getCliPlatformBundleConfigs } from "./bundle/kit-config";
 import { metroBundle } from "./bundle/metro";
-import { applyKitBundleConfigOverrides } from "./bundle/overrides";
-import type { BundleConfig, KitBundleConfig } from "./bundle/types";
+import { applyBundleConfigOverrides } from "./bundle/overrides";
 
 export type CLIBundleOptions = {
   id?: string;
+  entryFile?: string;
   platform?: AllPlatforms;
-  entryPath?: string;
-  distPath?: string;
-  assetsPath?: string;
-  bundlePrefix?: string;
-  bundleEncoding?: BundleArgs["bundleEncoding"];
   dev: boolean;
   minify?: boolean;
-  experimentalTreeShake?: boolean; // Deprecated
-  treeShake?: boolean;
+  bundleOutput?: string;
+  bundleEncoding?: BundleArgs["bundleEncoding"];
   maxWorkers?: number;
   sourcemapOutput?: string;
   sourcemapSourcesRoot?: string;
+  sourcemapUseAbsolutePath?: boolean;
+  assetsDest?: string;
+  treeShake?: boolean;
+  unstableTransformProfile?: TransformProfile;
   resetCache?: boolean;
   config?: string;
 };
@@ -31,39 +30,22 @@ export async function rnxBundle(
   cliConfig: CLIConfig,
   cliOptions: CLIBundleOptions
 ): Promise<void> {
-  // experimentalTreeShake is deprecated. Only use it when treeShake is not specified.
-  if (cliOptions.experimentalTreeShake !== undefined) {
-    console.warn(
-      "Warning: The command-line parameter '--experimental-tree-shake' is deprecated. Use `--tree-shake` instead."
-    );
-    if (cliOptions.treeShake === undefined) {
-      cliOptions.treeShake = cliOptions.experimentalTreeShake;
-    }
-    delete cliOptions.experimentalTreeShake;
-  }
-
   const metroConfig = await loadMetroConfig(cliConfig, cliOptions);
 
-  const kitBundleConfigs = getKitBundleConfigs(
+  const bundleConfigs = getCliPlatformBundleConfigs(
     cliOptions.id,
     cliOptions.platform
   );
-  if (!kitBundleConfigs) {
-    return Promise.resolve();
-  }
 
-  applyKitBundleConfigOverrides(cliOptions, kitBundleConfigs);
-
-  const bundleConfigs = extendObjectArray<KitBundleConfig, BundleConfig>(
-    kitBundleConfigs,
-    {
-      dev: cliOptions.dev,
-      minify: cliOptions.minify,
-    }
-  );
+  applyBundleConfigOverrides(cliOptions, bundleConfigs);
 
   for (const bundleConfig of bundleConfigs) {
-    await metroBundle(metroConfig, bundleConfig);
+    await metroBundle(
+      metroConfig,
+      bundleConfig,
+      cliOptions.dev,
+      cliOptions.minify
+    );
   }
 
   return Promise.resolve();

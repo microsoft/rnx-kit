@@ -73,6 +73,11 @@ export type BundleParameters = BundlerPlugins & {
   sourcemapSourcesRoot?: string;
 
   /**
+   * Controls whether or not SourceMapURL is reported as a full path or just a file name.
+   */
+  sourcemapUseAbsolutePath?: boolean;
+
+  /**
    * Path where all bundle assets (strings, images, fonts, sounds, ...) are written.
    * Either absolute, or relative to the package. If not given, assets are ignored.
    */

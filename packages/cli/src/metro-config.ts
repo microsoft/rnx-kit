@@ -1,3 +1,4 @@
+import type { TypeScriptValidationOptions } from "@rnx-kit/config";
 import {
   CyclicDependencies,
   PluginOptions as CyclicDetectorOptions,
@@ -15,7 +16,6 @@ import { AllPlatforms } from "@rnx-kit/tools-react-native/platform";
 import { Project } from "@rnx-kit/typescript-service";
 
 import { createProjectCache } from "./typescript/project-cache";
-import type { TypeScriptValidationOptions } from "./types";
 
 import type { DeltaResult, Graph } from "metro";
 import type { InputConfigT, SerializerConfigT } from "metro-config";
@@ -28,10 +28,14 @@ import type { InputConfigT, SerializerConfigT } from "metro-config";
  * Source file in node_modules (external packages) are ignored.
  *
  * @param options TypeScript validation options
+ * @param print Optional function to use when printing status messages to the Metro console
  * @returns Hook function
  */
-function createSerializerHook(options: TypeScriptValidationOptions) {
-  const projectCache = createProjectCache(options.print);
+function createSerializerHook(
+  options: TypeScriptValidationOptions,
+  print?: (message: string) => void
+) {
+  const projectCache = createProjectCache(print);
 
   const patternNodeModules = /[/\\]node_modules[/\\]/;
   const excludeNodeModules = (p: string) => !patternNodeModules.test(p);
@@ -116,13 +120,15 @@ const emptySerializerHook = (_graph: Graph, _delta: DeltaResult): void => {
  * @param detectDuplicateDependencies When true, duplicate dependency checking is enabled with a default set of options. Otherwise, the object allows for fine-grained control over the detection process.
  * @param typescriptValidation When true, TypeScript type-checking is enabled with a default set of options. Otherwise, the object allows for fine-grained control over the type-checking process.
  * @param treeShake When true, tree shaking is enabled.
+ * @param print Optional function to use when printing status messages to the Metro console
  */
 export function customizeMetroConfig(
   metroConfigReadonly: InputConfigT,
   detectCyclicDependencies: boolean | CyclicDetectorOptions,
   detectDuplicateDependencies: boolean | DuplicateDetectorOptions,
   typescriptValidation: boolean | TypeScriptValidationOptions,
-  treeShake: boolean
+  treeShake: boolean,
+  print?: (message: string) => void
 ): void {
   //  We will be making changes to the Metro configuration. Coerce from a
   //  type with readonly props to a type where the props are writeable.
@@ -163,9 +169,9 @@ export function customizeMetroConfig(
 
   let hook = emptySerializerHook;
   if (typeof typescriptValidation === "object") {
-    hook = createSerializerHook(typescriptValidation);
+    hook = createSerializerHook(typescriptValidation, print);
   } else if (typescriptValidation !== false) {
-    hook = createSerializerHook({});
+    hook = createSerializerHook({}, print);
   }
   metroConfig.serializer.experimentalSerializerHook = hook;
 }
