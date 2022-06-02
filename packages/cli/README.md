@@ -202,14 +202,14 @@ $ yarn react-native rnx-write-third-party-notices [options]
 
 | Option                    | Description                                                                                                                                    |
 | ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| --source-map-file [file]  | The source map file associated with the package's entry file. This source map eventually leads to all package dependencies and their licenses. |
-| --output-file [file]      | The path to use when writing the 3rd-party notice file.                                                                                        |
 | --root-path [path]        | The root of the repo. This is the starting point for finding each module in the source map dependency graph.                                   |
+| --source-map-file [file]  | The source map file associated with the package's entry file. This source map eventually leads to all package dependencies and their licenses. |
+| --json                    | Format the 3rd-party notice file as JSON instead of text.                                                                                      |
+| --output-file [file]      | The path to use when writing the 3rd-party notice file.                                                                                        |
 | --ignore-scopes [string]  | Comma-separated list of `npm` scopes to ignore when traversing the source map dependency graph.                                                |
 | --ignore-modules [string] | Comma-separated list of modules to ignore when traversing the source map dependency graph.                                                     |
 | --preamble-text [string]  | A string to prepend to the start of the 3rd-party notice.                                                                                      |
 | --additional-text [path]  | A string to append to the end of the 3rd-party notice.                                                                                         |
-| --json                    | Format the 3rd-party notice file as JSON instead of text.                                                                                      |
 
 ## Clean a React Native Project
 

@@ -201,19 +201,26 @@ module.exports = {
       func: rnxWriteThirdPartyNotices,
       options: [
         {
+          name: "--root-path <path>",
+          description:
+            "The root of the repo. This is the starting point for finding each module in the source map dependency graph.",
+        },
+        {
           name: "--source-map-file <file>",
           description:
             "The source map file associated with the package's entry file. This source map eventually leads to all package dependencies and their licenses.",
         },
         {
+          name: "--json",
+          description:
+            "Format the 3rd-party notice file as JSON instead of text.",
+          default: false,
+          parse: parseBoolean,
+        },
+        {
           name: "--output-file [file]",
           description:
             "The path to use when writing the 3rd-party notice file.",
-        },
-        {
-          name: "--root-path <path>",
-          description:
-            "The root of the repo. This is the starting point for finding each module in the source map dependency graph.",
         },
         {
           name: "--ignore-scopes [string]",
@@ -233,13 +240,6 @@ module.exports = {
         {
           name: "--additional-text [path]",
           description: "A string to append to the end of the 3rd-party notice.",
-        },
-        {
-          name: "--json",
-          description:
-            "Format the 3rd-party notice file as JSON instead of text.",
-          default: false,
-          parse: parseBoolean,
         },
       ],
     },
