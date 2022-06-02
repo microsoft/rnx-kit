@@ -1,5 +1,5 @@
 import { normalizePath } from "@rnx-kit/tools-node";
-import type { CustomResolver } from "metro-resolver";
+import type { CustomResolver, ResolutionContext } from "metro-resolver";
 import {
   getMetroResolver,
   remapReactNativeModule,
@@ -14,7 +14,12 @@ export function makeResolver({
   const metroResolver = getMetroResolver();
   const remappers = [remapModule, remapReactNativeModule, resolveModulePath];
 
-  const symlinkResolver: MetroResolver = (context, moduleName, platform) => {
+  const symlinkResolver = (
+    context: ResolutionContext,
+    moduleName: string,
+    platform: string | null,
+    requestedModuleName?: string
+  ) => {
     if (!platform) {
       throw new Error("No platform was specified");
     }
@@ -23,6 +28,19 @@ export function makeResolver({
     const resolveRequest = context.resolveRequest;
     if (resolveRequest === symlinkResolver) {
       delete context.resolveRequest;
+
+      // If the module was redirected using the `browser` field, we need to let
+      // Metro handle this without interfering.
+      if (
+        typeof requestedModuleName === "string" &&
+        requestedModuleName !== moduleName
+      ) {
+        try {
+          return resolve(context, requestedModuleName, platform, null);
+        } finally {
+          context.resolveRequest = resolveRequest;
+        }
+      }
     } else if (resolveRequest) {
       resolve = resolveRequest;
     }
@@ -46,7 +64,7 @@ export function makeResolver({
       }
     }
   };
-  return symlinkResolver;
+  return symlinkResolver as MetroResolver;
 }
 
 makeResolver.remapImportPath = remapImportPath;
