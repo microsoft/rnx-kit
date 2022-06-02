@@ -33,6 +33,8 @@ export function makeResolver({
       // is set and the target package uses the `browser` field to redirect
       // modules. If detected, we need to unset `resolveRequest` and retry with
       // Metro's resolver to avoid interference.
+      //
+      // Ref: https://github.com/facebook/metro/blob/v0.67.0/packages/metro-resolver/src/resolve.js#L59
       if (
         typeof requestedModuleName === "string" &&
         requestedModuleName !== moduleName
