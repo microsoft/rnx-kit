@@ -29,8 +29,10 @@ export function makeResolver({
     if (resolveRequest === symlinkResolver) {
       delete context.resolveRequest;
 
-      // If the module was redirected using the `browser` field, we need to let
-      // Metro handle this without interfering.
+      // Metro enters a different code path than it should when `resolveRequest`
+      // is set and the target package uses the `browser` field to redirect
+      // modules. If detected, we need to unset `resolveRequest` and retry with
+      // Metro's resolver to avoid interference.
       if (
         typeof requestedModuleName === "string" &&
         requestedModuleName !== moduleName
