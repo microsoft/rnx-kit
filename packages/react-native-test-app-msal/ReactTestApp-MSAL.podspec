@@ -18,7 +18,7 @@ Pod::Spec.new do |s|
   s.author    = { package['author']['name'] => package['author']['email'] }
   s.license   = package['license']
   s.homepage  = package['homepage']
-  s.source    = { :git => package['repository']['url'], :tag => "#{package['name']}_v#{version}" }
+  s.source    = { :git => package['repository']['url'], :tag => "#{package['name']}@#{version}" }
   s.summary   = package['description']
 
   s.ios.deployment_target = '14.0'
