@@ -284,7 +284,7 @@ PODS:
     - MSAL
     - RNXAuth
   - ReactTestApp-Resources (1.0.0-dev)
-  - RNXAuth (0.1.0):
+  - RNXAuth (0.1.1):
     - React-Core
   - SwiftLint (0.46.2)
   - Yoga (1.14.0)
@@ -440,7 +440,7 @@ SPEC CHECKSUMS:
   ReactTestApp-DevSupport: 1075d13c9f78457e4e7365dffb30f131e5b16a5b
   ReactTestApp-MSAL: 01ce59a7dccd3b099f6de76d1bc0b1ea9b24d88a
   ReactTestApp-Resources: 74a1cf509f4e7962b16361ea4e73cba3648fff5d
-  RNXAuth: c9e39e4206fd4c5e11144951d7955051da7c35ca
+  RNXAuth: 60c26d03e192279f9880da69e2876cc90786769d
   SwiftLint: 6bc52a21f0fd44cab9aa2dc8e534fb9f5e3ec507
   Yoga: e7dc4e71caba6472ff48ad7d234389b91dadc280
 
