@@ -48,7 +48,7 @@ export function makeResolver({
     try {
       // If a module was excluded, `_getEmptyModule()` will be called with no
       // platform set. We should let Metro handle this without interfering. See
-      // https://github.com/facebook/metro/blob/e7419900d2e063f2d531313f810d18c487f807f8/packages/metro/src/node-haste/DependencyGraph/ModuleResolution.js#L97
+      // https://github.com/facebook/metro/blob/v0.71.0/packages/metro/src/node-haste/DependencyGraph/ModuleResolution.js#L97
       if (!platform) {
         return resolve(context, moduleName, platform, null);
       }
