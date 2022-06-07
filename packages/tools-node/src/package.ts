@@ -1,7 +1,7 @@
 import { pickValues } from "@rnx-kit/tools-language/properties";
 import findUp from "find-up";
-import fs from "fs";
-import path from "path";
+import * as fs from "fs";
+import * as path from "path";
 import pkgDir from "pkg-dir";
 import pkgUp from "pkg-up";
 
@@ -187,11 +187,17 @@ export type FindPackageDependencyOptions = {
   startDir?: string;
 
   /**
-   * Optional flag controlling whether or symlinks can be found. Defaults to `true`.
+   * Optional flag controlling whether symlinks can be found. Defaults to `true`.
    * When `false`, and the package dependency directory is a symlink, it will not
    * be found.
    */
   allowSymlinks?: boolean;
+
+  /**
+   * Optional flag controlling whether to resolve symlinks. Defaults to `false`.
+   * Note that this flag has no effect if `allowSymlinks` is `false`.
+   */
+  resolveSymlinks?: boolean;
 };
 
 /**
@@ -210,7 +216,7 @@ export function findPackageDependencyDir(
 ): string | undefined {
   const pkgName =
     typeof ref === "string" ? ref : path.join(ref.scope ?? "", ref.name);
-  return findUp.sync(path.join("node_modules", pkgName), {
+  const packageDir = findUp.sync(path.join("node_modules", pkgName), {
     ...pickValues(
       options ?? {},
       ["startDir", "allowSymlinks"],
@@ -218,4 +224,11 @@ export function findPackageDependencyDir(
     ),
     type: "directory",
   });
+  if (!packageDir || !options?.resolveSymlinks) {
+    return packageDir;
+  }
+
+  return fs.lstatSync(packageDir).isSymbolicLink()
+    ? path.resolve(path.dirname(packageDir), fs.readlinkSync(packageDir))
+    : packageDir;
 }

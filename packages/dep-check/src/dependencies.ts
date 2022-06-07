@@ -4,7 +4,6 @@ import { error, warn } from "@rnx-kit/console";
 import type { PackageManifest } from "@rnx-kit/tools-node/package";
 import {
   findPackageDependencyDir,
-  parsePackageRef,
   readPackage,
 } from "@rnx-kit/tools-node/package";
 import { concatVersionRanges } from "./helpers";
@@ -53,9 +52,9 @@ export function visitDependencies(
 
     visited.add(dependency);
 
-    const packageRef = parsePackageRef(dependency);
-    const packageDir = findPackageDependencyDir(packageRef, {
+    const packageDir = findPackageDependencyDir(dependency, {
       startDir: projectRoot,
+      resolveSymlinks: true,
     });
     if (!packageDir) {
       warn(`Unable to resolve module '${dependency}'`);
