@@ -10,7 +10,7 @@
     "lint": "rnx-kit-scripts lint",
     "test": "react-native rnx-test --platform ios",
     "bundle": "react-native rnx-bundle",
-    "bundle+esbuild": "react-native rnx-bundle --bundle-prefix 'main+esbuild' --tree-shake",
+    "bundle+esbuild": "react-native rnx-bundle --id 'main+esbuild'",
     "bundle:android": "react-native rnx-bundle --platform android",
     "bundle:ios": "react-native rnx-bundle --platform ios",
     "bundle:macos": "react-native rnx-bundle --platform macos",
@@ -60,30 +60,74 @@
   "rnx-kit": {
     "reactNativeVersion": "^0.66",
     "kitType": "app",
-    "bundle": {
-      "entryPath": "src/index.ts",
-      "distPath": "dist",
-      "assetsPath": "dist",
-      "bundlePrefix": "main",
-      "detectCyclicDependencies": true,
-      "detectDuplicateDependencies": {
-        "ignoredModules": [
-          "react-is"
-        ]
+    "bundle": [
+      {
+        "id": "main",
+        "entryFile": "src/index.ts",
+        "assetsDest": "dist",
+        "detectCyclicDependencies": true,
+        "detectDuplicateDependencies": {
+          "ignoredModules": [
+            "react-is"
+          ]
+        },
+        "typescriptValidation": true,
+        "treeShake": false,
+        "targets": [
+          "android",
+          "ios",
+          "windows"
+        ],
+        "platforms": {
+          "android": {
+            "bundleOutput": "dist/main.android.bundle",
+            "sourcemapOutput": "dist/main.android.bundle.map",
+            "assetsDest": "dist/res"
+          },
+          "ios": {
+            "bundleOutput": "dist/main.ios.jsbundle",
+            "sourcemapOutput": "dist/main.ios.jsbundle.map"
+          },
+          "windows": {
+            "bundleOutput": "dist/main.windows.bundle",
+            "sourcemapOutput": "dist/main.windows.bundle.map"
+          }
+        }
       },
-      "typescriptValidation": true,
-      "treeShake": false,
-      "targets": [
-        "android",
-        "ios",
-        "windows"
-      ],
-      "platforms": {
-        "android": {
-          "assetsPath": "dist/res"
+      {
+        "id": "main+esbuild",
+        "entryFile": "src/index.ts",
+        "assetsDest": "dist",
+        "detectCyclicDependencies": true,
+        "detectDuplicateDependencies": {
+          "ignoredModules": [
+            "react-is"
+          ]
+        },
+        "typescriptValidation": true,
+        "treeShake": true,
+        "targets": [
+          "android",
+          "ios",
+          "windows"
+        ],
+        "platforms": {
+          "android": {
+            "bundleOutput": "dist/main+esbuild.android.bundle",
+            "sourcemapOutput": "dist/main+esbuild.android.bundle.map",
+            "assetsDest": "dist/res"
+          },
+          "ios": {
+            "bundleOutput": "dist/main+esbuild.ios.jsbundle",
+            "sourcemapOutput": "dist/main+esbuild.ios.jsbundle.map"
+          },
+          "windows": {
+            "bundleOutput": "dist/main+esbuild.windows.bundle",
+            "sourcemapOutput": "dist/main+esbuild.windows.bundle.map"
+          }
         }
       }
-    },
+    ],
     "server": {
       "projectRoot": "src",
       "detectDuplicateDependencies": {

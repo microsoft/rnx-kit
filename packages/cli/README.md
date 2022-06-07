@@ -31,8 +31,6 @@ The command `react-native rnx-bundle` is meant to be a drop-in replacement for
 work on upstreaming it to `@react-native-community/cli`, along with supporting
 libraries for package configuration and Metro plugins.
 
-TODO: add support for --transformer (will this conflict with --tree-shake?)
-
 ### Example Commands
 
 ```bash
@@ -118,8 +116,6 @@ The command `react-native rnx-start` is meant to be a drop-in replacement for
 `react-native start`. If `rnx-start` ever becomes widely accepted, we will work
 on upstreaming it to `@react-native-community/cli`, along with supporting
 libraries for package configuration and Metro plugins.
-
-TODO: add support for --transformer (will this conflict with --tree-shake?)
 
 ### Example Commands
 
