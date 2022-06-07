@@ -1,7 +1,6 @@
 /* jshint esversion: 8, node: true */
 // @ts-check
 
-const fs = require("fs");
 const path = require("path");
 
 /**
@@ -63,17 +62,10 @@ function defaultWatchFolders(projectRoot) {
  */
 function resolveModule(name, startDir) {
   const { findPackageDependencyDir } = require("@rnx-kit/tools-node/package");
-  const result = findPackageDependencyDir(name, {
+  return findPackageDependencyDir(name, {
     startDir,
-    allowSymlinks: true,
+    resolveSymlinks: true,
   });
-  if (!result) {
-    return undefined;
-  }
-
-  return fs.lstatSync(result).isSymbolicLink()
-    ? path.resolve(path.dirname(result), fs.readlinkSync(result))
-    : result;
 }
 
 /**

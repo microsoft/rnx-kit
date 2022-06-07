@@ -5,19 +5,22 @@ import {
   readPackage,
 } from "@rnx-kit/tools-node";
 import { getAvailablePlatforms } from "@rnx-kit/tools-react-native";
-import * as fs from "fs";
 import * as path from "path";
 import type { MetroResolver, ModuleResolver } from "./types";
 
-function resolveFrom(moduleName: string, startDir: string): string {
-  const p = findPackageDependencyDir(moduleName, { startDir });
+function resolveFrom(moduleName: string, startDir: string): string | undefined {
+  return findPackageDependencyDir(moduleName, {
+    startDir,
+    resolveSymlinks: true,
+  });
+}
+
+function ensureResolveFrom(moduleName: string, startDir: string): string {
+  const p = resolveFrom(moduleName, startDir);
   if (!p) {
     throw new Error(`Cannot find module '${moduleName}'`);
   }
-
-  return fs.lstatSync(p).isSymbolicLink()
-    ? path.resolve(path.dirname(p), fs.readlinkSync(p))
-    : p;
+  return p;
 }
 
 /**
@@ -26,16 +29,19 @@ function resolveFrom(moduleName: string, startDir: string): string {
  */
 export function getMetroResolver(fromDir = process.cwd()): MetroResolver {
   try {
-    const rnPath = resolveFrom("react-native", fromDir);
-    const rncliPath = resolveFrom("@react-native-community/cli", rnPath);
+    const rnPath = ensureResolveFrom("react-native", fromDir);
+    const rncliPath = ensureResolveFrom("@react-native-community/cli", rnPath);
 
     const { dependencies = {} } = readPackage(rncliPath);
     const metroResolverSearchPath =
       "@react-native-community/cli-plugin-metro" in dependencies
-        ? resolveFrom("@react-native-community/cli-plugin-metro", rncliPath)
+        ? ensureResolveFrom(
+            "@react-native-community/cli-plugin-metro",
+            rncliPath
+          )
         : rncliPath;
 
-    const metroResolverPath = resolveFrom(
+    const metroResolverPath = ensureResolveFrom(
       "metro-resolver",
       metroResolverSearchPath
     );
@@ -76,6 +82,10 @@ export const resolveModulePath: ModuleResolver = (
 
   const pkgName = ref.scope ? `${ref.scope}/${ref.name}` : ref.name;
   const pkgRoot = resolveFrom(pkgName, originModulePath);
+  if (!pkgRoot) {
+    return moduleName;
+  }
+
   const replaced = moduleName.replace(pkgName, pkgRoot);
   const relativePath = path.relative(path.dirname(originModulePath), replaced);
   return relativePath.startsWith(".")
