@@ -190,10 +190,10 @@ You can override default using command-line parameters, either in your terminal
 or in package scripts:
 
 ```sh
-react-native rnx-bundle --entryFile test.js
+react-native rnx-bundle --entry-file test.js
 ```
 
-Now its time to convert your `rnx-bundle` commands into app defaults. Use the
+Now it's time to convert your `rnx-bundle` commands into app defaults. Use the
 example above as a guide. Refer to the
 [BundleConfig schema](/docs/tools/config#bundleconfig-inherits-bundleparameters)
 for a complete list of configuration properties.
@@ -318,7 +318,7 @@ You should fix these now, or plan on fixing them soon. To defer until later,
 configure the bundler so it reports the errors without failing. Set
 `throwOnError` to `false` in the `typescriptValidation` configuration object.
 It's also a good idea to open a new issue for tracking the type errors, and as a
-reminder to re-enable `throwOnError`. In the mean time, keeping the errors
+reminder to re-enable `throwOnError`. In the meantime, keeping the errors
 visible in the Metro output helps everyone be aware of danger-areas in the app.
 
 **Are you running into duplicate package errors?**
