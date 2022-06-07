@@ -1,5 +1,13 @@
 # Change Log - @rnx-kit/metro-config
 
+## 1.2.33
+
+### Patch Changes
+
+- 4674e761: Enable `resolveSymlinks` and remove dupe code
+- Updated dependencies [1edb9acd]
+  - @rnx-kit/tools-node@1.3.0
+
 ## 1.2.32
 
 ### Patch Changes

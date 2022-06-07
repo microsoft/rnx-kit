@@ -1,5 +1,13 @@
 # Change Log - @rnx-kit/react-native-test-app-msal
 
+## 1.0.2
+
+### Patch Changes
+
+- aec1f838: Fix git tag format in podspec
+- Updated dependencies [aec1f838]
+  - @rnx-kit/react-native-auth@0.1.2
+
 ## 1.0.1
 
 ### Patch Changes

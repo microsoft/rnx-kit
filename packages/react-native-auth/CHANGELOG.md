@@ -1,5 +1,11 @@
 # @rnx-kit/react-native-auth
 
+## 0.1.2
+
+### Patch Changes
+
+- aec1f838: Rename `acquireToken` to better fit Swift naming conventions
+
 ## 0.1.1
 
 ### Patch Changes

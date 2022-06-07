@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/jest-preset
 
+## 0.1.10
+
+### Patch Changes
+
+- 78a6c4ed: Use publicly exported `loadConfig` if it exists
+
 ## 0.1.1
 
 Wed, 04 Aug 2021 10:08:23 GMT
