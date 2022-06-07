@@ -22,6 +22,9 @@
     "update-readme": ["build"]
   },
   "implicitDependencies": {
+    "packages/eslint-config/*": "*",
+    "packages/eslint-plugin/*": "*",
+    "packages/jest-preset/*": "*",
     "yarn.lock": "*"
   },
   "affected": {

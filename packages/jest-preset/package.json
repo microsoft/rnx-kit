@@ -51,7 +51,10 @@
     ]
   },
   "eslintConfig": {
-    "extends": "@rnx-kit/eslint-config"
+    "extends": "@rnx-kit/eslint-config",
+    "rules": {
+      "@typescript-eslint/ban-ts-comment": "off"
+    }
   },
   "jest": {
     "preset": "@rnx-kit/scripts"
