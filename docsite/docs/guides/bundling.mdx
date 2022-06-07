@@ -47,8 +47,8 @@ module.exports = makeMetroConfig({
 ```
 
 If your app was already using Metro, it may have mappings in its config which
-compensate for Metro's lack of symlink support. The mappings look something like
-this:
+compensate for Metro's lack of symlink support. They probably look something
+like this:
 
 ```js
 const fooLocal = path.resolve(__dirname, "node_modules", "foo");
@@ -96,7 +96,7 @@ iOS developer bundle:
       --platform ios \
       --bundle-output ios/main.jsbundle \
       --sourcemap-output ios/main.jsbundle.map \
-      --assets-dest ios \
+      --assets-dest ios
 
 If your curious about the rest of the command-line parameters, you can find the
 complete list in the
@@ -110,21 +110,23 @@ add type safety and protection from dependency problems. They're helping you
 root out potential bugs in your app. Ignore them for now. A bit later, you'll
 learn what they mean, why they're important, and how you can fix them.
 
-Next, put together an `rnx-start` command for your app. Parameters aren't
-typically needed for this command. However, you should take a look at the
-[CLI server documentation](/docs/tools/cli#command-line-overrides-1) and decide
-for yourself.
+The next step is putting together an `rnx-start` command for your app.
+Parameters aren't typically needed for this command. You should take a look at
+the [CLI server documentation](/docs/tools/cli#command-line-overrides-1) to see
+the full list of command-line parameters, and decide if you need any of them.
+
+Here's an example command which starts a Metro bundle server:
 
     react-native rnx-start
 
-Try it out!
+Try out your `rnx-start` server command!
 
 You might see warnings or errors, as you did when you ran the `rnx-bundle`
 command. Ignore them for now. You'll work through them a bit later.
 
 Assign both `rnx-bundle` and `rnx-start` commands to scripts in your app. A good
-practice is to have one bundle script per platform and an "umbrella" bundle
-script which runs them all.
+practice is to have one bundle script per platform, an "umbrella" bundle script
+which runs them all, and one server command.
 
 ```json title="package.json"
 {
@@ -142,16 +144,16 @@ script which runs them all.
 Now you're getting to the good stuff! :cake:
 
 Your app knows how to bundle itself. It knows which platforms it supports. It
-knows what to name the bundle file, and where to store assets, so the native
-host app can find them at runtime. And it knows how these things vary across
-each platform.
+knows what to name the bundle file, and where to store assets, so that the
+native host app can find them at runtime. And it knows how these things vary
+across each platform.
 
 All of this knowledge is encoded in the command-lines you've written for your
 app.
 
-[App configuration](/docs/tools/config) is a declarative way to express these
-decisions as _defaults_ for how your app is bundled. All the knowledge is
-captured in one easy-to-read format, without duplication.
+[App configuration](/docs/tools/config) is a declarative, structured way to
+express these decisions as _defaults_ for how your app is bundled. All the
+knowledge is captured in one easy-to-read format, without duplication.
 
 Take a look at this example iOS bundling command:
 
@@ -160,7 +162,7 @@ Take a look at this example iOS bundling command:
       --platform ios \
       --bundle-output ios/main.jsbundle \
       --sourcemap-output ios/main.jsbundle.map \
-      --assets-dest ios \
+      --assets-dest ios
 
 Here's what it looks like as app defaults in configuration:
 
@@ -198,10 +200,10 @@ example above as a guide. Refer to the
 [BundleConfig schema](/docs/tools/config#bundleconfig-inherits-bundleparameters)
 for a complete list of configuration properties.
 
-Do the same thing for your `rnx-start` commands, but only if you added
+Do the same thing for your `rnx-start` command, but only if you added
 command-line parameters. Use the
 [ServerConfig schema](/docs/tools/config#serverconfig-inherits-bundlerplugins)
-as a reference. If you don't specify any `ServerConfig`, the server will use
+as a reference. If you don't needing any `ServerConfig`, the server will use
 bundler defaults so you end up serving the same way you bundle.
 
 ## Beyond the Command-Line
@@ -258,8 +260,8 @@ module.exports = {
 ### Duplicate Dependencies
 
 Did you know that your app bundle can have multiple copies of a single package
-in it? Yes, this is a thing that happens. Sometimes, the duplicates are same
-version of the package! :package: :package: :package:
+in it? Yes, this is a thing that happens. Sometimes, the duplicates are even the
+same version of the package! :package: :package: :package:
 
 Clearly, this is bad because the bundle is larger than it needs to be. More
 importantly, though, duplicates _can lead to runtime problems_, especially when
@@ -316,10 +318,11 @@ find flaws, see patterns, and do automated transformations.
 
 You should fix these now, or plan on fixing them soon. To defer until later,
 configure the bundler so it reports the errors without failing. Set
-`throwOnError` to `false` in the `typescriptValidation` configuration object.
-It's also a good idea to open a new issue for tracking the type errors, and as a
-reminder to re-enable `throwOnError`. In the meantime, keeping the errors
-visible in the Metro output helps everyone be aware of danger-areas in the app.
+`throwOnError` to `false` in the `typescriptValidation`
+[configuration object](/docs/tools/config#bundlerplugins). It's also a good idea
+to open a new issue for tracking the type errors, and to remind you to re-enable
+`throwOnError`. In the meantime, keeping the errors visible in the Metro output
+helps everyone be aware of danger-areas in the app.
 
 **Are you running into duplicate package errors?**
 
@@ -332,16 +335,16 @@ design, allowing for a hoisted version and different local versions.
 So what can you do? The goal is to "collapse" the duplicate packages down to a
 single version. That means getting yarn/pnpm to look at all the places a
 duplicate package is named, and decide that one single version can be used to
-satisfy all constraints. That will lead to only one copy being downloaded and
-installed in your repo.
+satisfy all constraints. That will lead to only one copy showing up on the
+filesystem.
 
 Below are some helpful tricks you can try:
 
-- (Easy) Make sure your monorepo packages all depend on the same version of the
-  duplicate package.
+- (Easy) Make sure your packages all depend on the same version of the duplicate
+  package.
 - (Easy) If you are using yarn, run the `yarn-deduplicate` package to collapse
-  away duplicate entries in your yarn.lock file. Surprisingly, these aren't
-  cleaned up automatically.
+  away duplicate entries in your yarn.lock file. These aren't cleaned up
+  automatically as yarn runs.
 - (Hard) In your lock file, find the set of external packages that are pulling
   in the duplicate package. See if you can upgrade or downgrade them so they all
   bring in the same version of the duplicate package. This may not be possible.
@@ -350,11 +353,11 @@ Below are some helpful tricks you can try:
   `react-native`, make sure the semver constraints match. "^17.0.0" and
   "^17.0.2" will cause pnpm to fork the dependency tree to isolate (encapsulate)
   this difference.
-- (Dangerous, Easy). Force yarn/pnpm to use the same version of the duplicate
-  package. yarn has a `resolutions` property which does this. pnpm has a
-  `readPackage` hook which you can use to do this. Both are dangerous because
-  **you can break the packages that depend on the package version you are
-  changing**.
+- (Easy but **Dangerous**). Force yarn/pnpm to use a specific version of the
+  duplicate package whenever they see it, regardless of what is in package.json.
+  yarn has a `resolutions` property which does this. pnpm has a `readPackage`
+  hook which you can use to do this. Both are dangerous because **you can break
+  the packages that depend on the package version you are changing**.
 
 If you can't get rid of the duplicate package, and your app seems to be working,
 you can choose to live with it. Add it to the `ignoredModules` array in the
@@ -370,32 +373,31 @@ Cycles are bad because they can lead to an infinite loop at runtime.
 
 Here are some approaches you can use to fix a cycle:
 
-- If any of the packages live in your repo, you refactor the code to break the
-  cycle.
-- Even if they're all external packages, you can submit a PR, though it may take
-  time to be accepted and published. If you're impatient, you can use
-  `patch-package` while you wait for the PR to land.
-- Try looking for a different package that does roughly what you want.
-- Duplicate some of the code in your own repo, enough for you to be able to
-  break the cycle.
+- If any of the packages live in your repo, refactor them to break the cycle.
+- If they're all external packages, you can submit a PR, though it may take time
+  to be accepted and published. If you're impatient, you can use `patch-package`
+  while you wait for the PR to land.
+- Try looking for a different package, or group of packages, that does roughly
+  what you want.
 
-If none of this is appealing, you can take a closer look at the code involved
-and understand if and how an infinite loop might occur. If you can avoid
-triggering it, then document that in your code, and live with the cycle. Set
-`throwOnError` to `false` in the `detectCyclicDependencies` configuration
-object.
+If none of this is appealing, you can take a closer look at the code involved to
+understand if and how an infinite loop might occur. If you can avoid triggering
+it, then document that in your code, and live with the cycle. Set `throwOnError`
+to `false` in the `detectCyclicDependencies`
+[configuration object](/docs/tools/config#bundlerplugins).
 
 ## Integrating with PRs and Builds
 
-You're in the home stretch. You've done the hard part. Now you'll add some
-automation to guard your app during future development. :shield:
+You've done the hard part, and you're close to the finish line! The last step is
+to add automation which guards your app against bundling errors in future PRs.
+:shield:
 
 If you use Lerna, you can run one command from the root of your repo to bundle
 all packages:
 
 <PackageRunCommand args="lerna run bundle" />
 
-If you're using a task runner like Nx or Lage or Gulp, you can go for a more
+If you're using a task runner like Nx, Lage or Gulp, you can go for a more
 sophisticated integration. The advantage being that `bundle` runs as its own
 task with isolated logging and error handling. And, you can run it in parallel
 with other tasks.
@@ -436,5 +438,5 @@ shaking)!
 See room for improvement? Please make your voice heard! :speech_balloon:
 [Contribute](/docs/contributing) your ideas in
 [a new issue](https://github.com/microsoft/rnx-kit/issues/new?title=Bundling%20Feature%20Request&body=%3c%21--%20Describe%20the%20feature%20your%20need%20here.%20--%3e%0a%0a),
-[a discussion topic](https://github.com/microsoft/rnx-kit/discussions), or
+[a discussion topic](https://github.com/microsoft/rnx-kit/discussions/new), or
 through [a pull request](https://github.com/microsoft/rnx-kit/pulls).
