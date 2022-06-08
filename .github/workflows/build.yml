@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Set up Node 16
-        uses: actions/setup-node@v3.2.0
+        uses: actions/setup-node@v3.3.0
         with:
           node-version: 16
       - uses: actions/setup-go@v3
@@ -27,9 +27,9 @@ jobs:
       - name: Install package dependencies
         run: yarn ci
       - name: Build and test packages
-        run: yarn build:ci
+        run: yarn build:ci:all
       - name: Bundle packages
-        run: yarn bundle:ci
+        run: yarn bundle
       - name: Build website
         run: yarn build
         working-directory: docsite

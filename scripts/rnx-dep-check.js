@@ -3,11 +3,6 @@
 "use strict";
 
 module.exports = {
-  "@rnx-kit/tools-node": {
-    name: "@rnx-kit/tools-node",
-    version: "^1.2.7",
-    devOnly: true,
-  },
   "@types/jest": {
     name: "@types/jest",
     version: "^27.0.0",
@@ -47,6 +42,11 @@ module.exports = {
   "jest-diff": {
     name: "jest-diff",
     version: "^26.0.0",
+  },
+  "jest-extended": {
+    name: "jest-extended",
+    version: "^2.0.0",
+    devOnly: true,
   },
   "pkg-dir": {
     name: "pkg-dir",

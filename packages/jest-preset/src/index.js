@@ -79,7 +79,8 @@ function getTargetPlatform(defaultPlatform) {
 
   /** @type {() => CLIConfig} */
   const loadConfig =
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore could not find a declaration file
+    require("@react-native-community/cli").loadConfig ||
     // @ts-ignore could not find a declaration file
     require("@react-native-community/cli/build/tools/config").default;
 

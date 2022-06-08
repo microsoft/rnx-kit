@@ -1,11 +1,11 @@
-import type { MetaPackage } from "../types";
 import type { MetaCapability } from "@rnx-kit/config";
+import type { MetaPackage } from "../../types";
 
-export const metaPackages: Readonly<Record<MetaCapability, MetaPackage>> = {
+const baseCapabilities: Readonly<Record<MetaCapability, MetaPackage>> = {
   "core/testing": {
     name: "#meta",
     capabilities: ["core", "jest", "react-test-renderer"],
   },
 };
 
-export default metaPackages;
+export default baseCapabilities;

@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/dep-check
 
+## 1.12.16
+
+### Patch Changes
+
+- 1edb9acd: Fix dep-check failing to visit dependencies in a repository using pnpm or pnpm-like solutions
+
 ## 1.12.15
 
 ### Patch Changes

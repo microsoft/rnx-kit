@@ -77,6 +77,8 @@ export type ProfileVersion =
   | "0.67"
   | "0.68";
 
+export type ProfileMap = Record<ProfileVersion, Profile>;
+
 export type ProfilesInfo = {
   supportedProfiles: Profile[];
   supportedVersions: string;

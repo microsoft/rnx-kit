@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/typescript-react-native-resolver",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "TypeScript module resolver for use with react-native projects",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/typescript-react-native-resolver#readme",
   "license": "MIT",
@@ -27,7 +27,7 @@
   "devDependencies": {
     "@rnx-kit/scripts": "*",
     "@types/node": "^16.0.0",
-    "jest-extended": "^0.11.5",
+    "jest-extended": "^2.0.0",
     "typescript": "^4.0.0"
   },
   "peerDependencies": {
@@ -39,7 +39,7 @@
   "jest": {
     "preset": "@rnx-kit/scripts",
     "setupFilesAfterEnv": [
-      "jest-extended"
+      "jest-extended/all"
     ]
   }
 }

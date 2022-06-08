@@ -1,5 +1,21 @@
 # Change Log - @rnx-kit/metro-resolver-symlinks
 
+## 0.1.21
+
+### Patch Changes
+
+- b56846f2: Fix empty modules not being handled correctly
+- 28a302a1: Fix `browser` field module redirection not being handled correctly
+- 4674e761: Enable `resolveSymlinks` and remove dupe code
+- Updated dependencies [1edb9acd]
+  - @rnx-kit/tools-node@1.3.0
+
+## 0.1.20
+
+### Patch Changes
+
+- 77b9f0d9: Fix symlinks with relative paths not being resolved correctly
+
 ## 0.1.19
 
 ### Patch Changes

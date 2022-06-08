@@ -32,7 +32,7 @@
     "@types/metro": "^0.66.0",
     "@types/node": "^16.0.0",
     "@types/semver": "^7.0.0",
-    "jest-extended": "^0.11.5"
+    "jest-extended": "^2.0.0"
   },
   "depcheck": {
     "ignoreMatches": [
@@ -41,5 +41,11 @@
   },
   "eslintConfig": {
     "extends": "@rnx-kit/eslint-config"
+  },
+  "jest": {
+    "preset": "@rnx-kit/scripts",
+    "setupFilesAfterEnv": [
+      "jest-extended/all"
+    ]
   }
 }

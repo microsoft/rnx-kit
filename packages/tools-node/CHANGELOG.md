@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/tools-node
 
+## 1.3.0
+
+### Minor Changes
+
+- 1edb9acd: Added a flag, `resolveSymlinks`, to `findPackageDependencyDir` to make it return fully resolved symlinks
+
 ## 1.2.7
 
 ### Patch Changes

@@ -12,16 +12,7 @@ module.exports = async (_args, rawArgs = []) => {
   if (rawArgs.includes("--dependencies")) {
     const manifest = await fs.readFile("package.json", { encoding: "utf-8" });
     const { name } = JSON.parse(manifest);
-    return runScript(
-      "lage",
-      "build",
-      "--grouped",
-      "--log-level",
-      "info",
-      "--no-deps",
-      "--scope",
-      name
-    );
+    return runScript("nx", "build", name);
   }
 
   return sequence(clean, depcheck, lint, () =>

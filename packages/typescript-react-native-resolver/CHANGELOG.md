@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/typescript-react-native-resolver
 
+## 0.2.3
+
+### Patch Changes
+
+- 7cf554bf: Add support for new type-directive resolution in TS 4.7
+
 ## 0.2.2
 
 ### Patch Changes

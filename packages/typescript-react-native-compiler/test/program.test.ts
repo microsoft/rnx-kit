@@ -1,3 +1,4 @@
+import "jest-extended";
 import fs from "fs";
 import path from "path";
 import tempDir from "temp-dir";
