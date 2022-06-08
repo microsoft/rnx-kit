@@ -6,5 +6,5 @@ module.exports = {
     "node_modules",
     path.join(__dirname, "test", "__fixtures__", "node_modules"),
   ],
-  setupFilesAfterEnv: ["jest-extended"],
+  setupFilesAfterEnv: ["jest-extended/all"],
 };
