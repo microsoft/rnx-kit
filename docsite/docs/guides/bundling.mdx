@@ -229,8 +229,19 @@ you're used to, right in the Metro output:
   width="700"
 />
 
-TypeScript validation is **on** by default. You can control it with
-[typescriptValidation](/docs/tools/config#bundlerplugins).
+TypeScript validation is **on** by default. You can control it with the
+[typescriptValidation](/docs/tools/config#bundlerplugins) configuration
+property.
+
+```json title=package.json
+{
+  "rnx-kit": {
+    "bundle": {
+      "typescriptValidation": true
+    }
+  }
+}
+```
 
 ### Tree Shaking
 
@@ -240,8 +251,18 @@ Sometimes, a LOT smaller. :chart_with_downwards_trend:
 **Bonus:** When tree shaking is enabled, your app will bundle a lot faster! Tree
 shaking runs on `esbuild`, a native-code tool that is optimized for speed.
 
-Tree shaking is _off_ by default. You can control it with
-[treeShake](/docs/tools/config#bundlerplugins).
+Tree shaking is _off_ by default. You can control it with the
+[treeShake](/docs/tools/config#bundlerplugins) configuration property.
+
+```json title=package.json
+{
+  "rnx-kit": {
+    "bundle": {
+      "treeShake": true
+    }
+  }
+}
+```
 
 To make tree shaking to work properly, you'll also need to set
 `disableImportExportTransform` in your Babel config:
@@ -273,8 +294,19 @@ the duplicated package has global state.
   width="700"
 />
 
-Duplicate detection is **on** by default. You can control it with
-[detectDuplicateDependencies](/docs/tools/config#bundlerplugins).
+Duplicate detection is **on** by default. You can control it with the
+[detectDuplicateDependencies](/docs/tools/config#bundlerplugins) configuration
+property.
+
+```json title=package.json
+{
+  "rnx-kit": {
+    "bundle": {
+      "detectDuplicateDependencies": true
+    }
+  }
+}
+```
 
 ### Cyclic Dependencies
 
@@ -291,7 +323,18 @@ A cycle in your dependency graph will look somthing like this: `logger` requires
 />
 
 Cycles can be bad news. Detecting them is **on** by default. You can control it
-with [detectCyclicDependencies](/docs/tools/config#bundlerplugins).
+with the [detectCyclicDependencies](/docs/tools/config#bundlerplugins)
+configuration property.
+
+```json title=package.json
+{
+  "rnx-kit": {
+    "bundle": {
+      "detectCyclicDependencies": true
+    }
+  }
+}
+```
 
 ## Running the Bundler
 
@@ -360,8 +403,9 @@ Below are some helpful tricks you can try:
   the packages that depend on the package version you are changing**.
 
 If you can't get rid of the duplicate package, and your app seems to be working,
-you can choose to live with it. Add it to the `ignoredModules` array in the
-`detectDuplicateDependencies` configuration object.
+you can choose to live with it. Add the duplicate package name to the
+`ignoredModules` list in the `detectDuplicateDependencies`
+[configuration object](/docs/tools/config#bundlerplugins).
 
 **Are you seeing cyclic dependency errors?**
 
