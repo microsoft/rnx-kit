@@ -13,8 +13,6 @@ export type { KitCapabilities } from "./getKitCapabilities";
 export { getKitConfig } from "./getKitConfig";
 export type { GetKitConfigOptions } from "./getKitConfig";
 
-export { getServerConfig } from "./getServerConfig";
-
 export type {
   Capability,
   DependencyVersions,

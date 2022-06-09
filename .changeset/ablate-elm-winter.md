@@ -72,6 +72,11 @@ The following defaults now apply when running `rnx-bundle` and `rnx-start`:
 **NOTE**: Defaults are only used when the corresponding fields are missing from
 both configuration and the command-line.
 
+In addition to these defaults, `rnx-start` will use `bundle` configuration when
+`server` configuration is not present, ensuring that by default, you are serving
+the same way you are bundling. If both both are missing, then the above baseline
+defaults are used.
+
 ## `rnx-bundle`: source-map changes
 
 The bundling code used to force the creation of a source-map file when in dev

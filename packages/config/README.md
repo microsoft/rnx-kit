@@ -156,12 +156,3 @@ Get capability information from the package configuration.
 | reactNativeDevVersion | string                      | Min version in reactNativeVersion | React Native version to use during development of this package. If not specified, the minimum `reactNativeVersion` is used.                                                                                                                         |
 | capabilities          | `Capability[]`              | `[]`                              | List of [capabilities](https://github.com/microsoft/rnx-kit/tree/main/packages/dep-check#capabilities) that this package needs. A capability is a well-known name (string).                                                                         |
 | customProfiles        | string, undefined           |                                   | Path to a file containing [custom profiles](https://github.com/microsoft/rnx-kit/tree/main/packages/dep-check#custom-profiles).                                                                                                                     |
-
-### `getServerConfig(config)`
-
-Get server configuration from the rnx-kit configuration.
-
-| Parameter | Type           | Description                                               |
-| --------- | -------------- | --------------------------------------------------------- |
-| config    | `KitConfig`    | The package's rnx-kit configuration                       |
-| [Return]  | `ServerConfig` | Server configuration, or `undefined` if nothing was found |

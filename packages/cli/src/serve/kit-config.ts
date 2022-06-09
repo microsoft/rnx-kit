@@ -1,5 +1,5 @@
 import type { ServerConfig, BundlerPlugins } from "@rnx-kit/config";
-import { getKitConfig, getServerConfig } from "@rnx-kit/config";
+import { getKitConfig, getBundleConfig } from "@rnx-kit/config";
 import { getDefaultBundlerPlugins } from "../bundler-plugin-defaults";
 import { pickValues } from "@rnx-kit/tools-language/properties";
 
@@ -21,12 +21,23 @@ export function getKitServerConfig(
   overrides: ServerConfigOverrides
 ): CliServerConfig {
   const kitConfig = getKitConfig();
-  const maybeServerConfig = kitConfig ? getServerConfig(kitConfig) : undefined;
-  const serverConfig = maybeServerConfig ?? {};
+  let serverConfig = kitConfig?.server;
+  if (!serverConfig && kitConfig) {
+    const maybeBundleConfig = getBundleConfig(kitConfig);
+    if (maybeBundleConfig) {
+      serverConfig = pickValues(maybeBundleConfig, [
+        "detectCyclicDependencies",
+        "detectDuplicateDependencies",
+        "typescriptValidation",
+        "treeShake",
+      ]);
+    }
+  }
 
   return {
     ...getDefaultBundlerPlugins(),
     ...serverConfig,
+    treeShake: false, // tree shaking does not work with the bundle server
     ...pickValues(overrides, ["projectRoot", "assetPlugins", "sourceExts"]),
   };
 }
