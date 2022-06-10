@@ -10,7 +10,7 @@
     "lint": "rnx-kit-scripts lint",
     "test": "react-native rnx-test --platform ios",
     "bundle": "react-native rnx-bundle",
-    "bundle+esbuild": "react-native rnx-bundle --id 'main+esbuild'",
+    "bundle+esbuild": "react-native rnx-bundle --id esbuild",
     "bundle:android": "react-native rnx-bundle --platform android",
     "bundle:ios": "react-native rnx-bundle --platform ios",
     "bundle:macos": "react-native rnx-bundle --platform macos",
@@ -95,7 +95,7 @@
         }
       },
       {
-        "id": "main+esbuild",
+        "id": "esbuild",
         "entryFile": "src/index.ts",
         "assetsDest": "dist",
         "detectCyclicDependencies": true,
