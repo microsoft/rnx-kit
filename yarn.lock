@@ -2332,19 +2332,19 @@
     node-gyp "^8.2.0"
     read-package-json-fast "^2.0.1"
 
-"@nrwl/cli@14.2.2":
-  version "14.2.2"
-  resolved "https://registry.yarnpkg.com/@nrwl/cli/-/cli-14.2.2.tgz#ceb766b9df9ff1dccd4648ee989cbe254231f98a"
-  integrity sha512-LnIgs2kkCoVe4x2mDBhdMfD7yD1d0TteJKY6MO7V0NaMjUMiJHpFz2xGQQkre/UpcRHDCHd7xwYEN4J8auNfKQ==
+"@nrwl/cli@14.2.4":
+  version "14.2.4"
+  resolved "https://registry.yarnpkg.com/@nrwl/cli/-/cli-14.2.4.tgz#382592fe8cf5f5d5572dddbb366e55f2a2e23145"
+  integrity sha512-Ak6mmM9W39DSVaRDxt0yqMwHWg5yL9+QqhSB7q464EAKS6r4NPr6Z+avAjqAfoS/H8WsEPlwJnsaaJiP/gBwWQ==
   dependencies:
-    nx "14.2.2"
+    nx "14.2.4"
 
-"@nrwl/tao@14.2.2":
-  version "14.2.2"
-  resolved "https://registry.yarnpkg.com/@nrwl/tao/-/tao-14.2.2.tgz#1113d7728acef94eb5765b45cd1c74cf48d73091"
-  integrity sha512-FSqgsWEBJEVa70+crT20OqgI15XJjiy1x3fADx9hYFMQz/NYwQuFlmZG8xiZcRnEy2bOE6pdb5s6ThokjdE5XQ==
+"@nrwl/tao@14.2.4":
+  version "14.2.4"
+  resolved "https://registry.yarnpkg.com/@nrwl/tao/-/tao-14.2.4.tgz#cbe8ea61e12027be9b78534b1325df77168c2759"
+  integrity sha512-wnrS+Go1Moa+jkOKqxoR/+YihDSoMlbUemBBoa1P2JQ6gvCnCrsvCx3qosJ0HfSdqQy8tkoUqd624RcGUyDUbg==
   dependencies:
-    nx "14.2.2"
+    nx "14.2.4"
 
 "@parcel/watcher@2.0.4":
   version "2.0.4"
@@ -10395,13 +10395,13 @@ nwsapi@^2.2.0:
   resolved "https://registry.yarnpkg.com/nwsapi/-/nwsapi-2.2.0.tgz#204879a9e3d068ff2a55139c2c772780681a38b7"
   integrity sha512-h2AatdwYH+JHiZpv7pt/gSX1XoRGb7L/qSIeuqA6GwYoF9w1vP1cw42TO0aI2pNyshRK5893hNSl+1//vHK7hQ==
 
-nx@14.2.2, nx@^14.1.9:
-  version "14.2.2"
-  resolved "https://registry.yarnpkg.com/nx/-/nx-14.2.2.tgz#f970aa60082b705c69c7c2d70d7aabec23da5889"
-  integrity sha512-7QXNhcC8FqoLuq7yCEXS6rrfWX/KgFZk+Q++Fg4MBXXnIJ3xR6Fd3Db5R2jSFodio++hzA92ZWe2R/TAftageg==
+nx@14.2.4, nx@^14.1.9:
+  version "14.2.4"
+  resolved "https://registry.yarnpkg.com/nx/-/nx-14.2.4.tgz#0cf1ffff9535157845b24d65ad00bb1bc680c1e8"
+  integrity sha512-/LnPgHSckncvS+azP17F0sskDWeiEdBG3eMpAauX8dol4ECG01xPlkiuMTCw4URes6J1TObZTbaEk4eP2uWrag==
   dependencies:
-    "@nrwl/cli" "14.2.2"
-    "@nrwl/tao" "14.2.2"
+    "@nrwl/cli" "14.2.4"
+    "@nrwl/tao" "14.2.4"
     "@parcel/watcher" "2.0.4"
     chalk "4.1.0"
     chokidar "^3.5.1"
