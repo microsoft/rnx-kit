@@ -281,7 +281,7 @@
           {
             "name": "noActivitySince",
             "parameters": {
-              "days": 3
+              "days": 14
             }
           }
         ],
@@ -383,7 +383,7 @@
           {
             "name": "noActivitySince",
             "parameters": {
-              "days": 4
+              "days": 14
             }
           },
           {
@@ -403,7 +403,7 @@
           {
             "name": "addReply",
             "parameters": {
-              "comment": "This issue has been automatically marked as stale because it has been marked as requiring author feedback but has not had any activity for **4 days**. It will be closed if no further activity occurs **within 3 days of this comment**."
+              "comment": "This issue has been automatically marked as stale because it has been marked as requiring author feedback but has not had any activity for **14 days**. It will be closed if no further activity occurs **within 14 days of this comment**."
             }
           }
         ]
@@ -499,7 +499,7 @@
           {
             "name": "noActivitySince",
             "parameters": {
-              "days": 1
+              "days": 7
             }
           }
         ],
@@ -507,7 +507,7 @@
           {
             "name": "addReply",
             "parameters": {
-              "comment": "This issue has been marked as duplicate and has not had any activity for **1 day**. It will be closed for housekeeping purposes."
+              "comment": "This issue has been marked as duplicate and has not had any activity for **7 days**. It will be closed for housekeeping purposes."
             }
           },
           {
@@ -903,7 +903,7 @@
           {
             "name": "noActivitySince",
             "parameters": {
-              "days": 7
+              "days": 14
             }
           }
         ],
@@ -1005,7 +1005,7 @@
           {
             "name": "noActivitySince",
             "parameters": {
-              "days": 7
+              "days": 14
             }
           },
           {
@@ -1025,7 +1025,7 @@
           {
             "name": "addReply",
             "parameters": {
-              "comment": "This pull request has been automatically marked as stale because it has been marked as requiring author feedback but has not had any activity for **7 days**. It will be closed if no further activity occurs **within 7 days of this comment**."
+              "comment": "This pull request has been automatically marked as stale because it has been marked as requiring author feedback but has not had any activity for **14 days**. It will be closed if no further activity occurs **within 14 days of this comment**."
             }
           }
         ]
@@ -1073,7 +1073,7 @@
                 {
                   "name": "noActivitySince",
                   "parameters": {
-                    "days": 7
+                    "days": 14
                   }
                 }
               ]
@@ -1107,7 +1107,7 @@
         "eventNames": [
           "issue_comment"
         ],
-        "taskName": "For issues closed due to inactivity, re-open an issue if issue author posts a reply within 7 days.",
+        "taskName": "For issues closed due to inactivity, re-open an issue if issue author posts a reply within 14 days.",
         "actions": [
           {
             "name": "reopenIssue",
@@ -1167,7 +1167,7 @@
             {
               "name": "noActivitySince",
               "parameters": {
-                "days": 7
+                "days": 14
               }
             },
             {
@@ -1185,7 +1185,7 @@
         "eventNames": [
           "issue_comment"
         ],
-        "taskName": "For issues closed with no activity over 7 days, ask non-contributor to consider opening a new issue instead.",
+        "taskName": "For issues closed with no activity over 14 days, ask non-contributor to consider opening a new issue instead.",
         "actions": [
           {
             "name": "addReply",
@@ -1275,7 +1275,7 @@
           {
             "name": "noActivitySince",
             "parameters": {
-              "days": 30
+              "days": 60
             }
           },
           {
@@ -1287,7 +1287,7 @@
             "parameters": {}
           }
         ],
-        "taskName": "Lock issues closed without activity for over 30 days",
+        "taskName": "Lock issues closed without activity for over 60 days",
         "actions": [
           {
             "name": "lockIssue",
