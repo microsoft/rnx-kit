@@ -17,7 +17,9 @@ it uses that knowledge to keep your app healthy and up-to-date.
 
 The magic is in the data that comes with the dependency manager -- capabilities
 and profiles. Together, they describe a _curated_ and _tested_ list of packages
-that work with each major release of React Native.
+that work with each major release of React Native; you can find the full list of
+capabilities (_name & corresponding package_) that are supported by default
+[in this table](https://github.com/microsoft/rnx-kit/tree/main/packages/dep-check#capabilities).
 
 A capability is something your app needs to function. It has a well-known name,
 and it maps to a specific package and version:
@@ -48,7 +50,7 @@ const capabilities = {
 ```
 
 A profile is a collection of capabilities, known to work well with a specific
-release of React Native. Each React Native release has its own profile.
+release of React Native:
 
 ```typescript
 const reactNative: Package = {
@@ -68,6 +70,11 @@ const profile_0_67: Profile = {
   // ... etc ...
 };
 ```
+
+Each React Native release >= 0.61 has its own base profile
+[in this folder](https://github.com/microsoft/rnx-kit/tree/main/packages/dep-check/src/presets/microsoft),
+and you can tailor your local configuration by following this
+[customization guide](/docs/guides/dependency-management#customization).
 
 ## Meta Capabilities
 
