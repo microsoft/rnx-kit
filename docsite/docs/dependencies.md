@@ -72,7 +72,9 @@ const profile_0_67: Profile = {
 ```
 
 Each React Native release >= 0.61 has its own base profile
-[in this folder](https://github.com/microsoft/rnx-kit/tree/main/packages/dep-check/src/presets/microsoft).
+[in this folder](https://github.com/microsoft/rnx-kit/tree/main/packages/dep-check/src/presets/microsoft),
+and you can tailor your local configuration by following this
+[customization guide](/docs/guides/dependency-management#customization).
 
 ## Meta Capabilities
 
