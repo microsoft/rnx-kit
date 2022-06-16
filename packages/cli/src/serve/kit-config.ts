@@ -29,7 +29,7 @@ export function getKitServerConfig(
         "detectCyclicDependencies",
         "detectDuplicateDependencies",
         "typescriptValidation",
-        "treeShake",
+        //"treeShake",  // don't pull in treeShake yet, since it doesn't work with the server
       ]);
     }
   }
