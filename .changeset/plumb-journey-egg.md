@@ -1,5 +1,5 @@
 ---
-"@rnx-kit/metro-service": none
+"@rnx-kit/metro-service": major
 ---
 
 # Breaking Changes

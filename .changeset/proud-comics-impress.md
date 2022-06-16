@@ -1,5 +1,5 @@
 ---
-"@rnx-kit/config": none
+"@rnx-kit/config": minor
 ---
 
 # Breaking Changes
