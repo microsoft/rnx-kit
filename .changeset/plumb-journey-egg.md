@@ -1,5 +1,5 @@
 ---
-"@rnx-kit/metro-config": none
+"@rnx-kit/metro-service": none
 ---
 
 # Breaking Changes
