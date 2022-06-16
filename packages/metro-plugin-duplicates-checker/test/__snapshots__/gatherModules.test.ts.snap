@@ -3,7 +3,7 @@
 exports[`gatherModulesFromGraph() builds module map from a basic source map 1`] = `
 Array [
   "fbjs",
-  "rnx-kit",
+  "react-native",
 ]
 `;
 
@@ -25,9 +25,9 @@ Array [
   "react",
   "react-devtools-core",
   "react-is",
+  "react-native",
   "react-refresh",
   "regenerator-runtime",
-  "rnx-kit",
   "scheduler",
   "stacktrace-parser",
   "use-subscription",
