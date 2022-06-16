@@ -2333,19 +2333,19 @@
     node-gyp "^8.2.0"
     read-package-json-fast "^2.0.1"
 
-"@nrwl/cli@14.3.3":
-  version "14.3.3"
-  resolved "https://registry.yarnpkg.com/@nrwl/cli/-/cli-14.3.3.tgz#c860dfbe9877cace57dca353c06de7f0652b84ba"
-  integrity sha512-jiOWIUqWuMEP4fvLDL8x9xpiaH7IkcYWMEUmKGuKusmgv0KBjpKJ0mJCSrwFC/dFhl1uEWMcIF+YQZ4B7F4wpA==
+"@nrwl/cli@14.3.5":
+  version "14.3.5"
+  resolved "https://registry.yarnpkg.com/@nrwl/cli/-/cli-14.3.5.tgz#63610cc56bb55828891d9f93fcde25005620fda1"
+  integrity sha512-dNV2gxKndq8cgLGqRC58eSaGETAsD7RWDdVqf1SglsEExG6atgEyDaZe/NA7SIQCXIcg2c3zVb9sHqSlTVHdNQ==
   dependencies:
-    nx "14.3.3"
+    nx "14.3.5"
 
-"@nrwl/tao@14.3.3":
-  version "14.3.3"
-  resolved "https://registry.yarnpkg.com/@nrwl/tao/-/tao-14.3.3.tgz#1a9da08fec47d843f76ee0b3cdd99e0aea115da8"
-  integrity sha512-++t53j4KOrcCl9L+g8/ULP5bg8dRYCuKEDsiaqjlvWO1dJ6vhiJ7muWxITUqFAIUsi57Xzv7U+fI3pG/YjqIvA==
+"@nrwl/tao@14.3.5":
+  version "14.3.5"
+  resolved "https://registry.yarnpkg.com/@nrwl/tao/-/tao-14.3.5.tgz#b0150aab6c15efbb3cfd4d89b0d9d481a7b116ab"
+  integrity sha512-rdXeXadbOWTRdJMxa6MIdl6Daji+pSGo0kvgBVqAAcb/XL/9Hyyq42SLA+pclp8b1FfIqBt4Mxhpz4qsid5VqQ==
   dependencies:
-    nx "14.3.3"
+    nx "14.3.5"
 
 "@parcel/watcher@2.0.4":
   version "2.0.4"
@@ -10403,13 +10403,13 @@ nwsapi@^2.2.0:
   resolved "https://registry.yarnpkg.com/nwsapi/-/nwsapi-2.2.0.tgz#204879a9e3d068ff2a55139c2c772780681a38b7"
   integrity sha512-h2AatdwYH+JHiZpv7pt/gSX1XoRGb7L/qSIeuqA6GwYoF9w1vP1cw42TO0aI2pNyshRK5893hNSl+1//vHK7hQ==
 
-nx@14.3.3, nx@^14.1.9:
-  version "14.3.3"
-  resolved "https://registry.yarnpkg.com/nx/-/nx-14.3.3.tgz#9c4e655b1cee641a8383f5f669ac326df48a6377"
-  integrity sha512-PzPknkmsYXiV1iO2PcIrS/jr5SeeAQXGTTrJXQwdlCyCKh2177nu35pKlbl78GFPSNj0S3x6wYHqlXs9vn+Mfg==
+nx@14.3.5, nx@^14.1.9:
+  version "14.3.5"
+  resolved "https://registry.yarnpkg.com/nx/-/nx-14.3.5.tgz#5bf0bec3275392388c83412f532a9bd6afdfe69f"
+  integrity sha512-EbuY7h4PsvGsSQSmSI0em2ViqxRTR/GVB8VVUZZmgqiJHv2BT+NC7VWjMhS3VGarBTGsRkwUbx7yGOdyHjBG/A==
   dependencies:
-    "@nrwl/cli" "14.3.3"
-    "@nrwl/tao" "14.3.3"
+    "@nrwl/cli" "14.3.5"
+    "@nrwl/tao" "14.3.5"
     "@parcel/watcher" "2.0.4"
     chalk "4.1.0"
     chokidar "^3.5.1"
