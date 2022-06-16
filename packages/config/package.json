@@ -41,5 +41,15 @@
   },
   "eslintConfig": {
     "extends": "@rnx-kit/eslint-config"
+  },
+  "jest": {
+    "preset": "@rnx-kit/scripts",
+    "moduleDirectories": [
+      "node_modules",
+      "test/__fixtures__/node_modules"
+    ],
+    "setupFilesAfterEnv": [
+      "jest-extended/all"
+    ]
   }
 }
