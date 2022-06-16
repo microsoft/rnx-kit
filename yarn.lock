@@ -3225,9 +3225,9 @@
   integrity sha512-WKG4gTr8przEZBiJ5r3s8ZIAoMXNbOgQ+j/d5O4X3x6kZJRLNvyUJuUK/KoG3+8BaOHPhp2m7WC6JKKeovDSzQ==
 
 "@types/pacote@^11.0.0":
-  version "11.1.4"
-  resolved "https://registry.yarnpkg.com/@types/pacote/-/pacote-11.1.4.tgz#d7aeb508ce238d4750f21d82269257f9c5cdafc9"
-  integrity sha512-wWZOztJ/Msh8MqbKr2ESQ6WPRv4BF+OPC4nri3W4UKl/1P5Hdul+IvN5Up7FPIK0XhUAOTCz+1QZoyi9PKGx+w==
+  version "11.1.5"
+  resolved "https://registry.yarnpkg.com/@types/pacote/-/pacote-11.1.5.tgz#3efc5eb49069206a678f5483a7e008af06788a66"
+  integrity sha512-kMsfmhP2G45ngnpvH0LKd1celWnjgdiws1FHu3vMmYuoElGdqnd0ydf1ucZzeXamYnLe0NvSzGP2gYiETOEiQA==
   dependencies:
     "@types/node" "*"
     "@types/npm-registry-fetch" "*"
