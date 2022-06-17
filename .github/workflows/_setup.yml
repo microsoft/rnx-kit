@@ -1,0 +1,38 @@
+on:
+  workflow_call:
+    inputs:
+      node-version:
+        description: "Node version to use"
+        required: true
+        type: number
+        default: 16
+      go-version:
+        description: "When specified, ensure that a specific version of Go is available."
+        required: false
+        type: string
+      yarn-cache-key:
+        description: "Cache key to use for yarn"
+        required: true
+        type: string
+
+jobs:
+  setup:
+    name: "Setup CI environment"
+    steps:
+      - name: Set up Node ${{ inputs.node-version }}
+        uses: actions/setup-node@v3.3.0
+        with:
+          node-version: ${{ inputs.node-version }}
+      - uses: actions/setup-go@v3
+        if: ${{ inputs.go-version != '' }}
+        with:
+          go-version: ${{ go-version }}
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Cache /.yarn-offline-mirror
+        uses: actions/cache@v3
+        with:
+          path: .yarn-offline-mirror
+          key: ${{ inputs.yarn-cache-key }}

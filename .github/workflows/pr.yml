@@ -5,14 +5,9 @@ jobs:
     name: "Review"
     runs-on: ubuntu-latest
     steps:
-      - name: Set up Node 14
-        uses: actions/setup-node@v3.3.0
+      - uses: ./.github/workflows/_setup.yml
         with:
-          node-version: 14
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
+          yarn-cache-key: ${{ runner.os }}-${{ hashFiles('yarn.lock') }}-7
       - name: Ensure rnx-kit packages come from our repository
         run: |
           if grep rnx-kit yarn.lock; then
@@ -21,11 +16,6 @@ jobs:
       - name: Deduplicate packages
         run: |
           npx yarn-deduplicate --list --fail
-      - name: Cache /.yarn-offline-mirror
-        uses: actions/cache@v3
-        with:
-          path: .yarn-offline-mirror
-          key: ${{ runner.os }}-${{ hashFiles('yarn.lock') }}-7
       - name: Install package dependencies
         run: yarn ci
         env:
@@ -48,22 +38,11 @@ jobs:
         os: [ubuntu-latest, windows-latest]
     runs-on: ${{ matrix.os }}
     steps:
-      - name: Set up Node ${{ matrix.node-version }}
-        uses: actions/setup-node@v3.3.0
+      - uses: ./.github/workflows/_setup.yml
         with:
           node-version: ${{ matrix.node-version }}
-      - uses: actions/setup-go@v3
-        with:
           go-version: "^1.14.0"
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-      - name: Cache /.yarn-offline-mirror
-        uses: actions/cache@v3
-        with:
-          path: .yarn-offline-mirror
-          key: ${{ runner.os }}-${{ hashFiles('yarn.lock') }}-7
+          yarn-cache-key: ${{ runner.os }}-${{ hashFiles('yarn.lock') }}-7
       - name: Install package dependencies
         run: yarn ci
       - name: Build and test packages
@@ -89,19 +68,10 @@ jobs:
         with:
           distribution: temurin
           java-version: 11
-      - name: Set up Node 14
-        uses: actions/setup-node@v3.3.0
+      - uses: ./.github/workflows/_setup.yml
         with:
-          node-version: 14
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-      - name: Cache /.yarn-offline-mirror
-        uses: actions/cache@v3
-        with:
-          path: .yarn-offline-mirror
-          key: ${{ runner.os }}-${{ hashFiles('yarn.lock') }}-7
+          go-version: "^1.14.0"
+          yarn-cache-key: ${{ runner.os }}-${{ hashFiles('yarn.lock') }}-7
       - name: Install npm dependencies
         run: yarn ci
         env:
@@ -114,19 +84,10 @@ jobs:
     name: "Build iOS"
     runs-on: macos-11
     steps:
-      - name: Set up Node 14
-        uses: actions/setup-node@v3.3.0
+      - uses: ./.github/workflows/_setup.yml
         with:
-          node-version: 14
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-      - name: Cache /.yarn-offline-mirror
-        uses: actions/cache@v3
-        with:
-          path: .yarn-offline-mirror
-          key: ${{ runner.os }}-${{ hashFiles('yarn.lock') }}-7
+          go-version: "^1.14.0"
+          yarn-cache-key: ${{ runner.os }}-${{ hashFiles('yarn.lock') }}-7
       - name: Install npm dependencies
         run: yarn ci
         env:
@@ -146,19 +107,10 @@ jobs:
     name: "Build the website"
     runs-on: ubuntu-latest
     steps:
-      - name: Set up Node 16
-        uses: actions/setup-node@v3.3.0
+      - uses: ./.github/workflows/_setup.yml
         with:
-          node-version: 16
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-      - name: Cache /.yarn-offline-mirror
-        uses: actions/cache@v3
-        with:
-          path: .yarn-offline-mirror
-          key: ${{ runner.os }}-${{ hashFiles('yarn.lock') }}-7
+          go-version: "^1.14.0"
+          yarn-cache-key: ${{ runner.os }}-${{ hashFiles('yarn.lock') }}-7
       - name: Install package dependencies
         run: yarn ci
         env:
