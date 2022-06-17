@@ -86,7 +86,7 @@ It's time to put together an `rnx-bundle` command for your app. Start with
 | --sourcemap-output | Choose a file name and path for the source map. Usually named `<bundle-file>.map`.                 |
 | --assets-dest      | Choose a directory for storing assets like strings, images, audio, and video.                      |
 
-Add "--dev `false`" if you want to make an optimized, production bundle.
+Add `--dev false` if you want to make an optimized, production bundle.
 
 Put it all together into a single command. Here's an example which creates an
 iOS developer bundle:
@@ -132,8 +132,8 @@ which runs them all, and one server command.
 {
   "scripts": {
     "bundle": "yarn bundle:ios && yarn bundle:android",
-    "bundle:ios": "react-native bundle --platform ios ...",
-    "bundle:android": "react-native bundle --platform android ...",
+    "bundle:ios": "react-native rnx-bundle --platform ios ...",
+    "bundle:android": "react-native rnx-bundle --platform android ...",
     "start": "react-native rnx-start"
   }
 }
@@ -247,9 +247,6 @@ property.
 
 Tree shaking makes your app bundle smaller by eliminating unused code.
 Sometimes, a LOT smaller. :chart_with_downwards_trend:
-
-**Bonus:** When tree shaking is enabled, your app will bundle a lot faster! Tree
-shaking runs on `esbuild`, a native-code tool that is optimized for speed.
 
 Tree shaking is _off_ by default. You can control it with the
 [treeShake](/docs/tools/config#bundlerplugins) configuration property.
