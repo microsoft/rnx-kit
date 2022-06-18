@@ -73,6 +73,7 @@ module.exports = {
 if (require.main === module) {
   require("@rnx-kit/dep-check").cli({
     "custom-profiles": __filename,
+    "exclude-packages": "@rnx-kit/expo-app",
     vigilant: "0.66",
     write: process.argv.includes("--write"),
   });

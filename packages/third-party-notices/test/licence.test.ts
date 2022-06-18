@@ -7,11 +7,12 @@ import { extractLicenses } from "../src/write-third-party-notices";
 async function getSampleLicenseData(): Promise<License[]> {
   const map = new Map([
     // License data in package.json
-    ["@rnx-kit/cli", path.resolve("../../node_modules/@rnx-kit/cli")],
+    [
+      "@rnx-kit/console",
+      path.dirname(require.resolve("@rnx-kit/console/package.json")),
+    ],
     // License data package.json and LICENCE file
-    ["react-native", path.resolve("../../node_modules/react-native")],
-    // License data package.json and LICENSE file
-    ["react", path.resolve("../../node_modules/react")],
+    ["yargs", path.dirname(require.resolve("yargs/package.json"))],
   ]);
 
   const licenses = await extractLicenses(map);
