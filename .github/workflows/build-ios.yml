@@ -24,18 +24,18 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      - name: Cache /.yarn-offline-mirror
+      - name: Set up Yarn cache
         uses: actions/cache@v3
         with:
           path: .yarn-offline-mirror
           key: ${{ runner.os }}-${{ hashFiles('yarn.lock') }}-7
-      - name: Cache /.pods-offline-mirror
+      - name: Set up CocoaPods cache
         uses: actions/cache@v3
         with:
-          path: .pods-offline-mirror
-          key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
+          path: ${{ format('packages/{0}/ios/Pods', inputs.package) }}
+          key: ${{ runner.os }}-${{ inputs.package }}-pods-${{ hashFiles(format('packages/{0}/ios/Podfile.lock', inputs.package)) }}
           restore-keys: |
-            ${{ runner.os }}-pods-
+            ${{ runner.os }}-${{ inputs.package }}-pods-
       - name: Install npm dependencies
         run: yarn ci
         env:
