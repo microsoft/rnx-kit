@@ -29,7 +29,8 @@ jobs:
         with:
           path: .yarn-offline-mirror
           key: ${{ runner.os }}-${{ hashFiles('yarn.lock') }}-7
-      - uses: actions/cache@v3
+      - name: Cache /.pods-offline-mirror
+        uses: actions/cache@v3
         with:
           path: .pods-offline-mirror
           key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
