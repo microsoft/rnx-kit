@@ -29,13 +29,6 @@ jobs:
         with:
           path: .yarn-offline-mirror
           key: ${{ runner.os }}-${{ hashFiles('yarn.lock') }}-7
-      - name: Set up CocoaPods cache
-        uses: actions/cache@v3
-        with:
-          path: ${{ format('packages/{0}/ios/Pods', inputs.package) }}
-          key: ${{ runner.os }}-${{ inputs.package }}-pods-${{ hashFiles(format('packages/{0}/ios/Podfile.lock', inputs.package)) }}
-          restore-keys: |
-            ${{ runner.os }}-${{ inputs.package }}-pods-
       - name: Install npm dependencies
         run: yarn ci
         env:
