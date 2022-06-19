@@ -24,12 +24,13 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      - name: Set up Yarn cache
+      - name: Cache /.yarn-offline-mirror
         uses: actions/cache@v3
         with:
           path: .yarn-offline-mirror
           key: ${{ runner.os }}-${{ hashFiles('yarn.lock') }}-7
-      - uses: actions/cache@v3
+      - name: Cache /.pods-offline-mirror
+        uses: actions/cache@v3
         with:
           path: .pods-offline-mirror
           key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
