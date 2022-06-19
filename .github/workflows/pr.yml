@@ -110,38 +110,20 @@ jobs:
         run: |
           ./gradlew clean build
         working-directory: packages/test-app/android
-  build-ios:
+  build-ios-expo-app:
     name: "Build iOS"
-    runs-on: macos-11
-    steps:
-      - name: Set up Node 14
-        uses: actions/setup-node@v3.3.0
-        with:
-          node-version: 14
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-      - name: Cache /.yarn-offline-mirror
-        uses: actions/cache@v3
-        with:
-          path: .yarn-offline-mirror
-          key: ${{ runner.os }}-${{ hashFiles('yarn.lock') }}-7
-      - name: Install npm dependencies
-        run: yarn ci
-        env:
-          CI_SKIP_GO: 1
-      - name: Install Pods
-        run: pod install --project-directory=ios
-        working-directory: packages/test-app
-      - name: Build iOS app
-        run: |
-          device_name='iPhone 12'
-          device=$(xcrun simctl list devices "${device_name}" available | grep "${device_name} (")
-          re='\(([-0-9A-Fa-f]+)\)'
-          [[ $device =~ $re ]] || exit 1
-          xcodebuild -workspace SampleCrossApp.xcworkspace -scheme ReactTestApp -destination "platform=iOS Simulator,id=${BASH_REMATCH[1]}" CODE_SIGNING_ALLOWED=NO COMPILER_INDEX_STORE_ENABLE=NO build | xcpretty
-        working-directory: packages/test-app/ios
+    uses: ./.github/workflows/build-ios.yml
+    with:
+      package: expo-app
+      workspace-name: expoapp
+      scheme-name: expoapp
+  build-ios-test-app:
+    name: "Build iOS"
+    uses: ./.github/workflows/build-ios.yml
+    with:
+      package: test-app
+      workspace-name: SampleCrossApp
+      scheme-name: ReactTestApp
   build-website:
     name: "Build the website"
     runs-on: ubuntu-latest
