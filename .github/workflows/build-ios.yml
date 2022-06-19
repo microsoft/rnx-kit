@@ -13,7 +13,7 @@ on:
 
 jobs:
   build-ios:
-    name: ${{ inputs.package }}
+    name: Build iOS ${{ inputs.package }}
     runs-on: macos-11
     steps:
       - name: Set up Node 14
