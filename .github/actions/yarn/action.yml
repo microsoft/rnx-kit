@@ -13,7 +13,7 @@ runs:
       with:
         path: .yarn-offline-mirror
         key: yarn-${{ runner.os }}-${{ steps.cache-key-generator.outputs.cache-key }}
-      - name: Install package dependencies
-        run: yarn ci
-        env:
-          CI_SKIP_GO: 1
+    - name: Install package dependencies
+      run: yarn ci
+      env:
+        CI_SKIP_GO: 1
