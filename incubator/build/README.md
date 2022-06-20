@@ -50,10 +50,11 @@ yarn rnx-build
   - [ ] Android device
   - [x] iOS simulator
   - [ ] iOS device
-- [ ] Miscellaneous cleanup
+- [x] Miscellaneous cleanup
   - [x] Implement proper CLI
   - [x] Download build artifacts to platform specific folders
-  - [ ] iOS: Detect workspace to build
+  - [x] iOS: Detect workspace to build
+- [ ] Figure out how to install artifacts with QR code
 - [ ] Figure out caching
 - [ ] Figure out how to skip native build when cached
 - [ ] Implement support for macOS
