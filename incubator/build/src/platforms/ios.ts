@@ -82,15 +82,18 @@ async function launch(app: string, { udid }: SimDevice): Promise<void> {
 }
 
 async function untar(archive: string): Promise<string> {
-  const tar = makeCommand("tar");
-  const list = ensure(await tar("tf", archive));
+  const buildDir = path.dirname(archive);
+  const tar = makeCommand("tar", { cwd: buildDir });
+
+  const filename = path.basename(archive);
+  const list = ensure(await tar("tf", filename));
   const m = list.match(/(.*?)\//);
   if (!m) {
     throw new Error(`Failed to determine content of ${archive}`);
   }
 
-  ensure(await tar("xf", archive));
-  return m[1];
+  ensure(await tar("xf", filename));
+  return path.join(buildDir, m[1]);
 }
 
 export async function installAndLaunchApp(

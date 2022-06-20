@@ -52,7 +52,7 @@ yarn rnx-build
   - [ ] iOS device
 - [ ] Miscellaneous cleanup
   - [x] Implement proper CLI
-  - [ ] Download build artifacts to a platform specific folder
+  - [x] Download build artifacts to platform specific folders
   - [ ] iOS: Detect workspace to build
 - [ ] Figure out caching
 - [ ] Figure out how to skip native build when cached

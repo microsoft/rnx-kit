@@ -8,6 +8,7 @@
 .idea/
 Pods/
 coverage/
+/packages/*/*/rnx-build/
 /packages/*/bin/
 /packages/*/dist/
 /packages/*/lib/

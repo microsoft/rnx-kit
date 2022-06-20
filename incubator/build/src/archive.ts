@@ -1,7 +1,9 @@
 import * as fs from "node:fs";
+import * as path from "node:path";
 import yauzl from "yauzl";
 
 export function extract(filename: string): Promise<string> {
+  const destination = path.dirname(filename);
   return new Promise((resolve, reject) => {
     yauzl.open(filename, { lazyEntries: true }, (err, zipFile) => {
       if (err) {
@@ -15,10 +17,10 @@ export function extract(filename: string): Promise<string> {
             reject(err);
           }
 
-          const writeStream = fs.createWriteStream(entry.fileName);
+          const entryFilename = path.join(destination, entry.fileName);
           readStream
-            .pipe(writeStream)
-            .once("finish", () => resolve(entry.fileName));
+            .pipe(fs.createWriteStream(entryFilename))
+            .once("finish", () => resolve(entryFilename));
         });
       });
     });

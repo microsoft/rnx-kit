@@ -10,6 +10,7 @@ import * as path from "node:path";
 import ora from "ora";
 import { idle, withRetries } from "../async";
 import {
+  BUILD_ID,
   MAX_ATTEMPTS,
   MAX_DOWNLOAD_ATTEMPTS,
   USER_CONFIG_FILE,
@@ -40,7 +41,10 @@ const octokit: () => GitHubClient = (() => {
   };
 })();
 
-async function downloadArtifact(runId: WorkflowRunId): Promise<string> {
+async function downloadArtifact(
+  runId: WorkflowRunId,
+  { platform, projectRoot }: BuildParams
+): Promise<string> {
   const artifacts = await withRetries(async () => {
     const { data } = await octokit().rest.actions.listWorkflowRunArtifacts(
       runId
@@ -61,7 +65,15 @@ async function downloadArtifact(runId: WorkflowRunId): Promise<string> {
     return data as ArrayBuffer;
   }, MAX_DOWNLOAD_ATTEMPTS);
 
-  const filename = artifacts[0].name + ".zip";
+  const buildDir = path.join(
+    getRepositoryRoot(),
+    projectRoot,
+    platform,
+    BUILD_ID
+  );
+  const filename = path.join(buildDir, artifacts[0].name + ".zip");
+
+  await fs.mkdir(buildDir, { recursive: true, mode: 0o755 });
   await fs.writeFile(filename, Buffer.from(data));
   return filename;
 }
@@ -211,7 +223,7 @@ export async function build(
   await watchWorkflowRun(workflowRunId, spinner);
 
   spinner.start("Downloading build artifact");
-  const artifactFile = await downloadArtifact(workflowRunId);
+  const artifactFile = await downloadArtifact(workflowRunId, inputs);
   spinner.succeed(`Build artifact saved to ${artifactFile}`);
 
   return artifactFile;

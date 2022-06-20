@@ -16,13 +16,13 @@ export function ensure(result: SpawnResult, message = result.stderr): string {
   return result.stdout;
 }
 
-export function makeCommand(command: string): Command {
+export function makeCommand(command: string, options = {}): Command {
   return (...args: string[]) => {
     return new Promise((resolve) => {
       const stdout: Buffer[] = [];
       const stderr: Buffer[] = [];
 
-      const cmd = spawn(command, args);
+      const cmd = spawn(command, args, options);
 
       cmd.stdout.on("data", (data) => {
         stdout.push(data);
