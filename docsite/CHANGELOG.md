@@ -1,5 +1,11 @@
 # @rnx-kit/docsite
 
+## 0.1.3
+
+### Patch Changes
+
+- 058063ea: Adding more references to the default list of capabilities
+
 ## 0.1.2
 
 ### Patch Changes
