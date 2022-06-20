@@ -22,6 +22,5 @@ jobs:
       - name: Install package dependencies
         uses: ./.github/actions/yarn
       - name: Build Android app
-        run: |
-          ./gradlew clean build
-        working-directory: packages/${{ inputs.package }}/android
+        run: yarn run build:android
+        working-directory: packages/${{ inputs.package }}

@@ -32,12 +32,5 @@ jobs:
           project-directory: ios
           working-directory: packages/${{ inputs.package }}
       - name: Build iOS app
-        run: |
-          device_name='iPhone 12'
-          device=$(xcrun simctl list devices "${device_name}" available | grep "${device_name} (")
-          re='\(([-0-9A-Fa-f]+)\)'
-          [[ $device =~ $re ]] || exit 1
-          xcodebuild -workspace ${{ inputs.workspace-name }}.xcworkspace -scheme ${{ inputs.scheme-name }} -destination "platform=iOS Simulator,id=${BASH_REMATCH[1]}" CODE_SIGNING_ALLOWED=NO COMPILER_INDEX_STORE_ENABLE=NO build | xcpretty
-        working-directory: packages/${{ inputs.package }}/ios
-        env:
-          RCT_NO_LAUNCH_PACKAGER: 1
+        run: yarn build:ios
+        working-directory: packages/${{ inputs.package }}

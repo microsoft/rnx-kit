@@ -5,6 +5,8 @@
   "private": true,
   "scripts": {
     "build": "rnx-kit-scripts build",
+    "build:ios": "rnx-kit-scripts build-ios -w SampleCrossApp -s ReactTestApp -d 'iPhone 12'",
+    "build:android": "rnx-kit-scripts build-android clean build",
     "depcheck": "react-native rnx-dep-check && rnx-kit-scripts depcheck",
     "format": "rnx-kit-scripts format",
     "lint": "rnx-kit-scripts lint",
