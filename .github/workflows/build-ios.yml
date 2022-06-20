@@ -16,14 +16,14 @@ jobs:
     name: ${{ inputs.package }}
     runs-on: macos-11
     steps:
-      - name: Set up Node 14
-        uses: actions/setup-node@v3.3.0
-        with:
-          node-version: 14
       - name: Checkout
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
+      - name: Setup the toolchain
+        uses: ./.github/actions/setup-toolchain
+        with:
+          node-version: 14
       - name: Set up Yarn cache
         uses: actions/cache@v3
         with:
