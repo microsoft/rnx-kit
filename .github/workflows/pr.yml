@@ -66,25 +66,18 @@ jobs:
           yarn bundle+esbuild
         shell: bash
         working-directory: packages/test-app
-  build-android:
+  build-android-expo-app:
     name: "Build Android"
     runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-      - name: Setup the toolchain
-        uses: ./.github/actions/setup-toolchain
-        with:
-          node-version: 14
-          jdk-version: 11
-      - name: Install package dependencies
-        uses: ./.github/actions/yarn
-      - name: Build Android app
-        run: |
-          ./gradlew clean build
-        working-directory: packages/test-app/android
+    uses: ./.github/workflows/build-android.yml
+    with:
+      package: expo-app
+  build-android-test-app:
+    name: "Build Android"
+    runs-on: ubuntu-latest
+    uses: ./.github/workflows/build-android.yml
+    with:
+      package: test-app
   build-ios-expo-app:
     name: "Build iOS"
     uses: ./.github/workflows/build-ios.yml
