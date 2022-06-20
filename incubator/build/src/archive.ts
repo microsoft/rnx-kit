@@ -3,8 +3,8 @@ import * as path from "node:path";
 import yauzl from "yauzl";
 
 export function extract(filename: string): Promise<string> {
-  const destination = path.dirname(filename);
   return new Promise((resolve, reject) => {
+    const destination = path.dirname(filename);
     yauzl.open(filename, { lazyEntries: true }, (err, zipFile) => {
       if (err) {
         reject(err);
