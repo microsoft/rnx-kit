@@ -66,6 +66,10 @@
       "packages/@types/*",
       "packages/*",
       "scripts"
+    ],
+    "nohoist": [
+      "**/expo-app",
+      "**/expo-app/**"
     ]
   },
   "eslintConfig": {
