@@ -26,14 +26,11 @@ jobs:
           node-version: 14
       - name: Install package dependencies
         uses: ./.github/actions/yarn
-      - name: Set up CocoaPods cache
-        uses: actions/cache@v3
-        with:
-          path: ${{ format('packages/{0}/ios/Pods', inputs.package) }}
-          key: ${{ format('{0}-{1}-pods-{2}', runner.os, inputs.package, hashFiles(format('packages/{0}/ios/Podfile.lock', inputs.package))) }}
       - name: Install Pods
-        run: pod install --project-directory=ios
-        working-directory: packages/${{ inputs.package}}
+        uses: ./.github/actions/cocoapods
+        with:
+          project-directory: ios
+          working-directory: packages/${{ inputs.package }}
       - name: Build iOS app
         run: |
           device_name='iPhone 12'
