@@ -21,15 +21,8 @@ jobs:
       - name: Deduplicate packages
         run: |
           npx yarn-deduplicate --list --fail
-      - name: Cache /.yarn-offline-mirror
-        uses: actions/cache@v3
-        with:
-          path: .yarn-offline-mirror
-          key: ${{ runner.os }}-${{ hashFiles('yarn.lock') }}-7
       - name: Install package dependencies
-        run: yarn ci
-        env:
-          CI_SKIP_GO: 1
+        uses: ./.github/actions/yarn
       - name: Check for change files
         run: yarn change:check --since origin/${{ github.base_ref }}
       - name: Report formatting problems
@@ -57,13 +50,8 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           go-version: "^1.14.0"
-      - name: Cache /.yarn-offline-mirror
-        uses: actions/cache@v3
-        with:
-          path: .yarn-offline-mirror
-          key: ${{ runner.os }}-${{ hashFiles('yarn.lock') }}-7
       - name: Install package dependencies
-        run: yarn ci
+        uses: ./.github/actions/yarn
       - name: Build and test packages
         run: yarn build:ci --base origin/${{ github.base_ref }}
       - name: Ensure READMEs are up-to-date
@@ -91,15 +79,8 @@ jobs:
         with:
           node-version: 14
           jdk-version: 11
-      - name: Cache /.yarn-offline-mirror
-        uses: actions/cache@v3
-        with:
-          path: .yarn-offline-mirror
-          key: ${{ runner.os }}-${{ hashFiles('yarn.lock') }}-7
-      - name: Install npm dependencies
-        run: yarn ci
-        env:
-          CI_SKIP_GO: 1
+      - name: Install package dependencies
+        uses: ./.github/actions/yarn
       - name: Build Android app
         run: |
           ./gradlew clean build
@@ -128,15 +109,8 @@ jobs:
           fetch-depth: 0
       - name: Setup the toolchain
         uses: ./.github/actions/setup-toolchain
-      - name: Cache /.yarn-offline-mirror
-        uses: actions/cache@v3
-        with:
-          path: .yarn-offline-mirror
-          key: ${{ runner.os }}-${{ hashFiles('yarn.lock') }}-7
       - name: Install package dependencies
-        run: yarn ci
-        env:
-          CI_SKIP_GO: 1
+        uses: ./.github/actions/yarn
       - name: Build website
         run: yarn build
         working-directory: docsite

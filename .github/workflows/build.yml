@@ -17,13 +17,8 @@ jobs:
         with:
           node-version: 16
           go-version: "^1.14.0"
-      - name: Cache /.yarn-offline-mirror
-        uses: actions/cache@v3
-        with:
-          path: .yarn-offline-mirror
-          key: ${{ hashFiles('yarn.lock') }}
       - name: Install package dependencies
-        run: yarn ci
+        uses: ./.github/actions/yarn
       - name: Build and test packages
         run: yarn build:ci:all
       - name: Bundle packages

@@ -24,20 +24,13 @@ jobs:
         uses: ./.github/actions/setup-toolchain
         with:
           node-version: 14
-      - name: Set up Yarn cache
-        uses: actions/cache@v3
-        with:
-          path: .yarn-offline-mirror
-          key: ${{ runner.os }}-${{ hashFiles('yarn.lock') }}-7
+      - name: Install package dependencies
+        uses: ./.github/actions/yarn
       - name: Set up CocoaPods cache
         uses: actions/cache@v3
         with:
           path: ${{ format('packages/{0}/ios/Pods', inputs.package) }}
           key: ${{ format('{0}-{1}-pods-{2}', runner.os, inputs.package, hashFiles(format('packages/{0}/ios/Podfile.lock', inputs.package))) }}
-      - name: Install npm dependencies
-        run: yarn ci
-        env:
-          CI_SKIP_GO: 1
       - name: Install Pods
         run: pod install --project-directory=ios
         working-directory: packages/${{ inputs.package}}
