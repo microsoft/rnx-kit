@@ -51,7 +51,7 @@ yarn rnx-build
   - [x] iOS simulator
   - [ ] iOS device
 - [ ] Miscellaneous cleanup
-  - [ ] Implement proper CLI
+  - [x] Implement proper CLI
   - [ ] Download build artifacts to a platform specific folder
   - [ ] iOS: Detect workspace to build
 - [ ] Figure out caching

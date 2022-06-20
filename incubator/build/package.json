@@ -32,6 +32,8 @@
     "@octokit/core": "^3.6.0",
     "@octokit/plugin-rest-endpoint-methods": "^5.14.0",
     "ora": "^5.4.1",
+    "pkg-dir": "^5.0.0",
+    "yargs": "^16.0.0",
     "yauzl": "2.10.0"
   },
   "devDependencies": {
