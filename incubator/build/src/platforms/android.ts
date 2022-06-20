@@ -117,7 +117,7 @@ export async function installAndLaunchApk(
 ): Promise<void> {
   if (!ANDROID_HOME) {
     spinner.warn(
-      "ANDROID_HOME is not set and is required to install APK in device/emulator."
+      "ANDROID_HOME is not set and is required to install and launch APKs"
     );
     return;
   }

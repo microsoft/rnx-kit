@@ -44,9 +44,10 @@ async function getAvailableDevices(
   return devices;
 }
 
-function getDeveloperDirectory(): string {
+function getDeveloperDirectory(): string | undefined {
   const xcodeSelect = makeCommandSync("xcode-select");
-  return ensure(xcodeSelect("--print-path"));
+  const { stdout, status } = xcodeSelect("--print-path");
+  return status === 0 ? stdout.trim() : undefined;
 }
 
 async function getDevice(deviceName: string | undefined): Promise<SimDevice> {
@@ -101,6 +102,12 @@ export async function installAndLaunchApp(
   deviceName: string | undefined,
   spinner: Ora
 ): Promise<void> {
+  const developerDir = getDeveloperDirectory();
+  if (!developerDir) {
+    spinner.warn("Xcode is required to install and launch apps");
+    return;
+  }
+
   const device = await getDevice(deviceName);
   if (device.state === "Booted") {
     spinner.info(`${device.name} simulator is already connected`);
@@ -110,7 +117,6 @@ export async function installAndLaunchApp(
     spinner.succeed(`Booted ${device.name} simulator`);
   }
 
-  const developerDir = getDeveloperDirectory();
   await open(path.join(developerDir, "Applications", "Simulator.app"));
 
   const app = await untar(archive);
