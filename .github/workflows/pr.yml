@@ -68,13 +68,11 @@ jobs:
         working-directory: packages/test-app
   build-android-expo-app:
     name: "Build Android"
-    runs-on: ubuntu-latest
     uses: ./.github/workflows/build-android.yml
     with:
       package: expo-app
   build-android-test-app:
     name: "Build Android"
-    runs-on: ubuntu-latest
     uses: ./.github/workflows/build-android.yml
     with:
       package: test-app
