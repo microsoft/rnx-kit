@@ -12,7 +12,10 @@ function init(commands) {
     yargs.command(name, description, {}, async (args) => {
       try {
         await command(args, process.argv.slice(3));
-      } catch (_) {
+      } catch (e) {
+        if (e instanceof Error) {
+          console.error(e.message);
+        }
         process.exitCode = 1;
       }
     });
@@ -24,6 +27,14 @@ init({
   build: {
     description: "Builds the current package",
     command: require("./commands/build"),
+  },
+  "build-ios": {
+    description: "Builds an iOS app within the current package",
+    command: require("./commands/build-ios"),
+  },
+  "build-android": {
+    description: "Builds an Android app within the current package",
+    command: require("./commands/build-android"),
   },
   bundle: {
     description: "Bundles the current package",
