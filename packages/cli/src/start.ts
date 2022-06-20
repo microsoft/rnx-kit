@@ -15,7 +15,6 @@ import qrcode from "qrcode";
 import readline from "readline";
 import { customizeMetroConfig } from "./metro-config";
 import { getKitServerConfig } from "./serve/kit-config";
-import type { TypeScriptValidationOptions } from "./types";
 
 type DevServerMiddleware = ReturnType<
   typeof CliServerApi["createDevServerMiddleware"]
@@ -31,18 +30,18 @@ type DevServerMiddleware7 = Pick<DevServerMiddleware, "middleware"> & {
 };
 
 export type CLIStartOptions = {
-  host: string;
   port: number;
+  host: string;
   projectRoot?: string;
   watchFolders?: string[];
   assetPlugins?: string[];
   sourceExts?: string[];
   maxWorkers?: number;
+  resetCache?: boolean;
   customLogReporterPath?: string;
   https?: boolean;
   key?: string;
   cert?: string;
-  resetCache?: boolean;
   config?: string;
   interactive: boolean;
 };
@@ -69,9 +68,6 @@ export async function rnxStart(
   cliOptions: CLIStartOptions
 ): Promise<void> {
   const serverConfig = getKitServerConfig(cliOptions);
-  if (!serverConfig) {
-    return Promise.resolve();
-  }
 
   const { createDevServerMiddleware, indexPageMiddleware } = friendlyRequire<
     typeof CliServerApi
@@ -140,17 +136,15 @@ export async function rnxStart(
   });
 
   // customize the metro config to include plugins, presets, etc.
-  const typescriptValidationOptions: TypeScriptValidationOptions = {
-    print: (message: string): void => {
-      terminal.log(message);
-    },
-  };
   customizeMetroConfig(
     metroConfig,
     serverConfig.detectCyclicDependencies,
     serverConfig.detectDuplicateDependencies,
-    serverConfig.typescriptValidation ? typescriptValidationOptions : false,
-    serverConfig.treeShake
+    serverConfig.typescriptValidation,
+    serverConfig.treeShake,
+    (message: string): void => {
+      terminal.log(message);
+    }
   );
 
   // create middleware -- a collection of plugins which handle incoming

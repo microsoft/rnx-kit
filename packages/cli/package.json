@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/cli",
-  "version": "0.12.7",
+  "version": "0.13.0",
   "description": "Command-line interface for working with kit packages in your repo",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/cli",
   "license": "MIT",
@@ -53,17 +53,19 @@
     "@react-native-community/cli-types": "^6.0.0",
     "@rnx-kit/scripts": "*",
     "@types/metro": "^0.66.0",
+    "@types/metro-babel-transformer": "^0.66.0",
     "@types/metro-config": "^0.66.0",
     "@types/qrcode": "^1.4.2",
     "jest-extended": "^2.0.0",
     "memfs": "^3.4.1",
+    "metro-config": "^0.66.2",
     "typescript": "^4.0.0"
   },
   "depcheck": {
     "ignoreMatches": [
       "@react-native-community/cli-clean",
       "metro",
-      "metro-config",
+      "metro-babel-transformer",
       "readline"
     ]
   },

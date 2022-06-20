@@ -1,29 +1,33 @@
 import "jest-extended";
-import { applyKitBundleConfigOverrides } from "../../src/bundle/overrides";
-import type { KitBundleConfig } from "../../src/bundle/types";
+import { applyBundleConfigOverrides } from "../../src/bundle/overrides";
+import type { CliPlatformBundleConfig } from "../../src/bundle/types";
 
-describe("CLI > Bundle > Overrides > applyKitBundleConfigOverrides", () => {
-  const config: KitBundleConfig = {
+describe("CLI > Bundle > Overrides > applyBundleConfigOverrides", () => {
+  const config: CliPlatformBundleConfig = {
+    entryFile: "src/index.js",
+    bundleOutput: "main.jsbundle",
+    sourcemapUseAbsolutePath: false,
     detectCyclicDependencies: true,
     detectDuplicateDependencies: true,
     typescriptValidation: true,
     treeShake: true,
-    entryPath: "dist/index.js",
-    distPath: "dist",
-    assetsPath: "dist",
-    bundlePrefix: "main",
     platform: "ios",
   };
 
   test("has no effect when no overrides are given", () => {
     const copy = { ...config };
-    applyKitBundleConfigOverrides({}, [copy]);
+    applyBundleConfigOverrides({}, [copy]);
     expect(copy).toEqual(config);
   });
 
   function testOverride(name: string, value: unknown) {
     const copy = { ...config };
-    applyKitBundleConfigOverrides(
+    if (name in copy) {
+      if (name !== undefined && name !== null) {
+        expect(copy[name]).not.toEqual(value);
+      }
+    }
+    applyBundleConfigOverrides(
       {
         [name]: value,
       },
@@ -35,35 +39,35 @@ describe("CLI > Bundle > Overrides > applyKitBundleConfigOverrides", () => {
     });
   }
 
-  test("changes entryPath using an override", () => {
-    testOverride("entryPath", "out/entry.js");
+  test("changes entryFile using an override", () => {
+    testOverride("entryFile", "foo.js");
   });
 
-  test("changes distPath using an override", () => {
-    testOverride("distPath", "out");
+  test("changes bundleOutput using an override", () => {
+    testOverride("bundleOutput", "foo.bundle");
   });
 
-  test("changes assetsPath using an override", () => {
-    testOverride("assetsPath", "out/assets");
-  });
-
-  test("changes bundlePrefix using an override", () => {
-    testOverride("bundlePrefix", "main");
-  });
-
-  test("changes bundleEncoding using an override", () => {
+  test("sets bundleEncoding using an override", () => {
     testOverride("bundleEncoding", "utf8");
   });
 
-  test("changes sourcemapOutput using an override", () => {
-    testOverride("sourcemapOutput", "out/entry.map");
+  test("sets sourcemapOutput using an override", () => {
+    testOverride("sourcemapOutput", "out/foo.map");
   });
 
-  test("changes sourcemapSourcesRoot using an override", () => {
-    testOverride("sourcemapSourcesRoot", "out");
+  test("sets sourcemapSourcesRoot using an override", () => {
+    testOverride("sourcemapSourcesRoot", "/myrepo/packags/foo");
+  });
+
+  test("changes sourcemapUseAbsolutePath using an override", () => {
+    testOverride("sourcemapUseAbsolutePath", true);
+  });
+
+  test("sets assetsDest using an override", () => {
+    testOverride("assetsDest", "dist");
   });
 
   test("changes treeShake using an override", () => {
-    testOverride("treeShake", true);
+    testOverride("treeShake", false);
   });
 });

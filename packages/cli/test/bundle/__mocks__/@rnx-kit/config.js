@@ -8,8 +8,7 @@ rnxKitConfig.__setMockConfig = (config) => {
 };
 
 rnxKitConfig.getKitConfig = () => kitConfig;
-rnxKitConfig.getBundleDefinition = actualKitConfig.getBundleDefinition;
-rnxKitConfig.getBundlePlatformDefinition =
-  actualKitConfig.getBundlePlatformDefinition;
+rnxKitConfig.getBundleConfig = actualKitConfig.getBundleConfig;
+rnxKitConfig.getPlatformBundleConfig = actualKitConfig.getPlatformBundleConfig;
 
 module.exports = rnxKitConfig;

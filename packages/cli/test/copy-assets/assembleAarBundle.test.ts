@@ -5,6 +5,7 @@ import { assembleAarBundle } from "../../src/copy-assets";
 
 jest.mock("child_process");
 jest.mock("fs");
+jest.unmock("@rnx-kit/console");
 
 export const options = {
   platform: "android" as const,
