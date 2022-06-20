@@ -1,4 +1,5 @@
 import chalk from "chalk";
+import path from "path";
 
 import type { AssetData, OutputOptions } from "metro";
 import type { TransformProfile } from "metro-babel-transformer";
@@ -18,6 +19,7 @@ export type BundleArgs = {
   bundleEncoding?: OutputOptions["bundleEncoding"];
   sourcemapOutput?: string;
   sourcemapSourcesRoot?: string;
+  sourcemapUseAbsolutePath: boolean;
   unstableTransformProfile?: TransformProfile;
 };
 
@@ -31,6 +33,15 @@ type RequestOptions = {
 };
 
 export async function bundle(args: BundleArgs, config: ConfigT): Promise<void> {
+  try {
+    const {
+      buildBundleWithConfig,
+    } = require("@react-native-community/cli-plugin-metro");
+    return buildBundleWithConfig(args, config);
+  } catch (_) {
+    // Retry with our custom logic
+  }
+
   if (config.resolver.platforms.indexOf(args.platform) === -1) {
     console.error(
       `Invalid platform ${
@@ -53,9 +64,14 @@ export async function bundle(args: BundleArgs, config: ConfigT): Promise<void> {
   // have other choice than defining it as an env variable here.
   process.env.NODE_ENV = args.dev ? "development" : "production";
 
+  let sourceMapUrl = args.sourcemapOutput;
+  if (sourceMapUrl && !args.sourcemapUseAbsolutePath) {
+    sourceMapUrl = path.basename(sourceMapUrl);
+  }
+
   const requestOpts: RequestOptions = {
     entryFile: args.entryFile,
-    sourceMapUrl: args.sourcemapOutput,
+    sourceMapUrl,
     dev: args.dev,
     minify: args.minify !== undefined ? args.minify : !args.dev,
     platform: args.platform,

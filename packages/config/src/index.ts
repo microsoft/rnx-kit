@@ -1,25 +1,17 @@
 export type {
   BundleConfig,
-  BundleDefinition,
   BundleParameters,
-  BundleRequiredParameters,
-  BundlerRuntimeParameters,
+  BundlerPlugins,
+  TypeScriptValidationOptions,
 } from "./bundleConfig";
 
-export {
-  getBundleDefinition,
-  getBundlePlatformDefinition,
-} from "./getBundleDefinition";
-export type { BundleDefinitionWithRequiredParameters } from "./getBundleDefinition";
+export { getBundleConfig, getPlatformBundleConfig } from "./getBundleConfig";
 
 export { getKitCapabilities } from "./getKitCapabilities";
 export type { KitCapabilities } from "./getKitCapabilities";
 
 export { getKitConfig } from "./getKitConfig";
 export type { GetKitConfigOptions } from "./getKitConfig";
-
-export { getServerConfig } from "./getServerConfig";
-export type { ServerWithRequiredParameters } from "./getServerConfig";
 
 export type {
   Capability,
@@ -30,8 +22,4 @@ export type {
   MetaCapability,
 } from "./kitConfig";
 
-export type {
-  ServerRequiredParameters,
-  ServerParameters,
-  ServerConfig,
-} from "./serverConfig";
+export type { ServerConfig } from "./serverConfig";

@@ -55,7 +55,7 @@ export type GetDependencyVersions = () => DependencyVersions;
 export type KitType = "app" | "library";
 
 /**
- * Configuration information for an rnx-kit. This is retrieved via cosmi-config
+ * Configuration information for an rnx-kit package. This is retrieved from 'rnx-kit' in package.json.
  */
 export type KitConfig = {
   /**
@@ -79,13 +79,12 @@ export type KitConfig = {
   reactNativeDevVersion?: string;
 
   /**
-   * Specifies how the kit is bundled. When not defined, the kit cannot be bundled.
+   * Specifies how the package is bundled.
    */
-  bundle?: BundleConfig;
+  bundle?: BundleConfig | BundleConfig[];
 
   /**
-   * Specifies how the kit's development bundle-server is configured. When not defined,
-   * the kit will be served using default values.
+   * Specifies how the package's bundle server is configured.
    */
   server?: ServerConfig;
 

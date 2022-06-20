@@ -1,8 +1,0 @@
-{
-  "name": "not-present-test-package",
-  "version": "0.0.1",
-  "description": "Package with no kit behavior defined",
-  "private": true,
-  "author": "",
-  "license": "MIT"
-}

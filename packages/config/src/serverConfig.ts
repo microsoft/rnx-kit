@@ -1,8 +1,6 @@
-import type { BundlerRuntimeParameters } from "./bundleConfig";
+import type { BundlerPlugins } from "./bundleConfig";
 
-export type ServerRequiredParameters = BundlerRuntimeParameters;
-
-export type ServerParameters = Partial<ServerRequiredParameters> & {
+export type ServerConfig = BundlerPlugins & {
   /**
    * Path to the root of your react-native experience project. The bundle server uses
    * this root path to resolve all web requests. Either absolute, or relative to the
@@ -26,5 +24,3 @@ export type ServerParameters = Partial<ServerRequiredParameters> & {
    */
   sourceExts?: string[];
 };
-
-export type ServerConfig = ServerParameters;

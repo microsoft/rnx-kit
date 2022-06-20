@@ -1,49 +1,11 @@
-import type { BundleDefinitionWithRequiredParameters } from "@rnx-kit/config";
 import {
-  getBundleDefinition,
-  getBundlePlatformDefinition,
+  getBundleConfig,
+  getPlatformBundleConfig,
   getKitConfig,
 } from "@rnx-kit/config";
-import { warn } from "@rnx-kit/console";
 import type { AllPlatforms } from "@rnx-kit/tools-react-native/platform";
-import chalk from "chalk";
-import type { KitBundleConfig } from "./types";
-
-/**
- * Get a bundle definition from the kit configuration.
- *
- * @param id Optional bundle definition id. Only needed when the kit config has more than one definition.
- * @returns Bundle definition matching the id (if given), or the first bundle definition found. `undefined` if bundling is disabled or not supported for the kit.
- */
-export function getKitBundleDefinition(
-  id?: string
-): BundleDefinitionWithRequiredParameters | undefined {
-  const kitConfig = getKitConfig();
-  if (!kitConfig) {
-    throw new Error(
-      "No kit configuration found for this react-native experience"
-    );
-  }
-
-  if (kitConfig.bundle === null || kitConfig.bundle === undefined) {
-    warn(
-      chalk.yellow(
-        "No bundle configuration found for this react-native experience -- skipping bundling"
-      )
-    );
-    return undefined;
-  } else if (!kitConfig.bundle) {
-    warn(
-      chalk.yellow(
-        "Bundling is disabled for this react-native experience -- skipping"
-      )
-    );
-    return undefined;
-  }
-
-  // get the bundle definition
-  return getBundleDefinition(kitConfig.bundle, id);
-}
+import type { CliPlatformBundleConfig } from "./types";
+import { getDefaultBundlerPlugins } from "../bundler-plugin-defaults";
 
 /**
  * Get the list of target platforms for bundling.
@@ -63,36 +25,56 @@ export function getTargetPlatforms(
     return targetPlatforms;
   }
   throw new Error(
-    "No target platforms given. Update the kit configuration to include a target platform, or provide a target platform on the command-line."
+    "No target platforms given. Update the rnx-kit configuration to include a target platform, or provide a target platform on the command-line."
   );
 }
 
+function getDefaultBundleParameters(platform: string) {
+  const extension =
+    platform === "ios" || platform === "macos" ? "jsbundle" : "bundle";
+
+  return {
+    entryFile: "index.js",
+    bundleOutput: `index.${platform}.${extension}`,
+    sourcemapUseAbsolutePath: false,
+  };
+}
+
 /**
- * Get bundle configuration and target platform(s) from kit config. Create
- * one config per platform, applying any platform-specific customizations in
- * the kit config.
+ * Get the bundle configuration and target platform(s) from the rnx-kit
+ * configuration. Use them to create an array of platform-specific
+ * bundle configurations.
  *
- * @param id Optional bundle definition id. Only needed when the kit config has more than one definition.
+ * If an id is given, search for the matching bundle definition. Otherwise, use the first bundle definition.
+ *
+ * @param id Optional identity of the target bundle definition to return
  * @param overridePlatform Override platform, typically from the command-line. When given, this overrides the list of target platforms.
- * @returns Arrary of kit bundle configurations, one per target platform, or `undefined` if bundling is disabled
+ * @returns Arrary of platform-specific bundle configurations
  */
-export function getKitBundleConfigs(
+export function getCliPlatformBundleConfigs(
   id?: string,
   overridePlatform?: AllPlatforms
-): KitBundleConfig[] | undefined {
-  const bundleDefinition = getKitBundleDefinition(id);
-  if (!bundleDefinition) {
-    return undefined;
-  }
+): CliPlatformBundleConfig[] {
+  const kitConfig = getKitConfig();
+  const maybeBundleConfig = kitConfig
+    ? getBundleConfig(kitConfig, id)
+    : undefined;
+  const bundleConfig = maybeBundleConfig ?? {};
 
-  const platforms = getTargetPlatforms(
-    overridePlatform,
-    bundleDefinition.targets
-  );
+  const platforms = getTargetPlatforms(overridePlatform, bundleConfig.targets);
 
-  return platforms.map<KitBundleConfig>((platform) => {
+  return platforms.map<CliPlatformBundleConfig>((platform) => {
+    const platformBundleConfig = getPlatformBundleConfig(
+      bundleConfig,
+      platform
+    );
+
+    // apply defaults to fill in any required props that are missing
+
     return {
-      ...getBundlePlatformDefinition(bundleDefinition, platform),
+      ...getDefaultBundlerPlugins(),
+      ...getDefaultBundleParameters(platform),
+      ...platformBundleConfig,
       platform,
     };
   });
