@@ -8,15 +8,20 @@ import {
 import * as fs from "node:fs/promises";
 import * as path from "node:path";
 import ora from "ora";
-import { idle, withRetries } from "./async";
+import { idle, withRetries } from "../async";
 import {
   MAX_ATTEMPTS,
   MAX_DOWNLOAD_ATTEMPTS,
   USER_CONFIG_FILE,
   WORKFLOW_ID,
-} from "./constants";
-import { getRemoteUrl, getRepositoryRoot } from "./git";
-import type { BuildParams, Context, RepositoryInfo, UserConfig } from "./types";
+} from "../constants";
+import { getRemoteUrl, getRepositoryRoot } from "../git";
+import type {
+  BuildParams,
+  Context,
+  RepositoryInfo,
+  UserConfig,
+} from "../types";
 
 type GitHubClient = Octokit & ReturnType<typeof restEndpointMethods>;
 type WorkflowRunId =

@@ -4,7 +4,7 @@ import { hideBin } from "yargs/helpers";
 import yargs from "yargs/yargs";
 import { startBuild } from "./build";
 import { getRepositoryRoot } from "./git";
-import * as github from "./github";
+import * as github from "./remotes/github";
 import type { BuildParams, Platform } from "./types";
 
 export function build(params: BuildParams): Promise<number> {

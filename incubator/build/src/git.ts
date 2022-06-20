@@ -1,5 +1,5 @@
-import { BUILD_ID } from "./constants";
 import { makeCommand, makeCommandSync } from "./command";
+import { BUILD_ID } from "./constants";
 
 const git = makeCommand("git");
 const gitSync = makeCommandSync("git");
