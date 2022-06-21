@@ -13540,7 +13540,7 @@ react-native-gradle-plugin@^0.0.6:
   resolved "https://registry.yarnpkg.com/react-native-gradle-plugin/-/react-native-gradle-plugin-0.0.6.tgz#b61a9234ad2f61430937911003cddd7e15c72b45"
   integrity sha512-eIlgtsmDp1jLC24dRn43hB3kEcZVqx6DUQbR0N1ABXGnMEafm9I3V3dUUeD1vh+Dy5WqijSoEwLNUPLgu5zDMg==
 
-react-native-macos@^0.66.0-0:
+react-native-macos@^0.66.0:
   version "0.66.58"
   resolved "https://registry.yarnpkg.com/react-native-macos/-/react-native-macos-0.66.58.tgz#8230bbb24a60ecd9eff41cfdcf1f4aec14f141b4"
   integrity sha512-8d6U2fOYP5yK97FQMVYd6nFoxHeKsOUoagJZZH9SCJrtGjOGOBGNdmF4GKMV2Kdj8s5Jn/qw20cgGOvIA4030g==
@@ -13616,7 +13616,7 @@ react-native-web@0.17.7:
     normalize-css-color "^1.0.2"
     prop-types "^15.6.0"
 
-react-native-windows@^0.66.0-0:
+react-native-windows@^0.66.0:
   version "0.66.23"
   resolved "https://registry.yarnpkg.com/react-native-windows/-/react-native-windows-0.66.23.tgz#be7dfeb8c988d51f9c48a5eb07172e90868615b2"
   integrity sha512-V6kxLYOniwm+cTnILJALzb1ajLYqd9BlAzpFKbJrI8lfcL23O7Lcm5nDR5Dx22w1K+4TEUeR7KCm1HqWeG3Gew==
@@ -13695,7 +13695,7 @@ react-native@0.68.2:
     whatwg-fetch "^3.0.0"
     ws "^6.1.4"
 
-react-native@^0.66.0-0:
+react-native@^0.66.0:
   version "0.66.4"
   resolved "https://registry.yarnpkg.com/react-native/-/react-native-0.66.4.tgz#bf89a5fb18bd23046d889fb4de4ea2822a4d7805"
   integrity sha512-9vx5dlSfQlKbbDtr8+xMon6qsmSu7jvjdXWZpEKh3XVKpUidbbODv7048gwVKX8YAel1egeR7hN8vzSeI6ssTw==

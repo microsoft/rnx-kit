@@ -43,7 +43,7 @@
     "@types/semver": "^7.0.0",
     "lodash-es": "^4.17.21",
     "metro": "^0.66.2",
-    "react-native": "^0.66.0-0"
+    "react-native": "^0.66.0"
   },
   "depcheck": {
     "ignoreMatches": [

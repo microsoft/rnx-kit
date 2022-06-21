@@ -7,6 +7,7 @@ import profile_0_65 from "./profile-0.65";
 import profile_0_66 from "./profile-0.66";
 import profile_0_67 from "./profile-0.67";
 import profile_0_68 from "./profile-0.68";
+import profile_0_69 from "./profile-0.69";
 
 // Also export this by name for scripts to work around a bug where this module
 // is wrapped twice, i.e. `{ default: { default: preset } }`, when imported as
@@ -20,6 +21,7 @@ export const preset: Readonly<ProfileMap> = {
   "0.66": profile_0_66,
   "0.67": profile_0_67,
   "0.68": profile_0_68,
+  "0.69": profile_0_69,
 };
 
 export default preset;

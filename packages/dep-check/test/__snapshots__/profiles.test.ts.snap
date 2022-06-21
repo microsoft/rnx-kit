@@ -94,5 +94,12 @@ Object {
       "version": "^2.5.1",
     },
   },
+  "0.69": Object {
+    "format": Object {
+      "devOnly": true,
+      "name": "prettier",
+      "version": "^2.5.1",
+    },
+  },
 }
 `;

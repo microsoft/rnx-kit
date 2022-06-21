@@ -3,7 +3,7 @@ import profile_0_67 from "./profile-0.67";
 
 const reactNative: Package = {
   name: "react-native",
-  version: "^0.68.0-0",
+  version: "^0.68.0",
   capabilities: ["react"],
 };
 
@@ -30,12 +30,12 @@ const profile: Profile = {
   "core-ios": reactNative,
   "core-macos": {
     name: "react-native-macos",
-    version: "^0.68.0-0",
+    version: "^0.68.0",
     capabilities: ["react"],
   },
   "core-windows": {
     name: "react-native-windows",
-    version: "^0.68.0-0",
+    version: "^0.68.0",
     capabilities: ["core"],
   },
 
@@ -47,6 +47,10 @@ const profile: Profile = {
     name: "metro-react-native-babel-preset",
     version: "^0.67.0",
     devOnly: true,
+  },
+  "datetime-picker": {
+    name: "@react-native-community/datetimepicker",
+    version: "^6.0.2",
   },
   gestures: {
     name: "react-native-gesture-handler",
@@ -89,6 +93,19 @@ const profile: Profile = {
   screens: {
     name: "react-native-screens",
     version: "^3.13.1",
+  },
+  storage: {
+    name: "@react-native-async-storage/async-storage",
+    version: "^1.17.3",
+  },
+  "test-app": {
+    name: "react-native-test-app",
+    version: "^1.3.5",
+    devOnly: true,
+  },
+  webview: {
+    name: "react-native-webview",
+    version: "^11.18.1",
   },
 };
 
