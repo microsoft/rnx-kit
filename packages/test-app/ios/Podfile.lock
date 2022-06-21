@@ -277,14 +277,14 @@ PODS:
     - React-jsi (= 0.66.4)
     - React-logger (= 0.66.4)
     - React-perflogger (= 0.66.4)
-  - ReactTestApp-DevSupport (1.3.8):
+  - ReactTestApp-DevSupport (1.3.10):
     - React-Core
     - React-jsi
-  - ReactTestApp-MSAL (1.0.1):
+  - ReactTestApp-MSAL (1.0.2):
     - MSAL
     - RNXAuth
   - ReactTestApp-Resources (1.0.0-dev)
-  - RNXAuth (0.1.1):
+  - RNXAuth (0.1.2):
     - React-Core
   - SwiftLint (0.46.2)
   - Yoga (1.14.0)
@@ -437,10 +437,10 @@ SPEC CHECKSUMS:
   React-RCTVibration: e3ffca672dd3772536cb844274094b0e2c31b187
   React-runtimeexecutor: dec32ee6f2e2a26e13e58152271535fadff5455a
   ReactCommon: 57b69f6383eafcbd7da625bfa6003810332313c4
-  ReactTestApp-DevSupport: 1075d13c9f78457e4e7365dffb30f131e5b16a5b
-  ReactTestApp-MSAL: 01ce59a7dccd3b099f6de76d1bc0b1ea9b24d88a
+  ReactTestApp-DevSupport: 6275cb3b001d9d971f8328580f757409a1c1cf64
+  ReactTestApp-MSAL: 2fe4334f2e18008e6cc5323bb57d583f9b43b0d8
   ReactTestApp-Resources: 74a1cf509f4e7962b16361ea4e73cba3648fff5d
-  RNXAuth: 60c26d03e192279f9880da69e2876cc90786769d
+  RNXAuth: e393a0547142ae4c3bdd2ba299cd9dfff4192e32
   SwiftLint: 6bc52a21f0fd44cab9aa2dc8e534fb9f5e3ec507
   Yoga: e7dc4e71caba6472ff48ad7d234389b91dadc280
 
