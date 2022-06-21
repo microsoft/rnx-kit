@@ -25,9 +25,13 @@ export async function startBuild(
 
   spinner.succeed(`Created build branch ${buildBranch}`);
 
+  const context = { ...repoInfo, ref: buildBranch };
   const cleanUp = async () => {
-    spinner.start(`Deleting ${buildBranch}`);
-    await deleteBranch(buildBranch, upstream);
+    spinner.start("Cancelling build");
+    await Promise.allSettled([
+      remote.cancelBuild(context),
+      deleteBranch(buildBranch, upstream),
+    ]);
     spinner.succeed(`Deleted ${buildBranch}`);
   };
   const onSignal = () => {
@@ -40,7 +44,6 @@ export async function startBuild(
   spinner.start("Queueing build");
 
   try {
-    const context = { ...repoInfo, ref: buildBranch };
     const artifactFile = await remote.build(context, inputs, spinner);
 
     spinner.start("Extracting build artifact");
