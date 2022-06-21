@@ -25,10 +25,6 @@ async function main(): Promise<void> {
 
   const repoRoot = getRepositoryRoot();
   const argv = yargs(hideBin(process.argv))
-    .option("init", {
-      type: "string",
-      description: "Installs the appropriate files for your repository",
-    })
     .option("platform", {
       alias: "p",
       type: "string",
