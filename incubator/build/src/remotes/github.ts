@@ -7,6 +7,7 @@ import {
 } from "node:fs";
 import * as fs from "node:fs/promises";
 import * as path from "node:path";
+import * as readline from "node:readline";
 import ora from "ora";
 import { idle, withRetries } from "../async";
 import {
@@ -16,7 +17,7 @@ import {
   USER_CONFIG_FILE,
   WORKFLOW_ID,
 } from "../constants";
-import { getRemoteUrl, getRepositoryRoot } from "../git";
+import { getRemoteUrl, getRepositoryRoot, stage } from "../git";
 import type {
   BuildParams,
   Context,
@@ -42,6 +43,10 @@ const octokit: () => GitHubClient = (() => {
     return client;
   };
 })();
+
+function ensureDir(dir: string): Promise<string | undefined> {
+  return fs.mkdir(dir, { recursive: true, mode: 0o755 });
+}
 
 async function downloadArtifact(
   runId: WorkflowRunId,
@@ -75,7 +80,7 @@ async function downloadArtifact(
   );
   const filename = path.join(buildDir, artifacts[0].name + ".zip");
 
-  await fs.mkdir(buildDir, { recursive: true, mode: 0o755 });
+  await ensureDir(buildDir);
   await fs.writeFile(filename, Buffer.from(data));
   return filename;
 }
@@ -112,8 +117,9 @@ async function getWorkflowRunId(
 async function watchWorkflowRun(
   runId: WorkflowRunId,
   spinner: ora.Ora
-): Promise<void> {
+): Promise<string | null> {
   spinner.start("Starting build");
+
   while (runId) {
     await idle(1000);
 
@@ -128,7 +134,7 @@ async function watchWorkflowRun(
     if (status === "completed") {
       switch (conclusion) {
         case "failure":
-          spinner.fail();
+          spinner.fail("Build failed");
           break;
         case "success":
           spinner.succeed("Build succeeded");
@@ -137,7 +143,7 @@ async function watchWorkflowRun(
           spinner.fail(`Build ${conclusion}`);
           break;
       }
-      break;
+      return conclusion;
     }
 
     const currentStep = steps?.find((step) => step.status !== "completed");
@@ -145,6 +151,8 @@ async function watchWorkflowRun(
       spinner.text = currentStep.name;
     }
   }
+
+  return null;
 }
 
 /**
@@ -164,7 +172,7 @@ export function getRepositoryInfo(
   return { owner: m[1], repo: m[2] };
 }
 
-export function isSetUp(spinner: ora.Ora): boolean {
+export async function install(): Promise<number> {
   const workflowFile = path.join(
     getRepositoryRoot(),
     ".github",
@@ -172,8 +180,25 @@ export function isSetUp(spinner: ora.Ora): boolean {
     WORKFLOW_ID
   );
   if (!fileExists(workflowFile)) {
-    spinner.fail("The workflow for `rnx-build` needs to be committed first");
-    return false;
+    const prompt = readline.createInterface({
+      input: process.stdin,
+      output: process.stdout,
+    });
+    await new Promise((resolve) => {
+      prompt.question(
+        `A workflow file needs to be checked in first before you can start using ${BUILD_ID}.\n\n${BUILD_ID} will now copy the file to your repository. Please check it into your main branch.\n\nPress any key to continue`,
+        resolve
+      );
+    });
+    prompt.close();
+
+    await ensureDir(path.dirname(workflowFile));
+    await fs.cp(
+      path.join(__dirname, "..", "..", "workflows", "github.yml"),
+      workflowFile
+    );
+    stage(workflowFile);
+    return 1;
   }
 
   if (!getPersonalAccessToken()) {
@@ -183,23 +208,23 @@ export function isSetUp(spinner: ora.Ora): boolean {
       },
     };
     const example = JSON.stringify(exampleConfig);
-    spinner.fail(
+    console.error(
       `Missing personal access token for GitHub. Please create one, and put it in \`${USER_CONFIG_FILE}\`, e.g.: \`${example}\`.`
     );
-    spinner.fail(
+    console.error(
       "For how to create a personal access token, see: https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token"
     );
-    return false;
+    return 1;
   }
 
-  return true;
+  return 0;
 }
 
 export async function build(
   { owner, repo, ref }: Context,
   inputs: BuildParams,
   spinner: ora.Ora
-): Promise<string> {
+): Promise<string | null> {
   await octokit().rest.actions.createWorkflowDispatch({
     owner,
     repo,
@@ -223,8 +248,11 @@ export async function build(
     `Build queued: https://github.com/${owner}/${repo}/actions/runs/${workflowRunId.run_id}`
   );
 
-  await watchWorkflowRun(workflowRunId, spinner);
+  const conclusion = await watchWorkflowRun(workflowRunId, spinner);
   delete workflowRunCache[ref];
+  if (conclusion !== "success") {
+    return null;
+  }
 
   spinner.start("Downloading build artifact");
   const artifactFile = await downloadArtifact(workflowRunId, inputs);

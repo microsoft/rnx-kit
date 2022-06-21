@@ -24,7 +24,11 @@ export type Context = RepositoryInfo & {
 };
 
 export type Remote = {
-  isSetUp(spinner: Ora): boolean;
-  build(context: Context, inputs: BuildParams, spinner: Ora): Promise<string>;
+  build(
+    context: Context,
+    inputs: BuildParams,
+    spinner: Ora
+  ): Promise<string | null>;
   cancelBuild(context: Context): Promise<void>;
+  install(): Promise<number>;
 };

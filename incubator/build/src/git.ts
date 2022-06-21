@@ -109,3 +109,7 @@ export async function pushCurrentChanges(
 
   return buildBranch;
 }
+
+export function stage(...files: string[]): void {
+  gitSync("add", ...files);
+}
