@@ -7,6 +7,7 @@ import {
 } from "node:fs";
 import * as fs from "node:fs/promises";
 import * as path from "node:path";
+import * as readline from "node:readline";
 import ora from "ora";
 import { idle, withRetries } from "../async";
 import {
@@ -16,7 +17,7 @@ import {
   USER_CONFIG_FILE,
   WORKFLOW_ID,
 } from "../constants";
-import { getRemoteUrl, getRepositoryRoot } from "../git";
+import { getRemoteUrl, getRepositoryRoot, stage } from "../git";
 import type {
   BuildParams,
   Context,
@@ -164,7 +165,7 @@ export function getRepositoryInfo(
   return { owner: m[1], repo: m[2] };
 }
 
-export function isSetUp(spinner: ora.Ora): boolean {
+export async function install(): Promise<number> {
   const workflowFile = path.join(
     getRepositoryRoot(),
     ".github",
@@ -172,8 +173,30 @@ export function isSetUp(spinner: ora.Ora): boolean {
     WORKFLOW_ID
   );
   if (!fileExists(workflowFile)) {
-    spinner.fail("The workflow for `rnx-build` needs to be committed first");
-    return false;
+    await new Promise<void>((resolve) => {
+      const prompt = readline.createInterface({
+        input: process.stdin,
+        output: process.stdout,
+      });
+      prompt.question(
+        `A workflow file needs to be checked in first before you can start using ${BUILD_ID}.\n\n${BUILD_ID} will now copy the file to your repository. Please check it into your main branch.\n\nPress any key to continue`,
+        async () => {
+          prompt.close();
+
+          await fs.mkdir(path.dirname(workflowFile), {
+            recursive: true,
+            mode: 0o755,
+          });
+          await fs.cp(
+            path.join(__dirname, "..", "..", "workflows", "github.yml"),
+            workflowFile
+          );
+          stage(workflowFile);
+          resolve();
+        }
+      );
+    });
+    return 1;
   }
 
   if (!getPersonalAccessToken()) {
@@ -183,16 +206,16 @@ export function isSetUp(spinner: ora.Ora): boolean {
       },
     };
     const example = JSON.stringify(exampleConfig);
-    spinner.fail(
+    console.error(
       `Missing personal access token for GitHub. Please create one, and put it in \`${USER_CONFIG_FILE}\`, e.g.: \`${example}\`.`
     );
-    spinner.fail(
+    console.error(
       "For how to create a personal access token, see: https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token"
     );
-    return false;
+    return 1;
   }
 
-  return true;
+  return 0;
 }
 
 export async function build(

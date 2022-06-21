@@ -5,20 +5,30 @@ import yargs from "yargs/yargs";
 import { startBuild } from "./build";
 import { getRepositoryRoot } from "./git";
 import * as github from "./remotes/github";
-import type { BuildParams, Platform } from "./types";
+import type { Platform, Remote, RepositoryInfo } from "./types";
 
-export function build(params: BuildParams): Promise<number> {
+function getRemoteInfo(): [Remote, RepositoryInfo] {
   const githubRepo = github.getRepositoryInfo();
   if (githubRepo) {
-    return startBuild(github, githubRepo, params);
+    return [github, githubRepo];
   }
 
-  return Promise.reject("Unsupported repository");
+  throw new Error("Unsupported repository");
 }
 
-function main(): void {
+async function main(): Promise<void> {
+  const [remote, repoInfo] = getRemoteInfo();
+  const setup = await remote.install();
+  if (setup !== 0) {
+    return;
+  }
+
   const repoRoot = getRepositoryRoot();
-  const params = yargs(hideBin(process.argv))
+  const argv = yargs(hideBin(process.argv))
+    .option("init", {
+      type: "string",
+      description: "Installs the appropriate files for your repository",
+    })
     .option("platform", {
       alias: "p",
       type: "string",
@@ -37,9 +47,9 @@ function main(): void {
       },
     }).argv;
 
-  build({
-    platform: params.platform as Platform,
-    projectRoot: params["project-root"],
+  await startBuild(remote, repoInfo, {
+    platform: argv.platform as Platform,
+    projectRoot: argv["project-root"],
   });
 }
 

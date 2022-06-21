@@ -12,11 +12,8 @@ export async function startBuild(
 ): Promise<number> {
   const spinner = ora();
 
-  if (!remote.isSetUp(spinner)) {
-    return 1;
-  }
-
   spinner.start("Creating build branch");
+
   const upstream = "origin";
   const buildBranch = await pushCurrentChanges(upstream);
   if (!buildBranch) {
