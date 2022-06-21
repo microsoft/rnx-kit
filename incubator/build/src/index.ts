@@ -43,7 +43,7 @@ async function main(): Promise<void> {
       },
     }).argv;
 
-  await startBuild(remote, repoInfo, {
+  process.exitCode = await startBuild(remote, repoInfo, {
     platform: argv.platform as Platform,
     projectRoot: argv["project-root"],
   });
