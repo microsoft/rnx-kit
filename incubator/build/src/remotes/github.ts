@@ -30,6 +30,8 @@ type WorkflowRunId =
 type WorkflowRunsParams =
   RestEndpointMethodTypes["actions"]["listWorkflowRuns"]["parameters"];
 
+const workflowRunCache: Record<string, number> = {};
+
 const octokit: () => GitHubClient = (() => {
   let client: GitHubClient | undefined = undefined;
   return () => {
@@ -215,16 +217,31 @@ export async function build(
     per_page: 1,
     exclude_pull_requests: true,
   });
+  workflowRunCache[ref] = workflowRunId.run_id;
 
   spinner.succeed(
     `Build queued: https://github.com/${owner}/${repo}/actions/runs/${workflowRunId.run_id}`
   );
 
   await watchWorkflowRun(workflowRunId, spinner);
+  delete workflowRunCache[ref];
 
   spinner.start("Downloading build artifact");
   const artifactFile = await downloadArtifact(workflowRunId, inputs);
   spinner.succeed(`Build artifact saved to ${artifactFile}`);
 
   return artifactFile;
+}
+
+export async function cancelBuild({
+  owner,
+  repo,
+  ref,
+}: Context): Promise<void> {
+  const run_id = workflowRunCache[ref];
+  if (!run_id) {
+    return;
+  }
+
+  await octokit().rest.actions.cancelWorkflowRun({ owner, repo, run_id });
 }
