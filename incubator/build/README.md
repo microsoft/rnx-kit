@@ -42,27 +42,29 @@ yarn rnx-build
 - [x] Figure out how to push artifacts
   - [x] Android
   - [x] iOS
+  - [x] macOS
+  - [x] Windows
 - [x] Figure out how to download artifacts
-  - [x] Android
-  - [x] iOS
 - [ ] Figure out how to install artifacts
   - [x] Android emulator
   - [ ] Android device
   - [x] iOS simulator
   - [ ] iOS device
+  - [x] macOS
+  - [x] Windows
 - [x] Miscellaneous cleanup
   - [x] Implement proper CLI
   - [x] Download build artifacts to platform specific folders
   - [x] iOS: Detect workspace to build
 - [x] Cancel build job when user ctrl+c in the terminal
-- [ ] Figure out appropriate storage for auth tokens
 - [x] Add `init` or `install` command to copy the correct workflow file to
       user's repo
+- [ ] Install currently only works for Windows 11, we need to support 10
+- [ ] Figure out appropriate storage for auth tokens
 - [ ] Figure out how to install artifacts with QR code
 - [ ] Figure out caching
 - [ ] Figure out how to skip native build when cached
-- [ ] Implement support for macOS
-- [ ] Implement support for Windows
+- [ ] Replace yauzl with something more native
 
 ### Open Questions
 

@@ -4,7 +4,7 @@
 
 #if TARGET_OS_OSX
 #import <AppKit/NSViewController.h>
-typedef NSViewController RTAViewController
+typedef NSViewController RTAViewController;
 #else
 #import <UIKit/UIKit.h>
 typedef UIViewController RTAViewController;

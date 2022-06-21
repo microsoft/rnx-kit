@@ -90,6 +90,10 @@ function getPersonalAccessToken(): string | undefined {
     return process.env.GITHUB_TOKEN;
   }
 
+  if (!fileExists(USER_CONFIG_FILE)) {
+    return undefined;
+  }
+
   const content = fileReadSync(USER_CONFIG_FILE, { encoding: "utf-8" });
   const config: Partial<UserConfig> = JSON.parse(content);
   return config?.tokens?.github;
