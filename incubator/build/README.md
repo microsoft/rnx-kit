@@ -54,6 +54,9 @@ yarn rnx-build
   - [x] Implement proper CLI
   - [x] Download build artifacts to platform specific folders
   - [x] iOS: Detect workspace to build
+- [ ] Cancel build job when user ctrl+c in the terminal
+- [ ] Figure out appropriate storage for auth tokens
+- [ ] Add `init` or `install` command to copy the correct workflow file to user's repo
 - [ ] Figure out how to install artifacts with QR code
 - [ ] Figure out caching
 - [ ] Figure out how to skip native build when cached
