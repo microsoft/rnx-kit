@@ -147,7 +147,7 @@ THE SOFTWARE.
       "https://spdx.org/licenses/MIT.html",
     ],
     "name": "yargs",
-    "path": "~/packages/third-party-notices/node_modules/yargs",
+    "path": "~/node_modules/yargs",
     "version": "1.2.3-fixedVersionForTesting",
   },
   Object {
