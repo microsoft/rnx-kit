@@ -24,7 +24,7 @@ export async function startBuild(
 
   const context = { ...repoInfo, ref: buildBranch };
   const cleanUp = async () => {
-    spinner.start("Cancelling build");
+    spinner.start("Cleaning up");
     await Promise.allSettled([
       remote.cancelBuild(context),
       deleteBranch(buildBranch, upstream),
@@ -42,6 +42,10 @@ export async function startBuild(
 
   try {
     const artifactFile = await remote.build(context, inputs, spinner);
+    if (!artifactFile) {
+      await cleanUp();
+      return 1;
+    }
 
     spinner.start("Extracting build artifact");
     const buildArtifact = await extract(artifactFile);

@@ -117,8 +117,9 @@ async function getWorkflowRunId(
 async function watchWorkflowRun(
   runId: WorkflowRunId,
   spinner: ora.Ora
-): Promise<void> {
+): Promise<string | null> {
   spinner.start("Starting build");
+
   while (runId) {
     await idle(1000);
 
@@ -133,7 +134,7 @@ async function watchWorkflowRun(
     if (status === "completed") {
       switch (conclusion) {
         case "failure":
-          spinner.fail();
+          spinner.fail("Build failed");
           break;
         case "success":
           spinner.succeed("Build succeeded");
@@ -142,7 +143,7 @@ async function watchWorkflowRun(
           spinner.fail(`Build ${conclusion}`);
           break;
       }
-      break;
+      return conclusion;
     }
 
     const currentStep = steps?.find((step) => step.status !== "completed");
@@ -150,6 +151,8 @@ async function watchWorkflowRun(
       spinner.text = currentStep.name;
     }
   }
+
+  return null;
 }
 
 /**
@@ -221,7 +224,7 @@ export async function build(
   { owner, repo, ref }: Context,
   inputs: BuildParams,
   spinner: ora.Ora
-): Promise<string> {
+): Promise<string | null> {
   await octokit().rest.actions.createWorkflowDispatch({
     owner,
     repo,
@@ -245,8 +248,11 @@ export async function build(
     `Build queued: https://github.com/${owner}/${repo}/actions/runs/${workflowRunId.run_id}`
   );
 
-  await watchWorkflowRun(workflowRunId, spinner);
+  const conclusion = await watchWorkflowRun(workflowRunId, spinner);
   delete workflowRunCache[ref];
+  if (conclusion !== "success") {
+    return null;
+  }
 
   spinner.start("Downloading build artifact");
   const artifactFile = await downloadArtifact(workflowRunId, inputs);
