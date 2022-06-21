@@ -2751,17 +2751,17 @@
     "@octokit/types" "^6.0.3"
     universal-user-agent "^6.0.0"
 
-"@octokit/openapi-types@^12.1.0":
-  version "12.1.0"
-  resolved "https://registry.yarnpkg.com/@octokit/openapi-types/-/openapi-types-12.1.0.tgz#a68b60e969f26dee0eb7d127c65a84967f2d3a6e"
-  integrity sha512-kQzJh3ZUv3lDpi6M+uekMRHULvf9DlWoI1XgKN6nPeGDzkSgtkhVq1MMz3bFKQ6H6GbdC3ZqG/a6VzKhIx0VeA==
+"@octokit/openapi-types@^12.4.0":
+  version "12.4.0"
+  resolved "https://registry.yarnpkg.com/@octokit/openapi-types/-/openapi-types-12.4.0.tgz#fd8bf5db72bd566c5ba2cb76754512a9ebe66e71"
+  integrity sha512-Npcb7Pv30b33U04jvcD7l75yLU0mxhuX2Xqrn51YyZ5WTkF04bpbxLaZ6GcaTqu03WZQHoO/Gbfp95NGRueDUA==
 
 "@octokit/plugin-rest-endpoint-methods@^5.14.0":
-  version "5.14.0"
-  resolved "https://registry.yarnpkg.com/@octokit/plugin-rest-endpoint-methods/-/plugin-rest-endpoint-methods-5.14.0.tgz#758e01ac40998e607feaea7f80220c69990814ae"
-  integrity sha512-MRnMs4Dcm1OSaz/g/RLr4YY9otgysS7vN5SUkHGd7t+R8323cHsHFoEWHYPSmgUC0BieHRhvnCRWb4i3Pl+Lgg==
+  version "5.15.0"
+  resolved "https://registry.yarnpkg.com/@octokit/plugin-rest-endpoint-methods/-/plugin-rest-endpoint-methods-5.15.0.tgz#6c8251b55c33315a6e53e5b55654f72023ed5049"
+  integrity sha512-Gsw9+Xm56jVhfbJoy4pt6eOOyf8/3K6CAnx1Sl7U2GhZWcg8MR6YgXWnpfdF69S2ViMXLA7nfvTDAsZpFlkLRw==
   dependencies:
-    "@octokit/types" "^6.35.0"
+    "@octokit/types" "^6.36.0"
     deprecation "^2.3.1"
 
 "@octokit/request-error@^2.0.5", "@octokit/request-error@^2.1.0":
@@ -2785,12 +2785,12 @@
     node-fetch "^2.6.7"
     universal-user-agent "^6.0.0"
 
-"@octokit/types@^6.0.3", "@octokit/types@^6.16.1", "@octokit/types@^6.35.0":
-  version "6.35.0"
-  resolved "https://registry.yarnpkg.com/@octokit/types/-/types-6.35.0.tgz#11cd9a679c32b4a6c36459ae2ec3ac4de0104f71"
-  integrity sha512-DhLfdUuv3H37u6jBDfkwamypx3HflHg29b26nbA6iVFYkAlZ5cMEtu/9pQoihGnQE5M7jJFnNo25Rr1UwQNF8Q==
+"@octokit/types@^6.0.3", "@octokit/types@^6.16.1", "@octokit/types@^6.36.0":
+  version "6.37.0"
+  resolved "https://registry.yarnpkg.com/@octokit/types/-/types-6.37.0.tgz#32eb78edb34cf5cea4ba5753ab8db75b776d617a"
+  integrity sha512-BXWQhFKRkjX4dVW5L2oYa0hzWOAqsEsujXsQLSdepPoDZfYdubrD1KDGpyNldGXtR8QM/WezDcxcIN1UKJMGPA==
   dependencies:
-    "@octokit/openapi-types" "^12.1.0"
+    "@octokit/openapi-types" "^12.4.0"
 
 "@parcel/watcher@2.0.4":
   version "2.0.4"
