@@ -44,6 +44,10 @@ const octokit: () => GitHubClient = (() => {
   };
 })();
 
+function ensureDir(dir: string): Promise<string | undefined> {
+  return fs.mkdir(dir, { recursive: true, mode: 0o755 });
+}
+
 async function downloadArtifact(
   runId: WorkflowRunId,
   { platform, projectRoot }: BuildParams
@@ -76,7 +80,7 @@ async function downloadArtifact(
   );
   const filename = path.join(buildDir, artifacts[0].name + ".zip");
 
-  await fs.mkdir(buildDir, { recursive: true, mode: 0o755 });
+  await ensureDir(buildDir);
   await fs.writeFile(filename, Buffer.from(data));
   return filename;
 }
@@ -173,29 +177,24 @@ export async function install(): Promise<number> {
     WORKFLOW_ID
   );
   if (!fileExists(workflowFile)) {
-    await new Promise<void>((resolve) => {
-      const prompt = readline.createInterface({
-        input: process.stdin,
-        output: process.stdout,
-      });
+    const prompt = readline.createInterface({
+      input: process.stdin,
+      output: process.stdout,
+    });
+    await new Promise((resolve) => {
       prompt.question(
         `A workflow file needs to be checked in first before you can start using ${BUILD_ID}.\n\n${BUILD_ID} will now copy the file to your repository. Please check it into your main branch.\n\nPress any key to continue`,
-        async () => {
-          prompt.close();
-
-          await fs.mkdir(path.dirname(workflowFile), {
-            recursive: true,
-            mode: 0o755,
-          });
-          await fs.cp(
-            path.join(__dirname, "..", "..", "workflows", "github.yml"),
-            workflowFile
-          );
-          stage(workflowFile);
-          resolve();
-        }
+        resolve
       );
     });
+    prompt.close();
+
+    await ensureDir(path.dirname(workflowFile));
+    await fs.cp(
+      path.join(__dirname, "..", "..", "workflows", "github.yml"),
+      workflowFile
+    );
+    stage(workflowFile);
     return 1;
   }
 
