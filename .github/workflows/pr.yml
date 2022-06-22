@@ -11,8 +11,6 @@ jobs:
           fetch-depth: 0
       - name: Setup the toolchain
         uses: ./.github/actions/setup-toolchain
-        with:
-          node-version: 14
       - name: Ensure rnx-kit packages come from our repository
         run: |
           if grep rnx-kit yarn.lock; then

@@ -22,8 +22,6 @@ jobs:
           fetch-depth: 0
       - name: Setup the toolchain
         uses: ./.github/actions/setup-toolchain
-        with:
-          node-version: 14
       - name: Install package dependencies
         uses: ./.github/actions/yarn
       - name: Install Pods
