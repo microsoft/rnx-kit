@@ -114,5 +114,3 @@ xcodebuild -workspace "${workspace}.xcworkspace" -scheme "${scheme}" -destinatio
 if [[ "$CCACHE_DISABLE" != "1" ]]; then
   ccache --show-stats --verbose
 fi
-
-exit 0
