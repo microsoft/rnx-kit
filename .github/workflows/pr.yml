@@ -41,8 +41,15 @@ jobs:
     name: "Build"
     strategy:
       matrix:
-        node-version: [14, 16]
-        os: [${{ env.RNXKIT_AGENT_UBUNTU }}, ${{ env.RNXKIT_AGENT_WINDOWS }}]
+        include:
+          - node-version: 14
+            os: ${{ env.RNXKIT_AGENT_UBUNTU }}
+          - node-version: 14
+            os: ${{ env.RNXKIT_AGENT_WINDOWS }}
+          - node-version: 16
+            os: ${{ env.RNXKIT_AGENT_UBUNTU }}
+          - node-version: 16
+            os: ${{ env.RNXKIT_AGENT_WINDOWS }}
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout
