@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -eo pipefail
+
 device_default="iPhone 12"
 build_actions=(build)
 
@@ -20,15 +22,6 @@ usage() {
   echo ""
   exit 1
 }
-
-xcpretty=$(which xcpretty)
-if [[ -z "${xcpretty}" ]]; then
-  echo ""
-  echo "ERROR: xcpretty is required to run this script. Install it using 'gem install xcpretty'."
-  echo "       You may need to use 'sudo' to install it."
-  echo ""
-  exit 1
-fi
 
 while [[ $# -gt 0 ]]; do
   case $1 in
@@ -81,15 +74,8 @@ if [[ -z "$scheme" ]]; then
   usage
 fi
 
-package=$(basename $(pwd))
-
-echo "Building iOS project for package '${package}'"
-echo "  Build Actions .. ${build_actions[@]}"
-echo "  Device ......... ${device}"
-echo "  Workspace ...... ${workspace}"
-echo "  Scheme ......... ${scheme}"
-
 if [[ ! -d "ios/${workspace}.xcworkspace" ]]; then
+  package=$(basename $(pwd))
   echo ""
   echo "ERROR: Xcode workspace 'ios/${workspace}.xcworkspace' not found in package '${package}'."
   echo "       Maybe you need to run 'pod install --project-directory=ios'?"
@@ -108,20 +94,11 @@ else
   exit 1
 fi
 
-echo "  Device ID ...... ${device_id}"
-
 cd ios
 export RCT_NO_LAUNCH_PACKAGER=1
 
-command=(xcodebuild -workspace "${workspace}.xcworkspace" -scheme "${scheme}" -destination "platform=iOS Simulator,id=${device_id}" CODE_SIGNING_ALLOWED=NO COMPILER_INDEX_STORE_ENABLE=NO)
-command+=(${build_actions[@]})
-echo ""
-echo "Running: ${command[@]} | xcpretty"
-echo ""
-
-set -o pipefail && "${command[@]}" | xcpretty
+xcodebuild -workspace "${workspace}.xcworkspace" -scheme "${scheme}" -destination "id=${device_id}" CODE_SIGNING_ALLOWED=NO COMPILER_INDEX_STORE_ENABLE=NO "${build_actions[@]}"
 result=$?
-
 if [[ $result -ne 0 ]]; then
   echo ""
   echo "ERROR: build failed with error code: $result"
