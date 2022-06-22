@@ -8,7 +8,7 @@ on:
 jobs:
   build-android:
     name: ${{ inputs.package }}
-    runs-on: ubuntu-latest
+    runs-on: ${{ env.RNXKIT_AGENT_UBUNTU }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3

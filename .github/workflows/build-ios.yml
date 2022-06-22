@@ -14,7 +14,7 @@ on:
 jobs:
   build-ios:
     name: ${{ inputs.package }}
-    runs-on: macos-11
+    runs-on: ${{ env.RNXKIT_AGENT_MAC }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
