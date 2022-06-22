@@ -1,5 +1,5 @@
-name: CocoaPods
-description: Runs `pod install` and caches installed dependencies
+name: Setup for Apple
+description: Sets up caches for builds and CocoaPods, and runs `pod install`
 inputs:
   project-directory:
     description: The path to the root of the project directory
@@ -22,12 +22,19 @@ runs:
           echo '::set-output name=cache-key::false'
         fi
       shell: bash
+    - name: Cache /.ccache
+      if: ${{ steps.cache-key-generator.outputs.cache-key != 'false' }}
+      uses: actions/cache@v3
+      with:
+        path: .ccache
+        key: ccache-${{ runner.os }}-${{ inputs.project-directory }}-${{ steps.cache-key-generator.outputs.cache-key }}
+        restore-keys: ccache-${{ runner.os }}-${{ inputs.project-directory }}-
     - name: Cache ${{ inputs.working-directory }}/${{ inputs.project-directory }}/Pods
       if: ${{ steps.cache-key-generator.outputs.cache-key != 'false' }}
       uses: actions/cache@v3
       with:
         path: ${{ inputs.working-directory }}/${{ inputs.project-directory }}/Pods
-        key: pods-${{ runner.os }}-${{ steps.cache-key-generator.outputs.cache-key }}
+        key: pods-${{ runner.os }}-${{ inputs.project-directory }}-${{ steps.cache-key-generator.outputs.cache-key }}
     - name: Install Pods
       run: |
         pod install --project-directory=${{ inputs.project-directory }}

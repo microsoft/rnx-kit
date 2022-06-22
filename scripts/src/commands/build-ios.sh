@@ -94,8 +94,25 @@ else
   exit 1
 fi
 
+if [[ "$CCACHE_DISABLE" != "1" ]]; then
+  ccache_libexec="/usr/local/opt/ccache/libexec"
+  if [[ ! -d "$ccache_libexec" ]]; then
+    brew install ccache
+  fi
+
+  export CC="$(git rev-parse --show-toplevel)/scripts/clang"
+  export CCACHE_DIR="$(git rev-parse --show-toplevel)/.ccache"
+
+  ccache --zero-stats 1> /dev/null
+fi
+
 cd ios
 export RCT_NO_LAUNCH_PACKAGER=1
 
 xcodebuild -workspace "${workspace}.xcworkspace" -scheme "${scheme}" -destination "id=${device_id}" CODE_SIGNING_ALLOWED=NO COMPILER_INDEX_STORE_ENABLE=NO "${build_actions[@]}"
+
+if [[ "$CCACHE_DISABLE" != "1" ]]; then
+  ccache --show-stats --verbose
+fi
+
 exit 0
