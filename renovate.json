@@ -1,6 +1,6 @@
 {
   "extends": ["config:base", "schedule:earlyMondays"],
-  "labels": ["dependencies"],
+  "addLabels": ["dependencies"],
   "packageRules": [
     {
       "matchPackagePrefixes": ["@react-native-community/cli"],
@@ -41,6 +41,15 @@
         "react-native-windows"
       ],
       "allowedVersions": "^0.66.0"
+    },
+    {
+      "matchPackageNames": [
+        "react-native",
+        "react-native-macos",
+        "react-native-windows"
+      ],
+      "matchPaths": ["packages/expo-app/**"],
+      "allowedVersions": "^0.68.0"
     }
   ],
   "postUpdateOptions": ["yarnDedupeHighest"],
