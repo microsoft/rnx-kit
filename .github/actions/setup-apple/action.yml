@@ -17,7 +17,7 @@ runs:
       id: cache-key-generator
       run: |
         if [[ -f ${{ inputs.working-directory }}/${{ inputs.project-directory }}/Podfile.lock ]]; then
-          echo "::set-output name=cache-key::$(node scripts/shasum.mjs ${{ inputs.working-directory }}/${{ inputs.project-directory }}/Podfile.lock)"
+          echo "::set-output name=cache-key::$(basename ${{ inputs.working-directory }})-$(node scripts/shasum.mjs ${{ inputs.working-directory }}/${{ inputs.project-directory }}/Podfile.lock)"
         else
           echo '::set-output name=cache-key::false'
         fi
@@ -27,14 +27,14 @@ runs:
       uses: actions/cache@v3
       with:
         path: .ccache
-        key: ccache-${{ runner.os }}-${{ inputs.project-directory }}-${{ steps.cache-key-generator.outputs.cache-key }}
+        key: ccache-${{ runner.os }}-${{ steps.cache-key-generator.outputs.cache-key }}
         restore-keys: ccache-${{ runner.os }}-${{ inputs.project-directory }}-
     - name: Cache ${{ inputs.working-directory }}/${{ inputs.project-directory }}/Pods
       if: ${{ steps.cache-key-generator.outputs.cache-key != 'false' }}
       uses: actions/cache@v3
       with:
         path: ${{ inputs.working-directory }}/${{ inputs.project-directory }}/Pods
-        key: pods-${{ runner.os }}-${{ inputs.project-directory }}-${{ steps.cache-key-generator.outputs.cache-key }}
+        key: pods-${{ runner.os }}-${{ steps.cache-key-generator.outputs.cache-key }}
     - name: Install Pods
       run: |
         pod install --project-directory=${{ inputs.project-directory }}
