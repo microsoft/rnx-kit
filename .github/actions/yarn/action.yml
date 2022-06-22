@@ -4,15 +4,6 @@ description: Runs `yarn install` and caches downloaded dependencies
 runs:
   using: composite
   steps:
-    - name: Generate cache key
-      id: cache-key-generator
-      run: echo "::set-output name=cache-key::$(node scripts/shasum.mjs yarn.lock)"
-      shell: bash
-    - name: Cache /.yarn-offline-mirror
-      uses: actions/cache@v3
-      with:
-        path: .yarn-offline-mirror
-        key: yarn-${{ runner.os }}-${{ steps.cache-key-generator.outputs.cache-key }}
     - name: Install package dependencies
       run: yarn ci
       shell: bash
