@@ -1,13 +1,9 @@
 name: CI
 on: pull_request
-env:
-  RNXKIT_AGENT_UBUNTU: ubuntu-20.04
-  RNXKIT_AGENT_MAC: macos-11
-  RNXKIT_AGENT_WINDOWS: windows-2022
 jobs:
   review:
     name: "Review"
-    runs-on: ${{ env.RNXKIT_AGENT_UBUNTU }}
+    runs-on: ubuntu-20.04
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -41,15 +37,8 @@ jobs:
     name: "Build"
     strategy:
       matrix:
-        include:
-          - node-version: 14
-            os: ${{ env.RNXKIT_AGENT_UBUNTU }}
-          - node-version: 14
-            os: ${{ env.RNXKIT_AGENT_WINDOWS }}
-          - node-version: 16
-            os: ${{ env.RNXKIT_AGENT_UBUNTU }}
-          - node-version: 16
-            os: ${{ env.RNXKIT_AGENT_WINDOWS }}
+        node-version: [14, 16]
+        os: [ubuntu-20.04, windows-2022]
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout
@@ -66,7 +55,7 @@ jobs:
       - name: Build and test packages
         run: yarn build:ci --base origin/${{ github.base_ref }}
       - name: Ensure READMEs are up-to-date
-        if: ${{ matrix.node-version == 14 && matrix.os == env.RNXKIT_AGENT_UBUNTU }}
+        if: ${{ matrix.node-version == 14 && matrix.os == 'ubuntu-20.04' }}
         run: |
           yarn update-readme
           git diff --exit-code
@@ -103,7 +92,7 @@ jobs:
       scheme-name: ReactTestApp
   build-website:
     name: "Build the website"
-    runs-on: ${{ env.RNXKIT_AGENT_UBUNTU }}
+    runs-on: ubuntu-20.04
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -118,7 +107,7 @@ jobs:
         working-directory: docsite
   label:
     name: "Label"
-    runs-on: ${{ env.RNXKIT_AGENT_UBUNTU }}
+    runs-on: ubuntu-20.04
     permissions:
       contents: read
       pull-requests: write

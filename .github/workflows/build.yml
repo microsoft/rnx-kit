@@ -2,15 +2,11 @@ name: Build and Publish
 on:
   push:
     branches: [main]
-env:
-  RNXKIT_AGENT_UBUNTU: ubuntu-20.04
-  RNXKIT_AGENT_MAC: macos-11
-  RNXKIT_AGENT_WINDOWS: windows-2022
 jobs:
   build_and_publish:
     name: "Build and publish"
     if: ${{ github.repository == 'microsoft/rnx-kit' }}
-    runs-on: ${{ env.RNXKIT_AGENT_UBUNTU }}
+    runs-on: ubuntu-20.04
     steps:
       - name: Checkout
         uses: actions/checkout@v3
