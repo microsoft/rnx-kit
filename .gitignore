@@ -3,7 +3,8 @@
 *.log
 *.tgz
 *.xcworkspace/
-.ccache/
+.ccache/*
+!.ccache/ccache.conf
 .expo/
 .gradle/
 .idea/
