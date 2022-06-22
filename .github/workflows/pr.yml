@@ -105,7 +105,7 @@ jobs:
         working-directory: docsite
   label:
     name: "Label"
-    if: ${{ github.repository == 'microsoft/rnx-kit' }}
+    if: ${{ github.event.pull_request.head.repo.full_name == github.repository }}
     runs-on: ubuntu-20.04
     permissions:
       contents: read
