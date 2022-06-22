@@ -15,5 +15,6 @@ export async function launch(archive: string, spinner: Ora): Promise<void> {
 
   spinner.text = `Launching ${app}`;
   await open(app);
+
   spinner.succeed(`Launched ${app}`);
 }
