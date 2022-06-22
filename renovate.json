@@ -1,5 +1,50 @@
 {
-  "extends": [
-    "config:base"
-  ]
+  "extends": ["config:base", "schedule:earlyMondays"],
+  "labels": ["dependencies"],
+  "packageRules": [
+    {
+      "matchPackagePrefixes": ["@react-native-community/cli"],
+      "allowedVersions": "^6.0.0"
+    },
+    {
+      "matchPackageNames": ["hermes-engine"],
+      "allowedVersions": "~0.9.0"
+    },
+    {
+      "groupName": "Android",
+      "matchDatasources": ["maven"],
+      "matchPackagePrefixes": ["com.android."]
+    },
+    {
+      "groupName": "Kotlin",
+      "matchDatasources": ["maven"],
+      "matchPackagePrefixes": ["org.jetbrains.kotlin"]
+    },
+    {
+      "groupName": "Metro",
+      "matchSourceUrlPrefixes": ["https://github.com/facebook/metro"],
+      "allowedVersions": "^0.66.0"
+    },
+    {
+      "groupName": "Moshi",
+      "matchDatasources": ["maven"],
+      "matchPackagePrefixes": ["com.squareup.moshi"]
+    },
+    {
+      "matchPackageNames": ["react"],
+      "enabled": false
+    },
+    {
+      "matchPackageNames": [
+        "react-native",
+        "react-native-macos",
+        "react-native-windows"
+      ],
+      "allowedVersions": "^0.66.0"
+    }
+  ],
+  "postUpdateOptions": ["yarnDedupeHighest"],
+  "rangeStrategy": "update-lockfile",
+  "stabilityDays": 7,
+  "timezone": "Europe/Oslo"
 }
