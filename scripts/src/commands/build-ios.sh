@@ -2,7 +2,7 @@
 
 set -eo pipefail
 
-device_default="iPhone 12"
+device_default="iPhone 13"
 build_actions=(build)
 
 usage() {
