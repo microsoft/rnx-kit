@@ -98,12 +98,4 @@ cd ios
 export RCT_NO_LAUNCH_PACKAGER=1
 
 xcodebuild -workspace "${workspace}.xcworkspace" -scheme "${scheme}" -destination "id=${device_id}" CODE_SIGNING_ALLOWED=NO COMPILER_INDEX_STORE_ENABLE=NO "${build_actions[@]}"
-result=$?
-if [[ $result -ne 0 ]]; then
-  echo ""
-  echo "ERROR: build failed with error code: $result"
-  echo ""
-  exit $result
-fi
-
 exit 0
