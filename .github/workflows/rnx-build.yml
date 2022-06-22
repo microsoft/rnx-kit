@@ -1,0 +1,81 @@
+name: rnx-build
+on:
+  workflow_dispatch:
+    inputs:
+      packageManager:
+        description: "Supported package managers are `npm`, `yarn`, `pnpm` (v6.10+)"
+        required: true
+        default: "yarn"
+      platform:
+        description: "Supported platforms are `android`, `ios`, `macos`, `windows`"
+        required: true
+      projectRoot:
+        description: "Root of the project"
+        required: true
+jobs:
+  build-android:
+    name: "Build Android"
+    if: ${{ github.event.inputs.platform == 'android' }}
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Set up JDK
+        uses: actions/setup-java@v3.3.0
+        with:
+          distribution: temurin
+          java-version: 11
+      - name: Set up Node 16
+        uses: actions/setup-node@v3.3.0
+        with:
+          node-version: 16
+          cache: ${{ github.event.inputs.packageManager }}
+      - name: Install npm dependencies
+        run: ${{ github.event.inputs.packageManager }} install
+      - name: Build Android app
+        uses: gradle/gradle-build-action@v2.2.1
+        with:
+          gradle-version: wrapper
+          arguments: --no-daemon clean assembleDebug
+          build-root-directory: ${{ github.event.inputs.projectRoot }}/android
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: android-artifact
+          path: ${{ github.event.inputs.projectRoot }}/android/app/build/outputs/apk/debug/app-debug.apk
+  build-ios:
+    name: "Build iOS"
+    if: ${{ github.event.inputs.platform == 'ios' }}
+    runs-on: macos-11
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Set up Node 16
+        uses: actions/setup-node@v3.3.0
+        with:
+          node-version: 16
+          cache: ${{ github.event.inputs.packageManager }}
+      - name: Install npm dependencies
+        run: ${{ github.event.inputs.packageManager }} install
+      - name: Install Pods
+        run: pod install --project-directory=ios
+        working-directory: ${{ github.event.inputs.projectRoot }}
+      - name: Build iOS app
+        run: |
+          device_name='iPhone 13'
+          device=$(xcrun simctl list devices "${device_name}" available | grep "${device_name} (")
+          re='\(([-0-9A-Fa-f]+)\)'
+          [[ $device =~ $re ]] || exit 1
+          xcworkspace=$(find . -maxdepth 1 -name '*.xcworkspace' -type d | head -1)
+          xcodebuild -workspace ${xcworkspace} -scheme ReactTestApp -destination "id=${BASH_REMATCH[1]}" -configuration Debug -derivedDataPath DerivedData CODE_SIGNING_ALLOWED=NO COMPILER_INDEX_STORE_ENABLE=NO build
+        working-directory: ${{ github.event.inputs.projectRoot }}/ios
+      - name: Prepare build artifact
+        run: |
+          tar -cvf ios-artifact.tar -C DerivedData/Build/Products/Debug-iphonesimulator ReactTestApp.app
+          shasum --algorithm 512 ios-artifact.tar
+        working-directory: ${{ github.event.inputs.projectRoot }}/ios
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: ios-artifact
+          path: ${{ github.event.inputs.projectRoot }}/ios/ios-artifact.tar

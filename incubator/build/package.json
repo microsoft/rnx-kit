@@ -1,0 +1,54 @@
+{
+  "private": true,
+  "name": "@rnx-kit/build",
+  "version": "0.0.0",
+  "description": "EXPERIMENTAL - USE WITH CAUTION - @rnx-kit/build builds your app in the cloud",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/incubator/build#readme",
+  "license": "MIT",
+  "author": {
+    "name": "Microsoft Open Source",
+    "email": "microsoftopensource@users.noreply.github.com"
+  },
+  "files": [
+    "lib/**/*.{d.ts,js}",
+    "workflows/*"
+  ],
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "bin": {
+    "rnx-build": "lib/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "incubator/build"
+  },
+  "scripts": {
+    "build": "rnx-kit-scripts build",
+    "format": "rnx-kit-scripts format",
+    "lint": "rnx-kit-scripts lint",
+    "rnx-build": "node lib/index.js"
+  },
+  "dependencies": {
+    "@octokit/core": "^3.6.0",
+    "@octokit/plugin-rest-endpoint-methods": "^5.14.0",
+    "ora": "^5.4.1",
+    "pkg-dir": "^5.0.0",
+    "yargs": "^16.0.0",
+    "yauzl": "2.10.0"
+  },
+  "devDependencies": {
+    "@rnx-kit/scripts": "*",
+    "@types/yauzl": "2.10.0"
+  },
+  "engines": {
+    "node": ">=14.15"
+  },
+  "eslintConfig": {
+    "extends": "@rnx-kit/eslint-config"
+  },
+  "jest": {
+    "preset": "@rnx-kit/scripts"
+  },
+  "experimental": true
+}

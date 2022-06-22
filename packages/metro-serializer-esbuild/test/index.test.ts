@@ -188,6 +188,7 @@ describe("metro-serializer-esbuild", () => {
         var global;
         var init_lib = __esm({
           \\"lib/index.js\\": function() {
+            \\"use strict\\";
             global = new Function(\\"return this;\\")();
           }
         });

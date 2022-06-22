@@ -48,7 +48,7 @@ describe("getProfileVersionsFor()", () => {
 
   test("returns profiles for bigger version ranges", () => {
     const profiles = getProfileVersionsFor(">=0.64.2");
-    expect(profiles).toEqual(["0.64", "0.65", "0.66", "0.67", "0.68"]);
+    expect(profiles).toEqual(["0.64", "0.65", "0.66", "0.67", "0.68", "0.69"]);
   });
 
   test("returns profiles for multiple version ranges", () => {
