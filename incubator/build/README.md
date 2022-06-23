@@ -48,7 +48,7 @@ npm run rnx-build --platform <platform>
 - [x] Figure out how to download artifacts
 - [ ] Figure out how to install artifacts
   - [x] Android emulator
-  - [ ] Android device
+  - [x] Android device
   - [x] iOS simulator
   - [ ] iOS device
   - [x] macOS
