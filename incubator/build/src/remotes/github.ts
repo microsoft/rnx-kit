@@ -17,6 +17,7 @@ import {
   USER_CONFIG_FILE,
   WORKFLOW_ID,
 } from "../constants";
+import { ensureDir } from "../filesystem";
 import { getRemoteUrl, getRepositoryRoot, stage } from "../git";
 import type {
   BuildParams,
@@ -43,10 +44,6 @@ const octokit: () => GitHubClient = (() => {
     return client;
   };
 })();
-
-function ensureDir(dir: string): Promise<string | undefined> {
-  return fs.mkdir(dir, { recursive: true, mode: 0o755 });
-}
 
 async function downloadArtifact(
   runId: WorkflowRunId,
