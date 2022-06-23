@@ -36,6 +36,7 @@
     },
     {
       "matchPackageNames": [
+        "@types/react-native",
         "react-native",
         "react-native-macos",
         "react-native-windows"
@@ -44,6 +45,7 @@
     },
     {
       "matchPackageNames": [
+        "@types/react-native",
         "react-native",
         "react-native-macos",
         "react-native-windows"
