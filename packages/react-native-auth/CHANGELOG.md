@@ -1,5 +1,11 @@
 # @rnx-kit/react-native-auth
 
+## 0.1.3
+
+### Patch Changes
+
+- 641edba5: Declare support for react-native 0.69
+
 ## 0.1.2
 
 ### Patch Changes
