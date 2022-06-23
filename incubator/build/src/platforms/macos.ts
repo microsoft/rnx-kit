@@ -2,10 +2,15 @@ import * as os from "node:os";
 import type { Ora } from "ora";
 import { untar } from "../archive";
 import { makeCommand } from "../command";
+import type { BuildParams } from "../types";
 
 export const open = makeCommand("open");
 
-export async function launch(archive: string, spinner: Ora): Promise<void> {
+export async function deploy(
+  archive: string,
+  _: BuildParams,
+  spinner: Ora
+): Promise<void> {
   if (os.platform() !== "darwin") {
     return;
   }

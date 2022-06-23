@@ -1,10 +1,7 @@
 import ora from "ora";
 import { extract } from "./archive";
 import { deleteBranch, pushCurrentChanges } from "./git";
-import { installAndLaunchApk } from "./platforms/android";
-import { installAndLaunchApp } from "./platforms/ios";
-import * as macos from "./platforms/macos";
-import * as windows from "./platforms/windows";
+import * as platforms from "./platforms";
 import type { BuildParams, Remote, RepositoryInfo } from "./types";
 
 export async function startBuild(
@@ -53,22 +50,8 @@ export async function startBuild(
     const buildArtifact = await extract(artifactFile);
     spinner.succeed(`Extracted ${buildArtifact}`);
 
-    switch (inputs.platform) {
-      case "android":
-        await installAndLaunchApk(buildArtifact, undefined, spinner);
-        break;
-      case "ios":
-        await installAndLaunchApp(buildArtifact, undefined, spinner);
-        break;
-      case "macos":
-        await macos.launch(buildArtifact, spinner);
-        break;
-      case "windows":
-        await windows.launch(buildArtifact, spinner);
-        break;
-      default:
-        break;
-    }
+    const platform = await platforms.get(inputs.platform);
+    await platform.deploy(buildArtifact, inputs, spinner);
   } catch (e) {
     spinner.fail();
     await cleanUp();

@@ -29,8 +29,15 @@ async function main(): Promise<void> {
       type: "string",
       description:
         "Supported platforms are `android`, `ios`, `macos`, `windows`",
-      choices: ["android", "ios", "macos", "windows"],
+      choices: ["android", "ios", "macos", "windows"] as const,
       required: true,
+    })
+    .option("device-type", {
+      type: "string",
+      description:
+        "Supported device types are `device`, `emulator`, `simulator`",
+      choices: ["device", "emulator", "simulator"] as const,
+      default: "simulator" as const,
     })
     .option("project-root", {
       type: "string",
@@ -44,6 +51,7 @@ async function main(): Promise<void> {
     }).argv;
 
   process.exitCode = await startBuild(remote, repoInfo, {
+    deviceType: argv["device-type"],
     platform: argv.platform as Platform,
     projectRoot: argv["project-root"],
   });

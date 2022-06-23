@@ -6,6 +6,10 @@ on:
         description: "Supported architectures are `arm64`, `x64`"
         required: true
         default: "x64"
+      deviceType:
+        description: "Supported device types are `device`, `emulator`, `simulator`"
+        required: true
+        default: "simulator"
       packageManager:
         description: "Supported package managers are `npm`, `yarn`, `pnpm` (v6.10+)"
         required: true
@@ -50,7 +54,7 @@ jobs:
   build-ios:
     name: "Build iOS"
     if: ${{ github.event.inputs.platform == 'ios' }}
-    runs-on: macos-11
+    runs-on: macos-12
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -62,21 +66,39 @@ jobs:
       - name: Install npm dependencies
         run: ${{ github.event.inputs.packageManager }} install
       - name: Install Pods
-        run: pod install --project-directory=ios
+        run: |
+          pod install --project-directory=ios
+        working-directory: ${{ github.event.inputs.projectRoot }}
+      - name: Disable Clang sanitizers
+        run: |
+          # We need to disable Clang sanitizers otherwise the app will crash on
+          # startup trying to load Clang sanitizer libraries that would only
+          # exist if Xcode was attached.
+          xcconfig=node_modules/.generated/ios/ReactTestApp/ReactTestApp.debug.xcconfig
+          sed -i '' 's/CLANG_ADDRESS_SANITIZER = YES/CLANG_ADDRESS_SANITIZER = NO/g' ${xcconfig}
+          sed -i '' 's/CLANG_UNDEFINED_BEHAVIOR_SANITIZER = YES/CLANG_UNDEFINED_BEHAVIOR_SANITIZER = NO/g' ${xcconfig}
+          sed -i '' 's/-fsanitize=bounds//g' ${xcconfig}
         working-directory: ${{ github.event.inputs.projectRoot }}
       - name: Build iOS app
         run: |
-          device_name='iPhone 13'
-          device=$(xcrun simctl list devices "${device_name}" available | grep "${device_name} (")
-          re='\(([-0-9A-Fa-f]+)\)'
-          [[ $device =~ $re ]] || exit 1
+          if [[ ${{ github.event.inputs.deviceType }} == 'device' ]]; then
+            destination='generic/platform=iOS'
+          else
+            destination='generic/platform=iOS Simulator'
+          fi
           xcworkspace=$(find . -maxdepth 1 -name '*.xcworkspace' -type d | head -1)
-          xcodebuild -workspace ${xcworkspace} -scheme ReactTestApp -destination "id=${BASH_REMATCH[1]}" -configuration Debug -derivedDataPath DerivedData CODE_SIGNING_ALLOWED=NO COMPILER_INDEX_STORE_ENABLE=NO build
+          xcodebuild -workspace ${xcworkspace} -scheme ReactTestApp -destination "${destination}" -configuration Debug -derivedDataPath DerivedData CODE_SIGNING_ALLOWED=NO COMPILER_INDEX_STORE_ENABLE=NO build
         working-directory: ${{ github.event.inputs.projectRoot }}/ios
       - name: Prepare build artifact
         run: |
-          tar -cvf ios-artifact.tar -C DerivedData/Build/Products/Debug-iphonesimulator ReactTestApp.app
-          shasum --algorithm 512 ios-artifact.tar
+          output_path=DerivedData/Build/Products
+          app=$(find ${output_path} -maxdepth 2 -name '*.app' -type d | head -1)
+          # bsdtar corrupts files when archiving due to APFS sparse files. A
+          # workaround is to use GNU Tar instead. See also:
+          #   - https://github.com/actions/cache/issues/403
+          #   - https://github.com/actions/virtual-environments/issues/2619
+          gtar -cvf ios-artifact.tar -C "$(dirname ${app})" "$(basename ${app})"
+          shasum --algorithm 256 ios-artifact.tar
         working-directory: ${{ github.event.inputs.projectRoot }}/ios
       - name: Upload build artifact
         uses: actions/upload-artifact@v3
@@ -86,7 +108,7 @@ jobs:
   build-macos:
     name: "Build macOS"
     if: ${{ github.event.inputs.platform == 'macos' }}
-    runs-on: macos-11
+    runs-on: macos-12
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -107,8 +129,14 @@ jobs:
         working-directory: ${{ github.event.inputs.projectRoot }}/macos
       - name: Prepare build artifact
         run: |
-          tar -cvf macos-artifact.tar -C DerivedData/Build/Products/Debug ReactTestApp.app
-          shasum --algorithm 512 macos-artifact.tar
+          output_path=DerivedData/Build/Products
+          app=$(find ${output_path} -maxdepth 2 -name '*.app' -type d | head -1)
+          # bsdtar corrupts files when archiving due to APFS sparse files. A
+          # workaround is to use GNU Tar instead. See also:
+          #   - https://github.com/actions/cache/issues/403
+          #   - https://github.com/actions/virtual-environments/issues/2619
+          gtar -cvf macos-artifact.tar -C "$(dirname ${app})" "$(basename ${app})"
+          shasum --algorithm 256 macos-artifact.tar
         working-directory: ${{ github.event.inputs.projectRoot }}/macos
       - name: Upload build artifact
         uses: actions/upload-artifact@v3

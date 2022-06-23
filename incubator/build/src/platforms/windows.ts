@@ -5,6 +5,7 @@ import * as path from "node:path";
 import type { Ora } from "ora";
 import { retry } from "../async";
 import { makeCommand } from "../command";
+import type { BuildParams } from "../types";
 
 type PackageInfo = {
   packageName: string;
@@ -113,7 +114,11 @@ async function install(
   return result || new Error("App failed to install?");
 }
 
-export async function launch(app: string, spinner: Ora): Promise<void> {
+export async function deploy(
+  app: string,
+  _: BuildParams,
+  spinner: Ora
+): Promise<void> {
   if (os.platform() !== "win32") {
     return;
   }
