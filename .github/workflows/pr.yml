@@ -31,6 +31,10 @@ jobs:
         run: |
           yarn rnx-dep-check --write
           git diff --exit-code
+      - name: Report @rnx-kit/build workflow inconsistencies
+        run: |
+          cp incubator/build/workflows/github.yml .github/workflows/rnx-build.yml
+          git diff --exit-code
   build:
     name: "Build"
     strategy:
