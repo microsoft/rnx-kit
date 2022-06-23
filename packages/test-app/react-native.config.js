@@ -13,9 +13,9 @@ const project = (() => {
         sourceDir: "android",
         manifestPath: androidManifestPath(path.join(__dirname, "android")),
       },
-      windows: fs.existsSync("windows/Example.sln") && {
+      windows: fs.existsSync("windows/SampleCrossApp.sln") && {
         sourceDir: "windows",
-        solutionFile: "Example.sln",
+        solutionFile: "SampleCrossApp.sln",
         project: windowsProjectPath(path.join(__dirname, "windows")),
       },
       ...(iosProject ? { ios: { project: iosProject } } : undefined),

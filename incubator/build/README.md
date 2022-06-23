@@ -9,7 +9,7 @@
 
 🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧
 
-An experimental tool for building your native apps in the cloud.
+An experimental tool for building your apps in the cloud.
 
 ## Requirements
 
@@ -24,13 +24,14 @@ An experimental tool for building your native apps in the cloud.
 
 🚧 TODO: Not quite ready for general consumption
 
-At the moment, running these two commands should trigger an iOS build, install
-it in a simulator, and launch the app.
-
 ```sh
-yarn build
-yarn rnx-build
+npm run rnx-build --platform <platform>
 ```
+
+| Flag           | Description                                                  |
+| :------------- | :----------------------------------------------------------- |
+| -p, --platform | Supported platforms are `android`, `ios`, `macos`, `windows` |
+| --project-root | [Optional] Path to the root of the project                   |
 
 ## Contributors' Notes
 
@@ -42,29 +43,28 @@ yarn rnx-build
 - [x] Figure out how to push artifacts
   - [x] Android
   - [x] iOS
+  - [x] macOS
+  - [x] Windows
 - [x] Figure out how to download artifacts
-  - [x] Android
-  - [x] iOS
 - [ ] Figure out how to install artifacts
   - [x] Android emulator
   - [ ] Android device
   - [x] iOS simulator
   - [ ] iOS device
+  - [x] macOS
+  - [x] Windows
 - [x] Miscellaneous cleanup
   - [x] Implement proper CLI
   - [x] Download build artifacts to platform specific folders
   - [x] iOS: Detect workspace to build
 - [x] Cancel build job when user ctrl+c in the terminal
-- [ ] Figure out appropriate storage for auth tokens
 - [x] Add `init` or `install` command to copy the correct workflow file to
       user's repo
+- [ ] Windows: Install currently only works on Windows 11, we need to support 10
+- [ ] Build artifacts are currently hard-coded to look for ReactTestApp
+- [ ] Verify downloaded build artifacts using checksum
+- [ ] Figure out appropriate storage for auth tokens
 - [ ] Figure out how to install artifacts with QR code
 - [ ] Figure out caching
 - [ ] Figure out how to skip native build when cached
-- [ ] Implement support for macOS
-- [ ] Implement support for Windows
-
-### Open Questions
-
-- Can we avoid depending on Android SDK?
-- Can we avoid depending on Xcode?
+- [ ] Replace yauzl with something more native

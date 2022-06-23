@@ -2,6 +2,10 @@ name: rnx-build
 on:
   workflow_dispatch:
     inputs:
+      architecture:
+        description: "Supported architectures are `arm64`, `x64`"
+        required: true
+        default: "x64"
       packageManager:
         description: "Supported package managers are `npm`, `yarn`, `pnpm` (v6.10+)"
         required: true
@@ -21,7 +25,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Set up JDK
-        uses: actions/setup-java@v3.3.0
+        uses: actions/setup-java@v3.4.0
         with:
           distribution: temurin
           java-version: 11
@@ -33,7 +37,7 @@ jobs:
       - name: Install npm dependencies
         run: ${{ github.event.inputs.packageManager }} install
       - name: Build Android app
-        uses: gradle/gradle-build-action@v2.2.0
+        uses: gradle/gradle-build-action@v2.2.1
         with:
           gradle-version: wrapper
           arguments: --no-daemon clean assembleDebug
@@ -79,3 +83,78 @@ jobs:
         with:
           name: ios-artifact
           path: ${{ github.event.inputs.projectRoot }}/ios/ios-artifact.tar
+  build-macos:
+    name: "Build macOS"
+    if: ${{ github.event.inputs.platform == 'macos' }}
+    runs-on: macos-11
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Set up Node 16
+        uses: actions/setup-node@v3.3.0
+        with:
+          node-version: 16
+          cache: ${{ github.event.inputs.packageManager }}
+      - name: Install npm dependencies
+        run: ${{ github.event.inputs.packageManager }} install
+      - name: Install Pods
+        run: pod install --project-directory=macos
+        working-directory: ${{ github.event.inputs.projectRoot }}
+      - name: Build macOS app
+        run: |
+          xcworkspace=$(find . -maxdepth 1 -name '*.xcworkspace' -type d | head -1)
+          xcodebuild -workspace ${xcworkspace} -scheme ReactTestApp -configuration Debug -derivedDataPath DerivedData CODE_SIGNING_ALLOWED=NO COMPILER_INDEX_STORE_ENABLE=NO build
+        working-directory: ${{ github.event.inputs.projectRoot }}/macos
+      - name: Prepare build artifact
+        run: |
+          tar -cvf macos-artifact.tar -C DerivedData/Build/Products/Debug ReactTestApp.app
+          shasum --algorithm 512 macos-artifact.tar
+        working-directory: ${{ github.event.inputs.projectRoot }}/macos
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: macos-artifact
+          path: ${{ github.event.inputs.projectRoot }}/macos/macos-artifact.tar
+  build-windows:
+    name: "Build Windows"
+    if: ${{ github.event.inputs.platform == 'windows' }}
+    runs-on: windows-2022
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Set up MSBuild
+        uses: microsoft/setup-msbuild@v1.1
+      - name: Set up Node 16
+        uses: actions/setup-node@v3.3.0
+        with:
+          node-version: 16
+          cache: ${{ github.event.inputs.packageManager }}
+      - name: Install npm dependencies
+        run: ${{ github.event.inputs.packageManager }} install
+      - name: Install Windows test app
+        run: |
+          npx --package react-native-test-app -- install-windows-test-app --use-nuget
+        working-directory: ${{ github.event.inputs.projectRoot }}
+      - name: Set OID for unsigned packages
+        run: |
+          # https://docs.microsoft.com/en-us/windows/msix/package/unsigned-package
+          (Get-Content node_modules\.generated\windows\ReactTestApp\Package.appxmanifest) -replace '"CN=ReactTestApp"', '"CN=ReactTestApp, OID.2.25.311729368913984317654407730594956997722=1"' | Out-File -Encoding utf8 node_modules\.generated\windows\ReactTestApp\Package.appxmanifest
+        working-directory: ${{ github.event.inputs.projectRoot }}
+      - name: Install NuGet packages
+        run: |
+          nuget restore
+        working-directory: ${{ github.event.inputs.projectRoot }}/windows
+      - name: Build Windows app
+        run: |
+          MSBuild -maxCpuCount -property:Configuration=Debug -property:Platform=${{ github.event.inputs.architecture }} -property:AppxBundlePlatforms=${{ github.event.inputs.architecture }} -property:AppxBundle=Always -property:UapAppxPackageBuildMode=SideloadOnly -property:UseBundle=false -target:Build
+        working-directory: ${{ github.event.inputs.projectRoot }}/windows
+      - name: Prepare build artifact
+        run: |
+          cp ${{ github.event.inputs.architecture }}/Debug/ReactTestApp/AppxManifest.xml AppPackages/ReactTestApp/*
+        shell: bash
+        working-directory: ${{ github.event.inputs.projectRoot }}/windows
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: windows-artifact
+          path: ${{ github.event.inputs.projectRoot }}/windows/AppPackages/ReactTestApp

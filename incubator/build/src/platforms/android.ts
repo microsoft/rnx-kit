@@ -3,8 +3,13 @@ import { existsSync as fileExists } from "node:fs";
 import * as fs from "node:fs/promises";
 import * as path from "node:path";
 import type { Ora } from "ora";
-import { idle } from "../async";
+import { idle, retry } from "../async";
 import { ensure, makeCommand, makeCommandSync } from "../command";
+
+type PackageInfo = {
+  packageName: string;
+  activityName: string;
+};
 
 const ANDROID_HOME = process.env.ANDROID_HOME || "";
 const ADB_PATH = path.join(ANDROID_HOME, "platform-tools", "adb");
@@ -12,10 +17,10 @@ const EMULATOR_PATH = path.join(ANDROID_HOME, "emulator", "emulator");
 
 const adb = makeCommand(ADB_PATH);
 
-async function getBuildToolsPath(): Promise<string> {
+async function getBuildToolsPath(): Promise<string | null> {
   const buildToolsInstallPath = path.join(ANDROID_HOME, "build-tools");
   if (!fileExists(buildToolsInstallPath)) {
-    throw new Error("Could not find Android SDK Build-Tools");
+    return null;
   }
 
   const versions = await fs.readdir(buildToolsInstallPath);
@@ -57,25 +62,32 @@ async function getEmulators(): Promise<string[]> {
     .filter(Boolean);
 }
 
-async function getPackageName(apk: string): Promise<[string, string]> {
+async function getPackageName(apk: string): Promise<PackageInfo | Error> {
   const buildToolsPath = await getBuildToolsPath();
+  if (!buildToolsPath) {
+    return new Error("Could not find Android SDK Build-Tools");
+  }
+
   const aapt = makeCommandSync(path.join(buildToolsPath, "aapt2"));
 
   const { stdout } = aapt("dump", "badging", apk);
   const packageMatch = stdout.match(/package: name='(.*?)'/);
   if (!packageMatch) {
-    throw new Error("Could not find package name");
+    return new Error("Could not find package name");
   }
 
   const activityMatch = stdout.match(/launchable-activity: name='(.*?)'/);
   if (!activityMatch) {
-    throw new Error("Could not find launchable activity");
+    return new Error("Could not find launchable activity");
   }
 
-  return [packageMatch[1], activityMatch[1]];
+  return { packageName: packageMatch[1], activityName: activityMatch[1] };
 }
 
-async function install(filename: string, packageName: string): Promise<void> {
+async function install(
+  filename: string,
+  packageName: string
+): Promise<Error | null> {
   const { stderr, status } = await adb("install", filename);
   if (status !== 0) {
     if (stderr.includes("device offline")) {
@@ -86,24 +98,22 @@ async function install(filename: string, packageName: string): Promise<void> {
       return install(filename, packageName);
     }
 
-    throw new Error(stderr);
+    return new Error(stderr);
   }
+  return null;
 }
 
-async function launchEmulator(emulatorName: string): Promise<void> {
+async function launchEmulator(emulatorName: string): Promise<Error | null> {
   spawn(EMULATOR_PATH, ["@" + emulatorName], {
     detached: true,
     stdio: "ignore",
   }).unref();
 
-  while (emulatorName) {
+  const result = await retry(async () => {
     const devices = await getDevices();
-    if (devices.some(([, state]) => state === "device")) {
-      break;
-    }
-
-    await idle(1000);
-  }
+    return devices.some(([, state]) => state === "device") || null;
+  }, 4);
+  return result ? null : new Error("Timed out waiting for the emulator");
 }
 
 function start(packageName: string, activityName: string) {
@@ -124,7 +134,11 @@ export async function installAndLaunchApk(
 
   if (emulatorName) {
     spinner.start(`Booting Android emulator @${emulatorName}`);
-    await launchEmulator(emulatorName);
+    const error = await launchEmulator(emulatorName);
+    if (error) {
+      spinner.fail(error.message);
+      return;
+    }
     spinner.succeed(`Booted @${emulatorName}`);
   } else {
     const devices = await getDevices();
@@ -132,20 +146,39 @@ export async function installAndLaunchApk(
       spinner.info("An Android device is already connected");
     } else {
       const emulators = await getEmulators();
+      if (emulators.length === 0) {
+        spinner.warn("No emulators were found");
+        return;
+      }
+
       const emulatorName = emulators[0];
       spinner.start(`Booting Android emulator @${emulatorName}`);
-      await launchEmulator(emulatorName);
+      const error = await launchEmulator(emulatorName);
+      if (error) {
+        spinner.fail(error.message);
+        return;
+      }
       spinner.succeed(`Booted @${emulatorName}`);
     }
   }
 
-  const [packageName, activityName] = await getPackageName(apk);
+  const info = await getPackageName(apk);
+  if (info instanceof Error) {
+    spinner.fail(info.message);
+    return;
+  }
+
+  const { packageName, activityName } = info;
 
   spinner.start(`Installing ${apk}`);
-  await install(apk, packageName);
-  spinner.succeed(`Installed ${apk}`);
+  const error = await install(apk, packageName);
+  if (error) {
+    spinner.fail(error.message);
+    return;
+  }
 
-  spinner.start(`Starting ${packageName}`);
+  spinner.text = `Starting ${packageName}`;
   await start(packageName, activityName);
+
   spinner.succeed(`Started ${packageName}`);
 }

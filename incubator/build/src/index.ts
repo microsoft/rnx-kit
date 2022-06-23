@@ -23,7 +23,6 @@ async function main(): Promise<void> {
     return;
   }
 
-  const repoRoot = getRepositoryRoot();
   const argv = yargs(hideBin(process.argv))
     .option("platform", {
       alias: "p",
@@ -36,9 +35,10 @@ async function main(): Promise<void> {
     .option("project-root", {
       type: "string",
       description: "Root of project",
-      default: path.relative(repoRoot, pkgDir.sync() || process.cwd()),
+      default: pkgDir.sync() || process.cwd(),
       coerce: (value) => {
         // `projectRoot` needs to be relative to repository root
+        const repoRoot = getRepositoryRoot();
         return path.relative(repoRoot, path.resolve(process.cwd(), value));
       },
     }).argv;

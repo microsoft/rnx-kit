@@ -1,7 +1,9 @@
 import * as path from "node:path";
 import type { Ora } from "ora";
-import { idle } from "../async";
+import { untar } from "../archive";
+import { retry } from "../async";
 import { ensure, makeCommand, makeCommandSync } from "../command";
+import { open } from "./macos";
 
 type SimDevice = {
   name: string;
@@ -19,19 +21,19 @@ type Devices = {
   devices: Record<string, SimDevice[]>;
 };
 
-const open = makeCommand("open");
 const xcrun = makeCommand("xcrun");
 
-async function bootSimulator({ udid }: SimDevice): Promise<void> {
-  ensure(await xcrun("simctl", "boot", udid));
-
-  while (udid) {
-    await idle(1000);
-    const dev = await getDevice(udid);
-    if (dev.state === "Booted") {
-      break;
-    }
+async function bootSimulator({ udid }: SimDevice): Promise<Error | null> {
+  const { stderr, status } = await xcrun("simctl", "boot", udid);
+  if (status !== 0) {
+    return new Error(stderr);
   }
+
+  const result = await retry(async () => {
+    const dev = await getDevice(udid);
+    return dev?.state === "Booted" || null;
+  }, 4);
+  return result ? null : new Error("Timed out waiting for the simulator");
 }
 
 async function getAvailableDevices(
@@ -50,22 +52,28 @@ function getDeveloperDirectory(): string | undefined {
   return status === 0 ? stdout.trim() : undefined;
 }
 
-async function getDevice(deviceName: string | undefined): Promise<SimDevice> {
+async function getDevice(
+  deviceName: string | undefined
+): Promise<SimDevice | null> {
   const devices = await getAvailableDevices(deviceName);
   const runtime = Object.keys(devices)
     .sort()
     .reverse()
     .find((runtime) => devices[runtime].length !== 0);
   if (!runtime) {
-    throw new Error("Could not find an appropriate simulator");
+    return null;
   }
 
   const deviceList = devices[runtime];
   return deviceList[deviceList.length - 1];
 }
 
-async function install(app: string, { udid }: SimDevice): Promise<void> {
-  ensure(await xcrun("simctl", "install", udid, app));
+async function install(
+  app: string,
+  { udid }: SimDevice
+): Promise<Error | null> {
+  const { stderr, status } = await xcrun("simctl", "install", udid, app);
+  return status === 0 ? null : new Error(stderr);
 }
 
 async function launch(app: string, { udid }: SimDevice): Promise<void> {
@@ -82,21 +90,6 @@ async function launch(app: string, { udid }: SimDevice): Promise<void> {
   ensure(await xcrun("simctl", "launch", udid, CFBundleIdentifier));
 }
 
-async function untar(archive: string): Promise<string> {
-  const buildDir = path.dirname(archive);
-  const tar = makeCommand("tar", { cwd: buildDir });
-
-  const filename = path.basename(archive);
-  const list = ensure(await tar("tf", filename));
-  const m = list.match(/(.*?)\//);
-  if (!m) {
-    throw new Error(`Failed to determine content of ${archive}`);
-  }
-
-  ensure(await tar("xf", filename));
-  return path.join(buildDir, m[1]);
-}
-
 export async function installAndLaunchApp(
   archive: string,
   deviceName: string | undefined,
@@ -109,23 +102,37 @@ export async function installAndLaunchApp(
   }
 
   const device = await getDevice(deviceName);
+  if (!device) {
+    spinner.fail("Failed to find an appropriate simulator");
+    return;
+  }
+
   if (device.state === "Booted") {
     spinner.info(`${device.name} simulator is already connected`);
   } else {
     spinner.start(`Booting ${device.name} simulator`);
-    await bootSimulator(device);
+    const error = await bootSimulator(device);
+    if (error) {
+      spinner.fail(error.message);
+      return;
+    }
     spinner.succeed(`Booted ${device.name} simulator`);
   }
 
   await open(path.join(developerDir, "Applications", "Simulator.app"));
 
+  spinner.start(`Extracting ${archive}`);
   const app = await untar(archive);
 
-  spinner.start(`Installing ${app}`);
-  await install(app, device);
-  spinner.succeed(`Installed ${app}`);
+  spinner.text = `Installing ${app}`;
+  const error = await install(app, device);
+  if (error) {
+    spinner.fail(error.message);
+    return;
+  }
 
-  spinner.start(`Launching ${app}`);
+  spinner.text = `Launching ${app}`;
   await launch(app, device);
+
   spinner.succeed(`Launched ${app}`);
 }
