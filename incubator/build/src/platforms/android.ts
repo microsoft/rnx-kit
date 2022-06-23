@@ -6,6 +6,27 @@ import type { Ora } from "ora";
 import { idle, retry } from "../async";
 import { ensure, makeCommand, makeCommandSync } from "../command";
 
+type EmulatorInfo = {
+  product: string;
+  model: string;
+  device: string;
+  transport_id: string;
+};
+
+type PhysicalDeviceInfo = {
+  usb: string;
+  product: string;
+  model: string;
+  device: string;
+  transport_id: string;
+};
+
+type DeviceInfo = {
+  serial: string;
+  state: "offline" | "device" | string;
+  description: EmulatorInfo | PhysicalDeviceInfo;
+};
+
 type PackageInfo = {
   packageName: string;
   activityName: string;
@@ -42,14 +63,21 @@ async function getBuildToolsPath(): Promise<string | null> {
   return path.join(buildToolsInstallPath, latestVersion);
 }
 
-async function getDevices(): Promise<[string, string][]> {
-  const { stdout } = await adb("devices");
+async function getDevices(): Promise<DeviceInfo[]> {
+  // https://developer.android.com/studio/command-line/adb#devicestatus
+  const { stdout } = await adb("devices", "-l");
   return stdout
     .split("\n")
-    .splice(1)
+    .splice(1) // First line is 'List of devices attached'
     .map((device) => {
-      const [name, state] = device.split("\t");
-      return [name, state];
+      const [serial, state, ...props] = device.split(/\s+/);
+      return {
+        serial,
+        state,
+        description: Object.fromEntries(
+          props.map((prop) => prop.split(":"))
+        ) as DeviceInfo["description"],
+      };
     });
 }
 
@@ -85,25 +113,28 @@ async function getPackageName(apk: string): Promise<PackageInfo | Error> {
 }
 
 async function install(
-  filename: string,
+  device: DeviceInfo,
+  apk: string,
   packageName: string
 ): Promise<Error | null> {
-  const { stderr, status } = await adb("install", filename);
+  const { stderr, status } = await adb("-s", device.serial, "install", apk);
   if (status !== 0) {
     if (stderr.includes("device offline")) {
       await idle(1000);
-      return install(filename, packageName);
+      return install(device, apk, packageName);
     } else if (stderr.includes("INSTALL_FAILED_UPDATE_INCOMPATIBLE")) {
       await adb("uninstall", packageName);
-      return install(filename, packageName);
+      return install(device, apk, packageName);
     }
-
     return new Error(stderr);
   }
+
   return null;
 }
 
-async function launchEmulator(emulatorName: string): Promise<Error | null> {
+async function launchEmulator(
+  emulatorName: string
+): Promise<DeviceInfo | Error> {
   spawn(EMULATOR_PATH, ["@" + emulatorName], {
     detached: true,
     stdio: "ignore",
@@ -111,13 +142,61 @@ async function launchEmulator(emulatorName: string): Promise<Error | null> {
 
   const result = await retry(async () => {
     const devices = await getDevices();
-    return devices.some(([, state]) => state === "device") || null;
+    return devices.find((device) => device.state === "device") || null;
   }, 4);
-  return result ? null : new Error("Timed out waiting for the emulator");
+  return result || new Error("Timed out waiting for the emulator");
 }
 
-function start(packageName: string, activityName: string) {
-  return adb("shell", "am", "start", "-n", `${packageName}/${activityName}`);
+async function selectDevice(
+  emulatorName: string | undefined,
+  spinner: Ora
+): Promise<DeviceInfo | null> {
+  const attachedDevices = await getDevices();
+  if (!emulatorName) {
+    const physicalDevice = attachedDevices.find(
+      (device) => device.state === "device" && "usb" in device.description
+    );
+    if (physicalDevice) {
+      spinner.info(`Found Android device ${physicalDevice.serial}`);
+      return physicalDevice;
+    }
+  }
+
+  // There is currently no way to get the emulator name based on the list of
+  // attached devices. If we find an emulator, we'll have to assume it's the
+  // one the user wants.
+  const attachedEmulator = attachedDevices.find(
+    (device) => device.state === "device" && !("usb" in device.description)
+  );
+  if (attachedEmulator) {
+    spinner.info("An Android emulator is already attached");
+    return attachedEmulator;
+  }
+
+  const avd = emulatorName || (await getEmulators())[0];
+  if (!avd) {
+    spinner.warn("No emulators were found");
+    return null;
+  }
+
+  spinner.start(`Booting Android emulator @${avd}`);
+  const emulator = await launchEmulator(avd);
+  if (emulator instanceof Error) {
+    spinner.fail(emulator.message);
+    return null;
+  }
+
+  spinner.succeed(`Booted @${avd}`);
+  return emulator;
+}
+
+function start(
+  { serial }: DeviceInfo,
+  packageName: string,
+  activityName: string
+) {
+  const activity = `${packageName}/${activityName}`;
+  return adb("-s", serial, "shell", "am", "start", "-n", activity);
 }
 
 export async function installAndLaunchApk(
@@ -132,34 +211,9 @@ export async function installAndLaunchApk(
     return;
   }
 
-  if (emulatorName) {
-    spinner.start(`Booting Android emulator @${emulatorName}`);
-    const error = await launchEmulator(emulatorName);
-    if (error) {
-      spinner.fail(error.message);
-      return;
-    }
-    spinner.succeed(`Booted @${emulatorName}`);
-  } else {
-    const devices = await getDevices();
-    if (devices.some(([, state]) => state === "device")) {
-      spinner.info("An Android device is already connected");
-    } else {
-      const emulators = await getEmulators();
-      if (emulators.length === 0) {
-        spinner.warn("No emulators were found");
-        return;
-      }
-
-      const emulatorName = emulators[0];
-      spinner.start(`Booting Android emulator @${emulatorName}`);
-      const error = await launchEmulator(emulatorName);
-      if (error) {
-        spinner.fail(error.message);
-        return;
-      }
-      spinner.succeed(`Booted @${emulatorName}`);
-    }
+  const device = await selectDevice(emulatorName, spinner);
+  if (!device) {
+    return;
   }
 
   const info = await getPackageName(apk);
@@ -171,14 +225,14 @@ export async function installAndLaunchApk(
   const { packageName, activityName } = info;
 
   spinner.start(`Installing ${apk}`);
-  const error = await install(apk, packageName);
+  const error = await install(device, apk, packageName);
   if (error) {
     spinner.fail(error.message);
     return;
   }
 
   spinner.text = `Starting ${packageName}`;
-  await start(packageName, activityName);
+  await start(device, packageName, activityName);
 
   spinner.succeed(`Started ${packageName}`);
 }
