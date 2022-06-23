@@ -2,10 +2,10 @@ import * as fs from "node:fs";
 import * as path from "node:path";
 import yauzl from "yauzl";
 import { ensure, makeCommand } from "./command";
+import { ensureDir } from "./filesystem";
 
 export function extract(filename: string): Promise<string> {
   return new Promise((resolve, reject) => {
-    const mkdirOptions = { recursive: true, mode: 0o755 } as const;
     const destination = path.dirname(filename);
 
     yauzl.open(filename, { lazyEntries: true }, (err, zipFile) => {
@@ -17,7 +17,7 @@ export function extract(filename: string): Promise<string> {
       let output = "";
 
       zipFile.on("entry", (entry) => {
-        zipFile.openReadStream(entry, (err, readStream) => {
+        zipFile.openReadStream(entry, async (err, readStream) => {
           if (err) {
             reject(err);
           }
@@ -29,7 +29,8 @@ export function extract(filename: string): Promise<string> {
           output ||= absolutePath;
 
           if (absolutePath.endsWith("/") || absolutePath.endsWith("\\")) {
-            fs.mkdir(absolutePath, mkdirOptions, readNextEntry);
+            await ensureDir(absolutePath);
+            readNextEntry();
           } else {
             readStream
               .pipe(fs.createWriteStream(absolutePath))
