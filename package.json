@@ -57,7 +57,8 @@
     "nx/chalk": "^4.1.0",
     "nx/fast-glob": "^3.2.7",
     "nx/glob": "^7.1.4",
-    "nx/semver": "^7.3.4"
+    "nx/semver": "^7.3.4",
+    "shell-quote": "^1.7.3"
   },
   "workspaces": {
     "packages": [
