@@ -3,16 +3,14 @@ on: pull_request
 jobs:
   review:
     name: "Review"
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
-      - name: Set up Node 14
-        uses: actions/setup-node@v3.3.0
-        with:
-          node-version: 14
       - name: Checkout
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
+      - name: Setup the toolchain
+        uses: ./.github/actions/setup-toolchain
       - name: Ensure rnx-kit packages come from our repository
         run: |
           if grep rnx-kit yarn.lock; then
@@ -21,15 +19,8 @@ jobs:
       - name: Deduplicate packages
         run: |
           npx yarn-deduplicate --list --fail
-      - name: Cache /.yarn-offline-mirror
-        uses: actions/cache@v3
-        with:
-          path: .yarn-offline-mirror
-          key: ${{ runner.os }}-${{ hashFiles('yarn.lock') }}-7
       - name: Install package dependencies
-        run: yarn ci
-        env:
-          CI_SKIP_GO: 1
+        uses: ./.github/actions/yarn
       - name: Check for change files
         run: yarn change:check --since origin/${{ github.base_ref }}
       - name: Report formatting problems
@@ -45,31 +36,24 @@ jobs:
     strategy:
       matrix:
         node-version: [14, 16]
-        os: [ubuntu-latest, windows-latest]
+        os: [ubuntu-20.04, windows-2022]
     runs-on: ${{ matrix.os }}
     steps:
-      - name: Set up Node ${{ matrix.node-version }}
-        uses: actions/setup-node@v3.3.0
-        with:
-          node-version: ${{ matrix.node-version }}
-      - uses: actions/setup-go@v3
-        with:
-          go-version: "^1.14.0"
       - name: Checkout
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      - name: Cache /.yarn-offline-mirror
-        uses: actions/cache@v3
+      - name: Setup the toolchain
+        uses: ./.github/actions/setup-toolchain
         with:
-          path: .yarn-offline-mirror
-          key: ${{ runner.os }}-${{ hashFiles('yarn.lock') }}-7
+          node-version: ${{ matrix.node-version }}
+          go-version: "^1.14.0"
       - name: Install package dependencies
-        run: yarn ci
+        uses: ./.github/actions/yarn
       - name: Build and test packages
         run: yarn build:ci --base origin/${{ github.base_ref }}
       - name: Ensure READMEs are up-to-date
-        if: ${{ matrix.node-version == 14 && matrix.os == 'ubuntu-latest' }}
+        if: ${{ matrix.node-version == 14 && matrix.os == 'ubuntu-20.04' }}
         run: |
           yarn update-readme
           git diff --exit-code
@@ -80,95 +64,49 @@ jobs:
           yarn bundle+esbuild
         shell: bash
         working-directory: packages/test-app
-  build-android:
+  build-android-expo-app:
     name: "Build Android"
-    runs-on: ubuntu-latest
-    steps:
-      - name: Set up JDK
-        uses: actions/setup-java@v3.3.0
-        with:
-          distribution: temurin
-          java-version: 11
-      - name: Set up Node 14
-        uses: actions/setup-node@v3.3.0
-        with:
-          node-version: 14
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-      - name: Cache /.yarn-offline-mirror
-        uses: actions/cache@v3
-        with:
-          path: .yarn-offline-mirror
-          key: ${{ runner.os }}-${{ hashFiles('yarn.lock') }}-7
-      - name: Install npm dependencies
-        run: yarn ci
-        env:
-          CI_SKIP_GO: 1
-      - name: Build Android app
-        run: |
-          ./gradlew clean build
-        working-directory: packages/test-app/android
-  build-ios:
+    uses: ./.github/workflows/build-android.yml
+    with:
+      package: expo-app
+  build-android-test-app:
+    name: "Build Android"
+    uses: ./.github/workflows/build-android.yml
+    with:
+      package: test-app
+  build-ios-expo-app:
     name: "Build iOS"
-    runs-on: macos-11
-    steps:
-      - name: Set up Node 14
-        uses: actions/setup-node@v3.3.0
-        with:
-          node-version: 14
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-      - name: Cache /.yarn-offline-mirror
-        uses: actions/cache@v3
-        with:
-          path: .yarn-offline-mirror
-          key: ${{ runner.os }}-${{ hashFiles('yarn.lock') }}-7
-      - name: Install npm dependencies
-        run: yarn ci
-        env:
-          CI_SKIP_GO: 1
-      - name: Install Pods
-        run: pod install --project-directory=ios
-        working-directory: packages/test-app
-      - name: Build iOS app
-        run: |
-          device_name='iPhone 12'
-          device=$(xcrun simctl list devices "${device_name}" available | grep "${device_name} (")
-          re='\(([-0-9A-Fa-f]+)\)'
-          [[ $device =~ $re ]] || exit 1
-          xcodebuild -workspace SampleCrossApp.xcworkspace -scheme ReactTestApp -destination "platform=iOS Simulator,id=${BASH_REMATCH[1]}" CODE_SIGNING_ALLOWED=NO COMPILER_INDEX_STORE_ENABLE=NO build | xcpretty
-        working-directory: packages/test-app/ios
+    uses: ./.github/workflows/build-ios.yml
+    with:
+      package: expo-app
+      workspace-name: expoapp
+      scheme-name: expoapp
+  build-ios-test-app:
+    name: "Build iOS"
+    uses: ./.github/workflows/build-ios.yml
+    with:
+      package: test-app
+      workspace-name: SampleCrossApp
+      scheme-name: ReactTestApp
   build-website:
     name: "Build the website"
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
-      - name: Set up Node 16
-        uses: actions/setup-node@v3.3.0
-        with:
-          node-version: 16
       - name: Checkout
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      - name: Cache /.yarn-offline-mirror
-        uses: actions/cache@v3
-        with:
-          path: .yarn-offline-mirror
-          key: ${{ runner.os }}-${{ hashFiles('yarn.lock') }}-7
+      - name: Setup the toolchain
+        uses: ./.github/actions/setup-toolchain
       - name: Install package dependencies
-        run: yarn ci
-        env:
-          CI_SKIP_GO: 1
+        uses: ./.github/actions/yarn
       - name: Build website
         run: yarn build
         working-directory: docsite
   label:
     name: "Label"
-    runs-on: ubuntu-latest
+    if: ${{ github.event.pull_request.head.repo.full_name == github.repository }}
+    runs-on: ubuntu-20.04
     permissions:
       contents: read
       pull-requests: write

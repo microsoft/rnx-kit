@@ -4,13 +4,15 @@
   "private": "true",
   "scripts": {
     "build": "tsc --noEmit",
-    "test": "jest",
+    "build:ios": "rnx-kit-scripts build-ios -w expoapp -s expoapp -d 'iPhone 13'",
+    "build:android": "rnx-kit-scripts build-android clean build",
     "bundle": "yarn run bundle:ios && yarn run bundle:android",
     "bundle:ios": "yarn run mkdirp dist && node_modules/.bin/react-native bundle --entry-file index.js --platform ios --dev true --bundle-output dist/main.jsbundle --sourcemap-output dist/main.jsbundle.map --assets-dest dist",
     "bundle:android": "yarn run mkdirp dist/res && node_modules/.bin/react-native bundle --entry-file index.js --platform android --dev true --bundle-output dist/index.android.bundle --sourcemap-output dist/index.android.bundle.map --assets-dest dist/res",
-    "start": "expo start --dev-client",
+    "test": "jest",
     "android": "expo run:android",
     "ios": "expo run:ios",
+    "start": "expo start --dev-client",
     "web": "expo start --web"
   },
   "jest": {
@@ -39,12 +41,22 @@
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
+    "@rnx-kit/scripts": "*",
     "@types/react": "~17.0.21",
     "@types/react-native": "~0.66.13",
     "jest": "^27.0.0",
     "jest-expo": "~45.0.0",
     "mkdirp": "^1.0.4",
     "react-test-renderer": "17.0.2",
-    "typescript": "~4.3.5"
+    "typescript": "^4.0.0"
+  },
+  "depcheck": {
+    "ignoreMatches": [
+      "expo-asset",
+      "expo-constants",
+      "expo-system-ui",
+      "react-dom",
+      "react-native-web"
+    ]
   }
 }

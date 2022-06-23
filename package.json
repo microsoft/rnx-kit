@@ -20,7 +20,7 @@
     "bundle+esbuild": "nx run-many --target bundle+esbuild --all",
     "change": "changeset add",
     "change:check": "changeset status",
-    "ci": "yarn --cache-folder .yarn-offline-mirror --prefer-offline --frozen-lockfile --non-interactive",
+    "ci": "yarn --prefer-offline --frozen-lockfile --non-interactive",
     "clean": "nx clear-cache",
     "depcheck": "nx run-many --target depcheck --all",
     "format": "nx run-many --target format --all",
