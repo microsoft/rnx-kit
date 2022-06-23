@@ -240,7 +240,7 @@ describe("metro-serializer-esbuild", () => {
 
         // ../../node_modules/@fluentui/utilities/lib/version.js
         init_lib();
-        setVersion(\\"@fluentui/utilities\\", \\"8.8.1\\");
+        setVersion(\\"@fluentui/utilities\\", \\"8.8.3\\");
 
         // test/__fixtures__/sideEffectsArray.ts
         warn(\\"this should _not_ be removed\\");
