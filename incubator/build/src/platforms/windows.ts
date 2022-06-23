@@ -63,7 +63,10 @@ async function getPackageInfo(app: string): Promise<PackageInfo | null> {
   return { packageName, appId };
 }
 
-async function install(app: string): Promise<string | Error> {
+async function install(
+  app: string,
+  tryUninstall = true
+): Promise<string | Error> {
   const packageInfo = await getPackageInfo(app);
   if (!packageInfo) {
     return new Error(
@@ -86,13 +89,13 @@ async function install(app: string): Promise<string | Error> {
     path.join(app, msixbundle)
   );
   if (status !== 0) {
-    if (stderr?.includes("Install failed")) {
+    if (stderr?.includes("Install failed") && tryUninstall) {
       const { stdout: packageFullName } = await pwsh(
         `(Get-AppxPackage ${packageInfo.packageName}).PackageFullName`
       );
       if (packageFullName) {
         await pwsh("Remove-AppxPackage", packageFullName);
-        return install(app);
+        return install(app, false);
       }
     }
     return new Error(stderr);
