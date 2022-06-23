@@ -1,5 +1,13 @@
 # Change Log - @rnx-kit/react-native-test-app-msal
 
+## 1.0.3
+
+### Patch Changes
+
+- 01e91b07: Fixed build fail on macOS
+- Updated dependencies [641edba5]
+  - @rnx-kit/react-native-auth@0.1.3
+
 ## 1.0.2
 
 ### Patch Changes

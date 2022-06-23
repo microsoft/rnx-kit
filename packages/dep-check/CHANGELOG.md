@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/dep-check
 
+## 1.12.17
+
+### Patch Changes
+
+- 641edba5: Add profile for react-native 0.69
+
 ## 1.12.16
 
 ### Patch Changes
