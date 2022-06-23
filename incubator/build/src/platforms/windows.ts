@@ -1,3 +1,4 @@
+import { XMLParser } from "fast-xml-parser";
 import * as fs from "node:fs/promises";
 import * as os from "node:os";
 import * as path from "node:path";
@@ -44,15 +45,17 @@ function makePowerShell(
 
 async function getPackageInfo(app: string): Promise<PackageInfo | null> {
   const filename = path.join(app, "AppxManifest.xml");
-  const manifest = await fs.readFile(filename, { encoding: "utf-8" });
-  const m = manifest.match(/<Identity[^>]*Name="(.*?)"/s);
-  const packageName = m && m[1];
+  const content = await fs.readFile(filename, { encoding: "utf-8" });
+
+  const xml = new XMLParser({ ignoreAttributes: false });
+  const manifest = xml.parse(content);
+
+  const packageName = manifest?.Package?.Identity?.["@_Name"];
   if (!packageName) {
     return null;
   }
 
-  const n = manifest.match(/<Application[^>]*Id="(.*?)"/s);
-  const appId = n && n[1];
+  const appId = manifest.Package.Applications?.Application?.["@_Id"];
   if (!appId) {
     return null;
   }
