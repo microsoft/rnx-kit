@@ -1,4 +1,5 @@
-- Title: (fill me in with a unique identifier in kebab-case, `my-feature`)
+- Title: (set this to the kebab-case title you used for the filename, e.g.
+  `rfc-title`)
 - Date: (fill me in with today's date, YYYY-MM-DD)
 - RFC PR: (leave this empty)
 - rnx-kit Issue: (leave this empty)

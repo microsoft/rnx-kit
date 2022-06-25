@@ -13,7 +13,7 @@ Some changes, though, are "substantial", and we ask that these be put through a
 bit of a design process and produce a consensus among the community and core
 development team.
 
-[Active RFC List](https://github.com/microsoft/rnx-kit/pulls?q=is%3Aopen+is%3Apr+label%3ARFC)
+[Accepted RFC List](https://github.com/microsoft/rnx-kit/pulls?q=is%3Aopen+is%3Apr+label%3ARFC)
 
 ## When to follow this process
 
@@ -55,9 +55,8 @@ the RFC is worth pursuing.
 ## From proposal to acceptance
 
 In short, to get a major feature added to `rnx-kit`, you must first get an RFC
-proposal accepted and merged into the `rfcs` branch. Once merged, the RFC is
-"active" and may be implemented with the goal of eventual inclusion into
-`rnx-kit`.
+proposal accepted. Once accepted, the RFC is merged into the `rfcs` branch and
+may be implemented with the goal of eventual inclusion into `rnx-kit`.
 
 - Fork the `rnx-kit` repo http://github.com/microsoft/rnx-kit
 - Check out the `rfcs` branch
@@ -67,9 +66,9 @@ proposal accepted and merged into the `rfcs` branch. Once merged, the RFC is
   convincing motivation, demonstrate understanding of the impact of the design,
   or are disingenuous about the drawbacks or alternatives, tend to be
   poorly-received**.
-- Submit a pull request. As a pull request, the RFC will receive design feedback
-  from the larger community, and the author should be prepared to revise it in
-  response.
+- Submit a pull request targeting the `rfcs` branch. The RFC will receive design
+  feedback from the larger community, and the author should be prepared to
+  revise it in response.
 - Build consensus and integrate feedback. An RFC that has broad support is much
   more likely to make progress.
 - Eventually, the core team will decide whether the RFC is a candidate for
@@ -85,20 +84,20 @@ proposal accepted and merged into the `rfcs` branch. Once merged, the RFC is
   of the core team will then close the associated pull request.
 - The RFC may be accepted after the final comment period. A core team member
   will then assign an id number to the RFC, create a matching issue in
-  `rnx-kit`, and merge the RFC pull request. The RFC is now "active".
+  `rnx-kit`, and merge the RFC pull request.
 
 ## Accepted RFC lifecycle
 
-Once the RFC becomes "active", anyone may implement it and submit their work as
-a pull request to the `rnx-kit` repo. While it is not necessary that the author
-of the RFC write the implementation, it is by far the most effective way to see
-an RFC through to completion. Authors should not expect other developers to take
-on the responsibility of implementing their accepted proposal.
+Once the RFC is accepted, anyone may implement it and submit their work as a
+pull request to the `rnx-kit` repo. While it is not necessary that the author of
+the RFC write the implementation, it is by far the most effective way to see an
+RFC through to completion. Authors should not expect other developers to take on
+the responsibility of implementing their accepted proposal.
 
-Becoming "active" is not a rubber stamp, and in particular does not mean a pull
+Becoming accepted is not a rubber stamp, and in particular does not mean a pull
 request will ultimately be merged. Instead, it means that the core team has
 agreed to the RFC in principle and is amenable to merging it. Further, the fact
-that the RFC is "active" implies nothing about what priority is assigned to its
+that the RFC is accepted implies nothing about what priority is assigned to its
 implementation, nor whether anyone is currently working on it.
 
 Once accepted, an RFC should not be substantially changed. Only minor amendments
