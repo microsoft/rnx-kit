@@ -60,6 +60,7 @@ npm run rnx-build --platform <platform>
 - [x] Cancel build job when user ctrl+c in the terminal
 - [x] Add `init` or `install` command to copy the correct workflow file to
       user's repo
+- [x] Replace yauzl with something more native
 - [ ] Windows: Install currently only works on Windows 11, we need to support 10
 - [ ] Build artifacts are currently hard-coded to look for ReactTestApp
 - [ ] Verify downloaded build artifacts using checksum
@@ -67,4 +68,3 @@ npm run rnx-build --platform <platform>
 - [ ] Figure out how to install artifacts with QR code
 - [ ] Figure out caching
 - [ ] Figure out how to skip native build when cached
-- [ ] Replace yauzl with something more native
