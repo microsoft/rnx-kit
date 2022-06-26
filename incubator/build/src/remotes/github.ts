@@ -19,6 +19,7 @@ import {
 } from "../constants";
 import { ensureDir } from "../filesystem";
 import { getRemoteUrl, getRepositoryRoot, stage } from "../git";
+import { elapsedTime } from "../time";
 import type {
   BuildParams,
   Context,
@@ -121,36 +122,50 @@ async function watchWorkflowRun(
 ): Promise<string | null> {
   spinner.start("Starting build");
 
+  let count = 0;
+  let currentStep: string | undefined = "";
+  let startTime = "";
   while (runId) {
     await idle(1000);
 
-    const result = await octokit().rest.actions.listJobsForWorkflowRun(runId);
-    const job = result.data.jobs.find((job) => job.conclusion !== "skipped");
-    if (!job) {
+    // Poll job updates every 5 seconds. Note that GitHub currently limits
+    // user-to-server requests to 5000 per hour. That's only ~1.3 requests
+    // per second. For more details, see
+    // https://docs.github.com/en/rest/overview/resources-in-the-rest-api#rate-limiting
+    if (++count % 5 === 0) {
+      const result = await octokit().rest.actions.listJobsForWorkflowRun(runId);
+      const job = result.data.jobs.find((job) => job.conclusion !== "skipped");
+      if (!job) {
+        continue;
+      }
+
+      const { status, conclusion, started_at, steps } = job;
+
+      if (status === "completed") {
+        const elapsed = elapsedTime(started_at, job.completed_at);
+        switch (conclusion) {
+          case "failure":
+            spinner.fail(`Build failed (${elapsed})`);
+            break;
+          case "success":
+            spinner.succeed(`Build succeeded (${elapsed})`);
+            break;
+          default:
+            spinner.fail(`Build ${conclusion} (${elapsed})`);
+            break;
+        }
+        return conclusion;
+      }
+
+      currentStep = steps?.find((step) => step.status !== "completed")?.name;
+      startTime = started_at;
+    }
+
+    if (!currentStep) {
       continue;
     }
 
-    const { status, conclusion, steps } = job;
-
-    if (status === "completed") {
-      switch (conclusion) {
-        case "failure":
-          spinner.fail("Build failed");
-          break;
-        case "success":
-          spinner.succeed("Build succeeded");
-          break;
-        default:
-          spinner.fail(`Build ${conclusion}`);
-          break;
-      }
-      return conclusion;
-    }
-
-    const currentStep = steps?.find((step) => step.status !== "completed");
-    if (currentStep) {
-      spinner.text = currentStep.name;
-    }
+    spinner.text = `${currentStep} (${elapsedTime(startTime)})`;
   }
 
   return null;
