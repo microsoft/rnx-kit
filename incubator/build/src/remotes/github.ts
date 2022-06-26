@@ -34,6 +34,8 @@ type WorkflowRunId =
 type WorkflowRunsParams =
   RestEndpointMethodTypes["actions"]["listWorkflowRuns"]["parameters"];
 
+const POLL_INTERVAL = 1000;
+
 const workflowRunCache: Record<string, number> = {};
 
 const octokit: () => GitHubClient = (() => {
@@ -128,13 +130,19 @@ async function watchWorkflowRun(
 ): Promise<string | null> {
   spinner.start("Starting build");
 
+  const max = Math.max;
+  const now = Date.now;
+
   const params = { ...runId };
   let count = 0;
   let currentStep: string | undefined = "";
-  let startTime = "";
+  let jobStartedAt = "";
+  let idleTime = POLL_INTERVAL;
 
   while (runId) {
-    await idle(1000);
+    await idle(idleTime);
+
+    const start = now();
 
     // Note that GitHub currently limits user-to-server requests to 5000 per
     // hour. That's only ~1.3 requests per second. Besides reducing the poll
@@ -174,7 +182,7 @@ async function watchWorkflowRun(
           currentStep = steps?.find(
             (step) => step.status !== "completed"
           )?.name;
-          startTime = started_at;
+          jobStartedAt = started_at;
           params.headers = { "if-none-match": result.headers.etag };
         }
       } catch (e) {
@@ -190,7 +198,8 @@ async function watchWorkflowRun(
       continue;
     }
 
-    spinner.text = `${currentStep} (${elapsedTime(startTime)})`;
+    spinner.text = `${currentStep} (${elapsedTime(jobStartedAt)})`;
+    idleTime = max(100, POLL_INTERVAL - (now() - start));
   }
 
   return null;
