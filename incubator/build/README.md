@@ -43,6 +43,14 @@ npm run rnx-build --platform <platform>
 | --device-type  | [Optional] Supported device types are `device`, `emulator`, `simulator` |
 | --project-root | [Optional] Path to the root of the project                              |
 
+### iOS: Install Signing Certificate and Provisioning Profile
+
+In order to launch the build artifact on device, you need to install Apple
+signing certificate and provisioning profile on your host of choice.
+
+For GitHub, please follow the steps to create the four secrets here:
+[Creating secrets for your certificate and provisioning profile](https://docs.github.com/en/actions/deployment/deploying-xcode-applications/installing-an-apple-certificate-on-macos-runners-for-xcode-development#creating-secrets-for-your-certificate-and-provisioning-profile)
+
 ## Contributors' Notes
 
 ### TODO
@@ -56,11 +64,11 @@ npm run rnx-build --platform <platform>
   - [x] macOS
   - [x] Windows
 - [x] Figure out how to download artifacts
-- [ ] Figure out how to install artifacts
+- [x] Figure out how to install artifacts
   - [x] Android emulator
   - [x] Android device
   - [x] iOS simulator
-  - [ ] iOS device (need to figure out how to sign on CI)
+  - [x] iOS device (need to figure out how to sign on CI)
     - https://docs.github.com/en/actions/deployment/deploying-xcode-applications/installing-an-apple-certificate-on-macos-runners-for-xcode-development
   - [x] macOS
   - [x] Windows
