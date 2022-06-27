@@ -16,9 +16,18 @@ An experimental tool for building your apps in the cloud.
 🚧 TODO: Reduce the number of requirements
 
 - GitHub hosted repository
-- [Android Studio](https://developer.android.com/studio)
 - [Node.js](https://nodejs.org/en/download/) LTS 14.15 or greater
-- [Xcode](https://developer.apple.com/xcode/)
+
+| Feature                      | Android | iOS | macOS | Windows |
+| :--------------------------- | :-----: | :-: | :---: | :-----: |
+| Remote build                 |    ✓    |  ✓  |   ✓   |    ✓    |
+| Launch in device             |   ✓¹    | 🚧² |   ✓   |   ✓³    |
+| Launch in emulator/simulator |   ✓¹    | ✓²  |   -   |    -    |
+| Launch from QR code          |   🚧    | 🚧  |   -   |    -    |
+
+1. Requires [Android Studio](https://developer.android.com/studio)
+2. Requires [Xcode](https://developer.apple.com/xcode/)
+3. Currently requires Windows 11. We are working on a solution for Windows 10.
 
 ## Usage
 
