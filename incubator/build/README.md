@@ -28,10 +28,11 @@ An experimental tool for building your apps in the cloud.
 npm run rnx-build --platform <platform>
 ```
 
-| Flag           | Description                                                  |
-| :------------- | :----------------------------------------------------------- |
-| -p, --platform | Supported platforms are `android`, `ios`, `macos`, `windows` |
-| --project-root | [Optional] Path to the root of the project                   |
+| Flag           | Description                                                             |
+| :------------- | :---------------------------------------------------------------------- |
+| -p, --platform | Supported platforms are `android`, `ios`, `macos`, `windows`            |
+| --device-type  | [Optional] Supported device types are `device`, `emulator`, `simulator` |
+| --project-root | [Optional] Path to the root of the project                              |
 
 ## Contributors' Notes
 
@@ -50,7 +51,8 @@ npm run rnx-build --platform <platform>
   - [x] Android emulator
   - [x] Android device
   - [x] iOS simulator
-  - [ ] iOS device
+  - [ ] iOS device (need to figure out how to sign on CI)
+    - https://docs.github.com/en/actions/deployment/deploying-xcode-applications/installing-an-apple-certificate-on-macos-runners-for-xcode-development
   - [x] macOS
   - [x] Windows
 - [x] Miscellaneous cleanup

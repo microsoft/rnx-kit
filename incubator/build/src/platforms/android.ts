@@ -5,6 +5,7 @@ import * as path from "node:path";
 import type { Ora } from "ora";
 import { idle, retry } from "../async";
 import { ensure, makeCommand, makeCommandSync } from "../command";
+import type { BuildParams } from "../types";
 
 type EmulatorInfo = {
   product: string;
@@ -182,6 +183,7 @@ async function selectDevice(
   spinner.start(`Booting Android emulator @${avd}`);
   const emulator = await launchEmulator(avd);
   if (emulator instanceof Error) {
+    spinner.fail();
     spinner.fail(emulator.message);
     return null;
   }
@@ -199,9 +201,9 @@ function start(
   return adb("-s", serial, "shell", "am", "start", "-n", activity);
 }
 
-export async function installAndLaunchApk(
+export async function deploy(
   apk: string,
-  emulatorName: string | undefined,
+  { emulatorName }: BuildParams,
   spinner: Ora
 ): Promise<void> {
   if (!ANDROID_HOME) {
@@ -227,6 +229,7 @@ export async function installAndLaunchApk(
   spinner.start(`Installing ${apk}`);
   const error = await install(device, apk, packageName);
   if (error) {
+    spinner.fail();
     spinner.fail(error.message);
     return;
   }
