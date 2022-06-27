@@ -1,6 +1,7 @@
 import { Octokit } from "@octokit/core";
 import type { RestEndpointMethodTypes } from "@octokit/plugin-rest-endpoint-methods";
 import { restEndpointMethods } from "@octokit/plugin-rest-endpoint-methods";
+import { RequestError } from "@octokit/request-error";
 import {
   existsSync as fileExists,
   readFileSync as fileReadSync,
@@ -19,6 +20,7 @@ import {
 } from "../constants";
 import { ensureDir } from "../filesystem";
 import { getRemoteUrl, getRepositoryRoot, stage } from "../git";
+import { elapsedTime } from "../time";
 import type {
   BuildParams,
   Context,
@@ -31,6 +33,8 @@ type WorkflowRunId =
   RestEndpointMethodTypes["actions"]["listJobsForWorkflowRun"]["parameters"];
 type WorkflowRunsParams =
   RestEndpointMethodTypes["actions"]["listWorkflowRuns"]["parameters"];
+
+const POLL_INTERVAL = 1000;
 
 const workflowRunCache: Record<string, number> = {};
 
@@ -49,11 +53,12 @@ async function downloadArtifact(
   runId: WorkflowRunId,
   { platform, projectRoot }: BuildParams
 ): Promise<string> {
+  const listParams = { ...runId };
   const artifacts = await withRetries(async () => {
-    const { data } = await octokit().rest.actions.listWorkflowRunArtifacts(
-      runId
-    );
+    const { data, headers } =
+      await octokit().rest.actions.listWorkflowRunArtifacts(listParams);
     if (data.total_count === 0) {
+      listParams.headers = { "if-none-match": headers.etag };
       throw new Error("No artifacts were uploaded");
     }
     return data.artifacts;
@@ -99,13 +104,17 @@ function getPersonalAccessToken(): string | undefined {
 async function getWorkflowRunId(
   params: WorkflowRunsParams
 ): Promise<WorkflowRunId> {
+  const listParams = { ...params };
   const run_id = await withRetries(async () => {
-    const result = await octokit().rest.actions.listWorkflowRuns(params);
-    if (result.data.total_count === 0) {
+    const { data, headers } = await octokit().rest.actions.listWorkflowRuns(
+      listParams
+    );
+    if (data.total_count === 0) {
+      listParams.headers = { "if-none-match": headers.etag };
       throw new Error("Failed to get workflow run id");
     }
 
-    return result.data.workflow_runs[0].id;
+    return data.workflow_runs[0].id;
   }, MAX_ATTEMPTS);
 
   return {
@@ -121,36 +130,76 @@ async function watchWorkflowRun(
 ): Promise<string | null> {
   spinner.start("Starting build");
 
-  while (runId) {
-    await idle(1000);
+  const max = Math.max;
+  const now = Date.now;
 
-    const result = await octokit().rest.actions.listJobsForWorkflowRun(runId);
-    const job = result.data.jobs.find((job) => job.conclusion !== "skipped");
-    if (!job) {
+  const params = { ...runId };
+  let count = 0;
+  let currentStep: string | undefined = "";
+  let jobStartedAt = "";
+  let idleTime = POLL_INTERVAL;
+
+  while (runId) {
+    await idle(idleTime);
+
+    const start = now();
+
+    // Note that GitHub currently limits user-to-server requests to 5000 per
+    // hour. That's only ~1.3 requests per second. Besides reducing the poll
+    // frequency, we can also use conditional requests to reduce the number of
+    // requests that count against the limit.
+    //
+    // For more details, see
+    //   - https://docs.github.com/en/rest/overview/resources-in-the-rest-api#rate-limiting
+    //   - https://docs.github.com/en/rest/overview/resources-in-the-rest-api#conditional-requests
+    if (count++ % 5 === 0) {
+      try {
+        const result = await octokit().rest.actions.listJobsForWorkflowRun(
+          params
+        );
+        const job = result.data.jobs.find(
+          (job) => job.conclusion !== "skipped"
+        );
+        if (job) {
+          const { status, conclusion, started_at, steps } = job;
+
+          if (status === "completed") {
+            const elapsed = elapsedTime(started_at, job.completed_at);
+            switch (conclusion) {
+              case "failure":
+                spinner.fail(`Build failed (${elapsed})`);
+                break;
+              case "success":
+                spinner.succeed(`Build succeeded (${elapsed})`);
+                break;
+              default:
+                spinner.fail(`Build ${conclusion} (${elapsed})`);
+                break;
+            }
+            return conclusion;
+          }
+
+          currentStep = steps?.find(
+            (step) => step.status !== "completed"
+          )?.name;
+          jobStartedAt = started_at;
+          params.headers = { "if-none-match": result.headers.etag };
+        }
+      } catch (e) {
+        if (e instanceof RequestError && e.status === 304) {
+          // Status is unchanged since last request
+        } else {
+          throw e;
+        }
+      }
+    }
+
+    if (!currentStep) {
       continue;
     }
 
-    const { status, conclusion, steps } = job;
-
-    if (status === "completed") {
-      switch (conclusion) {
-        case "failure":
-          spinner.fail("Build failed");
-          break;
-        case "success":
-          spinner.succeed("Build succeeded");
-          break;
-        default:
-          spinner.fail(`Build ${conclusion}`);
-          break;
-      }
-      return conclusion;
-    }
-
-    const currentStep = steps?.find((step) => step.status !== "completed");
-    if (currentStep) {
-      spinner.text = currentStep.name;
-    }
+    spinner.text = `${currentStep} (${elapsedTime(jobStartedAt)})`;
+    idleTime = max(100, POLL_INTERVAL - (now() - start));
   }
 
   return null;
