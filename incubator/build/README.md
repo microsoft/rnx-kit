@@ -16,9 +16,18 @@ An experimental tool for building your apps in the cloud.
 🚧 TODO: Reduce the number of requirements
 
 - GitHub hosted repository
-- [Android Studio](https://developer.android.com/studio)
 - [Node.js](https://nodejs.org/en/download/) LTS 14.15 or greater
-- [Xcode](https://developer.apple.com/xcode/)
+
+| Feature                      | Android | iOS | macOS | Windows |
+| :--------------------------- | :-----: | :-: | :---: | :-----: |
+| Remote build                 |    ✓    |  ✓  |   ✓   |    ✓    |
+| Launch in device             |   ✓¹    | 🚧² |   ✓   |   ✓³    |
+| Launch in emulator/simulator |   ✓¹    | ✓²  |   -   |    -    |
+| Launch from QR code          |   🚧    | 🚧  |   -   |    -    |
+
+1. Requires [Android Studio](https://developer.android.com/studio)
+2. Requires [Xcode](https://developer.apple.com/xcode/)
+3. Currently requires Windows 11. We are working on a solution for Windows 10.
 
 ## Usage
 
@@ -62,6 +71,7 @@ npm run rnx-build --platform <platform>
 - [x] Cancel build job when user ctrl+c in the terminal
 - [x] Add `init` or `install` command to copy the correct workflow file to
       user's repo
+- [x] Replace yauzl with something more native
 - [ ] Windows: Install currently only works on Windows 11, we need to support 10
 - [ ] Build artifacts are currently hard-coded to look for ReactTestApp
 - [ ] Verify downloaded build artifacts using checksum
@@ -69,4 +79,3 @@ npm run rnx-build --platform <platform>
 - [ ] Figure out how to install artifacts with QR code
 - [ ] Figure out caching
 - [ ] Figure out how to skip native build when cached
-- [ ] Replace yauzl with something more native

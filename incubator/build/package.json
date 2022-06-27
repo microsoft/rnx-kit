@@ -35,12 +35,10 @@
     "fast-xml-parser": "^4.0.8",
     "ora": "^5.4.1",
     "pkg-dir": "^5.0.0",
-    "yargs": "^16.0.0",
-    "yauzl": "2.10.0"
+    "yargs": "^16.0.0"
   },
   "devDependencies": {
-    "@rnx-kit/scripts": "*",
-    "@types/yauzl": "2.10.0"
+    "@rnx-kit/scripts": "*"
   },
   "engines": {
     "node": ">=14.15"
