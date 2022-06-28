@@ -58,7 +58,7 @@ jobs:
     env:
       CERTIFICATE_FILE: build-certificate.p12
       KEYCHAIN_FILE: app-signing.keychain-db
-      PROVISION_PATH: 'Library/MobileDevice/Provisioning Profiles/Provisioning_Profile.mobileprovision'
+      PROVISION_PATH: "Library/MobileDevice/Provisioning Profiles/Provisioning_Profile.mobileprovision"
     steps:
       - name: Checkout
         uses: actions/checkout@v3
