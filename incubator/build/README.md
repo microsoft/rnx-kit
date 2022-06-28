@@ -21,13 +21,12 @@ An experimental tool for building your apps in the cloud.
 | Feature                      | Android | iOS | macOS | Windows |
 | :--------------------------- | :-----: | :-: | :---: | :-----: |
 | Remote build                 |    ✓    |  ✓  |   ✓   |    ✓    |
-| Launch in device             |   ✓¹    | 🚧² |   ✓   |   ✓³    |
+| Launch in device             |   ✓¹    | 🚧² |   ✓   |    ✓    |
 | Launch in emulator/simulator |   ✓¹    | ✓²  |   -   |    -    |
 | Launch from QR code          |   🚧    | 🚧  |   -   |    -    |
 
 1. Requires [Android Studio](https://developer.android.com/studio)
 2. Requires [Xcode](https://developer.apple.com/xcode/)
-3. Currently requires Windows 11. We are working on a solution for Windows 10.
 
 ## Usage
 
@@ -72,7 +71,7 @@ npm run rnx-build --platform <platform>
 - [x] Add `init` or `install` command to copy the correct workflow file to
       user's repo
 - [x] Replace yauzl with something more native
-- [ ] Windows: Install currently only works on Windows 11, we need to support 10
+- [x] Windows: Install currently only works on Windows 11, we need to support 10
 - [ ] Build artifacts are currently hard-coded to look for ReactTestApp
 - [ ] Verify downloaded build artifacts using checksum
 - [ ] Figure out appropriate storage for auth tokens

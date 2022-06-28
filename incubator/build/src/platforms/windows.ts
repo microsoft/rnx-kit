@@ -64,6 +64,16 @@ async function getPackageInfo(app: string): Promise<PackageInfo | null> {
   return { packageName, appId };
 }
 
+function normalizePath(p: string): string {
+  if (!process.env.SHELL) {
+    return p;
+  }
+
+  const { root } = path.parse(p);
+  const m = root.toLowerCase().match(/([a-z]+)/);
+  return m ? `/${m[1]}/${p.substring(root.length)}`.replace(/\\/g, "/") : p;
+}
+
 async function install(
   app: string,
   tryUninstall = true
@@ -75,22 +85,20 @@ async function install(
     );
   }
 
-  const files = await fs.readdir(app);
-  const msixbundle = files.find((file) => file.endsWith(".msixbundle"));
-  if (!msixbundle) {
-    return new Error("Missing MSIX package from build artifact");
-  }
-
   const pwsh = makePowerShell(app);
-  const pwshElevated = makePowerShell(app, true);
 
-  const { stderr, status } = await pwshElevated(
-    "Add-AppxPackage",
-    "-AllowUnsigned",
-    path.join(app, msixbundle)
+  const { stdout, stderr, status } = await pwsh(
+    "./Add-AppDevPackage.ps1",
+    "-Force",
+    "-SkipLoggingTelemetry"
   );
   if (status !== 0) {
-    if (stderr?.includes("Install failed") && tryUninstall) {
+    if (stdout.includes("Install the signing certificate")) {
+      const script = normalizePath(path.join(app, "Add-AppDevPackage.ps1"));
+      return new Error(
+        `The signing certificate needs to be installed before installing the app. Please run:\n\tpowershell ${script}`
+      );
+    } else if (stderr.includes("Install failed") && tryUninstall) {
       const { stdout: packageFullName } = await pwsh(
         `(Get-AppxPackage ${packageInfo.packageName}).PackageFullName`
       );
