@@ -158,7 +158,7 @@ async function watchWorkflowRun(
           params
         );
         const job = result.data.jobs.find(
-          (job) => job.conclusion !== "skipped"
+          (job) => job && job.conclusion !== "skipped"
         );
         if (job) {
           const { status, conclusion, started_at, steps } = job;
