@@ -36,11 +36,21 @@ An experimental tool for building your apps in the cloud.
 npm run rnx-build --platform <platform>
 ```
 
-| Flag           | Description                                                             |
-| :------------- | :---------------------------------------------------------------------- |
-| -p, --platform | Supported platforms are `android`, `ios`, `macos`, `windows`            |
-| --device-type  | [Optional] Supported device types are `device`, `emulator`, `simulator` |
-| --project-root | [Optional] Path to the root of the project                              |
+| Flag               | Description                                                             |
+| :----------------- | :---------------------------------------------------------------------- |
+| `-p`, `--platform` | Supported platforms are `android`, `ios`, `macos`, `windows`            |
+| `--device-type`    | [Optional] Supported device types are `device`, `emulator`, `simulator` |
+| `--project-root`   | [Optional] Path to the root of the project                              |
+
+### Android: Install Android Studio
+
+In order to launch the build artifact on device, you need to install Android
+Studio. Once installed, go into **Preferences** ❭ **Appearance & Behavior** ❭
+**System Settings** ❭ **Android SDK**, and install **Android SDK Build-Tools**
+and **Android SDK Platform-Tools**.
+
+If you want to run apps on the Android Emulator, follow the instructions here:
+[Run apps on the Android Emulator](https://developer.android.com/studio/run/emulator).
 
 ### iOS: Install Signing Certificate and Provisioning Profile
 
