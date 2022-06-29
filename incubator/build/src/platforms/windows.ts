@@ -64,6 +64,15 @@ async function getPackageInfo(app: string): Promise<PackageInfo | null> {
   return { packageName, appId };
 }
 
+/**
+ * Normalizes specified path depending on the shell currently in use.
+ *
+ * This is useful for ensuring paths are valid in Command Prompt or Bash. One
+ * requires `C:\\some\\path`, while the other requires `/c/some/path`.
+ *
+ * @param p Path to normalize
+ * @returns Path that is valid in the current shell.
+ */
 function normalizePath(p: string): string {
   if (!process.env.SHELL) {
     return p;
