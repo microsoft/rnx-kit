@@ -51,6 +51,7 @@ jobs:
         with:
           name: android-artifact
           path: ${{ github.event.inputs.projectRoot }}/android/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
   build-ios:
     name: "Build iOS"
     if: ${{ github.event.inputs.platform == 'ios' }}
@@ -138,6 +139,7 @@ jobs:
         with:
           name: ios-artifact
           path: ${{ github.event.inputs.projectRoot }}/ios/ios-artifact.tar
+          if-no-files-found: error
   build-macos:
     name: "Build macOS"
     if: ${{ github.event.inputs.platform == 'macos' }}
@@ -176,6 +178,7 @@ jobs:
         with:
           name: macos-artifact
           path: ${{ github.event.inputs.projectRoot }}/macos/macos-artifact.tar
+          if-no-files-found: error
   build-windows:
     name: "Build Windows"
     if: ${{ github.event.inputs.platform == 'windows' }}
@@ -196,11 +199,6 @@ jobs:
         run: |
           npx --package react-native-test-app -- install-windows-test-app --use-nuget
         working-directory: ${{ github.event.inputs.projectRoot }}
-      - name: Set OID for unsigned packages
-        run: |
-          # https://docs.microsoft.com/en-us/windows/msix/package/unsigned-package
-          (Get-Content node_modules\.generated\windows\ReactTestApp\Package.appxmanifest) -replace '"CN=ReactTestApp"', '"CN=ReactTestApp, OID.2.25.311729368913984317654407730594956997722=1"' | Out-File -Encoding utf8 node_modules\.generated\windows\ReactTestApp\Package.appxmanifest
-        working-directory: ${{ github.event.inputs.projectRoot }}
       - name: Install NuGet packages
         run: |
           nuget restore
@@ -210,12 +208,17 @@ jobs:
           MSBuild -maxCpuCount -property:Configuration=Debug -property:Platform=${{ github.event.inputs.architecture }} -property:AppxBundlePlatforms=${{ github.event.inputs.architecture }} -property:AppxBundle=Always -property:UapAppxPackageBuildMode=SideloadOnly -property:UseBundle=false -target:Build
         working-directory: ${{ github.event.inputs.projectRoot }}/windows
       - name: Prepare build artifact
+        id: prepare-build-artifact
         run: |
-          cp ${{ github.event.inputs.architecture }}/Debug/ReactTestApp/AppxManifest.xml AppPackages/ReactTestApp/*
+          appx_manifest=$(find ${{ github.event.inputs.architecture }}/Debug -name AppxManifest.xml -type f | head -1)
+          app_name=$(basename $(dirname ${appx_manifest}))
+          cp ${appx_manifest} AppPackages/${app_name}/*
+          echo "::set-output name=app-name::${app_name}"
         shell: bash
         working-directory: ${{ github.event.inputs.projectRoot }}/windows
       - name: Upload build artifact
         uses: actions/upload-artifact@v3
         with:
           name: windows-artifact
-          path: ${{ github.event.inputs.projectRoot }}/windows/AppPackages/ReactTestApp
+          path: ${{ github.event.inputs.projectRoot }}/windows/AppPackages/${{ steps.prepare-build-artifact.outputs.app-name }}
+          if-no-files-found: error
