@@ -118,6 +118,8 @@ jobs:
       - name: Remove Apple signing certificate and provisioning profile
         if: ${{ always() && github.event.inputs.deviceType == 'device' }}
         run: |
+          # Always run this job step, even if previous ones fail. See also
+          # https://docs.github.com/en/actions/deployment/deploying-xcode-applications/installing-an-apple-certificate-on-macos-runners-for-xcode-development#required-clean-up-on-self-hosted-runners
           security delete-keychain "${RUNNER_TEMP}/${KEYCHAIN_FILE}"
           rm -f "${RUNNER_TEMP}/${CERTIFICATE_FILE}" "${HOME}/${PROVISION_PATH}"
       - name: Prepare build artifact
