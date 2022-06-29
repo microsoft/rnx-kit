@@ -1,5 +1,6 @@
 import * as os from "node:os";
 import * as path from "node:path";
+import * as readline from "node:readline";
 import type { Ora } from "ora";
 import { untar } from "../archive";
 import { retry } from "../async";
@@ -195,7 +196,14 @@ async function install(device: Device, app: string): Promise<Error | null> {
 async function launch(device: Device, app: string): Promise<Error | null> {
   const { type, udid } = device;
   if (type === "device") {
-    const launch = iosDeploy("--id", udid, "--bundle", app, "--justlaunch");
+    const launch = iosDeploy(
+      "--id",
+      udid,
+      "--bundle",
+      app,
+      "--justlaunch",
+      "--noinstall"
+    );
     const { stderr, status } = await launch;
     if (status !== 0) {
       return new Error(stderr);
@@ -230,11 +238,21 @@ async function selectDevice(
       : (device) => device.type === "device";
     const physicalDevice = devices.find(search);
     if (!physicalDevice) {
-      const message = deviceName
-        ? `Failed to find device: ${deviceName}`
-        : "Failed to find a physical device";
-      spinner.fail(message);
-      return null;
+      // Device detection can sometimes be flaky. Prompt the user to make sure
+      // a device is properly plugged in, and try again.
+      const prompt = readline.createInterface({
+        input: process.stdin,
+        output: process.stdout,
+      });
+      const device = deviceName ? `device: ${deviceName}` : "a physical device";
+      await new Promise((resolve) =>
+        prompt.question(
+          `Failed to find ${device} - please make sure it is properly plugged in.\n\nPress any key to try again`,
+          resolve
+        )
+      );
+      prompt.close();
+      return selectDevice(deviceName, deviceType, spinner);
     }
 
     const { name, osVersion } = physicalDevice;
