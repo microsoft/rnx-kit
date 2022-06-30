@@ -2,7 +2,6 @@
 
 set -eo pipefail
 
-device_default="iPhone 13"
 build_actions=(build)
 
 usage() {
@@ -13,8 +12,6 @@ usage() {
   echo ""
   echo "OPTIONS:"
   echo "  --clean                 Optional. Clean up intermediate files before building."
-  echo "  -d, --device <name>     Optional. Name of the simulated iOS device to target."
-  echo "                          Defaults to '${device_defaukt}'."
   echo "  -s, --scheme <name>     Required. Name of the Xcode scheme to build"
   echo "  -w, --workspace <name>  Required. Name of the Xcode workspace file (without extension)."
   echo "                          This file must exist under the 'ios' directory."
@@ -27,11 +24,6 @@ while [[ $# -gt 0 ]]; do
   case $1 in
     --clean )
       build_actions=("clean" "${build_actions[@]}")
-      shift
-      ;;
-    -d|--device )
-      device="$2"
-      shift
       shift
       ;;
     -s|--scheme )
@@ -56,10 +48,6 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-if [[ -z "$device" ]]; then
-  device=$device_default
-fi
-
 if [[ -z "$workspace" ]]; then
   echo ""
   echo "ERROR: missing required option: -w, --workspace"
@@ -83,17 +71,6 @@ if [[ ! -d "ios/${workspace}.xcworkspace" ]]; then
   exit 1
 fi
 
-device_info=$(xcrun simctl list devices "${device}" available | grep "${device} (")
-re='\(([-0-9A-Fa-f]+)\)'
-if [[ $device_info =~ $re ]]; then
-  device_id=${BASH_REMATCH[1]}
-else
-  echo ""
-  echo "ERROR: failed to extract ID for device '${device}' from '${device_info}'"
-  echo ""
-  exit 1
-fi
-
 if [[ "$CCACHE_DISABLE" != "1" ]]; then
   ccache_libexec="/usr/local/opt/ccache/libexec"
   if [[ ! -d "$ccache_libexec" ]]; then
@@ -109,7 +86,7 @@ fi
 cd ios
 export RCT_NO_LAUNCH_PACKAGER=1
 
-xcodebuild -workspace "${workspace}.xcworkspace" -scheme "${scheme}" -destination "id=${device_id}" CODE_SIGNING_ALLOWED=NO COMPILER_INDEX_STORE_ENABLE=NO "${build_actions[@]}"
+xcodebuild -workspace "${workspace}.xcworkspace" -scheme "${scheme}" -destination "generic/platform=iOS Simulator" CODE_SIGNING_ALLOWED=NO COMPILER_INDEX_STORE_ENABLE=NO "${build_actions[@]}"
 
 if [[ "$CCACHE_DISABLE" != "1" ]]; then
   ccache --show-stats --verbose

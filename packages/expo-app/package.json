@@ -4,7 +4,7 @@
   "private": "true",
   "scripts": {
     "build": "tsc --noEmit",
-    "build:ios": "rnx-kit-scripts build-ios -w expoapp -s expoapp -d 'iPhone 13'",
+    "build:ios": "rnx-kit-scripts build-ios -w expoapp -s expoapp",
     "build:android": "rnx-kit-scripts build-android clean build",
     "bundle": "yarn run bundle:ios && yarn run bundle:android",
     "bundle:ios": "yarn run mkdirp dist && node_modules/.bin/react-native bundle --entry-file index.js --platform ios --dev true --bundle-output dist/main.jsbundle --sourcemap-output dist/main.jsbundle.map --assets-dest dist",
