@@ -36,11 +36,11 @@ An experimental tool for building your apps in the cloud.
 npm run rnx-build --platform <platform>
 ```
 
-| Flag               | Description                                                             |
-| :----------------- | :---------------------------------------------------------------------- |
-| `-p`, `--platform` | Supported platforms are `android`, `ios`, `macos`, `windows`            |
-| `--device-type`    | [Optional] Supported device types are `device`, `emulator`, `simulator` |
-| `--project-root`   | [Optional] Path to the root of the project                              |
+| Flag               | Description                                                                                                                                                       |
+| :----------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `-p`, `--platform` | Target platform to build for. Supported platforms are `android`, `ios`, `macos`, `windows`.                                                                       |
+| `--device-type`    | [Optional] Target device type. This is currently only implemented for iOS. Supported device types are `device`, `emulator`, `simulator`. Defaults to `simulator`. |
+| `--project-root`   | [Optional] Path to the root of the project. Defaults to current working directory.                                                                                |
 
 ### Android: Install Android Studio
 
