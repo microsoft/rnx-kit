@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-serializer-esbuild
 
+## 0.1.8
+
+### Patch Changes
+
+- 38a1065e: Default to the new `hermes` target introduced in esbuild [0.14.48](https://github.com/evanw/esbuild/releases/tag/v0.14.48).
+
 ## 0.1.7
 
 ### Patch Changes

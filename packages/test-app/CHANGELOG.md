@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/test-app
 
+## 0.0.3
+
+### Patch Changes
+
+- a455cb2d: Add android and ios build scripts. Update pod versions.
+
 ## 0.0.2
 
 ### Patch Changes

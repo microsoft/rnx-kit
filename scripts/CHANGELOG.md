@@ -1,5 +1,12 @@
 # Change Log - @rnx-kit/scripts
 
+## 1.1.3
+
+### Patch Changes
+
+- a455cb2d: Fix version of @rnx-kit/golang package. Add shasum script for use in CI
+  workflows. Add android and ios build commands/scripts.
+
 ## 1.1.2
 
 ### Patch Changes
