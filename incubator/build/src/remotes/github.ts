@@ -10,7 +10,7 @@ import * as fs from "node:fs/promises";
 import * as path from "node:path";
 import * as readline from "node:readline";
 import ora from "ora";
-import { idle, withRetry } from "../async";
+import { idle, once, withRetry } from "../async";
 import {
   BUILD_ID,
   MAX_ATTEMPTS,
@@ -28,7 +28,6 @@ import type {
   UserConfig,
 } from "../types";
 
-type GitHubClient = Octokit & ReturnType<typeof restEndpointMethods>;
 type WorkflowRunId =
   RestEndpointMethodTypes["actions"]["listJobsForWorkflowRun"]["parameters"];
 type WorkflowRunsParams =
@@ -38,16 +37,10 @@ const POLL_INTERVAL = 1000;
 
 const workflowRunCache: Record<string, number> = {};
 
-const octokit: () => GitHubClient = (() => {
-  let client: GitHubClient | undefined = undefined;
-  return () => {
-    if (!client) {
-      const RestClient = Octokit.plugin(restEndpointMethods);
-      client = new RestClient({ auth: getPersonalAccessToken() });
-    }
-    return client;
-  };
-})();
+const octokit = once(() => {
+  const RestClient = Octokit.plugin(restEndpointMethods);
+  return new RestClient({ auth: getPersonalAccessToken() });
+});
 
 async function downloadArtifact(
   runId: WorkflowRunId,
