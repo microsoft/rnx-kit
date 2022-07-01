@@ -27,7 +27,8 @@
     "build": "rnx-kit-scripts build",
     "format": "rnx-kit-scripts format",
     "lint": "rnx-kit-scripts lint",
-    "rnx-build": "node lib/index.js"
+    "rnx-build": "node lib/index.js",
+    "test": "rnx-kit-scripts test"
   },
   "dependencies": {
     "@octokit/core": "^3.6.0",
