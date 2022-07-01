@@ -25,7 +25,7 @@ export async function retry<R>(
   return result;
 }
 
-export async function withRetries<R>(
+export async function withRetry<R>(
   func: () => Promise<R>,
   retries: number,
   counter = 0
@@ -39,5 +39,5 @@ export async function withRetries<R>(
   }
 
   await idle(Math.pow(2, counter) * 1000);
-  return withRetries(func, retries - 1, counter + 1);
+  return withRetry(func, retries - 1, counter + 1);
 }

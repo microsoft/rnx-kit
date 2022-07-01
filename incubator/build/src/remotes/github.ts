@@ -10,7 +10,7 @@ import * as fs from "node:fs/promises";
 import * as path from "node:path";
 import * as readline from "node:readline";
 import ora from "ora";
-import { idle, withRetries } from "../async";
+import { idle, withRetry } from "../async";
 import {
   BUILD_ID,
   MAX_ATTEMPTS,
@@ -54,7 +54,7 @@ async function downloadArtifact(
   { platform, projectRoot }: BuildParams
 ): Promise<string> {
   const listParams = { ...runId };
-  const artifacts = await withRetries(async () => {
+  const artifacts = await withRetry(async () => {
     const { data, headers } =
       await octokit().rest.actions.listWorkflowRunArtifacts(listParams);
     if (data.total_count === 0) {
@@ -64,7 +64,7 @@ async function downloadArtifact(
     return data.artifacts;
   }, MAX_DOWNLOAD_ATTEMPTS);
 
-  const data = await withRetries(async () => {
+  const data = await withRetry(async () => {
     const { data } = await octokit().rest.actions.downloadArtifact({
       owner: runId.owner,
       repo: runId.repo,
@@ -105,7 +105,7 @@ async function getWorkflowRunId(
   params: WorkflowRunsParams
 ): Promise<WorkflowRunId> {
   const listParams = { ...params };
-  const run_id = await withRetries(async () => {
+  const run_id = await withRetry(async () => {
     const { data, headers } = await octokit().rest.actions.listWorkflowRuns(
       listParams
     );
