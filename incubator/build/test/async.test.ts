@@ -37,6 +37,17 @@ describe("async", () => {
     expect(times).toEqual([0, 1, 2, 4, 8]);
   });
 
+  test("retry() returns early with result", async () => {
+    let count = 0;
+
+    const result = await retry(async () => {
+      return ++count === 2 ? "done" : null;
+    }, 5);
+
+    expect(count).toBe(2);
+    expect(result).toBe("done");
+  });
+
   test("withRetry() with exponential backoff", async () => {
     const times = [];
     let count = 0;
@@ -55,5 +66,19 @@ describe("async", () => {
 
     expect(count).toBe(5);
     expect(times).toEqual([0, 1, 2, 4, 8]);
+  });
+
+  test("withRetry() returns early with result", async () => {
+    let count = 0;
+
+    const result = await withRetry(async () => {
+      if (++count === 2) {
+        return "done";
+      }
+      throw new Error();
+    }, 5);
+
+    expect(count).toBe(2);
+    expect(result).toBe("done");
   });
 });
