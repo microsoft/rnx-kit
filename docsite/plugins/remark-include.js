@@ -95,8 +95,7 @@ function plugin() {
       }
     }
 
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore -- The visit() overloads are bound to UnistNode, but we use the expanded MdAstNode
+    // @ts-expect-error -- The visit() overloads are bound to UnistNode, but we use the expanded MdAstNode
     visit(root, isInclude, processIncludeDirective);
 
     // Replace all include comments with the included file's AST. Do this in

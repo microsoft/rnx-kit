@@ -159,8 +159,7 @@ export async function rnxStart(
 
   // merge the Metro config middleware with our middleware
   const enhanceMiddleware = metroConfig.server.enhanceMiddleware;
-  // eslint-disable-next-line
-  // @ts-ignore
+  // @ts-expect-error We want to assign to read-only `enhanceMiddleware`
   metroConfig.server.enhanceMiddleware = (
     metroMiddleware: Middleware,
     metroServer: Server
