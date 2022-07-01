@@ -2,6 +2,16 @@ export function idle(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+export function once<R>(func: () => R): () => R {
+  let result: R | undefined;
+  return () => {
+    if (!result) {
+      result = func();
+    }
+    return result;
+  };
+}
+
 export async function retry<R>(
   func: () => Promise<R | null>,
   retries: number,

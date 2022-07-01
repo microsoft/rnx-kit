@@ -1,11 +1,17 @@
-import * as path from "path";
+import * as path from "node:path";
 import pkgDir from "pkg-dir";
+import type { Options } from "yargs";
+import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
-import yargs from "yargs/yargs";
 import { startBuild } from "./build";
 import { getRepositoryRoot } from "./git";
 import * as github from "./remotes/github";
-import type { Platform, Remote, RepositoryInfo } from "./types";
+import type { DeviceType, Platform, Remote, RepositoryInfo } from "./types";
+
+type RequiredOptionInferenceHelper<T> = Options & {
+  choices: T[];
+  required: true;
+};
 
 function getRemoteInfo(): [Remote, RepositoryInfo] {
   const githubRepo = github.getRepositoryInfo();
@@ -23,19 +29,21 @@ async function main(): Promise<void> {
     return;
   }
 
+  const deviceTypes: DeviceType[] = ["device", "emulator", "simulator"];
+
   const argv = yargs(hideBin(process.argv))
-    .option("platform", {
+    .option<"platform", RequiredOptionInferenceHelper<Platform>>("platform", {
       alias: "p",
       type: "string",
       description: "Target platform to build for",
-      choices: ["android", "ios", "macos", "windows"] as const,
+      choices: ["android", "ios", "macos", "windows"],
       required: true,
     })
     .option("device-type", {
       type: "string",
       description: "Target device type",
-      choices: ["device", "emulator", "simulator"] as const,
-      default: "simulator" as const,
+      choices: deviceTypes,
+      default: "simulator" as DeviceType,
     })
     .option("project-root", {
       type: "string",
@@ -51,7 +59,7 @@ async function main(): Promise<void> {
 
   process.exitCode = await startBuild(remote, repoInfo, {
     deviceType: argv["device-type"],
-    platform: argv.platform as Platform,
+    platform: argv.platform,
     projectRoot: argv["project-root"],
   });
 }
