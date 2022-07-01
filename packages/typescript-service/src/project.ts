@@ -195,8 +195,7 @@ export class Project {
   dispose(): void {
     this.languageService.dispose();
 
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore `languageService` cannot be used after calling dispose
+    // @ts-expect-error `languageService` cannot be used after calling dispose
     this.languageService = null;
   }
 }

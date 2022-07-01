@@ -180,8 +180,7 @@ export function loadMetroConfig(
     defaultConfig.reporter = overrides.reporter;
   }
   if (overrides.assetPlugins) {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
+    // @ts-expect-error We want to assign to read-only `assetPlugins`
     defaultConfig.transformer.assetPlugins = assetPlugins;
   }
 
