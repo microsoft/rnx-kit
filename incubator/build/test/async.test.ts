@@ -15,9 +15,9 @@ describe("async", () => {
     const incrementOnce = once(
       () => new Promise((resolve) => resolve(++count))
     );
-    incrementOnce();
-    incrementOnce();
-    incrementOnce();
+    await incrementOnce();
+    await incrementOnce();
+    await incrementOnce();
     expect(count).toBe(1);
   });
 
