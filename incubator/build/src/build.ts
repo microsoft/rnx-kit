@@ -1,5 +1,6 @@
 import ora from "ora";
 import { extract } from "./archive";
+import { once } from "./async";
 import { deleteBranch, pushCurrentChanges } from "./git";
 import * as platforms from "./platforms";
 import type { BuildParams, Remote, RepositoryInfo } from "./types";
@@ -22,14 +23,14 @@ export async function startBuild(
   spinner.succeed(`Created build branch ${buildBranch}`);
 
   const context = { ...repoInfo, ref: buildBranch };
-  const cleanUp = async () => {
+  const cleanUp = once(async () => {
     spinner.start("Cleaning up");
     await Promise.allSettled([
       remote.cancelBuild(context),
       deleteBranch(buildBranch, upstream),
     ]);
     spinner.succeed(`Deleted ${buildBranch}`);
-  };
+  });
   const onSignal = () => {
     spinner.fail();
     cleanUp().then(() => process.exit(1));

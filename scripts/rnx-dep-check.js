@@ -19,7 +19,7 @@ module.exports = {
     devOnly: true,
   },
   "@types/yargs": {
-    name: "@types/node",
+    name: "@types/yargs",
     version: "^16.0.0",
     devOnly: true,
   },
