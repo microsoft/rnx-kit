@@ -1,4 +1,5 @@
 import fg from "fast-glob";
+import findUp from "find-up";
 import * as path from "node:path";
 
 type PackageManager = {
@@ -36,32 +37,29 @@ export async function findPackages(
 }
 
 export const findSentinel = (() => {
-  let result: string | undefined;
-  return async () => {
+  let result: Promise<string | undefined>;
+  return () => {
     if (process.env.JEST_WORKER_ID || !result) {
-      const findUp = require("find-up");
-      result = await findUp(WORKSPACE_ROOT_SENTINELS);
+      result = findUp(WORKSPACE_ROOT_SENTINELS);
     }
     return result;
   };
 })();
 
-export async function getImplementation(
-  sentinel: string
-): Promise<PackageManager> {
+export function getImplementation(sentinel: string): Promise<PackageManager> {
   switch (path.basename(sentinel)) {
     case PACKAGE_LOCK_JSON: // fallthrough
     case YARN_LOCK:
-      return await import("./yarn");
+      return import("./yarn");
 
     case LERNA_JSON:
-      return await import("./lerna");
+      return import("./lerna");
 
     case PNPM_WORKSPACE_YAML:
-      return await import("./pnpm");
+      return import("./pnpm");
 
     case RUSH_JSON:
-      return await import("./rush");
+      return import("./rush");
   }
 
   throw new Error("This should not happen");
