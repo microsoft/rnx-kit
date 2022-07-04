@@ -4,9 +4,12 @@ import type { KitType } from "@rnx-kit/config";
 import { error } from "@rnx-kit/console";
 import { hasProperty } from "@rnx-kit/tools-language/properties";
 import { findPackageDir } from "@rnx-kit/tools-node/package";
+import {
+  findWorkspacePackages,
+  findWorkspaceRoot,
+} from "@rnx-kit/tools-workspaces";
 import isString from "lodash/isString";
 import * as path from "path";
-import { getAllPackageJsonFiles, getWorkspaceRoot } from "workspace-tools";
 import { makeCheckCommand } from "./check";
 import { initializeConfig } from "./initialize";
 import { resolveCustomProfiles } from "./profiles";
@@ -24,9 +27,9 @@ function ensureKitType(type: string): KitType | undefined {
   }
 }
 
-function getManifests(
+async function getManifests(
   packageJson: string | number | undefined
-): string[] | undefined {
+): Promise<string[] | undefined> {
   if (isString(packageJson) && packageJson) {
     return [packageJson];
   }
@@ -40,7 +43,7 @@ function getManifests(
   // package that just happened to be part of a workspace.
   const currentPackageJson = path.join(packageDir, "package.json");
   try {
-    if (getWorkspaceRoot(packageDir) !== packageDir) {
+    if ((await findWorkspaceRoot()) !== packageDir) {
       return [currentPackageJson];
     }
   } catch (_) {
@@ -48,7 +51,9 @@ function getManifests(
   }
 
   try {
-    const allPackages = getAllPackageJsonFiles(packageDir) ?? [];
+    const allPackages = (await findWorkspacePackages()).map((p) =>
+      path.join(p, "package.json")
+    );
     allPackages.push(currentPackageJson);
     return allPackages;
   } catch (e) {
@@ -147,7 +152,7 @@ export async function cli({
     process.exit(1);
   }
 
-  const manifests = getManifests(packageJson);
+  const manifests = await getManifests(packageJson);
   if (!manifests) {
     error("Could not find package root");
     process.exit(1);

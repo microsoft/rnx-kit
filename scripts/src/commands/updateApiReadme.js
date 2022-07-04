@@ -217,7 +217,8 @@ function updateApiReadme() {
     const exportedTypes = [];
 
     findSourceFiles().forEach((file) => {
-      const category = path.basename(file, ".ts");
+      const filename = path.basename(file, ".ts");
+      const category = filename === "index" ? "-" : filename;
       const content = fs.readFileSync(file, { encoding: "utf-8" });
       babelParser
         .parse(content, {
