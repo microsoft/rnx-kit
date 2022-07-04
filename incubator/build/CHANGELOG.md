@@ -1,5 +1,12 @@
 # @rnx-kit/build
 
+## 0.1.2
+
+### Patch Changes
+
+- 004cc058: Ensure clean-up only happens once
+- d55fe9bd: Android: Fixed build-tools version selection
+
 ## 0.1.1
 
 ### Patch Changes

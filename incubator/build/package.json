@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "@rnx-kit/build",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "EXPERIMENTAL - USE WITH CAUTION - @rnx-kit/build builds your app in the cloud",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/incubator/build#readme",
   "license": "MIT",

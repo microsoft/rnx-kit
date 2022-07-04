@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/rn-changelog-generator
 
+## 0.3.2
+
+### Patch Changes
+
+- 8e31bfe4: Add filter for the sync commits
+
 ## 0.3.1
 
 ### Patch Changes
