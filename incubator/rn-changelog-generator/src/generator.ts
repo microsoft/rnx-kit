@@ -126,6 +126,22 @@ function filterPreviouslyPickedCommits(
   return result;
 }
 
+function filterSyncCommits(commits: Commit[]) {
+  console.warn(chalk.green("Filter sync commits"));
+  console.group();
+  const result = commits.filter(({ commit, sha }) => {
+    const isSyncCommit = commit.message.includes(
+      "React Native sync for revisions"
+    );
+    if (isSyncCommit) {
+      console.warn(chalk.yellow(formatCommitLink(sha)));
+    }
+    return !isSyncCommit;
+  });
+  console.groupEnd();
+  return result;
+}
+
 //*****************************************************************************
 //#endregion
 
@@ -448,15 +464,15 @@ ${data.failed.general.join("\n")}
 //#region MAIN
 //*****************************************************************************
 
+type RunOptions = GenerateArgs & {
+  gitDir: string;
+  existingChangelogData: string;
+  renderOnlyMessage?: boolean;
+};
+
 export async function getAllChangelogDescriptions(
   commits: Commit[],
-  options: {
-    gitDir: string;
-    maxWorkers: number;
-    existingChangelogData: string;
-    verbose?: boolean;
-    renderOnlyMessage?: boolean;
-  }
+  options: RunOptions
 ) {
   const commits_1 = await Promise.resolve(commits);
   const commits_2 = await filterCICommits(commits_1);
@@ -470,30 +486,25 @@ export async function getAllChangelogDescriptions(
     options.existingChangelogData,
     commits_4
   );
+  const commits_6 = filterSyncCommits(commits_5);
   return getChangelogDesc(
-    commits_5,
-    !!options.verbose,
+    commits_6,
+    options.verbose,
     !!options.renderOnlyMessage
   );
 }
 
-export async function run(
-  options: Parameters<typeof getAllChangelogDescriptions>[1] & {
-    token: string | null;
-    base: string;
-    compare: string;
-  }
-) {
-  const commits_1 = await fetchCommits(
+export async function run(options: RunOptions) {
+  const commits = await fetchCommits(
     options.token,
     options.base,
     options.compare
   );
-  const changes = await getAllChangelogDescriptions(commits_1, options);
+  const changes = await getAllChangelogDescriptions(commits, options);
   return buildMarkDown(options.compare, changes);
 }
 
-interface GenerateArgs {
+type GenerateArgs = {
   base: string;
   compare: string;
   repo: string;
@@ -501,7 +512,7 @@ interface GenerateArgs {
   token: string | null;
   maxWorkers: number;
   verbose: boolean;
-}
+};
 
 function handler(argv: GenerateArgs) {
   const gitDir = path.join(argv.repo, ".git");
