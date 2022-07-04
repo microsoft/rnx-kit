@@ -7,7 +7,8 @@
 
 <!--remove-block end-->
 
-`@rnx-kit/tools-language` is a collection of tools for working with workspaces.
+`@rnx-kit/tools-workspaces` is a collection of tools for working with
+workspaces.
 
 It currently supports:
 
