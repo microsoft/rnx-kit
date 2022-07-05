@@ -60,10 +60,6 @@ module.exports = {
     name: "typescript",
     version: "^4.0.0",
   },
-  "workspace-tools": {
-    name: "workspace-tools",
-    version: "^0.18.3",
-  },
   yargs: {
     name: "yargs",
     version: "^16.0.0",

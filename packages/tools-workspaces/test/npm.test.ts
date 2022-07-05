@@ -1,20 +1,32 @@
-import { findWorkspacePackages, findWorkspaceRoot } from "../src/index";
+import {
+  findWorkspacePackages,
+  findWorkspacePackagesSync,
+  findWorkspaceRoot,
+  findWorkspaceRootSync,
+} from "../src/index";
 import { setFixture, unsetFixture } from "./helper";
 
 describe("findWorkspacePackages", () => {
+  const packages = [
+    expect.stringMatching(/__fixtures__[/\\]npm[/\\]packages[/\\]conan$/),
+    expect.stringMatching(/__fixtures__[/\\]npm[/\\]packages[/\\]dutch$/),
+    expect.stringMatching(/__fixtures__[/\\]npm[/\\]packages[/\\]john$/),
+    expect.stringMatching(/__fixtures__[/\\]npm[/\\]packages[/\\]quaid$/),
+    expect.stringMatching(/__fixtures__[/\\]npm[/\\]packages[/\\]t-800$/),
+  ];
+
   afterEach(() => {
     unsetFixture();
   });
 
   test("returns packages for npm workspaces", async () => {
     setFixture("npm");
-    expect(await findWorkspacePackages()).toEqual([
-      expect.stringMatching(/__fixtures__[/\\]npm[/\\]packages[/\\]conan$/),
-      expect.stringMatching(/__fixtures__[/\\]npm[/\\]packages[/\\]dutch$/),
-      expect.stringMatching(/__fixtures__[/\\]npm[/\\]packages[/\\]john$/),
-      expect.stringMatching(/__fixtures__[/\\]npm[/\\]packages[/\\]quaid$/),
-      expect.stringMatching(/__fixtures__[/\\]npm[/\\]packages[/\\]t-800$/),
-    ]);
+    expect(await findWorkspacePackages()).toEqual(packages);
+  });
+
+  test("returns packages for npm workspaces (sync)", () => {
+    setFixture("npm");
+    expect(findWorkspacePackagesSync()).toEqual(packages);
   });
 });
 
@@ -24,7 +36,12 @@ describe("findWorkspaceRoot", () => {
   });
 
   test("returns workspace root for npm workspaces", async () => {
-    setFixture("npm");
-    expect(await findWorkspaceRoot()).toMatch(/__fixtures__[/\\]npm$/);
+    const root = setFixture("npm");
+    expect(await findWorkspaceRoot()).toBe(root);
+  });
+
+  test("returns workspace root for npm workspaces (sync)", () => {
+    const root = setFixture("npm");
+    expect(findWorkspaceRootSync()).toBe(root);
   });
 });

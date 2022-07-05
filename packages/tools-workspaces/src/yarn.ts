@@ -1,14 +1,25 @@
-import * as fs from "node:fs/promises";
+import { readFileSync } from "node:fs";
+import { readFile } from "node:fs/promises";
 import * as path from "node:path";
-import { findPackages } from "./common";
+import { findPackages, findPackagesSync } from "./common";
 
 type Manifest = {
   workspaces?: string[] | { packages: string[] };
 };
 
+function parse({ workspaces }: Manifest): string[] | undefined {
+  return Array.isArray(workspaces) ? workspaces : workspaces?.packages;
+}
+
 async function readPackageManifest(root: string): Promise<Manifest> {
   const filename = path.join(root, "package.json");
-  const manifest = await fs.readFile(filename, { encoding: "utf-8" });
+  const manifest = await readFile(filename, { encoding: "utf-8" });
+  return JSON.parse(manifest);
+}
+
+function readPackageManifestSync(root: string): Manifest {
+  const filename = path.join(root, "package.json");
+  const manifest = readFileSync(filename, { encoding: "utf-8" });
   return JSON.parse(manifest);
 }
 
@@ -18,9 +29,12 @@ export async function findWorkspacePackages(
   lockfile: string
 ): Promise<string[]> {
   const root = path.dirname(lockfile);
-  const { workspaces } = await readPackageManifest(root);
-  const patterns = Array.isArray(workspaces)
-    ? workspaces
-    : workspaces?.packages;
-  return await findPackages(patterns, root);
+  const manifest = await readPackageManifest(root);
+  return await findPackages(parse(manifest), root);
+}
+
+export function findWorkspacePackagesSync(lockfile: string): string[] {
+  const root = path.dirname(lockfile);
+  const manifest = readPackageManifestSync(root);
+  return findPackagesSync(parse(manifest), root);
 }

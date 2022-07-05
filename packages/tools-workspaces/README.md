@@ -21,9 +21,11 @@ It currently supports:
 <!-- The following table can be updated by running `yarn update-readme` -->
 <!-- @rnx-kit/api start -->
 
-| Category | Function                  | Description                                                        |
-| -------- | ------------------------- | ------------------------------------------------------------------ |
-| -        | `findWorkspacePackages()` | Returns a list of all packages declared under workspaces.          |
-| -        | `findWorkspaceRoot()`     | Returns the root of the workspace; `undefined` if not a workspace. |
+| Category | Function                      | Description                                                                      |
+| -------- | ----------------------------- | -------------------------------------------------------------------------------- |
+| -        | `findWorkspacePackages()`     | Returns a list of all packages declared under workspaces.                        |
+| -        | `findWorkspacePackagesSync()` | Returns a list of all packages declared under workspaces synchronously.          |
+| -        | `findWorkspaceRoot()`         | Returns the root of the workspace; `undefined` if not a workspace.               |
+| -        | `findWorkspaceRootSync()`     | Returns the root of the workspace synchronously; `undefined` if not a workspace. |
 
 <!-- @rnx-kit/api end -->

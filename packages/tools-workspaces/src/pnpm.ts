@@ -1,8 +1,11 @@
 import * as path from "node:path";
-import readYamlFile from "read-yaml-file";
-import { findPackages } from "./common";
+import {
+  default as readYamlFile,
+  sync as readYamlFileSync,
+} from "read-yaml-file";
+import { findPackages, findPackagesSync } from "./common";
 
-type PnpmWorkspace = {
+type Workspace = {
   packages?: string[];
 };
 
@@ -10,6 +13,11 @@ type PnpmWorkspace = {
 export async function findWorkspacePackages(
   workspaceYaml: string
 ): Promise<string[]> {
-  const { packages } = await readYamlFile<PnpmWorkspace>(workspaceYaml);
+  const { packages } = await readYamlFile<Workspace>(workspaceYaml);
   return await findPackages(packages, path.dirname(workspaceYaml));
+}
+
+export function findWorkspacePackagesSync(workspaceYaml: string): string[] {
+  const { packages } = readYamlFileSync<Workspace>(workspaceYaml);
+  return findPackagesSync(packages, path.dirname(workspaceYaml));
 }

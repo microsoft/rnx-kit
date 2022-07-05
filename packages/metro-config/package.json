@@ -22,7 +22,7 @@
   "dependencies": {
     "@rnx-kit/babel-preset-metro-react-native": "^1.0.17",
     "@rnx-kit/tools-node": "^1.3.0",
-    "workspace-tools": "^0.18.3"
+    "@rnx-kit/tools-workspaces": "^0.0.1"
   },
   "peerDependencies": {
     "metro-config": ">=0.58.0",
