@@ -3,7 +3,6 @@
 const findUp = require("find-up");
 const fs = require("fs");
 const path = require("path");
-const { getWorkspaceRoot } = require("workspace-tools");
 
 const { downloadTask } = require("./download");
 const { unpackTask } = require("./unpack");
@@ -13,6 +12,14 @@ const { spawn } = require("./spawn");
  * @typedef {{url: string, hashAlgorithm: string, hash: string }} GoDistribution
  * @typedef {{ info: (m: string) => void; warn: (m: string) => void; error: (m: string) => void; }} Logger
  */
+
+const WORKSPACE_ROOT_SENTINELS = [
+  "lerna.json",
+  "rush.json",
+  "yarn.lock",
+  "package-lock.json",
+  "pnpm-lock.yaml",
+];
 
 /**
  * Returns the architecture that we should fetch Go binaries for.
@@ -66,24 +73,12 @@ function getGoDistribution() {
  * @returns {string} Path to the root node_modules/.cache directory
  */
 function getWorkspaceCacheDir() {
-  let workspaceRoot;
-  try {
-    workspaceRoot = getWorkspaceRoot(process.cwd());
-  } catch (_) {
-    // not a monorepo
-  }
-
-  if (!workspaceRoot) {
-    workspaceRoot = findUp.sync("package-lock.json");
-    if (workspaceRoot) {
-      workspaceRoot = path.dirname(workspaceRoot);
-    }
-  }
-
-  if (!workspaceRoot) {
+  const sentinel = findUp.sync(WORKSPACE_ROOT_SENTINELS);
+  if (!sentinel) {
     throw new Error("Cannot find the root of the repository");
   }
 
+  const workspaceRoot = path.dirname(sentinel);
   return path.join(workspaceRoot, "node_modules", ".cache");
 }
 
