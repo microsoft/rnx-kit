@@ -29,8 +29,7 @@
     "publish:changesets": "changeset publish",
     "rnx-dep-check": "yarn build-scope @rnx-kit/dep-check && scripts/rnx-dep-check.js",
     "test": "nx run-many --target test --output-style stream --all",
-    "update-readme": "yarn update-readme:main && nx run-many --target update-readme --all",
-    "update-readme:main": "node scripts/update-readme.js",
+    "update-readme": "nx run-many --target update-readme --all",
     "version:changesets": "changeset version"
   },
   "devDependencies": {

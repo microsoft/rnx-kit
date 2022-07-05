@@ -1,0 +1,45 @@
+{
+  "name": "@rnx-kit/tools-workspaces",
+  "version": "0.0.1",
+  "description": "A collection of tools for working with workspaces",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/tools-workspaces#readme",
+  "license": "MIT",
+  "author": {
+    "name": "Microsoft Open Source",
+    "email": "microsoftopensource@users.noreply.github.com"
+  },
+  "files": [
+    "lib/*"
+  ],
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "packages/tools-workspaces"
+  },
+  "scripts": {
+    "build": "rnx-kit-scripts build",
+    "format": "rnx-kit-scripts format",
+    "lint": "rnx-kit-scripts lint",
+    "test": "rnx-kit-scripts test",
+    "update-readme": "rnx-kit-scripts update-api-readme"
+  },
+  "dependencies": {
+    "fast-glob": "^3.2.7",
+    "find-up": "^5.0.0",
+    "read-yaml-file": "^2.1.0"
+  },
+  "devDependencies": {
+    "@rnx-kit/scripts": "*"
+  },
+  "engines": {
+    "node": ">= 14"
+  },
+  "eslintConfig": {
+    "extends": "@rnx-kit/eslint-config"
+  },
+  "jest": {
+    "preset": "@rnx-kit/scripts"
+  }
+}

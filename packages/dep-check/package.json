@@ -33,6 +33,7 @@
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tools-language": "*",
     "@rnx-kit/tools-node": "*",
+    "@rnx-kit/tools-workspaces": "*",
     "@types/jest": "^27.0.0",
     "@types/lodash": "^4.14.172",
     "@types/pacote": "^11.0.0",
@@ -47,7 +48,6 @@
     "pacote": "^12.0.0",
     "prompts": "^2.4.0",
     "semver": "^7.0.0",
-    "workspace-tools": "^0.18.3",
     "yargs": "^16.0.0"
   },
   "engines": {
