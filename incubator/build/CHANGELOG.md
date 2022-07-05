@@ -1,5 +1,11 @@
 # @rnx-kit/build
 
+## 0.1.3
+
+### Patch Changes
+
+- f9ba2aa5: Added `scheme` as build parameter
+
 ## 0.1.2
 
 ### Patch Changes

@@ -1,5 +1,13 @@
 # Change Log - @rnx-kit/metro-config
 
+## 1.2.34
+
+### Patch Changes
+
+- cf4070ac: Replace `workspace-tools` with `@rnx-kit/tools-workspaces`
+- Updated dependencies [37245c33]
+  - @rnx-kit/tools-workspaces@0.1.0
+
 ## 1.2.33
 
 ### Patch Changes

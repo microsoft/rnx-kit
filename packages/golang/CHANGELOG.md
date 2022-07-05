@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/golang
 
+## 0.2.2
+
+### Patch Changes
+
+- 32cfa7b2: Replace `workspace-tools` with a call to `find-up`
+
 ## 0.2.1
 
 ### Patch Changes
