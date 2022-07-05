@@ -45,18 +45,24 @@ describe("@rnx-kit/metro-config", () => {
 
   test("defaultWatchFolders() returns packages in a monorepo", () => {
     setFixture("awesome-repo/packages/t-800");
-
-    const repoRoot = path.dirname(path.dirname(process.cwd()));
-    const folders = defaultWatchFolders(process.cwd());
-
-    const packages = ["conan", "dutch", "john", "quaid", "t-800"].map((p) =>
-      path.join(repoRoot, "packages", p)
-    );
-    const expectedFolders = [
-      path.join(repoRoot, "node_modules"),
-      ...packages,
-    ].sort();
-    expect(folders.sort()).toEqual(expectedFolders);
+    expect(defaultWatchFolders().sort()).toEqual([
+      expect.stringMatching(
+        /__fixtures__[/\\]awesome-repo[/\\]packages[/\\]conan$/
+      ),
+      expect.stringMatching(
+        /__fixtures__[/\\]awesome-repo[/\\]packages[/\\]dutch$/
+      ),
+      expect.stringMatching(
+        /__fixtures__[/\\]awesome-repo[/\\]packages[/\\]john$/
+      ),
+      expect.stringMatching(
+        /__fixtures__[/\\]awesome-repo[/\\]packages[/\\]quaid$/
+      ),
+      expect.stringMatching(
+        /__fixtures__[/\\]awesome-repo[/\\]packages[/\\]t-800$/
+      ),
+      expect.stringMatching(/__fixtures__[/\\]awesome-repo[/\\]node_modules$/),
+    ]);
   });
 
   test("resolveUniqueModule() ignores symlinks", () => {
