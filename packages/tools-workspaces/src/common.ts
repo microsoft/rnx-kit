@@ -62,5 +62,7 @@ export function getImplementation(sentinel: string): Promise<PackageManager> {
       return import("./rush");
   }
 
-  throw new Error("This should not happen");
+  throw new Error(
+    `This should not happen - did we forget to add a switch case for '${sentinel}'?`
+  );
 }
