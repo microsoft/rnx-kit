@@ -83,9 +83,9 @@ jobs:
           # exist if Xcode was attached.
           xcconfig=node_modules/.generated/ios/ReactTestApp/ReactTestApp.debug.xcconfig
           if [[ -f "${xcconfig}" ]]; then
-            sed -i '' 's/CLANG_ADDRESS_SANITIZER = YES/CLANG_ADDRESS_SANITIZER = NO/g' ${xcconfig}
-            sed -i '' 's/CLANG_UNDEFINED_BEHAVIOR_SANITIZER = YES/CLANG_UNDEFINED_BEHAVIOR_SANITIZER = NO/g' ${xcconfig}
-            sed -i '' 's/-fsanitize=bounds//g' ${xcconfig}
+            sed -i '' 's/CLANG_ADDRESS_SANITIZER = YES/CLANG_ADDRESS_SANITIZER = NO/g' "${xcconfig}"
+            sed -i '' 's/CLANG_UNDEFINED_BEHAVIOR_SANITIZER = YES/CLANG_UNDEFINED_BEHAVIOR_SANITIZER = NO/g' "${xcconfig}"
+            sed -i '' 's/-fsanitize=bounds//g' "${xcconfig}"
           fi
         working-directory: ${{ github.event.inputs.projectRoot }}
       - name: Install Apple signing certificate and provisioning profile
@@ -161,6 +161,18 @@ jobs:
         run: ${{ github.event.inputs.packageManager }} install
       - name: Install Pods
         run: pod install --project-directory=macos
+        working-directory: ${{ github.event.inputs.projectRoot }}
+      - name: Disable Clang sanitizers
+        run: |
+          # We need to disable Clang sanitizers otherwise the app will crash on
+          # startup trying to load Clang sanitizer libraries that would only
+          # exist if Xcode was attached.
+          xcconfig=node_modules/.generated/macos/ReactTestApp/ReactTestApp.debug.xcconfig
+          if [[ -f "${xcconfig}" ]]; then
+            sed -i '' 's/CLANG_ADDRESS_SANITIZER = YES/CLANG_ADDRESS_SANITIZER = NO/g' "${xcconfig}"
+            sed -i '' 's/CLANG_UNDEFINED_BEHAVIOR_SANITIZER = YES/CLANG_UNDEFINED_BEHAVIOR_SANITIZER = NO/g' "${xcconfig}"
+            sed -i '' 's/-fsanitize=bounds//g' "${xcconfig}"
+          fi
         working-directory: ${{ github.event.inputs.projectRoot }}
       - name: Build macOS app
         run: |
