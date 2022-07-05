@@ -48,7 +48,7 @@ export const findSentinel = (() => {
 
 export function getImplementation(sentinel: string): Promise<PackageManager> {
   switch (path.basename(sentinel)) {
-    case PACKAGE_LOCK_JSON: // fallthrough
+    case PACKAGE_LOCK_JSON: // fallthrough - logic defining workspaces config is the same for npm and yarn
     case YARN_LOCK:
       return import("./yarn");
 
