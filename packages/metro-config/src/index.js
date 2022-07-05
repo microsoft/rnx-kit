@@ -14,37 +14,28 @@ const UNIQUE_PACKAGES = ["react", "react-native"];
 
 /**
  * A minimum list of folders that should be watched by Metro.
- * @param {string | undefined} projectRoot
  * @returns {string[]}
  */
-function defaultWatchFolders(projectRoot) {
-  const { findPackage } = require("@rnx-kit/tools-node/package");
+function defaultWatchFolders() {
   const {
-    getAllPackageJsonFiles,
-    getWorkspaceRoot,
-  } = require("workspace-tools");
-
-  // If `projectRoot` is not set, assume that `@rnx-kit/metro-config` lives in
-  // the same monorepo as the target package.
-  const thisPackage = path.dirname(findPackage(projectRoot) || "");
+    findWorkspacePackagesSync,
+    findWorkspaceRootSync,
+  } = require("@rnx-kit/tools-workspaces");
 
   try {
-    const root = getWorkspaceRoot(thisPackage);
+    const root = findWorkspaceRootSync();
     if (!root) {
       return [];
     }
 
-    const packages = getAllPackageJsonFiles(thisPackage);
+    const packages = findWorkspacePackagesSync();
     if (!Array.isArray(packages) || packages.length === 0) {
       return [];
     }
 
     // In a monorepo, in particular when using Yarn workspaces, packages are
     // symlinked in the root `node_modules` folder so it needs to be watched.
-    return [
-      path.join(root, "node_modules"),
-      ...packages.map((pkg) => path.dirname(pkg)),
-    ];
+    return [path.join(root, "node_modules"), ...packages];
   } catch (_) {
     return [];
   }
@@ -221,7 +212,7 @@ module.exports = {
             },
           }),
         },
-        watchFolders: defaultWatchFolders(customConfig.projectRoot),
+        watchFolders: defaultWatchFolders(),
       },
       {
         ...customConfig,

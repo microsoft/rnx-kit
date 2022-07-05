@@ -1,1 +1,1 @@
-# `workspace-tools` 0.18+ determines repo root by looking for a lock file
+# `@rnx-kit/tools-workspaces` determines repo root by looking for a lock file

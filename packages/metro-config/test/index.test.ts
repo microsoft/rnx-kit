@@ -1,15 +1,14 @@
-import * as fs from "fs";
-import * as path from "path";
+import * as fs from "node:fs";
+import * as path from "node:path";
+import {
+  defaultWatchFolders,
+  exclusionList,
+  makeMetroConfig,
+  resolveUniqueModule,
+  UNIQUE_PACKAGES,
+} from "../src/index";
 
 describe("@rnx-kit/metro-config", () => {
-  const {
-    UNIQUE_PACKAGES,
-    defaultWatchFolders,
-    exclusionList,
-    makeMetroConfig,
-    resolveUniqueModule,
-  } = require("../src/index");
-
   const metroConfigKeys = [
     "cacheStores",
     "resolver",
@@ -45,18 +44,28 @@ describe("@rnx-kit/metro-config", () => {
 
   test("defaultWatchFolders() returns packages in a monorepo", () => {
     setFixture("awesome-repo/packages/t-800");
+    const folders = defaultWatchFolders()
+      .map((path) => path.replace(/\\/g, "/"))
+      .sort();
 
-    const repoRoot = path.dirname(path.dirname(process.cwd()));
-    const folders = defaultWatchFolders(process.cwd());
-
-    const packages = ["conan", "dutch", "john", "quaid", "t-800"].map((p) =>
-      path.join(repoRoot, "packages", p)
-    );
-    const expectedFolders = [
-      path.join(repoRoot, "node_modules"),
-      ...packages,
-    ].sort();
-    expect(folders.sort()).toEqual(expectedFolders);
+    expect(folders).toEqual([
+      expect.stringMatching(/__fixtures__[/\\]awesome-repo[/\\]node_modules$/),
+      expect.stringMatching(
+        /__fixtures__[/\\]awesome-repo[/\\]packages[/\\]conan$/
+      ),
+      expect.stringMatching(
+        /__fixtures__[/\\]awesome-repo[/\\]packages[/\\]dutch$/
+      ),
+      expect.stringMatching(
+        /__fixtures__[/\\]awesome-repo[/\\]packages[/\\]john$/
+      ),
+      expect.stringMatching(
+        /__fixtures__[/\\]awesome-repo[/\\]packages[/\\]quaid$/
+      ),
+      expect.stringMatching(
+        /__fixtures__[/\\]awesome-repo[/\\]packages[/\\]t-800$/
+      ),
+    ]);
   });
 
   test("resolveUniqueModule() ignores symlinks", () => {
