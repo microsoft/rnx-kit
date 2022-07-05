@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/dep-check
 
+## 1.12.18
+
+### Patch Changes
+
+- 37245c33: Introducing `@rnx-kit/tools-workspaces`, a collection of tools for working with workspaces.
+
 ## 1.12.17
 
 ### Patch Changes
