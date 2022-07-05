@@ -25,8 +25,7 @@
   "dependencies": {
     "find-up": "^5.0.0",
     "got": "^11.8.2",
-    "hasha": "^5.2.2",
-    "workspace-tools": "^0.18.3"
+    "hasha": "^5.2.2"
   },
   "devDependencies": {
     "@types/node": "^16.0.0",
