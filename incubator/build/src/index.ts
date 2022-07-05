@@ -55,12 +55,18 @@ async function main(): Promise<void> {
         return path.relative(repoRoot, path.resolve(process.cwd(), value));
       },
     })
+    .option("scheme", {
+      type: "string",
+      description: "The workspace scheme to build (iOS and macOS only)",
+      default: "ReactTestApp",
+    })
     .strict().argv;
 
   process.exitCode = await startBuild(remote, repoInfo, {
     deviceType: argv["device-type"],
     platform: argv.platform,
     projectRoot: argv["project-root"],
+    scheme: argv.scheme,
   });
 }
 
