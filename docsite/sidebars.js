@@ -10,6 +10,8 @@
  */
 
 // @ts-check
+const fs = require("node:fs");
+const path = require("node:path");
 
 /** @type {import('@docusaurus/plugin-content-docs').SidebarsConfig} */
 const sidebars = {
@@ -36,33 +38,11 @@ const sidebars = {
       label: "Tools",
       items: [
         "tools/overview",
-        "tools/babel-plugin-import-path-remapper",
-        "tools/babel-preset-metro-react-native",
-        "tools/bundle-diff",
-        "tools/cli",
-        "tools/config",
-        "tools/dep-check",
-        "tools/esbuild-plugin-import-path-remapper",
-        "tools/eslint-plugin",
-        "tools/golang",
-        "tools/jest-preset",
-        "tools/metro-config",
-        "tools/metro-plugin-cyclic-dependencies-detector",
-        "tools/metro-plugin-duplicates-checker",
-        "tools/metro-resolver-symlinks",
-        "tools/metro-serializer",
-        "tools/metro-serializer-esbuild",
-        "tools/react-native-auth",
-        "tools/react-native-lazy-index",
-        "tools/react-native-test-app-msal",
-        "tools/third-party-notices",
-        "tools/tools-language",
-        "tools/tools-node",
-        "tools/tools-react-native",
-        "tools/tools-workspaces",
-        "tools/typescript-react-native-compiler",
-        "tools/typescript-react-native-resolver",
-        "tools/typescript-service",
+        ...fs
+          .readdirSync(path.join(__dirname, "docs", "tools"))
+          .filter((file) => file !== "overview.mdx" && file.endsWith(".mdx"))
+          .sort()
+          .map((file) => `tools/${path.basename(file, ".mdx")}`),
       ],
     },
   ],
