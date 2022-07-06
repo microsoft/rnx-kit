@@ -1,5 +1,15 @@
 {
   "extends": "nx/presets/npm.json",
+  "npmScope": "rnx-kit",
+  "affected": {
+    "defaultBase": "main"
+  },
+  "implicitDependencies": {
+    "packages/eslint-config/*": "*",
+    "packages/eslint-plugin/*": "*",
+    "packages/jest-preset/*": "*",
+    "yarn.lock": "*"
+  },
   "tasksRunnerOptions": {
     "default": {
       "runner": "@rnx-kit/scripts/nx-tasks-runner",
@@ -9,26 +19,14 @@
       }
     }
   },
-  "targetDependencies": {
-    "build": [
-      {
-        "target": "build",
-        "projects": "dependencies"
-      }
-    ],
+  "targetDefaults": {
+    "build": {
+      "dependsOn": ["^build"]
+    },
     "bundle": ["build"],
     "bundle+esbuild": ["build"],
     "test": ["build"],
     "update-readme": ["build"]
-  },
-  "implicitDependencies": {
-    "packages/eslint-config/*": "*",
-    "packages/eslint-plugin/*": "*",
-    "packages/jest-preset/*": "*",
-    "yarn.lock": "*"
-  },
-  "affected": {
-    "defaultBase": "main"
   },
   "pluginsConfig": {
     "@nrwl/js": {

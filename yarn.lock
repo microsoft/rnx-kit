@@ -2715,19 +2715,19 @@
     node-gyp "^8.2.0"
     read-package-json-fast "^2.0.1"
 
-"@nrwl/cli@14.3.6":
-  version "14.3.6"
-  resolved "https://registry.yarnpkg.com/@nrwl/cli/-/cli-14.3.6.tgz#bf9d36822bbe9db42c250f4151df2b496ae7f13f"
-  integrity sha512-MNCBzM3ZDsujEc5crltH/kEyNBKx6DofLHdpzY1EoiY+yF57W7E1B6ERkVUGDc52sR4snEUKpQLXdVFjwP+z8A==
+"@nrwl/cli@14.4.2":
+  version "14.4.2"
+  resolved "https://registry.yarnpkg.com/@nrwl/cli/-/cli-14.4.2.tgz#5ec1a7a10087ef5bdd5b57bf5e3c5221fb7938e0"
+  integrity sha512-JNV4kP9goZD4BlTQGKdKhCRc1bhiWYp1TaDJHdk4ZfhiLt1NzXNxxgc/eX2obFZ3Hw+KdM/gM5F7KfWBbtSGSw==
   dependencies:
-    nx "14.3.6"
+    nx "14.4.2"
 
-"@nrwl/tao@14.3.6":
-  version "14.3.6"
-  resolved "https://registry.yarnpkg.com/@nrwl/tao/-/tao-14.3.6.tgz#cb9ac487397dd1c399add2fd8564bc6debc0fec4"
-  integrity sha512-g3y6VRq4wNtbFZIclJwRR/1hcTesx6h64g7h80VWtyRw0pVq/0zAjb8abeQSTDLM15uc1pQJYPEfsR/KgI3Sow==
+"@nrwl/tao@14.4.2":
+  version "14.4.2"
+  resolved "https://registry.yarnpkg.com/@nrwl/tao/-/tao-14.4.2.tgz#36b4d133740abdaf5c222b4e732d0d7020c9def5"
+  integrity sha512-Ygw3skKZfFhi4MBHZKQ8A67pDQxeyDdY78tFWViMN0SEn9ExL41Q8V9aSMfir8VZYGca6ZOXX5MRhbeHdcgMLQ==
   dependencies:
-    nx "14.3.6"
+    nx "14.4.2"
 
 "@octokit/auth-token@^2.4.4":
   version "2.5.0"
@@ -11554,24 +11554,10 @@ minimalistic-assert@^1.0.0:
   resolved "https://registry.yarnpkg.com/minimalistic-assert/-/minimalistic-assert-1.0.1.tgz#2e194de044626d4a10e7f7fbc00ce73e83e4d5c7"
   integrity sha512-UtJcAD4yEaGtjPezWuO9wC4nwUnVH/8/Im3yEHQP4b67cXlD/Qr9hdITCU1xDbSEXg2XKNaP8jsReV7vQd00/A==
 
-"minimatch@2 || 3", minimatch@^3.0.2, minimatch@^3.0.4, minimatch@^3.1.1, minimatch@^3.1.2:
+"minimatch@2 || 3", minimatch@3.0.4, minimatch@3.0.5, minimatch@^3.0.2, minimatch@^3.0.4, minimatch@^3.0.5, minimatch@^3.1.1, minimatch@^3.1.2:
   version "3.1.2"
   resolved "https://registry.yarnpkg.com/minimatch/-/minimatch-3.1.2.tgz#19cd194bfd3e428f049a70817c038d89ab4be35b"
   integrity sha512-J7p63hRiAjw1NDEww1W7i37+ByIrOWO5XQQAzZ3VOcL0PNybwpfmV/N05zFAzwQ9USyEcX6t3UO+K5aqBQOIHw==
-  dependencies:
-    brace-expansion "^1.1.7"
-
-minimatch@3.0.4:
-  version "3.0.4"
-  resolved "https://registry.yarnpkg.com/minimatch/-/minimatch-3.0.4.tgz#5166e286457f03306064be5497e8dbb0c3d32083"
-  integrity sha512-yJHVQEhyqPLUTgt9B83PXu6W3rx4MvvHvSUvToogpwoGDOUQ+yDrR0HRot+yOCdCO7u4hX3pWft6kWBBcqh0UA==
-  dependencies:
-    brace-expansion "^1.1.7"
-
-minimatch@3.0.5:
-  version "3.0.5"
-  resolved "https://registry.yarnpkg.com/minimatch/-/minimatch-3.0.5.tgz#4da8f1290ee0f0f8e83d60ca69f8f134068604a3"
-  integrity sha512-tUpxzX0VAzJHjLu0xUfFv1gwVp9ba3IOuRAVH2EGuRW8a5emA2FlACLqiT/lDVtS1W+TGNwqz3sWaNyLgDJWuw==
   dependencies:
     brace-expansion "^1.1.7"
 
@@ -12036,13 +12022,13 @@ nwsapi@^2.2.0:
   resolved "https://registry.yarnpkg.com/nwsapi/-/nwsapi-2.2.0.tgz#204879a9e3d068ff2a55139c2c772780681a38b7"
   integrity sha512-h2AatdwYH+JHiZpv7pt/gSX1XoRGb7L/qSIeuqA6GwYoF9w1vP1cw42TO0aI2pNyshRK5893hNSl+1//vHK7hQ==
 
-nx@14.3.6, nx@^14.1.9:
-  version "14.3.6"
-  resolved "https://registry.yarnpkg.com/nx/-/nx-14.3.6.tgz#0b30dbe96df2cd62cb68c9d3609e2dc3219b0a20"
-  integrity sha512-jBgqXEkRalo8PwXJzO4HVNN3P5pqyL5VawyNd34qPl+4t2XlDRqoK0J74i8liPGdKPBB1HjM2K1u+QNF2ROvQA==
+nx@14.4.2, nx@^14.4.0:
+  version "14.4.2"
+  resolved "https://registry.yarnpkg.com/nx/-/nx-14.4.2.tgz#48ac7f82caccdf26ecd77b76e110c550bcafe7ca"
+  integrity sha512-bYO//HuwQL4X8y+2BjUPtkPLDiYI1zMejQo6+uJl3+VdYPcsjwW/ca581tBPHiPH95XnHiBartnMrMJtn11grw==
   dependencies:
-    "@nrwl/cli" "14.3.6"
-    "@nrwl/tao" "14.3.6"
+    "@nrwl/cli" "14.4.2"
+    "@nrwl/tao" "14.4.2"
     "@parcel/watcher" "2.0.4"
     chalk "4.1.0"
     chokidar "^3.5.1"
