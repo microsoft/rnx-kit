@@ -10,7 +10,7 @@ fs.__setMockFiles = (files) => {
 
 fs.__toJSON = () => vol.toJSON();
 
-fs.lstat = (...args) => Promise.resolve(vol.lstat(...args));
-fs.stat = (...args) => Promise.resolve(vol.stat(...args));
+fs.lstat = (...args) => vol.lstat(...args);
+fs.stat = (...args) => vol.stat(...args);
 
 module.exports = fs;
