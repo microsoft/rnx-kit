@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/config
 
+## 0.5.1
+
+### Patch Changes
+
+- 80333120: Updated config schema to reflect breaking changes in 0.5
+
 ## 0.5.0
 
 ### Minor Changes

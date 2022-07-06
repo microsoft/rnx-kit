@@ -1,5 +1,12 @@
 # Change Log - @rnx-kit/metro-serializer-esbuild
 
+## 0.1.9
+
+### Patch Changes
+
+- 80333120: Reverted "Default to the new `hermes` target"
+- 80333120: Fixed not being able to bundle react-native
+
 ## 0.1.8
 
 ### Patch Changes

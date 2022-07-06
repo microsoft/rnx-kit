@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/cli
 
+## 0.14.1
+
+### Patch Changes
+
+- 80333120: Fixed tree shaking not being enabled unless `--tree-shake` is specified
+
 ## 0.14.0
 
 ### Minor Changes
