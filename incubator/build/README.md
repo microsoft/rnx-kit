@@ -13,14 +13,12 @@ An experimental tool for building your apps in the cloud.
 
 ## Requirements
 
-🚧 TODO: Reduce the number of requirements
-
-- GitHub hosted repository
 - [Node.js](https://nodejs.org/en/download/) LTS 14.15 or greater
 
 | Feature                      | Android | iOS | macOS | Windows |
 | :--------------------------- | :-----: | :-: | :---: | :-----: |
-| Remote build                 |    ✓    |  ✓  |   ✓   |    ✓    |
+| Build with Azure DevOps      |   🚧    | 🚧  |  🚧   |   🚧    |
+| Build with GitHub Actions    |    ✓    |  ✓  |   ✓   |    ✓    |
 | Launch in device             |   ✓¹    | ✓²  |   ✓   |    ✓    |
 | Launch in emulator/simulator |   ✓¹    | ✓²  |   -   |    -    |
 | Launch from QR code          |   🚧    | 🚧  |   -   |    -    |
@@ -30,17 +28,17 @@ An experimental tool for building your apps in the cloud.
 
 ## Usage
 
-🚧 TODO: Not quite ready for general consumption
-
 ```sh
 npm run rnx-build --platform <platform>
 ```
 
-| Flag               | Description                                                                                                                                                       |
-| :----------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `-p`, `--platform` | Target platform to build for. Supported platforms are `android`, `ios`, `macos`, `windows`.                                                                       |
-| `--device-type`    | [Optional] Target device type. This is currently only implemented for iOS. Supported device types are `device`, `emulator`, `simulator`. Defaults to `simulator`. |
-| `--project-root`   | [Optional] Path to the root of the project. Defaults to current working directory.                                                                                |
+| Flag                | Description                                                                                                                                                       |
+| :------------------ | :---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `-p`, `--platform`  | Target platform to build for. Supported platforms are `android`, `ios`, `macos`, `windows`.                                                                       |
+| `--device-type`     | [Optional] Target device type. This is currently only implemented for iOS. Supported device types are `device`, `emulator`, `simulator`. Defaults to `simulator`. |
+| `--package-manager` | [Optional] Binary name of the package manager used in the current repo. Defaults to `npm`, `pnpm`, or `yarn` if detected.                                         |
+| `--project-root`    | [Optional] Path to the root of the project. Defaults to current working directory.                                                                                |
+| `--scheme`          | [Optional] The workspace scheme to build (iOS and macOS only). Defaults to `ReactTestApp`.                                                                        |
 
 ### Android: Install Android Studio
 
