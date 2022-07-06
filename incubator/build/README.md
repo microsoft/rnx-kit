@@ -21,7 +21,7 @@ An experimental tool for building your apps in the cloud.
 | Feature                      | Android | iOS | macOS | Windows |
 | :--------------------------- | :-----: | :-: | :---: | :-----: |
 | Remote build                 |    ✓    |  ✓  |   ✓   |    ✓    |
-| Launch in device             |   ✓¹    | 🚧² |   ✓   |    ✓    |
+| Launch in device             |   ✓¹    | ✓²  |   ✓   |    ✓    |
 | Launch in emulator/simulator |   ✓¹    | ✓²  |   -   |    -    |
 | Launch from QR code          |   🚧    | 🚧  |   -   |    -    |
 
