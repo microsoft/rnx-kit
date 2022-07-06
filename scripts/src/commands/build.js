@@ -12,7 +12,7 @@ module.exports = async (_args, rawArgs = []) => {
   if (rawArgs.includes("--dependencies")) {
     const manifest = await fs.readFile("package.json", { encoding: "utf-8" });
     const { name } = JSON.parse(manifest);
-    return runScript("nx", "build", name);
+    return runScript("nx", "build", name.substring("@rnx-kit/".length));
   }
 
   return sequence(clean, depcheck, lint, () =>

@@ -1,5 +1,4 @@
 {
-  "extends": "nx/presets/npm.json",
   "npmScope": "rnx-kit",
   "affected": {
     "defaultBase": "main"
@@ -10,6 +9,23 @@
     "packages/jest-preset/*": "*",
     "yarn.lock": "*"
   },
+  "targetDefaults": {
+    "build": {
+      "dependsOn": ["^build"]
+    },
+    "bundle": {
+      "dependsOn": ["build"]
+    },
+    "bundle+esbuild": {
+      "dependsOn": ["build"]
+    },
+    "test": {
+      "dependsOn": ["build"]
+    },
+    "update-readme": {
+      "dependsOn": ["build"]
+    }
+  },
   "tasksRunnerOptions": {
     "default": {
       "runner": "@rnx-kit/scripts/nx-tasks-runner",
@@ -18,15 +34,6 @@
         "parallel": 0
       }
     }
-  },
-  "targetDefaults": {
-    "build": {
-      "dependsOn": ["^build"]
-    },
-    "bundle": ["build"],
-    "bundle+esbuild": ["build"],
-    "test": ["build"],
-    "update-readme": ["build"]
   },
   "pluginsConfig": {
     "@nrwl/js": {

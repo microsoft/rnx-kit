@@ -27,7 +27,7 @@
     "lint": "nx run-many --target lint --all",
     "new-package": "node scripts/new-package.js",
     "publish:changesets": "changeset publish",
-    "rnx-dep-check": "yarn build-scope @rnx-kit/dep-check && scripts/rnx-dep-check.js",
+    "rnx-dep-check": "yarn build-scope dep-check && scripts/rnx-dep-check.js",
     "test": "nx run-many --target test --output-style stream --all",
     "update-readme": "nx run-many --target update-readme --all",
     "version:changesets": "changeset version"
