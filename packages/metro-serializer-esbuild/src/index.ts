@@ -299,7 +299,7 @@ export function MetroSerializer(
         // To ensure that Hermes is able to consume this bundle, we must target
         // ES5. Hermes is missing a bunch of ES6 features, such as block scoping
         // (see https://github.com/facebook/hermes/issues/575).
-        target: buildOptions?.target ?? "hermes0",
+        target: buildOptions?.target ?? "es5",
 
         write: false,
       })

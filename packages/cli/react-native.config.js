@@ -90,7 +90,6 @@ module.exports = {
           description:
             "Enable tree shaking to remove unused code and reduce the bundle size.",
           parse: parseBoolean,
-          default: false,
         },
         {
           name: "--unstable-transform-profile [string]",
