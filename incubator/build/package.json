@@ -41,7 +41,8 @@
     "yargs": "^16.0.0"
   },
   "devDependencies": {
-    "@rnx-kit/scripts": "*"
+    "@rnx-kit/scripts": "*",
+    "memfs": "^3.4.1"
   },
   "engines": {
     "node": ">=14.15"
