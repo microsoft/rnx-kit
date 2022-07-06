@@ -59,6 +59,7 @@ const sidebars = {
         "tools/tools-language",
         "tools/tools-node",
         "tools/tools-react-native",
+        "tools/tools-workspaces",
         "tools/typescript-react-native-compiler",
         "tools/typescript-react-native-resolver",
         "tools/typescript-service",
