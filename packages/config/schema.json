@@ -1,40 +1,33 @@
 {
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "allOf": [{ "$ref": "https://json.schemastore.org/package.json" }],
-  "definitions": {
+  "$defs": {
     "bundleParameters": {
-      "allOf": [{ "$ref": "#/definitions/bundlerRuntimeParameters" }],
+      "allOf": [{ "$ref": "#/$defs/bundlerRuntimeParameters" }],
       "type": "object",
       "properties": {
-        "entryPath": {
+        "entryFile": {
           "description": "Path to the .js file which is the entry-point for building the bundle. Either absolute, or relative to the package.",
           "type": "string"
         },
-        "distPath": {
-          "description": "Path where the bundle and source map files are written. Either absolute, or relative to the package.",
-          "type": "string",
-          "default": "dist"
-        },
-        "assetsPath": {
+        "assetsDest": {
           "description": "Path where all bundle assets (strings, images, fonts, sounds, ...) are written. Either absolute, or relative to the package.",
           "type": "string",
           "default": "dist"
         },
-        "bundlePrefix": {
-          "description": "Prefix for the bundle name, followed by the platform and either \".bundle\" (win, android) or \".jsbundle\" (mac, ios).",
+        "bundleOutput": {
+          "description": "Path to the output bundle file, either absolute or relative to the package.",
           "type": "string",
-          "default": "index"
+          "default": "index.[platform].bundle"
         },
         "bundleEncoding": {
           "description": "Encoding scheme to use when writing the bundle file. Currently limited to UTF-8, UTF-16 (little endian), and 7-bit ASCII.",
           "type": "string",
           "enum": ["utf8", "utf16le", "ascii"]
         },
-        "sourceMapPath": {
+        "sourcemapOutput": {
           "description": "Path to use when creating the bundle source map file. Either absolute, or relative to the package.",
           "type": "string"
         },
-        "sourceMapSourceRootPath": {
+        "sourcemapSourcesRoot": {
           "description": "Path to the package's source files. Used to make source-map paths relative and therefore portable.",
           "type": "string"
         }
@@ -175,41 +168,44 @@
   "properties": {
     "rnx-kit": {
       "description": "Configuration for an rnx-kit package",
-      "allOf": [{ "$ref": "#/definitions/depCheckConfig" }],
+      "allOf": [{ "$ref": "#/$defs/depCheckConfig" }],
       "type": "object",
       "properties": {
         "bundle": {
           "description": "Defines how a kit is bundled. Includes shared bundling parameters with platform-specific overrides.",
-          "allOf": [{ "$ref": "#/definitions/bundleParameters" }],
-          "type": "object",
-          "properties": {
-            "id": {
-              "description": "Unique identifier for this bundle definition. Only used as a reference within the kit build system.",
-              "type": "string"
-            },
-            "targets": {
-              "description": "The platform(s) for which this kit may be bundled.",
-              "type": "array",
-              "items": {
-                "type": "string",
-                "enum": ["android", "ios", "macos", "win32", "windows"]
-              }
-            },
-            "platforms": {
-              "description": "Platform-specific overrides for bundling parameters. Any parameter not listed in an override gets its value from the shared bundle definition, or falls back to defaults.",
-              "type": "object",
-              "properties": {
-                "android": { "$ref": "#/definitions/bundleParameters" },
-                "ios": { "$ref": "#/definitions/bundleParameters" },
-                "macos": { "$ref": "#/definitions/bundleParameters" },
-                "win32": { "$ref": "#/definitions/bundleParameters" },
-                "windows": { "$ref": "#/definitions/bundleParameters" }
+          "type": "array",
+          "items": {
+            "allOf": [{ "$ref": "#/$defs/bundleParameters" }],
+            "type": "object",
+            "properties": {
+              "id": {
+                "description": "Unique identifier for this bundle definition. Only used as a reference within the kit build system.",
+                "type": "string"
+              },
+              "targets": {
+                "description": "The platform(s) for which this kit may be bundled.",
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": ["android", "ios", "macos", "win32", "windows"]
+                }
+              },
+              "platforms": {
+                "description": "Platform-specific overrides for bundling parameters. Any parameter not listed in an override gets its value from the shared bundle definition, or falls back to defaults.",
+                "type": "object",
+                "properties": {
+                  "android": { "$ref": "#/$defs/bundleParameters" },
+                  "ios": { "$ref": "#/$defs/bundleParameters" },
+                  "macos": { "$ref": "#/$defs/bundleParameters" },
+                  "win32": { "$ref": "#/$defs/bundleParameters" },
+                  "windows": { "$ref": "#/$defs/bundleParameters" }
+                }
               }
             }
           }
         },
         "server": {
-          "allOf": [{ "$ref": "#/definitions/bundlerRuntimeParameters" }],
+          "allOf": [{ "$ref": "#/$defs/bundlerRuntimeParameters" }],
           "type": "object",
           "properties": {
             "projectRoot": {
