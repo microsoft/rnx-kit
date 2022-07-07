@@ -50,7 +50,7 @@ async function downloadArtifact(
   const artifacts = await withRetry(async () => {
     const { data, headers } =
       await octokit().rest.actions.listWorkflowRunArtifacts(listParams);
-    if (data.total_count === 0) {
+    if (data.artifacts.length === 0) {
       listParams.headers = { "if-none-match": headers.etag };
       throw new Error("No artifacts were uploaded");
     }
@@ -102,7 +102,7 @@ async function getWorkflowRunId(
     const { data, headers } = await octokit().rest.actions.listWorkflowRuns(
       listParams
     );
-    if (data.total_count === 0) {
+    if (data.workflow_runs.length === 0) {
       listParams.headers = { "if-none-match": headers.etag };
       throw new Error("Failed to get workflow run id");
     }
@@ -150,33 +150,35 @@ async function watchWorkflowRun(
         const result = await octokit().rest.actions.listJobsForWorkflowRun(
           params
         );
-        const job = result.data.jobs.find(
+        const activeJobs = result.data.jobs.filter(
           (job) => job && job.conclusion !== "skipped"
         );
+
+        const job = activeJobs.find((job) => job.status !== "completed");
         if (job) {
-          const { status, conclusion, started_at, steps } = job;
-
-          if (status === "completed") {
-            const elapsed = elapsedTime(started_at, job.completed_at);
-            switch (conclusion) {
-              case "failure":
-                spinner.fail(`Build failed (${elapsed})`);
-                break;
-              case "success":
-                spinner.succeed(`Build succeeded (${elapsed})`);
-                break;
-              default:
-                spinner.fail(`Build ${conclusion} (${elapsed})`);
-                break;
-            }
-            return conclusion;
-          }
-
+          const { started_at, steps } = job;
           currentStep = steps?.find(
             (step) => step.status !== "completed"
           )?.name;
           jobStartedAt = started_at;
           params.headers = { "if-none-match": result.headers.etag };
+        } else {
+          return activeJobs.reduce((result, job) => {
+            const { completed_at, conclusion, name, started_at } = job;
+            const elapsed = elapsedTime(started_at, completed_at);
+            switch (conclusion) {
+              case "failure":
+                spinner.fail(`${name} failed (${elapsed})`);
+                break;
+              case "success":
+                spinner.succeed(`${name} succeeded (${elapsed})`);
+                break;
+              default:
+                spinner.fail(`${name} ${conclusion} (${elapsed})`);
+                break;
+            }
+            return conclusion || result;
+          }, "failure");
         }
       } catch (e) {
         if (e instanceof RequestError && e.status === 304) {
