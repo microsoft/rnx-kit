@@ -11,7 +11,7 @@ on:
         required: true
         default: "simulator"
       packageManager:
-        description: "Supported package managers are `npm`, `yarn`, `pnpm` (v6.10+)"
+        description: "Binary name of the package manager used in the current repo"
         required: true
         default: "yarn"
       platform:
@@ -40,7 +40,6 @@ jobs:
         uses: actions/setup-node@v3.3.0
         with:
           node-version: 16
-          cache: ${{ github.event.inputs.packageManager }}
       - name: Install npm dependencies
         run: ${{ github.event.inputs.packageManager }} install
       - name: Build Android app
@@ -70,7 +69,6 @@ jobs:
         uses: actions/setup-node@v3.3.0
         with:
           node-version: 16
-          cache: ${{ github.event.inputs.packageManager }}
       - name: Install npm dependencies
         run: ${{ github.event.inputs.packageManager }} install
       - name: Install Pods
@@ -156,7 +154,6 @@ jobs:
         uses: actions/setup-node@v3.3.0
         with:
           node-version: 16
-          cache: ${{ github.event.inputs.packageManager }}
       - name: Install npm dependencies
         run: ${{ github.event.inputs.packageManager }} install
       - name: Install Pods
@@ -209,7 +206,6 @@ jobs:
         uses: actions/setup-node@v3.3.0
         with:
           node-version: 16
-          cache: ${{ github.event.inputs.packageManager }}
       - name: Install npm dependencies
         run: ${{ github.event.inputs.packageManager }} install
       - name: Install Windows test app

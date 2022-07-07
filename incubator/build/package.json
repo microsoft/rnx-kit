@@ -35,12 +35,14 @@
     "@octokit/plugin-rest-endpoint-methods": "^5.14.0",
     "@octokit/request-error": "^2.0.5",
     "fast-xml-parser": "^4.0.8",
+    "find-up": "^5.0.0",
     "ora": "^5.4.1",
     "pkg-dir": "^5.0.0",
     "yargs": "^16.0.0"
   },
   "devDependencies": {
-    "@rnx-kit/scripts": "*"
+    "@rnx-kit/scripts": "*",
+    "memfs": "^3.4.1"
   },
   "engines": {
     "node": ">=14.15"

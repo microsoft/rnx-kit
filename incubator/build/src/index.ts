@@ -5,6 +5,7 @@ import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 import { startBuild } from "./build";
 import { getRepositoryRoot } from "./git";
+import { detectPackageManager } from "./packageManager";
 import * as github from "./remotes/github";
 import type { DeviceType, Platform, Remote, RepositoryInfo } from "./types";
 
@@ -30,6 +31,7 @@ async function main(): Promise<void> {
   }
 
   const deviceTypes: DeviceType[] = ["device", "emulator", "simulator"];
+  const packageManager = await detectPackageManager();
 
   const argv = yargs(hideBin(process.argv))
     .option<"platform", RequiredOptionInferenceHelper<Platform>>("platform", {
@@ -44,6 +46,13 @@ async function main(): Promise<void> {
       description: "Target device type",
       choices: deviceTypes,
       default: "simulator" as DeviceType,
+    })
+    .option("package-manager", {
+      type: "string",
+      description:
+        "Binary name of the package manager used in the current repo",
+      default: packageManager,
+      required: !packageManager,
     })
     .option("project-root", {
       type: "string",
@@ -64,6 +73,7 @@ async function main(): Promise<void> {
 
   process.exitCode = await startBuild(remote, repoInfo, {
     deviceType: argv["device-type"],
+    packageManager: argv["package-manager"] || "npm",
     platform: argv.platform,
     projectRoot: argv["project-root"],
     scheme: argv.scheme,
