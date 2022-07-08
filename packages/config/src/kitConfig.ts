@@ -1,6 +1,10 @@
 import type { BundleConfig } from "./bundleConfig";
 import type { ServerConfig } from "./serverConfig";
 
+export type GenericConfig = {
+  [key: string]: string | number | boolean | GenericConfig;
+};
+
 export type MetaCapability = "core/testing";
 
 export type Capability =
@@ -77,6 +81,12 @@ export type KitConfig = {
    * @default minVersion(reactNativeVersion)
    */
   reactNativeDevVersion?: string;
+
+  build?: {
+    distribution?: {
+      service: string;
+    } & GenericConfig;
+  };
 
   /**
    * Specifies how the package is bundled.

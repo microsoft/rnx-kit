@@ -1,12 +1,16 @@
 import ora from "ora";
-import { extract } from "./archive";
 import { once } from "./async";
 import { deleteBranch, pushCurrentChanges } from "./git";
-import * as platforms from "./platforms";
-import type { BuildParams, Remote, RepositoryInfo } from "./types";
+import type {
+  BuildParams,
+  Distribution,
+  Remote,
+  RepositoryInfo,
+} from "./types";
 
 export async function startBuild(
   remote: Remote,
+  distribution: Distribution,
   repoInfo: RepositoryInfo,
   inputs: BuildParams
 ): Promise<number> {
@@ -41,18 +45,13 @@ export async function startBuild(
   spinner.start("Queueing build");
 
   try {
-    const artifactFile = await remote.build(context, inputs, spinner);
-    if (!artifactFile) {
+    const artifact = await remote.build(context, inputs, spinner);
+    if (!artifact) {
       await cleanUp();
       return 1;
     }
 
-    spinner.start("Extracting build artifact");
-    const buildArtifact = await extract(artifactFile);
-    spinner.succeed(`Extracted ${buildArtifact}`);
-
-    const platform = await platforms.get(inputs.platform);
-    await platform.deploy(buildArtifact, inputs, spinner);
+    await distribution.deploy(artifact, inputs, spinner);
   } catch (e) {
     spinner.fail();
     await cleanUp();

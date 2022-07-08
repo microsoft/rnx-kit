@@ -10,7 +10,7 @@ import {
   makeCommand,
   makeCommandSync,
 } from "../command";
-import type { BuildParams, DeviceType } from "../types";
+import type { BuildParams, DeviceType, JSObject } from "../types";
 import { open } from "./macos";
 
 type Device = {
@@ -148,7 +148,7 @@ async function getDevices(): Promise<Device[]> {
   return devices;
 }
 
-async function parsePlist(app: string): Promise<Error | Record<string, any>> {
+async function parsePlist(app: string): Promise<Error | JSObject> {
   const plutil = makeCommand("plutil");
 
   const infoPlist = path.join(app, "Info.plist");
@@ -204,9 +204,10 @@ async function launch(device: Device, app: string): Promise<Error | null> {
       "--justlaunch",
       "--noinstall"
     );
-    const { stderr, status } = await launch;
+    const { stdout, status } = await launch;
     if (status !== 0) {
-      return new Error(stderr);
+      const m = stdout.match(/error: (.*?)$/m);
+      return new Error(m ? m[1] : "Failed to launch app");
     }
   } else {
     const result = await parsePlist(app);
@@ -215,6 +216,10 @@ async function launch(device: Device, app: string): Promise<Error | null> {
     }
 
     const { CFBundleIdentifier } = result;
+    if (typeof CFBundleIdentifier !== "string") {
+      return new Error(`Invalid bundle identifier: ${CFBundleIdentifier}`);
+    }
+
     const launch = xcrun("simctl", "launch", udid, CFBundleIdentifier);
     const { stderr, status } = await launch;
     if (status !== 0) {

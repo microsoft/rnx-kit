@@ -10,6 +10,10 @@ on:
         description: "Supported device types are `device`, `emulator`, `simulator`"
         required: true
         default: "simulator"
+      distribution:
+        description: "Distribution config string, e.g. `local` or `firebase:<appId>`"
+        required: true
+        default: "local"
       packageManager:
         description: "Binary name of the package manager used in the current repo"
         required: true
@@ -54,6 +58,7 @@ jobs:
           name: android-artifact
           path: ${{ github.event.inputs.projectRoot }}/android/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
+          retention-days: 14
   build-ios:
     name: "Build iOS"
     if: ${{ github.event.inputs.platform == 'ios' }}
@@ -62,6 +67,7 @@ jobs:
       CERTIFICATE_FILE: build-certificate.p12
       KEYCHAIN_FILE: app-signing.keychain-db
       PROVISION_PATH: "Library/MobileDevice/Provisioning Profiles/Provisioning_Profile.mobileprovision"
+      XCARCHIVE_FILE: app.xcarchive
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -117,7 +123,7 @@ jobs:
             code_signing='CODE_SIGNING_ALLOWED=NO'
           fi
           xcworkspace=$(find . -maxdepth 1 -name '*.xcworkspace' -type d | head -1)
-          xcodebuild -workspace ${xcworkspace} -scheme ${{ github.event.inputs.scheme }} -destination "${destination}" -configuration Debug -derivedDataPath DerivedData ${code_signing} COMPILER_INDEX_STORE_ENABLE=NO build
+          xcodebuild -workspace ${xcworkspace} -scheme ${{ github.event.inputs.scheme }} -destination "${destination}" -configuration Debug -derivedDataPath DerivedData -archivePath ${XCARCHIVE_FILE} ${code_signing} COMPILER_INDEX_STORE_ENABLE=NO archive
         working-directory: ${{ github.event.inputs.projectRoot }}/ios
       - name: Remove Apple signing certificate and provisioning profile
         if: ${{ always() && github.event.inputs.deviceType == 'device' }}
@@ -127,22 +133,30 @@ jobs:
           security delete-keychain "${RUNNER_TEMP}/${KEYCHAIN_FILE}"
           rm -f "${RUNNER_TEMP}/${CERTIFICATE_FILE}" "${HOME}/${PROVISION_PATH}"
       - name: Prepare build artifact
+        id: prepare-build-artifact
         run: |
-          output_path=DerivedData/Build/Products
-          app=$(find ${output_path} -maxdepth 2 -name '*.app' -type d | head -1)
-          # bsdtar corrupts files when archiving due to APFS sparse files. A
-          # workaround is to use GNU Tar instead. See also:
-          #   - https://github.com/actions/cache/issues/403
-          #   - https://github.com/actions/virtual-environments/issues/2619
-          gtar -cvf ios-artifact.tar -C "$(dirname ${app})" "$(basename ${app})"
-          shasum --algorithm 256 ios-artifact.tar
+          if [[ ${{ github.event.inputs.distribution }} == 'local' ]]; then
+            app=$(find ${XCARCHIVE_FILE}/Products/Applications -maxdepth 1 -name '*.app' -type d | head -1)
+            # bsdtar corrupts files when archiving due to APFS sparse files. A
+            # workaround is to use GNU Tar instead. See also:
+            #   - https://github.com/actions/cache/issues/403
+            #   - https://github.com/actions/virtual-environments/issues/2619
+            gtar -cvf ios-artifact.tar -C "$(dirname ${app})" "$(basename ${app})"
+            shasum --algorithm 256 ios-artifact.tar
+            echo "::set-output name=filename::ios-artifact.tar"
+          else
+            xcodebuild -exportArchive -archivePath ${XCARCHIVE_FILE} -exportPath export -exportOptionsPlist ExportOptions.plist 2>&1
+            ipa=$(find export -maxdepth 1 -name '*.ipa' -type d | head -1)
+            echo "::set-output name=filename::${ipa}"
+          fi
         working-directory: ${{ github.event.inputs.projectRoot }}/ios
       - name: Upload build artifact
         uses: actions/upload-artifact@v3
         with:
           name: ios-artifact
-          path: ${{ github.event.inputs.projectRoot }}/ios/ios-artifact.tar
+          path: ${{ github.event.inputs.projectRoot }}/ios/${{ steps.prepare-build-artifact.outputs.filename }}
           if-no-files-found: error
+          retention-days: 14
   build-macos:
     name: "Build macOS"
     if: ${{ github.event.inputs.platform == 'macos' }}
@@ -193,6 +207,7 @@ jobs:
           name: macos-artifact
           path: ${{ github.event.inputs.projectRoot }}/macos/macos-artifact.tar
           if-no-files-found: error
+          retention-days: 14
   build-windows:
     name: "Build Windows"
     if: ${{ github.event.inputs.platform == 'windows' }}
@@ -235,11 +250,12 @@ jobs:
           name: windows-artifact
           path: ${{ github.event.inputs.projectRoot }}/windows/AppPackages/${{ steps.prepare-build-artifact.outputs.app-name }}
           if-no-files-found: error
+          retention-days: 14
   distribute:
     name: "Distribute build"
-    needs: [build-android, build-ios, build-macos, build-windows]
+    needs: [build-android, build-ios]
     runs-on: ubuntu-20.04
-    if: ${{ !cancelled() && !failure() }} # `success()` excludes skipped jobs
+    if: ${{ github.event.inputs.distribution != 'local' && !cancelled() && !failure() }} # `success()` excludes skipped jobs
     steps:
       - name: Download build artifact
         uses: actions/download-artifact@v3
@@ -247,3 +263,11 @@ jobs:
           name: ${{ github.event.inputs.platform }}-artifact
       - name: Display structure of build artifact
         run: ls -R
+      - name: Upload to Firebase
+        if: ${{ startsWith(github.event.inputs.distribution, 'firebase:') }}
+        env:
+          FIREBASE_APP_ID: ${{ github.event.inputs.distribution }}
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+        run: |
+          artifact=$(find . -maxdepth 1 -type f | head -1)
+          npx --package firebase-tools@11 firebase appdistribution:distribute "${artifact}" --app ${FIREBASE_APP_ID:9} --release-notes "${{ github.ref_name }}" --token "${FIREBASE_TOKEN}"
