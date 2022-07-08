@@ -16,8 +16,8 @@ export type RepositoryInfo = {
 };
 
 export type UserConfig = {
-  tokens: {
-    github?: string;
+  github?: {
+    token: string;
   };
 };
 

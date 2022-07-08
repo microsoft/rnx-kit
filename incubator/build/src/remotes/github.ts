@@ -90,8 +90,8 @@ function getPersonalAccessToken(): string | undefined {
   }
 
   const content = fileReadSync(USER_CONFIG_FILE, { encoding: "utf-8" });
-  const config: Partial<UserConfig> = JSON.parse(content);
-  return config?.tokens?.github;
+  const config: UserConfig = JSON.parse(content);
+  return config?.github?.token;
 }
 
 async function getWorkflowRunId(
@@ -248,16 +248,11 @@ export async function install(): Promise<number> {
 
   if (!getPersonalAccessToken()) {
     const exampleConfig: UserConfig = {
-      tokens: {
-        github: "token",
-      },
+      github: { token: "ghp_0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ" },
     };
     const example = JSON.stringify(exampleConfig);
     console.error(
-      `Missing personal access token for GitHub. Please create one, and put it in \`${USER_CONFIG_FILE}\`, e.g.: \`${example}\`.`
-    );
-    console.error(
-      "For how to create a personal access token, see: https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token"
+      `Missing personal access token for GitHub.\n\nPlease create one, and save it in '${USER_CONFIG_FILE}' like below:\n\n\t${example}\n\nFor how to create a personal access token, see: https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token`
     );
     return 1;
   }

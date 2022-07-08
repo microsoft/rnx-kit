@@ -34,6 +34,7 @@
     "@octokit/core": "^3.6.0",
     "@octokit/plugin-rest-endpoint-methods": "^5.14.0",
     "@octokit/request-error": "^2.0.5",
+    "env-paths": "^2.2.1",
     "fast-xml-parser": "^4.0.8",
     "find-up": "^5.0.0",
     "ora": "^5.4.1",
