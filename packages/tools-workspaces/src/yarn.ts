@@ -1,6 +1,6 @@
-import { readFileSync } from "node:fs";
-import { readFile } from "node:fs/promises";
-import * as path from "node:path";
+import { readFileSync } from "fs";
+import { readFile } from "fs/promises";
+import * as path from "path";
 import { findPackages, findPackagesSync } from "./common";
 
 type Manifest = {

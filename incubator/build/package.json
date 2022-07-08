@@ -46,7 +46,7 @@
     "memfs": "^3.4.1"
   },
   "engines": {
-    "node": ">=14.15"
+    "node": ">=14.18"
   },
   "eslintConfig": {
     "extends": "@rnx-kit/eslint-config"
