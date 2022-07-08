@@ -235,3 +235,15 @@ jobs:
           name: windows-artifact
           path: ${{ github.event.inputs.projectRoot }}/windows/AppPackages/${{ steps.prepare-build-artifact.outputs.app-name }}
           if-no-files-found: error
+  distribute:
+    name: "Distribute build"
+    needs: [build-android, build-ios, build-macos, build-windows]
+    runs-on: ubuntu-20.04
+    if: ${{ !cancelled() && !failure() }} # `success()` excludes skipped jobs
+    steps:
+      - name: Download build artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: ${{ github.event.inputs.platform }}-artifact
+      - name: Display structure of build artifact
+        run: ls -R
