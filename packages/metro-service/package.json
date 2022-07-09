@@ -21,7 +21,7 @@
     "test": "rnx-kit-scripts test"
   },
   "engines": {
-    "node": ">= 10.12"
+    "node": ">=10.12"
   },
   "dependencies": {
     "@rnx-kit/tools-language": "^1.2.6",

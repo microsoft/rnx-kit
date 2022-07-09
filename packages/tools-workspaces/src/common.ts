@@ -1,7 +1,7 @@
 import type { Options } from "fast-glob";
 import fg from "fast-glob";
 import findUp from "find-up";
-import * as path from "node:path";
+import * as path from "path";
 
 type PackageManager = {
   findWorkspacePackages: (sentinel: string) => Promise<string[]>;

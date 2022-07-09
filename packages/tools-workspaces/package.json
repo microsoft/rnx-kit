@@ -34,7 +34,7 @@
     "@rnx-kit/scripts": "*"
   },
   "engines": {
-    "node": ">= 14"
+    "node": ">=14.15"
   },
   "eslintConfig": {
     "extends": "@rnx-kit/eslint-config"
