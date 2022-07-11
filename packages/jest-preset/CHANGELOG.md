@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/jest-preset
 
+## 0.1.11
+
+### Patch Changes
+
+- 641d8978: Use `@ts-ignore` instead since we don't know which `@react-native-community/cli` version is used
+
 ## 0.1.10
 
 ### Patch Changes

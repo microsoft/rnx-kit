@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-service
 
+## 2.0.1
+
+### Patch Changes
+
+- 641d8978: Support `@react-native-community/cli-plugin-metro` >=6.1.0
+
 ## 2.0.0
 
 ### Major Changes
