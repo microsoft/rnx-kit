@@ -56,6 +56,7 @@
     "@types/metro-babel-transformer": "^0.66.0",
     "@types/metro-config": "^0.66.0",
     "@types/qrcode": "^1.4.2",
+    "jest": "^27.0.0",
     "jest-extended": "^2.0.0",
     "memfs": "^3.4.1",
     "metro-config": "^0.67.0",
