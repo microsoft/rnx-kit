@@ -79,9 +79,9 @@ function getTargetPlatform(defaultPlatform) {
 
   /** @type {() => CLIConfig} */
   const loadConfig =
-    // @ts-expect-error could not find a declaration file
+    // @ts-ignore could not find a declaration file
     require("@react-native-community/cli").loadConfig ||
-    // @ts-expect-error could not find a declaration file
+    // @ts-ignore could not find a declaration file
     require("@react-native-community/cli/build/tools/config").default;
 
   const { platforms } = loadConfig();

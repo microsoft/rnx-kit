@@ -15,7 +15,7 @@ module.exports = {
   },
   "@types/react-native": {
     name: "@types/react-native",
-    version: "^0.66.0",
+    version: "^0.68.0",
     devOnly: true,
   },
   "@types/yargs": {
@@ -70,7 +70,7 @@ if (require.main === module) {
   require("@rnx-kit/dep-check").cli({
     "custom-profiles": __filename,
     "exclude-packages": "@rnx-kit/expo-app",
-    vigilant: "0.66",
+    vigilant: "0.68",
     write: process.argv.includes("--write"),
   });
 }
