@@ -1,6 +1,7 @@
 import type { CustomResolver, ResolutionContext } from "metro-resolver";
 import { resolve } from "metro-resolver";
-import * as path from "path";
+import * as fs from "node:fs";
+import * as path from "node:path";
 import { makeResolver } from "../src/symlinkResolver";
 import { useFixture } from "./fixtures";
 
@@ -12,11 +13,12 @@ function makeContext(
 ): ResolutionContext {
   const context = {
     originModulePath: "",
-    doesFileExist: () => true,
+    doesFileExist: fs.existsSync,
     isAssetFile: () => false,
     nodeModulesPaths: [".", "..", "../.."],
     redirectModulePath: (modulePath: string) => modulePath,
     resolveRequest,
+    sourceExts: ["js", "json", "ts", "tsx"],
   } as unknown as ResolutionContext;
   return freeze ? Object.freeze(context) : context;
 }
