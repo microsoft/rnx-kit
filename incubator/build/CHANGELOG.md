@@ -1,5 +1,16 @@
 # @rnx-kit/build
 
+## 0.2.0
+
+### Minor Changes
+
+- fb757de1: Moved config file into OS-specific path for config files
+
+### Patch Changes
+
+- 1caac7c1: Properly handle multiple GitHub jobs
+- deb82d84: Added support for other package managers
+
 ## 0.1.3
 
 ### Patch Changes
