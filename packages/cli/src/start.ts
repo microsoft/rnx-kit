@@ -6,6 +6,8 @@ import {
   startServer,
 } from "@rnx-kit/metro-service";
 import chalk from "chalk";
+import type { Server as HttpServer } from "http";
+import type { Server as HttpsServer } from "https";
 import type { ReportableEvent, Reporter } from "metro";
 import type { Middleware } from "metro-config";
 import type Server from "metro/src/Server";
@@ -20,13 +22,12 @@ type DevServerMiddleware = ReturnType<
   typeof CliServerApi["createDevServerMiddleware"]
 >;
 
-type DevServer = ReturnType<DevServerMiddleware["attachToServer"]>;
-
-type DevServerMiddleware7 = Pick<DevServerMiddleware, "middleware"> & {
-  websocketEndpoints: unknown;
-  debuggerProxyEndpoint: DevServer["debuggerProxy"];
-  messageSocketEndpoint: DevServer["messageSocket"];
-  eventsSocketEndpoint: DevServer["eventsSocket"];
+type DevServerMiddleware6 = Pick<DevServerMiddleware, "middleware"> & {
+  attachToServer: (server: HttpServer | HttpsServer) => {
+    debuggerProxy: DevServerMiddleware["debuggerProxyEndpoint"];
+    eventsSocket: DevServerMiddleware["eventsSocketEndpoint"];
+    messageSocket: DevServerMiddleware["messageSocketEndpoint"];
+  };
 };
 
 export type CLIStartOptions = {
@@ -56,10 +57,10 @@ function friendlyRequire<T>(module: string): T {
   }
 }
 
-function hasWebsocketEndpoints(
-  devServer: DevServerMiddleware | DevServerMiddleware7
-): devServer is DevServerMiddleware7 {
-  return !("attachToServer" in devServer);
+function hasAttachToServerFunction(
+  devServer: DevServerMiddleware | DevServerMiddleware6
+): devServer is DevServerMiddleware6 {
+  return "attachToServer" in devServer;
 }
 
 export async function rnxStart(
@@ -174,9 +175,9 @@ export async function rnxStart(
   // `createDevServerMiddleware` changed its return type in
   // https://github.com/react-native-community/cli/pull/1560
   let websocketEndpoints: unknown = undefined;
-  let messageSocketEndpoint: DevServer["messageSocket"];
+  let messageSocketEndpoint: DevServerMiddleware["messageSocketEndpoint"];
 
-  if (hasWebsocketEndpoints(devServer)) {
+  if (!hasAttachToServerFunction(devServer)) {
     websocketEndpoints = devServer.websocketEndpoints;
     messageSocketEndpoint = devServer.messageSocketEndpoint;
 
@@ -194,7 +195,7 @@ export async function rnxStart(
   };
   const serverInstance = await startServer(metroConfig, serverOptions);
 
-  if (!hasWebsocketEndpoints(devServer)) {
+  if (hasAttachToServerFunction(devServer)) {
     const { messageSocket, eventsSocket } =
       devServer.attachToServer(serverInstance);
     messageSocketEndpoint = messageSocket;
