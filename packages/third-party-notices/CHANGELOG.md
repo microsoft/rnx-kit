@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/third-party-notices
 
+## 1.2.16
+
+### Patch Changes
+
+- 008474ca: Fix code to deal with nested node_module
+
 ## 1.2.15
 
 ### Patch Changes
