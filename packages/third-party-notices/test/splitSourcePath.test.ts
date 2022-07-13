@@ -40,9 +40,24 @@ describe("splitSourcePath", () => {
       `${absolutePathRoot}src\\root`,
       `${absolutePathRoot}src/root/node_modules/myPackage/node_modules/nestedPackage/nestedFile.js`
     );
-    expect(moduleName).toBe("myPackage");
+    expect(moduleName).toBe("nestedPackage");
     expect(osSpecificPath(modulePath)).toBe(
-      osSpecificPath(`${absolutePathRoot}src\\root\\node_modules\\myPackage`)
+      osSpecificPath(
+        `${absolutePathRoot}src\\root\\node_modules\\myPackage\\node_modules\\nestedPackage`
+      )
+    );
+  });
+
+  test("packageFolderWithNestedNodeModulesFilesAndNamespaces", () => {
+    const [moduleName, modulePath] = splitSourcePath(
+      `${absolutePathRoot}src\\root`,
+      `${absolutePathRoot}src/root/node_modules/@myframework/driver-utils/node_modules/@myframework/telemetry-utils/lib/config.js`
+    );
+    expect(moduleName).toBe("@myframework/telemetry-utils");
+    expect(osSpecificPath(modulePath)).toBe(
+      osSpecificPath(
+        `${absolutePathRoot}src\\root\\node_modules\\@myframework\\driver-utils\\node_modules\\@myframework\\telemetry-utils`
+      )
     );
   });
 

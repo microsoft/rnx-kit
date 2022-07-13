@@ -112,13 +112,14 @@ export function splitSourcePath(rootPath: string, p: string): string[] {
 
   const pnpmRegExp = /(.*?node_modules\/[.].+?\/node_modules\/)(.*)/;
   const pnpmPathComponents = pnpmRegExp.exec(p);
+
   if (pnpmPathComponents !== null) {
     nodeModulesPath = pnpmPathComponents[1];
     relativeSourcePath = pnpmPathComponents[2];
   } else {
     nodeModulesPath = p.substring(
       0,
-      p.indexOf(modulesRoot) + modulesRoot.length
+      p.lastIndexOf(modulesRoot) + modulesRoot.length
     );
     relativeSourcePath = p.substring(nodeModulesPath.length);
   }

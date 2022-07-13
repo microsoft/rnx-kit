@@ -42,6 +42,12 @@ describe("normalizePath", () => {
     );
   });
 
+  test("webPackNestedNodeModelesByNoHoistOrNotYarn", () => {
+    const path =
+      "webpack://@ms/office-test-project-runtime/../../node_modules/@myframework/driver-utils/node_modules/@myframework/telemetry-utils/lib/config.js";
+    expect(normalizePath(path)).toBe(path);
+  });
+
   // Paths
   test("relativePath", () => {
     expect(normalizePath("folder/file")).toBe("folder/file");
