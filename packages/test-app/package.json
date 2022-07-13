@@ -63,13 +63,15 @@
     "reactNativeVersion": "^0.68",
     "kitType": "app",
     "build": {
-      "distribution": {
-        "service": "firebase",
-        "appId": {
-          "android": "1:1234567890:android:0a1b2c3d4e5f67890",
-          "ios": "1:1234567890:android:0a1b2c3d4e5f67890"
+      "distribution": [
+        "@rnx-kit/build-plugin-firebase",
+        {
+          "appId": {
+            "android": "1:1234567890:android:0a1b2c3d4e5f67890",
+            "ios": "1:1234567890:android:0a1b2c3d4e5f67890"
+          }
         }
-      }
+      ]
     },
     "bundle": [
       {

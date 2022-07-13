@@ -1,0 +1,41 @@
+{
+  "private": true,
+  "name": "@rnx-kit/build-plugin-firebase",
+  "version": "0.0.1",
+  "description": "EXPERIMENTAL - USE WITH CAUTION - Firebase plugin for @rnx-kit/build",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/incubator/build-plugin-firebase#readme",
+  "license": "MIT",
+  "author": {
+    "name": "Microsoft Open Source",
+    "email": "microsoftopensource@users.noreply.github.com"
+  },
+  "files": [
+    "lib/**/*.{d.ts,js}"
+  ],
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "incubator/build-plugin-firebase"
+  },
+  "scripts": {
+    "build": "rnx-kit-scripts build",
+    "format": "rnx-kit-scripts format",
+    "lint": "rnx-kit-scripts lint"
+  },
+  "peerDependencies": {
+    "@rnx-kit/build": "*"
+  },
+  "devDependencies": {
+    "@rnx-kit/build": "*",
+    "@rnx-kit/scripts": "*"
+  },
+  "eslintConfig": {
+    "extends": "@rnx-kit/eslint-config"
+  },
+  "jest": {
+    "preset": "@rnx-kit/scripts"
+  },
+  "experimental": true
+}

@@ -16,7 +16,7 @@
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "bin": {
-    "rnx-build": "lib/index.js"
+    "rnx-build": "lib/cli.js"
   },
   "repository": {
     "type": "git",
@@ -27,7 +27,7 @@
     "build": "rnx-kit-scripts build",
     "format": "rnx-kit-scripts format",
     "lint": "rnx-kit-scripts lint",
-    "rnx-build": "node lib/index.js",
+    "rnx-build": "node lib/cli.js",
     "test": "rnx-kit-scripts test"
   },
   "dependencies": {
