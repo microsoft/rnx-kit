@@ -16,7 +16,6 @@ export type { GetKitConfigOptions } from "./getKitConfig";
 export type {
   Capability,
   DependencyVersions,
-  GenericConfig,
   GetDependencyVersions,
   KitConfig,
   KitType,

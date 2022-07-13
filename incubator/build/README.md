@@ -118,6 +118,13 @@ example:
 }
 ```
 
+Next, you need to
+[generate a token for Firebase CLI](https://firebase.google.com/docs/cli/#cli-ci-systems),
+and store it as a secret, `FIREBASE_TOKEN`, on your project host.
+
+If you're using GitHub, you should store it as an encrypted secret:
+https://docs.github.com/en/actions/security-guides/encrypted-secrets
+
 ## Assumptions
 
 ### Folder Structure

@@ -16,7 +16,7 @@ export type BuildParams = {
 };
 
 export type JSObject = {
-  [key: string]: string | number | boolean | JSObject;
+  [key: string]: string | number | boolean | JSObject | JSObject[];
 };
 
 export type RepositoryInfo = {
@@ -42,7 +42,7 @@ export type Distribution = {
   ) => Promise<void>;
   getConfigString: (
     platform: Platform,
-    config: JSObject | undefined
+    config: JSObject | null | undefined
   ) => Promise<string>;
 };
 

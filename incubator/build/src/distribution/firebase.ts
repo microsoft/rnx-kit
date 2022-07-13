@@ -24,7 +24,7 @@ export function deploy(
 
 export function getConfigString(
   platform: Platform,
-  config: Partial<FirebaseConfig> | undefined
+  config: Partial<FirebaseConfig> | null | undefined
 ): Promise<string> {
   if (!config) {
     throw new Error("Missing Firebase configuration");
