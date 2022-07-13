@@ -14,5 +14,6 @@ export function renderBarcode(url: string, spinner: Ora): void {
     console.log(qr);
     console.log(POINT_UP);
     spinner.info(TEXT);
+    spinner.info(`or use a web browser to open ${url}`);
   });
 }
