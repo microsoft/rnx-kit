@@ -4,8 +4,8 @@ import type { DEPLOYMENT, DEVICE_TYPES, PLATFORMS } from "./constants";
 // This type is only used in a comment. JSDoc currently does not support
 // importing types, but we can work around this limitation by importing and
 // re-exporting it: https://github.com/microsoft/TypeScript/issues/43950
-import type { renderQRcode } from "./qrcode";
-export type { renderQRcode };
+import type { renderQRCode } from "./qrcode";
+export type { renderQRCode };
 
 export type Deployment = typeof DEPLOYMENT[number];
 export type DeviceType = typeof DEVICE_TYPES[number];
@@ -44,7 +44,7 @@ export type DistributionPlugin = {
   /**
    * Deploys app to device.
    *
-   * If the app can be downloaded, use {@link renderQRcode} to render a QR code
+   * If the app can be downloaded, use {@link renderQRCode} to render a QR code
    * in the terminal.
    *
    * @param context Context and parameters for the current build

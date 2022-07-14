@@ -1,4 +1,4 @@
-export { renderQRcode } from "./qrcode";
+export { renderQRCode } from "./qrcode";
 export type {
   BuildParams,
   Context,

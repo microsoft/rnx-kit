@@ -1,4 +1,4 @@
-import { renderQRcode } from "@rnx-kit/build";
+import { renderQRCode } from "@rnx-kit/build";
 import type { DistributionPlugin, Platform } from "@rnx-kit/build";
 
 type FirebaseConfig = {
@@ -16,7 +16,7 @@ module.exports = (config: Partial<FirebaseConfig>): DistributionPlugin => {
        */
       const url =
         "https://console.firebase.google.com/project/_/appdistribution";
-      renderQRcode(url, spinner);
+      renderQRCode(url, spinner);
       return Promise.resolve();
     },
     getConfigString: (platform) => {
