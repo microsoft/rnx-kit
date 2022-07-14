@@ -209,7 +209,7 @@ export function getRepositoryInfo(
   upstream = "origin"
 ): RepositoryInfo | undefined {
   const remoteUrl = getRemoteUrl(upstream);
-  const m = remoteUrl.match(/github.com[/:](.*?)\/(.*?)(?:\.git)?/);
+  const m = remoteUrl.match(/github\.com[\/:](.*?)\/(.*?)(?:\.git)?$/);
   if (!m) {
     return undefined;
   }
