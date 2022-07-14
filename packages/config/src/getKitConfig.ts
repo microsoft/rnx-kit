@@ -3,7 +3,7 @@ import { readPackage } from "@rnx-kit/tools-node";
 import { KitConfig } from "./kitConfig";
 
 /**
- * Options for retrieving a kit config. The default is equivalanet to passing { cwd: process.cwd() }
+ * Options for retrieving a kit config. The default is equivalent to passing { cwd: process.cwd() }
  */
 export type GetKitConfigOptions = {
   /**

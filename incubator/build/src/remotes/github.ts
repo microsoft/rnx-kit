@@ -294,6 +294,10 @@ export async function build(
     return null;
   }
 
+  if (inputs.distribution !== "local") {
+    return inputs.distribution;
+  }
+
   spinner.start("Downloading build artifact");
   const artifactFile = await downloadArtifact(workflowRunId, inputs);
   spinner.succeed(`Build artifact saved to ${artifactFile}`);

@@ -4,24 +4,17 @@ import type { Options } from "yargs";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 import { startBuild } from "./build";
+import { DEPLOYMENT, DEVICE_TYPES, PLATFORMS } from "./constants";
+import { getDistributionConfig } from "./distribution";
 import { getRepositoryRoot } from "./git";
 import { detectPackageManager } from "./packageManager";
-import * as github from "./remotes/github";
-import type { DeviceType, Platform, Remote, RepositoryInfo } from "./types";
+import { getRemoteInfo } from "./remotes";
+import type { DeviceType, Platform } from "./types";
 
 type RequiredOptionInferenceHelper<T> = Options & {
-  choices: T[];
+  choices: ReadonlyArray<T>;
   required: true;
 };
-
-function getRemoteInfo(): [Remote, RepositoryInfo] {
-  const githubRepo = github.getRepositoryInfo();
-  if (githubRepo) {
-    return [github, githubRepo];
-  }
-
-  throw new Error("Unsupported repository");
-}
 
 async function main(): Promise<void> {
   const [remote, repoInfo] = getRemoteInfo();
@@ -30,40 +23,45 @@ async function main(): Promise<void> {
     return;
   }
 
-  const deviceTypes: DeviceType[] = ["device", "emulator", "simulator"];
-  const packageManager = await detectPackageManager();
+  const detectedPackageManager = await detectPackageManager();
+  const projectRootOption = {
+    type: "string",
+    description: "Root of project",
+    default: pkgDir.sync() || process.cwd(),
+  } as const;
 
   const argv = yargs(hideBin(process.argv))
+    .command("$0 [project-root]", "Build your app in the cloud", (yargs) => {
+      yargs.positional("project-root", projectRootOption);
+    })
     .option<"platform", RequiredOptionInferenceHelper<Platform>>("platform", {
       alias: "p",
       type: "string",
       description: "Target platform to build for",
-      choices: ["android", "ios", "macos", "windows"],
+      choices: PLATFORMS,
       required: true,
+    })
+    .option("deploy", {
+      type: "string",
+      description: "Where builds should be deployed from",
+      choices: DEPLOYMENT,
+      default: DEPLOYMENT[0],
     })
     .option("device-type", {
       type: "string",
-      description: "Target device type",
-      choices: deviceTypes,
+      description:
+        "Target device type; `emulator`/`simulator` implies `--deploy local`",
+      choices: DEVICE_TYPES,
       default: "simulator" as DeviceType,
     })
     .option("package-manager", {
       type: "string",
       description:
         "Binary name of the package manager used in the current repo",
-      default: packageManager,
-      required: !packageManager,
+      default: detectedPackageManager,
+      required: !detectedPackageManager,
     })
-    .option("project-root", {
-      type: "string",
-      description: "Root of project",
-      default: pkgDir.sync() || process.cwd(),
-      coerce: (value) => {
-        // `projectRoot` needs to be relative to repository root
-        const repoRoot = getRepositoryRoot();
-        return path.relative(repoRoot, path.resolve(process.cwd(), value));
-      },
-    })
+    .option("project-root", projectRootOption)
     .option("scheme", {
       type: "string",
       description: "The workspace scheme to build (iOS and macOS only)",
@@ -71,12 +69,32 @@ async function main(): Promise<void> {
     })
     .strict().argv;
 
-  process.exitCode = await startBuild(remote, repoInfo, {
-    deviceType: argv["device-type"],
-    packageManager: argv["package-manager"] || "npm",
-    platform: argv.platform,
-    projectRoot: argv["project-root"],
-    scheme: argv.scheme,
+  const {
+    deploy,
+    "device-type": deviceType,
+    "package-manager": packageManager,
+    platform,
+    "project-root": projectRoot,
+    scheme,
+  } = argv;
+
+  const [distImpl, distribution] = await getDistributionConfig(
+    deviceType === "device" ? deploy : "local",
+    platform,
+    projectRoot
+  );
+
+  process.exitCode = await startBuild(remote, distImpl, repoInfo, {
+    deviceType,
+    distribution,
+    packageManager: packageManager || "npm",
+    platform,
+    // `projectRoot` needs to be relative to repository root
+    projectRoot: path.relative(
+      getRepositoryRoot(),
+      path.resolve(process.cwd(), projectRoot)
+    ),
+    scheme,
   });
 }
 
