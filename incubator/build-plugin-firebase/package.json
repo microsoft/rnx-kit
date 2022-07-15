@@ -25,7 +25,7 @@
     "lint": "rnx-kit-scripts lint"
   },
   "peerDependencies": {
-    "@rnx-kit/build": "*"
+    "@rnx-kit/build": ">=0.3.0"
   },
   "devDependencies": {
     "@rnx-kit/build": "*",
