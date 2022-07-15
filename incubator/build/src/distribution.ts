@@ -14,7 +14,7 @@ function loadPlugin(
   [plugin, pluginConfig]: Partial<Plugin>,
   projectRoot: string
 ): Promise<DistributionPlugin> {
-  if (deployment === "auto" && typeof plugin === "string") {
+  if (deployment === "remote-first" && typeof plugin === "string") {
     const modulePath = require.resolve(plugin, { paths: [projectRoot] });
     return Promise.resolve(require(modulePath)(pluginConfig));
   }

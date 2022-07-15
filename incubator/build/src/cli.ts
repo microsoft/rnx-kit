@@ -50,7 +50,7 @@ async function main(): Promise<void> {
     .option("device-type", {
       type: "string",
       description:
-        "Target device type; `emulator`/`simulator` implies `--deploy local`",
+        "Target device type; `emulator`/`simulator` implies `--deploy local-only`",
       choices: DEVICE_TYPES,
       default: "simulator" as DeviceType,
     })
@@ -79,7 +79,7 @@ async function main(): Promise<void> {
   } = argv;
 
   const distribution = await getDistribution(
-    deviceType === "device" ? deploy : "local",
+    deviceType === "device" ? deploy : "local-only",
     projectRoot
   );
 
