@@ -82,7 +82,6 @@ changes to `metro.config.js`:
 +} = require("@rnx-kit/metro-serializer-esbuild");
 
  module.exports = makeMetroConfig({
-   projectRoot: __dirname,
 +  serializer: {
 +    customSerializer: MetroSerializer(),
 +  },
@@ -107,7 +106,6 @@ parameter. For instance, to output ES6 compliant code, set the target option:
 ```diff
  const myPlugins = [...];
  module.exports = makeMetroConfig({
-   projectRoot: __dirname,
    serializer: {
      customSerializer: MetroSerializer(myPlugins, {
 +      target: "es6"
