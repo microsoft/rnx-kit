@@ -27,7 +27,14 @@ module.exports = {
 const { makeMetroConfig } = require("@rnx-kit/metro-config");
 
 module.exports = makeMetroConfig({
-  projectRoot: __dirname,
+  transformer: {
+    getTransformOptions: async () => ({
+      transform: {
+        experimentalImportSupport: false,
+        inlineRequires: true,
+      },
+    }),
+  },
 });
 ```
 
@@ -152,7 +159,6 @@ const additionalExclusions = [msalExcludePattern];
 const blockList = exclusionList(additionalExclusions);
 
 module.exports = makeMetroConfig({
-  projectRoot: __dirname,
   resolver: {
     extraNodeModules: {
       "react-native-msal": msalPath,
@@ -214,7 +220,6 @@ const blockList = exclusionList([
 ]);
 
 module.exports = makeMetroConfig({
-  projectRoot: __dirname,
   resolver: {
     blacklistRE: blockList, // For Metro < 0.60
     blockList, // For Metro >= 0.60
@@ -240,7 +245,7 @@ const { makeMetroConfig } = require("@rnx-kit/metro-config");
 const fs = require("fs");
 const path = require("path");
 
-const config = makeMetroConfig({ projectRoot: __dirname });
+const config = makeMetroConfig();
 
 module.exports = {
   ...config,
