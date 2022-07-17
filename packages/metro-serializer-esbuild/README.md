@@ -71,6 +71,15 @@ If you're using `@rnx-kit/babel-preset-metro-react-native`, you can instead set
  };
 ```
 
+> Note that Hermes currently does not fully implement the
+> [ES6 spec](https://kangax.github.io/compat-table/es6/). esbuild, on the other
+> hand, does not fully support
+> [lowering to ES5](https://github.com/evanw/esbuild/issues/297). This
+> essentially means that you may have to add additional plugins if you're seeing
+> esbuild outputting "target environment is not supported yet" errors during
+> bundle. For an example, see the error and its solution in
+> [#1743](https://github.com/microsoft/rnx-kit/issues/1743).
+
 Next, configure Metro to use the esbuild serializer by making the following
 changes to `metro.config.js`:
 
@@ -115,7 +124,7 @@ parameter. For instance, to output ES6 compliant code, set the target option:
  });
 ```
 
-Below is all the currently supported options.
+Below are all the currently supported options.
 
 ### `fabric`
 
