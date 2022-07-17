@@ -3,14 +3,14 @@ import { once } from "./async";
 import { deleteBranch, pushCurrentChanges } from "./git";
 import type {
   BuildParams,
-  Distribution,
+  DistributionPlugin,
   Remote,
   RepositoryInfo,
 } from "./types";
 
 export async function startBuild(
   remote: Remote,
-  distribution: Distribution,
+  distribution: DistributionPlugin,
   repoInfo: RepositoryInfo,
   inputs: BuildParams
 ): Promise<number> {
@@ -51,7 +51,7 @@ export async function startBuild(
       return 1;
     }
 
-    await distribution.deploy(artifact, inputs, spinner);
+    await distribution.deploy({ ...context, ...inputs }, artifact, spinner);
   } catch (e) {
     spinner.fail();
     await cleanUp();

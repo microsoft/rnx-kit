@@ -1,37 +1,33 @@
 import { getKitConfig } from "@rnx-kit/config";
-import type { Deployment, Distribution, JSObject, Platform } from "./types";
+import type { Deployment, DistributionPlugin, JSObject } from "./types";
+
+type Plugin = [string, JSObject];
 
 type DraftKitConfig = ReturnType<typeof getKitConfig> & {
   build?: {
-    distribution: {
-      service: string;
-    } & JSObject;
+    distribution?: Plugin;
   };
 };
 
-function getDistribution(
+function loadPlugin(
   deployment: Deployment,
-  service: string | number | boolean | undefined
-): Promise<Distribution> {
-  if (deployment === "autodetect") {
-    switch (service) {
-      case "firebase": {
-        return import("./distribution/firebase");
-      }
-    }
+  [plugin, pluginConfig]: Partial<Plugin>,
+  projectRoot: string
+): Promise<DistributionPlugin> {
+  if (deployment === "remote-first" && typeof plugin === "string") {
+    const modulePath = require.resolve(plugin, { paths: [projectRoot] });
+    return Promise.resolve(require(modulePath)(pluginConfig));
   }
 
   return import("./distribution/local");
 }
 
-export async function getDistributionConfig(
+export function getDistribution(
   deployment: Deployment,
-  platform: Platform,
   projectRoot: string
-): Promise<[Distribution, string]> {
+): Promise<DistributionPlugin> {
   const kitConfig = getKitConfig({ cwd: projectRoot }) as DraftKitConfig;
   const distConfig = kitConfig?.build?.distribution;
-  const dist = await getDistribution(deployment, distConfig?.service);
-  const config = await dist.getConfigString(platform, distConfig);
-  return [dist, config];
+  const plugin: Partial<Plugin> = Array.isArray(distConfig) ? distConfig : [];
+  return loadPlugin(deployment, plugin, projectRoot);
 }

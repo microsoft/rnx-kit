@@ -7,7 +7,7 @@ const POINT_UP =
   "  ↑    ↑    ↑    ↑    ↑    ↑    ↑    ↑    ↑    ↑    ↑    ↑    ↑    ↑";
 const TEXT = "Scan the QR code to download your app";
 
-export function renderBarcode(url: string, spinner: Ora): void {
+export function renderQRCode(url: string, spinner: Ora): void {
   qrcode.toString(url, { type: "terminal" }, (_err, qr) => {
     spinner.info(TEXT);
     console.log(POINT_DOWN);

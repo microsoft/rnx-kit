@@ -9,6 +9,6 @@ export const CONFIG_DIR = envPaths(BUILD_ID).config;
 export const USER_CONFIG_FILE = path.join(CONFIG_DIR, "config.json");
 export const WORKFLOW_ID = BUILD_ID + ".yml";
 
-export const DEPLOYMENT = ["autodetect", "local"] as const;
+export const DEPLOYMENT = ["remote-first", "local-only"] as const;
 export const DEVICE_TYPES = ["device", "emulator", "simulator"] as const;
 export const PLATFORMS = ["android", "ios", "macos", "windows"] as const;

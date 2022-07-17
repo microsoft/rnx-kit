@@ -208,13 +208,16 @@ async function watchWorkflowRun(
 export function getRepositoryInfo(
   upstream = "origin"
 ): RepositoryInfo | undefined {
-  const remoteUrl = getRemoteUrl(upstream);
-  const m = remoteUrl.match(/github.com[/:](.*?)\/(.*?)\.git/);
-  if (!m) {
+  const remoteUrl = getRemoteUrl(upstream).split(/[/:]/).slice(-3);
+  if (remoteUrl.length !== 3 || !remoteUrl[0].endsWith("github.com")) {
     return undefined;
   }
 
-  return { owner: m[1], repo: m[2] };
+  const repo = remoteUrl[2];
+  return {
+    owner: remoteUrl[1],
+    repo: repo.endsWith(".git") ? repo.substring(0, repo.length - 4) : repo,
+  };
 }
 
 export async function install(): Promise<number> {
