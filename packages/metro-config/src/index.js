@@ -85,7 +85,7 @@ function resolveUniqueModule(packageName, searchStartDir) {
   // - path/to/node_modules/@babel/runtime
   // - path/to/node_modules/prop-types
   const owningDir = path.dirname(result.slice(0, -packageName.length));
-  const escapedPath = owningDir.replace(/\\/g, "\\\\");
+  const escapedPath = owningDir.replace(/[+.\\]/g, "\\$&");
   const escapedPackageName = path.normalize(packageName).replace(/\\/g, "\\\\");
 
   const exclusionRE = new RegExp(

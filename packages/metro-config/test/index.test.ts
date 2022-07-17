@@ -154,6 +154,15 @@ describe("@rnx-kit/metro-config", () => {
     );
   });
 
+  test("resolveUniqueModule() escapes characters clashing with regex tokens", () => {
+    const repo = fixturePath("pnpm-repo");
+    const [rnPath, rnExclude] = resolveUniqueModule("react-native", repo);
+    expect(rnPath).toMatch(
+      /__fixtures__[/\\]pnpm-repo[/\\]node_modules[/\\]\.pnpm[/\\]github\.com\+facebook\+react-native@72e1eda0736d34d027e4d4b1c3cace529ab5dcf3_react@17\.0\.2[/\\]node_modules[/\\]react-native$/
+    );
+    expect(rnExclude.test(path.join(rnPath, "package.json"))).toBeFalsy();
+  });
+
   test("exclusionList() ignores extra copies of react and react-native", () => {
     const repo = fixturePath("awesome-repo");
     const reactCopy = path.join(repo, "node_modules", "react", "package.json");
