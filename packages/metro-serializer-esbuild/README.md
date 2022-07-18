@@ -71,6 +71,15 @@ If you're using `@rnx-kit/babel-preset-metro-react-native`, you can instead set
  };
 ```
 
+> Note that Hermes currently does not fully implement the
+> [ES6 spec](https://kangax.github.io/compat-table/es6/). esbuild, on the other
+> hand, does not fully support
+> [lowering to ES5](https://github.com/evanw/esbuild/issues/297). This
+> essentially means that you may have to add additional plugins if you're seeing
+> esbuild outputting "target environment is not supported yet" errors during
+> bundle. For an example, see the error and its solution in
+> [#1743](https://github.com/microsoft/rnx-kit/issues/1743).
+
 Next, configure Metro to use the esbuild serializer by making the following
 changes to `metro.config.js`:
 
@@ -82,7 +91,6 @@ changes to `metro.config.js`:
 +} = require("@rnx-kit/metro-serializer-esbuild");
 
  module.exports = makeMetroConfig({
-   projectRoot: __dirname,
 +  serializer: {
 +    customSerializer: MetroSerializer(),
 +  },
@@ -95,6 +103,74 @@ We can now create a bundle as usual, e.g.:
 ```sh
 react-native bundle --entry-file index.js --platform ios --dev false ...
 ```
+
+## Options
+
+Similar to
+[`metro-serializer`](https://github.com/microsoft/rnx-kit/tree/main/packages/metro-serializer#usage),
+`metro-serializer-esbuild` also supports plugins. Additionally, you can
+configure the output of the plugin by passing an options object as the second
+parameter. For instance, to output ES6 compliant code, set the target option:
+
+```diff
+ const myPlugins = [...];
+ module.exports = makeMetroConfig({
+   serializer: {
+     customSerializer: MetroSerializer(myPlugins, {
++      target: "es6"
+     }),
+   },
+   transformer: esbuildTransformerConfig,
+ });
+```
+
+Below are all the currently supported options.
+
+### `fabric`
+
+When enabled, includes Fabric-enabled version of React. You can save some bytes
+by disabling this if you haven't migrated to Fabric yet.
+
+Defaults to `false`.
+
+### `minify`
+
+When enabled, the generated code will be minified instead of pretty-printed.
+
+See the full documentation at https://esbuild.github.io/api/#minify.
+
+Defaults to `true` in production environment; `false` otherwise.
+
+### `target`
+
+Sets the target environment for the transpiled JavaScript code.
+
+See the full documentation at https://esbuild.github.io/api/#target.
+
+Values: Any JS language version string such as `es5` or `es2015`. You can also
+use environment names. See the full documentation for a list of supported names.
+
+Defaults to `es5`.
+
+### `analyze`
+
+Sets whether esbuild should output a report at the end of bundling.
+
+See the full documentation at https://esbuild.github.io/api/#analyze.
+
+Values: `false` | `true` | `verbose`
+
+Defaults to `false`.
+
+### `logLevel`
+
+The log level passed to esbuild.
+
+See the full documentation at https://esbuild.github.io/api/#log-level
+
+Values: `verbose` | `debug` | `info` | `warning` | `error` | `silent`
+
+Defaults to `warning`.
 
 ## Known Limitations
 
