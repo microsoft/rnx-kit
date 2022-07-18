@@ -1,5 +1,15 @@
 # @rnx-kit/build
 
+## 0.3.0
+
+### Minor Changes
+
+- cca36af2: Implemented plugin system for app distribution
+
+### Patch Changes
+
+- a99b7969: Added support for distributing builds via [Firebase App Distribution](https://firebase.google.com/products/app-distribution)
+
 ## 0.2.0
 
 ### Minor Changes
