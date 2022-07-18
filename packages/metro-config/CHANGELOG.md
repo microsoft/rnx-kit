@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-config
 
+## 1.2.35
+
+### Patch Changes
+
+- 54edf48a: Fixed react-native not being found when using pnpm and GitHub URLs
+
 ## 1.2.34
 
 ### Patch Changes
