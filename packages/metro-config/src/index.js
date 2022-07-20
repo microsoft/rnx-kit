@@ -89,7 +89,7 @@ function resolveUniqueModule(packageName, searchStartDir) {
   const escapedPackageName = path.normalize(packageName).replace(/\\/g, "\\\\");
 
   const exclusionRE = new RegExp(
-    `(?<!${escapedPath})[/\\\\]node_modules[/\\\\]${escapedPackageName}[/\\\\].*`
+    `(?<!${escapedPath})\\${path.sep}node_modules\\${path.sep}${escapedPackageName}\\${path.sep}.*`
   );
   return [result, exclusionRE];
 }
