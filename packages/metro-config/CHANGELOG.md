@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-config
 
+## 1.2.36
+
+### Patch Changes
+
+- c0393431: Fixed invalid regular expression on Windows
+
 ## 1.2.35
 
 ### Patch Changes
