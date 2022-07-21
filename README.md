@@ -36,3 +36,6 @@ suggestions!
 Take a look at
 [CONTRIBUTING](https://github.com/microsoft/rnx-kit/tree/main/CONTRIBUTING.md)
 for details.
+
+If you are interested in proposing "substantial" changes, please refer to our
+[RFC process](https://github.com/microsoft/rnx-kit/tree/rfcs).
