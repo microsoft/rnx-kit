@@ -1,1 +1,5 @@
 blank_issues_enabled: true
+contact_links:
+    - name: 📝 Request For Comments (RFC)
+      url: https://github.com/microsoft/rnx-kit/tree/rfcs
+      about: For proposals that can introduce "substantial" changes to rnx-kit, please follow our RFC process.
