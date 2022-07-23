@@ -147,10 +147,10 @@ Sets the target environment for the transpiled JavaScript code.
 
 See the full documentation at https://esbuild.github.io/api/#target.
 
-Values: Any JS language version string such as `es5` or `es2015`. You can also
+Values: Any JS language version string such as `es6` or `esnext`. You can also
 use environment names. See the full documentation for a list of supported names.
 
-Defaults to `es5`.
+Defaults to `hermes0.7.0`.
 
 ### `analyze`
 

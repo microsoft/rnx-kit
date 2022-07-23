@@ -296,10 +296,12 @@ export function MetroSerializer(
         plugins,
         sourcemap: "external",
 
-        // To ensure that Hermes is able to consume this bundle, we must target
-        // ES5. Hermes is missing a bunch of ES6 features, such as block scoping
-        // (see https://github.com/facebook/hermes/issues/575).
-        target: buildOptions?.target ?? "es5",
+        // Hermes only implements select ES6 features and is missing others like
+        // block scoping (https://github.com/facebook/hermes/issues/575). As of
+        // esbuild 0.14.49, we can use the `hermes` target instead of `es5`.
+        // Note that this target is somewhat conservative and may require
+        // additional Babel plugins.
+        target: buildOptions?.target ?? "hermes0.7.0",
 
         write: false,
       })
