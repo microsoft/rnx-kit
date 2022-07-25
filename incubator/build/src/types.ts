@@ -12,6 +12,7 @@ export type DeviceType = typeof DEVICE_TYPES[number];
 export type Platform = typeof PLATFORMS[number];
 
 export type BuildParams = {
+  architecture: string;
   platform: Platform;
   deviceType: DeviceType;
   distribution: string;

@@ -120,10 +120,11 @@ jobs:
             code_signing=''
           else
             destination='generic/platform=iOS Simulator'
+            archs='ARCHS=${{ github.event.inputs.architecture }}'
             code_signing='CODE_SIGNING_ALLOWED=NO'
           fi
           xcworkspace=$(find . -maxdepth 1 -name '*.xcworkspace' -type d | head -1)
-          xcodebuild -workspace ${xcworkspace} -scheme ${{ github.event.inputs.scheme }} -destination "${destination}" -configuration Debug -derivedDataPath DerivedData -archivePath ${XCARCHIVE_FILE} ${code_signing} COMPILER_INDEX_STORE_ENABLE=NO archive
+          xcodebuild -workspace ${xcworkspace} -scheme ${{ github.event.inputs.scheme }} -destination "${destination}" -configuration Debug -derivedDataPath DerivedData -archivePath ${XCARCHIVE_FILE} ${archs} ${code_signing} COMPILER_INDEX_STORE_ENABLE=NO archive
         working-directory: ${{ github.event.inputs.projectRoot }}/ios
       - name: Remove Apple signing certificate and provisioning profile
         if: ${{ always() && github.event.inputs.deviceType == 'device' }}

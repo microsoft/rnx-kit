@@ -41,6 +41,11 @@ async function main(): Promise<void> {
       choices: PLATFORMS,
       required: true,
     })
+    .option("architecture", {
+      type: "string",
+      description: "CPU architecture of the machine running the app",
+      default: process.arch,
+    })
     .option("deploy", {
       type: "string",
       description: "Where builds should be deployed from",
@@ -70,6 +75,7 @@ async function main(): Promise<void> {
     .strict().argv;
 
   const {
+    architecture,
     deploy,
     "device-type": deviceType,
     "package-manager": packageManager,
@@ -84,6 +90,7 @@ async function main(): Promise<void> {
   );
 
   process.exitCode = await startBuild(remote, distribution, repoInfo, {
+    architecture,
     deviceType,
     distribution: await distribution.getConfigString(platform),
     packageManager: packageManager || "npm",
