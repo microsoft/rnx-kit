@@ -41,7 +41,7 @@
     "@types/semver": "^7.0.0",
     "@types/yargs": "^16.0.0",
     "chalk": "^4.1.0",
-    "detect-indent": "^6.0.0",
+    "detect-indent": "^7.0.0",
     "jest-diff": "^26.0.0",
     "lodash": "^4.17.21",
     "markdown-table": "^2.0.0",
