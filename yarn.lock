@@ -13320,9 +13320,9 @@ react-native-web@0.17.7:
     prop-types "^15.6.0"
 
 react-native-windows@^0.68.0:
-  version "0.68.8"
-  resolved "https://registry.yarnpkg.com/react-native-windows/-/react-native-windows-0.68.8.tgz#e4121181dc72e6c4e329f01c67b30a9781d8adb9"
-  integrity sha512-Bapg6TCeQzjweWW5nnBy/tsD7rj6DvcnrAN7OJCnnF6fJ8nlxYyU8kNFiZDKreR2PkdCeeZ8blBm/SETK+kMGg==
+  version "0.68.9"
+  resolved "https://registry.yarnpkg.com/react-native-windows/-/react-native-windows-0.68.9.tgz#154364a1a1be7f4e68d67537251663c236133e47"
+  integrity sha512-TVxtZ3ACoTRizYMexPqv0wNHRwu4jvTsfAZc1BnKn9B3yMZUkqL1wBB202yL/6+/++myJVmOAACtWbAKMcqaWA==
   dependencies:
     "@babel/runtime" "^7.0.0"
     "@jest/create-cache-key-function" "^27.0.1"
