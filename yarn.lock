@@ -2831,9 +2831,9 @@
   integrity sha512-xsgA7LKuQ/2QReMZQXNlBP68ferPlqw66Jmx5/J399Cn5EgIDaHXou6Rgn1GkpDNjkPji67fTlC2rz6ABaVFKw==
 
 "@octokit/plugin-rest-endpoint-methods@^6.0.0":
-  version "6.1.0"
-  resolved "https://registry.yarnpkg.com/@octokit/plugin-rest-endpoint-methods/-/plugin-rest-endpoint-methods-6.1.0.tgz#64804122e6bb93d4165a56cdcfc8bab1143d3d9f"
-  integrity sha512-gP/yHUY0k/uKkEqXF6tZGRhCFqZNjQ0qdh9/gVo74AJ2pc3cr1rjnW/KRw1uXUKB/H9Y0rRBCBxsLXJmQjPv3A==
+  version "6.1.2"
+  resolved "https://registry.yarnpkg.com/@octokit/plugin-rest-endpoint-methods/-/plugin-rest-endpoint-methods-6.1.2.tgz#bbf55cfc43acf177514441ecd1d26031006f73ed"
+  integrity sha512-sAfSKtLHNq0UQ2iFuI41I6m5SK6bnKFRJ5kUjDRVbmQXiRVi4aQiIcgG4cM7bt+bhSiWL4HwnTxDkWFlKeKClA==
   dependencies:
     "@octokit/types" "^6.40.0"
     deprecation "^2.3.1"
