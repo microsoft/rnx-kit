@@ -43,7 +43,7 @@
     "@babel/core": "^7.12.9",
     "@rnx-kit/scripts": "*",
     "@types/react": "~17.0.21",
-    "@types/react-native": "~0.66.13",
+    "@types/react-native": "~0.68.0",
     "jest": "^27.0.0",
     "jest-expo": "~45.0.0",
     "mkdirp": "^1.0.4",
