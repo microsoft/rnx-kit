@@ -1,5 +1,11 @@
 # @rnx-kit/react-native-auth
 
+## 0.1.4
+
+### Patch Changes
+
+- 203f327c: Depend on an explicit version of Kotlin Android plugin using the [plugins DSL](https://docs.gradle.org/current/userguide/plugins.html#sec:plugins_block)
+
 ## 0.1.3
 
 ### Patch Changes
