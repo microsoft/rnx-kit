@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/dep-check
 
+## 1.12.19
+
+### Patch Changes
+
+- ac77ec69: Bump for a build with latest @rnx-kit dependencies
+
 ## 1.12.18
 
 ### Patch Changes

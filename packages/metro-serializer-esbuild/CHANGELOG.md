@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-serializer-esbuild
 
+## 0.1.10
+
+### Patch Changes
+
+- 8c325887: Default to the new `hermes` target (retry)
+
 ## 0.1.9
 
 ### Patch Changes

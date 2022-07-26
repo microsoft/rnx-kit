@@ -1,5 +1,11 @@
 # @rnx-kit/build
 
+## 0.3.1
+
+### Patch Changes
+
+- f495c8af: Added support for Apple M1
+
 ## 0.3.0
 
 ### Minor Changes
