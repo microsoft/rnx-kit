@@ -37,6 +37,11 @@ const profile: Profile = {
     version: "^0.69.0",
     capabilities: ["core"],
   },
+
+  animation: {
+    name: "react-native-reanimated",
+    version: "^2.9.0",
+  },
   "babel-preset-react-native": {
     name: "metro-react-native-babel-preset",
     version: "^0.70.3",
@@ -45,6 +50,10 @@ const profile: Profile = {
   gestures: {
     name: "react-native-gesture-handler",
     version: "^2.4.2",
+  },
+  "masked-view": {
+    name: "@react-native-masked-view/masked-view",
+    version: "^0.2.7",
   },
   metro: {
     name: "metro",
@@ -88,9 +97,17 @@ const profile: Profile = {
     name: "react-native-safe-area-context",
     version: "^4.3.1",
   },
+  screens: {
+    name: "react-native-screens",
+    version: "^3.14.1",
+  },
   sqlite: {
     name: "react-native-sqlite-storage",
     version: "^6.0.1",
+  },
+  storage: {
+    name: "@react-native-async-storage/async-storage",
+    version: "^1.17.7",
   },
   "test-app": {
     name: "react-native-test-app",
@@ -99,7 +116,7 @@ const profile: Profile = {
   },
   webview: {
     name: "react-native-webview",
-    version: "^11.22.2",
+    version: "^11.23.0",
   },
 };
 

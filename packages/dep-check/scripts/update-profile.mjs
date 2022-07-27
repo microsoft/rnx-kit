@@ -230,11 +230,25 @@ async function makeProfile(preset, targetVersion, latestProfile) {
     "@react-native-community/cli",
     "@react-native-community/cli-plugin-metro",
   ].reduce(async (dependencies, packageName) => {
-    const packageInfo = await pacote.manifest(packageName, {
-      defaultTag: getPackageVersion(packageName, await dependencies),
-      fullMetadata: true,
-    });
-    return packageInfo.dependencies;
+    try {
+      const packageInfo = await pacote.manifest(packageName, {
+        defaultTag: getPackageVersion(packageName, await dependencies),
+        fullMetadata: true,
+      });
+      return packageInfo.dependencies;
+    } catch (e) {
+      if (e.code === "ETARGET") {
+        // Some packages, such as `@react-native-community/cli`, are still in
+        // alpha or beta while react-native RCs. Try again with the `next` tag.
+        const packageInfo = await pacote.manifest(packageName, {
+          defaultTag: "next",
+          fullMetadata: true,
+        });
+        return packageInfo.dependencies;
+      } else {
+        throw e;
+      }
+    }
   }, Promise.resolve(dependencies));
 
   return generateFromTemplate({
@@ -308,16 +322,39 @@ async function main({
     }
   }
 
+  const ignoredCapabilities = [
+    "babel-preset-react-native",
+    "core",
+    "core-android",
+    "core-ios",
+    "core-macos",
+    "core-windows",
+    "hermes",
+    "metro",
+    "metro-config",
+    "metro-core",
+    "metro-react-native-babel-transformer",
+    "metro-resolver",
+    "metro-runtime",
+    "react",
+    "react-dom",
+    "react-test-renderer",
+  ];
+
   /** @type {Record<string, PackageInfo>} */
   const delta = {};
   await Promise.all(
-    Object.entries(latestProfile).map(async ([capability, pkg]) => {
-      await fetchPackageInfo(pkg).then((info) => {
-        if (info) {
-          delta[capability] = info;
-        }
-      });
-    })
+    Object.entries(latestProfile)
+      .filter(([capability]) => {
+        return !ignoredCapabilities.includes(capability);
+      })
+      .map(async ([capability, pkg]) => {
+        await fetchPackageInfo(pkg).then((info) => {
+          if (info) {
+            delta[capability] = info;
+          }
+        });
+      })
   );
 
   const table = markdownTable([

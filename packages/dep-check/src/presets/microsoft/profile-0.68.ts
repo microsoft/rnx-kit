@@ -48,6 +48,10 @@ const profile: Profile = {
     version: "^0.67.0",
     devOnly: true,
   },
+  clipboard: {
+    name: "@react-native-clipboard/clipboard",
+    version: "^1.10.0",
+  },
   "datetime-picker": {
     name: "@react-native-community/datetimepicker",
     version: "^6.0.2",
@@ -98,6 +102,10 @@ const profile: Profile = {
     name: "@react-native-async-storage/async-storage",
     version: "^1.17.3",
   },
+  svg: {
+    name: "react-native-svg",
+    version: "^12.3.0",
+  },
   "test-app": {
     name: "react-native-test-app",
     version: "^1.3.5",
@@ -105,7 +113,7 @@ const profile: Profile = {
   },
   webview: {
     name: "react-native-webview",
-    version: "^11.18.1",
+    version: "^11.22.6",
   },
 };
 
