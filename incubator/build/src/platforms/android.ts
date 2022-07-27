@@ -5,6 +5,7 @@ import * as path from "node:path";
 import type { Ora } from "ora";
 import { idle, retry } from "../async";
 import { ensure, makeCommand, makeCommandSync } from "../command";
+import { MAX_ATTEMPTS } from "../constants";
 import type { BuildParams } from "../types";
 import { latestVersion } from "../version";
 
@@ -130,7 +131,7 @@ async function launchEmulator(
   const result = await retry(async () => {
     const devices = await getDevices();
     return devices.find((device) => device.state === "device") || null;
-  }, 4);
+  }, MAX_ATTEMPTS);
   return result || new Error("Timed out waiting for the emulator");
 }
 
