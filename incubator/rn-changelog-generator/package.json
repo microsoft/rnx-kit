@@ -18,7 +18,7 @@
     "directory": "incubator/rn-changelog-generator"
   },
   "engines": {
-    "node": ">=14"
+    "node": ">=14.15"
   },
   "scripts": {
     "prepare": "echo '⚠️ rn-changelog-generator is EXPERIMENTAL - USE WITH CAUTION  ⚠️'",
