@@ -22,8 +22,7 @@
   "scripts": {
     "build": "rnx-kit-scripts build",
     "format": "rnx-kit-scripts format",
-    "lint": "rnx-kit-scripts lint",
-    "test": "rnx-kit-scripts test"
+    "lint": "rnx-kit-scripts lint"
   },
   "dependencies": {
     "find-up": "^5.0.0"
