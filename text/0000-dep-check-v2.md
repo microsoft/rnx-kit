@@ -17,14 +17,25 @@ have set a few goals for ourselves:
     [built-in one](https://github.com/microsoft/rnx-kit/blob/main/packages/dep-check/src/presets/microsoft/index.ts).
 - The old configuration scheme will still be supported and take precedence
 
+Aside from all these changes, we also want to rename it to separate it more from
+other existing tools such as [`depcheck`](https://github.com/depcheck/depcheck)
+(without the `-`).
+
+The current new name proposed is `align-deps`
+([npmjs search](https://www.npmjs.com/search?q=align-deps)). Feel free to
+discuss as part of this RFC if you have other preferences, as comments to this
+line. This was previously discussed in
+[this issue](https://github.com/microsoft/rnx-kit/issues/484).
+
 # Motivation
 
-While `dep-check` is a tech agnostic solution for managing dependencies, its
-configuration schema is currently very coupled with React Native versions. This
-makes the configuration look out of place when used in web only packages.
-Further, users have expressed a desire to centralize their configuration around
-arbitrary dependencies (e.g. `react` or `@fluentui/react` instead of
-`react-native`). They also want the ability to bring their own presets.
+While `dep-check` (now `align-deps`) is a tech agnostic solution for managing
+dependencies, its configuration schema is currently very coupled with React
+Native versions. This makes the configuration look out of place when used in web
+only packages. Further, users have expressed a desire to centralize their
+configuration around arbitrary dependencies (e.g. `react` or `@fluentui/react`
+instead of `react-native`). They also want the ability to bring their own
+presets.
 
 # Guide-level explanation
 
@@ -37,7 +48,7 @@ This is how the new config will live in a `package.json`:
     "bundle":{
         ...
     },
-    "dep-check": {
+    "align-deps": {
         "presets": [
           "microsoft",
           "/path/to/my-collection-of-multiple-profiles"
@@ -63,7 +74,7 @@ This is how the new config will live in a `package.json`:
 
 There are a few main differences with how the config exists currently:
 
-- the config livs within the `dep-check` section of the `rnx-kit` section (not
+- the config livs within the `align-deps` section of the `rnx-kit` section (not
   on its own on top level)
 - there's no more `reactNativeVersion` and `reactNativeDevVersion`, replaced by
   more generic `requirements` (see details in the next section)
@@ -85,7 +96,7 @@ For example, to ensure that all packages are aligned on React 18.x:
 
 ```json
 {
-  "dep-check": {
+  "align-deps": {
     "requirements": ["react@^18.0"]
   }
 }
@@ -96,7 +107,7 @@ for development:
 
 ```json
 {
-  "dep-check": {
+  "align-deps": {
     "requirements": {
       "development": ["react@^18.0"],
       "production": ["react@>=16.13"]
@@ -109,7 +120,7 @@ You can bring your own presets to enrich the built-in one:
 
 ```json
 {
-  "dep-check": {
+  "align-deps": {
     "presets": ["microsoft", "/path/to/my-collection-of-multiple-profiles"],
     "requirements": ["react@^18.0"]
   }
@@ -120,7 +131,7 @@ Or replace the built-in preset entirely:
 
 ```json
 {
-  "dep-check": {
+  "align-deps": {
     "presets": ["/path/to/my-collection-of-multiple-profiles"],
     "requirements": ["react@^18.0"]
   }
@@ -147,7 +158,7 @@ equivalent:
 
 ```json
 {
-  "dep-check": {
+  "align-deps": {
     "requirements": {
       "development": ["core@0.66"],
       "production": ["core@^0.66 || ^0.67 || ^0.68"]
@@ -163,10 +174,13 @@ it's indirect; in 2.0 we'll have a more straightforward approach of directly
 passing `presets` and `requirements` as options. It would look like this:
 
 ```sh
-yarn rnx-dep-check --presets /path/to/profile-1,/path/to/profile-2  --requirements react@^18.0
+yarn rnx-align-deps --presets /path/to/profile-1,/path/to/profile-2  --requirements react@^18.0
 ```
 
-(and if the user doesn't explicitly pass presets, it will use the default ones)
+Two notes:
+
+- the command will be renamed according to the new name
+- if the user doesn't explicitly pass presets, it will use the default ones
 
 ## A Note on Conflict Resolution
 
@@ -176,20 +190,20 @@ and React Native below 0.69:
 
 ```json
 {
-  "dep-check": {
+  "align-deps": {
     "requirements": ["core@<0.69", "react@^18.0"]
   }
 }
 ```
 
-In this case, `dep-check` will throw an error since the built-in preset cannot
+In this case, `align-deps` will throw an error since the built-in preset cannot
 fulfill the requirements. To resolve the conflict, we recommend that users move
 one of the requirements to the relevant packages. For instance:
 
 ```js
 // global config
 {
-  "dep-check": {
+  "align-deps": {
     "requirements": [
       "react@^18.0"
     ]
@@ -207,7 +221,7 @@ one of the requirements to the relevant packages. For instance:
 }
 ```
 
-In short, `dep-check` will not try to resolve conflicts. It is up to users to
+In short, `align-deps` will not try to resolve conflicts. It is up to users to
 build presets/profiles that fit their needs.
 
 # Drawbacks
@@ -215,6 +229,10 @@ build presets/profiles that fit their needs.
 Not many drawbacks, just the one-off cost for developers to migrate to the new
 shape. But given the footprint of the change, it's a few lines per each
 package.json so not a massive migration cost.
+
+Changing the name with the release will also help ensure that there's a clear
+cut transition to the new configuration, and reduce the risk of
+misconfiguration.
 
 # Rationale, alternatives, and prior art
 
@@ -231,6 +249,13 @@ We can then consider removing support for the old shape in a potential version
 
 We'll pair the rollout with a migration guide and a blogpost in the rnx-kit
 repo.
+
+Also, since we will rename the package, we should also do the following steps:
+
+1. Rename the `dep-check` to the new name
+2. Change the old `dep-check` package to wrap the new package with a warning
+   about the name change
+3. Delete `dep-check` as its usage number goes to zero
 
 # Unresolved questions
 
