@@ -156,6 +156,18 @@ equivalent:
 }
 ```
 
+## About commands
+
+For consistency sake, we will remove the existing `--vigilant` command since
+it's indirect; in 2.0 we'll have a more straightforward approach of directly
+passing `presets` and `requirements` as options. It would look like this:
+
+```sh
+yarn rnx-dep-check --presets /path/to/profile-1,/path/to/profile-2  --requirements react@^18.0
+```
+
+(and if the user doesn't explicitly pass presets, it will use the default ones)
+
 ## A Note on Conflict Resolution
 
 What happens in the case of conflicts? For instance, React Native is not
