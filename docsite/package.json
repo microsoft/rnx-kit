@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/docsite",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "private": true,
   "scripts": {
     "docusaurus": "docusaurus",

@@ -1,5 +1,11 @@
 # @rnx-kit/build
 
+## 0.3.2
+
+### Patch Changes
+
+- 95f54070: Increased timeout waiting for Android emulator to boot
+
 ## 0.3.1
 
 ### Patch Changes
