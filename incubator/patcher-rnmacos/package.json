@@ -21,7 +21,7 @@
     "directory": "incubator/patcher-rnmacos"
   },
   "engines": {
-    "node": ">=14"
+    "node": ">=14.15"
   },
   "scripts": {
     "prepare": "echo '⚠️ patcher-rnmacos is EXPERIMENTAL - USE WITH CAUTION  ⚠️'",
