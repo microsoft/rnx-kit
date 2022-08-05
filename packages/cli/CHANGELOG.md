@@ -1,5 +1,12 @@
 # Change Log - @rnx-kit/cli
 
+## 0.14.2
+
+### Patch Changes
+
+- Updated dependencies [93dda3ab]
+  - @rnx-kit/metro-service@3.0.0
+
 ## 0.14.1
 
 ### Patch Changes
