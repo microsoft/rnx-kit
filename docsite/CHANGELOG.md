@@ -1,5 +1,11 @@
 # @rnx-kit/docsite
 
+## 0.1.4
+
+### Patch Changes
+
+- a7d2ada2: update unified package
+
 ## 0.1.3
 
 ### Patch Changes
