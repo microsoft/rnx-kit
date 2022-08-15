@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-service
 
+## 3.0.0
+
+### Major Changes
+
+- 93dda3ab: Drop support for Node 10
+
 ## 2.0.1
 
 ### Patch Changes
