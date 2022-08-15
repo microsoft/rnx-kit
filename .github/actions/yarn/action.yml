@@ -4,6 +4,7 @@ inputs:
   working-directory:
     description: The working directory to use when running yarn
     type: string
+    default: .
 
 runs:
   using: composite

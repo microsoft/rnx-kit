@@ -24,7 +24,8 @@ jobs:
         run: yarn bundle
       - name: Install package dependencies (docsite)
         uses: ./.github/actions/yarn
-        working-directory: docsite
+        with:
+          working-directory: docsite
       - name: Build website
         run: yarn build
         working-directory: docsite
