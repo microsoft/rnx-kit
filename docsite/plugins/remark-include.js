@@ -8,7 +8,6 @@ const visit = require("unist-util-visit");
 const { isInclude, getIncludePath } = require("./util/include");
 const parseMdxToAst = require("./util/parseMdxToAst");
 const readVFile = require("./util/readVFile");
-const getDocusaurusMdxContext = require("./util/docusaurusMdxContext");
 
 /**
  * @typedef {import("unist").Node} UnistNode
@@ -51,8 +50,6 @@ function isMarkdownFile(file) {
  * MDXAST, replacing the include directive node.
  */
 function plugin() {
-  const { currentDir } = getDocusaurusMdxContext(this);
-
   return transform;
 
   /**
@@ -60,8 +57,9 @@ function plugin() {
    * the included file.
    *
    * @param {MdAstNode} root MDXAST to transform
+   * @param {import("vfile").VFile} vfile Virtual file object
    */
-  function transform(root) {
+  function transform(root, vfile) {
     const locations = [];
 
     /**
@@ -78,7 +76,7 @@ function plugin() {
      */
     function processIncludeDirective(node, index, parent) {
       // Resolve the included file, relative to the current markdown file.
-      const p = path.resolve(currentDir, getIncludePath(node));
+      const p = path.resolve(vfile.dirname, getIncludePath(node));
 
       if (isMarkdownFile(p)) {
         // Include a markdown file

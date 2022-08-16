@@ -102,8 +102,10 @@ jobs:
           fetch-depth: 0
       - name: Setup the toolchain
         uses: ./.github/actions/setup-toolchain
-      - name: Install package dependencies
+      - name: Install package dependencies (docsite)
         uses: ./.github/actions/yarn
+        with:
+          working-directory: docsite
       - name: Build website
         run: yarn build
         working-directory: docsite
