@@ -55,7 +55,7 @@ describe("metro-serializer-esbuild", () => {
     const result = await bundle("test/__fixtures__/direct.ts");
     expect(result).toMatchInlineSnapshot(`
       "\\"use strict\\";
-      (function() {
+      (() => {
         // lib/index.js
         var global = new Function(\\"return this;\\")();
 
@@ -75,7 +75,7 @@ describe("metro-serializer-esbuild", () => {
     const result = await bundle("test/__fixtures__/exportAll.ts");
     expect(result).toMatchInlineSnapshot(`
       "\\"use strict\\";
-      (function() {
+      (() => {
         // lib/index.js
         var global = new Function(\\"return this;\\")();
 
@@ -95,7 +95,7 @@ describe("metro-serializer-esbuild", () => {
     const result = await bundle("test/__fixtures__/nestedExportAll.ts");
     expect(result).toMatchInlineSnapshot(`
       "\\"use strict\\";
-      (function() {
+      (() => {
         // lib/index.js
         var global = new Function(\\"return this;\\")();
 
@@ -115,7 +115,7 @@ describe("metro-serializer-esbuild", () => {
     const result = await bundle("test/__fixtures__/importAll.ts");
     expect(result).toMatchInlineSnapshot(`
       "\\"use strict\\";
-      (function() {
+      (() => {
         // lib/index.js
         var global = new Function(\\"return this;\\")();
 
@@ -135,7 +135,7 @@ describe("metro-serializer-esbuild", () => {
     const result = await bundle("test/__fixtures__/importExportAll.ts");
     expect(result).toMatchInlineSnapshot(`
       "\\"use strict\\";
-      (function() {
+      (() => {
         // lib/index.js
         var global = new Function(\\"return this;\\")();
 
@@ -155,7 +155,7 @@ describe("metro-serializer-esbuild", () => {
     const result = await bundle("test/__fixtures__/lodash-es.ts");
     expect(result).toMatchInlineSnapshot(`
       "\\"use strict\\";
-      (function() {
+      (() => {
         // lib/index.js
         var global = new Function(\\"return this;\\")();
 
@@ -176,7 +176,7 @@ describe("metro-serializer-esbuild", () => {
     const result = await bundle("test/__fixtures__/sideEffectsArray.ts");
     expect(result).toMatchInlineSnapshot(`
       "\\"use strict\\";
-      (function() {
+      (() => {
         var __getOwnPropNames = Object.getOwnPropertyNames;
         var __esm = function(fn, res) {
           return function __init() {
@@ -252,7 +252,7 @@ describe("metro-serializer-esbuild", () => {
   test('strips out `"use strict"`', async () => {
     const result = await bundle("test/__fixtures__/direct.ts", false);
     expect(result).toMatchInlineSnapshot(`
-      "(function(){var e=new Function(\\"return this;\\")();})();
+      "(()=>{var e=new Function(\\"return this;\\")();})();
       "
     `);
   });
