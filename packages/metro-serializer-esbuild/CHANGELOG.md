@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-serializer-esbuild
 
+## 0.1.11
+
+### Patch Changes
+
+- aeb1e5b5: Enable arrow functions and generators when targeting Hermes
+
 ## 0.1.10
 
 ### Patch Changes
