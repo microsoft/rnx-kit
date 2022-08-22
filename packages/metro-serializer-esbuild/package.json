@@ -32,7 +32,7 @@
     "metro": ">=0.66.1"
   },
   "devDependencies": {
-    "@fluentui/utilities": "8.8.3",
+    "@fluentui/utilities": "8.12.0",
     "@react-native-community/cli-plugin-metro": "^7.0.3",
     "@rnx-kit/metro-config": "*",
     "@rnx-kit/metro-serializer": "*",
