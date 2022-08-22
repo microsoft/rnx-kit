@@ -29,7 +29,7 @@ module.exports = {
   },
   esbuild: {
     name: "esbuild",
-    version: "^0.14.49",
+    version: "^0.15.0",
   },
   "find-up": {
     name: "find-up",
