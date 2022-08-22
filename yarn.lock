@@ -2054,10 +2054,10 @@
     eslint-plugin-react "7.24.0"
     eslint-plugin-security "1.4.0"
 
-"@microsoft/tsdoc@^0.13.0":
-  version "0.13.2"
-  resolved "https://registry.yarnpkg.com/@microsoft/tsdoc/-/tsdoc-0.13.2.tgz#3b0efb6d3903bd49edb073696f60e90df08efb26"
-  integrity sha512-WrHvO8PDL8wd8T2+zBGKrMwVL5IyzR3ryWUsl0PXgEV0QHup4mTLi0QcATefGI6Gx9Anu7vthPyyyLpY0EpiQg==
+"@microsoft/tsdoc@^0.14.0":
+  version "0.14.1"
+  resolved "https://registry.yarnpkg.com/@microsoft/tsdoc/-/tsdoc-0.14.1.tgz#155ef21065427901994e765da8a0ba0eaae8b8bd"
+  integrity sha512-6Wci+Tp3CgPt/B9B0a3J4s3yMgLNSku6w5TV6mN+61C71UqsRBv2FUibBf3tPGlNxebgPHMEUzKpb1ggE8KCKw==
 
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"

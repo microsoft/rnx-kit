@@ -17,7 +17,7 @@
     "@babel/core": "^7.0.0",
     "@babel/parser": "^7.0.0",
     "@babel/types": "^7.0.0",
-    "@microsoft/tsdoc": "^0.13.0",
+    "@microsoft/tsdoc": "^0.14.0",
     "@rnx-kit/golang": "^0.2.1",
     "depcheck": "^1.0.0",
     "esbuild": "^0.15.0",
