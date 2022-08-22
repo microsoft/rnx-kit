@@ -9,8 +9,8 @@ import com.microsoft.identity.client.IAuthenticationResult
 import com.microsoft.identity.client.IMultipleAccountPublicClientApplication
 import com.microsoft.identity.client.PublicClientApplication
 import com.microsoft.identity.client.exception.MsalException
-import com.microsoft.identity.common.exception.BaseException
-import com.microsoft.identity.common.exception.UiRequiredException
+import com.microsoft.identity.common.java.exception.BaseException
+import com.microsoft.identity.common.java.exception.UiRequiredException
 
 typealias TokenAcquiredHandler = (result: AuthResult?, error: AuthError?) -> Unit
 
