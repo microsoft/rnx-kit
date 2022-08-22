@@ -9872,9 +9872,9 @@ react-native-gradle-plugin@^0.0.6:
   integrity sha512-eIlgtsmDp1jLC24dRn43hB3kEcZVqx6DUQbR0N1ABXGnMEafm9I3V3dUUeD1vh+Dy5WqijSoEwLNUPLgu5zDMg==
 
 react-native-macos@^0.68.0:
-  version "0.68.6"
-  resolved "https://registry.yarnpkg.com/react-native-macos/-/react-native-macos-0.68.6.tgz#6e61677f15c0757553fe7caecdabc3018917664a"
-  integrity sha512-Kay+SeQ7998DHyL37wnDWW1X7Pyw2ChCVtl9etw3uzfkf46qxuLvDx0Hzji0icxEVi5Pf5wVGpDgavFICH4lEA==
+  version "0.68.27"
+  resolved "https://registry.yarnpkg.com/react-native-macos/-/react-native-macos-0.68.27.tgz#8085506f774c789701789a47cdea68f919414c15"
+  integrity sha512-VaUFa/pFvyUQbPzP18vwy1700GmvYaxWw35tKODmbo3Zv/V+1oWb4LurOOCvqJ3T3hn0oQJjGlFsaTowiTmo0A==
   dependencies:
     "@jest/create-cache-key-function" "^27.0.1"
     "@react-native-community/cli" "^7.0.3"
@@ -9902,6 +9902,7 @@ react-native-macos@^0.68.0:
     react-native-gradle-plugin "^0.0.6"
     react-refresh "^0.4.0"
     react-shallow-renderer "16.14.1"
+    readable-stream "^4.0.0"
     regenerator-runtime "^0.13.2"
     scheduler "^0.20.2"
     stacktrace-parser "^0.1.3"
@@ -10112,6 +10113,13 @@ readable-stream@^3.1.1, readable-stream@^3.4.0, readable-stream@^3.6.0:
     inherits "^2.0.3"
     string_decoder "^1.1.1"
     util-deprecate "^1.0.1"
+
+readable-stream@^4.0.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/readable-stream/-/readable-stream-4.1.0.tgz#280d0a29f559d3fb684a277254e02b6f61ae0631"
+  integrity sha512-sVisi3+P2lJ2t0BPbpK629j8wRW06yKGJUcaLAGXPAUhyUxVJm7VsCTit1PFgT4JHUDMrGNR+ZjSKpzGaRF3zw==
+  dependencies:
+    abort-controller "^3.0.0"
 
 readable-stream@~2.3.6:
   version "2.3.7"
