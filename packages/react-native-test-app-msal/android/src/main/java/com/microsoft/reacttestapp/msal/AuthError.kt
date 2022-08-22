@@ -1,6 +1,6 @@
 package com.microsoft.reacttestapp.msal
 
-import com.microsoft.identity.common.exception.BaseException
+import com.microsoft.identity.common.java.exception.BaseException
 
 data class AuthError(
     val type: AuthErrorType,

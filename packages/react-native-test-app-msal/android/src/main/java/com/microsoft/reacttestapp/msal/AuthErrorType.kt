@@ -1,10 +1,10 @@
 package com.microsoft.reacttestapp.msal
 
-import com.microsoft.identity.common.exception.BaseException
-import com.microsoft.identity.common.exception.DeviceRegistrationRequiredException
-import com.microsoft.identity.common.exception.IntuneAppProtectionPolicyRequiredException
-import com.microsoft.identity.common.exception.ServiceException
-import com.microsoft.identity.common.exception.UserCancelException
+import com.microsoft.identity.common.java.exception.BaseException
+import com.microsoft.identity.common.java.exception.DeviceRegistrationRequiredException
+import com.microsoft.identity.common.java.exception.IntuneAppProtectionPolicyRequiredException
+import com.microsoft.identity.common.java.exception.ServiceException
+import com.microsoft.identity.common.java.exception.UserCancelException
 
 enum class AuthErrorType(val type: String) {
     UNKNOWN("Unknown"),
