@@ -31,8 +31,8 @@
   },
   "resources": {
     "android": ["dist/res", "dist/main.android.jsbundle"],
-    "ios": ["dist/assets", "dist/main.ios.jsbundle"],
-    "macos": ["dist/assets", "dist/main.macos.jsbundle"],
+    "ios": ["app.json", "dist/assets", "dist/main.ios.jsbundle"],
+    "macos": ["app.json", "dist/assets", "dist/main.macos.jsbundle"],
     "windows": ["dist/assets", "dist/main.windows.bundle"]
   }
 }
