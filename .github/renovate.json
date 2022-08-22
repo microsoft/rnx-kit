@@ -31,6 +31,10 @@
       "matchPackagePrefixes": ["com.squareup.moshi"]
     },
     {
+      "groupName": "Octokit",
+      "matchSourceUrlPrefixes": ["https://github.com/octokit/"]
+    },
+    {
       "matchPackageNames": ["react"],
       "enabled": false
     },
