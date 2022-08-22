@@ -267,6 +267,13 @@ export function MetroSerializer(
       plugins.push(lodashTransformer());
     }
 
+    // Hermes only implements select ES6 features and is missing others like
+    // block scoping (https://github.com/facebook/hermes/issues/575). As of
+    // esbuild 0.14.49, we can use the `hermes` target instead of `es5`. Note
+    // that this target is somewhat conservative and may require additional
+    // Babel plugins.
+    const target = buildOptions?.target ?? "hermes0.7.0";
+
     return esbuild
       .build({
         bundle: true,
@@ -295,14 +302,22 @@ export function MetroSerializer(
         outfile,
         plugins,
         sourcemap: "external",
+        target,
+        supported: (() => {
+          if (typeof target !== "string" || !target.startsWith("hermes")) {
+            return undefined;
+          }
 
-        // Hermes only implements select ES6 features and is missing others like
-        // block scoping (https://github.com/facebook/hermes/issues/575). As of
-        // esbuild 0.14.49, we can use the `hermes` target instead of `es5`.
-        // Note that this target is somewhat conservative and may require
-        // additional Babel plugins.
-        target: buildOptions?.target ?? "hermes0.7.0",
-
+          // The following features should be safe to enable if we take into
+          // consideration that Hermes does not support classes. They were
+          // disabled in esbuild 0.14.49 after the feature compatibility table
+          // generator was fixed (see
+          // https://github.com/evanw/esbuild/releases/tag/v0.14.49).
+          return {
+            arrow: true,
+            generator: true,
+          };
+        })(),
         write: false,
       })
       .then(({ metafile, outputFiles }: BuildResult) => {
