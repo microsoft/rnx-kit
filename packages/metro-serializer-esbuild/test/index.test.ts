@@ -6,7 +6,11 @@ describe("metro-serializer-esbuild", () => {
 
   const consoleWarnSpy = jest.spyOn(global.console, "warn");
 
-  async function bundle(entryFile: string, dev = true): Promise<string> {
+  async function bundle(
+    entryFile: string,
+    dev = true,
+    sourcemapOutput = undefined
+  ): Promise<string> {
     let result: string | undefined = undefined;
     await buildBundle(
       {
@@ -17,6 +21,7 @@ describe("metro-serializer-esbuild", () => {
         platform: "native",
         resetCache: false,
         resetGlobalCache: false,
+        sourcemapOutput,
         sourcemapUseAbsolutePath: true,
         verbose: false,
       },
@@ -253,6 +258,19 @@ describe("metro-serializer-esbuild", () => {
     const result = await bundle("test/__fixtures__/direct.ts", false);
     expect(result).toMatchInlineSnapshot(`
       "(()=>{var e=new Function(\\"return this;\\")();})();
+      "
+    `);
+  });
+
+  test("adds sourceMappingURL comment", async () => {
+    const result = await bundle(
+      "test/__fixtures__/direct.ts",
+      false,
+      ".test-output.jsbundle.map"
+    );
+    expect(result).toMatchInlineSnapshot(`
+      "(()=>{var e=new Function(\\"return this;\\")();})();
+      //# sourceMappingURL=.test-output.jsbundle.map
       "
     `);
   });

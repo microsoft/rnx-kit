@@ -258,8 +258,9 @@ export function MetroSerializer(
     // the sourcemap and insert it into `BuildResult["outputFiles"]`. We've
     // disabled writing to disk by setting `write: false`. Metro will handle
     // the rest after we return code + sourcemap.
-    const outfile = "main.jsbundle";
-    const sourcemapfile = outfile + ".map";
+    const outfile =
+      options.sourceMapUrl?.replace(/\.map$/, "") ?? "main.jsbundle";
+    const sourcemapfile = options.sourceMapUrl ?? outfile + ".map";
 
     const plugins = [metroPlugin];
     if (isImporting("lodash", dependencies)) {
@@ -301,7 +302,7 @@ export function MetroSerializer(
         minify: buildOptions?.minify ?? !options.dev,
         outfile,
         plugins,
-        sourcemap: "external",
+        sourcemap: Boolean(options.sourceMapUrl) && "linked",
         target,
         supported: (() => {
           if (typeof target !== "string" || !target.startsWith("hermes")) {
