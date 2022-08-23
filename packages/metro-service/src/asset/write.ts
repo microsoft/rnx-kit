@@ -1,17 +1,14 @@
-import cpFile from "cp-file";
-import makeDir from "make-dir";
-import path from "path";
-
+import * as fs from "fs";
 import type { AssetData } from "metro";
-
+import * as path from "path";
 import { getAssetDestPathAndroid } from "./android";
-import { getAssetDestPathIOS } from "./ios";
 import { filterPlatformAssetScales } from "./filter";
+import { getAssetDestPathIOS } from "./ios";
 
 function copy(src: string, dest: string): void {
   const destDir = path.dirname(dest);
-  makeDir.sync(destDir);
-  cpFile.sync(src, dest);
+  fs.mkdirSync(destDir, { recursive: true, mode: 0o755 });
+  fs.copyFileSync(src, dest);
 }
 
 function copyAll(filesToCopy: Record<string, string>): void {
