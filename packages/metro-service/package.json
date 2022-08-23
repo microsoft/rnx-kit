@@ -25,9 +25,7 @@
   },
   "dependencies": {
     "@rnx-kit/tools-language": "^1.2.6",
-    "chalk": "^4.1.0",
-    "cp-file": "^9.1.0",
-    "make-dir": "^3.1.0"
+    "chalk": "^4.1.0"
   },
   "peerDependencies": {
     "@react-native-community/cli-plugin-metro": ">=6.1.0",
