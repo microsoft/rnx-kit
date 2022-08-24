@@ -254,12 +254,14 @@ export function MetroSerializer(
       },
     };
 
-    // `outfile` is only meant to give esbuild a name it can use to generate
-    // the sourcemap and insert it into `BuildResult["outputFiles"]`. We've
-    // disabled writing to disk by setting `write: false`. Metro will handle
-    // the rest after we return code + sourcemap.
-    const outfile = "main.jsbundle";
-    const sourcemapfile = outfile + ".map";
+    // `outfile` is required by esbuild to generate the sourcemap and insert it
+    // into `BuildResult["outputFiles"]`. It is also used to generate the
+    // `//# sourceMappingURL=` comment at the end of bundle. We've disabled
+    // writing to disk by setting `write: false`. Metro will handle the rest
+    // after we return code + sourcemap.
+    const outfile =
+      options.sourceMapUrl?.replace(/\.map$/, "") ?? "main.jsbundle";
+    const sourcemapfile = options.sourceMapUrl ?? outfile + ".map";
 
     const plugins = [metroPlugin];
     if (isImporting("lodash", dependencies)) {
@@ -301,7 +303,7 @@ export function MetroSerializer(
         minify: buildOptions?.minify ?? !options.dev,
         outfile,
         plugins,
-        sourcemap: "external",
+        sourcemap: Boolean(options.sourceMapUrl) && "linked",
         target,
         supported: (() => {
           if (typeof target !== "string" || !target.startsWith("hermes")) {
