@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-service
 
+## 3.0.1
+
+### Patch Changes
+
+- 2aaf2804: Replace `cp-file`, `make-dir` with Node API
+
 ## 3.0.0
 
 ### Major Changes
