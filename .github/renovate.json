@@ -16,6 +16,11 @@
       "matchPackagePrefixes": ["com.android."]
     },
     {
+      "groupName": "Jest",
+      "matchSourceUrlPrefixes": ["https://github.com/facebook/jest"],
+      "allowedVersions": "^27.0.0"
+    },
+    {
       "groupName": "Kotlin",
       "matchDatasources": ["maven"],
       "matchPackagePrefixes": ["org.jetbrains.kotlin"]
