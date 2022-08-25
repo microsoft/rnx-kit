@@ -3,7 +3,13 @@ import ts from "typescript";
 import { Service } from "../src/service";
 const diagnostic = require("../src/diagnostics");
 
-diagnostic.createDiagnosticWriter = jest.fn();
+jest.mock("../src/diagnostics", () => {
+  return {
+    ...jest.requireActual("../src/diagnostics"),
+    createDiagnosticWriter: jest.fn(),
+  };
+});
+
 const mockDiagnosticWriter = {
   format: jest.fn(),
   print: jest.fn(),
