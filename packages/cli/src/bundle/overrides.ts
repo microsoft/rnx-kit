@@ -11,6 +11,7 @@ export type BundleConfigOverrides = {
   sourcemapSourcesRoot?: string;
   sourcemapUseAbsolutePath?: boolean;
   assetsDest?: string;
+  ramBundle?: boolean;
   treeShake?: boolean;
   unstableTransformProfile?: TransformProfile;
 };
@@ -33,6 +34,7 @@ export function applyBundleConfigOverrides(
     "sourcemapSourcesRoot",
     "sourcemapUseAbsolutePath",
     "assetsDest",
+    "ramBundle",
     "treeShake",
     "unstableTransformProfile",
   ]);

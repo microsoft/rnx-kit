@@ -82,6 +82,11 @@ export type BundleParameters = BundlerPlugins & {
    * Either absolute, or relative to the package. If not given, assets are ignored.
    */
   assetsDest?: string;
+
+  /**
+   * Builds JavaScript as a "Random Access Module" bundle for offline use.
+   */
+  ramBundle?: boolean;
 };
 
 /**

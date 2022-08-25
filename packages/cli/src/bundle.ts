@@ -19,6 +19,7 @@ export type CLIBundleOptions = {
   sourcemapSourcesRoot?: string;
   sourcemapUseAbsolutePath?: boolean;
   assetsDest?: string;
+  ramBundle?: boolean;
   treeShake?: boolean;
   unstableTransformProfile?: TransformProfile;
   resetCache?: boolean;
