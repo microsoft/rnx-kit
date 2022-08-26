@@ -14,12 +14,12 @@ export type CLIBundleOptions = {
   minify?: boolean;
   bundleOutput?: string;
   bundleEncoding?: BundleArgs["bundleEncoding"];
+  bundleFormat?: BundleArgs["bundleFormat"];
   maxWorkers?: number;
   sourcemapOutput?: string;
   sourcemapSourcesRoot?: string;
   sourcemapUseAbsolutePath?: boolean;
   assetsDest?: string;
-  ramBundle?: boolean;
   treeShake?: boolean;
   unstableTransformProfile?: TransformProfile;
   resetCache?: boolean;

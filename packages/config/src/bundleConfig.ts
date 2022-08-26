@@ -57,9 +57,21 @@ export type BundleParameters = BundlerPlugins & {
    * Encoding scheme to use when writing the bundle file. Currently limited
    * to UTF-8, UTF-16 (little endian), and 7-bit ASCII.
    *
-   * @see "https://nodejs.org/api/buffer.html#buffer_buffers_and_character_encodings"
+   * @see https://nodejs.org/api/buffer.html#buffer_buffers_and_character_encodings
    */
   bundleEncoding?: OutputOptions["bundleEncoding"];
+
+  /**
+   * Specifies the format of the output bundle.
+   *
+   * Note that setting the format to `ram-bundle` will disable `treeShake`.
+   * Metro ignores custom serializers when RAM bundling.
+   *
+   * @see https://facebook.github.io/metro/docs/bundling
+   *
+   * @default "plain"
+   */
+  bundleFormat?: "plain" | "ram-bundle";
 
   /**
    * Path to use when creating the bundle source map file.
@@ -82,11 +94,6 @@ export type BundleParameters = BundlerPlugins & {
    * Either absolute, or relative to the package. If not given, assets are ignored.
    */
   assetsDest?: string;
-
-  /**
-   * Builds JavaScript as a "Random Access Module" bundle for offline use.
-   */
-  ramBundle?: boolean;
 };
 
 /**

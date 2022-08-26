@@ -144,6 +144,7 @@
       {
         "id": "ram",
         "entryFile": "src/index.ts",
+        "bundleFormat": "ram-bundle",
         "assetsDest": "dist",
         "detectCyclicDependencies": true,
         "detectDuplicateDependencies": {
@@ -151,7 +152,6 @@
             "react-is"
           ]
         },
-        "ramBundle": true,
         "typescriptValidation": true,
         "treeShake": true,
         "targets": [

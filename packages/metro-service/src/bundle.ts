@@ -19,7 +19,7 @@ export type BundleArgs = {
   dev: boolean;
   bundleOutput: string;
   bundleEncoding?: OutputOptions["bundleEncoding"];
-  ramBundle?: boolean;
+  bundleFormat?: "plain" | "ram-bundle";
   sourcemapOutput?: string;
   sourcemapSourcesRoot?: string;
   sourcemapUseAbsolutePath: boolean;
@@ -36,14 +36,18 @@ type RequestOptions = {
 };
 
 export async function bundle(
-  { ramBundle, ...args }: BundleArgs,
+  { bundleFormat, ...args }: BundleArgs,
   config: ConfigT
 ): Promise<void> {
   try {
     const {
       buildBundleWithConfig,
     } = require("@react-native-community/cli-plugin-metro");
-    return buildBundleWithConfig(args, config, ramBundle ? RamBundle : Bundle);
+    return buildBundleWithConfig(
+      args,
+      config,
+      bundleFormat === "ram-bundle" ? RamBundle : Bundle
+    );
   } catch (_) {
     // Retry with our custom logic
   }
@@ -75,7 +79,7 @@ export async function bundle(
     sourceMapUrl = path.basename(sourceMapUrl);
   }
 
-  const output = ramBundle ? RamBundle : Bundle;
+  const output = bundleFormat === "ram-bundle" ? RamBundle : Bundle;
   const requestOpts: RequestOptions = {
     entryFile: args.entryFile,
     sourceMapUrl,

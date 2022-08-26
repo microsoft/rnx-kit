@@ -7,11 +7,11 @@ export type BundleConfigOverrides = {
   entryFile?: string;
   bundleOutput?: string;
   bundleEncoding?: BundleArgs["bundleEncoding"];
+  bundleFormat?: BundleArgs["bundleFormat"];
   sourcemapOutput?: string;
   sourcemapSourcesRoot?: string;
   sourcemapUseAbsolutePath?: boolean;
   assetsDest?: string;
-  ramBundle?: boolean;
   treeShake?: boolean;
   unstableTransformProfile?: TransformProfile;
 };
@@ -30,11 +30,11 @@ export function applyBundleConfigOverrides(
     "entryFile",
     "bundleOutput",
     "bundleEncoding",
+    "bundleFormat",
     "sourcemapOutput",
     "sourcemapSourcesRoot",
     "sourcemapUseAbsolutePath",
     "assetsDest",
-    "ramBundle",
     "treeShake",
     "unstableTransformProfile",
   ]);

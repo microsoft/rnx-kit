@@ -52,15 +52,16 @@ Union of: "ios", "android", "windows", "win32", "macos"
 
 Parameters controlling how a bundle is constructed.
 
-| Name                     | Type               | Description                                                                                                                                                                                            |
-| ------------------------ | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| entryFile                | string, undefined  | Path to the .js file which is the entry-point for building the bundle. Either absolute, or relative to the package.                                                                                    |
-| bundleOutput             | string, undefined  | Path to the output bundle file. Either absolute or relative to the package.                                                                                                                            |
-| bundleEncoding           | string, undefined  | [Encoding scheme](https://nodejs.org/api/buffer.html#buffer_buffers_and_character_encodings) to use when writing the bundle file. Currently limited to UTF-8, UTF-16 (little endian), and 7-bit ASCII. |
-| sourcemapOutput          | string, undefined  | Path to use when creating the bundle source map file. Either absolute, or relative to the package.                                                                                                     |
-| sourcemapSourcesRoot     | string, undefined  | Path to the package's source files. Used to make source-map paths relative and therefore portable.                                                                                                     |
-| sourcemapUseAbsolutePath | boolean, undefined | Controls whether or not SourceMapURL is reported as a full path or just a file name.                                                                                                                   |
-| assetsDest               | string, undefined  | Path where all bundle assets (strings, images, fonts, sounds, ...) are written. Either absolute, or relative to the package.                                                                           |
+| Name                     | Type                             | Description                                                                                                                                                                                            |
+| ------------------------ | -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| entryFile                | string, undefined                | Path to the .js file which is the entry-point for building the bundle. Either absolute, or relative to the package.                                                                                    |
+| bundleOutput             | string, undefined                | Path to the output bundle file. Either absolute or relative to the package.                                                                                                                            |
+| bundleEncoding           | string, undefined                | [Encoding scheme](https://nodejs.org/api/buffer.html#buffer_buffers_and_character_encodings) to use when writing the bundle file. Currently limited to UTF-8, UTF-16 (little endian), and 7-bit ASCII. |
+| bundleFormat             | "plain", "ram-bundle", undefined | Controls output bundle format. See [Bundle Formats](https://facebook.github.io/metro/docs/bundling) for an overview. Note that `ram-bundle` this will disable the tree shaking plugin.                 |
+| sourcemapOutput          | string, undefined                | Path to use when creating the bundle source map file. Either absolute, or relative to the package.                                                                                                     |
+| sourcemapSourcesRoot     | string, undefined                | Path to the package's source files. Used to make source-map paths relative and therefore portable.                                                                                                     |
+| sourcemapUseAbsolutePath | boolean, undefined               | Controls whether or not SourceMapURL is reported as a full path or just a file name.                                                                                                                   |
+| assetsDest               | string, undefined                | Path where all bundle assets (strings, images, fonts, sounds, ...) are written. Either absolute, or relative to the package.                                                                           |
 
 ### `BundlerPlugins`
 
