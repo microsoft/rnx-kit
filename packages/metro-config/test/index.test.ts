@@ -412,8 +412,8 @@ describe("@rnx-kit/metro-config", () => {
     const config = makeMetroConfig({
       transformer: {
         // @ts-ignore
-        assetPlugins: null
-      }
+        assetPlugins: null,
+      },
     });
 
     expect(config.server?.enhanceMiddleware).toBeUndefined();
