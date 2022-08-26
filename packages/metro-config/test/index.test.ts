@@ -1,5 +1,6 @@
 import * as fs from "node:fs";
 import * as path from "node:path";
+import { enhanceMiddleware } from "../src/assetPluginForMonorepos";
 import {
   defaultWatchFolders,
   exclusionList,
@@ -252,6 +253,8 @@ describe("@rnx-kit/metro-config", () => {
       fail("Expected `config.resolver.blacklistRE` to be a RegExp");
     } else if (!(config.resolver.blockList instanceof RegExp)) {
       fail("Expected `config.resolver.blockList` to be a RegExp");
+    } else if (!config.server) {
+      fail("Expected `config.server` to be defined");
     } else if (!config.transformer) {
       fail("Expected `config.transformer` to be defined");
     } else if (!config.transformer.getTransformOptions) {
@@ -267,6 +270,11 @@ describe("@rnx-kit/metro-config", () => {
     const blockList = exclusionList().source;
     expect(config.resolver.blacklistRE.source).toBe(blockList);
     expect(config.resolver.blockList.source).toBe(blockList);
+
+    expect(config.server.enhanceMiddleware).toBe(enhanceMiddleware);
+    expect(config.transformer.assetPlugins).toContain(
+      require.resolve("../src/assetPluginForMonorepos")
+    );
 
     const opts = { dev: false, hot: false };
     const transformerOptions = await config.transformer.getTransformOptions(
@@ -303,6 +311,8 @@ describe("@rnx-kit/metro-config", () => {
       fail("Expected `config.resolver.blacklistRE` to be a RegExp");
     } else if (!(config.resolver.blockList instanceof RegExp)) {
       fail("Expected `config.resolver.blockList` to be a RegExp");
+    } else if (!config.server) {
+      fail("Expected `config.server` to be defined");
     } else if (!config.transformer) {
       fail("Expected `config.transformer` to be defined");
     } else if (!config.transformer.getTransformOptions) {
@@ -318,6 +328,11 @@ describe("@rnx-kit/metro-config", () => {
     const blockList = exclusionList().source;
     expect(config.resolver.blacklistRE.source).toBe(blockList);
     expect(config.resolver.blockList.source).toBe(blockList);
+
+    expect(config.server.enhanceMiddleware).toBe(enhanceMiddleware);
+    expect(config.transformer.assetPlugins).toContain(
+      require.resolve("../src/assetPluginForMonorepos")
+    );
 
     const opts = { dev: false, hot: false };
     const transformerOptions = await config.transformer.getTransformOptions(
@@ -379,5 +394,29 @@ describe("@rnx-kit/metro-config", () => {
 
     expect(blockList).not.toBeUndefined();
     expect(blockList).toBe(configWithBlockList.resolver?.blacklistRE);
+  });
+
+  test("makeMetroConfig() removes the asset plugin if the middleware is removed", () => {
+    const config = makeMetroConfig({
+      // @ts-ignore
+      server: { enhanceMiddleware: null },
+    });
+
+    expect(config.server?.enhanceMiddleware).toBeNull();
+    expect(config.transformer?.assetPlugins).not.toContain(
+      require.resolve("../src/assetPluginForMonorepos")
+    );
+  });
+
+  test("makeMetroConfig() removes the middleware if the asset plugin is removed", () => {
+    const config = makeMetroConfig({
+      transformer: {
+        // @ts-ignore
+        assetPlugins: null
+      }
+    });
+
+    expect(config.server?.enhanceMiddleware).toBeUndefined();
+    expect(config.transformer?.assetPlugins).toBeNull();
   });
 });

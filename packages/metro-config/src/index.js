@@ -13,6 +13,35 @@ const path = require("path");
 const UNIQUE_PACKAGES = ["react", "react-native"];
 
 /**
+ * Ensures `server.enhanceMiddleware` is only set if
+ * `transformer.assetPlugins` includes the asset plugin.
+ * @param {MetroConfig} config
+ * @returns {MetroConfig}
+ */
+function ensureMiddlewareConsistency(config) {
+  const { enhanceMiddleware } = require("./assetPluginForMonorepos");
+
+  const assetPlugins = config.transformer?.assetPlugins;
+  const monorepoPluginIndex = assetPlugins
+    ? assetPlugins.indexOf(require.resolve("./assetPluginForMonorepos"))
+    : -1;
+
+  if (config.server?.enhanceMiddleware !== enhanceMiddleware) {
+    // If our middleware was removed, we should also remove the corresponding
+    // asset plugin.
+    if (monorepoPluginIndex >= 0) {
+      // @ts-ignore `assetPlugins` is read-only
+      assetPlugins.splice(monorepoPluginIndex, 1);
+    }
+  } else if (monorepoPluginIndex < 0) {
+    // If our asset plugin was removed, we should also remove our middleware.
+    delete config.server["enhanceMiddleware"];
+  }
+
+  return config;
+}
+
+/**
  * A minimum list of folders that should be watched by Metro.
  * @returns {string[]}
  */
@@ -193,7 +222,7 @@ module.exports = {
     const customBlockList =
       customConfig.resolver &&
       (customConfig.resolver.blockList || customConfig.resolver.blacklistRE);
-    return mergeConfig(
+    const mergedConfig = mergeConfig(
       {
         resolver: {
           resolverMainFields: ["module", "browser", "main"],
@@ -247,5 +276,7 @@ module.exports = {
         },
       }
     );
+
+    return ensureMiddlewareConsistency(mergedConfig);
   },
 };
