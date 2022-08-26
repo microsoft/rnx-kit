@@ -21,12 +21,15 @@ const UNIQUE_PACKAGES = ["react", "react-native"];
 function ensureMiddlewareConsistency(config) {
   const { enhanceMiddleware } = require("./assetPluginForMonorepos");
 
-  const assetPlugins = config.transformer?.assetPlugins;
+  const assetPlugins = config.transformer && config.transformer.assetPlugins;
   const monorepoPluginIndex = assetPlugins
     ? assetPlugins.indexOf(require.resolve("./assetPluginForMonorepos"))
     : -1;
 
-  if (config.server?.enhanceMiddleware !== enhanceMiddleware) {
+  if (
+    !config.server ||
+    (config.server && config.server.enhanceMiddleware !== enhanceMiddleware)
+  ) {
     // If our middleware was removed, we should also remove the corresponding
     // asset plugin.
     if (monorepoPluginIndex >= 0) {
