@@ -100,6 +100,7 @@
           },
           "ios": {
             "bundleOutput": "dist/main.ios.jsbundle",
+            "bundleFormat": "ram-bundle",
             "sourcemapOutput": "dist/main.ios.jsbundle.map"
           },
           "windows": {

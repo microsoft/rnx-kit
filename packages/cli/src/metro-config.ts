@@ -17,8 +17,7 @@ import type { DeltaResult, Graph } from "metro";
 import type { InputConfigT, SerializerConfigT } from "metro-config";
 import { createProjectCache } from "./typescript/project-cache";
 
-type PluginsConfig = Required<BundlerPlugins> &
-  Pick<BundleParameters, "bundleFormat">;
+type PluginsConfig = BundlerPlugins & Pick<BundleParameters, "bundleFormat">;
 
 /**
  * Create a hook function to be registered with Metro during serialization.
@@ -125,8 +124,8 @@ export function customizeMetroConfig(
     bundleFormat,
     detectCyclicDependencies,
     detectDuplicateDependencies,
-    typescriptValidation,
     treeShake,
+    typescriptValidation,
   }: PluginsConfig,
   print?: (message: string) => void
 ): void {

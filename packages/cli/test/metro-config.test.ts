@@ -1,5 +1,6 @@
 import { CyclicDependencies } from "@rnx-kit/metro-plugin-cyclic-dependencies-detector";
 import { DuplicateDependencies } from "@rnx-kit/metro-plugin-duplicates-checker";
+import type { InputConfigT } from "metro-config";
 import { customizeMetroConfig } from "../src/metro-config";
 
 jest.mock("@rnx-kit/metro-plugin-cyclic-dependencies-detector", () => {
@@ -14,29 +15,26 @@ jest.mock("@rnx-kit/metro-plugin-duplicates-checker", () => {
   };
 });
 
-describe("cli/metro-config/customizeMetroConfig", () => {
-  const mockConfig = {
+// Always use a new mock since `customizeMetroConfig()` modifies the object.
+function makeMockConfig(): InputConfigT {
+  return {
     serializer: {
       customSerializer: false,
       experimentalSerializerHook: false,
     },
     transformer: {},
-  };
+  } as unknown as InputConfigT;
+}
 
+describe("cli/metro-config/customizeMetroConfig", () => {
   afterEach(() => {
     (CyclicDependencies as any).mockClear();
     (DuplicateDependencies as any).mockClear();
   });
 
   test("returns a config with plugins by default", () => {
-    const inputConfig = { ...mockConfig };
-    customizeMetroConfig(
-      inputConfig as any,
-      undefined,
-      undefined,
-      undefined,
-      undefined
-    );
+    const inputConfig = makeMockConfig();
+    customizeMetroConfig(inputConfig, {});
 
     expect(inputConfig).toEqual({
       serializer: {
@@ -54,14 +52,11 @@ describe("cli/metro-config/customizeMetroConfig", () => {
   });
 
   test("returns a config without a custom serializer when there are no plugins", () => {
-    const inputConfig = { ...mockConfig };
-    customizeMetroConfig(
-      inputConfig as any,
-      false,
-      false,
-      undefined,
-      undefined
-    );
+    const inputConfig = makeMockConfig();
+    customizeMetroConfig(inputConfig, {
+      detectCyclicDependencies: false,
+      detectDuplicateDependencies: false,
+    });
 
     expect(inputConfig).toEqual({
       serializer: {
@@ -78,14 +73,10 @@ describe("cli/metro-config/customizeMetroConfig", () => {
   });
 
   test("returns a config with only duplicates plugin", () => {
-    const inputConfig = { ...mockConfig };
-    customizeMetroConfig(
-      inputConfig as any,
-      false,
-      undefined,
-      undefined,
-      undefined
-    );
+    const inputConfig = makeMockConfig();
+    customizeMetroConfig(inputConfig, {
+      detectCyclicDependencies: false,
+    });
 
     expect(inputConfig).toEqual({
       serializer: {
@@ -103,14 +94,10 @@ describe("cli/metro-config/customizeMetroConfig", () => {
   });
 
   test("returns a config with only cyclic dependencies plugin", () => {
-    const inputConfig = { ...mockConfig };
-    customizeMetroConfig(
-      inputConfig as any,
-      undefined,
-      false,
-      undefined,
-      undefined
-    );
+    const inputConfig = makeMockConfig();
+    customizeMetroConfig(inputConfig, {
+      detectDuplicateDependencies: false,
+    });
 
     expect(inputConfig).toEqual({
       serializer: {
@@ -128,16 +115,13 @@ describe("cli/metro-config/customizeMetroConfig", () => {
   });
 
   test("forwards plugin options", () => {
-    const inputConfig = { ...mockConfig };
+    const inputConfig = makeMockConfig();
     const cyclicDependenciesOptions = { cyclicDependencies: true } as any;
     const duplicateDependencesOptions = { duplicateDependencies: true } as any;
-    customizeMetroConfig(
-      inputConfig as any,
-      cyclicDependenciesOptions,
-      duplicateDependencesOptions,
-      undefined,
-      undefined
-    );
+    customizeMetroConfig(inputConfig, {
+      detectCyclicDependencies: cyclicDependenciesOptions,
+      detectDuplicateDependencies: duplicateDependencesOptions,
+    });
 
     expect(inputConfig).toEqual({
       serializer: {
@@ -157,8 +141,12 @@ describe("cli/metro-config/customizeMetroConfig", () => {
   });
 
   test("returns a config with a custom serializer when tree shaking is enabled", () => {
-    const inputConfig = { ...mockConfig };
-    customizeMetroConfig(inputConfig as any, false, false, undefined, true);
+    const inputConfig = makeMockConfig();
+    customizeMetroConfig(inputConfig, {
+      detectCyclicDependencies: false,
+      detectDuplicateDependencies: false,
+      treeShake: true,
+    });
 
     expect(inputConfig).toEqual({
       serializer: {
@@ -175,6 +163,26 @@ describe("cli/metro-config/customizeMetroConfig", () => {
     expect(typeof inputConfig.serializer.experimentalSerializerHook).toBe(
       "function"
     );
+    expect(CyclicDependencies).not.toHaveBeenCalled();
+    expect(DuplicateDependencies).not.toHaveBeenCalled();
+  });
+
+  test("disables tree shaking if bundle format is `ram-bundle`", () => {
+    const inputConfig = makeMockConfig();
+    customizeMetroConfig(inputConfig, {
+      bundleFormat: "ram-bundle",
+      detectCyclicDependencies: false,
+      detectDuplicateDependencies: false,
+      treeShake: true,
+      typescriptValidation: false,
+    });
+
+    expect(inputConfig).toEqual({
+      serializer: {
+        experimentalSerializerHook: expect.anything(),
+      },
+      transformer: {},
+    });
     expect(CyclicDependencies).not.toHaveBeenCalled();
     expect(DuplicateDependencies).not.toHaveBeenCalled();
   });
