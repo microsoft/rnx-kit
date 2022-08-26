@@ -33,7 +33,7 @@ function ensureMiddlewareConsistency(config) {
     // If our middleware was removed, we should also remove the corresponding
     // asset plugin.
     if (monorepoPluginIndex >= 0) {
-      // @ts-ignore `assetPlugins` is read-only
+      // @ts-expect-error `assetPlugins` is read-only
       assetPlugins.splice(monorepoPluginIndex, 1);
     }
   } else if (monorepoPluginIndex < 0) {
