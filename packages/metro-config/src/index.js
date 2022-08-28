@@ -19,26 +19,21 @@ const UNIQUE_PACKAGES = ["react", "react-native"];
  * @returns {MetroConfig}
  */
 function ensureMiddlewareConsistency(config) {
-  const { enhanceMiddleware } = require("./assetPluginForMonorepos");
-
-  const assetPlugins = config.transformer && config.transformer.assetPlugins;
-  const monorepoPluginIndex = assetPlugins
-    ? assetPlugins.indexOf(require.resolve("./assetPluginForMonorepos"))
-    : -1;
-
-  if (
-    !config.server ||
-    (config.server && config.server.enhanceMiddleware !== enhanceMiddleware)
-  ) {
+  if (!config.server || !config.server.enhanceMiddleware) {
     // If our middleware was removed, we should also remove the corresponding
-    // asset plugin.
-    if (monorepoPluginIndex >= 0) {
-      // @ts-expect-error `assetPlugins` is read-only
-      assetPlugins.splice(monorepoPluginIndex, 1);
+    // asset plugin. Note that we can only check whether `enhanceMiddleware` is
+    // unset as we cannot guarantee that our middleware isn't embedded
+    // somewhere.
+    const assetPlugins = config.transformer && config.transformer.assetPlugins;
+    if (assetPlugins) {
+      const monorepoPluginIndex = assetPlugins.indexOf(
+        require.resolve("./assetPluginForMonorepos")
+      );
+      if (monorepoPluginIndex >= 0) {
+        // @ts-expect-error `assetPlugins` is read-only
+        assetPlugins.splice(monorepoPluginIndex, 1);
+      }
     }
-  } else if (monorepoPluginIndex < 0) {
-    // If our asset plugin was removed, we should also remove our middleware.
-    delete config.server["enhanceMiddleware"];
   }
 
   return config;
