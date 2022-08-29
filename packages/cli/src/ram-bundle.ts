@@ -20,5 +20,8 @@ export const rnxRamBundleCommand = {
   description:
     "Bundle your rnx-kit package in the RAM bundle format for offline use. See https://aka.ms/rnx-kit.",
   func: rnxRamBundle,
-  options: rnxBundleCommand.options,
+  options: rnxBundleCommand.options.filter((option) => {
+    // Tree shaking is currently incompatible with RAM bundle.
+    return !option.name.startsWith("--tree-shake");
+  }),
 };
