@@ -1,5 +1,12 @@
 # Change Log - @rnx-kit/dep-check
 
+## 1.12.21
+
+### Patch Changes
+
+- e78e4dae: Added profile for react-native 0.70
+- e3fd2c45: change file not found error to warning
+
 ## 1.12.20
 
 ### Patch Changes
