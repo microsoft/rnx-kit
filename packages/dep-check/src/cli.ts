@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import type { KitType } from "@rnx-kit/config";
-import { error } from "@rnx-kit/console";
+import { error, warn } from "@rnx-kit/console";
 import { hasProperty } from "@rnx-kit/tools-language/properties";
 import { findPackageDir } from "@rnx-kit/tools-node/package";
 import {
@@ -168,6 +168,12 @@ export async function cli({
     } catch (e) {
       if (hasProperty(e, "message")) {
         const currentPackageJson = path.relative(process.cwd(), manifest);
+
+        if (hasProperty(e, "code") && e.code === "ENOENT") {
+          warn(`${currentPackageJson}: ${e.message}`);
+          return exitCode;
+        }
+
         error(`${currentPackageJson}: ${e.message}`);
         return exitCode || 1;
       }
