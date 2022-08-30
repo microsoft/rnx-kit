@@ -7,12 +7,14 @@ import type { Dependencies, Graph, Module, SerializerOptions } from "metro";
 import type { SerializerConfigT } from "metro-config";
 import * as path from "path";
 import * as semver from "semver";
+import { absolutizeSourceMap, generateSourceMappingURL } from "./sourceMap";
 
 export { esbuildTransformerConfig } from "./esbuildTransformerConfig";
 
 export type Options = Pick<BuildOptions, "logLevel" | "minify" | "target"> & {
   analyze?: boolean | "verbose";
   fabric?: boolean;
+  sourceMapPaths?: "absolute" | "relative";
 };
 
 function assertVersion(requiredVersion: string): void {
@@ -26,22 +28,6 @@ function assertVersion(requiredVersion: string): void {
 
 function escapePath(path: string): string {
   return path.replace(/\\+/g, "\\\\");
-}
-
-function fixSourceMap(outputPath: string, text: string): string {
-  /**
-   * All paths in the source map are relative to the directory
-   * containing the source map.
-   *
-   * See https://esbuild.github.io/api/#source-root
-   */
-  const sourceRoot = path.dirname(outputPath);
-  const sourcemap = JSON.parse(text);
-  const sources = sourcemap.sources.map((file: string) =>
-    path.resolve(sourceRoot, file)
-  );
-
-  return JSON.stringify({ ...sourcemap, sources });
 }
 
 /**
@@ -104,7 +90,28 @@ function isRedundantPolyfill(modulePath: string): boolean {
 }
 
 function outputOf(module: Module | undefined): string | undefined {
-  return module?.output?.map(({ data }) => data.code).join("\n");
+  if (!module) {
+    return undefined;
+  }
+
+  const jsModules = module.output.filter(({ type }) => type.startsWith("js/"));
+  if (jsModules.length !== 1) {
+    throw new Error(
+      `Modules must have exactly one JS output, but ${module.path} has ${jsModules.length}`
+    );
+  }
+
+  const code = jsModules[0].data.code;
+  const moduleWithModuleNameOnly = {
+    ...module,
+    // esbuild only needs the base file name. It derives the path from the
+    // imported path, and appends the file name to it. If we don't trim the path
+    // here, we will end up with "double" paths, e.g.
+    // `src/Users/<user>/Source/rnx-kit/packages/test-app/src/App.native.tsx`.
+    path: path.basename(module.path),
+  };
+
+  return `${code}\n${generateSourceMappingURL([moduleWithModuleNameOnly])}\n`;
 }
 
 /**
@@ -328,7 +335,10 @@ export function MetroSerializer(
           if (outputPath === "<stdout>" || outputPath.endsWith(outfile)) {
             result.code = text;
           } else if (outputPath.endsWith(sourcemapfile)) {
-            result.map = fixSourceMap(outputPath, text);
+            result.map =
+              buildOptions?.sourceMapPaths === "absolute"
+                ? absolutizeSourceMap(outputPath, text)
+                : text;
           }
         });
         if (metafile) {
