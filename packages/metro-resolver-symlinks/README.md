@@ -63,8 +63,8 @@ everything in their main JS file.
      resolveRequest: MetroSymlinksResolver({
 +      remapModule: MetroSymlinksResolver.remapImportPath({
 +        test: (moduleId) => moduleId.startsWith("@rnx-kit/"),
-+        extensions: [".ts", ".tsx"],     # optional
-+        mainFields: ["module", "main"],  # optional
++        extensions: [".ts", ".tsx"],     // optional
++        mainFields: ["module", "main"],  // optional
 +      }),
      }),
    },
