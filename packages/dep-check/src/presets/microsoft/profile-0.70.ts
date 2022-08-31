@@ -48,6 +48,10 @@ const profile: Profile = {
     version: "^0.72.1",
     devOnly: true,
   },
+  gestures: {
+    name: "react-native-gesture-handler",
+    version: "^2.6.0",
+  },
   metro: {
     name: "metro",
     version: "^0.72.1",
