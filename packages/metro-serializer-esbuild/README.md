@@ -152,6 +152,15 @@ use environment names. See the full documentation for a list of supported names.
 
 Defaults to `hermes0.7.0`.
 
+### `sourceMapPaths`
+
+Determines whether paths in the output source map are absolute or relative to
+the directory containing the source map.
+
+Values: `absolute` | `relative`
+
+Defaults to `relative`.
+
 ### `analyze`
 
 Sets whether esbuild should output a report at the end of bundling.

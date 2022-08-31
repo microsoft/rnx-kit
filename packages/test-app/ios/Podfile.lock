@@ -289,11 +289,11 @@ PODS:
   - ReactTestApp-DevSupport (1.6.8):
     - React-Core
     - React-jsi
-  - ReactTestApp-MSAL (1.0.4):
+  - ReactTestApp-MSAL (1.0.5):
     - MSAL
     - RNXAuth
   - ReactTestApp-Resources (1.0.0-dev)
-  - RNXAuth (0.1.4):
+  - RNXAuth (0.1.5):
     - React-Core
   - Yoga (1.14.0)
 
@@ -448,9 +448,9 @@ SPEC CHECKSUMS:
   React-runtimeexecutor: 8cdd80915ed6dabf2221a689f1f7ddb50ea5e9f3
   ReactCommon: 5b1b43a7d81a1ac4eec85f7c4db3283a14a3b13d
   ReactTestApp-DevSupport: 477807a2c223e21ea8567c0c0a5880d561e11534
-  ReactTestApp-MSAL: 4fa86fda02c24009c9dd4b5647d45e0c45421f41
+  ReactTestApp-MSAL: 803fb430f3d9bf6bc022964c64ac3b64fea88f73
   ReactTestApp-Resources: 74a1cf509f4e7962b16361ea4e73cba3648fff5d
-  RNXAuth: 72b9e2b11d9f56e0f0860da43732dcccad0bcacb
+  RNXAuth: 1f5001db635f153c400b657b91e06e9b997620e8
   Yoga: 2f6a78c58dcc2963bd8e34d96a4246d9dff2e3a7
 
 PODFILE CHECKSUM: 438d9afb225dc2a99c6750449d7231544f5ad6f3
