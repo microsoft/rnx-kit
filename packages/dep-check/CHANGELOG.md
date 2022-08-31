@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/dep-check
 
+## 1.12.22
+
+### Patch Changes
+
+- 17b7666f: react-native-gesture-handler 2.6.0 supports react-native 0.70
+
 ## 1.12.21
 
 ### Patch Changes
