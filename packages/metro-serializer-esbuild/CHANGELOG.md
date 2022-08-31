@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-serializer-esbuild
 
+## 0.1.13
+
+### Patch Changes
+
+- 61151646: Fix source maps not pointing to source
+
 ## 0.1.12
 
 ### Patch Changes
