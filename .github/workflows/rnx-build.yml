@@ -47,7 +47,7 @@ jobs:
       - name: Install npm dependencies
         run: ${{ github.event.inputs.packageManager }} install
       - name: Build Android app
-        uses: gradle/gradle-build-action@v2.2.5
+        uses: gradle/gradle-build-action@v2.3.0
         with:
           gradle-version: wrapper
           arguments: --no-daemon clean assembleDebug
@@ -80,18 +80,6 @@ jobs:
       - name: Install Pods
         run: pod install --project-directory=ios
         working-directory: ${{ github.event.inputs.projectRoot }}
-      - name: Disable Clang sanitizers
-        run: |
-          # We need to disable Clang sanitizers otherwise the app will crash on
-          # startup trying to load Clang sanitizer libraries that would only
-          # exist if Xcode was attached.
-          xcconfig=node_modules/.generated/ios/ReactTestApp/ReactTestApp.debug.xcconfig
-          if [[ -f "${xcconfig}" ]]; then
-            sed -i '' 's/CLANG_ADDRESS_SANITIZER = YES/CLANG_ADDRESS_SANITIZER = NO/g' "${xcconfig}"
-            sed -i '' 's/CLANG_UNDEFINED_BEHAVIOR_SANITIZER = YES/CLANG_UNDEFINED_BEHAVIOR_SANITIZER = NO/g' "${xcconfig}"
-            sed -i '' 's/-fsanitize=bounds//g' "${xcconfig}"
-          fi
-        working-directory: ${{ github.event.inputs.projectRoot }}
       - name: Install Apple signing certificate and provisioning profile
         if: ${{ github.event.inputs.deviceType == 'device' }}
         env:
@@ -123,8 +111,11 @@ jobs:
             archs='ARCHS=${{ github.event.inputs.architecture }}'
             code_signing='CODE_SIGNING_ALLOWED=NO'
           fi
+          # We need to disable Clang sanitizers otherwise the app will crash on
+          # startup trying to load Clang sanitizer libraries that would only
+          # exist if Xcode was attached.
           xcworkspace=$(find . -maxdepth 1 -name '*.xcworkspace' -type d | head -1)
-          xcodebuild -workspace ${xcworkspace} -scheme ${{ github.event.inputs.scheme }} -destination "${destination}" -configuration Debug -derivedDataPath DerivedData -archivePath ${XCARCHIVE_FILE} ${archs} ${code_signing} COMPILER_INDEX_STORE_ENABLE=NO archive
+          xcodebuild -workspace ${xcworkspace} -scheme ${{ github.event.inputs.scheme }} -destination "${destination}" -configuration Debug -derivedDataPath DerivedData -archivePath ${XCARCHIVE_FILE} ${archs} ${code_signing} CLANG_ADDRESS_SANITIZER=NO CLANG_UNDEFINED_BEHAVIOR_SANITIZER=NO OTHER_CFLAGS='$(inherited) -fstack-protector-strong' OTHER_LDFLAGS='$(inherited) -fstack-protector-strong' COMPILER_INDEX_STORE_ENABLE=NO archive
         working-directory: ${{ github.event.inputs.projectRoot }}/ios
       - name: Remove Apple signing certificate and provisioning profile
         if: ${{ always() && github.event.inputs.deviceType == 'device' }}
@@ -174,22 +165,13 @@ jobs:
       - name: Install Pods
         run: pod install --project-directory=macos
         working-directory: ${{ github.event.inputs.projectRoot }}
-      - name: Disable Clang sanitizers
+      - name: Build macOS app
         run: |
           # We need to disable Clang sanitizers otherwise the app will crash on
           # startup trying to load Clang sanitizer libraries that would only
           # exist if Xcode was attached.
-          xcconfig=node_modules/.generated/macos/ReactTestApp/ReactTestApp.debug.xcconfig
-          if [[ -f "${xcconfig}" ]]; then
-            sed -i '' 's/CLANG_ADDRESS_SANITIZER = YES/CLANG_ADDRESS_SANITIZER = NO/g' "${xcconfig}"
-            sed -i '' 's/CLANG_UNDEFINED_BEHAVIOR_SANITIZER = YES/CLANG_UNDEFINED_BEHAVIOR_SANITIZER = NO/g' "${xcconfig}"
-            sed -i '' 's/-fsanitize=bounds//g' "${xcconfig}"
-          fi
-        working-directory: ${{ github.event.inputs.projectRoot }}
-      - name: Build macOS app
-        run: |
           xcworkspace=$(find . -maxdepth 1 -name '*.xcworkspace' -type d | head -1)
-          xcodebuild -workspace ${xcworkspace} -scheme ${{ github.event.inputs.scheme }} -configuration Debug -derivedDataPath DerivedData CODE_SIGNING_ALLOWED=NO COMPILER_INDEX_STORE_ENABLE=NO build
+          xcodebuild -workspace ${xcworkspace} -scheme ${{ github.event.inputs.scheme }} -configuration Debug -derivedDataPath DerivedData CODE_SIGNING_ALLOWED=NO CLANG_ADDRESS_SANITIZER=NO CLANG_UNDEFINED_BEHAVIOR_SANITIZER=NO OTHER_CFLAGS='$(inherited) -fstack-protector-strong' OTHER_LDFLAGS='$(inherited) -fstack-protector-strong' COMPILER_INDEX_STORE_ENABLE=NO build
         working-directory: ${{ github.event.inputs.projectRoot }}/macos
       - name: Prepare build artifact
         run: |
