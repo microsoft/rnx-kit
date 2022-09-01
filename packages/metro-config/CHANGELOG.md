@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-config
 
+## 1.2.37
+
+### Patch Changes
+
+- be0b6511: Publish type declaration files
+
 ## 1.2.36
 
 ### Patch Changes
