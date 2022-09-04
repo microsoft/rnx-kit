@@ -98,8 +98,8 @@ iOS developer bundle:
       --sourcemap-output ios/main.jsbundle.map \
       --assets-dest ios
 
-If you're curious about the rest of the command-line parameters, you can find the
-complete list in the
+If you're curious about the rest of the command-line parameters, you can find
+the complete list in the
 [CLI bundle documentation](/docs/tools/cli#command-line-overrides).
 
 Now is a good time to try out your `rnx-bundle` command.
@@ -272,6 +272,22 @@ module.exports = {
       { disableImportExportTransform: true },
     ],
   ],
+};
+```
+
+You'll also need to set `experimentalImportSupport` and `inlineRequires` in your
+Metro config:
+
+```js title="metro.config.js"
+module.exports = {
+  transformer: {
+    getTransformOptions: async () => ({
+      transform: {
+        experimentalImportSupport: true,
+        inlineRequires: true,
+      },
+    }),
+  },
 };
 ```
 
