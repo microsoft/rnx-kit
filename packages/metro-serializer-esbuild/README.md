@@ -57,19 +57,8 @@ in `babel.config.js`:
  };
 ```
 
-If you're using `@rnx-kit/babel-preset-metro-react-native`, you can instead set
-`esbuild` as transform profile:
-
-```diff
- module.exports = {
-   presets: [
-     [
-       "@rnx-kit/babel-preset-metro-react-native",
-+      { unstable_transformProfile: "esbuild" },
-     ],
-   ],
- };
-```
+If you're using `@rnx-kit/babel-preset-metro-react-native`, you don't need to
+make any changes.
 
 > Note that Hermes currently does not fully implement the
 > [ES6 spec](https://kangax.github.io/compat-table/es6/). esbuild, on the other
