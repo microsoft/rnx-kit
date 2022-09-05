@@ -161,14 +161,19 @@ Values: `absolute` | `relative`
 
 Defaults to `relative`.
 
-### `stripUseStrict`
+### `strictMode`
 
-You can save some bytes by stripping out `"use strict";` from the bundle. Note
-that this breaks the source map.
+By default, the `"use strict";` directive is added by Babel and esbuild when
+lowering to ES5. You can save some bytes by telling this serializer to strip
+them from the bundle.
+
+Note that disabling `strictMode` here will definitely break source maps. It is
+recommended to try disabling strict mode in Babel or TypeScript first before
+considering this option. If you can target ES6, that is a better alternative.
 
 This flag only affects production environment.
 
-Defaults to `false`.
+Defaults to `true`.
 
 ### `analyze`
 

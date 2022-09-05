@@ -9,9 +9,9 @@ describe("metro-serializer-esbuild", () => {
   async function bundle(
     entryFile: string,
     dev = true,
-    sourcemapOutput = undefined
+    sourcemapOutput: string | undefined = undefined
   ): Promise<string> {
-    let result: string | undefined = undefined;
+    let result = "";
     await buildBundle(
       {
         entryFile,
@@ -250,14 +250,6 @@ describe("metro-serializer-esbuild", () => {
         // test/__fixtures__/sideEffectsArray.ts
         warn(\\"this should _not_ be removed\\");
       })();
-      "
-    `);
-  });
-
-  test('strips out `"use strict"`', async () => {
-    const result = await bundle("test/__fixtures__/direct.ts", false);
-    expect(result).toMatchInlineSnapshot(`
-      "\\"use strict\\";(()=>{var e=new Function(\\"return this;\\")();})();
       "
     `);
   });
