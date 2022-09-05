@@ -15,9 +15,9 @@ const bannedPackages: ExcludedPackage[] = [
   },
   {
     name: "react-native-linear-gradient",
-    version: "*",
+    version: "<2.6.0",
     reason:
-      "This package is unmaintained and causes significant degradation in app start up time.",
+      "This package causes significant degradation in app start up time prior to 2.6.0.",
   },
   {
     name: "react-native-lazy-index",
