@@ -233,6 +233,8 @@ describe("@rnx-kit/metro-config", () => {
 });
 
 describe("makeMetroConfig", () => {
+  const consoleWarnSpy = jest.spyOn(require("@rnx-kit/console"), "warn");
+
   const metroConfigKeys = [
     "cacheStores",
     "resolver",
@@ -242,6 +244,10 @@ describe("makeMetroConfig", () => {
     "transformer",
     "watchFolders",
   ];
+
+  afterEach(() => {
+    consoleWarnSpy.mockReset();
+  });
 
   test("returns a default Metro config", async () => {
     const config = makeMetroConfig();
@@ -398,26 +404,20 @@ describe("makeMetroConfig", () => {
     expect(blockList).toBe(configWithBlockList.resolver?.blacklistRE);
   });
 
-  test("deletes the asset plugin if the middleware is deleted", () => {
+  test("warns about the asset plugin if the middleware is deleted", () => {
     const config = makeMetroConfig({
       // @ts-expect-error intentionally setting `enhanceMiddleware` to `null`
       server: { enhanceMiddleware: null },
     });
 
+    expect(consoleWarnSpy).toHaveBeenCalledWith(
+      expect.stringContaining(
+        "@rnx-kit/metro-config's middleware for assets in a monorepo was removed"
+      )
+    );
     expect(config.server?.enhanceMiddleware).toBeNull();
-    expect(config.transformer?.assetPlugins).not.toContain(
+    expect(config.transformer?.assetPlugins).toContain(
       require.resolve("../src/assetPluginForMonorepos")
     );
-  });
-
-  test("does not delete the asset plugin if the middleware is replaced", () => {
-    const config = makeMetroConfig({
-      server: { enhanceMiddleware: (middleware) => middleware },
-    });
-
-    expect(config.server?.enhanceMiddleware).not.toBeUndefined();
-    expect(config.transformer?.assetPlugins).toEqual([
-      require.resolve("../src/assetPluginForMonorepos"),
-    ]);
   });
 });

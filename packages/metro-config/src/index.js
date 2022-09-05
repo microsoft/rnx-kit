@@ -13,26 +13,28 @@ const path = require("path");
 const UNIQUE_PACKAGES = ["react", "react-native"];
 
 /**
- * Ensures `server.enhanceMiddleware` is only set if
+ * Verifies `server.enhanceMiddleware` is only set if
  * `transformer.assetPlugins` includes the asset plugin.
  * @param {MetroConfig} config
  * @returns {MetroConfig}
  */
-function ensureMiddlewareConsistency(config) {
+function verifyMiddlewareConsistency(config) {
   if (!config.server || !config.server.enhanceMiddleware) {
     // If our middleware was removed, we should also remove the corresponding
     // asset plugin. Note that we can only check whether `enhanceMiddleware` is
     // unset as we cannot guarantee that our middleware isn't embedded
     // somewhere.
-    const assetPlugins = config.transformer && config.transformer.assetPlugins;
-    if (assetPlugins) {
-      const monorepoPluginIndex = assetPlugins.indexOf(
+    const monorepoPluginIndex =
+      config.transformer &&
+      config.transformer.assetPlugins &&
+      config.transformer.assetPlugins.indexOf(
         require.resolve("./assetPluginForMonorepos")
       );
-      if (monorepoPluginIndex >= 0) {
-        // @ts-expect-error `assetPlugins` is read-only
-        assetPlugins.splice(monorepoPluginIndex, 1);
-      }
+    if (typeof monorepoPluginIndex === "number" && monorepoPluginIndex >= 0) {
+      const console = require("@rnx-kit/console");
+      console.warn(
+        `@rnx-kit/metro-config's middleware for assets in a monorepo was removed, but the accompanying plugin was not. If you intended to remove the middleware, you should also remove the plugin to avoid issues. The middleware was set in 'server.enhanceMiddleware' and the plugin can be found in 'transformer.assetPlugins'.`
+      );
     }
   }
 
@@ -275,6 +277,6 @@ module.exports = {
       }
     );
 
-    return ensureMiddlewareConsistency(mergedConfig);
+    return verifyMiddlewareConsistency(mergedConfig);
   },
 };
