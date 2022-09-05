@@ -257,7 +257,7 @@ describe("metro-serializer-esbuild", () => {
   test('strips out `"use strict"`', async () => {
     const result = await bundle("test/__fixtures__/direct.ts", false);
     expect(result).toMatchInlineSnapshot(`
-      "(()=>{var e=new Function(\\"return this;\\")();})();
+      "\\"use strict\\";(()=>{var e=new Function(\\"return this;\\")();})();
       "
     `);
   });
@@ -269,7 +269,7 @@ describe("metro-serializer-esbuild", () => {
       ".test-output.jsbundle.map"
     );
     expect(result).toMatchInlineSnapshot(`
-      "(()=>{var e=new Function(\\"return this;\\")();})();
+      "\\"use strict\\";(()=>{var e=new Function(\\"return this;\\")();})();
       //# sourceMappingURL=.test-output.jsbundle.map
       "
     `);
