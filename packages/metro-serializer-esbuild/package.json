@@ -49,6 +49,8 @@
   },
   "depcheck": {
     "ignoreMatches": [
+      "@fluentui/utilities",
+      "lodash-es",
       "metro-config",
       "metro-transform-worker"
     ]

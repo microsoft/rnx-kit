@@ -126,6 +126,17 @@ parameter. For instance, to output ES6 compliant code, set the target option:
 
 Below are all the currently supported options.
 
+### `target`
+
+Sets the target environment for the transpiled JavaScript code.
+
+See the full documentation at https://esbuild.github.io/api/#target.
+
+Values: Any JS language version string such as `es6` or `esnext`. You can also
+use environment names. See the full documentation for a list of supported names.
+
+Defaults to `hermes0.7.0`.
+
 ### `fabric`
 
 When enabled, includes Fabric-enabled version of React. You can save some bytes
@@ -141,17 +152,6 @@ See the full documentation at https://esbuild.github.io/api/#minify.
 
 Defaults to `true` in production environment; `false` otherwise.
 
-### `target`
-
-Sets the target environment for the transpiled JavaScript code.
-
-See the full documentation at https://esbuild.github.io/api/#target.
-
-Values: Any JS language version string such as `es6` or `esnext`. You can also
-use environment names. See the full documentation for a list of supported names.
-
-Defaults to `hermes0.7.0`.
-
 ### `sourceMapPaths`
 
 Determines whether paths in the output source map are absolute or relative to
@@ -160,6 +160,15 @@ the directory containing the source map.
 Values: `absolute` | `relative`
 
 Defaults to `relative`.
+
+### `stripUseStrict`
+
+You can save some bytes by stripping out `"use strict";` from the bundle. Note
+that this breaks the source map.
+
+This flag only affects production environment.
+
+Defaults to `false`.
 
 ### `analyze`
 
