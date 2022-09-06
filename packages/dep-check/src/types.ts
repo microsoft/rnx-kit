@@ -11,9 +11,9 @@ type Options = {
 export type Args = Options & {
   "custom-profiles"?: string | number;
   "exclude-packages"?: string | number;
-  "package-json"?: string | number;
   "set-version"?: string | number;
   init?: string;
+  packages?: (string | number)[];
   vigilant?: string | number;
 };
 
