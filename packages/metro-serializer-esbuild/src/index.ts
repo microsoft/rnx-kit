@@ -15,6 +15,7 @@ export type Options = Pick<BuildOptions, "logLevel" | "minify" | "target"> & {
   analyze?: boolean | "verbose";
   fabric?: boolean;
   sourceMapPaths?: "absolute" | "relative";
+  strictMode?: boolean;
 };
 
 function assertVersion(requiredVersion: string): void {
@@ -139,10 +140,10 @@ export function MetroSerializer(
       setup: (build) => {
         const pluginOptions = { filter: /.*/ };
 
-        // Metro does not inject `"use strict"`, but esbuild does. We should
-        // strip them out like Metro does. See also
+        // Metro does not inject `"use strict"`, but esbuild does. We can strip
+        // them out like Metro does, but it'll break the source map. See also
         // https://github.com/facebook/metro/blob/0fe1253cc4f76aa2a7683cfb2ad0253d0a768c83/packages/metro-react-native-babel-preset/src/configs/main.js#L68
-        if (!options.dev) {
+        if (!options.dev && buildOptions?.strictMode === false) {
           const encoder = new TextEncoder();
           build.onEnd(({ outputFiles }) => {
             outputFiles?.forEach(({ path, text }, index) => {

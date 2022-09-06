@@ -9,9 +9,9 @@ describe("metro-serializer-esbuild", () => {
   async function bundle(
     entryFile: string,
     dev = true,
-    sourcemapOutput = undefined
+    sourcemapOutput: string | undefined = undefined
   ): Promise<string> {
-    let result: string | undefined = undefined;
+    let result = "";
     await buildBundle(
       {
         entryFile,
@@ -254,14 +254,6 @@ describe("metro-serializer-esbuild", () => {
     `);
   });
 
-  test('strips out `"use strict"`', async () => {
-    const result = await bundle("test/__fixtures__/direct.ts", false);
-    expect(result).toMatchInlineSnapshot(`
-      "(()=>{var e=new Function(\\"return this;\\")();})();
-      "
-    `);
-  });
-
   test("adds sourceMappingURL comment", async () => {
     const result = await bundle(
       "test/__fixtures__/direct.ts",
@@ -269,7 +261,7 @@ describe("metro-serializer-esbuild", () => {
       ".test-output.jsbundle.map"
     );
     expect(result).toMatchInlineSnapshot(`
-      "(()=>{var e=new Function(\\"return this;\\")();})();
+      "\\"use strict\\";(()=>{var e=new Function(\\"return this;\\")();})();
       //# sourceMappingURL=.test-output.jsbundle.map
       "
     `);
