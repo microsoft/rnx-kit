@@ -1,4 +1,5 @@
 ---
+"@rnx-kit/cli": patch
 "@rnx-kit/dep-check": patch
 ---
 
