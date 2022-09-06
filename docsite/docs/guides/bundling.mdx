@@ -261,36 +261,6 @@ Tree shaking is _off_ by default. You can control it with the
 }
 ```
 
-To make tree shaking to work properly, you'll also need to set
-`disableImportExportTransform` in your Babel config:
-
-```js title="babel.config.js"
-module.exports = {
-  presets: [
-    [
-      "@rnx-kit/babel-preset-metro-react-native",
-      { disableImportExportTransform: true },
-    ],
-  ],
-};
-```
-
-You'll also need to set `experimentalImportSupport` and `inlineRequires` in your
-Metro config:
-
-```js title="metro.config.js"
-module.exports = {
-  transformer: {
-    getTransformOptions: async () => ({
-      transform: {
-        experimentalImportSupport: true,
-        inlineRequires: true,
-      },
-    }),
-  },
-};
-```
-
 ### Duplicate Dependencies
 
 Did you know that your app bundle can have multiple copies of a single package
