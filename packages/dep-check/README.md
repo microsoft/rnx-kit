@@ -30,11 +30,11 @@ npm add --save-dev @rnx-kit/dep-check
 ## Usage
 
 ```sh
-yarn rnx-dep-check [options] [/path/to/package.json]
+yarn rnx-dep-check [options] [packages...]
 ```
 
-Providing a path to `package.json` is optional. If omitted, it will look for one
-using Node module resolution.
+Specifying packages is optional. If omitted, dep-check will look for the closest
+`package.json` using Node module resolution.
 
 Examples:
 
