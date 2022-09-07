@@ -1,5 +1,5 @@
 #!/bin/bash
-set -eo pipefail
+set -eox pipefail
 
 case ${1-} in
   archive)
@@ -30,7 +30,7 @@ case ${1-} in
           ;;
         *)
           echo "Unknown option: $1"
-          shift
+          exit 1
           ;;
       esac
     done
@@ -71,7 +71,7 @@ case ${1-} in
           ;;
         *)
           echo "Unknown option: $1"
-          shift
+          exit 1
           ;;
       esac
     done
