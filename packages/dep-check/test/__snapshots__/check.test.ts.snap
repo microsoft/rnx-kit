@@ -21,7 +21,7 @@ Array [
   Array [
     "warn",
     "Known bad packages are found in '@rnx-kit/dep-check':
-    react-native-linear-gradient@*: This package is unmaintained and causes significant degradation in app start up time.",
+    react-native-linear-gradient@<2.6.0: This package causes significant degradation in app start up time prior to 2.6.0.",
   ],
 ]
 `;
@@ -31,7 +31,7 @@ Array [
   Array [
     "warn",
     "Known bad packages are found in '@rnx-kit/dep-check':
-    react-native-linear-gradient@*: This package is unmaintained and causes significant degradation in app start up time.",
+    react-native-linear-gradient@<2.6.0: This package causes significant degradation in app start up time prior to 2.6.0.",
   ],
 ]
 `;
