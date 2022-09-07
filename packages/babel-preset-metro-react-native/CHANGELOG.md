@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/babel-preset-metro-react-native
 
+## 1.1.1
+
+### Patch Changes
+
+- f80cff5a: Use `esbuild` transform profile when `metro-serializer-esbuild` is used
+
 ## 1.1.0
 
 ### Minor Changes

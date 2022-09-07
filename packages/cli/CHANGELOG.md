@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/cli
 
+## 0.14.3
+
+### Patch Changes
+
+- c067c1be: Allow specifying multiple packages on command line
+
 ## 0.14.2
 
 ### Patch Changes

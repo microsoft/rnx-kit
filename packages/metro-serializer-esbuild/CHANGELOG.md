@@ -1,5 +1,13 @@
 # Change Log - @rnx-kit/metro-serializer-esbuild
 
+## 0.1.14
+
+### Patch Changes
+
+- f80cff5a: Use `esbuild` transform profile when `metro-serializer-esbuild` is used
+- 42b6b6a5: Stop removing `"use strict";` by default as it breaks source maps
+- 74fa8fe2: Add support for Metro 0.72
+
 ## 0.1.13
 
 ### Patch Changes
