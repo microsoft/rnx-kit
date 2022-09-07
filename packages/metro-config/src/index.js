@@ -20,10 +20,12 @@ const UNIQUE_PACKAGES = ["react", "react-native"];
  */
 function verifyMiddlewareConsistency(config) {
   if (!config.server || !config.server.enhanceMiddleware) {
-    // If our middleware was removed, we should also remove the corresponding
-    // asset plugin. Note that we can only check whether `enhanceMiddleware` is
-    // unset as we cannot guarantee that our middleware isn't embedded
-    // somewhere.
+    // If our middleware was removed, the corresponding asset plugin should also
+    // be removed to avoid issues. We should notify the user of this so they can
+    // handle it accordingly.
+    //
+    // Note that we can only check whether `enhanceMiddleware` is unset as we
+    // cannot guarantee that our middleware isn't embedded somewhere.
     const monorepoPluginIndex =
       config.transformer &&
       config.transformer.assetPlugins &&
