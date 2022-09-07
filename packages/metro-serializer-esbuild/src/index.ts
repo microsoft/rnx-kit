@@ -31,6 +31,24 @@ function escapePath(path: string): string {
   return path.replace(/\\+/g, "\\\\");
 }
 
+function getModulePath(moduleName: string, parent: Module): string | undefined {
+  const p = parent.dependencies.get(moduleName)?.absolutePath;
+  if (p) {
+    return p;
+  }
+
+  // In Metro 0.72.0, the key changed from module name to a unique key in order
+  // to support features such as `require.context`. For more details, see
+  // https://github.com/facebook/metro/commit/52e1a00ffb124914a95e78e9f60df1bc2e2e7bf0.
+  for (const [, value] of parent.dependencies) {
+    if (value.data.name === moduleName) {
+      return value.absolutePath;
+    }
+  }
+
+  return undefined;
+}
+
 /**
  * Returns whether the specified module has any side effects.
  *
@@ -168,7 +186,7 @@ export function MetroSerializer(
 
           const parent = dependencies.get(args.importer);
           if (parent) {
-            const path = parent.dependencies.get(args.path)?.absolutePath;
+            const path = getModulePath(args.path, parent);
             return {
               path,
               sideEffects: path ? getSideEffects(path) : undefined,
