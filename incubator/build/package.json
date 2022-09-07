@@ -11,12 +11,14 @@
   },
   "files": [
     "lib/**/*.{d.ts,js}",
+    "scripts/*",
     "workflows/*"
   ],
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "bin": {
-    "rnx-build": "lib/cli.js"
+    "rnx-build": "lib/cli.js",
+    "rnx-build-apple": "scripts/build-apple.sh"
   },
   "repository": {
     "type": "git",
