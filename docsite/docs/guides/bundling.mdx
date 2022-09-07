@@ -98,8 +98,8 @@ iOS developer bundle:
       --sourcemap-output ios/main.jsbundle.map \
       --assets-dest ios
 
-If you're curious about the rest of the command-line parameters, you can find the
-complete list in the
+If you're curious about the rest of the command-line parameters, you can find
+the complete list in the
 [CLI bundle documentation](/docs/tools/cli#command-line-overrides).
 
 Now is a good time to try out your `rnx-bundle` command.
@@ -259,20 +259,6 @@ Tree shaking is _off_ by default. You can control it with the
     }
   }
 }
-```
-
-To make tree shaking to work properly, you'll also need to set
-`disableImportExportTransform` in your Babel config:
-
-```js title="babel.config.js"
-module.exports = {
-  presets: [
-    [
-      "@rnx-kit/babel-preset-metro-react-native",
-      { disableImportExportTransform: true },
-    ],
-  ],
-};
 ```
 
 ### Duplicate Dependencies
