@@ -124,7 +124,7 @@ export function MetroSerializer(
   assertVersion(">=0.66.1");
 
   // Signal to every plugin that we're using esbuild.
-  process.env[`RNX_METRO_SERIALIZER_ESBUILD_${process.pid}`] = "true";
+  process.env["RNX_METRO_SERIALIZER_ESBUILD"] = "true";
 
   return (
     entryPoint: string,
