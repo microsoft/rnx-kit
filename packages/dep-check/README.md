@@ -33,8 +33,10 @@ npm add --save-dev @rnx-kit/dep-check
 yarn rnx-dep-check [options] [packages...]
 ```
 
-Specifying packages is optional. If omitted, dep-check will look for the closest
-`package.json` using Node module resolution.
+Listing paths to packages that should be checked is optional. If omitted,
+dep-check will look for the closest `package.json` using Node module resolution.
+If the target package is a root package defining workspaces, they will all be
+included.
 
 Examples:
 
