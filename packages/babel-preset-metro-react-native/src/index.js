@@ -58,6 +58,11 @@ function constEnumPlugin() {
  * @returns {MetroPresetOptions | undefined}
  */
 function overridesFor(transformProfile) {
+  // Use the `esbuild` transform profile if the serializer is being used.
+  if (!transformProfile && process.env["RNX_METRO_SERIALIZER_ESBUILD"]) {
+    transformProfile = "esbuild";
+  }
+
   switch (transformProfile) {
     case "esbuild":
       return {
@@ -124,8 +129,8 @@ module.exports = (
     ...(options.withDevTools == null
       ? { dev: env !== "production" }
       : undefined),
-    ...options,
     ...overridesFor(unstable_transformProfile),
+    ...options,
   });
   const overrides = metroPreset.overrides;
 

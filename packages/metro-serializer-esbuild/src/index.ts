@@ -142,6 +142,9 @@ export function MetroSerializer(
 ): SerializerConfigT["customSerializer"] {
   assertVersion(">=0.66.1");
 
+  // Signal to every plugin that we're using esbuild.
+  process.env["RNX_METRO_SERIALIZER_ESBUILD"] = "true";
+
   return (
     entryPoint: string,
     preModules: ReadonlyArray<Module>,
