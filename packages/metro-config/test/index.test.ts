@@ -1,5 +1,6 @@
 import * as fs from "node:fs";
 import * as path from "node:path";
+import { enhanceMiddleware } from "../src/assetPluginForMonorepos";
 import {
   defaultWatchFolders,
   exclusionList,
@@ -9,16 +10,6 @@ import {
 } from "../src/index";
 
 describe("@rnx-kit/metro-config", () => {
-  const metroConfigKeys = [
-    "cacheStores",
-    "resolver",
-    "serializer",
-    "server",
-    "symbolicator",
-    "transformer",
-    "watchFolders",
-  ];
-
   const currentWorkingDir = process.cwd();
 
   /**
@@ -239,8 +230,26 @@ describe("@rnx-kit/metro-config", () => {
     ).toBeTruthy();
     expect(conanExclude.test("Test.ProjectImports.zip")).toBeTruthy();
   });
+});
 
-  test("makeMetroConfig() returns a default Metro config", async () => {
+describe("makeMetroConfig", () => {
+  const consoleWarnSpy = jest.spyOn(require("@rnx-kit/console"), "warn");
+
+  const metroConfigKeys = [
+    "cacheStores",
+    "resolver",
+    "serializer",
+    "server",
+    "symbolicator",
+    "transformer",
+    "watchFolders",
+  ];
+
+  afterEach(() => {
+    consoleWarnSpy.mockReset();
+  });
+
+  test("returns a default Metro config", async () => {
     const config = makeMetroConfig();
     expect(Object.keys(config).sort()).toEqual(metroConfigKeys);
 
@@ -252,6 +261,8 @@ describe("@rnx-kit/metro-config", () => {
       fail("Expected `config.resolver.blacklistRE` to be a RegExp");
     } else if (!(config.resolver.blockList instanceof RegExp)) {
       fail("Expected `config.resolver.blockList` to be a RegExp");
+    } else if (!config.server) {
+      fail("Expected `config.server` to be defined");
     } else if (!config.transformer) {
       fail("Expected `config.transformer` to be defined");
     } else if (!config.transformer.getTransformOptions) {
@@ -268,6 +279,11 @@ describe("@rnx-kit/metro-config", () => {
     expect(config.resolver.blacklistRE.source).toBe(blockList);
     expect(config.resolver.blockList.source).toBe(blockList);
 
+    expect(config.server.enhanceMiddleware).toBe(enhanceMiddleware);
+    expect(config.transformer.assetPlugins).toContain(
+      require.resolve("../src/assetPluginForMonorepos")
+    );
+
     const opts = { dev: false, hot: false };
     const transformerOptions = await config.transformer.getTransformOptions(
       [],
@@ -282,7 +298,7 @@ describe("@rnx-kit/metro-config", () => {
     expect(config.watchFolders.length).toBeGreaterThan(0);
   });
 
-  test("makeMetroConfig() merges Metro configs", async () => {
+  test("merges Metro configs", async () => {
     const config = makeMetroConfig({
       projectRoot: __dirname,
       resetCache: true,
@@ -303,6 +319,8 @@ describe("@rnx-kit/metro-config", () => {
       fail("Expected `config.resolver.blacklistRE` to be a RegExp");
     } else if (!(config.resolver.blockList instanceof RegExp)) {
       fail("Expected `config.resolver.blockList` to be a RegExp");
+    } else if (!config.server) {
+      fail("Expected `config.server` to be defined");
     } else if (!config.transformer) {
       fail("Expected `config.transformer` to be defined");
     } else if (!config.transformer.getTransformOptions) {
@@ -319,6 +337,11 @@ describe("@rnx-kit/metro-config", () => {
     expect(config.resolver.blacklistRE.source).toBe(blockList);
     expect(config.resolver.blockList.source).toBe(blockList);
 
+    expect(config.server.enhanceMiddleware).toBe(enhanceMiddleware);
+    expect(config.transformer.assetPlugins).toContain(
+      require.resolve("../src/assetPluginForMonorepos")
+    );
+
     const opts = { dev: false, hot: false };
     const transformerOptions = await config.transformer.getTransformOptions(
       [],
@@ -333,7 +356,7 @@ describe("@rnx-kit/metro-config", () => {
     expect(config.watchFolders.length).toBeGreaterThan(0);
   });
 
-  test("makeMetroConfig() merges `extraNodeModules`", () => {
+  test("merges `extraNodeModules`", () => {
     const config = makeMetroConfig({
       projectRoot: __dirname,
       resolver: {
@@ -359,7 +382,7 @@ describe("@rnx-kit/metro-config", () => {
     expect(extraNodeModules["react-native"]).toBe("/skynet");
   });
 
-  test("makeMetroConfig() sets both `blacklistRE` and `blockList`", () => {
+  test("sets both `blacklistRE` and `blockList`", () => {
     const configWithBlacklist = makeMetroConfig({
       resolver: {
         blacklistRE: /.*/,
@@ -379,5 +402,22 @@ describe("@rnx-kit/metro-config", () => {
 
     expect(blockList).not.toBeUndefined();
     expect(blockList).toBe(configWithBlockList.resolver?.blacklistRE);
+  });
+
+  test("warns about the asset plugin if the middleware is deleted", () => {
+    const config = makeMetroConfig({
+      // @ts-expect-error intentionally setting `enhanceMiddleware` to `null`
+      server: { enhanceMiddleware: null },
+    });
+
+    expect(consoleWarnSpy).toHaveBeenCalledWith(
+      expect.stringContaining(
+        "@rnx-kit/metro-config's middleware for assets in a monorepo was removed"
+      )
+    );
+    expect(config.server?.enhanceMiddleware).toBeNull();
+    expect(config.transformer?.assetPlugins).toContain(
+      require.resolve("../src/assetPluginForMonorepos")
+    );
   });
 });
