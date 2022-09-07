@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/dep-check
 
+## 1.12.23
+
+### Patch Changes
+
+- c067c1be: Allow specifying multiple packages on command line
+
 ## 1.12.22
 
 ### Patch Changes

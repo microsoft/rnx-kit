@@ -1,5 +1,12 @@
 # @rnx-kit/build
 
+## 0.3.3
+
+### Patch Changes
+
+- 74306a4b: Move some build scripts to a separate file so they can be shared
+- ddb143ff: Disable sanitizers via `xcodebuild` build settings
+
 ## 0.3.2
 
 ### Patch Changes
