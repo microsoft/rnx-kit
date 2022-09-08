@@ -1,7 +1,7 @@
 - Title: dep-check v2
 - Date: 2022-07-21
-- RFC PR: https://github.com/microsoft/rnx-kit/pull/1757
-- rnx-kit Issue: https://github.com/microsoft/rnx-kit/issues/1638
+- RFC PR: (leave this empty)
+- rnx-kit Issue: (leave this empty)
 
 # Summary
 
