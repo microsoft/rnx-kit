@@ -1,6 +1,8 @@
+import { preset as communityReactNativeNewArchOnlyPreset } from "./presets/community/react-native-new-arch-only";
 import { preset as reactNativePreset } from "./presets/microsoft/react-native";
 
 export const presets = {
+  "community/react-native-new-arch-only": communityReactNativeNewArchOnlyPreset,
   "microsoft/react-native": reactNativePreset,
 };
 

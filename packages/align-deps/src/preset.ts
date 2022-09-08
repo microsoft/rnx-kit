@@ -3,6 +3,7 @@ import semverCoerce from "semver/functions/coerce";
 import semverSatisfies from "semver/functions/satisfies";
 import semverValidRange from "semver/ranges/valid";
 import { gatherRequirements } from "./dependencies";
+import { preset as communityReactNativeNewArchOnlyPreset } from "./presets/community/react-native-new-arch-only";
 import { preset as reactNativePreset } from "./presets/microsoft/react-native";
 import type { AlignDepsConfig, Options, Preset } from "./types";
 
@@ -26,6 +27,8 @@ function loadPreset(
   resolve = require.resolve
 ): Preset {
   switch (preset) {
+    case "community/react-native-new-arch-only":
+      return communityReactNativeNewArchOnlyPreset;
     case "microsoft/react-native":
       return reactNativePreset;
     default:
