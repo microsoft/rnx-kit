@@ -13,37 +13,6 @@ const path = require("path");
 const UNIQUE_PACKAGES = ["react", "react-native"];
 
 /**
- * Verifies `server.enhanceMiddleware` is only set if
- * `transformer.assetPlugins` includes the asset plugin.
- * @param {MetroConfig} config
- * @returns {MetroConfig}
- */
-function verifyMiddlewareConsistency(config) {
-  if (!config.server || !config.server.enhanceMiddleware) {
-    // If our middleware was removed, the corresponding asset plugin should also
-    // be removed to avoid issues. We should notify the user of this so they can
-    // handle it accordingly.
-    //
-    // Note that we can only check whether `enhanceMiddleware` is unset as we
-    // cannot guarantee that our middleware isn't embedded somewhere.
-    const monorepoPluginIndex =
-      config.transformer &&
-      config.transformer.assetPlugins &&
-      config.transformer.assetPlugins.indexOf(
-        require.resolve("./assetPluginForMonorepos")
-      );
-    if (typeof monorepoPluginIndex === "number" && monorepoPluginIndex >= 0) {
-      const console = require("@rnx-kit/console");
-      console.warn(
-        `@rnx-kit/metro-config's middleware for assets in a monorepo was removed, but the accompanying plugin was not. If you intended to remove the middleware, you should also remove the plugin to avoid issues. The middleware was set in 'server.enhanceMiddleware' and the plugin can be found in 'transformer.assetPlugins'.`
-      );
-    }
-  }
-
-  return config;
-}
-
-/**
  * A minimum list of folders that should be watched by Metro.
  * @returns {string[]}
  */
@@ -224,7 +193,7 @@ module.exports = {
     const customBlockList =
       customConfig.resolver &&
       (customConfig.resolver.blockList || customConfig.resolver.blacklistRE);
-    const mergedConfig = mergeConfig(
+    return mergeConfig(
       {
         resolver: {
           resolverMainFields: ["module", "browser", "main"],
@@ -235,7 +204,6 @@ module.exports = {
           enhanceMiddleware,
         },
         transformer: {
-          assetPlugins: [require.resolve("./assetPluginForMonorepos")],
           getTransformOptions: async () => ({
             transform: {
               experimentalImportSupport: false,
@@ -278,7 +246,5 @@ module.exports = {
         },
       }
     );
-
-    return verifyMiddlewareConsistency(mergedConfig);
   },
 };
