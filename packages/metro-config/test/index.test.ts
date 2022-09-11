@@ -280,9 +280,7 @@ describe("makeMetroConfig", () => {
     expect(config.resolver.blockList.source).toBe(blockList);
 
     expect(config.server.enhanceMiddleware).toBe(enhanceMiddleware);
-    expect(config.transformer.assetPlugins).toContain(
-      require.resolve("../src/assetPluginForMonorepos")
-    );
+    expect(config.transformer.assetPlugins).toBeUndefined();
 
     const opts = { dev: false, hot: false };
     const transformerOptions = await config.transformer.getTransformOptions(
@@ -338,9 +336,7 @@ describe("makeMetroConfig", () => {
     expect(config.resolver.blockList.source).toBe(blockList);
 
     expect(config.server.enhanceMiddleware).toBe(enhanceMiddleware);
-    expect(config.transformer.assetPlugins).toContain(
-      require.resolve("../src/assetPluginForMonorepos")
-    );
+    expect(config.transformer.assetPlugins).toBeUndefined();
 
     const opts = { dev: false, hot: false };
     const transformerOptions = await config.transformer.getTransformOptions(
@@ -402,22 +398,5 @@ describe("makeMetroConfig", () => {
 
     expect(blockList).not.toBeUndefined();
     expect(blockList).toBe(configWithBlockList.resolver?.blacklistRE);
-  });
-
-  test("warns about the asset plugin if the middleware is deleted", () => {
-    const config = makeMetroConfig({
-      // @ts-expect-error intentionally setting `enhanceMiddleware` to `null`
-      server: { enhanceMiddleware: null },
-    });
-
-    expect(consoleWarnSpy).toHaveBeenCalledWith(
-      expect.stringContaining(
-        "@rnx-kit/metro-config's middleware for assets in a monorepo was removed"
-      )
-    );
-    expect(config.server?.enhanceMiddleware).toBeNull();
-    expect(config.transformer?.assetPlugins).toContain(
-      require.resolve("../src/assetPluginForMonorepos")
-    );
   });
 });
