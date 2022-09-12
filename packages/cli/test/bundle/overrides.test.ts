@@ -1,5 +1,8 @@
 import "jest-extended";
-import { applyBundleConfigOverrides } from "../../src/bundle/overrides";
+import {
+  applyBundleConfigOverrides,
+  overridableBundleOptions,
+} from "../../src/bundle/overrides";
 import type { CliPlatformBundleConfig } from "../../src/bundle/types";
 
 describe("CLI > Bundle > Overrides > applyBundleConfigOverrides", () => {
@@ -16,7 +19,11 @@ describe("CLI > Bundle > Overrides > applyBundleConfigOverrides", () => {
 
   test("has no effect when no overrides are given", () => {
     const copy = { ...config };
-    applyBundleConfigOverrides({}, [copy]);
+    applyBundleConfigOverrides(
+      {},
+      [copy],
+      [...overridableBundleOptions, "treeShake"]
+    );
     expect(copy).toEqual(config);
   });
 
@@ -28,10 +35,9 @@ describe("CLI > Bundle > Overrides > applyBundleConfigOverrides", () => {
       }
     }
     applyBundleConfigOverrides(
-      {
-        [name]: value,
-      },
-      [copy]
+      { [name]: value },
+      [copy],
+      [...overridableBundleOptions, "treeShake"]
     );
     expect(copy).toEqual({
       ...config,

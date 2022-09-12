@@ -198,3 +198,7 @@ Defaults to `warning`.
   details, read https://hackmd.io/Z021hgSGStKlYLwsqNMOcg. This can be mitigated
   with an ESLint rule, such as `no-export-all` from
   [`@rnx-kit/eslint-plugin`](https://github.com/microsoft/rnx-kit/tree/main/packages/eslint-plugin#readme).
+- esbuild is incompatible with
+  [RAM bundle](https://facebook.github.io/metro/docs/bundling/#indexed-ram-bundle).
+  If you require RAM bundles, you cannot use this serializer. In fact, Metro
+  will simply ignore it.

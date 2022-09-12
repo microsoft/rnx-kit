@@ -1,7 +1,7 @@
 import type { ServerConfig, BundlerPlugins } from "@rnx-kit/config";
 import { getKitConfig, getBundleConfig } from "@rnx-kit/config";
-import { getDefaultBundlerPlugins } from "../bundler-plugin-defaults";
 import { pickValues } from "@rnx-kit/tools-language/properties";
+import { getDefaultBundlerPlugins } from "../bundle/defaultPlugins";
 
 export type ServerConfigOverrides = {
   projectRoot?: string;

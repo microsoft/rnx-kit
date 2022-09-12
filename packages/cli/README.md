@@ -87,23 +87,23 @@ dependencies.
 
 ### Command-Line Overrides
 
-| Override                                                                           | Description                                                                                                                                            |
-| ---------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| --id [id]                                                                          | Target bundle definition. This is only needed when the rnx-kit configuration has multiple bundle definitions.                                          |
-| --entry-file [file]                                                                | Path to the root JavaScript or TypeScript file, either absolute or relative to the package.                                                            |
-| --platform [`ios` &#124; `android` &#124; `windows` &#124; `win32` &#124; `macos`] | Target platform. When not given, all platforms in the rnx-kit configuration are bundled.                                                               |
-| --dev [boolean]                                                                    | If false, warnings are disabled and the bundle is minified (default: true).                                                                            |
-| --minify [boolean]                                                                 | Controls whether or not the bundle is minified. Disabling minification is useful for test builds.                                                      |
-| --bundle-output [path]                                                             | Path to the output bundle file, either absolute or relative to the package.                                                                            |
-| --bundle-encoding [`utf8` &#124; `utf16le` &#124; `ascii`]                         | [Character encoding](https://nodejs.org/api/buffer.html#buffer_buffers_and_character_encodings) to use when writing the bundle file.                   |
-| --max-workers [number]                                                             | Specifies the maximum number of parallel worker threads to use for transforming files. This defaults to the number of cores available on your machine. |
-| --sourcemap-output [string]                                                        | Path where the bundle source map is written, either absolute or relative to the package.                                                               |
-| --sourcemap-sources-root [string]                                                  | Path to use when relativizing file entries in the bundle source map.                                                                                   |
-| --assets-dest [path]                                                               | Path where bundle assets like images are written, either absolute or relative to the package. If not given, assets are ignored.                        |
-| --tree-shake [boolean]                                                             | Enable tree shaking to remove unused code and reduce the bundle size.                                                                                  |
-| --reset-cache                                                                      | Reset the Metro cache.                                                                                                                                 |
-| --config [string]                                                                  | Path to the Metro configuration file.                                                                                                                  |
-| -h, --help                                                                         | Show usage information.                                                                                                                                |
+| Override                                                           | Description                                                                                                                                            |
+| ------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| --id [id]                                                          | Target bundle definition. This is only needed when the rnx-kit configuration has multiple bundle definitions.                                          |
+| --entry-file [file]                                                | Path to the root JavaScript or TypeScript file, either absolute or relative to the package.                                                            |
+| --platform [`ios` \| `android` \| `windows` \| `win32` \| `macos`] | Target platform. When not given, all platforms in the rnx-kit configuration are bundled.                                                               |
+| --dev [boolean]                                                    | If false, warnings are disabled and the bundle is minified (default: true).                                                                            |
+| --minify [boolean]                                                 | Controls whether or not the bundle is minified. Disabling minification is useful for test builds.                                                      |
+| --bundle-output [path]                                             | Path to the output bundle file, either absolute or relative to the package.                                                                            |
+| --bundle-encoding [`utf8` \| `utf16le` \| `ascii`]                 | [Character encoding](https://nodejs.org/api/buffer.html#buffer_buffers_and_character_encodings) to use when writing the bundle file.                   |
+| --max-workers [number]                                             | Specifies the maximum number of parallel worker threads to use for transforming files. This defaults to the number of cores available on your machine. |
+| --sourcemap-output [string]                                        | Path where the bundle source map is written, either absolute or relative to the package.                                                               |
+| --sourcemap-sources-root [string]                                  | Path to use when relativizing file entries in the bundle source map.                                                                                   |
+| --assets-dest [path]                                               | Path where bundle assets like images are written, either absolute or relative to the package. If not given, assets are ignored.                        |
+| --tree-shake [boolean]                                             | Enable tree shaking to remove unused code and reduce the bundle size.                                                                                  |
+| --reset-cache                                                      | Reset the Metro cache.                                                                                                                                 |
+| --config [string]                                                  | Path to the Metro configuration file.                                                                                                                  |
+| -h, --help                                                         | Show usage information.                                                                                                                                |
 
 ## Start a Bundle Server
 
@@ -139,8 +139,7 @@ yarn react-native rnx-start --host localhost --port 8812
         "ignoredModules": ["react-is"],
         "throwOnError": false
       },
-      "typescriptValidation": true,
-      "treeShake": true
+      "typescriptValidation": true
     }
   }
 }

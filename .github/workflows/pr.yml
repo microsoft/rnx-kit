@@ -70,7 +70,7 @@ jobs:
         working-directory: packages/test-app
       - name: Bundle test app with RAM bundle format
         run: |
-          yarn bundle+ram
+          yarn bundle-ram
         shell: bash
         working-directory: packages/test-app
   build-android-expo-app:

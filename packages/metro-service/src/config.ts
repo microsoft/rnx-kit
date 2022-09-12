@@ -165,7 +165,7 @@ export type MetroConfigOverrides = {
  * this loads from one of the default files -- metro.config.hs, metro.config.json,
  * or package.json.
  *
- * @param cliConfig @react-native-community/cli configuration
+ * @param cliConfig `@react-native-community/cli` configuration
  * @param overrides Overrides to apply to the Metro configuration
  * @returns Overridden Metro configuration
  */

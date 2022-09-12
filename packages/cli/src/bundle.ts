@@ -1,28 +1,17 @@
-import type { TransformProfile } from "metro-babel-transformer";
 import type { Config as CLIConfig } from "@react-native-community/cli-types";
-import { BundleArgs, loadMetroConfig } from "@rnx-kit/metro-service";
-import type { AllPlatforms } from "@rnx-kit/tools-react-native/platform";
+import { loadMetroConfig } from "@rnx-kit/metro-service";
+import { commonBundleOptions } from "./bundle/cliOptions";
 import { getCliPlatformBundleConfigs } from "./bundle/kit-config";
 import { metroBundle } from "./bundle/metro";
-import { applyBundleConfigOverrides } from "./bundle/overrides";
+import {
+  applyBundleConfigOverrides,
+  overridableBundleOptions,
+} from "./bundle/overrides";
+import type { CLICommonBundleOptions } from "./bundle/types";
+import { parseBoolean } from "./parsers";
 
-export type CLIBundleOptions = {
-  id?: string;
-  entryFile?: string;
-  platform?: AllPlatforms;
-  dev: boolean;
-  minify?: boolean;
-  bundleOutput?: string;
-  bundleEncoding?: BundleArgs["bundleEncoding"];
-  maxWorkers?: number;
-  sourcemapOutput?: string;
-  sourcemapSourcesRoot?: string;
-  sourcemapUseAbsolutePath?: boolean;
-  assetsDest?: string;
+type CLIBundleOptions = CLICommonBundleOptions & {
   treeShake?: boolean;
-  unstableTransformProfile?: TransformProfile;
-  resetCache?: boolean;
-  config?: string;
 };
 
 export async function rnxBundle(
@@ -37,7 +26,10 @@ export async function rnxBundle(
     cliOptions.platform
   );
 
-  applyBundleConfigOverrides(cliOptions, bundleConfigs);
+  applyBundleConfigOverrides(cliOptions, bundleConfigs, [
+    ...overridableBundleOptions,
+    "treeShake",
+  ]);
 
   for (const bundleConfig of bundleConfigs) {
     await metroBundle(
@@ -47,6 +39,20 @@ export async function rnxBundle(
       cliOptions.minify
     );
   }
-
-  return Promise.resolve();
 }
+
+export const rnxBundleCommand = {
+  name: "rnx-bundle",
+  description:
+    "Bundle your rnx-kit package for offline use. See https://aka.ms/rnx-kit.",
+  func: rnxBundle,
+  options: [
+    ...commonBundleOptions,
+    {
+      name: "--tree-shake [boolean]",
+      description:
+        "Enable tree shaking to remove unused code and reduce the bundle size.",
+      parse: parseBoolean,
+    },
+  ],
+};
