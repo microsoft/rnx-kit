@@ -23,11 +23,6 @@
           "type": "string",
           "enum": ["utf8", "utf16le", "ascii"]
         },
-        "bundleFormat": {
-          "description": "Controls output bundle format. See Metro's documentation (https://facebook.github.io/metro/docs/bundling) for an overview. Note that `ram-bundle` this will disable the tree shaking plugin.",
-          "type": "string",
-          "enum": ["plain", "ram-bundle"]
-        },
         "sourcemapOutput": {
           "description": "Path to use when creating the bundle source map file. Either absolute, or relative to the package.",
           "type": "string"

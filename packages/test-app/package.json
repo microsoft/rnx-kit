@@ -13,7 +13,6 @@
     "test": "react-native rnx-test --platform ios",
     "bundle": "react-native rnx-bundle",
     "bundle+esbuild": "react-native rnx-bundle --id esbuild",
-    "bundle+ram": "react-native rnx-bundle --id ram",
     "bundle:android": "react-native rnx-bundle --platform android",
     "bundle:ios": "react-native rnx-bundle --platform ios",
     "bundle:macos": "react-native rnx-bundle --platform macos",
@@ -100,7 +99,6 @@
           },
           "ios": {
             "bundleOutput": "dist/main.ios.jsbundle",
-            "bundleFormat": "ram-bundle",
             "sourcemapOutput": "dist/main.ios.jsbundle.map"
           },
           "windows": {
@@ -139,29 +137,6 @@
           "windows": {
             "bundleOutput": "dist/main+esbuild.windows.bundle",
             "sourcemapOutput": "dist/main+esbuild.windows.bundle.map"
-          }
-        }
-      },
-      {
-        "id": "ram",
-        "entryFile": "src/index.ts",
-        "bundleFormat": "ram-bundle",
-        "assetsDest": "dist",
-        "detectCyclicDependencies": true,
-        "detectDuplicateDependencies": {
-          "ignoredModules": [
-            "react-is"
-          ]
-        },
-        "typescriptValidation": true,
-        "treeShake": true,
-        "targets": [
-          "ios"
-        ],
-        "platforms": {
-          "ios": {
-            "bundleOutput": "dist/main.ios.ram.jsbundle",
-            "sourcemapOutput": "dist/main.ios.ram.jsbundle.map"
           }
         }
       }

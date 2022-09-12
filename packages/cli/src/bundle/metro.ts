@@ -25,7 +25,13 @@ export async function metroBundle(
 ): Promise<void> {
   info(`Bundling ${bundleConfig.platform}...`);
 
-  customizeMetroConfig(metroConfig, bundleConfig);
+  customizeMetroConfig(
+    metroConfig,
+    bundleConfig.detectCyclicDependencies,
+    bundleConfig.detectDuplicateDependencies,
+    bundleConfig.typescriptValidation,
+    bundleConfig.treeShake
+  );
 
   const metroBundleArgs: MetroBundleArgs = {
     ...bundleConfig,

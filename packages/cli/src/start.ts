@@ -137,9 +137,16 @@ export async function rnxStart(
   });
 
   // customize the metro config to include plugins, presets, etc.
-  customizeMetroConfig(metroConfig, serverConfig, (message) => {
-    terminal.log(message);
-  });
+  customizeMetroConfig(
+    metroConfig,
+    serverConfig.detectCyclicDependencies,
+    serverConfig.detectDuplicateDependencies,
+    serverConfig.typescriptValidation,
+    serverConfig.treeShake,
+    (message: string): void => {
+      terminal.log(message);
+    }
+  );
 
   // create middleware -- a collection of plugins which handle incoming
   // http(s) requests, routing them to static pages or JS functions.

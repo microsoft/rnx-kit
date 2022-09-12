@@ -6,8 +6,6 @@ import type { TransformProfile } from "metro-babel-transformer";
 import type { ConfigT } from "metro-config";
 import Server from "metro/src/Server";
 import Bundle from "metro/src/shared/output/bundle";
-// @ts-expect-error no declaration file for module
-import RamBundle from "metro/src/shared/output/RamBundle";
 
 import { saveAssets } from "./asset";
 
@@ -19,7 +17,6 @@ export type BundleArgs = {
   dev: boolean;
   bundleOutput: string;
   bundleEncoding?: OutputOptions["bundleEncoding"];
-  bundleFormat?: "plain" | "ram-bundle";
   sourcemapOutput?: string;
   sourcemapSourcesRoot?: string;
   sourcemapUseAbsolutePath: boolean;
@@ -35,19 +32,12 @@ type RequestOptions = {
   unstable_transformProfile?: TransformProfile;
 };
 
-export async function bundle(
-  { bundleFormat, ...args }: BundleArgs,
-  config: ConfigT
-): Promise<void> {
+export async function bundle(args: BundleArgs, config: ConfigT): Promise<void> {
   try {
     const {
       buildBundleWithConfig,
     } = require("@react-native-community/cli-plugin-metro");
-    return buildBundleWithConfig(
-      args,
-      config,
-      bundleFormat === "ram-bundle" ? RamBundle : Bundle
-    );
+    return buildBundleWithConfig(args, config);
   } catch (_) {
     // Retry with our custom logic
   }
@@ -79,7 +69,6 @@ export async function bundle(
     sourceMapUrl = path.basename(sourceMapUrl);
   }
 
-  const output = bundleFormat === "ram-bundle" ? RamBundle : Bundle;
   const requestOpts: RequestOptions = {
     entryFile: args.entryFile,
     sourceMapUrl,
@@ -91,9 +80,9 @@ export async function bundle(
   const server = new Server(config);
 
   try {
-    const bundle = await output.build(server, requestOpts);
+    const bundle = await Bundle.build(server, requestOpts);
 
-    await output.save(bundle, args, console.info);
+    await Bundle.save(bundle, args, console.info);
 
     // Save the assets of the bundle
     const outputAssets: readonly AssetData[] = await server.getAssets({

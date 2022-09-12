@@ -7,7 +7,6 @@ export type BundleConfigOverrides = {
   entryFile?: string;
   bundleOutput?: string;
   bundleEncoding?: BundleArgs["bundleEncoding"];
-  bundleFormat?: BundleArgs["bundleFormat"];
   sourcemapOutput?: string;
   sourcemapSourcesRoot?: string;
   sourcemapUseAbsolutePath?: boolean;
@@ -30,7 +29,6 @@ export function applyBundleConfigOverrides(
     "entryFile",
     "bundleOutput",
     "bundleEncoding",
-    "bundleFormat",
     "sourcemapOutput",
     "sourcemapSourcesRoot",
     "sourcemapUseAbsolutePath",
