@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-config
 
+## 1.2.39
+
+### Patch Changes
+
+- 3e706f3e: Fix monorepo asset plugin breaking bundling
+
 ## 1.2.38
 
 ### Patch Changes
