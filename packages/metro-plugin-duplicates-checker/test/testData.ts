@@ -1,6 +1,7 @@
 // istanbul ignore file
 
 import type { Graph, Module } from "@rnx-kit/metro-serializer";
+import type { BasicSourceMap } from "metro-source-map";
 import path from "path";
 
 const mockModule = {} as Module;
@@ -32,7 +33,7 @@ export const bundleGraphWithDuplicates: Graph = {
   entryPoints: [],
 };
 
-export const bundleSourceMap = {
+export const bundleSourceMap: BasicSourceMap = {
   version: 3,
   sources: [
     "__prelude__",
@@ -524,9 +525,11 @@ export const bundleSourceMap = {
     `${repoRoot}/node_modules/react-native/Libraries/NewAppScreen/components/ReloadInstructions.js`,
     `${repoRoot}/packages/test-app/lib/app.json`,
   ],
+  mappings: "",
+  names: [],
 };
 
-export const bundleSourceMapWithDuplicates = {
+export const bundleSourceMapWithDuplicates: BasicSourceMap = {
   version: 3,
   sources: [
     `${repoRoot}/packages/test-app/lib/src/index.js`,
@@ -534,4 +537,6 @@ export const bundleSourceMapWithDuplicates = {
     `${repoRoot}/node_modules/@react-native/polyfills/index.js`,
     `${repoRoot}/node_modules/react-native/index.js`,
   ],
+  mappings: "",
+  names: [],
 };
