@@ -1,7 +1,7 @@
 - Title: dep-check v2
 - Date: 2022-07-21
-- RFC PR: (leave this empty)
-- rnx-kit Issue: (leave this empty)
+- RFC PR: https://github.com/microsoft/rnx-kit/pull/1757
+- rnx-kit Issue: https://github.com/microsoft/rnx-kit/issues/1890
 
 # Summary
 
@@ -46,13 +46,8 @@ This is how the new config will live in a `package.json`:
   "rnx-kit": {
     "kitType": "app",
     "align-deps": {
-      "presets": [
-        "microsoft",
-        "/path/to/my-collection-of-multiple-profiles"
-      ],
-      "requirements": [
-        "react@18.0"
-      ],
+      "presets": ["microsoft", "/path/to/my-collection-of-multiple-profiles"],
+      "requirements": ["react@18.0"],
       "capabilities": [
         "core-android",
         "core-ios",
@@ -138,9 +133,7 @@ you can add multiple presets, and the ability to exclude the default preset:
 {
   "rnx-kit": {
     "align-deps": {
-      "presets": [
-        "/path/to/my-collection-of-multiple-profiles"
-      ],
+      "presets": ["/path/to/my-collection-of-multiple-profiles"],
       "requirements": ["react@18.0"]
     }
   }
@@ -222,10 +215,7 @@ and React Native below 0.69:
 {
   "rnx-kit": {
     "align-deps": {
-      "requirements": [
-        "core@<0.69",
-        "react@18.0"
-      ]
+      "requirements": ["core@<0.69", "react@18.0"]
     }
   }
 }
