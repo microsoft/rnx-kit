@@ -13,7 +13,7 @@ Some changes, though, are "substantial", and we ask that these be put through a
 bit of a design process and produce a consensus among the community and core
 development team.
 
-[Accepted RFC List](https://github.com/microsoft/rnx-kit/pulls?q=is%3Aopen+is%3Apr+label%3ARFC)
+[Accepted RFC List](https://github.com/microsoft/rnx-kit/issues?q=is%3Aissue+is%3Aopen+label%3ARFC)
 
 ## When to follow this process
 
