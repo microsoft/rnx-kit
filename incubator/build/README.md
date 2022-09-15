@@ -43,9 +43,9 @@ Supported platforms are `android`, `ios`, `macos`, `windows`.
 Where builds should be deployed from. For how to configure your app distribution
 service, please see [Distribution](#distribution).
 
-Supported deployment methods are `auto`, `local`.
+Supported deployment methods are `remote-first`, `local-only`.
 
-Defaults to `auto`.
+Defaults to `remote-first`.
 
 ### `--device-type` (optional)
 
@@ -53,7 +53,7 @@ Target device type. This is currently only implemented for iOS.
 
 Supported device types are `device`, `emulator`, `simulator`.
 
-Specifying `emulator`/`simulator` implies `--distribution local`.
+Specifying `emulator`/`simulator` implies `--deploy local-only`.
 
 Defaults to `simulator`.
 

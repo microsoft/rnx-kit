@@ -1,5 +1,17 @@
 # Change Log - @rnx-kit/dep-check
 
+## 1.13.0
+
+### Minor Changes
+
+- 127b2bee: Do not warn for recent react-native-linear-gradient versions
+
+## 1.12.23
+
+### Patch Changes
+
+- c067c1be: Allow specifying multiple packages on command line
+
 ## 1.12.22
 
 ### Patch Changes

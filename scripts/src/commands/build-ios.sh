@@ -72,13 +72,18 @@ if [[ ! -d "ios/${workspace}.xcworkspace" ]]; then
 fi
 
 if [[ "$CCACHE_DISABLE" != "1" ]]; then
-  ccache_libexec="/usr/local/opt/ccache/libexec"
-  if [[ ! -d "$ccache_libexec" ]]; then
+  if ! command -v ccache 1> /dev/null; then
     brew install ccache
   fi
 
-  export CC="$(git rev-parse --show-toplevel)/scripts/clang"
+  CCACHE_HOME=$(dirname $(dirname $(which ccache)))/opt/ccache
+
   export CCACHE_DIR="$(git rev-parse --show-toplevel)/.ccache"
+
+  export CC="${CCACHE_HOME}/libexec/clang"
+  export CXX="${CCACHE_HOME}/libexec/clang++"
+  export CMAKE_C_COMPILER_LAUNCHER=$(which ccache)
+  export CMAKE_CXX_COMPILER_LAUNCHER=$(which ccache)
 
   ccache --zero-stats 1> /dev/null
 fi

@@ -196,7 +196,7 @@ module.exports = {
     return mergeConfig(
       {
         resolver: {
-          resolverMainFields: ["module", "browser", "main"],
+          resolverMainFields: ["react-native", "module", "browser", "main"],
           blacklistRE: blockList, // For Metro < 0.60
           blockList, // For Metro >= 0.60
         },
@@ -204,7 +204,6 @@ module.exports = {
           enhanceMiddleware,
         },
         transformer: {
-          assetPlugins: [require.resolve("./assetPluginForMonorepos")],
           getTransformOptions: async () => ({
             transform: {
               experimentalImportSupport: false,

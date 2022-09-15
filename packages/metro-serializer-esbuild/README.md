@@ -57,19 +57,8 @@ in `babel.config.js`:
  };
 ```
 
-If you're using `@rnx-kit/babel-preset-metro-react-native`, you can instead set
-`esbuild` as transform profile:
-
-```diff
- module.exports = {
-   presets: [
-     [
-       "@rnx-kit/babel-preset-metro-react-native",
-+      { unstable_transformProfile: "esbuild" },
-     ],
-   ],
- };
-```
+If you're using `@rnx-kit/babel-preset-metro-react-native`, you don't need to
+make any changes.
 
 > Note that Hermes currently does not fully implement the
 > [ES6 spec](https://kangax.github.io/compat-table/es6/). esbuild, on the other
@@ -126,6 +115,17 @@ parameter. For instance, to output ES6 compliant code, set the target option:
 
 Below are all the currently supported options.
 
+### `target`
+
+Sets the target environment for the transpiled JavaScript code.
+
+See the full documentation at https://esbuild.github.io/api/#target.
+
+Values: Any JS language version string such as `es6` or `esnext`. You can also
+use environment names. See the full documentation for a list of supported names.
+
+Defaults to `hermes0.7.0`.
+
 ### `fabric`
 
 When enabled, includes Fabric-enabled version of React. You can save some bytes
@@ -141,17 +141,6 @@ See the full documentation at https://esbuild.github.io/api/#minify.
 
 Defaults to `true` in production environment; `false` otherwise.
 
-### `target`
-
-Sets the target environment for the transpiled JavaScript code.
-
-See the full documentation at https://esbuild.github.io/api/#target.
-
-Values: Any JS language version string such as `es6` or `esnext`. You can also
-use environment names. See the full documentation for a list of supported names.
-
-Defaults to `hermes0.7.0`.
-
 ### `sourceMapPaths`
 
 Determines whether paths in the output source map are absolute or relative to
@@ -160,6 +149,20 @@ the directory containing the source map.
 Values: `absolute` | `relative`
 
 Defaults to `relative`.
+
+### `strictMode`
+
+By default, the `"use strict";` directive is added by Babel and esbuild when
+lowering to ES5. You can save some bytes by telling this serializer to strip
+them from the bundle.
+
+Note that disabling `strictMode` here will definitely break source maps. It is
+recommended to try disabling strict mode in Babel or TypeScript first before
+considering this option. If you can target ES6, that is a better alternative.
+
+This flag only affects production environment.
+
+Defaults to `true`.
 
 ### `analyze`
 

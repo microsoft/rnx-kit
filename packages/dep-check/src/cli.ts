@@ -28,10 +28,16 @@ function ensureKitType(type: string): KitType | undefined {
 }
 
 async function getManifests(
-  packageJson: string | number | undefined
+  packages: (string | number)[] | undefined
 ): Promise<string[] | undefined> {
-  if (isString(packageJson) && packageJson) {
-    return [packageJson];
+  if (Array.isArray(packages)) {
+    return packages.reduce<string[]>((result, pkg) => {
+      const dir = findPackageDir(pkg.toString());
+      if (dir) {
+        result.push(path.join(dir, "package.json"));
+      }
+      return result;
+    }, []);
   }
 
   const packageDir = findPackageDir();
@@ -143,16 +149,13 @@ async function makeCommand(args: Args): Promise<Command | undefined> {
   return makeCheckCommand({ loose, write });
 }
 
-export async function cli({
-  "package-json": packageJson,
-  ...args
-}: Args): Promise<void> {
+export async function cli({ packages, ...args }: Args): Promise<void> {
   const command = await makeCommand(args);
   if (!command) {
     process.exit(1);
   }
 
-  const manifests = await getManifests(packageJson);
+  const manifests = await getManifests(packages);
   if (!manifests) {
     error("Could not find package root");
     process.exit(1);
@@ -187,7 +190,7 @@ export async function cli({
 
 if (require.main === module) {
   require("yargs").usage(
-    "$0 [package-json]",
+    "$0 [packages...]",
     "Dependency checker for React Native apps",
     {
       "custom-profiles": {

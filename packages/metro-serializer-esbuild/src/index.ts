@@ -15,6 +15,7 @@ export type Options = Pick<BuildOptions, "logLevel" | "minify" | "target"> & {
   analyze?: boolean | "verbose";
   fabric?: boolean;
   sourceMapPaths?: "absolute" | "relative";
+  strictMode?: boolean;
 };
 
 function assertVersion(requiredVersion: string): void {
@@ -28,6 +29,24 @@ function assertVersion(requiredVersion: string): void {
 
 function escapePath(path: string): string {
   return path.replace(/\\+/g, "\\\\");
+}
+
+function getModulePath(moduleName: string, parent: Module): string | undefined {
+  const p = parent.dependencies.get(moduleName)?.absolutePath;
+  if (p) {
+    return p;
+  }
+
+  // In Metro 0.72.0, the key changed from module name to a unique key in order
+  // to support features such as `require.context`. For more details, see
+  // https://github.com/facebook/metro/commit/52e1a00ffb124914a95e78e9f60df1bc2e2e7bf0.
+  for (const [, value] of parent.dependencies) {
+    if (value.data.name === moduleName) {
+      return value.absolutePath;
+    }
+  }
+
+  return undefined;
 }
 
 /**
@@ -123,6 +142,9 @@ export function MetroSerializer(
 ): SerializerConfigT["customSerializer"] {
   assertVersion(">=0.66.1");
 
+  // Signal to every plugin that we're using esbuild.
+  process.env["RNX_METRO_SERIALIZER_ESBUILD"] = "true";
+
   return (
     entryPoint: string,
     preModules: ReadonlyArray<Module>,
@@ -139,10 +161,10 @@ export function MetroSerializer(
       setup: (build) => {
         const pluginOptions = { filter: /.*/ };
 
-        // Metro does not inject `"use strict"`, but esbuild does. We should
-        // strip them out like Metro does. See also
+        // Metro does not inject `"use strict"`, but esbuild does. We can strip
+        // them out like Metro does, but it'll break the source map. See also
         // https://github.com/facebook/metro/blob/0fe1253cc4f76aa2a7683cfb2ad0253d0a768c83/packages/metro-react-native-babel-preset/src/configs/main.js#L68
-        if (!options.dev) {
+        if (!options.dev && buildOptions?.strictMode === false) {
           const encoder = new TextEncoder();
           build.onEnd(({ outputFiles }) => {
             outputFiles?.forEach(({ path, text }, index) => {
@@ -167,7 +189,7 @@ export function MetroSerializer(
 
           const parent = dependencies.get(args.importer);
           if (parent) {
-            const path = parent.dependencies.get(args.path)?.absolutePath;
+            const path = getModulePath(args.path, parent);
             return {
               path,
               sideEffects: path ? getSideEffects(path) : undefined,

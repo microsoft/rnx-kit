@@ -23,7 +23,7 @@ export function rnxDepCheck(
     ),
     loose: Boolean(args.loose),
     write: Boolean(args.write),
-    "package-json": argv[0],
+    packages: argv,
   });
 }
 

@@ -4,7 +4,12 @@ import type { Options } from "yargs";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 import { startBuild } from "./build";
-import { DEPLOYMENT, DEVICE_TYPES, PLATFORMS } from "./constants";
+import {
+  DEPLOYMENT,
+  DEVICE_TYPES,
+  PLATFORMS,
+  USER_CONFIG_FILE,
+} from "./constants";
 import { getDistribution } from "./distribution";
 import { getRepositoryRoot } from "./git";
 import { detectPackageManager } from "./packageManager";
@@ -104,4 +109,8 @@ async function main(): Promise<void> {
   });
 }
 
-main();
+main().catch((e) => {
+  process.exitCode = 1;
+  console.error(e);
+  console.log("User config:", USER_CONFIG_FILE);
+});
