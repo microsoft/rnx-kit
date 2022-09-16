@@ -1,8 +1,6 @@
 import type { Config as CLIConfig } from "@react-native-community/cli-types";
 import { info } from "@rnx-kit/console";
-import { loadMetroConfig } from "@rnx-kit/metro-service";
-// @ts-expect-error no declaration file for module
-import RamBundle from "metro/src/shared/output/RamBundle";
+import { loadMetroConfig, ramBundle } from "@rnx-kit/metro-service";
 import { commonBundleCommandOptions } from "./bundle/cliOptions";
 import { getCliPlatformBundleConfigs } from "./bundle/kit-config";
 import { metroBundle } from "./bundle/metro";
@@ -59,7 +57,7 @@ export async function rnxRamBundle(
       bundleConfig,
       cliOptions.dev,
       cliOptions.minify,
-      RamBundle
+      ramBundle
     );
   }
 }

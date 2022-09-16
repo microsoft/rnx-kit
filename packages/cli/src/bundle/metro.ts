@@ -2,7 +2,6 @@ import { info } from "@rnx-kit/console";
 import type { BundleArgs as MetroBundleArgs } from "@rnx-kit/metro-service";
 import { bundle } from "@rnx-kit/metro-service";
 import { createDirectory } from "@rnx-kit/tools-node/fs";
-import Bundle from "metro/src/shared/output/bundle";
 import type { ConfigT } from "metro-config";
 import * as path from "path";
 import { customizeMetroConfig } from "../metro-config";
@@ -25,7 +24,7 @@ export async function metroBundle(
   bundleConfig: CliPlatformBundleConfig,
   dev: boolean,
   minify?: boolean,
-  output = Bundle
+  output = bundle
 ): Promise<void> {
   info(`Bundling ${bundleConfig.platform}...`);
 
@@ -44,5 +43,5 @@ export async function metroBundle(
   metroBundleArgs.assetsDest && createDirectory(metroBundleArgs.assetsDest);
 
   // create the bundle
-  await bundle(metroBundleArgs, metroConfig, output);
+  await output(metroBundleArgs, metroConfig);
 }
