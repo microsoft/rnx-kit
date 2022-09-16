@@ -1,22 +1,23 @@
-import type { TransformProfile } from "metro-babel-transformer";
-import type { BundleArgs } from "@rnx-kit/metro-service";
 import { pickValues } from "@rnx-kit/tools-language/properties";
 import type { CliPlatformBundleConfig } from "./types";
 
-type BundleConfigOverrides = {
-  entryFile?: string;
-  bundleOutput?: string;
-  bundleEncoding?: BundleArgs["bundleEncoding"];
-  sourcemapOutput?: string;
-  sourcemapSourcesRoot?: string;
-  sourcemapUseAbsolutePath?: boolean;
-  assetsDest?: string;
-  treeShake?: boolean;
-  unstableTransformProfile?: TransformProfile;
-  indexedRamBundle?: boolean;
-};
+type BundleConfigOverrides = Partial<
+  Pick<
+    CliPlatformBundleConfig,
+    | "entryFile"
+    | "bundleOutput"
+    | "bundleEncoding"
+    | "sourcemapOutput"
+    | "sourcemapSourcesRoot"
+    | "sourcemapUseAbsolutePath"
+    | "assetsDest"
+    | "treeShake"
+    | "unstableTransformProfile"
+    | "indexedRamBundle"
+  >
+>;
 
-export const overridableBundleOptions: readonly (keyof BundleConfigOverrides)[] =
+export const overridableCommonBundleOptions: readonly (keyof BundleConfigOverrides)[] =
   [
     "assetsDest",
     "bundleEncoding",

@@ -1,7 +1,7 @@
 import { parsePlatform } from "@rnx-kit/tools-react-native/platform";
 import { parseBoolean, parseTransformProfile } from "../parsers";
 
-export const commonBundleOptions = [
+export const commonBundleCommandOptions = [
   {
     name: "--id [id]",
     description:

@@ -94,7 +94,7 @@ export type BundleParameters = BundlerPlugins & {
    *
    * Only applies to the `rnx-ram-bundle` command.
    */
-  indexedBundleFormat?: boolean;
+  indexedRamBundle?: boolean;
 };
 
 /**

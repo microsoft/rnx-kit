@@ -3,12 +3,12 @@ import { info } from "@rnx-kit/console";
 import { loadMetroConfig } from "@rnx-kit/metro-service";
 // @ts-expect-error no declaration file for module
 import RamBundle from "metro/src/shared/output/RamBundle";
-import { commonBundleOptions } from "./bundle/cliOptions";
+import { commonBundleCommandOptions } from "./bundle/cliOptions";
 import { getCliPlatformBundleConfigs } from "./bundle/kit-config";
 import { metroBundle } from "./bundle/metro";
 import {
   applyBundleConfigOverrides,
-  overridableBundleOptions,
+  overridableCommonBundleOptions,
 } from "./bundle/overrides";
 import type {
   CLICommonBundleOptions,
@@ -47,7 +47,7 @@ export async function rnxRamBundle(
   );
 
   applyBundleConfigOverrides(cliOptions, bundleConfigs, [
-    ...overridableBundleOptions,
+    ...overridableCommonBundleOptions,
     "indexedRamBundle",
   ]);
 
@@ -70,7 +70,7 @@ export const rnxRamBundleCommand = {
     "Bundle your rnx-kit package in the RAM bundle format for offline use. See https://aka.ms/rnx-kit.",
   func: rnxRamBundle,
   options: [
-    ...commonBundleOptions,
+    ...commonBundleCommandOptions,
     {
       name: "--indexed-ram-bundle",
       description:

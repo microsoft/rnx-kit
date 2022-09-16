@@ -1,11 +1,11 @@
 import type { Config as CLIConfig } from "@react-native-community/cli-types";
 import { loadMetroConfig } from "@rnx-kit/metro-service";
-import { commonBundleOptions } from "./bundle/cliOptions";
+import { commonBundleCommandOptions } from "./bundle/cliOptions";
 import { getCliPlatformBundleConfigs } from "./bundle/kit-config";
 import { metroBundle } from "./bundle/metro";
 import {
   applyBundleConfigOverrides,
-  overridableBundleOptions,
+  overridableCommonBundleOptions,
 } from "./bundle/overrides";
 import type { CLICommonBundleOptions } from "./bundle/types";
 import { parseBoolean } from "./parsers";
@@ -27,7 +27,7 @@ export async function rnxBundle(
   );
 
   applyBundleConfigOverrides(cliOptions, bundleConfigs, [
-    ...overridableBundleOptions,
+    ...overridableCommonBundleOptions,
     "treeShake",
   ]);
 
@@ -47,7 +47,7 @@ export const rnxBundleCommand = {
     "Bundle your rnx-kit package for offline use. See https://aka.ms/rnx-kit.",
   func: rnxBundle,
   options: [
-    ...commonBundleOptions,
+    ...commonBundleCommandOptions,
     {
       name: "--tree-shake [boolean]",
       description:
