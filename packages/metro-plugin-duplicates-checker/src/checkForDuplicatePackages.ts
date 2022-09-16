@@ -13,6 +13,11 @@ export type Options = {
   throwOnError?: boolean;
 };
 
+export type Result = {
+  banned: number;
+  duplicates: number;
+};
+
 export const defaultOptions: Options = {
   ignoredModules: [],
   bannedModules: [],
@@ -25,7 +30,7 @@ export function countCopies(module: ModuleMap[string]): number {
   }, 0);
 }
 
-export function printDuplicates(module: ModuleMap[string]): void {
+export function printModule(module: ModuleMap[string]): void {
   Object.keys(module)
     .sort()
     .forEach((version) => {
@@ -38,42 +43,46 @@ export function printDuplicates(module: ModuleMap[string]): void {
 export function detectDuplicatePackages(
   bundledModules: ModuleMap,
   { ignoredModules = [], bannedModules = [] }: Options
-): number {
-  return Object.keys(bundledModules).reduce((count, name) => {
+): Result {
+  let numBanned = 0;
+  let numDupes = 0;
+
+  for (const name of Object.keys(bundledModules)) {
+    if (bannedModules.includes(name)) {
+      error(`${name} (banned)`);
+      printModule(bundledModules[name]);
+      numBanned += 1;
+      continue;
+    }
+
     if (ignoredModules.includes(name)) {
-      return count;
+      continue;
     }
 
     const currentModule = bundledModules[name];
-
-    if (bannedModules.includes(name)) {
-      error(`${name} (banned)`);
-      printDuplicates(currentModule);
-      return count + 1;
-    }
-
     const numCopies = countCopies(currentModule);
     if (numCopies > 1) {
       error(`${name} (found ${numCopies} copies)`);
-      printDuplicates(currentModule);
-      return count + 1;
+      printModule(currentModule);
+      numDupes += 1;
+      continue;
     }
+  }
 
-    return count;
-  }, 0);
+  return { banned: numBanned, duplicates: numDupes };
 }
 
 export function checkForDuplicateDependencies(
   graph: Graph,
   options: Options = defaultOptions
-): number {
+): Result {
   return detectDuplicatePackages(gatherModulesFromGraph(graph, {}), options);
 }
 
 export function checkForDuplicatePackages(
   sourceMap: MixedSourceMap,
   options: Options = defaultOptions
-): number {
+): Result {
   return detectDuplicatePackages(
     gatherModulesFromSourceMap(sourceMap, {}),
     options
