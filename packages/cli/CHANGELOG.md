@@ -1,5 +1,12 @@
 # Change Log - @rnx-kit/cli
 
+## 0.14.4
+
+### Patch Changes
+
+- Updated dependencies [32480303]
+  - @rnx-kit/metro-plugin-duplicates-checker@2.0.0
+
 ## 0.14.3
 
 ### Patch Changes

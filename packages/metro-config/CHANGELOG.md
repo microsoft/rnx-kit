@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-config
 
+## 1.3.0
+
+### Minor Changes
+
+- 5314ae94: Added `react-native` to main fields
+
 ## 1.2.39
 
 ### Patch Changes

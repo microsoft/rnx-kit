@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/metro-plugin-duplicates-checker",
-  "version": "1.2.16",
+  "version": "2.0.0",
   "description": "Duplicate packages checker",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/metro-plugin-duplicates-checker#readme",
   "license": "MIT",
