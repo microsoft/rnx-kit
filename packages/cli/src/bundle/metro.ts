@@ -1,8 +1,9 @@
 import { info } from "@rnx-kit/console";
-import { bundle, BundleArgs as MetroBundleArgs } from "@rnx-kit/metro-service";
+import type { BundleArgs as MetroBundleArgs } from "@rnx-kit/metro-service";
+import { bundle } from "@rnx-kit/metro-service";
 import { createDirectory } from "@rnx-kit/tools-node/fs";
 import type { ConfigT } from "metro-config";
-import path from "path";
+import * as path from "path";
 import { customizeMetroConfig } from "../metro-config";
 import type { CliPlatformBundleConfig } from "./types";
 
@@ -16,22 +17,18 @@ import type { CliPlatformBundleConfig } from "./types";
  *            Further, optimizations like constant folding are disabled.
  *            When `false`, warnings are disabled and the bundle is minified by default.
  * @param minify Optionally choose whether or not the bundle is minified. When not set, minification is controlled by the `dev` property.
+ * @param output Output bundle format; defaults to plain JS
  */
 export async function metroBundle(
   metroConfig: ConfigT,
   bundleConfig: CliPlatformBundleConfig,
   dev: boolean,
-  minify?: boolean
+  minify?: boolean,
+  output = bundle
 ): Promise<void> {
   info(`Bundling ${bundleConfig.platform}...`);
 
-  customizeMetroConfig(
-    metroConfig,
-    bundleConfig.detectCyclicDependencies,
-    bundleConfig.detectDuplicateDependencies,
-    bundleConfig.typescriptValidation,
-    bundleConfig.treeShake
-  );
+  customizeMetroConfig(metroConfig, bundleConfig);
 
   const metroBundleArgs: MetroBundleArgs = {
     ...bundleConfig,
@@ -46,5 +43,5 @@ export async function metroBundle(
   metroBundleArgs.assetsDest && createDirectory(metroBundleArgs.assetsDest);
 
   // create the bundle
-  await bundle(metroBundleArgs, metroConfig);
+  await output(metroBundleArgs, metroConfig);
 }
