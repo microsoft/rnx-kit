@@ -1,5 +1,14 @@
 # Change Log - @rnx-kit/cli
 
+## 0.14.5
+
+### Patch Changes
+
+- d7150595: Add support for "Random Access Module" bundle format
+- Updated dependencies [d7150595]
+  - @rnx-kit/config@0.5.2
+  - @rnx-kit/metro-service@3.0.2
+
 ## 0.14.4
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/config
 
+## 0.5.2
+
+### Patch Changes
+
+- d7150595: Add support for "Random Access Module" bundle format
+
 ## 0.5.1
 
 ### Patch Changes

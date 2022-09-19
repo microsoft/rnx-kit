@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-service
 
+## 3.0.2
+
+### Patch Changes
+
+- d7150595: Add support for "Random Access Module" bundle format
+
 ## 3.0.1
 
 ### Patch Changes
