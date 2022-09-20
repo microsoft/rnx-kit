@@ -1,6 +1,7 @@
 const path = require("path");
 const {
   parseBoolean,
+  parseInt,
   rnxBundleCommand,
   rnxCopyAssetsCommand,
   rnxStart,
