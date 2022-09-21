@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/cli
 
+## 0.14.7
+
+### Patch Changes
+
+- 6d48c95c: Fix Windows compatability and a minor security issue.
+
 ## 0.14.6
 
 ### Patch Changes
