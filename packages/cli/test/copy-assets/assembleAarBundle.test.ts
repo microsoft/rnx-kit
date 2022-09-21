@@ -168,7 +168,7 @@ describe("assembleAarBundle", () => {
           /[/\\]node_modules[/\\].rnx-gradle-build[/\\]rnx-kit_react-native-auth[/\\]settings.gradle$/
         ),
         expect.stringMatching(
-          /include\(":rnx-kit_react-native-auth"\)\nproject\(":rnx-kit_react-native-auth"\).projectDir = file\(".*?[/\\\\]node_modules[/\\\\]@rnx-kit[/\\\\]react-native-auth[/\\\\]android"\)/
+          /include\(":rnx-kit_react-native-auth"\)\nproject\(":rnx-kit_react-native-auth"\).projectDir = file\(".*?(\/|\\\\)node_modules(\/|\\\\)@rnx-kit(\/|\\\\)react-native-auth(\/|\\\\)android"\)/
         ),
       ],
       [
