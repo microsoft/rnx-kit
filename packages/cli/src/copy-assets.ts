@@ -312,7 +312,7 @@ export async function assembleAarBundle(
 
     const settingsGradle = [
       `include(":${targetName}")`,
-      `project(":${targetName}").projectDir = file("${androidProject}")`,
+      `project(":${targetName}").projectDir = file(${JSON.stringify(androidProject)})`,
       "",
     ].join("\n");
 
