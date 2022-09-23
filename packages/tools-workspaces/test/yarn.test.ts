@@ -44,4 +44,10 @@ describe("findWorkspaceRoot", () => {
     const root = setFixture("yarn");
     expect(findWorkspaceRootSync()).toBe(root);
   });
+
+  test("returns workspace root when called inside workspace package with yarn.lock", () => {
+    setFixture("yarn/packages/conan");
+    const root = findWorkspaceRootSync();
+    expect(root).toBe(setFixture("yarn"));
+  });
 });

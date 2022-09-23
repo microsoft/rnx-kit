@@ -39,12 +39,12 @@ describe("findSentinel", () => {
 
   test("returns sentinel for npm", async () => {
     setFixture("npm");
-    expect(await findSentinel()).toMatch(/[/\\]package-lock.json$/);
+    expect(await findSentinel()).toMatch(/[/\\]package.json$/);
   });
 
   test("returns sentinel for npm (sync)", () => {
     setFixture("npm");
-    expect(findSentinelSync()).toMatch(/[/\\]package-lock.json$/);
+    expect(findSentinelSync()).toMatch(/[/\\]package.json$/);
   });
 
   test("returns sentinel for pnpm", async () => {
@@ -69,11 +69,11 @@ describe("findSentinel", () => {
 
   test("returns sentinel for Yarn", async () => {
     setFixture("yarn");
-    expect(await findSentinel()).toMatch(/[/\\]yarn.lock$/);
+    expect(await findSentinel()).toMatch(/[/\\]package.json$/);
   });
 
   test("returns sentinel for Yarn (sync)", () => {
     setFixture("yarn");
-    expect(findSentinelSync()).toMatch(/[/\\]yarn.lock$/);
+    expect(findSentinelSync()).toMatch(/[/\\]package.json$/);
   });
 });
