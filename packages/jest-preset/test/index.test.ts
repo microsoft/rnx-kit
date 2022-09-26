@@ -1,4 +1,5 @@
 import os from "os";
+import { defaults } from "jest-config";
 import path from "path";
 import jestPreset from "../src/index";
 
@@ -16,10 +17,26 @@ describe("jest-preset", () => {
     path.sep + path.join("__fixtures__", "react-native-windows");
 
   const jestIOSPreset = {
-    haste: {
-      defaultPlatform: "ios",
-      platforms: ["ios", "native"],
-    },
+    moduleFileExtensions: [
+      "ios.js",
+      "ios.jsx",
+      "ios.ts",
+      "ios.tsx",
+      "ios.json",
+      "ios.node",
+      "native.js",
+      "native.jsx",
+      "native.ts",
+      "native.tsx",
+      "native.json",
+      "native.node",
+      "js",
+      "jsx",
+      "ts",
+      "tsx",
+      "json",
+      "node",
+    ],
     moduleNameMapper: {},
     setupFiles: [
       expect.stringContaining(path.join(reactNativePath, "jest", "setup.js")),
@@ -38,10 +55,26 @@ describe("jest-preset", () => {
   };
 
   const jestMacOSPreset = (reactNativeMacOSPath: string) => ({
-    haste: {
-      defaultPlatform: "macos",
-      platforms: ["macos", "native"],
-    },
+    moduleFileExtensions: [
+      "macos.js",
+      "macos.jsx",
+      "macos.ts",
+      "macos.tsx",
+      "macos.json",
+      "macos.node",
+      "native.js",
+      "native.jsx",
+      "native.ts",
+      "native.tsx",
+      "native.json",
+      "native.node",
+      "js",
+      "jsx",
+      "ts",
+      "tsx",
+      "json",
+      "node",
+    ],
     moduleNameMapper: {
       "^react-native$": expect.stringContaining(reactNativeMacOSPath),
       "^react-native/(.*)": expect.stringContaining(
@@ -67,10 +100,26 @@ describe("jest-preset", () => {
   });
 
   const jestMultiPlatformPreset = {
-    haste: {
-      defaultPlatform: "macos",
-      platforms: ["macos", "native"],
-    },
+    moduleFileExtensions: [
+      "macos.js",
+      "macos.jsx",
+      "macos.ts",
+      "macos.tsx",
+      "macos.json",
+      "macos.node",
+      "native.js",
+      "native.jsx",
+      "native.ts",
+      "native.tsx",
+      "native.json",
+      "native.node",
+      "js",
+      "jsx",
+      "ts",
+      "tsx",
+      "json",
+      "node",
+    ],
     moduleNameMapper: {
       "^react-native$": expect.stringContaining(reactNativeMultiPlatformPath),
       "^react-native/(.*)": expect.stringContaining(
@@ -100,10 +149,32 @@ describe("jest-preset", () => {
   };
 
   const jestWindowsPreset = {
-    haste: {
-      defaultPlatform: "windows",
-      platforms: ["windows", "win", "native"],
-    },
+    moduleFileExtensions: [
+      "windows.js",
+      "windows.jsx",
+      "windows.ts",
+      "windows.tsx",
+      "windows.json",
+      "windows.node",
+      "win.js",
+      "win.jsx",
+      "win.ts",
+      "win.tsx",
+      "win.json",
+      "win.node",
+      "native.js",
+      "native.jsx",
+      "native.ts",
+      "native.tsx",
+      "native.json",
+      "native.node",
+      "js",
+      "jsx",
+      "ts",
+      "tsx",
+      "json",
+      "node",
+    ],
     moduleNameMapper: {
       "^react-native$": expect.stringContaining(reactNativeWindowsPath),
       "^react-native/(.*)": expect.stringContaining(
@@ -155,7 +226,7 @@ describe("jest-preset", () => {
 
     expect(jestPreset()).toEqual(
       expect.objectContaining({
-        haste: undefined,
+        moduleFileExtensions: defaults.moduleFileExtensions,
         moduleNameMapper: {},
         setupFiles: undefined,
         transform: {

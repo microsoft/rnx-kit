@@ -28,6 +28,7 @@
   "peerDependencies": {
     "@babel/core": "^7.0.0-0",
     "@react-native-community/cli": ">=4.10",
+    "jest-config": "*",
     "react-native": "^0.0.0-0 || >=0.63"
   },
   "peerDependenciesMeta": {

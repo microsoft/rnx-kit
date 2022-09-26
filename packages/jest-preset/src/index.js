@@ -1,4 +1,5 @@
 const findUp = require("find-up");
+const { defaults } = require("jest-config");
 const path = require("path");
 
 /**
@@ -122,23 +123,6 @@ function babelPresets(targetPlatform) {
 }
 
 /**
- * Returns `haste` setup for React Native.
- * @param {string | undefined} defaultPlatform
- * @returns {HasteConfig | undefined}
- */
-function haste(defaultPlatform) {
-  return defaultPlatform
-    ? {
-        defaultPlatform,
-        platforms:
-          defaultPlatform === "win32" || defaultPlatform === "windows"
-            ? [defaultPlatform, "win", "native"]
-            : [defaultPlatform, "native"],
-      }
-    : undefined;
-}
-
-/**
  * Returns module name mappers for React Native.
  * @param {string | undefined} reactNativePlatformPath
  * @returns {Record<string, string | string[]> | undefined}
@@ -150,6 +134,35 @@ function moduleNameMapper(reactNativePlatformPath) {
         "^react-native/(.*)": path.join(reactNativePlatformPath, "$1"),
       }
     : undefined;
+}
+
+/**
+ * Returns the list of file extensions used given a target platform. If no
+ * platform is provided, the default extensions are returned.
+ * @param {string | undefined} targetPlatform
+ * @param {string[] | undefined} userFileExtensions
+ * @returns {string[]}
+ */
+function moduleFileExtensionsForPlatform(targetPlatform, userFileExtensions) {
+  const defaultExtensions = defaults.moduleFileExtensions;
+  if (!targetPlatform) {
+    return userFileExtensions || defaultExtensions;
+  }
+
+  const extensions = userFileExtensions || [];
+  const platformExtensions =
+    targetPlatform === "win32" || targetPlatform === "windows"
+      ? [targetPlatform, "win", "native"]
+      : [targetPlatform, "native"];
+
+  for (const platform of platformExtensions) {
+    for (const extension of defaultExtensions) {
+      extensions.push(`${platform}.${extension}`);
+    }
+  }
+
+  extensions.push(...defaultExtensions);
+  return extensions;
 }
 
 /**
@@ -189,6 +202,7 @@ function transformRules(targetPlatform, reactNativePlatformPath) {
 module.exports = (
   defaultPlatform,
   {
+    moduleFileExtensions: userModuleFileExtensions,
     moduleNameMapper: userModuleNameMapper,
     transform: userTransform,
     transformIgnorePatterns: userTransformIgnorePatterns,
@@ -197,7 +211,10 @@ module.exports = (
 ) => {
   const [targetPlatform, platformPath] = getTargetPlatform(defaultPlatform);
   return {
-    haste: haste(targetPlatform),
+    moduleFileExtensions: moduleFileExtensionsForPlatform(
+      targetPlatform,
+      userModuleFileExtensions
+    ),
     moduleNameMapper: {
       ...moduleNameMapper(platformPath),
       ...userModuleNameMapper,
