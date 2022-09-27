@@ -196,7 +196,7 @@ module.exports = {
     return mergeConfig(
       {
         resolver: {
-          resolverMainFields: ["react-native", "module", "browser", "main"],
+          resolverMainFields: ["react-native", "browser", "main"],
           blacklistRE: blockList, // For Metro < 0.60
           blockList, // For Metro >= 0.60
         },

@@ -8,6 +8,7 @@ module.exports = makeMetroConfig({
   reporter: { update: () => undefined },
   resetCache: true,
   resolver: {
+    resolverMainFields: ["react-native", "module", "browser", "main"],
     blacklistRE: blockList,
     blockList,
   },
