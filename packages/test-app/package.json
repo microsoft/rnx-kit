@@ -155,6 +155,7 @@
       "core-ios",
       "core-macos",
       "core-windows",
+      "babel-preset-react-native",
       "react",
       "test-app"
     ]

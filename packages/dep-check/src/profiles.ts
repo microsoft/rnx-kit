@@ -6,10 +6,11 @@ import semverValid from "semver/functions/valid";
 import semverIntersects from "semver/ranges/intersects";
 import semverValidRange from "semver/ranges/valid";
 import { keysOf } from "./helpers";
-import { default as defaultPreset } from "./presets/microsoft";
+import { default as defaultPreset } from "./presets/microsoft/react-native";
 import type {
   MetaPackage,
   Package,
+  Preset,
   Profile,
   ProfileMap,
   ProfilesInfo,
@@ -182,6 +183,82 @@ export function profilesSatisfying(
 ): ProfileVersion[] {
   const versions = getProfileVersionsFor(versionOrRange);
   return profiles.filter((v) => versions.includes(v));
+}
+
+function v2_loadPreset(preset: string, projectRoot: string): Preset {
+  try {
+    return require("./presets/" + preset).default;
+  } catch (_) {
+    return require(require.resolve(preset, { paths: [projectRoot] }));
+  }
+}
+
+function v2_compileRequirements(
+  requirements: string[]
+): ((pkg: MetaPackage | Package) => boolean)[] {
+  const includePrerelease = { includePrerelease: true };
+  return requirements.map((req) => {
+    const [requiredPackage, requiredVersionRange] = req.split("@");
+    return (pkg: MetaPackage | Package) => {
+      return (
+        pkg.name === requiredPackage &&
+        "version" in pkg &&
+        semverSatisfies(
+          semverCoerce(pkg.version) || "0.0.1",
+          requiredVersionRange,
+          includePrerelease
+        )
+      );
+    };
+  });
+}
+
+export function v2_filterPreset(
+  requirements: string[],
+  preset: Preset
+): Preset {
+  const filteredPreset: Preset = {};
+  const reqs = v2_compileRequirements(requirements);
+  for (const [profileName, profile] of Object.entries(preset)) {
+    const packages = Object.values(profile);
+    const satisfiesRequirements = reqs.every((predicate) =>
+      packages.some(predicate)
+    );
+    if (satisfiesRequirements) {
+      filteredPreset[profileName] = profile;
+    }
+  }
+
+  return filteredPreset;
+}
+
+export function v2_profilesSatisfying(
+  requirements: string[],
+  presets: string[],
+  projectRoot: string
+): Preset {
+  console.assert(presets.length > 0 && requirements.length > 0);
+
+  const reqs = v2_compileRequirements(requirements);
+
+  const mergedPreset: Preset = {};
+  for (const presetName of presets) {
+    const preset = v2_loadPreset(presetName, projectRoot);
+    for (const [profileName, profile] of Object.entries(preset)) {
+      const packages = Object.values(profile);
+      const satisfiesRequirements = reqs.every((predicate) =>
+        packages.some(predicate)
+      );
+      if (satisfiesRequirements) {
+        mergedPreset[profileName] = {
+          ...mergedPreset[profileName],
+          ...profile,
+        };
+      }
+    }
+  }
+
+  return mergedPreset;
 }
 
 export function resolveCustomProfiles(

@@ -1,4 +1,4 @@
-import type { Package, Profile } from "../../types";
+import type { Package, Profile } from "../../../types";
 import profile61 from "./profile-0.61";
 
 const reactNative: Package = {

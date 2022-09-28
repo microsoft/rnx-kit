@@ -11,8 +11,9 @@ import {
   getProfilesFor,
   getProfileVersionsFor,
   profilesSatisfying,
+  v2_filterPreset,
 } from "./profiles";
-import type { CheckOptions, Profile, ProfileVersion } from "./types";
+import type { CheckOptions, Preset, Profile } from "./types";
 
 type Requirements = Required<
   Pick<KitConfig, "reactNativeVersion" | "capabilities">
@@ -20,8 +21,9 @@ type Requirements = Required<
 
 type Trace = {
   module: string;
-  reactNativeVersion: string;
-  profiles: ProfileVersion[];
+  reactNativeVersion?: string;
+  requirements?: string[];
+  profiles: string[];
 };
 
 function isCoreCapability(capability: Capability): boolean {
@@ -66,6 +68,114 @@ export function visitDependencies(
     const manifest = readPackage(packageDir);
     visitDependencies(manifest, packageDir, visitor, visited);
   });
+}
+
+export function gatherRequirements(
+  projectRoot: string,
+  manifest: PackageManifest,
+  preset: Preset,
+  appCapabilities: Capability[],
+  { loose }: Pick<CheckOptions, "loose">
+): { preset: Preset; capabilities: Capability[] } {
+  const allCapabilities = new Set<Capability>();
+  const trace: Trace[] = [
+    {
+      module: manifest.name,
+      profiles: Object.keys(preset),
+    },
+  ];
+
+  visitDependencies(manifest, projectRoot, (module, modulePath) => {
+    const kitConfig = getKitConfig({ cwd: modulePath });
+    if (!kitConfig) {
+      return;
+    }
+
+    const requirements = (() => {
+      const requirements = kitConfig.alignDeps?.requirements;
+      if (requirements) {
+        return Array.isArray(requirements)
+          ? requirements
+          : requirements.production;
+      }
+
+      if (kitConfig.reactNativeVersion) {
+        return [`react-native@${kitConfig.reactNativeVersion}`];
+      }
+
+      return null;
+    })();
+    if (!requirements) {
+      return;
+    }
+
+    const capabilities =
+      kitConfig.alignDeps?.capabilities || kitConfig.capabilities;
+    if (Array.isArray(capabilities)) {
+      for (const capability of capabilities) {
+        allCapabilities.add(capability);
+      }
+    }
+
+    const filteredPreset = v2_filterPreset(requirements, preset);
+    const filteredNames = Object.keys(filteredPreset);
+    if (filteredNames.length !== trace[trace.length - 1].profiles.length) {
+      trace.push({
+        module,
+        profiles: filteredNames,
+        requirements,
+      });
+    }
+
+    // In strict mode, we want to continue so we can catch all dependencies
+    // that cannot be satisfied. Whereas in loose mode, we can ignore them and
+    // carry on with the profiles that satisfy the rest.
+    if (filteredNames.length > 0) {
+      preset = filteredPreset;
+    }
+  });
+
+  if (trace[trace.length - 1].profiles.length === 0) {
+    const message = "No React Native profile could satisfy all requirements";
+    const fullTrace = [
+      message,
+      ...trace.map(({ module, profiles, requirements }) => {
+        const names = profiles.join(", ");
+        const reqs = requirements?.join(", ");
+        return `\t[${names}] satisfies '${module}' because it requires ${reqs}`;
+      }),
+    ].join("\n");
+    if (loose) {
+      warn(fullTrace);
+    } else {
+      error(fullTrace);
+      throw new Error(message);
+    }
+  }
+
+  const profiles = Object.values(preset);
+  allCapabilities.forEach((capability) => {
+    /**
+     * Core capabilities are capabilities that must always be declared by the
+     * hosting app and should not be included when gathering requirements.
+     * This is to avoid forcing an app to install dependencies it does not
+     * need, e.g. `react-native-windows` when the app only supports iOS.
+     */
+    if (
+      isCoreCapability(capability) ||
+      isDevOnlyCapability(capability, profiles)
+    ) {
+      allCapabilities.delete(capability);
+    }
+  });
+
+  // Merge with app capabilities _after_ filtering out core and dev-only
+  // capabilities.
+  for (const capability of appCapabilities) {
+    allCapabilities.add(capability);
+  }
+
+  return { preset, capabilities: Array.from(allCapabilities) };
 }
 
 export function getRequirements(

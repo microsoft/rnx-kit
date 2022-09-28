@@ -78,6 +78,12 @@ export type KitConfig = {
    */
   reactNativeDevVersion?: string;
 
+  alignDeps?: {
+    presets?: string[];
+    requirements?: string[] | { development: string[]; production: string[] };
+    capabilities?: Capability[];
+  };
+
   /**
    * Specifies how the package is bundled.
    */

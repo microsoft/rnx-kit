@@ -1,4 +1,4 @@
-import type { Capability, KitType } from "@rnx-kit/config";
+import type { Capability, KitConfig, KitType } from "@rnx-kit/config";
 import type { PackageManifest } from "@rnx-kit/tools-node/package";
 
 type Options = {
@@ -6,6 +6,12 @@ type Options = {
   excludePackages?: string;
   loose: boolean;
   write: boolean;
+};
+
+export type AlignDepsConfig = {
+  kitType: Required<KitConfig>["kitType"];
+  alignDeps: Required<Required<KitConfig>["alignDeps"]>;
+  manifest: PackageManifest;
 };
 
 export type Args = Options & {
@@ -79,6 +85,7 @@ export type ProfileVersion =
   | "0.69"
   | "0.70";
 
+export type Preset = Record<string, Profile>;
 export type ProfileMap = Record<ProfileVersion, Profile>;
 
 export type ProfilesInfo = {

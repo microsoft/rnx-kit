@@ -1,23 +1,25 @@
 import * as path from "path";
 import semver from "semver";
-import preset from "../src/presets/microsoft";
-import profile_0_62 from "../src/presets/microsoft/profile-0.62";
-import profile_0_63 from "../src/presets/microsoft/profile-0.63";
-import profile_0_64 from "../src/presets/microsoft/profile-0.64";
+import preset from "../src/presets/microsoft/react-native";
+import profile_0_62 from "../src/presets/microsoft/react-native/profile-0.62";
+import profile_0_63 from "../src/presets/microsoft/react-native/profile-0.63";
+import profile_0_64 from "../src/presets/microsoft/react-native/profile-0.64";
+import profile_0_68 from "../src/presets/microsoft/react-native/profile-0.68";
+import profile_0_69 from "../src/presets/microsoft/react-native/profile-0.69";
+import profile_0_70 from "../src/presets/microsoft/react-native/profile-0.70";
 import {
   getProfilesFor,
   getProfileVersionsFor,
   loadCustomProfiles,
   profilesSatisfying,
   resolveCustomProfiles,
+  v2_profilesSatisfying,
 } from "../src/profiles";
 import { ProfileVersion } from "../src/types";
 
-describe("Microsoft preset", () => {
+describe("microsoft/react-native preset", () => {
   test("matches react-native versions", () => {
-    const includePrerelease = {
-      includePrerelease: true,
-    };
+    const includePrerelease = { includePrerelease: true };
     Object.entries(preset).forEach(([version, capabilities]) => {
       const versionRange = "^" + version;
       Object.entries(capabilities).forEach(([capability, pkg]) => {
@@ -223,6 +225,72 @@ describe("profilesSatisfying()", () => {
       "0.63",
       "0.64",
     ]);
+  });
+});
+
+describe("v2_profilesSatisfying()", () => {
+  test("returns no profiles if requirements cannot be satisfied", () => {
+    const profiles = v2_profilesSatisfying(
+      ["react@17.0", "react-native@>=69.0"],
+      ["microsoft/react-native"],
+      process.cwd()
+    );
+    expect(profiles).toEqual({});
+  });
+
+  test("returns profiles satisfying single version range", () => {
+    const profiles = v2_profilesSatisfying(
+      ["react-native@0.70"],
+      ["microsoft/react-native"],
+      process.cwd()
+    );
+    expect(profiles).toEqual({ "0.70": profile_0_70 });
+  });
+
+  test("returns profiles satisfying multiple version ranges", () => {
+    const profiles = v2_profilesSatisfying(
+      ["react-native@0.68 || 0.70"],
+      ["microsoft/react-native"],
+      process.cwd()
+    );
+    expect(profiles).toEqual({ "0.68": profile_0_68, "0.70": profile_0_70 });
+  });
+
+  test("returns profiles satisfying wide version range", () => {
+    const profiles = v2_profilesSatisfying(
+      ["react-native@>=0.68"],
+      ["microsoft/react-native"],
+      process.cwd()
+    );
+    expect(profiles).toEqual({
+      "0.68": profile_0_68,
+      "0.69": profile_0_69,
+      "0.70": profile_0_70,
+    });
+  });
+
+  test("returns profiles satisfying non-react-native requirements", () => {
+    const profiles = v2_profilesSatisfying(
+      ["react@18"],
+      ["microsoft/react-native"],
+      process.cwd()
+    );
+    expect(profiles).toEqual({
+      "0.69": profile_0_69,
+      "0.70": profile_0_70,
+    });
+  });
+
+  test("returns profiles satisfying multiple requirements", () => {
+    const profiles = v2_profilesSatisfying(
+      ["react@^18.0", "react-native@>=0.64"],
+      ["microsoft/react-native"],
+      process.cwd()
+    );
+    expect(profiles).toEqual({
+      "0.69": profile_0_69,
+      "0.70": profile_0_70,
+    });
   });
 });
 

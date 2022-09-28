@@ -3,7 +3,7 @@ import isString from "lodash/isString";
 import prompts from "prompts";
 import { checkPackageManifest } from "./check";
 import { concatVersionRanges, keysOf, modifyManifest } from "./helpers";
-import { default as defaultPreset } from "./presets/microsoft";
+import { default as defaultPreset } from "./presets/microsoft/react-native";
 import { parseProfilesString } from "./profiles";
 import type { Command, ProfileVersion } from "./types";
 
