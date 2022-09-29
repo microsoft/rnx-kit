@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/cli
 
+## 0.14.8
+
+### Patch Changes
+
+- 659a4423: Fail gracefully if `jest-cli` is not installed
+
 ## 0.14.7
 
 ### Patch Changes
