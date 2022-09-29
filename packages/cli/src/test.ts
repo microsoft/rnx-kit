@@ -1,7 +1,7 @@
 import type { Config as CLIConfig } from "@react-native-community/cli-types";
+import { error } from "@rnx-kit/console";
 import { findPackageDependencyDir } from "@rnx-kit/tools-node";
 import { parsePlatform } from "@rnx-kit/tools-react-native/platform";
-import { run as runJest } from "jest-cli";
 
 type Args = {
   platform: "android" | "ios" | "macos" | "windows" | "win32";
@@ -25,6 +25,16 @@ export function rnxTest(
   _config: CLIConfig,
   { platform }: Args
 ): void {
+  const runJest: (argv: string[]) => void = (() => {
+    try {
+      const { run } = require("jest-cli");
+      return run;
+    } catch (e) {
+      error("'rnx-test' is unavailable because 'jest-cli' is not installed");
+      throw e;
+    }
+  })();
+
   const commandIndex = process.argv.indexOf(COMMAND_NAME);
   if (commandIndex < 0) {
     throw new Error("Failed to parse command arguments");
