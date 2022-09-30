@@ -3,7 +3,7 @@
 
 const fs = require("fs");
 const markdownTable = require("markdown-table");
-const { preset } = require("../lib/presets/microsoft");
+const { preset } = require("../lib/presets/microsoft/react-native");
 
 const README = "README.md";
 const TOKEN_START = "<!-- @rnx-kit/dep-check/capabilities start -->";
