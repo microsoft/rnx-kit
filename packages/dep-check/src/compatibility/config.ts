@@ -3,7 +3,10 @@ import { warn } from "@rnx-kit/console";
 import type { AlignDepsConfig, CheckConfig } from "../types";
 
 function dropPatchFromVersion(version: string): string {
-  return version.replace(/(\d+\.\d+)[-.\w]+/g, "$1");
+  return version
+    .split("||")
+    .map((v) => v.trim().split(".").slice(0, 2).join("."))
+    .join(" || ");
 }
 
 function oldConfigKeys(config: KitConfig): (keyof KitConfig)[] {

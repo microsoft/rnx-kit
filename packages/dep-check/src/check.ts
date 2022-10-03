@@ -1,3 +1,4 @@
+import type { KitConfig } from "@rnx-kit/config";
 import { getKitCapabilities, getKitConfig } from "@rnx-kit/config";
 import { error, info, warn } from "@rnx-kit/console";
 import { isPackageManifest, readPackage } from "@rnx-kit/tools-node/package";
@@ -19,6 +20,7 @@ import type {
   CheckConfig,
   CheckOptions,
   Command,
+  Preset,
 } from "./types";
 
 export function getCheckConfig(
@@ -161,6 +163,34 @@ export function checkPackageManifest(
   return 0;
 }
 
+function containsValidPresets(config: KitConfig["alignDeps"]): boolean {
+  const presets = config?.presets;
+  return !presets || (Array.isArray(presets) && presets.length > 0);
+}
+
+function containsValidRequirements(config: KitConfig["alignDeps"]): boolean {
+  const requirements = config?.requirements;
+  if (requirements) {
+    if (Array.isArray(requirements)) {
+      return requirements.length > 0;
+    } else if (typeof requirements === "object") {
+      return (
+        Array.isArray(requirements.production) &&
+        requirements.production.length > 0
+      );
+    }
+  }
+  return false;
+}
+
+function ensurePreset(preset: Preset, requirements: string[]): void {
+  if (Object.keys(preset).length === 0) {
+    throw new Error(
+      `No profiles could satisfy requirements: ${requirements.join(", ")}`
+    );
+  }
+}
+
 export function v2_getConfig(
   manifestPath: string,
   { uncheckedReturnCode }: CheckOptions
@@ -191,6 +221,19 @@ export function v2_getConfig(
 
   const { kitType = "library", alignDeps, ...config } = kitConfig;
   if (alignDeps) {
+    const errors = [];
+    if (!containsValidPresets(alignDeps)) {
+      errors.push("'alignDeps.presets' cannot be empty");
+    }
+    if (!containsValidRequirements(alignDeps)) {
+      errors.push("'alignDeps.requirements' cannot be empty");
+    }
+    if (errors.length > 0) {
+      for (const e of errors) {
+        error(e);
+      }
+      throw new Error("align-deps was not properly configured");
+    }
     return {
       kitType,
       alignDeps: {
@@ -228,11 +271,16 @@ function resolve(
 ) {
   const { capabilities, presets, requirements } = alignDeps;
 
+  const prodRequirements = Array.isArray(requirements)
+    ? requirements
+    : requirements.production;
   const initialProdPreset = v2_profilesSatisfying(
-    Array.isArray(requirements) ? requirements : requirements.production,
+    prodRequirements,
     presets,
     projectRoot
   );
+  ensurePreset(initialProdPreset, prodRequirements);
+
   const devPreset = (() => {
     if (kitType === "app") {
       // Preset for development is unused when the package is an app.
@@ -240,11 +288,14 @@ function resolve(
     } else if (Array.isArray(requirements)) {
       return initialProdPreset;
     } else {
-      return v2_profilesSatisfying(
-        requirements.development,
+      const devRequirements = requirements.development;
+      const devPreset = v2_profilesSatisfying(
+        devRequirements,
         presets,
         projectRoot
       );
+      ensurePreset(devPreset, devRequirements);
+      return devPreset;
     }
   })();
 
