@@ -41,7 +41,20 @@ describe("metro-serializer-esbuild", () => {
       {
         ...require("metro/src/shared/output/bundle"),
         save: ({ code }) => {
-          result = code;
+          result = code
+            .split("\n")
+            .map((line: string) => {
+              if (line.includes("virtual:metro:")) {
+                return line
+                  .replace(
+                    /virtual:metro:.*?[/\\](metro-serializer-esbuild|node_modules)[/\\]/g,
+                    "virtual:metro:/~/$1/"
+                  )
+                  .replace(/\\/g, "/");
+              }
+              return line;
+            })
+            .join("\n");
         },
       }
     );
@@ -64,12 +77,12 @@ describe("metro-serializer-esbuild", () => {
         // lib/index.js
         var global = new Function(\\"return this;\\")();
 
-        // test/__fixtures__/base.ts
+        // virtual:metro:/~/metro-serializer-esbuild/test/__fixtures__/base.ts
         function app() {
           \\"this should _not_ be removed\\";
         }
 
-        // test/__fixtures__/direct.ts
+        // virtual:metro:/~/metro-serializer-esbuild/test/__fixtures__/direct.ts
         app();
       })();
       "
@@ -84,12 +97,12 @@ describe("metro-serializer-esbuild", () => {
         // lib/index.js
         var global = new Function(\\"return this;\\")();
 
-        // test/__fixtures__/base.ts
+        // virtual:metro:/~/metro-serializer-esbuild/test/__fixtures__/base.ts
         function app() {
           \\"this should _not_ be removed\\";
         }
 
-        // test/__fixtures__/exportAll.ts
+        // virtual:metro:/~/metro-serializer-esbuild/test/__fixtures__/exportAll.ts
         app();
       })();
       "
@@ -104,12 +117,12 @@ describe("metro-serializer-esbuild", () => {
         // lib/index.js
         var global = new Function(\\"return this;\\")();
 
-        // test/__fixtures__/base.ts
+        // virtual:metro:/~/metro-serializer-esbuild/test/__fixtures__/base.ts
         function app() {
           \\"this should _not_ be removed\\";
         }
 
-        // test/__fixtures__/nestedExportAll.ts
+        // virtual:metro:/~/metro-serializer-esbuild/test/__fixtures__/nestedExportAll.ts
         app();
       })();
       "
@@ -124,12 +137,12 @@ describe("metro-serializer-esbuild", () => {
         // lib/index.js
         var global = new Function(\\"return this;\\")();
 
-        // test/__fixtures__/base.ts
+        // virtual:metro:/~/metro-serializer-esbuild/test/__fixtures__/base.ts
         function app() {
           \\"this should _not_ be removed\\";
         }
 
-        // test/__fixtures__/importAll.ts
+        // virtual:metro:/~/metro-serializer-esbuild/test/__fixtures__/importAll.ts
         app();
       })();
       "
@@ -144,12 +157,12 @@ describe("metro-serializer-esbuild", () => {
         // lib/index.js
         var global = new Function(\\"return this;\\")();
 
-        // test/__fixtures__/base.ts
+        // virtual:metro:/~/metro-serializer-esbuild/test/__fixtures__/base.ts
         function app() {
           \\"this should _not_ be removed\\";
         }
 
-        // test/__fixtures__/importExportAll.ts
+        // virtual:metro:/~/metro-serializer-esbuild/test/__fixtures__/importExportAll.ts
         app();
       })();
       "
@@ -164,13 +177,13 @@ describe("metro-serializer-esbuild", () => {
         // lib/index.js
         var global = new Function(\\"return this;\\")();
 
-        // ../../node_modules/lodash-es/head.js
+        // virtual:metro:/~/node_modules/lodash-es/head.js
         function head(array) {
           return array && array.length ? array[0] : void 0;
         }
         var head_default = head;
 
-        // test/__fixtures__/lodash-es.ts
+        // virtual:metro:/~/metro-serializer-esbuild/test/__fixtures__/lodash-es.ts
         console.log(head_default([]));
       })();
       "
@@ -183,10 +196,8 @@ describe("metro-serializer-esbuild", () => {
       "\\"use strict\\";
       (() => {
         var __getOwnPropNames = Object.getOwnPropertyNames;
-        var __esm = function(fn, res) {
-          return function __init() {
-            return fn && (res = (0, fn[__getOwnPropNames(fn)[0]])(fn = 0)), res;
-          };
+        var __esm = (fn, res) => function __init() {
+          return fn && (res = (0, fn[__getOwnPropNames(fn)[0]])(fn = 0)), res;
         };
 
         // lib/index.js
@@ -198,16 +209,16 @@ describe("metro-serializer-esbuild", () => {
           }
         });
 
-        // test/__fixtures__/sideEffectsArray.ts
+        // virtual:metro:/~/metro-serializer-esbuild/test/__fixtures__/sideEffectsArray.ts
         init_lib();
 
-        // ../../node_modules/@fluentui/utilities/lib/index.js
+        // virtual:metro:/~/node_modules/@fluentui/utilities/lib/index.js
         init_lib();
 
-        // ../../node_modules/@fluentui/set-version/lib/index.js
+        // virtual:metro:/~/node_modules/@fluentui/set-version/lib/index.js
         init_lib();
 
-        // ../../node_modules/@fluentui/set-version/lib/setVersion.js
+        // virtual:metro:/~/node_modules/@fluentui/set-version/lib/setVersion.js
         init_lib();
         var packagesCache = {};
         var _win = void 0;
@@ -226,10 +237,10 @@ describe("metro-serializer-esbuild", () => {
           }
         }
 
-        // ../../node_modules/@fluentui/set-version/lib/index.js
+        // virtual:metro:/~/node_modules/@fluentui/set-version/lib/index.js
         setVersion(\\"@fluentui/set-version\\", \\"6.0.0\\");
 
-        // ../../node_modules/@fluentui/utilities/lib/warn/warn.js
+        // virtual:metro:/~/node_modules/@fluentui/utilities/lib/warn/warn.js
         init_lib();
         var _warningCallback = void 0;
         function warn(message) {
@@ -240,14 +251,14 @@ describe("metro-serializer-esbuild", () => {
           }
         }
 
-        // ../../node_modules/@fluentui/utilities/lib/warn.js
+        // virtual:metro:/~/node_modules/@fluentui/utilities/lib/warn.js
         init_lib();
 
-        // ../../node_modules/@fluentui/utilities/lib/version.js
+        // virtual:metro:/~/node_modules/@fluentui/utilities/lib/version.js
         init_lib();
         setVersion(\\"@fluentui/utilities\\", \\"8.12.0\\");
 
-        // test/__fixtures__/sideEffectsArray.ts
+        // virtual:metro:/~/metro-serializer-esbuild/test/__fixtures__/sideEffectsArray.ts
         warn(\\"this should _not_ be removed\\");
       })();
       "
