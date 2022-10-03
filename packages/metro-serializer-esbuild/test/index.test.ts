@@ -41,10 +41,20 @@ describe("metro-serializer-esbuild", () => {
       {
         ...require("metro/src/shared/output/bundle"),
         save: ({ code }) => {
-          result = code.replace(
-            /virtual:metro:.*?[/\\](metro-serializer-esbuild|node_modules)[/\\]/g,
-            "virtual:metro:/~/$1/"
-          );
+          result = code
+            .split("\n")
+            .map((line: string) => {
+              if (line.includes("virtual:metro:")) {
+                return line
+                  .replace(
+                    /virtual:metro:.*?[/\\](metro-serializer-esbuild|node_modules)[/\\]/g,
+                    "virtual:metro:/~/$1/"
+                  )
+                  .replace(/\\/g, "/");
+              }
+              return line;
+            })
+            .join("\n");
         },
       }
     );
