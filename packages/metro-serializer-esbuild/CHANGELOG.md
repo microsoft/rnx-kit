@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-serializer-esbuild
 
+## 0.1.15
+
+### Patch Changes
+
+- 23c49af7: Resolve all files in a namespace. We don't resolve files from disk, and it is required for certain functionalities such as app bundle preludes.
+
 ## 0.1.14
 
 ### Patch Changes
