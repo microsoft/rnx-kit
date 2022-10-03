@@ -159,6 +159,7 @@ export function MetroSerializer(
     const metroPlugin: Plugin = {
       name: require("../package.json").name,
       setup: (build) => {
+        const namespace = "virtual:metro";
         const pluginOptions = { filter: /.*/ };
 
         // Metro does not inject `"use strict"`, but esbuild does. We can strip
@@ -181,6 +182,7 @@ export function MetroSerializer(
         build.onResolve(pluginOptions, (args) => {
           if (dependencies.has(args.path)) {
             return {
+              namespace,
               path: args.path,
               sideEffects: getSideEffects(args.path),
               pluginData: args.pluginData,
@@ -191,6 +193,7 @@ export function MetroSerializer(
           if (parent) {
             const path = getModulePath(args.path, parent);
             return {
+              namespace,
               path,
               sideEffects: path ? getSideEffects(path) : undefined,
               pluginData: args.pluginData,
@@ -199,6 +202,7 @@ export function MetroSerializer(
 
           if (preModules.find(({ path }) => path === args.path)) {
             return {
+              namespace,
               path: args.path,
               pluginData: args.pluginData,
             };
