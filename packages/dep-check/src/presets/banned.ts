@@ -14,6 +14,12 @@ const bannedPackages: ExcludedPackage[] = [
       "This package was renamed to '@react-native-masked-view/masked-view' in 0.2.0. Please remove the old package and start using the new one.",
   },
   {
+    name: "@types/react-native",
+    version: ">=0.71.0-0",
+    reason:
+      "Types are included in react-native starting with 0.71.0. '@types/react-native' will be deprecated from 0.72 onwards.",
+  },
+  {
     name: "react-native-linear-gradient",
     version: "<2.6.0",
     reason:
