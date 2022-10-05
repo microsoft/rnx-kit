@@ -1,5 +1,12 @@
 # Change Log - @rnx-kit/dep-check
 
+## 1.13.1
+
+### Patch Changes
+
+- fda5a3fb: `@types/react-native` won't be needed from 0.71 on
+- 86bf8afa: Bump `react-native-safe-area-context` for 0.70
+
 ## 1.13.0
 
 ### Minor Changes
