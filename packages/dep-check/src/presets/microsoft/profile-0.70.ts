@@ -86,6 +86,10 @@ const profile: Profile = {
     name: "@react-native-community/netinfo",
     version: "^9.0.0",
   },
+  "safe-area": {
+    name: "react-native-safe-area-context",
+    version: "^4.4.1",
+  },
   storage: {
     name: "@react-native-async-storage/async-storage",
     version: "^1.17.10",
