@@ -17,13 +17,13 @@ runs:
   using: composite
   steps:
     - name: Set up Node.js
-      uses: actions/setup-node@v3.4.1
+      uses: actions/setup-node@v3.5.0
       with:
         node-version: ${{ inputs.node-version }}
         cache: yarn
     - name: Set up JDK
       if: ${{ inputs.jdk-version != 0 }}
-      uses: actions/setup-java@v3.4.1
+      uses: actions/setup-java@v3.5.1
       with:
         distribution: temurin
         java-version: ${{ inputs.jdk-version }}

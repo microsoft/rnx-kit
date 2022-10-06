@@ -47,11 +47,13 @@ section in `package.json` like in the following example:
 }
 ```
 
-Next, you need to
-[generate a token for Firebase CLI](https://firebase.google.com/docs/cli/#cli-ci-systems),
-and store it as a secret, `FIREBASE_TOKEN`, on your project host.
+Next, you need to create a
+[service account](https://firebase.google.com/docs/app-distribution/authenticate-service-account)
+with the **Firebase App Distribution Admin** role, and create a private JSON
+key. Once a key is created and downloaded, base64 it and store it as a secret,
+`GOOGLE_APPLICATION_CREDENTIALS_BASE64`, on your project host.
 
-If you're using GitHub, you should store it as an encrypted secret:
+If you're using GitHub, store it as an encrypted secret:
 https://docs.github.com/en/actions/security-guides/encrypted-secrets
 
 ## Contributors' Notes
