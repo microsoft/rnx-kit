@@ -13,7 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, readonly) RNXAuthErrorType type;
 @property (nonatomic, readonly) NSString *correlationID;
-@property (nonatomic, nullable, readonly) NSString *message;
+@property (nonatomic, readonly, nullable) NSString *message;
 
 + (instancetype)errorWithType:(RNXAuthErrorType)type
                 correlationID:(NSString *)correlationID

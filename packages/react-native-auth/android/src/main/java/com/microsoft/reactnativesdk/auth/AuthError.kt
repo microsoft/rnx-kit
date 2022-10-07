@@ -11,19 +11,17 @@ import com.facebook.react.bridge.WritableMap
 data class AuthError(
     val type: AuthErrorType,
     val correlationId: String,
-    val message: String?
+    val message: String? = null
 ) {
     companion object {
         fun unknown() = AuthError(
             AuthErrorType.UNKNOWN,
-            "00000000-0000-0000-0000-000000000000",
-            null
+            "00000000-0000-0000-0000-000000000000"
         )
 
         fun userCanceled() = AuthError(
             AuthErrorType.USER_CANCELED,
-            "00000000-0000-0000-0000-000000000000",
-            null
+            "00000000-0000-0000-0000-000000000000"
         )
     }
 
