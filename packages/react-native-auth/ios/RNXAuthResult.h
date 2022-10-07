@@ -11,11 +11,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, readonly) NSString *accessToken;
 @property (nonatomic, readonly) NSInteger expirationTime;
-@property (nonatomic, readonly) NSString *redirectURI;
+@property (nonatomic, readonly, nullable) NSString *redirectURI;
+
++ (instancetype)resultWithAccessToken:(NSString *)accessToken
+                       expirationTime:(NSInteger)expirationTime;
 
 + (instancetype)resultWithAccessToken:(NSString *)accessToken
                        expirationTime:(NSInteger)expirationTime
-                          redirectURI:(NSString *)redirectURI;
+                          redirectURI:(nullable NSString *)redirectURI;
 
 - (NSDictionary *)dictionary;
 

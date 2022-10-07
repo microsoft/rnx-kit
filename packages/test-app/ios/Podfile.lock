@@ -286,7 +286,7 @@ PODS:
     - React-jsi (= 0.68.3)
     - React-logger (= 0.68.3)
     - React-perflogger (= 0.68.3)
-  - ReactTestApp-DevSupport (1.6.8):
+  - ReactTestApp-DevSupport (1.6.11):
     - React-Core
     - React-jsi
   - ReactTestApp-MSAL (1.0.5):
@@ -447,12 +447,12 @@ SPEC CHECKSUMS:
   React-RCTVibration: f41f116aad644973f24653effb3db3de64fa0314
   React-runtimeexecutor: 8cdd80915ed6dabf2221a689f1f7ddb50ea5e9f3
   ReactCommon: 5b1b43a7d81a1ac4eec85f7c4db3283a14a3b13d
-  ReactTestApp-DevSupport: 477807a2c223e21ea8567c0c0a5880d561e11534
+  ReactTestApp-DevSupport: 0164207f1b24b6c43f26f1e9d324e2ddc3193261
   ReactTestApp-MSAL: 803fb430f3d9bf6bc022964c64ac3b64fea88f73
   ReactTestApp-Resources: 74a1cf509f4e7962b16361ea4e73cba3648fff5d
   RNXAuth: 1f5001db635f153c400b657b91e06e9b997620e8
   Yoga: 2f6a78c58dcc2963bd8e34d96a4246d9dff2e3a7
 
-PODFILE CHECKSUM: 438d9afb225dc2a99c6750449d7231544f5ad6f3
+PODFILE CHECKSUM: df600ab6f7e85a7573cb1b256a65b13294140cbd
 
 COCOAPODS: 1.11.3

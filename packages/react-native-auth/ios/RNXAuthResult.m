@@ -4,6 +4,14 @@
 
 + (instancetype)resultWithAccessToken:(NSString *)accessToken
                        expirationTime:(NSInteger)expirationTime
+{
+    return [[RNXAuthResult alloc] initWithAccessToken:accessToken
+                                       expirationTime:expirationTime
+                                          redirectURI:NULL];
+}
+
++ (instancetype)resultWithAccessToken:(NSString *)accessToken
+                       expirationTime:(NSInteger)expirationTime
                           redirectURI:(NSString *)redirectURI
 {
     return [[RNXAuthResult alloc] initWithAccessToken:accessToken
@@ -28,7 +36,7 @@
     return @{
         @"accessToken": _accessToken,
         @"expirationTime": @(_expirationTime),
-        @"redirectUri": _redirectURI,
+        @"redirectUri": _redirectURI == NULL ? [NSNull null] : _redirectURI,
     };
 }
 
