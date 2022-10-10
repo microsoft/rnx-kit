@@ -10,12 +10,8 @@ import { gatherRequirements, getRequirements } from "./dependencies";
 import { findBadPackages } from "./findBadPackages";
 import { modifyManifest } from "./helpers";
 import { updatePackageManifest } from "./manifest";
-import {
-  getProfilesFor,
-  resolveCustomProfiles,
-  v2_filterPreset,
-  v2_mergePresets,
-} from "./profiles";
+import { filterPreset, mergePresets } from "./preset";
+import { getProfilesFor, resolveCustomProfiles } from "./profiles";
 import type {
   AlignDepsConfig,
   CheckConfig,
@@ -275,8 +271,8 @@ function resolve(
   const prodRequirements = Array.isArray(requirements)
     ? requirements
     : requirements.production;
-  const mergedPreset = v2_mergePresets(presets, projectRoot);
-  const initialProdPreset = v2_filterPreset(prodRequirements, mergedPreset);
+  const mergedPreset = mergePresets(presets, projectRoot);
+  const initialProdPreset = filterPreset(prodRequirements, mergedPreset);
   ensurePreset(initialProdPreset, prodRequirements);
 
   const devPreset = (() => {
@@ -287,7 +283,7 @@ function resolve(
       return initialProdPreset;
     } else {
       const devRequirements = requirements.development;
-      const devPreset = v2_filterPreset(devRequirements, mergedPreset);
+      const devPreset = filterPreset(devRequirements, mergedPreset);
       ensurePreset(devPreset, devRequirements);
       return devPreset;
     }

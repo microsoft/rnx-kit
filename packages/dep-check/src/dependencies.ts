@@ -7,11 +7,11 @@ import {
   readPackage,
 } from "@rnx-kit/tools-node/package";
 import { concatVersionRanges } from "./helpers";
+import { filterPreset } from "./preset";
 import {
   getProfilesFor,
   getProfileVersionsFor,
   profilesSatisfying,
-  v2_filterPreset,
 } from "./profiles";
 import type { CheckOptions, Preset, Profile } from "./types";
 
@@ -117,7 +117,7 @@ export function gatherRequirements(
       }
     }
 
-    const filteredPreset = v2_filterPreset(requirements, preset);
+    const filteredPreset = filterPreset(requirements, preset);
     const filteredNames = Object.keys(filteredPreset);
     if (filteredNames.length !== trace[trace.length - 1].profiles.length) {
       trace.push({
