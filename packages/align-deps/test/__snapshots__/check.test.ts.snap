@@ -1,0 +1,37 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`checkPackageManifest({ kitType: 'library' }) preserves indentation in 'package.json' 1`] = `
+"{
+	\\"name\\": \\"@rnx-kit/align-deps\\",
+	\\"version\\": \\"0.0.1\\",
+	\\"peerDependencies\\": {
+		\\"react\\": \\"17.0.1\\",
+		\\"react-native\\": \\"^0.64.2\\"
+	},
+	\\"devDependencies\\": {
+		\\"react\\": \\"17.0.1\\",
+		\\"react-native\\": \\"^0.64.2\\"
+	}
+}
+"
+`;
+
+exports[`checkPackageManifest({ kitType: 'library' }) prints warnings when detecting bad packages (with version range) 1`] = `
+Array [
+  Array [
+    "warn",
+    "Known bad packages are found in '@rnx-kit/align-deps':
+    react-native-linear-gradient@<2.6.0: This package causes significant degradation in app start up time prior to 2.6.0.",
+  ],
+]
+`;
+
+exports[`checkPackageManifest({ kitType: 'library' }) prints warnings when detecting bad packages 1`] = `
+Array [
+  Array [
+    "warn",
+    "Known bad packages are found in '@rnx-kit/align-deps':
+    react-native-linear-gradient@<2.6.0: This package causes significant degradation in app start up time prior to 2.6.0.",
+  ],
+]
+`;
