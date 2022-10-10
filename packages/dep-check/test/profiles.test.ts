@@ -13,7 +13,7 @@ import {
   loadCustomProfiles,
   profilesSatisfying,
   resolveCustomProfiles,
-  v2_profilesSatisfying,
+  v2_filterPreset,
 } from "../src/profiles";
 import { ProfileVersion } from "../src/types";
 
@@ -228,40 +228,27 @@ describe("profilesSatisfying()", () => {
   });
 });
 
-describe("v2_profilesSatisfying()", () => {
+describe("v2_filterPreset()", () => {
   test("returns no profiles if requirements cannot be satisfied", () => {
-    const profiles = v2_profilesSatisfying(
+    const profiles = v2_filterPreset(
       ["react@17.0", "react-native@>=69.0"],
-      ["microsoft/react-native"],
-      process.cwd()
+      preset
     );
     expect(profiles).toEqual({});
   });
 
   test("returns profiles satisfying single version range", () => {
-    const profiles = v2_profilesSatisfying(
-      ["react-native@0.70"],
-      ["microsoft/react-native"],
-      process.cwd()
-    );
+    const profiles = v2_filterPreset(["react-native@0.70"], preset);
     expect(profiles).toEqual({ "0.70": profile_0_70 });
   });
 
   test("returns profiles satisfying multiple version ranges", () => {
-    const profiles = v2_profilesSatisfying(
-      ["react-native@0.68 || 0.70"],
-      ["microsoft/react-native"],
-      process.cwd()
-    );
+    const profiles = v2_filterPreset(["react-native@0.68 || 0.70"], preset);
     expect(profiles).toEqual({ "0.68": profile_0_68, "0.70": profile_0_70 });
   });
 
   test("returns profiles satisfying wide version range", () => {
-    const profiles = v2_profilesSatisfying(
-      ["react-native@>=0.68"],
-      ["microsoft/react-native"],
-      process.cwd()
-    );
+    const profiles = v2_filterPreset(["react-native@>=0.68"], preset);
     expect(profiles).toEqual({
       "0.68": profile_0_68,
       "0.69": profile_0_69,
@@ -270,11 +257,7 @@ describe("v2_profilesSatisfying()", () => {
   });
 
   test("returns profiles satisfying non-react-native requirements", () => {
-    const profiles = v2_profilesSatisfying(
-      ["react@18"],
-      ["microsoft/react-native"],
-      process.cwd()
-    );
+    const profiles = v2_filterPreset(["react@18"], preset);
     expect(profiles).toEqual({
       "0.69": profile_0_69,
       "0.70": profile_0_70,
@@ -282,10 +265,9 @@ describe("v2_profilesSatisfying()", () => {
   });
 
   test("returns profiles satisfying multiple requirements", () => {
-    const profiles = v2_profilesSatisfying(
+    const profiles = v2_filterPreset(
       ["react@^18.0", "react-native@>=0.64"],
-      ["microsoft/react-native"],
-      process.cwd()
+      preset
     );
     expect(profiles).toEqual({
       "0.69": profile_0_69,

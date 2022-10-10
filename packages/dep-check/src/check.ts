@@ -13,7 +13,8 @@ import { updatePackageManifest } from "./manifest";
 import {
   getProfilesFor,
   resolveCustomProfiles,
-  v2_profilesSatisfying,
+  v2_filterPreset,
+  v2_mergePresets,
 } from "./profiles";
 import type {
   AlignDepsConfig,
@@ -274,11 +275,8 @@ function resolve(
   const prodRequirements = Array.isArray(requirements)
     ? requirements
     : requirements.production;
-  const initialProdPreset = v2_profilesSatisfying(
-    prodRequirements,
-    presets,
-    projectRoot
-  );
+  const mergedPreset = v2_mergePresets(presets, projectRoot);
+  const initialProdPreset = v2_filterPreset(prodRequirements, mergedPreset);
   ensurePreset(initialProdPreset, prodRequirements);
 
   const devPreset = (() => {
@@ -289,11 +287,7 @@ function resolve(
       return initialProdPreset;
     } else {
       const devRequirements = requirements.development;
-      const devPreset = v2_profilesSatisfying(
-        devRequirements,
-        presets,
-        projectRoot
-      );
+      const devPreset = v2_filterPreset(devRequirements, mergedPreset);
       ensurePreset(devPreset, devRequirements);
       return devPreset;
     }

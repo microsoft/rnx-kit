@@ -185,14 +185,6 @@ export function profilesSatisfying(
   return profiles.filter((v) => versions.includes(v));
 }
 
-function v2_loadPreset(preset: string, projectRoot: string): Preset {
-  try {
-    return require("./presets/" + preset).default;
-  } catch (_) {
-    return require(require.resolve(preset, { paths: [projectRoot] }));
-  }
-}
-
 function v2_compileRequirements(
   requirements: string[]
 ): ((pkg: MetaPackage | Package) => boolean)[] {
@@ -211,6 +203,14 @@ function v2_compileRequirements(
       );
     };
   });
+}
+
+function v2_loadPreset(preset: string, projectRoot: string): Preset {
+  try {
+    return require("./presets/" + preset).default;
+  } catch (_) {
+    return require(require.resolve(preset, { paths: [projectRoot] }));
+  }
 }
 
 export function v2_filterPreset(
@@ -232,29 +232,18 @@ export function v2_filterPreset(
   return filteredPreset;
 }
 
-export function v2_profilesSatisfying(
-  requirements: string[],
+export function v2_mergePresets(
   presets: string[],
   projectRoot: string
 ): Preset {
-  console.assert(presets.length > 0 && requirements.length > 0);
-
-  const reqs = v2_compileRequirements(requirements);
-
   const mergedPreset: Preset = {};
   for (const presetName of presets) {
     const preset = v2_loadPreset(presetName, projectRoot);
     for (const [profileName, profile] of Object.entries(preset)) {
-      const packages = Object.values(profile);
-      const satisfiesRequirements = reqs.every((predicate) =>
-        packages.some(predicate)
-      );
-      if (satisfiesRequirements) {
-        mergedPreset[profileName] = {
-          ...mergedPreset[profileName],
-          ...profile,
-        };
-      }
+      mergedPreset[profileName] = {
+        ...mergedPreset[profileName],
+        ...profile,
+      };
     }
   }
 
