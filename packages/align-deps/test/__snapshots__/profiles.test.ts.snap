@@ -1,0 +1,112 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`loadCustomProfiles() loads valid custom profiles 1`] = `
+Object {
+  "0.65": Object {
+    "format": Object {
+      "devOnly": true,
+      "name": "prettier",
+      "version": "^2.5.1",
+    },
+  },
+  "0.66": Object {
+    "format": Object {
+      "devOnly": true,
+      "name": "prettier",
+      "version": "^2.5.1",
+    },
+  },
+  "0.67": Object {
+    "format": Object {
+      "devOnly": true,
+      "name": "prettier",
+      "version": "^2.5.1",
+    },
+  },
+}
+`;
+
+exports[`loadCustomProfiles() prepends root-level capabilities to all profiles 1`] = `
+Object {
+  "0.61": Object {
+    "format": Object {
+      "devOnly": true,
+      "name": "prettier",
+      "version": "^2.5.1",
+    },
+  },
+  "0.62": Object {
+    "format": Object {
+      "devOnly": true,
+      "name": "prettier",
+      "version": "^2.5.1",
+    },
+  },
+  "0.63": Object {
+    "format": Object {
+      "devOnly": true,
+      "name": "prettier",
+      "version": "^2.5.1",
+    },
+  },
+  "0.64": Object {
+    "format": Object {
+      "devOnly": true,
+      "name": "prettier",
+      "version": "^2.5.1",
+    },
+  },
+  "0.65": Object {
+    "format": Object {
+      "devOnly": true,
+      "name": "prettier",
+      "version": "^2.5.1",
+    },
+  },
+  "0.66": Object {
+    "format": Object {
+      "devOnly": true,
+      "name": "prettier",
+      "version": "^2.5.1",
+    },
+    "test": Object {
+      "devOnly": true,
+      "name": "jest",
+      "version": "26.0",
+    },
+  },
+  "0.67": Object {
+    "format": Object {
+      "devOnly": true,
+      "name": "prettier",
+      "version": "3.0",
+    },
+    "test": Object {
+      "devOnly": true,
+      "name": "jest",
+      "version": "27.0",
+    },
+  },
+  "0.68": Object {
+    "format": Object {
+      "devOnly": true,
+      "name": "prettier",
+      "version": "^2.5.1",
+    },
+  },
+  "0.69": Object {
+    "format": Object {
+      "devOnly": true,
+      "name": "prettier",
+      "version": "^2.5.1",
+    },
+  },
+  "0.70": Object {
+    "format": Object {
+      "devOnly": true,
+      "name": "prettier",
+      "version": "^2.5.1",
+    },
+  },
+}
+`;
