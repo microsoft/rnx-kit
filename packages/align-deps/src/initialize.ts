@@ -1,7 +1,19 @@
+import type { KitType } from "@rnx-kit/config";
+import { error } from "@rnx-kit/console";
 import { readPackage } from "@rnx-kit/tools-node/package";
 import { capabilitiesFor } from "./capabilities";
 import { modifyManifest } from "./helpers";
-import type { CapabilitiesOptions } from "./types";
+import type { CapabilitiesOptions, Command } from "./types";
+
+function ensureKitType(type: string): KitType | undefined {
+  switch (type) {
+    case "app":
+    case "library":
+      return type;
+    default:
+      return undefined;
+  }
+}
 
 export function initializeConfig(
   packageManifest: string,
@@ -28,4 +40,23 @@ export function initializeConfig(
     },
   };
   modifyManifest(packageManifest, updatedManifest);
+}
+
+export function makeInitializeCommand(
+  kitType: string,
+  customProfiles: string | undefined
+): Command | undefined {
+  const verifiedKitType = ensureKitType(kitType);
+  if (!verifiedKitType) {
+    error(`Invalid kit type: '${kitType}'`);
+    return undefined;
+  }
+
+  return (manifest: string) => {
+    initializeConfig(manifest, {
+      kitType: verifiedKitType,
+      customProfilesPath: customProfiles,
+    });
+    return "success";
+  };
 }

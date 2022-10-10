@@ -17,6 +17,8 @@ import type {
   CheckConfig,
   CheckOptions,
   Command,
+  ErrorCode,
+  Options,
   Preset,
 } from "./types";
 
@@ -127,15 +129,11 @@ export function getCheckConfig(
 }
 
 export function getConfig(
-  manifestPath: string,
-  { uncheckedReturnCode }: CheckOptions
-): number | AlignDepsConfig | CheckConfig {
+  manifestPath: string
+): AlignDepsConfig | CheckConfig | ErrorCode {
   const manifest = readPackage(manifestPath);
   if (!isPackageManifest(manifest)) {
-    error(
-      `'${manifestPath}' does not contain a valid package manifest — please make sure it's not missing 'name' or 'version'`
-    );
-    return 1;
+    return "invalid-manifest";
   }
 
   const badPackages = findBadPackages(manifest);
@@ -143,7 +141,7 @@ export function getConfig(
     warn(
       `Known bad packages are found in '${manifest.name}':\n` +
         badPackages
-          .map((pkg) => `    ${pkg.name}@${pkg.version}: ${pkg.reason}`)
+          .map((pkg) => `\t${pkg.name}@${pkg.version}: ${pkg.reason}`)
           .join("\n")
     );
   }
@@ -151,23 +149,23 @@ export function getConfig(
   const projectRoot = path.dirname(manifestPath);
   const kitConfig = getKitConfig({ cwd: projectRoot });
   if (!kitConfig) {
-    return uncheckedReturnCode || 0;
+    return "not-configured";
   }
 
   const { kitType = "library", alignDeps, ...config } = kitConfig;
   if (alignDeps) {
     const errors = [];
     if (!containsValidPresets(alignDeps)) {
-      errors.push("'alignDeps.presets' cannot be empty");
+      errors.push(`${manifestPath}: 'alignDeps.presets' cannot be empty`);
     }
     if (!containsValidRequirements(alignDeps)) {
-      errors.push("'alignDeps.requirements' cannot be empty");
+      errors.push(`${manifestPath}: 'alignDeps.requirements' cannot be empty`);
     }
     if (errors.length > 0) {
       for (const e of errors) {
         error(e);
       }
-      throw new Error("align-deps was not properly configured");
+      return "invalid-configuration";
     }
     return {
       kitType,
@@ -248,23 +246,23 @@ function resolve(
 
 export function checkPackageManifest(
   manifestPath: string,
-  options: CheckOptions
-): number {
-  const result = options.config || getConfig(manifestPath, options);
-  if (typeof result === "number") {
-    return result;
+  options: CheckOptions,
+  inputConfig = getConfig(manifestPath)
+): ErrorCode {
+  if (typeof inputConfig === "string") {
+    return inputConfig;
   }
 
-  const config = migrateConfig(result);
-  if (config.alignDeps.capabilities.length === 0) {
-    return options.uncheckedReturnCode || 0;
-  }
-
+  const config = migrateConfig(inputConfig);
   const { devPreset, prodPreset, capabilities } = resolve(
     config,
     path.dirname(manifestPath),
     options
   );
+  if (capabilities.length === 0) {
+    return "success";
+  }
+
   const { kitType, manifest } = config;
 
   if (kitType === "app") {
@@ -305,21 +303,13 @@ export function checkPackageManifest(
         }
       );
       console.log(diff);
-
-      error(
-        "Changes are needed to satisfy all requirements. Re-run with `--write` to apply them."
-      );
-
-      const url = chalk.bold("https://aka.ms/align-deps");
-      info(`Visit ${url} for more information about align-deps.`);
-
-      return 1;
+      return "unsatisfied";
     }
   }
 
-  return 0;
+  return "success";
 }
 
-export function makeCheckCommand(options: CheckOptions): Command {
+export function makeCheckCommand(options: Options): Command {
   return (manifest: string) => checkPackageManifest(manifest, options);
 }

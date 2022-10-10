@@ -27,7 +27,7 @@ describe("checkPackageManifest({ kitType: 'app' }) (backwards compatibility)", (
 
     expect(
       checkPackageManifest(manifestPath, { loose: false, write: true })
-    ).toBe(0);
+    ).toBe("success");
     expect(destination).toBe(manifestPath);
     expect(updatedManifest).toMatchSnapshot();
   });

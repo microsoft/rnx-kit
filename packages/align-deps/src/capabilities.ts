@@ -136,7 +136,7 @@ export function resolveCapabilities(
 
   if (unresolvedCapabilities.size > 0) {
     const message = Array.from(unresolvedCapabilities).reduce(
-      (lines, capability) => (lines += `\n    ${capability}`),
+      (lines, capability) => (lines += `\n\t${capability}`),
       "The following capabilities could not be resolved for one or more profiles:"
     );
 

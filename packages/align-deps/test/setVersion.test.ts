@@ -9,7 +9,7 @@ type Result = {
   manifest: Record<string, unknown>;
 };
 
-describe("makeSetVersionCommand()", () => {
+xdescribe("makeSetVersionCommand()", () => {
   const rnxKitConfig = require("@rnx-kit/config");
   const fs = require("fs");
 

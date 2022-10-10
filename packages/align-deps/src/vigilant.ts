@@ -172,7 +172,7 @@ export function makeVigilantCommand({
 
     const manifest = readPackage(manifestPath);
     if (exclusionList.includes(manifest.name)) {
-      return 0;
+      return "success";
     }
 
     const currentProfile = buildProfileFromConfig(config, inputProfile);
@@ -190,9 +190,9 @@ export function makeVigilantCommand({
         error(
           `Found ${changes.length} violation(s) in ${manifest.name}:\n${violations}`
         );
-        return 1;
+        return "unsatisfied";
       }
     }
-    return 0;
+    return "success";
   };
 }

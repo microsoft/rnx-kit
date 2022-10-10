@@ -67,14 +67,14 @@ export async function makeSetVersionCommand(
 
   return (manifestPath: string) => {
     const checkReturnCode = checkPackageManifest(manifestPath, checkOnly);
-    if (checkReturnCode !== 0) {
+    if (checkReturnCode !== "success") {
       return checkReturnCode;
     }
 
     const manifest = readPackage(manifestPath);
     const rnxKitConfig = manifest["rnx-kit"];
     if (!rnxKitConfig) {
-      return 0;
+      return "not-configured";
     }
 
     rnxKitConfig.reactNativeVersion = supportedVersions;
