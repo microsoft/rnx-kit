@@ -35,3 +35,19 @@ Array [
   ],
 ]
 `;
+
+exports[`v2_checkPackageManifest({ kitType: 'library' }) (backwards compatibility) preserves indentation in 'package.json' 1`] = `
+"{
+	\\"name\\": \\"@rnx-kit/align-deps\\",
+	\\"version\\": \\"0.0.1\\",
+	\\"peerDependencies\\": {
+		\\"react\\": \\"17.0.1\\",
+		\\"react-native\\": \\"^0.64.2\\"
+	},
+	\\"devDependencies\\": {
+		\\"react\\": \\"17.0.1\\",
+		\\"react-native\\": \\"^0.64.2\\"
+	}
+}
+"
+`;

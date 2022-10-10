@@ -6,7 +6,7 @@ import semverValid from "semver/functions/valid";
 import semverIntersects from "semver/ranges/intersects";
 import semverValidRange from "semver/ranges/valid";
 import { keysOf } from "./helpers";
-import { default as defaultPreset } from "./presets/microsoft";
+import { default as defaultPreset } from "./presets/microsoft/react-native";
 import type {
   MetaPackage,
   Package,

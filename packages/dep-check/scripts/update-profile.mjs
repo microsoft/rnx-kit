@@ -20,7 +20,7 @@ import { isMetaPackage } from "../lib/capabilities.js";
  *   name: string;
  *   version: string;
  *   latest: string;
- *   homepage?: string;
+ *   homepage: string;
  *   dependencies?: Record<string, string>;
  *   peerDependencies?: Record<string, string>;
  * }} PackageInfo
@@ -62,13 +62,7 @@ function getPackageVersion(packageName, dependencies) {
   if (!packageVersion) {
     throw new Error(`Failed to get '${packageName}' version`);
   }
-
-  const coercedVersion = semverCoerce(packageVersion);
-  if (!coercedVersion) {
-    throw new Error(`Failed to coerce version: ${packageVersion}`);
-  }
-
-  return coercedVersion.version;
+  return semverCoerce(packageVersion).version;
 }
 
 /**
@@ -109,10 +103,6 @@ function generateFromTemplate({
   metroVersion,
 }) {
   const nextVersionCoerced = semverCoerce(targetVersion);
-  if (!nextVersionCoerced) {
-    throw new Error(`Failed to coerce version: ${targetVersion}`);
-  }
-
   const currentVersion = `${nextVersionCoerced.major}.${
     nextVersionCoerced.minor - 1
   }`;
@@ -125,7 +115,7 @@ function generateFromTemplate({
   const currentVersionVarName = `${nextVersionCoerced.major}_${
     nextVersionCoerced.minor - 1
   }`;
-  return `import type { Package, Profile } from "../../../types";
+  return `import type { Profile, Package } from "../../types";
 import profile_${currentVersionVarName} from "./profile-${currentVersion}";
 
 const reactNative: Package = {
@@ -281,11 +271,11 @@ async function makeProfile(preset, targetVersion, latestProfile) {
  * @param {{ preset?: string; targetVersion?: string; force?: boolean; }} options
  */
 async function main({
-  preset: presetName = "microsoft/react-native",
+  preset: presetName = "microsoft",
   targetVersion = "",
   force,
 }) {
-  const { preset } = await import(`../lib/presets/${presetName}.js`);
+  const { preset } = await import(`../lib/presets/${presetName}/index.js`);
   const allVersions = /** @type {import("../src/types").ProfileVersion[]} */ (
     Object.keys(preset)
       .sort((lhs, rhs) => semverCompare(semverCoerce(lhs), semverCoerce(rhs)))

@@ -3,8 +3,8 @@ import {
   updateDependencies,
   updatePackageManifest,
 } from "../src/manifest";
-import profile_0_63 from "../src/presets/microsoft/react-native/profile-0.63";
-import profile_0_64 from "../src/presets/microsoft/react-native/profile-0.64";
+import profile_0_63 from "../src/presets/microsoft/profile-0.63";
+import profile_0_64 from "../src/presets/microsoft/profile-0.64";
 import type { Package } from "../src/types";
 import { packageVersion, pickPackage } from "./helpers";
 

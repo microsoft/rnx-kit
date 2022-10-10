@@ -1,8 +1,12 @@
 import semverCoerce from "semver/functions/coerce";
-import { checkPackageManifest, getCheckConfig } from "../src/check";
-import profile_0_62 from "../src/presets/microsoft/profile-0.62";
-import profile_0_63 from "../src/presets/microsoft/profile-0.63";
-import profile_0_64 from "../src/presets/microsoft/profile-0.64";
+import {
+  checkPackageManifest,
+  getCheckConfig,
+  v2_checkPackageManifest,
+} from "../src/check";
+import profile_0_62 from "../src/presets/microsoft/react-native/profile-0.62";
+import profile_0_63 from "../src/presets/microsoft/react-native/profile-0.63";
+import profile_0_64 from "../src/presets/microsoft/react-native/profile-0.64";
 import { packageVersion } from "./helpers";
 
 jest.mock("fs");
@@ -282,6 +286,257 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
   });
 });
 
+describe("v2_checkPackageManifest({ kitType: 'library' }) (backwards compatibility)", () => {
+  const rnxKitConfig = require("@rnx-kit/config");
+  const fs = require("fs");
+
+  const consoleErrorSpy = jest.spyOn(global.console, "error");
+
+  const defaultOptions = { loose: false, write: false };
+
+  const mockManifest = {
+    name: "@rnx-kit/align-deps",
+    version: "0.0.1",
+  };
+
+  const react_v62_v63_v64 = [
+    packageVersion(profile_0_62, "react"),
+    packageVersion(profile_0_63, "react"),
+    packageVersion(profile_0_64, "react"),
+  ].join(" || ");
+
+  const v62_v63_v64 = [
+    packageVersion(profile_0_62, "core"),
+    packageVersion(profile_0_63, "core"),
+    packageVersion(profile_0_64, "core"),
+  ].join(" || ");
+
+  beforeEach(() => {
+    consoleErrorSpy.mockReset();
+    fs.__setMockContent({});
+    rnxKitConfig.__setMockConfig();
+  });
+
+  afterAll(() => {
+    jest.clearAllMocks();
+  });
+
+  test("returns error code when reading invalid manifests", () => {
+    expect(v2_checkPackageManifest("package.json", defaultOptions)).not.toBe(0);
+    expect(consoleErrorSpy).toBeCalledTimes(1);
+  });
+
+  test("returns early if 'rnx-kit' is missing from the manifest", () => {
+    fs.__setMockContent({
+      ...mockManifest,
+      dependencies: { "react-native-linear-gradient": "0.0.0" },
+    });
+
+    const options = { ...defaultOptions, uncheckedReturnCode: -1 };
+    expect(v2_checkPackageManifest("package.json", options)).toBe(-1);
+  });
+
+  test("prints warnings when detecting bad packages", () => {
+    fs.__setMockContent({
+      ...mockManifest,
+      dependencies: { "react-native-linear-gradient": "0.0.0" },
+      peerDependencies: {
+        "react-native": profile_0_64["core"],
+      },
+      devDependencies: {
+        "react-native": profile_0_64["core"],
+      },
+    });
+    rnxKitConfig.__setMockConfig({ reactNativeVersion: "0.64.0" });
+
+    expect(v2_checkPackageManifest("package.json", defaultOptions)).toBe(0);
+    expect(consoleErrorSpy).not.toBeCalled();
+  });
+
+  test("prints warnings when detecting bad packages (with version range)", () => {
+    fs.__setMockContent({
+      ...mockManifest,
+      dependencies: { "react-native-linear-gradient": "0.0.0" },
+    });
+    rnxKitConfig.__setMockConfig({ reactNativeVersion: "^0.63.0 || ^0.64.0" });
+
+    expect(v2_checkPackageManifest("package.json", defaultOptions)).toBe(0);
+    expect(consoleErrorSpy).not.toBeCalled();
+  });
+
+  test("returns early if no capabilities are defined", () => {
+    fs.__setMockContent(mockManifest);
+    rnxKitConfig.__setMockConfig({ reactNativeVersion: "0.64.0" });
+
+    expect(v2_checkPackageManifest("package.json", defaultOptions)).toBe(0);
+    expect(consoleErrorSpy).not.toBeCalled();
+  });
+
+  test("returns if no changes are needed", () => {
+    fs.__setMockContent({
+      ...mockManifest,
+      peerDependencies: {
+        react: packageVersion(profile_0_64, "react"),
+        "react-native": packageVersion(profile_0_64, "core"),
+      },
+      devDependencies: {
+        react: packageVersion(profile_0_64, "react"),
+        "react-native": packageVersion(profile_0_64, "core"),
+      },
+    });
+    rnxKitConfig.__setMockConfig({
+      reactNativeVersion: "0.64.0",
+      capabilities: ["core-ios"],
+    });
+
+    expect(v2_checkPackageManifest("package.json", defaultOptions)).toBe(0);
+    expect(consoleErrorSpy).not.toBeCalled();
+  });
+
+  test("returns if no changes are needed (write: true)", () => {
+    let didWriteToPath = false;
+
+    fs.__setMockContent({
+      ...mockManifest,
+      peerDependencies: {
+        react: packageVersion(profile_0_64, "react"),
+        "react-native": packageVersion(profile_0_64, "core"),
+      },
+      devDependencies: {
+        react: packageVersion(profile_0_64, "react"),
+        "react-native": packageVersion(profile_0_64, "core"),
+      },
+    });
+    fs.__setMockFileWriter((p, _content) => {
+      didWriteToPath = p;
+    });
+    rnxKitConfig.__setMockConfig({
+      reactNativeVersion: "0.64.0",
+      capabilities: ["core-ios"],
+    });
+
+    expect(
+      v2_checkPackageManifest("package.json", { loose: false, write: true })
+    ).toBe(0);
+    expect(didWriteToPath).toBe(false);
+    expect(consoleErrorSpy).not.toBeCalled();
+  });
+
+  test("returns error code if changes are needed", () => {
+    fs.__setMockContent(mockManifest);
+    rnxKitConfig.__setMockConfig({
+      reactNativeVersion: "0.64.0",
+      capabilities: ["core-ios"],
+    });
+
+    expect(v2_checkPackageManifest("package.json", defaultOptions)).not.toBe(0);
+    expect(consoleErrorSpy).toBeCalledTimes(1);
+  });
+
+  test("writes changes back to 'package.json'", () => {
+    let didWriteToPath = false;
+
+    fs.__setMockContent(mockManifest);
+    fs.__setMockFileWriter((p, _content) => {
+      didWriteToPath = p;
+    });
+    rnxKitConfig.__setMockConfig({
+      reactNativeVersion: "0.64.0",
+      capabilities: ["core-ios"],
+    });
+
+    expect(
+      v2_checkPackageManifest("package.json", { loose: false, write: true })
+    ).toBe(0);
+    expect(didWriteToPath).toBe("package.json");
+    expect(consoleErrorSpy).not.toBeCalled();
+  });
+
+  test("preserves indentation in 'package.json'", () => {
+    let output = "";
+
+    fs.__setMockContent(mockManifest, "\t");
+    fs.__setMockFileWriter((_, content) => {
+      output = content;
+    });
+    rnxKitConfig.__setMockConfig({
+      reactNativeVersion: "0.64.0",
+      capabilities: ["core-ios"],
+    });
+
+    expect(
+      v2_checkPackageManifest("package.json", { loose: false, write: true })
+    ).toBe(0);
+    expect(output).toMatchSnapshot();
+    expect(consoleErrorSpy).not.toBeCalled();
+  });
+
+  test("uses minimum supported version as development version", () => {
+    fs.__setMockContent({
+      ...mockManifest,
+      peerDependencies: {
+        react: react_v62_v63_v64,
+        "react-native": v62_v63_v64,
+      },
+      devDependencies: {
+        react: packageVersion(profile_0_62, "react"),
+        "react-native": packageVersion(profile_0_62, "core"),
+      },
+    });
+    rnxKitConfig.__setMockConfig({
+      reactNativeVersion: "^0.62 || ^0.63 || ^0.64",
+      capabilities: ["core-ios"],
+    });
+
+    expect(v2_checkPackageManifest("package.json", defaultOptions)).toBe(0);
+    expect(consoleErrorSpy).not.toBeCalled();
+  });
+
+  test("uses declared development version", () => {
+    fs.__setMockContent({
+      ...mockManifest,
+      peerDependencies: {
+        react: react_v62_v63_v64,
+        "react-native": v62_v63_v64,
+      },
+      devDependencies: {
+        react: packageVersion(profile_0_63, "react"),
+        "react-native": packageVersion(profile_0_63, "core"),
+      },
+    });
+    rnxKitConfig.__setMockConfig({
+      reactNativeVersion: "^0.62 || ^0.63 || ^0.64",
+      reactNativeDevVersion: "0.63.4",
+      capabilities: ["core-ios"],
+    });
+
+    expect(v2_checkPackageManifest("package.json", defaultOptions)).toBe(0);
+    expect(consoleErrorSpy).not.toBeCalled();
+  });
+
+  test("handles development version ranges", () => {
+    fs.__setMockContent({
+      ...mockManifest,
+      peerDependencies: {
+        react: react_v62_v63_v64,
+        "react-native": v62_v63_v64,
+      },
+      devDependencies: {
+        react: packageVersion(profile_0_63, "react"),
+        "react-native": packageVersion(profile_0_63, "core"),
+      },
+    });
+    rnxKitConfig.__setMockConfig({
+      reactNativeVersion: "^0.62 || ^0.63 || ^0.64",
+      reactNativeDevVersion: "^0.63.4",
+      capabilities: ["core-ios"],
+    });
+
+    expect(v2_checkPackageManifest("package.json", defaultOptions)).toBe(0);
+    expect(consoleErrorSpy).not.toBeCalled();
+  });
+});
+
 describe("getCheckConfig", () => {
   const rnxKitConfig = require("@rnx-kit/config");
   const fs = require("fs");
@@ -315,7 +570,7 @@ describe("getCheckConfig", () => {
       kitType: "library",
       manifest: mockManifest,
       reactNativeVersion,
-      reactNativeDevVersion: semverCoerce(reactNativeVersion).version,
+      reactNativeDevVersion: semverCoerce(reactNativeVersion)?.version,
     });
   });
 
@@ -353,7 +608,7 @@ describe("getCheckConfig", () => {
       kitType: "library",
       manifest: mockManifest,
       reactNativeVersion,
-      reactNativeDevVersion: semverCoerce(reactNativeVersion).version,
+      reactNativeDevVersion: semverCoerce(reactNativeVersion)?.version,
     });
   });
 });
