@@ -339,9 +339,16 @@ export function v2_checkPackageManifest(
   );
   const { kitType, manifest } = config;
 
-  info("Aligning dependencies according to the following profiles:");
-  info("\t- Development:", Object.keys(devPreset).join(", "));
-  info("\t- Production:", Object.keys(prodPreset).join(", "));
+  if (kitType === "app") {
+    info(
+      "Aligning dependencies according to the following profiles:",
+      Object.keys(prodPreset).join(", ")
+    );
+  } else {
+    info("Aligning dependencies according to the following profiles:");
+    info("\t- Development:", Object.keys(devPreset).join(", "));
+    info("\t- Production:", Object.keys(prodPreset).join(", "));
+  }
 
   const updatedManifest = updatePackageManifest(
     manifest,

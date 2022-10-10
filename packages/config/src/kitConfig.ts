@@ -78,9 +78,25 @@ export type KitConfig = {
    */
   reactNativeDevVersion?: string;
 
+  /**
+   * Configures how `align-deps` should align dependencies for this package.
+   */
   alignDeps?: {
+    /**
+     * Presets to use for aligning dependencies.
+     * @default ["microsoft/react-native"]
+     */
     presets?: string[];
+
+    /**
+     * Requirements for this package, e.g. `react-native@>=0.66`.
+     */
     requirements?: string[] | { development: string[]; production: string[] };
+
+    /**
+     * Capabilities used by the kit.
+     * @default []
+     */
     capabilities?: Capability[];
   };
 
