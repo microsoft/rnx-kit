@@ -11,7 +11,7 @@ import { findBadPackages } from "./findBadPackages";
 import { modifyManifest } from "./helpers";
 import { updatePackageManifest } from "./manifest";
 import { filterPreset, mergePresets } from "./preset";
-import { getProfilesFor, resolveCustomProfiles } from "./profiles";
+import { resolveCustomProfiles } from "./profiles";
 import type {
   AlignDepsConfig,
   CheckConfig,
@@ -19,6 +19,36 @@ import type {
   Command,
   Preset,
 } from "./types";
+
+export function containsValidPresets(config: KitConfig["alignDeps"]): boolean {
+  const presets = config?.presets;
+  return !presets || (Array.isArray(presets) && presets.length > 0);
+}
+
+export function containsValidRequirements(
+  config: KitConfig["alignDeps"]
+): boolean {
+  const requirements = config?.requirements;
+  if (requirements) {
+    if (Array.isArray(requirements)) {
+      return requirements.length > 0;
+    } else if (typeof requirements === "object") {
+      return (
+        Array.isArray(requirements.production) &&
+        requirements.production.length > 0
+      );
+    }
+  }
+  return false;
+}
+
+function ensurePreset(preset: Preset, requirements: string[]): void {
+  if (Object.keys(preset).length === 0) {
+    throw new Error(
+      `No profiles could satisfy requirements: ${requirements.join(", ")}`
+    );
+  }
+}
 
 export function getCheckConfig(
   manifestPath: string,
@@ -96,99 +126,7 @@ export function getCheckConfig(
   };
 }
 
-export function checkPackageManifest(
-  manifestPath: string,
-  options: CheckOptions
-): number {
-  const result = options.config || getCheckConfig(manifestPath, options);
-  if (typeof result === "number") {
-    return result;
-  }
-
-  const {
-    kitType,
-    reactNativeVersion,
-    reactNativeDevVersion,
-    capabilities,
-    customProfilesPath,
-    manifest,
-  } = result;
-
-  if (capabilities.length === 0) {
-    return options.uncheckedReturnCode || 0;
-  }
-
-  const updatedManifest = updatePackageManifest(
-    manifest,
-    capabilities,
-    getProfilesFor(reactNativeVersion, customProfilesPath),
-    getProfilesFor(reactNativeDevVersion, customProfilesPath),
-    kitType
-  );
-
-  // Don't fail when manifests only have whitespace differences.
-  const updatedManifestJson = JSON.stringify(updatedManifest, undefined, 2);
-  const normalizedManifestJson = JSON.stringify(manifest, undefined, 2);
-
-  if (updatedManifestJson !== normalizedManifestJson) {
-    if (options.write) {
-      modifyManifest(manifestPath, updatedManifest);
-    } else {
-      const diff = diffLinesUnified(
-        normalizedManifestJson.split("\n"),
-        updatedManifestJson.split("\n"),
-        {
-          aAnnotation: "Current",
-          aColor: chalk.red,
-          bAnnotation: "Expected",
-          bColor: chalk.green,
-        }
-      );
-      console.log(diff);
-
-      error(
-        "Changes are needed to satisfy all requirements. Re-run with `--write` to have dep-check apply them."
-      );
-
-      const url = chalk.bold("https://aka.ms/dep-check");
-      info(`Visit ${url} for more information about dep-check.`);
-
-      return 1;
-    }
-  }
-
-  return 0;
-}
-
-function containsValidPresets(config: KitConfig["alignDeps"]): boolean {
-  const presets = config?.presets;
-  return !presets || (Array.isArray(presets) && presets.length > 0);
-}
-
-function containsValidRequirements(config: KitConfig["alignDeps"]): boolean {
-  const requirements = config?.requirements;
-  if (requirements) {
-    if (Array.isArray(requirements)) {
-      return requirements.length > 0;
-    } else if (typeof requirements === "object") {
-      return (
-        Array.isArray(requirements.production) &&
-        requirements.production.length > 0
-      );
-    }
-  }
-  return false;
-}
-
-function ensurePreset(preset: Preset, requirements: string[]): void {
-  if (Object.keys(preset).length === 0) {
-    throw new Error(
-      `No profiles could satisfy requirements: ${requirements.join(", ")}`
-    );
-  }
-}
-
-export function v2_getConfig(
+export function getConfig(
   manifestPath: string,
   { uncheckedReturnCode }: CheckOptions
 ): number | AlignDepsConfig | CheckConfig {
@@ -308,11 +246,11 @@ function resolve(
   return { devPreset, prodPreset: initialProdPreset, capabilities };
 }
 
-export function v2_checkPackageManifest(
+export function checkPackageManifest(
   manifestPath: string,
   options: CheckOptions
 ): number {
-  const result = options.config || v2_getConfig(manifestPath, options);
+  const result = options.config || getConfig(manifestPath, options);
   if (typeof result === "number") {
     return result;
   }
@@ -383,9 +321,5 @@ export function v2_checkPackageManifest(
 }
 
 export function makeCheckCommand(options: CheckOptions): Command {
-  const check =
-    process.env["DEP_CHECK_VERSION"] === "2"
-      ? v2_checkPackageManifest
-      : checkPackageManifest;
-  return (manifest: string) => check(manifest, options);
+  return (manifest: string) => checkPackageManifest(manifest, options);
 }
