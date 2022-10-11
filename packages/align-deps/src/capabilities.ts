@@ -1,70 +1,46 @@
-import type { Capability, KitCapabilities } from "@rnx-kit/config";
+import type { Capability } from "@rnx-kit/config";
+import { warn } from "@rnx-kit/console";
 import type { PackageManifest } from "@rnx-kit/tools-node/package";
-import semverMinVersion from "semver/ranges/min-version";
-import { getProfilesFor, getProfileVersionsFor } from "./profiles";
-import { concatVersionRanges, keysOf } from "./helpers";
-import type {
-  CapabilitiesOptions,
-  MetaPackage,
-  Package,
-  Profile,
-} from "./types";
+import { keysOf } from "./helpers";
+import type { MetaPackage, Package, Preset, Profile } from "./types";
 
+/**
+ * Returns the list of capabilities used in the specified package manifest.
+ * @param packageManifest The package manifest to scan for dependencies
+ * @param preset The preset to use to resolve capabilities
+ * @returns A list of capabilities used in the specified package manifest
+ */
 export function capabilitiesFor(
-  { dependencies, devDependencies, peerDependencies }: PackageManifest,
-  { kitType = "library", customProfilesPath }: CapabilitiesOptions = {}
-): Partial<KitCapabilities> | undefined {
-  const targetReactNativeVersion =
-    peerDependencies?.["react-native"] ||
-    dependencies?.["react-native"] ||
-    devDependencies?.["react-native"];
-  if (!targetReactNativeVersion) {
-    return undefined;
+  {
+    dependencies = {},
+    devDependencies = {},
+    peerDependencies = {},
+  }: PackageManifest,
+  preset: Preset
+): Capability[] {
+  const dependenciesSet = new Set<string>(Object.keys(dependencies));
+  Object.keys(peerDependencies).forEach((dep) => dependenciesSet.add(dep));
+  Object.keys(devDependencies).forEach((dep) => dependenciesSet.add(dep));
+
+  if (dependenciesSet.size === 0) {
+    return [];
   }
 
-  const profiles = getProfilesFor(targetReactNativeVersion, customProfilesPath);
-  const packageToCapabilityMap: Record<string, Capability[]> = {};
-  profiles.forEach((profile) => {
-    keysOf(profile).reduce((result, capability) => {
-      const { name } = profile[capability];
-      if (!result[name]) {
-        result[name] = [capability];
-      } else {
-        result[name].push(capability);
+  const firstProfile = preset[keysOf(preset)[0]];
+  const allCapabilities = keysOf(firstProfile);
+  const packages = Object.values(firstProfile);
+
+  const foundCapabilities: Capability[] = [];
+  dependenciesSet.forEach((name) => {
+    const numPackages = packages.length;
+    for (let i = 0; i < numPackages; ++i) {
+      if (packages[i].name === name) {
+        foundCapabilities.push(allCapabilities[i]);
       }
-      return result;
-    }, packageToCapabilityMap);
+    }
   });
 
-  const reactNativeVersion = concatVersionRanges(
-    getProfileVersionsFor(targetReactNativeVersion)
-  );
-
-  return {
-    reactNativeVersion,
-    ...(kitType === "library"
-      ? {
-          reactNativeDevVersion:
-            devDependencies?.["react-native"] ||
-            semverMinVersion(reactNativeVersion)?.version,
-        }
-      : undefined),
-    kitType,
-    capabilities: Array.from(
-      keysOf({
-        ...dependencies,
-        ...peerDependencies,
-        ...devDependencies,
-      }).reduce<Set<Capability>>((result, dependency) => {
-        if (dependency in packageToCapabilityMap) {
-          packageToCapabilityMap[dependency].forEach((capability) => {
-            result.add(capability);
-          });
-        }
-        return result;
-      }, new Set<Capability>())
-    ).sort(),
-  };
+  return foundCapabilities.sort();
 }
 
 export function isMetaPackage(pkg: MetaPackage | Package): pkg is MetaPackage {
@@ -140,7 +116,7 @@ export function resolveCapabilities(
       "The following capabilities could not be resolved for one or more profiles:"
     );
 
-    console.warn(message);
+    warn(message);
   }
 
   return packages;

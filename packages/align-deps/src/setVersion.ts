@@ -2,6 +2,7 @@ import { readPackage } from "@rnx-kit/tools-node/package";
 import isString from "lodash/isString";
 import prompts from "prompts";
 import { checkPackageManifest } from "./commands/check";
+import { defaultConfig } from "./config";
 import { concatVersionRanges, keysOf, modifyManifest } from "./helpers";
 import { default as defaultPreset } from "./presets/microsoft/react-native";
 import { parseProfilesString } from "./profiles";
@@ -62,8 +63,12 @@ export async function makeSetVersionCommand(
     return undefined;
   }
 
-  const checkOnly = { loose: false, write: false };
-  const write = { loose: false, write: true };
+  const checkOnly = {
+    presets: defaultConfig.presets,
+    loose: false,
+    write: false,
+  };
+  const write = { presets: defaultConfig.presets, loose: false, write: true };
 
   return (manifestPath: string) => {
     const checkReturnCode = checkPackageManifest(manifestPath, checkOnly);

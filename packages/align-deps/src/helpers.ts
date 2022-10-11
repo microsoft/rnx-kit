@@ -2,6 +2,7 @@ import type { PackageManifest } from "@rnx-kit/tools-node/package";
 import { writePackage } from "@rnx-kit/tools-node/package";
 import detectIndent from "detect-indent";
 import fs from "fs";
+import semverCoerce from "semver/functions/coerce";
 
 export function compare<T>(lhs: T, rhs: T): -1 | 0 | 1 {
   if (lhs === rhs) {
@@ -15,6 +16,19 @@ export function compare<T>(lhs: T, rhs: T): -1 | 0 | 1 {
 
 export function concatVersionRanges(versions: string[]): string {
   return "^" + versions.join(" || ^");
+}
+
+export function dropPatchFromVersion(version: string): string {
+  return version
+    .split("||")
+    .map((v) => {
+      const coerced = semverCoerce(v);
+      if (!coerced) {
+        throw new Error(`Invalid version number: ${v}`);
+      }
+      return `${coerced.major}.${coerced.minor}`;
+    })
+    .join(" || ");
 }
 
 export function keysOf<T extends Record<string, unknown>>(obj: T): (keyof T)[] {

@@ -8,10 +8,10 @@ export type AlignDepsConfig = {
 };
 
 export type Options = {
+  presets: string[];
   loose: boolean;
   write: boolean;
   excludePackages?: string[];
-  presets?: string[];
   requirements?: string[];
 };
 
