@@ -14,7 +14,7 @@ private typealias RnxAuthResult = com.microsoft.reactnativesdk.auth.AuthResult
 class ReactNativeAuthMSALModule(context: ReactApplicationContext?) :
     ReactNativeAuthModule(context) {
 
-    override fun acquireToken(
+    override fun acquireTokenWithScopes(
         scopes: Array<String>,
         userPrincipalName: String,
         accountType: RnxAccountType,

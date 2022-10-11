@@ -25,14 +25,14 @@ RTAViewController *RTAMSALFindPresentedViewController(void);
 
 RCT_EXPORT_MODULE(RNXAuth)
 
-- (void)acquireTokenWithScopes:(nonnull NSArray<NSString *> *)scopes
+- (void)_acquireTokenWithScopes:(nonnull NSArray<NSString *> *)scopes
              userPrincipalName:(nonnull NSString *)userPrincipalName
                    accountType:(RNXAccountType)accountType
                onTokenAcquired:(TokenAcquiredHandler)onTokenAcquired
 {
     if (![NSThread isMainThread]) {
         dispatch_async(dispatch_get_main_queue(), ^{
-          [self acquireTokenWithScopes:scopes
+          [self _acquireTokenWithScopes:scopes
                      userPrincipalName:userPrincipalName
                            accountType:accountType
                        onTokenAcquired:onTokenAcquired];
@@ -41,7 +41,7 @@ RCT_EXPORT_MODULE(RNXAuth)
     }
 
     [TokenBroker.sharedBroker
-        acquireTokenWithScopes:scopes
+        _acquireTokenWithScopes:scopes
              userPrincipalName:userPrincipalName
                    accountType:RTAMSALAccountTypeFromRNXAccountType(accountType)
                         sender:RTAMSALFindPresentedViewController()

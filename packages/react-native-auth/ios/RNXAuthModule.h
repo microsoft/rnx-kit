@@ -47,11 +47,17 @@ typedef void (^TokenAcquiredHandler)(RNXAuthResult *_Nullable result,
  */
 @interface RNXAuthModule : NSObject <RCTBridgeModule>
 
-- (void)acquireTokenWithScopes:(NSArray<NSString *> *)scopes
+- (void)_acquireTokenWithResource:(NSString *)resource
              userPrincipalName:(NSString *)userPrincipalName
                    accountType:(RNXAccountType)accountType
                onTokenAcquired:(TokenAcquiredHandler)onTokenAcquired
-    NS_SWIFT_NAME(acquireToken(scopes:userPrincipalName:accountType:onTokenAcquired:));
+    NS_SWIFT_NAME(acquireTokenWithResource(scopes:userPrincipalName:accountType:onTokenAcquired:));
+
+- (void)_acquireTokenWithScopes:(NSArray<NSString *> *)scopes
+             userPrincipalName:(NSString *)userPrincipalName
+                   accountType:(RNXAccountType)accountType
+               onTokenAcquired:(TokenAcquiredHandler)onTokenAcquired
+    NS_SWIFT_NAME(acquireTokenWithScopes(scopes:userPrincipalName:accountType:onTokenAcquired:));
 
 @end
 
