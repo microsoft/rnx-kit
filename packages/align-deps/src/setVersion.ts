@@ -1,7 +1,7 @@
 import { readPackage } from "@rnx-kit/tools-node/package";
 import isString from "lodash/isString";
 import prompts from "prompts";
-import { checkPackageManifest } from "./check";
+import { checkPackageManifest } from "./commands/check";
 import { concatVersionRanges, keysOf, modifyManifest } from "./helpers";
 import { default as defaultPreset } from "./presets/microsoft/react-native";
 import { parseProfilesString } from "./profiles";

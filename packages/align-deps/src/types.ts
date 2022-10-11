@@ -33,13 +33,6 @@ export type CheckConfig = {
   manifest: PackageManifest;
 };
 
-export type CheckOptions = Options & {
-  uncheckedReturnCode?: number;
-  config?: number | CheckConfig;
-  supportedVersions?: string;
-  targetVersion?: string;
-};
-
 export type ErrorCode =
   | "success"
   | "invalid-configuration"
@@ -47,11 +40,6 @@ export type ErrorCode =
   | "missing-manifest"
   | "not-configured"
   | "unsatisfied";
-
-export type VigilantOptions = Options & {
-  customProfiles?: string;
-  versions: string;
-};
 
 export type CapabilitiesOptions = {
   kitType?: KitType;

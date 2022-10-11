@@ -175,20 +175,3 @@ export function parseProfilesString(
     targetVersion,
   };
 }
-
-export function profilesSatisfying(
-  profiles: ProfileVersion[],
-  versionOrRange: string
-): ProfileVersion[] {
-  const versions = getProfileVersionsFor(versionOrRange);
-  return profiles.filter((v) => versions.includes(v));
-}
-
-export function resolveCustomProfiles(
-  projectRoot: string,
-  profilesPath: string | undefined
-): string | undefined {
-  return profilesPath
-    ? require.resolve(profilesPath, { paths: [projectRoot] })
-    : undefined;
-}

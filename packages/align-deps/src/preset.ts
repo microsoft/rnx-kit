@@ -1,6 +1,20 @@
+import type { Capability } from "@rnx-kit/config";
 import semverCoerce from "semver/functions/coerce";
 import semverSatisfies from "semver/functions/satisfies";
-import type { MetaPackage, Package, Preset } from "./types";
+import { gatherRequirements } from "./dependencies";
+import type {
+  AlignDepsConfig,
+  MetaPackage,
+  Options,
+  Package,
+  Preset,
+} from "./types";
+
+type Resolution = {
+  devPreset: Preset;
+  prodPreset: Preset;
+  capabilities: Capability[];
+};
 
 function compileRequirements(
   requirements: string[]
@@ -25,6 +39,14 @@ function compileRequirements(
       );
     };
   });
+}
+
+function ensurePreset(preset: Preset, requirements: string[]): void {
+  if (Object.keys(preset).length === 0) {
+    throw new Error(
+      `No profiles could satisfy requirements: ${requirements.join(", ")}`
+    );
+  }
 }
 
 function loadPreset(preset: string, projectRoot: string): Preset {
@@ -65,4 +87,51 @@ export function mergePresets(presets: string[], projectRoot: string): Preset {
   }
 
   return mergedPreset;
+}
+
+export function resolve(
+  { kitType, alignDeps, manifest }: AlignDepsConfig,
+  projectRoot: string,
+  options: Options
+): Resolution {
+  const { capabilities, presets, requirements } = alignDeps;
+
+  const prodRequirements = Array.isArray(requirements)
+    ? requirements
+    : requirements.production;
+  const mergedPreset = mergePresets(presets, projectRoot);
+  const initialProdPreset = filterPreset(prodRequirements, mergedPreset);
+  ensurePreset(initialProdPreset, prodRequirements);
+
+  const devPreset = (() => {
+    if (kitType === "app") {
+      // Preset for development is unused when the package is an app.
+      return {};
+    } else if (Array.isArray(requirements)) {
+      return initialProdPreset;
+    } else {
+      const devRequirements = requirements.development;
+      const devPreset = filterPreset(devRequirements, mergedPreset);
+      ensurePreset(devPreset, devRequirements);
+      return devPreset;
+    }
+  })();
+
+  if (kitType === "app") {
+    const { preset: prodMergedPreset, capabilities: mergedCapabilities } =
+      gatherRequirements(
+        projectRoot,
+        manifest,
+        initialProdPreset,
+        capabilities,
+        options
+      );
+    return {
+      devPreset,
+      prodPreset: prodMergedPreset,
+      capabilities: mergedCapabilities,
+    };
+  }
+
+  return { devPreset, prodPreset: initialProdPreset, capabilities };
 }

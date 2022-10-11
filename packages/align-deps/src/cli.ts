@@ -8,7 +8,7 @@ import {
   findWorkspaceRoot,
 } from "@rnx-kit/tools-workspaces";
 import * as path from "path";
-import { makeCheckCommand } from "./check";
+import { makeCheckCommand } from "./commands/check";
 import { printError } from "./errors";
 import type { Args, Command } from "./types";
 
