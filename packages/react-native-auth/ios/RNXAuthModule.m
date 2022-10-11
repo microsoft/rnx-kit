@@ -15,7 +15,7 @@
     return NO;
 }
 
-- (void)_acquireTokenWithResource:(NSString *)resource
+- (void)acquireTokenWithResource:(NSString *)resource
              userPrincipalName:(NSString *)userPrincipalName
                    accountType:(RNXAccountType)accountType
                onTokenAcquired:(TokenAcquiredHandler)onTokenAcquired
@@ -23,7 +23,7 @@
     NSAssert(NO, @"%@ has not been implemented", NSStringFromSelector(_cmd));
 }
 
-- (void)_acquireTokenWithScopes:(NSArray<NSString *> *)scopes
+- (void)acquireTokenWithScopes:(NSArray<NSString *> *)scopes
              userPrincipalName:(NSString *)userPrincipalName
                    accountType:(RNXAccountType)accountType
                onTokenAcquired:(TokenAcquiredHandler)onTokenAcquired
@@ -79,7 +79,7 @@ RCT_EXPORT_METHOD(acquireTokenWithResource:(NSString *)resource
                       rejecter:(RCTPromiseRejectBlock)reject)
 // clang-format on
 {
-  [self _acquireTokenWithResource:resource
+  [self acquireTokenWithResource:resource
                userPrincipalName:userPrincipalName
                      accountType:RNXAccountTypeFromString(accountType)
                  onTokenAcquired:^(RNXAuthResult *result, RNXAuthError *error) {
@@ -102,7 +102,7 @@ RCT_EXPORT_METHOD(acquireTokenWithScopes:(NSArray<NSString *> *)scopes
 // clang-format on
 {
 
-    [self _acquireTokenWithScopes:scopes
+    [self acquireTokenWithScopes:scopes
                userPrincipalName:userPrincipalName
                      accountType:RNXAccountTypeFromString(accountType)
                  onTokenAcquired:^(RNXAuthResult *result, RNXAuthError *error) {

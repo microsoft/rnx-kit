@@ -51,13 +51,13 @@ typedef void (^TokenAcquiredHandler)(RNXAuthResult *_Nullable result,
              userPrincipalName:(NSString *)userPrincipalName
                    accountType:(RNXAccountType)accountType
                onTokenAcquired:(TokenAcquiredHandler)onTokenAcquired
-    NS_SWIFT_NAME(acquireTokenWithResource(scopes:userPrincipalName:accountType:onTokenAcquired:));
+    NS_SWIFT_NAME(acquireToken(resource:userPrincipalName:accountType:onTokenAcquired:));
 
 - (void)_acquireTokenWithScopes:(NSArray<NSString *> *)scopes
              userPrincipalName:(NSString *)userPrincipalName
                    accountType:(RNXAccountType)accountType
                onTokenAcquired:(TokenAcquiredHandler)onTokenAcquired
-    NS_SWIFT_NAME(acquireTokenWithScopes(scopes:userPrincipalName:accountType:onTokenAcquired:));
+    NS_SWIFT_NAME(acquireToken(scopes:userPrincipalName:accountType:onTokenAcquired:));
 
 @end
 
