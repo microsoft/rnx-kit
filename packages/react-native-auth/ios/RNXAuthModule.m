@@ -16,9 +16,9 @@
 }
 
 - (void)acquireTokenWithResource:(NSString *)resource
-             userPrincipalName:(NSString *)userPrincipalName
-                   accountType:(RNXAccountType)accountType
-               onTokenAcquired:(TokenAcquiredHandler)onTokenAcquired
+               userPrincipalName:(NSString *)userPrincipalName
+                     accountType:(RNXAccountType)accountType
+                 onTokenAcquired:(TokenAcquiredHandler)onTokenAcquired
 {
     NSAssert(NO, @"%@ has not been implemented", NSStringFromSelector(_cmd));
 }
@@ -79,18 +79,18 @@ RCT_EXPORT_METHOD(acquireTokenWithResource:(NSString *)resource
                       rejecter:(RCTPromiseRejectBlock)reject)
 // clang-format on
 {
-  [self acquireTokenWithResource:resource
-               userPrincipalName:userPrincipalName
-                     accountType:RNXAccountTypeFromString(accountType)
-                 onTokenAcquired:^(RNXAuthResult *result, RNXAuthError *error) {
-                   if (result == nil) {
-                       reject(RNXStringFromAuthErrorType(error.type),
-                              error.message,
-                              [NSError errorWithAuthError:error]);
-                   } else {
-                       resolve([result dictionary]);
-                   }
-                 }];
+    [self acquireTokenWithResource:resource
+                 userPrincipalName:userPrincipalName
+                       accountType:RNXAccountTypeFromString(accountType)
+                   onTokenAcquired:^(RNXAuthResult *result, RNXAuthError *error) {
+                     if (result == nil) {
+                         reject(RNXStringFromAuthErrorType(error.type),
+                                error.message,
+                                [NSError errorWithAuthError:error]);
+                     } else {
+                         resolve([result dictionary]);
+                     }
+                   }];
 }
 
 // clang-format off

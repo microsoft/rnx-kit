@@ -18,7 +18,7 @@ data class AuthResult(
             map.putString("accessToken", accessToken)
             map.putInt("expirationTime", expirationTime)
             redirectUri?.let {
-              map.putString("redirectUri", redirectUri)
+                map.putString("redirectUri", redirectUri)
             }
         }
     }
