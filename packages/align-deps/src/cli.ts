@@ -85,6 +85,7 @@ async function makeCommand(args: Args): Promise<Command | undefined> {
     "exclude-packages": excludePackages,
     init,
     loose,
+    "migrate-config": migrateConfig,
     presets,
     requirements,
     "set-version": setVersion,
@@ -92,10 +93,11 @@ async function makeCommand(args: Args): Promise<Command | undefined> {
   } = args;
 
   const options = {
+    presets: presets?.toString()?.split(",") ?? defaultConfig.presets,
     loose,
+    migrateConfig,
     write,
     excludePackages: excludePackages?.toString()?.split(","),
-    presets: presets?.toString()?.split(",") ?? defaultConfig.presets,
     requirements: requirements?.toString()?.split(","),
   };
 
@@ -178,6 +180,12 @@ if (require.main === module) {
         default: false,
         description:
           "Determines how strict the React Native version requirement should be. Useful for apps that depend on a newer React Native version than their dependencies declare support for.",
+        type: "boolean",
+      },
+      "migrate-config": {
+        default: false,
+        description:
+          "Determines whether align-deps should try to update the config in 'package.json'.",
         type: "boolean",
       },
       presets: {
