@@ -53,11 +53,19 @@ function loadPreset(preset: string, projectRoot: string): Preset {
   try {
     return require("./presets/" + preset).default;
   } catch (_) {
-    return require(require.resolve(preset, { paths: [projectRoot] }));
+    return process.env.JEST_WORKER_ID
+      ? require(preset)
+      : require(require.resolve(preset, { paths: [projectRoot] }));
   }
 }
 
-export function filterPreset(requirements: string[], preset: Preset): Preset {
+/**
+ * Filters out any profiles that do not satisfy the specified requirements.
+ * @param preset The preset to filter
+ * @param requirements The requirements that a profile must satisfy
+ * @returns Preset with only profiles that satisfy the requirements
+ */
+export function filterPreset(preset: Preset, requirements: string[]): Preset {
   const filteredPreset: Preset = {};
   const reqs = compileRequirements(requirements);
   for (const [profileName, profile] of Object.entries(preset)) {
@@ -74,6 +82,12 @@ export function filterPreset(requirements: string[], preset: Preset): Preset {
   return filteredPreset;
 }
 
+/**
+ * Loads and merges specified presets.
+ * @param presets The presets to load and merge
+ * @param projectRoot The project root from which presets should be resolved
+ * @returns Merged preset
+ */
 export function mergePresets(presets: string[], projectRoot: string): Preset {
   const mergedPreset: Preset = {};
   for (const presetName of presets) {
@@ -89,6 +103,15 @@ export function mergePresets(presets: string[], projectRoot: string): Preset {
   return mergedPreset;
 }
 
+/**
+ * Loads specified presets and filters them according to the requirements. The
+ * list of capabilities are also gathered from transitive dependencies if
+ * `kitType` is `app`.
+ * @param config User input config
+ * @param projectRoot Root of the project we're currently scanniing
+ * @param options
+ * @returns The resolved presets and capabilities
+ */
 export function resolve(
   { kitType, alignDeps, manifest }: AlignDepsConfig,
   projectRoot: string,
@@ -100,7 +123,7 @@ export function resolve(
     ? requirements
     : requirements.production;
   const mergedPreset = mergePresets(presets, projectRoot);
-  const initialProdPreset = filterPreset(prodRequirements, mergedPreset);
+  const initialProdPreset = filterPreset(mergedPreset, prodRequirements);
   ensurePreset(initialProdPreset, prodRequirements);
 
   const devPreset = (() => {
@@ -111,7 +134,7 @@ export function resolve(
       return initialProdPreset;
     } else {
       const devRequirements = requirements.development;
-      const devPreset = filterPreset(devRequirements, mergedPreset);
+      const devPreset = filterPreset(mergedPreset, devRequirements);
       ensurePreset(devPreset, devRequirements);
       return devPreset;
     }

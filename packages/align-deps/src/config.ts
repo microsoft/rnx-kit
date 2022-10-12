@@ -4,9 +4,9 @@ import { error, warn } from "@rnx-kit/console";
 import { isPackageManifest, readPackage } from "@rnx-kit/tools-node/package";
 import * as path from "path";
 import { findBadPackages } from "./findBadPackages";
-import type { AlignDepsConfig, CheckConfig, ErrorCode } from "./types";
+import type { AlignDepsConfig, LegacyCheckConfig, ErrorCode } from "./types";
 
-type ConfigResult = AlignDepsConfig | CheckConfig | ErrorCode;
+type ConfigResult = AlignDepsConfig | LegacyCheckConfig | ErrorCode;
 
 export const defaultConfig: AlignDepsConfig["alignDeps"] = {
   presets: ["microsoft/react-native"],
@@ -36,7 +36,7 @@ export function containsValidRequirements(
   return false;
 }
 
-export function getConfig(manifestPath: string): ConfigResult {
+export function loadConfig(manifestPath: string): ConfigResult {
   const manifest = readPackage(manifestPath);
   if (!isPackageManifest(manifest)) {
     return "invalid-manifest";
@@ -98,5 +98,5 @@ export function getConfig(manifestPath: string): ConfigResult {
     capabilities,
     customProfiles,
     manifest,
-  } as CheckConfig;
+  };
 }

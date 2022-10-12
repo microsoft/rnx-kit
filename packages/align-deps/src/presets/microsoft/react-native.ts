@@ -1,4 +1,4 @@
-import type { ProfileMap } from "../../types";
+import type { Preset } from "../../types";
 import profile_0_61 from "./react-native/profile-0.61";
 import profile_0_62 from "./react-native/profile-0.62";
 import profile_0_63 from "./react-native/profile-0.63";
@@ -13,7 +13,7 @@ import profile_0_70 from "./react-native/profile-0.70";
 // Also export this by name for scripts to work around a bug where this module
 // is wrapped twice, i.e. `{ default: { default: preset } }`, when imported as
 // ESM.
-export const preset: Readonly<ProfileMap> = {
+export const preset: Readonly<Preset> = {
   "0.61": profile_0_61,
   "0.62": profile_0_62,
   "0.63": profile_0_63,

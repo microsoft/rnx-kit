@@ -11,7 +11,6 @@ export { checkPackageManifestUnconfigured } from "./commands/vigilant";
 export { updatePackageManifest } from "./manifest";
 export type {
   Args,
-  CapabilitiesOptions,
   Command,
   DependencyType,
   ExcludedPackage,
@@ -19,7 +18,6 @@ export type {
   MetaPackage,
   Options,
   Package,
+  Preset,
   Profile,
-  ProfilesInfo,
-  ProfileVersion,
 } from "./types";

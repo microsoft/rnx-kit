@@ -1,10 +1,10 @@
 import type { Capability } from "@rnx-kit/config";
 import { capabilitiesFor, resolveCapabilities } from "../src/capabilities";
+import { filterPreset, mergePresets } from "../src/preset";
 import defaultPreset from "../src/presets/microsoft/react-native";
 import profile_0_62 from "../src/presets/microsoft/react-native/profile-0.62";
 import profile_0_63 from "../src/presets/microsoft/react-native/profile-0.63";
 import profile_0_64 from "../src/presets/microsoft/react-native/profile-0.64";
-import { getProfilesFor } from "../src/profiles";
 import { pickPackage } from "./helpers";
 
 describe("capabilitiesFor()", () => {
@@ -152,14 +152,17 @@ describe("resolveCapabilities()", () => {
       { virtual: true }
     );
 
-    const profiles = getProfilesFor(
-      "^0.62 || ^0.63 || ^0.64",
-      "mock-custom-profiles-module"
+    const preset = filterPreset(
+      mergePresets(
+        ["microsoft/react-native", "mock-custom-profiles-module"],
+        process.cwd()
+      ),
+      ["react-native@0.62 || 0.63 || 0.64"]
     );
 
     const packages = resolveCapabilities(
       ["skynet" as Capability, "svg"],
-      profiles
+      Object.values(preset)
     );
 
     const { name } = profile_0_64["svg"];
@@ -212,9 +215,17 @@ describe("resolveCapabilities()", () => {
       { virtual: true }
     );
 
+    const preset = filterPreset(
+      mergePresets(
+        ["microsoft/react-native", "mock-meta-package"],
+        process.cwd()
+      ),
+      ["react-native@0.64"]
+    );
+
     const packages = resolveCapabilities(
       ["core/all" as Capability],
-      getProfilesFor("^0.64", "mock-meta-package")
+      Object.values(preset)
     );
 
     expect(packages).toEqual({
@@ -247,9 +258,17 @@ describe("resolveCapabilities()", () => {
       { virtual: true }
     );
 
+    const preset = filterPreset(
+      mergePresets(
+        ["microsoft/react-native", "mock-meta-package-loop"],
+        process.cwd()
+      ),
+      ["react-native@0.64"]
+    );
+
     const packages = resolveCapabilities(
       ["reese" as Capability],
-      getProfilesFor("^0.64", "mock-meta-package-loop")
+      Object.values(preset)
     );
 
     expect(packages).toEqual({

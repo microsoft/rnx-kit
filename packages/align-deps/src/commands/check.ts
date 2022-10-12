@@ -4,21 +4,17 @@ import chalk from "chalk";
 import { diffLinesUnified } from "jest-diff";
 import * as path from "path";
 import { migrateConfig } from "../compatibility/config";
-import { getConfig } from "../config";
-import { modifyManifest } from "../helpers";
+import { loadConfig } from "../config";
+import { isError, modifyManifest } from "../helpers";
 import { updatePackageManifest } from "../manifest";
 import { resolve } from "../preset";
 import type { Command, ErrorCode, Options } from "../types";
 import { checkPackageManifestUnconfigured } from "./vigilant";
 
-function isError(config: ReturnType<typeof getConfig>): config is ErrorCode {
-  return typeof config === "string";
-}
-
 export function checkPackageManifest(
   manifestPath: string,
   options: Options,
-  inputConfig = getConfig(manifestPath)
+  inputConfig = loadConfig(manifestPath)
 ): ErrorCode {
   if (isError(inputConfig)) {
     return inputConfig;
@@ -43,10 +39,10 @@ export function checkPackageManifest(
     );
   } else {
     info(
-      "Aligning your library's dependencies according to the following profiles:"
+      "Aligning your library's dependencies according to the following profiles:\n" +
+        `\t- Development: ${Object.keys(devPreset).join(", ")}\n` +
+        `\t- Production: ${Object.keys(prodPreset).join(", ")}`
     );
-    info("\t- Development:", Object.keys(devPreset).join(", "));
-    info("\t- Production:", Object.keys(prodPreset).join(", "));
   }
 
   const updatedManifest = updatePackageManifest(
@@ -90,7 +86,7 @@ export function makeCheckCommand(options: Options): Command {
   }
 
   return (manifest: string) => {
-    const inputConfig = getConfig(manifest);
+    const inputConfig = loadConfig(manifest);
     const config = isError(inputConfig)
       ? inputConfig
       : migrateConfig(inputConfig);

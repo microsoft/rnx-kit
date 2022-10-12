@@ -24,14 +24,7 @@ export type Args = Pick<Options, "loose" | "write"> & {
   requirements?: string | number;
 };
 
-export type CheckConfig = {
-  kitType: KitType;
-  reactNativeVersion: string;
-  reactNativeDevVersion: string;
-  capabilities: Capability[];
-  customProfilesPath?: string;
-  manifest: PackageManifest;
-};
+export type DependencyType = "direct" | "development" | "peer";
 
 export type ErrorCode =
   | "success"
@@ -41,14 +34,12 @@ export type ErrorCode =
   | "not-configured"
   | "unsatisfied";
 
-export type CapabilitiesOptions = {
-  kitType?: KitType;
-  customProfilesPath?: string;
-};
-
 export type Command = (manifest: string) => ErrorCode;
 
-export type DependencyType = "direct" | "development" | "peer";
+export type ManifestProfile = Pick<
+  Required<PackageManifest>,
+  "dependencies" | "devDependencies" | "peerDependencies"
+>;
 
 export type MetaPackage = {
   name: "#meta";
@@ -63,36 +54,19 @@ export type Package = {
   devOnly?: boolean;
 };
 
-export type ManifestProfile = PackageManifest & {
-  dependencies: Record<string, string>;
-  peerDependencies: Record<string, string>;
-  devDependencies: Record<string, string>;
-};
-
 export type Profile = Readonly<Record<Capability, MetaPackage | Package>>;
 
-export type ProfileVersion =
-  | "0.61"
-  | "0.62"
-  | "0.63"
-  | "0.64"
-  | "0.65"
-  | "0.66"
-  | "0.67"
-  | "0.68"
-  | "0.69"
-  | "0.70";
-
 export type Preset = Record<string, Profile>;
-export type ProfileMap = Record<ProfileVersion, Profile>;
-
-export type ProfilesInfo = {
-  supportedProfiles: Profile[];
-  supportedVersions: string;
-  targetProfile: Profile[];
-  targetVersion: string;
-};
 
 export type ExcludedPackage = Package & {
   reason: string;
+};
+
+export type LegacyCheckConfig = {
+  kitType: KitType;
+  reactNativeVersion: string;
+  reactNativeDevVersion?: string;
+  capabilities: Capability[];
+  customProfiles?: string;
+  manifest: PackageManifest;
 };
