@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`checkPackageManifest({ kitType: 'app' }) adds required dependencies 1`] = `
+exports[`checkPackageManifest({ kitType: 'app' }) (backwards compatibility) adds required dependencies 1`] = `
 "{
   \\"name\\": \\"awesome-repo\\",
   \\"version\\": \\"1.0.0\\",

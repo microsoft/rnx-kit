@@ -1,6 +1,12 @@
 import { PackageManifest, readPackage } from "@rnx-kit/tools-node/package";
 import path from "path";
-import { getRequirements, visitDependencies } from "../src/dependencies";
+import {
+  gatherRequirements,
+  getRequirements,
+  visitDependencies,
+} from "../src/dependencies";
+import profile_0_63 from "../src/presets/microsoft/react-native/profile-0.63";
+import profile_0_64 from "../src/presets/microsoft/react-native/profile-0.64";
 
 jest.unmock("@rnx-kit/config");
 
@@ -103,6 +109,124 @@ describe("visitDependencies()", () => {
   });
 });
 
+describe("gatherRequirements()", () => {
+  const consoleErrorSpy = jest.spyOn(global.console, "error");
+  const consoleWarnSpy = jest.spyOn(global.console, "warn");
+  const defaultOptions = { loose: false };
+
+  afterEach(() => {
+    consoleErrorSpy.mockReset();
+    consoleWarnSpy.mockReset();
+  });
+
+  test("gather requirements from all dependencies", () => {
+    const [fixture, manifest] = useFixture("awesome-repo");
+    const initialPreset = { "0.63": profile_0_63, "0.64": profile_0_64 };
+    const initialCapabilities = manifest["rnx-kit"]?.capabilities;
+    const { preset, capabilities } = gatherRequirements(
+      fixture,
+      manifest,
+      initialPreset,
+      Array.isArray(initialCapabilities) ? initialCapabilities : [],
+      defaultOptions
+    );
+
+    expect(preset).toStrictEqual(initialPreset);
+
+    expect(capabilities.sort()).toEqual([
+      "animation",
+      "core-android",
+      "hermes",
+      "lazy-index",
+      "netinfo",
+      "storage",
+      "webview",
+    ]);
+
+    expect(consoleErrorSpy).not.toBeCalled();
+    expect(consoleWarnSpy).not.toBeCalled();
+  });
+
+  test("gather requirements from all dependencies with custom profiles", () => {
+    const cyberdyne = { name: "cyberdyne", version: "1.0.0", devOnly: true };
+    const skynet = { name: "skynet", version: "1.0.0" };
+
+    const initialPreset = {
+      "0.63": {
+        ...profile_0_63,
+        [cyberdyne.name]: cyberdyne,
+        [skynet.name]: skynet,
+      },
+      "0.64": {
+        ...profile_0_64,
+        [cyberdyne.name]: cyberdyne,
+        [skynet.name]: skynet,
+      },
+    };
+
+    const [fixture, manifest] = useFixture("awesome-repo-extended");
+    const initialCapabilities = manifest["rnx-kit"]?.capabilities;
+
+    const { preset, capabilities } = gatherRequirements(
+      fixture,
+      manifest,
+      initialPreset,
+      Array.isArray(initialCapabilities) ? initialCapabilities : [],
+      defaultOptions
+    );
+
+    expect(preset).toStrictEqual(initialPreset);
+
+    expect(capabilities.sort()).toEqual([
+      "animation",
+      "core-android",
+      "hermes",
+      "lazy-index",
+      "netinfo",
+      "skynet",
+      "storage",
+      "webview",
+    ]);
+
+    expect(consoleErrorSpy).not.toBeCalled();
+    expect(consoleWarnSpy).not.toBeCalled();
+  });
+
+  test("throws if no profiles can satisfy requirements of dependencies", () => {
+    const [fixture, manifest] = useFixture("no-profile-satisfying-deps");
+    expect(() =>
+      gatherRequirements(
+        fixture,
+        manifest,
+        { "0.64": profile_0_64 },
+        [],
+        defaultOptions
+      )
+    ).toThrowError("No profiles could satisfy all requirements");
+
+    expect(consoleErrorSpy).toBeCalledWith(
+      "error",
+      expect.stringContaining("No profiles could satisfy all requirements")
+    );
+    expect(consoleWarnSpy).not.toBeCalled();
+  });
+
+  test("does not throw if no profiles can satisfy requirement of dependencies in loose mode", () => {
+    const [fixture, manifest] = useFixture("no-profile-satisfying-deps");
+    expect(() =>
+      gatherRequirements(fixture, manifest, { "0.64": profile_0_64 }, [], {
+        loose: true,
+      })
+    ).not.toThrow();
+
+    expect(consoleErrorSpy).not.toBeCalled();
+    expect(consoleWarnSpy).toBeCalledWith(
+      "warn",
+      expect.stringContaining("No profiles could satisfy all requirements")
+    );
+  });
+});
+
 describe("getRequirements()", () => {
   const consoleErrorSpy = jest.spyOn(global.console, "error");
   const consoleWarnSpy = jest.spyOn(global.console, "warn");
@@ -141,7 +265,7 @@ describe("getRequirements()", () => {
     const cyberdyne = { name: "cyberdyne", version: "1.0.0", devOnly: true };
     const skynet = { name: "skynet", version: "1.0.0" };
     jest.mock(
-      "awesome-align-deps-profiles",
+      "awesome-align-deps-preset",
       () => ({
         "0.63": {
           [cyberdyne.name]: cyberdyne,
@@ -161,7 +285,7 @@ describe("getRequirements()", () => {
       "app",
       manifest,
       fixture,
-      "awesome-align-deps-profiles",
+      "awesome-align-deps-preset",
       defaultOptions
     );
 

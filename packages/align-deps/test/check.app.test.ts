@@ -8,13 +8,8 @@ function fixturePath(name: string) {
   return path.join(process.cwd(), "test", "__fixtures__", name);
 }
 
-describe("checkPackageManifest({ kitType: 'app' })", () => {
+describe("checkPackageManifest({ kitType: 'app' }) (backwards compatibility)", () => {
   const fs = require("fs");
-  const consoleWarnSpy = jest.spyOn(global.console, "warn");
-
-  beforeEach(() => {
-    consoleWarnSpy.mockReset();
-  });
 
   afterAll(() => {
     jest.clearAllMocks();
@@ -32,8 +27,7 @@ describe("checkPackageManifest({ kitType: 'app' })", () => {
 
     expect(
       checkPackageManifest(manifestPath, { loose: false, write: true })
-    ).toBe(0);
-    expect(consoleWarnSpy).not.toBeCalled();
+    ).toBe("success");
     expect(destination).toBe(manifestPath);
     expect(updatedManifest).toMatchSnapshot();
   });

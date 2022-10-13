@@ -1,19 +1,71 @@
 import semverCoerce from "semver/functions/coerce";
-import { checkPackageManifest, getCheckConfig } from "../src/check";
-import profile_0_62 from "../src/presets/microsoft/profile-0.62";
-import profile_0_63 from "../src/presets/microsoft/profile-0.63";
-import profile_0_64 from "../src/presets/microsoft/profile-0.64";
+import {
+  checkPackageManifest,
+  containsValidPresets,
+  containsValidRequirements,
+  getCheckConfig,
+} from "../src/check";
+import profile_0_68 from "../src/presets/microsoft/react-native/profile-0.68";
+import profile_0_69 from "../src/presets/microsoft/react-native/profile-0.69";
+import profile_0_70 from "../src/presets/microsoft/react-native/profile-0.70";
 import { packageVersion } from "./helpers";
 
 jest.mock("fs");
 
+describe("containsValidPresets()", () => {
+  test("is valid when 'presets' is unset", () => {
+    expect(containsValidPresets({})).toBe(true);
+  });
+
+  test("is invalid when 'presets' is empty", () => {
+    expect(containsValidPresets({ presets: [] })).toBe(false);
+  });
+
+  test("is invalid when 'presets' is not an array", () => {
+    // @ts-expect-error intentionally passing an invalid type
+    expect(containsValidPresets({ presets: "[]" })).toBe(false);
+  });
+});
+
+describe("containsValidRequirements()", () => {
+  test("is invalid when 'requirements' is unset", () => {
+    expect(containsValidRequirements({})).toBe(false);
+  });
+
+  test("is invalid when 'requirements' is empty", () => {
+    expect(containsValidRequirements({ requirements: [] })).toBe(false);
+    expect(
+      // @ts-expect-error intentionally passing an invalid type
+      containsValidRequirements({ requirements: { production: [] } })
+    ).toBe(false);
+    expect(
+      containsValidRequirements({
+        requirements: { development: [], production: [] },
+      })
+    ).toBe(false);
+  });
+
+  test("is invalid when 'requirements' is not an array", () => {
+    // @ts-expect-error intentionally passing an invalid type
+    expect(containsValidRequirements({ requirements: "[]" })).toBe(false);
+  });
+
+  test("is valid when 'requirements' contains at least one requirement", () => {
+    expect(
+      containsValidRequirements({ requirements: ["react-native@*"] })
+    ).toBe(true);
+    expect(
+      containsValidRequirements({
+        // @ts-expect-error intentionally passing an invalid type
+        requirements: { production: ["react-native@*"] },
+      })
+    ).toBe(true);
+  });
+});
+
 describe("checkPackageManifest({ kitType: 'library' })", () => {
   const rnxKitConfig = require("@rnx-kit/config");
   const fs = require("fs");
-
-  const consoleErrorSpy = jest.spyOn(global.console, "error");
-  const consoleLogSpy = jest.spyOn(global.console, "log");
-  const consoleWarnSpy = jest.spyOn(global.console, "warn");
 
   const defaultOptions = { loose: false, write: false };
 
@@ -22,22 +74,19 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
     version: "0.0.1",
   };
 
-  const react_v62_v63_v64 = [
-    packageVersion(profile_0_62, "react"),
-    packageVersion(profile_0_63, "react"),
-    packageVersion(profile_0_64, "react"),
+  const react_v68_v69_v70 = [
+    packageVersion(profile_0_68, "react"),
+    packageVersion(profile_0_69, "react"),
+    packageVersion(profile_0_70, "react"),
   ].join(" || ");
 
-  const v62_v63_v64 = [
-    packageVersion(profile_0_62, "core"),
-    packageVersion(profile_0_63, "core"),
-    packageVersion(profile_0_64, "core"),
+  const v68_v69_v70 = [
+    packageVersion(profile_0_68, "core"),
+    packageVersion(profile_0_69, "core"),
+    packageVersion(profile_0_70, "core"),
   ].join(" || ");
 
   beforeEach(() => {
-    consoleErrorSpy.mockReset();
-    consoleLogSpy.mockReset();
-    consoleWarnSpy.mockReset();
     fs.__setMockContent({});
     rnxKitConfig.__setMockConfig();
   });
@@ -47,8 +96,9 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
   });
 
   test("returns error code when reading invalid manifests", () => {
-    expect(checkPackageManifest("package.json", defaultOptions)).not.toBe(0);
-    expect(consoleErrorSpy).toBeCalledTimes(1);
+    expect(checkPackageManifest("package.json", defaultOptions)).toBe(
+      "invalid-manifest"
+    );
   });
 
   test("returns early if 'rnx-kit' is missing from the manifest", () => {
@@ -57,9 +107,9 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
       dependencies: { "react-native-linear-gradient": "0.0.0" },
     });
 
-    const options = { ...defaultOptions, uncheckedReturnCode: -1 };
-    expect(checkPackageManifest("package.json", options)).toBe(-1);
-    expect(consoleWarnSpy).toBeCalled();
+    expect(checkPackageManifest("package.json", defaultOptions)).toBe(
+      "not-configured"
+    );
   });
 
   test("prints warnings when detecting bad packages", () => {
@@ -67,17 +117,19 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
       ...mockManifest,
       dependencies: { "react-native-linear-gradient": "0.0.0" },
       peerDependencies: {
-        "react-native": profile_0_64["core"],
+        "react-native": profile_0_70["core"],
       },
       devDependencies: {
-        "react-native": profile_0_64["core"],
+        "react-native": profile_0_70["core"],
       },
     });
-    rnxKitConfig.__setMockConfig({ reactNativeVersion: "0.64.0" });
+    rnxKitConfig.__setMockConfig({
+      alignDeps: { requirements: ["react-native@0.70"] },
+    });
 
-    expect(checkPackageManifest("package.json", defaultOptions)).toBe(0);
-    expect(consoleErrorSpy).not.toBeCalled();
-    expect(consoleWarnSpy.mock.calls).toMatchSnapshot();
+    expect(checkPackageManifest("package.json", defaultOptions)).toBe(
+      "success"
+    );
   });
 
   test("prints warnings when detecting bad packages (with version range)", () => {
@@ -85,43 +137,48 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
       ...mockManifest,
       dependencies: { "react-native-linear-gradient": "0.0.0" },
     });
-    rnxKitConfig.__setMockConfig({ reactNativeVersion: "^0.63.0 || ^0.64.0" });
+    rnxKitConfig.__setMockConfig({
+      alignDeps: { requirements: ["react-native@^0.69.0 || ^0.70.0"] },
+    });
 
-    expect(checkPackageManifest("package.json", defaultOptions)).toBe(0);
-    expect(consoleErrorSpy).not.toBeCalled();
-    expect(consoleWarnSpy.mock.calls).toMatchSnapshot();
+    expect(checkPackageManifest("package.json", defaultOptions)).toBe(
+      "success"
+    );
   });
 
   test("returns early if no capabilities are defined", () => {
     fs.__setMockContent(mockManifest);
-    rnxKitConfig.__setMockConfig({ reactNativeVersion: "0.64.0" });
+    rnxKitConfig.__setMockConfig({
+      alignDeps: { requirements: ["react-native@0.70"] },
+    });
 
-    expect(checkPackageManifest("package.json", defaultOptions)).toBe(0);
-    expect(consoleErrorSpy).not.toBeCalled();
-    expect(consoleWarnSpy).not.toBeCalled();
+    expect(checkPackageManifest("package.json", defaultOptions)).toBe(
+      "success"
+    );
   });
 
   test("returns if no changes are needed", () => {
     fs.__setMockContent({
       ...mockManifest,
       peerDependencies: {
-        react: packageVersion(profile_0_64, "react"),
-        "react-native": packageVersion(profile_0_64, "core"),
+        react: packageVersion(profile_0_70, "react"),
+        "react-native": packageVersion(profile_0_70, "core"),
       },
       devDependencies: {
-        react: packageVersion(profile_0_64, "react"),
-        "react-native": packageVersion(profile_0_64, "core"),
+        react: packageVersion(profile_0_70, "react"),
+        "react-native": packageVersion(profile_0_70, "core"),
       },
     });
     rnxKitConfig.__setMockConfig({
-      reactNativeVersion: "0.64.0",
-      capabilities: ["core-ios"],
+      alignDeps: {
+        requirements: ["react-native@0.70"],
+        capabilities: ["core-ios"],
+      },
     });
 
-    expect(checkPackageManifest("package.json", defaultOptions)).toBe(0);
-    expect(consoleErrorSpy).not.toBeCalled();
-    expect(consoleLogSpy).not.toBeCalled();
-    expect(consoleWarnSpy).not.toBeCalled();
+    expect(checkPackageManifest("package.json", defaultOptions)).toBe(
+      "success"
+    );
   });
 
   test("returns if no changes are needed (write: true)", () => {
@@ -130,42 +187,42 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
     fs.__setMockContent({
       ...mockManifest,
       peerDependencies: {
-        react: packageVersion(profile_0_64, "react"),
-        "react-native": packageVersion(profile_0_64, "core"),
+        react: packageVersion(profile_0_70, "react"),
+        "react-native": packageVersion(profile_0_70, "core"),
       },
       devDependencies: {
-        react: packageVersion(profile_0_64, "react"),
-        "react-native": packageVersion(profile_0_64, "core"),
+        react: packageVersion(profile_0_70, "react"),
+        "react-native": packageVersion(profile_0_70, "core"),
       },
     });
     fs.__setMockFileWriter((p, _content) => {
       didWriteToPath = p;
     });
     rnxKitConfig.__setMockConfig({
-      reactNativeVersion: "0.64.0",
-      capabilities: ["core-ios"],
+      alignDeps: {
+        requirements: ["react-native@0.70"],
+        capabilities: ["core-ios"],
+      },
     });
 
     expect(
       checkPackageManifest("package.json", { loose: false, write: true })
-    ).toBe(0);
+    ).toBe("success");
     expect(didWriteToPath).toBe(false);
-    expect(consoleErrorSpy).not.toBeCalled();
-    expect(consoleLogSpy).not.toBeCalled();
-    expect(consoleWarnSpy).not.toBeCalled();
   });
 
   test("returns error code if changes are needed", () => {
     fs.__setMockContent(mockManifest);
     rnxKitConfig.__setMockConfig({
-      reactNativeVersion: "0.64.0",
-      capabilities: ["core-ios"],
+      alignDeps: {
+        requirements: ["react-native@0.70"],
+        capabilities: ["core-ios"],
+      },
     });
 
-    expect(checkPackageManifest("package.json", defaultOptions)).not.toBe(0);
-    expect(consoleErrorSpy).toBeCalledTimes(1);
-    expect(consoleWarnSpy).not.toBeCalled();
-    expect(consoleLogSpy).toBeCalledTimes(2);
+    expect(checkPackageManifest("package.json", defaultOptions)).not.toBe(
+      "success"
+    );
   });
 
   test("writes changes back to 'package.json'", () => {
@@ -176,17 +233,16 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
       didWriteToPath = p;
     });
     rnxKitConfig.__setMockConfig({
-      reactNativeVersion: "0.64.0",
-      capabilities: ["core-ios"],
+      alignDeps: {
+        requirements: ["react-native@0.70"],
+        capabilities: ["core-ios"],
+      },
     });
 
     expect(
       checkPackageManifest("package.json", { loose: false, write: true })
-    ).toBe(0);
+    ).toBe("success");
     expect(didWriteToPath).toBe("package.json");
-    expect(consoleErrorSpy).not.toBeCalled();
-    expect(consoleWarnSpy).not.toBeCalled();
-    expect(consoleLogSpy).not.toBeCalled();
   });
 
   test("preserves indentation in 'package.json'", () => {
@@ -197,88 +253,349 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
       output = content;
     });
     rnxKitConfig.__setMockConfig({
-      reactNativeVersion: "0.64.0",
-      capabilities: ["core-ios"],
+      alignDeps: {
+        requirements: ["react-native@0.70"],
+        capabilities: ["core-ios"],
+      },
     });
 
     expect(
       checkPackageManifest("package.json", { loose: false, write: true })
-    ).toBe(0);
+    ).toBe("success");
     expect(output).toMatchSnapshot();
-    expect(consoleErrorSpy).not.toBeCalled();
-    expect(consoleWarnSpy).not.toBeCalled();
-    expect(consoleLogSpy).not.toBeCalled();
   });
 
   test("uses minimum supported version as development version", () => {
     fs.__setMockContent({
       ...mockManifest,
       peerDependencies: {
-        react: react_v62_v63_v64,
-        "react-native": v62_v63_v64,
+        react: react_v68_v69_v70,
+        "react-native": v68_v69_v70,
       },
       devDependencies: {
-        react: packageVersion(profile_0_62, "react"),
-        "react-native": packageVersion(profile_0_62, "core"),
+        react: packageVersion(profile_0_68, "react"),
+        "react-native": packageVersion(profile_0_68, "core"),
       },
     });
     rnxKitConfig.__setMockConfig({
-      reactNativeVersion: "^0.62 || ^0.63 || ^0.64",
-      capabilities: ["core-ios"],
+      alignDeps: {
+        requirements: ["react-native@0.68 || 0.69 || 0.70"],
+        capabilities: ["core-ios"],
+      },
     });
 
-    expect(checkPackageManifest("package.json", defaultOptions)).toBe(0);
-    expect(consoleErrorSpy).not.toBeCalled();
-    expect(consoleLogSpy).not.toBeCalled();
-    expect(consoleWarnSpy).not.toBeCalled();
+    expect(checkPackageManifest("package.json", defaultOptions)).toBe(
+      "success"
+    );
   });
 
   test("uses declared development version", () => {
     fs.__setMockContent({
       ...mockManifest,
       peerDependencies: {
-        react: react_v62_v63_v64,
-        "react-native": v62_v63_v64,
+        react: react_v68_v69_v70,
+        "react-native": v68_v69_v70,
       },
       devDependencies: {
-        react: packageVersion(profile_0_63, "react"),
-        "react-native": packageVersion(profile_0_63, "core"),
+        react: packageVersion(profile_0_69, "react"),
+        "react-native": packageVersion(profile_0_69, "core"),
       },
     });
     rnxKitConfig.__setMockConfig({
-      reactNativeVersion: "^0.62 || ^0.63 || ^0.64",
-      reactNativeDevVersion: "0.63.4",
-      capabilities: ["core-ios"],
+      alignDeps: {
+        requirements: {
+          development: ["react-native@0.69"],
+          production: ["react-native@0.68 || 0.69 || 0.70"],
+        },
+        capabilities: ["core-ios"],
+      },
     });
 
-    expect(checkPackageManifest("package.json", defaultOptions)).toBe(0);
-    expect(consoleErrorSpy).not.toBeCalled();
-    expect(consoleLogSpy).not.toBeCalled();
-    expect(consoleWarnSpy).not.toBeCalled();
+    expect(checkPackageManifest("package.json", defaultOptions)).toBe(
+      "success"
+    );
   });
 
   test("handles development version ranges", () => {
     fs.__setMockContent({
       ...mockManifest,
       peerDependencies: {
-        react: react_v62_v63_v64,
-        "react-native": v62_v63_v64,
+        react: react_v68_v69_v70,
+        "react-native": v68_v69_v70,
       },
       devDependencies: {
-        react: packageVersion(profile_0_63, "react"),
-        "react-native": packageVersion(profile_0_63, "core"),
+        react: packageVersion(profile_0_69, "react"),
+        "react-native": packageVersion(profile_0_69, "core"),
       },
     });
     rnxKitConfig.__setMockConfig({
-      reactNativeVersion: "^0.62 || ^0.63 || ^0.64",
-      reactNativeDevVersion: "^0.63.4",
+      alignDeps: {
+        requirements: {
+          development: ["react-native@0.69"],
+          production: ["react-native@0.68 || 0.69 || 0.70"],
+        },
+        capabilities: ["core-ios"],
+      },
+    });
+
+    expect(checkPackageManifest("package.json", defaultOptions)).toBe(
+      "success"
+    );
+  });
+});
+
+describe("checkPackageManifest({ kitType: 'library' }) (backwards compatibility)", () => {
+  const rnxKitConfig = require("@rnx-kit/config");
+  const fs = require("fs");
+
+  const defaultOptions = { loose: false, write: false };
+
+  const mockManifest = {
+    name: "@rnx-kit/align-deps",
+    version: "0.0.1",
+  };
+
+  const react_v68_v69_v70 = [
+    packageVersion(profile_0_68, "react"),
+    packageVersion(profile_0_69, "react"),
+    packageVersion(profile_0_70, "react"),
+  ].join(" || ");
+
+  const v68_v69_v70 = [
+    packageVersion(profile_0_68, "core"),
+    packageVersion(profile_0_69, "core"),
+    packageVersion(profile_0_70, "core"),
+  ].join(" || ");
+
+  beforeEach(() => {
+    fs.__setMockContent({});
+    rnxKitConfig.__setMockConfig();
+  });
+
+  afterAll(() => {
+    jest.clearAllMocks();
+  });
+
+  test("returns error code when reading invalid manifests", () => {
+    expect(checkPackageManifest("package.json", defaultOptions)).not.toBe(
+      "success"
+    );
+  });
+
+  test("returns early if 'rnx-kit' is missing from the manifest", () => {
+    fs.__setMockContent({
+      ...mockManifest,
+      dependencies: { "react-native-linear-gradient": "0.0.0" },
+    });
+
+    expect(checkPackageManifest("package.json", defaultOptions)).toBe(
+      "not-configured"
+    );
+  });
+
+  test("prints warnings when detecting bad packages", () => {
+    fs.__setMockContent({
+      ...mockManifest,
+      dependencies: { "react-native-linear-gradient": "0.0.0" },
+      peerDependencies: {
+        "react-native": profile_0_70["core"],
+      },
+      devDependencies: {
+        "react-native": profile_0_70["core"],
+      },
+    });
+    rnxKitConfig.__setMockConfig({ reactNativeVersion: "0.70.0" });
+
+    expect(checkPackageManifest("package.json", defaultOptions)).toBe(
+      "success"
+    );
+  });
+
+  test("prints warnings when detecting bad packages (with version range)", () => {
+    fs.__setMockContent({
+      ...mockManifest,
+      dependencies: { "react-native-linear-gradient": "0.0.0" },
+    });
+    rnxKitConfig.__setMockConfig({ reactNativeVersion: "^0.69.0 || ^0.70.0" });
+
+    expect(checkPackageManifest("package.json", defaultOptions)).toBe(
+      "success"
+    );
+  });
+
+  test("returns early if no capabilities are defined", () => {
+    fs.__setMockContent(mockManifest);
+    rnxKitConfig.__setMockConfig({ reactNativeVersion: "0.70.0" });
+
+    expect(checkPackageManifest("package.json", defaultOptions)).toBe(
+      "success"
+    );
+  });
+
+  test("returns if no changes are needed", () => {
+    fs.__setMockContent({
+      ...mockManifest,
+      peerDependencies: {
+        react: packageVersion(profile_0_70, "react"),
+        "react-native": packageVersion(profile_0_70, "core"),
+      },
+      devDependencies: {
+        react: packageVersion(profile_0_70, "react"),
+        "react-native": packageVersion(profile_0_70, "core"),
+      },
+    });
+    rnxKitConfig.__setMockConfig({
+      reactNativeVersion: "0.70.0",
       capabilities: ["core-ios"],
     });
 
-    expect(checkPackageManifest("package.json", defaultOptions)).toBe(0);
-    expect(consoleErrorSpy).not.toBeCalled();
-    expect(consoleLogSpy).not.toBeCalled();
-    expect(consoleWarnSpy).not.toBeCalled();
+    expect(checkPackageManifest("package.json", defaultOptions)).toBe(
+      "success"
+    );
+  });
+
+  test("returns if no changes are needed (write: true)", () => {
+    let didWriteToPath = false;
+
+    fs.__setMockContent({
+      ...mockManifest,
+      peerDependencies: {
+        react: packageVersion(profile_0_70, "react"),
+        "react-native": packageVersion(profile_0_70, "core"),
+      },
+      devDependencies: {
+        react: packageVersion(profile_0_70, "react"),
+        "react-native": packageVersion(profile_0_70, "core"),
+      },
+    });
+    fs.__setMockFileWriter((p, _content) => {
+      didWriteToPath = p;
+    });
+    rnxKitConfig.__setMockConfig({
+      reactNativeVersion: "0.70.0",
+      capabilities: ["core-ios"],
+    });
+
+    expect(
+      checkPackageManifest("package.json", { loose: false, write: true })
+    ).toBe("success");
+    expect(didWriteToPath).toBe(false);
+  });
+
+  test("returns error code if changes are needed", () => {
+    fs.__setMockContent(mockManifest);
+    rnxKitConfig.__setMockConfig({
+      reactNativeVersion: "0.70.0",
+      capabilities: ["core-ios"],
+    });
+
+    expect(checkPackageManifest("package.json", defaultOptions)).toBe(
+      "unsatisfied"
+    );
+  });
+
+  test("writes changes back to 'package.json'", () => {
+    let didWriteToPath = false;
+
+    fs.__setMockContent(mockManifest);
+    fs.__setMockFileWriter((p, _content) => {
+      didWriteToPath = p;
+    });
+    rnxKitConfig.__setMockConfig({
+      reactNativeVersion: "0.70.0",
+      capabilities: ["core-ios"],
+    });
+
+    expect(
+      checkPackageManifest("package.json", { loose: false, write: true })
+    ).toBe("success");
+    expect(didWriteToPath).toBe("package.json");
+  });
+
+  test("preserves indentation in 'package.json'", () => {
+    let output = "";
+
+    fs.__setMockContent(mockManifest, "\t");
+    fs.__setMockFileWriter((_, content) => {
+      output = content;
+    });
+    rnxKitConfig.__setMockConfig({
+      reactNativeVersion: "0.70.0",
+      capabilities: ["core-ios"],
+    });
+
+    expect(
+      checkPackageManifest("package.json", { loose: false, write: true })
+    ).toBe("success");
+    expect(output).toMatchSnapshot();
+  });
+
+  test("uses minimum supported version as development version", () => {
+    fs.__setMockContent({
+      ...mockManifest,
+      peerDependencies: {
+        react: react_v68_v69_v70,
+        "react-native": v68_v69_v70,
+      },
+      devDependencies: {
+        react: packageVersion(profile_0_68, "react"),
+        "react-native": packageVersion(profile_0_68, "core"),
+      },
+    });
+    rnxKitConfig.__setMockConfig({
+      reactNativeVersion: "^0.68 || ^0.69 || ^0.70",
+      capabilities: ["core-ios"],
+    });
+
+    expect(checkPackageManifest("package.json", defaultOptions)).toBe(
+      "success"
+    );
+  });
+
+  test("uses declared development version", () => {
+    fs.__setMockContent({
+      ...mockManifest,
+      peerDependencies: {
+        react: react_v68_v69_v70,
+        "react-native": v68_v69_v70,
+      },
+      devDependencies: {
+        react: packageVersion(profile_0_69, "react"),
+        "react-native": packageVersion(profile_0_69, "core"),
+      },
+    });
+    rnxKitConfig.__setMockConfig({
+      reactNativeVersion: "^0.68 || ^0.69 || ^0.70",
+      reactNativeDevVersion: "0.69.4",
+      capabilities: ["core-ios"],
+    });
+
+    expect(checkPackageManifest("package.json", defaultOptions)).toBe(
+      "success"
+    );
+  });
+
+  test("handles development version ranges", () => {
+    fs.__setMockContent({
+      ...mockManifest,
+      peerDependencies: {
+        react: react_v68_v69_v70,
+        "react-native": v68_v69_v70,
+      },
+      devDependencies: {
+        react: packageVersion(profile_0_69, "react"),
+        "react-native": packageVersion(profile_0_69, "core"),
+      },
+    });
+    rnxKitConfig.__setMockConfig({
+      reactNativeVersion: "^0.68 || ^0.69 || ^0.70",
+      reactNativeDevVersion: "^0.69.4",
+      capabilities: ["core-ios"],
+    });
+
+    expect(checkPackageManifest("package.json", defaultOptions)).toBe(
+      "success"
+    );
   });
 });
 
@@ -315,7 +632,7 @@ describe("getCheckConfig", () => {
       kitType: "library",
       manifest: mockManifest,
       reactNativeVersion,
-      reactNativeDevVersion: semverCoerce(reactNativeVersion).version,
+      reactNativeDevVersion: semverCoerce(reactNativeVersion)?.version,
     });
   });
 
@@ -353,7 +670,7 @@ describe("getCheckConfig", () => {
       kitType: "library",
       manifest: mockManifest,
       reactNativeVersion,
-      reactNativeDevVersion: semverCoerce(reactNativeVersion).version,
+      reactNativeDevVersion: semverCoerce(reactNativeVersion)?.version,
     });
   });
 });

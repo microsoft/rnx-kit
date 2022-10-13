@@ -1,20 +1,27 @@
-import type { Capability, KitType } from "@rnx-kit/config";
+import type { Capability, KitConfig, KitType } from "@rnx-kit/config";
 import type { PackageManifest } from "@rnx-kit/tools-node/package";
 
-type Options = {
-  customProfiles?: string;
-  excludePackages?: string;
-  loose: boolean;
-  write: boolean;
+export type AlignDepsConfig = {
+  kitType: Required<KitConfig>["kitType"];
+  alignDeps: Required<Required<KitConfig>["alignDeps"]>;
+  manifest: PackageManifest;
 };
 
-export type Args = Options & {
-  "custom-profiles"?: string | number;
+export type Options = {
+  loose: boolean;
+  write: boolean;
+  excludePackages?: string[];
+  presets?: string[];
+  requirements?: string[];
+};
+
+export type Args = Pick<Options, "loose" | "write"> & {
   "exclude-packages"?: string | number;
   "set-version"?: string | number;
   init?: string;
   packages?: (string | number)[];
-  vigilant?: string | number;
+  presets?: string | number;
+  requirements?: string | number;
 };
 
 export type CheckConfig = {
@@ -33,7 +40,16 @@ export type CheckOptions = Options & {
   targetVersion?: string;
 };
 
+export type ErrorCode =
+  | "success"
+  | "invalid-configuration"
+  | "invalid-manifest"
+  | "missing-manifest"
+  | "not-configured"
+  | "unsatisfied";
+
 export type VigilantOptions = Options & {
+  customProfiles?: string;
   versions: string;
 };
 
@@ -42,7 +58,7 @@ export type CapabilitiesOptions = {
   customProfilesPath?: string;
 };
 
-export type Command = (manifest: string) => number;
+export type Command = (manifest: string) => ErrorCode;
 
 export type DependencyType = "direct" | "development" | "peer";
 
@@ -79,6 +95,7 @@ export type ProfileVersion =
   | "0.69"
   | "0.70";
 
+export type Preset = Record<string, Profile>;
 export type ProfileMap = Record<ProfileVersion, Profile>;
 
 export type ProfilesInfo = {

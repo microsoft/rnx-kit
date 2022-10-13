@@ -1,5 +1,5 @@
 import type { MetaCapability } from "@rnx-kit/config";
-import type { MetaPackage } from "../../types";
+import type { MetaPackage } from "../../../types";
 
 const baseCapabilities: Readonly<Record<MetaCapability, MetaPackage>> = {
   "core/testing": {

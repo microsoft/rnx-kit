@@ -3,7 +3,7 @@ import isString from "lodash/isString";
 import prompts from "prompts";
 import { checkPackageManifest } from "./check";
 import { concatVersionRanges, keysOf, modifyManifest } from "./helpers";
-import { default as defaultPreset } from "./presets/microsoft";
+import { default as defaultPreset } from "./presets/microsoft/react-native";
 import { parseProfilesString } from "./profiles";
 import type { Command, ProfileVersion } from "./types";
 
@@ -67,14 +67,14 @@ export async function makeSetVersionCommand(
 
   return (manifestPath: string) => {
     const checkReturnCode = checkPackageManifest(manifestPath, checkOnly);
-    if (checkReturnCode !== 0) {
+    if (checkReturnCode !== "success") {
       return checkReturnCode;
     }
 
     const manifest = readPackage(manifestPath);
     const rnxKitConfig = manifest["rnx-kit"];
     if (!rnxKitConfig) {
-      return 0;
+      return "not-configured";
     }
 
     rnxKitConfig.reactNativeVersion = supportedVersions;

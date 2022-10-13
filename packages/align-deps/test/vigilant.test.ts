@@ -301,8 +301,8 @@ describe("makeVigilantCommand()", () => {
       versions: "0.63",
       loose: false,
       write: false,
-    })("package.json");
-    expect(result).toBe(0);
+    })?.("package.json");
+    expect(result).toBe("success");
     expect(didWrite).toBe(false);
     expect(consoleErrorSpy).not.toBeCalled();
   });
@@ -325,8 +325,8 @@ describe("makeVigilantCommand()", () => {
       versions: "0.63",
       loose: false,
       write: false,
-    })("package.json");
-    expect(result).not.toBe(0);
+    })?.("package.json");
+    expect(result).not.toBe("success");
     expect(didWrite).toBe(false);
     expect(consoleErrorSpy).toBeCalledTimes(1);
   });
@@ -349,8 +349,8 @@ describe("makeVigilantCommand()", () => {
       versions: "0.63",
       loose: false,
       write: true,
-    })("package.json");
-    expect(result).toBe(0);
+    })?.("package.json");
+    expect(result).toBe("success");
     expect(didWrite).toBe(true);
     expect(consoleErrorSpy).not.toBeCalled();
   });
@@ -374,8 +374,8 @@ describe("makeVigilantCommand()", () => {
       write: false,
       excludePackages: "@rnx-kit/align-deps",
       loose: false,
-    })("package.json");
-    expect(result).toBe(0);
+    })?.("package.json");
+    expect(result).toBe("success");
     expect(didWrite).toBe(false);
     expect(consoleErrorSpy).not.toBeCalled();
   });
@@ -411,8 +411,8 @@ describe("makeVigilantCommand()", () => {
       versions: "0.64,0.65",
       loose: false,
       write: true,
-    })("package.json");
-    expect(result).toBe(0);
+    })?.("package.json");
+    expect(result).toBe("success");
     expect(consoleErrorSpy).not.toBeCalled();
     expect(manifest).toEqual({
       ...inputManifest,
@@ -459,8 +459,8 @@ describe("makeVigilantCommand()", () => {
       versions: "0.64,0.65",
       loose: false,
       write: true,
-    })("package.json");
-    expect(result).toBe(0);
+    })?.("package.json");
+    expect(result).toBe("success");
     expect(consoleErrorSpy).not.toBeCalled();
     expect(manifest).toEqual({
       ...inputManifest,
