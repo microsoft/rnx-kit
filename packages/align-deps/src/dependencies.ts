@@ -136,7 +136,7 @@ export function gatherRequirements(
   });
 
   if (trace[trace.length - 1].profiles.length === 0) {
-    const message = "No React Native profile could satisfy all requirements";
+    const message = "No profiles could satisfy all requirements";
     const fullTrace = [
       message,
       ...trace.map(({ module, profiles, requirements }) => {

@@ -202,13 +202,11 @@ describe("gatherRequirements()", () => {
         [],
         defaultOptions
       )
-    ).toThrowError("No React Native profile could satisfy all requirements");
+    ).toThrowError("No profiles could satisfy all requirements");
 
     expect(consoleErrorSpy).toBeCalledWith(
       "error",
-      expect.stringContaining(
-        "No React Native profile could satisfy all requirements"
-      )
+      expect.stringContaining("No profiles could satisfy all requirements")
     );
     expect(consoleWarnSpy).not.toBeCalled();
   });
@@ -224,9 +222,7 @@ describe("gatherRequirements()", () => {
     expect(consoleErrorSpy).not.toBeCalled();
     expect(consoleWarnSpy).toBeCalledWith(
       "warn",
-      expect.stringContaining(
-        "No React Native profile could satisfy all requirements"
-      )
+      expect.stringContaining("No profiles could satisfy all requirements")
     );
   });
 });

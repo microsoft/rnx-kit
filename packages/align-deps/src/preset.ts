@@ -9,14 +9,19 @@ function compileRequirements(
   return requirements.map((req) => {
     const [requiredPackage, requiredVersionRange] = req.split("@");
     return (pkg: MetaPackage | Package) => {
-      return (
-        pkg.name === requiredPackage &&
-        "version" in pkg &&
-        semverSatisfies(
-          semverCoerce(pkg.version) || "0.0.1",
-          requiredVersionRange,
-          includePrerelease
-        )
+      if (pkg.name !== requiredPackage || !("version" in pkg)) {
+        return false;
+      }
+
+      const coercedVersion = semverCoerce(pkg.version);
+      if (!coercedVersion) {
+        throw new Error(`Invalid version number: ${pkg.name}@${pkg.version}`);
+      }
+
+      return semverSatisfies(
+        coercedVersion,
+        requiredVersionRange,
+        includePrerelease
       );
     };
   });
@@ -34,6 +39,7 @@ export function filterPreset(requirements: string[], preset: Preset): Preset {
   const filteredPreset: Preset = {};
   const reqs = compileRequirements(requirements);
   for (const [profileName, profile] of Object.entries(preset)) {
+    // FIXME: Some capabilities can resolve to the same package (e.g. core vs core-microsoft)
     const packages = Object.values(profile);
     const satisfiesRequirements = reqs.every((predicate) =>
       packages.some(predicate)
