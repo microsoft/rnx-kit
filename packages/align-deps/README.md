@@ -360,21 +360,28 @@ instance:
 ## Migrating From `dep-check`
 
 Changes from `dep-check` to `align-deps` mostly surrounds the configuration
-schema, and renaming of a couple of flags. In most cases, your old configuration
-will still work as before. `align-deps` will let you know how to convert the old
-config, but you can also specify `--migrate-config` to let `align-deps` do it
-for you.
+schema, and renaming of a couple of flags:
 
-The following flags were renamed:
+- In most cases, your old configuration will still work as before. `align-deps`
+  will tell you how to convert the old config, but you can also specify
+  `--migrate-config` to let `align-deps` do it for you.
 
-| Old                  | New                                 |
-| -------------------- | ----------------------------------- |
-| `--custom-profiles`  | [`--presets`](#--presets)           |
-| `--exclude-packages` | _no change_                         |
-| `--init`             | _no change_                         |
-| `--vigilant`         | [`--requirements`](#--requirements) |
-| `--set-version`      | _no change_                         |
-| `--write`            | _no change_                         |
+- The following flags were renamed:
+
+  | Old                  | New                                 |
+  | -------------------- | ----------------------------------- |
+  | `--custom-profiles`  | [`--presets`](#--presets)           |
+  | `--exclude-packages` | _no change_                         |
+  | `--init`             | _no change_                         |
+  | `--vigilant`         | [`--requirements`](#--requirements) |
+  | `--set-version`      | _no change_                         |
+  | `--write`            | _no change_                         |
+
+- Because the new config schema no longer relies on profile names to determine a
+  profile, we had to _drop support_ for declaring capabilities at the root level
+  because we cannot reliably detect whether an entry is a package or a profile.
+  You will have to add those capabilities to all the profiles you want them
+  added to.
 
 ## Terminology
 
