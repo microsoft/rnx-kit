@@ -15,7 +15,7 @@ name clashes and other reasons. For more details, you can read the RFC:
 <https://github.com/microsoft/rnx-kit/pull/1757>.
 
 If you want to learn how align-deps is used at Microsoft, and see a demo of how
-it works in a monorepo – you can watch the
+it works in a monorepo, you can watch the
 ["Improve all the repos – exploring Microsoft’s DevExp"](https://youtu.be/DAEnPV78rQc?t=1085)
 talk by [@kelset](https://github.com/kelset) and
 [@tido64](https://github.com/tido64) at React Native Europe 2021.
@@ -118,6 +118,8 @@ Comma-separated list of requirements to apply if a package is _not configured_.
 For example, `--requirements react-native@0.70` will make sure your packages are
 compatible with `react-native` 0.70.
 
+See [Requirements](#requirements) for more details.
+
 ### `--set-version`
 
 Sets production and development `react-native` version requirements for any
@@ -152,23 +154,17 @@ Writes all proposed changes to the specified `package.json`.
 
 ## Configure
 
-`@rnx-kit/align-deps` must first be configured before it can be used. It uses
-`@rnx-kit/config` to retrieve your kit configuration. Your configuration must be
-in an `"rnx-kit"` section of your `package.json`.
+While `@rnx-kit/align-deps` can ensure your dependencies are aligned without a
+configuration, you can only get the more advanced features, such as dependencies
+section re-ordering (`dependencies` vs `peerDependencies`) and transitive
+dependency detection (A -> B -> C), by adding a configuration. Your
+configuration must be in an `"rnx-kit"` section of your `package.json`, and have
+the following shapes depending on the package type:
 
 ```ts
-export type Config = {
-  /**
-   * Whether this kit is an "app" or a "library".
-   * @default "library"
-   */
-  kitType?: "app" | "library";
-
-  /**
-   * Configures how `align-deps` should align
-   * dependencies for this package.
-   */
-  alignDeps?: {
+export type AppConfig = {
+  kitType: "app";
+  alignDeps: {
     /**
      * Presets to use for aligning dependencies.
      * @default ["microsoft/react-native"]
@@ -179,7 +175,7 @@ export type Config = {
      * Requirements for this package, e.g.
      * `react-native@>=0.70`.
      */
-    requirements: string[] | { development: string[]; production: string[] };
+    requirements: string[];
 
     /**
      * Capabilities used by the kit.
@@ -187,6 +183,54 @@ export type Config = {
     capabilities: Capability[];
   };
 };
+
+export type LibraryConfig = {
+  kitType: "library";
+  alignDeps: {
+    /**
+     * Presets to use for aligning dependencies.
+     * @default ["microsoft/react-native"]
+     */
+    presets?: string[];
+
+    /**
+     * Requirements for this package, e.g.
+     * `react-native@>=0.70`. `development` is for
+     * package authors, and `production` is for
+     * consumers.
+     */
+    requirements: { development: string[]; production: string[] };
+
+    /**
+     * Capabilities used by the kit.
+     */
+    capabilities: Capability[];
+  };
+};
+```
+
+For example, this is a config for a library that supports `react-native` 0.69
+and 0.70, and uses 0.70 internally:
+
+```js
+{
+  "name": "useful-library",
+  "version": "1.0",
+  ...
+  "rnx-kit": {
+    "kitType": "library",
+    "alignDeps": {
+      "requirements": {
+        "development": ["react-native@0.70"],
+        "production": ["react-native@0.69 || 0.70"]
+      }
+      "capabilities": [
+        "core-android",
+        "core-ios"
+      ]
+    }
+  }
+}
 ```
 
 ## Capabilities
@@ -262,14 +306,22 @@ If you're looking to update capabilities to a more recent version, run
 
 ## Custom Presets
 
-A custom preset is a list of capabilities that map to specific versions of
-packages. It can be a JSON file, or a JS file that default exports it. Custom
-presets are consumed via the [`--presets`](#--presets) flag.
+A profile is a list of capabilities that map to specific versions of packages. A
+custom preset is a collection of such profiles. It can be a JSON file, or a JS
+file that default exports it. Custom presets are consumed via the `presets` key
+in your [configuration](#configure), or the [`--presets`](#--presets) flag.
 
-For example, this custom preset adds `my-capability` to profiles named `0.69`
-and `0.70`:
+### Extending Built-in Presets
+
+The built-in preset, `microsoft/react-native`, contains a profile for every
+supported version of react-native. The profiles are named after every minor
+release, e.g. `0.69` or `0.70`.
+
+To add a new capability, e.g. `my-capability`, to the built-in profiles `0.69`
+and `0.70`, create a preset like below:
 
 ```js
+// my-preset/index.js
 module.exports = {
   0.69: {
     "my-capability": {
@@ -286,8 +338,55 @@ module.exports = {
 };
 ```
 
-For a more complete example, have a look at the
-[default preset](https://github.com/microsoft/rnx-kit/blob/e1d4b2484303cac04e0ec6a4e79d854c694b96b4/packages/align-deps/src/presets/microsoft/react-native.ts).
+Then add it to your configuration:
+
+```diff
+ {
+   "name": "my-package",
+   ...
+   "rnx-kit": {
+     "alignDeps": {
+       "presets": [
+         "microsoft/react-native",
++        "my-preset"
+       ],
+       "requirements": ["react-native@0.70"],
+       "capabilities": [
+         ...
+       ]
+     }
+   }
+ }
+```
+
+Or if you need to align unconfigured packages, specify
+`--presets microsoft/react-native,my-preset`.
+
+Make sure that `microsoft/react-native` is declared before your custom preset.
+This will tell `align-deps` to append capabilities when the profile names match.
+
+You can also use this feature to _override_ capabilities. For instance:
+
+```js
+// my-preset/index.js
+module.exports = {
+  "0.70": {
+    core: {
+      name: "react-native",
+      version: "^0.70.3-myCustomFork.1",
+    },
+  },
+};
+```
+
+With this preset, `core` will be resolved to your custom fork of `react-native`
+instead of the official version.
+
+Note that profile names are only needed when you want to extend or override
+presets. Otherwise, you can name your profiles whatever you want.
+
+For a complete example of a preset, have a look at
+[`microsoft/react-native`](https://github.com/microsoft/rnx-kit/blob/e1d4b2484303cac04e0ec6a4e79d854c694b96b4/packages/align-deps/src/presets/microsoft/react-native.ts).
 
 ### Custom Capabilities
 
@@ -347,7 +446,7 @@ instance:
    ...
    "rnx-kit": {
      "alignDeps": {
-       "presets": ["microsoft/react-native", "my-custom-profiles"],
+       "presets": ["microsoft/react-native", "my-preset"],
        "requirements": ["react-native@0.70"],
        "capabilities": [
 +        "core/all"
@@ -356,6 +455,141 @@ instance:
    }
  }
 ```
+
+## Requirements
+
+Requirements are what determines which profiles should be used. This is how it
+roughly works:
+
+- The list of presets are loaded and _merged_ into a giant preset
+- For each profile in the _merged_ preset, check whether they fulfill the
+  requirements
+  - Profiles that do not fulfill the requirements are discarded
+- Use the remaining profiles to align the target package
+
+For example, given the following configuration:
+
+```js
+{
+  "name": "useful-library",
+  "version": "1.0",
+  ...
+  "rnx-kit": {
+    "kitType": "library",
+    "alignDeps": {
+      "requirements": {
+        "development": ["react-native@0.70"],
+        "production": ["react-native@0.69 || 0.70"]
+      }
+      "capabilities": [
+        "core-android",  // `core-android` resolves to `react-native`
+        "core-ios"       // `core-ios` also resolves to `react-native`
+      ]
+    }
+  }
+}
+```
+
+`microsoft/react-native/0.70` will be used for development since it is the only
+profile that fulfills the requirement, `react-native@0.70`. `align-deps` ensures
+that `react-native` is correctly declared under `devDependencies`.
+
+```diff
+ {
+   "name": "useful-library",
+   "version": "1.0",
++  "devDependencies" {
++    "react-native": "^0.70.0"
++  }
+   ...
+ }
+```
+
+For production, there are two profiles that fulfill the requirements,
+`microsoft/react-native/0.69` and `microsoft/react-native/0.70`. Since this
+package is a library, `align-deps` ensures that `react-native` is correctly
+declared under `peerDependencies`:
+
+```diff
+ {
+   "name": "useful-library",
+   "version": "1.0",
++  "peerDependencies": {
++    "react-native": "^0.69.0 || ^0.70.0"
++  },
+   "devDependencies" {
+     "react-native": "^0.70.0"
+   }
+   ...
+ }
+```
+
+If the package was an app, `align-deps` would've ensured that `react-native` is
+only declared under `dependencies`.
+
+You can read more about the usage of the different dependencies sections in
+[Dependency Management](https://microsoft.github.io/rnx-kit/docs/architecture/dependency-management).
+
+One important thing to note here is that if there are multiple capabilities
+resolving to the same package, only the first occurrence of the package is
+checked. To illustrate this scenario, consider the following:
+
+```ts
+const builtInPreset = {
+  "0.69": {
+    core: {
+      name: "react-native",
+      version: "^0.69.0",
+    },
+  },
+  "0.70": {
+    core: {
+      name: "react-native",
+      version: "^0.70.0",
+    },
+  },
+};
+
+const customPreset = {
+  "0.69": {
+    "custom-capability": {
+      name: "react-native",
+      version: "^0.70.0-fork.1",
+    },
+  },
+};
+
+const megaPreset = mergePresets([builtInPreset, customPreset]);
+/*
+{
+  "0.69": {
+    core: {
+      name: "react-native",
+      version: "^0.69.0",
+    },
+    "custom-capability": {
+      name: "react-native",
+      version: "^0.70.0-fork.1",
+    },
+  },
+  "0.70": {
+    core: {
+      name: "react-native",
+      version: "^0.70.0",
+    },
+  },
+}
+ */
+
+const filteredPreset = filterPreset(megaPreset, ["react-native@0.70"]);
+/* ??? */
+```
+
+If `filterPreset` checked all capabilities in the profiles, it would return both
+`0.69` and `0.70` here because `custom-capability` would satisfy
+`react-native@0.70`. This is unexpected behaviour. Instead, `align-deps` looks
+for the first package matching the name and _then_ checks whether it fulfills
+the requirement. With this algorithm, only `0.70` is returned.
 
 ## Migrating From `dep-check`
 
