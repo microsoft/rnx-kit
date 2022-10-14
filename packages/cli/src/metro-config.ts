@@ -1,24 +1,20 @@
-import type { TypeScriptValidationOptions } from "@rnx-kit/config";
-import {
-  CyclicDependencies,
-  PluginOptions as CyclicDetectorOptions,
-} from "@rnx-kit/metro-plugin-cyclic-dependencies-detector";
-import {
-  DuplicateDependencies,
-  Options as DuplicateDetectorOptions,
-} from "@rnx-kit/metro-plugin-duplicates-checker";
-import { MetroPlugin, MetroSerializer } from "@rnx-kit/metro-serializer";
+import type {
+  BundlerPlugins,
+  TypeScriptValidationOptions,
+} from "@rnx-kit/config";
+import { CyclicDependencies } from "@rnx-kit/metro-plugin-cyclic-dependencies-detector";
+import { DuplicateDependencies } from "@rnx-kit/metro-plugin-duplicates-checker";
+import type { MetroPlugin } from "@rnx-kit/metro-serializer";
+import { MetroSerializer } from "@rnx-kit/metro-serializer";
 import {
   esbuildTransformerConfig,
   MetroSerializer as MetroSerializerEsbuild,
 } from "@rnx-kit/metro-serializer-esbuild";
-import { AllPlatforms } from "@rnx-kit/tools-react-native/platform";
-import { Project } from "@rnx-kit/typescript-service";
-
-import { createProjectCache } from "./typescript/project-cache";
-
+import type { AllPlatforms } from "@rnx-kit/tools-react-native/platform";
+import type { Project } from "@rnx-kit/typescript-service";
 import type { DeltaResult, Graph } from "metro";
 import type { InputConfigT, SerializerConfigT } from "metro-config";
+import { createProjectCache } from "./typescript/project-cache";
 
 /**
  * Create a hook function to be registered with Metro during serialization.
@@ -116,18 +112,17 @@ const emptySerializerHook = (_graph: Graph, _delta: DeltaResult): void => {
  * Customize the Metro configuration.
  *
  * @param metroConfigReadonly Metro configuration
- * @param detectCyclicDependencies When true, cyclic dependency checking is enabled with a default set of options. Otherwise the object allows for fine-grained control over the detection process.
- * @param detectDuplicateDependencies When true, duplicate dependency checking is enabled with a default set of options. Otherwise, the object allows for fine-grained control over the detection process.
- * @param typescriptValidation When true, TypeScript type-checking is enabled with a default set of options. Otherwise, the object allows for fine-grained control over the type-checking process.
- * @param treeShake When true, tree shaking is enabled.
+ * @param bundlerPlugins Plugins used to further customize Metro configuration
  * @param print Optional function to use when printing status messages to the Metro console
  */
 export function customizeMetroConfig(
   metroConfigReadonly: InputConfigT,
-  detectCyclicDependencies: boolean | CyclicDetectorOptions,
-  detectDuplicateDependencies: boolean | DuplicateDetectorOptions,
-  typescriptValidation: boolean | TypeScriptValidationOptions,
-  treeShake: boolean,
+  {
+    detectCyclicDependencies,
+    detectDuplicateDependencies,
+    treeShake,
+    typescriptValidation,
+  }: BundlerPlugins,
   print?: (message: string) => void
 ): void {
   //  We will be making changes to the Metro configuration. Coerce from a

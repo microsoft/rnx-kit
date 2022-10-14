@@ -32,12 +32,16 @@ type RequestOptions = {
   unstable_transformProfile?: TransformProfile;
 };
 
-export async function bundle(args: BundleArgs, config: ConfigT): Promise<void> {
+export async function bundle(
+  args: BundleArgs,
+  config: ConfigT,
+  output = Bundle
+): Promise<void> {
   try {
     const {
       buildBundleWithConfig,
     } = require("@react-native-community/cli-plugin-metro");
-    return buildBundleWithConfig(args, config);
+    return buildBundleWithConfig(args, config, output);
   } catch (_) {
     // Retry with our custom logic
   }
@@ -80,9 +84,9 @@ export async function bundle(args: BundleArgs, config: ConfigT): Promise<void> {
   const server = new Server(config);
 
   try {
-    const bundle = await Bundle.build(server, requestOpts);
+    const bundle = await output.build(server, requestOpts);
 
-    await Bundle.save(bundle, args, console.info);
+    await output.save(bundle, args, console.info);
 
     // Save the assets of the bundle
     const outputAssets: readonly AssetData[] = await server.getAssets({

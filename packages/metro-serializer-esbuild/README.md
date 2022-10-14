@@ -184,6 +184,17 @@ Values: `verbose` | `debug` | `info` | `warning` | `error` | `silent`
 
 Defaults to `warning`.
 
+## Metro + ESM Support
+
+Metro currently does not support ESM. However, if you're looking to save even
+more bytes, and are comfortable with solving CJS vs ESM resolution issues, you
+can try adding `module` to
+[`resolver.resolverMainFields`](https://facebook.github.io/metro/docs/configuration#resolvermainfields)
+in `metro.config.js`. This will tell Metro to always pick ESM over CJS when
+possible. Note that this can lead to unexpected errors since you cannot import
+ESM from CJS. Until https://github.com/facebook/metro/issues/670 lands, you are
+basically on your own to fix any issues that might come up.
+
 ## Known Limitations
 
 - Dev server may not work with this serializer. To work around this limitation,
@@ -198,3 +209,7 @@ Defaults to `warning`.
   details, read https://hackmd.io/Z021hgSGStKlYLwsqNMOcg. This can be mitigated
   with an ESLint rule, such as `no-export-all` from
   [`@rnx-kit/eslint-plugin`](https://github.com/microsoft/rnx-kit/tree/main/packages/eslint-plugin#readme).
+- esbuild is incompatible with
+  [RAM bundle](https://facebook.github.io/metro/docs/bundling/#indexed-ram-bundle).
+  If you require RAM bundles, you cannot use this serializer. In fact, Metro
+  will simply ignore it.

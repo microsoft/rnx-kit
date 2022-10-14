@@ -1,5 +1,11 @@
 # @rnx-kit/react-native-auth
 
+## 0.1.6
+
+### Patch Changes
+
+- 8bc3f789: Make `redirectURI` optional as their JS counterpart
+
 ## 0.1.5
 
 ### Patch Changes

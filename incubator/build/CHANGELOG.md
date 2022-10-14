@@ -1,5 +1,11 @@
 # @rnx-kit/build
 
+## 0.4.0
+
+### Minor Changes
+
+- 8f66b73b: Firebase: Authenticating with `--token` is deprecated. A service account is now required for authentication.
+
 ## 0.3.3
 
 ### Patch Changes

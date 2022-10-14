@@ -30,6 +30,10 @@
         "sourcemapSourcesRoot": {
           "description": "Path to the package's source files. Used to make source-map paths relative and therefore portable.",
           "type": "string"
+        },
+        "indexedBundleFormat": {
+          "description": "Force the \"Indexed RAM\" bundle file format, even when targeting Android. Only applies to the `rnx-ram-bundle` command.",
+          "type": "boolean"
         }
       }
     },

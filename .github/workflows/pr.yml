@@ -68,6 +68,11 @@ jobs:
           yarn bundle+esbuild
         shell: bash
         working-directory: packages/test-app
+      - name: Bundle test app with RAM bundle format
+        run: |
+          yarn ram-bundle
+        shell: bash
+        working-directory: packages/test-app
   build-android-expo-app:
     name: "Build Android"
     uses: ./.github/workflows/build-android.yml

@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-plugin-duplicates-checker
 
+## 2.0.0
+
+### Major Changes
+
+- 32480303: Breaking: Changed `checkForDuplicatePackages` to return an object to differentiate between banned and duplicate modules
+
 ## 1.2.16
 
 ### Patch Changes

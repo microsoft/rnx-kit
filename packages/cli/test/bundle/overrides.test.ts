@@ -1,5 +1,8 @@
 import "jest-extended";
-import { applyBundleConfigOverrides } from "../../src/bundle/overrides";
+import {
+  applyBundleConfigOverrides,
+  overridableCommonBundleOptions,
+} from "../../src/bundle/overrides";
 import type { CliPlatformBundleConfig } from "../../src/bundle/types";
 
 describe("CLI > Bundle > Overrides > applyBundleConfigOverrides", () => {
@@ -11,12 +14,17 @@ describe("CLI > Bundle > Overrides > applyBundleConfigOverrides", () => {
     detectDuplicateDependencies: true,
     typescriptValidation: true,
     treeShake: true,
+    indexedRamBundle: false,
     platform: "ios",
   };
 
   test("has no effect when no overrides are given", () => {
     const copy = { ...config };
-    applyBundleConfigOverrides({}, [copy]);
+    applyBundleConfigOverrides(
+      {},
+      [copy],
+      [...overridableCommonBundleOptions, "treeShake"]
+    );
     expect(copy).toEqual(config);
   });
 
@@ -28,10 +36,9 @@ describe("CLI > Bundle > Overrides > applyBundleConfigOverrides", () => {
       }
     }
     applyBundleConfigOverrides(
-      {
-        [name]: value,
-      },
-      [copy]
+      { [name]: value },
+      [copy],
+      [...overridableCommonBundleOptions, "treeShake", "indexedRamBundle"]
     );
     expect(copy).toEqual({
       ...config,
@@ -39,35 +46,39 @@ describe("CLI > Bundle > Overrides > applyBundleConfigOverrides", () => {
     });
   }
 
-  test("changes entryFile using an override", () => {
+  test("changes `entryFile` using an override", () => {
     testOverride("entryFile", "foo.js");
   });
 
-  test("changes bundleOutput using an override", () => {
+  test("changes `bundleOutput` using an override", () => {
     testOverride("bundleOutput", "foo.bundle");
   });
 
-  test("sets bundleEncoding using an override", () => {
+  test("sets `bundleEncoding` using an override", () => {
     testOverride("bundleEncoding", "utf8");
   });
 
-  test("sets sourcemapOutput using an override", () => {
+  test("sets `sourcemapOutput` using an override", () => {
     testOverride("sourcemapOutput", "out/foo.map");
   });
 
-  test("sets sourcemapSourcesRoot using an override", () => {
+  test("sets `sourcemapSourcesRoot` using an override", () => {
     testOverride("sourcemapSourcesRoot", "/myrepo/packags/foo");
   });
 
-  test("changes sourcemapUseAbsolutePath using an override", () => {
+  test("changes `sourcemapUseAbsolutePath` using an override", () => {
     testOverride("sourcemapUseAbsolutePath", true);
   });
 
-  test("sets assetsDest using an override", () => {
+  test("sets `assetsDest` using an override", () => {
     testOverride("assetsDest", "dist");
   });
 
-  test("changes treeShake using an override", () => {
+  test("changes `treeShake` using an override", () => {
     testOverride("treeShake", false);
+  });
+
+  test("changes `indexedRamBundle` using an override", () => {
+    testOverride("indexedRamBundle", true);
   });
 });

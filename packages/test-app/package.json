@@ -17,6 +17,7 @@
     "bundle:ios": "react-native rnx-bundle --platform ios",
     "bundle:macos": "react-native rnx-bundle --platform macos",
     "bundle:windows": "react-native rnx-bundle --platform windows",
+    "ram-bundle": "react-native rnx-ram-bundle",
     "android": "react-native run-android --no-packager",
     "ios": "react-native run-ios --no-packager",
     "macos": "react-native run-macos --scheme ReactTestApp --no-packager",
@@ -154,6 +155,7 @@
       "core-ios",
       "core-macos",
       "core-windows",
+      "babel-preset-react-native",
       "react",
       "test-app"
     ]

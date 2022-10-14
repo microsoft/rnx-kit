@@ -34,6 +34,11 @@ export type BundlerPlugins = {
 
   /**
    * Choose whether to enable tree shaking.
+   *
+   * Note that Metro ignores custom serializers (which this feature depends on)
+   * when outputting RAM bundle format.
+   *
+   * Only applies to `rnx-bundle` command.
    */
   treeShake?: boolean;
 };
@@ -57,7 +62,7 @@ export type BundleParameters = BundlerPlugins & {
    * Encoding scheme to use when writing the bundle file. Currently limited
    * to UTF-8, UTF-16 (little endian), and 7-bit ASCII.
    *
-   * @see "https://nodejs.org/api/buffer.html#buffer_buffers_and_character_encodings"
+   * @see https://nodejs.org/api/buffer.html#buffer_buffers_and_character_encodings
    */
   bundleEncoding?: OutputOptions["bundleEncoding"];
 
@@ -82,6 +87,14 @@ export type BundleParameters = BundlerPlugins & {
    * Either absolute, or relative to the package. If not given, assets are ignored.
    */
   assetsDest?: string;
+
+  /**
+   * Force the "Indexed RAM" bundle file format, even when targeting Android.
+   * For more details, see https://facebook.github.io/metro/docs/bundling.
+   *
+   * Only applies to the `rnx-ram-bundle` command.
+   */
+  indexedRamBundle?: boolean;
 };
 
 /**

@@ -61,6 +61,7 @@ Parameters controlling how a bundle is constructed.
 | sourcemapSourcesRoot     | string, undefined  | Path to the package's source files. Used to make source-map paths relative and therefore portable.                                                                                                     |
 | sourcemapUseAbsolutePath | boolean, undefined | Controls whether or not SourceMapURL is reported as a full path or just a file name.                                                                                                                   |
 | assetsDest               | string, undefined  | Path where all bundle assets (strings, images, fonts, sounds, ...) are written. Either absolute, or relative to the package.                                                                           |
+| indexedBundleFormat      | boolean, undefined | Force the "Indexed RAM" bundle file format, even when targeting Android. Only applies to the `rnx-ram-bundle` command.                                                                                 |
 
 ### `BundlerPlugins`
 

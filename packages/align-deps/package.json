@@ -1,0 +1,63 @@
+{
+  "private": true,
+  "name": "@rnx-kit/align-deps",
+  "version": "1.13.1",
+  "description": "Dependency checker for npm packages",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/align-deps#readme",
+  "license": "MIT",
+  "files": [
+    "lib/**/*.d.ts",
+    "lib/index.js"
+  ],
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "bin": {
+    "rnx-align-deps": "lib/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "packages/align-deps"
+  },
+  "scripts": {
+    "build": "rnx-kit-scripts build",
+    "bundle": "rnx-kit-scripts bundle",
+    "format": "rnx-kit-scripts format",
+    "lint": "rnx-kit-scripts lint",
+    "test": "rnx-kit-scripts test",
+    "update-profile": "node scripts/update-profile.mjs",
+    "update-readme": "node scripts/update-readme.js"
+  },
+  "devDependencies": {
+    "@rnx-kit/config": "*",
+    "@rnx-kit/console": "*",
+    "@rnx-kit/scripts": "*",
+    "@rnx-kit/tools-language": "*",
+    "@rnx-kit/tools-node": "*",
+    "@rnx-kit/tools-workspaces": "*",
+    "@types/jest": "^27.0.0",
+    "@types/lodash": "^4.14.172",
+    "@types/pacote": "^11.0.0",
+    "@types/prompts": "^2.0.0",
+    "@types/semver": "^7.0.0",
+    "@types/yargs": "^16.0.0",
+    "chalk": "^4.1.0",
+    "detect-indent": "^6.0.0",
+    "jest-diff": "^26.0.0",
+    "lodash": "^4.17.21",
+    "markdown-table": "^2.0.0",
+    "pacote": "^12.0.0",
+    "prompts": "^2.4.0",
+    "semver": "^7.0.0",
+    "yargs": "^16.0.0"
+  },
+  "engines": {
+    "node": ">=12.13"
+  },
+  "eslintConfig": {
+    "extends": "@rnx-kit/eslint-config"
+  },
+  "jest": {
+    "preset": "@rnx-kit/scripts"
+  }
+}

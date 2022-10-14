@@ -11,13 +11,15 @@ import com.facebook.react.bridge.WritableMap
 data class AuthResult(
     val accessToken: String,
     val expirationTime: Int,
-    val redirectUri: String
+    val redirectUri: String? = null
 ) {
     fun toWritableMap(): WritableMap {
         return Arguments.createMap().also { map ->
             map.putString("accessToken", accessToken)
             map.putInt("expirationTime", expirationTime)
-            map.putString("redirectUri", redirectUri)
+            redirectUri?.let {
+              map.putString("redirectUri", redirectUri)
+            }
         }
     }
 }

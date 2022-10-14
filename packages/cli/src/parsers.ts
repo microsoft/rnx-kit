@@ -12,6 +12,10 @@ export function parseBoolean(val: string): boolean {
   );
 }
 
+export function parseInt(value: string): number {
+  return global.parseInt(value, 10);
+}
+
 export function parseTransformProfile(val: string): TransformProfile {
   const allowedProfiles: TransformProfile[] = [
     "hermes-stable",

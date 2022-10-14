@@ -1,5 +1,39 @@
 # Change Log - @rnx-kit/cli
 
+## 0.14.8
+
+### Patch Changes
+
+- 659a4423: Fail gracefully if `jest-cli` is not installed
+
+## 0.14.7
+
+### Patch Changes
+
+- 6d48c95c: Fix Windows compatability and a minor security issue.
+
+## 0.14.6
+
+### Patch Changes
+
+- 94c95d81: Fixed CLI not parsing numbers correctly
+
+## 0.14.5
+
+### Patch Changes
+
+- d7150595: Add support for "Random Access Module" bundle format
+- Updated dependencies [d7150595]
+  - @rnx-kit/config@0.5.2
+  - @rnx-kit/metro-service@3.0.2
+
+## 0.14.4
+
+### Patch Changes
+
+- Updated dependencies [32480303]
+  - @rnx-kit/metro-plugin-duplicates-checker@2.0.0
+
 ## 0.14.3
 
 ### Patch Changes

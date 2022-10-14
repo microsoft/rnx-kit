@@ -1,0 +1,33 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`checkPackageManifest({ kitType: 'library' }) (backwards compatibility) preserves indentation in 'package.json' 1`] = `
+"{
+	\\"name\\": \\"@rnx-kit/align-deps\\",
+	\\"version\\": \\"0.0.1\\",
+	\\"peerDependencies\\": {
+		\\"react\\": \\"18.1.0\\",
+		\\"react-native\\": \\"^0.70.0\\"
+	},
+	\\"devDependencies\\": {
+		\\"react\\": \\"18.1.0\\",
+		\\"react-native\\": \\"^0.70.0\\"
+	}
+}
+"
+`;
+
+exports[`checkPackageManifest({ kitType: 'library' }) preserves indentation in 'package.json' 1`] = `
+"{
+	\\"name\\": \\"@rnx-kit/align-deps\\",
+	\\"version\\": \\"0.0.1\\",
+	\\"peerDependencies\\": {
+		\\"react\\": \\"18.1.0\\",
+		\\"react-native\\": \\"^0.70.0\\"
+	},
+	\\"devDependencies\\": {
+		\\"react\\": \\"18.1.0\\",
+		\\"react-native\\": \\"^0.70.0\\"
+	}
+}
+"
+`;

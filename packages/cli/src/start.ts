@@ -11,8 +11,8 @@ import type { Server as HttpsServer } from "https";
 import type { ReportableEvent, Reporter } from "metro";
 import type { Middleware } from "metro-config";
 import type Server from "metro/src/Server";
-import os from "os";
-import path from "path";
+import * as os from "os";
+import * as path from "path";
 import qrcode from "qrcode";
 import readline from "readline";
 import { customizeMetroConfig } from "./metro-config";
@@ -137,16 +137,9 @@ export async function rnxStart(
   });
 
   // customize the metro config to include plugins, presets, etc.
-  customizeMetroConfig(
-    metroConfig,
-    serverConfig.detectCyclicDependencies,
-    serverConfig.detectDuplicateDependencies,
-    serverConfig.typescriptValidation,
-    serverConfig.treeShake,
-    (message: string): void => {
-      terminal.log(message);
-    }
-  );
+  customizeMetroConfig(metroConfig, serverConfig, (message: string): void => {
+    terminal.log(message);
+  });
 
   // create middleware -- a collection of plugins which handle incoming
   // http(s) requests, routing them to static pages or JS functions.

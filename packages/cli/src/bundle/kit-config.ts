@@ -4,8 +4,8 @@ import {
   getKitConfig,
 } from "@rnx-kit/config";
 import type { AllPlatforms } from "@rnx-kit/tools-react-native/platform";
+import { getDefaultBundlerPlugins } from "./defaultPlugins";
 import type { CliPlatformBundleConfig } from "./types";
-import { getDefaultBundlerPlugins } from "../bundler-plugin-defaults";
 
 /**
  * Get the list of target platforms for bundling.
@@ -49,7 +49,7 @@ function getDefaultBundleParameters(platform: string) {
  *
  * @param id Optional identity of the target bundle definition to return
  * @param overridePlatform Override platform, typically from the command-line. When given, this overrides the list of target platforms.
- * @returns Arrary of platform-specific bundle configurations
+ * @returns Array of platform-specific bundle configurations
  */
 export function getCliPlatformBundleConfigs(
   id?: string,

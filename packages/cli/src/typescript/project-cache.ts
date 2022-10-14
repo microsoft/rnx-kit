@@ -9,8 +9,8 @@ import {
   Project,
   readConfigFile,
 } from "@rnx-kit/typescript-service";
-import fs from "fs";
-import path from "path";
+import * as fs from "fs";
+import * as path from "path";
 import ts from "typescript";
 
 export type ProjectInfo = {

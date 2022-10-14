@@ -4,7 +4,7 @@ import {
   countCopies,
   detectDuplicatePackages,
   Options,
-  printDuplicates,
+  printModule,
 } from "../src/checkForDuplicatePackages";
 import {
   bundleGraph,
@@ -90,7 +90,7 @@ describe("countCopies()", () => {
   });
 });
 
-describe("printDuplicates()", () => {
+describe("printModules()", () => {
   const consoleWarnSpy = jest.spyOn(global.console, "warn");
 
   beforeEach(() => {
@@ -102,15 +102,15 @@ describe("printDuplicates()", () => {
   });
 
   test("prints all versions and locations of a package", () => {
-    printDuplicates(testModuleMap["fbjs"]);
+    printModule(testModuleMap["fbjs"]);
     expect(consoleWarnSpy).toBeCalledTimes(2);
     consoleWarnSpy.mockReset();
 
-    printDuplicates(testModuleMap["metro"]);
+    printModule(testModuleMap["metro"]);
     expect(consoleWarnSpy).toBeCalledTimes(2);
     consoleWarnSpy.mockReset();
 
-    printDuplicates(testModuleMap["react-native"]);
+    printModule(testModuleMap["react-native"]);
     expect(consoleWarnSpy).toBeCalledTimes(1);
     consoleWarnSpy.mockReset();
   });
@@ -130,18 +130,21 @@ describe("detectDuplicatePackages()", () => {
   });
 
   test("returns number of duplicated packages", () => {
-    expect(detectDuplicatePackages(testModuleMap, defaultOptions)).toBe(2);
+    expect(detectDuplicatePackages(testModuleMap, defaultOptions)).toEqual({
+      banned: 0,
+      duplicates: 2,
+    });
   });
 
   test("ignores specified packages", () => {
     expect(
       detectDuplicatePackages(testModuleMap, { ignoredModules: ["fbjs"] })
-    ).toBe(1);
+    ).toEqual({ banned: 0, duplicates: 1 });
     expect(
       detectDuplicatePackages(testModuleMap, {
         ignoredModules: ["fbjs", "metro"],
       })
-    ).toBe(0);
+    ).toEqual({ banned: 0, duplicates: 0 });
   });
 
   test("counts banned packages", () => {
@@ -149,7 +152,7 @@ describe("detectDuplicatePackages()", () => {
       detectDuplicatePackages(testModuleMap, {
         bannedModules: ["react", "react-native"],
       })
-    ).toBe(4);
+    ).toEqual({ banned: 2, duplicates: 2 });
   });
 
   test("prints the duplicated packages", () => {
@@ -173,11 +176,17 @@ describe("checkForDuplicateDependencies()", () => {
   });
 
   test("checkForDuplicateDependencies", () => {
-    expect(checkForDuplicateDependencies(bundleGraph)).toBe(0);
+    expect(checkForDuplicateDependencies(bundleGraph)).toEqual({
+      banned: 0,
+      duplicates: 0,
+    });
     expect(consoleErrorSpy).not.toHaveBeenCalled();
     expect(consoleWarnSpy).not.toHaveBeenCalled();
 
-    expect(checkForDuplicateDependencies(bundleGraphWithDuplicates)).toBe(1);
+    expect(checkForDuplicateDependencies(bundleGraphWithDuplicates)).toEqual({
+      banned: 0,
+      duplicates: 1,
+    });
     expect(consoleErrorSpy).toBeCalledTimes(1);
     expect(consoleWarnSpy).toBeCalledTimes(2);
   });
@@ -185,7 +194,13 @@ describe("checkForDuplicateDependencies()", () => {
 
 describe("checkForDuplicatePackages()", () => {
   test("checkForDuplicatePackages", () => {
-    expect(checkForDuplicatePackages(bundleSourceMap)).toBe(0);
-    expect(checkForDuplicatePackages(bundleSourceMapWithDuplicates)).toBe(1);
+    expect(checkForDuplicatePackages(bundleSourceMap)).toEqual({
+      banned: 0,
+      duplicates: 0,
+    });
+    expect(checkForDuplicatePackages(bundleSourceMapWithDuplicates)).toEqual({
+      banned: 0,
+      duplicates: 1,
+    });
   });
 });
