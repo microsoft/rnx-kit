@@ -48,8 +48,9 @@ function isMisalignedPeer(from: string, to: string): boolean {
 }
 
 /**
- * Builds a profile targeting specified versions.
- * @returns A profile containing dependencies to compare against
+ * Builds a package manifest containing _all_ capabilities from profiles that
+ * satisfy the specified requirements.
+ * @returns A package manifest containing all capabilities
  */
 export function buildManifestProfile(
   manifestPath: string,
@@ -100,6 +101,14 @@ export function buildManifestProfile(
   };
 }
 
+/**
+ * Compares the package manifest with the desired profile and returns all
+ * dependencies that are misaligned.
+ * @param manifest The package manifest
+ * @param profile The desired profile to compare against
+ * @param write Whether misaligned dependencies should be updated
+ * @returns A list of misaligned dependencies
+ */
 export function inspect(
   manifest: PackageManifest,
   profile: ManifestProfile,
@@ -131,6 +140,16 @@ export function inspect(
   return changes;
 }
 
+/**
+ * Checks the specified package manifest for misaligned dependencies in place.
+ * Because the package is not configured, `align-deps` cannot know whether a
+ * dependency should be declared as a direct or peer dependency. It can only
+ * check whether the dependency is on the right version.
+ * @param manifestPath The path to the package manifest
+ * @param options Options from command line
+ * @param config Configuration from `package.json` or "generated" from command line flags
+ * @returns Whether the package needs changes
+ */
 export function checkPackageManifestUnconfigured(
   manifestPath: string,
   { excludePackages, write }: Options,
