@@ -19,6 +19,8 @@ import type {
 } from "../types";
 import { checkPackageManifestUnconfigured } from "./vigilant";
 
+type ConfigResult = AlignDepsConfig | CheckConfig | ErrorCode;
+
 const defaultConfig: AlignDepsConfig["alignDeps"] = {
   presets: ["microsoft/react-native"],
   requirements: [],
@@ -47,9 +49,7 @@ export function containsValidRequirements(
   return false;
 }
 
-function getConfig(
-  manifestPath: string
-): AlignDepsConfig | CheckConfig | ErrorCode {
+function getConfig(manifestPath: string): ConfigResult {
   const manifest = readPackage(manifestPath);
   if (!isPackageManifest(manifest)) {
     return "invalid-manifest";
@@ -114,12 +114,16 @@ function getConfig(
   } as CheckConfig;
 }
 
+function isError(config: ConfigResult): config is ErrorCode {
+  return typeof config === "string";
+}
+
 export function checkPackageManifest(
   manifestPath: string,
   options: Options,
   inputConfig = getConfig(manifestPath)
 ): ErrorCode {
-  if (typeof inputConfig === "string") {
+  if (isError(inputConfig)) {
     return inputConfig;
   }
 
@@ -190,13 +194,12 @@ export function makeCheckCommand(options: Options): Command {
 
   return (manifest: string) => {
     const inputConfig = getConfig(manifest);
-    const config =
-      typeof inputConfig === "string"
-        ? inputConfig
-        : migrateConfig(inputConfig);
+    const config = isError(inputConfig)
+      ? inputConfig
+      : migrateConfig(inputConfig);
 
     // If the package is configured, run the normal check first.
-    if (typeof config !== "string") {
+    if (!isError(config)) {
       const result = checkPackageManifest(manifest, options, config);
       return result !== "success"
         ? result
