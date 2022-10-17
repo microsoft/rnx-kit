@@ -1,3 +1,4 @@
+import type { Capability } from "@rnx-kit/config";
 import { error } from "@rnx-kit/console";
 import type { PackageManifest } from "@rnx-kit/tools-node/package";
 import * as path from "path";
@@ -11,6 +12,7 @@ import type {
   ErrorCode,
   ManifestProfile,
   Options,
+  Preset,
 } from "../types";
 
 type Change = {
@@ -25,6 +27,17 @@ const allSections = [
   "peerDependencies" as const,
   "devDependencies" as const,
 ];
+
+function getAllCapabilities(preset: Preset): Capability[] {
+  const capabilities = new Set<Capability>();
+  for (const profile of Object.values(preset)) {
+    for (const capability of keysOf(profile)) {
+      capabilities.add(capability);
+    }
+  }
+
+  return Array.from(capabilities);
+}
 
 function isMisalignedDirect(from: string, to: string): boolean {
   return from !== to;
@@ -60,8 +73,7 @@ export function buildManifestProfile(
       : [filterPreset(requirements.development, mergedPresets), prodPreset];
   })();
 
-  const allCapabilities = targetPreset[keysOf(targetPreset)[0]];
-  const unmanagedCapabilities = keysOf(allCapabilities).filter(
+  const unmanagedCapabilities = getAllCapabilities(targetPreset).filter(
     (capability) => !alignDeps.capabilities.includes(capability)
   );
 
