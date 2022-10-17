@@ -7,15 +7,19 @@
 
 <!--remove-block end-->
 
-`@rnx-kit/align-deps` manages dependencies for an npm package, based on its
-needs and requirements.
+`@rnx-kit/align-deps` is a tool for managing dependencies within a repository
+and across many repositories. It ensures that your packages are using compatible
+dependencies and versions, given a set of [requirements](#requirements), based
+on [customizable presets](#presets) with known good packages and versions that
+are curated from real apps. You can even bring your own presets that are
+tailored to your needs.
 
 Note that this tool was previously known as `dep-check`, but we renamed to avoid
 name clashes and other reasons. For more details, you can read the RFC:
 <https://github.com/microsoft/rnx-kit/pull/1757>.
 
-If you want to learn how align-deps is used at Microsoft, and see a demo of how
-it works in a monorepo, you can watch the
+If you want to learn how `align-deps` is used at Microsoft, and see a demo of
+how it works in a monorepo, you can watch the
 ["Improve all the repos – exploring Microsoft’s DevExp"](https://youtu.be/DAEnPV78rQc?t=1085)
 talk by [@kelset](https://github.com/kelset) and
 [@tido64](https://github.com/tido64) at React Native Europe 2021.
@@ -39,7 +43,7 @@ yarn rnx-align-deps [options] [packages...]
 ```
 
 Listing paths to packages that should be checked is optional. If omitted,
-align-deps will look for the closest `package.json` using Node module
+`align-deps` will look for the closest `package.json` using Node module
 resolution. If the target package is a root package defining workspaces, they
 will all be included.
 
@@ -54,7 +58,7 @@ Examples:
   yarn rnx-align-deps --init app
   # or specify `library` for a library
   ```
-- Apply changes suggested by align-deps:
+- Apply changes suggested by `align-deps`:
   ```sh
   yarn rnx-align-deps --write
   ```
@@ -105,6 +109,8 @@ module.exports = {
 
 For a more complete example, have a look at the
 [default preset](https://github.com/microsoft/rnx-kit/blob/e1d4b2484303cac04e0ec6a4e79d854c694b96b4/packages/align-deps/src/presets/microsoft/react-native.ts).
+
+See [Presets](#presets) for more details.
 
 > #### Note
 >
@@ -304,12 +310,12 @@ For an example, have a look at how the
 If you're looking to update capabilities to a more recent version, run
 `yarn update-profile` to help determine whether we need to bump any packages.
 
-## Custom Presets
+## Presets
 
 A profile is a list of capabilities that map to specific versions of packages. A
-custom preset is a collection of such profiles. It can be a JSON file, or a JS
-file that default exports it. Custom presets are consumed via the `presets` key
-in your [configuration](#configure), or the [`--presets`](#--presets) flag.
+preset is a collection of such profiles. It can be a JSON file, or a JS file
+that default exports it. Presets are consumed via the `presets` key in your
+[configuration](#configure), or the [`--presets`](#--presets) flag.
 
 ### Extending Built-in Presets
 
@@ -318,7 +324,7 @@ supported version of react-native. The profiles are named after every minor
 release, e.g. `0.69` or `0.70`.
 
 To add a new capability, e.g. `my-capability`, to the built-in profiles `0.69`
-and `0.70`, create a preset like below:
+and `0.70`, create a custom preset like below:
 
 ```js
 // my-preset/index.js
