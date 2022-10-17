@@ -86,7 +86,7 @@ Object {
     "react-native-windows": "^0.70.0",
     "react-test-renderer": "18.1.0",
   },
-  "name": "@rnx-kit/align-deps",
+  "name": "@rnx-kit/align-deps/vigilant-preset",
   "peerDependencies": Object {
     "@react-native-async-storage/async-storage": "^1.17.10",
     "@react-native-clipboard/clipboard": "^1.10.0",
@@ -209,7 +209,7 @@ Object {
     "react-native-windows": "^0.70.0",
     "react-test-renderer": "18.1.0",
   },
-  "name": "@rnx-kit/align-deps",
+  "name": "@rnx-kit/align-deps/vigilant-preset",
   "peerDependencies": Object {
     "@react-native-async-storage/async-storage": "^1.17.7 || ^1.17.10",
     "@react-native-clipboard/clipboard": "^1.10.0",

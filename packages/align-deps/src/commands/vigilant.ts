@@ -79,10 +79,9 @@ export function buildManifestProfile(
     "peer"
   );
 
-  const { name, version } = require("../../package.json");
   return {
-    name,
-    version,
+    name: "@rnx-kit/align-deps/vigilant-preset",
+    version: "1.0.0",
     dependencies: directDependencies,
     peerDependencies,
     devDependencies: directDependencies,
