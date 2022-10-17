@@ -26,6 +26,14 @@ const allSections = [
   "devDependencies" as const,
 ];
 
+function isMisalignedDirect(from: string, to: string): boolean {
+  return from !== to;
+}
+
+function isMisalignedPeer(from: string, to: string): boolean {
+  return from !== to && !semverSubset(to, from, { includePrerelease: true });
+}
+
 /**
  * Builds a profile targeting specified versions.
  * @returns A profile containing dependencies to compare against
@@ -86,10 +94,6 @@ export function inspect(
   profile: ManifestProfile,
   write: boolean
 ): Change[] {
-  const isMisalignedDirect = (from: string, to: string) => from !== to;
-  const isMisalignedPeer = (from: string, to: string) =>
-    from !== to && !semverSubset(to, from, { includePrerelease: true });
-
   const changes: Change[] = [];
   allSections.forEach((section) => {
     const dependencies = manifest[section];
