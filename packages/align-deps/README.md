@@ -14,8 +14,8 @@ on [customizable presets](#presets) with known good packages and versions that
 are curated from real apps. You can even bring your own presets that are
 tailored to your needs.
 
-Note that this tool was previously known as `dep-check`, but we renamed to avoid
-name clashes and other reasons. For more details, you can read the RFC:
+Note that this tool was previously known as `dep-check`, but it was renamed to
+avoid name clashes and other reasons. For more details, you can read the RFC:
 <https://github.com/microsoft/rnx-kit/pull/1757>.
 
 If you want to learn how `align-deps` is used at Microsoft, and see a demo of

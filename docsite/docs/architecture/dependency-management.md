@@ -1,6 +1,16 @@
 # Dependency Management
 
-[dep-check](../tools/dep-check) is a dependency manager and linter that aims to
+:::note
+
+`dep-check` was recently renamed to `align-deps` to avoid name clashes and
+general confusion. Unless noted otherwise, this document is still valid.
+
+You can read more about the changes in this RFC:
+<https://github.com/microsoft/rnx-kit/blob/rfcs/text/0001-dep-check-v2.md>
+
+:::
+
+[dep-check](../tools/align-deps) is a dependency manager and linter that aims to
 bring alignment to all React Native developers who are working in any-size
 repositories, from small self-contained repositories to big, enterprise
 monorepos.
@@ -435,6 +445,18 @@ still be useful without a configuration.
   `--vigilant 0.63,0.64` will compare dependencies against all known modules in
   profile version 0.63 and 0.64.
 
+:::note
+
+In `align-deps`, we've changed the configuration schema to make it more generic
+and not tied to a specific dependency (i.e. `react-native`). The `--vigilant`
+flag had to be replaced as well. The equivalent of `--vigilant 0.63,0.64` in the
+new schema is `--requirements 'react-native@0.63 || 0.64'`.
+
+You can read more about the changes in this RFC:
+<https://github.com/microsoft/rnx-kit/blob/rfcs/text/0001-dep-check-v2.md>
+
+:::
+
 ### Extensions
 
 The list of capabilities may be limited for some usage scenarios. `dep-check`
@@ -463,6 +485,19 @@ module.exports = {
 
 The profiles are appended to the default ones and may override capabilities.
 This format is explicitly chosen to be compatible with `--vigilant`.
+
+:::note
+
+In `align-deps`, we've deprecated `customProfiles` in favour of `presets`. A
+preset is just a collection of profiles like in the example above. This new
+property allows you to specify multiple presets and/or replace the built-in
+`react-native` preset. The command line flag, `--custom-profiles`, was replaced
+with `--presets`.
+
+You can read more about the changes in this RFC:
+<https://github.com/microsoft/rnx-kit/blob/rfcs/text/0001-dep-check-v2.md>
+
+:::
 
 ## Alternatives
 
