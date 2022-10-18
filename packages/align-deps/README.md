@@ -24,6 +24,9 @@ how it works in a monorepo, you can watch the
 talk by [@kelset](https://github.com/kelset) and
 [@tido64](https://github.com/tido64) at React Native Europe 2021.
 
+To learn more about how `align-deps` works, please read the
+[design document](https://microsoft.github.io/rnx-kit/docs/architecture/dependency-management).
+
 ## Installation
 
 ```sh
