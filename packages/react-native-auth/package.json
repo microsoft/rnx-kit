@@ -42,11 +42,22 @@
     "extends": "@rnx-kit/eslint-config"
   },
   "rnx-kit": {
-    "reactNativeVersion": ">=0.62 <1.0",
-    "reactNativeDevVersion": "^0.68",
-    "capabilities": [
-      "core-android",
-      "core-ios"
-    ]
+    "alignDeps": {
+      "presets": [
+        "microsoft/react-native"
+      ],
+      "requirements": {
+        "development": [
+          "react-native@0.68"
+        ],
+        "production": [
+          "react-native@>=0.62 <1.0"
+        ]
+      },
+      "capabilities": [
+        "core-android",
+        "core-ios"
+      ]
+    }
   }
 }

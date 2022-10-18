@@ -148,7 +148,7 @@ describe("initializeConfig()", () => {
   test("adds config with custom profiles", () => {
     const presets = [
       ...defaultConfig.presets,
-      "@rnx-kit/scripts/rnx-dep-check.js",
+      "@rnx-kit/scripts/rnx-align-deps.js",
     ];
     const result = initializeConfig(
       {

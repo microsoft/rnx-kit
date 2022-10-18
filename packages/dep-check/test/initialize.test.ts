@@ -154,7 +154,7 @@ describe("initializeConfig()", () => {
 
     initializeConfig("package.json", {
       kitType: "library",
-      customProfilesPath: "@rnx-kit/scripts/rnx-dep-check.js",
+      customProfilesPath: "@rnx-kit/scripts/rnx-align-deps.js",
     });
 
     const kitConfig = content["rnx-kit"];
@@ -163,7 +163,7 @@ describe("initializeConfig()", () => {
     }
 
     expect(kitConfig["customProfiles"]).toEqual(
-      "@rnx-kit/scripts/rnx-dep-check.js"
+      "@rnx-kit/scripts/rnx-align-deps.js"
     );
   });
 });
