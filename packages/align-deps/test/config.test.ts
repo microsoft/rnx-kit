@@ -1,4 +1,11 @@
-import { containsValidPresets, containsValidRequirements } from "../src/config";
+import {
+  containsValidPresets,
+  containsValidRequirements,
+  defaultConfig,
+  loadPresetsOverride,
+} from "../src/config";
+
+jest.mock("@rnx-kit/config");
 
 describe("containsValidPresets()", () => {
   test("is valid when 'presets' is unset", () => {
@@ -48,5 +55,43 @@ describe("containsValidRequirements()", () => {
         requirements: { production: ["react-native@*"] },
       })
     ).toBe(true);
+  });
+});
+
+describe("loadPresetsOverride()", () => {
+  const config = require("@rnx-kit/config");
+
+  afterEach(() => {
+    config.__setMockConfig({});
+  });
+
+  test("returns `null` when no config is found", () => {
+    expect(loadPresetsOverride("package.json")).toBe(null);
+  });
+
+  test("returns `null` when no presets are found", () => {
+    config.__setMockConfig({ alignDeps: {} });
+    expect(loadPresetsOverride("package.json")).toBe(null);
+  });
+
+  test("returns presets declared in `alignDeps`", () => {
+    config.__setMockConfig({ alignDeps: { presets: ["test"] } });
+    expect(loadPresetsOverride("package.json")).toEqual(["test"]);
+  });
+
+  test("returns preset declared in `customProfiles`", () => {
+    config.__setMockConfig({ customProfiles: "test" });
+    expect(loadPresetsOverride("package.json")).toEqual([
+      ...defaultConfig.presets,
+      "test",
+    ]);
+  });
+
+  test("prefers presets declared in `alignDeps`", () => {
+    config.__setMockConfig({
+      alignDeps: { presets: ["test"] },
+      customProfiles: "test",
+    });
+    expect(loadPresetsOverride("package.json")).toEqual(["test"]);
   });
 });
