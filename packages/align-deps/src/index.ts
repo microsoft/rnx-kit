@@ -1,3 +1,9 @@
+import { preset as reactNativePreset } from "./presets/microsoft/react-native";
+
+export const presets = {
+  "microsoft/react-native": reactNativePreset,
+};
+
 export { capabilitiesFor } from "./capabilities";
 export { cli } from "./cli";
 export { checkPackageManifest } from "./commands/check";
