@@ -18,7 +18,7 @@ function isKitType(type: string): type is KitType {
  * Generates an `align-deps` configuration for a React Native package by
  * inspecting its dependencies.
  *
- * Note that this function use the `react-native` version to determine which
+ * Note that this function uses the `react-native` version to determine which
  * profile to use. If the package is not a React Native app/library, this
  * function will return early.
  *
