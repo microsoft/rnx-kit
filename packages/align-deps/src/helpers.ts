@@ -45,10 +45,6 @@ export function dropPatchFromVersion(version: string): string {
     .join(" || ");
 }
 
-export function keysOf<T extends Record<string, unknown>>(obj: T): (keyof T)[] {
-  return Object.keys(obj);
-}
-
 export function modifyManifest(
   pkgPath: string,
   manifest: PackageManifest

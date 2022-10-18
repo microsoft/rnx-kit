@@ -1,3 +1,4 @@
+import { keysOf } from "@rnx-kit/tools-language/properties";
 import type { PackageManifest } from "@rnx-kit/tools-node/package";
 import isString from "lodash/isString";
 import prompts from "prompts";
@@ -5,7 +6,7 @@ import semverCoerce from "semver/functions/coerce";
 import { transformConfig } from "../compatibility/config";
 import { defaultConfig, loadConfig } from "../config";
 import { isError } from "../errors";
-import { keysOf, modifyManifest } from "../helpers";
+import { modifyManifest } from "../helpers";
 import defaultPreset from "../presets/microsoft/react-native";
 import type {
   AlignDepsConfig,

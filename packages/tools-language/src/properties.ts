@@ -95,3 +95,15 @@ export function hasProperty<Property extends string>(
 ): obj is Record<Property, unknown> {
   return typeof obj === "object" && obj !== null && property in obj;
 }
+
+/**
+ * Returns the names of the enumerable string properties of an object.
+ * Equivalent to calling `Object.keys()`, but type safe.
+ * @param obj Object that contains the properties
+ * @returns Type-safe array of properties of the specified object
+ */
+export function keysOf<T extends Record<string, unknown>>(
+  obj: T | undefined
+): (keyof T)[] {
+  return obj ? Object.keys(obj) : [];
+}
