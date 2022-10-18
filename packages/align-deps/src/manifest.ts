@@ -5,7 +5,7 @@ import { resolveCapabilities } from "./capabilities";
 import { compare, omitEmptySections } from "./helpers";
 import type { DependencyType, Package, Profile } from "./types";
 
-export function devOnlyPackages(
+function devOnlyPackages(
   packages: Record<string, Package[]>
 ): Record<string, Package[]> {
   return Object.keys(packages).reduce<Record<string, Package[]>>(

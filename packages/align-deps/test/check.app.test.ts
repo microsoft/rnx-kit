@@ -1,5 +1,5 @@
 import path from "path";
-import { checkPackageManifest } from "../src/check";
+import { checkPackageManifest } from "../src/commands/check";
 
 jest.mock("fs");
 jest.unmock("@rnx-kit/config");
