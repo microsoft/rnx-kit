@@ -25,6 +25,14 @@ RTAViewController *RTAMSALFindPresentedViewController(void);
 
 RCT_EXPORT_MODULE(RNXAuth)
 
+- (void)acquireTokenWithResources:(nonnull NSArray<NSString *> *)scopes
+             userPrincipalName:(nonnull NSString *)userPrincipalName
+                   accountType:(RNXAccountType)accountType
+               onTokenAcquired:(TokenAcquiredHandler)onTokenAcquired
+{
+  onTokenAcquired(nil, [RNXAuthError errorWithType:RNXAuthErrorTypeNotImplemented]);
+}
+
 - (void)acquireTokenWithScopes:(nonnull NSArray<NSString *> *)scopes
              userPrincipalName:(nonnull NSString *)userPrincipalName
                    accountType:(RNXAccountType)accountType
