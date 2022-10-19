@@ -118,7 +118,6 @@ Object {
     "react-native-webview": "^11.23.0",
     "react-native-windows": "^0.70.0",
   },
-  "version": "1.0.0-test",
 }
 `;
 
@@ -240,6 +239,5 @@ Object {
     "react-native-webview": "^11.23.0",
     "react-native-windows": "^0.69.0 || ^0.70.0",
   },
-  "version": "1.0.0-test",
 }
 `;

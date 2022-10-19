@@ -82,13 +82,13 @@ export function buildManifestProfile(
   // `dependencies` as well.
   const directDependencies = updateDependencies(
     {},
-    resolveCapabilities(unmanagedCapabilities, Object.values(targetPreset)),
+    resolveCapabilities(manifestPath, unmanagedCapabilities, targetPreset),
     "development"
   );
 
   const peerDependencies = updateDependencies(
     {},
-    resolveCapabilities(unmanagedCapabilities, Object.values(supportPreset)),
+    resolveCapabilities(manifestPath, unmanagedCapabilities, supportPreset),
     "peer"
   );
 
@@ -171,7 +171,7 @@ export function checkPackageManifestUnconfigured(
         )
         .join("\n");
       error(
-        `Found ${changes.length} violation(s) in ${manifest.name}:\n${violations}`
+        `Found ${changes.length} violation(s) in '${manifestPath}':\n${violations}`
       );
       return "unsatisfied";
     }

@@ -11,12 +11,13 @@ export type Options = {
   presets: string[];
   loose: boolean;
   migrateConfig: boolean;
+  verbose: boolean;
   write: boolean;
   excludePackages?: string[];
   requirements?: string[];
 };
 
-export type Args = Pick<Options, "loose" | "write"> & {
+export type Args = Pick<Options, "loose" | "verbose" | "write"> & {
   "exclude-packages"?: string | number;
   "migrate-config": boolean;
   "set-version"?: string | number;

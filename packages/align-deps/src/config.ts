@@ -54,7 +54,7 @@ export function loadConfig(
   const badPackages = findBadPackages(manifest);
   if (badPackages) {
     warn(
-      `Known bad packages are found in '${manifest.name}':\n` +
+      `Known bad packages are found in '${manifestPath}':\n` +
         badPackages
           .map((pkg) => `\t${pkg.name}@${pkg.version}: ${pkg.reason}`)
           .join("\n")

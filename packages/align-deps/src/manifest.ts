@@ -3,7 +3,7 @@ import type { PackageManifest } from "@rnx-kit/tools-node/package";
 import omit from "lodash/omit";
 import { resolveCapabilities } from "./capabilities";
 import { compare, omitEmptySections } from "./helpers";
-import type { DependencyType, Package, Profile } from "./types";
+import type { DependencyType, Package, Preset } from "./types";
 
 function devOnlyPackages(
   packages: Record<string, Package[]>
@@ -67,7 +67,7 @@ export function updateDependencies(
 
 /**
  * Updates the specified package manifest so that it will satisfy all declared
- * capabilities, using the specified set of profiles.
+ * capabilities, using the specified preset.
  *
  * When a kit is of type "library", it expects the consumer to be providing all
  * the capabilites. This function will make sure that `peerDependencies` is
@@ -82,22 +82,24 @@ export function updateDependencies(
  * packages. For the "app" type, packages are instead added to `dependencies`,
  * and removed from `peerDependencies` and `devDependencies`.
  *
- * @param manifest The package manifest that should be updated
+ * @param manifestPath The path to the package manifest to update
+ * @param manifest The package manifest to update
  * @param capabilities The set of capabilities that the kit requires
- * @param profiles The set of profiles that the kit needs to conform to
- * @param devProfiles The set of profiles that the kit will develop against
+ * @param prodPreset The preset that the kit needs to conform to
+ * @param devPreset The preset that the kit will develop against
  * @param packageType Whether the kit provides a feature or is an app
  * @returns A package manifest that satisfies specified capabilities
  */
 export function updatePackageManifest(
+  manifestPath: string,
   manifest: PackageManifest,
   capabilities: Capability[],
-  profiles: Profile[],
-  devProfiles: Profile[],
+  prodPreset: Preset,
+  devPreset: Preset,
   packageType: KitType
 ): PackageManifest {
   const { dependencies, peerDependencies, devDependencies } = manifest;
-  const packages = resolveCapabilities(capabilities, profiles);
+  const packages = resolveCapabilities(manifestPath, capabilities, prodPreset);
   const names = Object.keys(packages);
 
   switch (packageType) {
@@ -123,7 +125,7 @@ export function updatePackageManifest(
         ),
         devDependencies: updateDependencies(
           devDependencies,
-          resolveCapabilities(capabilities, devProfiles),
+          resolveCapabilities(manifestPath, capabilities, devPreset),
           "development"
         ),
       });

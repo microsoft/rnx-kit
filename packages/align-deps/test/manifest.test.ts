@@ -149,6 +149,7 @@ describe("updatePackageManifest()", () => {
   test("sets direct dependencies for apps", () => {
     const { dependencies, devDependencies, peerDependencies } =
       updatePackageManifest(
+        "package.json",
         {
           name: "Test",
           version: "0.0.1",
@@ -157,8 +158,8 @@ describe("updatePackageManifest()", () => {
           devDependencies: {},
         },
         ["core-android", "core-ios"],
-        [profile_0_63, profile_0_64],
-        [profile_0_64],
+        { "0.63": profile_0_63, "0.64": profile_0_64 },
+        { "0.64": profile_0_64 },
         "app"
       );
     expect(dependencies).toEqual({
@@ -173,6 +174,7 @@ describe("updatePackageManifest()", () => {
   test("removes dependencies from devDependencies for apps", () => {
     const { dependencies, devDependencies, peerDependencies } =
       updatePackageManifest(
+        "package.json",
         {
           name: "Test",
           version: "0.0.1",
@@ -181,8 +183,8 @@ describe("updatePackageManifest()", () => {
           devDependencies: mockDependencies,
         },
         ["core-android", "core-ios", "react"],
-        [profile_0_63, profile_0_64],
-        [profile_0_64],
+        { "0.63": profile_0_63, "0.64": profile_0_64 },
+        { "0.64": profile_0_64 },
         "app"
       );
     expect(dependencies).toEqual({
@@ -199,6 +201,7 @@ describe("updatePackageManifest()", () => {
   test("removes dependencies from peerDependencies for apps", () => {
     const { dependencies, devDependencies, peerDependencies } =
       updatePackageManifest(
+        "package.json",
         {
           name: "Test",
           version: "0.0.1",
@@ -207,8 +210,8 @@ describe("updatePackageManifest()", () => {
           devDependencies: {},
         },
         ["core-android", "core-ios", "react"],
-        [profile_0_63, profile_0_64],
-        [profile_0_64],
+        { "0.63": profile_0_63, "0.64": profile_0_64 },
+        { "0.64": profile_0_64 },
         "app"
       );
     expect(dependencies).toEqual({
@@ -225,6 +228,7 @@ describe("updatePackageManifest()", () => {
   test("sets dev/peer dependencies for libraries", () => {
     const { dependencies, devDependencies, peerDependencies } =
       updatePackageManifest(
+        "package.json",
         {
           name: "Test",
           version: "0.0.1",
@@ -232,8 +236,8 @@ describe("updatePackageManifest()", () => {
           peerDependencies: mockDependencies,
         },
         ["core-android", "core-ios"],
-        [profile_0_63, profile_0_64],
-        [profile_0_64],
+        { "0.63": profile_0_63, "0.64": profile_0_64 },
+        { "0.64": profile_0_64 },
         "library"
       );
     expect(dependencies).toEqual({ "@rnx-kit/align-deps": "^1.0.0" });
@@ -257,6 +261,7 @@ describe("updatePackageManifest()", () => {
   test("removes dependencies from direct dependencies for libraries", () => {
     const { dependencies, devDependencies, peerDependencies } =
       updatePackageManifest(
+        "package.json",
         {
           name: "Test",
           version: "0.0.1",
@@ -268,8 +273,8 @@ describe("updatePackageManifest()", () => {
           devDependencies: {},
         },
         ["core-android", "core-ios"],
-        [profile_0_64],
-        [profile_0_64],
+        { "0.64": profile_0_64 },
+        { "0.64": profile_0_64 },
         "library"
       );
     expect(dependencies).toEqual({ "@rnx-kit/align-deps": "^1.0.0" });
@@ -287,6 +292,7 @@ describe("updatePackageManifest()", () => {
   test("always sets dev-only dependencies", () => {
     const { dependencies, devDependencies, peerDependencies } =
       updatePackageManifest(
+        "package.json",
         {
           name: "Test",
           version: "0.0.1",
@@ -295,8 +301,8 @@ describe("updatePackageManifest()", () => {
           devDependencies: {},
         },
         ["core-android", "core-ios", "test-app"],
-        [profile_0_63, profile_0_64],
-        [profile_0_64],
+        { "0.63": profile_0_63, "0.64": profile_0_64 },
+        { "0.64": profile_0_64 },
         "app"
       );
     expect(dependencies).toEqual({

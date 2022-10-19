@@ -1,4 +1,5 @@
 import { checkPackageManifest } from "../src/commands/check";
+import { defaultConfig } from "../src/config";
 import profile_0_68 from "../src/presets/microsoft/react-native/profile-0.68";
 import profile_0_69 from "../src/presets/microsoft/react-native/profile-0.69";
 import profile_0_70 from "../src/presets/microsoft/react-native/profile-0.70";
@@ -6,11 +7,22 @@ import { packageVersion } from "./helpers";
 
 jest.mock("fs");
 
+const defaultOptions = {
+  presets: defaultConfig.presets,
+  loose: false,
+  migrateConfig: false,
+  verbose: false,
+  write: false,
+};
+
+const writeOptions = {
+  ...defaultOptions,
+  write: true,
+};
+
 describe("checkPackageManifest({ kitType: 'library' })", () => {
   const rnxKitConfig = require("@rnx-kit/config");
   const fs = require("fs");
-
-  const defaultOptions = { loose: false, write: false };
 
   const mockManifest = {
     name: "@rnx-kit/align-deps",
@@ -148,9 +160,7 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
       },
     });
 
-    expect(
-      checkPackageManifest("package.json", { loose: false, write: true })
-    ).toBe("success");
+    expect(checkPackageManifest("package.json", writeOptions)).toBe("success");
     expect(didWriteToPath).toBe(false);
   });
 
@@ -182,9 +192,7 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
       },
     });
 
-    expect(
-      checkPackageManifest("package.json", { loose: false, write: true })
-    ).toBe("success");
+    expect(checkPackageManifest("package.json", writeOptions)).toBe("success");
     expect(didWriteToPath).toBe("package.json");
   });
 
@@ -202,9 +210,7 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
       },
     });
 
-    expect(
-      checkPackageManifest("package.json", { loose: false, write: true })
-    ).toBe("success");
+    expect(checkPackageManifest("package.json", writeOptions)).toBe("success");
     expect(output).toMatchSnapshot();
   });
 
@@ -290,8 +296,6 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
 describe("checkPackageManifest({ kitType: 'library' }) (backwards compatibility)", () => {
   const rnxKitConfig = require("@rnx-kit/config");
   const fs = require("fs");
-
-  const defaultOptions = { loose: false, write: false };
 
   const mockManifest = {
     name: "@rnx-kit/align-deps",
@@ -419,9 +423,7 @@ describe("checkPackageManifest({ kitType: 'library' }) (backwards compatibility)
       capabilities: ["core-ios"],
     });
 
-    expect(
-      checkPackageManifest("package.json", { loose: false, write: true })
-    ).toBe("success");
+    expect(checkPackageManifest("package.json", writeOptions)).toBe("success");
     expect(didWriteToPath).toBe(false);
   });
 
@@ -449,9 +451,7 @@ describe("checkPackageManifest({ kitType: 'library' }) (backwards compatibility)
       capabilities: ["core-ios"],
     });
 
-    expect(
-      checkPackageManifest("package.json", { loose: false, write: true })
-    ).toBe("success");
+    expect(checkPackageManifest("package.json", writeOptions)).toBe("success");
     expect(didWriteToPath).toBe("package.json");
   });
 
@@ -467,9 +467,7 @@ describe("checkPackageManifest({ kitType: 'library' }) (backwards compatibility)
       capabilities: ["core-ios"],
     });
 
-    expect(
-      checkPackageManifest("package.json", { loose: false, write: true })
-    ).toBe("success");
+    expect(checkPackageManifest("package.json", writeOptions)).toBe("success");
     expect(output).toMatchSnapshot();
   });
 
