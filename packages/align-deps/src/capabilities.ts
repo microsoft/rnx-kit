@@ -92,11 +92,16 @@ function resolveCapability(
   }
 }
 
-export function resolveCapabilities(
-  manifestPath: string,
+/**
+ * Resolves specified capabilities.
+ * @param capabilities The list of capabilities to resolve
+ * @param preset The preset to use to resolve capabilities
+ * @returns A tuple of resolved dependencies and unresolved capabilities
+ */
+export function resolveCapabilitiesUnchecked(
   capabilities: Capability[],
   preset: Preset
-): Record<string, Package[]> {
+): [Record<string, Package[]>, Record<string, string[]>] {
   const profiles = Object.entries(preset);
   const dependencies: Record<string, Package[]> = {};
   const unresolvedCapabilities: Record<string, string[]> = {};
@@ -111,6 +116,30 @@ export function resolveCapabilities(
       );
     });
   }
+
+  return [dependencies, unresolvedCapabilities];
+}
+
+/**
+ * Resolves specified capabilities.
+ *
+ * Same as {@link resolveCapabilitiesUnchecked}, but warns about any unresolved
+ * capabilities.
+ *
+ * @param manifestPath The path to the package manifest
+ * @param capabilities The list of capabilities to resolve
+ * @param preset The preset to use to resolve capabilities
+ * @returns Resolved dependencies
+ */
+export function resolveCapabilities(
+  manifestPath: string,
+  capabilities: Capability[],
+  preset: Preset
+): Record<string, Package[]> {
+  const [dependencies, unresolvedCapabilities] = resolveCapabilitiesUnchecked(
+    capabilities,
+    preset
+  );
 
   const unresolved = Object.entries(unresolvedCapabilities);
   if (unresolved.length > 0) {
