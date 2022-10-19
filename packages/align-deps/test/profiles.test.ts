@@ -8,10 +8,7 @@ import {
   getProfilesFor,
   getProfileVersionsFor,
   loadCustomProfiles,
-  profilesSatisfying,
-  resolveCustomProfiles,
 } from "../src/profiles";
-import type { ProfileVersion } from "../src/types";
 
 describe("microsoft/react-native preset", () => {
   test("matches react-native versions", () => {
@@ -196,68 +193,5 @@ describe("loadCustomProfiles()", () => {
         )
       )
     ).toMatchSnapshot();
-  });
-});
-
-describe("profilesSatisfying()", () => {
-  const profileVersions: ProfileVersion[] = ["0.61", "0.62", "0.63", "0.64"];
-
-  test("returns an empty array when no profiles can satisfy requirements", () => {
-    expect(profilesSatisfying([], "^0.63.0 || ^0.64.0")).toEqual([]);
-    expect(profilesSatisfying(["0.61"], "^0.63.0 || ^0.64.0")).toEqual([]);
-  });
-
-  test("returns all profiles satisfying version", () => {
-    expect(profilesSatisfying(profileVersions, "0.63.2")).toEqual(["0.63"]);
-    expect(profilesSatisfying(profileVersions, "0.64.0-rc1")).toEqual(["0.64"]);
-    expect(profilesSatisfying(profileVersions, "0.64.0")).toEqual(["0.64"]);
-  });
-
-  test("returns all profiles satisfying version range", () => {
-    expect(
-      profilesSatisfying(profileVersions, "^0.63.0-0 || ^0.64.0-0")
-    ).toEqual(["0.63", "0.64"]);
-    expect(profilesSatisfying(profileVersions, "^0.63.0 || ^0.64.0")).toEqual([
-      "0.63",
-      "0.64",
-    ]);
-  });
-});
-
-describe("resolveCustomProfiles()", () => {
-  const projectRoot = `${__dirname}/__fixtures__/custom-profiles`;
-
-  test("handles undefined and empty strings", () => {
-    expect(resolveCustomProfiles(projectRoot, undefined)).toBeUndefined();
-    expect(resolveCustomProfiles(projectRoot, "")).toBeUndefined();
-  });
-
-  test("throws if the module cannot be resolved", () => {
-    expect(() =>
-      resolveCustomProfiles(projectRoot, "non-existent-custom-profiles")
-    ).toThrow("Cannot resolve module");
-  });
-
-  test("returns absolute path for module ids", () => {
-    const profilesPkg = "custom-profiles-package";
-    expect(resolveCustomProfiles(projectRoot, profilesPkg)).toEqual(
-      expect.stringContaining(
-        path.join(
-          "__fixtures__",
-          "custom-profiles",
-          "node_modules",
-          profilesPkg,
-          "index.js"
-        )
-      )
-    );
-  });
-
-  test("returns absolute path for relative paths", () => {
-    expect(resolveCustomProfiles(projectRoot, "./local-profiles.js")).toEqual(
-      expect.stringContaining(
-        path.join("__fixtures__", "custom-profiles", "local-profiles.js")
-      )
-    );
   });
 });
