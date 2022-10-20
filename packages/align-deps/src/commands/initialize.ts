@@ -14,6 +14,16 @@ function isKitType(type: string): type is KitType {
   return type === "app" || type === "library";
 }
 
+function minVersion(versionRange: string): string {
+  const ver = semverMinVersion(versionRange);
+  if (!ver) {
+    throw new Error(
+      `Could not determine the lowest version that satisfies range: ${versionRange}`
+    );
+  }
+  return ver.version;
+}
+
 /**
  * Generates an `align-deps` configuration for a React Native package by
  * inspecting its dependencies.
@@ -68,8 +78,7 @@ export function initializeConfig(
                   `react-native@${dropPatchFromVersion(
                     devDependencies?.["react-native"]
                       ? devDependencies["react-native"]
-                      : semverMinVersion(targetReactNativeVersion)?.version ??
-                          "0.0.0"
+                      : minVersion(targetReactNativeVersion)
                   )}`,
                 ],
                 production: requirements,
