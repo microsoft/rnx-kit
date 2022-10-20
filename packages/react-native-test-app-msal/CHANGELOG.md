@@ -1,5 +1,16 @@
 # Change Log - @rnx-kit/react-native-test-app-msal
 
+## 2.0.0
+
+### Major Changes
+
+- afd170e6: Add acquireTokenWithResource to Auth API, rename acquireToken to acquireTokenWithScopes
+
+### Patch Changes
+
+- Updated dependencies [afd170e6]
+  - @rnx-kit/react-native-auth@0.2.0
+
 ## 1.0.5
 
 ### Patch Changes

@@ -1,7 +1,7 @@
 {
   "$schema": "https://raw.githubusercontent.com/microsoft/rnx-kit/main/packages/config/schema.json",
   "name": "@rnx-kit/test-app",
-  "version": "0.0.3",
+  "version": "0.1.0",
   "private": true,
   "scripts": {
     "build": "rnx-kit-scripts build",
