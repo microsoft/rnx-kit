@@ -84,6 +84,12 @@ export function filterPreset(preset: Preset, requirements: string[]): Preset {
 
 /**
  * Loads and merges specified presets.
+ *
+ * The order of presets is significant. The profiles from each preset are merged
+ * when the names overlap. If there are overlaps within the profiles, i.e. when
+ * multiple profiles declare the same capability, the last profile wins. This
+ * allows users to both extend and override profiles as needed.
+ *
  * @param presets The presets to load and merge
  * @param projectRoot The project root from which presets should be resolved
  * @returns Merged preset
