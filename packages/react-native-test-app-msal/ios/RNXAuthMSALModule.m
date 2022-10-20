@@ -30,7 +30,9 @@ RCT_EXPORT_MODULE(RNXAuth)
                    accountType:(RNXAccountType)accountType
                onTokenAcquired:(TokenAcquiredHandler)onTokenAcquired
 {
-  onTokenAcquired(nil, [RNXAuthError errorWithType:RNXAuthErrorTypeNotImplemented]);
+  onTokenAcquired(nil, [RNXAuthError errorWithType:RNXAuthErrorTypeNotImplemented
+                                     "00000000-0000-0000-0000-000000000000"
+                                     "AcquireTokenWithResource: has not been implemented."]);
 }
 
 - (void)acquireTokenWithScopes:(nonnull NSArray<NSString *> *)scopes
