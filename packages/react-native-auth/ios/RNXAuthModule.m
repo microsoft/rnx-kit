@@ -62,7 +62,7 @@
  *   userPrincipalName: string,
  *   accountType: AccountType,
  * ): Promise<AuthResult>;
-
+ *
  * function acquireTokenWithScopes(
  *   scopes: string[],
  *   userPrincipalName: string,
