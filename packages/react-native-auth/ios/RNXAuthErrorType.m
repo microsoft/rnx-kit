@@ -11,6 +11,8 @@ NSString *RNXStringFromAuthErrorType(RNXAuthErrorType type)
             return @"InteractionRequired";
         case RNXAuthErrorTypeNoResponse:
             return @"NoResponse";
+        case RNXAuthErrorTypeNotImplemented:
+            return @"NotImplemented";
         case RNXAuthErrorTypePreconditionViolated:
             return @"PreconditionViolated";
         case RNXAuthErrorTypeServerDeclinedScopes:

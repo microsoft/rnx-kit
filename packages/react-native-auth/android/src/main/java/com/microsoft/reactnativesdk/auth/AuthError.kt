@@ -14,6 +14,11 @@ data class AuthError(
     val message: String? = null
 ) {
     companion object {
+        fun notImplemented() = AuthError(
+            AuthErrorType.NOT_IMPLEMENTED,
+            "00000000-0000-0000-0000-000000000000"
+        )
+
         fun unknown() = AuthError(
             AuthErrorType.UNKNOWN,
             "00000000-0000-0000-0000-000000000000"

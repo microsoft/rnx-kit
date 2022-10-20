@@ -25,6 +25,16 @@ RTAViewController *RTAMSALFindPresentedViewController(void);
 
 RCT_EXPORT_MODULE(RNXAuth)
 
+- (void)acquireTokenWithResources:(nonnull NSArray<NSString *> *)scopes
+             userPrincipalName:(nonnull NSString *)userPrincipalName
+                   accountType:(RNXAccountType)accountType
+               onTokenAcquired:(TokenAcquiredHandler)onTokenAcquired
+{
+  onTokenAcquired(nil, [RNXAuthError errorWithType:RNXAuthErrorTypeNotImplemented
+                                     correlationID:@"00000000-0000-0000-0000-000000000000"
+                                           message:@"AcquireTokenWithResource: has not been implemented."]);
+}
+
 - (void)acquireTokenWithScopes:(nonnull NSArray<NSString *> *)scopes
              userPrincipalName:(nonnull NSString *)userPrincipalName
                    accountType:(RNXAccountType)accountType

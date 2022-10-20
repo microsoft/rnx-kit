@@ -45,7 +45,7 @@ export type AuthErrorUserInfo = {
 };
 
 /**
- * Authentication error object thrown by {@link acquireToken}.
+ * Authentication error object thrown by {@link acquireTokenWithResource} or {@link acquireTokenWithScopes}.
  *
  * @note This object is populated by React Native when the underlying
  *       implementation returns an `Exception` (Android) or `NSError`
@@ -102,6 +102,29 @@ export type AuthResult = {
 };
 
 /**
+ * Acquires a token for a resource.
+ *
+ * @note This function may return a cached token.
+ *
+ * @param resource Resource to acquire a token for.
+ * @param userPrincipalName The user principal name to acquire a token for. Typically an email address.
+ * @param accountType Account type, i.e. a consumer account or a work/school account.
+ * @throws {AuthErrorNative}
+ * @returns The access token and related meta data.
+ */
+export function acquireTokenWithResource(
+  resource: string,
+  userPrincipalName: string,
+  accountType: AccountType
+): Promise<AuthResult> {
+  return NativeModules.RNXAuth.acquireTokenWithResource(
+    resource,
+    userPrincipalName,
+    accountType
+  );
+}
+
+/**
  * Acquires a token with specified scopes.
  *
  * @note This function may return a cached token.
@@ -112,12 +135,12 @@ export type AuthResult = {
  * @throws {AuthErrorNative}
  * @returns The access token and related meta data.
  */
-export function acquireToken(
+export function acquireTokenWithScopes(
   scopes: string[],
   userPrincipalName: string,
   accountType: AccountType
 ): Promise<AuthResult> {
-  return NativeModules.RNXAuth.acquireToken(
+  return NativeModules.RNXAuth.acquireTokenWithScopes(
     scopes,
     userPrincipalName,
     accountType
