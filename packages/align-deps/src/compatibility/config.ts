@@ -1,5 +1,6 @@
 import type { KitConfig } from "@rnx-kit/config";
 import { warn } from "@rnx-kit/console";
+import { defaultConfig } from "../config";
 import { dropPatchFromVersion } from "../helpers";
 import type { AlignDepsConfig, LegacyCheckConfig } from "../types";
 
@@ -37,10 +38,9 @@ export function transformConfig({
   return {
     kitType,
     alignDeps: {
-      presets: [
-        "microsoft/react-native",
-        ...(customProfiles ? [customProfiles] : []),
-      ],
+      presets: customProfiles
+        ? [...defaultConfig.presets, customProfiles]
+        : defaultConfig.presets,
       requirements:
         kitType === "app"
           ? [`react-native@${reactNativeVersion}`]

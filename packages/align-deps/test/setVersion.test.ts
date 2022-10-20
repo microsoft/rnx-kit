@@ -43,7 +43,17 @@ describe("makeSetVersionCommand()", () => {
     jest.clearAllMocks();
   });
 
-  test("rejects unsupported versions `react-native`", async () => {
+  test("rejects invalid version numbers", async () => {
+    expect(makeSetVersionCommand("latest", options)).rejects.toEqual(
+      expect.objectContaining({
+        message: expect.stringContaining(
+          "'latest' is not a valid version number"
+        ),
+      })
+    );
+  });
+
+  test("rejects unsupported `react-native` versions", async () => {
     expect(makeSetVersionCommand("0.59", options)).rejects.toEqual(
       expect.objectContaining({
         message: expect.stringContaining(
@@ -53,7 +63,55 @@ describe("makeSetVersionCommand()", () => {
     );
   });
 
-  test("updates dependencies", async () => {
+  test("skips unconfigured packages", async () => {
+    const result = setupMocks({
+      name: "@rnx-kit/align-deps",
+      version: "1.0.0-test",
+      dependencies: {
+        react: "16.13.1",
+        "react-native": "^0.63.2",
+      },
+    });
+
+    prompts.inject([["0.64"]]);
+
+    const command = await makeSetVersionCommand("", options);
+    if (typeof command !== "function") {
+      fail();
+    }
+
+    expect(command("package.json")).toBe("not-configured");
+    expect(result.didWrite).toBe(false);
+  });
+
+  test("skips partially configured packages", async () => {
+    const result = setupMocks({
+      name: "@rnx-kit/align-deps",
+      version: "1.0.0-test",
+      dependencies: {
+        react: "16.13.1",
+        "react-native": "^0.63.2",
+      },
+      "rnx-kit": {
+        kitType: "app",
+        alignDeps: {
+          presets: ["custom"],
+        },
+      },
+    });
+
+    prompts.inject([["0.64"]]);
+
+    const command = await makeSetVersionCommand("", options);
+    if (typeof command !== "function") {
+      fail();
+    }
+
+    expect(command("package.json")).toBe("invalid-configuration");
+    expect(result.didWrite).toBe(false);
+  });
+
+  test("updates `react-native` requirements", async () => {
     const result = setupMocks({
       name: "@rnx-kit/align-deps",
       version: "1.0.0-test",
@@ -96,6 +154,59 @@ describe("makeSetVersionCommand()", () => {
       },
       "rnx-kit": {
         kitType: "library",
+        alignDeps: {
+          requirements: {
+            development: ["react-native@0.64"],
+            production: ["react-native@0.63 || 0.64"],
+          },
+          capabilities: ["core"],
+        },
+      },
+    });
+  });
+
+  test("updates `react-native` requirements (backwards compatibility)", async () => {
+    const result = setupMocks({
+      name: "@rnx-kit/align-deps",
+      version: "1.0.0-test",
+      peerDependencies: {
+        react: "16.13.1",
+        "react-native": "^0.63.2",
+      },
+      devDependencies: {
+        react: "16.13.1",
+        "react-native": "^0.63.2",
+      },
+      "rnx-kit": {
+        kitType: "library",
+        reactNativeVersion: "0.63",
+        reactNativeDevVersion: "0.63",
+        capabilities: ["core"],
+      },
+    });
+
+    const command = await makeSetVersionCommand("0.64,0.63", options);
+    if (typeof command !== "function") {
+      fail();
+    }
+
+    expect(command("package.json")).toBe("success");
+    expect(result.manifest).toEqual({
+      name: "@rnx-kit/align-deps",
+      version: "1.0.0-test",
+      peerDependencies: {
+        react: "16.13.1 || 17.0.1",
+        "react-native": "^0.63.2 || ^0.64.2",
+      },
+      devDependencies: {
+        react: "17.0.1",
+        "react-native": "^0.64.2",
+      },
+      "rnx-kit": {
+        kitType: "library",
+        reactNativeVersion: "0.63",
+        reactNativeDevVersion: "0.63",
+        capabilities: ["core"],
         alignDeps: {
           requirements: {
             development: ["react-native@0.64"],
@@ -265,27 +376,6 @@ describe("makeSetVersionCommand()", () => {
     }
 
     expect(command("package.json")).toBe("unsatisfied");
-    expect(result.didWrite).toBe(false);
-  });
-
-  test("skips unconfigured packages", async () => {
-    const result = setupMocks({
-      name: "@rnx-kit/align-deps",
-      version: "1.0.0-test",
-      dependencies: {
-        react: "16.13.1",
-        "react-native": "^0.63.2",
-      },
-    });
-
-    prompts.inject([["0.64"]]);
-
-    const command = await makeSetVersionCommand("", options);
-    if (typeof command !== "function") {
-      fail();
-    }
-
-    expect(command("package.json")).toBe("not-configured");
     expect(result.didWrite).toBe(false);
   });
 

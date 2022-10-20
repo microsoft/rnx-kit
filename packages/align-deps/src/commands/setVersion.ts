@@ -9,7 +9,6 @@ import defaultPreset from "../presets/microsoft/react-native";
 import type {
   AlignDepsConfig,
   Command,
-  ErrorCode,
   LegacyCheckConfig,
   Options,
 } from "../types";
@@ -104,7 +103,7 @@ function setVersion(
   config: AlignDepsConfig | LegacyCheckConfig,
   targetVersion: string,
   supportedVersions: string[]
-): ErrorCode | PackageManifest {
+): PackageManifest {
   const { kitType, manifest } = config;
   const alignDeps =
     "alignDeps" in config
@@ -163,10 +162,6 @@ export async function makeSetVersionCommand(
     }
 
     const result = setVersion(config, targetVersion, supportedVersions);
-    if (isError(result)) {
-      return result;
-    }
-
     modifyManifest(manifestPath, result);
     return checkPackageManifest(manifestPath, write);
   };
