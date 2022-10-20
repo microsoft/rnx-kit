@@ -9,6 +9,8 @@ import {
 } from "@rnx-kit/tools-workspaces";
 import * as path from "path";
 import { makeCheckCommand } from "./commands/check";
+import { makeInitializeCommand } from "./commands/initialize";
+import { defaultConfig } from "./config";
 import { printError } from "./errors";
 import type { Args, Command } from "./types";
 
@@ -79,19 +81,26 @@ async function makeCommand(args: Args): Promise<Command | undefined> {
 
   const {
     "exclude-packages": excludePackages,
+    init,
     loose,
     presets,
     requirements,
     write,
   } = args;
 
-  return makeCheckCommand({
+  const options = {
     loose,
     write,
     excludePackages: excludePackages?.toString()?.split(","),
-    presets: presets?.toString()?.split(","),
+    presets: presets?.toString()?.split(",") ?? defaultConfig.presets,
     requirements: requirements?.toString()?.split(","),
-  });
+  };
+
+  if (typeof init !== "undefined") {
+    return makeInitializeCommand(init, options);
+  }
+
+  return makeCheckCommand(options);
 }
 
 export async function cli({ packages, ...args }: Args): Promise<void> {
@@ -144,6 +153,12 @@ if (require.main === module) {
           "Comma-separated list of package names to exclude from inspection.",
         type: "string",
         requiresArg: true,
+      },
+      init: {
+        description:
+          "Writes an initial kit config to the specified 'package.json'. Note that this only works for React Native packages.",
+        choices: ["app", "library"],
+        conflicts: ["requirements"],
       },
       loose: {
         default: false,

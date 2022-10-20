@@ -26,9 +26,11 @@ export function printError(manifestPath: string, code: ErrorCode): void {
       );
       break;
 
-    case "missing-manifest":
+    case "missing-react-native":
       error(
-        `'${path.dirname(currentPackageJson)}' is missing a package manifest`
+        `Failed to infer requirements for '${manifestPath}'. This command ` +
+          "currently relies on the 'react-native' version in your project " +
+          "to generate the config."
       );
       break;
 

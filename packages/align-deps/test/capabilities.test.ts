@@ -1,5 +1,6 @@
 import type { Capability } from "@rnx-kit/config";
 import { capabilitiesFor, resolveCapabilities } from "../src/capabilities";
+import defaultPreset from "../src/presets/microsoft/react-native";
 import profile_0_62 from "../src/presets/microsoft/react-native/profile-0.62";
 import profile_0_63 from "../src/presets/microsoft/react-native/profile-0.63";
 import profile_0_64 from "../src/presets/microsoft/react-native/profile-0.64";
@@ -7,82 +8,64 @@ import { getProfilesFor } from "../src/profiles";
 import { pickPackage } from "./helpers";
 
 describe("capabilitiesFor()", () => {
-  test("returns `undefined` when react-native is not a dependency", () => {
+  test("returns an empty array when there are no dependencies", () => {
     expect(
-      capabilitiesFor({ name: "@rnx-kit/align-deps", version: "1.0.0" })
-    ).toBeUndefined();
-    expect(
-      capabilitiesFor({
-        name: "@rnx-kit/align-deps",
-        version: "1.0.0",
-        dependencies: {
-          react: "^17.0.1",
-        },
-      })
-    ).toBeUndefined();
+      capabilitiesFor(
+        { name: "@rnx-kit/align-deps", version: "1.0.0" },
+        defaultPreset
+      )
+    ).toEqual([]);
   });
 
-  test("returns capabilities when react-native is under dependencies", () => {
+  test("returns capabilities for dependencies declared under `dependencies`", () => {
     const manifest = {
       name: "@rnx-kit/align-deps",
       version: "1.0.0",
       dependencies: {
+        react: "^17.0.1",
         "react-native": "^0.64.1",
       },
     };
-    expect(capabilitiesFor(manifest)).toEqual({
-      reactNativeVersion: "^0.64",
-      reactNativeDevVersion: "0.64.0",
-      kitType: "library",
-      capabilities: ["core", "core-android", "core-ios"],
-    });
+    expect(capabilitiesFor(manifest, defaultPreset)).toEqual([
+      "core",
+      "core-android",
+      "core-ios",
+      "react",
+    ]);
   });
 
-  test("returns capabilities when react-native is under peerDependencies", () => {
+  test("returns capabilities for dependencies declared under `peerDependencies`", () => {
     const manifest = {
       name: "@rnx-kit/align-deps",
       version: "1.0.0",
       peerDependencies: {
+        react: "^17.0.1",
         "react-native": "^0.64.1",
       },
     };
-    expect(capabilitiesFor(manifest)).toEqual({
-      reactNativeVersion: "^0.64",
-      reactNativeDevVersion: "0.64.0",
-      kitType: "library",
-      capabilities: ["core", "core-android", "core-ios"],
-    });
+    expect(capabilitiesFor(manifest, defaultPreset)).toEqual([
+      "core",
+      "core-android",
+      "core-ios",
+      "react",
+    ]);
   });
 
-  test("returns capabilities when react-native is under devDependencies", () => {
+  test("returns capabilities for dependencies declared under `devDependencies`", () => {
     const manifest = {
       name: "@rnx-kit/align-deps",
       version: "1.0.0",
       devDependencies: {
+        react: "^17.0.1",
         "react-native": "^0.64.1",
       },
     };
-    expect(capabilitiesFor(manifest)).toEqual({
-      reactNativeVersion: "^0.64",
-      reactNativeDevVersion: "^0.64.1",
-      kitType: "library",
-      capabilities: ["core", "core-android", "core-ios"],
-    });
-  });
-
-  test("returns kit config with app type instead of dev version", () => {
-    const manifest = {
-      name: "@rnx-kit/align-deps",
-      version: "1.0.0",
-      peerDependencies: {
-        "react-native": "^0.64.1",
-      },
-    };
-    expect(capabilitiesFor(manifest, { kitType: "app" })).toEqual({
-      reactNativeVersion: "^0.64",
-      kitType: "app",
-      capabilities: ["core", "core-android", "core-ios"],
-    });
+    expect(capabilitiesFor(manifest, defaultPreset)).toEqual([
+      "core",
+      "core-android",
+      "core-ios",
+      "react",
+    ]);
   });
 
   test("ignores packages that are not managed by align-deps", () => {
@@ -98,11 +81,12 @@ describe("capabilitiesFor()", () => {
         "@rnx-kit/cli": "*",
       },
     };
-    expect(capabilitiesFor(manifest, { kitType: "app" })).toEqual({
-      reactNativeVersion: "^0.64",
-      kitType: "app",
-      capabilities: ["core", "core-android", "core-ios", "react"],
-    });
+    expect(capabilitiesFor(manifest, defaultPreset)).toEqual([
+      "core",
+      "core-android",
+      "core-ios",
+      "react",
+    ]);
   });
 });
 

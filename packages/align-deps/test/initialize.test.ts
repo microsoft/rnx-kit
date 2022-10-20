@@ -1,10 +1,10 @@
-import { initializeConfig } from "../src/initialize";
-
-jest.mock("fs");
+import {
+  initializeConfig,
+  makeInitializeCommand,
+} from "../src/commands/initialize";
+import { defaultConfig } from "../src/config";
 
 describe("initializeConfig()", () => {
-  const fs = require("fs");
-
   const bundle = {
     entryPath: "src/index.ts",
     distPath: "dist",
@@ -18,78 +18,54 @@ describe("initializeConfig()", () => {
     },
   };
 
-  const mockManifest = {
-    dependencies: {
-      "react-native": "^0.64.1",
-    },
-    peerDependencies: {
-      "@react-native-community/netinfo": "^5.9.10",
-      "react-native-webview": "^10.10.2",
-    },
-    "rnx-kit": {
-      bundle,
-    },
-  };
-
-  const mockCapabilities = [
-    "core",
-    "core-android",
-    "core-ios",
-    "netinfo",
-    "webview",
-  ];
-
-  beforeEach(() => {
-    const unset = () => {
-      throw new Error("unset");
-    };
-    fs.__setMockContent(unset);
-    fs.__setMockFileWriter(unset);
-  });
-
   test("returns early if capabilities are declared", () => {
-    fs.__setMockContent({ "rnx-kit": { capabilities: [] } });
+    const result = initializeConfig(
+      {
+        name: "@rnx-kit/align-deps",
+        version: "0.0.0-test",
+        "rnx-kit": { alignDeps: {} },
+      },
+      ".",
+      "library",
+      { presets: [], loose: false, write: false }
+    );
 
-    let didWrite = false;
-    fs.__setMockFileWriter(() => {
-      didWrite = true;
-    });
-
-    initializeConfig("package.json", {});
-    expect(didWrite).toBe(false);
+    expect(result).toBeNull();
   });
 
   test("returns early if no capabilities are found", () => {
-    fs.__setMockContent({ name: "@rnx-kit/align-deps", version: "1.0.0-test" });
+    const result = initializeConfig(
+      {
+        name: "@rnx-kit/align-deps",
+        version: "0.0.0-test",
+      },
+      ".",
+      "library",
+      { presets: [], loose: false, write: false }
+    );
 
-    let didWrite = false;
-    fs.__setMockFileWriter(() => {
-      didWrite = true;
-    });
-
-    initializeConfig("package.json", {});
-    expect(didWrite).toBe(false);
+    expect(result).toBeNull();
   });
 
   test("keeps existing config", () => {
-    fs.__setMockContent({
-      dependencies: {
-        "react-native": "^0.64.1",
+    const result = initializeConfig(
+      {
+        name: "@rnx-kit/align-deps",
+        version: "0.0.0-test",
+        dependencies: {
+          "react-native": "^0.64.1",
+        },
+        "rnx-kit": {
+          platformBundle: false,
+          bundle,
+        },
       },
-      "rnx-kit": {
-        platformBundle: false,
-        bundle,
-      },
-    });
+      ".",
+      "library",
+      { presets: defaultConfig.presets, loose: false, write: false }
+    );
 
-    let content = {};
-    fs.__setMockFileWriter((_: string, data: string) => {
-      content = JSON.parse(data);
-    });
-
-    initializeConfig("package.json", {});
-
-    const kitConfig = content["rnx-kit"];
+    const kitConfig = result?.["rnx-kit"];
     if (!kitConfig) {
       fail();
     }
@@ -99,71 +75,124 @@ describe("initializeConfig()", () => {
   });
 
   test('adds config with type "app"', () => {
-    fs.__setMockContent(mockManifest);
+    const result = initializeConfig(
+      {
+        name: "@rnx-kit/align-deps",
+        version: "0.0.0-test",
+        dependencies: {
+          "react-native": "^0.64.1",
+        },
+        peerDependencies: {
+          "@react-native-community/netinfo": "^5.9.10",
+          "react-native-webview": "^10.10.2",
+        },
+        "rnx-kit": {
+          bundle,
+        },
+      },
+      ".",
+      "app",
+      { presets: defaultConfig.presets, loose: false, write: false }
+    );
 
-    let content = {};
-    fs.__setMockFileWriter((_: string, data: string) => {
-      content = JSON.parse(data);
-    });
-
-    initializeConfig("package.json", { kitType: "app" });
-
-    const kitConfig = content["rnx-kit"];
+    const kitConfig = result?.["rnx-kit"];
     if (!kitConfig) {
       fail();
     }
 
-    expect(kitConfig["bundle"]).toEqual(bundle);
-    expect(kitConfig["reactNativeVersion"]).toEqual("^0.64");
-    expect(kitConfig["reactNativeDevVersion"]).toBeUndefined();
-    expect(kitConfig["kitType"]).toEqual("app");
-    expect(kitConfig["capabilities"]).toEqual(mockCapabilities);
-    expect(kitConfig["customProfiles"]).toBeUndefined();
+    expect(kitConfig.bundle).toEqual(bundle);
+    expect(kitConfig.kitType).toEqual("app");
+    expect(kitConfig.alignDeps).toEqual({
+      requirements: ["react-native@0.64"],
+      capabilities: ["core", "core-android", "core-ios", "netinfo", "webview"],
+    });
   });
 
   test('adds config with type "library"', () => {
-    fs.__setMockContent(mockManifest);
+    const result = initializeConfig(
+      {
+        name: "@rnx-kit/align-deps",
+        version: "0.0.0-test",
+        dependencies: {
+          "react-native": "^0.64.1",
+        },
+        peerDependencies: {
+          "@react-native-community/netinfo": "^5.9.10",
+          "react-native-webview": "^10.10.2",
+        },
+        "rnx-kit": {
+          bundle,
+        },
+      },
+      ".",
+      "library",
+      { presets: defaultConfig.presets, loose: false, write: false }
+    );
 
-    let content = {};
-    fs.__setMockFileWriter((_: string, data: string) => {
-      content = JSON.parse(data);
-    });
-
-    initializeConfig("package.json", { kitType: "library" });
-
-    const kitConfig = content["rnx-kit"];
+    const kitConfig = result?.["rnx-kit"];
     if (!kitConfig) {
       fail();
     }
 
-    expect(kitConfig["bundle"]).toEqual(bundle);
-    expect(kitConfig["reactNativeVersion"]).toEqual("^0.64");
-    expect(kitConfig["reactNativeDevVersion"]).toEqual("0.64.0");
-    expect(kitConfig["kitType"]).toEqual("library");
-    expect(kitConfig["capabilities"]).toEqual(mockCapabilities);
-    expect(kitConfig["customProfiles"]).toBeUndefined();
+    expect(kitConfig.bundle).toEqual(bundle);
+    expect(kitConfig.kitType).toEqual("library");
+    expect(kitConfig.alignDeps).toEqual({
+      requirements: {
+        development: ["react-native@0.64"],
+        production: ["react-native@0.64"],
+      },
+      capabilities: ["core", "core-android", "core-ios", "netinfo", "webview"],
+    });
   });
 
   test("adds config with custom profiles", () => {
-    fs.__setMockContent(mockManifest);
+    const presets = [
+      ...defaultConfig.presets,
+      "@rnx-kit/scripts/rnx-dep-check.js",
+    ];
+    const result = initializeConfig(
+      {
+        name: "@rnx-kit/align-deps",
+        version: "0.0.0-test",
+        dependencies: {
+          "react-native": "^0.64.1",
+        },
+        peerDependencies: {
+          "@react-native-community/netinfo": "^5.9.10",
+          "react-native-webview": "^10.10.2",
+        },
+        "rnx-kit": {
+          bundle,
+        },
+      },
+      ".",
+      "library",
+      { presets, loose: false, write: false }
+    );
 
-    let content = {};
-    fs.__setMockFileWriter((_: string, data: string) => {
-      content = JSON.parse(data);
-    });
-
-    initializeConfig("package.json", {
-      kitType: "library",
-      customProfilesPath: "@rnx-kit/scripts/rnx-dep-check.js",
-    });
-
-    const kitConfig = content["rnx-kit"];
-    if (!kitConfig) {
+    const alignDeps = result?.["rnx-kit"]?.alignDeps;
+    if (!alignDeps) {
       fail();
     }
 
-    expect(kitConfig["customProfiles"]).toEqual(
-      "@rnx-kit/scripts/rnx-dep-check.js"
-    );
+    expect(alignDeps["presets"]).toEqual(presets);
+  });
+});
+
+describe("makeInitializeCommand()", () => {
+  const options = {
+    presets: [],
+    loose: false,
+    write: false,
+  };
+
+  test("returns undefined for invalid kit types", () => {
+    const command = makeInitializeCommand("random", options);
+    expect(command).toBeUndefined();
+  });
+
+  test("returns command for kit types", () => {
+    expect(makeInitializeCommand("app", options)).toBeDefined();
+    expect(makeInitializeCommand("library", options)).toBeDefined();
   });
 });

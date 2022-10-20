@@ -1,17 +1,7 @@
 import type { KitConfig } from "@rnx-kit/config";
 import { warn } from "@rnx-kit/console";
-import semverCoerce from "semver/functions/coerce";
+import { dropPatchFromVersion } from "../helpers";
 import type { AlignDepsConfig, CheckConfig } from "../types";
-
-function dropPatchFromVersion(version: string): string {
-  return version
-    .split("||")
-    .map((v) => {
-      const coerced = semverCoerce(v);
-      return coerced ? `${coerced.major}.${coerced.minor}` : "0.0";
-    })
-    .join(" || ");
-}
 
 function oldConfigKeys(config: KitConfig): (keyof KitConfig)[] {
   const oldKeys = [
