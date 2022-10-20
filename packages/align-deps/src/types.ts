@@ -37,7 +37,7 @@ export type ErrorCode =
   | "success"
   | "invalid-configuration"
   | "invalid-manifest"
-  | "missing-manifest"
+  | "missing-react-native"
   | "not-configured"
   | "unsatisfied";
 

@@ -91,16 +91,21 @@ export function makeInitializeCommand(
 
   return (manifestPath: string) => {
     const manifest = readPackage(manifestPath);
-    const projectRoot = path.dirname(manifestPath);
+    if (manifest["rnx-kit"]?.alignDeps) {
+      return "success";
+    }
+
     const updatedManifest = initializeConfig(
       manifest,
-      projectRoot,
+      path.dirname(manifestPath),
       kitType,
       options
     );
-    if (updatedManifest) {
-      modifyManifest(manifestPath, updatedManifest);
+    if (!updatedManifest) {
+      return "missing-react-native";
     }
+
+    modifyManifest(manifestPath, updatedManifest);
     return "success";
   };
 }
