@@ -101,7 +101,6 @@ RCT_EXPORT_METHOD(acquireTokenWithScopes:(NSArray<NSString *> *)scopes
                                 rejecter:(RCTPromiseRejectBlock)reject)
 // clang-format on
 {
-
     [self acquireTokenWithScopes:scopes
                userPrincipalName:userPrincipalName
                      accountType:RNXAccountTypeFromString(accountType)
