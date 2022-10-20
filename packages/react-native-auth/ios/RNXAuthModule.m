@@ -62,7 +62,7 @@
  *   userPrincipalName: string,
  *   accountType: AccountType,
  * ): Promise<AuthResult>;
-
+ *
  * function acquireTokenWithScopes(
  *   scopes: string[],
  *   userPrincipalName: string,
@@ -95,13 +95,12 @@ RCT_EXPORT_METHOD(acquireTokenWithResource:(NSString *)resource
 
 // clang-format off
 RCT_EXPORT_METHOD(acquireTokenWithScopes:(NSArray<NSString *> *)scopes
-             userPrincipalName:(NSString *)userPrincipalName
-                   accountType:(NSString *)accountType
-                      resolver:(RCTPromiseResolveBlock)resolve
-                      rejecter:(RCTPromiseRejectBlock)reject)
+                       userPrincipalName:(NSString *)userPrincipalName
+                             accountType:(NSString *)accountType
+                                resolver:(RCTPromiseResolveBlock)resolve
+                                rejecter:(RCTPromiseRejectBlock)reject)
 // clang-format on
 {
-
     [self acquireTokenWithScopes:scopes
                userPrincipalName:userPrincipalName
                      accountType:RNXAccountTypeFromString(accountType)
