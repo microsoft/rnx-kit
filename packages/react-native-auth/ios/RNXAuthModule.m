@@ -73,10 +73,10 @@
 
 // clang-format off
 RCT_EXPORT_METHOD(acquireTokenWithResource:(NSString *)resource
-             userPrincipalName:(NSString *)userPrincipalName
-                   accountType:(NSString *)accountType
-                      resolver:(RCTPromiseResolveBlock)resolve
-                      rejecter:(RCTPromiseRejectBlock)reject)
+                         userPrincipalName:(NSString *)userPrincipalName
+                               accountType:(NSString *)accountType
+                                  resolver:(RCTPromiseResolveBlock)resolve
+                                  rejecter:(RCTPromiseRejectBlock)reject)
 // clang-format on
 {
     [self acquireTokenWithResource:resource
