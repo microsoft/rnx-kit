@@ -1,5 +1,11 @@
 # @rnx-kit/react-native-auth
 
+## 0.2.0
+
+### Minor Changes
+
+- afd170e6: Add acquireTokenWithResource to Auth API, rename acquireToken to acquireTokenWithScopes
+
 ## 0.1.6
 
 ### Patch Changes

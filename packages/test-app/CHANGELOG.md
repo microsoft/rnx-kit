@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/test-app
 
+## 0.1.0
+
+### Minor Changes
+
+- afd170e6: Add acquireTokenWithResource to Auth API, rename acquireToken to acquireTokenWithScopes
+
 ## 0.0.3
 
 ### Patch Changes
