@@ -26,21 +26,17 @@ export function capabilitiesFor(
     return [];
   }
 
-  const firstProfile = preset[keysOf(preset)[0]];
-  const allCapabilities = keysOf(firstProfile);
-  const packages = Object.values(firstProfile);
-
-  const foundCapabilities: Capability[] = [];
-  dependenciesSet.forEach((name) => {
-    const numPackages = packages.length;
-    for (let i = 0; i < numPackages; ++i) {
-      if (packages[i].name === name) {
-        foundCapabilities.push(allCapabilities[i]);
+  const foundCapabilities = new Set<Capability>();
+  for (const profile of Object.values(preset)) {
+    for (const capability of keysOf(profile)) {
+      const { name } = profile[capability];
+      if (dependenciesSet.has(name)) {
+        foundCapabilities.add(capability);
       }
     }
-  });
+  }
 
-  return foundCapabilities.sort();
+  return Array.from(foundCapabilities).sort();
 }
 
 export function isMetaPackage(pkg: MetaPackage | Package): pkg is MetaPackage {
