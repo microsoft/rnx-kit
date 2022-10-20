@@ -126,8 +126,8 @@ function setVersion(
     alignDeps: {
       ...alignDeps,
       presets:
-        // The default presets was added when `loadConfig` was called. We need
-        // to remove it here to avoid cluttering the manifest.
+        // The default presets were added with `loadConfig`. We need to remove
+        // it here to not add new fields to the config.
         alignDeps.presets === defaultConfig.presets
           ? undefined
           : alignDeps.presets,
