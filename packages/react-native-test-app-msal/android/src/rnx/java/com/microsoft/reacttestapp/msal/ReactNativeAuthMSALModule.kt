@@ -14,6 +14,15 @@ private typealias RnxAuthResult = com.microsoft.reactnativesdk.auth.AuthResult
 class ReactNativeAuthMSALModule(context: ReactApplicationContext?) :
     ReactNativeAuthModule(context) {
 
+    override fun acquireTokenWithResource(
+        resource: String,
+        userPrincipalName: String,
+        accountType: RnxAccountType,
+        onTokenAcquired: OnTokenAcquired
+    ) {
+      onTokenAcquired(null, RnxAuthError.notImplemented())
+    }
+
     override fun acquireTokenWithScopes(
         scopes: Array<String>,
         userPrincipalName: String,
@@ -53,6 +62,7 @@ fun AuthErrorType.toRnxAuthErrorType(): RnxAuthErrorType = when (this) {
     AuthErrorType.CONDITIONAL_ACCESS_BLOCKED -> RnxAuthErrorType.CONDITIONAL_ACCESS_BLOCKED
     AuthErrorType.INTERACTION_REQUIRED -> RnxAuthErrorType.INTERACTION_REQUIRED
     AuthErrorType.NO_RESPONSE -> RnxAuthErrorType.NO_RESPONSE
+    AuthErrorType.NOT_IMPLEMENTED -> RnxAuthErrorType.NOT_IMPLEMENTED
     AuthErrorType.PRECONDITION_VIOLATED -> RnxAuthErrorType.PRECONDITION_VIOLATED
     AuthErrorType.SERVER_DECLINED_SCOPES -> RnxAuthErrorType.SERVER_DECLINED_SCOPES
     AuthErrorType.SERVER_PROTECTION_POLICIES_REQUIRED -> RnxAuthErrorType.SERVER_PROTECTION_POLICIES_REQUIRED

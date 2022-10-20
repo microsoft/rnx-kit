@@ -13,6 +13,7 @@ typedef NS_ENUM(NSInteger, RNXAuthErrorType) {
     RNXAuthErrorTypeConditionalAccessBlocked,
     RNXAuthErrorTypeInteractionRequired,
     RNXAuthErrorTypeNoResponse,
+    RNXAuthErrorTypeNotImplemented,
     RNXAuthErrorTypePreconditionViolated,
     RNXAuthErrorTypeServerDeclinedScopes,
     RNXAuthErrorTypeServerProtectionPoliciesRequired,
