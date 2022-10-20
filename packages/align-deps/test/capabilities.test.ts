@@ -7,6 +7,10 @@ import profile_0_63 from "../src/presets/microsoft/react-native/profile-0.63";
 import profile_0_64 from "../src/presets/microsoft/react-native/profile-0.64";
 import { pickPackage } from "./helpers";
 
+function makeMockResolver(module: string): RequireResolve {
+  return (() => module) as unknown as RequireResolve;
+}
+
 describe("capabilitiesFor()", () => {
   test("returns an empty array when there are no dependencies", () => {
     expect(
@@ -155,7 +159,8 @@ describe("resolveCapabilities()", () => {
     const preset = filterPreset(
       mergePresets(
         ["microsoft/react-native", "mock-custom-profiles-module"],
-        process.cwd()
+        process.cwd(),
+        makeMockResolver("mock-custom-profiles-module")
       ),
       ["react-native@0.62 || 0.63 || 0.64"]
     );
@@ -218,7 +223,8 @@ describe("resolveCapabilities()", () => {
     const preset = filterPreset(
       mergePresets(
         ["microsoft/react-native", "mock-meta-package"],
-        process.cwd()
+        process.cwd(),
+        makeMockResolver("mock-meta-package")
       ),
       ["react-native@0.64"]
     );
@@ -261,7 +267,8 @@ describe("resolveCapabilities()", () => {
     const preset = filterPreset(
       mergePresets(
         ["microsoft/react-native", "mock-meta-package-loop"],
-        process.cwd()
+        process.cwd(),
+        makeMockResolver("mock-meta-package-loop")
       ),
       ["react-native@0.64"]
     );

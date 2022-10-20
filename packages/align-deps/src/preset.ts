@@ -49,13 +49,15 @@ function ensurePreset(preset: Preset, requirements: string[]): void {
   }
 }
 
-function loadPreset(preset: string, projectRoot: string): Preset {
+function loadPreset(
+  preset: string,
+  projectRoot: string,
+  resolve = require.resolve
+): Preset {
   try {
     return require("./presets/" + preset).default;
   } catch (_) {
-    return process.env.JEST_WORKER_ID
-      ? require(preset)
-      : require(require.resolve(preset, { paths: [projectRoot] }));
+    return require(resolve(preset, { paths: [projectRoot] }));
   }
 }
 
@@ -94,10 +96,14 @@ export function filterPreset(preset: Preset, requirements: string[]): Preset {
  * @param projectRoot The project root from which presets should be resolved
  * @returns Merged preset
  */
-export function mergePresets(presets: string[], projectRoot: string): Preset {
+export function mergePresets(
+  presets: string[],
+  projectRoot: string,
+  resolve = require.resolve
+): Preset {
   const mergedPreset: Preset = {};
   for (const presetName of presets) {
-    const preset = loadPreset(presetName, projectRoot);
+    const preset = loadPreset(presetName, projectRoot, resolve);
     for (const [profileName, profile] of Object.entries(preset)) {
       mergedPreset[profileName] = {
         ...mergedPreset[profileName],
