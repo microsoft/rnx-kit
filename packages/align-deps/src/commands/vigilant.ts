@@ -64,14 +64,14 @@ export function buildManifestProfile(
   const [targetPreset, supportPreset] = (() => {
     const { requirements } = alignDeps;
     if (Array.isArray(requirements)) {
-      const preset = filterPreset(requirements, mergedPresets);
+      const preset = filterPreset(mergedPresets, requirements);
       return [preset, preset];
     }
 
-    const prodPreset = filterPreset(requirements.production, mergedPresets);
+    const prodPreset = filterPreset(mergedPresets, requirements.production);
     return kitType === "app"
       ? [prodPreset, prodPreset]
-      : [filterPreset(requirements.development, mergedPresets), prodPreset];
+      : [filterPreset(mergedPresets, requirements.development), prodPreset];
   })();
 
   const unmanagedCapabilities = getAllCapabilities(targetPreset).filter(
@@ -93,8 +93,6 @@ export function buildManifestProfile(
   );
 
   return {
-    name: "@rnx-kit/align-deps/vigilant-preset",
-    version: "1.0.0",
     dependencies: directDependencies,
     peerDependencies,
     devDependencies: directDependencies,

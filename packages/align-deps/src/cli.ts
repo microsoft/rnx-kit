@@ -7,11 +7,13 @@ import {
   findWorkspacePackages,
   findWorkspaceRoot,
 } from "@rnx-kit/tools-workspaces";
+import isString from "lodash/isString";
 import * as path from "path";
 import { makeCheckCommand } from "./commands/check";
 import { makeInitializeCommand } from "./commands/initialize";
+import { makeSetVersionCommand } from "./commands/setVersion";
 import { defaultConfig } from "./config";
-import { printError } from "./errors";
+import { printError, printInfo } from "./errors";
 import type { Args, Command } from "./types";
 
 async function getManifests(
@@ -85,6 +87,7 @@ async function makeCommand(args: Args): Promise<Command | undefined> {
     loose,
     presets,
     requirements,
+    "set-version": setVersion,
     write,
   } = args;
 
@@ -98,6 +101,13 @@ async function makeCommand(args: Args): Promise<Command | undefined> {
 
   if (typeof init !== "undefined") {
     return makeInitializeCommand(init, options);
+  }
+
+  // When `--set-version` is without a value, `setVersion` is an empty string if
+  // invoked directly. When invoked via `@react-native-community/cli`,
+  // `setVersion` is `true` instead.
+  if (setVersion || isString(setVersion)) {
+    return makeSetVersionCommand(setVersion, options);
   }
 
   return makeCheckCommand(options);
@@ -141,6 +151,10 @@ export async function cli({ packages, ...args }: Args): Promise<void> {
   }, 0);
 
   process.exitCode = errors;
+
+  if (errors > 0) {
+    printInfo();
+  }
 }
 
 if (require.main === module) {
@@ -177,6 +191,12 @@ if (require.main === module) {
           "Comma-separated list of requirements to apply if a package is not configured for align-deps.",
         type: "string",
         requiresArg: true,
+      },
+      "set-version": {
+        description:
+          "Sets `react-native` requirements for any configured package. There is an interactive prompt if no value is provided. The value should be a comma-separated list of `react-native` versions to set, where the first number specifies the development version. Example: `0.70,0.69`",
+        type: "string",
+        conflicts: ["init", "requirements"],
       },
       write: {
         default: false,

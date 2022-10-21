@@ -3,11 +3,6 @@ import chalk from "chalk";
 import * as path from "path";
 import type { ErrorCode } from "./types";
 
-function printURL(): void {
-  const url = chalk.bold("https://aka.ms/align-deps");
-  info(`Visit ${url} for more information about align-deps.`);
-}
-
 export function printError(manifestPath: string, code: ErrorCode): void {
   const currentPackageJson = path.relative(process.cwd(), manifestPath);
 
@@ -17,7 +12,6 @@ export function printError(manifestPath: string, code: ErrorCode): void {
 
     case "invalid-configuration":
       error(`${currentPackageJson}: align-deps was not properly configured`);
-      printURL();
       break;
 
     case "invalid-manifest":
@@ -36,14 +30,17 @@ export function printError(manifestPath: string, code: ErrorCode): void {
 
     case "not-configured":
       error(`${currentPackageJson}: align-deps was not configured`);
-      printURL();
       break;
 
     case "unsatisfied":
       error(
         `${currentPackageJson}: Changes are needed to satisfy all requirements. Re-run with '--write' to apply them.`
       );
-      printURL();
       break;
   }
+}
+
+export function printInfo(): void {
+  const url = chalk.bold("https://aka.ms/align-deps");
+  info(`Visit ${url} for more information about align-deps.`);
 }

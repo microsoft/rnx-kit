@@ -1,7 +1,8 @@
 import type { KitConfig } from "@rnx-kit/config";
 import { warn } from "@rnx-kit/console";
+import { defaultConfig } from "../config";
 import { dropPatchFromVersion } from "../helpers";
-import type { AlignDepsConfig, CheckConfig } from "../types";
+import type { AlignDepsConfig, LegacyCheckConfig } from "../types";
 
 function oldConfigKeys(config: KitConfig): (keyof KitConfig)[] {
   const oldKeys = [
@@ -24,25 +25,22 @@ function oldConfigKeys(config: KitConfig): (keyof KitConfig)[] {
  */
 export function transformConfig({
   capabilities,
-  customProfilesPath,
+  customProfiles,
   kitType,
   manifest,
   reactNativeDevVersion,
   reactNativeVersion,
-}: CheckConfig): AlignDepsConfig {
+}: LegacyCheckConfig): AlignDepsConfig {
   const devVersion = dropPatchFromVersion(
     reactNativeDevVersion || reactNativeVersion
   );
-  const prodVersion = dropPatchFromVersion(
-    reactNativeVersion || reactNativeDevVersion
-  );
+  const prodVersion = dropPatchFromVersion(reactNativeVersion);
   return {
     kitType,
     alignDeps: {
-      presets: [
-        "microsoft/react-native",
-        ...(customProfilesPath ? [customProfilesPath] : []),
-      ],
+      presets: customProfiles
+        ? [...defaultConfig.presets, customProfiles]
+        : defaultConfig.presets,
       requirements:
         kitType === "app"
           ? [`react-native@${reactNativeVersion}`]
@@ -57,7 +55,7 @@ export function transformConfig({
 }
 
 export function migrateConfig(
-  config: AlignDepsConfig | CheckConfig
+  config: AlignDepsConfig | LegacyCheckConfig
 ): AlignDepsConfig {
   if ("alignDeps" in config) {
     const oldKeys = oldConfigKeys(config);

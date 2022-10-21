@@ -49,15 +49,25 @@ function ensurePreset(preset: Preset, requirements: string[]): void {
   }
 }
 
-function loadPreset(preset: string, projectRoot: string): Preset {
+function loadPreset(
+  preset: string,
+  projectRoot: string,
+  resolve = require.resolve
+): Preset {
   try {
     return require("./presets/" + preset).default;
   } catch (_) {
-    return require(require.resolve(preset, { paths: [projectRoot] }));
+    return require(resolve(preset, { paths: [projectRoot] }));
   }
 }
 
-export function filterPreset(requirements: string[], preset: Preset): Preset {
+/**
+ * Filters out any profiles that do not satisfy the specified requirements.
+ * @param preset The preset to filter
+ * @param requirements The requirements that a profile must satisfy
+ * @returns Preset with only profiles that satisfy the requirements
+ */
+export function filterPreset(preset: Preset, requirements: string[]): Preset {
   const filteredPreset: Preset = {};
   const reqs = compileRequirements(requirements);
   for (const [profileName, profile] of Object.entries(preset)) {
@@ -74,10 +84,26 @@ export function filterPreset(requirements: string[], preset: Preset): Preset {
   return filteredPreset;
 }
 
-export function mergePresets(presets: string[], projectRoot: string): Preset {
+/**
+ * Loads and merges specified presets.
+ *
+ * The order of presets is significant. The profiles from each preset are merged
+ * when the names overlap. If there are overlaps within the profiles, i.e. when
+ * multiple profiles declare the same capability, the last profile wins. This
+ * allows users to both extend and override profiles as needed.
+ *
+ * @param presets The presets to load and merge
+ * @param projectRoot The project root from which presets should be resolved
+ * @returns Merged preset
+ */
+export function mergePresets(
+  presets: string[],
+  projectRoot: string,
+  resolve = require.resolve
+): Preset {
   const mergedPreset: Preset = {};
   for (const presetName of presets) {
-    const preset = loadPreset(presetName, projectRoot);
+    const preset = loadPreset(presetName, projectRoot, resolve);
     for (const [profileName, profile] of Object.entries(preset)) {
       mergedPreset[profileName] = {
         ...mergedPreset[profileName],
@@ -89,6 +115,15 @@ export function mergePresets(presets: string[], projectRoot: string): Preset {
   return mergedPreset;
 }
 
+/**
+ * Loads specified presets and filters them according to the requirements. The
+ * list of capabilities are also gathered from transitive dependencies if
+ * `kitType` is `app`.
+ * @param config User input config
+ * @param projectRoot Root of the project we're currently scanniing
+ * @param options
+ * @returns The resolved presets and capabilities
+ */
 export function resolve(
   { kitType, alignDeps, manifest }: AlignDepsConfig,
   projectRoot: string,
@@ -100,7 +135,7 @@ export function resolve(
     ? requirements
     : requirements.production;
   const mergedPreset = mergePresets(presets, projectRoot);
-  const initialProdPreset = filterPreset(prodRequirements, mergedPreset);
+  const initialProdPreset = filterPreset(mergedPreset, prodRequirements);
   ensurePreset(initialProdPreset, prodRequirements);
 
   const devPreset = (() => {
@@ -111,7 +146,7 @@ export function resolve(
       return initialProdPreset;
     } else {
       const devRequirements = requirements.development;
-      const devPreset = filterPreset(devRequirements, mergedPreset);
+      const devPreset = filterPreset(mergedPreset, devRequirements);
       ensurePreset(devPreset, devRequirements);
       return devPreset;
     }

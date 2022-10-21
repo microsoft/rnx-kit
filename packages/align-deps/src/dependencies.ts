@@ -107,7 +107,7 @@ export function gatherRequirements(
       }
     }
 
-    const filteredPreset = filterPreset(requirements, preset);
+    const filteredPreset = filterPreset(preset, requirements);
     const filteredNames = Object.keys(filteredPreset);
     if (filteredNames.length !== trace[trace.length - 1].profiles.length) {
       trace.push({

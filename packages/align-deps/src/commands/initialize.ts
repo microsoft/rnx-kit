@@ -61,7 +61,7 @@ export function initializeConfig(
   const requirements = [
     `react-native@${dropPatchFromVersion(targetReactNativeVersion)}`,
   ];
-  const preset = filterPreset(requirements, mergePresets(presets, projectRoot));
+  const preset = filterPreset(mergePresets(presets, projectRoot), requirements);
 
   return {
     ...manifest,
