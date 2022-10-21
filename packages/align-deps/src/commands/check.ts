@@ -20,7 +20,7 @@ export function checkPackageManifest(
     return inputConfig;
   }
 
-  const config = migrateConfig(inputConfig);
+  const config = migrateConfig(inputConfig, manifestPath, options);
   const { devPreset, prodPreset, capabilities } = resolve(
     config,
     path.dirname(manifestPath),
@@ -89,7 +89,7 @@ export function makeCheckCommand(options: Options): Command {
     const inputConfig = loadConfig(manifest);
     const config = isError(inputConfig)
       ? inputConfig
-      : migrateConfig(inputConfig);
+      : migrateConfig(inputConfig, manifest, options);
 
     // If the package is configured, run the normal check first.
     if (!isError(config)) {

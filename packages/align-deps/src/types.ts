@@ -10,6 +10,7 @@ export type AlignDepsConfig = {
 export type Options = {
   presets: string[];
   loose: boolean;
+  migrateConfig: boolean;
   write: boolean;
   excludePackages?: string[];
   requirements?: string[];
@@ -17,6 +18,7 @@ export type Options = {
 
 export type Args = Pick<Options, "loose" | "write"> & {
   "exclude-packages"?: string | number;
+  "migrate-config": boolean;
   "set-version"?: string | number;
   init?: string;
   packages?: (string | number)[];

@@ -1,17 +1,19 @@
 import type { KitConfig } from "@rnx-kit/config";
 import { warn } from "@rnx-kit/console";
+import * as path from "path";
 import { defaultConfig } from "../config";
-import { dropPatchFromVersion } from "../helpers";
-import type { AlignDepsConfig, LegacyCheckConfig } from "../types";
+import { dropPatchFromVersion, modifyManifest } from "../helpers";
+import type { AlignDepsConfig, LegacyCheckConfig, Options } from "../types";
 
-function oldConfigKeys(config: KitConfig): (keyof KitConfig)[] {
-  const oldKeys = [
-    "capabilities",
-    "customProfiles",
-    "reactNativeDevVersion",
-    "reactNativeVersion",
-  ] as const;
-  return oldKeys.filter((key) => key in config);
+const legacyKeys = [
+  "capabilities",
+  "customProfiles",
+  "reactNativeDevVersion",
+  "reactNativeVersion",
+] as const;
+
+function findLegacyConfigKeys(config: KitConfig): (keyof KitConfig)[] {
+  return legacyKeys.filter((key) => key in config);
 }
 
 /**
@@ -43,7 +45,7 @@ export function transformConfig({
         : defaultConfig.presets,
       requirements:
         kitType === "app"
-          ? [`react-native@${reactNativeVersion}`]
+          ? [`react-native@${prodVersion}`]
           : {
               development: [`react-native@${devVersion}`],
               production: [`react-native@${prodVersion}`],
@@ -55,15 +57,20 @@ export function transformConfig({
 }
 
 export function migrateConfig(
-  config: AlignDepsConfig | LegacyCheckConfig
+  config: AlignDepsConfig | LegacyCheckConfig,
+  manifestPath: string,
+  { migrateConfig }: Options
 ): AlignDepsConfig {
+  const manifestRelPath = path.relative(process.cwd(), manifestPath);
   if ("alignDeps" in config) {
-    const oldKeys = oldConfigKeys(config);
+    const oldKeys = findLegacyConfigKeys(config);
     if (oldKeys.length > 0) {
       const unsupportedKeys = oldKeys
         .map((key) => `'rnx-kit.${key}'`)
         .join(", ");
-      warn(`The following keys are no longer supported: ${unsupportedKeys}`);
+      warn(
+        `${manifestRelPath}: The following keys are no longer supported: ${unsupportedKeys}`
+      );
     }
     return config;
   }
@@ -71,13 +78,29 @@ export function migrateConfig(
   const newConfig = transformConfig(config);
   const { manifest, ...configOnly } = newConfig;
 
-  warn(`The config schema has changed. Please update your config to the following:
+  if (migrateConfig) {
+    const kitConfig = manifest["rnx-kit"];
+    if (kitConfig) {
+      for (const key of legacyKeys) {
+        delete kitConfig[key];
+      }
+    }
+
+    manifest["rnx-kit"] = {
+      ...kitConfig,
+      alignDeps: configOnly.alignDeps,
+    };
+
+    modifyManifest(manifestPath, manifest);
+  } else {
+    warn(`${manifestRelPath}: The config schema has changed. Please update your config to the following:
 
 ${JSON.stringify(configOnly, null, 2)}
 
-Support for the old schema will be removed in a future release.`);
+Or run this command again with '--migrate-config' to update your config automatically.
 
-  // TODO: Add a flag to automatically migrate users to the new config schema.
+Support for the old schema will be removed in a future release.`);
+  }
 
   return newConfig;
 }
