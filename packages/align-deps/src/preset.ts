@@ -158,6 +158,7 @@ export function resolve(
         projectRoot,
         manifest,
         initialProdPreset,
+        prodRequirements,
         capabilities,
         options
       );

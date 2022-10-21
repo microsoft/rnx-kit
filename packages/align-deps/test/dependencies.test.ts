@@ -1,8 +1,8 @@
 import { PackageManifest, readPackage } from "@rnx-kit/tools-node/package";
 import path from "path";
 import { gatherRequirements, visitDependencies } from "../src/dependencies";
-import profile_0_63 from "../src/presets/microsoft/react-native/profile-0.63";
-import profile_0_64 from "../src/presets/microsoft/react-native/profile-0.64";
+import profile_0_69 from "../src/presets/microsoft/react-native/profile-0.69";
+import profile_0_70 from "../src/presets/microsoft/react-native/profile-0.70";
 
 jest.unmock("@rnx-kit/config");
 
@@ -117,12 +117,13 @@ describe("gatherRequirements()", () => {
 
   test("gather requirements from all dependencies", () => {
     const [fixture, manifest] = useFixture("awesome-repo");
-    const initialPreset = { "0.63": profile_0_63, "0.64": profile_0_64 };
+    const initialPreset = { "0.69": profile_0_69, "0.70": profile_0_70 };
     const initialCapabilities = manifest["rnx-kit"]?.capabilities;
     const { preset, capabilities } = gatherRequirements(
       fixture,
       manifest,
       initialPreset,
+      ["react-native@0.69 || 0.70"],
       Array.isArray(initialCapabilities) ? initialCapabilities : [],
       defaultOptions
     );
@@ -148,13 +149,13 @@ describe("gatherRequirements()", () => {
     const skynet = { name: "skynet", version: "1.0.0" };
 
     const initialPreset = {
-      "0.63": {
-        ...profile_0_63,
+      "0.69": {
+        ...profile_0_69,
         [cyberdyne.name]: cyberdyne,
         [skynet.name]: skynet,
       },
-      "0.64": {
-        ...profile_0_64,
+      "0.70": {
+        ...profile_0_70,
         [cyberdyne.name]: cyberdyne,
         [skynet.name]: skynet,
       },
@@ -167,6 +168,7 @@ describe("gatherRequirements()", () => {
       fixture,
       manifest,
       initialPreset,
+      ["react-native@0.69 || 0.70"],
       Array.isArray(initialCapabilities) ? initialCapabilities : [],
       defaultOptions
     );
@@ -194,7 +196,8 @@ describe("gatherRequirements()", () => {
       gatherRequirements(
         fixture,
         manifest,
-        { "0.64": profile_0_64 },
+        { "0.70": profile_0_70 },
+        ["react-native@0.70"],
         [],
         defaultOptions
       )
@@ -210,9 +213,14 @@ describe("gatherRequirements()", () => {
   test("does not throw if no profiles can satisfy requirement of dependencies in loose mode", () => {
     const [fixture, manifest] = useFixture("no-profile-satisfying-deps");
     expect(() =>
-      gatherRequirements(fixture, manifest, { "0.64": profile_0_64 }, [], {
-        loose: true,
-      })
+      gatherRequirements(
+        fixture,
+        manifest,
+        { "0.70": profile_0_70 },
+        ["react-native@0.70"],
+        [],
+        { loose: true }
+      )
     ).not.toThrow();
 
     expect(consoleErrorSpy).not.toBeCalled();
