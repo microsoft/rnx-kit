@@ -17,9 +17,9 @@ runs:
       id: cache-key-generator
       run: |
         if [[ -f ${{ inputs.working-directory }}/${{ inputs.project-directory }}/Podfile.lock ]]; then
-          echo "::set-output name=cache-key::$(basename ${{ inputs.working-directory }})-$(node scripts/shasum.mjs ${{ inputs.working-directory }}/${{ inputs.project-directory }}/Podfile.lock)"
+          echo "cache-key=$(basename ${{ inputs.working-directory }})-$(node scripts/shasum.mjs ${{ inputs.working-directory }}/${{ inputs.project-directory }}/Podfile.lock)" >> $GITHUB_OUTPUT
         else
-          echo '::set-output name=cache-key::false'
+          echo 'cache-key=false' >> $GITHUB_OUTPUT
         fi
       shell: bash
     - name: Cache /.ccache

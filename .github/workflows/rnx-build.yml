@@ -102,11 +102,11 @@ jobs:
           if [[ ${{ github.event.inputs.distribution }} == 'local' ]]; then
             app=$(find ${XCARCHIVE_FILE}/Products/Applications -maxdepth 1 -name '*.app' -type d | head -1)
             npx --prefix . rnx-build-apple archive ios-artifact.tar "${app}"
-            echo "::set-output name=filename::ios-artifact.tar"
+            echo 'filename=ios-artifact.tar' >> $GITHUB_OUTPUT
           else
             xcodebuild -exportArchive -archivePath ${XCARCHIVE_FILE} -exportPath export -exportOptionsPlist ExportOptions.plist 2>&1
             ipa=$(find export -maxdepth 1 -name '*.ipa' -type d | head -1)
-            echo "::set-output name=filename::${ipa}"
+            echo "filename=${ipa}" >> $GITHUB_OUTPUT
           fi
         working-directory: ${{ github.event.inputs.projectRoot }}/ios
       - name: Upload build artifact
@@ -181,7 +181,7 @@ jobs:
           appx_manifest=$(find ${{ github.event.inputs.architecture }}/Debug -name AppxManifest.xml -type f | head -1)
           app_name=$(basename $(dirname ${appx_manifest}))
           cp ${appx_manifest} AppPackages/${app_name}/*
-          echo "::set-output name=app-name::${app_name}"
+          echo "app-name=${app_name}" >> $GITHUB_OUTPUT
         shell: bash
         working-directory: ${{ github.event.inputs.projectRoot }}/windows
       - name: Upload build artifact
