@@ -11,8 +11,7 @@ import type { Options, Preset, Profile } from "./types";
 
 type Trace = {
   module: string;
-  reactNativeVersion?: string;
-  requirements?: string[];
+  requirements: string[];
   profiles: string[];
 };
 
@@ -64,6 +63,7 @@ export function gatherRequirements(
   projectRoot: string,
   manifest: PackageManifest,
   preset: Preset,
+  requirements: string[],
   appCapabilities: Capability[],
   { loose }: Pick<Options, "loose">
 ): { preset: Preset; capabilities: Capability[] } {
@@ -72,6 +72,7 @@ export function gatherRequirements(
     {
       module: manifest.name,
       profiles: Object.keys(preset),
+      requirements,
     },
   ];
 

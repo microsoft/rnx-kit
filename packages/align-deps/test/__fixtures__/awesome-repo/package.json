@@ -4,11 +4,11 @@
   "dependencies": {
     "conan": "1.0.0",
     "quaid": "1.0.0",
-    "react": "17.0.1",
-    "react-native": "0.64.0"
+    "react": "18.1.0",
+    "react-native": "0.70.3"
   },
   "rnx-kit": {
-    "reactNativeVersion": "^0.63 || ^0.64",
+    "reactNativeVersion": "^0.69 || ^0.70",
     "kitType": "app",
     "capabilities": [
       "core-android",
