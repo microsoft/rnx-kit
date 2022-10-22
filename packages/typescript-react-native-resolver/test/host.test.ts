@@ -18,6 +18,16 @@ import {
   ExtensionsJSON,
 } from "../src/extension";
 
+let origTsVersion: string;
+beforeEach(() => {
+  origTsVersion = ts.version;
+  (ts as any).version = "4.6.0"; // eslint-disable-line @typescript-eslint/no-explicit-any
+});
+
+afterEach(() => {
+  (ts as any).version = origTsVersion; // eslint-disable-line @typescript-eslint/no-explicit-any
+});
+
 describe("Host > changeHostToUseReactNativeResolver", () => {
   const mockDirectoryExists = jest.fn();
   const mockFileExists = jest.fn();
@@ -277,5 +287,87 @@ describe("Host > resolveTypeReferenceDirectives", () => {
     expect(directives[0].resolvedFileName).toEqual("resolved.ts");
 
     ts.resolveTypeReferenceDirective = origResolveTypeReferenceDirective;
+  });
+});
+
+describe("Host-TS-4.7 > resolveModuleName", () => {
+
+ beforeEach(() => {
+    (ts as any).version = "4.7.0"; // eslint-disable-line @typescript-eslint/no-explicit-any
+  });
+
+  const mockRealpath = jest.fn();
+  const context = {
+    host: {
+      realpath: mockRealpath,
+    } as unknown as ts.CompilerHost,
+    options: {},
+  } as unknown as ResolverContext;
+
+  afterEach(() => {
+    jest.resetAllMocks();
+  });
+
+  test("resolves a package module", () => {
+    const resolvedFileName =
+      "/repos/rnx-kit/node_modules/@scope/package/main.d.ts";
+    (resolvePackageModule as jest.Mock).mockReturnValue({ resolvedFileName });
+    mockRealpath.mockReturnValue(resolvedFileName);
+
+    const module = resolveModuleName(
+      context,
+      "@scope/package",
+      "/repos/rnx-kit/packages/test-app/lib/app.js",
+      []
+    );
+    expect(module.isExternalLibraryImport).toBeTrue();
+    expect(module.resolvedFileName).toEqual(resolvedFileName);
+  });
+
+  test("resolves a file module in the current package", () => {
+    const resolvedFileName = "/repos/rnx-kit/packages/test-app/lib/config.d.ts";
+    (resolveFileModule as jest.Mock).mockReturnValue({ resolvedFileName });
+    mockRealpath.mockReturnValue(resolvedFileName);
+
+    const module = resolveModuleName(
+      context,
+      "./config",
+      "/repos/rnx-kit/packages/test-app/lib/app.js",
+      []
+    );
+    expect(module.isExternalLibraryImport).toBeFalse();
+    expect(module.resolvedFileName).toEqual(resolvedFileName);
+  });
+
+  test("resolves a file module in an external package", () => {
+    const resolvedFileName =
+      "/repos/rnx-kit/node_modules/@scope/package/param.d.ts";
+    (resolveFileModule as jest.Mock).mockReturnValue({ resolvedFileName });
+    mockRealpath.mockReturnValue(resolvedFileName);
+
+    const module = resolveModuleName(
+      context,
+      "./param",
+      "/repos/rnx-kit/node_modules/@scope/package/index.d.ts",
+      []
+    );
+    expect(module.isExternalLibraryImport).toBeTrue();
+    expect(module.resolvedFileName).toEqual(resolvedFileName);
+  });
+
+  test("returns the real path to a resolved file", () => {
+    const resolvedFileName = "/repos/rnx-kit/node_modules/find-up/index.js";
+    (resolvePackageModule as jest.Mock).mockReturnValue({ resolvedFileName });
+    const realResolvedFileName = "/repos/rnx-kit/.yarn-cache/find-up/index.js";
+    mockRealpath.mockReturnValue(realResolvedFileName);
+
+    const module = resolveModuleName(
+      context,
+      "find-up",
+      "/repos/rnx-kit/packages/tools-node/src/fs.ts",
+      []
+    );
+    expect(module.isExternalLibraryImport).toBeTrue();
+    expect(module.resolvedFileName).toEqual(realResolvedFileName);
   });
 });

@@ -3,7 +3,9 @@ import {
   isPackageModuleRef,
   parseModuleRef,
 } from "@rnx-kit/tools-node";
+import intersection from "lodash/intersection";
 import path from "path";
+import semverSatisfies from "semver/functions/satisfies";
 import ts from "typescript";
 
 import {
@@ -101,6 +103,10 @@ export function changeHostToUseReactNativeResolver({
   );
 }
 
+export function supportsModuleSuffixes(): boolean {
+  return semverSatisfies(ts.version, ">=4.7.0");
+}
+
 /**
  * Resolve a module for a TypeScript program. Prefer type (.d.ts) files and
  * TypeScript source (.ts[x]) files, as they usually carry more type
@@ -116,17 +122,58 @@ export function resolveModuleName(
   context: ResolverContext,
   moduleName: string,
   containingFile: string,
-  extensions: ts.Extension[]
+  extensions: ts.Extension[],
+  redirectedReference?: ts.ResolvedProjectReference
 ): ts.ResolvedModuleFull | undefined {
   let module: ts.ResolvedModuleFull | undefined = undefined;
 
-  const moduleRef = parseModuleRef(moduleName);
-  const searchDir = path.dirname(containingFile);
-  if (isPackageModuleRef(moduleRef)) {
-    module = resolvePackageModule(context, moduleRef, searchDir, extensions);
-  } else if (isFileModuleRef(moduleRef)) {
-    module = resolveFileModule(context, moduleRef, searchDir, extensions);
+  if (supportsModuleSuffixes()) {
+    const moduleSuffixes = [...context.platformExtensions, ""];
+
+    const optionsWithSuffixes = {
+      ...context.options,
+    };
+
+    if (!optionsWithSuffixes.moduleSuffixes) {
+      optionsWithSuffixes.moduleSuffixes = moduleSuffixes;
+    }
+
+    const moduleSuffixesIntersection = intersection(
+      optionsWithSuffixes.moduleSuffixes,
+      moduleSuffixes
+    );
+    const ok = isEqual(moduleSuffixesIntersection, moduleSuffixes);
+    if (!ok) {
+      const currentSuffixes = optionsWithSuffixes.moduleSuffixes.join(",");
+      const wantedSuffixes = moduleSuffixes.join(",");
+      throw new Error(
+        `Failed to resolve module reference '${moduleName}' in source file '${containingFile}.\n` +
+        `The parent package has a TypeScript configuration which sets 'moduleSuffixes' to '${currentSuffixes}'.\n` +
+        `This is incompatible with the target platform '${context.platform}', which requires moduleSuffixes to contain at least '${wantedSuffixes}', in that order.\n` +
+        `We would like to understand any use cases where this error occurs, as there may be room to make improvements.\n` +
+        `Please add a comment about your scenario, and include this error message: https://github.com/microsoft/rnx-kit/discussions/1971.`
+      );
+    }
+
+    module = ts.resolveModuleName(
+      moduleName,
+      containingFile,
+      optionsWithSuffixes,
+      context.host,
+      undefined,
+      redirectedReference
+    ).resolvedModule;
+
+  } else {
+    const moduleRef = parseModuleRef(moduleName);
+    const searchDir = path.dirname(containingFile);
+    if (isPackageModuleRef(moduleRef)) {
+      module = resolvePackageModule(context, moduleRef, searchDir, extensions);
+    } else if (isFileModuleRef(moduleRef)) {
+      module = resolveFileModule(context, moduleRef, searchDir, extensions);
+    }
   }
+
   if (module) {
     module.isExternalLibraryImport = /[/\\]node_modules[/\\]/.test(
       module.resolvedFileName
@@ -162,7 +209,7 @@ export function resolveModuleNames(
   moduleNames: string[],
   containingFile: string,
   _reusedNames: string[] | undefined,
-  _redirectedReference?: ts.ResolvedProjectReference
+  redirectedReference?: ts.ResolvedProjectReference
 ): (ts.ResolvedModuleFull | undefined)[] {
   const { options, log, replaceReactNativePackageName } = context;
   const resolutions: (ts.ResolvedModuleFull | undefined)[] = [];
@@ -183,7 +230,8 @@ export function resolveModuleNames(
       context,
       finalModuleName,
       containingFile,
-      ExtensionsTypeScript
+      ExtensionsTypeScript,
+      redirectedReference
     );
     if (!module) {
       log.log(
@@ -194,7 +242,8 @@ export function resolveModuleNames(
         context,
         finalModuleName,
         containingFile,
-        ExtensionsJavaScript
+        ExtensionsJavaScript,
+        redirectedReference
       );
       if (!module && options.resolveJsonModule) {
         log.log(
@@ -205,7 +254,8 @@ export function resolveModuleNames(
           context,
           finalModuleName,
           containingFile,
-          ExtensionsJSON
+          ExtensionsJSON,
+          redirectedReference
         );
       }
     }
