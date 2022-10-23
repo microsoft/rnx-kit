@@ -7,7 +7,6 @@ import {
   findWorkspacePackages,
   findWorkspaceRoot,
 } from "@rnx-kit/tools-workspaces";
-import * as fs from "fs";
 import isString from "lodash/isString";
 import * as path from "path";
 import { makeCheckCommand } from "./commands/check";
@@ -47,13 +46,9 @@ async function getManifests(
   }
 
   try {
-    const allPackages: string[] = [];
-    for (const pkg of await findWorkspacePackages()) {
-      const p = path.join(pkg, "package.json");
-      if (fs.existsSync(p)) {
-        allPackages.push(p);
-      }
-    }
+    const allPackages = (await findWorkspacePackages()).map((p) =>
+      path.join(p, "package.json")
+    );
     allPackages.push(currentPackageJson);
     return allPackages;
   } catch (e) {
