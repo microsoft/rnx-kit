@@ -4,7 +4,7 @@ import { error, warn } from "@rnx-kit/console";
 import { isPackageManifest, readPackage } from "@rnx-kit/tools-node/package";
 import * as path from "path";
 import { findBadPackages } from "./findBadPackages";
-import type { AlignDepsConfig, LegacyCheckConfig, ErrorCode } from "./types";
+import type { AlignDepsConfig, ErrorCode, LegacyCheckConfig } from "./types";
 
 type ConfigResult = AlignDepsConfig | LegacyCheckConfig | ErrorCode;
 
@@ -36,7 +36,16 @@ export function containsValidRequirements(
   return false;
 }
 
-export function loadConfig(manifestPath: string): ConfigResult {
+/**
+ * Loads configuration from the specified package manifest.
+ * @param manifestPath The path to the package manifest to load configuration from
+ * @param mode Determines whether partial configuration is allowed
+ * @returns The configuration; otherwise an error code
+ */
+export function loadConfig(
+  manifestPath: string,
+  mode: "normal" | "vigilant" = "normal"
+): ConfigResult {
   const manifest = readPackage(manifestPath);
   if (!isPackageManifest(manifest)) {
     return "invalid-manifest";
@@ -68,8 +77,12 @@ export function loadConfig(manifestPath: string): ConfigResult {
       errors.push(`${manifestPath}: 'alignDeps.requirements' cannot be empty`);
     }
     if (errors.length > 0) {
-      for (const e of errors) {
-        error(e);
+      // In "vigilant" mode, we allow partial configurations as they can be
+      // provided by the user on the command line.
+      if (mode === "normal") {
+        for (const e of errors) {
+          error(e);
+        }
       }
       return "invalid-configuration";
     }
@@ -84,19 +97,59 @@ export function loadConfig(manifestPath: string): ConfigResult {
     };
   }
 
-  const {
-    capabilities,
-    customProfiles,
-    reactNativeDevVersion,
-    reactNativeVersion,
-  } = getKitCapabilities(config);
+  try {
+    const {
+      capabilities,
+      customProfiles,
+      reactNativeDevVersion,
+      reactNativeVersion,
+    } = getKitCapabilities(config);
 
-  return {
-    kitType,
-    reactNativeVersion,
-    ...(config.reactNativeDevVersion ? { reactNativeDevVersion } : undefined),
-    capabilities,
-    customProfiles,
-    manifest,
-  };
+    return {
+      kitType,
+      reactNativeVersion,
+      ...(config.reactNativeDevVersion ? { reactNativeDevVersion } : undefined),
+      capabilities,
+      customProfiles,
+      manifest,
+    };
+  } catch (e) {
+    return "invalid-configuration";
+  }
+}
+
+/**
+ * Loads presets from the specified package manifest.
+ *
+ * Must only be used in "vigilant" mode.
+ *
+ * In "vigilant" mode, we allow packages to declare which presets should be
+ * used, overriding the `--presets` flag. Otherwise, this would normally be
+ * considered an invalid configuration. As such, this function may only be used
+ * after {@link loadConfig} returns `invalid-configuration` or `not-configured`
+ * for the same package manifest.
+ *
+ * @param manifestPath The path to the package manifest to load configuration from
+ * @returns Presets loaded from the package manifest; otherwise `null`
+ */
+export function loadPresetsOverrideFromPackage(
+  manifestPath: string
+): string[] | null {
+  const projectRoot = path.dirname(manifestPath);
+  const kitConfig = getKitConfig({ cwd: projectRoot });
+  if (!kitConfig) {
+    return null;
+  }
+
+  const presets = kitConfig.alignDeps?.presets;
+  if (Array.isArray(presets)) {
+    return presets;
+  }
+
+  const { customProfiles } = kitConfig;
+  if (typeof customProfiles === "string") {
+    return [...defaultConfig.presets, customProfiles];
+  }
+
+  return null;
 }
