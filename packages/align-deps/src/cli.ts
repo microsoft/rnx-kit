@@ -53,7 +53,7 @@ async function getManifests(
     const allPackages = (await findWorkspacePackages()).map((p) =>
       path.join(path.relative(cwd, p), "package.json")
     );
-    allPackages.push(currentPackageJson);
+    allPackages.push(manifestPath);
     return allPackages;
   } catch (e) {
     if (hasProperty(e, "message")) {
