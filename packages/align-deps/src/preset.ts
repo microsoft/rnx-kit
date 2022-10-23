@@ -1,45 +1,15 @@
 import type { Capability } from "@rnx-kit/config";
 import semverCoerce from "semver/functions/coerce";
 import semverSatisfies from "semver/functions/satisfies";
+import semverValidRange from "semver/ranges/valid";
 import { gatherRequirements } from "./dependencies";
-import type {
-  AlignDepsConfig,
-  MetaPackage,
-  Options,
-  Package,
-  Preset,
-} from "./types";
+import type { AlignDepsConfig, Options, Preset } from "./types";
 
 type Resolution = {
   devPreset: Preset;
   prodPreset: Preset;
   capabilities: Capability[];
 };
-
-function compileRequirements(
-  requirements: string[]
-): ((pkg: MetaPackage | Package) => boolean)[] {
-  const includePrerelease = { includePrerelease: true };
-  return requirements.map((req) => {
-    const [requiredPackage, requiredVersionRange] = req.split("@");
-    return (pkg: MetaPackage | Package) => {
-      if (pkg.name !== requiredPackage || !("version" in pkg)) {
-        return false;
-      }
-
-      const coercedVersion = semverCoerce(pkg.version);
-      if (!coercedVersion) {
-        throw new Error(`Invalid version number: ${pkg.name}@${pkg.version}`);
-      }
-
-      return semverSatisfies(
-        coercedVersion,
-        requiredVersionRange,
-        includePrerelease
-      );
-    };
-  });
-}
 
 function ensurePreset(preset: Preset, requirements: string[]): void {
   if (Object.keys(preset).length === 0) {
@@ -61,6 +31,23 @@ function loadPreset(
   }
 }
 
+export function parseRequirements(requirements: string[]): [string, string][] {
+  return requirements.map((req) => {
+    const index = req.lastIndexOf("@");
+    if (index <= 0) {
+      throw new Error(`Invalid requirement: ${req}`);
+    }
+
+    const name = req.substring(0, index);
+    const version = req.substring(index + 1);
+    if (!version || !semverValidRange(version)) {
+      throw new Error(`Invalid version range in requirement: ${req}`);
+    }
+
+    return [name, version];
+  });
+}
+
 /**
  * Filters out any profiles that do not satisfy the specified requirements.
  * @param preset The preset to filter
@@ -69,13 +56,31 @@ function loadPreset(
  */
 export function filterPreset(preset: Preset, requirements: string[]): Preset {
   const filteredPreset: Preset = {};
-  const reqs = compileRequirements(requirements);
+
+  const includePrerelease = { includePrerelease: true };
+  const reqs = parseRequirements(requirements);
+
   for (const [profileName, profile] of Object.entries(preset)) {
-    // FIXME: Some capabilities can resolve to the same package (e.g. core vs core-microsoft)
     const packages = Object.values(profile);
-    const satisfiesRequirements = reqs.every((predicate) =>
-      packages.some(predicate)
-    );
+    const satisfiesRequirements = reqs.every(([pkgName, pkgVersion]) => {
+      // User provided capabilities can resolve to the same package (e.g. core
+      // vs core-microsoft). We will only look at the first capability to avoid
+      // unexpected behaviour, e.g. due to extensions declaring an older version
+      // of a package that is also declared in the built-in preset.
+      const pkg = packages.find((pkg) => pkg.name === pkgName);
+      if (!pkg || !("version" in pkg)) {
+        return false;
+      }
+
+      const coercedVersion = semverCoerce(pkg.version);
+      if (!coercedVersion) {
+        throw new Error(
+          `Invalid version number in '${profileName}': ${pkg.name}@${pkg.version}`
+        );
+      }
+
+      return semverSatisfies(coercedVersion, pkgVersion, includePrerelease);
+    });
     if (satisfiesRequirements) {
       filteredPreset[profileName] = profile;
     }
