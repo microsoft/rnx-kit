@@ -383,9 +383,8 @@ describe("checkPackageManifest({ kitType: 'library' }) (backwards compatibility)
   });
 
   test("returns error code when reading invalid manifests", () => {
-    expect(checkPackageManifest("package.json", defaultOptions)).not.toBe(
-      "success"
-    );
+    const result = checkPackageManifest("package.json", defaultOptions);
+    expect(result).not.toBe("success");
   });
 
   test("returns early if 'rnx-kit' is missing from the manifest", () => {
@@ -394,9 +393,9 @@ describe("checkPackageManifest({ kitType: 'library' }) (backwards compatibility)
       dependencies: { "react-native-linear-gradient": "0.0.0" },
     });
 
-    expect(checkPackageManifest("package.json", defaultOptions)).toBe(
-      "not-configured"
-    );
+    const result = checkPackageManifest("package.json", defaultOptions);
+
+    expect(result).toBe("not-configured");
   });
 
   test("prints warnings when detecting bad packages", () => {
@@ -412,9 +411,9 @@ describe("checkPackageManifest({ kitType: 'library' }) (backwards compatibility)
     });
     rnxKitConfig.__setMockConfig({ reactNativeVersion: "0.70.0" });
 
-    expect(checkPackageManifest("package.json", defaultOptions)).toBe(
-      "success"
-    );
+    const result = checkPackageManifest("package.json", defaultOptions);
+
+    expect(result).toBe("success");
   });
 
   test("prints warnings when detecting bad packages (with version range)", () => {
@@ -424,18 +423,18 @@ describe("checkPackageManifest({ kitType: 'library' }) (backwards compatibility)
     });
     rnxKitConfig.__setMockConfig({ reactNativeVersion: "^0.69.0 || ^0.70.0" });
 
-    expect(checkPackageManifest("package.json", defaultOptions)).toBe(
-      "success"
-    );
+    const result = checkPackageManifest("package.json", defaultOptions);
+
+    expect(result).toBe("success");
   });
 
   test("returns early if no capabilities are defined", () => {
     fs.__setMockContent(mockManifest);
     rnxKitConfig.__setMockConfig({ reactNativeVersion: "0.70.0" });
 
-    expect(checkPackageManifest("package.json", defaultOptions)).toBe(
-      "success"
-    );
+    const result = checkPackageManifest("package.json", defaultOptions);
+
+    expect(result).toBe("success");
   });
 
   test("returns if no changes are needed", () => {
@@ -455,9 +454,9 @@ describe("checkPackageManifest({ kitType: 'library' }) (backwards compatibility)
       capabilities: ["core-ios"],
     });
 
-    expect(checkPackageManifest("package.json", defaultOptions)).toBe(
-      "success"
-    );
+    const result = checkPackageManifest("package.json", defaultOptions);
+
+    expect(result).toBe("success");
   });
 
   test("returns if no changes are needed (write: true)", () => {
@@ -493,9 +492,9 @@ describe("checkPackageManifest({ kitType: 'library' }) (backwards compatibility)
       capabilities: ["core-ios"],
     });
 
-    expect(checkPackageManifest("package.json", defaultOptions)).toBe(
-      "unsatisfied"
-    );
+    const result = checkPackageManifest("package.json", defaultOptions);
+
+    expect(result).toBe("unsatisfied");
   });
 
   test("writes changes back to 'package.json'", () => {
@@ -547,9 +546,9 @@ describe("checkPackageManifest({ kitType: 'library' }) (backwards compatibility)
       capabilities: ["core-ios"],
     });
 
-    expect(checkPackageManifest("package.json", defaultOptions)).toBe(
-      "success"
-    );
+    const result = checkPackageManifest("package.json", defaultOptions);
+
+    expect(result).toBe("success");
   });
 
   test("uses declared development version", () => {
@@ -570,9 +569,9 @@ describe("checkPackageManifest({ kitType: 'library' }) (backwards compatibility)
       capabilities: ["core-ios"],
     });
 
-    expect(checkPackageManifest("package.json", defaultOptions)).toBe(
-      "success"
-    );
+    const result = checkPackageManifest("package.json", defaultOptions);
+
+    expect(result).toBe("success");
   });
 
   test("handles development version ranges", () => {
@@ -593,8 +592,8 @@ describe("checkPackageManifest({ kitType: 'library' }) (backwards compatibility)
       capabilities: ["core-ios"],
     });
 
-    expect(checkPackageManifest("package.json", defaultOptions)).toBe(
-      "success"
-    );
+    const result = checkPackageManifest("package.json", defaultOptions);
+
+    expect(result).toBe("success");
   });
 });
