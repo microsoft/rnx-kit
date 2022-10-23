@@ -285,10 +285,7 @@ describe("checkPackageManifestUnconfigured()", () => {
 
     const result = checkPackageManifestUnconfigured(
       "package.json",
-      {
-        ...defaultOptions,
-        write: true,
-      },
+      { ...defaultOptions, write: true },
       makeConfig(["react-native@0.70"], {
         name: "@rnx-kit/align-deps",
         version: "1.0.0",
@@ -310,10 +307,7 @@ describe("checkPackageManifestUnconfigured()", () => {
 
     const result = checkPackageManifestUnconfigured(
       "package.json",
-      {
-        ...defaultOptions,
-        excludePackages: ["@rnx-kit/align-deps"],
-      },
+      { ...defaultOptions, excludePackages: ["@rnx-kit/align-deps"] },
       makeConfig(["react-native@0.70"], {
         name: "@rnx-kit/align-deps",
         version: "1.0.0",
@@ -366,10 +360,7 @@ describe("checkPackageManifestUnconfigured()", () => {
 
     const result = checkPackageManifestUnconfigured(
       "package.json",
-      {
-        ...defaultOptions,
-        write: true,
-      },
+      { ...defaultOptions, write: true },
       { ...kitConfig, manifest: inputManifest }
     );
 
