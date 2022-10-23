@@ -4,7 +4,7 @@ import chalk from "chalk";
 import { diffLinesUnified } from "jest-diff";
 import * as path from "path";
 import { migrateConfig } from "../compatibility/config";
-import { loadConfig, loadPresetsOverride } from "../config";
+import { loadConfig, loadPresetsOverrideFromPackage } from "../config";
 import { isError, modifyManifest } from "../helpers";
 import { updatePackageManifest } from "../manifest";
 import { resolve } from "../preset";
@@ -103,7 +103,7 @@ export function makeCheckCommand(options: Options): Command {
     if (config === "invalid-configuration" || config === "not-configured") {
       // In "vigilant" mode, we allow packages to declare which presets should
       // be used in config, overriding the `--presets` flag.
-      const presetsOverride = loadPresetsOverride(manifest);
+      const presetsOverride = loadPresetsOverrideFromPackage(manifest);
       return checkPackageManifestUnconfigured(manifest, options, {
         kitType: "library",
         alignDeps: {

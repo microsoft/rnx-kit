@@ -132,7 +132,9 @@ export function loadConfig(
  * @param manifestPath The path to the package manifest to load configuration from
  * @returns Presets loaded from the package manifest; otherwise `null`
  */
-export function loadPresetsOverride(manifestPath: string): string[] | null {
+export function loadPresetsOverrideFromPackage(
+  manifestPath: string
+): string[] | null {
   const projectRoot = path.dirname(manifestPath);
   const kitConfig = getKitConfig({ cwd: projectRoot });
   if (!kitConfig) {

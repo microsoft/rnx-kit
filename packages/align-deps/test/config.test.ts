@@ -2,7 +2,7 @@ import {
   containsValidPresets,
   containsValidRequirements,
   defaultConfig,
-  loadPresetsOverride,
+  loadPresetsOverrideFromPackage,
 } from "../src/config";
 
 jest.mock("@rnx-kit/config");
@@ -58,7 +58,7 @@ describe("containsValidRequirements()", () => {
   });
 });
 
-describe("loadPresetsOverride()", () => {
+describe("loadPresetsOverrideFromPackage()", () => {
   const config = require("@rnx-kit/config");
 
   afterEach(() => {
@@ -66,22 +66,22 @@ describe("loadPresetsOverride()", () => {
   });
 
   test("returns `null` when no config is found", () => {
-    expect(loadPresetsOverride("package.json")).toBe(null);
+    expect(loadPresetsOverrideFromPackage("package.json")).toBe(null);
   });
 
   test("returns `null` when no presets are found", () => {
     config.__setMockConfig({ alignDeps: {} });
-    expect(loadPresetsOverride("package.json")).toBe(null);
+    expect(loadPresetsOverrideFromPackage("package.json")).toBe(null);
   });
 
   test("returns presets declared in `alignDeps`", () => {
     config.__setMockConfig({ alignDeps: { presets: ["test"] } });
-    expect(loadPresetsOverride("package.json")).toEqual(["test"]);
+    expect(loadPresetsOverrideFromPackage("package.json")).toEqual(["test"]);
   });
 
   test("returns preset declared in `customProfiles`", () => {
     config.__setMockConfig({ customProfiles: "test" });
-    expect(loadPresetsOverride("package.json")).toEqual([
+    expect(loadPresetsOverrideFromPackage("package.json")).toEqual([
       ...defaultConfig.presets,
       "test",
     ]);
@@ -92,6 +92,6 @@ describe("loadPresetsOverride()", () => {
       alignDeps: { presets: ["test"] },
       customProfiles: "test",
     });
-    expect(loadPresetsOverride("package.json")).toEqual(["test"]);
+    expect(loadPresetsOverrideFromPackage("package.json")).toEqual(["test"]);
   });
 });
