@@ -100,6 +100,29 @@ export function buildManifestProfile(
 }
 
 /**
+ * Cached version of {@link buildManifestProfile}.
+ *
+ * In monorepositories with many packages, this can save a lot of time.
+ *
+ * @param manifestPath The path to the package manifest
+ * @param config Configuration from `package.json` or "generated" from command line flags
+ * @returns A package manifest containing all capabilities
+ */
+const buildManifestProfileCached = ((): typeof buildManifestProfile => {
+  const profileCache: Record<string, ManifestProfile> = {};
+  return (manifestPath, config) => {
+    const { kitType, alignDeps } = config;
+    const key = `${kitType}:${JSON.stringify(alignDeps)}`;
+    if (!profileCache[key]) {
+      const result = buildManifestProfile(manifestPath, config);
+      profileCache[key] = result;
+    }
+
+    return profileCache[key];
+  };
+})();
+
+/**
  * Compares the package manifest with the desired profile and returns all
  * dependencies that are misaligned.
  * @param manifest The package manifest
@@ -157,7 +180,7 @@ export function checkPackageManifestUnconfigured(
     return "success";
   }
 
-  const manifestProfile = buildManifestProfile(manifestPath, config);
+  const manifestProfile = buildManifestProfileCached(manifestPath, config);
   const { manifest } = config;
   const changes = inspect(manifest, manifestProfile, write);
   if (changes.length > 0) {
