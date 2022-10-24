@@ -1,5 +1,11 @@
 # @rnx-kit/tools-workspaces
 
+## 0.1.2
+
+### Patch Changes
+
+- 0b8a7b2f: Exclude packages that don't have a manifest
+
 ## 0.1.1
 
 ### Patch Changes
