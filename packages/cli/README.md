@@ -174,11 +174,11 @@ from the bundle configuration (or its [defaults](#bundle-defaults)).
 Manage your package's dependencies.
 
 ```
-$ yarn react-native rnx-dep-check [options] [/path/to/package.json]
+$ yarn react-native rnx-align-deps [options] [/path/to/package.json]
 ```
 
 Refer to
-[@rnx-kit/dep-check](https://github.com/microsoft/rnx-kit/tree/main/packages/dep-check)
+[@rnx-kit/align-deps](https://github.com/microsoft/rnx-kit/tree/main/packages/align-deps)
 for details.
 
 ## Generate a Third-Party Notice for a Package
