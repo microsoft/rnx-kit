@@ -17,6 +17,61 @@ import { defaultConfig } from "./config";
 import { printError, printInfo } from "./errors";
 import type { Args, Command } from "./types";
 
+export const cliOptions = {
+  "exclude-packages": {
+    description:
+      "Comma-separated list of package names to exclude from inspection.",
+    type: "string",
+    requiresArg: true,
+  },
+  init: {
+    description:
+      "Writes an initial kit config to the specified 'package.json'. Note that this only works for React Native packages.",
+    choices: ["app", "library"],
+    conflicts: ["requirements"],
+  },
+  loose: {
+    default: false,
+    description:
+      "Determines how strict the React Native version requirement should be. Useful for apps that depend on a newer React Native version than their dependencies declare support for.",
+    type: "boolean",
+  },
+  "migrate-config": {
+    default: false,
+    description:
+      "Determines whether align-deps should try to update the config in 'package.json'.",
+    type: "boolean",
+  },
+  presets: {
+    description:
+      "Comma-separated list of presets. This can be names to built-in presets, or paths to external presets.",
+    type: "string",
+    requiresArg: true,
+  },
+  requirements: {
+    description:
+      "Comma-separated list of requirements to apply if a package is not configured for align-deps.",
+    type: "string",
+    requiresArg: true,
+  },
+  "set-version": {
+    description:
+      "Sets `react-native` requirements for any configured package. There is an interactive prompt if no value is provided. The value should be a comma-separated list of `react-native` versions to set, where the first number specifies the development version. Example: `0.70,0.69`",
+    type: "string",
+    conflicts: ["init", "requirements"],
+  },
+  verbose: {
+    default: false,
+    description: "Increase logging verbosity",
+    type: "boolean",
+  },
+  write: {
+    default: false,
+    description: "Writes changes to the specified 'package.json'.",
+    type: "boolean",
+  },
+};
+
 async function getManifests(
   packages: (string | number)[] | undefined
 ): Promise<string[] | undefined> {
@@ -172,60 +227,7 @@ if (require.main === module) {
   require("yargs").usage(
     "$0 [packages...]",
     "Dependency checker for npm packages",
-    {
-      "exclude-packages": {
-        description:
-          "Comma-separated list of package names to exclude from inspection.",
-        type: "string",
-        requiresArg: true,
-      },
-      init: {
-        description:
-          "Writes an initial kit config to the specified 'package.json'. Note that this only works for React Native packages.",
-        choices: ["app", "library"],
-        conflicts: ["requirements"],
-      },
-      loose: {
-        default: false,
-        description:
-          "Determines how strict the React Native version requirement should be. Useful for apps that depend on a newer React Native version than their dependencies declare support for.",
-        type: "boolean",
-      },
-      "migrate-config": {
-        default: false,
-        description:
-          "Determines whether align-deps should try to update the config in 'package.json'.",
-        type: "boolean",
-      },
-      presets: {
-        description:
-          "Comma-separated list of presets. This can be names to built-in presets, or paths to external presets.",
-        type: "string",
-        requiresArg: true,
-      },
-      requirements: {
-        description:
-          "Comma-separated list of requirements to apply if a package is not configured for align-deps.",
-        type: "string",
-        requiresArg: true,
-      },
-      "set-version": {
-        description:
-          "Sets `react-native` requirements for any configured package. There is an interactive prompt if no value is provided. The value should be a comma-separated list of `react-native` versions to set, where the first number specifies the development version. Example: `0.70,0.69`",
-        type: "string",
-        conflicts: ["init", "requirements"],
-      },
-      verbose: {
-        default: false,
-        description: "Increase logging verbosity",
-        type: "boolean",
-      },
-      write: {
-        default: false,
-        description: "Writes changes to the specified 'package.json'.",
-        type: "boolean",
-      },
-    },
+    cliOptions,
     cli
   ).argv;
 }
