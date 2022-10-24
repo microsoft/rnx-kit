@@ -22,6 +22,10 @@ export const WORKSPACE_ROOT_SENTINELS = [
   PNPM_WORKSPACE_YAML,
 ];
 
+function dirnameAll(paths: string[]): string[] {
+  return paths.map((p) => path.dirname(p));
+}
+
 function makeFindSentinel<R>(finder: (name: string[]) => R) {
   let result: R | undefined;
   return () => {
@@ -34,7 +38,8 @@ function makeFindSentinel<R>(finder: (name: string[]) => R) {
 
 function makeFindPackages<R>(
   glob: (patterns: string[], options: Options) => R,
-  fallback: R
+  fallback: R,
+  postprocess: (result: R) => R
 ) {
   const ignore = ["**/Pods/**", "**/bower_components/**", "**/node_modules/**"];
   return (patterns: string[] | undefined, cwd: string): R => {
@@ -42,17 +47,24 @@ function makeFindPackages<R>(
       return fallback;
     }
 
-    return glob(patterns, {
+    const pkgPatterns = patterns.map((p) => p + "/package.json");
+    const result = glob(pkgPatterns, {
       cwd,
       ignore,
       absolute: true,
-      onlyDirectories: true,
+      onlyFiles: true,
     });
+    return postprocess(result);
   };
 }
 
-export const findPackages = makeFindPackages(fg, Promise.resolve([]));
-export const findPackagesSync = makeFindPackages(fg.sync, []);
+export const findPackages = makeFindPackages(
+  fg,
+  Promise.resolve([]),
+  (result: Promise<string[]>) => result.then(dirnameAll)
+);
+
+export const findPackagesSync = makeFindPackages(fg.sync, [], dirnameAll);
 
 export const findSentinel = makeFindSentinel(findUp);
 export const findSentinelSync = makeFindSentinel(findUp.sync);

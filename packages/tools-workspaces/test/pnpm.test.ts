@@ -21,12 +21,12 @@ describe("findWorkspacePackages", () => {
 
   test("returns packages for pnpm workspaces", async () => {
     setFixture("pnpm");
-    expect(await findWorkspacePackages()).toEqual(packages);
+    expect((await findWorkspacePackages()).sort()).toEqual(packages);
   });
 
   test("returns packages for pnpm workspaces (sync)", () => {
     setFixture("pnpm");
-    expect(findWorkspacePackagesSync()).toEqual(packages);
+    expect(findWorkspacePackagesSync().sort()).toEqual(packages);
   });
 });
 
