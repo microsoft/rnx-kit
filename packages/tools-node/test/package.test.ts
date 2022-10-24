@@ -17,8 +17,8 @@ describe("Node > Package", () => {
   const fixtureDir = path.resolve(__dirname, "__fixtures__");
 
   beforeAll(() => {
-    expect(fs.existsSync(fixtureDir)).toBeTrue();
-    expect(fs.existsSync(tempDir)).toBeTrue();
+    expect(fs.existsSync(fixtureDir)).toBe(true);
+    expect(fs.existsSync(tempDir)).toBe(true);
   });
 
   let testTempDir: string;
@@ -44,12 +44,17 @@ describe("Node > Package", () => {
     });
   });
 
+  test("parsePackageRef(@alias) is allowed", () => {
+    expect(parsePackageRef("@alias")).toEqual({ name: "@alias" });
+  });
+
   test("parsePackageRef(undefined) throws an Error", () => {
+    // @ts-expect-error Argument of type 'undefined' is not assignable to parameter of type 'string'
     expect(() => parsePackageRef(undefined)).toThrowError();
   });
 
-  test("parsePackageRef(@babel) throws an Error", () => {
-    expect(() => parsePackageRef("@babel")).toThrowError();
+  test("parsePackageRef(@babel/) throws an Error", () => {
+    expect(() => parsePackageRef("@babel/")).toThrowError();
   });
 
   test("parsePackageRef(@/core) throws an Error", () => {
@@ -73,15 +78,15 @@ describe("Node > Package", () => {
       name: "package name",
       version: "1.0.0",
     };
-    expect(isPackageManifest(manifest)).toBeTrue();
+    expect(isPackageManifest(manifest)).toBe(true);
   });
 
   test("isPackageManifest() returns false when the object is not a PackageManifest", () => {
-    expect(isPackageManifest(undefined)).toBeFalse();
-    expect(isPackageManifest({})).toBeFalse();
-    expect(isPackageManifest("hello")).toBeFalse();
-    expect(isPackageManifest({ name: "name but no version" })).toBeFalse();
-    expect(isPackageManifest({ version: "version but no name" })).toBeFalse();
+    expect(isPackageManifest(undefined)).toBe(false);
+    expect(isPackageManifest({})).toBe(false);
+    expect(isPackageManifest("hello")).toBe(false);
+    expect(isPackageManifest({ name: "name but no version" })).toBe(false);
+    expect(isPackageManifest({ version: "version but no name" })).toBe(false);
   });
 
   test("readPackage() loads package.json when given its containing directory", () => {
@@ -102,9 +107,9 @@ describe("Node > Package", () => {
       name: "package name",
       version: "1.0.0",
     };
-    expect(fs.existsSync(pkgPath)).toBeFalse();
+    expect(fs.existsSync(pkgPath)).toBe(false);
     writePackage(testTempDir, manifest);
-    expect(fs.existsSync(pkgPath)).toBeTrue();
+    expect(fs.existsSync(pkgPath)).toBe(true);
   });
 
   test("writePackage() writes package.json when given a full path to it", () => {
@@ -113,9 +118,9 @@ describe("Node > Package", () => {
       name: "package name",
       version: "1.0.0",
     };
-    expect(fs.existsSync(pkgPath)).toBeFalse();
+    expect(fs.existsSync(pkgPath)).toBe(false);
     writePackage(pkgPath, manifest);
-    expect(fs.existsSync(pkgPath)).toBeTrue();
+    expect(fs.existsSync(pkgPath)).toBe(true);
   });
 
   test("findPackage() returns the nearest package.json file", () => {
