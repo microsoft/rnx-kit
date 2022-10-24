@@ -48,6 +48,10 @@ const profile: Profile = {
     version: "^0.72.1",
     devOnly: true,
   },
+  "datetime-picker": {
+    name: "@react-native-community/datetimepicker",
+    version: "^6.3.3",
+  },
   gestures: {
     name: "react-native-gesture-handler",
     version: "^2.6.0",
@@ -89,6 +93,10 @@ const profile: Profile = {
   "safe-area": {
     name: "react-native-safe-area-context",
     version: "^4.4.1",
+  },
+  screens: {
+    name: "react-native-screens",
+    version: "^3.18.2",
   },
   storage: {
     name: "@react-native-async-storage/async-storage",
