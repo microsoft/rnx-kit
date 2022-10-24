@@ -1,5 +1,11 @@
 # @rnx-kit/build
 
+## 0.4.1
+
+### Patch Changes
+
+- d5a54c2f: GitHub Actions: `set-output` is deprecated
+
 ## 0.4.0
 
 ### Minor Changes
