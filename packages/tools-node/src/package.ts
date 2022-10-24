@@ -22,17 +22,21 @@ export type PackageRef = {
  */
 export function parsePackageRef(r: string): PackageRef {
   if (r.startsWith("@")) {
+    // If `/` is not found, the reference could be a path alias.
     const indexSeparator = r.indexOf("/");
-    // The separator must start from position >= 2 to ensure that it is '@'
-    // and at least one other character. Further, the separator must have
-    // at least 1 character following it, before the end of the string.
-    if (indexSeparator < 2 || indexSeparator + 2 >= r.length) {
-      throw new Error(`Invalid package reference: "${r}"`);
+    if (indexSeparator >= 0) {
+      // The separator must start from position >= 2 to ensure that it is '@'
+      // and at least one other character. Further, the separator must have
+      // at least 1 character following it, before the end of the string.
+      if (indexSeparator < 2 || indexSeparator + 2 >= r.length) {
+        throw new Error(`Invalid package reference: "${r}"`);
+      }
+
+      return {
+        scope: r.substring(0, indexSeparator),
+        name: r.substring(indexSeparator + 1),
+      };
     }
-    return {
-      scope: r.substring(0, indexSeparator),
-      name: r.substring(indexSeparator + 1),
-    };
   }
 
   if (!r) {
