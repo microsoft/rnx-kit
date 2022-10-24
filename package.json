@@ -36,7 +36,7 @@
     "@babel/core": "^7.0.0",
     "@changesets/cli": "^2.22.0",
     "@rnx-kit/dep-check": "*",
-    "nx": "^14.4.0",
+    "nx": "^15.0.1",
     "prettier": "^2.3.0"
   },
   "engines": {

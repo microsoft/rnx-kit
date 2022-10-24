@@ -3,11 +3,15 @@
   "affected": {
     "defaultBase": "main"
   },
-  "implicitDependencies": {
-    "packages/eslint-config/*": "*",
-    "packages/eslint-plugin/*": "*",
-    "packages/jest-preset/*": "*",
-    "yarn.lock": "*"
+  "namedInputs": {
+    "default": ["{projectRoot}/**/*", "sharedGlobals"],
+    "sharedGlobals": [
+      "{workspaceRoot}/packages/eslint-config/*",
+      "{workspaceRoot}/packages/eslint-plugin/*",
+      "{workspaceRoot}/packages/jest-preset/*",
+      "{workspaceRoot}/yarn.lock"
+    ],
+    "production": ["default"]
   },
   "targetDefaults": {
     "build": {
