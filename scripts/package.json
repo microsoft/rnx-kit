@@ -36,7 +36,7 @@
   },
   "depcheck": {
     "ignoreMatches": [
-      "@rnx-kit/dep-check",
+      "@rnx-kit/align-deps",
       "@rnx-kit/jest-preset",
       "jest",
       "midgard-yarn",

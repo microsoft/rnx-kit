@@ -27,7 +27,7 @@
     "lint": "nx run-many --target lint --all",
     "new-package": "node scripts/new-package.js",
     "publish:changesets": "changeset publish",
-    "rnx-dep-check": "yarn build-scope dep-check && scripts/rnx-dep-check.js",
+    "rnx-align-deps": "yarn build-scope align-deps && scripts/rnx-align-deps.js",
     "test": "nx run-many --target test --output-style stream --all",
     "update-readme": "nx run-many --target update-readme --all",
     "version:changesets": "changeset version"
@@ -35,7 +35,7 @@
   "devDependencies": {
     "@babel/core": "^7.0.0",
     "@changesets/cli": "^2.22.0",
-    "@rnx-kit/dep-check": "*",
+    "@rnx-kit/align-deps": "*",
     "nx": "^15.0.1",
     "prettier": "^2.3.0"
   },

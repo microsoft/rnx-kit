@@ -5,11 +5,11 @@
   - .yarnrc
   - package.json
   - scripts/**/*
+'feature: align-deps':
+  - packages/align-deps/**/*
 'feature: cli':
   - packages/cli/**/*
   - packages/config/**/*
-'feature: dep-check':
-  - packages/dep-check/**/*
 'feature: eslint':
   - packages/eslint-*/**/*
 'feature: jest':

@@ -7,7 +7,7 @@
     "build": "rnx-kit-scripts build",
     "build:ios": "rnx-kit-scripts build-ios -w SampleCrossApp -s ReactTestApp",
     "build:android": "rnx-kit-scripts build-android clean build",
-    "depcheck": "react-native rnx-dep-check && rnx-kit-scripts depcheck",
+    "depcheck": "react-native rnx-align-deps && rnx-kit-scripts depcheck",
     "format": "rnx-kit-scripts format",
     "lint": "rnx-kit-scripts lint",
     "test": "react-native rnx-test --platform ios",
@@ -61,7 +61,6 @@
     "preset": "@rnx-kit/scripts"
   },
   "rnx-kit": {
-    "reactNativeVersion": "^0.68",
     "kitType": "app",
     "build": {
       "distribution": [
@@ -150,14 +149,22 @@
         ]
       }
     },
-    "capabilities": [
-      "core-android",
-      "core-ios",
-      "core-macos",
-      "core-windows",
-      "babel-preset-react-native",
-      "react",
-      "test-app"
-    ]
+    "alignDeps": {
+      "presets": [
+        "microsoft/react-native"
+      ],
+      "requirements": [
+        "react-native@0.68"
+      ],
+      "capabilities": [
+        "core-android",
+        "core-ios",
+        "core-macos",
+        "core-windows",
+        "babel-preset-react-native",
+        "react",
+        "test-app"
+      ]
+    }
   }
 }

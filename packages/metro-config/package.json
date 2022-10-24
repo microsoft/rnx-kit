@@ -54,6 +54,11 @@
     "preset": "@rnx-kit/scripts"
   },
   "rnx-kit": {
-    "customProfiles": "@rnx-kit/scripts/rnx-dep-check.js"
+    "alignDeps": {
+      "presets": [
+        "microsoft/react-native",
+        "@rnx-kit/scripts/rnx-align-deps.js"
+      ]
+    }
   }
 }

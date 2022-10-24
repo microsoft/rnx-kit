@@ -1,8 +1,9 @@
 #!/usr/bin/env node
-
 "use strict";
 
-module.exports = {
+const { cli, presets } = require("@rnx-kit/align-deps");
+
+const profile = {
   "@types/jest": {
     name: "@types/jest",
     version: "^27.0.0",
@@ -66,11 +67,18 @@ module.exports = {
   },
 };
 
+const profileNames = Object.keys(presets["microsoft/react-native"]);
+
+module.exports = profileNames.reduce((preset, key) => {
+  preset[key] = profile;
+  return preset;
+}, {});
+
 if (require.main === module) {
-  require("@rnx-kit/dep-check").cli({
-    "custom-profiles": __filename,
+  cli({
+    presets: ["microsoft/react-native", __filename],
     "exclude-packages": "@rnx-kit/expo-app",
-    vigilant: "0.68",
+    requirements: ["react-native@0.68"],
     write: process.argv.includes("--write"),
   });
 }

@@ -20,7 +20,7 @@ yarn add @rnx-kit/build @rnx-kit/build-plugin-firebase --dev
 or if you're using npm
 
 ```sh
-npm add --save-dev @rnx-kit/dep-check @rnx-kit/build-plugin-firebase
+npm add --save-dev @rnx-kit/build @rnx-kit/build-plugin-firebase
 ```
 
 ## Usage
