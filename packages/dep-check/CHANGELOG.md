@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/dep-check
 
+## 1.13.2
+
+### Patch Changes
+
+- 0de1a0aa: Bump `@rnx-kit/tools-workspaces` to 0.1.2
+
 ## 1.13.1
 
 ### Patch Changes

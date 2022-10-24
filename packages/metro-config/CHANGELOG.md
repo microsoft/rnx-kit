@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-config
 
+## 1.3.2
+
+### Patch Changes
+
+- 0de1a0aa: Bump `@rnx-kit/tools-workspaces` to 0.1.2
+
 ## 1.3.1
 
 ### Patch Changes
