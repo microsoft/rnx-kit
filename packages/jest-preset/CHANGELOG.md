@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/jest-preset
 
+## 0.1.12
+
+### Patch Changes
+
+- a1c819b7: `@office-iss/react-native-win32` and `react-native-macos` need to be transformed because they contain Flow typed files
+
 ## 0.1.11
 
 ### Patch Changes
