@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/dep-check
 
+## 1.13.3
+
+### Patch Changes
+
+- 4af0dc3f: Bump `datetime-picker` and `screens` for better 0.70 support
+
 ## 1.13.2
 
 ### Patch Changes
