@@ -247,7 +247,6 @@ describe("jest-preset", () => {
     };
 
     const regex = new RegExp(transformIgnorePatterns[0]);
-    console.log(regex);
     for (const [path, ignored] of Object.entries(paths)) {
       expect(regex.test(path)).toBe(ignored);
     }
