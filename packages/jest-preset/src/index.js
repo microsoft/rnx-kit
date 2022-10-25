@@ -209,7 +209,7 @@ module.exports = (
       ...userTransform,
     },
     transformIgnorePatterns: [
-      "node_modules/(?!((jest-)?react-native|@react-native(-community)?)/)",
+      "node_modules/(?!((jest-)?react-native|@react-native(-community)?|@office-iss/react-native-win32)/)",
       ...(userTransformIgnorePatterns || []),
     ],
     ...userOptions,
