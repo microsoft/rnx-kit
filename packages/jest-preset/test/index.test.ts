@@ -226,4 +226,30 @@ describe("jest-preset", () => {
       expect.objectContaining(jestMacOSPreset(path.sep + "react-native-macos"))
     );
   });
+
+  test("ignores 'node_modules' with a few exceptions", () => {
+    const { transformIgnorePatterns } = jestPreset();
+    if (!transformIgnorePatterns || transformIgnorePatterns.length === 0) {
+      fail();
+    }
+
+    const paths = {
+      "node_modules/@babel/runtime/regenerator": true,
+      "node_modules/@office-iss/react-native-win32/index.js": false,
+      "node_modules/@office-iss/rex-win32/rex-win32.js": true,
+      "node_modules/@react-native-community/cli/index.js": false,
+      "node_modules/@react-native-windows/virtualized-list/src/VirtualizedList.js":
+        true,
+      "node_modules/@react-native/polyfills/index.js": false,
+      "node_modules/react-native/index.js": false,
+      "node_modules/react/index.js": true,
+      "packages/react-native/index.js": false,
+    };
+
+    const regex = new RegExp(transformIgnorePatterns[0]);
+    console.log(regex);
+    for (const [path, ignored] of Object.entries(paths)) {
+      expect(regex.test(path)).toBe(ignored);
+    }
+  });
 });
