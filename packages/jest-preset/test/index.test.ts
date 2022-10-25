@@ -241,6 +241,7 @@ describe("jest-preset", () => {
       "node_modules/@react-native-windows/virtualized-list/src/VirtualizedList.js":
         true,
       "node_modules/@react-native/polyfills/index.js": false,
+      "node_modules/react-native-macos/index.js": false,
       "node_modules/react-native/index.js": false,
       "node_modules/react/index.js": true,
       "packages/react-native/index.js": false,
