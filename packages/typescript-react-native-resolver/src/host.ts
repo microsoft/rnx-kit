@@ -79,13 +79,18 @@ export function changeHostToUseReactNativeResolver({
     );
   }
 
+  // Depending on where we get called from platformExtensionNames may already have platform in it
+  const platformExtensions = platformExtensionNames || [];
+  if (!platformExtensions.includes(platform)) {
+    platformExtensions.unshift(platform);
+  }
   const context: ResolverContext = {
     host: host as ModuleResolutionHostLike,
     options,
     disableReactNativePackageSubstitution,
     log,
     platform,
-    platformExtensions: [platform, ...(platformExtensionNames || [])].map(
+    platformExtensions: platformExtensions.map(
       (e) => `.${e}` // prepend a '.' to each name to make it a file extension
     ),
     replaceReactNativePackageName: createReactNativePackageNameReplacer(
