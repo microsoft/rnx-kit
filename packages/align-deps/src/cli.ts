@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import { error } from "@rnx-kit/console";
+import { isNonEmptyArray } from "@rnx-kit/tools-language/array";
 import { hasProperty } from "@rnx-kit/tools-language/properties";
 import { findPackageDir } from "@rnx-kit/tools-node/package";
 import {
@@ -20,7 +21,10 @@ async function getManifests(
   packages: (string | number)[] | undefined
 ): Promise<string[] | undefined> {
   const cwd = process.cwd();
-  if (Array.isArray(packages)) {
+  // When positional arguments are not provided, we will get `undefined` if
+  // invoked directly, and an empty array if invoked via
+  // `@react-native-community/cli`.
+  if (isNonEmptyArray(packages)) {
     return packages.reduce<string[]>((result, pkg) => {
       const dir = findPackageDir(pkg.toString());
       if (dir) {
