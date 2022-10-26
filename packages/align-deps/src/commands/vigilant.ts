@@ -167,7 +167,7 @@ export function checkPackageManifestUnconfigured(
       const violations = changes
         .map(
           ({ name, from, to, section }) =>
-            `\t${name} "${from}" -> "${to}" (${section})`
+            `\t${name} "${from}" should be "${to}" (${section})`
         )
         .join("\n");
       error(
