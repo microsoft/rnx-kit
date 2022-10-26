@@ -19,11 +19,14 @@ import type { Args, Command } from "./types";
 async function getManifests(
   packages: (string | number)[] | undefined
 ): Promise<string[] | undefined> {
+  const cwd = process.cwd();
   if (Array.isArray(packages)) {
     return packages.reduce<string[]>((result, pkg) => {
       const dir = findPackageDir(pkg.toString());
       if (dir) {
-        result.push(path.join(dir, "package.json"));
+        const pkgJson = path.join(dir, "package.json");
+        const relativePath = path.relative(cwd, pkgJson);
+        result.push(relativePath);
       }
       return result;
     }, []);
@@ -34,22 +37,23 @@ async function getManifests(
     return undefined;
   }
 
-  // Make sure we don't return all packages when dep-check is run inside a
-  // package that just happened to be part of a workspace.
+  // Make sure we don't return all packages when run inside a package that just
+  // happens to be part of a workspace.
   const currentPackageJson = path.join(packageDir, "package.json");
+  const manifestPath = path.relative(cwd, currentPackageJson);
   try {
     if ((await findWorkspaceRoot()) !== packageDir) {
-      return [currentPackageJson];
+      return [manifestPath];
     }
   } catch (_) {
-    return [currentPackageJson];
+    return [manifestPath];
   }
 
   try {
     const allPackages = (await findWorkspacePackages()).map((p) =>
-      path.join(p, "package.json")
+      path.join(path.relative(cwd, p), "package.json")
     );
-    allPackages.push(currentPackageJson);
+    allPackages.push(manifestPath);
     return allPackages;
   } catch (e) {
     if (hasProperty(e, "message")) {
@@ -89,6 +93,7 @@ async function makeCommand(args: Args): Promise<Command | undefined> {
     presets,
     requirements,
     "set-version": setVersion,
+    verbose,
     write,
   } = args;
 
@@ -96,6 +101,7 @@ async function makeCommand(args: Args): Promise<Command | undefined> {
     presets: presets?.toString()?.split(",") ?? defaultConfig.presets,
     loose,
     migrateConfig,
+    verbose,
     write,
     excludePackages: excludePackages?.toString()?.split(","),
     requirements: requirements?.toString()?.split(","),
@@ -142,8 +148,7 @@ export async function cli({ packages, ...args }: Args): Promise<void> {
       }
     } catch (e) {
       if (hasProperty(e, "message")) {
-        const currentPackageJson = path.relative(process.cwd(), manifest);
-        error(`${currentPackageJson}: ${e.message}`);
+        error(`${manifest}: ${e.message}`);
         return errors + 1;
       }
 
@@ -205,6 +210,11 @@ if (require.main === module) {
           "Sets `react-native` requirements for any configured package. There is an interactive prompt if no value is provided. The value should be a comma-separated list of `react-native` versions to set, where the first number specifies the development version. Example: `0.70,0.69`",
         type: "string",
         conflicts: ["init", "requirements"],
+      },
+      verbose: {
+        default: false,
+        description: "Increase logging verbosity",
+        type: "boolean",
       },
       write: {
         default: false,

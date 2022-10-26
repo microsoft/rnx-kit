@@ -48,7 +48,7 @@ export function visitDependencies(
       resolveSymlinks: true,
     });
     if (!packageDir) {
-      warn(`Unable to resolve module '${dependency}'`);
+      warn(`Unable to resolve module '${dependency}' from '${projectRoot}'`);
       return;
     }
 

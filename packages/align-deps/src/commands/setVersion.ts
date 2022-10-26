@@ -4,7 +4,8 @@ import prompts from "prompts";
 import semverCoerce from "semver/functions/coerce";
 import { transformConfig } from "../compatibility/config";
 import { defaultConfig, loadConfig } from "../config";
-import { isError, keysOf, modifyManifest } from "../helpers";
+import { isError } from "../errors";
+import { keysOf, modifyManifest } from "../helpers";
 import defaultPreset from "../presets/microsoft/react-native";
 import type {
   AlignDepsConfig,

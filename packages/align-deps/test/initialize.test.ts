@@ -4,6 +4,14 @@ import {
 } from "../src/commands/initialize";
 import { defaultConfig } from "../src/config";
 
+const defaultOptions = {
+  presets: defaultConfig.presets,
+  loose: false,
+  migrateConfig: false,
+  verbose: false,
+  write: false,
+};
+
 describe("initializeConfig()", () => {
   const bundle = {
     entryPath: "src/index.ts",
@@ -27,7 +35,7 @@ describe("initializeConfig()", () => {
       },
       ".",
       "library",
-      { presets: [], loose: false, write: false }
+      { ...defaultOptions, presets: [] }
     );
 
     expect(result).toBeNull();
@@ -41,7 +49,7 @@ describe("initializeConfig()", () => {
       },
       ".",
       "library",
-      { presets: [], loose: false, write: false }
+      { ...defaultOptions, presets: [] }
     );
 
     expect(result).toBeNull();
@@ -62,7 +70,7 @@ describe("initializeConfig()", () => {
       },
       ".",
       "library",
-      { presets: defaultConfig.presets, loose: false, write: false }
+      defaultOptions
     );
 
     const kitConfig = result?.["rnx-kit"];
@@ -92,7 +100,7 @@ describe("initializeConfig()", () => {
       },
       ".",
       "app",
-      { presets: defaultConfig.presets, loose: false, write: false }
+      defaultOptions
     );
 
     const kitConfig = result?.["rnx-kit"];
@@ -126,7 +134,7 @@ describe("initializeConfig()", () => {
       },
       ".",
       "library",
-      { presets: defaultConfig.presets, loose: false, write: false }
+      defaultOptions
     );
 
     const kitConfig = result?.["rnx-kit"];
@@ -167,7 +175,7 @@ describe("initializeConfig()", () => {
       },
       ".",
       "library",
-      { presets, loose: false, write: false }
+      { ...defaultOptions, presets }
     );
 
     const alignDeps = result?.["rnx-kit"]?.alignDeps;
@@ -180,11 +188,7 @@ describe("initializeConfig()", () => {
 });
 
 describe("makeInitializeCommand()", () => {
-  const options = {
-    presets: [],
-    loose: false,
-    write: false,
-  };
+  const options = { ...defaultOptions, presets: [] };
 
   test("returns undefined for invalid kit types", () => {
     const command = makeInitializeCommand("random", options);

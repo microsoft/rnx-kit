@@ -5,7 +5,8 @@ import { diffLinesUnified } from "jest-diff";
 import * as path from "path";
 import { migrateConfig } from "../compatibility/config";
 import { loadConfig, loadPresetsOverrideFromPackage } from "../config";
-import { isError, modifyManifest } from "../helpers";
+import { isError } from "../errors";
+import { modifyManifest } from "../helpers";
 import { updatePackageManifest } from "../manifest";
 import { resolve } from "../preset";
 import type { Command, ErrorCode, Options } from "../types";
@@ -32,24 +33,27 @@ export function checkPackageManifest(
 
   const { kitType, manifest } = config;
 
-  if (kitType === "app") {
-    info(
-      "Aligning your app's dependencies according to the following profiles:",
-      Object.keys(prodPreset).join(", ")
-    );
-  } else {
-    info(
-      "Aligning your library's dependencies according to the following profiles:\n" +
-        `\t- Development: ${Object.keys(devPreset).join(", ")}\n` +
-        `\t- Production: ${Object.keys(prodPreset).join(", ")}`
-    );
+  if (options.verbose) {
+    if (kitType === "app") {
+      info(
+        `${manifestPath}: Aligning your app's dependencies according to the following profiles:`,
+        Object.keys(prodPreset).join(", ")
+      );
+    } else {
+      info(
+        `${manifestPath}: Aligning your library's dependencies according to the following profiles:\n` +
+          `\t- Development: ${Object.keys(devPreset).join(", ")}\n` +
+          `\t- Production: ${Object.keys(prodPreset).join(", ")}`
+      );
+    }
   }
 
   const updatedManifest = updatePackageManifest(
+    manifestPath,
     manifest,
     capabilities,
-    Object.values(prodPreset),
-    Object.values(devPreset),
+    prodPreset,
+    devPreset,
     kitType
   );
 

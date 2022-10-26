@@ -45,9 +45,9 @@ export function isMetaPackage(pkg: MetaPackage | Package): pkg is MetaPackage {
 
 function resolveCapability(
   capability: Capability,
-  profile: Profile,
+  namedProfile: [string, Profile],
   dependencies: Record<string, Package[]>,
-  unresolvedCapabilities: Set<string>,
+  unresolvedCapabilities: Record<string, string[]>,
   resolved = new Set<string>()
 ): void {
   if (resolved.has(capability)) {
@@ -57,16 +57,22 @@ function resolveCapability(
   // Make sure we don't end in a loop
   resolved.add(capability);
 
+  const [profileName, profile] = namedProfile;
   const pkg = profile[capability];
   if (!pkg) {
-    unresolvedCapabilities.add(capability);
+    const profiles = unresolvedCapabilities[capability];
+    if (!profiles) {
+      unresolvedCapabilities[capability] = [profileName];
+    } else {
+      profiles.push(profileName);
+    }
     return;
   }
 
   pkg.capabilities?.forEach((capability) =>
     resolveCapability(
       capability,
-      profile,
+      namedProfile,
       dependencies,
       unresolvedCapabilities,
       resolved
@@ -87,33 +93,35 @@ function resolveCapability(
 }
 
 export function resolveCapabilities(
+  manifestPath: string,
   capabilities: Capability[],
-  profiles: Profile[]
+  preset: Preset
 ): Record<string, Package[]> {
-  const unresolvedCapabilities = new Set<string>();
-  const packages = capabilities.reduce<Record<string, Package[]>>(
-    (dependencies, capability) => {
-      profiles.forEach((profile) => {
-        resolveCapability(
-          capability,
-          profile,
-          dependencies,
-          unresolvedCapabilities
-        );
-      });
-      return dependencies;
-    },
-    {}
-  );
+  const profiles = Object.entries(preset);
+  const dependencies: Record<string, Package[]> = {};
+  const unresolvedCapabilities: Record<string, string[]> = {};
 
-  if (unresolvedCapabilities.size > 0) {
-    const message = Array.from(unresolvedCapabilities).reduce(
-      (lines, capability) => (lines += `\n\t${capability}`),
-      "The following capabilities could not be resolved for one or more profiles:"
+  for (const capability of capabilities) {
+    profiles.forEach((profile) => {
+      resolveCapability(
+        capability,
+        profile,
+        dependencies,
+        unresolvedCapabilities
+      );
+    });
+  }
+
+  const unresolved = Object.entries(unresolvedCapabilities);
+  if (unresolved.length > 0) {
+    const message = unresolved.reduce(
+      (lines, [capability, profiles]) =>
+        (lines += `\n\t${capability} (missing in ${profiles.join(", ")})`),
+      `${manifestPath}: The following capabilities could not be resolved for one or more profiles:`
     );
 
     warn(message);
   }
 
-  return packages;
+  return dependencies;
 }

@@ -1,5 +1,6 @@
 import path from "path";
 import { checkPackageManifest } from "../src/commands/check";
+import { defaultConfig } from "../src/config";
 
 jest.mock("fs");
 jest.unmock("@rnx-kit/config");
@@ -26,7 +27,13 @@ describe("checkPackageManifest({ kitType: 'app' }) (backwards compatibility)", (
     });
 
     expect(
-      checkPackageManifest(manifestPath, { loose: false, write: true })
+      checkPackageManifest(manifestPath, {
+        presets: defaultConfig.presets,
+        loose: false,
+        migrateConfig: false,
+        verbose: false,
+        write: true,
+      })
     ).toBe("success");
     expect(destination).toBe(manifestPath);
     expect(updatedManifest).toMatchSnapshot();

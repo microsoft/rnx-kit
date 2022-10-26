@@ -1,6 +1,5 @@
 import type { KitConfig } from "@rnx-kit/config";
 import { warn } from "@rnx-kit/console";
-import * as path from "path";
 import { defaultConfig } from "../config";
 import { dropPatchFromVersion, modifyManifest } from "../helpers";
 import type { AlignDepsConfig, LegacyCheckConfig, Options } from "../types";
@@ -61,7 +60,6 @@ export function migrateConfig(
   manifestPath: string,
   { migrateConfig }: Options
 ): AlignDepsConfig {
-  const manifestRelPath = path.relative(process.cwd(), manifestPath);
   if ("alignDeps" in config) {
     const oldKeys = findLegacyConfigKeys(config);
     if (oldKeys.length > 0) {
@@ -69,7 +67,7 @@ export function migrateConfig(
         .map((key) => `'rnx-kit.${key}'`)
         .join(", ");
       warn(
-        `${manifestRelPath}: The following keys are no longer supported: ${unsupportedKeys}`
+        `${manifestPath}: The following keys are no longer supported: ${unsupportedKeys}`
       );
     }
     return config;
@@ -93,7 +91,7 @@ export function migrateConfig(
 
     modifyManifest(manifestPath, manifest);
   } else {
-    warn(`${manifestRelPath}: The config schema has changed. Please update your config to the following:
+    warn(`${manifestPath}: The config schema has changed. Please update your config to the following:
 
 ${JSON.stringify(configOnly, null, 2)}
 
