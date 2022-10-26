@@ -37,8 +37,8 @@ async function getManifests(
     return undefined;
   }
 
-  // Make sure we don't return all packages when dep-check is run inside a
-  // package that just happened to be part of a workspace.
+  // Make sure we don't return all packages when run inside a package that just
+  // happens to be part of a workspace.
   const currentPackageJson = path.join(packageDir, "package.json");
   const manifestPath = path.relative(cwd, currentPackageJson);
   try {
