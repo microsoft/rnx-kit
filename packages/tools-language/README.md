@@ -34,6 +34,7 @@ import * from "@rnx-kit/tools-language/properties";
 | properties | `extendObject(obj, extendedProps)`        | Add properties to an object, changing it from its current type to an extended type.                                                                         |
 | properties | `extendObjectArray(arr, extendedProps)`   | Add properties to each object in an array, changing the object from its current type to an extended type.                                                   |
 | properties | `hasProperty(obj, property)`              | Returns whether `property` exists in `obj`.                                                                                                                 |
+| properties | `keysOf(obj)`                             | Returns the names of the enumerable string properties of an object. Equivalent to calling `Object.keys()`, but type safe.                                   |
 | properties | `pickValue(obj, key, name)`               | Pick the value for property `key` from `obj` and return it in a new object. If `name` is given, use it in the new object, instead of `key`.                 |
 | properties | `pickValues(obj, keys, names)`            | Pick the value for each `key` property from `obj` and return each one in a new object. If `names` are given, use them in the new object, instead of `keys`. |
 

@@ -1,10 +1,11 @@
 import type { Capability } from "@rnx-kit/config";
 import { error } from "@rnx-kit/console";
+import { keysOf } from "@rnx-kit/tools-language/properties";
 import type { PackageManifest } from "@rnx-kit/tools-node/package";
 import * as path from "path";
 import semverSubset from "semver/ranges/subset";
 import { resolveCapabilities } from "../capabilities";
-import { keysOf, modifyManifest } from "../helpers";
+import { modifyManifest } from "../helpers";
 import { updateDependencies } from "../manifest";
 import { filterPreset, mergePresets } from "../preset";
 import type {
