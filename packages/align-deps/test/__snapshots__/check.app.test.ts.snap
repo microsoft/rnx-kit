@@ -17,7 +17,7 @@ exports[`checkPackageManifest({ kitType: 'app' }) (backwards compatibility) adds
     \\"react-native-webview\\": \\"^11.23.0\\"
   },
   \\"rnx-kit\\": {
-    \\"reactNativeVersion\\": \\"^0.69 || ^0.70\\",
+    \\"reactNativeVersion\\": \\"^0.70\\",
     \\"kitType\\": \\"app\\",
     \\"capabilities\\": [
       \\"core-android\\",

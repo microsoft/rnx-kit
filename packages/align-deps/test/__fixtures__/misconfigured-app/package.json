@@ -1,0 +1,16 @@
+{
+  "name": "misconfigured-app",
+  "version": "1.0.0",
+  "rnx-kit": {
+    "kitType": "app",
+    "alignDeps": {
+      "requirements": [
+        "react-native@0.69 || 0.70"
+      ],
+      "capabilities": [
+        "core-android",
+        "hermes"
+      ]
+    }
+  }
+}
