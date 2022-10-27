@@ -12,7 +12,9 @@ export function printError(manifestPath: string, code: ErrorCode): void {
       break;
 
     case "invalid-app-requirements":
-      error(`${manifestPath}: app requirements must resolve to a single profile`);
+      error(
+        `${manifestPath}: app requirements must resolve to a single profile`
+      );
       break;
 
     case "invalid-configuration":
