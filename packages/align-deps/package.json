@@ -1,5 +1,4 @@
 {
-  "private": true,
   "name": "@rnx-kit/align-deps",
   "version": "1.13.1",
   "description": "Dependency checker for npm packages",
