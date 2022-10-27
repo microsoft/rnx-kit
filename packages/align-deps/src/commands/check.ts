@@ -1,4 +1,6 @@
 import { info } from "@rnx-kit/console";
+import { pickValues } from "@rnx-kit/tools-language";
+import type { PackageManifest } from "@rnx-kit/tools-node/package";
 import { readPackage } from "@rnx-kit/tools-node/package";
 import chalk from "chalk";
 import { diffLinesUnified } from "jest-diff";
@@ -11,6 +13,18 @@ import { updatePackageManifest } from "../manifest";
 import { resolve } from "../preset";
 import type { Command, ErrorCode, Options } from "../types";
 import { checkPackageManifestUnconfigured } from "./vigilant";
+
+const visibleKeys = [
+  "name",
+  "version",
+  "dependencies",
+  "peerDependencies",
+  "devDependencies",
+];
+
+function stringify(manifest: PackageManifest): string {
+  return JSON.stringify(pickValues(manifest, visibleKeys), undefined, 2);
+}
 
 export function checkPackageManifest(
   manifestPath: string,
@@ -58,8 +72,8 @@ export function checkPackageManifest(
   );
 
   // Don't fail when manifests only have whitespace differences.
-  const updatedManifestJson = JSON.stringify(updatedManifest, undefined, 2);
-  const normalizedManifestJson = JSON.stringify(manifest, undefined, 2);
+  const updatedManifestJson = stringify(updatedManifest);
+  const normalizedManifestJson = stringify(manifest);
 
   if (updatedManifestJson !== normalizedManifestJson) {
     if (options.write) {
