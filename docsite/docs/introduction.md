@@ -51,14 +51,16 @@ example, a package can describe the options and paths to use during bundling.
 {
   "rnx-kit": {
     "kitType": "app",
-    "reactNativeVersion": "^0.66 || ^0.67",
-    "capabilities": [
-      "core-android",
-      "core-ios",
-      "core-macos",
-      "core-windows",
-      "react"
-    ],
+    "alignDeps": {
+      "requirements": ["react-native@0.68"],
+      "capabilities": [
+        "core-android",
+        "core-ios",
+        "core-macos",
+        "core-windows",
+        "react"
+      ]
+    },
     "bundle": true
   }
 }
@@ -74,8 +76,8 @@ $ yarn react-native rnx-bundle --platform windows --entry-path ./src/index-test.
 // Run a bundle server on an unusual port
 $ yarn react-native rnx-start --port 23000
 
-// Run the dependency manager, scanning all packages and targeting React Native 0.66
-$ yarn react-native rnx-align-deps --requirements react-native@0.66
+// Run the dependency manager, scanning all packages and targeting React Native 0.68
+$ yarn react-native rnx-align-deps --requirements react-native@0.68
 ```
 
 ### Choosing Individual Tools

@@ -55,11 +55,11 @@ release of React Native:
 ```typescript
 const reactNative: Package = {
   name: "react-native",
-  version: "^0.67.0-0",
+  version: "^0.68.0",
   capabilities: ["react"],
 };
 
-const profile_0_67: Profile = {
+const profile_0_68: Profile = {
   react: {
     name: "react",
     version: "17.0.2",
@@ -108,15 +108,17 @@ package require?
 {
   "rnx-kit": {
     "kitType": "app",
-    "reactNativeVersion": "^0.66 || ^0.67",
-    "capabilities": [
-      "core-android",
-      "core-ios",
-      "core-macos",
-      "core-windows",
-      "react",
-      "test-app"
-    ]
+    "alignDeps": {
+      "requirements": ["react-native@0.68"],
+      "capabilities": [
+        "core-android",
+        "core-ios",
+        "core-macos",
+        "core-windows",
+        "react",
+        "test-app"
+      ]
+    }
   }
 }
 ```
