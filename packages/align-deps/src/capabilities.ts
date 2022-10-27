@@ -4,6 +4,11 @@ import { keysOf } from "@rnx-kit/tools-language/properties";
 import type { PackageManifest } from "@rnx-kit/tools-node/package";
 import type { MetaPackage, Package, Preset, Profile } from "./types";
 
+type ResolvedDependencies = {
+  dependencies: Record<string, Package[]>;
+  unresolvedCapabilities: Record<string, string[]>;
+};
+
 /**
  * Returns the list of capabilities used in the specified package manifest.
  * @param packageManifest The package manifest to scan for dependencies
@@ -92,11 +97,16 @@ function resolveCapability(
   }
 }
 
-export function resolveCapabilities(
-  manifestPath: string,
+/**
+ * Resolves specified capabilities to real dependencies.
+ * @param capabilities The list of capabilities to resolve
+ * @param preset The preset to use to resolve capabilities
+ * @returns A tuple of resolved dependencies and unresolved capabilities
+ */
+export function resolveCapabilitiesUnchecked(
   capabilities: Capability[],
   preset: Preset
-): Record<string, Package[]> {
+): ResolvedDependencies {
   const profiles = Object.entries(preset);
   const dependencies: Record<string, Package[]> = {};
   const unresolvedCapabilities: Record<string, string[]> = {};
@@ -111,6 +121,30 @@ export function resolveCapabilities(
       );
     });
   }
+
+  return { dependencies, unresolvedCapabilities };
+}
+
+/**
+ * Resolves specified capabilities to real dependencies.
+ *
+ * Same as {@link resolveCapabilitiesUnchecked}, but warns about any unresolved
+ * capabilities.
+ *
+ * @param manifestPath The path to the package manifest
+ * @param capabilities The list of capabilities to resolve
+ * @param preset The preset to use to resolve capabilities
+ * @returns Resolved dependencies
+ */
+export function resolveCapabilities(
+  manifestPath: string,
+  capabilities: Capability[],
+  preset: Preset
+): Record<string, Package[]> {
+  const { dependencies, unresolvedCapabilities } = resolveCapabilitiesUnchecked(
+    capabilities,
+    preset
+  );
 
   const unresolved = Object.entries(unresolvedCapabilities);
   if (unresolved.length > 0) {
