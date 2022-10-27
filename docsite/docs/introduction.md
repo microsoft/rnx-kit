@@ -75,7 +75,7 @@ $ yarn react-native rnx-bundle --platform windows --entry-path ./src/index-test.
 $ yarn react-native rnx-start --port 23000
 
 // Run the dependency manager, scanning all packages and targeting React Native 0.66
-$ yarn react-native rnx-dep-check --vigilant 0.66
+$ yarn react-native rnx-align-deps --requirements react-native@0.66
 ```
 
 ### Choosing Individual Tools
