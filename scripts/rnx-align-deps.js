@@ -32,6 +32,10 @@ const profile = {
     name: "esbuild",
     version: "^0.15.0",
   },
+  eslint: {
+    name: "eslint",
+    version: "^8.0.0",
+  },
   "find-up": {
     name: "find-up",
     version: "^5.0.0",
@@ -39,6 +43,10 @@ const profile = {
   jest: {
     name: "jest",
     version: "^27.0.0",
+  },
+  "jest-cli": {
+    name: "jest-cli",
+    version: "^27.5.1",
   },
   "jest-diff": {
     name: "jest-diff",
