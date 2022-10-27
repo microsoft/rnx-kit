@@ -109,7 +109,8 @@ export function buildManifestProfile(
   // Multiple capabilities may resolve to the same dependency. We must therefore
   // resolve them first before we can filter out checked dependencies.
   const managedDependencies = Object.keys(
-    resolveCapabilitiesUnchecked(alignDeps.capabilities, targetPreset)[0]
+    resolveCapabilitiesUnchecked(alignDeps.capabilities, targetPreset)
+      .dependencies
   );
 
   const allCapabilities = getAllCapabilities(supportPreset);
