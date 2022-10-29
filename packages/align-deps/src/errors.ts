@@ -11,6 +11,12 @@ export function printError(manifestPath: string, code: ErrorCode): void {
     case "success":
       break;
 
+    case "invalid-app-requirements":
+      error(
+        `${manifestPath}: app requirements must resolve to a single profile`
+      );
+      break;
+
     case "invalid-configuration":
       error(`${manifestPath}: align-deps was not properly configured`);
       break;

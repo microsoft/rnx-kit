@@ -18,6 +18,7 @@ describe("printError()", () => {
 
   test("prints error message for code", () => {
     [
+      "invalid-app-requirements" as const,
       "invalid-configuration" as const,
       "invalid-manifest" as const,
       "missing-react-native" as const,

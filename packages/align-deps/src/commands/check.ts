@@ -41,11 +41,13 @@ export function checkPackageManifest(
     path.dirname(manifestPath),
     options
   );
-  if (capabilities.length === 0) {
+  const { kitType, manifest } = config;
+
+  if (kitType === "app" && Object.keys(prodPreset).length !== 1) {
+    return "invalid-app-requirements";
+  } else if (capabilities.length === 0) {
     return "success";
   }
-
-  const { kitType, manifest } = config;
 
   if (options.verbose) {
     if (kitType === "app") {
