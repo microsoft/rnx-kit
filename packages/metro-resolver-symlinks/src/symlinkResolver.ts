@@ -1,19 +1,17 @@
 import { normalizePath } from "@rnx-kit/tools-node";
 import type { CustomResolver, ResolutionContext } from "metro-resolver";
-import {
-  getMetroResolver,
-  remapReactNativeModule,
-  resolveModulePath,
-} from "./resolver";
+import { requireModuleFromMetro } from "./helper";
+import { remapReactNativeModule, resolveModulePath } from "./resolver";
 import type { MetroResolver, Options } from "./types";
 import { remapImportPath } from "./utils/remapImportPath";
 
-export function makeResolver({
-  remapModule = (_, moduleName, __) => moduleName,
-}: Options = {}): MetroResolver {
-  const metroResolver = getMetroResolver();
-  const remappers = [remapModule, remapReactNativeModule, resolveModulePath];
+export function makeResolver(options: Options = {}): MetroResolver {
+  const { resolve: metroResolver } =
+    requireModuleFromMetro<typeof import("metro-resolver")>("metro-resolver");
 
+  const { remapModule = (_, moduleName, __) => moduleName } = options;
+
+  const remappers = [remapModule, remapReactNativeModule, resolveModulePath];
   const symlinkResolver = (
     context: ResolutionContext,
     moduleName: string,
