@@ -41,9 +41,10 @@ Import and assign the resolver to `resolver.resolveRequest` in your
 
 ## Options
 
-| Option      | Type                           | Description                                         |
-| :---------- | :----------------------------- | :-------------------------------------------------- |
-| remapModule | `(moduleId: string) => string` | A custom function for remapping additional modules. |
+| Option                                | Type                           | Description                                                                                                                                                                                                                                                                                          |
+| :------------------------------------ | :----------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `remapModule`                         | `(moduleId: string) => string` | A custom function for remapping additional modules.                                                                                                                                                                                                                                                  |
+| `experimental_retryResolvingFromDisk` | boolean                        | [Experimental] Whether to retry module resolution on disk if not found in Haste map. This option is useful for scenarios where you want to reduce the number of watched files (and thus the initial time spent on crawling). Note that enabling this will likely be slower than having a warm cache. |
 
 ### `remapModule`
 

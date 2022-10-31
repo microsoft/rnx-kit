@@ -1,17 +1,44 @@
 import { normalizePath } from "@rnx-kit/tools-node";
-import type { CustomResolver, ResolutionContext } from "metro-resolver";
+import type {
+  CustomResolver,
+  Resolution,
+  ResolutionContext,
+} from "metro-resolver";
 import { requireModuleFromMetro } from "./helper";
 import { remapReactNativeModule, resolveModulePath } from "./resolver";
 import type { MetroResolver, Options } from "./types";
+import { applyEnhancedResolver } from "./utils/enhancedResolve";
+import { patchMetro } from "./utils/patchMetro";
 import { remapImportPath } from "./utils/remapImportPath";
+
+function applyMetroResolver(
+  resolve: CustomResolver,
+  context: ResolutionContext,
+  moduleName: string,
+  platform: string
+): Resolution {
+  const modifiedModuleName = resolveModulePath(context, moduleName, platform);
+  return resolve(context, normalizePath(modifiedModuleName), platform, null);
+}
 
 export function makeResolver(options: Options = {}): MetroResolver {
   const { resolve: metroResolver } =
     requireModuleFromMetro<typeof import("metro-resolver")>("metro-resolver");
 
-  const { remapModule = (_, moduleName, __) => moduleName } = options;
+  const {
+    remapModule = (_, moduleName, __) => moduleName,
+    experimental_retryResolvingFromDisk,
+  } = options;
 
-  const remappers = [remapModule, remapReactNativeModule, resolveModulePath];
+  const applyResolver = experimental_retryResolvingFromDisk
+    ? applyEnhancedResolver
+    : applyMetroResolver;
+
+  if (experimental_retryResolvingFromDisk) {
+    patchMetro(options);
+  }
+
+  const remappers = [remapModule, remapReactNativeModule];
   const symlinkResolver = (
     context: ResolutionContext,
     moduleName: string,
@@ -56,12 +83,7 @@ export function makeResolver(options: Options = {}): MetroResolver {
         moduleName
       );
 
-      return resolve(
-        context,
-        normalizePath(modifiedModuleName),
-        platform,
-        null
-      );
+      return applyResolver(resolve, context, modifiedModuleName, platform);
     } finally {
       if (!context.resolveRequest) {
         // Restoring `resolveRequest` must happen last
