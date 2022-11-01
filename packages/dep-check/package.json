@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/dep-check",
-  "version": "1.13.3",
+  "version": "1.13.4",
   "description": "Dependency checker for React Native apps",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/dep-check#readme",
   "license": "MIT",
