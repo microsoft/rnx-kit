@@ -1,5 +1,16 @@
 # Change Log - @rnx-kit/cli
 
+## 0.14.9
+
+### Patch Changes
+
+- 496a6f4a: Add `keysOf` to `@rnx-kit/tools-language`, a type-safe wrapper around `Object.keys`
+- Updated dependencies [34b83032]
+- Updated dependencies [bdeda331]
+- Updated dependencies [496a6f4a]
+  - @rnx-kit/dep-check@1.13.4
+  - @rnx-kit/tools-language@1.4.0
+
 ## 0.14.8
 
 ### Patch Changes
