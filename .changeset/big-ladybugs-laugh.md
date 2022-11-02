@@ -2,4 +2,4 @@
 "@rnx-kit/metro-resolver-symlinks": patch
 ---
 
-Respect `extraNodeModules` (and some refactoring)
+Use `extraNodeModules` if it is defined (and some refactoring)
