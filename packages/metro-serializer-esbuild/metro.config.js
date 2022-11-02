@@ -13,7 +13,9 @@ module.exports = makeMetroConfig({
     blockList,
   },
   serializer: {
-    customSerializer: MetroSerializer(),
+    customSerializer: MetroSerializer([], {
+      minify: false,
+    }),
     getPolyfills: () => [],
   },
   transformer: esbuildTransformerConfig,
