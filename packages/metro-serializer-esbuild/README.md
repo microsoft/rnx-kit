@@ -197,6 +197,8 @@ basically on your own to fix any issues that might come up.
 
 ## Known Limitations
 
+- Dev server does not play well with esbuild. It is therefore only used when
+  building production bundles.
 - esbuild does not properly tree-shake `export *`. This is a known limitation
   (see https://github.com/evanw/esbuild/issues/1420). It is also not recommended
   to use `export *` in your code as they may lead to duplicate exports. For more
