@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-serializer-esbuild
 
+## 0.1.16
+
+### Patch Changes
+
+- 8147a812: Use esbuild only for production bundles
+
 ## 0.1.15
 
 ### Patch Changes

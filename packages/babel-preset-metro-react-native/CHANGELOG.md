@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/babel-preset-metro-react-native
 
+## 1.1.2
+
+### Patch Changes
+
+- 8147a812: Use esbuild only for production bundles
+
 ## 1.1.1
 
 ### Patch Changes
