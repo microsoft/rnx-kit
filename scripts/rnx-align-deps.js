@@ -65,6 +65,11 @@ const profile = {
     name: "semver",
     version: "^7.0.0",
   },
+  "test-app": {
+    name: "react-native-test-app",
+    version: "^2.0.0",
+    devOnly: true,
+  },
   typescript: {
     name: "typescript",
     version: "^4.0.0",
