@@ -37,22 +37,22 @@
     "extends": "@rnx-kit/eslint-config"
   },
   "go-release": {
-    "version": "1.18",
+    "version": "1.19.3",
     "hashAlgorithm": "sha256",
     "checksums": {
       "darwin": {
-        "arm64": "9cab6123af9ffade905525d79fc9ee76651e716c85f1f215872b5f2976782480",
-        "x64": "70bb4a066997535e346c8bfa3e0dfe250d61100b17ccc5676274642447834969"
+        "arm64": "49e394ab92bc6fa3df3d27298ddf3e4491f99477bee9dd4934525a526f3a391c",
+        "x64": "7fa09a9a34cb6f794e61e9ada1d6d18796f936a2b35f22724906cad71396e590"
       },
       "linux": {
-        "arm64": "7ac7b396a691e588c5fb57687759e6c4db84a2a3bbebb0765f4b38e5b1c5b00e",
-        "x32": "1c04cf4440b323a66328e0df95d409f955b9b475e58eae235fdd3d1f1cf02f4f",
-        "x64": "e85278e98f57cdb150fe8409e6e5df5343ecb13cebf03a5d5ff12bd55a80264f"
+        "arm64": "99de2fe112a52ab748fb175edea64b313a0c8d51d6157dba683a6be163fd5eab",
+        "x32": "4f055d40cbd3047b90f5b6c2d30a7fc6732aa1475f372f37ac574f725340aab3",
+        "x64": "74b9640724fd4e6bb0ed2a1bc44ae813a03f1e72a4c76253e2d5c015494430ba"
       },
       "win32": {
-        "arm64": "1c454eb60c64d481965a165c623ff1ed6cf32d68c6b31f36069c8768d908f093",
-        "x32": "e23fd2a0509690fe7e63b2b1bcd4c39ed57b46ccde76f35dc0d16ca7fdbc5aaa",
-        "x64": "65c5c0c709a7ca1b357091b10b795b439d8b50e579d3893edab4c7e9b384f435"
+        "arm64": "af37fe4acad6cccdb5222d26d19c1918086b6c8aaadf72a5948eca9ec7ddef99",
+        "x32": "cbf9ced1c6d4d874464b30dbbbb237fb45f932b68994702adabda4ef56ac63a0",
+        "x64": "b51549a9f21ee053f8a3d8e38e45b1b8b282d976f3b60f1f89b37ac54e272d31"
       }
     }
   }
