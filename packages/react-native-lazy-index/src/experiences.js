@@ -57,7 +57,7 @@ function parseExperiencesFromArray(experiences) {
         visited,
         verbose,
       }),
-    /** @type {Record<string, Component>} */ ({})
+    /** @type {Record<string, Component>} */({})
   );
 }
 
@@ -79,11 +79,11 @@ function parseExperiencesFromObject(experiences) {
 
     components[id] = { type, moduleId, source: "package.json" };
     return components;
-  }, /** @type {Record<string, Component>} */ ({}));
+  }, /** @type {Record<string, Component>} */({}));
 }
 
 /**
- * @param {string | number | boolean | {} | null | undefined} experiences
+ * @param {string | number | boolean | Record<string, unknown> | null | undefined} experiences
  * @returns {Record<string, Component>}
  */
 function parseExperiences(experiences) {
