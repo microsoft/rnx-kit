@@ -2,6 +2,11 @@
 
 const { discardResult } = require("../process");
 
+const defaultOptions = {
+  minify: false,
+  platform: "node",
+};
+
 /**
  * @param {unknown} platform
  * @returns {"browser" | "neutral" | "node"}
@@ -19,14 +24,16 @@ function ensureValidPlatform(platform) {
 }
 
 /**
- * @param {Record<string, unknown>=} args
+ * @param {Record<string, unknown> | undefined} options
  */
-function bundle({ minify, platform } = { minify: false, platform: "node" }) {
+function bundle(options) {
   const fs = require("fs");
+
+  const { minify, platform } = { ...defaultOptions, ...options };
+  const targetPlatform = ensureValidPlatform(platform);
 
   const manifest = fs.readFileSync("package.json", { encoding: "utf-8" });
   const { main, dependencies } = JSON.parse(manifest);
-  const targetPlatform = ensureValidPlatform(platform);
 
   return require("esbuild")
     .build({
