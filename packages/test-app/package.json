@@ -152,7 +152,7 @@
     "alignDeps": {
       "presets": [
         "microsoft/react-native",
-        "@rnx-kit/scripts/rnx-align-deps.js"
+        "@rnx-kit/scripts/align-deps-preset.js"
       ],
       "requirements": [
         "react-native@0.68"
