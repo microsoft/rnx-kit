@@ -9992,9 +9992,9 @@ react-native-screens@~3.11.1:
     warn-once "^0.1.0"
 
 react-native-test-app@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/react-native-test-app/-/react-native-test-app-2.0.0.tgz#9939a06b68738fb95a9aaad7e4c6af917360645d"
-  integrity sha512-qWV1JVBlyzlQLDWT6ZLnnCSzNBQDfM9ozwOQdQKMaUsspWJ6f6ebMDQTZNJgemBGorzNZxQlki8BqbknPFQh/w==
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/react-native-test-app/-/react-native-test-app-2.0.1.tgz#6e60cab1f5d8a19ddba2e365f45dd8db6040ca4c"
+  integrity sha512-UJ/eGus7stVK3Ay+Cjqmae9gnQs0YTEOgQ3MfX2i2mgghCxx5qtlZlK5K4/7d5EVHMddLcGgehMY7CmuLMMK5Q==
   dependencies:
     ajv "^8.0.0"
     chalk "^4.1.0"
