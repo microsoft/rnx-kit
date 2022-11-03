@@ -59,7 +59,12 @@ function constEnumPlugin() {
  */
 function overridesFor(transformProfile) {
   // Use the `esbuild` transform profile if the serializer is being used.
-  if (!transformProfile && process.env["RNX_METRO_SERIALIZER_ESBUILD"]) {
+  const env = process.env.BABEL_ENV || process.env.NODE_ENV;
+  if (
+    !transformProfile &&
+    env === "production" &&
+    process.env["RNX_METRO_SERIALIZER_ESBUILD"]
+  ) {
     transformProfile = "esbuild";
   }
 

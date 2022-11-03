@@ -197,12 +197,8 @@ basically on your own to fix any issues that might come up.
 
 ## Known Limitations
 
-- Dev server may not work with this serializer. To work around this limitation,
-  you can save the esbuild specific Metro config to a separate file and only
-  specify it when needed, e.g.:
-  ```sh
-  react-native bundle ... --config metro+esbuild.config.js
-  ```
+- Dev server does not play well with esbuild. It is therefore only used when
+  building production bundles.
 - esbuild does not properly tree-shake `export *`. This is a known limitation
   (see https://github.com/evanw/esbuild/issues/1420). It is also not recommended
   to use `export *` in your code as they may lead to duplicate exports. For more

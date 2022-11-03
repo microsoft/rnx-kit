@@ -34,6 +34,7 @@
   "devDependencies": {
     "@fluentui/utilities": "8.12.0",
     "@react-native-community/cli-plugin-metro": "^7.0.3",
+    "@rnx-kit/babel-preset-metro-react-native": "*",
     "@rnx-kit/metro-config": "*",
     "@rnx-kit/metro-serializer": "*",
     "@rnx-kit/scripts": "*",
