@@ -64,7 +64,7 @@ const profile = {
   },
   "test-app": {
     name: "react-native-test-app",
-    version: "^2.0.0",
+    version: "^2.0.2",
     devOnly: true,
   },
   typescript: {

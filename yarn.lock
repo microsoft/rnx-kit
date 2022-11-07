@@ -9987,10 +9987,10 @@ react-native-screens@~3.11.1:
     react-freeze "^1.0.0"
     warn-once "^0.1.0"
 
-react-native-test-app@^2.0.0:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/react-native-test-app/-/react-native-test-app-2.0.1.tgz#6e60cab1f5d8a19ddba2e365f45dd8db6040ca4c"
-  integrity sha512-UJ/eGus7stVK3Ay+Cjqmae9gnQs0YTEOgQ3MfX2i2mgghCxx5qtlZlK5K4/7d5EVHMddLcGgehMY7CmuLMMK5Q==
+react-native-test-app@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/react-native-test-app/-/react-native-test-app-2.0.2.tgz#132b601199f4cddadd24c26237dfeda5b918b0e2"
+  integrity sha512-OZeVBwTjndLCyh7/L8TYTcbSdE2oV+mPoY0AD4awTKLMaLFycfT0cSEWlfSdj8Va2KPj+AmXwfQIoI9l6/w7/Q==
   dependencies:
     ajv "^8.0.0"
     chalk "^4.1.0"
