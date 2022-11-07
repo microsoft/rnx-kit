@@ -9987,10 +9987,10 @@ react-native-screens@~3.11.1:
     react-freeze "^1.0.0"
     warn-once "^0.1.0"
 
-react-native-test-app@^2.0.0:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/react-native-test-app/-/react-native-test-app-2.0.1.tgz#6e60cab1f5d8a19ddba2e365f45dd8db6040ca4c"
-  integrity sha512-UJ/eGus7stVK3Ay+Cjqmae9gnQs0YTEOgQ3MfX2i2mgghCxx5qtlZlK5K4/7d5EVHMddLcGgehMY7CmuLMMK5Q==
+react-native-test-app@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/react-native-test-app/-/react-native-test-app-2.0.2.tgz#132b601199f4cddadd24c26237dfeda5b918b0e2"
+  integrity sha512-OZeVBwTjndLCyh7/L8TYTcbSdE2oV+mPoY0AD4awTKLMaLFycfT0cSEWlfSdj8Va2KPj+AmXwfQIoI9l6/w7/Q==
   dependencies:
     ajv "^8.0.0"
     chalk "^4.1.0"
@@ -10054,10 +10054,10 @@ react-native-windows@^0.68.0:
     whatwg-fetch "^3.0.0"
     ws "^6.1.4"
 
-react-native@0.68.4, react-native@^0.68.0:
-  version "0.68.4"
-  resolved "https://registry.yarnpkg.com/react-native/-/react-native-0.68.4.tgz#c52c590f93e9d115010e458650957824c0b1406e"
-  integrity sha512-Hp5qwztQ1XNnV43QTz1kUx33iZHmJqbbe7L19V9psaWtX/h9j6SEtZ3UHBrigIPlppkIP1E5x3CDr9FdD4d6CA==
+react-native@0.68.5, react-native@^0.68.0:
+  version "0.68.5"
+  resolved "https://registry.yarnpkg.com/react-native/-/react-native-0.68.5.tgz#8ba7389e00b757c59b6ea23bf38303d52367d155"
+  integrity sha512-t3kiQ/gumFV+0r/NRSIGtYxanjY4da0utFqHgkMcRPJVwXFWC0Fr8YiOeRGYO1dp8EfrSsOjtfWic/inqVYlbQ==
   dependencies:
     "@jest/create-cache-key-function" "^27.0.1"
     "@react-native-community/cli" "^7.0.3"
