@@ -65,16 +65,19 @@ function jestOptions(): Options[] {
   // To work around this, resolve `jest-cli` first, then use the resolved path
   // to import `./build/cli/args`.
   const jestPath = findPackageDependencyDir("jest-cli") || "jest-cli";
-  const { options } = require(`${jestPath}/build/cli/args`);
-
-  return Object.keys(options).map((option) => {
-    const { default: defaultValue, description, type } = options[option];
-    return {
-      name: `--${option} [${type}]`,
-      description,
-      default: defaultValue,
-    };
-  });
+  try {
+    const { options } = require(`${jestPath}/build/cli/args`);
+    return Object.keys(options).map((option) => {
+      const { default: defaultValue, description, type } = options[option];
+      return {
+        name: `--${option} [${type}]`,
+        description,
+        default: defaultValue,
+      };
+    });
+  } catch (_) {
+    return [];
+  }
 }
 
 export const rnxTestCommand = {
