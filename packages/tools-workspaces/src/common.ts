@@ -1,7 +1,10 @@
 import type { Options } from "fast-glob";
 import fg from "fast-glob";
 import findUp from "find-up";
+import { readFileSync } from "fs";
+import { readFile } from "fs/promises";
 import * as path from "path";
+import stripJsonComments from "strip-json-comments";
 
 type PackageManager = {
   findWorkspacePackages: (sentinel: string) => Promise<string[]>;
@@ -109,4 +112,14 @@ export function getImplementationSync(sentinel: string): PackageManager {
   throw new Error(
     `This should not happen - did we forget to add a switch case for '${sentinel}'?`
   );
+}
+
+export async function readJSON(path: string) {
+  const json = await readFile(path, { encoding: "utf-8" });
+  return JSON.parse(stripJsonComments(json));
+}
+
+export function readJSONSync(path: string) {
+  const json = readFileSync(path, { encoding: "utf-8" });
+  return JSON.parse(stripJsonComments(json));
 }
