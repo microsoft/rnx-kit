@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/tools-language
 
+## 1.4.1
+
+### Patch Changes
+
+- a5810bb8: Fix types while upgrading to TypeScript 4.8
+
 ## 1.4.0
 
 ### Minor Changes
