@@ -1,5 +1,11 @@
 # @rnx-kit/tools-workspaces
 
+## 0.1.3
+
+### Patch Changes
+
+- c14e998e: Ignore comments when parsing JSON
+
 ## 0.1.2
 
 ### Patch Changes

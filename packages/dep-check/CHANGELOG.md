@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/dep-check
 
+## 1.13.5
+
+### Patch Changes
+
+- c14e998e: Ignore comments when parsing JSON
+
 ## 1.13.4
 
 ### Patch Changes
