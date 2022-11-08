@@ -1,6 +1,7 @@
 /* jshint esversion: 8, node: true */
 // @ts-check
 
+const fs = require("fs");
 const path = require("path");
 
 /**
@@ -35,7 +36,24 @@ function defaultWatchFolders() {
 
     // In a monorepo, in particular when using Yarn workspaces, packages are
     // symlinked in the root `node_modules` folder so it needs to be watched.
-    return [path.join(root, "node_modules"), ...packages];
+    const rootNodeModules = path.join(root, "node_modules");
+    if (fs.existsSync(rootNodeModules)) {
+      packages.unshift(rootNodeModules);
+    }
+
+    // Rush + pnpm downloads dependencies into a separate folder.
+    const rushPnpmDir = path.join(
+      root,
+      "common",
+      "temp",
+      "node_modules",
+      ".pnpm"
+    );
+    if (fs.existsSync(rushPnpmDir)) {
+      packages.unshift(rushPnpmDir);
+    }
+
+    return packages;
   } catch (_) {
     return [];
   }
