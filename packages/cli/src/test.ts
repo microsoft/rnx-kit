@@ -2,6 +2,7 @@ import type { Config as CLIConfig } from "@react-native-community/cli-types";
 import { error } from "@rnx-kit/console";
 import { findPackageDependencyDir } from "@rnx-kit/tools-node";
 import { parsePlatform } from "@rnx-kit/tools-react-native/platform";
+import * as path from "path";
 
 type Args = {
   platform: "android" | "ios" | "macos" | "windows" | "win32";
@@ -20,6 +21,11 @@ type Options = {
 
 const COMMAND_NAME = "rnx-test";
 
+function resolveJestCli(): string {
+  const jestPath = path.dirname(require.resolve("jest/package.json"));
+  return require.resolve("jest-cli", { paths: [jestPath] });
+}
+
 export function rnxTest(
   _argv: string[],
   _config: CLIConfig,
@@ -27,7 +33,7 @@ export function rnxTest(
 ): void {
   const runJest: (argv: string[]) => void = (() => {
     try {
-      const { run } = require("jest-cli");
+      const { run } = require(resolveJestCli());
       return run;
     } catch (e) {
       error("'rnx-test' is unavailable because 'jest-cli' is not installed");
@@ -64,9 +70,11 @@ function jestOptions(): Options[] {
   //
   // To work around this, resolve `jest-cli` first, then use the resolved path
   // to import `./build/cli/args`.
-  const jestPath = findPackageDependencyDir("jest-cli") || "jest-cli";
   try {
+    const jestPath = findPackageDependencyDir(resolveJestCli()) || "jest-cli";
+
     const { options } = require(`${jestPath}/build/cli/args`);
+
     return Object.keys(options).map((option) => {
       const { default: defaultValue, description, type } = options[option];
       return {

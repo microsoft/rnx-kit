@@ -47,6 +47,9 @@
   "peerDependenciesMeta": {
     "@react-native-community/cli-server-api": {
       "optional": true
+    },
+    "jest-cli": {
+      "optional": true
     }
   },
   "devDependencies": {
