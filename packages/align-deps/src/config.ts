@@ -39,13 +39,9 @@ export function containsValidRequirements(
 /**
  * Loads configuration from the specified package manifest.
  * @param manifestPath The path to the package manifest to load configuration from
- * @param mode Determines whether partial configuration is allowed
  * @returns The configuration; otherwise an error code
  */
-export function loadConfig(
-  manifestPath: string,
-  mode: "normal" | "vigilant" = "normal"
-): ConfigResult {
+export function loadConfig(manifestPath: string): ConfigResult {
   const manifest = readPackage(manifestPath);
   if (!isPackageManifest(manifest)) {
     return "invalid-manifest";
@@ -77,12 +73,8 @@ export function loadConfig(
       errors.push(`${manifestPath}: 'alignDeps.requirements' cannot be empty`);
     }
     if (errors.length > 0) {
-      // In "vigilant" mode, we allow partial configurations as they can be
-      // provided by the user on the command line.
-      if (mode === "normal") {
-        for (const e of errors) {
-          error(e);
-        }
+      for (const e of errors) {
+        error(e);
       }
       return "invalid-configuration";
     }

@@ -146,7 +146,7 @@ export function makeCheckCommand(options: Options): Command {
   }
 
   return (manifest: string) => {
-    const inputConfig = loadConfig(manifest, "vigilant");
+    const inputConfig = loadConfig(manifest);
     const config = isError(inputConfig)
       ? inputConfig
       : migrateConfig(inputConfig, manifest, options);
