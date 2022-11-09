@@ -19,13 +19,12 @@ export function findBadPackages({
     devDependencies,
   ].reduce<Set<ExcludedPackage>>((badPackages, deps) => {
     if (deps) {
-      Object.keys(deps).reduce((result, name) => {
+      for (const name of Object.keys(deps)) {
         const info = isBanned(name, deps[name]);
         if (info) {
-          result.add(info);
+          badPackages.add(info);
         }
-        return result;
-      }, badPackages);
+      }
     }
     return badPackages;
   }, new Set<ExcludedPackage>());

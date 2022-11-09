@@ -210,9 +210,11 @@ export function inspect(
 
 /**
  * Checks the specified package manifest for misaligned dependencies in place.
+ *
  * Because the package is not configured, `align-deps` cannot know whether a
  * dependency should be declared as a direct or peer dependency. It can only
  * check whether the dependency is on the right version.
+ *
  * @param manifestPath The path to the package manifest
  * @param options Options from command line
  * @param config Configuration from `package.json` or "generated" from command line flags

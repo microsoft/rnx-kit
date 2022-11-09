@@ -6,7 +6,7 @@ import chalk from "chalk";
 import { diffLinesUnified } from "jest-diff";
 import * as path from "path";
 import { migrateConfig } from "../compatibility/config";
-import { loadConfig, loadPresetsOverrideFromPackage } from "../config";
+import { loadConfig } from "../config";
 import { isError } from "../errors";
 import { modifyManifest } from "../helpers";
 import { updatePackageManifest } from "../manifest";
@@ -26,6 +26,28 @@ function stringify(manifest: PackageManifest): string {
   return JSON.stringify(pickValues(manifest, visibleKeys), undefined, 2);
 }
 
+/**
+ * Checks the specified package manifest for misaligned dependencies.
+ *
+ * There are essentially two modes of operation depending on whether the package
+ * is an app or a library.
+ *
+ * - For libraries, only dependencies that are declared under capabilities are
+ *   checked. `align-deps` will ensure that `peerDependencies` and
+ *   `devDependencies` are correctly used to satisfy the declared capabilities.
+ * - For apps, its dependencies and the dependencies of its dependencies are
+ *   checked. `align-deps` will ensure that `dependencies` and `devDependencies`
+ *   are correctly used to satisfy the declared capabilities. Additionally,
+ *   requirements may only resolve to a single profile. If multiple profiles
+ *   satisfy the requirements, the command will fail.
+ *
+ * @see {@link updatePackageManifest}
+ *
+ * @param manifestPath Path to the package manifest to check
+ * @param options Command line options
+ * @param inputConfig Configuration in the package manifest
+ * @returns `success` when everything is in order; an {@link ErrorCode} otherwise
+ */
 export function checkPackageManifest(
   manifestPath: string,
   options: Options,
@@ -99,6 +121,24 @@ export function checkPackageManifest(
   return "success";
 }
 
+/**
+ * Creates the check command. This is the default command no other flags are
+ * specified.
+ *
+ * In normal mode, `align-deps` will only check packages that have a
+ * configuration, and only listed capabilities.
+ *
+ * In vigilant mode, `align-deps` will check all packages in the workspace,
+ * regardless of whether they have a configuration. For packages that do have a
+ * configuration, the listed capabilities will be checked first as usual. The
+ * remaining capabilities will then be checked, but are treated as unconfigured.
+ *
+ * @see {@link checkPackageManifest}
+ * @see {@link checkPackageManifestUnconfigured}
+ *
+ * @param options Command line options
+ * @returns The check command
+ */
 export function makeCheckCommand(options: Options): Command {
   const { presets, requirements } = options;
   if (!requirements) {
@@ -123,11 +163,10 @@ export function makeCheckCommand(options: Options): Command {
     if (config === "invalid-configuration" || config === "not-configured") {
       // In "vigilant" mode, we allow packages to declare which presets should
       // be used in config, overriding the `--presets` flag.
-      const presetsOverride = loadPresetsOverrideFromPackage(manifest);
       return checkPackageManifestUnconfigured(manifest, options, {
         kitType: "library",
         alignDeps: {
-          presets: presetsOverride || presets,
+          presets,
           requirements,
           capabilities: [],
         },

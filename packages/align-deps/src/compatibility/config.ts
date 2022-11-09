@@ -55,6 +55,18 @@ export function transformConfig({
   };
 }
 
+/**
+ * Migrates the old config schema into the new one, if necessary.
+ *
+ * This will function will allow users to let `align-deps` update their config.
+ * Otherwise, it will tell them how to update their config manually. It will
+ * also warn about old config keys that are no longer used.
+ *
+ * @param config Configuration in the package manifest
+ * @param manifestPath Path to the package manifest to check
+ * @param options Command line options
+ * @returns The config in the new schema
+ */
 export function migrateConfig(
   config: AlignDepsConfig | LegacyCheckConfig,
   manifestPath: string,

@@ -117,39 +117,3 @@ export function loadConfig(
     return "invalid-configuration";
   }
 }
-
-/**
- * Loads presets from the specified package manifest.
- *
- * Must only be used in "vigilant" mode.
- *
- * In "vigilant" mode, we allow packages to declare which presets should be
- * used, overriding the `--presets` flag. Otherwise, this would normally be
- * considered an invalid configuration. As such, this function may only be used
- * after {@link loadConfig} returns `invalid-configuration` or `not-configured`
- * for the same package manifest.
- *
- * @param manifestPath The path to the package manifest to load configuration from
- * @returns Presets loaded from the package manifest; otherwise `null`
- */
-export function loadPresetsOverrideFromPackage(
-  manifestPath: string
-): string[] | null {
-  const projectRoot = path.dirname(manifestPath);
-  const kitConfig = getKitConfig({ cwd: projectRoot });
-  if (!kitConfig) {
-    return null;
-  }
-
-  const presets = kitConfig.alignDeps?.presets;
-  if (Array.isArray(presets)) {
-    return presets;
-  }
-
-  const { customProfiles } = kitConfig;
-  if (typeof customProfiles === "string") {
-    return [...defaultConfig.presets, customProfiles];
-  }
-
-  return null;
-}
