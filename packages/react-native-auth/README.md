@@ -7,7 +7,7 @@
 
 <!--remove-block end-->
 
-@rnx-kit/react-native-auth provides a cross-app uniform API for user
+`@rnx-kit/react-native-auth` provides a cross-app uniform API for user
 authentication.
 
 ## Install
@@ -24,16 +24,23 @@ choice.
 ## Usage
 
 ```typescript
-import { acquireToken } from "@rnx-kit/react-native-auth";
+import {
+  acquireTokenWithScopes,
+  isAvailable,
+} from "@rnx-kit/react-native-auth";
 
-const scopes = ["user.read"];
-const userPrincipalName = "arnold@contoso.com";
+if (isAvailable()) {
+  const scopes = ["user.read"];
+  const userPrincipalName = "arnold@contoso.com";
 
-const result = await acquireToken(
-  scopes,
-  userPrincipalName,
-  "MicrosoftAccount"
-);
+  const result = await acquireTokenWithScopes(
+    scopes,
+    userPrincipalName,
+    "MicrosoftAccount"
+  );
+} else {
+  // Use an alternate authentication method
+}
 ```
 
 ## Motivation
