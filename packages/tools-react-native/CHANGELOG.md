@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/tools-react-native
 
+## 1.2.3
+
+### Patch Changes
+
+- 53df63dd: `extensions` argument of `expandPlatformExtensions` should be readonly
+
 ## 1.2.2
 
 ### Patch Changes
