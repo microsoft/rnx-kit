@@ -3,6 +3,8 @@ import { DuplicateDependencies } from "@rnx-kit/metro-plugin-duplicates-checker"
 import type { InputConfigT } from "metro-config";
 import { customizeMetroConfig } from "../src/metro-config";
 
+import MyCustomMetroSerializationPlugin from "./my-custom-metro-serialization-plugin";
+
 jest.mock("@rnx-kit/metro-plugin-cyclic-dependencies-detector", () => {
   return {
     CyclicDependencies: jest.fn(),
@@ -28,6 +30,7 @@ function makeMockConfig(): InputConfigT {
 
 describe("cli/metro-config/customizeMetroConfig", () => {
   afterEach(() => {
+    MyCustomMetroSerializationPlugin.mockClear();
     (CyclicDependencies as any).mockClear();
     (DuplicateDependencies as any).mockClear();
   });
@@ -137,6 +140,34 @@ describe("cli/metro-config/customizeMetroConfig", () => {
     expect(CyclicDependencies).toHaveBeenCalledWith(cyclicDependenciesOptions);
     expect(DuplicateDependencies).toHaveBeenCalledWith(
       duplicateDependencesOptions
+    );
+  });
+
+  test("custom serialization plugin options", () => {
+    const inputConfig = makeMockConfig();
+    const myCustomPluginOptions = { param1: "foo" };
+    customizeMetroConfig(inputConfig, {
+      customSerializationPlugins: [
+        {
+          path: "./test/my-custom-metro-serialization-plugin",
+          options: myCustomPluginOptions,
+        },
+      ],
+    });
+
+    expect(inputConfig).toEqual({
+      serializer: {
+        customSerializer: expect.anything(),
+        experimentalSerializerHook: expect.anything(),
+      },
+      transformer: {},
+    });
+    expect(typeof inputConfig.serializer.customSerializer).toBe("function");
+    expect(typeof inputConfig.serializer.experimentalSerializerHook).toBe(
+      "function"
+    );
+    expect(MyCustomMetroSerializationPlugin).toHaveBeenCalledWith(
+      myCustomPluginOptions
     );
   });
 

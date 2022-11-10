@@ -118,6 +118,7 @@ const emptySerializerHook = (_graph: Graph, _delta: DeltaResult): void => {
 export function customizeMetroConfig(
   metroConfigReadonly: InputConfigT,
   {
+    customSerializationPlugins,
     detectCyclicDependencies,
     detectDuplicateDependencies,
     treeShake,
@@ -130,6 +131,13 @@ export function customizeMetroConfig(
   const metroConfig = metroConfigReadonly as InputConfigT;
 
   const plugins: MetroPlugin[] = [];
+  if (customSerializationPlugins) {
+    customSerializationPlugins.forEach((plugin) => {
+      const implPath = require.resolve(plugin.path, { paths: [process.cwd()] });
+      const impl = require(implPath);
+      plugins.push(impl(plugin.options));
+    });
+  }
   if (typeof detectDuplicateDependencies === "object") {
     plugins.push(DuplicateDependencies(detectDuplicateDependencies));
   } else if (detectDuplicateDependencies !== false) {
