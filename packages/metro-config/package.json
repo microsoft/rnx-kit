@@ -52,13 +52,5 @@
   },
   "jest": {
     "preset": "@rnx-kit/scripts"
-  },
-  "rnx-kit": {
-    "alignDeps": {
-      "presets": [
-        "microsoft/react-native",
-        "@rnx-kit/scripts/rnx-align-deps.js"
-      ]
-    }
   }
 }

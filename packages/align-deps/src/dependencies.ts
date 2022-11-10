@@ -59,6 +59,16 @@ export function visitDependencies(
   });
 }
 
+/**
+ * Gathers requirements from dependencies, and their dependencies.
+ * @param projectRoot Root of the package to check
+ * @param manifest Package manifest
+ * @param preset Preset satisfying the requirements of the current package
+ * @param requirements Requirements of the current package
+ * @param appCapabilities Capabilities used by the current package
+ * @param options Command line options
+ * @returns Capabilities required by dependencies
+ */
 export function gatherRequirements(
   projectRoot: string,
   manifest: PackageManifest,

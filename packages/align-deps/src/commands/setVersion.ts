@@ -101,6 +101,13 @@ function updateRequirements(
   }
 }
 
+/**
+ * Updates the package's `react-native` versions.
+ * @param config Configuration in the package manifest
+ * @param targetVersion React Native version for daily usage
+ * @param supportedVersions React Native versions that the package will support
+ * @returns Updated package manifest
+ */
 function setVersion(
   config: AlignDepsConfig | LegacyCheckConfig,
   targetVersion: string,
@@ -139,6 +146,16 @@ function setVersion(
   return config.manifest;
 }
 
+/**
+ * Creates the `set-version` command.
+ *
+ * Note that this command will only run if the package is configured and
+ * contains no misalignments.
+ *
+ * @param versions Version range string provided on the command line
+ * @param options Command line options
+ * @returns The `set-version` command
+ */
 export async function makeSetVersionCommand(
   versions: string | number,
   options: Options
