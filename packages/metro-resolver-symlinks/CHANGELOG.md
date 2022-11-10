@@ -1,5 +1,13 @@
 # Change Log - @rnx-kit/metro-resolver-symlinks
 
+## 0.1.22
+
+### Patch Changes
+
+- 53df63dd: Use `extraNodeModules` if it is defined (and some refactoring)
+- Updated dependencies [53df63dd]
+  - @rnx-kit/tools-react-native@1.2.3
+
 ## 0.1.21
 
 ### Patch Changes
