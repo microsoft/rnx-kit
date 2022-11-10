@@ -4,7 +4,7 @@ export type MetroResolver = typeof import("metro-resolver").resolve;
 
 export type ResolutionContext = Pick<
   MetroResolutionContext,
-  "originModulePath"
+  "extraNodeModules" | "originModulePath"
 >;
 
 export type ModuleResolver = (

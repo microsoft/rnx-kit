@@ -16,7 +16,7 @@ export type AllPlatforms = "ios" | "android" | "windows" | "win32" | "macos";
  */
 export function expandPlatformExtensions(
   platform: string,
-  extensions: string[]
+  extensions: readonly string[]
 ): string[] {
   const platforms = platformExtensions(platform);
 
