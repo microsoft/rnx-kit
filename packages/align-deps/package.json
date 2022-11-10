@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/align-deps",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Dependency checker for npm packages",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/align-deps#readme",
   "license": "MIT",

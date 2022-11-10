@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/align-deps
 
+## 2.0.1
+
+### Patch Changes
+
+- 430dd69a: Fix not being able to load `microsoft/react-native`
+
 ## 2.0.0
 
 ### Major Changes
