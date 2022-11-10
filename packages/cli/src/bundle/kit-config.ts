@@ -49,11 +49,15 @@ function getDefaultBundleParameters(platform: string) {
  *
  * @param id Optional identity of the target bundle definition to return
  * @param overridePlatform Override platform, typically from the command-line. When given, this overrides the list of target platforms.
+ * @param overrideDev Override dev, typically from the command-line. When given, this overrides the dev property from the target bundle definition.
+ * @param overrideMinify Override minify, typically from the command-line. When given, this overrides the minify property from the target bundle definition.
  * @returns Array of platform-specific bundle configurations
  */
 export function getCliPlatformBundleConfigs(
   id?: string,
-  overridePlatform?: AllPlatforms
+  overridePlatform?: AllPlatforms,
+  overrideDev?: boolean,
+  overrideMinify?: boolean
 ): CliPlatformBundleConfig[] {
   const kitConfig = getKitConfig();
   const maybeBundleConfig = kitConfig
@@ -72,9 +76,12 @@ export function getCliPlatformBundleConfigs(
     // apply defaults to fill in any required props that are missing
 
     return {
+      dev: true,
       ...getDefaultBundlerPlugins(),
       ...getDefaultBundleParameters(platform),
       ...platformBundleConfig,
+      ...(overrideDev !== undefined ? { dev: overrideDev } : {}),
+      ...(overrideMinify !== undefined ? { minify: overrideMinify } : {}),
       platform,
     };
   });

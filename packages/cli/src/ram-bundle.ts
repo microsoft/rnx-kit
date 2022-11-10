@@ -41,7 +41,9 @@ export async function rnxRamBundle(
 
   const bundleConfigs = getCliPlatformBundleConfigs(
     cliOptions.id,
-    cliOptions.platform
+    cliOptions.platform,
+    cliOptions.dev,
+    cliOptions.minify
   );
 
   applyBundleConfigOverrides(cliOptions, bundleConfigs, [
@@ -52,13 +54,7 @@ export async function rnxRamBundle(
   disableTreeShaking(bundleConfigs);
 
   for (const bundleConfig of bundleConfigs) {
-    await metroBundle(
-      metroConfig,
-      bundleConfig,
-      cliOptions.dev,
-      cliOptions.minify,
-      ramBundle
-    );
+    await metroBundle(metroConfig, bundleConfig, ramBundle);
   }
 }
 

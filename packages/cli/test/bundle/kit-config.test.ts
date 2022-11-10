@@ -30,6 +30,7 @@ describe("CLI > Bundle > Kit Config > getTargetPlatforms", () => {
 
 describe("CLI > Bundle > Kit Config > getCliPlatformBundleConfigs", () => {
   const defaultConfig = {
+    dev: true,
     entryFile: "index.js",
     sourcemapUseAbsolutePath: false,
     detectCyclicDependencies: true,

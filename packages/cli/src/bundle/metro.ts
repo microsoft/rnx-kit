@@ -1,5 +1,4 @@
 import { info } from "@rnx-kit/console";
-import type { BundleArgs as MetroBundleArgs } from "@rnx-kit/metro-service";
 import { bundle } from "@rnx-kit/metro-service";
 import { createDirectory } from "@rnx-kit/tools-node/fs";
 import type { ConfigT } from "metro-config";
@@ -22,26 +21,18 @@ import type { CliPlatformBundleConfig } from "./types";
 export async function metroBundle(
   metroConfig: ConfigT,
   bundleConfig: CliPlatformBundleConfig,
-  dev: boolean,
-  minify?: boolean,
   output = bundle
 ): Promise<void> {
   info(`Bundling ${bundleConfig.platform}...`);
 
   customizeMetroConfig(metroConfig, bundleConfig);
 
-  const metroBundleArgs: MetroBundleArgs = {
-    ...bundleConfig,
-    dev,
-    minify,
-  };
-
   // ensure all output directories exist
-  createDirectory(path.dirname(metroBundleArgs.bundleOutput));
-  metroBundleArgs.sourcemapOutput &&
-    createDirectory(path.dirname(metroBundleArgs.sourcemapOutput));
-  metroBundleArgs.assetsDest && createDirectory(metroBundleArgs.assetsDest);
+  createDirectory(path.dirname(bundleConfig.bundleOutput));
+  bundleConfig.sourcemapOutput &&
+    createDirectory(path.dirname(bundleConfig.sourcemapOutput));
+  bundleConfig.assetsDest && createDirectory(bundleConfig.assetsDest);
 
   // create the bundle
-  await output(metroBundleArgs, metroConfig);
+  await output(bundleConfig, metroConfig);
 }

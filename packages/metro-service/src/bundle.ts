@@ -14,7 +14,7 @@ export type BundleArgs = {
   entryFile: string;
   minify?: boolean;
   platform: string;
-  dev: boolean;
+  dev?: boolean;
   bundleOutput: string;
   bundleEncoding?: OutputOptions["bundleEncoding"];
   sourcemapOutput?: string;
@@ -76,7 +76,7 @@ export async function bundle(
   const requestOpts: RequestOptions = {
     entryFile: args.entryFile,
     sourceMapUrl,
-    dev: args.dev,
+    dev: args.dev !== false,
     minify: args.minify !== undefined ? args.minify : !args.dev,
     platform: args.platform,
     unstable_transformProfile: args.unstableTransformProfile,

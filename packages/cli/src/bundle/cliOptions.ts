@@ -21,7 +21,6 @@ export const commonBundleCommandOptions = [
   {
     name: "--dev [boolean]",
     description: "If false, warnings are disabled and the bundle is minified.",
-    default: true,
     parse: parseBoolean,
   },
   {

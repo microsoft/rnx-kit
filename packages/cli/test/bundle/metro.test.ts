@@ -28,6 +28,7 @@ describe("CLI > Bundle > Metro > metroBundle", () => {
     sourcemapSourcesRoot: "root-path-for-source-maps",
     sourcemapUseAbsolutePath: false,
     assetsDest: "dist",
+    minify: true,
   };
 
   const bundleConfig: CliPlatformBundleConfig = {
@@ -38,25 +39,25 @@ describe("CLI > Bundle > Metro > metroBundle", () => {
     treeShake: true,
   };
 
-  const dev = true;
-  const minify = true;
-
   it("does not use a custom serializer when all plugins are disabled", async () => {
     const metroConfig = await getDefaultConfig();
     expect(metroConfig.serializer.customSerializer).toBeNil();
-    await metroBundle(metroConfig, bundleConfigNoPlugins, dev, minify);
+    // TODO input changed .. minify will no longer be true
+    await metroBundle(metroConfig, bundleConfigNoPlugins);
     expect(metroConfig.serializer.customSerializer).toBeNil();
   });
 
   it("uses a custom serializer when at least one plugin is enabled", async () => {
     const metroConfig = await getDefaultConfig();
     expect(metroConfig.serializer.customSerializer).toBeNil();
-    await metroBundle(metroConfig, bundleConfig, dev, minify);
+    // TODO input changed .. minify will no longer be true
+    await metroBundle(metroConfig, bundleConfig);
     expect(metroConfig.serializer.customSerializer).not.toBeNil();
   });
 
   it("creates directories for the bundle, the source map, and assets", async () => {
-    await metroBundle(await getDefaultConfig(), bundleConfig, dev, minify);
+    // TODO input changed .. minify will no longer be true
+    await metroBundle(await getDefaultConfig(), bundleConfig);
     expect(mockCreateDirectory).toHaveBeenCalledTimes(3);
     expect(mockCreateDirectory).toHaveBeenNthCalledWith(1, "src");
     expect(mockCreateDirectory).toHaveBeenNthCalledWith(2, "map");
@@ -64,12 +65,11 @@ describe("CLI > Bundle > Metro > metroBundle", () => {
   });
 
   it("invokes the Metro bundler using all input parameters", async () => {
-    await metroBundle(await getDefaultConfig(), bundleConfig, dev, minify);
+    // TODO input changed .. minify will no longer be true
+    await metroBundle(await getDefaultConfig(), bundleConfig);
     expect(mockBundle).toHaveBeenCalledTimes(1);
     expect(mockBundle.mock.calls[0][0]).toEqual({
       ...bundleConfig,
-      dev,
-      minify,
     });
   });
 });

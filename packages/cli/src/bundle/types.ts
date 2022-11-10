@@ -7,7 +7,7 @@ export type CLICommonBundleOptions = {
   id?: string;
   entryFile?: string;
   platform?: AllPlatforms;
-  dev: boolean;
+  dev?: boolean;
   minify?: boolean;
   bundleOutput?: string;
   bundleEncoding?: BundleArgs["bundleEncoding"];
@@ -25,6 +25,7 @@ export type CliPlatformBundleConfig = BundleParameters &
   Required<
     Pick<
       BundleParameters,
+      | "dev"
       | "entryFile"
       | "bundleOutput"
       | "sourcemapUseAbsolutePath"

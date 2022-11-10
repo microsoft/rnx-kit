@@ -4,9 +4,11 @@ import type { CliPlatformBundleConfig } from "./types";
 type BundleConfigOverrides = Partial<
   Pick<
     CliPlatformBundleConfig,
+    | "dev"
     | "entryFile"
     | "bundleOutput"
     | "bundleEncoding"
+    | "minify"
     | "sourcemapOutput"
     | "sourcemapSourcesRoot"
     | "sourcemapUseAbsolutePath"
@@ -22,7 +24,9 @@ export const overridableCommonBundleOptions: readonly (keyof BundleConfigOverrid
     "assetsDest",
     "bundleEncoding",
     "bundleOutput",
+    "dev",
     "entryFile",
+    "minify",
     "sourcemapOutput",
     "sourcemapSourcesRoot",
     "sourcemapUseAbsolutePath",

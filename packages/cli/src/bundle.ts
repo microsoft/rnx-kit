@@ -23,7 +23,9 @@ export async function rnxBundle(
 
   const bundleConfigs = getCliPlatformBundleConfigs(
     cliOptions.id,
-    cliOptions.platform
+    cliOptions.platform,
+    cliOptions.dev,
+    cliOptions.minify
   );
 
   applyBundleConfigOverrides(cliOptions, bundleConfigs, [
@@ -32,12 +34,7 @@ export async function rnxBundle(
   ]);
 
   for (const bundleConfig of bundleConfigs) {
-    await metroBundle(
-      metroConfig,
-      bundleConfig,
-      cliOptions.dev,
-      cliOptions.minify
-    );
+    await metroBundle(metroConfig, bundleConfig);
   }
 }
 
