@@ -6,7 +6,7 @@ import { diffLinesUnified } from "jest-diff";
 import path from "path";
 import { getRequirements } from "./dependencies";
 import { findBadPackages } from "./findBadPackages";
-import { modifyManifest } from "./helpers";
+import { modifyManifest, printMigrationMessage } from "./helpers";
 import { updatePackageManifest } from "./manifest";
 import { getProfilesFor, resolveCustomProfiles } from "./profiles";
 import type { CheckConfig, CheckOptions, Command } from "./types";
@@ -144,9 +144,13 @@ export function checkPackageManifest(
       const url = chalk.bold("https://aka.ms/dep-check");
       info(`Visit ${url} for more information about dep-check.`);
 
+      printMigrationMessage();
+
       return 1;
     }
   }
+
+  printMigrationMessage();
 
   return 0;
 }
