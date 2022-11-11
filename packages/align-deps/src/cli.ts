@@ -226,7 +226,7 @@ export async function cli({ packages, ...args }: Args): Promise<void> {
 if (require.main === module) {
   require("yargs").usage(
     "$0 [packages...]",
-    "Dependency checker for npm packages",
+    "Manage dependencies within a repository and across many repositories",
     cliOptions,
     cli
   ).argv;
