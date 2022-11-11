@@ -29,7 +29,8 @@ export function rnxAlignDeps(
 
 export const rnxAlignDepsCommand = {
   name: "rnx-align-deps",
-  description: "Manage dependencies within a repository and across many repositories",
+  description:
+    "Manage dependencies within a repository and across many repositories",
   func: rnxAlignDeps,
   options: [
     {
