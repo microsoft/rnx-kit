@@ -29,7 +29,7 @@ export function rnxAlignDeps(
 
 export const rnxAlignDepsCommand = {
   name: "rnx-align-deps",
-  description: "Dependency checker for npm packages",
+  description: "Manage dependencies within a repository and across many repositories",
   func: rnxAlignDeps,
   options: [
     {
