@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/cli
 
+## 0.15.0
+
+### Minor Changes
+
+- d563e22f: Migrate from `@rnx-kit/dep-check` to `@rnx-kit/align-deps`
+
 ## 0.14.10
 
 ### Patch Changes
