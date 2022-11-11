@@ -171,7 +171,7 @@ from the bundle configuration (or its [defaults](#bundle-defaults)).
 
 ## Manage Dependencies
 
-Manage your package's dependencies.
+Manage dependencies within a repository and across many repositories.
 
 ```
 $ yarn react-native rnx-align-deps [options] [/path/to/package.json]
