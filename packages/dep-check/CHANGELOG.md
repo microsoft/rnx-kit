@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/dep-check
 
+## 1.14.0
+
+### Minor Changes
+
+- 93b480ab: Tell users to migrate to `@rnx-kit/align-deps`
+
 ## 1.13.5
 
 ### Patch Changes
