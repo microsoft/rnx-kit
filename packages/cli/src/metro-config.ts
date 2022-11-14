@@ -131,16 +131,14 @@ export function customizeMetroConfig(
   const metroConfig = metroConfigReadonly as InputConfigT;
 
   const plugins: MetroPlugin[] = [];
-  if (extraSerializationPlugins) {
-    if (Array.isArray(extraSerializationPlugins))
-      extraSerializationPlugins.forEach((plugin) => {
-        const implPath = require.resolve(plugin.path, {
-          paths: [metroConfig.projectRoot],
-        });
-        const impl = require(implPath);
-        plugins.push(impl(plugin.options));
+  if (Array.isArray(extraSerializationPlugins))
+    extraSerializationPlugins.forEach((plugin) => {
+      const implPath = require.resolve(plugin.path, {
+        paths: [metroConfig.projectRoot],
       });
-  }
+      const impl = require(implPath);
+      plugins.push(impl(plugin.options));
+    });
   if (typeof detectDuplicateDependencies === "object") {
     plugins.push(DuplicateDependencies(detectDuplicateDependencies));
   } else if (detectDuplicateDependencies !== false) {
