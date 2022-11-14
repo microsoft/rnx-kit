@@ -42,7 +42,6 @@ describe("CLI > Bundle > Metro > metroBundle", () => {
   it("does not use a custom serializer when all plugins are disabled", async () => {
     const metroConfig = await getDefaultConfig();
     expect(metroConfig.serializer.customSerializer).toBeNil();
-    // TODO input changed .. minify will no longer be true
     await metroBundle(metroConfig, bundleConfigNoPlugins);
     expect(metroConfig.serializer.customSerializer).toBeNil();
   });
@@ -50,13 +49,11 @@ describe("CLI > Bundle > Metro > metroBundle", () => {
   it("uses a custom serializer when at least one plugin is enabled", async () => {
     const metroConfig = await getDefaultConfig();
     expect(metroConfig.serializer.customSerializer).toBeNil();
-    // TODO input changed .. minify will no longer be true
     await metroBundle(metroConfig, bundleConfig);
     expect(metroConfig.serializer.customSerializer).not.toBeNil();
   });
 
   it("creates directories for the bundle, the source map, and assets", async () => {
-    // TODO input changed .. minify will no longer be true
     await metroBundle(await getDefaultConfig(), bundleConfig);
     expect(mockCreateDirectory).toHaveBeenCalledTimes(3);
     expect(mockCreateDirectory).toHaveBeenNthCalledWith(1, "src");
@@ -65,7 +62,6 @@ describe("CLI > Bundle > Metro > metroBundle", () => {
   });
 
   it("invokes the Metro bundler using all input parameters", async () => {
-    // TODO input changed .. minify will no longer be true
     await metroBundle(await getDefaultConfig(), bundleConfig);
     expect(mockBundle).toHaveBeenCalledTimes(1);
     expect(mockBundle.mock.calls[0][0]).toEqual({
