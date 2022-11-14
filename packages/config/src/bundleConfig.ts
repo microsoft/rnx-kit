@@ -10,7 +10,7 @@ export type TypeScriptValidationOptions = {
   throwOnError?: boolean;
 };
 
-export type CustomSerializationPluginOption = {
+export type ExtraSerializationPluginOption = {
   path: string;
   options?: object;
 };
@@ -22,7 +22,7 @@ export type BundlerPlugins = {
   /**
    * Specify additional custom metro serializer plugins
    */
-  customSerializationPlugins?: CustomSerializationPluginOption[];
+  extraSerializationPlugins?: ExtraSerializationPluginOption[];
 
   /**
    * Choose whether to detect cycles in the dependency graph. `true` uses defaults,

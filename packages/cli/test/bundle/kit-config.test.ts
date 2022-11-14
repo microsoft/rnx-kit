@@ -32,7 +32,7 @@ describe("CLI > Bundle > Kit Config > getCliPlatformBundleConfigs", () => {
   const defaultConfig = {
     entryFile: "index.js",
     sourcemapUseAbsolutePath: false,
-    customSerializationPlugins: [],
+    extraSerializationPlugins: [],
     detectCyclicDependencies: true,
     detectDuplicateDependencies: true,
     typescriptValidation: true,

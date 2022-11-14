@@ -147,7 +147,7 @@ describe("cli/metro-config/customizeMetroConfig", () => {
     const inputConfig = makeMockConfig();
     const myCustomPluginOptions = { param1: "foo" };
     customizeMetroConfig(inputConfig, {
-      customSerializationPlugins: [
+      extraSerializationPlugins: [
         {
           path: "./test/my-custom-metro-serialization-plugin",
           options: myCustomPluginOptions,
