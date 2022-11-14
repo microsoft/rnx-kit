@@ -20,6 +20,7 @@ jest.mock("@rnx-kit/metro-plugin-duplicates-checker", () => {
 // Always use a new mock since `customizeMetroConfig()` modifies the object.
 function makeMockConfig(): InputConfigT {
   return {
+    projectRoot: __dirname,
     serializer: {
       customSerializer: false,
       experimentalSerializerHook: false,
@@ -40,6 +41,7 @@ describe("cli/metro-config/customizeMetroConfig", () => {
     customizeMetroConfig(inputConfig, {});
 
     expect(inputConfig).toEqual({
+      projectRoot: expect.stringContaining("test"),
       serializer: {
         customSerializer: expect.anything(),
         experimentalSerializerHook: expect.anything(),
@@ -62,6 +64,7 @@ describe("cli/metro-config/customizeMetroConfig", () => {
     });
 
     expect(inputConfig).toEqual({
+      projectRoot: expect.stringContaining("test"),
       serializer: {
         experimentalSerializerHook: expect.anything(),
       },
@@ -82,6 +85,7 @@ describe("cli/metro-config/customizeMetroConfig", () => {
     });
 
     expect(inputConfig).toEqual({
+      projectRoot: expect.stringContaining("test"),
       serializer: {
         customSerializer: expect.anything(),
         experimentalSerializerHook: expect.anything(),
@@ -103,6 +107,7 @@ describe("cli/metro-config/customizeMetroConfig", () => {
     });
 
     expect(inputConfig).toEqual({
+      projectRoot: expect.stringContaining("test"),
       serializer: {
         customSerializer: expect.anything(),
         experimentalSerializerHook: expect.anything(),
@@ -127,6 +132,7 @@ describe("cli/metro-config/customizeMetroConfig", () => {
     });
 
     expect(inputConfig).toEqual({
+      projectRoot: expect.stringContaining("test"),
       serializer: {
         customSerializer: expect.anything(),
         experimentalSerializerHook: expect.anything(),
@@ -149,13 +155,14 @@ describe("cli/metro-config/customizeMetroConfig", () => {
     customizeMetroConfig(inputConfig, {
       extraSerializationPlugins: [
         {
-          path: "./test/my-custom-metro-serialization-plugin",
+          path: "./my-custom-metro-serialization-plugin",
           options: myCustomPluginOptions,
         },
       ],
     });
 
     expect(inputConfig).toEqual({
+      projectRoot: expect.stringContaining("test"),
       serializer: {
         customSerializer: expect.anything(),
         experimentalSerializerHook: expect.anything(),
@@ -180,6 +187,7 @@ describe("cli/metro-config/customizeMetroConfig", () => {
     });
 
     expect(inputConfig).toEqual({
+      projectRoot: expect.stringContaining("test"),
       serializer: {
         customSerializer: expect.anything(),
         experimentalSerializerHook: expect.anything(),
