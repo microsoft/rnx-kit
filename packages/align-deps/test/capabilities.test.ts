@@ -1,88 +1,75 @@
 import type { Capability } from "@rnx-kit/config";
 import { capabilitiesFor, resolveCapabilities } from "../src/capabilities";
+import { filterPreset, mergePresets } from "../src/preset";
+import defaultPreset from "../src/presets/microsoft/react-native";
 import profile_0_62 from "../src/presets/microsoft/react-native/profile-0.62";
 import profile_0_63 from "../src/presets/microsoft/react-native/profile-0.63";
 import profile_0_64 from "../src/presets/microsoft/react-native/profile-0.64";
-import { getProfilesFor } from "../src/profiles";
 import { pickPackage } from "./helpers";
 
+function makeMockResolver(module: string): RequireResolve {
+  return (() => module) as unknown as RequireResolve;
+}
+
 describe("capabilitiesFor()", () => {
-  test("returns `undefined` when react-native is not a dependency", () => {
+  test("returns an empty array when there are no dependencies", () => {
     expect(
-      capabilitiesFor({ name: "@rnx-kit/align-deps", version: "1.0.0" })
-    ).toBeUndefined();
-    expect(
-      capabilitiesFor({
-        name: "@rnx-kit/align-deps",
-        version: "1.0.0",
-        dependencies: {
-          react: "^17.0.1",
-        },
-      })
-    ).toBeUndefined();
+      capabilitiesFor(
+        { name: "@rnx-kit/align-deps", version: "1.0.0" },
+        defaultPreset
+      )
+    ).toEqual([]);
   });
 
-  test("returns capabilities when react-native is under dependencies", () => {
+  test("returns capabilities for dependencies declared under `dependencies`", () => {
     const manifest = {
       name: "@rnx-kit/align-deps",
       version: "1.0.0",
       dependencies: {
+        react: "^17.0.1",
         "react-native": "^0.64.1",
       },
     };
-    expect(capabilitiesFor(manifest)).toEqual({
-      reactNativeVersion: "^0.64",
-      reactNativeDevVersion: "0.64.0",
-      kitType: "library",
-      capabilities: ["core", "core-android", "core-ios"],
-    });
+    expect(capabilitiesFor(manifest, defaultPreset)).toEqual([
+      "core",
+      "core-android",
+      "core-ios",
+      "react",
+    ]);
   });
 
-  test("returns capabilities when react-native is under peerDependencies", () => {
+  test("returns capabilities for dependencies declared under `peerDependencies`", () => {
     const manifest = {
       name: "@rnx-kit/align-deps",
       version: "1.0.0",
       peerDependencies: {
+        react: "^17.0.1",
         "react-native": "^0.64.1",
       },
     };
-    expect(capabilitiesFor(manifest)).toEqual({
-      reactNativeVersion: "^0.64",
-      reactNativeDevVersion: "0.64.0",
-      kitType: "library",
-      capabilities: ["core", "core-android", "core-ios"],
-    });
+    expect(capabilitiesFor(manifest, defaultPreset)).toEqual([
+      "core",
+      "core-android",
+      "core-ios",
+      "react",
+    ]);
   });
 
-  test("returns capabilities when react-native is under devDependencies", () => {
+  test("returns capabilities for dependencies declared under `devDependencies`", () => {
     const manifest = {
       name: "@rnx-kit/align-deps",
       version: "1.0.0",
       devDependencies: {
+        react: "^17.0.1",
         "react-native": "^0.64.1",
       },
     };
-    expect(capabilitiesFor(manifest)).toEqual({
-      reactNativeVersion: "^0.64",
-      reactNativeDevVersion: "^0.64.1",
-      kitType: "library",
-      capabilities: ["core", "core-android", "core-ios"],
-    });
-  });
-
-  test("returns kit config with app type instead of dev version", () => {
-    const manifest = {
-      name: "@rnx-kit/align-deps",
-      version: "1.0.0",
-      peerDependencies: {
-        "react-native": "^0.64.1",
-      },
-    };
-    expect(capabilitiesFor(manifest, { kitType: "app" })).toEqual({
-      reactNativeVersion: "^0.64",
-      kitType: "app",
-      capabilities: ["core", "core-android", "core-ios"],
-    });
+    expect(capabilitiesFor(manifest, defaultPreset)).toEqual([
+      "core",
+      "core-android",
+      "core-ios",
+      "react",
+    ]);
   });
 
   test("ignores packages that are not managed by align-deps", () => {
@@ -98,11 +85,12 @@ describe("capabilitiesFor()", () => {
         "@rnx-kit/cli": "*",
       },
     };
-    expect(capabilitiesFor(manifest, { kitType: "app" })).toEqual({
-      reactNativeVersion: "^0.64",
-      kitType: "app",
-      capabilities: ["core", "core-android", "core-ios", "react"],
-    });
+    expect(capabilitiesFor(manifest, defaultPreset)).toEqual([
+      "core",
+      "core-android",
+      "core-ios",
+      "react",
+    ]);
   });
 });
 
@@ -119,8 +107,9 @@ describe("resolveCapabilities()", () => {
 
   test("dedupes packages", () => {
     const packages = resolveCapabilities(
+      "package.json",
       ["core", "core", "test-app"],
-      [profile_0_64]
+      { "0.64": profile_0_64 }
     );
 
     const { name } = profile_0_64["core"];
@@ -136,10 +125,11 @@ describe("resolveCapabilities()", () => {
   });
 
   test("dedupes package versions", () => {
-    const packages = resolveCapabilities(
-      ["webview"],
-      [profile_0_62, profile_0_63, profile_0_64]
-    );
+    const packages = resolveCapabilities("package.json", ["webview"], {
+      "0.62": profile_0_62,
+      "0.63": profile_0_63,
+      "0.64": profile_0_64,
+    });
 
     const { name } = profile_0_64["webview"];
     expect(packages).toEqual({
@@ -151,8 +141,13 @@ describe("resolveCapabilities()", () => {
 
   test("ignores missing/unknown capabilities", () => {
     const packages = resolveCapabilities(
+      "package.json",
       ["skynet" as Capability, "svg"],
-      [profile_0_62, profile_0_63, profile_0_64]
+      {
+        "0.62": profile_0_62,
+        "0.63": profile_0_63,
+        "0.64": profile_0_64,
+      }
     );
 
     const { name } = profile_0_64["svg"];
@@ -168,14 +163,19 @@ describe("resolveCapabilities()", () => {
       { virtual: true }
     );
 
-    const profiles = getProfilesFor(
-      "^0.62 || ^0.63 || ^0.64",
-      "mock-custom-profiles-module"
+    const preset = filterPreset(
+      mergePresets(
+        ["microsoft/react-native", "mock-custom-profiles-module"],
+        process.cwd(),
+        makeMockResolver("mock-custom-profiles-module")
+      ),
+      ["react-native@0.62 || 0.63 || 0.64"]
     );
 
     const packages = resolveCapabilities(
+      "package.json",
       ["skynet" as Capability, "svg"],
-      profiles
+      preset
     );
 
     const { name } = profile_0_64["svg"];
@@ -186,10 +186,10 @@ describe("resolveCapabilities()", () => {
   });
 
   test("resolves capabilities required by capabilities", () => {
-    const packages = resolveCapabilities(
-      ["core-windows"],
-      [profile_0_63, profile_0_64]
-    );
+    const packages = resolveCapabilities("package.json", ["core-windows"], {
+      "0.63": profile_0_63,
+      "0.64": profile_0_64,
+    });
 
     expect(packages).toEqual({
       react: [
@@ -228,9 +228,19 @@ describe("resolveCapabilities()", () => {
       { virtual: true }
     );
 
+    const preset = filterPreset(
+      mergePresets(
+        ["microsoft/react-native", "mock-meta-package"],
+        process.cwd(),
+        makeMockResolver("mock-meta-package")
+      ),
+      ["react-native@0.64"]
+    );
+
     const packages = resolveCapabilities(
+      "package.json",
       ["core/all" as Capability],
-      getProfilesFor("^0.64", "mock-meta-package")
+      preset
     );
 
     expect(packages).toEqual({
@@ -263,9 +273,19 @@ describe("resolveCapabilities()", () => {
       { virtual: true }
     );
 
+    const preset = filterPreset(
+      mergePresets(
+        ["microsoft/react-native", "mock-meta-package-loop"],
+        process.cwd(),
+        makeMockResolver("mock-meta-package-loop")
+      ),
+      ["react-native@0.64"]
+    );
+
     const packages = resolveCapabilities(
+      "package.json",
       ["reese" as Capability],
-      getProfilesFor("^0.64", "mock-meta-package-loop")
+      preset
     );
 
     expect(packages).toEqual({

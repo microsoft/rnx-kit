@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/golang
 
+## 0.2.3
+
+### Patch Changes
+
+- c467ca8b: Bump Go to 1.19.3
+
 ## 0.2.2
 
 ### Patch Changes

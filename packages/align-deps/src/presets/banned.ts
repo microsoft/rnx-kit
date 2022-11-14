@@ -5,7 +5,13 @@ const bannedPackages: ExcludedPackage[] = [
     name: "@react-native-community/async-storage",
     version: "*",
     reason:
-      "This package was renamed to '@react-native-async-storage/async-storage' in 1.13.0. The new package will be recommended in 0.64.",
+      "This package was renamed to '@react-native-async-storage/async-storage' in 1.13.0. The new package is recommended in 0.64.",
+  },
+  {
+    name: "@react-native-community/clipboard",
+    version: "*",
+    reason:
+      "This package was renamed to '@react-native-clipboard/clipboard' in 1.6.0. The new package is recommended in 0.64.",
   },
   {
     name: "@react-native-community/masked-view",
@@ -17,7 +23,7 @@ const bannedPackages: ExcludedPackage[] = [
     name: "@types/react-native",
     version: ">=0.71.0-0",
     reason:
-      "Types are included in react-native starting with 0.71.0. '@types/react-native' will be deprecated from 0.72 onwards.",
+      "Types are included in react-native starting with 0.71.0. '@types/react-native' is deprecated from 0.72 onwards.",
   },
   {
     name: "react-native-linear-gradient",
@@ -29,7 +35,7 @@ const bannedPackages: ExcludedPackage[] = [
     name: "react-native-lazy-index",
     version: "*",
     reason:
-      "This package was renamed to '@rnx-kit/react-native-lazy-index'. The new package will be recommended in 0.66.",
+      "This package was renamed to '@rnx-kit/react-native-lazy-index'. The new package is recommended in 0.66.",
   },
   {
     name: "react-native-netinfo",

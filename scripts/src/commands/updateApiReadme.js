@@ -149,9 +149,10 @@ function renderParamNode(node) {
       return "{}";
     case "RestElement":
       return `...${renderParamNode(node.argument)}`;
-    case "TSParameterProperty":
     case "TSAsExpression":
     case "TSNonNullExpression":
+    case "TSParameterProperty":
+    case "TSSatisfiesExpression":
     case "TSTypeAssertion":
       throw new Error(`Unsupported parameter type: ${node.type}`);
   }

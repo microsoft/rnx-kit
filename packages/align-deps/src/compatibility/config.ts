@@ -1,26 +1,18 @@
 import type { KitConfig } from "@rnx-kit/config";
 import { warn } from "@rnx-kit/console";
-import semverCoerce from "semver/functions/coerce";
-import type { AlignDepsConfig, CheckConfig } from "../types";
+import { defaultConfig } from "../config";
+import { dropPatchFromVersion, modifyManifest } from "../helpers";
+import type { AlignDepsConfig, LegacyCheckConfig, Options } from "../types";
 
-function dropPatchFromVersion(version: string): string {
-  return version
-    .split("||")
-    .map((v) => {
-      const coerced = semverCoerce(v);
-      return coerced ? `${coerced.major}.${coerced.minor}` : "0.0";
-    })
-    .join(" || ");
-}
+const legacyKeys = [
+  "capabilities",
+  "customProfiles",
+  "reactNativeDevVersion",
+  "reactNativeVersion",
+] as const;
 
-function oldConfigKeys(config: KitConfig): (keyof KitConfig)[] {
-  const oldKeys = [
-    "capabilities",
-    "customProfiles",
-    "reactNativeDevVersion",
-    "reactNativeVersion",
-  ] as const;
-  return oldKeys.filter((key) => key in config);
+function findLegacyConfigKeys(config: KitConfig): (keyof KitConfig)[] {
+  return legacyKeys.filter((key) => key in config);
 }
 
 /**
@@ -34,28 +26,25 @@ function oldConfigKeys(config: KitConfig): (keyof KitConfig)[] {
  */
 export function transformConfig({
   capabilities,
-  customProfilesPath,
+  customProfiles,
   kitType,
   manifest,
   reactNativeDevVersion,
   reactNativeVersion,
-}: CheckConfig): AlignDepsConfig {
+}: LegacyCheckConfig): AlignDepsConfig {
   const devVersion = dropPatchFromVersion(
     reactNativeDevVersion || reactNativeVersion
   );
-  const prodVersion = dropPatchFromVersion(
-    reactNativeVersion || reactNativeDevVersion
-  );
+  const prodVersion = dropPatchFromVersion(reactNativeVersion);
   return {
     kitType,
     alignDeps: {
-      presets: [
-        "microsoft/react-native",
-        ...(customProfilesPath ? [customProfilesPath] : []),
-      ],
+      presets: customProfiles
+        ? [...defaultConfig.presets, customProfiles]
+        : defaultConfig.presets,
       requirements:
         kitType === "app"
-          ? [`react-native@${reactNativeVersion}`]
+          ? [`react-native@${prodVersion}`]
           : {
               development: [`react-native@${devVersion}`],
               production: [`react-native@${prodVersion}`],
@@ -66,16 +55,32 @@ export function transformConfig({
   };
 }
 
+/**
+ * Migrates the old config schema into the new one, if necessary.
+ *
+ * This will function will allow users to let `align-deps` update their config.
+ * Otherwise, it will tell them how to update their config manually. It will
+ * also warn about old config keys that are no longer used.
+ *
+ * @param config Configuration in the package manifest
+ * @param manifestPath Path to the package manifest to check
+ * @param options Command line options
+ * @returns The config in the new schema
+ */
 export function migrateConfig(
-  config: AlignDepsConfig | CheckConfig
+  config: AlignDepsConfig | LegacyCheckConfig,
+  manifestPath: string,
+  { migrateConfig }: Options
 ): AlignDepsConfig {
   if ("alignDeps" in config) {
-    const oldKeys = oldConfigKeys(config);
+    const oldKeys = findLegacyConfigKeys(config);
     if (oldKeys.length > 0) {
       const unsupportedKeys = oldKeys
         .map((key) => `'rnx-kit.${key}'`)
         .join(", ");
-      warn(`The following keys are no longer supported: ${unsupportedKeys}`);
+      warn(
+        `${manifestPath}: The following keys are no longer supported: ${unsupportedKeys}`
+      );
     }
     return config;
   }
@@ -83,13 +88,29 @@ export function migrateConfig(
   const newConfig = transformConfig(config);
   const { manifest, ...configOnly } = newConfig;
 
-  warn(`The config schema has changed. Please update your config to the following:
+  if (migrateConfig) {
+    const kitConfig = manifest["rnx-kit"];
+    if (kitConfig) {
+      for (const key of legacyKeys) {
+        delete kitConfig[key];
+      }
+    }
+
+    manifest["rnx-kit"] = {
+      ...kitConfig,
+      alignDeps: configOnly.alignDeps,
+    };
+
+    modifyManifest(manifestPath, manifest);
+  } else {
+    warn(`${manifestPath}: The config schema has changed. Please update your config to the following:
 
 ${JSON.stringify(configOnly, null, 2)}
 
-Support for the old schema will be removed in a future release.`);
+Or run this command again with '--migrate-config' to update your config automatically.
 
-  // TODO: Add a flag to automatically migrate users to the new config schema.
+Support for the old schema will be removed in a future release.`);
+  }
 
   return newConfig;
 }

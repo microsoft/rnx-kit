@@ -1,9 +1,9 @@
-import { parseProfilesString } from "../src/profiles";
 import {
   buildManifestProfile,
   checkPackageManifestUnconfigured,
   inspect,
 } from "../src/commands/vigilant";
+import { defaultConfig } from "../src/config";
 import type { AlignDepsConfig } from "../src/types";
 
 jest.mock("fs");
@@ -27,14 +27,11 @@ function makeConfig(
 }
 
 describe("buildManifestProfile()", () => {
-  const testVersion = "1.0.0-test";
-
   test("builds a package manifest for a single profile version", () => {
     const profile = buildManifestProfile(
       "package.json",
       makeConfig(["react-native@0.70"])
     );
-    profile.version = testVersion;
     expect(profile).toMatchSnapshot();
   });
 
@@ -46,7 +43,6 @@ describe("buildManifestProfile()", () => {
         production: ["react-native@0.69 || 0.70"],
       })
     );
-    profile.version = testVersion;
     expect(profile).toMatchSnapshot();
   });
 
@@ -57,11 +53,6 @@ describe("buildManifestProfile()", () => {
     expect("react-native-test-app" in dependencies).toBe(true);
     expect("react-native-test-app" in peerDependencies).toBe(false);
     expect("react-native-test-app" in devDependencies).toBe(true);
-  });
-
-  test("throws when no profiles match the requested versions", () => {
-    expect(() => parseProfilesString("0.59", undefined)).toThrow();
-    expect(() => parseProfilesString("0.59,0.64", undefined)).toThrow();
   });
 });
 
@@ -222,6 +213,14 @@ describe("checkPackageManifestUnconfigured()", () => {
 
   const consoleErrorSpy = jest.spyOn(global.console, "error");
 
+  const defaultOptions = {
+    presets: defaultConfig.presets,
+    loose: false,
+    migrateConfig: false,
+    verbose: false,
+    write: false,
+  };
+
   beforeEach(() => {
     consoleErrorSpy.mockReset();
     fs.__setMockContent({});
@@ -242,7 +241,7 @@ describe("checkPackageManifestUnconfigured()", () => {
 
     const result = checkPackageManifestUnconfigured(
       "package.json",
-      { loose: false, write: false },
+      defaultOptions,
       makeConfig(["react-native@0.70"], {
         name: "@rnx-kit/align-deps",
         version: "1.0.0",
@@ -264,7 +263,7 @@ describe("checkPackageManifestUnconfigured()", () => {
 
     const result = checkPackageManifestUnconfigured(
       "package.json",
-      { loose: false, write: false },
+      defaultOptions,
       makeConfig(["react-native@0.70"], {
         name: "@rnx-kit/align-deps",
         version: "1.0.0",
@@ -286,7 +285,7 @@ describe("checkPackageManifestUnconfigured()", () => {
 
     const result = checkPackageManifestUnconfigured(
       "package.json",
-      { loose: false, write: true },
+      { ...defaultOptions, write: true },
       makeConfig(["react-native@0.70"], {
         name: "@rnx-kit/align-deps",
         version: "1.0.0",
@@ -308,11 +307,7 @@ describe("checkPackageManifestUnconfigured()", () => {
 
     const result = checkPackageManifestUnconfigured(
       "package.json",
-      {
-        write: false,
-        excludePackages: ["@rnx-kit/align-deps"],
-        loose: false,
-      },
+      { ...defaultOptions, excludePackages: ["@rnx-kit/align-deps"] },
       makeConfig(["react-native@0.70"], {
         name: "@rnx-kit/align-deps",
         version: "1.0.0",
@@ -365,7 +360,7 @@ describe("checkPackageManifestUnconfigured()", () => {
 
     const result = checkPackageManifestUnconfigured(
       "package.json",
-      { loose: false, write: true },
+      { ...defaultOptions, write: true },
       { ...kitConfig, manifest: inputManifest }
     );
 

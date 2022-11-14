@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/react-native-auth",
-  "version": "0.1.6",
+  "version": "0.2.0",
   "description": "@rnx-kit/react-native-auth provides a cross-app uniform API for user authentication",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/react-native-auth#readme",
   "license": "MIT",
@@ -42,11 +42,22 @@
     "extends": "@rnx-kit/eslint-config"
   },
   "rnx-kit": {
-    "reactNativeVersion": ">=0.62 <1.0",
-    "reactNativeDevVersion": "^0.68",
-    "capabilities": [
-      "core-android",
-      "core-ios"
-    ]
+    "alignDeps": {
+      "presets": [
+        "microsoft/react-native"
+      ],
+      "requirements": {
+        "development": [
+          "react-native@0.68"
+        ],
+        "production": [
+          "react-native@>=0.62 <1.0"
+        ]
+      },
+      "capabilities": [
+        "core-android",
+        "core-ios"
+      ]
+    }
   }
 }

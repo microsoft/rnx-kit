@@ -11,8 +11,7 @@ import type { Options, Preset, Profile } from "./types";
 
 type Trace = {
   module: string;
-  reactNativeVersion?: string;
-  requirements?: string[];
+  requirements: string[];
   profiles: string[];
 };
 
@@ -49,7 +48,7 @@ export function visitDependencies(
       resolveSymlinks: true,
     });
     if (!packageDir) {
-      warn(`Unable to resolve module '${dependency}'`);
+      warn(`Unable to resolve module '${dependency}' from '${projectRoot}'`);
       return;
     }
 
@@ -60,10 +59,21 @@ export function visitDependencies(
   });
 }
 
+/**
+ * Gathers requirements from dependencies, and their dependencies.
+ * @param projectRoot Root of the package to check
+ * @param manifest Package manifest
+ * @param preset Preset satisfying the requirements of the current package
+ * @param requirements Requirements of the current package
+ * @param appCapabilities Capabilities used by the current package
+ * @param options Command line options
+ * @returns Capabilities required by dependencies
+ */
 export function gatherRequirements(
   projectRoot: string,
   manifest: PackageManifest,
   preset: Preset,
+  requirements: string[],
   appCapabilities: Capability[],
   { loose }: Pick<Options, "loose">
 ): { preset: Preset; capabilities: Capability[] } {
@@ -72,6 +82,7 @@ export function gatherRequirements(
     {
       module: manifest.name,
       profiles: Object.keys(preset),
+      requirements,
     },
   ];
 
@@ -107,7 +118,7 @@ export function gatherRequirements(
       }
     }
 
-    const filteredPreset = filterPreset(requirements, preset);
+    const filteredPreset = filterPreset(preset, requirements);
     const filteredNames = Object.keys(filteredPreset);
     if (filteredNames.length !== trace[trace.length - 1].profiles.length) {
       trace.push({

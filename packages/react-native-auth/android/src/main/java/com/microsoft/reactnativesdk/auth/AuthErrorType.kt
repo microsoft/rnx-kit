@@ -11,6 +11,7 @@ enum class AuthErrorType(val type: String) {
     CONDITIONAL_ACCESS_BLOCKED("ConditionalAccessBlocked"),
     INTERACTION_REQUIRED("InteractionRequired"),
     NO_RESPONSE("NoResponse"),
+    NOT_IMPLEMENTED("NotImplemented"),
     PRECONDITION_VIOLATED("PreconditionViolated"),
     SERVER_DECLINED_SCOPES("ServerDeclinedScopes"),
     SERVER_PROTECTION_POLICIES_REQUIRED("ServerProtectionPoliciesRequired"),

@@ -27,17 +27,32 @@
     "lint": "nx run-many --target lint --all",
     "new-package": "node scripts/new-package.js",
     "publish:changesets": "changeset publish",
-    "rnx-dep-check": "yarn build-scope dep-check && scripts/rnx-dep-check.js",
+    "rnx-align-deps": "yarn build-scope align-deps && scripts/rnx-align-deps.js",
     "test": "nx run-many --target test --output-style stream --all",
     "update-readme": "nx run-many --target update-readme --all",
     "version:changesets": "changeset version"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",
+    "@babel/preset-env": "^7.0.0",
     "@changesets/cli": "^2.22.0",
-    "@rnx-kit/dep-check": "*",
-    "nx": "^14.4.0",
-    "prettier": "^2.3.0"
+    "@rnx-kit/align-deps": "*",
+    "eslint": "^8.0.0",
+    "jest-cli": "^27.5.1",
+    "metro": "^0.67.0",
+    "metro-config": "^0.67.0",
+    "metro-core": "^0.67.0",
+    "metro-react-native-babel-preset": "^0.67.0",
+    "metro-react-native-babel-transformer": "^0.67.0",
+    "metro-resolver": "^0.67.0",
+    "metro-runtime": "^0.67.0",
+    "metro-transform-worker": "^0.67.0",
+    "nx": "^15.0.1",
+    "prettier": "^2.3.0",
+    "react": "17.0.2",
+    "react-native": "^0.68.0",
+    "react-native-test-app": "^2.0.2",
+    "typescript": "^4.0.0"
   },
   "engines": {
     "node": ">=14.18"
@@ -45,12 +60,11 @@
   "resolutions": {
     "eslint-plugin-react": "^7.26.0",
     "micromatch": "^4.0.0",
-    "minimatch": "^3.0.5",
     "nx/chalk": "^4.1.0",
     "nx/fast-glob": "^3.2.7",
     "nx/glob": "^7.1.4",
-    "nx/semver": "^7.3.4",
-    "shell-quote": "^1.7.3"
+    "nx/minimatch": "^3.0.5",
+    "nx/semver": "^7.3.4"
   },
   "workspaces": {
     "packages": [

@@ -40,9 +40,7 @@ function sortCoreFirst(lhs, rhs) {
   return lhs < rhs ? -1 : 1;
 }
 
-const allVersions = /** @type {import("../src/types").ProfileVersion[]} */ (
-  Object.keys(preset).reverse()
-);
+const allVersions = /** @type {string[]} */ (Object.keys(preset).reverse());
 const allCapabilities = /** @type {import("@rnx-kit/config").Capability[]} */ (
   Object.keys(preset[allVersions[0]]).sort(sortCoreFirst)
 );

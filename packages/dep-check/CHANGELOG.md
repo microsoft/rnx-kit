@@ -1,5 +1,36 @@
 # Change Log - @rnx-kit/dep-check
 
+## 1.14.0
+
+### Minor Changes
+
+- 93b480ab: Tell users to migrate to `@rnx-kit/align-deps`
+
+## 1.13.5
+
+### Patch Changes
+
+- c14e998e: Ignore comments when parsing JSON
+
+## 1.13.4
+
+### Patch Changes
+
+- 34b83032: Fix exit code not propagating properly in vigilant mode
+- bdeda331: `@react-native-community/clipboard` was renamed to `@react-native-clipboard/clipboard`
+
+## 1.13.3
+
+### Patch Changes
+
+- 4af0dc3f: Bump `datetime-picker` and `screens` for better 0.70 support
+
+## 1.13.2
+
+### Patch Changes
+
+- 0de1a0aa: Bump `@rnx-kit/tools-workspaces` to 0.1.2
+
 ## 1.13.1
 
 ### Patch Changes

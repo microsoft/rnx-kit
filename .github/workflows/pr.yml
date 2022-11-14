@@ -29,7 +29,7 @@ jobs:
           git diff --exit-code
       - name: Report dependency problems
         run: |
-          yarn rnx-dep-check --write
+          yarn rnx-align-deps --write
           git diff --exit-code
       - name: Report @rnx-kit/build workflow inconsistencies
         run: |

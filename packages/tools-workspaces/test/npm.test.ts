@@ -21,12 +21,12 @@ describe("findWorkspacePackages", () => {
 
   test("returns packages for npm workspaces", async () => {
     setFixture("npm");
-    expect(await findWorkspacePackages()).toEqual(packages);
+    expect((await findWorkspacePackages()).sort()).toEqual(packages);
   });
 
   test("returns packages for npm workspaces (sync)", () => {
     setFixture("npm");
-    expect(findWorkspacePackagesSync()).toEqual(packages);
+    expect(findWorkspacePackagesSync().sort()).toEqual(packages);
   });
 });
 

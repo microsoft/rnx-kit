@@ -2,14 +2,14 @@ const path = require("path");
 const {
   parseBoolean,
   parseInt,
+  rnxAlignDepsCommand,
   rnxBundleCommand,
+  rnxClean,
   rnxCopyAssetsCommand,
-  rnxStart,
-  rnxDepCheckCommand,
   rnxRamBundleCommand,
+  rnxStart,
   rnxTestCommand,
   rnxWriteThirdPartyNotices,
-  rnxClean,
 } = require("./lib/index");
 
 module.exports = {
@@ -101,7 +101,7 @@ module.exports = {
       ],
     },
     rnxCopyAssetsCommand,
-    rnxDepCheckCommand,
+    rnxAlignDepsCommand,
     rnxTestCommand,
     {
       name: "rnx-write-third-party-notices",

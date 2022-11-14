@@ -21,12 +21,12 @@ describe("findWorkspacePackages", () => {
 
   test("returns packages for Rush workspaces", async () => {
     setFixture("rush");
-    expect(await findWorkspacePackages()).toEqual(packages);
+    expect((await findWorkspacePackages()).sort()).toEqual(packages);
   });
 
   test("returns packages for Rush workspaces (sync)", () => {
     setFixture("rush");
-    expect(findWorkspacePackagesSync()).toEqual(packages);
+    expect(findWorkspacePackagesSync().sort()).toEqual(packages);
   });
 });
 

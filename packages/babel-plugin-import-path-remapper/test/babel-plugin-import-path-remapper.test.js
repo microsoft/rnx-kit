@@ -114,9 +114,7 @@ describe("@rnx-kit/babel-plugin-import-path-remapper", () => {
         `import(/* webpackChunkName: "example" */ "@rnx-kit/example/lib/index");`
       )
     ).toBe(
-      `import(
-/* webpackChunkName: "example" */
-"@rnx-kit/example/src/index");`
+      `import( /* webpackChunkName: "example" */"@rnx-kit/example/src/index");`
     );
   });
 
@@ -134,9 +132,7 @@ describe("@rnx-kit/babel-plugin-import-path-remapper", () => {
         }
       )
     ).toBe(
-      `import(
-/* webpackChunkName: "example" */
-"@rnx-kit/example/__mocks__/index.js");`
+      `import( /* webpackChunkName: "example" */"@rnx-kit/example/__mocks__/index.js");`
     );
   });
 
@@ -153,9 +149,7 @@ describe("@rnx-kit/babel-plugin-import-path-remapper", () => {
         }
       )
     ).toBe(
-      `import(
-/* webpackChunkName: "example" */
-"@rnx-kit/example/__mocks__/lib/index");`
+      `import( /* webpackChunkName: "example" */"@rnx-kit/example/__mocks__/lib/index");`
     );
   });
 });

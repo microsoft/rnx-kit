@@ -1,14 +1,15 @@
-import { readFileSync } from "fs";
-import { readFile } from "fs/promises";
 import * as path from "path";
+import { readJSON, readJSONSync } from "./common";
 
 type RushProject = {
   packageName: string;
   projectFolder: string;
 };
 
-function parse(config: string, configFile: string): string[] {
-  const { projects } = JSON.parse(config);
+function parse(
+  { projects }: { projects: RushProject[] },
+  configFile: string
+): string[] {
   const root = path.dirname(configFile);
   return projects.map((project: RushProject) =>
     path.join(root, project.projectFolder)
@@ -19,11 +20,11 @@ function parse(config: string, configFile: string): string[] {
 export async function findWorkspacePackages(
   configFile: string
 ): Promise<string[]> {
-  const config = await readFile(configFile, { encoding: "utf-8" });
-  return parse(config, configFile);
+  const project = await readJSON(configFile);
+  return parse(project, configFile);
 }
 
 export function findWorkspacePackagesSync(configFile: string): string[] {
-  const config = readFileSync(configFile, { encoding: "utf-8" });
-  return parse(config, configFile);
+  const project = readJSONSync(configFile);
+  return parse(project, configFile);
 }

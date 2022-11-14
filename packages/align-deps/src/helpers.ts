@@ -2,6 +2,7 @@ import type { PackageManifest } from "@rnx-kit/tools-node/package";
 import { writePackage } from "@rnx-kit/tools-node/package";
 import detectIndent from "detect-indent";
 import fs from "fs";
+import semverValidRange from "semver/ranges/valid";
 
 export function compare<T>(lhs: T, rhs: T): -1 | 0 | 1 {
   if (lhs === rhs) {
@@ -13,12 +14,35 @@ export function compare<T>(lhs: T, rhs: T): -1 | 0 | 1 {
   }
 }
 
-export function concatVersionRanges(versions: string[]): string {
-  return "^" + versions.join(" || ^");
-}
+export function dropPatchFromVersion(version: string): string {
+  return version
+    .split("||")
+    .map((input) => {
+      const versionRange = input.trim();
+      if (!semverValidRange(versionRange)) {
+        throw new Error(`Invalid version number: ${versionRange}`);
+      }
 
-export function keysOf<T extends Record<string, unknown>>(obj: T): (keyof T)[] {
-  return Object.keys(obj);
+      if (!versionRange) {
+        return "*";
+      }
+
+      return versionRange
+        .split(" ")
+        .map((v) => {
+          if (v === "*" || v === "-") {
+            // No need to manipulate `*` or hyphen ranges, e.g. `1.0 - 2.0`
+            return v;
+          }
+
+          const [major, minor = "0"] = v.split(".");
+          return major === "^0" || major === "~0"
+            ? `0.${minor}`
+            : `${major}.${minor}`;
+        })
+        .join(" ");
+    })
+    .join(" || ");
 }
 
 export function modifyManifest(

@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/tools-node
 
+## 1.3.1
+
+### Patch Changes
+
+- 0d6e0db1: Allow aliases of the form `@alias`
+
 ## 1.3.0
 
 ### Minor Changes

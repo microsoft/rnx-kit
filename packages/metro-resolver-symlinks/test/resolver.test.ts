@@ -1,10 +1,7 @@
 import * as os from "os";
 import * as path from "path";
-import {
-  getMetroResolver,
-  remapReactNativeModule,
-  resolveModulePath,
-} from "../src/resolver";
+import { requireModuleFromMetro } from "../src/helper";
+import { remapReactNativeModule, resolveModulePath } from "../src/resolver";
 import { useFixture } from "./fixtures";
 
 const AVAILABLE_PLATFORMS = {
@@ -14,6 +11,13 @@ const AVAILABLE_PLATFORMS = {
 };
 
 const nixOnlyTest = os.platform() === "win32" ? test.skip : test;
+
+function getMetroResolver(fromDir: string) {
+  return requireModuleFromMetro<typeof import("metro-resolver")>(
+    "metro-resolver",
+    fromDir
+  ).resolve;
+}
 
 describe("getMetroResolver", () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

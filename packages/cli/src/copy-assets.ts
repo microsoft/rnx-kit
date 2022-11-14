@@ -1,6 +1,7 @@
 import type { Config as CLIConfig } from "@react-native-community/cli-types";
 import { error, info, warn } from "@rnx-kit/console";
 import { isNonEmptyArray } from "@rnx-kit/tools-language/array";
+import { keysOf } from "@rnx-kit/tools-language/properties";
 import type { PackageManifest } from "@rnx-kit/tools-node/package";
 import {
   findPackageDependencyDir,
@@ -91,10 +92,6 @@ function gradleTargetName(packageName: string): string {
 
 function isAssetsConfig(config: unknown): config is AssetsConfig {
   return typeof config === "object" && config !== null && "getAssets" in config;
-}
-
-function keysOf(record: Record<string, unknown> | undefined): string[] {
-  return record ? Object.keys(record) : [];
 }
 
 export function versionOf(pkgName: string): string {

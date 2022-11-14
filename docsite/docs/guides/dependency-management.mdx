@@ -1,4 +1,4 @@
-import DepCheckInit from "./_dep-check-init.mdx";
+import AlignDepsInit from "./_align-deps-init.mdx";
 import PackageCommand from "./_package-command.mdx";
 import PackageRunCommand from "./_package-run-command.mdx";
 import AmplifyCallout from "../_amplify-callout.mdx";
@@ -25,9 +25,9 @@ done all at once, or gradually over multiple PRs.
 First, add the dependency manager to your package.
 
 <PackageCommand
-  yarnArgs="add @rnx-kit/dep-check --dev"
-  pnpmArgs="add -D @rnx-kit/dep-check"
-  npmArgs="add --save-dev @rnx-kit/dep-check"
+  yarnArgs="add @rnx-kit/align-deps --dev"
+  pnpmArgs="add -D @rnx-kit/align-deps"
+  npmArgs="add --save-dev @rnx-kit/align-deps"
 />
 
 Add new script commands for convenience. We'll use these later.
@@ -35,8 +35,8 @@ Add new script commands for convenience. We'll use these later.
 ```json title="package.json"
 {
   "scripts": {
-    "check-dependencies": "rnx-dep-check",
-    "fix-dependencies": "rnx-dep-check --write"
+    "check-dependencies": "rnx-align-deps",
+    "fix-dependencies": "rnx-align-deps --write"
   }
 }
 ```
@@ -44,7 +44,7 @@ Add new script commands for convenience. We'll use these later.
 Next, generate the dependency manager configuration for your package. If your
 package produces a bundle, it's an `app`. Otherwise, it's a `library`.
 
-<DepCheckInit />
+<AlignDepsInit />
 
 Fix any React Native package versions that might have compatibility issues.
 
@@ -99,17 +99,17 @@ every package in your repo.
 Add the dependency manager to your repo's root package.json.
 
 <PackageCommand
-  yarnArgs="add @rnx-kit/dep-check --dev -W"
-  pnpmArgs="add -D @rnx-kit/dep-check"
-  npmArgs="add --save-dev @rnx-kit/dep-check"
+  yarnArgs="add @rnx-kit/align-deps --dev -W"
+  pnpmArgs="add -D @rnx-kit/align-deps"
+  npmArgs="add --save-dev @rnx-kit/align-deps"
 />
 
 Next, add this command to your PR loop. It runs the dependency manager from the
 root of the repo, scanning all packages. This include packages which haven't
-onboarded yet. For those, `--vigilant [version]` controls the target React
-Native release to use when checking compatibility.
+onboarded yet. For those, `--requirements react-native@[version]` controls the
+target React Native release to use when checking compatibility.
 
-<PackageRunCommand args="rnx-dep-check --vigilant 0.66" />
+<PackageRunCommand args="rnx-align-deps --requirements react-native@0.66" />
 
 When a compatibility problem is found, the command fails with a non-zero exit
 code, which causes the PR loop to fail. This protects the repo from risky
@@ -119,7 +119,7 @@ In the PR logs, you'll see a detailed report, in `diff` format, explaining what
 went wrong.
 
 ```diff
-error Found 3 violation(s) in @rnts/app:
+error Found 3 violation(s) in 'packages/app/package.json':
     react-native "^0.66.0" -> "^0.66.0-0" (dependencies)
     react-native-macos "^0.66.0" -> "^0.66.0-0" (dependencies)
     react-native-windows "^0.66.0" -> "^0.66.0-0" (dependencies)
@@ -141,7 +141,7 @@ error Found 3 violation(s) in @rnts/app:
     "devDependencies": {
       "@microsoft/api-extractor": "^7.19.4",
       "@office-iss/react-native-win32": "^0.66.0",
-      "@rnx-kit/dep-check": "^1.12.9",
+      "@rnx-kit/align-deps": "^2.0.0",
       "@types/react-native": "^0.66.0",
 -     "rimraf": "^3.0.2",
       "react": "17.0.2",
@@ -155,17 +155,20 @@ error Found 3 violation(s) in @rnts/app:
       "typescript": "^4.5.5"
     },
     "rnx-kit": {
-      "reactNativeVersion": "^0.66",
-      "reactNativeDevVersion": "^0.66.0",
       "kitType": "library",
-      "capabilities": [
-        "core",
-        "core-android",
-        "core-ios",
-        "core-macos",
-        "core-windows",
-        "react"
-      ]
+      "alignDeps": {
+        "requirements": {
+          "development": ["react-native@0.66"],
+          "production": ["react-native@0.66"]
+        },
+        "capabilities": [
+          "core-android",
+          "core-ios",
+          "core-macos",
+          "core-windows",
+          "react"
+        ]
+      }
 +   },
 +   "peerDependencies": {
 +     "react": "17.0.2",
@@ -174,8 +177,8 @@ error Found 3 violation(s) in @rnts/app:
 +     "react-native-windows": "^0.66.0-0"
     }
   }
-error Changes are needed to satisfy all requirements. Re-run with `--write` to have dep-check apply them.
-info Visit https://aka.ms/dep-check for more information about dep-check.
+error 'packages/button/package.json': Changes are needed to satisfy all requirements. Re-run with `--write` to apply them.
+info Visit https://aka.ms/align-deps information about align-deps.
 error Command failed with exit code 1.
 info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
 ```
@@ -183,14 +186,14 @@ info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this comm
 Fixing problems is automated, too! From your development terminal, run the same
 command with a `--write` parameter.
 
-<PackageRunCommand args="rnx-dep-check --vigilant 0.66 --write" />
+<PackageRunCommand args="rnx-align-deps --requirements react-native@0.66 --write" />
 
 **Review** and **test** the fixes before pushing them to your PR.
 
 ### Dependency Manager Updates
 
 The dependency manager comes with a
-[built-in list](https://github.com/microsoft/rnx-kit/tree/main/packages/dep-check#capabilities)
+[built-in list](https://github.com/microsoft/rnx-kit/tree/main/packages/align-deps#capabilities)
 of known/good React Native package versions and releases. Keeping the dependency
 manager up-to-date gives you the latest compatibility data.
 
@@ -206,7 +209,7 @@ response.
 Run this command from the root of your repo. It uses the dependency manager to
 make the fixes automatically.
 
-<PackageRunCommand args="rnx-dep-check --write" />
+<PackageRunCommand args="rnx-align-deps --write" />
 
 **Review** and **test** the fixes before pushing them to the PR with the
 dependency manager update.
@@ -217,24 +220,24 @@ When you're ready to upgrade to a new release of React Native (or downgrade to
 an old release), you can use the dependency manager to help you out.
 
 First, update your PR loop definition. Find the
-`rnx-dep-check --vigilant [version]` command and change the target React Native
-version.
+`rnx-align-deps --requirements react-native@[version]` command and change the
+target React Native version.
 
 Then, run these commands from the root of your repo to change your React Native
 version and adjust all React Native dependencies to be compatible. Replace
 `[version]` with your target React Native version in `major.minor` format, such
 as "0.66" or "0.68".
 
-<PackageRunCommand args="rnx-dep-check --set-version [version]" />
+<PackageRunCommand args="rnx-align-deps --set-version [version]" />
 
-<PackageRunCommand args="rnx-dep-check --vigilant [version] --write" />
+<PackageRunCommand args="rnx-align-deps --requirements react-native@[version] --write" />
 
 **Review** and **test** your packages thoroughly before merging these changes.
 
 ## Customization
 
 Did you know that you can add your own packages to the dependency manager's
-[built-in list](https://github.com/microsoft/rnx-kit/tree/main/packages/dep-check#capabilities)?
+[built-in list](https://github.com/microsoft/rnx-kit/tree/main/packages/align-deps#capabilities)?
 
 If your repo uses React Native packages that aren't known to the dependency
 manager, add them to the list! Or if you want to align other dependencies
@@ -246,16 +249,16 @@ module, a `.json` file, or a module name.
 
 ```json title="dependency-profile.json"
 {
-  "@types/node": {
-    "name": "@types/node",
-    "version": "^16.0.0",
-    "devOnly": true
-  },
-  "chalk": {
-    "name": "chalk",
-    "version": "^4.1.0"
-  },
-  "0.63": {
+  "0.66": {
+    "@types/node": {
+      "name": "@types/node",
+      "version": "^16.0.0",
+      "devOnly": true
+    },
+    "chalk": {
+      "name": "chalk",
+      "version": "^4.1.0"
+    },
     "native-base": {
       "name": "native-base",
       "version": "^3.3.11",
@@ -267,35 +270,51 @@ module, a `.json` file, or a module name.
 
 :::note
 
-Look at `native-base` in the example above. It's wrapped in a `0.63` version
-tag. That means it only applies to React Native 0.63 and above.
+Look at `native-base` in the example above. It's wrapped in a `0.66` version
+tag. That means it only applies to React Native 0.66.
 
 :::
 
 Next, configure each of your onboarded React Native packages to use the list.
 
-```json title="package.json"
-{
-  "rnx-kit": {
-    "customProfiles": "path/to/dependency-profile.json"
-  }
-}
+```diff title="package.json"
+ {
+   "rnx-kit": {
+     "alignDeps": {
++      "presets": [
++        "microsoft/react-native",
++        "path/to/dependency-profile.json"
++      ],
+       "requirements": {
+         "development": ["react-native@0.66"],
+         "production": ["react-native@0.66"]
+       },
+       "capabilities": [
+         "core-android",
+         "core-ios",
+         "core-macos",
+         "core-windows",
+         "react"
+       ]
+     }
+   }
+ }
 ```
 
-Now its time to use the list. Run the dependency manager to update all of your
+Now it's time to use the list. Run the dependency manager to update all of your
 packages.
 
-<PackageRunCommand args="rnx-dep-check --vigilant 0.66 --customProfiles path/to/dependency-profile.json --write" />
+<PackageRunCommand args="rnx-align-deps --requirements react-native@0.66 --presets microsoft/react-native,path/to/dependency-profile.json --write" />
 
 **Review** and **test** the changes before continuing.
 
 The last step is updating the automation. Each command needs an extra
-`--customProfiles [path]` parameter.
+`--presets [paths]` parameter.
 
-- Pull Requests: Change the `rnx-dep-check --vigilant [version]` command
-- Dependency Manager Updates: Change the `rnx-dep-check --write` command
+- Pull Requests: Change the `rnx-align-deps --requirements react-native@[version]` command
+- Dependency Manager Updates: Change the `rnx-align-deps --write` command
 - Upgrading React Native: Change the
-  `rnx-dep-check --vigilant [version] --write` command
+  `rnx-align-deps --requirements react-native@[version] --write` command
 
 ## Finish Line
 

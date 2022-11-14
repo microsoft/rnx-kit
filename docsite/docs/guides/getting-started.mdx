@@ -1,4 +1,4 @@
-import DepCheckInit from "./_dep-check-init.mdx";
+import AlignDepsInit from "./_align-deps-init.mdx";
 import PackageCommand from "./_package-command.mdx";
 import PackageRunCommand from "./_package-run-command.mdx";
 
@@ -21,19 +21,19 @@ If you want to learn more about this project before jumping in, head to the
 Start by adding the dependency manager to your package.
 
 <PackageCommand
-  yarnArgs="add @rnx-kit/dep-check --dev"
-  pnpmArgs="add -D @rnx-kit/dep-check"
-  npmArgs="add --save-dev @rnx-kit/dep-check"
+  yarnArgs="add @rnx-kit/align-deps --dev"
+  pnpmArgs="add -D @rnx-kit/align-deps"
+  npmArgs="add --save-dev @rnx-kit/align-deps"
 />
 
 Next, generate the dependency manager configuration for your package. If your
 package produces a bundle, it's an `app`. Otherwise, it's a `library`.
 
-<DepCheckInit />
+<AlignDepsInit />
 
 Fix any React Native package versions that might have compatibility issues.
 
-<PackageRunCommand args="rnx-dep-check --write" />
+<PackageRunCommand args="rnx-align-deps --write" />
 
 Review the changes. They should be limited to package.json and your Yarn / npm /
 pnpm lock file.

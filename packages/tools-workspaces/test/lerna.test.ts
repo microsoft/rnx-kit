@@ -49,22 +49,22 @@ describe("findWorkspacePackages", () => {
 
   test("returns packages for Lerna workspaces", async () => {
     setFixture("lerna-packages");
-    expect(await findWorkspacePackages()).toEqual(packagesPackages);
+    expect((await findWorkspacePackages()).sort()).toEqual(packagesPackages);
   });
 
   test("returns packages for Lerna workspaces (sync)", () => {
     setFixture("lerna-packages");
-    expect(findWorkspacePackagesSync()).toEqual(packagesPackages);
+    expect(findWorkspacePackagesSync().sort()).toEqual(packagesPackages);
   });
 
   test("returns packages for delegated workspaces", async () => {
     setFixture("lerna-workspaces");
-    expect(await findWorkspacePackages()).toEqual(workspacesPackages);
+    expect((await findWorkspacePackages()).sort()).toEqual(workspacesPackages);
   });
 
   test("returns packages for delegated workspaces (sync)", () => {
     setFixture("lerna-workspaces");
-    expect(findWorkspacePackagesSync()).toEqual(workspacesPackages);
+    expect(findWorkspacePackagesSync().sort()).toEqual(workspacesPackages);
   });
 });
 

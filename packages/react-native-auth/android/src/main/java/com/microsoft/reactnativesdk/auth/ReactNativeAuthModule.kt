@@ -20,7 +20,7 @@ typealias OnTokenAcquired = (result: AuthResult?, error: AuthError?) -> Unit
  * // android/src/rnx/java/com/microsoft/reacttestapp/msal/ReactNativeAuthMSALModule.kt
  * @ReactModule(name = ReactNativeAuthModule.NAME, hasConstants = false)
  * class ReactNativeAuthMSALModule(context: ReactApplicationContext?) : ReactNativeAuthModule(context) {
- *     override fun acquireToken(
+ *     override fun acquireTokenWithScopes(
  *         scopes: Array<String>,
  *         userPrincipalName: String,
  *         accountType: RnxAccountType,
@@ -48,7 +48,14 @@ abstract class ReactNativeAuthModule(context: ReactApplicationContext?) :
         )
     }
 
-    abstract fun acquireToken(
+    abstract fun acquireTokenWithResource(
+        resource: String,
+        userPrincipalName: String,
+        accountType: AccountType,
+        onTokenAcquired: OnTokenAcquired
+    )
+
+    abstract fun acquireTokenWithScopes(
         scopes: Array<String>,
         userPrincipalName: String,
         accountType: AccountType,
@@ -58,13 +65,36 @@ abstract class ReactNativeAuthModule(context: ReactApplicationContext?) :
     override fun getName(): String = NAME
 
     @ReactMethod
-    fun acquireToken(
+    fun acquireTokenWithResource(
+        resource: String,
+        userPrincipalName: String,
+        accountType: String,
+        promise: Promise
+    ) {
+        acquireTokenWithResource(
+            resource,
+            userPrincipalName,
+            AccountType.from(accountType)
+        ) { result, error ->
+            when {
+                error != null -> promise.reject(error.type.toString(), error.toWritableMap())
+                result == null -> promise.reject(
+                    AuthErrorType.UNKNOWN.toString(),
+                    AuthError.unknown().toWritableMap()
+                )
+                else -> promise.resolve(result.toWritableMap())
+            }
+        }
+    }
+
+    @ReactMethod
+    fun acquireTokenWithScopes(
         scopes: ReadableArray,
         userPrincipalName: String,
         accountType: String,
         promise: Promise
     ) {
-        acquireToken(
+        acquireTokenWithScopes(
             scopes.toStringArray(),
             userPrincipalName,
             AccountType.from(accountType)

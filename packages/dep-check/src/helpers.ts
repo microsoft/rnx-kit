@@ -1,3 +1,4 @@
+import { warn } from "@rnx-kit/console";
 import type { PackageManifest } from "@rnx-kit/tools-node/package";
 import { writePackage } from "@rnx-kit/tools-node/package";
 import detectIndent from "detect-indent";
@@ -39,4 +40,19 @@ export function omitEmptySections(manifest: PackageManifest): PackageManifest {
     }
   }
   return manifest;
+}
+
+export function printMigrationMessage(): void {
+  const banner =
+    "⚠️   ⚠️   ⚠️   ⚠️   ⚠️   ⚠️   ⚠️   ⚠️   ⚠️   ⚠️   ⚠️   ⚠️   ⚠️   ⚠️   ⚠️   ⚠️";
+
+  warn(banner);
+  warn("'@rnx-kit/dep-check' has been renamed to '@rnx-kit/align-deps'!");
+  warn(
+    "You can replace '@rnx-kit/dep-check' with '@rnx-kit/align-deps' in your 'package.json' and your configurations will be automatically upgraded."
+  );
+  warn(
+    "For reasoning and more details, you can read the RFC: https://github.com/microsoft/rnx-kit/pull/1757"
+  );
+  warn(banner);
 }

@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/jest-preset",
-  "version": "0.1.11",
+  "version": "0.1.12",
   "description": "Jest preset for React Native code bases",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/jest-preset#readme",
   "license": "MIT",
@@ -60,8 +60,5 @@
   },
   "jest": {
     "preset": "@rnx-kit/scripts"
-  },
-  "rnx-kit": {
-    "customProfiles": "@rnx-kit/scripts/rnx-dep-check.js"
   }
 }

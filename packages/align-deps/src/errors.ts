@@ -1,47 +1,53 @@
 import { error, info } from "@rnx-kit/console";
 import chalk from "chalk";
-import * as path from "path";
 import type { ErrorCode } from "./types";
 
-function printURL(): void {
-  const url = chalk.bold("https://aka.ms/align-deps");
-  info(`Visit ${url} for more information about align-deps.`);
+export function isError<T>(config: T | ErrorCode): config is ErrorCode {
+  return typeof config === "string";
 }
 
 export function printError(manifestPath: string, code: ErrorCode): void {
-  const currentPackageJson = path.relative(process.cwd(), manifestPath);
-
   switch (code) {
     case "success":
       break;
 
+    case "invalid-app-requirements":
+      error(
+        `${manifestPath}: app requirements must resolve to a single profile`
+      );
+      break;
+
     case "invalid-configuration":
-      error(`${currentPackageJson}: align-deps was not properly configured`);
-      printURL();
+      error(`${manifestPath}: align-deps was not properly configured`);
       break;
 
     case "invalid-manifest":
       error(
-        `'${currentPackageJson}' does not contain a valid package manifest — please make sure it's not missing 'name' or 'version'`
+        `${manifestPath}: Invalid package manifest — please make sure it's not missing 'name' or 'version'`
       );
       break;
 
-    case "missing-manifest":
+    case "missing-react-native":
       error(
-        `'${path.dirname(currentPackageJson)}' is missing a package manifest`
+        `Failed to infer requirements for '${manifestPath}'. This command ` +
+          "currently relies on the 'react-native' version in your project " +
+          "to generate the config."
       );
       break;
 
     case "not-configured":
-      error(`${currentPackageJson}: align-deps was not configured`);
-      printURL();
+      error(`${manifestPath}: align-deps was not configured`);
       break;
 
     case "unsatisfied":
       error(
-        `${currentPackageJson}: Changes are needed to satisfy all requirements. Re-run with '--write' to apply them.`
+        `${manifestPath}: Changes are needed to satisfy all requirements. Re-run with '--write' to apply them.`
       );
-      printURL();
       break;
   }
+}
+
+export function printInfo(): void {
+  const url = chalk.bold("https://aka.ms/align-deps");
+  info(`Visit ${url} for more information about align-deps.`);
 }

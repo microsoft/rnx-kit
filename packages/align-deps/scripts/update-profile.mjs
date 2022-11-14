@@ -286,7 +286,7 @@ async function main({
   force,
 }) {
   const { preset } = await import(`../lib/presets/${presetName}.js`);
-  const allVersions = /** @type {import("../src/types").ProfileVersion[]} */ (
+  const allVersions = /** @type {string[]} */ (
     Object.keys(preset)
       .sort((lhs, rhs) => semverCompare(semverCoerce(lhs), semverCoerce(rhs)))
       .reverse()

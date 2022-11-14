@@ -5,13 +5,12 @@ export const presets = {
 };
 
 export { capabilitiesFor } from "./capabilities";
-export { cli } from "./cli";
+export { cli, cliOptions } from "./cli";
 export { checkPackageManifest } from "./commands/check";
 export { checkPackageManifestUnconfigured } from "./commands/vigilant";
 export { updatePackageManifest } from "./manifest";
 export type {
   Args,
-  CapabilitiesOptions,
   Command,
   DependencyType,
   ExcludedPackage,
@@ -19,7 +18,6 @@ export type {
   MetaPackage,
   Options,
   Package,
+  Preset,
   Profile,
-  ProfilesInfo,
-  ProfileVersion,
 } from "./types";

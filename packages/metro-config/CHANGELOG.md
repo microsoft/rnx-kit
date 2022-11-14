@@ -1,5 +1,20 @@
 # Change Log - @rnx-kit/metro-config
 
+## 1.3.3
+
+### Patch Changes
+
+- c14e998e: Add support for Rush + pnpm setup
+- c14e998e: Ignore comments when parsing JSON
+- Updated dependencies [c14e998e]
+  - @rnx-kit/tools-workspaces@0.1.3
+
+## 1.3.2
+
+### Patch Changes
+
+- 0de1a0aa: Bump `@rnx-kit/tools-workspaces` to 0.1.2
+
 ## 1.3.1
 
 ### Patch Changes

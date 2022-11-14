@@ -1,4 +1,4 @@
-import { acquireToken } from "@rnx-kit/react-native-auth";
+import { acquireTokenWithScopes } from "@rnx-kit/react-native-auth";
 import React, { useCallback, useMemo, useState } from "react";
 import {
   Pressable,
@@ -174,7 +174,7 @@ function App({ concurrentRoot }: { concurrentRoot?: boolean }) {
   const startAcquireToken = React.useCallback(async () => {
     try {
       const authConfig = manifest["react-native-test-app-msal"];
-      const result = await acquireToken(
+      const result = await acquireTokenWithScopes(
         authConfig.orgScopes,
         authConfig.userPrincipalName,
         "Organizational"
