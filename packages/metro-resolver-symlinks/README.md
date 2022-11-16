@@ -28,16 +28,15 @@ npm add --save-dev @rnx-kit/metro-resolver-symlinks
 Import and assign the resolver to `resolver.resolveRequest` in your
 `metro.config.js`:
 
-```js
-const { makeMetroConfig } = require("@rnx-kit/metro-config");
-const MetroSymlinksResolver = require("@rnx-kit/metro-resolver-symlinks");
+```diff
+ const { makeMetroConfig } = require("@rnx-kit/metro-config");
++const MetroSymlinksResolver = require("@rnx-kit/metro-resolver-symlinks");
 
-module.exports = makeMetroConfig({
-  projectRoot: __dirname,
-  resolver: {
-    resolveRequest: MetroSymlinksResolver(),
-  },
-});
+ module.exports = makeMetroConfig({
+   resolver: {
++    resolveRequest: MetroSymlinksResolver(),
+   },
+ });
 ```
 
 ## Options
