@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-serializer-esbuild
 
+## 0.1.17
+
+### Patch Changes
+
+- a1fcd9eb: Fix modules not being resolved in pnpm-like setups
+
 ## 0.1.16
 
 ### Patch Changes

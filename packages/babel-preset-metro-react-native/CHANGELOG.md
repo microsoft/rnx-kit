@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/babel-preset-metro-react-native
 
+## 1.1.3
+
+### Patch Changes
+
+- a1fcd9eb: Fix modules not being resolved in pnpm-like setups
+
 ## 1.1.2
 
 ### Patch Changes
