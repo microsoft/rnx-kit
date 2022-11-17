@@ -23,7 +23,7 @@ export const esbuildTransformerConfig: Partial<TransformerConfigT> = {
   /**
    * Minifying is unnecessary as esbuild will take care of it.
    */
-  minifierPath: "@rnx-kit/metro-serializer-esbuild/lib/minify.js",
+  minifierPath: require.resolve("./minify"),
 
   /**
    * Metro transforms `require(...)` calls to

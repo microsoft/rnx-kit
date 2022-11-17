@@ -42,7 +42,7 @@ describe("@rnx-kit/babel-preset-metro-react-native", () => {
         overrides: expect.arrayContaining([
           {
             test: /\.tsx?$/,
-            plugins: ["const-enum"],
+            plugins: [expect.stringContaining("babel-plugin-const-enum")],
           },
         ]),
       })
@@ -73,7 +73,7 @@ describe("@rnx-kit/babel-preset-metro-react-native", () => {
           {
             test: /\.tsx?$/,
             plugins: [
-              "const-enum",
+              expect.stringContaining("babel-plugin-const-enum"),
               ...optionsWithAdditionalPlugins.additionalPlugins,
             ],
           },
