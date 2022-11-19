@@ -15,25 +15,24 @@ chains that may cause issues in your bundle.
 Import and add the plugin to `MetroSerializer` in your `metro.config.js`, and
 optionally configure it to your liking:
 
-```js
-const { makeMetroConfig } = require("@rnx-kit/metro-config");
-const {
-  CyclicDependencies,
-} = require("@rnx-kit/metro-plugin-cyclic-dependencies-detector");
-const { MetroSerializer } = require("@rnx-kit/metro-serializer");
+```diff
+ const { makeMetroConfig } = require("@rnx-kit/metro-config");
++const {
++  CyclicDependencies,
++} = require("@rnx-kit/metro-plugin-cyclic-dependencies-detector");
++const { MetroSerializer } = require("@rnx-kit/metro-serializer");
 
-module.exports = makeMetroConfig({
-  projectRoot: __dirname,
-  serializer: {
-    customSerializer: MetroSerializer([
-      CyclicDependencies({
-        includeNodeModules: false,
-        linesOfContext: 1,
-        throwOnError: true,
-      }),
-    ]),
-  },
-});
+ module.exports = makeMetroConfig({
+   serializer: {
++    customSerializer: MetroSerializer([
++      CyclicDependencies({
++        includeNodeModules: false,
++        linesOfContext: 1,
++        throwOnError: true,
++      }),
++    ]),
+   },
+ });
 ```
 
 ## Options

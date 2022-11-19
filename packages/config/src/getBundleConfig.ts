@@ -66,6 +66,7 @@ export function getBundleConfig(
 
   // 5/20/2022: fail when `bundle` is set to true, which is from the old config format
   //            remove on the next 0.x bump or when going to 1.0, whichever comes first
+  // @ts-expect-error --^
   if (config.bundle === true) {
     throw new Error(
       `The rnx-kit configuration property 'bundle' no longer supports boolean values. Bundling is always enabled with sensible defaults. You should remove the 'bundle' property to make use of the defaults, or specify the bundle configuration as an object.`

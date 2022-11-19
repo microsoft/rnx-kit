@@ -49,7 +49,7 @@ function constEnumPlugin() {
     // assume we need `const-enum`
   }
 
-  return ["const-enum"];
+  return [require.resolve("babel-plugin-const-enum")];
 }
 
 /**

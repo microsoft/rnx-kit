@@ -80,9 +80,9 @@ changes to `metro.config.js`:
 +} = require("@rnx-kit/metro-serializer-esbuild");
 
  module.exports = makeMetroConfig({
-+  serializer: {
+   serializer: {
 +    customSerializer: MetroSerializer(),
-+  },
+   },
 +  transformer: esbuildTransformerConfig,
  });
 ```
