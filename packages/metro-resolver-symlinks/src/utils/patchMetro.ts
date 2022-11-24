@@ -48,6 +48,11 @@ function getModuleResolver() {
  * cases, like on CI, we can even set `watchFolders` to an empty array to limit
  * watched files to the current package only.
  *
+ * Why didn't we use `hasteImplModulePath`? Contrary to the name, it doesn't
+ * let you replace HasteFS. As of 0.73, it is only used to retrieve the path of
+ * a module. The default implementation returns
+ * `path.relative(projectRoot, filePath)` if the entry is not found in the map.
+ *
  * @param options Options passed to Metro
  */
 export function patchMetro({
