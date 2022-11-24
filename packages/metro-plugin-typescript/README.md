@@ -24,6 +24,6 @@
 
 ## Options
 
-| Key            | Type     | Default | Description                              |
-| :------------- | :------- | :------ | :--------------------------------------- |
-| throwOnError   | boolean  | `false`  | Whether to throw when errors are found. |
+| Key          | Type    | Default | Description                             |
+| :----------- | :------ | :------ | :-------------------------------------- |
+| throwOnError | boolean | `false` | Whether to throw when errors are found. |
