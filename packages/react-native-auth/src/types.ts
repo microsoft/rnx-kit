@@ -37,11 +37,14 @@ export type AuthErrorUserInfo = {
 };
 
 /**
- * Authentication error object thrown by {@link acquireTokenWithResource} or {@link acquireTokenWithScopes}.
+ * Authentication error object thrown by {@link acquireTokenWithResource} or
+ * {@link acquireTokenWithScopes}.
  *
  * @note This object is populated by React Native when the underlying
  *       implementation returns an `Exception` (Android) or `NSError`
  *       (iOS/macOS).
+ *
+ * @internal
  *
  * @property code The type of error that occurred during authentication
  * @property message The error message
@@ -78,6 +81,9 @@ export type AuthErrorIOS = AuthErrorBase & {
   nativeStackIOS?: string[];
 };
 
+/**
+ * The authentication error object. May contain a native stack trace.
+ */
 export type AuthErrorNative = AuthErrorAndroid | AuthErrorIOS;
 
 /**

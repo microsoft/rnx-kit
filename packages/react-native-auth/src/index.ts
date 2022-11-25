@@ -58,6 +58,9 @@ export function acquireTokenWithScopes(
   );
 }
 
+/**
+ * Returns whether this module is available.
+ */
 export function isAvailable(): boolean {
   return Boolean(NativeAuth);
 }

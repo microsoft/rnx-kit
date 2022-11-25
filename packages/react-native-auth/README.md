@@ -29,10 +29,10 @@ import {
   isAvailable,
 } from "@rnx-kit/react-native-auth";
 
-if (isAvailable()) {
-  const scopes = ["user.read"];
-  const userPrincipalName = "arnold@contoso.com";
+const scopes = ["user.read"];
+const userPrincipalName = "arnold@contoso.com";
 
+if (isAvailable()) {
   const result = await acquireTokenWithScopes(
     scopes,
     userPrincipalName,
@@ -42,6 +42,27 @@ if (isAvailable()) {
   // Use an alternate authentication method
 }
 ```
+
+<!-- The following table can be updated by running `yarn update-readme` -->
+<!-- @rnx-kit/api start -->
+
+| Category | Type Name         | Description                                                                                                                                                            |
+| -------- | ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| types    | AccountType       | Account types. Current valid types are Microsoft accounts (or MSA) and organizational (M365), but can be extended to support other types, e.g. Apple, Google, etc.     |
+| types    | AuthErrorAndroid  | The authentication error object contains a stack trace on Android.                                                                                                     |
+| types    | AuthErrorIOS      | The authentication error object contains a stack trace on iOS.                                                                                                         |
+| types    | AuthErrorNative   | The authentication error object. May contain a native stack trace.                                                                                                     |
+| types    | AuthErrorType     | The type of error that occurred during authentication.                                                                                                                 |
+| types    | AuthErrorUserInfo | Authentication error details provided by the underlying implementation. This object can be used to provide the inner exception, or a more user friendly error message. |
+| types    | AuthResult        | Authentication result returned on success.                                                                                                                             |
+
+| Category | Function                                                             | Description                               |
+| -------- | -------------------------------------------------------------------- | ----------------------------------------- |
+| -        | `acquireTokenWithResource(resource, userPrincipalName, accountType)` | Acquires a token for a resource.          |
+| -        | `acquireTokenWithScopes(scopes, userPrincipalName, accountType)`     | Acquires a token with specified scopes.   |
+| -        | `isAvailable()`                                                      | Returns whether this module is available. |
+
+<!-- @rnx-kit/api end -->
 
 ## Motivation
 

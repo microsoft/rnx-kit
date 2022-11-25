@@ -45,6 +45,9 @@ import type { AuthResult } from "./types";
  */
 type AccountType = string;
 
+/**
+ * Specification for the native auth module.
+ */
 export interface Spec extends TurboModule {
   acquireTokenWithResource(
     resource: string,
@@ -61,7 +64,12 @@ export interface Spec extends TurboModule {
 
 const AuthModule = TurboModuleRegistry.get<Spec>("RNXAuth");
 
-export function getEnforcing() {
+/**
+ * Returns the native auth module.
+ * @protected
+ * @throws If the native module is not found
+ */
+export function getEnforcing(): Spec {
   if (!AuthModule) {
     throw new Error(
       "TurboModuleRegistry: 'RNXAuth' could not be found. Verify that a" +
