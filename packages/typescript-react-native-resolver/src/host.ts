@@ -4,6 +4,7 @@ import {
   parseModuleRef,
 } from "@rnx-kit/tools-node";
 import intersection from "lodash/intersection";
+import isEqual from "lodash/isEqual";
 import path from "path";
 import semverSatisfies from "semver/functions/satisfies";
 import ts from "typescript";
