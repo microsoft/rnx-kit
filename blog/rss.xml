@@ -8,7 +8,6 @@
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <language>en</language>
-        <copyright>Copyright © 2022 Microsoft</copyright>
         <item>
             <title><![CDATA[React Native Developer Tools]]></title>
             <link>https://microsoft.github.io/rnx-kit/blog/react-native-developer-tools</link>

@@ -7,7 +7,6 @@
     <link rel="alternate" href="https://microsoft.github.io/rnx-kit/blog"/>
     <subtitle>React Native Developer Tools Blog</subtitle>
     <icon>https://microsoft.github.io/rnx-kit/img/favicon.ico</icon>
-    <rights>Copyright © 2022 Microsoft</rights>
     <entry>
         <title type="html"><![CDATA[React Native Developer Tools]]></title>
         <id>react-native-developer-tools</id>
