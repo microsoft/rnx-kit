@@ -31,7 +31,6 @@ export function expandPlatformExtensions(
 
 /**
  * Returns a map of available React Native platforms. The result is cached.
- * @privateRemarks is-arrow-function
  * @param startDir The directory to look for react-native platforms from
  * @returns A platform-to-npm-package map, excluding "core" platforms.
  */
