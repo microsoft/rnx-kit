@@ -66,7 +66,6 @@ const AuthModule = TurboModuleRegistry.get<Spec>("RNXAuth");
 
 /**
  * Returns the native auth module.
- * @protected
  * @throws If the native module is not found
  */
 export function getEnforcing(): Spec {
