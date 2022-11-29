@@ -1,0 +1,17 @@
+{
+  "private": true,
+  "name": "@rnx-kit/ignore",
+  "version": "1.0.0",
+  "description": "Meta package for preventing packages from being installed",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/incubator/ignore#readme",
+  "license": "MIT",
+  "files": [
+    "index.js"
+  ],
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "incubator/ignore"
+  }
+}
