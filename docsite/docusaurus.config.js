@@ -61,16 +61,6 @@ const config = {
           editUrl: docsiteUrl + "/",
           beforeDefaultRemarkPlugins: [remarkInclude, remarkRemoveBlock],
         },
-        blog: {
-          blogTitle: "Blog",
-          postsPerPage: "ALL",
-          blogSidebarTitle: "Posts",
-          blogSidebarCount: "ALL",
-          feedOptions: {
-            type: ["atom", "rss"],
-            copyright: `Copyright © ${new Date().getFullYear()} Microsoft`,
-          },
-        },
         theme: {
           customCss: require.resolve("./src/css/custom.css"),
         },
@@ -156,9 +146,9 @@ const config = {
             label: "Contributing",
           },
           {
-            to: "blog",
             label: "Blog",
             position: "right",
+            href: "https://devblogs.microsoft.com/react-native/",
           },
           {
             src: "img/github-logo.svg",

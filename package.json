@@ -27,7 +27,7 @@
     "lint": "nx run-many --target lint --all",
     "new-package": "node scripts/new-package.js",
     "publish:changesets": "changeset publish",
-    "rnx-align-deps": "yarn build-scope align-deps && scripts/rnx-align-deps.js",
+    "rnx-align-deps": "yarn build-scope align-deps && scripts/rnx-align-deps.mjs",
     "test": "nx run-many --target test --output-style stream --all",
     "update-readme": "nx run-many --target update-readme --all",
     "version:changesets": "changeset version"
@@ -58,6 +58,7 @@
     "node": ">=14.18"
   },
   "resolutions": {
+    "@vue/compiler-sfc": "./incubator/ignore",
     "eslint-plugin-react": "^7.26.0",
     "micromatch": "^4.0.0",
     "nx/chalk": "^4.1.0",
