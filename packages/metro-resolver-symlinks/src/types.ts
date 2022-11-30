@@ -1,5 +1,9 @@
 import type { ResolutionContext as MetroResolutionContext } from "metro-resolver";
 
+type ExperimentalOptions = {
+  experimental_retryResolvingFromDisk?: boolean | "force";
+};
+
 export type MetroResolver = typeof import("metro-resolver").resolve;
 
 export type ResolutionContext = Pick<
@@ -13,6 +17,6 @@ export type ModuleResolver = (
   platform: string
 ) => string;
 
-export type Options = {
+export type Options = ExperimentalOptions & {
   remapModule?: ModuleResolver;
 };
