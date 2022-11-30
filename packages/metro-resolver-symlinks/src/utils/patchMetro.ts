@@ -29,10 +29,6 @@ function getDependencyGraph() {
   return importMetroModule("/src/node-haste/DependencyGraph");
 }
 
-function getModuleResolver() {
-  return importMetroModule("/src/node-haste/DependencyGraph/ModuleResolution");
-}
-
 function supportsRetryResolvingFromDisk(): boolean {
   const { version } = importMetroModule("/package.json");
   const [major, minor] = version.split(".");
@@ -91,7 +87,6 @@ export function patchMetro(options: Options): void {
   }
 
   const DependencyGraph = getDependencyGraph();
-  const { ModuleResolver } = getModuleResolver();
 
   // Patch `_createModuleResolver` and `_doesFileExist` to use `fs.existsSync`.
   DependencyGraph.prototype.orig__createModuleResolver =
@@ -101,41 +96,25 @@ export function patchMetro(options: Options): void {
       return this._hasteFS.exists(filePath) || fileExists(filePath);
     };
 
-    this._moduleResolver = new ModuleResolver({
-      dirExists: (filePath: string) => {
-        try {
-          return fs.lstatSync(filePath).isDirectory();
-        } catch (_) {
-          return false;
-        }
-      },
-      disableHierarchicalLookup:
-        this._config.resolver.disableHierarchicalLookup,
-      doesFileExist: this._doesFileExist,
-      emptyModulePath: this._config.resolver.emptyModulePath,
-      extraNodeModules: this._config.resolver.extraNodeModules,
-      isAssetFile: (file: string) =>
-        this._assetExtensions.has(path.extname(file)),
-      mainFields: this._config.resolver.resolverMainFields,
-      moduleCache: this._moduleCache,
-      moduleMap: this._moduleMap,
-      nodeModulesPaths: this._config.resolver.nodeModulesPaths,
-      preferNativePlatform: true,
-      projectRoot: this._config.projectRoot,
-      resolveAsset: (dirPath: string, assetName: string, extension: string) => {
-        const basePath = dirPath + path.sep + assetName;
-        const assets = [
-          basePath + extension,
-          ...this._config.resolver.assetResolutions.map(
-            (resolution: string) =>
-              basePath + "@" + resolution + "x" + extension
-          ),
-        ].filter(this._doesFileExist);
-        return assets.length ? assets : null;
-      },
-      resolveRequest: this._config.resolver.resolveRequest,
-      sourceExts: this._config.resolver.sourceExts,
-    });
+    this.orig__createModuleResolver();
+    if (!(typeof this._moduleResolver._options.resolveAsset === "function")) {
+      throw new Error("Could not find `resolveAsset` in `ModuleResolver`");
+    }
+
+    this._moduleResolver._options.resolveAsset = (
+      dirPath: string,
+      assetName: string,
+      extension: string
+    ) => {
+      const basePath = dirPath + path.sep + assetName;
+      const assets = [
+        basePath + extension,
+        ...this._config.resolver.assetResolutions.map(
+          (resolution: string) => basePath + "@" + resolution + "x" + extension
+        ),
+      ].filter(this._doesFileExist);
+      return assets.length ? assets : null;
+    };
   };
 
   // Since we will be resolving files outside of `watchFolders`, their hashes
@@ -145,6 +124,8 @@ export function patchMetro(options: Options): void {
     try {
       return this.orig_getSha1(filePath);
     } catch (e) {
+      // `ReferenceError` will always be thrown when Metro encounters a file
+      // that does not exist in the Haste map.
       if (e instanceof ReferenceError) {
         return filePath;
       }
