@@ -15,12 +15,13 @@ const getEnhancedResolver = (() => {
     if (!resolvers[platform]) {
       // @ts-expect-error Property 'mainFields' does not exist on type 'ResolutionContext'
       const { mainFields, sourceExts } = context;
+      const extensions = sourceExts.map((ext) => `.${ext}`);
       resolvers[platform] = require("enhanced-resolve").create.sync({
         aliasFields: ["browser"],
-        extensions: expandPlatformExtensions(
-          platform,
-          sourceExts.map((ext) => `.${ext}`)
-        ),
+        extensions:
+          platform === "common"
+            ? extensions
+            : expandPlatformExtensions(platform, extensions),
         mainFields,
       });
     }
