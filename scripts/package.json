@@ -20,7 +20,6 @@
     "fs-extra": "^10.0.0",
     "jest": "^27.0.0",
     "markdown-table": "^2.0.0",
-    "midgard-yarn": "^1.23.24",
     "typedoc": "^0.23.21",
     "typescript": "^4.0.0",
     "yargs": "^16.0.0"
@@ -34,7 +33,6 @@
       "@rnx-kit/align-deps",
       "@rnx-kit/jest-preset",
       "jest",
-      "midgard-yarn",
       "typescript"
     ]
   },

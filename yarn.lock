@@ -8493,11 +8493,6 @@ micromatch@^3.1.10, micromatch@^3.1.4, micromatch@^4.0.0, micromatch@^4.0.2, mic
     braces "^3.0.2"
     picomatch "^2.3.1"
 
-midgard-yarn@^1.23.24:
-  version "1.23.34"
-  resolved "https://registry.yarnpkg.com/midgard-yarn/-/midgard-yarn-1.23.34.tgz#c4301c24fc19e07b4709429df61a140d507d2557"
-  integrity sha512-pRwjOa+7CW0z/UcSrAiU3YEXHbiGHEvV8j2hWujr+s9BrWlDUz6NCKOL11yB5SX6mAUCxOckD0nf2cyCSRt4UQ==
-
 mime-db@1.52.0, "mime-db@>= 1.43.0 < 2":
   version "1.52.0"
   resolved "https://registry.yarnpkg.com/mime-db/-/mime-db-1.52.0.tgz#bbabcdc02859f4987301c856e3387ce5ec43bf70"
