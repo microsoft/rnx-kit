@@ -15,7 +15,12 @@ function importMetroModule(path: string) {
     return require(modulePath);
   } catch (_) {
     throw new Error(
-      `Cannot find '${modulePath}'. This probably means that 'experimental_retryResolvingFromDisk' is not compatible with the version of 'metro' that you are currently using. Please update to the latest version and try again. If the issue still persists after the update, please file a bug at https://github.com/microsoft/rnx-kit/issues.`
+      `Cannot find '${modulePath}'. This probably means that ` +
+        "'experimental_retryResolvingFromDisk' is not compatible with the " +
+        "version of 'metro' that you are currently using. Please update to " +
+        "the latest version and try again. If the issue still persists after " +
+        "the update, please file a bug at " +
+        "https://github.com/microsoft/rnx-kit/issues."
     );
   }
 }
@@ -26,6 +31,31 @@ function getDependencyGraph() {
 
 function getModuleResolver() {
   return importMetroModule("/src/node-haste/DependencyGraph/ModuleResolution");
+}
+
+function supportsRetryResolvingFromDisk(): boolean {
+  const { version } = importMetroModule("/package.json");
+  const [major, minor] = version.split(".");
+  const v = major * 1000 + minor;
+  return v >= 64 && v <= 73;
+}
+
+export function shouldEnableRetryResolvingFromDisk({
+  experimental_retryResolvingFromDisk,
+}: Options): boolean {
+  if (
+    !supportsRetryResolvingFromDisk() &&
+    experimental_retryResolvingFromDisk !== "force"
+  ) {
+    console.warn(
+      "The version of Metro you're using has not been tested with " +
+        "`experimental_retryResolvingFromDisk`. If you still want to enable " +
+        "it, please set it to 'force'."
+    );
+    return false;
+  }
+
+  return Boolean(experimental_retryResolvingFromDisk);
 }
 
 /**
@@ -55,10 +85,8 @@ function getModuleResolver() {
  *
  * @param options Options passed to Metro
  */
-export function patchMetro({
-  experimental_retryResolvingFromDisk,
-}: Options): void {
-  if (!experimental_retryResolvingFromDisk) {
+export function patchMetro(options: Options): void {
+  if (!shouldEnableRetryResolvingFromDisk(options)) {
     return;
   }
 

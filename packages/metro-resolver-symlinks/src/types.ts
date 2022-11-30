@@ -1,7 +1,7 @@
 import type { ResolutionContext as MetroResolutionContext } from "metro-resolver";
 
 type ExperimentalOptions = {
-  experimental_retryResolvingFromDisk?: boolean;
+  experimental_retryResolvingFromDisk?: boolean | "force";
 };
 
 export type MetroResolver = typeof import("metro-resolver").resolve;

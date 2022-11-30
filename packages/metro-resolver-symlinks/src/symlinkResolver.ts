@@ -8,7 +8,10 @@ import { requireModuleFromMetro } from "./helper";
 import { remapReactNativeModule, resolveModulePath } from "./resolver";
 import type { MetroResolver, Options } from "./types";
 import { applyEnhancedResolver } from "./utils/enhancedResolve";
-import { patchMetro } from "./utils/patchMetro";
+import {
+  patchMetro,
+  shouldEnableRetryResolvingFromDisk,
+} from "./utils/patchMetro";
 import { remapImportPath } from "./utils/remapImportPath";
 
 function applyMetroResolver(
@@ -25,16 +28,16 @@ export function makeResolver(options: Options = {}): MetroResolver {
   const { resolve: metroResolver } =
     requireModuleFromMetro<typeof import("metro-resolver")>("metro-resolver");
 
-  const {
-    remapModule = (_, moduleName, __) => moduleName,
-    experimental_retryResolvingFromDisk,
-  } = options;
+  const { remapModule = (_, moduleName, __) => moduleName } = options;
 
-  const applyResolver = experimental_retryResolvingFromDisk
+  const enableRetryResolvingFromDisk =
+    shouldEnableRetryResolvingFromDisk(options);
+
+  const applyResolver = enableRetryResolvingFromDisk
     ? applyEnhancedResolver
     : applyMetroResolver;
 
-  if (experimental_retryResolvingFromDisk) {
+  if (enableRetryResolvingFromDisk) {
     patchMetro(options);
   }
 
