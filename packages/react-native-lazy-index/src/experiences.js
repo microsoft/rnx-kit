@@ -83,7 +83,7 @@ function parseExperiencesFromObject(experiences) {
 }
 
 /**
- * @param {string | number | boolean | {} | null | undefined} experiences
+ * @param {string | number | boolean | Record<string, unknown> | null | undefined} experiences
  * @returns {Record<string, Component>}
  */
 function parseExperiences(experiences) {

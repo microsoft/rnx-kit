@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/react-native-test-app-msal
 
+## 2.0.1
+
+### Patch Changes
+
+- 234c51e2: Bump `com.microsoft.identity.client:msal` to v4.0.4
+
 ## 2.0.0
 
 ### Major Changes

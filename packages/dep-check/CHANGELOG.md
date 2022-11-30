@@ -1,5 +1,24 @@
 # Change Log - @rnx-kit/dep-check
 
+## 1.14.0
+
+### Minor Changes
+
+- 93b480ab: Tell users to migrate to `@rnx-kit/align-deps`
+
+## 1.13.5
+
+### Patch Changes
+
+- c14e998e: Ignore comments when parsing JSON
+
+## 1.13.4
+
+### Patch Changes
+
+- 34b83032: Fix exit code not propagating properly in vigilant mode
+- bdeda331: `@react-native-community/clipboard` was renamed to `@react-native-clipboard/clipboard`
+
 ## 1.13.3
 
 ### Patch Changes

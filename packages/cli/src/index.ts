@@ -1,7 +1,7 @@
+export { rnxAlignDeps, rnxAlignDepsCommand } from "./align-deps";
 export { rnxBundle, rnxBundleCommand } from "./bundle";
 export { rnxClean } from "./clean";
 export { copyProjectAssets, rnxCopyAssetsCommand } from "./copy-assets";
-export { rnxDepCheck, rnxDepCheckCommand } from "./dep-check";
 export { parseBoolean, parseInt, parseTransformProfile } from "./parsers";
 export { rnxRamBundle, rnxRamBundleCommand } from "./ram-bundle";
 export { rnxStart } from "./start";

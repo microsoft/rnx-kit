@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/tools-workspaces",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "A collection of tools for working with workspaces",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/tools-workspaces#readme",
   "license": "MIT",
@@ -28,7 +28,8 @@
   "dependencies": {
     "fast-glob": "^3.2.7",
     "find-up": "^5.0.0",
-    "read-yaml-file": "^2.1.0"
+    "read-yaml-file": "^2.1.0",
+    "strip-json-comments": "^3.1.1"
   },
   "devDependencies": {
     "@rnx-kit/scripts": "*"

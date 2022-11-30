@@ -8,7 +8,7 @@
     "react-native": "0.70.3"
   },
   "rnx-kit": {
-    "reactNativeVersion": "0.69 || 0.70",
+    "reactNativeVersion": "0.70",
     "kitType": "app",
     "capabilities": [
       "core-android",

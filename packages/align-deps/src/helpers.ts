@@ -3,7 +3,6 @@ import { writePackage } from "@rnx-kit/tools-node/package";
 import detectIndent from "detect-indent";
 import fs from "fs";
 import semverValidRange from "semver/ranges/valid";
-import type { ErrorCode } from "./types";
 
 export function compare<T>(lhs: T, rhs: T): -1 | 0 | 1 {
   if (lhs === rhs) {
@@ -44,14 +43,6 @@ export function dropPatchFromVersion(version: string): string {
         .join(" ");
     })
     .join(" || ");
-}
-
-export function isError<T>(config: T | ErrorCode): config is ErrorCode {
-  return typeof config === "string";
-}
-
-export function keysOf<T extends Record<string, unknown>>(obj: T): (keyof T)[] {
-  return Object.keys(obj);
 }
 
 export function modifyManifest(

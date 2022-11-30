@@ -1,57 +1,8 @@
-import {
-  findPackageDependencyDir,
-  isFileModuleRef,
-  parseModuleRef,
-  readPackage,
-} from "@rnx-kit/tools-node";
+import { isFileModuleRef, parseModuleRef } from "@rnx-kit/tools-node";
 import { getAvailablePlatforms } from "@rnx-kit/tools-react-native";
 import * as path from "path";
-import type { MetroResolver, ModuleResolver } from "./types";
-
-function resolveFrom(moduleName: string, startDir: string): string | undefined {
-  return findPackageDependencyDir(moduleName, {
-    startDir,
-    resolveSymlinks: true,
-  });
-}
-
-function ensureResolveFrom(moduleName: string, startDir: string): string {
-  const p = resolveFrom(moduleName, startDir);
-  if (!p) {
-    throw new Error(`Cannot find module '${moduleName}'`);
-  }
-  return p;
-}
-
-/**
- * Get `metro-resolver` from the cli to avoid adding another dependency that
- * needs to be kept in sync.
- */
-export function getMetroResolver(fromDir = process.cwd()): MetroResolver {
-  try {
-    const rnPath = ensureResolveFrom("react-native", fromDir);
-    const rncliPath = ensureResolveFrom("@react-native-community/cli", rnPath);
-
-    const { dependencies = {} } = readPackage(rncliPath);
-    const metroResolverSearchPath =
-      "@react-native-community/cli-plugin-metro" in dependencies
-        ? ensureResolveFrom(
-            "@react-native-community/cli-plugin-metro",
-            rncliPath
-          )
-        : rncliPath;
-
-    const metroResolverPath = ensureResolveFrom(
-      "metro-resolver",
-      metroResolverSearchPath
-    );
-    return require(metroResolverPath).resolve;
-  } catch (_) {
-    throw new Error(
-      "Cannot find module 'metro-resolver'. This probably means that '@rnx-kit/metro-resolver-symlinks' is not compatible with the version of 'metro' that you are currently using. Please update to the latest version and try again. If the issue still persists after the update, please file a bug at https://github.com/microsoft/rnx-kit/issues."
-    );
-  }
-}
+import { resolveFrom } from "./helper";
+import type { ModuleResolver } from "./types";
 
 export const remapReactNativeModule: ModuleResolver = (
   _context,
@@ -70,7 +21,7 @@ export const remapReactNativeModule: ModuleResolver = (
 };
 
 export const resolveModulePath: ModuleResolver = (
-  { originModulePath },
+  { extraNodeModules, originModulePath },
   moduleName,
   _platform
 ) => {
@@ -81,7 +32,8 @@ export const resolveModulePath: ModuleResolver = (
   }
 
   const pkgName = ref.scope ? `${ref.scope}/${ref.name}` : ref.name;
-  const pkgRoot = resolveFrom(pkgName, originModulePath);
+  const pkgRoot =
+    extraNodeModules?.[pkgName] ?? resolveFrom(pkgName, originModulePath);
   if (!pkgRoot) {
     return moduleName;
   }

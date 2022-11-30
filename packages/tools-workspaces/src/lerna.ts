@@ -1,5 +1,4 @@
-import { existsSync as fileExists, readFileSync } from "fs";
-import { readFile } from "fs/promises";
+import { existsSync as fileExists } from "fs";
 import * as path from "path";
 import {
   findPackages,
@@ -7,6 +6,8 @@ import {
   getImplementation,
   getImplementationSync,
   LERNA_JSON,
+  readJSON,
+  readJSONSync,
   WORKSPACE_ROOT_SENTINELS,
 } from "./common";
 
@@ -18,8 +19,7 @@ function filterSentinels(): string[] {
 export async function findWorkspacePackages(
   configFile: string
 ): Promise<string[]> {
-  const config = await readFile(configFile, { encoding: "utf-8" });
-  const { packages, useWorkspaces } = JSON.parse(config);
+  const { packages, useWorkspaces } = await readJSON(configFile);
   if (!useWorkspaces) {
     return await findPackages(packages, path.dirname(configFile));
   }
@@ -38,8 +38,7 @@ export async function findWorkspacePackages(
 }
 
 export function findWorkspacePackagesSync(configFile: string): string[] {
-  const config = readFileSync(configFile, { encoding: "utf-8" });
-  const { packages, useWorkspaces } = JSON.parse(config);
+  const { packages, useWorkspaces } = readJSONSync(configFile);
   if (!useWorkspaces) {
     return findPackagesSync(packages, path.dirname(configFile));
   }

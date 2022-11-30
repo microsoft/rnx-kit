@@ -1,5 +1,32 @@
 # Change Log - @rnx-kit/cli
 
+## 0.15.0
+
+### Minor Changes
+
+- d563e22f: Migrate from `@rnx-kit/dep-check` to `@rnx-kit/align-deps`
+
+## 0.14.10
+
+### Patch Changes
+
+- 80f823df: Fail gracefully if `jest-cli` is not installed (part 2)
+- Updated dependencies [c14e998e]
+- Updated dependencies [a5810bb8]
+  - @rnx-kit/dep-check@1.13.5
+  - @rnx-kit/tools-language@1.4.1
+
+## 0.14.9
+
+### Patch Changes
+
+- 496a6f4a: Add `keysOf` to `@rnx-kit/tools-language`, a type-safe wrapper around `Object.keys`
+- Updated dependencies [34b83032]
+- Updated dependencies [bdeda331]
+- Updated dependencies [496a6f4a]
+  - @rnx-kit/dep-check@1.13.4
+  - @rnx-kit/tools-language@1.4.0
+
 ## 0.14.8
 
 ### Patch Changes

@@ -34,6 +34,8 @@ describe("makeSetVersionCommand()", () => {
   const options = {
     presets: defaultConfig.presets,
     loose: false,
+    migrateConfig: false,
+    verbose: false,
     write: false,
   };
 

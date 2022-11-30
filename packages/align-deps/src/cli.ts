@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import { error } from "@rnx-kit/console";
+import { isNonEmptyArray } from "@rnx-kit/tools-language/array";
 import { hasProperty } from "@rnx-kit/tools-language/properties";
 import { findPackageDir } from "@rnx-kit/tools-node/package";
 import {
@@ -16,14 +17,75 @@ import { defaultConfig } from "./config";
 import { printError, printInfo } from "./errors";
 import type { Args, Command } from "./types";
 
+export const cliOptions = {
+  "exclude-packages": {
+    description:
+      "Comma-separated list of package names to exclude from inspection.",
+    type: "string",
+    requiresArg: true,
+  },
+  init: {
+    description:
+      "Writes an initial kit config to the specified 'package.json'. Note that this only works for React Native packages.",
+    choices: ["app", "library"],
+    conflicts: ["requirements"],
+  },
+  loose: {
+    default: false,
+    description:
+      "Determines how strict the React Native version requirement should be. Useful for apps that depend on a newer React Native version than their dependencies declare support for.",
+    type: "boolean",
+  },
+  "migrate-config": {
+    default: false,
+    description:
+      "Determines whether align-deps should try to update the config in 'package.json'.",
+    type: "boolean",
+  },
+  presets: {
+    description:
+      "Comma-separated list of presets. This can be names to built-in presets, or paths to external presets.",
+    type: "string",
+    requiresArg: true,
+  },
+  requirements: {
+    description:
+      "Comma-separated list of requirements to apply if a package is not configured for align-deps.",
+    type: "string",
+    requiresArg: true,
+  },
+  "set-version": {
+    description:
+      "Sets `react-native` requirements for any configured package. There is an interactive prompt if no value is provided. The value should be a comma-separated list of `react-native` versions to set, where the first number specifies the development version. Example: `0.70,0.69`",
+    type: "string",
+    conflicts: ["init", "requirements"],
+  },
+  verbose: {
+    default: false,
+    description: "Increase logging verbosity",
+    type: "boolean",
+  },
+  write: {
+    default: false,
+    description: "Writes changes to the specified 'package.json'.",
+    type: "boolean",
+  },
+};
+
 async function getManifests(
   packages: (string | number)[] | undefined
 ): Promise<string[] | undefined> {
-  if (Array.isArray(packages)) {
+  const cwd = process.cwd();
+  // When positional arguments are not provided, we will get `undefined` if
+  // invoked directly, and an empty array if invoked via
+  // `@react-native-community/cli`.
+  if (isNonEmptyArray(packages)) {
     return packages.reduce<string[]>((result, pkg) => {
       const dir = findPackageDir(pkg.toString());
       if (dir) {
-        result.push(path.join(dir, "package.json"));
+        const pkgJson = path.join(dir, "package.json");
+        const relativePath = path.relative(cwd, pkgJson);
+        result.push(relativePath);
       }
       return result;
     }, []);
@@ -34,22 +96,23 @@ async function getManifests(
     return undefined;
   }
 
-  // Make sure we don't return all packages when dep-check is run inside a
-  // package that just happened to be part of a workspace.
+  // Make sure we don't return all packages when run inside a package that just
+  // happens to be part of a workspace.
   const currentPackageJson = path.join(packageDir, "package.json");
+  const manifestPath = path.relative(cwd, currentPackageJson);
   try {
     if ((await findWorkspaceRoot()) !== packageDir) {
-      return [currentPackageJson];
+      return [manifestPath];
     }
   } catch (_) {
-    return [currentPackageJson];
+    return [manifestPath];
   }
 
   try {
     const allPackages = (await findWorkspacePackages()).map((p) =>
-      path.join(p, "package.json")
+      path.join(path.relative(cwd, p), "package.json")
     );
-    allPackages.push(currentPackageJson);
+    allPackages.push(manifestPath);
     return allPackages;
   } catch (e) {
     if (hasProperty(e, "message")) {
@@ -89,6 +152,7 @@ async function makeCommand(args: Args): Promise<Command | undefined> {
     presets,
     requirements,
     "set-version": setVersion,
+    verbose,
     write,
   } = args;
 
@@ -96,6 +160,7 @@ async function makeCommand(args: Args): Promise<Command | undefined> {
     presets: presets?.toString()?.split(",") ?? defaultConfig.presets,
     loose,
     migrateConfig,
+    verbose,
     write,
     excludePackages: excludePackages?.toString()?.split(","),
     requirements: requirements?.toString()?.split(","),
@@ -142,8 +207,7 @@ export async function cli({ packages, ...args }: Args): Promise<void> {
       }
     } catch (e) {
       if (hasProperty(e, "message")) {
-        const currentPackageJson = path.relative(process.cwd(), manifest);
-        error(`${currentPackageJson}: ${e.message}`);
+        error(`${manifest}: ${e.message}`);
         return errors + 1;
       }
 
@@ -162,56 +226,8 @@ export async function cli({ packages, ...args }: Args): Promise<void> {
 if (require.main === module) {
   require("yargs").usage(
     "$0 [packages...]",
-    "Dependency checker for npm packages",
-    {
-      "exclude-packages": {
-        description:
-          "Comma-separated list of package names to exclude from inspection.",
-        type: "string",
-        requiresArg: true,
-      },
-      init: {
-        description:
-          "Writes an initial kit config to the specified 'package.json'. Note that this only works for React Native packages.",
-        choices: ["app", "library"],
-        conflicts: ["requirements"],
-      },
-      loose: {
-        default: false,
-        description:
-          "Determines how strict the React Native version requirement should be. Useful for apps that depend on a newer React Native version than their dependencies declare support for.",
-        type: "boolean",
-      },
-      "migrate-config": {
-        default: false,
-        description:
-          "Determines whether align-deps should try to update the config in 'package.json'.",
-        type: "boolean",
-      },
-      presets: {
-        description:
-          "Comma-separated list of presets. This can be names to built-in presets, or paths to external presets.",
-        type: "string",
-        requiresArg: true,
-      },
-      requirements: {
-        description:
-          "Comma-separated list of requirements to apply if a package is not configured for align-deps.",
-        type: "string",
-        requiresArg: true,
-      },
-      "set-version": {
-        description:
-          "Sets `react-native` requirements for any configured package. There is an interactive prompt if no value is provided. The value should be a comma-separated list of `react-native` versions to set, where the first number specifies the development version. Example: `0.70,0.69`",
-        type: "string",
-        conflicts: ["init", "requirements"],
-      },
-      write: {
-        default: false,
-        description: "Writes changes to the specified 'package.json'.",
-        type: "boolean",
-      },
-    },
+    "Manage dependencies within a repository and across many repositories",
+    cliOptions,
     cli
   ).argv;
 }

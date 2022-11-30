@@ -14,24 +14,18 @@
     "lint": "rnx-kit-scripts lint"
   },
   "dependencies": {
-    "@babel/core": "^7.0.0",
-    "@babel/parser": "^7.0.0",
-    "@babel/types": "^7.0.0",
-    "@microsoft/tsdoc": "^0.14.0",
     "@rnx-kit/golang": "^0.2.1",
     "depcheck": "^1.0.0",
     "esbuild": "^0.15.0",
     "fs-extra": "^10.0.0",
-    "glob": "^7.0.0",
     "jest": "^27.0.0",
     "markdown-table": "^2.0.0",
-    "midgard-yarn": "^1.23.24",
+    "typedoc": "^0.23.21",
     "typescript": "^4.0.0",
     "yargs": "^16.0.0"
   },
   "devDependencies": {
     "@types/fs-extra": "^9.0.0",
-    "@types/glob": "^7.0.0",
     "@types/jest": "^27.0.0"
   },
   "depcheck": {
@@ -39,7 +33,6 @@
       "@rnx-kit/align-deps",
       "@rnx-kit/jest-preset",
       "jest",
-      "midgard-yarn",
       "typescript"
     ]
   },

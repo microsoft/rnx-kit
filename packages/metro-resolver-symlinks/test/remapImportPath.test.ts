@@ -21,7 +21,7 @@ describe("remap-import-path", () => {
   });
 
   test("throws if test function is missing", () => {
-    // @ts-ignore
+    // @ts-expect-error Intentionally missing test function
     expect(() => remapImportPath()).toThrow(
       "A test function is required for this plugin"
     );

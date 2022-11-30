@@ -1,8 +1,13 @@
 import type { Capability } from "@rnx-kit/config";
 import { warn } from "@rnx-kit/console";
+import { keysOf } from "@rnx-kit/tools-language/properties";
 import type { PackageManifest } from "@rnx-kit/tools-node/package";
-import { keysOf } from "./helpers";
 import type { MetaPackage, Package, Preset, Profile } from "./types";
+
+type ResolvedDependencies = {
+  dependencies: Record<string, Package[]>;
+  unresolvedCapabilities: Record<string, string[]>;
+};
 
 /**
  * Returns the list of capabilities used in the specified package manifest.
@@ -45,9 +50,9 @@ export function isMetaPackage(pkg: MetaPackage | Package): pkg is MetaPackage {
 
 function resolveCapability(
   capability: Capability,
-  profile: Profile,
+  namedProfile: [string, Profile],
   dependencies: Record<string, Package[]>,
-  unresolvedCapabilities: Set<string>,
+  unresolvedCapabilities: Record<string, string[]>,
   resolved = new Set<string>()
 ): void {
   if (resolved.has(capability)) {
@@ -57,16 +62,22 @@ function resolveCapability(
   // Make sure we don't end in a loop
   resolved.add(capability);
 
+  const [profileName, profile] = namedProfile;
   const pkg = profile[capability];
   if (!pkg) {
-    unresolvedCapabilities.add(capability);
+    const profiles = unresolvedCapabilities[capability];
+    if (!profiles) {
+      unresolvedCapabilities[capability] = [profileName];
+    } else {
+      profiles.push(profileName);
+    }
     return;
   }
 
   pkg.capabilities?.forEach((capability) =>
     resolveCapability(
       capability,
-      profile,
+      namedProfile,
       dependencies,
       unresolvedCapabilities,
       resolved
@@ -86,34 +97,65 @@ function resolveCapability(
   }
 }
 
-export function resolveCapabilities(
+/**
+ * Resolves specified capabilities to real dependencies.
+ * @param capabilities The list of capabilities to resolve
+ * @param preset The preset to use to resolve capabilities
+ * @returns A tuple of resolved dependencies and unresolved capabilities
+ */
+export function resolveCapabilitiesUnchecked(
   capabilities: Capability[],
-  profiles: Profile[]
+  preset: Preset
+): ResolvedDependencies {
+  const profiles = Object.entries(preset);
+  const dependencies: Record<string, Package[]> = {};
+  const unresolvedCapabilities: Record<string, string[]> = {};
+
+  for (const capability of capabilities) {
+    profiles.forEach((profile) => {
+      resolveCapability(
+        capability,
+        profile,
+        dependencies,
+        unresolvedCapabilities
+      );
+    });
+  }
+
+  return { dependencies, unresolvedCapabilities };
+}
+
+/**
+ * Resolves specified capabilities to real dependencies.
+ *
+ * Same as {@link resolveCapabilitiesUnchecked}, but warns about any unresolved
+ * capabilities.
+ *
+ * @param manifestPath The path to the package manifest
+ * @param capabilities The list of capabilities to resolve
+ * @param preset The preset to use to resolve capabilities
+ * @returns Resolved dependencies
+ */
+export function resolveCapabilities(
+  manifestPath: string,
+  capabilities: Capability[],
+  preset: Preset
 ): Record<string, Package[]> {
-  const unresolvedCapabilities = new Set<string>();
-  const packages = capabilities.reduce<Record<string, Package[]>>(
-    (dependencies, capability) => {
-      profiles.forEach((profile) => {
-        resolveCapability(
-          capability,
-          profile,
-          dependencies,
-          unresolvedCapabilities
-        );
-      });
-      return dependencies;
-    },
-    {}
+  const { dependencies, unresolvedCapabilities } = resolveCapabilitiesUnchecked(
+    capabilities,
+    preset
   );
 
-  if (unresolvedCapabilities.size > 0) {
-    const message = Array.from(unresolvedCapabilities).reduce(
-      (lines, capability) => (lines += `\n\t${capability}`),
-      "The following capabilities could not be resolved for one or more profiles:"
+  const unresolved = Object.entries(unresolvedCapabilities);
+  if (unresolved.length > 0) {
+    const message = unresolved.reduce(
+      (lines, [capability, profiles]) =>
+        (lines += `\n\t${capability} (missing in ${profiles.join(", ")})`),
+      `${manifestPath}: The following capabilities could not be resolved for one or more profiles:`
     );
 
     warn(message);
   }
 
-  return packages;
+  return dependencies;
 }

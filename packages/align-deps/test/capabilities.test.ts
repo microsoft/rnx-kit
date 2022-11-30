@@ -107,8 +107,9 @@ describe("resolveCapabilities()", () => {
 
   test("dedupes packages", () => {
     const packages = resolveCapabilities(
+      "package.json",
       ["core", "core", "test-app"],
-      [profile_0_64]
+      { "0.64": profile_0_64 }
     );
 
     const { name } = profile_0_64["core"];
@@ -124,10 +125,11 @@ describe("resolveCapabilities()", () => {
   });
 
   test("dedupes package versions", () => {
-    const packages = resolveCapabilities(
-      ["webview"],
-      [profile_0_62, profile_0_63, profile_0_64]
-    );
+    const packages = resolveCapabilities("package.json", ["webview"], {
+      "0.62": profile_0_62,
+      "0.63": profile_0_63,
+      "0.64": profile_0_64,
+    });
 
     const { name } = profile_0_64["webview"];
     expect(packages).toEqual({
@@ -139,8 +141,13 @@ describe("resolveCapabilities()", () => {
 
   test("ignores missing/unknown capabilities", () => {
     const packages = resolveCapabilities(
+      "package.json",
       ["skynet" as Capability, "svg"],
-      [profile_0_62, profile_0_63, profile_0_64]
+      {
+        "0.62": profile_0_62,
+        "0.63": profile_0_63,
+        "0.64": profile_0_64,
+      }
     );
 
     const { name } = profile_0_64["svg"];
@@ -166,8 +173,9 @@ describe("resolveCapabilities()", () => {
     );
 
     const packages = resolveCapabilities(
+      "package.json",
       ["skynet" as Capability, "svg"],
-      Object.values(preset)
+      preset
     );
 
     const { name } = profile_0_64["svg"];
@@ -178,10 +186,10 @@ describe("resolveCapabilities()", () => {
   });
 
   test("resolves capabilities required by capabilities", () => {
-    const packages = resolveCapabilities(
-      ["core-windows"],
-      [profile_0_63, profile_0_64]
-    );
+    const packages = resolveCapabilities("package.json", ["core-windows"], {
+      "0.63": profile_0_63,
+      "0.64": profile_0_64,
+    });
 
     expect(packages).toEqual({
       react: [
@@ -230,8 +238,9 @@ describe("resolveCapabilities()", () => {
     );
 
     const packages = resolveCapabilities(
+      "package.json",
       ["core/all" as Capability],
-      Object.values(preset)
+      preset
     );
 
     expect(packages).toEqual({
@@ -274,8 +283,9 @@ describe("resolveCapabilities()", () => {
     );
 
     const packages = resolveCapabilities(
+      "package.json",
       ["reese" as Capability],
-      Object.values(preset)
+      preset
     );
 
     expect(packages).toEqual({

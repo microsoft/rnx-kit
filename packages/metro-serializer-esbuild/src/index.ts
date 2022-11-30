@@ -145,6 +145,9 @@ export function MetroSerializer(
   // Signal to every plugin that we're using esbuild.
   process.env["RNX_METRO_SERIALIZER_ESBUILD"] = "true";
 
+  const baseJSBundle = require("metro/src/DeltaBundler/Serializers/baseJSBundle");
+  const bundleToString = require("metro/src/lib/bundleToString");
+
   return (
     entryPoint: string,
     preModules: ReadonlyArray<Module>,
@@ -154,6 +157,12 @@ export function MetroSerializer(
     metroPlugins.forEach((plugin) =>
       plugin(entryPoint, preModules, graph, options)
     );
+
+    if (options.dev) {
+      const bundle = baseJSBundle(entryPoint, preModules, graph, options);
+      const bundleCode = bundleToString(bundle).code;
+      return Promise.resolve(bundleCode);
+    }
 
     const { dependencies } = graph;
     const metroPlugin: Plugin = {

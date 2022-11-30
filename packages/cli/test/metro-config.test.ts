@@ -154,9 +154,7 @@ describe("cli/metro-config/customizeMetroConfig", () => {
         experimentalSerializerHook: expect.anything(),
       },
       transformer: expect.objectContaining({
-        minifierPath: expect.stringContaining(
-          "@rnx-kit/metro-serializer-esbuild"
-        ),
+        minifierPath: expect.stringContaining("metro-serializer-esbuild"),
       }),
     });
     expect(typeof inputConfig.serializer.customSerializer).toBe("function");

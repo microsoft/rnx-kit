@@ -1,160 +1,96 @@
 // @ts-check
 
-const {
-  isExportNamedDeclaration,
-  isFunctionDeclaration,
-  isIdentifier,
-} = require("@babel/types");
-const { DocExcerpt, TSDocParser } = require("@microsoft/tsdoc");
-const fs = require("fs");
-
 const README = "README.md";
 const TOKEN_START = "<!-- @rnx-kit/api start -->";
 const TOKEN_END = "<!-- @rnx-kit/api end -->";
 
-/**
- * @param {string} summary
- * @returns {string}
- */
-function extractBrief(summary) {
-  const newParagraph = summary.indexOf("\n\n");
-  return (newParagraph > 0 ? summary.substring(0, newParagraph) : summary)
-    .trim()
-    .replace(/\n/g, " ");
-}
+const path = require("path");
 
 /**
- * @param {readonly import("@babel/types").Comment[] | null | undefined} comments
- * @returns {import("@babel/types").Comment | null}
+ * @typedef {import("typedoc/dist/lib/serialization/schema").Comment} Comment
+ * @typedef {import("typedoc/dist/lib/serialization/schema").CommentDisplayPart} CommentDisplayPart
+ * @typedef {import("typedoc/dist/lib/serialization/schema").SourceReference} SourceReference
  */
-function findLastBlockComment(comments) {
-  if (comments) {
-    for (let i = comments.length - 1; i >= 0; --i) {
-      if (comments[i].type === "CommentBlock") {
-        return comments[i];
-      }
+const typedoc = require("typedoc");
+
+/**
+ * @param {SourceReference[] | undefined} sources
+ */
+function getBaseName(sources) {
+  if (Array.isArray(sources)) {
+    const filename = sources[0].fileName;
+    const ext = path.extname(filename);
+    const base = path.basename(filename, ext);
+    if (base !== "index") {
+      return base;
     }
   }
-  return null;
+  return "-";
 }
 
 /**
- * @returns {string[]}
+ * @param {string} source
+ * @param {string} identifier
+ * @param {Comment | undefined} comment
+ * @returns {comment is Comment}
  */
-function findSourceFiles() {
-  try {
-    const tsconfig = require.resolve("./tsconfig.json", {
-      paths: [process.cwd()],
-    });
-    const { include } = require(tsconfig);
-    if (Array.isArray(include)) {
-      const glob = require("glob");
-      return include.reduce((result, pattern) => {
-        if (fs.existsSync(pattern)) {
-          if (fs.statSync(pattern).isDirectory()) {
-            result.push(...glob.sync(`${pattern}/**/*.ts`));
-          } else {
-            result.push(pattern);
-          }
-        } else {
-          result.push(...glob.sync(pattern));
+function isCommented(source, identifier, comment) {
+  if (!comment) {
+    console.warn(
+      "WARN",
+      `${source}:`,
+      `${identifier} is exported but undocumented`
+    );
+    return false;
+  }
+
+  return true;
+}
+
+function parse() {
+  const app = new typedoc.Application();
+  app.options.addReader(new typedoc.TypeDocReader());
+  app.options.addReader(new typedoc.TSConfigReader());
+
+  app.bootstrap({
+    entryPoints: ["src/index.ts"],
+    excludeInternal: true,
+  });
+
+  return app.serializer.toObject(app.convert());
+}
+
+/**
+ * @param {CommentDisplayPart[]} parts
+ */
+function renderSummary(parts) {
+  const result = [];
+
+  for (const part of parts) {
+    switch (part.kind) {
+      case "text":
+      case "code":
+        result.push(part.text);
+        break;
+      case "inline-tag":
+        switch (part.tag) {
+          case "@label":
+          case "@inheritdoc": // Shouldn't happen
+            break; // Not rendered.
+          case "@link":
+          case "@linkcode":
+          case "@linkplain":
+            result.push("`" + part.text + "`");
+            break;
         }
-        return result;
-      }, /** @type {string[]} */ ([]));
+        break;
     }
-  } catch (_) {
-    /* ignore */
   }
-  return [];
-}
 
-/**
- * @param {import("@babel/types").ExportNamedDeclaration} node
- * @returns {string}
- */
-function getExportedName(node) {
-  const declaration = node.declaration;
-  switch (declaration?.type) {
-    case "FunctionDeclaration":
-    case "TSInterfaceDeclaration":
-    case "TSTypeAliasDeclaration":
-      if (!isIdentifier(declaration.id)) {
-        // TODO: Unnamed functions are currently unsupported
-        return "";
-      }
-      return declaration.id.name;
-
-    case "VariableDeclaration": {
-      if (isArrowFunction(node)) {
-        const decl = declaration.declarations[0];
-        if (isIdentifier(decl.id)) {
-          return decl.id.name;
-        }
-      }
-      return "";
-    }
-
-    default:
-      return "";
-  }
-}
-
-/**
- * Returns whether the node represents a memoized function.
- * @param {import("@babel/types").ExportNamedDeclaration} node
- * @returns {boolean}
- */
-function isArrowFunction(node) {
-  return Boolean(
-    node.declaration?.type === "VariableDeclaration" &&
-      findLastBlockComment(node.leadingComments)?.value?.includes(
-        "@privateRemarks is-arrow-function"
-      )
-  );
-}
-
-/**
- * @param {import("@microsoft/tsdoc").DocNode} docNode
- * @returns {string}
- */
-function renderDocNode(docNode) {
-  /** @type {string[]} */
-  const content = [];
-  if (docNode) {
-    if (docNode instanceof DocExcerpt) {
-      content.push(docNode.content.toString());
-    }
-    docNode.getChildNodes().forEach((childNode) => {
-      content.push(renderDocNode(childNode));
-    });
-  }
-  return content.join("");
-}
-
-/**
- * @param {import("@babel/types").LVal} node
- * @returns {string}
- */
-function renderParamNode(node) {
-  switch (node.type) {
-    case "ArrayPattern":
-      return "[]";
-    case "AssignmentPattern":
-      return renderParamNode(node.left);
-    case "Identifier":
-      return node.name;
-    case "MemberExpression":
-      throw new Error(`Unsupported parameter type: ${node.type}`);
-    case "ObjectPattern":
-      return "{}";
-    case "RestElement":
-      return `...${renderParamNode(node.argument)}`;
-    case "TSParameterProperty":
-    case "TSAsExpression":
-    case "TSNonNullExpression":
-    case "TSTypeAssertion":
-      throw new Error(`Unsupported parameter type: ${node.type}`);
-  }
+  const comment = result.join("");
+  const paragraph = comment.indexOf("\n\n");
+  const summary = paragraph > 0 ? comment.substring(0, paragraph) : comment;
+  return summary.replace(/\n/g, " ");
 }
 
 /**
@@ -171,7 +107,7 @@ function updateReadme(exportedTypes, exportedFunctions) {
   };
 
   /** @type {(table: string[][], options?: {}) => string} */
-  // @ts-expect-error
+  // @ts-expect-error no declaration file for markdown-table
   const markdownTable = require("markdown-table");
 
   const types =
@@ -190,6 +126,8 @@ function updateReadme(exportedTypes, exportedFunctions) {
           ...exportedFunctions.sort(sortByCategory),
         ]);
 
+  const fs = require("fs");
+
   const readme = fs.readFileSync(README, { encoding: "utf-8" });
   const updatedReadme = readme.replace(
     new RegExp(`${TOKEN_START}([^]+)${TOKEN_END}`),
@@ -204,11 +142,12 @@ function updateReadme(exportedTypes, exportedFunctions) {
 }
 
 function updateApiReadme() {
-  return new Promise((resolve) => {
-    const babelParser = require("@babel/parser");
-    const path = require("path");
-
-    const tsdocParser = new TSDocParser();
+  return new Promise((resolve, reject) => {
+    const project = parse();
+    const children = project?.children;
+    if (!children) {
+      return reject();
+    }
 
     /** @type {[string, string, string][]} */
     const exportedFunctions = [];
@@ -216,69 +155,36 @@ function updateApiReadme() {
     /** @type {[string, string, string][]} */
     const exportedTypes = [];
 
-    findSourceFiles().forEach((file) => {
-      const filename = path.basename(file, ".ts");
-      const category = filename === "index" ? "-" : filename;
-      const content = fs.readFileSync(file, { encoding: "utf-8" });
-      babelParser
-        .parse(content, {
-          plugins: ["typescript"],
-          sourceType: "module",
-          sourceFilename: file,
-        })
-        .program.body.forEach((node) => {
-          if (!isExportNamedDeclaration(node)) {
-            return;
+    for (const { name, kind, comment, sources, signatures } of children) {
+      switch (kind) {
+        case typedoc.ReflectionKind.TypeAlias: {
+          const source = getBaseName(sources);
+          if (isCommented(source, name, comment)) {
+            exportedTypes.push([source, name, renderSummary(comment.summary)]);
           }
-
-          const name = getExportedName(node);
-          if (!name) {
-            return;
-          }
-
-          const identifier = (() => {
-            if (isFunctionDeclaration(node.declaration)) {
-              return `\`${name}(${node.declaration.params
-                .map(renderParamNode)
-                .join(", ")})\``;
+          break;
+        }
+        case typedoc.ReflectionKind.Function: {
+          const source = getBaseName(sources);
+          signatures?.forEach(({ name, comment, parameters }) => {
+            if (isCommented(source, name, comment)) {
+              exportedFunctions.push([
+                source,
+                Array.isArray(parameters)
+                  ? `\`${name}(${parameters
+                      .map((p) => (p.flags.isRest ? `...${p.name}` : p.name))
+                      .join(", ")})\``
+                  : `\`${name}()\``,
+                renderSummary(comment.summary),
+              ]);
             }
-            if (isArrowFunction(node)) {
-              const comment = findLastBlockComment(node.leadingComments);
-              return `\`${name}(${comment?.value
-                ?.split("@param ")
-                ?.map((part) => part.substring(0, part.indexOf(" ")))
-                ?.slice(1)
-                ?.join(", ")})\``;
-            }
-            return name;
-          })();
-
-          const commentBlock = findLastBlockComment(node.leadingComments);
-          if (!commentBlock) {
-            console.warn(
-              "WARN",
-              `${file}:`,
-              `${identifier} is exported but undocumented`
-            );
-            return;
-          }
-
-          const result = tsdocParser.parseString(
-            "/*" + commentBlock.value + "*/"
-          );
-          const summary = renderDocNode(result.docComment.summarySection);
-          const description = extractBrief(summary);
-
-          if (
-            isFunctionDeclaration(node.declaration) ||
-            isArrowFunction(node)
-          ) {
-            exportedFunctions.push([category, identifier, description]);
-          } else {
-            exportedTypes.push([category, identifier, description]);
-          }
-        });
-    });
+          });
+          break;
+        }
+        default:
+          console.warn("Unknown kind:", name);
+      }
+    }
 
     updateReadme(exportedTypes, exportedFunctions);
 

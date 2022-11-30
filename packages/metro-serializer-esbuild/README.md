@@ -80,9 +80,9 @@ changes to `metro.config.js`:
 +} = require("@rnx-kit/metro-serializer-esbuild");
 
  module.exports = makeMetroConfig({
-+  serializer: {
+   serializer: {
 +    customSerializer: MetroSerializer(),
-+  },
+   },
 +  transformer: esbuildTransformerConfig,
  });
 ```
@@ -197,9 +197,9 @@ basically on your own to fix any issues that might come up.
 
 ## Known Limitations
 
-- Dev server may not work with this serializer. To work around this limitation,
-  you can save the esbuild specific Metro config to a separate file and only
-  specify it when needed, e.g.:
+- Dev server does not play well with `esbuildTransformerConfig`. To work around
+  this limitation, you can save the esbuild specific Metro config to a separate
+  file and only specify it when needed, e.g.:
   ```sh
   react-native bundle ... --config metro+esbuild.config.js
   ```

@@ -8,7 +8,7 @@ describe("metro-serializer-esbuild", () => {
 
   async function bundle(
     entryFile: string,
-    dev = true,
+    dev = false,
     sourcemapOutput: string | undefined = undefined
   ): Promise<string> {
     let result = "";
@@ -244,7 +244,7 @@ describe("metro-serializer-esbuild", () => {
         init_lib();
         var _warningCallback = void 0;
         function warn(message) {
-          if (_warningCallback && true) {
+          if (_warningCallback && false) {
             _warningCallback(message);
           } else if (console && console.warn) {
             console.warn(message);
@@ -272,9 +272,28 @@ describe("metro-serializer-esbuild", () => {
       ".test-output.jsbundle.map"
     );
     expect(result).toMatchInlineSnapshot(`
-      "\\"use strict\\";(()=>{var e=new Function(\\"return this;\\")();})();
+      "\\"use strict\\";
+      (() => {
+        // lib/index.js
+        var global = new Function(\\"return this;\\")();
+
+        // virtual:metro:/~/metro-serializer-esbuild/test/__fixtures__/base.ts
+        function app() {
+          \\"this should _not_ be removed\\";
+        }
+
+        // virtual:metro:/~/metro-serializer-esbuild/test/__fixtures__/direct.ts
+        app();
+      })();
       //# sourceMappingURL=.test-output.jsbundle.map
       "
     `);
+  });
+
+  test("is disabled when `dev: true`", async () => {
+    const result = await bundle("test/__fixtures__/direct.ts", true);
+    expect(result).toMatch(
+      "var __BUNDLE_START_TIME__=this.nativePerformanceNow?nativePerformanceNow():Date.now(),__DEV__=true,process=this.process||{},__METRO_GLOBAL_PREFIX__='';process.env=process.env||{};process.env.NODE_ENV=process.env.NODE_ENV||\"development\";"
+    );
   });
 });

@@ -1,22 +1,29 @@
 import { error, info } from "@rnx-kit/console";
 import chalk from "chalk";
-import * as path from "path";
 import type { ErrorCode } from "./types";
 
-export function printError(manifestPath: string, code: ErrorCode): void {
-  const currentPackageJson = path.relative(process.cwd(), manifestPath);
+export function isError<T>(config: T | ErrorCode): config is ErrorCode {
+  return typeof config === "string";
+}
 
+export function printError(manifestPath: string, code: ErrorCode): void {
   switch (code) {
     case "success":
       break;
 
+    case "invalid-app-requirements":
+      error(
+        `${manifestPath}: app requirements must resolve to a single profile`
+      );
+      break;
+
     case "invalid-configuration":
-      error(`${currentPackageJson}: align-deps was not properly configured`);
+      error(`${manifestPath}: align-deps was not properly configured`);
       break;
 
     case "invalid-manifest":
       error(
-        `'${currentPackageJson}' does not contain a valid package manifest — please make sure it's not missing 'name' or 'version'`
+        `${manifestPath}: Invalid package manifest — please make sure it's not missing 'name' or 'version'`
       );
       break;
 
@@ -29,12 +36,12 @@ export function printError(manifestPath: string, code: ErrorCode): void {
       break;
 
     case "not-configured":
-      error(`${currentPackageJson}: align-deps was not configured`);
+      error(`${manifestPath}: align-deps was not configured`);
       break;
 
     case "unsatisfied":
       error(
-        `${currentPackageJson}: Changes are needed to satisfy all requirements. Re-run with '--write' to apply them.`
+        `${manifestPath}: Changes are needed to satisfy all requirements. Re-run with '--write' to apply them.`
       );
       break;
   }
