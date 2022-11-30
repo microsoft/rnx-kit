@@ -97,7 +97,7 @@ export function patchMetro(options: Options): void {
     };
 
     this.orig__createModuleResolver();
-    if (!(typeof this._moduleResolver._options.resolveAsset === "function")) {
+    if (typeof this._moduleResolver._options.resolveAsset !== "function") {
       throw new Error("Could not find `resolveAsset` in `ModuleResolver`");
     }
 
