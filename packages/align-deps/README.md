@@ -45,6 +45,12 @@ npm add --save-dev @rnx-kit/align-deps
 yarn rnx-align-deps [options] [packages...]
 ```
 
+or just
+
+```sh
+npx @rnx-kit/align-deps [options] [packages...]
+```
+
 Listing paths to packages that should be checked is optional. If omitted,
 `align-deps` will look for the closest `package.json` using Node module
 resolution. If the target package is a root package defining workspaces, they
@@ -55,6 +61,8 @@ Examples:
 - Ensure dependencies are compatible with react-native 0.70 without a config:
   ```sh
   yarn rnx-align-deps --requirements react-native@0.70
+  or
+  npx @rnx-kit/align-deps --requirements react-native@0.70
   ```
 - Initialize a config for your app (or library):
   ```sh
