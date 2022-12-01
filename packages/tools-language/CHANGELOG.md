@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/tools-language
 
+## 1.4.2
+
+### Patch Changes
+
+- 786e24c7: Also export `isNonEmptyArray`, `keysOf` from index
+
 ## 1.4.1
 
 ### Patch Changes
