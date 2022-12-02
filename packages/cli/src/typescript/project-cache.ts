@@ -3,10 +3,7 @@ import {
   AllPlatforms,
   platformExtensions,
 } from "@rnx-kit/tools-react-native/platform";
-import {
-  changeHostToUseReactNativeResolver,
-  supportsModuleSuffixes,
-} from "@rnx-kit/typescript-react-native-resolver";
+import { changeHostToUseReactNativeResolver } from "@rnx-kit/typescript-react-native-resolver";
 import {
   createDiagnosticWriter,
   Project,
@@ -117,19 +114,6 @@ export function createProjectCache(
     return cmdLine;
   }
 
-  function validateCompilerOptions(options: ts.CompilerOptions) {
-    const { baseUrl, paths, rootDirs } = options;
-    if (!baseUrl && !paths && !rootDirs) {
-      return;
-    }
-
-    if (!supportsModuleSuffixes()) {
-      throw new Error(
-        `@rnx-kit/cli requires TypeScript 4.7 or later for path mapping support (at least one of paths, baseURL, or rootDirs is set in tsconfig.json).`
-      );
-    }
-  }
-
   function createProjectInfo(
     root: string,
     platform: AllPlatforms
@@ -140,8 +124,6 @@ export function createProjectCache(
       // Not a TypeScript project
       return undefined;
     }
-
-    validateCompilerOptions(cmdLine.options);
 
     //  Trim down the list of source files found by TypeScript. This ensures
     //  that only explicitly added files are loaded and parsed by TypeScript.
@@ -162,7 +144,6 @@ export function createProjectCache(
       const disableReactNativePackageSubstitution = true;
       changeHostToUseReactNativeResolver({
         host,
-        options: cmdLine.options,
         platform,
         platformExtensionNames,
         disableReactNativePackageSubstitution,

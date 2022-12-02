@@ -1,5 +1,3 @@
-import ts from "typescript";
-
 /**
  * Host interface for handling module resolution queries.
  *
@@ -25,11 +23,6 @@ export type ResolverContext = {
    * Host interface for handling module resolution queries.
    */
   readonly host: ModuleResolutionHostLike;
-
-  /**
-   * TypeScript compiler options.
-   */
-  readonly options: ts.ParsedCommandLine["options"];
 
   /**
    * Flag controlling the replacement of `react-native` the target platform's

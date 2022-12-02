@@ -1,4 +1,1 @@
-export {
-  changeHostToUseReactNativeResolver,
-  supportsModuleSuffixes,
-} from "./host";
+export { changeHostToUseReactNativeResolver } from "./host";
