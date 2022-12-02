@@ -14,13 +14,7 @@ import {
   ExtensionsJSON,
   ExtensionsTypeScript,
 } from "./extension";
-import {
-  changeModuleResolutionHostToLogFileSystemReads,
-  logModuleBegin,
-  logModuleEnd,
-  ResolverLog,
-  ResolverLogMode,
-} from "./log";
+import { logModuleBegin, logModuleEnd } from "./log";
 import { createReactNativePackageNameReplacer } from "./react-native-package-name";
 import { resolveFileModule, resolvePackageModule } from "./resolve";
 
@@ -30,18 +24,11 @@ import type { ResolverContext, ModuleResolutionHostLike } from "./types";
  * Change the TypeScript `CompilerHost` or `LanguageServiceHost` so it makes
  * use of react-native module resolution.
  *
- * This includes binding the `trace` method to a react-native trace logger.
- * The logger is active when the compiler option `traceResolution` is true, or
- * when react-native error tracing is enabled. All file and directory reads
- * are logged, making it easy to see what the resolver is doing.
- *
  * @param host Compiler host or language service host
  * @param options Compiler options
  * @param platform Target platform
  * @param platformExtensionNames Optional list of platform file extensions, from highest precedence (index 0) to lowest. Example: `["ios", "mobile", "native"]`.
  * @param disableReactNativePackageSubstitution Flag to prevent substituting the module name `react-native` with the target platform's out-of-tree NPM package implementation. For example, on Windows, devs expect `react-native` to implicitly refer to `react-native-windows`.
- * @param traceReactNativeModuleResolutionErrors Flag to enable trace logging when a resolver error occurs. All messages involved in the failed module resolution are aggregated and logged.
- * @param traceResolutionLog Optional file to use for logging trace message. When not present, log messages go to the console.
  */
 export function changeHostToUseReactNativeResolver({
   host,
@@ -49,36 +36,18 @@ export function changeHostToUseReactNativeResolver({
   platform,
   platformExtensionNames,
   disableReactNativePackageSubstitution,
-  traceReactNativeModuleResolutionErrors,
-  traceResolutionLog,
 }: {
   host: ts.CompilerHost | ts.LanguageServiceHost;
   options: ts.ParsedCommandLine["options"];
   platform: string;
   platformExtensionNames: string[] | undefined;
   disableReactNativePackageSubstitution: boolean;
-  traceReactNativeModuleResolutionErrors: boolean;
-  traceResolutionLog: string | undefined;
 }): void {
   // Ensure that optional methods have an implementation so they can be hooked
   // for logging, and so we can use them in the resolver.
   host.directoryExists = host.directoryExists ?? ts.sys.directoryExists;
   host.realpath = host.realpath ?? ts.sys.realpath;
   host.getDirectories = host.getDirectories ?? ts.sys.getDirectories;
-
-  let mode = ResolverLogMode.Never;
-  if (options.traceResolution) {
-    mode = ResolverLogMode.Always;
-  } else if (traceReactNativeModuleResolutionErrors) {
-    mode = ResolverLogMode.OnFailure;
-  }
-  const log = new ResolverLog(mode, traceResolutionLog);
-  if (mode !== ResolverLogMode.Never) {
-    host.trace = log.log.bind(log);
-    changeModuleResolutionHostToLogFileSystemReads(
-      host as ModuleResolutionHostLike
-    );
-  }
 
   // Depending on where we get called from platformExtensionNames may already have platform in it
   const platformExtensions = platformExtensionNames || [];
@@ -89,7 +58,6 @@ export function changeHostToUseReactNativeResolver({
     host: host as ModuleResolutionHostLike,
     options,
     disableReactNativePackageSubstitution,
-    log,
     platform,
     platformExtensions: platformExtensions.map(
       (e) => `.${e}` // prepend a '.' to each name to make it a file extension
@@ -97,8 +65,7 @@ export function changeHostToUseReactNativeResolver({
     replaceReactNativePackageName: createReactNativePackageNameReplacer(
       host.getCurrentDirectory(),
       platform,
-      disableReactNativePackageSubstitution,
-      log
+      disableReactNativePackageSubstitution
     ),
   };
 
@@ -221,7 +188,7 @@ export function resolveModuleNames(
   const resolutions: (ts.ResolvedModuleFull | undefined)[] = [];
 
   for (const moduleName of moduleNames) {
-    logModuleBegin(log, moduleName, containingFile);
+    logModuleBegin(host, moduleName, containingFile);
 
     const finalModuleName = replaceReactNativePackageName(moduleName);
 
@@ -267,7 +234,7 @@ export function resolveModuleNames(
     }
 
     resolutions.push(module);
-    logModuleEnd(log, options, moduleName, module);
+    logModuleEnd(host, moduleName, module);
   }
 
   return resolutions;
@@ -303,24 +270,11 @@ export function resolveTypeReferenceDirectives(
   _compilerOptions?: ts.CompilerOptions,
   containingFileMode?: ts.SourceFile["impliedNodeFormat"]
 ): (ts.ResolvedTypeReferenceDirective | undefined)[] {
-  const { host, options, log } = context;
+  const { host, options } = context;
 
   const resolutions: (ts.ResolvedTypeReferenceDirective | undefined)[] = [];
 
   for (const typeDirectiveName of typeDirectiveNames) {
-    // TypeScript only emits trace messages when traceResolution is enabled.
-    // Our code, however, can emit even when traceResolution is disabled. We
-    // have the "emit only errors" mode. This includes the file-system reads
-    // we hooked on the module-resolution host.
-    //
-    // We don't want to see those file-system read messages without the
-    // larger context of TypeScript's trace messages. So, for type directives,
-    // we can only log successes AND failures when traceResolution is enabled.
-    //
-    if (options.traceResolution) {
-      log.begin();
-    }
-
     const name =
       typeof typeDirectiveName === "string"
         ? typeDirectiveName
@@ -337,13 +291,6 @@ export function resolveTypeReferenceDirectives(
       );
 
     resolutions.push(directive);
-    if (options.traceResolution) {
-      if (directive) {
-        log.endSuccess();
-      } else {
-        log.endFailure();
-      }
-    }
   }
 
   return resolutions;
