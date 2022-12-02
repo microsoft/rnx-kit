@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-resolver-symlinks
 
+## 0.1.23
+
+### Patch Changes
+
+- 80e6557d: Add an experimental option for retrying module resolution from disk if not found in Haste map
+
 ## 0.1.22
 
 ### Patch Changes

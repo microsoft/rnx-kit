@@ -1,5 +1,11 @@
 # @rnx-kit/react-native-auth
 
+## 0.2.1
+
+### Patch Changes
+
+- 62b18876: Add TurboModule spec
+
 ## 0.2.0
 
 ### Minor Changes
