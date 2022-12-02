@@ -40,7 +40,7 @@ export function changeHostToUseReactNativeResolver({
   host: ts.CompilerHost | ts.LanguageServiceHost;
   options: ts.ParsedCommandLine["options"];
   platform: string;
-  platformExtensionNames: string[] | undefined;
+  platformExtensionNames: string[];
   disableReactNativePackageSubstitution: boolean;
 }): void {
   // Ensure that optional methods have an implementation so they can be hooked
@@ -49,17 +49,12 @@ export function changeHostToUseReactNativeResolver({
   host.realpath = host.realpath ?? ts.sys.realpath;
   host.getDirectories = host.getDirectories ?? ts.sys.getDirectories;
 
-  // Depending on where we get called from platformExtensionNames may already have platform in it
-  const platformExtensions = platformExtensionNames || [];
-  if (!platformExtensions.includes(platform)) {
-    platformExtensions.unshift(platform);
-  }
   const context: ResolverContext = {
     host: host as ModuleResolutionHostLike,
     options,
     disableReactNativePackageSubstitution,
     platform,
-    platformExtensions: platformExtensions.map(
+    platformExtensions: platformExtensionNames?.map(
       (e) => `.${e}` // prepend a '.' to each name to make it a file extension
     ),
     replaceReactNativePackageName: createReactNativePackageNameReplacer(

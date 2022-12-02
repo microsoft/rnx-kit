@@ -21,7 +21,7 @@ function configureCompilerHost(
   //
   compilerHost.trace = ts.sys.write;
 
-  if (platform) {
+  if (platform && platformExtensions) {
     //  A react-native target platform was specified. Use the react-native
     //  TypeScript resolver.
     //
