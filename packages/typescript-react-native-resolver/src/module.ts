@@ -67,6 +67,7 @@ export function searchForModuleFile(
  * that is a better match.
  *
  * @param context Resolver context
+ * @param options Compiler options
  * @param searchDir Directory to use when searching for the module file
  * @param modulePath Module path
  * @param extensions List of allowed file extensions, in order from highest precedence (index 0) to lowest.
@@ -74,6 +75,7 @@ export function searchForModuleFile(
  */
 export function findModuleFile(
   context: ResolverContext,
+  options: ts.CompilerOptions,
   searchDir: string,
   modulePath: string,
   extensions: ts.Extension[]
@@ -124,10 +126,22 @@ export function findModuleFile(
       if (host.fileExists(path.join(moduleDir, "package.json"))) {
         //  The module path refers to a directory containing an embedded
         //  package. Start a new search from the module path (package root).
-        module = resolveModule(context, moduleDir, undefined, extensions);
+        module = resolveModule(
+          context,
+          options,
+          moduleDir,
+          undefined,
+          extensions
+        );
       } else {
         //  Search for an index file.
-        module = findModuleFile(context, moduleDir, "index", extensions);
+        module = findModuleFile(
+          context,
+          options,
+          moduleDir,
+          "index",
+          extensions
+        );
       }
     }
   }

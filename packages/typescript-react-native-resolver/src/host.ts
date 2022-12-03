@@ -22,20 +22,17 @@ import type { ResolverContext, ModuleResolutionHostLike } from "./types";
  * use of react-native module resolution.
  *
  * @param host Compiler host or language service host
- * @param options Compiler options
  * @param platform Target platform
  * @param platformExtensionNames List of platform file extensions, from highest precedence (index 0) to lowest. Example: `["ios", "mobile", "native"]`.
  * @param disableReactNativePackageSubstitution Flag to prevent substituting the module name `react-native` with the target platform's out-of-tree NPM package implementation. For example, on Windows, devs expect `react-native` to implicitly refer to `react-native-windows`.
  */
 export function changeHostToUseReactNativeResolver({
   host,
-  options,
   platform,
   platformExtensionNames,
   disableReactNativePackageSubstitution,
 }: {
   host: ts.CompilerHost | ts.LanguageServiceHost;
-  options: ts.ParsedCommandLine["options"];
   platform: string;
   platformExtensionNames: string[];
   disableReactNativePackageSubstitution: boolean;
@@ -48,7 +45,6 @@ export function changeHostToUseReactNativeResolver({
 
   const context: ResolverContext = {
     host: host as ModuleResolutionHostLike,
-    options,
     disableReactNativePackageSubstitution,
     platform,
     platformExtensions: platformExtensionNames.map(
@@ -83,6 +79,7 @@ export function resolveModuleName(
   context: ResolverContext,
   moduleName: string,
   containingFile: string,
+  options: ts.CompilerOptions,
   extensions: ts.Extension[]
 ): ts.ResolvedModuleFull | undefined {
   let module: ts.ResolvedModuleFull | undefined = undefined;
@@ -90,16 +87,28 @@ export function resolveModuleName(
   const moduleRef = parseModuleRef(moduleName);
   const searchDir = path.dirname(containingFile);
   if (isPackageModuleRef(moduleRef)) {
-    module = resolvePackageModule(context, moduleRef, searchDir, extensions);
+    module = resolvePackageModule(
+      context,
+      options,
+      moduleRef,
+      searchDir,
+      extensions
+    );
   } else if (isFileModuleRef(moduleRef)) {
-    module = resolveFileModule(context, moduleRef, searchDir, extensions);
+    module = resolveFileModule(
+      context,
+      options,
+      moduleRef,
+      searchDir,
+      extensions
+    );
   }
   if (module) {
     module.isExternalLibraryImport = /[/\\]node_modules[/\\]/.test(
       module.resolvedFileName
     );
 
-    const { host, options } = context;
+    const { host } = context;
     if (host.realpath && !options.preserveSymlinks) {
       const resolvedFileName = host.realpath(module.resolvedFileName);
       const originalPath =
@@ -122,6 +131,10 @@ export function resolveModuleName(
  * @param context Resolver context
  * @param moduleNames List of module names, as they appear in each require/import statement
  * @param containingFile File from which the modules were all required/imported
+ * @param _reusedNames
+ * @param _redirectedReference Head node in the program's graph of type references
+ * @param options Compiler options to use when resolving this module
+ * @param _containingSourceFile
  * @returns Array of results. Each entry will have resolved module information, or will be `undefined` if resolution failed. The array will have one element for each entry in the module name list.
  */
 export function resolveModuleNames(
@@ -129,9 +142,11 @@ export function resolveModuleNames(
   moduleNames: string[],
   containingFile: string,
   _reusedNames: string[] | undefined,
-  _redirectedReference?: ts.ResolvedProjectReference
+  _redirectedReference: ts.ResolvedProjectReference | undefined,
+  options: ts.CompilerOptions,
+  _containingSourceFile: ts.SourceFile | undefined
 ): (ts.ResolvedModuleFull | undefined)[] {
-  const { options, host, replaceReactNativePackageName } = context;
+  const { host, replaceReactNativePackageName } = context;
   const resolutions: (ts.ResolvedModuleFull | undefined)[] = [];
 
   const traceEnabled = isTraceEnabled(host, options);
@@ -158,6 +173,7 @@ export function resolveModuleNames(
       context,
       finalModuleName,
       containingFile,
+      options,
       ExtensionsTypeScript
     );
     if (!module) {
@@ -170,6 +186,7 @@ export function resolveModuleNames(
         context,
         finalModuleName,
         containingFile,
+        options,
         ExtensionsJavaScript
       );
       if (!module && options.resolveJsonModule) {
@@ -182,6 +199,7 @@ export function resolveModuleNames(
           context,
           finalModuleName,
           containingFile,
+          options,
           ExtensionsJSON
         );
       }
@@ -220,11 +238,11 @@ export function resolveTypeReferenceDirectives(
   context: ResolverContext,
   typeDirectiveNames: string[] | readonly ts.FileReference[],
   containingFile: string,
-  redirectedReference: ts.ResolvedProjectReference,
-  _compilerOptions?: ts.CompilerOptions,
-  containingFileMode?: ts.SourceFile["impliedNodeFormat"]
+  redirectedReference: ts.ResolvedProjectReference | undefined,
+  options: ts.CompilerOptions,
+  containingFileMode: ts.SourceFile["impliedNodeFormat"] | undefined
 ): (ts.ResolvedTypeReferenceDirective | undefined)[] {
-  const { host, options } = context;
+  const { host } = context;
 
   const resolutions: (ts.ResolvedTypeReferenceDirective | undefined)[] = [];
 

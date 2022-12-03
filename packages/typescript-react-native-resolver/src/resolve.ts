@@ -23,6 +23,7 @@ import { ResolverContext } from "./types";
  * for an "index" file.
  *
  * @param context Resolver context
+ * @param options Compiler options
  * @param packageDir Root of the package which contains the module
  * @param modulePath Optional relative path to the module
  * @param extensions List of allowed file extensions, in order from highest precedence (index 0) to lowest.
@@ -30,16 +31,17 @@ import { ResolverContext } from "./types";
  */
 export function resolveModule(
   context: ResolverContext,
+  options: ts.CompilerOptions,
   packageDir: string,
   modulePath: string | undefined,
   extensions: ts.Extension[]
 ): ts.ResolvedModuleFull | undefined {
   //  A module path was given. Use that to resolve the module to a file.
   if (modulePath) {
-    return findModuleFile(context, packageDir, modulePath, extensions);
+    return findModuleFile(context, options, packageDir, modulePath, extensions);
   }
 
-  const { host, options } = context;
+  const { host } = context;
 
   const traceEnabled = isTraceEnabled(host, options);
 
@@ -65,19 +67,25 @@ export function resolveModule(
       if (traceEnabled) {
         host.trace(`Package has 'types' field '${types}'.`);
       }
-      module = findModuleFile(context, packageDir, types, extensions);
+      module = findModuleFile(context, options, packageDir, types, extensions);
     } else if (typeof typings === "string" && typings.length > 0) {
       if (traceEnabled) {
         host.trace(`Package has 'typings' field '${typings}'.`);
       }
-      module = findModuleFile(context, packageDir, typings, extensions);
+      module = findModuleFile(
+        context,
+        options,
+        packageDir,
+        typings,
+        extensions
+      );
     }
   }
   if (!module && typeof main === "string" && main.length > 0) {
     if (traceEnabled) {
       host.trace(`Package has 'main' field '${main}'.`);
     }
-    module = findModuleFile(context, packageDir, main, extensions);
+    module = findModuleFile(context, options, packageDir, main, extensions);
   }
 
   //  Properties from package.json weren't able to resolve the module.
@@ -86,7 +94,7 @@ export function resolveModule(
     if (traceEnabled) {
       host.trace("Searching for index file.");
     }
-    module = findModuleFile(context, packageDir, "index", extensions);
+    module = findModuleFile(context, options, packageDir, "index", extensions);
   }
 
   return module;
@@ -94,10 +102,11 @@ export function resolveModule(
 
 function findPackageDependencyDir(
   context: ResolverContext,
+  options: ts.CompilerOptions,
   ref: PackageModuleRef,
   startDir: string
 ): string | undefined {
-  const { host, options } = context;
+  const { host } = context;
 
   if (isTraceEnabled(host, options)) {
     host.trace(
@@ -135,6 +144,7 @@ function findPackageDependencyDir(
  * at-types package.
  *
  * @param context Resolver context
+ * @param options Compiler options
  * @param moduleRef Module to resolve
  * @param searchDir Directory to start searching for the module's package
  * @param extensions List of allowed module file extensions
@@ -142,11 +152,12 @@ function findPackageDependencyDir(
  */
 export function resolvePackageModule(
   context: ResolverContext,
+  options: ts.CompilerOptions,
   moduleRef: PackageModuleRef,
   searchDir: string,
   extensions: ts.Extension[]
 ): ts.ResolvedModuleFull | undefined {
-  const { host, options } = context;
+  const { host } = context;
 
   const traceEnabled = isTraceEnabled(host, options);
 
@@ -162,19 +173,36 @@ export function resolvePackageModule(
       } starting in ${searchDir}.`
     );
   }
-  const pkgDir = findPackageDependencyDir(context, moduleRef, searchDir);
+  const pkgDir = findPackageDependencyDir(
+    context,
+    options,
+    moduleRef,
+    searchDir
+  );
   if (pkgDir) {
     if (traceEnabled) {
       host.trace(`Loading module from external package '${pkgDir}'.`);
     }
 
-    module = resolveModule(context, pkgDir, moduleRef.path, extensions);
+    module = resolveModule(
+      context,
+      options,
+      pkgDir,
+      moduleRef.path,
+      extensions
+    );
     if (!module && moduleRef.path) {
       // Try again, without using a path. Type modules don't have to use the
       // same file layout as the corresponding source code modules. For
       // example, type info could be in a single, hand-crafted file, while
       // the source code is spread across many files.
-      module = resolveModule(context, pkgDir, undefined, ExtensionsTypeScript);
+      module = resolveModule(
+        context,
+        options,
+        pkgDir,
+        undefined,
+        ExtensionsTypeScript
+      );
     }
   }
 
@@ -188,6 +216,7 @@ export function resolvePackageModule(
     };
     module = resolvePackageModule(
       context,
+      options,
       typesModuleRef,
       searchDir,
       ExtensionsTypeScript
@@ -203,6 +232,7 @@ export function resolvePackageModule(
  * Search for it using the given directory.
  *
  * @param context Resolver context
+ * @param options Compiler options
  * @param moduleRef Module to resolve
  * @param searchDir Directory to search for the module file
  * @param extensions List of allowed module file extensions
@@ -210,14 +240,21 @@ export function resolvePackageModule(
  */
 export function resolveFileModule(
   context: ResolverContext,
+  options: ts.CompilerOptions,
   moduleRef: FileModuleRef,
   searchDir: string,
   extensions: ts.Extension[]
 ): ts.ResolvedModuleFull | undefined {
-  const { host, options } = context;
+  const { host } = context;
 
   if (isTraceEnabled(host, options)) {
     host.trace(`Loading module from directory '${searchDir}'.`);
   }
-  return findModuleFile(context, searchDir, moduleRef.path, extensions);
+  return findModuleFile(
+    context,
+    options,
+    searchDir,
+    moduleRef.path,
+    extensions
+  );
 }

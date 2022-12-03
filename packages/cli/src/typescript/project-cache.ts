@@ -144,7 +144,6 @@ export function createProjectCache(
       const disableReactNativePackageSubstitution = true;
       changeHostToUseReactNativeResolver({
         host,
-        options: cmdLine.options,
         platform,
         platformExtensionNames,
         disableReactNativePackageSubstitution,

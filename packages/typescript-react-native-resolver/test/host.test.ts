@@ -31,7 +31,6 @@ describe("Host > changeHostToUseReactNativeResolver", () => {
 
     changeHostToUseReactNativeResolver({
       host,
-      options: {},
       platform: "ios",
       platformExtensionNames: ["native"],
       disableReactNativePackageSubstitution: false,
@@ -57,7 +56,6 @@ describe("Host > resolveModuleName", () => {
     host: {
       realpath: mockRealpath,
     } as unknown as ts.CompilerHost,
-    options: {},
   } as unknown as ResolverContext;
 
   afterEach(() => {
@@ -74,6 +72,7 @@ describe("Host > resolveModuleName", () => {
       context,
       "@scope/package",
       "/repos/rnx-kit/packages/test-app/lib/app.js",
+      {},
       []
     );
     expect(module.isExternalLibraryImport).toBeTrue();
@@ -89,6 +88,7 @@ describe("Host > resolveModuleName", () => {
       context,
       "./config",
       "/repos/rnx-kit/packages/test-app/lib/app.js",
+      {},
       []
     );
     expect(module.isExternalLibraryImport).toBeFalse();
@@ -105,6 +105,7 @@ describe("Host > resolveModuleName", () => {
       context,
       "./param",
       "/repos/rnx-kit/node_modules/@scope/package/index.d.ts",
+      {},
       []
     );
     expect(module.isExternalLibraryImport).toBeTrue();
@@ -121,6 +122,7 @@ describe("Host > resolveModuleName", () => {
       context,
       "find-up",
       "/repos/rnx-kit/packages/tools-node/src/fs.ts",
+      {},
       []
     );
     expect(module.isExternalLibraryImport).toBeTrue();
@@ -136,12 +138,12 @@ describe("Host > resolveModuleNames", () => {
       trace: mockTrace,
       realpath: mockRealpath,
     } as unknown as ModuleResolutionHostLike,
-    options: {
-      traceResolution: true,
-      resolveJsonModule: true,
-    },
     replaceReactNativePackageName: (x: string) => x + "-replaced",
   } as unknown as ResolverContext;
+  const options: ts.CompilerOptions = {
+    traceResolution: true,
+    resolveJsonModule: true,
+  };
 
   afterEach(() => {
     jest.resetAllMocks();
@@ -156,6 +158,9 @@ describe("Host > resolveModuleNames", () => {
       context,
       ["pkg-dir", "pkg-up"],
       "/repos/rnx-kit/packages/test-app/src/app.ts",
+      undefined,
+      undefined,
+      options,
       undefined
     );
     expect(modules).not.toBeNil();
@@ -175,14 +180,17 @@ describe("Host > resolveModuleNames", () => {
       context,
       ["pkg-dir", "pkg-up"],
       "/repos/rnx-kit/packages/test-app/src/app.ts",
+      undefined,
+      undefined,
+      options,
       undefined
     );
 
     expect(resolvePackageModule).toBeCalledTimes(2);
     const calls = (resolvePackageModule as jest.Mock).mock.calls;
-    // 2nd argument: PackageModuleRef
-    expect(calls[0][1]).toEqual({ name: "pkg-dir-replaced" });
-    expect(calls[1][1]).toEqual({ name: "pkg-up-replaced" });
+    // 3rd argument: PackageModuleRef
+    expect(calls[0][2]).toEqual({ name: "pkg-dir-replaced" });
+    expect(calls[1][2]).toEqual({ name: "pkg-up-replaced" });
 
     expect(mockTrace).toBeCalled();
   });
@@ -192,15 +200,18 @@ describe("Host > resolveModuleNames", () => {
       context,
       ["pkg-dir"],
       "/repos/rnx-kit/packages/test-app/src/app.ts",
+      undefined,
+      undefined,
+      options,
       undefined
     );
 
     expect(resolvePackageModule).toBeCalledTimes(3);
     const calls = (resolvePackageModule as jest.Mock).mock.calls;
-    // 4th argument: ts.Extension[]
-    expect(calls[0][3]).toEqual(ExtensionsTypeScript);
-    expect(calls[1][3]).toEqual(ExtensionsJavaScript);
-    expect(calls[2][3]).toEqual(ExtensionsJSON);
+    // 5th argument: ts.Extension[]
+    expect(calls[0][4]).toEqual(ExtensionsTypeScript);
+    expect(calls[1][4]).toEqual(ExtensionsJavaScript);
+    expect(calls[2][4]).toEqual(ExtensionsJSON);
 
     expect(mockTrace).toBeCalled();
   });
@@ -215,14 +226,15 @@ describe("Host > resolveTypeReferenceDirectives", () => {
     const origResolveTypeReferenceDirective = ts.resolveTypeReferenceDirective;
     ts.resolveTypeReferenceDirective = mockResolveTypeReferenceDirective;
 
-    const context = {
-      options: {},
-    } as unknown as ResolverContext;
+    const context = {} as unknown as ResolverContext;
 
     const directives = resolveTypeReferenceDirectives(
       context,
       ["type-ref"],
-      "parent-file.ts"
+      "parent-file.ts",
+      undefined,
+      {},
+      undefined
     );
     expect(mockResolveTypeReferenceDirective).toBeCalled();
     expect(directives).toBeArrayOfSize(1);

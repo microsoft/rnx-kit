@@ -20,12 +20,10 @@ const context = {
     getDirectories: ts.sys.getDirectories,
   },
 
-  options: {
-    traceResolution: true,
-  },
-
   platformExtensions: [".ios", ".native"],
 } as unknown as ResolverContext;
+
+const options: ts.CompilerOptions = { traceResolution: true };
 
 const extensions = [ts.Extension.Ts, ts.Extension.Tsx, ts.Extension.Dts];
 
@@ -46,19 +44,25 @@ describe("Resolve > resolveModule", () => {
   });
 
   test("resolves module path carbon", () => {
-    const result = resolveModule(context, fixturePath, "carbon", extensions);
+    const result = resolveModule(
+      context,
+      options,
+      fixturePath,
+      "carbon",
+      extensions
+    );
     expect(result).not.toBeNil();
     expect(result.resolvedFileName).toEqual(pathOf("carbon.ts"));
   });
 
   test("fails to resolve a module path that does not exist", () => {
     expect(
-      resolveModule(context, fixturePath, "does-not-exist", extensions)
+      resolveModule(context, options, fixturePath, "does-not-exist", extensions)
     ).toBeUndefined();
   });
 
   function resolveTest(packageDir: string, resolvedPath: string): void {
-    const result = resolveModule(context, packageDir, "", extensions);
+    const result = resolveModule(context, options, packageDir, "", extensions);
     expect(result).not.toBeNil();
     expect(result.resolvedFileName).toEqual(resolvedPath);
     expect(mockTrace).toBeCalled();
@@ -98,6 +102,7 @@ describe("Resolve > resolvePackageModule", () => {
 
     const result = resolvePackageModule(
       context,
+      options,
       packageModuleRef,
       fixturePath,
       extensions
@@ -145,6 +150,7 @@ describe("Resolve > resolvePackageModule", () => {
     expect(
       resolvePackageModule(
         context,
+        options,
         { name: "does-not-exist" },
         fixturePath,
         extensions
@@ -162,6 +168,7 @@ describe("Resolve > resolveFileModule", () => {
   test("resolves ./aluminum/core to file core.ts in directory aluminum", () => {
     const result = resolveFileModule(
       context,
+      options,
       { path: "./aluminum/core" },
       fixturePath,
       extensions

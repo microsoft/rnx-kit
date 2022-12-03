@@ -22,7 +22,6 @@ function configureCompilerHost(
     //
     changeHostToUseReactNativeResolver({
       host: compilerHost,
-      options: cmdLine.ts.options,
       platform,
       platformExtensionNames: platformExtensions,
       disableReactNativePackageSubstitution:

@@ -17,7 +17,6 @@ const host: ModuleResolutionHostLike = {
 const platformExtensions = [".ios", ".native"];
 const context = {
   host,
-  options: {},
   platformExtensions,
 } as unknown as ResolverContext;
 
@@ -38,7 +37,13 @@ function find(
     ts.Extension.Jsx,
   ]
 ): string | undefined {
-  const result = findModuleFile(context, fixturePath, modulePath, extensions);
+  const result = findModuleFile(
+    context,
+    {},
+    fixturePath,
+    modulePath,
+    extensions
+  );
   return result ? result.resolvedFileName : undefined;
 }
 
