@@ -1,7 +1,7 @@
+import "jest-extended";
 import path from "path";
 import ts from "typescript";
 
-import { ResolverLog } from "../src/log";
 import {
   resolveModule,
   resolvePackageModule,
@@ -9,22 +9,20 @@ import {
 } from "../src/resolve";
 import type { ResolverContext } from "../src/types";
 
-const mockLog = jest.fn();
+const mockTrace = jest.fn();
 const context = {
   host: {
     fileExists: ts.sys.fileExists,
     readFile: ts.sys.readFile,
-    trace: (_: string) => {
-      // nop
-    },
+    trace: mockTrace,
     directoryExists: ts.sys.directoryExists,
     realpath: ts.sys.realpath,
     getDirectories: ts.sys.getDirectories,
   },
 
-  log: {
-    log: mockLog,
-  } as unknown as ResolverLog,
+  options: {
+    traceResolution: true,
+  },
 
   platformExtensions: [".ios", ".native"],
 } as unknown as ResolverContext;
@@ -63,7 +61,7 @@ describe("Resolve > resolveModule", () => {
     const result = resolveModule(context, packageDir, "", extensions);
     expect(result).not.toBeNil();
     expect(result.resolvedFileName).toEqual(resolvedPath);
-    expect(mockLog).toBeCalled();
+    expect(mockTrace).toBeCalled();
   }
 
   test("resolves module helium using the types package property", () => {
@@ -106,7 +104,7 @@ describe("Resolve > resolvePackageModule", () => {
     );
     expect(result).not.toBeNil();
     expect(result.resolvedFileName).toEqual(resolvedPath);
-    expect(mockLog).toBeCalled();
+    expect(mockTrace).toBeCalled();
   }
 
   test("resolves to file element.ts in external package flourine'", () => {
@@ -152,7 +150,7 @@ describe("Resolve > resolvePackageModule", () => {
         extensions
       )
     ).toBeUndefined();
-    expect(mockLog).toBeCalled();
+    expect(mockTrace).toBeCalled();
   });
 });
 
@@ -170,6 +168,6 @@ describe("Resolve > resolveFileModule", () => {
     );
     expect(result).not.toBeNil();
     expect(result.resolvedFileName).toEqual(pathOf("aluminum", "core.ts"));
-    expect(mockLog).toBeCalled();
+    expect(mockTrace).toBeCalled();
   });
 });

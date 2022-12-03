@@ -66,14 +66,6 @@ export class Usage {
       "--disableReactNativePackageSubstitution",
       "The react-native resolver maps module references from 'react-native' to the target platform's implementation, such as 'react-native-windows' for Windows, and 'react-native-macos' MacOS. This option disables that behavior."
     );
-    this.option(
-      "--traceReactNativeModuleResolutionErrors",
-      "When the react-native resolver is active, display a detailed report whenever it fails to map a module to a file name."
-    );
-    this.option(
-      "--traceResolutionLog <logFile>",
-      "Write all resolution trace messages to a log file, instead of to the console. Trace messages are appended to the end of the file, and it is created if it doesn't exist."
-    );
 
     if (this.pkg?.homepage) {
       console.log(

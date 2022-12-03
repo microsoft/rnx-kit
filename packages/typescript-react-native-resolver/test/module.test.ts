@@ -2,7 +2,6 @@ import path from "path";
 import ts from "typescript";
 
 import { findModuleFile } from "../src/module";
-import { ResolverLog, ResolverLogMode } from "../src/log";
 import type { ResolverContext, ModuleResolutionHostLike } from "../src/types";
 
 const host: ModuleResolutionHostLike = {
@@ -15,9 +14,12 @@ const host: ModuleResolutionHostLike = {
   realpath: ts.sys.realpath,
   getDirectories: ts.sys.getDirectories,
 };
-const log = new ResolverLog(ResolverLogMode.Never);
 const platformExtensions = [".ios", ".native"];
-const context = { host, log, platformExtensions } as unknown as ResolverContext;
+const context = {
+  host,
+  options: {},
+  platformExtensions,
+} as unknown as ResolverContext;
 
 const fixturePath = path.join(
   process.cwd(),

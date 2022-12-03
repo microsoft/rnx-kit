@@ -11,7 +11,6 @@ import {
   resolveTypeReferenceDirectives,
 } from "../src/host";
 import type { ModuleResolutionHostLike, ResolverContext } from "../src/types";
-import { ResolverLog, ResolverLogMode } from "../src/log";
 import {
   ExtensionsTypeScript,
   ExtensionsJavaScript,
@@ -19,89 +18,35 @@ import {
 } from "../src/extension";
 
 describe("Host > changeHostToUseReactNativeResolver", () => {
-  const mockDirectoryExists = jest.fn();
-  const mockFileExists = jest.fn();
   const mockGetCurrentDirectory = jest.fn();
-  const mockGetDirectories = jest.fn();
-  const mockReadFile = jest.fn();
-  const mockRealpath = jest.fn();
-  const host = {
-    directoryExists: mockDirectoryExists,
-    fileExists: mockFileExists,
-    getCurrentDirectory: mockGetCurrentDirectory,
-    getDirectories: mockGetDirectories,
-    readFile: mockReadFile,
-    realpath: mockRealpath,
-  } as unknown as ts.CompilerHost;
 
   afterEach(() => {
     jest.resetAllMocks();
   });
 
-  function testChangeHost(): void {
+  function createTestHost(): ts.CompilerHost {
+    const host = {
+      getCurrentDirectory: mockGetCurrentDirectory,
+    } as unknown as ts.CompilerHost;
+
     changeHostToUseReactNativeResolver({
       host,
       options: {},
       platform: "ios",
       platformExtensionNames: ["native"],
       disableReactNativePackageSubstitution: false,
-      traceReactNativeModuleResolutionErrors: true,
-      traceResolutionLog: undefined,
     });
+
+    return host;
   }
 
-  test("sets the trace function to ensure trace logging is possible", () => {
-    testChangeHost();
-    expect(host.trace).toBeFunction();
-  });
-
-  test("hooks fileExists with a function that calls the original function", () => {
-    testChangeHost();
-    expect(host.fileExists).toBeFunction();
-    expect(host.fileExists).not.toBe(mockFileExists);
-    host.fileExists("alpha");
-    expect(mockFileExists).toBeCalledWith("alpha");
-  });
-
-  test("hooks readFile with a function that calls the original function", () => {
-    testChangeHost();
-    expect(host.readFile).toBeFunction();
-    expect(host.readFile).not.toBe(mockReadFile);
-    host.readFile("beta");
-    expect(mockReadFile).toBeCalledWith("beta");
-  });
-
-  test("hooks directoryExists with a function that calls the original function", () => {
-    testChangeHost();
-    expect(host.directoryExists).toBeFunction();
-    expect(host.directoryExists).not.toBe(mockDirectoryExists);
-    host.directoryExists("gamma");
-    expect(mockDirectoryExists).toBeCalledWith("gamma");
-  });
-
-  test("hooks realpath with a function that calls the original function", () => {
-    testChangeHost();
-    expect(host.realpath).toBeFunction();
-    expect(host.realpath).not.toBe(mockRealpath);
-    host.realpath("delta");
-    expect(mockRealpath).toBeCalledWith("delta");
-  });
-
-  test("hooks getDirectories with a function that calls the original function", () => {
-    testChangeHost();
-    expect(host.getDirectories).toBeFunction();
-    expect(host.getDirectories).not.toBe(mockGetDirectories);
-    host.getDirectories("epsilon");
-    expect(mockGetDirectories).toBeCalledWith("epsilon");
-  });
-
   test("sets resolveModuleNames", () => {
-    testChangeHost();
+    const host = createTestHost();
     expect(host.resolveModuleNames).toBeFunction();
   });
 
   test("sets resolveTypeReferenceDirectives", () => {
-    testChangeHost();
+    const host = createTestHost();
     expect(host.resolveTypeReferenceDirectives).toBeFunction();
   });
 });
@@ -184,15 +129,17 @@ describe("Host > resolveModuleName", () => {
 });
 
 describe("Host > resolveModuleNames", () => {
+  const mockTrace = jest.fn();
   const mockRealpath = jest.fn();
   const context = {
     host: {
+      trace: mockTrace,
       realpath: mockRealpath,
     } as unknown as ModuleResolutionHostLike,
     options: {
+      traceResolution: true,
       resolveJsonModule: true,
     },
-    log: new ResolverLog(ResolverLogMode.Never),
     replaceReactNativePackageName: (x: string) => x + "-replaced",
   } as unknown as ResolverContext;
 
@@ -215,6 +162,8 @@ describe("Host > resolveModuleNames", () => {
     expect(modules).toBeArrayOfSize(2);
     expect(modules[0]).not.toBeNil();
     expect(modules[1]).not.toBeNil();
+
+    expect(mockTrace).toBeCalled();
   });
 
   test("replaces react-native module with react-native-windows when on the Windows platform", () => {
@@ -234,6 +183,8 @@ describe("Host > resolveModuleNames", () => {
     // 2nd argument: PackageModuleRef
     expect(calls[0][1]).toEqual({ name: "pkg-dir-replaced" });
     expect(calls[1][1]).toEqual({ name: "pkg-up-replaced" });
+
+    expect(mockTrace).toBeCalled();
   });
 
   test("tries TypeScript, then JavaScript, then JSON module resolution", () => {
@@ -250,6 +201,8 @@ describe("Host > resolveModuleNames", () => {
     expect(calls[0][3]).toEqual(ExtensionsTypeScript);
     expect(calls[1][3]).toEqual(ExtensionsJavaScript);
     expect(calls[2][3]).toEqual(ExtensionsJSON);
+
+    expect(mockTrace).toBeCalled();
   });
 });
 
@@ -264,7 +217,6 @@ describe("Host > resolveTypeReferenceDirectives", () => {
 
     const context = {
       options: {},
-      log: new ResolverLog(ResolverLogMode.Never),
     } as unknown as ResolverContext;
 
     const directives = resolveTypeReferenceDirectives(

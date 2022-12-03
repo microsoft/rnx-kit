@@ -18,8 +18,6 @@ export type ParsedCommandLineRnTs = {
   platform?: string;
   platformExtensions?: string[];
   disableReactNativePackageSubstitution?: boolean;
-  traceReactNativeModuleResolutionErrors?: boolean;
-  traceResolutionLog?: string;
 };
 
 export type CommandLine = {
@@ -54,29 +52,11 @@ export function parseCommandLineRnTs(args: string[]): {
     );
   }
 
-  const traceReactNativeModuleResolutionErrors = extractParameterFlag(
-    argsCopy,
-    "traceReactNativeModuleResolutionErrors"
-  );
-  if (!platform && traceReactNativeModuleResolutionErrors) {
-    reportParameterDependencyViolation(
-      "traceReactNativeModuleResolutionErrors",
-      "platform"
-    );
-  }
-
-  const traceResolutionLog = extractParameterValue(
-    argsCopy,
-    "traceResolutionLog"
-  );
-
   return {
     cmdLineRnTs: {
       platform,
       platformExtensions,
       disableReactNativePackageSubstitution,
-      traceReactNativeModuleResolutionErrors,
-      traceResolutionLog,
     },
     tsArgs: argsCopy,
   };
