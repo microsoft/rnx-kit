@@ -29,6 +29,7 @@ describe("Parse > parseCommandLineRnTs", () => {
     const result = parseCommandLineRnTs(getRnArgs());
     expect(result.tsArgs.indexOf("--platformExtensions")).toEqual(-1);
     expect(result.cmdLineRnTs.platformExtensions).toIncludeSameMembers([
+      "ios",
       "native",
       "mobile",
     ]);

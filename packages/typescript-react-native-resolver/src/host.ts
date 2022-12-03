@@ -24,7 +24,7 @@ import type { ResolverContext, ModuleResolutionHostLike } from "./types";
  * @param host Compiler host or language service host
  * @param options Compiler options
  * @param platform Target platform
- * @param platformExtensionNames Optional list of platform file extensions, from highest precedence (index 0) to lowest. Example: `["ios", "mobile", "native"]`.
+ * @param platformExtensionNames List of platform file extensions, from highest precedence (index 0) to lowest. Example: `["ios", "mobile", "native"]`.
  * @param disableReactNativePackageSubstitution Flag to prevent substituting the module name `react-native` with the target platform's out-of-tree NPM package implementation. For example, on Windows, devs expect `react-native` to implicitly refer to `react-native-windows`.
  */
 export function changeHostToUseReactNativeResolver({
@@ -37,7 +37,7 @@ export function changeHostToUseReactNativeResolver({
   host: ts.CompilerHost | ts.LanguageServiceHost;
   options: ts.ParsedCommandLine["options"];
   platform: string;
-  platformExtensionNames: string[] | undefined;
+  platformExtensionNames: string[];
   disableReactNativePackageSubstitution: boolean;
 }): void {
   // Ensure that optional methods have an implementation so they can be hooked
@@ -51,7 +51,7 @@ export function changeHostToUseReactNativeResolver({
     options,
     disableReactNativePackageSubstitution,
     platform,
-    platformExtensions: [platform, ...(platformExtensionNames || [])].map(
+    platformExtensions: platformExtensionNames.map(
       (e) => `.${e}` // prepend a '.' to each name to make it a file extension
     ),
     replaceReactNativePackageName: createReactNativePackageNameReplacer(

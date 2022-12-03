@@ -33,12 +33,20 @@ export function parseCommandLineRnTs(args: string[]): {
 
   const platform = extractParameterValue(argsCopy, "platform");
 
-  const platformExtensions = extractParameterValue(
+  let platformExtensions = extractParameterValue(
     argsCopy,
     "platformExtensions"
   )?.split(",");
-  if (!platform && platformExtensions) {
-    reportParameterDependencyViolation("platformExtensions", "platform");
+  if (!platform) {
+    if (platformExtensions) {
+      reportParameterDependencyViolation("platformExtensions", "platform");
+    }
+  } else {
+    if (!platformExtensions) {
+      platformExtensions = [platform];
+    } else {
+      platformExtensions.unshift(platform);
+    }
   }
 
   const disableReactNativePackageSubstitution = extractParameterFlag(
