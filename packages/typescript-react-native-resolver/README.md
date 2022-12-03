@@ -10,12 +10,5 @@
 `@rnx-kit/typescript-react-native-resolver` is a TypeScript module resolver for
 use with react-native projects.
 
-This package is intended to be used with `@rnx-kit/typescript-service`. It
-exports an implementation of `ResolverHost` which combines Node resolution with
-react-native resolution.
-
-The resolver uses the target platform to find platform-override files such as
-`foo.ios.ts` and `foo.native.ts`. It also maps `react-native` module references
-to out-of-tree platforms such as `react-native-windows` and
-`react-native-macos`. For performance reasons, these mappings are built into the
-resolver, rather than loaded dynamically using `@react-native-community/cli`.
+This package is intended for internal use by `@rnx-kit/cli` and
+`@rnx-kit/typescript-react-native-compiler`.
