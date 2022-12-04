@@ -22,7 +22,9 @@
   },
   "dependencies": {
     "@rnx-kit/tools-node": "^1.2.7",
-    "@rnx-kit/tools-react-native": "^1.2.0"
+    "@rnx-kit/tools-react-native": "^1.2.0",
+    "lodash": "^4.17.21",
+    "semver": "^7.3.8"
   },
   "devDependencies": {
     "@rnx-kit/scripts": "*",
