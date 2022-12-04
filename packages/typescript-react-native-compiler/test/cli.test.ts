@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from "path";
-import tempDir from "temp-dir";
+import { createTestDirectory, removeTestDirectory } from "./utils";
 
 import { showAllHelp, showHelp, showVersion } from "../src/commands";
 import { compile } from "../src/compile";
@@ -18,14 +18,14 @@ describe("CLI > cli", () => {
   let testTempDir: string;
 
   beforeEach(() => {
-    testTempDir = fs.mkdtempSync(
-      path.join(tempDir, "rnx-kit-typescript-react-native-compiler-cli-test-")
+    testTempDir = createTestDirectory(
+      "rnx-kit-typescript-react-native-compiler-cli-test-"
     );
   });
 
   afterEach(() => {
     jest.resetAllMocks();
-    fs.rmdirSync(testTempDir, { maxRetries: 5, recursive: true });
+    removeTestDirectory(testTempDir);
   });
 
   test("shows the version when --version is on the command-line", () => {

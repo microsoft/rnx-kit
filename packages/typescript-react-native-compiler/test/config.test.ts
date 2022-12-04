@@ -1,7 +1,6 @@
-import fs from "fs";
 import path from "path";
-import tempDir from "temp-dir";
 import ts from "typescript";
+import { createTestDirectory, removeTestDirectory } from "./utils";
 
 import { parseCommandLine } from "../src/command-line";
 import {
@@ -42,16 +41,13 @@ describe("Config > ensureConfigFileOrSourceFiles", () => {
   let testTempDir: string;
 
   beforeEach(() => {
-    testTempDir = fs.mkdtempSync(
-      path.join(
-        tempDir,
-        "rnx-kit-typescript-react-native-compiler-config-test-"
-      )
+    testTempDir = createTestDirectory(
+      "rnx-kit-typescript-react-native-compiler-config-test-"
     );
   });
 
   afterEach(() => {
-    fs.rmdirSync(testTempDir, { maxRetries: 5, recursive: true });
+    removeTestDirectory(testTempDir);
   });
 
   test("returns a config file when the 'project' option is set", () => {
