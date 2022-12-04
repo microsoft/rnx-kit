@@ -1,4 +1,5 @@
 import "jest-extended";
+import semverSatisfies from "semver/functions/satisfies";
 import ts from "typescript";
 
 import { resolveFileModule, resolvePackageModule } from "../src/resolve";
@@ -11,11 +12,6 @@ import {
   resolveTypeReferenceDirectives,
 } from "../src/host";
 import type { ModuleResolutionHostLike, ResolverContext } from "../src/types";
-import {
-  ExtensionsTypeScript,
-  ExtensionsJavaScript,
-  ExtensionsJSON,
-} from "../src/extension";
 
 describe("Host > changeHostToUseReactNativeResolver", () => {
   const mockGetCurrentDirectory = jest.fn();
@@ -136,8 +132,8 @@ describe("Host > resolveModuleNames", () => {
   const context = {
     host: {
       trace: mockTrace,
-      realpath: mockRealpath,
     } as unknown as ModuleResolutionHostLike,
+    platformExtensions: [".ios", ".native", ""],
     replaceReactNativePackageName: (x: string) => x + "-replaced",
   } as unknown as ResolverContext;
   const options: ts.CompilerOptions = {
@@ -145,75 +141,62 @@ describe("Host > resolveModuleNames", () => {
     resolveJsonModule: true,
   };
 
+  beforeAll(() => {
+    // We use TS >= 4.7 in our repo. This ensures that the version is proplery restored.
+    // These tests will run using the TS resolved with moduleSuffixes, and will bypass
+    // our own internal resolver.
+    expect(semverSatisfies(ts.version, ">=4.7.0")).toBeTrue();
+  });
+
   afterEach(() => {
     jest.resetAllMocks();
   });
 
   test("resolves each module", () => {
-    const resolvedFileName = "/repos/rnx-kit/node_modules/pkg-dir/index.d.ts";
-    (resolvePackageModule as jest.Mock).mockReturnValue({ resolvedFileName });
-    mockRealpath.mockReturnValue(resolvedFileName);
+    const origTsResolveModuleName = ts.resolveModuleName;
+    const mockTsResolveModuleName = jest.fn();
+    ts.resolveModuleName = mockTsResolveModuleName;
+    try {
+      mockTsResolveModuleName
+        .mockReturnValueOnce({ resolvedModule: { resolvedFileName: "first" } })
+        .mockReturnValueOnce({
+          resolvedModule: { resolvedFileName: "second" },
+        });
 
-    const modules = resolveModuleNames(
-      context,
-      ["pkg-dir", "pkg-up"],
-      "/repos/rnx-kit/packages/test-app/src/app.ts",
-      undefined,
-      undefined,
-      options,
-      undefined
-    );
-    expect(modules).not.toBeNil();
-    expect(modules).toBeArrayOfSize(2);
-    expect(modules[0]).not.toBeNil();
-    expect(modules[1]).not.toBeNil();
+      const modules = resolveModuleNames(
+        context,
+        ["pkg-dir", "pkg-up"],
+        "/repos/rnx-kit/packages/test-app/src/app.ts",
+        undefined,
+        undefined,
+        options,
+        undefined
+      );
 
-    expect(mockTrace).toBeCalled();
-  });
+      expect(mockTsResolveModuleName).toHaveBeenCalledTimes(2);
+      const calls = mockTsResolveModuleName.mock.calls;
+      // 1st param: module name
+      expect(calls[0][0]).toEqual("pkg-dir-replaced");
+      expect(calls[1][0]).toEqual("pkg-up-replaced");
+      // 3rd param: CompilerOptions
+      expect(calls[0][2]).toContainEntry([
+        "moduleSuffixes",
+        [".ios", ".native", ""],
+      ]);
+      expect(calls[1][2]).toContainEntry([
+        "moduleSuffixes",
+        [".ios", ".native", ""],
+      ]);
 
-  test("replaces react-native module with react-native-windows when on the Windows platform", () => {
-    const resolvedFileName = "/repos/rnx-kit/node_modules/pkg-dir/index.d.ts";
-    (resolvePackageModule as jest.Mock).mockReturnValue({ resolvedFileName });
-    mockRealpath.mockReturnValue(resolvedFileName);
+      expect(modules).not.toBeNil();
+      expect(modules).toBeArrayOfSize(2);
+      expect(modules[0]).toEqual({ resolvedFileName: "first" });
+      expect(modules[1]).toEqual({ resolvedFileName: "second" });
 
-    resolveModuleNames(
-      context,
-      ["pkg-dir", "pkg-up"],
-      "/repos/rnx-kit/packages/test-app/src/app.ts",
-      undefined,
-      undefined,
-      options,
-      undefined
-    );
-
-    expect(resolvePackageModule).toBeCalledTimes(2);
-    const calls = (resolvePackageModule as jest.Mock).mock.calls;
-    // 3rd argument: PackageModuleRef
-    expect(calls[0][2]).toEqual({ name: "pkg-dir-replaced" });
-    expect(calls[1][2]).toEqual({ name: "pkg-up-replaced" });
-
-    expect(mockTrace).toBeCalled();
-  });
-
-  test("tries TypeScript, then JavaScript, then JSON module resolution", () => {
-    resolveModuleNames(
-      context,
-      ["pkg-dir"],
-      "/repos/rnx-kit/packages/test-app/src/app.ts",
-      undefined,
-      undefined,
-      options,
-      undefined
-    );
-
-    expect(resolvePackageModule).toBeCalledTimes(3);
-    const calls = (resolvePackageModule as jest.Mock).mock.calls;
-    // 5th argument: ts.Extension[]
-    expect(calls[0][4]).toEqual(ExtensionsTypeScript);
-    expect(calls[1][4]).toEqual(ExtensionsJavaScript);
-    expect(calls[2][4]).toEqual(ExtensionsJSON);
-
-    expect(mockTrace).toBeCalled();
+      expect(mockTrace).toBeCalled();
+    } finally {
+      ts.resolveModuleName = origTsResolveModuleName;
+    }
   });
 });
 

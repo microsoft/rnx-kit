@@ -3,7 +3,10 @@ import {
   isPackageModuleRef,
   parseModuleRef,
 } from "@rnx-kit/tools-node";
+import intersection from "lodash/intersection";
+import isEqual from "lodash/isEqual";
 import path from "path";
+import semverSatisfies from "semver/functions/satisfies";
 import ts from "typescript";
 
 import {
@@ -62,6 +65,150 @@ export function changeHostToUseReactNativeResolver({
     undefined,
     context
   );
+}
+
+/**
+ * Starting with TypeScript 4.7, a new compiler option named `moduleSuffixes` is
+ * available. We can use this to configure the built-in TypeScript module resolver
+ * for React Native projects. Using the TS resolver, rather than our own, is best
+ * because it is actively maintained, up-to-date with changes in the node ecosystem,
+ * and supports more scenarios such as path remapping (baseUrl, paths, rootDir).
+ *
+ * @returns `true` if TypeScript supports the `moduleSuffixes` compiler option. `false`, otherwise.
+ */
+export function doesTypeScriptSupportModuleSuffixes(): boolean {
+  return semverSatisfies(ts.version, ">=4.7.0");
+}
+
+/**
+ * Get TypeScript compiler options with the `moduleSuffixes` property configured
+ * for the current React Native project. `moduleSuffixes` must contain all of the
+ * React Native platform file extensions -- in precedence order.
+ *
+ * Examine the given set of compiler options for the project. If `moduleSuffixes`
+ * is already set, and it does not contain the right React Native entries, we will
+ * throw an error. We cannot proceed because there's no way to **safely** add to
+ * `moduleSuffixes`. Additions change the way modules are resolved to files, and
+ * can only be done reliably by the package owner.
+ *
+ * When an error is thrown, it explains this, and offers some options to the developer.
+ *
+ * @param context Resolver context. Describes the current React Native project.
+ * @param moduleName Name of the module being resolved (used for error reporting).
+ * @param containingFile File containing the module reference (used for error reporting).
+ * @param options Compiler options for the module
+ * @returns Compiler options with a `moduleSuffixes` property containing the list of React Native platform file extensions. This may be input options object, or it may be a copy (if changes were made).
+ */
+export function getCompilerOptionsWithReactNativeModuleSuffixes(
+  context: ResolverContext,
+  moduleName: string,
+  containingFile: string,
+  options: ts.CompilerOptions
+): ts.CompilerOptions {
+  if (!options.moduleSuffixes) {
+    //  `moduleSuffixes` is not defined. Return a copy of the input object with
+    //  `moduleSuffixes` set to the list of React Native platform extensions.
+    return {
+      ...options,
+      moduleSuffixes: [...context.platformExtensions],
+    };
+  }
+
+  //  `moduleSuffixes` is already defined in the module's compiler options.
+  //  We cannot safely modify it because we don't know how to order the entries
+  //  when adding those needed for React Native. Ordering matters because it controls
+  //  file selection. e.g. If "ios" comes before "native", then "foo.ios.ts" will be
+  //  resolved ahead of "foo.native.ts".
+  //
+  //  The best we can do is check `moduleSuffixes` to see if the React Native entries
+  //  we need are already there, in order. If not, we have to fail.
+
+  const suffixesIntersection = intersection(
+    options.moduleSuffixes,
+    context.platformExtensions
+  );
+  const neededSuffixesAlreadyPresent = isEqual(
+    suffixesIntersection,
+    context.platformExtensions
+  );
+  if (!neededSuffixesAlreadyPresent) {
+    const currentSuffixes = options.moduleSuffixes.join(",");
+    const neededSuffixes = context.platformExtensions.join(",");
+    throw new Error(
+      `Failed to resolve module reference '${moduleName}' in source file '${containingFile}.\n` +
+        `The parent package has a TypeScript configuration which sets 'moduleSuffixes' to '${currentSuffixes}'.\n` +
+        `This is incompatible with the target platform '${context.platform}', which requires 'moduleSuffixes' to contain at least '${neededSuffixes}', in that order.\n` +
+        `We would like to understand any use cases where this error occurs, as there may be room to make improvements.\n` +
+        `Please add a comment about your scenario, and include this error message: https://github.com/microsoft/rnx-kit/discussions/1971.`
+    );
+  }
+
+  // Return the original compiler options, since we know they have the right
+  // `moduleSuffixes` entries for React Native resolution.
+  return options;
+}
+
+/**
+ * Resolves a module to a file using TypeScript's built-in module resolver and
+ * the `moduleSuffixes` compiler option.
+ *
+ * @param context Resolver context. Describes the current React Native project.
+ * @param moduleName Name of the module being resolved.
+ * @param containingFile File containing the module reference.
+ * @param options Compiler options for the module.
+ * @param redirectedReference
+ * @returns
+ */
+export function resolveModuleNameUsingModuleSuffixes(
+  context: ResolverContext,
+  moduleName: string,
+  containingFile: string,
+  options: ts.CompilerOptions,
+  redirectedReference?: ts.ResolvedProjectReference
+): ts.ResolvedModuleFull | undefined {
+  //  Ensure the compiler options has `moduleSuffixes` set correctly for this RN project.
+  const optionsWithSuffixes = getCompilerOptionsWithReactNativeModuleSuffixes(
+    context,
+    moduleName,
+    containingFile,
+    options
+  );
+
+  //
+  //  Invoke the built-in TypeScript module resolver.
+  //
+  //  One of the params it takes is a module resolution cache. We don't currently use
+  //  this, and TypeScript can operate without it, though it may be slower. We have not
+  //  done perf analysis to see how much of a benefit the cache provides.
+  //
+  //  If, down the road, we decide to add a cache, it should be created using:
+  //
+  //    `ts.createModuleResolutionCache(currentDirectory, getCanonicalFileName, options)`.
+  //
+  //  And we should store each per-directory cache in a map, attached to `context`.
+  //
+  const cache: ts.ModuleResolutionCache | undefined = undefined;
+
+  //  Another param the resolver takes is an explicit resolution mode: CommonJS or ESNext.
+  //  It is optional, and we leave it undefined, so that TypeScript chooses an apprporiate
+  //  default.
+  //
+  const resolutionMode:
+    | ts.ModuleKind.CommonJS
+    | ts.ModuleKind.ESNext
+    | undefined = undefined;
+
+  const module = ts.resolveModuleName(
+    moduleName,
+    containingFile,
+    optionsWithSuffixes,
+    context.host,
+    cache,
+    redirectedReference,
+    resolutionMode
+  ).resolvedModule;
+
+  return module;
 }
 
 /**
@@ -124,9 +271,13 @@ export function resolveModuleName(
 
 /**
  * Resolve a set of modules for a TypeScript program, all referenced from a
- * single containing file. Prefer type (.d.ts) files and TypeScript source
- * (.ts[x]) files, as they usually carry more type information than JavaScript
- * source (.js[x]) files.
+ * single containing file. When possible, delegate module resolution to TypeScript
+ * itself, rather than using our custom resolver, as the TypeScript resolver
+ * supports more scenarios than ours.
+ *
+ * When doing the module resolution ourselves, we prefer type (.d.ts) files and
+ * TypeScript source (.ts[x]) files, as they usually carry more type information
+ * than JavaScript source (.js[x]) files.
  *
  * @param context Resolver context
  * @param moduleNames List of module names, as they appear in each require/import statement
@@ -142,7 +293,7 @@ export function resolveModuleNames(
   moduleNames: string[],
   containingFile: string,
   _reusedNames: string[] | undefined,
-  _redirectedReference: ts.ResolvedProjectReference | undefined,
+  redirectedReference: ts.ResolvedProjectReference | undefined,
   options: ts.CompilerOptions,
   _containingSourceFile: ts.SourceFile | undefined
 ): (ts.ResolvedModuleFull | undefined)[] {
@@ -161,25 +312,40 @@ export function resolveModuleNames(
       );
     }
 
-    //  First, try to resolve the module to a TypeScript file. Then, fall back
-    //  to looking for a JavaScript file. Finally, if JSON modules are allowed,
-    //  try resolving to one of them.
-    if (traceEnabled) {
-      host.trace(
-        `Searching for module '${finalModuleName}' with target file type 'TypeScript'`
+    let module: ts.ResolvedModuleFull | undefined = undefined;
+    if (doesTypeScriptSupportModuleSuffixes()) {
+      module = resolveModuleNameUsingModuleSuffixes(
+        context,
+        finalModuleName,
+        containingFile,
+        options,
+        redirectedReference
       );
-    }
-    let module = resolveModuleName(
-      context,
-      finalModuleName,
-      containingFile,
-      options,
-      ExtensionsTypeScript
-    );
-    if (!module) {
+    } else {
+      //  We're using an older version of TypeScript which doesn't support
+      //  `moduleSuffixes`, which means we need to use our custom resolver.
+      //
+      //  Our resolver doesn't support TypeScript's path remapping features.
+      //  This can be confusing/misleading, so print an explicit error message
+      //  here if they are being used. This gives developers a clear signal
+      //  that there is a problem, and tells them how to proceed.
+      //
+      const { baseUrl, paths, rootDirs } = options;
+      if (baseUrl || paths || rootDirs) {
+        throw new Error(
+          "@rnx-kit/cli has TypeScript validation enabled, and has detected that tsconfig.json " +
+            "is using at least one of 'paths', 'baseURL', or 'rootDirs'. " +
+            "The CLI only supports these options with TypeScript 4.7 or later. " +
+            "Please upgrade TypeScript, turn off CLI TypeScript validation, or remove these tsconfig.json options."
+        );
+      }
+
+      //  First, try to resolve the module to a TypeScript file. Then, fall back
+      //  to looking for a JavaScript file. Finally, if JSON modules are allowed,
+      //  try resolving to one of them.
       if (traceEnabled) {
         host.trace(
-          `Searching for module '${finalModuleName}' with target file type 'JavaScript'`
+          `Searching for module '${finalModuleName}' with target file type 'TypeScript'`
         );
       }
       module = resolveModuleName(
@@ -187,12 +353,12 @@ export function resolveModuleNames(
         finalModuleName,
         containingFile,
         options,
-        ExtensionsJavaScript
+        ExtensionsTypeScript
       );
-      if (!module && options.resolveJsonModule) {
+      if (!module) {
         if (traceEnabled) {
           host.trace(
-            `Searching for module '${finalModuleName}' with target file type 'JSON'`
+            `Searching for module '${finalModuleName}' with target file type 'JavaScript'`
           );
         }
         module = resolveModuleName(
@@ -200,8 +366,22 @@ export function resolveModuleNames(
           finalModuleName,
           containingFile,
           options,
-          ExtensionsJSON
+          ExtensionsJavaScript
         );
+        if (!module && options.resolveJsonModule) {
+          if (traceEnabled) {
+            host.trace(
+              `Searching for module '${finalModuleName}' with target file type 'JSON'`
+            );
+          }
+          module = resolveModuleName(
+            context,
+            finalModuleName,
+            containingFile,
+            options,
+            ExtensionsJSON
+          );
+        }
       }
     }
 
@@ -251,6 +431,23 @@ export function resolveTypeReferenceDirectives(
       typeof typeDirectiveName === "string"
         ? typeDirectiveName
         : typeDirectiveName.fileName.toLowerCase();
+
+    //
+    //  Invoke the built-in TypeScript type-reference resolver.
+    //
+    //  One of the params it takes is a resolution cache. We don't currently use this,
+    //  and TypeScript can operate without it, though it may be slower. We have not done
+    //  perf analysis to see how much of a benefit the cache provides.
+    //
+    //  If, down the road, we decide to add a cache, it should be created using:
+    //
+    //    `ts.createTypeReferenceDirectiveResolutionCache(currentDirectory, ...)`
+    //
+    //  And we should store each per-directory cache in a map, attached to `context`.
+    //
+    const cache: ts.TypeReferenceDirectiveResolutionCache | undefined =
+      undefined;
+
     const { resolvedTypeReferenceDirective: directive } =
       ts.resolveTypeReferenceDirective(
         name,
@@ -258,7 +455,7 @@ export function resolveTypeReferenceDirectives(
         options,
         host,
         redirectedReference,
-        undefined, // for caching, create with ts.createTypeReferenceDirectiveResolutionCache(...)
+        cache,
         containingFileMode
       );
 
