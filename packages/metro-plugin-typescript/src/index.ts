@@ -1,0 +1,1 @@
+export { TypeScriptPlugin } from "./serializerHook";
