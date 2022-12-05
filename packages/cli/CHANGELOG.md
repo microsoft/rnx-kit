@@ -1,5 +1,13 @@
 # Change Log - @rnx-kit/cli
 
+## 0.15.2
+
+### Patch Changes
+
+- 2f0c782e: Extract TypeScript plugin to a separate package
+- Updated dependencies [2f0c782e]
+  - @rnx-kit/metro-plugin-typescript@0.1.0
+
 ## 0.15.1
 
 ### Patch Changes
