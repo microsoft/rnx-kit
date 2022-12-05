@@ -1,5 +1,4 @@
 import ts from "typescript";
-import type { ResolverLog } from "./log";
 
 /**
  * Host interface for handling module resolution queries.
@@ -50,11 +49,6 @@ export type ResolverContext = {
    * types for ios.
    */
   readonly disableReactNativePackageSubstitution: boolean;
-
-  /**
-   * Log for tracking module resolution activity
-   */
-  readonly log: ResolverLog;
 
   /**
    * Target platform.

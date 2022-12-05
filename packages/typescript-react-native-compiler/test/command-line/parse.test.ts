@@ -11,9 +11,6 @@ function getRnArgs(): string[] {
     "--platformExtensions",
     "mobile,native",
     "--disableReactNativePackageSubstitution",
-    "--traceReactNativeModuleResolutionErrors",
-    "--traceResolutionLog",
-    "trace.log",
   ];
 }
 
@@ -55,28 +52,6 @@ describe("Parse > parseCommandLineRnTs", () => {
     expect(() =>
       parseCommandLineRnTs(["--disableReactNativePackageSubstitution"])
     ).toThrowError();
-  });
-
-  test("extracts --traceReactNativeModuleResolutionErrors flag", () => {
-    const result = parseCommandLineRnTs(getRnArgs());
-    expect(
-      result.tsArgs.indexOf("--traceReactNativeModuleResolutionErrors")
-    ).toEqual(-1);
-    expect(
-      result.cmdLineRnTs.traceReactNativeModuleResolutionErrors
-    ).toBeTrue();
-  });
-
-  test("throws when --traceReactNativeModuleResolutionErrors is given without --platform", () => {
-    expect(() =>
-      parseCommandLineRnTs(["--traceReactNativeModuleResolutionErrors"])
-    ).toThrowError();
-  });
-
-  test("extracts --traceResolutionLog value", () => {
-    const result = parseCommandLineRnTs(getRnArgs());
-    expect(result.tsArgs.indexOf("--traceResolutionLog")).toEqual(-1);
-    expect(result.cmdLineRnTs.traceResolutionLog).toEqual("trace.log");
   });
 });
 
