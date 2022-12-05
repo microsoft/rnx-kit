@@ -1,5 +1,18 @@
 # Change Log - @rnx-kit/typescript-react-native-compiler
 
+## 0.0.9
+
+### Patch Changes
+
+- 94aeb460: BREAKING: remove command-line parameters
+  'traceReactNativeModuleResolutionErrors' and 'traceResolutionLog' which were
+  used for configuring custom trace logging. From this version onward, standard
+  TypeScript module resolution tracing applies. Set the compiler option
+  'traceResolution' to true, and you will see trace messages appear in the
+  console. Logging to a file is no longer supported.
+- Updated dependencies [94aeb460]
+  - @rnx-kit/typescript-react-native-resolver@0.3.0
+
 ## 0.0.8
 
 ### Patch Changes
