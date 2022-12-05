@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/jest-preset
 
+## 0.1.13
+
+### Patch Changes
+
+- 6c59f781: Add support for react-native-windows
+
 ## 0.1.12
 
 ### Patch Changes

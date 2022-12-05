@@ -103,16 +103,12 @@ export function createProjectCache(
     const enhanceLanguageServiceHost = (host: ts.LanguageServiceHost): void => {
       const platformExtensionNames = platformExtensions(platform);
       const disableReactNativePackageSubstitution = true;
-      const traceReactNativeModuleResolutionErrors = false;
-      const traceResolutionLog = undefined;
       changeHostToUseReactNativeResolver({
         host,
         options: cmdLine.options,
         platform,
         platformExtensionNames,
         disableReactNativePackageSubstitution,
-        traceReactNativeModuleResolutionErrors,
-        traceResolutionLog,
       });
     };
     const tsproject = new Project(

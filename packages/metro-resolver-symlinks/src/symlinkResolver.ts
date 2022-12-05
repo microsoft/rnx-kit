@@ -1,9 +1,28 @@
 import { normalizePath } from "@rnx-kit/tools-node";
-import type { CustomResolver, ResolutionContext } from "metro-resolver";
+import type {
+  CustomResolver,
+  Resolution,
+  ResolutionContext,
+} from "metro-resolver";
 import { requireModuleFromMetro } from "./helper";
 import { remapReactNativeModule, resolveModulePath } from "./resolver";
 import type { MetroResolver, Options } from "./types";
+import { applyEnhancedResolver } from "./utils/enhancedResolve";
+import {
+  patchMetro,
+  shouldEnableRetryResolvingFromDisk,
+} from "./utils/patchMetro";
 import { remapImportPath } from "./utils/remapImportPath";
+
+function applyMetroResolver(
+  resolve: CustomResolver,
+  context: ResolutionContext,
+  moduleName: string,
+  platform: string
+): Resolution {
+  const modifiedModuleName = resolveModulePath(context, moduleName, platform);
+  return resolve(context, normalizePath(modifiedModuleName), platform, null);
+}
 
 export function makeResolver(options: Options = {}): MetroResolver {
   const { resolve: metroResolver } =
@@ -11,7 +30,18 @@ export function makeResolver(options: Options = {}): MetroResolver {
 
   const { remapModule = (_, moduleName, __) => moduleName } = options;
 
-  const remappers = [remapModule, remapReactNativeModule, resolveModulePath];
+  const enableRetryResolvingFromDisk =
+    shouldEnableRetryResolvingFromDisk(options);
+
+  const applyResolver = enableRetryResolvingFromDisk
+    ? applyEnhancedResolver
+    : applyMetroResolver;
+
+  if (enableRetryResolvingFromDisk) {
+    patchMetro(options);
+  }
+
+  const remappers = [remapModule, remapReactNativeModule];
   const symlinkResolver = (
     context: ResolutionContext,
     moduleName: string,
@@ -56,12 +86,7 @@ export function makeResolver(options: Options = {}): MetroResolver {
         moduleName
       );
 
-      return resolve(
-        context,
-        normalizePath(modifiedModuleName),
-        platform,
-        null
-      );
+      return applyResolver(resolve, context, modifiedModuleName, platform);
     } finally {
       if (!context.resolveRequest) {
         // Restoring `resolveRequest` must happen last
