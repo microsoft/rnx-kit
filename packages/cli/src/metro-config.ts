@@ -1,112 +1,14 @@
-import type {
-  BundlerPlugins,
-  TypeScriptValidationOptions,
-} from "@rnx-kit/config";
+import type { BundlerPlugins } from "@rnx-kit/config";
 import { CyclicDependencies } from "@rnx-kit/metro-plugin-cyclic-dependencies-detector";
 import { DuplicateDependencies } from "@rnx-kit/metro-plugin-duplicates-checker";
+import { TypeScriptPlugin } from "@rnx-kit/metro-plugin-typescript";
 import type { MetroPlugin } from "@rnx-kit/metro-serializer";
 import { MetroSerializer } from "@rnx-kit/metro-serializer";
 import {
   esbuildTransformerConfig,
   MetroSerializer as MetroSerializerEsbuild,
 } from "@rnx-kit/metro-serializer-esbuild";
-import type { AllPlatforms } from "@rnx-kit/tools-react-native/platform";
-import type { Project } from "@rnx-kit/typescript-service";
-import type { DeltaResult, Graph } from "metro";
 import type { InputConfigT, SerializerConfigT } from "metro-config";
-import { createProjectCache } from "./typescript/project-cache";
-
-/**
- * Create a hook function to be registered with Metro during serialization.
- * Each serialization pass runs the hook which type-checks each added/updated
- * source file.
- *
- * Source file in node_modules (external packages) are ignored.
- *
- * @param options TypeScript validation options
- * @param print Optional function to use when printing status messages to the Metro console
- * @returns Hook function
- */
-function createSerializerHook(
-  options: TypeScriptValidationOptions,
-  print?: (message: string) => void
-) {
-  const projectCache = createProjectCache(print);
-
-  const patternNodeModules = /[/\\]node_modules[/\\]/;
-  const excludeNodeModules = (p: string) => !patternNodeModules.test(p);
-
-  const hook = (graph: Graph, delta: DeltaResult): void => {
-    const platform = graph.transformOptions.platform as AllPlatforms;
-    if (platform) {
-      if (delta.reset) {
-        //  Metro is signaling that all cached data for this Graph should be
-        //  thrown out. Each Graph is scoped to one platform, so discard all
-        //  of that platform's projects.
-        projectCache.clearPlatform(platform);
-      }
-
-      //  Filter adds, updates, and deletes coming from Metro. Do not look at
-      //  anything in an external package (e.g. under node_modules).
-      const adds = Array.from(
-        delta.added.values(),
-        (module) => module.path
-      ).filter(excludeNodeModules);
-
-      const updates = Array.from(
-        delta.modified.values(),
-        (module) => module.path
-      ).filter(excludeNodeModules);
-
-      const deletes = Array.from(delta.deleted.values()).filter(
-        excludeNodeModules
-      );
-
-      //  Try to map each file to a TypeScript project, and apply its delta operation.
-      //  Some projects may not actually be TypeScript projects (ignore those).
-      const tsprojectsToValidate: Set<Project> = new Set();
-      adds.concat(updates).forEach((sourceFile) => {
-        const projectInfo = projectCache.getProjectInfo(sourceFile, platform);
-        if (projectInfo) {
-          // This is a TypeScript project. Validate it.
-          const { tsproject, tssourceFiles } = projectInfo;
-          if (tssourceFiles.has(sourceFile)) {
-            tsproject.setFile(sourceFile);
-            tsprojectsToValidate.add(tsproject);
-          }
-        }
-      });
-      deletes.forEach((sourceFile) => {
-        const projectInfo = projectCache.getProjectInfo(sourceFile, platform);
-        if (projectInfo) {
-          // This is a TypeScript project. Validate it.
-          const { tsproject } = projectInfo;
-          tsproject.removeFile(sourceFile);
-          tsprojectsToValidate.add(tsproject);
-        }
-      });
-
-      //  Validate all projects which changed, printing all type errors.
-      let isValid = true;
-      tsprojectsToValidate.forEach((p) => {
-        if (!p.validate()) {
-          isValid = false;
-        }
-      });
-
-      if (!isValid && options.throwOnError) {
-        // Type-checking failed. Fail the Metro operation (bundling or serving).
-        throw new Error("Type validation failed");
-      }
-    }
-  };
-
-  return hook;
-}
-
-const emptySerializerHook = (_graph: Graph, _delta: DeltaResult): void => {
-  // nop
-};
 
 /**
  * Customize the Metro configuration.
@@ -162,11 +64,6 @@ export function customizeMetroConfig(
     delete metroConfig.serializer.customSerializer;
   }
 
-  let hook = emptySerializerHook;
-  if (typeof typescriptValidation === "object") {
-    hook = createSerializerHook(typescriptValidation, print);
-  } else if (typescriptValidation !== false) {
-    hook = createSerializerHook({}, print);
-  }
+  const hook = TypeScriptPlugin(typescriptValidation, print);
   metroConfig.serializer.experimentalSerializerHook = hook;
 }

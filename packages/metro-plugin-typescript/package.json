@@ -1,0 +1,52 @@
+{
+  "name": "@rnx-kit/metro-plugin-typescript",
+  "version": "0.0.1",
+  "description": "Metro plugin for TypeScript type validation",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/metro-plugin-typescript#readme",
+  "license": "MIT",
+  "author": {
+    "name": "Microsoft Open Source",
+    "email": "microsoftopensource@users.noreply.github.com"
+  },
+  "files": [
+    "lib/*"
+  ],
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "packages/metro-plugin-typescript"
+  },
+  "engines": {
+    "node": ">=14.18"
+  },
+  "scripts": {
+    "build": "rnx-kit-scripts build",
+    "format": "rnx-kit-scripts format",
+    "lint": "rnx-kit-scripts lint"
+  },
+  "dependencies": {
+    "@rnx-kit/config": "^0.5.2",
+    "@rnx-kit/tools-node": "^1.3.1",
+    "@rnx-kit/tools-react-native": "^1.2.3",
+    "@rnx-kit/typescript-react-native-resolver": "^0.3.0",
+    "@rnx-kit/typescript-service": "^1.5.4",
+    "typescript": "^4.0.0"
+  },
+  "devDependencies": {
+    "@rnx-kit/scripts": "*",
+    "@types/metro": "^0.66.0"
+  },
+  "depcheck": {
+    "ignoreMatches": [
+      "metro"
+    ]
+  },
+  "eslintConfig": {
+    "extends": "@rnx-kit/eslint-config"
+  },
+  "jest": {
+    "preset": "@rnx-kit/scripts"
+  }
+}
