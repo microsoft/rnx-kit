@@ -55,6 +55,7 @@ function getCommandLine(
     "--strict",
     "--skipLibCheck", // saves a lot of time; we don't need them for these tests
     "--noLib", // saves a lot of time; we don't need them for these tests
+    "--traceResolution", // always print module resolution tracing to validate that it works
     ...(build === Build.Incremental ? ["--incremental", "--composite"] : []),
   ]);
   return cmdLine;
@@ -73,23 +74,13 @@ function testProgramUsesReactNativeResolver(
   testTempDir: string,
   program: ts.Program | ts.EmitAndSemanticDiagnosticsBuilderProgram
 ): void {
-  const oldLog = console.log;
-  const mockLog = jest.fn();
-  console.log = mockLog;
+  const emitResult = program.emit();
+  expect(emitResult.emitSkipped).toBeFalse();
+  expect(emitResult.diagnostics).toBeArrayOfSize(0);
 
-  try {
-    const emitResult = program.emit();
-    expect(emitResult.emitSkipped).toBeFalse();
-    expect(emitResult.diagnostics).toBeArrayOfSize(0);
-
-    expect(fs.existsSync(path.join(testTempDir, "index.ios.js"))).toBeTrue();
-    expect(fs.existsSync(path.join(testTempDir, "f.ios.js"))).toBeTrue();
-    expect(fs.existsSync(path.join(testTempDir, "f.native.js"))).toBeFalse();
-
-    expect(mockLog).toHaveBeenCalledTimes(0);
-  } finally {
-    console.log = oldLog;
-  }
+  expect(fs.existsSync(path.join(testTempDir, "index.ios.js"))).toBeTrue();
+  expect(fs.existsSync(path.join(testTempDir, "f.ios.js"))).toBeTrue();
+  expect(fs.existsSync(path.join(testTempDir, "f.native.js"))).toBeFalse();
 }
 
 function testProgramUsesTypeScriptResolver(
@@ -106,13 +97,27 @@ function testProgramUsesTypeScriptResolver(
 }
 
 describe("Program > createProgram", () => {
+  let mockTsWrite: jest.Mock;
+  let oldTsWrite: typeof ts.sys.write;
+
   let testTempDir: string;
+
+  beforeAll(() => {
+    mockTsWrite = jest.fn();
+    oldTsWrite = ts.sys.write;
+    ts.sys.write = mockTsWrite;
+  });
+
+  afterAll(() => {
+    ts.sys.write = oldTsWrite;
+  });
 
   beforeEach(() => {
     testTempDir = createTestTempDir("createProgram");
   });
 
   afterEach(() => {
+    jest.resetAllMocks();
     removeTestTempDir(testTempDir);
   });
 
@@ -142,23 +147,55 @@ describe("Program > createProgram", () => {
 
   test("creates a program with the react-native resolver when a platform is specified", () => {
     testProgramUsesReactNativeResolver(testTempDir, getProgram(UsePackage.RN));
+    expect(mockTsWrite.mock.calls.length).toBeGreaterThan(0);
+    expect(mockTsWrite.mock.calls[0][0]).toMatch(/^======== Resolving module/);
+  });
+
+  test("creates a program with the react-native resolver with tracing disabled", () => {
+    const cmdLine = getCommandLine(testTempDir, UsePackage.RN, Build.Full);
+    delete cmdLine.ts.options.traceResolution;
+    testProgramUsesReactNativeResolver(testTempDir, createProgram(cmdLine));
+    expect(mockTsWrite).not.toBeCalled();
   });
 
   test("creates a program with the typescript resolver when no platform is specified", () => {
     testProgramUsesTypeScriptResolver(testTempDir, getProgram(UsePackage.TS));
+    expect(mockTsWrite.mock.calls.length).toBeGreaterThan(0);
+    expect(mockTsWrite.mock.calls[0][0]).toMatch(/^======== Resolving module/);
+  });
+
+  test("creates a program with the typescript resolver with tracing disabled", () => {
+    const cmdLine = getCommandLine(testTempDir, UsePackage.TS, Build.Full);
+    delete cmdLine.ts.options.traceResolution;
+    testProgramUsesTypeScriptResolver(testTempDir, createProgram(cmdLine));
+    expect(mockTsWrite).not.toBeCalled();
   });
 });
 
 describe("Program > createIncrementalProgram", () => {
   const fixturePath = path.join(process.cwd(), "test", "__fixtures__");
 
+  let mockTsWrite: jest.Mock;
+  let oldTsWrite: typeof ts.sys.write;
+
   let testTempDir: string;
+
+  beforeAll(() => {
+    mockTsWrite = jest.fn();
+    oldTsWrite = ts.sys.write;
+    ts.sys.write = mockTsWrite;
+  });
+
+  afterAll(() => {
+    ts.sys.write = oldTsWrite;
+  });
 
   beforeEach(() => {
     testTempDir = createTestTempDir("createIncrementalProgram");
   });
 
   afterEach(() => {
+    jest.resetAllMocks();
     removeTestTempDir(testTempDir);
   });
 
@@ -196,9 +233,27 @@ describe("Program > createIncrementalProgram", () => {
 
   test("creates a program with the react-native resolver when a platform is specified", () => {
     testProgramUsesReactNativeResolver(testTempDir, getProgram(UsePackage.RN));
+    expect(mockTsWrite.mock.calls.length).toBeGreaterThan(0);
+    expect(mockTsWrite.mock.calls[0][0]).toMatch(/^======== Resolving module/);
+  });
+
+  test("creates a program with the react-native resolver with tracing disabled", () => {
+    const cmdLine = getCommandLine(testTempDir, UsePackage.RN, Build.Full);
+    delete cmdLine.ts.options.traceResolution;
+    testProgramUsesReactNativeResolver(testTempDir, createProgram(cmdLine));
+    expect(mockTsWrite).not.toBeCalled();
   });
 
   test("creates a program with the typescript resolver when no platform is specified", () => {
     testProgramUsesTypeScriptResolver(testTempDir, getProgram(UsePackage.TS));
+    expect(mockTsWrite.mock.calls.length).toBeGreaterThan(0);
+    expect(mockTsWrite.mock.calls[0][0]).toMatch(/^======== Resolving module/);
+  });
+
+  test("creates a program with the typescript resolver with tracing disabled", () => {
+    const cmdLine = getCommandLine(testTempDir, UsePackage.TS, Build.Full);
+    delete cmdLine.ts.options.traceResolution;
+    testProgramUsesTypeScriptResolver(testTempDir, createProgram(cmdLine));
+    expect(mockTsWrite).not.toBeCalled();
   });
 });

@@ -1,5 +1,4 @@
 import * as path from "path";
-import { ResolverLog, ResolverLogMode } from "../src/log";
 import { createReactNativePackageNameReplacer } from "../src/react-native-package-name";
 
 const fixture = path.join(
@@ -13,8 +12,7 @@ describe("React-Native Package Name > createReactNativePackageNameReplacer > Dis
     const replacer = createReactNativePackageNameReplacer(
       fixture,
       "windows",
-      true,
-      new ResolverLog(ResolverLogMode.Never)
+      true
     );
     expect(replacer("react-native")).toEqual("react-native");
     expect(replacer("react-native/foo")).toEqual("react-native/foo");
@@ -26,8 +24,7 @@ describe("React-Native Package Name > createReactNativePackageNameReplacer > In-
     const replacer = createReactNativePackageNameReplacer(
       fixture,
       "ios",
-      false,
-      new ResolverLog(ResolverLogMode.Never)
+      false
     );
     expect(replacer("react-native")).toEqual("react-native");
     expect(replacer("react-native/foo")).toEqual("react-native/foo");
@@ -35,16 +32,10 @@ describe("React-Native Package Name > createReactNativePackageNameReplacer > In-
 });
 
 describe("React-Native Package Name > createReactNativePackageNameReplacer > Out-of-tree Platform", () => {
-  const mockLog = jest.fn();
-  const resolverLog: unknown = {
-    log: mockLog,
-  };
-
   const replacer = createReactNativePackageNameReplacer(
     fixture,
     "windows",
-    false,
-    resolverLog as ResolverLog
+    false
   );
 
   afterEach(() => {
@@ -58,10 +49,5 @@ describe("React-Native Package Name > createReactNativePackageNameReplacer > Out
   test("replaces a react-native module reference with react-native-windows", () => {
     expect(replacer("react-native")).toEqual("react-native-windows");
     expect(replacer("react-native/foo")).toEqual("react-native-windows/foo");
-  });
-
-  test("logs a message when substituting a react-native module reference", () => {
-    replacer("react-native");
-    expect(mockLog).toBeCalled();
   });
 });

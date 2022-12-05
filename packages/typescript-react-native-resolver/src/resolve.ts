@@ -7,6 +7,7 @@ import path from "path";
 import ts from "typescript";
 
 import { ExtensionsTypeScript } from "./extension";
+import { isTraceEnabled } from "./log";
 import { findModuleFile } from "./module";
 import { ResolverContext } from "./types";
 
@@ -38,13 +39,17 @@ export function resolveModule(
     return findModuleFile(context, packageDir, modulePath, extensions);
   }
 
-  const { host, log } = context;
+  const { host, options } = context;
+
+  const traceEnabled = isTraceEnabled(host, options);
 
   let module: ts.ResolvedModuleFull | undefined;
 
   //  No path was given. Try resolving the module using package.json
   //  properties.
-  log.log("Reading package.json from directory %o.", packageDir);
+  if (traceEnabled) {
+    host.trace(`Reading package.json from directory ${packageDir}.`);
+  }
   const result = host.readFile(path.join(packageDir, "package.json"));
   if (!result) {
     throw new Error(
@@ -57,22 +62,30 @@ export function resolveModule(
   //  type files (.d.ts).
   if (extensions.includes(ts.Extension.Dts)) {
     if (typeof types === "string" && types.length > 0) {
-      log.log("Package has 'types' field '%s'.", types);
+      if (traceEnabled) {
+        host.trace(`Package has 'types' field '${types}'.`);
+      }
       module = findModuleFile(context, packageDir, types, extensions);
     } else if (typeof typings === "string" && typings.length > 0) {
-      log.log("Package has 'typings' field '%s'.", typings);
+      if (traceEnabled) {
+        host.trace(`Package has 'typings' field '${typings}'.`);
+      }
       module = findModuleFile(context, packageDir, typings, extensions);
     }
   }
   if (!module && typeof main === "string" && main.length > 0) {
-    log.log("Package has 'main' field '%s'.", main);
+    if (traceEnabled) {
+      host.trace(`Package has 'main' field '${main}'.`);
+    }
     module = findModuleFile(context, packageDir, main, extensions);
   }
 
   //  Properties from package.json weren't able to resolve the module.
   //  Try resolving it to an "index" file.
   if (!module) {
-    log.log("Searching for index file.");
+    if (traceEnabled) {
+      host.trace("Searching for index file.");
+    }
     module = findModuleFile(context, packageDir, "index", extensions);
   }
 
@@ -84,13 +97,15 @@ function findPackageDependencyDir(
   ref: PackageModuleRef,
   startDir: string
 ): string | undefined {
-  const { log, host } = context;
+  const { host, options } = context;
 
-  log.log(
-    "Searching for external package %o starting in %o.",
-    ref.scope ? ref.scope + "/" + ref.name : ref.name,
-    startDir
-  );
+  if (isTraceEnabled(host, options)) {
+    host.trace(
+      `Searching for external package ${
+        ref.scope ? ref.scope + "/" + ref.name : ref.name
+      } starting in ${startDir}.`
+    );
+  }
 
   const suffixDir = path.join("node_modules", ref.scope ?? "", ref.name);
 
@@ -131,19 +146,27 @@ export function resolvePackageModule(
   searchDir: string,
   extensions: ts.Extension[]
 ): ts.ResolvedModuleFull | undefined {
-  const { log } = context;
+  const { host, options } = context;
+
+  const traceEnabled = isTraceEnabled(host, options);
 
   let module: ts.ResolvedModuleFull | undefined = undefined;
 
   // Resolve the module to a file within the package
-  log.log(
-    "Searching for external package %o starting in %o.",
-    moduleRef.scope ? moduleRef.scope + "/" + moduleRef.name : moduleRef.name,
-    searchDir
-  );
+  if (traceEnabled) {
+    host.trace(
+      `Searching for external package ${
+        moduleRef.scope
+          ? moduleRef.scope + "/" + moduleRef.name
+          : moduleRef.name
+      } starting in ${searchDir}.`
+    );
+  }
   const pkgDir = findPackageDependencyDir(context, moduleRef, searchDir);
   if (pkgDir) {
-    log.log("Loading module from external package '%s'.", pkgDir);
+    if (traceEnabled) {
+      host.trace(`Loading module from external package '${pkgDir}'.`);
+    }
 
     module = resolveModule(context, pkgDir, moduleRef.path, extensions);
     if (!module && moduleRef.path) {
@@ -191,6 +214,10 @@ export function resolveFileModule(
   searchDir: string,
   extensions: ts.Extension[]
 ): ts.ResolvedModuleFull | undefined {
-  context.log.log("Loading module from directory '%s'.", searchDir);
+  const { host, options } = context;
+
+  if (isTraceEnabled(host, options)) {
+    host.trace(`Loading module from directory '${searchDir}'.`);
+  }
   return findModuleFile(context, searchDir, moduleRef.path, extensions);
 }
