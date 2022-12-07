@@ -33,7 +33,7 @@ export function getCompilerOptionsWithReactNativeModuleSuffixes(
     //  `moduleSuffixes` set to the list of React Native platform extensions.
     return {
       ...options,
-      moduleSuffixes: [...context.platformFileExtensions],
+      moduleSuffixes: context.platformFileExtensions,
     };
   }
 
@@ -230,6 +230,14 @@ export function resolveTypeReferenceDirectives(
         ? typeDirectiveName
         : typeDirectiveName.fileName.toLowerCase();
 
+    //  Ensure the compiler options has `moduleSuffixes` set correctly for this RN project.
+    const optionsWithSuffixes = getCompilerOptionsWithReactNativeModuleSuffixes(
+      context,
+      name,
+      containingFile,
+      options
+    );
+
     //
     //  Invoke the built-in TypeScript type-reference resolver.
     //
@@ -250,7 +258,7 @@ export function resolveTypeReferenceDirectives(
       ts.resolveTypeReferenceDirective(
         name,
         containingFile,
-        options,
+        optionsWithSuffixes,
         host,
         redirectedReference,
         cache,

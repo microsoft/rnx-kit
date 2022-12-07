@@ -1,3 +1,4 @@
+import "jest-extended";
 import ts from "typescript";
 import {
   getCompilerOptionsWithReactNativeModuleSuffixes,
@@ -135,6 +136,15 @@ describe("Resolver", () => {
         undefined
       );
       expect(mockResolveTypeReferenceDirective).toBeCalled();
+      const calls = mockResolveTypeReferenceDirective.mock.calls;
+      // 1st param: name
+      expect(calls[0][0]).toEqual("type-ref");
+      // 3rd param: CompilerOptions
+      expect(calls[0][2]).toContainEntry([
+        "moduleSuffixes",
+        [".ios", ".native", ""],
+      ]);
+
       expect(directives).toBeArrayOfSize(1);
       expect(directives[0].resolvedFileName).toEqual("resolved.ts");
     } finally {
