@@ -24,7 +24,8 @@
   "scripts": {
     "build": "rnx-kit-scripts build",
     "format": "rnx-kit-scripts format",
-    "lint": "rnx-kit-scripts lint"
+    "lint": "rnx-kit-scripts lint",
+    "test": "rnx-kit-scripts test"
   },
   "dependencies": {
     "@rnx-kit/config": "^0.5.2",
@@ -38,7 +39,8 @@
   },
   "devDependencies": {
     "@rnx-kit/scripts": "*",
-    "@types/metro": "^0.66.0"
+    "@types/metro": "^0.66.0",
+    "jest-extended": "^2.0.0"
   },
   "depcheck": {
     "ignoreMatches": [
@@ -49,6 +51,9 @@
     "extends": "@rnx-kit/eslint-config"
   },
   "jest": {
-    "preset": "@rnx-kit/scripts"
+    "preset": "@rnx-kit/scripts",
+    "setupFilesAfterEnv": [
+      "jest-extended/all"
+    ]
   }
 }
