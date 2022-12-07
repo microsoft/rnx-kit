@@ -43,24 +43,32 @@ export function getCompilerOptionsWithReactNativeModuleSuffixes(
   //  file selection. e.g. If "ios" comes before "native", then "foo.ios.ts" will be
   //  resolved ahead of "foo.native.ts".
   //
-  //  The best we can do is check `moduleSuffixes` to see if the React Native entries
-  //  we need are already there, in order. If not, we have to fail.
+  //  Package authors may use a convention where they set 'moduleSuffixes' to [".native", ""].
+  //  They do this when they don't have platform-specific code (e.g. iOS only). Instead,
+  //  they suffixes to separate React Native code (.native.ts) from Web code (.ts). We
+  //  allow that convention as well.
+  //
+  //  The best we can do is check `moduleSuffixes` for either of these conventions, and fail
+  //  if they aren't met.
 
-  const suffixesIntersection = intersection(
-    options.moduleSuffixes,
+  const hasAllPlatformFileExtensions = isEqual(
+    intersection(options.moduleSuffixes, context.platformFileExtensions),
     context.platformFileExtensions
   );
-  const neededSuffixesAlreadyPresent = isEqual(
-    suffixesIntersection,
-    context.platformFileExtensions
+
+  const nativePlatformFileExtension = [".native", ""];
+  const hasNativePlatformFileExtension = isEqual(
+    intersection(options.moduleSuffixes, nativePlatformFileExtension),
+    nativePlatformFileExtension
   );
-  if (!neededSuffixesAlreadyPresent) {
+  if (!hasAllPlatformFileExtensions && !hasNativePlatformFileExtension) {
     const currentSuffixes = options.moduleSuffixes.join(",");
-    const neededSuffixes = context.platformFileExtensions.join(",");
+    const neededAllSuffixes = context.platformFileExtensions.join(",");
+    const neededNativeSuffixes = nativePlatformFileExtension.join(",");
     throw new Error(
       `Failed to resolve module reference '${moduleName}' in source file '${containingFile}.\n` +
         `The parent package has a TypeScript configuration which sets 'moduleSuffixes' to '${currentSuffixes}'.\n` +
-        `This is incompatible with the target platform '${context.platform}', which requires 'moduleSuffixes' to contain at least '${neededSuffixes}', in that order.\n` +
+        `This is incompatible with the target platform '${context.platform}', which requires 'moduleSuffixes' to contain either '${neededAllSuffixes}' or just '${neededNativeSuffixes}', in order.\n` +
         `We would like to understand any use cases where this error occurs, as there may be room to make improvements.\n` +
         `Please add a comment about your scenario, and include this error message: https://github.com/microsoft/rnx-kit/discussions/1971.`
     );

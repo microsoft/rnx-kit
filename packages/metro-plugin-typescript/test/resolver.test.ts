@@ -103,6 +103,24 @@ describe("Resolver", () => {
     ]);
   });
 
+  test("verifies that moduleSuffixes is valid when it is already present without a platform name", () => {
+    // platform is ios, and is set by context.platform. moduleSuffixes must have
+    // all of the ios-related extensions, in order, but can have others mixed in.
+    const inputOptions = {
+      moduleSuffixes: [".lemonheads", ".native", "", ".snickers"],
+    };
+    const outputOptions = getCompilerOptionsWithReactNativeModuleSuffixes(
+      context,
+      "module",
+      "containing-file",
+      inputOptions
+    );
+    expect(outputOptions).toContainEntry([
+      "moduleSuffixes",
+      inputOptions.moduleSuffixes, // output must match input
+    ]);
+  });
+
   test("fails when moduleSuffixes is set, but is invalid for the target platform", () => {
     const inputOptions = {
       moduleSuffixes: ["this isn't going to work"],
