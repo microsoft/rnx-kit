@@ -8,6 +8,12 @@ import { createProgram, createIncrementalProgram } from "./program";
 import { reportUnsupportedTscOptions } from "./unsupported";
 
 export function cli(args: string[]): void {
+  console.warn(
+    "[DEPRECATED] This tool has been deprecated in favor of using 'tsc' >= 4.7 " +
+      "with the 'moduleSuffixes' compiler option. See https://www.typescriptlang.org/tsconfig#moduleSuffixes.\n" +
+      "You may continue to use this tool, but it will be removed in a future release."
+  );
+
   const cmdLine = parseCommandLine(args);
   if (cmdLine.ts.errors.length > 0) {
     const writer = createDiagnosticWriter();

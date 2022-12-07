@@ -10,6 +10,16 @@
 `@rnx-kit/typescript-react-native-compiler` is the TypeScript compiler `tsc`
 with a custom module resolver for react-native projects.
 
+## 🛑 Deprecated 🛑
+
+This tool has been deprecated in favor of using `tsc` >= 4.7 with the
+`moduleSuffixes`
+[compiler option](https://www.typescriptlang.org/tsconfig#moduleSuffixes).
+
+You may continue to use it, but it will be removed in a future release.
+
+## Synopsis
+
 This package extends TypeScript, adding the concept of a platform to `tsc`. When
 resolving modules, the platform is used to find platform-extension files such as
 `foo.ios.ts` and `foo.native.ts`. The platform is also used to map
