@@ -38,6 +38,13 @@ export function createEnhanceLanguageServiceHost(
    * such as path remapping (baseUrl, paths, rootDir).
    */
   if (semverSatisfies(ts.version, ">=4.7.0")) {
+    //  Make the last platform file extension blank so that resolution falls back
+    //  to files which have no extension. The pre-4.7 codepath, which runs our custom
+    //  resolver, doesn't need this because our resolver adds it when searching for
+    //  module files.
+
+    platformFileExtensions.push("");
+
     //  Use simple resolvers that delegate to the built-in TS resolvers
 
     return (host: ts.LanguageServiceHost) => {
