@@ -51,7 +51,7 @@ function stringify(manifest: PackageManifest): string {
 export function checkPackageManifest(
   manifestPath: string,
   options: Options,
-  inputConfig = loadConfig(manifestPath)
+  inputConfig = loadConfig(manifestPath, options)
 ): ErrorCode {
   if (isError(inputConfig)) {
     return inputConfig;
@@ -146,7 +146,7 @@ export function makeCheckCommand(options: Options): Command {
   }
 
   return (manifest: string) => {
-    const inputConfig = loadConfig(manifest);
+    const inputConfig = loadConfig(manifest, options);
     const config = isError(inputConfig)
       ? inputConfig
       : migrateConfig(inputConfig, manifest, options);

@@ -4,7 +4,12 @@ import { error, warn } from "@rnx-kit/console";
 import { isPackageManifest, readPackage } from "@rnx-kit/tools-node/package";
 import * as path from "path";
 import { findBadPackages } from "./findBadPackages";
-import type { AlignDepsConfig, ErrorCode, LegacyCheckConfig } from "./types";
+import type {
+  AlignDepsConfig,
+  ErrorCode,
+  LegacyCheckConfig,
+  Options,
+} from "./types";
 
 type ConfigResult = AlignDepsConfig | LegacyCheckConfig | ErrorCode;
 
@@ -39,12 +44,20 @@ export function containsValidRequirements(
 /**
  * Loads configuration from the specified package manifest.
  * @param manifestPath The path to the package manifest to load configuration from
+ * @param options Command line options
  * @returns The configuration; otherwise an error code
  */
-export function loadConfig(manifestPath: string): ConfigResult {
+export function loadConfig(
+  manifestPath: string,
+  { excludePackages }: Pick<Options, "excludePackages">
+): ConfigResult {
   const manifest = readPackage(manifestPath);
   if (!isPackageManifest(manifest)) {
     return "invalid-manifest";
+  }
+
+  if (excludePackages?.includes(manifest.name)) {
+    return "excluded";
   }
 
   const badPackages = findBadPackages(manifest);
