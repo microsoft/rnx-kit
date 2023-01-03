@@ -1,4 +1,4 @@
-import { containsValidPresets, containsValidRequirements } from "../src/config";
+import { containsValidPresets, findEmptyRequirements } from "../src/config";
 
 jest.mock("@rnx-kit/config");
 
@@ -17,38 +17,70 @@ describe("containsValidPresets()", () => {
   });
 });
 
-describe("containsValidRequirements()", () => {
+describe("findEmptyRequirements()", () => {
   test("is invalid when 'requirements' is unset", () => {
-    expect(containsValidRequirements({})).toBe(false);
+    expect(findEmptyRequirements({})).toBe("requirements");
   });
 
   test("is invalid when 'requirements' is empty", () => {
-    expect(containsValidRequirements({ requirements: [] })).toBe(false);
+    expect(findEmptyRequirements({ requirements: [] })).toBe("requirements");
+
     expect(
       // @ts-expect-error intentionally passing an invalid type
-      containsValidRequirements({ requirements: { production: [] } })
-    ).toBe(false);
+      findEmptyRequirements({ requirements: { production: [] } })
+    ).toBe("requirements.development");
+
     expect(
-      containsValidRequirements({
+      findEmptyRequirements({
         requirements: { development: [], production: [] },
       })
-    ).toBe(false);
+    ).toBe("requirements.development");
+
+    expect(
+      findEmptyRequirements({
+        // @ts-expect-error intentionally passing an invalid type
+        requirements: { development: ["react-native@*"] },
+      })
+    ).toBe("requirements.production");
+
+    expect(
+      findEmptyRequirements({
+        requirements: { development: ["react-native@*"], production: [] },
+      })
+    ).toBe("requirements.production");
   });
 
   test("is invalid when 'requirements' is not an array", () => {
     // @ts-expect-error intentionally passing an invalid type
-    expect(containsValidRequirements({ requirements: "[]" })).toBe(false);
+    expect(findEmptyRequirements({ requirements: "[]" })).toBe("requirements");
+
+    expect(
+      findEmptyRequirements({
+        // @ts-expect-error intentionally passing an invalid type
+        requirements: { development: "[]", production: "[]" },
+      })
+    ).toBe("requirements.development");
+
+    expect(
+      findEmptyRequirements({
+        // @ts-expect-error intentionally passing an invalid type
+        requirements: { development: ["react-native@*"], production: "[]" },
+      })
+    ).toBe("requirements.production");
   });
 
   test("is valid when 'requirements' contains at least one requirement", () => {
     expect(
-      containsValidRequirements({ requirements: ["react-native@*"] })
-    ).toBe(true);
+      findEmptyRequirements({ requirements: ["react-native@*"] })
+    ).toBeUndefined();
+
     expect(
-      containsValidRequirements({
-        // @ts-expect-error intentionally passing an invalid type
-        requirements: { production: ["react-native@*"] },
+      findEmptyRequirements({
+        requirements: {
+          development: ["react-native@*"],
+          production: ["react-native@*"],
+        },
       })
-    ).toBe(true);
+    ).toBeUndefined();
   });
 });
