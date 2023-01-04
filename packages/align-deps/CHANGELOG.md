@@ -1,5 +1,12 @@
 # Change Log - @rnx-kit/align-deps
 
+## 2.0.2
+
+### Patch Changes
+
+- ceb63587: Fix `--exclude-packages` not working with plain check
+- d2468c3d: Improve requirements check
+
 ## 2.0.1
 
 ### Patch Changes
