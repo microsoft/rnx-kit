@@ -19,21 +19,25 @@ export function containsValidPresets(config: KitConfig["alignDeps"]): boolean {
   return !presets || (Array.isArray(presets) && presets.length > 0);
 }
 
-export function containsValidRequirements(
+export function findEmptyRequirements(
   config: KitConfig["alignDeps"]
-): boolean {
+): string | undefined {
   const requirements = config?.requirements;
   if (requirements) {
     if (Array.isArray(requirements)) {
-      return requirements.length > 0;
+      if (requirements.length > 0) {
+        return undefined;
+      }
     } else if (typeof requirements === "object") {
-      return (
-        Array.isArray(requirements.production) &&
-        requirements.production.length > 0
+      const environments = ["development", "production"] as const;
+      const key = environments.find(
+        (env) =>
+          !Array.isArray(requirements[env]) || requirements[env].length === 0
       );
+      return key && `requirements.${key}`;
     }
   }
-  return false;
+  return "requirements";
 }
 
 /**
@@ -69,9 +73,12 @@ export function loadConfig(manifestPath: string): ConfigResult {
     if (!containsValidPresets(alignDeps)) {
       errors.push(`${manifestPath}: 'alignDeps.presets' cannot be empty`);
     }
-    if (!containsValidRequirements(alignDeps)) {
-      errors.push(`${manifestPath}: 'alignDeps.requirements' cannot be empty`);
+
+    const emptyReqs = findEmptyRequirements(alignDeps);
+    if (emptyReqs) {
+      errors.push(`${manifestPath}: 'alignDeps.${emptyReqs}' cannot be empty`);
     }
+
     if (errors.length > 0) {
       for (const e of errors) {
         error(e);
