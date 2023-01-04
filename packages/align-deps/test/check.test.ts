@@ -267,6 +267,25 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
     expect(consoleWarnSpy).not.toBeCalled();
   });
 
+  test("returns appropriate error code if package is excluded", () => {
+    fs.__setMockContent(mockManifest);
+    rnxKitConfig.__setMockConfig({
+      alignDeps: {
+        requirements: ["react-native@0.70"],
+        capabilities: ["core-ios"],
+      },
+    });
+
+    const result = checkPackageManifest("package.json", {
+      ...defaultOptions,
+      excludePackages: ["@rnx-kit/align-deps"],
+    });
+
+    expect(result).toBe("excluded");
+    expect(consoleLogSpy).not.toBeCalled();
+    expect(consoleWarnSpy).not.toBeCalled();
+  });
+
   test("uses minimum supported version as development version", () => {
     fs.__setMockContent({
       ...mockManifest,

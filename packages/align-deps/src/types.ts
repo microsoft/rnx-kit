@@ -31,6 +31,7 @@ export type DependencyType = "direct" | "development" | "peer";
 
 export type ErrorCode =
   | "success"
+  | "excluded"
   | "invalid-app-requirements"
   | "invalid-configuration"
   | "invalid-manifest"

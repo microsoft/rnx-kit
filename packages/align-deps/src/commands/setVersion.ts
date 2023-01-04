@@ -170,7 +170,7 @@ export async function makeSetVersionCommand(
   const write = { ...options, loose: false, write: true };
 
   return (manifestPath: string) => {
-    const config = loadConfig(manifestPath);
+    const config = loadConfig(manifestPath, options);
     if (isError(config)) {
       return config;
     }

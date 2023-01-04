@@ -9,6 +9,7 @@ export function isError<T>(config: T | ErrorCode): config is ErrorCode {
 export function printError(manifestPath: string, code: ErrorCode): void {
   switch (code) {
     case "success":
+    case "excluded":
       break;
 
     case "invalid-app-requirements":
