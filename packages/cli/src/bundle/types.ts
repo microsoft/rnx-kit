@@ -28,10 +28,8 @@ export type CliPlatformBundleConfig = BundleParameters &
       | "entryFile"
       | "bundleOutput"
       | "sourcemapUseAbsolutePath"
-      | "detectCyclicDependencies"
-      | "detectDuplicateDependencies"
-      | "typescriptValidation"
       | "treeShake"
+      | "plugins"
     >
   > & {
     unstableTransformProfile?: TransformProfile;

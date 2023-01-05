@@ -9,7 +9,8 @@ export type ServerConfigOverrides = {
   sourceExts?: string[];
 };
 
-export type CliServerConfig = ServerConfig & Required<BundlerPlugins>;
+export type CliServerConfig = ServerConfig &
+  Required<Pick<BundlerPlugins, "plugins" | "treeShake">>;
 
 /**
  * Get the server configuration from the rnx-kit configuration. Apply any overrides.
@@ -30,6 +31,7 @@ export function getKitServerConfig(
         "detectDuplicateDependencies",
         "typescriptValidation",
         //"treeShake",  // don't pull in treeShake yet, since it doesn't work with the server
+        "plugins",
       ]);
     }
   }

@@ -78,14 +78,19 @@
         "id": "main",
         "entryFile": "src/index.ts",
         "assetsDest": "dist",
-        "detectCyclicDependencies": true,
-        "detectDuplicateDependencies": {
-          "ignoredModules": [
-            "react-is"
-          ]
-        },
-        "typescriptValidation": true,
         "treeShake": false,
+        "plugins": [
+          "@rnx-kit/metro-plugin-cyclic-dependencies-detector",
+          [
+            "@rnx-kit/metro-plugin-duplicates-checker",
+            {
+              "ignoredModules": [
+                "react-is"
+              ]
+            }
+          ],
+          "@rnx-kit/metro-plugin-typescript"
+        ],
         "targets": [
           "android",
           "ios",

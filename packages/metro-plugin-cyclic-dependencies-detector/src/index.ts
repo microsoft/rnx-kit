@@ -16,3 +16,7 @@ export function CyclicDependencies(
     detectCycles(entryPoint, graph, pluginOptions);
   };
 }
+
+CyclicDependencies.type = "analyzer";
+
+export default CyclicDependencies;

@@ -79,6 +79,8 @@ export function DuplicateDependencies(
   };
 }
 
+DuplicateDependencies.type = "analyzer";
+
 if (require.main === module) {
   checkForDuplicatePackagesInFile(process.argv[2]).catch((error) => {
     if (error) {
@@ -87,3 +89,5 @@ if (require.main === module) {
     }
   });
 }
+
+export default DuplicateDependencies;

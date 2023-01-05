@@ -10,6 +10,8 @@ export type TypeScriptValidationOptions = {
   throwOnError?: boolean;
 };
 
+export type Plugin = string | [string, Record<string, unknown>];
+
 /**
  * Parameters controlling bundler plugins.
  */
@@ -17,18 +19,24 @@ export type BundlerPlugins = {
   /**
    * Choose whether to detect cycles in the dependency graph. `true` uses defaults,
    * while `CyclicDetectorOptions` lets you control the detection process.
+   *
+   * @deprecated Replaced by `plugins`
    */
   detectCyclicDependencies?: boolean | CyclicDetectorOptions;
 
   /**
    * Choose whether to detect duplicate packages in the dependency graph. `true` uses defaults,
    * while `DuplicateDetectorOptions` lets you control the detection process.
+   *
+   * @deprecated Replaced by `plugins`
    */
   detectDuplicateDependencies?: boolean | DuplicateDetectorOptions;
 
   /**
    * Choose whether to type-check source files using TypeScript. `true` uses defaults,
    * while `TypeScriptValidationOptions` lets you control the validation process.
+   *
+   * @deprecated Replaced by `plugins`
    */
   typescriptValidation?: boolean | TypeScriptValidationOptions;
 
@@ -41,6 +49,17 @@ export type BundlerPlugins = {
    * Only applies to `rnx-bundle` command.
    */
   treeShake?: boolean;
+
+  /**
+   * List of plugins to add to the bundling process.
+   *
+   * @default [
+   *   "@rnx-kit/metro-plugin-cyclic-dependencies-detector",
+   *   "@rnx-kit/metro-plugin-duplicates-checker",
+   *   "@rnx-kit/metro-plugin-typescript"
+   * ]
+   */
+  plugins?: Plugin[];
 };
 
 /**
