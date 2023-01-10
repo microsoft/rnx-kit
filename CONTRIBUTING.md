@@ -18,7 +18,6 @@ As a contributor, you're expected to follow the
 <!--remove-block start-->
 
 - [Contributor License Agreement](#Contributor-License-Agreement)
-- [Code of Conduct](#Code-of-Conduct)
 - [Requirements](#Requirements)
 - [Build](#Build)
 - [Change Logs](#Change-Logs)
