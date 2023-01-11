@@ -1,7 +1,7 @@
 import type { AllPlatforms } from "@rnx-kit/tools-react-native/platform";
 import type { Project } from "@rnx-kit/typescript-service";
 import type { DeltaResult, Graph } from "metro";
-import ts from "typescript";
+import type ts from "typescript";
 
 export type ProjectInfo = {
   tsproject: Project;
@@ -46,11 +46,11 @@ export type SerializerHook = (graph: Graph, delta: DeltaResult) => void;
 /**
  * Context to use when invoking this resolver
  */
-export interface ResolverContext {
+export type ResolverContext = Readonly<{
   /**
    * Host interface for handling module resolution queries.
    */
-  readonly host: ts.LanguageServiceHost;
+  host: ts.LanguageServiceHost;
 
   /**
    * Flag controlling the replacement of `react-native` the target platform's
@@ -69,18 +69,18 @@ export interface ResolverContext {
    * react-native-macos doesn't export types, instead relying on the in-tree
    * types for ios.
    */
-  readonly disableReactNativePackageSubstitution: boolean;
+  disableReactNativePackageSubstitution: boolean;
 
   /**
    * Target platform.
    */
-  readonly platform: AllPlatforms;
+  platform: AllPlatforms;
 
   /**
    * List of react-native platform file extensions, such as ".native".
    * Ordered from highest precedence (index 0) to lowest.
    */
-  readonly platformFileExtensions: string[];
+  platformFileExtensions: string[];
 
   /**
    * Function which *may* replace references to the `react-native` module with
@@ -92,5 +92,5 @@ export interface ResolverContext {
    * substitution when `disableReactNativePackageSubstitution` (in this object)
    * is `false`.
    */
-  readonly replaceReactNativePackageName: (moduleName: string) => string;
-}
+  replaceReactNativePackageName: (moduleName: string) => string;
+}>;
