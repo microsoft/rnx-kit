@@ -146,6 +146,21 @@ export function resolveModuleNames(
       );
     }
 
+    //  Our resolver doesn't support TypeScript's path remapping features.
+    //  This can be confusing/misleading, so print an explicit error message
+    //  here if this feature is being used. This gives developers a clear signal
+    //  that there is a problem, and tells them how to proceed.
+    //
+    const { baseUrl, paths, rootDirs } = options;
+    if (baseUrl || paths || rootDirs) {
+      throw new Error(
+        "@rnx-kit/cli has TypeScript validation enabled, and has detected that tsconfig.json " +
+          "is using at least one of 'paths', 'baseURL', or 'rootDirs'. " +
+          "The CLI only supports these options with TypeScript 4.7 or later. " +
+          "Please upgrade TypeScript, turn off CLI TypeScript validation, or remove these tsconfig.json options."
+      );
+    }
+
     //  First, try to resolve the module to a TypeScript file. Then, fall back
     //  to looking for a JavaScript file. Finally, if JSON modules are allowed,
     //  try resolving to one of them.

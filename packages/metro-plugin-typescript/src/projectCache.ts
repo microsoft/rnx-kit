@@ -1,7 +1,5 @@
 import { findPackageDir } from "@rnx-kit/tools-node";
 import type { AllPlatforms } from "@rnx-kit/tools-react-native/platform";
-import { platformExtensions } from "@rnx-kit/tools-react-native/platform";
-import { changeHostToUseReactNativeResolver } from "@rnx-kit/typescript-react-native-resolver";
 import {
   createDiagnosticWriter,
   Project,
@@ -10,6 +8,7 @@ import {
 import * as fs from "fs";
 import * as path from "path";
 import ts from "typescript";
+import { createEnhanceLanguageServiceHost } from "./host";
 import type { ProjectCache, ProjectInfo } from "./types";
 
 /**
@@ -100,22 +99,11 @@ export function createProjectCache(
 
     // Create a TypeScript project using the configuration file. Enhance the
     // underlying TS language service with our react-native module resolver.
-    const enhanceLanguageServiceHost = (host: ts.LanguageServiceHost): void => {
-      const platformExtensionNames = platformExtensions(platform);
-      const disableReactNativePackageSubstitution = true;
-      changeHostToUseReactNativeResolver({
-        host,
-        options: cmdLine.options,
-        platform,
-        platformExtensionNames,
-        disableReactNativePackageSubstitution,
-      });
-    };
     const tsproject = new Project(
       documentRegistry,
       diagnosticWriter,
       cmdLine,
-      enhanceLanguageServiceHost
+      createEnhanceLanguageServiceHost(platform, cmdLine.options)
     );
 
     return {
