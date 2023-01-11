@@ -45,7 +45,7 @@ export function getCompilerOptionsWithReactNativeModuleSuffixes(
   //
   //  Package authors may use a convention where they set 'moduleSuffixes' to [".native", ""].
   //  They do this when they don't have platform-specific code (e.g. iOS only). Instead,
-  //  they suffixes to separate React Native code (.native.ts) from Web code (.ts). We
+  //  they use suffixes to separate React Native code (.native.ts) from Web code (.ts). We
   //  allow that convention as well.
   //
   //  The best we can do is check `moduleSuffixes` for either of these conventions, and fail
@@ -121,7 +121,7 @@ export function resolveModuleName(
   const cache: ts.ModuleResolutionCache | undefined = undefined;
 
   //  Another param the resolver takes is an explicit resolution mode: CommonJS or ESNext.
-  //  It is optional, and we leave it undefined, so that TypeScript chooses an apprporiate
+  //  It is optional, and we leave it undefined, so that TypeScript chooses an appropriate
   //  default.
   //
   const resolutionMode:
