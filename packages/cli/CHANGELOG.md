@@ -1,5 +1,12 @@
 # Change Log - @rnx-kit/cli
 
+## 0.15.3
+
+### Patch Changes
+
+- Updated dependencies [f01bdef6]
+  - @rnx-kit/metro-plugin-typescript@0.2.0
+
 ## 0.15.2
 
 ### Patch Changes
