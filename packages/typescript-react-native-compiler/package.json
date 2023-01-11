@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/typescript-react-native-compiler",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "TypeScript compiler with a custom module resolver for react-native projects",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/typescript-react-native-compiler#readme",
   "license": "MIT",
@@ -26,7 +26,7 @@
   "dependencies": {
     "@rnx-kit/tools-language": "^1.2.6",
     "@rnx-kit/tools-node": "^1.2.7",
-    "@rnx-kit/typescript-react-native-resolver": "^0.3.0",
+    "@rnx-kit/typescript-react-native-resolver": "^0.3.1",
     "@rnx-kit/typescript-service": "^1.5.3",
     "chalk": "^4.1.0"
   },

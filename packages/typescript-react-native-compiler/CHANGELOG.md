@@ -1,5 +1,13 @@
 # Change Log - @rnx-kit/typescript-react-native-compiler
 
+## 0.0.10
+
+### Patch Changes
+
+- f01bdef6: Mark this package as depcrecated.
+- Updated dependencies [f01bdef6]
+  - @rnx-kit/typescript-react-native-resolver@0.3.1
+
 ## 0.0.9
 
 ### Patch Changes
