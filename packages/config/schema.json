@@ -40,46 +40,21 @@
     "bundlerRuntimeParameters": {
       "type": "object",
       "properties": {
-        "detectCyclicDependencies": {
-          "description": "Choose whether to detect cycles in the dependency graph. If true, then a default set of options will be used. Otherwise the object allows for fine-grained control over the detection process.",
-          "oneOf": [
-            { "type": "boolean" },
-            {
-              "type": "object",
-              "properties": {
-                "includeNodeModules": { "type": "boolean" },
-                "linesOfContext": { "type": "number" },
-                "throwOnError": { "type": "boolean" }
+        "plugins": {
+          "description": "Plugins passed to the Metro config.",
+          "type": "array",
+          "items": {
+            "oneOf": [
+              { "type": "string" },
+              {
+                "type": "array",
+                "items": {
+                  "oneOf": [{ "type": "string" }, { "type": "object" }]
+                }
               }
-            }
-          ],
-          "default": true
-        },
-        "detectDuplicateDependencies": {
-          "description": "Choose whether to detect duplicate packages in the dependency graph.",
-          "oneOf": [
-            { "type": "boolean" },
-            {
-              "type": "object",
-              "properties": {
-                "ignoredModules": {
-                  "type": "array",
-                  "items": { "type": "string" }
-                },
-                "bannedModules": {
-                  "type": "array",
-                  "items": { "type": "string" }
-                },
-                "throwOnError": { "type": "boolean" }
-              }
-            }
-          ],
-          "default": true
-        },
-        "typescriptValidation": {
-          "description": "Choose whether to type-check source files using TypeScript.",
-          "type": "boolean",
-          "default": true
+            ]
+          },
+          "uniqueItems": true
         },
         "treeShake": {
           "description": "Choose whether to enable tree shaking.",
