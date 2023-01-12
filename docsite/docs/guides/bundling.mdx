@@ -229,18 +229,22 @@ you're used to, right in the Metro output:
   width="700"
 />
 
-TypeScript validation is **on** by default. You can control it with the
-[typescriptValidation](/docs/tools/config#bundlerplugins) configuration
-property.
+TypeScript validation is **on** by default. You can configure it by passing
+options with the `@rnx-kit/metro-plugin-typescript` entry in
+[plugins](/docs/tools/config#bundlerplugins) configuration property.
 
-```json title=package.json
-{
-  "rnx-kit": {
-    "bundle": {
-      "typescriptValidation": true
-    }
-  }
-}
+```diff title=package.json
+ {
+   "rnx-kit": {
+     "bundle": {
+       "plugins": [
+         "@rnx-kit/metro-plugin-cyclic-dependencies-detector",
+         "@rnx-kit/metro-plugin-duplicates-checker",
++        ["@rnx-kit/metro-plugin-typescript", { options: {} }]
+       ]
+     }
+   }
+ }
 ```
 
 ### Tree Shaking
@@ -277,18 +281,22 @@ the duplicated package has global state.
   width="700"
 />
 
-Duplicate detection is **on** by default. You can control it with the
-[detectDuplicateDependencies](/docs/tools/config#bundlerplugins) configuration
-property.
+Duplicate detection is **on** by default. You can configure it by passing
+options with the `@rnx-kit/metro-plugin-duplicates-checker` entry in
+[plugins](/docs/tools/config#bundlerplugins) configuration property.
 
-```json title=package.json
-{
-  "rnx-kit": {
-    "bundle": {
-      "detectDuplicateDependencies": true
-    }
-  }
-}
+```diff title=package.json
+ {
+   "rnx-kit": {
+     "bundle": {
+       "plugins": [
+         "@rnx-kit/metro-plugin-cyclic-dependencies-detector",
++        ["@rnx-kit/metro-plugin-duplicates-checker", { "options": {} }],
+         "@rnx-kit/metro-plugin-typescript"
+       ]
+     }
+   }
+ }
 ```
 
 ### Cyclic Dependencies
@@ -305,18 +313,26 @@ A cycle in your dependency graph will look somthing like this: `logger` requires
   width="650"
 />
 
-Cycles can be bad news. Detecting them is **on** by default. You can control it
-with the [detectCyclicDependencies](/docs/tools/config#bundlerplugins)
-configuration property.
+Cycles can be bad news. Detecting them is **on** by default. You can configure
+it by passing options with the
+`@rnx-kit/metro-plugin-cyclic-dependencies-detector` entry in
+[plugins](/docs/tools/config#bundlerplugins) configuration property.
 
-```json title=package.json
-{
-  "rnx-kit": {
-    "bundle": {
-      "detectCyclicDependencies": true
-    }
-  }
-}
+```diff title=package.json
+ {
+   "rnx-kit": {
+     "bundle": {
+       "plugins": [
++        [
++          "@rnx-kit/metro-plugin-cyclic-dependencies-detector",
++          { "options": {} }
++        ],
+         "@rnx-kit/metro-plugin-duplicates-checker",
+         "@rnx-kit/metro-plugin-typescript"
+       ]
+     }
+   }
+ }
 ```
 
 ## Running the Bundler
@@ -344,11 +360,25 @@ find flaws, see patterns, and do automated transformations.
 
 You should fix these now, or plan on fixing them soon. To defer until later,
 configure the bundler so it reports the errors without failing. Set
-`throwOnError` to `false` in the `typescriptValidation`
-[configuration object](/docs/tools/config#bundlerplugins). It's also a good idea
-to open a new issue for tracking the type errors, and to remind you to re-enable
-`throwOnError`. In the meantime, keeping the errors visible in the Metro output
-helps everyone be aware of danger-areas in the app.
+`throwOnError` to `false`:
+
+```diff title=package.json
+ {
+   "rnx-kit": {
+     "bundle": {
+       "plugins": [
+         "@rnx-kit/metro-plugin-cyclic-dependencies-detector",
+         "@rnx-kit/metro-plugin-duplicates-checker",
++        ["@rnx-kit/metro-plugin-typescript", { "throwOnError": false }]
+       ]
+     }
+   }
+ }
+```
+
+It's also a good idea to open a new issue for tracking the type errors, and to
+remind you to re-enable `throwOnError`. In the meantime, keeping the errors
+visible in the Metro output helps everyone be aware of danger-areas in the app.
 
 **Are you running into duplicate package errors?**
 
@@ -387,8 +417,24 @@ Below are some helpful tricks you can try:
 
 If you can't get rid of the duplicate package, and your app seems to be working,
 you can choose to live with it. Add the duplicate package name to the
-`ignoredModules` list in the `detectDuplicateDependencies`
-[configuration object](/docs/tools/config#bundlerplugins).
+`ignoredModules` option, e.g. to ignore duplicates of `react-is`:
+
+```diff title=package.json
+ {
+   "rnx-kit": {
+     "bundle": {
+       "plugins": [
+         "@rnx-kit/metro-plugin-cyclic-dependencies-detector",
++        [
++          "@rnx-kit/metro-plugin-duplicates-checker",
++          { "ignoredModules": ["react-is"] }
++        ],
+         "@rnx-kit/metro-plugin-typescript"
+       ]
+     }
+   }
+ }
+```
 
 **Are you seeing cyclic dependency errors?**
 
@@ -410,8 +456,24 @@ Here are some approaches you can use to fix a cycle:
 If none of this is appealing, you can take a closer look at the code involved to
 understand if and how an infinite loop might occur. If you can avoid triggering
 it, then document that in your code, and live with the cycle. Set `throwOnError`
-to `false` in the `detectCyclicDependencies`
-[configuration object](/docs/tools/config#bundlerplugins).
+to `false`:
+
+```diff title=package.json
+ {
+   "rnx-kit": {
+     "bundle": {
+       "plugins": [
++        [
++          "@rnx-kit/metro-plugin-cyclic-dependencies-detector",
++          { "throwOnError": false }
++        ],
+         "@rnx-kit/metro-plugin-duplicates-checker",
+         "@rnx-kit/metro-plugin-typescript"
+       ]
+     }
+   }
+ }
+```
 
 ## Integrating with PRs and Builds
 
