@@ -63,7 +63,13 @@ yarn react-native rnx-bundle --entry-file src/index.ts --bundle-output main.jsbu
           "assetsDest": "dist/res"
         },
         "macos": {
-          "typescriptValidation": false
+          "plugins": [
+            "@rnx-kit/metro-plugin-cyclic-dependencies-detector",
+            [
+              "@rnx-kit/metro-plugin-duplicates-checker",
+              { "ignoredModules": ["react-is"] }
+            ]
+          ]
         }
       }
     }
