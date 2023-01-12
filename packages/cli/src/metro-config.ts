@@ -42,6 +42,7 @@ export function customizeMetroConfig(
   const metroConfig = metroConfigReadonly as InputConfigT;
 
   const metroPlugins: MetroPlugin[] = [];
+  const serializerHooks: SerializerConfigT["experimentalSerializerHook"][] = [];
 
   const oldOptions = [
     "detectCyclicDependencies",
@@ -74,8 +75,9 @@ export function customizeMetroConfig(
       metroPlugins.push(CyclicDependencies());
     }
 
-    const hook = TypeScriptPlugin(typescriptValidation, print);
-    metroConfig.serializer.experimentalSerializerHook = hook;
+    if (typescriptValidation !== false) {
+      serializerHooks.push(TypeScriptPlugin(typescriptValidation, print));
+    }
   } else {
     const plugins =
       bundlerPlugins.plugins || getDefaultBundlerPlugins().plugins;
@@ -85,15 +87,13 @@ export function customizeMetroConfig(
         : [entry, undefined];
       const plugin = importPlugin(module);
       switch (plugin.type) {
-        case "analyzer":
+        case "serializer":
           metroPlugins.push(plugin(options));
           break;
 
-        case "serializerHook": {
-          const hook = plugin(options, print);
-          metroConfig.serializer.experimentalSerializerHook = hook;
+        case "serializerHook":
+          serializerHooks.push(plugin(options, print));
           break;
-        }
 
         default:
           throw new Error(`${module}: unknown plugin type: ${plugin.type}`);
@@ -121,5 +121,20 @@ export function customizeMetroConfig(
     ) as SerializerConfigT["customSerializer"];
   } else {
     delete metroConfig.serializer.customSerializer;
+  }
+
+  switch (serializerHooks.length) {
+    case 0:
+      break;
+    case 1:
+      metroConfig.serializer.experimentalSerializerHook = serializerHooks[0];
+      break;
+    default:
+      metroConfig.serializer.experimentalSerializerHook = (graph, delta) => {
+        for (const hook of serializerHooks) {
+          hook(graph, delta);
+        }
+      };
+      break;
   }
 }

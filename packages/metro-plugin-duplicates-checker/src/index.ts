@@ -79,7 +79,7 @@ export function DuplicateDependencies(
   };
 }
 
-DuplicateDependencies.type = "analyzer";
+DuplicateDependencies.type = "serializer";
 
 if (require.main === module) {
   checkForDuplicatePackagesInFile(process.argv[2]).catch((error) => {

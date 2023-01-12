@@ -17,6 +17,6 @@ export function CyclicDependencies(
   };
 }
 
-CyclicDependencies.type = "analyzer";
+CyclicDependencies.type = "serializer";
 
 export default CyclicDependencies;
