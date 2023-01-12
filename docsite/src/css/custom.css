@@ -197,11 +197,13 @@ html[data-theme="dark"] .navbar {
  * Links
  */
 .markdown a {
-  background-color: rgba(187, 239, 253, 0.3);
+  background-color: rgba(187, 239, 253, 0.4);
   border-bottom: 1px solid var(--ifm-hr-border-color);
   color: var(--ifm-font-color-base);
   display: initial;
   line-height: calc(var(--ifm-font-size-base) + 4px);
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
 }
 
 .markdown a:hover {
@@ -211,7 +213,7 @@ html[data-theme="dark"] .navbar {
 }
 
 html[data-theme="dark"] .markdown a {
-  background-color: rgba(var(--react-native-color-rgb), 0.12);
+  background-color: rgba(var(--react-native-color-rgb), 0.2);
   border-bottom-color: rgba(var(--react-native-color-rgb), 0.3);
 }
 
