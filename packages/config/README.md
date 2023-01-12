@@ -67,12 +67,10 @@ Parameters controlling how a bundle is constructed.
 
 Parameters controlling bundler plugins.
 
-| Name                        | Type                                              | Description                                                                                                                                                         |
-| --------------------------- | ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| detectCyclicDependencies    | boolean, `CyclicDetectorOptions`, undefined       | Choose whether to detect cycles in the dependency graph. `true` uses defaults, while `CyclicDetectorOptions` lets you control the detection process.                |
-| detectDuplicateDependencies | boolean, `DuplicateDetectorOptions`, undefined    | Choose whether to detect duplicate packages in the dependency graph. `true` uses defaults, while `DuplicateDetectorOptions` lets you control the detection process. |
-| typescriptValidation        | boolean, `TypeScriptValidationOptions`, undefined | Choose whether to type-check source files using TypeScript. `true` uses defaults, while `TypeScriptValidationOptions` lets you control the validation process.      |
-| treeShake                   | boolean, undefined                                | Choose whether to enable tree shaking.                                                                                                                              |
+| Name      | Type                          | Description                                                                                                                                                                                    |
+| --------- | ----------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| plugins   | `(string \| [string, any])[]` | List of plugins to apply. If unset, it falls back to `["@rnx-kit/metro-plugin-cyclic-dependencies-detector", "@rnx-kit/metro-plugin-duplicates-checker", "@rnx-kit/metro-plugin-typescript"]`. |
+| treeShake | boolean, undefined            | Choose whether to enable tree shaking.                                                                                                                                                         |
 
 ### `CyclicDetectorOptions`
 
