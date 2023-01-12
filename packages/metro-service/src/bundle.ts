@@ -1,12 +1,10 @@
 import chalk from "chalk";
-import path from "path";
-
 import type { AssetData, OutputOptions } from "metro";
 import type { TransformProfile } from "metro-babel-transformer";
 import type { ConfigT } from "metro-config";
 import Server from "metro/src/Server";
 import Bundle from "metro/src/shared/output/bundle";
-
+import path from "path";
 import { saveAssets } from "./asset";
 
 export type BundleArgs = {
@@ -32,18 +30,25 @@ type RequestOptions = {
   unstable_transformProfile?: TransformProfile;
 };
 
+function getBundlerFromCliPlugin() {
+  try {
+    const {
+      buildBundleWithConfig,
+    } = require("@react-native-community/cli-plugin-metro");
+    return buildBundleWithConfig;
+  } catch (_) {
+    return undefined;
+  }
+}
+
 export async function bundle(
   args: BundleArgs,
   config: ConfigT,
   output = Bundle
 ): Promise<void> {
-  try {
-    const {
-      buildBundleWithConfig,
-    } = require("@react-native-community/cli-plugin-metro");
+  const buildBundleWithConfig = getBundlerFromCliPlugin();
+  if (buildBundleWithConfig) {
     return buildBundleWithConfig(args, config, output);
-  } catch (_) {
-    // Retry with our custom logic
   }
 
   if (config.resolver.platforms.indexOf(args.platform) === -1) {

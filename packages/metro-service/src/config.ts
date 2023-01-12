@@ -1,13 +1,25 @@
-import path from "path";
 import type { Config as CLIConfig } from "@react-native-community/cli-types";
 import type { Reporter } from "metro";
-import { loadConfig, ConfigT, InputConfigT } from "metro-config";
+import { ConfigT, InputConfigT, loadConfig } from "metro-config";
 import type {
   CustomResolver,
   Resolution,
   ResolutionContext,
 } from "metro-resolver";
 import { resolve as metroResolver } from "metro-resolver";
+import path from "path";
+
+export type MetroConfigOverrides = {
+  config?: string;
+  port?: number;
+  projectRoot?: string;
+  watchFolders?: string[];
+  sourceExts?: string[];
+  maxWorkers?: number;
+  resetCache?: boolean;
+  reporter?: Reporter;
+  assetPlugins?: string[];
+};
 
 const INTERNAL_CALLSITES_REGEX = new RegExp(
   [
@@ -69,16 +81,7 @@ function getAsyncRequireModulePath(): string | undefined {
   }
 }
 
-function getDefaultConfig(cliConfig: CLIConfig): InputConfigT {
-  try {
-    const {
-      getDefaultConfig,
-    } = require("@react-native-community/cli-plugin-metro");
-    return getDefaultConfig(cliConfig);
-  } catch (_) {
-    // Retry with our custom logic
-  }
-
+function getDefaultConfigInternal(cliConfig: CLIConfig): InputConfigT {
   const outOfTreePlatforms = Object.keys(cliConfig.platforms).filter(
     (platform) => cliConfig.platforms[platform].npmPackageName
   );
@@ -148,17 +151,16 @@ function getDefaultConfig(cliConfig: CLIConfig): InputConfigT {
   return defaultConfig as InputConfigT;
 }
 
-export type MetroConfigOverrides = {
-  config?: string;
-  port?: number;
-  projectRoot?: string;
-  watchFolders?: string[];
-  sourceExts?: string[];
-  maxWorkers?: number;
-  resetCache?: boolean;
-  reporter?: Reporter;
-  assetPlugins?: string[];
-};
+function getDefaultConfigProvider(): typeof getDefaultConfigInternal {
+  try {
+    const {
+      getDefaultConfig,
+    } = require("@react-native-community/cli-plugin-metro");
+    return getDefaultConfig;
+  } catch (_) {
+    return getDefaultConfigInternal;
+  }
+}
 
 /**
  * Load the Metro configuration and apply overrides. If a config file isn't given,
@@ -173,6 +175,7 @@ export function loadMetroConfig(
   cliConfig: CLIConfig,
   overrides: MetroConfigOverrides
 ): Promise<ConfigT> {
+  const getDefaultConfig = getDefaultConfigProvider();
   const defaultConfig = getDefaultConfig(cliConfig);
 
   //  apply overrides that loadConfig() doesn't do for us
