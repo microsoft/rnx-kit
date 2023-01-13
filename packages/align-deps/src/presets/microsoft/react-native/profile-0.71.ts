@@ -45,7 +45,7 @@ const profile: Profile = {
   },
   "babel-preset-react-native": {
     name: "metro-react-native-babel-preset",
-    version: "^0.73.5",
+    version: "^0.73.7",
     devOnly: true,
   },
   gestures: {
@@ -59,32 +59,32 @@ const profile: Profile = {
   },
   metro: {
     name: "metro",
-    version: "^0.73.5",
+    version: "^0.73.7",
     devOnly: true,
   },
   "metro-config": {
     name: "metro-config",
-    version: "^0.73.5",
+    version: "^0.73.7",
     devOnly: true,
   },
   "metro-core": {
     name: "metro-core",
-    version: "^0.73.5",
+    version: "^0.73.7",
     devOnly: true,
   },
   "metro-react-native-babel-transformer": {
     name: "metro-react-native-babel-transformer",
-    version: "^0.73.5",
+    version: "^0.73.7",
     devOnly: true,
   },
   "metro-resolver": {
     name: "metro-resolver",
-    version: "^0.73.5",
+    version: "^0.73.7",
     devOnly: true,
   },
   "metro-runtime": {
     name: "metro-runtime",
-    version: "^0.73.5",
+    version: "^0.73.7",
     devOnly: true,
   },
   screens: {
