@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-service
 
+## 3.0.3
+
+### Patch Changes
+
+- 775ef91d: Fix exceptions unintentionally being caught
+
 ## 3.0.2
 
 ### Patch Changes
