@@ -11,7 +11,6 @@ cli({
       "align-deps-preset.js"
     ),
   ],
-  "exclude-packages": "@rnx-kit/expo-app",
   requirements: ["react-native@0.68"],
   write: process.argv.includes("--write"),
 });

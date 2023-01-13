@@ -52,17 +52,6 @@
         "react-native-windows"
       ],
       "allowedVersions": "^0.68.0"
-    },
-    {
-      "matchPackageNames": [
-        "@types/react-native",
-        "react-native",
-        "react-native-codegen",
-        "react-native-macos",
-        "react-native-windows"
-      ],
-      "matchPaths": ["packages/expo-app/**"],
-      "allowedVersions": "^0.68.0"
     }
   ],
   "postUpdateOptions": ["yarnDedupeHighest"],
