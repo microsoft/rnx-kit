@@ -73,23 +73,11 @@ jobs:
           yarn ram-bundle
         shell: bash
         working-directory: packages/test-app
-  build-android-expo-app:
-    name: "Build Android"
-    uses: ./.github/workflows/build-android.yml
-    with:
-      package: expo-app
   build-android-test-app:
     name: "Build Android"
     uses: ./.github/workflows/build-android.yml
     with:
       package: test-app
-  build-ios-expo-app:
-    name: "Build iOS"
-    uses: ./.github/workflows/build-ios.yml
-    with:
-      package: expo-app
-      workspace-name: expoapp
-      scheme-name: expoapp
   build-ios-test-app:
     name: "Build iOS"
     uses: ./.github/workflows/build-ios.yml
