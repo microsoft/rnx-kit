@@ -49,7 +49,6 @@ yarn react-native rnx-bundle --entry-file src/index.ts --bundle-output main.jsbu
     "bundle": {
       "entryFile": "entry.js",
       "assetsDest": "dist",
-      "targets": ["ios", "android", "windows", "macos"],
       "plugins": [
         "@rnx-kit/metro-plugin-cyclic-dependencies-detector",
         [
@@ -58,6 +57,7 @@ yarn react-native rnx-bundle --entry-file src/index.ts --bundle-output main.jsbu
         ],
         "@rnx-kit/metro-plugin-typescript"
       ],
+      "targets": ["ios", "android", "windows", "macos"],
       "platforms": {
         "android": {
           "assetsDest": "dist/res"
