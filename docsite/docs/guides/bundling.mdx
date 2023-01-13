@@ -240,7 +240,7 @@ options with the `@rnx-kit/metro-plugin-typescript` entry in
        "plugins": [
          "@rnx-kit/metro-plugin-cyclic-dependencies-detector",
          "@rnx-kit/metro-plugin-duplicates-checker",
-+        ["@rnx-kit/metro-plugin-typescript", { options: {} }]
++        ["@rnx-kit/metro-plugin-typescript", { "throwOnError": true }]
        ]
      }
    }
@@ -291,7 +291,7 @@ options with the `@rnx-kit/metro-plugin-duplicates-checker` entry in
      "bundle": {
        "plugins": [
          "@rnx-kit/metro-plugin-cyclic-dependencies-detector",
-+        ["@rnx-kit/metro-plugin-duplicates-checker", { "options": {} }],
++        ["@rnx-kit/metro-plugin-duplicates-checker", { "throwOnError": true }],
          "@rnx-kit/metro-plugin-typescript"
        ]
      }
@@ -325,7 +325,7 @@ it by passing options with the
        "plugins": [
 +        [
 +          "@rnx-kit/metro-plugin-cyclic-dependencies-detector",
-+          { "options": {} }
++          { "throwOnError": true }
 +        ],
          "@rnx-kit/metro-plugin-duplicates-checker",
          "@rnx-kit/metro-plugin-typescript"
