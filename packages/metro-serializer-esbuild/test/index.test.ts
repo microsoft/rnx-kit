@@ -74,7 +74,7 @@ describe("metro-serializer-esbuild", () => {
     expect(result).toMatchInlineSnapshot(`
       "\\"use strict\\";
       (() => {
-        // lib/index.js
+        // virtual:metro:__rnx_prelude__
         var global = new Function(\\"return this;\\")();
 
         // virtual:metro:/~/metro-serializer-esbuild/test/__fixtures__/base.ts
@@ -94,7 +94,7 @@ describe("metro-serializer-esbuild", () => {
     expect(result).toMatchInlineSnapshot(`
       "\\"use strict\\";
       (() => {
-        // lib/index.js
+        // virtual:metro:__rnx_prelude__
         var global = new Function(\\"return this;\\")();
 
         // virtual:metro:/~/metro-serializer-esbuild/test/__fixtures__/base.ts
@@ -114,7 +114,7 @@ describe("metro-serializer-esbuild", () => {
     expect(result).toMatchInlineSnapshot(`
       "\\"use strict\\";
       (() => {
-        // lib/index.js
+        // virtual:metro:__rnx_prelude__
         var global = new Function(\\"return this;\\")();
 
         // virtual:metro:/~/metro-serializer-esbuild/test/__fixtures__/base.ts
@@ -134,7 +134,7 @@ describe("metro-serializer-esbuild", () => {
     expect(result).toMatchInlineSnapshot(`
       "\\"use strict\\";
       (() => {
-        // lib/index.js
+        // virtual:metro:__rnx_prelude__
         var global = new Function(\\"return this;\\")();
 
         // virtual:metro:/~/metro-serializer-esbuild/test/__fixtures__/base.ts
@@ -154,7 +154,7 @@ describe("metro-serializer-esbuild", () => {
     expect(result).toMatchInlineSnapshot(`
       "\\"use strict\\";
       (() => {
-        // lib/index.js
+        // virtual:metro:__rnx_prelude__
         var global = new Function(\\"return this;\\")();
 
         // virtual:metro:/~/metro-serializer-esbuild/test/__fixtures__/base.ts
@@ -174,7 +174,7 @@ describe("metro-serializer-esbuild", () => {
     expect(result).toMatchInlineSnapshot(`
       "\\"use strict\\";
       (() => {
-        // lib/index.js
+        // virtual:metro:__rnx_prelude__
         var global = new Function(\\"return this;\\")();
 
         // virtual:metro:/~/node_modules/lodash-es/head.js
@@ -200,26 +200,25 @@ describe("metro-serializer-esbuild", () => {
           return fn && (res = (0, fn[__getOwnPropNames(fn)[0]])(fn = 0)), res;
         };
 
-        // lib/index.js
+        // virtual:metro:__rnx_prelude__
         var global;
-        var init_lib = __esm({
-          \\"lib/index.js\\"() {
-            \\"use strict\\";
+        var init_rnx_prelude = __esm({
+          \\"virtual:metro:__rnx_prelude__\\"() {
             global = new Function(\\"return this;\\")();
           }
         });
 
         // virtual:metro:/~/metro-serializer-esbuild/test/__fixtures__/sideEffectsArray.ts
-        init_lib();
+        init_rnx_prelude();
 
         // virtual:metro:/~/node_modules/@fluentui/utilities/lib/index.js
-        init_lib();
+        init_rnx_prelude();
 
         // virtual:metro:/~/node_modules/@fluentui/set-version/lib/index.js
-        init_lib();
+        init_rnx_prelude();
 
         // virtual:metro:/~/node_modules/@fluentui/set-version/lib/setVersion.js
-        init_lib();
+        init_rnx_prelude();
         var packagesCache = {};
         var _win = void 0;
         try {
@@ -241,7 +240,7 @@ describe("metro-serializer-esbuild", () => {
         setVersion(\\"@fluentui/set-version\\", \\"6.0.0\\");
 
         // virtual:metro:/~/node_modules/@fluentui/utilities/lib/warn/warn.js
-        init_lib();
+        init_rnx_prelude();
         var _warningCallback = void 0;
         function warn(message) {
           if (_warningCallback && false) {
@@ -252,10 +251,10 @@ describe("metro-serializer-esbuild", () => {
         }
 
         // virtual:metro:/~/node_modules/@fluentui/utilities/lib/warn.js
-        init_lib();
+        init_rnx_prelude();
 
         // virtual:metro:/~/node_modules/@fluentui/utilities/lib/version.js
-        init_lib();
+        init_rnx_prelude();
         setVersion(\\"@fluentui/utilities\\", \\"8.12.0\\");
 
         // virtual:metro:/~/metro-serializer-esbuild/test/__fixtures__/sideEffectsArray.ts
@@ -274,7 +273,7 @@ describe("metro-serializer-esbuild", () => {
     expect(result).toMatchInlineSnapshot(`
       "\\"use strict\\";
       (() => {
-        // lib/index.js
+        // virtual:metro:__rnx_prelude__
         var global = new Function(\\"return this;\\")();
 
         // virtual:metro:/~/metro-serializer-esbuild/test/__fixtures__/base.ts
