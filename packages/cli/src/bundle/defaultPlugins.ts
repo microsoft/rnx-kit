@@ -1,6 +1,8 @@
 import type { BundleParameters } from "@rnx-kit/config";
 
-const defaultPlugins = {
+type DefaultPlugins = Pick<Required<BundleParameters>, "plugins" | "treeShake">;
+
+const defaultPlugins: DefaultPlugins = {
   plugins: [
     "@rnx-kit/metro-plugin-cyclic-dependencies-detector",
     "@rnx-kit/metro-plugin-duplicates-checker",
@@ -9,8 +11,6 @@ const defaultPlugins = {
   treeShake: false,
 };
 
-export function getDefaultBundlerPlugins(): Required<
-  Pick<BundleParameters, "plugins" | "treeShake">
-> {
+export function getDefaultBundlerPlugins(): DefaultPlugins {
   return defaultPlugins;
 }
