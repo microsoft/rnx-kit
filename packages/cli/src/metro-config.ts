@@ -1,4 +1,4 @@
-import type { BundlerPlugins } from "@rnx-kit/config";
+import type { BundleParameters, BundlerPlugins } from "@rnx-kit/config";
 import { warn } from "@rnx-kit/console";
 import { CyclicDependencies } from "@rnx-kit/metro-plugin-cyclic-dependencies-detector";
 import { DuplicateDependencies } from "@rnx-kit/metro-plugin-duplicates-checker";
@@ -11,6 +11,15 @@ import {
 } from "@rnx-kit/metro-serializer-esbuild";
 import type { InputConfigT, SerializerConfigT } from "metro-config";
 import { getDefaultBundlerPlugins } from "./bundle/defaultPlugins";
+
+type MetroExtraParams = Pick<
+  BundleParameters,
+  | "detectCyclicDependencies"
+  | "detectDuplicateDependencies"
+  | "typescriptValidation"
+  | "plugins"
+  | "treeShake"
+>;
 
 function resolvePlugin(name: string): string {
   try {
@@ -82,12 +91,12 @@ function readLegacyOptions({
  * Customize the Metro configuration.
  *
  * @param metroConfigReadonly Metro configuration
- * @param bundlerPlugins Plugins used to further customize Metro configuration
+ * @param extraParams Parameters used to further customize Metro configuration
  * @param print Optional function to use when printing status messages to the Metro console
  */
 export function customizeMetroConfig(
   metroConfigReadonly: InputConfigT,
-  bundlerPlugins: BundlerPlugins,
+  extraParams: MetroExtraParams,
   print?: (message: string) => void
 ): void {
   // We will be making changes to the Metro configuration. Coerce from a type
@@ -100,7 +109,7 @@ export function customizeMetroConfig(
     SerializerConfigT["experimentalSerializerHook"]
   > = {};
 
-  const legacyWarning = readLegacyOptions(bundlerPlugins);
+  const legacyWarning = readLegacyOptions(extraParams);
   if (legacyWarning) {
     warn(legacyWarning);
 
@@ -108,7 +117,7 @@ export function customizeMetroConfig(
       detectCyclicDependencies,
       detectDuplicateDependencies,
       typescriptValidation,
-    } = bundlerPlugins;
+    } = extraParams;
 
     if (typeof detectDuplicateDependencies === "object") {
       metroPlugins.push(DuplicateDependencies(detectDuplicateDependencies));
@@ -127,8 +136,7 @@ export function customizeMetroConfig(
       serializerHooks["@rnx-kit/metro-plugin-typescript"] = plugin;
     }
   } else {
-    const plugins =
-      bundlerPlugins.plugins || getDefaultBundlerPlugins().plugins;
+    const plugins = extraParams.plugins || getDefaultBundlerPlugins().plugins;
     for (const entry of plugins) {
       const [module, options] = Array.isArray(entry)
         ? entry
@@ -149,7 +157,7 @@ export function customizeMetroConfig(
     }
   }
 
-  if (bundlerPlugins.treeShake) {
+  if (extraParams.treeShake) {
     metroConfig.serializer.customSerializer =
       MetroSerializerEsbuild(metroPlugins);
     Object.assign(metroConfig.transformer, esbuildTransformerConfig);

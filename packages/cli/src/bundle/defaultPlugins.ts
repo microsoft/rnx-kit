@@ -1,4 +1,4 @@
-import type { BundlerPlugins } from "@rnx-kit/config";
+import type { BundleParameters } from "@rnx-kit/config";
 
 const defaultPlugins = {
   plugins: [
@@ -10,7 +10,7 @@ const defaultPlugins = {
 };
 
 export function getDefaultBundlerPlugins(): Required<
-  Pick<BundlerPlugins, "plugins" | "treeShake">
+  Pick<BundleParameters, "plugins" | "treeShake">
 > {
   return defaultPlugins;
 }

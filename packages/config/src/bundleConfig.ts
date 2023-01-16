@@ -39,27 +39,6 @@ export type BundlerPlugins = {
    * @deprecated Replaced by `plugins`
    */
   typescriptValidation?: boolean | TypeScriptValidationOptions;
-
-  /**
-   * Choose whether to enable tree shaking.
-   *
-   * Note that Metro ignores custom serializers (which this feature depends on)
-   * when outputting RAM bundle format.
-   *
-   * Only applies to `rnx-bundle` command.
-   */
-  treeShake?: boolean;
-
-  /**
-   * List of plugins to add to the bundling process.
-   *
-   * @default [
-   *   "@rnx-kit/metro-plugin-cyclic-dependencies-detector",
-   *   "@rnx-kit/metro-plugin-duplicates-checker",
-   *   "@rnx-kit/metro-plugin-typescript"
-   * ]
-   */
-  plugins?: Plugin[];
 };
 
 /**
@@ -114,6 +93,27 @@ export type BundleParameters = BundlerPlugins & {
    * Only applies to the `rnx-ram-bundle` command.
    */
   indexedRamBundle?: boolean;
+
+  /**
+   * Choose whether to enable tree shaking.
+   *
+   * Note that Metro ignores custom serializers (which this feature depends on)
+   * when outputting RAM bundle format.
+   *
+   * Only applies to `rnx-bundle` command.
+   */
+  treeShake?: boolean;
+
+  /**
+   * List of plugins to add to the bundling process.
+   *
+   * @default [
+   *   "@rnx-kit/metro-plugin-cyclic-dependencies-detector",
+   *   "@rnx-kit/metro-plugin-duplicates-checker",
+   *   "@rnx-kit/metro-plugin-typescript"
+   * ]
+   */
+  plugins?: Plugin[];
 };
 
 /**
