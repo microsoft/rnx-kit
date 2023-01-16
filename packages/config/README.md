@@ -48,29 +48,22 @@ platform-specific overrides.
 
 Union of: "ios", "android", "windows", "win32", "macos"
 
-### `BundleParameters` inherits `BundlerPlugins`
+### `BundleParameters`
 
 Parameters controlling how a bundle is constructed.
 
-| Name                     | Type               | Description                                                                                                                                                                                            |
-| ------------------------ | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| entryFile                | string, undefined  | Path to the .js file which is the entry-point for building the bundle. Either absolute, or relative to the package.                                                                                    |
-| bundleOutput             | string, undefined  | Path to the output bundle file. Either absolute or relative to the package.                                                                                                                            |
-| bundleEncoding           | string, undefined  | [Encoding scheme](https://nodejs.org/api/buffer.html#buffer_buffers_and_character_encodings) to use when writing the bundle file. Currently limited to UTF-8, UTF-16 (little endian), and 7-bit ASCII. |
-| sourcemapOutput          | string, undefined  | Path to use when creating the bundle source map file. Either absolute, or relative to the package.                                                                                                     |
-| sourcemapSourcesRoot     | string, undefined  | Path to the package's source files. Used to make source-map paths relative and therefore portable.                                                                                                     |
-| sourcemapUseAbsolutePath | boolean, undefined | Controls whether or not SourceMapURL is reported as a full path or just a file name.                                                                                                                   |
-| assetsDest               | string, undefined  | Path where all bundle assets (strings, images, fonts, sounds, ...) are written. Either absolute, or relative to the package.                                                                           |
-| indexedBundleFormat      | boolean, undefined | Force the "Indexed RAM" bundle file format, even when targeting Android. Only applies to the `rnx-ram-bundle` command.                                                                                 |
-
-### `BundlerPlugins`
-
-Parameters controlling bundler plugins.
-
-| Name      | Type                          | Description                                                                                                                                                                                    |
-| --------- | ----------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| plugins   | `(string \| [string, any])[]` | List of plugins to apply. If unset, it falls back to `["@rnx-kit/metro-plugin-cyclic-dependencies-detector", "@rnx-kit/metro-plugin-duplicates-checker", "@rnx-kit/metro-plugin-typescript"]`. |
-| treeShake | boolean, undefined            | Choose whether to enable tree shaking.                                                                                                                                                         |
+| Name                     | Type                          | Description                                                                                                                                                                                            |
+| ------------------------ | ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| entryFile                | string, undefined             | Path to the .js file which is the entry-point for building the bundle. Either absolute, or relative to the package.                                                                                    |
+| bundleOutput             | string, undefined             | Path to the output bundle file. Either absolute or relative to the package.                                                                                                                            |
+| bundleEncoding           | string, undefined             | [Encoding scheme](https://nodejs.org/api/buffer.html#buffer_buffers_and_character_encodings) to use when writing the bundle file. Currently limited to UTF-8, UTF-16 (little endian), and 7-bit ASCII. |
+| sourcemapOutput          | string, undefined             | Path to use when creating the bundle source map file. Either absolute, or relative to the package.                                                                                                     |
+| sourcemapSourcesRoot     | string, undefined             | Path to the package's source files. Used to make source-map paths relative and therefore portable.                                                                                                     |
+| sourcemapUseAbsolutePath | boolean, undefined            | Controls whether or not SourceMapURL is reported as a full path or just a file name.                                                                                                                   |
+| assetsDest               | string, undefined             | Path where all bundle assets (strings, images, fonts, sounds, ...) are written. Either absolute, or relative to the package.                                                                           |
+| indexedBundleFormat      | boolean, undefined            | Force the "Indexed RAM" bundle file format, even when targeting Android. Only applies to the `rnx-ram-bundle` command.                                                                                 |
+| plugins                  | `(string \| [string, any])[]` | List of plugins to apply. If unset, it falls back to `["@rnx-kit/metro-plugin-cyclic-dependencies-detector", "@rnx-kit/metro-plugin-duplicates-checker", "@rnx-kit/metro-plugin-typescript"]`.         |
+| treeShake                | boolean, undefined            | Choose whether to enable tree shaking.                                                                                                                                                                 |
 
 ### `CyclicDetectorOptions`
 
@@ -94,13 +87,14 @@ Parameters controlling bundler plugins.
 | ------------ | ------------------ | ------- | --------------------------------------------------------------- |
 | throwOnError | boolean, undefined | true    | Controls whether an error is thrown when type-validation fails. |
 
-### `ServerConfig` inherits `BundlerPlugins`
+### `ServerConfig`
 
-| Name         | Type                | Description                                                                                                                                                                                                                                                  |
-| ------------ | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| projectRoot  | string, undefined   | Path to the root of your react-native application. The bundle server uses this root path to resolve all web requests. The root path should contain your Babel config, otherwise Metro won't be able to find it. Either absolute, or relative to the package. |
-| assetPlugins | string[], undefined | Additional asset plugins to be used by the Metro Babel transformer. Comma-separated list containing plugin modules and/or absolute paths to plugin packages.                                                                                                 |
-| sourceExts   | string[], undefined | Additional source-file extensions to include when generating bundles. Comma-separated list, excluding the leading dot.                                                                                                                                       |
+| Name         | Type                          | Description                                                                                                                                                                                                                                                  |
+| ------------ | ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| projectRoot  | string, undefined             | Path to the root of your react-native application. The bundle server uses this root path to resolve all web requests. The root path should contain your Babel config, otherwise Metro won't be able to find it. Either absolute, or relative to the package. |
+| assetPlugins | string[], undefined           | Additional asset plugins to be used by the Metro Babel transformer. Comma-separated list containing plugin modules and/or absolute paths to plugin packages.                                                                                                 |
+| sourceExts   | string[], undefined           | Additional source-file extensions to include when generating bundles. Comma-separated list, excluding the leading dot.                                                                                                                                       |
+| plugins      | `(string \| [string, any])[]` | List of plugins to apply. If unset, it falls back to `["@rnx-kit/metro-plugin-cyclic-dependencies-detector", "@rnx-kit/metro-plugin-duplicates-checker", "@rnx-kit/metro-plugin-typescript"]`.                                                               |
 
 ## API
 

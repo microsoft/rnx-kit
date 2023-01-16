@@ -1,4 +1,4 @@
-import type { BundleParameters, BundlerPlugins } from "@rnx-kit/config";
+import type { BundleParameters } from "@rnx-kit/config";
 import { warn } from "@rnx-kit/console";
 import { CyclicDependencies } from "@rnx-kit/metro-plugin-cyclic-dependencies-detector";
 import { DuplicateDependencies } from "@rnx-kit/metro-plugin-duplicates-checker";
@@ -38,7 +38,7 @@ function readLegacyOptions({
   detectCyclicDependencies,
   detectDuplicateDependencies,
   typescriptValidation,
-}: BundlerPlugins): string | undefined {
+}: MetroExtraParams): string | undefined {
   const oldOptions = [];
   const deprecatedOptions: Record<string, Record<string, unknown> | true> = {};
 
