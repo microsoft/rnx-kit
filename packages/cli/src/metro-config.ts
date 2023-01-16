@@ -42,7 +42,10 @@ export function customizeMetroConfig(
   const metroConfig = metroConfigReadonly as InputConfigT;
 
   const metroPlugins: MetroPlugin[] = [];
-  const serializerHooks: SerializerConfigT["experimentalSerializerHook"][] = [];
+  const serializerHooks: Record<
+    string,
+    SerializerConfigT["experimentalSerializerHook"]
+  > = {};
 
   const oldOptions = [
     "detectCyclicDependencies",
@@ -76,7 +79,8 @@ export function customizeMetroConfig(
     }
 
     if (typescriptValidation !== false) {
-      serializerHooks.push(TypeScriptPlugin(typescriptValidation, print));
+      const plugin = TypeScriptPlugin(typescriptValidation, print);
+      serializerHooks["@rnx-kit/metro-plugin-typescript"] = plugin;
     }
   } else {
     const plugins =
@@ -92,7 +96,7 @@ export function customizeMetroConfig(
           break;
 
         case "serializerHook":
-          serializerHooks.push(plugin(options, print));
+          serializerHooks[module] = plugin(options, print);
           break;
 
         default:
@@ -123,15 +127,16 @@ export function customizeMetroConfig(
     delete metroConfig.serializer.customSerializer;
   }
 
-  switch (serializerHooks.length) {
+  const hooks = Object.values(serializerHooks);
+  switch (hooks.length) {
     case 0:
       break;
     case 1:
-      metroConfig.serializer.experimentalSerializerHook = serializerHooks[0];
+      metroConfig.serializer.experimentalSerializerHook = hooks[0];
       break;
     default:
       metroConfig.serializer.experimentalSerializerHook = (graph, delta) => {
-        for (const hook of serializerHooks) {
+        for (const hook of hooks) {
           hook(graph, delta);
         }
       };
