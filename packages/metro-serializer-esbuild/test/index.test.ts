@@ -74,7 +74,7 @@ describe("metro-serializer-esbuild", () => {
     expect(result).toMatchInlineSnapshot(`
       "\\"use strict\\";
       (() => {
-        // lib/index.js
+        // virtual:metro:/~/metro-serializer-esbuild/lib/index.js
         var global = new Function(\\"return this;\\")();
 
         // virtual:metro:/~/metro-serializer-esbuild/test/__fixtures__/base.ts
@@ -94,7 +94,7 @@ describe("metro-serializer-esbuild", () => {
     expect(result).toMatchInlineSnapshot(`
       "\\"use strict\\";
       (() => {
-        // lib/index.js
+        // virtual:metro:/~/metro-serializer-esbuild/lib/index.js
         var global = new Function(\\"return this;\\")();
 
         // virtual:metro:/~/metro-serializer-esbuild/test/__fixtures__/base.ts
@@ -114,7 +114,7 @@ describe("metro-serializer-esbuild", () => {
     expect(result).toMatchInlineSnapshot(`
       "\\"use strict\\";
       (() => {
-        // lib/index.js
+        // virtual:metro:/~/metro-serializer-esbuild/lib/index.js
         var global = new Function(\\"return this;\\")();
 
         // virtual:metro:/~/metro-serializer-esbuild/test/__fixtures__/base.ts
@@ -134,7 +134,7 @@ describe("metro-serializer-esbuild", () => {
     expect(result).toMatchInlineSnapshot(`
       "\\"use strict\\";
       (() => {
-        // lib/index.js
+        // virtual:metro:/~/metro-serializer-esbuild/lib/index.js
         var global = new Function(\\"return this;\\")();
 
         // virtual:metro:/~/metro-serializer-esbuild/test/__fixtures__/base.ts
@@ -154,7 +154,7 @@ describe("metro-serializer-esbuild", () => {
     expect(result).toMatchInlineSnapshot(`
       "\\"use strict\\";
       (() => {
-        // lib/index.js
+        // virtual:metro:/~/metro-serializer-esbuild/lib/index.js
         var global = new Function(\\"return this;\\")();
 
         // virtual:metro:/~/metro-serializer-esbuild/test/__fixtures__/base.ts
@@ -174,7 +174,7 @@ describe("metro-serializer-esbuild", () => {
     expect(result).toMatchInlineSnapshot(`
       "\\"use strict\\";
       (() => {
-        // lib/index.js
+        // virtual:metro:/~/metro-serializer-esbuild/lib/index.js
         var global = new Function(\\"return this;\\")();
 
         // virtual:metro:/~/node_modules/lodash-es/head.js
@@ -200,11 +200,10 @@ describe("metro-serializer-esbuild", () => {
           return fn && (res = (0, fn[__getOwnPropNames(fn)[0]])(fn = 0)), res;
         };
 
-        // lib/index.js
+        // virtual:metro:/~/metro-serializer-esbuild/lib/index.js
         var global;
         var init_lib = __esm({
-          \\"lib/index.js\\"() {
-            \\"use strict\\";
+          \\"virtual:metro:/~/metro-serializer-esbuild/lib/index.js\\"() {
             global = new Function(\\"return this;\\")();
           }
         });
@@ -274,7 +273,7 @@ describe("metro-serializer-esbuild", () => {
     expect(result).toMatchInlineSnapshot(`
       "\\"use strict\\";
       (() => {
-        // lib/index.js
+        // virtual:metro:/~/metro-serializer-esbuild/lib/index.js
         var global = new Function(\\"return this;\\")();
 
         // virtual:metro:/~/metro-serializer-esbuild/test/__fixtures__/base.ts
