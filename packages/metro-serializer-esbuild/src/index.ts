@@ -209,7 +209,10 @@ export function MetroSerializer(
             };
           }
 
-          if (preModules.find(({ path }) => path === args.path)) {
+          if (
+            args.path === __filename ||
+            preModules.find(({ path }) => path === args.path)
+          ) {
             return {
               namespace,
               path: args.path,

@@ -9,7 +9,7 @@
 .expo/
 .gradle/
 .idea/
-.xcode.env.local
+.xcode.env*
 /incubator/*/bin/
 /incubator/*/dist/
 /incubator/*/lib/
