@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/esbuild-plugin-import-path-remapper
 
+## 2.0.0
+
+### Major Changes
+
+- e1a215d0: Bumped esbuild to 0.17.0
+
 ## 1.2.0
 
 ### Minor Changes

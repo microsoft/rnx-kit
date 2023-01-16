@@ -1,5 +1,13 @@
 # Change Log - @rnx-kit/cli
 
+## 0.15.4
+
+### Patch Changes
+
+- 909b3d0d: Fix broken bundle when `dev=true` `treeShake=true`
+- Updated dependencies [e1a215d0]
+  - @rnx-kit/metro-serializer-esbuild@0.1.18
+
 ## 0.15.3
 
 ### Patch Changes
