@@ -25,6 +25,59 @@ function importPlugin(name: string) {
   return plugin.default || plugin;
 }
 
+function readLegacyOptions({
+  detectCyclicDependencies,
+  detectDuplicateDependencies,
+  typescriptValidation,
+}: BundlerPlugins): string | undefined {
+  const oldOptions = [];
+  const deprecatedOptions: Record<string, Record<string, unknown> | true> = {};
+
+  if (detectCyclicDependencies) {
+    oldOptions.push("detectCyclicDependencies");
+    deprecatedOptions["@rnx-kit/metro-plugin-cyclic-dependencies-detector"] =
+      detectCyclicDependencies;
+  }
+  if (detectDuplicateDependencies) {
+    oldOptions.push("detectDuplicateDependencies");
+    deprecatedOptions["@rnx-kit/metro-plugin-duplicates-checker"] =
+      detectDuplicateDependencies;
+  }
+  if (typescriptValidation) {
+    oldOptions.push("typescriptValidation");
+    deprecatedOptions["@rnx-kit/metro-plugin-typescript"] =
+      typescriptValidation;
+  }
+
+  if (oldOptions.length === 0) {
+    return undefined;
+  }
+
+  return (
+    `'${oldOptions.join("', '")}' have been replaced by a new 'plugins' ` +
+    "option. Below is an equivalent config:\n" +
+    "\n" +
+    '    "plugins": [\n' +
+    Object.entries(deprecatedOptions)
+      .map(([name, options]) => {
+        if (typeof options === "object") {
+          const json = JSON.stringify(options, null, 2)
+            .split("\n")
+            .join("\n      ");
+          return `      ["${name}", ${json}]`;
+        } else {
+          return `      "${name}"`;
+        }
+      })
+      .join(",\n") +
+    "\n" +
+    "    ]\n" +
+    "\n" +
+    "For more details, see " +
+    "https://github.com/microsoft/rnx-kit/tree/main/packages/cli#readme"
+  );
+}
+
 /**
  * Customize the Metro configuration.
  *
@@ -47,18 +100,9 @@ export function customizeMetroConfig(
     SerializerConfigT["experimentalSerializerHook"]
   > = {};
 
-  const oldOptions = [
-    "detectCyclicDependencies",
-    "detectDuplicateDependencies",
-    "typescriptValidation",
-  ];
-  if (oldOptions.some((option) => option in bundlerPlugins)) {
-    const deprecatedOptions = oldOptions.map((key) => `'${key}'`).join(", ");
-    warn(
-      `${deprecatedOptions} have been replaced by a new 'plugins' option. ` +
-        "Please use this new option instead. For more details, see" +
-        "https://github.com/microsoft/rnx-kit/tree/main/packages/cli#readme"
-    );
+  const legacyWarning = readLegacyOptions(bundlerPlugins);
+  if (legacyWarning) {
+    warn(legacyWarning);
 
     const {
       detectCyclicDependencies,
