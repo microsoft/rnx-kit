@@ -16,7 +16,7 @@
   "dependencies": {
     "@rnx-kit/golang": "^0.2.1",
     "depcheck": "^1.0.0",
-    "esbuild": "^0.15.0",
+    "esbuild": "^0.17.0",
     "fs-extra": "^10.0.0",
     "jest": "^27.0.0",
     "markdown-table": "^2.0.0",
