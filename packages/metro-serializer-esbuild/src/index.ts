@@ -164,6 +164,8 @@ export function MetroSerializer(
       return Promise.resolve(bundleCode);
     }
 
+    const prelude = "__rnx_prelude__";
+
     const { dependencies } = graph;
     const metroPlugin: Plugin = {
       name: require("../package.json").name,
@@ -210,7 +212,7 @@ export function MetroSerializer(
           }
 
           if (
-            args.path === __filename ||
+            args.path === prelude ||
             preModules.find(({ path }) => path === args.path)
           ) {
             return {
@@ -252,7 +254,7 @@ export function MetroSerializer(
             };
           }
 
-          if (args.path === __filename) {
+          if (args.path === prelude) {
             return {
               /**
                * Add all the polyfills in this file. See the `inject` option
@@ -340,7 +342,7 @@ export function MetroSerializer(
            * to medium sized app. We can work around this issue by adding all
            * the polyfills in a single file that we inject here.
            */
-          __filename,
+          prelude,
         ],
         legalComments: "none",
         logLevel: buildOptions?.logLevel ?? "error",
