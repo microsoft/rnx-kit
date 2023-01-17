@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/config
 
+## 0.6.0
+
+### Minor Changes
+
+- d8d0cf37: Add new `plugins` option
+
 ## 0.5.2
 
 ### Patch Changes

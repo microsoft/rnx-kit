@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "@rnx-kit/build",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "EXPERIMENTAL - USE WITH CAUTION - @rnx-kit/build builds your app in the cloud",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/incubator/build#readme",
   "license": "MIT",
@@ -36,7 +36,7 @@
     "@octokit/core": "^4.0.0",
     "@octokit/plugin-rest-endpoint-methods": "^6.0.0",
     "@octokit/request-error": "^3.0.0",
-    "@rnx-kit/config": "^0.5.1",
+    "@rnx-kit/config": "^0.6.0",
     "env-paths": "^2.2.1",
     "fast-xml-parser": "^4.0.8",
     "find-up": "^5.0.0",

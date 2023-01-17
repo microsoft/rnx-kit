@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-plugin-duplicates-checker
 
+## 2.1.0
+
+### Minor Changes
+
+- d8d0cf37: Support new `plugins` option in CLI
+
 ## 2.0.0
 
 ### Major Changes

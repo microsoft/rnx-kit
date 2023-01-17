@@ -1,5 +1,12 @@
 # @rnx-kit/build
 
+## 0.4.2
+
+### Patch Changes
+
+- Updated dependencies [d8d0cf37]
+  - @rnx-kit/config@0.6.0
+
 ## 0.4.1
 
 ### Patch Changes

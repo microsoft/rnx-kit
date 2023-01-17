@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-plugin-cyclic-dependencies-detector
 
+## 1.1.0
+
+### Minor Changes
+
+- d8d0cf37: Support new `plugins` option in CLI
+
 ## 1.0.22
 
 ### Patch Changes
