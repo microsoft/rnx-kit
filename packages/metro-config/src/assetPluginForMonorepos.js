@@ -18,7 +18,7 @@
  *
  * For more details, see https://github.com/facebook/metro/issues/290.
  *
- * @param {import("type-fest").Mutable<AssetData>} assetData
+ * @param {import("type-fest").Writable<AssetData>} assetData
  * @returns {AssetData}
  */
 function assetPlugin(assetData) {
