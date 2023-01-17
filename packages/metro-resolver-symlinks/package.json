@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/metro-resolver-symlinks",
-  "version": "0.1.23",
+  "version": "0.1.24",
   "description": "Metro resolver with support for symlinks",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/metro-resolver-symlinks#readme",
   "license": "MIT",

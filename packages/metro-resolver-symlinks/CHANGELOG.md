@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-resolver-symlinks
 
+## 0.1.24
+
+### Patch Changes
+
+- e5aff351: Handle packages that are missing the `default` exports conditional
+
 ## 0.1.23
 
 ### Patch Changes
