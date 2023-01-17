@@ -8,7 +8,7 @@ const PACKAGE_MANAGERS = {
 } as const;
 
 type LockFile = keyof typeof PACKAGE_MANAGERS;
-type PackageManager = typeof PACKAGE_MANAGERS[LockFile];
+type PackageManager = (typeof PACKAGE_MANAGERS)[LockFile];
 
 export async function detectPackageManager(): Promise<
   PackageManager | undefined

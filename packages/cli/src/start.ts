@@ -19,7 +19,7 @@ import { customizeMetroConfig } from "./metro-config";
 import { getKitServerConfig } from "./serve/kit-config";
 
 type DevServerMiddleware = ReturnType<
-  typeof CliServerApi["createDevServerMiddleware"]
+  (typeof CliServerApi)["createDevServerMiddleware"]
 >;
 
 type DevServerMiddleware6 = Pick<DevServerMiddleware, "middleware"> & {
