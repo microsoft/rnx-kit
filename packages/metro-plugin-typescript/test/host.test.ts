@@ -1,4 +1,3 @@
-import "jest-extended";
 import semverSatisfies from "semver/functions/satisfies";
 import ts from "typescript";
 
@@ -49,8 +48,8 @@ describe("Host (TS v4.6.0)", () => {
     } as ts.LanguageServiceHost;
     createEnhanceLanguageServiceHost("ios", {})(host);
 
-    expect(host.resolveModuleNames).toBeFunction();
-    expect(host.resolveTypeReferenceDirectives).toBeFunction();
+    expect(typeof host.resolveModuleNames).toBe("function");
+    expect(typeof host.resolveTypeReferenceDirectives).toBe("function");
   });
 });
 
@@ -59,7 +58,7 @@ describe("Host (TS >= 4.7.0)", () => {
     // We use TS >= 4.7 in our repo. This ensures that the version is proplery restored.
     // These tests will run using the TS resolver with moduleSuffixes, and will bypass
     // our own internal resolver.
-    expect(semverSatisfies(ts.version, ">=4.7.0")).toBeTrue();
+    expect(semverSatisfies(ts.version, ">=4.7.0")).toBe(true);
   });
 
   afterAll(() => {
@@ -76,7 +75,7 @@ describe("Host (TS >= 4.7.0)", () => {
     } as ts.LanguageServiceHost;
     createEnhanceLanguageServiceHost("ios", {})(host);
 
-    expect(host.resolveModuleNames).toBeFunction();
+    expect(typeof host.resolveModuleNames).toBe("function");
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     host.resolveModuleNames!(
       ["module"],
@@ -88,7 +87,7 @@ describe("Host (TS >= 4.7.0)", () => {
     );
     expect(resolveModuleNames).toBeCalledTimes(1);
 
-    expect(host.resolveTypeReferenceDirectives).toBeFunction();
+    expect(typeof host.resolveTypeReferenceDirectives).toBe("function");
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     host.resolveTypeReferenceDirectives!(
       ["type-reference"],
@@ -117,9 +116,10 @@ describe("Host (TS >= 4.7.0)", () => {
     );
     expect(resolveModuleNames).toBeCalledTimes(1);
     // 1st argument: ResolverContext
-    expect((resolveModuleNames as jest.Mock).mock.calls[0][0]).toContainEntry([
-      "platformFileExtensions",
-      [".ios", ".native", ""],
-    ]);
+    expect((resolveModuleNames as jest.Mock).mock.calls[0][0]).toEqual(
+      expect.objectContaining({
+        platformFileExtensions: [".ios", ".native", ""],
+      })
+    );
   });
 });

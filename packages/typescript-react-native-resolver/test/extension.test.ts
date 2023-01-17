@@ -1,14 +1,13 @@
-import "jest-extended";
 import ts from "typescript";
 import { hasExtension, getExtensionFromPath } from "../src/extension";
 
 describe("Extension > hasExtension", () => {
   test("returns true when the file has the given extension", () => {
-    expect(hasExtension("foo.d.ts", ts.Extension.Dts)).toBeTrue();
+    expect(hasExtension("foo.d.ts", ts.Extension.Dts)).toBe(true);
   });
 
   test("returns false when the file does not have the given extension", () => {
-    expect(hasExtension("foo.d.ts", ts.Extension.Js)).toBeFalse();
+    expect(hasExtension("foo.d.ts", ts.Extension.Js)).toBe(false);
   });
 });
 

@@ -1,4 +1,3 @@
-import "jest-extended";
 import fs from "fs";
 import path from "path";
 import tempDir from "temp-dir";
@@ -14,8 +13,8 @@ describe("Node > FS", () => {
   const fixtureDir = path.resolve(__dirname, "__fixtures__");
 
   beforeAll(() => {
-    expect(fs.existsSync(fixtureDir)).toBeTrue();
-    expect(fs.existsSync(tempDir)).toBeTrue();
+    expect(fs.existsSync(fixtureDir)).toBe(true);
+    expect(fs.existsSync(tempDir)).toBe(true);
   });
 
   let testTempDir: string;
@@ -27,7 +26,7 @@ describe("Node > FS", () => {
   });
 
   afterEach(() => {
-    fs.rmdirSync(testTempDir, { maxRetries: 5, recursive: true });
+    fs.rmSync(testTempDir, { maxRetries: 5, recursive: true });
   });
 
   test("findFirstFileExists() returns undefined when no files are given", () => {
@@ -51,17 +50,17 @@ describe("Node > FS", () => {
 
   test("createDirectory() creates a directory", () => {
     const p = path.join(testTempDir, "testdir");
-    expect(fs.existsSync(p)).toBeFalse();
+    expect(fs.existsSync(p)).toBe(false);
     createDirectory(p);
-    expect(fs.existsSync(p)).toBeTrue();
+    expect(fs.existsSync(p)).toBe(true);
   });
 
   test("createDirectory() sets permissions on the new directory", () => {
     const p = path.join(testTempDir, "testdir");
-    expect(fs.existsSync(p)).toBeFalse();
+    expect(fs.existsSync(p)).toBe(false);
     createDirectory(p);
     const stats = fs.statSync(p);
-    expect(stats.isDirectory()).toBeTrue();
+    expect(stats.isDirectory()).toBe(true);
     // check for rw|r|r rather than rwx|rx|rx since 'x' doesn't seem to come through on Windows
     expect(stats.mode & 0o644).toEqual(0o644);
   });
@@ -69,54 +68,54 @@ describe("Node > FS", () => {
   test("createDirectory() creates a parent directory", () => {
     const parent = path.join(testTempDir, "parentdir");
     const p = path.join(parent, "testdir");
-    expect(fs.existsSync(parent)).toBeFalse();
+    expect(fs.existsSync(parent)).toBe(false);
     createDirectory(p);
-    expect(fs.existsSync(parent)).toBeTrue();
+    expect(fs.existsSync(parent)).toBe(true);
   });
 
   test("createDirectory() sets permissions on the new parent directory", () => {
     const parent = path.join(testTempDir, "parentdir");
     const p = path.join(parent, "testdir");
-    expect(fs.existsSync(parent)).toBeFalse();
+    expect(fs.existsSync(parent)).toBe(false);
     createDirectory(p);
     const stats = fs.statSync(parent);
-    expect(stats.isDirectory()).toBeTrue();
+    expect(stats.isDirectory()).toBe(true);
     // check for rw|r|r rather than rwx|rx|rx since 'x' doesn't seem to come through on Windows
     expect(stats.mode & 0o644).toEqual(0o644);
   });
 
   test("statSync() succeeds when given a valid path", () => {
     const stats = statSync(fixtureDir);
-    expect(stats).not.toBeNil();
-    expect(stats).toBeObject();
+    expect(stats).toBeTruthy();
+    expect(typeof stats).toBe("object");
   });
 
   test("statSync() fails when given a bad path", () => {
     const stats = statSync(path.join(fixtureDir, "does-not-exist"));
-    expect(stats).toBeNil();
+    expect(stats).toBeUndefined();
   });
 
   test("isDirectory() returns true for a directory path", () => {
-    expect(isDirectory(fixtureDir)).toBeTrue();
+    expect(isDirectory(fixtureDir)).toBe(true);
   });
 
   test("isDirectory() returns false for a file path", () => {
-    expect(isDirectory(path.join(fixtureDir, "a.txt"))).toBeFalse();
+    expect(isDirectory(path.join(fixtureDir, "a.txt"))).toBe(false);
   });
 
   test("isDirectory() returns false for a bad path", () => {
-    expect(isDirectory(path.join(fixtureDir, "does-not-exist"))).toBeFalse();
+    expect(isDirectory(path.join(fixtureDir, "does-not-exist"))).toBe(false);
   });
 
   test("isFile() returns true for a file path", () => {
-    expect(isFile(path.join(fixtureDir, "a.txt"))).toBeTrue();
+    expect(isFile(path.join(fixtureDir, "a.txt"))).toBe(true);
   });
 
   test("isFile() returns false for a directory path", () => {
-    expect(isFile(fixtureDir)).toBeFalse();
+    expect(isFile(fixtureDir)).toBe(false);
   });
 
   test("isFile() returns false for a bad path", () => {
-    expect(isFile(path.join(fixtureDir, "does-not-exist"))).toBeFalse();
+    expect(isFile(path.join(fixtureDir, "does-not-exist"))).toBe(false);
   });
 });

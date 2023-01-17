@@ -29,7 +29,6 @@
     "@rnx-kit/scripts": "*",
     "@types/node": "^16.0.0",
     "jest": "^27.0.0",
-    "jest-extended": "^2.0.0",
     "temp-dir": "^2.0.0",
     "typescript": "^4.0.0"
   },
@@ -40,9 +39,6 @@
     "extends": "@rnx-kit/eslint-config"
   },
   "jest": {
-    "preset": "@rnx-kit/scripts",
-    "setupFilesAfterEnv": [
-      "jest-extended/all"
-    ]
+    "preset": "@rnx-kit/scripts"
   }
 }

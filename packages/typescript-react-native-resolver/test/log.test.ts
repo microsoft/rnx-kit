@@ -1,8 +1,6 @@
-import fs from "fs";
-
+import ts from "typescript";
 import { isTraceEnabled, logModuleBegin, logModuleEnd } from "../src/log";
 import type { ModuleResolutionHostLike } from "../src/types";
-import ts from "typescript";
 
 const mockTrace = jest.fn();
 
@@ -18,15 +16,15 @@ describe("Log > isTraceEnabled", () => {
   });
 
   test("isTraceEnabled returns true", () => {
-    expect(isTraceEnabled(mockHost, options)).toBeTrue();
+    expect(isTraceEnabled(mockHost, options)).toBe(true);
   });
 
   test("isTraceEnabled returns false when option is disabled", () => {
-    expect(isTraceEnabled(mockHost, {})).toBeFalse();
+    expect(isTraceEnabled(mockHost, {})).toBe(false);
   });
 
   test("isTraceEnabled returns false when trace function is missing", () => {
-    expect(isTraceEnabled({} as ModuleResolutionHostLike, options)).toBeFalse();
+    expect(isTraceEnabled({} as ModuleResolutionHostLike, options)).toBe(false);
   });
 });
 

@@ -1,4 +1,3 @@
-import "jest-extended";
 import {
   extendObject,
   extendObjectArray,
@@ -136,7 +135,8 @@ describe("Language > Props > extendObjectArray", () => {
       copy,
       extendedProps
     );
-    expect(extended).toBeArrayOfSize(1);
+    expect(Array.isArray(extended)).toBe(true);
+    expect(extended.length).toBe(1);
     expect(extended).toEqual([
       {
         ...baseObj,
@@ -151,7 +151,8 @@ describe("Language > Props > extendObjectArray", () => {
       copy,
       extendedProps
     );
-    expect(extended).toBeArrayOfSize(2);
+    expect(Array.isArray(extended)).toBe(true);
+    expect(extended.length).toBe(2);
     expect(extended).toEqual([
       {
         ...baseObj,
@@ -176,7 +177,8 @@ describe("Language > Props > extendObjectArray", () => {
   test("makes no changes when extended props are optional and are not given", () => {
     const copy = [{ ...baseObj }, { ...baseObj2 }];
     const extended = extendObjectArray<BaseType, ExtendedType>(copy, {});
-    expect(extended).toBeArrayOfSize(2);
+    expect(Array.isArray(extended)).toBe(true);
+    expect(extended.length).toBe(2);
     expect(extended).toEqual([baseObj, baseObj2]);
   });
 });

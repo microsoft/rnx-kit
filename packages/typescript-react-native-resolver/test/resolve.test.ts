@@ -1,11 +1,9 @@
-import "jest-extended";
 import path from "path";
 import ts from "typescript";
-
 import {
+  resolveFileModule,
   resolveModule,
   resolvePackageModule,
-  resolveFileModule,
 } from "../src/resolve";
 import type { ResolverContext } from "../src/types";
 
@@ -47,8 +45,8 @@ describe("Resolve > resolveModule", () => {
 
   test("resolves module path carbon", () => {
     const result = resolveModule(context, fixturePath, "carbon", extensions);
-    expect(result).not.toBeNil();
-    expect(result.resolvedFileName).toEqual(pathOf("carbon.ts"));
+    expect(result).toBeTruthy();
+    expect(result?.resolvedFileName).toEqual(pathOf("carbon.ts"));
   });
 
   test("fails to resolve a module path that does not exist", () => {
@@ -59,8 +57,8 @@ describe("Resolve > resolveModule", () => {
 
   function resolveTest(packageDir: string, resolvedPath: string): void {
     const result = resolveModule(context, packageDir, "", extensions);
-    expect(result).not.toBeNil();
-    expect(result.resolvedFileName).toEqual(resolvedPath);
+    expect(result).toBeTruthy();
+    expect(result?.resolvedFileName).toEqual(resolvedPath);
     expect(mockTrace).toBeCalled();
   }
 
@@ -102,8 +100,8 @@ describe("Resolve > resolvePackageModule", () => {
       fixturePath,
       extensions
     );
-    expect(result).not.toBeNil();
-    expect(result.resolvedFileName).toEqual(resolvedPath);
+    expect(result).toBeTruthy();
+    expect(result?.resolvedFileName).toEqual(resolvedPath);
     expect(mockTrace).toBeCalled();
   }
 
@@ -166,8 +164,8 @@ describe("Resolve > resolveFileModule", () => {
       fixturePath,
       extensions
     );
-    expect(result).not.toBeNil();
-    expect(result.resolvedFileName).toEqual(pathOf("aluminum", "core.ts"));
+    expect(result).toBeTruthy();
+    expect(result?.resolvedFileName).toEqual(pathOf("aluminum", "core.ts"));
     expect(mockTrace).toBeCalled();
   });
 });
