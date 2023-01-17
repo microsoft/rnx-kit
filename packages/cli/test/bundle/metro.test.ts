@@ -1,4 +1,3 @@
-import "jest-extended";
 import { metroBundle } from "../../src/bundle/metro";
 import type { CliPlatformBundleConfig } from "../../src/bundle/types";
 
@@ -43,16 +42,16 @@ describe("CLI > Bundle > Metro > metroBundle", () => {
 
   it("does not use a custom serializer when all plugins are disabled", async () => {
     const metroConfig = await getDefaultConfig();
-    expect(metroConfig.serializer.customSerializer).toBeNil();
+    expect(metroConfig.serializer.customSerializer).toBeFalsy();
     await metroBundle(metroConfig, bundleConfigNoPlugins, dev, minify);
-    expect(metroConfig.serializer.customSerializer).toBeNil();
+    expect(metroConfig.serializer.customSerializer).toBeFalsy();
   });
 
   it("uses a custom serializer when at least one plugin is enabled", async () => {
     const metroConfig = await getDefaultConfig();
-    expect(metroConfig.serializer.customSerializer).toBeNil();
+    expect(metroConfig.serializer.customSerializer).toBeFalsy();
     await metroBundle(metroConfig, bundleConfig, dev, minify);
-    expect(metroConfig.serializer.customSerializer).not.toBeNil();
+    expect(metroConfig.serializer.customSerializer).toBeTruthy();
   });
 
   it("creates directories for the bundle, the source map, and assets", async () => {

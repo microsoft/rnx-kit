@@ -1,4 +1,3 @@
-import "jest-extended";
 import type { KitConfig } from "../src/kitConfig";
 import type { BundleConfig } from "../src/bundleConfig";
 import {
@@ -30,7 +29,7 @@ describe("getBundleConfig()", () => {
 
   test("fails when the bundle property is set to true (no longer supported)", () => {
     expect(() =>
-      getBundleConfig({ bundle: true as BundleConfig })
+      getBundleConfig({ bundle: true as unknown as BundleConfig })
     ).toThrowError(
       /The rnx-kit configuration property 'bundle' no longer supports boolean values./i
     );
@@ -38,9 +37,10 @@ describe("getBundleConfig()", () => {
 
   test("returns the bundle config associated with the given id", () => {
     const d = getBundleConfig(kitConfig, "123abc");
-    expect(d.id).toEqual("123abc");
-    expect(d.targets).toBeArrayOfSize(3);
-    expect(d.targets).toIncludeSameMembers(["ios", "android", "windows"]);
+    expect(d?.id).toEqual("123abc");
+    expect(Array.isArray(d?.targets)).toBe(true);
+    expect(d?.targets?.length).toBe(3);
+    expect(d?.targets).toEqual(["ios", "android", "windows"]);
   });
 
   test("returns undefined when the bundle id is not found", () => {
@@ -53,9 +53,10 @@ describe("getBundleConfig()", () => {
 
   test("returns the first bundle definition when an id is not given", () => {
     const d = getBundleConfig(kitConfig);
-    expect(d.id).toEqual("8");
-    expect(d.targets).toBeArrayOfSize(1);
-    expect(d.targets).toIncludeSameMembers(["windows"]);
+    expect(d?.id).toEqual("8");
+    expect(Array.isArray(d?.targets)).toBe(true);
+    expect(d?.targets.length).toBe(1);
+    expect(d?.targets).toEqual(["windows"]);
   });
 
   test("fails when bundle config contains renamed property experimental_treeShake", () => {

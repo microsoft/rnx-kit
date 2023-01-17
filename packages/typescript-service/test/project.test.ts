@@ -1,11 +1,9 @@
-import "jest-extended";
 import fs from "fs";
 import path from "path";
 import tempDir from "temp-dir";
 import ts from "typescript";
-import { DiagnosticWriter } from "../src/diagnostics";
 import { findConfigFile, readConfigFile } from "../src/config";
-import { createDefaultResolverHost } from "../src/resolve";
+import { DiagnosticWriter } from "../src/diagnostics";
 import { Project } from "../src/project";
 
 describe("Project", () => {
@@ -27,12 +25,20 @@ describe("Project", () => {
 
   afterEach(() => {
     jest.resetAllMocks();
-    fs.rmdirSync(testTempDir, { maxRetries: 5, recursive: true });
+    fs.rmSync(testTempDir, { maxRetries: 5, recursive: true });
   });
 
   function createProject(fileName = "valid-tsconfig.json"): Project {
     const configFileName = findConfigFile(fixturePath, fileName);
+    if (!configFileName) {
+      fail();
+    }
+
     const cmdLine = readConfigFile(configFileName);
+    if (!cmdLine) {
+      fail();
+    }
+
     cmdLine.options.outDir = testTempDir;
     cmdLine.options.sourceMap = true;
     cmdLine.options.declaration = true;
@@ -47,13 +53,13 @@ describe("Project", () => {
 
   test("getConfig returns the project config", () => {
     const project = createProject();
-    expect(project.getCommandLine()).not.toBeNil();
-    expect(project.getCommandLine()).toBeObject();
+    expect(project.getCommandLine()).toBeTruthy();
+    expect(typeof project.getCommandLine()).toBe("object");
   });
 
   test("validateFile succeeds when given a valid source file", () => {
     const project = createProject();
-    expect(project.validateFile(path.join(fixturePath, "a.ts"))).toBeTrue();
+    expect(project.validateFile(path.join(fixturePath, "a.ts"))).toBe(true);
     expect(mockDiagnosticWriter.print).not.toBeCalled();
   });
 
@@ -61,20 +67,20 @@ describe("Project", () => {
     const project = createProject();
     const fileName = path.join(fixturePath, "c.ts");
     const result = project.validateFile(fileName);
-    expect(result).toBeFalse();
+    expect(result).toBe(false);
     expect(mockDiagnosticWriter.print).toBeCalledTimes(1);
   });
 
   test("validate reports errors from all source files", () => {
     const project = createProject();
-    expect(project.validate()).toBeFalse();
+    expect(project.validate()).toBe(false);
     expect(mockDiagnosticWriter.print).toBeCalledTimes(1);
   });
 
   test("validate succeeds after removing a source file with errors", () => {
     const project = createProject();
     project.removeFile(path.join(fixturePath, "c.ts"));
-    expect(project.validate()).toBeTrue();
+    expect(project.validate()).toBe(true);
     expect(mockDiagnosticWriter.print).not.toBeCalled();
   });
 
@@ -84,7 +90,7 @@ describe("Project", () => {
       "export function c() { return 'c'; }"
     );
     project.setFile(path.join(fixturePath, "c.ts"), snapshot);
-    expect(project.validate()).toBeTrue();
+    expect(project.validate()).toBe(true);
     expect(mockDiagnosticWriter.print).not.toBeCalled();
   });
 
@@ -94,39 +100,39 @@ describe("Project", () => {
     project.removeFile(path.join(fixturePath, "c.ts"));
 
     project.setFile(path.join(fixturePath, "b.ts"));
-    expect(project.validate()).toBeTrue();
+    expect(project.validate()).toBe(true);
     expect(mockDiagnosticWriter.print).not.toBeCalled();
   });
 
   test("emitFile successfully writes a transpiled javascript file", () => {
     const project = createProject();
-    expect(project.emitFile(path.join(fixturePath, "a.ts"))).toBeTrue();
-    expect(fs.existsSync(path.join(testTempDir, "a.js"))).toBeTrue();
+    expect(project.emitFile(path.join(fixturePath, "a.ts"))).toBe(true);
+    expect(fs.existsSync(path.join(testTempDir, "a.js"))).toBe(true);
   });
 
   test("emitFile successfully writes a typescript declaration file", () => {
     const project = createProject();
-    expect(project.emitFile(path.join(fixturePath, "a.ts"))).toBeTrue();
-    expect(fs.existsSync(path.join(testTempDir, "a.d.ts"))).toBeTrue();
+    expect(project.emitFile(path.join(fixturePath, "a.ts"))).toBe(true);
+    expect(fs.existsSync(path.join(testTempDir, "a.d.ts"))).toBe(true);
   });
 
   test("emitFile successfully writes a sourcemap file", () => {
     const project = createProject();
-    expect(project.emitFile(path.join(fixturePath, "a.ts"))).toBeTrue();
-    expect(fs.existsSync(path.join(testTempDir, "a.js.map"))).toBeTrue();
+    expect(project.emitFile(path.join(fixturePath, "a.ts"))).toBe(true);
+    expect(fs.existsSync(path.join(testTempDir, "a.js.map"))).toBe(true);
   });
 
   test("emitFile successfully writes a declaration sourcemap file", () => {
     const project = createProject();
-    expect(project.emitFile(path.join(fixturePath, "a.ts"))).toBeTrue();
-    expect(fs.existsSync(path.join(testTempDir, "a.d.ts.map"))).toBeTrue();
+    expect(project.emitFile(path.join(fixturePath, "a.ts"))).toBe(true);
+    expect(fs.existsSync(path.join(testTempDir, "a.d.ts.map"))).toBe(true);
   });
 
   test("emit successfully transpiles all project files", () => {
     const project = createProject();
-    expect(project.emit()).toBeTrue();
-    expect(fs.existsSync(path.join(testTempDir, "a.js"))).toBeTrue();
-    expect(fs.existsSync(path.join(testTempDir, "b.js"))).toBeTrue();
-    expect(fs.existsSync(path.join(testTempDir, "c.js"))).toBeTrue();
+    expect(project.emit()).toBe(true);
+    expect(fs.existsSync(path.join(testTempDir, "a.js"))).toBe(true);
+    expect(fs.existsSync(path.join(testTempDir, "b.js"))).toBe(true);
+    expect(fs.existsSync(path.join(testTempDir, "c.js"))).toBe(true);
   });
 });

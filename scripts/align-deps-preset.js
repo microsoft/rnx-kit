@@ -49,11 +49,6 @@ const profile = {
     name: "jest-diff",
     version: "^27.0.0",
   },
-  "jest-extended": {
-    name: "jest-extended",
-    version: "^2.0.0",
-    devOnly: true,
-  },
   "pkg-dir": {
     name: "pkg-dir",
     version: "^5.0.0",

@@ -30,7 +30,7 @@ describe("Node > Package", () => {
   });
 
   afterEach(() => {
-    fs.rmdirSync(testTempDir, { maxRetries: 5, recursive: true });
+    fs.rmSync(testTempDir, { maxRetries: 5, recursive: true });
   });
 
   test("parsePackageRef(react-native) returns an unscoped reference", () => {

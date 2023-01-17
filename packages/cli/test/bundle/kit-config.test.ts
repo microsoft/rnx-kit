@@ -1,4 +1,3 @@
-import "jest-extended";
 import {
   getTargetPlatforms,
   getCliPlatformBundleConfigs,
@@ -9,8 +8,9 @@ const rnxKitConfig = require("@rnx-kit/config");
 describe("CLI > Bundle > Kit Config > getTargetPlatforms", () => {
   test("returns the override platform", () => {
     const platforms = getTargetPlatforms("ios", ["android", "ios", "windows"]);
-    expect(platforms).toBeArrayOfSize(1);
-    expect(platforms).toIncludeSameMembers(["ios"]);
+    expect(Array.isArray(platforms)).toBe(true);
+    expect(platforms.length).toBe(1);
+    expect(platforms).toEqual(["ios"]);
   });
 
   test("returns the target platforms", () => {
@@ -19,8 +19,9 @@ describe("CLI > Bundle > Kit Config > getTargetPlatforms", () => {
       "ios",
       "windows",
     ]);
-    expect(platforms).toBeArrayOfSize(3);
-    expect(platforms).toIncludeSameMembers(["android", "ios", "windows"]);
+    expect(Array.isArray(platforms)).toBe(true);
+    expect(platforms.length).toBe(3);
+    expect(platforms).toEqual(["android", "ios", "windows"]);
   });
 
   test("throws when no override or target platform is given", () => {
@@ -68,25 +69,29 @@ describe("CLI > Bundle > Kit Config > getCliPlatformBundleConfigs", () => {
 
   test("returns defaults for iOS when package has no config", () => {
     const configs = getCliPlatformBundleConfigs(undefined, "ios");
-    expect(configs).toBeArrayOfSize(1);
+    expect(Array.isArray(configs)).toBe(true);
+    expect(configs.length).toBe(1);
     expect(configs[0]).toEqual(defaultConfigIOS);
   });
 
   test("returns defaults for MacOS when package has no config", () => {
     const configs = getCliPlatformBundleConfigs(undefined, "macos");
-    expect(configs).toBeArrayOfSize(1);
+    expect(Array.isArray(configs)).toBe(true);
+    expect(configs.length).toBe(1);
     expect(configs[0]).toEqual(defaultConfigMacOS);
   });
 
   test("returns defaults for Android when package has no config", () => {
     const configs = getCliPlatformBundleConfigs(undefined, "android");
-    expect(configs).toBeArrayOfSize(1);
+    expect(Array.isArray(configs)).toBe(true);
+    expect(configs.length).toBe(1);
     expect(configs[0]).toEqual(defaultConfigAndroid);
   });
 
   test("returns defaults for Windows when package has no config", () => {
     const configs = getCliPlatformBundleConfigs(undefined, "windows");
-    expect(configs).toBeArrayOfSize(1);
+    expect(Array.isArray(configs)).toBe(true);
+    expect(configs.length).toBe(1);
     expect(configs[0]).toEqual(defaultConfigWindows);
   });
 
@@ -102,7 +107,8 @@ describe("CLI > Bundle > Kit Config > getCliPlatformBundleConfigs", () => {
   test("returns config with defaults for all target platforms", () => {
     rnxKitConfig.__setMockConfig(testConfig);
     const configs = getCliPlatformBundleConfigs();
-    expect(configs).toBeArrayOfSize(4);
+    expect(Array.isArray(configs)).toBe(true);
+    expect(configs.length).toBe(4);
     expect(configs[0]).toEqual({ ...defaultConfigIOS, ...testConfig.bundle });
     expect(configs[1]).toEqual({ ...defaultConfigMacOS, ...testConfig.bundle });
     expect(configs[2]).toEqual({
@@ -131,7 +137,8 @@ describe("CLI > Bundle > Kit Config > getCliPlatformBundleConfigs", () => {
   test("returns the first config when no id is given", () => {
     rnxKitConfig.__setMockConfig(testMultiConfig);
     const configs = getCliPlatformBundleConfigs(undefined, "ios");
-    expect(configs).toBeArrayOfSize(1);
+    expect(Array.isArray(configs)).toBe(true);
+    expect(configs.length).toBe(1);
     expect(configs[0]).toEqual({
       ...defaultConfigIOS,
       ...testMultiConfig.bundle[0],
@@ -141,7 +148,8 @@ describe("CLI > Bundle > Kit Config > getCliPlatformBundleConfigs", () => {
   test("returns the selected config when an id is given", () => {
     rnxKitConfig.__setMockConfig(testMultiConfig);
     const configs = getCliPlatformBundleConfigs("second", "android");
-    expect(configs).toBeArrayOfSize(1);
+    expect(Array.isArray(configs)).toBe(true);
+    expect(configs.length).toBe(1);
     expect(configs[0]).toEqual({
       ...defaultConfigAndroid,
       ...testMultiConfig.bundle[1],

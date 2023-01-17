@@ -1,4 +1,3 @@
-import "jest-extended";
 import ts from "typescript";
 import {
   getCompilerOptionsWithReactNativeModuleSuffixes,
@@ -43,19 +42,19 @@ describe("Resolver", () => {
       expect(calls[0][0]).toEqual("pkg-dir-replaced");
       expect(calls[1][0]).toEqual("pkg-up-replaced");
       // 3rd param: CompilerOptions
-      expect(calls[0][2]).toContainEntry([
-        "moduleSuffixes",
-        [".ios", ".native", ""],
-      ]);
-      expect(calls[1][2]).toContainEntry([
-        "moduleSuffixes",
-        [".ios", ".native", ""],
-      ]);
+      expect(calls[0][2]).toEqual({
+        moduleSuffixes: [".ios", ".native", ""],
+      });
+      expect(calls[1][2]).toEqual({
+        moduleSuffixes: [".ios", ".native", ""],
+      });
 
-      expect(modules).not.toBeNil();
-      expect(modules).toBeArrayOfSize(2);
-      expect(modules[0]).toEqual({ resolvedFileName: "first" });
-      expect(modules[1]).toEqual({ resolvedFileName: "second" });
+      expect(Array.isArray(modules)).toBe(true);
+      expect(modules.length).toBe(2);
+      expect(modules).toEqual([
+        { resolvedFileName: "first" },
+        { resolvedFileName: "second" },
+      ]);
     } finally {
       ts.resolveModuleName = origTsResolveModuleName;
     }
@@ -71,10 +70,9 @@ describe("Resolver", () => {
       "containing-file",
       inputOptions
     );
-    expect(outputOptions).toContainEntry([
-      "moduleSuffixes",
-      [".ios", ".native", ""],
-    ]);
+    expect(outputOptions).toEqual({
+      moduleSuffixes: [".ios", ".native", ""],
+    });
   });
 
   test("verifies that moduleSuffixes is valid when it is already present", () => {
@@ -97,10 +95,9 @@ describe("Resolver", () => {
       "containing-file",
       inputOptions
     );
-    expect(outputOptions).toContainEntry([
-      "moduleSuffixes",
-      inputOptions.moduleSuffixes, // output must match input
-    ]);
+    expect(outputOptions).toEqual({
+      moduleSuffixes: inputOptions.moduleSuffixes, // output must match input
+    });
   });
 
   test("verifies that moduleSuffixes is valid when it is already present without a platform name", () => {
@@ -115,10 +112,9 @@ describe("Resolver", () => {
       "containing-file",
       inputOptions
     );
-    expect(outputOptions).toContainEntry([
-      "moduleSuffixes",
-      inputOptions.moduleSuffixes, // output must match input
-    ]);
+    expect(outputOptions).toEqual({
+      moduleSuffixes: inputOptions.moduleSuffixes, // output must match input
+    });
   });
 
   test("fails when moduleSuffixes is set, but is invalid for the target platform", () => {
@@ -158,13 +154,13 @@ describe("Resolver", () => {
       // 1st param: name
       expect(calls[0][0]).toEqual("type-ref");
       // 3rd param: CompilerOptions
-      expect(calls[0][2]).toContainEntry([
-        "moduleSuffixes",
-        [".ios", ".native", ""],
-      ]);
+      expect(calls[0][2]).toEqual({
+        moduleSuffixes: [".ios", ".native", ""],
+      });
 
-      expect(directives).toBeArrayOfSize(1);
-      expect(directives[0].resolvedFileName).toEqual("resolved.ts");
+      expect(Array.isArray(directives)).toBe(true);
+      expect(directives.length).toBe(1);
+      expect(directives?.[0]?.resolvedFileName).toEqual("resolved.ts");
     } finally {
       ts.resolveTypeReferenceDirective = origResolveTypeReferenceDirective;
     }

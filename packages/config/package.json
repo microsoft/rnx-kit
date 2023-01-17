@@ -32,8 +32,7 @@
     "@types/metro": "^0.66.0",
     "@types/node": "^16.0.0",
     "@types/semver": "^7.0.0",
-    "jest": "^27.0.0",
-    "jest-extended": "^2.0.0"
+    "jest": "^27.0.0"
   },
   "depcheck": {
     "ignoreMatches": [
@@ -48,9 +47,6 @@
     "moduleDirectories": [
       "node_modules",
       "test/__fixtures__/node_modules"
-    ],
-    "setupFilesAfterEnv": [
-      "jest-extended/all"
     ]
   }
 }

@@ -1,4 +1,3 @@
-import "jest-extended";
 import { escapePath, normalizePath } from "../src/path";
 
 describe("Node > Path", () => {

@@ -29,16 +29,12 @@
   "devDependencies": {
     "@rnx-kit/scripts": "*",
     "@types/node": "^16.0.0",
-    "jest": "^27.0.0",
-    "jest-extended": "^2.0.0"
+    "jest": "^27.0.0"
   },
   "eslintConfig": {
     "extends": "@rnx-kit/eslint-config"
   },
   "jest": {
-    "preset": "@rnx-kit/scripts",
-    "setupFilesAfterEnv": [
-      "jest-extended/all"
-    ]
+    "preset": "@rnx-kit/scripts"
   }
 }

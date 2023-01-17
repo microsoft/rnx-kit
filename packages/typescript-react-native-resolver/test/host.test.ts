@@ -1,4 +1,3 @@
-import "jest-extended";
 import ts from "typescript";
 
 import { resolveFileModule, resolvePackageModule } from "../src/resolve";
@@ -42,12 +41,12 @@ describe("Host > changeHostToUseReactNativeResolver", () => {
 
   test("sets resolveModuleNames", () => {
     const host = createTestHost();
-    expect(host.resolveModuleNames).toBeFunction();
+    expect(typeof host.resolveModuleNames).toBe("function");
   });
 
   test("sets resolveTypeReferenceDirectives", () => {
     const host = createTestHost();
-    expect(host.resolveTypeReferenceDirectives).toBeFunction();
+    expect(typeof host.resolveTypeReferenceDirectives).toBe("function");
   });
 });
 
@@ -76,8 +75,8 @@ describe("Host > resolveModuleName", () => {
       "/repos/rnx-kit/packages/test-app/lib/app.js",
       []
     );
-    expect(module.isExternalLibraryImport).toBeTrue();
-    expect(module.resolvedFileName).toEqual(resolvedFileName);
+    expect(module?.isExternalLibraryImport).toBe(true);
+    expect(module?.resolvedFileName).toEqual(resolvedFileName);
   });
 
   test("resolves a file module in the current package", () => {
@@ -91,8 +90,8 @@ describe("Host > resolveModuleName", () => {
       "/repos/rnx-kit/packages/test-app/lib/app.js",
       []
     );
-    expect(module.isExternalLibraryImport).toBeFalse();
-    expect(module.resolvedFileName).toEqual(resolvedFileName);
+    expect(module?.isExternalLibraryImport).toBe(false);
+    expect(module?.resolvedFileName).toEqual(resolvedFileName);
   });
 
   test("resolves a file module in an external package", () => {
@@ -107,8 +106,8 @@ describe("Host > resolveModuleName", () => {
       "/repos/rnx-kit/node_modules/@scope/package/index.d.ts",
       []
     );
-    expect(module.isExternalLibraryImport).toBeTrue();
-    expect(module.resolvedFileName).toEqual(resolvedFileName);
+    expect(module?.isExternalLibraryImport).toBe(true);
+    expect(module?.resolvedFileName).toEqual(resolvedFileName);
   });
 
   test("returns the real path to a resolved file", () => {
@@ -123,8 +122,8 @@ describe("Host > resolveModuleName", () => {
       "/repos/rnx-kit/packages/tools-node/src/fs.ts",
       []
     );
-    expect(module.isExternalLibraryImport).toBeTrue();
-    expect(module.resolvedFileName).toEqual(realResolvedFileName);
+    expect(module?.isExternalLibraryImport).toBe(true);
+    expect(module?.resolvedFileName).toEqual(realResolvedFileName);
   });
 });
 
@@ -158,10 +157,10 @@ describe("Host > resolveModuleNames", () => {
       "/repos/rnx-kit/packages/test-app/src/app.ts",
       undefined
     );
-    expect(modules).not.toBeNil();
-    expect(modules).toBeArrayOfSize(2);
-    expect(modules[0]).not.toBeNil();
-    expect(modules[1]).not.toBeNil();
+    expect(Array.isArray(modules)).toBe(true);
+    expect(modules.length).toBe(2);
+    expect(modules[0]).toBeTruthy();
+    expect(modules[1]).toBeTruthy();
 
     expect(mockTrace).toBeCalled();
   });
@@ -222,11 +221,15 @@ describe("Host > resolveTypeReferenceDirectives", () => {
     const directives = resolveTypeReferenceDirectives(
       context,
       ["type-ref"],
-      "parent-file.ts"
+      "parent-file.ts",
+      undefined,
+      {},
+      undefined
     );
     expect(mockResolveTypeReferenceDirective).toBeCalled();
-    expect(directives).toBeArrayOfSize(1);
-    expect(directives[0].resolvedFileName).toEqual("resolved.ts");
+    expect(Array.isArray(directives)).toBe(true);
+    expect(directives.length).toBe(1);
+    expect(directives[0]?.resolvedFileName).toEqual("resolved.ts");
 
     ts.resolveTypeReferenceDirective = origResolveTypeReferenceDirective;
   });
