@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/config",
-  "version": "0.5.2",
+  "version": "0.6.0",
   "description": "Define and query information about a kit package",
   "license": "MIT",
   "main": "lib/index.js",

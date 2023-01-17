@@ -1,5 +1,20 @@
 # Change Log - @rnx-kit/cli
 
+## 0.16.0
+
+### Minor Changes
+
+- d8d0cf37: Add new `plugins` option
+
+### Patch Changes
+
+- Updated dependencies [d8d0cf37]
+- Updated dependencies [d8d0cf37]
+  - @rnx-kit/config@0.6.0
+  - @rnx-kit/metro-plugin-cyclic-dependencies-detector@1.1.0
+  - @rnx-kit/metro-plugin-duplicates-checker@2.1.0
+  - @rnx-kit/metro-plugin-typescript@0.3.0
+
 ## 0.15.4
 
 ### Patch Changes

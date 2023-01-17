@@ -1,5 +1,16 @@
 # @rnx-kit/metro-plugin-typescript
 
+## 0.3.0
+
+### Minor Changes
+
+- d8d0cf37: Support new `plugins` option in CLI
+
+### Patch Changes
+
+- Updated dependencies [d8d0cf37]
+  - @rnx-kit/config@0.6.0
+
 ## 0.2.0
 
 ### Minor Changes
