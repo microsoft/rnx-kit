@@ -18,10 +18,8 @@ describe("CLI > Bundle > Metro > metroBundle", () => {
   const bundleConfigNoPlugins: CliPlatformBundleConfig = {
     entryFile: "out/entry.js",
     bundleOutput: "src/main.jsbundle",
-    detectCyclicDependencies: false,
-    detectDuplicateDependencies: false,
-    typescriptValidation: false,
     treeShake: false,
+    plugins: [],
     platform: "ios",
     sourcemapOutput: "map/main.map",
     sourcemapSourcesRoot: "root-path-for-source-maps",
@@ -31,10 +29,12 @@ describe("CLI > Bundle > Metro > metroBundle", () => {
 
   const bundleConfig: CliPlatformBundleConfig = {
     ...bundleConfigNoPlugins,
-    detectCyclicDependencies: true,
-    detectDuplicateDependencies: true,
-    typescriptValidation: true,
     treeShake: true,
+    plugins: [
+      "@rnx-kit/metro-plugin-cyclic-dependencies-detector",
+      "@rnx-kit/metro-plugin-duplicates-checker",
+      "@rnx-kit/metro-plugin-typescript",
+    ],
   };
 
   const dev = true;

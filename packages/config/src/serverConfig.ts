@@ -1,4 +1,4 @@
-import type { BundlerPlugins } from "./bundleConfig";
+import type { BundlerPlugins, Plugin } from "./bundleConfig";
 
 export type ServerConfig = BundlerPlugins & {
   /**
@@ -23,4 +23,15 @@ export type ServerConfig = BundlerPlugins & {
    * list, excluding the leading dot.
    */
   sourceExts?: string[];
+
+  /**
+   * List of plugins to add to the bundling process.
+   *
+   * @default [
+   *   "@rnx-kit/metro-plugin-cyclic-dependencies-detector",
+   *   "@rnx-kit/metro-plugin-duplicates-checker",
+   *   "@rnx-kit/metro-plugin-typescript"
+   * ]
+   */
+  plugins?: Plugin[];
 };

@@ -49,18 +49,27 @@ yarn react-native rnx-bundle --entry-file src/index.ts --bundle-output main.jsbu
     "bundle": {
       "entryFile": "entry.js",
       "assetsDest": "dist",
-      "detectCyclicDependencies": true,
-      "detectDuplicateDependencies": {
-        "ignoredModules": ["react-is"]
-      },
-      "typescriptValidation": true,
+      "plugins": [
+        "@rnx-kit/metro-plugin-cyclic-dependencies-detector",
+        [
+          "@rnx-kit/metro-plugin-duplicates-checker",
+          { "ignoredModules": ["react-is"] }
+        ],
+        "@rnx-kit/metro-plugin-typescript"
+      ],
       "targets": ["ios", "android", "windows", "macos"],
       "platforms": {
         "android": {
           "assetsDest": "dist/res"
         },
         "macos": {
-          "typescriptValidation": false
+          "plugins": [
+            "@rnx-kit/metro-plugin-cyclic-dependencies-detector",
+            [
+              "@rnx-kit/metro-plugin-duplicates-checker",
+              { "ignoredModules": ["react-is"] }
+            ]
+          ]
         }
       }
     }
@@ -73,14 +82,12 @@ yarn react-native rnx-bundle --entry-file src/index.ts --bundle-output main.jsbu
 When certain parameters aren't specified in configuration or on the
 command-line, they are explicitly set to default values.
 
-| Parameter                   | Default Value                                                                                 |
-| --------------------------- | --------------------------------------------------------------------------------------------- |
-| entryFile                   | "index.js"                                                                                    |
-| bundleOutput                | "index.<`platform`>.bundle" (Windows, Android), or "index.<`platform`>.jsbundle" (iOS, MacOS) |
-| detectCyclicDependencies    | `true`                                                                                        |
-| detectDuplicateDependencies | `true`                                                                                        |
-| typescriptValidation        | `true`                                                                                        |
-| treeShake                   | `false`                                                                                       |
+| Parameter    | Default Value                                                                                                                            |
+| ------------ | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| entryFile    | "index.js"                                                                                                                               |
+| bundleOutput | "index.<`platform`>.bundle" (Windows, Android), or "index.<`platform`>.jsbundle" (iOS, MacOS)                                            |
+| treeShake    | `false`                                                                                                                                  |
+| plugins      | `["@rnx-kit/metro-plugin-cyclic-dependencies-detector", "@rnx-kit/metro-plugin-duplicates-checker", "@rnx-kit/metro-plugin-typescript"]` |
 
 Other parameters have implicit defaults, buried deep in Metro or its
 dependencies.
@@ -134,12 +141,17 @@ yarn react-native rnx-start --host localhost --port 8812
   "rnx-kit": {
     "server": {
       "projectRoot": "src",
-      "detectCyclicDependencies": true,
-      "detectDuplicateDependencies": {
-        "ignoredModules": ["react-is"],
-        "throwOnError": false
-      },
-      "typescriptValidation": true
+      "plugins": [
+        "@rnx-kit/metro-plugin-cyclic-dependencies-detector",
+        [
+          "@rnx-kit/metro-plugin-duplicates-checker",
+          {
+            "ignoredModules": ["react-is"],
+            "throwOnError": false
+          }
+        ],
+        "@rnx-kit/metro-plugin-typescript"
+      ]
     }
   }
 }

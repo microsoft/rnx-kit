@@ -95,3 +95,5 @@ export function TypeScriptPlugin(
     }
   };
 }
+
+TypeScriptPlugin.type = "serializerHook";

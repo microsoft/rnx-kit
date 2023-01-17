@@ -9,10 +9,12 @@ describe("CLI > Bundle > Overrides > applyBundleConfigOverrides", () => {
     entryFile: "src/index.js",
     bundleOutput: "main.jsbundle",
     sourcemapUseAbsolutePath: false,
-    detectCyclicDependencies: true,
-    detectDuplicateDependencies: true,
-    typescriptValidation: true,
     treeShake: true,
+    plugins: [
+      "@rnx-kit/metro-plugin-cyclic-dependencies-detector",
+      "@rnx-kit/metro-plugin-duplicates-checker",
+      "@rnx-kit/metro-plugin-typescript",
+    ],
     indexedRamBundle: false,
     platform: "ios",
   };

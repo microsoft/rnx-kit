@@ -1,15 +1,18 @@
-import type { ServerConfig, BundlerPlugins } from "@rnx-kit/config";
-import { getKitConfig, getBundleConfig } from "@rnx-kit/config";
+import type { ServerConfig } from "@rnx-kit/config";
+import { getBundleConfig, getKitConfig } from "@rnx-kit/config";
 import { pickValues } from "@rnx-kit/tools-language/properties";
 import { getDefaultBundlerPlugins } from "../bundle/defaultPlugins";
 
-export type ServerConfigOverrides = {
+type ServerConfigOverrides = {
   projectRoot?: string;
   assetPlugins?: string[];
   sourceExts?: string[];
 };
 
-export type CliServerConfig = ServerConfig & Required<BundlerPlugins>;
+type CliServerConfig = ServerConfig & {
+  plugins: Required<ServerConfig>["plugins"];
+  treeShake: false;
+};
 
 /**
  * Get the server configuration from the rnx-kit configuration. Apply any overrides.
@@ -29,7 +32,7 @@ export function getKitServerConfig(
         "detectCyclicDependencies",
         "detectDuplicateDependencies",
         "typescriptValidation",
-        //"treeShake",  // don't pull in treeShake yet, since it doesn't work with the server
+        "plugins",
       ]);
     }
   }

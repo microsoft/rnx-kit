@@ -33,10 +33,12 @@ describe("CLI > Bundle > Kit Config > getCliPlatformBundleConfigs", () => {
   const defaultConfig = {
     entryFile: "index.js",
     sourcemapUseAbsolutePath: false,
-    detectCyclicDependencies: true,
-    detectDuplicateDependencies: true,
-    typescriptValidation: true,
     treeShake: false,
+    plugins: [
+      "@rnx-kit/metro-plugin-cyclic-dependencies-detector",
+      "@rnx-kit/metro-plugin-duplicates-checker",
+      "@rnx-kit/metro-plugin-typescript",
+    ],
   };
 
   const defaultConfigIOS = {
