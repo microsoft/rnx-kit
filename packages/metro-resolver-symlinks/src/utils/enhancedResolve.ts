@@ -18,6 +18,10 @@ const getEnhancedResolver = (() => {
       const extensions = sourceExts.map((ext) => `.${ext}`);
       resolvers[platform] = require("enhanced-resolve").create.sync({
         aliasFields: ["browser"],
+        // Add `require` to handle packages that are missing `default`
+        // conditional. See
+        // https://github.com/webpack/enhanced-resolve/issues/313
+        conditionNames: ["require", "node"],
         extensions:
           platform === "common"
             ? extensions
