@@ -7,9 +7,9 @@ import type { DEPLOYMENT, DEVICE_TYPES, PLATFORMS } from "./constants";
 import type { renderQRCode } from "./qrcode";
 export type { renderQRCode };
 
-export type Deployment = typeof DEPLOYMENT[number];
-export type DeviceType = typeof DEVICE_TYPES[number];
-export type Platform = typeof PLATFORMS[number];
+export type Deployment = (typeof DEPLOYMENT)[number];
+export type DeviceType = (typeof DEVICE_TYPES)[number];
+export type Platform = (typeof PLATFORMS)[number];
 
 export type BuildParams = {
   architecture: string;

@@ -11,7 +11,7 @@ export const CHANGE_TYPE = [
   "unknown",
   "failed",
 ] as const;
-export type ChangeType = typeof CHANGE_TYPE[number];
+export type ChangeType = (typeof CHANGE_TYPE)[number];
 
 export const CHANGE_CATEGORY = [
   "android",
@@ -19,7 +19,7 @@ export const CHANGE_CATEGORY = [
   "general",
   "internal",
 ] as const;
-export type ChangeCategory = typeof CHANGE_CATEGORY[number];
+export type ChangeCategory = (typeof CHANGE_CATEGORY)[number];
 
 const CHANGELOG_LINE_REGEXP = new RegExp(
   `(\\[(${[...CHANGE_TYPE, ...CHANGE_CATEGORY].join("|")})\\]s*)+`,
