@@ -1,12 +1,12 @@
 import { esbuildTransformerConfig } from "@rnx-kit/metro-serializer-esbuild";
 import { transform as swcTransform } from "@swc/core";
-import {
-  JsTransformOptions,
-  transform as metroTransform,
-} from "metro-transform-worker";
+import type { JsTransformOptions } from "metro-transform-worker";
+import { transform as metroTransform } from "metro-transform-worker";
 import DependencyCollector from "./DependencyCollector";
 
 export { getCacheKey } from "metro-transform-worker";
+
+const flowRemoveTypes = require("flow-remove-types");
 
 const countLines = (() => {
   const reLine = /^/gm;
@@ -17,11 +17,12 @@ function isAsset(filename: string, options: JsTransformOptions): boolean {
   return filename.endsWith(".json") || options.type === "asset";
 }
 
-function isFlow(filename: string, data: Buffer): boolean {
+function isFlow(filename: string, data: string): boolean {
   return (
     // `react-native` doesn't mark all files with `@flow`. Just assume
     // everything is written in Flow.
-    /[/\\]react-native[/\\]/.test(filename) ||
+    filename.includes("/react-native/") ||
+    filename.includes("\\react-native\\") ||
     data.includes("@flow") ||
     data.includes("@noflow")
   );
@@ -41,26 +42,30 @@ export const transform: typeof metroTransform = async (
     );
   }
 
-  if (isAsset(filename, options) || isFlow(filename, data)) {
+  if (isAsset(filename, options)) {
     return metroTransform(config, projectRoot, filename, data, options);
   }
 
+  const rawInput = data.toString("utf-8");
+  const input = isFlow(filename, rawInput)
+    ? flowRemoveTypes(rawInput, { all: true }).toString()
+    : rawInput;
+
+  const isTSX = filename.endsWith(".tsx");
+
   const dependencyCollector = new DependencyCollector();
-  const { code } = await swcTransform(data.toString("utf-8"), {
+  const { code } = await swcTransform(input, {
     filename,
     swcrc: false,
+    minify: false,
+    sourceMaps: "inline",
+    plugin: (m) => dependencyCollector.visitProgram(m),
+    isModule: options.type !== "script",
     jsc: {
       parser:
-        filename.endsWith(".ts") || filename.endsWith(".tsx")
-          ? {
-              syntax: "typescript",
-              tsx: filename.endsWith(".tsx"),
-            }
-          : {
-              syntax: "ecmascript",
-              jsx: true,
-            },
-      target: "es2021",
+        isTSX || filename.endsWith(".ts")
+          ? { syntax: "typescript", tsx: isTSX }
+          : { syntax: "ecmascript", jsx: true },
       transform: {
         optimizer: {
           globals: {
@@ -71,11 +76,8 @@ export const transform: typeof metroTransform = async (
           },
         },
       },
+      target: "es5",
     },
-    minify: options.minify,
-    sourceMaps: true,
-    plugin: (m) => dependencyCollector.visitProgram(m),
-    isModule: options.type !== "script",
   });
 
   return {
@@ -85,7 +87,6 @@ export const transform: typeof metroTransform = async (
         data: {
           code,
           lineCount: countLines(code),
-          map: [],
           functionMap: null,
         },
         type: options.type === "script" ? "js/script" : "js/module",
