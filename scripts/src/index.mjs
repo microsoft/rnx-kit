@@ -1,15 +1,28 @@
 #!/usr/bin/env node
 // @ts-check
 
+import yargs from "yargs";
+import buildAndroid from "./commands/build-android.mjs";
+import buildGo from "./commands/build-go.mjs";
+import buildIOS from "./commands/build-ios.mjs";
+import build from "./commands/build.mjs";
+import bundle from "./commands/bundle.mjs";
+import clean from "./commands/clean.mjs";
+import depcheck from "./commands/depcheck.mjs";
+import format from "./commands/format.mjs";
+import lint from "./commands/lint.mjs";
+import test from "./commands/test.mjs";
+import updateApiReadme from "./commands/updateApiReadme.mjs";
+
 /**
- * @param {Record<string, { description: string; command: import("./process").Command }>} commands
+ * @param {Record<string, { description: string; command: import("./process.mjs").Command }>} commands
  * @returns
  */
 function init(commands) {
-  const yargs = require("yargs/yargs")(process.argv.slice(2));
+  const parser = yargs(process.argv.slice(2));
   Object.keys(commands).forEach((name) => {
     const { description, command } = commands[name];
-    yargs.command(name, description, {}, async (args) => {
+    parser.command(name, description, {}, async (args) => {
       try {
         await command(args, process.argv.slice(3));
       } catch (e) {
@@ -20,52 +33,52 @@ function init(commands) {
       }
     });
   });
-  return yargs.help().demandCommand().argv;
+  return parser.help().demandCommand().argv;
 }
 
 init({
   build: {
     description: "Builds the current package",
-    command: require("./commands/build"),
+    command: build,
   },
   "build-ios": {
     description: "Builds an iOS app within the current package",
-    command: require("./commands/build-ios"),
+    command: buildIOS,
   },
   "build-android": {
     description: "Builds an Android app within the current package",
-    command: require("./commands/build-android"),
+    command: buildAndroid,
   },
   bundle: {
     description: "Bundles the current package",
-    command: require("./commands/bundle"),
+    command: bundle,
   },
   clean: {
     description: "Removes build and test artifacts",
-    command: require("./commands/clean"),
+    command: clean,
   },
   depcheck: {
     description: "Scans package for unused or missing dependencies",
-    command: require("./commands/depcheck"),
+    command: depcheck,
   },
   format: {
     description: "Formats source files",
-    command: require("./commands/format"),
+    command: format,
   },
   go: {
     description: "Builds Go code",
-    command: require("./commands/build-go"),
+    command: buildGo,
   },
   lint: {
     description: "Lints source files",
-    command: require("./commands/lint"),
+    command: lint,
   },
   test: {
     description: "Runs tests",
-    command: require("./commands/test"),
+    command: test,
   },
   "update-api-readme": {
     description: "Updates the API tables in README.md",
-    command: require("./commands/updateApiReadme"),
+    command: updateApiReadme,
   },
 });

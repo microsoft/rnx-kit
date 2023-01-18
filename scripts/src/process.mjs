@@ -4,19 +4,15 @@
  * @typedef {(args?: import("yargs").Arguments, rawArgs?: string[]) => Promise<void>} Command
  */
 
-const { spawn } = require("child_process");
-const os = require("os");
-
-function discardResult() {
-  return undefined;
-}
+import { spawn } from "node:child_process";
+import * as os from "node:os";
 
 /**
  * @param {string} command
  * @param {...string} args
  * @returns {Promise<void>}
  */
-function execute(command, ...args) {
+export function execute(command, ...args) {
   return new Promise((resolve, reject) => {
     spawn(command, args, { stdio: "inherit" }).on("close", (code) => {
       if (code === 0) {
@@ -33,7 +29,7 @@ function execute(command, ...args) {
  * @param {...string} args
  * @returns {Promise<void>}
  */
-function runScript(command, ...args) {
+export function runScript(command, ...args) {
   const yarn = os.platform() === "win32" ? "yarn.cmd" : "yarn";
   return execute(yarn, "--silent", command, ...args);
 }
@@ -42,14 +38,9 @@ function runScript(command, ...args) {
  * @param {...() => Promise<void>} scripts
  * @returns {Promise<void>}
  */
-function sequence(...scripts) {
+export function sequence(...scripts) {
   return scripts.reduce(
     (result, script) => result.then(() => script()),
     Promise.resolve()
   );
 }
-
-exports.discardResult = discardResult;
-exports.execute = execute;
-exports.runScript = runScript;
-exports.sequence = sequence;

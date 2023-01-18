@@ -1,10 +1,10 @@
 // @ts-check
 
-const { runScript } = require("../process");
+import { runScript } from "../process.mjs";
 
-/** @type {import("../process").Command} */
-module.exports = () =>
-  runScript(
+/** @type {import("../process.mjs").Command} */
+export default async function format() {
+  await runScript(
     "prettier",
     "--write",
     "--loglevel",
@@ -14,3 +14,4 @@ module.exports = () =>
     "!**/{__fixtures__,lib}/**",
     "!**/CHANGELOG.*"
   );
+}
