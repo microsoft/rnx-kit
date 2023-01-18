@@ -1,6 +1,6 @@
 // @ts-check
 
-const { discardResult } = require("../process");
+import * as fs from "node:fs";
 
 const defaultOptions = {
   minify: false,
@@ -26,30 +26,25 @@ function ensureValidPlatform(platform) {
 /**
  * @param {Record<string, unknown> | undefined} options
  */
-function bundle(options) {
-  const fs = require("fs");
-
+export default async function bundle(options) {
   const { minify, platform } = { ...defaultOptions, ...options };
   const targetPlatform = ensureValidPlatform(platform);
 
   const manifest = fs.readFileSync("package.json", { encoding: "utf-8" });
   const { main, dependencies } = JSON.parse(manifest);
 
-  return require("esbuild")
-    .build({
-      bundle: true,
-      entryPoints: ["src/index.ts"],
-      external: [
-        ...(dependencies ? Object.keys(dependencies) : []),
-        "./package.json",
-      ],
-      minify: Boolean(minify),
-      outfile: main,
-      platform: targetPlatform,
-      banner:
-        targetPlatform === "node" ? { js: "#!/usr/bin/env node" } : undefined,
-    })
-    .then(discardResult);
+  const esbuild = await import("esbuild");
+  await esbuild.build({
+    bundle: true,
+    entryPoints: ["src/index.ts"],
+    external: [
+      ...(dependencies ? Object.keys(dependencies) : []),
+      "./package.json",
+    ],
+    minify: Boolean(minify),
+    outfile: main,
+    platform: targetPlatform,
+    banner:
+      targetPlatform === "node" ? { js: "#!/usr/bin/env node" } : undefined,
+  });
 }
-
-module.exports = bundle;

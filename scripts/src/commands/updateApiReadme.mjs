@@ -1,17 +1,17 @@
 // @ts-check
 
-const README = "README.md";
-const TOKEN_START = "<!-- @rnx-kit/api start -->";
-const TOKEN_END = "<!-- @rnx-kit/api end -->";
-
-const path = require("path");
+import * as fs from "node:fs";
+import * as path from "node:path";
 
 /**
  * @typedef {import("typedoc/dist/lib/serialization/schema").Comment} Comment
  * @typedef {import("typedoc/dist/lib/serialization/schema").CommentDisplayPart} CommentDisplayPart
  * @typedef {import("typedoc/dist/lib/serialization/schema").SourceReference} SourceReference
  */
-const typedoc = require("typedoc");
+
+const README = "README.md";
+const TOKEN_START = "<!-- @rnx-kit/api start -->";
+const TOKEN_END = "<!-- @rnx-kit/api end -->";
 
 /**
  * @param {SourceReference[] | undefined} sources
@@ -47,7 +47,10 @@ function isCommented(source, identifier, comment) {
   return true;
 }
 
-function parse() {
+/**
+ * @param {import("typedoc")} typedoc
+ */
+function parse(typedoc) {
   const app = new typedoc.Application();
   app.options.addReader(new typedoc.TypeDocReader());
   app.options.addReader(new typedoc.TSConfigReader());
@@ -97,7 +100,7 @@ function renderSummary(parts) {
  * @param {[string, string, string][]} exportedTypes
  * @param {[string, string, string][]} exportedFunctions
  */
-function updateReadme(exportedTypes, exportedFunctions) {
+async function updateReadme(exportedTypes, exportedFunctions) {
   /** @type {(lhs: [string, string, string], rhs: [string, string, string]) => -1 | 0 | 1} */
   const sortByCategory = (lhs, rhs) => {
     if (lhs[0] !== rhs[0]) {
@@ -108,7 +111,7 @@ function updateReadme(exportedTypes, exportedFunctions) {
 
   /** @type {(table: string[][], options?: {}) => string} */
   // @ts-expect-error no declaration file for markdown-table
-  const markdownTable = require("markdown-table");
+  const { default: markdownTable } = await import("markdown-table");
 
   const types =
     exportedTypes.length === 0
@@ -126,8 +129,6 @@ function updateReadme(exportedTypes, exportedFunctions) {
           ...exportedFunctions.sort(sortByCategory),
         ]);
 
-  const fs = require("fs");
-
   const readme = fs.readFileSync(README, { encoding: "utf-8" });
   const updatedReadme = readme.replace(
     new RegExp(`${TOKEN_START}([^]+)${TOKEN_END}`),
@@ -141,55 +142,51 @@ function updateReadme(exportedTypes, exportedFunctions) {
   }
 }
 
-function updateApiReadme() {
-  return new Promise((resolve, reject) => {
-    const project = parse();
-    const children = project?.children;
-    if (!children) {
-      return reject();
-    }
+export default async function updateApiReadme() {
+  const { default: typedoc } = await import("typedoc");
 
-    /** @type {[string, string, string][]} */
-    const exportedFunctions = [];
+  const project = parse(typedoc);
+  const children = project?.children;
+  if (!children) {
+    throw new Error("Failed to parse project");
+  }
 
-    /** @type {[string, string, string][]} */
-    const exportedTypes = [];
+  /** @type {[string, string, string][]} */
+  const exportedFunctions = [];
 
-    for (const { name, kind, comment, sources, signatures } of children) {
-      switch (kind) {
-        case typedoc.ReflectionKind.TypeAlias: {
-          const source = getBaseName(sources);
-          if (isCommented(source, name, comment)) {
-            exportedTypes.push([source, name, renderSummary(comment.summary)]);
-          }
-          break;
+  /** @type {[string, string, string][]} */
+  const exportedTypes = [];
+
+  for (const { name, kind, comment, sources, signatures } of children) {
+    switch (kind) {
+      case typedoc.ReflectionKind.TypeAlias: {
+        const source = getBaseName(sources);
+        if (isCommented(source, name, comment)) {
+          exportedTypes.push([source, name, renderSummary(comment.summary)]);
         }
-        case typedoc.ReflectionKind.Function: {
-          const source = getBaseName(sources);
-          signatures?.forEach(({ name, comment, parameters }) => {
-            if (isCommented(source, name, comment)) {
-              exportedFunctions.push([
-                source,
-                Array.isArray(parameters)
-                  ? `\`${name}(${parameters
-                      .map((p) => (p.flags.isRest ? `...${p.name}` : p.name))
-                      .join(", ")})\``
-                  : `\`${name}()\``,
-                renderSummary(comment.summary),
-              ]);
-            }
-          });
-          break;
-        }
-        default:
-          console.warn("Unknown kind:", name);
+        break;
       }
+      case typedoc.ReflectionKind.Function: {
+        const source = getBaseName(sources);
+        signatures?.forEach(({ name, comment, parameters }) => {
+          if (isCommented(source, name, comment)) {
+            exportedFunctions.push([
+              source,
+              Array.isArray(parameters)
+                ? `\`${name}(${parameters
+                    .map((p) => (p.flags.isRest ? `...${p.name}` : p.name))
+                    .join(", ")})\``
+                : `\`${name}()\``,
+              renderSummary(comment.summary),
+            ]);
+          }
+        });
+        break;
+      }
+      default:
+        console.warn("Unknown kind:", name);
     }
+  }
 
-    updateReadme(exportedTypes, exportedFunctions);
-
-    resolve(0);
-  });
+  await updateReadme(exportedTypes, exportedFunctions);
 }
-
-module.exports = updateApiReadme;

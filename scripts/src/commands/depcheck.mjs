@@ -1,5 +1,9 @@
 // @ts-check
 
+import * as fs from "node:fs";
+import { createRequire } from "node:module";
+import * as path from "node:path";
+
 /**
  * @param {{ [key: string]: unknown }} a
  * @param {{ [key: string]: unknown }} b
@@ -17,8 +21,8 @@ function mergeOneLevel(a, b = {}) {
 }
 
 function patch() {
-  const fs = require("fs");
-  const path = require("path");
+  // @ts-expect-error ts(1343): 'import.meta' is only allowed when module is ESM
+  const require = createRequire(import.meta.url);
 
   const depcheck = path.dirname(require.resolve("depcheck/package.json"));
   const patchedFile = path.join(depcheck, ".rnx-kit-patched");
@@ -42,14 +46,15 @@ function patch() {
   }
 }
 
-module.exports = () => {
+export default async function depcheck() {
+  patch();
+
+  const { default: depcheck } = await import("depcheck");
+
   return new Promise((resolve, reject) => {
-    patch();
-
-    const depcheck = require("depcheck");
-    const path = require("path");
-
-    const config = require(path.join(process.cwd(), "package.json"));
+    const packageJson = path.join(process.cwd(), "package.json");
+    const json = fs.readFileSync(packageJson, { encoding: "utf-8" });
+    const config = JSON.parse(json);
     const options = mergeOneLevel(
       {
         ignorePatterns: ["/lib/*", "/test/__fixtures__/*"],
@@ -116,4 +121,4 @@ module.exports = () => {
       }
     });
   });
-};
+}
