@@ -39,7 +39,7 @@ jobs:
     name: "Build"
     strategy:
       matrix:
-        node-version: [14, 16]
+        node-version: [14, 16, 18]
         os: [ubuntu-20.04, windows-2022]
     runs-on: ${{ matrix.os }}
     steps:
@@ -57,7 +57,7 @@ jobs:
       - name: Build and test packages
         run: yarn build:ci --base origin/${{ github.base_ref }}
       - name: Ensure READMEs are up-to-date
-        if: ${{ matrix.node-version == 14 && matrix.os == 'ubuntu-20.04' }}
+        if: ${{ matrix.node-version == 18 && matrix.os == 'ubuntu-20.04' }}
         run: |
           yarn update-readme
           git diff --exit-code
