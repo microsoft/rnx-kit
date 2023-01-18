@@ -40,10 +40,10 @@ jobs:
         with:
           distribution: temurin
           java-version: 11
-      - name: Set up Node 16
+      - name: Set up Node 18
         uses: actions/setup-node@v3.6.0
         with:
-          node-version: 16
+          node-version: 18
       - name: Install npm dependencies
         run: ${{ github.event.inputs.packageManager }} install
       - name: Build Android app
@@ -71,10 +71,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Set up Node 16
+      - name: Set up Node 18
         uses: actions/setup-node@v3.6.0
         with:
-          node-version: 16
+          node-version: 18
       - name: Install npm dependencies
         run: ${{ github.event.inputs.packageManager }} install
       - name: Install Pods
@@ -123,10 +123,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Set up Node 16
+      - name: Set up Node 18
         uses: actions/setup-node@v3.6.0
         with:
-          node-version: 16
+          node-version: 18
       - name: Install npm dependencies
         run: ${{ github.event.inputs.packageManager }} install
       - name: Install Pods
@@ -157,10 +157,10 @@ jobs:
         uses: actions/checkout@v3
       - name: Set up MSBuild
         uses: microsoft/setup-msbuild@v1.3
-      - name: Set up Node 16
+      - name: Set up Node 18
         uses: actions/setup-node@v3.6.0
         with:
-          node-version: 16
+          node-version: 18
       - name: Install npm dependencies
         run: ${{ github.event.inputs.packageManager }} install
       - name: Install Windows test app
