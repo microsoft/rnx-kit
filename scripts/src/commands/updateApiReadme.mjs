@@ -111,7 +111,7 @@ async function updateReadme(exportedTypes, exportedFunctions) {
 
   /** @type {(table: string[][], options?: {}) => string} */
   // @ts-expect-error no declaration file for markdown-table
-  const { default: markdownTable } = await import("markdown-table");
+  const { markdownTable } = await import("markdown-table");
 
   const types =
     exportedTypes.length === 0
