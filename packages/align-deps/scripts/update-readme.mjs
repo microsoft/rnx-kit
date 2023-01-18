@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 // @ts-check
 
-const fs = require("fs");
-const markdownTable = require("markdown-table");
-const { preset } = require("../lib/presets/microsoft/react-native");
+import { markdownTable } from "markdown-table";
+import * as fs from "node:fs";
+import { preset } from "../lib/presets/microsoft/react-native.js";
 
 const README = "README.md";
 const TOKEN_START = "<!-- @rnx-kit/align-deps/capabilities start -->";

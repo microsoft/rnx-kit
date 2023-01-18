@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // @ts-check
 
-import markdownTable from "markdown-table";
+import { markdownTable } from "markdown-table";
 import { existsSync as fileExists } from "node:fs";
 import * as fs from "node:fs/promises";
 import * as path from "node:path";

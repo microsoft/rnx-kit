@@ -25,7 +25,7 @@
     "lint": "rnx-kit-scripts lint",
     "test": "rnx-kit-scripts test",
     "update-profile": "node scripts/update-profile.mjs",
-    "update-readme": "node scripts/update-readme.js"
+    "update-readme": "node scripts/update-readme.mjs"
   },
   "devDependencies": {
     "@rnx-kit/config": "*",
@@ -43,7 +43,7 @@
     "detect-indent": "^6.0.0",
     "jest-diff": "^27.0.0",
     "lodash": "^4.17.21",
-    "markdown-table": "^2.0.0",
+    "markdown-table": "^3.0.0",
     "package-json": "^8.0.0",
     "prompts": "^2.4.0",
     "semver": "^7.0.0",
