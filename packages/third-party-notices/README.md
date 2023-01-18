@@ -61,3 +61,22 @@ writeThirdPartyNotices({
   sourceMapFile: "./dist/myPackage.js.map",
 });
 ```
+### As a plugin
+Import and add the plugin to `ThirdPartyNotices` in your `metro.config.js`, and
+optionally configure it to your liking:
+
+```diff
+ const { makeMetroConfig } = require("@rnx-kit/metro-config");
++const { ThirdPartyNotices } = require("@rnx-kit/third-party-notices");
++const { MetroSerializer } = require("@rnx-kit/metro-serializer");
+
+ module.exports = makeMetroConfig({
+   serializer: {
++    customSerializer: MetroSerializer([
++      ThirdPartyNotices({
++        rootPath: ".",
++        sourceMapFile: "./dist/myPackage.js.map",
++      }),
++    ]),
+   },
+ });

@@ -32,9 +32,15 @@
   },
   "devDependencies": {
     "@rnx-kit/eslint-config": "*",
+    "@rnx-kit/metro-serializer": "*",
     "@rnx-kit/scripts": "*",
     "@types/jest": "^27.0.0",
     "@types/yargs": "^16.0.0"
+  },
+  "depcheck": {
+    "ignoreMatches": [
+      "metro"
+    ]
   },
   "eslintConfig": {
     "extends": "@rnx-kit/eslint-config"
