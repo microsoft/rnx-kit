@@ -1,14 +1,14 @@
 #!/usr/bin/env node
 // @ts-check
 
-import { existsSync as fileExists } from "fs";
-import * as fs from "fs/promises";
 import markdownTable from "markdown-table";
-import pacote from "pacote";
-import * as path from "path";
+import { existsSync as fileExists } from "node:fs";
+import * as fs from "node:fs/promises";
+import * as path from "node:path";
+import { fileURLToPath } from "node:url";
+import packageJson from "package-json";
 import semverCoerce from "semver/functions/coerce.js";
 import semverCompare from "semver/functions/compare.js";
-import { fileURLToPath } from "url";
 import { isMetaPackage } from "../lib/capabilities.js";
 
 /**
@@ -21,34 +21,46 @@ import { isMetaPackage } from "../lib/capabilities.js";
  *   version: string;
  *   latest: string;
  *   homepage?: string;
- *   dependencies?: Record<string, string>;
- *   peerDependencies?: Record<string, string>;
+ *   dependencies: any;
+ *   peerDependencies: any;
  * }} PackageInfo
  */
 
 /**
  * Fetches package manifest from npm.
  * @param {MetaPackage | Package} pkg
- * @param {string=} defaultTag
+ * @param {string=} targetVersion
  * @returns {Promise<PackageInfo | void>}
  */
-async function fetchPackageInfo(pkg, defaultTag = "latest") {
+async function fetchPackageInfo(pkg, targetVersion = "latest") {
   if (isMetaPackage(pkg)) {
     return Promise.resolve();
   }
 
   const { name, version } = pkg;
-  const manifest = await pacote.manifest(name, {
-    defaultTag,
+  const manifest = await packageJson(name, {
+    version: targetVersion,
     fullMetadata: true,
   });
+
+  const {
+    version: latest,
+    homepage,
+    dependencies,
+    peerDependencies,
+  } = manifest;
+
+  if (typeof latest !== "string") {
+    throw new Error(`Failed to fetch manifest for '${name}'`);
+  }
+
   return {
     name,
     version,
-    latest: manifest.version,
-    homepage: manifest.homepage,
-    dependencies: manifest.dependencies,
-    peerDependencies: manifest.peerDependencies,
+    latest,
+    homepage,
+    dependencies,
+    peerDependencies,
   };
 }
 
@@ -241,8 +253,8 @@ async function makeProfile(preset, targetVersion, latestProfile) {
     "@react-native-community/cli-plugin-metro",
   ].reduce(async (dependencies, packageName) => {
     try {
-      const packageInfo = await pacote.manifest(packageName, {
-        defaultTag: getPackageVersion(packageName, await dependencies),
+      const packageInfo = await packageJson(packageName, {
+        version: getPackageVersion(packageName, await dependencies),
         fullMetadata: true,
       });
       return packageInfo.dependencies;
@@ -250,8 +262,8 @@ async function makeProfile(preset, targetVersion, latestProfile) {
       if (e.code === "ETARGET") {
         // Some packages, such as `@react-native-community/cli`, are still in
         // alpha or beta while react-native RCs. Try again with the `next` tag.
-        const packageInfo = await pacote.manifest(packageName, {
-          defaultTag: "next",
+        const packageInfo = await packageJson(packageName, {
+          version: "next",
           fullMetadata: true,
         });
         return packageInfo.dependencies;
