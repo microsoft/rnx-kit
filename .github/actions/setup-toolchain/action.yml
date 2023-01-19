@@ -4,7 +4,7 @@ inputs:
   node-version:
     description: The version of Node to use
     type: number
-    default: 16
+    default: 18
     required: true
   jdk-version:
     description: The Java JDK version to use, if specified
@@ -12,6 +12,7 @@ inputs:
   go-version:
     description: The semver version of Go to use, if specified
     type: string
+    default: "^1.14.0"
 
 runs:
   using: composite

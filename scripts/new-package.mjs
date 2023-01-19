@@ -1,15 +1,17 @@
 // a script that takes a string as value and copies the folder packages/template
 // to a new folder with the name of the value
 
+import * as fs from "node:fs";
+import * as path from "node:path";
+import { fileURLToPath } from "node:url";
+import yargs from "yargs";
+
 const TOKEN_START = "<!-- experimental-warning start -->";
 const TOKEN_END = "<!-- experimental-warning end -->";
 const experimental_label =
   "🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧\n### This tool is EXPERIMENTAL - USE WITH CAUTION\n🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧\n";
 
-// Include process module
-const process = require("process");
-
-var argv = require("yargs/yargs")(process.argv.slice(2))
+const argv = yargs(process.argv.slice(2))
   .usage("Usage: new-package <name> --experimental")
   .example(
     "new-package my-package --experimental",
@@ -21,32 +23,30 @@ var argv = require("yargs/yargs")(process.argv.slice(2))
   .default("experimental", false).argv;
 
 // this is less than ideal, but the only way to make positional working with v16 of yargs
-var projectName = argv["_"][0];
-var experimental = argv.experimental;
+const projectName = argv["_"][0];
+const experimental = argv.experimental;
 
 // do some quick sanitization
-var cleanProjectName = projectName.replace(/[|&;$%@"<>()+,]/g, "");
+const cleanProjectName = projectName.replace(/[|&;$%@"<>()+,]/g, "");
+
+const scriptsDir = path.dirname(fileURLToPath(import.meta.url));
+const repoRoot = path.dirname(scriptsDir);
 
 // copy the package/template folder to a new folder with the name of the value
 // and then change the package.json file to the new name
-const fse = require("fs-extra");
-const fs = require("fs");
-const path = require("path");
-const templatePath = path.join(__dirname, "../packages/template");
+const templatePath = path.join(repoRoot, "packages", "template");
 
 const targetFolderPath = experimental ? "incubator" : "packages";
 
-const newProjectPath = path.join(
-  __dirname,
-  `../${targetFolderPath}/` + cleanProjectName
-);
+const newProjectPath = path.join(repoRoot, targetFolderPath, cleanProjectName);
 
 // copy the template folder to the new project folder
 try {
-  fse.copySync(templatePath, newProjectPath, {
+  fs.cpSync(templatePath, newProjectPath, {
     dereference: true,
-    overwrite: false,
     errorOnExist: true,
+    force: false,
+    recursive: true,
   });
 } catch (error) {
   console.error(
@@ -56,7 +56,9 @@ try {
 
 // change the package.json file to the new name
 const packageJsonPath = path.join(newProjectPath, "package.json");
-const packageJson = require(packageJsonPath);
+const packageJson = JSON.parse(
+  fs.readFileSync(packageJsonPath, { encoding: "utf-8" })
+);
 packageJson.name = "@rnx-kit/" + cleanProjectName;
 packageJson.description =
   `${
@@ -89,7 +91,7 @@ try {
 // change the README.md file to the new name
 const readmePath = path.join(newProjectPath, "README.md");
 
-const readme = fs.readFileSync(readmePath, "utf8");
+const readme = fs.readFileSync(readmePath, { encoding: "utf-8" });
 
 const newReadme = readme.replace(/template/g, cleanProjectName);
 
