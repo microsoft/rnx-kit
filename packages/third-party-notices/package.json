@@ -35,6 +35,8 @@
     "@rnx-kit/metro-serializer": "*",
     "@rnx-kit/scripts": "*",
     "@types/jest": "^27.0.0",
+    "@types/metro": "^0.66.0",
+    "@types/metro-source-map": "^0.66.0",
     "@types/yargs": "^16.0.0"
   },
   "depcheck": {

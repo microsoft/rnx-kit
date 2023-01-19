@@ -82,8 +82,7 @@ export async function writeThirdPartyNoticesFromMap(
     outputFile = prefix + ".LICENSE.txt";
   }
 
-  const writeFileAsync = promisify(fs.writeFile);
-  await writeFileAsync(outputFile, outputText, "utf8");
+  fs.writeFileSync(outputFile, outputText);
 }
 
 export async function getCurrentPackageId(
