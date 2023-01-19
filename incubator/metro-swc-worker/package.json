@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/metro-swc-worker",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "experimental": true,
   "description": "Metro transform worker that uses swc under the hood",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/metro-swc-worker#readme",

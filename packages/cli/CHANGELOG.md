@@ -1,5 +1,13 @@
 # Change Log - @rnx-kit/cli
 
+## 0.16.1
+
+### Patch Changes
+
+- 8b761802: Increase supported version range of `@react-native-community/cli-server-api`
+- Updated dependencies [20d81d18]
+  - @rnx-kit/third-party-notices@1.3.0
+
 ## 0.16.0
 
 ### Minor Changes

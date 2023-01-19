@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-swc-worker
 
+## 0.1.9
+
+### Patch Changes
+
+- 32750725: Remove Flow types without using Babel
+
 ## 0.1.8
 
 ### Patch Changes
