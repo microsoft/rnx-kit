@@ -21,13 +21,12 @@ export function ThirdPartyNotices(
       return;
     }
 
-    if (!options) {
-      options = {
-        rootPath: serializerOptions.projectRoot,
-        sourceMapFile: serializerOptions.sourceMapUrl || "",
-        json: false,
-      };
-    }
+    options = {
+      rootPath: serializerOptions.projectRoot,
+      sourceMapFile: serializerOptions.sourceMapUrl || "",
+      json: false,
+      ...(options as object),
+    };
 
     const sources = Array.from(graph.dependencies.keys());
     const moduleNameToPath = gatherModulesFromSources(sources, options);
