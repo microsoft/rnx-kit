@@ -51,7 +51,6 @@ jobs:
         uses: ./.github/actions/setup-toolchain
         with:
           node-version: ${{ matrix.node-version }}
-          go-version: "^1.14.0"
       - name: Install package dependencies
         uses: ./.github/actions/yarn
       - name: Build and test packages
