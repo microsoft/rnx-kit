@@ -9,7 +9,7 @@ import {
 export { writeThirdPartyNotices } from "./write-third-party-notices";
 
 export function ThirdPartyNotices(
-  options: WriteThirdPartyNoticesOptions
+  inputOptions: Partial<WriteThirdPartyNoticesOptions>
 ): MetroPlugin {
   return (
     _entryPoint: string,
@@ -21,11 +21,11 @@ export function ThirdPartyNotices(
       return;
     }
 
-    options = {
+    const options = {
       rootPath: serializerOptions.projectRoot,
       sourceMapFile: serializerOptions.sourceMapUrl || "",
       json: false,
-      ...(options as object),
+      ...inputOptions,
     };
 
     const sources = Array.from(graph.dependencies.keys());
