@@ -2,6 +2,7 @@ import fs from "fs";
 import { findPackage, readPackage } from "@rnx-kit/tools-node/package";
 import { resolve } from "path";
 import { promisify } from "util";
+import type { BasicSourceMap } from "metro-source-map";
 import { createLicenseJSON } from "./output/json";
 import { createLicenseFileContents } from "./output/text";
 import type {
@@ -62,6 +63,26 @@ export async function writeThirdPartyNotices(
   } else {
     console.log(outputText);
   }
+}
+
+export async function writeThirdPartyNoticesFromMap(
+  options: WriteThirdPartyNoticesOptions,
+  moduleNameToPathMap: Map<string, string>
+): Promise<void> {
+  const { additionalText, json, preambleText, sourceMapFile } = options;
+  let { outputFile } = options;
+
+  const licenses = await extractLicenses(moduleNameToPathMap);
+  const outputText = json
+    ? createLicenseJSON(licenses)
+    : createLicenseFileContents(licenses, preambleText, additionalText);
+
+  if (!outputFile) {
+    const prefix = sourceMapFile?.replace(/\.map$/, "") ?? "main";
+    outputFile = prefix + ".LICENSE.txt";
+  }
+
+  fs.writeFileSync(outputFile, outputText);
 }
 
 export async function getCurrentPackageId(
@@ -222,4 +243,19 @@ export async function extractLicenses(
       lhs < rhs ? -1 : lhs > rhs ? 1 : 0
     )
   );
+}
+
+export function gatherModulesFromSources(
+  sources: BasicSourceMap["sources"],
+  options: WriteThirdPartyNoticesOptions
+): Map<string, string> {
+  const moduleNameToPath = new Map<string, string>();
+
+  sources.forEach((source) => {
+    if (source.includes("node_modules/")) {
+      parseModule(options, moduleNameToPath, source);
+    }
+  });
+
+  return moduleNameToPath;
 }
