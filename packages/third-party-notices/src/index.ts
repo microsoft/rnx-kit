@@ -7,6 +7,7 @@ import {
 } from "./write-third-party-notices";
 
 export { writeThirdPartyNotices } from "./write-third-party-notices";
+
 export function ThirdPartyNotices(
   options: WriteThirdPartyNoticesOptions
 ): MetroPlugin {
