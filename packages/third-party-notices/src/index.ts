@@ -21,6 +21,14 @@ export function ThirdPartyNotices(
       return;
     }
 
+    if (!options) {
+      options = {
+        rootPath: serializerOptions.projectRoot,
+        sourceMapFile: serializerOptions.sourceMapUrl || "",
+        json: false,
+      };
+    }
+
     const sources = Array.from(graph.dependencies.keys());
     const moduleNameToPath = gatherModulesFromSources(sources, options);
     writeThirdPartyNoticesFromMap(options, moduleNameToPath);
