@@ -36,7 +36,8 @@
       "jest",
       "markdown-table",
       "typedoc",
-      "typescript"
+      "typescript",
+      "yargs"
     ]
   },
   "eslintConfig": {
