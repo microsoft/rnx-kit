@@ -1,5 +1,5 @@
-import { Graph, Module, SerializerOptions } from "metro";
-import { WriteThirdPartyNoticesOptions } from "./types";
+import type { Graph, Module, SerializerOptions } from "metro";
+import type { WriteThirdPartyNoticesOptions } from "./types";
 import type { MetroPlugin } from "@rnx-kit/metro-serializer";
 import {
   gatherModulesFromSources,
