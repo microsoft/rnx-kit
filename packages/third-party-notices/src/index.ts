@@ -17,7 +17,7 @@ export function ThirdPartyNotices(
     graph: Graph,
     serializerOptions: SerializerOptions
   ) => {
-    if (!serializerOptions.dev) {
+    if (serializerOptions.dev) {
       return;
     }
 
