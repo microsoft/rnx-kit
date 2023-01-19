@@ -1,7 +1,10 @@
 import { Graph, Module, SerializerOptions } from "metro";
 import { WriteThirdPartyNoticesOptions } from "./types";
 import type { MetroPlugin } from "@rnx-kit/metro-serializer";
-import { writeThirdPartyNotices } from "./write-third-party-notices";
+import {
+  gatherModulesFromSources,
+  writeThirdPartyNoticesFromMap,
+} from "./write-third-party-notices";
 
 export { writeThirdPartyNotices } from "./write-third-party-notices";
 export function ThirdPartyNotices(
@@ -10,10 +13,16 @@ export function ThirdPartyNotices(
   return (
     _entryPoint: string,
     _preModules: ReadonlyArray<Module>,
-    _graph: Graph,
-    _options: SerializerOptions
+    graph: Graph,
+    serializerOptions: SerializerOptions
   ) => {
-    writeThirdPartyNotices(options);
+    if (!serializerOptions.dev) {
+      return;
+    }
+
+    const sources = Array.from(graph.dependencies.keys());
+    const moduleNameToPath = gatherModulesFromSources(sources, options);
+    writeThirdPartyNoticesFromMap(options, moduleNameToPath);
   };
 }
 

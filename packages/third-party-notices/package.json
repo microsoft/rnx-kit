@@ -39,7 +39,8 @@
   },
   "depcheck": {
     "ignoreMatches": [
-      "metro"
+      "metro",
+      "metro-source-map"
     ]
   },
   "eslintConfig": {
