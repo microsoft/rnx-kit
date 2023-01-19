@@ -61,7 +61,9 @@ writeThirdPartyNotices({
   sourceMapFile: "./dist/myPackage.js.map",
 });
 ```
+
 ### As a plugin
+
 Import and add the plugin to `ThirdPartyNotices` in your `metro.config.js`, and
 optionally configure it to your liking:
 
@@ -80,3 +82,4 @@ optionally configure it to your liking:
 +    ]),
    },
  });
+```
