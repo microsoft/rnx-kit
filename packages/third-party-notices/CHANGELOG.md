@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/third-party-notices
 
+## 1.3.0
+
+### Minor Changes
+
+- 20d81d18: Add Metro plugin support
+
 ## 1.2.16
 
 ### Patch Changes
