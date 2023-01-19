@@ -67,12 +67,12 @@ export async function writeThirdPartyNotices(
 
 export async function writeThirdPartyNoticesFromMap(
   options: WriteThirdPartyNoticesOptions,
-  moduleNameToPath: Map<string, string>
+  moduleNameToPathMap: Map<string, string>
 ): Promise<void> {
   const { additionalText, json, preambleText, sourceMapFile } = options;
   let { outputFile } = options;
 
-  const licenses = await extractLicenses(moduleNameToPath);
+  const licenses = await extractLicenses(moduleNameToPathMap);
   const outputText = json
     ? createLicenseJSON(licenses)
     : createLicenseFileContents(licenses, preambleText, additionalText);
