@@ -252,7 +252,8 @@ export function gatherModulesFromSources(
   const moduleNameToPath = new Map<string, string>();
 
   sources.forEach((source) => {
-    if (source.includes("node_modules/")) {
+    if (source.includes("node_modules")) {
+      source = normalizePath(source);
       parseModule(options, moduleNameToPath, source);
     }
   });
