@@ -1,6 +1,7 @@
 import type { Config as CLIConfig } from "@react-native-community/cli-types";
 import type { Reporter } from "metro";
-import { ConfigT, InputConfigT, loadConfig } from "metro-config";
+import type { ConfigT, InputConfigT } from "metro-config";
+import { loadConfig } from "metro-config";
 import type {
   CustomResolver,
   Resolution,

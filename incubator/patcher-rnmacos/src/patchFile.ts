@@ -1,6 +1,6 @@
 import { log } from "./logger";
 import { applyPatchTool, applyPatchEmbedded } from "./patch_utils";
-import { IPatchFileCommandOptions, PatchFileFuncType } from "./types";
+import type { IPatchFileCommandOptions, PatchFileFuncType } from "./types";
 
 function applyPatch(
   targetPath: string,

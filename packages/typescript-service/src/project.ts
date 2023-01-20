@@ -2,7 +2,7 @@ import { isNonEmptyArray } from "@rnx-kit/tools-language/array";
 import chalk from "chalk";
 import ts from "typescript";
 import { ExternalFileCache, ProjectFileCache } from "./cache";
-import { DiagnosticWriter } from "./diagnostics";
+import type { DiagnosticWriter } from "./diagnostics";
 
 export class Project {
   private diagnosticWriter: DiagnosticWriter;

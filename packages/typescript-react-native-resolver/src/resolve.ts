@@ -1,15 +1,12 @@
-import {
-  FileModuleRef,
-  getMangledPackageName,
-  PackageModuleRef,
-} from "@rnx-kit/tools-node";
+import type { FileModuleRef, PackageModuleRef } from "@rnx-kit/tools-node";
+import { getMangledPackageName } from "@rnx-kit/tools-node";
 import path from "path";
 import ts from "typescript";
 
 import { ExtensionsTypeScript } from "./extension";
 import { isTraceEnabled } from "./log";
 import { findModuleFile } from "./module";
-import { ResolverContext } from "./types";
+import type { ResolverContext } from "./types";
 
 /**
  * Resolve a module reference within a given package directory.
