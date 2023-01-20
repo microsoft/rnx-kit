@@ -3,4 +3,4 @@
 "@rnx-kit/metro-config": patch
 ---
 
-fix(deps): include peer dependencies for yarn
+Include missing peer dependencies detected by Yarn 3.0.
