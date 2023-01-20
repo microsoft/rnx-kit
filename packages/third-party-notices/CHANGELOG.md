@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/third-party-notices
 
+## 1.3.1
+
+### Patch Changes
+
+- b29492d0: Normalize module path to resolve errors on Windows
+
 ## 1.3.0
 
 ### Minor Changes
