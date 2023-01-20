@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/babel-preset-metro-react-native
 
+## 1.1.4
+
+### Patch Changes
+
+- 5455c234: Include missing peer dependencies detected by Yarn 3.0.
+
 ## 1.1.3
 
 ### Patch Changes
