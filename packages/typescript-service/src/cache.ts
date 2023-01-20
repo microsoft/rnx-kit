@@ -1,5 +1,5 @@
 import { normalizePath } from "@rnx-kit/tools-node";
-import ts from "typescript";
+import type ts from "typescript";
 import { VersionedSnapshot } from "./snapshot";
 
 export class ProjectFileCache {

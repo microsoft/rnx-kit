@@ -1,6 +1,7 @@
 import type { MetroPlugin } from "@rnx-kit/metro-serializer";
 import type { Graph, Module, SerializerOptions } from "metro";
-import { detectCycles, PluginOptions } from "./detectCycles";
+import type { PluginOptions } from "./detectCycles";
+import { detectCycles } from "./detectCycles";
 
 export type { PluginOptions } from "./detectCycles";
 

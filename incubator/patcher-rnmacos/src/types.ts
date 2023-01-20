@@ -1,4 +1,4 @@
-import program from "commander";
+import type program from "commander";
 
 export interface ICommonOptions extends program.Command {
   gitExecutable: string;

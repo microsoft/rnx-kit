@@ -1,6 +1,6 @@
 import path from "path";
 import { readPackage } from "@rnx-kit/tools-node";
-import { KitConfig } from "./kitConfig";
+import type { KitConfig } from "./kitConfig";
 
 /**
  * Options for retrieving a kit config. The default is equivalent to passing { cwd: process.cwd() }

@@ -1,10 +1,10 @@
 import { error, warn } from "@rnx-kit/console";
 import type { Graph } from "metro";
 import type { MixedSourceMap } from "metro-source-map";
+import type { ModuleMap } from "./gatherModules";
 import {
   gatherModulesFromGraph,
   gatherModulesFromSourceMap,
-  ModuleMap,
 } from "./gatherModules";
 
 export type Options = {

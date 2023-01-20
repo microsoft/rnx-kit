@@ -2,7 +2,7 @@ import program from "commander";
 import { log } from "./logger";
 import fs_path from "path";
 
-import {
+import type {
   DiffReposFuncType,
   PatchRepoFuncType,
   PatchFileFuncType,

@@ -1,20 +1,19 @@
+import { compareFiles } from "./file_compare";
+import { isFileBinary } from "./file_type_utils";
 import {
-  traverseDirectory,
-  writeFile,
+  copyFile2,
+  eraseAndRecreateDirectory,
+  getFileNameExtension,
   getRelativePath,
   lookUpRelativePath,
-  eraseAndRecreateDirectory,
   resolvePath,
-  copyFile2,
-  getFileNameExtension,
+  traverseDirectory,
+  writeFile,
 } from "./fs_utils";
-import { diffFiles } from "./patch_utils";
-import { log } from "./logger";
-import { isFileBinary } from "./file_type_utils";
-import { compareFiles } from "./file_compare";
 import { cleanRepoSync } from "./git_utils";
-
-import { IDiffCommandOptions, DiffReposFuncType } from "./types";
+import { log } from "./logger";
+import { diffFiles } from "./patch_utils";
+import type { DiffReposFuncType, IDiffCommandOptions } from "./types";
 
 const diffRepos: DiffReposFuncType = (
   dirtyRepoAbsPath: string,

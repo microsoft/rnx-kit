@@ -9,7 +9,7 @@ import {
 import { log } from "./logger";
 import { applyPatchTool, applyPatchEmbedded } from "./patch_utils";
 import { isFileBinary } from "./file_type_utils";
-import { IPatchCommandOptions, PatchRepoFuncType } from "./types";
+import type { IPatchCommandOptions, PatchRepoFuncType } from "./types";
 
 function applyPatch(
   targetPath: string,

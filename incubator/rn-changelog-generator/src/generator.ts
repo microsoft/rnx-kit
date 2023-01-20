@@ -1,22 +1,22 @@
 #!/usr/bin/env node
 
-import levenshtein from "fast-levenshtein";
-import util from "util";
-import path from "path";
-import fs from "fs";
 import chalk from "chalk";
-import pLimit from "p-limit";
-import deepmerge from "deepmerge";
 import child_process from "child_process";
-import { fetchCommits, Commit } from "./utils/commits";
-import getChangeMessage from "./utils/getChangeMessage";
+import deepmerge from "deepmerge";
+import levenshtein from "fast-levenshtein";
+import fs from "fs";
+import pLimit from "p-limit";
+import path from "path";
+import util from "util";
+import type { Commit } from "./utils/commits";
+import { fetchCommits } from "./utils/commits";
 import formatCommitLink from "./utils/formatCommitLink";
+import type { ChangeCategory, ChangeType } from "./utils/getChangeDimensions";
 import getChangeDimensions, {
-  CHANGE_TYPE,
   CHANGE_CATEGORY,
-  ChangeType,
-  ChangeCategory,
+  CHANGE_TYPE,
 } from "./utils/getChangeDimensions";
+import getChangeMessage from "./utils/getChangeMessage";
 
 const execFile = util.promisify(child_process.execFile);
 
