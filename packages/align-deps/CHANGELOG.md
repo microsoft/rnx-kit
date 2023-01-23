@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/align-deps
 
+## 2.0.4
+
+### Patch Changes
+
+- f6dced6d: Bump dependencies that have updated New Arch support
+
 ## 2.0.3
 
 ### Patch Changes
