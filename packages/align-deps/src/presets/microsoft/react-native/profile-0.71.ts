@@ -48,9 +48,13 @@ const profile: Profile = {
     version: "^0.73.7",
     devOnly: true,
   },
+  "datetime-picker": {
+    name: "@react-native-community/datetimepicker",
+    version: "^6.4.2",
+  },
   gestures: {
     name: "react-native-gesture-handler",
-    version: "^2.8.0", // TODO: Update when a 0.71 compatible version is released
+    version: "^2.9.0",
   },
   jest: {
     name: "jest",
@@ -89,7 +93,7 @@ const profile: Profile = {
   },
   screens: {
     name: "react-native-screens",
-    version: "^3.18.2", // TODO: Update when a 0.71 compatible version is released
+    version: "^3.19.0",
   },
   shimmer: {
     name: "react-native-shimmer",
