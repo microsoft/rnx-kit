@@ -39,26 +39,25 @@ const profile: Profile = {
     capabilities: ["core"],
   },
 
-  animation: {
-    name: "react-native-reanimated",
-    version: "^2.14.1",
-  },
   "babel-preset-react-native": {
     name: "metro-react-native-babel-preset",
     version: "^0.73.7",
     devOnly: true,
   },
-  "datetime-picker": {
-    name: "@react-native-community/datetimepicker",
-    version: "^6.4.2",
+  "community/cli": {
+    name: "@react-native-community/cli",
+    version: "^10.0.0",
+    capabilities: ["community/cli-android", "community/cli-ios"],
+    devOnly: true,
   },
-  gestures: {
-    name: "react-native-gesture-handler",
-    version: "^2.9.0",
+  "community/cli-android": {
+    name: "@react-native-community/cli-platform-android",
+    version: "^10.0.0",
+    devOnly: true,
   },
-  jest: {
-    name: "jest",
-    version: "^29.2.1",
+  "community/cli-ios": {
+    name: "@react-native-community/cli-platform-ios",
+    version: "^10.0.0",
     devOnly: true,
   },
   metro: {
@@ -89,6 +88,24 @@ const profile: Profile = {
   "metro-runtime": {
     name: "metro-runtime",
     version: "^0.73.7",
+    devOnly: true,
+  },
+
+  animation: {
+    name: "react-native-reanimated",
+    version: "^2.14.1",
+  },
+  "datetime-picker": {
+    name: "@react-native-community/datetimepicker",
+    version: "^6.4.2",
+  },
+  gestures: {
+    name: "react-native-gesture-handler",
+    version: "^2.9.0",
+  },
+  jest: {
+    name: "jest",
+    version: "^29.2.1",
     devOnly: true,
   },
   screens: {

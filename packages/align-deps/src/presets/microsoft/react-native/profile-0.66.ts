@@ -39,31 +39,10 @@ const profile: Profile = {
     capabilities: ["core"],
   },
 
-  animation: {
-    name: "react-native-reanimated",
-    version: "^2.2.3",
-  },
-  hermes: {
-    name: "hermes-engine",
-    version: "~0.9.0",
-  },
   "babel-preset-react-native": {
     name: "metro-react-native-babel-preset",
     version: "^0.66.2",
     devOnly: true,
-  },
-  html: {
-    name: "react-native-render-html",
-    version: "^6.1.0",
-  },
-  jest: {
-    name: "jest",
-    version: "^26.6.3",
-    devOnly: true,
-  },
-  "lazy-index": {
-    name: "@rnx-kit/react-native-lazy-index",
-    version: "^2.1.7",
   },
   metro: {
     name: "metro",
@@ -94,6 +73,28 @@ const profile: Profile = {
     name: "metro-runtime",
     version: "^0.66.2",
     devOnly: true,
+  },
+
+  animation: {
+    name: "react-native-reanimated",
+    version: "^2.2.3",
+  },
+  hermes: {
+    name: "hermes-engine",
+    version: "~0.9.0",
+  },
+  html: {
+    name: "react-native-render-html",
+    version: "^6.1.0",
+  },
+  jest: {
+    name: "jest",
+    version: "^26.6.3",
+    devOnly: true,
+  },
+  "lazy-index": {
+    name: "@rnx-kit/react-native-lazy-index",
+    version: "^2.1.7",
   },
   "navigation/native": {
     name: "@react-navigation/native",

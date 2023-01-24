@@ -39,30 +39,26 @@ const profile: Profile = {
     capabilities: ["core"],
   },
 
-  animation: {
-    name: "react-native-reanimated",
-    version: "^2.5.0",
-  },
   "babel-preset-react-native": {
     name: "metro-react-native-babel-preset",
     version: "^0.67.0",
     devOnly: true,
   },
-  clipboard: {
-    name: "@react-native-clipboard/clipboard",
-    version: "^1.10.0",
+  "community/cli": {
+    name: "@react-native-community/cli",
+    version: "^7.0.3",
+    capabilities: ["community/cli-android", "community/cli-ios"],
+    devOnly: true,
   },
-  "datetime-picker": {
-    name: "@react-native-community/datetimepicker",
-    version: "^6.0.2",
+  "community/cli-android": {
+    name: "@react-native-community/cli-platform-android",
+    version: "^7.0.1",
+    devOnly: true,
   },
-  gestures: {
-    name: "react-native-gesture-handler",
-    version: "^2.3.2",
-  },
-  hermes: {
-    name: "hermes-engine",
-    version: "~0.11.0",
+  "community/cli-ios": {
+    name: "@react-native-community/cli-platform-ios",
+    version: "^7.0.1",
+    devOnly: true,
   },
   metro: {
     name: "metro",
@@ -93,6 +89,27 @@ const profile: Profile = {
     name: "metro-runtime",
     version: "^0.67.0",
     devOnly: true,
+  },
+
+  animation: {
+    name: "react-native-reanimated",
+    version: "^2.5.0",
+  },
+  clipboard: {
+    name: "@react-native-clipboard/clipboard",
+    version: "^1.10.0",
+  },
+  "datetime-picker": {
+    name: "@react-native-community/datetimepicker",
+    version: "^6.0.2",
+  },
+  gestures: {
+    name: "react-native-gesture-handler",
+    version: "^2.3.2",
+  },
+  hermes: {
+    name: "hermes-engine",
+    version: "~0.11.0",
   },
   screens: {
     name: "react-native-screens",

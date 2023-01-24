@@ -45,21 +45,20 @@ const profile: Profile = {
     version: "^0.59.0",
     devOnly: true,
   },
-  "floating-action": {
-    name: "react-native-floating-action",
-    version: "^1.21.0",
+  "community/cli": {
+    name: "@react-native-community/cli",
+    version: "^4.10.0",
+    capabilities: ["community/cli-android", "community/cli-ios"],
+    devOnly: true,
   },
-  gestures: {
-    name: "react-native-gesture-handler",
-    version: "^1.10.3",
+  "community/cli-android": {
+    name: "@react-native-community/cli-platform-android",
+    version: "^4.10.0",
+    devOnly: true,
   },
-  hermes: {
-    name: "hermes-engine",
-    version: "~0.5.0",
-  },
-  jest: {
-    name: "jest",
-    version: "^24.9.0",
+  "community/cli-ios": {
+    name: "@react-native-community/cli-platform-ios",
+    version: "^4.10.0",
     devOnly: true,
   },
   metro: {
@@ -90,6 +89,24 @@ const profile: Profile = {
   "metro-runtime": {
     name: "metro-runtime",
     version: "^0.59.0",
+    devOnly: true,
+  },
+
+  "floating-action": {
+    name: "react-native-floating-action",
+    version: "^1.21.0",
+  },
+  gestures: {
+    name: "react-native-gesture-handler",
+    version: "^1.10.3",
+  },
+  hermes: {
+    name: "hermes-engine",
+    version: "~0.5.0",
+  },
+  jest: {
+    name: "jest",
+    version: "^24.9.0",
     devOnly: true,
   },
   "navigation/native": {

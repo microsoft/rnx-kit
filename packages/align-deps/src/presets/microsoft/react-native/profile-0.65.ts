@@ -39,14 +39,61 @@ const profile: Profile = {
     capabilities: ["core"],
   },
 
-  animation: {
-    name: "react-native-reanimated",
-    version: "^2.2.1",
-  },
   "babel-preset-react-native": {
     name: "metro-react-native-babel-preset",
     version: "^0.66.0",
     devOnly: true,
+  },
+  "community/cli": {
+    name: "@react-native-community/cli",
+    version: "^6.0.0",
+    capabilities: ["community/cli-android", "community/cli-ios"],
+    devOnly: true,
+  },
+  "community/cli-android": {
+    name: "@react-native-community/cli-platform-android",
+    version: "^6.0.0",
+    devOnly: true,
+  },
+  "community/cli-ios": {
+    name: "@react-native-community/cli-platform-ios",
+    version: "^6.0.0",
+    devOnly: true,
+  },
+  metro: {
+    name: "metro",
+    version: "^0.66.0",
+    devOnly: true,
+  },
+  "metro-config": {
+    name: "metro-config",
+    version: "^0.66.0",
+    devOnly: true,
+  },
+  "metro-core": {
+    name: "metro-core",
+    version: "^0.66.0",
+    devOnly: true,
+  },
+  "metro-react-native-babel-transformer": {
+    name: "metro-react-native-babel-transformer",
+    version: "^0.66.0",
+    devOnly: true,
+  },
+  "metro-resolver": {
+    name: "metro-resolver",
+    version: "^0.66.0",
+    devOnly: true,
+  },
+  "metro-runtime": {
+    name: "metro-runtime",
+    version: "^0.66.0",
+    devOnly: true,
+  },
+
+  animation: {
+    name: "react-native-reanimated",
+    version: "^2.2.1",
   },
   clipboard: {
     name: "@react-native-clipboard/clipboard",
@@ -80,36 +127,6 @@ const profile: Profile = {
   "masked-view": {
     name: "@react-native-masked-view/masked-view",
     version: "^0.2.6",
-  },
-  metro: {
-    name: "metro",
-    version: "^0.66.0",
-    devOnly: true,
-  },
-  "metro-config": {
-    name: "metro-config",
-    version: "^0.66.0",
-    devOnly: true,
-  },
-  "metro-core": {
-    name: "metro-core",
-    version: "^0.66.0",
-    devOnly: true,
-  },
-  "metro-react-native-babel-transformer": {
-    name: "metro-react-native-babel-transformer",
-    version: "^0.66.0",
-    devOnly: true,
-  },
-  "metro-resolver": {
-    name: "metro-resolver",
-    version: "^0.66.0",
-    devOnly: true,
-  },
-  "metro-runtime": {
-    name: "metro-runtime",
-    version: "^0.66.0",
-    devOnly: true,
   },
   modal: {
     name: "react-native-modal",
