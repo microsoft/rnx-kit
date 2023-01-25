@@ -19,7 +19,7 @@
     "directory": "packages/metro-plugin-typescript"
   },
   "engines": {
-    "node": ">=14.18"
+    "node": ">=14.15"
   },
   "scripts": {
     "build": "rnx-kit-scripts build",
