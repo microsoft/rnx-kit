@@ -110,6 +110,9 @@ function getProfilePath(preset, profileVersion) {
  *   preset: string;
  *   targetVersion: string;
  *   reactVersion: string;
+ *   cliVersion: string;
+ *   cliAndroidVersion: string;
+ *   cliIOSVersion: string;
  *   metroVersion: string;
  * }} versions
  * @returns {string}
@@ -118,6 +121,9 @@ function generateFromTemplate({
   preset,
   targetVersion,
   reactVersion,
+  cliVersion,
+  cliAndroidVersion,
+  cliIOSVersion,
   metroVersion,
 }) {
   const nextVersionCoerced = semverCoerce(targetVersion);
@@ -181,6 +187,22 @@ const profile: Profile = {
   "babel-preset-react-native": {
     name: "metro-react-native-babel-preset",
     version: "^${metroVersion}",
+    devOnly: true,
+  },
+  "community/cli": {
+    name: "@react-native-community/cli",
+    version: "^${cliVersion}",
+    capabilities: ["community/cli-android", "community/cli-ios"],
+    devOnly: true,
+  },
+  "community/cli-android": {
+    name: "@react-native-community/cli-platform-android",
+    version: "^${cliAndroidVersion}",
+    devOnly: true,
+  },
+  "community/cli-ios": {
+    name: "@react-native-community/cli-platform-ios",
+    version: "^${cliIOSVersion}",
     devOnly: true,
   },
   metro: {
@@ -277,6 +299,15 @@ async function makeProfile(preset, targetVersion, latestProfile) {
     preset,
     targetVersion,
     reactVersion: getPackageVersion("react", peerDependencies),
+    cliVersion: getPackageVersion("@react-native-community/cli", dependencies),
+    cliAndroidVersion: getPackageVersion(
+      "@react-native-community/cli-platform-android",
+      dependencies
+    ),
+    cliIOSVersion: getPackageVersion(
+      "@react-native-community/cli-platform-ios",
+      dependencies
+    ),
     metroVersion: getPackageVersion("metro", cliMetroPluginDependencies),
   });
 }

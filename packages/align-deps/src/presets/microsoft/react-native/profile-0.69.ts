@@ -38,22 +38,26 @@ const profile: Profile = {
     capabilities: ["core"],
   },
 
-  animation: {
-    name: "react-native-reanimated",
-    version: "^2.9.0",
-  },
   "babel-preset-react-native": {
     name: "metro-react-native-babel-preset",
     version: "^0.70.3",
     devOnly: true,
   },
-  gestures: {
-    name: "react-native-gesture-handler",
-    version: "^2.5.0",
+  "community/cli": {
+    name: "@react-native-community/cli",
+    version: "^8.0.4",
+    capabilities: ["community/cli-android", "community/cli-ios"],
+    devOnly: true,
   },
-  "masked-view": {
-    name: "@react-native-masked-view/masked-view",
-    version: "^0.2.7",
+  "community/cli-android": {
+    name: "@react-native-community/cli-platform-android",
+    version: "^8.0.4",
+    devOnly: true,
+  },
+  "community/cli-ios": {
+    name: "@react-native-community/cli-platform-ios",
+    version: "^8.0.4",
+    devOnly: true,
   },
   metro: {
     name: "metro",
@@ -84,6 +88,19 @@ const profile: Profile = {
     name: "metro-runtime",
     version: "^0.70.1",
     devOnly: true,
+  },
+
+  animation: {
+    name: "react-native-reanimated",
+    version: "^2.9.0",
+  },
+  gestures: {
+    name: "react-native-gesture-handler",
+    version: "^2.5.0",
+  },
+  "masked-view": {
+    name: "@react-native-masked-view/masked-view",
+    version: "^0.2.7",
   },
   netinfo: {
     name: "@react-native-community/netinfo",

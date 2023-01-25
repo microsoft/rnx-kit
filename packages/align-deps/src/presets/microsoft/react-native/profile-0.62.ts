@@ -44,18 +44,21 @@ const profile: Profile = {
     version: "^0.58.0",
     devOnly: true,
   },
-  hermes: {
-    name: "hermes-engine",
-    version: "~0.4.0",
-  },
-  jest: {
-    name: "jest",
-    version: "^24.8.0",
+  "community/cli": {
+    name: "@react-native-community/cli",
+    version: "^4.5.1",
+    capabilities: ["community/cli-android", "community/cli-ios"],
     devOnly: true,
   },
-  netinfo: {
-    name: "@react-native-community/netinfo",
-    version: "^5.9.10",
+  "community/cli-android": {
+    name: "@react-native-community/cli-platform-android",
+    version: "^4.5.1",
+    devOnly: true,
+  },
+  "community/cli-ios": {
+    name: "@react-native-community/cli-platform-ios",
+    version: "^4.5.0",
+    devOnly: true,
   },
   metro: {
     name: "metro",
@@ -86,6 +89,20 @@ const profile: Profile = {
     name: "metro-runtime",
     version: "^0.58.0",
     devOnly: true,
+  },
+
+  hermes: {
+    name: "hermes-engine",
+    version: "~0.4.0",
+  },
+  jest: {
+    name: "jest",
+    version: "^24.8.0",
+    devOnly: true,
+  },
+  netinfo: {
+    name: "@react-native-community/netinfo",
+    version: "^5.9.10",
   },
 };
 
