@@ -47,10 +47,14 @@ export type CLIStartOptions = {
   interactive: boolean;
 };
 
-function friendlyRequire<T>(module: string): T {
+function friendlyRequire<T>(...modules: string[]): T {
   try {
-    return require(module) as T;
+    const modulePath = modules.reduce((startDir, module) => {
+      return require.resolve(module, { paths: [startDir] });
+    }, process.cwd());
+    return require(modulePath) as T;
   } catch (_) {
+    const module = modules[modules.length - 1];
     throw new Error(
       `Cannot find module '${module}'. This probably means that '@rnx-kit/cli' is not compatible with the version of '@react-native-community/cli' that you are currently using. Please update to the latest version and try again. If the issue still persists after the update, please file a bug at https://github.com/microsoft/rnx-kit/issues.`
     );
@@ -72,7 +76,11 @@ export async function rnxStart(
 
   const { createDevServerMiddleware, indexPageMiddleware } = friendlyRequire<
     typeof CliServerApi
-  >("@react-native-community/cli-server-api");
+  >(
+    "react-native",
+    "@react-native-community/cli",
+    "@react-native-community/cli-server-api"
+  );
 
   // interactive mode requires raw access to stdin
   let interactive = cliOptions.interactive;
