@@ -4,7 +4,7 @@
 
 ### Patch Changes
 
-- 341d2847: Resolve `@react-native-community/cli-server-api` starting from `react-native` to avoid relying hoisting
+- 341d2847: Resolve `@react-native-community/cli-server-api` starting from `react-native` to avoid relying on hoisting
 
 ## 0.16.1
 
