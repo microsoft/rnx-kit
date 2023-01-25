@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/cli
 
+## 0.16.2
+
+### Patch Changes
+
+- 341d2847: Resolve `@react-native-community/cli-server-api` starting from `react-native` to avoid relying hoisting
+
 ## 0.16.1
 
 ### Patch Changes

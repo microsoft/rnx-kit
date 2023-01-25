@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/metro-config",
-  "version": "1.3.4",
+  "version": "1.3.5",
   "description": "Metro config for monorepos",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/metro-config#readme",
   "license": "MIT",
