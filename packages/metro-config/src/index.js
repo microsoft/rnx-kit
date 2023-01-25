@@ -229,7 +229,7 @@ module.exports = {
             },
           }),
         },
-        watchFolders: defaultWatchFolders(),
+        watchFolders: customConfig.watchFolders ?? defaultWatchFolders(),
       },
       {
         ...customConfig,
