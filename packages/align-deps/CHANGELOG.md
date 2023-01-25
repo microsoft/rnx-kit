@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/align-deps
 
+## 2.1.0
+
+### Minor Changes
+
+- 15baa5d5: Add `@react-native-community/cli` to profiles
+
 ## 2.0.4
 
 ### Patch Changes

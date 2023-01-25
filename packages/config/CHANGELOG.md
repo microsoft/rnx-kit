@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/config
 
+## 0.6.1
+
+### Patch Changes
+
+- 15baa5d5: Add `community/cli*` capabilities
+
 ## 0.6.0
 
 ### Minor Changes

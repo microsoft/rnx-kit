@@ -1,5 +1,13 @@
 # @rnx-kit/metro-plugin-typescript
 
+## 0.3.1
+
+### Patch Changes
+
+- 95a35126: Lower Node version requirement to support any 14 LTS
+- Updated dependencies [15baa5d5]
+  - @rnx-kit/config@0.6.1
+
 ## 0.3.0
 
 ### Minor Changes
