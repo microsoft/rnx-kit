@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-config
 
+## 1.3.5
+
+### Patch Changes
+
+- 4b73250b: Skip populating `watchFolders` if provided by user config
+
 ## 1.3.4
 
 ### Patch Changes
