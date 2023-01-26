@@ -19,6 +19,7 @@
 /packages/*/ios/build
 /packages/*/lib/
 /packages/*/macos/build
+/packages/template/CHANGELOG.md
 /scripts/bin/
 /scripts/lib/
 Pods/
