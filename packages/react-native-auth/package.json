@@ -24,7 +24,7 @@
   "scripts": {
     "build": "rnx-kit-scripts build",
     "format": "rnx-kit-scripts format",
-    "format:c": "clang-format -i $(git ls-files '*.h' '*.m')",
+    "format:c": "clang-format -i $(git ls-files '*.c' '*.cpp' '*.h' '*.m' '*.mm')",
     "lint": "rnx-kit-scripts lint",
     "lint:kt": "ktlint --relative --verbose 'android/src/**/*.kt'",
     "update-readme": "rnx-kit-scripts update-api-readme"

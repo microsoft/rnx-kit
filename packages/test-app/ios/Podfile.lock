@@ -286,10 +286,12 @@ PODS:
     - React-jsi (= 0.68.5)
     - React-logger (= 0.68.5)
     - React-perflogger (= 0.68.5)
-  - ReactTestApp-DevSupport (2.0.3):
+  - ReactNativeHost (0.0.1):
+    - React-Core
+  - ReactTestApp-DevSupport (2.3.4):
     - React-Core
     - React-jsi
-  - ReactTestApp-MSAL (2.0.1):
+  - ReactTestApp-MSAL (2.0.2):
     - MSAL
     - RNXAuth
   - ReactTestApp-Resources (1.0.0-dev)
@@ -331,6 +333,7 @@ DEPENDENCIES:
   - React-RCTVibration (from `../../../node_modules/react-native/Libraries/Vibration`)
   - React-runtimeexecutor (from `../../../node_modules/react-native/ReactCommon/runtimeexecutor`)
   - ReactCommon/turbomodule/core (from `../../../node_modules/react-native/ReactCommon`)
+  - ReactNativeHost (from `../../react-native-host`)
   - ReactTestApp-DevSupport (from `../../../node_modules/react-native-test-app`)
   - ReactTestApp-MSAL (from `../../react-native-test-app-msal`)
   - ReactTestApp-Resources (from `..`)
@@ -403,6 +406,8 @@ EXTERNAL SOURCES:
     :path: "../../../node_modules/react-native/ReactCommon/runtimeexecutor"
   ReactCommon:
     :path: "../../../node_modules/react-native/ReactCommon"
+  ReactNativeHost:
+    :path: "../../react-native-host"
   ReactTestApp-DevSupport:
     :path: "../../../node_modules/react-native-test-app"
   ReactTestApp-MSAL:
@@ -447,8 +452,9 @@ SPEC CHECKSUMS:
   React-RCTVibration: 9819a3bf6230e4b2a99877c21268b0b2416157a1
   React-runtimeexecutor: b1f1995089b90696dbc2a7ffe0059a80db5c8eb1
   ReactCommon: 149e2c0acab9bac61378da0db5b2880a1b5ff59b
-  ReactTestApp-DevSupport: 13f0b1ee9ff539bd7c8976eb5cf99c6cd0e00def
-  ReactTestApp-MSAL: 8d785756a554aa97d4e0549061accece850ba82d
+  ReactNativeHost: dc2c263ce93b834113a4b4b8bd31444c45a1ef91
+  ReactTestApp-DevSupport: 9248d96d73d2a42b94a6c84b3b7bf838c4c92246
+  ReactTestApp-MSAL: 7257a08f33e2944cd2724261a78267caf26d16c8
   ReactTestApp-Resources: 74a1cf509f4e7962b16361ea4e73cba3648fff5d
   RNXAuth: d37ae710b2ce38b5e0221015bd56ce710673c704
   Yoga: c4d61225a466f250c35c1ee78d2d0b3d41fe661c
