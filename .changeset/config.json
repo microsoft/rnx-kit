@@ -5,5 +5,5 @@
   "linked": [],
   "access": "public",
   "baseBranch": "origin/main",
-  "ignore": ["@rnx-kit/ignore", "@rnx-kit/scripts", "@rnx-kit/template"]
+  "ignore": ["@rnx-kit/ignore", "@rnx-kit/template"]
 }
