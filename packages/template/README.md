@@ -31,6 +31,7 @@ npm add --save-dev @rnx-kit/template
 ## Usage
 
 <!-- usage start -->
+
 Simply run from rnx-kit root
 
 ```sh
@@ -53,4 +54,5 @@ To generate a sample project for you to use.
 - `README.md` what will tell your users everything they need to know. Please make sure to cover at least a few basics: how to use, which problems it solve, any specific props or patterns to follow. Your tests should help explain in details how the code actually works
 - `tsconfig.json` standard TS configuration for your package - it should be fairly simple, as it leverages the monorepo shared configs.
 -->
+
 <!-- usage end -->
