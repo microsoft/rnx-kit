@@ -1,12 +1,11 @@
 <!-- We recommend an empty change log entry for a new package: `yarn change --empty` -->
 
-# Template folder
+# @rnx-kit/template
 
 [![Build](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml/badge.svg)](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml)
 [![npm version](https://img.shields.io/npm/v/@rnx-kit/template)](https://www.npmjs.com/package/@rnx-kit/template)
 
-<!-- experimental-warning start -->
-<!-- experimental-warning end -->
+<!-- experimental-warning -->
 
 This is a sample folder to use as base for generating new packages for
 `rnx-kit`.
@@ -17,8 +16,21 @@ We want new packages to follow an existing set of patterns and guidelines; via
 this package, we can enforce easily allow new folders to stick to at least a
 common starting point.
 
+## Installation
+
+```sh
+yarn add @rnx-kit/template --dev
+```
+
+or if you're using npm
+
+```sh
+npm add --save-dev @rnx-kit/template
+```
+
 ## Usage
 
+<!-- usage start -->
 Simply run from rnx-kit root
 
 ```sh
@@ -41,3 +53,4 @@ To generate a sample project for you to use.
 - `README.md` what will tell your users everything they need to know. Please make sure to cover at least a few basics: how to use, which problems it solve, any specific props or patterns to follow. Your tests should help explain in details how the code actually works
 - `tsconfig.json` standard TS configuration for your package - it should be fairly simple, as it leverages the monorepo shared configs.
 -->
+<!-- usage end -->

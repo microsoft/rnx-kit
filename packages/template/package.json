@@ -20,7 +20,7 @@
     "directory": "packages/template"
   },
   "engines": {
-    "node": ">=14.18"
+    "node": ">=14.15"
   },
   "scripts": {
     "build": "rnx-kit-scripts build",

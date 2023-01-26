@@ -6,10 +6,16 @@ import * as path from "node:path";
 import { fileURLToPath } from "node:url";
 import yargs from "yargs";
 
-const TOKEN_START = "<!-- experimental-warning start -->";
-const TOKEN_END = "<!-- experimental-warning end -->";
-const experimental_label =
-  "🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧\n### This tool is EXPERIMENTAL - USE WITH CAUTION\n🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧\n";
+const EXPERIMENTAL_BANNER =
+  "🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧\n### THIS TOOL IS EXPERIMENTAL — USE WITH CAUTION\n🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧";
+const USAGE_TOKEN_START = "<!-- usage start -->";
+const USAGE_TOKEN_END = "<!-- usage end -->";
+const WARNING_BANNER_TOKEN = "<!-- experimental-warning -->";
+
+if (!fs.cpSync) {
+  console.error("Please use Node 16.13 or higher");
+  process.exit(1);
+}
 
 const argv = yargs(process.argv.slice(2))
   .usage("Usage: new-package <name> --experimental")
@@ -59,18 +65,17 @@ const packageJsonPath = path.join(newProjectPath, "package.json");
 const packageJson = JSON.parse(
   fs.readFileSync(packageJsonPath, { encoding: "utf-8" })
 );
-packageJson.name = "@rnx-kit/" + cleanProjectName;
-packageJson.description =
-  `${
-    experimental
-      ? "EXPERIMENTAL - USE WITH CAUTION - New package called "
-      : "New package called "
-  }` + cleanProjectName;
 
-packageJson.homepage =
-  `https://github.com/microsoft/rnx-kit/tree/main/${targetFolderPath}/` +
-  cleanProjectName +
-  "#readme";
+packageJson.name = "@rnx-kit/" + cleanProjectName;
+packageJson.version = "0.0.1";
+
+const prefix = experimental ? "EXPERIMENTAL - USE WITH CAUTION - " : "";
+packageJson.description = `${prefix}New package called ${cleanProjectName}`;
+
+packageJson.homepage = packageJson.homepage.replace(
+  "packages/template",
+  `${targetFolderPath}/${cleanProjectName}`
+);
 
 packageJson.repository.directory = `${targetFolderPath}/` + cleanProjectName;
 
@@ -80,28 +85,13 @@ if (experimental) {
 
 fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2) + "\n");
 
-// don't keep the changelog from template
-const changelogPath = path.join(newProjectPath, "CHANGELOG.md");
-try {
-  fs.unlinkSync(changelogPath);
-} catch (err) {
-  console.error(err);
-}
-
 // change the README.md file to the new name
 const readmePath = path.join(newProjectPath, "README.md");
-
 const readme = fs.readFileSync(readmePath, { encoding: "utf-8" });
 
-const newReadme = readme.replace(/template/g, cleanProjectName);
+const updatedReadme = readme
+  .replace(/template/g, cleanProjectName)
+  .replace(WARNING_BANNER_TOKEN, experimental ? EXPERIMENTAL_BANNER : "")
+  .replace(new RegExp(`${USAGE_TOKEN_START}([^]+)${USAGE_TOKEN_END}`), "");
 
-const replaceInReadmeWith = experimental
-  ? `${TOKEN_START}\n\n${experimental_label}\n\n${TOKEN_END}`
-  : "";
-
-const updatedExperimentalReadme = newReadme.replace(
-  new RegExp(`${TOKEN_START}([^]+)${TOKEN_END}`),
-  replaceInReadmeWith
-);
-
-fs.writeFileSync(readmePath, updatedExperimentalReadme);
+fs.writeFileSync(readmePath, updatedReadme);
