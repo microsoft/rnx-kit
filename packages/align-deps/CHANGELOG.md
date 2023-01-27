@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/align-deps
 
+## 2.1.1
+
+### Patch Changes
+
+- cdac1d22: Validate input package paths
+
 ## 2.1.0
 
 ### Minor Changes
