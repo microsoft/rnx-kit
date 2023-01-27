@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/eslint-plugin
 
+## 0.3.0
+
+### Minor Changes
+
+- 8da1b4dd: Added `consistent-type-imports` rule
+
 ## 0.2.13
 
 ### Patch Changes
