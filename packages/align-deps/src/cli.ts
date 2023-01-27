@@ -8,6 +8,7 @@ import {
   findWorkspacePackages,
   findWorkspaceRoot,
 } from "@rnx-kit/tools-workspaces";
+import * as fs from "fs";
 import isString from "lodash/isString";
 import * as path from "path";
 import { makeCheckCommand } from "./commands/check";
@@ -80,8 +81,14 @@ async function getManifests(
   // invoked directly, and an empty array if invoked via
   // `@react-native-community/cli`.
   if (isNonEmptyArray(packages)) {
-    return packages.reduce<string[]>((result, pkg) => {
-      const dir = findPackageDir(pkg.toString());
+    const manifests = packages.reduce<string[]>((result, input) => {
+      const pkg = input.toString();
+      if (!fs.existsSync(pkg)) {
+        error(`${pkg}: No such file or directory`);
+        return result;
+      }
+
+      const dir = findPackageDir(pkg);
       if (dir) {
         const pkgJson = path.join(dir, "package.json");
         const relativePath = path.relative(cwd, pkgJson);
@@ -89,10 +96,12 @@ async function getManifests(
       }
       return result;
     }, []);
+    return manifests.length === 0 ? undefined : manifests;
   }
 
   const packageDir = findPackageDir();
   if (!packageDir) {
+    error("Could not find package root");
     return undefined;
   }
 
@@ -189,7 +198,6 @@ export async function cli({ packages, ...args }: Args): Promise<void> {
 
   const manifests = await getManifests(packages);
   if (!manifests) {
-    error("Could not find package root");
     process.exitCode = 1;
     return;
   }
