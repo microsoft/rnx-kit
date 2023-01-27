@@ -23,6 +23,12 @@ module.exports = {
   plugins: ["@rnx-kit", "@typescript-eslint"],
   rules: {
     "@rnx-kit/no-export-all": "warn",
+    "@typescript-eslint/consistent-type-imports": [
+      "error",
+      {
+        disallowTypeAnnotations: false,
+      },
+    ],
     "@typescript-eslint/no-unused-vars": [
       "error",
       {
