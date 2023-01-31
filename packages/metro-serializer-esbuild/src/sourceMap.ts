@@ -18,7 +18,7 @@ export function absolutizeSourceMap(outputPath: string, text: string): string {
   const sourceRoot = path.dirname(outputPath);
   const sourcemap = JSON.parse(text);
   const sources = sourcemap.sources.map((file: string) =>
-    path.resolve(sourceRoot, file)
+    file.startsWith("virtual:") ? file : path.resolve(sourceRoot, file)
   );
 
   return JSON.stringify({ ...sourcemap, sources });

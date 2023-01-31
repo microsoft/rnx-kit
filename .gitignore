@@ -13,6 +13,7 @@
 /incubator/*/bin/
 /incubator/*/dist/
 /incubator/*/lib/
+/packages/*/*.LICENSE.txt
 /packages/*/*/rnx-build/
 /packages/*/bin/
 /packages/*/dist/

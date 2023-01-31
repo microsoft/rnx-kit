@@ -170,6 +170,9 @@ export function MetroSerializer(
     const metroPlugin: Plugin = {
       name: require("../package.json").name,
       setup: (build) => {
+        // Don't add namespace to all files. esbuild currently adds it to all
+        // file paths in the source map. See
+        // https://github.com/evanw/esbuild/issues/2283.
         const namespace = "virtual:metro";
         const pluginOptions = { filter: /.*/ };
 
@@ -193,7 +196,6 @@ export function MetroSerializer(
         build.onResolve(pluginOptions, (args) => {
           if (dependencies.has(args.path)) {
             return {
-              namespace,
               path: args.path,
               sideEffects: getSideEffects(args.path),
               pluginData: args.pluginData,
@@ -204,17 +206,20 @@ export function MetroSerializer(
           if (parent) {
             const path = getModulePath(args.path, parent);
             return {
-              namespace,
               path,
               sideEffects: path ? getSideEffects(path) : undefined,
               pluginData: args.pluginData,
             };
           }
 
-          if (
-            args.path === prelude ||
-            preModules.find(({ path }) => path === args.path)
-          ) {
+          if (preModules.find(({ path }) => path === args.path)) {
+            return {
+              path: args.path,
+              pluginData: args.pluginData,
+            };
+          }
+
+          if (args.path === prelude) {
             return {
               namespace,
               path: args.path,
