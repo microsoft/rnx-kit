@@ -41,20 +41,7 @@ describe("metro-serializer-esbuild", () => {
       {
         ...require("metro/src/shared/output/bundle"),
         save: ({ code }) => {
-          result = code
-            .split("\n")
-            .map((line: string) => {
-              if (line.includes("virtual:metro:")) {
-                return line
-                  .replace(
-                    /virtual:metro:.*?[/\\](metro-serializer-esbuild|node_modules)[/\\]/g,
-                    "virtual:metro:/~/$1/"
-                  )
-                  .replace(/\\/g, "/");
-              }
-              return line;
-            })
-            .join("\n");
+          result = code;
         },
       }
     );
@@ -77,12 +64,12 @@ describe("metro-serializer-esbuild", () => {
         // virtual:metro:__rnx_prelude__
         var global = new Function(\\"return this;\\")();
 
-        // virtual:metro:/~/metro-serializer-esbuild/test/__fixtures__/base.ts
+        // test/__fixtures__/base.ts
         function app() {
           \\"this should _not_ be removed\\";
         }
 
-        // virtual:metro:/~/metro-serializer-esbuild/test/__fixtures__/direct.ts
+        // test/__fixtures__/direct.ts
         app();
       })();
       "
@@ -97,12 +84,12 @@ describe("metro-serializer-esbuild", () => {
         // virtual:metro:__rnx_prelude__
         var global = new Function(\\"return this;\\")();
 
-        // virtual:metro:/~/metro-serializer-esbuild/test/__fixtures__/base.ts
+        // test/__fixtures__/base.ts
         function app() {
           \\"this should _not_ be removed\\";
         }
 
-        // virtual:metro:/~/metro-serializer-esbuild/test/__fixtures__/exportAll.ts
+        // test/__fixtures__/exportAll.ts
         app();
       })();
       "
@@ -117,12 +104,12 @@ describe("metro-serializer-esbuild", () => {
         // virtual:metro:__rnx_prelude__
         var global = new Function(\\"return this;\\")();
 
-        // virtual:metro:/~/metro-serializer-esbuild/test/__fixtures__/base.ts
+        // test/__fixtures__/base.ts
         function app() {
           \\"this should _not_ be removed\\";
         }
 
-        // virtual:metro:/~/metro-serializer-esbuild/test/__fixtures__/nestedExportAll.ts
+        // test/__fixtures__/nestedExportAll.ts
         app();
       })();
       "
@@ -137,12 +124,12 @@ describe("metro-serializer-esbuild", () => {
         // virtual:metro:__rnx_prelude__
         var global = new Function(\\"return this;\\")();
 
-        // virtual:metro:/~/metro-serializer-esbuild/test/__fixtures__/base.ts
+        // test/__fixtures__/base.ts
         function app() {
           \\"this should _not_ be removed\\";
         }
 
-        // virtual:metro:/~/metro-serializer-esbuild/test/__fixtures__/importAll.ts
+        // test/__fixtures__/importAll.ts
         app();
       })();
       "
@@ -157,12 +144,12 @@ describe("metro-serializer-esbuild", () => {
         // virtual:metro:__rnx_prelude__
         var global = new Function(\\"return this;\\")();
 
-        // virtual:metro:/~/metro-serializer-esbuild/test/__fixtures__/base.ts
+        // test/__fixtures__/base.ts
         function app() {
           \\"this should _not_ be removed\\";
         }
 
-        // virtual:metro:/~/metro-serializer-esbuild/test/__fixtures__/importExportAll.ts
+        // test/__fixtures__/importExportAll.ts
         app();
       })();
       "
@@ -177,13 +164,13 @@ describe("metro-serializer-esbuild", () => {
         // virtual:metro:__rnx_prelude__
         var global = new Function(\\"return this;\\")();
 
-        // virtual:metro:/~/node_modules/lodash-es/head.js
+        // ../../node_modules/lodash-es/head.js
         function head(array) {
           return array && array.length ? array[0] : void 0;
         }
         var head_default = head;
 
-        // virtual:metro:/~/metro-serializer-esbuild/test/__fixtures__/lodash-es.ts
+        // test/__fixtures__/lodash-es.ts
         console.log(head_default([]));
       })();
       "
@@ -208,16 +195,16 @@ describe("metro-serializer-esbuild", () => {
           }
         });
 
-        // virtual:metro:/~/metro-serializer-esbuild/test/__fixtures__/sideEffectsArray.ts
+        // test/__fixtures__/sideEffectsArray.ts
         init_rnx_prelude();
 
-        // virtual:metro:/~/node_modules/@fluentui/utilities/lib/index.js
+        // ../../node_modules/@fluentui/utilities/lib/index.js
         init_rnx_prelude();
 
-        // virtual:metro:/~/node_modules/@fluentui/set-version/lib/index.js
+        // ../../node_modules/@fluentui/set-version/lib/index.js
         init_rnx_prelude();
 
-        // virtual:metro:/~/node_modules/@fluentui/set-version/lib/setVersion.js
+        // ../../node_modules/@fluentui/set-version/lib/setVersion.js
         init_rnx_prelude();
         var packagesCache = {};
         var _win = void 0;
@@ -236,10 +223,10 @@ describe("metro-serializer-esbuild", () => {
           }
         }
 
-        // virtual:metro:/~/node_modules/@fluentui/set-version/lib/index.js
+        // ../../node_modules/@fluentui/set-version/lib/index.js
         setVersion(\\"@fluentui/set-version\\", \\"6.0.0\\");
 
-        // virtual:metro:/~/node_modules/@fluentui/utilities/lib/warn/warn.js
+        // ../../node_modules/@fluentui/utilities/lib/warn/warn.js
         init_rnx_prelude();
         var _warningCallback = void 0;
         function warn(message) {
@@ -250,14 +237,14 @@ describe("metro-serializer-esbuild", () => {
           }
         }
 
-        // virtual:metro:/~/node_modules/@fluentui/utilities/lib/warn.js
+        // ../../node_modules/@fluentui/utilities/lib/warn.js
         init_rnx_prelude();
 
-        // virtual:metro:/~/node_modules/@fluentui/utilities/lib/version.js
+        // ../../node_modules/@fluentui/utilities/lib/version.js
         init_rnx_prelude();
         setVersion(\\"@fluentui/utilities\\", \\"8.12.0\\");
 
-        // virtual:metro:/~/metro-serializer-esbuild/test/__fixtures__/sideEffectsArray.ts
+        // test/__fixtures__/sideEffectsArray.ts
         warn(\\"this should _not_ be removed\\");
       })();
       "
@@ -276,12 +263,12 @@ describe("metro-serializer-esbuild", () => {
         // virtual:metro:__rnx_prelude__
         var global = new Function(\\"return this;\\")();
 
-        // virtual:metro:/~/metro-serializer-esbuild/test/__fixtures__/base.ts
+        // test/__fixtures__/base.ts
         function app() {
           \\"this should _not_ be removed\\";
         }
 
-        // virtual:metro:/~/metro-serializer-esbuild/test/__fixtures__/direct.ts
+        // test/__fixtures__/direct.ts
         app();
       })();
       //# sourceMappingURL=.test-output.jsbundle.map
