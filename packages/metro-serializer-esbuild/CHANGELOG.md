@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-serializer-esbuild
 
+## 0.1.19
+
+### Patch Changes
+
+- efc3a9ed: Don't add namespace to all source files. esbuild currently adds it to all file paths in the source map (see https://github.com/evanw/esbuild/issues/2283). This prevents tools from resolving files correctly.
+
 ## 0.1.18
 
 ### Patch Changes

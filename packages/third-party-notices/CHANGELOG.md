@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/third-party-notices
 
+## 1.3.2
+
+### Patch Changes
+
+- 1e706d07: Simplify text output
+
 ## 1.3.1
 
 ### Patch Changes
