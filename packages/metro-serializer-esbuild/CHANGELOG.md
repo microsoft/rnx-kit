@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-serializer-esbuild
 
+## 0.1.20
+
+### Patch Changes
+
+- d566998e: Virtual pre-modules should inherit the namespace of the top-level prelude
+
 ## 0.1.19
 
 ### Patch Changes
