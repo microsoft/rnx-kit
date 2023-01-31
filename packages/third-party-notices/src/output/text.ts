@@ -1,27 +1,14 @@
-import os from "os";
 import type { License } from "../types";
+
+const EOL = "\n";
+const SEPARATOR = `${EOL}${EOL}========================================================================${EOL}${EOL}`;
 
 export function createLicenseFileContents(
   licenses: License[],
   preambleText?: string[],
   additionalText?: string[]
 ): string {
-  let outputText = "";
-
-  const writeLine = (s: string): void => {
-    outputText += `${s || ""}${os.EOL}`;
-  };
-
-  const writeMultipleLines = (s: string): void => {
-    const lines = s.split(/\r\n|\r|\n/g);
-    lines.forEach((line: string) => {
-      writeLine(line);
-    });
-  };
-
-  if (preambleText) {
-    writeMultipleLines(preambleText.join(os.EOL));
-  }
+  const output = preambleText ? [preambleText.join(EOL)] : [];
 
   // Emit combined license text
   licenses.forEach(({ name, version, license, licenseText, licenseURLs }) => {
@@ -38,17 +25,15 @@ export function createLicenseFileContents(
       }
       licenseText = `${license} (${licenseURLs.join(" ")})`;
     }
-    writeLine("================================================");
-    writeLine(`${name} ${version}`);
-    writeLine("--");
-    writeMultipleLines(licenseText.trim());
-    writeLine("================================================");
-    writeLine("");
+
+    const trimmedText = licenseText.replace(/\r\n|\r|\n/g, EOL).trim();
+    output.push(`${name} ${version}${EOL}--${EOL}${trimmedText}`);
   });
 
   if (additionalText) {
-    writeMultipleLines(additionalText.join(os.EOL));
+    output.push(additionalText.join(EOL));
   }
 
-  return outputText;
+  // Always add a newline at the end
+  return output.join(SEPARATOR) + EOL;
 }
