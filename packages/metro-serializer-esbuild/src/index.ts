@@ -3,6 +3,7 @@ import type { MetroPlugin } from "@rnx-kit/metro-serializer";
 import { findPackage, readPackage } from "@rnx-kit/tools-node";
 import type { BuildOptions, BuildResult, Plugin } from "esbuild";
 import * as esbuild from "esbuild";
+import * as fs from "fs";
 import type { Dependencies, Graph, Module, SerializerOptions } from "metro";
 import type { SerializerConfigT } from "metro-config";
 import * as path from "path";
@@ -213,16 +214,20 @@ export function MetroSerializer(
           }
 
           if (preModules.find(({ path }) => path === args.path)) {
+            // In certain setups, such as when using external bundles, we may
+            // pass virtual files here. If so, we'll need to inherit the
+            // namespace of the top-level prelude.
             return {
               path: args.path,
+              namespace: fs.existsSync(args.path) ? "" : args.namespace,
               pluginData: args.pluginData,
             };
           }
 
           if (args.path === prelude) {
             return {
-              namespace,
               path: args.path,
+              namespace,
               pluginData: args.pluginData,
             };
           }
