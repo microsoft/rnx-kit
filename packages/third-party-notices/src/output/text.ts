@@ -26,7 +26,8 @@ export function createLicenseFileContents(
       licenseText = `${license} (${licenseURLs.join(" ")})`;
     }
 
-    output.push(`${name} ${version}${EOL}--${EOL}${licenseText.trim()}`);
+    const trimmedText = licenseText.replace(/\r\n|\r|\n/g, EOL).trim();
+    output.push(`${name} ${version}${EOL}--${EOL}${trimmedText}`);
   });
 
   if (additionalText) {
