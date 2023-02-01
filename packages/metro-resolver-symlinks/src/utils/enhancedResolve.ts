@@ -22,6 +22,9 @@ const getEnhancedResolver = (() => {
         // conditional. See
         // https://github.com/webpack/enhanced-resolve/issues/313
         conditionNames: ["require", "node"],
+        // Disable exports map as it currently takes precedence over the
+        // `react-native` field. Revisit when Metro gets support for the field.
+        exportsFields: [],
         extensions:
           platform === "common"
             ? extensions
