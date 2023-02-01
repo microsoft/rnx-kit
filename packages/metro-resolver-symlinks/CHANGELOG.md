@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-resolver-symlinks
 
+## 0.1.25
+
+### Patch Changes
+
+- fa2c3b29: When `experimental_retryResolvingFromDisk` is enabled, don't parse exports maps as they currently take precedence over the `react-native` field.
+
 ## 0.1.24
 
 ### Patch Changes
