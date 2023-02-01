@@ -13,7 +13,12 @@ export function makeMap({
 }: BasicSourceMap): Record<string, number> {
   return sources.reduce<Record<string, number>>((map, file, index) => {
     const content = sourcesContent[index];
-    map[file] = content?.length ?? NaN;
+    if (content) {
+      const actualLength = content.lastIndexOf("//# sourceMappingURL=");
+      map[file] = actualLength > 0 ? actualLength : content.length;
+    } else {
+      map[file] = NaN;
+    }
     return map;
   }, {});
 }
