@@ -22,6 +22,7 @@ module.exports = {
   },
   plugins: ["@rnx-kit", "@typescript-eslint"],
   rules: {
+    "@rnx-kit/no-const-enum": "warn",
     "@rnx-kit/no-export-all": "warn",
     "@typescript-eslint/consistent-type-imports": [
       "error",
