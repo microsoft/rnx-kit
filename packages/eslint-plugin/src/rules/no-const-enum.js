@@ -1,6 +1,10 @@
 // @ts-check
 "use strict";
 
+/**
+ * @typedef {import("estree").Node & { const?: boolean; }} Node
+ */
+
 /** @type {import("eslint").Rule.RuleModule} */
 module.exports = {
   meta: {
@@ -14,7 +18,7 @@ module.exports = {
   },
   create: (context) => {
     return {
-      TSEnumDeclaration: (node) => {
+      TSEnumDeclaration: (/** @type {Node} */ node) => {
         if (node.const) {
           context.report({
             node,
