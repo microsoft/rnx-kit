@@ -1,5 +1,5 @@
-import { RuleTester } from "eslint";
 import rule from "../src/rules/no-export-all";
+import { makeRuleTester } from "./RuleTester";
 
 jest.mock("fs");
 
@@ -67,27 +67,12 @@ export namespace ZIndexes {
 `,
 });
 
-const config = {
-  env: {
-    es6: true,
-    node: true,
-  },
-  parser: require.resolve("@typescript-eslint/parser"),
-  parserOptions: {
-    ecmaFeatures: {
-      jsx: true,
-    },
-    ecmaVersion: 2018,
-    sourceType: "module",
-  },
-};
-
 function lines(...strings: string[]): string {
   return strings.join("\n");
 }
 
 describe("disallows `export *`", () => {
-  const ruleTester = new RuleTester(config);
+  const ruleTester = makeRuleTester();
 
   ruleTester.run("no-export-all", rule, {
     valid: [
