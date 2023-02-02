@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/eslint-plugin
 
+## 0.4.0
+
+### Minor Changes
+
+- 218e1a76: Added `no-const-enum` rule
+
 ## 0.3.0
 
 ### Minor Changes

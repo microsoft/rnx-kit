@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/bundle-diff
 
+## 1.0.12
+
+### Patch Changes
+
+- 5fcfb87a: Ignore inlined source map
+
 ## 1.0.6
 
 Mon, 01 Nov 2021 13:46:12 GMT
