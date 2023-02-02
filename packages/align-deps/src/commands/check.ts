@@ -153,10 +153,9 @@ export function makeCheckCommand(options: Options): Command {
 
     // If the package is configured, run the normal check first.
     if (!isError(config)) {
-      const result = checkPackageManifest(manifest, options, config);
-      return result !== "success"
-        ? result
-        : checkPackageManifestUnconfigured(manifest, options, config);
+      const res1 = checkPackageManifest(manifest, options, config);
+      const res2 = checkPackageManifestUnconfigured(manifest, options, config);
+      return res1 !== "success" ? res1 : res2;
     }
 
     // Otherwise, run the unconfigured check only.
