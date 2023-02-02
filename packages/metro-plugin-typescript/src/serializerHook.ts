@@ -3,6 +3,7 @@ import type { AllPlatforms } from "@rnx-kit/tools-react-native/platform";
 import type { Project } from "@rnx-kit/typescript-service";
 import { createProjectCache } from "./projectCache";
 import type { SerializerHook } from "./types";
+import { normalizePath } from "@rnx-kit/tools-node";
 
 /**
  * Create a hook function to be registered with Metro during serialization.
@@ -63,7 +64,7 @@ export function TypeScriptPlugin(
         if (projectInfo) {
           // This is a TypeScript project. Validate it.
           const { tsproject, tssourceFiles } = projectInfo;
-          if (tssourceFiles.has(sourceFile)) {
+          if (tssourceFiles.has(normalizePath(sourceFile))) {
             tsproject.setFile(sourceFile);
             tsprojectsToValidate.add(tsproject);
           }
