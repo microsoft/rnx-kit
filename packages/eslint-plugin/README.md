@@ -28,7 +28,7 @@ npm add --save-dev @rnx-kit/eslint-plugin
 ## Recommended Configs
 
 This ESLint plugin exports
-[`@rnx-kit/recommended`](https://github.com/microsoft/rnx-kit/blob/main/packages/eslint-plugin/src/configs/recommended.js)
+[`@rnx-kit/recommended`](./src/configs/recommended.js)
 configuration. To enable it, add it to the `extends` section of your ESLint
 config file:
 
@@ -52,5 +52,5 @@ config file:
 
 |  ✓  | 🔧  | Rule                                                                                                                         | Description                                                                        |
 | :-: | :-: | :--------------------------------------------------------------------------------------------------------------------------- | :--------------------------------------------------------------------------------- |
-|  ✓  |     | [`@rnx-kit/no-const-enum`](https://github.com/microsoft/rnx-kit/blob/main/packages/eslint-plugin/src/rules/no-const-enum.js) | disallow `const enum` ([why is it bad?](https://hackmd.io/bBcd6R-1TB6Zq95PSquooQ)) |
-|  ✓  | 🔧  | [`@rnx-kit/no-export-all`](https://github.com/microsoft/rnx-kit/blob/main/packages/eslint-plugin/src/rules/no-export-all.js) | disallow `export *` ([why is it bad?](https://hackmd.io/Z021hgSGStKlYLwsqNMOcg))   |
+|  ✓  |     | [`@rnx-kit/no-const-enum`](./src/rules/no-const-enum.js) | disallow `const enum` ([why is it bad?](https://hackmd.io/bBcd6R-1TB6Zq95PSquooQ)) |
+|  ✓  | 🔧  | [`@rnx-kit/no-export-all`](./src/rules/no-export-all.js) | disallow `export *` ([why is it bad?](https://hackmd.io/Z021hgSGStKlYLwsqNMOcg))   |
