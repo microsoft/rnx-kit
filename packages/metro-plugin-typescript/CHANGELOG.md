@@ -1,5 +1,11 @@
 # @rnx-kit/metro-plugin-typescript
 
+## 0.3.2
+
+### Patch Changes
+
+- 6a63f437: Fix failure to typecheck when running on Windows
+
 ## 0.3.1
 
 ### Patch Changes
