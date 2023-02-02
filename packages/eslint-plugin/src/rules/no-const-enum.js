@@ -23,7 +23,7 @@ module.exports = {
           context.report({
             node,
             message:
-              "Prefer string literal unions over `const enum` to avoid bundle bloat, and package boundary issues.",
+              "Prefer string literal unions over `const enum` to avoid bundle bloat and package boundary issues.",
           });
         }
       },

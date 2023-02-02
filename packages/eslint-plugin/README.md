@@ -50,6 +50,7 @@ config file:
 - ✓: Enabled with `@rnx-kit/recommended`
 - 🔧: Fixable with `--fix`
 
-|  ✓  | 🔧  | Rule                                                                                                                         | Description         |
-| :-: | :-: | :--------------------------------------------------------------------------------------------------------------------------- | :------------------ |
-|  ✓  | 🔧  | [`@rnx-kit/no-export-all`](https://github.com/microsoft/rnx-kit/blob/main/packages/eslint-plugin/src/rules/no-export-all.js) | disallow `export *` |
+|  ✓  | 🔧  | Rule                                                                                                                         | Description                                                                        |
+| :-: | :-: | :--------------------------------------------------------------------------------------------------------------------------- | :--------------------------------------------------------------------------------- |
+|  ✓  |     | [`@rnx-kit/no-const-enum`](https://github.com/microsoft/rnx-kit/blob/main/packages/eslint-plugin/src/rules/no-const-enum.js) | disallow `const enum` ([why is it bad?](https://hackmd.io/bBcd6R-1TB6Zq95PSquooQ)) |
+|  ✓  | 🔧  | [`@rnx-kit/no-export-all`](https://github.com/microsoft/rnx-kit/blob/main/packages/eslint-plugin/src/rules/no-export-all.js) | disallow `export *` ([why is it bad?](https://hackmd.io/Z021hgSGStKlYLwsqNMOcg))   |
