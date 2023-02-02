@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/align-deps
 
+## 2.1.2
+
+### Patch Changes
+
+- 8198e0b8: Always run the unconfigured check following the configured one when in "vigilant" mode
+
 ## 2.1.1
 
 ### Patch Changes
