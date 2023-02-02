@@ -28,9 +28,8 @@ npm add --save-dev @rnx-kit/eslint-plugin
 ## Recommended Configs
 
 This ESLint plugin exports
-[`@rnx-kit/recommended`](./src/configs/recommended.js)
-configuration. To enable it, add it to the `extends` section of your ESLint
-config file:
+[`@rnx-kit/recommended`](./src/configs/recommended.js) configuration. To enable
+it, add it to the `extends` section of your ESLint config file:
 
 ```json
 {
@@ -50,7 +49,7 @@ config file:
 - ✓: Enabled with `@rnx-kit/recommended`
 - 🔧: Fixable with `--fix`
 
-|  ✓  | 🔧  | Rule                                                                                                                         | Description                                                                        |
-| :-: | :-: | :--------------------------------------------------------------------------------------------------------------------------- | :--------------------------------------------------------------------------------- |
+|  ✓  | 🔧  | Rule                                                     | Description                                                                        |
+| :-: | :-: | :------------------------------------------------------- | :--------------------------------------------------------------------------------- |
 |  ✓  |     | [`@rnx-kit/no-const-enum`](./src/rules/no-const-enum.js) | disallow `const enum` ([why is it bad?](https://hackmd.io/bBcd6R-1TB6Zq95PSquooQ)) |
 |  ✓  | 🔧  | [`@rnx-kit/no-export-all`](./src/rules/no-export-all.js) | disallow `export *` ([why is it bad?](https://hackmd.io/Z021hgSGStKlYLwsqNMOcg))   |
