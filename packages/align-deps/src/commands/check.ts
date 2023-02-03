@@ -41,6 +41,8 @@ function stringify(manifest: PackageManifest): string {
  *   requirements may only resolve to a single profile. If multiple profiles
  *   satisfy the requirements, the command will fail.
  *
+ * Note that this function mutates the manifest when `write` is `true`.
+ *
  * @see {@link updatePackageManifest}
  *
  * @param manifestPath Path to the package manifest to check
