@@ -41,6 +41,8 @@ function stringify(manifest: PackageManifest): string {
  *   requirements may only resolve to a single profile. If multiple profiles
  *   satisfy the requirements, the command will fail.
  *
+ * Note that this function mutates the manifest when `write` is `true`.
+ *
  * @see {@link updatePackageManifest}
  *
  * @param manifestPath Path to the package manifest to check
@@ -101,6 +103,9 @@ export function checkPackageManifest(
 
   if (updatedManifestJson !== normalizedManifestJson) {
     if (options.write) {
+      // The config object may be passed to other commands, so we need to
+      // update it in-place to ensure consistency.
+      inputConfig.manifest = updatedManifest;
       modifyManifest(manifestPath, updatedManifest);
     } else {
       const diff = diffLinesUnified(
