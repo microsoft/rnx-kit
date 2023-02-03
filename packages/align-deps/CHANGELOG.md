@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/align-deps
 
+## 2.1.3
+
+### Patch Changes
+
+- ea68e9b3: Fix `--write` not writing all reported misalignments when in "vigilant" mode
+
 ## 2.1.2
 
 ### Patch Changes
