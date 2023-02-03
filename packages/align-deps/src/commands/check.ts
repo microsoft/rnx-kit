@@ -101,6 +101,9 @@ export function checkPackageManifest(
 
   if (updatedManifestJson !== normalizedManifestJson) {
     if (options.write) {
+      // The config object may be passed to other commands, so we need to
+      // update it in-place to ensure consistency.
+      inputConfig.manifest = updatedManifest;
       modifyManifest(manifestPath, updatedManifest);
     } else {
       const diff = diffLinesUnified(

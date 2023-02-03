@@ -172,6 +172,9 @@ const buildManifestProfileCached = ((): typeof buildManifestProfile => {
 /**
  * Compares the package manifest with the desired profile and returns all
  * dependencies that are misaligned.
+ *
+ * Note that this function mutates the manifest when `write` is `true`.
+ *
  * @param manifest The package manifest
  * @param profile The desired profile to compare against
  * @param write Whether misaligned dependencies should be updated
