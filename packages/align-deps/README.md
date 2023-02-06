@@ -39,6 +39,16 @@ or if you're using npm
 npm add --save-dev @rnx-kit/align-deps
 ```
 
+You can also run this tool using `npx`
+
+```sh
+npx @rnx-kit/align-deps [options] [packages...]
+```
+
+but note that profiles may change between each run. We therefore don't recommend
+that you use `npx` if you intend to run this tool on CI or as part of
+post-install. It should be fine if you run it manually.
+
 ## Usage
 
 ```sh
