@@ -6,8 +6,10 @@
   "license": "MIT",
   "files": [
     "lib/*",
-    "platform.js",
-    "platform.d.ts"
+    "metro.d.ts",
+    "metro.js",
+    "platform.d.ts",
+    "platform.js"
   ],
   "main": "lib/index.js",
   "types": "lib/index.d.ts",

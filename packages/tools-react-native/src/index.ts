@@ -1,3 +1,4 @@
+export { findMetroPath, getMetroVersion } from "./metro";
 export {
   expandPlatformExtensions,
   getAvailablePlatforms,

@@ -1,6 +1,7 @@
 import { info, warn } from "@rnx-kit/console";
 import type { MetroPlugin } from "@rnx-kit/metro-serializer";
-import { findPackage, readPackage } from "@rnx-kit/tools-node";
+import { findPackage, readPackage } from "@rnx-kit/tools-node/package";
+import { getMetroVersion } from "@rnx-kit/tools-react-native/metro";
 import type { BuildOptions, BuildResult, Plugin } from "esbuild";
 import * as esbuild from "esbuild";
 import * as fs from "fs";
@@ -20,7 +21,11 @@ export type Options = Pick<BuildOptions, "logLevel" | "minify" | "target"> & {
 };
 
 function assertVersion(requiredVersion: string): void {
-  const { version } = require("metro/package.json");
+  const version = getMetroVersion();
+  if (!version) {
+    throw new Error(`Metro version ${requiredVersion} is required`);
+  }
+
   if (!semver.satisfies(version, requiredVersion)) {
     throw new Error(
       `Metro version ${requiredVersion} is required; got ${version}`

@@ -29,6 +29,7 @@
   },
   "dependencies": {
     "@rnx-kit/config": "^0.6.1",
+    "@rnx-kit/console": "^1.0.0",
     "@rnx-kit/tools-node": "^1.3.1",
     "@rnx-kit/tools-react-native": "^1.2.3",
     "@rnx-kit/typescript-react-native-resolver": "^0.3.1",

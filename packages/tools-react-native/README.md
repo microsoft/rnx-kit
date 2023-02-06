@@ -28,6 +28,8 @@ import * from "@rnx-kit/tools-react-native/platform";
 
 | Category | Function                                               | Description                                                                                     |
 | -------- | ------------------------------------------------------ | ----------------------------------------------------------------------------------------------- |
+| metro    | `findMetroPath(projectRoot)`                           | Finds the installation path of Metro.                                                           |
+| metro    | `getMetroVersion(projectRoot)`                         | Returns Metro version number.                                                                   |
 | platform | `expandPlatformExtensions(platform, extensions)`       | Returns a list of extensions that should be tried for the target platform in prioritized order. |
 | platform | `getAvailablePlatforms(startDir)`                      | Returns a map of available React Native platforms. The result is cached.                        |
 | platform | `getAvailablePlatformsUncached(startDir, platformMap)` | Returns a map of available React Native platforms. The result is NOT cached.                    |
