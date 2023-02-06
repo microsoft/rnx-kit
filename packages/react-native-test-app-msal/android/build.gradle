@@ -73,7 +73,11 @@ repositories {
     }
 }
 
+def rnxDisableAuthProperty = "com.microsoft.reacttestapp.msal.disableRnxAuthModule"
 def rnxAuth = findNodeModulesPath("@rnx-kit/react-native-auth")
+def skipAuthModuleRegistration =
+    rootProject.hasProperty(rnxDisableAuthProperty) &&
+    rootProject.property(rnxDisableAuthProperty)
 
 android {
     def manifest = new JsonSlurper().parseText(findFile("app.json").text)
@@ -148,7 +152,7 @@ android {
 
         main.res.srcDirs += generatedResDir
 
-        if (rnxAuth == null) {
+        if (skipAuthModuleRegistration || rnxAuth == null) {
             main.java.srcDirs += "src/nornx/java"
         } else {
             main.java.srcDirs += "src/rnx/java"
