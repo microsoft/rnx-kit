@@ -2877,9 +2877,9 @@ ajv@^6.10.0, ajv@^6.12.4:
     uri-js "^4.2.2"
 
 ajv@^8.0.0:
-  version "8.11.2"
-  resolved "https://registry.yarnpkg.com/ajv/-/ajv-8.11.2.tgz#aecb20b50607acf2569b6382167b65a96008bb78"
-  integrity sha512-E4bfmKAhGiSTvMfL1Myyycaub+cUEU2/IvpylXkUu7CHBkBj1f/ikdzbD7YQ6FKUbixDxeYvB/xY4fvyroDlQg==
+  version "8.12.0"
+  resolved "https://registry.yarnpkg.com/ajv/-/ajv-8.12.0.tgz#d1a0527323e22f53562c567c00991577dfbe19d1"
+  integrity sha512-sRu1kpcO9yLtYxBKvqfTeh9KzZEwO3STyX1HT+4CaDzC6HpTGYhIhPIzj9XuKU7KYDwnaeh5hcOwjy1QuJzBPA==
   dependencies:
     fast-deep-equal "^3.1.1"
     json-schema-traverse "^1.0.0"
@@ -4657,9 +4657,9 @@ fast-levenshtein@^3.0.0:
     fastest-levenshtein "^1.0.7"
 
 fast-xml-parser@^4.0.0, fast-xml-parser@^4.0.8:
-  version "4.0.13"
-  resolved "https://registry.yarnpkg.com/fast-xml-parser/-/fast-xml-parser-4.0.13.tgz#dab3e7ea17d39805af0a9f6d041f4c975c2b9b58"
-  integrity sha512-g+OboAw8ol1FgTHhKLR7ZHcItNudceiY04BBrvqa0JBWoPhi/+e5r4H5AeW+EsQCroJLJwsuOP3dD3c6cc5uOg==
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/fast-xml-parser/-/fast-xml-parser-4.1.1.tgz#28c878b7f1eb4555fa898f1c715adf9d4007306e"
+  integrity sha512-4gAP5PvNyrqePBOIIcpaEeE+nKBry1n6qTQiJsE59sLP0OC+YwhU7/XVmLLEMexbiluFQX1yEYm82Pk9B7xEiw==
   dependencies:
     strnum "^1.0.5"
 
@@ -7686,9 +7686,9 @@ pump@^3.0.0:
     once "^1.3.1"
 
 punycode@^2.1.0, punycode@^2.1.1:
-  version "2.1.1"
-  resolved "https://registry.yarnpkg.com/punycode/-/punycode-2.1.1.tgz#b58b010ac40c22c5657616c8d2c2c02c7bf479ec"
-  integrity sha512-XRsRjdf+j5ml+y/6GKHPZbrF/8p2Yga0JPtdqTIY2Xe5ohJPD9saDJJLPvp9+NSBprVvevdXZybnj2cv8OEd0A==
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/punycode/-/punycode-2.3.0.tgz#f67fa67c94da8f4d0cfff981aee4118064199b8f"
+  integrity sha512-rRV+zQD8tVFys26lAGR9WUuS4iUAngJScM+ZRSKtvl5tKeZ2t5bvdNFdNHBW9FWR4guGHlgmsZ1G7BSm2wTbuA==
 
 qrcode@^1.5.0:
   version "1.5.1"
@@ -7849,9 +7849,9 @@ react-native-macos@^0.68.0:
     ws "^6.1.4"
 
 react-native-test-app@^2.0.2:
-  version "2.3.0"
-  resolved "https://registry.yarnpkg.com/react-native-test-app/-/react-native-test-app-2.3.0.tgz#1606a85a5eda5a3dffce4fa587272fb60d3ffbf8"
-  integrity sha512-1K+fH6Vz0KHNl+LmpUTi2NmSrIvp4Gzl8UUVX+vm1gUSvi0ffanobv2jdQvXAHd4WnzQ+Kxx7QMZfRbCZ762Iw==
+  version "2.3.4"
+  resolved "https://registry.yarnpkg.com/react-native-test-app/-/react-native-test-app-2.3.4.tgz#4628b5487a3daa5b0ac510f19e2fa4f324928dc8"
+  integrity sha512-YWjo5bU8oXYiTldHBIW1Nruf8OaRi2jnfg2Mgffr6gQqRqLcC0G18qC/qiIy3vhsVPKPXAFgTd7W/p0fzPdaeQ==
   dependencies:
     ajv "^8.0.0"
     chalk "^4.1.0"
