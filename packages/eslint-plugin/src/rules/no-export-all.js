@@ -254,8 +254,7 @@ function extractExports(context, moduleId, depth) {
                 case "TSDeclareFunction": {
                   const name = declaration.id && declaration.id.name;
                   if (name) {
-                    const set = declaration.declare ? types : exports;
-                    set.add(name);
+                    exports.add(name);
                   }
                   break;
                 }
@@ -394,10 +393,6 @@ module.exports = {
             : (fixer) => {
                 /** @type {string[]} */
                 const lines = [];
-                if (result.exports.length > 0) {
-                  const names = result.exports.sort().join(", ");
-                  lines.push(`export { ${names} } from ${node.source.raw};`);
-                }
                 if (result.types.length > 0) {
                   const uniqueTypes = result.types.filter(
                     (type) => !result.exports.includes(type)
@@ -408,6 +403,10 @@ module.exports = {
                       `export type { ${types} } from ${node.source.raw};`
                     );
                   }
+                }
+                if (result.exports.length > 0) {
+                  const names = result.exports.sort().join(", ");
+                  lines.push(`export { ${names} } from ${node.source.raw};`);
                 }
                 return fixer.replaceText(node, lines.join("\n"));
               },
