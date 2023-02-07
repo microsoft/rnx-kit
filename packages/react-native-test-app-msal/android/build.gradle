@@ -73,7 +73,11 @@ repositories {
     }
 }
 
-def rnxAuth = findNodeModulesPath("@rnx-kit/react-native-auth")
+def rnxAuthPackage = findNodeModulesPath("@rnx-kit/react-native-auth")
+def rnxDisableAuthProperty = "com.microsoft.reacttestapp.msal.disableRnxAuthModule"
+def rnxAuthSkipModuleRegistration =
+    rnxAuthPackage == null ||
+    (rootProject.hasProperty(rnxDisableAuthProperty) && rootProject.property(rnxDisableAuthProperty).toString().equalsIgnoreCase("true"))
 
 android {
     def manifest = new JsonSlurper().parseText(findFile("app.json").text)
@@ -148,7 +152,7 @@ android {
 
         main.res.srcDirs += generatedResDir
 
-        if (rnxAuth == null) {
+        if (rnxAuthSkipModuleRegistration) {
             main.java.srcDirs += "src/nornx/java"
         } else {
             main.java.srcDirs += "src/rnx/java"
@@ -168,7 +172,7 @@ dependencies {
     //noinspection GradleDynamicVersion
     implementation "com.facebook.react:react-native:+"
 
-    if (rnxAuth != null) {
+    if (rnxAuthPackage != null) {
         implementation project(path: ":rnx-kit_react-native-auth")
     }
 }
