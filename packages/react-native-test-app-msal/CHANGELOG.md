@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/react-native-test-app-msal
 
+## 2.1.0
+
+### Minor Changes
+
+- 6dac8ed5: add flag to support optional auth module registration
+
 ## 2.0.2
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/tools-react-native
 
+## 1.3.0
+
+### Minor Changes
+
+- 75b98095: Added functions for finding the installation path of Metro, and for retrieving its version
+
 ## 1.2.3
 
 ### Patch Changes

@@ -1,5 +1,13 @@
 # @rnx-kit/metro-plugin-typescript
 
+## 0.3.3
+
+### Patch Changes
+
+- 75b98095: Disable the plugin if the current Metro version is unsupported
+- Updated dependencies [75b98095]
+  - @rnx-kit/tools-react-native@1.3.0
+
 ## 0.3.2
 
 ### Patch Changes

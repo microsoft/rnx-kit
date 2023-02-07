@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/eslint-plugin
 
+## 0.4.1
+
+### Patch Changes
+
+- 44ab287f: Fixed `@rnx-kit/no-export-all` autofix treating `export declare` as types
+
 ## 0.4.0
 
 ### Minor Changes
