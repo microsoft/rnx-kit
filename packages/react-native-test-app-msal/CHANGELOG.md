@@ -4,7 +4,7 @@
 
 ### Minor Changes
 
-- 6dac8ed5: add flag to support optional auth module registration
+- 6dac8ed5: Add flag to support optional auth module registration
 
 ## 2.0.2
 
