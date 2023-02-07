@@ -1,5 +1,13 @@
 # Change Log - @rnx-kit/metro-serializer-esbuild
 
+## 0.1.21
+
+### Patch Changes
+
+- 8bc3f023: Resolve `metro` via `react-native` to ensure the correct instance is used
+- Updated dependencies [75b98095]
+  - @rnx-kit/tools-react-native@1.3.0
+
 ## 0.1.20
 
 ### Patch Changes
