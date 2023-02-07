@@ -24,8 +24,8 @@ export function escape() {
   console.log("Get to da choppah!");
 }
 
-export { escape as escapeRe, name as nameRe };
 export type { IChopper as IChopperRe, Predator as PredatorRe };
+export { escape as escapeRe, name as nameRe };
 `,
   conquerer: "export * from 'destroyer'",
   destroyer: "export * from 'barbarian'",
@@ -91,8 +91,8 @@ describe("disallows `export *`", () => {
         code: "export * from 'chopper';",
         errors: 1,
         output: lines(
-          "export { Chopper, Kind, escape, escapeRe, name, nameRe } from 'chopper';",
-          "export type { IChopper, IChopperRe, Predator, PredatorRe } from 'chopper';"
+          "export type { IChopper, IChopperRe, Predator, PredatorRe } from 'chopper';",
+          "export { Chopper, Kind, escape, escapeRe, name, nameRe } from 'chopper';"
         ),
       },
       {
@@ -113,15 +113,18 @@ describe("disallows `export *`", () => {
       {
         code: "export * from 'types';",
         errors: 1,
-        output:
-          "export type { Helicopter, IChopper, Predator, escape } from 'types';",
+        output: lines(
+          "export type { IChopper, Predator } from 'types';",
+          "export { Helicopter, escape } from 'types';"
+        ),
       },
       {
         code: lines("export * from './internal';", "export * from 'types';"),
         errors: 1,
         output: lines(
           "export * from './internal';",
-          "export type { Helicopter, IChopper, Predator, escape } from 'types';"
+          "export type { IChopper, Predator } from 'types';",
+          "export { Helicopter, escape } from 'types';"
         ),
         options: [{ expand: "external-only" }],
       },
