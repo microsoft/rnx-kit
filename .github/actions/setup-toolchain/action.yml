@@ -4,7 +4,7 @@ inputs:
   node-version:
     description: The version of Node to use
     type: number
-    default: 18
+    default: 16  # `npm pack` is broken in npm 9.x: https://github.com/npm/npm-packlist/issues/152
     required: true
   jdk-version:
     description: The Java JDK version to use, if specified
