@@ -116,7 +116,7 @@ have introduced a small script to easily allow for new packages generation.
 Simply run
 
 ```sh
-yarn new-package --name TEST
+yarn new-package <package-name>
 ```
 
 To generate a sample project for you to use; this is based on
