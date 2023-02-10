@@ -8,7 +8,6 @@
   },
   "scripts": {
     "build": "rnx-kit-scripts build",
-    "build:go": "rnx-kit-scripts go",
     "depcheck": "rnx-kit-scripts depcheck",
     "format": "rnx-kit-scripts format",
     "lint": "rnx-kit-scripts lint"
