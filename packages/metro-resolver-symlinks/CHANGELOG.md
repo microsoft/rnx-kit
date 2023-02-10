@@ -4,7 +4,7 @@
 
 ### Patch Changes
 
-- 26e56d8f: adjust `metro-resolver-symlinks` metro patch to use any available hasteFS alias
+- 26e56d8f: Adjust Metro patch to use any available `hasteFS` alias
 
 ## 0.1.25
 
