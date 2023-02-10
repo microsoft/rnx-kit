@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-resolver-symlinks
 
+## 0.1.26
+
+### Patch Changes
+
+- 26e56d8f: adjust `metro-resolver-symlinks` metro patch to use any available hasteFS alias
+
 ## 0.1.25
 
 ### Patch Changes
