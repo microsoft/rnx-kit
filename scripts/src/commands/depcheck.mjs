@@ -62,7 +62,11 @@ export default async function depcheck() {
           "@rnx-kit/eslint-config",
           "@rnx-kit/scripts",
           "@types/*",
+          "eslint",
+          "jest",
           "nx",
+          "prettier",
+          "typescript",
         ],
         specials: [
           depcheck.special.babel,

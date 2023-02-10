@@ -43,13 +43,18 @@
     "@rnx-kit/eslint-config": "*",
     "@rnx-kit/scripts": "*",
     "@types/node": "^16.0.0",
+    "eslint": "^8.0.0",
+    "jest": "^27.0.0",
+    "prettier": "^2.8.0",
     "react": "17.0.2",
-    "react-native": "^0.68.0"
+    "react-native": "^0.68.0",
+    "typescript": "^4.0.0"
   },
   "depcheck": {
     "ignoreMatches": [
       "@babel/preset-env",
-      "@babel/preset-typescript"
+      "@babel/preset-typescript",
+      "@jest/types"
     ]
   },
   "eslintConfig": {

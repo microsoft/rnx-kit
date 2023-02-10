@@ -10,25 +10,24 @@ on:
       scheme-name:
         required: true
         type: string
-
 jobs:
   build-ios:
     name: ${{ inputs.package }}
-    runs-on: macos-11
+    runs-on: macos-12
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
       - name: Setup the toolchain
         uses: ./.github/actions/setup-toolchain
       - name: Install package dependencies
-        uses: ./.github/actions/yarn
+        run: |
+          yarn
       - name: Setup Apple
         uses: ./.github/actions/setup-apple
         with:
           project-directory: ios
           working-directory: packages/${{ inputs.package }}
       - name: Build iOS app
-        run: yarn build:ios
+        run: |
+          yarn build:ios
         working-directory: packages/${{ inputs.package }}

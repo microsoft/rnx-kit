@@ -33,6 +33,8 @@
     "metro": ">=0.66.1"
   },
   "devDependencies": {
+    "@babel/core": "^7.1.6",
+    "@babel/preset-env": "^7.1.6",
     "@fluentui/utilities": "8.12.0",
     "@react-native-community/cli-plugin-metro": "^7.0.3",
     "@rnx-kit/babel-preset-metro-react-native": "*",
@@ -44,10 +46,15 @@
     "@types/metro-transform-worker": "^0.66.0",
     "@types/react": "^17.0.2",
     "@types/semver": "^7.0.0",
+    "eslint": "^8.0.0",
+    "jest": "^27.0.0",
     "lodash-es": "^4.17.21",
     "metro": "^0.67.0",
+    "metro-react-native-babel-preset": "^0.67.0",
+    "prettier": "^2.8.0",
     "react": "17.0.2",
-    "react-native": "^0.68.0"
+    "react-native": "^0.68.0",
+    "typescript": "^4.0.0"
   },
   "depcheck": {
     "ignoreMatches": [

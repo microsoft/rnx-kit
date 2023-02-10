@@ -4,22 +4,21 @@ on:
       package:
         required: true
         type: string
-
 jobs:
   build-android:
     name: ${{ inputs.package }}
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
       - name: Setup the toolchain
         uses: ./.github/actions/setup-toolchain
         with:
           jdk-version: 11
       - name: Install package dependencies
-        uses: ./.github/actions/yarn
+        run: |
+          yarn
       - name: Build Android app
-        run: yarn run build:android
+        run: |
+          yarn run build:android
         working-directory: packages/${{ inputs.package }}

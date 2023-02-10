@@ -25,7 +25,11 @@
   },
   "devDependencies": {
     "@rnx-kit/scripts": "*",
-    "@types/jest": "^27.0.0"
+    "@types/jest": "^27.0.0",
+    "eslint": "^8.0.0",
+    "jest": "^27.0.0",
+    "prettier": "^2.8.0",
+    "typescript": "^4.0.0"
   },
   "eslintConfig": {
     "extends": "@rnx-kit/eslint-config"

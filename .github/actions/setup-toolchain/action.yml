@@ -4,7 +4,12 @@ inputs:
   node-version:
     description: The version of Node to use
     type: number
-    default: 16  # `npm pack` is broken in npm 9.x: https://github.com/npm/npm-packlist/issues/152
+    default: 16 # `npm pack` is broken in npm 9.x: https://github.com/npm/npm-packlist/issues/152
+    required: true
+  node-cache:
+    description: Cache global packages data
+    type: string
+    default: "yarn"
     required: true
   jdk-version:
     description: The Java JDK version to use, if specified
@@ -17,7 +22,7 @@ runs:
       uses: actions/setup-node@v3.6.0
       with:
         node-version: ${{ inputs.node-version }}
-        cache: yarn
+        cache: ${{ inputs.node-cache }}
     - name: Set up JDK
       if: ${{ inputs.jdk-version != 0 }}
       uses: actions/setup-java@v3.9.0
