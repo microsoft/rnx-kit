@@ -47,11 +47,6 @@
     _bridge = nil;
 }
 
-- (NSURL *)URLForResource:(NSString *)name
-{
-    return nil;
-}
-
 - (void)usingModule:(Class)moduleClass block:(void (^)(id<RCTBridgeModule> _Nullable))block
 {
     const BOOL requiresMainQueueSetup =

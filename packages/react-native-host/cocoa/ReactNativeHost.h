@@ -26,9 +26,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)shutdown;
 
-/// Returns the URL to the specified resource.
-- (nullable NSURL *)URLForResource:(nullable NSString *)name;
-
 /// Calls the specified block when the desired native module is retrieved. Note
 /// that this may initialize the module.
 ///
