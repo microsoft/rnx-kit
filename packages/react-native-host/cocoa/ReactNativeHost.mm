@@ -69,14 +69,6 @@
     block(bridgeModule);
 }
 
-- (RNXView *)viewWithModuleName:(NSString *)moduleName
-              initialProperties:(NSDictionary *)initialProperties;
-{
-    return [[RCTRootView alloc] initWithBridge:self.bridge
-                                    moduleName:moduleName
-                             initialProperties:initialProperties];
-}
-
 // MARK: - RCTBridgeDelegate details
 
 - (NSURL *)sourceURLForBridge:(RCTBridge *)bridge
@@ -97,6 +89,35 @@
     return [_config respondsToSelector:@selector(extraModulesForBridge:)]
                ? [_config extraModulesForBridge:bridge]
                : @[];
+}
+
+// MARK: - Category: View
+
++ (instancetype)hostFromRootView:(RNXView *)rootView
+{
+    if (![rootView respondsToSelector:@selector(bridge)]) {
+        return nil;
+    }
+
+    id bridge = [rootView performSelector:@selector(bridge)];
+    if (![bridge respondsToSelector:@selector(delegate)]) {
+        return nil;
+    }
+
+    id delegate = [bridge performSelector:@selector(delegate)];
+    if (![delegate isMemberOfClass:self]) {
+        return nil;
+    }
+
+    return delegate;
+}
+
+- (RNXView *)viewWithModuleName:(NSString *)moduleName
+              initialProperties:(NSDictionary *)initialProperties;
+{
+    return [[RCTRootView alloc] initWithBridge:self.bridge
+                                    moduleName:moduleName
+                             initialProperties:initialProperties];
 }
 
 @end

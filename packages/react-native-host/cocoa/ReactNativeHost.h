@@ -39,6 +39,12 @@ NS_ASSUME_NONNULL_BEGIN
               block:(void (^)(id<RCTBridgeModule> _Nullable))block
     NS_SWIFT_NAME(using(module:block:));
 
+@end
+
+@interface ReactNativeHost (View)
+
++ (nullable instancetype)hostFromRootView:(RNXView *)rootView NS_SWIFT_NAME(host(from:));
+
 /// Creates a React root view with the specified module and initial properties.
 ///
 /// - Parameters:
