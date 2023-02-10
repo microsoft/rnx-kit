@@ -9,10 +9,6 @@ inputs:
   jdk-version:
     description: The Java JDK version to use, if specified
     type: number
-  go-version:
-    description: The semver version of Go to use, if specified
-    type: string
-    default: "^1.14.0"
 
 runs:
   using: composite
@@ -28,8 +24,3 @@ runs:
       with:
         distribution: temurin
         java-version: ${{ inputs.jdk-version }}
-    - name: Set up Go
-      if: ${{ inputs.go-version != '' }}
-      uses: actions/setup-go@v3
-      with:
-        go-version: ${{ inputs.go-version }}
