@@ -14,7 +14,6 @@
     "lint": "rnx-kit-scripts lint"
   },
   "dependencies": {
-    "@rnx-kit/golang": "^0.2.1",
     "depcheck": "^1.0.0",
     "esbuild": "^0.17.0",
     "jest": "^27.0.0",
@@ -29,7 +28,6 @@
   "depcheck": {
     "ignoreMatches": [
       "@rnx-kit/align-deps",
-      "@rnx-kit/golang",
       "@rnx-kit/jest-preset",
       "depcheck",
       "esbuild",

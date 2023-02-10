@@ -1,7 +1,0 @@
-{
-  "extends": "@rnx-kit/scripts/tsconfig-shared.json",
-  "compilerOptions": {
-    "noEmit": true
-  },
-  "include": ["src"]
-}
