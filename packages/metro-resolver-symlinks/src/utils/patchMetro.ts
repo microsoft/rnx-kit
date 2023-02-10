@@ -92,8 +92,9 @@ export function patchMetro(options: Options): void {
   DependencyGraph.prototype.orig__createModuleResolver =
     DependencyGraph.prototype._createModuleResolver;
   DependencyGraph.prototype._createModuleResolver = function (): void {
+    const hasteFS = this._hasteFS || this._snapshotFS || this._fileSystem;
     this._doesFileExist = (filePath: string): boolean => {
-      return this._hasteFS.exists(filePath) || fileExists(filePath);
+      return hasteFS.exists(filePath) || fileExists(filePath);
     };
 
     this.orig__createModuleResolver();
