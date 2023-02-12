@@ -47,15 +47,22 @@ disable import/export transformation by enabling `disableImportExportTransform`
 in `babel.config.js`:
 
 ```diff
++const env = process.env.BABEL_ENV || process.env.NODE_ENV;
  module.exports = {
    presets: [
      [
        "module:metro-react-native-babel-preset",
-+      { disableImportExportTransform: true },
++      {
++        disableImportExportTransform:
++          env === "production" && process.env["RNX_METRO_SERIALIZER_ESBUILD"],
++      },
      ],
    ],
  };
 ```
+
+To avoid issues with dev server, we only want to enable
+`disableImportExportTransform` when bundling for production.
 
 If you're using `@rnx-kit/babel-preset-metro-react-native`, you don't need to
 make any changes.
@@ -86,6 +93,9 @@ changes to `metro.config.js`:
 +  transformer: esbuildTransformerConfig,
  });
 ```
+
+> Note that `esbuildTransformerConfig` is incompatible with dev server and debug
+> builds. It should only be set when bundling for production.
 
 We can now create a bundle as usual, e.g.:
 
