@@ -54,6 +54,42 @@ describe("buildManifestProfile()", () => {
     expect("react-native-test-app" in peerDependencies).toBe(false);
     expect("react-native-test-app" in devDependencies).toBe(true);
   });
+
+  test("throws if requirements cannot be satisfied", () => {
+    expect(() =>
+      buildManifestProfile("package.json", makeConfig(["react-native@1000.0"]))
+    ).toThrowError(
+      "No profiles could satisfy requirements: react-native@1000.0"
+    );
+  });
+
+  test("throws if dev requirements cannot be satisfied", () => {
+    expect(() =>
+      buildManifestProfile(
+        "package.json",
+        makeConfig({
+          development: ["react-native@1000.0"],
+          production: ["react-native@0.69 || 0.70"],
+        })
+      )
+    ).toThrowError(
+      "No profiles could satisfy requirements: react-native@1000.0"
+    );
+  });
+
+  test("throws if prod requirements cannot be satisfied", () => {
+    expect(() =>
+      buildManifestProfile(
+        "package.json",
+        makeConfig({
+          development: ["react-native@0.70"],
+          production: ["react-native@1000.0"],
+        })
+      )
+    ).toThrowError(
+      "No profiles could satisfy requirements: react-native@1000.0"
+    );
+  });
 });
 
 describe("inspect()", () => {
