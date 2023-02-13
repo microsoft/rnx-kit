@@ -20,8 +20,8 @@
     "bundle+esbuild": "nx run-many --target bundle+esbuild --all",
     "change": "changeset add",
     "change:check": "changeset status",
-    "ci": "yarn --prefer-offline --frozen-lockfile --non-interactive",
-    "clean": "nx clear-cache",
+    "clean": "git clean -dfqx --exclude=.yarn/cache",
+    "clear-cache": "nx clear-cache",
     "depcheck": "nx run-many --target depcheck --all",
     "format": "nx run-many --target format --all",
     "lint": "nx run-many --target lint --all",
@@ -48,7 +48,7 @@
     "metro-runtime": "^0.67.0",
     "metro-transform-worker": "^0.67.0",
     "nx": "^15.0.1",
-    "prettier": "^2.3.0",
+    "prettier": "^2.8.0",
     "react": "17.0.2",
     "react-native": "^0.68.0",
     "react-native-test-app": "^2.0.2",
@@ -57,8 +57,9 @@
   "engines": {
     "node": ">=14.18"
   },
+  "packageManager": "yarn@3.4.1",
   "resolutions": {
-    "@vue/compiler-sfc": "./incubator/ignore",
+    "@vue/compiler-sfc": "link:./incubator/ignore",
     "eslint-plugin-react": "^7.26.0",
     "micromatch": "^4.0.0",
     "nx/chalk": "^4.1.0",

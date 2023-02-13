@@ -31,7 +31,11 @@
     "@rnx-kit/scripts": "*",
     "@types/metro-resolver": "^0.66.0",
     "@types/node": "^16.0.0",
-    "metro-resolver": "^0.67.0"
+    "eslint": "^8.0.0",
+    "jest": "^27.0.0",
+    "metro-resolver": "^0.67.0",
+    "prettier": "^2.8.0",
+    "typescript": "^4.0.0"
   },
   "eslintConfig": {
     "extends": "@rnx-kit/eslint-config"

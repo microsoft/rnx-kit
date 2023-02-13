@@ -40,7 +40,10 @@
   },
   "devDependencies": {
     "@rnx-kit/scripts": "*",
-    "@types/metro": "^0.66.0"
+    "@types/metro": "^0.66.0",
+    "eslint": "^8.0.0",
+    "jest": "^27.0.0",
+    "prettier": "^2.8.0"
   },
   "depcheck": {
     "ignoreMatches": [

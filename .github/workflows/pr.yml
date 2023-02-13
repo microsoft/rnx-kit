@@ -3,7 +3,7 @@ on: pull_request
 jobs:
   review:
     name: "Review"
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -13,16 +13,18 @@ jobs:
         uses: ./.github/actions/setup-toolchain
       - name: Ensure rnx-kit packages come from our repository
         run: |
-          if grep rnx-kit yarn.lock; then
+          if grep 'rnx-kit.*@npm' yarn.lock; then
             exit 1
           fi
       - name: Deduplicate packages
         run: |
-          npx yarn-deduplicate --list --fail
+          yarn dedupe --check
       - name: Install package dependencies
-        uses: ./.github/actions/yarn
+        run: |
+          yarn
       - name: Check for change files
-        run: yarn change:check --since origin/${{ github.base_ref }}
+        run: |
+          yarn change:check --since origin/${{ github.base_ref }}
       - name: Report formatting problems
         run: |
           yarn format
@@ -40,7 +42,7 @@ jobs:
     strategy:
       matrix:
         node-version: [14, 16, 18]
-        os: [ubuntu-20.04, windows-2022]
+        os: [ubuntu-22.04, windows-2022]
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout
@@ -52,16 +54,19 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - name: Install package dependencies
-        uses: ./.github/actions/yarn
+        run: |
+          yarn
       - name: Build and test packages
-        run: yarn build:ci --base origin/${{ github.base_ref }}
+        run: |
+          yarn build:ci --base origin/${{ github.base_ref }}
       - name: Ensure READMEs are up-to-date
-        if: ${{ matrix.node-version == 18 && matrix.os == 'ubuntu-20.04' }}
+        if: ${{ matrix.node-version == 18 && matrix.os == 'ubuntu-22.04' }}
         run: |
           yarn update-readme
           git diff --exit-code
       - name: Bundle packages
-        run: yarn bundle
+        run: |
+          yarn bundle
       - name: Bundle test app with esbuild
         run: |
           yarn bundle+esbuild
@@ -86,25 +91,26 @@ jobs:
       scheme-name: ReactTestApp
   build-website:
     name: "Build the website"
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
       - name: Setup the toolchain
         uses: ./.github/actions/setup-toolchain
-      - name: Install package dependencies (docsite)
-        uses: ./.github/actions/yarn
         with:
-          working-directory: docsite
+          node-cache: ""
+      - name: Install package dependencies (docsite)
+        run: |
+          yarn
+        working-directory: docsite
       - name: Build website
-        run: yarn build
+        run: |
+          yarn build
         working-directory: docsite
   label:
     name: "Label"
     if: ${{ github.event.pull_request.head.repo.full_name == github.repository }}
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     permissions:
       contents: read
       pull-requests: write

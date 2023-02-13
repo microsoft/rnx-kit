@@ -34,7 +34,7 @@
     "default": {
       "runner": "@rnx-kit/scripts/nx-tasks-runner",
       "options": {
-        "cacheableOperations": ["build", "build:ci", "lint", "test"],
+        "cacheableOperations": ["build", "build:ci", "format", "lint", "test"],
         "parallel": 0
       }
     }

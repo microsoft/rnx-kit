@@ -15,10 +15,16 @@
     "directory": "packages/eslint-config"
   },
   "scripts": {
-    "format": "rnx-kit-scripts format"
+    "format": "prettier --write --loglevel error **/*.{js,json,md}"
   },
   "dependencies": {
     "@microsoft/eslint-plugin-sdl": "^0.2.0",
     "@rnx-kit/eslint-plugin": "*"
+  },
+  "peerDependencies": {
+    "eslint": ">=6.0.0"
+  },
+  "devDependencies": {
+    "prettier": "^2.8.0"
   }
 }

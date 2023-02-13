@@ -31,7 +31,7 @@ export function execute(command, ...args) {
  */
 export function runScript(command, ...args) {
   const yarn = os.platform() === "win32" ? "yarn.cmd" : "yarn";
-  return execute(yarn, "--silent", command, ...args);
+  return execute(yarn, command, ...args);
 }
 
 /**

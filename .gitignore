@@ -10,6 +10,9 @@
 .gradle/
 .idea/
 .xcode.env*
+.yarn/*
+!.yarn/plugins/
+!.yarn/releases/
 /incubator/*/bin/
 /incubator/*/dist/
 /incubator/*/lib/

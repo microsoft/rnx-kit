@@ -53,6 +53,10 @@ const profile = {
     name: "pkg-dir",
     version: "^5.0.0",
   },
+  prettier: {
+    name: "prettier",
+    version: "^2.8.0",
+  },
   semver: {
     name: "semver",
     version: "^7.0.0",

@@ -29,7 +29,10 @@
   },
   "devDependencies": {
     "@rnx-kit/build": "*",
-    "@rnx-kit/scripts": "*"
+    "@rnx-kit/scripts": "*",
+    "eslint": "^8.0.0",
+    "prettier": "^2.8.0",
+    "typescript": "^4.0.0"
   },
   "eslintConfig": {
     "extends": "@rnx-kit/eslint-config"

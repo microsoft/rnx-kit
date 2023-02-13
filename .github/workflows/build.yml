@@ -6,7 +6,7 @@ jobs:
   build_and_publish:
     name: "Build and publish"
     if: ${{ github.repository == 'microsoft/rnx-kit' }}
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -15,17 +15,21 @@ jobs:
       - name: Setup the toolchain
         uses: ./.github/actions/setup-toolchain
       - name: Install package dependencies
-        uses: ./.github/actions/yarn
+        run: |
+          yarn
       - name: Build and test packages
-        run: yarn build:ci:all
+        run: |
+          yarn build:ci:all
       - name: Bundle packages
-        run: yarn bundle
+        run: |
+          yarn bundle
       - name: Install package dependencies (docsite)
-        uses: ./.github/actions/yarn
-        with:
-          working-directory: docsite
+        run: |
+          yarn
+        working-directory: docsite
       - name: Build website
-        run: yarn build
+        run: |
+          yarn build
         working-directory: docsite
       - name: Create release PR or publish to npm
         uses: changesets/action@v1
