@@ -100,7 +100,7 @@
     }
 
     id delegate = [bridge performSelector:@selector(delegate)];
-    if (![delegate isMemberOfClass:self]) {
+    if (![delegate isKindOfClass:self]) {
         return nil;
     }
 
