@@ -10,7 +10,7 @@ import {
 } from "../capabilities";
 import { modifyManifest } from "../helpers";
 import { updateDependencies } from "../manifest";
-import { filterPreset, mergePresets } from "../preset";
+import { ensurePreset, filterPreset, mergePresets } from "../preset";
 import type {
   AlignDepsConfig,
   ErrorCode,
@@ -97,13 +97,21 @@ export function buildManifestProfile(
     const { requirements } = alignDeps;
     if (Array.isArray(requirements)) {
       const preset = filterPreset(mergedPresets, requirements);
+      ensurePreset(preset, requirements);
       return [preset, preset];
     }
 
     const prodPreset = filterPreset(mergedPresets, requirements.production);
-    return kitType === "app"
-      ? [prodPreset, prodPreset]
-      : [filterPreset(mergedPresets, requirements.development), prodPreset];
+    ensurePreset(prodPreset, requirements.production);
+
+    if (kitType === "app") {
+      return [prodPreset, prodPreset];
+    }
+
+    const devPreset = filterPreset(mergedPresets, requirements.development);
+    ensurePreset(devPreset, requirements.development);
+
+    return [devPreset, prodPreset];
   })();
 
   // Multiple capabilities may resolve to the same dependency. We must therefore

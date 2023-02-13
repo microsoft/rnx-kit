@@ -5,7 +5,18 @@
  */
 
 import { spawn } from "node:child_process";
+import { createRequire } from "node:module";
 import * as os from "node:os";
+import * as path from "node:path";
+
+function findWorkspaceRoot() {
+  // @ts-expect-error ts(1343): 'import.meta' is only allowed when module is ESM
+  const require = createRequire(import.meta.url);
+  const scriptsDir = path.dirname(
+    require.resolve("@rnx-kit/scripts/package.json")
+  );
+  return path.dirname(scriptsDir);
+}
 
 /**
  * @param {string} command
@@ -14,7 +25,15 @@ import * as os from "node:os";
  */
 export function execute(command, ...args) {
   return new Promise((resolve, reject) => {
-    spawn(command, args, { stdio: "inherit" }).on("close", (code) => {
+    /** @type {import("node:child_process").SpawnOptions} */
+    const options = {
+      cwd:
+        command.startsWith("yarn") && args[0] === "nx"
+          ? findWorkspaceRoot()
+          : process.cwd(),
+      stdio: "inherit",
+    };
+    spawn(command, args, options).on("close", (code) => {
       if (code === 0) {
         resolve();
       } else {
@@ -35,7 +54,7 @@ export function runScript(command, ...args) {
 }
 
 /**
- * @param {...() => Promise<void>} scripts
+ * @param {...(() => Promise<void>)} scripts
  * @returns {Promise<void>}
  */
 export function sequence(...scripts) {
