@@ -3,7 +3,6 @@
 
 import yargs from "yargs";
 import buildAndroid from "./commands/build-android.mjs";
-import buildGo from "./commands/build-go.mjs";
 import buildIOS from "./commands/build-ios.mjs";
 import build from "./commands/build.mjs";
 import bundle from "./commands/bundle.mjs";
@@ -64,10 +63,6 @@ init({
   format: {
     description: "Formats source files",
     command: format,
-  },
-  go: {
-    description: "Builds Go code",
-    command: buildGo,
   },
   lint: {
     description: "Lints source files",

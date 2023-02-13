@@ -13,5 +13,3 @@ runs:
       run: yarn ci
       shell: bash
       working-directory: ${{ inputs.working-directory }}
-      env:
-        CI_SKIP_GO: 1
