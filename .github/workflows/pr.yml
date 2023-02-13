@@ -79,16 +79,43 @@ jobs:
         working-directory: packages/test-app
   build-android-test-app:
     name: "Build Android"
-    uses: ./.github/workflows/build-android.yml
-    with:
-      package: test-app
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup the toolchain
+        uses: ./.github/actions/setup-toolchain
+        with:
+          jdk-version: 11
+      - name: Install package dependencies
+        run: |
+          yarn
+      - name: Build Android app
+        run: |
+          yarn build:android
+        working-directory: packages/test-app
   build-ios-test-app:
     name: "Build iOS"
-    uses: ./.github/workflows/build-ios.yml
-    with:
-      package: test-app
-      workspace-name: SampleCrossApp
-      scheme-name: ReactTestApp
+    runs-on: macos-12
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup the toolchain
+        uses: ./.github/actions/setup-toolchain
+        with:
+          platform: ios
+      - name: Install package dependencies
+        run: |
+          yarn
+      - name: Install Pods
+        uses: microsoft/react-native-test-app/.github/actions/cocoapods@2.3.6
+        with:
+          project-directory: ios
+          working-directory: packages/test-app
+      - name: Build iOS app
+        run: |
+          yarn build:ios
+        working-directory: packages/test-app
   build-website:
     name: "Build the website"
     runs-on: ubuntu-22.04

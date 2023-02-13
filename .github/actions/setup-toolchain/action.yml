@@ -14,7 +14,9 @@ inputs:
   jdk-version:
     description: The Java JDK version to use, if specified
     type: number
-
+  platform:
+    description: The target platform to set up toolchain for
+    type: string
 runs:
   using: composite
   steps:
@@ -29,3 +31,20 @@ runs:
       with:
         distribution: temurin
         java-version: ${{ inputs.jdk-version }}
+    - name: Generate cache key
+      id: cache-key-generator
+      run: |
+        if [[ -f packages/test-app/${{ inputs.platform }}/Podfile.lock ]]; then
+          clang --version > .clang-version
+          echo "cache-key=$(node scripts/shasum.mjs .clang-version .yarnrc.yml packages/test-app/${{ inputs.platform }}/Podfile.lock)" >> $GITHUB_OUTPUT
+        else
+          echo 'cache-key=false' >> $GITHUB_OUTPUT
+        fi
+      shell: bash
+    - name: Cache /.ccache
+      if: ${{ steps.cache-key-generator.outputs.cache-key != 'false' }}
+      uses: actions/cache@v3
+      with:
+        path: .ccache
+        key: ${{ runner.os }}-${{ inputs.platform }}-ccache-${{ steps.cache-key-generator.outputs.cache-key }}
+        restore-keys: ${{ runner.os }}-${{ inputs.platform }}-ccache-
