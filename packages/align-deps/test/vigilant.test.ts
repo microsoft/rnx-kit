@@ -105,6 +105,9 @@ describe("inspect()", () => {
     devDependencies: {
       "react-native": "^0.63.2",
     },
+    unmanagedCapabilities: {
+      "react-native": "core",
+    },
   };
 
   test("handles empty dependencies", () => {
@@ -112,8 +115,14 @@ describe("inspect()", () => {
       name: "@rnx-kit/align-deps",
       version: "1.0.0",
     };
-    expect(inspect(manifest, mockManifestProfile, false)).toEqual([]);
-    expect(inspect(manifest, mockManifestProfile, true)).toEqual([]);
+    expect(inspect(manifest, mockManifestProfile, false)).toEqual({
+      changes: [],
+      unmanagedDependencies: [],
+    });
+    expect(inspect(manifest, mockManifestProfile, true)).toEqual({
+      changes: [],
+      unmanagedDependencies: [],
+    });
   });
 
   test("ignores unmanaged dependencies", () => {
@@ -127,18 +136,19 @@ describe("inspect()", () => {
       dependencies,
     };
 
-    const expectedChanges = [
-      {
-        name: "react-native",
-        from: manifest.dependencies["react-native"],
-        to: mockManifestProfile.dependencies["react-native"],
-        section: "dependencies",
-      },
-    ];
+    const expected = {
+      changes: [
+        {
+          name: "react-native",
+          from: manifest.dependencies["react-native"],
+          to: mockManifestProfile.dependencies["react-native"],
+          section: "dependencies",
+        },
+      ],
+      unmanagedDependencies: [["react-native", "core"]],
+    };
 
-    expect(inspect(manifest, mockManifestProfile, false)).toEqual(
-      expectedChanges
-    );
+    expect(inspect(manifest, mockManifestProfile, false)).toEqual(expected);
     expect(manifest.dependencies).toEqual(dependencies);
   });
 
@@ -157,24 +167,25 @@ describe("inspect()", () => {
       },
     };
 
-    const expectedChanges = [
-      {
-        name: "react-native",
-        from: manifest.peerDependencies["react-native"],
-        to: mockManifestProfile.peerDependencies["react-native"],
-        section: "peerDependencies",
-      },
-      {
-        name: "react-native",
-        from: manifest.devDependencies["react-native"],
-        to: mockManifestProfile.devDependencies["react-native"],
-        section: "devDependencies",
-      },
-    ];
+    const expected = {
+      changes: [
+        {
+          name: "react-native",
+          from: manifest.peerDependencies["react-native"],
+          to: mockManifestProfile.peerDependencies["react-native"],
+          section: "peerDependencies",
+        },
+        {
+          name: "react-native",
+          from: manifest.devDependencies["react-native"],
+          to: mockManifestProfile.devDependencies["react-native"],
+          section: "devDependencies",
+        },
+      ],
+      unmanagedDependencies: [["react-native", "core"]],
+    };
 
-    expect(inspect(manifest, mockManifestProfile, false)).toEqual(
-      expectedChanges
-    );
+    expect(inspect(manifest, mockManifestProfile, false)).toEqual(expected);
   });
 
   test("modifies the manifest when `write: true`", () => {
@@ -188,18 +199,19 @@ describe("inspect()", () => {
       dependencies: { ...dependencies },
     };
 
-    const expectedChanges = [
-      {
-        name: "react-native",
-        from: manifest.dependencies["react-native"],
-        to: mockManifestProfile.dependencies["react-native"],
-        section: "dependencies",
-      },
-    ];
+    const expected = {
+      changes: [
+        {
+          name: "react-native",
+          from: manifest.dependencies["react-native"],
+          to: mockManifestProfile.dependencies["react-native"],
+          section: "dependencies",
+        },
+      ],
+      unmanagedDependencies: [["react-native", "core"]],
+    };
 
-    expect(inspect(manifest, mockManifestProfile, true)).toEqual(
-      expectedChanges
-    );
+    expect(inspect(manifest, mockManifestProfile, true)).toEqual(expected);
     expect(manifest.dependencies).not.toEqual(dependencies);
   });
 
@@ -229,17 +241,23 @@ describe("inspect()", () => {
         "react-native": "^0.66.0-0",
       },
       devDependencies: {},
-    };
-    const expectedChanges = [
-      {
-        name: "react",
-        from: manifest.dependencies["react"],
-        to: profile.dependencies["react"],
-        section: "dependencies",
+      unmanagedCapabilities: {
+        react: "react",
       },
-    ];
+    };
+    const expected = {
+      changes: [
+        {
+          name: "react",
+          from: manifest.dependencies["react"],
+          to: profile.dependencies["react"],
+          section: "dependencies",
+        },
+      ],
+      unmanagedDependencies: [["react", "react"]],
+    };
 
-    expect(inspect(manifest, profile, false)).toEqual(expectedChanges);
+    expect(inspect(manifest, profile, false)).toEqual(expected);
   });
 });
 

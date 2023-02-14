@@ -41,15 +41,11 @@ export type ErrorCode =
 
 export type Command = (manifest: string) => ErrorCode;
 
-export type ManifestProfile = Pick<
-  Required<PackageManifest>,
-  "dependencies" | "devDependencies" | "peerDependencies"
->;
-
 export type MetaPackage = {
   name: "#meta";
   capabilities: Capability[];
   devOnly?: boolean;
+  [key: symbol]: string;
 };
 
 export type Package = {
@@ -57,6 +53,7 @@ export type Package = {
   version: string;
   capabilities?: Capability[];
   devOnly?: boolean;
+  [key: symbol]: string;
 };
 
 export type Profile = Readonly<Record<Capability, MetaPackage | Package>>;
@@ -65,6 +62,13 @@ export type Preset = Record<string, Profile>;
 
 export type ExcludedPackage = Package & {
   reason: string;
+};
+
+export type ManifestProfile = Pick<
+  Required<PackageManifest>,
+  "dependencies" | "devDependencies" | "peerDependencies"
+> & {
+  unmanagedCapabilities: Record<string, string | undefined>;
 };
 
 export type LegacyCheckConfig = {

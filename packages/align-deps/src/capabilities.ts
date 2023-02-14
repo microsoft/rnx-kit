@@ -9,6 +9,8 @@ type ResolvedDependencies = {
   unresolvedCapabilities: Record<string, string[]>;
 };
 
+const ProvidesMeta = Symbol("provides");
+
 /**
  * Returns the list of capabilities used in the specified package manifest.
  * @param packageManifest The package manifest to scan for dependencies
@@ -44,6 +46,12 @@ export function capabilitiesFor(
   return Array.from(foundCapabilities).sort();
 }
 
+export function capabilityProvidedBy(
+  pkg: MetaPackage | Package
+): string | undefined {
+  return pkg[ProvidesMeta];
+}
+
 export function isMetaPackage(pkg: MetaPackage | Package): pkg is MetaPackage {
   return pkg.name === "#meta" && Array.isArray(pkg.capabilities);
 }
@@ -73,6 +81,8 @@ function resolveCapability(
     }
     return;
   }
+
+  pkg[ProvidesMeta] = capability;
 
   pkg.capabilities?.forEach((capability) =>
     resolveCapability(

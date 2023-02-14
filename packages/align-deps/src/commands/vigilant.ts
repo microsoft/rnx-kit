@@ -1,10 +1,11 @@
 import type { Capability } from "@rnx-kit/config";
-import { error } from "@rnx-kit/console";
+import { error, info, warn } from "@rnx-kit/console";
 import { keysOf } from "@rnx-kit/tools-language/properties";
 import type { PackageManifest } from "@rnx-kit/tools-node/package";
 import * as path from "path";
 import semverSubset from "semver/ranges/subset";
 import {
+  capabilityProvidedBy,
   resolveCapabilities,
   resolveCapabilitiesUnchecked,
 } from "../capabilities";
@@ -16,14 +17,18 @@ import type {
   ErrorCode,
   ManifestProfile,
   Options,
+  Package,
   Preset,
 } from "../types";
 
-type Change = {
-  name: string;
-  from: string;
-  to: string;
-  section: string;
+type Report = {
+  changes: Array<{
+    name: string;
+    from: string;
+    to: string;
+    section: string;
+  }>;
+  unmanagedDependencies: [string, string][];
 };
 
 const allSections = [
@@ -65,7 +70,7 @@ function resolveUnmanagedCapabilities(
   allCapabilities: Capability[],
   preset: Preset,
   managedDependencies: string[]
-) {
+): Record<string, Package[]> {
   const dependencies = resolveCapabilities(
     manifestPath,
     allCapabilities,
@@ -125,14 +130,16 @@ export function buildManifestProfile(
 
   // Use "development" type so we can check for `devOnly` packages under
   // `dependencies` as well.
+  const unmanagedCapabilities = resolveUnmanagedCapabilities(
+    manifestPath,
+    allCapabilities,
+    targetPreset,
+    managedDependencies
+  );
+
   const directDependencies = updateDependencies(
     {},
-    resolveUnmanagedCapabilities(
-      manifestPath,
-      allCapabilities,
-      targetPreset,
-      managedDependencies
-    ),
+    unmanagedCapabilities,
     "development"
   );
 
@@ -151,6 +158,12 @@ export function buildManifestProfile(
     dependencies: directDependencies,
     peerDependencies,
     devDependencies: directDependencies,
+    unmanagedCapabilities: Object.fromEntries(
+      Object.values(unmanagedCapabilities).map((packages) => {
+        const pkg = packages[0];
+        return [pkg.name, capabilityProvidedBy(pkg)];
+      })
+    ),
   };
 }
 
@@ -192,8 +205,12 @@ export function inspect(
   manifest: PackageManifest,
   profile: ManifestProfile,
   write: boolean
-): Change[] {
-  const changes: Change[] = [];
+): Report {
+  const changes: Report["changes"] = [];
+  const capabilities: Record<string, string> = {};
+
+  const { unmanagedCapabilities } = profile;
+
   allSections.forEach((section) => {
     const dependencies = manifest[section];
     if (!dependencies) {
@@ -213,10 +230,15 @@ export function inspect(
             dependencies[name] = to;
           }
         }
+
+        const capability = unmanagedCapabilities[name];
+        if (capability) {
+          capabilities[name] = capability;
+        }
       }
     });
   });
-  return changes;
+  return { changes, unmanagedDependencies: Object.entries(capabilities) };
 }
 
 /**
@@ -242,16 +264,35 @@ export function checkPackageManifestUnconfigured(
 
   const manifestProfile = buildManifestProfileCached(manifestPath, config);
   const { manifest } = config;
-  const changes = inspect(manifest, manifestProfile, write);
+  const { changes, unmanagedDependencies } = inspect(
+    manifest,
+    manifestProfile,
+    write
+  );
+
+  if (
+    config.alignDeps.capabilities.length > 0 &&
+    unmanagedDependencies.length > 0
+  ) {
+    const dependencies = unmanagedDependencies
+      .map(([name, capability]) => `\t${name} is managed by '${capability}'`)
+      .join("\n");
+    warn(
+      `A number of dependencies were found that can be managed by adding the following capabilities:\n${dependencies}`
+    );
+    info(
+      "Note that capabilities will never be added automatically, even with '--write'."
+    );
+  }
+
   if (changes.length > 0) {
     if (write) {
       modifyManifest(manifestPath, manifest);
     } else {
       const violations = changes
-        .map(
-          ({ name, from, to, section }) =>
-            `\t${name} "${from}" should be "${to}" (${section})`
-        )
+        .map(({ name, from, to, section }) => {
+          return `\t${name} "${from}" should be "${to}" (in ${section})`;
+        })
         .join("\n");
       error(
         `Found ${changes.length} violation(s) in '${manifestPath}':\n${violations}`
