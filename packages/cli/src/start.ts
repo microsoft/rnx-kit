@@ -260,6 +260,10 @@ export async function rnxStart(
             terminal.log(chalk.green("Reloading app..."));
             messageSocketEndpoint.broadcast("reload", undefined);
             break;
+
+          case "return":
+            terminal.log("");
+            break;
         }
       }
     });
