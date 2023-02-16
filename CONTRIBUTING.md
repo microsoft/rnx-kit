@@ -121,7 +121,7 @@ yarn new-package <package-name>
 
 To generate a sample project for you to use; this is based on
 `packages/template`. You can pass the extra flag `--experimental` to send the
-package in the `incubator` folder - files will be tweaked as necessary.
+package in the `incubator` folder — files will be tweaked as necessary.
 
 ## Change Logs
 
@@ -138,6 +138,9 @@ which collects and records information about your change.
 Follow the prompts and describe the changes you are making to each package. This
 information is written in files under `/.changeset`. Our CI loop uses these
 files to bump package versions and update package change logs.
+
+> Note that you only need one change log entry per feature/fix. You don't need
+> to create new entries if you're addressing PR feedback.
 
 ## Releases
 
