@@ -100,6 +100,20 @@ export async function rnxStart(
     cliOptions.customLogReporterPath
   );
 
+  const printHelp = () => {
+    const dim = chalk.dim;
+    const press = dim(" › Press ");
+    [
+      ["r", "reload the app"],
+      ["d", "open developer menu"],
+      ["a", "show bundler address QR code"],
+      ["h", "show this help message"],
+      ["ctrl-c", "quit"],
+    ].forEach(([key, description]) => {
+      terminal.log(press + key + dim(` to ${description}.`));
+    });
+  };
+
   // create a reporter function, to be bound to the Metro configuration.
   // which writes to the Metro terminal and
   // also notifies the `reportEvent` delegate.
@@ -111,16 +125,7 @@ export async function rnxStart(
         reportEventDelegate(event);
       }
       if (interactive && event.type === "dep_graph_loading") {
-        const dim = chalk.dim;
-        const press = dim(" › Press ");
-        [
-          ["r", "reload the app"],
-          ["d", "open developer menu"],
-          ["a", "show bundler address QR code"],
-          ["ctrl-c", "quit"],
-        ].forEach(([key, description]) => {
-          terminal.log(press + key + dim(` to ${description}.`));
-        });
+        printHelp();
       }
     },
   };
@@ -255,9 +260,17 @@ export async function rnxStart(
             messageSocketEndpoint.broadcast("devMenu", undefined);
             break;
 
+          case "h":
+            printHelp();
+            break;
+
           case "r":
             terminal.log(chalk.green("Reloading app..."));
             messageSocketEndpoint.broadcast("reload", undefined);
+            break;
+
+          case "return":
+            terminal.log("");
             break;
         }
       }
