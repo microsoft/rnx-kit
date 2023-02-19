@@ -1,0 +1,12 @@
+{
+  "configs": [
+    {
+      "bundleIdentifier": "60e9b142-63fb-4d27-95f3-a4f5a5f1087a",
+      "sourcemap": "./common.android.bundle.map"
+    },
+    {
+      "bundleIdentifier": "7a78fde8-7c5c-445d-945e-9354649f9562",
+      "sourcemap": "./org.android.bundle.map"
+    }
+  ]
+}
