@@ -136,11 +136,11 @@ jobs:
         working-directory: docsite
   label:
     name: "Label"
-    if: ${{ github.event.pull_request.head.repo.full_name == github.repository }}
-    runs-on: ubuntu-22.04
     permissions:
       contents: read
       pull-requests: write
+    if: ${{ github.event.pull_request.head.repo.full_name == github.repository }}
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/labeler@v4
         with:

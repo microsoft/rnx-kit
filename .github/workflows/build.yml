@@ -5,6 +5,9 @@ on:
 jobs:
   build_and_publish:
     name: "Build and publish"
+    permissions:
+      contents: write # create releases (changesets/action), deploy to GitHub Pages (peaceiris/actions-gh-pages)
+      pull-requests: write # create publish PRs (changesets/action)
     if: ${{ github.repository == 'microsoft/rnx-kit' }}
     runs-on: ubuntu-22.04
     steps:
