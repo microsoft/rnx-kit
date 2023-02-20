@@ -7254,10 +7254,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"flow-parser@npm:0.*, flow-parser@npm:^0.197.0":
-  version: 0.197.0
-  resolution: "flow-parser@npm:0.197.0"
-  checksum: d1436477d089c97d73421280da0777a6c1126646810912abc38844759cbf2f9a7e4481888b4c34921e593d21f0c337adf6ea1f752dedab3361d5f60054febec5
+"flow-parser@npm:0.*, flow-parser@npm:^0.200.0":
+  version: 0.200.0
+  resolution: "flow-parser@npm:0.200.0"
+  checksum: 0024755e08c5e4fb6ac7f081036ac5a92f6e4275f5cdfce0e041ebbba7b4e222a7c24d0ea72667c79294aea9a5c3a902fe2a601400bbda32e6a507f438ed0356
   languageName: node
   linkType: hard
 
@@ -7269,16 +7269,16 @@ __metadata:
   linkType: hard
 
 "flow-remove-types@npm:^2.197.0":
-  version: 2.197.0
-  resolution: "flow-remove-types@npm:2.197.0"
+  version: 2.200.0
+  resolution: "flow-remove-types@npm:2.200.0"
   dependencies:
-    flow-parser: ^0.197.0
+    flow-parser: ^0.200.0
     pirates: ^3.0.2
     vlq: ^0.2.1
   bin:
     flow-node: flow-node
     flow-remove-types: flow-remove-types
-  checksum: 52a3ff245b22aabbd556de778f29e2263dbe1944edafce9634c8bde60cc4fa9d0fb8fbb0e2cf1e5a052dfbfc07c85f5a75e85bd2201e869a734a0c5679a2e056
+  checksum: c16d598b9928ac9031d54eaf5e68e4e6b8ca99a5713c0e56e56ae76b75badbe754c04f6ec6397c2e1f7c7792250be04dec00b56f643fe5e0542a396d5af2df6a
   languageName: node
   linkType: hard
 
