@@ -1,5 +1,13 @@
 # Change Log - @rnx-kit/cli
 
+## 0.16.3
+
+### Patch Changes
+
+- 172a7b7f: Add help support and enter for newlines to rnx-start
+- Updated dependencies [d4059e0b]
+  - @rnx-kit/align-deps@2.1.4
+
 ## 0.16.2
 
 ### Patch Changes
