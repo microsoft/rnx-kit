@@ -11451,8 +11451,8 @@ __metadata:
   linkType: hard
 
 "react-native-test-app@npm:^2.0.2":
-  version: 2.3.4
-  resolution: "react-native-test-app@npm:2.3.4"
+  version: 2.3.9
+  resolution: "react-native-test-app@npm:2.3.9"
   dependencies:
     ajv: ^8.0.0
     chalk: ^4.1.0
@@ -11462,7 +11462,7 @@ __metadata:
     uuid: ^8.3.2
     yargs: ^16.0.0
   peerDependencies:
-    "@expo/config-plugins": ^5.0.0
+    "@expo/config-plugins": ">=5.0"
     "@react-native-community/cli": ">=5.0"
     "@react-native-community/cli-platform-android": ">=5.0"
     "@react-native-community/cli-platform-ios": ">=5.0"
@@ -11491,7 +11491,7 @@ __metadata:
     init: scripts/init.js
     init-test-app: scripts/init.js
     install-windows-test-app: windows/test-app.js
-  checksum: c8057dc4fcc3c12ae060aaf464e81777565c4bd0b1fe3ed66d15c9e9b22bdd1306c92f2289a0a2c844a6e9c560f93a3ee4a38453de2230134b5aa7525ea99717
+  checksum: f8663d5c49f761ef0669ecad7a4799c0af80d647a89c29d64dac97b078b24e941903c37893c8722654164d7cf1abbd39fcfa7c3d3485b7a76ddad9f4bc6c6c5d
   languageName: node
   linkType: hard
 
