@@ -20,6 +20,15 @@ function findWorkspaceRoot() {
 
 /**
  * @param {string} command
+ * @param {string[]} args
+ * @returns {boolean}
+ */
+function isRunningNx(command, args) {
+  return command.startsWith("yarn") && args[0] === "nx";
+}
+
+/**
+ * @param {string} command
  * @param {...string} args
  * @returns {Promise<void>}
  */
@@ -27,10 +36,8 @@ export function execute(command, ...args) {
   return new Promise((resolve, reject) => {
     /** @type {import("node:child_process").SpawnOptions} */
     const options = {
-      cwd:
-        command.startsWith("yarn") && args[0] === "nx"
-          ? findWorkspaceRoot()
-          : process.cwd(),
+      // Nx is only installed at workspace root — adjust `cwd` accordingly.
+      cwd: isRunningNx(command, args) ? findWorkspaceRoot() : process.cwd(),
       stdio: "inherit",
     };
     spawn(command, args, options).on("close", (code) => {
