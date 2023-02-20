@@ -12,14 +12,6 @@ type Resolution = {
   capabilities: Capability[];
 };
 
-function ensurePreset(preset: Preset, requirements: string[]): void {
-  if (Object.keys(preset).length === 0) {
-    throw new Error(
-      `No profiles could satisfy requirements: ${requirements.join(", ")}`
-    );
-  }
-}
-
 function loadPreset(
   preset: string,
   projectRoot: string,
@@ -30,6 +22,14 @@ function loadPreset(
       return reactNativePreset;
     default:
       return require(resolve(preset, { paths: [projectRoot] }));
+  }
+}
+
+export function ensurePreset(preset: Preset, requirements: string[]): void {
+  if (Object.keys(preset).length === 0) {
+    throw new Error(
+      `No profiles could satisfy requirements: ${requirements.join(", ")}`
+    );
   }
 }
 
