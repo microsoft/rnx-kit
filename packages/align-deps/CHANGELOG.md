@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/align-deps
 
+## 2.1.4
+
+### Patch Changes
+
+- d4059e0b: Ensure non-empty preset when in vigilant mode
+
 ## 2.1.3
 
 ### Patch Changes

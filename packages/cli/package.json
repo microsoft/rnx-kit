@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/cli",
-  "version": "0.16.2",
+  "version": "0.16.3",
   "description": "Command-line interface for working with kit packages in your repo",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/cli",
   "license": "MIT",
@@ -19,7 +19,7 @@
     "test": "rnx-kit-scripts test"
   },
   "dependencies": {
-    "@rnx-kit/align-deps": "^2.0.1",
+    "@rnx-kit/align-deps": "^2.1.4",
     "@rnx-kit/config": "^0.6.0",
     "@rnx-kit/console": "^1.0.11",
     "@rnx-kit/metro-plugin-cyclic-dependencies-detector": "^1.1.0",
