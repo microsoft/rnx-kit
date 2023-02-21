@@ -4,24 +4,27 @@ import { error } from "@rnx-kit/console";
 import type { IConfigFile } from "./types";
 
 /**
- * Takes a buffer, joins it with newline and symbolicates it with the provided sourcemap
+ * Takes a buffer, joins it with a newline and symbolicates it with the provided sourcemap
  *
  * @param buffer    a string array representing the buffer
  * @param sourcemap sourcemap that must be used to symbolicate the passed buffer
  */
 export const symbolicateBuffer = (buffer: string[], sourcemap: string) => {
   if (buffer.length > 0) {
-    // Write errorLine to a temp file
-    fse.writeFileSync("./temp.txt", buffer.join("\n"));
+    // Write buffer to a temp file
+    fse.writeFileSync("./temp.rnbuffertrace", buffer.join("\n"));
 
-    // Symbolicate error line
-    ChildProcess.execSync(`npx metro-symbolicate ${sourcemap} < ./temp.txt`, {
-      stdio: "inherit",
-    });
+    // Symbolicate buffer
+    ChildProcess.execSync(
+      `npx metro-symbolicate ${sourcemap} < ./temp.rnbuffertrace`,
+      {
+        stdio: "inherit",
+      }
+    );
     console.log("\n");
 
     // Delete temp file
-    fse.removeSync("./temp.txt");
+    fse.removeSync("./temp.rnbuffertrace");
   }
 };
 
