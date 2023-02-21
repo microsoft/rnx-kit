@@ -1,6 +1,5 @@
-const fakeMethod = (message: string) => {
-  console.log(message);
-  return message;
-};
+#!/usr/bin/env node
 
-export default fakeMethod;
+import { symbolicateStackTraces } from "./symbolicate_stack_traces";
+
+symbolicateStackTraces();

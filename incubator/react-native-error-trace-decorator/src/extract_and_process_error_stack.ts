@@ -1,15 +1,6 @@
-import { info } from "@rnx-kit/console";
 import * as fse from "fs-extra";
-import * as ChildProcess from "child_process";
-
-interface IBundleInterface {
-  bundleIdentifier: string;
-  sourcemap: string;
-}
-
-interface IConfigFile {
-  configs: IBundleInterface[];
-}
+import type { IBundleInterface, IConfigFile } from "./types";
+import { isConfigFileValid, symbolicateBuffer } from "./utils";
 
 /**
  *  Extracts and symbolicates error stack traces.
@@ -27,66 +18,72 @@ export const extractAndSymbolicateErrorStack = (
   ) as IConfigFile;
 
   // Check validity of the passed config file and proceed
-  if (checkIfConfigFileIsValidAndPopulateMap(configFile)) {
+  if (isConfigFileValid(configFile)) {
     // Read error file and split by newline
     const errorFile = fse.readFileSync(errorFilePath, "utf8").split("\n");
 
+    /**
+     * Keeps a running buffer of stack trace lines based on bundleIdentifiers and batches symbolication
+     * In our experience, this works much faster than symbolicating line by line
+     *
+     * 1. Prints lines as is when there are no matches.
+     * 2. Keeps a running buffer of lines with same identifiers.
+     * 3. Whenever there is a identifier mismatch, flushes buffer and creates a new buffer
+     */
+    let buffer: string[] = [];
+    let bufferConfig: IBundleInterface | undefined;
+
     errorFile.forEach((errorLine: string) => {
-      configFile.configs.every((config: IBundleInterface, index: number) => {
-        if (errorLine.includes(config.bundleIdentifier)) {
-          // Write errorLine to a temp file
-          fse.writeFileSync("./temp.txt", errorLine);
+      const configForCurrentLine = getIdentifierForLine(
+        errorLine,
+        configFile.configs
+      );
 
-          // Symbolicate error line
-          ChildProcess.execSync(
-            `npx metro-symbolicate ${config.sourcemap} < ./temp.txt`,
-            { stdio: "inherit" }
-          );
-
-          // Print a new line after each line
-          console.log("\n");
-
-          // Delete temp file
-          fse.removeSync("./temp.txt");
-
-          // Break loop
-          return false;
+      // Case where no identifier matches the errorLine
+      if (!configForCurrentLine) {
+        // Print buffer if buffer exists
+        if (buffer.length > 0 && bufferConfig) {
+          symbolicateBuffer(buffer, bufferConfig.sourcemap);
+          // Flush buffer
+          buffer = [];
+          bufferConfig = undefined;
         }
+        // Print errorLine as it is
+        console.log(errorLine);
+        return;
+      }
 
-        // If no bundleIdentifier matches errorLine, print the error line as is
-        if (index === configFile.configs.length - 1) {
-          console.log(errorLine);
-        }
-        return true;
-      });
+      // If currentLine matches ongoing buffer's bundle, add it to buffer
+      if (configForCurrentLine === bufferConfig) {
+        buffer.push(errorLine);
+        return;
+      }
+
+      // If currentLine does not match buffer's bundle, flush buffer and create a new buffer
+      if (buffer.length > 0 && bufferConfig) {
+        // Print buffer
+        symbolicateBuffer(buffer, bufferConfig.sourcemap);
+      }
+      // Create new buffer
+      buffer = [errorLine];
+      bufferConfig = configForCurrentLine;
     });
+
+    // Flush buffer if there is any remaining data
+    if (buffer.length > 0 && bufferConfig !== undefined) {
+      symbolicateBuffer(buffer, bufferConfig.sourcemap);
+    }
   }
 };
 
-const checkIfConfigFileIsValidAndPopulateMap = (
-  configFile: IConfigFile
-): boolean => {
-  if (configFile.configs) {
-    // Parse through all configs and check if sourcemap files exist
-    for (
-      let bundleIndex = 0;
-      bundleIndex < configFile.configs.length;
-      bundleIndex++
-    ) {
-      const currentConfig = configFile.configs[bundleIndex];
-      if (
-        !currentConfig ||
-        !currentConfig.sourcemap ||
-        !fse.existsSync(currentConfig.sourcemap) ||
-        !currentConfig.bundleIdentifier
-      ) {
-        info(
-          `Config: { bundleIdentifier: ${currentConfig.bundleIdentifier}, sourcemap: ${currentConfig.sourcemap} } is not proper`
-        );
-        return false;
-      }
+const getIdentifierForLine = (
+  errorLine: string,
+  configs: IBundleInterface[]
+) => {
+  for (let configIndex = 0; configIndex < configs.length; configIndex++) {
+    if (errorLine.includes(configs[configIndex].bundleIdentifier)) {
+      return configs[configIndex];
     }
-    return true;
   }
-  return false;
+  return;
 };

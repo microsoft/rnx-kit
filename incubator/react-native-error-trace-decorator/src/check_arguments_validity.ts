@@ -1,12 +1,7 @@
 import type * as minimist from "minimist";
 import { error, info } from "@rnx-kit/console";
 import * as fse from "fs-extra";
-
-export type IArgumentsCapability = {
-  help: string;
-  errorFile: string;
-  configFile: string;
-};
+import type { IArgumentsCapability } from "./types";
 
 const capabilities: IArgumentsCapability = {
   help: "displays the help",
@@ -14,9 +9,19 @@ const capabilities: IArgumentsCapability = {
   configFile: "pass the path to the config file",
 };
 
-const JSONfileFormat = `{\n "configs": [\n{"bundleIdentifier": "Identifier for bundle 1 in the error stack", "sourcemapLocation": "Location of the sourcemap for the bundle 1"}, and so on..\n]\n}`;
-
-const configFilePattern = `Please create a JSON config file in the following format:\n${JSONfileFormat}`;
+const exampleConfigFile = {
+  configs: [
+    {
+      bundleIdentifier: "Identifier for Bundle 1",
+      sourcemap: "path/to/sourcemap/for/bundle1",
+    },
+    {
+      bundleIdentifier: "Identifier for Bundle 2",
+      sourcemap: "path/to/sourcemap/for/bundle2",
+    },
+  ],
+};
+const configFilePattern = `Please create a JSON config file in the following format:\n${exampleConfigFile}`;
 
 export const checkArgumentValidity = (args: minimist.ParsedArgs): boolean => {
   // If help flag is passed, print help
@@ -34,7 +39,7 @@ export const checkArgumentValidity = (args: minimist.ParsedArgs): boolean => {
     return false;
   }
 
-  // If config file does not exist. Print out the appropriate error message
+  // If config file does not exist, print out the appropriate error message
   if (!fse.existsSync(args.configFile)) {
     error(
       `Config file does not exist in ${args.configFile}. Please pass a valid path`
