@@ -2947,7 +2947,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rnx-kit/align-deps@*, @rnx-kit/align-deps@^2.0.1, @rnx-kit/align-deps@workspace:packages/align-deps":
+"@rnx-kit/align-deps@*, @rnx-kit/align-deps@^2.1.4, @rnx-kit/align-deps@workspace:packages/align-deps":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/align-deps@workspace:packages/align-deps"
   dependencies:
@@ -3084,7 +3084,7 @@ __metadata:
   resolution: "@rnx-kit/cli@workspace:packages/cli"
   dependencies:
     "@react-native-community/cli-types": ^6.0.0
-    "@rnx-kit/align-deps": ^2.0.1
+    "@rnx-kit/align-deps": ^2.1.4
     "@rnx-kit/config": ^0.6.0
     "@rnx-kit/console": ^1.0.11
     "@rnx-kit/metro-plugin-cyclic-dependencies-detector": ^1.1.0
