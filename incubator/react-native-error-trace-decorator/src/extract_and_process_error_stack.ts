@@ -14,7 +14,7 @@ export const extractAndSymbolicateErrorStack = (
 ) => {
   // Read config file as an object
   const configFile = JSON.parse(
-    fse.readFileSync(configFilePath, "utf-8")
+    fse.readFileSync(configFilePath, "utf8")
   ) as IConfigFile;
 
   // Check validity of the passed config file and proceed

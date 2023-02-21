@@ -33,7 +33,7 @@ describe("Testing extractAndSymbolicateErrorStack", () => {
     const errorFilePath = "errorFilePath";
     const configFilePath = "configFilePath";
     extractAndSymbolicateErrorStack(errorFilePath, configFilePath);
-    expect(readFileSyncSpy).toHaveBeenCalledWith(configFilePath, "utf-8");
+    expect(readFileSyncSpy).toHaveBeenCalledWith(configFilePath, "utf8");
   });
 
   it("should not do anything when config file is not valid", () => {
