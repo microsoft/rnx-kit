@@ -113,3 +113,9 @@ If the tool is added as a dependency in your package, run the following:
 ```sh
 yarn react-native-error-trace-decorator --errorFile <path_to_the_error_file> --configFile <path_to_the_config_file>
 ```
+
+Alternatively, this tool can be directly run using npx,
+
+```sh
+npx react-native-error-trace-decorator --errorFile <path_to_the_error_file> --configFile <path_to_the_config_file>
+```
