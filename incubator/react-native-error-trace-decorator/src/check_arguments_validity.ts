@@ -21,7 +21,9 @@ const exampleConfigFile = {
     },
   ],
 };
-const configFilePattern = `Please create a JSON config file in the following format:\n${exampleConfigFile}`;
+const configFilePattern = `Please create a JSON config file in the following format:\n${JSON.stringify(
+  exampleConfigFile
+)}`;
 
 export const checkArgumentValidity = (args: minimist.ParsedArgs): boolean => {
   // If help flag is passed, print help
