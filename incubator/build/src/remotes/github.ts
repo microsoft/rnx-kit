@@ -9,7 +9,7 @@ import {
 import * as fs from "node:fs/promises";
 import * as path from "node:path";
 import * as readline from "node:readline";
-import ora from "ora";
+import type ora from "ora";
 import { idle, once, withRetry } from "../async";
 import {
   BUILD_ID,
