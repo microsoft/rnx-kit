@@ -30,7 +30,7 @@
     "rnx-align-deps": "yarn build-scope align-deps && scripts/rnx-align-deps.mjs",
     "test": "nx run-many --target test --output-style stream --all",
     "update-readme": "nx run-many --target update-readme --all",
-    "version:changesets": "changeset version"
+    "version:changesets": "changeset version && yarn install --mode update-lockfile"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",
