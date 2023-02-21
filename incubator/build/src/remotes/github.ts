@@ -150,6 +150,11 @@ async function watchWorkflowRun(
         const result = await octokit().rest.actions.listJobsForWorkflowRun(
           params
         );
+        if (result.data.jobs.length === 0) {
+          // Still starting up
+          continue;
+        }
+
         const activeJobs = result.data.jobs.filter(
           (job) => job && job.conclusion !== "skipped"
         );

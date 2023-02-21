@@ -135,6 +135,24 @@ module.exports = (config: Partial<Config>): DistributionPlugin => {
 };
 ```
 
+## GitHub Actions
+
+Allow the following actions and reusable workflows:
+
+```
+actions/cache@*,
+actions/checkout@*,
+actions/download-artifact@*,
+actions/setup-java@*,
+actions/setup-node@*,
+actions/upload-artifact@*,
+darenm/Setup-VSTest@*,
+gradle/gradle-build-action@*,
+microsoft/react-native-test-app/.github/actions/*,
+microsoft/setup-msbuild@*,
+ruby/setup-ruby@*,
+```
+
 ## Assumptions
 
 ### Folder Structure
