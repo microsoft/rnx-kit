@@ -14,11 +14,25 @@ import type { BuildParams, DeviceType, JSObject } from "../types";
 import { open } from "./macos";
 
 type Device = {
+  simulator: boolean;
+  operatingSystemVersion: string;
+  interface?: string;
+  available: boolean;
+  platform:
+    | "com.apple.platform.appletvos"
+    | "com.apple.platform.appletvsimulator"
+    | "com.apple.platform.driverkit"
+    | "com.apple.platform.iphoneos"
+    | "com.apple.platform.iphonesimulator"
+    | "com.apple.platform.macosx"
+    | "com.apple.platform.watchos"
+    | "com.apple.platform.watchsimulator";
+  modelCode: string;
+  identifier: string;
+  architecture: "arm64" | "arm64e";
+  modelUTI: string;
+  modelName: string;
   name: string;
-  type: "device" | "simulator" | "unknown";
-  osVersion: string;
-  accessories?: Device[];
-  udid: string;
 };
 
 type Simulator = {
@@ -60,92 +74,12 @@ function getDeveloperDirectory(): string | undefined {
 }
 
 async function getDevices(): Promise<Device[]> {
-  const { stdout, stderr, status } = await xcrun("xctrace", "list", "devices");
+  const { stdout, status } = await xcrun("xcdevice", "list");
   if (status !== 0) {
     return [];
   }
 
-  const devices: Device[] = [];
-
-  /**
-   * As of Xcode 13.4.1, the output may look like this:
-   *
-   * % xcrun xctrace list devices
-   * == Devices ==
-   * Arnold’s MacBook Pro 2019 (00000000-0000-0000-0000-000000000000)
-   * Arnold’s iPhone (15.5) (00000000-0000000000000000)
-   *
-   * == Simulators ==
-   * Apple TV Simulator (15.5) (00000000-0000-0000-0000-000000000000)
-   * Apple TV 4K (2nd generation) Simulator (15.5) (00000000-0000-0000-0000-000000000000)
-   * Apple TV 4K (at 1080p) (2nd generation) Simulator (15.5) (00000000-0000-0000-0000-000000000000)
-   * iPad (9th generation) Simulator (15.5) (00000000-0000-0000-0000-000000000000)
-   * iPad Air (4th generation) Simulator (15.5) (00000000-0000-0000-0000-000000000000)
-   * iPad Air (5th generation) Simulator (15.5) (00000000-0000-0000-0000-000000000000)
-   * iPad Pro (11-inch) (3rd generation) Simulator (15.5) (00000000-0000-0000-0000-000000000000)
-   * iPad Pro (12.9-inch) (5th generation) Simulator (15.5) (00000000-0000-0000-0000-000000000000)
-   * iPad Pro (9.7-inch) Simulator (15.5) (00000000-0000-0000-0000-000000000000)
-   * iPad mini (6th generation) Simulator (15.5) (00000000-0000-0000-0000-000000000000)
-   * iPhone 11 Simulator (15.5) (00000000-0000-0000-0000-000000000000)
-   * iPhone 11 Pro Simulator (15.5) (00000000-0000-0000-0000-000000000000)
-   * iPhone 11 Pro Max Simulator (15.5) (00000000-0000-0000-0000-000000000000)
-   * iPhone 12 Simulator (15.5) (00000000-0000-0000-0000-000000000000)
-   * iPhone 12 Pro Simulator (15.5) (00000000-0000-0000-0000-000000000000)
-   * iPhone 12 Pro Simulator (15.5) + Apple Watch Series 5 - 40mm (8.5) (00000000-0000-0000-0000-000000000000)
-   * iPhone 12 Pro Max Simulator (15.5) (00000000-0000-0000-0000-000000000000)
-   * iPhone 12 Pro Max Simulator (15.5) + Apple Watch Series 5 - 44mm (8.5) (00000000-0000-0000-0000-000000000000)
-   * iPhone 12 mini Simulator (15.5) (00000000-0000-0000-0000-000000000000)
-   * iPhone 13 Simulator (15.5) (00000000-0000-0000-0000-000000000000)
-   * iPhone 13 Simulator (15.5) + Apple Watch Series 7 - 45mm (8.5) (00000000-0000-0000-0000-000000000000)
-   * iPhone 13 Pro Simulator (15.5) (00000000-0000-0000-0000-000000000000)
-   * iPhone 13 Pro Simulator (15.5) + Apple Watch Series 6 - 40mm (8.5) (00000000-0000-0000-0000-000000000000)
-   * iPhone 13 Pro Max Simulator (15.5) (00000000-0000-0000-0000-000000000000)
-   * iPhone 13 Pro Max Simulator (15.5) + Apple Watch Series 6 - 44mm (8.5) (00000000-0000-0000-0000-000000000000)
-   * iPhone 13 mini Simulator (15.5) (00000000-0000-0000-0000-000000000000)
-   * iPhone 13 mini Simulator (15.5) + Apple Watch Series 7 - 41mm (8.5) (00000000-0000-0000-0000-000000000000)
-   * iPhone 8 Simulator (15.5) (00000000-0000-0000-0000-000000000000)
-   * iPhone 8 Plus Simulator (15.5) (00000000-0000-0000-0000-000000000000)
-   * iPhone SE (2nd generation) Simulator (15.5) (00000000-0000-0000-0000-000000000000)
-   * iPhone SE (3rd generation) Simulator (15.5) (00000000-0000-0000-0000-000000000000)
-   * iPod touch (7th generation) Simulator (15.5) (00000000-0000-0000-0000-000000000000)
-   *
-   * Note: Older versions of `xtrace` output to stderr instead of stdout.
-   */
-  (stdout || stderr).split("\n").reduce<Device["type"]>((type, line) => {
-    if (line === "== Devices ==") {
-      return "device";
-    } else if (line === "== Simulators ==") {
-      return "simulator";
-    }
-
-    const match = line.match(
-      /(.*?)(?:\sSimulator)?\s\(([.\d]+)\)(?:\s\+\s(.*?)\s\(([.\d]+)\))?\s\(([0-9A-Fa-f]{8}-[0-9A-Fa-f]{16}|[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12})\)/
-    );
-    if (match) {
-      const [, name, osVersion, accessoryName, accessoryVersion, udid] = match;
-      devices.push({
-        name,
-        type,
-        osVersion,
-        ...(accessoryName
-          ? {
-              accessories: [
-                {
-                  name: accessoryName,
-                  type,
-                  osVersion: accessoryVersion,
-                  udid,
-                },
-              ],
-            }
-          : undefined),
-        udid,
-      });
-    }
-    return type;
-  }, "unknown");
-
-  return devices;
+  return JSON.parse(stdout);
 }
 
 async function parsePlist(app: string): Promise<Error | JSObject> {
@@ -183,22 +117,21 @@ async function bootSimulator({ udid }: Simulator): Promise<Error | null> {
 }
 
 async function install(device: Device, app: string): Promise<Error | null> {
-  const { type, udid } = device;
-  const install =
-    type === "device"
-      ? () => iosDeploy("--id", udid, "--bundle", app)
-      : () => xcrun("simctl", "install", udid, app);
+  const { simulator, identifier } = device;
+  const install = simulator
+    ? () => xcrun("simctl", "install", identifier, app)
+    : () => iosDeploy("--id", identifier, "--bundle", app);
 
   const { stderr, status } = await install();
   return status === 0 ? null : new Error(stderr);
 }
 
 async function launch(device: Device, app: string): Promise<Error | null> {
-  const { type, udid } = device;
-  if (type === "device") {
+  const { simulator, identifier } = device;
+  if (!simulator) {
     const launch = iosDeploy(
       "--id",
-      udid,
+      identifier,
       "--bundle",
       app,
       "--justlaunch",
@@ -220,7 +153,7 @@ async function launch(device: Device, app: string): Promise<Error | null> {
       return new Error(`Invalid bundle identifier: ${CFBundleIdentifier}`);
     }
 
-    const launch = xcrun("simctl", "launch", udid, CFBundleIdentifier);
+    const launch = xcrun("simctl", "launch", identifier, CFBundleIdentifier);
     const { stderr, status } = await launch;
     if (status !== 0) {
       return new Error(stderr);
@@ -239,8 +172,9 @@ async function selectDevice(
 
   if (deviceType === "device") {
     const search: (device: Device) => boolean = deviceName
-      ? ({ name, type }) => name === deviceName && type === "device"
-      : (device) => device.type === "device";
+      ? ({ simulator, name }) => !simulator && name === deviceName
+      : ({ simulator, platform }) =>
+          !simulator && platform === "com.apple.platform.iphoneos";
     const physicalDevice = devices.find(search);
     if (!physicalDevice) {
       // Device detection can sometimes be flaky. Prompt the user to make sure
@@ -260,22 +194,16 @@ async function selectDevice(
       return selectDevice(deviceName, deviceType, spinner);
     }
 
-    const { name, osVersion } = physicalDevice;
-    spinner.info(`Found ${name} (${osVersion})`);
+    const { operatingSystemVersion, name } = physicalDevice;
+    spinner.info(`Found ${name} (${operatingSystemVersion})`);
     return physicalDevice;
   }
 
   const device = deviceName
-    ? devices.find(
-        ({ name, type, accessories }) =>
-          name === deviceName && type === "simulator" && !accessories
-      )
-    : devices
-        .reverse()
-        .find(
-          ({ name, type, accessories }) =>
-            type === "simulator" && !accessories && /^iPhone \d\d$/.test(name)
-        );
+    ? devices.find(({ simulator, name }) => simulator && name === deviceName)
+    : devices.reverse().find(({ simulator, available, name }) => {
+        return simulator && available && /^iPhone \d\d$/.test(name);
+      });
   if (!device) {
     const message = deviceName
       ? `Failed to find simulator: ${deviceName}`
@@ -284,11 +212,11 @@ async function selectDevice(
     return null;
   }
 
-  const availableSimulators = await getAvailableSimulators(device.udid);
+  const availableSimulators = await getAvailableSimulators(device.identifier);
   for (const simulators of Object.values(availableSimulators)) {
     for (const simulator of simulators) {
       const { name, state, udid } = simulator;
-      if (udid === device.udid) {
+      if (udid === device.identifier) {
         if (state !== "Booted") {
           spinner.start(`Booting ${name} simulator`);
           const error = await bootSimulator(simulator);
@@ -306,7 +234,7 @@ async function selectDevice(
     }
   }
 
-  throw new Error(`Failed to find simulator: ${device.udid}`);
+  throw new Error(`Failed to find simulator: ${device.identifier}`);
 }
 
 export async function deploy(
@@ -329,7 +257,7 @@ export async function deploy(
     return;
   }
 
-  if (device.type === "device") {
+  if (!device.simulator) {
     await ensureInstalled(
       () => iosDeploy("--version"),
       `ios-deploy is required to install and launch apps on devices.\nInstall ios-deploy via Homebrew by running:\n\n    brew install ios-deploy\n\nPress any key to continue`
