@@ -9,7 +9,7 @@ import {
 import * as fs from "node:fs/promises";
 import * as path from "node:path";
 import * as readline from "node:readline";
-import ora from "ora";
+import type ora from "ora";
 import { idle, once, withRetry } from "../async";
 import {
   BUILD_ID,
@@ -150,6 +150,11 @@ async function watchWorkflowRun(
         const result = await octokit().rest.actions.listJobsForWorkflowRun(
           params
         );
+        if (result.data.jobs.length === 0) {
+          // Still starting up
+          continue;
+        }
+
         const activeJobs = result.data.jobs.filter(
           (job) => job && job.conclusion !== "skipped"
         );
