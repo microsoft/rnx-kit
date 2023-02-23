@@ -25,7 +25,7 @@ const configFilePattern = `Please create a JSON config file in the following for
   exampleConfigFile
 )}`;
 
-export const checkArgumentValidity = (args: minimist.ParsedArgs): boolean => {
+export function checkArgumentValidity(args: minimist.ParsedArgs): boolean {
   // If help flag is passed, print help
   if (args.help) {
     printHelp();
@@ -67,9 +67,9 @@ export const checkArgumentValidity = (args: minimist.ParsedArgs): boolean => {
   }
 
   return true;
-};
+}
 
-const printHelp = () => {
+function printHelp(): void {
   let capabString = "";
   Object.keys(capabilities).forEach((capab) => {
     capabString = `${capabString}\n--${capab}:- ${
@@ -78,4 +78,4 @@ const printHelp = () => {
   });
   info(capabString);
   info(configFilePattern);
-};
+}

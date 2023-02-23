@@ -2,7 +2,7 @@ import minimist from "minimist";
 import { checkArgumentValidity } from "./check_arguments_validity";
 import { extractAndSymbolicateErrorStack } from "./extract_and_process_error_stack";
 
-export const symbolicateStackTraces = () => {
+export function symbolicateStackTraces(): void {
   // Get Arguments
   const commandLineArguments = minimist(process.argv.slice(2));
 
@@ -14,4 +14,4 @@ export const symbolicateStackTraces = () => {
       commandLineArguments.configFile
     );
   }
-};
+}

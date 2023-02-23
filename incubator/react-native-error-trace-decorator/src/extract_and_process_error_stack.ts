@@ -8,10 +8,10 @@ import { isConfigFileValid, symbolicateBuffer } from "./utils";
  * @param errorFilePath   The path to the error file
  * @param configFilePath  The path to the config file
  */
-export const extractAndSymbolicateErrorStack = (
+export function extractAndSymbolicateErrorStack(
   errorFilePath: string,
   configFilePath: string
-) => {
+): void {
   // Read config file as an object
   const configFile = JSON.parse(
     fse.readFileSync(configFilePath, "utf8")
@@ -33,7 +33,7 @@ export const extractAndSymbolicateErrorStack = (
     let buffer: string[] = [];
     let bufferConfig: IBundleInterface | undefined;
 
-    errorFile.forEach((errorLine: string) => {
+    for (const errorLine of errorFile) {
       const configForCurrentLine = getIdentifierForLine(
         errorLine,
         configFile.configs
@@ -50,13 +50,13 @@ export const extractAndSymbolicateErrorStack = (
         }
         // Print errorLine as it is
         console.log(errorLine);
-        return;
+        continue;
       }
 
       // If currentLine matches ongoing buffer's bundle, add it to buffer
       if (configForCurrentLine === bufferConfig) {
         buffer.push(errorLine);
-        return;
+        continue;
       }
 
       // If currentLine does not match buffer's bundle, flush buffer and create a new buffer
@@ -67,23 +67,18 @@ export const extractAndSymbolicateErrorStack = (
       // Create new buffer
       buffer = [errorLine];
       bufferConfig = configForCurrentLine;
-    });
+    }
 
     // Flush buffer if there is any remaining data
     if (buffer.length > 0 && bufferConfig !== undefined) {
       symbolicateBuffer(buffer, bufferConfig.sourcemap);
     }
   }
-};
+}
 
-const getIdentifierForLine = (
+function getIdentifierForLine(
   errorLine: string,
   configs: IBundleInterface[]
-) => {
-  for (let configIndex = 0; configIndex < configs.length; configIndex++) {
-    if (errorLine.includes(configs[configIndex].bundleIdentifier)) {
-      return configs[configIndex];
-    }
-  }
-  return;
-};
+): IBundleInterface | undefined {
+  return configs.find((config) => errorLine.includes(config.bundleIdentifier));
+}

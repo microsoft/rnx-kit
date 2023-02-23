@@ -9,7 +9,7 @@ import type { IConfigFile } from "./types";
  * @param buffer    a string array representing the buffer
  * @param sourcemap sourcemap that must be used to symbolicate the passed buffer
  */
-export const symbolicateBuffer = (buffer: string[], sourcemap: string) => {
+export function symbolicateBuffer(buffer: string[], sourcemap: string) {
   if (buffer.length > 0) {
     // Write buffer to a temp file
     fse.writeFileSync("./temp.rnbuffertrace", buffer.join("\n"));
@@ -26,7 +26,7 @@ export const symbolicateBuffer = (buffer: string[], sourcemap: string) => {
     // Delete temp file
     fse.removeSync("./temp.rnbuffertrace");
   }
-};
+}
 
 /**
  * Checks whether the config file is valid
@@ -34,7 +34,7 @@ export const symbolicateBuffer = (buffer: string[], sourcemap: string) => {
  * @param configFile  the config file passed as a parsed Json
  * @returns           a boolean value indicating if the config file is valid
  */
-export const isConfigFileValid = (configFile: IConfigFile): boolean => {
+export function isConfigFileValid(configFile: IConfigFile): boolean {
   if (configFile.configs) {
     // Check if configs is empty
     if (configFile.configs.length === 0) {
@@ -42,20 +42,14 @@ export const isConfigFileValid = (configFile: IConfigFile): boolean => {
       return false;
     }
     // Parse through all configs and check if sourcemap files exist
-    for (
-      let bundleIndex = 0;
-      bundleIndex < configFile.configs.length;
-      bundleIndex++
-    ) {
-      const currentConfig = configFile.configs[bundleIndex];
+    for (const config of configFile.configs) {
       if (
-        !currentConfig ||
-        !currentConfig.sourcemap ||
-        !fse.existsSync(currentConfig.sourcemap) ||
-        !currentConfig.bundleIdentifier
+        !config?.sourcemap ||
+        !fse.existsSync(config.sourcemap) ||
+        !config?.bundleIdentifier
       ) {
         error(
-          `Config: { bundleIdentifier: ${currentConfig.bundleIdentifier}, sourcemap: ${currentConfig.sourcemap} } is not proper`
+          `Config: { bundleIdentifier: ${config.bundleIdentifier}, sourcemap: ${config.sourcemap} } is not proper`
         );
         return false;
       }
@@ -63,4 +57,4 @@ export const isConfigFileValid = (configFile: IConfigFile): boolean => {
     return true;
   }
   return false;
-};
+}
