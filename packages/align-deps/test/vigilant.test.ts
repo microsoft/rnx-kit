@@ -116,11 +116,21 @@ describe("inspect()", () => {
       version: "1.0.0",
     };
     expect(inspect(manifest, mockManifestProfile, false)).toEqual({
-      changes: [],
+      changes: {
+        dependencies: [],
+        peerDependencies: [],
+        devDependencies: [],
+      },
+      changesCount: 0,
       unmanagedDependencies: [],
     });
     expect(inspect(manifest, mockManifestProfile, true)).toEqual({
-      changes: [],
+      changes: {
+        dependencies: [],
+        peerDependencies: [],
+        devDependencies: [],
+      },
+      changesCount: 0,
       unmanagedDependencies: [],
     });
   });
@@ -137,14 +147,19 @@ describe("inspect()", () => {
     };
 
     const expected = {
-      changes: [
-        {
-          name: "react-native",
-          from: manifest.dependencies["react-native"],
-          to: mockManifestProfile.dependencies["react-native"],
-          section: "dependencies",
-        },
-      ],
+      changes: {
+        dependencies: [
+          {
+            type: "changed",
+            dependency: "react-native",
+            target: mockManifestProfile.dependencies["react-native"],
+            current: manifest.dependencies["react-native"],
+          },
+        ],
+        peerDependencies: [],
+        devDependencies: [],
+      },
+      changesCount: 1,
       unmanagedDependencies: [["react-native", "core"]],
     };
 
@@ -168,20 +183,26 @@ describe("inspect()", () => {
     };
 
     const expected = {
-      changes: [
-        {
-          name: "react-native",
-          from: manifest.peerDependencies["react-native"],
-          to: mockManifestProfile.peerDependencies["react-native"],
-          section: "peerDependencies",
-        },
-        {
-          name: "react-native",
-          from: manifest.devDependencies["react-native"],
-          to: mockManifestProfile.devDependencies["react-native"],
-          section: "devDependencies",
-        },
-      ],
+      changes: {
+        dependencies: [],
+        peerDependencies: [
+          {
+            type: "changed",
+            dependency: "react-native",
+            target: mockManifestProfile.peerDependencies["react-native"],
+            current: manifest.peerDependencies["react-native"],
+          },
+        ],
+        devDependencies: [
+          {
+            type: "changed",
+            dependency: "react-native",
+            target: mockManifestProfile.devDependencies["react-native"],
+            current: manifest.devDependencies["react-native"],
+          },
+        ],
+      },
+      changesCount: 2,
       unmanagedDependencies: [["react-native", "core"]],
     };
 
@@ -200,14 +221,19 @@ describe("inspect()", () => {
     };
 
     const expected = {
-      changes: [
-        {
-          name: "react-native",
-          from: manifest.dependencies["react-native"],
-          to: mockManifestProfile.dependencies["react-native"],
-          section: "dependencies",
-        },
-      ],
+      changes: {
+        dependencies: [
+          {
+            type: "changed",
+            dependency: "react-native",
+            target: mockManifestProfile.dependencies["react-native"],
+            current: manifest.dependencies["react-native"],
+          },
+        ],
+        peerDependencies: [],
+        devDependencies: [],
+      },
+      changesCount: 1,
       unmanagedDependencies: [["react-native", "core"]],
     };
 
@@ -246,14 +272,19 @@ describe("inspect()", () => {
       },
     };
     const expected = {
-      changes: [
-        {
-          name: "react",
-          from: manifest.dependencies["react"],
-          to: profile.dependencies["react"],
-          section: "dependencies",
-        },
-      ],
+      changes: {
+        dependencies: [
+          {
+            type: "changed",
+            dependency: "react",
+            target: profile.dependencies["react"],
+            current: manifest.dependencies["react"],
+          },
+        ],
+        peerDependencies: [],
+        devDependencies: [],
+      },
+      changesCount: 1,
       unmanagedDependencies: [["react", "react"]],
     };
 

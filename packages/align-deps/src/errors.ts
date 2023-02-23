@@ -41,9 +41,7 @@ export function printError(manifestPath: string, code: ErrorCode): void {
       break;
 
     case "unsatisfied":
-      error(
-        `${manifestPath}: Changes are needed to satisfy all requirements. Re-run with '--write' to apply them.`
-      );
+      error(`Re-run with '--write' to fix them.`);
       break;
   }
 }

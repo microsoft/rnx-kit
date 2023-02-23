@@ -220,10 +220,24 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
       },
     });
 
-    const result = checkPackageManifest("package.json", defaultOptions);
+    const result = checkPackageManifest(
+      "package.json",
+      defaultOptions,
+      undefined,
+      (message) => {
+        expect(message)
+          .toBe(`package.json: Changes are needed to satisfy all capabilities.
+	In peerDependencies:
+	  - react "18.1.0" is missing
+	  - react-native "^0.70.0" is missing
+	In devDependencies:
+	  - react "18.1.0" is missing
+	  - react-native "^0.70.0" is missing`);
+      }
+    );
 
     expect(result).not.toBe("success");
-    expect(consoleLogSpy).toBeCalled();
+    expect(consoleLogSpy).not.toBeCalled();
     expect(consoleWarnSpy).not.toBeCalled();
   });
 

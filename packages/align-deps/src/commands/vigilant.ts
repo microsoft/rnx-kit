@@ -9,11 +9,13 @@ import {
   resolveCapabilities,
   resolveCapabilitiesUnchecked,
 } from "../capabilities";
+import { stringify } from "../diff";
 import { modifyManifest } from "../helpers";
 import { updateDependencies } from "../manifest";
 import { ensurePreset, filterPreset, mergePresets } from "../preset";
 import type {
   AlignDepsConfig,
+  Changes,
   ErrorCode,
   ManifestProfile,
   Options,
@@ -22,20 +24,10 @@ import type {
 } from "../types";
 
 type Report = {
-  changes: Array<{
-    name: string;
-    from: string;
-    to: string;
-    section: string;
-  }>;
+  changes: Changes;
+  changesCount: number;
   unmanagedDependencies: [string, string][];
 };
-
-const allSections = [
-  "dependencies" as const,
-  "peerDependencies" as const,
-  "devDependencies" as const,
-];
 
 function getAllCapabilities(preset: Preset): Capability[] {
   const capabilities = new Set<Capability>();
@@ -206,26 +198,37 @@ export function inspect(
   profile: ManifestProfile,
   write: boolean
 ): Report {
-  const changes: Report["changes"] = [];
+  const allChanges: Report["changes"] = {
+    dependencies: [],
+    peerDependencies: [],
+    devDependencies: [],
+  };
   const capabilities: Record<string, string> = {};
 
   const { unmanagedCapabilities } = profile;
 
-  allSections.forEach((section) => {
+  const changesCount = keysOf(allChanges).reduce((count, section) => {
     const dependencies = manifest[section];
     if (!dependencies) {
-      return;
+      return count;
     }
 
     const isMisaligned =
       section === "peerDependencies" ? isMisalignedPeer : isMisalignedDirect;
     const desiredDependencies = profile[section];
-    Object.keys(dependencies).forEach((name) => {
+    const changes = allChanges[section];
+
+    for (const name of Object.keys(dependencies)) {
       if (name in desiredDependencies) {
         const from = dependencies[name];
         const to = desiredDependencies[name];
         if (isMisaligned(from, to)) {
-          changes.push({ name, from, to, section });
+          changes.push({
+            type: "changed",
+            dependency: name,
+            target: to,
+            current: from,
+          });
           if (write) {
             dependencies[name] = to;
           }
@@ -236,9 +239,16 @@ export function inspect(
           capabilities[name] = capability;
         }
       }
-    });
-  });
-  return { changes, unmanagedDependencies: Object.entries(capabilities) };
+    }
+
+    return count + changes.length;
+  }, 0);
+
+  return {
+    changes: allChanges,
+    changesCount,
+    unmanagedDependencies: Object.entries(capabilities),
+  };
 }
 
 /**
@@ -251,12 +261,14 @@ export function inspect(
  * @param manifestPath The path to the package manifest
  * @param options Options from command line
  * @param config Configuration from `package.json` or "generated" from command line flags
+ * @param logError Function for outputting changes
  * @returns Whether the package needs changes
  */
 export function checkPackageManifestUnconfigured(
   manifestPath: string,
   { excludePackages, write }: Options,
-  config: AlignDepsConfig
+  config: AlignDepsConfig,
+  logError = error
 ): ErrorCode {
   if (excludePackages?.includes(config.manifest.name)) {
     return "success";
@@ -264,7 +276,7 @@ export function checkPackageManifestUnconfigured(
 
   const manifestProfile = buildManifestProfileCached(manifestPath, config);
   const { manifest } = config;
-  const { changes, unmanagedDependencies } = inspect(
+  const { changes, changesCount, unmanagedDependencies } = inspect(
     manifest,
     manifestProfile,
     write
@@ -275,28 +287,26 @@ export function checkPackageManifestUnconfigured(
     unmanagedDependencies.length > 0
   ) {
     const dependencies = unmanagedDependencies
-      .map(([name, capability]) => `\t${name} is managed by '${capability}'`)
+      .map(([name, capability]) => {
+        return `\t  - ${name} can be managed by '${capability}'`;
+      })
       .join("\n");
     warn(
-      `A number of dependencies were found that can be managed by adding the following capabilities:\n${dependencies}`
+      `A number of unmanaged dependencies were found — they can be managed by the following capabilities:\n${dependencies}`
     );
     info(
-      "Note that capabilities will never be added automatically, even with '--write'."
+      "Note: Capabilities will never be added automatically, even with '--write'."
     );
   }
 
-  if (changes.length > 0) {
+  if (changesCount > 0) {
     if (write) {
       modifyManifest(manifestPath, manifest);
     } else {
-      const violations = changes
-        .map(({ name, from, to, section }) => {
-          return `\t${name} "${from}" should be "${to}" (in ${section})`;
-        })
-        .join("\n");
-      error(
-        `Found ${changes.length} violation(s) in '${manifestPath}':\n${violations}`
-      );
+      const violations = stringify(changes, [
+        `${manifestPath}: Found ${changesCount} violation(s) outside of capabilities.`,
+      ]);
+      logError(violations);
       return "unsatisfied";
     }
   }

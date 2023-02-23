@@ -7,6 +7,17 @@ export type AlignDepsConfig = {
   manifest: PackageManifest;
 };
 
+export type Change =
+  | { type: "added"; dependency: string; target: string }
+  | { type: "changed"; dependency: string; target: string; current: string }
+  | { type: "removed"; dependency: string };
+
+export type Changes = {
+  dependencies: Change[];
+  peerDependencies: Change[];
+  devDependencies: Change[];
+};
+
 export type Options = {
   presets: string[];
   loose: boolean;
