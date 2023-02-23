@@ -117,5 +117,5 @@ yarn react-native-error-trace-decorator --errorFile <path_to_the_error_file> --c
 Alternatively, this tool can be directly run using npx,
 
 ```sh
-npx react-native-error-trace-decorator --errorFile <path_to_the_error_file> --configFile <path_to_the_config_file>
+npx @rnx-kit/react-native-error-trace-decorator --errorFile <path_to_the_error_file> --configFile <path_to_the_config_file>
 ```
