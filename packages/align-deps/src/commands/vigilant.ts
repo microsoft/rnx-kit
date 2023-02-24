@@ -292,7 +292,7 @@ export function checkPackageManifestUnconfigured(
       })
       .join("\n");
     warn(
-      `A number of unmanaged dependencies were found — they can be managed by the following capabilities:\n${dependencies}`
+      `${manifestPath}: Found dependencies that are currently missing from capabilities:\n${dependencies}`
     );
     info(
       "Note: Capabilities will never be added automatically, even with '--write'."
