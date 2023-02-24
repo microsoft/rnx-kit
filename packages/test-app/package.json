@@ -43,6 +43,7 @@
     "@rnx-kit/metro-serializer": "*",
     "@rnx-kit/metro-serializer-esbuild": "*",
     "@rnx-kit/react-native-auth": "*",
+    "@rnx-kit/react-native-host": "*",
     "@rnx-kit/react-native-test-app-msal": "*",
     "@rnx-kit/scripts": "*",
     "@rnx-kit/third-party-notices": "*",
