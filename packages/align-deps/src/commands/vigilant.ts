@@ -1,36 +1,33 @@
 import type { Capability } from "@rnx-kit/config";
-import { error } from "@rnx-kit/console";
+import { error, info, warn } from "@rnx-kit/console";
 import { keysOf } from "@rnx-kit/tools-language/properties";
 import type { PackageManifest } from "@rnx-kit/tools-node/package";
 import * as path from "path";
 import semverSubset from "semver/ranges/subset";
 import {
+  capabilityProvidedBy,
   resolveCapabilities,
   resolveCapabilitiesUnchecked,
 } from "../capabilities";
+import { stringify } from "../diff";
 import { modifyManifest } from "../helpers";
 import { updateDependencies } from "../manifest";
 import { ensurePreset, filterPreset, mergePresets } from "../preset";
 import type {
   AlignDepsConfig,
+  Changes,
   ErrorCode,
   ManifestProfile,
   Options,
+  Package,
   Preset,
 } from "../types";
 
-type Change = {
-  name: string;
-  from: string;
-  to: string;
-  section: string;
+type Report = {
+  changes: Changes;
+  changesCount: number;
+  unmanagedDependencies: [string, string][];
 };
-
-const allSections = [
-  "dependencies" as const,
-  "peerDependencies" as const,
-  "devDependencies" as const,
-];
 
 function getAllCapabilities(preset: Preset): Capability[] {
   const capabilities = new Set<Capability>();
@@ -65,7 +62,7 @@ function resolveUnmanagedCapabilities(
   allCapabilities: Capability[],
   preset: Preset,
   managedDependencies: string[]
-) {
+): Record<string, Package[]> {
   const dependencies = resolveCapabilities(
     manifestPath,
     allCapabilities,
@@ -125,14 +122,16 @@ export function buildManifestProfile(
 
   // Use "development" type so we can check for `devOnly` packages under
   // `dependencies` as well.
+  const unmanagedCapabilities = resolveUnmanagedCapabilities(
+    manifestPath,
+    allCapabilities,
+    targetPreset,
+    managedDependencies
+  );
+
   const directDependencies = updateDependencies(
     {},
-    resolveUnmanagedCapabilities(
-      manifestPath,
-      allCapabilities,
-      targetPreset,
-      managedDependencies
-    ),
+    unmanagedCapabilities,
     "development"
   );
 
@@ -151,6 +150,12 @@ export function buildManifestProfile(
     dependencies: directDependencies,
     peerDependencies,
     devDependencies: directDependencies,
+    unmanagedCapabilities: Object.fromEntries(
+      Object.values(unmanagedCapabilities).map((packages) => {
+        const pkg = packages[0];
+        return [pkg.name, capabilityProvidedBy(pkg)];
+      })
+    ),
   };
 }
 
@@ -192,31 +197,58 @@ export function inspect(
   manifest: PackageManifest,
   profile: ManifestProfile,
   write: boolean
-): Change[] {
-  const changes: Change[] = [];
-  allSections.forEach((section) => {
+): Report {
+  const allChanges: Report["changes"] = {
+    dependencies: [],
+    peerDependencies: [],
+    devDependencies: [],
+  };
+  const capabilities: Record<string, string> = {};
+
+  const { unmanagedCapabilities } = profile;
+
+  const changesCount = keysOf(allChanges).reduce((count, section) => {
     const dependencies = manifest[section];
     if (!dependencies) {
-      return;
+      return count;
     }
 
     const isMisaligned =
       section === "peerDependencies" ? isMisalignedPeer : isMisalignedDirect;
     const desiredDependencies = profile[section];
-    Object.keys(dependencies).forEach((name) => {
+    const changes = allChanges[section];
+
+    for (const name of Object.keys(dependencies)) {
       if (name in desiredDependencies) {
         const from = dependencies[name];
         const to = desiredDependencies[name];
         if (isMisaligned(from, to)) {
-          changes.push({ name, from, to, section });
+          changes.push({
+            type: "changed",
+            dependency: name,
+            target: to,
+            current: from,
+          });
           if (write) {
             dependencies[name] = to;
           }
         }
+
+        const capability = unmanagedCapabilities[name];
+        if (capability) {
+          capabilities[name] = capability;
+        }
       }
-    });
-  });
-  return changes;
+    }
+
+    return count + changes.length;
+  }, 0);
+
+  return {
+    changes: allChanges,
+    changesCount,
+    unmanagedDependencies: Object.entries(capabilities),
+  };
 }
 
 /**
@@ -229,12 +261,14 @@ export function inspect(
  * @param manifestPath The path to the package manifest
  * @param options Options from command line
  * @param config Configuration from `package.json` or "generated" from command line flags
+ * @param logError Function for outputting changes
  * @returns Whether the package needs changes
  */
 export function checkPackageManifestUnconfigured(
   manifestPath: string,
   { excludePackages, write }: Options,
-  config: AlignDepsConfig
+  config: AlignDepsConfig,
+  logError = error
 ): ErrorCode {
   if (excludePackages?.includes(config.manifest.name)) {
     return "success";
@@ -242,20 +276,37 @@ export function checkPackageManifestUnconfigured(
 
   const manifestProfile = buildManifestProfileCached(manifestPath, config);
   const { manifest } = config;
-  const changes = inspect(manifest, manifestProfile, write);
-  if (changes.length > 0) {
+  const { changes, changesCount, unmanagedDependencies } = inspect(
+    manifest,
+    manifestProfile,
+    write
+  );
+
+  if (
+    config.alignDeps.capabilities.length > 0 &&
+    unmanagedDependencies.length > 0
+  ) {
+    const dependencies = unmanagedDependencies
+      .map(([name, capability]) => {
+        return `\t  - ${name} can be managed by '${capability}'`;
+      })
+      .join("\n");
+    warn(
+      `${manifestPath}: Found dependencies that are currently missing from capabilities:\n${dependencies}`
+    );
+    info(
+      "Note: Capabilities will never be added automatically, even with '--write'."
+    );
+  }
+
+  if (changesCount > 0) {
     if (write) {
       modifyManifest(manifestPath, manifest);
     } else {
-      const violations = changes
-        .map(
-          ({ name, from, to, section }) =>
-            `\t${name} "${from}" should be "${to}" (${section})`
-        )
-        .join("\n");
-      error(
-        `Found ${changes.length} violation(s) in '${manifestPath}':\n${violations}`
-      );
+      const violations = stringify(changes, [
+        `${manifestPath}: Found ${changesCount} violation(s) outside of capabilities.`,
+      ]);
+      logError(violations);
       return "unsatisfied";
     }
   }

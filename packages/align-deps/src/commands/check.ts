@@ -1,30 +1,15 @@
-import { info } from "@rnx-kit/console";
-import { pickValues } from "@rnx-kit/tools-language";
-import type { PackageManifest } from "@rnx-kit/tools-node/package";
+import { error, info } from "@rnx-kit/console";
 import { readPackage } from "@rnx-kit/tools-node/package";
-import chalk from "chalk";
-import { diffLinesUnified } from "jest-diff";
 import * as path from "path";
 import { migrateConfig } from "../compatibility/config";
 import { loadConfig } from "../config";
+import { diff, stringify } from "../diff";
 import { isError } from "../errors";
 import { modifyManifest } from "../helpers";
 import { updatePackageManifest } from "../manifest";
 import { resolve } from "../preset";
 import type { Command, ErrorCode, Options } from "../types";
 import { checkPackageManifestUnconfigured } from "./vigilant";
-
-const visibleKeys = [
-  "name",
-  "version",
-  "dependencies",
-  "peerDependencies",
-  "devDependencies",
-];
-
-function stringify(manifest: PackageManifest): string {
-  return JSON.stringify(pickValues(manifest, visibleKeys), undefined, 2);
-}
 
 /**
  * Checks the specified package manifest for misaligned dependencies.
@@ -48,12 +33,14 @@ function stringify(manifest: PackageManifest): string {
  * @param manifestPath Path to the package manifest to check
  * @param options Command line options
  * @param inputConfig Configuration in the package manifest
+ * @param logError Function for outputting changes
  * @returns `success` when everything is in order; an {@link ErrorCode} otherwise
  */
 export function checkPackageManifest(
   manifestPath: string,
   options: Options,
-  inputConfig = loadConfig(manifestPath, options)
+  inputConfig = loadConfig(manifestPath, options),
+  logError = error
 ): ErrorCode {
   if (isError(inputConfig)) {
     return inputConfig;
@@ -97,28 +84,18 @@ export function checkPackageManifest(
     kitType
   );
 
-  // Don't fail when manifests only have whitespace differences.
-  const updatedManifestJson = stringify(updatedManifest);
-  const normalizedManifestJson = stringify(manifest);
-
-  if (updatedManifestJson !== normalizedManifestJson) {
+  const allChanges = diff(manifest, updatedManifest);
+  if (allChanges) {
     if (options.write) {
       // The config object may be passed to other commands, so we need to
       // update it in-place to ensure consistency.
       inputConfig.manifest = updatedManifest;
       modifyManifest(manifestPath, updatedManifest);
     } else {
-      const diff = diffLinesUnified(
-        normalizedManifestJson.split("\n"),
-        updatedManifestJson.split("\n"),
-        {
-          aAnnotation: "Current",
-          aColor: chalk.red,
-          bAnnotation: "Expected",
-          bColor: chalk.green,
-        }
-      );
-      console.log(diff);
+      const violations = stringify(allChanges, [
+        `${manifestPath}: Changes are needed to satisfy all capabilities.`,
+      ]);
+      logError(violations);
       return "unsatisfied";
     }
   }
@@ -158,8 +135,20 @@ export function makeCheckCommand(options: Options): Command {
 
     // If the package is configured, run the normal check first.
     if (!isError(config)) {
-      const res1 = checkPackageManifest(manifest, options, config);
-      const res2 = checkPackageManifestUnconfigured(manifest, options, config);
+      const output: string[] = [];
+      const logError = (message: string) => {
+        output.push(message);
+      };
+      const res1 = checkPackageManifest(manifest, options, config, logError);
+      const res2 = checkPackageManifestUnconfigured(
+        manifest,
+        options,
+        config,
+        logError
+      );
+      for (const message of output) {
+        error(message);
+      }
       return res1 !== "success" ? res1 : res2;
     }
 
