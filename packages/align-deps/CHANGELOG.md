@@ -1,5 +1,12 @@
 # Change Log - @rnx-kit/align-deps
 
+## 2.2.0
+
+### Minor Changes
+
+- 162b1dd5: When in vigilant mode, also suggest capabilities that can be added. This is only warning as there are legitimate reasons to not have dependencies managed by align-deps. For instance, the maintainers of AsyncStorage would not want to use the `storage` capability.
+- 162b1dd5: The output format of regular and vigilant mode has been changed to be more legible and more consistent with each other.
+
 ## 2.1.4
 
 ### Patch Changes

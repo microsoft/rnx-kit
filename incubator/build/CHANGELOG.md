@@ -1,5 +1,14 @@
 # @rnx-kit/build
 
+## 0.4.3
+
+### Patch Changes
+
+- 3db04bdc: Use `xcdevice` instead of `xtrace` to find devices
+- 4171d6a3: GitHub: Fix job ending prematurely when it takes longer than usual to start up
+- 9be09c3d: Use version number instead of SHA now that a new RNTA release is out
+- 4171d6a3: Use `setup-toolchain` action from `react-native-test-app`
+
 ## 0.4.2
 
 ### Patch Changes
