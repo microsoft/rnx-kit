@@ -29,7 +29,7 @@ type Device = {
     | "com.apple.platform.watchsimulator";
   modelCode: string;
   identifier: string;
-  architecture: "arm64" | "arm64e";
+  architecture: "arm64" | "arm64e" | "x86_64" | "x86_64h";
   modelUTI: string;
   modelName: string;
   name: string;
