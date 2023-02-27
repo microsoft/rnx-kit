@@ -1,8 +1,8 @@
 import { acquireTokenWithScopes } from "@rnx-kit/react-native-auth";
 import React, { useCallback, useMemo, useState } from "react";
 import {
-  Pressable,
   NativeModules,
+  Pressable,
   SafeAreaView,
   ScrollView,
   StatusBar,

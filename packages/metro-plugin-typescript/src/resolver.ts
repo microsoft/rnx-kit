@@ -1,7 +1,12 @@
+import { parseModuleRef } from "@rnx-kit/tools-node";
 import intersection from "lodash/intersection";
 import isEqual from "lodash/isEqual";
 import ts from "typescript";
 import type { ResolverContext } from "./types";
+
+function isPackageRef(name: string): boolean {
+  return !parseModuleRef(name).path;
+}
 
 /**
  * Get TypeScript compiler options with the `moduleSuffixes` property configured
@@ -97,13 +102,17 @@ export function resolveModuleName(
   redirectedReference: ts.ResolvedProjectReference | undefined,
   options: ts.CompilerOptions
 ): ts.ResolvedModuleFull | undefined {
-  //  Ensure the compiler options has `moduleSuffixes` set correctly for this RN project.
-  const optionsWithSuffixes = getCompilerOptionsWithReactNativeModuleSuffixes(
-    context,
-    moduleName,
-    containingFile,
-    options
-  );
+  // Ensure the compiler options has `moduleSuffixes` set correctly for this RN
+  // project. If `moduleName` points to a package (no paths), don't add platform
+  // suffixes as they are not used when looking at main fields.
+  const optionsWithSuffixes = isPackageRef(moduleName)
+    ? options
+    : getCompilerOptionsWithReactNativeModuleSuffixes(
+        context,
+        moduleName,
+        containingFile,
+        options
+      );
 
   //
   //  Invoke the built-in TypeScript module resolver.

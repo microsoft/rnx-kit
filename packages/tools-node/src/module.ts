@@ -36,7 +36,7 @@ export function parseModuleRef(r: string): PackageModuleRef | FileModuleRef {
   const ref: PackageModuleRef = parsePackageRef(r);
 
   const indexPath = ref.name.indexOf("/");
-  if (indexPath > -1) {
+  if (indexPath >= 0) {
     const p = ref.name.substring(indexPath + 1);
     if (p) {
       ref.path = p;

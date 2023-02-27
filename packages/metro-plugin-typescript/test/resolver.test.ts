@@ -12,7 +12,8 @@ describe("Resolver", () => {
     disableReactNativePackageSubstitution: false,
     platform: "ios",
     platformFileExtensions: [".ios", ".native", ""],
-    replaceReactNativePackageName: (x: string) => x + "-replaced",
+    replaceReactNativePackageName: (x: string) =>
+      x.replace(/^@rnx-kit/, "@replaced"),
   };
 
   test("resolves modules", () => {
@@ -20,15 +21,24 @@ describe("Resolver", () => {
     const mockTsResolveModuleName = jest.fn();
     ts.resolveModuleName = mockTsResolveModuleName;
     try {
-      mockTsResolveModuleName
-        .mockReturnValueOnce({ resolvedModule: { resolvedFileName: "first" } })
-        .mockReturnValueOnce({
-          resolvedModule: { resolvedFileName: "second" },
-        });
+      const moduleNames = [
+        "pkg-dir",
+        "pkg-up",
+        "pkg-up/index.js",
+        "@rnx-kit/tools-node",
+        "@rnx-kit/tools-node/lib/index.js",
+        "./index",
+      ];
+
+      const resolvedModules = moduleNames.map((name) => {
+        const resolvedModule = { resolvedFileName: name };
+        mockTsResolveModuleName.mockReturnValueOnce({ resolvedModule });
+        return resolvedModule;
+      });
 
       const modules = resolveModuleNames(
         context,
-        ["pkg-dir", "pkg-up"],
+        moduleNames,
         "/repos/rnx-kit/packages/test-app/src/app.ts",
         undefined,
         undefined,
@@ -36,25 +46,25 @@ describe("Resolver", () => {
         undefined
       );
 
-      expect(mockTsResolveModuleName).toHaveBeenCalledTimes(2);
+      expect(mockTsResolveModuleName).toHaveBeenCalledTimes(moduleNames.length);
       const calls = mockTsResolveModuleName.mock.calls;
       // 1st param: module name
-      expect(calls[0][0]).toEqual("pkg-dir-replaced");
-      expect(calls[1][0]).toEqual("pkg-up-replaced");
+      expect(calls[0][0]).toEqual("pkg-dir");
+      expect(calls[1][0]).toEqual("pkg-up");
+      expect(calls[2][0]).toEqual("pkg-up/index.js");
+      expect(calls[3][0]).toEqual("@replaced/tools-node");
+      expect(calls[4][0]).toEqual("@replaced/tools-node/lib/index.js");
+      expect(calls[5][0]).toEqual("./index");
       // 3rd param: CompilerOptions
-      expect(calls[0][2]).toEqual({
-        moduleSuffixes: [".ios", ".native", ""],
-      });
-      expect(calls[1][2]).toEqual({
-        moduleSuffixes: [".ios", ".native", ""],
-      });
+      expect(calls[0][2]).toEqual({});
+      expect(calls[1][2]).toEqual({});
+      expect(calls[2][2]).toEqual({ moduleSuffixes: [".ios", ".native", ""] });
+      expect(calls[3][2]).toEqual({});
+      expect(calls[4][2]).toEqual({ moduleSuffixes: [".ios", ".native", ""] });
+      expect(calls[5][2]).toEqual({ moduleSuffixes: [".ios", ".native", ""] });
 
       expect(Array.isArray(modules)).toBe(true);
-      expect(modules.length).toBe(2);
-      expect(modules).toEqual([
-        { resolvedFileName: "first" },
-        { resolvedFileName: "second" },
-      ]);
+      expect(modules).toEqual(resolvedModules);
     } finally {
       ts.resolveModuleName = origTsResolveModuleName;
     }
