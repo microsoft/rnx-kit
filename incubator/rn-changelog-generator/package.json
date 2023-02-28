@@ -26,7 +26,7 @@
     "bundle": "rnx-kit-scripts bundle",
     "format": "rnx-kit-scripts format",
     "lint": "rnx-kit-scripts lint",
-    "test:local": "rnx-kit-scripts test validateChangelog"
+    "test:local": "rnx-kit-scripts test"
   },
   "devDependencies": {
     "@rnx-kit/scripts": "*",
