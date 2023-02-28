@@ -1,5 +1,7 @@
 import generator from "./generator";
 import single from "./single";
+import validate from "./validate";
+import validateChangelog from "./utils/validateChangelog";
 
 if (require.main === module) {
   require("yargs")
@@ -15,5 +17,15 @@ if (require.main === module) {
       single.args,
       single.handler
     )
+    .command(
+      "validate",
+      "Validate if a commit message meets changelog requirements. Returns 'missing', 'valid' or 'invalid'",
+      validate.args,
+      validate.handler
+    )
     .help("help").argv;
 }
+
+export default {
+  validate: validateChangelog,
+};
