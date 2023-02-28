@@ -1,5 +1,5 @@
-import * as fs from "node:fs/promises";
+import * as fs from "node:fs";
 
-export function ensureDir(dir: string): Promise<string | undefined> {
-  return fs.mkdir(dir, { recursive: true, mode: 0o755 });
+export function ensureDir(dir: string): string | undefined {
+  return fs.mkdirSync(dir, { recursive: true, mode: 0o755 });
 }

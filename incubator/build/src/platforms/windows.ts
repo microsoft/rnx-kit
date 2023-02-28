@@ -1,5 +1,5 @@
 import { XMLParser } from "fast-xml-parser";
-import * as fs from "node:fs/promises";
+import * as fs from "node:fs";
 import * as os from "node:os";
 import * as path from "node:path";
 import type { Ora } from "ora";
@@ -44,9 +44,9 @@ function makePowerShell(
   }
 }
 
-async function getPackageInfo(app: string): Promise<PackageInfo | null> {
+function getPackageInfo(app: string): PackageInfo | null {
   const filename = path.join(app, "AppxManifest.xml");
-  const content = await fs.readFile(filename, { encoding: "utf-8" });
+  const content = fs.readFileSync(filename, { encoding: "utf-8" });
 
   const xml = new XMLParser({ ignoreAttributes: false });
   const manifest = xml.parse(content);
@@ -87,7 +87,7 @@ async function install(
   app: string,
   tryUninstall = true
 ): Promise<string | Error> {
-  const packageInfo = await getPackageInfo(app);
+  const packageInfo = getPackageInfo(app);
   if (!packageInfo) {
     return new Error(
       "Failed to get package name and/or app id from build artifact"

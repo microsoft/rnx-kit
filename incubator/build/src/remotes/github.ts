@@ -2,11 +2,7 @@ import { Octokit } from "@octokit/core";
 import type { RestEndpointMethodTypes } from "@octokit/plugin-rest-endpoint-methods";
 import { restEndpointMethods } from "@octokit/plugin-rest-endpoint-methods";
 import { RequestError } from "@octokit/request-error";
-import {
-  existsSync as fileExists,
-  readFileSync as fileReadSync,
-} from "node:fs";
-import * as fs from "node:fs/promises";
+import * as fs from "node:fs";
 import * as path from "node:path";
 import * as readline from "node:readline";
 import type ora from "ora";
@@ -75,8 +71,8 @@ async function downloadArtifact(
   );
   const filename = path.join(buildDir, artifacts[0].name + ".zip");
 
-  await ensureDir(buildDir);
-  await fs.writeFile(filename, Buffer.from(data));
+  ensureDir(buildDir);
+  fs.writeFileSync(filename, Buffer.from(data));
   return filename;
 }
 
@@ -85,11 +81,11 @@ function getPersonalAccessToken(): string | undefined {
     return process.env.GITHUB_TOKEN;
   }
 
-  if (!fileExists(USER_CONFIG_FILE)) {
+  if (!fs.existsSync(USER_CONFIG_FILE)) {
     return undefined;
   }
 
-  const content = fileReadSync(USER_CONFIG_FILE, { encoding: "utf-8" });
+  const content = fs.readFileSync(USER_CONFIG_FILE, { encoding: "utf-8" });
   const config: UserConfig = JSON.parse(content);
   return config?.github?.token;
 }
@@ -150,14 +146,15 @@ async function watchWorkflowRun(
         const result = await octokit().rest.actions.listJobsForWorkflowRun(
           params
         );
-        if (result.data.jobs.length === 0) {
-          // Still starting up
-          continue;
-        }
-
         const activeJobs = result.data.jobs.filter(
           (job) => job && job.conclusion !== "skipped"
         );
+
+        // There must be at least one job that wasn't skipped (for the target
+        // platform). If none, we're still waiting for it to start up.
+        if (activeJobs.length === 0) {
+          continue;
+        }
 
         const job = activeJobs.find((job) => job.status !== "completed");
         if (job) {
@@ -232,7 +229,7 @@ export async function install(): Promise<number> {
     "workflows",
     WORKFLOW_ID
   );
-  if (!fileExists(workflowFile)) {
+  if (!fs.existsSync(workflowFile)) {
     const prompt = readline.createInterface({
       input: process.stdin,
       output: process.stdout,
@@ -245,8 +242,8 @@ export async function install(): Promise<number> {
     });
     prompt.close();
 
-    await ensureDir(path.dirname(workflowFile));
-    await fs.cp(
+    ensureDir(path.dirname(workflowFile));
+    fs.copyFileSync(
       path.join(__dirname, "..", "..", "workflows", "github.yml"),
       workflowFile
     );

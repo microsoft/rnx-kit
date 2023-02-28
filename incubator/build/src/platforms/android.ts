@@ -1,6 +1,5 @@
 import { spawn } from "node:child_process";
-import { existsSync as fileExists } from "node:fs";
-import * as fs from "node:fs/promises";
+import * as fs from "node:fs";
 import * as path from "node:path";
 import type { Ora } from "ora";
 import { idle, retry } from "../async";
@@ -41,13 +40,13 @@ const EMULATOR_PATH = path.join(ANDROID_HOME, "emulator", "emulator");
 
 const adb = makeCommand(ADB_PATH);
 
-async function getBuildToolsPath(): Promise<string | null> {
+function getBuildToolsPath(): string | null {
   const buildToolsInstallPath = path.join(ANDROID_HOME, "build-tools");
-  if (!fileExists(buildToolsInstallPath)) {
+  if (!fs.existsSync(buildToolsInstallPath)) {
     return null;
   }
 
-  const versions = await fs.readdir(buildToolsInstallPath);
+  const versions = fs.readdirSync(buildToolsInstallPath);
   return path.join(buildToolsInstallPath, latestVersion(versions));
 }
 
@@ -78,8 +77,8 @@ async function getEmulators(): Promise<string[]> {
     .filter(Boolean);
 }
 
-async function getPackageName(apk: string): Promise<PackageInfo | Error> {
-  const buildToolsPath = await getBuildToolsPath();
+function getPackageName(apk: string): PackageInfo | Error {
+  const buildToolsPath = getBuildToolsPath();
   if (!buildToolsPath) {
     return new Error("Could not find Android SDK Build-Tools");
   }
@@ -205,7 +204,7 @@ export async function deploy(
     return;
   }
 
-  const info = await getPackageName(apk);
+  const info = getPackageName(apk);
   if (info instanceof Error) {
     spinner.fail(info.message);
     return;
