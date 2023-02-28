@@ -1,5 +1,11 @@
 # @rnx-kit/metro-plugin-typescript
 
+## 0.3.4
+
+### Patch Changes
+
+- 42e47987: Don't apply module suffixes when resolving main fields
+
 ## 0.3.3
 
 ### Patch Changes
