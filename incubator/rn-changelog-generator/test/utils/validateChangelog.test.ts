@@ -82,7 +82,7 @@ describe(validateChangelog, () => {
       ).toBe("invalid");
     });
   });
-  describe.only("should identify changelog as valid", () => {
+  describe("should identify changelog as valid", () => {
     it("when second category is invalid but ignored", () => {
       expect(validateChangelog(invalidSecondCategory)).toBe("valid");
     });
