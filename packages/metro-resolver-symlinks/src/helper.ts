@@ -1,4 +1,7 @@
-import { findPackageDependencyDir, readPackage } from "@rnx-kit/tools-node";
+import {
+  findPackageDependencyDir,
+  readPackage,
+} from "@rnx-kit/tools-node/package";
 
 export function resolveFrom(
   moduleName: string,

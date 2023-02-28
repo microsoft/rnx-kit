@@ -1,5 +1,5 @@
-import { isFileModuleRef, parseModuleRef } from "@rnx-kit/tools-node";
-import { getAvailablePlatforms } from "@rnx-kit/tools-react-native";
+import { isFileModuleRef, parseModuleRef } from "@rnx-kit/tools-node/module";
+import { getAvailablePlatforms } from "@rnx-kit/tools-react-native/platform";
 import * as path from "path";
 import { resolveFrom } from "./helper";
 import type { ModuleResolver } from "./types";

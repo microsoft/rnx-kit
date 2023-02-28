@@ -1,4 +1,4 @@
-import { isPackageModuleRef, parseModuleRef } from "@rnx-kit/tools-node";
+import { isPackageModuleRef, parseModuleRef } from "@rnx-kit/tools-node/module";
 import { expandPlatformExtensions } from "@rnx-kit/tools-react-native/platform";
 import type {
   CustomResolver,
@@ -13,18 +13,30 @@ const getEnhancedResolver = (() => {
   const resolvers: Record<string, Resolver> = {};
   return (context: ResolutionContext, platform = "common") => {
     if (!resolvers[platform]) {
-      // @ts-expect-error Property 'mainFields' does not exist on type 'ResolutionContext'
-      const { mainFields, sourceExts } = context;
+      const {
+        // @ts-expect-error Property 'mainFields' does not exist on type 'ResolutionContext'
+        mainFields,
+        sourceExts,
+        // @ts-expect-error Property 'unstable_conditionNames' does not exist on type 'ResolutionContext'
+        unstable_conditionNames,
+        // @ts-expect-error Property 'unstable_enablePackageExports' does not exist on type 'ResolutionContext'
+        unstable_enablePackageExports,
+      } = context;
       const extensions = sourceExts.map((ext) => `.${ext}`);
       resolvers[platform] = require("enhanced-resolve").create.sync({
         aliasFields: ["browser"],
+
         // Add `require` to handle packages that are missing `default`
         // conditional. See
         // https://github.com/webpack/enhanced-resolve/issues/313
-        conditionNames: ["require", "node"],
-        // Disable exports map as it currently takes precedence over the
-        // `react-native` field. Revisit when Metro gets support for the field.
-        exportsFields: [],
+        conditionNames: unstable_enablePackageExports
+          ? unstable_conditionNames
+          : ["require", "node"],
+
+        // Unless `unstable_enablePackageExports` is enabled, disable exports
+        // map as it currently takes precedence over the `react-native` field.
+        ...(unstable_enablePackageExports ? undefined : { exportsFields: [] }),
+
         extensions:
           platform === "common"
             ? extensions

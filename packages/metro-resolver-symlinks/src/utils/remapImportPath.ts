@@ -1,10 +1,10 @@
-import type { PackageModuleRef } from "@rnx-kit/tools-node";
 import {
   isFileModuleRef,
   parseModuleRef,
   readPackage,
 } from "@rnx-kit/tools-node";
-import { expandPlatformExtensions } from "@rnx-kit/tools-react-native";
+import type { PackageModuleRef } from "@rnx-kit/tools-node/module";
+import { expandPlatformExtensions } from "@rnx-kit/tools-react-native/platform";
 import * as path from "path";
 import type { ModuleResolver, ResolutionContext } from "../types";
 
