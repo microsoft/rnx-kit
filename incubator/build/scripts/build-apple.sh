@@ -56,8 +56,8 @@ case ${1-} in
                ${code_signing} \
                CLANG_ADDRESS_SANITIZER=NO \
                CLANG_UNDEFINED_BEHAVIOR_SANITIZER=NO \
-               OTHER_CFLAGS='$(inherited) -fstack-protector-strong' \
-               OTHER_LDFLAGS='$(inherited) -fstack-protector-strong' \
+               OTHER_CFLAGS='$(inherited) -fno-sanitize=undefined -fno-sanitize=bounds -fstack-protector-strong' \
+               OTHER_LDFLAGS='$(inherited) -fno-sanitize=undefined -fno-sanitize=bounds -fstack-protector-strong' \
                COMPILER_INDEX_STORE_ENABLE=NO \
                archive
     ;;
@@ -86,8 +86,8 @@ case ${1-} in
                CODE_SIGNING_ALLOWED=NO \
                CLANG_ADDRESS_SANITIZER=NO \
                CLANG_UNDEFINED_BEHAVIOR_SANITIZER=NO \
-               OTHER_CFLAGS='$(inherited) -fstack-protector-strong' \
-               OTHER_LDFLAGS='$(inherited) -fstack-protector-strong' \
+               OTHER_CFLAGS='$(inherited) -fno-sanitize=undefined -fno-sanitize=bounds -fstack-protector-strong' \
+               OTHER_LDFLAGS='$(inherited) -fno-sanitize=undefined -fno-sanitize=bounds -fstack-protector-strong' \
                COMPILER_INDEX_STORE_ENABLE=NO \
                build
     ;;
