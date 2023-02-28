@@ -1,5 +1,12 @@
 # @rnx-kit/build
 
+## 0.4.4
+
+### Patch Changes
+
+- f713d3be: GitHub: Fix job ending prematurely when it takes longer than usual to start up (proper)
+- 23b3b066: iOS/macOS: Explicitly disable sanitizers since they might be enabled by inherited flags
+
 ## 0.4.3
 
 ### Patch Changes
