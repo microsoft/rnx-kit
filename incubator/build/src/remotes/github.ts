@@ -143,9 +143,8 @@ async function watchWorkflowRun(
     //   - https://docs.github.com/en/rest/overview/resources-in-the-rest-api#conditional-requests
     if (count++ % 5 === 0) {
       try {
-        const result = await octokit().rest.actions.listJobsForWorkflowRun(
-          params
-        );
+        const gh = octokit();
+        const result = await gh.rest.actions.listJobsForWorkflowRun(params);
         const activeJobs = result.data.jobs.filter(
           (job) => job && job.conclusion !== "skipped"
         );
