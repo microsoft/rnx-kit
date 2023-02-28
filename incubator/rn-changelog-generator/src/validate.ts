@@ -10,7 +10,8 @@ export default {
     commitMsg: {
       alias: "c",
       string: true,
-      describe: "Validate if commit message ",
+      describe:
+        "Validate if commit message follows changelog format. Returns 'missing', 'invalid', or 'valid'.",
       demandOption: true,
     },
   },
