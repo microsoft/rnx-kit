@@ -33,15 +33,16 @@ function supportsRetryResolvingFromDisk(): boolean {
   const { version } = importMetroModule("/package.json");
   const [major, minor] = version.split(".");
   const v = major * 1000 + minor;
-  return v >= 64 && v <= 73;
+  return v >= 64 && v <= 75;
 }
 
 export function shouldEnableRetryResolvingFromDisk({
   experimental_retryResolvingFromDisk,
 }: Options): boolean {
   if (
-    !supportsRetryResolvingFromDisk() &&
-    experimental_retryResolvingFromDisk !== "force"
+    experimental_retryResolvingFromDisk &&
+    experimental_retryResolvingFromDisk !== "force" &&
+    !supportsRetryResolvingFromDisk()
   ) {
     console.warn(
       "The version of Metro you're using has not been tested with " +
@@ -92,7 +93,11 @@ export function patchMetro(options: Options): void {
   DependencyGraph.prototype.orig__createModuleResolver =
     DependencyGraph.prototype._createModuleResolver;
   DependencyGraph.prototype._createModuleResolver = function (): void {
-    const hasteFS = this._hasteFS || this._snapshotFS || this._fileSystem;
+    const hasteFS =
+      this._fileSystem || // >= 0.73.5
+      this._snapshotFS || // 0.73.4
+      this._hasteFS; // < 0.73.4
+
     this._doesFileExist = (filePath: string): boolean => {
       return hasteFS.exists(filePath) || fileExists(filePath);
     };
