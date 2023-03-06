@@ -3137,6 +3137,7 @@ __metadata:
     "@rnx-kit/console": ^1.0.11
     "@rnx-kit/metro-plugin-cyclic-dependencies-detector": "*"
     "@rnx-kit/metro-plugin-duplicates-checker": "*"
+    "@rnx-kit/metro-serializer-esbuild": "*"
     "@rnx-kit/scripts": "*"
     "@rnx-kit/tools-node": ^1.2.7
     "@rnx-kit/tools-react-native": "*"

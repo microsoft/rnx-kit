@@ -158,8 +158,17 @@ export function customizeMetroConfig(
   }
 
   if (extraParams.treeShake) {
-    metroConfig.serializer.customSerializer =
-      MetroSerializerEsbuild(metroPlugins);
+    if (metroConfig.serializer.customSerializer) {
+      warn(
+        "`serializer.customSerializer` in `metro.config.js` will be overwritten to enable tree shaking"
+      );
+    }
+    metroConfig.serializer.customSerializer = MetroSerializerEsbuild(
+      metroPlugins,
+      typeof extraParams.treeShake === "object"
+        ? extraParams.treeShake
+        : undefined
+    );
     Object.assign(metroConfig.transformer, esbuildTransformerConfig);
   } else if (metroPlugins.length > 0) {
     // MetroSerializer acts as a CustomSerializer, and it works with both
