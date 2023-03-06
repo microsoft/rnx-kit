@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/rn-changelog-generator
 
+## 0.4.0
+
+### Minor Changes
+
+- 3fa093e8: Adding validation command to verify if a commit follows a React Native changelog
+
 ## 0.3.2
 
 ### Patch Changes

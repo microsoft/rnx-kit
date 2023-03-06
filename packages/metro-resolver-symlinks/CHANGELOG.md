@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-resolver-symlinks
 
+## 0.1.27
+
+### Patch Changes
+
+- 9c0c87b9: Add support for the experimental `unstable_enablePackageExports` flag in 0.75.1
+
 ## 0.1.26
 
 ### Patch Changes
