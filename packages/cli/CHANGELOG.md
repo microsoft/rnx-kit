@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/cli
 
+## 0.16.4
+
+### Patch Changes
+
+- 5730d24d: Forward build options to `metro-serializer-esbuild`
+
 ## 0.16.3
 
 ### Patch Changes
