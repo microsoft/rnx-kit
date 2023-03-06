@@ -1,6 +1,7 @@
-import type { AllPlatforms } from "@rnx-kit/tools-react-native/platform";
 import type { PluginOptions as CyclicDetectorOptions } from "@rnx-kit/metro-plugin-cyclic-dependencies-detector";
 import type { Options as DuplicateDetectorOptions } from "@rnx-kit/metro-plugin-duplicates-checker";
+import type { Options as EsbuildOptions } from "@rnx-kit/metro-serializer-esbuild";
+import type { AllPlatforms } from "@rnx-kit/tools-react-native/platform";
 import type { OutputOptions } from "metro";
 
 export type TypeScriptValidationOptions = {
@@ -102,7 +103,7 @@ export type BundleParameters = BundlerPlugins & {
    *
    * Only applies to `rnx-bundle` command.
    */
-  treeShake?: boolean;
+  treeShake?: boolean | EsbuildOptions;
 
   /**
    * List of plugins to add to the bundling process.

@@ -26,6 +26,7 @@
   "devDependencies": {
     "@rnx-kit/metro-plugin-cyclic-dependencies-detector": "*",
     "@rnx-kit/metro-plugin-duplicates-checker": "*",
+    "@rnx-kit/metro-serializer-esbuild": "*",
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tools-react-native": "*",
     "@types/lodash": "^4.14.172",

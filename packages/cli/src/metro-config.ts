@@ -158,8 +158,12 @@ export function customizeMetroConfig(
   }
 
   if (extraParams.treeShake) {
-    metroConfig.serializer.customSerializer =
-      MetroSerializerEsbuild(metroPlugins);
+    metroConfig.serializer.customSerializer = MetroSerializerEsbuild(
+      metroPlugins,
+      typeof extraParams.treeShake === "object"
+        ? extraParams.treeShake
+        : undefined
+    );
     Object.assign(metroConfig.transformer, esbuildTransformerConfig);
   } else if (metroPlugins.length > 0) {
     // MetroSerializer acts as a CustomSerializer, and it works with both
