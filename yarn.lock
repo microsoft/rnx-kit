@@ -11422,8 +11422,8 @@ __metadata:
   linkType: hard
 
 "react-native-macos@npm:^0.68.0":
-  version: 0.68.65
-  resolution: "react-native-macos@npm:0.68.65"
+  version: 0.68.66
+  resolution: "react-native-macos@npm:0.68.66"
   dependencies:
     "@jest/create-cache-key-function": ^27.0.1
     "@react-native-community/cli": ^7.0.3
@@ -11463,7 +11463,7 @@ __metadata:
     react: 17.0.2
   bin:
     react-native-macos: cli.js
-  checksum: 12820beb9cb84f11626cd23fb9ee5ec71b8a595742cdac3a72832c7b0d311619dc8e1542d7a94e791fd700ca39788e9afbe40e319019856c724873e7e9db11b0
+  checksum: f9ab5d60d4c5ffeeb1d2bf62d223cab52929f27790fce62f6733d8fbb6ab95ad6921f59b4323eed51e4269ab36f304b5149d7acc5c5145e6f3fb63270781161d
   languageName: node
   linkType: hard
 
