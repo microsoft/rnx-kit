@@ -1976,47 +1976,47 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fluentui/dom-utilities@npm:^2.2.2":
-  version: 2.2.2
-  resolution: "@fluentui/dom-utilities@npm:2.2.2"
+"@fluentui/dom-utilities@npm:^2.2.5":
+  version: 2.2.5
+  resolution: "@fluentui/dom-utilities@npm:2.2.5"
   dependencies:
-    "@fluentui/set-version": ^8.2.2
+    "@fluentui/set-version": ^8.2.5
     tslib: ^2.1.0
-  checksum: 180db58c9982bc3fd6a109be636f72e805f372972a2a94425fa792977e465959468e1030f105b0accfbc52e51adf5aedf2a278a2cc1b9d970c056c95ca583abc
+  checksum: 09277daca0aaa0cecfbac1c652c8c17addf87a63ad348295bc485b1d1705d49b26be7a9184a839a070de4f11a68b2834a7e62126db73f5c3138f9abf663ae1ef
   languageName: node
   linkType: hard
 
-"@fluentui/merge-styles@npm:^8.5.3":
-  version: 8.5.3
-  resolution: "@fluentui/merge-styles@npm:8.5.3"
+"@fluentui/merge-styles@npm:^8.5.6":
+  version: 8.5.6
+  resolution: "@fluentui/merge-styles@npm:8.5.6"
   dependencies:
-    "@fluentui/set-version": ^8.2.2
+    "@fluentui/set-version": ^8.2.5
     tslib: ^2.1.0
-  checksum: 446a238730030d3dd287e8b9a202cb38d9d108f8a1b125a28fb1712d3bc907cdc4e3ce73b4d967d451fd1ca11b3393a93415d3ef2ddfeeefb594df5b2b0cda5f
+  checksum: 8f472353e430cd64ff4a449d155170bd303fdf0f9dfce021b5c43a7dccb35cd070bbb9e946c18c6e939eb93cfbaf5dab0d5988f9efcde19dc841a8aadb209377
   languageName: node
   linkType: hard
 
-"@fluentui/set-version@npm:^8.2.2":
-  version: 8.2.2
-  resolution: "@fluentui/set-version@npm:8.2.2"
+"@fluentui/set-version@npm:^8.2.5":
+  version: 8.2.5
+  resolution: "@fluentui/set-version@npm:8.2.5"
   dependencies:
     tslib: ^2.1.0
-  checksum: a849ff3b055c8e33178af00298994e5e94d61092c007883ff27e94c3f79b98b22d720a646d9bea1d8e7d73e719e1c0e06e573a3a5123b1e3f69f92ada58c037c
+  checksum: be190d34e0bf5b1f7947f9f376483ffb97abc79799ffe8196288abed76c678c31a349d9e7a5ed3eaec892bf80723e76ae309142ee0d7659e66a49048fe2341c7
   languageName: node
   linkType: hard
 
-"@fluentui/utilities@npm:8.12.0":
-  version: 8.12.0
-  resolution: "@fluentui/utilities@npm:8.12.0"
+"@fluentui/utilities@npm:8.13.7":
+  version: 8.13.7
+  resolution: "@fluentui/utilities@npm:8.13.7"
   dependencies:
-    "@fluentui/dom-utilities": ^2.2.2
-    "@fluentui/merge-styles": ^8.5.3
-    "@fluentui/set-version": ^8.2.2
+    "@fluentui/dom-utilities": ^2.2.5
+    "@fluentui/merge-styles": ^8.5.6
+    "@fluentui/set-version": ^8.2.5
     tslib: ^2.1.0
   peerDependencies:
-    "@types/react": ">=16.8.0 <18.0.0"
-    react: ">=16.8.0 <18.0.0"
-  checksum: 8d57c9dadbba2325b8f8e601867b91a049ff44d859fb8c8879ea3b6071e90c451983e693d0a351e06c9f4e222e55074c997626d2a2a7533fdf8d6b913fe92842
+    "@types/react": ">=16.8.0 <19.0.0"
+    react: ">=16.8.0 <19.0.0"
+  checksum: 36262b1184e3551beea4bdd4c0c774fb2d7b993760215b3525e1a985e8d2083ac59f3635aa98592f87fa18b016213a7397b408460f1779218345da8ad531b50f
   languageName: node
   linkType: hard
 
@@ -3367,7 +3367,7 @@ __metadata:
   dependencies:
     "@babel/core": ^7.1.6
     "@babel/preset-env": ^7.1.6
-    "@fluentui/utilities": 8.12.0
+    "@fluentui/utilities": 8.13.7
     "@react-native-community/cli-plugin-metro": ^7.0.3
     "@rnx-kit/babel-preset-metro-react-native": "*"
     "@rnx-kit/console": ^1.0.11
