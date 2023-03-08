@@ -69,20 +69,19 @@ We use Yarn to install npm dependencies. From the repo root, run:
 yarn
 ```
 
-This will also take care of building any tools that you might need. Once it's
-done, you can choose to build all packages or just the packages you're
+Once it's done, you can choose to build all packages or just the packages you're
 interested in.
 
-If you want to build all packages, you should run:
+If you want to build all packages, run the following command at the root:
 
-```
+```sh
 yarn build
 ```
 
 Otherwise, you can specify which package to build, e.g. `@rnx-kit/cli`:
 
 ```sh
-yarn build-scope @rnx-kit/cli
+yarn build-scope cli
 ```
 
 Alternatively, you can navigate to the package folder and run:
