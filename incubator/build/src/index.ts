@@ -1,4 +1,4 @@
-export { renderQRCode } from "./qrcode";
+export { renderQRCode } from "./qrcode.js";
 export type {
   BuildParams,
   Context,
@@ -8,4 +8,4 @@ export type {
   Platform,
   Remote,
   RepositoryInfo,
-} from "./types";
+} from "./types.js";

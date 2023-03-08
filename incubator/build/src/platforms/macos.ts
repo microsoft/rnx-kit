@@ -1,8 +1,8 @@
 import * as os from "node:os";
 import type { Ora } from "ora";
-import { untar } from "../archive";
-import { makeCommand } from "../command";
-import type { BuildParams } from "../types";
+import { untar } from "../archive.js";
+import { makeCommand } from "../command.js";
+import type { BuildParams } from "../types.js";
 
 export const open = makeCommand("open");
 

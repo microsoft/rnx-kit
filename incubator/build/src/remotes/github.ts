@@ -6,23 +6,23 @@ import * as fs from "node:fs";
 import * as path from "node:path";
 import * as readline from "node:readline";
 import type ora from "ora";
-import { idle, once, withRetry } from "../async";
+import { idle, once, withRetry } from "../async.js";
 import {
   BUILD_ID,
   MAX_ATTEMPTS,
   MAX_DOWNLOAD_ATTEMPTS,
   USER_CONFIG_FILE,
   WORKFLOW_ID,
-} from "../constants";
-import { ensureDir } from "../filesystem";
-import { getRemoteUrl, getRepositoryRoot, stage } from "../git";
-import { elapsedTime } from "../time";
+} from "../constants.js";
+import { ensureDir } from "../filesystem.js";
+import { getRemoteUrl, getRepositoryRoot, stage } from "../git.js";
+import { elapsedTime } from "../time.js";
 import type {
   BuildParams,
   Context,
   RepositoryInfo,
   UserConfig,
-} from "../types";
+} from "../types.js";
 
 type WorkflowRunId =
   RestEndpointMethodTypes["actions"]["listJobsForWorkflowRun"]["parameters"];

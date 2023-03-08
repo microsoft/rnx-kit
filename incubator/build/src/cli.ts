@@ -2,19 +2,18 @@ import * as path from "node:path";
 import pkgDir from "pkg-dir";
 import type { Options } from "yargs";
 import yargs from "yargs";
-import { hideBin } from "yargs/helpers";
-import { startBuild } from "./build";
+import { startBuild } from "./build.js";
 import {
   DEPLOYMENT,
   DEVICE_TYPES,
   PLATFORMS,
   USER_CONFIG_FILE,
-} from "./constants";
-import { getDistribution } from "./distribution";
-import { getRepositoryRoot } from "./git";
-import { detectPackageManager } from "./packageManager";
-import { getRemoteInfo } from "./remotes";
-import type { DeviceType, Platform } from "./types";
+} from "./constants.js";
+import { getDistribution } from "./distribution.js";
+import { getRepositoryRoot } from "./git.js";
+import { detectPackageManager } from "./packageManager.js";
+import { getRemoteInfo } from "./remotes.js";
+import type { DeviceType, Platform } from "./types.js";
 
 type RequiredOptionInferenceHelper<T> = Options & {
   choices: ReadonlyArray<T>;
@@ -35,7 +34,7 @@ async function main(): Promise<void> {
     default: pkgDir.sync() || process.cwd(),
   } as const;
 
-  const argv = yargs(hideBin(process.argv))
+  const argv = yargs(process.argv.slice(2))
     .command("$0 [project-root]", "Build your app in the cloud", (yargs) => {
       yargs.positional("project-root", projectRootOption);
     })

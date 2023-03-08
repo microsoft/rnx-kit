@@ -5,7 +5,7 @@ type FirebaseConfig = {
   appId: string | Partial<Record<Platform, string>>;
 };
 
-module.exports = (config: Partial<FirebaseConfig>): DistributionPlugin => {
+export default function (config: Partial<FirebaseConfig>): DistributionPlugin {
   return {
     deploy: (_context, _artifact, spinner) => {
       /**
@@ -39,4 +39,4 @@ module.exports = (config: Partial<FirebaseConfig>): DistributionPlugin => {
       return Promise.resolve(`firebase:${appId}`);
     },
   };
-};
+}

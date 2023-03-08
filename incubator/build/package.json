@@ -14,8 +14,13 @@
     "scripts/*",
     "workflows/*"
   ],
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "import": "./lib/index.js"
+    }
+  },
   "bin": {
     "rnx-build": "lib/cli.js",
     "rnx-build-apple": "scripts/build-apple.sh"

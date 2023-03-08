@@ -2,16 +2,16 @@ import * as os from "node:os";
 import * as path from "node:path";
 import * as readline from "node:readline";
 import type { Ora } from "ora";
-import { untar } from "../archive";
-import { retry } from "../async";
+import { untar } from "../archive.js";
+import { retry } from "../async.js";
 import {
   ensure,
   ensureInstalled,
   makeCommand,
   makeCommandSync,
-} from "../command";
-import type { BuildParams, DeviceType, JSObject } from "../types";
-import { open } from "./macos";
+} from "../command.js";
+import type { BuildParams, DeviceType, JSObject } from "../types.js";
+import { open } from "./macos.js";
 
 type Device = {
   simulator: boolean;
