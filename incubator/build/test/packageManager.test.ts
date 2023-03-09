@@ -7,7 +7,7 @@ function changeToFixtureDir(fixture: string) {
 }
 
 function changeToRootDir() {
-  const root = os.platform() === "win32" ? process.cwd().substring(0, 2) : "/";
+  const root = os.platform() === "win32" ? process.cwd().substring(0, 3) : "/";
   process.chdir(root);
 }
 
