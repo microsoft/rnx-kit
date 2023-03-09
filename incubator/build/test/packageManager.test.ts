@@ -23,18 +23,10 @@ describe("detectPackageManager", () => {
     expect(detectPackageManager()).toBeUndefined();
   });
 
-  test("detects npm", async () => {
-    changeToFixtureDir("npm");
-    expect(detectPackageManager()).toBe("npm");
-  });
-
-  test("detects pnpm", async () => {
-    changeToFixtureDir("pnpm");
-    expect(detectPackageManager()).toBe("pnpm");
-  });
-
-  test("detects Yarn", async () => {
-    changeToFixtureDir("yarn");
-    expect(detectPackageManager()).toBe("yarn");
-  });
+  for (const pm of ["npm", "pnpm", "yarn"]) {
+    test(`detects ${pm}`, async () => {
+      changeToFixtureDir(pm);
+      expect(detectPackageManager()).toBe(pm);
+    });
+  }
 });
