@@ -55,7 +55,6 @@
     "@types/qrcode": "^1.4.2",
     "eslint": "^8.0.0",
     "jest": "^27.0.0",
-    "memfs": "^3.4.1",
     "prettier": "^2.8.0",
     "typescript": "^4.0.0"
   },
@@ -66,7 +65,10 @@
     "extends": "@rnx-kit/eslint-config"
   },
   "jest": {
-    "preset": "@rnx-kit/scripts"
+    "preset": "@rnx-kit/scripts",
+    "transformIgnorePatterns": [
+      "/node_modules/(?!(find-up|locate-path|p-limit|p-locate|path-exists|yocto-queue)/)"
+    ]
   },
   "experimental": true
 }

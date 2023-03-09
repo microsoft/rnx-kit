@@ -3121,7 +3121,6 @@ __metadata:
     fast-xml-parser: ^4.0.0
     find-up: ^6.3.0
     jest: ^27.0.0
-    memfs: ^3.4.1
     ora: ^6.1.2
     pkg-dir: ^7.0.0
     prettier: ^2.8.0
