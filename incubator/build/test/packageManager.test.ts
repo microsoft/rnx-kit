@@ -18,13 +18,13 @@ describe("detectPackageManager", () => {
     process.chdir(cwd);
   });
 
-  test("returns `undefined` when it fails to detect package manager", async () => {
+  test("returns `undefined` when it fails to detect package manager", () => {
     changeToRootDir();
     expect(detectPackageManager()).toBeUndefined();
   });
 
   for (const pm of ["npm", "pnpm", "yarn"]) {
-    test(`detects ${pm}`, async () => {
+    test(`detects ${pm}`, () => {
       changeToFixtureDir(pm);
       expect(detectPackageManager()).toBe(pm);
     });
