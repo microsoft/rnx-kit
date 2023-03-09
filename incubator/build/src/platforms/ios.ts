@@ -201,13 +201,26 @@ async function selectDevice(
 
   const device = deviceName
     ? devices.find(({ simulator, name }) => simulator && name === deviceName)
-    : devices.reverse().find(({ simulator, available, name }) => {
-        return simulator && available && /^iPhone \d\d$/.test(name);
+    : devices.reverse().find(({ simulator, available, modelName }) => {
+        return simulator && available && /^iPhone \d\d$/.test(modelName);
       });
   if (!device) {
-    const message = deviceName
-      ? `Failed to find simulator: ${deviceName}`
-      : "Failed to find an iPhone simulator";
+    const foundDevices = devices
+      .reduce<string[]>((list, device) => {
+        const { simulator, operatingSystemVersion, available, modelName } =
+          device;
+        if (simulator && available) {
+          list.push(`${modelName} (${operatingSystemVersion})`);
+        }
+        return list;
+      }, [])
+      .sort();
+    const message = [
+      deviceName
+        ? `Failed to find ${deviceName} simulator:`
+        : "Failed to find an iPhone simulator:",
+      ...foundDevices,
+    ].join("\n\t - ");
     spinner.fail(message);
     return null;
   }
