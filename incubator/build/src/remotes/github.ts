@@ -5,7 +5,7 @@ import { RequestError } from "@octokit/request-error";
 import * as fs from "node:fs";
 import * as path from "node:path";
 import * as readline from "node:readline";
-import type ora from "ora";
+import type { Ora } from "ora";
 import { idle, once, withRetry } from "../async.js";
 import {
   BUILD_ID,
@@ -115,7 +115,7 @@ async function getWorkflowRunId(
 
 async function watchWorkflowRun(
   runId: WorkflowRunId,
-  spinner: ora.Ora
+  spinner: Ora
 ): Promise<string | null> {
   spinner.start("Starting build");
 
@@ -267,7 +267,7 @@ export async function install(): Promise<number> {
 export async function build(
   { owner, repo, ref }: Context,
   inputs: BuildParams,
-  spinner: ora.Ora
+  spinner: Ora
 ): Promise<string | null> {
   await octokit().rest.actions.createWorkflowDispatch({
     owner,

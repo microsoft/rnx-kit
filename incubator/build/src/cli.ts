@@ -1,5 +1,5 @@
 import * as path from "node:path";
-import pkgDir from "pkg-dir";
+import { packageDirectorySync } from "pkg-dir";
 import type { Options } from "yargs";
 import yargs from "yargs";
 import { startBuild } from "./build.js";
@@ -27,11 +27,11 @@ async function main(): Promise<void> {
     return;
   }
 
-  const detectedPackageManager = await detectPackageManager();
+  const detectedPackageManager = detectPackageManager();
   const projectRootOption = {
     type: "string",
     description: "Root of project",
-    default: pkgDir.sync() || process.cwd(),
+    default: packageDirectorySync() || process.cwd(),
   } as const;
 
   const argv = yargs(process.argv.slice(2))

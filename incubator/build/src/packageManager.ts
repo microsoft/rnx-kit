@@ -1,4 +1,4 @@
-import findUp from "find-up";
+import { findUpSync } from "find-up";
 import * as path from "node:path";
 
 const PACKAGE_MANAGERS = {
@@ -10,9 +10,7 @@ const PACKAGE_MANAGERS = {
 type LockFile = keyof typeof PACKAGE_MANAGERS;
 type PackageManager = (typeof PACKAGE_MANAGERS)[LockFile];
 
-export async function detectPackageManager(): Promise<
-  PackageManager | undefined
-> {
-  const file = await findUp(Object.keys(PACKAGE_MANAGERS));
+export function detectPackageManager(): PackageManager | undefined {
+  const file = findUpSync(Object.keys(PACKAGE_MANAGERS));
   return file ? PACKAGE_MANAGERS[path.basename(file) as LockFile] : undefined;
 }
