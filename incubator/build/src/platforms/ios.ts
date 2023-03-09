@@ -220,7 +220,7 @@ async function selectDevice(
         ? `Failed to find ${deviceName} simulator:`
         : "Failed to find an iPhone simulator:",
       ...foundDevices,
-    ].join("\n\t - ");
+    ].join("\n\t- ");
     spinner.fail(message);
     return null;
   }
