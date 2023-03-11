@@ -1,4 +1,4 @@
-import * as fse from "fs-extra";
+import * as fs from "fs";
 import * as ChildProcess from "child_process";
 import { error } from "@rnx-kit/console";
 import type { IConfigFile } from "./types";
@@ -12,7 +12,7 @@ import type { IConfigFile } from "./types";
 export function symbolicateBuffer(buffer: string[], sourcemap: string) {
   if (buffer.length > 0) {
     // Write buffer to a temp file
-    fse.writeFileSync("./temp.rnbuffertrace", buffer.join("\n"));
+    fs.writeFileSync("./temp.rnbuffertrace", buffer.join("\n"));
 
     // Symbolicate buffer
     ChildProcess.execSync(
@@ -24,7 +24,7 @@ export function symbolicateBuffer(buffer: string[], sourcemap: string) {
     console.log("\n");
 
     // Delete temp file
-    fse.removeSync("./temp.rnbuffertrace");
+    fs.unlinkSync("./temp.rnbuffertrace");
   }
 }
 
@@ -45,7 +45,7 @@ export function isConfigFileValid(configFile: IConfigFile): boolean {
     for (const config of configFile.configs) {
       if (
         !config?.sourcemap ||
-        !fse.existsSync(config.sourcemap) ||
+        !fs.existsSync(config.sourcemap) ||
         !config?.bundleIdentifier
       ) {
         error(

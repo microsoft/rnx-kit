@@ -31,8 +31,6 @@
   },
   "devDependencies": {
     "@rnx-kit/scripts": "*",
-    "@types/fs-extra": "^11.0.0",
-    "@types/minimist": "^1.2.0",
     "eslint": "^8.0.0",
     "jest": "^27.0.0",
     "prettier": "^2.8.0",
@@ -40,8 +38,7 @@
   },
   "dependencies": {
     "@rnx-kit/console": "^1.0.11",
-    "fs-extra": "^11.1.0",
-    "minimist": "^1.2.7"
+    "yargs": "^17.7.0"
   },
   "eslintConfig": {
     "extends": "@rnx-kit/eslint-config"

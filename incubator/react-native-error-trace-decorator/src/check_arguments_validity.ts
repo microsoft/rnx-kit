@@ -1,13 +1,7 @@
-import type * as minimist from "minimist";
-import { error, info } from "@rnx-kit/console";
-import * as fse from "fs-extra";
-import type { IArgumentsCapability } from "./types";
-
-const capabilities: IArgumentsCapability = {
-  help: "displays the help",
-  errorFile: "pass the path to txt file containing the stack trace",
-  configFile: "pass the path to the config file",
-};
+import * as fs from "fs";
+import { error } from "@rnx-kit/console";
+import yargs from "yargs";
+import { hideBin } from "yargs/helpers";
 
 const exampleConfigFile = {
   configs: [
@@ -21,61 +15,42 @@ const exampleConfigFile = {
     },
   ],
 };
-const configFilePattern = `Please create a JSON config file in the following format:\n${JSON.stringify(
-  exampleConfigFile
-)}`;
 
-export function checkArgumentValidity(args: minimist.ParsedArgs): boolean {
-  // If help flag is passed, print help
-  if (args.help) {
-    printHelp();
-    return false;
-  }
+export function checkArgumentValidity(args: string[]) {
+  const sanitizedArgs = yargs(hideBin(args))
+    .option("configFile", {
+      type: "string",
+      alias: "cf",
+      description: `pass the path to the config file in the following format:\n ${JSON.stringify(
+        exampleConfigFile
+      )}`,
+      required: true,
+    })
+    .option("errorFile", {
+      type: "string",
+      alias: "ef",
+      description: "pass the path to txt file containing the stack trace",
+      required: true,
+    })
+    .help()
+    .strict().argv;
 
-  // If configFile param is not passed, deem the arguments invalid
-  if (!args.configFile) {
-    error(
-      "configFile argument was not passed. Please pass a path to the config file."
-    );
-    printHelp();
-    return false;
-  }
+  const { configFile, errorFile } = sanitizedArgs;
 
   // If config file does not exist, print out the appropriate error message
-  if (!fse.existsSync(args.configFile)) {
+  if (!fs.existsSync(configFile)) {
     error(
-      `Config file does not exist in ${args.configFile}. Please pass a valid path`
+      `Config file does not exist in ${configFile}. Please pass a valid path`
     );
-    return false;
-  }
-
-  // If errorFile param is not passed, deem the arguments invalid
-  if (!args.errorFile) {
-    error(
-      "errorFile argument was not passed. Please pass a path to the errorFile file."
-    );
-    printHelp();
     return false;
   }
 
   // If error file does not exist. Print out the appropriate error message
-  if (!fse.existsSync(args.errorFile)) {
+  if (!fs.existsSync(errorFile)) {
     error(
-      `Error file does not exist in ${args.errorFile}. Please pass a valid path`
+      `Error file does not exist in ${errorFile}. Please pass a valid path`
     );
     return false;
   }
-
-  return true;
-}
-
-function printHelp(): void {
-  let capabString = "";
-  Object.keys(capabilities).forEach((capab) => {
-    capabString = `${capabString}\n--${capab}:- ${
-      capabilities[capab as keyof IArgumentsCapability]
-    }`;
-  });
-  info(capabString);
-  info(configFilePattern);
+  return { configFile, errorFile };
 }

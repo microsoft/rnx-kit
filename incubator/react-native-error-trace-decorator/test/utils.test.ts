@@ -1,24 +1,24 @@
 import { symbolicateBuffer, isConfigFileValid } from "../src/utils";
-import * as fse from "fs-extra";
+import * as fse from "fs";
 import * as ChildProcess from "child_process";
 import { error } from "@rnx-kit/console";
 import type { IConfigFile } from "../src/types";
 
-jest.mock("fs-extra");
+jest.mock("fs");
 jest.mock("child_process");
 jest.mock("@rnx-kit/console");
 
 describe("Testing utils", () => {
   describe("Testing symbolicateBuffer", () => {
     let writeFileSyncSpy;
-    let removeSyncSpy;
+    let unlinkSyncSpy;
     let execSyncSpy;
     let logSpy;
 
     beforeEach(() => {
       jest.clearAllMocks();
       writeFileSyncSpy = jest.spyOn(fse, "writeFileSync");
-      removeSyncSpy = jest.spyOn(fse, "removeSync");
+      unlinkSyncSpy = jest.spyOn(fse, "unlinkSync");
       execSyncSpy = jest.spyOn(ChildProcess, "execSync");
       logSpy = jest.spyOn(console, "log").mockImplementation();
     });
@@ -29,7 +29,7 @@ describe("Testing utils", () => {
       symbolicateBuffer(buffer, sourcemap);
       expect(execSyncSpy).toBeCalled();
       expect(writeFileSyncSpy).toBeCalledTimes(1);
-      expect(removeSyncSpy).toBeCalledTimes(1);
+      expect(unlinkSyncSpy).toBeCalledTimes(1);
       expect(logSpy).toBeCalledTimes(1);
     });
 
@@ -40,7 +40,7 @@ describe("Testing utils", () => {
       symbolicateBuffer(buffer, sourcemap);
       expect(execSyncSpy).not.toBeCalled();
       expect(writeFileSyncSpy).not.toBeCalled();
-      expect(removeSyncSpy).not.toBeCalled();
+      expect(unlinkSyncSpy).not.toBeCalled();
     });
   });
 

@@ -1,4 +1,4 @@
-import * as fse from "fs-extra";
+import * as fs from "fs";
 import type { IBundleInterface, IConfigFile } from "./types";
 import { isConfigFileValid, symbolicateBuffer } from "./utils";
 
@@ -14,13 +14,13 @@ export function extractAndSymbolicateErrorStack(
 ): void {
   // Read config file as an object
   const configFile = JSON.parse(
-    fse.readFileSync(configFilePath, "utf8")
+    fs.readFileSync(configFilePath, "utf8")
   ) as IConfigFile;
 
   // Check validity of the passed config file and proceed
   if (isConfigFileValid(configFile)) {
     // Read error file and split by newline
-    const errorFile = fse.readFileSync(errorFilePath, "utf8").split("\n");
+    const errorFile = fs.readFileSync(errorFilePath, "utf8").split("\n");
 
     /**
      * Keeps a running buffer of stack trace lines based on bundleIdentifiers and batches symbolication

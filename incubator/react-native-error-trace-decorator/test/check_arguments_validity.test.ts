@@ -1,10 +1,9 @@
 import { error, info } from "@rnx-kit/console";
-import * as fse from "fs-extra";
+import * as fs from "fs";
 import { checkArgumentValidity } from "../src/check_arguments_validity";
 
 jest.mock("@rnx-kit/console");
-jest.mock("fs-extra");
-jest.mock("minimist");
+jest.mock("fs");
 
 describe("Testing checkArgumentValidity", () => {
   let infoSpy: jest.SpyInstance;
@@ -29,7 +28,7 @@ describe("Testing checkArgumentValidity", () => {
 
   test("if config file does not exist, print out the appropriate error message", () => {
     (
-      fse.existsSync as jest.MockedFunction<typeof fse.existsSync>
+      fs.existsSync as jest.MockedFunction<typeof fs.existsSync>
     ).mockReturnValueOnce(false);
     expect(
       checkArgumentValidity({ configFile: "path/to/config/file" } as never)
@@ -39,7 +38,7 @@ describe("Testing checkArgumentValidity", () => {
 
   test("if errorFile param is not passed, deem the arguments invalid and print help", () => {
     (
-      fse.existsSync as jest.MockedFunction<typeof fse.existsSync>
+      fs.existsSync as jest.MockedFunction<typeof fs.existsSync>
     ).mockReturnValueOnce(true);
     expect(
       checkArgumentValidity({ configFile: "path/to/config/file" } as never)
@@ -49,7 +48,7 @@ describe("Testing checkArgumentValidity", () => {
   });
 
   test("if error file does not exist, print out the appropriate error message", () => {
-    (fse.existsSync as jest.MockedFunction<typeof fse.existsSync>)
+    (fs.existsSync as jest.MockedFunction<typeof fs.existsSync>)
       .mockReturnValueOnce(true)
       .mockReturnValueOnce(false);
     expect(
@@ -62,7 +61,7 @@ describe("Testing checkArgumentValidity", () => {
   });
 
   test("if all arguments are valid, return true", () => {
-    (fse.existsSync as jest.MockedFunction<typeof fse.existsSync>)
+    (fs.existsSync as jest.MockedFunction<typeof fs.existsSync>)
       .mockReturnValueOnce(true)
       .mockReturnValueOnce(true);
     expect(

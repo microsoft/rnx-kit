@@ -1,8 +1,8 @@
-import * as fse from "fs-extra";
+import * as fse from "fs";
 import { isConfigFileValid, symbolicateBuffer } from "../src/utils";
 import { extractAndSymbolicateErrorStack } from "../src/extract_and_process_error_stack";
 
-jest.mock("fs-extra");
+jest.mock("fs");
 jest.mock("../src/utils");
 
 const mockConfigFile = {
