@@ -2636,15 +2636,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@octokit/types@npm:^9.0.0":
-  version: 9.0.0
-  resolution: "@octokit/types@npm:9.0.0"
-  dependencies:
-    "@octokit/openapi-types": ^16.0.0
-  checksum: 5c7f5cca8f00f7c4daa0d00f4fe991c1598ec47cd6ced50b1c5fbe9721bb9dee0adc2acdee265a3a715bb984e53ef3dc7f1cfb7326f712c6d809d59fc5c6648d
-  languageName: node
-  linkType: hard
-
 "@opentelemetry/api@npm:^1.0.1, @opentelemetry/api@npm:^1.0.4":
   version: 1.1.0
   resolution: "@opentelemetry/api@npm:1.1.0"
@@ -3589,6 +3580,22 @@ __metadata:
   peerDependencies:
     react: 16.11.0 || 16.13.1 || 17.0.1 || 17.0.2 || 18.0.0 || 18.1.0 || 18.2.0
     react-native: ^0.62.3 || ^0.63.2 || ^0.64.2 || ^0.65.0 || ^0.66.0 || ^0.67.0 || ^0.68.0 || ^0.69.0 || ^0.70.0 || ^0.71.0
+  languageName: unknown
+  linkType: soft
+
+"@rnx-kit/react-native-error-trace-decorator@workspace:incubator/react-native-error-trace-decorator":
+  version: 0.0.0-use.local
+  resolution: "@rnx-kit/react-native-error-trace-decorator@workspace:incubator/react-native-error-trace-decorator"
+  dependencies:
+    "@rnx-kit/console": ^1.0.11
+    "@rnx-kit/scripts": "*"
+    eslint: ^8.0.0
+    jest: ^27.0.0
+    prettier: ^2.8.0
+    typescript: ^4.0.0
+    yargs: ^17.7.0
+  bin:
+    react-native-error-trace-decorator: lib/index.js
   languageName: unknown
   linkType: soft
 
