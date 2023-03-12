@@ -2012,9 +2012,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fluentui/utilities@npm:8.13.7":
-  version: 8.13.7
-  resolution: "@fluentui/utilities@npm:8.13.7"
+"@fluentui/utilities@npm:8.13.8":
+  version: 8.13.8
+  resolution: "@fluentui/utilities@npm:8.13.8"
   dependencies:
     "@fluentui/dom-utilities": ^2.2.5
     "@fluentui/merge-styles": ^8.5.6
@@ -2023,7 +2023,7 @@ __metadata:
   peerDependencies:
     "@types/react": ">=16.8.0 <19.0.0"
     react: ">=16.8.0 <19.0.0"
-  checksum: 36262b1184e3551beea4bdd4c0c774fb2d7b993760215b3525e1a985e8d2083ac59f3635aa98592f87fa18b016213a7397b408460f1779218345da8ad531b50f
+  checksum: 06a71d6e8c1426726b54fb1e1e76e6b1cf3e4f523cc5660286716cfdcb7392df7b8588b6061c3bdd059f40cf9f758f421f61d4a585ce60a53ca4167860467dff
   languageName: node
   linkType: hard
 
@@ -3437,7 +3437,7 @@ __metadata:
   dependencies:
     "@babel/core": ^7.1.6
     "@babel/preset-env": ^7.1.6
-    "@fluentui/utilities": 8.13.7
+    "@fluentui/utilities": 8.13.8
     "@react-native-community/cli-plugin-metro": ^7.0.3
     "@rnx-kit/babel-preset-metro-react-native": "*"
     "@rnx-kit/console": ^1.0.11
