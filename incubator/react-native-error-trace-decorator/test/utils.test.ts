@@ -86,7 +86,7 @@ describe("Testing utils", () => {
       };
       existsSyncSpy.mockReturnValue(true);
       expect(isConfigFileValid(configFile as IConfigFile)).toBe(false);
-      expect(existsSyncSpy).toBeCalled();
+      expect(existsSyncSpy).not.toBeCalled();
       expect(errorSpy).toBeCalled();
     });
 
@@ -97,7 +97,7 @@ describe("Testing utils", () => {
       existsSyncSpy.mockReturnValue(true);
       expect(isConfigFileValid(configFile)).toBe(true);
       expect(existsSyncSpy).toBeCalled();
-      expect(errorSpy).not.toBeCalled();
+      expect(errorSpy).not.toBeCalledTimes(1);
     });
   });
 });

@@ -30,13 +30,14 @@ export function isConfigFileValid(configFile: IConfigFile): boolean {
     }
     // Parse through all configs and check if sourcemap files exist
     for (const config of configFile.configs) {
-      if (
-        !config?.sourcemap ||
-        !fs.existsSync(config.sourcemap) ||
-        !config?.bundleIdentifier
-      ) {
+      if (!config?.bundleIdentifier) {
+        error("Bundle Identifier must be set for all configs");
+        return false;
+      }
+
+      if (!config?.sourcemap || !fs.existsSync(config.sourcemap)) {
         error(
-          `Config: { bundleIdentifier: ${config.bundleIdentifier}, sourcemap: ${config.sourcemap} } is not proper`
+          `Sourcemap file for ${config.bundleIdentifier} does not exist at ${config.sourcemap}`
         );
         return false;
       }
