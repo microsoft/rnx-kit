@@ -3597,7 +3597,7 @@ __metadata:
     typescript: ^4.0.0
     yargs: ^17.7.0
   bin:
-    react-native-error-trace-decorator: lib/index.js
+    react-native-error-trace-decorator: lib/cli.js
   languageName: unknown
   linkType: soft
 
