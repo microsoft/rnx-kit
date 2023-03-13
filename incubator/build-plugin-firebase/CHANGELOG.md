@@ -1,5 +1,16 @@
 # @rnx-kit/build-plugin-firebase
 
+## 1.1.0
+
+### Minor Changes
+
+- b8eb7ecc: Migrate to ESM
+
+### Patch Changes
+
+- Updated dependencies [b8eb7ecc]
+  - @rnx-kit/build@0.5.0
+
 ## 1.0.0
 
 ### Patch Changes
