@@ -1,6 +1,16 @@
 import * as fs from "fs";
 import type { IBundleInterface, IConfigFile } from "./types";
 import { isConfigFileValid, symbolicateBuffer } from "./utils";
+const SourceMapConsumer = require("source-map").SourceMapConsumer;
+const Symbolication = require("metro-symbolicate/src/Symbolication.js");
+
+const options = {
+  nameSource: "function_names",
+  inputLineStart: 1,
+  inputColumnStart: 0,
+  outputLineStart: 1,
+  outputColumnStart: 0,
+};
 
 /**
  *  Extracts and symbolicates error stack traces.
@@ -24,7 +34,6 @@ export function extractAndSymbolicateErrorStack(
 
     /**
      * Keeps a running buffer of stack trace lines based on bundleIdentifiers and batches symbolication
-     * In our experience, this works much faster than symbolicating line by line
      *
      * 1. Prints lines as is when there are no matches.
      * 2. Keeps a running buffer of lines with same identifiers.
@@ -32,6 +41,10 @@ export function extractAndSymbolicateErrorStack(
      */
     let buffer: string[] = [];
     let bufferConfig: IBundleInterface | undefined;
+
+    // Map to store sourceMapContexts for each bundleIdentifier
+    // We might be able to resuse sourceMapContexts for trace lines with same bundleIdentifier
+    const sourceMapContextMap = new Map<string, object>();
 
     for (const errorLine of errorFile) {
       const configForCurrentLine = getIdentifierForLine(
@@ -41,9 +54,26 @@ export function extractAndSymbolicateErrorStack(
 
       // Case where no identifier matches the errorLine
       if (!configForCurrentLine) {
-        // Print buffer if buffer exists
         if (buffer.length > 0 && bufferConfig) {
-          symbolicateBuffer(buffer, bufferConfig.sourcemap);
+          // If we have already cached sourceMapContext for this bundleIdentifier, use it
+          // Otherwise create a new sourceMapContext and cache it
+          if (sourceMapContextMap.get(bufferConfig.bundleIdentifier)) {
+            symbolicateBuffer(
+              buffer,
+              sourceMapContextMap.get(bufferConfig.bundleIdentifier)
+            );
+          } else {
+            const sourceMapContext = Symbolication.createContext(
+              SourceMapConsumer,
+              fs.readFileSync(bufferConfig.sourcemap, "utf-8"),
+              options
+            );
+            sourceMapContextMap.set(
+              bufferConfig.bundleIdentifier,
+              sourceMapContext
+            );
+            symbolicateBuffer(buffer, sourceMapContext);
+          }
           // Flush buffer
           buffer = [];
           bufferConfig = undefined;
@@ -61,8 +91,25 @@ export function extractAndSymbolicateErrorStack(
 
       // If currentLine does not match buffer's bundle, flush buffer and create a new buffer
       if (buffer.length > 0 && bufferConfig) {
-        // Print buffer
-        symbolicateBuffer(buffer, bufferConfig.sourcemap);
+        // If we have already cached sourceMapContext for this bundleIdentifier, use it
+        // Otherwise create a new sourceMapContext and cache it
+        if (sourceMapContextMap.get(bufferConfig.bundleIdentifier)) {
+          symbolicateBuffer(
+            buffer,
+            sourceMapContextMap.get(bufferConfig.bundleIdentifier)
+          );
+        } else {
+          const sourceMapContext = Symbolication.createContext(
+            SourceMapConsumer,
+            fs.readFileSync(bufferConfig.sourcemap, "utf-8"),
+            options
+          );
+          sourceMapContextMap.set(
+            bufferConfig.bundleIdentifier,
+            sourceMapContext
+          );
+          symbolicateBuffer(buffer, sourceMapContext);
+        }
       }
       // Create new buffer
       buffer = [errorLine];
@@ -71,7 +118,25 @@ export function extractAndSymbolicateErrorStack(
 
     // Flush buffer if there is any remaining data
     if (buffer.length > 0 && bufferConfig !== undefined) {
-      symbolicateBuffer(buffer, bufferConfig.sourcemap);
+      // If we have already cached sourceMapContext for this bundleIdentifier, use it
+      // Otherwise create a new sourceMapContext and cache it
+      if (sourceMapContextMap.get(bufferConfig.bundleIdentifier)) {
+        symbolicateBuffer(
+          buffer,
+          sourceMapContextMap.get(bufferConfig.bundleIdentifier)
+        );
+      } else {
+        const sourceMapContext = Symbolication.createContext(
+          SourceMapConsumer,
+          fs.readFileSync(bufferConfig.sourcemap, "utf-8"),
+          options
+        );
+        sourceMapContextMap.set(
+          bufferConfig.bundleIdentifier,
+          sourceMapContext
+        );
+        symbolicateBuffer(buffer, sourceMapContext);
+      }
     }
   }
 }

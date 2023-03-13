@@ -83,12 +83,13 @@ describe("Testing extractAndSymbolicateErrorStack", () => {
     isConfigFileValidSpy = (
       isConfigFileValid as jest.MockedFunction<typeof isConfigFileValid>
     ).mockReturnValue(true);
-    const errorFile = "test1:1:1\ntest1:2:2\nnormalLine\ntest2:2:2\ntest2:2:2";
+    const errorFile =
+      "test1:1:1\ntest1:2:2\nnormalLine\ntest2:2:2\ntest2:2:2\ntest1:1:2\ntest1:2:3\nnormalLine";
     readFileSyncSpy
       .mockReturnValueOnce(JSON.stringify(mockConfigFile))
       .mockReturnValueOnce(errorFile);
     extractAndSymbolicateErrorStack(errorFilePath, configFilePath);
-    expect(symbolicateBufferSpy).toBeCalledTimes(2);
-    expect(logSpy).toBeCalledTimes(1);
+    expect(symbolicateBufferSpy).toBeCalledTimes(3);
+    expect(logSpy).toBeCalledTimes(2);
   });
 });

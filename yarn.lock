@@ -1515,7 +1515,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/traverse@npm:^7.0.0, @babel/traverse@npm:^7.12.5, @babel/traverse@npm:^7.14.0, @babel/traverse@npm:^7.16.0, @babel/traverse@npm:^7.20.5, @babel/traverse@npm:^7.20.7, @babel/traverse@npm:^7.21.0, @babel/traverse@npm:^7.21.2, @babel/traverse@npm:^7.7.2":
+"@babel/traverse@npm:^7.0.0, @babel/traverse@npm:^7.12.5, @babel/traverse@npm:^7.14.0, @babel/traverse@npm:^7.16.0, @babel/traverse@npm:^7.20.0, @babel/traverse@npm:^7.20.5, @babel/traverse@npm:^7.20.7, @babel/traverse@npm:^7.21.0, @babel/traverse@npm:^7.21.2, @babel/traverse@npm:^7.7.2":
   version: 7.21.2
   resolution: "@babel/traverse@npm:7.21.2"
   dependencies:
@@ -3591,7 +3591,9 @@ __metadata:
     "@rnx-kit/scripts": "*"
     eslint: ^8.0.0
     jest: ^27.0.0
+    metro-symbolicate: ^0.76.0
     prettier: ^2.8.0
+    source-map: ^0.5.6
     typescript: ^4.0.0
     yargs: ^17.7.0
   bin:
@@ -10080,6 +10082,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"metro-source-map@npm:0.76.0":
+  version: 0.76.0
+  resolution: "metro-source-map@npm:0.76.0"
+  dependencies:
+    "@babel/traverse": ^7.20.0
+    "@babel/types": ^7.20.0
+    invariant: ^2.2.4
+    metro-symbolicate: 0.76.0
+    nullthrows: ^1.1.1
+    ob1: 0.76.0
+    source-map: ^0.5.6
+    vlq: ^1.0.0
+  checksum: 6407f9e76e663581222c8f91d55e081f368bb887335a2b832551dea0b046014aedb854aa960bf7f90ae984360700187ab3abd619aff6607b7c3812292079d769
+  languageName: node
+  linkType: hard
+
 "metro-symbolicate@npm:0.67.0":
   version: 0.67.0
   resolution: "metro-symbolicate@npm:0.67.0"
@@ -10093,6 +10111,22 @@ __metadata:
   bin:
     metro-symbolicate: src/index.js
   checksum: 4a2bbbcf6a166473003151c2e62255a7a3e0ba0043134c303418b21fc9cf6cf362c2b5a249f533dceb94a88642805bd771c2062bc5ae8cb3a53cf11809041128
+  languageName: node
+  linkType: hard
+
+"metro-symbolicate@npm:0.76.0, metro-symbolicate@npm:^0.76.0":
+  version: 0.76.0
+  resolution: "metro-symbolicate@npm:0.76.0"
+  dependencies:
+    invariant: ^2.2.4
+    metro-source-map: 0.76.0
+    nullthrows: ^1.1.1
+    source-map: ^0.5.6
+    through2: ^2.0.1
+    vlq: ^1.0.0
+  bin:
+    metro-symbolicate: src/index.js
+  checksum: b8a10322b8ae0b1e0f846010aa97a5ecfe48ee17a5e4dcea7a771ec44b3f0e086064673a2f3f9b8f5211b58c063335e684e805cc1f6f772a6265b3a33728c4b6
   languageName: node
   linkType: hard
 
@@ -10761,6 +10795,13 @@ __metadata:
   version: 0.67.0
   resolution: "ob1@npm:0.67.0"
   checksum: 02910732e1094dd164d6dfa674250bc404503c8a85fa60b15399f9059006329d7b1bad2cb0bca1841bcf4c2c1759d91297485361523d21066984a9130f3f3b65
+  languageName: node
+  linkType: hard
+
+"ob1@npm:0.76.0":
+  version: 0.76.0
+  resolution: "ob1@npm:0.76.0"
+  checksum: 602fa17c4c9a3848bf02fc574f2163ccbda4c9040437bd23d1c1b2cc7af706a4fab0f1cc7c4b3b31c63c3b1aa0ccf3b29fa0557f6258a6131ad2d246621c3ecf
   languageName: node
   linkType: hard
 

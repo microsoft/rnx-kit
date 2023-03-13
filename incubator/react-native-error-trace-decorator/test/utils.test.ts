@@ -1,6 +1,5 @@
 import { symbolicateBuffer, isConfigFileValid } from "../src/utils";
 import * as fse from "fs";
-import * as ChildProcess from "child_process";
 import { error } from "@rnx-kit/console";
 import type { IConfigFile } from "../src/types";
 
@@ -10,37 +9,31 @@ jest.mock("@rnx-kit/console");
 
 describe("Testing utils", () => {
   describe("Testing symbolicateBuffer", () => {
-    let writeFileSyncSpy;
-    let unlinkSyncSpy;
-    let execSyncSpy;
     let logSpy;
 
     beforeEach(() => {
       jest.clearAllMocks();
-      writeFileSyncSpy = jest.spyOn(fse, "writeFileSync");
-      unlinkSyncSpy = jest.spyOn(fse, "unlinkSync");
-      execSyncSpy = jest.spyOn(ChildProcess, "execSync");
       logSpy = jest.spyOn(console, "log").mockImplementation();
     });
 
-    it("should call ChildProcess.execSync when buffer is non-empty", () => {
+    it("should call symbolicate when buffer is non-empty", () => {
       const buffer = ["line1", "line2"];
-      const sourcemap = "sourcemap";
+      const sourcemap = {
+        symbolicate: jest.fn(),
+      };
       symbolicateBuffer(buffer, sourcemap);
-      expect(execSyncSpy).toBeCalled();
-      expect(writeFileSyncSpy).toBeCalledTimes(1);
-      expect(unlinkSyncSpy).toBeCalledTimes(1);
+      expect(sourcemap.symbolicate).toBeCalledWith("line1\nline2");
       expect(logSpy).toBeCalledTimes(1);
     });
 
-    it("should not call ChildProcess.execSync when buffer is empty", () => {
+    it("should not call symbolicate when buffer is empty", () => {
       const buffer = [];
-      const sourcemap = "sourcemap";
+      const sourcemap = {
+        symbolicate: jest.fn(),
+      };
 
       symbolicateBuffer(buffer, sourcemap);
-      expect(execSyncSpy).not.toBeCalled();
-      expect(writeFileSyncSpy).not.toBeCalled();
-      expect(unlinkSyncSpy).not.toBeCalled();
+      expect(sourcemap.symbolicate).not.toBeCalled();
     });
   });
 

@@ -1,5 +1,4 @@
 import * as fs from "fs";
-import * as ChildProcess from "child_process";
 import { error } from "@rnx-kit/console";
 import type { IConfigFile } from "./types";
 
@@ -9,22 +8,10 @@ import type { IConfigFile } from "./types";
  * @param buffer    a string array representing the buffer
  * @param sourcemap sourcemap that must be used to symbolicate the passed buffer
  */
-export function symbolicateBuffer(buffer: string[], sourcemap: string) {
-  if (buffer.length > 0) {
-    // Write buffer to a temp file
-    fs.writeFileSync("./temp.rnbuffertrace", buffer.join("\n"));
-
-    // Symbolicate buffer
-    ChildProcess.execSync(
-      `npx metro-symbolicate ${sourcemap} < ./temp.rnbuffertrace`,
-      {
-        stdio: "inherit",
-      }
-    );
-    console.log("\n");
-
-    // Delete temp file
-    fs.unlinkSync("./temp.rnbuffertrace");
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function symbolicateBuffer(buffer: string[], sourcemapContext: any) {
+  if (buffer.length > 0 && sourcemapContext) {
+    console.log(sourcemapContext.symbolicate(buffer.join("\n")));
   }
 }
 
