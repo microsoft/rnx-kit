@@ -5,7 +5,34 @@ type FirebaseConfig = {
   appId: string | Partial<Record<Platform, string>>;
 };
 
-module.exports = (config: Partial<FirebaseConfig>): DistributionPlugin => {
+function validateConfig(config: Partial<FirebaseConfig>): void {
+  if (!config) {
+    throw new Error("Missing Firebase configuration");
+  }
+
+  const { appId } = config;
+  if (!appId) {
+    throw new Error(`Missing Firebase app id`);
+  }
+
+  if (typeof appId === "object") {
+    const errors = Object.entries(appId).reduce((errors, [platform, id]) => {
+      if (typeof id !== "string") {
+        console.error(`Invalid Firebase app id for '${platform}': ${id}`);
+        return errors + 1;
+      }
+      return errors;
+    }, 0);
+    if (errors > 0) {
+      throw new Error(`Invalid Firebase app ids`);
+    }
+  } else if (typeof appId !== "string") {
+    throw new Error(`Invalid Firebase app id: ${appId}`);
+  }
+}
+
+export default function (config: Partial<FirebaseConfig>): DistributionPlugin {
+  validateConfig(config);
   return {
     deploy: (_context, _artifact, spinner) => {
       /**
@@ -20,23 +47,11 @@ module.exports = (config: Partial<FirebaseConfig>): DistributionPlugin => {
       return Promise.resolve();
     },
     getConfigString: (platform) => {
-      if (!config) {
-        throw new Error("Missing Firebase configuration");
-      }
-
-      if (!config.appId) {
-        throw new Error(`Missing Firebase app id`);
-      }
-
       const appId =
         typeof config.appId === "object"
           ? config.appId[platform]
           : config.appId;
-      if (typeof appId !== "string") {
-        throw new Error(`Invalid/missing Firebase app id for ${platform}`);
-      }
-
       return Promise.resolve(`firebase:${appId}`);
     },
   };
-};
+}

@@ -14,8 +14,13 @@
     "scripts/*",
     "workflows/*"
   ],
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "import": "./lib/index.js"
+    }
+  },
   "bin": {
     "rnx-build": "lib/cli.js",
     "rnx-build-apple": "scripts/build-apple.sh"
@@ -37,11 +42,11 @@
     "@octokit/plugin-rest-endpoint-methods": "^7.0.0",
     "@octokit/request-error": "^3.0.0",
     "@rnx-kit/config": "^0.6.0",
-    "env-paths": "^2.2.1",
-    "fast-xml-parser": "^4.0.8",
-    "find-up": "^5.0.0",
-    "ora": "^5.4.1",
-    "pkg-dir": "^5.0.0",
+    "env-paths": "^3.0.0",
+    "fast-xml-parser": "^4.0.0",
+    "find-up": "^6.3.0",
+    "ora": "^6.1.2",
+    "pkg-dir": "^7.0.0",
     "qrcode": "^1.5.0",
     "yargs": "^16.0.0"
   },
@@ -50,7 +55,6 @@
     "@types/qrcode": "^1.4.2",
     "eslint": "^8.0.0",
     "jest": "^27.0.0",
-    "memfs": "^3.4.1",
     "prettier": "^2.8.0",
     "typescript": "^4.0.0"
   },
@@ -61,7 +65,10 @@
     "extends": "@rnx-kit/eslint-config"
   },
   "jest": {
-    "preset": "@rnx-kit/scripts"
+    "preset": "@rnx-kit/scripts",
+    "transformIgnorePatterns": [
+      "/node_modules/(?!(find-up|locate-path|p-limit|p-locate|path-exists|yocto-queue)/)"
+    ]
   },
   "experimental": true
 }

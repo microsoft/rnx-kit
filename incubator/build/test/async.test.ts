@@ -1,4 +1,4 @@
-import { idle, once, retry, withRetry } from "../src/async";
+import { idle, once, retry, withRetry } from "../lib/async";
 
 jest.setTimeout(30000);
 
@@ -22,7 +22,7 @@ describe("async", () => {
   });
 
   test("retry() with exponential backoff", async () => {
-    const times = [];
+    const times: number[] = [];
     let count = 0;
     let start = Date.now();
 
@@ -49,7 +49,7 @@ describe("async", () => {
   });
 
   test("withRetry() with exponential backoff", async () => {
-    const times = [];
+    const times: number[] = [];
     let count = 0;
     let start = Date.now();
 

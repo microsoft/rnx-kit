@@ -1,5 +1,6 @@
 import { getKitConfig } from "@rnx-kit/config";
-import type { Deployment, DistributionPlugin, JSObject } from "./types";
+import { createRequire } from "node:module";
+import type { Deployment, DistributionPlugin, JSObject } from "./types.js";
 
 type Plugin = [string, JSObject];
 
@@ -15,11 +16,15 @@ function loadPlugin(
   projectRoot: string
 ): Promise<DistributionPlugin> {
   if (deployment === "remote-first" && typeof plugin === "string") {
+    const require = createRequire(import.meta.url);
     const modulePath = require.resolve(plugin, { paths: [projectRoot] });
-    return Promise.resolve(require(modulePath)(pluginConfig));
+    return import(modulePath).then((module) => {
+      const plugin = module.default || module;
+      return plugin(pluginConfig);
+    });
   }
 
-  return import("./distribution/local");
+  return import("./distribution/local.js");
 }
 
 export function getDistribution(

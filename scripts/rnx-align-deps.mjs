@@ -13,4 +13,5 @@ cli({
   ],
   requirements: ["react-native@0.68"],
   write: process.argv.includes("--write"),
+  "exclude-packages": ["@rnx-kit/build"],
 });

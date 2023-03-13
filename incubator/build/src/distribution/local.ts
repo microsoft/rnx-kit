@@ -1,7 +1,7 @@
 import type { Ora } from "ora";
-import { extract } from "../archive";
-import * as platforms from "../platforms";
-import type { Context, BuildParams, Platform } from "../types";
+import { extract } from "../archive.js";
+import * as platforms from "../platforms.js";
+import type { Context, BuildParams, Platform } from "../types.js";
 
 export async function deploy(
   context: Context & BuildParams,

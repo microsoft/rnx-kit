@@ -1,10 +1,10 @@
 import type { Ora } from "ora";
-import type { DEPLOYMENT, DEVICE_TYPES, PLATFORMS } from "./constants";
+import type { DEPLOYMENT, DEVICE_TYPES, PLATFORMS } from "./constants.js";
 
 // This type is only used in a comment. JSDoc currently does not support
 // importing types, but we can work around this limitation by importing and
 // re-exporting it: https://github.com/microsoft/TypeScript/issues/43950
-import type { renderQRCode } from "./qrcode";
+import type { renderQRCode } from "./qrcode.js";
 export type { renderQRCode };
 
 export type Deployment = (typeof DEPLOYMENT)[number];
