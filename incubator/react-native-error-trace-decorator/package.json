@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/react-native-error-trace-decorator",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "EXPERIMENTAL - USE WITH CAUTION - New package called react-native-error-trace-decorator",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/incubator/react-native-error-trace-decorator#readme",
   "license": "MIT",
