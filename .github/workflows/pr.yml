@@ -108,7 +108,7 @@ jobs:
         run: |
           yarn
       - name: Install Pods
-        uses: microsoft/react-native-test-app/.github/actions/cocoapods@2.3.9
+        uses: microsoft/react-native-test-app/.github/actions/cocoapods@2.3.12
         with:
           project-directory: ios
           working-directory: packages/test-app
