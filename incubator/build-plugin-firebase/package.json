@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "@rnx-kit/build-plugin-firebase",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "EXPERIMENTAL - USE WITH CAUTION - Firebase plugin for @rnx-kit/build",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/incubator/build-plugin-firebase#readme",
   "license": "MIT",
