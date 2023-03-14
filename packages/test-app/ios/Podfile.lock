@@ -288,7 +288,7 @@ PODS:
     - React-perflogger (= 0.68.6)
   - ReactNativeHost (0.1.0):
     - React-Core
-  - ReactTestApp-DevSupport (2.3.9):
+  - ReactTestApp-DevSupport (2.3.12):
     - React-Core
     - React-jsi
   - ReactTestApp-MSAL (2.1.1):
@@ -453,7 +453,7 @@ SPEC CHECKSUMS:
   React-runtimeexecutor: d5498cfb7059bf8397b6416db4777843f3f4c1e7
   ReactCommon: 1974dab5108c79b40199f12a4833d2499b9f6303
   ReactNativeHost: 209c326959a22914b93049bbf958992d35de89a7
-  ReactTestApp-DevSupport: 0eef2d0c339c998ab7d2033f5c8c7e6652d072e3
+  ReactTestApp-DevSupport: a33bfbe09dd21ff4ea512b117831db06174955b7
   ReactTestApp-MSAL: ad448d0b95393b58d1ec11d10f8c0cab226399d2
   ReactTestApp-Resources: 74a1cf509f4e7962b16361ea4e73cba3648fff5d
   RNXAuth: d37ae710b2ce38b5e0221015bd56ce710673c704
@@ -461,4 +461,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: df600ab6f7e85a7573cb1b256a65b13294140cbd
 
-COCOAPODS: 1.11.3
+COCOAPODS: 1.12.0
