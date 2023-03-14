@@ -1,6 +1,10 @@
-#import <React/RCTRootView.h>
-
 #import "ReactNativeHost.h"
+
+#ifdef USE_FABRIC
+#import <React/RCTFabricSurfaceHostingProxyRootView.h>
+#else
+#import <React/RCTRootView.h>
+#endif  // USE_FABRIC
 
 @implementation ReactNativeHost (View)
 
@@ -26,9 +30,15 @@
 - (RNXView *)viewWithModuleName:(NSString *)moduleName
               initialProperties:(NSDictionary *)initialProperties;
 {
+#ifdef USE_FABRIC
+    return [[RCTFabricSurfaceHostingProxyRootView alloc] initWithBridge:self.bridge
+                                                             moduleName:moduleName
+                                                      initialProperties:initialProperties];
+#else
     return [[RCTRootView alloc] initWithBridge:self.bridge
                                     moduleName:moduleName
                              initialProperties:initialProperties];
+#endif  // USE_FABRIC
 }
 
 @end

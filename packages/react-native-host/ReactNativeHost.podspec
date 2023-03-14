@@ -17,8 +17,15 @@ Pod::Spec.new do |s|
   s.osx.deployment_target = '10.15'
 
   s.dependency 'React-Core'
+  s.dependency 'React-cxxreact'
 
-  s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES' }
+  s.pod_target_xcconfig = {
+    'DEFINES_MODULE' => 'YES',
+    'HEADER_SEARCH_PATHS' => [
+      '$(PODS_ROOT)/Headers/Private/React-Core',
+      '$(PODS_ROOT)/boost',
+    ],
+  }
 
   # Include both package and repository relative paths to allow the podspec to
   # be consumed from both a local path, and as a podspec outside a spec
