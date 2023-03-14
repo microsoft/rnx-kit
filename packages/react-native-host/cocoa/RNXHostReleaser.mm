@@ -25,7 +25,7 @@
     return self;
 }
 
-- (void)setBridge:(RCTBridge *)bridge
+- (void)setBridge:(__weak RCTBridge *)bridge
 {
 #if !TARGET_OS_OSX
     // This may initialize `RCTAccessibilityManager` and must therefore be run
@@ -37,7 +37,6 @@
           return;
       }
 
-      RCTBridge *bridge = strongSelf->_host.bridge;
       RCTUIManager *manager = bridge.uiManager;
       if (manager == nil) {
           return;

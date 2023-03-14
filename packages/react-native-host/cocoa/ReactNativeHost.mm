@@ -3,9 +3,6 @@
 #import <React/RCTBridge.h>
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTDevLoadingViewSetEnabled.h>
-#import <React/RCTRootView.h>
-#import <React/RCTUIManager.h>
-#import <React/RCTUIManagerUtils.h>
 #import <React/RCTUtils.h>
 
 #import "RNXHostConfig.h"

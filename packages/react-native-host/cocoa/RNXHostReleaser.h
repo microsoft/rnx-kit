@@ -10,9 +10,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)init NS_UNAVAILABLE;
 
-- (nullable instancetype)initWithHost:(ReactNativeHost *)host NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithHost:(ReactNativeHost *)host NS_DESIGNATED_INITIALIZER;
 
-- (void)setBridge:(RCTBridge *)bridge;
+- (void)setBridge:(__weak RCTBridge *)bridge;
 
 @end
 
