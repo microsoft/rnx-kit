@@ -4,7 +4,6 @@ import { error } from "@rnx-kit/console";
 import type { IConfigFile } from "../src/types";
 
 jest.mock("fs");
-jest.mock("child_process");
 jest.mock("@rnx-kit/console");
 
 describe("Testing utils", () => {
