@@ -9,16 +9,16 @@
 #import <React/RCTUtils.h>
 
 #import "RNXHostConfig.h"
+#import "RNXHostReleaser.h"
 
 @implementation ReactNativeHost {
     __weak id<RNXHostConfig> _config;
     RCTBridge *_bridge;
-    __weak NSDictionary<NSNumber *, UIView *> *_viewRegistry;
     NSLock *_isShuttingDown;
-    BOOL _isObservingAppDidEnterBackgroundNotification;
+    RNXHostReleaser *_hostReleaser;
 }
 
-- (instancetype)initWithConfig:(__weak id<RNXHostConfig>)config
+- (instancetype)initWithConfig:(id<RNXHostConfig>)config
 {
     if (self = [super init]) {
         if ([config respondsToSelector:@selector(isDevLoadingViewEnabled)]) {
@@ -44,6 +44,11 @@
         _config = config;
         _isShuttingDown = [[NSLock alloc] init];
 
+        if ([config respondsToSelector:@selector(shouldReleaseBridgeWhenBackgrounded)] &&
+            [config shouldReleaseBridgeWhenBackgrounded]) {
+            _hostReleaser = [[RNXHostReleaser alloc] initWithHost:self];
+        }
+
         (void)self.bridge;  // Initialize the bridge now
     }
     return self;
@@ -59,7 +64,7 @@
     @try {
         if (_bridge == nil) {
             _bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:nil];
-            [self releaseBridgeWhenBackgrounded];
+            [_hostReleaser setBridge:_bridge];
             if ([_config respondsToSelector:@selector(onBridgeInstantiated:)]) {
                 [_config onBridgeInstantiated:_bridge];
             }
@@ -128,92 +133,6 @@
     return [_config respondsToSelector:@selector(extraModulesForBridge:)]
                ? [_config extraModulesForBridge:bridge]
                : @[];
-}
-
-// MARK: - Category: View
-
-+ (instancetype)hostFromRootView:(RNXView *)rootView
-{
-    if (![rootView respondsToSelector:@selector(bridge)]) {
-        return nil;
-    }
-
-    id bridge = [rootView performSelector:@selector(bridge)];
-    if (![bridge respondsToSelector:@selector(delegate)]) {
-        return nil;
-    }
-
-    id delegate = [bridge performSelector:@selector(delegate)];
-    if (![delegate isKindOfClass:self]) {
-        return nil;
-    }
-
-    return delegate;
-}
-
-- (RNXView *)viewWithModuleName:(NSString *)moduleName
-              initialProperties:(NSDictionary *)initialProperties;
-{
-    return [[RCTRootView alloc] initWithBridge:self.bridge
-                                    moduleName:moduleName
-                             initialProperties:initialProperties];
-}
-
-// MARK: - Private
-
-- (void)onAppDidEnterBackground:(NSNotification *)note
-{
-    if (_viewRegistry.count == 0) {
-        [self shutdown];
-    }
-}
-
-- (void)releaseBridgeWhenBackgrounded
-{
-#if !TARGET_OS_OSX
-    if (![_config respondsToSelector:@selector(shouldReleaseBridgeWhenBackgrounded)] ||
-        ![_config shouldReleaseBridgeWhenBackgrounded]) {
-        return;
-    }
-
-    // This may initialize `RCTAccessibilityManager` and must therefore be run
-    // on the main queue.
-    __weak typeof(self) weakSelf = self;
-    RCTExecuteOnMainQueue(^{
-      typeof(self) strongSelf = weakSelf;
-      if (strongSelf == nil) {
-          return;
-      }
-
-      RCTBridge *bridge = strongSelf->_bridge;
-      RCTUIManager *manager = bridge.uiManager;
-      if (manager == nil) {
-          return;
-      }
-
-      // `addUIBlock` must be called on the UIManager queue.
-      RCTExecuteOnUIManagerQueue(^{
-        [manager addUIBlock:^(RCTUIManager *uiManager,
-                              NSDictionary<NSNumber *, UIView *> *viewRegistry) {
-          typeof(self) strongSelf = weakSelf;
-          if (strongSelf == nil) {
-              return;
-          }
-
-          strongSelf->_viewRegistry = viewRegistry;
-        }];
-      });
-    });
-
-    if (!_isObservingAppDidEnterBackgroundNotification) {
-        _isObservingAppDidEnterBackgroundNotification = YES;
-        NSNotificationCenter *notificationCenter = NSNotificationCenter.defaultCenter;
-        [notificationCenter addObserver:self
-                               selector:@selector(onAppDidEnterBackground:)
-                                   name:UIApplicationDidEnterBackgroundNotification
-                                 object:nil];
-    }
-#endif  // !TARGET_OS_OSX
 }
 
 @end
