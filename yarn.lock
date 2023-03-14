@@ -1515,7 +1515,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/traverse@npm:^7.0.0, @babel/traverse@npm:^7.12.5, @babel/traverse@npm:^7.14.0, @babel/traverse@npm:^7.16.0, @babel/traverse@npm:^7.20.5, @babel/traverse@npm:^7.20.7, @babel/traverse@npm:^7.21.0, @babel/traverse@npm:^7.21.2, @babel/traverse@npm:^7.7.2":
+"@babel/traverse@npm:^7.0.0, @babel/traverse@npm:^7.12.5, @babel/traverse@npm:^7.14.0, @babel/traverse@npm:^7.16.0, @babel/traverse@npm:^7.20.0, @babel/traverse@npm:^7.20.5, @babel/traverse@npm:^7.20.7, @babel/traverse@npm:^7.21.0, @babel/traverse@npm:^7.21.2, @babel/traverse@npm:^7.7.2":
   version: 7.21.2
   resolution: "@babel/traverse@npm:7.21.2"
   dependencies:
@@ -3580,6 +3580,24 @@ __metadata:
   peerDependencies:
     react: 16.11.0 || 16.13.1 || 17.0.1 || 17.0.2 || 18.0.0 || 18.1.0 || 18.2.0
     react-native: ^0.62.3 || ^0.63.2 || ^0.64.2 || ^0.65.0 || ^0.66.0 || ^0.67.0 || ^0.68.0 || ^0.69.0 || ^0.70.0 || ^0.71.0
+  languageName: unknown
+  linkType: soft
+
+"@rnx-kit/react-native-error-trace-decorator@workspace:incubator/react-native-error-trace-decorator":
+  version: 0.0.0-use.local
+  resolution: "@rnx-kit/react-native-error-trace-decorator@workspace:incubator/react-native-error-trace-decorator"
+  dependencies:
+    "@rnx-kit/console": ^1.0.11
+    "@rnx-kit/scripts": "*"
+    eslint: ^8.0.0
+    jest: ^27.0.0
+    metro-symbolicate: ^0.76.0
+    prettier: ^2.8.0
+    source-map: ^0.5.6
+    typescript: ^4.0.0
+    yargs: ^16.0.0
+  bin:
+    react-native-error-trace-decorator: lib/cli.js
   languageName: unknown
   linkType: soft
 
@@ -10064,6 +10082,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"metro-source-map@npm:0.76.0":
+  version: 0.76.0
+  resolution: "metro-source-map@npm:0.76.0"
+  dependencies:
+    "@babel/traverse": ^7.20.0
+    "@babel/types": ^7.20.0
+    invariant: ^2.2.4
+    metro-symbolicate: 0.76.0
+    nullthrows: ^1.1.1
+    ob1: 0.76.0
+    source-map: ^0.5.6
+    vlq: ^1.0.0
+  checksum: 6407f9e76e663581222c8f91d55e081f368bb887335a2b832551dea0b046014aedb854aa960bf7f90ae984360700187ab3abd619aff6607b7c3812292079d769
+  languageName: node
+  linkType: hard
+
 "metro-symbolicate@npm:0.67.0":
   version: 0.67.0
   resolution: "metro-symbolicate@npm:0.67.0"
@@ -10077,6 +10111,22 @@ __metadata:
   bin:
     metro-symbolicate: src/index.js
   checksum: 4a2bbbcf6a166473003151c2e62255a7a3e0ba0043134c303418b21fc9cf6cf362c2b5a249f533dceb94a88642805bd771c2062bc5ae8cb3a53cf11809041128
+  languageName: node
+  linkType: hard
+
+"metro-symbolicate@npm:0.76.0, metro-symbolicate@npm:^0.76.0":
+  version: 0.76.0
+  resolution: "metro-symbolicate@npm:0.76.0"
+  dependencies:
+    invariant: ^2.2.4
+    metro-source-map: 0.76.0
+    nullthrows: ^1.1.1
+    source-map: ^0.5.6
+    through2: ^2.0.1
+    vlq: ^1.0.0
+  bin:
+    metro-symbolicate: src/index.js
+  checksum: b8a10322b8ae0b1e0f846010aa97a5ecfe48ee17a5e4dcea7a771ec44b3f0e086064673a2f3f9b8f5211b58c063335e684e805cc1f6f772a6265b3a33728c4b6
   languageName: node
   linkType: hard
 
@@ -10745,6 +10795,13 @@ __metadata:
   version: 0.67.0
   resolution: "ob1@npm:0.67.0"
   checksum: 02910732e1094dd164d6dfa674250bc404503c8a85fa60b15399f9059006329d7b1bad2cb0bca1841bcf4c2c1759d91297485361523d21066984a9130f3f3b65
+  languageName: node
+  linkType: hard
+
+"ob1@npm:0.76.0":
+  version: 0.76.0
+  resolution: "ob1@npm:0.76.0"
+  checksum: 602fa17c4c9a3848bf02fc574f2163ccbda4c9040437bd23d1c1b2cc7af706a4fab0f1cc7c4b3b31c63c3b1aa0ccf3b29fa0557f6258a6131ad2d246621c3ecf
   languageName: node
   linkType: hard
 
@@ -14287,8 +14344,8 @@ __metadata:
   linkType: hard
 
 "yargs@npm:^17.1.1, yargs@npm:^17.6.2":
-  version: 17.6.2
-  resolution: "yargs@npm:17.6.2"
+  version: 17.7.1
+  resolution: "yargs@npm:17.7.1"
   dependencies:
     cliui: ^8.0.1
     escalade: ^3.1.1
@@ -14297,7 +14354,7 @@ __metadata:
     string-width: ^4.2.3
     y18n: ^5.0.5
     yargs-parser: ^21.1.1
-  checksum: 47da1b0d854fa16d45a3ded57b716b013b2179022352a5f7467409da5a04a1eef5b3b3d97a2dfc13e8bbe5f2ffc0afe3bc6a4a72f8254e60f5a4bd7947138643
+  checksum: 3d8a43c336a4942bc68080768664aca85c7bd406f018bad362fd255c41c8f4e650277f42fd65d543fce99e084124ddafee7bbfc1a5c6a8fda4cec78609dcf8d4
   languageName: node
   linkType: hard
 
