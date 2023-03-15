@@ -5,6 +5,9 @@ version = package['version']
 repository = package['repository']
 repo_dir = repository['directory']
 
+source_files = 'cocoa/*.{h,m,mm}'
+public_header_files = 'cocoa/{ReactNativeHost,RNXHostConfig}.h'
+
 Pod::Spec.new do |s|
   s.name      = 'ReactNativeHost'
   s.version   = version
@@ -31,8 +34,8 @@ Pod::Spec.new do |s|
   # Include both package and repository relative paths to allow the podspec to
   # be consumed from both a local path, and as a podspec outside a spec
   # repository.
-  s.source_files         = 'cocoa/*.{h,m,mm}',                                    # :path
-                           "#{repo_dir}/cocoa/*.{h,m,mm}"                         # :podspec
-  s.public_header_files  = 'cocoa/{ReactNativeHost,RNXHostConfig}.h',             # :path
-                           "#{repo_dir}/cocoa/{ReactNativeHost,RNXHostConfig}.h"  # :podspec
+  s.source_files         = source_files,                         # :path
+                           "#{repo_dir}/#{source_files}"         # :podspec
+  s.public_header_files  = public_header_files,                  # :path
+                           "#{repo_dir}/#{public_header_files}"  # :podspec
 end
