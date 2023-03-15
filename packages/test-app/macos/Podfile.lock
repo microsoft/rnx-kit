@@ -453,7 +453,7 @@ SPEC CHECKSUMS:
   React-RCTVibration: 5e01780eb45effeb1e538fc3c64ffa186423eb2a
   React-runtimeexecutor: 17ad66d482998fbe0a92253cced17a5cbc06a125
   ReactCommon: d4e6d01d12414c52ec5d0de14d9ad8cd5d09ad61
-  ReactNativeHost: d9c1f2a984689724360dc98ef792533942d5cce0
+  ReactNativeHost: 0a119c32604851159587dd2ecd3d81b7be89c528
   ReactTestApp-DevSupport: a33bfbe09dd21ff4ea512b117831db06174955b7
   ReactTestApp-MSAL: ad448d0b95393b58d1ec11d10f8c0cab226399d2
   ReactTestApp-Resources: bb546b3a5dca4b7931bee423d4ef28cd94b346cf

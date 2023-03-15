@@ -3,6 +3,7 @@ require 'json'
 package = JSON.parse(File.read(File.join(__dir__, 'package.json')))
 version = package['version']
 repository = package['repository']
+repo_dir = repository['directory']
 
 Pod::Spec.new do |s|
   s.name      = 'ReactNativeHost'
@@ -30,8 +31,8 @@ Pod::Spec.new do |s|
   # Include both package and repository relative paths to allow the podspec to
   # be consumed from both a local path, and as a podspec outside a spec
   # repository.
-  s.source_files         = 'cocoa/*.{h,m,mm}',                            # :path
-                           "#{repository['directory']}/cocoa/*.{h,m,mm}"  # :podspec
-  s.public_header_files  = 'cocoa/*.h',                                   # :path
-                           "#{repository['directory']}/cocoa/*.h"         # :podspec
+  s.source_files         = 'cocoa/*.{h,m,mm}',                                    # :path
+                           "#{repo_dir}/cocoa/*.{h,m,mm}"                         # :podspec
+  s.public_header_files  = 'cocoa/{ReactNativeHost,RNXHostConfig}.h',             # :path
+                           "#{repo_dir}/cocoa/{ReactNativeHost,RNXHostConfig}.h"  # :podspec
 end
