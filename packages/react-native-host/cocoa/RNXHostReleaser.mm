@@ -7,13 +7,16 @@
 #import "ReactNativeHost.h"
 
 @implementation RNXHostReleaser {
+#if !TARGET_OS_OSX
     __weak ReactNativeHost *_host;
     __weak NSDictionary<NSNumber *, UIView *> *_viewRegistry;
+#endif  // !TARGET_OS_OSX
 }
 
 - (instancetype)initWithHost:(ReactNativeHost *)host
 {
     if (self = [super init]) {
+#if !TARGET_OS_OSX
         _host = host;
 
         NSNotificationCenter *notificationCenter = NSNotificationCenter.defaultCenter;
@@ -21,6 +24,7 @@
                                selector:@selector(onAppDidEnterBackground:)
                                    name:UIApplicationDidEnterBackgroundNotification
                                  object:nil];
+#endif  // !TARGET_OS_OSX
     }
     return self;
 }
@@ -58,11 +62,13 @@
 #endif  // !TARGET_OS_OSX
 }
 
+#if !TARGET_OS_OSX
 - (void)onAppDidEnterBackground:(NSNotification *)note
 {
     if (_viewRegistry.count == 0) {
         [_host shutdown];
     }
 }
+#endif  // !TARGET_OS_OSX
 
 @end
