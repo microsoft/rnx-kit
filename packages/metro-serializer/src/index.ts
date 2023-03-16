@@ -1,4 +1,9 @@
-import type { MixedOutput, Module, ReadOnlyGraph, SerializerOptions } from "metro";
+import type {
+  MixedOutput,
+  Module,
+  ReadOnlyGraph,
+  SerializerOptions,
+} from "metro";
 import * as semver from "semver";
 
 export type MetroPlugin<T = MixedOutput> = (

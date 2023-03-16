@@ -180,7 +180,7 @@ export async function rnxStart(
 
   // `createDevServerMiddleware` changed its return type in
   // https://github.com/react-native-community/cli/pull/1560
-  let websocketEndpoints: RunServerOptions['websocketEndpoints'] = undefined;
+  let websocketEndpoints: RunServerOptions["websocketEndpoints"] = undefined;
   let messageSocketEndpoint: DevServerMiddleware["messageSocketEndpoint"];
 
   if (!hasAttachToServerFunction(devServer)) {
