@@ -8,13 +8,10 @@
 
 @class RCTBridge;
 
-namespace facebook
+namespace facebook::react
 {
-    namespace react
-    {
-        class JSExecutorFactory;
-    }
-}  // namespace facebook
+    class JSExecutorFactory;
+}  // namespace facebook::react
 
 NS_ASSUME_NONNULL_BEGIN
 
