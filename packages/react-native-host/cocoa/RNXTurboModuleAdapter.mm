@@ -1,7 +1,10 @@
 #import "RNXTurboModuleAdapter.h"
 
 #define FOLLY_NO_CONFIG 1
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wcomma"
 #import <cxxreact/JSExecutor.h>
+#pragma clang diagnostic pop
 
 #if USE_TURBOMODULE
 #import <React/CoreModulesPlugins.h>

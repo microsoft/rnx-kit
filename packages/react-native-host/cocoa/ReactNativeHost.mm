@@ -1,7 +1,10 @@
 #import "ReactNativeHost.h"
 
 #define FOLLY_NO_CONFIG 1
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wcomma"
 #import <cxxreact/JSExecutor.h>
+#pragma clang diagnostic pop
 
 #import <React/RCTBridge.h>
 #import <React/RCTBundleURLProvider.h>
@@ -9,13 +12,13 @@
 #import <React/RCTDevLoadingViewSetEnabled.h>
 #import <React/RCTUtils.h>
 
-@interface ReactNativeHost () <RCTCxxBridgeDelegate>
-@end
-
 #import "RNXFabricAdapter.h"
 #import "RNXHostConfig.h"
 #import "RNXHostReleaser.h"
 #import "RNXTurboModuleAdapter.h"
+
+@interface ReactNativeHost () <RCTCxxBridgeDelegate>
+@end
 
 @implementation ReactNativeHost {
     __weak id<RNXHostConfig> _config;
