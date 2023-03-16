@@ -8,7 +8,7 @@ import {
 import chalk from "chalk";
 import type { Server as HttpServer } from "http";
 import type { Server as HttpsServer } from "https";
-import type { ReportableEvent, Reporter } from "metro";
+import type { ReportableEvent, Reporter, RunServerOptions } from "metro";
 import type { Middleware } from "metro-config";
 import type Server from "metro/src/Server";
 import * as os from "os";
@@ -180,7 +180,7 @@ export async function rnxStart(
 
   // `createDevServerMiddleware` changed its return type in
   // https://github.com/react-native-community/cli/pull/1560
-  let websocketEndpoints: unknown = undefined;
+  let websocketEndpoints: RunServerOptions['websocketEndpoints'] = undefined;
   let messageSocketEndpoint: DevServerMiddleware["messageSocketEndpoint"];
 
   if (!hasAttachToServerFunction(devServer)) {

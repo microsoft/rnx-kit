@@ -1,6 +1,6 @@
 import type { AllPlatforms } from "@rnx-kit/tools-react-native/platform";
 import type { Project } from "@rnx-kit/typescript-service";
-import type { DeltaResult, Graph } from "metro";
+import type { DeltaResult, ReadOnlyGraph } from "metro";
 import type ts from "typescript";
 
 export type ProjectInfo = {
@@ -41,7 +41,7 @@ export type ProjectCache = {
   ): ProjectInfo | undefined;
 };
 
-export type SerializerHook = (graph: Graph, delta: DeltaResult) => void;
+export type SerializerHook = (graph: ReadOnlyGraph, delta: DeltaResult) => void;
 
 /**
  * Context to use when invoking this resolver

@@ -1,6 +1,6 @@
 import { findPackageDir, readPackage } from "@rnx-kit/tools-node/package";
 import * as fs from "fs";
-import type { Graph } from "metro";
+import type { ReadOnlyGraph } from "metro";
 import type {
   BasicSourceMap,
   IndexMap,
@@ -73,7 +73,7 @@ export function gatherModulesFromSources(
 }
 
 export function gatherModulesFromGraph(
-  graph: Graph,
+  graph: ReadOnlyGraph,
   moduleMap: ModuleMap
 ): ModuleMap {
   const sources = Array.from(graph.dependencies.keys());

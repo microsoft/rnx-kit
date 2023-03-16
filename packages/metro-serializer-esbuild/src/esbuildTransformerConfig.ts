@@ -1,7 +1,7 @@
-import type { ExtraTransformOptions, TransformerConfigT } from "metro-config";
+import type { TransformerConfigT } from "metro-config";
 
 export const esbuildTransformerConfig: Partial<TransformerConfigT> = {
-  getTransformOptions: async (): Promise<ExtraTransformOptions> => ({
+  getTransformOptions: async () => ({
     transform: {
       /**
        * Disable `import-export-plugin` to preserve ES6 import/export syntax.

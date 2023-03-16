@@ -5,7 +5,7 @@ import { getMetroVersion } from "@rnx-kit/tools-react-native/metro";
 import type { BuildOptions, BuildResult, Plugin } from "esbuild";
 import * as esbuild from "esbuild";
 import * as fs from "fs";
-import type { Dependencies, Graph, Module, SerializerOptions } from "metro";
+import type { Module, ReadOnlyDependencies } from "metro";
 import type { SerializerConfigT } from "metro-config";
 import * as path from "path";
 import * as semver from "semver";
@@ -98,7 +98,10 @@ const getSideEffects = (() => {
   };
 })();
 
-function isImporting(moduleName: string, dependencies: Dependencies): boolean {
+function isImporting(
+  moduleName: string,
+  dependencies: ReadOnlyDependencies
+): boolean {
   const iterator = dependencies.keys();
   for (let key = iterator.next(); !key.done; key = iterator.next()) {
     if (key.value.includes(moduleName)) {
@@ -154,12 +157,7 @@ export function MetroSerializer(
   const baseJSBundle = require("metro/src/DeltaBundler/Serializers/baseJSBundle");
   const bundleToString = require("metro/src/lib/bundleToString");
 
-  return (
-    entryPoint: string,
-    preModules: ReadonlyArray<Module>,
-    graph: Graph,
-    options: SerializerOptions
-  ): ReturnType<Required<SerializerConfigT>["customSerializer"]> => {
+  return (entryPoint, preModules, graph, options) => {
     metroPlugins.forEach((plugin) =>
       plugin(entryPoint, preModules, graph, options)
     );

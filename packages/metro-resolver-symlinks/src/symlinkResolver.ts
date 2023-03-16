@@ -21,6 +21,7 @@ function applyMetroResolver(
   platform: string
 ): Resolution {
   const modifiedModuleName = resolveModulePath(context, moduleName, platform);
+  // @ts-expect-error We pass 4 arguments instead of 3 to be backwards compatible
   return resolve(context, normalizePath(modifiedModuleName), platform, null);
 }
 
@@ -51,6 +52,7 @@ export function makeResolver(options: Options = {}): MetroResolver {
     let resolve: CustomResolver = metroResolver;
     const resolveRequest = context.resolveRequest;
     if (resolveRequest === symlinkResolver) {
+      // @ts-expect-error We intentionally delete `resolveRequest` here and restore it later
       delete context.resolveRequest;
 
       // Metro enters a different code path than it should when `resolveRequest`
@@ -64,8 +66,10 @@ export function makeResolver(options: Options = {}): MetroResolver {
         requestedModuleName !== moduleName
       ) {
         try {
+          // @ts-expect-error We pass 4 arguments instead of 3 to be backwards compatible
           return resolve(context, requestedModuleName, platform, null);
         } finally {
+          // @ts-expect-error We intentionally deleted `resolveRequest` and restore it here
           context.resolveRequest = resolveRequest;
         }
       }
@@ -78,6 +82,7 @@ export function makeResolver(options: Options = {}): MetroResolver {
       // platform set. We should let Metro handle this without interfering. See
       // https://github.com/facebook/metro/blob/v0.71.0/packages/metro/src/node-haste/DependencyGraph/ModuleResolution.js#L97
       if (!platform) {
+        // @ts-expect-error We pass 4 arguments instead of 3 to be backwards compatible
         return resolve(context, moduleName, platform, null);
       }
 
@@ -90,6 +95,7 @@ export function makeResolver(options: Options = {}): MetroResolver {
     } finally {
       if (!context.resolveRequest) {
         // Restoring `resolveRequest` must happen last
+        // @ts-expect-error We intentionally deleted `resolveRequest` and restore it here
         context.resolveRequest = resolveRequest;
       }
     }

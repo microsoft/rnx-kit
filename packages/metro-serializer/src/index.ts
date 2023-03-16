@@ -1,10 +1,10 @@
-import type { Graph, MixedOutput, Module, SerializerOptions } from "metro";
+import type { MixedOutput, Module, ReadOnlyGraph, SerializerOptions } from "metro";
 import * as semver from "semver";
 
 export type MetroPlugin<T = MixedOutput> = (
   entryPoint: string,
   preModules: ReadonlyArray<Module<T>>,
-  graph: Graph<T>,
+  graph: ReadOnlyGraph<T>,
   options: SerializerOptions<T>
 ) => void;
 
@@ -13,7 +13,7 @@ export type CustomSerializerResult = string | { code: string; map: string };
 export type CustomSerializer = (
   entryPoint: string,
   preModules: ReadonlyArray<Module>,
-  graph: Graph,
+  graph: ReadOnlyGraph,
   options: SerializerOptions
 ) => Promise<CustomSerializerResult> | CustomSerializerResult;
 
@@ -35,7 +35,7 @@ export function MetroSerializer(plugins: MetroPlugin[]): CustomSerializer {
   return (
     entryPoint: string,
     preModules: ReadonlyArray<Module>,
-    graph: Graph,
+    graph: ReadOnlyGraph,
     options: SerializerOptions
   ): string | Promise<string> => {
     plugins.forEach((plugin) => plugin(entryPoint, preModules, graph, options));

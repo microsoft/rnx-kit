@@ -46,6 +46,7 @@ function reactNativePlatformResolver(platformImplementations: {
     let resolve: CustomResolver = metroResolver;
     const resolveRequest = context.resolveRequest;
     if (platformResolver === resolveRequest) {
+      // @ts-expect-error We intentionally delete `resolveRequest` here and restore it later
       delete context.resolveRequest;
     } else if (resolveRequest) {
       resolve = resolveRequest;
@@ -63,9 +64,11 @@ function reactNativePlatformResolver(platformImplementations: {
           )}`;
         }
       }
+      // @ts-expect-error We pass 4 arguments instead of 3 to be backwards compatible
       return resolve(context, modifiedModuleName, platform, null);
     } finally {
       if (!context.resolveRequest) {
+        // @ts-expect-error We intentionally deleted `resolveRequest` and restore it here
         context.resolveRequest = resolveRequest;
       }
     }

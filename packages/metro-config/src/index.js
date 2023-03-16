@@ -5,9 +5,7 @@ const fs = require("fs");
 const path = require("path");
 
 /**
- * @typedef {import("metro-config").ExtraTransformOptions} ExtraTransformOptions;
- * @typedef {import("metro-config").InputConfigT} InputConfigT;
- * @typedef {import("type-fest").PartialDeep<InputConfigT>} MetroConfig;
+ * @typedef {import("metro-config").MetroConfig} MetroConfig;
  */
 
 /** Packages that must be resolved to one specific copy. */
@@ -202,7 +200,6 @@ module.exports = {
    * @returns {MetroConfig}
    */
   makeMetroConfig: (customConfig = {}) => {
-    // @ts-expect-error There are no type definition files for `metro-config`
     const { mergeConfig } = require("metro-config");
     const { enhanceMiddleware } = require("./assetPluginForMonorepos");
 

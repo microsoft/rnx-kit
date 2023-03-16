@@ -1,6 +1,5 @@
-import type { Graph, Module, SerializerOptions } from "metro";
-import type { WriteThirdPartyNoticesOptions } from "./types";
 import type { MetroPlugin } from "@rnx-kit/metro-serializer";
+import type { WriteThirdPartyNoticesOptions } from "./types";
 import {
   gatherModulesFromSources,
   writeThirdPartyNoticesFromMap,
@@ -11,12 +10,7 @@ export { writeThirdPartyNotices } from "./write-third-party-notices";
 export function ThirdPartyNotices(
   inputOptions: Partial<WriteThirdPartyNoticesOptions>
 ): MetroPlugin {
-  return (
-    _entryPoint: string,
-    _preModules: ReadonlyArray<Module>,
-    graph: Graph,
-    serializerOptions: SerializerOptions
-  ) => {
+  return (_entryPoint, _preModules, graph, serializerOptions) => {
     if (serializerOptions.dev) {
       return;
     }

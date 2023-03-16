@@ -1,5 +1,4 @@
 import type { MetroPlugin } from "@rnx-kit/metro-serializer";
-import type { Graph, Module, SerializerOptions } from "metro";
 import type { PluginOptions } from "./detectCycles";
 import { detectCycles } from "./detectCycles";
 
@@ -8,12 +7,7 @@ export type { PluginOptions } from "./detectCycles";
 export function CyclicDependencies(
   pluginOptions: PluginOptions = {}
 ): MetroPlugin {
-  return (
-    entryPoint: string,
-    _preModules: ReadonlyArray<Module>,
-    graph: Graph,
-    _options: SerializerOptions
-  ) => {
+  return (entryPoint, _preModules, graph, _options) => {
     detectCycles(entryPoint, graph, pluginOptions);
   };
 }

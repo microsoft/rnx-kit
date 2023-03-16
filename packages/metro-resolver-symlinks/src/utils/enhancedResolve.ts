@@ -14,12 +14,9 @@ const getEnhancedResolver = (() => {
   return (context: ResolutionContext, platform = "common") => {
     if (!resolvers[platform]) {
       const {
-        // @ts-expect-error Property 'mainFields' does not exist on type 'ResolutionContext'
         mainFields,
         sourceExts,
-        // @ts-expect-error Property 'unstable_conditionNames' does not exist on type 'ResolutionContext'
         unstable_conditionNames,
-        // @ts-expect-error Property 'unstable_enablePackageExports' does not exist on type 'ResolutionContext'
         unstable_enablePackageExports,
       } = context;
       const extensions = sourceExts.map((ext) => `.${ext}`);
