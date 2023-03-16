@@ -22,9 +22,11 @@ Pod::Spec.new do |s|
 
   s.dependency 'React-Core'
   s.dependency 'React-cxxreact'
-  s.dependency 'ReactCommon'
 
-  s.dependency 'React-RCTFabric' if ENV['RCT_NEW_ARCH_ENABLED'] = '1'
+  if ENV['RCT_NEW_ARCH_ENABLED'] == '1'
+    s.dependency 'ReactCommon/turbomodule/core'
+    s.dependency 'React-RCTFabric'
+  end
 
   s.pod_target_xcconfig = {
     'CLANG_CXX_LANGUAGE_STANDARD' => 'gnu++17',
