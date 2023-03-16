@@ -3,7 +3,7 @@
  * @typedef {import("metro-config").ConfigT} ConfigT;
  * @typedef {import("metro-config").Middleware} Middleware;
  *
- * @typedef {import("metro/src/Server") & {
+ * @typedef {import("metro/src/Server").default & {
  *   _config?: ConfigT;
  * }} Server;
  */

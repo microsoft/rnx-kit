@@ -9,7 +9,8 @@ import {
   esbuildTransformerConfig,
   MetroSerializer as MetroSerializerEsbuild,
 } from "@rnx-kit/metro-serializer-esbuild";
-import type { InputConfigT, SerializerConfigT } from "metro-config";
+import type { ConfigT, SerializerConfigT } from "metro-config";
+import type { WritableDeep } from "type-fest";
 import { getDefaultBundlerPlugins } from "./bundle/defaultPlugins";
 
 type MetroExtraParams = Pick<
@@ -95,13 +96,13 @@ function readLegacyOptions({
  * @param print Optional function to use when printing status messages to the Metro console
  */
 export function customizeMetroConfig(
-  metroConfigReadonly: InputConfigT,
+  metroConfigReadonly: ConfigT,
   extraParams: MetroExtraParams,
   print?: (message: string) => void
 ): void {
   // We will be making changes to the Metro configuration. Coerce from a type
   // with readonly props to a type where the props are writeable.
-  const metroConfig = metroConfigReadonly as InputConfigT;
+  const metroConfig = metroConfigReadonly as WritableDeep<ConfigT>;
 
   const metroPlugins: MetroPlugin[] = [];
   const serializerHooks: Record<
@@ -185,6 +186,7 @@ export function customizeMetroConfig(
       metroPlugins
     ) as SerializerConfigT["customSerializer"];
   } else {
+    // @ts-expect-error We don't want this set if unused
     delete metroConfig.serializer.customSerializer;
   }
 

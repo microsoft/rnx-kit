@@ -34,6 +34,7 @@ export default class DependencyCollector extends Visitor {
         this.dependencies.push({
           name: arg.value,
           data: {
+            key: arg.value,
             asyncType: null,
             isOptional: false,
             locs: [],
@@ -74,6 +75,7 @@ export default class DependencyCollector extends Visitor {
       this.dependencies.push({
         name,
         data: {
+          key: name,
           asyncType: null,
           isOptional: false,
           locs: [],

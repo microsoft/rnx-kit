@@ -1,7 +1,8 @@
 import chalk from "chalk";
-import type { AssetData, OutputOptions } from "metro";
+import type { AssetData } from "metro";
 import type { TransformProfile } from "metro-babel-transformer";
 import type { ConfigT } from "metro-config";
+import type { OutputOptions } from "metro/shared/types";
 import Server from "metro/src/Server";
 import Bundle from "metro/src/shared/output/bundle";
 import path from "path";

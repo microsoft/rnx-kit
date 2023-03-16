@@ -1,26 +1,31 @@
 "use strict";
 
+const metroTypesVersion = "^0.76.0";
+
+const dependencies = {
+  jest: "^27.0.0",
+  metro: metroTypesVersion,
+  "metro-babel-transformer": metroTypesVersion,
+  "metro-config": metroTypesVersion,
+  "metro-core": metroTypesVersion,
+  "metro-resolver": metroTypesVersion,
+  "metro-source-map": metroTypesVersion,
+  "metro-transform-worker": metroTypesVersion,
+  node: "^16.0.0",
+  "react-native": "^0.68.0",
+  yargs: "^16.0.0",
+};
+
+function makeTypesEntries() {
+  return Object.entries(dependencies).reduce((types, [name, version]) => {
+    const pkgName = `@types/${name}`;
+    types[pkgName] = { name: pkgName, version, devOnly: true };
+    return types;
+  }, {});
+}
+
 const profile = {
-  "@types/jest": {
-    name: "@types/jest",
-    version: "^27.0.0",
-    devOnly: true,
-  },
-  "@types/node": {
-    name: "@types/node",
-    version: "^16.0.0",
-    devOnly: true,
-  },
-  "@types/react-native": {
-    name: "@types/react-native",
-    version: "^0.68.0",
-    devOnly: true,
-  },
-  "@types/yargs": {
-    name: "@types/yargs",
-    version: "^16.0.0",
-    devOnly: true,
-  },
+  ...makeTypesEntries(),
   chalk: {
     name: "chalk",
     version: "^4.1.0",
@@ -39,15 +44,11 @@ const profile = {
   },
   jest: {
     name: "jest",
-    version: "^27.0.0",
+    version: dependencies.jest,
   },
   "jest-cli": {
     name: "jest-cli",
     version: "^27.5.1",
-  },
-  "jest-diff": {
-    name: "jest-diff",
-    version: "^27.0.0",
   },
   "pkg-dir": {
     name: "pkg-dir",
@@ -72,7 +73,7 @@ const profile = {
   },
   yargs: {
     name: "yargs",
-    version: "^16.0.0",
+    version: dependencies.yargs,
   },
 };
 

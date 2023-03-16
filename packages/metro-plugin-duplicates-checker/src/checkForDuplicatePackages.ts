@@ -1,5 +1,5 @@
 import { error, warn } from "@rnx-kit/console";
-import type { Graph } from "metro";
+import type { ReadOnlyGraph } from "metro";
 import type { MixedSourceMap } from "metro-source-map";
 import type { ModuleMap } from "./gatherModules";
 import {
@@ -73,7 +73,7 @@ export function detectDuplicatePackages(
 }
 
 export function checkForDuplicateDependencies(
-  graph: Graph,
+  graph: ReadOnlyGraph,
   options: Options = defaultOptions
 ): Result {
   return detectDuplicatePackages(gatherModulesFromGraph(graph, {}), options);

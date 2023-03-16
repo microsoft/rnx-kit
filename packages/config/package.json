@@ -30,7 +30,7 @@
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tools-react-native": "*",
     "@types/lodash": "^4.14.172",
-    "@types/metro": "^0.66.0",
+    "@types/metro": "^0.76.0",
     "@types/node": "^16.0.0",
     "@types/semver": "^7.0.0",
     "eslint": "^8.0.0",

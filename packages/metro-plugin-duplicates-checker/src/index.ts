@@ -1,7 +1,6 @@
 import { error } from "@rnx-kit/console";
 import type { MetroPlugin } from "@rnx-kit/metro-serializer";
 import { readFile } from "fs";
-import type { Graph, Module, SerializerOptions } from "metro";
 import type { MixedSourceMap } from "metro-source-map";
 import type { Options, Result } from "./checkForDuplicatePackages";
 import {
@@ -60,12 +59,7 @@ export function checkForDuplicatePackagesInFile(
 export function DuplicateDependencies(
   pluginOptions: Options = defaultOptions
 ): MetroPlugin {
-  return (
-    _entryPoint: string,
-    _preModules: ReadonlyArray<Module>,
-    graph: Graph,
-    _options: SerializerOptions
-  ) => {
+  return (_entryPoint, _preModules, graph, _options) => {
     const result = checkForDuplicateDependencies(graph, pluginOptions);
     const errorMessage = getErrorMessage(result);
     if (errorMessage) {
