@@ -3,7 +3,6 @@
   "version": "0.1.4",
   "private": true,
   "scripts": {
-    "ci": "yarn --prefer-offline --frozen-lockfile --non-interactive",
     "docusaurus": "docusaurus",
     "start": "docusaurus start",
     "build": "docusaurus build",
