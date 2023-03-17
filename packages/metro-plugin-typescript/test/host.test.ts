@@ -1,13 +1,11 @@
-import semverSatisfies from "semver/functions/satisfies";
-import ts from "typescript";
+jest.mock("../src/resolver");
 
+import type ts from "typescript";
 import { createEnhanceLanguageServiceHost } from "../src/host";
 import {
   resolveModuleNames,
   resolveTypeReferenceDirectives,
 } from "../src/resolver";
-
-jest.mock("../src/resolver");
 
 //
 //  Mechanism to artificially control the TypeScript version. This is used to
@@ -17,26 +15,10 @@ jest.mock("../src/resolver");
 //  testing we are doing here.
 //
 
-const origTsVersion = ts.version;
-
-function setTsVersion(version: string) {
-  (ts as any).version = version; // eslint-disable-line @typescript-eslint/no-explicit-any
-}
-
-function resetTsVersion() {
-  (ts as any).version = origTsVersion; // eslint-disable-line @typescript-eslint/no-explicit-any
-}
-
 describe("Host (TS v4.6.0)", () => {
-  beforeAll(() => {
-    // Force TS version to 4.6.0, which pre-dates moduleSuffixes. This ensures our tests
-    // run against our internal resolver.
-    setTsVersion("4.6.0");
-  });
-
-  afterAll(() => {
-    resetTsVersion();
-  });
+  // Force TS version to 4.6, which pre-dates moduleSuffixes. This ensures our
+  // tests run against our internal resolver.
+  const tsMock = { version: "4.6.4" } as unknown as typeof ts;
 
   afterEach(() => {
     jest.resetAllMocks();
@@ -46,7 +28,7 @@ describe("Host (TS v4.6.0)", () => {
     const host = {
       getCurrentDirectory: process.cwd,
     } as ts.LanguageServiceHost;
-    createEnhanceLanguageServiceHost("ios", {})(host);
+    createEnhanceLanguageServiceHost("ios", {}, tsMock)(host);
 
     expect(typeof host.resolveModuleNames).toBe("function");
     expect(typeof host.resolveTypeReferenceDirectives).toBe("function");
@@ -54,17 +36,6 @@ describe("Host (TS v4.6.0)", () => {
 });
 
 describe("Host (TS >= 4.7.0)", () => {
-  beforeAll(() => {
-    // We use TS >= 4.7 in our repo. This ensures that the version is proplery restored.
-    // These tests will run using the TS resolver with moduleSuffixes, and will bypass
-    // our own internal resolver.
-    expect(semverSatisfies(ts.version, ">=4.7.0")).toBe(true);
-  });
-
-  afterAll(() => {
-    resetTsVersion();
-  });
-
   afterEach(() => {
     jest.resetAllMocks();
   });
@@ -75,9 +46,7 @@ describe("Host (TS >= 4.7.0)", () => {
     } as ts.LanguageServiceHost;
     createEnhanceLanguageServiceHost("ios", {})(host);
 
-    expect(typeof host.resolveModuleNames).toBe("function");
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    host.resolveModuleNames!(
+    host.resolveModuleNames?.(
       ["module"],
       "containing-file",
       undefined,
@@ -85,28 +54,25 @@ describe("Host (TS >= 4.7.0)", () => {
       {},
       undefined
     );
+
     expect(resolveModuleNames).toBeCalledTimes(1);
 
-    expect(typeof host.resolveTypeReferenceDirectives).toBe("function");
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    host.resolveTypeReferenceDirectives!(
+    host.resolveTypeReferenceDirectives?.(
       ["type-reference"],
       "containing-file",
       undefined,
       {},
       undefined
     );
+
     expect(resolveTypeReferenceDirectives).toBeCalledTimes(1);
   });
 
   test("empty extension is added to the end of the platform file extension list", () => {
-    const host = {
-      getCurrentDirectory: process.cwd,
-    } as ts.LanguageServiceHost;
+    const host = { getCurrentDirectory: process.cwd } as ts.LanguageServiceHost;
     createEnhanceLanguageServiceHost("ios", {})(host);
 
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    host.resolveModuleNames!(
+    host.resolveModuleNames?.(
       ["module"],
       "containing-file",
       undefined,
@@ -114,6 +80,7 @@ describe("Host (TS >= 4.7.0)", () => {
       {},
       undefined
     );
+
     expect(resolveModuleNames).toBeCalledTimes(1);
     // 1st argument: ResolverContext
     expect((resolveModuleNames as jest.Mock).mock.calls[0][0]).toEqual(

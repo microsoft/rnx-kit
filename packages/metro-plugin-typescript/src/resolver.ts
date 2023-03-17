@@ -93,6 +93,7 @@ export function getCompilerOptionsWithReactNativeModuleSuffixes(
  * @param containingFile File containing the module reference.
  * @param redirectedReference Head node in the program's graph of type references
  * @param options Compiler options for the module.
+ * @param ts Used for _mocking_ only. This parameter must _always_ be last.
  * @returns
  */
 export function resolveModuleName(
@@ -100,7 +101,8 @@ export function resolveModuleName(
   moduleName: string,
   containingFile: string,
   redirectedReference: ts.ResolvedProjectReference | undefined,
-  options: ts.CompilerOptions
+  options: ts.CompilerOptions,
+  { resolveModuleName } = ts
 ): ts.ResolvedModuleFull | undefined {
   // Ensure the compiler options has `moduleSuffixes` set correctly for this RN
   // project. If `moduleName` points to a package (no paths), don't add platform
@@ -138,7 +140,7 @@ export function resolveModuleName(
     | ts.ModuleKind.ESNext
     | undefined = undefined;
 
-  const module = ts.resolveModuleName(
+  const module = resolveModuleName(
     moduleName,
     containingFile,
     optionsWithSuffixes,
@@ -146,9 +148,8 @@ export function resolveModuleName(
     cache,
     redirectedReference,
     resolutionMode
-  ).resolvedModule;
-
-  return module;
+  );
+  return module.resolvedModule;
 }
 
 /**
@@ -171,6 +172,7 @@ export function resolveModuleName(
  * @param redirectedReference Head node in the program's graph of type references
  * @param options Compiler options to use when resolving this module
  * @param _containingSourceFile
+ * @param typescript Used for _mocking_ only. This parameter must _always_ be last.
  * @returns Array of results. Each entry will have resolved module information, or will be `undefined` if resolution failed. The array will have one element for each entry in the module name list.
  */
 export function resolveModuleNames(
@@ -180,7 +182,8 @@ export function resolveModuleNames(
   _reusedNames: string[] | undefined,
   redirectedReference: ts.ResolvedProjectReference | undefined,
   options: ts.CompilerOptions,
-  _containingSourceFile: ts.SourceFile | undefined
+  _containingSourceFile: ts.SourceFile | undefined,
+  typescript = ts
 ): (ts.ResolvedModuleFull | undefined)[] {
   const { host, replaceReactNativePackageName } = context;
   const resolutions: (ts.ResolvedModuleFull | undefined)[] = [];
@@ -198,7 +201,8 @@ export function resolveModuleNames(
       finalModuleName,
       containingFile,
       redirectedReference,
-      options
+      options,
+      typescript
     );
 
     resolutions.push(module);
@@ -227,6 +231,7 @@ export function resolveModuleNames(
  * @param redirectedReference Head node in the program's graph of type references
  * @param options Compiler options
  * @param containingFileMode Indicates whether the containing file is an ESNext module or a CommonJS module
+ * @param ts Used for _mocking_ only. This parameter must _always_ be last.
  * @returns Array of results. Each entry will have resolved type information, or will be `undefined` if resolution failed. The array will have one element for each entry in the type name list.
  */
 export function resolveTypeReferenceDirectives(
@@ -235,7 +240,8 @@ export function resolveTypeReferenceDirectives(
   containingFile: string,
   redirectedReference: ts.ResolvedProjectReference | undefined,
   options: ts.CompilerOptions,
-  containingFileMode: ts.SourceFile["impliedNodeFormat"] | undefined
+  containingFileMode: ts.SourceFile["impliedNodeFormat"] | undefined,
+  { resolveTypeReferenceDirective } = ts
 ): (ts.ResolvedTypeReferenceDirective | undefined)[] {
   const { host } = context;
 
@@ -272,7 +278,7 @@ export function resolveTypeReferenceDirectives(
       undefined;
 
     const { resolvedTypeReferenceDirective: directive } =
-      ts.resolveTypeReferenceDirective(
+      resolveTypeReferenceDirective(
         name,
         containingFile,
         optionsWithSuffixes,

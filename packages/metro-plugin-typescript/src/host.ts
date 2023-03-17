@@ -16,11 +16,13 @@ import type { ResolverContext } from "./types";
  *
  * @param platform Target platform for the React Native project
  * @param options TypeScript compiler options for the project (only used for TS < 4.7)
+ * @param ts Used for _mocking_ only. This parameter must _always_ be last.
  * @returns A function which enhances a TypeScript language service host
  */
 export function createEnhanceLanguageServiceHost(
   platform: AllPlatforms,
-  options: ts.CompilerOptions
+  options: ts.CompilerOptions,
+  { version: tsVersion } = ts
 ): (host: ts.LanguageServiceHost) => void {
   const platformExtensionNames = platformExtensions(platform);
   const platformFileExtensions = platformExtensionNames.map(
@@ -37,7 +39,7 @@ export function createEnhanceLanguageServiceHost(
    * up-to-date with changes in the Node ecosystem, and supports more scenarios
    * such as path remapping (baseUrl, paths, rootDir).
    */
-  if (semverSatisfies(ts.version, ">=4.7.0")) {
+  if (semverSatisfies(tsVersion, ">=4.7.0")) {
     //  Make the last platform file extension blank so that resolution falls back
     //  to files which have no extension. The pre-4.7 codepath, which runs our custom
     //  resolver, doesn't need this because our resolver adds it when searching for
