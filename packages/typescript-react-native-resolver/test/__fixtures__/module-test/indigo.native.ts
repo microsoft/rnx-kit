@@ -1,1 +1,0 @@
-export const indigoNative = true;

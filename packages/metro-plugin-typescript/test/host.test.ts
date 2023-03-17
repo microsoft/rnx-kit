@@ -16,22 +16,18 @@ import {
 //
 
 describe("Host (TS v4.6.0)", () => {
-  // Force TS version to 4.6, which pre-dates moduleSuffixes. This ensures our
-  // tests run against our internal resolver.
+  // Force TS version to 4.6, which pre-dates moduleSuffixes.
   const tsMock = { version: "4.6.4" } as unknown as typeof ts;
 
   afterEach(() => {
     jest.resetAllMocks();
   });
 
-  test("hooks are set for resolver functions", () => {
-    const host = {
-      getCurrentDirectory: process.cwd,
-    } as ts.LanguageServiceHost;
-    createEnhanceLanguageServiceHost("ios", {}, tsMock)(host);
-
-    expect(typeof host.resolveModuleNames).toBe("function");
-    expect(typeof host.resolveTypeReferenceDirectives).toBe("function");
+  test("throws if TypeScript doesn't support `moduleSuffixes`", () => {
+    const host = { getCurrentDirectory: process.cwd } as ts.LanguageServiceHost;
+    expect(() => createEnhanceLanguageServiceHost("ios", tsMock)(host)).toThrow(
+      "TypeScript >=4.7 is required"
+    );
   });
 });
 
@@ -41,10 +37,8 @@ describe("Host (TS >= 4.7.0)", () => {
   });
 
   test("hooks are set to the TS-delegating resolver functions", () => {
-    const host = {
-      getCurrentDirectory: process.cwd,
-    } as ts.LanguageServiceHost;
-    createEnhanceLanguageServiceHost("ios", {})(host);
+    const host = { getCurrentDirectory: process.cwd } as ts.LanguageServiceHost;
+    createEnhanceLanguageServiceHost("ios")(host);
 
     host.resolveModuleNames?.(
       ["module"],
@@ -70,7 +64,7 @@ describe("Host (TS >= 4.7.0)", () => {
 
   test("empty extension is added to the end of the platform file extension list", () => {
     const host = { getCurrentDirectory: process.cwd } as ts.LanguageServiceHost;
-    createEnhanceLanguageServiceHost("ios", {})(host);
+    createEnhanceLanguageServiceHost("ios")(host);
 
     host.resolveModuleNames?.(
       ["module"],
