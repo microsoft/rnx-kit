@@ -15,7 +15,7 @@ function identity<T>(v: T): T {
 /**
  * Create a function that replaces a 'react-native' module reference with a
  * reference to the target platform's react-native package. This only happens
- * when targeting an out-of-tree platform like Windows or MacOS.
+ * when targeting an out-of-tree platform like Windows or macOS.
  *
  * @param currentDirectory Current directory – used to find available React Native platforms
  * @param platform Target platform
