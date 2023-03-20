@@ -5,17 +5,15 @@ import {
 } from "@rnx-kit/tools-node";
 import path from "path";
 import ts from "typescript";
-
 import {
-  ExtensionsJavaScript,
   ExtensionsJSON,
+  ExtensionsJavaScript,
   ExtensionsTypeScript,
 } from "./extension";
 import { isTraceEnabled, logModuleBegin, logModuleEnd } from "./log";
 import { createReactNativePackageNameReplacer } from "./react-native-package-name";
 import { resolveFileModule, resolvePackageModule } from "./resolve";
-
-import type { ResolverContext, ModuleResolutionHostLike } from "./types";
+import type { ModuleResolutionHostLike, ResolverContext } from "./types";
 
 /**
  * Change the TypeScript `CompilerHost` or `LanguageServiceHost` so it makes
@@ -229,18 +227,18 @@ export function resolveModuleNames(
  * @param redirectedReference Head node in the program's graph of type references
  * @param options Compiler options
  * @param containingFileMode Indicates whether the containing file is an ESNext module or a CommonJS module
+ * @param ts Used for _mocking_ only. This parameter must _always_ be last.
  * @returns Array of results. Each entry will have resolved type information, or will be `undefined` if resolution failed. The array will have one element for each entry in the type name list.
  */
 export function resolveTypeReferenceDirectives(
-  context: ResolverContext,
+  { host, options }: ResolverContext,
   typeDirectiveNames: string[] | readonly ts.FileReference[],
   containingFile: string,
   redirectedReference: ts.ResolvedProjectReference,
   _compilerOptions?: ts.CompilerOptions,
-  containingFileMode?: ts.SourceFile["impliedNodeFormat"]
+  containingFileMode?: ts.SourceFile["impliedNodeFormat"],
+  { resolveTypeReferenceDirective } = ts
 ): (ts.ResolvedTypeReferenceDirective | undefined)[] {
-  const { host, options } = context;
-
   const resolutions: (ts.ResolvedTypeReferenceDirective | undefined)[] = [];
 
   for (const typeDirectiveName of typeDirectiveNames) {
@@ -249,7 +247,7 @@ export function resolveTypeReferenceDirectives(
         ? typeDirectiveName
         : typeDirectiveName.fileName.toLowerCase();
     const { resolvedTypeReferenceDirective: directive } =
-      ts.resolveTypeReferenceDirective(
+      resolveTypeReferenceDirective(
         name,
         containingFile,
         options,

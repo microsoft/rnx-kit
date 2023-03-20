@@ -36,7 +36,7 @@
     "@rnx-kit/typescript-service": "^1.5.4",
     "lodash": "^4.17.21",
     "semver": "^7.0.0",
-    "typescript": "^4.0.0"
+    "typescript": "^5.0.0"
   },
   "devDependencies": {
     "@rnx-kit/scripts": "*",

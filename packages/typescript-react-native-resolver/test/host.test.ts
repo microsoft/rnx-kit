@@ -1,20 +1,19 @@
-import ts from "typescript";
-
-import { resolveFileModule, resolvePackageModule } from "../src/resolve";
 jest.mock("../src/resolve");
 
+import type ts from "typescript";
+import {
+  ExtensionsJSON,
+  ExtensionsJavaScript,
+  ExtensionsTypeScript,
+} from "../src/extension";
 import {
   changeHostToUseReactNativeResolver,
   resolveModuleName,
   resolveModuleNames,
   resolveTypeReferenceDirectives,
 } from "../src/host";
+import { resolveFileModule, resolvePackageModule } from "../src/resolve";
 import type { ModuleResolutionHostLike, ResolverContext } from "../src/types";
-import {
-  ExtensionsTypeScript,
-  ExtensionsJavaScript,
-  ExtensionsJSON,
-} from "../src/extension";
 
 describe("Host > changeHostToUseReactNativeResolver", () => {
   const mockGetCurrentDirectory = jest.fn();
@@ -211,26 +210,22 @@ describe("Host > resolveTypeReferenceDirectives", () => {
     mockResolveTypeReferenceDirective.mockReturnValue({
       resolvedTypeReferenceDirective: { resolvedFileName: "resolved.ts" },
     });
-    const origResolveTypeReferenceDirective = ts.resolveTypeReferenceDirective;
-    ts.resolveTypeReferenceDirective = mockResolveTypeReferenceDirective;
-
-    const context = {
-      options: {},
-    } as unknown as ResolverContext;
 
     const directives = resolveTypeReferenceDirectives(
-      context,
+      { options: {} } as unknown as ResolverContext,
       ["type-ref"],
       "parent-file.ts",
-      undefined,
+      {} as unknown as ts.ResolvedProjectReference,
       {},
-      undefined
+      undefined,
+      {
+        resolveTypeReferenceDirective: mockResolveTypeReferenceDirective,
+      } as unknown as typeof ts
     );
+
     expect(mockResolveTypeReferenceDirective).toBeCalled();
     expect(Array.isArray(directives)).toBe(true);
     expect(directives.length).toBe(1);
     expect(directives[0]?.resolvedFileName).toEqual("resolved.ts");
-
-    ts.resolveTypeReferenceDirective = origResolveTypeReferenceDirective;
   });
 });
