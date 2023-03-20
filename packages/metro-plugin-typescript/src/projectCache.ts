@@ -103,7 +103,7 @@ export function createProjectCache(
       documentRegistry,
       diagnosticWriter,
       cmdLine,
-      createEnhanceLanguageServiceHost(platform, cmdLine.options)
+      createEnhanceLanguageServiceHost(platform)
     );
 
     return {
