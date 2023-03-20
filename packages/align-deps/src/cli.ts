@@ -209,8 +209,8 @@ export async function cli({ packages, ...args }: Args): Promise<void> {
   const errors = manifests.reduce((errors, manifest) => {
     try {
       const result = command(manifest);
+      printError(manifest, result);
       if (result !== "success" && result !== "excluded") {
-        printError(manifest, result);
         return errors + 1;
       }
     } catch (e) {
