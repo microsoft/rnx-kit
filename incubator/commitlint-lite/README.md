@@ -14,8 +14,8 @@ Pipe the commit message to `@rnx-kit/commitlint-lite`:
 echo 'ci: lint commit messages' | npx @rnx-kit/commitlint-lite
 ```
 
-**Example:** Only the first commit's message in a PR needs to conform (useful
-when you always squash before merging):
+**Example:** In a PR, only the first commit's message needs to conform if you
+always squash before merging:
 
 ```sh
 git log --format='%s' origin/trunk..HEAD | tail -1 | npx @rnx-kit/commitlint-lite
