@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/align-deps
 
+## 2.2.1
+
+### Patch Changes
+
+- 4d3bcfbd: Print packages that have been excluded
+
 ## 2.2.0
 
 ### Minor Changes

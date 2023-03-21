@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/typescript-service
 
+## 1.5.5
+
+### Patch Changes
+
+- bd96118a: Declare support for TypeScript 5.0
+
 ## 1.5.4
 
 ### Patch Changes
