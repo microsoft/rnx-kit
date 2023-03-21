@@ -3036,7 +3036,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rnx-kit/align-deps@*, @rnx-kit/align-deps@^2.1.4, @rnx-kit/align-deps@workspace:packages/align-deps":
+"@rnx-kit/align-deps@*, @rnx-kit/align-deps@^2.2.1, @rnx-kit/align-deps@workspace:packages/align-deps":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/align-deps@workspace:packages/align-deps"
   dependencies:
@@ -3171,12 +3171,12 @@ __metadata:
   resolution: "@rnx-kit/cli@workspace:packages/cli"
   dependencies:
     "@react-native-community/cli-types": ^6.0.0
-    "@rnx-kit/align-deps": ^2.1.4
+    "@rnx-kit/align-deps": ^2.2.1
     "@rnx-kit/config": ^0.6.0
     "@rnx-kit/console": ^1.0.11
     "@rnx-kit/metro-plugin-cyclic-dependencies-detector": ^1.1.0
     "@rnx-kit/metro-plugin-duplicates-checker": ^2.1.0
-    "@rnx-kit/metro-plugin-typescript": ^0.3.0
+    "@rnx-kit/metro-plugin-typescript": ^0.4.0
     "@rnx-kit/metro-serializer": ^1.0.11
     "@rnx-kit/metro-serializer-esbuild": ^0.1.18
     "@rnx-kit/metro-service": ^3.0.2
@@ -3423,7 +3423,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rnx-kit/metro-plugin-typescript@^0.3.0, @rnx-kit/metro-plugin-typescript@workspace:packages/metro-plugin-typescript":
+"@rnx-kit/metro-plugin-typescript@^0.4.0, @rnx-kit/metro-plugin-typescript@workspace:packages/metro-plugin-typescript":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/metro-plugin-typescript@workspace:packages/metro-plugin-typescript"
   dependencies:
@@ -3432,7 +3432,7 @@ __metadata:
     "@rnx-kit/scripts": "*"
     "@rnx-kit/tools-node": ^1.3.1
     "@rnx-kit/tools-react-native": ^1.3.0
-    "@rnx-kit/typescript-service": ^1.5.4
+    "@rnx-kit/typescript-service": ^1.5.5
     "@types/metro": ^0.76.0
     eslint: ^8.0.0
     jest: ^27.0.0
@@ -3851,7 +3851,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rnx-kit/typescript-service@^1.5.4, @rnx-kit/typescript-service@workspace:packages/typescript-service":
+"@rnx-kit/typescript-service@^1.5.5, @rnx-kit/typescript-service@workspace:packages/typescript-service":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/typescript-service@workspace:packages/typescript-service"
   dependencies:
