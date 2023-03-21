@@ -1,12 +1,20 @@
 require 'json'
 
+source_files = 'cocoa/*.{h,m,mm}'
+public_header_files = 'cocoa/{ReactNativeHost,RNXHostConfig}.h'
+
 package = JSON.parse(File.read(File.join(__dir__, 'package.json')))
 version = package['version']
 repository = package['repository']
 repo_dir = repository['directory']
 
-source_files = 'cocoa/*.{h,m,mm}'
-public_header_files = 'cocoa/{ReactNativeHost,RNXHostConfig}.h'
+new_arch_enabled = ENV['RCT_NEW_ARCH_ENABLED'] == '1'
+preprocessor_definitions = ['FOLLY_NO_CONFIG=1']
+if new_arch_enabled
+  preprocessor_definitions << 'RCT_NEW_ARCH_ENABLED=1'
+  preprocessor_definitions << 'USE_FABRIC=1'
+  preprocessor_definitions << 'USE_TURBOMODULE=1'
+end
 
 Pod::Spec.new do |s|
   s.name      = 'ReactNativeHost'
@@ -23,7 +31,7 @@ Pod::Spec.new do |s|
   s.dependency 'React-Core'
   s.dependency 'React-cxxreact'
 
-  if ENV['RCT_NEW_ARCH_ENABLED'] == '1'
+  if new_arch_enabled
     s.dependency 'ReactCommon/turbomodule/core'
     s.dependency 'React-RCTFabric'
   end
@@ -31,6 +39,7 @@ Pod::Spec.new do |s|
   s.pod_target_xcconfig = {
     'CLANG_CXX_LANGUAGE_STANDARD' => 'gnu++17',
     'DEFINES_MODULE' => 'YES',
+    'GCC_PREPROCESSOR_DEFINITIONS' => preprocessor_definitions,
     'HEADER_SEARCH_PATHS' => [
       '$(PODS_ROOT)/Headers/Private/React-Core',
       '$(PODS_ROOT)/boost',
