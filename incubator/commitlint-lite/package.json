@@ -1,0 +1,51 @@
+{
+  "name": "@rnx-kit/commitlint-lite",
+  "version": "0.0.1",
+  "description": "Lint commit messages",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/incubator/commitlint-lite#readme",
+  "license": "MIT",
+  "author": {
+    "name": "Microsoft Open Source",
+    "email": "microsoftopensource@users.noreply.github.com"
+  },
+  "files": [
+    "lib/*"
+  ],
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "import": "./lib/index.js"
+    }
+  },
+  "bin": "lib/cli.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "incubator/commitlint-lite"
+  },
+  "scripts": {
+    "build": "rnx-kit-scripts build",
+    "format": "rnx-kit-scripts format",
+    "lint": "rnx-kit-scripts lint",
+    "test": "rnx-kit-scripts test"
+  },
+  "devDependencies": {
+    "@rnx-kit/scripts": "*",
+    "eslint": "^8.0.0",
+    "jest": "^27.0.0",
+    "prettier": "^2.8.0",
+    "typescript": "^5.0.0"
+  },
+  "engines": {
+    "node": ">=14.18"
+  },
+  "eslintConfig": {
+    "extends": "@rnx-kit/eslint-config"
+  },
+  "jest": {
+    "preset": "@rnx-kit/scripts",
+    "resolver": "<rootDir>/test/resolver.cjs"
+  },
+  "experimental": true
+}

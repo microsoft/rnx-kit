@@ -3219,6 +3219,20 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@rnx-kit/commitlint-lite@workspace:incubator/commitlint-lite":
+  version: 0.0.0-use.local
+  resolution: "@rnx-kit/commitlint-lite@workspace:incubator/commitlint-lite"
+  dependencies:
+    "@rnx-kit/scripts": "*"
+    eslint: ^8.0.0
+    jest: ^27.0.0
+    prettier: ^2.8.0
+    typescript: ^5.0.0
+  bin:
+    commitlint-lite: lib/cli.js
+  languageName: unknown
+  linkType: soft
+
 "@rnx-kit/config@*, @rnx-kit/config@^0.6.0, @rnx-kit/config@^0.6.1, @rnx-kit/config@workspace:packages/config":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/config@workspace:packages/config"
