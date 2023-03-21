@@ -1,5 +1,15 @@
 # Change Log - @rnx-kit/cli
 
+## 0.16.5
+
+### Patch Changes
+
+- Updated dependencies [3e699d3a]
+- Updated dependencies [bd96118a]
+- Updated dependencies [4d3bcfbd]
+  - @rnx-kit/metro-plugin-typescript@0.4.0
+  - @rnx-kit/align-deps@2.2.1
+
 ## 0.16.4
 
 ### Patch Changes

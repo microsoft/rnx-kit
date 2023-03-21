@@ -1,5 +1,17 @@
 # @rnx-kit/metro-plugin-typescript
 
+## 0.4.0
+
+### Minor Changes
+
+- 3e699d3a: Deprecated TypeScript 4.6 – this plugin now requires 4.7+
+
+### Patch Changes
+
+- bd96118a: Fix TypeScript version being set too high
+- Updated dependencies [bd96118a]
+  - @rnx-kit/typescript-service@1.5.5
+
 ## 0.3.4
 
 ### Patch Changes

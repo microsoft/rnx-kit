@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/commitlint-lite",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Lint commit messages",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/incubator/commitlint-lite#readme",
   "license": "MIT",
