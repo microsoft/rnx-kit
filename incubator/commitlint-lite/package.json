@@ -45,7 +45,7 @@
   },
   "jest": {
     "preset": "@rnx-kit/scripts",
-    "resolver": "<rootDir>/test/resolver.cjs"
+    "resolver": "@rnx-kit/jest-preset/typescript-esm-resolver.cjs"
   },
   "experimental": true
 }

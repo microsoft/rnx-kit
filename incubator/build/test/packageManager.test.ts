@@ -1,6 +1,6 @@
 import * as os from "node:os";
 import * as path from "node:path";
-import { detectPackageManager } from "../lib/packageManager";
+import { detectPackageManager } from "../src/packageManager";
 
 function changeToFixtureDir(fixture: string) {
   process.chdir(path.join(__dirname, "__fixtures__", fixture + "-project"));

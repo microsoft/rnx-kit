@@ -1,7 +1,7 @@
 import * as fs from "node:fs";
 import * as os from "node:os";
 import * as path from "node:path";
-import { extract, untar, unzip } from "../lib/archive";
+import { extract, untar, unzip } from "../src/archive";
 
 function fixturePath(artifact: string): string {
   return path.join(__dirname, "__fixtures__", artifact);

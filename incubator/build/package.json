@@ -66,6 +66,7 @@
   },
   "jest": {
     "preset": "@rnx-kit/scripts",
+    "resolver": "@rnx-kit/jest-preset/typescript-esm-resolver.cjs",
     "transformIgnorePatterns": [
       "/node_modules/(?!(find-up|locate-path|p-limit|p-locate|path-exists|yocto-queue)/)"
     ]

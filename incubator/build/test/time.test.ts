@@ -1,4 +1,4 @@
-import { elapsedTime } from "../lib/time";
+import { elapsedTime } from "../src/time";
 
 describe("time", () => {
   const now = "1970-01-01T00:00:00Z";

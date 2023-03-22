@@ -1,5 +1,5 @@
-const { MAX_LINE_LENGTH } = require("../src/constants.ts");
-const { lint } = require("../src/index.ts");
+import { MAX_LINE_LENGTH } from "../src/constants";
+import { lint } from "../src/index";
 
 describe("Lint commit message", () => {
   it("should fail non-conforming messages", () => {

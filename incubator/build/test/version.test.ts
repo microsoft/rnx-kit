@@ -1,4 +1,4 @@
-import { latestVersion } from "../lib/version";
+import { latestVersion } from "../src/version";
 
 describe("latestVersion", () => {
   test("returns 0.0.0 if no versions are passed", () => {
