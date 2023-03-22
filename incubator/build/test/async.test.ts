@@ -1,4 +1,4 @@
-import { idle, once, retry, withRetry } from "../lib/async";
+import { idle, once, retry, withRetry } from "../src/async";
 
 jest.setTimeout(30000);
 
