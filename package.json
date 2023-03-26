@@ -57,7 +57,7 @@
   "engines": {
     "node": ">=14.18"
   },
-  "packageManager": "yarn@3.4.1",
+  "packageManager": "yarn@3.5.0",
   "resolutions": {
     "@vue/compiler-sfc": "link:./incubator/ignore",
     "eslint-plugin-react": "^7.26.0",
