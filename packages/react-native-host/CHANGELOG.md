@@ -1,5 +1,11 @@
 # @rnx-kit/react-native-host
 
+## 0.2.1
+
+### Patch Changes
+
+- 2ffd5f96: Fixed empty package
+
 ## 0.2.0
 
 ### Minor Changes
