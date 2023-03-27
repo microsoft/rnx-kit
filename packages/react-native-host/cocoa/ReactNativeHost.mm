@@ -3,16 +3,19 @@
 #import <React/RCTBridge.h>
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTDevLoadingViewSetEnabled.h>
-#import <React/RCTRootView.h>
 #import <React/RCTUtils.h>
 
 #import "RNXHostConfig.h"
+#import "RNXHostReleaser.h"
 
 @implementation ReactNativeHost {
     __weak id<RNXHostConfig> _config;
+    RCTBridge *_bridge;
+    NSLock *_isShuttingDown;
+    RNXHostReleaser *_hostReleaser;
 }
 
-- (instancetype)initWithConfig:(__weak id<RNXHostConfig>)config
+- (instancetype)initWithConfig:(id<RNXHostConfig>)config
 {
     if (self = [super init]) {
         if ([config respondsToSelector:@selector(isDevLoadingViewEnabled)]) {
@@ -36,15 +39,58 @@
         }
 
         _config = config;
-        _bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:nil];
+        _isShuttingDown = [[NSLock alloc] init];
+
+        if ([config respondsToSelector:@selector(shouldReleaseBridgeWhenBackgrounded)] &&
+            [config shouldReleaseBridgeWhenBackgrounded]) {
+            _hostReleaser = [[RNXHostReleaser alloc] initWithHost:self];
+        }
+
+        (void)self.bridge;  // Initialize the bridge now
     }
     return self;
 }
 
+- (RCTBridge *)bridge
+{
+    if (![_isShuttingDown tryLock]) {
+        NSAssert(NO, @"Tried to access the bridge while shutting down");
+        return nil;
+    }
+
+    @try {
+        if (_bridge == nil) {
+            _bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:nil];
+            [_hostReleaser setBridge:_bridge];
+            if ([_config respondsToSelector:@selector(onBridgeInstantiated:)]) {
+                [_config onBridgeInstantiated:_bridge];
+            }
+        }
+
+        return _bridge;
+    } @finally {
+        [_isShuttingDown unlock];
+    }
+}
+
 - (void)shutdown
 {
-    [_bridge invalidate];
-    _bridge = nil;
+    if ([_config respondsToSelector:@selector(onBridgeWillShutDown:)]) {
+        [_config onBridgeWillShutDown:_bridge];
+    }
+
+    [_isShuttingDown lock];
+
+    @try {
+        [_bridge invalidate];
+        _bridge = nil;
+
+        if ([_config respondsToSelector:@selector(onBridgeDidShutDown)]) {
+            [_config onBridgeDidShutDown];
+        }
+    } @finally {
+        [_isShuttingDown unlock];
+    }
 }
 
 - (void)usingModule:(Class)moduleClass block:(void (^)(id<RCTBridgeModule> _Nullable))block
@@ -84,35 +130,6 @@
     return [_config respondsToSelector:@selector(extraModulesForBridge:)]
                ? [_config extraModulesForBridge:bridge]
                : @[];
-}
-
-// MARK: - Category: View
-
-+ (instancetype)hostFromRootView:(RNXView *)rootView
-{
-    if (![rootView respondsToSelector:@selector(bridge)]) {
-        return nil;
-    }
-
-    id bridge = [rootView performSelector:@selector(bridge)];
-    if (![bridge respondsToSelector:@selector(delegate)]) {
-        return nil;
-    }
-
-    id delegate = [bridge performSelector:@selector(delegate)];
-    if (![delegate isKindOfClass:self]) {
-        return nil;
-    }
-
-    return delegate;
-}
-
-- (RNXView *)viewWithModuleName:(NSString *)moduleName
-              initialProperties:(NSDictionary *)initialProperties;
-{
-    return [[RCTRootView alloc] initWithBridge:self.bridge
-                                    moduleName:moduleName
-                             initialProperties:initialProperties];
 }
 
 @end
