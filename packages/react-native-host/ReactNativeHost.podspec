@@ -1,8 +1,20 @@
 require 'json'
 
+source_files = 'cocoa/*.{h,m,mm}'
+public_header_files = 'cocoa/{ReactNativeHost,RNXHostConfig}.h'
+
 package = JSON.parse(File.read(File.join(__dir__, 'package.json')))
 version = package['version']
 repository = package['repository']
+repo_dir = repository['directory']
+
+new_arch_enabled = ENV['RCT_NEW_ARCH_ENABLED'] == '1'
+preprocessor_definitions = ['FOLLY_NO_CONFIG=1']
+if new_arch_enabled
+  preprocessor_definitions << 'RCT_NEW_ARCH_ENABLED=1'
+  preprocessor_definitions << 'USE_FABRIC=1'
+  preprocessor_definitions << 'USE_TURBOMODULE=1'
+end
 
 Pod::Spec.new do |s|
   s.name      = 'ReactNativeHost'
@@ -17,14 +29,28 @@ Pod::Spec.new do |s|
   s.osx.deployment_target = '10.15'
 
   s.dependency 'React-Core'
+  s.dependency 'React-cxxreact'
 
-  s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES' }
+  if new_arch_enabled
+    s.dependency 'ReactCommon/turbomodule/core'
+    s.dependency 'React-RCTFabric'
+  end
+
+  s.pod_target_xcconfig = {
+    'CLANG_CXX_LANGUAGE_STANDARD' => 'gnu++17',
+    'DEFINES_MODULE' => 'YES',
+    'GCC_PREPROCESSOR_DEFINITIONS' => preprocessor_definitions,
+    'HEADER_SEARCH_PATHS' => [
+      '$(PODS_ROOT)/Headers/Private/React-Core',
+      '$(PODS_ROOT)/boost',
+    ],
+  }
 
   # Include both package and repository relative paths to allow the podspec to
   # be consumed from both a local path, and as a podspec outside a spec
   # repository.
-  s.source_files         = 'cocoa/*.{h,m,mm}',                            # :path
-                           "#{repository['directory']}/cocoa/*.{h,m,mm}"  # :podspec
-  s.public_header_files  = 'cocoa/*.h',                                   # :path
-                           "#{repository['directory']}/cocoa/*.h"         # :podspec
+  s.source_files         = source_files,                         # :path
+                           "#{repo_dir}/#{source_files}"         # :podspec
+  s.public_header_files  = public_header_files,                  # :path
+                           "#{repo_dir}/#{public_header_files}"  # :podspec
 end

@@ -1,15 +1,29 @@
 #import "ReactNativeHost.h"
 
+#define FOLLY_NO_CONFIG 1
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wcomma"
+#import <cxxreact/JSExecutor.h>
+#pragma clang diagnostic pop
+
 #import <React/RCTBridge.h>
 #import <React/RCTBundleURLProvider.h>
+#import <React/RCTCxxBridgeDelegate.h>
 #import <React/RCTDevLoadingViewSetEnabled.h>
 #import <React/RCTUtils.h>
 
+#import "RNXFabricAdapter.h"
 #import "RNXHostConfig.h"
 #import "RNXHostReleaser.h"
+#import "RNXTurboModuleAdapter.h"
+
+@interface ReactNativeHost () <RCTCxxBridgeDelegate>
+@end
 
 @implementation ReactNativeHost {
     __weak id<RNXHostConfig> _config;
+    RNXTurboModuleAdapter *_turboModuleAdapter;
+    NSObject *_surfacePresenterBridgeAdapter;
     RCTBridge *_bridge;
     NSLock *_isShuttingDown;
     RNXHostReleaser *_hostReleaser;
@@ -39,6 +53,9 @@
         }
 
         _config = config;
+#if USE_FABRIC || USE_TURBOMODULE
+        _turboModuleAdapter = [[RNXTurboModuleAdapter alloc] init];
+#endif
         _isShuttingDown = [[NSLock alloc] init];
 
         if ([config respondsToSelector:@selector(shouldReleaseBridgeWhenBackgrounded)] &&
@@ -61,6 +78,7 @@
     @try {
         if (_bridge == nil) {
             _bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:nil];
+            _surfacePresenterBridgeAdapter = RNXInstallSurfacePresenterBridgeAdapter(_bridge);
             [_hostReleaser setBridge:_bridge];
             if ([_config respondsToSelector:@selector(onBridgeInstantiated:)]) {
                 [_config onBridgeInstantiated:_bridge];
@@ -131,5 +149,21 @@
                ? [_config extraModulesForBridge:bridge]
                : @[];
 }
+
+// MARK: - RCTCxxBridgeDelegate details
+
+- (std::unique_ptr<facebook::react::JSExecutorFactory>)jsExecutorFactoryForBridge:
+    (RCTBridge *)bridge
+{
+#if USE_TURBOMODULE
+    // jsExecutorFactoryForBridge: (USE_TURBOMODULE=1)
+    return [_turboModuleAdapter jsExecutorFactoryForBridge:bridge];
+#else
+    // jsExecutorFactoryForBridge: (USE_TURBOMODULE=0)
+    return nullptr;
+#endif  // USE_TURBOMODULE
+}
+
+// MARK: - Private
 
 @end
