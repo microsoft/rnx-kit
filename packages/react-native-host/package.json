@@ -11,7 +11,7 @@
   "files": [
     "ReactNativeHost.podspec",
     "android/",
-    "mac/"
+    "cocoa/"
   ],
   "repository": {
     "type": "git",
