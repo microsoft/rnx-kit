@@ -91,30 +91,30 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/core@npm:^7.1.0, @babel/core@npm:^7.1.6, @babel/core@npm:^7.12.3, @babel/core@npm:^7.13.16, @babel/core@npm:^7.14.0, @babel/core@npm:^7.7.2, @babel/core@npm:^7.8.0":
-  version: 7.21.0
-  resolution: "@babel/core@npm:7.21.0"
+"@babel/core@npm:^7.0.0, @babel/core@npm:^7.1.0, @babel/core@npm:^7.1.6, @babel/core@npm:^7.12.3, @babel/core@npm:^7.12.9, @babel/core@npm:^7.13.16, @babel/core@npm:^7.14.0, @babel/core@npm:^7.7.2, @babel/core@npm:^7.8.0":
+  version: 7.21.3
+  resolution: "@babel/core@npm:7.21.3"
   dependencies:
     "@ampproject/remapping": ^2.2.0
     "@babel/code-frame": ^7.18.6
-    "@babel/generator": ^7.21.0
+    "@babel/generator": ^7.21.3
     "@babel/helper-compilation-targets": ^7.20.7
-    "@babel/helper-module-transforms": ^7.21.0
+    "@babel/helper-module-transforms": ^7.21.2
     "@babel/helpers": ^7.21.0
-    "@babel/parser": ^7.21.0
+    "@babel/parser": ^7.21.3
     "@babel/template": ^7.20.7
-    "@babel/traverse": ^7.21.0
-    "@babel/types": ^7.21.0
+    "@babel/traverse": ^7.21.3
+    "@babel/types": ^7.21.3
     convert-source-map: ^1.7.0
     debug: ^4.1.0
     gensync: ^1.0.0-beta.2
     json5: ^2.2.2
     semver: ^6.3.0
-  checksum: 357f4dd3638861ceebf6d95ff49ad8b902065ee8b7b352621deed5666c2a6d702a48ca7254dba23ecae2a0afb67d20f90db7dd645c3b75e35e72ad9776c671aa
+  checksum: bef25fbea96f461bf79bd1d0e4f0cdce679fd5ada464a89c1141ddba59ae1adfdbb23e04440c266ed525712d33d5ffd818cd8b0c25b1dee0e648d5559516153a
   languageName: node
   linkType: hard
 
-"@babel/generator@npm:^7.14.0, @babel/generator@npm:^7.21.0, @babel/generator@npm:^7.21.3, @babel/generator@npm:^7.7.2":
+"@babel/generator@npm:^7.14.0, @babel/generator@npm:^7.21.3, @babel/generator@npm:^7.7.2":
   version: 7.21.3
   resolution: "@babel/generator@npm:7.21.3"
   dependencies:
@@ -259,7 +259,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/helper-module-transforms@npm:^7.18.6, @babel/helper-module-transforms@npm:^7.20.11, @babel/helper-module-transforms@npm:^7.21.0":
+"@babel/helper-module-transforms@npm:^7.18.6, @babel/helper-module-transforms@npm:^7.20.11, @babel/helper-module-transforms@npm:^7.21.2":
   version: 7.21.2
   resolution: "@babel/helper-module-transforms@npm:7.21.2"
   dependencies:
@@ -410,7 +410,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/parser@npm:^7.0.0, @babel/parser@npm:^7.1.0, @babel/parser@npm:^7.13.16, @babel/parser@npm:^7.14.0, @babel/parser@npm:^7.14.7, @babel/parser@npm:^7.20.7, @babel/parser@npm:^7.21.0, @babel/parser@npm:^7.21.3":
+"@babel/parser@npm:^7.0.0, @babel/parser@npm:^7.1.0, @babel/parser@npm:^7.13.16, @babel/parser@npm:^7.14.0, @babel/parser@npm:^7.14.7, @babel/parser@npm:^7.20.7, @babel/parser@npm:^7.21.3":
   version: 7.21.3
   resolution: "@babel/parser@npm:7.21.3"
   bin:
@@ -1515,7 +1515,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/traverse@npm:^7.0.0, @babel/traverse@npm:^7.12.5, @babel/traverse@npm:^7.14.0, @babel/traverse@npm:^7.16.0, @babel/traverse@npm:^7.20.0, @babel/traverse@npm:^7.20.5, @babel/traverse@npm:^7.20.7, @babel/traverse@npm:^7.21.0, @babel/traverse@npm:^7.21.2, @babel/traverse@npm:^7.7.2":
+"@babel/traverse@npm:^7.0.0, @babel/traverse@npm:^7.12.5, @babel/traverse@npm:^7.14.0, @babel/traverse@npm:^7.16.0, @babel/traverse@npm:^7.20.0, @babel/traverse@npm:^7.20.5, @babel/traverse@npm:^7.20.7, @babel/traverse@npm:^7.21.0, @babel/traverse@npm:^7.21.2, @babel/traverse@npm:^7.21.3, @babel/traverse@npm:^7.7.2":
   version: 7.21.3
   resolution: "@babel/traverse@npm:7.21.3"
   dependencies:
@@ -3072,7 +3072,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/babel-plugin-import-path-remapper@workspace:packages/babel-plugin-import-path-remapper"
   dependencies:
-    "@babel/core": ^7.1.6
+    "@babel/core": ^7.0.0
     "@babel/helper-plugin-utils": ^7.0.0
     "@rnx-kit/scripts": "*"
     "@rnx-kit/tools-node": ^1.2.7
@@ -3090,7 +3090,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/babel-preset-metro-react-native@workspace:packages/babel-preset-metro-react-native"
   dependencies:
-    "@babel/core": ^7.1.6
+    "@babel/core": ^7.0.0
     "@rnx-kit/babel-plugin-import-path-remapper": "*"
     "@rnx-kit/scripts": "*"
     "@types/babel__core": ^7.0.0
@@ -3637,7 +3637,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/react-native-host@workspace:packages/react-native-host"
   dependencies:
-    "@babel/core": ^7.1.6
+    "@babel/core": ^7.12.9
     "@babel/preset-env": ^7.1.6
     react: 17.0.2
     react-native: ^0.68.0
@@ -3651,7 +3651,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/react-native-lazy-index@workspace:packages/react-native-lazy-index"
   dependencies:
-    "@babel/core": ^7.1.6
+    "@babel/core": ^7.0.0
     "@babel/parser": ^7.0.0
     "@babel/traverse": ^7.0.0
     "@babel/types": ^7.0.0
@@ -3735,7 +3735,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/test-app@workspace:packages/test-app"
   dependencies:
-    "@babel/core": ^7.1.6
+    "@babel/core": ^7.12.9
     "@babel/preset-env": ^7.1.6
     "@babel/runtime": ^7.12.5
     "@rnx-kit/babel-preset-metro-react-native": "*"
@@ -12430,7 +12430,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "rnx-kit@workspace:."
   dependencies:
-    "@babel/core": ^7.1.6
+    "@babel/core": ^7.0.0
     "@babel/preset-env": ^7.0.0
     "@changesets/cli": ^2.22.0
     "@rnx-kit/align-deps": "*"
