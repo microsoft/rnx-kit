@@ -13,6 +13,32 @@
 const fs = require("node:fs");
 const path = require("node:path");
 
+function generateToolsSidebar() {
+  const items = [];
+  const workspace = path.join("..", "packages");
+  for (const pkg of fs.readdirSync(workspace)) {
+    const manifest = path.join(workspace, pkg, "package.json");
+    const readme = path.join(workspace, pkg, "README.md");
+    if (!fs.existsSync(manifest) || !fs.existsSync(readme)) {
+      continue;
+    }
+
+    const content = fs.readFileSync(manifest, { encoding: "utf-8" });
+    if (JSON.parse(content).private) {
+      continue;
+    }
+
+    const output = path.join("docs", "tools", `${pkg}.mdx`);
+    if (!fs.existsSync(output)) {
+      const mdx = [`# ${pkg}`, "", `<!--include ../../${readme}-->`, ""];
+      fs.writeFileSync(output, mdx.join("\n"));
+    }
+
+    items.push(`tools/${path.basename(pkg, ".mdx")}`);
+  }
+  return items.sort();
+}
+
 /** @type {import('@docusaurus/plugin-content-docs').SidebarsConfig} */
 const sidebars = {
   docsSidebar: [
@@ -36,14 +62,7 @@ const sidebars = {
     {
       type: "category",
       label: "Tools",
-      items: [
-        "tools/overview",
-        ...fs
-          .readdirSync(path.join(__dirname, "docs", "tools"))
-          .filter((file) => file !== "overview.mdx" && file.endsWith(".mdx"))
-          .sort()
-          .map((file) => `tools/${path.basename(file, ".mdx")}`),
-      ],
+      items: ["tools/overview", ...generateToolsSidebar()],
     },
   ],
 

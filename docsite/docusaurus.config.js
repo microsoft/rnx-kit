@@ -1,5 +1,8 @@
 // @ts-check
 
+// Ensure sidebar content is generated
+require("./sidebars.js");
+
 const remarkInclude = require("./plugins/remark-include");
 const remarkRemoveBlock = require("./plugins/remark-remove-block");
 
@@ -9,9 +12,7 @@ const remarkRemoveBlock = require("./plugins/remark-remove-block");
 
 const darkCodeTheme = require("prism-react-renderer/themes/vsDark");
 
-/**
- * @type {CodeTheme}
- */
+/** @type {CodeTheme} */
 const lightCodeTheme = require("prism-react-renderer/themes/vsLight");
 lightCodeTheme.plain.color = "rgb(28, 30, 33)"; // from CSS --font-color-base-rgb
 lightCodeTheme.plain.backgroundColor = "#ffffff";
@@ -19,13 +20,9 @@ lightCodeTheme.plain.backgroundColor = "#ffffff";
 const organizationName = "microsoft";
 const projectName = "rnx-kit";
 const githubUrl = "https://github.com/" + organizationName + "/" + projectName;
-const mainReadmeUrl = githubUrl + "/#react-native-developer-tools";
+const mainReadmeUrl = githubUrl + "/#readme";
 const mainBranchUrl = githubUrl + "/tree/main";
 const docsiteUrl = mainBranchUrl + "/docsite";
-
-/**
- * @typedef {ReturnType<import("@cmfcmf/docusaurus-search-local/lib/server").validateOptions>} SearchPluginOptions
- */
 
 const title1 = "React Native";
 const title2 = "Developer Tools";
