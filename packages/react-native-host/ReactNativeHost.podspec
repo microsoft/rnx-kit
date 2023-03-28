@@ -41,11 +41,11 @@ Pod::Spec.new do |s|
     'DEFINES_MODULE' => 'YES',
     'GCC_PREPROCESSOR_DEFINITIONS' => preprocessor_definitions,
     'HEADER_SEARCH_PATHS' => [
-      '$(PODS_ROOT)/Headers/Private/React-Core',
       '$(PODS_ROOT)/boost',
       '$(PODS_ROOT)/boost-for-react-native',
       '$(PODS_ROOT)/RCT-Folly',
       '$(PODS_ROOT)/DoubleConversion',
+      '$(PODS_ROOT)/Headers/Private/React-Core',
     ],
   }
 
