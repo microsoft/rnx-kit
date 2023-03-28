@@ -9,7 +9,7 @@ repository = package['repository']
 repo_dir = repository['directory']
 
 new_arch_enabled = ENV['RCT_NEW_ARCH_ENABLED'] == '1'
-preprocessor_definitions = ['FOLLY_NO_CONFIG=1']
+preprocessor_definitions = ['FOLLY_NO_CONFIG=1', 'FOLLY_MOBILE=1', 'FOLLY_USE_LIBCPP=1']
 if new_arch_enabled
   preprocessor_definitions << 'RCT_NEW_ARCH_ENABLED=1'
   preprocessor_definitions << 'USE_FABRIC=1'
@@ -29,9 +29,9 @@ Pod::Spec.new do |s|
   s.osx.deployment_target = '10.15'
 
   s.dependency 'React-Core'
+  s.dependency 'React-cxxreact'
 
   if new_arch_enabled
-    s.dependency 'React-cxxreact'
     s.dependency 'React-RCTFabric'
     s.dependency 'ReactCommon/turbomodule/core'
   end
@@ -43,6 +43,9 @@ Pod::Spec.new do |s|
     'HEADER_SEARCH_PATHS' => [
       '$(PODS_ROOT)/Headers/Private/React-Core',
       '$(PODS_ROOT)/boost',
+      '$(PODS_ROOT)/boost-for-react-native',
+      '$(PODS_ROOT)/RCT-Folly',
+      '$(PODS_ROOT)/DoubleConversion',
     ],
   }
 
