@@ -29,11 +29,11 @@ Pod::Spec.new do |s|
   s.osx.deployment_target = '10.15'
 
   s.dependency 'React-Core'
-  s.dependency 'React-cxxreact'
 
   if new_arch_enabled
-    s.dependency 'ReactCommon/turbomodule/core'
+    s.dependency 'React-cxxreact'
     s.dependency 'React-RCTFabric'
+    s.dependency 'ReactCommon/turbomodule/core'
   end
 
   s.pod_target_xcconfig = {
