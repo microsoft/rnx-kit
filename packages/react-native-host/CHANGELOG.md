@@ -1,5 +1,11 @@
 # @rnx-kit/react-native-host
 
+## 0.2.3
+
+### Patch Changes
+
+- 24e0eb61: Removed unused dependencies
+
 ## 0.2.2
 
 ### Patch Changes
