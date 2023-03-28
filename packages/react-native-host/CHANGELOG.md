@@ -1,5 +1,11 @@
 # @rnx-kit/react-native-host
 
+## 0.2.2
+
+### Patch Changes
+
+- b4f682a1: `React-cxxreact` is only needed when New Arch is enabled
+
 ## 0.2.1
 
 ### Patch Changes
