@@ -18,17 +18,11 @@
     "url": "https://github.com/microsoft/rnx-kit",
     "directory": "packages/react-native-host"
   },
-  "engines": {
-    "node": ">=14.15"
-  },
   "scripts": {
     "format:c": "clang-format -i $(git ls-files '*.c' '*.cpp' '*.h' '*.m' '*.mm')",
     "lint:kt": "ktlint --relative --verbose 'android/src/**/*.kt'"
   },
   "peerDependencies": {
     "react-native": ">=0.64"
-  },
-  "eslintConfig": {
-    "extends": "@rnx-kit/eslint-config"
   }
 }
