@@ -3636,14 +3636,8 @@ __metadata:
 "@rnx-kit/react-native-host@*, @rnx-kit/react-native-host@workspace:packages/react-native-host":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/react-native-host@workspace:packages/react-native-host"
-  dependencies:
-    "@babel/core": ^7.12.9
-    "@babel/preset-env": ^7.1.6
-    react: 17.0.2
-    react-native: ^0.68.0
   peerDependencies:
-    react: 17.0.1 || 17.0.2 || 18.0.0 || 18.1.0 || 18.2.0
-    react-native: ^0.64.2 || ^0.65.0 || ^0.66.0 || ^0.67.0 || ^0.68.0 || ^0.69.0 || ^0.70.0 || ^0.71.0
+    react-native: ">=0.64"
   languageName: unknown
   linkType: soft
 
