@@ -101,7 +101,7 @@ const profile: Profile = {
   },
   storage: {
     name: "@react-native-async-storage/async-storage",
-    version: "^1.18.0",
+    version: "^1.18.1",
   },
   "test-app": {
     name: "react-native-test-app",
