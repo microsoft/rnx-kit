@@ -3,7 +3,7 @@
 
 import { markdownTable } from "markdown-table";
 import { existsSync as fileExists } from "node:fs";
-import * as fs from "node:fs/promises";
+import * as fs from "node:fs";
 import * as path from "node:path";
 import { fileURLToPath } from "node:url";
 import packageJson from "package-json";
@@ -90,21 +90,18 @@ function getPackageVersion(packageName, dependencies) {
  * Returns the path to a profile.
  * @param {string} preset
  * @param {string} profileVersion
- * @returns {string}
+ * @returns {[string, string]}
  */
 function getProfilePath(preset, profileVersion) {
   const __dirname = path.dirname(fileURLToPath(import.meta.url));
-  return path.relative(
+  const presetDir = path.relative(
     process.cwd(),
-    path.join(
-      __dirname,
-      "..",
-      "src",
-      "presets",
-      preset,
-      `profile-${profileVersion}.ts`
-    )
+    path.join(__dirname, "..", "src", "presets", preset)
   );
+  return [
+    path.join(presetDir, `profile-${profileVersion}.ts`),
+    presetDir + ".ts",
+  ];
 }
 
 /**
@@ -138,7 +135,7 @@ function generateFromTemplate({
     nextVersionCoerced.minor - 1
   }`;
 
-  const currentProfile = getProfilePath(preset, currentVersion);
+  const [currentProfile] = getProfilePath(preset, currentVersion);
   if (!fileExists(currentProfile)) {
     throw new Error(`Could not find '${currentProfile}'`);
   }
@@ -355,9 +352,41 @@ async function main({
         latestProfile
       );
       if (newProfile) {
-        const dst = getProfilePath(presetName, targetVersion);
-        fs.writeFile(dst, newProfile).then(() => {
+        const [dst, presetFile] = getProfilePath(presetName, targetVersion);
+        fs.writeFile(dst, newProfile, () => {
           console.log(`Wrote to '${dst}'`);
+
+          const profiles = fs
+            .readdirSync(path.dirname(dst))
+            .filter((file) => file.startsWith("profile-"))
+            .map((file) => {
+              const filename = path.basename(file, ".ts");
+              const version = filename.substring("profile-".length);
+              const varName = filename.replace(/[^\w]/g, "_");
+              return [version, varName];
+            });
+
+          const preset = [
+            `import type { Preset } from "../../types";`,
+            ...profiles.map(
+              ([version, varName]) =>
+                `import ${varName} from "./react-native/profile-${version}";`
+            ),
+            "",
+            "// Also export this by name for scripts to work around a bug where this module",
+            "// is wrapped twice, i.e. `{ default: { default: preset } }`, when imported as",
+            "// ESM.",
+            "export const preset: Readonly<Preset> = {",
+            ...profiles.map(
+              ([version, varName]) => `  "${version}": ${varName},`
+            ),
+            "};",
+            "",
+            "export default preset;",
+            "",
+          ].join("\n");
+          fs.writeFileSync(presetFile, preset);
+          console.log(`Updated '${presetFile}'`);
         });
       }
     } catch (e) {

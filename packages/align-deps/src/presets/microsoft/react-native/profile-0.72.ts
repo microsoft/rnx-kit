@@ -1,14 +1,14 @@
 import type { Package, Profile } from "../../../types";
-import profile_0_70 from "./profile-0.70";
+import profile_0_71 from "./profile-0.71";
 
 const reactNative: Package = {
   name: "react-native",
-  version: "^0.71.0",
+  version: "^0.72.0",
   capabilities: ["react"],
 };
 
 const profile: Profile = {
-  ...profile_0_70,
+  ...profile_0_71,
   react: {
     name: "react",
     version: "18.2.0",
@@ -30,107 +30,82 @@ const profile: Profile = {
   "core-ios": reactNative,
   "core-macos": {
     name: "react-native-macos",
-    version: "^0.71.0",
+    version: "^0.72.0",
     capabilities: ["react"],
   },
   "core-windows": {
     name: "react-native-windows",
-    version: "^0.71.0",
+    version: "^0.72.0",
     capabilities: ["core"],
   },
 
   "babel-preset-react-native": {
     name: "metro-react-native-babel-preset",
-    version: "^0.73.7",
+    version: "^0.76.0",
     devOnly: true,
   },
   "community/cli": {
     name: "@react-native-community/cli",
-    version: "^10.0.0",
+    version: "^11.0.0",
     capabilities: ["community/cli-android", "community/cli-ios"],
     devOnly: true,
   },
   "community/cli-android": {
     name: "@react-native-community/cli-platform-android",
-    version: "^10.0.0",
+    version: "^11.0.0",
     devOnly: true,
   },
   "community/cli-ios": {
     name: "@react-native-community/cli-platform-ios",
-    version: "^10.0.0",
+    version: "^11.0.0",
     devOnly: true,
   },
   metro: {
     name: "metro",
-    version: "^0.73.7",
+    version: "^0.76.0",
     devOnly: true,
   },
   "metro-config": {
     name: "metro-config",
-    version: "^0.73.7",
+    version: "^0.76.0",
     devOnly: true,
   },
   "metro-core": {
     name: "metro-core",
-    version: "^0.73.7",
+    version: "^0.76.0",
     devOnly: true,
   },
   "metro-react-native-babel-transformer": {
     name: "metro-react-native-babel-transformer",
-    version: "^0.73.7",
+    version: "^0.76.0",
     devOnly: true,
   },
   "metro-resolver": {
     name: "metro-resolver",
-    version: "^0.73.7",
+    version: "^0.76.0",
     devOnly: true,
   },
   "metro-runtime": {
     name: "metro-runtime",
-    version: "^0.73.7",
+    version: "^0.76.0",
     devOnly: true,
   },
 
   animation: {
     name: "react-native-reanimated",
-    version: "^2.14.1",
-  },
-  checkbox: {
-    name: "@react-native-community/checkbox",
-    version: "^0.5.15",
+    version: "^3.0.2",
   },
   "datetime-picker": {
     name: "@react-native-community/datetimepicker",
-    version: "^6.4.2",
-  },
-  gestures: {
-    name: "react-native-gesture-handler",
-    version: "^2.9.0",
-  },
-  jest: {
-    name: "jest",
-    version: "^29.2.1",
-    devOnly: true,
-  },
-  screens: {
-    name: "react-native-screens",
-    version: "^3.19.0",
-  },
-  shimmer: {
-    name: "react-native-shimmer",
-    version: "^0.6.0",
+    version: "^7.0.0",
   },
   storage: {
     name: "@react-native-async-storage/async-storage",
-    version: "^1.17.11",
-  },
-  svg: {
-    name: "react-native-svg",
-    version: "^13.8.0",
+    version: "^1.18.0",
   },
   "test-app": {
     name: "react-native-test-app",
-    version: "^2.2.1",
+    version: "^2.3.14",
     devOnly: true,
   },
 };
