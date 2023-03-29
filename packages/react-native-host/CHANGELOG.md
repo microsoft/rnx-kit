@@ -1,5 +1,11 @@
 # @rnx-kit/react-native-host
 
+## 0.2.4
+
+### Patch Changes
+
+- 8d8fc112: Fixed Xcode not being able to find a number of headers when targeting react-native 0.64
+
 ## 0.2.3
 
 ### Patch Changes
