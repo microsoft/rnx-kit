@@ -3,13 +3,10 @@
 // Ensure content is generated
 require("./generate")();
 
-/**
- * @typedef {{plain: Record<string, string>; styles: Array<{types: string[], style: { color: string; }}>}} CodeTheme
- */
-
 const darkCodeTheme = require("prism-react-renderer/themes/vsDark");
 
-/** @type {CodeTheme} */
+/** @type {import("prism-react-renderer").PrismTheme} */
+// @ts-expect-error Type definition doesn't match up with actual export
 const lightCodeTheme = require("prism-react-renderer/themes/vsLight");
 lightCodeTheme.plain.color = "rgb(28, 30, 33)"; // from CSS --font-color-base-rgb
 lightCodeTheme.plain.backgroundColor = "#ffffff";

@@ -1,22 +1,23 @@
-import React from "react";
-import clsx from "clsx";
-import Layout from "@theme/Layout";
 import Link from "@docusaurus/Link";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
-import styles from "./index.module.css";
+import Layout from "@theme/Layout";
+import clsx from "clsx";
+import React from "react";
 import HomepageFeatures from "../components/HomepageFeatures";
+import styles from "./index.module.css";
 
 function HomepageHeader() {
   const { siteConfig } = useDocusaurusContext();
+  const { title1, title2 } = siteConfig.customFields;
   return (
     <header className={styles.headerBanner}>
       <div className="container">
         <h1 className={clsx("hero__title", styles.headerTitle)}>
           <div className={clsx(styles.headerTitleText)}>
-            {siteConfig.customFields.title1}
+            {typeof title1 === "string" ? title1 : "React Native"}
           </div>
           <div className={clsx(styles.headerTitleText)}>
-            {siteConfig.customFields.title2}
+            {typeof title2 === "string" ? title2 : "Developer Tools"}
           </div>
         </h1>
         <p className={clsx("hero__subtitle", styles.headerTagline)}>
