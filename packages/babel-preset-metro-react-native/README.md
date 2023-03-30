@@ -1,11 +1,7 @@
-<!--remove-block start-->
-
 # @rnx-kit/babel-preset-metro-react-native
 
 [![Build](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml/badge.svg)](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml)
 [![npm version](https://img.shields.io/npm/v/@rnx-kit/babel-preset-metro-react-native)](https://www.npmjs.com/package/@rnx-kit/babel-preset-metro-react-native)
-
-<!--remove-block end-->
 
 `@rnx-kit/babel-preset-metro-react-native` provides a Babel preset for React
 Native applications that you can use as a drop-in replacement for

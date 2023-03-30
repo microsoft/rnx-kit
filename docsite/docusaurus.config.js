@@ -1,10 +1,7 @@
 // @ts-check
 
-// Ensure sidebar content is generated
-require("./sidebars.js");
-
-const remarkInclude = require("./plugins/remark-include");
-const remarkRemoveBlock = require("./plugins/remark-remove-block");
+// Ensure content is generated
+require("./generate")();
 
 /**
  * @typedef {{plain: Record<string, string>; styles: Array<{types: string[], style: { color: string; }}>}} CodeTheme
@@ -56,7 +53,6 @@ const config = {
           sidebarPath: require.resolve("./sidebars.js"),
           sidebarCollapsed: false,
           editUrl: docsiteUrl + "/",
-          beforeDefaultRemarkPlugins: [remarkInclude, remarkRemoveBlock],
         },
         theme: {
           customCss: require.resolve("./src/css/custom.css"),

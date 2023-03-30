@@ -1,11 +1,7 @@
-<!--remove-block start-->
-
 # @rnx-kit/eslint-plugin
 
 [![Build](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml/badge.svg)](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml)
 [![npm version](https://img.shields.io/npm/v/@rnx-kit/eslint-plugin)](https://www.npmjs.com/package/@rnx-kit/eslint-plugin)
-
-<!--remove-block end-->
 
 `@rnx-kit/eslint-plugin` is a set of rules that can be extended in your own
 shareable ESLint config.

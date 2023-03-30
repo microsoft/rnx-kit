@@ -1,11 +1,7 @@
-<!--remove-block start-->
-
 # @rnx-kit/typescript-react-native-compiler
 
 [![Build](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml/badge.svg)](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml)
 [![npm version](https://img.shields.io/npm/v/@rnx-kit/typescript-react-native-compiler)](https://www.npmjs.com/package/@rnx-kit/typescript-react-native-compiler)
-
-<!--remove-block end-->
 
 `@rnx-kit/typescript-react-native-compiler` is the TypeScript compiler `tsc`
 with a custom module resolver for react-native projects.

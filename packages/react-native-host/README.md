@@ -1,11 +1,7 @@
-<!--remove-block start-->
-
 # @rnx-kit/react-native-host
 
 [![Build](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml/badge.svg)](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml)
 [![npm version](https://img.shields.io/npm/v/@rnx-kit/react-native-host)](https://www.npmjs.com/package/@rnx-kit/react-native-host)
-
-<!--remove-block end-->
 
 `@rnx-kit/react-native-host` simplifies React Native initialization.
 

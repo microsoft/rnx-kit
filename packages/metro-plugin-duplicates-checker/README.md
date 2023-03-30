@@ -1,11 +1,7 @@
-<!--remove-block start-->
-
 # @rnx-kit/metro-plugin-duplicates-checker
 
 [![Build](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml/badge.svg)](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml)
 [![npm version](https://img.shields.io/npm/v/@rnx-kit/metro-plugin-duplicates-checker)](https://www.npmjs.com/package/@rnx-kit/metro-plugin-duplicates-checker)
-
-<!--remove-block end-->
 
 `@rnx-kit/metro-plugin-duplicates-checker` checks for duplicate packages in your
 bundle.

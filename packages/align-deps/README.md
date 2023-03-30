@@ -1,11 +1,7 @@
-<!--remove-block start-->
-
 # @rnx-kit/align-deps
 
 [![Build](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml/badge.svg)](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml)
 [![npm version](https://img.shields.io/npm/v/@rnx-kit/align-deps)](https://www.npmjs.com/package/@rnx-kit/align-deps)
-
-<!--remove-block end-->
 
 `@rnx-kit/align-deps` is a tool for managing dependencies within a repository
 and across many repositories. It ensures that your packages are using compatible

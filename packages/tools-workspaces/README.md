@@ -1,11 +1,7 @@
-<!--remove-block start-->
-
 # @rnx-kit/tools-workspaces
 
 [![Build](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml/badge.svg)](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml)
 [![npm version](https://img.shields.io/npm/v/@rnx-kit/tools-workspaces)](https://www.npmjs.com/package/@rnx-kit/tools-workspaces)
-
-<!--remove-block end-->
 
 `@rnx-kit/tools-workspaces` is a collection of tools for working with
 workspaces.

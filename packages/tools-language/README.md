@@ -1,11 +1,7 @@
-<!--remove-block start-->
-
 # @rnx-kit/tools-language
 
 [![Build](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml/badge.svg)](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml)
 [![npm version](https://img.shields.io/npm/v/@rnx-kit/tools-language)](https://www.npmjs.com/package/@rnx-kit/tools-language)
-
-<!--remove-block end-->
 
 `@rnx-kit/tools-language` is a collection of supplemental JavaScript functions
 and types.
