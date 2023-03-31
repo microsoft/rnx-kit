@@ -1,5 +1,9 @@
 name: CI
 on: pull_request
+concurrency:
+  # Ensure single build of a pull request
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   review:
     name: "Review"
