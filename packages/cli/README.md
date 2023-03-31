@@ -180,6 +180,7 @@ from the bundle configuration (or its [defaults](#bundle-defaults)).
 | --cert [path]                       | Path to a custom SSL certificate file to use for secure (https) communication.                                                                                   |
 | --config [string]                   | Path to the Metro configuration file.                                                                                                                            |
 | --no-interactive                    | Disables interactive mode.                                                                                                                                       |
+| --id                                | Specify which bundle configuration to use.                                                                                                                       |
 
 ## Manage Dependencies
 

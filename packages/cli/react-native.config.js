@@ -98,6 +98,10 @@ module.exports = {
           name: "--no-interactive",
           description: "Disables interactive mode.",
         },
+        {
+          name: "--id [string]",
+          description: "Specify which bundle configuration to use.",
+        },
       ],
     },
     rnxCopyAssetsCommand,
