@@ -103,6 +103,11 @@ const profile: Profile = {
     name: "react-native-gesture-handler",
     version: "^2.6.0",
   },
+  hermes: {
+    // Hermes now comes bundled with `react-native`
+    name: "#meta",
+    capabilities: ["core"],
+  },
   netinfo: {
     name: "@react-native-community/netinfo",
     version: "^9.0.0",

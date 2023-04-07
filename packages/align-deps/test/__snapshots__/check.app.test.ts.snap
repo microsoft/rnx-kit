@@ -9,7 +9,6 @@ exports[`checkPackageManifest({ kitType: 'app' }) (backwards compatibility) adds
     "@react-native-community/netinfo": "^9.0.0",
     "@rnx-kit/react-native-lazy-index": "^2.1.7",
     "conan": "1.0.0",
-    "hermes-engine": "~0.11.0",
     "quaid": "1.0.0",
     "react": "18.1.0",
     "react-native": "^0.70.0",

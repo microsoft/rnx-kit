@@ -26,6 +26,12 @@ const bannedPackages: ExcludedPackage[] = [
       "Types are included in react-native starting with 0.71.0. '@types/react-native' is deprecated from 0.72 onwards.",
   },
   {
+    name: "hermes-engine",
+    version: "~0.11.0",
+    reason:
+      "Hermes is included with react-native starting with 0.70. Remove this package when you're on react-native 0.70 or higher.",
+  },
+  {
     name: "react-native-linear-gradient",
     version: "<2.6.0",
     reason:
