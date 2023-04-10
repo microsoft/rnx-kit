@@ -87,7 +87,7 @@ export async function bundle(
     platform: args.platform,
     unstable_transformProfile: args.unstableTransformProfile,
   };
-  const server = new Server(config);
+  const server = new Server(config, { watch: false });
 
   try {
     const bundle = await output.build(server, requestOpts);
