@@ -1,6 +1,15 @@
 import { Commit } from "./commits";
 import formatCommitLink from "./formatCommitLink";
 
+function getAuthorFormatting(item: Commit) {
+  if (item.author?.login != null) {
+    return `[@${item.author.login}](https://github.com/${item.author.login})`;
+  } else if (item.commit.author?.name != null) {
+    return item.commit.author.name;
+  }
+  return null;
+}
+
 export default function getChangeMessage(item: Commit, onlyMessage = false) {
   const commitMessage = item.commit.message.split("\n");
   let entry =
@@ -20,16 +29,9 @@ export default function getChangeMessage(item: Commit, onlyMessage = false) {
     return entry;
   }
 
+  const author = getAuthorFormatting(item);
   const authorSection = `([${item.sha.slice(0, 10)}](${formatCommitLink(
     item.sha
-  )})${
-    item.author
-      ? " by [@" +
-        item.author.login +
-        "](https://github.com/" +
-        item.author.login +
-        ")"
-      : ""
-  })`;
+  )})${author ? " by " + author : ""})`;
   return `- ${entry} ${authorSection}`;
 }
