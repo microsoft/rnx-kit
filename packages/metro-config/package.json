@@ -26,10 +26,16 @@
     "@rnx-kit/tools-workspaces": "^0.1.3"
   },
   "peerDependencies": {
+    "@react-native/metro-config": "*",
     "metro-config": ">=0.58.0",
     "metro-react-native-babel-preset": "*",
     "react": "*",
     "react-native": "*"
+  },
+  "peerDependenciesMeta": {
+    "@react-native/metro-config": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "@babel/core": "^7.1.6",
@@ -55,7 +61,10 @@
     ]
   },
   "eslintConfig": {
-    "extends": "@rnx-kit/eslint-config"
+    "extends": "@rnx-kit/eslint-config",
+    "rules": {
+      "@typescript-eslint/ban-ts-comment": "off"
+    }
   },
   "jest": {
     "preset": "@rnx-kit/scripts"
