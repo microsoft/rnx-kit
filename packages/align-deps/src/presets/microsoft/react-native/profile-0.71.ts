@@ -133,6 +133,10 @@ const profile: Profile = {
     version: "^2.2.1",
     devOnly: true,
   },
+  webview: {
+    name: "react-native-webview",
+    version: "^12.0.2",
+  },
 };
 
 export default profile;
