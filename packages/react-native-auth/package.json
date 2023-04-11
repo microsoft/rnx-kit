@@ -37,11 +37,10 @@
     "@babel/core": "^7.1.6",
     "@babel/preset-env": "^7.1.6",
     "@rnx-kit/scripts": "*",
-    "@types/react-native": "^0.68.0",
     "eslint": "^8.0.0",
     "prettier": "^2.0.0",
-    "react": "17.0.2",
-    "react-native": "^0.68.0",
+    "react": "18.2.0",
+    "react-native": "^0.71.0",
     "typescript": "^5.0.0"
   },
   "eslintConfig": {
@@ -54,7 +53,7 @@
       ],
       "requirements": {
         "development": [
-          "react-native@0.68"
+          "react-native@0.71"
         ],
         "production": [
           "react-native@>=0.62 <1.0"

@@ -31,7 +31,7 @@ describe("React Native > Platform", () => {
   test("getAvailablePlatformsUncached() returns available platforms", () => {
     const fixture = path.join(__dirname, "__fixtures__", "available-platforms");
     expect(getAvailablePlatformsUncached(fixture)).toMatchInlineSnapshot(`
-      Object {
+      {
         "android": "",
         "ios": "",
         "macos": "react-native-macos",
@@ -50,7 +50,7 @@ describe("React Native > Platform", () => {
       "react-native"
     );
     expect(getAvailablePlatformsUncached(fixture)).toMatchInlineSnapshot(`
-      Object {
+      {
         "android": "",
         "ios": "",
         "macos": "react-native-macos",
@@ -62,7 +62,7 @@ describe("React Native > Platform", () => {
 
   test("getAvailablePlatformsUncached() handles 'missing' package root", () => {
     expect(getAvailablePlatformsUncached()).toMatchInlineSnapshot(`
-      Object {
+      {
         "android": "",
         "ios": "",
       }

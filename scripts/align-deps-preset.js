@@ -3,7 +3,7 @@
 const metroTypesVersion = "^0.76.0";
 
 const dependencies = {
-  jest: "^27.0.0",
+  jest: "^29.0.0",
   metro: metroTypesVersion,
   "metro-babel-transformer": metroTypesVersion,
   "metro-config": metroTypesVersion,
@@ -12,7 +12,6 @@ const dependencies = {
   "metro-source-map": metroTypesVersion,
   "metro-transform-worker": metroTypesVersion,
   node: "^16.0.0",
-  "react-native": "^0.68.0",
   yargs: "^16.0.0",
 };
 
@@ -48,7 +47,7 @@ const profile = {
   },
   "jest-cli": {
     name: "jest-cli",
-    version: "^27.5.1",
+    version: "^29.2.1",
   },
   "pkg-dir": {
     name: "pkg-dir",
@@ -61,11 +60,6 @@ const profile = {
   semver: {
     name: "semver",
     version: "^7.0.0",
-  },
-  "test-app": {
-    name: "react-native-test-app",
-    version: "^2.0.2",
-    devOnly: true,
   },
   typescript: {
     name: "typescript",

@@ -59,14 +59,14 @@ describe("metro-serializer-esbuild", () => {
   test("removes unused code", async () => {
     const result = await bundle("test/__fixtures__/direct.ts");
     expect(result).toMatchInlineSnapshot(`
-      "\\"use strict\\";
+      ""use strict";
       (() => {
         // virtual:metro:__rnx_prelude__
-        var global = new Function(\\"return this;\\")();
+        var global = new Function("return this;")();
 
         // test/__fixtures__/base.ts
         function app() {
-          \\"this should _not_ be removed\\";
+          "this should _not_ be removed";
         }
 
         // test/__fixtures__/direct.ts
@@ -79,14 +79,14 @@ describe("metro-serializer-esbuild", () => {
   test("removes unused code (export *)", async () => {
     const result = await bundle("test/__fixtures__/exportAll.ts");
     expect(result).toMatchInlineSnapshot(`
-      "\\"use strict\\";
+      ""use strict";
       (() => {
         // virtual:metro:__rnx_prelude__
-        var global = new Function(\\"return this;\\")();
+        var global = new Function("return this;")();
 
         // test/__fixtures__/base.ts
         function app() {
-          \\"this should _not_ be removed\\";
+          "this should _not_ be removed";
         }
 
         // test/__fixtures__/exportAll.ts
@@ -99,14 +99,14 @@ describe("metro-serializer-esbuild", () => {
   test("removes unused code (nested export *)", async () => {
     const result = await bundle("test/__fixtures__/nestedExportAll.ts");
     expect(result).toMatchInlineSnapshot(`
-      "\\"use strict\\";
+      ""use strict";
       (() => {
         // virtual:metro:__rnx_prelude__
-        var global = new Function(\\"return this;\\")();
+        var global = new Function("return this;")();
 
         // test/__fixtures__/base.ts
         function app() {
-          \\"this should _not_ be removed\\";
+          "this should _not_ be removed";
         }
 
         // test/__fixtures__/nestedExportAll.ts
@@ -119,14 +119,14 @@ describe("metro-serializer-esbuild", () => {
   test("removes unused code (import *)", async () => {
     const result = await bundle("test/__fixtures__/importAll.ts");
     expect(result).toMatchInlineSnapshot(`
-      "\\"use strict\\";
+      ""use strict";
       (() => {
         // virtual:metro:__rnx_prelude__
-        var global = new Function(\\"return this;\\")();
+        var global = new Function("return this;")();
 
         // test/__fixtures__/base.ts
         function app() {
-          \\"this should _not_ be removed\\";
+          "this should _not_ be removed";
         }
 
         // test/__fixtures__/importAll.ts
@@ -139,14 +139,14 @@ describe("metro-serializer-esbuild", () => {
   test("removes unused code (import * <- export *)", async () => {
     const result = await bundle("test/__fixtures__/importExportAll.ts");
     expect(result).toMatchInlineSnapshot(`
-      "\\"use strict\\";
+      ""use strict";
       (() => {
         // virtual:metro:__rnx_prelude__
-        var global = new Function(\\"return this;\\")();
+        var global = new Function("return this;")();
 
         // test/__fixtures__/base.ts
         function app() {
-          \\"this should _not_ be removed\\";
+          "this should _not_ be removed";
         }
 
         // test/__fixtures__/importExportAll.ts
@@ -159,10 +159,10 @@ describe("metro-serializer-esbuild", () => {
   test("tree-shakes lodash-es", async () => {
     const result = await bundle("test/__fixtures__/lodash-es.ts");
     expect(result).toMatchInlineSnapshot(`
-      "\\"use strict\\";
+      ""use strict";
       (() => {
         // virtual:metro:__rnx_prelude__
-        var global = new Function(\\"return this;\\")();
+        var global = new Function("return this;")();
 
         // ../../node_modules/lodash-es/head.js
         function head(array) {
@@ -180,7 +180,7 @@ describe("metro-serializer-esbuild", () => {
   test("handles `sideEffects` array", async () => {
     const result = await bundle("test/__fixtures__/sideEffectsArray.ts");
     expect(result).toMatchInlineSnapshot(`
-      "\\"use strict\\";
+      ""use strict";
       (() => {
         var __getOwnPropNames = Object.getOwnPropertyNames;
         var __esm = (fn, res) => function __init() {
@@ -190,8 +190,8 @@ describe("metro-serializer-esbuild", () => {
         // virtual:metro:__rnx_prelude__
         var global;
         var init_rnx_prelude = __esm({
-          \\"virtual:metro:__rnx_prelude__\\"() {
-            global = new Function(\\"return this;\\")();
+          "virtual:metro:__rnx_prelude__"() {
+            global = new Function("return this;")();
           }
         });
 
@@ -213,7 +213,7 @@ describe("metro-serializer-esbuild", () => {
         } catch (e) {
         }
         function setVersion(packageName, packageVersion) {
-          if (typeof _win !== \\"undefined\\") {
+          if (typeof _win !== "undefined") {
             var packages = _win.__packages__ = _win.__packages__ || {};
             if (!packages[packageName] || !packagesCache[packageName]) {
               packagesCache[packageName] = packageVersion;
@@ -224,7 +224,7 @@ describe("metro-serializer-esbuild", () => {
         }
 
         // ../../node_modules/@fluentui/set-version/lib/index.js
-        setVersion(\\"@fluentui/set-version\\", \\"6.0.0\\");
+        setVersion("@fluentui/set-version", "6.0.0");
 
         // ../../node_modules/@fluentui/utilities/lib/warn/warn.js
         init_rnx_prelude();
@@ -242,10 +242,10 @@ describe("metro-serializer-esbuild", () => {
 
         // ../../node_modules/@fluentui/utilities/lib/version.js
         init_rnx_prelude();
-        setVersion(\\"@fluentui/utilities\\", \\"8.13.9\\");
+        setVersion("@fluentui/utilities", "8.13.9");
 
         // test/__fixtures__/sideEffectsArray.ts
-        warn(\\"this should _not_ be removed\\");
+        warn("this should _not_ be removed");
       })();
       "
     `);
@@ -258,14 +258,14 @@ describe("metro-serializer-esbuild", () => {
       ".test-output.jsbundle.map"
     );
     expect(result).toMatchInlineSnapshot(`
-      "\\"use strict\\";
+      ""use strict";
       (() => {
         // virtual:metro:__rnx_prelude__
-        var global = new Function(\\"return this;\\")();
+        var global = new Function("return this;")();
 
         // test/__fixtures__/base.ts
         function app() {
-          \\"this should _not_ be removed\\";
+          "this should _not_ be removed";
         }
 
         // test/__fixtures__/direct.ts
@@ -279,7 +279,7 @@ describe("metro-serializer-esbuild", () => {
   test("is disabled when `dev: true`", async () => {
     const result = await bundle("test/__fixtures__/direct.ts", true);
     expect(result).toMatch(
-      "var __BUNDLE_START_TIME__=this.nativePerformanceNow?nativePerformanceNow():Date.now(),__DEV__=true,process=this.process||{},__METRO_GLOBAL_PREFIX__='';process.env=process.env||{};process.env.NODE_ENV=process.env.NODE_ENV||\"development\";"
+      "var __BUNDLE_START_TIME__=this.nativePerformanceNow?nativePerformanceNow():Date.now(),__DEV__=true,process=this.process||{},__METRO_GLOBAL_PREFIX__=''"
     );
   });
 });

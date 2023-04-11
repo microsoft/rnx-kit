@@ -24,16 +24,14 @@ describe("jest-preset", () => {
     setupFiles: [
       expect.stringContaining(path.join(reactNativePath, "jest", "setup.js")),
     ],
+    testEnvironment: expect.stringContaining(
+      path.join(reactNativePath, "jest", "react-native-env.js")
+    ),
     transform: {
       "\\.(bmp|gif|jpg|jpeg|mp4|png|psd|svg|webp)$": expect.stringContaining(
         path.join(reactNativePath, "jest", "assetFileTransformer.js")
       ),
-      "\\.[jt]sx?$": [
-        "babel-jest",
-        {
-          presets: ["module:metro-react-native-babel-preset"],
-        },
-      ],
+      "\\.[jt]sx?$": "babel-jest",
     },
   };
 
@@ -53,16 +51,14 @@ describe("jest-preset", () => {
         path.join(reactNativeMacOSPath, "jest", "setup.js")
       ),
     ],
+    testEnvironment: expect.stringContaining(
+      path.join(reactNativeMacOSPath, "jest", "react-native-env.js")
+    ),
     transform: {
       "\\.(bmp|gif|jpg|jpeg|mp4|png|psd|svg|webp)$": expect.stringContaining(
         path.join(reactNativeMacOSPath, "jest", "assetFileTransformer.js")
       ),
-      "\\.[jt]sx?$": [
-        "babel-jest",
-        {
-          presets: ["module:metro-react-native-babel-preset"],
-        },
-      ],
+      "\\.[jt]sx?$": "babel-jest",
     },
   });
 

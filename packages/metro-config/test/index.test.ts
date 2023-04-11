@@ -243,6 +243,7 @@ describe("makeMetroConfig", () => {
     "symbolicator",
     "transformer",
     "watchFolders",
+    "watcher",
   ];
 
   afterEach(() => {
