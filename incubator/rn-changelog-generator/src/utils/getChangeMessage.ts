@@ -2,9 +2,9 @@ import { Commit } from "./commits";
 import formatCommitLink from "./formatCommitLink";
 
 function getAuthorFormatting(item: Commit) {
-  if (item.author?.login != null) {
+  if (item.author?.login) {
     return `[@${item.author.login}](https://github.com/${item.author.login})`;
-  } else if (item.commit.author?.name != null) {
+  } else if (item.commit.author?.name) {
     return item.commit.author.name;
   }
   return null;
