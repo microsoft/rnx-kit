@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/cli
 
+## 0.16.6
+
+### Patch Changes
+
+- 5fbc30dc: Add `--id` flag to `rnx-start`
+
 ## 0.16.5
 
 ### Patch Changes
