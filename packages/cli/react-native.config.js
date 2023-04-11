@@ -100,7 +100,8 @@ module.exports = {
         },
         {
           name: "--id [string]",
-          description: "Specify which bundle configuration to use if server configuration is missing.",
+          description:
+            "Specify which bundle configuration to use if server configuration is missing.",
         },
       ],
     },
