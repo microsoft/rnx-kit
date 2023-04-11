@@ -45,6 +45,7 @@ export type CLIStartOptions = {
   cert?: string;
   config?: string;
   interactive: boolean;
+  id?: string;
 };
 
 function friendlyRequire<T>(...modules: string[]): T {

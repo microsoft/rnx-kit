@@ -7,6 +7,7 @@ type ServerConfigOverrides = {
   projectRoot?: string;
   assetPlugins?: string[];
   sourceExts?: string[];
+  id?: string;
 };
 
 type CliServerConfig = ServerConfig & {
@@ -26,7 +27,7 @@ export function getKitServerConfig(
   const kitConfig = getKitConfig();
   let serverConfig = kitConfig?.server;
   if (!serverConfig && kitConfig) {
-    const maybeBundleConfig = getBundleConfig(kitConfig);
+    const maybeBundleConfig = getBundleConfig(kitConfig, overrides?.id);
     if (maybeBundleConfig) {
       serverConfig = pickValues(maybeBundleConfig, [
         "detectCyclicDependencies",
