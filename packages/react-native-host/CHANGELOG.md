@@ -1,5 +1,11 @@
 # @rnx-kit/react-native-host
 
+## 0.2.5
+
+### Patch Changes
+
+- 405dcfea: Fix 0.72 + New Architecture not being able to find `RCTAppSetupUtils.h`
+
 ## 0.2.4
 
 ### Patch Changes
