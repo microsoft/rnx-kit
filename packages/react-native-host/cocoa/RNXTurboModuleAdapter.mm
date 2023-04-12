@@ -14,8 +14,7 @@
 #import <React/RCTAppSetupUtils.h>
 #define USE_RUNTIME_SCHEDULER 0
 #else
-#import <RCTAppSetupUtils.h>
-
+#import <React-RCTAppDelegate/RCTAppSetupUtils.h>
 #import <React/RCTSurfacePresenterBridgeAdapter.h>
 #import <react/renderer/runtimescheduler/RuntimeScheduler.h>
 #import <react/renderer/runtimescheduler/RuntimeSchedulerCallInvoker.h>

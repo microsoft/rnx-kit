@@ -32,6 +32,7 @@ Pod::Spec.new do |s|
   s.dependency 'React-cxxreact'
 
   if new_arch_enabled
+    s.dependency 'React-RCTAppDelegate'
     s.dependency 'React-RCTFabric'
     s.dependency 'ReactCommon/turbomodule/core'
   end
