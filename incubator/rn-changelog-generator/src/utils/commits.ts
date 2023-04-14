@@ -4,7 +4,12 @@ import { IncomingHttpHeaders } from "http";
 
 export interface Commit {
   sha: string;
-  commit: { message: string };
+  commit: {
+    message: string;
+    author?: {
+      name: string;
+    };
+  };
   author?: { login: string };
 }
 
