@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/rn-changelog-generator
 
+## 0.4.1
+
+### Patch Changes
+
+- b8a39ed2: Address case where there is no author login property
+
 ## 0.4.0
 
 ### Minor Changes
