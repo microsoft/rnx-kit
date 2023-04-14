@@ -1798,7 +1798,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@docusaurus/module-type-aliases@npm:2.3.1, @docusaurus/module-type-aliases@npm:^2.2.0":
+"@docusaurus/module-type-aliases@npm:2.3.1":
   version: 2.3.1
   resolution: "@docusaurus/module-type-aliases@npm:2.3.1"
   dependencies:
@@ -2376,24 +2376,13 @@ __metadata:
   resolution: "@rnx-kit/docsite@workspace:."
   dependencies:
     "@docusaurus/core": ^2.2.0
-    "@docusaurus/module-type-aliases": ^2.2.0
     "@docusaurus/preset-classic": ^2.2.0
-    "@mdx-js/react": ^1.6.22
-    "@mdx-js/util": 1.6.22
     "@tsconfig/docusaurus": ^1.0.6
     clsx: ^1.2.1
-    mdast-zone: ^4.0.1
     prism-react-renderer: ^1.3.5
     react: 17.0.2
     react-dom: 17.0.2
-    remark-footnotes: 2.0.0
-    remark-mdx: 1.6.22
-    remark-parse: 8.0.3
-    remark-squeeze-paragraphs: 4.0.0
     typescript: ^4.0.0
-    unified: 9.2.2
-    unist-util-visit: ^2.0.3
-    vfile: ^4.0.0
   languageName: unknown
   linkType: soft
 
@@ -6919,13 +6908,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mdast-comment-marker@npm:^1.0.0":
-  version: 1.1.2
-  resolution: "mdast-comment-marker@npm:1.1.2"
-  checksum: 9e3a75cbc8dad24388825889001542065ee6684634548be2f08fa5c557a28a2b39530273805ed85c75a8d04c1231c345decf07445717e2d458d86440471a9e4b
-  languageName: node
-  linkType: hard
-
 "mdast-squeeze-paragraphs@npm:^4.0.0":
   version: 4.0.0
   resolution: "mdast-squeeze-paragraphs@npm:4.0.0"
@@ -6964,16 +6946,6 @@ __metadata:
   version: 2.0.0
   resolution: "mdast-util-to-string@npm:2.0.0"
   checksum: 0b2113ada10e002fbccb014170506dabe2f2ddacaacbe4bc1045c33f986652c5a162732a2c057c5335cdb58419e2ad23e368e5be226855d4d4e280b81c4e9ec2
-  languageName: node
-  linkType: hard
-
-"mdast-zone@npm:^4.0.1":
-  version: 4.0.1
-  resolution: "mdast-zone@npm:4.0.1"
-  dependencies:
-    mdast-comment-marker: ^1.0.0
-    unist-util-visit: ^2.0.0
-  checksum: 19e5814c6dc598ad041f4028a6804b43b0af2ad0c7047e5793d875f31235daa2c6793cd1c1d430f2b69b2a2d4793034113de958cacc9a28f6957043af2aa2c19
   languageName: node
   linkType: hard
 
@@ -10024,7 +9996,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"unified@npm:9.2.2, unified@npm:^9.2.2":
+"unified@npm:^9.2.2":
   version: 9.2.2
   resolution: "unified@npm:9.2.2"
   dependencies:

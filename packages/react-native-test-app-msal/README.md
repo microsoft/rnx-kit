@@ -1,11 +1,7 @@
-<!--remove-block start-->
-
 # @rnx-kit/react-native-test-app-msal
 
 [![Build](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml/badge.svg)](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml)
 [![npm version](https://img.shields.io/npm/v/@rnx-kit/react-native-test-app-msal)](https://www.npmjs.com/package/@rnx-kit/react-native-test-app-msal)
-
-<!--remove-block end-->
 
 [Microsoft Authentication Library](http://aka.ms/aadv2) (MSAL) module for
 [React Native Test App](https://github.com/microsoft/react-native-test-app#readme).

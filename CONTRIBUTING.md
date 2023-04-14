@@ -1,8 +1,4 @@
-<!--remove-block start-->
-
 # Contributing
-
-<!--remove-block end-->
 
 Thank you for your interest in this project! We welcome all contributions and
 suggestions!
@@ -14,17 +10,6 @@ can [submit a pull-request](https://github.com/microsoft/rnx-kit/pulls).
 
 As a contributor, you're expected to follow the
 [code of conduct](https://github.com/microsoft/rnx-kit/blob/main/CODE_OF_CONDUCT.md).
-
-<!--remove-block start-->
-
-- [Contributor License Agreement](#Contributor-License-Agreement)
-- [Requirements](#Requirements)
-- [Build](#Build)
-- [Change Logs](#Change-Logs)
-- [Releases](#Releases)
-- [Style Guide](#Style-Guide)
-
-<!--remove-block end-->
 
 ## Contributor License Agreement
 

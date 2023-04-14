@@ -1,23 +1,9 @@
-<!--remove-block start-->
-
 # @rnx-kit/cli
 
 [![Build](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml/badge.svg)](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml)
 [![npm version](https://img.shields.io/npm/v/@rnx-kit/cli)](https://www.npmjs.com/package/@rnx-kit/cli)
 
-<!--remove-block end-->
-
 Command-line interface for working with packages in your repo.
-
-<!--remove-block start-->
-
-- [Bundle a package](#bundle-a-package)
-- [Start a bundle server](#start-a-bundle-server)
-- [Manage dependencies](#manage-dependencies)
-- [Generate a 3rd-party notice for a package](#generate-a-third%2dparty-notice-for-a-package)
-- [Clean a React Native project](#clean-a-react-native-project)
-
-<!--remove-block end-->
 
 ## Bundle a Package
 

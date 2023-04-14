@@ -1,11 +1,7 @@
-<!--remove-block start-->
-
 # @rnx-kit/react-native-lazy-index
 
 [![Build](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml/badge.svg)](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml)
 [![npm version](https://img.shields.io/npm/v/@rnx-kit/react-native-lazy-index)](https://www.npmjs.com/package/@rnx-kit/react-native-lazy-index)
-
-<!--remove-block end-->
 
 `react-native-lazy-index` is a RAM bundle friendly, bundle-time generated
 `index.js`. Improve your app startup time by only loading features you'll use on

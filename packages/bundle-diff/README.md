@@ -1,11 +1,7 @@
-<!--remove-block start-->
-
 # @rnx-kit/bundle-diff
 
 [![Build](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml/badge.svg)](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml)
 [![npm version](https://img.shields.io/npm/v/@rnx-kit/bundle-diff)](https://www.npmjs.com/package/@rnx-kit/bundle-diff)
-
-<!--remove-block end-->
 
 A simple tool for diffing two bundles. Useful for getting an overview of which
 files are included in one bundle but not the other. For example, comparing a

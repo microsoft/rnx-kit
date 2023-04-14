@@ -1,11 +1,7 @@
-<!--remove-block start-->
-
 # @rnx-kit/metro-plugin-cyclic-dependencies-detector
 
 [![Build](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml/badge.svg)](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml)
 [![npm version](https://img.shields.io/npm/v/@rnx-kit/metro-plugin-cyclic-dependencies-detector)](https://www.npmjs.com/package/@rnx-kit/metro-plugin-cyclic-dependencies-detector)
-
-<!--remove-block end-->
 
 `@rnx-kit/metro-plugin-cyclic-dependencies-detector` detects cyclic import
 chains that may cause issues in your bundle.

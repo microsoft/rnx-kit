@@ -1,11 +1,7 @@
-<!--remove-block start-->
-
 # @rnx-kit/metro-serializer
 
 [![Build](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml/badge.svg)](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml)
 [![npm version](https://img.shields.io/npm/v/@rnx-kit/metro-serializer)](https://www.npmjs.com/package/@rnx-kit/metro-serializer)
-
-<!--remove-block end-->
 
 `@rnx-kit/metro-serializer` is Metro's default JavaScript bundle serializer, but
 with support for plugins.

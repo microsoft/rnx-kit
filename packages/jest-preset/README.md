@@ -1,11 +1,7 @@
-<!--remove-block start-->
-
 # @rnx-kit/jest-preset
 
 [![Build](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml/badge.svg)](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml)
 [![npm version](https://img.shields.io/npm/v/@rnx-kit/jest-preset)](https://www.npmjs.com/package/@rnx-kit/jest-preset)
-
-<!--remove-block end-->
 
 A Jest preset with support for React Native
 [platform-specific extensions](https://reactnative.dev/docs/platform-specific-code#platform-specific-extensions)

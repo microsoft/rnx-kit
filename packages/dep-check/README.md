@@ -2,14 +2,10 @@
 
 For more details, read the RFC: https://github.com/microsoft/rnx-kit/pull/1757
 
-<!--remove-block start-->
-
 # @rnx-kit/dep-check
 
 [![Build](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml/badge.svg)](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml)
 [![npm version](https://img.shields.io/npm/v/@rnx-kit/dep-check)](https://www.npmjs.com/package/@rnx-kit/dep-check)
-
-<!--remove-block end-->
 
 `@rnx-kit/dep-check` manages React Native dependencies for a package, based on
 its needs and requirements.

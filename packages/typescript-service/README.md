@@ -1,11 +1,7 @@
-<!--remove-block start-->
-
 # @rnx-kit/typescript-service
 
 [![Build](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml/badge.svg)](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml)
 [![npm version](https://img.shields.io/npm/v/@rnx-kit/typescript-service)](https://www.npmjs.com/package/@rnx-kit/typescript-service)
-
-<!--remove-block end-->
 
 `@rnx-kit/typescript-service` gives you access to TypeScript's language
 services, and lets you customize how module resolution occurs.

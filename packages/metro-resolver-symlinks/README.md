@@ -1,11 +1,7 @@
-<!--remove-block start-->
-
 # @rnx-kit/metro-resolver-symlinks
 
 [![Build](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml/badge.svg)](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml)
 [![npm version](https://img.shields.io/npm/v/@rnx-kit/metro-resolver-symlinks)](https://www.npmjs.com/package/@rnx-kit/metro-resolver-symlinks)
-
-<!--remove-block end-->
 
 `@rnx-kit/metro-resolver-symlinks` is a Metro resolver with proper support for
 symlinks. This is especially useful in monorepos, or repos using package
