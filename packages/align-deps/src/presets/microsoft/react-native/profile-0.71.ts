@@ -112,6 +112,14 @@ const profile: Profile = {
     version: "^29.2.1",
     devOnly: true,
   },
+  "masked-view": {
+    name: "@react-native-masked-view/masked-view",
+    version: "^0.2.9",
+  },
+  "safe-area": {
+    name: "react-native-safe-area-context",
+    version: "^4.5.1",
+  },
   screens: {
     name: "react-native-screens",
     version: "^3.19.0",
