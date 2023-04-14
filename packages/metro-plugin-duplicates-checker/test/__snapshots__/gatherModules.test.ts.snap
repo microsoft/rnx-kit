@@ -1,14 +1,14 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`gatherModulesFromGraph() builds module map from a basic source map 1`] = `
-Array [
+[
   "react-native",
   "rnx-kit",
 ]
 `;
 
 exports[`gatherModulesFromSourceMap() builds module map from a basic source map 1`] = `
-Array [
+[
   "@babel/runtime",
   "abort-controller",
   "anser",
@@ -30,7 +30,6 @@ Array [
   "rnx-kit",
   "scheduler",
   "stacktrace-parser",
-  "use-subscription",
   "whatwg-fetch",
 ]
 `;

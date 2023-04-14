@@ -162,10 +162,29 @@ function setupFiles(targetPlatform, reactNativePlatformPath) {
   return targetPlatform
     ? [
         require.resolve(
-          `${reactNativePlatformPath || "react-native"}/jest/setup`
+          `${reactNativePlatformPath || "react-native"}/jest/setup.js`
         ),
       ]
     : undefined;
+}
+
+/**
+ * Returns test environment for React Native.
+ * @param {string | undefined} targetPlatform
+ * @param {string | undefined} reactNativePlatformPath
+ * @returns {string | undefined}
+ */
+function getTestEnvironment(targetPlatform, reactNativePlatformPath) {
+  if (targetPlatform) {
+    try {
+      return require.resolve(
+        `${reactNativePlatformPath || "react-native"}/jest/react-native-env.js`
+      );
+    } catch (_) {
+      // ignore
+    }
+  }
+  return undefined;
 }
 
 /**
@@ -196,6 +215,7 @@ module.exports = (
   } = {}
 ) => {
   const [targetPlatform, platformPath] = getTargetPlatform(defaultPlatform);
+  const testEnvironment = getTestEnvironment(targetPlatform, platformPath);
   return {
     haste: haste(targetPlatform),
     moduleNameMapper: {
@@ -203,8 +223,11 @@ module.exports = (
       ...userModuleNameMapper,
     },
     setupFiles: setupFiles(targetPlatform, platformPath),
+    testEnvironment,
     transform: {
-      "\\.[jt]sx?$": ["babel-jest", { presets: babelPresets(targetPlatform) }],
+      "\\.[jt]sx?$": testEnvironment
+        ? "babel-jest"
+        : ["babel-jest", { presets: babelPresets(targetPlatform) }],
       ...transformRules(targetPlatform, platformPath),
       ...userTransform,
     },

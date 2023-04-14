@@ -1,8 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`buildManifestProfile() builds a package manifest for a single profile version 1`] = `
-Object {
-  "dependencies": Object {
+{
+  "dependencies": {
     "@react-native-async-storage/async-storage": "^1.17.10",
     "@react-native-clipboard/clipboard": "^1.10.0",
     "@react-native-community/checkbox": "^0.5.8",
@@ -47,7 +47,7 @@ Object {
     "react-native-windows": "^0.70.0",
     "react-test-renderer": "18.1.0",
   },
-  "devDependencies": Object {
+  "devDependencies": {
     "@react-native-async-storage/async-storage": "^1.17.10",
     "@react-native-clipboard/clipboard": "^1.10.0",
     "@react-native-community/checkbox": "^0.5.8",
@@ -92,7 +92,7 @@ Object {
     "react-native-windows": "^0.70.0",
     "react-test-renderer": "18.1.0",
   },
-  "peerDependencies": Object {
+  "peerDependencies": {
     "@react-native-async-storage/async-storage": "^1.17.10",
     "@react-native-clipboard/clipboard": "^1.10.0",
     "@react-native-community/checkbox": "^0.5.8",
@@ -124,7 +124,7 @@ Object {
     "react-native-webview": "^11.23.0",
     "react-native-windows": "^0.70.0",
   },
-  "unmanagedCapabilities": Object {
+  "unmanagedCapabilities": {
     "@react-native-async-storage/async-storage": "storage",
     "@react-native-clipboard/clipboard": "clipboard",
     "@react-native-community/checkbox": "checkbox",
@@ -173,8 +173,8 @@ Object {
 `;
 
 exports[`buildManifestProfile() builds a package manifest for multiple profile versions 1`] = `
-Object {
-  "dependencies": Object {
+{
+  "dependencies": {
     "@react-native-async-storage/async-storage": "^1.17.10",
     "@react-native-clipboard/clipboard": "^1.10.0",
     "@react-native-community/checkbox": "^0.5.8",
@@ -219,7 +219,7 @@ Object {
     "react-native-windows": "^0.70.0",
     "react-test-renderer": "18.1.0",
   },
-  "devDependencies": Object {
+  "devDependencies": {
     "@react-native-async-storage/async-storage": "^1.17.10",
     "@react-native-clipboard/clipboard": "^1.10.0",
     "@react-native-community/checkbox": "^0.5.8",
@@ -264,7 +264,7 @@ Object {
     "react-native-windows": "^0.70.0",
     "react-test-renderer": "18.1.0",
   },
-  "peerDependencies": Object {
+  "peerDependencies": {
     "@react-native-async-storage/async-storage": "^1.17.7 || ^1.17.10",
     "@react-native-clipboard/clipboard": "^1.10.0",
     "@react-native-community/checkbox": "^0.5.8",
@@ -296,7 +296,7 @@ Object {
     "react-native-webview": "^11.23.0",
     "react-native-windows": "^0.69.0 || ^0.70.0",
   },
-  "unmanagedCapabilities": Object {
+  "unmanagedCapabilities": {
     "@react-native-async-storage/async-storage": "storage",
     "@react-native-clipboard/clipboard": "clipboard",
     "@react-native-community/checkbox": "checkbox",

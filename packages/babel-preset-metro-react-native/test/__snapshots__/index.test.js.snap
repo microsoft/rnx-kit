@@ -1,26 +1,26 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`@rnx-kit/babel-preset-metro-react-native applies additional plugins 1`] = `
-"Object.defineProperty(exports, \\"__esModule\\", { value: true });
+"Object.defineProperty(exports, "__esModule", { value: true });
 exports.takeDirection = takeDirection;
-require(\\"typescript/src/remap-test/lib/lib\\");
+require("typescript/src/remap-test/lib/lib");
 var Direction;
 (function (Direction) {
-  Direction[(Direction[\\"Up\\"] = 0)] = \\"Up\\";
-  Direction[(Direction[\\"Down\\"] = 1)] = \\"Down\\";
-  Direction[(Direction[\\"Left\\"] = 2)] = \\"Left\\";
-  Direction[(Direction[\\"Right\\"] = 3)] = \\"Right\\";
+  Direction[(Direction["Up"] = 0)] = "Up";
+  Direction[(Direction["Down"] = 1)] = "Down";
+  Direction[(Direction["Left"] = 2)] = "Left";
+  Direction[(Direction["Right"] = 3)] = "Right";
 })(Direction || (Direction = {}));
 function takeDirection(direction) {
   switch (direction) {
     case Direction.Up:
-      return \\"up\\";
+      return "up";
     case Direction.Down:
-      return \\"down\\";
+      return "down";
     case Direction.Left:
-      return \\"left\\";
+      return "left";
     case Direction.Right:
-      return \\"right\\";
+      return "right";
   }
 }
 console.log(takeDirection(Direction.Up));
@@ -28,26 +28,26 @@ console.log(takeDirection(Direction.Up));
 `;
 
 exports[`@rnx-kit/babel-preset-metro-react-native can be further extended 1`] = `
-"Object.defineProperty(exports, \\"__esModule\\", { value: true });
+"Object.defineProperty(exports, "__esModule", { value: true });
 exports.takeDirection = takeDirection;
-require(\\"typescript/src/remap-test/lib/lib\\");
+require("typescript/src/remap-test/lib/lib");
 var Direction;
 (function (Direction) {
-  Direction[(Direction[\\"Up\\"] = 0)] = \\"Up\\";
-  Direction[(Direction[\\"Down\\"] = 1)] = \\"Down\\";
-  Direction[(Direction[\\"Left\\"] = 2)] = \\"Left\\";
-  Direction[(Direction[\\"Right\\"] = 3)] = \\"Right\\";
+  Direction[(Direction["Up"] = 0)] = "Up";
+  Direction[(Direction["Down"] = 1)] = "Down";
+  Direction[(Direction["Left"] = 2)] = "Left";
+  Direction[(Direction["Right"] = 3)] = "Right";
 })(Direction || (Direction = {}));
 function takeDirection(direction) {
   switch (direction) {
     case Direction.Up:
-      return \\"up\\";
+      return "up";
     case Direction.Down:
-      return \\"down\\";
+      return "down";
     case Direction.Left:
-      return \\"left\\";
+      return "left";
     case Direction.Right:
-      return \\"right\\";
+      return "right";
   }
 }
 console.log(takeDirection(Direction.Up));
@@ -55,24 +55,24 @@ console.log(takeDirection(Direction.Up));
 `;
 
 exports[`@rnx-kit/babel-preset-metro-react-native forwards options to \`metro-react-native-babel-preset\` 1`] = `
-"require(\\"typescript/lib/remap-test/lib/lib\\");
+"require("typescript/lib/remap-test/lib/lib");
 var Direction;
 (function (Direction) {
-  Direction[(Direction[\\"Up\\"] = 0)] = \\"Up\\";
-  Direction[(Direction[\\"Down\\"] = 1)] = \\"Down\\";
-  Direction[(Direction[\\"Left\\"] = 2)] = \\"Left\\";
-  Direction[(Direction[\\"Right\\"] = 3)] = \\"Right\\";
+  Direction[(Direction["Up"] = 0)] = "Up";
+  Direction[(Direction["Down"] = 1)] = "Down";
+  Direction[(Direction["Left"] = 2)] = "Left";
+  Direction[(Direction["Right"] = 3)] = "Right";
 })(Direction || (Direction = {}));
 function takeDirection(direction) {
   switch (direction) {
     case Direction.Up:
-      return \\"up\\";
+      return "up";
     case Direction.Down:
-      return \\"down\\";
+      return "down";
     case Direction.Left:
-      return \\"left\\";
+      return "left";
     case Direction.Right:
-      return \\"right\\";
+      return "right";
   }
 }
 console.log(takeDirection(Direction.Up));
@@ -86,26 +86,26 @@ exports[`@rnx-kit/babel-preset-metro-react-native passes \`loose: true\` to \`@b
 `;
 
 exports[`@rnx-kit/babel-preset-metro-react-native transforms \`const enum\`s 1`] = `
-"Object.defineProperty(exports, \\"__esModule\\", { value: true });
+"Object.defineProperty(exports, "__esModule", { value: true });
 exports.takeDirection = takeDirection;
-require(\\"typescript/lib/remap-test/lib/lib\\");
+require("typescript/lib/remap-test/lib/lib");
 var Direction;
 (function (Direction) {
-  Direction[(Direction[\\"Up\\"] = 0)] = \\"Up\\";
-  Direction[(Direction[\\"Down\\"] = 1)] = \\"Down\\";
-  Direction[(Direction[\\"Left\\"] = 2)] = \\"Left\\";
-  Direction[(Direction[\\"Right\\"] = 3)] = \\"Right\\";
+  Direction[(Direction["Up"] = 0)] = "Up";
+  Direction[(Direction["Down"] = 1)] = "Down";
+  Direction[(Direction["Left"] = 2)] = "Left";
+  Direction[(Direction["Right"] = 3)] = "Right";
 })(Direction || (Direction = {}));
 function takeDirection(direction) {
   switch (direction) {
     case Direction.Up:
-      return \\"up\\";
+      return "up";
     case Direction.Down:
-      return \\"down\\";
+      return "down";
     case Direction.Left:
-      return \\"left\\";
+      return "left";
     case Direction.Right:
-      return \\"right\\";
+      return "right";
   }
 }
 console.log(takeDirection(Direction.Up));
