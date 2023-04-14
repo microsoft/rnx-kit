@@ -1,5 +1,11 @@
 # @rnx-kit/react-native-auth
 
+## 0.2.2
+
+### Patch Changes
+
+- f18acaca: Fix the "Kotlin Gradle plugin was loaded multiple times" warning
+
 ## 0.2.1
 
 ### Patch Changes

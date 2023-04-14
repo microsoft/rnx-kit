@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/jest-preset
 
+## 0.1.14
+
+### Patch Changes
+
+- a98b0421: Add support for react-native 0.71
+
 ## 0.1.13
 
 ### Patch Changes

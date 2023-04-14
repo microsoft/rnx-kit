@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/cli
 
+## 0.16.7
+
+### Patch Changes
+
+- a98b0421: Declare support for Jest 29
+
 ## 0.16.6
 
 ### Patch Changes
