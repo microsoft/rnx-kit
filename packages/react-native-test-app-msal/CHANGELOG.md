@@ -1,5 +1,14 @@
 # Change Log - @rnx-kit/react-native-test-app-msal
 
+## 2.1.2
+
+### Patch Changes
+
+- f41f538c: Update dependency com.google.android.material:material to v1.8.0
+- f18acaca: Fix the "Kotlin Gradle plugin was loaded multiple times" warning
+- Updated dependencies [f18acaca]
+  - @rnx-kit/react-native-auth@0.2.2
+
 ## 2.1.1
 
 ### Patch Changes
