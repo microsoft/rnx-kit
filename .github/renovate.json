@@ -40,7 +40,7 @@
       "matchSourceUrlPrefixes": ["https://github.com/octokit/"]
     },
     {
-      "matchPackageNames": ["react"],
+      "matchPackageNames": ["@fluentui/utilities", "react"],
       "enabled": false
     },
     {
