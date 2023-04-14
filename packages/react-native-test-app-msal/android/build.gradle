@@ -56,7 +56,7 @@ buildscript {
 
 plugins {
     id("com.android.library")
-    id("org.jetbrains.kotlin.android") version "${kotlinVersion}"
+    id("org.jetbrains.kotlin.android")
 }
 
 repositories {
