@@ -52,15 +52,20 @@ function isCommented(source, identifier, comment) {
  */
 function parse(typedoc) {
   const app = new typedoc.Application();
-  app.options.addReader(new typedoc.TypeDocReader());
   app.options.addReader(new typedoc.TSConfigReader());
+  app.options.addReader(new typedoc.TypeDocReader());
 
   app.bootstrap({
     entryPoints: ["src/index.ts"],
     excludeInternal: true,
   });
 
-  return app.serializer.toObject(app.convert());
+  const project = app.convert();
+  if (!project) {
+    throw new Error("Failed to convert project");
+  }
+
+  return app.serializer.projectToObject(project, process.cwd());
 }
 
 /**
