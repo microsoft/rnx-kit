@@ -2984,15 +2984,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-community/cli-types@npm:^6.0.0":
-  version: 6.0.0
-  resolution: "@react-native-community/cli-types@npm:6.0.0"
-  dependencies:
-    ora: ^3.4.0
-  checksum: 7ef1a4e5e340facca6280bc8d9f36cd44b8c6d05ba2afa228fea9bd3eabfa4d0b273e3c42f5e1f65144e126eb4f95ef7ffbd785981d30286799d74f267863265
-  languageName: node
-  linkType: hard
-
 "@react-native-community/cli@npm:10.2.2":
   version: 10.2.2
   resolution: "@react-native-community/cli@npm:10.2.2"
@@ -3271,7 +3262,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/cli@workspace:packages/cli"
   dependencies:
-    "@react-native-community/cli-types": ^6.0.0
+    "@react-native-community/cli-types": ^10.0.0
     "@rnx-kit/align-deps": ^2.2.1
     "@rnx-kit/config": ^0.6.0
     "@rnx-kit/console": ^1.0.11
@@ -3623,7 +3614,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/metro-service@workspace:packages/metro-service"
   dependencies:
-    "@react-native-community/cli-types": ^6.0.0
+    "@react-native-community/cli-types": ^10.0.0
     "@rnx-kit/scripts": "*"
     "@rnx-kit/tools-language": ^1.2.6
     "@types/metro": ^0.76.0
