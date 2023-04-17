@@ -335,14 +335,14 @@ PODS:
   - ReactNativeHost (0.2.5):
     - React-Core
     - React-cxxreact
-  - ReactTestApp-DevSupport (2.3.18):
+  - ReactTestApp-DevSupport (2.4.0):
     - React-Core
     - React-jsi
-  - ReactTestApp-MSAL (2.1.1):
+  - ReactTestApp-MSAL (2.1.2):
     - MSAL
     - RNXAuth
   - ReactTestApp-Resources (1.0.0-dev)
-  - RNXAuth (0.2.1):
+  - RNXAuth (0.2.2):
     - React-Core
   - SocketRocket (0.6.0)
   - Yoga (1.14.0)
@@ -509,10 +509,10 @@ SPEC CHECKSUMS:
   React-runtimeexecutor: c0304d6eb9aabf6083473b951b44d2f0386f6298
   ReactCommon: cb2fb338854294c10509c82f37aacfbda2d05bff
   ReactNativeHost: 5e4cc8c8ededf0639d095fe874e4bddcacdfe77f
-  ReactTestApp-DevSupport: 1a9381b9b8323ec0c7c6153e175e44e4376c76a8
-  ReactTestApp-MSAL: ad448d0b95393b58d1ec11d10f8c0cab226399d2
+  ReactTestApp-DevSupport: e82ce10aef3488ec1aea8bd8a330eea4fc67024e
+  ReactTestApp-MSAL: 928b822f90d65e3c5324c911d0fcd1431127fa35
   ReactTestApp-Resources: bb546b3a5dca4b7931bee423d4ef28cd94b346cf
-  RNXAuth: d37ae710b2ce38b5e0221015bd56ce710673c704
+  RNXAuth: 6f8b8f104caf289bfc7bf0ceb32c20b265d07cfc
   SocketRocket: fccef3f9c5cedea1353a9ef6ada904fde10d6608
   Yoga: a8565418bf37c05986f9d4fb84682f9228b88c0d
 
