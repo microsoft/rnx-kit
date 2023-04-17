@@ -60,7 +60,7 @@
     }
   },
   "devDependencies": {
-    "@react-native-community/cli-types": "^6.0.0",
+    "@react-native-community/cli-types": "^10.0.0",
     "@rnx-kit/scripts": "*",
     "@types/metro": "^0.76.0",
     "@types/metro-babel-transformer": "^0.76.0",
