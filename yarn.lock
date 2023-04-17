@@ -2358,7 +2358,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jest/types@npm:^27.0.0, @jest/types@npm:^27.5.1":
+"@jest/types@npm:^27.5.1":
   version: 27.5.1
   resolution: "@jest/types@npm:27.5.1"
   dependencies:
@@ -2371,7 +2371,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jest/types@npm:^29.5.0":
+"@jest/types@npm:^29.0.0, @jest/types@npm:^29.5.0":
   version: 29.5.0
   resolution: "@jest/types@npm:29.5.0"
   dependencies:
@@ -3431,7 +3431,7 @@ __metadata:
   dependencies:
     "@babel/preset-env": ^7.0.0
     "@babel/preset-typescript": ^7.0.0
-    "@jest/types": ^27.0.0
+    "@jest/types": ^29.0.0
     "@rnx-kit/eslint-config": "*"
     "@rnx-kit/scripts": "*"
     "@types/node": ^16.0.0
