@@ -1,5 +1,12 @@
 # Change Log - @rnx-kit/eslint-plugin
 
+## 0.4.2
+
+### Patch Changes
+
+- 12421fa0: no-export-all: Don't flag or autofix namespace exports (`export * as ns`)
+- 0ac2d516: no-export-all: add support in fixer for TS `export import =`
+
 ## 0.4.1
 
 ### Patch Changes
