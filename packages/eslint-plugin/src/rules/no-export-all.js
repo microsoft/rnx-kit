@@ -4,6 +4,7 @@
 /**
  * @typedef {import("@typescript-eslint/types").TSESTree.Node} Node
  * @typedef {import("eslint").Rule.RuleContext} ESLintRuleContext
+ * @typedef {import("eslint").Rule.ReportFixer} ESLintReportFixer
  * @typedef {{ exports: string[], types: string[] }} NamedExports
  *
  * @typedef {{
@@ -375,11 +376,10 @@ module.exports = {
     return {
       ExportAllDeclaration: (node) => {
         const source = node.source.value;
-        if (
-          expand === "external-only" &&
-          source &&
-          source.toString().startsWith(".")
-        ) {
+        const isInternal = source && source.toString().startsWith(".");
+        // export * as foo from "foo";
+        const isExportNamespace = !!node.exported;
+        if ((expand === "external-only" && isInternal) || isExportNamespace) {
           return;
         }
 
