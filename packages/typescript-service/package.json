@@ -21,7 +21,6 @@
     "test": "rnx-kit-scripts test"
   },
   "dependencies": {
-    "@rnx-kit/tools-language": "^1.2.6",
     "@rnx-kit/tools-node": "^1.2.7",
     "chalk": "^4.1.0"
   },

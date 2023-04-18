@@ -22,7 +22,6 @@ import * from "@rnx-kit/tools-language/properties";
 
 | Category   | Function                       | Description                                                                                                                                                 |
 | ---------- | ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| array      | `isNonEmptyArray(array)`       | Returns whether the specified object is a non-empty array.                                                                                                  |
 | properties | `hasProperty(obj, property)`   | Returns whether `property` exists in `obj`.                                                                                                                 |
 | properties | `keysOf(obj)`                  | Returns the names of the enumerable string properties of an object. Equivalent to calling `Object.keys()`, but type safe.                                   |
 | properties | `pickValues(obj, keys, names)` | Pick the value for each `key` property from `obj` and return each one in a new object. If `names` are given, use them in the new object, instead of `keys`. |

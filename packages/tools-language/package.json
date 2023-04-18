@@ -5,8 +5,6 @@
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/tools-language#readme",
   "license": "MIT",
   "files": [
-    "array.d.ts",
-    "array.js",
     "lib/*",
     "properties.d.ts",
     "properties.js"
