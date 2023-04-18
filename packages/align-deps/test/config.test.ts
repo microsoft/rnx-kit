@@ -1,4 +1,9 @@
-import { containsValidPresets, findEmptyRequirements } from "../src/config";
+import type { PackageManifest } from "@rnx-kit/tools-node/package";
+import {
+  containsValidPresets,
+  findEmptyRequirements,
+  isPackageManifest,
+} from "../src/config";
 
 jest.mock("@rnx-kit/config");
 
@@ -82,5 +87,23 @@ describe("findEmptyRequirements()", () => {
         },
       })
     ).toBeUndefined();
+  });
+});
+
+describe("isPackageManifest()", () => {
+  test("isPackageManifest() returns true when the object is a PackageManifest", () => {
+    const manifest: PackageManifest = {
+      name: "package name",
+      version: "1.0.0",
+    };
+    expect(isPackageManifest(manifest)).toBe(true);
+  });
+
+  test("isPackageManifest() returns false when the object is not a PackageManifest", () => {
+    expect(isPackageManifest(undefined)).toBe(false);
+    expect(isPackageManifest({})).toBe(false);
+    expect(isPackageManifest("hello")).toBe(false);
+    expect(isPackageManifest({ name: "name but no version" })).toBe(false);
+    expect(isPackageManifest({ version: "version but no name" })).toBe(false);
   });
 });

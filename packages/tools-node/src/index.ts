@@ -16,7 +16,6 @@ export {
   findPackage,
   findPackageDependencyDir,
   findPackageDir,
-  isPackageManifest,
   parsePackageRef,
   readPackage,
   writePackage,

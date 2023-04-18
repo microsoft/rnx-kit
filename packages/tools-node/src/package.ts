@@ -80,23 +80,6 @@ export type PackageManifest = {
 };
 
 /**
- * Determine if the given object is a `package.json` manifest.
- *
- * @param manifest Object to evaluate
- * @returns `true` if the object is a manifest
- */
-export function isPackageManifest(
-  manifest: unknown
-): manifest is PackageManifest {
-  return (
-    typeof manifest === "object" &&
-    manifest !== null &&
-    "name" in manifest &&
-    "version" in manifest
-  );
-}
-
-/**
  * Resolve a package path to a file reference by appending `package.json`, if needed.
  *
  * @param pkgPath Package path. May contain `package.json`.

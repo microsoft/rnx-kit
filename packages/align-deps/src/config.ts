@@ -1,7 +1,8 @@
 import type { KitConfig } from "@rnx-kit/config";
 import { getKitCapabilities, getKitConfig } from "@rnx-kit/config";
 import { error, warn } from "@rnx-kit/console";
-import { isPackageManifest, readPackage } from "@rnx-kit/tools-node/package";
+import type { PackageManifest } from "@rnx-kit/tools-node/package";
+import { readPackage } from "@rnx-kit/tools-node/package";
 import * as path from "path";
 import { findBadPackages } from "./findBadPackages";
 import type {
@@ -43,6 +44,23 @@ export function findEmptyRequirements(
     }
   }
   return "requirements";
+}
+
+/**
+ * Determine if the given object is a `package.json` manifest.
+ *
+ * @param manifest Object to evaluate
+ * @returns `true` if the object is a manifest
+ */
+export function isPackageManifest(
+  manifest: unknown
+): manifest is PackageManifest {
+  return (
+    typeof manifest === "object" &&
+    manifest !== null &&
+    "name" in manifest &&
+    "version" in manifest
+  );
 }
 
 /**
