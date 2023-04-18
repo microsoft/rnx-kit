@@ -44,7 +44,6 @@
     "@types/metro": "^0.76.0",
     "@types/metro-config": "^0.76.0",
     "@types/metro-transform-worker": "^0.76.0",
-    "@types/react": "^17.0.2",
     "@types/semver": "^7.0.0",
     "eslint": "^8.0.0",
     "jest": "^29.0.0",
