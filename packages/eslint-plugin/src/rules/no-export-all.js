@@ -330,6 +330,14 @@ function extractExports(context, moduleId, depth) {
             }
             break;
           }
+
+          case "TSImportEqualsDeclaration":
+            if (node.isExport) {
+              // export import foo = require('./foo');
+              // export import Bar = Foo.Bar;
+              exports.add(node.id.name);
+            }
+            break;
         }
       },
     });
