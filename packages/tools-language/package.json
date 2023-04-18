@@ -7,8 +7,6 @@
   "files": [
     "array.d.ts",
     "array.js",
-    "function.d.ts",
-    "function.js",
     "lib/*",
     "math.d.ts",
     "math.js",

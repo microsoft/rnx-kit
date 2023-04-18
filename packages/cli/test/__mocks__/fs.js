@@ -12,6 +12,7 @@ fs.__toJSON = () => vol.toJSON();
 
 fs.lstat = (...args) => Promise.resolve(vol.lstat(...args));
 fs.lstatSync = (...args) => vol.lstatSync(...args);
+fs.mkdirSync = (...args) => vol.mkdirSync(...args);
 fs.readFileSync = (...args) => vol.readFileSync(...args);
 fs.stat = (...args) => Promise.resolve(vol.stat(...args));
 fs.statSync = (...args) => vol.statSync(...args);

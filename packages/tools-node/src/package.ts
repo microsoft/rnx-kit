@@ -46,19 +46,6 @@ export function parsePackageRef(r: string): PackageRef {
 }
 
 /**
- * Get the mangled name for a package reference.
- *
- * @param ref Package reference
- * @returns Mangled name
- */
-export function getMangledPackageName(ref: PackageRef): string {
-  if (ref.scope) {
-    return ref.scope.slice(1) + "__" + ref.name;
-  }
-  return ref.name;
-}
-
-/**
  * Schema for a reference to a person in `package.json`.
  */
 export type PackagePerson =

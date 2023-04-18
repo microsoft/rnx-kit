@@ -2,7 +2,7 @@
 
 exports[`@rnx-kit/babel-preset-metro-react-native applies additional plugins 1`] = `
 "Object.defineProperty(exports, "__esModule", { value: true });
-exports.takeDirection = takeDirection;
+exports.takeDirection = takeDirection; // @ts-ignore
 require("typescript/src/remap-test/lib/lib");
 var Direction;
 (function (Direction) {
@@ -29,7 +29,7 @@ console.log(takeDirection(Direction.Up));
 
 exports[`@rnx-kit/babel-preset-metro-react-native can be further extended 1`] = `
 "Object.defineProperty(exports, "__esModule", { value: true });
-exports.takeDirection = takeDirection;
+exports.takeDirection = takeDirection; // @ts-ignore
 require("typescript/src/remap-test/lib/lib");
 var Direction;
 (function (Direction) {
@@ -55,7 +55,8 @@ console.log(takeDirection(Direction.Up));
 `;
 
 exports[`@rnx-kit/babel-preset-metro-react-native forwards options to \`metro-react-native-babel-preset\` 1`] = `
-"require("typescript/lib/remap-test/lib/lib");
+"// @ts-ignore
+require("typescript/lib/remap-test/lib/lib");
 var Direction;
 (function (Direction) {
   Direction[(Direction["Up"] = 0)] = "Up";
@@ -87,7 +88,7 @@ exports[`@rnx-kit/babel-preset-metro-react-native passes \`loose: true\` to \`@b
 
 exports[`@rnx-kit/babel-preset-metro-react-native transforms \`const enum\`s 1`] = `
 "Object.defineProperty(exports, "__esModule", { value: true });
-exports.takeDirection = takeDirection;
+exports.takeDirection = takeDirection; // @ts-ignore
 require("typescript/lib/remap-test/lib/lib");
 var Direction;
 (function (Direction) {

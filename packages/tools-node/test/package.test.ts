@@ -6,7 +6,6 @@ import {
   findPackage,
   findPackageDependencyDir,
   findPackageDir,
-  getMangledPackageName,
   isPackageManifest,
   parsePackageRef,
   readPackage,
@@ -59,18 +58,6 @@ describe("Node > Package", () => {
 
   test("parsePackageRef(@/core) throws an Error", () => {
     expect(() => parsePackageRef("@/core")).toThrowError();
-  });
-
-  test("getMangledPackageName(react-native) returns react-native", () => {
-    expect(getMangledPackageName({ name: "react-native" })).toEqual(
-      "react-native"
-    );
-  });
-
-  test("getMangledPackageName(@babel/core) returns babel__core", () => {
-    expect(getMangledPackageName({ scope: "@babel", name: "core" })).toEqual(
-      "babel__core"
-    );
   });
 
   test("isPackageManifest() returns true when the object is a PackageManifest", () => {
