@@ -20,12 +20,11 @@ import * from "@rnx-kit/tools-language/properties";
 <!-- The following table can be updated by running `yarn update-readme` -->
 <!-- @rnx-kit/api start -->
 
-| Category   | Function                                  | Description                                                                                                                                                 |
-| ---------- | ----------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| array      | `isNonEmptyArray(array)`                  | Returns whether the specified object is a non-empty array.                                                                                                  |
-| math       | `isApproximatelyEqual(f1, f2, tolerance)` | Decide if two numbers, integer or decimal, are "approximately" equal. They're equal if they are close enough to be within the given tolerance.              |
-| properties | `hasProperty(obj, property)`              | Returns whether `property` exists in `obj`.                                                                                                                 |
-| properties | `keysOf(obj)`                             | Returns the names of the enumerable string properties of an object. Equivalent to calling `Object.keys()`, but type safe.                                   |
-| properties | `pickValues(obj, keys, names)`            | Pick the value for each `key` property from `obj` and return each one in a new object. If `names` are given, use them in the new object, instead of `keys`. |
+| Category   | Function                       | Description                                                                                                                                                 |
+| ---------- | ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| array      | `isNonEmptyArray(array)`       | Returns whether the specified object is a non-empty array.                                                                                                  |
+| properties | `hasProperty(obj, property)`   | Returns whether `property` exists in `obj`.                                                                                                                 |
+| properties | `keysOf(obj)`                  | Returns the names of the enumerable string properties of an object. Equivalent to calling `Object.keys()`, but type safe.                                   |
+| properties | `pickValues(obj, keys, names)` | Pick the value for each `key` property from `obj` and return each one in a new object. If `names` are given, use them in the new object, instead of `keys`. |
 
 <!-- @rnx-kit/api end -->

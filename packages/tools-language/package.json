@@ -8,8 +8,6 @@
     "array.d.ts",
     "array.js",
     "lib/*",
-    "math.d.ts",
-    "math.js",
     "properties.d.ts",
     "properties.js"
   ],

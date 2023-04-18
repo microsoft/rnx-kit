@@ -1,6 +1,25 @@
-import { isApproximatelyEqual } from "@rnx-kit/tools-language/math";
-import path from "path";
+import * as path from "path";
 import type { PackagerAsset } from "./types";
+
+/**
+ * Decide if two numbers, integer or decimal, are "approximately" equal.
+ * They're equal if they are close enough to be within the given tolerance.
+ *
+ * This is useful for comparing decimal values, as they aren't precise enough
+ * to use equality.
+ *
+ * @param lhs First value to compare
+ * @param rhs Second value to compare
+ * @param tolerance Number indicating how far apart the first and second values can be before they are considered not equal.
+ * @returns True if the difference between the first and second value is less than the tolerance
+ */
+export function isApproximatelyEqual(
+  lhs: number,
+  rhs: number,
+  tolerance: number
+): boolean {
+  return Math.abs(lhs - rhs) < tolerance;
+}
 
 export function getAndroidAssetSuffix(
   asset: PackagerAsset,
@@ -51,7 +70,7 @@ function getAndroidResourceFolderName(
 function getBasePath(asset: PackagerAsset): string {
   let basePath = asset.httpServerLocation;
   if (basePath[0] === "/") {
-    basePath = basePath.substr(1);
+    basePath = basePath.substring(1);
   }
   return basePath;
 }
