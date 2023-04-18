@@ -39,7 +39,6 @@ import * from "@rnx-kit/tools-node/path";
 | package  | `findPackage(startDir)`                         | Find the nearest `package.json` manifest file. Search upward through all parent directories.                                   |
 | package  | `findPackageDependencyDir(ref, options)`        | Find the package dependency's directory, starting from the given directory and moving outward, through all parent directories. |
 | package  | `findPackageDir(startDir)`                      | Find the parent directory of the nearest `package.json` manifest file. Search upward through all parent directories.           |
-| package  | `isPackageManifest(manifest)`                   | Determine if the given object is a `package.json` manifest.                                                                    |
 | package  | `parsePackageRef(r)`                            | Parse a package reference string. An example reference is the `name` property found in `package.json`.                         |
 | package  | `readPackage(pkgPath)`                          | Read a `package.json` manifest from a file.                                                                                    |
 | package  | `writePackage(pkgPath, manifest, space)`        | Write a `package.json` manifest to a file.                                                                                     |
