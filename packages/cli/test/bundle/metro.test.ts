@@ -1,16 +1,11 @@
 import { metroBundle } from "../../src/bundle/metro";
 import type { CliPlatformBundleConfig } from "../../src/bundle/types";
 
-const { getDefaultConfig } = require("metro-config");
-
-const mockCreateDirectory = jest.fn();
-const toolsNodeFS = require("@rnx-kit/tools-node/fs");
-toolsNodeFS.createDirectory = mockCreateDirectory;
-
-const metroService = require("@rnx-kit/metro-service");
-const mockBundle = metroService.bundle;
+jest.mock("fs");
 
 describe("CLI > Bundle > Metro > metroBundle", () => {
+  const { getDefaultConfig } = require("metro-config");
+
   afterEach(() => {
     jest.resetAllMocks();
   });
@@ -56,14 +51,23 @@ describe("CLI > Bundle > Metro > metroBundle", () => {
 
   it("creates directories for the bundle, the source map, and assets", async () => {
     await metroBundle(await getDefaultConfig(), bundleConfig, dev, minify);
-    expect(mockCreateDirectory).toHaveBeenCalledTimes(3);
-    expect(mockCreateDirectory).toHaveBeenNthCalledWith(1, "src");
-    expect(mockCreateDirectory).toHaveBeenNthCalledWith(2, "map");
-    expect(mockCreateDirectory).toHaveBeenNthCalledWith(3, "dist");
+
+    const fs = require("fs");
+    expect(Object.keys(fs.__toJSON())).toEqual(
+      expect.arrayContaining([
+        expect.stringContaining("/packages/cli/dist"),
+        expect.stringContaining("/packages/cli/map"),
+        expect.stringContaining("/packages/cli/src"),
+      ])
+    );
   });
 
   it("invokes the Metro bundler using all input parameters", async () => {
+    const metroService = require("@rnx-kit/metro-service");
+    const mockBundle = metroService.bundle;
+
     await metroBundle(await getDefaultConfig(), bundleConfig, dev, minify);
+
     expect(mockBundle).toHaveBeenCalledTimes(1);
     expect(mockBundle.mock.calls[0][0]).toEqual({
       ...bundleConfig,

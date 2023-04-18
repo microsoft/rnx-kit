@@ -46,19 +46,6 @@ export function parsePackageRef(r: string): PackageRef {
 }
 
 /**
- * Get the mangled name for a package reference.
- *
- * @param ref Package reference
- * @returns Mangled name
- */
-export function getMangledPackageName(ref: PackageRef): string {
-  if (ref.scope) {
-    return ref.scope.slice(1) + "__" + ref.name;
-  }
-  return ref.name;
-}
-
-/**
  * Schema for a reference to a person in `package.json`.
  */
 export type PackagePerson =
@@ -91,23 +78,6 @@ export type PackageManifest = {
     | Record<string, unknown>
     | undefined;
 };
-
-/**
- * Determine if the given object is a `package.json` manifest.
- *
- * @param manifest Object to evaluate
- * @returns `true` if the object is a manifest
- */
-export function isPackageManifest(
-  manifest: unknown
-): manifest is PackageManifest {
-  return (
-    typeof manifest === "object" &&
-    manifest !== null &&
-    "name" in manifest &&
-    "version" in manifest
-  );
-}
 
 /**
  * Resolve a package path to a file reference by appending `package.json`, if needed.

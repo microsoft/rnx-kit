@@ -6,8 +6,6 @@ import {
   findPackage,
   findPackageDependencyDir,
   findPackageDir,
-  getMangledPackageName,
-  isPackageManifest,
   parsePackageRef,
   readPackage,
   writePackage,
@@ -59,34 +57,6 @@ describe("Node > Package", () => {
 
   test("parsePackageRef(@/core) throws an Error", () => {
     expect(() => parsePackageRef("@/core")).toThrowError();
-  });
-
-  test("getMangledPackageName(react-native) returns react-native", () => {
-    expect(getMangledPackageName({ name: "react-native" })).toEqual(
-      "react-native"
-    );
-  });
-
-  test("getMangledPackageName(@babel/core) returns babel__core", () => {
-    expect(getMangledPackageName({ scope: "@babel", name: "core" })).toEqual(
-      "babel__core"
-    );
-  });
-
-  test("isPackageManifest() returns true when the object is a PackageManifest", () => {
-    const manifest: PackageManifest = {
-      name: "package name",
-      version: "1.0.0",
-    };
-    expect(isPackageManifest(manifest)).toBe(true);
-  });
-
-  test("isPackageManifest() returns false when the object is not a PackageManifest", () => {
-    expect(isPackageManifest(undefined)).toBe(false);
-    expect(isPackageManifest({})).toBe(false);
-    expect(isPackageManifest("hello")).toBe(false);
-    expect(isPackageManifest({ name: "name but no version" })).toBe(false);
-    expect(isPackageManifest({ version: "version but no name" })).toBe(false);
   });
 
   test("readPackage() loads package.json when given its containing directory", () => {

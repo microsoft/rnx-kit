@@ -1,4 +1,3 @@
-import { isNonEmptyArray } from "@rnx-kit/tools-language/array";
 import chalk from "chalk";
 import ts from "typescript";
 import { ExternalFileCache, ProjectFileCache } from "./cache";
@@ -127,7 +126,7 @@ export class Project {
     const diagnostics = this.getFileDiagnostics(fileName).filter(
       (d) => d.category !== ts.DiagnosticCategory.Suggestion
     );
-    if (isNonEmptyArray(diagnostics)) {
+    if (Array.isArray(diagnostics) && diagnostics.length > 0) {
       diagnostics.forEach((d) => this.diagnosticWriter.print(d));
       return false;
     }

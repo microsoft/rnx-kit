@@ -1,6 +1,5 @@
 import type { Config as CLIConfig } from "@react-native-community/cli-types";
 import { error, info, warn } from "@rnx-kit/console";
-import { isNonEmptyArray } from "@rnx-kit/tools-language/array";
 import { keysOf } from "@rnx-kit/tools-language/properties";
 import type { PackageManifest } from "@rnx-kit/tools-node/package";
 import {
@@ -331,7 +330,7 @@ export async function assembleAarBundle(
 }
 
 async function copyFiles(files: unknown, destination: string): Promise<void> {
-  if (!isNonEmptyArray<string>(files)) {
+  if (!Array.isArray(files) || files.length === 0) {
     return;
   }
 
@@ -348,7 +347,7 @@ async function copyXcodeAssets(
   xcassets: unknown,
   destination: string
 ): Promise<void> {
-  if (!isNonEmptyArray<string>(xcassets)) {
+  if (!Array.isArray(xcassets) || xcassets.length === 0) {
     return;
   }
 

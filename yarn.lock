@@ -3940,7 +3940,6 @@ __metadata:
   resolution: "@rnx-kit/typescript-service@workspace:packages/typescript-service"
   dependencies:
     "@rnx-kit/scripts": "*"
-    "@rnx-kit/tools-language": ^1.2.6
     "@rnx-kit/tools-node": ^1.2.7
     "@types/node": ^16.0.0
     chalk: ^4.1.0

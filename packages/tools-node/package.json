@@ -6,14 +6,12 @@
   "license": "MIT",
   "files": [
     "lib/*",
-    "fs.js",
-    "fs.d.ts",
-    "module.js",
     "module.d.ts",
-    "package.js",
+    "module.js",
     "package.d.ts",
-    "path.js",
-    "path.d.ts"
+    "package.js",
+    "path.d.ts",
+    "path.js"
   ],
   "main": "lib/index.js",
   "types": "lib/index.d.ts",

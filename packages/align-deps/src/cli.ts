@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
 import { error } from "@rnx-kit/console";
-import { isNonEmptyArray } from "@rnx-kit/tools-language/array";
 import { hasProperty } from "@rnx-kit/tools-language/properties";
 import { findPackageDir } from "@rnx-kit/tools-node/package";
 import {
@@ -80,7 +79,7 @@ async function getManifests(
   // When positional arguments are not provided, we will get `undefined` if
   // invoked directly, and an empty array if invoked via
   // `@react-native-community/cli`.
-  if (isNonEmptyArray(packages)) {
+  if (Array.isArray(packages) && packages.length > 0) {
     const manifests = packages.reduce<string[]>((result, input) => {
       const pkg = input.toString();
       if (!fs.existsSync(pkg)) {
