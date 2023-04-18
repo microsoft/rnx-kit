@@ -3554,7 +3554,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rnx-kit/metro-serializer-esbuild@*, @rnx-kit/metro-serializer-esbuild@^0.1.0, @rnx-kit/metro-serializer-esbuild@^0.1.18, @rnx-kit/metro-serializer-esbuild@workspace:packages/metro-serializer-esbuild":
+"@rnx-kit/metro-serializer-esbuild@*, @rnx-kit/metro-serializer-esbuild@^0.1.18, @rnx-kit/metro-serializer-esbuild@workspace:packages/metro-serializer-esbuild":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/metro-serializer-esbuild@workspace:packages/metro-serializer-esbuild"
   dependencies:
@@ -3645,25 +3645,6 @@ __metadata:
   peerDependenciesMeta:
     "@react-native-community/cli-plugin-metro":
       optional: true
-  languageName: unknown
-  linkType: soft
-
-"@rnx-kit/metro-swc-worker@workspace:incubator/metro-swc-worker":
-  version: 0.0.0-use.local
-  resolution: "@rnx-kit/metro-swc-worker@workspace:incubator/metro-swc-worker"
-  dependencies:
-    "@rnx-kit/eslint-config": "*"
-    "@rnx-kit/metro-serializer-esbuild": ^0.1.0
-    "@rnx-kit/scripts": "*"
-    "@swc/core": ^1.3.0
-    "@types/metro": ^0.76.0
-    "@types/metro-transform-worker": ^0.76.0
-    eslint: ^8.0.0
-    flow-remove-types: ^2.197.0
-    prettier: ^2.8.0
-    typescript: ^5.0.0
-  peerDependencies:
-    metro-transform-worker: ">=0.66.1"
   languageName: unknown
   linkType: soft
 
@@ -4005,120 +3986,6 @@ __metadata:
   dependencies:
     "@sinonjs/commons": ^2.0.0
   checksum: c62aa98e7cefda8dedc101ce227abc888dc46b8ff9706c5f0a8dfd9c3ada97d0a5611384738d9ba0b26b59f99c2ba24efece8e779bb08329e9e87358fa309824
-  languageName: node
-  linkType: hard
-
-"@swc/core-darwin-arm64@npm:1.3.50":
-  version: 1.3.50
-  resolution: "@swc/core-darwin-arm64@npm:1.3.50"
-  conditions: os=darwin & cpu=arm64
-  languageName: node
-  linkType: hard
-
-"@swc/core-darwin-x64@npm:1.3.50":
-  version: 1.3.50
-  resolution: "@swc/core-darwin-x64@npm:1.3.50"
-  conditions: os=darwin & cpu=x64
-  languageName: node
-  linkType: hard
-
-"@swc/core-linux-arm-gnueabihf@npm:1.3.50":
-  version: 1.3.50
-  resolution: "@swc/core-linux-arm-gnueabihf@npm:1.3.50"
-  conditions: os=linux & cpu=arm
-  languageName: node
-  linkType: hard
-
-"@swc/core-linux-arm64-gnu@npm:1.3.50":
-  version: 1.3.50
-  resolution: "@swc/core-linux-arm64-gnu@npm:1.3.50"
-  conditions: os=linux & cpu=arm64 & libc=glibc
-  languageName: node
-  linkType: hard
-
-"@swc/core-linux-arm64-musl@npm:1.3.50":
-  version: 1.3.50
-  resolution: "@swc/core-linux-arm64-musl@npm:1.3.50"
-  conditions: os=linux & cpu=arm64 & libc=musl
-  languageName: node
-  linkType: hard
-
-"@swc/core-linux-x64-gnu@npm:1.3.50":
-  version: 1.3.50
-  resolution: "@swc/core-linux-x64-gnu@npm:1.3.50"
-  conditions: os=linux & cpu=x64 & libc=glibc
-  languageName: node
-  linkType: hard
-
-"@swc/core-linux-x64-musl@npm:1.3.50":
-  version: 1.3.50
-  resolution: "@swc/core-linux-x64-musl@npm:1.3.50"
-  conditions: os=linux & cpu=x64 & libc=musl
-  languageName: node
-  linkType: hard
-
-"@swc/core-win32-arm64-msvc@npm:1.3.50":
-  version: 1.3.50
-  resolution: "@swc/core-win32-arm64-msvc@npm:1.3.50"
-  conditions: os=win32 & cpu=arm64
-  languageName: node
-  linkType: hard
-
-"@swc/core-win32-ia32-msvc@npm:1.3.50":
-  version: 1.3.50
-  resolution: "@swc/core-win32-ia32-msvc@npm:1.3.50"
-  conditions: os=win32 & cpu=ia32
-  languageName: node
-  linkType: hard
-
-"@swc/core-win32-x64-msvc@npm:1.3.50":
-  version: 1.3.50
-  resolution: "@swc/core-win32-x64-msvc@npm:1.3.50"
-  conditions: os=win32 & cpu=x64
-  languageName: node
-  linkType: hard
-
-"@swc/core@npm:^1.3.0":
-  version: 1.3.50
-  resolution: "@swc/core@npm:1.3.50"
-  dependencies:
-    "@swc/core-darwin-arm64": 1.3.50
-    "@swc/core-darwin-x64": 1.3.50
-    "@swc/core-linux-arm-gnueabihf": 1.3.50
-    "@swc/core-linux-arm64-gnu": 1.3.50
-    "@swc/core-linux-arm64-musl": 1.3.50
-    "@swc/core-linux-x64-gnu": 1.3.50
-    "@swc/core-linux-x64-musl": 1.3.50
-    "@swc/core-win32-arm64-msvc": 1.3.50
-    "@swc/core-win32-ia32-msvc": 1.3.50
-    "@swc/core-win32-x64-msvc": 1.3.50
-  peerDependencies:
-    "@swc/helpers": ^0.5.0
-  dependenciesMeta:
-    "@swc/core-darwin-arm64":
-      optional: true
-    "@swc/core-darwin-x64":
-      optional: true
-    "@swc/core-linux-arm-gnueabihf":
-      optional: true
-    "@swc/core-linux-arm64-gnu":
-      optional: true
-    "@swc/core-linux-arm64-musl":
-      optional: true
-    "@swc/core-linux-x64-gnu":
-      optional: true
-    "@swc/core-linux-x64-musl":
-      optional: true
-    "@swc/core-win32-arm64-msvc":
-      optional: true
-    "@swc/core-win32-ia32-msvc":
-      optional: true
-    "@swc/core-win32-x64-msvc":
-      optional: true
-  peerDependenciesMeta:
-    "@swc/helpers":
-      optional: true
-  checksum: 63364c0bf6f395a57b576c4f7c5f79542a7c018c7bcc121e1bccdb157ca3ead97ee30920cf5ec6e93b0bd58e0145cb388721d7862ede867927137a437b4ef21a
   languageName: node
   linkType: hard
 
@@ -7373,31 +7240,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"flow-parser@npm:0.*, flow-parser@npm:^0.203.1":
-  version: 0.203.1
-  resolution: "flow-parser@npm:0.203.1"
-  checksum: ed9beb3d83e352ed646bd9c06fa2a96a0b71cfd6f83d7ccf75a7c16dbe844128bcefefa6c8d0f09ef1337d0e0a9a9c8dadfd25bb149ed657ce91ec63a0a5113b
-  languageName: node
-  linkType: hard
-
-"flow-parser@npm:^0.185.0":
+"flow-parser@npm:0.*, flow-parser@npm:^0.185.0":
   version: 0.185.2
   resolution: "flow-parser@npm:0.185.2"
   checksum: 6c8cee6ef2a2f0e5a5dd29698dfc493c8148263ce52b061804c812877ef68b1d0747d8f17256f2ed36e105550eab27a37377be32f1fed4b72c434dda6e0c053c
-  languageName: node
-  linkType: hard
-
-"flow-remove-types@npm:^2.197.0":
-  version: 2.203.1
-  resolution: "flow-remove-types@npm:2.203.1"
-  dependencies:
-    flow-parser: ^0.203.1
-    pirates: ^3.0.2
-    vlq: ^0.2.1
-  bin:
-    flow-node: flow-node
-    flow-remove-types: flow-remove-types
-  checksum: 63f5cb13a1110a7949ad5ec770a2b0f3cd9d2b2fab4987d430ef4476773ff0d3e1f80dc0b7e6280c66812ae15fc33cefb9688e9ade046a90111c86b85ef29994
   languageName: node
   linkType: hard
 
@@ -10442,13 +10288,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-modules-regexp@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "node-modules-regexp@npm:1.0.0"
-  checksum: 99541903536c5ce552786f0fca7f06b88df595e62e423c21fa86a1674ee2363dad1f7482d1bec20b4bd9fa5f262f88e6e5cb788fc56411113f2fe2e97783a3a7
-  languageName: node
-  linkType: hard
-
 "node-releases@npm:^2.0.6":
   version: 2.0.8
   resolution: "node-releases@npm:2.0.8"
@@ -11139,15 +10978,6 @@ __metadata:
   version: 4.0.1
   resolution: "pify@npm:4.0.1"
   checksum: 9c4e34278cb09987685fa5ef81499c82546c033713518f6441778fbec623fc708777fe8ac633097c72d88470d5963094076c7305cafc7ad340aae27cfacd856b
-  languageName: node
-  linkType: hard
-
-"pirates@npm:^3.0.2":
-  version: 3.0.2
-  resolution: "pirates@npm:3.0.2"
-  dependencies:
-    node-modules-regexp: ^1.0.0
-  checksum: 73bc9d8a1859c0854740541d1afd0c87b62d3d63fdaec38c3ac7f57d9d70b9f6f325f5ffcac11b8935c8d9249ead41c9c59632ed098b225a96219274ca6248c8
   languageName: node
   linkType: hard
 
@@ -13462,13 +13292,6 @@ __metadata:
   version: 1.1.2
   resolution: "vary@npm:1.1.2"
   checksum: ae0123222c6df65b437669d63dfa8c36cee20a504101b2fcd97b8bf76f91259c17f9f2b4d70a1e3c6bbcee7f51b28392833adb6b2770b23b01abec84e369660b
-  languageName: node
-  linkType: hard
-
-"vlq@npm:^0.2.1":
-  version: 0.2.3
-  resolution: "vlq@npm:0.2.3"
-  checksum: 2231d8caeb5b2c1a438677ab029e9a94aa6fb61ab05819c72691b792aea0456dab29576aff5ae29309ee45bad0a309e832dc45173119bca1393f3b87709d8f8d
   languageName: node
   linkType: hard
 
