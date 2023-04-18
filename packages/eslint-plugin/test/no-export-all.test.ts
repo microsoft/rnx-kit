@@ -94,6 +94,7 @@ describe("disallows `export *`", () => {
       "export default 'Arnold';",
       "const name = 'Arnold'; export { name as default };",
       "export { escape } from 'chopper';",
+      "export * as chopper from 'chopper';",
       {
         code: "export * from './internal';",
         options: [{ expand: "external-only" }],
