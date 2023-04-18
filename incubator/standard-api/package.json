@@ -1,0 +1,40 @@
+{
+  "private": true,
+  "name": "@rnx-kit/standard-api",
+  "version": "0.0.1",
+  "description": "EXPERIMENTAL - USE WITH CAUTION - New package called standard-api",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/incubator/standard-api#readme",
+  "license": "MIT",
+  "author": {
+    "name": "Microsoft Open Source",
+    "email": "microsoftopensource@users.noreply.github.com"
+  },
+  "files": [
+    "lib.d.ts"
+  ],
+  "main": "lib.js",
+  "types": "lib.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "incubator/standard-api"
+  },
+  "engines": {
+    "node": ">=14.15"
+  },
+  "scripts": {
+    "format": "rnx-kit-scripts format",
+    "generate": "node generate.mjs"
+  },
+  "devDependencies": {
+    "@rnx-kit/scripts": "*",
+    "eslint": "^8.0.0",
+    "got": "^12.1.0",
+    "prettier": "^2.8.0",
+    "typescript": "^5.0.0"
+  },
+  "eslintConfig": {
+    "extends": "@rnx-kit/eslint-config"
+  },
+  "experimental": true
+}

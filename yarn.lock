@@ -3784,6 +3784,18 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@rnx-kit/standard-api@workspace:incubator/standard-api":
+  version: 0.0.0-use.local
+  resolution: "@rnx-kit/standard-api@workspace:incubator/standard-api"
+  dependencies:
+    "@rnx-kit/scripts": "*"
+    eslint: ^8.0.0
+    got: ^12.1.0
+    prettier: ^2.8.0
+    typescript: ^5.0.0
+  languageName: unknown
+  linkType: soft
+
 "@rnx-kit/template@workspace:packages/template":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/template@workspace:packages/template"
