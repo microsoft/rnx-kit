@@ -43,6 +43,19 @@ export interface IChopper {
 
 export declare function escape(): void;
 `,
+  "ts-import-equals": `
+import * as chopper from 'chopper';
+export import notChopper = chopper;
+export import IChopper = chopper.IChopper;
+export import name = chopper.name;
+export import chopper = require('chopper');
+
+namespace Foo {
+  export const foo = 'foo';
+}
+export import foo = Foo.foo;
+export const bar = 'bar';
+`,
   "@fluentui/font-icons-mdl2": `
 export const enum IconNames {
   PageLink = 'PageLink',
@@ -117,6 +130,12 @@ describe("disallows `export *`", () => {
           "export type { IChopper, Predator } from 'types';",
           "export { Helicopter, escape } from 'types';"
         ),
+      },
+      {
+        code: "export * from 'ts-import-equals';",
+        errors: 1,
+        output:
+          "export { IChopper, bar, chopper, foo, name, notChopper } from 'ts-import-equals';",
       },
       {
         code: lines("export * from './internal';", "export * from 'types';"),
