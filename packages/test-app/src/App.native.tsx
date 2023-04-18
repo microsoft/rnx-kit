@@ -1,5 +1,6 @@
 import { acquireTokenWithScopes } from "@rnx-kit/react-native-auth";
 import React, { useCallback, useMemo, useState } from "react";
+import type { LayoutChangeEvent } from "react-native";
 import {
   NativeModules,
   Pressable,
@@ -9,8 +10,8 @@ import {
   StyleSheet,
   Switch,
   Text,
-  useColorScheme,
   View,
+  useColorScheme,
 } from "react-native";
 // @ts-expect-error no types for "react-native/Libraries/Core/ReactNativeVersion"
 import { version as coreVersion } from "react-native/Libraries/Core/ReactNativeVersion";
@@ -146,7 +147,7 @@ function DevMenu() {
 
   const isRemoteDebuggingAvailable = getRemoteDebuggingAvailability();
   const toggleRemoteDebugging = useCallback(
-    (value) => {
+    (value: boolean) => {
       if (isRemoteDebuggingAvailable) {
         NativeModules["DevSettings"].setIsDebuggingRemotely(value);
       }
@@ -191,9 +192,10 @@ function App({ concurrentRoot }: { concurrentRoot?: boolean }) {
 
   const [isFabric, setFabric] = useState(false);
   const onLayout = useCallback(
-    (ev) => {
+    (ev: LayoutChangeEvent) => {
       setFabric(
         Boolean(
+          // @ts-expect-error Internal handle to determine whether Fabric is enabled
           ev.currentTarget["_internalInstanceHandle"]?.stateNode?.canonical
         )
       );

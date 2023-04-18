@@ -47,7 +47,7 @@
     "@rnx-kit/react-native-test-app-msal": "*",
     "@rnx-kit/scripts": "*",
     "@rnx-kit/third-party-notices": "*",
-    "@types/react": "^17.0.2",
+    "@types/react": "^18.0.0",
     "eslint": "^8.0.0",
     "jest-cli": "^29.2.1",
     "metro-react-native-babel-preset": "^0.73.7",

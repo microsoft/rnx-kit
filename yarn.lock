@@ -3572,7 +3572,6 @@ __metadata:
     "@types/metro": ^0.76.0
     "@types/metro-config": ^0.76.0
     "@types/metro-transform-worker": ^0.76.0
-    "@types/react": ^17.0.2
     "@types/semver": ^7.0.0
     esbuild: ^0.17.0
     esbuild-plugin-lodash: ^1.2.0
@@ -3817,7 +3816,7 @@ __metadata:
     "@rnx-kit/react-native-test-app-msal": "*"
     "@rnx-kit/scripts": "*"
     "@rnx-kit/third-party-notices": "*"
-    "@types/react": ^17.0.2
+    "@types/react": ^18.0.0
     eslint: ^8.0.0
     jest-cli: ^29.2.1
     metro-react-native-babel-preset: ^0.73.7
@@ -4344,14 +4343,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:^17.0.2":
-  version: 17.0.58
-  resolution: "@types/react@npm:17.0.58"
+"@types/react@npm:^18.0.0":
+  version: 18.0.37
+  resolution: "@types/react@npm:18.0.37"
   dependencies:
     "@types/prop-types": "*"
     "@types/scheduler": "*"
     csstype: ^3.0.2
-  checksum: 4eaf32b86c43f388c681e34a00921c508dd88a1d1022aebfadc5fe802b7c5bed863de1a17eed31e43ca2d65222952dfe79a022055a0e6e4e1ad89fc5a42ec05e
+  checksum: 6a6c8feada1d6aa2d01a38c44ce09598d93688e97ed21511d5e34fd7fe748b760dd957a5ac0725f5643d8d7e1a0ade6478ebd4be96c9605c5d6816b17ad35d2d
   languageName: node
   linkType: hard
 
