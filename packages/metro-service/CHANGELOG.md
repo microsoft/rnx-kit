@@ -1,5 +1,13 @@
 # Change Log - @rnx-kit/metro-service
 
+## 3.0.4
+
+### Patch Changes
+
+- f1dfcf6b: Inline helper function for comparing floats
+- Updated dependencies [f1dfcf6b]
+  - @rnx-kit/tools-language@2.0.0
+
 ## 3.0.3
 
 ### Patch Changes

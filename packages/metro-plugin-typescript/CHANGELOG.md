@@ -1,5 +1,16 @@
 # @rnx-kit/metro-plugin-typescript
 
+## 0.4.1
+
+### Patch Changes
+
+- Updated dependencies [f1dfcf6b]
+- Updated dependencies [f1dfcf6b]
+  - @rnx-kit/typescript-service@1.5.6
+  - @rnx-kit/tools-node@2.0.0
+  - @rnx-kit/config@0.6.2
+  - @rnx-kit/tools-react-native@1.3.1
+
 ## 0.4.0
 
 ### Minor Changes

@@ -1,5 +1,12 @@
 # Change Log - @rnx-kit/tools-react-native
 
+## 1.3.1
+
+### Patch Changes
+
+- Updated dependencies [f1dfcf6b]
+  - @rnx-kit/tools-node@2.0.0
+
 ## 1.3.0
 
 ### Minor Changes

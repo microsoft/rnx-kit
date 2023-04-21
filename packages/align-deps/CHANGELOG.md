@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/align-deps
 
+## 2.2.2
+
+### Patch Changes
+
+- f1dfcf6b: Inline helper functions
+
 ## 2.2.1
 
 ### Patch Changes

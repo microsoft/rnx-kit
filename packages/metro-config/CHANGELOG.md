@@ -1,5 +1,13 @@
 # Change Log - @rnx-kit/metro-config
 
+## 1.3.6
+
+### Patch Changes
+
+- 8bc75b51: Get default config from `@react-native/metro-config` if available
+- Updated dependencies [f1dfcf6b]
+  - @rnx-kit/tools-node@2.0.0
+
 ## 1.3.5
 
 ### Patch Changes

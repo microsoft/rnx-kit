@@ -1,5 +1,12 @@
 # Change Log - @rnx-kit/metro-plugin-duplicates-checker
 
+## 2.1.1
+
+### Patch Changes
+
+- Updated dependencies [f1dfcf6b]
+  - @rnx-kit/tools-node@2.0.0
+
 ## 2.1.0
 
 ### Minor Changes

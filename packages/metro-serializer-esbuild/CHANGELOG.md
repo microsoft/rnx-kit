@@ -1,5 +1,13 @@
 # Change Log - @rnx-kit/metro-serializer-esbuild
 
+## 0.1.22
+
+### Patch Changes
+
+- Updated dependencies [f1dfcf6b]
+  - @rnx-kit/tools-node@2.0.0
+  - @rnx-kit/tools-react-native@1.3.1
+
 ## 0.1.21
 
 ### Patch Changes
