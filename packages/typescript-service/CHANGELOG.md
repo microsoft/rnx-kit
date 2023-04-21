@@ -1,5 +1,13 @@
 # Change Log - @rnx-kit/typescript-service
 
+## 1.5.6
+
+### Patch Changes
+
+- f1dfcf6b: Expand function for checking arrays
+- Updated dependencies [f1dfcf6b]
+  - @rnx-kit/tools-node@2.0.0
+
 ## 1.5.5
 
 ### Patch Changes

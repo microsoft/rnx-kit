@@ -1,5 +1,12 @@
 # Change Log - @rnx-kit/config
 
+## 0.6.2
+
+### Patch Changes
+
+- Updated dependencies [f1dfcf6b]
+  - @rnx-kit/tools-node@2.0.0
+
 ## 0.6.1
 
 ### Patch Changes

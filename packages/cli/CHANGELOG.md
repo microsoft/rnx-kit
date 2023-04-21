@@ -1,5 +1,25 @@
 # Change Log - @rnx-kit/cli
 
+## 0.16.8
+
+### Patch Changes
+
+- f1dfcf6b: Inline helper functions
+- Updated dependencies [f1dfcf6b]
+- Updated dependencies [f1dfcf6b]
+- Updated dependencies [f1dfcf6b]
+  - @rnx-kit/metro-service@3.0.4
+  - @rnx-kit/tools-language@2.0.0
+  - @rnx-kit/tools-node@2.0.0
+  - @rnx-kit/align-deps@2.2.2
+  - @rnx-kit/config@0.6.2
+  - @rnx-kit/metro-plugin-cyclic-dependencies-detector@1.1.1
+  - @rnx-kit/metro-plugin-duplicates-checker@2.1.1
+  - @rnx-kit/metro-plugin-typescript@0.4.1
+  - @rnx-kit/metro-serializer-esbuild@0.1.22
+  - @rnx-kit/third-party-notices@1.3.3
+  - @rnx-kit/tools-react-native@1.3.1
+
 ## 0.16.7
 
 ### Patch Changes

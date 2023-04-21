@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/tools-language
 
+## 2.0.0
+
+### Major Changes
+
+- f1dfcf6b: Removed unused helper functions
+
 ## 1.4.2
 
 ### Patch Changes

@@ -1,5 +1,12 @@
 # Change Log - @rnx-kit/third-party-notices
 
+## 1.3.3
+
+### Patch Changes
+
+- Updated dependencies [f1dfcf6b]
+  - @rnx-kit/tools-node@2.0.0
+
 ## 1.3.2
 
 ### Patch Changes

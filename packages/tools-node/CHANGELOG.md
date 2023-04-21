@@ -1,5 +1,16 @@
 # Change Log - @rnx-kit/tools-node
 
+## 2.0.0
+
+### Major Changes
+
+- f1dfcf6b: Removed unused helper functions
+
+### Patch Changes
+
+- Updated dependencies [f1dfcf6b]
+  - @rnx-kit/tools-language@2.0.0
+
 ## 1.3.1
 
 ### Patch Changes

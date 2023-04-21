@@ -1,5 +1,13 @@
 # Change Log - @rnx-kit/metro-resolver-symlinks
 
+## 0.1.28
+
+### Patch Changes
+
+- Updated dependencies [f1dfcf6b]
+  - @rnx-kit/tools-node@2.0.0
+  - @rnx-kit/tools-react-native@1.3.1
+
 ## 0.1.27
 
 ### Patch Changes

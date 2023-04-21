@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/typescript-service",
-  "version": "1.5.5",
+  "version": "1.5.6",
   "description": "TypeScript language services with support for custom module resolution",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/typescript-service#readme",
   "license": "MIT",
@@ -21,7 +21,7 @@
     "test": "rnx-kit-scripts test"
   },
   "dependencies": {
-    "@rnx-kit/tools-node": "^1.2.7",
+    "@rnx-kit/tools-node": "^2.0.0",
     "chalk": "^4.1.0"
   },
   "peerDependencies": {
