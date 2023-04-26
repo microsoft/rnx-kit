@@ -1,0 +1,5 @@
+package com.microsoft.reactnativehost.compat
+
+import com.facebook.react.ReactInstanceManager
+
+typealias ReactInstanceEventListener = ReactInstanceManager.ReactInstanceEventListener
