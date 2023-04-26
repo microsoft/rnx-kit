@@ -10,12 +10,12 @@ You can import the entire package, or, to save space, import individual
 categories:
 
 ```typescript
-import * from "@rnx-kit/tools-node";
+import * as tools from "@rnx-kit/tools-node";
 
-import * from "@rnx-kit/tools-node/fs";
-import * from "@rnx-kit/tools-node/module";
-import * from "@rnx-kit/tools-node/package";
-import * from "@rnx-kit/tools-node/path";
+// Alternatively...
+import * as moduleTools from "@rnx-kit/tools-node/module";
+import * as packageTools from "@rnx-kit/tools-node/package";
+import * as pathTools from "@rnx-kit/tools-node/path";
 ```
 
 <!-- The following table can be updated by running `yarn update-readme` -->

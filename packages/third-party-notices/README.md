@@ -24,7 +24,11 @@ basedon webpack at the moment.
 
 ### Commandline
 
-`npx @rnx-kit/third-party-notices --rootPath <myPackage> --sourceMapFile <myPackage/dist/myPackage.js.map>`
+```
+npx @rnx-kit/third-party-notices \
+    --rootPath <myPackage> \
+    --sourceMapFile <myPackage/dist/myPackage.js.map>
+```
 
 ```
 Options:
