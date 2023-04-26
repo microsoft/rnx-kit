@@ -19,12 +19,17 @@ libraries for package configuration and Metro plugins.
 
 ### Example Commands
 
-```bash
+```sh
 yarn react-native rnx-bundle
 ```
 
-```bash
-yarn react-native rnx-bundle --entry-file src/index.ts --bundle-output main.jsbundle --platform ios --dev false --minify true
+```sh
+yarn react-native rnx-bundle       \
+    --entry-file src/index.ts      \
+    --bundle-output main.jsbundle  \
+    --platform ios                 \
+    --dev false                    \
+    --minify true
 ```
 
 ### Example Configuration (Optional)
@@ -112,11 +117,11 @@ libraries for package configuration and Metro plugins.
 
 ### Example Commands
 
-```bash
+```sh
 yarn react-native rnx-start
 ```
 
-```bash
+```sh
 yarn react-native rnx-start --host localhost --port 8812
 ```
 
@@ -186,7 +191,7 @@ Generate a 3rd-party notice, which is an aggregation of all the LICENSE files
 from your package's dependencies.
 
 > NOTE: A 3rd-party notice is a **legal document**. You are solely responsble
-> for its content, even if you use `@rnx-kit` to assist you in generating it.
+> for its content, even if you use this command to assist you in generating it.
 > You should consult with an attorney to ensure your notice meets all legal
 > requirements.
 
@@ -206,6 +211,10 @@ $ yarn react-native rnx-write-third-party-notices [options]
 | --additional-text [path]  | A string to append to the end of the 3rd-party notice.                                                                                         |
 
 ## Clean a React Native Project
+
+> Deprecated: This command was upstreamed to `@react-native-community/cli`. As
+> of [v8.0](https://github.com/react-native-community/cli/releases/tag/v8.0.0),
+> you can use `react-native clean` instead.
 
 Cleans your project by removing React Native related caches and modules.
 

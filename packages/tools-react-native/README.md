@@ -10,9 +10,11 @@ You can import the entire package, or, to save space, import individual
 categories:
 
 ```typescript
-import * from "@rnx-kit/tools-react-native";
+import * as tools from "@rnx-kit/tools-react-native";
 
-import * from "@rnx-kit/tools-react-native/platform";
+// Alternatively...
+import * as metroTools from "@rnx-kit/tools-react-native/metro";
+import * as platformTools from "@rnx-kit/tools-react-native/platform";
 ```
 
 <!-- The following table can be updated by running `yarn update-readme` -->

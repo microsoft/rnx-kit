@@ -27,7 +27,7 @@ module.exports = makeMetroConfig({
     getTransformOptions: async () => ({
       transform: {
         experimentalImportSupport: false,
-        inlineRequires: true,
+        inlineRequires: false,
       },
     }),
   },
@@ -43,20 +43,20 @@ yarn react-native start
 To build the JS bundle:
 
 ```sh
-yarn react-native bundle  \
-  --entry-file <path>     \
-  --platform <platform>   \
-  --dev <false | true>    \
-  --bundle-output <path>  \
-  --assets-dest <path>
+yarn react-native bundle    \
+    --entry-file <path>     \
+    --platform <platform>   \
+    --dev <false | true>    \
+    --bundle-output <path>  \
+    --assets-dest <path>
 
 # e.g. to build a prod bundle
-yarn react-native bundle             \
-  --entry-file lib/index.ios.js      \
-  --platform ios                     \
-  --dev false                        \
-  --bundle-output lib/main.jsbundle  \
-  --assets-dest lib/
+yarn react-native bundle               \
+    --entry-file lib/index.ios.js      \
+    --platform ios                     \
+    --dev false                        \
+    --bundle-output lib/main.jsbundle  \
+    --assets-dest lib/
 ```
 
 For more information on available commands and options, please see

@@ -10,11 +10,7 @@ You can import the entire package, or, to save space, import individual
 categories:
 
 ```typescript
-import * from "@rnx-kit/tools-language";
-
-import * from "@rnx-kit/tools-language/function";
-import * from "@rnx-kit/tools-language/math";
-import * from "@rnx-kit/tools-language/properties";
+import * tools from "@rnx-kit/tools-language";
 ```
 
 <!-- The following table can be updated by running `yarn update-readme` -->
