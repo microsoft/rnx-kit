@@ -11471,8 +11471,8 @@ __metadata:
   linkType: hard
 
 "react-native@npm:^0.71.0":
-  version: 0.71.6
-  resolution: "react-native@npm:0.71.6"
+  version: 0.71.7
+  resolution: "react-native@npm:0.71.7"
   dependencies:
     "@jest/create-cache-key-function": ^29.2.1
     "@react-native-community/cli": 10.2.2
@@ -11512,7 +11512,7 @@ __metadata:
     react: 18.2.0
   bin:
     react-native: cli.js
-  checksum: aadbd9b57dd9b10a41b60337ea1a4103e2fb2320784bf148100e807bd0a77929bdb310ea68d054165cd3c00647a3d020eecb0efb864cc7a93733b2d580e1e675
+  checksum: efd91d5560290b883e0d3d3482cc4657268c2e480171b63a0c6b7dc8f6b1331298feac7d9966e1831d95d9fee893dfa831252052561232843e4982880238f09e
   languageName: node
   linkType: hard
 
