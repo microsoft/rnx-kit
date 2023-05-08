@@ -13,10 +13,8 @@ fs.__setMockFiles = (files) => {
 fs.__toJSON = () => vol.toJSON();
 
 fs.copy = (...args) => vol.promises.copyFile(...args);
-fs.ensureDir = (dir) => vol.promises.mkdir(dir, { recursive: true });
+fs.ensureDirSync = (dir) => vol.mkdirSync(dir, { recursive: true });
 fs.existsSync = (...args) => vol.existsSync(...args);
-fs.pathExists = (...args) => Promise.resolve(vol.existsSync(...args));
-fs.readFile = (...args) => vol.promises.readFile(...args);
-fs.writeFile = (...args) => vol.promises.writeFile(...args);
+fs.writeFileSync = (...args) => vol.writeFileSync(...args);
 
 module.exports = fs;

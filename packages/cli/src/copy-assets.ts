@@ -11,8 +11,7 @@ import type { AllPlatforms } from "@rnx-kit/tools-react-native";
 import { parsePlatform } from "@rnx-kit/tools-react-native";
 import type { SpawnSyncOptions } from "child_process";
 import { spawnSync } from "child_process";
-import * as fs from "fs";
-import * as fsx from "fs-extra";
+import * as fs from "fs-extra";
 import * as os from "os";
 import * as path from "path";
 
@@ -215,7 +214,7 @@ export async function assembleAarBundle(
   };
 
   const outputDir = path.join(context.options.assetsDest, "aar");
-  fsx.ensureDirSync(outputDir);
+  fs.ensureDirSync(outputDir);
 
   const dest = path.join(outputDir, `${targetName}-${version}.aar`);
 
@@ -315,7 +314,7 @@ export async function assembleAarBundle(
       "",
     ].join("\n");
 
-    fsx.ensureDirSync(buildDir);
+    fs.ensureDirSync(buildDir);
     fs.writeFileSync(path.join(buildDir, "build.gradle"), buildGradle);
     fs.writeFileSync(
       path.join(buildDir, "gradle.properties"),
@@ -327,7 +326,7 @@ export async function assembleAarBundle(
     run(gradlew, targets, { cwd: buildDir, stdio: "inherit", env });
   }
 
-  await Promise.all(targetsToCopy.map(([src, dest]) => fsx.copy(src, dest)));
+  await Promise.all(targetsToCopy.map(([src, dest]) => fs.copy(src, dest)));
 }
 
 function copyFiles(files: unknown, destination: string): Promise<void>[] {
@@ -335,9 +334,9 @@ function copyFiles(files: unknown, destination: string): Promise<void>[] {
     return [];
   }
 
-  fsx.ensureDirSync(destination);
+  fs.ensureDirSync(destination);
   return files.map((file) => {
-    return fsx.copy(file, `${destination}/${path.basename(file)}`);
+    return fs.copy(file, `${destination}/${path.basename(file)}`);
   });
 }
 
@@ -501,7 +500,7 @@ export async function copyProjectAssets(options: Options): Promise<void> {
         (!fs.existsSync(destination) || fs.statSync(destination).isDirectory())
       ) {
         info(`Copying Android Archive of "${dependencyName}"`);
-        copyTasks.push(fsx.copy(output, destination));
+        copyTasks.push(fs.copy(output, destination));
       }
     }
     await Promise.all(copyTasks);
