@@ -26,6 +26,7 @@ export type AndroidArchive = {
       minSdkVersion?: number;
       targetSdkVersion?: number;
     };
+    kotlinVersion?: string;
   };
 };
 
@@ -58,12 +59,13 @@ export type AssetsConfig = {
 };
 
 const defaultAndroidConfig: Required<Required<AndroidArchive>["android"]> = {
-  androidPluginVersion: "7.1.3",
-  compileSdkVersion: 31,
+  androidPluginVersion: "7.2.2",
+  compileSdkVersion: 33,
   defaultConfig: {
     minSdkVersion: 23,
     targetSdkVersion: 29,
   },
+  kotlinVersion: "1.7.22",
 };
 
 function ensureOption(options: Options, opt: string, flag = opt) {
@@ -267,6 +269,8 @@ export async function assembleAarBundle(
     const androidPluginVersion =
       android?.androidPluginVersion ??
       defaultAndroidConfig.androidPluginVersion;
+    const kotlinVersion =
+      android?.kotlinVersion ?? defaultAndroidConfig.kotlinVersion;
     const buildRelativeReactNativePath = path.relative(
       buildDir,
       reactNativePath
@@ -279,6 +283,7 @@ export async function assembleAarBundle(
       `      minSdkVersion = ${minSdkVersion}`,
       `      targetSdkVersion = ${targetSdkVersion}`,
       `      androidPluginVersion = "${androidPluginVersion}"`,
+      `      kotlinVersion = "${kotlinVersion}"`,
       "  }",
       "",
       "  repositories {",
@@ -288,6 +293,7 @@ export async function assembleAarBundle(
       "",
       "  dependencies {",
       '      classpath("com.android.tools.build:gradle:${project.ext.androidPluginVersion}")',
+      '      classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${project.ext.kotlinVersion}")',
       "  }",
       "}",
       "",
