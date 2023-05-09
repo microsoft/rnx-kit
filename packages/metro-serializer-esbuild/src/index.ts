@@ -13,7 +13,15 @@ import { absolutizeSourceMap, generateSourceMappingURL } from "./sourceMap";
 
 export { esbuildTransformerConfig } from "./esbuildTransformerConfig";
 
-export type Options = Pick<BuildOptions, "logLevel" | "minify" | "target"> & {
+export type Options = Pick<
+  BuildOptions,
+  | "logLevel"
+  | "minify"
+  | "minifyWhitespace"
+  | "minifyIdentifiers"
+  | "minifySyntax"
+  | "target"
+> & {
   analyze?: boolean | "verbose";
   fabric?: boolean;
   sourceMapPaths?: "absolute" | "relative";
@@ -361,6 +369,9 @@ export function MetroSerializer(
         logLevel: buildOptions?.logLevel ?? "error",
         metafile: Boolean(buildOptions?.analyze),
         minify: buildOptions?.minify ?? !options.dev,
+        minifyWhitespace: buildOptions?.minifyWhitespace,
+        minifyIdentifiers: buildOptions?.minifyIdentifiers,
+        minifySyntax: buildOptions?.minifySyntax,
         outfile,
         plugins,
         sourcemap: Boolean(options.sourceMapUrl) && "linked",

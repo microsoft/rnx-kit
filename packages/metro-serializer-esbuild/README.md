@@ -147,6 +147,30 @@ See the full documentation at https://esbuild.github.io/api/#minify.
 
 Defaults to `true` in production environment; `false` otherwise.
 
+### `minifyWhitespace`
+
+Same as `minify` but only removes whitespace.
+
+See the full documentation at https://esbuild.github.io/api/#minify.
+
+By default, this option is not set.
+
+### `minifyIdentifiers`
+
+Same as `minify` but only renames local variables to be shorter.
+
+See the full documentation at https://esbuild.github.io/api/#minify.
+
+By default, this option is not set.
+
+### `minifySyntax`
+
+Same as `minify` but only rewrites syntax to be more compact.
+
+See the full documentation at https://esbuild.github.io/api/#minify.
+
+By default, this option is not set.
+
 ### `sourceMapPaths`
 
 Determines whether paths in the output source map are absolute or relative to
