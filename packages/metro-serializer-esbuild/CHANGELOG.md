@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-serializer-esbuild
 
+## 0.1.23
+
+### Patch Changes
+
+- 6c4b70c3: Add `minifyWhitespace`, `minifyIdentifiers`, `minifySyntax` options to allow more granular control over minification
+
 ## 0.1.22
 
 ### Patch Changes
