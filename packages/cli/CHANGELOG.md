@@ -1,5 +1,12 @@
 # Change Log - @rnx-kit/cli
 
+## 0.16.9
+
+### Patch Changes
+
+- 3db06445: Refactor `copy-assets` command to rely less on async fs functions
+- 828ca15e: Add Kotlin plugin to `copy-assets` command
+
 ## 0.16.8
 
 ### Patch Changes
