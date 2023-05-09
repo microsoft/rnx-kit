@@ -187,7 +187,7 @@ export async function assembleAarBundle(
   }
 
   const findUp = require("find-up");
-  const gradlew = await findUp(
+  const gradlew = findUp.sync(
     os.platform() === "win32" ? "gradlew.bat" : "gradlew"
   );
   if (!gradlew) {
@@ -214,7 +214,7 @@ export async function assembleAarBundle(
   };
 
   const outputDir = path.join(context.options.assetsDest, "aar");
-  await fs.ensureDir(outputDir);
+  fs.ensureDirSync(outputDir);
 
   const dest = path.join(outputDir, `${targetName}-${version}.aar`);
 
@@ -314,13 +314,13 @@ export async function assembleAarBundle(
       "",
     ].join("\n");
 
-    await fs.ensureDir(buildDir);
-    await fs.writeFile(path.join(buildDir, "build.gradle"), buildGradle);
-    await fs.writeFile(
+    fs.ensureDirSync(buildDir);
+    fs.writeFileSync(path.join(buildDir, "build.gradle"), buildGradle);
+    fs.writeFileSync(
       path.join(buildDir, "gradle.properties"),
       gradleProperties
     );
-    await fs.writeFile(path.join(buildDir, "settings.gradle"), settingsGradle);
+    fs.writeFileSync(path.join(buildDir, "settings.gradle"), settingsGradle);
 
     // Run only one Gradle task at a time
     run(gradlew, targets, { cwd: buildDir, stdio: "inherit", env });
@@ -329,35 +329,15 @@ export async function assembleAarBundle(
   await Promise.all(targetsToCopy.map(([src, dest]) => fs.copy(src, dest)));
 }
 
-async function copyFiles(files: unknown, destination: string): Promise<void> {
+function copyFiles(files: unknown, destination: string): Promise<void>[] {
   if (!Array.isArray(files) || files.length === 0) {
-    return;
+    return [];
   }
 
-  await fs.ensureDir(destination);
-  await Promise.all(
-    files.map((file) => {
-      const basename = path.basename(file);
-      return fs.copy(file, `${destination}/${basename}`);
-    })
-  );
-}
-
-async function copyXcodeAssets(
-  xcassets: unknown,
-  destination: string
-): Promise<void> {
-  if (!Array.isArray(xcassets) || xcassets.length === 0) {
-    return;
-  }
-
-  await fs.ensureDir(destination);
-  await Promise.all(
-    xcassets.map((catalog) => {
-      const dest = `${destination}/${path.basename(catalog)}`;
-      return fs.copy(catalog, dest);
-    })
-  );
+  fs.ensureDirSync(destination);
+  return files.map((file) => {
+    return fs.copy(file, `${destination}/${path.basename(file)}`);
+  });
 }
 
 export async function copyAssets(
@@ -366,12 +346,12 @@ export async function copyAssets(
   { assets, strings, xcassets }: NativeAssets
 ): Promise<void> {
   const tasks = [
-    copyFiles(assets, `${assetsDest}/assets/${packageName}`),
-    copyFiles(strings, `${assetsDest}/strings/${packageName}`),
+    ...copyFiles(assets, `${assetsDest}/assets/${packageName}`),
+    ...copyFiles(strings, `${assetsDest}/strings/${packageName}`),
   ];
 
   if (typeof xcassetsDest === "string") {
-    tasks.push(copyXcodeAssets(xcassets, xcassetsDest));
+    tasks.push(...copyFiles(xcassets, xcassetsDest));
   }
 
   await Promise.all(tasks);
@@ -477,10 +457,7 @@ export async function gatherConfigs({
  */
 export async function copyProjectAssets(options: Options): Promise<void> {
   const projectRoot = findPackageDir() || process.cwd();
-  const content = await fs.readFile(`${projectRoot}/package.json`, {
-    encoding: "utf-8",
-  });
-  const manifest: PackageManifest = JSON.parse(content);
+  const manifest = readPackage(projectRoot);
   const context = { projectRoot, manifest, options };
   const assetConfigs = await gatherConfigs(context);
   if (!assetConfigs) {
