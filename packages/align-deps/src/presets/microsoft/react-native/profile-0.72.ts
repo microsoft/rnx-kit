@@ -105,7 +105,7 @@ const profile: Profile = {
   },
   "test-app": {
     name: "react-native-test-app",
-    version: "^2.3.14",
+    version: "^2.5.3",
     devOnly: true,
   },
 };
