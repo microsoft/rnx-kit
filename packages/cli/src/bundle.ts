@@ -1,6 +1,7 @@
 import type { Config as CLIConfig } from "@react-native-community/cli-types";
 import { loadMetroConfig } from "@rnx-kit/metro-service";
 import { commonBundleCommandOptions } from "./bundle/cliOptions";
+import { emitBytecode } from "./bundle/hermes";
 import { getCliPlatformBundleConfigs } from "./bundle/kit-config";
 import { metroBundle } from "./bundle/metro";
 import {
@@ -28,6 +29,7 @@ export async function rnxBundle(
 
   applyBundleConfigOverrides(cliOptions, bundleConfigs, [
     ...overridableCommonBundleOptions,
+    "hermes",
     "treeShake",
   ]);
 
@@ -38,6 +40,15 @@ export async function rnxBundle(
       cliOptions.dev,
       cliOptions.minify
     );
+
+    const { bundleOutput, hermes, sourcemapOutput } = bundleConfig;
+    if (hermes) {
+      emitBytecode(
+        bundleOutput,
+        sourcemapOutput,
+        hermes === true ? {} : hermes
+      );
+    }
   }
 }
 

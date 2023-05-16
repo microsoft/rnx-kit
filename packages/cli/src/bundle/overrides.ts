@@ -14,6 +14,7 @@ type BundleConfigOverrides = Partial<
     | "treeShake"
     | "unstableTransformProfile"
     | "indexedRamBundle"
+    | "hermes"
   >
 >;
 
