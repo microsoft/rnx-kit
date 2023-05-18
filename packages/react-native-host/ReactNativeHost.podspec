@@ -31,10 +31,13 @@ Pod::Spec.new do |s|
   s.dependency 'React-Core'
   s.dependency 'React-cxxreact'
 
+  # Normally, we wouldn't need this unless New Arch was enabled. However,
+  # Reanimated requires a header from here.
+  s.dependency 'ReactCommon/turbomodule/core'
+
   if new_arch_enabled
     s.dependency 'React-RCTAppDelegate'
     s.dependency 'React-RCTFabric'
-    s.dependency 'ReactCommon/turbomodule/core'
   end
 
   s.pod_target_xcconfig = {
