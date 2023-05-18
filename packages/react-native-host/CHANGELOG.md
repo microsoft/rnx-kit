@@ -1,5 +1,11 @@
 # @rnx-kit/react-native-host
 
+## 0.2.6
+
+### Patch Changes
+
+- 32c5ee3e: Make headers from `ReactCommon/turbomodule/core` available to config plugins
+
 ## 0.2.5
 
 ### Patch Changes
