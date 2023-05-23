@@ -99,6 +99,10 @@ const profile: Profile = {
     name: "@react-native-community/datetimepicker",
     version: "^7.0.0",
   },
+  "safe-area": {
+    name: "react-native-safe-area-context",
+    version: "^4.5.3",
+  },
   storage: {
     name: "@react-native-async-storage/async-storage",
     version: "^1.18.1",
