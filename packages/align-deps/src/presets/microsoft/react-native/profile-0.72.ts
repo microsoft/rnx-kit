@@ -93,11 +93,11 @@ const profile: Profile = {
 
   animation: {
     name: "react-native-reanimated",
-    version: "^3.0.2",
+    version: "^3.1.0",
   },
   "datetime-picker": {
     name: "@react-native-community/datetimepicker",
-    version: "^7.0.0",
+    version: "^7.1.0",
   },
   "safe-area": {
     name: "react-native-safe-area-context",
@@ -109,7 +109,7 @@ const profile: Profile = {
   },
   "test-app": {
     name: "react-native-test-app",
-    version: "^2.5.3",
+    version: "^2.5.4",
     devOnly: true,
   },
 };
