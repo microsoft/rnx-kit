@@ -7089,13 +7089,13 @@ __metadata:
   linkType: hard
 
 "fast-xml-parser@npm:^4.0.0, fast-xml-parser@npm:^4.0.12":
-  version: 4.2.2
-  resolution: "fast-xml-parser@npm:4.2.2"
+  version: 4.2.3
+  resolution: "fast-xml-parser@npm:4.2.3"
   dependencies:
     strnum: ^1.0.5
   bin:
     fxparser: src/cli/cli.js
-  checksum: f0e687927ddc11b2ba9e434d8bf77ef759b6692639dd2dd731e2f30201319e7c70dec08a103dd67a1af7a27f176246502d9d0f5325b5b5b99ab49665fa876857
+  checksum: 2515f98569acfcf9dae51f40c9b4f9920c79cbd904c57bee063d730775852c92608bd4817e446654e396b167d308f26b07a88820ddf3268ae295fb1cd627296d
   languageName: node
   linkType: hard
 
