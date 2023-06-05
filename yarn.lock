@@ -13079,18 +13079,18 @@ __metadata:
   linkType: hard
 
 "typedoc@npm:^0.24.0":
-  version: 0.24.6
-  resolution: "typedoc@npm:0.24.6"
+  version: 0.24.8
+  resolution: "typedoc@npm:0.24.8"
   dependencies:
     lunr: ^2.3.9
     marked: ^4.3.0
     minimatch: ^9.0.0
     shiki: ^0.14.1
   peerDependencies:
-    typescript: 4.6.x || 4.7.x || 4.8.x || 4.9.x || 5.0.x
+    typescript: 4.6.x || 4.7.x || 4.8.x || 4.9.x || 5.0.x || 5.1.x
   bin:
     typedoc: bin/typedoc
-  checksum: 3911ef6a7736ce6655a4b22fabc5be6df8812412e209d730fd168bfa7797847897f05fed797bc16558f11ce647b20746453748ff8afe85b1375c3efe2d7b57df
+  checksum: a46a14497f789fb3594e6c3af2e45276934ac46df40b7ed15a504ee51dc7a8013a2ffb3a54fd73abca6a2b71f97d3ec9ad356fa9aa81d29743e4645a965a2ae0
   languageName: node
   linkType: hard
 
