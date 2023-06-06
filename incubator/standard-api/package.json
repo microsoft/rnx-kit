@@ -29,7 +29,7 @@
   "devDependencies": {
     "@rnx-kit/scripts": "*",
     "eslint": "^8.0.0",
-    "got": "^12.1.0",
+    "got": "^13.0.0",
     "prettier": "^2.8.0",
     "typescript": "^5.0.0"
   },
