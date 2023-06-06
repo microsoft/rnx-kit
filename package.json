@@ -47,7 +47,7 @@
     "metro-resolver": "^0.73.7",
     "metro-runtime": "^0.73.7",
     "metro-transform-worker": "^0.73.7",
-    "nx": "^15.0.1",
+    "nx": "^16.3.2",
     "prettier": "^2.8.0",
     "react": "18.2.0",
     "react-native": "^0.71.0",
