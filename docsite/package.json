@@ -29,7 +29,7 @@
   },
   "packageManager": "yarn@3.4.1",
   "resolutions": {
-    "got": "^13.0.0",
+    "got": "^11.0",
     "trim": "0.0.3"
   },
   "browserslist": {
