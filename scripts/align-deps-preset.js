@@ -11,7 +11,7 @@ const dependencies = {
   "metro-resolver": metroTypesVersion,
   "metro-source-map": metroTypesVersion,
   "metro-transform-worker": metroTypesVersion,
-  node: "^16.0.0",
+  node: "^18.0.0",
   yargs: "^16.0.0",
 };
 
