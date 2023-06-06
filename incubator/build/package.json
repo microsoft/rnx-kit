@@ -43,7 +43,7 @@
     "@octokit/request-error": "^3.0.0",
     "@rnx-kit/config": "^0.6.0",
     "env-paths": "^3.0.0",
-    "fast-xml-parser": "^4.0.0",
+    "fast-xml-parser": "^4.2.4",
     "find-up": "^6.3.0",
     "ora": "^6.1.2",
     "pkg-dir": "^7.0.0",

@@ -3398,7 +3398,7 @@ __metadata:
     "@types/qrcode": ^1.4.2
     env-paths: ^3.0.0
     eslint: ^8.0.0
-    fast-xml-parser: ^4.0.0
+    fast-xml-parser: ^4.2.4
     find-up: ^6.3.0
     jest: ^29.0.0
     ora: ^6.1.2
@@ -7285,6 +7285,17 @@ __metadata:
   bin:
     fxparser: src/cli/cli.js
   checksum: 2515f98569acfcf9dae51f40c9b4f9920c79cbd904c57bee063d730775852c92608bd4817e446654e396b167d308f26b07a88820ddf3268ae295fb1cd627296d
+  languageName: node
+  linkType: hard
+
+"fast-xml-parser@npm:^4.2.4":
+  version: 4.2.4
+  resolution: "fast-xml-parser@npm:4.2.4"
+  dependencies:
+    strnum: ^1.0.5
+  bin:
+    fxparser: src/cli/cli.js
+  checksum: d3b4d0c0152c09f98def792769fca6bb3fa1d597f9745d9564451c239089bd86bdf573c9263b4944860028cb7edb81752d64399c1aff8b87c9225ecef96905f7
   languageName: node
   linkType: hard
 
