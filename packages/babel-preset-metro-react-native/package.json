@@ -37,9 +37,9 @@
     "@rnx-kit/babel-plugin-import-path-remapper": "*",
     "@rnx-kit/scripts": "*",
     "@types/babel__core": "^7.0.0",
-    "@types/jest": "^29.0.0",
+    "@types/jest": "^29.2.1",
     "eslint": "^8.0.0",
-    "jest": "^29.0.0",
+    "jest": "^29.2.1",
     "prettier": "^2.8.0",
     "typescript": "^5.0.0"
   },

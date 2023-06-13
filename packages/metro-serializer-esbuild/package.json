@@ -46,7 +46,7 @@
     "@types/metro-transform-worker": "^0.76.0",
     "@types/semver": "^7.0.0",
     "eslint": "^8.0.0",
-    "jest": "^29.0.0",
+    "jest": "^29.2.1",
     "lodash-es": "^4.17.21",
     "metro": "^0.73.7",
     "metro-react-native-babel-preset": "^0.73.7",
