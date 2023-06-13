@@ -3,7 +3,7 @@
 const metroTypesVersion = "^0.76.0";
 
 const dependencies = {
-  jest: "^29.0.0",
+  jest: "^29.2.1",
   metro: metroTypesVersion,
   "metro-babel-transformer": metroTypesVersion,
   "metro-config": metroTypesVersion,
@@ -41,13 +41,9 @@ const profile = {
     name: "find-up",
     version: "^5.0.0",
   },
-  jest: {
-    name: "jest",
-    version: dependencies.jest,
-  },
   "jest-cli": {
     name: "jest-cli",
-    version: "^29.2.1",
+    version: dependencies.jest,
   },
   "pkg-dir": {
     name: "pkg-dir",
