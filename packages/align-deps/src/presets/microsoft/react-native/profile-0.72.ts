@@ -99,6 +99,10 @@ const profile: Profile = {
     name: "@react-native-community/datetimepicker",
     version: "^7.1.0",
   },
+  gestures: {
+    name: "react-native-gesture-handler",
+    version: "^2.12.0",
+  },
   "safe-area": {
     name: "react-native-safe-area-context",
     version: "^4.5.3",
@@ -109,8 +113,12 @@ const profile: Profile = {
   },
   "test-app": {
     name: "react-native-test-app",
-    version: "^2.5.4",
+    version: "^2.5.5",
     devOnly: true,
+  },
+  webview: {
+    name: "react-native-webview",
+    version: "^13.2.1",
   },
 };
 
