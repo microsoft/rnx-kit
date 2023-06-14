@@ -3319,7 +3319,7 @@ __metadata:
     jest: ^29.2.1
     lodash: ^4.17.21
     markdown-table: ^3.0.0
-    package-json: ^8.0.0
+    package-json: ^8.1.1
     prettier: ^2.8.0
     prompts: ^2.4.0
     semver: ^7.0.0
@@ -11067,15 +11067,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"package-json@npm:^8.0.0":
-  version: 8.1.0
-  resolution: "package-json@npm:8.1.0"
+"package-json@npm:^8.1.1":
+  version: 8.1.1
+  resolution: "package-json@npm:8.1.1"
   dependencies:
     got: ^12.1.0
     registry-auth-token: ^5.0.1
     registry-url: ^6.0.0
     semver: ^7.3.7
-  checksum: 28c16ef0296915533c3dec9ce579fd6ea8ac62df0cd0b4b44e65a45506fda781cf1d1fd4a083fe90af3e041a9514b6be30562d85689da450986aff43dc856cc7
+  checksum: 28bec6f42bf9fba66b7c8fea07576fc23d08ec7923433f7835d6cd8654e72169d74f9738b3785107d18a476ae76712e0daeb1dddcd6930e69f9e4b47eba7c0ca
   languageName: node
   linkType: hard
 

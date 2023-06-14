@@ -20,6 +20,7 @@ import { isMetaPackage } from "../lib/capabilities.js";
  *   name: string;
  *   version: string;
  *   latest: string;
+ *   modified: string;
  *   homepage?: string;
  *   dependencies: any;
  *   peerDependencies: any;
@@ -48,6 +49,7 @@ async function fetchPackageInfo(pkg, targetVersion = "latest") {
     homepage,
     dependencies,
     peerDependencies,
+    time,
   } = manifest;
 
   if (typeof latest !== "string") {
@@ -58,6 +60,7 @@ async function fetchPackageInfo(pkg, targetVersion = "latest") {
     name,
     version,
     latest,
+    modified: time?.modified ?? "",
     homepage,
     dependencies,
     peerDependencies,
@@ -415,12 +418,14 @@ async function main({
     ...Object.keys(delta)
       .sort()
       .map((capability) => {
-        const { name, version, latest, homepage } = delta[capability];
+        const { name, version, latest, modified, homepage } = delta[capability];
         return [
           capability,
           name,
           version,
-          version.endsWith(latest) ? "=" : latest,
+          version.endsWith(latest)
+            ? "="
+            : `${latest} (${modified.split("T")[0]})`,
           homepage,
         ];
       }),
