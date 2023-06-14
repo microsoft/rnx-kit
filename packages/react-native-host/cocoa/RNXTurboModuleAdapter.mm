@@ -45,7 +45,7 @@
     _turboModuleManager = [[RCTTurboModuleManager alloc] initWithBridge:bridge
                                                                delegate:self
                                                               jsInvoker:callInvoker];
-    return RCTAppSetupDefaultJsExecutorFactory(bridge, _turboModuleManager, _runtimeScheduler);
+    return RCTAppSetupDefaultJsExecutorFactory(bridge, _turboModuleManager);
 #else
     _turboModuleManager = [[RCTTurboModuleManager alloc] initWithBridge:bridge
                                                                delegate:self
