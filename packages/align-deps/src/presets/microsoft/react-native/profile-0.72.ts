@@ -107,6 +107,10 @@ const profile: Profile = {
     name: "react-native-safe-area-context",
     version: "^4.5.3",
   },
+  screens: {
+    name: "react-native-screens",
+    version: "^3.21.0",
+  },
   storage: {
     name: "@react-native-async-storage/async-storage",
     version: "^1.18.2",
@@ -118,7 +122,7 @@ const profile: Profile = {
   },
   webview: {
     name: "react-native-webview",
-    version: "^13.2.1",
+    version: "^13.2.2",
   },
 };
 
