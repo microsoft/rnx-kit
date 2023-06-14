@@ -46,18 +46,18 @@ const profile: Profile = {
   },
   "community/cli": {
     name: "@react-native-community/cli",
-    version: "^11.3.1",
+    version: "^11.3.2",
     capabilities: ["community/cli-android", "community/cli-ios"],
     devOnly: true,
   },
   "community/cli-android": {
     name: "@react-native-community/cli-platform-android",
-    version: "^11.3.1",
+    version: "^11.3.2",
     devOnly: true,
   },
   "community/cli-ios": {
     name: "@react-native-community/cli-platform-ios",
-    version: "^11.3.1",
+    version: "^11.3.2",
     devOnly: true,
   },
   metro: {
@@ -93,7 +93,7 @@ const profile: Profile = {
 
   animation: {
     name: "react-native-reanimated",
-    version: "^3.2.0",
+    version: "^3.3.0",
   },
   "datetime-picker": {
     name: "@react-native-community/datetimepicker",
