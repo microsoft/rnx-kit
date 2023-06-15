@@ -1,6 +1,5 @@
 import type { Capability, KitType } from "@rnx-kit/config";
 import type { PackageManifest } from "@rnx-kit/tools-node/package";
-import omit from "lodash/omit";
 import { resolveCapabilities } from "./capabilities";
 import { compare, omitEmptySections } from "./helpers";
 import type { DependencyType, Package, Preset } from "./types";
@@ -28,7 +27,12 @@ export function removeKeys(
     return obj;
   }
 
-  return omit(obj, ...keys);
+  const copy = { ...obj };
+  for (const k of keys) {
+    delete copy[k];
+  }
+
+  return copy;
 }
 
 export function updateDependencies(

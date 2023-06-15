@@ -3309,7 +3309,6 @@ __metadata:
     "@rnx-kit/tools-node": "*"
     "@rnx-kit/tools-workspaces": "*"
     "@types/jest": ^29.2.1
-    "@types/lodash": ^4.14.172
     "@types/prompts": ^2.0.0
     "@types/semver": ^7.0.0
     "@types/yargs": ^16.0.0
@@ -3317,7 +3316,6 @@ __metadata:
     detect-indent: ^6.0.0
     eslint: ^8.0.0
     jest: ^29.2.1
-    lodash: ^4.17.21
     markdown-table: ^3.0.0
     package-json: ^8.1.1
     prettier: ^2.8.0
@@ -3506,13 +3504,11 @@ __metadata:
     "@rnx-kit/scripts": "*"
     "@rnx-kit/tools-node": ^2.0.0
     "@rnx-kit/tools-react-native": "*"
-    "@types/lodash": ^4.14.172
     "@types/metro": ^0.76.0
     "@types/node": ^18.0.0
     "@types/semver": ^7.0.0
     eslint: ^8.0.0
     jest: ^29.2.1
-    lodash: ^4.17.21
     prettier: ^2.8.0
     semver: ^7.0.0
     typescript: ^5.0.0
@@ -3702,7 +3698,6 @@ __metadata:
     "@types/metro": ^0.76.0
     eslint: ^8.0.0
     jest: ^29.2.1
-    lodash: ^4.17.21
     prettier: ^2.8.0
     semver: ^7.0.0
     typescript: ">=4.7.0"
@@ -4353,13 +4348,6 @@ __metadata:
   version: 7.0.9
   resolution: "@types/json-schema@npm:7.0.9"
   checksum: 259d0e25f11a21ba5c708f7ea47196bd396e379fddb79c76f9f4f62c945879dc21657904914313ec2754e443c5018ea8372362f323f30e0792897fdb2098a705
-  languageName: node
-  linkType: hard
-
-"@types/lodash@npm:^4.14.172":
-  version: 4.14.195
-  resolution: "@types/lodash@npm:4.14.195"
-  checksum: 39b75ca635b3fa943d17d3d3aabc750babe4c8212485a4df166fe0516e39288e14b0c60afc6e21913cc0e5a84734633c71e617e2bd14eaa1cf51b8d7799c432e
   languageName: node
   linkType: hard
 

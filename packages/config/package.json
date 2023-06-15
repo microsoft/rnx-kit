@@ -20,7 +20,6 @@
   "dependencies": {
     "@rnx-kit/console": "^1.0.11",
     "@rnx-kit/tools-node": "^2.0.0",
-    "lodash": "^4.17.21",
     "semver": "^7.0.0"
   },
   "devDependencies": {
@@ -29,7 +28,6 @@
     "@rnx-kit/metro-serializer-esbuild": "*",
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tools-react-native": "*",
-    "@types/lodash": "^4.14.172",
     "@types/metro": "^0.76.0",
     "@types/node": "^18.0.0",
     "@types/semver": "^7.0.0",
