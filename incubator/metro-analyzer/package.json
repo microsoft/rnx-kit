@@ -1,0 +1,56 @@
+{
+  "private": true,
+  "name": "@rnx-kit/metro-analyzer",
+  "version": "0.0.1",
+  "description": "EXPERIMENTAL - USE WITH CAUTION - A tool for analyzing a Metro bundle",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/incubator/metro-analyzer#readme",
+  "license": "MIT",
+  "author": {
+    "name": "Microsoft Open Source",
+    "email": "microsoftopensource@users.noreply.github.com"
+  },
+  "files": [
+    "lib/*"
+  ],
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "import": "./lib/index.js",
+      "require": "./lib/index.js"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "incubator/metro-analyzer"
+  },
+  "engines": {
+    "node": ">=14.15"
+  },
+  "scripts": {
+    "prepare": "echo '⚠️  metro-analyzer is EXPERIMENTAL - USE WITH CAUTION  ⚠️'",
+    "build": "rnx-kit-scripts build",
+    "format": "rnx-kit-scripts format",
+    "lint": "rnx-kit-scripts lint",
+    "test": "rnx-kit-scripts test"
+  },
+  "devDependencies": {
+    "@rnx-kit/console": "^1.0.11",
+    "@rnx-kit/metro-plugin-duplicates-checker": "^2.1.1",
+    "@rnx-kit/scripts": "*",
+    "chalk": "^4.1.0",
+    "eslint": "^8.0.0",
+    "jest": "^29.0.0",
+    "prettier": "^2.8.0",
+    "typescript": "^5.0.0",
+    "yargs": "^16.0.0"
+  },
+  "eslintConfig": {
+    "extends": "@rnx-kit/eslint-config"
+  },
+  "jest": {
+    "preset": "@rnx-kit/scripts"
+  },
+  "experimental": true
+}
