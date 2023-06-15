@@ -16,10 +16,27 @@
 #else
 #import <React-RCTAppDelegate/RCTAppSetupUtils.h>
 #import <React/RCTSurfacePresenterBridgeAdapter.h>
+
+// We still get into this path because react-native-macos 0.71 picked up some
+// 0.72 bits. AFAICT, `RCTLegacyInteropComponents.h` is a new addition in 0.72
+// in both react-native and react-native-macos.
+#if __has_include(<React-RCTAppDelegate/RCTLegacyInteropComponents.h>)
 #import <react/renderer/runtimescheduler/RuntimeScheduler.h>
 #import <react/renderer/runtimescheduler/RuntimeSchedulerCallInvoker.h>
+#if __has_include(<React/RCTRuntimeExecutorFromBridge.h>)
+#import <React/RCTRuntimeExecutorFromBridge.h>
+#endif  // __has_include(<React/RCTRuntimeExecutorFromBridge.h>)
 #define USE_RUNTIME_SCHEDULER 1
-#endif  // __has_include(<React/RCTAppSetupUtils.h>)
+#else
+#define USE_RUNTIME_SCHEDULER 0
+#endif  // __has_include(<React-RCTAppDelegate/RCTLegacyInteropComponents.h>)
+
+// RCTAppSetupDefaultJsExecutorFactory is in different locations for iOS (0.71)/macOS(0.71)
+#if !TARGET_OS_OSX
+#import <React/RCTAppSetupUtils.h>
+#else
+#import <React-RCTAppDelegate/RCTAppSetupUtils.h>
+#endif // TARGET_OS_OSX
 
 #endif  // USE_TURBOMODULE
 
@@ -45,7 +62,7 @@
     _turboModuleManager = [[RCTTurboModuleManager alloc] initWithBridge:bridge
                                                                delegate:self
                                                               jsInvoker:callInvoker];
-    return RCTAppSetupDefaultJsExecutorFactory(bridge, _turboModuleManager);
+    return RCTAppSetupDefaultJsExecutorFactory(bridge, _turboModuleManager, _runtimeScheduler);
 #else
     _turboModuleManager = [[RCTTurboModuleManager alloc] initWithBridge:bridge
                                                                delegate:self
