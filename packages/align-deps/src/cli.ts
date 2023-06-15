@@ -8,13 +8,13 @@ import {
   findWorkspaceRoot,
 } from "@rnx-kit/tools-workspaces";
 import * as fs from "fs";
-import isString from "lodash/isString";
 import * as path from "path";
 import { makeCheckCommand } from "./commands/check";
 import { makeInitializeCommand } from "./commands/initialize";
 import { makeSetVersionCommand } from "./commands/setVersion";
 import { defaultConfig } from "./config";
 import { printError, printInfo } from "./errors";
+import { isString } from "./helpers";
 import type { Args, Command } from "./types";
 
 export const cliOptions = {

@@ -45,6 +45,10 @@ export function dropPatchFromVersion(version: string): string {
     .join(" || ");
 }
 
+export function isString(str: unknown): str is string {
+  return typeof str?.valueOf() === "string";
+}
+
 export function modifyManifest(
   pkgPath: string,
   manifest: PackageManifest

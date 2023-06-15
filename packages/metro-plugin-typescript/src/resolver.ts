@@ -1,8 +1,25 @@
 import { parseModuleRef } from "@rnx-kit/tools-node";
-import intersection from "lodash/intersection";
-import isEqual from "lodash/isEqual";
 import ts from "typescript";
 import type { ResolverContext } from "./types";
+
+function intersection<T>(lhs: T[], rhs: T[]): T[] {
+  return lhs.filter((v) => rhs.includes(v));
+}
+
+function isEqual<T>(lhs: T[], rhs: T[]): boolean {
+  const length = lhs.length;
+  if (length !== rhs.length) {
+    return false;
+  }
+
+  for (let i = 0; i < length; ++i) {
+    if (lhs[i] !== rhs[i]) {
+      return false;
+    }
+  }
+
+  return true;
+}
 
 function isPackageRef(name: string): boolean {
   return !parseModuleRef(name).path;

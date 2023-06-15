@@ -1,5 +1,4 @@
 import type { AllPlatforms } from "@rnx-kit/tools-react-native/platform";
-import castArray from "lodash/castArray";
 import type { KitConfig } from "./kitConfig";
 import type { BundleParameters, BundleConfig } from "./bundleConfig";
 
@@ -73,7 +72,9 @@ export function getBundleConfig(
     );
   }
 
-  const bundles = castArray(config.bundle);
+  const bundles = Array.isArray(config.bundle)
+    ? config.bundle
+    : [config.bundle];
 
   let bundle: BundleConfig | undefined;
   if (id) {
