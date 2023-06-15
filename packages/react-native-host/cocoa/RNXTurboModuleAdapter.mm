@@ -31,12 +31,7 @@
 #define USE_RUNTIME_SCHEDULER 0
 #endif  // __has_include(<React-RCTAppDelegate/RCTLegacyInteropComponents.h>)
 
-// RCTAppSetupDefaultJsExecutorFactory is in different locations for iOS (0.71)/macOS(0.71)
-#if !TARGET_OS_OSX
-#import <React/RCTAppSetupUtils.h>
-#else
-#import <React-RCTAppDelegate/RCTAppSetupUtils.h>
-#endif // TARGET_OS_OSX
+#endif  // __has_include(<React/RCTAppSetupUtils.h>)
 
 #endif  // USE_TURBOMODULE
 
