@@ -1,9 +1,7 @@
-// this file has a method that tests the FakeMethod from ../src/index.ts
+// TODO: add actual tests!
 
-import FakeMethod from "../src/index";
-
-describe("FakeMethod", () => {
+describe("HelloWorld", () => {
   it("should return a string", () => {
-    expect(FakeMethod("Hello World!")).toBe("Hello World!");
+    expect("Hello World!").toBe("Hello World!");
   });
 });

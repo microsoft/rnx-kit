@@ -85,6 +85,7 @@ export function webpackStats(
     const inputsInOutput = output.inputs;
     let id = 0;
 
+    // TODO: Add support for multiple chunks
     webpack.chunks.push({
       entry: true,
       size: output.bytes,
