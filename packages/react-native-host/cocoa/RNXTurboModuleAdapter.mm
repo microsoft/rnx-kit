@@ -16,9 +16,21 @@
 #else
 #import <React-RCTAppDelegate/RCTAppSetupUtils.h>
 #import <React/RCTSurfacePresenterBridgeAdapter.h>
+
+// We still get into this path because react-native-macos 0.71 picked up some
+// 0.72 bits. AFAICT, `RCTLegacyInteropComponents.h` is a new addition in 0.72
+// in both react-native and react-native-macos.
+#if __has_include(<React-RCTAppDelegate/RCTLegacyInteropComponents.h>)
 #import <react/renderer/runtimescheduler/RuntimeScheduler.h>
 #import <react/renderer/runtimescheduler/RuntimeSchedulerCallInvoker.h>
+#if __has_include(<React/RCTRuntimeExecutorFromBridge.h>)
+#import <React/RCTRuntimeExecutorFromBridge.h>
+#endif  // __has_include(<React/RCTRuntimeExecutorFromBridge.h>)
 #define USE_RUNTIME_SCHEDULER 1
+#else
+#define USE_RUNTIME_SCHEDULER 0
+#endif  // __has_include(<React-RCTAppDelegate/RCTLegacyInteropComponents.h>)
+
 #endif  // __has_include(<React/RCTAppSetupUtils.h>)
 
 #endif  // USE_TURBOMODULE
