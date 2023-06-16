@@ -1,15 +1,13 @@
 import yargs from "yargs";
 import { analyze } from "./analyze.js";
-import { compare } from "./compare.js";
+import { compare, readMetafile } from "./compare.js";
 import { webpackStats } from "./webpackStats.js";
-import type { Metafile } from "./metafile.js";
-import fs from "fs";
 
 export function main(): void {
   yargs(process.argv.slice(2))
     .command(
       "analyze",
-      "Analyzes a metro bundle by analyzing the esbuild metafile",
+      "Analyzes a bundle by consuming and analyzing an esbuild metafile",
       (yargs) =>
         yargs
           .option("metafile", {
@@ -17,7 +15,7 @@ export function main(): void {
             type: "string",
             demandOption: true,
           })
-          .option("detailed", {
+          .option("showDuplicates", {
             describe:
               "Get detailed information about how the duplicates are bundled",
             type: "boolean",
@@ -33,7 +31,7 @@ export function main(): void {
             type: "string",
           }),
       (argv) => {
-        analyze(argv.metafile, argv.detailed, argv.transform, argv.json);
+        analyze(argv.metafile, argv.showDuplicates, argv.transform, argv.json);
       }
     )
     .command(
@@ -77,10 +75,7 @@ export function main(): void {
             default: false,
           }),
       (argv) => {
-        const content = fs.readFileSync(argv.metafile, {
-          encoding: "utf-8",
-        });
-        const metafile: Metafile = JSON.parse(content);
+        const metafile = readMetafile(argv.metafile);
 
         webpackStats(
           metafile,

@@ -1,11 +1,9 @@
-import fs from "fs";
 import { DOWNLOAD_SPEED } from "./constants.js";
 import {
   generateGraph,
   getDuplicates,
   getWhyDuplicatesInBundle,
 } from "./duplicates.js";
-import type { Metafile } from "./metafile.js";
 import {
   output,
   outputDuplicates,
@@ -15,24 +13,24 @@ import { stats } from "./stats.js";
 import { webpackStats as webpackStats } from "./webpackStats.js";
 import { info } from "@rnx-kit/console";
 import * as path from "path";
+import { readMetafile } from "./compare.js";
 
 /**
  * Analyzes a esbuild metafile.
  *
  * @param metafilePath The esbuild metafile to analyze
- * @param detailed Whether to output detailed information about duplicates
+ * @param showDuplicates Whether to output detailed information about duplicates
  * @param transform Generate a webpack stats file based on the
  * esbuild metafile and set the output file to write the stats file to
  * @param jsonFile Output file to write analysis information to in JSON format
  */
 export async function analyze(
   metafilePath: string,
-  detailed: boolean,
+  showDuplicates: boolean,
   transformPath?: string,
   jsonFile?: string
 ) {
-  const content = fs.readFileSync(metafilePath, { encoding: "utf-8" });
-  const metafile: Metafile = JSON.parse(content);
+  const metafile = readMetafile(metafilePath);
   const metafileDir = path.dirname(metafilePath);
   const statsPath = transformPath || path.join(metafileDir, "stats.json");
   const jsonPath = jsonFile ? jsonFile : path.join(metafileDir, "result.json");
@@ -48,7 +46,7 @@ export async function analyze(
   } else {
     outputDuplicates(duplicates);
 
-    if (detailed) {
+    if (showDuplicates) {
       outputWhyDuplicateInBundle(getWhyDuplicatesInBundle(metafile, graph));
     }
   }
