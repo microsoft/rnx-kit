@@ -1,9 +1,14 @@
 import type { Metafile } from "./metafile.js";
 import type { Stats } from "./types.js";
 
-function getSummaryStats(metafile: Metafile): Stats {
+/**
+ * Returns a summary statistics of the given metafile.
+ *
+ * @param metafile The metafile to analyze.
+ * @returns Summary statistics object.
+ */
+export function stats(metafile: Metafile): Stats {
   const { inputs, outputs } = metafile;
-  let files = 0;
   let totalBytes = 0;
   let esmBytes = 0;
   let cjsBytes = 0;
@@ -33,7 +38,6 @@ function getSummaryStats(metafile: Metafile): Stats {
       nodeModulesBytes += file.bytes;
     }
 
-    files++;
     totalBytes += file.bytes;
   }
 
@@ -46,7 +50,7 @@ function getSummaryStats(metafile: Metafile): Stats {
   }
 
   return {
-    files,
+    files: Object.keys(inputs).length,
     totalBytes,
     esmBytes,
     cjsBytes,
@@ -56,14 +60,4 @@ function getSummaryStats(metafile: Metafile): Stats {
     countOut,
     bytesOut,
   };
-}
-
-/**
- * Returns a summary statistics of the given metafile.
- *
- * @param metafile The metafile to analyze.
- * @returns Summary statistics object.
- */
-export function stats(metafile: Metafile): Stats {
-  return getSummaryStats(metafile);
 }
