@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/align-deps
 
+## 2.2.3
+
+### Patch Changes
+
+- 40a9b023: Replace `lodash`
+
 ## 2.2.2
 
 ### Patch Changes
