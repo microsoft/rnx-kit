@@ -106,7 +106,7 @@ const profile: Profile = {
   hermes: {
     // Hermes now comes bundled with `react-native`
     name: "#meta",
-    capabilities: ["core"],
+    capabilities: [],
   },
   netinfo: {
     name: "@react-native-community/netinfo",

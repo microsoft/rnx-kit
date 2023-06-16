@@ -55,10 +55,12 @@ const table = markdownTable([
         if ("version" in pkg) {
           const { name, version } = pkg;
           return `${name}@${version}`;
-        } else {
+        } else if (pkg.capabilities.length > 0) {
           return `Meta package for installing ${pkg.capabilities
             .map((name) => `\`${name}\``)
             .join(", ")}`;
+        } else {
+          return "-";
         }
       }),
     ];

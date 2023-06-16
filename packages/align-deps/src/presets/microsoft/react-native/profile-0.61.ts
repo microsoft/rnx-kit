@@ -38,6 +38,11 @@ const profile: Profile = {
     version: "^0.61.0",
     capabilities: ["core"],
   },
+  "core/metro-config": {
+    name: "#meta",
+    capabilities: [],
+    devOnly: true,
+  },
 
   "babel-preset-react-native": {
     name: "metro-react-native-babel-preset",

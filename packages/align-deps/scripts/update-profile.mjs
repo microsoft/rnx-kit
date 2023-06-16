@@ -149,7 +149,7 @@ import profile_${currentVersionVarName} from "./profile-${currentVersion}";
 const reactNative: Package = {
   name: "react-native",
   version: "^${targetVersion}.0",
-  capabilities: ["react"],
+  capabilities: ["react", "core/metro-config"],
 };
 
 const profile: Profile = {
@@ -182,6 +182,11 @@ const profile: Profile = {
     name: "react-native-windows",
     version: "^${targetVersion}.0",
     capabilities: ["core"],
+  },
+  "core/metro-config": {
+    name: "@react-native/metro-config",
+    version: "^${targetVersion}.0",
+    devOnly: true,
   },
 
   "babel-preset-react-native": {
