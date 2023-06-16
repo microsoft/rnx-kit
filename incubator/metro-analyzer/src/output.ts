@@ -1,7 +1,7 @@
 import chalk from "chalk";
 import fs from "fs";
 import { VIRTUAL_PREFIX } from "./constants.js";
-import type { Duplicate, Path, Result, Stats } from "./types.js";
+import type { Path, Result, Stats } from "./types.js";
 import { error, info } from "@rnx-kit/console";
 
 function formatBytes(bytes: number, decimals = 1): string {
@@ -115,28 +115,6 @@ export function output(result: Result, jsonPath?: string): void {
     outputJSON(result, jsonPath);
   } else {
     outputToConsole(result);
-  }
-}
-
-/**
- * Outputs a list of duplicate dependencies to the console.
- *
- * @param duplicates  List of duplicate dependencies in the bundle
- */
-export function outputDuplicates(duplicates: Duplicate[]): void {
-  info(`Found ${duplicates.length} duplicate dependencies:`);
-  for (const duplicate of duplicates) {
-    const { module, copies, versions } = duplicate;
-    console.log(
-      `The dependency ${module} resolves to ${copies} files in the bundle:`
-    );
-
-    for (const version in versions) {
-      for (const path of versions[version]) {
-        console.log(` - ${path}`);
-      }
-    }
-    console.log();
   }
 }
 

@@ -1,5 +1,5 @@
 export { analyze } from "./analyze.js";
-export { compare } from "./compare.js";
+export { compare, readMetafile } from "./compare.js";
 export {
   generateGraph,
   getDuplicates,
@@ -10,7 +10,6 @@ export {
 export {
   output,
   outputDiffToConsole,
-  outputDuplicates,
   outputWhyDuplicateInBundle,
 } from "./output.js";
 

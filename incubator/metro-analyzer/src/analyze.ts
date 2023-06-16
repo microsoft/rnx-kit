@@ -4,14 +4,9 @@ import {
   getDuplicates,
   getWhyDuplicatesInBundle,
 } from "./duplicates.js";
-import {
-  output,
-  outputDuplicates,
-  outputWhyDuplicateInBundle,
-} from "./output.js";
+import { output, outputWhyDuplicateInBundle } from "./output.js";
 import { stats } from "./stats.js";
 import { webpackStats as webpackStats } from "./webpackStats.js";
-import { info } from "@rnx-kit/console";
 import * as path from "path";
 import { readMetafile } from "./compare.js";
 
@@ -40,15 +35,9 @@ export async function analyze(
     webpackStats(metafile, metafileDir, false, statsPath, graph);
   }
 
-  const duplicates = getDuplicates(metafile.inputs);
-  if (!duplicates.length) {
-    info(`No duplicates found in ${metafilePath}`);
-  } else {
-    outputDuplicates(duplicates);
-
-    if (showDuplicates) {
-      outputWhyDuplicateInBundle(getWhyDuplicatesInBundle(metafile, graph));
-    }
+  const result = getDuplicates(metafile.inputs);
+  if (result.duplicates && showDuplicates) {
+    outputWhyDuplicateInBundle(getWhyDuplicatesInBundle(metafile, graph));
   }
 
   const data = stats(metafile);

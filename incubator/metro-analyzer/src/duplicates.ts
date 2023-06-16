@@ -1,15 +1,11 @@
-import { countCopies } from "@rnx-kit/metro-plugin-duplicates-checker/lib/checkForDuplicatePackages.js";
-import { resolveModule } from "@rnx-kit/metro-plugin-duplicates-checker/lib/gatherModules.js";
+import type { Result } from "@rnx-kit/metro-plugin-duplicates-checker";
+import {
+  detectDuplicatePackages,
+  resolveModule,
+} from "@rnx-kit/metro-plugin-duplicates-checker";
 import { VIRTUAL_PREFIX } from "./constants.js";
 import type { Metafile } from "./metafile.js";
-import type {
-  Duplicate,
-  Graph,
-  Import,
-  Item,
-  ModuleMap,
-  Path,
-} from "./types.js";
+import type { Graph, Import, Item, ModuleMap, Path } from "./types.js";
 
 /** Generates a map of all the entry points and imports in the metafile.
  * Maps each module to the module that imports it and the import type.
@@ -144,7 +140,7 @@ export function getWhyDuplicatesInBundle(
   return paths;
 }
 
-function getResolvedModules(inputs: Metafile["inputs"]): ModuleMap {
+export function getDuplicates(inputs: Metafile["inputs"]): Result {
   const moduleMap: ModuleMap = {};
 
   for (const file in inputs) {
@@ -157,21 +153,5 @@ function getResolvedModules(inputs: Metafile["inputs"]): ModuleMap {
     moduleMap[name][version].add(absolutePath);
   }
 
-  return moduleMap;
-}
-
-// Can probably remove this as the @rnx-kit/metro-plugin-duplicates-checker
-// plugin should be enabled when bundling, so before running the analyzer.
-export function getDuplicates(inputs: Metafile["inputs"]): Duplicate[] {
-  const resolvedModules = getResolvedModules(inputs);
-  const duplicates: Duplicate[] = [];
-
-  for (const module in resolvedModules) {
-    const copies = countCopies(resolvedModules[module]);
-    if (copies > 1) {
-      duplicates.push({ copies, module, versions: resolvedModules[module] });
-    }
-  }
-
-  return duplicates;
+  return detectDuplicatePackages(moduleMap, {});
 }
