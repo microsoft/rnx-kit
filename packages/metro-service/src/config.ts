@@ -160,10 +160,15 @@ function getDefaultConfigProvider(): typeof getDefaultConfigInternal {
     const {
       getDefaultConfig,
     } = require("@react-native-community/cli-plugin-metro");
-    return getDefaultConfig;
+
+    // Starting with `react-native` 0.72, we need to build a complete Metro
+    // config upfront and will no longer need to get a default config here.
+    return getDefaultConfig ? getDefaultConfig : () => ({});
   } catch (_) {
-    return getDefaultConfigInternal;
+    // Ignore
   }
+
+  return getDefaultConfigInternal;
 }
 
 /**
