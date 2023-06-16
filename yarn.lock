@@ -3493,7 +3493,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rnx-kit/config@*, @rnx-kit/config@^0.6.0, @rnx-kit/config@^0.6.2, @rnx-kit/config@workspace:packages/config":
+"@rnx-kit/config@*, @rnx-kit/config@^0.6.0, @rnx-kit/config@^0.6.2, @rnx-kit/config@^0.6.3, @rnx-kit/config@workspace:packages/config":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/config@workspace:packages/config"
   dependencies:
@@ -3689,7 +3689,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/metro-plugin-typescript@workspace:packages/metro-plugin-typescript"
   dependencies:
-    "@rnx-kit/config": ^0.6.2
+    "@rnx-kit/config": ^0.6.3
     "@rnx-kit/console": ^1.0.0
     "@rnx-kit/scripts": "*"
     "@rnx-kit/tools-node": ^2.0.0

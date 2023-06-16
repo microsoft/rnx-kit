@@ -1,5 +1,11 @@
 # @rnx-kit/react-native-host
 
+## 0.2.7
+
+### Patch Changes
+
+- 79615c96: RuntimeScheduler is only used by TurboModule Manager in >RN0.72
+
 ## 0.2.6
 
 ### Patch Changes

@@ -1,5 +1,13 @@
 # @rnx-kit/metro-plugin-typescript
 
+## 0.4.2
+
+### Patch Changes
+
+- 40a9b023: Replace `lodash`
+- Updated dependencies [40a9b023]
+  - @rnx-kit/config@0.6.3
+
 ## 0.4.1
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/config
 
+## 0.6.3
+
+### Patch Changes
+
+- 40a9b023: Replace `lodash`
+
 ## 0.6.2
 
 ### Patch Changes

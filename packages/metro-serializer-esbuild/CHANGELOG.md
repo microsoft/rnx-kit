@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-serializer-esbuild
 
+## 0.1.24
+
+### Patch Changes
+
+- af8ad7f7: Bump esbuild to 0.18 to include a number of `tsconfig.json` related fixes (see https://github.com/evanw/esbuild/releases/tag/v0.18.0)
+
 ## 0.1.23
 
 ### Patch Changes
