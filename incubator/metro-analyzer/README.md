@@ -1,5 +1,3 @@
-<!-- We recommend an empty change log entry for a new package: `yarn change --empty` -->
-
 # @rnx-kit/metro-analyzer
 
 [![Build](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml/badge.svg)](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml)
@@ -11,14 +9,16 @@
 
 🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧
 
-This is a sample folder to use as base for generating new packages for
-`rnx-kit`.
-
 ## Motivation
 
-We want new packages to follow an existing set of patterns and guidelines; via
-this package, we can enforce easily allow new folders to stick to at least a
-common starting point.
+This tool provides simple analysis of Metro bundles based on
+[esbuild's metafile](https://esbuild.github.io/api/#metafile). It allows users
+to analyze a bundle/metafile, compare two metafiles, and generate a limited, but
+compatible Webpack stats file. This file can then be used with more advanced
+Webpack-based analysis and comparison tools such as
+[@mixer/webpack-bundle-compare](https://github.com/microsoft/webpack-bundle-compare).
+This tool could allow developers quickly and easily gain insights into their
+bundle size and composition.
 
 ## Installation
 
