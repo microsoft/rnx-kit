@@ -1,7 +1,7 @@
-# @rnx-kit/metro-analyzer
+# @rnx-kit/esbuild-bundle-analyzer
 
 [![Build](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml/badge.svg)](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml)
-[![npm version](https://img.shields.io/npm/v/@rnx-kit/metro-analyzer)](https://www.npmjs.com/package/@rnx-kit/metro-analyzer)
+[![npm version](https://img.shields.io/npm/v/@rnx-kit/esbuild-bundle-analyzer)](https://www.npmjs.com/package/@rnx-kit/esbuild-bundle-analyzer)
 
 🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧
 
@@ -23,20 +23,20 @@ bundle size and composition.
 ## Installation
 
 ```sh
-yarn add @rnx-kit/metro-analyzer --dev
+yarn add @rnx-kit/esbuild-bundle-analyzer --dev
 ```
 
 or if you're using npm
 
 ```sh
-npm add --save-dev @rnx-kit/metro-analyzer
+npm add --save-dev @rnx-kit/esbuild-bundle-analyzer
 ```
 
 ## Usage
 
 This tool has three commands, `analyze`, `compare`, and `transform`. You can
 find the full list of functionalities by invoking the command
-`npx @rnx-kit/metro-analyzer --help`.
+`npx @rnx-kit/esbuild-bundle-analyzer --help`.
 
 ### analyze
 
@@ -50,7 +50,7 @@ are being added in the bundle.
 Generate simple analysis of a bundle by consuming esbuild's metafile:
 
 ```sh
-npx @rnx-kit/metro-analyzer analyze --metafile <path-to-esbuild-metafile>
+npx @rnx-kit/esbuild-bundle-analyzer analyze --metafile <path-to-esbuild-metafile>
 ```
 
 Along with these core options, you might want to pass the following params:
@@ -66,7 +66,7 @@ Along with these core options, you might want to pass the following params:
 A complete example of this script is the following:
 
 ```sh
-npx @rnx-kit/metro-analyzer analyze --metafile meta.json --json --detailed --transform dist/stats.json
+npx @rnx-kit/esbuild-bundle-analyzer analyze --metafile meta.json --json --detailed --transform dist/stats.json
 ```
 
 ### compare
@@ -75,7 +75,7 @@ This command will compare two metafiles and outputs the difference between the
 two.
 
 ```sh
-npx @rnx-kit/metro-analyzer compare --baseline <path-to-esbuild-metafile> --candidate <path-to-esbuild-metafile>
+npx @rnx-kit/esbuild-bundle-analyzer compare --baseline <path-to-esbuild-metafile> --candidate <path-to-esbuild-metafile>
 ```
 
 ### compare
@@ -84,7 +84,7 @@ This command will compare two metafiles and outputs the difference between the
 two.
 
 ```sh
-npx @rnx-kit/metro-analyzer compare --baseline <path-to-esbuild-metafile> --candidate <path-to-esbuild-metafile>
+npx @rnx-kit/esbuild-bundle-analyzer compare --baseline <path-to-esbuild-metafile> --candidate <path-to-esbuild-metafile>
 ```
 
 This command consumes the esbuild metafile and transforms it into a compatible
@@ -97,7 +97,7 @@ track and compare the bundle size over time.
 Generate a webpack stats file:
 
 ```sh
-npx @rnx-kit/metro-analyzer transform --metafile <path-to-esbuild-metafile> --outputFile <path-to-webpack-stats-file>
+npx @rnx-kit/esbuild-bundle-analyzer transform --metafile <path-to-esbuild-metafile> --outputFile <path-to-webpack-stats-file>
 ```
 
 Then, you can upload the generated Webpack stats file to

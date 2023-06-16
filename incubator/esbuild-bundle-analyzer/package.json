@@ -1,9 +1,9 @@
 {
   "private": true,
-  "name": "@rnx-kit/metro-analyzer",
+  "name": "@rnx-kit/esbuild-bundle-analyzer",
   "version": "0.0.1",
-  "description": "EXPERIMENTAL - USE WITH CAUTION - A tool for analyzing a Metro bundle",
-  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/incubator/metro-analyzer#readme",
+  "description": "EXPERIMENTAL - USE WITH CAUTION - A tool for analyzing an esbuild bundle/metafile",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/incubator/esbuild-bundle-analyzer#readme",
   "license": "MIT",
   "author": {
     "name": "Microsoft Open Source",
@@ -23,13 +23,13 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/microsoft/rnx-kit",
-    "directory": "incubator/metro-analyzer"
+    "directory": "incubator/esbuild-bundle-analyzer"
   },
   "engines": {
     "node": ">=14.15"
   },
   "scripts": {
-    "prepare": "echo '⚠️  metro-analyzer is EXPERIMENTAL - USE WITH CAUTION  ⚠️'",
+    "prepare": "echo '⚠️  esbuild-bundle-analyzer is EXPERIMENTAL - USE WITH CAUTION  ⚠️'",
     "build": "rnx-kit-scripts build",
     "format": "rnx-kit-scripts format",
     "lint": "rnx-kit-scripts lint",
