@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-service
 
+## 3.0.5
+
+### Patch Changes
+
+- 2d8fab91: Fix out-of-tree platforms not being included on react-native 0.72
+
 ## 3.0.4
 
 ### Patch Changes
