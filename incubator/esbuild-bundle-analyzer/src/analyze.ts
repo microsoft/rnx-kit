@@ -9,6 +9,8 @@ import { stats } from "./stats.js";
 import { webpackStats as webpackStats } from "./webpackStats.js";
 import * as path from "path";
 import { readMetafile } from "./compare.js";
+import { error } from "@rnx-kit/console";
+import { getErrorMessage } from "@rnx-kit/metro-plugin-duplicates-checker";
 
 /**
  * Analyzes a esbuild metafile.
@@ -36,7 +38,12 @@ export async function analyze(
   }
 
   const result = getDuplicates(metafile.inputs);
-  if (result.duplicates && showDuplicates) {
+  const errorMessage = getErrorMessage(result);
+  if (errorMessage) {
+    error(errorMessage);
+  }
+
+  if (errorMessage && showDuplicates) {
     outputWhyDuplicateInBundle(getWhyDuplicatesInBundle(metafile, graph));
   }
 

@@ -14,7 +14,10 @@ export { resolveModule } from "./gatherModules";
 export { checkForDuplicatePackages };
 export type { Options, Result };
 
-function getErrorMessage({ banned, duplicates }: Result): string | undefined {
+export function getErrorMessage({
+  banned,
+  duplicates,
+}: Result): string | undefined {
   if (duplicates > 0) {
     if (banned > 0) {
       return `Found ${banned} banned module(s) and ${duplicates} duplicate(s)`;

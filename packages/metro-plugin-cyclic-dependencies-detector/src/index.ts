@@ -3,6 +3,7 @@ import type { PluginOptions } from "./detectCycles";
 import { detectCycles } from "./detectCycles";
 
 export type { PluginOptions } from "./detectCycles";
+export { packageRelativePath } from "./detectCycles";
 
 export function CyclicDependencies(
   pluginOptions: PluginOptions = {}

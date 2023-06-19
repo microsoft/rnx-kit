@@ -3,6 +3,7 @@ import fs from "fs";
 import { VIRTUAL_PREFIX } from "./constants.js";
 import type { Path, Result, Stats } from "./types.js";
 import { error, info } from "@rnx-kit/console";
+import { packageRelativePath } from "@rnx-kit/metro-plugin-cyclic-dependencies-detector";
 
 function formatBytes(bytes: number, decimals = 1): string {
   if (bytes === 0) return "0 bytes";
@@ -125,59 +126,35 @@ export function output(result: Result, jsonPath?: string): void {
  * import paths all the way to the entry point.
  */
 export function outputWhyDuplicateInBundle(paths: Path[]): void {
+  const cachedPaths: Record<string, string> = {};
+
   for (const path of paths) {
-    let first = true;
     let lastItem = path[0];
+    let index = 0;
 
-    for (const i in path) {
-      const item = path[i];
+    for (let file in path) {
+      const item = path[file];
       lastItem = item;
+      file = file.replace(VIRTUAL_PREFIX, "");
 
-      if (first) {
-        info(
-          `Entry point ${item?.input.replace(
-            VIRTUAL_PREFIX,
-            ""
-          )} contains:\n   import "${item?.import?.original}";  \u2935`
-        );
-
-        first = false;
-        continue;
+      if (!index) {
+        info(packageRelativePath(file, cachedPaths));
       }
 
-      let type = "";
-      switch (item?.import?.kind) {
-        case "import-statement":
-          type = "Imported file";
-          break;
-        case "require-call":
-          type = "Required file";
-          break;
-        case "dynamic-import":
-          type = "Dynamically-imported file";
-          break;
-        case "import-rule":
-          type = "Imported stylesheet file";
-          break;
-        case "url-token":
-          type = "URL reference file";
-          break;
-        default:
-          throw new Error(`Invalid import kind: ${item?.import?.kind}`);
-      }
-
-      console.log(
-        `${type} ${i.replace(VIRTUAL_PREFIX, "")} contains:\n   import "${
-          item?.import?.original
-        }";  \u2935`
+      info(
+        `${"    ".repeat(index)}└── ${packageRelativePath(file, cachedPaths)}`
       );
+
+      index += 1;
     }
 
-    console.log(
-      `Which is how the file (${lastItem?.import?.input.replace(
-        VIRTUAL_PREFIX,
-        ""
-      )}) ended up in the bundle.\n`
-    );
+    if (lastItem?.import?.input !== undefined) {
+      info(
+        `${"    ".repeat(index)}└── ${packageRelativePath(
+          lastItem?.import?.input.replace(VIRTUAL_PREFIX, ""),
+          cachedPaths
+        )}\n`
+      );
+    }
   }
 }
