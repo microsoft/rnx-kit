@@ -58,30 +58,6 @@ function defaultWatchFolders() {
 }
 
 /**
- * Returns default Metro config.
- *
- * Starting with `react-native` 0.72, we need to build a complete Metro config
- * as `@react-native-community/cli` will no longer provide defaults.
- *
- * @param {string} projectRoot
- * @returns {MetroConfig[]}
- */
-function getDefaultConfig(projectRoot) {
-  try {
-    const pkgJson = path.join(projectRoot, "package.json");
-    const manifest = fs.readFileSync(pkgJson, { encoding: "utf-8" });
-    if (manifest.includes("@react-native/metro-config")) {
-      // @ts-ignore Cannot find module or its corresponding type declarations.
-      const { getDefaultConfig } = require("@react-native/metro-config");
-      return [getDefaultConfig(projectRoot)];
-    }
-  } catch (_) {
-    // Ignore
-  }
-  return [];
-}
-
-/**
  * Returns the path to specified module; `undefined` if not found.
  *
  * Note that this function resolves symlinks. This is necessary for setups that
@@ -226,6 +202,7 @@ module.exports = {
   makeMetroConfig: (customConfig = {}) => {
     const { mergeConfig } = require("metro-config");
     const { enhanceMiddleware } = require("./assetPluginForMonorepos");
+    const { getDefaultConfig } = require("./defaultConfig");
 
     const projectRoot = customConfig.projectRoot || process.cwd();
     const blockList = exclusionList([], projectRoot);
