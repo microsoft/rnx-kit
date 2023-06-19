@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-config
 
+## 1.3.7
+
+### Patch Changes
+
+- 2d8fab91: Fix out-of-tree platforms not being included on react-native 0.72
+
 ## 1.3.6
 
 ### Patch Changes
