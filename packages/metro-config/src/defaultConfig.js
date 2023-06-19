@@ -12,6 +12,24 @@ const path = require("path");
  */
 
 /**
+ * @param {string} moduleName
+ * @param {string} implementation
+ */
+function redirectToPlatform(moduleName, implementation) {
+  if (implementation) {
+    if (moduleName === "react-native") {
+      return implementation;
+    }
+
+    const prefix = "react-native/";
+    if (moduleName.startsWith(prefix)) {
+      return `${implementation}/${moduleName.slice(prefix.length)}`;
+    }
+  }
+  return moduleName;
+}
+
+/**
  * @param {PlatformImplementations} implementations
  */
 function outOfTreePlatformResolver(implementations) {
@@ -30,17 +48,8 @@ function outOfTreePlatformResolver(implementations) {
     }
 
     try {
-      let modifiedModuleName = moduleName;
-      const reactNativePlatform = implementations[platform];
-      if (reactNativePlatform) {
-        if (moduleName === "react-native") {
-          modifiedModuleName = reactNativePlatform;
-        } else if (moduleName.startsWith("react-native/")) {
-          modifiedModuleName = `${reactNativePlatform}/${modifiedModuleName.slice(
-            "react-native/".length
-          )}`;
-        }
-      }
+      const impl = implementations[platform];
+      const modifiedModuleName = redirectToPlatform(moduleName, impl);
       // @ts-expect-error We pass 4 arguments instead of 3 to be backwards compatible
       return resolve(context, modifiedModuleName, platform, null);
     } finally {
