@@ -29,9 +29,21 @@ export function main(): void {
           .option("json", {
             describe: "Output analysis information as JSON",
             type: "string",
+          })
+          .option("namespace", {
+            describe:
+              "Removes the namespace from every module to get cleaner output",
+            type: "string",
+            default: "file:",
           }),
       (argv) => {
-        analyze(argv.metafile, argv.showDuplicates, argv.transform, argv.json);
+        analyze(
+          argv.metafile,
+          argv.showDuplicates,
+          argv.namespace,
+          argv.transform,
+          argv.json
+        );
       }
     )
     .command(
@@ -73,6 +85,12 @@ export function main(): void {
             type: "boolean",
             demandOption: false,
             default: false,
+          })
+          .option("namespace", {
+            describe:
+              "Removes the namespace from every module to get cleaner output",
+            type: "string",
+            default: "file:",
           }),
       (argv) => {
         const metafile = readMetafile(argv.metafile);
@@ -81,7 +99,8 @@ export function main(): void {
           metafile,
           argv.metafile,
           argv.skipLineNumber,
-          argv.outputFile
+          argv.outputFile,
+          argv.namespace
         );
       }
     )

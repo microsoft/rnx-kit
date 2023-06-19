@@ -1,6 +1,6 @@
 import fs from "fs";
 import * as path from "path";
-import { filesToSkip, VIRTUAL_PREFIX } from "./constants.js";
+import { filesToSkip } from "./constants.js";
 import { generateGraph, getWhyFileInBundle } from "./duplicates.js";
 import type { Metafile } from "./metafile.js";
 import type {
@@ -57,6 +57,7 @@ function getSimplePath(dir: string, file: string): string {
  * @param metafileDir Directory of the esbuild metafile
  * @param skipLineNumber Whether to skip the line number in the webpack stats output
  * @param statsPath The path to the webpack stats file
+ * @param namespace The namespace to remove from every module to get cleaner output
  * @param graph Module object containing all the entry points and imports
  */
 export function webpackStats(
@@ -64,6 +65,7 @@ export function webpackStats(
   metafileDir: string,
   skipLineNumber: boolean,
   statsPath: string,
+  namespace: string,
   graph?: Graph
 ): void {
   if (!graph) graph = generateGraph(metafile);
@@ -95,7 +97,7 @@ export function webpackStats(
     });
 
     for (const inputFile in inputsInOutput) {
-      const inputFileClean = inputFile.replace(VIRTUAL_PREFIX, "");
+      const inputFileClean = inputFile.replace(namespace, "");
       if (filesToSkip.includes(inputFileClean)) continue;
 
       const input = inputsInOutput[inputFile];
@@ -105,14 +107,14 @@ export function webpackStats(
 
       for (const p in paths) {
         issuers.push({
-          name: getSimplePath(metafileDir, p.replace(VIRTUAL_PREFIX, "")),
+          name: getSimplePath(metafileDir, p.replace(namespace, "")),
         });
       }
 
       for (const input in inputs) {
         for (const imp of inputs[input].imports) {
           if (imp.path === inputFile) {
-            const cleanInput = input.replace(VIRTUAL_PREFIX, "");
+            const cleanInput = input.replace(namespace, "");
 
             reasons.push({
               type: inputs[input].format === "esm" ? "harmony" : "cjs",

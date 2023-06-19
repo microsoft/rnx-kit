@@ -3,7 +3,6 @@ import {
   detectDuplicatePackages,
   resolveModule,
 } from "@rnx-kit/metro-plugin-duplicates-checker";
-import { VIRTUAL_PREFIX } from "./constants.js";
 import type { Metafile } from "./metafile.js";
 import type { Graph, Import, Item, ModuleMap, Path } from "./types.js";
 
@@ -140,12 +139,24 @@ export function getWhyDuplicatesInBundle(
   return paths;
 }
 
-export function getDuplicates(inputs: Metafile["inputs"]): Result {
+/**
+ * Finds all duplicates in the metafile. This is very similar to the
+ * metro-plugin-duplicates-checker, but it uses the esbuild metafile
+ * instead of the metro graph/bundle/sourcemap.
+ *
+ * @param inputs The metafile inputs
+ * @param namespace The namespace to remove from the file paths
+ * @returns List of duplicated files
+ */
+export function getDuplicates(
+  inputs: Metafile["inputs"],
+  namespace: string
+): Result {
   const moduleMap: ModuleMap = {};
 
   for (const file in inputs) {
     const { name, version, absolutePath } = resolveModule(
-      file.replace(VIRTUAL_PREFIX, "")
+      file.replace(namespace, "")
     );
 
     moduleMap[name] ||= {};

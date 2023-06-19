@@ -1,6 +1,5 @@
 import chalk from "chalk";
 import fs from "fs";
-import { VIRTUAL_PREFIX } from "./constants.js";
 import type { Path, Result, Stats } from "./types.js";
 import { error, info } from "@rnx-kit/console";
 import { packageRelativePath } from "@rnx-kit/metro-plugin-cyclic-dependencies-detector";
@@ -123,9 +122,13 @@ export function output(result: Result, jsonPath?: string): void {
  * Outputs why and how a duplicated file is being included in the bundle.
  *
  * @param paths List of duplicated files in the bundle and their
- * import paths all the way to the entry point.
+ * import paths all the way to the entry point
+ * @param namespace The namespace to remove from the file paths
  */
-export function outputWhyDuplicateInBundle(paths: Path[]): void {
+export function outputWhyDuplicateInBundle(
+  paths: Path[],
+  namespace: string
+): void {
   const cachedPaths: Record<string, string> = {};
 
   for (const path of paths) {
@@ -135,7 +138,7 @@ export function outputWhyDuplicateInBundle(paths: Path[]): void {
     for (let file in path) {
       const item = path[file];
       lastItem = item;
-      file = file.replace(VIRTUAL_PREFIX, "");
+      file = file.replace(namespace, "");
 
       if (!index) {
         info(packageRelativePath(file, cachedPaths));
@@ -151,7 +154,7 @@ export function outputWhyDuplicateInBundle(paths: Path[]): void {
     if (lastItem?.import?.input !== undefined) {
       info(
         `${"    ".repeat(index)}└── ${packageRelativePath(
-          lastItem?.import?.input.replace(VIRTUAL_PREFIX, ""),
+          lastItem?.import?.input.replace(namespace, ""),
           cachedPaths
         )}\n`
       );
