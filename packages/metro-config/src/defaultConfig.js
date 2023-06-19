@@ -12,6 +12,25 @@ const path = require("path");
  */
 
 /**
+ * @param {PlatformImplementations} availablePlatforms
+ */
+function getPreludeModules(availablePlatforms) {
+  // Include all instances of `InitializeCore` here and let Metro exclude
+  // the unused ones.
+  const mainModules = new Set([
+    require.resolve("react-native/Libraries/Core/InitializeCore"),
+  ]);
+  for (const moduleName of Object.values(availablePlatforms)) {
+    if (moduleName) {
+      mainModules.add(
+        require.resolve(`${moduleName}/Libraries/Core/InitializeCore`)
+      );
+    }
+  }
+  return Array.from(mainModules);
+}
+
+/**
  * @param {string} moduleName
  * @param {string} implementation
  */
@@ -87,20 +106,9 @@ function getDefaultConfig(projectRoot) {
       defaultConfig.resolver.resolveRequest =
         outOfTreePlatformResolver(availablePlatforms);
 
-      // Include all instances of `InitializeCore` here and let Metro exclude
-      // the unused ones.
-      const mainModules = new Set([
-        require.resolve("react-native/Libraries/Core/InitializeCore"),
-      ]);
-      for (const moduleName of Object.values(availablePlatforms)) {
-        if (moduleName) {
-          mainModules.add(
-            require.resolve(`${moduleName}/Libraries/Core/InitializeCore`)
-          );
-        }
-      }
+      const preludeModules = getPreludeModules(availablePlatforms);
       defaultConfig.serializer.getModulesRunBeforeMainModule = () => {
-        return Array.from(mainModules);
+        return preludeModules;
       };
 
       return [defaultConfig];
