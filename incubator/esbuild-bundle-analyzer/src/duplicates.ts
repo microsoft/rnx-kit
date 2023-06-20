@@ -68,7 +68,7 @@ export function getWhyFileInBundle(graph: Graph, file: string): Path {
   const path: Path = {};
   let current = file;
   let importer = graph.imports[current];
-  const items: Item[] = [{ input: file, import: null }];
+  const items: Item[] = [{ input: file, import: undefined }];
 
   if (!importer) return path;
 

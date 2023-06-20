@@ -33,11 +33,11 @@ export type Graph = {
 
 export type Item = {
   input: string;
-  import: Import | null;
+  import: Import | undefined;
 };
 
 export type Path = {
-  [key: string]: Item | null;
+  [key: string]: Item;
 };
 
 export type ModuleMap = {

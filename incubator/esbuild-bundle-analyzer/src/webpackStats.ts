@@ -12,9 +12,7 @@ import type {
 import { info } from "@rnx-kit/console";
 
 // TODO: Improve...
-function getLine(filePath: string, keyword?: string): string {
-  if (!filePath || !keyword) return "";
-
+function getLine(filePath: string, keyword: string): string {
   try {
     const file = fs.readFileSync(filePath, "utf-8");
     const lineNumber = file.split("\n").findIndex((line) => {
@@ -24,9 +22,9 @@ function getLine(filePath: string, keyword?: string): string {
         return line.includes(keyword.split("/src/index.ts")[0]);
       }
 
-      if (!result && line.includes("lib")) {
+      if (!result && line.includes("/lib/")) {
         return line
-          .replace("lib", "src")
+          .replace("/lib/", "/src/")
           .replace(".js", ".ts")
           .includes(keyword);
       }
@@ -65,7 +63,7 @@ export function webpackStats(
   metafileDir: string,
   skipLineNumber: boolean,
   statsPath: string,
-  namespace: string,
+  namespace = "",
   graph?: Graph
 ): void {
   if (!graph) graph = generateGraph(metafile);
@@ -121,7 +119,10 @@ export function webpackStats(
               module: cleanInput,
               moduleName: getSimplePath(metafileDir, cleanInput),
               userRequest: imp.original,
-              loc: !skipLineNumber ? getLine(cleanInput, imp.original) : "",
+              loc:
+                !skipLineNumber && imp.original
+                  ? getLine(cleanInput, imp.original)
+                  : "",
             });
           }
         }

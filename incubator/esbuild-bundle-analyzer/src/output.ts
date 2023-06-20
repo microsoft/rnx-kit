@@ -1,7 +1,7 @@
 import chalk from "chalk";
 import fs from "fs";
 import type { Path, Result, Stats } from "./types.js";
-import { error, info } from "@rnx-kit/console";
+import { info } from "@rnx-kit/console";
 import { packageRelativePath } from "@rnx-kit/metro-plugin-cyclic-dependencies-detector";
 
 function formatBytes(bytes: number, decimals = 1): string {
@@ -35,11 +35,6 @@ function formatText(
  * @param candidate The candidate statistics
  */
 export function outputDiffToConsole(baseline: Stats, candidate: Stats): void {
-  if (!baseline || !candidate) {
-    error("Invalid input parameters");
-    return;
-  }
-
   info(
     "Comparing baseline and candidate statistics:\n" +
       `  Num. Files: ${formatText(baseline.files, candidate.files, false)}\n` +
@@ -151,7 +146,7 @@ export function outputWhyDuplicateInBundle(
       index += 1;
     }
 
-    if (lastItem?.import?.input !== undefined) {
+    if (lastItem?.import?.input) {
       info(
         `${"    ".repeat(index)}└── ${packageRelativePath(
           lastItem?.import?.input.replace(namespace, ""),

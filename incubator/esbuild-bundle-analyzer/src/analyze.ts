@@ -22,13 +22,13 @@ import { getErrorMessage } from "@rnx-kit/metro-plugin-duplicates-checker";
  * esbuild metafile and set the output file to write the stats file to
  * @param jsonFile Output file to write analysis information to in JSON format
  */
-export async function analyze(
+export function analyze(
   metafilePath: string,
   showDuplicates: boolean,
-  namespace: string,
+  namespace = "",
   transformPath?: string,
   jsonFile?: string
-) {
+): void {
   const metafile = readMetafile(metafilePath);
   const metafileDir = path.dirname(metafilePath);
   const statsPath = transformPath || path.join(metafileDir, "stats.json");

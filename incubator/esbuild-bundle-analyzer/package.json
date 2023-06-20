@@ -51,7 +51,8 @@
     "extends": "@rnx-kit/eslint-config"
   },
   "jest": {
-    "preset": "@rnx-kit/scripts"
+    "preset": "@rnx-kit/scripts",
+    "resolver": "@rnx-kit/jest-preset/typescript-esm-resolver.cjs"
   },
   "experimental": true
 }

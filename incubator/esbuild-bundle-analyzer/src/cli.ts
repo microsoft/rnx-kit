@@ -34,7 +34,6 @@ export function main(): void {
             describe:
               "Removes the namespace from every module to get cleaner output",
             type: "string",
-            default: "file:",
           }),
       (argv) => {
         analyze(
@@ -90,7 +89,6 @@ export function main(): void {
             describe:
               "Removes the namespace from every module to get cleaner output",
             type: "string",
-            default: "file:",
           }),
       (argv) => {
         const metafile = readMetafile(argv.metafile);
