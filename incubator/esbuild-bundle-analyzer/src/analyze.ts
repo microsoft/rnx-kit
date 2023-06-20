@@ -43,13 +43,12 @@ export function analyze(
   const errorMessage = getErrorMessage(result);
   if (errorMessage) {
     error(errorMessage);
-  }
-
-  if (errorMessage && showDuplicates) {
-    outputWhyDuplicateInBundle(
-      getWhyDuplicatesInBundle(metafile, graph),
-      namespace
-    );
+    if (showDuplicates) {
+      outputWhyDuplicateInBundle(
+        getWhyDuplicatesInBundle(metafile, graph),
+        namespace
+      );
+    }
   }
 
   const data = stats(metafile);

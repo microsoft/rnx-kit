@@ -15,7 +15,7 @@ export function main(): void {
             type: "string",
             demandOption: true,
           })
-          .option("showDuplicates", {
+          .option("show-duplicates", {
             describe:
               "Get detailed information about how the duplicates are bundled",
             type: "boolean",
@@ -74,12 +74,12 @@ export function main(): void {
             type: "string",
             demandOption: true,
           })
-          .option("outputFile", {
+          .option("output", {
             describe: "Output file to write the Webpack stats file to",
             type: "string",
             demandOption: true,
           })
-          .option("skipLineNumber", {
+          .option("skip-line-number", {
             describe: "Skip line number in the output",
             type: "boolean",
             demandOption: false,

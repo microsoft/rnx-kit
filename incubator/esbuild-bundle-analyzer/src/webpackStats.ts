@@ -33,20 +33,20 @@ function getLine(filePath: string, keyword: string): string {
       return result;
     });
 
-    return lineNumber !== -1 ? (lineNumber + 1).toString() : "";
+    return lineNumber >= 0 ? (lineNumber + 1).toString() : "";
   } catch (err) {
     return "";
   }
 }
 
-/** Returns a simpler and more readable path which starts from node_modules, e.g.:
+/**
+ * Returns a simpler and more readable path which starts from node_modules, e.g.:
  * ../../.store/@test-library@0.0.1-b55dbe3d1aed7a6c074d/node_modules/@test-library/a/b/test.js
  * becomes node_modules/@test-library/a/b/test.js
  */
 function getSimplePath(dir: string, file: string): string {
-  return file.includes("node_modules")
-    ? "node_modules" + file.split("node_modules")[1]
-    : path.relative(dir, file);
+  const index = file.indexOf("node_modules");
+  return index >= 0 ? file.splice(index) : path.relative(dir, file);
 }
 
 /**
