@@ -10,6 +10,7 @@ export type Capability =
   | "core-ios"
   | "core-macos"
   | "core-windows"
+  | "core/metro-config"
   | "animation"
   | "babel-preset-react-native"
   | "base64"

@@ -95,6 +95,10 @@ const profile: Profile = {
     name: "react-native-reanimated",
     version: "^2.14.1",
   },
+  checkbox: {
+    name: "@react-native-community/checkbox",
+    version: "^0.5.15",
+  },
   "datetime-picker": {
     name: "@react-native-community/datetimepicker",
     version: "^6.4.2",
@@ -107,6 +111,14 @@ const profile: Profile = {
     name: "jest",
     version: "^29.2.1",
     devOnly: true,
+  },
+  "masked-view": {
+    name: "@react-native-masked-view/masked-view",
+    version: "^0.2.9",
+  },
+  "safe-area": {
+    name: "react-native-safe-area-context",
+    version: "^4.5.1",
   },
   screens: {
     name: "react-native-screens",
@@ -122,12 +134,16 @@ const profile: Profile = {
   },
   svg: {
     name: "react-native-svg",
-    version: "^13.7.0",
+    version: "^13.9.0",
   },
   "test-app": {
     name: "react-native-test-app",
     version: "^2.2.1",
     devOnly: true,
+  },
+  webview: {
+    name: "react-native-webview",
+    version: "^12.0.2",
   },
 };
 
