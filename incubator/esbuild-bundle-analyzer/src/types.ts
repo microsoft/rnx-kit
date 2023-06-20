@@ -15,7 +15,8 @@ export type Format = "esm" | "cjs";
 export type Result = {
   data: Stats;
   buildTime: number;
-  downloadTime: number;
+  slowDownloadTime: number;
+  fastDownloadTime: number;
   avgFileSize: number;
   avgFileSizeNodeModules: number;
 };

@@ -17,8 +17,9 @@ export function stats(metafile: Metafile): Stats {
   let nodeModulesBytes = 0;
   let countOut = 0;
   let bytesOut = 0;
+  const keys = Object.keys(inputs);
 
-  for (const input in inputs) {
+  for (const input of keys) {
     const file = inputs[input];
 
     switch (file.format) {
@@ -50,7 +51,7 @@ export function stats(metafile: Metafile): Stats {
   }
 
   return {
-    files: Object.keys(inputs).length,
+    files: keys.length,
     totalBytes,
     esmBytes,
     cjsBytes,

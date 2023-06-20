@@ -55,18 +55,23 @@ npx @rnx-kit/esbuild-bundle-analyzer analyze --metafile <path-to-esbuild-metafil
 
 Along with these core options, you might want to pass the following params:
 
-- `--detailed`, Boolean flag to output how each duplicated file is being added
-  to the bundle
-- `--transform`, Generates a webpack stats file from the esbuild metafile and
-  sets the output file to write the stats file to
+- `--show-duplicates`, Boolean flag to output how each duplicated file is being
+  added to the bundle
 - `--json`, Outputs the analysis in JSON format and sets the output file to
   write the analysis information to. If not set the analysis will be output to
   the console
+- `--namespace`, Every module has an associated namespace. By default esbuild
+  operates in the file namespace, which corresponds to files on the `file`
+  system.
+  [@rnx-kit/metro-serializer-esbuild](https://github.com/microsoft/rnx-kit/tree/main/packages/metro-serializer-esbuild)
+  uses the `virtual:metro` namespace. This flag allows you to specify the
+  namespace of the metafile. This is useful if you want cleaner output without
+  the namespace prefix.
 
 A complete example of this script is the following:
 
 ```sh
-npx @rnx-kit/esbuild-bundle-analyzer analyze --metafile meta.json --json --detailed --transform dist/stats.json
+npx @rnx-kit/esbuild-bundle-analyzer analyze --metafile meta.json --json --show-duplicates --namespace virtual:metro
 ```
 
 ### compare
@@ -97,7 +102,7 @@ track and compare the bundle size over time.
 Generate a webpack stats file:
 
 ```sh
-npx @rnx-kit/esbuild-bundle-analyzer transform --metafile <path-to-esbuild-metafile> --outputFile <path-to-webpack-stats-file>
+npx @rnx-kit/esbuild-bundle-analyzer transform --metafile <path-to-esbuild-metafile> --output <path-to-webpack-stats-file>
 ```
 
 Then, you can upload the generated Webpack stats file to

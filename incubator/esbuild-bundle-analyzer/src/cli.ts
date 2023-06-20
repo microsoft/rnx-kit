@@ -6,11 +6,11 @@ import { webpackStats } from "./webpackStats.js";
 export function main(): void {
   yargs(process.argv.slice(2))
     .command(
-      "analyze",
+      "analyze <metafile>",
       "Analyzes a bundle by consuming and analyzing an esbuild metafile",
       (yargs) =>
         yargs
-          .option("metafile", {
+          .positional("metafile", {
             describe: "The esbuild metafile to analyze",
             type: "string",
             demandOption: true,
@@ -20,11 +20,6 @@ export function main(): void {
               "Get detailed information about how the duplicates are bundled",
             type: "boolean",
             default: false,
-          })
-          .option("transform", {
-            describe:
-              "Generates a webpack stats file from the esbuild metafile and sets the output file to write the stats file to",
-            type: "string",
           })
           .option("json", {
             describe: "Output analysis information as JSON",
@@ -38,9 +33,8 @@ export function main(): void {
       (argv) => {
         analyze(
           argv.metafile,
-          argv.showDuplicates,
+          argv["show-duplicates"],
           argv.namespace,
-          argv.transform,
           argv.json
         );
       }
@@ -65,11 +59,11 @@ export function main(): void {
       }
     )
     .command(
-      "transform",
-      "Transform the esbuild metafile to webpack JSON stats",
+      "transform <metafile>",
+      "Transform the esbuild metafile to webpack JSON stats file",
       (yargs) =>
         yargs
-          .option("metafile", {
+          .positional("metafile", {
             describe: "The esbuild metafile to analyze",
             type: "string",
             demandOption: true,
@@ -96,8 +90,8 @@ export function main(): void {
         webpackStats(
           metafile,
           argv.metafile,
-          argv.skipLineNumber,
-          argv.outputFile,
+          argv["skip-line-number"],
+          argv.output,
           argv.namespace
         );
       }

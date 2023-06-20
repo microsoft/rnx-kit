@@ -46,7 +46,7 @@ function getLine(filePath: string, keyword: string): string {
  */
 function getSimplePath(dir: string, file: string): string {
   const index = file.indexOf("node_modules");
-  return index >= 0 ? file.splice(index) : path.relative(dir, file);
+  return index >= 0 ? file.slice(index) : path.relative(dir, file);
 }
 
 /**

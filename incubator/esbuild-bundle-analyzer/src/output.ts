@@ -28,6 +28,25 @@ function formatText(
     : `${baseline} -> ${candidate} (${emoji}${Math.abs(baseline - candidate)})`;
 }
 
+function formatTime(time: number) {
+  const microSeconds = 1000000;
+  const milliSeconds = 1000;
+  let unit, size;
+
+  if (time < 0.0005) {
+    unit = "μs";
+    size = Math.round(time * microSeconds);
+  } else if (time < 0.5) {
+    unit = "ms";
+    size = Math.round(time * milliSeconds);
+  } else {
+    unit = "s";
+    size = time;
+  }
+
+  return `${size} ${unit}`;
+}
+
 /**
  * Outputs the difference between the baseline and candidate statistics to the console.
  *
@@ -84,7 +103,8 @@ function outputToConsole(result: Result): void {
       outputStats.map((stat) => `  ${stat}`).join("\n") +
       "\n" +
       `Build time: ${result.buildTime} s\n` +
-      `Download time: ${result.downloadTime} s\n` +
+      `3G download time: ${formatTime(result.slowDownloadTime)}\n` +
+      `4G download time: ${formatTime(result.fastDownloadTime)}\n` +
       `Average file size: ${formatBytes(result.avgFileSize)}\n` +
       `Average file size (node_modules): ${formatBytes(
         result.avgFileSizeNodeModules,
