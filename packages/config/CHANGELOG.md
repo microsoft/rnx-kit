@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/config
 
+## 0.6.4
+
+### Patch Changes
+
+- c9eafa48: Add new capability, `core/metro-config`, for `@react-native/metro-config`
+
 ## 0.6.3
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/align-deps
 
+## 2.2.4
+
+### Patch Changes
+
+- c9eafa48: Added profile for react-native 0.72
+
 ## 2.2.3
 
 ### Patch Changes
