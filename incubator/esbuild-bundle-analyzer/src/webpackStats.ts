@@ -11,7 +11,8 @@ import type {
 } from "./types.js";
 import { info } from "@rnx-kit/console";
 
-// TODO: Improve...
+// TODO: Update to be more generic and configurable to it supports
+// more than just lib and src folders
 function getLine(filePath: string, keyword: string): string {
   try {
     const file = fs.readFileSync(filePath, "utf-8");
@@ -96,6 +97,7 @@ export function webpackStats(
 
     for (const inputFile in inputsInOutput) {
       const inputFileClean = inputFile.replace(namespace, "");
+      // TODO: Make filesToSkip configurable so users can add their own files to skip
       if (filesToSkip.includes(inputFileClean)) continue;
 
       const input = inputsInOutput[inputFile];

@@ -10,7 +10,7 @@ import {
 } from "./checkForDuplicatePackages";
 
 export { detectDuplicatePackages } from "./checkForDuplicatePackages";
-export { resolveModule } from "./gatherModules";
+export { normalizePath, resolveModule } from "./gatherModules";
 export { checkForDuplicatePackages };
 export type { Options, Result };
 

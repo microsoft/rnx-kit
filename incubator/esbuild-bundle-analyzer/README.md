@@ -11,7 +11,7 @@
 
 ## Motivation
 
-This tool provides simple analysis of Metro bundles based on
+This tool provides simple analysis of bundles based on
 [esbuild's metafile](https://esbuild.github.io/api/#metafile). It allows users
 to analyze a bundle/metafile, compare two metafiles, and generate a limited, but
 compatible Webpack stats file. This file can then be used with more advanced
@@ -42,10 +42,10 @@ find the full list of functionalities by invoking the command
 
 This command will output a simple analysis of the input and output files and
 in-depth detail about the duplicate dependencies. This tool consumes esbuild's
-metafile and then analyzes the data to provide a simple analysis of the Metro
-bundle. For all the duplicates the tool will present full path from the
-entry-point to the duplicated file to showcase why and how the duplicated files
-are being added in the bundle.
+metafile and then analyzes the data to provide a simple analysis of the bundle.
+For all the duplicates the tool will present full path from the entry-point to
+the duplicated file to showcase why and how the duplicated files are being added
+in the bundle.
 
 Generate simple analysis of a bundle by consuming esbuild's metafile:
 

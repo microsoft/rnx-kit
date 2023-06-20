@@ -53,7 +53,10 @@ export type Duplicate = {
 };
 
 /**
- * Webpack types.
+ * TODO: Update this so the data we generate is not only a subset of Webpack types
+ * consumed by @mixer/webpack-bundle-compare. So, this tool can generate webpack
+ * stats file that's even more compatible with other third-party tools.
+ *
  * The types are defined in detail here: https://webpack.js.org/api/stats/
  * This is a subset of the types provided by webpack, where we only care
  * about the types that are relevant to us which are the types consumed

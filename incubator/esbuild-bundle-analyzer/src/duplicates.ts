@@ -2,6 +2,7 @@ import type { Result } from "@rnx-kit/metro-plugin-duplicates-checker";
 import {
   detectDuplicatePackages,
   resolveModule,
+  normalizePath,
 } from "@rnx-kit/metro-plugin-duplicates-checker";
 import type { Metafile } from "./metafile.js";
 import type { Graph, Import, Item, ModuleMap, Path } from "./types.js";
@@ -156,7 +157,7 @@ export function getDuplicates(
 
   for (const file in inputs) {
     const { name, version, absolutePath } = resolveModule(
-      file.replace(namespace, "")
+      normalizePath(file.replace(namespace, ""))
     );
 
     moduleMap[name] ||= {};
