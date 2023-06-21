@@ -1,5 +1,4 @@
 {
-  "private": true,
   "name": "@rnx-kit/esbuild-bundle-analyzer",
   "version": "0.0.1",
   "description": "EXPERIMENTAL - USE WITH CAUTION - A tool for analyzing an esbuild bundle/metafile",
