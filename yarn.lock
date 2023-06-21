@@ -3515,6 +3515,24 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@rnx-kit/esbuild-bundle-analyzer@workspace:incubator/esbuild-bundle-analyzer":
+  version: 0.0.0-use.local
+  resolution: "@rnx-kit/esbuild-bundle-analyzer@workspace:incubator/esbuild-bundle-analyzer"
+  dependencies:
+    "@rnx-kit/console": ^1.0.11
+    "@rnx-kit/metro-plugin-cyclic-dependencies-detector": ^1.1.1
+    "@rnx-kit/metro-plugin-duplicates-checker": ^2.1.1
+    "@rnx-kit/scripts": "*"
+    "@rnx-kit/tools-node": ^2.0.0
+    chalk: ^4.1.0
+    eslint: ^8.0.0
+    jest: ^29.2.1
+    prettier: ^2.8.0
+    typescript: ^5.0.0
+    yargs: ^16.0.0
+  languageName: unknown
+  linkType: soft
+
 "@rnx-kit/esbuild-plugin-import-path-remapper@workspace:packages/esbuild-plugin-import-path-remapper":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/esbuild-plugin-import-path-remapper@workspace:packages/esbuild-plugin-import-path-remapper"
