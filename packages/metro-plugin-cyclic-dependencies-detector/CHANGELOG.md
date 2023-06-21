@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-plugin-cyclic-dependencies-detector
 
+## 1.1.2
+
+### Patch Changes
+
+- 190c8d11: Export `packageRelativePath` function
+
 ## 1.1.1
 
 ### Patch Changes
