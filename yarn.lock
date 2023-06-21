@@ -3520,8 +3520,8 @@ __metadata:
   resolution: "@rnx-kit/esbuild-bundle-analyzer@workspace:incubator/esbuild-bundle-analyzer"
   dependencies:
     "@rnx-kit/console": ^1.0.11
-    "@rnx-kit/metro-plugin-cyclic-dependencies-detector": ^1.1.1
-    "@rnx-kit/metro-plugin-duplicates-checker": ^2.1.1
+    "@rnx-kit/metro-plugin-cyclic-dependencies-detector": ^1.1.2
+    "@rnx-kit/metro-plugin-duplicates-checker": ^2.1.2
     "@rnx-kit/scripts": "*"
     "@rnx-kit/tools-node": ^2.0.0
     chalk: ^4.1.0
@@ -3653,7 +3653,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rnx-kit/metro-plugin-cyclic-dependencies-detector@*, @rnx-kit/metro-plugin-cyclic-dependencies-detector@^1.1.1, @rnx-kit/metro-plugin-cyclic-dependencies-detector@workspace:packages/metro-plugin-cyclic-dependencies-detector":
+"@rnx-kit/metro-plugin-cyclic-dependencies-detector@*, @rnx-kit/metro-plugin-cyclic-dependencies-detector@^1.1.1, @rnx-kit/metro-plugin-cyclic-dependencies-detector@^1.1.2, @rnx-kit/metro-plugin-cyclic-dependencies-detector@workspace:packages/metro-plugin-cyclic-dependencies-detector":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/metro-plugin-cyclic-dependencies-detector@workspace:packages/metro-plugin-cyclic-dependencies-detector"
   dependencies:
@@ -3671,7 +3671,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rnx-kit/metro-plugin-duplicates-checker@*, @rnx-kit/metro-plugin-duplicates-checker@^2.1.1, @rnx-kit/metro-plugin-duplicates-checker@workspace:packages/metro-plugin-duplicates-checker":
+"@rnx-kit/metro-plugin-duplicates-checker@*, @rnx-kit/metro-plugin-duplicates-checker@^2.1.1, @rnx-kit/metro-plugin-duplicates-checker@^2.1.2, @rnx-kit/metro-plugin-duplicates-checker@workspace:packages/metro-plugin-duplicates-checker":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/metro-plugin-duplicates-checker@workspace:packages/metro-plugin-duplicates-checker"
   dependencies:
