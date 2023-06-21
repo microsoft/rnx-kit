@@ -26,7 +26,8 @@ const statsData: Result = {
     bytesOut: 3157492,
   },
   buildTime: 0,
-  downloadTime: 25,
+  slowDownloadTime: 180,
+  fastDownloadTime: 10,
   avgFileSize: 3242,
   avgFileSizeNodeModules: 3402,
 };

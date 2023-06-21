@@ -7,7 +7,7 @@ import { statsData } from "./testData";
 const consoleSpy = jest.spyOn(global.console, "log");
 const fixturePath = path.join(process.cwd(), "test", "__fixtures__");
 const metafilePath = path.join(fixturePath, "meta.json");
-const defaultResultPath = path.join(fixturePath, "result.json");
+const defaultResultPath = path.join(fixturePath, "meta_result.json");
 const customResultPath = path.join(process.cwd(), "custom_result.json");
 
 describe("analyze()", () => {

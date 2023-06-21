@@ -27,7 +27,9 @@ export function analyze(
 ): void {
   const metafile = readMetafile(metafilePath);
   const metafileDir = path.dirname(metafilePath);
-  const jsonPath = jsonFile ? jsonFile : path.join(metafileDir, "result.json");
+  const metafileName = path.parse(metafilePath).name;
+  const jsonFileName = `${metafileName}_result.json`;
+  const jsonPath = jsonFile ? jsonFile : path.join(metafileDir, jsonFileName);
   const graph = generateGraph(metafile);
 
   const result = getDuplicates(metafile.inputs, namespace);
