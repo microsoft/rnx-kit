@@ -125,7 +125,10 @@ function isRedundantPolyfill(modulePath: string): boolean {
   return /(?:__prelude__|[/\\]polyfills[/\\]require.js)$/.test(modulePath);
 }
 
-function outputOf(module: Module | undefined): string | undefined {
+function outputOf(
+  module: Module | undefined,
+  logLevel: BuildOptions["logLevel"]
+): string | undefined {
   if (!module) {
     return undefined;
   }
@@ -146,6 +149,11 @@ function outputOf(module: Module | undefined): string | undefined {
     // `src/Users/<user>/Source/rnx-kit/packages/test-app/src/App.native.tsx`.
     path: path.basename(module.path),
   };
+
+  if (logLevel === "debug" && code.includes("export * from")) {
+    const modulePath = path.relative(process.cwd(), module.path);
+    warn(`Found uses of 'export *' in ${modulePath}`);
+  }
 
   return `${code}\n${generateSourceMappingURL([moduleWithModuleNameOnly])}\n`;
 }
@@ -262,7 +270,7 @@ export function MetroSerializer(
           const mod = dependencies.get(args.path);
           if (mod) {
             return {
-              contents: outputOf(mod) ?? "",
+              contents: outputOf(mod, buildOptions?.logLevel) ?? "",
               pluginData: args.pluginData,
             };
           }
@@ -270,7 +278,7 @@ export function MetroSerializer(
           const polyfill = preModules.find(({ path }) => path === args.path);
           if (polyfill) {
             return {
-              contents: outputOf(polyfill) ?? "",
+              contents: outputOf(polyfill, buildOptions?.logLevel) ?? "",
               pluginData: args.pluginData,
             };
           }
