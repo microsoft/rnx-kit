@@ -1,5 +1,12 @@
 # Change Log - @rnx-kit/metro-serializer-esbuild
 
+## 0.1.25
+
+### Patch Changes
+
+- 49d0f491: Add support for `metafile` flag
+- 146eb6ec: Warn when `export *` is used on log level 'debug'
+
 ## 0.1.24
 
 ### Patch Changes
