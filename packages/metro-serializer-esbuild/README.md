@@ -214,6 +214,15 @@ Values: `verbose` | `debug` | `info` | `warning` | `error` | `silent`
 
 Defaults to `warning`.
 
+### `metafile`
+
+The path to write metadata to, relative to the package root.
+
+Determines whether esbuild should produce some metadata about the build in JSON
+format.
+
+See the full documentation at https://esbuild.github.io/api/#metafile.
+
 ## Metro + ESM Support
 
 Metro currently does not support ESM. However, if you're looking to save even

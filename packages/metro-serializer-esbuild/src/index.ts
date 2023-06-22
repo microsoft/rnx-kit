@@ -24,6 +24,7 @@ export type Options = Pick<
 > & {
   analyze?: boolean | "verbose";
   fabric?: boolean;
+  metafile?: string;
   sourceMapPaths?: "absolute" | "relative";
   strictMode?: boolean;
 };
@@ -375,7 +376,7 @@ export function MetroSerializer(
         ],
         legalComments: "none",
         logLevel: buildOptions?.logLevel ?? "error",
-        metafile: Boolean(buildOptions?.analyze),
+        metafile: Boolean(buildOptions?.analyze || buildOptions?.metafile),
         minify: buildOptions?.minify ?? !options.dev,
         minifyWhitespace: buildOptions?.minifyWhitespace,
         minifyIdentifiers: buildOptions?.minifyIdentifiers,
@@ -414,11 +415,18 @@ export function MetroSerializer(
           }
         });
         if (metafile) {
-          esbuild
-            .analyzeMetafile(metafile, {
-              verbose: buildOptions?.analyze === "verbose",
-            })
-            .then((text) => info(text));
+          if (buildOptions?.analyze) {
+            const options = { verbose: buildOptions.analyze === "verbose" };
+            esbuild
+              .analyzeMetafile(metafile, options)
+              .then((text) => info(text));
+          }
+          if (typeof buildOptions?.metafile === "string") {
+            fs.writeFileSync(
+              path.join(path.dirname(sourcemapfile), buildOptions.metafile),
+              typeof metafile === "string" ? metafile : JSON.stringify(metafile)
+            );
+          }
         } else {
           info("esbuild bundle size:", result.code.length);
         }
