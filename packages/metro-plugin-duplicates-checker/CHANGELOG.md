@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-plugin-duplicates-checker
 
+## 2.1.2
+
+### Patch Changes
+
+- 190c8d11: Export `detectDuplicatePackages`, `normalizePath`, `resolveModule`, and `getErrorMessage` functions
+
 ## 2.1.1
 
 ### Patch Changes
