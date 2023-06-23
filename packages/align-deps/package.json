@@ -46,7 +46,7 @@
     "package-json": "^8.1.1",
     "prettier": "^2.8.0",
     "prompts": "^2.4.0",
-    "semver": "^7.5.2",
+    "semver": "^7.0.0",
     "typescript": "^5.0.0",
     "yargs": "^16.0.0"
   },

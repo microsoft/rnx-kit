@@ -27,7 +27,7 @@
     "esbuild": "^0.18.0",
     "esbuild-plugin-lodash": "^1.2.0",
     "fast-glob": "^3.2.7",
-    "semver": "^7.5.2"
+    "semver": "^7.0.0"
   },
   "peerDependencies": {
     "metro": ">=0.66.1"

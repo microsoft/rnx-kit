@@ -21,7 +21,7 @@
     "test": "rnx-kit-scripts test"
   },
   "dependencies": {
-    "semver": "^7.5.2"
+    "semver": "^7.0.0"
   },
   "peerDependencies": {
     "metro": ">=0.58.0"
