@@ -6,6 +6,7 @@ import * as path from "path";
 const sourceMappingOptions = {
   processModuleFilter: () => true,
   excludeSource: false,
+  shouldAddToIgnoreList: () => false,
 };
 
 export function absolutizeSourceMap(outputPath: string, text: string): string {
