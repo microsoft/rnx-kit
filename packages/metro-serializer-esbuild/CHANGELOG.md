@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-serializer-esbuild
 
+## 0.1.26
+
+### Patch Changes
+
+- 0bf36c2b: Add `shouldAddToIgnoreList` to `sourceMappingOptions`, this became mandatory in Metro 0.76.3
+
 ## 0.1.25
 
 ### Patch Changes
