@@ -60,6 +60,9 @@
   "packageManager": "yarn@3.4.1",
   "resolutions": {
     "@microsoft/eslint-plugin-sdl/eslint-plugin-react": "^7.26.0",
+    "@react-native-community/cli": "^10.2.5",
+    "@react-native-community/cli-platform-android": "^10.2.0",
+    "@react-native-community/cli-platform-ios": "^10.2.5",
     "@vue/compiler-sfc": "link:./incubator/ignore",
     "jscodeshift/micromatch": "^4.0.4",
     "metro": "^0.73.10",
