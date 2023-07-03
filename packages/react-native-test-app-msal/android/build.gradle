@@ -3,6 +3,11 @@ import groovy.json.JsonSlurper
 
 import java.nio.file.Paths
 
+static int toVersionNumber(String version) {
+    def (major, minor, patch) = version.findAll(/\d+/)
+    return (major as int) * 10000 + (minor as int) * 100 + (patch as int)
+}
+
 buildscript {
     ext.ensureProperty = { config, property ->
         if (!config.containsKey(property)) {
@@ -165,7 +170,13 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
     implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
 
-    implementation "androidx.activity:activity-ktx:1.7.2"
+    def kotlinVersionNumber = toVersionNumber(kotlinVersion)
+    if (kotlinVersionNumber >= 10800) {
+        implementation "androidx.activity:activity-ktx:1.7.2"
+    } else {
+        implementation "androidx.activity:activity-ktx:1.6.1"
+    }
+
     implementation "com.google.android.material:material:1.8.0"
     implementation "com.microsoft.identity.client:msal:4.5.0"
 
