@@ -1,5 +1,7 @@
 .DS_Store
-node_modules
+.yarn
 docsite
 incubator
+node_modules
 packages
+yarn.lock
