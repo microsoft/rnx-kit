@@ -64,8 +64,7 @@ graph TD;
   is to install this layer as polyfills. Installing them on-demand is preferred,
   but we need to start somewhere and we should be able to improve this layer
   later without affecting users. In any case, we will need tools to include
-  polyfills similarly to
-  [autolinking](https://github.com/react-native-community/cli/blob/main/docs/autolinking.md).
+  polyfills similarly to [autolinking][].
 
 - **Turbo/native module:** This is the layer that accepts JS calls and forwards
   them platform implementations. A community module can be used here if one
@@ -93,8 +92,7 @@ module.exports = {
 };
 ```
 
-Polyfills are gathered and passed to Metro via
-[`serializer.getPolyfills`](https://github.com/facebook/react-native/blob/0.72-stable/packages/metro-config/index.js#L49).
+Polyfills are gathered and passed to Metro via [`serializer.getPolyfills`][].
 
 ### Discovery
 
@@ -110,16 +108,15 @@ dependencies they need to add. At minimum we should:
    - Note: While we say "tool" here, it doesn't necessarily have to be a
      standalone thing. A Babel plugin or similar would also fit. The less users
      have to worry about it, the better.
-2. Add new capabilities to
-   [`@rnx-kit/align-deps`](https://github.com/microsoft/rnx-kit/tree/main/packages/align-deps#readme)
+2. Add new capabilities to [`@rnx-kit/align-deps`][]
    - `align-deps` ensures that package versions are aligned and can help keeping
      track of transitive dependencies.
 
 ## Drawbacks
 
-> Why should we not do this, and what is the impact of that decision? Please
-> consider the cost to educate developers, migrate existing users, and maintain
-> the proposed changes.
+> TODO: Why should we not do this, and what is the impact of that decision?
+> Please consider the cost to educate developers, migrate existing users, and
+> maintain the proposed changes.
 
 ## Rationale, alternatives, and prior art
 
@@ -127,12 +124,16 @@ dependencies they need to add. At minimum we should:
   would require users to change web code to accommodate native. For instance,
   `navigator.getBattery()` would have to be rewritten as
   `require("@react-native-api/battery-manager").getBattery()`.
+- There are many polyfills out there, but they are mostly used to provide
+  functionalities that are only present in newer ES standards (e.g.
+  [`Object.assign`][], [`Object.is`][]). We have not found any that address the
+  scope defined here.
 
 ## Adoption strategy
 
-> If we accept this proposal, how will existing developers adopt it? Is this a
-> breaking change? Can we write a codemod? Should we coordinate with other
-> projects or libraries?
+> TODO: If we accept this proposal, how will existing developers adopt it? Is
+> this a breaking change? Can we write a codemod? Should we coordinate with
+> other projects or libraries?
 
 ## Unresolved questions
 
@@ -144,3 +145,14 @@ dependencies they need to add. At minimum we should:
       https://developer.android.com/training/monitoring-device-state/battery-monitoring
     - iOS:
       https://developer.apple.com/documentation/uikit/uidevice/1620051-batterystate
+
+<!-- References -->
+
+[`@rnx-kit/align-deps`]:
+  https://github.com/microsoft/rnx-kit/tree/main/packages/align-deps#readme
+[`Object.assign`]: https://github.com/ljharb/object.assign/blob/main/polyfill.js
+[`Object.is`]: https://github.com/es-shims/object-is/blob/main/polyfill.js
+[`serializer.getPolyfills`]:
+  https://github.com/facebook/react-native/blob/0.72-stable/packages/metro-config/index.js#L49
+[autolinking]:
+  https://github.com/react-native-community/cli/blob/main/docs/autolinking.md
