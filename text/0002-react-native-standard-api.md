@@ -1,12 +1,12 @@
 - Title: react-native-standard-api
 - Date: 2023-07-04
-- RFC PR: (leave this empty)
-- rnx-kit Issue: (leave this empty)
+- RFC PR: https://github.com/microsoft/rnx-kit/pull/2504
+- rnx-kit Issue: N/A
 
 ## Abstract
 
 React Native currently lacks a well-defined, stable API. Today, we have a "wild
-west" of community modules, each with its own set of interfaces and behaviours.
+west" of community modules, each with its own set of interfaces and behaviors.
 It is the developers' responsibility to find the module that fits their needs
 and that is seemingly actively maintained. Additionally, the API are not
 compatible with Web APIs, thus closing the door to a wealth of open source
@@ -36,6 +36,9 @@ function useBatteryLevel() {
   return batteryLevel;
 }
 ```
+
+The native platforms we aim to support via react-native are iOS, Android,
+Windows and macOS.
 
 ## Reference-level explanation
 
@@ -67,8 +70,15 @@ graph TD;
   polyfills similarly to [autolinking][].
 
 - **Turbo/native module:** This is the layer that accepts JS calls and forwards
-  them platform implementations. A community module can be used here if one
-  exists. Modules are installed via the standard autolinking mechanism.
+  them platform implementations. Modules are installed via the standard
+  autolinking mechanism.
+
+- **Platform API/Community module:** When available, we want to be able to
+  leverage what already exist in the community and avoid creating competing
+  solutions. When we need to write it from scratch, we want to comply with the
+  guidelines for the
+  [new architecture libraries](https://github.com/reactwg/react-native-new-architecture/discussions/categories/libraries)
+  provided by Meta.
 
 ### Modularity
 
@@ -118,6 +128,11 @@ dependencies they need to add. At minimum we should:
 > Please consider the cost to educate developers, migrate existing users, and
 > maintain the proposed changes.
 
+- existing React Native apps might need to be adapted to shift to this new
+  modules
+- a lot of the tooling needed for this effort to succeed as detailed above needs
+  to be created
+
 ## Rationale, alternatives, and prior art
 
 - A variation of the current proposal without polyfills was considered, but it
@@ -128,12 +143,34 @@ dependencies they need to add. At minimum we should:
   functionalities that are only present in newer ES standards (e.g.
   [`Object.assign`][], [`Object.is`][]). We have not found any that address the
   scope defined here.
+- [React Native Test App](https://github.com/microsoft/react-native-test-app)
+  will be used as the sandbox tool to build the modules against, to reduce
+  friction and have "out of the box" the ability to test across all the target
+  platforms.
+- This goal of web-like code working via React Native on multiple platforms is
+  shared with Meta's
+  [RFC: React DOM for Native](https://github.com/react-native-community/discussions-and-proposals/pull/496),
+  which should be considered complementary to the proposal presented here
 
 ## Adoption strategy
 
 > TODO: If we accept this proposal, how will existing developers adopt it? Is
 > this a breaking change? Can we write a codemod? Should we coordinate with
 > other projects or libraries?
+
+In what we would call "phase zero", only one module will be implemented so that
+the tooling and infrastructure can be build and flows can be set up. This is to
+allow for multiple teams and developers to work discretely on the specific
+modules that they are interested in, removing most of the friction of the
+devloop to enable contributors to just focus on producing code.
+
+In "phase one", one or more modules will be adopted as experimental within a few
+selected production apps to validate the concept and implementation.
+
+The "phase two" will be decided once we have as a good level of confidence on
+the viability of this proposal. In this phase, documentation on how to use this
+new set of modules will be prepared to help developers leverage them to bring
+their Web code to other native platforms.
 
 ## Unresolved questions
 
