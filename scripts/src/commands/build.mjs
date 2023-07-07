@@ -12,7 +12,7 @@ export default async function build(_args, rawArgs = []) {
   if (rawArgs.includes("--dependencies")) {
     const manifest = fs.readFileSync("package.json", { encoding: "utf-8" });
     const { name } = JSON.parse(manifest);
-    return runScript("nx", "build", name.substring("@rnx-kit/".length));
+    return runScript("nx", "build", name);
   }
 
   await sequence(clean, depcheck, lint, () =>
