@@ -5,6 +5,7 @@
   "namedInputs": {
     "default": ["{projectRoot}/**/*", "sharedGlobals"],
     "sharedGlobals": [
+      "{workspaceRoot}/nx.json",
       "{workspaceRoot}/packages/eslint-config/*",
       "{workspaceRoot}/packages/eslint-plugin/*",
       "{workspaceRoot}/packages/jest-preset/*",
