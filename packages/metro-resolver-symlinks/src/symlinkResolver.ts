@@ -16,13 +16,20 @@ import { remapImportPath } from "./utils/remapImportPath";
 
 function applyMetroResolver(
   resolve: CustomResolver,
-  context: ResolutionContext,
+  ctx: ResolutionContext,
   moduleName: string,
   platform: string
 ): Resolution {
-  const modifiedModuleName = resolveModulePath(context, moduleName, platform);
+  // Resolve redirects before we try to resolve the module:
+  // https://github.com/facebook/metro/blob/v0.76.7/docs/Resolution.md#redirectmodulepath-string--string--false
+  const realModuleName = ctx.redirectModulePath(moduleName);
+  if (realModuleName === false) {
+    return { type: "empty" };
+  }
+
+  const modifiedModuleName = resolveModulePath(ctx, realModuleName, platform);
   // @ts-expect-error We pass 4 arguments instead of 3 to be backwards compatible
-  return resolve(context, normalizePath(modifiedModuleName), platform, null);
+  return resolve(ctx, normalizePath(modifiedModuleName), platform, null);
 }
 
 export function makeResolver(options: Options = {}): MetroResolver {
