@@ -32,6 +32,8 @@
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
+    "@babel/plugin-transform-react-jsx": "^7.0.0",
+    "@babel/plugin-transform-react-jsx-source": "^7.0.0",
     "@babel/preset-env": "^7.1.6",
     "@babel/runtime": "^7.12.5",
     "@rnx-kit/babel-preset-metro-react-native": "*",
