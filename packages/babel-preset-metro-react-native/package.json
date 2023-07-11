@@ -17,7 +17,7 @@
     "build": "rnx-kit-scripts build",
     "format": "rnx-kit-scripts format",
     "lint": "rnx-kit-scripts lint",
-    "test": "rnx-kit-scripts test"
+    "test": "NODE_OPTIONS=--experimental-vm-modules rnx-kit-scripts test"
   },
   "dependencies": {
     "babel-plugin-const-enum": "^1.0.0"
