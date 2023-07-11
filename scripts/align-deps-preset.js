@@ -51,7 +51,7 @@ const profile = {
   },
   prettier: {
     name: "prettier",
-    version: "^2.8.0",
+    version: "^3.0.0",
   },
   semver: {
     name: "semver",

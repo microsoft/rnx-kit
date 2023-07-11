@@ -18,13 +18,13 @@ describe("@rnx-kit/babel-preset-metro-react-native", () => {
    *
    * @param {string} filename
    * @param {import("@babel/core").TransformOptions} opts
-   * @returns {string | null}
+   * @returns {Promise<string | null>}
    */
-  function transform(filename, opts) {
+  async function transform(filename, opts) {
     const output = babel.transformFileSync(filename, opts);
     return output?.code
       ? // Format the code to make the snapshot more legible.
-        prettier.format(output.code, { parser: "babel" })
+        await prettier.format(output.code, { parser: "babel" })
       : null;
   }
 
@@ -95,11 +95,11 @@ describe("@rnx-kit/babel-preset-metro-react-native", () => {
     );
   });
 
-  test("forwards options to `metro-react-native-babel-preset`", () => {
+  test("forwards options to `metro-react-native-babel-preset`", async () => {
     const cwd = path.join(__dirname, "__fixtures__");
     const app = path.join(cwd, "App.ts");
 
-    const code = transform(app, {
+    const code = await transform(app, {
       cwd,
       presets: [
         [
@@ -116,11 +116,11 @@ describe("@rnx-kit/babel-preset-metro-react-native", () => {
     expect(code).toMatchSnapshot();
   });
 
-  test("transforms `const enum`s", () => {
+  test("transforms `const enum`s", async () => {
     const cwd = path.join(__dirname, "__fixtures__");
     const app = path.join(cwd, "App.ts");
 
-    const code = transform(app, {
+    const code = await transform(app, {
       cwd,
       presets: ["@rnx-kit/babel-preset-metro-react-native"],
     });
@@ -132,11 +132,11 @@ describe("@rnx-kit/babel-preset-metro-react-native", () => {
     expect(code).toMatchSnapshot();
   });
 
-  test("applies additional plugins", () => {
+  test("applies additional plugins", async () => {
     const cwd = path.join(__dirname, "__fixtures__");
     const app = path.join(cwd, "App.ts");
 
-    const code = transform(app, {
+    const code = await transform(app, {
       cwd,
       presets: [
         [
@@ -160,7 +160,7 @@ describe("@rnx-kit/babel-preset-metro-react-native", () => {
     expect(code).toMatchSnapshot();
   });
 
-  test("can be further extended", () => {
+  test("can be further extended", async () => {
     const cwd = path.join(__dirname, "__fixtures__");
     const app = path.join(cwd, "App.ts");
 
@@ -180,7 +180,7 @@ describe("@rnx-kit/babel-preset-metro-react-native", () => {
       ],
     });
 
-    const code = transform(app, {
+    const code = await transform(app, {
       cwd,
       presets: [customPreset],
     });
@@ -192,11 +192,11 @@ describe("@rnx-kit/babel-preset-metro-react-native", () => {
     expect(code).toMatchSnapshot();
   });
 
-  test("passes `loose: true` to `@babel/plugin-transform-classes`", () => {
+  test("passes `loose: true` to `@babel/plugin-transform-classes`", async () => {
     const cwd = path.join(__dirname, "__fixtures__");
     const app = path.join(cwd, "Class.ts");
 
-    const code = transform(app, {
+    const code = await transform(app, {
       cwd,
       presets: [
         [
