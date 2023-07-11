@@ -1,13 +1,14 @@
-import fs from "fs";
-import path from "path";
-import tempDir from "temp-dir";
+import * as fs from "node:fs";
+import * as os from "node:os";
+import * as path from "node:path";
 import ts from "typescript";
 import { findConfigFile, readConfigFile } from "../src/config";
-import { DiagnosticWriter } from "../src/diagnostics";
+import type { DiagnosticWriter } from "../src/diagnostics";
 import { Project } from "../src/project";
 
 describe("Project", () => {
   const fixturePath = path.join(process.cwd(), "test", "__fixtures__");
+  const tempDir = fs.realpathSync(os.tmpdir());
 
   const mockDiagnosticWriter: DiagnosticWriter = {
     format: jest.fn(),

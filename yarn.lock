@@ -4077,7 +4077,6 @@ __metadata:
     pkg-dir: ^5.0.0
     pkg-up: ^3.1.0
     prettier: ^2.8.0
-    temp-dir: ^2.0.0
     typescript: ^5.0.0
   languageName: unknown
   linkType: soft
@@ -4123,7 +4122,6 @@ __metadata:
     eslint: ^8.0.0
     jest: ^29.2.1
     prettier: ^2.8.0
-    temp-dir: ^2.0.0
     typescript: ^5.0.0
   peerDependencies:
     typescript: ">=4.0"
@@ -13001,13 +12999,6 @@ __metadata:
     mkdirp: ^1.0.3
     yallist: ^4.0.0
   checksum: 8a278bed123aa9f53549b256a36b719e317c8b96fe86a63406f3c62887f78267cea9b22dc6f7007009738509800d4a4dccc444abd71d762287c90f35b002eb1c
-  languageName: node
-  linkType: hard
-
-"temp-dir@npm:^2.0.0":
-  version: 2.0.0
-  resolution: "temp-dir@npm:2.0.0"
-  checksum: cc4f0404bf8d6ae1a166e0e64f3f409b423f4d1274d8c02814a59a5529f07db6cd070a749664141b992b2c1af337fa9bb451a460a43bb9bcddc49f235d3115aa
   languageName: node
   linkType: hard
 

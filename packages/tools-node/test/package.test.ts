@@ -1,6 +1,6 @@
-import fs from "fs";
-import path from "path";
-import tempDir from "temp-dir";
+import * as fs from "node:fs";
+import * as os from "node:os";
+import * as path from "node:path";
 import type { PackageManifest } from "../src/package";
 import {
   findPackage,
@@ -13,6 +13,7 @@ import {
 
 describe("Node > Package", () => {
   const fixtureDir = path.resolve(__dirname, "__fixtures__");
+  const tempDir = fs.realpathSync(os.tmpdir());
 
   beforeAll(() => {
     expect(fs.existsSync(fixtureDir)).toBe(true);
