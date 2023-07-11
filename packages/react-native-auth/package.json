@@ -38,7 +38,7 @@
     "@babel/preset-env": "^7.1.6",
     "@rnx-kit/scripts": "*",
     "eslint": "^8.0.0",
-    "prettier": "^2.0.0",
+    "prettier": "^3.0.0",
     "react": "18.2.0",
     "react-native": "^0.71.0",
     "typescript": "^5.0.0"
