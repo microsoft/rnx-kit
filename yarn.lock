@@ -3310,7 +3310,7 @@ __metadata:
     jest: ^29.2.1
     markdown-table: ^3.0.0
     package-json: ^8.1.1
-    prettier: ^2.8.0
+    prettier: ^3.0.0
     prompts: ^2.4.0
     semver: ^7.0.0
     typescript: ^5.0.0
@@ -3333,7 +3333,7 @@ __metadata:
     "@types/jest": ^29.2.1
     eslint: ^8.0.0
     jest: ^29.2.1
-    prettier: ^2.8.0
+    prettier: ^3.0.0
     typescript: ^5.0.0
   languageName: unknown
   linkType: soft
@@ -3350,7 +3350,7 @@ __metadata:
     babel-plugin-const-enum: ^1.0.0
     eslint: ^8.0.0
     jest: ^29.2.1
-    prettier: ^2.8.0
+    prettier: ^3.0.0
     typescript: ^5.0.0
   peerDependencies:
     "@babel/core": ^7.0.0
@@ -3369,7 +3369,7 @@ __metadata:
     "@rnx-kit/build": "*"
     "@rnx-kit/scripts": "*"
     eslint: ^8.0.0
-    prettier: ^2.8.0
+    prettier: ^3.0.0
     typescript: ^5.0.0
   peerDependencies:
     "@rnx-kit/build": ">=0.5.0"
@@ -3393,7 +3393,7 @@ __metadata:
     jest: ^29.2.1
     ora: ^6.1.2
     pkg-dir: ^7.0.0
-    prettier: ^2.8.0
+    prettier: ^3.0.0
     qrcode: ^1.5.0
     typescript: ^5.0.0
     yargs: ^16.0.0
@@ -3411,7 +3411,7 @@ __metadata:
     "@types/jest": ^29.2.1
     eslint: ^8.0.0
     jest: ^29.2.1
-    prettier: ^2.8.0
+    prettier: ^3.0.0
     typescript: ^5.0.0
   bin:
     rnx-bundle-diff: lib/cli.js
@@ -3449,7 +3449,7 @@ __metadata:
     memfs: ^4.0.0
     metro-config: ^0.73.7
     ora: ^5.4.1
-    prettier: ^2.8.0
+    prettier: ^3.0.0
     qrcode: ^1.5.0
     readline: ^1.3.0
     type-fest: ^3.0.0
@@ -3478,7 +3478,7 @@ __metadata:
     "@rnx-kit/scripts": "*"
     eslint: ^8.0.0
     jest: ^29.2.1
-    prettier: ^2.8.0
+    prettier: ^3.0.0
     typescript: ^5.0.0
   bin:
     commitlint-lite: lib/cli.js
@@ -3501,7 +3501,7 @@ __metadata:
     "@types/semver": ^7.0.0
     eslint: ^8.0.0
     jest: ^29.2.1
-    prettier: ^2.8.0
+    prettier: ^3.0.0
     semver: ^7.0.0
     typescript: ^5.0.0
   languageName: unknown
@@ -3517,7 +3517,7 @@ __metadata:
     chalk: ^4.1.0
     eslint: ^8.0.0
     jest: ^29.2.1
-    prettier: ^2.8.0
+    prettier: ^3.0.0
     typescript: ^5.0.0
   languageName: unknown
   linkType: soft
@@ -3534,7 +3534,7 @@ __metadata:
     chalk: ^4.1.0
     eslint: ^8.0.0
     jest: ^29.2.1
-    prettier: ^2.8.0
+    prettier: ^3.0.0
     typescript: ^5.0.0
     yargs: ^16.0.0
   languageName: unknown
@@ -3548,7 +3548,7 @@ __metadata:
     esbuild: ^0.18.0
     eslint: ^8.0.0
     jest: ^29.2.1
-    prettier: ^2.8.0
+    prettier: ^3.0.0
     typescript: ^5.0.0
   languageName: unknown
   linkType: soft
@@ -3559,7 +3559,7 @@ __metadata:
   dependencies:
     "@microsoft/eslint-plugin-sdl": ^0.2.0
     "@rnx-kit/eslint-plugin": "*"
-    prettier: ^2.8.0
+    prettier: ^3.0.0
   peerDependencies:
     eslint: ">=6.0.0"
   languageName: unknown
@@ -3579,7 +3579,7 @@ __metadata:
     eslint-plugin-react: ^7.26.0
     eslint-plugin-react-hooks: ^4.3.0
     jest: ^29.2.1
-    prettier: ^2.8.0
+    prettier: ^3.0.0
     typescript: ^5.0.0
   peerDependencies:
     eslint: ">=6.0.0"
@@ -3605,7 +3605,7 @@ __metadata:
     eslint: ^8.0.0
     find-up: ^5.0.0
     jest: ^29.2.1
-    prettier: ^2.8.0
+    prettier: ^3.0.0
     react: 18.2.0
     react-native: ^0.71.0
     typescript: ^5.0.0
@@ -3641,7 +3641,7 @@ __metadata:
     jest: ^29.2.1
     metro-config: ^0.73.7
     metro-react-native-babel-preset: ^0.73.7
-    prettier: ^2.8.0
+    prettier: ^3.0.0
     react-native: ^0.71.0
     type-fest: ^3.0.0
     typescript: ^5.0.0
@@ -3673,7 +3673,7 @@ __metadata:
     "@types/node": ^18.0.0
     eslint: ^8.0.0
     jest: ^29.2.1
-    prettier: ^2.8.0
+    prettier: ^3.0.0
     typescript: ^5.0.0
   languageName: unknown
   linkType: soft
@@ -3692,7 +3692,7 @@ __metadata:
     "@types/node": ^18.0.0
     eslint: ^8.0.0
     jest: ^29.2.1
-    prettier: ^2.8.0
+    prettier: ^3.0.0
     typescript: ^5.0.0
   bin:
     check-duplicates: lib/index.js
@@ -3712,7 +3712,7 @@ __metadata:
     "@types/metro": ^0.76.0
     eslint: ^8.0.0
     jest: ^29.2.1
-    prettier: ^2.8.0
+    prettier: ^3.0.0
     semver: ^7.0.0
     typescript: ">=4.7.0"
   languageName: unknown
@@ -3732,7 +3732,7 @@ __metadata:
     eslint: ^8.0.0
     jest: ^29.2.1
     metro-resolver: ^0.73.7
-    prettier: ^2.8.0
+    prettier: ^3.0.0
     typescript: ^5.0.0
   languageName: unknown
   linkType: soft
@@ -3764,7 +3764,7 @@ __metadata:
     lodash-es: ^4.17.21
     metro: ^0.73.7
     metro-react-native-babel-preset: ^0.73.7
-    prettier: ^2.8.0
+    prettier: ^3.0.0
     react: 18.2.0
     react-native: ^0.71.0
     semver: ^7.0.0
@@ -3784,7 +3784,7 @@ __metadata:
     eslint: ^8.0.0
     jest: ^29.2.1
     metro: ^0.73.7
-    prettier: ^2.8.0
+    prettier: ^3.0.0
     semver: ^7.0.0
     typescript: ^5.0.0
   peerDependencies:
@@ -3814,7 +3814,7 @@ __metadata:
     metro-react-native-babel-transformer: ^0.73.7
     metro-resolver: ^0.73.7
     metro-runtime: ^0.73.7
-    prettier: ^2.8.0
+    prettier: ^3.0.0
     typescript: ^5.0.0
   peerDependencies:
     "@react-native-community/cli-plugin-metro": ">=6.1.0"
@@ -3843,7 +3843,7 @@ __metadata:
     fs-extra: ^10.0.0
     istextorbinary: ^3.3.0
     jest: ^29.2.1
-    prettier: ^2.8.0
+    prettier: ^3.0.0
     typescript: ^5.0.0
     winston: ^3.2.1
   bin:
@@ -3859,7 +3859,7 @@ __metadata:
     "@babel/preset-env": ^7.1.6
     "@rnx-kit/scripts": "*"
     eslint: ^8.0.0
-    prettier: ^2.0.0
+    prettier: ^3.0.0
     react: 18.2.0
     react-native: ^0.71.0
     typescript: ^5.0.0
@@ -3878,7 +3878,7 @@ __metadata:
     eslint: ^8.0.0
     jest: ^29.2.1
     metro-symbolicate: ^0.76.0
-    prettier: ^2.8.0
+    prettier: ^3.0.0
     source-map: ^0.5.6
     typescript: ^5.0.0
     yargs: ^16.0.0
@@ -3909,7 +3909,7 @@ __metadata:
     babel-plugin-codegen: ^4.0.0
     eslint: ^8.0.0
     jest: ^29.2.1
-    prettier: ^2.8.0
+    prettier: ^3.0.0
     typescript: ^5.0.0
   peerDependencies:
     react-native: ">=0.59"
@@ -3940,7 +3940,7 @@ __metadata:
     fast-levenshtein: ^3.0.0
     jest: ^29.2.1
     p-limit: ^3.1.0
-    prettier: ^2.8.0
+    prettier: ^3.0.0
     typescript: ^5.0.0
     yargs: ^16.0.0
   bin:
@@ -3958,7 +3958,7 @@ __metadata:
     eslint: ^8.0.0
     jest: ^29.2.1
     markdown-table: ^3.0.0
-    prettier: ^2.8.0
+    prettier: ^3.0.0
     typedoc: ^0.24.0
     typescript: ^5.0.0
     yargs: ^16.0.0
@@ -3974,7 +3974,7 @@ __metadata:
     "@rnx-kit/scripts": "*"
     eslint: ^8.0.0
     got: ^13.0.0
-    prettier: ^2.8.0
+    prettier: ^3.0.0
     typescript: ^5.0.0
   languageName: unknown
   linkType: soft
@@ -3986,7 +3986,7 @@ __metadata:
     "@rnx-kit/scripts": "*"
     eslint: ^8.0.0
     jest: ^29.2.1
-    prettier: ^2.8.0
+    prettier: ^3.0.0
     typescript: ^5.0.0
   languageName: unknown
   linkType: soft
@@ -4017,7 +4017,7 @@ __metadata:
     eslint: ^8.0.0
     jest-cli: ^29.2.1
     metro-react-native-babel-preset: ^0.73.7
-    prettier: ^2.8.0
+    prettier: ^3.0.0
     react: 18.2.0
     react-native: ^0.71.0
     react-native-macos: ^0.71.0
@@ -4042,7 +4042,7 @@ __metadata:
     "@types/yargs": ^16.0.0
     eslint: ^8.0.0
     jest: ^29.2.1
-    prettier: ^2.8.0
+    prettier: ^3.0.0
     spdx-expression-parse: ^3.0.1
     typescript: ^5.0.0
     yargs: ^16.0.0
@@ -4059,7 +4059,7 @@ __metadata:
     "@types/node": ^18.0.0
     eslint: ^8.0.0
     jest: ^29.2.1
-    prettier: ^2.8.0
+    prettier: ^3.0.0
     typescript: ^5.0.0
   languageName: unknown
   linkType: soft
@@ -4076,7 +4076,7 @@ __metadata:
     jest: ^29.2.1
     pkg-dir: ^5.0.0
     pkg-up: ^3.1.0
-    prettier: ^2.8.0
+    prettier: ^3.0.0
     typescript: ^5.0.0
   languageName: unknown
   linkType: soft
@@ -4090,7 +4090,7 @@ __metadata:
     "@types/node": ^18.0.0
     eslint: ^8.0.0
     jest: ^29.2.1
-    prettier: ^2.8.0
+    prettier: ^3.0.0
     typescript: ^5.0.0
   languageName: unknown
   linkType: soft
@@ -4104,7 +4104,7 @@ __metadata:
     fast-glob: ^3.2.7
     find-up: ^5.0.0
     jest: ^29.2.1
-    prettier: ^2.8.0
+    prettier: ^3.0.0
     read-yaml-file: ^2.1.0
     strip-json-comments: ^3.1.1
     typescript: ^5.0.0
@@ -4121,7 +4121,7 @@ __metadata:
     chalk: ^4.1.0
     eslint: ^8.0.0
     jest: ^29.2.1
-    prettier: ^2.8.0
+    prettier: ^3.0.0
     typescript: ^5.0.0
   peerDependencies:
     typescript: ">=4.0"
@@ -11308,12 +11308,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier@npm:^2.0.0, prettier@npm:^2.7.1, prettier@npm:^2.8.0":
+"prettier@npm:^2.7.1":
   version: 2.8.8
   resolution: "prettier@npm:2.8.8"
   bin:
     prettier: bin-prettier.js
   checksum: b49e409431bf129dd89238d64299ba80717b57ff5a6d1c1a8b1a28b590d998a34e083fa13573bc732bb8d2305becb4c9a4407f8486c81fa7d55100eb08263cf8
+  languageName: node
+  linkType: hard
+
+"prettier@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "prettier@npm:3.0.0"
+  bin:
+    prettier: bin/prettier.cjs
+  checksum: 6a832876a1552dc58330d2467874e5a0b46b9ccbfc5d3531eb69d15684743e7f83dc9fbd202db6270446deba9c82b79d24383d09924c462b457136a759425e33
   languageName: node
   linkType: hard
 
@@ -12212,7 +12221,7 @@ __metadata:
     metro-runtime: ^0.73.7
     metro-transform-worker: ^0.73.7
     nx: ^16.5.1
-    prettier: ^2.8.0
+    prettier: ^3.0.0
     react: 18.2.0
     react-native: ^0.71.0
     react-native-test-app: ^2.2.1

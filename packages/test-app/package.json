@@ -53,7 +53,7 @@
     "eslint": "^8.0.0",
     "jest-cli": "^29.2.1",
     "metro-react-native-babel-preset": "^0.73.7",
-    "prettier": "^2.8.0",
+    "prettier": "^3.0.0",
     "react-native-test-app": "^2.2.1",
     "react-test-renderer": "18.2.0",
     "typescript": "^5.0.0"
