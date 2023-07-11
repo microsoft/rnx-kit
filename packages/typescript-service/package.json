@@ -33,7 +33,6 @@
     "eslint": "^8.0.0",
     "jest": "^29.2.1",
     "prettier": "^2.8.0",
-    "temp-dir": "^2.0.0",
     "typescript": "^5.0.0"
   },
   "eslintConfig": {
