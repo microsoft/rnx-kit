@@ -1,5 +1,12 @@
 # Change Log - @rnx-kit/react-native-test-app-msal
 
+## 2.1.4
+
+### Patch Changes
+
+- 3c97f6f9: Bump `com.microsoft.identity.client:msal` to v4.6.1
+- 525a764e: Use `androidx.activity:activity-ktx` 1.7.2 if Kotlin version is 1.8 or greater
+
 ## 2.1.3
 
 ### Patch Changes
