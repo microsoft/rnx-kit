@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-resolver-symlinks
 
+## 0.1.29
+
+### Patch Changes
+
+- 86d5d5c6: Correctly handle redirected modules
+
 ## 0.1.28
 
 ### Patch Changes
