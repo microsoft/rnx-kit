@@ -27,7 +27,7 @@
     "lint": "nx run-many --target lint --all",
     "new-package": "node scripts/new-package.mjs",
     "publish:changesets": "changeset publish",
-    "rnx-align-deps": "yarn build-scope align-deps && scripts/rnx-align-deps.mjs",
+    "rnx-align-deps": "yarn build-scope @rnx-kit/align-deps && scripts/rnx-align-deps.mjs",
     "test": "nx run-many --target test --output-style stream --all",
     "update-readme": "nx run-many --target update-readme --all",
     "version:changesets": "changeset version && yarn install --mode update-lockfile"
@@ -47,7 +47,7 @@
     "metro-resolver": "^0.73.7",
     "metro-runtime": "^0.73.7",
     "metro-transform-worker": "^0.73.7",
-    "nx": "^16.3.2",
+    "nx": "^16.5.1",
     "prettier": "^2.8.0",
     "react": "18.2.0",
     "react-native": "^0.71.0",
