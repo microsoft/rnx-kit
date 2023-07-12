@@ -1,4 +1,5 @@
 require 'json'
+require 'rubygems'
 
 source_files = 'cocoa/*.{h,m,mm}'
 public_header_files = 'cocoa/{ReactNativeHost,RNXHostConfig}.h'
@@ -36,7 +37,12 @@ Pod::Spec.new do |s|
   s.dependency 'ReactCommon/turbomodule/core'
 
   if new_arch_enabled
-    s.dependency 'React-RCTAppDelegate'
+    # RCTAppDelegate was first introduced in RN 0.71,
+    # so it should be skipped if its spec does not exist.
+    if Gem::Specification.find_all_by_name('React-RCTAppDelegate').any?
+      s.dependency 'React-RCTAppDelegate'
+    end
+
     s.dependency 'React-RCTFabric'
   end
 
