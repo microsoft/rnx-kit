@@ -80,9 +80,6 @@
             _bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:nil];
             _surfacePresenterBridgeAdapter = RNXInstallSurfacePresenterBridgeAdapter(_bridge);
             [_hostReleaser setBridge:_bridge];
-            if ([_config respondsToSelector:@selector(onBridgeInstantiated:)]) {
-                [_config onBridgeInstantiated:_bridge];
-            }
         }
 
         return _bridge;
@@ -93,19 +90,11 @@
 
 - (void)shutdown
 {
-    if ([_config respondsToSelector:@selector(onBridgeWillShutDown:)]) {
-        [_config onBridgeWillShutDown:_bridge];
-    }
-
     [_isShuttingDown lock];
 
     @try {
         [_bridge invalidate];
         _bridge = nil;
-
-        if ([_config respondsToSelector:@selector(onBridgeDidShutDown)]) {
-            [_config onBridgeDidShutDown];
-        }
     } @finally {
         [_isShuttingDown unlock];
     }

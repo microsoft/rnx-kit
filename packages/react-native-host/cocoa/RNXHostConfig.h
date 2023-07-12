@@ -24,15 +24,6 @@ NS_ASSUME_NONNULL_BEGIN
              message:(NSString *)message
     __attribute__((__swift_name__("log(_:source:filename:line:message:)")));
 
-// Called when the bridge has been instantiated.
-- (void)onBridgeInstantiated:(RCTBridge *)bridge;
-
-// Called when the bridge is about to be shut down.
-- (void)onBridgeWillShutDown:(RCTBridge *)bridge;
-
-// Called when the bridge has been shut down.
-- (void)onBridgeDidShutDown;
-
 /// Handles a fatal error.
 - (void)onFatalError:(NSError *)error;
 
