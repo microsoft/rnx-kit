@@ -5,14 +5,21 @@
 
 ## Abstract
 
-React Native currently lacks a well-defined, stable API. Today, we have a "wild
-west" of community modules, each with its own set of interfaces and behaviors.
-It is the developers' responsibility to find the module that fits their needs
-and that is seemingly actively maintained. Additionally, the API are not
-compatible with Web APIs, thus closing the door to a wealth of open source
-libraries that do not have explicit React Native support. This often means that
-developers cannot reuse existing web code, and must search for or even create
-one for their needs.
+React Native currently lacks a well-defined, stable and complete API surface.
+When compared to what both
+[iOS](https://developer.apple.com/documentation/technologies) and
+[Android](https://developer.android.com/reference) provide out of the box, today
+in React Native core quite a few are missing, and to fill that gap we have a
+"wild west" of community modules, each with its own set of interfaces and
+behaviors. While this is in line with the broader experience in the web/npm
+space, at the end of the day this means that it is the developers'
+responsibility to find modules that fits their needs and that are seemingly
+actively maintained.
+
+Additionally, the API are not compatible with Web APIs, thus closing the door to
+a wealth of open source libraries that do not have explicit React Native
+support. This often means that developers cannot reuse existing web code, and
+must search for or even create one for their needs.
 
 In this RFC, we are proposing to close this gap by providing our own
 implementation of the
@@ -50,7 +57,7 @@ unused bits; nor does it make any sense to include MBs of dependencies that are
 never used. Ideally, migrating from community modules to the standard API should
 not increase the final app size (at least not significantly).
 
-The API is implemented in layers:
+The API we envision being implemented in layers:
 
 ```mermaid
 graph TD;
@@ -83,9 +90,13 @@ graph TD;
 ### Modularity
 
 We want to avoid introducing unused modules and adding unnecessary bloat to the
-app bundle. The API should therefore be broken down into smaller modules that
-can be installed separately. These modules are installed by autolinking, and
-must therefore be explicitly added to an app's `package.json`.
+app bundle. The standard API should therefore be broken down into small modules
+that can be installed separately. These modules are installed by autolinking,
+and must therefore be explicitly added to an app's `package.json`.
+
+For example, if you want to use `BatteryManager` you should not need to import
+the whole `rn-standard-api` node_module, but only its dedicated
+`rn-standard-api/battery-manager` submodule.
 
 Additionally, we want to avoid requiring that users manually add polyfills for
 the modules they need. Instead, we propose that modules that implement a part of
@@ -103,6 +114,22 @@ module.exports = {
 ```
 
 Polyfills are gathered and passed to Metro via [`serializer.getPolyfills`][].
+
+### Infrastructure and repository setup
+
+On top of what has been mentioned above, we are still investigating the right
+approach for how the code for this effort should be created and organised. The
+most likely approach will involve a monorepo (similar to
+[`rnx-kit`](https://github.com/microsoft/rnx-kit)) where each module will be its
+own dedicated package; in it, implementation for all the various native
+platforms will be present (so, we won't have
+`rn-standard-api/packages/battery-manager-ios` and
+`rn-standard-api/packages/battery-manager-android` but only
+`rn-standard-api/packages/battery-manager`).
+
+This will also allow for different people to work on different modules at the
+same time, while having a coherent infra to rely on for testing,
+package/versioning management, etc.
 
 ### Discovery
 
@@ -129,9 +156,13 @@ dependencies they need to add. At minimum we should:
 > maintain the proposed changes.
 
 - existing React Native apps might need to be adapted to shift to this new
-  modules
+  modules.
 - a lot of the tooling needed for this effort to succeed as detailed above needs
-  to be created
+  to be created.
+- the number of Web APIs is very high, so implementing each and every of them
+  for all the platforms will take a massive amount of time and funding -
+  realistically, we will select a subset of APIs to focus on, based on needs and
+  usage data.
 
 ## Rationale, alternatives, and prior art
 
@@ -150,7 +181,7 @@ dependencies they need to add. At minimum we should:
 - This goal of web-like code working via React Native on multiple platforms is
   shared with Meta's
   [RFC: React DOM for Native](https://github.com/react-native-community/discussions-and-proposals/pull/496),
-  which should be considered complementary to the proposal presented here
+  which should be considered complementary to the proposal presented here.
 
 ## Adoption strategy
 
