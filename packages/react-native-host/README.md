@@ -71,7 +71,7 @@ For example, if you previously had something like this:
 You should instead have:
 
 ```objc
-// AppDelegate.m
+// AppDelegate.h
 @import ReactNativeHost;
 @import UIKit;
 
