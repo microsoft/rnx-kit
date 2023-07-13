@@ -301,6 +301,23 @@ here when we can't.
 
 Our mantra for this effort is, to put simply, "a rising tide lifts all boats".
 
+### Measuring Success
+
+As we execute on this roadmap, we will closely monitor data and metrics to
+ensure our tools are delivering real improvements for React Native developers.
+This includes looking at adoption rates, time savings achieved, and other
+efficiency gains.
+
+We also recognize the importance of community feedback. We will engage
+developers through GitHub discussions to collect ideas and feature requests.
+This input will help us continue refining rnx-kit to best meet our goals.
+
+Ultimately, while community feedback is valued, Microsoft priorities will be put
+first in deciding which improvements to pursue. By combining data-driven
+insights with judicious consideration of community suggestions, we aim to build
+developer tools that meet both our needs and those of the broader React Native
+ecosystem.
+
 <!-- Footnotes -->
 
 [^1]:
