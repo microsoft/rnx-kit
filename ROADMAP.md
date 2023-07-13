@@ -1,6 +1,6 @@
 # The `rnx-kit` roadmap
 
-> **Introduction**
+> **Disclaimer**
 >
 > This document conveys what we (the maintainers of `rnx-kit`) want to achieve
 > with it. Whether we have resources to fund all the efforts to reach these
@@ -21,7 +21,7 @@ as we need to work with platform specific tools in addition to JS ones. This
 complexity is what drives stakeholders towards alternatives despite what
 performance numbers indicate.
 
-## Our Vision: bring the web's best developer experience to React Native
+## Our vision: bring the web's best developer experience to React Native
 
 If we look at how to get started with web development, we can reduce the steps
 down to the following:
@@ -37,11 +37,10 @@ That's only three steps to get started! It can be further reduced if we consider
 the use of virtual environments like [GitHub Codespaces][] which manage setting
 up the tooling mostly automagically.
 
-Web browsers include almost everything you might need, from the
-[standard APIs](https://developer.mozilla.org/en-US/docs/Web/API) that can be
-used to access audio, graphics, the file system, and many others to development
-tools that are embedded directly right next to your app. Web browsers,
-basically, have it all - batteries included.
+Web browsers include almost everything you might need, from the [standard
+APIs][] that can be used to access audio, graphics, the file system, and many
+others to development tools that are embedded directly right next to your app.
+Web browsers essentially come with batteries included.
 
 Let's compare that to how one would get started with React Native:
 
@@ -130,20 +129,20 @@ Let's compare that to how one would get started with React Native:
   </tbody>
 </table>
 
-In many scenarios, from a product perspective, a WebView is sufficient and will
-provide a "good enough" experience to end users. This makes React Native, with
-all its complexities, an expensive choice to make. It's not enough to talk about
-performance numbers and great user experiences: we also need to court developers
-with a great developer experience.
+In many scenarios, a WebView is sufficient and will provide a "good enough"
+experience to end users from a product perspective. This makes React Native,
+with all its complexities, an expensive choice to make. It's not enough to talk
+about performance numbers and great user experiences: we also need to court
+developers with a great developer experience.
 
 That's what we are setting as a north star goal for `rnx-kit`: to fill the gaps
 and provide a set of tools to reduce this distance, bringing the web's best
 developer experience to React Native.
 
-In the next section, we will outline what we are currently doing today and what
+In the next sections, we will outline what we are currently doing today and what
 we need to invest into going forward.
 
-## Our Approach
+## Our approach
 
 ### React Native's "web browser"
 
@@ -161,9 +160,9 @@ For small teams, the cost may be prohibitive.
 In order to level the playing field, we need one development client for all
 React Native related needs across all platforms[^1]:
 
-- Where possible we need to provide a consistent and well-maintained development
-  client that can be downloaded, for instance, from the platform's app store or
-  as a downloadable executable.
+- Where possible, we need to provide a consistent and well-maintained
+  development client that can be downloaded; for instance, from the platform's
+  app store or as a downloadable executable.
 - Where access to the native code or additional dependencies are required, we
   need to make it effortless to include additional modules and to change React
   Native versions (in both directions).
@@ -173,10 +172,10 @@ aimed for with [`react-native-test-app`][], but still need the last push over
 the finishing line.
 
 For historical reasons, this work is in a separate repository:
-https://github.com/microsoft/react-native-test-app, but it is maintained by the
-very same folks maintaining `rnx-kit`. Currently it does not support/target web.
+https://github.com/microsoft/react-native-test-app. It is maintained by the very
+same folks maintaining `rnx-kit`. It currently does not support/target web.
 
-In the long term want `react-native-test-app` to be the best choice for
+In the long term, we want `react-native-test-app` to be the best choice for
 developers, whether they are working on a library or a standalone app.
 
 > **Note**
@@ -194,7 +193,7 @@ developers, whether they are working on a library or a standalone app.
 
 The piece of the browser puzzle missing from the above section is a standard
 API. Today, web developers can reach out to Web APIs and assume that their app
-will function across many platforms - that is not the case for React Native
+will function across many platforms — that is not the case for React Native
 developers. If the API you're looking for is not immediately available in
 `react-native`, you will have to look for modules written by the community.
 Maybe you'll find one in [React Native Directory][], or maybe you will have to
@@ -224,10 +223,10 @@ What we see is that different teams manage dependencies in their own ways. There
 is little consensus on what to use and what versions, leading to issues when
 they try to get their features integrated into an app. [`@rnx-kit/align-deps`][]
 tries to solve this by scanning dependencies and making sure the correct
-packages and versions are being used based on opinionated built-in profiles. Its
-centralized design (expandable locally by each project as they see fit) allows
-it to align dependencies across many packages both within a repository and
-across repositories.
+packages and versions are being used based on opinionated built-in profiles, or
+custom profiles provided by someone else. Its centralized design allows it to
+align dependencies across many packages both within a repository and across
+repositories.
 
 #### JS bundling
 
@@ -237,9 +236,9 @@ that we identify here should be fixed upstream first when feasible, and
 otherwise fixed in our custom tooling.
 
 It is imperative that we maintain a good partnership with the teams working on
-Metro and [`@react-native-community/cli`][]. In the past we drove dedicated
-meetings with this goal, under the [Bundle Working Group][] effort, now morphed
-into Meta-owned [Metro Office Hours][].
+Metro and [`@react-native-community/cli`][]. In the past, we drove dedicated
+meetings with this goal in mind under the [Bundle Working Group][] effort. This
+effort has now evolved into the Meta-owned [Metro Office Hours][].
 
 #### Unified CLI
 
@@ -253,10 +252,10 @@ and logic to enable/disable some of the configuration based on the current mode.
 
 This is all too much for users that just want to get started on their actual
 work. With a custom CLI, we can abstract away complexities like this behind a
-single flag. This is why having we have wrapped a few extra features on top of
-the [`@react-native-community/cli`][] in `rnx-kit` to tie all these things
-together is important. If you look at the current [list of tools][], we're
-building up quite a repertoire.
+single flag. This is why wrapping a few extra features on top of the
+[`@react-native-community/cli`][] in `rnx-kit` to tie all these things together
+is important. If you look at the current [list of tools][], we're building up
+quite a repertoire.
 
 This solution is middle ground between upstreaming everything we can and
 addressing our needs in a timely fashion.
@@ -282,9 +281,9 @@ Codespaces.
 
 This is an area of React Native that historically has been unclear; however, we
 have high hopes for great things coming out of the recently spun up [Debugging
-Working Group][]. Ideally, the end result will provide an tool similar (and
+Working Group][]. Ideally, the end result will provide tools similar (and
 familiar in developer experience) to what web development already has available
-with tooling such as the [Chrome DevTools][].
+with tooling such as [Chrome DevTools][].
 
 ## Our role in the broader community
 
@@ -301,22 +300,16 @@ here when we can't.
 
 Our mantra for this effort is, to put simply, "a rising tide lifts all boats".
 
-### Measuring Success
+### Measuring success
 
 As we execute on this roadmap, we will closely monitor data and metrics to
 ensure our tools are delivering real improvements for React Native developers.
 This includes looking at adoption rates, time savings achieved, and other
 efficiency gains.
 
-We also recognize the importance of community feedback. We will engage
+We also recognize the importance of community feedback. We will engage with
 developers through GitHub discussions to collect ideas and feature requests.
-This input will help us continue refining rnx-kit to best meet our goals.
-
-Ultimately, while community feedback is valued, Microsoft priorities will be put
-first in deciding which improvements to pursue. By combining data-driven
-insights with judicious consideration of community suggestions, we aim to build
-developer tools that meet both our needs and those of the broader React Native
-ecosystem.
+This input will help us continue refining `rnx-kit` to best meet our goals.
 
 <!-- Footnotes -->
 
@@ -334,19 +327,20 @@ ecosystem.
 [`npm create vite@latest`]:
   https://vitejs.dev/guide/#scaffolding-your-first-vite-project
 [`react-native-test-app`]: https://github.com/microsoft/react-native-test-app
+[Bundle Working Group]:
+  https://github.com/microsoft/rnx-kit/discussions/categories/bundle-working-group
+[Chrome DevTools]: https://developer.chrome.com/docs/devtools/
 [Debugging Working Group]:
   https://github.com/react-native-community/developer-experience-wg/discussions/categories/debugging
 [GitHub Codespaces]: https://github.com/features/codespaces
 [Metro]: https://facebook.github.io/metro/
+[Metro Office Hours]:
+  https://github.com/react-native-community/developer-experience-wg/discussions/categories/metro
 [React DOM For Native RFC]:
   https://github.com/react-native-community/discussions-and-proposals/pull/496
 [React Native Directory]: https://reactnative.directory/
 [Tophat]: https://shopify.engineering/shopify-tophat-mobile-developer-testing
 [list of tools]: https://microsoft.github.io/rnx-kit/docs/tools/overview
-[Bundle Working Group]:
-  https://github.com/microsoft/rnx-kit/discussions/categories/bundle-working-group
-[Metro Office Hours]:
-  https://github.com/react-native-community/developer-experience-wg/discussions/categories/metro
+[standard APIs]: https://developer.mozilla.org/en-US/docs/Web/API
 [write a plugin]:
-  https://github.com/microsoft/rnx-kit/tree/main/packages/metro-serializer-esbuild
-[Chrome DevTools]: https://developer.chrome.com/docs/devtools/
+  https://github.com/microsoft/rnx-kit/tree/main/packages/metro-serializer-esbuild#readme
