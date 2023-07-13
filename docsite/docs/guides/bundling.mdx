@@ -178,8 +178,13 @@ Here's what it looks like as app defaults in configuration:
   "rnx-kit": {
     "bundle": {
       "entryFile": "index.js",
-      "targets": ["ios"],
+      "targets": ["android", "ios"],
       "platforms": {
+        "android": {
+          "bundleOutput": "dist/main.android.bundle",
+          "sourcemapOutput": "dist/main.android.bundle.map",
+          "assetsDest": "dist/res"
+        },
         "ios": {
           "bundleOutput": "dist/main.ios.jsbundle",
           "sourcemapOutput": "dist/main.ios.jsbundle.map",
