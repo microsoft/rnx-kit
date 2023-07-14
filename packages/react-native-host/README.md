@@ -25,6 +25,7 @@ npm add --save-dev @rnx-kit/react-native-host
 ## Usage
 
 ### iOS/macOS
+> To see a working example how to use this library for iOS/macOS, please refer to [react-native-test-app](https://github.com/microsoft/react-native-test-app/tree/trunk/ios/ReactTestApp).
 
 [Autolinking](https://github.com/react-native-community/cli/blob/10.x/docs/autolinking.md)
 should make this module available to your app project.
@@ -110,7 +111,7 @@ Objective-C:
 ReactNativeHost *host = [[ReactNativeHost alloc] initWithConfig:self];
 ```
 Swift:
-```
+```swift
 let host = ReactNativeHost(config: self)
 ```
 
@@ -133,7 +134,7 @@ Objective-C:
 ```
 
 Swift:
-```
+```swift
 host.using(module: MyNativeModuleClass.self) {
   // Access and use the native module here
 }
@@ -155,13 +156,13 @@ Creates a React root view with the specified module and initial properties. Para
 
 
 Objective-C:
-```
+```objc
 ReactNativeHost *host = [[ReactNativeHost alloc] initWithConfig:self];
 UIView *rootView = [host viewWithModuleName:moduleName
                          initialProperties:initialProperties];
 ```
 Swift:
-```
+```swift
 let view = host.view(
     moduleName: moduleName,
     initialProperties: initialProperties
@@ -171,7 +172,7 @@ let view = host.view(
 
 ### RNXConfig
 
-`RNXHostConfig` is a superset of `RCTBridgeDelegate`. It's backwards compatible.
+`RNXHostConfig` is a superset of `RCTBridgeDelegate` and it's backwards compatible.
 
 #### `isDevLoadingViewEnabled`
 Returns whether the loading view should be visible while loading JavaScript
