@@ -19,10 +19,15 @@
     "directory": "packages/react-native-host"
   },
   "scripts": {
+    "format": "rnx-kit-scripts format",
     "format:c": "clang-format -i $(git ls-files '*.c' '*.cpp' '*.h' '*.m' '*.mm')",
     "lint:kt": "ktlint --relative --verbose 'android/src/**/*.kt'"
   },
   "peerDependencies": {
     "react-native": ">=0.64"
+  },
+  "devDependencies": {
+    "@rnx-kit/scripts": "*",
+    "prettier": "^3.0.0"
   }
 }
