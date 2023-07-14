@@ -95,3 +95,89 @@ You should instead have:
 
 @end
 ```
+## API
+### ReactNativeHost
+Instantiates the appropriate modules required for the setup. It handles New Architecture if necessary.
+
+#### `initWithConfig`
+**Swift name:** `init`
+
+Creates an instance of `ReactNativeHost` using the designated initializer.
+
+
+Objective-C:
+```objc
+ReactNativeHost *host = [[ReactNativeHost alloc] initWithConfig:self];
+```
+Swift:
+```
+let host = ReactNativeHost(config: self)
+```
+
+#### `shutdown`
+Shuts down the React Native instance
+
+#### `usingModule`
+**Swift name:** `using`
+
+Retrieves or initializes a desired native module. Parameters:
+- `moduleClass` - class of the native module to initialize or retrieve
+- `block` - block that gets called when the native module is retrieved
+
+
+Objective-C:
+```objc
+[host usingModule:[MyNativeModuleClass class] block:^(id<RCTBridgeModule> module) {
+    // Access and use the native module here
+}];
+```
+
+Swift:
+```
+host.using(module: MyNativeModuleClass.self) {
+  // Access and use the native module here
+}
+```
+
+#### `hostFromRootView`
+**Swift name:** `host`
+
+Retrieves the `ReactNativeHost` instance that view belongs to.
+
+
+#### `viewWithModuleName`
+**Swift name:** `view`
+
+Creates a React root view with the specified module and initial properties. Parameters:
+
+- `moduleName` - name of the module to create root view of
+- `initialProperties` - properties passed to the module
+
+
+Objective-C:
+```
+ReactNativeHost *host = [[ReactNativeHost alloc] initWithConfig:self];
+UIView *rootView = [host viewWithModuleName:moduleName
+                         initialProperties:initialProperties];
+```
+Swift:
+```
+let view = host.view(
+    moduleName: moduleName,
+    initialProperties: initialProperties
+)
+```
+
+
+### RNXConfig
+
+`RNXHostConfig` is a superset of `RCTBridgeDelegate`. It's backwards compatible.
+
+#### `isDevLoadingViewEnabled`
+Returns whether the loading view should be visible while loading JavaScript
+
+#### `shouldReleaseBridgeWhenBackgrounded`
+Returns whether the bridge should be released when the app is in the background
+
+#### `onFatalError`
+Handles a fatal error
