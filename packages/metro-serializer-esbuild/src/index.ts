@@ -5,7 +5,7 @@ import { getMetroVersion } from "@rnx-kit/tools-react-native/metro";
 import type { BuildOptions, BuildResult, Plugin } from "esbuild";
 import * as esbuild from "esbuild";
 import * as fs from "fs";
-import type { Module, ReadOnlyDependencies } from "metro";
+import type { Module, ReadOnlyDependencies, SerializerOptions } from "metro";
 import type { SerializerConfigT } from "metro-config";
 import * as path from "path";
 import * as semver from "semver";
@@ -37,7 +37,7 @@ function assertVersion(requiredVersion: string): void {
 
   if (!semver.satisfies(version, requiredVersion)) {
     throw new Error(
-      `Metro version ${requiredVersion} is required; got ${version}`
+      `Metro version ${requiredVersion} is required; got ${version}`,
     );
   }
 }
@@ -109,7 +109,7 @@ const getSideEffects = (() => {
 
 function isImporting(
   moduleName: string,
-  dependencies: ReadOnlyDependencies
+  dependencies: ReadOnlyDependencies,
 ): boolean {
   const iterator = dependencies.keys();
   for (let key = iterator.next(); !key.done; key = iterator.next()) {
@@ -128,16 +128,22 @@ function isRedundantPolyfill(modulePath: string): boolean {
 
 function outputOf(
   module: Module | undefined,
-  logLevel: BuildOptions["logLevel"]
+  processModuleFilter: SerializerOptions["processModuleFilter"],
+  createModuleId: SerializerOptions["createModuleId"],
+  logLevel: BuildOptions["logLevel"],
 ): string | undefined {
   if (!module) {
     return undefined;
   }
 
+  if (processModuleFilter && !processModuleFilter(module)) {
+    return "";
+  }
+
   const jsModules = module.output.filter(({ type }) => type.startsWith("js/"));
   if (jsModules.length !== 1) {
     throw new Error(
-      `Modules must have exactly one JS output, but ${module.path} has ${jsModules.length}`
+      `Modules must have exactly one JS output, but ${module.path} has ${jsModules.length}`,
     );
   }
 
@@ -148,7 +154,9 @@ function outputOf(
     // imported path, and appends the file name to it. If we don't trim the path
     // here, we will end up with "double" paths, e.g.
     // `src/Users/<user>/Source/rnx-kit/packages/test-app/src/App.native.tsx`.
-    path: path.basename(module.path),
+    path: createModuleId
+      ? createModuleId(module.path).toString()
+      : path.basename(module.path),
   };
 
   if (logLevel === "debug" && code.includes("export * from")) {
@@ -164,7 +172,7 @@ function outputOf(
  */
 export function MetroSerializer(
   metroPlugins: MetroPlugin[] = [],
-  buildOptions?: Options
+  buildOptions?: Options,
 ): SerializerConfigT["customSerializer"] {
   assertVersion(">=0.66.1");
 
@@ -176,7 +184,7 @@ export function MetroSerializer(
 
   return (entryPoint, preModules, graph, options) => {
     metroPlugins.forEach((plugin) =>
-      plugin(entryPoint, preModules, graph, options)
+      plugin(entryPoint, preModules, graph, options),
     );
 
     if (options.dev) {
@@ -253,11 +261,14 @@ export function MetroSerializer(
           }
 
           throw new Error(
-            `Could not resolve '${args.path}' from '${args.importer}'`
+            `Could not resolve '${args.path}' from '${args.importer}'`,
           );
         });
 
         build.onLoad(pluginOptions, (args) => {
+          const createModuleId = options?.createModuleId;
+          const processModuleFilter = options?.processModuleFilter;
+
           // Ideally, we should be adding external files to the options object
           // that we pass to `esbuild.build()` below. Since it doesn't work for
           // some reason, we'll filter them out here instead.
@@ -271,7 +282,13 @@ export function MetroSerializer(
           const mod = dependencies.get(args.path);
           if (mod) {
             return {
-              contents: outputOf(mod, buildOptions?.logLevel) ?? "",
+              contents:
+                outputOf(
+                  mod,
+                  processModuleFilter,
+                  createModuleId,
+                  buildOptions?.logLevel,
+                ) ?? "",
               pluginData: args.pluginData,
             };
           }
@@ -279,7 +296,13 @@ export function MetroSerializer(
           const polyfill = preModules.find(({ path }) => path === args.path);
           if (polyfill) {
             return {
-              contents: outputOf(polyfill, buildOptions?.logLevel) ?? "",
+              contents:
+                outputOf(
+                  polyfill,
+                  processModuleFilter,
+                  createModuleId,
+                  buildOptions?.logLevel,
+                ) ?? "",
               pluginData: args.pluginData,
             };
           }
@@ -424,7 +447,9 @@ export function MetroSerializer(
           if (typeof buildOptions?.metafile === "string") {
             fs.writeFileSync(
               path.join(path.dirname(sourcemapfile), buildOptions.metafile),
-              typeof metafile === "string" ? metafile : JSON.stringify(metafile)
+              typeof metafile === "string"
+                ? metafile
+                : JSON.stringify(metafile),
             );
           }
         } else {
