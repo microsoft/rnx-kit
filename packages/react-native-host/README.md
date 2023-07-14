@@ -101,7 +101,7 @@ You should instead have:
 Instantiates the appropriate modules required for the setup. It handles New Architecture if necessary.
 
 #### `initWithConfig`
-**Swift name:** `init`
+**Swift name:** `init(_:)`
 
 Creates an instance of `ReactNativeHost` using the designated initializer.
 
@@ -129,14 +129,21 @@ Retrieves or initializes a desired native module. Parameters:
 Objective-C:
 ```objc
 [host usingModule:[MyNativeModuleClass class] block:^(id<RCTBridgeModule> module) {
-    // Access and use the native module here
+    if (![module isKindOfClass:[MyNativeModuleClass class]]) {
+        return;
+    }
+    MyNativeModuleClass *myNativeModule = (MyNativeModuleClass *)module;
+    // Use the native module here
 }];
 ```
 
 Swift:
 ```swift
 host.using(module: MyNativeModuleClass.self) {
-  // Access and use the native module here
+  guard let myNativeModule = module as? MyNativeModuleClass else {
+    return
+  }
+  // Use the native module here
 }
 ```
 
