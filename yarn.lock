@@ -3890,6 +3890,9 @@ __metadata:
 "@rnx-kit/react-native-host@*, @rnx-kit/react-native-host@^0.2.7, @rnx-kit/react-native-host@workspace:packages/react-native-host":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/react-native-host@workspace:packages/react-native-host"
+  dependencies:
+    "@rnx-kit/scripts": "*"
+    prettier: ^3.0.0
   peerDependencies:
     react-native: ">=0.64"
   languageName: unknown
