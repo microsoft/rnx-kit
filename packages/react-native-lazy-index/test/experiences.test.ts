@@ -1,8 +1,12 @@
-import { resolveModule } from "./../src/module";
-import { parseExperiences, getFlight } from "./../src/experiences";
+import { resolveModule } from "../src/module";
+import { parseExperiences, getFlightedModule } from "../src/experiences";
 import fs from "fs";
 
 describe("parseExperiences()", () => {
+  afterEach(() => {
+    process.env.RN_LAZY_INDEX_FLIGHTS = "";
+  });
+
   test("missing experiences section", () => {
     const packageManifest = resolveModule("./package.json");
     const { experiences } = JSON.parse(
@@ -58,7 +62,7 @@ describe("parseExperiences()", () => {
   });
 
   test("single flighted experiences", () => {
-    let experiences = {
+    const experiences = {
       SomeFeature: "@awesome-app/some-feature",
       "callable:AnotherFeature": "@awesome-app/another-feature",
       FinalFeature: {
@@ -81,14 +85,6 @@ describe("parseExperiences()", () => {
     });
 
     process.env.RN_LAZY_INDEX_FLIGHTS = "FinalFeature";
-    experiences = {
-      SomeFeature: "@awesome-app/some-feature",
-      "callable:AnotherFeature": "@awesome-app/another-feature",
-      FinalFeature: {
-        module: "@awesome-app/final-feature",
-        flights: ["FinalFeature"],
-      },
-    };
     result = parseExperiences(experiences);
     expect(result).toEqual({
       AnotherFeature: {
@@ -110,8 +106,7 @@ describe("parseExperiences()", () => {
   });
 
   test("multiple flighted experiences", () => {
-    process.env.RN_LAZY_INDEX_FLIGHTS = "";
-    let experiences = {
+    const experiences = {
       SomeFeature: {
         module: "@awesome-app/some-feature",
         flights: ["SomeFeature"],
@@ -120,6 +115,10 @@ describe("parseExperiences()", () => {
       FinalFeature: {
         module: "@awesome-app/final-feature",
         flights: ["FinalFeature"],
+      },
+      "callable:ThirdFeature": {
+        module: "@awesome-app/third-feature",
+        flights: ["ThirdFeature"],
       },
     };
     let result = parseExperiences(experiences);
@@ -132,17 +131,6 @@ describe("parseExperiences()", () => {
     });
 
     process.env.RN_LAZY_INDEX_FLIGHTS = "SomeFeature,FinalFeature";
-    experiences = {
-      SomeFeature: {
-        module: "@awesome-app/some-feature",
-        flights: ["SomeFeature"],
-      },
-      "callable:AnotherFeature": "@awesome-app/another-feature",
-      FinalFeature: {
-        module: "@awesome-app/final-feature",
-        flights: ["FinalFeature"],
-      },
-    };
     result = parseExperiences(experiences);
     expect(result).toEqual({
       AnotherFeature: {
@@ -161,50 +149,88 @@ describe("parseExperiences()", () => {
         type: "app",
       },
     });
+
+    process.env.RN_LAZY_INDEX_FLIGHTS = "SomeFeature,FinalFeature,ThirdFeature";
+    result = parseExperiences(experiences);
+    expect(result).toEqual({
+      AnotherFeature: {
+        moduleId: "@awesome-app/another-feature",
+        source: "package.json",
+        type: "callable",
+      },
+      SomeFeature: {
+        moduleId: "@awesome-app/some-feature",
+        source: "package.json",
+        type: "app",
+      },
+      FinalFeature: {
+        moduleId: "@awesome-app/final-feature",
+        source: "package.json",
+        type: "app",
+      },
+      ThirdFeature: {
+        moduleId: "@awesome-app/third-feature",
+        source: "package.json",
+        type: "callable",
+      },
+    });
   });
 });
 
 describe("getFlight()", () => {
   test("empty flight object", () => {
     const emptyFlight = {};
-    const result = getFlight(emptyFlight);
+    const result = getFlightedModule(emptyFlight);
     expect(result).toBeUndefined();
   });
 
   test("missing fields", () => {
     const noModule = { flights: ["SomeFeature"] };
-    expect(getFlight(noModule)).toBeUndefined();
+    expect(getFlightedModule(noModule)).toBeUndefined();
 
     const noFlight = { module: "@awesome-app/some-feature" };
-    expect(getFlight(noFlight)).toBeUndefined();
+    expect(getFlightedModule(noFlight)).toBeUndefined();
   });
 
   test("wrong field type", () => {
     const flightsString = { flights: "SomeFeature" };
-    expect(getFlight(flightsString)).toBeUndefined();
+    expect(getFlightedModule(flightsString)).toBeUndefined();
 
     const moduleArray = { module: ["@awesome-app/some-feature"] };
-    expect(getFlight(moduleArray)).toBeUndefined();
+    expect(getFlightedModule(moduleArray)).toBeUndefined();
 
     const flightsObject = { flights: { val: "SomeFeature" } };
-    expect(getFlight(flightsObject)).toBeUndefined();
+    expect(getFlightedModule(flightsObject)).toBeUndefined();
 
     const moduleObject = { module: { val: "@awesome-app/some-feature" } };
-    expect(getFlight(moduleObject)).toBeUndefined();
+    expect(getFlightedModule(moduleObject)).toBeUndefined();
 
     const flightsInt = { flights: 1 };
-    expect(getFlight(flightsInt)).toBeUndefined();
+    expect(getFlightedModule(flightsInt)).toBeUndefined();
 
     const moduleInt = { module: 1 };
-    expect(getFlight(moduleInt)).toBeUndefined();
+    expect(getFlightedModule(moduleInt)).toBeUndefined();
+
+    const invalidModuleValidFlights = {
+      module: ["@awesome-app/some-feature"],
+      flights: ["SomeFeature"],
+    };
+    expect(getFlightedModule(invalidModuleValidFlights)).toBeUndefined();
+
+    const invalidFlightsValidModule = {
+      module: "@awesome-app/some-feature",
+      flights: "SomeFeature",
+    };
+    expect(getFlightedModule(invalidFlightsValidModule)).toBeUndefined();
   });
 
   test("valid flight object", () => {
-    const flight = {
-      module: "@awesome-app/some-feature",
-      flights: ["SomeFeature"],
-    };
-    expect(getFlight(flight)).toEqual({
+    expect(
+      getFlightedModule({
+        module: "@awesome-app/some-feature",
+        flights: ["SomeFeature"],
+      })
+    ).toEqual({
       module: "@awesome-app/some-feature",
       flights: ["SomeFeature"],
     });

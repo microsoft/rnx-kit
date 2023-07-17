@@ -36,7 +36,7 @@ function parseIntDefault(s, defaultValue) {
  * @param {unknown} moduleId
  * @returns {{module: string, flights: string[]} | undefined}
  */
-function getFlight(moduleId) {
+function getFlightedModule(moduleId) {
   if (
     moduleId &&
     typeof moduleId === "object" &&
@@ -45,8 +45,10 @@ function getFlight(moduleId) {
     "flights" in moduleId &&
     Array.isArray(moduleId.flights)
   ) {
-    // @ts-ignore
-    return moduleId;
+    return {
+      module: moduleId.module,
+      flights: moduleId.flights,
+    };
   }
   return undefined;
 }
@@ -90,7 +92,7 @@ function parseExperiencesFromObject(experiences) {
 
   return Object.keys(experiences).reduce((components, name) => {
     let moduleId = experiences[name];
-    const flightedModule = getFlight(moduleId);
+    const flightedModule = getFlightedModule(moduleId);
 
     if (flightedModule) {
       const flighted = flights?.some((flight) => {
@@ -139,4 +141,4 @@ function parseExperiences(experiences) {
 }
 
 exports.parseExperiences = parseExperiences;
-exports.getFlight = getFlight;
+exports.getFlightedModule = getFlightedModule;
