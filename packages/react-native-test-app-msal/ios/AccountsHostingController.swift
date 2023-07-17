@@ -4,6 +4,9 @@ import SwiftUI
 // "Forward-declare" RCTBridge to avoid dependency on React-Core
 typealias RCTBridge = AnyObject
 
+// "Forward-declare" ReactNativeHost to avoid dependency on ReactNativeHost
+typealias ReactNativeHost = AnyObject
+
 #if os(iOS)
     public typealias RTAViewController = UIViewController
     typealias RTAHostingController = UIHostingController
@@ -24,6 +27,11 @@ final class ObservableHostingController: ObservableObject {
 
 @objc(MicrosoftAccounts)
 public final class AccountsHostingController: RTAViewController {
+    @objc
+    init(host _: ReactNativeHost) {
+        super.init(nibName: nil, bundle: nil)
+    }
+
     @objc
     init(bridge _: RCTBridge) {
         super.init(nibName: nil, bundle: nil)
