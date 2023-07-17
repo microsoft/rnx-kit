@@ -2,24 +2,8 @@ import type { BabelFileResult } from "@babel/core";
 
 describe("react-native-lazy-index", () => {
   const babel = require("@babel/core");
-  const { spawnSync } = require("child_process");
   const path = require("path");
-
   const currentWorkingDir = process.cwd();
-
-  /**
-   * Generates a sequence from RegEx matches.
-   */
-  function* generateSequence(
-    str: string,
-    regex: RegExp
-  ): Generator<string, void> {
-    let m = regex.exec(str);
-    while (m) {
-      yield m[1];
-      m = regex.exec(str);
-    }
-  }
 
   /**
    * Tests the specified fixture.

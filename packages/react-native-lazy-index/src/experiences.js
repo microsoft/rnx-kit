@@ -67,7 +67,24 @@ function parseExperiencesFromArray(experiences) {
  */
 function parseExperiencesFromObject(experiences) {
   return Object.keys(experiences).reduce((components, name) => {
-    const moduleId = experiences[name];
+    let moduleId = experiences[name];
+
+    if (
+      moduleId &&
+      typeof moduleId === "object" &&
+      "module" in moduleId &&
+      typeof moduleId.module === "string" &&
+      "flighted" in moduleId &&
+      typeof moduleId.flighted === "boolean"
+    ) {
+      const flightedModule = moduleId;
+      if (flightedModule.flighted) {
+        return components;
+      }
+
+      moduleId = flightedModule.module;
+    }
+
     if (typeof moduleId !== "string") {
       return components;
     }
