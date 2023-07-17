@@ -11708,8 +11708,8 @@ __metadata:
   linkType: hard
 
 "react-native@npm:^0.71.0":
-  version: 0.71.11
-  resolution: "react-native@npm:0.71.11"
+  version: 0.71.12
+  resolution: "react-native@npm:0.71.12"
   dependencies:
     "@jest/create-cache-key-function": ^29.2.1
     "@react-native-community/cli": 10.2.4
@@ -11720,6 +11720,7 @@ __metadata:
     "@react-native/polyfills": 2.0.0
     abort-controller: ^3.0.0
     anser: ^1.4.9
+    ansi-regex: ^5.0.0
     base64-js: ^1.1.2
     deprecated-react-native-prop-types: ^3.0.1
     event-target-shim: ^5.0.1
@@ -11749,7 +11750,7 @@ __metadata:
     react: 18.2.0
   bin:
     react-native: cli.js
-  checksum: a6f7139a167f977ef7ef5569d20cf21fddd60d88aa6f5530caadf3ab88d7c12160eaac701086a0c245b49ea8003bac8bd615cb2494ee781ffcca43c80024f8a3
+  checksum: 5de4f8754641f0ea463a6e0f2e01de82ad51cee52f44cf704742e6dba09b1e24818f1d6d3d6c9b9591930f5d453acc5220ac628746b72d7624e2cdf051934635
   languageName: node
   linkType: hard
 
