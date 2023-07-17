@@ -89,6 +89,7 @@
     "extends": "@rnx-kit/eslint-config"
   },
   "prettier": {
+    "trailingComma": "es5",
     "overrides": [
       {
         "files": [
