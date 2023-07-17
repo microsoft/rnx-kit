@@ -7,8 +7,6 @@ export default async function format() {
   await runScript(
     "prettier",
     "--write",
-    "--trailing-comma",
-    "es5",
     "--log-level",
     "error",
     "**/*.{js,json,jsx,md,ts,tsx,yml}",
