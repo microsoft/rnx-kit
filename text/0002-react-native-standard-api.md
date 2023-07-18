@@ -6,18 +6,17 @@
 ## Abstract
 
 React Native currently lacks a well-defined, stable and complete API surface.
-When compared to what both
-[iOS](https://developer.apple.com/documentation/technologies) and
-[Android](https://developer.android.com/reference) provide out of the box, today
-in React Native core quite a few are missing, and to fill that gap we have a
+Compared to what both [Android](https://developer.android.com/reference) and
+[iOS](https://developer.apple.com/documentation/technologies) provide out of the
+box, React Native core is missing quite a lot today. To fill that gap, we have a
 "wild west" of community modules, each with its own set of interfaces and
 behaviors. While this is in line with the broader experience in the web/npm
 space, at the end of the day this means that it is the developers'
-responsibility to find modules that fits their needs and that are seemingly
+responsibility to find modules that fit their needs and that are seemingly
 actively maintained.
 
-Additionally, the API are not compatible with Web APIs, thus closing the door to
-a wealth of open source libraries that do not have explicit React Native
+Additionally, the APIs are not compatible with Web APIs, thus closing the door
+to a wealth of open source libraries that do not have explicit React Native
 support. This often means that developers cannot reuse existing web code, and
 must search for or even create one for their needs.
 
@@ -44,8 +43,8 @@ function useBatteryLevel() {
 }
 ```
 
-The native platforms we aim to support via react-native are iOS, Android,
-Windows and macOS.
+The native platforms we aim to support via react-native are Android, iOS, macOS,
+Windows.
 
 ## Reference-level explanation
 
@@ -57,7 +56,7 @@ unused bits; nor does it make any sense to include MBs of dependencies that are
 never used. Ideally, migrating from community modules to the standard API should
 not increase the final app size (at least not significantly).
 
-The API we envision being implemented in layers:
+The API we envision are implemented in the following layers:
 
 ```mermaid
 graph TD;
@@ -66,7 +65,7 @@ graph TD;
   id2(Turbo/native module)-->id3(Platform API/\nCommunity module);
 ```
 
-- **Web APIs:** On the surface, there are little to no differences from normal
+- **Web APIs:** On the surface, there are little to no differences from typical
   web code.
 
 - **JS shim:** This is a thin layer for marshalling web API calls to native
@@ -81,8 +80,8 @@ graph TD;
   autolinking mechanism.
 
 - **Platform API/Community module:** When available, we want to be able to
-  leverage what already exist in the community and avoid creating competing
-  solutions. When we need to write it from scratch, we want to comply with the
+  leverage what already exists in the community and avoid creating competing
+  solutions. When we need to write from scratch, we want to comply with the
   guidelines for the
   [new architecture libraries](https://github.com/reactwg/react-native-new-architecture/discussions/categories/libraries)
   provided by Meta.
@@ -90,13 +89,13 @@ graph TD;
 ### Modularity
 
 We want to avoid introducing unused modules and adding unnecessary bloat to the
-app bundle. The standard API should therefore be broken down into small modules
+app bundle. The standard API must therefore be broken down into smaller modules
 that can be installed separately. These modules are installed by autolinking,
 and must therefore be explicitly added to an app's `package.json`.
 
 For example, if you want to use `BatteryManager` you should not need to import
-the whole `rn-standard-api` node_module, but only its dedicated
-`rn-standard-api/battery-manager` submodule.
+the whole `react-native-apis` module, but only the specific
+`@react-native-apis/battery-manager` submodule.
 
 Additionally, we want to avoid requiring that users manually add polyfills for
 the modules they need. Instead, we propose that modules that implement a part of
@@ -121,15 +120,14 @@ On top of what has been mentioned above, we are still investigating the right
 approach for how the code for this effort should be created and organised. The
 most likely approach will involve a monorepo (similar to
 [`rnx-kit`](https://github.com/microsoft/rnx-kit)) where each module will be its
-own dedicated package; in it, implementation for all the various native
-platforms will be present (so, we won't have
-`rn-standard-api/packages/battery-manager-ios` and
-`rn-standard-api/packages/battery-manager-android` but only
-`rn-standard-api/packages/battery-manager`).
+own dedicated package. For now, we will suggest that implementations for all
+supported platforms be present in the one package. We won't have
+`@react-native-apis/packages/battery-manager-ios` and
+`@react-native-apis/packages/battery-manager-android`, only
+`@react-native-apis/packages/battery-manager`.
 
-This will also allow for different people to work on different modules at the
-same time, while having a coherent infra to rely on for testing,
-package/versioning management, etc.
+This should allow for different people to work on different modules at the same
+time, while having a coherent infra to rely on for testing, publishing, etc.
 
 ### Discovery
 
@@ -138,11 +136,11 @@ APIs can be overwhelming for consumers. We need tools that can tell users which
 dependencies they need to add. At minimum we should:
 
 1. Implement a tool for detecting usage of web APIs
-   - The tool should be able to list used web APIs and report on uses that have
-     not been polyfilled.
+   - The tool should be able to list used web APIs and flag uses that have not
+     been polyfilled.
    - If possible, the tool should also recommend which dependencies to add
      and/or automatically add it to `package.json`.
-   - Note: While we say "tool" here, it doesn't necessarily have to be a
+   - **Note:** While we say "tool" here, it doesn't necessarily have to be a
      standalone thing. A Babel plugin or similar would also fit. The less users
      have to worry about it, the better.
 2. Add new capabilities to [`@rnx-kit/align-deps`][]
@@ -151,18 +149,13 @@ dependencies they need to add. At minimum we should:
 
 ## Drawbacks
 
-> TODO: Why should we not do this, and what is the impact of that decision?
-> Please consider the cost to educate developers, migrate existing users, and
-> maintain the proposed changes.
-
-- existing React Native apps might need to be adapted to shift to this new
-  modules.
-- a lot of the tooling needed for this effort to succeed as detailed above needs
+- Existing React Native apps might need to be adapted this new paradigm.
+- A lot of the tooling needed for this effort to succeed as detailed above needs
   to be created.
-- the number of Web APIs is very high, so implementing each and every of them
-  for all the platforms will take a massive amount of time and funding -
+- The number of Web APIs is very high. Implementing each and every one of them
+  for all the platforms will take a massive amount of time and funding —
   realistically, we will select a subset of APIs to focus on, based on needs and
-  usage data.
+  real usage data.
 
 ## Rationale, alternatives, and prior art
 
@@ -175,7 +168,7 @@ dependencies they need to add. At minimum we should:
   [`Object.assign`][], [`Object.is`][]). We have not found any that address the
   scope defined here.
 - [React Native Test App](https://github.com/microsoft/react-native-test-app)
-  will be used as the sandbox tool to build the modules against, to reduce
+  will be used as the sandbox tool to build the modules against to reduce
   friction and have "out of the box" the ability to test across all the target
   platforms.
 - This goal of web-like code working via React Native on multiple platforms is
@@ -185,23 +178,24 @@ dependencies they need to add. At minimum we should:
 
 ## Adoption strategy
 
-> TODO: If we accept this proposal, how will existing developers adopt it? Is
-> this a breaking change? Can we write a codemod? Should we coordinate with
-> other projects or libraries?
+We will be following the crawl-walk-run methodology:
 
-In what we would call "phase zero", only one module will be implemented so that
-the tooling and infrastructure can be build and flows can be set up. This is to
-allow for multiple teams and developers to work discretely on the specific
-modules that they are interested in, removing most of the friction of the
-devloop to enable contributors to just focus on producing code.
+- **Crawl stage:** Only one module will be implemented so that the tooling and
+  infrastructure can be built and flows can be set up. We want to evaluate
+  whether things up to this point still make sense and adapt if otherwise.
+  Additionally, the infrastructure should allow for multiple teams and
+  developers to work discretely on the specific modules that they are interested
+  in, removing most of the friction to enable contributors to just focus on
+  producing code.
 
-In "phase one", one or more modules will be adopted as experimental within a few
-selected production apps to validate the concept and implementation.
+- **Walk stage:** One or more modules will be adopted as experimental within a
+  few selected production apps to validate the concept and implementation. This
+  implies that we have worked out what modules to prioritize by this stage.
 
-The "phase two" will be decided once we have as a good level of confidence on
-the viability of this proposal. In this phase, documentation on how to use this
-new set of modules will be prepared to help developers leverage them to bring
-their Web code to other native platforms.
+- **Run stage:** By this stage, we aim to have a good level of confidence on the
+  viability of this proposal. Documentation on how to use this new set of
+  modules will be prepared to help developers leverage them to bring their web
+  code to native platforms.
 
 ## Unresolved questions
 
