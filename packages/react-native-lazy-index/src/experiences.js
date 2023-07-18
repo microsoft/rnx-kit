@@ -32,6 +32,28 @@ function parseIntDefault(s, defaultValue) {
 }
 
 /**
+ * Returns the module object if it is a valid flighted object.
+ * @param {unknown} moduleId
+ * @returns {{module: string, flights: string[]} | undefined}
+ */
+function getFlightedModule(moduleId) {
+  if (
+    moduleId &&
+    typeof moduleId === "object" &&
+    "module" in moduleId &&
+    typeof moduleId.module === "string" &&
+    "flights" in moduleId &&
+    Array.isArray(moduleId.flights)
+  ) {
+    return {
+      module: moduleId.module,
+      flights: moduleId.flights,
+    };
+  }
+  return undefined;
+}
+
+/**
  * @param {string[]} experiences
  * @returns {Record<string, Component>}
  */
@@ -66,8 +88,24 @@ function parseExperiencesFromArray(experiences) {
  * @returns {Record<string, Component>}
  */
 function parseExperiencesFromObject(experiences) {
+  const flights = process.env["RN_LAZY_INDEX_FLIGHTS"]?.split(",");
+
   return Object.keys(experiences).reduce((components, name) => {
-    const moduleId = experiences[name];
+    let moduleId = experiences[name];
+    const flightedModule = getFlightedModule(moduleId);
+
+    if (flightedModule) {
+      const flighted = flights?.some((flight) => {
+        return flightedModule.flights.includes(flight);
+      });
+
+      if (!flighted) {
+        return components;
+      }
+
+      moduleId = flightedModule.module;
+    }
+
     if (typeof moduleId !== "string") {
       return components;
     }
@@ -103,3 +141,4 @@ function parseExperiences(experiences) {
 }
 
 exports.parseExperiences = parseExperiences;
+exports.getFlightedModule = getFlightedModule;
