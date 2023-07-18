@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/react-native-lazy-index",
-  "version": "2.1.7",
+  "version": "2.2.0",
   "description": "RAM bundle friendly index.js with on-demand loaded modules",
   "keywords": [
     "babel",

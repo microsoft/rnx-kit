@@ -1,5 +1,11 @@
 # @rnx-kit/react-native-lazy-index
 
+## 2.2.0
+
+### Minor Changes
+
+- b949bbd6: Extend `parseExperiencesFromObject` to support enabling/disabling flighted experiences
+
 ## 2.1.7
 
 ### Patch Changes
