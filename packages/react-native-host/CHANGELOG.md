@@ -1,5 +1,12 @@
 # @rnx-kit/react-native-host
 
+## 0.2.8
+
+### Patch Changes
+
+- 504a691b: Remove unused bridge events. `RCTBridge` may go away in the future and should not be exposed to users.
+- 537d6f74: Describe react-native-host API in README
+
 ## 0.2.7
 
 ### Patch Changes

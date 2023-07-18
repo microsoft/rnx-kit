@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/react-native-test-app-msal
 
+## 2.1.5
+
+### Patch Changes
+
+- 4079b5bc: Implement `initWithHost:` introduced in `react-native-test-app` 2.5.11
+
 ## 2.1.4
 
 ### Patch Changes
