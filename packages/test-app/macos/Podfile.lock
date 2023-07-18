@@ -336,7 +336,7 @@ PODS:
     - React-Core
     - React-cxxreact
     - ReactCommon/turbomodule/core
-  - ReactTestApp-DevSupport (2.5.10):
+  - ReactTestApp-DevSupport (2.5.12):
     - React-Core
     - React-jsi
   - ReactTestApp-MSAL (2.1.4):
@@ -510,7 +510,7 @@ SPEC CHECKSUMS:
   React-runtimeexecutor: 87da2e7097ea1b4a2c12e8c8bb11e71f8d5bad17
   ReactCommon: ccfd0e44e5da2024a8e420b09d1800f86d3b3ad3
   ReactNativeHost: 5dd0021c01ade845f1171f4e6f6814f214ddfadb
-  ReactTestApp-DevSupport: 4bef8745d6a67987c92113f503805066ff268f97
+  ReactTestApp-DevSupport: 7c030a9b1a9d54ba3f39db6ea9af7e7d02acd387
   ReactTestApp-MSAL: 35552a169434bc9ca7fb14b46fcdbabf1d6ff046
   ReactTestApp-Resources: bb546b3a5dca4b7931bee423d4ef28cd94b346cf
   RNXAuth: aebb79490c3998a43fe499d2f5745ef085168705
