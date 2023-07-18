@@ -53,15 +53,16 @@ like this:
 ```js
 const fooLocal = path.resolve(__dirname, "node_modules", "foo");
 const barHoisted = path.resolve(__dirname, "..", "..", "node_modules", "foo");
-{
+
+module.exports = {
   resolver: {
     extraNodeModules: {
-      "foo": fooLocal,
-      "bar": barHoisted
+      foo: fooLocal,
+      bar: barHoisted,
     },
   },
   watchFolders: [fooLocal, barHoisted],
-}
+};
 ```
 
 Good news! You can get rid of all these mappings now! :tada:
@@ -81,7 +82,7 @@ It's time to put together an `rnx-bundle` command for your app. Start with
 | Parameter          | Explanation                                                                                        |
 | ------------------ | -------------------------------------------------------------------------------------------------- |
 | --entry-file       | The source file at the root of your app. It usually has a call to `AppRegistry.registerComponent`. |
-| --platform         | Pick your target platform: ios, android, macos, or windows.                                        |
+| --platform         | Pick your target platform: android, ios, macos, or windows.                                        |
 | --bundle-output    | Choose a file name and path for the bundle file.                                                   |
 | --sourcemap-output | Choose a file name and path for the source map. Usually named `<bundle-file>.map`.                 |
 | --assets-dest      | Choose a directory for storing assets like strings, images, audio, and video.                      |
@@ -91,12 +92,14 @@ Add `--dev false` if you want to make an optimized, production bundle.
 Put it all together into a single command. Here's an example which creates an
 iOS developer bundle:
 
-    react-native rnx-bundle \
-      --entry-file index.js \
-      --platform ios \
-      --bundle-output ios/main.jsbundle \
-      --sourcemap-output ios/main.jsbundle.map \
-      --assets-dest ios
+```sh
+react-native rnx-bundle \
+    --entry-file index.js \
+    --platform ios \
+    --bundle-output dist/main.ios.jsbundle \
+    --sourcemap-output dist/main.ios.jsbundle.map \
+    --assets-dest dist
+```
 
 If you're curious about the rest of the command-line parameters, you can find
 the complete list in the
@@ -117,7 +120,9 @@ the full list of command-line parameters, and decide if you need any of them.
 
 Here's an example command which starts a Metro bundle server:
 
-    react-native rnx-start
+```sh
+react-native rnx-start
+```
 
 Try out your `rnx-start` server command!
 
@@ -157,12 +162,14 @@ knowledge is captured in one easy-to-read format, without duplication.
 
 Take a look at this example iOS bundling command:
 
-    react-native rnx-bundle \
-      --entry-file index.js \
-      --platform ios \
-      --bundle-output ios/main.jsbundle \
-      --sourcemap-output ios/main.jsbundle.map \
-      --assets-dest ios
+```sh
+react-native rnx-bundle \
+    --entry-file index.js \
+    --platform ios \
+    --bundle-output dist/main.ios.jsbundle \
+    --sourcemap-output dist/main.ios.jsbundle.map \
+    --assets-dest dist
+```
 
 Here's what it looks like as app defaults in configuration:
 
@@ -171,12 +178,17 @@ Here's what it looks like as app defaults in configuration:
   "rnx-kit": {
     "bundle": {
       "entryFile": "index.js",
-      "targets": ["ios"],
+      "targets": ["android", "ios"],
       "platforms": {
+        "android": {
+          "bundleOutput": "dist/main.android.bundle",
+          "sourcemapOutput": "dist/main.android.bundle.map",
+          "assetsDest": "dist/res"
+        },
         "ios": {
-          "bundleOutput": "ios/main.jsbundle",
-          "sourcemapOutput": "ios/main.jsbundle.map",
-          "assetsDest": "ios"
+          "bundleOutput": "dist/main.ios.jsbundle",
+          "sourcemapOutput": "dist/main.ios.jsbundle.map",
+          "assetsDest": "dist"
         }
       }
     }
@@ -474,6 +486,46 @@ to `false`:
    }
  }
 ```
+
+## Integrating with Gradle (Android)
+
+We highly recommend that you disable the
+"createBundle&lt;targetName&gt;JsAndAssets" tasks from Gradle and instead run
+`react-native rnx-bundle` separately. That way, you avoid re-bundling when no
+changes has been made to the JavaScript code.
+
+This is currently the official way to disable them. Add the following block
+somewhere in your app's `build.gradle`:
+
+```groovy title="android/app/build.gradle"
+// We don't want the React plugin to bundle.
+tasks.whenTaskAdded { task ->
+    // The task name can be found in `react-native-gradle-plugin`:
+    // https://github.com/facebook/react-native/blob/0.71-stable/packages/react-native-gradle-plugin/src/main/kotlin/com/facebook/react/TaskConfiguration.kt#L54
+    if (task.name.startsWith("createBundle") && task.name.endsWith("JsAndAssets")) {
+        task.enabled = false
+    }
+}
+```
+
+You can also have a look at how it's done in
+[`react-native-test-app`](https://github.com/microsoft/react-native-test-app/blob/113e97d8f62e5d7e1e5c602422d83f912ca5c385/android/app/build.gradle#L25-L32).
+
+## Integrating with Xcode (iOS and macOS)
+
+We highly recommend that you remove the "Bundle React Native code and images"
+phase from Xcode and instead run `react-native rnx-bundle` separately. That way,
+you avoid re-bundling when no changes has been made to the JavaScript code.
+
+Click on your app's project in Xcode, and navigate to the "Build Phases" tab.
+Find the "Bundle React Native code and images" phase, and click on the trash can
+icon on the far right to remove it.
+
+<img
+  src={useBaseUrl("/img/bundle-react-native-code-and-images.png")}
+  alt="Screenshot of Xcode with 'Bundle React Native code and images' phase expanded."
+  width="700"
+/>
 
 ## Integrating with PRs and Builds
 
