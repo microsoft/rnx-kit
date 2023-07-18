@@ -180,12 +180,11 @@ dependencies they need to add. At minimum we should:
 We will be following the crawl-walk-run methodology:
 
 - **Crawl stage:** Only one module will be implemented so that the tooling and
-  infrastructure can be built and flows can be set up. We want to evaluate
-  whether things up to this point still make sense and adapt if otherwise.
-  Additionally, the infrastructure should allow for multiple teams and
-  developers to work discretely on the specific modules that they are interested
-  in, removing most of the friction to enable contributors to just focus on
-  producing code.
+  infrastructure can be built and flows can be set up. The infrastructure should
+  allow for multiple teams and developers to work discretely on the specific
+  modules that they are interested in, removing most of the friction to enable
+  contributors to just focus on producing code. We want to evaluate whether
+  things up to this point still make sense and adapt if otherwise.
 
 - **Walk stage:** One or more modules will be adopted as experimental within a
   few selected production apps to validate the concept and implementation. This
