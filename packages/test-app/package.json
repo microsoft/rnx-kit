@@ -18,7 +18,7 @@
     "bundle:macos": "react-native rnx-bundle --platform macos",
     "bundle:windows": "react-native rnx-bundle --platform windows",
     "ram-bundle": "react-native rnx-ram-bundle",
-    "android": "react-native run-android --no-packager",
+    "android": "react-native run-android --no-packager --appId com.msft.identity.client.sample.local",
     "ios": "react-native run-ios --no-packager",
     "macos": "react-native run-macos --scheme ReactTestApp --no-packager",
     "windows": "react-native run-windows --no-packager --sln windows\\SampleCrossApp.sln",
