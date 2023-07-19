@@ -2,103 +2,8 @@ import { parseModuleRef } from "@rnx-kit/tools-node";
 import ts from "typescript";
 import type { ResolverContext } from "./types";
 
-function intersection<T>(lhs: T[], rhs: T[]): T[] {
-  return lhs.filter((v) => rhs.includes(v));
-}
-
-function isEqual<T>(lhs: T[], rhs: T[]): boolean {
-  const length = lhs.length;
-  if (length !== rhs.length) {
-    return false;
-  }
-
-  for (let i = 0; i < length; ++i) {
-    if (lhs[i] !== rhs[i]) {
-      return false;
-    }
-  }
-
-  return true;
-}
-
 function isPackageRef(name: string): boolean {
   return !parseModuleRef(name).path;
-}
-
-/**
- * Get TypeScript compiler options with the `moduleSuffixes` property configured
- * for the current React Native project. `moduleSuffixes` must contain all of the
- * React Native platform file extensions -- in precedence order.
- *
- * Examine the given set of compiler options for the project. If `moduleSuffixes`
- * is already set, and it does not contain the right React Native entries, we will
- * throw an error. We cannot proceed because there's no way to **safely** add to
- * `moduleSuffixes`. Additions change the way modules are resolved to files, and
- * can only be done reliably by the package owner.
- *
- * When an error is thrown, it explains this, and offers some options to the developer.
- *
- * @param context Resolver context. Describes the current React Native project.
- * @param moduleName Name of the module being resolved (used for error reporting).
- * @param containingFile File containing the module reference (used for error reporting).
- * @param options Compiler options for the module
- * @returns Compiler options with a `moduleSuffixes` property containing the list of React Native platform file extensions. This may be input options object, or it may be a copy (if changes were made).
- */
-export function getCompilerOptionsWithReactNativeModuleSuffixes(
-  context: ResolverContext,
-  moduleName: string,
-  containingFile: string,
-  options: ts.CompilerOptions
-): ts.CompilerOptions {
-  if (!options.moduleSuffixes) {
-    //  `moduleSuffixes` is not defined. Return a copy of the input object with
-    //  `moduleSuffixes` set to the list of React Native platform extensions.
-    return {
-      ...options,
-      moduleSuffixes: context.platformFileExtensions,
-    };
-  }
-
-  //  `moduleSuffixes` is already defined in the module's compiler options.
-  //  We cannot safely modify it because we don't know how to order the entries
-  //  when adding those needed for React Native. Ordering matters because it controls
-  //  file selection. e.g. If "ios" comes before "native", then "foo.ios.ts" will be
-  //  resolved ahead of "foo.native.ts".
-  //
-  //  Package authors may use a convention where they set 'moduleSuffixes' to [".native", ""].
-  //  They do this when they don't have platform-specific code (e.g. iOS only). Instead,
-  //  they use suffixes to separate React Native code (.native.ts) from Web code (.ts). We
-  //  allow that convention as well.
-  //
-  //  The best we can do is check `moduleSuffixes` for either of these conventions, and fail
-  //  if they aren't met.
-
-  const hasAllPlatformFileExtensions = isEqual(
-    intersection(options.moduleSuffixes, context.platformFileExtensions),
-    context.platformFileExtensions
-  );
-
-  const nativePlatformFileExtension = [".native", ""];
-  const hasNativePlatformFileExtension = isEqual(
-    intersection(options.moduleSuffixes, nativePlatformFileExtension),
-    nativePlatformFileExtension
-  );
-  if (!hasAllPlatformFileExtensions && !hasNativePlatformFileExtension) {
-    const currentSuffixes = options.moduleSuffixes.join(",");
-    const neededAllSuffixes = context.platformFileExtensions.join(",");
-    const neededNativeSuffixes = nativePlatformFileExtension.join(",");
-    throw new Error(
-      `Failed to resolve module reference '${moduleName}' in source file '${containingFile}.\n` +
-        `The parent package has a TypeScript configuration which sets 'moduleSuffixes' to '${currentSuffixes}'.\n` +
-        `This is incompatible with the target platform '${context.platform}', which requires 'moduleSuffixes' to contain either '${neededAllSuffixes}' or just '${neededNativeSuffixes}', in order.\n` +
-        `We would like to understand any use cases where this error occurs, as there may be room to make improvements.\n` +
-        `Please add a comment about your scenario, and include this error message: https://github.com/microsoft/rnx-kit/discussions/1971.`
-    );
-  }
-
-  // Return the original compiler options, since we know they have the right
-  // `moduleSuffixes` entries for React Native resolution.
-  return options;
 }
 
 /**
@@ -126,12 +31,7 @@ export function resolveModuleName(
   // suffixes as they are not used when looking at main fields.
   const optionsWithSuffixes = isPackageRef(moduleName)
     ? options
-    : getCompilerOptionsWithReactNativeModuleSuffixes(
-        context,
-        moduleName,
-        containingFile,
-        options
-      );
+    : { ...options, moduleSuffixes: context.platformFileExtensions };
 
   //
   //  Invoke the built-in TypeScript module resolver.
@@ -271,12 +171,10 @@ export function resolveTypeReferenceDirectives(
         : typeDirectiveName.fileName.toLowerCase();
 
     //  Ensure the compiler options has `moduleSuffixes` set correctly for this RN project.
-    const optionsWithSuffixes = getCompilerOptionsWithReactNativeModuleSuffixes(
-      context,
-      name,
-      containingFile,
-      options
-    );
+    const optionsWithSuffixes = {
+      ...options,
+      moduleSuffixes: context.platformFileExtensions,
+    };
 
     //
     //  Invoke the built-in TypeScript type-reference resolver.
