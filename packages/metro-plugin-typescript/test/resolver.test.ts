@@ -1,6 +1,5 @@
 import type ts from "typescript";
 import {
-  getCompilerOptionsWithReactNativeModuleSuffixes,
   resolveModuleNames,
   resolveTypeReferenceDirectives,
 } from "../src/resolver";
@@ -65,77 +64,6 @@ describe("Resolver", () => {
 
     expect(Array.isArray(modules)).toBe(true);
     expect(modules).toEqual(resolvedModules);
-  });
-
-  test("adds moduleSuffixes when it is not present", () => {
-    // platform is ios, and is set by context.platform. moduleSuffixes must be set
-    // to the list of ios-related extensions.
-    const inputOptions = {};
-    const outputOptions = getCompilerOptionsWithReactNativeModuleSuffixes(
-      context,
-      "module",
-      "containing-file",
-      inputOptions
-    );
-    expect(outputOptions).toEqual({
-      moduleSuffixes: [".ios", ".native", ""],
-    });
-  });
-
-  test("verifies that moduleSuffixes is valid when it is already present", () => {
-    // platform is ios, and is set by context.platform. moduleSuffixes must have
-    // all of the ios-related extensions, in order, but can have others mixed in.
-    const inputOptions = {
-      moduleSuffixes: [
-        ".goobers",
-        ".ios",
-        ".milk-duds",
-        ".lemonheads",
-        ".native",
-        "",
-        ".snickers",
-      ],
-    };
-    const outputOptions = getCompilerOptionsWithReactNativeModuleSuffixes(
-      context,
-      "module",
-      "containing-file",
-      inputOptions
-    );
-    expect(outputOptions).toEqual({
-      moduleSuffixes: inputOptions.moduleSuffixes, // output must match input
-    });
-  });
-
-  test("verifies that moduleSuffixes is valid when it is already present without a platform name", () => {
-    // platform is ios, and is set by context.platform. moduleSuffixes must have
-    // all of the ios-related extensions, in order, but can have others mixed in.
-    const inputOptions = {
-      moduleSuffixes: [".lemonheads", ".native", "", ".snickers"],
-    };
-    const outputOptions = getCompilerOptionsWithReactNativeModuleSuffixes(
-      context,
-      "module",
-      "containing-file",
-      inputOptions
-    );
-    expect(outputOptions).toEqual({
-      moduleSuffixes: inputOptions.moduleSuffixes, // output must match input
-    });
-  });
-
-  test("fails when moduleSuffixes is set, but is invalid for the target platform", () => {
-    const inputOptions = {
-      moduleSuffixes: ["this isn't going to work"],
-    };
-    expect(() =>
-      getCompilerOptionsWithReactNativeModuleSuffixes(
-        context,
-        "module",
-        "containing-file",
-        inputOptions
-      )
-    ).toThrowError();
   });
 
   test("resolves type reference directives", () => {
