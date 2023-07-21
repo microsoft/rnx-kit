@@ -1,4 +1,3 @@
-import { isPackageModuleRef, parseModuleRef } from "@rnx-kit/tools-node/module";
 import { expandPlatformExtensions } from "@rnx-kit/tools-react-native/platform";
 import type {
   CustomResolver,
@@ -21,6 +20,11 @@ const getEnhancedResolver = (() => {
       } = context;
       const extensions = sourceExts.map((ext) => `.${ext}`);
       resolvers[platform] = require("enhanced-resolve").create.sync({
+        // Map Metro's `context.extraNodeModules` to Webpack's `resolve.alias`.
+        // Metro's implementation is a subset of Webpack's. See:
+        // - https://facebook.github.io/metro/docs/resolution
+        // - https://webpack.js.org/configuration/resolve/#resolvealias
+        alias: context.extraNodeModules,
         aliasFields: ["browser"],
 
         // Add `require` to handle packages that are missing `default`
@@ -45,19 +49,7 @@ const getEnhancedResolver = (() => {
   };
 })();
 
-function getFromDir(context: ResolutionContext, moduleName: string): string {
-  const { extraNodeModules, originModulePath } = context;
-  if (extraNodeModules) {
-    const ref = parseModuleRef(moduleName);
-    if (isPackageModuleRef(ref)) {
-      const pkgName = ref.scope ? `${ref.scope}/${ref.name}` : ref.name;
-      const dir = extraNodeModules[pkgName];
-      if (dir) {
-        return dir;
-      }
-    }
-  }
-
+function getFromDir({ originModulePath }: ResolutionContext): string {
   return originModulePath ? path.dirname(originModulePath) : process.cwd();
 }
 
@@ -72,7 +64,7 @@ export function applyEnhancedResolver(
   }
 
   const enhancedResolve = getEnhancedResolver(context, platform);
-  const filePath = enhancedResolve(getFromDir(context, moduleName), moduleName);
+  const filePath = enhancedResolve(getFromDir(context), moduleName);
   if (filePath === false) {
     return { type: "empty" };
   }

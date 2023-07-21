@@ -1,4 +1,12 @@
 import { acquireTokenWithScopes } from "@rnx-kit/react-native-auth";
+// Both `internal` imports are used to verify that `metro-resolver-symlinks`
+// resolves them correctly when `experimental_retryResolvingFromDisk` is
+// enabled.
+import {
+  getReactNativeVersion,
+  getRemoteDebuggingAvailability,
+} from "internal";
+import { getHermesVersion } from "internal/hermes";
 import React, { useCallback, useMemo, useState } from "react";
 import type { LayoutChangeEvent } from "react-native";
 import {
@@ -13,8 +21,6 @@ import {
   View,
   useColorScheme,
 } from "react-native";
-// @ts-expect-error no types for "react-native/Libraries/Core/ReactNativeVersion"
-import { version as coreVersion } from "react-native/Libraries/Core/ReactNativeVersion";
 import { Colors, Header } from "react-native/Libraries/NewAppScreen";
 // @ts-expect-error no types for "react-native/Libraries/Utilities/DebugEnvironment"
 import { isAsyncDebugging } from "react-native/Libraries/Utilities/DebugEnvironment";
@@ -36,29 +42,6 @@ type FeatureProps =
       disabled?: boolean;
       onValueChange?: (value: boolean) => void;
     };
-
-function getHermesVersion() {
-  return (
-    // @ts-expect-error `HermesInternal` is set when on Hermes
-    global.HermesInternal?.getRuntimeProperties?.()["OSS Release Version"] ??
-    false
-  );
-}
-
-function getReactNativeVersion() {
-  const version = `${coreVersion.major}.${coreVersion.minor}.${coreVersion.patch}`;
-  return coreVersion.prerelease
-    ? version + `-${coreVersion.prerelease}`
-    : version;
-}
-
-function getRemoteDebuggingAvailability() {
-  return (
-    // @ts-expect-error `RN$Bridgeless` is a react-native specific property
-    global.RN$Bridgeless !== true &&
-    typeof NativeModules["DevSettings"]?.setIsDebuggingRemotely === "function"
-  );
-}
 
 function isOnOrOff(value: unknown): "Off" | "On" {
   return value ? "On" : "Off";
