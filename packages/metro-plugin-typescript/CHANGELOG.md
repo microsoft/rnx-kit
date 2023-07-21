@@ -1,5 +1,11 @@
 # @rnx-kit/metro-plugin-typescript
 
+## 0.4.3
+
+### Patch Changes
+
+- a4c18204: Respect `moduleSuffixes` set at the root level
+
 ## 0.4.2
 
 ### Patch Changes
