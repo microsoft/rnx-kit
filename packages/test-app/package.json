@@ -67,7 +67,10 @@
     "extends": "@rnx-kit/eslint-config"
   },
   "jest": {
-    "preset": "@rnx-kit/scripts"
+    "preset": "@rnx-kit/scripts",
+    "moduleNameMapper": {
+      "^internal(.*)$": "<rootDir>/src/internal$1"
+    }
   },
   "rnx-kit": {
     "kitType": "app",
