@@ -9,6 +9,7 @@ import { defaultConfig } from "../config";
 import { dropPatchFromVersion, modifyManifest } from "../helpers";
 import { filterPreset, mergePresets } from "../preset";
 import type { Command, Options } from "../types";
+import type { PackageInfos } from "workspace-tools";
 
 function isKitType(type: string): type is KitType {
   return type === "app" || type === "library";
@@ -42,7 +43,8 @@ export function initializeConfig(
   manifest: PackageManifest,
   projectRoot: string,
   kitType: KitType,
-  { presets }: Options
+  { presets }: Options,
+  allPackages: PackageInfos
 ): PackageManifest | null {
   const kitConfig = manifest["rnx-kit"];
   if (kitConfig?.alignDeps) {
@@ -61,7 +63,7 @@ export function initializeConfig(
   const requirements = [
     `react-native@${dropPatchFromVersion(targetReactNativeVersion)}`,
   ];
-  const preset = filterPreset(mergePresets(presets, projectRoot), requirements);
+  const preset = filterPreset(mergePresets(presets, projectRoot, allPackages), requirements);
 
   return {
     ...manifest,
@@ -91,7 +93,8 @@ export function initializeConfig(
 
 export function makeInitializeCommand(
   kitType: string,
-  options: Options
+  options: Options,
+  allPackages: PackageInfos
 ): Command | undefined {
   if (!isKitType(kitType)) {
     error(`Invalid kit type: '${kitType}'`);
@@ -108,7 +111,8 @@ export function makeInitializeCommand(
       manifest,
       path.dirname(manifestPath),
       kitType,
-      options
+      options,
+      allPackages
     );
     if (!updatedManifest) {
       return "missing-react-native";

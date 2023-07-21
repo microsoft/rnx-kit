@@ -10,6 +10,7 @@ import { updatePackageManifest } from "../manifest";
 import { resolve } from "../preset";
 import type { Command, ErrorCode, Options } from "../types";
 import { checkPackageManifestUnconfigured } from "./vigilant";
+import type { PackageInfos } from "workspace-tools";
 
 /**
  * Checks the specified package manifest for misaligned dependencies.
@@ -39,6 +40,7 @@ import { checkPackageManifestUnconfigured } from "./vigilant";
 export function checkPackageManifest(
   manifestPath: string,
   options: Options,
+  allPackages: PackageInfos,
   inputConfig = loadConfig(manifestPath, options),
   logError = error
 ): ErrorCode {
@@ -50,7 +52,8 @@ export function checkPackageManifest(
   const { devPreset, prodPreset, capabilities } = resolve(
     config,
     path.dirname(manifestPath),
-    options
+    options,
+    allPackages
   );
   const { kitType, manifest } = config;
 
@@ -121,10 +124,10 @@ export function checkPackageManifest(
  * @param options Command line options
  * @returns The check command
  */
-export function makeCheckCommand(options: Options): Command {
+export function makeCheckCommand(options: Options, allPackages: PackageInfos): Command {
   const { presets, requirements } = options;
   if (!requirements) {
-    return (manifest: string) => checkPackageManifest(manifest, options);
+    return (manifest: string) => checkPackageManifest(manifest, options, allPackages);
   }
 
   return (manifest: string) => {
@@ -139,11 +142,12 @@ export function makeCheckCommand(options: Options): Command {
       const logError = (message: string) => {
         output.push(message);
       };
-      const res1 = checkPackageManifest(manifest, options, config, logError);
+      const res1 = checkPackageManifest(manifest, options, allPackages, config, logError);
       const res2 = checkPackageManifestUnconfigured(
         manifest,
         options,
         config,
+        allPackages,
         logError
       );
       for (const message of output) {
@@ -164,7 +168,8 @@ export function makeCheckCommand(options: Options): Command {
           capabilities: [],
         },
         manifest: readPackage(manifest),
-      });
+      }, 
+      allPackages);
     }
 
     return config;

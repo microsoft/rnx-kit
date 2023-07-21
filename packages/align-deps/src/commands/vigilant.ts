@@ -22,6 +22,7 @@ import type {
   Package,
   Preset,
 } from "../types";
+import type { PackageInfos } from "workspace-tools";
 
 type Report = {
   changes: Changes;
@@ -83,11 +84,13 @@ function resolveUnmanagedCapabilities(
  */
 export function buildManifestProfile(
   manifestPath: string,
-  { kitType, alignDeps }: AlignDepsConfig
+  { kitType, alignDeps }: AlignDepsConfig,
+  allPackages: PackageInfos,
 ): ManifestProfile {
   const mergedPresets = mergePresets(
     alignDeps.presets,
-    path.dirname(manifestPath)
+    path.dirname(manifestPath),
+    allPackages
   );
 
   const [targetPreset, supportPreset] = (() => {
@@ -170,11 +173,11 @@ export function buildManifestProfile(
  */
 const buildManifestProfileCached = ((): typeof buildManifestProfile => {
   const profileCache: Record<string, ManifestProfile> = {};
-  return (manifestPath, config) => {
+  return (manifestPath, config, allPackages) => {
     const { kitType, alignDeps } = config;
     const key = `${kitType}:${JSON.stringify(alignDeps)}`;
     if (!profileCache[key]) {
-      const result = buildManifestProfile(manifestPath, config);
+      const result = buildManifestProfile(manifestPath, config, allPackages);
       profileCache[key] = result;
     }
 
@@ -268,13 +271,14 @@ export function checkPackageManifestUnconfigured(
   manifestPath: string,
   { excludePackages, write }: Options,
   config: AlignDepsConfig,
+  allPackages: PackageInfos,
   logError = error
 ): ErrorCode {
   if (excludePackages?.includes(config.manifest.name)) {
     return "success";
   }
 
-  const manifestProfile = buildManifestProfileCached(manifestPath, config);
+  const manifestProfile = buildManifestProfileCached(manifestPath, config, allPackages);
   const { manifest } = config;
   const { changes, changesCount, unmanagedDependencies } = inspect(
     manifest,

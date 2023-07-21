@@ -14,6 +14,7 @@ import type {
   Options,
 } from "../types";
 import { checkPackageManifest } from "./check";
+import type { PackageInfos } from "workspace-tools";
 
 function parseVersions(versions: string): string[] {
   return versions.split(",").map((v) => {
@@ -157,7 +158,8 @@ function setVersion(
  */
 export async function makeSetVersionCommand(
   versions: string | number,
-  options: Options
+  options: Options,
+  allPackages: PackageInfos,
 ): Promise<Command | undefined> {
   const input = await parseInput(versions);
   if (!input) {
@@ -174,13 +176,13 @@ export async function makeSetVersionCommand(
       return config;
     }
 
-    const checkResult = checkPackageManifest(manifestPath, checkOnly, config);
+    const checkResult = checkPackageManifest(manifestPath, checkOnly, allPackages, config);
     if (checkResult !== "success") {
       return checkResult;
     }
 
     const result = setVersion(config, targetVersion, supportedVersions);
     modifyManifest(manifestPath, result);
-    return checkPackageManifest(manifestPath, write);
+    return checkPackageManifest(manifestPath, write, allPackages);
   };
 }

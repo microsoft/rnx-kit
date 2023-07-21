@@ -5,6 +5,9 @@ import semverValidRange from "semver/ranges/valid";
 import { gatherRequirements } from "./dependencies";
 import { preset as reactNativePreset } from "./presets/microsoft/react-native";
 import type { AlignDepsConfig, Options, Preset } from "./types";
+import path from "path";
+import parsePackageName from "parse-package-name";
+import type { PackageInfos } from "workspace-tools";
 
 type Resolution = {
   devPreset: Preset;
@@ -15,13 +18,35 @@ type Resolution = {
 function loadPreset(
   preset: string,
   projectRoot: string,
-  resolve = require.resolve
+  resolve = require.resolve,
+  allPackages: PackageInfos
 ): Preset {
   switch (preset) {
     case "microsoft/react-native":
       return reactNativePreset;
-    default:
-      return require(resolve(preset, { paths: [projectRoot] }));
+    default: {
+      const savePresetVal = preset;
+      let check = 1;
+      if(preset[0] === '/' || preset[0] === '\\') {
+        check = 0;
+        preset = preset.slice(1)
+      }
+      const parsedInfo = parsePackageName(preset);
+      if(check === 0) {
+        preset = savePresetVal;
+      }
+      if (parsedInfo.name === ".") {
+        console.error("Incorrect package name in the preset field");
+      }
+      const info = allPackages[parsedInfo.name];
+      if (info !== undefined) {
+        const returnResolvedPath = path.join(path.dirname(info.packageJsonPath), parsedInfo.path);
+        return require(returnResolvedPath);
+      }
+      else {
+        return require(resolve(preset, { paths: [projectRoot] }));
+      }
+    }
   }
 }
 
@@ -106,11 +131,12 @@ export function filterPreset(preset: Preset, requirements: string[]): Preset {
 export function mergePresets(
   presets: string[],
   projectRoot: string,
+  allPackages: PackageInfos,
   resolve = require.resolve
 ): Preset {
   const mergedPreset: Preset = {};
   for (const presetName of presets) {
-    const preset = loadPreset(presetName, projectRoot, resolve);
+    const preset = loadPreset(presetName, projectRoot, resolve, allPackages);
     for (const [profileName, profile] of Object.entries(preset)) {
       mergedPreset[profileName] = {
         ...mergedPreset[profileName],
@@ -121,6 +147,8 @@ export function mergePresets(
 
   return mergedPreset;
 }
+
+
 
 /**
  * Loads specified presets and filters them according to the requirements. The
@@ -134,14 +162,15 @@ export function mergePresets(
 export function resolve(
   { kitType, alignDeps, manifest }: AlignDepsConfig,
   projectRoot: string,
-  options: Options
+  options: Options,
+  allPackages: PackageInfos
 ): Resolution {
   const { capabilities, presets, requirements } = alignDeps;
-
+  
   const prodRequirements = Array.isArray(requirements)
     ? requirements
     : requirements.production;
-  const mergedPreset = mergePresets(presets, projectRoot);
+  const mergedPreset = mergePresets(presets, projectRoot, allPackages);
   const initialProdPreset = filterPreset(mergedPreset, prodRequirements);
   ensurePreset(initialProdPreset, prodRequirements);
 

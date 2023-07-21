@@ -16,6 +16,8 @@ import { defaultConfig } from "./config";
 import { printError, printInfo } from "./errors";
 import { isString } from "./helpers";
 import type { Args, Command } from "./types";
+import type { PackageInfos } from "workspace-tools";
+import { getPackageInfos } from "workspace-tools";
 
 export const cliOptions = {
   "exclude-packages": {
@@ -142,7 +144,7 @@ function reportConflicts(conflicts: [string, string][], args: Args): boolean {
   }, false);
 }
 
-async function makeCommand(args: Args): Promise<Command | undefined> {
+async function makeCommand(args: Args, allPackages: PackageInfos): Promise<Command | undefined> {
   const conflicts: [string, string][] = [
     ["init", "set-version"],
     ["init", args.write ? "write" : "no-write"],
@@ -175,21 +177,22 @@ async function makeCommand(args: Args): Promise<Command | undefined> {
   };
 
   if (typeof init !== "undefined") {
-    return makeInitializeCommand(init, options);
+    return makeInitializeCommand(init, options, allPackages);
   }
 
   // When `--set-version` is without a value, `setVersion` is an empty string if
   // invoked directly. When invoked via `@react-native-community/cli`,
   // `setVersion` is `true` instead.
   if (setVersion || isString(setVersion)) {
-    return makeSetVersionCommand(setVersion, options);
+    return makeSetVersionCommand(setVersion, options, allPackages);
   }
 
-  return makeCheckCommand(options);
+  return makeCheckCommand(options, allPackages);
 }
 
 export async function cli({ packages, ...args }: Args): Promise<void> {
-  const command = await makeCommand(args);
+  const allPackages = getPackageInfos(process.cwd());
+  const command = await makeCommand(args, allPackages);
   if (!command) {
     process.exitCode = 1;
     return;
