@@ -4,9 +4,9 @@ import * as fs from "node:fs";
 import * as path from "node:path";
 
 /**
- * @typedef {import("typedoc/dist/lib/serialization/schema").Comment} Comment
- * @typedef {import("typedoc/dist/lib/serialization/schema").CommentDisplayPart} CommentDisplayPart
- * @typedef {import("typedoc/dist/lib/serialization/schema").SourceReference} SourceReference
+ * @typedef {import("typedoc").JSONOutput.Comment} Comment
+ * @typedef {import("typedoc").JSONOutput.CommentDisplayPart} CommentDisplayPart
+ * @typedef {import("typedoc").JSONOutput.SourceReference} SourceReference
  */
 
 const README = "README.md";

@@ -10,7 +10,6 @@ import * as os from "node:os";
 import * as path from "node:path";
 
 function findWorkspaceRoot() {
-  // @ts-expect-error ts(1343): 'import.meta' is only allowed when module is ESM
   const require = createRequire(import.meta.url);
   const scriptsDir = path.dirname(
     require.resolve("@rnx-kit/scripts/package.json")
