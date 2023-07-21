@@ -1,7 +1,12 @@
 {
   "extends": "@rnx-kit/scripts/tsconfig-shared.json",
   "compilerOptions": {
-    "checkJs": false
+    "checkJs": false,
+    "noEmit": true,
+    "paths": {
+      "internal": ["./src/internal"],
+      "internal/*": ["./src/internal/*"]
+    }
   },
   "include": ["src"]
 }
