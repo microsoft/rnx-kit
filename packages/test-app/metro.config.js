@@ -16,7 +16,7 @@ const blockList = exclusionList([
 module.exports = makeMetroConfig({
   resolver: {
     extraNodeModules: {
-      "internal": path.resolve(__dirname, "src", "internal"),
+      internal: path.resolve(__dirname, "src", "internal"),
       ...(useAuthMock
         ? {
             "@rnx-kit/react-native-auth": require("path").join(
