@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-resolver-symlinks
 
+## 0.1.30
+
+### Patch Changes
+
+- 259bc617: Fix `extraNodeModules` not resolving correctly when `experimental_retryResolvingFromDisk` is enabled
+
 ## 0.1.29
 
 ### Patch Changes
