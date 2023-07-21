@@ -167,6 +167,7 @@ describe("resolveCapabilities()", () => {
       mergePresets(
         ["microsoft/react-native", "mock-custom-profiles-module"],
         process.cwd(),
+        {},
         makeMockResolver("mock-custom-profiles-module")
       ),
       ["react-native@0.62 || 0.63 || 0.64"]
@@ -232,6 +233,7 @@ describe("resolveCapabilities()", () => {
       mergePresets(
         ["microsoft/react-native", "mock-meta-package"],
         process.cwd(),
+        {},
         makeMockResolver("mock-meta-package")
       ),
       ["react-native@0.64"]
@@ -277,6 +279,7 @@ describe("resolveCapabilities()", () => {
       mergePresets(
         ["microsoft/react-native", "mock-meta-package-loop"],
         process.cwd(),
+        {},
         makeMockResolver("mock-meta-package-loop")
       ),
       ["react-native@0.64"]

@@ -35,7 +35,8 @@ describe("initializeConfig()", () => {
       },
       ".",
       "library",
-      { ...defaultOptions, presets: [] }
+      { ...defaultOptions, presets: [] },
+      {}
     );
 
     expect(result).toBeNull();
@@ -49,7 +50,8 @@ describe("initializeConfig()", () => {
       },
       ".",
       "library",
-      { ...defaultOptions, presets: [] }
+      { ...defaultOptions, presets: [] },
+      {}
     );
 
     expect(result).toBeNull();
@@ -70,7 +72,8 @@ describe("initializeConfig()", () => {
       },
       ".",
       "library",
-      defaultOptions
+      defaultOptions,
+      {}
     );
 
     const kitConfig = result?.["rnx-kit"];
@@ -100,7 +103,8 @@ describe("initializeConfig()", () => {
       },
       ".",
       "app",
-      defaultOptions
+      defaultOptions,
+      {}
     );
 
     const kitConfig = result?.["rnx-kit"];
@@ -134,7 +138,8 @@ describe("initializeConfig()", () => {
       },
       ".",
       "library",
-      defaultOptions
+      defaultOptions,
+      {}
     );
 
     const kitConfig = result?.["rnx-kit"];
@@ -175,7 +180,8 @@ describe("initializeConfig()", () => {
       },
       ".",
       "library",
-      { ...defaultOptions, presets }
+      { ...defaultOptions, presets },
+      {}
     );
 
     const alignDeps = result?.["rnx-kit"]?.alignDeps;
@@ -191,12 +197,12 @@ describe("makeInitializeCommand()", () => {
   const options = { ...defaultOptions, presets: [] };
 
   test("returns undefined for invalid kit types", () => {
-    const command = makeInitializeCommand("random", options);
+    const command = makeInitializeCommand("random", options, {});
     expect(command).toBeUndefined();
   });
 
   test("returns command for kit types", () => {
-    expect(makeInitializeCommand("app", options)).toBeDefined();
-    expect(makeInitializeCommand("library", options)).toBeDefined();
+    expect(makeInitializeCommand("app", options, {})).toBeDefined();
+    expect(makeInitializeCommand("library", options, {})).toBeDefined();
   });
 });

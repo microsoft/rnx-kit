@@ -30,7 +30,8 @@ describe("buildManifestProfile()", () => {
   test("builds a package manifest for a single profile version", () => {
     const profile = buildManifestProfile(
       "package.json",
-      makeConfig(["react-native@0.70"])
+      makeConfig(["react-native@0.70"]),
+      {}
     );
     expect(profile).toMatchSnapshot();
   });
@@ -41,14 +42,15 @@ describe("buildManifestProfile()", () => {
       makeConfig({
         development: ["react-native@0.70"],
         production: ["react-native@0.69 || 0.70"],
-      })
+      }),
+      {}
     );
     expect(profile).toMatchSnapshot();
   });
 
   test("includes devOnly packages under `dependencies`", () => {
     const { dependencies, devDependencies, peerDependencies } =
-      buildManifestProfile("package.json", makeConfig(["react-native@0.70"]));
+      buildManifestProfile("package.json", makeConfig(["react-native@0.70"]), {});
 
     expect("react-native-test-app" in dependencies).toBe(true);
     expect("react-native-test-app" in peerDependencies).toBe(false);
@@ -57,7 +59,7 @@ describe("buildManifestProfile()", () => {
 
   test("throws if requirements cannot be satisfied", () => {
     expect(() =>
-      buildManifestProfile("package.json", makeConfig(["react-native@1000.0"]))
+      buildManifestProfile("package.json", makeConfig(["react-native@1000.0"]), {})
     ).toThrowError(
       "No profiles could satisfy requirements: react-native@1000.0"
     );
@@ -70,7 +72,8 @@ describe("buildManifestProfile()", () => {
         makeConfig({
           development: ["react-native@1000.0"],
           production: ["react-native@0.69 || 0.70"],
-        })
+        }),
+        {}
       )
     ).toThrowError(
       "No profiles could satisfy requirements: react-native@1000.0"
@@ -84,7 +87,8 @@ describe("buildManifestProfile()", () => {
         makeConfig({
           development: ["react-native@0.70"],
           production: ["react-native@1000.0"],
-        })
+        }),
+        {}
       )
     ).toThrowError(
       "No profiles could satisfy requirements: react-native@1000.0"
@@ -333,7 +337,8 @@ describe("checkPackageManifestUnconfigured()", () => {
         dependencies: {
           "react-native": "^0.70.0",
         },
-      })
+      }),
+      {}
     );
     expect(result).toBe("success");
     expect(didWrite).toBe(false);
@@ -355,7 +360,8 @@ describe("checkPackageManifestUnconfigured()", () => {
         dependencies: {
           "react-native": "1000.0.0",
         },
-      })
+      }),
+      {}
     );
     expect(result).not.toBe("success");
     expect(didWrite).toBe(false);
@@ -377,7 +383,8 @@ describe("checkPackageManifestUnconfigured()", () => {
         dependencies: {
           "react-native": "1000.0.0",
         },
-      })
+      }),
+      {}
     );
     expect(result).toBe("success");
     expect(didWrite).toBe(true);
@@ -399,7 +406,8 @@ describe("checkPackageManifestUnconfigured()", () => {
         dependencies: {
           "react-native": "1000.0.0",
         },
-      })
+      }),
+      {}
     );
     expect(result).toBe("success");
     expect(didWrite).toBe(false);
@@ -446,7 +454,8 @@ describe("checkPackageManifestUnconfigured()", () => {
     const result = checkPackageManifestUnconfigured(
       "package.json",
       { ...defaultOptions, write: true },
-      { ...kitConfig, manifest: inputManifest }
+      { ...kitConfig, manifest: inputManifest },
+      {}
     );
 
     expect(result).toBe("success");

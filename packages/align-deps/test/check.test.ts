@@ -56,7 +56,7 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
   });
 
   test("returns error code when reading invalid manifests", () => {
-    const result = checkPackageManifest("package.json", defaultOptions);
+    const result = checkPackageManifest("package.json", defaultOptions, {});
     expect(result).toBe("invalid-manifest");
     expect(consoleLogSpy).not.toBeCalled();
     expect(consoleWarnSpy).not.toBeCalled();
@@ -68,7 +68,7 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
       dependencies: { "react-native-linear-gradient": "0.0.0" },
     });
 
-    const result = checkPackageManifest("package.json", defaultOptions);
+    const result = checkPackageManifest("package.json", defaultOptions, {});
 
     expect(result).toBe("not-configured");
     expect(consoleLogSpy).not.toBeCalled();
@@ -90,7 +90,7 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
       alignDeps: { requirements: ["react-native@0.70"] },
     });
 
-    const result = checkPackageManifest("package.json", defaultOptions);
+    const result = checkPackageManifest("package.json", defaultOptions, {});
 
     expect(result).toBe("success");
     expect(consoleLogSpy).not.toBeCalled();
@@ -106,7 +106,7 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
       alignDeps: { requirements: ["react-native@^0.69.0 || ^0.70.0"] },
     });
 
-    const result = checkPackageManifest("package.json", defaultOptions);
+    const result = checkPackageManifest("package.json", defaultOptions, {});
 
     expect(result).toBe("success");
     expect(consoleLogSpy).not.toBeCalled();
@@ -119,7 +119,7 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
       alignDeps: { requirements: ["react-native@0.70"] },
     });
 
-    const result = checkPackageManifest("package.json", defaultOptions);
+    const result = checkPackageManifest("package.json", defaultOptions, {});
 
     expect(result).toBe("success");
     expect(consoleLogSpy).not.toBeCalled();
@@ -145,7 +145,7 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
       },
     });
 
-    const result = checkPackageManifest("package.json", defaultOptions);
+    const result = checkPackageManifest("package.json", defaultOptions, {});
 
     expect(result).toBe("success");
     expect(consoleLogSpy).not.toBeCalled();
@@ -174,7 +174,7 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
     const result = checkPackageManifest("package.json", {
       ...defaultOptions,
       verbose: true,
-    });
+    }, {});
 
     expect(result).toBe("success");
     expect(consoleLogSpy).toBeCalled();
@@ -205,7 +205,7 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
       },
     });
 
-    expect(checkPackageManifest("package.json", writeOptions)).toBe("success");
+    expect(checkPackageManifest("package.json", writeOptions, {})).toBe("success");
     expect(didWriteToPath).toBe(false);
     expect(consoleLogSpy).not.toBeCalled();
     expect(consoleWarnSpy).not.toBeCalled();
@@ -223,6 +223,7 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
     const result = checkPackageManifest(
       "package.json",
       defaultOptions,
+      {},
       undefined,
       (message) => {
         expect(message)
@@ -255,7 +256,7 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
       },
     });
 
-    expect(checkPackageManifest("package.json", writeOptions)).toBe("success");
+    expect(checkPackageManifest("package.json", writeOptions, {})).toBe("success");
     expect(didWriteToPath).toBe("package.json");
     expect(consoleLogSpy).not.toBeCalled();
     expect(consoleWarnSpy).not.toBeCalled();
@@ -275,7 +276,7 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
       },
     });
 
-    expect(checkPackageManifest("package.json", writeOptions)).toBe("success");
+    expect(checkPackageManifest("package.json", writeOptions, {})).toBe("success");
     expect(output).toMatchSnapshot();
     expect(consoleLogSpy).not.toBeCalled();
     expect(consoleWarnSpy).not.toBeCalled();
@@ -293,7 +294,7 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
     const result = checkPackageManifest("package.json", {
       ...defaultOptions,
       excludePackages: ["@rnx-kit/align-deps"],
-    });
+    }, {});
 
     expect(result).toBe("excluded");
     expect(consoleLogSpy).not.toBeCalled();
@@ -319,7 +320,7 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
       },
     });
 
-    const result = checkPackageManifest("package.json", defaultOptions);
+    const result = checkPackageManifest("package.json", defaultOptions, {});
 
     expect(result).toBe("success");
     expect(consoleLogSpy).not.toBeCalled();
@@ -348,7 +349,7 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
       },
     });
 
-    const result = checkPackageManifest("package.json", defaultOptions);
+    const result = checkPackageManifest("package.json", defaultOptions, {});
 
     expect(result).toBe("success");
     expect(consoleLogSpy).not.toBeCalled();
@@ -377,7 +378,7 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
       },
     });
 
-    const result = checkPackageManifest("package.json", defaultOptions);
+    const result = checkPackageManifest("package.json", defaultOptions, {});
 
     expect(result).toBe("success");
     expect(consoleLogSpy).not.toBeCalled();
@@ -416,7 +417,7 @@ describe("checkPackageManifest({ kitType: 'library' }) (backwards compatibility)
   });
 
   test("returns error code when reading invalid manifests", () => {
-    const result = checkPackageManifest("package.json", defaultOptions);
+    const result = checkPackageManifest("package.json", defaultOptions, {});
     expect(result).not.toBe("success");
   });
 
@@ -426,7 +427,7 @@ describe("checkPackageManifest({ kitType: 'library' }) (backwards compatibility)
       dependencies: { "react-native-linear-gradient": "0.0.0" },
     });
 
-    const result = checkPackageManifest("package.json", defaultOptions);
+    const result = checkPackageManifest("package.json", defaultOptions, {});
 
     expect(result).toBe("not-configured");
   });
@@ -444,7 +445,7 @@ describe("checkPackageManifest({ kitType: 'library' }) (backwards compatibility)
     });
     rnxKitConfig.__setMockConfig({ reactNativeVersion: "0.70.0" });
 
-    const result = checkPackageManifest("package.json", defaultOptions);
+    const result = checkPackageManifest("package.json", defaultOptions, {});
 
     expect(result).toBe("success");
   });
@@ -456,7 +457,7 @@ describe("checkPackageManifest({ kitType: 'library' }) (backwards compatibility)
     });
     rnxKitConfig.__setMockConfig({ reactNativeVersion: "^0.69.0 || ^0.70.0" });
 
-    const result = checkPackageManifest("package.json", defaultOptions);
+    const result = checkPackageManifest("package.json", defaultOptions, {});
 
     expect(result).toBe("success");
   });
@@ -465,7 +466,7 @@ describe("checkPackageManifest({ kitType: 'library' }) (backwards compatibility)
     fs.__setMockContent(mockManifest);
     rnxKitConfig.__setMockConfig({ reactNativeVersion: "0.70.0" });
 
-    const result = checkPackageManifest("package.json", defaultOptions);
+    const result = checkPackageManifest("package.json", defaultOptions, {});
 
     expect(result).toBe("success");
   });
@@ -487,7 +488,7 @@ describe("checkPackageManifest({ kitType: 'library' }) (backwards compatibility)
       capabilities: ["core-ios"],
     });
 
-    const result = checkPackageManifest("package.json", defaultOptions);
+    const result = checkPackageManifest("package.json", defaultOptions, {});
 
     expect(result).toBe("success");
   });
@@ -514,7 +515,7 @@ describe("checkPackageManifest({ kitType: 'library' }) (backwards compatibility)
       capabilities: ["core-ios"],
     });
 
-    expect(checkPackageManifest("package.json", writeOptions)).toBe("success");
+    expect(checkPackageManifest("package.json", writeOptions, {})).toBe("success");
     expect(didWriteToPath).toBe(false);
   });
 
@@ -525,7 +526,7 @@ describe("checkPackageManifest({ kitType: 'library' }) (backwards compatibility)
       capabilities: ["core-ios"],
     });
 
-    const result = checkPackageManifest("package.json", defaultOptions);
+    const result = checkPackageManifest("package.json", defaultOptions, {});
 
     expect(result).toBe("unsatisfied");
   });
@@ -542,7 +543,7 @@ describe("checkPackageManifest({ kitType: 'library' }) (backwards compatibility)
       capabilities: ["core-ios"],
     });
 
-    expect(checkPackageManifest("package.json", writeOptions)).toBe("success");
+    expect(checkPackageManifest("package.json", writeOptions, {})).toBe("success");
     expect(didWriteToPath).toBe("package.json");
   });
 
@@ -558,7 +559,7 @@ describe("checkPackageManifest({ kitType: 'library' }) (backwards compatibility)
       capabilities: ["core-ios"],
     });
 
-    expect(checkPackageManifest("package.json", writeOptions)).toBe("success");
+    expect(checkPackageManifest("package.json", writeOptions, {})).toBe("success");
     expect(output).toMatchSnapshot();
   });
 
@@ -579,7 +580,7 @@ describe("checkPackageManifest({ kitType: 'library' }) (backwards compatibility)
       capabilities: ["core-ios"],
     });
 
-    const result = checkPackageManifest("package.json", defaultOptions);
+    const result = checkPackageManifest("package.json", defaultOptions, {});
 
     expect(result).toBe("success");
   });
@@ -602,7 +603,7 @@ describe("checkPackageManifest({ kitType: 'library' }) (backwards compatibility)
       capabilities: ["core-ios"],
     });
 
-    const result = checkPackageManifest("package.json", defaultOptions);
+    const result = checkPackageManifest("package.json", defaultOptions, {});
 
     expect(result).toBe("success");
   });
@@ -625,7 +626,7 @@ describe("checkPackageManifest({ kitType: 'library' }) (backwards compatibility)
       capabilities: ["core-ios"],
     });
 
-    const result = checkPackageManifest("package.json", defaultOptions);
+    const result = checkPackageManifest("package.json", defaultOptions, {});
 
     expect(result).toBe("success");
   });
