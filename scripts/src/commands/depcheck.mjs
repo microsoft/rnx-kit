@@ -21,7 +21,6 @@ function mergeOneLevel(a, b = {}) {
 }
 
 function patch() {
-  // @ts-expect-error ts(1343): 'import.meta' is only allowed when module is ESM
   const require = createRequire(import.meta.url);
 
   const depcheck = path.dirname(require.resolve("depcheck/package.json"));
