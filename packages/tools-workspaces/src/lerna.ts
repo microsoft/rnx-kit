@@ -19,11 +19,13 @@ function filterSentinels(): string[] {
 export async function findWorkspacePackages(
   configFile: string
 ): Promise<string[]> {
-  const { packages, useWorkspaces } = await readJSON(configFile);
-  if (!useWorkspaces) {
+  const { packages } = await readJSON(configFile);
+  // respect the Lerna `packages` property
+  if (packages) {
     return await findPackages(packages, path.dirname(configFile));
   }
 
+  // fallback to alternative sentinels regardless of `useWorkspaces`
   const root = path.dirname(configFile);
   const sentinels = filterSentinels();
   for (const sentinel of sentinels) {
@@ -34,6 +36,7 @@ export async function findWorkspacePackages(
     }
   }
 
+  // return empty list if there's no alternative sentinel to fall back to
   return [];
 }
 
