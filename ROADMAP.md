@@ -205,8 +205,7 @@ cannot provide a complete downloadable app for development without this.
 
 > **Note**
 >
-> - An RFC for this effort has been posted here:
->   https://github.com/microsoft/rnx-kit/pull/2504
+> - RFC for this effort is here: [React Native Standard APIs RFC][]
 > - This section only relates to the Web APIs. For the DOM counterpart of this
 >   web convergence effort, please refer to the [React DOM For Native RFC][].
 
@@ -285,6 +284,95 @@ Working Group][]. Ideally, the end result will provide tools similar (and
 familiar in developer experience) to what web development already has available
 with tooling such as [Chrome DevTools][].
 
+### Recapping the vision
+
+Based on all the above, this is our vision for a better future:
+
+<table>
+  <tbody valign="top">
+    <tr>
+      <th>&ZeroWidthSpace;</th>
+      <th>Web</th>
+      <th>RN + rnx-kit</th>
+    </tr>
+    <tr>
+      <td>Requirements</td>
+      <td>
+        <ul>
+          <li>Node</li>
+          <li>A web browser</li>
+        </ul>
+      </td>
+      <td>
+        <ul>
+          <li>Node</li>
+          <li>on device
+            <ul>
+              <li>@rnx-kit/build allows for developers to only need a target device on which to install the app to work.</li>
+            </ul>
+          </li>
+          <li>on machine (simulator/emulator required)
+            <ul>
+              <li> Overall simplified by using React Native Test App as the sandbox project. All configuration will be preset via it. RNTA will also ensure that the right version of each tool is used per each RN version. </li>
+              <li> Enhanced CLI and tooling like align-deps ensure a smoother experience. </li>
+              <li> Native tooling will still be needed.
+                <ul>
+                  <li> Android
+                    <ul>
+                      <li>
+                        Android Studio
+                        <ul>
+                          <li>Android SDK Platform</li>
+                          <li>Android SDK Build-Tools</li>
+                        </ul>
+                      </li>
+                      <li>Java Development Kit</li>
+                    </ul>
+                  </li>
+                  <li> iOS and macOS
+                    <ul>
+                      <li>CocoaPods (and by extension, Ruby)</li>
+                      <li>Xcode</li>
+                    </ul>
+                  </li>
+                  <li> Windows
+                    <ul>
+                      <li>Visual Studio</li>
+                    </ul>
+                  </li>
+              </ul>
+            </li>
+          </li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td>API</td>
+      <td>
+        <a href="https://developer.mozilla.org/en-US/docs/Web/API">Web APIs</a>
+      </td>
+      <td>
+        The React Native implementation of those same <a href="https://developer.mozilla.org/en-US/docs/Web/API">Web APIs</a> as detailed in the <a href="https://github.com/microsoft/rnx-kit/pull/2504">React Native Standard APIs RFC</a>.
+      </td>
+    </tr>
+    <tr>
+      <td>Debugging</td>
+      <td>
+        Depends on your browser choice.
+        <a
+          href="https://developer.chrome.com/blog/devtools-modern-web-debugging/"
+          >Chrome DevTools</a
+        >
+        is a popular one.
+      </td>
+      <td>
+        The new dedicated tool that will be developed by Meta with the support and our participation in the Debugging working group.
+      </td>
+    </tr>
+
+  </tbody>
+</table>
+
 ## Our role in the broader community
 
 It is hard to understate the importance of the React Native community in the
@@ -338,6 +426,7 @@ This input will help us continue refining `rnx-kit` to best meet our goals.
   https://github.com/react-native-community/developer-experience-wg/discussions/categories/metro
 [React DOM For Native RFC]:
   https://github.com/react-native-community/discussions-and-proposals/pull/496
+[React Native Standard APIs RFC]: https://github.com/microsoft/rnx-kit/pull/2504
 [React Native Directory]: https://reactnative.directory/
 [Tophat]: https://shopify.engineering/shopify-tophat-mobile-developer-testing
 [list of tools]: https://microsoft.github.io/rnx-kit/docs/tools/overview
