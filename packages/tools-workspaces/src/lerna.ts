@@ -20,10 +20,14 @@ export async function findWorkspacePackages(
   configFile: string
 ): Promise<string[]> {
   const { packages, useWorkspaces } = await readJSON(configFile);
-  if (!useWorkspaces) {
+
+  // `useWorkspaces` was deprecated: https://github.com/lerna/lerna/releases/tag/7.0.0
+  // respect Lerna `packages` property
+  if (packages && useWorkspaces !== true) {
     return await findPackages(packages, path.dirname(configFile));
   }
 
+  // fall back to alternative sentinel regardless of `useWorkspaces`
   const root = path.dirname(configFile);
   const sentinels = filterSentinels();
   for (const sentinel of sentinels) {
@@ -34,6 +38,7 @@ export async function findWorkspacePackages(
     }
   }
 
+  // return empty list if there is no alternative to fall back to
   return [];
 }
 
