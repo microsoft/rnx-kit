@@ -11567,7 +11567,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-gradle-plugin@npm:^0.71.17, react-native-gradle-plugin@npm:^0.71.19":
+"react-native-gradle-plugin@npm:^0.71.19":
   version: 0.71.19
   resolution: "react-native-gradle-plugin@npm:0.71.19"
   checksum: 2e3ab679f0b81edd81b9fb88a73a16c8b9b6dbef4e7158fd894c42e6dff04ba8d11f1b9663ffa2c30d0d9deee3cd44b033cd280322c010be3c290e4422088a7a
@@ -11575,19 +11575,20 @@ __metadata:
   linkType: hard
 
 "react-native-macos@npm:^0.71.0":
-  version: 0.71.15
-  resolution: "react-native-macos@npm:0.71.15"
+  version: 0.71.27
+  resolution: "react-native-macos@npm:0.71.27"
   dependencies:
     "@jest/create-cache-key-function": ^29.2.1
-    "@react-native-community/cli": 10.2.2
+    "@react-native-community/cli": 10.2.4
     "@react-native-community/cli-platform-android": 10.2.0
-    "@react-native-community/cli-platform-ios": 10.2.1
+    "@react-native-community/cli-platform-ios": 10.2.4
     "@react-native-community/cli-tools": 10.1.1
     "@react-native/assets": 1.0.0
     "@react-native/normalize-color": 2.1.0
     "@react-native/polyfills": 2.0.0
     abort-controller: ^3.0.0
     anser: ^1.4.9
+    ansi-regex: ^5.0.0
     base64-js: ^1.1.2
     deprecated-react-native-prop-types: ^3.0.1
     event-target-shim: ^5.0.1
@@ -11595,16 +11596,16 @@ __metadata:
     jest-environment-node: ^29.2.1
     jsc-android: ^250231.0.0
     memoize-one: ^5.0.0
-    metro-react-native-babel-transformer: 0.73.9
-    metro-runtime: 0.73.9
-    metro-source-map: 0.73.9
+    metro-react-native-babel-transformer: 0.73.10
+    metro-runtime: 0.73.10
+    metro-source-map: 0.73.10
     mkdirp: ^0.5.1
     nullthrows: ^1.1.1
     pretty-format: ^26.5.2
     promise: ^8.3.0
     react-devtools-core: ^4.26.1
     react-native-codegen: ^0.71.5
-    react-native-gradle-plugin: ^0.71.17
+    react-native-gradle-plugin: ^0.71.19
     react-refresh: ^0.4.0
     react-shallow-renderer: ^16.15.0
     regenerator-runtime: ^0.13.2
@@ -11617,7 +11618,7 @@ __metadata:
     react: 18.2.0
   bin:
     react-native-macos: cli.js
-  checksum: 2ebfb1067ab5d6c8e0da034e8cf617c4ce72420d5af6789be76c854a9fc89673d3511fbec6c954bedb4e2453778eb98185bfba1cd43815992594198bdebd892e
+  checksum: 050067a88abb4ca7c7e3a357728d54d3d6e581357e3424abed78014bd97eeaf72f28e3d593e48b5f4b6089356825d504218c052c48d3de918b8f0610d3995434
   languageName: node
   linkType: hard
 
