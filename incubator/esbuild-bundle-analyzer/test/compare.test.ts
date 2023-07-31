@@ -1,4 +1,4 @@
-import path from "path";
+import path from "node:path";
 import { compare, readMetafile } from "../src/compare";
 
 const fixturePath = path.join(process.cwd(), "test", "__fixtures__");

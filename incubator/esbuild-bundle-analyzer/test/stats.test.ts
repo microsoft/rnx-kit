@@ -1,6 +1,6 @@
-import path from "path";
-import { stats } from "../src/stats";
+import * as path from "node:path";
 import { readMetafile } from "../src/compare";
+import { stats } from "../src/stats";
 import type { Stats } from "../src/types";
 
 const fixturePath = path.join(process.cwd(), "test", "__fixtures__");
