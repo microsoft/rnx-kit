@@ -1,5 +1,11 @@
 # @rnx-kit/tools-workspaces
 
+## 0.1.4
+
+### Patch Changes
+
+- bdb49b37: fix issue caused by Lerna 7+ `useWorkspaces` deprecation
+
 ## 0.1.3
 
 ### Patch Changes
