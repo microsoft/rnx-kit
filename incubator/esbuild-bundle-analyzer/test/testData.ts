@@ -1,4 +1,4 @@
-import path from "path";
+import * as path from "node:path";
 import type { Input } from "../src/metafile";
 import type { Result } from "../src/types";
 

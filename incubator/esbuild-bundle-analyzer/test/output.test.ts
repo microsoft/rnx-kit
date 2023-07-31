@@ -1,15 +1,15 @@
-import path from "path";
-import * as fs from "fs";
+import * as fs from "node:fs";
+import * as path from "node:path";
 import { readMetafile } from "../src/compare";
 import { generateGraph, getWhyDuplicatesInBundle } from "../src/duplicates";
+import type { Metafile } from "../src/metafile";
 import {
   output,
   outputDiffToConsole,
   outputWhyDuplicateInBundle,
 } from "../src/output";
-import type { Result } from "../src/types";
-import type { Metafile } from "../src/metafile";
 import { stats } from "../src/stats";
+import type { Result } from "../src/types";
 
 const fixturePath = path.join(process.cwd(), "test", "__fixtures__");
 const statsDataFilePath = path.join(process.cwd(), "statsTest.json");

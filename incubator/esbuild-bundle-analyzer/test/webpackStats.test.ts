@@ -1,5 +1,5 @@
-import path from "path";
-import * as fs from "fs";
+import * as fs from "node:fs";
+import * as path from "node:path";
 import type { WebpackStats } from "../src/types";
 import { webpackStats } from "../src/webpackStats";
 

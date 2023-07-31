@@ -1,6 +1,6 @@
 // Copied from metro-plugin-duplicates-checker/test/__mocks__/fs.js
-const fs = jest.createMockFromModule("fs");
-const actualFs = jest.requireActual("fs");
+const fs = jest.createMockFromModule("node:fs");
+const actualFs = jest.requireActual("node:fs");
 
 // Under normal circumstances, this extra copy of '@react-native/polyfills'
 // should not be installed.
