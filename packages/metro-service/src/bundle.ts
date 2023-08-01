@@ -7,6 +7,7 @@ import Server from "metro/src/Server";
 import Bundle from "metro/src/shared/output/bundle";
 import path from "path";
 import { saveAssets } from "./asset";
+import { ensureBabelConfig } from "./babel";
 
 export type BundleArgs = {
   assetsDest?: string;
@@ -47,6 +48,9 @@ export async function bundle(
   config: ConfigT,
   output = Bundle
 ): Promise<void> {
+  // ensure Metro can find Babel config
+  ensureBabelConfig(config);
+
   const buildBundleWithConfig = getBundlerFromCliPlugin();
   if (buildBundleWithConfig) {
     return buildBundleWithConfig(args, config, output);
