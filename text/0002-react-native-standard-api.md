@@ -94,8 +94,8 @@ that can be installed separately. These modules are installed by autolinking,
 and must therefore be explicitly added to an app's `package.json`.
 
 For example, if you want to use `BatteryManager` you should not need to import
-the whole `react-native-apis` module, but only the dedicated
-`@react-native-apis/battery-manager` submodule.
+the whole `react-native-webapis` module, but only the dedicated
+`@react-native-webapis/battery-manager` submodule.
 
 Additionally, we want to avoid requiring that users manually add polyfills for
 the modules they need. Instead, we propose that modules that implement a part of
@@ -120,10 +120,13 @@ On top of what has been mentioned above, we are still investigating the right
 approach for how the code for this effort should be created and organised. The
 most likely approach will involve a monorepo (similar to
 [`rnx-kit`](https://github.com/microsoft/rnx-kit)) where each module will be its
-own dedicated package. For now, we will suggest that implementations for all
-supported platforms be present in the one package. We won't have
-`/packages/battery-manager-ios` and `/packages/battery-manager-android`, only
-`/packages/battery-manager`.
+own dedicated package. For starters, we will suggest that implementations for
+"core" supported platforms (i.e. Android, iOS, macOS, Windows) be present in the
+one package — we won't have `/~/battery-manager-android` and
+`/~/battery-manager-ios`, only `/~/battery-manager`. However, it should still be
+possible to have additional platform specific implementations, e.g.
+`/~/battery-manager-tvos`. These should also be treated as first class citizens
+and be recognized by all tooling.
 
 This should allow for different people to work on different modules at the same
 time, while having a coherent infra to rely on for testing, publishing, etc.
