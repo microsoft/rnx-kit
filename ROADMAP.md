@@ -205,7 +205,7 @@ cannot provide a complete downloadable app for development without this.
 
 > **Note**
 >
-> - RFC for this effort is here: [React Native Standard APIs RFC][]
+> - The RFC for this effort is here: [React Native Standard APIs RFC][]
 > - This section only relates to the Web APIs. For the DOM counterpart of this
 >   web convergence effort, please refer to the [React DOM For Native RFC][].
 
@@ -293,7 +293,7 @@ Based on all the above, this is our vision for a better future:
     <tr>
       <th>&ZeroWidthSpace;</th>
       <th>Web</th>
-      <th>RN + rnx-kit</th>
+      <th>React Native + rnx-kit</th>
     </tr>
     <tr>
       <td>Requirements</td>
@@ -306,18 +306,33 @@ Based on all the above, this is our vision for a better future:
       <td>
         <ul>
           <li>Node</li>
-          <li>on device
+          <li>
+            Enhanced CLI and tooling like <code>align-deps</code> ensure a
+            smoother experience.
+          </li>
+          <li>
+            On device:
             <ul>
-              <li>@rnx-kit/build allows for developers to only need a target device on which to install the app to work.</li>
+              <li>
+                <code>@rnx-kit/build</code> allows for developers to only need a
+                target device on which to install the app to work.
+              </li>
             </ul>
           </li>
-          <li>on machine (simulator/emulator required)
+          <li>
+            On machine (simulator/emulator required):
             <ul>
-              <li> Overall simplified by using React Native Test App as the sandbox project. All configuration will be preset via it. RNTA will also ensure that the right version of each tool is used per each RN version. </li>
-              <li> Enhanced CLI and tooling like align-deps ensure a smoother experience. </li>
-              <li> Native tooling will still be needed.
+              <li>
+                Greatly simplified by using React Native Test App (RNTA) as the
+                sandbox project. All configuration will be preset via it. RNTA
+                will ensure that the right version of each tool is used as
+                required by individual React Native versions.
+              </li>
+              <li>
+                Some native tooling will still be needed:
                 <ul>
-                  <li> Android
+                  <li>
+                    Android
                     <ul>
                       <li>
                         Android Studio
@@ -329,19 +344,27 @@ Based on all the above, this is our vision for a better future:
                       <li>Java Development Kit</li>
                     </ul>
                   </li>
-                  <li> iOS and macOS
+                  <li>
+                    iOS
                     <ul>
-                      <li>CocoaPods (and by extension, Ruby)</li>
                       <li>Xcode</li>
                     </ul>
                   </li>
-                  <li> Windows
+                  <li>
+                    macOS
                     <ul>
-                      <li>Visual Studio</li>
+                      <li>Xcode (only needed for native debugging)</li>
                     </ul>
                   </li>
-              </ul>
-            </li>
+                  <li>
+                    Windows
+                    <ul>
+                      <li>Visual Studio (only needed for native debugging)</li>
+                    </ul>
+                  </li>
+                </ul>
+              </li>
+            </ul>
           </li>
         </ul>
       </td>
@@ -352,7 +375,12 @@ Based on all the above, this is our vision for a better future:
         <a href="https://developer.mozilla.org/en-US/docs/Web/API">Web APIs</a>
       </td>
       <td>
-        The React Native implementation of those same <a href="https://developer.mozilla.org/en-US/docs/Web/API">Web APIs</a> as detailed in the <a href="https://github.com/microsoft/rnx-kit/pull/2504">React Native Standard APIs RFC</a>.
+        The React Native implementation of the very same
+        <a href="https://developer.mozilla.org/en-US/docs/Web/API">Web APIs</a>
+        as detailed in the
+        <a href="https://github.com/microsoft/rnx-kit/pull/2504"
+          >React Native Standard APIs RFC</a
+        >.
       </td>
     </tr>
     <tr>
@@ -366,10 +394,10 @@ Based on all the above, this is our vision for a better future:
         is a popular one.
       </td>
       <td>
-        The new dedicated tool that will be developed by Meta with the support and our participation in the Debugging working group.
+        New dedicated tools that will be developed by Meta with the support and
+        our participation in the Debugging Working Group.
       </td>
     </tr>
-
   </tbody>
 </table>
 
@@ -426,8 +454,8 @@ This input will help us continue refining `rnx-kit` to best meet our goals.
   https://github.com/react-native-community/developer-experience-wg/discussions/categories/metro
 [React DOM For Native RFC]:
   https://github.com/react-native-community/discussions-and-proposals/pull/496
-[React Native Standard APIs RFC]: https://github.com/microsoft/rnx-kit/pull/2504
 [React Native Directory]: https://reactnative.directory/
+[React Native Standard APIs RFC]: https://github.com/microsoft/rnx-kit/pull/2504
 [Tophat]: https://shopify.engineering/shopify-tophat-mobile-developer-testing
 [list of tools]: https://microsoft.github.io/rnx-kit/docs/tools/overview
 [standard APIs]: https://developer.mozilla.org/en-US/docs/Web/API
