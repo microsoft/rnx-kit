@@ -1,6 +1,6 @@
 import type { Config as CLIConfig } from "@react-native-community/cli-types";
 import { error } from "@rnx-kit/console";
-import { findPackageDependencyDir } from "@rnx-kit/tools-node";
+import { findPackageDir } from "@rnx-kit/tools-node";
 import { parsePlatform } from "@rnx-kit/tools-react-native/platform";
 import * as path from "path";
 
@@ -21,7 +21,7 @@ type Options = {
 
 const COMMAND_NAME = "rnx-test";
 
-function resolveJestCli(): string {
+export function resolveJestCli(): string {
   const jestPath = path.dirname(require.resolve("jest/package.json"));
   return require.resolve("jest-cli", { paths: [jestPath] });
 }
@@ -62,30 +62,55 @@ export function rnxTest(
   runJest(argv);
 }
 
-function jestOptions(): Options[] {
-  // Starting with Jest 27, we are getting this error:
-  //
-  // Package subpath './build/cli/args' is not defined by "exports" in
-  // /~/node_modules/jest-cli/package.json
-  //
-  // To work around this, resolve `jest-cli` first, then use the resolved path
-  // to import `./build/cli/args`.
-  try {
-    const jestPath = findPackageDependencyDir(resolveJestCli()) || "jest-cli";
+export function jestOptions(): Options[] {
+  const options = (() => {
+    try {
+      // `yargsOptions` is exported as of 29.5.0
+      // https://github.com/jestjs/jest/commit/0e8ed24a527b951efe11ed49da46e0bd8c0ebef9
+      const { yargsOptions } = require("jest-cli");
+      if (yargsOptions) {
+        return yargsOptions;
+      }
+    } catch (_) {
+      // ignore
+    }
 
-    const { options } = require(`${jestPath}/build/cli/args`);
+    // Starting with Jest 27, we are getting this error:
+    //
+    // Package subpath './build/cli/args' is not defined by "exports" in
+    // /~/node_modules/jest-cli/package.json
+    //
+    // To work around this, resolve `jest-cli` first, then use the resolved
+    // path to import `./build/cli/args`.
+    const jestPath = findPackageDir(resolveJestCli()) || "jest-cli";
 
-    return Object.keys(options).map((option) => {
-      const { default: defaultValue, description, type } = options[option];
-      return {
-        name: `--${option} [${type}]`,
-        description,
-        default: defaultValue,
-      };
-    });
-  } catch (_) {
-    return [];
-  }
+    try {
+      // `args.js` was moved in 29.2.0
+      // https://github.com/jestjs/jest/commit/2ecf723c50c5d25b2fe94e1ff8081f36aed9d67b
+      const { options } = require(`${jestPath}/build/args`);
+      return options;
+    } catch (_) {
+      // ignore
+    }
+
+    try {
+      const { options } = require(`${jestPath}/build/cli/args`);
+      return options;
+    } catch (_) {
+      // ignore
+    }
+
+    return {};
+  })();
+  return Object.keys(options).map((option) => {
+    const { alias, default: defaultValue, description, type } = options[option];
+    const name = `--${option} [${type}]`;
+    return {
+      name: alias ? `-${alias}, ${name}` : name,
+      description,
+      default: defaultValue,
+    };
+  });
 }
 
 export const rnxTestCommand = {
