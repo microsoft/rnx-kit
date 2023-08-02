@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/cli
 
+## 0.16.10
+
+### Patch Changes
+
+- 0b842c78: Fix `rnx-test` command not accepting any arguments when using Jest 29.2+
+
 ## 0.16.9
 
 ### Patch Changes
