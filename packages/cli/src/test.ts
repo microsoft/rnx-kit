@@ -21,7 +21,7 @@ type Options = {
 
 const COMMAND_NAME = "rnx-test";
 
-function resolveJestCli(): string {
+export function resolveJestCli(): string {
   const jestPath = path.dirname(require.resolve("jest/package.json"));
   return require.resolve("jest-cli", { paths: [jestPath] });
 }
@@ -62,7 +62,7 @@ export function rnxTest(
   runJest(argv);
 }
 
-function jestOptions(): Options[] {
+export function jestOptions(): Options[] {
   const options = (() => {
     try {
       // `yargsOptions` is exported as of 29.5.0
