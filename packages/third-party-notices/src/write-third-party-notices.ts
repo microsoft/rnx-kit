@@ -1,8 +1,8 @@
-import fs from "fs";
+import { isPackageModuleRef, parseModuleRef } from "@rnx-kit/tools-node/module";
 import { findPackage, readPackage } from "@rnx-kit/tools-node/package";
-import { resolve } from "path";
-import { promisify } from "util";
+import * as fs from "fs";
 import type { BasicSourceMap } from "metro-source-map";
+import * as path from "path";
 import { createLicenseJSON } from "./output/json";
 import { createLicenseFileContents } from "./output/text";
 import type {
@@ -36,13 +36,12 @@ const modulesRoot = "node_modules/";
 export async function writeThirdPartyNotices(
   options: WriteThirdPartyNoticesOptions
 ): Promise<void> {
-  const readFileAsync = promisify(fs.readFile);
-
+  const fileOptions = { encoding: "utf-8" } as const;
   const { additionalText, json, outputFile, preambleText, sourceMapFile } =
     options;
 
   // Parse source map file
-  const sourceMapJson = await readFileAsync(sourceMapFile, "utf8");
+  const sourceMapJson = fs.readFileSync(sourceMapFile, fileOptions);
   const sourceMap: SourceMap = JSON.parse(sourceMapJson);
 
   const currentPackageId = await getCurrentPackageId(options.rootPath);
@@ -58,8 +57,7 @@ export async function writeThirdPartyNotices(
     : createLicenseFileContents(licenses, preambleText, additionalText);
 
   if (outputFile) {
-    const writeFileAsync = promisify(fs.writeFile);
-    await writeFileAsync(outputFile, outputText, "utf8");
+    fs.writeFileSync(outputFile, outputText, fileOptions);
   } else {
     console.log(outputText);
   }
@@ -118,12 +116,11 @@ export function splitSourcePath(rootPath: string, p: string): string[] {
   //  ** example **
   //    npm:  <repo-root>/common/temp/node_modules/fbjs
   //    pnpm: <repo-root>/common/temp/node_modules/.yourProject.pkgs.visualstudio.com/fbjs/0.8.17/node_modules/fbjs
-
-  let nodeModulesPath;
-  let relativeSourcePath;
-
+  //
   //  bundles use WebPack's dll plugin to perform cross-bundle module retrieval.
-  //  cross bundle modules' paths are appended with 'delegated ', which we need to remove from path.
+  //  cross bundle modules' paths are appended with 'delegated ', which we need
+  //  to remove from path.
+  //
   //  ** example **
   //    delegated ../../../common/temp/node_modules/.yourProject.pkgs.visualstudio.com/react-native/0.3003.5/react@16.0.0/node_modules/react-native/Libraries/EventEmitter/NativeEventEmitter.js from dll-reference runtime20
   const DELEGATED_PREFIX = "delegated ";
@@ -131,28 +128,23 @@ export function splitSourcePath(rootPath: string, p: string): string[] {
     p = p.substring(DELEGATED_PREFIX.length);
   }
 
-  const pnpmRegExp = /(.*?node_modules\/[.].+?\/node_modules\/)(.*)/;
-  const pnpmPathComponents = pnpmRegExp.exec(p);
-
-  if (pnpmPathComponents !== null) {
-    nodeModulesPath = pnpmPathComponents[1];
-    relativeSourcePath = pnpmPathComponents[2];
-  } else {
-    nodeModulesPath = p.substring(
-      0,
-      p.lastIndexOf(modulesRoot) + modulesRoot.length
-    );
-    relativeSourcePath = p.substring(nodeModulesPath.length);
+  const absolutePath = path.resolve(rootPath, p);
+  const idx = absolutePath.lastIndexOf(modulesRoot);
+  if (idx == null || idx < 0) {
+    throw new Error(`Unexpected module: ${p}`);
   }
 
-  let moduleName;
-  if (relativeSourcePath[0] === "@") {
-    moduleName = relativeSourcePath.split("/").slice(0, 2).join("/");
-  } else {
-    moduleName = relativeSourcePath.split("/")[0];
+  const ref = parseModuleRef(absolutePath.substring(idx + modulesRoot.length));
+  if (!isPackageModuleRef(ref)) {
+    throw new Error(`Could not parse module: ${p}`);
   }
 
-  return [moduleName, resolve(rootPath, `${nodeModulesPath}${moduleName}`)];
+  return [
+    ref.scope ? `${ref.scope}/${ref.name}` : ref.name,
+    ref.path
+      ? absolutePath.substring(0, absolutePath.length - ref.path.length - 1)
+      : absolutePath,
+  ];
 }
 
 export function parseModule(
@@ -161,7 +153,6 @@ export function parseModule(
   p: string
 ): void {
   const [moduleName, modulePath] = splitSourcePath(options.rootPath, p);
-  const fs = require("fs");
   if (
     (options.ignoreScopes &&
       options.ignoreScopes.some((scope: string) =>

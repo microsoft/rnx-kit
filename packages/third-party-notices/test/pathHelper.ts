@@ -1,7 +1,7 @@
-import os from "os";
+import os from "node:os";
 
 export const absolutePathRoot = os.platform() === "win32" ? "o:\\" : "/";
 
 export function osSpecificPath(p: string): string {
-  return os.platform() === "win32" ? p : p.replace(/[\\]+/g, "/");
+  return os.platform() === "win32" ? p.replace(/[/]+/g, "\\") : p;
 }
