@@ -23,9 +23,6 @@
   "dependencies": {
     "semver": "^7.0.0"
   },
-  "peerDependencies": {
-    "metro": ">=0.58.0"
-  },
   "devDependencies": {
     "@rnx-kit/scripts": "*",
     "@types/metro": "^0.76.0",
