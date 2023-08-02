@@ -1,5 +1,5 @@
 import { splitSourcePath } from "../src/write-third-party-notices";
-import { absolutePathRoot, osSpecificPath } from "./pathHelper";
+import { absolutePathRoot } from "./pathHelper";
 
 describe("splitSourcePath", () => {
   test("absolutePath", () => {
@@ -8,8 +8,8 @@ describe("splitSourcePath", () => {
       `${absolutePathRoot}src/root/node_modules/myPackage/myFile.js`
     );
     expect(moduleName).toBe("myPackage");
-    expect(osSpecificPath(modulePath)).toBe(
-      osSpecificPath(`${absolutePathRoot}src/root/node_modules/myPackage`)
+    expect(modulePath).toBe(
+      `${absolutePathRoot}src/root/node_modules/myPackage`
     );
   });
 
@@ -19,8 +19,8 @@ describe("splitSourcePath", () => {
       `${absolutePathRoot}src/root/node_modules/myPackage/myFile.js`
     );
     expect(moduleName).toBe("myPackage");
-    expect(osSpecificPath(modulePath)).toBe(
-      osSpecificPath(`${absolutePathRoot}src/root/node_modules/myPackage`)
+    expect(modulePath).toBe(
+      `${absolutePathRoot}src/root/node_modules/myPackage`
     );
   });
 
@@ -30,8 +30,8 @@ describe("splitSourcePath", () => {
       `${absolutePathRoot}src/root/node_modules/myPackage`
     );
     expect(moduleName).toBe("myPackage");
-    expect(osSpecificPath(modulePath)).toBe(
-      osSpecificPath(`${absolutePathRoot}src/root/node_modules/myPackage`)
+    expect(modulePath).toBe(
+      `${absolutePathRoot}src/root/node_modules/myPackage`
     );
   });
 
@@ -41,10 +41,8 @@ describe("splitSourcePath", () => {
       `${absolutePathRoot}src/root/node_modules/myPackage/node_modules/nestedPackage/nestedFile.js`
     );
     expect(moduleName).toBe("nestedPackage");
-    expect(osSpecificPath(modulePath)).toBe(
-      osSpecificPath(
-        `${absolutePathRoot}src/root/node_modules/myPackage/node_modules/nestedPackage`
-      )
+    expect(modulePath).toBe(
+      `${absolutePathRoot}src/root/node_modules/myPackage/node_modules/nestedPackage`
     );
   });
 
@@ -54,10 +52,8 @@ describe("splitSourcePath", () => {
       `${absolutePathRoot}src/root/node_modules/@myframework/driver-utils/node_modules/@myframework/telemetry-utils/lib/config.js`
     );
     expect(moduleName).toBe("@myframework/telemetry-utils");
-    expect(osSpecificPath(modulePath)).toBe(
-      osSpecificPath(
-        `${absolutePathRoot}src/root/node_modules/@myframework/driver-utils/node_modules/@myframework/telemetry-utils`
-      )
+    expect(modulePath).toBe(
+      `${absolutePathRoot}src/root/node_modules/@myframework/driver-utils/node_modules/@myframework/telemetry-utils`
     );
   });
 
@@ -67,10 +63,8 @@ describe("splitSourcePath", () => {
       `${absolutePathRoot}src/root/otherSrcFolder/node_modules/myPackage/myFile.js`
     );
     expect(moduleName).toBe("myPackage");
-    expect(osSpecificPath(modulePath)).toBe(
-      osSpecificPath(
-        `${absolutePathRoot}src/root/otherSrcFolder/node_modules/myPackage`
-      )
+    expect(modulePath).toBe(
+      `${absolutePathRoot}src/root/otherSrcFolder/node_modules/myPackage`
     );
   });
 
@@ -80,10 +74,8 @@ describe("splitSourcePath", () => {
       `${absolutePathRoot}src/root/node_modules/@scope/myPackage/myFile.js`
     );
     expect(moduleName).toBe("@scope/myPackage");
-    expect(osSpecificPath(modulePath)).toBe(
-      osSpecificPath(
-        `${absolutePathRoot}src/root/node_modules/@scope/myPackage`
-      )
+    expect(modulePath).toBe(
+      `${absolutePathRoot}src/root/node_modules/@scope/myPackage`
     );
   });
 
@@ -93,8 +85,8 @@ describe("splitSourcePath", () => {
       "node_modules/myPackage/myFile.js"
     );
     expect(moduleName).toBe("myPackage");
-    expect(osSpecificPath(modulePath)).toBe(
-      osSpecificPath(`${absolutePathRoot}src/root/node_modules/myPackage`)
+    expect(modulePath).toBe(
+      `${absolutePathRoot}src/root/node_modules/myPackage`
     );
   });
 
@@ -104,9 +96,7 @@ describe("splitSourcePath", () => {
       `../node_modules/myPackage/myFile.js`
     );
     expect(moduleName).toBe("myPackage");
-    expect(osSpecificPath(modulePath)).toBe(
-      osSpecificPath(`${absolutePathRoot}src/node_modules/myPackage`)
-    );
+    expect(modulePath).toBe(`${absolutePathRoot}src/node_modules/myPackage`);
   });
 
   test("relativePathsWithDotDotColldingOnNames", () => {
@@ -116,7 +106,7 @@ describe("splitSourcePath", () => {
     );
     expect(moduleName).toBe("myPackage");
     expect(modulePath).toBe(
-      osSpecificPath(`${absolutePathRoot}src/other/node_modules/myPackage`)
+      `${absolutePathRoot}src/other/node_modules/myPackage`
     );
   });
 });

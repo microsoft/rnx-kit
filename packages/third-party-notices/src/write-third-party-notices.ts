@@ -13,7 +13,7 @@ import type {
   WriteThirdPartyNoticesOptions,
 } from "./types";
 
-const modulesRoot = "node_modules";
+const modulesRoot = "node_modules/";
 
 /**
  * Function to write third party notices based on the specified source map.
@@ -128,15 +128,13 @@ export function splitSourcePath(rootPath: string, p: string): string[] {
     p = p.substring(DELEGATED_PREFIX.length);
   }
 
-  const absolutePath = path.resolve(rootPath, p);
+  const absolutePath = path.resolve(rootPath, p).replace(/[\\]+/g, "/");
   const idx = absolutePath.lastIndexOf(modulesRoot);
   if (idx == null || idx < 0) {
     throw new Error(`Unexpected module: ${p}`);
   }
 
-  const ref = parseModuleRef(
-    absolutePath.substring(idx + modulesRoot.length + 1)
-  );
+  const ref = parseModuleRef(absolutePath.substring(idx + modulesRoot.length));
   if (!isPackageModuleRef(ref)) {
     throw new Error(`Could not parse module: ${p}`);
   }

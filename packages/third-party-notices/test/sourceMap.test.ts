@@ -3,7 +3,7 @@ import {
   extractModuleNameToPathMap,
   parseSourceMap,
 } from "../src/write-third-party-notices";
-import { absolutePathRoot, osSpecificPath } from "./pathHelper";
+import { absolutePathRoot } from "./pathHelper";
 
 jest.mock("fs");
 
@@ -26,12 +26,10 @@ describe("parseModule", () => {
 
     expect(map.size).toBe(2);
     expect(map.get("myPackage")).toBe(
-      osSpecificPath(`${absolutePathRoot}src/node_modules/myPackage`)
+      `${absolutePathRoot}src/node_modules/myPackage`
     );
     expect(map.get("@scope/myOtherPackage")).toBe(
-      osSpecificPath(
-        `${absolutePathRoot}src/node_modules/@scope/myOtherPackage`
-      )
+      `${absolutePathRoot}src/node_modules/@scope/myOtherPackage`
     );
   });
 
@@ -64,20 +62,16 @@ describe("parseModule", () => {
 
     expect(map.size).toBe(4);
     expect(map.get("myPackage")).toBe(
-      osSpecificPath(`${absolutePathRoot}src/node_modules/myPackage`)
+      `${absolutePathRoot}src/node_modules/myPackage`
     );
     expect(map.get("myPackage2")).toBe(
-      osSpecificPath(`${absolutePathRoot}src/node_modules/myPackage2`)
+      `${absolutePathRoot}src/node_modules/myPackage2`
     );
     expect(map.get("@scope/myOtherPackage")).toBe(
-      osSpecificPath(
-        `${absolutePathRoot}src/node_modules/@scope/myOtherPackage`
-      )
+      `${absolutePathRoot}src/node_modules/@scope/myOtherPackage`
     );
     expect(map.get("@scope2/myOtherPackage")).toBe(
-      osSpecificPath(
-        `${absolutePathRoot}src/node_modules/@scope2/myOtherPackage`
-      )
+      `${absolutePathRoot}src/node_modules/@scope2/myOtherPackage`
     );
   });
 });
