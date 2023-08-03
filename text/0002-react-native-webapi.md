@@ -1,4 +1,4 @@
-- Title: react-native-standard-api
+- Title: react-native-webapi
 - Date: 2023-07-04
 - RFC PR: https://github.com/microsoft/rnx-kit/pull/2504
 - rnx-kit Issue: N/A
@@ -53,8 +53,8 @@ Our goal is not to reimplement a browser, e.g.
 a full browser with everything that entails, including modules that they may
 never get used. Native apps, and mobile apps especially, cannot be shipped with
 unused bits; nor does it make any sense to include MBs of dependencies that are
-never used. Ideally, migrating from community modules to the standard API should
-not increase the final app size (at least not significantly).
+never used. Ideally, migrating from community modules to the WebAPI should not
+increase the final app size (at least not significantly).
 
 The API we envision are implemented in the following layers:
 
@@ -89,9 +89,9 @@ graph TD;
 ### Modularity
 
 We want to avoid introducing unused modules and adding unnecessary bloat to the
-app bundle. The standard API must therefore be broken down into smaller modules
-that can be installed separately. These modules are installed by autolinking,
-and must therefore be explicitly added to an app's `package.json`.
+app bundle. The WebAPIs must therefore be broken down into smaller modules that
+can be installed separately. These modules are installed by autolinking, and
+must therefore be explicitly added to an app's `package.json`.
 
 For example, if you want to use `BatteryManager` you should not need to import
 the whole `react-native-webapis` module, but only the dedicated
