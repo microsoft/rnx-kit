@@ -1,4 +1,4 @@
-- Title: react-native-webapi
+- Title: react-native-webapis
 - Date: 2023-07-04
 - RFC PR: https://github.com/microsoft/rnx-kit/pull/2504
 - rnx-kit Issue: N/A
