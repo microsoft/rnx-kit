@@ -3776,8 +3776,6 @@ __metadata:
     react-native: ^0.71.0
     semver: ^7.0.0
     typescript: ^5.0.0
-  peerDependencies:
-    metro: ">=0.66.1"
   languageName: unknown
   linkType: soft
 
@@ -3794,8 +3792,6 @@ __metadata:
     prettier: ^3.0.0
     semver: ^7.0.0
     typescript: ^5.0.0
-  peerDependencies:
-    metro: ">=0.58.0"
   languageName: unknown
   linkType: soft
 

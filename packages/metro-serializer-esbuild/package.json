@@ -29,9 +29,6 @@
     "fast-glob": "^3.2.7",
     "semver": "^7.0.0"
   },
-  "peerDependencies": {
-    "metro": ">=0.66.1"
-  },
   "devDependencies": {
     "@babel/core": "^7.1.6",
     "@babel/preset-env": "^7.1.6",
