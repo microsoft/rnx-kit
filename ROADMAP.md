@@ -379,7 +379,7 @@ Based on all the above, this is our vision for a better future:
         <a href="https://developer.mozilla.org/en-US/docs/Web/API">Web APIs</a>
         as detailed in the
         <a href="https://github.com/microsoft/rnx-kit/pull/2504"
-          >React Native WebAPI implementation RFC</a
+          >React Native WebAPIs RFC</a
         >.
       </td>
     </tr>
