@@ -1,9 +1,9 @@
 {
   "private": true,
-  "name": "@rnx-kit/standard-api",
+  "name": "@react-native-webapis/types",
   "version": "0.0.1",
-  "description": "EXPERIMENTAL - USE WITH CAUTION - New package called standard-api",
-  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/incubator/standard-api#readme",
+  "description": "EXPERIMENTAL - USE WITH CAUTION - New package called @react-native-webapis/types",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/incubator/@react-native-webapis/types#readme",
   "license": "MIT",
   "author": {
     "name": "Microsoft Open Source",
@@ -17,7 +17,7 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/microsoft/rnx-kit",
-    "directory": "incubator/standard-api"
+    "directory": "incubator/@react-native-webapis/types"
   },
   "engines": {
     "node": ">=14.15"
