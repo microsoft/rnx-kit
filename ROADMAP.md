@@ -455,7 +455,7 @@ This input will help us continue refining `rnx-kit` to best meet our goals.
 [React DOM For Native RFC]:
   https://github.com/react-native-community/discussions-and-proposals/pull/496
 [React Native Directory]: https://reactnative.directory/
-[React Native WebAPI implementation]:
+[React Native WebAPIs]:
   https://github.com/microsoft/rnx-kit/pull/2504
 [Tophat]: https://shopify.engineering/shopify-tophat-mobile-developer-testing
 [list of tools]: https://microsoft.github.io/rnx-kit/docs/tools/overview
