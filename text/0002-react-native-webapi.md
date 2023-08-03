@@ -89,9 +89,9 @@ graph TD;
 ### Modularity
 
 We want to avoid introducing unused modules and adding unnecessary bloat to the
-app bundle. The WebAPIs must therefore be broken down into smaller modules that
-can be installed separately. These modules are installed by autolinking, and
-must therefore be explicitly added to an app's `package.json`.
+app bundle. WebAPIs must therefore be broken down into smaller modules that can
+be installed separately. These modules are installed by autolinking, and must
+therefore be explicitly added to an app's `package.json`.
 
 For example, if you want to use `BatteryManager` you should not need to import
 the whole `react-native-webapis` module, but only the dedicated
