@@ -164,7 +164,7 @@ dependencies they need to add. At minimum we should:
 - A variation of the current proposal without polyfills was considered, but it
   would require users to change web code to accommodate native. For instance,
   `navigator.getBattery()` would have to be rewritten as
-  `require("@react-native-api/battery-manager").getBattery()`.
+  `require("@react-native-webapis/battery-manager").getBattery()`.
 - There are many polyfills out there, but they are mostly used to provide
   functionalities that are only present in newer ES standards (e.g.
   [`Object.assign`][], [`Object.is`][]). We have not found any that address the
