@@ -3180,6 +3180,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@react-native-webapis/types@workspace:incubator/@react-native-webapis/types":
+  version: 0.0.0-use.local
+  resolution: "@react-native-webapis/types@workspace:incubator/@react-native-webapis/types"
+  dependencies:
+    "@rnx-kit/scripts": "*"
+    eslint: ^8.0.0
+    got: ^13.0.0
+    prettier: ^3.0.0
+    typescript: ^5.0.0
+  languageName: unknown
+  linkType: soft
+
 "@react-native-windows/cli@npm:0.71.14":
   version: 0.71.14
   resolution: "@react-native-windows/cli@npm:0.71.14"
@@ -3974,18 +3986,6 @@ __metadata:
     yargs: ^16.0.0
   bin:
     rnx-kit-scripts: src/index.mjs
-  languageName: unknown
-  linkType: soft
-
-"@rnx-kit/standard-api@workspace:incubator/standard-api":
-  version: 0.0.0-use.local
-  resolution: "@rnx-kit/standard-api@workspace:incubator/standard-api"
-  dependencies:
-    "@rnx-kit/scripts": "*"
-    eslint: ^8.0.0
-    got: ^13.0.0
-    prettier: ^3.0.0
-    typescript: ^5.0.0
   languageName: unknown
   linkType: soft
 

@@ -80,7 +80,7 @@
   "workspaces": {
     "packages": [
       "incubator/*",
-      "packages/@types/*",
+      "incubator/@react-native-webapis/*",
       "packages/*",
       "scripts"
     ]
