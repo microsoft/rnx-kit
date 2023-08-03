@@ -189,7 +189,7 @@ developers, whether they are working on a library or a standalone app.
 >   and local tooling to allow seamless local testing of PR builds (iOS and
 >   Android only).
 
-### React Native Standard APIs
+### React Native Web APIs
 
 The piece of the browser puzzle missing from the above section is a standard
 API. Today, web developers can reach out to Web APIs and assume that their app
@@ -205,7 +205,7 @@ cannot provide a complete downloadable app for development without this.
 
 > **Note**
 >
-> - The RFC for this effort is here: [React Native Standard APIs RFC][]
+> - The RFC for this effort is here: [React Native WebAPI implementation][]
 > - This section only relates to the Web APIs. For the DOM counterpart of this
 >   web convergence effort, please refer to the [React DOM For Native RFC][].
 
@@ -379,7 +379,7 @@ Based on all the above, this is our vision for a better future:
         <a href="https://developer.mozilla.org/en-US/docs/Web/API">Web APIs</a>
         as detailed in the
         <a href="https://github.com/microsoft/rnx-kit/pull/2504"
-          >React Native Standard APIs RFC</a
+          >React Native WebAPI implementation RFC</a
         >.
       </td>
     </tr>
@@ -455,7 +455,8 @@ This input will help us continue refining `rnx-kit` to best meet our goals.
 [React DOM For Native RFC]:
   https://github.com/react-native-community/discussions-and-proposals/pull/496
 [React Native Directory]: https://reactnative.directory/
-[React Native Standard APIs RFC]: https://github.com/microsoft/rnx-kit/pull/2504
+[React Native WebAPI implementation]:
+  https://github.com/microsoft/rnx-kit/pull/2504
 [Tophat]: https://shopify.engineering/shopify-tophat-mobile-developer-testing
 [list of tools]: https://microsoft.github.io/rnx-kit/docs/tools/overview
 [standard APIs]: https://developer.mozilla.org/en-US/docs/Web/API
