@@ -53,7 +53,7 @@ Our goal is not to reimplement a browser, e.g.
 a full browser with everything that entails, including modules that they may
 never get used. Native apps, and mobile apps especially, cannot be shipped with
 unused bits; nor does it make any sense to include MBs of dependencies that are
-never used. Ideally, migrating from community modules to the WebAPIs should not
+never used. Ideally, migrating from community modules to WebAPIs should not
 increase the final app size (at least not significantly).
 
 The API we envision are implemented in the following layers:
