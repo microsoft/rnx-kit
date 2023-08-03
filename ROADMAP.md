@@ -189,7 +189,7 @@ developers, whether they are working on a library or a standalone app.
 >   and local tooling to allow seamless local testing of PR builds (iOS and
 >   Android only).
 
-### React Native Web APIs
+### React Native WebAPIs
 
 The piece of the browser puzzle missing from the above section is a standard
 API. Today, web developers can reach out to Web APIs and assume that their app
