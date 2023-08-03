@@ -205,7 +205,7 @@ cannot provide a complete downloadable app for development without this.
 
 > **Note**
 >
-> - The RFC for this effort is here: [React Native WebAPI implementation][]
+> - The RFC for this effort is here: [React Native WebAPIs][]
 > - This section only relates to the Web APIs. For the DOM counterpart of this
 >   web convergence effort, please refer to the [React DOM For Native RFC][].
 
