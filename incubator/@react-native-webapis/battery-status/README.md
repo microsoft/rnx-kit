@@ -1,0 +1,92 @@
+# @react-native-webapis/battery-status
+
+[![Build](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml/badge.svg)](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml)
+[![npm version](https://img.shields.io/npm/v/@react-native-webapis/battery-status)](https://www.npmjs.com/package/@react-native-webapis/battery-status)
+
+🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧
+
+### THIS TOOL IS EXPERIMENTAL — USE WITH CAUTION
+
+🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧
+
+[Battery Status API](https://developer.mozilla.org/en-US/docs/Web/API/Battery_Status_API)
+for React Native.
+
+## Motivation
+
+This is a prototype for the [React Native WebAPIs RFC](https://github.com/microsoft/rnx-kit/pull/2504)
+
+## Installation
+
+```sh
+yarn add @rnx-kit/polyfills --dev
+yarn add @react-native-webapis/battery-status
+```
+
+or if you're using npm
+
+```sh
+npm add --save-dev @rnx-kit/polyfills
+npm add @react-native-webapis/battery-status
+```
+
+## Usage
+
+```diff
+diff --git a/packages/test-app/metro.config.js b/packages/test-app/metro.config.js
+index 7c0dcfc2..df0f8b0d 100644
+--- a/packages/test-app/metro.config.js
++++ b/packages/test-app/metro.config.js
+@@ -33,4 +33,7 @@ module.exports = makeMetroConfig({
+     blacklistRE: blockList,
+     blockList,
+   },
++  serializer: {
++    getModulesRunBeforeMainModule: require("@rnx-kit/polyfills").default,
++  },
+ });
+diff --git a/packages/test-app/src/App.native.tsx b/packages/test-app/src/App.native.tsx
+index 599634a9..b465f0fe 100644
+--- a/packages/test-app/src/App.native.tsx
++++ b/packages/test-app/src/App.native.tsx
+@@ -1,3 +1,5 @@
++// Temporary until we figure out how to magically inject WebAPIs
++import "@react-native-webapis/battery-status";
+ import { acquireTokenWithScopes } from "@rnx-kit/react-native-auth";
+ // Both `internal` imports are used to verify that `metro-resolver-symlinks`
+ // resolves them correctly when `experimental_retryResolvingFromDisk` is
+@@ -7,7 +9,7 @@ import {
+   getRemoteDebuggingAvailability,
+ } from "internal";
+ import { getHermesVersion } from "internal/hermes";
+-import React, { useCallback, useMemo, useState } from "react";
++import React, { useCallback, useEffect, useMemo, useState } from "react";
+ import type { LayoutChangeEvent } from "react-native";
+ import {
+   NativeModules,
+@@ -186,6 +188,14 @@ function App({ concurrentRoot }: { concurrentRoot?: boolean }) {
+     [setFabric]
+   );
+
++  const [batteryLevel, setBatteryLevel] = useState(-1);
++  useEffect(() => {
++    // @ts-expect-error FIXME
++    global.navigator.getBattery().then((status) => {
++      setBatteryLevel(status.level);
++    });
++  }, []);
++
+   return (
+     <SafeAreaView style={styles.body}>
+       <StatusBar barStyle={isDarkMode ? "light-content" : "dark-content"} />
+@@ -195,6 +205,9 @@ function App({ concurrentRoot }: { concurrentRoot?: boolean }) {
+         style={styles.body}
+       >
+         <Header />
++        <View style={styles.group}>
++          <Feature value={batteryLevel.toFixed(2)}>Battery Level</Feature>
++        </View>
+         <View style={styles.group}>
+           <Button onPress={startAcquireToken}>Acquire Token</Button>
+         </View>
+```
