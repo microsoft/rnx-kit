@@ -7,7 +7,7 @@ import { fileURLToPath } from "node:url";
 import yargs from "yargs";
 
 const EXPERIMENTAL_BANNER =
-  "🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧\n### THIS TOOL IS EXPERIMENTAL — USE WITH CAUTION\n🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧";
+  "🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧\n\n### THIS TOOL IS EXPERIMENTAL — USE WITH CAUTION\n\n🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧";
 const USAGE_TOKEN_START = "<!-- usage start -->";
 const USAGE_TOKEN_END = "<!-- usage end -->";
 const WARNING_BANNER_TOKEN = "<!-- experimental-warning -->";

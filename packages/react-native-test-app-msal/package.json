@@ -15,8 +15,8 @@
   },
   "scripts": {
     "format:c": "clang-format -i $(git ls-files '*.h' '*.m')",
-    "format:swift": "swiftformat --swiftversion 5.5 ios",
-    "lint:kt": "ktlint --relative --verbose 'android/src/**/*.kt'",
+    "format:swift": "swiftformat ios",
+    "lint:kt": "ktlint --relative 'android/src/**/*.kt'",
     "lint:swift": "swiftlint"
   },
   "peerDependencies": {

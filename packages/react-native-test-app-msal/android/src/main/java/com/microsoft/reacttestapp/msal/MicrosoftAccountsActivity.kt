@@ -122,7 +122,8 @@ class MicrosoftAccountsActivity : AppCompatActivity() {
                 val userPrincipalName = sharedPreferences.getString(USERNAME_KEY, null)
                 val accountType = sharedPreferences.getString(ACCOUNT_TYPE_KEY, null)
                 val selectedAccount = allAccounts.find {
-                    it.userPrincipalName == userPrincipalName && it.accountType.toString() == accountType
+                    it.userPrincipalName == userPrincipalName &&
+                        it.accountType.toString() == accountType
                 }
                 tokenBroker.selectedAccount = selectedAccount
                 viewModel.selectedAccount.postValue(selectedAccount)

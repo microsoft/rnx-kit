@@ -26,7 +26,7 @@
     "format": "rnx-kit-scripts format",
     "format:c": "clang-format -i $(git ls-files '*.c' '*.cpp' '*.h' '*.m' '*.mm')",
     "lint": "rnx-kit-scripts lint",
-    "lint:kt": "ktlint --relative --verbose 'android/src/**/*.kt'",
+    "lint:kt": "ktlint --relative 'android/src/**/*.kt'",
     "update-readme": "rnx-kit-scripts update-api-readme"
   },
   "peerDependencies": {

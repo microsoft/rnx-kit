@@ -16,7 +16,7 @@ public final class AuthError: NSObject {
 
 extension AuthError {
     convenience init(error: NSError?) {
-        if let error = error {
+        if let error {
             let correlationID = error.userInfo[MSALCorrelationIDKey] as? String
             let message = error.userInfo[MSALErrorDescriptionKey] as? String
             self.init(

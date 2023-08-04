@@ -20,7 +20,7 @@ class ReactNativeAuthMSALModule(context: ReactApplicationContext?) :
         accountType: RnxAccountType,
         onTokenAcquired: OnTokenAcquired
     ) {
-      onTokenAcquired(null, RnxAuthError.notImplemented())
+        onTokenAcquired(null, RnxAuthError.notImplemented())
     }
 
     override fun acquireTokenWithScopes(
@@ -64,7 +64,8 @@ fun AuthErrorType.toRnxAuthErrorType(): RnxAuthErrorType = when (this) {
     AuthErrorType.NO_RESPONSE -> RnxAuthErrorType.NO_RESPONSE
     AuthErrorType.PRECONDITION_VIOLATED -> RnxAuthErrorType.PRECONDITION_VIOLATED
     AuthErrorType.SERVER_DECLINED_SCOPES -> RnxAuthErrorType.SERVER_DECLINED_SCOPES
-    AuthErrorType.SERVER_PROTECTION_POLICIES_REQUIRED -> RnxAuthErrorType.SERVER_PROTECTION_POLICIES_REQUIRED
+    AuthErrorType.SERVER_PROTECTION_POLICIES_REQUIRED ->
+        RnxAuthErrorType.SERVER_PROTECTION_POLICIES_REQUIRED
     AuthErrorType.TIMEOUT -> RnxAuthErrorType.TIMEOUT
     AuthErrorType.USER_CANCELED -> RnxAuthErrorType.USER_CANCELED
     AuthErrorType.WORKPLACE_JOIN_REQUIRED -> RnxAuthErrorType.WORKPLACE_JOIN_REQUIRED

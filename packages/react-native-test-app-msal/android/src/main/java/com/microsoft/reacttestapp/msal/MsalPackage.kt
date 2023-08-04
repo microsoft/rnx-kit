@@ -12,17 +12,19 @@ class MsalPackage : TurboReactPackage() {
 
         return when (name) {
             info.name() -> ReactNativeAuthModuleProvider.create(reactContext)
-                ?: throw IllegalStateException("ReactNativeAuthModuleProvider.create() wasn't supposed to return null")
+                ?: throw IllegalStateException(
+                    "ReactNativeAuthModuleProvider.create() wasn't supposed to return null"
+                )
             else -> throw IllegalArgumentException("No module named '$name'")
         }
     }
 
-    override fun getReactModuleInfoProvider(): ReactModuleInfoProvider =
-        ReactModuleInfoProvider {
-            val info = ReactNativeAuthModuleProvider.info()
-            if (info == null)
-                mapOf()
-            else
-                mapOf(info.name() to info).toMutableMap()
+    override fun getReactModuleInfoProvider(): ReactModuleInfoProvider = ReactModuleInfoProvider {
+        val info = ReactNativeAuthModuleProvider.info()
+        if (info == null) {
+            mapOf()
+        } else {
+            mapOf(info.name() to info).toMutableMap()
         }
+    }
 }
