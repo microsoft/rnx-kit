@@ -124,7 +124,8 @@ function getDefaultConfigInternal(cliConfig: CLIConfig): InputConfigT {
           require.resolve(
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             `${cliConfig.platforms[platform]
-              .npmPackageName!}/Libraries/Core/InitializeCore`
+              .npmPackageName!}/Libraries/Core/InitializeCore`,
+            { paths: [cliConfig.root] }
           )
         ),
       ],
