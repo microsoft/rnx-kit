@@ -3812,6 +3812,7 @@ __metadata:
   resolution: "@rnx-kit/metro-service@workspace:packages/metro-service"
   dependencies:
     "@react-native-community/cli-types": ^10.0.0
+    "@rnx-kit/console": ^1.0.0
     "@rnx-kit/scripts": "*"
     "@rnx-kit/tools-language": ^2.0.0
     "@types/metro": ^0.76.0

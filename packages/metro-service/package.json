@@ -24,6 +24,7 @@
     "node": ">=12.13"
   },
   "dependencies": {
+    "@rnx-kit/console": "^1.0.0",
     "@rnx-kit/tools-language": "^2.0.0",
     "chalk": "^4.1.0"
   },
