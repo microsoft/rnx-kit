@@ -1,12 +1,8 @@
 import type { WriteThirdPartyNoticesOptions } from "../src/types";
 import { parseModule } from "../src/write-third-party-notices";
-import { absolutePathRoot, osSpecificPath } from "./pathHelper";
+import { absolutePathRoot } from "./pathHelper";
 
 jest.mock("fs");
-
-require("fs").existsSync = jest.fn().mockImplementation((path) => {
-  return path.indexOf("missing") == -1;
-});
 
 const options: WriteThirdPartyNoticesOptions = {
   rootPath: `${absolutePathRoot}src`,
@@ -27,7 +23,7 @@ describe("parseModule", () => {
 
     expect(map.size).toBe(1);
     expect(map.get("myPackage")).toBe(
-      osSpecificPath(`${absolutePathRoot}src\\node_modules\\myPackage`)
+      `${absolutePathRoot}src/node_modules/myPackage`
     );
   });
 
@@ -37,9 +33,7 @@ describe("parseModule", () => {
 
     expect(map.size).toBe(1);
     expect(map.get("@myScope/myPackage")).toBe(
-      osSpecificPath(
-        `${absolutePathRoot}src\\node_modules\\@myScope\\myPackage`
-      )
+      `${absolutePathRoot}src/node_modules/@myScope/myPackage`
     );
   });
 
@@ -67,9 +61,7 @@ describe("parseModule", () => {
 
     expect(map.size).toBe(1);
     expect(map.get("@scope/ignoredModule")).toBe(
-      osSpecificPath(
-        `${absolutePathRoot}src\\node_modules\\@scope\\ignoredModule`
-      )
+      `${absolutePathRoot}src/node_modules/@scope/ignoredModule`
     );
   });
 
@@ -94,9 +86,7 @@ describe("parseModule", () => {
 
     expect(map.size).toBe(1);
     expect(map.get("@ignoredScopeYetNot/myPackage")).toBe(
-      osSpecificPath(
-        `${absolutePathRoot}src\\node_modules\\@ignoredScopeYetNot\\myPackage`
-      )
+      `${absolutePathRoot}src/node_modules/@ignoredScopeYetNot/myPackage`
     );
   });
 });
