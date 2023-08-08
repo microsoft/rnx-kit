@@ -5,14 +5,14 @@ import chalk from "chalk";
 import fs from "fs";
 import type { ConfigT } from "metro-config";
 import type { BundleOptions, OutputOptions } from "metro/shared/types";
-import type {AssetData} from 'metro';
+import type { AssetData } from "metro";
 import Server from "metro/src/Server";
 import Bundle from "metro/src/shared/output/bundle";
 import path from "path";
 import { saveAssets } from "./asset";
-import { saveAssetsAndroid } from './asset/android';
-import { saveAssetsDefault } from './asset/default';
-import { saveAssetsIOS } from './asset/ios';
+import { saveAssetsAndroid } from "./asset/android";
+import { saveAssetsDefault } from "./asset/default";
+import { saveAssetsIOS } from "./asset/ios";
 import { ensureBabelConfig } from "./babel";
 
 export type BundleArgs = {
@@ -53,24 +53,32 @@ type SaveAssetsPlugin = (
   addAssetToCopy: (
     asset: AssetData,
     allowedScales: number[] | undefined,
-    getAssetDestPath: (asset: AssetData, scale: number) => string,
-  ) => void,
+    getAssetDestPath: (asset: AssetData, scale: number) => string
+  ) => void
 ) => void;
 
-  // Eventually this will be part of the rn config, but we require it on older rn versions for win32 and the cli doesn't allow extra config properties.
-  // See https://github.com/react-native-community/cli/pull/2002
-function getSaveAssetsPlugin(platform: string, projectRoot: string): SaveAssetsPlugin {
+// Eventually this will be part of the rn config, but we require it on older rn versions for win32 and the cli doesn't allow extra config properties.
+// See https://github.com/react-native-community/cli/pull/2002
+function getSaveAssetsPlugin(
+  platform: string,
+  projectRoot: string
+): SaveAssetsPlugin {
   try {
-    if (platform === 'win32') {
-      const saveAssetsPlugin = require.resolve('@office-iss/react-native-win32/saveAssetPlugin', {paths: [projectRoot]});
+    if (platform === "win32") {
+      const saveAssetsPlugin = require.resolve(
+        "@office-iss/react-native-win32/saveAssetPlugin",
+        { paths: [projectRoot] }
+      );
       return require(saveAssetsPlugin);
     }
-  } catch (_) { /* empty */ }
-  return platform === 'ios'
-  ? saveAssetsIOS
-  : platform === 'android'
-  ? saveAssetsAndroid
-  : saveAssetsDefault;
+  } catch (_) {
+    /* empty */
+  }
+  return platform === "ios"
+    ? saveAssetsIOS
+    : platform === "android"
+    ? saveAssetsAndroid
+    : saveAssetsDefault;
 }
 
 export async function bundle(
@@ -81,7 +89,10 @@ export async function bundle(
   // ensure Metro can find Babel config
   ensureBabelConfig(config);
 
-  const saveAssetsPlugin = getSaveAssetsPlugin(args.platform, config.projectRoot);
+  const saveAssetsPlugin = getSaveAssetsPlugin(
+    args.platform,
+    config.projectRoot
+  );
 
   if (config.resolver.platforms.indexOf(args.platform) === -1) {
     error(

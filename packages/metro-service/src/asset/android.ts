@@ -3,7 +3,7 @@
 import * as path from "path";
 import { getResourceIdentifier } from "./assetPathUtils";
 import type { PackagerAsset } from "./types";
-import type {AssetData} from 'metro';
+import type { AssetData } from "metro";
 
 export function getAndroidAssetSuffix(scale: number): string {
   const tolerance = 0.01;
@@ -62,10 +62,10 @@ export function saveAssetsAndroid(
   addAssetToCopy: (
     asset: AssetData,
     allowedScales: number[] | undefined,
-    getAssetDestPath: (asset: AssetData, scale: number) => string,
-  ) => void,
+    getAssetDestPath: (asset: AssetData, scale: number) => string
+  ) => void
 ) {
   assets.forEach((asset) =>
-    addAssetToCopy(asset, undefined, getAssetDestPathAndroid),
+    addAssetToCopy(asset, undefined, getAssetDestPathAndroid)
   );
 }

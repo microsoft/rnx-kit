@@ -7,13 +7,10 @@
  */
 
 import path from "path";
-import type {AssetData} from 'metro';
+import type { AssetData } from "metro";
 import type { PackagerAsset } from "./types";
 
-export function getAssetDestPath(
-  asset: PackagerAsset,
-  scale: number
-): string {
+export function getAssetDestPath(asset: PackagerAsset, scale: number): string {
   const suffix = scale === 1 ? "" : `@${scale}x`;
   const fileName = `${asset.name + suffix}.${asset.type}`;
   return path.join(
@@ -33,9 +30,8 @@ export function saveAssetsDefault(
   addAssetToCopy: (
     asset: AssetData,
     allowedScales: number[] | undefined,
-    getAssetDestPath: (asset: AssetData, scale: number) => string,
-  ) => void,
+    getAssetDestPath: (asset: AssetData, scale: number) => string
+  ) => void
 ) {
   assets.forEach((asset) => addAssetToCopy(asset, undefined, getAssetDestPath));
 }
-

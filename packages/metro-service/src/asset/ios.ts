@@ -6,8 +6,8 @@ import type { AssetData } from "metro";
 import { error, info } from "@rnx-kit/console";
 import path from "path";
 import { getResourceIdentifier } from "./assetPathUtils";
-import { filterPlatformAssetScales } from './filter';
-import { getAssetDestPath } from './default';
+import { filterPlatformAssetScales } from "./filter";
+import { getAssetDestPath } from "./default";
 
 type ImageSet = {
   basePath: string;
@@ -80,38 +80,38 @@ export function saveAssetsIOS(
   addAssetToCopy: (
     asset: AssetData,
     allowedScales: number[] | undefined,
-    getAssetDestPath: (asset: AssetData, scale: number) => string,
-  ) => void,
+    getAssetDestPath: (asset: AssetData, scale: number) => string
+  ) => void
 ) {
   if (assetCatalogDest != null) {
     // Use iOS Asset Catalog for images. This will allow Apple app thinning to
     // remove unused scales from the optimized bundle.
-    const catalogDir = path.join(assetCatalogDest, 'RNAssets.xcassets');
+    const catalogDir = path.join(assetCatalogDest, "RNAssets.xcassets");
     if (!fs.existsSync(catalogDir)) {
       error(
-        `Could not find asset catalog 'RNAssets.xcassets' in ${assetCatalogDest}. Make sure to create it if it does not exist.`,
+        `Could not find asset catalog 'RNAssets.xcassets' in ${assetCatalogDest}. Make sure to create it if it does not exist.`
       );
       return;
     }
 
-    info('Adding images to asset catalog', catalogDir);
+    info("Adding images to asset catalog", catalogDir);
     cleanAssetCatalog(catalogDir);
     for (const asset of assets) {
       if (isCatalogAsset(asset)) {
         const imageSet = getImageSet(
           catalogDir,
           asset,
-          filterPlatformAssetScales(ALLOWED_SCALES, asset.scales),
+          filterPlatformAssetScales(ALLOWED_SCALES, asset.scales)
         );
         writeImageSet(imageSet);
       } else {
         addAssetToCopy(asset, ALLOWED_SCALES, getAssetDestPath);
       }
     }
-    info('Done adding images to asset catalog');
+    info("Done adding images to asset catalog");
   } else {
     assets.forEach((asset) =>
-      addAssetToCopy(asset, ALLOWED_SCALES, getAssetDestPath),
+      addAssetToCopy(asset, ALLOWED_SCALES, getAssetDestPath)
     );
   }
 }

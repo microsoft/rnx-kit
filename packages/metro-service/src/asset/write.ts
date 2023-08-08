@@ -63,9 +63,9 @@ export async function saveAssets(
     addAssetToCopy: (
       asset: AssetData,
       allowedScales: number[] | undefined,
-      getAssetDestPath: (asset: AssetData, scale: number) => string,
-    ) => void,
-  ) => void,
+      getAssetDestPath: (asset: AssetData, scale: number) => string
+    ) => void
+  ) => void
 ): Promise<void> {
   if (!assetsDest) {
     warn("Assets destination folder is not set, skipping...");
@@ -74,23 +74,23 @@ export async function saveAssets(
 
   const filesToCopy: Record<string, string> = Object.create(null); // Map src -> dest
 
-    const addAssetToCopy = (
-      asset: AssetData,
-      allowedScales: number[] | undefined,
-      getAssetDestPath: (asset: AssetData, scale: number) => string,
-    ) => {
-      const validScales = new Set(
-        filterPlatformAssetScales(allowedScales, asset.scales),
-        );
+  const addAssetToCopy = (
+    asset: AssetData,
+    allowedScales: number[] | undefined,
+    getAssetDestPath: (asset: AssetData, scale: number) => string
+  ) => {
+    const validScales = new Set(
+      filterPlatformAssetScales(allowedScales, asset.scales)
+    );
 
-        asset.scales.forEach((scale: number, idx: number) => {
-          if (!validScales.has(scale)) {
-            return;
-          }
-          const src = asset.files[idx];
-          const dest = path.join(assetsDest, getAssetDestPath(asset, scale));
-          filesToCopy[src] = dest;
-        });
+    asset.scales.forEach((scale: number, idx: number) => {
+      if (!validScales.has(scale)) {
+        return;
+      }
+      const src = asset.files[idx];
+      const dest = path.join(assetsDest, getAssetDestPath(asset, scale));
+      filesToCopy[src] = dest;
+    });
 
     asset.scales.forEach((scale, idx) => {
       if (!validScales.has(scale)) {
@@ -107,7 +107,7 @@ export async function saveAssets(
     platform,
     assetsDest,
     assetCatalogDest,
-    addAssetToCopy,
+    addAssetToCopy
   );
   return copyAll(filesToCopy);
 }
