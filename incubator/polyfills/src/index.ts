@@ -1,4 +1,3 @@
-import * as path from "path";
 import { getDependencyPolyfills } from "./dependency";
 import type { Context, GetPreludeModules } from "./types";
 
