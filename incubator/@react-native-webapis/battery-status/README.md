@@ -14,7 +14,8 @@ for React Native.
 
 ## Motivation
 
-This is a prototype for the [React Native WebAPIs RFC](https://github.com/microsoft/rnx-kit/pull/2504)
+This is a prototype for the
+[React Native WebAPIs RFC](https://github.com/microsoft/rnx-kit/pull/2504)
 
 ## Installation
 
