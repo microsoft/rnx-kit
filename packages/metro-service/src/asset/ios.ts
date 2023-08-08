@@ -3,9 +3,11 @@
 
 import fs from "fs";
 import type { AssetData } from "metro";
+import { error, info } from "@rnx-kit/console";
 import path from "path";
 import { getResourceIdentifier } from "./assetPathUtils";
-import type { PackagerAsset } from "./types";
+import { filterPlatformAssetScales } from './filter';
+import { getAssetDestPath } from './default';
 
 type ImageSet = {
   basePath: string;
@@ -68,17 +70,48 @@ export function writeImageSet(imageSet: ImageSet): void {
   );
 }
 
-export function getAssetDestPathIOS(
-  asset: PackagerAsset,
-  scale: number
-): string {
-  const suffix = scale === 1 ? "" : `@${scale}x`;
-  const fileName = `${asset.name + suffix}.${asset.type}`;
-  return path.join(
-    // Assets can have relative paths outside of the project root.
-    // Replace `../` with `_` to make sure they don't end up outside of
-    // the expected assets directory.
-    asset.httpServerLocation.substring(1).replace(/\.\.\//g, "_"),
-    fileName
-  );
+const ALLOWED_SCALES = [1, 2, 3];
+
+export function saveAssetsIOS(
+  assets: ReadonlyArray<AssetData>,
+  _platform: string,
+  _assetsDest: string | undefined,
+  assetCatalogDest: string | undefined,
+  addAssetToCopy: (
+    asset: AssetData,
+    allowedScales: number[] | undefined,
+    getAssetDestPath: (asset: AssetData, scale: number) => string,
+  ) => void,
+) {
+  if (assetCatalogDest != null) {
+    // Use iOS Asset Catalog for images. This will allow Apple app thinning to
+    // remove unused scales from the optimized bundle.
+    const catalogDir = path.join(assetCatalogDest, 'RNAssets.xcassets');
+    if (!fs.existsSync(catalogDir)) {
+      error(
+        `Could not find asset catalog 'RNAssets.xcassets' in ${assetCatalogDest}. Make sure to create it if it does not exist.`,
+      );
+      return;
+    }
+
+    info('Adding images to asset catalog', catalogDir);
+    cleanAssetCatalog(catalogDir);
+    for (const asset of assets) {
+      if (isCatalogAsset(asset)) {
+        const imageSet = getImageSet(
+          catalogDir,
+          asset,
+          filterPlatformAssetScales(ALLOWED_SCALES, asset.scales),
+        );
+        writeImageSet(imageSet);
+      } else {
+        addAssetToCopy(asset, ALLOWED_SCALES, getAssetDestPath);
+      }
+    }
+    info('Done adding images to asset catalog');
+  } else {
+    assets.forEach((asset) =>
+      addAssetToCopy(asset, ALLOWED_SCALES, getAssetDestPath),
+    );
+  }
 }

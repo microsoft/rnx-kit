@@ -1,14 +1,9 @@
 // https://github.com/react-native-community/cli/blob/716555851b442a83a1bf5e0db27b6226318c9a69/packages/cli-plugin-metro/src/commands/bundle/filterPlatformAssetScales.ts
 
-const ALLOWED_SCALES: { [key: string]: number[] } = {
-  ios: [1, 2, 3],
-};
-
 export function filterPlatformAssetScales(
-  platform: string,
+  allowlist: ReadonlyArray<number> | undefined,
   scales: readonly number[]
 ): readonly number[] {
-  const allowlist: number[] = ALLOWED_SCALES[platform];
   if (!allowlist) {
     return scales;
   }
