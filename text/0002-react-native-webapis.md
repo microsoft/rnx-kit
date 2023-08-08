@@ -93,9 +93,9 @@ app bundle. WebAPIs must therefore be broken down into smaller modules that can
 be installed separately. These modules are installed by autolinking, and must
 therefore be explicitly added to an app's `package.json`.
 
-For example, if you want to use `BatteryManager` you should not need to import
+For example, if you want to use `BatteryStatus` you should not need to import
 the whole `react-native-webapis` module, but only the dedicated
-`@react-native-webapis/battery-manager` submodule.
+`@react-native-webapis/battery-status` submodule.
 
 Additionally, we want to avoid requiring that users manually add polyfills for
 the modules they need. Instead, we propose that modules that implement a part of
@@ -112,7 +112,9 @@ module.exports = {
 };
 ```
 
-Polyfills are gathered and passed to Metro via [`serializer.getPolyfills`][].
+Polyfills are gathered and passed to Metro. Any dependency with a correctly
+declared polyfill will be included. They do not need to be under the
+`@react-native-webapis` scope or even live in the same repository.
 
 ### Infrastructure and repository setup
 
@@ -122,10 +124,10 @@ most likely approach will involve a monorepo (similar to
 [`rnx-kit`](https://github.com/microsoft/rnx-kit)) where each module will be its
 own dedicated package. For starters, we will suggest that implementations for
 "core" supported platforms (i.e. Android, iOS, macOS, Windows) be present in the
-one package — we won't have `/~/battery-manager-android` and
-`/~/battery-manager-ios`, only `/~/battery-manager`. However, it should still be
+one package — we won't have `/~/battery-status-android` and
+`/~/battery-status-ios`, only `/~/battery-status`. However, it should still be
 possible to have additional platform specific implementations, e.g.
-`/~/battery-manager-tvos`. These should also be treated as first class citizens
+`/~/battery-status-tvos`. These should also be treated as first class citizens
 and be recognized by all tooling.
 
 This should allow for different people to work on different modules at the same
@@ -164,7 +166,7 @@ dependencies they need to add. At minimum we should:
 - A variation of the current proposal without polyfills was considered, but it
   would require users to change web code to accommodate native. For instance,
   `navigator.getBattery()` would have to be rewritten as
-  `require("@react-native-webapis/battery-manager").getBattery()`.
+  `require("@react-native-webapis/battery-status").getBattery()`.
 - There are many polyfills out there, but they are mostly used to provide
   functionalities that are only present in newer ES standards (e.g.
   [`Object.assign`][], [`Object.is`][]). We have not found any that address the
@@ -201,13 +203,16 @@ We will be following the crawl-walk-run methodology:
 ## Unresolved questions
 
 - Which parts of the Web API do we prioritize first?
-  - As proof-of-concept, we suggest implementing
-    [`BatteryManager`](https://developer.mozilla.org/en-US/docs/Web/API/BatteryManager)
+  - As proof-of-concept, we've implemented the
+    [`Battery Status API`](https://developer.mozilla.org/en-US/docs/Web/API/Battery_Status_API)
     as it is small and self-contained.
-    - Android:
-      https://developer.android.com/training/monitoring-device-state/battery-monitoring
-    - iOS:
-      https://developer.apple.com/documentation/uikit/uidevice/1620051-batterystate
+    - https://github.com/microsoft/rnx-kit/pull/2590
+    - Note that we're currently using
+      [`serializer.getModulesRunBeforeMainModule`][] until something better
+      exists. It currently requires that listed modules are explicitly imported
+      in the bundle itself, which we do not want. We need something akin to
+      Webpack's [entry points](https://webpack.js.org/concepts/entry-points/).
+      More details here: https://github.com/facebook/metro/issues/850.
 
 <!-- References -->
 
@@ -215,7 +220,7 @@ We will be following the crawl-walk-run methodology:
   https://github.com/microsoft/rnx-kit/tree/main/packages/align-deps#readme
 [`Object.assign`]: https://github.com/ljharb/object.assign/blob/main/polyfill.js
 [`Object.is`]: https://github.com/es-shims/object-is/blob/main/polyfill.js
-[`serializer.getPolyfills`]:
+[`serializer.getModulesRunBeforeMainModule`]:
   https://github.com/facebook/react-native/blob/0.72-stable/packages/metro-config/index.js#L49
 [autolinking]:
   https://github.com/react-native-community/cli/blob/main/docs/autolinking.md
