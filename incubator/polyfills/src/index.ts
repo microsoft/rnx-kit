@@ -20,9 +20,9 @@ function defaultModules({ projectRoot }: Context): string[] {
 
   const modules = [];
   for (const platform of platforms) {
-    const p = path.join(platform, "Libraries", "Core", "InitializeCore");
+    const core = `${platform}/Libraries/Core/InitializeCore`;
     try {
-      modules.push(require.resolve(p, options));
+      modules.push(require.resolve(core, options));
     } catch (_) {
       // ignore
     }
