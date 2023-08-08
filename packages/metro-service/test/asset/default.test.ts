@@ -1,7 +1,7 @@
 import * as path from "path";
-import { getAssetDestPathIOS } from "../../src/asset/ios";
+import { getAssetDestPath } from "../../src/asset/default";
 
-describe("getAssetDestPathIOS", () => {
+describe("getAssetDestPath", () => {
   test("should build correct path", () => {
     const asset = {
       name: "icon",
@@ -9,7 +9,7 @@ describe("getAssetDestPathIOS", () => {
       httpServerLocation: "/assets/test",
     };
 
-    expect(getAssetDestPathIOS(asset, 1)).toBe(
+    expect(getAssetDestPath(asset, 1)).toBe(
       path.normalize("assets/test/icon.png")
     );
   });
@@ -21,10 +21,10 @@ describe("getAssetDestPathIOS", () => {
       httpServerLocation: "/assets/test",
     };
 
-    expect(getAssetDestPathIOS(asset, 2)).toBe(
+    expect(getAssetDestPath(asset, 2)).toBe(
       path.normalize("assets/test/icon@2x.png")
     );
-    expect(getAssetDestPathIOS(asset, 3)).toBe(
+    expect(getAssetDestPath(asset, 3)).toBe(
       path.normalize("assets/test/icon@3x.png")
     );
   });
@@ -36,7 +36,7 @@ describe("getAssetDestPathIOS", () => {
       httpServerLocation: "/assets/../../test",
     };
 
-    expect(getAssetDestPathIOS(asset, 1)).toBe(
+    expect(getAssetDestPath(asset, 1)).toBe(
       path.normalize("assets/__test/icon.png")
     );
   });
