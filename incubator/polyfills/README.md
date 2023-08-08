@@ -19,8 +19,11 @@ autolinking, but gathers polyfills from dependencies instead.
 
 ## Motivation
 
-This package is part of
-[React Native WebAPIs](https://github.com/microsoft/rnx-kit/pull/2504).
+Please read the
+[Modularity](https://github.com/microsoft/rnx-kit/blob/tido/react-native-standard-api/text/0002-react-native-webapis.md#modularity)
+section of the
+[React Native WebAPIs RFC](https://github.com/microsoft/rnx-kit/pull/2504) for
+its raison d'être.
 
 ## Installation
 
