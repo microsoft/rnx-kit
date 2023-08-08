@@ -1,8 +1,10 @@
+// https://github.com/react-native-community/cli/blob/716555851b442a83a1bf5e0db27b6226318c9a69/packages/cli-plugin-metro/src/commands/bundle/buildBundle.ts
+
+import { error, info } from "@rnx-kit/console";
 import chalk from "chalk";
-import type { AssetData } from "metro";
-import type { TransformProfile } from "metro-babel-transformer";
+import fs from "fs";
 import type { ConfigT } from "metro-config";
-import type { OutputOptions } from "metro/shared/types";
+import type { BundleOptions, OutputOptions } from "metro/shared/types";
 import Server from "metro/src/Server";
 import Bundle from "metro/src/shared/output/bundle";
 import path from "path";
@@ -11,16 +13,23 @@ import { ensureBabelConfig } from "./babel";
 
 export type BundleArgs = {
   assetsDest?: string;
+  assetCatalogDest?: string;
   entryFile: string;
+  resetCache?: boolean;
+  resetGlobalCache?: boolean;
+  transformer?: string;
   minify?: boolean;
+  config?: string;
   platform: string;
   dev: boolean;
   bundleOutput: string;
   bundleEncoding?: OutputOptions["bundleEncoding"];
+  maxWorkers?: number;
   sourcemapOutput?: string;
   sourcemapSourcesRoot?: string;
   sourcemapUseAbsolutePath: boolean;
-  unstableTransformProfile?: TransformProfile;
+  verbose?: boolean;
+  unstableTransformProfile?: BundleOptions["unstable_transformProfile"];
 };
 
 type RequestOptions = {
@@ -29,19 +38,8 @@ type RequestOptions = {
   dev: boolean;
   minify: boolean;
   platform: string;
-  unstable_transformProfile?: TransformProfile;
+  unstable_transformProfile?: BundleOptions["unstable_transformProfile"];
 };
-
-function getBundlerFromCliPlugin() {
-  try {
-    const {
-      buildBundleWithConfig,
-    } = require("@react-native-community/cli-plugin-metro");
-    return buildBundleWithConfig;
-  } catch (_) {
-    return undefined;
-  }
-}
 
 export async function bundle(
   args: BundleArgs,
@@ -51,19 +49,14 @@ export async function bundle(
   // ensure Metro can find Babel config
   ensureBabelConfig(config);
 
-  const buildBundleWithConfig = getBundlerFromCliPlugin();
-  if (buildBundleWithConfig) {
-    return buildBundleWithConfig(args, config, output);
-  }
-
   if (config.resolver.platforms.indexOf(args.platform) === -1) {
-    console.error(
+    error(
       `Invalid platform ${
         args.platform ? `"${chalk.bold(args.platform)}" ` : ""
       }selected.`
     );
 
-    console.info(
+    info(
       `Available platforms are: ${config.resolver.platforms
         .map((x) => `"${chalk.bold(x)}"`)
         .join(
@@ -96,17 +89,26 @@ export async function bundle(
   try {
     const bundle = await output.build(server, requestOpts);
 
-    await output.save(bundle, args, console.info);
+    // Ensure destination directory exists before saving the bundle
+    const mkdirOptions = { recursive: true, mode: 0o755 } as const;
+    fs.mkdirSync(path.dirname(args.bundleOutput), mkdirOptions);
+
+    await output.save(bundle, args, info);
 
     // Save the assets of the bundle
-    const outputAssets: readonly AssetData[] = await server.getAssets({
+    const outputAssets = await server.getAssets({
       ...Server.DEFAULT_BUNDLE_OPTIONS,
       ...requestOpts,
       bundleType: "todo",
     });
 
     // When we're done saving bundle output and the assets, we're done.
-    return await saveAssets(outputAssets, args.platform, args.assetsDest);
+    return await saveAssets(
+      outputAssets,
+      args.platform,
+      args.assetsDest,
+      args.assetCatalogDest
+    );
   } finally {
     server.end();
   }

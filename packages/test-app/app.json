@@ -30,7 +30,7 @@
     "userPrincipalName": "arnold@contoso.com"
   },
   "resources": {
-    "android": ["dist/res", "dist/main.android.jsbundle"],
+    "android": ["dist/res", "dist/main.android.bundle"],
     "ios": ["app.json", "dist/assets", "dist/main.ios.jsbundle"],
     "macos": ["app.json", "dist/assets", "dist/main.macos.jsbundle"],
     "windows": ["dist/assets", "dist/main.windows.bundle"]
