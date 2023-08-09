@@ -28,6 +28,9 @@
     "lint": "rnx-kit-scripts lint"
   },
   "dependencies": {
+    "@babel/core": "^7.0.0",
+    "@babel/helper-plugin-utils": "^7.0.0",
+    "@babel/template": "^7.0.0",
     "@rnx-kit/console": "^1.0.0",
     "@rnx-kit/tools-node": "^2.0.0"
   },
