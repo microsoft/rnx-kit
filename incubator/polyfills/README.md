@@ -49,21 +49,7 @@ npm add --save-dev @rnx-kit/polyfills
     };
    ```
 
-2. Configure Metro to use a custom `getModulesRunBeforeMainModule`:
-
-   ```diff
-    // metro.config.js
-    const { makeMetroConfig } = require("@rnx-kit/metro-config");
-    const { getPreludeModules } = require("@rnx-kit/polyfills");
-
-    module.exports = makeMetroConfig({
-   +  serializer: {
-   +    getModulesRunBeforeMainModule: getPreludeModules,
-   +  },
-    });
-   ```
-
-3. In your `index.js` (or `index.ts`), add the following comment:
+2. In your `index.js` (or `index.ts`), add the following comment:
 
    ```
    // @react-native-webapis
