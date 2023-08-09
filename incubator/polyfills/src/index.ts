@@ -1,40 +1,48 @@
+import type { ConfigAPI } from "@babel/core";
+import { types as t } from "@babel/core";
+import { declare } from "@babel/helper-plugin-utils";
+import babelTemplate from "@babel/template";
 import { getDependencyPolyfills } from "./dependency";
-import type { Context, GetPreludeModules } from "./types";
 
-/**
- * Ideally, we'd need something between `serializer.getPolyfills` and
- * `serializer.getModulesRunBeforeMainModule`. The former does not have access
- * to `require`, while the latter requires that the listed modules are
- * explicitly used in the bundle itself (see
- * https://github.com/facebook/metro/issues/850). For now, we will use this fact
- * to simply list all prelude modules.
- */
-function defaultModules({ projectRoot }: Context): string[] {
-  const platforms = [
-    "react-native",
-    "react-native-macos",
-    "react-native-windows",
-  ];
-  const options = { paths: [projectRoot] };
+module.exports = declare((api: ConfigAPI) => {
+  api.assertVersion(7);
 
-  const modules = [];
-  for (const platform of platforms) {
-    const core = `${platform}/Libraries/Core/InitializeCore`;
-    try {
-      modules.push(require.resolve(core, options));
-    } catch (_) {
-      // ignore
-    }
-  }
+  const pluginName = "@react-native-webapis/polyfills";
 
-  return modules;
-}
+  let isPolyfilled: string | null = null;
 
-export const getPreludeModules: GetPreludeModules = () => {
-  const context = { projectRoot: process.cwd() };
-  const modules = defaultModules(context);
-  const dependencyPolyfills = getDependencyPolyfills(context);
-  return modules.concat(dependencyPolyfills);
-};
+  return {
+    name: pluginName,
+    visitor: {
+      Program: (path, context) => {
+        const leadingComments = path.node.body[0]?.leadingComments;
+        const codegen = leadingComments?.some((comment) => {
+          const normalizedComment = comment.value.trim().split(" ")[0].trim();
+          return normalizedComment.startsWith("@react-native-webapis");
+        });
 
-export default getPreludeModules;
+        if (!codegen) {
+          return;
+        }
+
+        if (isPolyfilled != null) {
+          throw new Error(
+            `'${pluginName}' is already applied to ${isPolyfilled}`
+          );
+        }
+
+        isPolyfilled = context.file.opts.filename ?? "<unnamed module>";
+
+        const polyfills = getDependencyPolyfills({ projectRoot: context.cwd });
+        const importPolyfill = babelTemplate(`import %%source%%;`);
+
+        for (const polyfill of polyfills) {
+          path.unshiftContainer(
+            "body",
+            importPolyfill({ source: t.stringLiteral(polyfill) })
+          );
+        }
+      },
+    },
+  };
+});
