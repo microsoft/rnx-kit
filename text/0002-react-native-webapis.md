@@ -207,11 +207,9 @@ We will be following the crawl-walk-run methodology:
     [`Battery Status API`](https://developer.mozilla.org/en-US/docs/Web/API/Battery_Status_API)
     as it is small and self-contained.
     - https://github.com/microsoft/rnx-kit/pull/2590
-    - Note that we're currently using
-      [`serializer.getModulesRunBeforeMainModule`][] until something better
-      exists. It requires that listed modules are explicitly imported in the
-      bundle itself, which we do not want, but are working around with a Babel
-      plugin. We need something akin to Webpack's
+    - We're currently using a Babel plugin and rely on a magic comment in the
+      bundle to generate import statements. To further automate this, we would
+      need something akin to Webpack's
       [entry points](https://webpack.js.org/concepts/entry-points/). More
       details here: https://github.com/facebook/metro/issues/850.
 
