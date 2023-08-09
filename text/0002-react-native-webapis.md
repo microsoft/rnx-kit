@@ -212,6 +212,8 @@ We will be following the crawl-walk-run methodology:
       need something akin to Webpack's
       [entry points](https://webpack.js.org/concepts/entry-points/). More
       details here: https://github.com/facebook/metro/issues/850.
+    - It looks like this API is deprecated due to privacy concerns:
+      https://github.com/microsoft/TypeScript-DOM-lib-generator/pull/236
 
 <!-- References -->
 
