@@ -39,13 +39,32 @@ npm add --save-dev @rnx-kit/polyfills
 
 ## Usage
 
-```diff
- const { makeMetroConfig } = require("@rnx-kit/metro-config");
- const { getPreludeModules } = require("@rnx-kit/polyfills");
+1. Add the Babel plugin:
 
- module.exports = makeMetroConfig({
-+  serializer: {
-+    getModulesRunBeforeMainModule: getPreludeModules,
-+  },
- });
-```
+   ```diff
+    // babel.config.js
+    module.exports = {
+      presets: ["module:@react-native/babel-preset"],
+   +  plugins: [require("@rnx-kit/polyfills/babel-plugin")],
+    };
+   ```
+
+2. Configure Metro to use a custom `getModulesRunBeforeMainModule`:
+
+   ```diff
+    // metro.config.js
+    const { makeMetroConfig } = require("@rnx-kit/metro-config");
+    const { getPreludeModules } = require("@rnx-kit/polyfills");
+
+    module.exports = makeMetroConfig({
+   +  serializer: {
+   +    getModulesRunBeforeMainModule: getPreludeModules,
+   +  },
+    });
+   ```
+
+3. In your `index.js` (or `index.ts`), add the following comment:
+
+   ```
+   // @react-native-webapis
+   ```

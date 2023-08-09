@@ -34,6 +34,18 @@ npm add @react-native-webapis/battery-status
 ## Usage
 
 ```diff
+diff --git a/packages/test-app/babel.config.js b/packages/test-app/babel.config.js
+index 69ebd557..a012b7f5 100644
+--- a/packages/test-app/babel.config.js
++++ b/packages/test-app/babel.config.js
+@@ -13,6 +13,7 @@ module.exports = {
+           { runtime: "automatic" },
+         ],
+         [require("@babel/plugin-transform-react-jsx-source")],
++        [require("@rnx-kit/polyfills/babel-plugin")],
+       ],
+     },
+   ],
 diff --git a/packages/test-app/metro.config.js b/packages/test-app/metro.config.js
 index 7c0dcfc2..df0f8b0d 100644
 --- a/packages/test-app/metro.config.js
@@ -47,12 +59,12 @@ index 7c0dcfc2..df0f8b0d 100644
 +  },
  });
 diff --git a/packages/test-app/src/App.native.tsx b/packages/test-app/src/App.native.tsx
-index 599634a9..b465f0fe 100644
+index 599634a9..a9b493ab 100644
 --- a/packages/test-app/src/App.native.tsx
 +++ b/packages/test-app/src/App.native.tsx
 @@ -1,3 +1,5 @@
-+// Temporary until we figure out how to magically inject WebAPIs
-+import "@react-native-webapis/battery-status";
++// @react-native-webapis
++
  import { acquireTokenWithScopes } from "@rnx-kit/react-native-auth";
  // Both `internal` imports are used to verify that `metro-resolver-symlinks`
  // resolves them correctly when `experimental_retryResolvingFromDisk` is
