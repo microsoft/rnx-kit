@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/third-party-notices
 
+## 1.3.4
+
+### Patch Changes
+
+- 6d05950b: Fix `splitSourcePath` potentially getting wrong module name
+
 ## 1.3.3
 
 ### Patch Changes

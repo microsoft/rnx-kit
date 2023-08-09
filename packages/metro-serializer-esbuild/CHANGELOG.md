@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-serializer-esbuild
 
+## 0.1.27
+
+### Patch Changes
+
+- e4c560b3: Remove unused peer dependency
+
 ## 0.1.26
 
 ### Patch Changes

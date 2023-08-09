@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-serializer
 
+## 1.0.12
+
+### Patch Changes
+
+- e4c560b3: Remove unused peer dependency
+
 ## 1.0.6
 
 Mon, 01 Nov 2021 13:46:13 GMT
