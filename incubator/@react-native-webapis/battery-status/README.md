@@ -46,18 +46,6 @@ index 69ebd557..a012b7f5 100644
        ],
      },
    ],
-diff --git a/packages/test-app/metro.config.js b/packages/test-app/metro.config.js
-index 7c0dcfc2..df0f8b0d 100644
---- a/packages/test-app/metro.config.js
-+++ b/packages/test-app/metro.config.js
-@@ -33,4 +33,7 @@ module.exports = makeMetroConfig({
-     blacklistRE: blockList,
-     blockList,
-   },
-+  serializer: {
-+    getModulesRunBeforeMainModule: require("@rnx-kit/polyfills").default,
-+  },
- });
 diff --git a/packages/test-app/src/App.native.tsx b/packages/test-app/src/App.native.tsx
 index 599634a9..a9b493ab 100644
 --- a/packages/test-app/src/App.native.tsx
