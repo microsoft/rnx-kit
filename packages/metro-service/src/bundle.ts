@@ -63,16 +63,16 @@ function getSaveAssetsPlugin(
   platform: string,
   projectRoot: string
 ): SaveAssetsPlugin {
-  try {
-    if (platform === "win32") {
+  if (platform === "win32") {
+    try {
       const saveAssetsPlugin = require.resolve(
         "@office-iss/react-native-win32/saveAssetPlugin",
         { paths: [projectRoot] }
       );
       return require(saveAssetsPlugin);
+    } catch (_) {
+      /* empty */
     }
-  } catch (_) {
-    /* empty */
   }
   return platform === "ios"
     ? saveAssetsIOS
