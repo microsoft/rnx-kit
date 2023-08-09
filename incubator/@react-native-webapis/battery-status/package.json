@@ -36,7 +36,7 @@
     "lint:kt": "ktlint --code-style=android_studio --relative 'android/src/**/*.kt'"
   },
   "peerDependencies": {
-    "react-native": ">=0.71.0"
+    "react-native": ">=0.71.0-0"
   },
   "devDependencies": {
     "@rnx-kit/scripts": "*",
