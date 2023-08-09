@@ -1,10 +1,7 @@
 import type { BatteryStatus } from "./NativeBatteryStatus";
 import NativeBatteryStatus from "./NativeBatteryStatus";
 
-const navigator = global.navigator || {};
-
-// @ts-expect-error TS2339: Property 'getBattery' does not exist on type 'Navigator'.
-navigator.getBattery = (): Promise<BatteryStatus> => {
+function getBattery(): Promise<BatteryStatus> {
   return new Promise((resolve) => {
     NativeBatteryStatus.getStatus().then(
       ({ charging, chargingTime, dischargingTime, level }) => {
@@ -17,7 +14,19 @@ navigator.getBattery = (): Promise<BatteryStatus> => {
       }
     );
   });
-};
+}
+
+Object.defineProperty(getBattery, "_isPolyfilledBy", {
+  value: "@react-native-webapis/battery-status",
+  writable: false,
+});
+
+const navigator = global.navigator || {};
+
+Object.defineProperty(navigator, "getBattery", {
+  value: getBattery,
+  writable: false,
+});
 
 if (navigator !== global.navigator) {
   global.navigator = navigator;
