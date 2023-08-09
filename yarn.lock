@@ -3177,7 +3177,7 @@ __metadata:
     prettier: ^3.0.0
     typescript: ^5.0.0
   peerDependencies:
-    react-native: ">=0.71.0"
+    react-native: ">=0.71.0-0"
   languageName: unknown
   linkType: soft
 

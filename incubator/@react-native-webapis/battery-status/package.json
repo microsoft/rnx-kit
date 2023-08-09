@@ -11,7 +11,9 @@
   },
   "files": [
     "RNWBatteryStatus.podspec",
-    "android/*",
+    "android/build.gradle",
+    "android/gradle.properties",
+    "android/src/*",
     "ios/*",
     "lib/*",
     "macos/*",
@@ -33,7 +35,7 @@
     "format": "rnx-kit-scripts format",
     "format:c": "clang-format -i $(git ls-files '*.c' '*.cpp' '*.h' '*.m' '*.mm')",
     "lint": "rnx-kit-scripts lint",
-    "lint:kt": "ktlint --code-style=android_studio --relative 'android/src/**/*.kt'"
+    "lint:kt": "ktlint --relative 'android/src/**/*.kt'"
   },
   "peerDependencies": {
     "react-native": ">=0.71.0-0"
