@@ -10,6 +10,7 @@
     "email": "microsoftopensource@users.noreply.github.com"
   },
   "files": [
+    "babel-plugin.js",
     "lib/*"
   ],
   "main": "lib/index.js",
