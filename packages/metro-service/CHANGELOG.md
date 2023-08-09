@@ -1,5 +1,25 @@
 # Change Log - @rnx-kit/metro-service
 
+## 3.1.0
+
+### Minor Changes
+
+- 2edf436c: Refactor saveAssets code to allow out of tree overrides
+
+### Patch Changes
+
+- 18c757ba: Resolve npmPackageName from project root not local paths
+- 513efaab: `@react-native-community/cli-plugin-metro` has been deprecated. Sync to the
+  latest changes and don't depend on it for bundling.
+
+  `@react-native-community/cli-plugin-metro` is being moved into the
+  `react-native` repository. In the process, it was renamed and its API surface
+  has been reduced to the bare minimum. `buildBundleWithConfig`, which we need to
+  pass our custom config to the bundler, has also been axed. For more details, see
+  https://github.com/facebook/react-native/pull/38795.
+
+- 6da44cd3: Warn if `projectRoot` may be misconfigured
+
 ## 3.0.5
 
 ### Patch Changes

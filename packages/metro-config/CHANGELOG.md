@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-config
 
+## 1.3.8
+
+### Patch Changes
+
+- 18c757ba: Resolve npmPackageName from project root not local paths
+
 ## 1.3.7
 
 ### Patch Changes

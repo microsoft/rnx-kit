@@ -1,5 +1,21 @@
 # Change Log - @rnx-kit/cli
 
+## 0.16.11
+
+### Patch Changes
+
+- 6da44cd3: Warn if `projectRoot` may be misconfigured
+- Updated dependencies [18c757ba]
+- Updated dependencies [513efaab]
+- Updated dependencies [2edf436c]
+- Updated dependencies [e4c560b3]
+- Updated dependencies [6da44cd3]
+- Updated dependencies [6d05950b]
+  - @rnx-kit/metro-service@3.1.0
+  - @rnx-kit/metro-serializer-esbuild@0.1.27
+  - @rnx-kit/metro-serializer@1.0.12
+  - @rnx-kit/third-party-notices@1.3.4
+
 ## 0.16.10
 
 ### Patch Changes
