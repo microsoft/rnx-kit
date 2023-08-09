@@ -42,7 +42,7 @@ index 69ebd557..a012b7f5 100644
            { runtime: "automatic" },
          ],
          [require("@babel/plugin-transform-react-jsx-source")],
-+        [require("@rnx-kit/polyfills/babel-plugin")],
++        [require("@rnx-kit/polyfills")],
        ],
      },
    ],
@@ -72,7 +72,7 @@ index 599634a9..a9b493ab 100644
 +  const [batteryLevel, setBatteryLevel] = useState(-1);
 +  useEffect(() => {
 +    // @ts-expect-error FIXME
-+    global.navigator.getBattery().then((status) => {
++    navigator.getBattery().then((status) => {
 +      setBatteryLevel(status.level);
 +    });
 +  }, []);

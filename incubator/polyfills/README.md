@@ -9,13 +9,8 @@
 
 🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧
 
-This is a polyfills "autolinker" for Metro. It works like native module
+This is a polyfills "autolinker" for React Native. It works like native module
 autolinking, but gathers polyfills from dependencies instead.
-
-> **Note**
->
-> This package is temporary. Ideally, this should be upstreamed to
-> `@react-native-community/cli`.
 
 ## Motivation
 
@@ -45,11 +40,12 @@ npm add --save-dev @rnx-kit/polyfills
     // babel.config.js
     module.exports = {
       presets: ["module:@react-native/babel-preset"],
-   +  plugins: [require("@rnx-kit/polyfills/babel-plugin")],
+   +  plugins: [require("@rnx-kit/polyfills")],
     };
    ```
 
-2. In your `index.js` (or `index.ts`), add the following comment:
+2. In your `index.ts` (or `index.js`), add the following comment at the top of
+   the file:
 
    ```
    // @react-native-webapis
