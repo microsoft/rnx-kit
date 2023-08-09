@@ -39,7 +39,7 @@ extension CFDictionary {
         let service = "com.microsoft.ReactTestApp-MSAL"
         let account = "account"
 
-        guard let secret = secret else {
+        guard let secret else {
             return [
                 kSecAttrService: service,
                 kSecAttrAccount: account,

@@ -12,10 +12,11 @@ enum class AccountType(val type: String) {
         private const val MSA_TENANT = "9188040d-6c67-4c5b-b112-36a304b66dad"
 
         fun fromIssuer(issuer: String): AccountType {
-            return if (issuer.contains(MSA_TENANT))
+            return if (issuer.contains(MSA_TENANT)) {
                 MICROSOFT_ACCOUNT
-            else
+            } else {
                 ORGANIZATIONAL
+            }
         }
     }
 

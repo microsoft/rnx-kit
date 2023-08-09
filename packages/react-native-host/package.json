@@ -21,7 +21,7 @@
   "scripts": {
     "format": "rnx-kit-scripts format",
     "format:c": "clang-format -i $(git ls-files '*.c' '*.cpp' '*.h' '*.m' '*.mm')",
-    "lint:kt": "ktlint --relative --verbose 'android/src/**/*.kt'"
+    "lint:kt": "ktlint --relative 'android/src/**/*.kt'"
   },
   "peerDependencies": {
     "react-native": ">=0.64"

@@ -13,7 +13,9 @@ class ReactNativeAuthPackage : ReactPackage {
         return emptyList()
     }
 
-    override fun createViewManagers(reactContext: ReactApplicationContext): List<ViewManager<*, *>> {
+    override fun createViewManagers(
+        reactContext: ReactApplicationContext
+    ): List<ViewManager<*, *>> {
         return emptyList()
     }
 }

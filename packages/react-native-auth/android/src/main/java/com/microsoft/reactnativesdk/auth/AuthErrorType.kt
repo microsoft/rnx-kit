@@ -17,5 +17,5 @@ enum class AuthErrorType(val type: String) {
     SERVER_PROTECTION_POLICIES_REQUIRED("ServerProtectionPoliciesRequired"),
     TIMEOUT("Timeout"),
     USER_CANCELED("UserCanceled"),
-    WORKPLACE_JOIN_REQUIRED("WorkplaceJoinRequired");
+    WORKPLACE_JOIN_REQUIRED("WorkplaceJoinRequired")
 }

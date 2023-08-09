@@ -11,7 +11,8 @@ class Config {
 
         fun authorityFor(accountType: AccountType): String = when (accountType) {
             AccountType.INVALID -> throw InvalidParameterException()
-            AccountType.MICROSOFT_ACCOUNT -> "https://login.microsoftonline.com/consumers/oauth2/v2.0/authorize"
+            AccountType.MICROSOFT_ACCOUNT ->
+                "https://login.microsoftonline.com/consumers/oauth2/v2.0/authorize"
             AccountType.ORGANIZATIONAL -> "https://login.microsoftonline.com/common/"
         }
 

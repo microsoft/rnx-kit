@@ -47,7 +47,7 @@ public final class TokenBroker: NSObject {
         sender: RTAViewController,
         onTokenAcquired: @escaping TokenAcquiredHandler
     ) {
-        guard let selectedAccount = selectedAccount else {
+        guard let selectedAccount else {
             let error = AuthError(
                 type: .preconditionViolated,
                 correlationID: Constants.EmptyGUID,
@@ -186,7 +186,7 @@ public final class TokenBroker: NSObject {
             application.acquireToken(with: parameters) { result, error in
                 self.condition.signal()
 
-                guard let result = result else {
+                guard let result else {
                     onTokenAcquired(nil, AuthError(error: error as NSError?))
                     return
                 }
@@ -207,7 +207,7 @@ public final class TokenBroker: NSObject {
             return
         }
 
-        guard let userPrincipalName = userPrincipalName,
+        guard let userPrincipalName,
               let cachedAccount = try? application.account(forUsername: userPrincipalName)
         else {
             acquireTokenInteractive(
@@ -225,7 +225,7 @@ public final class TokenBroker: NSObject {
 
         DispatchQueue.main.async {
             application.acquireTokenSilent(with: parameters) { result, error in
-                guard let result = result else {
+                guard let result else {
                     if let error = error as NSError? {
                         if error.isInteractionRequiredError() {
                             self.acquireTokenInteractive(
