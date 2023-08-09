@@ -5,11 +5,11 @@ import chalk from "chalk";
 import fs from "fs";
 import type { ConfigT } from "metro-config";
 import type { BundleOptions, OutputOptions } from "metro/shared/types";
-import type { AssetData } from "metro";
 import Server from "metro/src/Server";
 import Bundle from "metro/src/shared/output/bundle";
 import path from "path";
 import { saveAssets } from "./asset";
+import type { SaveAssetsPlugin } from "./asset/types";
 import { saveAssetsAndroid } from "./asset/android";
 import { saveAssetsDefault } from "./asset/default";
 import { saveAssetsIOS } from "./asset/ios";
@@ -45,18 +45,6 @@ type RequestOptions = {
   unstable_transformProfile?: BundleOptions["unstable_transformProfile"];
 };
 
-type SaveAssetsPlugin = (
-  assets: ReadonlyArray<AssetData>,
-  platform: string,
-  assetsDest: string | undefined,
-  assetCatalogDest: string | undefined,
-  addAssetToCopy: (
-    asset: AssetData,
-    allowedScales: number[] | undefined,
-    getAssetDestPath: (asset: AssetData, scale: number) => string
-  ) => void
-) => void;
-
 // Eventually this will be part of the rn config, but we require it on older rn versions for win32 and the cli doesn't allow extra config properties.
 // See https://github.com/react-native-community/cli/pull/2002
 function getSaveAssetsPlugin(
@@ -74,11 +62,15 @@ function getSaveAssetsPlugin(
       /* empty */
     }
   }
-  return platform === "ios"
-    ? saveAssetsIOS
-    : platform === "android"
-    ? saveAssetsAndroid
-    : saveAssetsDefault;
+
+  switch (platform) {
+    case "ios":
+      return saveAssetsIOS;
+    case "android":
+      return saveAssetsAndroid;
+    default:
+      return saveAssetsDefault;
+  }
 }
 
 export async function bundle(

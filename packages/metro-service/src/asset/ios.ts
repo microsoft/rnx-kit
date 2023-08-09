@@ -8,6 +8,7 @@ import path from "path";
 import { getResourceIdentifier } from "./assetPathUtils";
 import { filterPlatformAssetScales } from "./filter";
 import { getAssetDestPath } from "./default";
+import type { SaveAssetsPlugin } from "./types";
 
 type ImageSet = {
   basePath: string;
@@ -72,17 +73,13 @@ export function writeImageSet(imageSet: ImageSet): void {
 
 const ALLOWED_SCALES = [1, 2, 3];
 
-export function saveAssetsIOS(
-  assets: ReadonlyArray<AssetData>,
-  _platform: string,
-  _assetsDest: string | undefined,
-  assetCatalogDest: string | undefined,
-  addAssetToCopy: (
-    asset: AssetData,
-    allowedScales: number[] | undefined,
-    getAssetDestPath: (asset: AssetData, scale: number) => string
-  ) => void
-) {
+export const saveAssetsIOS: SaveAssetsPlugin = (
+  assets,
+  _platform,
+  _assetsDest,
+  assetCatalogDest,
+  addAssetToCopy
+) => {
   if (assetCatalogDest != null) {
     // Use iOS Asset Catalog for images. This will allow Apple app thinning to
     // remove unused scales from the optimized bundle.
@@ -114,4 +111,4 @@ export function saveAssetsIOS(
       addAssetToCopy(asset, ALLOWED_SCALES, getAssetDestPath)
     );
   }
-}
+};

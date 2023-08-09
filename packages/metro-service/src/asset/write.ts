@@ -5,6 +5,7 @@ import * as fs from "fs";
 import type { AssetData } from "metro";
 import * as path from "path";
 import { filterPlatformAssetScales } from "./filter";
+import type { SaveAssetsPlugin } from "./types";
 
 function copy(
   src: string,
@@ -50,22 +51,12 @@ function copyAll(filesToCopy: Record<string, string>) {
   });
 }
 
-export async function saveAssets(
+export function saveAssets(
   assets: ReadonlyArray<AssetData>,
   platform: string,
   assetsDest: string | undefined,
   assetCatalogDest: string | undefined,
-  saveAssetsPlugin: (
-    assets: ReadonlyArray<AssetData>,
-    platform: string,
-    assetsDest: string | undefined,
-    assetCatalogDest: string | undefined,
-    addAssetToCopy: (
-      asset: AssetData,
-      allowedScales: number[] | undefined,
-      getAssetDestPath: (asset: AssetData, scale: number) => string
-    ) => void
-  ) => void
+  saveAssetsPlugin: SaveAssetsPlugin
 ): Promise<void> {
   if (!assetsDest) {
     warn("Assets destination folder is not set, skipping...");

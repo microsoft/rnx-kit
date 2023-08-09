@@ -7,8 +7,7 @@
  */
 
 import path from "path";
-import type { AssetData } from "metro";
-import type { PackagerAsset } from "./types";
+import type { PackagerAsset, SaveAssetsPlugin } from "./types";
 
 export function getAssetDestPath(asset: PackagerAsset, scale: number): string {
   const suffix = scale === 1 ? "" : `@${scale}x`;
@@ -22,16 +21,12 @@ export function getAssetDestPath(asset: PackagerAsset, scale: number): string {
   );
 }
 
-export function saveAssetsDefault(
-  assets: ReadonlyArray<AssetData>,
-  _platform: string,
-  _assetsDest: string | undefined,
-  _assetCatalogDest: string | undefined,
-  addAssetToCopy: (
-    asset: AssetData,
-    allowedScales: number[] | undefined,
-    getAssetDestPath: (asset: AssetData, scale: number) => string
-  ) => void
-) {
+export const saveAssetsDefault: SaveAssetsPlugin = (
+  assets,
+  _platform,
+  _assetsDest,
+  _assetCatalogDest,
+  addAssetToCopy
+) => {
   assets.forEach((asset) => addAssetToCopy(asset, undefined, getAssetDestPath));
-}
+};
