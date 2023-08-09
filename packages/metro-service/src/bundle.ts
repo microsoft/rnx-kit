@@ -9,6 +9,10 @@ import Server from "metro/src/Server";
 import Bundle from "metro/src/shared/output/bundle";
 import path from "path";
 import { saveAssets } from "./asset";
+import type { SaveAssetsPlugin } from "./asset/types";
+import { saveAssetsAndroid } from "./asset/android";
+import { saveAssetsDefault } from "./asset/default";
+import { saveAssetsIOS } from "./asset/ios";
 import { ensureBabelConfig } from "./babel";
 
 export type BundleArgs = {
@@ -41,6 +45,34 @@ type RequestOptions = {
   unstable_transformProfile?: BundleOptions["unstable_transformProfile"];
 };
 
+// Eventually this will be part of the rn config, but we require it on older rn versions for win32 and the cli doesn't allow extra config properties.
+// See https://github.com/react-native-community/cli/pull/2002
+function getSaveAssetsPlugin(
+  platform: string,
+  projectRoot: string
+): SaveAssetsPlugin {
+  if (platform === "win32") {
+    try {
+      const saveAssetsPlugin = require.resolve(
+        "@office-iss/react-native-win32/saveAssetPlugin",
+        { paths: [projectRoot] }
+      );
+      return require(saveAssetsPlugin);
+    } catch (_) {
+      /* empty */
+    }
+  }
+
+  switch (platform) {
+    case "ios":
+      return saveAssetsIOS;
+    case "android":
+      return saveAssetsAndroid;
+    default:
+      return saveAssetsDefault;
+  }
+}
+
 export async function bundle(
   args: BundleArgs,
   config: ConfigT,
@@ -48,6 +80,11 @@ export async function bundle(
 ): Promise<void> {
   // ensure Metro can find Babel config
   ensureBabelConfig(config);
+
+  const saveAssetsPlugin = getSaveAssetsPlugin(
+    args.platform,
+    config.projectRoot
+  );
 
   if (config.resolver.platforms.indexOf(args.platform) === -1) {
     error(
@@ -107,7 +144,8 @@ export async function bundle(
       outputAssets,
       args.platform,
       args.assetsDest,
-      args.assetCatalogDest
+      args.assetCatalogDest,
+      saveAssetsPlugin
     );
   } finally {
     server.end();

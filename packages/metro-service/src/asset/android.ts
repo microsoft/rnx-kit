@@ -2,7 +2,7 @@
 
 import * as path from "path";
 import { getResourceIdentifier } from "./assetPathUtils";
-import type { PackagerAsset } from "./types";
+import type { PackagerAsset, SaveAssetsPlugin } from "./types";
 
 export function getAndroidAssetSuffix(scale: number): string {
   const tolerance = 0.01;
@@ -52,3 +52,15 @@ export function getAssetDestPathAndroid(
   const fileName = getResourceIdentifier(asset);
   return path.join(androidFolder, `${fileName}.${asset.type}`);
 }
+
+export const saveAssetsAndroid: SaveAssetsPlugin = (
+  assets,
+  _platform,
+  _assetsDest,
+  _assetCatalogDest,
+  addAssetToCopy
+) => {
+  assets.forEach((asset) =>
+    addAssetToCopy(asset, undefined, getAssetDestPathAndroid)
+  );
+};
