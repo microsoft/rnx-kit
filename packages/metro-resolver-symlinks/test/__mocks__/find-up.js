@@ -1,6 +1,6 @@
 const actualFindUp = jest.requireActual("find-up");
-const fs = jest.requireActual("fs");
-const path = jest.requireActual("path");
+const fs = jest.requireActual("node:fs");
+const path = jest.requireActual("node:path");
 
 const findUp = jest.createMockFromModule("find-up");
 

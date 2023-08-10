@@ -1,6 +1,7 @@
 import { findMetroPath } from "@rnx-kit/tools-react-native/metro";
 import * as fs from "fs";
 import * as path from "path";
+import * as url from "url";
 import type { Options } from "../types";
 
 function fileExists(path: string): boolean {
@@ -9,8 +10,7 @@ function fileExists(path: string): boolean {
 }
 
 function importMetroModule(path: string) {
-  const metroPath = findMetroPath();
-  const modulePath = metroPath + path;
+  const modulePath = findMetroPath() + path;
   try {
     return require(modulePath);
   } catch (_) {
@@ -23,10 +23,6 @@ function importMetroModule(path: string) {
         "https://github.com/microsoft/rnx-kit/issues."
     );
   }
-}
-
-function getDependencyGraph() {
-  return importMetroModule("/src/node-haste/DependencyGraph");
 }
 
 function supportsRetryResolvingFromDisk(): boolean {
@@ -87,7 +83,7 @@ export function patchMetro(options: Options): void {
     return;
   }
 
-  const DependencyGraph = getDependencyGraph();
+  const DependencyGraph = importMetroModule("/src/node-haste/DependencyGraph");
 
   // Patch `_createModuleResolver` and `_doesFileExist` to use `fs.existsSync`.
   DependencyGraph.prototype.orig__createModuleResolver =
@@ -137,6 +133,51 @@ export function patchMetro(options: Options): void {
       }
 
       throw e;
+    }
+  };
+
+  // We need to patch `_processSingleAssetRequest` because it calls
+  // `Assets.getAsset`, and `Assets.getAsset` checks whether the asset lives
+  // under one of `projectRoot` or `watchFolders`.
+  const Server = importMetroModule("/src/Server");
+  Server.prototype.orig__processSingleAssetRequest =
+    Server.prototype._processSingleAssetRequest;
+  Server.prototype._processSingleAssetRequest = function (
+    req: { url: string },
+    res: unknown
+  ): Promise<void> {
+    const urlObj = url.parse(decodeURI(req.url), true);
+    let [, assetPath] =
+      (urlObj &&
+        urlObj.pathname &&
+        urlObj.pathname.match(/^\/assets\/(.+)$/)) ||
+      [];
+
+    if (!assetPath && urlObj && urlObj.query && urlObj.query.unstable_path) {
+      const unstable_path = Array.isArray(urlObj.query.unstable_path)
+        ? urlObj.query.unstable_path[0]
+        : urlObj.query.unstable_path;
+      const result = unstable_path.match(/^([^?]*)\??(.*)$/);
+      if (result == null) {
+        throw new Error(`Unable to parse URL: ${unstable_path}`);
+      }
+
+      const [, actualPath] = result;
+      assetPath = actualPath;
+    }
+
+    if (!assetPath) {
+      throw new Error(`Could not extract asset path from URL: ${req.url}`);
+    }
+
+    const watchFolders = this.getWatchFolders();
+    const absolutePath = path.resolve(this._config.projectRoot, assetPath);
+    this._config.watchFolders = [path.dirname(absolutePath)];
+
+    try {
+      return this.orig__processSingleAssetRequest(req, res);
+    } finally {
+      this._config.watchFolders = watchFolders;
     }
   };
 }
