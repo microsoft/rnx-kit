@@ -1,5 +1,5 @@
-import path from "path";
 import fs from "fs";
+import path from "path";
 import ts from "typescript";
 import { VersionedSnapshot } from "../src/snapshot";
 

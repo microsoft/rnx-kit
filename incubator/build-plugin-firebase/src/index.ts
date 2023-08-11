@@ -1,5 +1,5 @@
-import { renderQRCode } from "@rnx-kit/build";
 import type { DistributionPlugin, Platform } from "@rnx-kit/build";
+import { renderQRCode } from "@rnx-kit/build";
 
 type FirebaseConfig = {
   appId: string | Partial<Record<Platform, string>>;

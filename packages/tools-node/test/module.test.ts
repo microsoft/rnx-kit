@@ -2,10 +2,10 @@ import fs from "fs";
 import os from "os";
 import path from "path";
 import {
-  parseModuleRef,
-  isPackageModuleRef,
-  isFileModuleRef,
   getPackageModuleRefFromModulePath,
+  isFileModuleRef,
+  isPackageModuleRef,
+  parseModuleRef,
 } from "../src/module";
 
 describe("Node > Module", () => {

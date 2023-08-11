@@ -1,8 +1,8 @@
 // @ts-check
 
 import * as fs from "node:fs";
-import { createRequire } from "node:module";
 import * as path from "node:path";
+import require from "../require.mjs";
 
 /**
  * @param {{ [key: string]: unknown }} a
@@ -21,8 +21,6 @@ function mergeOneLevel(a, b = {}) {
 }
 
 function patch() {
-  const require = createRequire(import.meta.url);
-
   const depcheck = path.dirname(require.resolve("depcheck/package.json"));
   const patchedFile = path.join(depcheck, ".rnx-kit-patched");
   if (!fs.existsSync(patchedFile)) {

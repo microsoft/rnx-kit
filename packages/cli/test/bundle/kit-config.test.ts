@@ -1,6 +1,6 @@
 import {
-  getTargetPlatforms,
   getCliPlatformBundleConfigs,
+  getTargetPlatforms,
 } from "../../src/bundle/kit-config";
 
 const rnxKitConfig = require("@rnx-kit/config");

@@ -1,14 +1,14 @@
+import { isFileBinary } from "./file_type_utils";
 import {
-  traverseDirectory,
+  copyFile,
+  copyFileOverwrite,
   getRelativePath,
   lookUpRelativePath,
   resolvePath,
-  copyFile,
-  copyFileOverwrite,
+  traverseDirectory,
 } from "./fs_utils";
 import { log } from "./logger";
-import { applyPatchTool, applyPatchEmbedded } from "./patch_utils";
-import { isFileBinary } from "./file_type_utils";
+import { applyPatchEmbedded, applyPatchTool } from "./patch_utils";
 import type { IPatchCommandOptions, PatchRepoFuncType } from "./types";
 
 function applyPatch(

@@ -1,5 +1,4 @@
 export { findMetroPath, getMetroVersion } from "./metro";
-export type { AllPlatforms } from "./platform";
 export {
   expandPlatformExtensions,
   getAvailablePlatforms,
@@ -7,3 +6,4 @@ export {
   parsePlatform,
   platformExtensions,
 } from "./platform";
+export type { AllPlatforms } from "./platform";

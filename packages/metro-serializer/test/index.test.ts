@@ -1,5 +1,5 @@
-import { MetroSerializer, CustomSerializerResult } from "../src/index";
 import type { Graph, SerializerOptions } from "metro";
+import { CustomSerializerResult, MetroSerializer } from "../src/index";
 
 jest.mock("metro/src/DeltaBundler/Serializers/baseJSBundle");
 jest.mock("metro/src/lib/bundleToString");

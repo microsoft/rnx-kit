@@ -1,6 +1,6 @@
 import fs from "fs";
 import ts from "typescript";
-import { ProjectFileCache, ExternalFileCache } from "../src/cache";
+import { ExternalFileCache, ProjectFileCache } from "../src/cache";
 
 jest.mock("fs");
 

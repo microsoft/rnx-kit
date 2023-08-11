@@ -3,8 +3,8 @@ import { spawn } from "child_process";
 import { log } from "./logger";
 
 import { executeEffects } from "./patch/apply";
-import { reversePatch } from "./patch/reverse";
 import { readPatch } from "./patch/read";
+import { reversePatch } from "./patch/reverse";
 
 // import {InterfaceCLI, getArgs} from './cli';
 // const patchExecutable = getArgs().patchExecutable;

@@ -1,9 +1,9 @@
-import type { KitConfig } from "../src/kitConfig";
 import type { BundleConfig } from "../src/bundleConfig";
 import {
   getBundleConfig,
   getPlatformBundleConfig,
 } from "../src/getBundleConfig";
+import type { KitConfig } from "../src/kitConfig";
 
 const kitConfig: KitConfig = {
   bundle: [

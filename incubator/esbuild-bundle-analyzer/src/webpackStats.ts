@@ -1,3 +1,4 @@
+import { info } from "@rnx-kit/console";
 import fs from "fs";
 import * as path from "path";
 import { filesToSkip } from "./constants.js";
@@ -9,7 +10,6 @@ import type {
   StatsModuleReason,
   WebpackStats,
 } from "./types.js";
-import { info } from "@rnx-kit/console";
 
 // TODO: Update to be more generic and configurable to it supports
 // more than just lib and src folders

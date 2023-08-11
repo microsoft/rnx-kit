@@ -1,6 +1,6 @@
 import * as path from "path";
-import { findFiles, mockFiles } from "./helpers";
 import { copyAssets, gatherConfigs, versionOf } from "../../src/copy-assets";
+import { findFiles, mockFiles } from "./helpers";
 
 const options = {
   platform: "ios" as const,

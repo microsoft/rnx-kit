@@ -1,3 +1,7 @@
+import { error } from "@rnx-kit/console";
+import { getErrorMessage } from "@rnx-kit/metro-plugin-duplicates-checker";
+import * as path from "path";
+import { readMetafile } from "./compare.js";
 import { FAST_DOWNLOAD_SPEED, SLOW_DOWNLOAD_SPEED } from "./constants.js";
 import {
   generateGraph,
@@ -6,10 +10,6 @@ import {
 } from "./duplicates.js";
 import { output, outputWhyDuplicateInBundle } from "./output.js";
 import { stats } from "./stats.js";
-import * as path from "path";
-import { readMetafile } from "./compare.js";
-import { error } from "@rnx-kit/console";
-import { getErrorMessage } from "@rnx-kit/metro-plugin-duplicates-checker";
 
 /**
  * Analyzes a esbuild metafile.

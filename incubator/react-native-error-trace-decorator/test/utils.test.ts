@@ -1,7 +1,7 @@
-import { symbolicateBuffer, isConfigFileValid } from "../src/utils";
-import * as fse from "fs";
 import { error } from "@rnx-kit/console";
+import * as fse from "fs";
 import type { IConfigFile } from "../src/types";
+import { isConfigFileValid, symbolicateBuffer } from "../src/utils";
 
 jest.mock("fs");
 jest.mock("@rnx-kit/console");

@@ -1,11 +1,11 @@
+import { assertNever } from "./assertNever";
 import {
-  ParsedPatchFile,
-  PatchFilePart,
   Hunk,
   HunkHeader,
+  ParsedPatchFile,
+  PatchFilePart,
   verifyHunkIntegrity,
 } from "./parse";
-import { assertNever } from "./assertNever";
 
 function reverseHunk(hunk: Hunk): Hunk {
   const header: HunkHeader = {

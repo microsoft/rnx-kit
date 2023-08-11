@@ -9,10 +9,10 @@ import Server from "metro/src/Server";
 import Bundle from "metro/src/shared/output/bundle";
 import path from "path";
 import { saveAssets } from "./asset";
-import type { SaveAssetsPlugin } from "./asset/types";
 import { saveAssetsAndroid } from "./asset/android";
 import { saveAssetsDefault } from "./asset/default";
 import { saveAssetsIOS } from "./asset/ios";
+import type { SaveAssetsPlugin } from "./asset/types";
 import { ensureBabelConfig } from "./babel";
 
 export type BundleArgs = {

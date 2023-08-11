@@ -1,7 +1,7 @@
 import {
   getBundleConfig,
-  getPlatformBundleConfig,
   getKitConfig,
+  getPlatformBundleConfig,
 } from "@rnx-kit/config";
 import type { AllPlatforms } from "@rnx-kit/tools-react-native/platform";
 import { getDefaultBundlerPlugins } from "./defaultPlugins";
