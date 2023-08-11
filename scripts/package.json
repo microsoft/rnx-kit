@@ -34,6 +34,7 @@
       "depcheck",
       "esbuild",
       "markdown-table",
+      "prettier-plugin-organize-imports",
       "typedoc",
       "yargs"
     ]
