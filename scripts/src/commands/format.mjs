@@ -1,11 +1,10 @@
 // @ts-check
 
-import { createRequire } from "node:module";
 import { runScript } from "../process.mjs";
+import require from "../require.mjs";
 
 /** @type {import("../process.mjs").Command} */
 export default async function format() {
-  const require = createRequire(import.meta.url);
   await runScript(
     "prettier",
     "--write",

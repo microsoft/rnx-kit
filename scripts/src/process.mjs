@@ -5,12 +5,11 @@
  */
 
 import { spawn } from "node:child_process";
-import { createRequire } from "node:module";
 import * as os from "node:os";
 import * as path from "node:path";
+import require from "./require.mjs";
 
 function findWorkspaceRoot() {
-  const require = createRequire(import.meta.url);
   const scriptsDir = path.dirname(
     require.resolve("@rnx-kit/scripts/package.json")
   );
