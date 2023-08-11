@@ -1,5 +1,5 @@
-import * as fs from "fs";
 import { error } from "@rnx-kit/console";
+import * as fs from "fs";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 

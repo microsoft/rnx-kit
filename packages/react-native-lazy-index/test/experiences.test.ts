@@ -1,6 +1,6 @@
-import { resolveModule } from "../src/module";
-import { parseExperiences, getFlightedModule } from "../src/experiences";
 import fs from "fs";
+import { getFlightedModule, parseExperiences } from "../src/experiences";
+import { resolveModule } from "../src/module";
 
 describe("parseExperiences()", () => {
   afterEach(() => {

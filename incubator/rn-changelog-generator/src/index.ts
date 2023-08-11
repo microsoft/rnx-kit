@@ -1,7 +1,7 @@
 import generator from "./generator";
 import single from "./single";
-import validate from "./validate";
 import validateChangelog from "./utils/validateChangelog";
+import validate from "./validate";
 
 if (require.main === module) {
   require("yargs")

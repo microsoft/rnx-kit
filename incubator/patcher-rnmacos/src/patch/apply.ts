@@ -1,7 +1,7 @@
 import fs from "fs-extra";
 import { dirname } from "path";
-import { ParsedPatchFile, FilePatch, Hunk } from "./parse";
 import { assertNever } from "./assertNever";
+import { FilePatch, Hunk, ParsedPatchFile } from "./parse";
 
 import { log } from "../logger";
 

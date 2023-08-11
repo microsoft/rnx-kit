@@ -1,5 +1,5 @@
-import { getKitConfig } from "../src/getKitConfig";
 import path from "path";
+import { getKitConfig } from "../src/getKitConfig";
 
 describe("getKitConfig()", () => {
   const currentWorkingDir = process.cwd();

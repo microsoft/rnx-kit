@@ -1,15 +1,15 @@
 import program from "commander";
-import { log } from "./logger";
 import fs_path from "path";
+import { log } from "./logger";
 
 import type {
   DiffReposFuncType,
-  PatchRepoFuncType,
-  PatchFileFuncType,
-  OnCompletionFuncType,
   IDiffCommandOptions,
   IPatchCommandOptions,
   IPatchFileCommandOptions,
+  OnCompletionFuncType,
+  PatchFileFuncType,
+  PatchRepoFuncType,
 } from "./types";
 
 program.version("0.0.1");

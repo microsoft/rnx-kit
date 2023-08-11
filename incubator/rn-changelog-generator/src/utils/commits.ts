@@ -1,6 +1,6 @@
-import https from "https";
 import chalk from "chalk";
 import { IncomingHttpHeaders } from "http";
+import https from "https";
 
 export interface Commit {
   sha: string;

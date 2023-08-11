@@ -1,5 +1,5 @@
-import path from "path";
 import { readPackage } from "@rnx-kit/tools-node";
+import path from "path";
 import type { KitConfig } from "./kitConfig";
 
 /**

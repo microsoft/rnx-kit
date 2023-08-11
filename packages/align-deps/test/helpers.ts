@@ -1,5 +1,5 @@
 import type { Capability } from "@rnx-kit/config";
-import type { Profile, Package } from "../src/types";
+import type { Package, Profile } from "../src/types";
 
 export function pickPackage(profile: Profile, capability: string): Package {
   const pkg = profile[capability];

@@ -1,7 +1,6 @@
-import { spawnSync } from "child_process";
 import * as path from "path";
-import { findFiles, mockFiles } from "./helpers";
 import { assembleAarBundle } from "../../src/copy-assets";
+import { findFiles, mockFiles } from "./helpers";
 
 jest.mock("child_process");
 jest.mock("fs");

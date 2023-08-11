@@ -1,4 +1,3 @@
-export type { AllPlatforms } from "./lib/platform";
 export {
   expandPlatformExtensions,
   getAvailablePlatforms,
@@ -6,3 +5,4 @@ export {
   parsePlatform,
   platformExtensions,
 } from "./lib/platform";
+export type { AllPlatforms } from "./lib/platform";

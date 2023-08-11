@@ -1,7 +1,7 @@
 import { error } from "@rnx-kit/console";
 import * as fs from "fs";
-import { checkArgumentValidity } from "../src/check_arguments_validity";
 import { hideBin } from "yargs/helpers";
+import { checkArgumentValidity } from "../src/check_arguments_validity";
 
 jest.mock("@rnx-kit/console");
 jest.mock("fs");

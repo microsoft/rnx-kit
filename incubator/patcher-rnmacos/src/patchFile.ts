@@ -1,5 +1,5 @@
 import { log } from "./logger";
-import { applyPatchTool, applyPatchEmbedded } from "./patch_utils";
+import { applyPatchEmbedded, applyPatchTool } from "./patch_utils";
 import type { IPatchFileCommandOptions, PatchFileFuncType } from "./types";
 
 function applyPatch(

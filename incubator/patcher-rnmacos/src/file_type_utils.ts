@@ -1,4 +1,4 @@
-import { isTextSync, isBinarySync } from "istextorbinary";
+import { isBinarySync, isTextSync } from "istextorbinary";
 
 export function isFileText(filepath: string) {
   return isTextSync(filepath);

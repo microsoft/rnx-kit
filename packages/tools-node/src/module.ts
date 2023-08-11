@@ -1,6 +1,6 @@
 import path from "path";
 import type { PackageRef } from "./package";
-import { findPackageDir, readPackage, parsePackageRef } from "./package";
+import { findPackageDir, parsePackageRef, readPackage } from "./package";
 
 /**
  * Module reference relative to a package, such as `react-native` or

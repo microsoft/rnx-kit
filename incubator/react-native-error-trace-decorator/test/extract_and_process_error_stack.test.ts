@@ -1,6 +1,6 @@
 import * as fse from "fs";
-import { isConfigFileValid, symbolicateBuffer } from "../src/utils";
 import { extractAndSymbolicateErrorStack } from "../src/extract_and_process_error_stack";
+import { isConfigFileValid, symbolicateBuffer } from "../src/utils";
 
 jest.mock("fs");
 jest.mock("../src/utils");

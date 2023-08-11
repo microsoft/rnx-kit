@@ -3,8 +3,8 @@ import { readFileSync } from "fs-extra";
 // import { relative, resolve } from "path";
 // import { normalize } from "path";
 // import {PackageDetails} from '../PackageDetails';
-import { parsePatchFile, PatchFilePart } from "./parse";
 import { log } from "../logger";
+import { parsePatchFile, PatchFilePart } from "./parse";
 
 export function readPatch({
   patchFilePath,

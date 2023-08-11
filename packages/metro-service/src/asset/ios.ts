@@ -1,13 +1,13 @@
 // https://github.com/react-native-community/cli/blob/716555851b442a83a1bf5e0db27b6226318c9a69/packages/cli-plugin-metro/src/commands/bundle/assetCatalogIOS.ts
 // https://github.com/react-native-community/cli/blob/716555851b442a83a1bf5e0db27b6226318c9a69/packages/cli-plugin-metro/src/commands/bundle/getAssetDestPathIOS.ts
 
+import { error, info } from "@rnx-kit/console";
 import fs from "fs";
 import type { AssetData } from "metro";
-import { error, info } from "@rnx-kit/console";
 import path from "path";
 import { getResourceIdentifier } from "./assetPathUtils";
-import { filterPlatformAssetScales } from "./filter";
 import { getAssetDestPath } from "./default";
+import { filterPlatformAssetScales } from "./filter";
 import type { SaveAssetsPlugin } from "./types";
 
 type ImageSet = {

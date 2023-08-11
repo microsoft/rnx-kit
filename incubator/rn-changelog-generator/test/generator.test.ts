@@ -1,19 +1,19 @@
-import https from "https";
+import deepmerge from "deepmerge";
 import { EventEmitter } from "events";
 import { promises as fs } from "fs";
+import https from "https";
 import path from "path";
-import deepmerge from "deepmerge";
 
 import {
   CHANGES_TEMPLATE,
-  git,
-  run,
-  getAllChangelogDescriptions,
-  getOffsetBaseCommit,
-  getOriginalCommit,
-  getFirstCommitAfterForkingFromMain,
   Changes,
   PlatformChanges,
+  getAllChangelogDescriptions,
+  getFirstCommitAfterForkingFromMain,
+  getOffsetBaseCommit,
+  getOriginalCommit,
+  git,
+  run,
 } from "../src/generator";
 
 if (!process.env.RN_REPO) {
