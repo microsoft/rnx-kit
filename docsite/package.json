@@ -27,7 +27,7 @@
   "engines": {
     "node": ">=16.14.0"
   },
-  "packageManager": "yarn@3.4.1",
+  "packageManager": "yarn@3.6.1",
   "resolutions": {
     "got": "^11.0",
     "trim": "0.0.3"
