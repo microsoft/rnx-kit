@@ -57,7 +57,7 @@
   "engines": {
     "node": ">=14.18"
   },
-  "packageManager": "yarn@3.4.1",
+  "packageManager": "yarn@3.6.1",
   "resolutions": {
     "@microsoft/eslint-plugin-sdl/eslint-plugin-react": "^7.26.0",
     "@react-native-community/cli": "^10.2.5",
