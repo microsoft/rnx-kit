@@ -203,11 +203,12 @@ export function MetroSerializer(
         if (!options.dev && buildOptions?.strictMode === false) {
           const encoder = new TextEncoder();
           build.onEnd(({ outputFiles }) => {
-            outputFiles?.forEach(({ path, text }, index) => {
+            outputFiles?.forEach(({ hash, path, text }, index) => {
               const newText = text.replace(/"use strict";\s*/g, "");
               outputFiles[index] = {
                 path,
                 contents: encoder.encode(newText),
+                hash,
                 text: newText,
               };
             });
