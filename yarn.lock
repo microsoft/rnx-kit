@@ -3923,7 +3923,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rnx-kit/react-native-host@*, @rnx-kit/react-native-host@^0.2.7, @rnx-kit/react-native-host@workspace:packages/react-native-host":
+"@rnx-kit/react-native-host@*, @rnx-kit/react-native-host@^0.2.8, @rnx-kit/react-native-host@workspace:packages/react-native-host":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/react-native-host@workspace:packages/react-native-host"
   dependencies:
@@ -11653,10 +11653,10 @@ __metadata:
   linkType: hard
 
 "react-native-test-app@npm:^2.2.1":
-  version: 2.5.12
-  resolution: "react-native-test-app@npm:2.5.12"
+  version: 2.5.15
+  resolution: "react-native-test-app@npm:2.5.15"
   dependencies:
-    "@rnx-kit/react-native-host": ^0.2.7
+    "@rnx-kit/react-native-host": ^0.2.8
     ajv: ^8.0.0
     chalk: ^4.1.0
     cliui: ^8.0.0
@@ -11695,7 +11695,7 @@ __metadata:
     init: scripts/init.js
     init-test-app: scripts/init.js
     install-windows-test-app: windows/test-app.js
-  checksum: ad26bcec379416e9d793cfaaf1175658797c017e29a05777abe8a69095896e38d39e271f11d99b952dd3038ec0653945baa114d0a5201bbb68c40dac1ace8218
+  checksum: 1168ff483f6c25800c8ba854ed9e7e8da26a31e705c9712d8f70ed62c3d516402b3f6c44ea3fbbd975030a63e48a117e7a318b0f75fa9661d0dce397028f5dde
   languageName: node
   linkType: hard
 
