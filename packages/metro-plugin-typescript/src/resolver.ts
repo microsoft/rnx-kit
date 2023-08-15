@@ -201,11 +201,12 @@ export function resolveTypeReferenceDirectiveReferences<
   const resolutions: ts.ResolvedTypeReferenceDirectiveWithFailedLookupLocations[] =
     [];
 
+  // Ensure the compiler options has `moduleSuffixes` set correctly for this
+  // React Native project.
+  const optionsWithSuffixes = { ...options, moduleSuffixes };
+
   for (const ref of typeDirectiveReferences) {
     const name = typeof ref === "string" ? ref : ref.fileName.toLowerCase();
-
-    //  Ensure the compiler options has `moduleSuffixes` set correctly for this RN project.
-    const optionsWithSuffixes = { ...options, moduleSuffixes };
 
     //
     //  Invoke the built-in TypeScript type-reference resolver.
