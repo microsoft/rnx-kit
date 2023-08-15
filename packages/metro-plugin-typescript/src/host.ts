@@ -3,7 +3,12 @@ import type { AllPlatforms } from "@rnx-kit/tools-react-native/platform";
 import { platformExtensions } from "@rnx-kit/tools-react-native/platform";
 import semverSatisfies from "semver/functions/satisfies";
 import ts from "typescript";
-import { resolveModuleNames, resolveTypeReferenceDirectives } from "./resolver";
+import {
+  resolveModuleNameLiterals,
+  resolveModuleNames,
+  resolveTypeReferenceDirectiveReferences,
+  resolveTypeReferenceDirectives,
+} from "./resolver";
 import type { ResolverContext } from "./types";
 
 const DEFAULT_PACKAGE_NAME = "react-native";
@@ -88,10 +93,17 @@ export function createEnhanceLanguageServiceHost(
       ),
     };
 
-    host.resolveModuleNames = resolveModuleNames.bind(undefined, context);
-    host.resolveTypeReferenceDirectives = resolveTypeReferenceDirectives.bind(
-      undefined,
-      context
-    );
+    if (semverSatisfies(tsVersion, ">=5.0")) {
+      host.resolveModuleNameLiterals = (...args) =>
+        resolveModuleNameLiterals(context, ...args);
+      host.resolveTypeReferenceDirectiveReferences = (...args) =>
+        resolveTypeReferenceDirectiveReferences(context, ...args);
+    } else {
+      host.resolveModuleNames = resolveModuleNames.bind(undefined, context);
+      host.resolveTypeReferenceDirectives = resolveTypeReferenceDirectives.bind(
+        undefined,
+        context
+      );
+    }
   };
 }

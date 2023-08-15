@@ -3,7 +3,9 @@ jest.mock("../src/resolver");
 import type ts from "typescript";
 import { createEnhanceLanguageServiceHost } from "../src/host";
 import {
+  resolveModuleNameLiterals,
   resolveModuleNames,
+  resolveTypeReferenceDirectiveReferences,
   resolveTypeReferenceDirectives,
 } from "../src/resolver";
 
@@ -15,8 +17,8 @@ import {
 //  testing we are doing here.
 //
 
-describe("Host (TS v4.6.0)", () => {
-  // Force TS version to 4.6, which pre-dates moduleSuffixes.
+describe("Host (TypeScript <4.7)", () => {
+  // Force TypeScript version to 4.6, which pre-dates `moduleSuffixes`.
   const tsMock = { version: "4.6.4" } as unknown as typeof ts;
 
   afterEach(() => {
@@ -31,14 +33,17 @@ describe("Host (TS v4.6.0)", () => {
   });
 });
 
-describe("Host (TS >= 4.7.0)", () => {
+describe("Host (TypeScript >=4.7 <5.0)", () => {
+  // Force TypeScript version to 4.7, which supports `moduleSuffixes`.
+  const tsMock = { version: "4.7.0" } as unknown as typeof ts;
+
   afterEach(() => {
     jest.resetAllMocks();
   });
 
   test("hooks are set to the TS-delegating resolver functions", () => {
     const host = { getCurrentDirectory: process.cwd } as ts.LanguageServiceHost;
-    createEnhanceLanguageServiceHost("ios")(host);
+    createEnhanceLanguageServiceHost("ios", tsMock)(host);
 
     host.resolveModuleNames?.(
       ["module"],
@@ -64,7 +69,7 @@ describe("Host (TS >= 4.7.0)", () => {
 
   test("empty extension is added to the end of the platform file extension list", () => {
     const host = { getCurrentDirectory: process.cwd } as ts.LanguageServiceHost;
-    createEnhanceLanguageServiceHost("ios")(host);
+    createEnhanceLanguageServiceHost("ios", tsMock)(host);
 
     host.resolveModuleNames?.(
       ["module"],
@@ -78,6 +83,66 @@ describe("Host (TS >= 4.7.0)", () => {
     expect(resolveModuleNames).toBeCalledTimes(1);
     // 1st argument: ResolverContext
     expect((resolveModuleNames as jest.Mock).mock.calls[0][0]).toEqual(
+      expect.objectContaining({
+        platformFileExtensions: [".ios", ".native", ""],
+      })
+    );
+  });
+});
+
+describe("Host (TypeScript >=5.0)", () => {
+  // Force TypeScript version to 5.0, which deprecates `resolveModuleNames` and
+  // `resolveTypeReferenceDirectives`.
+  const tsMock = { version: "5.0.0" } as unknown as typeof ts;
+
+  afterEach(() => {
+    jest.resetAllMocks();
+  });
+
+  test("hooks are set to the TS-delegating resolver functions", () => {
+    const host = { getCurrentDirectory: process.cwd } as ts.LanguageServiceHost;
+    createEnhanceLanguageServiceHost("ios", tsMock)(host);
+
+    host.resolveModuleNameLiterals?.(
+      [{ text: "module" } as ts.StringLiteral],
+      "containing-file",
+      undefined,
+      {},
+      {} as ts.SourceFile,
+      undefined
+    );
+
+    expect(resolveModuleNameLiterals).toBeCalledTimes(1);
+
+    host.resolveTypeReferenceDirectiveReferences?.(
+      ["type-reference"],
+      "containing-file",
+      undefined,
+      {},
+      {} as ts.SourceFile,
+      undefined
+    );
+
+    expect(resolveTypeReferenceDirectiveReferences).toBeCalledTimes(1);
+  });
+
+  test("empty extension is added to the end of the platform file extension list", () => {
+    const host = { getCurrentDirectory: process.cwd } as ts.LanguageServiceHost;
+    createEnhanceLanguageServiceHost("ios", tsMock)(host);
+
+    host.resolveModuleNameLiterals?.(
+      [{ text: "module" } as ts.StringLiteral],
+      "containing-file",
+      undefined,
+      {},
+      {} as ts.SourceFile,
+      undefined
+    );
+
+    expect(resolveModuleNameLiterals).toBeCalledTimes(1);
+
+    // 1st argument: ResolverContext
+    expect((resolveModuleNameLiterals as jest.Mock).mock.calls[0][0]).toEqual(
       expect.objectContaining({
         platformFileExtensions: [".ios", ".native", ""],
       })
