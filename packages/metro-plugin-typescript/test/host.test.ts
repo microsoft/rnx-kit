@@ -3,10 +3,10 @@ jest.mock("../src/resolver");
 import type ts from "typescript";
 import { createEnhanceLanguageServiceHost } from "../src/host";
 import {
-  resolveModuleNames,
   resolveModuleNameLiterals,
-  resolveTypeReferenceDirectives,
+  resolveModuleNames,
   resolveTypeReferenceDirectiveReferences,
+  resolveTypeReferenceDirectives,
 } from "../src/resolver";
 
 //

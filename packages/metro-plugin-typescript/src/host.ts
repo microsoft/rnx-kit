@@ -4,10 +4,10 @@ import { platformExtensions } from "@rnx-kit/tools-react-native/platform";
 import semverSatisfies from "semver/functions/satisfies";
 import ts from "typescript";
 import {
-  resolveModuleNames,
   resolveModuleNameLiterals,
-  resolveTypeReferenceDirectives,
+  resolveModuleNames,
   resolveTypeReferenceDirectiveReferences,
+  resolveTypeReferenceDirectives,
 } from "./resolver";
 import type { ResolverContext } from "./types";
 
