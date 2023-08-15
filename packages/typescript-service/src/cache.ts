@@ -16,11 +16,11 @@ export class ProjectFileCache {
 
   set(fileName: string, snapshot?: ts.IScriptSnapshot): void {
     const normalized = normalizePath(fileName);
-    if (!this.files.has(normalized)) {
+    const file = this.files.get(normalized);
+    if (!file) {
       this.files.set(normalized, new VersionedSnapshot(normalized, snapshot));
     } else {
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- Map has the element, and we only store non-null objects
-      this.files.get(normalized)!.update(snapshot);
+      file.update(snapshot);
     }
   }
 
@@ -61,7 +61,6 @@ export class ExternalFileCache {
       this.files.set(normalized, file);
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- Map has the element, and we only store non-null objects
-    return this.files.get(normalized)!.getSnapshot();
+    return file.getSnapshot();
   }
 }
