@@ -8,7 +8,7 @@ import type {
   ResolutionContext,
 } from "metro-resolver";
 import { resolve as metroResolver } from "metro-resolver";
-import path from "path";
+import * as path from "path";
 
 export type MetroConfigOverrides = {
   config?: string;
@@ -156,11 +156,25 @@ function getDefaultConfigInternal(cliConfig: CLIConfig): InputConfigT {
   return defaultConfig as InputConfigT;
 }
 
-function getDefaultConfigProvider(): typeof getDefaultConfigInternal {
+function getDefaultConfigProvider(
+  projectRoot: string
+): typeof getDefaultConfigInternal {
+  const options = { paths: [projectRoot] };
   try {
-    const {
-      getDefaultConfig,
-    } = require("@react-native-community/cli-plugin-metro");
+    // Starting with `react-native` 0.72, we need to build a complete Metro
+    // config upfront and will no longer need to get a default config here.
+    require.resolve("@react-native/metro-config", options);
+    return () => ({});
+  } catch (_) {
+    // Ignore
+  }
+
+  try {
+    const cliPluginMetro = require.resolve(
+      "@react-native-community/cli-plugin-metro",
+      options
+    );
+    const { getDefaultConfig } = require(cliPluginMetro);
 
     // Starting with `react-native` 0.72, we need to build a complete Metro
     // config upfront and will no longer need to get a default config here.
@@ -185,7 +199,7 @@ export function loadMetroConfig(
   cliConfig: CLIConfig,
   overrides: MetroConfigOverrides
 ): Promise<ConfigT> {
-  const getDefaultConfig = getDefaultConfigProvider();
+  const getDefaultConfig = getDefaultConfigProvider(cliConfig.root);
   const defaultConfig = getDefaultConfig(cliConfig);
 
   //  apply overrides that loadConfig() doesn't do for us
