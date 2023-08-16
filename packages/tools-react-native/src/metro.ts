@@ -21,6 +21,13 @@ export function findMetroPath(projectRoot = process.cwd()): string | undefined {
     return undefined;
   }
 
+  // `metro` dependency was moved to `@react-native/community-cli-plugin` in 0.73
+  // https://github.com/facebook/react-native/commit/fdcb94ad1310af6613cfb2a2c3f22f200bfa1c86
+  const cliPlugin = resolveFrom("@react-native/community-cli-plugin", rnPath);
+  if (cliPlugin) {
+    return resolveFrom("metro", cliPlugin);
+  }
+
   const cliPath = resolveFrom("@react-native-community/cli", rnPath);
   if (!cliPath) {
     return undefined;
