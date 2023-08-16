@@ -24,7 +24,7 @@ export function requireModuleFromMetro<R = unknown>(
 ): R {
   const startDir = findMetroPath(fromDir);
   if (!startDir) {
-    throw new Error(`Cannot find module '${moduleName}'`);
+    throw new Error("Cannot find module 'metro'");
   }
 
   const modulePath = resolveFrom(moduleName, startDir);
