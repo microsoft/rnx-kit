@@ -1,5 +1,22 @@
-import buildBundle from "@react-native-community/cli-plugin-metro/build/commands/bundle/buildBundle";
-import * as path from "path";
+import type { Config } from "@react-native-community/cli-types";
+import type { BundleArgs } from "@rnx-kit/metro-service";
+import { bundle, loadMetroConfig } from "@rnx-kit/metro-service";
+import type Bundle from "metro/src/shared/output/bundle";
+import * as path from "node:path";
+
+async function buildBundle(
+  args: BundleArgs,
+  ctx: Config,
+  output: typeof Bundle
+) {
+  const config = await loadMetroConfig(ctx, {
+    maxWorkers: args.maxWorkers,
+    resetCache: args.resetCache,
+    config: args.config,
+  });
+
+  return bundle(args, config, output);
+}
 
 describe("metro-serializer-esbuild", () => {
   jest.setTimeout(90000);
@@ -32,7 +49,6 @@ describe("metro-serializer-esbuild", () => {
         ),
         dependencies: {},
         commands: [],
-        assets: [],
         healthChecks: [],
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         platforms: { android: {}, ios: {} } as any,
