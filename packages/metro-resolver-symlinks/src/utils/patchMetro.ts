@@ -29,7 +29,7 @@ function supportsRetryResolvingFromDisk(): boolean {
   const { version } = importMetroModule("/package.json");
   const [major, minor] = version.split(".");
   const v = major * 1000 + minor;
-  return v >= 64 && v <= 75;
+  return v >= 64 && v <= 78;
 }
 
 export function shouldEnableRetryResolvingFromDisk({
