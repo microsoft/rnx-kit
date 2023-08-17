@@ -16,21 +16,28 @@ function resolveFrom(name: string, startDir: string): string | undefined {
  * @returns The path to the Metro installation; `undefined` if Metro could not be found
  */
 export function findMetroPath(projectRoot = process.cwd()): string | undefined {
-  const rnPath = resolveFrom("react-native", projectRoot);
-  if (!rnPath) {
+  const rnDir = resolveFrom("react-native", projectRoot);
+  if (!rnDir) {
     return undefined;
   }
 
-  const cliPath = resolveFrom("@react-native-community/cli", rnPath);
-  if (!cliPath) {
+  // `metro` dependency was moved to `@react-native/community-cli-plugin` in 0.73
+  // https://github.com/facebook/react-native/commit/fdcb94ad1310af6613cfb2a2c3f22f200bfa1c86
+  const cliPluginDir = resolveFrom("@react-native/community-cli-plugin", rnDir);
+  if (cliPluginDir) {
+    return resolveFrom("metro", cliPluginDir);
+  }
+
+  const cliDir = resolveFrom("@react-native-community/cli", rnDir);
+  if (!cliDir) {
     return undefined;
   }
 
-  const cliMetroPath = resolveFrom(
+  const cliMetroDir = resolveFrom(
     "@react-native-community/cli-plugin-metro",
-    cliPath
+    cliDir
   );
-  return resolveFrom("metro", cliMetroPath || cliPath);
+  return resolveFrom("metro", cliMetroDir || cliDir);
 }
 
 /**
