@@ -116,7 +116,12 @@ export default async function depcheck() {
 
       if (errors.length > 0) {
         console.error(errors.join("\n"));
-        reject(new Error("Dependency check failed"));
+        if (config.name === "@rnx-kit/test-app") {
+          // The test app is the only exception to allow free experimentation
+          resolve(0);
+        } else {
+          reject(new Error("Dependency check failed"));
+        }
       } else {
         resolve(0);
       }
