@@ -3,7 +3,7 @@ import {
   readPackage,
 } from "@rnx-kit/tools-node/package";
 
-function resolveDependency(name: string, startDir: string): string | undefined {
+function resolveFrom(name: string, startDir: string): string | undefined {
   return findPackageDependencyDir(name, {
     startDir,
     resolveSymlinks: true,
@@ -16,21 +16,21 @@ function resolveDependency(name: string, startDir: string): string | undefined {
  * @returns The path to the Metro installation; `undefined` if Metro could not be found
  */
 export function findMetroPath(projectRoot = process.cwd()): string | undefined {
-  const rnPath = resolveDependency("react-native", projectRoot);
+  const rnPath = resolveFrom("react-native", projectRoot);
   if (!rnPath) {
     return undefined;
   }
 
-  const cliPath = resolveDependency("@react-native-community/cli", rnPath);
+  const cliPath = resolveFrom("@react-native-community/cli", rnPath);
   if (!cliPath) {
     return undefined;
   }
 
-  const cliMetroPath = resolveDependency(
+  const cliMetroPath = resolveFrom(
     "@react-native-community/cli-plugin-metro",
     cliPath
   );
-  return resolveDependency("metro", cliMetroPath || cliPath);
+  return resolveFrom("metro", cliMetroPath || cliPath);
 }
 
 /**

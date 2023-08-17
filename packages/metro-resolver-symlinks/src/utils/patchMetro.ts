@@ -1,6 +1,6 @@
+import { findMetroPath } from "@rnx-kit/tools-react-native/metro";
 import * as fs from "fs";
 import * as path from "path";
-import { ensureResolveFrom, getMetroSearchPath } from "../helper";
 import type { Options } from "../types";
 
 function fileExists(path: string): boolean {
@@ -9,7 +9,7 @@ function fileExists(path: string): boolean {
 }
 
 function importMetroModule(path: string) {
-  const metroPath = ensureResolveFrom("metro", getMetroSearchPath());
+  const metroPath = findMetroPath();
   const modulePath = metroPath + path;
   try {
     return require(modulePath);

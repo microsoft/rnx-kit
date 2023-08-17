@@ -1,5 +1,5 @@
-import * as os from "os";
-import * as path from "path";
+import * as os from "node:os";
+import * as path from "node:path";
 import { requireModuleFromMetro } from "../src/helper";
 import { remapReactNativeModule, resolveModulePath } from "../src/resolver";
 import { useFixture } from "./fixtures";
@@ -12,16 +12,16 @@ const AVAILABLE_PLATFORMS = {
 
 const nixOnlyTest = os.platform() === "win32" ? test.skip : test;
 
-function getMetroResolver(fromDir: string) {
-  return requireModuleFromMetro<typeof import("metro-resolver")>(
-    "metro-resolver",
-    fromDir
-  ).resolve;
-}
-
-describe("getMetroResolver", () => {
+describe("requireModuleFromMetro", () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const context: any = {};
+
+  function getMetroResolver(fromDir: string) {
+    return requireModuleFromMetro<typeof import("metro-resolver")>(
+      "metro-resolver",
+      fromDir
+    ).resolve;
+  }
 
   test("returns `metro-resolver` installed by `react-native`", () => {
     const p = useFixture("metro-resolver-duplicates");
