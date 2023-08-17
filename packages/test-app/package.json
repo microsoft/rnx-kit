@@ -25,6 +25,7 @@
     "start": "react-native rnx-start"
   },
   "dependencies": {
+    "@react-native-webapis/battery-status": "workspace:^",
     "react": "18.2.0",
     "react-native": "^0.71.0",
     "react-native-macos": "^0.71.0",
@@ -44,6 +45,7 @@
     "@rnx-kit/metro-resolver-symlinks": "*",
     "@rnx-kit/metro-serializer": "*",
     "@rnx-kit/metro-serializer-esbuild": "*",
+    "@rnx-kit/polyfills": "workspace:^",
     "@rnx-kit/react-native-auth": "*",
     "@rnx-kit/react-native-host": "*",
     "@rnx-kit/react-native-test-app-msal": "*",

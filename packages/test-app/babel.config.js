@@ -13,6 +13,7 @@ module.exports = {
           { runtime: "automatic" },
         ],
         [require("@babel/plugin-transform-react-jsx-source")],
+        [require("@rnx-kit/polyfills")],
       ],
     },
   ],

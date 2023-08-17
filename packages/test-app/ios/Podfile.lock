@@ -328,6 +328,8 @@ PODS:
     - MSAL
     - RNXAuth
   - ReactTestApp-Resources (1.0.0-dev)
+  - RNWBatteryStatus (0.0.1):
+    - React-Core
   - RNXAuth (0.2.3):
     - React-Core
   - Yoga (1.14.0)
@@ -371,6 +373,7 @@ DEPENDENCIES:
   - ReactTestApp-DevSupport (from `../../../node_modules/react-native-test-app`)
   - "ReactTestApp-MSAL (from `../../../node_modules/@rnx-kit/react-native-test-app-msal`)"
   - ReactTestApp-Resources (from `..`)
+  - "RNWBatteryStatus (from `../../../node_modules/@react-native-webapis/battery-status`)"
   - "RNXAuth (from `../../../node_modules/@rnx-kit/react-native-auth`)"
   - Yoga (from `../../../node_modules/react-native/ReactCommon/yoga`)
 
@@ -452,6 +455,8 @@ EXTERNAL SOURCES:
     :path: "../../../node_modules/@rnx-kit/react-native-test-app-msal"
   ReactTestApp-Resources:
     :path: ".."
+  RNWBatteryStatus:
+    :path: "../../../node_modules/@react-native-webapis/battery-status"
   RNXAuth:
     :path: "../../../node_modules/@rnx-kit/react-native-auth"
   Yoga:
@@ -496,6 +501,7 @@ SPEC CHECKSUMS:
   ReactTestApp-DevSupport: 9b9eb9bf56d1a2f3ce71875c20597decdc04683c
   ReactTestApp-MSAL: 10b54d7d435128a3a3d2ca56aeabd17cf72080d2
   ReactTestApp-Resources: 4b819f4d440477a0470146af1cd05299f19b33f8
+  RNWBatteryStatus: a4034b9c82770b378cdc5730bf39499bb0df437f
   RNXAuth: aebb79490c3998a43fe499d2f5745ef085168705
   Yoga: 39310a10944fc864a7550700de349183450f8aaa
 

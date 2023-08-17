@@ -18,6 +18,9 @@
   "android": {
     "package": "com.msft.identity.client.sample.local"
   },
+  "ios": {
+    "bundleIdentifier": "com.msft.identity.client.sample.local"
+  },
   "windows": {
     "certificateKeyFile": "windows/ReactTestApp_TemporaryKey.pfx",
     "certificateThumbprint": "868BFD0D5ED2E720FF29284233CA0B1B7E613A1B"

@@ -1,17 +1,9 @@
-import { acquireTokenWithScopes } from "@rnx-kit/react-native-auth";
-// Both `internal` imports are used to verify that `metro-resolver-symlinks`
-// resolves them correctly when `experimental_retryResolvingFromDisk` is
-// enabled.
-import {
-  getReactNativeVersion,
-  getRemoteDebuggingAvailability,
-} from "internal";
+// @react-native-webapis
+import { getReactNativeVersion } from "internal";
 import { getHermesVersion } from "internal/hermes";
 import React, { useCallback, useMemo, useState } from "react";
 import type { LayoutChangeEvent } from "react-native";
 import {
-  NativeModules,
-  Pressable,
   SafeAreaView,
   ScrollView,
   StatusBar,
@@ -22,14 +14,46 @@ import {
   useColorScheme,
 } from "react-native";
 import { Colors, Header } from "react-native/Libraries/NewAppScreen";
-// @ts-expect-error no types for "react-native/Libraries/Utilities/DebugEnvironment"
-import { isAsyncDebugging } from "react-native/Libraries/Utilities/DebugEnvironment";
-import manifest from "../app.json";
 
-type ButtonProps = {
-  children: string;
-  onPress: () => void;
-};
+// STEP 1: import it
+// import useBatteryStatus from "../web/src/useBatteryStatus";
+
+function App({ concurrentRoot }: { concurrentRoot?: boolean }) {
+  const isDarkMode = useColorScheme() === "dark";
+  const styles = useStyles();
+  const [isFabric, setFabric] = useIsFabricComponent();
+
+  // STEP 2: use it
+  // const batteryLevel = useBatteryStatus();
+
+  return (
+    <SafeAreaView style={styles.body}>
+      <StatusBar barStyle={isDarkMode ? "light-content" : "dark-content"} />
+      <ScrollView
+        contentInsetAdjustmentBehavior="automatic"
+        onLayout={setFabric}
+        style={styles.body}
+      >
+        <Header />
+        {/* STEP 3: show it! */}
+        {/* <View style={styles.group}>
+          <Feature value={batteryLevel.toFixed(1)}>Battery Level</Feature>
+        </View> */}
+        <View style={styles.group}>
+          <Feature value={getReactNativeVersion()}>React Native</Feature>
+          <Separator />
+          <Feature value={isOnOrOff(getHermesVersion())}>Hermes</Feature>
+          <Separator />
+          <Feature value={isOnOrOff(isFabric)}>Fabric</Feature>
+          <Separator />
+          <Feature value={isOnOrOff(isFabric && concurrentRoot)}>
+            Concurrent React
+          </Feature>
+        </View>
+      </ScrollView>
+    </SafeAreaView>
+  );
+}
 
 type FeatureProps =
   | {
@@ -45,6 +69,24 @@ type FeatureProps =
 
 function isOnOrOff(value: unknown): "Off" | "On" {
   return value ? "On" : "Off";
+}
+
+function useIsFabricComponent() {
+  const [isFabric, setFabric] = useState(false);
+  return [
+    isFabric,
+    useCallback(
+      (ev: LayoutChangeEvent) => {
+        setFabric(
+          Boolean(
+            // @ts-expect-error Internal handle to determine whether Fabric is enabled
+            ev.currentTarget["_internalInstanceHandle"]?.stateNode?.canonical
+          )
+        );
+      },
+      [setFabric]
+    ),
+  ] as const;
 }
 
 function useStyles() {
@@ -93,19 +135,6 @@ function useStyles() {
   }, [colorScheme]);
 }
 
-function Button({ children, onPress }: ButtonProps) {
-  const styles = useStyles();
-  return (
-    <Pressable
-      android_ripple={styles.buttonRipple}
-      style={styles.groupItemContainer}
-      onPress={onPress}
-    >
-      <Text style={styles.groupItemLabel}>{children}</Text>
-    </Pressable>
-  );
-}
-
 function Feature({ children, value, ...props }: FeatureProps) {
   const styles = useStyles();
   return (
@@ -123,96 +152,6 @@ function Feature({ children, value, ...props }: FeatureProps) {
 function Separator() {
   const styles = useStyles();
   return <View style={styles.separator} />;
-}
-
-function DevMenu() {
-  const styles = useStyles();
-
-  const isRemoteDebuggingAvailable = getRemoteDebuggingAvailability();
-  const toggleRemoteDebugging = useCallback(
-    (value: boolean) => {
-      if (isRemoteDebuggingAvailable) {
-        NativeModules["DevSettings"].setIsDebuggingRemotely(value);
-      }
-    },
-    [isRemoteDebuggingAvailable]
-  );
-
-  if (!isRemoteDebuggingAvailable) {
-    return null;
-  }
-
-  return (
-    <View style={styles.group}>
-      <Feature value={isAsyncDebugging} onValueChange={toggleRemoteDebugging}>
-        Remote Debugging
-      </Feature>
-    </View>
-  );
-}
-
-function App({ concurrentRoot }: { concurrentRoot?: boolean }) {
-  const isDarkMode = useColorScheme() === "dark";
-  const styles = useStyles();
-
-  const startAcquireToken = React.useCallback(async () => {
-    try {
-      const authConfig = manifest["react-native-test-app-msal"];
-      const result = await acquireTokenWithScopes(
-        authConfig.orgScopes,
-        authConfig.userPrincipalName,
-        "Organizational"
-      );
-      console.log(JSON.stringify(result, undefined, 2));
-    } catch (e) {
-      const error =
-        typeof e === "object" && e !== null && "code" in e
-          ? JSON.stringify(e, undefined, 2)
-          : e;
-      console.log(error);
-    }
-  }, []);
-
-  const [isFabric, setFabric] = useState(false);
-  const onLayout = useCallback(
-    (ev: LayoutChangeEvent) => {
-      setFabric(
-        Boolean(
-          // @ts-expect-error Internal handle to determine whether Fabric is enabled
-          ev.currentTarget["_internalInstanceHandle"]?.stateNode?.canonical
-        )
-      );
-    },
-    [setFabric]
-  );
-
-  return (
-    <SafeAreaView style={styles.body}>
-      <StatusBar barStyle={isDarkMode ? "light-content" : "dark-content"} />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        onLayout={onLayout}
-        style={styles.body}
-      >
-        <Header />
-        <View style={styles.group}>
-          <Button onPress={startAcquireToken}>Acquire Token</Button>
-        </View>
-        <DevMenu />
-        <View style={styles.group}>
-          <Feature value={getReactNativeVersion()}>React Native</Feature>
-          <Separator />
-          <Feature value={isOnOrOff(getHermesVersion())}>Hermes</Feature>
-          <Separator />
-          <Feature value={isOnOrOff(isFabric)}>Fabric</Feature>
-          <Separator />
-          <Feature value={isOnOrOff(isFabric && concurrentRoot)}>
-            Concurrent React
-          </Feature>
-        </View>
-      </ScrollView>
-    </SafeAreaView>
-  );
 }
 
 export default App;

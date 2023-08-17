@@ -3154,7 +3154,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-webapis/battery-status@workspace:incubator/@react-native-webapis/battery-status":
+"@react-native-webapis/battery-status@workspace:^, @react-native-webapis/battery-status@workspace:incubator/@react-native-webapis/battery-status":
   version: 0.0.0-use.local
   resolution: "@react-native-webapis/battery-status@workspace:incubator/@react-native-webapis/battery-status"
   dependencies:
@@ -3864,7 +3864,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rnx-kit/polyfills@workspace:incubator/polyfills":
+"@rnx-kit/polyfills@workspace:^, @rnx-kit/polyfills@workspace:incubator/polyfills":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/polyfills@workspace:incubator/polyfills"
   dependencies:
@@ -4025,6 +4025,7 @@ __metadata:
     "@babel/plugin-transform-react-jsx-source": ^7.0.0
     "@babel/preset-env": ^7.1.6
     "@babel/runtime": ^7.12.5
+    "@react-native-webapis/battery-status": "workspace:^"
     "@rnx-kit/babel-preset-metro-react-native": "*"
     "@rnx-kit/cli": "*"
     "@rnx-kit/metro-config": "*"
@@ -4033,6 +4034,7 @@ __metadata:
     "@rnx-kit/metro-resolver-symlinks": "*"
     "@rnx-kit/metro-serializer": "*"
     "@rnx-kit/metro-serializer-esbuild": "*"
+    "@rnx-kit/polyfills": "workspace:^"
     "@rnx-kit/react-native-auth": "*"
     "@rnx-kit/react-native-host": "*"
     "@rnx-kit/react-native-test-app-msal": "*"
