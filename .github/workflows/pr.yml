@@ -70,23 +70,23 @@ jobs:
           git diff --exit-code
       - name: Bundle packages
         run: |
-          yarn bundle
+          yarn bundle:ci --base origin/${{ github.base_ref }}
       - name: Bundle test app with esbuild
         run: |
-          yarn bundle+esbuild
+          yarn nx affected --base origin/${{ github.base_ref }} --target bundle+esbuild
         shell: bash
-        working-directory: packages/test-app
       - name: Bundle test app with RAM bundle format
         run: |
-          yarn ram-bundle
+          yarn nx affected --base origin/${{ github.base_ref }} --target ram-bundle
         shell: bash
-        working-directory: packages/test-app
   build-android-test-app:
     name: "Build Android"
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
       - name: Setup the toolchain
         uses: ./.github/actions/setup-toolchain
         with:
@@ -94,7 +94,14 @@ jobs:
       - name: Install package dependencies
         run: |
           yarn
+      - name: Determine whether the Android app needs to be built
+        id: affected-projects
+        run: |
+          if [[ "$(yarn show-affected --base origin/${{ github.base_ref }})" = *"@rnx-kit/test-app"* ]]; then
+            echo 'android=true' >> $GITHUB_OUTPUT
+          fi
       - name: Build Android app
+        if: ${{ steps.affected-projects.outputs.android != '' }}
         run: |
           yarn build:android
         working-directory: packages/test-app
@@ -104,6 +111,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
       - name: Setup the toolchain
         uses: ./.github/actions/setup-toolchain
         with:
@@ -111,12 +120,20 @@ jobs:
       - name: Install package dependencies
         run: |
           yarn
+      - name: Determine whether the iOS app needs to be built
+        id: affected-projects
+        run: |
+          if [[ "$(yarn show-affected --base origin/${{ github.base_ref }})" = *"@rnx-kit/test-app"* ]]; then
+            echo 'ios=true' >> $GITHUB_OUTPUT
+          fi
       - name: Install Pods
         uses: microsoft/react-native-test-app/.github/actions/cocoapods@trunk
+        if: ${{ steps.affected-projects.outputs.ios != '' }}
         with:
           project-directory: ios
           working-directory: packages/test-app
       - name: Build iOS app
+        if: ${{ steps.affected-projects.outputs.ios != '' }}
         run: |
           yarn build:ios
         working-directory: packages/test-app

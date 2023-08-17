@@ -17,7 +17,7 @@
     "build:ci:all": "nx run-many --target test --all",
     "build-scope": "nx build",
     "bundle": "nx run-many --target bundle --all",
-    "bundle+esbuild": "nx run-many --target bundle+esbuild --all",
+    "bundle:ci": "nx affected --target bundle",
     "change": "changeset add",
     "change:check": "changeset status",
     "clean": "git clean -dfqx --exclude=.yarn/cache",
@@ -28,6 +28,7 @@
     "new-package": "node scripts/new-package.mjs",
     "publish:changesets": "changeset publish",
     "rnx-align-deps": "yarn build-scope @rnx-kit/align-deps && scripts/rnx-align-deps.mjs",
+    "show-affected": "nx show projects --affected",
     "test": "nx run-many --target test --output-style stream --all",
     "update-readme": "nx run-many --target update-readme --all",
     "version:changesets": "changeset version && yarn install --mode update-lockfile"
