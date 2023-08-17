@@ -6,13 +6,8 @@ import { getDependencyPolyfills } from "./dependency";
 
 module.exports = declare((api: ConfigAPI) => {
   api.assertVersion(7);
-
-  const pluginName = "@react-native-webapis/polyfills";
-
-  let isPolyfilled: string | null = null;
-
   return {
-    name: pluginName,
+    name: "@rnx-kit/polyfills",
     visitor: {
       Program: (path, context) => {
         const leadingComments = path.node.body[0]?.leadingComments;
@@ -24,14 +19,6 @@ module.exports = declare((api: ConfigAPI) => {
         if (!codegen) {
           return;
         }
-
-        if (isPolyfilled != null) {
-          throw new Error(
-            `'${pluginName}' is already applied to ${isPolyfilled}`
-          );
-        }
-
-        isPolyfilled = context.file.opts.filename ?? "<unnamed module>";
 
         const polyfills = getDependencyPolyfills({ projectRoot: context.cwd });
         const importPolyfill = babelTemplate(`import %%source%%;`);
