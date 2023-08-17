@@ -26,15 +26,17 @@ buildscript {
         return rootProject.ext.has(prop) ? rootProject.ext.get(prop) : defaultValue
     }
 
-    ext.kotlinVersion = getExtProp("kotlinVersion", "1.5.31")
-
     repositories {
         google()
         mavenCentral()
     }
 
     dependencies {
-        classpath("com.android.tools.build:gradle:${getExtProp('androidPluginVersion', '7.2.1')}")
+        def androidPluginVersion = getExtProp("androidPluginVersion", "7.2.2")
+        classpath("com.android.tools.build:gradle:${androidPluginVersion}")
+
+        def kotlinVersion = getExtProp("kotlinVersion", "1.7.21")
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
     }
 }
 
@@ -64,10 +66,6 @@ android {
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
-    implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
-
     //noinspection GradleDynamicVersion
     implementation "com.facebook.react:react-native:+"
 }
