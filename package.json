@@ -17,7 +17,7 @@
     "build:ci:all": "nx run-many --target test --all",
     "build-scope": "nx build",
     "bundle": "nx run-many --target bundle --all",
-    "bundle+esbuild": "nx run-many --target bundle+esbuild --all",
+    "bundle:ci": "nx affected --target bundle",
     "change": "changeset add",
     "change:check": "changeset status",
     "clean": "git clean -dfqx --exclude=.yarn/cache",

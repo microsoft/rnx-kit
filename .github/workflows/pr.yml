@@ -70,17 +70,15 @@ jobs:
           git diff --exit-code
       - name: Bundle packages
         run: |
-          yarn bundle
+          yarn bundle:ci --base origin/${{ github.base_ref }}
       - name: Bundle test app with esbuild
         run: |
-          yarn bundle+esbuild
+          yarn nx affected --base origin/${{ github.base_ref }} --target bundle+esbuild
         shell: bash
-        working-directory: packages/test-app
       - name: Bundle test app with RAM bundle format
         run: |
-          yarn ram-bundle
+          yarn nx affected --base origin/${{ github.base_ref }} --target ram-bundle
         shell: bash
-        working-directory: packages/test-app
   build-android-test-app:
     name: "Build Android"
     runs-on: ubuntu-22.04
