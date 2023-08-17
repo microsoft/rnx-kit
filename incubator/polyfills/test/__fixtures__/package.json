@@ -1,0 +1,16 @@
+{
+  "name": "AwesomeGame",
+  "version": "1.0.0",
+  "dependencies": {
+    "@react-native-webapis/battery-status": "*"
+  },
+  "peerDependencies": {
+    "this-should-be-ignored": "*"
+  },
+  "devDependencies": {
+    "@react-native-webapis/gamepad": "*",
+    "invalid-polyfill-boolean": "*",
+    "invalid-polyfill-boundary": "*",
+    "invalid-polyfill-missing": "*"
+  }
+}

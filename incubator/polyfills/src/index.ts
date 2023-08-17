@@ -23,7 +23,9 @@ module.exports = declare((api: ConfigAPI) => {
         const polyfills = getDependencyPolyfills({ projectRoot: context.cwd });
         const importPolyfill = babelTemplate(`import %%source%%;`);
 
-        for (const polyfill of polyfills) {
+        // Add polyfills in reverse order because we're unshifting
+        for (let i = polyfills.length - 1; i >= 0; --i) {
+          const polyfill = polyfills[i];
           path.unshiftContainer(
             "body",
             importPolyfill({ source: t.stringLiteral(polyfill) })
