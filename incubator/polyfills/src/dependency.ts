@@ -1,5 +1,6 @@
 import { error } from "@rnx-kit/console";
 import { readPackage } from "@rnx-kit/tools-node";
+import * as fs from "fs";
 import * as path from "path";
 import type { Context } from "./types";
 
@@ -17,13 +18,13 @@ function getDependencies({ projectRoot }: Context): string[] {
   return Array.from(dependencies);
 }
 
-function isValidPath(p: string): boolean {
-  return (
-    Boolean(p) &&
-    !p.startsWith("..") &&
-    !p.startsWith("/") &&
-    !/^[A-Za-z]:/.test(p)
-  );
+export function resolvePath(fromDir: string, p: unknown): string | null {
+  if (typeof p !== "string" || !p) {
+    return null;
+  }
+
+  const resolved = path.resolve(fromDir, p);
+  return resolved.startsWith(fromDir) ? resolved : null;
 }
 
 export function getDependencyPolyfills(context: Context): string[] {
@@ -36,14 +37,17 @@ export function getDependencyPolyfills(context: Context): string[] {
     try {
       const config = require.resolve(`${name}/react-native.config.js`, options);
       const polyfill = require(config).dependency?.api?.polyfill;
-      if (typeof polyfill === "string") {
-        if (!isValidPath(polyfill)) {
-          error(`${name}: invalid polyfill path: ${polyfill}`);
-          continue;
-        }
-
-        polyfills.push(path.resolve(path.dirname(config), polyfill));
+      const absolutePath = resolvePath(path.dirname(config), polyfill);
+      if (!absolutePath) {
+        error(`${name}: invalid polyfill path: ${polyfill}`);
+        continue;
       }
+      if (!fs.existsSync(absolutePath)) {
+        error(`${name}: no such polyfill: ${polyfill}`);
+        continue;
+      }
+
+      polyfills.push(absolutePath);
     } catch (_) {
       // ignore
     }
