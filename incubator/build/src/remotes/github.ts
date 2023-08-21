@@ -95,9 +95,8 @@ async function getWorkflowRunId(
 ): Promise<WorkflowRunId> {
   const listParams = { ...params };
   const run_id = await withRetry(async () => {
-    const { data, headers } = await octokit().rest.actions.listWorkflowRuns(
-      listParams
-    );
+    const { data, headers } =
+      await octokit().rest.actions.listWorkflowRuns(listParams);
     if (data.workflow_runs.length === 0) {
       listParams.headers = { "if-none-match": headers.etag };
       throw new Error("Failed to get workflow run id");
