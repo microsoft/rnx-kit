@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/tools-react-native
 
+## 1.3.2
+
+### Patch Changes
+
+- 1bc772cc: Find `metro` via the new `@react-native/community-cli-plugin` package
+
 ## 1.3.1
 
 ### Patch Changes

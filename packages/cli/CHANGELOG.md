@@ -1,5 +1,20 @@
 # Change Log - @rnx-kit/cli
 
+## 0.16.12
+
+### Patch Changes
+
+- 39deedd8: Bump dependencies to handle `@react-native-community/cli-plugin-metro` -> `@react-native/community-cli-plugin`
+- Updated dependencies [d8f53ed7]
+- Updated dependencies [7f152115]
+- Updated dependencies [1bc772cc]
+- Updated dependencies [11e8e546]
+- Updated dependencies [1c2725b8]
+  - @rnx-kit/metro-serializer-esbuild@0.1.28
+  - @rnx-kit/tools-react-native@1.3.2
+  - @rnx-kit/metro-service@3.1.1
+  - @rnx-kit/metro-plugin-typescript@0.4.4
+
 ## 0.16.11
 
 ### Patch Changes

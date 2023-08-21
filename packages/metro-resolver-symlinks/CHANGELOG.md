@@ -1,5 +1,13 @@
 # Change Log - @rnx-kit/metro-resolver-symlinks
 
+## 0.1.31
+
+### Patch Changes
+
+- ebca91d7: Reuse `findMetroPath` from `@rnx-kit/tools-react-native`
+- Updated dependencies [1bc772cc]
+  - @rnx-kit/tools-react-native@1.3.2
+
 ## 0.1.30
 
 ### Patch Changes

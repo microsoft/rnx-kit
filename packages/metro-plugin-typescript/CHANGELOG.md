@@ -1,5 +1,15 @@
 # @rnx-kit/metro-plugin-typescript
 
+## 0.4.4
+
+### Patch Changes
+
+- 1c2725b8: Implemented replacements for `resolveModuleNames` and `resolveTypeReferenceDirectives` deprecated in TypeScript 5.0 (https://github.com/microsoft/TypeScript/commit/9e845d224859950fb263dec43f8fa1f7334e52da)
+- Updated dependencies [1bc772cc]
+- Updated dependencies [1c2725b8]
+  - @rnx-kit/tools-react-native@1.3.2
+  - @rnx-kit/typescript-service@1.5.7
+
 ## 0.4.3
 
 ### Patch Changes

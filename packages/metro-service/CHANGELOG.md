@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-service
 
+## 3.1.1
+
+### Patch Changes
+
+- 11e8e546: Use `@react-native/metro-config` to determine whether we need `getDefaultConfig` to load Metro config
+
 ## 3.1.0
 
 ### Minor Changes
