@@ -1,5 +1,6 @@
 import type CliServerApi from "@react-native-community/cli-server-api";
 import type { Config as CLIConfig } from "@react-native-community/cli-types";
+import type { MetroTerminal } from "@rnx-kit/metro-service";
 import {
   createTerminal,
   loadMetroConfig,
@@ -68,6 +69,53 @@ function hasAttachToServerFunction(
   return "attachToServer" in devServer;
 }
 
+function makeHelp(terminal: MetroTerminal["terminal"]): () => void {
+  const menuItems: ("" | [string, string])[] = [
+    ["R", "Reload the app"],
+    ["D", "Open developer menu"],
+    ["A", "Show bundler address QR code"],
+    "",
+    ["H", "Show this help message"],
+    ["Ctrl-C", "Quit"],
+  ];
+
+  const margin = 4;
+  const maxColumnWidth = (index: number) => {
+    return (max: number, item: (typeof menuItems)[number]) => {
+      if (!item) {
+        return max;
+      }
+
+      const width = item[index].length;
+      return width > max ? width : max;
+    };
+  };
+
+  const keyWidth = menuItems.reduce(maxColumnWidth(0), 0);
+  const labelWidth = menuItems.reduce(maxColumnWidth(1), 0);
+  const separator = `┠${"─".repeat(labelWidth + keyWidth + margin + 1)}`;
+
+  const dim = chalk.dim;
+  const lines = menuItems.map((item) => {
+    if (!item) {
+      return separator;
+    }
+
+    const [key, label] = item;
+    const labelPadding = labelWidth - label.length;
+    const keyPadding = keyWidth - key.length;
+    const padding = " ".repeat(labelPadding + keyPadding + margin);
+    return `┃ ${dim(label)}${padding}${key}`;
+  });
+
+  return () => {
+    for (const line of lines) {
+      terminal.log(line);
+    }
+    terminal.log("");
+  };
+}
+
 export async function rnxStart(
   _argv: Array<string>,
   cliConfig: CLIConfig,
@@ -101,19 +149,7 @@ export async function rnxStart(
     cliOptions.customLogReporterPath
   );
 
-  const printHelp = () => {
-    const dim = chalk.dim;
-    const press = dim(" › Press ");
-    [
-      ["r", "reload the app"],
-      ["d", "open developer menu"],
-      ["a", "show bundler address QR code"],
-      ["h", "show this help message"],
-      ["ctrl-c", "quit"],
-    ].forEach(([key, description]) => {
-      terminal.log(press + key + dim(` to ${description}.`));
-    });
-  };
+  const printHelp = makeHelp(terminal);
 
   // create a reporter function, to be bound to the Metro configuration.
   // which writes to the Metro terminal and
