@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-resolver-symlinks
 
+## 0.1.32
+
+### Patch Changes
+
+- 6ec78905: Fix handling of asset files when `experimental_retryResolvingFromDisk` is enabled
+
 ## 0.1.31
 
 ### Patch Changes

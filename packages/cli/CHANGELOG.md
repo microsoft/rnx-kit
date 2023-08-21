@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/cli
 
+## 0.16.13
+
+### Patch Changes
+
+- 67525429: Put a fresh coat of paint on CLI's menu/help message
+
 ## 0.16.12
 
 ### Patch Changes
