@@ -3170,18 +3170,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-webapis/types@workspace:incubator/@react-native-webapis/types":
-  version: 0.0.0-use.local
-  resolution: "@react-native-webapis/types@workspace:incubator/@react-native-webapis/types"
-  dependencies:
-    "@rnx-kit/scripts": "*"
-    eslint: ^8.0.0
-    got: ^13.0.0
-    prettier: ^3.0.0
-    typescript: ^5.0.0
-  languageName: unknown
-  linkType: soft
-
 "@react-native-windows/cli@npm:0.72.3":
   version: 0.72.3
   resolution: "@react-native-windows/cli@npm:0.72.3"
@@ -7924,25 +7912,6 @@ __metadata:
     p-cancelable: ^3.0.0
     responselike: ^3.0.0
   checksum: 3c37f5d858aca2859f9932e7609d35881d07e7f2d44c039d189396f0656896af6c77c22f2c51c563f8918be483f60ff41e219de742ab4642d4b106711baccbd5
-  languageName: node
-  linkType: hard
-
-"got@npm:^13.0.0":
-  version: 13.0.0
-  resolution: "got@npm:13.0.0"
-  dependencies:
-    "@sindresorhus/is": ^5.2.0
-    "@szmarczak/http-timer": ^5.0.1
-    cacheable-lookup: ^7.0.0
-    cacheable-request: ^10.2.8
-    decompress-response: ^6.0.0
-    form-data-encoder: ^2.1.2
-    get-stream: ^6.0.1
-    http2-wrapper: ^2.1.10
-    lowercase-keys: ^3.0.0
-    p-cancelable: ^3.0.0
-    responselike: ^3.0.0
-  checksum: bcae6601efd710bc6c5b454c5e44bcb16fcfe57a1065e2d61ff918c1d69c3cf124984ebf509ca64ed10f0da2d2b5531b77da05aa786e75849d084fb8fbea711b
   languageName: node
   linkType: hard
 

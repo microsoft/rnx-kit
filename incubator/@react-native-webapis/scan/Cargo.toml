@@ -1,0 +1,19 @@
+[package]
+name = "scan"
+version = "0.1.0"
+authors = ["Tommy Nguyen <4123478+tido64@users.noreply.github.com>"]
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+rayon = "1.7.0"
+swc_common = "0.31.21"
+swc_ecma_parser = "0.137.15"
+swc_ecma_visit = "0.93.7"
+swc_ecmascript = "0.231.40"
+walkdir = "2.3.3"
+
+[profile.release]
+# Tell `rustc` to optimize for small code size.
+opt-level = "s"
