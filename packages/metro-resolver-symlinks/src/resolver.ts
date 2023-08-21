@@ -1,8 +1,10 @@
 import { isFileModuleRef, parseModuleRef } from "@rnx-kit/tools-node/module";
+import { normalizePath } from "@rnx-kit/tools-node/path";
 import { getAvailablePlatforms } from "@rnx-kit/tools-react-native/platform";
+import type { CustomResolver, Resolution } from "metro-resolver";
 import * as path from "path";
 import { resolveFrom } from "./helper";
-import type { ModuleResolver } from "./types";
+import type { ModuleResolver, ResolutionContextCompat } from "./types";
 
 export const remapReactNativeModule: ModuleResolver = (
   _context,
@@ -44,3 +46,21 @@ export const resolveModulePath: ModuleResolver = (
     ? relativePath
     : `.${path.sep}${relativePath}`;
 };
+
+export function applyMetroResolver(
+  resolve: CustomResolver,
+  ctx: ResolutionContextCompat,
+  moduleName: string,
+  platform: string
+): Resolution {
+  // Resolve redirects before we try to resolve the module:
+  // https://github.com/facebook/metro/blob/v0.76.7/docs/Resolution.md#redirectmodulepath-string--string--false
+  const realModuleName = ctx.redirectModulePath(moduleName);
+  if (realModuleName === false) {
+    return { type: "empty" };
+  }
+
+  const modifiedModuleName = resolveModulePath(ctx, realModuleName, platform);
+  // @ts-expect-error We pass 4 arguments instead of 3 to be backwards compatible
+  return resolve(ctx, normalizePath(modifiedModuleName), platform, null);
+}

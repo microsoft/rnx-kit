@@ -6,7 +6,7 @@ import {
 import type { PackageModuleRef } from "@rnx-kit/tools-node/module";
 import { expandPlatformExtensions } from "@rnx-kit/tools-react-native/platform";
 import * as path from "path";
-import type { ModuleResolver, ResolutionContext } from "../types";
+import type { ModuleResolver, ResolutionContextCompat } from "../types";
 
 type Resolver = (fromDir: string, moduleId: string) => string;
 
@@ -25,7 +25,7 @@ const DEFAULT_OPTIONS = {
 };
 
 export function remapLibToSrc(
-  { originModulePath }: ResolutionContext,
+  { originModulePath }: ResolutionContextCompat,
   ref: PackageModuleRef,
   resolver: Resolver
 ): string | undefined {
@@ -66,7 +66,7 @@ export function resolveModule(
 }
 
 export function resolveModulePath(
-  { originModulePath }: ResolutionContext,
+  { originModulePath }: ResolutionContextCompat,
   ref: PackageModuleRef,
   resolver: Resolver,
   options: ResolverOptions
