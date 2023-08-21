@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/typescript-service
 
+## 1.5.7
+
+### Patch Changes
+
+- 1c2725b8: Implemented replacements for `resolveModuleNames` and `resolveTypeReferenceDirectives` deprecated in TypeScript 5.0 (https://github.com/microsoft/TypeScript/commit/9e845d224859950fb263dec43f8fa1f7334e52da)
+
 ## 1.5.6
 
 ### Patch Changes

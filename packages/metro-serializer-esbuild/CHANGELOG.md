@@ -1,5 +1,14 @@
 # Change Log - @rnx-kit/metro-serializer-esbuild
 
+## 0.1.28
+
+### Patch Changes
+
+- d8f53ed7: Bump esbuild to 0.19.x
+- 7f152115: Support esbuild v0.18.19
+- Updated dependencies [1bc772cc]
+  - @rnx-kit/tools-react-native@1.3.2
+
 ## 0.1.27
 
 ### Patch Changes
