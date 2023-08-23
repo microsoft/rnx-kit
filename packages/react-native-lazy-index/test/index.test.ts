@@ -9,14 +9,28 @@ describe("react-native-lazy-index", () => {
   /**
    * Tests the specified fixture.
    */
-  function transformFixture(fixture: string): BabelFileResult | null {
-    const workingDir = path.join(__dirname, "__fixtures__", fixture);
-    process.chdir(workingDir);
+  function transformFixture(
+    fixture: string | Record<string, string>
+  ): BabelFileResult | null {
+    if (typeof fixture === "string") {
+      const workingDir = path.join(__dirname, "__fixtures__", fixture);
+      process.chdir(workingDir);
+      return babel.transformSync(
+        `// @codegen\nmodule.exports = require("../../../src/index")();`,
+        {
+          cwd: workingDir,
+          filename: `${fixture}.js`,
+          plugins: ["codegen"],
+        }
+      );
+    }
+
+    const experiences = JSON.stringify(fixture);
     return babel.transformSync(
-      `// @codegen\nmodule.exports = require("../../../src/index")();`,
+      `// @codegen\nmodule.exports = require("./src/index")(${experiences});`,
       {
-        cwd: workingDir,
-        filename: `${fixture}.js`,
+        cwd: currentWorkingDir,
+        filename: `index.js`,
         plugins: ["codegen"],
       }
     );
@@ -36,8 +50,20 @@ describe("react-native-lazy-index", () => {
     expect(result?.code).toMatchSnapshot();
   });
 
-  test("wraps registered components", () => {
+  test("wraps components declared in `package.json`", () => {
     const result = transformFixture("MyAwesomeApp");
+    expect(result).toBeTruthy();
+    expect(result?.code).toMatchSnapshot();
+  });
+
+  test("wraps components declared inline", () => {
+    const result = transformFixture({
+      "callable:YetAnotherFeature": "@awesome-app/yet-another-feature",
+      "callable:YetAnotherFeatureLazy": "@awesome-app/yet-another-feature",
+      "callable:AnotherFeature": "@awesome-app/another-feature",
+      SomeFeature: "@awesome-app/some-feature",
+      FinalFeature: "@awesome-app/final-feature",
+    });
     expect(result).toBeTruthy();
     expect(result?.code).toMatchSnapshot();
   });
