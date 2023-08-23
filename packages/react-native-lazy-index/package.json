@@ -1,7 +1,7 @@
 {
   "name": "@rnx-kit/react-native-lazy-index",
   "version": "2.2.0",
-  "description": "RAM bundle friendly index.js with on-demand loaded modules",
+  "description": "Hermes/RAM bundle friendly index.js with on-demand loaded modules",
   "keywords": [
     "babel",
     "bundle",
@@ -35,16 +35,13 @@
     "test": "rnx-kit-scripts test"
   },
   "dependencies": {
-    "@babel/core": "^7.0.0",
-    "@babel/parser": "^7.0.0",
-    "@babel/traverse": "^7.0.0",
-    "@babel/types": "^7.0.0",
     "babel-plugin-codegen": "^4.0.0"
   },
   "peerDependencies": {
     "react-native": ">=0.59"
   },
   "devDependencies": {
+    "@babel/core": "^7.0.0",
     "@rnx-kit/scripts": "*",
     "@types/jest": "^29.2.1",
     "@types/node": "^18.0.0",

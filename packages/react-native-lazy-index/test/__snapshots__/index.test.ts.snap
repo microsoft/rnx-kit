@@ -1,102 +1,53 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`react-native-lazy-index wraps AppRegistry.registerComponent calls 1`] = `
-"// @ts-nocheck
-// eslint-disable-line no-undef
-const {
+"const {
   AppRegistry
 } = require("react-native");
 AppRegistry.registerComponent("Component-01", () => {
-  // Source: component-01.js
   require("./component-01");
   return AppRegistry.getRunnable("Component-01").componentProvider();
 });
 AppRegistry.registerComponent("Component-02", () => {
-  // Source: component-02.js
   require("./component-02");
   return AppRegistry.getRunnable("Component-02").componentProvider();
 });"
 `;
 
 exports[`react-native-lazy-index wraps BatchedBridge.registerCallableModule calls 1`] = `
-"// @ts-nocheck
-// eslint-disable-line no-undef
-const BatchedBridge = require("react-native/Libraries/BatchedBridge/BatchedBridge");
+"const BatchedBridge = require("react-native/Libraries/BatchedBridge/BatchedBridge");
 BatchedBridge.registerLazyCallableModule("Module-01", () => {
-  // Source: module-01.js
   require("./module-01");
   return BatchedBridge.getCallableModule("Module-01");
 });
 BatchedBridge.registerLazyCallableModule("Module-02", () => {
-  // Source: module-02.js
   require("./module-02");
   return BatchedBridge.getCallableModule("Module-02");
 });"
 `;
 
 exports[`react-native-lazy-index wraps registered components 1`] = `
-"// @ts-nocheck
-// eslint-disable-line no-undef
-const {
+"const {
   AppRegistry
 } = require("react-native");
 const BatchedBridge = require("react-native/Libraries/BatchedBridge/BatchedBridge");
 BatchedBridge.registerLazyCallableModule("YetAnotherFeature", () => {
-  // Source: node_modules/@awesome-app/yet-another-feature/index.js
   require("@awesome-app/yet-another-feature");
   return BatchedBridge.getCallableModule("YetAnotherFeature");
 });
 BatchedBridge.registerLazyCallableModule("YetAnotherFeatureLazy", () => {
-  // Source: node_modules/@awesome-app/yet-another-feature/index.js
   require("@awesome-app/yet-another-feature");
   return BatchedBridge.getCallableModule("YetAnotherFeatureLazy");
 });
 BatchedBridge.registerLazyCallableModule("AnotherFeature", () => {
-  // Source: node_modules/@awesome-app/another-feature/index.js
   require("@awesome-app/another-feature");
   return BatchedBridge.getCallableModule("AnotherFeature");
 });
 AppRegistry.registerComponent("SomeFeature", () => {
-  // Source: node_modules/@awesome-app/some-feature/index.js
   require("@awesome-app/some-feature");
   return AppRegistry.getRunnable("SomeFeature").componentProvider();
 });
 AppRegistry.registerComponent("FinalFeature", () => {
-  // Source: node_modules/@awesome-app/final-feature/index.js
-  require("@awesome-app/final-feature");
-  return AppRegistry.getRunnable("FinalFeature").componentProvider();
-});"
-`;
-
-exports[`react-native-lazy-index wraps registered components using declared entry points 1`] = `
-"// @ts-nocheck
-// eslint-disable-line no-undef
-const {
-  AppRegistry
-} = require("react-native");
-const BatchedBridge = require("react-native/Libraries/BatchedBridge/BatchedBridge");
-BatchedBridge.registerLazyCallableModule("YetAnotherFeature", () => {
-  // Source: package.json
-  require("@awesome-app/yet-another-feature");
-  return BatchedBridge.getCallableModule("YetAnotherFeature");
-});
-BatchedBridge.registerLazyCallableModule("YetAnotherFeatureLazy", () => {
-  // Source: package.json
-  require("@awesome-app/yet-another-feature");
-  return BatchedBridge.getCallableModule("YetAnotherFeatureLazy");
-});
-BatchedBridge.registerLazyCallableModule("AnotherFeature", () => {
-  // Source: package.json
-  require("@awesome-app/another-feature");
-  return BatchedBridge.getCallableModule("AnotherFeature");
-});
-AppRegistry.registerComponent("SomeFeature", () => {
-  // Source: package.json
-  require("@awesome-app/some-feature");
-  return AppRegistry.getRunnable("SomeFeature").componentProvider();
-});
-AppRegistry.registerComponent("FinalFeature", () => {
-  // Source: package.json
   require("@awesome-app/final-feature");
   return AppRegistry.getRunnable("FinalFeature").componentProvider();
 });"

@@ -3,7 +3,7 @@
 [![Build](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml/badge.svg)](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml)
 [![npm version](https://img.shields.io/npm/v/@rnx-kit/react-native-lazy-index)](https://www.npmjs.com/package/@rnx-kit/react-native-lazy-index)
 
-`react-native-lazy-index` is a RAM bundle friendly, bundle-time generated
+`react-native-lazy-index` is a Hermes/RAM bundle friendly, bundle-time generated
 `index.js`. Improve your app startup time by only loading features you'll use on
 demand.
 
@@ -35,37 +35,23 @@ it to your `.babelrc`:
  }
 ```
 
-In your `package.json`, add a section called `"experiences"` with the features
-that should be lazy loaded. In the example below, we've listed four packages:
-
-```diff
- {
-   "name": "my-awesome-app",
-   "version": "1.0.0",
-   "main": "index.js",
-   "dependencies": {
-     "@awesome-app/some-feature": "*",
-     "@awesome-app/another-feature": "*",
-     "@awesome-app/yet-another-feature": "*",
-     "@awesome-app/final-feature": "*",
-     "@rnx-kit/react-native-lazy-index": "^2.0.0",
-     "react": "16.13.1",
-     "react-native": "0.63.4"
-   },
-+  "experiences": [
-+    "@awesome-app/some-feature",
-+    "@awesome-app/another-feature",
-+    "@awesome-app/yet-another-feature",
-+    "@awesome-app/final-feature"
-+  ]
- }
-```
-
-Finally, replace the content of your `index.js` with:
+In your `index.js`, import `@rnx-kit/react-native-lazy-index` and pass to it the
+features that should be lazy loaded. In the example below, we register four
+entry points:
 
 ```js
-import "@rnx-kit/react-native-lazy-index";
+// @codegen
+module.exports = require("@rnx-kit/react-native-lazy-index")({
+  SomeFeature: "@awesome-app/some-feature",
+  "callable:AnotherFeature": "@awesome-app/another-feature",
+  YetAnotherFeature: "@awesome-app/yet-another-feature",
+  FinalFeature: "@awesome-app/final-feature",
+});
 ```
+
+By default, a call to `AppRegistry` is generated using the key as the app key,
+and the value is the name of the module containing the app. If the key is
+prefixed with `callable:`, a call to `BatchedBridge` will be generated.
 
 That's it!
 
@@ -129,71 +115,6 @@ AppRegistry.registerComponent("FinalFeature", () => {
   return AppRegistry.getRunnable("FinalFeature").componentProvider();
 });
 ```
-
-## Troubleshooting
-
-If you're having trouble with undetected components, there are a couple of
-things you should look out for.
-
-### First parameter must be a string literal
-
-`react-native-lazy-index` cannot evaluate the name passed to
-`AppRegistry.registerComponent()` or `BatchedBridge.registerCallableModule()`
-unless it is a string literal. For instance, if you have something like this in
-code:
-
-```js
-const appName = "MyApp";
-
-AppRegistry.registerComponent(appName, () => {
-  ...
-});
-```
-
-You'll need to inline the string:
-
-```js
-AppRegistry.registerComponent("MyApp", () => {
-  ...
-});
-```
-
-`react-native-lazy-index` outputs warnings when it detects these instances. If
-changing the code is not feasible, you can also
-[manually declare all entry points](#i-want-to-manually-declare-all-entry-points-myself).
-
-### My components are still not found
-
-`react-native-lazy-index` avoids scanning dependencies too deeply to reduce its
-impact on the build time. If your registrations lie too deep within a
-dependency, it may have bailed out before reaching them. There are a couple of
-things you can do to help `react-native-lazy-index` find your components:
-
-1. If you have access to the source code, you can move your registrations
-   further up, closer to the entry point of your dependency.
-2. You can increase the max depth by setting the environment variable
-   `RN_LAZY_INDEX_MAX_DEPTH`. The default is currently set to 3. Note that
-   changing this setting may significantly impact your build time.
-3. If neither is feasible, you can also
-   [manually declare all entry points](#i-want-to-manually-declare-all-entry-points-myself).
-
-### I want to manually declare all entry points myself
-
-You can skip scanning by manually declaring entry points. The below
-configuration will generate the same code as the earlier example output:
-
-```json
-  "experiences": {
-    "SomeFeature": "@awesome-app/some-feature",
-    "callable:AnotherFeature": "@awesome-app/another-feature",
-    "YetAnotherFeature": "@awesome-app/yet-another-feature",
-    "FinalFeature": "@awesome-app/final-feature"
-  }
-```
-
-By default, a call to `AppRegistry` is generated using the key as the app key,
-and the value is the name of the module containing the app. If the key is
-prefixed with `callable:`, a call to `BatchedBridge` will be generated.
 
 ## Contributing
 

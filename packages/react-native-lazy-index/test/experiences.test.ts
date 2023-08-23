@@ -40,22 +40,18 @@ describe("parseExperiences()", () => {
     expect(result).toEqual({
       AnotherFeature: {
         moduleId: "@awesome-app/another-feature",
-        source: "package.json",
         type: "callable",
       },
       FinalFeature: {
         moduleId: "@awesome-app/final-feature",
-        source: "package.json",
         type: "app",
       },
       SomeFeature: {
         moduleId: "@awesome-app/some-feature",
-        source: "package.json",
         type: "app",
       },
       YetAnotherFeature: {
         moduleId: "@awesome-app/yet-another-feature",
-        source: "package.json",
         type: "app",
       },
     });
@@ -74,12 +70,10 @@ describe("parseExperiences()", () => {
     expect(result).toEqual({
       AnotherFeature: {
         moduleId: "@awesome-app/another-feature",
-        source: "package.json",
         type: "callable",
       },
       SomeFeature: {
         moduleId: "@awesome-app/some-feature",
-        source: "package.json",
         type: "app",
       },
     });
@@ -89,17 +83,14 @@ describe("parseExperiences()", () => {
     expect(result).toEqual({
       AnotherFeature: {
         moduleId: "@awesome-app/another-feature",
-        source: "package.json",
         type: "callable",
       },
       SomeFeature: {
         moduleId: "@awesome-app/some-feature",
-        source: "package.json",
         type: "app",
       },
       FinalFeature: {
         moduleId: "@awesome-app/final-feature",
-        source: "package.json",
         type: "app",
       },
     });
@@ -125,7 +116,6 @@ describe("parseExperiences()", () => {
     expect(result).toEqual({
       AnotherFeature: {
         moduleId: "@awesome-app/another-feature",
-        source: "package.json",
         type: "callable",
       },
     });
@@ -135,17 +125,14 @@ describe("parseExperiences()", () => {
     expect(result).toEqual({
       AnotherFeature: {
         moduleId: "@awesome-app/another-feature",
-        source: "package.json",
         type: "callable",
       },
       SomeFeature: {
         moduleId: "@awesome-app/some-feature",
-        source: "package.json",
         type: "app",
       },
       FinalFeature: {
         moduleId: "@awesome-app/final-feature",
-        source: "package.json",
         type: "app",
       },
     });
@@ -155,22 +142,18 @@ describe("parseExperiences()", () => {
     expect(result).toEqual({
       AnotherFeature: {
         moduleId: "@awesome-app/another-feature",
-        source: "package.json",
         type: "callable",
       },
       SomeFeature: {
         moduleId: "@awesome-app/some-feature",
-        source: "package.json",
         type: "app",
       },
       FinalFeature: {
         moduleId: "@awesome-app/final-feature",
-        source: "package.json",
         type: "app",
       },
       ThirdFeature: {
         moduleId: "@awesome-app/third-feature",
-        source: "package.json",
         type: "callable",
       },
     });
