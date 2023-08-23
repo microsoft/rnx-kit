@@ -1,4 +1,4 @@
-import type { Format } from "./types.js";
+import type { Format } from "./types";
 
 export type Metafile = {
   inputs: Record<string, Input>;

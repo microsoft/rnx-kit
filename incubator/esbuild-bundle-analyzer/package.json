@@ -11,13 +11,8 @@
   "files": [
     "lib/*"
   ],
-  "type": "module",
-  "exports": {
-    ".": {
-      "types": "./lib/index.d.ts",
-      "import": "./lib/index.js",
-      "require": "./lib/index.js"
-    }
+  "bin": {
+    "rnx-esbuild-bundle-analyzer": "./lib/cli.js"
   },
   "repository": {
     "type": "git",
@@ -53,8 +48,7 @@
     "extends": "@rnx-kit/eslint-config"
   },
   "jest": {
-    "preset": "@rnx-kit/scripts",
-    "resolver": "@rnx-kit/jest-preset/typescript-esm-resolver.cjs"
+    "preset": "@rnx-kit/scripts"
   },
   "experimental": true
 }

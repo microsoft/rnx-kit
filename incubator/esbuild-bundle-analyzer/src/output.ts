@@ -2,7 +2,7 @@ import { info } from "@rnx-kit/console";
 import { packageRelativePath } from "@rnx-kit/metro-plugin-cyclic-dependencies-detector";
 import chalk from "chalk";
 import fs from "fs";
-import type { Path, Result, Stats } from "./types.js";
+import type { Path, Result, Stats } from "./types";
 
 function formatBytes(bytes: number, decimals = 1): string {
   if (bytes === 0) return "0 bytes";

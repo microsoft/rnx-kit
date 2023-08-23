@@ -1,7 +1,7 @@
 import yargs from "yargs";
-import { analyze } from "./analyze.js";
-import { compare, readMetafile } from "./compare.js";
-import { webpackStats } from "./webpackStats.js";
+import { analyze } from "./analyze";
+import { compare } from "./compare";
+import { webpackStats } from "./webpackStats";
 
 export function main(): void {
   yargs(process.argv.slice(2))
@@ -85,15 +85,7 @@ export function main(): void {
             type: "string",
           }),
       (argv) => {
-        const metafile = readMetafile(argv.metafile);
-
-        webpackStats(
-          metafile,
-          argv.metafile,
-          argv["skip-line-number"],
-          argv.output,
-          argv.namespace
-        );
+        webpackStats(argv.metafile, argv.output, argv["skip-line-number"]);
       }
     )
     .demandCommand().argv;

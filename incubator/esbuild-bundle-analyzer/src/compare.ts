@@ -1,7 +1,7 @@
 import fs from "fs";
-import type { Metafile } from "./metafile.js";
-import { outputDiffToConsole } from "./output.js";
-import { stats } from "./stats.js";
+import type { Metafile } from "./metafile";
+import { outputDiffToConsole } from "./output";
+import { stats } from "./stats";
 
 /**
  * Compares two esbuild metafiles and outputs the differences.

@@ -1,17 +1,17 @@
-export { analyze } from "./analyze.js";
-export { compare, readMetafile } from "./compare.js";
+export { analyze } from "./analyze";
+export { compare, readMetafile } from "./compare";
 export {
   generateGraph,
   getDuplicates,
   getWhyDuplicatesInBundle,
   getWhyFileInBundle,
-} from "./duplicates.js";
+} from "./duplicates";
 
 export {
   output,
   outputDiffToConsole,
   outputWhyDuplicateInBundle,
-} from "./output.js";
+} from "./output";
 
-export { stats } from "./stats.js";
-export { webpackStats } from "./webpackStats.js";
+export { stats } from "./stats";
+export { webpackStats } from "./webpackStats";
