@@ -2,7 +2,7 @@
 "use strict";
 
 /**
- * @typedef {import("./generateLazyIndex").Component} Component;
+ * @typedef {import("./index").Component} Component;
  */
 
 const CALLABLE_PREFIX = "callable:";
