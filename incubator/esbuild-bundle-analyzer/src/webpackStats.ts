@@ -48,38 +48,12 @@ function getLine(filePath: string, keyword: string): string {
 export function getCleanUserRequest(userRequest?: string): string {
   if (!userRequest) return "";
 
-  const patternsToRemove = [
-    "/src/index.",
-    "/lib/index.",
-    "/dist/index.",
-    "/build/index.",
-  ];
+  const patternToRemoveRegex =
+    /\/(src|lib|dist|build)\/index(\.[^.]+)?\.[^.]+$/;
 
-  for (const pattern of patternsToRemove) {
-    const index = userRequest.indexOf(pattern);
-    if (index >= 0) {
-      let extensionIndex = -1;
-      let length = 3;
-
-      if (userRequest.endsWith(".ts")) {
-        extensionIndex = userRequest.indexOf(".ts", index);
-      } else if (userRequest.endsWith(".js")) {
-        extensionIndex = userRequest.indexOf(".js", index);
-      } else if (userRequest.endsWith(".jsx")) {
-        extensionIndex = userRequest.indexOf(".jsx", index);
-        length = 4;
-      } else if (userRequest.endsWith(".tsx")) {
-        extensionIndex = userRequest.indexOf(".tsx", index);
-        length = 4;
-      }
-
-      if (extensionIndex >= 0) {
-        return (
-          userRequest.slice(0, index) +
-          userRequest.slice(extensionIndex + length)
-        );
-      }
-    }
+  const match = userRequest.match(patternToRemoveRegex);
+  if (match) {
+    return userRequest.replace(match[0], "");
   }
 
   return userRequest;

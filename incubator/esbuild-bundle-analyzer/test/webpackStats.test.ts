@@ -41,9 +41,12 @@ describe("getCleanUserRequest()", () => {
     expect(getCleanUserRequest(`${res}/src/index.tsx`)).toBe(res);
     expect(getCleanUserRequest(`${res}/src/index.jsx`)).toBe(res);
     expect(getCleanUserRequest(`${res}/src/index.native.ts`)).toBe(res);
+    expect(getCleanUserRequest(`${res}/dist/index.android.ts`)).toBe(res);
+    expect(getCleanUserRequest(`${res}/build/index.ios.ts`)).toBe(res);
     expect(getCleanUserRequest(`${res}/lib/index.js`)).toBe(res);
     expect(getCleanUserRequest(`${res}/lib/index.native.js`)).toBe(res);
     expect(getCleanUserRequest(`${res}/file.js`)).toBe(`${res}/file.js`);
+    expect(getCleanUserRequest(`react/src/file.js`)).toBe(`react/src/file.js`);
     expect(getCleanUserRequest(undefined)).toBe("");
     expect(getCleanUserRequest("")).toBe("");
   });
