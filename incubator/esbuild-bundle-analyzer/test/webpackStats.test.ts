@@ -1,7 +1,7 @@
 import * as fs from "node:fs";
 import * as path from "node:path";
 import type { WebpackStats } from "../src/types";
-import { webpackStats, getCleanUserRequest } from "../src/webpackStats";
+import { getCleanUserRequest, webpackStats } from "../src/webpackStats";
 
 const consoleSpy = jest.spyOn(global.console, "log");
 const fixturePath = path.join(process.cwd(), "test", "__fixtures__");
