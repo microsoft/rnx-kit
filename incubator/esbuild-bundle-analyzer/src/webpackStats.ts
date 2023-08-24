@@ -15,24 +15,27 @@ function getLine(filePath: string, keyword: string): string {
     const file = fs.readFileSync(path.resolve(filePath), "utf-8");
     const lineNumber = file.split("\n").findIndex((line) => {
       const result = line.includes(keyword);
+      if (result) return true;
 
-      if (keyword.endsWith(".ts") || keyword.endsWith(".js")) {
-        keyword = keyword.slice(0, -3);
-      }
-
-      if (!result) {
-        if (line.includes("/lib/")) {
-          return line.replace("/lib/", "/src/").includes(keyword);
-        } else if (line.includes("/dist/")) {
-          return line.replace("/dist/", "/src/").includes(keyword);
-        } else if (line.includes("/build/")) {
-          return line.replace("/build/", "/src/").includes(keyword);
-        } else {
-          return false;
+      const extensionsToRemove = [".ts", ".js", ".tsx", ".jsx", ".mjs", ".cjs"];
+      for (const extension of extensionsToRemove) {
+        if (keyword.endsWith(extension)) {
+          keyword = keyword.slice(0, -extension.length);
+          break;
         }
       }
 
-      return result;
+      // Check if the import is nested, e.g.:
+      // import { ensureDir } from "@rnx-kit/cli/bundle/metro";
+      if (line.includes("/lib/")) {
+        return line.replace("/lib/", "/src/").includes(keyword);
+      } else if (line.includes("/dist/")) {
+        return line.replace("/dist/", "/src/").includes(keyword);
+      } else if (line.includes("/build/")) {
+        return line.replace("/build/", "/src/").includes(keyword);
+      } else {
+        return false;
+      }
     });
 
     return lineNumber >= 0 ? (lineNumber + 1).toString() : "";
@@ -49,7 +52,7 @@ export function getCleanUserRequest(userRequest?: string): string {
   if (!userRequest) return "";
 
   const patternToRemoveRegex =
-    /\/(src|lib|dist|build)\/index(\.[^.]+)?\.[^.]+$/;
+    /\/(src|lib|dist|build)\/index(\.[^.]+)?(\.[^.]+)?$/;
 
   const match = userRequest.match(patternToRemoveRegex);
   if (match) {
