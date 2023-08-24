@@ -6,14 +6,12 @@
 ## Abstract
 
 React Native currently lacks a well-defined, stable and complete API surface.
-Compared to what both [Android](https://developer.android.com/reference) and
-[iOS](https://developer.apple.com/documentation/technologies) provide out of the
-box, React Native core is missing quite a lot today. To fill that gap, we have a
-"wild west" of community modules, each with its own set of interfaces and
-behaviors. While this is in line with the broader experience in the web/npm
-space, at the end of the day this means that it is the developers'
-responsibility to find modules that fit their needs and that are seemingly
-actively maintained.
+Compared to what both [Android][] and [iOS][] provide out of the box, React
+Native core is missing quite a lot today. To fill that gap, we have a "wild
+west" of community modules, each with its own set of interfaces and behaviors.
+While this is in line with the broader experience in the web/npm space, at the
+end of the day this means that it is the developers' responsibility to find
+modules that fit their needs and that are seemingly actively maintained.
 
 Additionally, the APIs are not compatible with Web APIs, thus closing the door
 to a wealth of open source libraries that do not have explicit React Native
@@ -21,11 +19,10 @@ support. This often means that developers cannot reuse existing web code, and
 must search for or even create one for their needs.
 
 In this RFC, we are proposing to close this gap by providing our own
-implementation of the
-[Web APIs](https://developer.mozilla.org/en-US/docs/Web/API) for React Native.
-The ultimate goal is to open the possibility to run non-UI code directly in a
-React Native app; to provide a familiar environment for existing web developers
-as well as a well-documented API for developers of any experience level.
+implementation of the [Web APIs][] for React Native. The ultimate goal is to
+open the possibility to run non-UI code directly in a React Native app; to
+provide a familiar environment for existing web developers as well as a
+well-documented API for developers of any experience level.
 
 ## Guide-level explanation
 
@@ -48,43 +45,48 @@ Windows.
 
 ## Reference-level explanation
 
-Our goal is not to reimplement a browser, e.g.
-[Electron](https://www.electronjs.org/). Apps made this way currently ship with
-a full browser with everything that entails, including modules that they may
-never get used. Native apps, and mobile apps especially, cannot be shipped with
-unused bits; nor does it make any sense to include MBs of dependencies that are
-never used. Ideally, migrating from community modules to WebAPIs should not
-increase the final app size (at least not significantly).
+Our goal is not to reimplement a browser, e.g. [Electron][]. Apps made this way
+currently ship with a full browser with everything that entails, including
+modules that they may never get used. Native apps, and mobile apps especially,
+cannot be shipped with unused bits; nor does it make any sense to include MBs of
+dependencies that are never used. Ideally, migrating from community modules to
+WebAPIs should not increase the final app size (at least not significantly).
 
-The API we envision are implemented in the following layers:
+We envision the APIs can be implemented in at least two ways:
 
 ```mermaid
 graph TD;
   id(Web APIs)-->id1(JS shim);
   id1(JS shim)-->id2(Turbo/native module);
   id2(Turbo/native module)-->id3(Platform API/\nCommunity module);
+  id(Web APIs)-->id10(JS implementation);
 ```
 
 - **Web APIs:** On the surface, there are little to no differences from typical
   web code.
 
-- **JS shim:** This is a thin layer for marshalling web API calls to native
-  modules. It needs to be installed before it can be used. The current thinking
-  is to install this layer as polyfills. Installing them on-demand is preferred,
-  but we need to start somewhere and we should be able to improve this layer
-  later without affecting users. In any case, we will need tools to include
-  polyfills similarly to [autolinking][].
+- The APIs can be implemented as a native module and a shim layer:
 
-- **Turbo/native module:** This is the layer that accepts JS calls and forwards
-  them platform implementations. Modules are installed via the standard
-  autolinking mechanism.
+  - **JS shim:** This is a thin layer for marshalling web API calls to native
+    modules. It needs to be installed before it can be used. The current
+    thinking is to install this layer as polyfills. Installing them on-demand is
+    preferred, but we need to start somewhere and we should be able to improve
+    this layer later without affecting users. In any case, we will need tools to
+    include polyfills similarly to [autolinking][].
+  - **Turbo/native module:** This is the layer that accepts JS calls and
+    forwards them platform implementations. Modules are installed via the
+    standard autolinking mechanism.
+    - Note: Some Web APIs may necessitate JSI bindings e.g., to properly manage
+      native resources or because the object model in the API lends itself more
+      towards live, stateful, graphs of objects which would otherwise require a
+      thicker polyfill.
+  - **Platform API/Community module:** When available, we want to be able to
+    leverage what already exists in the community and avoid creating competing
+    solutions. When we need to write from scratch, we want to comply with the
+    guidelines for the [new architecture libraries][] provided by Meta.
 
-- **Platform API/Community module:** When available, we want to be able to
-  leverage what already exists in the community and avoid creating competing
-  solutions. When we need to write from scratch, we want to comply with the
-  guidelines for the
-  [new architecture libraries](https://github.com/reactwg/react-native-new-architecture/discussions/categories/libraries)
-  provided by Meta.
+- Alternatively, native code may not be necessary at all if a complete
+  implementation can be done in pure JS.
 
 ### Modularity
 
@@ -120,15 +122,14 @@ declared polyfill will be included. They do not need to be under the
 
 On top of what has been mentioned above, we are still investigating the right
 approach for how the code for this effort should be created and organised. The
-most likely approach will involve a monorepo (similar to
-[`rnx-kit`](https://github.com/microsoft/rnx-kit)) where each module will be its
-own dedicated package. For starters, we will suggest that implementations for
-"core" supported platforms (i.e. Android, iOS, macOS, Windows) be present in the
-one package — we won't have `/~/battery-status-android` and
-`/~/battery-status-ios`, only `/~/battery-status`. However, it should still be
-possible to have additional platform specific implementations, e.g.
-`/~/battery-status-tvos`. These should also be treated as first class citizens
-and be recognized by all tooling.
+most likely approach will involve a monorepo (similar to [`rnx-kit`][]) where
+each module will be its own dedicated package. For starters, we will suggest
+that implementations for "core" supported platforms (i.e. Android, iOS, macOS,
+Windows) be present in the one package — we won't have
+`/~/battery-status-android` and `/~/battery-status-ios`, only
+`/~/battery-status`. However, it should still be possible to have additional
+platform specific implementations, e.g. `/~/battery-status-tvos`. These should
+also be treated as first class citizens and be recognized by all tooling.
 
 This should allow for different people to work on different modules at the same
 time, while having a coherent infra to rely on for testing, publishing, etc.
@@ -167,18 +168,19 @@ dependencies they need to add. At minimum we should:
   would require users to change web code to accommodate native. For instance,
   `navigator.getBattery()` would have to be rewritten as
   `require("@react-native-webapis/battery-status").getBattery()`.
+  - On the other hand, this approach has the advantage of not polluting the
+    global space with typings for APIs that may not be available in your
+    project.
 - There are many polyfills out there, but they are mostly used to provide
   functionalities that are only present in newer ES standards (e.g.
   [`Object.assign`][], [`Object.is`][]). We have not found any that address the
   scope defined here.
-- [React Native Test App](https://github.com/microsoft/react-native-test-app)
-  will be used as the sandbox tool to build the modules against to reduce
-  friction and have "out of the box" the ability to test across all the target
-  platforms.
+- [React Native Test App][] will be used as the sandbox tool to build the
+  modules against to reduce friction and have "out of the box" the ability to
+  test across all the target platforms.
 - This goal of web-like code working via React Native on multiple platforms is
-  shared with Meta's
-  [RFC: React DOM for Native](https://github.com/react-native-community/discussions-and-proposals/pull/496),
-  which should be considered complementary to the proposal presented here.
+  shared with Meta's [RFC: React DOM for Native][], which should be considered
+  complementary to the proposal presented here.
 
 ## Adoption strategy
 
@@ -203,15 +205,13 @@ We will be following the crawl-walk-run methodology:
 ## Unresolved questions
 
 - Which parts of the Web API do we prioritize first?
-  - As proof-of-concept, we've implemented the
-    [`Battery Status API`](https://developer.mozilla.org/en-US/docs/Web/API/Battery_Status_API)
-    as it is small and self-contained.
-    - https://github.com/microsoft/rnx-kit/pull/2590
+  - As proof-of-concept, we've implemented the [Battery Status API][] as it is
+    small and self-contained.
+    - Code: https://github.com/microsoft/rnx-kit/pull/2590
     - We're currently using a Babel plugin and rely on a magic comment in the
-      bundle to generate import statements. To further automate this, we would
-      need something akin to Webpack's
-      [entry points](https://webpack.js.org/concepts/entry-points/). More
-      details here: https://github.com/facebook/metro/issues/850.
+      bundle to generate import statements. An alternative implementation would
+      be to use something akin to Webpack's [entry points][]. More details here:
+      https://github.com/facebook/metro/issues/850.
     - It looks like this API is deprecated due to privacy concerns:
       https://github.com/microsoft/TypeScript-DOM-lib-generator/pull/236
 
@@ -221,7 +221,20 @@ We will be following the crawl-walk-run methodology:
   https://github.com/microsoft/rnx-kit/tree/main/packages/align-deps#readme
 [`Object.assign`]: https://github.com/ljharb/object.assign/blob/main/polyfill.js
 [`Object.is`]: https://github.com/es-shims/object-is/blob/main/polyfill.js
+[`rnx-kit`]: https://github.com/microsoft/rnx-kit
 [`serializer.getModulesRunBeforeMainModule`]:
   https://github.com/facebook/react-native/blob/0.72-stable/packages/metro-config/index.js#L49
+[Android]: https://developer.android.com/reference
+[Battery Status API]:
+  https://developer.mozilla.org/en-US/docs/Web/API/Battery_Status_API
+[Electron]: https://www.electronjs.org/
+[RFC: React DOM for Native]:
+  https://github.com/react-native-community/discussions-and-proposals/pull/496
+[React Native Test App]: https://github.com/microsoft/react-native-test-app
+[Web APIs]: https://developer.mozilla.org/en-US/docs/Web/API
 [autolinking]:
   https://github.com/react-native-community/cli/blob/main/docs/autolinking.md
+[entry points]: https://webpack.js.org/concepts/entry-points/
+[iOS]: https://developer.apple.com/documentation/technologies
+[new architecture libraries]:
+  https://github.com/reactwg/react-native-new-architecture/discussions/categories/libraries
