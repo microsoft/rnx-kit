@@ -12,7 +12,7 @@
     "lib/*"
   ],
   "bin": {
-    "rnx-esbuild-bundle-analyzer": "./lib/cli.js"
+    "rnx-analyzer": "./lib/cli.js"
   },
   "repository": {
     "type": "git",

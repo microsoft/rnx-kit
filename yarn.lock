@@ -3557,7 +3557,7 @@ __metadata:
     typescript: ^5.0.0
     yargs: ^16.0.0
   bin:
-    rnx-esbuild-bundle-analyzer: ./lib/cli.js
+    rnx-analyzer: ./lib/cli.js
   languageName: unknown
   linkType: soft
 
