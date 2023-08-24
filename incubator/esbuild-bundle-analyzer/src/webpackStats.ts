@@ -12,7 +12,7 @@ import type {
 
 function getLine(filePath: string, keyword: string): string {
   try {
-    const file = fs.readFileSync(path.resolve(filePath), "utf-8");
+    const file = fs.readFileSync(filePath, "utf-8");
     const lineNumber = file.split("\n").findIndex((line) => {
       const result = line.includes(keyword);
       if (result) return true;
@@ -54,38 +54,12 @@ export function getCleanUserRequest(userRequest?: string): string {
   const patternToRemoveRegex =
     /\/(src|lib|dist|build)\/index(\.[^.]+)?(\.[^.]+)?$/;
 
-  const match = userRequest.match(patternToRemoveRegex);
-  if (match) {
-    return userRequest.replace(match[0], "");
-  }
-
-  return userRequest;
+  return userRequest.replace(patternToRemoveRegex, "");
 }
 
-function removePrefix(filePath: string): string {
-  let parts = filePath.split(":");
-
-  while (parts.length > 1) {
-    filePath = parts.slice(1).join(":");
-    parts = filePath.split(":");
-  }
-
-  return filePath;
-}
-
-/**
- * Returns a simpler and more readable path which starts from node_modules
- * and removes the namespace prefix, e.g.:
- * namespace:user/x/.store/@test-library@0.0.1-b55dbe3d1aed7a6c074d/node_modules/@test-library/a/b/test.js
- * becomes node_modules/@test-library/a/b/test.js
- */
-function getSimplePath(file: string): string {
-  if (!file.startsWith("..")) {
-    file = removePrefix(file);
-  }
-
-  const index = file.indexOf("node_modules");
-  return index >= 0 ? file.slice(index) : path.relative(process.cwd(), file);
+export function removePrefix(filePath: string): string {
+  const lastColonIndex = filePath.lastIndexOf(":");
+  return lastColonIndex < 0 ? filePath : filePath.slice(lastColonIndex + 1);
 }
 
 /**
@@ -137,9 +111,9 @@ export function webpackStats(
       const reasons: StatsModuleReason[] = [];
       const issuers: StatsModuleIssuer[] = [];
 
-      for (const p in paths) {
+      for (const name in paths) {
         issuers.push({
-          name: getSimplePath(p),
+          name,
         });
       }
 
@@ -150,7 +124,7 @@ export function webpackStats(
             reasons.push({
               type: inputs[input].format === "esm" ? "harmony" : "cjs",
               module: input,
-              moduleName: getSimplePath(input),
+              moduleName: input,
               userRequest,
               loc:
                 !skipLineNumber && imp.original
@@ -164,7 +138,7 @@ export function webpackStats(
       webpack.modules.push({
         type: "module",
         identifier: inputFile,
-        name: getSimplePath(inputFile),
+        name: inputFile,
         size: input.bytesInOutput,
         issuerPath: issuers,
         id: (id += 1),

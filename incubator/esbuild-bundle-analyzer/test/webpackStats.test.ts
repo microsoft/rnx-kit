@@ -1,7 +1,11 @@
 import * as fs from "node:fs";
 import * as path from "node:path";
 import type { WebpackStats } from "../src/types";
-import { getCleanUserRequest, webpackStats } from "../src/webpackStats";
+import {
+  getCleanUserRequest,
+  removePrefix,
+  webpackStats,
+} from "../src/webpackStats";
 
 const consoleSpy = jest.spyOn(global.console, "log");
 const fixturePath = path.join(process.cwd(), "test", "__fixtures__");
@@ -50,5 +54,18 @@ describe("getCleanUserRequest()", () => {
     expect(getCleanUserRequest(`react/src/file.js`)).toBe(`react/src/file.js`);
     expect(getCleanUserRequest(undefined)).toBe("");
     expect(getCleanUserRequest("")).toBe("");
+  });
+});
+
+describe("removePrefix()", () => {
+  test("removes prefix", () => {
+    const path = "@rnx-kit/test/src/index.ts";
+    const winPath = "@rnx-kit\\test\\src\\index.ts";
+    expect(removePrefix(`:${path}`)).toBe(path);
+    expect(removePrefix(`namespace:${path}`)).toBe(path);
+    expect(removePrefix(`namespace:metro:${path}`)).toBe(path);
+    expect(removePrefix(`:${winPath}`)).toBe(winPath);
+    expect(removePrefix(`namespace:${winPath}`)).toBe(winPath);
+    expect(removePrefix(`namespace:metro:${winPath}`)).toBe(winPath);
   });
 });
