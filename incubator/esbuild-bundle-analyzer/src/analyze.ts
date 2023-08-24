@@ -49,7 +49,6 @@ export function analyze(
   output(
     {
       data: data,
-      buildTime: 0,
       slowDownloadTime: Math.round(
         data.totalBytes / 1024 / SLOW_DOWNLOAD_SPEED
       ),

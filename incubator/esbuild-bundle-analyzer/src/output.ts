@@ -102,7 +102,6 @@ function outputToConsole(result: Result): void {
       "Output stats:\n" +
       outputStats.map((stat) => `  ${stat}`).join("\n") +
       "\n" +
-      `Build time: ${result.buildTime} s\n` +
       `3G download time: ${formatTime(result.slowDownloadTime)}\n` +
       `4G download time: ${formatTime(result.fastDownloadTime)}\n` +
       `Average file size: ${formatBytes(result.avgFileSize)}\n` +
