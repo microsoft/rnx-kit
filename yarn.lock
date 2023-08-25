@@ -3567,6 +3567,7 @@ __metadata:
     "@types/jest": ^29.2.1
     "@typescript-eslint/eslint-plugin": ^6.0.0
     "@typescript-eslint/parser": ^6.0.0
+    "@typescript-eslint/types": ^6.0.0
     enhanced-resolve: ^5.8.3
     eslint: ^8.0.0
     eslint-plugin-react: ^7.26.0
@@ -4672,7 +4673,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript-eslint/types@npm:6.4.1":
+"@typescript-eslint/types@npm:6.4.1, @typescript-eslint/types@npm:^6.0.0":
   version: 6.4.1
   resolution: "@typescript-eslint/types@npm:6.4.1"
   checksum: 16ba46140dbe426407bbb940e87fb347e7eb53b64f74e8f6a819cd662aa25ccd0c25b1e588867ce3cd36a8b4eccea7bd81f4d429595e6e86d9a24c655b1c8617

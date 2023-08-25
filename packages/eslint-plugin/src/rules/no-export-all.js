@@ -2,7 +2,7 @@
 "use strict";
 
 /**
- * @typedef {import("@typescript-eslint/types").TSESTree.Node} Node
+ * @typedef {import("@typescript-eslint/types/dist/index").TSESTree.Node} Node
  * @typedef {import("eslint").Rule.RuleContext} ESLintRuleContext
  * @typedef {import("eslint").Rule.ReportFixer} ESLintReportFixer
  * @typedef {{ exports: string[], types: string[] }} NamedExports
@@ -252,7 +252,9 @@ function extractExports(context, moduleId, depth) {
                 // fallthrough
                 case "FunctionDeclaration":
                 // fallthrough
-                case "TSDeclareFunction": {
+                case "TSDeclareFunction":
+                // fallthrough
+                case "TSImportEqualsDeclaration": {
                   const name = declaration.id && declaration.id.name;
                   if (name) {
                     exports.add(name);
@@ -332,8 +334,11 @@ function extractExports(context, moduleId, depth) {
             break;
           }
 
+          // Prior to v6, a `TSImportEqualsDeclaration` will have an `isExport`
+          // property instead of being wrapped in an `ExportNamedDeclaration`.
+          // See https://github.com/typescript-eslint/typescript-eslint/issues/4130
           case "TSImportEqualsDeclaration":
-            if (node.isExport) {
+            if ("isExport" in node && node.isExport) {
               // export import foo = require('./foo');
               // export import Bar = Foo.Bar;
               exports.add(node.id.name);
