@@ -119,7 +119,6 @@ const patchRepo: PatchRepoFuncType = (
   };
 
   const callbackDirectory = (_path: string, _rootAbsPath: string) => {
-    // tslint:disable-next-line:no-console
     // console.log('Directory: ' + path);
   };
 

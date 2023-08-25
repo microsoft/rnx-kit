@@ -3,7 +3,7 @@ import type ts from "typescript";
 import { VersionedSnapshot } from "./snapshot";
 
 export class ProjectFileCache {
-  private files: Map<string, VersionedSnapshot> = new Map();
+  private files = new Map<string, VersionedSnapshot>();
 
   constructor(fileNames: string[]) {
     fileNames.forEach((fileName) => this.set(fileName));
@@ -50,7 +50,7 @@ export class ProjectFileCache {
 
 // TODO: the files in this list need to be watched. on change/delete, remove from this list and let the file be re-cached on demand
 export class ExternalFileCache {
-  private files: Map<string, VersionedSnapshot> = new Map();
+  private files = new Map<string, VersionedSnapshot>();
 
   getSnapshot(fileName: string): ts.IScriptSnapshot {
     const normalized = normalizePath(fileName);

@@ -37,15 +37,9 @@ export type Item = {
   import: Import | undefined;
 };
 
-export type Path = {
-  [key: string]: Item;
-};
+export type Path = Record<string, Item>;
 
-export type ModuleMap = {
-  [name: string]: {
-    [version: string]: Set<string>;
-  };
-};
+export type ModuleMap = Record<string, Record<string, Set<string>>>;
 
 export type Duplicate = {
   copies: number;

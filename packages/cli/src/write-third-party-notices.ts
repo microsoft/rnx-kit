@@ -13,7 +13,7 @@ type CliThirdPartyNoticesOptions = {
 };
 
 export function rnxWriteThirdPartyNotices(
-  _argv: Array<string>,
+  _argv: string[],
   _config: CLIConfig,
   {
     additionalText,

@@ -15,7 +15,7 @@ type CLIBundleOptions = CLICommonBundleOptions & {
 };
 
 export async function rnxBundle(
-  _argv: Array<string>,
+  _argv: string[],
   cliConfig: CLIConfig,
   cliOptions: CLIBundleOptions
 ): Promise<void> {

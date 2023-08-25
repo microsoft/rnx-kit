@@ -16,9 +16,7 @@ type Task = {
   action: () => Promise<void>;
 };
 
-type CLICommand = {
-  [key: string]: Task[];
-};
+type CLICommand = Record<string, Task[]>;
 
 export async function rnxClean(
   _argv: string[],

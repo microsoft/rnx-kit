@@ -8,7 +8,7 @@ import * as semver from "semver";
 
 export type MetroPlugin<T = MixedOutput> = (
   entryPoint: string,
-  preModules: ReadonlyArray<Module<T>>,
+  preModules: readonly Module<T>[],
   graph: ReadOnlyGraph<T>,
   options: SerializerOptions<T>
 ) => void;
@@ -17,7 +17,7 @@ export type CustomSerializerResult = string | { code: string; map: string };
 
 export type CustomSerializer = (
   entryPoint: string,
-  preModules: ReadonlyArray<Module>,
+  preModules: readonly Module[],
   graph: ReadOnlyGraph,
   options: SerializerOptions
 ) => Promise<CustomSerializerResult> | CustomSerializerResult;
@@ -39,7 +39,7 @@ export function MetroSerializer(plugins: MetroPlugin[]): CustomSerializer {
 
   return (
     entryPoint: string,
-    preModules: ReadonlyArray<Module>,
+    preModules: readonly Module[],
     graph: ReadOnlyGraph,
     options: SerializerOptions
   ): string | Promise<string> => {

@@ -1,6 +1,6 @@
 export type BasicSourceMap = {
-  sources: Array<string>;
-  sourcesContent: Array<string | null>;
+  sources: string[];
+  sourcesContent: (string | null)[];
 };
 
 export type SourceDiff = {

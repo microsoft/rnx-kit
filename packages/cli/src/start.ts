@@ -117,7 +117,7 @@ function makeHelp(terminal: MetroTerminal["terminal"]): () => void {
 }
 
 export async function rnxStart(
-  _argv: Array<string>,
+  _argv: string[],
   cliConfig: CLIConfig,
   cliOptions: CLIStartOptions
 ): Promise<void> {
