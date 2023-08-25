@@ -317,14 +317,14 @@ PODS:
     - React-jsi (= 0.71.12)
     - React-logger (= 0.71.12)
     - React-perflogger (= 0.71.12)
-  - ReactNativeHost (0.2.7):
+  - ReactNativeHost (0.2.8):
     - React-Core
     - React-cxxreact
     - ReactCommon/turbomodule/core
-  - ReactTestApp-DevSupport (2.5.12):
+  - ReactTestApp-DevSupport (2.5.15):
     - React-Core
     - React-jsi
-  - ReactTestApp-MSAL (2.1.4):
+  - ReactTestApp-MSAL (2.1.6):
     - MSAL
     - RNXAuth
   - ReactTestApp-Resources (1.0.0-dev)
@@ -492,9 +492,9 @@ SPEC CHECKSUMS:
   React-RCTVibration: a283fefb8cc29d9740a7ff2e87f72ad10f25a433
   React-runtimeexecutor: 7902246857a4ead4166869e6c42d4df329ff721d
   ReactCommon: 903ae47d52e4af9bd1d41d5c7c6004e828aa59a1
-  ReactNativeHost: 5dd0021c01ade845f1171f4e6f6814f214ddfadb
-  ReactTestApp-DevSupport: 7c030a9b1a9d54ba3f39db6ea9af7e7d02acd387
-  ReactTestApp-MSAL: 35552a169434bc9ca7fb14b46fcdbabf1d6ff046
+  ReactNativeHost: 5caf8c9381f26c453fabbe8c3b87f6a013a3c459
+  ReactTestApp-DevSupport: 9b9eb9bf56d1a2f3ce71875c20597decdc04683c
+  ReactTestApp-MSAL: 10b54d7d435128a3a3d2ca56aeabd17cf72080d2
   ReactTestApp-Resources: 4b819f4d440477a0470146af1cd05299f19b33f8
   RNXAuth: aebb79490c3998a43fe499d2f5745ef085168705
   Yoga: 39310a10944fc864a7550700de349183450f8aaa
