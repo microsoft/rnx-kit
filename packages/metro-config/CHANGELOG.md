@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-config
 
+## 1.3.9
+
+### Patch Changes
+
+- 660793b5: Ignore unrelated file changes
+
 ## 1.3.8
 
 ### Patch Changes

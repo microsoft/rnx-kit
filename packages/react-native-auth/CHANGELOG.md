@@ -1,5 +1,11 @@
 # @rnx-kit/react-native-auth
 
+## 0.2.4
+
+### Patch Changes
+
+- 8872a52e: Use correct iOS account type string
+
 ## 0.2.3
 
 ### Patch Changes
