@@ -14,4 +14,19 @@ export {
 } from "./output";
 
 export { stats } from "./stats";
-export { webpackStats } from "./webpackStats";
+export { transform } from "./webpackStats";
+
+export type {
+  Duplicate,
+  Format,
+  Graph,
+  Import,
+  Item,
+  ModuleMap,
+  Path,
+  Result,
+  Stats,
+  StatsModuleIssuer,
+  StatsModuleReason,
+  WebpackStats,
+} from "./types";

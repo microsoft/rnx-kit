@@ -1,7 +1,7 @@
 import yargs from "yargs";
 import { analyze } from "./analyze";
 import { compare } from "./compare";
-import { webpackStats } from "./webpackStats";
+import { transform } from "./webpackStats";
 
 export function main(): void {
   yargs(process.argv.slice(2))
@@ -78,14 +78,9 @@ export function main(): void {
             type: "boolean",
             demandOption: false,
             default: false,
-          })
-          .option("namespace", {
-            describe:
-              "Removes the namespace from every module to get cleaner output",
-            type: "string",
           }),
       (argv) => {
-        webpackStats(argv.metafile, argv.output, argv["skip-line-number"]);
+        transform(argv.metafile, argv["skip-line-number"], argv.output);
       }
     )
     .demandCommand().argv;

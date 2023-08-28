@@ -10,32 +10,23 @@ import type {
   WebpackStats,
 } from "./types";
 
-function getLine(filePath: string, keyword: string): string {
+function getLine(
+  filePath: string,
+  keyword: string,
+  src?: string,
+  dest?: string
+): string {
   try {
     const file = fs.readFileSync(filePath, "utf-8");
     const lineNumber = file.split("\n").findIndex((line) => {
       const result = line.includes(keyword);
       if (result) return true;
 
-      const extensionsToRemove = [".ts", ".js", ".tsx", ".jsx", ".mjs", ".cjs"];
-      for (const extension of extensionsToRemove) {
-        if (keyword.endsWith(extension)) {
-          keyword = keyword.slice(0, -extension.length);
-          break;
-        }
+      if (src && dest && line.includes(`/${dest}/`)) {
+        return line.replace(`/${dest}/`, `/${src}/`).includes(keyword);
       }
 
-      // Check if the import is nested, e.g.:
-      // import { ensureDir } from "@rnx-kit/cli/bundle/metro";
-      if (line.includes("/lib/")) {
-        return line.replace("/lib/", "/src/").includes(keyword);
-      } else if (line.includes("/dist/")) {
-        return line.replace("/dist/", "/src/").includes(keyword);
-      } else if (line.includes("/build/")) {
-        return line.replace("/build/", "/src/").includes(keyword);
-      } else {
-        return false;
-      }
+      return false;
     });
 
     return lineNumber >= 0 ? (lineNumber + 1).toString() : "";
@@ -57,25 +48,54 @@ export function getCleanUserRequest(userRequest?: string): string {
   return userRequest.replace(patternToRemoveRegex, "");
 }
 
-export function removePrefix(filePath: string): string {
+export function removeNamespace(filePath: string): string {
   const lastColonIndex = filePath.lastIndexOf(":");
-  return lastColonIndex < 0 ? filePath : filePath.slice(lastColonIndex + 1);
+  if (lastColonIndex < 0) return filePath;
+
+  const namespace = filePath.slice(0, lastColonIndex);
+  const result = filePath.slice(lastColonIndex + 1);
+  const isWindowsPath = /\\[\\\S|*\S]?.*$/.test(filePath);
+  const last = namespace.split(":").pop();
+
+  if (isWindowsPath && last?.length === 1) {
+    const driveLetter = /[a-zA-Z]$/.test(last) ? `${last}:` : "";
+    return `${driveLetter}${result}`;
+  }
+
+  return result;
+}
+
+/**
+ * Returns a simpler and more readable path which starts from node_modules
+ * and removes the namespace prefix, e.g.:
+ * namespace:user/x/.store/@test-library@0.0.1-b55dbe3d1aed7a6c074d/node_modules/@test-library/a/b/test.js
+ * becomes node_modules/@test-library/a/b/test.js
+ */
+function getSimplePath(file: string): string {
+  if (!file.startsWith("..")) {
+    file = removeNamespace(file);
+  }
+
+  const index = file.indexOf("node_modules");
+  return index >= 0 ? file.slice(index) : path.relative(process.cwd(), file);
 }
 
 /**
  * Transforms a esbuild metafile into a webpack stats file.
  *
  * @param metafilePath The path to the esbuild metafile
- * @param statsPath The path to the webpack stats file
  * @param skipLineNumber Whether to skip the line number in the webpack stats output
+ * @param statsPath The path to the webpack stats file
  * @param graph Module object containing all the entry points and imports
  */
-export function webpackStats(
+export function transform(
   metafilePath: string,
-  statsPath: string,
   skipLineNumber: boolean,
-  graph?: Graph
-): void {
+  statsPath?: string,
+  graph?: Graph,
+  src?: string,
+  dest?: string
+): WebpackStats | null {
   const metafile = readMetafile(metafilePath);
   if (!graph) graph = generateGraph(metafile);
   const { inputs, outputs } = metafile;
@@ -113,7 +133,7 @@ export function webpackStats(
 
       for (const name in paths) {
         issuers.push({
-          name,
+          name: getSimplePath(name),
         });
       }
 
@@ -124,11 +144,11 @@ export function webpackStats(
             reasons.push({
               type: inputs[input].format === "esm" ? "harmony" : "cjs",
               module: input,
-              moduleName: input,
+              moduleName: getSimplePath(input),
               userRequest,
               loc:
                 !skipLineNumber && imp.original
-                  ? getLine(removePrefix(input), userRequest)
+                  ? getLine(removeNamespace(input), userRequest, src, dest)
                   : "",
             });
           }
@@ -138,7 +158,7 @@ export function webpackStats(
       webpack.modules.push({
         type: "module",
         identifier: inputFile,
-        name: inputFile,
+        name: getSimplePath(inputFile),
         size: input.bytesInOutput,
         issuerPath: issuers,
         id: (id += 1),
@@ -150,6 +170,11 @@ export function webpackStats(
     chunkId += 1;
   }
 
-  fs.writeFileSync(statsPath, JSON.stringify(webpack));
-  info(`Webpack stats file written to ${statsPath}`);
+  if (!statsPath) {
+    return webpack;
+  } else {
+    fs.writeFileSync(statsPath, JSON.stringify(webpack));
+    info(`Webpack stats file written to ${statsPath}`);
+    return null;
+  }
 }
