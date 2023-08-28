@@ -2,7 +2,7 @@
 
 RNXAccountType RNXAccountTypeFromString(NSString *type)
 {
-    if ([type isEqualToString:@"Microsoft"]) {
+    if ([type isEqualToString:@"MicrosoftAccount"]) {
         return RNXAccountTypeMicrosoftAccount;
     }
     if ([type isEqualToString:@"Organizational"]) {
