@@ -1,15 +1,14 @@
 import { error } from "@rnx-kit/console";
 import { getErrorMessage } from "@rnx-kit/metro-plugin-duplicates-checker";
 import * as path from "path";
-import { readMetafile } from "./compare.js";
-import { FAST_DOWNLOAD_SPEED, SLOW_DOWNLOAD_SPEED } from "./constants.js";
+import { readMetafile } from "./compare";
 import {
   generateGraph,
   getDuplicates,
   getWhyDuplicatesInBundle,
-} from "./duplicates.js";
-import { output, outputWhyDuplicateInBundle } from "./output.js";
-import { stats } from "./stats.js";
+} from "./duplicates";
+import { output, outputWhyDuplicateInBundle } from "./output";
+import { stats } from "./stats";
 
 /**
  * Analyzes a esbuild metafile.
@@ -44,11 +43,12 @@ export function analyze(
     }
   }
 
+  const SLOW_DOWNLOAD_SPEED = 50; // 3G - 50 kbps
+  const FAST_DOWNLOAD_SPEED = 875; // 4G - 875 kbps
   const data = stats(metafile);
   output(
     {
       data: data,
-      buildTime: 0,
       slowDownloadTime: Math.round(
         data.totalBytes / 1024 / SLOW_DOWNLOAD_SPEED
       ),

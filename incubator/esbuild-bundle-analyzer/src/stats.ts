@@ -1,5 +1,5 @@
-import type { Metafile } from "./metafile.js";
-import type { Stats } from "./types.js";
+import type { Metafile } from "./metafile";
+import type { Stats } from "./types";
 
 /**
  * Returns a summary statistics of the given metafile.

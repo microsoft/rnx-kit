@@ -4,8 +4,8 @@ import {
   normalizePath,
   resolveModule,
 } from "@rnx-kit/metro-plugin-duplicates-checker";
-import type { Metafile } from "./metafile.js";
-import type { Graph, Import, Item, ModuleMap, Path } from "./types.js";
+import type { Metafile } from "./metafile";
+import type { Graph, Import, Item, ModuleMap, Path } from "./types";
 
 /** Generates a map of all the entry points and imports in the metafile.
  * Maps each module to the module that imports it and the import type.

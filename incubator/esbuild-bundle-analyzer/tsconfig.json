@@ -1,4 +1,4 @@
 {
-  "extends": "@rnx-kit/scripts/tsconfig-esm.json",
+  "extends": "@rnx-kit/scripts/tsconfig-shared.json",
   "include": ["src"]
 }

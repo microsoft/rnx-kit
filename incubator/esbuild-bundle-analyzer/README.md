@@ -50,7 +50,7 @@ in the bundle.
 Generate simple analysis of a bundle by consuming esbuild's metafile:
 
 ```sh
-npx @rnx-kit/esbuild-bundle-analyzer analyze --metafile <path-to-esbuild-metafile>
+npx @rnx-kit/esbuild-bundle-analyzer analyze <path-to-esbuild-metafile>
 ```
 
 Along with these core options, you might want to pass the following params:
@@ -71,7 +71,7 @@ Along with these core options, you might want to pass the following params:
 A complete example of this script is the following:
 
 ```sh
-npx @rnx-kit/esbuild-bundle-analyzer analyze --metafile meta.json --json --show-duplicates --namespace virtual:metro
+npx @rnx-kit/esbuild-bundle-analyzer analyze meta.json --json --show-duplicates --namespace virtual:metro
 ```
 
 ### compare
@@ -102,7 +102,7 @@ track and compare the bundle size over time.
 Generate a webpack stats file:
 
 ```sh
-npx @rnx-kit/esbuild-bundle-analyzer transform --metafile <path-to-esbuild-metafile> --output <path-to-webpack-stats-file>
+npx @rnx-kit/esbuild-bundle-analyzer transform <path-to-esbuild-metafile> --output <path-to-webpack-stats-file>
 ```
 
 Then, you can upload the generated Webpack stats file to

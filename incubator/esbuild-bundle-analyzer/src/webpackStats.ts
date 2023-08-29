@@ -1,78 +1,52 @@
 import { info } from "@rnx-kit/console";
 import fs from "fs";
 import * as path from "path";
-import { filesToSkip } from "./constants.js";
-import { generateGraph, getWhyFileInBundle } from "./duplicates.js";
-import type { Metafile } from "./metafile.js";
+import pkgDir from "pkg-dir";
+import { readMetafile } from "./compare";
+import { generateGraph, getWhyFileInBundle } from "./duplicates";
 import type {
   Graph,
   StatsModuleIssuer,
   StatsModuleReason,
   WebpackStats,
-} from "./types.js";
+} from "./types";
 
-// TODO: Update to be more generic and configurable to it supports
-// more than just lib and src folders
-function getLine(filePath: string, keyword: string): string {
-  try {
-    const file = fs.readFileSync(filePath, "utf-8");
-    const lineNumber = file.split("\n").findIndex((line) => {
-      const result = line.includes(keyword);
-
-      if (!result && keyword.includes("/src/index.ts")) {
-        return line.includes(keyword.split("/src/index.ts")[0]);
-      }
-
-      if (!result && line.includes("/lib/")) {
-        return line
-          .replace("/lib/", "/src/")
-          .replace(".js", ".ts")
-          .includes(keyword);
-      }
-
-      return result;
-    });
-
-    return lineNumber >= 0 ? (lineNumber + 1).toString() : "";
-  } catch (err) {
-    return "";
-  }
+export function removeNamespace(filePath: string): string {
+  const match = filePath.match(/((\b[A-Za-z]:)?[^:]*)$/);
+  return match?.[0] ?? filePath;
 }
 
 /**
- * Returns a simpler and more readable path which starts from node_modules, e.g.:
- * ../../.store/@test-library@0.0.1-b55dbe3d1aed7a6c074d/node_modules/@test-library/a/b/test.js
- * becomes node_modules/@test-library/a/b/test.js
+ * Returns a relative path without the namespace.
  */
-function getSimplePath(dir: string, file: string): string {
-  const index = file.indexOf("node_modules");
-  return index >= 0 ? file.slice(index) : path.relative(dir, file);
+function getSimplePath(projectRoot: string, file: string): string {
+  if (!file.startsWith("..")) {
+    file = removeNamespace(file);
+  }
+
+  return path.relative(projectRoot, file);
 }
 
 /**
  * Transforms a esbuild metafile into a webpack stats file.
  *
- * @param metafile The esbuild metafile
- * @param metafileDir Directory of the esbuild metafile
- * @param skipLineNumber Whether to skip the line number in the webpack stats output
+ * @param metafilePath The path to the esbuild metafile
  * @param statsPath The path to the webpack stats file
- * @param namespace The namespace to remove from every module to get cleaner output
  * @param graph Module object containing all the entry points and imports
  */
-export function webpackStats(
-  metafile: Metafile,
-  metafileDir: string,
-  skipLineNumber: boolean,
-  statsPath: string,
-  namespace = "",
+export function transform(
+  metafilePath: string,
+  statsPath?: string,
   graph?: Graph
-): void {
+): WebpackStats | null {
+  const metafile = readMetafile(metafilePath);
+  const projectRoot = pkgDir.sync(path.dirname(metafilePath)) || process.cwd();
   if (!graph) graph = generateGraph(metafile);
   const { inputs, outputs } = metafile;
   const webpack: WebpackStats = {
     time: 0,
     builtAt: Date.now(),
-    outputPath: path.resolve(metafileDir),
+    outputPath: path.resolve(metafilePath),
     chunks: [],
     modules: [],
     errors: [],
@@ -85,46 +59,36 @@ export function webpackStats(
     const output = outputs[file];
     const inputsInOutput = output.inputs;
     let id = 0;
+    let chunkId = 0;
 
-    // TODO: Add support for multiple chunks
     webpack.chunks.push({
       entry: true,
       size: output.bytes,
       names: ["main"],
-      id: 0,
-      parents: [0],
+      id: chunkId,
+      parents: [chunkId],
     });
 
     for (const inputFile in inputsInOutput) {
-      const inputFileClean = inputFile.replace(namespace, "");
-      // TODO: Make filesToSkip configurable so users can add their own files to skip
-      if (filesToSkip.includes(inputFileClean)) continue;
-
       const input = inputsInOutput[inputFile];
       const paths = getWhyFileInBundle(graph, inputFile);
       const reasons: StatsModuleReason[] = [];
       const issuers: StatsModuleIssuer[] = [];
 
-      for (const p in paths) {
+      for (const name in paths) {
         issuers.push({
-          name: getSimplePath(metafileDir, p.replace(namespace, "")),
+          name: getSimplePath(projectRoot, name),
         });
       }
 
       for (const input in inputs) {
         for (const imp of inputs[input].imports) {
           if (imp.path === inputFile) {
-            const cleanInput = input.replace(namespace, "");
-
             reasons.push({
               type: inputs[input].format === "esm" ? "harmony" : "cjs",
-              module: cleanInput,
-              moduleName: getSimplePath(metafileDir, cleanInput),
+              module: input,
+              moduleName: getSimplePath(projectRoot, input),
               userRequest: imp.original,
-              loc:
-                !skipLineNumber && imp.original
-                  ? getLine(cleanInput, imp.original)
-                  : "",
             });
           }
         }
@@ -133,16 +97,23 @@ export function webpackStats(
       webpack.modules.push({
         type: "module",
         identifier: inputFile,
-        name: getSimplePath(metafileDir, inputFileClean),
+        name: getSimplePath(projectRoot, inputFile),
         size: input.bytesInOutput,
         issuerPath: issuers,
         id: (id += 1),
-        chunks: [0],
+        chunks: [chunkId],
         reasons: reasons,
       });
     }
+
+    chunkId += 1;
   }
 
-  fs.writeFileSync(statsPath, JSON.stringify(webpack));
-  info(`Webpack stats file written to ${statsPath}`);
+  if (!statsPath) {
+    return webpack;
+  } else {
+    fs.writeFileSync(statsPath, JSON.stringify(webpack));
+    info(`Webpack stats file written to ${statsPath}`);
+    return null;
+  }
 }

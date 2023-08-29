@@ -11,13 +11,10 @@
   "files": [
     "lib/*"
   ],
-  "type": "module",
-  "exports": {
-    ".": {
-      "types": "./lib/index.d.ts",
-      "import": "./lib/index.js",
-      "require": "./lib/index.js"
-    }
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "bin": {
+    "rnx-analyzer": "./lib/cli.js"
   },
   "repository": {
     "type": "git",
@@ -39,6 +36,7 @@
     "@rnx-kit/metro-plugin-cyclic-dependencies-detector": "^1.1.2",
     "@rnx-kit/metro-plugin-duplicates-checker": "^2.1.2",
     "chalk": "^4.1.0",
+    "pkg-dir": "^5.0.0",
     "yargs": "^16.0.0"
   },
   "devDependencies": {
@@ -53,8 +51,7 @@
     "extends": "@rnx-kit/eslint-config"
   },
   "jest": {
-    "preset": "@rnx-kit/scripts",
-    "resolver": "@rnx-kit/jest-preset/typescript-esm-resolver.cjs"
+    "preset": "@rnx-kit/scripts"
   },
   "experimental": true
 }

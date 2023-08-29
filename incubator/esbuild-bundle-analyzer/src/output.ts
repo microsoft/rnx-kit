@@ -2,7 +2,7 @@ import { info } from "@rnx-kit/console";
 import { packageRelativePath } from "@rnx-kit/metro-plugin-cyclic-dependencies-detector";
 import chalk from "chalk";
 import fs from "fs";
-import type { Path, Result, Stats } from "./types.js";
+import type { Path, Result, Stats } from "./types";
 
 function formatBytes(bytes: number, decimals = 1): string {
   if (bytes === 0) return "0 bytes";
@@ -102,7 +102,6 @@ function outputToConsole(result: Result): void {
       "Output stats:\n" +
       outputStats.map((stat) => `  ${stat}`).join("\n") +
       "\n" +
-      `Build time: ${result.buildTime} s\n` +
       `3G download time: ${formatTime(result.slowDownloadTime)}\n` +
       `4G download time: ${formatTime(result.fastDownloadTime)}\n` +
       `Average file size: ${formatBytes(result.avgFileSize)}\n` +

@@ -249,7 +249,6 @@ export const statsData: Result = {
     countOut: 4,
     bytesOut: 3157492,
   },
-  buildTime: 0,
   slowDownloadTime: 180,
   fastDownloadTime: 10,
   avgFileSize: 3251,
