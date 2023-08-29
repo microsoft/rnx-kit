@@ -1,11 +1,7 @@
 import * as fs from "node:fs";
 import * as path from "node:path";
 import type { WebpackStats } from "../src/types";
-import {
-  getCleanUserRequest,
-  removeNamespace,
-  transform,
-} from "../src/webpackStats";
+import { removeNamespace, transform } from "../src/webpackStats";
 
 const consoleSpy = jest.spyOn(global.console, "log");
 const fixturePath = path.join(process.cwd(), "test", "__fixtures__");
@@ -47,25 +43,6 @@ describe("webpackStats()", () => {
     expect(result?.modules).not.toEqual([]);
     expect(result?.errors).toEqual([]);
     expect(result?.warnings).toEqual([]);
-  });
-});
-
-describe("getCleanUserRequest()", () => {
-  test("getCleanUserRequest", () => {
-    const res = "@rnx-kit/test";
-    expect(getCleanUserRequest(`${res}/src/index.ts`)).toBe(res);
-    expect(getCleanUserRequest(`${res}/src/index.tsx`)).toBe(res);
-    expect(getCleanUserRequest(`${res}/src/index.jsx`)).toBe(res);
-    expect(getCleanUserRequest(`${res}/src/index.native.ts`)).toBe(res);
-    expect(getCleanUserRequest(`${res}/dist/index.android.ts`)).toBe(res);
-    expect(getCleanUserRequest(`${res}/build/index.ios.ts`)).toBe(res);
-    expect(getCleanUserRequest(`${res}/lib/index.js`)).toBe(res);
-    expect(getCleanUserRequest(`${res}/lib/index`)).toBe(res);
-    expect(getCleanUserRequest(`${res}/lib/index.native.js`)).toBe(res);
-    expect(getCleanUserRequest(`${res}/file.js`)).toBe(`${res}/file.js`);
-    expect(getCleanUserRequest(`react/src/file.js`)).toBe(`react/src/file.js`);
-    expect(getCleanUserRequest(undefined)).toBe("");
-    expect(getCleanUserRequest("")).toBe("");
   });
 });
 

@@ -35,49 +35,22 @@ function getLine(
   }
 }
 
-/**
- * Returns a cleaner userRequest by removing the src/index.ts(x) and lib/index.js(x)
- * from the import path.
- */
-export function getCleanUserRequest(userRequest?: string): string {
-  if (!userRequest) return "";
-
-  const patternToRemoveRegex =
-    /\/(src|lib|dist|build)\/index(\.[^.]+)?(\.[^.]+)?$/;
-
-  return userRequest.replace(patternToRemoveRegex, "");
-}
-
 export function removeNamespace(filePath: string): string {
-  const lastColonIndex = filePath.lastIndexOf(":");
-  if (lastColonIndex < 0) return filePath;
+  const match = filePath.match(/((\b[A-Za-z]:)?[^:]*)$/);
+  if (!match) return filePath;
 
-  const namespace = filePath.slice(0, lastColonIndex);
-  const result = filePath.slice(lastColonIndex + 1);
-  const isWindowsPath = /\\[\\\S|*\S]?.*$/.test(filePath);
-  const last = namespace.split(":").pop();
-
-  if (isWindowsPath && last?.length === 1) {
-    const driveLetter = /[a-zA-Z]$/.test(last) ? `${last}:` : "";
-    return `${driveLetter}${result}`;
-  }
-
-  return result;
+  return match[0];
 }
 
 /**
- * Returns a simpler and more readable path which starts from node_modules
- * and removes the namespace prefix, e.g.:
- * namespace:user/x/.store/@test-library@0.0.1-b55dbe3d1aed7a6c074d/node_modules/@test-library/a/b/test.js
- * becomes node_modules/@test-library/a/b/test.js
+ * Returns a relative path without the namespace.
  */
 function getSimplePath(file: string): string {
   if (!file.startsWith("..")) {
     file = removeNamespace(file);
   }
 
-  const index = file.indexOf("node_modules");
-  return index >= 0 ? file.slice(index) : path.relative(process.cwd(), file);
+  return path.relative(process.cwd(), file);
 }
 
 /**
@@ -140,15 +113,14 @@ export function transform(
       for (const input in inputs) {
         for (const imp of inputs[input].imports) {
           if (imp.path === inputFile) {
-            const userRequest = getCleanUserRequest(imp.original);
             reasons.push({
               type: inputs[input].format === "esm" ? "harmony" : "cjs",
               module: input,
               moduleName: getSimplePath(input),
-              userRequest,
+              userRequest: imp.original,
               loc:
                 !skipLineNumber && imp.original
-                  ? getLine(removeNamespace(input), userRequest, src, dest)
+                  ? getLine(removeNamespace(input), imp.original, src, dest)
                   : "",
             });
           }
