@@ -19,12 +19,12 @@ export function removeNamespace(filePath: string): string {
 /**
  * Returns a relative path without the namespace.
  */
-function getSimplePath(metacwd: string, file: string): string {
+function getSimplePath(projectRoot: string, file: string): string {
   if (!file.startsWith("..")) {
     file = removeNamespace(file);
   }
 
-  return path.relative(pkgDir.sync(metacwd) || process.cwd(), file);
+  return path.relative(projectRoot, file);
 }
 
 /**
@@ -40,7 +40,7 @@ export function transform(
   graph?: Graph
 ): WebpackStats | null {
   const metafile = readMetafile(metafilePath);
-  const metafileDir = path.dirname(metafilePath);
+  const projectRoot = pkgDir.sync(path.dirname(metafilePath)) || process.cwd();
   if (!graph) graph = generateGraph(metafile);
   const { inputs, outputs } = metafile;
   const webpack: WebpackStats = {
@@ -77,7 +77,7 @@ export function transform(
 
       for (const name in paths) {
         issuers.push({
-          name: getSimplePath(metafileDir, name),
+          name: getSimplePath(projectRoot, name),
         });
       }
 
@@ -87,7 +87,7 @@ export function transform(
             reasons.push({
               type: inputs[input].format === "esm" ? "harmony" : "cjs",
               module: input,
-              moduleName: getSimplePath(metafileDir, input),
+              moduleName: getSimplePath(projectRoot, input),
               userRequest: imp.original,
             });
           }
@@ -97,7 +97,7 @@ export function transform(
       webpack.modules.push({
         type: "module",
         identifier: inputFile,
-        name: getSimplePath(metafileDir, inputFile),
+        name: getSimplePath(projectRoot, inputFile),
         size: input.bytesInOutput,
         issuerPath: issuers,
         id: (id += 1),
