@@ -64,6 +64,14 @@ function readExperiencesFromManifest() {
   const manifest = fs.readFileSync(manifestPath, { encoding: "utf-8" });
   const { experiences } = JSON.parse(manifest);
 
+  if (!experiences) {
+    throw new Error("Missing `experiences` section in `package.json`");
+  }
+
+  if (typeof experiences !== "object") {
+    throw new Error("Invalid `experiences` section in `package.json`");
+  }
+
   return experiences;
 }
 

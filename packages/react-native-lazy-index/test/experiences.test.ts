@@ -1,6 +1,4 @@
-import fs from "fs";
 import { getFlightedModule, parseExperiences } from "../src/experiences";
-import { resolveModule } from "../src/module";
 
 describe("parseExperiences()", () => {
   afterEach(() => {
@@ -8,24 +6,15 @@ describe("parseExperiences()", () => {
   });
 
   test("missing experiences section", () => {
-    const packageManifest = resolveModule("./package.json");
-    const { experiences } = JSON.parse(
-      fs.readFileSync(packageManifest, "utf-8")
-    );
-    const result = () => {
-      parseExperiences(experiences);
-    };
+    const result = () => parseExperiences(undefined);
     expect(result).toThrow(Error);
-    expect(result).toThrow("Missing `experiences` section in `package.json`");
+    expect(result).toThrow("Invalid experiences map; got 'undefined'");
   });
 
   test("invalid experiences section", () => {
-    const experiences = "MyAwesomeApp";
-    const result = () => {
-      parseExperiences(experiences);
-    };
+    const result = () => parseExperiences("MyAwesomeApp");
     expect(result).toThrow(Error);
-    expect(result).toThrow("Invalid `experiences` section in `package.json`");
+    expect(result).toThrow("Invalid experiences map; got 'string'");
   });
 
   test("object experiences section", () => {
