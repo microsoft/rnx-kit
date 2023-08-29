@@ -35,9 +35,9 @@ const INTERNAL_CALLSITES_REGEX = new RegExp(
   ].join("|")
 );
 
-function reactNativePlatformResolver(platformImplementations: {
-  [platform: string]: string;
-}) {
+function reactNativePlatformResolver(
+  platformImplementations: Record<string, string>
+) {
   const platformResolver = (
     context: ResolutionContext,
     moduleName: string,
@@ -100,7 +100,7 @@ function getDefaultConfigInternal(cliConfig: CLIConfig): InputConfigT {
         outOfTreePlatforms.length === 0
           ? undefined
           : reactNativePlatformResolver(
-              outOfTreePlatforms.reduce<{ [platform: string]: string }>(
+              outOfTreePlatforms.reduce<Record<string, string>>(
                 (result, platform) => {
                   result[platform] =
                     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion

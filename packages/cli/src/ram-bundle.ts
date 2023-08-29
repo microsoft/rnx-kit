@@ -33,7 +33,7 @@ function disableTreeShaking(configs: CliPlatformBundleConfig[]): void {
 }
 
 export async function rnxRamBundle(
-  _argv: Array<string>,
+  _argv: string[],
   cliConfig: CLIConfig,
   cliOptions: CLIRamBundleOptions
 ): Promise<void> {

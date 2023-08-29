@@ -1,11 +1,11 @@
-export interface IBundleInterface {
+export type IBundleInterface = {
   bundleIdentifier: string;
   sourcemap: string;
-}
+};
 
-export interface IConfigFile {
+export type IConfigFile = {
   configs: IBundleInterface[];
-}
+};
 
 export type IArgumentsCapability = {
   help: string;

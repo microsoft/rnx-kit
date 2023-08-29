@@ -14,11 +14,7 @@ type ModuleInfo = {
   absolutePath: string;
 };
 
-export type ModuleMap = {
-  [name: string]: {
-    [version: string]: Set<string>;
-  };
-};
+export type ModuleMap = Record<string, Record<string, Set<string>>>;
 
 export function normalizePath(p: string): string {
   return p.replace(/webpack:\/\/\//g, "").replace(/[\\]+/g, "/");

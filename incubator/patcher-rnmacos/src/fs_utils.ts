@@ -56,7 +56,6 @@ export function writeFile(
   try {
     // const name2 = 'patch-' + name.replace(/[ &\/\\#,+()$~%.'":*?<>{}]/g, '-');
     const name = fs_path.basename(relativefilepath);
-    // tslint:disable-next-line: variable-name
     const relative_dir = fs_path.parse(relativefilepath).dir;
 
     // Create directory if not exists.

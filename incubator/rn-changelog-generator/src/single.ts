@@ -2,10 +2,10 @@ import { fetchCommit } from "./utils/commits";
 import getChangeDimensions from "./utils/getChangeDimensions";
 import getChangeMessage from "./utils/getChangeMessage";
 
-interface SingleArgs {
+type SingleArgs = {
   commit: string;
   token: string | null;
-}
+};
 
 async function handler(argv: SingleArgs) {
   const commitData = await fetchCommit(argv.token, argv.commit);

@@ -42,8 +42,7 @@ const { readPackage } = require("@rnx-kit/tools-node/package");
 const spdxParse = require("spdx-expression-parse");
 
 function _getPackageJsonInformations(modules) {
-  for (let i = 0; i < modules.length; i++) {
-    let module = modules[i];
+  for (const module of modules) {
     let pkg = readPackage(module.path);
 
     module.version = pkg.version;
@@ -74,11 +73,11 @@ function _getPackageJsonInformations(modules) {
     ) {
       let licenses = pkg.license ? pkg.license : pkg.licenses;
       let licenseList = [];
-      for (var j = 0; j < licenses.length; j++) {
-        licenseList.push(licenses[j].type || licenses[j].name);
+      for (const license of licenses) {
+        licenseList.push(license.type || license.name);
         module.license = licenseList.join(" / ");
-        if (licenses[j].url) {
-          module.licenseURLs.push(licenses[j].url);
+        if (license.url) {
+          module.licenseURLs.push(license.url);
         }
       }
     } else if (pkg.license && typeof pkg.license == "object") {
@@ -92,16 +91,15 @@ function _getPackageJsonInformations(modules) {
 }
 
 function _findLicenseFiles(modules) {
-  for (let i = 0; i < modules.length; i++) {
-    let module = modules[i];
+  for (const module of modules) {
     var files = fs.readdirSync(module.path);
 
-    for (var j = 0; j < files.length; j++) {
-      if (files[j].match(/(LICENSE|LICENCE|COPYING)/i)) {
-        module.licenseFile = files[j];
+    for (const file of files) {
+      if (file.match(/(LICENSE|LICENCE|COPYING)/i)) {
+        module.licenseFile = file;
         if (module.noticeFile) break;
-      } else if (files[j].match(/NOTICE/i)) {
-        module.noticeFile = files[j];
+      } else if (file.match(/NOTICE/i)) {
+        module.noticeFile = file;
         if (module.licenseFile) break;
       }
     }
@@ -138,8 +136,7 @@ function _getSpdxLicenseInformation(license, moduleName) {
 }
 
 function _readLicenseText(modules) {
-  for (let i = 0; i < modules.length; i++) {
-    let module = modules[i];
+  for (const module of modules) {
     if (module.licenseFile) {
       module.licenseText = fs
         .readFileSync(path.join(module.path, module.licenseFile))

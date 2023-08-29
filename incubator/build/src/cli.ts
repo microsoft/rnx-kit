@@ -16,7 +16,7 @@ import { getRemoteInfo } from "./remotes.js";
 import type { DeviceType, Platform } from "./types.js";
 
 type RequiredOptionInferenceHelper<T> = Options & {
-  choices: ReadonlyArray<T>;
+  choices: readonly T[];
   required: true;
 };
 
