@@ -1,6 +1,7 @@
 import { info } from "@rnx-kit/console";
 import fs from "fs";
 import * as path from "path";
+import pkgDir from "pkg-dir";
 import { readMetafile } from "./compare";
 import { generateGraph, getWhyFileInBundle } from "./duplicates";
 import type {
@@ -10,24 +11,12 @@ import type {
   WebpackStats,
 } from "./types";
 
-function getLine(
-  filePath: string,
-  keyword: string,
-  src?: string,
-  dest?: string
-): string {
+function getLine(filePath: string, keyword: string): string {
   try {
     const file = fs.readFileSync(filePath, "utf-8");
-    const lineNumber = file.split("\n").findIndex((line) => {
-      const result = line.includes(keyword);
-      if (result) return true;
-
-      if (src && dest && line.includes(`/${dest}/`)) {
-        return line.replace(`/${dest}/`, `/${src}/`).includes(keyword);
-      }
-
-      return false;
-    });
+    const lineNumber = file
+      .split("\n")
+      .findIndex((line) => line.includes(keyword));
 
     return lineNumber >= 0 ? (lineNumber + 1).toString() : "";
   } catch (err) {
@@ -43,12 +32,12 @@ export function removeNamespace(filePath: string): string {
 /**
  * Returns a relative path without the namespace.
  */
-function getSimplePath(file: string): string {
+function getSimplePath(metacwd: string, file: string): string {
   if (!file.startsWith("..")) {
     file = removeNamespace(file);
   }
 
-  return path.relative(process.cwd(), file);
+  return path.relative(pkgDir.sync(metacwd) || process.cwd(), file);
 }
 
 /**
@@ -63,11 +52,10 @@ export function transform(
   metafilePath: string,
   skipLineNumber: boolean,
   statsPath?: string,
-  graph?: Graph,
-  src?: string,
-  dest?: string
+  graph?: Graph
 ): WebpackStats | null {
   const metafile = readMetafile(metafilePath);
+  const metafileDir = path.dirname(metafilePath);
   if (!graph) graph = generateGraph(metafile);
   const { inputs, outputs } = metafile;
   const webpack: WebpackStats = {
@@ -104,7 +92,7 @@ export function transform(
 
       for (const name in paths) {
         issuers.push({
-          name: getSimplePath(name),
+          name: getSimplePath(metafileDir, name),
         });
       }
 
@@ -114,11 +102,11 @@ export function transform(
             reasons.push({
               type: inputs[input].format === "esm" ? "harmony" : "cjs",
               module: input,
-              moduleName: getSimplePath(input),
+              moduleName: getSimplePath(metafileDir, input),
               userRequest: imp.original,
               loc:
                 !skipLineNumber && imp.original
-                  ? getLine(removeNamespace(input), imp.original, src, dest)
+                  ? getLine(removeNamespace(input), imp.original)
                   : "",
             });
           }
@@ -128,7 +116,7 @@ export function transform(
       webpack.modules.push({
         type: "module",
         identifier: inputFile,
-        name: getSimplePath(inputFile),
+        name: getSimplePath(metafileDir, inputFile),
         size: input.bytesInOutput,
         issuerPath: issuers,
         id: (id += 1),
