@@ -19,7 +19,7 @@ describe("webpackStats()", () => {
 
   test("webpackStats with statsPath", () => {
     const metafilePath = path.join(fixturePath, "meta.json");
-    transform(metafilePath, false, statsPath);
+    transform(metafilePath, statsPath);
     const content = fs.readFileSync(statsPath, "utf-8");
 
     expect(fs.existsSync(statsPath)).toBe(true);
@@ -35,7 +35,7 @@ describe("webpackStats()", () => {
 
   test("webpackStats without statsPath", () => {
     const metafilePath = path.join(fixturePath, "meta.json");
-    const result = transform(metafilePath, false);
+    const result = transform(metafilePath);
     expect(result?.time).toBe(0);
     expect(result?.builtAt).toBeLessThanOrEqual(Date.now());
     expect(result?.outputPath).toBe(path.resolve(metafilePath));

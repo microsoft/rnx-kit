@@ -72,15 +72,9 @@ export function main(): void {
             describe: "Output file to write the Webpack stats file to",
             type: "string",
             demandOption: true,
-          })
-          .option("skip-line-number", {
-            describe: "Skip line number in the output",
-            type: "boolean",
-            demandOption: false,
-            default: false,
           }),
       (argv) => {
-        transform(argv.metafile, argv["skip-line-number"], argv.output);
+        transform(argv.metafile, argv.output);
       }
     )
     .demandCommand().argv;

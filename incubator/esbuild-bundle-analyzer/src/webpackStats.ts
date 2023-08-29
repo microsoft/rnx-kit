@@ -11,19 +11,6 @@ import type {
   WebpackStats,
 } from "./types";
 
-function getLine(filePath: string, keyword: string): string {
-  try {
-    const file = fs.readFileSync(filePath, "utf-8");
-    const lineNumber = file
-      .split("\n")
-      .findIndex((line) => line.includes(keyword));
-
-    return lineNumber >= 0 ? (lineNumber + 1).toString() : "";
-  } catch (err) {
-    return "";
-  }
-}
-
 export function removeNamespace(filePath: string): string {
   const match = filePath.match(/((\b[A-Za-z]:)?[^:]*)$/);
   return match?.[0] ?? filePath;
@@ -44,13 +31,11 @@ function getSimplePath(metacwd: string, file: string): string {
  * Transforms a esbuild metafile into a webpack stats file.
  *
  * @param metafilePath The path to the esbuild metafile
- * @param skipLineNumber Whether to skip the line number in the webpack stats output
  * @param statsPath The path to the webpack stats file
  * @param graph Module object containing all the entry points and imports
  */
 export function transform(
   metafilePath: string,
-  skipLineNumber: boolean,
   statsPath?: string,
   graph?: Graph
 ): WebpackStats | null {
@@ -104,10 +89,6 @@ export function transform(
               module: input,
               moduleName: getSimplePath(metafileDir, input),
               userRequest: imp.original,
-              loc:
-                !skipLineNumber && imp.original
-                  ? getLine(removeNamespace(input), imp.original)
-                  : "",
             });
           }
         }
