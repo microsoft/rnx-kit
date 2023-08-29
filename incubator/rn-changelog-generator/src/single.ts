@@ -5,7 +5,7 @@ import getChangeMessage from "./utils/getChangeMessage";
 type SingleArgs = {
   commit: string;
   token: string | null;
-}
+};
 
 async function handler(argv: SingleArgs) {
   const commitData = await fetchCommit(argv.token, argv.commit);

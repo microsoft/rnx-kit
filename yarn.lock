@@ -3552,6 +3552,7 @@ __metadata:
   dependencies:
     "@microsoft/eslint-plugin-sdl": ^0.2.0
     "@rnx-kit/eslint-plugin": "*"
+    "@typescript-eslint/eslint-plugin": ^6.0.0
     prettier: ^3.0.0
   peerDependencies:
     eslint: ">=6.0.0"

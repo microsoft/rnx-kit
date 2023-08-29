@@ -35,7 +35,9 @@ const INTERNAL_CALLSITES_REGEX = new RegExp(
   ].join("|")
 );
 
-function reactNativePlatformResolver(platformImplementations: Record<string, string>) {
+function reactNativePlatformResolver(
+  platformImplementations: Record<string, string>
+) {
   const platformResolver = (
     context: ResolutionContext,
     moduleName: string,
