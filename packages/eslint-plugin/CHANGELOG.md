@@ -1,5 +1,19 @@
 # Change Log - @rnx-kit/eslint-plugin
 
+## 0.5.0
+
+### Minor Changes
+
+- 950fcf0a: Bumped typescript-eslint to v6.
+
+  typescript-eslint v6 contains breaking changes! The most notable ones are:
+
+  - Dropped support for Node 12 and 14.
+  - Dropped support for ESLint v6.
+
+  For full details, see their announcement:
+  https://typescript-eslint.io/blog/announcing-typescript-eslint-v6
+
 ## 0.4.2
 
 ### Patch Changes

@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/esbuild-bundle-analyzer",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "EXPERIMENTAL - USE WITH CAUTION - A tool for analyzing an esbuild bundle/metafile",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/incubator/esbuild-bundle-analyzer#readme",
   "license": "MIT",
