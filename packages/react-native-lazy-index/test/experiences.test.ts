@@ -16,7 +16,7 @@ describe("parseExperiences()", () => {
       parseExperiences(experiences);
     };
     expect(result).toThrow(Error);
-    expect(result).toThrow("Missing `experiences` section in `package.json`");
+    expect(result).toThrow("Invalid experiences map; got 'undefined'");
   });
 
   test("invalid experiences section", () => {
@@ -25,7 +25,7 @@ describe("parseExperiences()", () => {
       parseExperiences(experiences);
     };
     expect(result).toThrow(Error);
-    expect(result).toThrow("Invalid `experiences` section in `package.json`");
+    expect(result).toThrow("Invalid experiences map; got 'string'");
   });
 
   test("object experiences section", () => {

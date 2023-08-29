@@ -34,12 +34,8 @@ function getFlightedModule(moduleId) {
  * @returns {Record<string, Component>}
  */
 function parseExperiences(experiences) {
-  if (!experiences) {
-    throw new Error("Missing `experiences` section in `package.json`");
-  }
-
-  if (typeof experiences !== "object") {
-    throw new Error("Invalid `experiences` section in `package.json`");
+  if (!experiences || typeof experiences !== "object") {
+    throw new Error(`Invalid experiences map; got '${typeof experiences}'`);
   }
 
   const flights = process.env["RN_LAZY_INDEX_FLIGHTS"]?.split(",");
