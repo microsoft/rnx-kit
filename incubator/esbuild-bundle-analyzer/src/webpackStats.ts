@@ -37,9 +37,7 @@ function getLine(
 
 export function removeNamespace(filePath: string): string {
   const match = filePath.match(/((\b[A-Za-z]:)?[^:]*)$/);
-  if (!match) return filePath;
-
-  return match[0];
+  return match?.[0] ?? filePath;
 }
 
 /**
