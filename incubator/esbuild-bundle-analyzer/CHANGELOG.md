@@ -1,5 +1,11 @@
 # @rnx-kit/esbuild-bundle-analyzer
 
+## 0.2.0
+
+### Minor Changes
+
+- 19f4963a: Cleaner and more accurate Webpack stats
+
 ## 0.1.0
 
 ### Minor Changes
