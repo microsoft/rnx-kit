@@ -3935,9 +3935,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rnx-kit/react-native-test-app-msal@*, @rnx-kit/react-native-test-app-msal@workspace:packages/react-native-test-app-msal":
+"@rnx-kit/react-native-test-app-msal@*, @rnx-kit/react-native-test-app-msal@workspace:incubator/react-native-test-app-msal":
   version: 0.0.0-use.local
-  resolution: "@rnx-kit/react-native-test-app-msal@workspace:packages/react-native-test-app-msal"
+  resolution: "@rnx-kit/react-native-test-app-msal@workspace:incubator/react-native-test-app-msal"
   peerDependencies:
     "@rnx-kit/react-native-auth": "*"
     react-native-test-app: ">=0.9.16"
