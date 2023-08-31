@@ -162,7 +162,7 @@ function toRuleContext(context) {
     parserPath: context.parserPath,
     parserOptions: context.parserOptions,
     parserServices: context.parserServices,
-    filename: context.getFilename(),
+    filename: context.filename || context.getFilename(),
   };
 }
 
