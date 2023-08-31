@@ -2,6 +2,7 @@
   "name": "@rnx-kit/config",
   "version": "0.6.4",
   "description": "Define and query information about a kit package",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/config#readme",
   "license": "MIT",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",

@@ -37,6 +37,10 @@ jobs:
         run: |
           yarn rnx-align-deps --write
           git diff --exit-code
+      - name: Report package metadata inconsistencies
+        run: |
+          node scripts/lint-metadata.mjs
+          git diff --exit-code
       - name: Report @rnx-kit/build workflow inconsistencies
         run: |
           cp incubator/build/workflows/github.yml .github/workflows/rnx-build.yml
