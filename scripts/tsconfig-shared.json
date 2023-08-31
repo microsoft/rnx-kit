@@ -23,6 +23,6 @@
     "target": "ES2019",
     "pretty": true,
     "skipLibCheck": true,
-    "skipDefaultLibCheck": true,
+    "skipDefaultLibCheck": true
   }
 }
