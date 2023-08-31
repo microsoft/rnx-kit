@@ -9,7 +9,7 @@
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/microsoft/rnx-kit.git"
+    "url": "https://github.com/microsoft/rnx-kit"
   },
   "scripts": {
     "build": "nx run-many --target build --all",
