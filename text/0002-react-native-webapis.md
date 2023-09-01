@@ -74,7 +74,7 @@ graph TD;
     this layer later without affecting users. In any case, we will need tools to
     include polyfills similarly to [autolinking][].
   - **Turbo/native module:** This is the layer that accepts JS calls and
-    forwards them platform implementations. Modules are installed via the
+    forwards them to platform implementations. Modules are installed via the
     standard autolinking mechanism.
     - Note: Some Web APIs may necessitate JSI bindings e.g., to properly manage
       native resources or because the object model in the API lends itself more
@@ -123,16 +123,53 @@ declared polyfill will be included. They do not need to be under the
 On top of what has been mentioned above, we are still investigating the right
 approach for how the code for this effort should be created and organised. The
 most likely approach will involve a monorepo (similar to [`rnx-kit`][]) where
-each module will be its own dedicated package. For starters, we will suggest
-that implementations for "core" supported platforms (i.e. Android, iOS, macOS,
-Windows) be present in the one package — we won't have
-`/~/battery-status-android` and `/~/battery-status-ios`, only
+each module will be its own dedicated package.
+
+For starters, we will suggest that implementations for "core" supported
+platforms (i.e. Android, iOS, macOS, Windows) be present in the one package — we
+won't have `/~/battery-status-android` and `/~/battery-status-ios`, only
 `/~/battery-status`. However, it should still be possible to have additional
 platform specific implementations, e.g. `/~/battery-status-tvos`. These should
 also be treated as first class citizens and be recognized by all tooling.
 
 This should allow for different people to work on different modules at the same
 time, while having a coherent infra to rely on for testing, publishing, etc.
+
+During the initial phase of this effort we should keep all the packages marked
+as private so that they won't be published to npm. This should allow for more
+flexibility in starting to implement code while the details of the final setup
+get agreed on.
+
+#### Testing
+
+Ideally we want to rely on the already existing test suites that W3C
+[provides for QA](https://www.w3.org/QA/Test/). Here's an example for the
+[Geolocation](https://dev.w3.org/geo/api/test-suite/) webapi, and a
+[single test](https://dev.w3.org/geo/api/test-suite/t00001.js).
+
+### Prioritization strategy
+
+The number of Web APIs is very high (1000+). Implementing each and every one of
+them for all the platforms will take a massive amount of time and funding —
+realistically, we need a strategy to decide how to select and prioritize which
+APIs to work on.
+
+As part of our investigation, we have created
+[a script](https://github.com/microsoft/rnx-kit/tree/main/incubator/%40react-native-webapis/types)
+that extracts the interfaces from the TS typings for webapis (from
+`https://unpkg.com/@mdn/browser-compat-data/data.json`) and allows us to filter
+them, removing the ones we know for sure we don't want to implement
+([ex. DOM, HTML, etc](https://github.com/microsoft/rnx-kit/blob/main/incubator/%40react-native-webapis/types/generate.mjs#L10)).
+That still leaves us with around 200 APIs, still way too many.
+
+To pair with the script we have been working on a
+[tool to scan](https://github.com/microsoft/rnx-kit/pull/2621) the usage of
+webapis across a codebase. This allows us to verify which APIs are relevant and
+can get higher priority.
+
+This is where the need for a monorepo with a quick devloop comes in handy: so
+that partners/interested companies can volunteer to take ownership of some
+specific webapis and work on them in parallel, in a coordinate manner.
 
 ### Discovery
 
@@ -152,15 +189,37 @@ dependencies they need to add. At minimum we should:
    - `align-deps` ensures that package versions are aligned and can help keeping
      track of transitive dependencies.
 
+## An example implementation
+
+As proof-of-concept, we've implemented the [Battery Status API][] as it is small
+and self-contained. The code can be
+[found here](https://github.com/microsoft/rnx-kit/pull/2590).
+
+To get it to work, we had to use a custom plugin
+([`@rnx-kit/polyfills`](https://github.com/microsoft/rnx-kit/tree/main/incubator/polyfills))
+and rely on a "magic comment" in the bundle to generate import statements. An
+alternative implementation would be to use something akin to Webpack's [entry
+points][]. More details here: https://github.com/facebook/metro/issues/850.
+
 ## Drawbacks
 
 - Existing React Native apps might need to be adapted this new paradigm.
 - A lot of the tooling needed for this effort to succeed as detailed above needs
   to be created.
-- The number of Web APIs is very high. Implementing each and every one of them
-  for all the platforms will take a massive amount of time and funding —
-  realistically, we will select a subset of APIs to focus on, based on needs and
-  real usage data.
+- The number of Web APIs is very high (1000+). See the section above about
+  prioritization strategy for more details on how we are planning to tackle
+  this.
+- It looks like it's very hard to properly detected how ownership about an API
+  endpoint works, tracking usage and if it's viable or not. For example, it's
+  kind of surprising to find that the only clear reference about the Battery
+  Status API being deprecated is
+  [in a comment in a PR in a TS repo](https://github.com/microsoft/TypeScript-DOM-lib-generator/pull/236).
+  The official documentation doesn't seem to reflect actual status that well
+  https://w3c.github.io/battery/#the-batterymanager-interface
+  - Our current idea would be to leverage the existence or not of said API in
+    the TS interface (which is also what we use for our script for generating
+    the "valid interfaces" mentioned above), using it as "realistic source of
+    truth"
 
 ## Rationale, alternatives, and prior art
 
@@ -204,16 +263,9 @@ We will be following the crawl-walk-run methodology:
 
 ## Unresolved questions
 
-- Which parts of the Web API do we prioritize first?
-  - As proof-of-concept, we've implemented the [Battery Status API][] as it is
-    small and self-contained.
-    - Code: https://github.com/microsoft/rnx-kit/pull/2590
-    - We're currently using a Babel plugin and rely on a magic comment in the
-      bundle to generate import statements. An alternative implementation would
-      be to use something akin to Webpack's [entry points][]. More details here:
-      https://github.com/facebook/metro/issues/850.
-    - It looks like this API is deprecated due to privacy concerns:
-      https://github.com/microsoft/TypeScript-DOM-lib-generator/pull/236
+- How do we keep track of which WebAPIs are at which stage of their
+  support/implementation on the web side, so that we don't want on
+  unused/deprecated APIs?
 
 <!-- References -->
 
