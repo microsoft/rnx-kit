@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/eslint-plugin
 
+## 0.5.1
+
+### Patch Changes
+
+- d67d59d2: Use `context.filename` if available (starting with [ESLint v8.40](https://eslint.org/blog/2023/05/eslint-v8.40.0-released/))
+
 ## 0.5.0
 
 ### Minor Changes
