@@ -37,11 +37,16 @@ export function getDependencyPolyfills(context: Context): string[] {
     try {
       const config = require.resolve(`${name}/react-native.config.js`, options);
       const polyfill = require(config).dependency?.api?.polyfill;
+      if (polyfill == null) {
+        continue;
+      }
+
       const absolutePath = resolvePath(path.dirname(config), polyfill);
       if (!absolutePath) {
         error(`${name}: invalid polyfill path: ${polyfill}`);
         continue;
       }
+
       if (!fs.existsSync(absolutePath)) {
         error(`${name}: no such polyfill: ${polyfill}`);
         continue;
