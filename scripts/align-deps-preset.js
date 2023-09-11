@@ -1,16 +1,7 @@
 "use strict";
 
-const metroTypesVersion = "^0.76.0";
-
 const dependencies = {
   jest: "^29.2.1",
-  metro: metroTypesVersion,
-  "metro-babel-transformer": metroTypesVersion,
-  "metro-config": metroTypesVersion,
-  "metro-core": metroTypesVersion,
-  "metro-resolver": metroTypesVersion,
-  "metro-source-map": metroTypesVersion,
-  "metro-transform-worker": metroTypesVersion,
   node: "^18.0.0",
   yargs: "^16.0.0",
 };

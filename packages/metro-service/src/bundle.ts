@@ -4,7 +4,7 @@ import { error, info } from "@rnx-kit/console";
 import chalk from "chalk";
 import fs from "fs";
 import type { ConfigT } from "metro-config";
-import type { BundleOptions, OutputOptions } from "metro/shared/types";
+import type { BundleOptions, OutputOptions } from "metro/src/shared/types";
 import Server from "metro/src/Server";
 import Bundle from "metro/src/shared/output/bundle";
 import path from "path";

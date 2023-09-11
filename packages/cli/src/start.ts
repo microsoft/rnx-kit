@@ -221,7 +221,6 @@ export async function rnxStart(
   let messageSocketEndpoint: DevServerMiddleware["messageSocketEndpoint"];
 
   if (!hasAttachToServerFunction(devServer)) {
-    // @ts-expect-error There's a type mismatch because CLI uses import("ws").Server while Metro redefines it
     websocketEndpoints = devServer.websocketEndpoints;
     messageSocketEndpoint = devServer.messageSocketEndpoint;
 

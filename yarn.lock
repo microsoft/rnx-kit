@@ -3516,9 +3516,6 @@ __metadata:
     "@rnx-kit/tools-language": ^2.0.0
     "@rnx-kit/tools-node": ^2.0.0
     "@rnx-kit/tools-react-native": ^1.3.2
-    "@types/metro": ^0.76.0
-    "@types/metro-babel-transformer": ^0.76.0
-    "@types/metro-config": ^0.76.0
     "@types/qrcode": ^1.4.2
     chalk: ^4.1.0
     eslint: ^8.0.0
@@ -3575,7 +3572,6 @@ __metadata:
     "@rnx-kit/scripts": "*"
     "@rnx-kit/tools-node": ^2.0.0
     "@rnx-kit/tools-react-native": "*"
-    "@types/metro": ^0.76.0
     "@types/node": ^18.0.0
     "@types/semver": ^7.0.0
     eslint: ^8.0.0
@@ -3721,8 +3717,6 @@ __metadata:
     "@types/babel__core": ^7.0.0
     "@types/connect": ^3.4.36
     "@types/jest": ^29.2.1
-    "@types/metro": ^0.76.0
-    "@types/metro-config": ^0.76.0
     eslint: ^8.0.0
     jest: ^29.2.1
     metro-config: ^0.76.5
@@ -3755,7 +3749,6 @@ __metadata:
     "@rnx-kit/scripts": "*"
     "@rnx-kit/tools-node": ^2.0.0
     "@types/jest": ^29.2.1
-    "@types/metro": ^0.76.0
     "@types/node": ^18.0.0
     eslint: ^8.0.0
     jest: ^29.2.1
@@ -3773,8 +3766,6 @@ __metadata:
     "@rnx-kit/scripts": "*"
     "@rnx-kit/tools-node": ^2.0.0
     "@types/jest": ^29.2.1
-    "@types/metro": ^0.76.0
-    "@types/metro-source-map": ^0.76.0
     "@types/node": ^18.0.0
     eslint: ^8.0.0
     jest: ^29.2.1
@@ -3795,7 +3786,6 @@ __metadata:
     "@rnx-kit/tools-node": ^2.0.0
     "@rnx-kit/tools-react-native": ^1.3.2
     "@rnx-kit/typescript-service": ^1.5.7
-    "@types/metro": ^0.76.0
     eslint: ^8.0.0
     jest: ^29.2.1
     prettier: ^3.0.0
@@ -3812,7 +3802,6 @@ __metadata:
     "@rnx-kit/scripts": "*"
     "@rnx-kit/tools-node": ^2.0.0
     "@rnx-kit/tools-react-native": ^1.3.2
-    "@types/metro-resolver": ^0.76.0
     "@types/node": ^18.0.0
     enhanced-resolve: ^5.8.3
     eslint: ^8.0.0
@@ -3839,9 +3828,6 @@ __metadata:
     "@rnx-kit/scripts": "*"
     "@rnx-kit/tools-node": ^2.0.0
     "@rnx-kit/tools-react-native": ^1.3.2
-    "@types/metro": ^0.76.0
-    "@types/metro-config": ^0.76.0
-    "@types/metro-transform-worker": ^0.76.0
     "@types/semver": ^7.0.0
     esbuild: ^0.19.0
     esbuild-plugin-lodash: ^1.2.0
@@ -3864,7 +3850,6 @@ __metadata:
   resolution: "@rnx-kit/metro-serializer@workspace:packages/metro-serializer"
   dependencies:
     "@rnx-kit/scripts": "*"
-    "@types/metro": ^0.76.0
     "@types/semver": ^7.0.0
     eslint: ^8.0.0
     jest: ^29.2.1
@@ -3883,11 +3868,6 @@ __metadata:
     "@rnx-kit/console": ^1.0.0
     "@rnx-kit/scripts": "*"
     "@rnx-kit/tools-language": ^2.0.0
-    "@types/metro": ^0.76.0
-    "@types/metro-babel-transformer": ^0.76.0
-    "@types/metro-config": ^0.76.0
-    "@types/metro-core": ^0.76.0
-    "@types/metro-resolver": ^0.76.0
     "@types/node": ^18.0.0
     chalk: ^4.1.0
     eslint: ^8.0.0
@@ -4136,7 +4116,6 @@ __metadata:
     "@rnx-kit/scripts": "*"
     "@rnx-kit/tools-node": ^2.0.0
     "@types/jest": ^29.2.1
-    "@types/metro-source-map": ^0.76.0
     "@types/yargs": ^16.0.0
     eslint: ^8.0.0
     jest: ^29.2.1
@@ -4294,13 +4273,6 @@ __metadata:
   version: 2.0.0
   resolution: "@tootallnate/once@npm:2.0.0"
   checksum: ad87447820dd3f24825d2d947ebc03072b20a42bfc96cbafec16bff8bbda6c1a81fcb0be56d5b21968560c5359a0af4038a68ba150c3e1694fe4c109a063bed8
-  languageName: node
-  linkType: hard
-
-"@types/babel__code-frame@npm:*":
-  version: 7.0.3
-  resolution: "@types/babel__code-frame@npm:7.0.3"
-  checksum: 543bd933e5ffdfbf75dfee0a36461c8a9d9283d5a95ceae0e021b2aef7fe774f1f251ea56f507faedf9d3574894b4774636f2b125f5cc5f6759503e1e56feb93
   languageName: node
   linkType: hard
 
@@ -4472,97 +4444,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/metro-babel-transformer@npm:*, @types/metro-babel-transformer@npm:^0.76.0":
-  version: 0.76.0
-  resolution: "@types/metro-babel-transformer@npm:0.76.0"
-  dependencies:
-    "@types/metro-source-map": "*"
-  checksum: 69ea8f624ea700c6e9bbb7e5a544fa97b661b835f6ed7101e7f62db1ee78f9864d1fab088fe3bcdd13893ed135a3374bfcac35923c7eeb9caa5d1d8385907397
-  languageName: node
-  linkType: hard
-
-"@types/metro-cache@npm:*":
-  version: 0.76.0
-  resolution: "@types/metro-cache@npm:0.76.0"
-  dependencies:
-    "@types/node": "*"
-  checksum: e6462d95f879cf32f7e12c94ba0c8e03e86fa32cd8e1bd64318b44f7a2f1ca064b88017f19765b55b492b498c7b20b263dc681a28ad687f9c0356e151deeec25
-  languageName: node
-  linkType: hard
-
-"@types/metro-config@npm:*, @types/metro-config@npm:^0.76.0":
-  version: 0.76.2
-  resolution: "@types/metro-config@npm:0.76.2"
-  dependencies:
-    "@types/metro": "*"
-    "@types/metro-cache": "*"
-    "@types/metro-resolver": "*"
-    "@types/metro-transform-worker": "*"
-  checksum: a7cf1e3838c9b9158b83f3b5530739d5eb216fad3ab26cc1c1a65dd322a33700b6b63ecb603463baa7b535cd0751dfcc513693ee372f7374807dc9357a94b212
-  languageName: node
-  linkType: hard
-
-"@types/metro-core@npm:*, @types/metro-core@npm:^0.76.0":
-  version: 0.76.0
-  resolution: "@types/metro-core@npm:0.76.0"
-  dependencies:
-    "@types/node": "*"
-  checksum: 4115710e4ee57b509f8bdc54f3c8db509d6fd62e16cfa5249ca15f12e9d5852617e740acfc562b67d4c346677da4fd4d5a0302b3107d9f684aa694bc76d3fdb4
-  languageName: node
-  linkType: hard
-
-"@types/metro-file-map@npm:*":
-  version: 0.76.0
-  resolution: "@types/metro-file-map@npm:0.76.0"
-  dependencies:
-    "@types/metro-config": "*"
-  checksum: 678a2b8957f14b0525b23948607596eb69dffd7938701585faae642efff582227b408d6e5c708328cb5c507a5cf65a2922afb2b585e99936fea6cac1e7e6e6d7
-  languageName: node
-  linkType: hard
-
-"@types/metro-resolver@npm:*, @types/metro-resolver@npm:^0.76.0":
-  version: 0.76.1
-  resolution: "@types/metro-resolver@npm:0.76.1"
-  checksum: 3ab468bb8a3d3eff8e30830c234fef456a464d5ec5769258bbce200e89d5dc56d2dbdf62620a20d639ab260261fa07da1683db649c87288ba92b84eb17b00c20
-  languageName: node
-  linkType: hard
-
-"@types/metro-source-map@npm:*, @types/metro-source-map@npm:^0.76.0":
-  version: 0.76.0
-  resolution: "@types/metro-source-map@npm:0.76.0"
-  checksum: 7a64f470fcc74de001ca57b9968ef512536b3cdb39554587b3e0e881f123411590fa5ec7f5c875936e793370dcfd98948f917ccb7c21f8a00dba0ebe663cd770
-  languageName: node
-  linkType: hard
-
-"@types/metro-transform-worker@npm:*, @types/metro-transform-worker@npm:^0.76.0":
-  version: 0.76.0
-  resolution: "@types/metro-transform-worker@npm:0.76.0"
-  dependencies:
-    "@types/metro": "*"
-    "@types/metro-babel-transformer": "*"
-    "@types/metro-source-map": "*"
-  checksum: 6a4ae0f2e8e61d803c110929377c16868a9c17c7df9dbf6517e5c7cb13f217e412a9b2404a68529f099923f03d3997ad8648200802f01b105ef4c547a507f88b
-  languageName: node
-  linkType: hard
-
-"@types/metro@npm:*, @types/metro@npm:^0.76.0":
-  version: 0.76.0
-  resolution: "@types/metro@npm:0.76.0"
-  dependencies:
-    "@types/babel__code-frame": "*"
-    "@types/metro-babel-transformer": "*"
-    "@types/metro-config": "*"
-    "@types/metro-core": "*"
-    "@types/metro-file-map": "*"
-    "@types/metro-resolver": "*"
-    "@types/metro-source-map": "*"
-    "@types/metro-transform-worker": "*"
-    "@types/ws": "*"
-    "@types/yargs": "*"
-  checksum: 2cff9534b7a61d880b7186f6c665310a787e2cdb850f413e6c1c71286b8e391110820e1a39a2a27d515c8c848f06c74dab7eb54b1022f0aa2d5001d1a8a1c71a
-  languageName: node
-  linkType: hard
-
 "@types/minimatch@npm:^3.0.3":
   version: 3.0.5
   resolution: "@types/minimatch@npm:3.0.5"
@@ -4663,23 +4544,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/ws@npm:*":
-  version: 8.5.4
-  resolution: "@types/ws@npm:8.5.4"
-  dependencies:
-    "@types/node": "*"
-  checksum: fefbad20d211929bb996285c4e6f699b12192548afedbe4930ab4384f8a94577c9cd421acaad163cacd36b88649509970a05a0b8f20615b30c501ed5269038d1
-  languageName: node
-  linkType: hard
-
-"@types/yargs-parser@npm:*":
-  version: 20.2.0
-  resolution: "@types/yargs-parser@npm:20.2.0"
-  checksum: 54cf3f8d2c7db47e200e8c96e05b3b33ee554e78d29f3db55f04ca4b86dc6b8ff6b1349f5772268ce2d365cde0a0f4fdd92bf5933c2be2c1ea3f19f0b4599e1f
-  languageName: node
-  linkType: hard
-
-"@types/yargs@npm:*, @types/yargs@npm:^17.0.8":
+"@types/yargs-parser@npm:*, @types/yargs@npm:^17.0.8":
   version: 17.0.24
   resolution: "@types/yargs@npm:17.0.24"
   dependencies:
