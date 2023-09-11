@@ -18,6 +18,7 @@
       "typescript": "./src/index.ts",
       "default": "./lib/index.js"
     },
+    "./package.json": "./package.json",
     "./properties": {
       "types": "./lib/properties.d.ts",
       "typescript": "./src/properties.ts",
