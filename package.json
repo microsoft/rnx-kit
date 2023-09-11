@@ -27,7 +27,7 @@
     "lint": "nx run-many --target lint --all",
     "new-package": "node scripts/new-package.mjs",
     "publish:changesets": "changeset publish",
-    "rnx-align-deps": "cd packages/align-deps && yarn bundle && cd ../.. && scripts/rnx-align-deps.mjs",
+    "rnx-align-deps": "yarn workspace @rnx-kit/align-deps bundle && scripts/rnx-align-deps.mjs",
     "show-affected": "nx show projects --affected",
     "test": "nx run-many --target test --output-style stream --all",
     "update-readme": "nx run-many --target update-readme --all",
