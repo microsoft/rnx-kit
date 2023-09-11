@@ -1,8 +1,7 @@
 {
   "extends": "@rnx-kit/scripts/tsconfig-shared.json",
   "compilerOptions": {
-    "alwaysStrict": false,
-    "emitDeclarationOnly": true
+    "alwaysStrict": false
   },
   "include": ["src"]
 }
