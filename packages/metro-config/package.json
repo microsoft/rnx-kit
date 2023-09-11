@@ -47,6 +47,7 @@
     "@babel/preset-env": "^7.1.6",
     "@rnx-kit/scripts": "*",
     "@types/babel__core": "^7.0.0",
+    "@types/connect": "^3.4.36",
     "@types/jest": "^29.2.1",
     "@types/metro": "^0.76.0",
     "@types/metro-config": "^0.76.0",
