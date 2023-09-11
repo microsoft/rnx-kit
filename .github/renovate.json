@@ -4,7 +4,7 @@
   "packageRules": [
     {
       "matchPackagePrefixes": ["@react-native-community/cli"],
-      "allowedVersions": "^10.0.0"
+      "allowedVersions": "^11.0.0"
     },
     {
       "groupName": "Android",
@@ -24,7 +24,7 @@
     {
       "groupName": "Metro",
       "matchSourceUrlPrefixes": ["https://github.com/facebook/metro"],
-      "allowedVersions": "^0.73.0"
+      "allowedVersions": "^0.76.0"
     },
     {
       "groupName": "Moshi",
@@ -41,12 +41,18 @@
     },
     {
       "matchPackageNames": [
+        "@react-native/codegen",
+        "@react-native/gradle-plugin",
+        "@react-native/js-polyfills",
+        "@react-native/metro-config",
+        "@react-native/normalize-colors",
+        "@react-native/virtualized-lists",
         "react-native",
         "react-native-codegen",
         "react-native-macos",
         "react-native-windows"
       ],
-      "allowedVersions": "^0.71.0"
+      "allowedVersions": "^0.72.0"
     }
   ],
   "postUpdateOptions": ["yarnDedupeHighest"],
