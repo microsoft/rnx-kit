@@ -50,9 +50,7 @@ inputWithDuplicates[
   format: "cjs",
 };
 
-inputWithDuplicates[
-  `${repoRoot}/node_modules/chalk/source/index.js`
-] = {
+inputWithDuplicates[`${repoRoot}/node_modules/chalk/source/index.js`] = {
   bytes: 15403,
   imports: [
     {
