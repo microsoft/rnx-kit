@@ -35,7 +35,7 @@ describe("metro-serializer-esbuild", () => {
         bundleEncoding: "utf8",
         bundleOutput: ".test-output.jsbundle",
         dev,
-        platform: "native",
+        platform: "ios",
         resetCache: false,
         resetGlobalCache: false,
         sourcemapOutput,

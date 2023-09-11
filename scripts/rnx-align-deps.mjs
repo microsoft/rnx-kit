@@ -11,7 +11,7 @@ cli({
       "align-deps-preset.js"
     ),
   ],
-  requirements: ["react-native@0.71"],
+  requirements: ["react-native@0.72"],
   write: process.argv.includes("--write"),
   "exclude-packages": ["@rnx-kit/build", "@rnx-kit/metro-plugin-typescript"],
 });

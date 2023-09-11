@@ -2,7 +2,7 @@ import type { PluginOptions as CyclicDetectorOptions } from "@rnx-kit/metro-plug
 import type { Options as DuplicateDetectorOptions } from "@rnx-kit/metro-plugin-duplicates-checker";
 import type { Options as EsbuildOptions } from "@rnx-kit/metro-serializer-esbuild";
 import type { AllPlatforms } from "@rnx-kit/tools-react-native/platform";
-import type { OutputOptions } from "metro/shared/types";
+import type { OutputOptions } from "metro/src/shared/types";
 
 export type TypeScriptValidationOptions = {
   /**

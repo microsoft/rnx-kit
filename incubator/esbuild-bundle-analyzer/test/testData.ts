@@ -7,7 +7,7 @@ export const repoRoot = pkgDir.sync(path.resolve(__dirname, "..", ".."));
 
 export const inputWithDuplicates: Record<string, Input> = {};
 inputWithDuplicates[
-  `${repoRoot}/packages/test-app/node_modules/@react-native/polyfills/index.js`
+  `${repoRoot}/node_modules/@rnx-kit/build/node_modules/chalk/source/index.js`
 ] = {
   bytes: 15399,
   imports: [
@@ -50,9 +50,7 @@ inputWithDuplicates[
   format: "cjs",
 };
 
-inputWithDuplicates[
-  `${repoRoot}/node_modules/@react-native/polyfills/index.js`
-] = {
+inputWithDuplicates[`${repoRoot}/node_modules/chalk/source/index.js`] = {
   bytes: 15403,
   imports: [
     {
