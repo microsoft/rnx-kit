@@ -3350,6 +3350,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@react-native/normalize-colors@npm:*":
+  version: 0.73.0
+  resolution: "@react-native/normalize-colors@npm:0.73.0"
+  checksum: 0b98021f4d40e497f25e96d610d98602cb6d80d455e3a93676e99922c7cfa03829c531eae110b62585bfa567bb4d2b28f91f0b06f8539244619baac2c0bee9a9
+  languageName: node
+  linkType: hard
+
 "@react-native/normalize-colors@npm:^0.72.0":
   version: 0.72.0
   resolution: "@react-native/normalize-colors@npm:0.72.0"

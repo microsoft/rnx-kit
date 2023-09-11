@@ -65,7 +65,6 @@
     "@react-native-community/cli-platform-android": "^11.3.6",
     "@react-native-community/cli-platform-ios": "^11.3.6",
     "@vue/compiler-sfc": "link:./incubator/ignore",
-    "deprecated-react-native-prop-types/@react-native/normalize-colors": "^0.72.0",
     "nx/fast-glob": "^3.2.7",
     "nx/glob": "^7.1.4",
     "nx/minimatch": "^3.0.5",

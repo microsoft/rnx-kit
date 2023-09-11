@@ -235,24 +235,30 @@ describe("@rnx-kit/metro-config", () => {
 describe("makeMetroConfig", () => {
   const consoleWarnSpy = jest.spyOn(require("@rnx-kit/console"), "warn");
 
-  const metroConfigKeys = [
-    "cacheStores",
-    "resolver",
-    "serializer",
-    "server",
-    "symbolicator",
-    "transformer",
-    "watchFolders",
-    "watcher",
-  ];
-
   afterEach(() => {
     consoleWarnSpy.mockReset();
   });
 
   test("returns a default Metro config", async () => {
     const config = makeMetroConfig();
-    expect(Object.keys(config).sort()).toEqual(metroConfigKeys);
+    expect(Object.keys(config).sort()).toEqual([
+      "cacheStores",
+      "cacheVersion",
+      "maxWorkers",
+      "projectRoot",
+      "reporter",
+      "resetCache",
+      "resolver",
+      "serializer",
+      "server",
+      "stickyWorkers",
+      "symbolicator",
+      "transformer",
+      "transformerPath",
+      "unstable_perfLoggerFactory",
+      "watchFolders",
+      "watcher",
+    ]);
 
     if (!config.resolver) {
       fail("Expected `config.resolver` to be defined");
@@ -281,7 +287,7 @@ describe("makeMetroConfig", () => {
     expect(config.resolver.blockList.source).toBe(blockList);
 
     expect(config.server.enhanceMiddleware).toBe(enhanceMiddleware);
-    expect(config.transformer.assetPlugins).toBeUndefined();
+    expect(config.transformer.assetPlugins).toEqual([]);
 
     const opts = { dev: false, hot: false };
     const transformerOptions = await config.transformer.getTransformOptions(
@@ -303,9 +309,18 @@ describe("makeMetroConfig", () => {
       resetCache: true,
     });
 
-    expect(Object.keys(config).sort()).toEqual(
-      metroConfigKeys.concat(["projectRoot", "resetCache"]).sort()
-    );
+    expect(Object.keys(config).sort()).toEqual([
+      "cacheStores",
+      "projectRoot",
+      "resetCache",
+      "resolver",
+      "serializer",
+      "server",
+      "symbolicator",
+      "transformer",
+      "watchFolders",
+      "watcher",
+    ]);
 
     expect(config.projectRoot).toBe(__dirname);
     expect(config.resetCache).toBeTruthy();
