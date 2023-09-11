@@ -26,9 +26,9 @@
   },
   "dependencies": {
     "react": "18.2.0",
-    "react-native": "^0.71.0",
-    "react-native-macos": "^0.71.0",
-    "react-native-windows": "^0.71.0"
+    "react-native": "^0.72.0",
+    "react-native-macos": "^0.72.0",
+    "react-native-windows": "^0.72.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
@@ -36,6 +36,7 @@
     "@babel/plugin-transform-react-jsx-source": "^7.0.0",
     "@babel/preset-env": "^7.1.6",
     "@babel/runtime": "^7.12.5",
+    "@react-native/metro-config": "^0.72.0",
     "@rnx-kit/babel-preset-metro-react-native": "*",
     "@rnx-kit/cli": "*",
     "@rnx-kit/metro-config": "*",
@@ -52,9 +53,9 @@
     "@types/react": "^18.0.0",
     "eslint": "^8.0.0",
     "jest-cli": "^29.2.1",
-    "metro-react-native-babel-preset": "^0.73.7",
+    "metro-react-native-babel-preset": "^0.76.5",
     "prettier": "^3.0.0",
-    "react-native-test-app": "^2.2.1",
+    "react-native-test-app": "^2.5.5",
     "react-test-renderer": "18.2.0",
     "typescript": "^5.0.0"
   },
@@ -185,7 +186,7 @@
         "@rnx-kit/scripts/align-deps-preset.js"
       ],
       "requirements": [
-        "react-native@0.71"
+        "react-native@0.72"
       ],
       "capabilities": [
         "core-android",
