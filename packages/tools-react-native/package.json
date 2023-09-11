@@ -9,10 +9,28 @@
     "metro.d.ts",
     "metro.js",
     "platform.d.ts",
-    "platform.js"
+    "platform.js",
+    "src/*"
   ],
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "typescript": "./src/index.ts",
+      "default": "./lib/index.js"
+    },
+    "./metro": {
+      "types": "./lib/metro.d.ts",
+      "typescript": "./src/metro.ts",
+      "default": "./lib/metro.js"
+    },
+    "./platform": {
+      "types": "./lib/platform.d.ts",
+      "typescript": "./src/platform.ts",
+      "default": "./lib/platform.js"
+    }
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/microsoft/rnx-kit",

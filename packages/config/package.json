@@ -4,8 +4,17 @@
   "description": "Define and query information about a kit package",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/config#readme",
   "license": "MIT",
+  "files": [
+    "lib/*",
+    "src/*"
+  ],
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
+  "exports": {
+    "types": "./lib/index.d.ts",
+    "typescript": "./src/index.ts",
+    "default": "./lib/index.js"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/microsoft/rnx-kit",
