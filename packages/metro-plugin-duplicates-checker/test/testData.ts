@@ -23,13 +23,10 @@ export const bundleGraphWithDuplicates: Graph = {
   dependencies: new Map<string, Module>([
     [`${repoRoot}/packages/test-app/lib/src/index.js`, mockModule],
     [
-      `${repoRoot}/node_modules/@react-native/normalize-colors/index.js`,
+      `${repoRoot}/node_modules/@rnx-kit/build/node_modules/chalk/source/index.js`,
       mockModule,
     ],
-    [
-      `${repoRoot}/node_modules/deprecated-react-native-prop-types/node_modules/@react-native/normalize-colors/index.js`,
-      mockModule,
-    ],
+    [`${repoRoot}/node_modules/chalk/source/index.js`, mockModule],
     [`${repoRoot}/node_modules/react-native/index.js`, mockModule],
   ]),
   importBundleNames: new Set<string>(),
@@ -535,8 +532,8 @@ export const bundleSourceMap: BasicSourceMap = {
 export const bundleSourceMapWithDuplicates: BasicSourceMap = {
   version: 3,
   sources: [
-    `${repoRoot}/node_modules/@react-native/normalize-colors/index.js`,
-    `${repoRoot}/node_modules/deprecated-react-native-prop-types/node_modules/@react-native/normalize-colors/index.js`,
+    `${repoRoot}/node_modules/@rnx-kit/build/node_modules/chalk/source/index.js`,
+    `${repoRoot}/node_modules/chalk/source/index.js`,
     `${repoRoot}/node_modules/react-native/index.js`,
     `${repoRoot}/packages/test-app/lib/src/index.js`,
   ],

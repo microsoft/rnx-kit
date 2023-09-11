@@ -7,7 +7,7 @@ export const repoRoot = pkgDir.sync(path.resolve(__dirname, "..", ".."));
 
 export const inputWithDuplicates: Record<string, Input> = {};
 inputWithDuplicates[
-  `${repoRoot}/node_modules/deprecated-react-native-prop-types/node_modules/@react-native/normalize-colors/index.js`
+  `${repoRoot}/node_modules/@rnx-kit/build/node_modules/chalk/source/index.js`
 ] = {
   bytes: 15399,
   imports: [
@@ -51,7 +51,7 @@ inputWithDuplicates[
 };
 
 inputWithDuplicates[
-  `${repoRoot}/node_modules/@react-native/normalize-colors/index.js`
+  `${repoRoot}/node_modules/chalk/source/index.js`
 ] = {
   bytes: 15403,
   imports: [
