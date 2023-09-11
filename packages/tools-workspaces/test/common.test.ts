@@ -21,6 +21,16 @@ describe("findSentinel", () => {
     unsetFixture();
   });
 
+  test("returns sentinel for Bun", async () => {
+    setFixture("bun");
+    expect(await findSentinel()).toMatch(/[/\\]bun.lockb$/);
+  });
+
+  test("returns sentinel for Bun (sync)", () => {
+    setFixture("bun");
+    expect(findSentinelSync()).toMatch(/[/\\]bun.lockb$/);
+  });
+
   test("returns sentinel for Lerna", async () => {
     setFixture("lerna-packages");
     expect(await findSentinel()).toMatch(/[/\\]lerna.json$/);

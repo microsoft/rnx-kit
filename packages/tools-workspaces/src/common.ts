@@ -11,6 +11,7 @@ type PackageManager = {
   findWorkspacePackagesSync: (sentinel: string) => string[];
 };
 
+export const BUN_LOCKB = "bun.lockb";
 export const LERNA_JSON = "lerna.json";
 export const PACKAGE_LOCK_JSON = "package-lock.json";
 export const PNPM_WORKSPACE_YAML = "pnpm-workspace.yaml";
@@ -23,6 +24,7 @@ export const WORKSPACE_ROOT_SENTINELS = [
   YARN_LOCK,
   PACKAGE_LOCK_JSON,
   PNPM_WORKSPACE_YAML,
+  BUN_LOCKB,
 ];
 
 function dirnameAll(paths: string[]): string[] {
@@ -74,7 +76,8 @@ export const findSentinelSync = makeFindSentinel(findUp.sync);
 
 export function getImplementation(sentinel: string): Promise<PackageManager> {
   switch (path.basename(sentinel)) {
-    case PACKAGE_LOCK_JSON: // fallthrough - logic defining workspaces config is the same for npm and yarn
+    case BUN_LOCKB: // fallthrough — logic defining workspaces config is the same as for npm and yarn
+    case PACKAGE_LOCK_JSON: // fallthrough — logic defining workspaces config is the same for npm and yarn
     case YARN_LOCK:
       return import("./yarn");
 
@@ -95,7 +98,8 @@ export function getImplementation(sentinel: string): Promise<PackageManager> {
 
 export function getImplementationSync(sentinel: string): PackageManager {
   switch (path.basename(sentinel)) {
-    case PACKAGE_LOCK_JSON: // fallthrough
+    case BUN_LOCKB: // fallthrough — logic defining workspaces config is the same as for npm and yarn
+    case PACKAGE_LOCK_JSON: // fallthrough — logic defining workspaces config is the same for npm and yarn
     case YARN_LOCK:
       return require("./yarn");
 
