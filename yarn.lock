@@ -11844,8 +11844,8 @@ __metadata:
   linkType: hard
 
 "react-native-test-app@npm:^2.2.1":
-  version: 2.5.15
-  resolution: "react-native-test-app@npm:2.5.15"
+  version: 2.5.20
+  resolution: "react-native-test-app@npm:2.5.20"
   dependencies:
     "@rnx-kit/react-native-host": ^0.2.8
     ajv: ^8.0.0
@@ -11864,7 +11864,7 @@ __metadata:
     mustache: ^4.0.0
     react: ~17.0.1 || ~18.0.0 || ~18.1.0 || ~18.2.0
     react-native: ^0.0.0-0 || 0.64 - 0.72 || 1000.0.0
-    react-native-macos: ^0.0.0-0 || 0.64 || 0.66 || 0.68 || 0.71
+    react-native-macos: ^0.0.0-0 || 0.64 || 0.66 || 0.68 || 0.71 - 0.72
     react-native-windows: ^0.0.0-0 || 0.64 - 0.72
   peerDependenciesMeta:
     "@expo/config-plugins":
@@ -11886,7 +11886,7 @@ __metadata:
     init: scripts/init.js
     init-test-app: scripts/init.js
     install-windows-test-app: windows/test-app.js
-  checksum: 1168ff483f6c25800c8ba854ed9e7e8da26a31e705c9712d8f70ed62c3d516402b3f6c44ea3fbbd975030a63e48a117e7a318b0f75fa9661d0dce397028f5dde
+  checksum: fa1ebc0025d103f01e047847eae0cb996a8ee0136b171bba6f344e064e1f865c688896c6bc5b01f44d7957c68f3e4acad71e4fa2af39cfcb0df27e4dd05d0301
   languageName: node
   linkType: hard
 
