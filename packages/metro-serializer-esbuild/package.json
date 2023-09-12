@@ -33,7 +33,7 @@
     "@babel/core": "^7.1.6",
     "@babel/preset-env": "^7.1.6",
     "@fluentui/utilities": "8.13.9",
-    "@react-native-community/cli-types": "^10.0.0",
+    "@react-native-community/cli-types": "^11.0.0",
     "@rnx-kit/babel-preset-metro-react-native": "*",
     "@rnx-kit/metro-config": "*",
     "@rnx-kit/metro-serializer": "*",

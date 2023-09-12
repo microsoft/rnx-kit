@@ -3131,21 +3131,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-community/cli-types@npm:11.3.7":
+"@react-native-community/cli-types@npm:11.3.7, @react-native-community/cli-types@npm:^11.0.0":
   version: 11.3.7
   resolution: "@react-native-community/cli-types@npm:11.3.7"
   dependencies:
     joi: ^17.2.1
   checksum: e9d49617c0e17d40680f9cc0b271083a83de0aaf3d53acab54cf195bfa35cae35c69ec88f1cb026c9a096f8dfd5bdc12787ee3e52cf98df68a572de1859c71ea
-  languageName: node
-  linkType: hard
-
-"@react-native-community/cli-types@npm:^10.0.0":
-  version: 10.0.0
-  resolution: "@react-native-community/cli-types@npm:10.0.0"
-  dependencies:
-    joi: ^17.2.1
-  checksum: 6153088d6be1eeb05c9203a4fbed7f4a3761d989d461ad596c081316379775f1649a59a474adf660b1198c3b179dbe343392eb78b3fe7c6a0f400e53476f7fc1
   languageName: node
   linkType: hard
 
@@ -3501,7 +3492,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/cli@workspace:packages/cli"
   dependencies:
-    "@react-native-community/cli-types": ^10.0.0
+    "@react-native-community/cli-types": ^11.0.0
     "@rnx-kit/align-deps": ^2.2.2
     "@rnx-kit/config": ^0.6.2
     "@rnx-kit/console": ^1.0.11
@@ -3819,7 +3810,7 @@ __metadata:
     "@babel/core": ^7.1.6
     "@babel/preset-env": ^7.1.6
     "@fluentui/utilities": 8.13.9
-    "@react-native-community/cli-types": ^10.0.0
+    "@react-native-community/cli-types": ^11.0.0
     "@rnx-kit/babel-preset-metro-react-native": "*"
     "@rnx-kit/console": ^1.0.11
     "@rnx-kit/metro-config": "*"
@@ -3864,7 +3855,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/metro-service@workspace:packages/metro-service"
   dependencies:
-    "@react-native-community/cli-types": ^10.0.0
+    "@react-native-community/cli-types": ^11.0.0
     "@rnx-kit/console": ^1.0.0
     "@rnx-kit/scripts": "*"
     "@rnx-kit/tools-language": ^2.0.0
