@@ -36,6 +36,7 @@ export default async function bundle(options) {
   const esbuild = await import("esbuild");
   await esbuild.build({
     bundle: true,
+    conditions: ["typescript"],
     entryPoints: ["src/index.ts"],
     external: [
       ...(dependencies ? Object.keys(dependencies) : []),

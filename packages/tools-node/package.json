@@ -11,10 +11,34 @@
     "package.d.ts",
     "package.js",
     "path.d.ts",
-    "path.js"
+    "path.js",
+    "src/*"
   ],
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "typescript": "./src/index.ts",
+      "default": "./lib/index.js"
+    },
+    "./module": {
+      "types": "./lib/module.d.ts",
+      "typescript": "./src/module.ts",
+      "default": "./lib/module.js"
+    },
+    "./package": {
+      "types": "./lib/package.d.ts",
+      "typescript": "./src/package.ts",
+      "default": "./lib/package.js"
+    },
+    "./package.json": "./package.json",
+    "./path": {
+      "types": "./lib/path.d.ts",
+      "typescript": "./src/path.ts",
+      "default": "./lib/path.js"
+    }
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/microsoft/rnx-kit",

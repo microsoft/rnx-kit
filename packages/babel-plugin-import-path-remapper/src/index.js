@@ -45,7 +45,12 @@ function findMainSourceFile(sourcePath, requester, customRemap) {
     resolveOptions
   );
 
-  const { main } = readPackage(manifestPath);
+  const { main, exports } = readPackage(manifestPath);
+  if (exports) {
+    // Skip packages that declare entry points
+    return;
+  }
+
   if (customRemap) {
     return customRemap(
       sourcePath,
