@@ -1,5 +1,13 @@
 # Change Log - @rnx-kit/babel-plugin-import-path-remapper
 
+## 1.1.4
+
+### Patch Changes
+
+- bc2b2627: Skip packages that declare entry points
+- Updated dependencies [bc2b2627]
+  - @rnx-kit/tools-node@2.0.1
+
 ## 1.1.3
 
 ### Patch Changes

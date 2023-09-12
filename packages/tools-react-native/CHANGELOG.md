@@ -1,5 +1,13 @@
 # Change Log - @rnx-kit/tools-react-native
 
+## 1.3.3
+
+### Patch Changes
+
+- bc2b2627: Allow bundling directly from TypeScript source
+- Updated dependencies [bc2b2627]
+  - @rnx-kit/tools-node@2.0.1
+
 ## 1.3.2
 
 ### Patch Changes

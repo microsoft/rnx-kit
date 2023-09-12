@@ -1,5 +1,14 @@
 # Change Log - @rnx-kit/config
 
+## 0.6.5
+
+### Patch Changes
+
+- bc2b2627: Allow bundling directly from TypeScript source
+- Updated dependencies [bc2b2627]
+  - @rnx-kit/tools-node@2.0.1
+  - @rnx-kit/console@1.0.12
+
 ## 0.6.4
 
 ### Patch Changes
