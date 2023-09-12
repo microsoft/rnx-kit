@@ -20,6 +20,32 @@ inputs:
 runs:
   using: composite
   steps:
+    - name: Set up Ccache
+      id: setup-ccache
+      if: ${{ inputs.platform == 'ios' || inputs.platform == 'macos' }}
+      run: |
+        podfile_lock="packages/test-app/${{ inputs.platform }}/Podfile.lock"
+        if [[ -f $(git rev-parse --show-toplevel)/.ccache/ccache.conf ]] && [[ -f "$podfile_lock" ]]; then
+          if ! command -v ccache 1> /dev/null; then
+            brew install ccache
+          fi
+
+          CCACHE_HOME=$(dirname $(dirname $(which ccache)))/opt/ccache
+
+          echo "CCACHE_DIR=$(git rev-parse --show-toplevel)/.ccache" >> $GITHUB_ENV
+
+          echo "CC=${CCACHE_HOME}/libexec/clang" >> $GITHUB_ENV
+          echo "CXX=${CCACHE_HOME}/libexec/clang++" >> $GITHUB_ENV
+          echo "CMAKE_C_COMPILER_LAUNCHER=$(which ccache)" >> $GITHUB_ENV
+          echo "CMAKE_CXX_COMPILER_LAUNCHER=$(which ccache)" >> $GITHUB_ENV
+
+          ccache --zero-stats 1> /dev/null
+
+          clang --version > .clang-version
+          input=$(find . -maxdepth 1 -name .clang-version -o -name .yarnrc.yml | sort)
+          echo "cache-key=$(cat "$podfile_lock" $input | shasum -a 256 | awk '{ print $1 }')" >> $GITHUB_OUTPUT
+        fi
+      shell: bash
     - name: Set up Node.js
       uses: actions/setup-node@v3.8.1
       with:
@@ -31,20 +57,9 @@ runs:
       with:
         distribution: temurin
         java-version: ${{ inputs.jdk-version }}
-    - name: Generate cache key
-      id: cache-key-generator
-      run: |
-        if [[ -f packages/test-app/${{ inputs.platform }}/Podfile.lock ]]; then
-          clang --version > .clang-version
-          echo "cache-key=$(node scripts/shasum.mjs .clang-version .yarnrc.yml packages/test-app/${{ inputs.platform }}/Podfile.lock)" >> $GITHUB_OUTPUT
-        else
-          echo 'cache-key=false' >> $GITHUB_OUTPUT
-        fi
-      shell: bash
     - name: Cache /.ccache
-      if: ${{ steps.cache-key-generator.outputs.cache-key != 'false' }}
+      if: ${{ steps.setup-ccache.outputs.cache-key }}
       uses: actions/cache@v3
       with:
         path: .ccache
-        key: ${{ runner.os }}-${{ inputs.platform }}-ccache-${{ steps.cache-key-generator.outputs.cache-key }}
-        restore-keys: ${{ runner.os }}-${{ inputs.platform }}-ccache-
+        key: ${{ runner.os }}-${{ inputs.cache-key-prefix }}-ccache-${{ steps.setup-ccache.outputs.cache-key }}

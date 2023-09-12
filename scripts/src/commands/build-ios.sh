@@ -91,7 +91,13 @@ fi
 cd ios
 export RCT_NO_LAUNCH_PACKAGER=1
 
-xcodebuild -workspace "${workspace}.xcworkspace" -scheme "${scheme}" -destination "generic/platform=iOS Simulator" CODE_SIGNING_ALLOWED=NO COMPILER_INDEX_STORE_ENABLE=NO "${build_actions[@]}"
+xcodebuild \
+  -workspace "${workspace}.xcworkspace" \
+  -scheme "${scheme}" \
+  -destination "generic/platform=iOS Simulator" \
+  CODE_SIGNING_ALLOWED=NO \
+  COMPILER_INDEX_STORE_ENABLE=NO \
+  "${build_actions[@]}"
 
 if [[ "$CCACHE_DISABLE" != "1" ]]; then
   ccache --show-stats --verbose
