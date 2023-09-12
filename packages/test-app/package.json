@@ -36,6 +36,7 @@
     "@babel/plugin-transform-react-jsx-source": "^7.0.0",
     "@babel/preset-env": "^7.1.6",
     "@babel/runtime": "^7.12.5",
+    "@jridgewell/trace-mapping": "^0.3.18",
     "@react-native/metro-config": "^0.72.0",
     "@rnx-kit/babel-preset-metro-react-native": "*",
     "@rnx-kit/cli": "*",

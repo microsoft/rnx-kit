@@ -2,7 +2,6 @@
 
 import * as fs from "node:fs";
 import * as path from "node:path";
-import require from "../require.mjs";
 
 /**
  * @param {{ [key: string]: unknown }} a
@@ -20,32 +19,7 @@ function mergeOneLevel(a, b = {}) {
   return result;
 }
 
-function patch() {
-  const depcheck = path.dirname(require.resolve("depcheck/package.json"));
-  const patchedFile = path.join(depcheck, ".rnx-kit-patched");
-  if (!fs.existsSync(patchedFile)) {
-    try {
-      const tsParser = path.join(depcheck, "dist", "parser", "typescript.js");
-
-      const content = fs.readFileSync(tsParser, { encoding: "utf-8" });
-      const patched = content.replace(
-        /{\s*pipelineOperator: {\s*proposal: 'minimal'\s*}\s*}/,
-        "['pipelineOperator', { proposal: 'minimal' }]"
-      );
-      if (patched !== content) {
-        fs.writeFileSync(tsParser, patched);
-      }
-    } catch (_) {
-      // ignore
-    } finally {
-      fs.writeFileSync(patchedFile, "");
-    }
-  }
-}
-
 export default async function depcheck() {
-  patch();
-
   const { default: depcheck } = await import("depcheck");
 
   return new Promise((resolve, reject) => {
