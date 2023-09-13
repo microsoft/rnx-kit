@@ -3351,7 +3351,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rnx-kit/align-deps@*, @rnx-kit/align-deps@^2.2.2, @rnx-kit/align-deps@workspace:packages/align-deps":
+"@rnx-kit/align-deps@^2.2.2, @rnx-kit/align-deps@workspace:packages/align-deps":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/align-deps@workspace:packages/align-deps"
   dependencies:
@@ -3505,6 +3505,8 @@ __metadata:
     fs-extra: ^10.0.0
     jest: ^29.2.1
     memfs: ^4.0.0
+    metro: ^0.76.5
+    metro-babel-transformer: ^0.76.8
     metro-config: ^0.76.5
     ora: ^5.4.1
     prettier: ^3.0.0
@@ -3514,11 +3516,14 @@ __metadata:
     typescript: ^5.0.0
   peerDependencies:
     "@react-native-community/cli": ">=5.0.1"
+    "@react-native-community/cli-clean": ">=8.0.0"
     "@react-native-community/cli-server-api": ">=5.0.1"
     jest-cli: ">=26.0"
     react-native: ">=0.64"
   peerDependenciesMeta:
     "@react-native-community/cli":
+      optional: true
+    "@react-native-community/cli-clean":
       optional: true
     "@react-native-community/cli-server-api":
       optional: true
@@ -3558,6 +3563,7 @@ __metadata:
     "@types/semver": ^7.0.0
     eslint: ^8.0.0
     jest: ^29.2.1
+    metro: ^0.76.5
     prettier: ^3.0.0
     semver: ^7.0.0
     typescript: ^5.0.0
@@ -3701,6 +3707,7 @@ __metadata:
     "@types/jest": ^29.2.1
     eslint: ^8.0.0
     jest: ^29.2.1
+    metro: ^0.76.5
     metro-config: ^0.76.5
     metro-react-native-babel-preset: ^0.76.5
     prettier: ^3.0.0
@@ -3734,6 +3741,7 @@ __metadata:
     "@types/node": ^18.0.0
     eslint: ^8.0.0
     jest: ^29.2.1
+    metro: ^0.76.5
     prettier: ^3.0.0
     typescript: ^5.0.0
   languageName: unknown
@@ -3751,6 +3759,8 @@ __metadata:
     "@types/node": ^18.0.0
     eslint: ^8.0.0
     jest: ^29.2.1
+    metro: ^0.76.5
+    metro-source-map: ^0.76.8
     prettier: ^3.0.0
     typescript: ^5.0.0
   bin:
@@ -3770,6 +3780,7 @@ __metadata:
     "@rnx-kit/typescript-service": ^1.5.7
     eslint: ^8.0.0
     jest: ^29.2.1
+    metro: ^0.76.5
     prettier: ^3.0.0
     semver: ^7.0.0
     typescript: ">=4.7.0"
@@ -3818,7 +3829,9 @@ __metadata:
     jest: ^29.2.1
     lodash-es: ^4.17.21
     metro: ^0.76.5
+    metro-config: ^0.76.5
     metro-react-native-babel-preset: ^0.76.5
+    metro-transform-worker: ^0.76.5
     prettier: ^3.0.0
     react: 18.2.0
     react-native: ^0.72.0
@@ -3863,6 +3876,7 @@ __metadata:
     prettier: ^3.0.0
     typescript: ^5.0.0
   peerDependencies:
+    "@office-iss/react-native-win32": "*"
     "@react-native-community/cli-plugin-metro": "*"
     "@react-native/metro-config": "*"
     metro: ">=0.66.1"
@@ -3872,6 +3886,8 @@ __metadata:
     metro-resolver: ">=0.66.1"
     metro-runtime: ">=0.66.1"
   peerDependenciesMeta:
+    "@office-iss/react-native-win32":
+      optional: true
     "@react-native-community/cli-plugin-metro":
       optional: true
     "@react-native/metro-config":
@@ -4102,6 +4118,7 @@ __metadata:
     "@types/yargs": ^16.0.0
     eslint: ^8.0.0
     jest: ^29.2.1
+    metro-source-map: ^0.76.8
     prettier: ^3.0.0
     spdx-expression-parse: ^3.0.1
     typescript: ^5.0.0
@@ -9965,7 +9982,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"metro-babel-transformer@npm:0.76.8":
+"metro-babel-transformer@npm:0.76.8, metro-babel-transformer@npm:^0.76.8":
   version: 0.76.8
   resolution: "metro-babel-transformer@npm:0.76.8"
   dependencies:
@@ -12389,7 +12406,6 @@ __metadata:
     "@babel/core": ^7.0.0
     "@babel/preset-env": ^7.0.0
     "@changesets/cli": ^2.22.0
-    "@rnx-kit/align-deps": "*"
     eslint: ^8.0.0
     jest-cli: ^29.2.1
     metro: ^0.76.5

@@ -45,7 +45,7 @@
   },
   "depcheck": {
     "ignoreMatches": [
-      "babel-plugin-const-enum"
+      "@rnx-kit/babel-plugin-import-path-remapper"
     ]
   },
   "eslintConfig": {

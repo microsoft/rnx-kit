@@ -52,7 +52,6 @@
   "depcheck": {
     "ignoreMatches": [
       "@typescript-eslint/eslint-plugin",
-      "@typescript-eslint/parser",
       "@typescript-eslint/types",
       "eslint-plugin-react",
       "eslint-plugin-react-hooks"

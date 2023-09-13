@@ -29,6 +29,7 @@
     "chalk": "^4.1.0"
   },
   "peerDependencies": {
+    "@office-iss/react-native-win32": "*",
     "@react-native-community/cli-plugin-metro": "*",
     "@react-native/metro-config": "*",
     "metro": ">=0.66.1",
@@ -39,6 +40,9 @@
     "metro-runtime": ">=0.66.1"
   },
   "peerDependenciesMeta": {
+    "@office-iss/react-native-win32": {
+      "optional": true
+    },
     "@react-native-community/cli-plugin-metro": {
       "optional": true
     },
@@ -60,12 +64,6 @@
     "metro-runtime": "^0.76.5",
     "prettier": "^3.0.0",
     "typescript": "^5.0.0"
-  },
-  "depcheck": {
-    "ignoreMatches": [
-      "@office-iss/react-native-win32",
-      "metro-babel-transformer"
-    ]
   },
   "eslintConfig": {
     "extends": "@rnx-kit/eslint-config"
