@@ -31,7 +31,7 @@ export default async function bundle(options) {
   const targetPlatform = ensureValidPlatform(platform);
 
   const manifest = fs.readFileSync("package.json", { encoding: "utf-8" });
-  const { main, dependencies } = JSON.parse(manifest);
+  const { main, dependencies, peerDependencies } = JSON.parse(manifest);
 
   const esbuild = await import("esbuild");
   await esbuild.build({
@@ -40,6 +40,7 @@ export default async function bundle(options) {
     entryPoints: ["src/index.ts"],
     external: [
       ...(dependencies ? Object.keys(dependencies) : []),
+      ...(peerDependencies ? Object.keys(peerDependencies) : []),
       "./package.json",
     ],
     minify: Boolean(minify),

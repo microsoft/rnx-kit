@@ -54,7 +54,8 @@
     "ignoreMatches": [
       "@babel/preset-env",
       "@babel/preset-typescript",
-      "@jest/types"
+      "@jest/types",
+      "react"
     ]
   },
   "eslintConfig": {

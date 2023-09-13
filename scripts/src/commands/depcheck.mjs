@@ -28,7 +28,7 @@ export default async function depcheck() {
     const config = JSON.parse(json);
     const options = mergeOneLevel(
       {
-        ignorePatterns: ["/lib/*", "/test/__fixtures__/*"],
+        ignorePatterns: ["/lib/*"],
         ignoreMatches: [
           "@rnx-kit/eslint-config",
           "@rnx-kit/scripts",

@@ -30,13 +30,7 @@
   "depcheck": {
     "ignoreMatches": [
       "@rnx-kit/align-deps",
-      "@rnx-kit/jest-preset",
-      "depcheck",
-      "esbuild",
-      "markdown-table",
-      "prettier-plugin-organize-imports",
-      "typedoc",
-      "yargs"
+      "@rnx-kit/jest-preset"
     ]
   },
   "eslintConfig": {
