@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/console
 
+## 1.0.12
+
+### Patch Changes
+
+- bc2b2627: Allow bundling directly from TypeScript source
+
 ## 1.0.6
 
 Mon, 01 Nov 2021 13:46:12 GMT

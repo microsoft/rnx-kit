@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/tools-language
 
+## 2.0.1
+
+### Patch Changes
+
+- bc2b2627: Allow bundling directly from TypeScript source
+
 ## 2.0.0
 
 ### Major Changes

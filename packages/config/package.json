@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/config",
-  "version": "0.6.4",
+  "version": "0.6.5",
   "description": "Define and query information about a kit package",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/config#readme",
   "license": "MIT",
@@ -31,8 +31,8 @@
     "test": "rnx-kit-scripts test"
   },
   "dependencies": {
-    "@rnx-kit/console": "^1.0.11",
-    "@rnx-kit/tools-node": "^2.0.0",
+    "@rnx-kit/console": "^1.0.12",
+    "@rnx-kit/tools-node": "^2.0.1",
     "semver": "^7.0.0"
   },
   "devDependencies": {

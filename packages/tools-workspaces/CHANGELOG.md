@@ -1,5 +1,12 @@
 # @rnx-kit/tools-workspaces
 
+## 0.1.5
+
+### Patch Changes
+
+- 96905f7b: Add support for [Bun](https://bun.sh/)
+- bc2b2627: Allow bundling directly from TypeScript source
+
 ## 0.1.4
 
 ### Patch Changes
