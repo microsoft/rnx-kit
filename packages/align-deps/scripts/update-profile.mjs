@@ -26,6 +26,14 @@ import semverCompare from "semver/functions/compare.js";
  */
 
 /**
+ * This wrapper is mostly for coercing TypeScript into inferring the correct
+ * type.
+ * @param {any} v
+ * @returns {Record<string, string> | undefined}
+ */
+const Optional = (v) => v;
+
+/**
  * Fetches package manifest from npm.
  * @param {MetaPackage | Package} pkg
  * @param {string=} targetVersion
@@ -60,8 +68,8 @@ async function fetchPackageInfo(pkg, targetVersion = "latest") {
     latest,
     modified: time?.modified ?? "",
     homepage,
-    dependencies: /** @type {Record<string, string>=} */ (dependencies),
-    peerDependencies: /** @type {Record<string, string>=} */ (peerDependencies),
+    dependencies: Optional(dependencies),
+    peerDependencies: Optional(peerDependencies),
   };
 }
 
@@ -270,43 +278,35 @@ async function getCurrentMetroVersion(dependencies) {
     ["@react-native-community/cli", "@react-native-community/cli-plugin-metro"],
   ];
 
-  /**
-   * This wrapper is mostly for coercing TypeScript into inferring the correct
-   * type.
-   * @param {any} v
-   * @returns {Record<string, string> | null}
-   */
-  const Optional = (v) => v;
-
   for (const chain of metroVersionDependencyChains) {
-    /** @type {Record<string, string> | null} */
     const deps = await chain.reduce(
-      async (dependencies, packageName) => {
-        if (!dependencies) {
-          return null;
-        }
+      (p, packageName) =>
+        p.then(async (dependencies) => {
+          if (!dependencies) {
+            return undefined;
+          }
 
-        try {
-          const packageInfo = await packageJson(packageName, {
-            version: getPackageVersion(packageName, await dependencies),
-            fullMetadata: true,
-          });
-          return Optional(packageInfo.dependencies);
-        } catch (e) {
-          if (e.code === "ETARGET" || e.name === "VersionNotFoundError") {
-            // Some packages, such as `@react-native-community/cli`, are still
-            // in alpha or beta while react-native is in pre-release. Try again
-            // with the `next` tag.
+          try {
             const packageInfo = await packageJson(packageName, {
-              version: "next",
+              version: getPackageVersion(packageName, dependencies),
               fullMetadata: true,
             });
             return Optional(packageInfo.dependencies);
-          } else {
-            return null;
+          } catch (e) {
+            if (e.code === "ETARGET" || e.name === "VersionNotFoundError") {
+              // Some packages, such as `@react-native-community/cli`, are still
+              // in alpha or beta while react-native is in pre-release. Try again
+              // with the `next` tag.
+              const packageInfo = await packageJson(packageName, {
+                version: "next",
+                fullMetadata: true,
+              });
+              return Optional(packageInfo.dependencies);
+            } else {
+              return undefined;
+            }
           }
-        }
-      },
+        }),
       Promise.resolve(Optional(dependencies))
     );
 
