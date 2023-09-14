@@ -202,14 +202,21 @@ export function loadMetroConfig(
   const getDefaultConfig = getDefaultConfigProvider(cliConfig.root);
   const defaultConfig = getDefaultConfig(cliConfig);
 
-  //  apply overrides that loadConfig() doesn't do for us
-  if (overrides.reporter) {
-    defaultConfig.reporter = overrides.reporter;
-  }
   if (overrides.assetPlugins) {
     // @ts-expect-error We want to assign to read-only `assetPlugins`
     defaultConfig.transformer.assetPlugins = assetPlugins;
   }
 
-  return loadConfig({ cwd: cliConfig.root, ...overrides }, defaultConfig);
+  let config = loadConfig({ cwd: cliConfig.root, ...overrides }, defaultConfig);
+
+  // apply overrides that loadConfig() doesn't do for us
+  if (overrides.reporter) {
+    config = config.then((config) => {
+      // @ts-expect-error We want to override `reporter`
+      config.reporter = overrides.reporter;
+      return config;
+    });
+  }
+
+  return config;
 }
