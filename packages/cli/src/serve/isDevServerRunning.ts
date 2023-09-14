@@ -39,7 +39,7 @@ export async function isDevServerRunning(
 /**
  * Returns whether the specified host:port is occupied.
  *
- * NOTE: The host **must** match whatever gets passed to `Metro.runServer`.
+ * NOTE: `host` **must** match whatever gets passed to `Metro.runServer`.
  */
 async function isPortOccupied(
   host: string | undefined,
