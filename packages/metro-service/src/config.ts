@@ -1,5 +1,4 @@
 import type { Config as CLIConfig } from "@react-native-community/cli-types";
-import type { Reporter } from "metro";
 import type { ConfigT, InputConfigT } from "metro-config";
 import { loadConfig } from "metro-config";
 import type {
@@ -18,7 +17,6 @@ export type MetroConfigOverrides = {
   sourceExts?: string[];
   maxWorkers?: number;
   resetCache?: boolean;
-  reporter?: Reporter;
   assetPlugins?: string[];
 };
 
@@ -202,10 +200,6 @@ export function loadMetroConfig(
   const getDefaultConfig = getDefaultConfigProvider(cliConfig.root);
   const defaultConfig = getDefaultConfig(cliConfig);
 
-  //  apply overrides that loadConfig() doesn't do for us
-  if (overrides.reporter) {
-    defaultConfig.reporter = overrides.reporter;
-  }
   if (overrides.assetPlugins) {
     // @ts-expect-error We want to assign to read-only `assetPlugins`
     defaultConfig.transformer.assetPlugins = assetPlugins;
