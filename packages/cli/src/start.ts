@@ -1,5 +1,5 @@
 import type CliServerApi from "@react-native-community/cli-server-api";
-import type { Config as CLIConfig } from "@react-native-community/cli-types";
+import type { Config } from "@react-native-community/cli-types";
 import logger from "@rnx-kit/console";
 import type { MetroTerminal } from "@rnx-kit/metro-service";
 import {
@@ -11,14 +11,12 @@ import chalk from "chalk";
 import type { Server as HttpServer } from "http";
 import type { Server as HttpsServer } from "https";
 import type { ReportableEvent, Reporter, RunServerOptions } from "metro";
-import type { ConfigT, Middleware } from "metro-config";
+import type { Middleware } from "metro-config";
 import type Server from "metro/src/Server";
-import fetch from "node-fetch";
-import * as os from "os";
 import * as path from "path";
-import qrcode from "qrcode";
-import readline from "readline";
 import { customizeMetroConfig } from "./metro-config";
+import { attachKeyHandlers } from "./serve/attachKeyHandlers";
+import { isDevServerRunning } from "./serve/isDevServerRunning";
 import { getKitServerConfig } from "./serve/kit-config";
 
 type DevServerMiddleware = ReturnType<
@@ -33,22 +31,23 @@ type DevServerMiddleware6 = Pick<DevServerMiddleware, "middleware"> & {
   };
 };
 
-export type CLIStartOptions = {
-  port: number;
-  host: string;
-  projectRoot?: string;
-  watchFolders?: string[];
+export type StartCommandArgs = {
   assetPlugins?: string[];
-  sourceExts?: string[];
-  maxWorkers?: number;
-  resetCache?: boolean;
-  customLogReporterPath?: string;
-  https?: boolean;
-  key?: string;
   cert?: string;
+  customLogReporterPath?: string;
+  host?: string;
+  https?: boolean;
+  maxWorkers?: number;
+  key?: string;
+  platforms?: string[];
+  port?: number;
+  resetCache?: boolean;
+  sourceExts?: string[];
+  transformer?: string;
+  watchFolders?: string[];
   config?: string;
+  projectRoot?: string;
   interactive: boolean;
-  id?: string;
 };
 
 // https://github.com/facebook/react-native/blob/3e7a873f2d1c5170a7f4c88064897e74a149c5d5/packages/dev-middleware/src/createDevMiddleware.js#L40
@@ -74,16 +73,6 @@ type HelpOptions = {
 };
 
 type MenuItem = [string, string];
-
-function devServerUrl(
-  cliOptions: CLIStartOptions,
-  metroConfig: ConfigT
-): string {
-  const protocol = cliOptions.https ? "https" : "http";
-  const host = cliOptions.host || os.hostname();
-  const port = metroConfig.server.port;
-  return `${protocol}://${host}:${port}`;
-}
 
 function friendlyRequire<T>(...modules: string[]): T {
   try {
@@ -162,10 +151,10 @@ function makeHelp(
 
 export async function rnxStart(
   _argv: string[],
-  cliConfig: CLIConfig,
-  cliOptions: CLIStartOptions
+  ctx: Config,
+  args: StartCommandArgs
 ): Promise<void> {
-  const serverConfig = getKitServerConfig(cliOptions);
+  const serverConfig = getKitServerConfig(args);
 
   const { createDevServerMiddleware, indexPageMiddleware } = friendlyRequire<
     typeof CliServerApi
@@ -176,24 +165,17 @@ export async function rnxStart(
   );
 
   // interactive mode requires raw access to stdin
-  let interactive = cliOptions.interactive;
+  let interactive = args.interactive;
   if (interactive) {
     interactive = process.stdin.isTTY;
     if (!interactive) {
-      logger.warn(
-        chalk.yellow("Interactive mode is not supported on this terminal")
-      );
+      logger.warn("Interactive mode is not supported in this environment");
     }
   }
 
-  // create a Metro terminal and reporter for writing to the console
-  const { terminal, reporter: terminalReporter } = createTerminal(
-    cliOptions.customLogReporterPath
-  );
-
   // load Metro configuration, applying overrides from the command line
-  const metroConfig = await loadMetroConfig(cliConfig, {
-    ...cliOptions,
+  const metroConfig = await loadMetroConfig(ctx, {
+    ...args,
     ...(serverConfig.projectRoot
       ? { projectRoot: path.resolve(serverConfig.projectRoot) }
       : undefined),
@@ -209,18 +191,48 @@ export async function rnxStart(
       : undefined),
   });
 
+  // create a Metro terminal and reporter for writing to the console
+  const { terminal, reporter: terminalReporter } = createTerminal(
+    args.customLogReporterPath
+  );
+
   // customize the metro config to include plugins, presets, etc.
   customizeMetroConfig(metroConfig, serverConfig, (message: string): void => {
     terminal.log(message);
   });
 
+  const host = args.host?.length ? args.host : "localhost";
+  const {
+    projectRoot,
+    server: { port },
+    watchFolders,
+  } = metroConfig;
+  const scheme = args.https === true ? "https" : "http";
+  const serverStatus = await isDevServerRunning(
+    scheme,
+    host,
+    port,
+    projectRoot
+  );
+
+  switch (serverStatus) {
+    case "matched_server_running":
+      logger.info(
+        `A dev server is already running for this project on port ${port}. ` +
+          "Exiting..."
+      );
+      return;
+    case "port_taken":
+      logger.error(
+        `Another process is using on port ${port}. Please terminate this ` +
+          "process and try again, or use another port with `--port`."
+      );
+      return;
+  }
+
   // create middleware -- a collection of plugins which handle incoming
   // http(s) requests, routing them to static pages or JS functions.
-  const devServer = createDevServerMiddleware({
-    host: cliOptions.host,
-    port: metroConfig.server.port,
-    watchFolders: metroConfig.watchFolders,
-  });
+  const devServer = createDevServerMiddleware({ host, port, watchFolders });
 
   const coreDevMiddleware = (() => {
     try {
@@ -231,7 +243,7 @@ export async function rnxStart(
         "@react-native/dev-middleware"
       );
       return createDevMiddleware({
-        projectRoot: metroConfig.projectRoot,
+        projectRoot,
         logger,
         unstable_experiments: {
           // NOTE: Only affects the /open-debugger endpoint
@@ -292,10 +304,10 @@ export async function rnxStart(
   };
 
   const serverInstance = await startServer(metroConfig, {
-    host: cliOptions.host,
-    secure: cliOptions.https,
-    secureCert: cliOptions.cert,
-    secureKey: cliOptions.key,
+    host: args.host,
+    secure: args.https,
+    secureCert: args.cert,
+    secureKey: args.key,
     ...(coreDevMiddleware
       ? {
           unstable_extraMiddleware: [
@@ -318,6 +330,10 @@ export async function rnxStart(
 
     // bind our `reportEvent` delegate to the Metro server
     reportEventDelegate = eventsSocket.reportEvent;
+  } else {
+    // `messageSocketEndpoint` should already be set at this point. But this
+    // makes TypeScript happier.
+    messageSocketEndpoint = devServer.messageSocketEndpoint;
   }
 
   // In Node 8, the default keep-alive for an HTTP connection is 5 seconds. In
@@ -335,58 +351,11 @@ export async function rnxStart(
   // in interactive mode, listen for keyboard events from stdin and bind
   // them to specific actions.
   if (interactive) {
-    readline.emitKeypressEvents(process.stdin);
-
-    process.stdin.setRawMode(true);
-    process.stdin.on("keypress", (_key, data) => {
-      const { ctrl, name } = data;
-      if (ctrl === true) {
-        switch (name) {
-          case "c":
-            terminal.log(chalk.green("Exiting..."));
-            process.exit();
-            break;
-          case "z":
-            process.emit("SIGTSTP", "SIGTSTP");
-            break;
-        }
-      } else {
-        switch (name) {
-          case "d":
-            terminal.log(chalk.green("Opening developer menu..."));
-            messageSocketEndpoint.broadcast("devMenu", undefined);
-            break;
-
-          case "h":
-            printHelp();
-            break;
-
-          case "j": {
-            const url = devServerUrl(cliOptions, metroConfig);
-            fetch(url + "/open-debugger", { method: "POST" });
-            break;
-          }
-
-          case "q": {
-            const url = `${devServerUrl(cliOptions, metroConfig)}/index.bundle`;
-            qrcode.toString(url, { type: "terminal" }, (_err, qr) => {
-              terminal.log("");
-              terminal.log(url + ":");
-              terminal.log(qr);
-            });
-            break;
-          }
-
-          case "r":
-            terminal.log(chalk.green("Reloading app..."));
-            messageSocketEndpoint.broadcast("reload", undefined);
-            break;
-
-          case "return":
-            terminal.log("");
-            break;
-        }
-      }
+    attachKeyHandlers({
+      devServerUrl: `${scheme}://${host}:${port}`,
+      help: printHelp,
+      messageSocketEndpoint,
+      terminal,
     });
   }
 }
