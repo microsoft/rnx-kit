@@ -8,7 +8,6 @@ import { fileURLToPath } from "node:url";
 import packageJson from "package-json";
 import semverCoerce from "semver/functions/coerce.js";
 import semverCompare from "semver/functions/compare.js";
-import { isMetaPackage } from "../lib/capabilities.js";
 
 /**
  * @typedef {import("../src/types").MetaPackage} MetaPackage
@@ -101,6 +100,19 @@ function getProfilePath(preset, profileVersion) {
     path.join(presetDir, `profile-${profileVersion}.ts`),
     presetDir + ".ts",
   ];
+}
+
+/**
+ * Returns whether the package is a meta package.
+ *
+ * Note: This is a copy of the function in 'src/capabilities.ts' to avoid having
+ * to compile the whole package before we can run this script.
+ *
+ * @param {MetaPackage | Package} pkg
+ * @returns {pkg is MetaPackage}
+ */
+function isMetaPackage(pkg) {
+  return pkg.name === "#meta" && Array.isArray(pkg.capabilities);
 }
 
 /**
