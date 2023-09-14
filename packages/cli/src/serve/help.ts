@@ -53,11 +53,8 @@ export function makeHelp(
     const padding = " ".repeat(labelPadding + keyPadding + margin);
     return `┃ ${dim(label)}${padding}${key}`;
   });
+  lines.push("");
 
-  return () => {
-    for (const line of lines) {
-      terminal.log(line);
-    }
-    terminal.log("");
-  };
+  const help = lines.join("\n");
+  return () => terminal.log(help);
 }
