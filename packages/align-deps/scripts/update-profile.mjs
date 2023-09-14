@@ -295,8 +295,8 @@ async function getCurrentMetroVersion(dependencies) {
           } catch (e) {
             if (e.code === "ETARGET" || e.name === "VersionNotFoundError") {
               // Some packages, such as `@react-native-community/cli`, are still
-              // in alpha or beta while react-native is in pre-release. Try again
-              // with the `next` tag.
+              // in alpha or beta while react-native is in pre-release. Try
+              // again with the `next` tag.
               const packageInfo = await packageJson(packageName, {
                 version: "next",
                 fullMetadata: true,
