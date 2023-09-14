@@ -231,7 +231,7 @@ export async function rnxStart(
         "@react-native/dev-middleware"
       );
       return createDevMiddleware({
-        projectRoot: cliOptions.projectRoot || process.cwd(),
+        projectRoot: metroConfig.projectRoot,
         logger,
         unstable_experiments: {
           // NOTE: Only affects the /open-debugger endpoint
