@@ -14,7 +14,7 @@ type ServerStatus = "not_running" | "already_running" | "in_use" | "unknown";
  */
 export async function isDevServerRunning(
   scheme: string,
-  host: string,
+  host: string | undefined,
   port: number,
   projectRoot: string
 ): Promise<ServerStatus> {
@@ -41,7 +41,10 @@ export async function isDevServerRunning(
  *
  * NOTE: The host **must** match whatever gets passed to `Metro.runServer`.
  */
-async function isPortOccupied(host: string, port: number): Promise<boolean> {
+async function isPortOccupied(
+  host: string | undefined,
+  port: number
+): Promise<boolean> {
   const server = net.createServer((c) => c.end());
   try {
     await new Promise<void>((resolve, reject) => {

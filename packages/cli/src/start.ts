@@ -209,7 +209,7 @@ export async function rnxStart(
   const scheme = args.https === true ? "https" : "http";
   const serverStatus = await isDevServerRunning(
     scheme,
-    args.host ?? "",
+    args.host,
     port,
     projectRoot
   );
