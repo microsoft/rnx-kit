@@ -3,6 +3,7 @@ import type { Config } from "@react-native-community/cli-types";
 import * as logger from "@rnx-kit/console";
 import {
   createTerminal,
+  isDevServerRunning,
   loadMetroConfig,
   startServer,
 } from "@rnx-kit/metro-service";
@@ -13,9 +14,8 @@ import type { Middleware } from "metro-config";
 import type Server from "metro/src/Server";
 import * as path from "path";
 import { customizeMetroConfig } from "./metro-config";
-import { attachKeyHandlers } from "./serve/attachKeyHandlers";
 import { makeHelp } from "./serve/help";
-import { isDevServerRunning } from "./serve/isDevServerRunning";
+import { attachKeyHandlers } from "./serve/keyboard";
 import { getKitServerConfig } from "./serve/kit-config";
 
 type DevServerMiddleware = ReturnType<
@@ -135,9 +135,8 @@ export async function rnxStart(
   );
 
   // customize the metro config to include plugins, presets, etc.
-  customizeMetroConfig(metroConfig, serverConfig, (message: string): void => {
-    terminal.log(message);
-  });
+  const log = (message: string): void => terminal.log(message);
+  customizeMetroConfig(metroConfig, serverConfig, log);
 
   const {
     projectRoot,

@@ -1,5 +1,6 @@
 import { info } from "@rnx-kit/console";
 import type { MetroTerminal } from "@rnx-kit/metro-service";
+import fetch from "node-fetch";
 import qrcode from "qrcode";
 import readline from "readline";
 
