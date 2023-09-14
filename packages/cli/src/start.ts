@@ -201,7 +201,6 @@ export async function rnxStart(
     terminal.log(message);
   });
 
-  const host = args.host?.length ? args.host : "localhost";
   const {
     projectRoot,
     server: { port },
@@ -210,7 +209,7 @@ export async function rnxStart(
   const scheme = args.https === true ? "https" : "http";
   const serverStatus = await isDevServerRunning(
     scheme,
-    host,
+    args.host ?? "",
     port,
     projectRoot
   );
@@ -224,14 +223,15 @@ export async function rnxStart(
       return;
     case "port_taken":
       logger.error(
-        `Another process is using on port ${port}. Please terminate this ` +
-          "process and try again, or use another port with `--port`."
+        `Another process is using port ${port}. Please terminate this ` +
+          "process and try again, or try another port with `--port`."
       );
       return;
   }
 
   // create middleware -- a collection of plugins which handle incoming
   // http(s) requests, routing them to static pages or JS functions.
+  const host = args.host?.length ? args.host : "localhost";
   const devServer = createDevServerMiddleware({ host, port, watchFolders });
 
   const coreDevMiddleware = (() => {

@@ -27,7 +27,8 @@ export async function isDevServerRunning(
       return "not_running";
     }
 
-    const statusResponse = await fetch(`${scheme}://${host}:${port}/status`);
+    const statusUrl = `${scheme}://${host || "localhost"}:${port}/status`;
+    const statusResponse = await fetch(statusUrl);
     const body = await statusResponse.text();
 
     return body === "packager-status:running" &&
@@ -39,26 +40,22 @@ export async function isDevServerRunning(
   }
 }
 
+/**
+ * Returns whether the specified host:port is occupied.
+ *
+ * NOTE: The host **must** match whatever gets passed to `Metro.runServer`.
+ */
 async function isPortOccupied(host: string, port: number): Promise<boolean> {
-  let result = false;
-  const server = net.createServer();
-
-  return new Promise((resolve, reject) => {
-    server.once("error", (e) => {
-      server.close();
-      if ("code" in e && e.code === "EADDRINUSE") {
-        result = true;
-      } else {
-        reject(e);
-      }
+  const server = net.createServer((c) => c.end());
+  try {
+    await new Promise<void>((resolve, reject) => {
+      server.on("error", (err) => reject(err));
+      server.listen(port, host, undefined, () => resolve());
     });
-    server.once("listening", () => {
-      result = false;
-      server.close();
-    });
-    server.once("close", () => {
-      resolve(result);
-    });
-    server.listen({ host, port });
-  });
+    return false;
+  } catch (_) {
+    return true;
+  } finally {
+    await new Promise<void>((resolve) => server.close(() => resolve()));
+  }
 }
