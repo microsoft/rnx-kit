@@ -1,13 +1,11 @@
 import type CliServerApi from "@react-native-community/cli-server-api";
 import type { Config } from "@react-native-community/cli-types";
 import * as logger from "@rnx-kit/console";
-import type { MetroTerminal } from "@rnx-kit/metro-service";
 import {
   createTerminal,
   loadMetroConfig,
   startServer,
 } from "@rnx-kit/metro-service";
-import chalk from "chalk";
 import type { Server as HttpServer } from "http";
 import type { Server as HttpsServer } from "https";
 import type { ReportableEvent, Reporter, RunServerOptions } from "metro";
@@ -16,6 +14,7 @@ import type Server from "metro/src/Server";
 import * as path from "path";
 import { customizeMetroConfig } from "./metro-config";
 import { attachKeyHandlers } from "./serve/attachKeyHandlers";
+import { makeHelp } from "./serve/help";
 import { isDevServerRunning } from "./serve/isDevServerRunning";
 import { getKitServerConfig } from "./serve/kit-config";
 
@@ -68,12 +67,6 @@ type DevMiddlewareModule = {
   createDevMiddleware: (options: DevMiddlewareOptions) => DevMiddlewareAPI;
 };
 
-type HelpOptions = {
-  hasDebugger: boolean;
-};
-
-type MenuItem = [string, string];
-
 function friendlyRequire<T>(...modules: string[]): T {
   try {
     const modulePath = modules.reduce((startDir, module) => {
@@ -92,61 +85,6 @@ function hasAttachToServerFunction(
   devServer: DevServerMiddleware | DevServerMiddleware6
 ): devServer is DevServerMiddleware6 {
   return "attachToServer" in devServer;
-}
-
-function makeHelp(
-  terminal: MetroTerminal["terminal"],
-  { hasDebugger }: HelpOptions
-): () => void {
-  const openDebugger: MenuItem | null = hasDebugger
-    ? ["J", "Open debugger"]
-    : null;
-
-  const menuItems: ("" | MenuItem)[] = [
-    ["D", "Open developer menu"],
-    ...(openDebugger ? [openDebugger] : []),
-    ["Q", "Show bundler address QR code"],
-    ["R", "Reload the app"],
-    "",
-    ["H", "Show this help message"],
-    ["Ctrl-C", "Quit"],
-  ];
-
-  const margin = 4;
-  const maxColumnWidth = (index: number) => {
-    return (max: number, item: (typeof menuItems)[number]) => {
-      if (!item) {
-        return max;
-      }
-
-      const width = item[index].length;
-      return width > max ? width : max;
-    };
-  };
-
-  const keyWidth = menuItems.reduce(maxColumnWidth(0), 0);
-  const labelWidth = menuItems.reduce(maxColumnWidth(1), 0);
-  const separator = `┠${"─".repeat(labelWidth + keyWidth + margin + 1)}`;
-
-  const dim = chalk.dim;
-  const lines = menuItems.map((item) => {
-    if (!item) {
-      return separator;
-    }
-
-    const [key, label] = item;
-    const labelPadding = labelWidth - label.length;
-    const keyPadding = keyWidth - key.length;
-    const padding = " ".repeat(labelPadding + keyPadding + margin);
-    return `┃ ${dim(label)}${padding}${key}`;
-  });
-
-  return () => {
-    for (const line of lines) {
-      terminal.log(line);
-    }
-    terminal.log("");
-  };
 }
 
 export async function rnxStart(
