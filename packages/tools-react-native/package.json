@@ -25,12 +25,12 @@
       "typescript": "./src/metro.ts",
       "default": "./lib/metro.js"
     },
-    "./package.json": "./package.json",
     "./platform": {
       "types": "./lib/platform.d.ts",
       "typescript": "./src/platform.ts",
       "default": "./lib/platform.js"
-    }
+    },
+    "./package.json": "./package.json"
   },
   "repository": {
     "type": "git",
