@@ -1,5 +1,5 @@
-import type { MetroTerminal } from "@rnx-kit/metro-service";
 import { info } from "@rnx-kit/console";
+import type { MetroTerminal } from "@rnx-kit/metro-service";
 import qrcode from "qrcode";
 import readline from "readline";
 
