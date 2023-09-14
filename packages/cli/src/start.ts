@@ -215,13 +215,13 @@ export async function rnxStart(
   );
 
   switch (serverStatus) {
-    case "matched_server_running":
+    case "already_running":
       logger.info(
         `A dev server is already running for this project on port ${port}. ` +
           "Exiting..."
       );
       return;
-    case "port_taken":
+    case "in_use":
       logger.error(
         `Another process is using port ${port}. Please terminate this ` +
           "process and try again, or try another port with `--port`."

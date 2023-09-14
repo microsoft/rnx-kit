@@ -1,20 +1,16 @@
 import net from "net";
 import fetch from "node-fetch";
 
-type ServerStatus =
-  | "not_running"
-  | "matched_server_running"
-  | "port_taken"
-  | "unknown";
+type ServerStatus = "not_running" | "already_running" | "in_use" | "unknown";
 
 /**
  * Determine whether we can run the dev server.
  *
  * Return values:
- * - `not_running`: The port is unoccupied.
- * - `matched_server_running`: The port is occupied by another instance of this dev server (matching the passed `projectRoot`).
- * - `port_taken`: The port is occupied by another process.
- * - `unknown`: An error was encountered; attempt server creation anyway.
+ *   - `not_running`: No process is listening at given address
+ *   - `already_running`: A dev server is already running for this project
+ *   - `in_use`: Another process is using given address
+ *   - `unknown`: An unknown error occurred
  */
 export async function isDevServerRunning(
   scheme: string,
@@ -33,8 +29,8 @@ export async function isDevServerRunning(
 
     return body === "packager-status:running" &&
       statusResponse.headers.get("X-React-Native-Project-Root") === projectRoot
-      ? "matched_server_running"
-      : "port_taken";
+      ? "already_running"
+      : "in_use";
   } catch (e) {
     return "unknown";
   }
