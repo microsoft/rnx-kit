@@ -1,6 +1,6 @@
 import type CliServerApi from "@react-native-community/cli-server-api";
 import type { Config } from "@react-native-community/cli-types";
-import logger from "@rnx-kit/console";
+import * as logger from "@rnx-kit/console";
 import type { MetroTerminal } from "@rnx-kit/metro-service";
 import {
   createTerminal,

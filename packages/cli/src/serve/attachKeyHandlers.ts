@@ -1,5 +1,5 @@
 import type { MetroTerminal } from "@rnx-kit/metro-service";
-import chalk from "chalk";
+import { info } from "@rnx-kit/console";
 import qrcode from "qrcode";
 import readline from "readline";
 
@@ -24,7 +24,7 @@ export function attachKeyHandlers({
     if (ctrl === true) {
       switch (name) {
         case "c":
-          terminal.log(chalk.green("Exiting..."));
+          info("Exiting...");
           process.exit();
           break;
         case "z":
@@ -34,7 +34,7 @@ export function attachKeyHandlers({
     } else {
       switch (name) {
         case "d":
-          terminal.log(chalk.green("Opening developer menu..."));
+          info("Opening developer menu...");
           messageSocketEndpoint.broadcast("devMenu", undefined);
           break;
 
@@ -58,7 +58,7 @@ export function attachKeyHandlers({
         }
 
         case "r":
-          terminal.log(chalk.green("Reloading app..."));
+          info("Reloading app...");
           messageSocketEndpoint.broadcast("reload", undefined);
           break;
 
