@@ -19,7 +19,8 @@
     ".": {
       "types": "./lib/index.d.ts",
       "import": "./lib/index.js"
-    }
+    },
+    "./package.json": "./package.json"
   },
   "bin": {
     "rnx-build": "lib/cli.js",
