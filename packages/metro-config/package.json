@@ -56,7 +56,7 @@
     "metro-react-native-babel-preset": "^0.76.5",
     "prettier": "^3.0.0",
     "react-native": "^0.72.0",
-    "type-fest": "^3.0.0",
+    "type-fest": "^4.0.0",
     "typescript": "^5.0.0"
   },
   "depcheck": {
