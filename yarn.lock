@@ -4046,7 +4046,6 @@ __metadata:
     jest: ^29.2.1
     markdown-table: ^3.0.0
     prettier: ^3.0.0
-    prettier-plugin-organize-imports: ^3.0.0
     typedoc: ^0.25.0
     typescript: ^5.0.0
     yargs: ^16.0.0
@@ -12435,6 +12434,7 @@ __metadata:
     metro-transform-worker: ^0.76.5
     nx: ^16.5.1
     prettier: ^3.0.0
+    prettier-plugin-organize-imports: ^3.0.0
     react: 18.2.0
     react-native: ^0.72.0
     react-native-test-app: ^2.5.5

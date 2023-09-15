@@ -49,6 +49,7 @@
     "metro-transform-worker": "^0.76.5",
     "nx": "^16.5.1",
     "prettier": "^3.0.0",
+    "prettier-plugin-organize-imports": "^3.0.0",
     "react": "18.2.0",
     "react-native": "^0.72.0",
     "react-native-test-app": "^2.5.5",
@@ -85,6 +86,9 @@
     "extends": "@rnx-kit/eslint-config"
   },
   "prettier": {
+    "plugins": [
+      "prettier-plugin-organize-imports"
+    ],
     "trailingComma": "es5",
     "overrides": [
       {
