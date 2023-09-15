@@ -50,17 +50,16 @@ function isCommented(source, identifier, comment) {
 /**
  * @param {import("typedoc")} typedoc
  */
-function parse(typedoc) {
-  const app = new typedoc.Application();
-  app.options.addReader(new typedoc.TSConfigReader());
-  app.options.addReader(new typedoc.TypeDocReader());
+async function parse(typedoc) {
+  const app = await typedoc.Application.bootstrap(
+    {
+      entryPoints: ["src/index.ts"],
+      excludeInternal: true,
+    },
+    [new typedoc.TSConfigReader(), new typedoc.TypeDocReader()]
+  );
 
-  app.bootstrap({
-    entryPoints: ["src/index.ts"],
-    excludeInternal: true,
-  });
-
-  const project = app.convert();
+  const project = await app.convert();
   if (!project) {
     throw new Error("Failed to convert project");
   }
@@ -150,7 +149,7 @@ async function updateReadme(exportedTypes, exportedFunctions) {
 export default async function updateApiReadme() {
   const { default: typedoc } = await import("typedoc");
 
-  const project = parse(typedoc);
+  const project = await parse(typedoc);
   const children = project?.children;
   if (!children) {
     throw new Error("Failed to parse project");
