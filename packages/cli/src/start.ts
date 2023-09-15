@@ -7,8 +7,6 @@ import {
   loadMetroConfig,
   startServer,
 } from "@rnx-kit/metro-service";
-import type { Server as HttpServer } from "http";
-import type { Server as HttpsServer } from "https";
 import type { ReportableEvent, Reporter, RunServerOptions } from "metro";
 import type { Middleware } from "metro-config";
 import type Server from "metro/src/Server";
@@ -17,55 +15,12 @@ import { customizeMetroConfig } from "./metro-config";
 import { makeHelp } from "./serve/help";
 import { attachKeyHandlers } from "./serve/keyboard";
 import { getKitServerConfig } from "./serve/kit-config";
-
-type DevServerMiddleware = ReturnType<
-  (typeof CliServerApi)["createDevServerMiddleware"]
->;
-
-type DevServerMiddleware6 = Pick<DevServerMiddleware, "middleware"> & {
-  attachToServer: (server: HttpServer | HttpsServer) => {
-    debuggerProxy: DevServerMiddleware["debuggerProxyEndpoint"];
-    eventsSocket: DevServerMiddleware["eventsSocketEndpoint"];
-    messageSocket: DevServerMiddleware["messageSocketEndpoint"];
-  };
-};
-
-export type StartCommandArgs = {
-  assetPlugins?: string[];
-  cert?: string;
-  customLogReporterPath?: string;
-  host?: string;
-  https?: boolean;
-  maxWorkers?: number;
-  key?: string;
-  platforms?: string[];
-  port?: number;
-  resetCache?: boolean;
-  sourceExts?: string[];
-  transformer?: string;
-  watchFolders?: string[];
-  config?: string;
-  projectRoot?: string;
-  interactive: boolean;
-};
-
-// https://github.com/facebook/react-native/blob/3e7a873f2d1c5170a7f4c88064897e74a149c5d5/packages/dev-middleware/src/createDevMiddleware.js#L40
-type DevMiddlewareAPI = {
-  middleware: DevServerMiddleware["middleware"];
-  websocketEndpoints: RunServerOptions["websocketEndpoints"];
-};
-
-type DevMiddlewareOptions = {
-  projectRoot: string;
-  logger?: typeof logger;
-  unstable_browserLauncher?: unknown;
-  unstable_eventReporter?: unknown;
-  unstable_experiments?: unknown;
-};
-
-type DevMiddlewareModule = {
-  createDevMiddleware: (options: DevMiddlewareOptions) => DevMiddlewareAPI;
-};
+import type {
+  DevMiddlewareModule,
+  DevServerMiddleware,
+  DevServerMiddleware6,
+  StartCommandArgs,
+} from "./serve/types";
 
 function friendlyRequire<T>(...modules: string[]): T {
   try {
