@@ -81,6 +81,6 @@ type DevMiddlewareOptions = {
 };
 
 /** `@react-native/dev-middleware` */
-export type DevMiddlewareModule = {
+export type CoreDevMiddleware = {
   createDevMiddleware: (options: DevMiddlewareOptions) => DevMiddlewareAPI;
 };

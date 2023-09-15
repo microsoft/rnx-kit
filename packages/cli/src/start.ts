@@ -15,26 +15,11 @@ import { makeHelp } from "./serve/help";
 import { attachKeyHandlers } from "./serve/keyboard";
 import { getKitServerConfig } from "./serve/kit-config";
 import type {
-  CliServerApi,
-  DevMiddlewareModule,
   DevServerMiddleware,
   DevServerMiddleware6,
   StartCommandArgs,
 } from "./serve/types";
-
-function friendlyRequire<T>(...modules: string[]): T {
-  try {
-    const modulePath = modules.reduce((startDir, module) => {
-      return require.resolve(module, { paths: [startDir] });
-    }, process.cwd());
-    return require(modulePath) as T;
-  } catch (_) {
-    const module = modules[modules.length - 1];
-    throw new Error(
-      `Cannot find module '${module}'. This probably means that '@rnx-kit/cli' is not compatible with the version of '@react-native-community/cli' that you are currently using. Please update to the latest version and try again. If the issue still persists after the update, please file a bug at https://github.com/microsoft/rnx-kit/issues.`
-    );
-  }
-}
+import { requireExternal } from "./serve/external";
 
 function hasAttachToServerFunction(
   devServer: DevServerMiddleware | DevServerMiddleware6
@@ -49,12 +34,9 @@ export async function rnxStart(
 ): Promise<void> {
   const serverConfig = getKitServerConfig(args);
 
-  const { createDevServerMiddleware, indexPageMiddleware } =
-    friendlyRequire<CliServerApi>(
-      "react-native",
-      "@react-native-community/cli",
-      "@react-native-community/cli-server-api"
-    );
+  const { createDevServerMiddleware, indexPageMiddleware } = requireExternal(
+    "@react-native-community/cli-server-api"
+  );
 
   // interactive mode requires raw access to stdin
   let interactive = args.interactive;
@@ -128,9 +110,7 @@ export async function rnxStart(
   const coreDevMiddleware = (() => {
     try {
       // https://github.com/facebook/react-native/blob/3e7a873f2d1c5170a7f4c88064897e74a149c5d5/packages/community-cli-plugin/src/commands/start/runServer.js#L115
-      const { createDevMiddleware } = friendlyRequire<DevMiddlewareModule>(
-        "react-native",
-        "@react-native/community-cli-plugin",
+      const { createDevMiddleware } = requireExternal(
         "@react-native/dev-middleware"
       );
       return createDevMiddleware({

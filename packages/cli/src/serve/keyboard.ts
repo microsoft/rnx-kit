@@ -3,13 +3,12 @@ import type { MetroTerminal } from "@rnx-kit/metro-service";
 import fetch from "node-fetch";
 import qrcode from "qrcode";
 import readline from "readline";
+import type { DevServerMiddleware } from "./types";
 
 type Options = {
   devServerUrl: string;
   help: () => void;
-  messageSocketEndpoint: {
-    broadcast: (type: string, params?: Record<string, unknown>) => void;
-  };
+  messageSocketEndpoint: DevServerMiddleware["messageSocketEndpoint"];
   terminal: MetroTerminal["terminal"];
 };
 
