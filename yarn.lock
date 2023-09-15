@@ -3512,7 +3512,7 @@ __metadata:
     prettier: ^3.0.0
     qrcode: ^1.5.0
     readline: ^1.3.0
-    type-fest: ^3.0.0
+    type-fest: ^4.0.0
     typescript: ^5.0.0
   peerDependencies:
     "@react-native-community/cli": ">=5.0.1"
@@ -3712,7 +3712,7 @@ __metadata:
     metro-react-native-babel-preset: ^0.76.5
     prettier: ^3.0.0
     react-native: ^0.72.0
-    type-fest: ^3.0.0
+    type-fest: ^4.0.0
     typescript: ^5.0.0
   peerDependencies:
     "@react-native/metro-config": "*"
@@ -13484,10 +13484,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"type-fest@npm:^3.0.0":
-  version: 3.13.1
-  resolution: "type-fest@npm:3.13.1"
-  checksum: c06b0901d54391dc46de3802375f5579868949d71f93b425ce564e19a428a0d411ae8d8cb0e300d330071d86152c3ea86e744c3f2860a42a79585b6ec2fdae8e
+"type-fest@npm:^4.0.0":
+  version: 4.3.1
+  resolution: "type-fest@npm:4.3.1"
+  checksum: 04e0f073dcc31c113c1b8856c089b388e7e9f4383a9ed72cc1466a89ec50d9d67678844eeec342b5a1ce71b21e817764d4f067aa148f6bcb5df9005ff3803382
   languageName: node
   linkType: hard
 
