@@ -11,6 +11,7 @@ import type { Middleware } from "metro-config";
 import type Server from "metro/src/Server";
 import * as path from "path";
 import { customizeMetroConfig } from "./metro-config";
+import { requireExternal } from "./serve/external";
 import { makeHelp } from "./serve/help";
 import { attachKeyHandlers } from "./serve/keyboard";
 import { getKitServerConfig } from "./serve/kit-config";
@@ -19,7 +20,6 @@ import type {
   DevServerMiddleware6,
   StartCommandArgs,
 } from "./serve/types";
-import { requireExternal } from "./serve/external";
 
 function hasAttachToServerFunction(
   devServer: DevServerMiddleware | DevServerMiddleware6
