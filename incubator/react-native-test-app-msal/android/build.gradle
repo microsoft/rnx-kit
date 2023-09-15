@@ -173,7 +173,7 @@ dependencies {
     if (kotlinVersionNumber >= 10800) {
         implementation "androidx.activity:activity-ktx:1.7.2"
     } else {
-        implementation "androidx.activity:activity-ktx:1.6.1"
+        implementation(["androidx.activity", "activity-ktx", "1.6.1"].join(":"))
     }
 
     implementation "com.google.android.material:material:1.9.0"
