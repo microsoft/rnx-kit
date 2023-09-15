@@ -1,4 +1,3 @@
-import type CliServerApi from "@react-native-community/cli-server-api";
 import type { Config } from "@react-native-community/cli-types";
 import * as logger from "@rnx-kit/console";
 import {
@@ -16,6 +15,7 @@ import { makeHelp } from "./serve/help";
 import { attachKeyHandlers } from "./serve/keyboard";
 import { getKitServerConfig } from "./serve/kit-config";
 import type {
+  CliServerApi,
   DevMiddlewareModule,
   DevServerMiddleware,
   DevServerMiddleware6,
@@ -49,13 +49,12 @@ export async function rnxStart(
 ): Promise<void> {
   const serverConfig = getKitServerConfig(args);
 
-  const { createDevServerMiddleware, indexPageMiddleware } = friendlyRequire<
-    typeof CliServerApi
-  >(
-    "react-native",
-    "@react-native-community/cli",
-    "@react-native-community/cli-server-api"
-  );
+  const { createDevServerMiddleware, indexPageMiddleware } =
+    friendlyRequire<CliServerApi>(
+      "react-native",
+      "@react-native-community/cli",
+      "@react-native-community/cli-server-api"
+    );
 
   // interactive mode requires raw access to stdin
   let interactive = args.interactive;

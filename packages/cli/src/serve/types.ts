@@ -43,6 +43,7 @@ export type CliServerApi = {
   createDevServerMiddleware: (
     options: MiddlewareOptions
   ) => DevServerMiddleware | DevServerMiddleware6;
+  indexPageMiddleware: Middleware;
 };
 
 // https://github.com/facebook/react-native/blob/d208dc422c9239d126e0da674451c5898d57319d/packages/community-cli-plugin/src/commands/start/runServer.js#L32
