@@ -2685,83 +2685,84 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nrwl/tao@npm:16.5.5":
-  version: 16.5.5
-  resolution: "@nrwl/tao@npm:16.5.5"
+"@nrwl/tao@npm:16.8.1":
+  version: 16.8.1
+  resolution: "@nrwl/tao@npm:16.8.1"
   dependencies:
-    nx: 16.5.5
+    nx: 16.8.1
+    tslib: ^2.3.0
   bin:
     tao: index.js
-  checksum: 1f78506cc01d0e81516431bf5d020378389b6ae21c23410ed44213e5e07ee50dbc8c111b7c096be086c8a27430121c2d5ae2f01056f739be5cc11b488136e0cd
+  checksum: 3026a7c66a7567a79fa0f4e73d5c51c0e272bf787a27356468c93fb244176f9d6fa27170c592ffd4fdbc5aa166853d92d01e11808639ed8c87e3f4095508e22f
   languageName: node
   linkType: hard
 
-"@nx/nx-darwin-arm64@npm:16.5.5":
-  version: 16.5.5
-  resolution: "@nx/nx-darwin-arm64@npm:16.5.5"
+"@nx/nx-darwin-arm64@npm:16.8.1":
+  version: 16.8.1
+  resolution: "@nx/nx-darwin-arm64@npm:16.8.1"
   conditions: os=darwin & cpu=arm64
   languageName: node
   linkType: hard
 
-"@nx/nx-darwin-x64@npm:16.5.5":
-  version: 16.5.5
-  resolution: "@nx/nx-darwin-x64@npm:16.5.5"
+"@nx/nx-darwin-x64@npm:16.8.1":
+  version: 16.8.1
+  resolution: "@nx/nx-darwin-x64@npm:16.8.1"
   conditions: os=darwin & cpu=x64
   languageName: node
   linkType: hard
 
-"@nx/nx-freebsd-x64@npm:16.5.5":
-  version: 16.5.5
-  resolution: "@nx/nx-freebsd-x64@npm:16.5.5"
+"@nx/nx-freebsd-x64@npm:16.8.1":
+  version: 16.8.1
+  resolution: "@nx/nx-freebsd-x64@npm:16.8.1"
   conditions: os=freebsd & cpu=x64
   languageName: node
   linkType: hard
 
-"@nx/nx-linux-arm-gnueabihf@npm:16.5.5":
-  version: 16.5.5
-  resolution: "@nx/nx-linux-arm-gnueabihf@npm:16.5.5"
+"@nx/nx-linux-arm-gnueabihf@npm:16.8.1":
+  version: 16.8.1
+  resolution: "@nx/nx-linux-arm-gnueabihf@npm:16.8.1"
   conditions: os=linux & cpu=arm
   languageName: node
   linkType: hard
 
-"@nx/nx-linux-arm64-gnu@npm:16.5.5":
-  version: 16.5.5
-  resolution: "@nx/nx-linux-arm64-gnu@npm:16.5.5"
+"@nx/nx-linux-arm64-gnu@npm:16.8.1":
+  version: 16.8.1
+  resolution: "@nx/nx-linux-arm64-gnu@npm:16.8.1"
   conditions: os=linux & cpu=arm64 & libc=glibc
   languageName: node
   linkType: hard
 
-"@nx/nx-linux-arm64-musl@npm:16.5.5":
-  version: 16.5.5
-  resolution: "@nx/nx-linux-arm64-musl@npm:16.5.5"
+"@nx/nx-linux-arm64-musl@npm:16.8.1":
+  version: 16.8.1
+  resolution: "@nx/nx-linux-arm64-musl@npm:16.8.1"
   conditions: os=linux & cpu=arm64 & libc=musl
   languageName: node
   linkType: hard
 
-"@nx/nx-linux-x64-gnu@npm:16.5.5":
-  version: 16.5.5
-  resolution: "@nx/nx-linux-x64-gnu@npm:16.5.5"
+"@nx/nx-linux-x64-gnu@npm:16.8.1":
+  version: 16.8.1
+  resolution: "@nx/nx-linux-x64-gnu@npm:16.8.1"
   conditions: os=linux & cpu=x64 & libc=glibc
   languageName: node
   linkType: hard
 
-"@nx/nx-linux-x64-musl@npm:16.5.5":
-  version: 16.5.5
-  resolution: "@nx/nx-linux-x64-musl@npm:16.5.5"
+"@nx/nx-linux-x64-musl@npm:16.8.1":
+  version: 16.8.1
+  resolution: "@nx/nx-linux-x64-musl@npm:16.8.1"
   conditions: os=linux & cpu=x64 & libc=musl
   languageName: node
   linkType: hard
 
-"@nx/nx-win32-arm64-msvc@npm:16.5.5":
-  version: 16.5.5
-  resolution: "@nx/nx-win32-arm64-msvc@npm:16.5.5"
+"@nx/nx-win32-arm64-msvc@npm:16.8.1":
+  version: 16.8.1
+  resolution: "@nx/nx-win32-arm64-msvc@npm:16.8.1"
   conditions: os=win32 & cpu=arm64
   languageName: node
   linkType: hard
 
-"@nx/nx-win32-x64-msvc@npm:16.5.5":
-  version: 16.5.5
-  resolution: "@nx/nx-win32-x64-msvc@npm:16.5.5"
+"@nx/nx-win32-x64-msvc@npm:16.8.1":
+  version: 16.8.1
+  resolution: "@nx/nx-win32-x64-msvc@npm:16.8.1"
   conditions: os=win32 & cpu=x64
   languageName: node
   linkType: hard
@@ -6568,10 +6569,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dotenv@npm:~10.0.0":
+"dotenv-expand@npm:~10.0.0":
   version: 10.0.0
-  resolution: "dotenv@npm:10.0.0"
-  checksum: f412c5fe8c24fbe313d302d2500e247ba8a1946492db405a4de4d30dd0eb186a88a43f13c958c5a7de303938949c4231c56994f97d05c4bc1f22478d631b4005
+  resolution: "dotenv-expand@npm:10.0.0"
+  checksum: 2a38b470efe0abcb1ac8490421a55e1d764dc9440fd220942bce40965074f3fb00b585f4346020cb0f0f219966ee6b4ee5023458b3e2953fe5b3214de1b314ee
+  languageName: node
+  linkType: hard
+
+"dotenv@npm:~16.3.1":
+  version: 16.3.1
+  resolution: "dotenv@npm:16.3.1"
+  checksum: 15d75e7279018f4bafd0ee9706593dd14455ddb71b3bcba9c52574460b7ccaf67d5cf8b2c08a5af1a9da6db36c956a04a1192b101ee102a3e0cf8817bbcf3dfd
   languageName: node
   linkType: hard
 
@@ -10696,6 +10704,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"node-machine-id@npm:1.1.12":
+  version: 1.1.12
+  resolution: "node-machine-id@npm:1.1.12"
+  checksum: e23088a0fb4a77a1d6484b7f09a22992fd3e0054d4f2e427692b4c7081e6cf30118ba07b6113b6c89f1ce46fd26ec5ab1d76dcaf6c10317717889124511283a5
+  languageName: node
+  linkType: hard
+
 "node-releases@npm:^2.0.12":
   version: 2.0.12
   resolution: "node-releases@npm:2.0.12"
@@ -10784,21 +10799,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nx@npm:16.5.5, nx@npm:^16.5.1":
-  version: 16.5.5
-  resolution: "nx@npm:16.5.5"
+"nx@npm:16.8.1, nx@npm:^16.5.1":
+  version: 16.8.1
+  resolution: "nx@npm:16.8.1"
   dependencies:
-    "@nrwl/tao": 16.5.5
-    "@nx/nx-darwin-arm64": 16.5.5
-    "@nx/nx-darwin-x64": 16.5.5
-    "@nx/nx-freebsd-x64": 16.5.5
-    "@nx/nx-linux-arm-gnueabihf": 16.5.5
-    "@nx/nx-linux-arm64-gnu": 16.5.5
-    "@nx/nx-linux-arm64-musl": 16.5.5
-    "@nx/nx-linux-x64-gnu": 16.5.5
-    "@nx/nx-linux-x64-musl": 16.5.5
-    "@nx/nx-win32-arm64-msvc": 16.5.5
-    "@nx/nx-win32-x64-msvc": 16.5.5
+    "@nrwl/tao": 16.8.1
+    "@nx/nx-darwin-arm64": 16.8.1
+    "@nx/nx-darwin-x64": 16.8.1
+    "@nx/nx-freebsd-x64": 16.8.1
+    "@nx/nx-linux-arm-gnueabihf": 16.8.1
+    "@nx/nx-linux-arm64-gnu": 16.8.1
+    "@nx/nx-linux-arm64-musl": 16.8.1
+    "@nx/nx-linux-x64-gnu": 16.8.1
+    "@nx/nx-linux-x64-musl": 16.8.1
+    "@nx/nx-win32-arm64-msvc": 16.8.1
+    "@nx/nx-win32-x64-msvc": 16.8.1
     "@parcel/watcher": 2.0.4
     "@yarnpkg/lockfile": ^1.1.0
     "@yarnpkg/parsers": 3.0.0-rc.46
@@ -10808,7 +10823,8 @@ __metadata:
     cli-cursor: 3.1.0
     cli-spinners: 2.6.1
     cliui: ^7.0.2
-    dotenv: ~10.0.0
+    dotenv: ~16.3.1
+    dotenv-expand: ~10.0.0
     enquirer: ~2.3.6
     fast-glob: 3.2.7
     figures: 3.2.0
@@ -10820,6 +10836,7 @@ __metadata:
     jsonc-parser: 3.2.0
     lines-and-columns: ~2.0.3
     minimatch: 3.0.5
+    node-machine-id: 1.1.12
     npm-run-path: ^4.0.1
     open: ^8.4.0
     semver: 7.5.3
@@ -10863,7 +10880,7 @@ __metadata:
       optional: true
   bin:
     nx: bin/nx.js
-  checksum: f9514964ae5ee381bf257418555d2e7f6f513b6a91373b8e75811e41aa0c75a0e155e88033a8a10ce083cb4e80455d9cf11351d622c79b3cc64de0196ff157b9
+  checksum: a880cbcd331eb45f81c7fbcc5e4567faf7663f5ae4dde6cb50afdb56c2f644d9ed22f0f429819bae456e97dad3bb4be6137c7cf0782ed23e020d7b4703f5984e
   languageName: node
   linkType: hard
 
