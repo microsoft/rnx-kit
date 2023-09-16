@@ -32,12 +32,12 @@
       "typescript": "./src/package.ts",
       "default": "./lib/package.js"
     },
-    "./package.json": "./package.json",
     "./path": {
       "types": "./lib/path.d.ts",
       "typescript": "./src/path.ts",
       "default": "./lib/path.js"
-    }
+    },
+    "./package.json": "./package.json"
   },
   "repository": {
     "type": "git",
