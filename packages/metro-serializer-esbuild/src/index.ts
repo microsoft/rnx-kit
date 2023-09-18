@@ -427,6 +427,7 @@ export function MetroSerializer(
               path.join(path.dirname(sourcemapfile), buildOptions.metafile),
               typeof metafile === "string" ? metafile : JSON.stringify(metafile)
             );
+            info("esbuild bundle size:", result.code.length);
           }
         } else {
           info("esbuild bundle size:", result.code.length);
