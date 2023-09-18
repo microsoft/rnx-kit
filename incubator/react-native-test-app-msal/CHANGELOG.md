@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/react-native-test-app-msal
 
+## 2.1.7
+
+### Patch Changes
+
+- fe7db24e: Update dependency `com.microsoft.identity.client:msal` to v4.7.0
+
 ## 2.1.6
 
 ### Patch Changes

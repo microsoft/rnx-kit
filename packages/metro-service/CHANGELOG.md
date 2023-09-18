@@ -1,5 +1,12 @@
 # Change Log - @rnx-kit/metro-service
 
+## 3.1.2
+
+### Patch Changes
+
+- 39f0a3b2: Fix help message not showing on startup (and add preliminary support for 0.73)
+- d9f6c50a: Ensure dependencies are correctly declared
+
 ## 3.1.1
 
 ### Patch Changes
