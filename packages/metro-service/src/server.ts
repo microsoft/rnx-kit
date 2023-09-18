@@ -1,6 +1,6 @@
 import { runServer } from "metro";
 import net from "net";
-import fetch from "node-fetch";
+import nodeFetch from "node-fetch";
 import { ensureBabelConfig } from "./babel";
 
 type ServerStatus = "not_running" | "already_running" | "in_use" | "unknown";
@@ -48,8 +48,10 @@ export async function isDevServerRunning(
       return "not_running";
     }
 
+    // TODO: Remove `node-fetch` when we drop support for Node 16
+    const ftch = "fetch" in globalThis ? fetch : nodeFetch;
     const statusUrl = `${scheme}://${host || "localhost"}:${port}/status`;
-    const statusResponse = await fetch(statusUrl);
+    const statusResponse = await ftch(statusUrl);
     const body = await statusResponse.text();
 
     return body === "packager-status:running" &&
