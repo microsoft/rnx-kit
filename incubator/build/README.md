@@ -13,7 +13,7 @@ An experimental tool for building your apps in the cloud.
 
 ## Requirements
 
-- [Node.js](https://nodejs.org/en/download/) LTS 14.18 or greater
+- [Node.js](https://nodejs.org/en/download/) LTS 18.12 or greater
 
 | Feature                      | Android | iOS | macOS | Windows |
 | :--------------------------- | :-----: | :-: | :---: | :-----: |
