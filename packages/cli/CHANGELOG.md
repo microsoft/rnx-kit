@@ -1,5 +1,17 @@
 # Change Log - @rnx-kit/cli
 
+## 0.16.14
+
+### Patch Changes
+
+- 39f0a3b2: Fix help message not showing on startup (and add preliminary support for 0.73)
+- d9f6c50a: Ensure dependencies are correctly declared
+- Updated dependencies [39f0a3b2]
+- Updated dependencies [52e032e2]
+- Updated dependencies [d9f6c50a]
+  - @rnx-kit/metro-service@3.1.2
+  - @rnx-kit/metro-serializer-esbuild@0.1.29
+
 ## 0.16.13
 
 ### Patch Changes

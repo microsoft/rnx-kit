@@ -3491,8 +3491,8 @@ __metadata:
     "@rnx-kit/metro-plugin-duplicates-checker": ^2.1.1
     "@rnx-kit/metro-plugin-typescript": ^0.4.4
     "@rnx-kit/metro-serializer": ^1.0.12
-    "@rnx-kit/metro-serializer-esbuild": ^0.1.28
-    "@rnx-kit/metro-service": ^3.1.1
+    "@rnx-kit/metro-serializer-esbuild": ^0.1.29
+    "@rnx-kit/metro-service": ^3.1.2
     "@rnx-kit/scripts": "*"
     "@rnx-kit/third-party-notices": ^1.3.4
     "@rnx-kit/tools-language": ^2.0.0
@@ -3808,7 +3808,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rnx-kit/metro-serializer-esbuild@*, @rnx-kit/metro-serializer-esbuild@^0.1.28, @rnx-kit/metro-serializer-esbuild@workspace:packages/metro-serializer-esbuild":
+"@rnx-kit/metro-serializer-esbuild@*, @rnx-kit/metro-serializer-esbuild@^0.1.29, @rnx-kit/metro-serializer-esbuild@workspace:packages/metro-serializer-esbuild":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/metro-serializer-esbuild@workspace:packages/metro-serializer-esbuild"
   dependencies:
@@ -3858,7 +3858,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rnx-kit/metro-service@*, @rnx-kit/metro-service@^3.1.1, @rnx-kit/metro-service@workspace:packages/metro-service":
+"@rnx-kit/metro-service@*, @rnx-kit/metro-service@^3.1.2, @rnx-kit/metro-service@workspace:packages/metro-service":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/metro-service@workspace:packages/metro-service"
   dependencies:

@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-serializer-esbuild
 
+## 0.1.29
+
+### Patch Changes
+
+- 52e032e2: Add bundle size log even when metafile option is set
+
 ## 0.1.28
 
 ### Patch Changes
