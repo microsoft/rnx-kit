@@ -36,7 +36,12 @@ const workflowRunCache: Record<string, number> = {};
 
 const octokit = once(() => {
   const RestClient = Octokit.plugin(restEndpointMethods);
-  return new RestClient({ auth: getPersonalAccessToken(), request: { fetch } });
+  return new RestClient({
+    auth: getPersonalAccessToken(),
+    // Use `node-fetch` only if Node doesn't have it:
+    // https://github.com/octokit/request.js/blob/v8.1.1/src/fetch-wrapper.ts#L28-L31
+    request: "fetch" in globalThis ? undefined : { fetch },
+  });
 });
 
 async function downloadArtifact(
