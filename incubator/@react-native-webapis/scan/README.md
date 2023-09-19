@@ -11,7 +11,7 @@ potential uses of [Web APIs](https://developer.mozilla.org/en-US/docs/Web/API).
 1. [Install Rust](https://www.rust-lang.org/learn/get-started)
 2. Build: `cargo build --release`
 
-A binary will be output at `target/release/scan`. Make not of this location, or
+A binary will be output at `target/release/scan`. Make note of this location or
 copy the binary somewhere that you can easily access later.
 
 ## Usage
