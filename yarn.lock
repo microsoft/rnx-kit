@@ -3285,6 +3285,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@react-native/assets-registry@npm:^0.73.0":
+  version: 0.73.0
+  resolution: "@react-native/assets-registry@npm:0.73.0"
+  checksum: 27548b90c79d7c34d6551173f99374c929cefa7e236d429e03baa63d570bf916abb8f08ce1771bc3a097f38384231e6bf2aa9f5db7a35c10e0c7a819981a1430
+  languageName: node
+  linkType: hard
+
 "@react-native/assets@npm:1.0.0":
   version: 1.0.0
   resolution: "@react-native/assets@npm:1.0.0"
@@ -3863,6 +3870,7 @@ __metadata:
   resolution: "@rnx-kit/metro-service@workspace:packages/metro-service"
   dependencies:
     "@react-native-community/cli-types": ^11.0.0
+    "@react-native/assets-registry": ^0.73.0
     "@rnx-kit/console": ^1.0.0
     "@rnx-kit/scripts": "*"
     "@rnx-kit/tools-language": ^2.0.0
@@ -3870,6 +3878,7 @@ __metadata:
     "@types/node-fetch": ^2.6.5
     chalk: ^4.1.0
     eslint: ^8.0.0
+    flow-remove-types: ~2.206.0
     jest: ^29.2.1
     metro: ^0.76.5
     metro-config: ^0.76.5
@@ -7530,6 +7539,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"flow-remove-types@npm:~2.206.0":
+  version: 2.206.0
+  resolution: "flow-remove-types@npm:2.206.0"
+  dependencies:
+    flow-parser: ^0.206.0
+    pirates: ^3.0.2
+    vlq: ^0.2.1
+  bin:
+    flow-node: flow-node
+    flow-remove-types: flow-remove-types
+  checksum: 54b848d0ce9b7f2c7611ff3ba6230d52ccfef4b73408fd88c4c9c25a83c8a3a128de076c5dab9d2ce5cd3f2588f06c3250b9699eabb4d9bc32c8432f0b7ee157
+  languageName: node
+  linkType: hard
+
 "fn.name@npm:1.x.x":
   version: 1.1.0
   resolution: "fn.name@npm:1.1.0"
@@ -10724,6 +10747,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"node-modules-regexp@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "node-modules-regexp@npm:1.0.0"
+  checksum: 99541903536c5ce552786f0fca7f06b88df595e62e423c21fa86a1674ee2363dad1f7482d1bec20b4bd9fa5f262f88e6e5cb788fc56411113f2fe2e97783a3a7
+  languageName: node
+  linkType: hard
+
 "node-releases@npm:^2.0.12":
   version: 2.0.12
   resolution: "node-releases@npm:2.0.12"
@@ -11418,6 +11448,15 @@ __metadata:
   version: 4.0.1
   resolution: "pify@npm:4.0.1"
   checksum: 9c4e34278cb09987685fa5ef81499c82546c033713518f6441778fbec623fc708777fe8ac633097c72d88470d5963094076c7305cafc7ad340aae27cfacd856b
+  languageName: node
+  linkType: hard
+
+"pirates@npm:^3.0.2":
+  version: 3.0.2
+  resolution: "pirates@npm:3.0.2"
+  dependencies:
+    node-modules-regexp: ^1.0.0
+  checksum: 73bc9d8a1859c0854740541d1afd0c87b62d3d63fdaec38c3ac7f57d9d70b9f6f325f5ffcac11b8935c8d9249ead41c9c59632ed098b225a96219274ca6248c8
   languageName: node
   linkType: hard
 
@@ -13802,6 +13841,13 @@ __metadata:
   version: 1.1.2
   resolution: "vary@npm:1.1.2"
   checksum: ae0123222c6df65b437669d63dfa8c36cee20a504101b2fcd97b8bf76f91259c17f9f2b4d70a1e3c6bbcee7f51b28392833adb6b2770b23b01abec84e369660b
+  languageName: node
+  linkType: hard
+
+"vlq@npm:^0.2.1":
+  version: 0.2.3
+  resolution: "vlq@npm:0.2.3"
+  checksum: 2231d8caeb5b2c1a438677ab029e9a94aa6fb61ab05819c72691b792aea0456dab29576aff5ae29309ee45bad0a309e832dc45173119bca1393f3b87709d8f8d
   languageName: node
   linkType: hard
 

@@ -3,12 +3,11 @@
 
 import { error, info } from "@rnx-kit/console";
 import fs from "fs";
-import type { AssetData } from "metro";
 import path from "path";
-import { getResourceIdentifier } from "./assetPathUtils";
+import { getAndroidResourceIdentifier } from "../assets-registry/path-support";
 import { getAssetDestPath } from "./default";
 import { filterPlatformAssetScales } from "./filter";
-import type { SaveAssetsPlugin } from "./types";
+import type { AssetData, SaveAssetsPlugin } from "./types";
 
 type ImageSet = {
   basePath: string;
@@ -29,7 +28,7 @@ export function getImageSet(
   asset: AssetData,
   scales: readonly number[]
 ): ImageSet {
-  const fileName = getResourceIdentifier(asset);
+  const fileName = getAndroidResourceIdentifier(asset);
   return {
     basePath: path.join(catalogDir, `${fileName}.imageset`),
     files: scales.map((scale, idx) => {

@@ -1,50 +1,5 @@
 import * as path from "path";
-import {
-  getAndroidAssetSuffix,
-  getAssetDestPathAndroid,
-} from "../../src/asset/android";
-
-describe("getAndroidAssetSuffix", () => {
-  test("returns 'ldpi' for scale 0.75", () => {
-    expect(getAndroidAssetSuffix(0.75)).toEqual("ldpi");
-  });
-
-  test("returns 'mdpi' for scale 1", () => {
-    expect(getAndroidAssetSuffix(1)).toEqual("mdpi");
-  });
-
-  test("returns 'hdpi' for scale 1.5", () => {
-    expect(getAndroidAssetSuffix(1.5)).toEqual("hdpi");
-  });
-
-  test("returns 'xhdpi' for scale 2", () => {
-    expect(getAndroidAssetSuffix(2)).toEqual("xhdpi");
-  });
-
-  test("returns 'xxhdpi' for scale 3", () => {
-    expect(getAndroidAssetSuffix(3)).toEqual("xxhdpi");
-  });
-
-  test("returns 'xxxhdpi' for scale 4", () => {
-    expect(getAndroidAssetSuffix(4)).toEqual("xxxhdpi");
-  });
-
-  test("returns 'ldpi' for scale 0.741", () => {
-    expect(getAndroidAssetSuffix(0.741)).toEqual("ldpi");
-  });
-
-  test("returns 'ldpi' for scale 0.759", () => {
-    expect(getAndroidAssetSuffix(0.759)).toEqual("ldpi");
-  });
-
-  test("returns 'ldpi' for scale 0.70", () => {
-    expect(getAndroidAssetSuffix(0.7)).toEqual("ldpi");
-  });
-
-  test("returns 'mdpi' for scale 1.23", () => {
-    expect(getAndroidAssetSuffix(1.23)).toEqual("mdpi");
-  });
-});
+import { getAssetDestPathAndroid } from "../../src/asset/android";
 
 describe("getAssetDestPathAndroid", () => {
   test("should use the right destination folder", () => {
