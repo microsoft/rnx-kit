@@ -21,6 +21,7 @@ impl<'a> WebApiVisitor<'a> {
 }
 
 impl<'a> Visit for WebApiVisitor<'a> {
+    /// Count all references to `navigator.*`
     fn visit_member_expr(&mut self, member: &MemberExpr) {
         if let Expr::Ident(ident) = member.obj.as_ref() {
             if ident.as_ref() == "navigator" {
@@ -39,6 +40,7 @@ impl<'a> Visit for WebApiVisitor<'a> {
         }
     }
 
+    /// Count all uses of identifiers that found in `WEB_APIS`
     fn visit_new_expr(&mut self, expr: &NewExpr) {
         if let Expr::Ident(ident) = expr.callee.as_ref() {
             if let Ok(..) = WEB_APIS.binary_search(&ident.as_ref()) {

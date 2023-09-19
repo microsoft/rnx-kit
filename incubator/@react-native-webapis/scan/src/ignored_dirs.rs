@@ -12,6 +12,7 @@ pub static IGNORED_DIRECTORIES: &'static [&str] = &[
     "@pnpm",
     "@react-native",
     "@react-native-community",
+    "@react-native-mac",
     "@react-native-webapis",
     "@react-native-windows",
     "@rnx-kit",
