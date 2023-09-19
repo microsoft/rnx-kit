@@ -1,5 +1,9 @@
 **/android/build/
 **/app/build/
+**/target/.rustc_info.json
+**/target/CACHEDIR.TAG
+**/target/debug/
+**/target/release/
 *.log
 *.tgz
 *.xcworkspace/
@@ -13,12 +17,10 @@
 .yarn/*
 !.yarn/plugins/
 !.yarn/releases/
-/incubator/*/bin/
 /incubator/*/dist/
 /incubator/*/lib/
 /packages/*/*.LICENSE.txt
 /packages/*/*/rnx-build/
-/packages/*/bin/
 /packages/*/dist/
 /packages/*/ios/build
 /packages/*/lib/
