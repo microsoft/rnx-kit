@@ -256,11 +256,18 @@ export async function install(): Promise<number> {
 
   if (!getPersonalAccessToken()) {
     const exampleConfig: UserConfig = {
-      github: { token: "ghp_0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ" },
+      github: { token: "github_pat_0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ" },
     };
     const example = JSON.stringify(exampleConfig);
     console.error(
-      `Missing personal access token for GitHub.\n\nPlease create one, and save it in '${USER_CONFIG_FILE}' like below:\n\n\t${example}\n\nFor how to create a personal access token, see: https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token`
+      "Missing personal access token for GitHub.\n\nPlease create a " +
+        "fine-grained personal access token, and save it in " +
+        `'${USER_CONFIG_FILE}' like below:\n\n\t${example}\n\nThe ` +
+        "token must have `action:write` permission. When creating a new " +
+        "fine-grained personal access token, under 'Repository permissions', " +
+        "make sure 'Actions' is set to 'Read and write'.\n\n" +
+        "For how to create a personal access token, see: " +
+        "https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token"
     );
     return 1;
   }
