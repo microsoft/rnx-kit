@@ -2,6 +2,7 @@ import { Octokit } from "@octokit/core";
 import type { RestEndpointMethodTypes } from "@octokit/plugin-rest-endpoint-methods";
 import { restEndpointMethods } from "@octokit/plugin-rest-endpoint-methods";
 import { RequestError } from "@octokit/request-error";
+import fetch from "node-fetch";
 import * as fs from "node:fs";
 import * as path from "node:path";
 import * as readline from "node:readline";
@@ -35,7 +36,12 @@ const workflowRunCache: Record<string, number> = {};
 
 const octokit = once(() => {
   const RestClient = Octokit.plugin(restEndpointMethods);
-  return new RestClient({ auth: getPersonalAccessToken() });
+  return new RestClient({
+    auth: getPersonalAccessToken(),
+    // Use `node-fetch` only if Node doesn't implement Fetch API:
+    // https://github.com/octokit/request.js/blob/v8.1.1/src/fetch-wrapper.ts#L28-L31
+    request: "fetch" in globalThis ? undefined : { fetch },
+  });
 });
 
 async function downloadArtifact(
