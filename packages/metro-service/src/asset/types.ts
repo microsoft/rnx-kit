@@ -1,13 +1,8 @@
 import type { AssetData } from "metro";
-
-export type PackagerAsset = {
-  httpServerLocation: string;
-  name: string;
-  type: string;
-};
+import type { PackagerAsset } from "../assets-registry/registry";
 
 export type SaveAssetsPlugin = (
-  assets: ReadonlyArray<AssetData>,
+  assets: readonly AssetData[],
   platform: string,
   assetsDest: string | undefined,
   assetCatalogDest: string | undefined,
@@ -17,3 +12,5 @@ export type SaveAssetsPlugin = (
     getAssetDestPath: (asset: AssetData, scale: number) => string
   ) => void
 ) => void;
+
+export { AssetData, PackagerAsset };

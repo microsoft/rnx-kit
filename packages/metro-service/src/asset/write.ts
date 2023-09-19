@@ -2,10 +2,9 @@
 
 import { info, warn } from "@rnx-kit/console";
 import * as fs from "fs";
-import type { AssetData } from "metro";
 import * as path from "path";
 import { filterPlatformAssetScales } from "./filter";
-import type { SaveAssetsPlugin } from "./types";
+import type { AssetData, SaveAssetsPlugin } from "./types";
 
 function copy(
   src: string,
@@ -52,7 +51,7 @@ function copyAll(filesToCopy: Record<string, string>) {
 }
 
 export function saveAssets(
-  assets: ReadonlyArray<AssetData>,
+  assets: readonly AssetData[],
   platform: string,
   assetsDest: string | undefined,
   assetCatalogDest: string | undefined,
