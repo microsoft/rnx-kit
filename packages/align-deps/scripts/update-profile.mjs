@@ -2,14 +2,12 @@
 // @ts-check
 
 import { markdownTable } from "markdown-table";
-import { existsSync as fileExists } from "node:fs";
 import * as fs from "node:fs";
 import * as path from "node:path";
 import { fileURLToPath } from "node:url";
 import packageJson from "package-json";
 import semverCoerce from "semver/functions/coerce.js";
 import semverCompare from "semver/functions/compare.js";
-import { isMetaPackage } from "../lib/capabilities.js";
 
 /**
  * @typedef {import("../src/types").MetaPackage} MetaPackage
@@ -22,10 +20,18 @@ import { isMetaPackage } from "../lib/capabilities.js";
  *   latest: string;
  *   modified: string;
  *   homepage?: string;
- *   dependencies: any;
- *   peerDependencies: any;
+ *   dependencies?: Record<string, string>;
+ *   peerDependencies?: Record<string, string>;
  * }} PackageInfo
  */
+
+/**
+ * This wrapper is mostly for coercing TypeScript into inferring the correct
+ * type.
+ * @param {any} v
+ * @returns {Record<string, string> | undefined}
+ */
+const Optional = (v) => v;
 
 /**
  * Fetches package manifest from npm.
@@ -62,8 +68,8 @@ async function fetchPackageInfo(pkg, targetVersion = "latest") {
     latest,
     modified: time?.modified ?? "",
     homepage,
-    dependencies,
-    peerDependencies,
+    dependencies: Optional(dependencies),
+    peerDependencies: Optional(peerDependencies),
   };
 }
 
@@ -105,6 +111,19 @@ function getProfilePath(preset, profileVersion) {
 }
 
 /**
+ * Returns whether the package is a meta package.
+ *
+ * Note: This is a copy of the function in 'src/capabilities.ts' to avoid having
+ * to compile the whole package before we can run this script.
+ *
+ * @param {MetaPackage | Package} pkg
+ * @returns {pkg is MetaPackage}
+ */
+function isMetaPackage(pkg) {
+  return pkg.name === "#meta" && Array.isArray(pkg.capabilities);
+}
+
+/**
  * Generates a profile.
  * @param {{
  *   preset: string;
@@ -136,7 +155,7 @@ function generateFromTemplate({
   }`;
 
   const [currentProfile] = getProfilePath(preset, currentVersion);
-  if (!fileExists(currentProfile)) {
+  if (!fs.existsSync(currentProfile)) {
     throw new Error(`Could not find '${currentProfile}'`);
   }
 
@@ -247,6 +266,59 @@ export default profile;
 }
 
 /**
+ * Returns the current Metro version by resolving react-native's dependencies.
+ * @param {Required<PackageInfo>["dependencies"]} dependencies
+ * @returns {Promise<string>}
+ */
+async function getCurrentMetroVersion(dependencies) {
+  const metroVersionDependencyChains = [
+    // 0.73+
+    ["@react-native/community-cli-plugin"],
+    // 0.65 - 0.72
+    ["@react-native-community/cli", "@react-native-community/cli-plugin-metro"],
+  ];
+
+  for (const chain of metroVersionDependencyChains) {
+    const deps = await chain.reduce(
+      (p, packageName) =>
+        p.then(async (dependencies) => {
+          if (!dependencies) {
+            return undefined;
+          }
+
+          try {
+            const packageInfo = await packageJson(packageName, {
+              version: getPackageVersion(packageName, dependencies),
+              fullMetadata: true,
+            });
+            return Optional(packageInfo.dependencies);
+          } catch (e) {
+            if (e.code === "ETARGET" || e.name === "VersionNotFoundError") {
+              // Some packages, such as `@react-native-community/cli`, are still
+              // in alpha or beta while react-native is in pre-release. Try
+              // again with the `next` tag.
+              const packageInfo = await packageJson(packageName, {
+                version: "next",
+                fullMetadata: true,
+              });
+              return Optional(packageInfo.dependencies);
+            } else {
+              return undefined;
+            }
+          }
+        }),
+      Promise.resolve(Optional(dependencies))
+    );
+
+    if (deps) {
+      return getPackageVersion("metro", deps);
+    }
+  }
+
+  throw new Error("Failed to get 'metro' version");
+}
+
+/**
  * Fetches package versions for specified react-native version.
  * @param {string} preset
  * @param {string} targetVersion
@@ -274,32 +346,6 @@ async function makeProfile(preset, targetVersion, latestProfile) {
     );
   }
 
-  // Fetch `metro` version from `@react-native-community/cli-plugin-metro` > `@react-native-community/cli`
-  const cliMetroPluginDependencies = await [
-    "@react-native-community/cli",
-    "@react-native-community/cli-plugin-metro",
-  ].reduce(async (dependencies, packageName) => {
-    try {
-      const packageInfo = await packageJson(packageName, {
-        version: getPackageVersion(packageName, await dependencies),
-        fullMetadata: true,
-      });
-      return packageInfo.dependencies;
-    } catch (e) {
-      if (e.code === "ETARGET") {
-        // Some packages, such as `@react-native-community/cli`, are still in
-        // alpha or beta while react-native RCs. Try again with the `next` tag.
-        const packageInfo = await packageJson(packageName, {
-          version: "next",
-          fullMetadata: true,
-        });
-        return packageInfo.dependencies;
-      } else {
-        throw e;
-      }
-    }
-  }, Promise.resolve(dependencies));
-
   return generateFromTemplate({
     preset,
     targetVersion,
@@ -313,7 +359,7 @@ async function makeProfile(preset, targetVersion, latestProfile) {
       "@react-native-community/cli-platform-ios",
       dependencies
     ),
-    metroVersion: getPackageVersion("metro", cliMetroPluginDependencies),
+    metroVersion: await getCurrentMetroVersion(dependencies),
   });
 }
 
