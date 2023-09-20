@@ -1,5 +1,17 @@
 # @rnx-kit/build
 
+## 0.6.0
+
+### Minor Changes
+
+- 9c863db0: Bumped `@octokit/core` to 5.0, and dropped support for Node 14 and 16.
+
+  Testing shows that at least Node 16 still works if you import `node-fetch`, so technically, if your setup does not enforce Node version, you can still use this package.
+
+### Patch Changes
+
+- a1cfd62f: Added instructions for how to create an access token
+
 ## 0.5.0
 
 ### Minor Changes

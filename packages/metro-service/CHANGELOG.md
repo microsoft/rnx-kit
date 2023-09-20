@@ -1,5 +1,12 @@
 # Change Log - @rnx-kit/metro-service
 
+## 3.1.3
+
+### Patch Changes
+
+- c9e7641b: Reuse code from `@react-native/assets-registry`
+- 8ba65d6f: Use `node-fetch` only as fallback when current Node version doesn't implement Fetch API
+
 ## 3.1.2
 
 ### Patch Changes

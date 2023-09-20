@@ -1,5 +1,13 @@
 # @rnx-kit/build-plugin-firebase
 
+## 2.0.0
+
+### Patch Changes
+
+- Updated dependencies [a1cfd62f]
+- Updated dependencies [9c863db0]
+  - @rnx-kit/build@0.6.0
+
 ## 1.1.0
 
 ### Minor Changes
