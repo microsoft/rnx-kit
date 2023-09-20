@@ -1,5 +1,14 @@
 # Change Log - @rnx-kit/cli
 
+## 0.16.15
+
+### Patch Changes
+
+- 8ba65d6f: Use `node-fetch` only as fallback when current Node version doesn't implement Fetch API
+- Updated dependencies [c9e7641b]
+- Updated dependencies [8ba65d6f]
+  - @rnx-kit/metro-service@3.1.3
+
 ## 0.16.14
 
 ### Patch Changes
