@@ -74,6 +74,7 @@ type DevMiddlewareAPI = {
 
 type DevMiddlewareOptions = {
   projectRoot: string;
+  serverBaseUrl: string;
   logger?: typeof logger;
   unstable_browserLauncher?: unknown;
   unstable_eventReporter?: unknown;
