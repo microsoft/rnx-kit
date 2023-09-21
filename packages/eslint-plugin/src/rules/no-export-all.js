@@ -41,6 +41,8 @@ const DEFAULT_CONFIG = {
   eslintScopeManager: true,
 };
 
+const NODE_ENV = process.env.NODE_ENV;
+
 /**
  * Returns whether there are any named exports.
  * @param {NamedExports?} namedExports
@@ -93,7 +95,7 @@ const resolveFrom =
   /** @type {() => (fromDir: string, moduleId: string) => string} */
   (
     () => {
-      if (process.env.NODE_ENV === "test") {
+      if (NODE_ENV === "test") {
         return (_, moduleId) => moduleId;
       }
 
