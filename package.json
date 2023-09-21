@@ -97,6 +97,7 @@
           "*.mdx"
         ],
         "options": {
+          "organizeImportsSkipDestructiveCodeActions": true,
           "proseWrap": "always"
         }
       }

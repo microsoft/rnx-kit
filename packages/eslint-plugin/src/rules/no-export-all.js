@@ -78,12 +78,14 @@ function isLikelyInProject(project, modulePath) {
  * @returns {{ traverse: (node: Node, options: {}) => void; }}
  */
 function makeTraverser() {
-  const Traverser = require(path.join(
-    path.dirname(require.resolve("eslint/package.json")),
-    "lib",
-    "shared",
-    "traverser"
-  ));
+  const Traverser = require(
+    path.join(
+      path.dirname(require.resolve("eslint/package.json")),
+      "lib",
+      "shared",
+      "traverser"
+    )
+  );
   return new Traverser();
 }
 
