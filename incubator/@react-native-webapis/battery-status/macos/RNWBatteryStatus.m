@@ -26,25 +26,30 @@ RCT_EXPORT_METHOD(getStatus:(RCTPromiseResolveBlock)resolve
             CFDictionaryRef desc = IOPSGetPowerSourceDescription(psInfo, ps);
 
             CFTypeRef state = CFDictionaryGetValue(desc, CFSTR(kIOPSPowerSourceStateKey));
-            BOOL isPluggedIn = CFStringCompare(state, CFSTR(kIOPSACPowerValue), 0) == kCFCompareEqualTo;
+            BOOL isPluggedIn =
+                CFStringCompare(state, CFSTR(kIOPSACPowerValue), 0) == kCFCompareEqualTo;
 
             CFTypeRef charging = CFDictionaryGetValue(desc, CFSTR(kIOPSIsChargingKey));
             status[@"charging"] = [NSNumber numberWithBool:CFBooleanGetValue(charging)];
 
             CFTypeRef chargingTime = nil;
-            if (isPluggedIn && CFDictionaryGetValueIfPresent(desc, CFSTR(kIOPSTimeToFullChargeKey), &chargingTime)) {
+            if (isPluggedIn && CFDictionaryGetValueIfPresent(
+                                   desc, CFSTR(kIOPSTimeToFullChargeKey), &chargingTime)) {
                 int minutes = 0;
                 CFNumberGetValue(chargingTime, kCFNumberIntType, &minutes);
-                status[@"chargingTime"] = [NSNumber numberWithInt:minutes < 0 ? minutes : minutes * 60];
+                status[@"chargingTime"] =
+                    [NSNumber numberWithInt:minutes < 0 ? minutes : minutes * 60];
             } else {
                 status[@"chargingTime"] = @-1;
             }
 
             CFTypeRef dischargingTime = nil;
-            if (!isPluggedIn && CFDictionaryGetValueIfPresent(desc, CFSTR(kIOPSTimeToEmptyKey), &dischargingTime)) {
+            if (!isPluggedIn &&
+                CFDictionaryGetValueIfPresent(desc, CFSTR(kIOPSTimeToEmptyKey), &dischargingTime)) {
                 int minutes = 0;
                 CFNumberGetValue(dischargingTime, kCFNumberIntType, &minutes);
-                status[@"dischargingTime"] = [NSNumber numberWithInt:minutes < 0 ? minutes : minutes * 60];
+                status[@"dischargingTime"] =
+                    [NSNumber numberWithInt:minutes < 0 ? minutes : minutes * 60];
             } else {
                 status[@"dischargingTime"] = @-1;
             }
