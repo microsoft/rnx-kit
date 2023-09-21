@@ -3787,6 +3787,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/metro-resolver-symlinks@workspace:packages/metro-resolver-symlinks"
   dependencies:
+    "@rnx-kit/console": ^1.0.0
     "@rnx-kit/eslint-config": "*"
     "@rnx-kit/scripts": "*"
     "@rnx-kit/tools-node": ^2.0.0
