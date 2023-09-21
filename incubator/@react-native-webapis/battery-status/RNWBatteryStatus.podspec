@@ -23,8 +23,12 @@ Pod::Spec.new do |s|
   # Include both package and repository relative paths to allow the podspec to
   # be consumed from both a local path, and as a podspec outside a spec
   # repository.
-  s.source_files         = 'ios/*.{h,m}',                            # :path
-                           "#{repository['directory']}/ios/*.{h,m}"  # :podspec
-  s.public_header_files  = 'ios/*.h',                                # :path
-                           "#{repository['directory']}/ios/*.h"      # :podspec
+  s.ios.source_files         = 'ios/*.{h,m}',                              # :path
+                               "#{repository['directory']}/ios/*.{h,m}"    # :podspec
+  s.ios.public_header_files  = 'ios/*.h',                                  # :path
+                               "#{repository['directory']}/ios/*.h"        # :podspec
+  s.osx.source_files         = 'macos/*.{h,m}',                            # :path
+                               "#{repository['directory']}/macos/*.{h,m}"  # :podspec
+  s.osx.public_header_files  = 'macos/*.h',                                # :path
+                               "#{repository['directory']}/macos/*.h"      # :podspec
 end
