@@ -20,9 +20,9 @@ RCT_EXPORT_METHOD(getStatus:(RCTPromiseResolveBlock)resolve
 
     CFTypeRef psInfo = IOPSCopyPowerSourcesInfo();
     if (psInfo != nil) {
-        CFArrayRef psListRef = IOPSCopyPowerSourcesList(psInfo);
-        if (CFArrayGetCount(psListRef) > 0) {
-            CFTypeRef ps = CFArrayGetValueAtIndex(psListRef, 0);
+        CFArrayRef psList = IOPSCopyPowerSourcesList(psInfo);
+        if (CFArrayGetCount(psList) > 0) {
+            CFTypeRef ps = CFArrayGetValueAtIndex(psList, 0);
             CFDictionaryRef desc = IOPSGetPowerSourceDescription(psInfo, ps);
 
             CFTypeRef state = CFDictionaryGetValue(desc, CFSTR(kIOPSPowerSourceStateKey));
@@ -60,7 +60,7 @@ RCT_EXPORT_METHOD(getStatus:(RCTPromiseResolveBlock)resolve
             status[@"level"] = [NSNumber numberWithFloat:capacity / 100.0];
         }
 
-        CFRelease(psListRef);
+        CFRelease(psList);
         CFRelease(psInfo);
     }
 
