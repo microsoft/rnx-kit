@@ -105,16 +105,18 @@ export async function rnxStart(
   // create middleware -- a collection of plugins which handle incoming
   // http(s) requests, routing them to static pages or JS functions.
   const host = args.host?.length ? args.host : "localhost";
+  const devServerUrl = `${scheme}://${host}:${port}`;
   const devServer = createDevServerMiddleware({ host, port, watchFolders });
 
   const coreDevMiddleware = (() => {
     try {
-      // https://github.com/facebook/react-native/blob/3e7a873f2d1c5170a7f4c88064897e74a149c5d5/packages/community-cli-plugin/src/commands/start/runServer.js#L115
+      // https://github.com/facebook/react-native/blob/7888338295476f4d4f00733309e54b8d22318e1e/packages/community-cli-plugin/src/commands/start/runServer.js#L115
       const { createDevMiddleware } = requireExternal(
         "@react-native/dev-middleware"
       );
       return createDevMiddleware({
         projectRoot,
+        serverBaseUrl: devServerUrl,
         logger,
         unstable_experiments: {
           // NOTE: Only affects the /open-debugger endpoint
@@ -157,19 +159,15 @@ export async function rnxStart(
     reportEventDelegate = devServer.eventsSocketEndpoint.reportEvent;
   }
 
-  const printHelp = makeHelp(terminal, {
-    hasDebugger: Boolean(coreDevMiddleware),
-  });
+  const help = makeHelp(terminal, { hasDebugger: Boolean(coreDevMiddleware) });
 
   // @ts-expect-error We want to override `reporter`
   metroConfig.reporter = {
     update(event: ReportableEvent) {
       terminalReporter.update(event);
-      if (reportEventDelegate) {
-        reportEventDelegate(event);
-      }
+      reportEventDelegate?.(event);
       if (interactive && event.type === "dep_graph_loading") {
-        printHelp();
+        help();
       }
     },
   };
@@ -222,11 +220,6 @@ export async function rnxStart(
   // in interactive mode, listen for keyboard events from stdin and bind
   // them to specific actions.
   if (interactive) {
-    attachKeyHandlers({
-      devServerUrl: `${scheme}://${host}:${port}`,
-      help: printHelp,
-      messageSocketEndpoint,
-      terminal,
-    });
+    attachKeyHandlers({ devServerUrl, help, messageSocketEndpoint, terminal });
   }
 }
