@@ -2,10 +2,9 @@
 // @ts-check
 "use strict";
 
-const { getPreset } = require(require.resolve(
-  "metro-react-native-babel-preset",
-  { paths: [process.cwd()] }
-));
+const { getPreset } = require(
+  require.resolve("metro-react-native-babel-preset", { paths: [process.cwd()] })
+);
 
 /**
  * @typedef {import("@babel/core").ConfigAPI} ConfigAPI
