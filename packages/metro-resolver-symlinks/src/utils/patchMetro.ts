@@ -1,3 +1,4 @@
+import { info, warn } from "@rnx-kit/console";
 import { findMetroPath } from "@rnx-kit/tools-react-native/metro";
 import * as fs from "fs";
 import * as path from "path";
@@ -40,7 +41,7 @@ export function shouldEnableRetryResolvingFromDisk({
     experimental_retryResolvingFromDisk !== "force" &&
     !supportsRetryResolvingFromDisk()
   ) {
-    console.warn(
+    warn(
       "The version of Metro you're using has not been tested with " +
         "`experimental_retryResolvingFromDisk`. If you still want to enable " +
         "it, please set it to 'force'."
@@ -82,6 +83,8 @@ export function patchMetro(options: Options): void {
   if (!shouldEnableRetryResolvingFromDisk(options)) {
     return;
   }
+
+  info(`experimental_retryResolvingFromDisk: Patching '${findMetroPath()}'`);
 
   const DependencyGraph = importMetroModule("/src/node-haste/DependencyGraph");
 
