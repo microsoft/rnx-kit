@@ -7,16 +7,15 @@
 
 namespace winrt::ReactNativeBatteryStatus
 {
-    using winrt::Windows::Devices::Power::Battery;
-    using winrt::Windows::System::Power::BatteryStatus;
     using winrt::Microsoft::ReactNative::JSValue;
     using winrt::Microsoft::ReactNative::JSValueObject;
     using winrt::Microsoft::ReactNative::ReactContext;
     using winrt::Microsoft::ReactNative::ReactPromise;
+    using winrt::Windows::Devices::Power::Battery;
+    using winrt::Windows::System::Power::BatteryStatus;
 
     REACT_MODULE(RNWBatteryStatus)
-    struct RNWBatteryStatus
-    {
+    struct RNWBatteryStatus {
         REACT_INIT(Initialize)
         void Initialize(ReactContext const &reactContext) noexcept
         {
@@ -56,4 +55,4 @@ namespace winrt::ReactNativeBatteryStatus
         ReactContext m_reactContext{nullptr};
     };
 
-} // namespace winrt::ReactNativeBatteryStatus
+}  // namespace winrt::ReactNativeBatteryStatus

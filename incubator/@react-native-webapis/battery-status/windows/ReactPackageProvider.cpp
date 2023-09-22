@@ -1,4 +1,5 @@
 #include "pch.h"
+
 #include "ReactPackageProvider.h"
 #if __has_include("ReactPackageProvider.g.cpp")
 #include "ReactPackageProvider.g.cpp"
@@ -15,4 +16,4 @@ namespace winrt::ReactNativeBatteryStatus::implementation
     {
         AddAttributedModules(packageBuilder, false);
     }
-} // namespace winrt::ReactNativeBatteryStatus::implementation
+}  // namespace winrt::ReactNativeBatteryStatus::implementation
