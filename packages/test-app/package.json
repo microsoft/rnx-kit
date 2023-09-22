@@ -21,7 +21,7 @@
     "android": "react-native run-android --no-packager --appId com.msft.identity.client.sample.local",
     "ios": "react-native run-ios --no-packager",
     "macos": "react-native run-macos --scheme ReactTestApp --no-packager",
-    "windows": "react-native run-windows --no-packager --sln windows\\SampleCrossApp.sln",
+    "windows": "react-native run-windows --no-packager --sln windows/SampleCrossApp.sln",
     "start": "react-native rnx-start"
   },
   "dependencies": {
@@ -120,6 +120,10 @@
             "bundleOutput": "dist/main.ios.jsbundle",
             "sourcemapOutput": "dist/main.ios.jsbundle.map"
           },
+          "macos": {
+            "bundleOutput": "dist/main.macos.jsbundle",
+            "sourcemapOutput": "dist/main.macos.jsbundle.map"
+          },
           "windows": {
             "bundleOutput": "dist/main.windows.bundle",
             "sourcemapOutput": "dist/main.windows.bundle.map"
@@ -159,6 +163,10 @@
             "bundleOutput": "dist/main+esbuild.ios.jsbundle",
             "sourcemapOutput": "dist/main+esbuild.ios.jsbundle.map"
           },
+          "macos": {
+            "bundleOutput": "dist/main+esbuild.macos.jsbundle",
+            "sourcemapOutput": "dist/main+esbuild.macos.jsbundle.map"
+          },
           "windows": {
             "bundleOutput": "dist/main+esbuild.windows.bundle",
             "sourcemapOutput": "dist/main+esbuild.windows.bundle.map"
@@ -167,7 +175,6 @@
       }
     ],
     "server": {
-      "projectRoot": "src",
       "plugins": [
         "@rnx-kit/metro-plugin-cyclic-dependencies-detector",
         [
