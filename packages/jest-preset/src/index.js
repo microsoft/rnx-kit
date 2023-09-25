@@ -77,12 +77,19 @@ function getTargetPlatform(defaultPlatform) {
     return getReactNativePlatformPath();
   }
 
+  const { resolveDependencyChain } = require("@rnx-kit/tools-node/package");
+
   /** @type {() => CLIConfig} */
-  const loadConfig =
-    // @ts-ignore could not find a declaration file
-    require("@react-native-community/cli").loadConfig ||
-    // @ts-ignore could not find a declaration file
-    require("@react-native-community/cli/build/tools/config").default;
+  const loadConfig = (() => {
+    const rnCliPath = resolveDependencyChain([
+      "react-native",
+      "@react-native-community/cli",
+    ]);
+    return (
+      require(rnCliPath).loadConfig ||
+      require(`${rnCliPath}/build/tools/config`).default
+    );
+  })();
 
   const { platforms } = loadConfig();
   const targetPlatformConfig = platforms[defaultPlatform];
@@ -95,13 +102,12 @@ function getTargetPlatform(defaultPlatform) {
 
   // `npmPackageName` is unset if target platform is in core.
   const { npmPackageName } = targetPlatformConfig;
+  const projectRoot = { paths: [process.cwd()] };
   return [
     defaultPlatform,
     npmPackageName
       ? path.dirname(
-          require.resolve(`${npmPackageName}/package.json`, {
-            paths: [process.cwd()],
-          })
+          require.resolve(`${npmPackageName}/package.json`, projectRoot)
         )
       : undefined,
   ];

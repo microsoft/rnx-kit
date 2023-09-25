@@ -4,6 +4,7 @@ import * as fs from "fs-extra";
 import ora from "ora";
 import * as os from "os";
 import * as path from "path";
+import { requireExternal } from "./serve/external";
 
 type Args = {
   include?: string;
@@ -30,7 +31,7 @@ export async function rnxClean(
 
   const spinner = ora();
   try {
-    require.resolve("@react-native-community/cli-clean");
+    requireExternal("@react-native-community/cli-clean");
     spinner.warn(
       "`rnx-clean` has been upstreamed to `@react-native-community/cli`. Please use `npx react-native clean` instead."
     );
