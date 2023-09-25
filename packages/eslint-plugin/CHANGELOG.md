@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/eslint-plugin
 
+## 0.5.2
+
+### Patch Changes
+
+- a442ffd4: Cache access to `NODE_ENV`
+
 ## 0.5.1
 
 ### Patch Changes

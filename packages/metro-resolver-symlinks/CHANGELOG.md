@@ -1,5 +1,13 @@
 # Change Log - @rnx-kit/metro-resolver-symlinks
 
+## 0.1.33
+
+### Patch Changes
+
+- 3c65642e: Print the path to the Metro instance that will be monkey patched if `experimental_retryResolvingFromDisk` is enabled
+- Updated dependencies [55756581]
+  - @rnx-kit/tools-node@2.1.0
+
 ## 0.1.32
 
 ### Patch Changes

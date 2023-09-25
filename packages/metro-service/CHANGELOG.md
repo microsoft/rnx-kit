@@ -1,5 +1,13 @@
 # Change Log - @rnx-kit/metro-service
 
+## 3.1.4
+
+### Patch Changes
+
+- 55756581: Resolve correct `@react-native-community/cli-plugin-metro` instance through `react-native`
+- Updated dependencies [55756581]
+  - @rnx-kit/tools-node@2.1.0
+
 ## 3.1.3
 
 ### Patch Changes

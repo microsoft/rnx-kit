@@ -1,5 +1,13 @@
 # Change Log - @rnx-kit/jest-preset
 
+## 0.1.15
+
+### Patch Changes
+
+- 55756581: Resolve correct `@react-native-community/cli` instance through `react-native`
+- Updated dependencies [55756581]
+  - @rnx-kit/tools-node@2.1.0
+
 ## 0.1.14
 
 ### Patch Changes
