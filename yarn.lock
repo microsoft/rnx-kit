@@ -3053,16 +3053,16 @@ __metadata:
   linkType: hard
 
 "@react-native-community/cli-platform-ios@npm:^11.3.6":
-  version: 11.3.7
-  resolution: "@react-native-community/cli-platform-ios@npm:11.3.7"
+  version: 11.3.8
+  resolution: "@react-native-community/cli-platform-ios@npm:11.3.8"
   dependencies:
-    "@react-native-community/cli-tools": 11.3.7
+    "@react-native-community/cli-tools": 11.3.8
     chalk: ^4.1.2
     execa: ^5.0.0
     fast-xml-parser: ^4.0.12
     glob: ^7.1.3
     ora: ^5.4.1
-  checksum: 7c067d2e42855b70efd93396ecd6a4379660f5ff0f62472b693e52e092a19b9f39aef73d9ba58cda9eac8bd47710bbee98393438ac7936b6c9d0b5c9c60a1d23
+  checksum: 72c4d76a98680c863ef1e9b8b41a873a4e8c643bb24c1fac4c996b9159bdef22ee52194a5e00124f6f43936ed8b832de303948190d2383135d0ebfccb2d11216
   languageName: node
   linkType: hard
 
@@ -3116,6 +3116,23 @@ __metadata:
     semver: ^7.5.2
     shell-quote: ^1.7.3
   checksum: ae9e368119be1307b341af79d72309b06acab4afd5e38dba860569e9c8c968b33e68b9a0ba02ad152e81fa7d0aa76c44e391714781107561b5119238f27e72b2
+  languageName: node
+  linkType: hard
+
+"@react-native-community/cli-tools@npm:11.3.8":
+  version: 11.3.8
+  resolution: "@react-native-community/cli-tools@npm:11.3.8"
+  dependencies:
+    appdirsjs: ^1.2.4
+    chalk: ^4.1.2
+    find-up: ^5.0.0
+    mime: ^2.4.1
+    node-fetch: ^2.6.0
+    open: ^6.2.0
+    ora: ^5.4.1
+    semver: ^7.5.2
+    shell-quote: ^1.7.3
+  checksum: 17ce3eaac0ed77e6a75a6fcf5580fcf212bd88c869c77aa72a6ccb71872b0871195d1314c7edeeac649b21617d624647ee76da77412e1c3aaff328a7fc785982
   languageName: node
   linkType: hard
 
