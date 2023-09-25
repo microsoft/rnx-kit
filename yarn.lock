@@ -4299,11 +4299,11 @@ __metadata:
   linkType: hard
 
 "@types/babel__helper-plugin-utils@npm:^7.0.0":
-  version: 7.10.0
-  resolution: "@types/babel__helper-plugin-utils@npm:7.10.0"
+  version: 7.10.1
+  resolution: "@types/babel__helper-plugin-utils@npm:7.10.1"
   dependencies:
     "@types/babel__core": "*"
-  checksum: 5a5fce5e8910b4728e2d0740d9fd72af86bbf6ce747d500ce82c8694200af63d45041f5c8101847f98e1cecddfeb5f13a447e592d5246cddaabbeccfcba4098e
+  checksum: 6e8dc796c974a4375df66967383867278b51f956a0bb70359ff36820ea6ddefbf2be12feb0d99a05e456cbf45c5e29159544b9af875d25d2b6d397f9d5c3ac29
   languageName: node
   linkType: hard
 
