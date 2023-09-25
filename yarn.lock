@@ -3040,29 +3040,29 @@ __metadata:
   linkType: hard
 
 "@react-native-community/cli-platform-android@npm:^11.3.6":
-  version: 11.3.7
-  resolution: "@react-native-community/cli-platform-android@npm:11.3.7"
+  version: 11.3.8
+  resolution: "@react-native-community/cli-platform-android@npm:11.3.8"
   dependencies:
-    "@react-native-community/cli-tools": 11.3.7
+    "@react-native-community/cli-tools": 11.3.8
     chalk: ^4.1.2
     execa: ^5.0.0
     glob: ^7.1.3
     logkitty: ^0.7.1
-  checksum: 5f2f567af3077518d487005fa322f96461f2929762c0bbce6275af97ee00a798683835d481a42477ed3430a5aa141e8fb033d913b7ddbf4ab28aae19bedec4c3
+  checksum: 49a7ddefee42999184665c9d5fe58debbc6743cac6eb66f5dee16e963f674a423ba5afcbf6af7edc5915540547a71d35f493cbf937aa262814aa1eb7c9e04d12
   languageName: node
   linkType: hard
 
 "@react-native-community/cli-platform-ios@npm:^11.3.6":
-  version: 11.3.7
-  resolution: "@react-native-community/cli-platform-ios@npm:11.3.7"
+  version: 11.3.8
+  resolution: "@react-native-community/cli-platform-ios@npm:11.3.8"
   dependencies:
-    "@react-native-community/cli-tools": 11.3.7
+    "@react-native-community/cli-tools": 11.3.8
     chalk: ^4.1.2
     execa: ^5.0.0
     fast-xml-parser: ^4.0.12
     glob: ^7.1.3
     ora: ^5.4.1
-  checksum: 7c067d2e42855b70efd93396ecd6a4379660f5ff0f62472b693e52e092a19b9f39aef73d9ba58cda9eac8bd47710bbee98393438ac7936b6c9d0b5c9c60a1d23
+  checksum: 72c4d76a98680c863ef1e9b8b41a873a4e8c643bb24c1fac4c996b9159bdef22ee52194a5e00124f6f43936ed8b832de303948190d2383135d0ebfccb2d11216
   languageName: node
   linkType: hard
 
@@ -3099,23 +3099,6 @@ __metadata:
     serve-static: ^1.13.1
     ws: ^7.5.1
   checksum: 2c87d650fe028bc002d3b2ece2df3d63b38285c84ca397c469d029cf5267ebafae51d8c9e39120d802338a9f747b1a749693d87d08f330f3e2b59d318545e5ea
-  languageName: node
-  linkType: hard
-
-"@react-native-community/cli-tools@npm:11.3.7":
-  version: 11.3.7
-  resolution: "@react-native-community/cli-tools@npm:11.3.7"
-  dependencies:
-    appdirsjs: ^1.2.4
-    chalk: ^4.1.2
-    find-up: ^5.0.0
-    mime: ^2.4.1
-    node-fetch: ^2.6.0
-    open: ^6.2.0
-    ora: ^5.4.1
-    semver: ^7.5.2
-    shell-quote: ^1.7.3
-  checksum: ae9e368119be1307b341af79d72309b06acab4afd5e38dba860569e9c8c968b33e68b9a0ba02ad152e81fa7d0aa76c44e391714781107561b5119238f27e72b2
   languageName: node
   linkType: hard
 
