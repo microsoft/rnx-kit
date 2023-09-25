@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/eslint-plugin",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "description": "A set of ESLint rules for React developers",
   "keywords": [
     "eslint",

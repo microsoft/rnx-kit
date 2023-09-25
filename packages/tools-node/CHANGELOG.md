@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/tools-node
 
+## 2.1.0
+
+### Minor Changes
+
+- 55756581: Added function for resolving a dependency chain
+
 ## 2.0.1
 
 ### Patch Changes
