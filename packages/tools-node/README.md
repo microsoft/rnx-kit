@@ -41,6 +41,7 @@ import * as pathTools from "@rnx-kit/tools-node/path";
 | package  | `findPackageDir(startDir)`                      | Find the parent directory of the nearest `package.json` manifest file. Search upward through all parent directories.           |
 | package  | `parsePackageRef(r)`                            | Parse a package reference string. An example reference is the `name` property found in `package.json`.                         |
 | package  | `readPackage(pkgPath)`                          | Read a `package.json` manifest from a file.                                                                                    |
+| package  | `resolveDependencyChain(chain, startDir)`       | Resolve the path to a dependency given a chain of dependencies leading up to it.                                               |
 | package  | `writePackage(pkgPath, manifest, space)`        | Write a `package.json` manifest to a file.                                                                                     |
 | path     | `normalizePath(p)`                              | Normalize the separators in a path, converting each backslash ('\\') to a foreward slash ('/').                                |
 

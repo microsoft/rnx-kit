@@ -12,6 +12,7 @@ export {
   findPackageDir,
   parsePackageRef,
   readPackage,
+  resolveDependencyChain,
   writePackage,
 } from "./package";
 export type {

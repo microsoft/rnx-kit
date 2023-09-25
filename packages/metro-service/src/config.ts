@@ -1,4 +1,5 @@
 import type { Config as CLIConfig } from "@react-native-community/cli-types";
+import { resolveDependencyChain } from "@rnx-kit/tools-node/package";
 import type { ConfigT, InputConfigT } from "metro-config";
 import { loadConfig } from "metro-config";
 import type {
@@ -168,9 +169,13 @@ function getDefaultConfigProvider(
   }
 
   try {
-    const cliPluginMetro = require.resolve(
-      "@react-native-community/cli-plugin-metro",
-      options
+    const cliPluginMetro = resolveDependencyChain(
+      [
+        "react-native",
+        "@react-native-community/cli",
+        "@react-native-community/cli-plugin-metro",
+      ],
+      projectRoot
     );
     const { getDefaultConfig } = require(cliPluginMetro);
 

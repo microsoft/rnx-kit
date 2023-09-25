@@ -3511,18 +3511,9 @@ __metadata:
     type-fest: ^4.0.0
     typescript: ^5.0.0
   peerDependencies:
-    "@react-native-community/cli": ">=5.0.1"
-    "@react-native-community/cli-clean": ">=8.0.0"
-    "@react-native-community/cli-server-api": ">=5.0.1"
     jest-cli: ">=26.0"
     react-native: ">=0.64"
   peerDependenciesMeta:
-    "@react-native-community/cli":
-      optional: true
-    "@react-native-community/cli-clean":
-      optional: true
-    "@react-native-community/cli-server-api":
-      optional: true
     jest-cli:
       optional: true
     react-native:
@@ -3666,6 +3657,7 @@ __metadata:
     "@jest/types": ^29.2.1
     "@rnx-kit/eslint-config": "*"
     "@rnx-kit/scripts": "*"
+    "@rnx-kit/tools-node": ^2.0.1
     "@types/node": ^18.0.0
     eslint: ^8.0.0
     find-up: ^5.0.0
@@ -3676,11 +3668,8 @@ __metadata:
     typescript: ^5.0.0
   peerDependencies:
     "@babel/core": ^7.0.0-0
-    "@react-native-community/cli": ">=4.10"
     react-native: ^0.0.0-0 || >=0.63
   peerDependenciesMeta:
-    "@react-native-community/cli":
-      optional: true
     react-native:
       optional: true
   languageName: unknown
@@ -3861,6 +3850,7 @@ __metadata:
     "@rnx-kit/console": ^1.0.0
     "@rnx-kit/scripts": "*"
     "@rnx-kit/tools-language": ^2.0.0
+    "@rnx-kit/tools-node": ^2.0.1
     "@types/node": ^18.0.0
     "@types/node-fetch": ^2.6.5
     chalk: ^4.1.0

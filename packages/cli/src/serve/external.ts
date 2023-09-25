@@ -1,14 +1,16 @@
+import { resolveDependencyChain } from "@rnx-kit/tools-node/package";
 import type { CliServerApi, CoreDevMiddleware } from "./types";
 
+type CliClean = typeof import("@react-native-community/cli-clean");
+
 type ExternalModule =
+  | "@react-native-community/cli-clean"
   | "@react-native-community/cli-server-api"
   | "@react-native/dev-middleware";
 
 function friendlyRequire<T>(...modules: string[]): T {
   try {
-    const modulePath = modules.reduce((startDir, module) => {
-      return require.resolve(module, { paths: [startDir] });
-    }, process.cwd());
+    const modulePath = resolveDependencyChain(modules);
     return require(modulePath) as T;
   } catch (_) {
     const module = modules[modules.length - 1];
@@ -23,6 +25,10 @@ function friendlyRequire<T>(...modules: string[]): T {
 }
 
 export function requireExternal(
+  module: "@react-native-community/cli-clean"
+): CliClean;
+
+export function requireExternal(
   module: "@react-native-community/cli-server-api"
 ): CliServerApi;
 
@@ -32,8 +38,14 @@ export function requireExternal(
 
 export function requireExternal(
   module: ExternalModule
-): CliServerApi | CoreDevMiddleware {
+): CliClean | CliServerApi | CoreDevMiddleware {
   switch (module) {
+    case "@react-native-community/cli-clean":
+      return friendlyRequire<CliClean>(
+        "react-native",
+        "@react-native-community/cli",
+        "@react-native-community/cli-clean"
+      );
     case "@react-native-community/cli-server-api":
       return friendlyRequire<CliServerApi>(
         "react-native",

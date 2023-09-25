@@ -206,3 +206,20 @@ export function findPackageDependencyDir(
     ? path.resolve(path.dirname(packageDir), fs.readlinkSync(packageDir))
     : packageDir;
 }
+
+/**
+ * Resolve the path to a dependency given a chain of dependencies leading up to
+ * it.
+ * @param chain Chain of dependencies leading up to the target dependency.
+ * @param startDir Optional starting directory for the search. If not given, the current directory is used.
+ * @returns Path to the final dependency's directory.
+ */
+export function resolveDependencyChain(
+  chain: string[],
+  startDir = process.cwd()
+) {
+  return chain.reduce((startDir, module) => {
+    const p = require.resolve(`${module}/package.json`, { paths: [startDir] });
+    return path.dirname(p);
+  }, startDir);
+}
