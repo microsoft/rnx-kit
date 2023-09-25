@@ -2,6 +2,11 @@
 
 #import <IOKit/ps/IOPowerSources.h>
 
+#define kBatteryStatusChargingKey @"charging"
+#define kBatteryStatusChargingTimeKey @"chargingTime"
+#define kBatteryStatusDischargingTimeKey @"dischargingTime"
+#define kBatteryStatusLevelKey @"level"
+
 @implementation RNWBatteryStatus
 
 RCT_EXPORT_MODULE(RNWBatteryStatus)
@@ -16,7 +21,17 @@ RCT_EXPORT_METHOD(getStatus:(RCTPromiseResolveBlock)resolve
                    rejecter:(RCTPromiseRejectBlock)reject)
 // clang-format on
 {
-    NSMutableDictionary *status = [NSMutableDictionary dictionaryWithCapacity:4];
+    // These are values reported by Chrome/Edge on a desktop machine
+    NSMutableDictionary *status =
+        [NSMutableDictionary dictionaryWithObjectsAndKeys:@YES,
+                                                          kBatteryStatusChargingKey,
+                                                          @0,
+                                                          kBatteryStatusChargingTimeKey,
+                                                          @-1,
+                                                          kBatteryStatusDischargingTimeKey,
+                                                          @1,
+                                                          kBatteryStatusLevelKey,
+                                                          nil];
 
     CFTypeRef psInfo = IOPSCopyPowerSourcesInfo();
     if (psInfo != nil) {
@@ -30,17 +45,18 @@ RCT_EXPORT_METHOD(getStatus:(RCTPromiseResolveBlock)resolve
                 CFStringCompare(state, CFSTR(kIOPSACPowerValue), 0) == kCFCompareEqualTo;
 
             CFTypeRef charging = CFDictionaryGetValue(desc, CFSTR(kIOPSIsChargingKey));
-            status[@"charging"] = [NSNumber numberWithBool:CFBooleanGetValue(charging)];
+            status[kBatteryStatusChargingKey] =
+                [NSNumber numberWithBool:CFBooleanGetValue(charging)];
 
             CFTypeRef chargingTime = nil;
             if (isPluggedIn && CFDictionaryGetValueIfPresent(
                                    desc, CFSTR(kIOPSTimeToFullChargeKey), &chargingTime)) {
                 int minutes = 0;
                 CFNumberGetValue(chargingTime, kCFNumberIntType, &minutes);
-                status[@"chargingTime"] =
+                status[kBatteryStatusChargingTimeKey] =
                     [NSNumber numberWithInt:minutes < 0 ? minutes : minutes * 60];
             } else {
-                status[@"chargingTime"] = @-1;
+                status[kBatteryStatusChargingTimeKey] = @-1;
             }
 
             CFTypeRef dischargingTime = nil;
@@ -48,16 +64,14 @@ RCT_EXPORT_METHOD(getStatus:(RCTPromiseResolveBlock)resolve
                 CFDictionaryGetValueIfPresent(desc, CFSTR(kIOPSTimeToEmptyKey), &dischargingTime)) {
                 int minutes = 0;
                 CFNumberGetValue(dischargingTime, kCFNumberIntType, &minutes);
-                status[@"dischargingTime"] =
+                status[kBatteryStatusDischargingTimeKey] =
                     [NSNumber numberWithInt:minutes < 0 ? minutes : minutes * 60];
-            } else {
-                status[@"dischargingTime"] = @-1;
             }
 
             CFTypeRef level = CFDictionaryGetValue(desc, CFSTR(kIOPSCurrentCapacityKey));
             int capacity = 0;
             CFNumberGetValue(level, kCFNumberIntType, &capacity);
-            status[@"level"] = [NSNumber numberWithFloat:capacity / 100.0];
+            status[kBatteryStatusLevelKey] = [NSNumber numberWithFloat:capacity / 100.0];
         }
 
         CFRelease(psList);
