@@ -201,6 +201,14 @@ and rely on a "magic comment" in the bundle to generate import statements. An
 alternative implementation would be to use something akin to Webpack's [entry
 points][]. More details here: https://github.com/facebook/metro/issues/850.
 
+This implementation allowed us to establish some common pattern to be reused in
+future web APIs implementations such as the subfolders division and the
+convention native-side of using `RNW<webapi name>` as module name. On top of
+this we will be preparing a shallow template to allow a quicker generation of
+new web APIs that will follow the existing DX in rnx-kit of using
+`yarn new-package <package-name>` as
+[detailed here](https://github.com/microsoft/rnx-kit/blob/main/CONTRIBUTING.md#adding-a-new-package).
+
 ## Drawbacks
 
 - Existing React Native apps might need to be adapted this new paradigm.
@@ -266,6 +274,13 @@ We will be following the crawl-walk-run methodology:
 - How do we keep track of which WebAPIs are at which stage of their
   support/implementation on the web side, so that we don't want on
   unused/deprecated APIs?
+- How do we want to track and coordinate work on each web API? An idea could be
+  to have an umbrella issue in the `rnx-kit` repository that serves as an
+  overall tracker, indicating (only) which web APIs are being worked on, who is
+  working on them, and status of the implementation (statuses to be defined).
+- If the overall idea is to get web and native code to be used the same way,
+  what bundler should then be used in the web app and which in the native app?
+  Should it be the same? Further investigations ongoing.
 
 <!-- References -->
 
