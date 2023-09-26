@@ -12,10 +12,14 @@
 [Battery Status API](https://developer.mozilla.org/en-US/docs/Web/API/Battery_Status_API)
 for React Native.
 
-## Motivation
-
-This is a prototype for the
-[React Native WebAPIs RFC](https://github.com/microsoft/rnx-kit/pull/2504)
+> **Note**
+>
+> This is purely a prototype for the
+> [React Native WebAPIs RFC](https://github.com/microsoft/rnx-kit/pull/2504). It
+> currently does not implement the Battery Status API to spec, e.g. it's missing
+> events and its properties are not updated live. Rather, its purpose is to show
+> that it's possible to have a native module polyfill a web API, enabling direct
+> use of previously web-only code in a React Native app.
 
 ## Installation
 
