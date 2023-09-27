@@ -2,12 +2,13 @@
 
 // Ensure content is generated
 require("./generate")();
+const { themes } = require('prism-react-renderer');
 
-const darkCodeTheme = require("prism-react-renderer/themes/vsDark");
+const darkCodeTheme = themes.vsDark;
 
 /** @type {import("prism-react-renderer").PrismTheme} */
 // @ts-expect-error Type definition doesn't match up with actual export
-const lightCodeTheme = require("prism-react-renderer/themes/vsLight");
+const lightCodeTheme = themes.vsLight;
 lightCodeTheme.plain.color = "rgb(28, 30, 33)"; // from CSS --font-color-base-rgb
 lightCodeTheme.plain.backgroundColor = "#ffffff";
 
