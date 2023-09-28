@@ -1,6 +1,6 @@
 import useBaseUrl from "@docusaurus/useBaseUrl";
-import React from "react";
 import clsx from "clsx";
+import React from "react";
 import styles from "./HomepageFeatures.module.css";
 
 type FeatureItem = {
@@ -12,16 +12,18 @@ type FeatureItem = {
 
 const FeatureList: FeatureItem[] = [
   {
-    title: "Made by developers, for developers.",
+    title: "For all developers",
     image: "/img/code-pull-request.svg",
     alt: "Pull-request icon",
     description: [
       <p key="dev1">
-        <strong>Purpose-built</strong> for React Native engineers. Focused on
-        developer experience. Designed to fit into <em>any</em> project, no
-        matter how large or complex.
+        <strong>Developer-centric tools</strong> built for React Native
+        engineers. Designed for real world needs - integrate into <em>any </em>
+        project, large or small.
       </p>,
-      <p key="dev2">Great tools make all the difference.</p>,
+      <p key="dev2">
+        Purpose-built to improve DX and streamline your workflow.
+      </p>,
     ],
   },
   {
@@ -35,7 +37,8 @@ const FeatureList: FeatureItem[] = [
         TypeScript, Jest, and more.
       </p>,
       <p key="com2">
-        Join in! Your contributions are <em>always</em> welcome.
+        Contributions from the community are key to shaping rnx-kit. Get
+        involved!
       </p>,
     ],
   },
@@ -45,10 +48,12 @@ const FeatureList: FeatureItem[] = [
     alt: "Flask icon",
     description: [
       <p key="test1">
-        From unit tests to deployments in large monorepos, each tool is{" "}
-        <strong>thoroughly validated</strong>. Microsoft has engineers dedicated
-        to this project, using it to ship React Native apps to millions of
-        customers.
+        Battle-tested at scale by Microsoft engineers. From unit tests to large
+        monorepos, these tools are <strong>thoroughly validated</strong>.
+      </p>,
+      <p key="com2">
+        Dedicated maintainers are ensuring rnx-kit evolves to meet the real
+        needs of Microsoft.
       </p>,
     ],
   },

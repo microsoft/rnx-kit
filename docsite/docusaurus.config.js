@@ -2,7 +2,7 @@
 
 // Ensure content is generated
 require("./generate")();
-const { themes } = require('prism-react-renderer');
+const { themes } = require("prism-react-renderer");
 
 const darkCodeTheme = themes.vsDark;
 
@@ -25,7 +25,7 @@ const title2 = "Developer Tools";
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: title1 + " " + title2,
-  tagline: "Modern, scalable tools. Exceptional developer experience.",
+  tagline: "Tools to boost your productivity. By and for the community.",
   url: "https://" + organizationName + ".github.io",
   baseUrl: "/" + projectName + "/",
   onBrokenLinks: "throw",
