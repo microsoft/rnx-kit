@@ -4,6 +4,20 @@ import type { Options as EsbuildOptions } from "@rnx-kit/metro-serializer-esbuil
 import type { AllPlatforms } from "@rnx-kit/tools-react-native/platform";
 import type { OutputOptions } from "metro/src/shared/types";
 
+export type HermesOptions = {
+  /**
+   * Path to `hermesc` binary. By default, `cli` will try to find it in
+   * `node_modules`.
+   */
+  command?: string;
+
+  /**
+   * List of arguments passed to `hermesc`. By default, this is
+   * `["-O", "-output-source-map", "-w"]`.
+   */
+  flags?: string[];
+};
+
 export type TypeScriptValidationOptions = {
   /**
    * Controls whether an error is thrown when type-validation fails.
@@ -104,6 +118,13 @@ export type BundleParameters = BundlerPlugins & {
    * Only applies to `rnx-bundle` command.
    */
   treeShake?: boolean | EsbuildOptions;
+
+  /**
+   * Whether to run the Hermes compiler on the output bundle.
+   *
+   * Only applies to `rnx-bundle` command.
+   */
+  hermes?: boolean | HermesOptions;
 
   /**
    * List of plugins to add to the bundling process.

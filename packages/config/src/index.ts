@@ -2,6 +2,7 @@ export type {
   BundleConfig,
   BundleParameters,
   BundlerPlugins,
+  HermesOptions,
   TypeScriptValidationOptions,
 } from "./bundleConfig";
 

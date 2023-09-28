@@ -75,8 +75,9 @@ command-line, they are explicitly set to default values.
 
 | Parameter    | Default Value                                                                                                                            |
 | ------------ | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| entryFile    | "index.js"                                                                                                                               |
-| bundleOutput | "index.<`platform`>.bundle" (Windows, Android), or "index.<`platform`>.jsbundle" (iOS, macOS)                                            |
+| entryFile    | `"index.js"`                                                                                                                             |
+| bundleOutput | `"index.<platform>.bundle"` (Windows, Android) or `"index.<platform>.jsbundle"` (iOS, macOS)                                             |
+| hermes       | `false`                                                                                                                                  |
 | treeShake    | `false`                                                                                                                                  |
 | plugins      | `["@rnx-kit/metro-plugin-cyclic-dependencies-detector", "@rnx-kit/metro-plugin-duplicates-checker", "@rnx-kit/metro-plugin-typescript"]` |
 
