@@ -1,37 +1,52 @@
-# React Native Developer Tools
+# `rnx-kit` - React Native tooling by and for developers
 
 [![Open in Visual Studio Code](https://img.shields.io/static/v1?logo=visualstudiocode&label=&message=Open%20in%20Visual%20Studio%20Code&color=007acc&labelColor=444444&logoColor=007acc)](https://vscode.dev/github/microsoft/rnx-kit)
 [![Build](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml/badge.svg)](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml)
 
-### Modern, scalable tools. Exceptional developer experience.
+`rnx-kit` is a collection of battle-tested tools created by Microsoft engineers
+to optimize the React Native developer experience. It helps filling gaps in the
+React Native ecosystem and streamlines the developer workflow.
 
-You can find guides, documentation, resources, and our blog on the
-[project website](https://microsoft.github.io/rnx-kit).
+These tools are actively used every day to ship React Native apps at scale
+across Microsoft. Now they're open source and available for any React Native
+project.
 
-### Made by Developers, for Developers.
+## What's included
 
-_Purpose-built for React Native engineers. Focused on developer experience.
-Designed to fit into any project, no matter how large or complex._
+`rnx-kit` includes tools for:
 
-_Great tools make all the difference._
+- Dependency management - Ensure consistent dependency versions across large
+  projects with `align-deps`.
+- Native builds (experimental) - Build Android and iOS apps in the cloud with
+  `build`. Avoid installing heavy native toolchains.
+- Better bundling - `metro-serializer` allows the enhancement of Metro to add
+  features such as TypeScript validation with Metro, tree shaking, duplicate and
+  cyclic dependencies detection.
+- Microsoft-tailored defaults - you can find Babel preset for Metro opinionated
+  for Microsoft usage.
 
-### Community First
+And many more!
 
-_Created as a GitHub-first repository for the React Native community. Integrated
-with tools you already use: Metro, TypeScript, Jest, and more._
+## Get started
 
-_Join in! Your contributions are always welcome._
+Please follow
+[Introduction guide](https://microsoft.github.io/rnx-kit/docs/introduction) on
+the documentation website to learn about how you can quickly add the "all in
+one" CLI to your project and get most of the tools set out of the box.
 
-### Tested at scale. Supported by Microsoft.
+Or follow the
+[Getting started guide](https://microsoft.github.io/rnx-kit/docs/guides/getting-started)
+for an easy introduction to our dependency management tool.
 
-_From unit tests to deployments in large monorepos, each tool is thoroughly
-validated. Microsoft has engineers dedicated to this project, using it to ship
-React Native apps to millions of customers._
+If you want to use only a specific tool, you can refer to its README for
+details; they are all easily readable in the
+[Tools section](https://microsoft.github.io/rnx-kit/docs/tools/overview) of the
+documentation.
 
-### Contributing
+## Contributing
 
-Thank you for your interest in this project! We welcome all contributions and
-suggestions!
+rnx-kit is built for the community, by the community. Your contributions are
+welcome!
 
 Take a look at
 [CONTRIBUTING](https://github.com/microsoft/rnx-kit/tree/main/CONTRIBUTING.md)
