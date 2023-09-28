@@ -126,9 +126,9 @@ const config = {
           },
           {
             type: "doc",
-            docId: "resources",
+            docId: "community",
             position: "right",
-            label: "Resources",
+            label: "Community",
           },
           {
             type: "doc",
