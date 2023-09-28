@@ -11,6 +11,6 @@ managing dependencies. Individual tools help you solve specific problem, like
 [making Metro work with symlinks](./metro-resolver-symlinks).
 
 If you get stuck or notice that something is missing, take a look at the
-[Resources](../resources) area. You'll find talks, podcasts, recorded streaming
+[Community](../community) area. You'll find talks, podcasts, recorded streaming
 sessions, and other materials that may help you out. You'll also find links to
 the developer community where you can ask questions and get help.
