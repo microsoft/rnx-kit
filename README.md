@@ -8,7 +8,7 @@ to optimize the React Native developer experience. It helps filling gaps in the
 React Native ecosystem and streamlines the developer workflow.
 
 These tools are actively used every day to ship React Native apps at scale
-across Microsoft. Now they're open source and available for any React Native
+across Microsoft; now they're open source and available for any React Native
 project.
 
 ## What's included
@@ -38,15 +38,15 @@ Or follow the
 [Getting started guide](https://microsoft.github.io/rnx-kit/docs/guides/getting-started)
 for an easy introduction to our dependency management tool.
 
-If you want to use only a specific tool, you can refer to its README for
+If you want to use only a specific tool, you can refer to its `README`` for
 details; they are all easily readable in the
 [Tools section](https://microsoft.github.io/rnx-kit/docs/tools/overview) of the
 documentation.
 
 ## Contributing
 
-rnx-kit is built for the community, by the community. Your contributions are
-welcome!
+`rnx-kit` is built for the community, by the community - and maintained by
+Microsoft engineers. Your contributions are welcome!
 
 Take a look at
 [CONTRIBUTING](https://github.com/microsoft/rnx-kit/tree/main/CONTRIBUTING.md)
