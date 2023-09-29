@@ -2,12 +2,13 @@
 
 // Ensure content is generated
 require("./generate")();
+const { themes } = require("prism-react-renderer");
 
-const darkCodeTheme = require("prism-react-renderer/themes/vsDark");
+const darkCodeTheme = themes.vsDark;
 
 /** @type {import("prism-react-renderer").PrismTheme} */
 // @ts-expect-error Type definition doesn't match up with actual export
-const lightCodeTheme = require("prism-react-renderer/themes/vsLight");
+const lightCodeTheme = themes.vsLight;
 lightCodeTheme.plain.color = "rgb(28, 30, 33)"; // from CSS --font-color-base-rgb
 lightCodeTheme.plain.backgroundColor = "#ffffff";
 
@@ -24,7 +25,7 @@ const title2 = "Developer Tools";
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: title1 + " " + title2,
-  tagline: "Modern, scalable tools. Exceptional developer experience.",
+  tagline: "Tools to boost your productivity. By and for the community.",
   url: "https://" + organizationName + ".github.io",
   baseUrl: "/" + projectName + "/",
   onBrokenLinks: "throw",
@@ -125,9 +126,9 @@ const config = {
           },
           {
             type: "doc",
-            docId: "resources",
+            docId: "community",
             position: "right",
-            label: "Resources",
+            label: "Community",
           },
           {
             type: "doc",
