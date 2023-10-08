@@ -4409,11 +4409,11 @@ __metadata:
   linkType: hard
 
 "@types/istextorbinary@npm:^2.3.0":
-  version: 2.3.1
-  resolution: "@types/istextorbinary@npm:2.3.1"
+  version: 2.3.2
+  resolution: "@types/istextorbinary@npm:2.3.2"
   dependencies:
     "@types/node": "*"
-  checksum: cb431e557231f8ccd7c7d62b133b8da2cd6dd17700a4201c74681c450ff6c13bbb6d4a8a85463156af9f09def9f1c400f2894af00cc94b4b571b66dcd5998b43
+  checksum: a5ba4086d7d6a619ba1e3c5258d3c42a0282673997beed9aeb0d3830886f93706bbb2efcbdf716fa67f3fb858f0af1d838e97d0ab9f1ff922e98493e44840b55
   languageName: node
   linkType: hard
 
