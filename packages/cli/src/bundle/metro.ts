@@ -35,6 +35,7 @@ export async function metroBundle(
   customizeMetroConfig(metroConfig, {
     ...bundleConfig,
     treeShake: !dev && bundleConfig.treeShake,
+    minify,
   });
 
   const metroBundleArgs: MetroBundleArgs = {

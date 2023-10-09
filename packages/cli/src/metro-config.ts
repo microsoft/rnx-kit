@@ -20,6 +20,7 @@ type MetroExtraParams = Pick<
   | "typescriptValidation"
   | "plugins"
   | "treeShake"
+  | "minify"
 >;
 
 function resolvePlugin(name: string): string {
@@ -164,11 +165,19 @@ export function customizeMetroConfig(
         "`serializer.customSerializer` in `metro.config.js` will be overwritten to enable tree shaking"
       );
     }
+    let buildOptions =
+      extraParams.treeShake instanceof Object
+        ? extraParams.treeShake
+        : undefined;
+
+    if (extraParams.minify !== undefined) {
+      buildOptions ||= {};
+      buildOptions.minify = extraParams.minify;
+    }
+
     metroConfig.serializer.customSerializer = MetroSerializerEsbuild(
       metroPlugins,
-      typeof extraParams.treeShake === "object"
-        ? extraParams.treeShake
-        : undefined
+      buildOptions
     );
     Object.assign(metroConfig.transformer, esbuildTransformerConfig);
   } else if (metroPlugins.length > 0) {
