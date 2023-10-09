@@ -32,6 +32,12 @@ export const bannedPackages: ExcludedPackage[] = [
       "Hermes is included with react-native starting with 0.70. Remove this package when you're on react-native 0.70 or higher.",
   },
   {
+    name: "metro-react-native-babel-preset",
+    version: "*",
+    reason:
+      "This package was renamed to '@react-native/babel-preset' in react-native 0.73. Replace this package when you're on react-native 0.73 or higher.",
+  },
+  {
     name: "react-native-linear-gradient",
     version: "<2.6.0",
     reason:

@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 // @ts-check
 
+import { bundle } from "@rnx-kit/scripts/src/commands/bundle.js";
 import { markdownTable } from "markdown-table";
 import * as fs from "node:fs";
-import { preset } from "../lib/presets/microsoft/react-native.js";
 
 const README = "README.md";
 const TOKEN_START = "<!-- @rnx-kit/align-deps/capabilities start -->";
@@ -16,6 +16,18 @@ const TOKEN_END = "<!-- @rnx-kit/align-deps/capabilities end -->";
  */
 function isCoreCapability(capability) {
   return capability === "core" || capability.startsWith("core-");
+}
+
+/**
+ * Loads the `microsoft/react-native` preset.
+ */
+async function loadPreset() {
+  // Ensure we always have an updated preset
+  await bundle({});
+
+  /** @type {typeof import("../src/index.ts")} */
+  const { presets } = await import("../lib/index.js");
+  return presets["microsoft/react-native"];
 }
 
 /**
@@ -40,6 +52,7 @@ function sortCoreFirst(lhs, rhs) {
   return lhs < rhs ? -1 : 1;
 }
 
+const preset = await loadPreset();
 const allVersions = /** @type {string[]} */ (Object.keys(preset).reverse());
 const allCapabilities = /** @type {import("@rnx-kit/config").Capability[]} */ (
   Object.keys(preset[allVersions[0]]).sort(sortCoreFirst)

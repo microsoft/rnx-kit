@@ -161,6 +161,15 @@ function generateFromTemplate({
   const currentVersionVarName = `${nextVersionCoerced.major}_${
     nextVersionCoerced.minor - 1
   }`;
+
+  const useOldBabelPresetName = semverCompare(nextVersionCoerced, "0.73.0") < 0;
+  const babelPresetName = useOldBabelPresetName
+    ? "metro-react-native-babel-preset"
+    : "@react-native/babel-preset";
+  const babelPresetVersion = useOldBabelPresetName
+    ? metroVersion
+    : targetVersion + ".0";
+
   return `import type { Package, Profile } from "../../../types";
 import { profile as profile_${currentVersionVarName} } from "./profile-${currentVersion}";
 
@@ -208,8 +217,8 @@ export const profile: Profile = {
   },
 
   "babel-preset-react-native": {
-    name: "metro-react-native-babel-preset",
-    version: "^${metroVersion}",
+    name: "${babelPresetName}",
+    version: "^${babelPresetVersion}",
     devOnly: true,
   },
   "community/cli": {
