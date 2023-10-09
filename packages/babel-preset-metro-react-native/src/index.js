@@ -49,7 +49,10 @@ function constEnumPlugin() {
 
 function loadPreset(projectRoot = process.cwd()) {
   const fs = require("fs");
-  const manifest = fs.readFileSync("package.json", { encoding: "utf-8" });
+  const path = require("path");
+
+  const manifestPath = path.join(projectRoot, "package.json");
+  const manifest = fs.readFileSync(manifestPath, { encoding: "utf-8" });
   const isTesting = manifest.includes(
     '"name": "@rnx-kit/babel-preset-metro-react-native"'
   );
