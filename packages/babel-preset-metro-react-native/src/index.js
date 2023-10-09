@@ -2,10 +2,6 @@
 // @ts-check
 "use strict";
 
-const { getPreset } = require(
-  require.resolve("metro-react-native-babel-preset", { paths: [process.cwd()] })
-);
-
 /**
  * @typedef {import("@babel/core").ConfigAPI} ConfigAPI
  * @typedef {import("@babel/core").PluginItem} PluginItem
@@ -49,6 +45,23 @@ function constEnumPlugin() {
   }
 
   return [require.resolve("babel-plugin-const-enum")];
+}
+
+function loadPreset(projectRoot = process.cwd()) {
+  const fs = require("fs");
+  const manifest = fs.readFileSync("package.json", { encoding: "utf-8" });
+  const isTesting = manifest.includes(
+    '"name": "@rnx-kit/babel-preset-metro-react-native"'
+  );
+
+  const options = { paths: [projectRoot] };
+  const babelPreset =
+    manifest.includes("@react-native/babel-preset") && !isTesting
+      ? require.resolve("@react-native/babel-preset", options) // >=0.73
+      : require.resolve("metro-react-native-babel-preset", options);
+
+  const { getPreset } = require(babelPreset);
+  return getPreset;
 }
 
 /**
@@ -129,7 +142,7 @@ module.exports = (
   } = {}
 ) => {
   const env = process.env.BABEL_ENV || process.env.NODE_ENV;
-  const metroPreset = getPreset(null, {
+  const metroPreset = loadPreset()(null, {
     ...(options.withDevTools == null
       ? { dev: env !== "production" }
       : undefined),
