@@ -25,10 +25,17 @@
   "peerDependencies": {
     "@babel/core": "^7.0.0",
     "@babel/plugin-transform-typescript": "^7.0.0",
+    "@react-native/babel-preset": "*",
     "metro-react-native-babel-preset": "*"
   },
   "peerDependenciesMeta": {
     "@babel/plugin-transform-typescript": {
+      "optional": true
+    },
+    "@react-native/babel-preset": {
+      "optional": true
+    },
+    "metro-react-native-babel-preset": {
       "optional": true
     }
   },
