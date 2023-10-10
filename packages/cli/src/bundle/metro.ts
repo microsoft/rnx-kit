@@ -33,7 +33,7 @@ export async function metroBundle(
   info(`Bundling ${bundleConfig.platform}...`);
 
   if (!dev && bundleConfig.treeShake) {
-    if (minify !== undefined) {
+    if (minify != null) {
       bundleConfig.treeShake =
         typeof bundleConfig.treeShake === "object"
           ? { ...bundleConfig.treeShake, minify }
