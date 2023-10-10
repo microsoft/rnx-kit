@@ -1,0 +1,57 @@
+{
+  "private": true,
+  "name": "@react-native-webapis/battery-status",
+  "version": "0.0.1",
+  "description": "EXPERIMENTAL - USE WITH CAUTION - Battery Status API for React Native",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/incubator/@react-native-webapis/battery-status#readme",
+  "license": "MIT",
+  "author": {
+    "name": "Microsoft Open Source",
+    "email": "microsoftopensource@users.noreply.github.com"
+  },
+  "files": [
+    "RNWBatteryStatus.podspec",
+    "android/build.gradle",
+    "android/gradle.properties",
+    "android/src/*",
+    "ios/*",
+    "lib/*",
+    "macos/*",
+    "windows/*",
+    "react-native.config.js"
+  ],
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "incubator/@react-native-webapis/battery-status"
+  },
+  "engines": {
+    "node": ">=14.15"
+  },
+  "scripts": {
+    "build": "rnx-kit-scripts build",
+    "format": "rnx-kit-scripts format",
+    "format:c": "clang-format -i $(git ls-files '*.c' '*.cpp' '*.h' '*.m' '*.mm')",
+    "lint": "rnx-kit-scripts lint",
+    "lint:kt": "ktlint --relative 'android/src/**/*.kt'"
+  },
+  "peerDependencies": {
+    "react-native": ">=0.71.0-0"
+  },
+  "devDependencies": {
+    "@rnx-kit/scripts": "*",
+    "eslint": "^8.0.0",
+    "jest": "^29.2.1",
+    "prettier": "^3.0.0",
+    "typescript": "^5.0.0"
+  },
+  "eslintConfig": {
+    "extends": "@rnx-kit/eslint-config"
+  },
+  "jest": {
+    "preset": "@rnx-kit/scripts"
+  },
+  "experimental": true
+}

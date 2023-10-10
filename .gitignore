@@ -4,6 +4,10 @@
 **/target/CACHEDIR.TAG
 **/target/debug/
 **/target/release/
+**/windows/AppPackages/
+**/windows/Generated Files/
+**/windows/obj/
+**/windows/x64/
 *.log
 *.tgz
 *.xcworkspace/
@@ -19,17 +23,19 @@
 !.yarn/releases/
 /incubator/*/dist/
 /incubator/*/lib/
+/incubator/@react-native-webapis/*/lib/
 /packages/*/*.LICENSE.txt
 /packages/*/*/rnx-build/
 /packages/*/dist/
-/packages/*/ios/build
+/packages/*/ios/build/
 /packages/*/lib/
-/packages/*/macos/build
+/packages/*/macos/build/
 /packages/template/CHANGELOG.md
 /scripts/bin/
 /scripts/lib/
 Pods/
 coverage/
 local.properties
+msbuild.binlog
 node_modules/
 !**/__fixtures__/**/node_modules/
