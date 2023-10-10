@@ -34,10 +34,11 @@ export async function metroBundle(
 
   if (!dev && bundleConfig.treeShake) {
     if (minify != null) {
-      bundleConfig.treeShake =
-        typeof bundleConfig.treeShake === "object"
-          ? { ...bundleConfig.treeShake, minify }
-          : { minify };
+      if (typeof bundleConfig.treeShake === "object") {
+        bundleConfig.treeShake.minify = minify;
+      } else {
+        bundleConfig.treeShake = { minify };
+      }
     }
   } else {
     bundleConfig.treeShake = false;
