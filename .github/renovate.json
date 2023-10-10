@@ -41,9 +41,16 @@
     },
     {
       "matchPackageNames": [
+        "@react-native/assets-registry",
+        "@react-native/babel-plugin-codegen",
+        "@react-native/babel-preset",
         "@react-native/codegen",
+        "@react-native/community-cli-plugin",
+        "@react-native/debugger-frontend",
+        "@react-native/dev-middleware",
         "@react-native/gradle-plugin",
         "@react-native/js-polyfills",
+        "@react-native/metro-babel-transformer",
         "@react-native/metro-config",
         "@react-native/normalize-colors",
         "@react-native/virtualized-lists",
