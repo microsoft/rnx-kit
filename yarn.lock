@@ -3483,7 +3483,7 @@ __metadata:
   dependencies:
     "@react-native-community/cli-types": ^11.0.0
     "@rnx-kit/align-deps": ^2.2.2
-    "@rnx-kit/config": ^0.6.2
+    "@rnx-kit/config": ^0.6.6
     "@rnx-kit/console": ^1.0.11
     "@rnx-kit/metro-plugin-cyclic-dependencies-detector": ^1.1.1
     "@rnx-kit/metro-plugin-duplicates-checker": ^2.1.1
@@ -3540,7 +3540,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rnx-kit/config@*, @rnx-kit/config@^0.6.0, @rnx-kit/config@^0.6.2, @rnx-kit/config@^0.6.3, @rnx-kit/config@workspace:packages/config":
+"@rnx-kit/config@*, @rnx-kit/config@^0.6.0, @rnx-kit/config@^0.6.3, @rnx-kit/config@^0.6.6, @rnx-kit/config@workspace:packages/config":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/config@workspace:packages/config"
   dependencies:

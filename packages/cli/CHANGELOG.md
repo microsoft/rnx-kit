@@ -1,5 +1,14 @@
 # Change Log - @rnx-kit/cli
 
+## 0.16.17
+
+### Patch Changes
+
+- f1668f4d: Pass minify option to metro-serializer-esbuild
+- 839ba0e3: Allow Hermes to be run post-bundle
+- Updated dependencies [839ba0e3]
+  - @rnx-kit/config@0.6.6
+
 ## 0.16.16
 
 ### Patch Changes
