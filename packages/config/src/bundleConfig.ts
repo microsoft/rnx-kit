@@ -120,13 +120,6 @@ export type BundleParameters = BundlerPlugins & {
   treeShake?: boolean | EsbuildOptions;
 
   /**
-   * Choose whether to enable tree minification.
-   *
-   * Only applies to `rnx-bundle` command.
-   */
-  minify?: boolean;
-
-  /**
    * Whether to run the Hermes compiler on the output bundle.
    *
    * Only applies to `rnx-bundle` command.

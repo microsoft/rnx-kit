@@ -32,11 +32,18 @@ export async function metroBundle(
 ): Promise<void> {
   info(`Bundling ${bundleConfig.platform}...`);
 
-  customizeMetroConfig(metroConfig, {
-    ...bundleConfig,
-    treeShake: !dev && bundleConfig.treeShake,
-    minify,
-  });
+  if (!dev && bundleConfig.treeShake) {
+    if (minify !== undefined) {
+      bundleConfig.treeShake =
+        typeof bundleConfig.treeShake === "object"
+          ? { ...bundleConfig.treeShake, minify }
+          : { minify };
+    }
+  } else {
+    bundleConfig.treeShake = false;
+  }
+
+  customizeMetroConfig(metroConfig, bundleConfig);
 
   const metroBundleArgs: MetroBundleArgs = {
     ...bundleConfig,
