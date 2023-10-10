@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/babel-preset-metro-react-native
 
+## 1.1.5
+
+### Patch Changes
+
+- cca1727d: Use `@react-native/babel-preset` when it's specified in `package.json`
+
 ## 1.1.4
 
 ### Patch Changes

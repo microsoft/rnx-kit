@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/config
 
+## 0.6.6
+
+### Patch Changes
+
+- 839ba0e3: Add `HermesOptions` for controlling Hermes bytecode output
+
 ## 0.6.5
 
 ### Patch Changes
