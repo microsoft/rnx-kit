@@ -3271,9 +3271,9 @@ __metadata:
   linkType: hard
 
 "@react-native/assets-registry@npm:^0.73.0":
-  version: 0.73.1
-  resolution: "@react-native/assets-registry@npm:0.73.1"
-  checksum: d9d09774d497bae13b1fb6a1c977bf6e442858639ee66fe4e8f955cfc903a16f79de6129471114a918a4b814eb5150bd808a5a7dc9f8b12d49795d9488d4cb67
+  version: 0.73.0
+  resolution: "@react-native/assets-registry@npm:0.73.0"
+  checksum: 27548b90c79d7c34d6551173f99374c929cefa7e236d429e03baa63d570bf916abb8f08ce1771bc3a097f38384231e6bf2aa9f5db7a35c10e0c7a819981a1430
   languageName: node
   linkType: hard
 
