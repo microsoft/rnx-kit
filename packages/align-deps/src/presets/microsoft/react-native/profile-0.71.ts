@@ -134,7 +134,7 @@ const profile: Profile = {
   },
   svg: {
     name: "react-native-svg",
-    version: "^13.9.0",
+    version: "^13.14.0",
   },
   "test-app": {
     name: "react-native-test-app",
