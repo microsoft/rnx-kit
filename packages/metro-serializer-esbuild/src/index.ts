@@ -345,7 +345,7 @@ export function MetroSerializer(
                  * @see https://github.com/facebook/hermes/issues/820
                  */
                 needsAsyncIteratorSymbolPolyfill(target)
-                  ? `if (!Symbol["asyncIterator"]) { Symbol.asyncIterator = Symbol.for("Symbol.asyncIterator"); }`
+                  ? `if (!Symbol.asyncIterator) { Symbol.asyncIterator = Symbol.for("Symbol.asyncIterator"); }`
                   : "",
               ].join("\n"),
             };
