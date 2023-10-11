@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/align-deps
 
+## 2.2.5
+
+### Patch Changes
+
+- 46732af1: Update react-native-svg minimum dependency
+
 ## 2.2.4
 
 ### Patch Changes
