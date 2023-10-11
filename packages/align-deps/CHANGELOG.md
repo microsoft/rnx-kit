@@ -4,7 +4,7 @@
 
 ### Patch Changes
 
-- 46732af1: Update react-native-svg minimum dependency
+- 46732af1: Bump `react-native-svg` for Xcode 15 build fix
 
 ## 2.2.4
 
