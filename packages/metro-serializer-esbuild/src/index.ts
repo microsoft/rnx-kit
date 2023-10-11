@@ -9,6 +9,7 @@ import type { Module, ReadOnlyDependencies } from "metro";
 import type { SerializerConfigT } from "metro-config";
 import * as path from "path";
 import * as semver from "semver";
+import { polyfillAsyncIteratorSymbol } from "./polyfills";
 import { absolutizeSourceMap, generateSourceMappingURL } from "./sourceMap";
 
 export { esbuildTransformerConfig } from "./esbuildTransformerConfig";
@@ -157,16 +158,6 @@ function outputOf(
   }
 
   return `${code}\n${generateSourceMappingURL([moduleWithModuleNameOnly])}\n`;
-}
-
-function polyfillAsyncIteratorSymbol(target: string | string[]): string {
-  const isHermes = (t: string) => t.startsWith("hermes");
-  const polyfill = Array.isArray(target)
-    ? target.some(isHermes)
-    : isHermes(target);
-  return polyfill
-    ? `if (!Symbol.asyncIterator) { Symbol.asyncIterator = Symbol.for("Symbol.asyncIterator"); }`
-    : "";
 }
 
 /**
