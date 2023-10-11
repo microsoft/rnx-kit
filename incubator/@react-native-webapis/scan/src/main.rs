@@ -57,8 +57,10 @@ fn main() {
                 result.entry(k).and_modify(|count| *count += v).or_insert(v);
             }
             result
-        })
-        .unwrap();
+        });
 
-    print_sorted(&result);
+    match result {
+        Some(data) => print_sorted(&data),
+        None => println!("{{}}"),
+    }
 }
