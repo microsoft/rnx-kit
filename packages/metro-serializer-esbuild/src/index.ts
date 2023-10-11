@@ -126,11 +126,6 @@ function isRedundantPolyfill(modulePath: string): boolean {
   return /(?:__prelude__|[/\\]polyfills[/\\]require.js)$/.test(modulePath);
 }
 
-function needsAsyncIteratorSymbolPolyfill(target: string | string[]): boolean {
-  const isHermes = (t: string) => t.startsWith("hermes");
-  return Array.isArray(target) ? target.some(isHermes) : isHermes(target);
-}
-
 function outputOf(
   module: Module | undefined,
   logLevel: BuildOptions["logLevel"]
@@ -162,6 +157,16 @@ function outputOf(
   }
 
   return `${code}\n${generateSourceMappingURL([moduleWithModuleNameOnly])}\n`;
+}
+
+function polyfillAsyncIteratorSymbol(target: string | string[]): string {
+  const isHermes = (t: string) => t.startsWith("hermes");
+  const polyfill = Array.isArray(target)
+    ? target.some(isHermes)
+    : isHermes(target);
+  return polyfill
+    ? `if (!Symbol.asyncIterator) { Symbol.asyncIterator = Symbol.for("Symbol.asyncIterator"); }`
+    : "";
 }
 
 /**
@@ -344,9 +349,7 @@ export function MetroSerializer(
                  * @see https://github.com/evanw/esbuild/pull/3194
                  * @see https://github.com/facebook/hermes/issues/820
                  */
-                needsAsyncIteratorSymbolPolyfill(target)
-                  ? `if (!Symbol.asyncIterator) { Symbol.asyncIterator = Symbol.for("Symbol.asyncIterator"); }`
-                  : "",
+                polyfillAsyncIteratorSymbol(target),
               ].join("\n"),
             };
           }
