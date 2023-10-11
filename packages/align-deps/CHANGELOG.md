@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/align-deps
 
+## 2.2.5
+
+### Patch Changes
+
+- 46732af1: Bump `react-native-svg` for Xcode 15 build fix
+
 ## 2.2.4
 
 ### Patch Changes
