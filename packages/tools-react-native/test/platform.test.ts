@@ -30,15 +30,13 @@ describe("React Native > Platform", () => {
 
   test("getAvailablePlatformsUncached() returns available platforms", () => {
     const fixture = path.join(__dirname, "__fixtures__", "available-platforms");
-    expect(getAvailablePlatformsUncached(fixture)).toMatchInlineSnapshot(`
-      {
-        "android": "",
-        "ios": "",
-        "macos": "react-native-macos",
-        "win32": "@office-iss/react-native-win32",
-        "windows": "react-native-windows",
-      }
-    `);
+    expect(getAvailablePlatformsUncached(fixture)).toEqual({
+      android: "",
+      ios: "",
+      macos: "react-native-macos",
+      win32: "@office-iss/react-native-win32",
+      windows: "react-native-windows",
+    });
   });
 
   test("getAvailablePlatformsUncached() finds package root", () => {
@@ -49,24 +47,20 @@ describe("React Native > Platform", () => {
       "node_modules",
       "react-native"
     );
-    expect(getAvailablePlatformsUncached(fixture)).toMatchInlineSnapshot(`
-      {
-        "android": "",
-        "ios": "",
-        "macos": "react-native-macos",
-        "win32": "@office-iss/react-native-win32",
-        "windows": "react-native-windows",
-      }
-    `);
+    expect(getAvailablePlatformsUncached(fixture)).toEqual({
+      android: "",
+      ios: "",
+      macos: "react-native-macos",
+      win32: "@office-iss/react-native-win32",
+      windows: "react-native-windows",
+    });
   });
 
   test("getAvailablePlatformsUncached() handles 'missing' package root", () => {
-    expect(getAvailablePlatformsUncached()).toMatchInlineSnapshot(`
-      {
-        "android": "",
-        "ios": "",
-      }
-    `);
+    expect(getAvailablePlatformsUncached()).toEqual({
+      android: "",
+      ios: "",
+    });
   });
 
   test("parsePlatform() succeeds for all known platforms", () => {
