@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-serializer-esbuild
 
+## 0.1.30
+
+### Patch Changes
+
+- 88a4b620: Fixed Hermes crashing when bundling with esbuild 0.18.8+ due to the introduction of lowering async generator functions
+
 ## 0.1.29
 
 ### Patch Changes
