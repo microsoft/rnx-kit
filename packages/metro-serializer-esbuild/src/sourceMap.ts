@@ -1,6 +1,5 @@
+import { findMetroPath } from "@rnx-kit/tools-react-native/metro";
 import type { Module } from "metro";
-// @ts-expect-error No declaration file for module
-import sourceMapString from "metro/src/DeltaBundler/Serializers/sourceMapString";
 import * as path from "path";
 
 const sourceMappingOptions = {
@@ -26,6 +25,10 @@ export function absolutizeSourceMap(outputPath: string, text: string): string {
 }
 
 export function getInlineSourceMappingURL(modules: readonly Module[]): string {
+  const metroPath = findMetroPath();
+  const sourceMapString = require(
+    `${metroPath}/src/DeltaBundler/Serializers/sourceMapString`
+  );
   const sourceMap = sourceMapString(modules, sourceMappingOptions);
   const base64 = Buffer.from(sourceMap).toString("base64");
   return `data:application/json;charset=utf-8;base64,${base64}`;
