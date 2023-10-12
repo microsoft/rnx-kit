@@ -1,8 +1,6 @@
 import { requireModuleFromMetro } from "@rnx-kit/tools-react-native/metro";
 import type { Terminal } from "metro-core";
 import type { TerminalReporter } from "metro/src/lib/TerminalReporter";
-import * as path from "path";
-import { requireMetroPath } from "./metro";
 
 export type MetroTerminal = {
   terminal: Terminal;
@@ -18,8 +16,7 @@ function getReporter(
     return require(p);
   }
 
-  const metroPath = requireMetroPath(projectRoot);
-  return require(path.join(metroPath, "src", "lib", "TerminalReporter"));
+  return requireModuleFromMetro("metro/src/lib/TerminalReporter", projectRoot);
 }
 
 export function makeReporter(

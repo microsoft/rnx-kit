@@ -5,11 +5,21 @@ import {
 
 type MetroImport =
   | typeof import("metro")
+  | typeof import("metro/src/Server").default
+  | typeof import("metro/src/lib/TerminalReporter").TerminalReporter
+  | typeof import("metro/src/shared/output/bundle")
   | typeof import("metro-config")
   | typeof import("metro-core")
   | typeof import("metro-resolver");
 
-type MetroModule = "metro" | "metro-config" | "metro-core" | "metro-resolver";
+type MetroModule =
+  | "metro"
+  | "metro/src/Server"
+  | "metro/src/lib/TerminalReporter"
+  | "metro/src/shared/output/bundle"
+  | "metro-config"
+  | "metro-core"
+  | "metro-resolver";
 
 function resolveFrom(name: string, startDir: string): string | undefined {
   return findPackageDependencyDir(name, {
@@ -69,14 +79,32 @@ export function requireModuleFromMetro(
   moduleName: "metro",
   fromDir?: string
 ): typeof import("metro");
+
+export function requireModuleFromMetro(
+  moduleName: "metro/src/Server",
+  fromDir?: string
+): typeof import("metro/src/Server").default;
+
+export function requireModuleFromMetro(
+  moduleName: "metro/src/lib/TerminalReporter",
+  fromDir?: string
+): typeof import("metro/src/lib/TerminalReporter").TerminalReporter;
+
+export function requireModuleFromMetro(
+  moduleName: "metro/src/shared/output/bundle",
+  fromDir?: string
+): typeof import("metro/src/shared/output/bundle");
+
 export function requireModuleFromMetro(
   moduleName: "metro-config",
   fromDir?: string
 ): typeof import("metro-config");
+
 export function requireModuleFromMetro(
   moduleName: "metro-core",
   fromDir?: string
 ): typeof import("metro-core");
+
 export function requireModuleFromMetro(
   moduleName: "metro-resolver",
   fromDir?: string
@@ -95,7 +123,10 @@ export function requireModuleFromMetro(
     throw new Error("Cannot find module 'metro'");
   }
 
-  const modulePath = resolveFrom(moduleName, startDir);
+  const metroDir = "metro/";
+  const modulePath = moduleName.startsWith(metroDir)
+    ? `${startDir}/${moduleName.substring(metroDir.length)}`
+    : resolveFrom(moduleName, startDir);
   if (!modulePath) {
     throw new Error(
       `Cannot find module '${moduleName}'. This probably means that ` +
