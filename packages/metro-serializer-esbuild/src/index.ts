@@ -175,7 +175,7 @@ export function MetroSerializer(
   // Signal to every plugin that we're using esbuild.
   process.env["RNX_METRO_SERIALIZER_ESBUILD"] = "true";
 
-  const metroPath = findMetroPath();
+  const metroPath = findMetroPath() || "metro";
   const baseJSBundle = require(
     `${metroPath}/src/DeltaBundler/Serializers/baseJSBundle`
   );

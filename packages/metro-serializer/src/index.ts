@@ -32,7 +32,7 @@ export type CustomSerializer = (
  * @see https://github.com/facebook/metro/blob/af23a1b27bcaaff2e43cb795744b003e145e78dd/packages/metro/src/Server.js#L228
  */
 export function MetroSerializer(plugins: MetroPlugin[]): CustomSerializer {
-  const metroPath = findMetroPath();
+  const metroPath = findMetroPath() || "metro";
   const baseJSBundle = require(
     `${metroPath}/src/DeltaBundler/Serializers/baseJSBundle`
   );
