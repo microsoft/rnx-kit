@@ -1,9 +1,16 @@
 import type { ConfigT } from "metro-config";
-// @ts-expect-error no declaration file for module
-import RamBundle from "metro/src/shared/output/RamBundle";
+import * as path from "path";
 import type { BundleArgs } from "./bundle";
 import { bundle } from "./bundle";
+import { requireMetroPath } from "./metro";
 
 export function ramBundle(args: BundleArgs, config: ConfigT): Promise<void> {
-  return bundle(args, config, RamBundle);
+  const ramBundlePath = path.join(
+    requireMetroPath(config.projectRoot),
+    "src",
+    "shared",
+    "output",
+    "RamBundle"
+  );
+  return bundle(args, config, require(ramBundlePath));
 }

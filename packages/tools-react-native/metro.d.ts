@@ -1,1 +1,5 @@
-export { findMetroPath, getMetroVersion } from "./lib/metro";
+export {
+  findMetroPath,
+  getMetroVersion,
+  requireModuleFromMetro,
+} from "./lib/metro";

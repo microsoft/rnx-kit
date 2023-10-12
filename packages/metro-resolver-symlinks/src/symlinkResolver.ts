@@ -1,5 +1,5 @@
+import { requireModuleFromMetro } from "@rnx-kit/tools-react-native/metro";
 import type { CustomResolver } from "metro-resolver";
-import { requireModuleFromMetro } from "./helper";
 import { applyMetroResolver, remapReactNativeModule } from "./resolver";
 import type { MetroResolver, Options, ResolutionContextCompat } from "./types";
 import { applyEnhancedResolver } from "./utils/enhancedResolve";
@@ -10,8 +10,7 @@ import {
 import { remapImportPath } from "./utils/remapImportPath";
 
 export function makeResolver(options: Options = {}): MetroResolver {
-  const { resolve: metroResolver } =
-    requireModuleFromMetro<typeof import("metro-resolver")>("metro-resolver");
+  const { resolve: metroResolver } = requireModuleFromMetro("metro-resolver");
 
   const { remapModule = (_, moduleName, __) => moduleName } = options;
 

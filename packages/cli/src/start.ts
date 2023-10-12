@@ -1,9 +1,10 @@
 import type { Config } from "@react-native-community/cli-types";
 import * as logger from "@rnx-kit/console";
 import {
-  createTerminal,
   isDevServerRunning,
   loadMetroConfig,
+  makeReporter,
+  makeTerminal,
   startServer,
 } from "@rnx-kit/metro-service";
 import type { ReportableEvent, Reporter, RunServerOptions } from "metro";
@@ -65,20 +66,14 @@ export async function rnxStart(
       : undefined),
   });
 
-  // create a Metro terminal and reporter for writing to the console
-  const { terminal, reporter: terminalReporter } = createTerminal(
-    args.customLogReporterPath
-  );
+  const { projectRoot, watchFolders } = metroConfig;
+  const terminal = makeTerminal(projectRoot);
 
   // customize the metro config to include plugins, presets, etc.
   const log = (message: string): void => terminal.log(message);
   customizeMetroConfig(metroConfig, serverConfig, log);
 
-  const {
-    projectRoot,
-    server: { port },
-    watchFolders,
-  } = metroConfig;
+  const { port } = metroConfig.server;
   const scheme = args.https === true ? "https" : "http";
   const serverStatus = await isDevServerRunning(
     scheme,
@@ -160,6 +155,11 @@ export async function rnxStart(
   }
 
   const help = makeHelp(terminal, { hasDebugger: Boolean(coreDevMiddleware) });
+  const terminalReporter = makeReporter(
+    args.customLogReporterPath,
+    terminal,
+    projectRoot
+  );
 
   // @ts-expect-error We want to override `reporter`
   metroConfig.reporter = {

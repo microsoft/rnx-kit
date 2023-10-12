@@ -2,18 +2,17 @@
 
 import { error, info } from "@rnx-kit/console";
 import chalk from "chalk";
-import fs from "fs";
+import * as fs from "fs";
 import type { ConfigT } from "metro-config";
-import Server from "metro/src/Server";
-import Bundle from "metro/src/shared/output/bundle";
 import type { BundleOptions, OutputOptions } from "metro/src/shared/types";
-import path from "path";
+import * as path from "path";
 import { saveAssets } from "./asset";
 import { saveAssetsAndroid } from "./asset/android";
 import { saveAssetsDefault } from "./asset/default";
 import { saveAssetsIOS } from "./asset/ios";
 import type { SaveAssetsPlugin } from "./asset/types";
 import { ensureBabelConfig } from "./babel";
+import { requireMetroPath } from "./metro";
 
 export type BundleArgs = {
   assetsDest?: string;
@@ -44,6 +43,23 @@ type RequestOptions = {
   platform: string;
   unstable_transformProfile?: BundleOptions["unstable_transformProfile"];
 };
+
+function getMetroBundle(
+  projectRoot: string
+): typeof import("metro/src/shared/output/bundle") {
+  const metroPath = requireMetroPath(projectRoot);
+  return require(path.join(metroPath, "src", "shared", "output", "bundle"));
+}
+
+function getMetroServer(
+  projectRoot: string
+): typeof import("metro/src/Server").default {
+  const metroPath = requireMetroPath(projectRoot);
+  const Server: typeof import("metro/src/Server") = require(
+    path.join(metroPath, "src", "Server")
+  );
+  return Server.default ?? Server;
+}
 
 // Eventually this will be part of the rn config, but we require it on older rn versions for win32 and the cli doesn't allow extra config properties.
 // See https://github.com/react-native-community/cli/pull/2002
@@ -76,7 +92,7 @@ function getSaveAssetsPlugin(
 export async function bundle(
   args: BundleArgs,
   config: ConfigT,
-  output = Bundle
+  output = getMetroBundle(config.projectRoot)
 ): Promise<void> {
   // ensure Metro can find Babel config
   ensureBabelConfig(config);
@@ -112,6 +128,8 @@ export async function bundle(
   if (sourceMapUrl && !args.sourcemapUseAbsolutePath) {
     sourceMapUrl = path.basename(sourceMapUrl);
   }
+
+  const Server = getMetroServer(config.projectRoot);
 
   const requestOpts: RequestOptions = {
     entryFile: args.entryFile,

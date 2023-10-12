@@ -3,6 +3,14 @@ import {
   readPackage,
 } from "@rnx-kit/tools-node/package";
 
+type MetroImport =
+  | typeof import("metro")
+  | typeof import("metro-config")
+  | typeof import("metro-core")
+  | typeof import("metro-resolver");
+
+type MetroModule = "metro" | "metro-config" | "metro-core" | "metro-resolver";
+
 function resolveFrom(name: string, startDir: string): string | undefined {
   return findPackageDependencyDir(name, {
     startDir,
@@ -55,4 +63,49 @@ export function getMetroVersion(
 
   const { version } = readPackage(metroPath);
   return version;
+}
+
+export function requireModuleFromMetro(
+  moduleName: "metro",
+  fromDir?: string
+): typeof import("metro");
+export function requireModuleFromMetro(
+  moduleName: "metro-config",
+  fromDir?: string
+): typeof import("metro-config");
+export function requireModuleFromMetro(
+  moduleName: "metro-core",
+  fromDir?: string
+): typeof import("metro-core");
+export function requireModuleFromMetro(
+  moduleName: "metro-resolver",
+  fromDir?: string
+): typeof import("metro-resolver");
+
+/**
+ * Imports specified module starting from the installation directory of the
+ * currently used `metro` version.
+ */
+export function requireModuleFromMetro(
+  moduleName: MetroModule,
+  fromDir = process.cwd()
+): MetroImport {
+  const startDir = findMetroPath(fromDir);
+  if (!startDir) {
+    throw new Error("Cannot find module 'metro'");
+  }
+
+  const modulePath = resolveFrom(moduleName, startDir);
+  if (!modulePath) {
+    throw new Error(
+      `Cannot find module '${moduleName}'. This probably means that ` +
+        "'@rnx-kit/tools-react-native' is not compatible with the version " +
+        "of 'metro' that you are currently using. Please update to the " +
+        "latest version and try again. If the issue still persists after the " +
+        "update, please file a bug at " +
+        "https://github.com/microsoft/rnx-kit/issues."
+    );
+  }
+
+  return require(modulePath);
 }
