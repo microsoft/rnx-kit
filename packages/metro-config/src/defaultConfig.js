@@ -1,4 +1,5 @@
 // @ts-check
+const { requireModuleFromMetro } = require("@rnx-kit/tools-react-native/metro");
 const fs = require("fs");
 const path = require("path");
 
@@ -58,12 +59,16 @@ function redirectToPlatform(moduleName, implementation) {
 
 /**
  * @param {PlatformImplementations} implementations
+ * @param {string} projectRoot
  */
-function outOfTreePlatformResolver(implementations) {
+function outOfTreePlatformResolver(implementations, projectRoot) {
+  const { resolve: metroResolver } = requireModuleFromMetro(
+    "metro-resolver",
+    projectRoot
+  );
+
   /** @type {(context: ResolutionContext, moduleName: string, platform: string) => Resolution} */
   const platformResolver = (context, moduleName, platform) => {
-    const { resolve: metroResolver } = require("metro-resolver");
-
     /** @type {CustomResolver} */
     let resolve = metroResolver;
     const resolveRequest = context.resolveRequest;
@@ -111,8 +116,10 @@ function getDefaultConfig(projectRoot) {
 
       const availablePlatforms = getAvailablePlatforms(projectRoot);
       defaultConfig.resolver.platforms = Object.keys(availablePlatforms);
-      defaultConfig.resolver.resolveRequest =
-        outOfTreePlatformResolver(availablePlatforms);
+      defaultConfig.resolver.resolveRequest = outOfTreePlatformResolver(
+        availablePlatforms,
+        projectRoot
+      );
 
       const preludeModules = getPreludeModules(availablePlatforms, projectRoot);
       defaultConfig.serializer.getModulesRunBeforeMainModule = () => {
