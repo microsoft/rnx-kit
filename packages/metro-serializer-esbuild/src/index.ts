@@ -9,6 +9,7 @@ import type { Module, ReadOnlyDependencies } from "metro";
 import type { SerializerConfigT } from "metro-config";
 import * as path from "path";
 import * as semver from "semver";
+import { polyfillAsyncIteratorSymbol } from "./polyfills";
 import { absolutizeSourceMap, generateSourceMappingURL } from "./sourceMap";
 
 export { esbuildTransformerConfig } from "./esbuildTransformerConfig";
@@ -187,6 +188,13 @@ export function MetroSerializer(
 
     const prelude = "__rnx_prelude__";
 
+    // Hermes only implements select ES6 features and is missing others like
+    // block scoping (https://github.com/facebook/hermes/issues/575). As of
+    // esbuild 0.14.49, we can use the `hermes` target instead of `es5`. Note
+    // that this target is somewhat conservative and may require additional
+    // Babel plugins.
+    const target = buildOptions?.target ?? "hermes0.7.0";
+
     const { dependencies } = graph;
     const metroPlugin: Plugin = {
       name: require("../package.json").name,
@@ -322,6 +330,17 @@ export function MetroSerializer(
                 ...options.runBeforeMainModule
                   .filter((value) => dependencies.has(value))
                   .map((value) => `require("${escapePath(value)}");`),
+
+                /**
+                 * Starting with 0.18.8, esbuild lowers async generator
+                 * functions. The polyfill assumes that `Symbol.asyncIterator`
+                 * is defined, which may not always be the case. For instance,
+                 * Hermes currently does not support AsyncIterator.
+                 *
+                 * @see https://github.com/evanw/esbuild/pull/3194
+                 * @see https://github.com/facebook/hermes/issues/820
+                 */
+                polyfillAsyncIteratorSymbol(target),
               ].join("\n"),
             };
           }
@@ -346,13 +365,6 @@ export function MetroSerializer(
       const lodashTransformer = require("esbuild-plugin-lodash");
       plugins.push(lodashTransformer());
     }
-
-    // Hermes only implements select ES6 features and is missing others like
-    // block scoping (https://github.com/facebook/hermes/issues/575). As of
-    // esbuild 0.14.49, we can use the `hermes` target instead of `es5`. Note
-    // that this target is somewhat conservative and may require additional
-    // Babel plugins.
-    const target = buildOptions?.target ?? "hermes0.7.0";
 
     return esbuild
       .build({
