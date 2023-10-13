@@ -3178,6 +3178,21 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@react-native-webapis/web-storage@workspace:incubator/@react-native-webapis/web-storage":
+  version: 0.0.0-use.local
+  resolution: "@react-native-webapis/web-storage@workspace:incubator/@react-native-webapis/web-storage"
+  dependencies:
+    "@rnx-kit/scripts": "*"
+    eslint: ^8.0.0
+    jest: ^29.2.1
+    prettier: ^3.0.0
+    typescript: ^5.0.0
+  peerDependencies:
+    react: ">=18.2.0"
+    react-native: ">=0.71.0-0"
+  languageName: unknown
+  linkType: soft
+
 "@react-native-windows/cli@npm:0.72.3":
   version: 0.72.3
   resolution: "@react-native-windows/cli@npm:0.72.3"

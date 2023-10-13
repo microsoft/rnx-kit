@@ -1,0 +1,70 @@
+import java.nio.file.Paths
+
+buildscript {
+    ext.findFile = { fileName ->
+        def currentDirPath = rootDir == null ? null : rootDir.toString()
+
+        while (currentDirPath != null) {
+            def currentDir = file(currentDirPath);
+            def requestedFile = Paths.get(currentDirPath, fileName).toFile()
+
+            if (requestedFile.exists()) {
+                return requestedFile
+            }
+
+            currentDirPath = currentDir.getParent()
+        }
+
+        return null
+    }
+
+    ext.findNodeModulesPath = { packageName ->
+        return findFile(Paths.get("node_modules", packageName).toString())
+    }
+
+    ext.getExtProp = { prop, defaultValue ->
+        return rootProject.ext.has(prop) ? rootProject.ext.get(prop) : defaultValue
+    }
+
+    repositories {
+        google()
+        mavenCentral()
+    }
+
+    dependencies {
+        def kotlinVersion = getExtProp("kotlinVersion", "1.7.21")
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+    }
+}
+
+plugins {
+    id("com.android.library")
+    id("org.jetbrains.kotlin.android")
+}
+
+repositories {
+    maven {
+        url("${findNodeModulesPath('react-native')}/android")
+    }
+
+    google()
+    mavenCentral()
+}
+
+android {
+    compileSdkVersion getExtProp("compileSdkVersion", 33)
+    defaultConfig {
+        minSdkVersion getExtProp("minSdkVersion", 23)
+        targetSdkVersion getExtProp("targetSdkVersion", 33)
+    }
+    lintOptions {
+        abortOnError false
+    }
+}
+
+dependencies {
+    implementation "androidx.core:core-ktx:1.9.0"
+
+    //noinspection GradleDynamicVersion
+    implementation "com.facebook.react:react-native:+"
+}
