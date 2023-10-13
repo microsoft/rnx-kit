@@ -1,6 +1,10 @@
 /* jshint esversion: 8, node: true */
 // @ts-check
 
+const {
+  findMetroPath,
+  requireModuleFromMetro,
+} = require("@rnx-kit/tools-react-native/metro");
 const fs = require("fs");
 const path = require("path");
 
@@ -159,13 +163,15 @@ function excludeExtraCopiesOf(packageName, searchStartDir) {
 function exclusionList(additionalExclusions = [], projectRoot = process.cwd()) {
   /** @type {(additionalExclusions: (string | RegExp)[]) => RegExp} */
   const exclusionList = (() => {
+    const metroConfigDir = resolveModule(
+      "metro-config",
+      findMetroPath(projectRoot)
+    );
     try {
-      // @ts-expect-error There are no type definition files for `metro-config`
-      return require("metro-config/src/defaults/exclusionList");
+      return require(`${metroConfigDir}/src/defaults/exclusionList`);
     } catch (_) {
       // `blacklist` was renamed to `exclusionList` in 0.60
-      // @ts-expect-error There are no type definition files for `metro-config`
-      return require("metro-config/src/defaults/blacklist");
+      return require(`${metroConfigDir}/src/defaults/blacklist`);
     }
   })();
 
@@ -196,11 +202,12 @@ module.exports = {
    * @returns {MetroConfig}
    */
   makeMetroConfig: (customConfig = {}) => {
-    const { mergeConfig } = require("metro-config");
+    const projectRoot = customConfig.projectRoot || process.cwd();
+
+    const { mergeConfig } = requireModuleFromMetro("metro-config", projectRoot);
     const { enhanceMiddleware } = require("./assetPluginForMonorepos");
     const { getDefaultConfig } = require("./defaultConfig");
 
-    const projectRoot = customConfig.projectRoot || process.cwd();
     const blockList = exclusionList([], projectRoot);
     const customBlockList =
       customConfig.resolver &&

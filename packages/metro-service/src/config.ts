@@ -1,14 +1,14 @@
 import type { Config as CLIConfig } from "@react-native-community/cli-types";
 import { resolveDependencyChain } from "@rnx-kit/tools-node/package";
+import { requireModuleFromMetro } from "@rnx-kit/tools-react-native/metro";
 import type { ConfigT, InputConfigT } from "metro-config";
-import { loadConfig } from "metro-config";
 import type {
   CustomResolver,
   Resolution,
   ResolutionContext,
 } from "metro-resolver";
-import { resolve as metroResolver } from "metro-resolver";
 import * as path from "path";
+import { requireMetroPath } from "./metro";
 
 export type MetroConfigOverrides = {
   config?: string;
@@ -35,8 +35,14 @@ const INTERNAL_CALLSITES_REGEX = new RegExp(
 );
 
 function reactNativePlatformResolver(
-  platformImplementations: Record<string, string>
+  platformImplementations: Record<string, string>,
+  projectRoot: string
 ) {
+  const { resolve: metroResolver } = requireModuleFromMetro(
+    "metro-resolver",
+    projectRoot
+  );
+
   const platformResolver = (
     context: ResolutionContext,
     moduleName: string,
@@ -75,19 +81,29 @@ function reactNativePlatformResolver(
   return platformResolver;
 }
 
-function getAsyncRequireModulePath(): string | undefined {
+function getAsyncRequireModulePath(projectRoot: string): string | undefined {
+  const paths = { paths: [requireMetroPath(projectRoot)] };
   try {
     // `metro-runtime` was introduced in 0.63
-    return require.resolve("metro-runtime/src/modules/asyncRequire");
+    return require.resolve("metro-runtime/src/modules/asyncRequire", paths);
   } catch (_) {
-    return require.resolve("metro/src/lib/bundle-modules/asyncRequire");
+    return require.resolve("metro/src/lib/bundle-modules/asyncRequire", paths);
   }
 }
 
-function getDefaultConfigInternal(cliConfig: CLIConfig): InputConfigT {
-  const outOfTreePlatforms = Object.keys(cliConfig.platforms).filter(
-    (platform) => cliConfig.platforms[platform].npmPackageName
-  );
+function getDefaultConfigInternal({
+  root,
+  platforms,
+  reactNativePath,
+}: CLIConfig): InputConfigT {
+  const options = { paths: [root] };
+
+  const outOfTreePlatforms: [string, string][] = [];
+  for (const [platform, { npmPackageName }] of Object.entries(platforms)) {
+    if (npmPackageName) {
+      outOfTreePlatforms.push([platform, npmPackageName]);
+    }
+  }
 
   // Create and return an incomplete InputConfigT. It is used as an override
   // to Metro's default configuration. This has to be force-cast because
@@ -99,37 +115,28 @@ function getDefaultConfigInternal(cliConfig: CLIConfig): InputConfigT {
         outOfTreePlatforms.length === 0
           ? undefined
           : reactNativePlatformResolver(
-              outOfTreePlatforms.reduce<Record<string, string>>(
-                (result, platform) => {
-                  result[platform] =
-                    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                    cliConfig.platforms[platform].npmPackageName!;
-                  return result;
-                },
-                {}
-              )
+              Object.fromEntries(outOfTreePlatforms),
+              root
             ),
       resolverMainFields: ["react-native", "browser", "main"],
-      platforms: [...Object.keys(cliConfig.platforms), "native"],
+      platforms: [...Object.keys(platforms), "native"],
     },
     serializer: {
       // We can include multiple copies of InitializeCore here because metro will
       // only add ones that are already part of the bundle
       getModulesRunBeforeMainModule: () => [
         require.resolve(
-          path.join(cliConfig.reactNativePath, "Libraries/Core/InitializeCore")
+          path.join(reactNativePath, "Libraries/Core/InitializeCore")
         ),
-        ...outOfTreePlatforms.map((platform) =>
+        ...outOfTreePlatforms.map(([, npmPackageName]) =>
           require.resolve(
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            `${cliConfig.platforms[platform]
-              .npmPackageName!}/Libraries/Core/InitializeCore`,
-            { paths: [cliConfig.root] }
+            `${npmPackageName}/Libraries/Core/InitializeCore`,
+            options
           )
         ),
       ],
       getPolyfills: () =>
-        require(path.join(cliConfig.reactNativePath, "rn-get-polyfills"))(),
+        require(path.join(reactNativePath, "rn-get-polyfills"))(),
     },
     server: {
       port: Number(process.env.RCT_METRO_PORT) || 8081,
@@ -145,10 +152,11 @@ function getDefaultConfigInternal(cliConfig: CLIConfig): InputConfigT {
     transformer: {
       allowOptionalDependencies: true,
       babelTransformerPath: require.resolve(
-        "metro-react-native-babel-transformer"
+        "metro-react-native-babel-transformer",
+        options
       ),
       assetRegistryPath: "react-native/Libraries/Image/AssetRegistry",
-      asyncRequireModulePath: getAsyncRequireModulePath(),
+      asyncRequireModulePath: getAsyncRequireModulePath(root),
     },
     watchFolders: [],
   };
@@ -210,5 +218,6 @@ export function loadMetroConfig(
     defaultConfig.transformer.assetPlugins = assetPlugins;
   }
 
+  const { loadConfig } = requireModuleFromMetro("metro-config", cliConfig.root);
   return loadConfig({ cwd: cliConfig.root, ...overrides }, defaultConfig);
 }

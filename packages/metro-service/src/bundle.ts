@@ -1,13 +1,12 @@
 // https://github.com/react-native-community/cli/blob/716555851b442a83a1bf5e0db27b6226318c9a69/packages/cli-plugin-metro/src/commands/bundle/buildBundle.ts
 
 import { error, info } from "@rnx-kit/console";
+import { requireModuleFromMetro } from "@rnx-kit/tools-react-native/metro";
 import chalk from "chalk";
-import fs from "fs";
+import * as fs from "fs";
 import type { ConfigT } from "metro-config";
-import Server from "metro/src/Server";
-import Bundle from "metro/src/shared/output/bundle";
 import type { BundleOptions, OutputOptions } from "metro/src/shared/types";
-import path from "path";
+import * as path from "path";
 import { saveAssets } from "./asset";
 import { saveAssetsAndroid } from "./asset/android";
 import { saveAssetsDefault } from "./asset/default";
@@ -76,7 +75,10 @@ function getSaveAssetsPlugin(
 export async function bundle(
   args: BundleArgs,
   config: ConfigT,
-  output = Bundle
+  output = requireModuleFromMetro(
+    "metro/src/shared/output/bundle",
+    config.projectRoot
+  )
 ): Promise<void> {
   // ensure Metro can find Babel config
   ensureBabelConfig(config);
@@ -112,6 +114,8 @@ export async function bundle(
   if (sourceMapUrl && !args.sourcemapUseAbsolutePath) {
     sourceMapUrl = path.basename(sourceMapUrl);
   }
+
+  const Server = requireModuleFromMetro("metro/src/Server", config.projectRoot);
 
   const requestOpts: RequestOptions = {
     entryFile: args.entryFile,

@@ -1,7 +1,10 @@
 import { info, warn } from "@rnx-kit/console";
 import type { MetroPlugin } from "@rnx-kit/metro-serializer";
 import { findPackage, readPackage } from "@rnx-kit/tools-node/package";
-import { getMetroVersion } from "@rnx-kit/tools-react-native/metro";
+import {
+  findMetroPath,
+  getMetroVersion,
+} from "@rnx-kit/tools-react-native/metro";
 import type { BuildOptions, BuildResult, Plugin } from "esbuild";
 import * as esbuild from "esbuild";
 import * as fs from "fs";
@@ -172,8 +175,11 @@ export function MetroSerializer(
   // Signal to every plugin that we're using esbuild.
   process.env["RNX_METRO_SERIALIZER_ESBUILD"] = "true";
 
-  const baseJSBundle = require("metro/src/DeltaBundler/Serializers/baseJSBundle");
-  const bundleToString = require("metro/src/lib/bundleToString");
+  const metroPath = findMetroPath() || "metro";
+  const baseJSBundle = require(
+    `${metroPath}/src/DeltaBundler/Serializers/baseJSBundle`
+  );
+  const bundleToString = require(`${metroPath}/src/lib/bundleToString`);
 
   return (entryPoint, preModules, graph, options) => {
     metroPlugins.forEach((plugin) =>

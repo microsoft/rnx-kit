@@ -1,3 +1,4 @@
+import { findMetroPath } from "@rnx-kit/tools-react-native/metro";
 import type {
   MixedOutput,
   Module,
@@ -31,8 +32,11 @@ export type CustomSerializer = (
  * @see https://github.com/facebook/metro/blob/af23a1b27bcaaff2e43cb795744b003e145e78dd/packages/metro/src/Server.js#L228
  */
 export function MetroSerializer(plugins: MetroPlugin[]): CustomSerializer {
-  const baseJSBundle = require("metro/src/DeltaBundler/Serializers/baseJSBundle");
-  const bundleToString = require("metro/src/lib/bundleToString");
+  const metroPath = findMetroPath() || "metro";
+  const baseJSBundle = require(
+    `${metroPath}/src/DeltaBundler/Serializers/baseJSBundle`
+  );
+  const bundleToString = require(`${metroPath}/src/lib/bundleToString`);
 
   const { version } = require("metro/package.json");
   const shouldReturnPromise = semver.satisfies(version, ">=0.60.0");

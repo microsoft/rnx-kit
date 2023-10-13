@@ -1,4 +1,5 @@
-import { runServer } from "metro";
+import { requireModuleFromMetro } from "@rnx-kit/tools-react-native/metro";
+import type { runServer } from "metro";
 import net from "net";
 import nodeFetch from "node-fetch";
 import { ensureBabelConfig } from "./babel";
@@ -65,5 +66,7 @@ export async function isDevServerRunning(
 
 export const startServer: typeof runServer = (config, ...args) => {
   ensureBabelConfig(config);
+
+  const { runServer } = requireModuleFromMetro("metro", config.projectRoot);
   return runServer(config, ...args);
 };
