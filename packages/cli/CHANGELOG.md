@@ -1,5 +1,16 @@
 # Change Log - @rnx-kit/cli
 
+## 0.16.18
+
+### Patch Changes
+
+- 2885f73c: Ensure correct Metro dependencies are used by traversing the dependency chain starting from `react-native`
+- Updated dependencies [2885f73c]
+  - @rnx-kit/metro-serializer-esbuild@0.1.31
+  - @rnx-kit/metro-serializer@1.0.13
+  - @rnx-kit/metro-service@3.1.5
+  - @rnx-kit/tools-react-native@1.3.4
+
 ## 0.16.17
 
 ### Patch Changes
