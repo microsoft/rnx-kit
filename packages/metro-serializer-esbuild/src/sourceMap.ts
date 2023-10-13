@@ -25,7 +25,7 @@ export function absolutizeSourceMap(outputPath: string, text: string): string {
 }
 
 export function getInlineSourceMappingURL(modules: readonly Module[]): string {
-  const metroPath = findMetroPath();
+  const metroPath = findMetroPath() || "metro";
   const sourceMapString = require(
     `${metroPath}/src/DeltaBundler/Serializers/sourceMapString`
   );
