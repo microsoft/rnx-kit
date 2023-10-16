@@ -1,5 +1,13 @@
 # Change Log - @rnx-kit/metro-resolver-symlinks
 
+## 0.1.34
+
+### Patch Changes
+
+- 2885f73c: Ensure correct Metro dependencies are used by traversing the dependency chain starting from `react-native`
+- Updated dependencies [2885f73c]
+  - @rnx-kit/tools-react-native@1.3.4
+
 ## 0.1.33
 
 ### Patch Changes

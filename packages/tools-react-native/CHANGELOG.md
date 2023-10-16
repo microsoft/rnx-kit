@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/tools-react-native
 
+## 1.3.4
+
+### Patch Changes
+
+- 2885f73c: Ensure correct Metro dependencies are used by traversing the dependency chain starting from `react-native`
+
 ## 1.3.3
 
 ### Patch Changes

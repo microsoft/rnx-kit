@@ -1,5 +1,13 @@
 # Change Log - @rnx-kit/metro-serializer
 
+## 1.0.13
+
+### Patch Changes
+
+- 2885f73c: Ensure correct Metro dependencies are used by traversing the dependency chain starting from `react-native`
+- Updated dependencies [2885f73c]
+  - @rnx-kit/tools-react-native@1.3.4
+
 ## 1.0.12
 
 ### Patch Changes
