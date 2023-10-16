@@ -55,7 +55,7 @@ android {
     compileSdkVersion getExtProp("compileSdkVersion", 33)
     defaultConfig {
         minSdkVersion getExtProp("minSdkVersion", 23)
-        targetSdkVersion getExtProp("targetSdkVersion", 29)
+        targetSdkVersion getExtProp("targetSdkVersion", 33)
     }
     lintOptions {
         abortOnError false

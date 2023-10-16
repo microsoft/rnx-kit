@@ -38,6 +38,7 @@
     "lint:kt": "ktlint --relative 'android/src/**/*.kt'"
   },
   "peerDependencies": {
+    "react": ">=18.2.0",
     "react-native": ">=0.71.0-0"
   },
   "devDependencies": {
