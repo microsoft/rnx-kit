@@ -5,7 +5,7 @@ version = package['version']
 repository = package['repository']
 
 Pod::Spec.new do |s|
-  File.basename(__FILE__, '.podspec')
+  s.name      = File.basename(__FILE__, '.podspec')
   s.version   = version
   s.author    = { package['author']['name'] => package['author']['email'] }
   s.license   = package['license']
