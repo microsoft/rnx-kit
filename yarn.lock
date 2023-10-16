@@ -3718,6 +3718,7 @@ __metadata:
     type-fest: ^4.0.0
     typescript: ^5.0.0
   peerDependencies:
+    "@babel/core": ^7.0.0
     "@react-native/metro-config": "*"
     react: "*"
     react-native: "*"

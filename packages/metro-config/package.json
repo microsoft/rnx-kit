@@ -27,6 +27,7 @@
     "@rnx-kit/tools-workspaces": "^0.1.3"
   },
   "peerDependencies": {
+    "@babel/core": "^7.0.0",
     "@react-native/metro-config": "*",
     "react": "*",
     "react-native": "*"
