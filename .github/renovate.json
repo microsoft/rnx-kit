@@ -12,11 +12,6 @@
       "matchPackagePrefixes": ["com.android."]
     },
     {
-      "groupName": "Definitely Typed",
-      "matchDatasources": ["npm"],
-      "matchPackagePrefixes": ["@types/"]
-    },
-    {
       "groupName": "Jest",
       "matchSourceUrlPrefixes": ["https://github.com/facebook/jest"],
       "allowedVersions": "^29.0.0"
@@ -39,6 +34,11 @@
     {
       "groupName": "Octokit",
       "matchSourceUrlPrefixes": ["https://github.com/octokit/"]
+    },
+    {
+      "groupName": "TypeScript type definitions",
+      "matchDatasources": ["npm"],
+      "matchPackagePrefixes": ["@types/"]
     },
     {
       "matchPackageNames": ["@fluentui/utilities", "react"],
