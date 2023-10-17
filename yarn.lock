@@ -10011,14 +10011,14 @@ __metadata:
   linkType: hard
 
 "memfs@npm:^4.0.0":
-  version: 4.4.0
-  resolution: "memfs@npm:4.4.0"
+  version: 4.6.0
+  resolution: "memfs@npm:4.6.0"
   dependencies:
     json-joy: ^9.2.0
     thingies: ^1.11.1
   peerDependencies:
     tslib: 2
-  checksum: d087ce3f3d06c1bcc0ebf28494478f6339e8c86dcce9f26df15b8998c205c900be5e4dd5e60030a014c57460dfedd3228bc57c3b4d3079f57da7bbfa8432d171
+  checksum: b32a35bee9f96dc011605f3bb39e74e6d2a5de51c952a77bb38a0dfabd3381c40ae382d27f385aa290edee8081597fb1a3b41a07bb3f775fd55312dc30ac1d9d
   languageName: node
   linkType: hard
 
