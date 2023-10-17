@@ -65,7 +65,7 @@
     "@react-native-community/cli-platform-android": "^11.3.6",
     "@react-native-community/cli-platform-ios": "^11.3.6",
     "@vue/compiler-sfc": "link:./incubator/ignore",
-    "depcheck/@babel/parser": "~7.22.5",
+    "depcheck/@babel/parser": "~7.23.0",
     "depcheck/@babel/traverse": "~7.23.0",
     "deprecated-react-native-prop-types/@react-native/normalize-colors": "^0.72.0",
     "nx/fast-glob": "^3.2.7",
