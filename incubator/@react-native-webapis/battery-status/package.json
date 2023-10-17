@@ -1,6 +1,6 @@
 {
   "name": "@react-native-webapis/battery-status",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "EXPERIMENTAL - USE WITH CAUTION - Battery Status API for React Native",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/incubator/@react-native-webapis/battery-status#readme",
   "license": "MIT",

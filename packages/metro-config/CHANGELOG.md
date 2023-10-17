@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-config
 
+## 1.3.11
+
+### Patch Changes
+
+- a399bcbe: `@rnx-kit/babel-preset-metro-react-native` has a peer dependency on `@babel/core` so we need to forward it
+
 ## 1.3.10
 
 ### Patch Changes
