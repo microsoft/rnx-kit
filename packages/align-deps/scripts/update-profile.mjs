@@ -66,7 +66,7 @@ async function fetchPackageInfo(pkg, targetVersion = "latest") {
     name,
     version,
     latest,
-    modified: time?.modified ?? "",
+    modified: time?.[latest] ?? "?",
     homepage,
     dependencies: Optional(dependencies),
     peerDependencies: Optional(peerDependencies),
