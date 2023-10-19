@@ -40,7 +40,7 @@
   },
   "dependencies": {
     "@octokit/core": "^5.0.0",
-    "@octokit/plugin-rest-endpoint-methods": "^9.0.0",
+    "@octokit/plugin-rest-endpoint-methods": "^10.0.0",
     "@octokit/request-error": "^5.0.0",
     "@rnx-kit/config": "^0.6.0",
     "env-paths": "^3.0.0",
