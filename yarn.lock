@@ -3119,12 +3119,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-community/cli-types@npm:11.3.8, @react-native-community/cli-types@npm:^11.0.0":
+"@react-native-community/cli-types@npm:11.3.8":
   version: 11.3.8
   resolution: "@react-native-community/cli-types@npm:11.3.8"
   dependencies:
     joi: ^17.2.1
   checksum: 51532a32c1474dea43104e053432930cb3589e3bb8f00eb44e0408be192783c665f0638e772e516fa328dc6a83abd97310f7a9cdff650779afd853a8c5cc65b8
+  languageName: node
+  linkType: hard
+
+"@react-native-community/cli-types@npm:^11.0.0":
+  version: 11.3.9
+  resolution: "@react-native-community/cli-types@npm:11.3.9"
+  dependencies:
+    joi: ^17.2.1
+  checksum: 1ba3534c69f1ca6813811125eb5502bfcdaa42f3f3f659c19b61a8fdd4fb4d03e1e06bda72e5391c420570fe6ac135a85d8e65f07c781fe5d7fbb63ad01993e7
   languageName: node
   linkType: hard
 
