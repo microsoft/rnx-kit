@@ -3,6 +3,7 @@
   "addLabels": ["dependencies"],
   "packageRules": [
     {
+      "groupName": "@react-native-community/cli",
       "matchPackagePrefixes": ["@react-native-community/cli"],
       "allowedVersions": "^11.0.0"
     },
