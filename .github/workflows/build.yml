@@ -13,6 +13,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
+          filter: blob:none
           fetch-depth: 0
       - name: Setup the toolchain
         uses: ./.github/actions/setup-toolchain

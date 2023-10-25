@@ -12,6 +12,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
+          filter: blob:none
           fetch-depth: 0
       - name: Setup the toolchain
         uses: ./.github/actions/setup-toolchain
@@ -56,6 +57,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
+          filter: blob:none
           fetch-depth: 0
       - name: Setup the toolchain
         uses: ./.github/actions/setup-toolchain
@@ -68,7 +70,7 @@ jobs:
         run: |
           yarn build:ci --base origin/${{ github.base_ref }}
       - name: Ensure READMEs are up-to-date
-        if: ${{ matrix.node-version == 18 && matrix.os == 'ubuntu-22.04' }}
+        if: ${{ matrix.node-version == 18 && runner.os == 'Linux' }}
         run: |
           yarn update-readme
           git diff --exit-code
@@ -90,6 +92,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
+          filter: blob:none
           fetch-depth: 0
       - name: Setup the toolchain
         uses: ./.github/actions/setup-toolchain
@@ -111,11 +114,12 @@ jobs:
         working-directory: packages/test-app
   build-ios-test-app:
     name: "Build iOS"
-    runs-on: macos-12
+    runs-on: macos-13
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
+          filter: blob:none
           fetch-depth: 0
       - name: Setup the toolchain
         uses: ./.github/actions/setup-toolchain
