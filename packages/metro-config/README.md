@@ -6,17 +6,21 @@
 `@rnx-kit/metro-config` provides helper functions for creating a Metro config
 that works in a monorepo.
 
+## Installation
+
+```sh
+yarn add @rnx-kit/metro-config --dev
+```
+
+or if you're using npm
+
+```sh
+npm add --save-dev @rnx-kit/metro-config
+```
+
 ## Usage
 
-First, we need to add two files to the target package, `babel.config.js` and
-`metro.config.js`:
-
-```js
-// babel.config.js
-module.exports = {
-  presets: ["@rnx-kit/babel-preset-metro-react-native"],
-};
-```
+Import `makeMetroConfig` helper function from `@rnx-kit/metro-config`:
 
 ```js
 // metro.config.js
@@ -34,43 +38,14 @@ module.exports = makeMetroConfig({
 });
 ```
 
-To start the dev server:
-
-```sh
-yarn react-native start
-```
-
-To build the JS bundle:
-
-```sh
-yarn react-native bundle    \
-    --entry-file <path>     \
-    --platform <platform>   \
-    --dev <false | true>    \
-    --bundle-output <path>  \
-    --assets-dest <path>
-
-# e.g. to build a prod bundle
-yarn react-native bundle               \
-    --entry-file lib/index.ios.js      \
-    --platform ios                     \
-    --dev false                        \
-    --bundle-output lib/main.jsbundle  \
-    --assets-dest lib/
-```
-
-For more information on available commands and options, please see
-[React Native CLI documentation](https://github.com/react-native-community/cli/blob/v4.13.1/docs/commands.md).
+`makeMetroConfig` takes a Metro config as parameter. The config is augmented
+with additional fields to make sure it works smoothly in a monorepo.
 
 ## Known Limitations
 
 While Metro is the de-facto standard, it lacks a few features that would make it
 optimal; here's our current wishlist, feel free to submit PRs if you want to
 help with them :)
-
-- Implement [symlinks](https://github.com/facebook/metro/issues/1)
-  - Ideally this will be done directly upstream in Metro/Watchman. In the
-    meantime, we are adding all the symlinks to `watchFolders` as a workaround.
 
 ### Bundle size
 
