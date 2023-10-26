@@ -17,28 +17,32 @@ function test(storage: Storage): "Failed" | "Passed" {
   const testKey = "@react-native-webapis/web-storage/test";
 
   storage.clear();
-  if (storage.getItem(testKey) != null) {
+  if (storage.getItem(testKey) !== null || storage.length !== 0) {
     return "Failed";
   }
 
   storage.setItem(testKey, testKey);
-  if (storage.getItem(testKey) !== testKey) {
+  if (storage.getItem(testKey) !== testKey || storage.length !== 1) {
     return "Failed";
   }
 
   const now = Date.now().toString();
   storage.setItem(testKey, now);
-  if (storage.getItem(testKey) !== now) {
+  if (storage.getItem(testKey) !== now || storage.length !== 1) {
     return "Failed";
   }
 
   storage.removeItem(testKey);
-  if (storage.getItem(testKey) != null) {
+  if (storage.getItem(testKey) !== null || storage.length !== 0) {
     return "Failed";
   }
 
   for (let i = 0; i < iterations; ++i) {
     storage.setItem(`${testKey}/${i}`, i.toString());
+  }
+
+  if (storage.length !== iterations) {
+    return "Failed";
   }
 
   for (let i = 0; i < iterations; ++i) {
@@ -48,8 +52,12 @@ function test(storage: Storage): "Failed" | "Passed" {
   }
 
   storage.clear();
+  if (storage.length !== 0) {
+    return "Failed";
+  }
+
   for (let i = 0; i < 4; ++i) {
-    if (storage.getItem(`${testKey}/${i}`) != null) {
+    if (storage.getItem(`${testKey}/${i}`) !== null) {
       return "Failed";
     }
   }

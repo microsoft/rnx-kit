@@ -26,7 +26,10 @@ export default function makeSessionStorage() {
       writable: false,
     },
     getItem: {
-      value: (key: string) => store.get(key),
+      value: (key: string) => {
+        const value = store.get(key);
+        return typeof value !== "string" ? null : value;
+      },
       writable: false,
     },
     setItem: {

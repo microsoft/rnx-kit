@@ -5,11 +5,11 @@ import { TurboModuleRegistry } from "react-native";
 // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
 export interface Spec extends TurboModule {
   length: () => number;
-  key: (index: number) => string | undefined;
-  getItem: (key: string) => string | undefined;
-  setItem: (key: string, value: string) => void;
-  removeItem: (key: string) => void;
-  clear: () => void;
+  key: Storage["key"];
+  getItem: Storage["getItem"];
+  setItem: Storage["setItem"];
+  removeItem: Storage["removeItem"];
+  clear: Storage["clear"];
 }
 
 export default TurboModuleRegistry.getEnforcing<Spec>("RNWWebStorage");
