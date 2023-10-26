@@ -1,3 +1,16 @@
+/**
+ * Returns the number of key/value pairs in specified storage.
+ *
+ * This is a workaround for TypeScript narrowing bug:
+ *
+ *     error TS2367: This comparison appears to be unintentional because the types '0' and '1' have no overlap.
+ *     39   if (storage.getItem(testKey) !== testKey || storage.length !== 1) {
+ *                                                      ~~~~~~~~~~~~~~~~~~~~
+ */
+function length(storage: Storage): number {
+  return storage.length;
+}
+
 function test(storage: Storage): "Failed" | "Passed" {
   const prerequisites = [
     () => storage,
@@ -17,23 +30,23 @@ function test(storage: Storage): "Failed" | "Passed" {
   const testKey = "@react-native-webapis/web-storage/test";
 
   storage.clear();
-  if (storage.getItem(testKey) !== null || storage.length !== 0) {
+  if (storage.getItem(testKey) !== null || length(storage) !== 0) {
     return "Failed";
   }
 
   storage.setItem(testKey, testKey);
-  if (storage.getItem(testKey) !== testKey || storage.length !== 1) {
+  if (storage.getItem(testKey) !== testKey || length(storage) !== 1) {
     return "Failed";
   }
 
   const now = Date.now().toString();
   storage.setItem(testKey, now);
-  if (storage.getItem(testKey) !== now || storage.length !== 1) {
+  if (storage.getItem(testKey) !== now || length(storage) !== 1) {
     return "Failed";
   }
 
   storage.removeItem(testKey);
-  if (storage.getItem(testKey) !== null || storage.length !== 0) {
+  if (storage.getItem(testKey) !== null || length(storage) !== 0) {
     return "Failed";
   }
 
@@ -41,7 +54,7 @@ function test(storage: Storage): "Failed" | "Passed" {
     storage.setItem(`${testKey}/${i}`, i.toString());
   }
 
-  if (storage.length !== iterations) {
+  if (length(storage) !== iterations) {
     return "Failed";
   }
 
@@ -52,7 +65,7 @@ function test(storage: Storage): "Failed" | "Passed" {
   }
 
   storage.clear();
-  if (storage.length !== 0) {
+  if (length(storage) !== 0) {
     return "Failed";
   }
 
