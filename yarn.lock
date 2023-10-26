@@ -3406,7 +3406,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rnx-kit/babel-preset-metro-react-native@*, @rnx-kit/babel-preset-metro-react-native@^1.1.4, @rnx-kit/babel-preset-metro-react-native@workspace:packages/babel-preset-metro-react-native":
+"@rnx-kit/babel-preset-metro-react-native@*, @rnx-kit/babel-preset-metro-react-native@workspace:packages/babel-preset-metro-react-native":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/babel-preset-metro-react-native@workspace:packages/babel-preset-metro-react-native"
   dependencies:
@@ -3701,7 +3701,6 @@ __metadata:
   dependencies:
     "@babel/core": ^7.1.6
     "@babel/preset-env": ^7.1.6
-    "@rnx-kit/babel-preset-metro-react-native": ^1.1.4
     "@rnx-kit/console": ^1.0.0
     "@rnx-kit/scripts": "*"
     "@rnx-kit/tools-node": ^2.0.0
@@ -3719,7 +3718,6 @@ __metadata:
     type-fest: ^4.0.0
     typescript: ^5.0.0
   peerDependencies:
-    "@babel/core": ^7.0.0
     "@react-native/metro-config": "*"
     react: "*"
     react-native: "*"
