@@ -8,6 +8,7 @@ workspaces.
 
 It currently supports:
 
+- [Bun](https://bun.sh/)
 - [Lerna](https://lerna.js.org/docs/configuration)
 - [npm](https://docs.npmjs.com/cli/v8/using-npm/workspaces)
 - [pnpm](https://pnpm.io/pnpm-workspace_yaml)
