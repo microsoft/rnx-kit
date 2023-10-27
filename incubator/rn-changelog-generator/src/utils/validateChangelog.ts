@@ -4,7 +4,7 @@ const changelogRegex =
 
 const internalChangelogRegex = /\[\s?(INTERNAL)\s?\].*/gi;
 
-export default function validateChangelog(commitMsg: string) {
+export function validateChangelog(commitMsg: string) {
   if (!commitMsg.toLowerCase().includes("changelog:")) {
     return "missing";
   }

@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 
 import { initCli } from "./cli";
-import diffRepos from "./diffRepos";
+import { diffRepos } from "./diffRepos";
 import { log } from "./logger";
-import patchFile from "./patchFile";
-import patchRepo from "./patchRepo";
+import { patchFile } from "./patchFile";
+import { patchRepo } from "./patchRepo";
 
 const onCompletion = () => {
   // Check whether there were any errors .. and set the exit code if so.

@@ -43,7 +43,7 @@ function applyPatch(
   }
 }
 
-const patchRepo: PatchRepoFuncType = (
+export const patchRepo: PatchRepoFuncType = (
   targetRepoAbsPath: string,
   patchNames: string[],
   options: IPatchCommandOptions
@@ -133,5 +133,3 @@ const patchRepo: PatchRepoFuncType = (
     );
   });
 };
-
-export default patchRepo;

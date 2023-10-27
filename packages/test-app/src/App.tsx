@@ -1,3 +1,3 @@
 import type * as React from "react";
 
-export default (): React.ReactElement | null => null;
+export const App = (): React.ReactElement | null => null;

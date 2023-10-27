@@ -1,5 +1,5 @@
 import type { BatteryStatus } from "./NativeBatteryStatus";
-import NativeBatteryStatus from "./NativeBatteryStatus";
+import { NativeBatteryStatus } from "./NativeBatteryStatus";
 
 function getBattery(): Promise<BatteryStatus> {
   return new Promise((resolve) => {

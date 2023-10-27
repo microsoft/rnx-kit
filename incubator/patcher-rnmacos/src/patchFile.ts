@@ -37,7 +37,7 @@ function applyPatch(
   }
 }
 
-const patchFile: PatchFileFuncType = (
+export const patchFile: PatchFileFuncType = (
   targetFileAbsPath: string,
   patchFileAbsPath: string,
   options: IPatchFileCommandOptions
@@ -60,5 +60,3 @@ const patchFile: PatchFileFuncType = (
     }
   );
 };
-
-export default patchFile;

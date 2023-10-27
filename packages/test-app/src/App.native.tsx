@@ -151,7 +151,7 @@ function DevMenu() {
   );
 }
 
-function App({ concurrentRoot }: { concurrentRoot?: boolean }) {
+export function App({ concurrentRoot }: { concurrentRoot?: boolean }) {
   const isDarkMode = useColorScheme() === "dark";
   const styles = useStyles();
 
@@ -214,5 +214,3 @@ function App({ concurrentRoot }: { concurrentRoot?: boolean }) {
     </SafeAreaView>
   );
 }
-
-export default App;
