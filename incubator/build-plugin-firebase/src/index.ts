@@ -31,6 +31,8 @@ function validateConfig(config: Partial<FirebaseConfig>): void {
   }
 }
 
+// `export default` required for plugin interface
+// eslint-disable-next-line no-restricted-exports
 export default function (config: Partial<FirebaseConfig>): DistributionPlugin {
   validateConfig(config);
   return {

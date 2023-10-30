@@ -14,4 +14,5 @@ export interface Spec extends TurboModule {
   getStatus(): Promise<BatteryStatus>;
 }
 
-export default TurboModuleRegistry.getEnforcing<Spec>("RNWBatteryStatus");
+export const NativeBatteryStatus =
+  TurboModuleRegistry.getEnforcing<Spec>("RNWBatteryStatus");

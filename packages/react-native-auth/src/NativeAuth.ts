@@ -63,20 +63,18 @@ export interface Spec extends TurboModule {
   ): Promise<AuthResult>;
 }
 
-const AuthModule = TurboModuleRegistry.get<Spec>("RNXAuth");
+export const NativeAuth = TurboModuleRegistry.get<Spec>("RNXAuth");
 
 /**
  * Returns the native auth module.
  * @throws If the native module is not found
  */
 export function getEnforcing(): Spec {
-  if (!AuthModule) {
+  if (!NativeAuth) {
     throw new Error(
       "TurboModuleRegistry: 'RNXAuth' could not be found. Verify that a" +
         "module by this name is registered in the native binary."
     );
   }
-  return AuthModule;
+  return NativeAuth;
 }
-
-export default AuthModule;

@@ -1,7 +1,7 @@
-import generator from "./generator";
-import single from "./single";
-import validateChangelog from "./utils/validateChangelog";
-import validate from "./validate";
+import * as generator from "./generator";
+import * as single from "./single";
+import { validateChangelog } from "./utils/validateChangelog";
+import * as validate from "./validate";
 
 if (require.main === module) {
   require("yargs")
@@ -26,6 +26,7 @@ if (require.main === module) {
     .help("help").argv;
 }
 
+// eslint-disable-next-line no-restricted-exports
 export default {
   validate: validateChangelog,
 };

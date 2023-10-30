@@ -1,6 +1,4 @@
-const fakeMethod = (message: string) => {
+export const fakeMethod = (message: string) => {
   console.log(message);
   return message;
 };
-
-export default fakeMethod;

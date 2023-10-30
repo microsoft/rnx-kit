@@ -1,4 +1,4 @@
-import NativeAuth, { getEnforcing } from "./NativeAuth";
+import { NativeAuth, getEnforcing } from "./NativeAuth";
 import type { AccountType, AuthResult } from "./types";
 
 export type {

@@ -15,4 +15,6 @@ export function CyclicDependencies(
 
 CyclicDependencies.type = "serializer";
 
+// `export default` required for plugin interface
+// eslint-disable-next-line no-restricted-exports
 export default CyclicDependencies;

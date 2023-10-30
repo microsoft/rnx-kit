@@ -30,4 +30,6 @@ export function ThirdPartyNotices(
 
 ThirdPartyNotices.type = "serializer";
 
+// `export default` required for plugin interface
+// eslint-disable-next-line no-restricted-exports
 export default ThirdPartyNotices;

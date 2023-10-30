@@ -15,7 +15,7 @@ import { log } from "./logger";
 import { diffFiles } from "./patch_utils";
 import type { DiffReposFuncType, IDiffCommandOptions } from "./types";
 
-const diffRepos: DiffReposFuncType = (
+export const diffRepos: DiffReposFuncType = (
   dirtyRepoAbsPath: string,
   baseRepoAbsPath: string,
   options: IDiffCommandOptions
@@ -195,5 +195,3 @@ const diffRepos: DiffReposFuncType = (
     });
   }
 };
-
-export default diffRepos;
