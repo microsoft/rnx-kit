@@ -30,7 +30,7 @@
   },
   "devDependencies": {
     "@rnx-kit/scripts": "*",
-    "@types/fast-levenshtein": "0.0.2",
+    "@types/fast-levenshtein": "0.0.3",
     "chalk": "^4.1.0",
     "deepmerge": "^4.2.2",
     "eslint": "^8.0.0",
