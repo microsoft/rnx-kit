@@ -1,7 +1,7 @@
 import fs from "fs-extra";
 import { dirname } from "path";
 import { assertNever } from "./assertNever";
-import { FilePatch, Hunk, ParsedPatchFile } from "./parse";
+import type { FilePatch, Hunk, ParsedPatchFile } from "./parse";
 
 import { log } from "../logger";
 
@@ -57,18 +57,18 @@ export const executeEffects = (
         log.info("patch\\apply", "Patches found.");
         applyPatch(eff, targetFilePathOverride, { dryRun });
         break;
-      case "mode change":
+      case "mode change": {
         const currentMode = fs.statSync(eff.path).mode;
         if (
           ((isExecutable(eff.newMode) && isExecutable(currentMode)) ||
             (!isExecutable(eff.newMode) && !isExecutable(currentMode))) &&
           dryRun
         ) {
-          // tslint:disable-next-line: no-console
           console.warn(`Mode change is not required for file ${eff.path}`);
         }
         fs.chmodSync(eff.path, eff.newMode);
         break;
+      }
       default:
         assertNever(eff);
     }
@@ -76,7 +76,6 @@ export const executeEffects = (
 };
 
 function isExecutable(fileMode: number) {
-  // tslint:disable-next-line:no-bitwise
   return (fileMode & 0b001_000_000) > 0;
 }
 
@@ -130,6 +129,7 @@ function applyPatch(
 
   for (const hunk of hunks) {
     let fuzzingOffset = 0;
+    // eslint-disable-next-line no-constant-condition
     while (true) {
       const modifications = evaluateHunk(hunk, fileLines, fuzzingOffset);
       if (modifications) {
@@ -141,10 +141,9 @@ function applyPatch(
         fuzzingOffset < 0 ? fuzzingOffset * -1 : fuzzingOffset * -1 - 1;
 
       if (Math.abs(fuzzingOffset) > 20) {
+        const num = hunks.indexOf(hunk);
         throw new Error(
-          `Cant apply hunk ${hunks.indexOf(
-            hunk
-          )} for file ${effectiveTargetPath}`
+          `Cant apply hunk ${num} for file ${effectiveTargetPath}`
         );
       }
     }
@@ -186,19 +185,19 @@ function applyPatch(
   fs.writeFileSync(targetFilePathOverride, fileLines.join("\n"), { mode });
 }
 
-interface Push {
+type Push = {
   type: "push";
   line: string;
-}
-interface Pop {
+};
+type Pop = {
   type: "pop";
-}
-interface Splice {
+};
+type Splice = {
   type: "splice";
   index: number;
   numToDelete: number;
   linesToInsert: string[];
-}
+};
 
 type Modificaiton = Push | Pop | Splice;
 
@@ -250,7 +249,7 @@ function evaluateHunk(
           if (!linesAreEqual(originalLine, line)) {
             log.warn(
               "evaluateHunk",
-              `Reason: Context/Deletion line mismatch; Expected: \"${line}\"; Actual: \"${originalLine}\";Hunk Details: ${hunkToString(
+              `Reason: Context/Deletion line mismatch; Expected: "${line}"; Actual: "${originalLine}"; Hunk Details: ${hunkToString(
                 hunk
               )}`
             );

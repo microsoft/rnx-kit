@@ -19,7 +19,7 @@ function mergeOneLevel(a, b = {}) {
   return result;
 }
 
-export default async function depcheck() {
+export async function depcheck() {
   const { default: depcheck } = await import("depcheck");
 
   return new Promise((resolve, reject) => {

@@ -3,7 +3,7 @@
 import { runScript } from "../process.mjs";
 
 /** @type {import("../process.mjs").Command} */
-export default async function format() {
+export async function format() {
   await runScript(
     "prettier",
     "--write",

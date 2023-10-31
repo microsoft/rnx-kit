@@ -1,5 +1,5 @@
-import { Commit } from "./commits";
-import formatCommitLink from "./formatCommitLink";
+import type { Commit } from "./commits";
+import { formatCommitLink } from "./formatCommitLink";
 
 function getAuthorFormatting(item: Commit) {
   if (item.author?.login) {
@@ -10,7 +10,7 @@ function getAuthorFormatting(item: Commit) {
   return null;
 }
 
-export default function getChangeMessage(item: Commit, onlyMessage = false) {
+export function getChangeMessage(item: Commit, onlyMessage = false) {
   const commitMessage = item.commit.message.split("\n");
   let entry =
     commitMessage

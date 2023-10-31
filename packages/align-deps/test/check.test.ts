@@ -1,8 +1,8 @@
 import { checkPackageManifest } from "../src/commands/check";
 import { defaultConfig } from "../src/config";
-import profile_0_68 from "../src/presets/microsoft/react-native/profile-0.68";
-import profile_0_69 from "../src/presets/microsoft/react-native/profile-0.69";
-import profile_0_70 from "../src/presets/microsoft/react-native/profile-0.70";
+import { profile as profile_0_68 } from "../src/presets/microsoft/react-native/profile-0.68";
+import { profile as profile_0_69 } from "../src/presets/microsoft/react-native/profile-0.69";
+import { profile as profile_0_70 } from "../src/presets/microsoft/react-native/profile-0.70";
 import { packageVersion } from "./helpers";
 
 jest.mock("fs");

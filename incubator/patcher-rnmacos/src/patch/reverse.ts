@@ -1,11 +1,6 @@
 import { assertNever } from "./assertNever";
-import {
-  Hunk,
-  HunkHeader,
-  ParsedPatchFile,
-  PatchFilePart,
-  verifyHunkIntegrity,
-} from "./parse";
+import type { Hunk, HunkHeader, ParsedPatchFile, PatchFilePart } from "./parse";
+import { verifyHunkIntegrity } from "./parse";
 
 function reverseHunk(hunk: Hunk): Hunk {
   const header: HunkHeader = {

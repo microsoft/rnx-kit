@@ -163,7 +163,7 @@ function generateFromTemplate({
     nextVersionCoerced.minor - 1
   }`;
   return `import type { Package, Profile } from "../../../types";
-import profile_${currentVersionVarName} from "./profile-${currentVersion}";
+import { profile as profile_${currentVersionVarName} } from "./profile-${currentVersion}";
 
 const reactNative: Package = {
   name: "react-native",
@@ -171,7 +171,7 @@ const reactNative: Package = {
   capabilities: ["react", "core/metro-config"],
 };
 
-const profile: Profile = {
+export const profile: Profile = {
   ...profile_${currentVersionVarName},
   react: {
     name: "react",
@@ -260,8 +260,6 @@ const profile: Profile = {
     devOnly: true,
   },
 };
-
-export default profile;
 `;
 }
 
@@ -421,7 +419,7 @@ async function main({
             `import type { Preset } from "../../types";`,
             ...profiles.map(
               ([version, varName]) =>
-                `import ${varName} from "./react-native/profile-${version}";`
+                `import { profile as ${varName} } from "./react-native/profile-${version}";`
             ),
             "",
             "// Also export this by name for scripts to work around a bug where this module",
@@ -432,8 +430,6 @@ async function main({
               ([version, varName]) => `  "${version}": ${varName},`
             ),
             "};",
-            "",
-            "export default preset;",
             "",
           ].join("\n");
           fs.writeFileSync(presetFile, preset);

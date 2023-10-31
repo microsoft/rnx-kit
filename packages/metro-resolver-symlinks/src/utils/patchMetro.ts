@@ -149,6 +149,7 @@ export function patchMetro(options: Options): void {
     req: { url: string },
     res: unknown
   ): Promise<void> {
+    // eslint-disable-next-line node/no-deprecated-api
     const urlObj = url.parse(decodeURI(req.url), true);
     let [, assetPath] =
       (urlObj &&

@@ -1,6 +1,6 @@
 import { fetchCommit } from "./utils/commits";
-import getChangeDimensions from "./utils/getChangeDimensions";
-import getChangeMessage from "./utils/getChangeMessage";
+import { getChangeDimensions } from "./utils/getChangeDimensions";
+import { getChangeMessage } from "./utils/getChangeMessage";
 
 type SingleArgs = {
   commit: string;

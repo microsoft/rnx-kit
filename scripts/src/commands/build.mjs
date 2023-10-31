@@ -2,12 +2,12 @@
 
 import * as fs from "node:fs";
 import { runScript, sequence } from "../process.mjs";
-import clean from "./clean.mjs";
-import depcheck from "./depcheck.mjs";
-import lint from "./lint.mjs";
+import { clean } from "./clean.mjs";
+import { depcheck } from "./depcheck.mjs";
+import { lint } from "./lint.mjs";
 
 /** @type {import("../process.mjs").Command} */
-export default async function build(_args, rawArgs = []) {
+export async function build(_args, rawArgs = []) {
   // If `--dependencies` is specified, also build the package's dependencies.
   if (rawArgs.includes("--dependencies")) {
     const manifest = fs.readFileSync("package.json", { encoding: "utf-8" });
