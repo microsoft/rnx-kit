@@ -8,8 +8,9 @@
  */
 module.exports = (tasks, options, context) => {
   if (options.parallel === 0) {
-    const numCpus = require("os").cpus().length;
-    if (process.env.CI) {
+    const os = require("node:os");
+    const numCpus = os.availableParallelism?.() ?? os.cpus().length;
+    if (process.env["CI"]) {
       options.parallel = Math.max(numCpus, 1);
       console.log(`Using ${options.parallel} cores`);
     } else {

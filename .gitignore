@@ -14,8 +14,8 @@
 .DS_Store
 .ccache/*
 !.ccache/ccache.conf
-.expo/
 .gradle/
+.nx/cache
 .idea/
 .xcode.env*
 .yarn/*

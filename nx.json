@@ -18,7 +18,11 @@
   },
   "targetDefaults": {
     "build": {
-      "dependsOn": ["^build"]
+      "dependsOn": ["^build"],
+      "cache": true
+    },
+    "build:ci": {
+      "cache": true
     },
     "bundle": {
       "dependsOn": ["build"]
@@ -26,8 +30,15 @@
     "bundle+esbuild": {
       "dependsOn": ["build"]
     },
+    "format": {
+      "cache": true
+    },
+    "lint": {
+      "cache": true
+    },
     "test": {
-      "dependsOn": ["build"]
+      "dependsOn": ["build"],
+      "cache": true
     },
     "update-readme": {
       "dependsOn": ["build"]
@@ -37,13 +48,12 @@
     "default": {
       "runner": "@rnx-kit/scripts/nx-tasks-runner",
       "options": {
-        "cacheableOperations": ["build", "build:ci", "format", "lint", "test"],
         "parallel": 0
       }
     }
   },
   "pluginsConfig": {
-    "@nrwl/js": {
+    "@nx/js": {
       "analyzeSourceFiles": false
     }
   }
