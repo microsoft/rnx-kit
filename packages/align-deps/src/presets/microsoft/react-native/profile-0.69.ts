@@ -24,6 +24,7 @@ export const profile: Profile = {
     capabilities: ["react"],
     devOnly: true,
   },
+
   core: reactNative,
   "core-android": reactNative,
   "core-ios": reactNative,
