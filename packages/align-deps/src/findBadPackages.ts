@@ -1,10 +1,10 @@
 import type { PackageManifest } from "@rnx-kit/tools-node/package";
 import semverSubset from "semver/ranges/subset";
-import banned from "./presets/banned";
+import { bannedPackages } from "./presets/banned";
 import type { ExcludedPackage } from "./types";
 
 function isBanned(name: string, version: string): ExcludedPackage | undefined {
-  const info = banned.find((pkg) => pkg.name === name);
+  const info = bannedPackages.find((pkg) => pkg.name === name);
   return info && semverSubset(version, info.version) ? info : undefined;
 }
 

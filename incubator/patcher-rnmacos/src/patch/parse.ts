@@ -1,6 +1,6 @@
 import { assertNever } from "./assertNever";
 
-export interface HunkHeader {
+export type HunkHeader = {
   original: {
     start: number;
     length: number;
@@ -9,7 +9,7 @@ export interface HunkHeader {
     start: number;
     length: number;
   };
-}
+};
 
 export const parseHunkHeaderLine = (headerLine: string): HunkHeader => {
   const match = headerLine
@@ -36,48 +36,48 @@ export const EXECUTABLE_FILE_MODE = 0o755;
 
 type FileMode = typeof NON_EXECUTABLE_FILE_MODE | typeof EXECUTABLE_FILE_MODE;
 
-interface PatchMutationPart {
+type PatchMutationPart = {
   type: "context" | "insertion" | "deletion";
   lines: string[];
   noNewlineAtEndOfFile: boolean;
-}
+};
 
-interface FileRename {
+type FileRename = {
   type: "rename";
   fromPath: string;
   toPath: string;
-}
+};
 
-interface FileModeChange {
+type FileModeChange = {
   type: "mode change";
   path: string;
   oldMode: FileMode;
   newMode: FileMode;
-}
+};
 
-export interface FilePatch {
+export type FilePatch = {
   type: "patch";
   path: string;
   hunks: Hunk[];
   beforeHash: string | null;
   afterHash: string | null;
-}
+};
 
-interface FileDeletion {
+type FileDeletion = {
   type: "file deletion";
   path: string;
   mode: FileMode;
   hunk: Hunk | null;
   hash: string | null;
-}
+};
 
-interface FileCreation {
+type FileCreation = {
   type: "file creation";
   mode: FileMode;
   path: string;
   hunk: Hunk | null;
   hash: string | null;
-}
+};
 
 export type PatchFilePart =
   | FilePatch
@@ -90,7 +90,7 @@ export type ParsedPatchFile = PatchFilePart[];
 
 type State = "parsing header" | "parsing hunks";
 
-interface FileDeets {
+type FileDeets = {
   diffLineFromPath: string | null;
   diffLineToPath: string | null;
   oldMode: string | null;
@@ -104,12 +104,12 @@ interface FileDeets {
   fromPath: string | null;
   toPath: string | null;
   hunks: Hunk[] | null;
-}
+};
 
-export interface Hunk {
+export type Hunk = {
   header: HunkHeader;
   parts: PatchMutationPart[];
-}
+};
 
 const emptyFilePatch = (): FileDeets => ({
   diffLineFromPath: null,
@@ -132,9 +132,10 @@ const emptyHunk = (headerLine: string): Hunk => ({
   parts: [],
 });
 
-const hunkLinetypes: {
-  [k: string]: PatchMutationPart["type"] | "pragma" | "header";
-} = {
+const hunkLinetypes: Record<
+  string,
+  PatchMutationPart["type"] | "pragma" | "header"
+> = {
   "@": "header",
   "-": "deletion",
   "+": "insertion",
@@ -394,7 +395,6 @@ export function interpretParsedPatchFile(files: FileDeets[]): ParsedPatchFile {
 }
 
 function parseFileMode(mode: string): FileMode {
-  // tslint:disable-next-line:no-bitwise
   const parsedMode = parseInt(mode, 8) & 0o777;
   if (
     parsedMode !== NON_EXECUTABLE_FILE_MODE &&

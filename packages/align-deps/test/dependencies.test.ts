@@ -1,8 +1,8 @@
 import { PackageManifest, readPackage } from "@rnx-kit/tools-node/package";
 import path from "path";
 import { gatherRequirements, visitDependencies } from "../src/dependencies";
-import profile_0_69 from "../src/presets/microsoft/react-native/profile-0.69";
-import profile_0_70 from "../src/presets/microsoft/react-native/profile-0.70";
+import { profile as profile_0_69 } from "../src/presets/microsoft/react-native/profile-0.69";
+import { profile as profile_0_70 } from "../src/presets/microsoft/react-native/profile-0.70";
 
 jest.unmock("@rnx-kit/config");
 

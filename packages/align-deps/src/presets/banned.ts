@@ -1,6 +1,6 @@
 import type { ExcludedPackage } from "../types";
 
-const bannedPackages: ExcludedPackage[] = [
+export const bannedPackages: ExcludedPackage[] = [
   {
     name: "@react-native-community/async-storage",
     version: "*",
@@ -50,5 +50,3 @@ const bannedPackages: ExcludedPackage[] = [
       "This is an old and unmaintained fork of @react-native-netinfo/netinfo.",
   },
 ];
-
-export default bannedPackages;

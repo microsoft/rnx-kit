@@ -1,10 +1,10 @@
 import { filterPreset, parseRequirements } from "../src/preset";
-import defaultPreset from "../src/presets/microsoft/react-native";
-import profile_0_68 from "../src/presets/microsoft/react-native/profile-0.68";
-import profile_0_69 from "../src/presets/microsoft/react-native/profile-0.69";
-import profile_0_70 from "../src/presets/microsoft/react-native/profile-0.70";
-import profile_0_71 from "../src/presets/microsoft/react-native/profile-0.71";
-import profile_0_72 from "../src/presets/microsoft/react-native/profile-0.72";
+import { preset as defaultPreset } from "../src/presets/microsoft/react-native";
+import { profile as profile_0_68 } from "../src/presets/microsoft/react-native/profile-0.68";
+import { profile as profile_0_69 } from "../src/presets/microsoft/react-native/profile-0.69";
+import { profile as profile_0_70 } from "../src/presets/microsoft/react-native/profile-0.70";
+import { profile as profile_0_71 } from "../src/presets/microsoft/react-native/profile-0.71";
+import { profile as profile_0_72 } from "../src/presets/microsoft/react-native/profile-0.72";
 
 describe("filterPreset()", () => {
   test("returns no profiles if requirements cannot be satisfied", () => {

@@ -1,4 +1,4 @@
-import { Commit } from "./commits";
+import type { Commit } from "./commits";
 
 export const CHANGE_TYPE = [
   "breaking",
@@ -112,7 +112,7 @@ function getChangeCategory(commitMsg: string): ChangeCategory {
     return "general";
   }
 }
-export default function getChangeDimensions(item: Commit) {
+export function getChangeDimensions(item: Commit) {
   const commitMsg = item.commit.message;
   let changelogMsg = commitMsg.split("\n").find((line) => {
     return CHANGELOG_LINE_REGEXP.test(line);

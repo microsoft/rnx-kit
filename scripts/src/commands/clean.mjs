@@ -3,7 +3,7 @@
 import * as fs from "node:fs";
 
 /** @type {import("../process.mjs").Command} */
-export default async function clean() {
+export async function clean() {
   const options = { force: true, maxRetries: 3, recursive: true };
   [
     "bin",

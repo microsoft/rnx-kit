@@ -1,7 +1,7 @@
 // https://github.com/react-native-community/cli/blob/716555851b442a83a1bf5e0db27b6226318c9a69/packages/cli-plugin-metro/src/commands/bundle/filterPlatformAssetScales.ts
 
 export function filterPlatformAssetScales(
-  allowlist: ReadonlyArray<number> | undefined,
+  allowlist: readonly number[] | undefined,
   scales: readonly number[]
 ): readonly number[] {
   if (!allowlist) {

@@ -1,10 +1,10 @@
 import type { Capability } from "@rnx-kit/config";
 import { capabilitiesFor, resolveCapabilities } from "../src/capabilities";
 import { filterPreset, mergePresets } from "../src/preset";
-import defaultPreset from "../src/presets/microsoft/react-native";
-import profile_0_62 from "../src/presets/microsoft/react-native/profile-0.62";
-import profile_0_63 from "../src/presets/microsoft/react-native/profile-0.63";
-import profile_0_64 from "../src/presets/microsoft/react-native/profile-0.64";
+import { preset as defaultPreset } from "../src/presets/microsoft/react-native";
+import { profile as profile_0_62 } from "../src/presets/microsoft/react-native/profile-0.62";
+import { profile as profile_0_63 } from "../src/presets/microsoft/react-native/profile-0.63";
+import { profile as profile_0_64 } from "../src/presets/microsoft/react-native/profile-0.64";
 import { pickPackage } from "./helpers";
 
 function makeMockResolver(module: string): RequireResolve {

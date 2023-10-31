@@ -1,8 +1,8 @@
 import chalk from "chalk";
-import { IncomingHttpHeaders } from "http";
+import type { IncomingHttpHeaders } from "http";
 import https from "https";
 
-export interface Commit {
+export type Commit = {
   sha: string;
   commit: {
     message: string;
@@ -11,7 +11,7 @@ export interface Commit {
     };
   };
   author?: { login: string };
-}
+};
 
 function fetchJSON<T>(token: string | null, path: string) {
   const host = "api.github.com";

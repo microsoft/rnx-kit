@@ -19,6 +19,7 @@
 .idea/
 .xcode.env*
 .yarn/*
+!.yarn/patches/
 !.yarn/plugins/
 !.yarn/releases/
 /incubator/*/dist/

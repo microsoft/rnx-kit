@@ -26,7 +26,7 @@ function ensureValidPlatform(platform) {
 /**
  * @param {Record<string, unknown> | undefined} options
  */
-export default async function bundle(options) {
+export async function bundle(options) {
   const { minify, platform } = { ...defaultOptions, ...options };
   const targetPlatform = ensureValidPlatform(platform);
 

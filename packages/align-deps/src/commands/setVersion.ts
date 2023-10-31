@@ -6,7 +6,7 @@ import { transformConfig } from "../compatibility/config";
 import { defaultConfig, loadConfig } from "../config";
 import { isError } from "../errors";
 import { isString, modifyManifest } from "../helpers";
-import defaultPreset from "../presets/microsoft/react-native";
+import { preset as defaultPreset } from "../presets/microsoft/react-native";
 import type {
   AlignDepsConfig,
   Command,

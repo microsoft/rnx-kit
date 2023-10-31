@@ -1,5 +1,5 @@
 import type { Package, Profile } from "../../../types";
-import profile61 from "./profile-0.61";
+import { profile as profile_0_61 } from "./profile-0.61";
 
 const reactNative: Package = {
   name: "react-native",
@@ -7,8 +7,8 @@ const reactNative: Package = {
   capabilities: ["react"],
 };
 
-const profile: Profile = {
-  ...profile61,
+export const profile: Profile = {
+  ...profile_0_61,
   react: {
     name: "react",
     version: "16.11.0",
@@ -105,5 +105,3 @@ const profile: Profile = {
     version: "^5.9.10",
   },
 };
-
-export default profile;

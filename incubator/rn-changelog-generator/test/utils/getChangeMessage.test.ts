@@ -1,4 +1,4 @@
-import getChangeMessage from "../../src/utils/getChangeMessage";
+import { getChangeMessage } from "../../src/utils/getChangeMessage";
 
 console.warn = () => {};
 console.error = () => {};

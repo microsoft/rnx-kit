@@ -2,16 +2,16 @@
 // @ts-check
 
 import yargs from "yargs";
-import buildAndroid from "./commands/build-android.mjs";
-import buildIOS from "./commands/build-ios.mjs";
-import build from "./commands/build.mjs";
-import bundle from "./commands/bundle.mjs";
-import clean from "./commands/clean.mjs";
-import depcheck from "./commands/depcheck.mjs";
-import format from "./commands/format.mjs";
-import lint from "./commands/lint.mjs";
-import test from "./commands/test.mjs";
-import updateApiReadme from "./commands/updateApiReadme.mjs";
+import { buildAndroid } from "./commands/build-android.mjs";
+import { buildIOS } from "./commands/build-ios.mjs";
+import { build } from "./commands/build.mjs";
+import { bundle } from "./commands/bundle.mjs";
+import { clean } from "./commands/clean.mjs";
+import { depcheck } from "./commands/depcheck.mjs";
+import { format } from "./commands/format.mjs";
+import { lint } from "./commands/lint.mjs";
+import { test } from "./commands/test.mjs";
+import { updateApiReadme } from "./commands/updateApiReadme.mjs";
 
 /**
  * @param {Record<string, { description: string; command: import("./process.mjs").Command }>} commands

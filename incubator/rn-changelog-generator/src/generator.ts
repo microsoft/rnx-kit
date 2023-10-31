@@ -10,13 +10,14 @@ import path from "path";
 import util from "util";
 import type { Commit } from "./utils/commits";
 import { fetchCommits } from "./utils/commits";
-import formatCommitLink from "./utils/formatCommitLink";
+import { formatCommitLink } from "./utils/formatCommitLink";
 import type { ChangeCategory, ChangeType } from "./utils/getChangeDimensions";
-import getChangeDimensions, {
+import {
   CHANGE_CATEGORY,
   CHANGE_TYPE,
+  getChangeDimensions,
 } from "./utils/getChangeDimensions";
-import getChangeMessage from "./utils/getChangeMessage";
+import { getChangeMessage } from "./utils/getChangeMessage";
 
 const execFile = util.promisify(child_process.execFile);
 

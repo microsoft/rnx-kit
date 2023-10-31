@@ -146,7 +146,7 @@ async function updateReadme(exportedTypes, exportedFunctions) {
   }
 }
 
-export default async function updateApiReadme() {
+export async function updateApiReadme() {
   const { default: typedoc } = await import("typedoc");
 
   const project = await parse(typedoc);
