@@ -194,3 +194,28 @@ function execute(command: string, args: string[], cwd: string): Promise<void> {
     });
   });
 }
+
+export const rnxCleanCommand = {
+  name: "rnx-clean",
+  func: rnxClean,
+  description: "Clears React Native project related caches",
+  options: [
+    {
+      name: "--include [android,cocoapods,metro,npm,watchman,yarn]",
+      description:
+        "Comma-separated flag of caches to clear, e.g. `npm,yarn`. When not specified, only non-platform specific caches are cleared.",
+      default: "metro,npm,watchman,yarn",
+    },
+    {
+      name: "--project-root <path>",
+      description: "Root path to your React Native project",
+      default: process.cwd(),
+      parse: (val: string) => path.resolve(val),
+    },
+    {
+      name: "--verify",
+      description: "Whether to verify the integrity of the cache",
+      default: false,
+    },
+  ],
+};

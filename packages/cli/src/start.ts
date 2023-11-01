@@ -223,3 +223,94 @@ export async function rnxStart(
     attachKeyHandlers({ devServerUrl, help, messageSocketEndpoint, terminal });
   }
 }
+
+export const rnxStartCommand = {
+  name: "rnx-start",
+  func: rnxStart,
+  description:
+    "Start a bundle-server to host your react-native experience during development",
+  options: [
+    {
+      name: "--port [number]",
+      description:
+        "Host port to use when listening for incoming server requests.",
+      parse: parseInt,
+      default: 8081,
+    },
+    {
+      name: "--host [string]",
+      description:
+        "Host name or address to bind when listening for incoming server requests. When not given, requests from all addresses are accepted.",
+      default: "",
+    },
+    {
+      name: "--projectRoot [path]",
+      description:
+        "Path to the root of your react-native project. The bundle server uses this root path to resolve all web requests.",
+      parse: (val: string) => path.resolve(val),
+    },
+    {
+      name: "--watchFolders [paths]",
+      description:
+        "Additional folders which will be added to the file-watch list. Comma-separated. By default, Metro watches all project files.",
+      parse: (val: string) =>
+        val.split(",").map((folder) => path.resolve(folder)),
+    },
+    {
+      name: "--assetPlugins [list]",
+      description:
+        "Additional asset plugins to be used by the Metro Babel transformer. Comma-separated list containing plugin module names or absolute paths to plugin packages.",
+      parse: (val: string) => val.split(","),
+    },
+    {
+      name: "--sourceExts [list]",
+      description:
+        "Additional source-file extensions to include when generating bundles. Comma-separated list, excluding the leading dot.",
+      parse: (val: string) => val.split(","),
+    },
+    {
+      name: "--max-workers [number]",
+      description:
+        "Specifies the maximum number of parallel worker threads to use for transforming files. This defaults to the number of cores available on your machine.",
+      parse: parseInt,
+    },
+    {
+      name: "--reset-cache",
+      description: "Reset the Metro cache.",
+    },
+    {
+      name: "--custom-log-reporter-path [string]",
+      description:
+        "Path to a JavaScript file which exports a Metro 'TerminalReporter' function. This replaces the default reporter, which writes all messages to the Metro console.",
+    },
+    {
+      name: "--https",
+      description:
+        "Use a secure (https) web server. When not specified, an insecure (http) web server is used.",
+    },
+    {
+      name: "--key [path]",
+      description:
+        "Path to a custom SSL private key file to use for secure (https) communication.",
+    },
+    {
+      name: "--cert [path]",
+      description:
+        "Path to a custom SSL certificate file to use for secure (https) communication.",
+    },
+    {
+      name: "--config [string]",
+      description: "Path to the Metro configuration file.",
+      parse: (val: string) => path.resolve(val),
+    },
+    {
+      name: "--no-interactive",
+      description: "Disables interactive mode.",
+    },
+    {
+      name: "--id [string]",
+      description:
+        "Specify which bundle configuration to use if server configuration is missing.",
+    },
+  ],
+};
