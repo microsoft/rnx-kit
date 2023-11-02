@@ -2148,7 +2148,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@eslint/js@npm:8.51.0":
+"@eslint/js@npm:8.51.0, @eslint/js@npm:^8.0.0":
   version: 8.51.0
   resolution: "@eslint/js@npm:8.51.0"
   checksum: 0228bf1e1e0414843e56d9ff362a2a72d579c078f93174666f29315690e9e30a8633ad72c923297f7fd7182381b5a476805ff04dac8debe638953eb1ded3ac73
@@ -4055,6 +4055,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/scripts@workspace:scripts"
   dependencies:
+    "@eslint/js": ^8.0.0
     "@types/jest": ^29.2.1
     "@types/node": ^18.0.0
     "@types/yargs": ^16.0.0
