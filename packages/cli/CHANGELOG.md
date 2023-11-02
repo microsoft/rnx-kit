@@ -1,5 +1,13 @@
 # Change Log - @rnx-kit/cli
 
+## 0.16.19
+
+### Patch Changes
+
+- 45939377: Export `react-native.config.js` for simpler forwarding
+- Updated dependencies [9d7a2dfc]
+  - @rnx-kit/metro-serializer@1.0.14
+
 ## 0.16.18
 
 ### Patch Changes
