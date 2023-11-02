@@ -38,7 +38,7 @@ export function MetroSerializer(plugins: MetroPlugin[]): CustomSerializer {
   );
   const bundleToString = require(`${metroPath}/src/lib/bundleToString`);
 
-  const { version } = require("metro/package.json");
+  const { version } = require(`${metroPath}/package.json`);
   const shouldReturnPromise = semver.satisfies(version, ">=0.60.0");
 
   return (
