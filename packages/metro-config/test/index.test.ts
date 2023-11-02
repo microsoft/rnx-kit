@@ -6,7 +6,6 @@ import {
   exclusionList,
   makeMetroConfig,
   resolveUniqueModule,
-  UNIQUE_PACKAGES,
 } from "../src/index";
 
 describe("@rnx-kit/metro-config", () => {
@@ -278,9 +277,11 @@ describe("makeMetroConfig", () => {
       fail("Expected `config.watchFolders` to be an array");
     }
 
-    expect(Object.keys(config.resolver.extraNodeModules)).toEqual(
-      UNIQUE_PACKAGES
-    );
+    expect(Object.keys(config.resolver.extraNodeModules)).toEqual([
+      "react",
+      "react-native",
+      "@babel/runtime",
+    ]);
 
     const blockList = exclusionList().source;
     expect(config.resolver.blacklistRE.source).toBe(blockList);
@@ -343,9 +344,11 @@ describe("makeMetroConfig", () => {
       fail("Expected `config.watchFolders` to be an array");
     }
 
-    expect(Object.keys(config.resolver.extraNodeModules)).toEqual(
-      UNIQUE_PACKAGES
-    );
+    expect(Object.keys(config.resolver.extraNodeModules)).toEqual([
+      "react",
+      "react-native",
+      "@babel/runtime",
+    ]);
 
     const blockList = exclusionList().source;
     expect(config.resolver.blacklistRE.source).toBe(blockList);
@@ -385,6 +388,7 @@ describe("makeMetroConfig", () => {
     }
 
     expect(Object.keys(extraNodeModules).sort()).toEqual([
+      "@babel/runtime",
       "my-awesome-package",
       "react",
       "react-native",
