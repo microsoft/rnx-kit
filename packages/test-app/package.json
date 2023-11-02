@@ -40,6 +40,7 @@
     "@react-native/metro-config": "^0.72.0",
     "@rnx-kit/babel-preset-metro-react-native": "*",
     "@rnx-kit/cli": "*",
+    "@rnx-kit/eslint-config": "*",
     "@rnx-kit/metro-config": "*",
     "@rnx-kit/metro-plugin-cyclic-dependencies-detector": "*",
     "@rnx-kit/metro-plugin-duplicates-checker": "*",
@@ -64,9 +65,6 @@
     "ignoreMatches": [
       "internal"
     ]
-  },
-  "eslintConfig": {
-    "extends": "@rnx-kit/eslint-config"
   },
   "jest": {
     "preset": "@rnx-kit/scripts",

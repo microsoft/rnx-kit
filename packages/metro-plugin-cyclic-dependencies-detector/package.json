@@ -25,6 +25,7 @@
     "@rnx-kit/tools-node": "^2.0.0"
   },
   "devDependencies": {
+    "@rnx-kit/eslint-config": "*",
     "@rnx-kit/metro-serializer": "*",
     "@rnx-kit/scripts": "*",
     "@types/jest": "^29.2.1",
@@ -34,9 +35,6 @@
     "metro": "^0.76.5",
     "prettier": "^3.0.0",
     "typescript": "^5.0.0"
-  },
-  "eslintConfig": {
-    "extends": "@rnx-kit/eslint-config"
   },
   "jest": {
     "preset": "@rnx-kit/scripts"

@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/eslint-config",
-  "version": "0.0.2",
+  "version": "0.0.0",
   "private": true,
   "description": "Shareable ESLint config for @rnx-kit",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/eslint-config#readme",
@@ -15,13 +15,19 @@
     "directory": "packages/eslint-config"
   },
   "scripts": {
-    "format": "prettier --write --loglevel error **/*.{js,json,md}"
+    "format": "prettier --write --log-level error README.md index.js package.json"
   },
   "dependencies": {
+    "@eslint/eslintrc": "^2.1.2",
+    "@eslint/js": "^8.0.0",
     "@microsoft/eslint-plugin-sdl": "^0.2.0",
-    "@rnx-kit/eslint-plugin": "*",
+    "@rnx-kit/eslint-plugin": "workspace:*",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
-    "@typescript-eslint/parser": "^6.0.0"
+    "@typescript-eslint/parser": "^6.0.0",
+    "eslint-plugin-node": "11.1.0",
+    "eslint-plugin-react": "^7.26.0",
+    "eslint-plugin-react-hooks": "^4.3.0",
+    "eslint-plugin-security": "^1.4.0"
   },
   "peerDependencies": {
     "eslint": ">=6.0.0"

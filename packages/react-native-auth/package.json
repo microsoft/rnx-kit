@@ -37,15 +37,13 @@
     "@babel/core": "^7.1.6",
     "@babel/preset-env": "^7.1.6",
     "@react-native/metro-config": "^0.72.0",
+    "@rnx-kit/eslint-config": "*",
     "@rnx-kit/scripts": "*",
     "eslint": "^8.0.0",
     "prettier": "^3.0.0",
     "react": "18.2.0",
     "react-native": "^0.72.0",
     "typescript": "^5.0.0"
-  },
-  "eslintConfig": {
-    "extends": "@rnx-kit/eslint-config"
   },
   "rnx-kit": {
     "alignDeps": {

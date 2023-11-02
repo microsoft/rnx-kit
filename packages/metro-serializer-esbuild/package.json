@@ -35,6 +35,7 @@
     "@fluentui/utilities": "8.13.9",
     "@react-native-community/cli-types": "^11.0.0",
     "@rnx-kit/babel-preset-metro-react-native": "*",
+    "@rnx-kit/eslint-config": "*",
     "@rnx-kit/metro-config": "*",
     "@rnx-kit/metro-serializer": "*",
     "@rnx-kit/metro-service": "*",
@@ -57,9 +58,6 @@
     "ignoreMatches": [
       "@babel/preset-env"
     ]
-  },
-  "eslintConfig": {
-    "extends": "@rnx-kit/eslint-config"
   },
   "jest": {
     "preset": "@rnx-kit/scripts"

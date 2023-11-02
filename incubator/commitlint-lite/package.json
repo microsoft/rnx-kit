@@ -32,6 +32,7 @@
     "test": "rnx-kit-scripts test"
   },
   "devDependencies": {
+    "@rnx-kit/eslint-config": "*",
     "@rnx-kit/scripts": "*",
     "@types/node": "^18.0.0",
     "eslint": "^8.0.0",
@@ -41,9 +42,6 @@
   },
   "engines": {
     "node": ">=14.18"
-  },
-  "eslintConfig": {
-    "extends": "@rnx-kit/eslint-config"
   },
   "jest": {
     "preset": "@rnx-kit/scripts",

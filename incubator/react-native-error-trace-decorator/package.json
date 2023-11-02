@@ -37,14 +37,12 @@
   },
   "dependencies": {
     "@rnx-kit/console": "^1.0.11",
+    "@rnx-kit/eslint-config": "*",
     "@types/node": "^18.0.0",
     "@types/yargs": "^16.0.0",
     "metro-symbolicate": "^0.76.0",
     "source-map": "^0.5.6",
     "yargs": "^16.0.0"
-  },
-  "eslintConfig": {
-    "extends": "@rnx-kit/eslint-config"
   },
   "jest": {
     "preset": "@rnx-kit/scripts"

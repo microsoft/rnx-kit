@@ -29,6 +29,7 @@
     "test:local": "RN_REPO='../../../react-native' rnx-kit-scripts test"
   },
   "devDependencies": {
+    "@rnx-kit/eslint-config": "*",
     "@rnx-kit/scripts": "*",
     "@types/fast-levenshtein": "0.0.3",
     "@types/node": "^18.0.0",
@@ -41,9 +42,6 @@
     "prettier": "^3.0.0",
     "typescript": "^5.0.0",
     "yargs": "^16.0.0"
-  },
-  "eslintConfig": {
-    "extends": "@rnx-kit/eslint-config"
   },
   "jest": {
     "preset": "@rnx-kit/scripts"
