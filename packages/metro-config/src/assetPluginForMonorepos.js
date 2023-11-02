@@ -68,6 +68,7 @@ function enhanceMiddleware(middleware, server) {
     if (url && url.startsWith("/assets/")) {
       req.url = url.replace(/@@\//g, "../");
     }
+    // @ts-ignore Type differs depending on Node version
     return middleware(req, res, next);
   };
 }
