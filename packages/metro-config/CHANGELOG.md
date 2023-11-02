@@ -1,5 +1,12 @@
 # Change Log - @rnx-kit/metro-config
 
+## 1.3.12
+
+### Patch Changes
+
+- ab32e46f: Remove unused dependencies and update the README
+- a5ec943a: Fix `@react-native/metro-config` not being resolved correctly in a pnpm setup
+
 ## 1.3.11
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-serializer
 
+## 1.0.14
+
+### Patch Changes
+
+- 9d7a2dfc: Fix `metro/package.json` not being resolved from the correct path
+
 ## 1.0.13
 
 ### Patch Changes
