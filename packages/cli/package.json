@@ -61,9 +61,11 @@
     }
   },
   "devDependencies": {
+    "@react-native-community/cli-clean": "^11.0.0",
     "@react-native-community/cli-types": "^11.0.0",
     "@rnx-kit/scripts": "*",
     "@types/connect": "^3.4.36",
+    "@types/fs-extra": "^9.0.0",
     "@types/node-fetch": "^2.6.5",
     "@types/qrcode": "^1.4.2",
     "eslint": "^8.0.0",
