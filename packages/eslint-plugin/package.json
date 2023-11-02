@@ -39,7 +39,9 @@
   "devDependencies": {
     "@rnx-kit/scripts": "*",
     "@types/eslint": "^8.0.0",
+    "@types/estree": "*",
     "@types/jest": "^29.2.1",
+    "@types/node": "^18.0.0",
     "@typescript-eslint/types": "^6.0.0",
     "eslint": "^8.0.0",
     "jest": "^29.2.1",

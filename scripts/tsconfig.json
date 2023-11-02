@@ -1,5 +1,5 @@
 {
-  "extends": "@rnx-kit/scripts/tsconfig-esm.json",
+  "extends": "./tsconfig-esm.json",
   "compilerOptions": {
     "noEmit": true
   },

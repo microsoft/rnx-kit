@@ -37,6 +37,7 @@
   },
   "devDependencies": {
     "@jest/types": "^29.2.1",
+    "@react-native-community/cli-types": "^11.0.0",
     "@rnx-kit/eslint-config": "*",
     "@rnx-kit/scripts": "*",
     "@types/node": "^18.0.0",
