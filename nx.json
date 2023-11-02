@@ -46,7 +46,7 @@
   },
   "tasksRunnerOptions": {
     "default": {
-      "runner": "@rnx-kit/scripts/nx-tasks-runner",
+      "runner": "./scripts/nx-tasks-runner",
       "options": {
         "parallel": 0
       }
