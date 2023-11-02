@@ -68,7 +68,6 @@ function enhanceMiddleware(middleware, server) {
     if (url && url.startsWith("/assets/")) {
       req.url = url.replace(/@@\//g, "../");
     }
-    // @ts-expect-error Function overloading is a bit wonky with latest Metro
     return middleware(req, res, next);
   };
 }
