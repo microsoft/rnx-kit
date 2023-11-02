@@ -3499,7 +3499,7 @@ __metadata:
     "@rnx-kit/metro-plugin-cyclic-dependencies-detector": ^1.1.1
     "@rnx-kit/metro-plugin-duplicates-checker": ^2.1.1
     "@rnx-kit/metro-plugin-typescript": ^0.4.4
-    "@rnx-kit/metro-serializer": ^1.0.13
+    "@rnx-kit/metro-serializer": ^1.0.14
     "@rnx-kit/metro-serializer-esbuild": ^0.1.31
     "@rnx-kit/metro-service": ^3.1.5
     "@rnx-kit/scripts": "*"
@@ -3846,7 +3846,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rnx-kit/metro-serializer@*, @rnx-kit/metro-serializer@^1.0.13, @rnx-kit/metro-serializer@workspace:packages/metro-serializer":
+"@rnx-kit/metro-serializer@*, @rnx-kit/metro-serializer@^1.0.14, @rnx-kit/metro-serializer@workspace:packages/metro-serializer":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/metro-serializer@workspace:packages/metro-serializer"
   dependencies:
