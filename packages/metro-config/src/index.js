@@ -132,7 +132,7 @@ function resolveUniqueModules(modules, projectRoot) {
 
   // Additional modules that often cause issues in pnpm setups
 
-  /** @type {(curr: string | undefined, next: string) => string | undefined} */
+  /** @type {(prev: string | undefined, curr: string) => string | undefined} */
   const chainedResolve = (prev, curr) =>
     prev ? resolveModule(curr, prev) : undefined;
 
