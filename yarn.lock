@@ -3160,6 +3160,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@react-native-webapis/battery-status@workspace:incubator/@react-native-webapis/battery-status"
   dependencies:
+    "@rnx-kit/eslint-config": "*"
     "@rnx-kit/scripts": "*"
     "@types/node": ^18.0.0
     eslint: ^8.0.0
@@ -3354,6 +3355,7 @@ __metadata:
   dependencies:
     "@rnx-kit/config": "*"
     "@rnx-kit/console": "*"
+    "@rnx-kit/eslint-config": "*"
     "@rnx-kit/scripts": "*"
     "@rnx-kit/tools-language": "*"
     "@rnx-kit/tools-node": "*"
@@ -3384,6 +3386,7 @@ __metadata:
   dependencies:
     "@babel/core": ^7.0.0
     "@babel/helper-plugin-utils": ^7.0.0
+    "@rnx-kit/eslint-config": "*"
     "@rnx-kit/scripts": "*"
     "@rnx-kit/tools-node": ^2.0.1
     "@types/babel__core": ^7.0.0
@@ -3404,6 +3407,7 @@ __metadata:
     "@babel/core": ^7.0.0
     "@babel/plugin-transform-typescript": ^7.0.0
     "@rnx-kit/babel-plugin-import-path-remapper": "*"
+    "@rnx-kit/eslint-config": "*"
     "@rnx-kit/scripts": "*"
     "@types/babel__core": ^7.0.0
     "@types/jest": ^29.2.1
@@ -3433,6 +3437,7 @@ __metadata:
   resolution: "@rnx-kit/build-plugin-firebase@workspace:incubator/build-plugin-firebase"
   dependencies:
     "@rnx-kit/build": "*"
+    "@rnx-kit/eslint-config": "*"
     "@rnx-kit/scripts": "*"
     eslint: ^8.0.0
     prettier: ^3.0.0
@@ -3450,6 +3455,7 @@ __metadata:
     "@octokit/plugin-rest-endpoint-methods": ^10.0.0
     "@octokit/request-error": ^5.0.0
     "@rnx-kit/config": ^0.6.0
+    "@rnx-kit/eslint-config": "*"
     "@rnx-kit/scripts": "*"
     "@types/qrcode": ^1.4.2
     "@types/yargs": ^16.0.0
@@ -3475,6 +3481,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/bundle-diff@workspace:packages/bundle-diff"
   dependencies:
+    "@rnx-kit/eslint-config": "*"
     "@rnx-kit/scripts": "*"
     "@types/jest": ^29.2.1
     "@types/node": ^18.0.0
@@ -3496,6 +3503,7 @@ __metadata:
     "@rnx-kit/align-deps": ^2.2.2
     "@rnx-kit/config": ^0.6.6
     "@rnx-kit/console": ^1.0.11
+    "@rnx-kit/eslint-config": "*"
     "@rnx-kit/metro-plugin-cyclic-dependencies-detector": ^1.1.1
     "@rnx-kit/metro-plugin-duplicates-checker": ^2.1.1
     "@rnx-kit/metro-plugin-typescript": ^0.4.4
@@ -3542,6 +3550,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/commitlint-lite@workspace:incubator/commitlint-lite"
   dependencies:
+    "@rnx-kit/eslint-config": "*"
     "@rnx-kit/scripts": "*"
     "@types/node": ^18.0.0
     eslint: ^8.0.0
@@ -3558,6 +3567,7 @@ __metadata:
   resolution: "@rnx-kit/config@workspace:packages/config"
   dependencies:
     "@rnx-kit/console": ^1.0.12
+    "@rnx-kit/eslint-config": "*"
     "@rnx-kit/metro-plugin-cyclic-dependencies-detector": "*"
     "@rnx-kit/metro-plugin-duplicates-checker": "*"
     "@rnx-kit/metro-serializer-esbuild": "*"
@@ -3579,6 +3589,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/console@workspace:packages/console"
   dependencies:
+    "@rnx-kit/eslint-config": "*"
     "@rnx-kit/scripts": "*"
     "@types/jest": ^29.2.1
     "@types/node": ^18.0.0
@@ -3595,6 +3606,7 @@ __metadata:
   resolution: "@rnx-kit/esbuild-bundle-analyzer@workspace:incubator/esbuild-bundle-analyzer"
   dependencies:
     "@rnx-kit/console": ^1.0.11
+    "@rnx-kit/eslint-config": "*"
     "@rnx-kit/metro-plugin-cyclic-dependencies-detector": ^1.1.2
     "@rnx-kit/metro-plugin-duplicates-checker": ^2.1.2
     "@rnx-kit/scripts": "*"
@@ -3617,6 +3629,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/esbuild-plugin-import-path-remapper@workspace:packages/esbuild-plugin-import-path-remapper"
   dependencies:
+    "@rnx-kit/eslint-config": "*"
     "@rnx-kit/scripts": "*"
     "@types/node": ^18.0.0
     esbuild: ^0.19.0
@@ -3631,20 +3644,27 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/eslint-config@workspace:packages/eslint-config"
   dependencies:
+    "@eslint/eslintrc": ^2.1.2
+    "@eslint/js": ^8.0.0
     "@microsoft/eslint-plugin-sdl": ^0.2.0
-    "@rnx-kit/eslint-plugin": "*"
+    "@rnx-kit/eslint-plugin": "workspace:*"
     "@typescript-eslint/eslint-plugin": ^6.0.0
     "@typescript-eslint/parser": ^6.0.0
+    eslint-plugin-node: 11.1.0
+    eslint-plugin-react: ^7.26.0
+    eslint-plugin-react-hooks: ^4.3.0
+    eslint-plugin-security: ^1.4.0
     prettier: ^3.0.0
   peerDependencies:
     eslint: ">=6.0.0"
   languageName: unknown
   linkType: soft
 
-"@rnx-kit/eslint-plugin@*, @rnx-kit/eslint-plugin@workspace:packages/eslint-plugin":
+"@rnx-kit/eslint-plugin@workspace:*, @rnx-kit/eslint-plugin@workspace:packages/eslint-plugin":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/eslint-plugin@workspace:packages/eslint-plugin"
   dependencies:
+    "@rnx-kit/eslint-config": "*"
     "@rnx-kit/scripts": "*"
     "@types/eslint": ^8.0.0
     "@types/estree": "*"
@@ -3706,6 +3726,7 @@ __metadata:
     "@babel/core": ^7.1.6
     "@babel/preset-env": ^7.1.6
     "@rnx-kit/console": ^1.0.0
+    "@rnx-kit/eslint-config": "*"
     "@rnx-kit/scripts": "*"
     "@rnx-kit/tools-node": ^2.0.0
     "@rnx-kit/tools-react-native": ^1.3.4
@@ -3736,6 +3757,7 @@ __metadata:
   resolution: "@rnx-kit/metro-plugin-cyclic-dependencies-detector@workspace:packages/metro-plugin-cyclic-dependencies-detector"
   dependencies:
     "@rnx-kit/console": ^1.0.11
+    "@rnx-kit/eslint-config": "*"
     "@rnx-kit/metro-serializer": "*"
     "@rnx-kit/scripts": "*"
     "@rnx-kit/tools-node": ^2.0.0
@@ -3754,6 +3776,7 @@ __metadata:
   resolution: "@rnx-kit/metro-plugin-duplicates-checker@workspace:packages/metro-plugin-duplicates-checker"
   dependencies:
     "@rnx-kit/console": ^1.0.11
+    "@rnx-kit/eslint-config": "*"
     "@rnx-kit/metro-serializer": "*"
     "@rnx-kit/scripts": "*"
     "@rnx-kit/tools-node": ^2.0.0
@@ -3776,6 +3799,7 @@ __metadata:
   dependencies:
     "@rnx-kit/config": ^0.6.3
     "@rnx-kit/console": ^1.0.0
+    "@rnx-kit/eslint-config": "*"
     "@rnx-kit/scripts": "*"
     "@rnx-kit/tools-node": ^2.0.0
     "@rnx-kit/tools-react-native": ^1.3.2
@@ -3820,6 +3844,7 @@ __metadata:
     "@react-native-community/cli-types": ^11.0.0
     "@rnx-kit/babel-preset-metro-react-native": "*"
     "@rnx-kit/console": ^1.0.11
+    "@rnx-kit/eslint-config": "*"
     "@rnx-kit/metro-config": "*"
     "@rnx-kit/metro-serializer": "*"
     "@rnx-kit/metro-service": "*"
@@ -3850,6 +3875,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/metro-serializer@workspace:packages/metro-serializer"
   dependencies:
+    "@rnx-kit/eslint-config": "*"
     "@rnx-kit/scripts": "*"
     "@rnx-kit/tools-react-native": ^1.3.4
     "@types/node": ^18.0.0
@@ -3870,6 +3896,7 @@ __metadata:
     "@react-native-community/cli-types": ^11.0.0
     "@react-native/assets-registry": ^0.73.0
     "@rnx-kit/console": ^1.0.0
+    "@rnx-kit/eslint-config": "*"
     "@rnx-kit/scripts": "*"
     "@rnx-kit/tools-node": ^2.1.0
     "@rnx-kit/tools-react-native": ^1.3.4
@@ -3906,6 +3933,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/patcher-rnmacos@workspace:incubator/patcher-rnmacos"
   dependencies:
+    "@rnx-kit/eslint-config": "*"
     "@rnx-kit/scripts": "*"
     "@types/fs-extra": ^9.0.0
     "@types/istextorbinary": ^2.3.0
@@ -3931,6 +3959,7 @@ __metadata:
     "@babel/helper-plugin-utils": ^7.0.0
     "@babel/template": ^7.0.0
     "@rnx-kit/console": ^1.0.0
+    "@rnx-kit/eslint-config": "*"
     "@rnx-kit/scripts": "*"
     "@rnx-kit/tools-node": ^2.0.0
     "@types/babel__core": ^7.0.0
@@ -3957,6 +3986,7 @@ __metadata:
     "@babel/core": ^7.1.6
     "@babel/preset-env": ^7.1.6
     "@react-native/metro-config": ^0.72.0
+    "@rnx-kit/eslint-config": "*"
     "@rnx-kit/scripts": "*"
     eslint: ^8.0.0
     prettier: ^3.0.0
@@ -3974,6 +4004,7 @@ __metadata:
   resolution: "@rnx-kit/react-native-error-trace-decorator@workspace:incubator/react-native-error-trace-decorator"
   dependencies:
     "@rnx-kit/console": ^1.0.11
+    "@rnx-kit/eslint-config": "*"
     "@rnx-kit/scripts": "*"
     "@types/node": ^18.0.0
     "@types/yargs": ^16.0.0
@@ -4005,6 +4036,7 @@ __metadata:
   resolution: "@rnx-kit/react-native-lazy-index@workspace:packages/react-native-lazy-index"
   dependencies:
     "@babel/core": ^7.0.0
+    "@rnx-kit/eslint-config": "*"
     "@rnx-kit/scripts": "*"
     "@types/jest": ^29.2.1
     "@types/node": ^18.0.0
@@ -4034,6 +4066,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/rn-changelog-generator@workspace:incubator/rn-changelog-generator"
   dependencies:
+    "@rnx-kit/eslint-config": "*"
     "@rnx-kit/scripts": "*"
     "@types/fast-levenshtein": 0.0.3
     "@types/node": ^18.0.0
@@ -4077,6 +4110,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/template@workspace:packages/template"
   dependencies:
+    "@rnx-kit/eslint-config": "*"
     "@rnx-kit/scripts": "*"
     eslint: ^8.0.0
     jest: ^29.2.1
@@ -4098,6 +4132,7 @@ __metadata:
     "@react-native/metro-config": ^0.72.0
     "@rnx-kit/babel-preset-metro-react-native": "*"
     "@rnx-kit/cli": "*"
+    "@rnx-kit/eslint-config": "*"
     "@rnx-kit/metro-config": "*"
     "@rnx-kit/metro-plugin-cyclic-dependencies-detector": "*"
     "@rnx-kit/metro-plugin-duplicates-checker": "*"
@@ -4152,6 +4187,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/tools-language@workspace:packages/tools-language"
   dependencies:
+    "@rnx-kit/eslint-config": "*"
     "@rnx-kit/scripts": "*"
     "@types/node": ^18.0.0
     eslint: ^8.0.0
@@ -4165,6 +4201,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/tools-node@workspace:packages/tools-node"
   dependencies:
+    "@rnx-kit/eslint-config": "*"
     "@rnx-kit/scripts": "*"
     "@rnx-kit/tools-language": ^2.0.1
     "@types/node": ^18.0.0
@@ -4182,6 +4219,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/tools-react-native@workspace:packages/tools-react-native"
   dependencies:
+    "@rnx-kit/eslint-config": "*"
     "@rnx-kit/scripts": "*"
     "@rnx-kit/tools-node": ^2.0.1
     "@types/node": ^18.0.0
@@ -4196,6 +4234,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/tools-workspaces@workspace:packages/tools-workspaces"
   dependencies:
+    "@rnx-kit/eslint-config": "*"
     "@rnx-kit/scripts": "*"
     "@types/node": ^18.0.0
     eslint: ^8.0.0
@@ -4213,6 +4252,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/typescript-service@workspace:packages/typescript-service"
   dependencies:
+    "@rnx-kit/eslint-config": "*"
     "@rnx-kit/scripts": "*"
     "@rnx-kit/tools-node": ^2.0.0
     "@types/node": ^18.0.0
@@ -7104,12 +7144,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-security@npm:1.4.0":
-  version: 1.4.0
-  resolution: "eslint-plugin-security@npm:1.4.0"
+"eslint-plugin-security@npm:^1.4.0":
+  version: 1.7.1
+  resolution: "eslint-plugin-security@npm:1.7.1"
   dependencies:
-    safe-regex: ^1.1.0
-  checksum: 31807b2b42fcb3cc670a2f96b4e6f5d716015750bdcd055f0bac9f2cbec74cad0b86405696fe6d46e778d4e3cb819023995651e312c1f61e8d32db93ffb80e38
+    safe-regex: ^2.1.1
+  checksum: 3a650e2482e108bb4b9c3b9ac64adefcf1dfda069cd43f89a7d3b84822da2417c9d1b764ec5e1acf4c193b48edc630c7ef2d0a5279a478a8672f9030bc78a8c0
   languageName: node
   linkType: hard
 
@@ -12248,6 +12288,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"regexp-tree@npm:~0.1.1":
+  version: 0.1.27
+  resolution: "regexp-tree@npm:0.1.27"
+  bin:
+    regexp-tree: bin/regexp-tree
+  checksum: 129aebb34dae22d6694ab2ac328be3f99105143737528ab072ef624d599afecbcfae1f5c96a166fa9e5f64fa1ecf30b411c4691e7924c3e11bbaf1712c260c54
+  languageName: node
+  linkType: hard
+
 "regexp.prototype.flags@npm:^1.4.3, regexp.prototype.flags@npm:^1.5.0":
   version: 1.5.0
   resolution: "regexp.prototype.flags@npm:1.5.0"
@@ -12467,13 +12516,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ret@npm:~0.1.10":
-  version: 0.1.15
-  resolution: "ret@npm:0.1.15"
-  checksum: d76a9159eb8c946586567bd934358dfc08a36367b3257f7a3d7255fdd7b56597235af23c6afa0d7f0254159e8051f93c918809962ebd6df24ca2a83dbe4d4151
-  languageName: node
-  linkType: hard
-
 "retry@npm:^0.12.0":
   version: 0.12.0
   resolution: "retry@npm:0.12.0"
@@ -12583,12 +12625,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"safe-regex@npm:^1.1.0":
-  version: 1.1.0
-  resolution: "safe-regex@npm:1.1.0"
+"safe-regex@npm:^2.1.1":
+  version: 2.1.1
+  resolution: "safe-regex@npm:2.1.1"
   dependencies:
-    ret: ~0.1.10
-  checksum: 9a8bba57c87a841f7997b3b951e8e403b1128c1a4fd1182f40cc1a20e2d490593d7c2a21030fadfea320c8e859219019e136f678c6689ed5960b391b822f01d5
+    regexp-tree: ~0.1.1
+  checksum: 5d734e2193c63ef0cb00f60c0244e0f8a30ecb31923633cd34636808d6a7c4c206d650017953ae1db8bc33967c2f06af33488dea6f038f4e38212beb7bed77b4
   languageName: node
   linkType: hard
 

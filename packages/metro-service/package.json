@@ -50,6 +50,7 @@
   "devDependencies": {
     "@react-native-community/cli-types": "^11.0.0",
     "@react-native/assets-registry": "^0.73.0",
+    "@rnx-kit/eslint-config": "*",
     "@rnx-kit/scripts": "*",
     "@types/node": "^18.0.0",
     "@types/node-fetch": "^2.6.5",
@@ -64,9 +65,6 @@
     "metro-runtime": "^0.76.5",
     "prettier": "^3.0.0",
     "typescript": "^5.0.0"
-  },
-  "eslintConfig": {
-    "extends": "@rnx-kit/eslint-config"
   },
   "jest": {
     "preset": "@rnx-kit/scripts"

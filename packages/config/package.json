@@ -36,6 +36,7 @@
     "semver": "^7.0.0"
   },
   "devDependencies": {
+    "@rnx-kit/eslint-config": "*",
     "@rnx-kit/metro-plugin-cyclic-dependencies-detector": "*",
     "@rnx-kit/metro-plugin-duplicates-checker": "*",
     "@rnx-kit/metro-serializer-esbuild": "*",
@@ -48,9 +49,6 @@
     "metro": "^0.76.5",
     "prettier": "^3.0.0",
     "typescript": "^5.0.0"
-  },
-  "eslintConfig": {
-    "extends": "@rnx-kit/eslint-config"
   },
   "jest": {
     "preset": "@rnx-kit/scripts",

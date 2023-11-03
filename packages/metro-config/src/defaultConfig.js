@@ -108,7 +108,6 @@ function getDefaultConfig(projectRoot) {
     const pkgJson = path.join(projectRoot, "package.json");
     const manifest = fs.readFileSync(pkgJson, { encoding: "utf-8" });
     if (manifest.includes("@react-native/metro-config")) {
-      // @ts-ignore Cannot find module or its corresponding type declarations.
       const metroConfigPath = require.resolve("@react-native/metro-config", {
         paths: [projectRoot],
       });

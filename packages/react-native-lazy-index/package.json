@@ -42,6 +42,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",
+    "@rnx-kit/eslint-config": "*",
     "@rnx-kit/scripts": "*",
     "@types/jest": "^29.2.1",
     "@types/node": "^18.0.0",
@@ -54,12 +55,6 @@
     "ignoreMatches": [
       "babel-plugin-codegen"
     ]
-  },
-  "eslintConfig": {
-    "extends": "@rnx-kit/eslint-config",
-    "rules": {
-      "@typescript-eslint/ban-ts-comment": "off"
-    }
   },
   "jest": {
     "preset": "@rnx-kit/scripts"

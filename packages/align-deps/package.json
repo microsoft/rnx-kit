@@ -30,6 +30,7 @@
   "devDependencies": {
     "@rnx-kit/config": "*",
     "@rnx-kit/console": "*",
+    "@rnx-kit/eslint-config": "*",
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tools-language": "*",
     "@rnx-kit/tools-node": "*",
@@ -52,9 +53,6 @@
   },
   "engines": {
     "node": ">=12.13"
-  },
-  "eslintConfig": {
-    "extends": "@rnx-kit/eslint-config"
   },
   "jest": {
     "preset": "@rnx-kit/scripts"

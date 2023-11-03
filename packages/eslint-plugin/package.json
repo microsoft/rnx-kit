@@ -37,6 +37,7 @@
     "eslint": ">=6.0.0"
   },
   "devDependencies": {
+    "@rnx-kit/eslint-config": "*",
     "@rnx-kit/scripts": "*",
     "@types/eslint": "^8.0.0",
     "@types/estree": "*",
@@ -58,9 +59,6 @@
       "eslint-plugin-react",
       "eslint-plugin-react-hooks"
     ]
-  },
-  "eslintConfig": {
-    "extends": "@rnx-kit/eslint-config"
   },
   "jest": {
     "preset": "@rnx-kit/scripts"

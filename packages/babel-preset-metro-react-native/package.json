@@ -43,6 +43,7 @@
     "@babel/core": "^7.0.0",
     "@babel/plugin-transform-typescript": "^7.0.0",
     "@rnx-kit/babel-plugin-import-path-remapper": "*",
+    "@rnx-kit/eslint-config": "*",
     "@rnx-kit/scripts": "*",
     "@types/babel__core": "^7.0.0",
     "@types/jest": "^29.2.1",
@@ -56,9 +57,6 @@
     "ignoreMatches": [
       "@rnx-kit/babel-plugin-import-path-remapper"
     ]
-  },
-  "eslintConfig": {
-    "extends": "@rnx-kit/eslint-config"
   },
   "jest": {
     "roots": [

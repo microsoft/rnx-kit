@@ -31,6 +31,7 @@
     "test": "rnx-kit-scripts test"
   },
   "devDependencies": {
+    "@rnx-kit/eslint-config": "*",
     "@rnx-kit/scripts": "*",
     "@types/fs-extra": "^9.0.0",
     "@types/istextorbinary": "^2.3.0",
@@ -45,9 +46,6 @@
     "fs-extra": "^10.0.0",
     "istextorbinary": "^3.3.0",
     "winston": "^3.2.1"
-  },
-  "eslintConfig": {
-    "extends": "@rnx-kit/eslint-config"
   },
   "jest": {
     "preset": "@rnx-kit/scripts"

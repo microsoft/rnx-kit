@@ -38,6 +38,7 @@
   "devDependencies": {
     "@babel/core": "^7.1.6",
     "@babel/preset-env": "^7.1.6",
+    "@rnx-kit/eslint-config": "*",
     "@rnx-kit/scripts": "*",
     "@types/babel__core": "^7.0.0",
     "@types/connect": "^3.4.36",
@@ -58,12 +59,6 @@
       "@rnx-kit/babel-preset-metro-react-native",
       "type-fest"
     ]
-  },
-  "eslintConfig": {
-    "extends": "@rnx-kit/eslint-config",
-    "rules": {
-      "@typescript-eslint/ban-ts-comment": "off"
-    }
   },
   "jest": {
     "preset": "@rnx-kit/scripts"

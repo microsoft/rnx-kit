@@ -43,6 +43,7 @@
     }
   },
   "devDependencies": {
+    "@rnx-kit/eslint-config": "*",
     "@rnx-kit/scripts": "*",
     "@types/babel__core": "^7.0.0",
     "@types/babel__helper-plugin-utils": "^7.0.0",
@@ -53,9 +54,6 @@
     "metro-config": "^0.76.5",
     "prettier": "^3.0.0",
     "typescript": "^5.0.0"
-  },
-  "eslintConfig": {
-    "extends": "@rnx-kit/eslint-config"
   },
   "jest": {
     "preset": "@rnx-kit/scripts"
