@@ -115,6 +115,50 @@ function resolveUniqueModule(packageName, searchStartDir) {
 }
 
 /**
+ * Resolves modules that need to be unique.
+ * @param {string[]} modules
+ * @param {string} projectRoot
+ * @returns {Record<string, string>}
+ */
+function resolveUniqueModules(modules, projectRoot) {
+  /** @type Record<string, string> */
+  const extraModules = {};
+  for (const name of modules) {
+    const resolvedPath = resolveModule(name, projectRoot);
+    if (resolvedPath) {
+      extraModules[name] = resolvedPath;
+    }
+  }
+
+  // Additional modules that often cause issues in pnpm setups
+
+  /** @type {(prev: string | undefined, curr: string) => string | undefined} */
+  const chainedResolve = (prev, curr) =>
+    prev ? resolveModule(curr, prev) : undefined;
+
+  const metroDir = findMetroPath(projectRoot) || require.resolve("metro");
+  const babelRuntime =
+    // Starting with `metro` 0.71.0, `@babel/runtime` can be found through
+    // `metro` -> `metro-runtime`
+    ["metro-runtime", "@babel/runtime"].reduce(chainedResolve, metroDir) ||
+    // Prior to `metro` 0.71.0, we can find `@babel/runtime` by going through
+    // `metro-react-native-babel-preset`
+    //     -> `@babel/plugin-transform-regenerator`
+    //     -> `regenerator-transform`
+    [
+      "metro-react-native-babel-preset",
+      "@babel/plugin-transform-regenerator",
+      "regenerator-transform",
+      "@babel/runtime",
+    ].reduce(chainedResolve, projectRoot);
+  if (babelRuntime) {
+    extraModules["@babel/runtime"] = babelRuntime;
+  }
+
+  return extraModules;
+}
+
+/**
  * Returns a regex to exclude extra copies of specified package.
  *
  * Note that when using this function to exclude packages, you should also add
@@ -189,8 +233,6 @@ function exclusionList(additionalExclusions = [], projectRoot = process.cwd()) {
 }
 
 module.exports = {
-  UNIQUE_PACKAGES,
-
   defaultWatchFolders,
   excludeExtraCopiesOf,
   exclusionList,
@@ -253,13 +295,7 @@ module.exports = {
              * duplicated.
              * @see exclusionList for further information.
              */
-            ...UNIQUE_PACKAGES.reduce((extraModules, name) => {
-              const resolvedPath = resolveModule(name, projectRoot);
-              if (resolvedPath) {
-                extraModules[name] = resolvedPath;
-              }
-              return extraModules;
-            }, /** @type Record<string, string> */ ({})),
+            ...resolveUniqueModules(UNIQUE_PACKAGES, projectRoot),
             ...(customConfig.resolver
               ? customConfig.resolver.extraNodeModules
               : {}),
