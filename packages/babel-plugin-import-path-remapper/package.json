@@ -26,6 +26,7 @@
   },
   "devDependencies": {
     "@rnx-kit/eslint-config": "*",
+    "@rnx-kit/jest-preset": "*",
     "@rnx-kit/scripts": "*",
     "@types/babel__core": "^7.0.0",
     "@types/babel__helper-plugin-utils": "^7.0.0",
@@ -37,7 +38,7 @@
     "typescript": "^5.0.0"
   },
   "jest": {
-    "preset": "@rnx-kit/scripts",
+    "preset": "@rnx-kit/jest-preset/private",
     "testRegex": "/test/.*\\.test\\.js$"
   }
 }

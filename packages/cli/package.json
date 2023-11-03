@@ -64,6 +64,7 @@
     "@react-native-community/cli-clean": "^11.0.0",
     "@react-native-community/cli-types": "^11.0.0",
     "@rnx-kit/eslint-config": "*",
+    "@rnx-kit/jest-preset": "*",
     "@rnx-kit/scripts": "*",
     "@types/connect": "^3.4.36",
     "@types/fs-extra": "^9.0.0",
@@ -86,6 +87,6 @@
     ]
   },
   "jest": {
-    "preset": "@rnx-kit/scripts"
+    "preset": "@rnx-kit/jest-preset/private"
   }
 }

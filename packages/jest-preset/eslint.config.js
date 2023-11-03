@@ -1,8 +1,32 @@
+const js = require("@eslint/js");
+
+// We keep a separate ESLint config to avoid circular dependency
 module.exports = [
-  ...require("@rnx-kit/eslint-config"),
+  js.configs.recommended,
   {
+    languageOptions: {
+      ecmaVersion: "latest",
+      sourceType: "module",
+      globals: {
+        console: "readonly",
+        module: "readonly",
+        process: "readonly",
+        require: "readonly",
+      },
+    },
     rules: {
-      "@typescript-eslint/ban-ts-comment": "off",
+      "no-restricted-exports": [
+        "error",
+        {
+          restrictDefaultExports: {
+            direct: true,
+            named: true,
+            defaultFrom: true,
+            namedFrom: true,
+            namespaceFrom: true,
+          },
+        },
+      ],
     },
   },
 ];

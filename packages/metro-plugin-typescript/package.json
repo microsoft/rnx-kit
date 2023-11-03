@@ -38,6 +38,7 @@
   },
   "devDependencies": {
     "@rnx-kit/eslint-config": "*",
+    "@rnx-kit/jest-preset": "*",
     "@rnx-kit/scripts": "*",
     "@types/node": "^18.0.0",
     "@types/semver": "^7.0.0",
@@ -47,6 +48,6 @@
     "prettier": "^3.0.0"
   },
   "jest": {
-    "preset": "@rnx-kit/scripts"
+    "preset": "@rnx-kit/jest-preset/private"
   }
 }

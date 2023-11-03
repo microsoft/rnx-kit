@@ -41,8 +41,9 @@
     "react-native": ">=0.59"
   },
   "devDependencies": {
-    "@babel/core": "^7.0.0",
+    "@babel/core": "^7.20.0",
     "@rnx-kit/eslint-config": "*",
+    "@rnx-kit/jest-preset": "*",
     "@rnx-kit/scripts": "*",
     "@types/jest": "^29.2.1",
     "@types/node": "^18.0.0",
@@ -57,6 +58,6 @@
     ]
   },
   "jest": {
-    "preset": "@rnx-kit/scripts"
+    "preset": "@rnx-kit/jest-preset/private"
   }
 }

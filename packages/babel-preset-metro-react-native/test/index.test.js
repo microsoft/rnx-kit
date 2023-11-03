@@ -3,9 +3,11 @@
 
 describe("@rnx-kit/babel-preset-metro-react-native", () => {
   const babel = require("@babel/core");
-  const path = require("path");
+  const path = require("node:path");
   const prettier = require("prettier");
   const preset = require("../src/index");
+
+  const thisBabelPreset = path.resolve(__dirname, "..");
 
   const optionsWithAdditionalPlugins = {
     additionalPlugins: [
@@ -101,12 +103,7 @@ describe("@rnx-kit/babel-preset-metro-react-native", () => {
 
     const code = await transform(app, {
       cwd,
-      presets: [
-        [
-          "@rnx-kit/babel-preset-metro-react-native",
-          { disableImportExportTransform: true },
-        ],
-      ],
+      presets: [[thisBabelPreset, { disableImportExportTransform: true }]],
     });
 
     if (!code) {
@@ -122,7 +119,7 @@ describe("@rnx-kit/babel-preset-metro-react-native", () => {
 
     const code = await transform(app, {
       cwd,
-      presets: ["@rnx-kit/babel-preset-metro-react-native"],
+      presets: [thisBabelPreset],
     });
 
     if (!code) {
@@ -140,7 +137,7 @@ describe("@rnx-kit/babel-preset-metro-react-native", () => {
       cwd,
       presets: [
         [
-          "@rnx-kit/babel-preset-metro-react-native",
+          thisBabelPreset,
           {
             additionalPlugins: [
               [
@@ -167,7 +164,7 @@ describe("@rnx-kit/babel-preset-metro-react-native", () => {
     const customPreset = () => ({
       presets: [
         [
-          "@rnx-kit/babel-preset-metro-react-native",
+          thisBabelPreset,
           {
             additionalPlugins: [
               [
@@ -200,7 +197,7 @@ describe("@rnx-kit/babel-preset-metro-react-native", () => {
       cwd,
       presets: [
         [
-          "@rnx-kit/babel-preset-metro-react-native",
+          thisBabelPreset,
           {
             disableImportExportTransform: true,
             looseClassTransform: true,
