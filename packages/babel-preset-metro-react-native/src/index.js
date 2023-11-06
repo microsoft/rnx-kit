@@ -64,17 +64,17 @@ function loadPreset(projectRoot = process.cwd()) {
       : require.resolve("metro-react-native-babel-preset", options);
 
   const { getPreset } = require(babelPreset);
-  return getPreset;
+  return [getPreset, babelPreset];
 }
 
 /**
  * Returns additional options for `metro-react-native-babel-preset`.
  * @param {string | undefined} transformProfile
+ * @param {string | undefined} env
  * @returns {MetroPresetOptions | undefined}
  */
-function overridesFor(transformProfile) {
+function overridesFor(transformProfile, env) {
   // Use the `esbuild` transform profile if the serializer is being used.
-  const env = process.env.BABEL_ENV || process.env.NODE_ENV;
   if (
     !transformProfile &&
     env === "production" &&
@@ -145,11 +145,12 @@ module.exports = (
   } = {}
 ) => {
   const env = process.env.BABEL_ENV || process.env.NODE_ENV;
-  const metroPreset = loadPreset()(null, {
+  const [getPreset, babelPreset] = loadPreset();
+  const metroPreset = getPreset(null, {
     ...(options.withDevTools == null
       ? { dev: env !== "production" }
       : undefined),
-    ...overridesFor(unstable_transformProfile),
+    ...overridesFor(unstable_transformProfile, env),
     ...options,
   });
   const overrides = metroPreset.overrides;
@@ -163,8 +164,11 @@ module.exports = (
   });
 
   if (looseClassTransform) {
+    const pluginClasses = require.resolve("@babel/plugin-transform-classes", {
+      paths: [babelPreset],
+    });
     overrides.push({
-      plugins: [["@babel/plugin-transform-classes", { loose: true }]],
+      plugins: [[pluginClasses, { loose: true }]],
     });
   }
 
