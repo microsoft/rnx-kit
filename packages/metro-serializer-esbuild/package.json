@@ -34,6 +34,7 @@
     "@babel/preset-env": "^7.20.0",
     "@fluentui/utilities": "8.13.9",
     "@react-native-community/cli-types": "^11.0.0",
+    "@rnx-kit/babel-plugin-import-path-remapper": "*",
     "@rnx-kit/babel-preset-metro-react-native": "*",
     "@rnx-kit/eslint-config": "*",
     "@rnx-kit/jest-preset": "*",
@@ -41,6 +42,7 @@
     "@rnx-kit/metro-serializer": "*",
     "@rnx-kit/metro-service": "*",
     "@rnx-kit/scripts": "*",
+    "@types/jest": "^29.2.1",
     "@types/node": "^18.0.0",
     "@types/semver": "^7.0.0",
     "eslint": "^8.0.0",
@@ -59,8 +61,5 @@
     "ignoreMatches": [
       "@babel/preset-env"
     ]
-  },
-  "jest": {
-    "preset": "@rnx-kit/jest-preset/private"
   }
 }

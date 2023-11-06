@@ -23,6 +23,8 @@ describe("metro-serializer-esbuild", () => {
 
   const consoleWarnSpy = jest.spyOn(global.console, "warn");
 
+  const root = path.dirname(__dirname);
+
   async function bundle(
     entryFile: string,
     dev = false,
@@ -43,7 +45,7 @@ describe("metro-serializer-esbuild", () => {
         verbose: false,
       },
       {
-        root: path.dirname(__dirname),
+        root,
         reactNativePath: path.dirname(
           require.resolve("react-native/package.json")
         ),
@@ -189,6 +191,7 @@ describe("metro-serializer-esbuild", () => {
   });
 
   test("tree-shakes lodash-es", async () => {
+    const _head = require.resolve("lodash-es/head.js", { paths: ["."] });
     const result = await bundle("test/__fixtures__/lodash-es.ts");
     expect(result).toEqual([
       '"use strict";',
@@ -199,7 +202,7 @@ describe("metro-serializer-esbuild", () => {
       '    Symbol.asyncIterator = Symbol.for("Symbol.asyncIterator");',
       "  }",
       "",
-      "  // ../../node_modules/lodash-es/head.js",
+      `  // ${path.relative(root, _head).replace(/[\\]/g, "/")}`,
       "  function head(array) {",
       "    return array && array.length ? array[0] : void 0;",
       "  }",
@@ -213,6 +216,20 @@ describe("metro-serializer-esbuild", () => {
   });
 
   test("handles `sideEffects` array", async () => {
+    const importResolve = (spec: string, parent = ".") => {
+      const m = require.resolve(spec, { paths: [parent] });
+      return path
+        .relative(root, m)
+        .replace(/[\\]/g, "/")
+        .replace("/lib-commonjs/", "/lib/");
+    };
+
+    const fluentUtils = importResolve("@fluentui/utilities");
+    const fluentSetVersion = importResolve(
+      "@fluentui/set-version",
+      path.join(root, fluentUtils)
+    );
+
     const result = await bundle("test/__fixtures__/sideEffectsArray.ts");
     expect(result).toEqual([
       '"use strict";',
@@ -236,13 +253,13 @@ describe("metro-serializer-esbuild", () => {
       "  // test/__fixtures__/sideEffectsArray.ts",
       "  init_rnx_prelude();",
       "",
-      "  // ../../node_modules/@fluentui/utilities/lib/index.js",
+      `  // ${fluentUtils}`,
       "  init_rnx_prelude();",
       "",
-      "  // ../../node_modules/@fluentui/set-version/lib/index.js",
+      `  // ${fluentSetVersion}`,
       "  init_rnx_prelude();",
       "",
-      "  // ../../node_modules/@fluentui/set-version/lib/setVersion.js",
+      `  // ${fluentSetVersion.replace("index.js", "setVersion.js")}`,
       "  init_rnx_prelude();",
       "  var packagesCache = {};",
       "  var _win = void 0;",
@@ -261,10 +278,10 @@ describe("metro-serializer-esbuild", () => {
       "    }",
       "  }",
       "",
-      "  // ../../node_modules/@fluentui/set-version/lib/index.js",
+      `  // ${fluentSetVersion}`,
       '  setVersion("@fluentui/set-version", "6.0.0");',
       "",
-      "  // ../../node_modules/@fluentui/utilities/lib/warn/warn.js",
+      `  // ${fluentUtils.replace("index.js", "warn/warn.js")}`,
       "  init_rnx_prelude();",
       "  var _warningCallback = void 0;",
       "  function warn(message) {",
@@ -275,10 +292,10 @@ describe("metro-serializer-esbuild", () => {
       "    }",
       "  }",
       "",
-      "  // ../../node_modules/@fluentui/utilities/lib/warn.js",
+      `  // ${fluentUtils.replace("index.js", "warn.js")}`,
       "  init_rnx_prelude();",
       "",
-      "  // ../../node_modules/@fluentui/utilities/lib/version.js",
+      `  // ${fluentUtils.replace("index.js", "version.js")}`,
       "  init_rnx_prelude();",
       '  setVersion("@fluentui/utilities", "8.13.9");',
       "",
