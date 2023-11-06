@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-'use strict';
+"use strict";
 // Keep this file in sync with lighthouse
 // TODO: have LH depend on this one.
 
@@ -16,8 +16,8 @@
  *     edge-debug --enable-extensions
  */
 
-require('./compiled-check.js')('./dist/chromium-edge-launcher.js');
-const {Launcher, launch} = require('./dist/chromium-edge-launcher');
+require("./compiled-check.js")("./dist/chromium-edge-launcher.js");
+const { Launcher, launch } = require("./dist/chromium-edge-launcher");
 
 const args = process.argv.slice(2);
 const edgeFlags = [];
@@ -26,20 +26,26 @@ let port;
 let ignoreDefaultFlags;
 
 if (args.length) {
-  const providedFlags = args.filter(flag => flag.startsWith('--'));
+  const providedFlags = args.filter((flag) => flag.startsWith("--"));
 
-  const portFlag = providedFlags.find(flag => flag.startsWith('--port='));
-  if (portFlag) port = parseInt(portFlag.replace('--port=', ''), 10);
+  const portFlag = providedFlags.find((flag) => flag.startsWith("--port="));
+  if (portFlag) port = parseInt(portFlag.replace("--port=", ""), 10);
 
-  const enableExtensions = !!providedFlags.find(flag => flag === '--enable-extensions');
+  const enableExtensions = !!providedFlags.find(
+    (flag) => flag === "--enable-extensions"
+  );
   // The basic pattern for enabling Edge extensions
   if (enableExtensions) {
     ignoreDefaultFlags = true;
-    edgeFlags.push(...Launcher.defaultFlags().filter(flag => flag !== '--disable-extensions'));
+    edgeFlags.push(
+      ...Launcher.defaultFlags().filter(
+        (flag) => flag !== "--disable-extensions"
+      )
+    );
   }
 
   edgeFlags.push(...providedFlags);
-  startingUrl = args.find(flag => !flag.startsWith('--'));
+  startingUrl = args.find((flag) => !flag.startsWith("--"));
 }
 
 launch({
@@ -48,5 +54,5 @@ launch({
   ignoreDefaultFlags,
   edgeFlags,
 })
-// eslint-disable-next-line no-console
-.then(v => console.log(`✨  Edge debugging port: ${v.port}`));
+  // eslint-disable-next-line no-console
+  .then((v) => console.log(`✨  Edge debugging port: ${v.port}`));
