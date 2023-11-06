@@ -7,7 +7,7 @@ describe("@rnx-kit/babel-preset-metro-react-native", () => {
   const prettier = require("prettier");
   const preset = require("../src/index");
 
-  const thisBabelPreset = path.resolve(__dirname, "..");
+  const thisBabelPreset = path.dirname(__dirname);
 
   const optionsWithAdditionalPlugins = {
     additionalPlugins: [
