@@ -13,6 +13,7 @@ fs.__setMockFileWriter = (writer) => {
 
 fs.lstatSync = (...args) => actualFs.lstatSync(...args);
 fs.readFileSync = (...args) => data || actualFs.readFileSync(...args);
+fs.readlinkSync = (...args) => actualFs.readlinkSync(...args);
 fs.statSync = actualFs.statSync; // used by cosmiconfig
 fs.writeFileSync = undefined;
 
