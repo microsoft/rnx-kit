@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-config
 
+## 1.3.13
+
+### Patch Changes
+
+- 986d3a73: Help Metro resolve `@babel/runtime` in pnpm setups
+
 ## 1.3.12
 
 ### Patch Changes
