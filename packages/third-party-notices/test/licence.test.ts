@@ -4,15 +4,17 @@ import { createLicenseFileContents } from "../src/output/text";
 import type { License } from "../src/types";
 import { extractLicenses } from "../src/write-third-party-notices";
 
+const rnxConsoleDir = path.dirname(
+  require.resolve("@rnx-kit/console/package.json")
+);
+const yargsDir = path.dirname(require.resolve("yargs/package.json"));
+
 async function getSampleLicenseData(): Promise<License[]> {
   const map = new Map([
     // License data in package.json
-    [
-      "@rnx-kit/console",
-      path.dirname(require.resolve("@rnx-kit/console/package.json")),
-    ],
+    ["@rnx-kit/console", rnxConsoleDir],
     // License data package.json and LICENCE file
-    ["yargs", path.dirname(require.resolve("yargs/package.json"))],
+    ["yargs", yargsDir],
   ]);
 
   const licenses = await extractLicenses(map);
@@ -38,15 +40,31 @@ describe("license", () => {
   test("extractLicenses", async () => {
     const licenses = await getSampleLicenseData();
 
-    // normalize the paths for stable and cross platform snapshots
-    for (const license of licenses) {
-      license.path = license.path
-        .replace(path.resolve(__dirname, "../../.."), "~")
-        .replace(/[/\\]/g, "/")
-        .replace(/\.store\/[^/]*\/node_modules\//g, ".store/~/");
-    }
-
-    expect(licenses).toMatchSnapshot();
+    expect(licenses).toEqual([
+      {
+        license: "MIT",
+        licenseURLs: ["https://spdx.org/licenses/MIT.html"],
+        name: "@rnx-kit/console",
+        path: rnxConsoleDir,
+        version: "1.2.3-fixedVersionForTesting",
+      },
+      {
+        license: "MIT",
+        licenseFile: "LICENSE",
+        licenseText: expect.stringMatching(/^MIT License/),
+        licenseURLs: ["https://spdx.org/licenses/MIT.html"],
+        name: "yargs",
+        path: yargsDir,
+        version: "1.2.3-fixedVersionForTesting",
+      },
+      {
+        license: "Unlicensed",
+        licenseURLs: [],
+        name: "private-package",
+        path: ".",
+        version: "1.0.0",
+      },
+    ]);
   });
 
   test("createLicenseFileContents", async () => {
@@ -74,6 +92,28 @@ describe("license", () => {
 
     const licenseText = createLicenseJSON(licenses);
 
-    expect(JSON.parse(licenseText)).toMatchSnapshot();
+    expect(JSON.parse(licenseText)).toEqual({
+      packages: [
+        {
+          copyright: "No copyright notice",
+          license: "MIT",
+          name: "@rnx-kit/console",
+          version: "1.2.3-fixedVersionForTesting",
+        },
+        {
+          copyright:
+            "Copyright 2010 James Halliday (mail@substack.net); Modified work Copyright 2014 Contributors (ben@npmjs.com)",
+          license: "MIT",
+          name: "yargs",
+          version: "1.2.3-fixedVersionForTesting",
+        },
+        {
+          copyright: "No copyright notice",
+          license: "Unlicensed",
+          name: "private-package",
+          version: "1.0.0",
+        },
+      ],
+    });
   });
 });
