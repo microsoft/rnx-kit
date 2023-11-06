@@ -3508,7 +3508,7 @@ __metadata:
     "@rnx-kit/jest-preset": "*"
     "@rnx-kit/scripts": "*"
     "@types/mkdirp": ^1.0.1
-    "@types/node": "*"
+    "@types/node": ^18.0.0
     "@types/rimraf": ^3.0.0
     "@types/sinon": ^9.0.1
     escape-string-regexp: ^4.0.0
