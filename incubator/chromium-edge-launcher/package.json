@@ -29,7 +29,7 @@
     "test": "rnx-kit-scripts test"
   },
   "dependencies": {
-    "@types/node": "*",
+    "@types/node": "^18.0.0",
     "escape-string-regexp": "^4.0.0",
     "is-wsl": "^2.2.0",
     "lighthouse-logger": "^1.0.0",
