@@ -31,6 +31,7 @@
     "@rnx-kit/eslint-config": "*",
     "@rnx-kit/jest-preset": "*",
     "@rnx-kit/scripts": "*",
+    "@types/jest": "^29.2.1",
     "@types/node": "^18.0.0",
     "eslint": "^8.0.0",
     "find-up": "^5.0.0",
@@ -38,8 +39,5 @@
     "metro-resolver": "^0.76.5",
     "prettier": "^3.0.0",
     "typescript": "^5.0.0"
-  },
-  "jest": {
-    "preset": "@rnx-kit/jest-preset/private"
   }
 }
