@@ -42,7 +42,8 @@ describe("license", () => {
     for (const license of licenses) {
       license.path = license.path
         .replace(path.resolve(__dirname, "../../.."), "~")
-        .replace(/[/\\]/g, "/");
+        .replace(/[/\\]/g, "/")
+        .replace(/\.store\/[^/]*\/node_modules\//g, ".store/~/");
     }
 
     expect(licenses).toMatchSnapshot();

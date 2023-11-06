@@ -33,6 +33,7 @@
   },
   "devDependencies": {
     "@rnx-kit/eslint-config": "*",
+    "@rnx-kit/jest-preset": "*",
     "@rnx-kit/scripts": "*",
     "@types/node": "^18.0.0",
     "eslint": "^8.0.0",
@@ -44,7 +45,7 @@
     "node": ">=14.18"
   },
   "jest": {
-    "preset": "@rnx-kit/scripts",
+    "preset": "@rnx-kit/jest-preset/private",
     "resolver": "@rnx-kit/jest-preset/typescript-esm-resolver.cjs"
   },
   "experimental": true

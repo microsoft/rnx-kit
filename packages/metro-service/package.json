@@ -51,6 +51,7 @@
     "@react-native-community/cli-types": "^11.0.0",
     "@react-native/assets-registry": "^0.73.0",
     "@rnx-kit/eslint-config": "*",
+    "@rnx-kit/jest-preset": "*",
     "@rnx-kit/scripts": "*",
     "@types/node": "^18.0.0",
     "@types/node-fetch": "^2.6.5",
@@ -67,6 +68,6 @@
     "typescript": "^5.0.0"
   },
   "jest": {
-    "preset": "@rnx-kit/scripts"
+    "preset": "@rnx-kit/jest-preset/private"
   }
 }

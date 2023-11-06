@@ -32,6 +32,7 @@
   },
   "devDependencies": {
     "@rnx-kit/eslint-config": "*",
+    "@rnx-kit/jest-preset": "*",
     "@rnx-kit/metro-serializer": "*",
     "@rnx-kit/scripts": "*",
     "@types/jest": "^29.2.1",
@@ -44,6 +45,6 @@
     "typescript": "^5.0.0"
   },
   "jest": {
-    "preset": "@rnx-kit/scripts"
+    "preset": "@rnx-kit/jest-preset/private"
   }
 }

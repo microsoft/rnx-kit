@@ -37,6 +37,7 @@
   },
   "devDependencies": {
     "@rnx-kit/eslint-config": "*",
+    "@rnx-kit/jest-preset": "*",
     "@rnx-kit/metro-plugin-cyclic-dependencies-detector": "*",
     "@rnx-kit/metro-plugin-duplicates-checker": "*",
     "@rnx-kit/metro-serializer-esbuild": "*",
@@ -51,7 +52,7 @@
     "typescript": "^5.0.0"
   },
   "jest": {
-    "preset": "@rnx-kit/scripts",
+    "preset": "@rnx-kit/jest-preset/private",
     "moduleDirectories": [
       "node_modules",
       "test/__fixtures__/node_modules"

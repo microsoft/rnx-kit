@@ -30,12 +30,13 @@
     "semver": "^7.0.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.1.6",
-    "@babel/preset-env": "^7.1.6",
+    "@babel/core": "^7.20.0",
+    "@babel/preset-env": "^7.20.0",
     "@fluentui/utilities": "8.13.9",
     "@react-native-community/cli-types": "^11.0.0",
     "@rnx-kit/babel-preset-metro-react-native": "*",
     "@rnx-kit/eslint-config": "*",
+    "@rnx-kit/jest-preset": "*",
     "@rnx-kit/metro-config": "*",
     "@rnx-kit/metro-serializer": "*",
     "@rnx-kit/metro-service": "*",
@@ -60,6 +61,6 @@
     ]
   },
   "jest": {
-    "preset": "@rnx-kit/scripts"
+    "preset": "@rnx-kit/jest-preset/private"
   }
 }

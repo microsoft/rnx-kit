@@ -31,6 +31,7 @@
     "@rnx-kit/config": "*",
     "@rnx-kit/console": "*",
     "@rnx-kit/eslint-config": "*",
+    "@rnx-kit/jest-preset": "*",
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tools-language": "*",
     "@rnx-kit/tools-node": "*",
@@ -55,6 +56,6 @@
     "node": ">=12.13"
   },
   "jest": {
-    "preset": "@rnx-kit/scripts"
+    "preset": "@rnx-kit/jest-preset/private"
   }
 }

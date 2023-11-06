@@ -36,13 +36,14 @@
   "devDependencies": {
     "@rnx-kit/build": "*",
     "@rnx-kit/eslint-config": "*",
+    "@rnx-kit/jest-preset": "*",
     "@rnx-kit/scripts": "*",
     "eslint": "^8.0.0",
     "prettier": "^3.0.0",
     "typescript": "^5.0.0"
   },
   "jest": {
-    "preset": "@rnx-kit/scripts"
+    "preset": "@rnx-kit/jest-preset/private"
   },
   "experimental": true
 }

@@ -159,8 +159,11 @@ describe("jest-preset", () => {
             "babel-jest",
             {
               presets: [
-                ["@babel/preset-env", { targets: { node: "current" } }],
-                "@babel/preset-typescript",
+                [
+                  expect.stringMatching(/[/\\]@babel[/\\]preset-env/),
+                  { targets: { node: "current" } },
+                ],
+                expect.stringMatching(/[/\\]@babel[/\\]preset-typescript/),
               ],
             },
           ],

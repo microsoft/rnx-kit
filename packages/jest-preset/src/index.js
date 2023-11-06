@@ -10,6 +10,24 @@ const path = require("path");
  */
 
 /**
+ * Resolve the path to a dependency given a chain of dependencies leading up to
+ * it.
+ *
+ * Note: This is a copy of the function in `@rnx-kit/tools-node` to avoid
+ * circular dependency.
+ *
+ * @param {string[]} chain Chain of dependencies leading up to the target dependency.
+ * @param {string=} startDir Optional starting directory for the search. If not given, the current directory is used.
+ * @returns Path to the final dependency's directory.
+ */
+function resolveDependencyChain(chain, startDir = process.cwd()) {
+  return chain.reduce((startDir, module) => {
+    const p = require.resolve(`${module}/package.json`, { paths: [startDir] });
+    return path.dirname(p);
+  }, startDir);
+}
+
+/**
  * Returns the current package directory.
  * @returns {string | undefined}
  */
@@ -77,8 +95,6 @@ function getTargetPlatform(defaultPlatform) {
     return getReactNativePlatformPath();
   }
 
-  const { resolveDependencyChain } = require("@rnx-kit/tools-node/package");
-
   /** @type {() => CLIConfig} */
   const loadConfig = (() => {
     const rnCliPath = resolveDependencyChain([
@@ -122,8 +138,11 @@ function babelPresets(targetPlatform) {
   return targetPlatform
     ? ["module:metro-react-native-babel-preset"]
     : [
-        ["@babel/preset-env", { targets: { node: "current" } }],
-        "@babel/preset-typescript",
+        [
+          require.resolve("@babel/preset-env"),
+          { targets: { node: "current" } },
+        ],
+        require.resolve("@babel/preset-typescript"),
       ];
 }
 

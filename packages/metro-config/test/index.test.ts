@@ -239,7 +239,9 @@ describe("makeMetroConfig", () => {
   });
 
   test("returns a default Metro config", async () => {
-    const config = makeMetroConfig();
+    const projectRoot = path.resolve("../test-app");
+    const config = makeMetroConfig({ projectRoot });
+
     expect(Object.keys(config).sort()).toEqual([
       "cacheStores",
       "cacheVersion",
@@ -283,7 +285,7 @@ describe("makeMetroConfig", () => {
       "@babel/runtime",
     ]);
 
-    const blockList = exclusionList().source;
+    const blockList = exclusionList([], projectRoot).source;
     expect(config.resolver.blacklistRE.source).toBe(blockList);
     expect(config.resolver.blockList.source).toBe(blockList);
 

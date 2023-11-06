@@ -9,9 +9,9 @@ import * as os from "node:os";
 import * as path from "node:path";
 import { require } from "./require.mjs";
 
-function findWorkspaceRoot() {
+function findWorkspaceRoot(options = { paths: [process.cwd()] }) {
   const scriptsDir = path.dirname(
-    require.resolve("@rnx-kit/scripts/package.json")
+    require.resolve("@rnx-kit/scripts/package.json", options)
   );
   return path.dirname(scriptsDir);
 }

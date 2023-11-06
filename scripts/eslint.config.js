@@ -1,5 +1,6 @@
 const js = require("@eslint/js");
 
+// We keep a separate ESLint config to avoid circular dependency
 module.exports = [
   js.configs.recommended,
   {
