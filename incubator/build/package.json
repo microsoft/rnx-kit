@@ -68,12 +68,5 @@
   "engines": {
     "node": ">=18.12"
   },
-  "jest": {
-    "preset": "@rnx-kit/jest-preset/private",
-    "resolver": "@rnx-kit/jest-preset/typescript-esm-resolver.cjs",
-    "transformIgnorePatterns": [
-      "/node_modules/(?!(find-up|locate-path|p-limit|p-locate|path-exists|yocto-queue)/)"
-    ]
-  },
   "experimental": true
 }
