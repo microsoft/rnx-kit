@@ -8,9 +8,13 @@ import {
 } from "../src/checkForDuplicatePackages";
 import {
   bundleGraph,
+  bundleGraphFS,
   bundleGraphWithDuplicates,
+  bundleGraphWithDuplicatesFS,
   bundleSourceMap,
+  bundleSourceMapFS,
   bundleSourceMapWithDuplicates,
+  bundleSourceMapWithDuplicatesFS,
   repoRoot,
 } from "./testData";
 
@@ -163,6 +167,8 @@ describe("detectDuplicatePackages()", () => {
 });
 
 describe("checkForDuplicateDependencies()", () => {
+  const fs = require("fs");
+
   const consoleErrorSpy = jest.spyOn(global.console, "error");
   const consoleWarnSpy = jest.spyOn(global.console, "warn");
 
@@ -172,16 +178,21 @@ describe("checkForDuplicateDependencies()", () => {
   });
 
   afterAll(() => {
+    fs.__setMockFiles();
     jest.clearAllMocks();
   });
 
   test("checkForDuplicateDependencies", () => {
+    fs.__setMockFiles(bundleGraphFS);
+
     expect(checkForDuplicateDependencies(bundleGraph)).toEqual({
       banned: 0,
       duplicates: 0,
     });
     expect(consoleErrorSpy).not.toHaveBeenCalled();
     expect(consoleWarnSpy).not.toHaveBeenCalled();
+
+    fs.__setMockFiles(bundleGraphWithDuplicatesFS);
 
     expect(checkForDuplicateDependencies(bundleGraphWithDuplicates)).toEqual({
       banned: 0,
@@ -193,11 +204,20 @@ describe("checkForDuplicateDependencies()", () => {
 });
 
 describe("checkForDuplicatePackages()", () => {
+  const fs = require("fs");
+
+  afterAll(() => fs.__setMockFiles());
+
   test("checkForDuplicatePackages", () => {
+    fs.__setMockFiles(bundleSourceMapFS);
+
     expect(checkForDuplicatePackages(bundleSourceMap)).toEqual({
       banned: 0,
       duplicates: 0,
     });
+
+    fs.__setMockFiles(bundleSourceMapWithDuplicatesFS);
+
     expect(checkForDuplicatePackages(bundleSourceMapWithDuplicates)).toEqual({
       banned: 0,
       duplicates: 1,

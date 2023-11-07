@@ -2,35 +2,54 @@
 
 import type { Graph, Module } from "@rnx-kit/metro-serializer";
 import type { BasicSourceMap } from "metro-source-map";
-import path from "path";
+import * as path from "node:path";
 
 const mockModule = {} as Module;
 
-const pkgDir = jest.requireActual("pkg-dir");
-export const repoRoot = pkgDir.sync(path.resolve(__dirname, "..", ".."));
+export const repoRoot = path.resolve(__dirname, "..", "..", "..");
+
+function makeManifest(name, version = "0.0.0") {
+  return JSON.stringify({ name, version });
+}
 
 export const bundleGraph: Graph = {
   dependencies: new Map<string, Module>([
     [`${repoRoot}/packages/test-app/lib/src/index.js`, mockModule],
     [`${repoRoot}/node_modules/react-native/index.js`, mockModule],
-    [`${repoRoot}/node_modules/fbjs/lib/warning.js`, mockModule],
   ]),
   importBundleNames: new Set<string>(),
   entryPoints: [],
 };
 
+export const bundleGraphFS: Record<string, string> = {
+  [`${repoRoot}/packages/test-app/package.json`]:
+    makeManifest("@rnx-kit/test-app"),
+  [`${repoRoot}/node_modules/react-native/package.json`]:
+    makeManifest("react-native"),
+};
+
 export const bundleGraphWithDuplicates: Graph = {
   dependencies: new Map<string, Module>([
-    [`${repoRoot}/packages/test-app/lib/src/index.js`, mockModule],
     [
       `${repoRoot}/node_modules/@rnx-kit/build/node_modules/chalk/source/index.js`,
       mockModule,
     ],
     [`${repoRoot}/node_modules/chalk/source/index.js`, mockModule],
     [`${repoRoot}/node_modules/react-native/index.js`, mockModule],
+    [`${repoRoot}/packages/test-app/lib/src/index.js`, mockModule],
   ]),
   importBundleNames: new Set<string>(),
   entryPoints: [],
+};
+
+export const bundleGraphWithDuplicatesFS: Record<string, string> = {
+  [`${repoRoot}/node_modules//@rnx-kit/build/node_modules/chalk/package.json`]:
+    makeManifest("chalk"),
+  [`${repoRoot}/node_modules/chalk/package.json`]: makeManifest("chalk"),
+  [`${repoRoot}/node_modules/react-native/package.json`]:
+    makeManifest("react-native"),
+  [`${repoRoot}/packages/test-app/package.json`]:
+    makeManifest("@rnx-kit/test-app"),
 };
 
 export const bundleSourceMap: BasicSourceMap = {
@@ -45,8 +64,6 @@ export const bundleSourceMap: BasicSourceMap = {
     `${repoRoot}/node_modules/react-native/index.js`,
     `${repoRoot}/node_modules/invariant/browser.js`,
     `${repoRoot}/node_modules/react-native/Libraries/Utilities/warnOnce.js`,
-    `${repoRoot}/node_modules/fbjs/lib/warning.js`,
-    `${repoRoot}/node_modules/fbjs/lib/emptyFunction.js`,
     `${repoRoot}/node_modules/react-native/Libraries/Components/AccessibilityInfo/AccessibilityInfo.ios.js`,
     `${repoRoot}/node_modules/@babel/runtime/helpers/interopRequireDefault.js`,
     `${repoRoot}/node_modules/react-native/Libraries/Components/AccessibilityInfo/NativeAccessibilityManager.js`,
@@ -176,9 +193,6 @@ export const bundleSourceMap: BasicSourceMap = {
     `${repoRoot}/node_modules/react-native/Libraries/Core/setUpTimers.js`,
     `${repoRoot}/node_modules/react-native/Libraries/Core/Timers/JSTimers.js`,
     `${repoRoot}/node_modules/react-native/Libraries/Core/Timers/NativeTiming.js`,
-    `${repoRoot}/node_modules/fbjs/lib/performanceNow.js`,
-    `${repoRoot}/node_modules/fbjs/lib/performance.js`,
-    `${repoRoot}/node_modules/fbjs/lib/ExecutionEnvironment.js`,
     `${repoRoot}/node_modules/react-native/Libraries/Core/setUpXHR.js`,
     `${repoRoot}/node_modules/react-native/Libraries/Network/XMLHttpRequest.js`,
     `${repoRoot}/node_modules/react-native/Libraries/Blob/BlobManager.js`,
@@ -224,7 +238,6 @@ export const bundleSourceMap: BasicSourceMap = {
     `${repoRoot}/node_modules/react-native/Libraries/Utilities/DevSettings.js`,
     `${repoRoot}/node_modules/react-native/Libraries/NativeModules/specs/NativeDevSettings.js`,
     `${repoRoot}/node_modules/metro/src/lib/bundle-modules/HMRClient.js`,
-    `${repoRoot}/node_modules/eventemitter3/index.js`,
     `${repoRoot}/node_modules/react-native/Libraries/Utilities/LoadingView.ios.js`,
     `${repoRoot}/node_modules/react-native/Libraries/Utilities/NativeDevLoadingView.js`,
     `${repoRoot}/node_modules/react-native/Libraries/Utilities/HMRClientProdShim.js`,
@@ -298,8 +311,6 @@ export const bundleSourceMap: BasicSourceMap = {
     `${repoRoot}/node_modules/react-native/Libraries/Components/AppleTV/NativeTVNavigationEventEmitter.js`,
     `${repoRoot}/node_modules/react-native/Libraries/Components/Sound/SoundManager.js`,
     `${repoRoot}/node_modules/react-native/Libraries/Components/Sound/NativeSoundManager.js`,
-    `${repoRoot}/node_modules/fbjs/lib/keyMirror.js`,
-    `${repoRoot}/node_modules/fbjs/lib/invariant.js`,
     `${repoRoot}/node_modules/nullthrows/nullthrows.js`,
     `${repoRoot}/node_modules/react-native/Libraries/Components/Touchable/TouchableNativeFeedback.js`,
     `${repoRoot}/node_modules/react-native/Libraries/Pressability/Pressability.js`,
@@ -504,9 +515,6 @@ export const bundleSourceMap: BasicSourceMap = {
     `${repoRoot}/node_modules/react-native/Libraries/Components/StatusBar/StatusBarIOS.js`,
     `${repoRoot}/node_modules/react-native/Libraries/Components/ToastAndroid/ToastAndroid.ios.js`,
     `${repoRoot}/node_modules/react-native/Libraries/Utilities/useColorScheme.js`,
-    `${repoRoot}/node_modules/use-subscription/index.js`,
-    `${repoRoot}/node_modules/use-subscription/cjs/use-subscription.production.min.js`,
-    `${repoRoot}/node_modules/use-subscription/cjs/use-subscription.development.js`,
     `${repoRoot}/node_modules/react-native/Libraries/Utilities/useWindowDimensions.js`,
     `${repoRoot}/node_modules/react-native/Libraries/Vibration/Vibration.js`,
     `${repoRoot}/node_modules/react-native/Libraries/Vibration/NativeVibration.js`,
@@ -529,6 +537,50 @@ export const bundleSourceMap: BasicSourceMap = {
   names: [],
 };
 
+export const bundleSourceMapFS: Record<string, string> = {
+  [`${repoRoot}/node_modules/@babel/runtime/package.json`]:
+    makeManifest("@babel/runtime"),
+  [`${repoRoot}/node_modules/abort-controller/package.json`]:
+    makeManifest("abort-controller"),
+  [`${repoRoot}/node_modules/anser/package.json`]: makeManifest("anser"),
+  [`${repoRoot}/node_modules/base64-js/package.json`]:
+    makeManifest("base64-js"),
+  [`${repoRoot}/node_modules/event-target-shim/package.json`]:
+    makeManifest("event-target-shim"),
+  [`${repoRoot}/node_modules/invariant/package.json`]:
+    makeManifest("invariant"),
+  [`${repoRoot}/node_modules/metro/package.json`]: makeManifest("metro"),
+  [`${repoRoot}/node_modules/nullthrows/package.json`]:
+    makeManifest("nullthrows"),
+  [`${repoRoot}/node_modules/object-assign/package.json`]:
+    makeManifest("object-assign"),
+  [`${repoRoot}/node_modules/promise/package.json`]: makeManifest("promise"),
+  [`${repoRoot}/node_modules/prop-types/package.json`]:
+    makeManifest("prop-types"),
+  [`${repoRoot}/node_modules/react-devtools-core/package.json`]: makeManifest(
+    "react-devtools-core"
+  ),
+  [`${repoRoot}/node_modules/react-is/package.json`]: makeManifest("react-is"),
+  [`${repoRoot}/node_modules/react-native/node_modules/pretty-format/package.json`]:
+    makeManifest("pretty-format"),
+  [`${repoRoot}/node_modules/react-native/package.json`]:
+    makeManifest("react-native"),
+  [`${repoRoot}/node_modules/react-refresh/package.json`]:
+    makeManifest("react-refresh"),
+  [`${repoRoot}/node_modules/react/package.json`]: makeManifest("react"),
+  [`${repoRoot}/node_modules/regenerator-runtime/package.json`]: makeManifest(
+    "regenerator-runtime"
+  ),
+  [`${repoRoot}/node_modules/scheduler/package.json`]:
+    makeManifest("scheduler"),
+  [`${repoRoot}/node_modules/stacktrace-parser/package.json`]:
+    makeManifest("stacktrace-parser"),
+  [`${repoRoot}/node_modules/whatwg-fetch/package.json`]:
+    makeManifest("whatwg-fetch"),
+  [`${repoRoot}/packages/test-app/package.json`]:
+    makeManifest("@rnx-kit/test-app"),
+};
+
 export const bundleSourceMapWithDuplicates: BasicSourceMap = {
   version: 3,
   sources: [
@@ -539,4 +591,14 @@ export const bundleSourceMapWithDuplicates: BasicSourceMap = {
   ],
   mappings: "",
   names: [],
+};
+
+export const bundleSourceMapWithDuplicatesFS: Record<string, string> = {
+  [`${repoRoot}/node_modules/@rnx-kit/build/node_modules/chalk/package.json`]:
+    makeManifest("chalk"),
+  [`${repoRoot}/node_modules/chalk/package.json`]: makeManifest("chalk"),
+  [`${repoRoot}/node_modules/react-native/package.json`]:
+    makeManifest("react-native"),
+  [`${repoRoot}/packages/test-app/package.json`]:
+    makeManifest("@rnx-kit/test-app"),
 };

@@ -23,7 +23,7 @@ export function normalizePath(p: string): string {
 export function resolveModule(source: string): ModuleInfo {
   const pkg = findPackageDir(source);
   if (!pkg) {
-    throw new Error(`Unable to find package '${pkg}'`);
+    throw new Error(`Unable to resolve module '${source}'`);
   }
 
   const { name, version } = readPackage(pkg);
