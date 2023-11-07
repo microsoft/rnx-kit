@@ -1,5 +1,5 @@
 {
-  "private": true,
+  "private": false,
   "name": "@rnx-kit/chromium-edge-launcher",
   "version": "0.0.1",
   "description": "EXPERIMENTAL - USE WITH CAUTION - Launch latest Edge with the Devtools Protocol port open",
