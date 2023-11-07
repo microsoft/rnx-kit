@@ -1,0 +1,55 @@
+{
+  "name": "@rnx-kit/chromium-edge-launcher",
+  "version": "0.0.1",
+  "description": "EXPERIMENTAL - USE WITH CAUTION - Launch latest Edge with the Devtools Protocol port open",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/incubator/chromium-edge-launcher#readme",
+  "license": "Apache-2.0",
+  "author": {
+    "name": "Microsoft Open Source",
+    "email": "microsoftopensource@users.noreply.github.com"
+  },
+  "files": [
+    "lib/*"
+  ],
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "incubator/chromium-edge-launcher"
+  },
+  "engines": {
+    "node": ">=14.15"
+  },
+  "scripts": {
+    "build": "rnx-kit-scripts build",
+    "format": "rnx-kit-scripts format",
+    "lint": "rnx-kit-scripts lint",
+    "test": "rnx-kit-scripts test"
+  },
+  "dependencies": {
+    "@types/node": "^18.0.0",
+    "escape-string-regexp": "^4.0.0",
+    "is-wsl": "^2.2.0",
+    "lighthouse-logger": "^1.0.0",
+    "mkdirp": "^1.0.4",
+    "rimraf": "^3.0.2"
+  },
+  "devDependencies": {
+    "@rnx-kit/eslint-config": "*",
+    "@rnx-kit/jest-preset": "*",
+    "@rnx-kit/scripts": "*",
+    "@types/mkdirp": "^1.0.1",
+    "@types/rimraf": "^3.0.0",
+    "@types/sinon": "^9.0.1",
+    "eslint": "^8.0.0",
+    "jest": "^29.2.1",
+    "prettier": "^3.0.0",
+    "sinon": "^9.0.1",
+    "typescript": "^5.0.0"
+  },
+  "jest": {
+    "preset": "@rnx-kit/jest-preset/private"
+  },
+  "experimental": true
+}
