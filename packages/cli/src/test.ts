@@ -1,8 +1,10 @@
 import type { Config as CLIConfig } from "@react-native-community/cli-types";
 import { error } from "@rnx-kit/console";
-import { findPackageDir } from "@rnx-kit/tools-node";
+import {
+  findPackageDir,
+  resolveDependencyChain,
+} from "@rnx-kit/tools-node/package";
 import { parsePlatform } from "@rnx-kit/tools-react-native/platform";
-import * as path from "path";
 
 type Args = {
   platform: "android" | "ios" | "macos" | "windows" | "win32";
@@ -20,23 +22,19 @@ type Options = {
 };
 
 const COMMAND_NAME = "rnx-test";
-
-export function resolveJestCli(): string {
-  const jestPath = path.dirname(require.resolve("jest/package.json"));
-  return require.resolve("jest-cli", { paths: [jestPath] });
-}
+const DEP_CHAIN = ["jest", "jest-cli"];
 
 export function rnxTest(
   _argv: string[],
-  _config: CLIConfig,
+  { root }: CLIConfig,
   { platform }: Args
 ): void {
   const runJest: (argv: string[]) => void = (() => {
     try {
-      const { run } = require(resolveJestCli());
+      const { run } = require(resolveDependencyChain(DEP_CHAIN, root));
       return run;
     } catch (e) {
-      error("'rnx-test' is unavailable because 'jest-cli' is not installed");
+      error("'rnx-test' is unavailable because 'jest' is not installed");
       throw e;
     }
   })();
@@ -64,10 +62,21 @@ export function rnxTest(
 
 export function jestOptions(): Options[] {
   const options = (() => {
+    const jestCliPath = (() => {
+      try {
+        return resolveDependencyChain(DEP_CHAIN);
+      } catch (_) {
+        return undefined;
+      }
+    })();
+    if (!jestCliPath) {
+      return {};
+    }
+
     try {
       // `yargsOptions` is exported as of 29.5.0
       // https://github.com/jestjs/jest/commit/0e8ed24a527b951efe11ed49da46e0bd8c0ebef9
-      const { yargsOptions } = require("jest-cli");
+      const { yargsOptions } = require(jestCliPath);
       if (yargsOptions) {
         return yargsOptions;
       }
@@ -82,7 +91,7 @@ export function jestOptions(): Options[] {
     //
     // To work around this, resolve `jest-cli` first, then use the resolved
     // path to import `./build/cli/args`.
-    const jestPath = findPackageDir(resolveJestCli()) || "jest-cli";
+    const jestPath = findPackageDir(jestCliPath) || "jest-cli";
 
     try {
       // `args.js` was moved in 29.2.0
