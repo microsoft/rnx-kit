@@ -10,50 +10,13 @@ import {
   file50Path,
   firstDuplicate,
   inputWithDuplicates,
+  inputWithDuplicatesFS,
   inputWithoutDuplicates,
-  repoRoot,
 } from "./testData";
 
-const fixturePath = path.join(process.cwd(), "test", "__fixtures__");
+const fixturePath = path.join(__dirname, "__fixtures__");
 
 jest.mock("fs");
-jest.mock("@rnx-kit/tools-node/package");
-
-// Under normal circumstances, this extra copy of '@react-native/polyfills'
-// should not be installed.
-// Copied from metro-plugin-duplicates-checker/test/checkForDuplicatePackages.test.ts
-const extraPolyfills = `${repoRoot.replace(
-  /\\/g,
-  "/"
-)}/packages/test-app/node_modules/@react-native/polyfills`;
-require("@rnx-kit/tools-node/package").findPackageDir = jest
-  .fn()
-  .mockImplementation((startDir) => {
-    switch (startDir) {
-      // Under normal circumstances, this extra copy of '@react-native/polyfills'
-      // should not be installed.
-      case `${extraPolyfills}/index.js`:
-        return extraPolyfills;
-      default:
-        return jest
-          .requireActual("@rnx-kit/tools-node/package")
-          .findPackageDir(startDir);
-    }
-  });
-require("@rnx-kit/tools-node/package").readPackage = jest
-  .fn()
-  .mockImplementation((path) => {
-    if (path.replace(/\\/g, "/").includes(extraPolyfills)) {
-      return {
-        name: "@react-native/polyfills",
-        version: "1.0.0",
-      };
-    } else {
-      return jest
-        .requireActual("@rnx-kit/tools-node/package")
-        .readPackage(path);
-    }
-  });
 
 describe("generateGraph()", () => {
   test("generateGraph", () => {
@@ -135,13 +98,21 @@ describe("getWhyDuplicatesInBundle()", () => {
 });
 
 describe("getDuplicates()", () => {
-  expect(getDuplicates(inputWithoutDuplicates, "")).toEqual({
-    banned: 0,
-    duplicates: 0,
-  });
+  const fs = require("fs");
 
-  expect(getDuplicates(inputWithDuplicates, "")).toEqual({
-    banned: 0,
-    duplicates: 1,
+  afterAll(() => fs.__setMockFiles());
+
+  test("finds duplicates", () => {
+    fs.__setMockFiles(inputWithDuplicatesFS);
+
+    expect(getDuplicates(inputWithoutDuplicates, "")).toEqual({
+      banned: 0,
+      duplicates: 0,
+    });
+
+    expect(getDuplicates(inputWithDuplicates, "")).toEqual({
+      banned: 0,
+      duplicates: 1,
+    });
   });
 });

@@ -3623,6 +3623,7 @@ __metadata:
     "@rnx-kit/metro-plugin-duplicates-checker": ^2.1.2
     "@rnx-kit/scripts": "*"
     "@rnx-kit/tools-node": ^2.0.0
+    "@types/jest": ^29.2.1
     "@types/node": ^18.0.0
     "@types/yargs": ^16.0.0
     chalk: ^4.1.0
