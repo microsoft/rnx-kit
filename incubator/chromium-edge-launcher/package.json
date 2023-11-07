@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/chromium-edge-launcher",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "EXPERIMENTAL - USE WITH CAUTION - Launch latest Edge with the Devtools Protocol port open",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/incubator/chromium-edge-launcher#readme",
   "license": "Apache-2.0",

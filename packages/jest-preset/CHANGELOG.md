@@ -1,5 +1,12 @@
 # Change Log - @rnx-kit/jest-preset
 
+## 0.1.16
+
+### Patch Changes
+
+- dafd4e95: Resolve `react-native` starting from project root
+- 91b10ad1: Resolve presets so Jest can find them in pnpm setups
+
 ## 0.1.15
 
 ### Patch Changes

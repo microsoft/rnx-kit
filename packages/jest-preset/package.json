@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/jest-preset",
-  "version": "0.1.15",
+  "version": "0.1.16",
   "description": "Jest preset for React Native code bases",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/jest-preset#readme",
   "license": "MIT",
