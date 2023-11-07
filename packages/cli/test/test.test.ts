@@ -1,4 +1,4 @@
-import { jestOptions, resolveJestCli } from "../src/test";
+import { jestOptions } from "../src/test";
 
 describe("rnx-test", () => {
   test("retrieves options from 'jest-cli'", () => {
@@ -7,11 +7,5 @@ describe("rnx-test", () => {
 
     const updateSnapshot = options.find(({ name }) => name.startsWith("-u,"));
     expect(updateSnapshot).toBeDefined();
-  });
-
-  test("resolves 'jest-cli' starting from 'jest'", () => {
-    expect(resolveJestCli()).toMatch(
-      /node_modules[/\\]jest-cli[/\\]build[/\\]index.js$/
-    );
   });
 });
