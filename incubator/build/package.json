@@ -56,6 +56,8 @@
     "@rnx-kit/eslint-config": "*",
     "@rnx-kit/jest-preset": "*",
     "@rnx-kit/scripts": "*",
+    "@types/jest": "^29.2.1",
+    "@types/node": "^18.0.0",
     "@types/qrcode": "^1.4.2",
     "@types/yargs": "^16.0.0",
     "eslint": "^8.0.0",
@@ -65,13 +67,6 @@
   },
   "engines": {
     "node": ">=18.12"
-  },
-  "jest": {
-    "preset": "@rnx-kit/jest-preset/private",
-    "resolver": "@rnx-kit/jest-preset/typescript-esm-resolver.cjs",
-    "transformIgnorePatterns": [
-      "/node_modules/(?!(find-up|locate-path|p-limit|p-locate|path-exists|yocto-queue)/)"
-    ]
   },
   "experimental": true
 }

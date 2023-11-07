@@ -32,9 +32,10 @@ function dirnameAll(paths: string[]): string[] {
 }
 
 function makeFindSentinel<R>(finder: (name: string[]) => R) {
+  const isTesting = Boolean(process.env.JEST_WORKER_ID);
   let result: R | undefined;
   return () => {
-    if (process.env.JEST_WORKER_ID || !result) {
+    if (isTesting || !result) {
       result = finder(WORKSPACE_ROOT_SENTINELS);
     }
     return result;
