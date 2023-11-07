@@ -1,23 +1,22 @@
 const fs = jest.createMockFromModule("fs");
-const actualFs = jest.requireActual("fs");
 
-// Under normal circumstances, this extra copy of '@react-native/polyfills'
-// should not be installed.
-const extraPolyfills =
-  "/packages/test-app/node_modules/@react-native/polyfills";
+const { vol } = require("memfs");
 
-fs.readFileSync = actualFs.readFileSync;
-
-fs.realpathSync = actualFs.realpathSync;
-const actualRealpathSyncNative = actualFs.realpathSync.native;
-fs.realpathSync.native = (path, ...args) => {
-  if (path.replace(/\\/g, "/").endsWith(extraPolyfills)) {
-    return path;
-  } else {
-    return actualRealpathSyncNative(path, ...args);
-  }
+/** @type {(newMockFiles: { [filename: string]: string }) => void} */
+fs.__setMockFiles = (files) => {
+  vol.reset();
+  vol.fromJSON(files);
 };
 
-fs.statSync = actualFs.statSync; // Used by 'pkg-dir'
+fs.__toJSON = () => vol.toJSON();
+
+fs.lstat = (...args) => vol.lstat(...args);
+fs.lstatSync = (...args) => vol.lstatSync(...args);
+fs.mkdirSync = (...args) => vol.mkdirSync(...args);
+fs.readFileSync = (...args) => vol.readFileSync(...args);
+fs.realpathSync = (...args) => vol.realpathSync(...args);
+fs.realpathSync.native = (...args) => vol.realpathSync(...args);
+fs.stat = (...args) => vol.stat(...args);
+fs.statSync = (...args) => vol.statSync(...args);
 
 module.exports = fs;
