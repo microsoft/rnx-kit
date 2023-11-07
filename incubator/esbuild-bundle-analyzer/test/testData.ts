@@ -2,8 +2,11 @@ import * as path from "node:path";
 import type { Input } from "../src/metafile";
 import type { Result } from "../src/types";
 
-const pkgDir = jest.requireActual("pkg-dir");
-export const repoRoot = pkgDir.sync(path.resolve(__dirname, "..", ".."));
+export const repoRoot = path.resolve(__dirname, "..", "..", "..");
+
+function makeManifest(name, version = "0.0.0") {
+  return JSON.stringify({ name, version });
+}
 
 export const inputWithDuplicates: Record<string, Input> = {};
 inputWithDuplicates[
@@ -90,6 +93,16 @@ inputWithDuplicates[`${repoRoot}/node_modules/chalk/source/index.js`] = {
     },
   ],
   format: "cjs",
+};
+
+export const inputWithDuplicatesFS: Record<string, string> = {
+  "repo/node_modules/@apollo/client/package.json":
+    makeManifest("@apollo/client"),
+  "repo/packages/ra-ui-materialui/package.json":
+    makeManifest("ra-ui-materialui"),
+  [`${repoRoot}/node_modules/@rnx-kit/build/node_modules/chalk/package.json`]:
+    makeManifest("chalk"),
+  [`${repoRoot}/node_modules/chalk/package.json`]: makeManifest("chalk"),
 };
 
 export const inputWithoutDuplicates: Record<string, Input> = {
