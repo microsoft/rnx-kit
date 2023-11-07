@@ -22,7 +22,7 @@ type Options = {
 };
 
 const COMMAND_NAME = "rnx-test";
-const DEP_CHAIN = ["jest", "jest-cli"];
+const JEST_CLI = ["jest", "jest-cli"];
 
 export function rnxTest(
   _argv: string[],
@@ -31,7 +31,7 @@ export function rnxTest(
 ): void {
   const runJest: (argv: string[]) => void = (() => {
     try {
-      const { run } = require(resolveDependencyChain(DEP_CHAIN, root));
+      const { run } = require(resolveDependencyChain(JEST_CLI, root));
       return run;
     } catch (e) {
       error("'rnx-test' is unavailable because 'jest' is not installed");
@@ -64,7 +64,7 @@ export function jestOptions(): Options[] {
   const options = (() => {
     const jestCliPath = (() => {
       try {
-        return resolveDependencyChain(DEP_CHAIN);
+        return resolveDependencyChain(JEST_CLI);
       } catch (_) {
         return undefined;
       }
