@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-plugin-duplicates-checker
 
+## 2.1.3
+
+### Patch Changes
+
+- ef8e4b17: Fix error message not containing the path we're trying to resolve
+
 ## 2.1.2
 
 ### Patch Changes

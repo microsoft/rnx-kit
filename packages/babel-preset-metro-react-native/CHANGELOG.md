@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/babel-preset-metro-react-native
 
+## 1.1.6
+
+### Patch Changes
+
+- 95703e41: Help Babel find `@babel/plugin-transform-classes` in pnpm setups
+
 ## 1.1.5
 
 ### Patch Changes
