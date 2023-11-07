@@ -15,46 +15,9 @@ import {
   bundleSourceMapFS,
   bundleSourceMapWithDuplicates,
   bundleSourceMapWithDuplicatesFS,
-  repoRoot,
 } from "./testData";
 
 jest.mock("fs");
-jest.mock("@rnx-kit/tools-node/package");
-
-// Under normal circumstances, this extra copy of '@react-native/polyfills'
-// should not be installed.
-const extraPolyfills = `${repoRoot.replace(
-  /\\/g,
-  "/"
-)}/packages/test-app/node_modules/@react-native/polyfills`;
-require("@rnx-kit/tools-node/package").findPackageDir = jest
-  .fn()
-  .mockImplementation((startDir) => {
-    switch (startDir) {
-      // Under normal circumstances, this extra copy of '@react-native/polyfills'
-      // should not be installed.
-      case `${extraPolyfills}/index.js`:
-        return extraPolyfills;
-      default:
-        return jest
-          .requireActual("@rnx-kit/tools-node/package")
-          .findPackageDir(startDir);
-    }
-  });
-require("@rnx-kit/tools-node/package").readPackage = jest
-  .fn()
-  .mockImplementation((path) => {
-    if (path.replace(/\\/g, "/").includes(extraPolyfills)) {
-      return {
-        name: "@react-native/polyfills",
-        version: "1.0.0",
-      };
-    } else {
-      return jest
-        .requireActual("@rnx-kit/tools-node/package")
-        .readPackage(path);
-    }
-  });
 
 const defaultOptions: Options = {
   ignoredModules: [],
