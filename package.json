@@ -37,6 +37,8 @@
     "@babel/core": "^7.0.0",
     "@babel/preset-env": "^7.0.0",
     "@changesets/cli": "^2.22.0",
+    "@types/jest": "^29.2.1",
+    "@types/node": "^18.0.0",
     "eslint": "^8.0.0",
     "jest-cli": "^29.2.1",
     "metro": "^0.76.5",
