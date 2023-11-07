@@ -86,9 +86,10 @@ function getReactNativePlatformPath(rootDir = getPackageDirectory()) {
 /**
  * Returns the platform name and path to the module providing the platform.
  * @param {string | undefined} defaultPlatform
+ * @param {{ paths: string[] }} searchPaths
  * @returns {PlatformPath} `[platformName, platformPath]` pair
  */
-function getTargetPlatform(defaultPlatform) {
+function getTargetPlatform(defaultPlatform, searchPaths) {
   if (!defaultPlatform) {
     // If no target platform is set, see if we're inside an out-of-tree
     // platform package.
@@ -118,12 +119,11 @@ function getTargetPlatform(defaultPlatform) {
 
   // `npmPackageName` is unset if target platform is in core.
   const { npmPackageName } = targetPlatformConfig;
-  const projectRoot = { paths: [process.cwd()] };
   return [
     defaultPlatform,
     npmPackageName
       ? path.dirname(
-          require.resolve(`${npmPackageName}/package.json`, projectRoot)
+          require.resolve(`${npmPackageName}/package.json`, searchPaths)
         )
       : undefined,
   ];
@@ -181,13 +181,15 @@ function moduleNameMapper(reactNativePlatformPath) {
  * Returns setup files for React Native.
  * @param {string | undefined} targetPlatform
  * @param {string | undefined} reactNativePlatformPath
+ * @param {{ paths: string[] }} searchPaths
  * @returns {string[] | undefined}
  */
-function setupFiles(targetPlatform, reactNativePlatformPath) {
+function setupFiles(targetPlatform, reactNativePlatformPath, searchPaths) {
   return targetPlatform
     ? [
         require.resolve(
-          `${reactNativePlatformPath || "react-native"}/jest/setup.js`
+          `${reactNativePlatformPath || "react-native"}/jest/setup.js`,
+          searchPaths
         ),
       ]
     : undefined;
@@ -197,13 +199,19 @@ function setupFiles(targetPlatform, reactNativePlatformPath) {
  * Returns test environment for React Native.
  * @param {string | undefined} targetPlatform
  * @param {string | undefined} reactNativePlatformPath
+ * @param {{ paths: string[] }} searchPaths
  * @returns {string | undefined}
  */
-function getTestEnvironment(targetPlatform, reactNativePlatformPath) {
+function getTestEnvironment(
+  targetPlatform,
+  reactNativePlatformPath,
+  searchPaths
+) {
   if (targetPlatform) {
     try {
       return require.resolve(
-        `${reactNativePlatformPath || "react-native"}/jest/react-native-env.js`
+        `${reactNativePlatformPath || "react-native"}/jest/react-native-env.js`,
+        searchPaths
       );
     } catch (_) {
       // ignore
@@ -216,14 +224,16 @@ function getTestEnvironment(targetPlatform, reactNativePlatformPath) {
  * Returns transform rules for React Native.
  * @param {string | undefined} targetPlatform
  * @param {string | undefined} reactNativePlatformPath
+ * @param {{ paths: string[] }} searchPaths
  * @returns {Record<string, string> | undefined}
  */
-function transformRules(targetPlatform, reactNativePlatformPath) {
+function transformRules(targetPlatform, reactNativePlatformPath, searchPaths) {
   const reactNative = reactNativePlatformPath || "react-native";
   return targetPlatform
     ? {
         "\\.(bmp|gif|jpg|jpeg|mp4|png|psd|svg|webp)$": require.resolve(
-          `${reactNative}/jest/assetFileTransformer.js`
+          `${reactNative}/jest/assetFileTransformer.js`,
+          searchPaths
         ),
       }
     : undefined;
@@ -239,21 +249,29 @@ module.exports = (
     ...userOptions
   } = {}
 ) => {
-  const [targetPlatform, platformPath] = getTargetPlatform(defaultPlatform);
-  const testEnvironment = getTestEnvironment(targetPlatform, platformPath);
+  const searchPaths = { paths: [process.cwd()] };
+  const [targetPlatform, platformPath] = getTargetPlatform(
+    defaultPlatform,
+    searchPaths
+  );
+  const testEnvironment = getTestEnvironment(
+    targetPlatform,
+    platformPath,
+    searchPaths
+  );
   return {
     haste: haste(targetPlatform),
     moduleNameMapper: {
       ...moduleNameMapper(platformPath),
       ...userModuleNameMapper,
     },
-    setupFiles: setupFiles(targetPlatform, platformPath),
+    setupFiles: setupFiles(targetPlatform, platformPath, searchPaths),
     testEnvironment,
     transform: {
       "\\.[jt]sx?$": testEnvironment
         ? "babel-jest"
         : ["babel-jest", { presets: babelPresets(targetPlatform) }],
-      ...transformRules(targetPlatform, platformPath),
+      ...transformRules(targetPlatform, platformPath, searchPaths),
       ...userTransform,
     },
     transformIgnorePatterns: [

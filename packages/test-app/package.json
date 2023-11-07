@@ -67,12 +67,6 @@
       "internal"
     ]
   },
-  "jest": {
-    "preset": "@rnx-kit/jest-preset/private",
-    "moduleNameMapper": {
-      "^internal(.*)$": "<rootDir>/src/internal$1"
-    }
-  },
   "rnx-kit": {
     "kitType": "app",
     "build": {
