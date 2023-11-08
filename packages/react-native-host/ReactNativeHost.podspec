@@ -17,7 +17,7 @@ if new_arch_enabled
 end
 
 Pod::Spec.new do |s|
-  s.name      = 'ReactNativeHost'
+  s.name      = File.basename(__FILE__, '.podspec')
   s.version   = version
   s.author    = { package['author']['name'] => package['author']['email'] }
   s.license   = package['license']

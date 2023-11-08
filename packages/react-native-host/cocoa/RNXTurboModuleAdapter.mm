@@ -61,9 +61,9 @@
 #endif  // USE_TURBOMODULE
 }
 
-// MARK: - RCTTurboModuleManagerDelegate details
-
 #if USE_TURBOMODULE
+
+// MARK: - RCTTurboModuleManagerDelegate details
 
 - (Class)getModuleClassFromName:(const char *)name
 {
@@ -81,8 +81,6 @@
 {
     return RCTAppSetupDefaultModuleFromClass(moduleClass);
 }
-
-#endif  // USE_TURBOMODULE
 
 // MARK: - Private
 
@@ -114,5 +112,7 @@
 #else
 #endif  // SUPPORTS_LEGACY_COMPONENTS
 }
+
+#endif  // USE_TURBOMODULE
 
 @end
