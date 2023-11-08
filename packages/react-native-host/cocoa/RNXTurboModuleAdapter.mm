@@ -109,7 +109,6 @@
     for (NSString *legacyComponent in [RCTLegacyInteropComponents legacyInteropComponents]) {
         [RCTLegacyViewManagerInteropComponentView supportLegacyViewManagerWithName:legacyComponent];
     }
-#else
 #endif  // SUPPORTS_LEGACY_COMPONENTS
 }
 
