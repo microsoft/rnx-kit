@@ -1,7 +1,12 @@
 #import "ReactNativeHost.h"
 
 #ifdef USE_FABRIC
+#if __has_include(<React/RCTFabricSurfaceHostingProxyRootView.h>)
 #import <React/RCTFabricSurfaceHostingProxyRootView.h>
+#else
+#import <React/RCTFabricSurface.h>
+#import <React/RCTSurfaceHostingProxyRootView.h>
+#endif  // __has_include(<React/RCTFabricSurfaceHostingProxyRootView.h>)
 #else
 #import <React/RCTRootView.h>
 #endif  // USE_FABRIC
@@ -31,9 +36,16 @@
               initialProperties:(NSDictionary *)initialProperties;
 {
 #ifdef USE_FABRIC
+#if __has_include(<React/RCTFabricSurfaceHostingProxyRootView.h>)
     return [[RCTFabricSurfaceHostingProxyRootView alloc] initWithBridge:self.bridge
                                                              moduleName:moduleName
                                                       initialProperties:initialProperties];
+#else
+    RCTFabricSurface *surface = [[RCTFabricSurface alloc] initWithBridge:self.bridge
+                                                              moduleName:moduleName
+                                                       initialProperties:initialProperties];
+    return [[RCTSurfaceHostingProxyRootView alloc] initWithSurface:surface];
+#endif  // __has_include(<React/RCTFabricSurfaceHostingProxyRootView.h>)
 #else
     return [[RCTRootView alloc] initWithBridge:self.bridge
                                     moduleName:moduleName
