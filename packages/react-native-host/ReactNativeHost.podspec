@@ -17,7 +17,7 @@ if new_arch_enabled
 end
 
 Pod::Spec.new do |s|
-  s.name      = 'ReactNativeHost'
+  s.name      = File.basename(__FILE__, '.podspec')
   s.version   = version
   s.author    = { package['author']['name'] => package['author']['email'] }
   s.license   = package['license']
@@ -38,6 +38,7 @@ Pod::Spec.new do |s|
   if new_arch_enabled
     s.dependency 'React-RCTAppDelegate'
     s.dependency 'React-RCTFabric'
+    s.dependency 'Yoga'
   end
 
   s.pod_target_xcconfig = {
@@ -50,6 +51,7 @@ Pod::Spec.new do |s|
       '$(PODS_ROOT)/RCT-Folly',
       '$(PODS_ROOT)/DoubleConversion',
       '$(PODS_ROOT)/Headers/Private/React-Core',
+      '$(PODS_ROOT)/Headers/Private/Yoga',
     ],
   }
 
