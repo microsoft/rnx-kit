@@ -1,5 +1,11 @@
 # @rnx-kit/react-native-host
 
+## 0.2.9
+
+### Patch Changes
+
+- b73c47b0: Add support for 0.73
+
 ## 0.2.8
 
 ### Patch Changes
