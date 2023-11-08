@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/cli
 
+## 0.16.20
+
+### Patch Changes
+
+- 6e06c61f: Don't throw if Jest is not installed
+
 ## 0.16.19
 
 ### Patch Changes
