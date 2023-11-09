@@ -48,7 +48,9 @@
     "jest": "^29.2.1",
     "metro": "^0.76.5",
     "metro-config": "^0.76.5",
+    "metro-resolver": "^0.76.5",
     "prettier": "^3.0.0",
+    "react": "18.2.0",
     "react-native": "^0.72.0",
     "type-fest": "^4.0.0",
     "typescript": "^5.0.0"
@@ -57,7 +59,7 @@
     "ignoreMatches": [
       "@babel/core",
       "@babel/preset-env",
-      "@rnx-kit/babel-preset-metro-react-native",
+      "metro-resolver",
       "type-fest"
     ]
   },
