@@ -189,11 +189,10 @@ export async function assembleAarBundle(
   }
 
   const findUp = require("find-up");
-  const gradlew = findUp.sync(
-    os.platform() === "win32" ? "gradlew.bat" : "gradlew"
-  );
+  const wrapper = os.platform() === "win32" ? "gradlew.bat" : "gradlew";
+  const gradlew = findUp.sync(wrapper);
   if (!gradlew) {
-    warn(`Skipped \`${packageName}\`: cannot find \`gradlew\``);
+    warn(`Skipped \`${packageName}\`: cannot find \`${wrapper}\``);
     return;
   }
 

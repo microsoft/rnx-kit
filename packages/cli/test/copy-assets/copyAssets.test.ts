@@ -1,6 +1,5 @@
 import * as path from "path";
 import { copyAssets, gatherConfigs, versionOf } from "../../src/copy-assets";
-import { findFiles, mockFiles } from "./helpers";
 
 const options = {
   platform: "ios" as const,
@@ -19,6 +18,16 @@ const context = {
 };
 
 describe("copyAssets", () => {
+  const fs = require("fs-extra");
+
+  function findFiles() {
+    return Object.entries(fs.__toJSON());
+  }
+
+  function mockFiles(files: Record<string, string> = {}) {
+    fs.__setMockFiles(files);
+  }
+
   afterEach(() => {
     mockFiles();
   });
