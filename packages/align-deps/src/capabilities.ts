@@ -96,6 +96,13 @@ function resolveCapability(
 
   if (!isMetaPackage(pkg)) {
     const { name, version } = pkg;
+    if (!name) {
+      throw new Error(`Invalid capability '${capability}': missing name`);
+    }
+    if (!version) {
+      throw new Error(`Invalid capability '${capability}': missing version`);
+    }
+
     if (name in dependencies) {
       const versions = dependencies[name];
       if (!versions.find((current) => current.version === version)) {
