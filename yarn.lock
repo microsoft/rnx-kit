@@ -2166,21 +2166,21 @@ __metadata:
   linkType: hard
 
 "@fluentui/merge-styles@npm:^8.5.7":
-  version: 8.5.7
-  resolution: "@fluentui/merge-styles@npm:8.5.7"
+  version: 8.5.13
+  resolution: "@fluentui/merge-styles@npm:8.5.13"
   dependencies:
-    "@fluentui/set-version": ^8.2.6
+    "@fluentui/set-version": ^8.2.12
     tslib: ^2.1.0
-  checksum: 0649eeb430ec3839de153d032ead61b46925d5cd93772cca91b84c05d91a621709a926527bcbb9f971dd53360bb4bca7a46c438fb58edeb0405416f4b0b7d7fb
+  checksum: de81776f06c0bcaa91baabbea35685573d37c87da076bb85afd25a075a79e42b26ba8762d52630d54dda9be0d04455bb662c2472fc5b326573ce4dc1818d6f7d
   languageName: node
   linkType: hard
 
-"@fluentui/set-version@npm:^8.2.6":
-  version: 8.2.6
-  resolution: "@fluentui/set-version@npm:8.2.6"
+"@fluentui/set-version@npm:^8.2.12, @fluentui/set-version@npm:^8.2.6":
+  version: 8.2.12
+  resolution: "@fluentui/set-version@npm:8.2.12"
   dependencies:
     tslib: ^2.1.0
-  checksum: 485b65137789607cbb717f3f720d179137e671e23cc49013e314bdf0076b7f5e13a5680a91fc6789124fd94d4c9c28a6ada28f99db7fcd453a197ed9eacd4edd
+  checksum: 207325c1fbfb2a57364b3b7f6aa747453f6d012f4cdf70a529d0ef778bea1114da2c65b38fa8041cdcb8e95c7dd39b7bf96a000b3c99adb85ae349f6c81b91c0
   languageName: node
   linkType: hard
 

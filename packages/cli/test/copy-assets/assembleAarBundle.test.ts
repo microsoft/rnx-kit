@@ -1,29 +1,42 @@
 import * as path from "path";
 import { assembleAarBundle } from "../../src/copy-assets";
-import { findFiles, mockFiles } from "./helpers";
 
 jest.mock("child_process");
 jest.mock("fs");
 jest.unmock("@rnx-kit/console");
 
-export const options = {
-  platform: "android" as const,
-  assetsDest: "dist",
-  bundleAar: true,
-};
-
-export const context = {
-  projectRoot: path.resolve(__dirname, "..", ".."),
-  manifest: {
-    name: "@rnx-kit/cli",
-    version: "0.0.0-dev",
-  },
-  options,
-};
-
 describe("assembleAarBundle", () => {
+  const fs = require("fs");
+  const fsx = require("fs-extra");
+
   const consoleWarnSpy = jest.spyOn(global.console, "warn");
   const spawnSyncSpy = jest.spyOn(require("child_process"), "spawnSync");
+
+  const options = {
+    platform: "android" as const,
+    assetsDest: "dist",
+    bundleAar: true,
+  };
+
+  const context = {
+    projectRoot: path.resolve(__dirname, "..", ".."),
+    manifest: {
+      name: "@rnx-kit/cli",
+      version: "0.0.0-dev",
+    },
+    options,
+  };
+
+  const dummyManifest = JSON.stringify({ version: "0.0.0-dev" });
+
+  function findFiles() {
+    return Object.entries(fsx.__toJSON());
+  }
+
+  function mockFiles(files: Record<string, string> = {}) {
+    fs.__setMockFiles(files);
+    fsx.__setMockFiles(files);
+  }
 
   afterEach(() => {
     mockFiles();
@@ -35,10 +48,18 @@ describe("assembleAarBundle", () => {
   });
 
   test("returns early if there is nothing to assemble", async () => {
+    mockFiles({
+      gradlew: "",
+      "gradlew.bat": "",
+    });
+
     await assembleAarBundle(context, context.manifest.name, {});
 
     expect(consoleWarnSpy).not.toHaveBeenCalled();
-    expect(findFiles()).toEqual([]);
+    expect(findFiles()).toEqual([
+      [expect.stringMatching(/[/\\]gradlew$/), ""],
+      [expect.stringMatching(/[/\\]gradlew.bat$/), ""],
+    ]);
   });
 
   test("returns early if Gradle wrapper cannot be found", async () => {
@@ -46,7 +67,7 @@ describe("assembleAarBundle", () => {
 
     expect(consoleWarnSpy).toHaveBeenCalledWith(
       expect.anything(),
-      expect.stringMatching(/cannot find `gradlew`$/)
+      expect.stringMatching(/cannot find `gradlew(.bat)?`$/)
     );
     expect(spawnSyncSpy).not.toHaveBeenCalled();
     expect(findFiles()).toEqual([]);
@@ -71,9 +92,7 @@ describe("assembleAarBundle", () => {
     mockFiles({
       gradlew: "",
       "gradlew.bat": "",
-      "node_modules/@rnx-kit/react-native-auth/package.json": JSON.stringify({
-        version: "0.0.0-dev",
-      }),
+      "node_modules/@rnx-kit/react-native-auth/package.json": dummyManifest,
     });
 
     await assembleAarBundle(context, "@rnx-kit/react-native-auth", { aar: {} });
@@ -90,7 +109,7 @@ describe("assembleAarBundle", () => {
         expect.stringMatching(
           /[/\\]node_modules[/\\]@rnx-kit[/\\]react-native-auth[/\\]package.json$/
         ),
-        JSON.stringify({ version: "0.0.0-dev" }),
+        dummyManifest,
       ],
     ]);
   });
@@ -103,12 +122,8 @@ describe("assembleAarBundle", () => {
         "build.gradle",
       "node_modules/@rnx-kit/react-native-auth/android/build/outputs/aar/rnx-kit_react-native-auth-release.aar":
         "rnx-kit_react-native-auth-release.aar",
-      "node_modules/@rnx-kit/react-native-auth/package.json": JSON.stringify({
-        version: "0.0.0-dev",
-      }),
-      "node_modules/react-native/package.json": JSON.stringify({
-        version: "1000.0.0-dev",
-      }),
+      "node_modules/@rnx-kit/react-native-auth/package.json": dummyManifest,
+      "node_modules/react-native/package.json": dummyManifest,
     });
 
     await assembleAarBundle(context, "@rnx-kit/react-native-auth", { aar: {} });
@@ -142,13 +157,13 @@ describe("assembleAarBundle", () => {
         expect.stringMatching(
           /[/\\]node_modules[/\\]@rnx-kit[/\\]react-native-auth[/\\]package.json$/
         ),
-        JSON.stringify({ version: "0.0.0-dev" }),
+        dummyManifest,
       ],
       [
         expect.stringMatching(
           /[/\\]node_modules[/\\]react-native[/\\]package.json$/
         ),
-        JSON.stringify({ version: "1000.0.0-dev" }),
+        dummyManifest,
       ],
       [
         expect.stringMatching(
@@ -189,12 +204,8 @@ describe("assembleAarBundle", () => {
         "rnx-kit_react-native-auth-release.aar",
       "node_modules/@rnx-kit/react-native-auth/android/settings.gradle":
         "settings.gradle",
-      "node_modules/@rnx-kit/react-native-auth/package.json": JSON.stringify({
-        version: "0.0.0-dev",
-      }),
-      "node_modules/react-native/package.json": JSON.stringify({
-        version: "1000.0.0-dev",
-      }),
+      "node_modules/@rnx-kit/react-native-auth/package.json": dummyManifest,
+      "node_modules/react-native/package.json": dummyManifest,
     });
 
     await assembleAarBundle(context, "@rnx-kit/react-native-auth", { aar: {} });
@@ -234,13 +245,13 @@ describe("assembleAarBundle", () => {
         expect.stringMatching(
           /[/\\]node_modules[/\\]@rnx-kit[/\\]react-native-auth[/\\]package.json$/
         ),
-        JSON.stringify({ version: "0.0.0-dev" }),
+        dummyManifest,
       ],
       [
         expect.stringMatching(
           /[/\\]node_modules[/\\]react-native[/\\]package.json$/
         ),
-        JSON.stringify({ version: "1000.0.0-dev" }),
+        dummyManifest,
       ],
       [
         expect.stringMatching(
@@ -259,12 +270,8 @@ describe("assembleAarBundle", () => {
         "build.gradle",
       "node_modules/@rnx-kit/react-native-auth/android/build/outputs/aar/rnx-kit_react-native-auth-release.aar":
         "rnx-kit_react-native-auth-release.aar",
-      "node_modules/@rnx-kit/react-native-auth/package.json": JSON.stringify({
-        version: "0.0.0-dev",
-      }),
-      "node_modules/react-native/package.json": JSON.stringify({
-        version: "1000.0.0-dev",
-      }),
+      "node_modules/@rnx-kit/react-native-auth/package.json": dummyManifest,
+      "node_modules/react-native/package.json": dummyManifest,
     });
 
     await assembleAarBundle(context, "@rnx-kit/react-native-auth", {
