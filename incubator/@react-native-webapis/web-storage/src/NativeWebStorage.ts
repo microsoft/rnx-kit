@@ -12,4 +12,5 @@ export interface Spec extends TurboModule {
   clear: Storage["clear"];
 }
 
-export default TurboModuleRegistry.getEnforcing<Spec>("RNWWebStorage");
+export const NativeWebStorage =
+  TurboModuleRegistry.getEnforcing<Spec>("RNWWebStorage");

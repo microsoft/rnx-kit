@@ -1,7 +1,7 @@
-import NativeWebStorage from "./NativeWebStorage";
+import { NativeWebStorage } from "./NativeWebStorage";
 import type { StoragePolyfill } from "./types";
 
-export default function makeLocalStorage() {
+export function makeLocalStorage() {
   const localStorage: StoragePolyfill = {
     _isPolyfilledBy: {
       value: "@react-native-webapis/web-storage",

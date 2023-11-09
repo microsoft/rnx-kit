@@ -1,5 +1,5 @@
-import makeLocalStorage from "./localStorage";
-import makeSessionStorage from "./sessionStorage";
+import { makeLocalStorage } from "./localStorage";
+import { makeSessionStorage } from "./sessionStorage";
 
 const window = global.window || {};
 

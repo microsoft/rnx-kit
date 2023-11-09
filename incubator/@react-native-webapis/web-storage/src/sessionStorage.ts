@@ -1,6 +1,6 @@
 import type { StoragePolyfill } from "./types";
 
-export default function makeSessionStorage() {
+export function makeSessionStorage() {
   const store = new Map<string, string>();
   const sessionStorage: StoragePolyfill = {
     _isPolyfilledBy: {
