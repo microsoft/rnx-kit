@@ -12133,7 +12133,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-macos@npm:^0.72.0":
+"react-native-macos@npm:0.72.0":
   version: 0.72.0
   resolution: "react-native-macos@npm:0.72.0"
   dependencies:
@@ -12178,6 +12178,54 @@ __metadata:
   bin:
     react-native-macos: cli.js
   checksum: 030b6ad57c78e59e667aef0f6c946e3591156bc44b997bf52c4d86e6120220ce504bc409ef6baff49f2473db47cf74113b560b01ccf46cff4cb4411ca26471f2
+  languageName: node
+  linkType: hard
+
+"react-native-macos@patch:react-native-macos@npm%3A0.72.0#./.yarn/patches/react-native-macos-npm-0.72.0-a4a20def58.patch::locator=rnx-kit%40workspace%3A.":
+  version: 0.72.0
+  resolution: "react-native-macos@patch:react-native-macos@npm%3A0.72.0#./.yarn/patches/react-native-macos-npm-0.72.0-a4a20def58.patch::version=0.72.0&hash=167904&locator=rnx-kit%40workspace%3A."
+  dependencies:
+    "@jest/create-cache-key-function": ^29.2.1
+    "@react-native-community/cli": 11.3.6
+    "@react-native-community/cli-platform-android": 11.3.6
+    "@react-native-community/cli-platform-ios": 11.3.6
+    "@react-native-mac/virtualized-lists": ^0.72.0
+    "@react-native/assets-registry": ^0.72.0
+    "@react-native/codegen": ^0.72.6
+    "@react-native/gradle-plugin": ^0.72.11
+    "@react-native/js-polyfills": ^0.72.1
+    "@react-native/normalize-colors": ^0.72.0
+    abort-controller: ^3.0.0
+    anser: ^1.4.9
+    base64-js: ^1.1.2
+    deprecated-react-native-prop-types: 4.1.0
+    event-target-shim: ^5.0.1
+    flow-enums-runtime: ^0.0.5
+    invariant: ^2.2.4
+    jest-environment-node: ^29.2.1
+    jsc-android: ^250231.0.0
+    memoize-one: ^5.0.0
+    metro-runtime: 0.76.8
+    metro-source-map: 0.76.8
+    mkdirp: ^0.5.1
+    nullthrows: ^1.1.1
+    pretty-format: ^26.5.2
+    promise: ^8.3.0
+    react-devtools-core: ^4.27.2
+    react-refresh: ^0.4.0
+    react-shallow-renderer: ^16.15.0
+    regenerator-runtime: ^0.13.2
+    scheduler: 0.24.0-canary-efb381bbf-20230505
+    stacktrace-parser: ^0.1.10
+    use-sync-external-store: ^1.0.0
+    whatwg-fetch: ^3.0.0
+    ws: ^6.2.2
+    yargs: ^17.6.2
+  peerDependencies:
+    react: 18.2.0
+  bin:
+    react-native-macos: cli.js
+  checksum: 8202f5a23aa880bcc50032f446284433005b7ae4874fcf16657f3bf923df7485a2df301201655b746d13428a53a07e7cc8638fead8da051a7518d93d377eea0e
   languageName: node
   linkType: hard
 
@@ -12267,7 +12315,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native@npm:^0.72.0":
+"react-native@npm:0.72.4":
   version: 0.72.4
   resolution: "react-native@npm:0.72.4"
   dependencies:
@@ -12312,6 +12360,54 @@ __metadata:
   bin:
     react-native: cli.js
   checksum: c66afb143b5df75bbbd7d88a885ef268cc8957213625f0d6eac1950a4748cd19d56ad4beea1ec0e0aa687e2dd1866df386134b6c96207c950c2203194c81c57b
+  languageName: node
+  linkType: hard
+
+"react-native@patch:react-native@npm%3A0.72.4#./.yarn/patches/react-native-npm-0.72.4-31c59a957a.patch::locator=rnx-kit%40workspace%3A.":
+  version: 0.72.4
+  resolution: "react-native@patch:react-native@npm%3A0.72.4#./.yarn/patches/react-native-npm-0.72.4-31c59a957a.patch::version=0.72.4&hash=167904&locator=rnx-kit%40workspace%3A."
+  dependencies:
+    "@jest/create-cache-key-function": ^29.2.1
+    "@react-native-community/cli": 11.3.6
+    "@react-native-community/cli-platform-android": 11.3.6
+    "@react-native-community/cli-platform-ios": 11.3.6
+    "@react-native/assets-registry": ^0.72.0
+    "@react-native/codegen": ^0.72.6
+    "@react-native/gradle-plugin": ^0.72.11
+    "@react-native/js-polyfills": ^0.72.1
+    "@react-native/normalize-colors": ^0.72.0
+    "@react-native/virtualized-lists": ^0.72.8
+    abort-controller: ^3.0.0
+    anser: ^1.4.9
+    base64-js: ^1.1.2
+    deprecated-react-native-prop-types: 4.1.0
+    event-target-shim: ^5.0.1
+    flow-enums-runtime: ^0.0.5
+    invariant: ^2.2.4
+    jest-environment-node: ^29.2.1
+    jsc-android: ^250231.0.0
+    memoize-one: ^5.0.0
+    metro-runtime: 0.76.8
+    metro-source-map: 0.76.8
+    mkdirp: ^0.5.1
+    nullthrows: ^1.1.1
+    pretty-format: ^26.5.2
+    promise: ^8.3.0
+    react-devtools-core: ^4.27.2
+    react-refresh: ^0.4.0
+    react-shallow-renderer: ^16.15.0
+    regenerator-runtime: ^0.13.2
+    scheduler: 0.24.0-canary-efb381bbf-20230505
+    stacktrace-parser: ^0.1.10
+    use-sync-external-store: ^1.0.0
+    whatwg-fetch: ^3.0.0
+    ws: ^6.2.2
+    yargs: ^17.6.2
+  peerDependencies:
+    react: 18.2.0
+  bin:
+    react-native: cli.js
+  checksum: 17eb87f4bcbea00ebfa102efe4c8fea5f07237351cfbaedfe1409ef96e065daa95892715414fb65641f07298fb6ab2144f5af3e145d5a5b5c78564d6fe1957f6
   languageName: node
   linkType: hard
 

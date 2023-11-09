@@ -1,7 +1,8 @@
 #!/usr/bin/env node
-import { cli } from "@rnx-kit/align-deps";
 import * as path from "node:path";
 import { fileURLToPath } from "node:url";
+// Import the bundle directly to avoid circular dependency
+import { cli } from "../packages/align-deps/lib/index.js";
 
 cli({
   presets: [
