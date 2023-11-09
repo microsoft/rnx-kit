@@ -282,6 +282,8 @@ describe("makeMetroConfig", () => {
     expect(Object.keys(config.resolver.extraNodeModules)).toEqual([
       "react",
       "react-native",
+      "react-native-macos",
+      "react-native-windows",
       "@babel/runtime",
     ]);
 
@@ -349,6 +351,8 @@ describe("makeMetroConfig", () => {
     expect(Object.keys(config.resolver.extraNodeModules)).toEqual([
       "react",
       "react-native",
+      "react-native-macos",
+      "react-native-windows",
       "@babel/runtime",
     ]);
 
@@ -394,6 +398,8 @@ describe("makeMetroConfig", () => {
       "my-awesome-package",
       "react",
       "react-native",
+      "react-native-macos",
+      "react-native-windows",
     ]);
 
     expect(extraNodeModules["my-awesome-package"]).toBe("/skynet");
