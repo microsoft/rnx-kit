@@ -232,6 +232,7 @@ describe("@rnx-kit/metro-config", () => {
 });
 
 describe("makeMetroConfig", () => {
+  const projectRoot = path.resolve("../test-app");
   const consoleWarnSpy = jest.spyOn(require("@rnx-kit/console"), "warn");
 
   afterEach(() => {
@@ -239,7 +240,6 @@ describe("makeMetroConfig", () => {
   });
 
   test("returns a default Metro config", async () => {
-    const projectRoot = path.resolve("../test-app");
     const config = makeMetroConfig({ projectRoot });
 
     expect(Object.keys(config).sort()).toEqual([
@@ -310,24 +310,30 @@ describe("makeMetroConfig", () => {
 
   test("merges Metro configs", async () => {
     const config = makeMetroConfig({
-      projectRoot: __dirname,
+      projectRoot,
       resetCache: true,
     });
 
     expect(Object.keys(config).sort()).toEqual([
       "cacheStores",
+      "cacheVersion",
+      "maxWorkers",
       "projectRoot",
+      "reporter",
       "resetCache",
       "resolver",
       "serializer",
       "server",
+      "stickyWorkers",
       "symbolicator",
       "transformer",
+      "transformerPath",
+      "unstable_perfLoggerFactory",
       "watchFolders",
       "watcher",
     ]);
 
-    expect(config.projectRoot).toBe(__dirname);
+    expect(config.projectRoot).toBe(projectRoot);
     expect(config.resetCache).toBeTruthy();
 
     if (!config.resolver) {
@@ -356,12 +362,12 @@ describe("makeMetroConfig", () => {
       "@babel/runtime",
     ]);
 
-    const blockList = exclusionList().source;
+    const blockList = exclusionList([], projectRoot).source;
     expect(config.resolver.blacklistRE.source).toBe(blockList);
     expect(config.resolver.blockList.source).toBe(blockList);
 
     expect(config.server.enhanceMiddleware).toBe(enhanceMiddleware);
-    expect(config.transformer.assetPlugins).toBeUndefined();
+    expect(config.transformer.assetPlugins).toEqual([]);
 
     const opts = { dev: false, hot: false };
     const transformerOptions = await config.transformer.getTransformOptions(
@@ -379,7 +385,7 @@ describe("makeMetroConfig", () => {
 
   test("merges `extraNodeModules`", () => {
     const config = makeMetroConfig({
-      projectRoot: __dirname,
+      projectRoot,
       resolver: {
         extraNodeModules: {
           "my-awesome-package": "/skynet",
