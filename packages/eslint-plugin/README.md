@@ -41,6 +41,10 @@ config file:
 - [`plugin:react-hooks/recommended`](https://github.com/facebook/react/blob/main/packages/eslint-plugin-react-hooks/src/index.js)
 - [`plugin:react/recommended`](https://github.com/yannickcr/eslint-plugin-react#recommended)
 
+Additionally, it also includes and enables:
+
+- [`@react-native/eslint-plugin`](https://github.com/facebook/react-native/tree/main/packages/eslint-plugin-react-native#readme)
+
 ## Supported Rules
 
 - ✓: Enabled with `@rnx-kit/recommended`

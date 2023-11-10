@@ -27,6 +27,7 @@
     "test": "rnx-kit-scripts test"
   },
   "dependencies": {
+    "@react-native/eslint-plugin": "^0.74.0",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
     "enhanced-resolve": "^5.8.3",
@@ -55,6 +56,7 @@
   },
   "depcheck": {
     "ignoreMatches": [
+      "@react-native/eslint-plugin",
       "@typescript-eslint/eslint-plugin",
       "@typescript-eslint/types",
       "eslint-plugin-react",
