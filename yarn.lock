@@ -4090,7 +4090,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rnx-kit/react-native-host@^0.2.8, @rnx-kit/react-native-host@workspace:*, @rnx-kit/react-native-host@workspace:packages/react-native-host":
+"@rnx-kit/react-native-host@workspace:*, @rnx-kit/react-native-host@workspace:packages/react-native-host":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/react-native-host@workspace:packages/react-native-host"
   dependencies:
