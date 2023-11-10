@@ -1,12 +1,15 @@
 // @ts-check
 "use strict";
 
+const { name, version } = require("../package.json");
 module.exports = {
+  meta: {
+    name,
+    version,
+  },
   configs: {
     recommended: require("./configs/recommended"),
+    strict: require("./configs/strict"),
   },
-  rules: {
-    "no-const-enum": require("./rules/no-const-enum"),
-    "no-export-all": require("./rules/no-export-all"),
-  },
+  rules: require("./rules").rules,
 };
