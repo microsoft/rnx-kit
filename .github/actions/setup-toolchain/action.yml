@@ -3,14 +3,12 @@ description: Sets up the toolchain for the project
 inputs:
   node-version:
     description: The version of Node to use
-    type: number
-    default: 16 # `npm pack` is broken in npm 9.x: https://github.com/npm/npm-packlist/issues/152
-    required: true
+    type: string
+    default: "20"
   node-cache:
     description: Cache global packages data
     type: string
     default: "yarn"
-    required: true
   jdk-version:
     description: The Java JDK version to use, if specified
     type: number
