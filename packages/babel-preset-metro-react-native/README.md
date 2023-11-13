@@ -40,8 +40,8 @@ try.
 ### Enable compiler assumptions
 
 Since 7.13.0, Babel can make certain assumptions about your code to reduce the
-amount of generated code. You can read more about it at
-<https://babeljs.io/docs/en/assumptions>.
+amount of generated code. You can read more about it in
+[Compiler assumptions](https://babeljs.io/docs/en/assumptions).
 
 ### Enable loose mode when transforming classes
 

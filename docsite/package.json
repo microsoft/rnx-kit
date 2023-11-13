@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "@rnx-kit/docsite",
-  "version": "0.1.4",
+  "version": "0.0.0",
   "scripts": {
     "docusaurus": "docusaurus",
     "start": "docusaurus start",
@@ -15,8 +15,8 @@
     "typecheck": "tsc"
   },
   "dependencies": {
-    "@docusaurus/core": "^2.4.0",
-    "@docusaurus/preset-classic": "^2.4.0",
+    "@docusaurus/core": "^3.0.0",
+    "@docusaurus/preset-classic": "^3.0.0",
     "@tsconfig/docusaurus": "^2.0.1",
     "clsx": "^1.2.1",
     "prism-react-renderer": "^2.1.0",
@@ -25,13 +25,9 @@
     "typescript": "^5.0.0"
   },
   "engines": {
-    "node": ">=16.14.0"
+    "node": ">=18.12"
   },
   "packageManager": "yarn@3.6.1",
-  "resolutions": {
-    "got": "^11.0",
-    "trim": "0.0.3"
-  },
   "browserslist": {
     "production": [
       ">0.5%",

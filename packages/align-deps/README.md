@@ -12,7 +12,7 @@ tailored to your needs.
 
 Note that this tool was previously known as `dep-check`, but it was renamed to
 avoid name clashes and other reasons. For more details, you can read the RFC:
-<https://github.com/microsoft/rnx-kit/pull/1757>.
+[`dep-check` v2](https://github.com/microsoft/rnx-kit/blob/rfcs/text/0001-dep-check-v2.md).
 
 If you want to learn how `align-deps` is used at Microsoft, and see a demo of
 how it works in a monorepo, you can watch the

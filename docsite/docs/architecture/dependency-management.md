@@ -6,7 +6,7 @@
 general confusion. Unless noted otherwise, this document is still valid.
 
 You can read more about the changes in this RFC:
-<https://github.com/microsoft/rnx-kit/blob/rfcs/text/0001-dep-check-v2.md>
+[`dep-check` v2](https://github.com/microsoft/rnx-kit/blob/rfcs/text/0001-dep-check-v2.md)
 
 :::
 
@@ -453,7 +453,7 @@ flag had to be replaced as well. The equivalent of `--vigilant 0.63,0.64` in the
 new schema is `--requirements 'react-native@0.63 || 0.64'`.
 
 You can read more about the changes in this RFC:
-<https://github.com/microsoft/rnx-kit/blob/rfcs/text/0001-dep-check-v2.md>
+[`dep-check` v2](https://github.com/microsoft/rnx-kit/blob/rfcs/text/0001-dep-check-v2.md)
 
 :::
 
@@ -495,7 +495,7 @@ property allows you to specify multiple presets and/or replace the built-in
 with `--presets`.
 
 You can read more about the changes in this RFC:
-<https://github.com/microsoft/rnx-kit/blob/rfcs/text/0001-dep-check-v2.md>
+[`dep-check` v2](https://github.com/microsoft/rnx-kit/blob/rfcs/text/0001-dep-check-v2.md)
 
 :::
 
