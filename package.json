@@ -62,9 +62,9 @@
     "nx/glob": "^7.1.4",
     "nx/minimatch": "^3.0.5",
     "nx/semver": "^7.3.5",
-    "react-native-macos@^0.72.0": "patch:react-native-macos@npm%3A0.72.0#./.yarn/patches/react-native-macos-npm-0.72.0-a4a20def58.patch",
+    "react-native-macos@^0.72.0": "patch:react-native-macos@npm%3A0.72.7#./.yarn/patches/react-native-macos-npm-0.72.7-e19b4d7895.patch",
     "react-native-windows/metro-source-map": "^0.76.8",
-    "react-native@^0.72.0": "patch:react-native@npm%3A0.72.4#./.yarn/patches/react-native-npm-0.72.4-31c59a957a.patch"
+    "react-native@^0.72.0": "patch:react-native@npm%3A0.72.6#./.yarn/patches/react-native-npm-0.72.6-9d6fdd645f.patch"
   },
   "workspaces": {
     "packages": [

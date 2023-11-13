@@ -3295,9 +3295,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native/codegen@npm:^0.72.6":
-  version: 0.72.6
-  resolution: "@react-native/codegen@npm:0.72.6"
+"@react-native/codegen@npm:^0.72.6, @react-native/codegen@npm:^0.72.7":
+  version: 0.72.7
+  resolution: "@react-native/codegen@npm:0.72.7"
   dependencies:
     "@babel/parser": ^7.20.0
     flow-parser: ^0.206.0
@@ -3305,7 +3305,7 @@ __metadata:
     nullthrows: ^1.1.1
   peerDependencies:
     "@babel/preset-env": ^7.1.6
-  checksum: 56ef32546ac042069bba0ca8ee8cc21cfcb32500b8fcb01917d824ad5a78b0c4da9a336b1391217deb934224ee3f0f9f5590584c1387b94d44861369f2451449
+  checksum: 7793a9da9eec18a5c68af37ad0e25000ed7f111086223bc85b08e52c79229266d5affc9e6f9cb14348e7921f0d1b96267ff63801d95bc23c55f54b57c0a9c510
   languageName: node
   linkType: hard
 
@@ -12133,17 +12133,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-macos@npm:0.72.0":
-  version: 0.72.0
-  resolution: "react-native-macos@npm:0.72.0"
+"react-native-macos@npm:0.72.7":
+  version: 0.72.7
+  resolution: "react-native-macos@npm:0.72.7"
   dependencies:
     "@jest/create-cache-key-function": ^29.2.1
-    "@react-native-community/cli": 11.3.6
-    "@react-native-community/cli-platform-android": 11.3.6
-    "@react-native-community/cli-platform-ios": 11.3.6
+    "@react-native-community/cli": 11.3.7
+    "@react-native-community/cli-platform-android": 11.3.7
+    "@react-native-community/cli-platform-ios": 11.3.7
     "@react-native-mac/virtualized-lists": ^0.72.0
     "@react-native/assets-registry": ^0.72.0
-    "@react-native/codegen": ^0.72.6
+    "@react-native/codegen": ^0.72.7
     "@react-native/gradle-plugin": ^0.72.11
     "@react-native/js-polyfills": ^0.72.1
     "@react-native/normalize-colors": ^0.72.0
@@ -12177,21 +12177,21 @@ __metadata:
     react: 18.2.0
   bin:
     react-native-macos: cli.js
-  checksum: 030b6ad57c78e59e667aef0f6c946e3591156bc44b997bf52c4d86e6120220ce504bc409ef6baff49f2473db47cf74113b560b01ccf46cff4cb4411ca26471f2
+  checksum: 4e198a11534dfe640e3e11761e063def9f37d90cd8e60e406287f7ddd9d40d1b9e48e437e6baec1b518a51e7143f2d6db9f0d85b22f833e31d3729ba4f73962e
   languageName: node
   linkType: hard
 
-"react-native-macos@patch:react-native-macos@npm%3A0.72.0#./.yarn/patches/react-native-macos-npm-0.72.0-a4a20def58.patch::locator=rnx-kit%40workspace%3A.":
-  version: 0.72.0
-  resolution: "react-native-macos@patch:react-native-macos@npm%3A0.72.0#./.yarn/patches/react-native-macos-npm-0.72.0-a4a20def58.patch::version=0.72.0&hash=167904&locator=rnx-kit%40workspace%3A."
+"react-native-macos@patch:react-native-macos@npm%3A0.72.7#./.yarn/patches/react-native-macos-npm-0.72.7-e19b4d7895.patch::locator=rnx-kit%40workspace%3A.":
+  version: 0.72.7
+  resolution: "react-native-macos@patch:react-native-macos@npm%3A0.72.7#./.yarn/patches/react-native-macos-npm-0.72.7-e19b4d7895.patch::version=0.72.7&hash=6adeb9&locator=rnx-kit%40workspace%3A."
   dependencies:
     "@jest/create-cache-key-function": ^29.2.1
-    "@react-native-community/cli": 11.3.6
-    "@react-native-community/cli-platform-android": 11.3.6
-    "@react-native-community/cli-platform-ios": 11.3.6
+    "@react-native-community/cli": 11.3.7
+    "@react-native-community/cli-platform-android": 11.3.7
+    "@react-native-community/cli-platform-ios": 11.3.7
     "@react-native-mac/virtualized-lists": ^0.72.0
     "@react-native/assets-registry": ^0.72.0
-    "@react-native/codegen": ^0.72.6
+    "@react-native/codegen": ^0.72.7
     "@react-native/gradle-plugin": ^0.72.11
     "@react-native/js-polyfills": ^0.72.1
     "@react-native/normalize-colors": ^0.72.0
@@ -12225,7 +12225,7 @@ __metadata:
     react: 18.2.0
   bin:
     react-native-macos: cli.js
-  checksum: 8202f5a23aa880bcc50032f446284433005b7ae4874fcf16657f3bf923df7485a2df301201655b746d13428a53a07e7cc8638fead8da051a7518d93d377eea0e
+  checksum: 796e29a9ebeb67355ff423fa078db0978d26c3f9587891d460b2528c85683b9867397fbce9477e256ee81fc9d39a056a349ea8dd15848db3a4958529a145bb48
   languageName: node
   linkType: hard
 
@@ -12315,16 +12315,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native@npm:0.72.4":
-  version: 0.72.4
-  resolution: "react-native@npm:0.72.4"
+"react-native@npm:0.72.6":
+  version: 0.72.6
+  resolution: "react-native@npm:0.72.6"
   dependencies:
     "@jest/create-cache-key-function": ^29.2.1
-    "@react-native-community/cli": 11.3.6
-    "@react-native-community/cli-platform-android": 11.3.6
-    "@react-native-community/cli-platform-ios": 11.3.6
+    "@react-native-community/cli": 11.3.7
+    "@react-native-community/cli-platform-android": 11.3.7
+    "@react-native-community/cli-platform-ios": 11.3.7
     "@react-native/assets-registry": ^0.72.0
-    "@react-native/codegen": ^0.72.6
+    "@react-native/codegen": ^0.72.7
     "@react-native/gradle-plugin": ^0.72.11
     "@react-native/js-polyfills": ^0.72.1
     "@react-native/normalize-colors": ^0.72.0
@@ -12359,20 +12359,20 @@ __metadata:
     react: 18.2.0
   bin:
     react-native: cli.js
-  checksum: c66afb143b5df75bbbd7d88a885ef268cc8957213625f0d6eac1950a4748cd19d56ad4beea1ec0e0aa687e2dd1866df386134b6c96207c950c2203194c81c57b
+  checksum: 3cf0af092c0d6b9b6e67795664e324136f6d1a41c6a889737fb612e5ddb93d0537c890fe733e751fe3bbc139cbb4f9f6d9eff4467e8d8dc67194ac8b382fa168
   languageName: node
   linkType: hard
 
-"react-native@patch:react-native@npm%3A0.72.4#./.yarn/patches/react-native-npm-0.72.4-31c59a957a.patch::locator=rnx-kit%40workspace%3A.":
-  version: 0.72.4
-  resolution: "react-native@patch:react-native@npm%3A0.72.4#./.yarn/patches/react-native-npm-0.72.4-31c59a957a.patch::version=0.72.4&hash=167904&locator=rnx-kit%40workspace%3A."
+"react-native@patch:react-native@npm%3A0.72.6#./.yarn/patches/react-native-npm-0.72.6-9d6fdd645f.patch::locator=rnx-kit%40workspace%3A.":
+  version: 0.72.6
+  resolution: "react-native@patch:react-native@npm%3A0.72.6#./.yarn/patches/react-native-npm-0.72.6-9d6fdd645f.patch::version=0.72.6&hash=6adeb9&locator=rnx-kit%40workspace%3A."
   dependencies:
     "@jest/create-cache-key-function": ^29.2.1
-    "@react-native-community/cli": 11.3.6
-    "@react-native-community/cli-platform-android": 11.3.6
-    "@react-native-community/cli-platform-ios": 11.3.6
+    "@react-native-community/cli": 11.3.7
+    "@react-native-community/cli-platform-android": 11.3.7
+    "@react-native-community/cli-platform-ios": 11.3.7
     "@react-native/assets-registry": ^0.72.0
-    "@react-native/codegen": ^0.72.6
+    "@react-native/codegen": ^0.72.7
     "@react-native/gradle-plugin": ^0.72.11
     "@react-native/js-polyfills": ^0.72.1
     "@react-native/normalize-colors": ^0.72.0
@@ -12407,7 +12407,7 @@ __metadata:
     react: 18.2.0
   bin:
     react-native: cli.js
-  checksum: 17eb87f4bcbea00ebfa102efe4c8fea5f07237351cfbaedfe1409ef96e065daa95892715414fb65641f07298fb6ab2144f5af3e145d5a5b5c78564d6fe1957f6
+  checksum: 97b8eb62e62a6260c3b06b595e5086347d8c1e8786ffcc979986f5d19f00ffda9c3bae03715abd06765273fc4e1e17c81efe3f871ffd43f2c94de432ce0bc6f0
   languageName: node
   linkType: hard
 
