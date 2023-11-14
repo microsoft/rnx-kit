@@ -9497,14 +9497,14 @@ __metadata:
   linkType: hard
 
 "prism-react-renderer@npm:^2.1.0":
-  version: 2.1.0
-  resolution: "prism-react-renderer@npm:2.1.0"
+  version: 2.2.0
+  resolution: "prism-react-renderer@npm:2.2.0"
   dependencies:
     "@types/prismjs": ^1.26.0
     clsx: ^1.2.1
   peerDependencies:
     react: ">=16.0.0"
-  checksum: 61b4eb22bdbf01005a0d7ec2a24a27b69e28f124a1fbbfc2adb4d7d41a7929ea94d5ce506a361dd5a230728402f02595d521d9a5286d74ec9b34be0896c513a5
+  checksum: 6169791b721a320c3205a5e187511d4087fe6fca340a2c218f2a32d0c2d839a68029a00259d40865abff5a93d828caebffad3f017b23c83954b05f675a55bce9
   languageName: node
   linkType: hard
 
