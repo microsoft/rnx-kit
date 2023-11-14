@@ -13,6 +13,10 @@
       "matchPackagePrefixes": ["com.android."]
     },
     {
+      "groupName": "ESLint",
+      "matchSourceUrlPrefixes": ["https://github.com/eslint/eslint"]
+    },
+    {
       "groupName": "Jest",
       "matchSourceUrlPrefixes": ["https://github.com/facebook/jest"],
       "allowedVersions": "^29.0.0"
