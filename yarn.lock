@@ -1941,10 +1941,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@colors/colors@npm:1.5.0":
-  version: 1.5.0
-  resolution: "@colors/colors@npm:1.5.0"
-  checksum: d64d5260bed1d5012ae3fc617d38d1afc0329fec05342f4e6b838f46998855ba56e0a73833f4a80fa8378c84810da254f76a8a19c39d038260dc06dc4e007425
+"@colors/colors@npm:1.6.0, @colors/colors@npm:^1.6.0":
+  version: 1.6.0
+  resolution: "@colors/colors@npm:1.6.0"
+  checksum: aa209963e0c3218e80a4a20553ba8c0fbb6fa13140540b4e5f97923790be06801fc90172c1114fc8b7e888b3d012b67298cde6b9e81521361becfaee400c662f
   languageName: node
   linkType: hard
 
@@ -4795,6 +4795,13 @@ __metadata:
   version: 2.0.0
   resolution: "@types/stack-utils@npm:2.0.0"
   checksum: b3fbae25b073116977ecb5c67d22f14567b51a7792403b0bf46e5de8f29bde3bd4ec1626afb22065495ca7f1c699c8bd66720050c94b8f8f9bcefbee79d161fd
+  languageName: node
+  linkType: hard
+
+"@types/triple-beam@npm:^1.3.2":
+  version: 1.3.5
+  resolution: "@types/triple-beam@npm:1.3.5"
+  checksum: 519b6a1b30d4571965c9706ad5400a200b94e4050feca3e7856e3ea7ac00ec9903e32e9a10e2762d0f7e472d5d03e5f4b29c16c0bd8c1f77c8876c683b2231f1
   languageName: node
   linkType: hard
 
@@ -10099,15 +10106,16 @@ __metadata:
   linkType: hard
 
 "logform@npm:^2.3.2, logform@npm:^2.4.0":
-  version: 2.4.0
-  resolution: "logform@npm:2.4.0"
+  version: 2.6.0
+  resolution: "logform@npm:2.6.0"
   dependencies:
-    "@colors/colors": 1.5.0
+    "@colors/colors": 1.6.0
+    "@types/triple-beam": ^1.3.2
     fecha: ^4.2.0
     ms: ^2.1.1
     safe-stable-stringify: ^2.3.1
     triple-beam: ^1.3.0
-  checksum: e75ccccc1a2664612ade3c7f3d3185787198b4028e54ea2795df87901f28b3881eddd8d7e73ce03f4420dca638a1cbe6d42254179685ab2075e4ac38a71ffb6c
+  checksum: b9ea74bb75e55379ad0eb3e4d65ae6e8d02bc45b431c218162878bf663997ab9258a73104c2b30e09dd2db288bb83c8bf8748e46689d75f5e7e34cf69378d6df
   languageName: node
   linkType: hard
 
@@ -14400,10 +14408,10 @@ __metadata:
   linkType: hard
 
 "winston@npm:^3.2.1":
-  version: 3.10.0
-  resolution: "winston@npm:3.10.0"
+  version: 3.11.0
+  resolution: "winston@npm:3.11.0"
   dependencies:
-    "@colors/colors": 1.5.0
+    "@colors/colors": ^1.6.0
     "@dabh/diagnostics": ^2.0.2
     async: ^3.2.3
     is-stream: ^2.0.0
@@ -14414,7 +14422,7 @@ __metadata:
     stack-trace: 0.0.x
     triple-beam: ^1.3.0
     winston-transport: ^4.5.0
-  checksum: 47df0361220d12b46d1b3c98a1c380a3718321739d527a182ce7984fc20715e5b0b55db0bcd3fd076d1b1d3261903b890b053851cfd4bc028bda7951fa8ca2e0
+  checksum: ca4454070f7a71b19f53c8c1765c59a013dab220edb49161b2e81917751d3e9edc3382430e4fb050feda04fb8463290ecab7cbc9240ec8d3d3b32a121849bbb0
   languageName: node
   linkType: hard
 
