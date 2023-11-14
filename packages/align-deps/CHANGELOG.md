@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/align-deps
 
+## 2.2.6
+
+### Patch Changes
+
+- 188482ab: Throw if a capability is missing name or version
+
 ## 2.2.5
 
 ### Patch Changes
