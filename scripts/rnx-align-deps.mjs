@@ -1,16 +1,12 @@
 #!/usr/bin/env node
-import * as path from "node:path";
-import { fileURLToPath } from "node:url";
+import { URL } from "node:url";
 // Import the bundle directly to avoid circular dependency
 import { cli } from "../packages/align-deps/lib/index.js";
 
 cli({
   presets: [
     "microsoft/react-native",
-    path.join(
-      path.dirname(fileURLToPath(import.meta.url)),
-      "align-deps-preset.js"
-    ),
+    new URL("align-deps-preset.js", import.meta.url).pathname,
   ],
   requirements: ["react-native@0.72"],
   write: process.argv.includes("--write"),
