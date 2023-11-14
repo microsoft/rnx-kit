@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-config
 
+## 1.3.14
+
+### Patch Changes
+
+- b7a3e823: Resolve out-of-tree platform packages to help Metro find them in pnpm setups
+
 ## 1.3.13
 
 ### Patch Changes
