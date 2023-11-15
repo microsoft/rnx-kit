@@ -1,5 +1,12 @@
 # Change Log - @rnx-kit/eslint-plugin
 
+## 0.5.3
+
+### Patch Changes
+
+- 5da23646: Prepare `no-export-all` for ESLint v9
+- d51cee8a: Add linter rules to ensure `PlatformColor()` and `DynamicColorIOS()` are used correctly
+
 ## 0.5.2
 
 ### Patch Changes
