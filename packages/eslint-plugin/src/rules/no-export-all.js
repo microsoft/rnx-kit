@@ -3,6 +3,7 @@
 
 /**
  * @typedef {import("@typescript-eslint/types/dist/index").TSESTree.Node} Node
+ * @typedef {import("eslint").Linter.FlatConfig} FlatConfig
  * @typedef {import("eslint").Rule.RuleContext} ESLintRuleContext
  * @typedef {import("eslint").Rule.ReportFixer} ESLintReportFixer
  * @typedef {{ exports: string[], types: string[] }} NamedExports
@@ -14,11 +15,11 @@
  *     expand: "all" | "external-only";
  *     maxDepth: number;
  *   };
- *   settings: ESLintRuleContext["settings"];
- *   parserPath: ESLintRuleContext["parserPath"];
- *   parserOptions: ESLintRuleContext["parserOptions"];
- *   parserServices: ESLintRuleContext["parserServices"];
  *   filename: string;
+ *   languageOptions: FlatConfig["languageOptions"];
+ *   parserOptions: ESLintRuleContext["parserOptions"];
+ *   parserPath: ESLintRuleContext["parserPath"];
+ *   sourceCode: ESLintRuleContext["sourceCode"];
  * }} RuleContext
  */
 
@@ -162,11 +163,12 @@ function toRuleContext(context) {
       ...defaultOptions,
       ...(context.options && context.options[0]),
     },
-    settings: context.settings,
-    parserPath: context.parserPath,
-    parserOptions: context.parserOptions,
-    parserServices: context.parserServices,
     filename: context.filename || context.getFilename(),
+    // @ts-expect-error Types have not yet been updated to include this field
+    languageOptions: context.languageOptions,
+    parserOptions: context.parserOptions,
+    parserPath: context.parserPath,
+    sourceCode: context.sourceCode,
   };
 }
 
@@ -176,8 +178,23 @@ function toRuleContext(context) {
  * @param {string} moduleId
  * @returns {{ ast: Node; filename: string; } | null}
  */
-function parse({ filename, options, parserPath, parserOptions }, moduleId) {
-  const { parseForESLint } = require(parserPath);
+function parse(context, moduleId) {
+  const { filename, languageOptions, options, parserPath } = context;
+  const parseForESLint = (() => {
+    // @ts-expect-error This option exists when using flat config
+    const parseForESLint = languageOptions?.parser?.parseForESLint;
+    if (typeof parseForESLint === "function") {
+      return parseForESLint;
+    }
+
+    // `parserPath` is only set when using legacy config format
+    if (parserPath) {
+      const { parseForESLint } = require(parserPath);
+      return parseForESLint;
+    }
+
+    return null;
+  })();
   if (typeof parseForESLint !== "function") {
     return null;
   }
@@ -186,6 +203,8 @@ function parse({ filename, options, parserPath, parserOptions }, moduleId) {
     const parentDir = path.dirname(filename);
     const modulePath = resolveFrom(parentDir, moduleId);
     const code = fs.readFileSync(modulePath, { encoding: "utf-8" });
+    const parserOptions =
+      languageOptions?.parserOptions ?? context.parserOptions;
     const { project } = parserOptions;
     return {
       ast: parseForESLint(code, {
@@ -395,7 +414,7 @@ module.exports = {
         const source = node.source.value;
         const isInternal = source && source.toString().startsWith(".");
         // export * as foo from "foo";
-        const isExportNamespace = !!node.exported;
+        const isExportNamespace = Boolean(node.exported);
         if ((expand === "external-only" && isInternal) || isExportNamespace) {
           return;
         }
