@@ -150,17 +150,12 @@ const resolveFrom =
  * @returns {RuleContext}
  */
 function toRuleContext(context) {
-  /** @type {RuleContext["options"]} */
-  const defaultOptions = {
-    debug: false,
-    expand: "all",
-    maxDepth: 5,
-  };
-
   return {
     id: context.id,
     options: {
-      ...defaultOptions,
+      debug: false,
+      expand: "all",
+      maxDepth: 5,
       ...(context.options && context.options[0]),
     },
     filename: context.filename || context.getFilename(),
