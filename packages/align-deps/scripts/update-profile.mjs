@@ -4,7 +4,7 @@
 import { markdownTable } from "markdown-table";
 import * as fs from "node:fs";
 import * as path from "node:path";
-import { fileURLToPath } from "node:url";
+import { URL } from "node:url";
 import packageJson from "package-json";
 import semverCoerce from "semver/functions/coerce.js";
 import semverCompare from "semver/functions/compare.js";
@@ -99,10 +99,9 @@ function getPackageVersion(packageName, dependencies) {
  * @returns {[string, string]}
  */
 function getProfilePath(preset, profileVersion) {
-  const __dirname = path.dirname(fileURLToPath(import.meta.url));
   const presetDir = path.relative(
     process.cwd(),
-    path.join(__dirname, "..", "src", "presets", preset)
+    new URL(`../src/presets/${preset}`, import.meta.url).pathname
   );
   return [
     path.join(presetDir, `profile-${profileVersion}.ts`),

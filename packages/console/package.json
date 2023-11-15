@@ -37,7 +37,7 @@
     "@rnx-kit/jest-preset": "*",
     "@rnx-kit/scripts": "*",
     "@types/jest": "^29.2.1",
-    "@types/node": "^18.0.0",
+    "@types/node": "^20.0.0",
     "eslint": "^8.0.0",
     "jest": "^29.2.1",
     "prettier": "^3.0.0",

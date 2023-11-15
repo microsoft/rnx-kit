@@ -3165,7 +3165,7 @@ __metadata:
     "@rnx-kit/eslint-config": "*"
     "@rnx-kit/jest-preset": "*"
     "@rnx-kit/scripts": "*"
-    "@types/node": ^18.0.0
+    "@types/node": ^20.0.0
     eslint: ^8.0.0
     jest: ^29.2.1
     prettier: ^3.0.0
@@ -3406,7 +3406,7 @@ __metadata:
     "@types/babel__core": ^7.0.0
     "@types/babel__helper-plugin-utils": ^7.0.0
     "@types/jest": ^29.2.1
-    "@types/node": ^18.0.0
+    "@types/node": ^20.0.0
     eslint: ^8.0.0
     jest: ^29.2.1
     prettier: ^3.0.0
@@ -3425,7 +3425,7 @@ __metadata:
     "@rnx-kit/scripts": "*"
     "@types/babel__core": ^7.0.0
     "@types/jest": ^29.2.1
-    "@types/node": ^18.0.0
+    "@types/node": ^20.0.0
     babel-plugin-const-enum: ^1.0.0
     eslint: ^8.0.0
     jest: ^29.2.1
@@ -3475,7 +3475,7 @@ __metadata:
     "@rnx-kit/jest-preset": "*"
     "@rnx-kit/scripts": "*"
     "@types/jest": ^29.2.1
-    "@types/node": ^18.0.0
+    "@types/node": ^20.0.0
     "@types/qrcode": ^1.4.2
     "@types/yargs": ^16.0.0
     env-paths: ^3.0.0
@@ -3504,7 +3504,7 @@ __metadata:
     "@rnx-kit/jest-preset": "*"
     "@rnx-kit/scripts": "*"
     "@types/jest": ^29.2.1
-    "@types/node": ^18.0.0
+    "@types/node": ^20.0.0
     eslint: ^8.0.0
     jest: ^29.2.1
     prettier: ^3.0.0
@@ -3522,7 +3522,7 @@ __metadata:
     "@rnx-kit/jest-preset": "*"
     "@rnx-kit/scripts": "*"
     "@types/mkdirp": ^1.0.1
-    "@types/node": ^18.0.0
+    "@types/node": ^20.0.0
     "@types/rimraf": ^3.0.0
     "@types/sinon": ^9.0.1
     escape-string-regexp: ^4.0.0
@@ -3565,7 +3565,7 @@ __metadata:
     "@types/connect": ^3.4.36
     "@types/fs-extra": ^9.0.0
     "@types/jest": ^29.2.1
-    "@types/node": ^18.0.0
+    "@types/node": ^20.0.0
     "@types/node-fetch": ^2.6.5
     "@types/qrcode": ^1.4.2
     chalk: ^4.1.0
@@ -3604,7 +3604,7 @@ __metadata:
     "@rnx-kit/eslint-config": "*"
     "@rnx-kit/jest-preset": "*"
     "@rnx-kit/scripts": "*"
-    "@types/node": ^18.0.0
+    "@types/node": ^20.0.0
     eslint: ^8.0.0
     jest: ^29.2.1
     prettier: ^3.0.0
@@ -3627,7 +3627,7 @@ __metadata:
     "@rnx-kit/scripts": "*"
     "@rnx-kit/tools-node": ^2.0.1
     "@rnx-kit/tools-react-native": "*"
-    "@types/node": ^18.0.0
+    "@types/node": ^20.0.0
     "@types/semver": ^7.0.0
     eslint: ^8.0.0
     jest: ^29.2.1
@@ -3646,7 +3646,7 @@ __metadata:
     "@rnx-kit/jest-preset": "*"
     "@rnx-kit/scripts": "*"
     "@types/jest": ^29.2.1
-    "@types/node": ^18.0.0
+    "@types/node": ^20.0.0
     chalk: ^4.1.0
     eslint: ^8.0.0
     jest: ^29.2.1
@@ -3667,7 +3667,7 @@ __metadata:
     "@rnx-kit/scripts": "*"
     "@rnx-kit/tools-node": ^2.0.0
     "@types/jest": ^29.2.1
-    "@types/node": ^18.0.0
+    "@types/node": ^20.0.0
     "@types/yargs": ^16.0.0
     chalk: ^4.1.0
     eslint: ^8.0.0
@@ -3688,7 +3688,7 @@ __metadata:
     "@rnx-kit/eslint-config": "*"
     "@rnx-kit/jest-preset": "*"
     "@rnx-kit/scripts": "*"
-    "@types/node": ^18.0.0
+    "@types/node": ^20.0.0
     esbuild: ^0.19.0
     eslint: ^8.0.0
     jest: ^29.2.1
@@ -3729,7 +3729,7 @@ __metadata:
     "@types/eslint": ^8.0.0
     "@types/estree": "*"
     "@types/jest": ^29.2.1
-    "@types/node": ^18.0.0
+    "@types/node": ^20.0.0
     "@typescript-eslint/eslint-plugin": ^6.0.0
     "@typescript-eslint/parser": ^6.0.0
     "@typescript-eslint/types": ^6.0.0
@@ -3763,7 +3763,7 @@ __metadata:
     "@react-native-community/cli-types": ^11.0.0
     "@rnx-kit/scripts": "*"
     "@types/jest": ^29.2.1
-    "@types/node": ^18.0.0
+    "@types/node": ^20.0.0
     eslint: ^8.0.0
     find-up: ^5.0.0
     jest: ^29.2.1
@@ -3826,7 +3826,7 @@ __metadata:
     "@rnx-kit/scripts": "*"
     "@rnx-kit/tools-node": ^2.0.0
     "@types/jest": ^29.2.1
-    "@types/node": ^18.0.0
+    "@types/node": ^20.0.0
     eslint: ^8.0.0
     jest: ^29.2.1
     metro: ^0.76.5
@@ -3846,7 +3846,7 @@ __metadata:
     "@rnx-kit/scripts": "*"
     "@rnx-kit/tools-node": ^2.0.0
     "@types/jest": ^29.2.1
-    "@types/node": ^18.0.0
+    "@types/node": ^20.0.0
     eslint: ^8.0.0
     jest: ^29.2.1
     memfs: ^4.0.0
@@ -3871,7 +3871,7 @@ __metadata:
     "@rnx-kit/tools-node": ^2.0.0
     "@rnx-kit/tools-react-native": ^1.3.2
     "@rnx-kit/typescript-service": ^1.5.7
-    "@types/node": ^18.0.0
+    "@types/node": ^20.0.0
     "@types/semver": ^7.0.0
     eslint: ^8.0.0
     jest: ^29.2.1
@@ -3893,7 +3893,7 @@ __metadata:
     "@rnx-kit/tools-node": ^2.1.0
     "@rnx-kit/tools-react-native": ^1.3.4
     "@types/jest": ^29.2.1
-    "@types/node": ^18.0.0
+    "@types/node": ^20.0.0
     enhanced-resolve: ^5.8.3
     eslint: ^8.0.0
     find-up: ^5.0.0
@@ -3924,7 +3924,7 @@ __metadata:
     "@rnx-kit/tools-node": ^2.0.0
     "@rnx-kit/tools-react-native": ^1.3.4
     "@types/jest": ^29.2.1
-    "@types/node": ^18.0.0
+    "@types/node": ^20.0.0
     "@types/semver": ^7.0.0
     esbuild: ^0.19.0
     esbuild-plugin-lodash: ^1.2.0
@@ -3952,7 +3952,7 @@ __metadata:
     "@rnx-kit/jest-preset": "*"
     "@rnx-kit/scripts": "*"
     "@rnx-kit/tools-react-native": ^1.3.4
-    "@types/node": ^18.0.0
+    "@types/node": ^20.0.0
     "@types/semver": ^7.0.0
     eslint: ^8.0.0
     jest: ^29.2.1
@@ -3975,7 +3975,7 @@ __metadata:
     "@rnx-kit/scripts": "*"
     "@rnx-kit/tools-node": ^2.1.0
     "@rnx-kit/tools-react-native": ^1.3.4
-    "@types/node": ^18.0.0
+    "@types/node": ^20.0.0
     "@types/node-fetch": ^2.6.5
     chalk: ^4.1.0
     eslint: ^8.0.0
@@ -4013,7 +4013,7 @@ __metadata:
     "@rnx-kit/scripts": "*"
     "@types/fs-extra": ^9.0.0
     "@types/istextorbinary": ^2.3.0
-    "@types/node": ^18.0.0
+    "@types/node": ^20.0.0
     commander: ^4.1.1
     eslint: ^8.0.0
     fs-extra: ^10.0.0
@@ -4042,7 +4042,7 @@ __metadata:
     "@types/babel__core": ^7.0.0
     "@types/babel__helper-plugin-utils": ^7.0.0
     "@types/babel__template": ^7.0.0
-    "@types/node": ^18.0.0
+    "@types/node": ^20.0.0
     chalk: ^4.1.0
     eslint: ^8.0.0
     jest: ^29.2.1
@@ -4085,7 +4085,7 @@ __metadata:
     "@rnx-kit/eslint-config": "*"
     "@rnx-kit/jest-preset": "*"
     "@rnx-kit/scripts": "*"
-    "@types/node": ^18.0.0
+    "@types/node": ^20.0.0
     "@types/yargs": ^16.0.0
     eslint: ^8.0.0
     jest: ^29.2.1
@@ -4119,7 +4119,7 @@ __metadata:
     "@rnx-kit/jest-preset": "*"
     "@rnx-kit/scripts": "*"
     "@types/jest": ^29.2.1
-    "@types/node": ^18.0.0
+    "@types/node": ^20.0.0
     babel-plugin-codegen: ^4.0.0
     eslint: ^8.0.0
     jest: ^29.2.1
@@ -4150,7 +4150,7 @@ __metadata:
     "@rnx-kit/jest-preset": "*"
     "@rnx-kit/scripts": "*"
     "@types/fast-levenshtein": 0.0.4
-    "@types/node": ^18.0.0
+    "@types/node": ^20.0.0
     chalk: ^4.1.0
     deepmerge: ^4.2.2
     eslint: ^8.0.0
@@ -4171,7 +4171,7 @@ __metadata:
   dependencies:
     "@eslint/js": ^8.0.0
     "@types/jest": ^29.2.1
-    "@types/node": ^18.0.0
+    "@types/node": ^20.0.0
     "@types/yargs": ^16.0.0
     depcheck: ^1.0.0
     esbuild: ^0.19.0
@@ -4253,7 +4253,7 @@ __metadata:
     "@rnx-kit/scripts": "*"
     "@rnx-kit/tools-node": ^2.0.0
     "@types/jest": ^29.2.1
-    "@types/node": ^18.0.0
+    "@types/node": ^20.0.0
     "@types/yargs": ^16.0.0
     eslint: ^8.0.0
     jest: ^29.2.1
@@ -4274,7 +4274,7 @@ __metadata:
     "@rnx-kit/eslint-config": "*"
     "@rnx-kit/jest-preset": "*"
     "@rnx-kit/scripts": "*"
-    "@types/node": ^18.0.0
+    "@types/node": ^20.0.0
     eslint: ^8.0.0
     jest: ^29.2.1
     prettier: ^3.0.0
@@ -4290,7 +4290,7 @@ __metadata:
     "@rnx-kit/jest-preset": "*"
     "@rnx-kit/scripts": "*"
     "@rnx-kit/tools-language": ^2.0.1
-    "@types/node": ^18.0.0
+    "@types/node": ^20.0.0
     eslint: ^8.0.0
     find-up: ^5.0.0
     jest: ^29.2.1
@@ -4309,7 +4309,7 @@ __metadata:
     "@rnx-kit/jest-preset": "*"
     "@rnx-kit/scripts": "*"
     "@rnx-kit/tools-node": ^2.0.1
-    "@types/node": ^18.0.0
+    "@types/node": ^20.0.0
     eslint: ^8.0.0
     jest: ^29.2.1
     metro: ^0.76.5
@@ -4328,7 +4328,7 @@ __metadata:
     "@rnx-kit/eslint-config": "*"
     "@rnx-kit/jest-preset": "*"
     "@rnx-kit/scripts": "*"
-    "@types/node": ^18.0.0
+    "@types/node": ^20.0.0
     eslint: ^8.0.0
     fast-glob: ^3.2.7
     find-up: ^5.0.0
@@ -4348,7 +4348,7 @@ __metadata:
     "@rnx-kit/jest-preset": "*"
     "@rnx-kit/scripts": "*"
     "@rnx-kit/tools-node": ^2.0.0
-    "@types/node": ^18.0.0
+    "@types/node": ^20.0.0
     chalk: ^4.1.0
     eslint: ^8.0.0
     jest: ^29.2.1
@@ -4684,7 +4684,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*":
+"@types/node@npm:*, @types/node@npm:^20.0.0":
   version: 20.9.0
   resolution: "@types/node@npm:20.9.0"
   dependencies:
@@ -4697,15 +4697,6 @@ __metadata:
   version: 12.20.55
   resolution: "@types/node@npm:12.20.55"
   checksum: e4f86785f4092706e0d3b0edff8dca5a13b45627e4b36700acd8dfe6ad53db71928c8dee914d4276c7fd3b6ccd829aa919811c9eb708a2c8e4c6eb3701178c37
-  languageName: node
-  linkType: hard
-
-"@types/node@npm:^18.0.0":
-  version: 18.18.9
-  resolution: "@types/node@npm:18.18.9"
-  dependencies:
-    undici-types: ~5.26.4
-  checksum: 629ce20357586144031cb43d601617eef45e59460dea6b1e123f708e6885664f44d54f65e5b72b2614af5b8613f3652ced832649c0b991accbc6a85139befa51
   languageName: node
   linkType: hard
 
@@ -12927,7 +12918,7 @@ __metadata:
   dependencies:
     "@changesets/cli": ^2.22.0
     "@types/jest": ^29.2.1
-    "@types/node": ^18.0.0
+    "@types/node": ^20.0.0
     eslint: ^8.0.0
     metro: ^0.76.5
     nx: ~17.0.2

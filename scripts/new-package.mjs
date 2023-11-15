@@ -3,7 +3,7 @@
 
 import * as fs from "node:fs";
 import * as path from "node:path";
-import { fileURLToPath } from "node:url";
+import { URL } from "node:url";
 import yargs from "yargs";
 
 const EXPERIMENTAL_BANNER =
@@ -35,8 +35,7 @@ const experimental = argv.experimental;
 // do some quick sanitization
 const cleanProjectName = projectName.replace(/[|&;$%@"<>()+,]/g, "");
 
-const scriptsDir = path.dirname(fileURLToPath(import.meta.url));
-const repoRoot = path.dirname(scriptsDir);
+const repoRoot = new URL("..", import.meta.url).pathname;
 
 // copy the package/template folder to a new folder with the name of the value
 // and then change the package.json file to the new name

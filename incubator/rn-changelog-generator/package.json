@@ -33,7 +33,7 @@
     "@rnx-kit/jest-preset": "*",
     "@rnx-kit/scripts": "*",
     "@types/fast-levenshtein": "0.0.4",
-    "@types/node": "^18.0.0",
+    "@types/node": "^20.0.0",
     "chalk": "^4.1.0",
     "deepmerge": "^4.2.2",
     "eslint": "^8.0.0",
