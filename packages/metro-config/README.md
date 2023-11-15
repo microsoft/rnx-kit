@@ -100,15 +100,17 @@ would resolve `react-native-msal@2.0.3` while `another-awesome-package` would
 resolve `react-native-msal@3.1.0`. This would lead to duplicate packages in your
 bundle and may cause issues.
 
-    workspace
-    ├── node_modules
-    │   └── react-native-msal@3.1.0  <-- should be ignored
-    └── packages
-        ├── my-awesome-package
-        │   └── node_modules
-        │       └── react-native-msal@2.0.3  <-- should take precedence
-        └── another-awesome-package  <-- imported by my-awesome-package,
-                                         but uses workspace's react-native-msal
+```
+workspace
+├── node_modules
+│   └── react-native-msal@3.1.0  <-- should be ignored
+└── packages
+    ├── my-awesome-package
+    │   └── node_modules
+    │       └── react-native-msal@2.0.3  <-- should take precedence
+    └── another-awesome-package  <-- imported by my-awesome-package,
+                                     but uses workspace's react-native-msal
+```
 
 If we simply exclude the workspace's copy, Metro will not be able to find
 `react-native-msal` from `another-awesome-package`. It also won't exclude copies
