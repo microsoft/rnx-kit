@@ -21,6 +21,7 @@
     "@eslint/eslintrc": "^2.1.2",
     "@eslint/js": "^8.0.0",
     "@microsoft/eslint-plugin-sdl": "^0.2.0",
+    "@react-native/eslint-plugin": "^0.74.0",
     "@rnx-kit/eslint-plugin": "workspace:*",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",

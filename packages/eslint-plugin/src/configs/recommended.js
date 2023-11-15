@@ -20,8 +20,9 @@ module.exports = {
     ecmaVersion: 2018,
     sourceType: "module",
   },
-  plugins: ["@rnx-kit", "@typescript-eslint"],
+  plugins: ["@react-native", "@rnx-kit", "@typescript-eslint"],
   rules: {
+    "@react-native/platform-colors": "error",
     "@rnx-kit/no-const-enum": "warn",
     "@rnx-kit/no-export-all": "warn",
     "@typescript-eslint/consistent-type-imports": [

@@ -3309,6 +3309,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@react-native/eslint-plugin@npm:^0.74.0":
+  version: 0.74.0
+  resolution: "@react-native/eslint-plugin@npm:0.74.0"
+  checksum: 2ac8713e602d2ec993f03b1f5b161f0739a71a9b36bf185de48ddcdff6c1e30c61729ad48c11a963d39a60d10d2a2ecf4c4f922ef1ea40a8f2b1e8d71626fd2f
+  languageName: node
+  linkType: hard
+
 "@react-native/gradle-plugin@npm:^0.72.11":
   version: 0.72.11
   resolution: "@react-native/gradle-plugin@npm:0.72.11"
@@ -3697,6 +3704,7 @@ __metadata:
     "@eslint/eslintrc": ^2.1.2
     "@eslint/js": ^8.0.0
     "@microsoft/eslint-plugin-sdl": ^0.2.0
+    "@react-native/eslint-plugin": ^0.74.0
     "@rnx-kit/eslint-plugin": "workspace:*"
     "@typescript-eslint/eslint-plugin": ^6.0.0
     "@typescript-eslint/parser": ^6.0.0
@@ -3714,6 +3722,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/eslint-plugin@workspace:packages/eslint-plugin"
   dependencies:
+    "@react-native/eslint-plugin": ^0.74.0
     "@rnx-kit/eslint-config": "*"
     "@rnx-kit/jest-preset": "*"
     "@rnx-kit/scripts": "*"
