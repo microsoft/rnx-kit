@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-serializer-esbuild
 
+## 0.1.32
+
+### Patch Changes
+
+- 1088382a: Added [`drop`](https://esbuild.github.io/api/#drop) and [`pure`](https://esbuild.github.io/api/#pure) options
+
 ## 0.1.31
 
 ### Patch Changes
