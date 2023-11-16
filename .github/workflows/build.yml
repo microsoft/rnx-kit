@@ -17,10 +17,6 @@ jobs:
           fetch-depth: 0
       - name: Setup the toolchain
         uses: ./.github/actions/setup-toolchain
-        with:
-          # `npm pack` fails in pnpm mode when using npm 9+ (bundled with Node 18+)
-          # See also: https://github.com/npm/cli/issues/5007
-          node-version: "16"
       - name: Install package dependencies
         run: |
           yarn
@@ -38,6 +34,12 @@ jobs:
         run: |
           yarn build
         working-directory: docsite
+      - name: Set up Node.js
+        uses: actions/setup-node@v4.0.0
+        with:
+          # `npm pack` fails in pnpm mode when using npm 9+ (bundled with Node 18+)
+          # See also: https://github.com/npm/cli/issues/5007
+          node-version: "16"
       - name: Create release PR or publish to npm
         uses: changesets/action@v1
         with:
