@@ -5,8 +5,6 @@ on:
 jobs:
   build_and_publish:
     name: "Build and publish"
-    permissions:
-      contents: write # deploy to GitHub Pages (peaceiris/actions-gh-pages)
     if: ${{ github.repository == 'microsoft/rnx-kit' }}
     runs-on: ubuntu-22.04
     steps:
@@ -38,11 +36,20 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-      - name: Set up Node.js (website)
+  website:
+    name: "Publish website"
+    permissions:
+      contents: write # deploy to GitHub Pages (peaceiris/actions-gh-pages)
+    needs: build_and_publish
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Node.js
         uses: actions/setup-node@v4.0.0
         with:
           node-version: "20"
-      - name: Install package dependencies (website)
+      - name: Install package dependencies
         run: |
           yarn
         working-directory: docsite
