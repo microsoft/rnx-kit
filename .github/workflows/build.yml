@@ -5,6 +5,8 @@ on:
 jobs:
   build_and_publish:
     name: "Build and publish"
+    permissions:
+      contents: write # create Git tags
     if: ${{ github.repository == 'microsoft/rnx-kit' }}
     runs-on: ubuntu-22.04
     steps:
