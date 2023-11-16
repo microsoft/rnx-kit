@@ -139,6 +139,16 @@ by disabling this if you haven't migrated to Fabric yet.
 
 Defaults to `false`.
 
+### `drop`
+
+Tells esbuild to edit your source code before building to drop certain
+constructs. There are currently two possible things that can be dropped:
+`debugger` and `console`.
+
+See the full documentation at https://esbuild.github.io/api/#drop.
+
+By default, this option is not set.
+
 ### `minify`
 
 When enabled, the generated code will be minified instead of pretty-printed.
@@ -168,6 +178,15 @@ By default, this option is not set.
 Same as `minify` but only rewrites syntax to be more compact.
 
 See the full documentation at https://esbuild.github.io/api/#minify.
+
+By default, this option is not set.
+
+### `pure`
+
+Add `/* @__PURE__ */` annotation to the specified new or call expressions. This
+tells esbuild they can be removed if the resulting value is unused.
+
+See the full documentation at https://esbuild.github.io/api/#pure.
 
 By default, this option is not set.
 
