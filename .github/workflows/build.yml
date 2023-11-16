@@ -17,6 +17,10 @@ jobs:
           fetch-depth: 0
       - name: Setup the toolchain
         uses: ./.github/actions/setup-toolchain
+        with:
+          # `npm pack` fails in pnpm mode when using npm 9+ (bundled with Node 18+)
+          # See also: https://github.com/npm/cli/issues/5007
+          node-version: "16"
       - name: Install package dependencies
         run: |
           yarn
@@ -26,20 +30,6 @@ jobs:
       - name: Bundle packages
         run: |
           yarn bundle
-      - name: Install package dependencies (docsite)
-        run: |
-          yarn
-        working-directory: docsite
-      - name: Build website
-        run: |
-          yarn build
-        working-directory: docsite
-      - name: Set up Node.js
-        uses: actions/setup-node@v4.0.0
-        with:
-          # `npm pack` fails in pnpm mode when using npm 9+ (bundled with Node 18+)
-          # See also: https://github.com/npm/cli/issues/5007
-          node-version: "16"
       - name: Create release PR or publish to npm
         uses: changesets/action@v1
         with:
@@ -48,6 +38,18 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Set up Node.js (website)
+        uses: actions/setup-node@v4.0.0
+        with:
+          node-version: "20"
+      - name: Install package dependencies (website)
+        run: |
+          yarn
+        working-directory: docsite
+      - name: Build website
+        run: |
+          yarn build
+        working-directory: docsite
       - name: Deploy website
         uses: peaceiris/actions-gh-pages@v3
         with:
