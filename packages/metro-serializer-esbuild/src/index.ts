@@ -19,11 +19,13 @@ export { esbuildTransformerConfig } from "./esbuildTransformerConfig";
 
 export type Options = Pick<
   BuildOptions,
+  | "drop"
   | "logLevel"
   | "minify"
   | "minifyWhitespace"
   | "minifyIdentifiers"
   | "minifySyntax"
+  | "pure"
   | "target"
 > & {
   analyze?: boolean | "verbose";
@@ -380,6 +382,7 @@ export function MetroSerializer(
           __METRO_GLOBAL_PREFIX__: "''",
           global: "global",
         },
+        drop: buildOptions?.drop,
         entryPoints: [entryPoint],
         inject: [
           /**
@@ -402,6 +405,7 @@ export function MetroSerializer(
         minifySyntax: buildOptions?.minifySyntax,
         outfile,
         plugins,
+        pure: buildOptions?.pure,
         sourcemap: Boolean(options.sourceMapUrl) && "linked",
         target,
         supported: (() => {
