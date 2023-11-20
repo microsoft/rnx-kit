@@ -4631,11 +4631,11 @@ __metadata:
   linkType: hard
 
 "@types/istextorbinary@npm:^2.3.0":
-  version: 2.3.3
-  resolution: "@types/istextorbinary@npm:2.3.3"
+  version: 2.3.4
+  resolution: "@types/istextorbinary@npm:2.3.4"
   dependencies:
     "@types/node": "*"
-  checksum: 207a028d069d542c14fcee22570fd4e61a5cadb50a5fabc582b6dcb859679e089341882c6262a8804b9cbaa1258c00fe199d981a79c8044a775eff5415508873
+  checksum: 616c11809f7c04249f0651df7c66ce276573c2ae2882e56536d0c1fcbeef7045797ee91cd0d2ddfb80be6a0840d043d360bc752a73ea8c780b059a0510dcdeb2
   languageName: node
   linkType: hard
 
@@ -4727,12 +4727,12 @@ __metadata:
   linkType: hard
 
 "@types/prompts@npm:^2.0.0":
-  version: 2.4.7
-  resolution: "@types/prompts@npm:2.4.7"
+  version: 2.4.8
+  resolution: "@types/prompts@npm:2.4.8"
   dependencies:
     "@types/node": "*"
     kleur: ^3.0.3
-  checksum: 2c57b3c419b4be72039dcd0d099c4643a5f7d06cf20156709e87498cd4f6cb4000edc1cafde95786b46d137eb5ace01e3ba83dbc5f29cb69f4b778fdd42b7d81
+  checksum: 5422ae432c107a083a22016212fba5fc736e789f6168527961badb180485f816b1ad136002e7a614f44bc03285c76b7e2d09e0fe8240229eff7a2000a200a7f7
   languageName: node
   linkType: hard
 
@@ -4744,11 +4744,11 @@ __metadata:
   linkType: hard
 
 "@types/qrcode@npm:^1.4.2":
-  version: 1.5.4
-  resolution: "@types/qrcode@npm:1.5.4"
+  version: 1.5.5
+  resolution: "@types/qrcode@npm:1.5.5"
   dependencies:
     "@types/node": "*"
-  checksum: 6e52ea88e76df1da314ca35e61fe5e8e4beab1821d814204225d4b72d7cdb22d2e8f60f0bc3c7e6ec56c4d3380bf5ca96ced1af35926ecfcb085474b20ef9696
+  checksum: d92c1d3e77406bf13a03ec521b2ffb1ac99b2e6ea3a17cad670f2610f62e1293554c57e4074bb2fd4e9369f475f863b69e0ae8c543cb049c4a3c1b0c2d92522a
   languageName: node
   linkType: hard
 
@@ -4781,9 +4781,9 @@ __metadata:
   linkType: hard
 
 "@types/semver@npm:^7.0.0, @types/semver@npm:^7.5.0":
-  version: 7.5.4
-  resolution: "@types/semver@npm:7.5.4"
-  checksum: 120c0189f6fec5f2d12d0d71ac8a4cfa952dc17fa3d842e8afddb82bba8828a4052f8799c1653e2b47ae1977435f38e8985658fde971905ce5afb8e23ee97ecf
+  version: 7.5.5
+  resolution: "@types/semver@npm:7.5.5"
+  checksum: 533e6c93d1262d65f449423d94a445f7f3db0672e7429f21b6a1636d6051dbab3a2989ddcda9b79c69bb37830931d09fc958a65305a891357f5cea3257c297f5
   languageName: node
   linkType: hard
 
@@ -4827,29 +4827,29 @@ __metadata:
   linkType: hard
 
 "@types/yargs@npm:^15.0.0":
-  version: 15.0.17
-  resolution: "@types/yargs@npm:15.0.17"
+  version: 15.0.18
+  resolution: "@types/yargs@npm:15.0.18"
   dependencies:
     "@types/yargs-parser": "*"
-  checksum: b306af8c32ed5eee219d66fb2b302b24460e5551f6df38ac52c26906e2689ac55d64190cf15feec46b380abd0b1994631690d9ffcc7bcd9dd3ff1242740fa5f0
+  checksum: 52bd812d25f0ee0943506b6189fd14211ca233ff061d2003406a6148ce6a58148f4033bb9bc6b6dc598665354b81e0750cbaf6c695f70f29abb1ae45742d92d3
   languageName: node
   linkType: hard
 
 "@types/yargs@npm:^16.0.0":
-  version: 16.0.7
-  resolution: "@types/yargs@npm:16.0.7"
+  version: 16.0.8
+  resolution: "@types/yargs@npm:16.0.8"
   dependencies:
     "@types/yargs-parser": "*"
-  checksum: b116b9a3f3fc0ed608f2413fc3c48ba90344761d0c160ca6a31edf669959325172594f706cb85f9c1c46c5cf33130ff6b5772143c37567a24689489976a5d248
+  checksum: 3e82590f930fed262580fec5878336e975934a758b10961e0b403b8883c59b472225f38959399612edb7a2a9783d9edd244d1f9c2b5e7d072b21372646e888d2
   languageName: node
   linkType: hard
 
 "@types/yargs@npm:^17.0.8":
-  version: 17.0.29
-  resolution: "@types/yargs@npm:17.0.29"
+  version: 17.0.31
+  resolution: "@types/yargs@npm:17.0.31"
   dependencies:
     "@types/yargs-parser": "*"
-  checksum: 8bbc0edd573a5a084cb13a9985c124490fd74e73b1ed8a3058861c13124e103b00a19770dc55c53215653a7845d7033e0695917b75153cfe9618d5b2fd3cf86e
+  checksum: a7f4fe5b05162790cbcbccceb22821e2cb3e49d95a4d8403352f258744cd504124f3ab502eddb2262f5d2d9cc6a0547851ae44621b14fe4c505d8f1434c2a19e
   languageName: node
   linkType: hard
 
