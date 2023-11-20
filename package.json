@@ -47,7 +47,7 @@
   "engines": {
     "node": ">=16.13"
   },
-  "packageManager": "yarn@4.0.1",
+  "packageManager": "yarn@4.0.2",
   "resolutions": {
     "@microsoft/eslint-plugin-sdl/eslint-plugin-react": "^7.26.0",
     "@microsoft/eslint-plugin-sdl/eslint-plugin-security": "^1.4.0",
