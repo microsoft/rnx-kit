@@ -315,12 +315,12 @@ export function interpretParsedPatchFile(files: FileDeets[]): ParsedPatchFile {
     const type: PatchFilePart["type"] = renameFrom
       ? "rename"
       : deletedFileMode
-      ? "file deletion"
-      : newFileMode
-      ? "file creation"
-      : hunks && hunks.length > 0
-      ? "patch"
-      : "mode change";
+        ? "file deletion"
+        : newFileMode
+          ? "file creation"
+          : hunks && hunks.length > 0
+            ? "patch"
+            : "mode change";
 
     let destinationFilePath: string | null = null;
     switch (type) {
