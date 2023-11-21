@@ -1,8 +1,8 @@
 // @ts-check
 
-import { runScript } from "../process.mjs";
+import { runScript } from "../process.js";
 
-/** @type {import("../process.mjs").Command} */
+/** @type {import("../process.js").Command} */
 export async function test(_args, rawArgs = []) {
   await runScript("jest", "--passWithNoTests", ...rawArgs);
 }

@@ -4,7 +4,7 @@ import { spawn } from "node:child_process";
 import * as os from "node:os";
 import * as path from "node:path";
 
-/** @type {import("../process.mjs").Command} */
+/** @type {import("../process.js").Command} */
 export function buildAndroid(_args, rawArgs) {
   const wrapper = os.platform() === "win32" ? "gradlew.bat" : "gradlew";
   const gradlew = path.resolve("android", wrapper);

@@ -184,7 +184,7 @@
     "alignDeps": {
       "presets": [
         "microsoft/react-native",
-        "@rnx-kit/scripts/align-deps-preset.js"
+        "@rnx-kit/scripts/align-deps-preset.cjs"
       ],
       "requirements": [
         "react-native@0.72"
@@ -194,9 +194,13 @@
         "core-ios",
         "core-macos",
         "core-windows",
+        "core/testing",
         "babel-preset-react-native",
+        "eslint",
+        "prettier",
         "react",
-        "test-app"
+        "test-app",
+        "typescript"
       ]
     }
   }

@@ -4193,7 +4193,7 @@ __metadata:
     typescript: ^5.0.0
     yargs: ^16.0.0
   bin:
-    rnx-kit-scripts: src/index.mjs
+    rnx-kit-scripts: src/index.js
   languageName: unknown
   linkType: soft
 

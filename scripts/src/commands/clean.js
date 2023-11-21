@@ -2,7 +2,7 @@
 
 import * as fs from "node:fs";
 
-/** @type {import("../process.mjs").Command} */
+/** @type {import("../process.js").Command} */
 export async function clean() {
   const options = { force: true, maxRetries: 3, recursive: true };
   [

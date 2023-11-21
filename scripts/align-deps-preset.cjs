@@ -61,10 +61,12 @@ const profile = {
   esbuild: {
     name: "esbuild",
     version: "^0.19.0",
+    devOnly: true,
   },
   eslint: {
     name: "eslint",
     version: "^8.0.0",
+    devOnly: true,
   },
   "find-up": {
     name: "find-up",
@@ -81,6 +83,7 @@ const profile = {
   prettier: {
     name: "prettier",
     version: "^3.0.0",
+    devOnly: true,
   },
   semver: {
     name: "semver",
@@ -89,6 +92,7 @@ const profile = {
   typescript: {
     name: "typescript",
     version: "^5.0.0",
+    devOnly: true,
   },
   yargs: {
     name: "yargs",

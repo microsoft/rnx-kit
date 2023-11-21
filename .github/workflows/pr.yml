@@ -39,7 +39,7 @@ jobs:
           git diff --exit-code
       - name: Report package metadata inconsistencies
         run: |
-          node scripts/lint-metadata.mjs
+          node scripts/lint-metadata.js
           git diff --exit-code
       - name: Report @rnx-kit/build workflow inconsistencies
         run: |
