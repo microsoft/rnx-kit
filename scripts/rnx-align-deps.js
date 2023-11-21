@@ -6,7 +6,7 @@ import { cli } from "../packages/align-deps/lib/index.js";
 cli({
   presets: [
     "microsoft/react-native",
-    new URL("align-deps-preset.js", import.meta.url).pathname,
+    new URL("align-deps-preset.cjs", import.meta.url).pathname,
   ],
   requirements: ["react-native@0.72"],
   write: process.argv.includes("--write"),

@@ -1,12 +1,12 @@
 // @ts-check
 
 import * as fs from "node:fs";
-import { runScript, sequence } from "../process.mjs";
-import { clean } from "./clean.mjs";
-import { depcheck } from "./depcheck.mjs";
-import { lint } from "./lint.mjs";
+import { runScript, sequence } from "../process.js";
+import { clean } from "./clean.js";
+import { depcheck } from "./depcheck.js";
+import { lint } from "./lint.js";
 
-/** @type {import("../process.mjs").Command} */
+/** @type {import("../process.js").Command} */
 export async function build(_args, rawArgs = []) {
   // If `--dependencies` is specified, also build the package's dependencies.
   if (rawArgs.includes("--dependencies")) {

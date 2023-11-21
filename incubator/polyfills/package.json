@@ -62,14 +62,11 @@
   },
   "rnx-kit": {
     "alignDeps": {
-      "presets": [
-        "microsoft/react-native",
-        "@rnx-kit/scripts/align-deps-preset.js"
-      ],
       "requirements": [
         "react-native@0.72"
       ],
       "capabilities": [
+        "jest",
         "metro-config"
       ]
     }

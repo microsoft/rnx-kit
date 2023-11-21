@@ -7,7 +7,7 @@
 import { spawn } from "node:child_process";
 import * as os from "node:os";
 import * as path from "node:path";
-import { require } from "./require.mjs";
+import { require } from "./require.js";
 
 function findWorkspaceRoot(options = { paths: [process.cwd()] }) {
   const scriptsDir = path.dirname(
