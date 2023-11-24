@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-serializer-esbuild
 
+## 0.1.33
+
+### Patch Changes
+
+- c60b0526: esbuild [0.19.6](https://github.com/evanw/esbuild/releases/tag/v0.19.6) no longer throws when a `Symbol` is missing
+
 ## 0.1.32
 
 ### Patch Changes
