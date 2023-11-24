@@ -3,11 +3,12 @@
 [![Build](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml/badge.svg)](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml)
 [![npm version](https://img.shields.io/npm/v/@rnx-kit/eslint-plugin)](https://www.npmjs.com/package/@rnx-kit/eslint-plugin)
 
-`@rnx-kit/eslint-plugin` is a set of rules that can be extended in your own
-shareable ESLint config.
+`@rnx-kit/eslint-plugin` is a set of configurations and rules that can be used
+as is, or extended in your own ESLint config.
 
-For more details on shareable configs, see
-https://eslint.org/docs/developer-guide/shareable-configs.
+Note that this plugin requires the
+[new ESLint configuration format](https://eslint.org/blog/2022/08/new-config-system-part-2/).
+If you still rely on the previous format, use version 0.5.x instead.
 
 ## Install
 
@@ -21,33 +22,70 @@ or if you're using npm:
 npm add --save-dev @rnx-kit/eslint-plugin
 ```
 
-## Recommended Configs
+## Usage
 
-This ESLint plugin exports
-[`@rnx-kit/recommended`](https://github.com/microsoft/rnx-kit/blob/main/packages/eslint-plugin/src/configs/recommended.js)
-configuration. To enable it, add it to the `extends` section of your ESLint
-config file:
+This ESLint plugin exports multiple configurations. For instance, to use the
+[`recommended`](https://github.com/microsoft/rnx-kit/blob/main/packages/eslint-plugin/src/configs/recommended.js)
+configuration, you can re-export it in your
+[flat config](https://eslint.org/docs/latest/use/configure/configuration-files-new)
+like below:
 
-```json
-{
-  "extends": ["plugin:@rnx-kit/recommended"]
-}
+```js
+module.exports = require("@rnx-kit/eslint-plugin/recommended");
 ```
 
-`@rnx-kit/recommended` currently extends:
+Alternatively, if you want to add customizations:
 
-- [`eslint:recommended`](https://eslint.org/docs/rules/)
-- [`plugin:@typescript-eslint/recommended`](https://github.com/typescript-eslint/typescript-eslint/tree/main/packages/eslint-plugin#supported-rules)
-- [`plugin:react-hooks/recommended`](https://github.com/facebook/react/blob/main/packages/eslint-plugin-react-hooks/src/index.js)
-- [`plugin:react/recommended`](https://github.com/yannickcr/eslint-plugin-react#recommended)
+```js
+const rnx = require("@rnx-kit/eslint-plugin");
+module.exports = [
+  ...rnx.configs.recommended,
+  {
+    rules: {
+      "@rnx-kit/no-const-enum": "error",
+      "@rnx-kit/no-export-all": "error",
+    },
+  },
+];
+```
 
-Additionally, it also includes and enables:
+If you're just interested in the rules, you can use it as a plugin and enable
+the rules you're interested in:
 
-- [`@react-native/eslint-plugin`](https://github.com/facebook/react-native/tree/main/packages/eslint-plugin-react-native#readme)
+```js
+module.exports = [
+  {
+    plugins: {
+      "@rnx-kit": require("@rnx-kit/eslint-plugin"),
+    },
+    rules: {
+      "@rnx-kit/no-const-enum": "error",
+      "@rnx-kit/no-export-all": "error",
+    },
+  },
+];
+```
+
+## Recommended Configurations
+
+- [`@rnx-kit/eslint-plugin/recommended`](https://github.com/microsoft/rnx-kit/blob/main/packages/eslint-plugin/src/configs/recommended.js)
+  extends:
+  - [`eslint:recommended`](https://eslint.org/docs/rules/)
+  - [`plugin:@typescript-eslint/recommended`](https://typescript-eslint.io/linting/configs#recommended)
+  - [`plugin:react-hooks/recommended`](https://github.com/facebook/react/tree/main/packages/eslint-plugin-react-hooks#readme)
+  - [`plugin:react/recommended`](https://github.com/yannickcr/eslint-plugin-react#recommended)
+  - It also includes and enables the following rules:
+    - [`@react-native/platform-colors`](https://github.com/facebook/react-native/tree/main/packages/eslint-plugin-react-native#readme)
+- [`@rnx-kit/eslint-plugin/strict`](https://github.com/microsoft/rnx-kit/blob/main/packages/eslint-plugin/src/configs/strict.js)
+  extends `@rnx-kit/eslint-plugin/recommended` with rules that enables better
+  tree shaking:
+  - [`@rnx-kit/no-const-enum`](https://github.com/microsoft/rnx-kit/blob/main/packages/eslint-plugin/src/rules/no-const-enum.js)
+  - [`@rnx-kit/no-export-all`](https://github.com/microsoft/rnx-kit/blob/main/packages/eslint-plugin/src/rules/no-export-all.js)
+  - [`no-restricted-exports`](https://archive.eslint.org/docs/rules/no-restricted-exports)
 
 ## Supported Rules
 
-- ✓: Enabled with `@rnx-kit/recommended`
+- ✓: Enabled with `@rnx-kit/eslint-plugin/recommended`
 - 🔧: Fixable with `--fix`
 
 |  ✓  | 🔧  | Rule                                                                                                                         | Description                                                                        |

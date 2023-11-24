@@ -37,7 +37,7 @@
     "@changesets/cli": "^2.22.0",
     "@types/jest": "^29.2.1",
     "@types/node": "^20.0.0",
-    "eslint": "^8.0.0",
+    "eslint": "^8.23.0",
     "metro": "^0.76.5",
     "nx": "~17.0.2",
     "prettier": "^3.0.0",
@@ -49,7 +49,7 @@
   },
   "packageManager": "yarn@3.7.0",
   "resolutions": {
-    "@microsoft/eslint-plugin-sdl/eslint-plugin-react": "^7.26.0",
+    "@microsoft/eslint-plugin-sdl/eslint-plugin-react": "^7.33.0",
     "@microsoft/eslint-plugin-sdl/eslint-plugin-security": "^1.4.0",
     "@react-native-community/cli": "^11.3.6",
     "@react-native-community/cli-platform-android": "^11.3.6",

@@ -15,6 +15,18 @@
     "src/*"
   ],
   "main": "src/index.js",
+  "exports": {
+    ".": {
+      "default": "./src/index.js"
+    },
+    "./recommended": {
+      "default": "./src/configs/recommended.js"
+    },
+    "./strict": {
+      "default": "./src/configs/strict.js"
+    },
+    "./package.json": "./package.json"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/microsoft/rnx-kit",
@@ -27,26 +39,32 @@
     "test": "rnx-kit-scripts test"
   },
   "dependencies": {
+    "@eslint/eslintrc": "^2.1.2",
+    "@eslint/js": "^8.33.0",
     "@react-native/eslint-plugin": "^0.74.0",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
     "enhanced-resolve": "^5.8.3",
-    "eslint-plugin-react": "^7.26.0",
-    "eslint-plugin-react-hooks": "^4.3.0"
+    "eslint-plugin-react": "^7.33.0",
+    "eslint-plugin-react-hooks": "^4.6.0"
   },
   "peerDependencies": {
-    "eslint": ">=6.0.0"
+    "eslint": ">=8.23.0"
   },
   "devDependencies": {
+    "@microsoft/eslint-plugin-sdl": "^0.2.0",
     "@rnx-kit/eslint-config": "*",
     "@rnx-kit/jest-preset": "*",
     "@rnx-kit/scripts": "*",
     "@types/eslint": "^8.0.0",
+    "@types/eslint__eslintrc": "^2.1.1",
+    "@types/eslint__js": "^8.0.0",
     "@types/estree": "*",
     "@types/jest": "^29.2.1",
     "@types/node": "^20.0.0",
     "@typescript-eslint/types": "^6.0.0",
-    "eslint": "^8.0.0",
+    "eslint": "^8.23.0",
+    "eslint-plugin-node": "11.1.0",
     "jest": "^29.2.1",
     "prettier": "^3.0.0",
     "typescript": "^5.0.0"
@@ -56,9 +74,11 @@
   },
   "depcheck": {
     "ignoreMatches": [
+      "@microsoft/eslint-plugin-sdl",
       "@react-native/eslint-plugin",
       "@typescript-eslint/eslint-plugin",
       "@typescript-eslint/types",
+      "eslint-plugin-node",
       "eslint-plugin-react",
       "eslint-plugin-react-hooks"
     ]

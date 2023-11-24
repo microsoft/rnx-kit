@@ -42,7 +42,7 @@
     "@types/mkdirp": "^1.0.1",
     "@types/rimraf": "^3.0.0",
     "@types/sinon": "^9.0.1",
-    "eslint": "^8.0.0",
+    "eslint": "^8.23.0",
     "jest": "^29.2.1",
     "prettier": "^3.0.0",
     "sinon": "^9.0.1",
