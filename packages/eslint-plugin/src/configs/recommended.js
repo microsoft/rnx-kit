@@ -45,5 +45,10 @@ module.exports = [
       "@typescript-eslint/no-var-requires": "off",
       "react/prop-types": "off",
     },
+    settings: {
+      react: {
+        version: "detect",
+      },
+    },
   },
 ];
