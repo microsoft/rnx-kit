@@ -9,12 +9,26 @@ const compat = new FlatCompat({
   recommendedConfig: js.configs.recommended,
 });
 
+/**
+ * @param {string} spec
+ * @returns {boolean}
+ */
+function isInstalled(spec) {
+  try {
+    return Boolean(require.resolve(spec, { paths: [process.cwd()] }));
+  } catch (_) {
+    return false;
+  }
+}
+
+const usesReact = isInstalled("react");
+const configs = ["plugin:@typescript-eslint/recommended"];
+if (usesReact) {
+  configs.push("plugin:react-hooks/recommended", "plugin:react/recommended");
+}
+
 module.exports = [
-  ...compat.extends(
-    "plugin:@typescript-eslint/recommended",
-    "plugin:react-hooks/recommended",
-    "plugin:react/recommended"
-  ),
+  ...compat.extends(...configs),
   {
     languageOptions: {
       // @ts-expect-error No declaration file for module
@@ -43,7 +57,7 @@ module.exports = [
         },
       ],
       "@typescript-eslint/no-var-requires": "off",
-      "react/prop-types": "off",
+      ...(usesReact ? { "react/prop-types": "off" } : {}),
     },
     settings: {
       react: {
