@@ -1,5 +1,15 @@
 # Change Log - @rnx-kit/eslint-plugin
 
+## 0.6.0
+
+### Minor Changes
+
+- 2ba27400: ESLint 8.23+ and its new config system is now required — read more about ESLint's new config system, flat config, here: https://eslint.org/blog/2022/08/new-config-system-part-2/
+
+### Patch Changes
+
+- 9842205d: Exclude `eslint-plugin-react` if `react` is not installed
+
 ## 0.5.3
 
 ### Patch Changes
