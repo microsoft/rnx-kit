@@ -31,6 +31,7 @@ export async function depcheck() {
         ignorePatterns: ["/lib/*"],
         ignoreMatches: [
           "@rnx-kit/eslint-config",
+          "@rnx-kit/jest-preset",
           "@rnx-kit/scripts",
           "@types/*",
           "eslint",
