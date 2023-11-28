@@ -199,7 +199,7 @@ function getDefaultConfigProvider(
 
 /**
  * Load the Metro configuration and apply overrides. If a config file isn't given,
- * this loads from one of the default files -- metro.config.hs, metro.config.json,
+ * this loads from one of the default files -- metro.config.js, metro.config.json,
  * or package.json.
  *
  * @param cliConfig `@react-native-community/cli` configuration
