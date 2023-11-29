@@ -87,6 +87,9 @@ if [[ "$CCACHE_DISABLE" != "1" ]]; then
 
   ccache --zero-stats 1> /dev/null
 fi
+if ! command -v xcbeautify 1> /dev/null; then
+  brew install xcbeautify
+fi
 
 cd ios
 export RCT_NO_LAUNCH_PACKAGER=1
@@ -97,7 +100,8 @@ xcodebuild \
   -destination "generic/platform=iOS Simulator" \
   CODE_SIGNING_ALLOWED=NO \
   COMPILER_INDEX_STORE_ENABLE=NO \
-  "${build_actions[@]}"
+  "${build_actions[@]}" \
+  | xcbeautify
 
 if [[ "$CCACHE_DISABLE" != "1" ]]; then
   ccache --show-stats --verbose
