@@ -1,5 +1,4 @@
 {
-  "private": true,
   "name": "@react-native-webapis/web-storage",
   "version": "0.0.1",
   "description": "EXPERIMENTAL - USE WITH CAUTION - Web Storage API for React Native",
