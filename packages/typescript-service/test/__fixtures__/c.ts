@@ -1,5 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { b } from "./b";
 
-export function c(_: unknown) {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export function c(x: any) {
   return "123" + b() + "456";
 }
