@@ -122,7 +122,7 @@ export const profile: Profile = {
   },
   "test-app": {
     name: "react-native-test-app",
-    version: "^2.5.33",
+    version: "^2.5.34",
     devOnly: true,
   },
   webview: {
