@@ -1,7 +1,11 @@
 import { getChangeDimensions } from "../../src/utils/getChangeDimensions";
 
-console.warn = () => {};
-console.error = () => {};
+console.warn = () => {
+  //
+};
+console.error = () => {
+  //
+};
 
 describe(getChangeDimensions, () => {
   it("should have fixed, ios dimensions", () => {

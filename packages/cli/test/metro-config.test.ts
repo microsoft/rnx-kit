@@ -143,8 +143,8 @@ describe("cli/metro-config/customizeMetroConfig", () => {
 
   test("forwards plugin options", () => {
     const inputConfig = makeMockConfig();
-    const cyclicDependenciesOptions = { cyclicDependencies: true } as any;
-    const duplicateDependencesOptions = { duplicateDependencies: true } as any;
+    const cyclicDependenciesOptions = { cyclicDependencies: true };
+    const duplicateDependencesOptions = { duplicateDependencies: true };
     customizeMetroConfig(inputConfig, {
       plugins: [
         [

@@ -1,5 +1,5 @@
 import { b } from "./b";
 
-export function c(x: any) {
+export function c(_: unknown) {
   return "123" + b() + "456";
 }

@@ -1,7 +1,11 @@
 import { getChangeMessage } from "../../src/utils/getChangeMessage";
 
-console.warn = () => {};
-console.error = () => {};
+console.warn = () => {
+  //
+};
+console.error = () => {
+  //
+};
 
 describe(getChangeMessage, () => {
   it("formats a changelog entry", () => {

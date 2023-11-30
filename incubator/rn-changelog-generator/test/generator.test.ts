@@ -1,13 +1,13 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import deepmerge from "deepmerge";
 import { EventEmitter } from "events";
 import { promises as fs } from "fs";
 import https from "https";
 import path from "path";
 
+import type { Changes, PlatformChanges } from "../src/generator";
 import {
   CHANGES_TEMPLATE,
-  Changes,
-  PlatformChanges,
   getAllChangelogDescriptions,
   getFirstCommitAfterForkingFromMain,
   getOffsetBaseCommit,
@@ -23,8 +23,12 @@ if (!process.env.RN_REPO) {
 }
 const RN_REPO = path.join(process.env.RN_REPO, ".git");
 
-console.warn = () => {};
-console.error = () => {};
+console.warn = () => {
+  //
+};
+console.error = () => {
+  //
+};
 
 function requestWithFixtureResponse(fixture: string) {
   const requestEmitter = new EventEmitter();
@@ -139,7 +143,7 @@ function getCommitMessage(sha: string) {
 type PartialChanges = { [K in keyof Changes]?: Partial<PlatformChanges> };
 
 describe("commit resolving,formatting and attribution regression tests", () => {
-  const cases: Array<[string, PartialChanges, boolean?]> = [
+  const cases: [string, PartialChanges, boolean?][] = [
     [
       "d8fa1206c3fecd494b0f6abb63c66488e6ced5e0",
       {

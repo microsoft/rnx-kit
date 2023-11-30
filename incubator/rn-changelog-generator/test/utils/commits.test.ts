@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { EventEmitter } from "events";
 import { promises as fs } from "fs";
 import https from "https";
@@ -5,8 +6,12 @@ import path from "path";
 
 import { fetchCommit, fetchCommits } from "../../src/utils/commits";
 
-console.warn = () => {};
-console.error = () => {};
+console.warn = () => {
+  //
+};
+console.error = () => {
+  //
+};
 
 function requestWithFixtureResponse(fixture: string) {
   const requestEmitter = new EventEmitter();

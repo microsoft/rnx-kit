@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/ban-types */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /**
  * @license Copyright 2016 Google Inc. All Rights Reserved.
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -5,7 +7,8 @@
  */
 "use strict";
 
-import { Launcher, Options, killAll, launch } from "../src/edge-launcher";
+import type { Options } from "../src/edge-launcher";
+import { Launcher, killAll, launch } from "../src/edge-launcher";
 import { DEFAULT_FLAGS } from "../src/flags";
 
 import * as assert from "assert";
@@ -13,12 +16,17 @@ import { spy, stub } from "sinon";
 
 const log = require("lighthouse-logger");
 const fsMock = {
-  openSync: () => {},
-  closeSync: () => {},
-  writeFileSync: () => {},
+  openSync: () => {
+    //
+  },
+  closeSync: () => {
+    //
+  },
+  writeFileSync: () => {
+    //
+  },
 };
 
-// @ts-ignore
 const launchEdgeWithOpts = async (opts: Options = {}) => {
   const spawnStub = stub().returns({ pid: "some_pid" });
 
@@ -126,7 +134,7 @@ describe("Launcher", () => {
   it("doesn't launch multiple edge processes", async () => {
     const edgeInstance = new Launcher();
     await edgeInstance.launch();
-    let pid = edgeInstance.pid!;
+    const pid = edgeInstance.pid!;
     await edgeInstance.launch();
     assert.strictEqual(pid, edgeInstance.pid);
     await edgeInstance.kill();

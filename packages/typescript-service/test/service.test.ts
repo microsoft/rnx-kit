@@ -1,4 +1,4 @@
-import ts from "typescript";
+import type ts from "typescript";
 import { Service } from "../src/service";
 const diagnostic = require("../src/diagnostics");
 
