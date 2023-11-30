@@ -1,4 +1,6 @@
-function noop() {}
+function noop() {
+  //
+}
 
 exports.error = noop;
 exports.info = noop;

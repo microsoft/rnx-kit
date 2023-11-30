@@ -1,8 +1,5 @@
-import {
-  CyclicDependencies,
-  detectCycles,
-  traverseDependencies,
-} from "../src/detectCycles";
+import type { CyclicDependencies } from "../src/detectCycles";
+import { detectCycles, traverseDependencies } from "../src/detectCycles";
 import {
   entryPoint,
   graphWithCycles,

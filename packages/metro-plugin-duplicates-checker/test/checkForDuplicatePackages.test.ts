@@ -1,9 +1,9 @@
+import type { Options } from "../src/checkForDuplicatePackages";
 import {
   checkForDuplicateDependencies,
   checkForDuplicatePackages,
   countCopies,
   detectDuplicatePackages,
-  Options,
   printModule,
 } from "../src/checkForDuplicatePackages";
 import {

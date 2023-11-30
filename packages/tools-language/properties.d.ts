@@ -1,1 +1,1 @@
-export * from "./lib/properties";
+export { hasProperty, keysOf, pickValues } from "./lib/properties";

@@ -1,1 +1,1 @@
-export * from "./lib/path";
+export { normalizePath } from "./lib/path";

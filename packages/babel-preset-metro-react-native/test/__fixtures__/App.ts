@@ -1,6 +1,6 @@
-// @ts-ignore
 require("typescript/lib/remap-test/lib/lib");
 
+// eslint-disable-next-line @rnx-kit/no-const-enum
 const enum Direction {
   Up,
   Down,

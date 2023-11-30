@@ -7,7 +7,8 @@ describe("isValidSourceMap()", () => {
     expect(isValidSourceMap({ sources: [] })).toBe(false);
     expect(isValidSourceMap({ sourcesContent: [] })).toBe(false);
 
-    const badSourceMap = { sources: "", sourcesContent: "" } as any;
+    const badValue = "" as unknown as string[];
+    const badSourceMap = { sources: badValue, sourcesContent: badValue };
     expect(isValidSourceMap(badSourceMap)).toBe(false);
 
     expect(isValidSourceMap({ sources: [], sourcesContent: [] })).toBe(true);
