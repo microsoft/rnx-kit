@@ -12,7 +12,7 @@
 [Battery Status API](https://developer.mozilla.org/en-US/docs/Web/API/Battery_Status_API)
 for React Native.
 
-> **Note**
+> [!NOTE]
 >
 > This is purely a prototype for the
 > [React Native WebAPIs RFC](https://github.com/microsoft/rnx-kit/pull/2504). It

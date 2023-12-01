@@ -67,7 +67,9 @@ everything in their main JS file.
  });
 ```
 
-> **Sidenote:** When Metro releases a version with the ability to set a
+> [!TIP]
+>
+> When Metro releases a version with the ability to set a
 > [custom resolver for Haste requests](https://github.com/facebook/metro/commit/96fb6e904e1660b37f4d1f5353ca1e5477c4afbf),
 > this way of remapping modules is preferable over
 > `@rnx-kit/babel-plugin-import-path-remapper`. The Babel plugin mutates the AST
