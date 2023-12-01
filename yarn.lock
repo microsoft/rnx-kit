@@ -4136,7 +4136,7 @@ __metadata:
     "@rnx-kit/scripts": "*"
     prettier: ^3.0.0
   peerDependencies:
-    react-native: ">=0.64"
+    react-native: ">=0.66"
   languageName: unknown
   linkType: soft
 

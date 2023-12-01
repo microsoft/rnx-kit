@@ -24,7 +24,7 @@
     "lint:kt": "ktlint --relative 'android/src/**/*.kt'"
   },
   "peerDependencies": {
-    "react-native": ">=0.64"
+    "react-native": ">=0.66"
   },
   "devDependencies": {
     "@rnx-kit/scripts": "*",
