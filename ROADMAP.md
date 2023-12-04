@@ -1,6 +1,6 @@
 # The `rnx-kit` roadmap
 
-> **Disclaimer**
+> [!IMPORTANT]
 >
 > This document conveys what we (the maintainers of `rnx-kit`) want to achieve
 > with it. Whether we have resources to fund all the efforts to reach these
@@ -178,7 +178,7 @@ same folks maintaining `rnx-kit`. It currently does not support/target web.
 In the long term, we want `react-native-test-app` to be the best choice for
 developers, whether they are working on a library or a standalone app.
 
-> **Note**
+> [!NOTE]
 >
 > - For efforts towards making it easier to build, see
 >   [Building native](#building-native).
@@ -203,7 +203,7 @@ write one yourself. We want to shift the mindset from "what packages to use" to
 Standard APIs is what will make the "web browser" effort truly ubiquitous. We
 cannot provide a complete downloadable app for development without this.
 
-> **Note**
+> [!NOTE]
 >
 > - The RFC for this effort is here: [React Native WebAPIs][]
 > - This section only relates to the Web APIs. For the DOM counterpart of this
