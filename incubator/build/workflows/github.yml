@@ -43,7 +43,7 @@ jobs:
       - name: Install npm dependencies
         run: ${{ github.event.inputs.packageManager }} install
       - name: Build Android app
-        uses: gradle/gradle-build-action@v2.9.0
+        uses: gradle/gradle-build-action@v2.10.0
         with:
           gradle-version: wrapper
           arguments: --no-daemon clean assembleDebug
