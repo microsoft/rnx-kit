@@ -43,7 +43,7 @@ import * as pathTools from "@rnx-kit/tools-node/path";
 | package  | `readPackage(pkgPath)`                          | Read a `package.json` manifest from a file.                                                                                    |
 | package  | `resolveDependencyChain(chain, startDir)`       | Resolve the path to a dependency given a chain of dependencies leading up to it.                                               |
 | package  | `writePackage(pkgPath, manifest, space)`        | Write a `package.json` manifest to a file.                                                                                     |
-| path     | `findUp(name, __namedParameters)`               | Finds the specified file or directory by walking up parent directories.                                                        |
+| path     | `findUp(names, options)`                        | Finds the specified file(s) or directory(s) by walking up parent directories.                                                  |
 | path     | `normalizePath(p)`                              | Normalize the separators in a path, converting each backslash ('\\') to a foreward slash ('/').                                |
 
 <!-- @rnx-kit/api end -->

@@ -26,7 +26,9 @@ function exists(name: string, type: FileType, stat: fs.StatSyncFn): boolean {
 }
 
 /**
- * Finds the specified file or directory by walking up parent directories.
+ * Finds the specified file(s) or directory(s) by walking up parent directories.
+ * @param names One or multiple names to search for
+ * @param options
  */
 export function findUp(
   names: string | string[],
