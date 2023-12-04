@@ -7,6 +7,7 @@ import {
   findPackageDir,
   readPackage,
 } from "@rnx-kit/tools-node/package";
+import { findUp } from "@rnx-kit/tools-node/path";
 import type { AllPlatforms } from "@rnx-kit/tools-react-native";
 import { parsePlatform } from "@rnx-kit/tools-react-native";
 import type { SpawnSyncOptions } from "child_process";
@@ -188,9 +189,8 @@ export async function assembleAarBundle(
     return;
   }
 
-  const findUp = require("find-up");
   const wrapper = os.platform() === "win32" ? "gradlew.bat" : "gradlew";
-  const gradlew = findUp.sync(wrapper);
+  const gradlew = findUp(wrapper);
   if (!gradlew) {
     warn(`Skipped \`${packageName}\`: cannot find \`${wrapper}\``);
     return;

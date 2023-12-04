@@ -1,5 +1,5 @@
+import { findPackageDir } from "@rnx-kit/tools-node/package";
 import * as path from "node:path";
-import { packageDirectorySync } from "pkg-dir";
 import type { Options } from "yargs";
 import yargs from "yargs";
 import { startBuild } from "./build.js";
@@ -31,7 +31,7 @@ async function main(): Promise<void> {
   const projectRootOption = {
     type: "string",
     description: "Root of project",
-    default: packageDirectorySync() || process.cwd(),
+    default: findPackageDir() || process.cwd(),
   } as const;
 
   const argv = yargs(process.argv.slice(2))

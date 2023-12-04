@@ -3508,6 +3508,7 @@ __metadata:
     "@rnx-kit/eslint-config": "*"
     "@rnx-kit/jest-preset": "*"
     "@rnx-kit/scripts": "*"
+    "@rnx-kit/tools-node": ^2.1.0
     "@types/jest": ^29.2.1
     "@types/node": ^20.0.0
     "@types/qrcode": ^1.4.2
@@ -3515,11 +3516,9 @@ __metadata:
     env-paths: ^3.0.0
     eslint: ^8.23.0
     fast-xml-parser: ^4.0.0
-    find-up: ^6.3.0
     jest: ^29.2.1
     node-fetch: ^3.3.2
     ora: ^7.0.1
-    pkg-dir: ^7.0.0
     prettier: ^3.0.0
     qrcode: ^1.5.0
     typescript: ^5.0.0
@@ -3604,7 +3603,6 @@ __metadata:
     "@types/qrcode": ^1.4.2
     chalk: ^4.1.0
     eslint: ^8.23.0
-    find-up: ^5.0.0
     fs-extra: ^10.0.0
     jest: ^29.2.1
     memfs: ^4.0.0
@@ -3699,14 +3697,13 @@ __metadata:
     "@rnx-kit/metro-plugin-cyclic-dependencies-detector": ^1.1.2
     "@rnx-kit/metro-plugin-duplicates-checker": ^2.1.2
     "@rnx-kit/scripts": "*"
-    "@rnx-kit/tools-node": ^2.0.0
+    "@rnx-kit/tools-node": ^2.1.0
     "@types/jest": ^29.2.1
     "@types/node": ^20.0.0
     "@types/yargs": ^16.0.0
     chalk: ^4.1.0
     eslint: ^8.23.0
     jest: ^29.2.1
-    pkg-dir: ^5.0.0
     prettier: ^3.0.0
     typescript: ^5.0.0
     yargs: ^16.0.0
@@ -3928,7 +3925,6 @@ __metadata:
     "@types/node": ^20.0.0
     enhanced-resolve: ^5.8.3
     eslint: ^8.23.0
-    find-up: ^5.0.0
     jest: ^29.2.1
     metro-resolver: ^0.76.5
     prettier: ^3.0.0
@@ -4297,7 +4293,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rnx-kit/tools-language@*, @rnx-kit/tools-language@^2.0.0, @rnx-kit/tools-language@^2.0.1, @rnx-kit/tools-language@workspace:packages/tools-language":
+"@rnx-kit/tools-language@*, @rnx-kit/tools-language@^2.0.0, @rnx-kit/tools-language@workspace:packages/tools-language":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/tools-language@workspace:packages/tools-language"
   dependencies:
@@ -4319,13 +4315,9 @@ __metadata:
     "@rnx-kit/eslint-config": "*"
     "@rnx-kit/jest-preset": "*"
     "@rnx-kit/scripts": "*"
-    "@rnx-kit/tools-language": ^2.0.1
     "@types/node": ^20.0.0
     eslint: ^8.23.0
-    find-up: ^5.0.0
     jest: ^29.2.1
-    pkg-dir: ^5.0.0
-    pkg-up: ^3.1.0
     prettier: ^3.0.0
     typescript: ^5.0.0
   languageName: unknown
@@ -7825,16 +7817,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"find-up@npm:^6.3.0":
-  version: 6.3.0
-  resolution: "find-up@npm:6.3.0"
-  dependencies:
-    locate-path: ^7.1.0
-    path-exists: ^5.0.0
-  checksum: 9a21b7f9244a420e54c6df95b4f6fc3941efd3c3e5476f8274eb452f6a85706e7a6a90de71353ee4f091fcb4593271a6f92810a324ec542650398f928783c280
-  languageName: node
-  linkType: hard
-
 "find-yarn-workspace-root2@npm:1.2.16":
   version: 1.2.16
   resolution: "find-yarn-workspace-root2@npm:1.2.16"
@@ -10075,15 +10057,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"locate-path@npm:^7.1.0":
-  version: 7.2.0
-  resolution: "locate-path@npm:7.2.0"
-  dependencies:
-    p-locate: ^6.0.0
-  checksum: c1b653bdf29beaecb3d307dfb7c44d98a2a98a02ebe353c9ad055d1ac45d6ed4e1142563d222df9b9efebc2bcb7d4c792b507fad9e7150a04c29530b7db570f8
-  languageName: node
-  linkType: hard
-
 "lodash-es@npm:^4.17.21":
   version: 4.17.21
   resolution: "lodash-es@npm:4.17.21"
@@ -11638,15 +11611,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"p-limit@npm:^4.0.0":
-  version: 4.0.0
-  resolution: "p-limit@npm:4.0.0"
-  dependencies:
-    yocto-queue: ^1.0.0
-  checksum: 01d9d70695187788f984226e16c903475ec6a947ee7b21948d6f597bed788e3112cc7ec2e171c1d37125057a5f45f3da21d8653e04a3a793589e12e9e80e756b
-  languageName: node
-  linkType: hard
-
 "p-locate@npm:^3.0.0":
   version: 3.0.0
   resolution: "p-locate@npm:3.0.0"
@@ -11671,15 +11635,6 @@ __metadata:
   dependencies:
     p-limit: ^3.0.2
   checksum: 1623088f36cf1cbca58e9b61c4e62bf0c60a07af5ae1ca99a720837356b5b6c5ba3eb1b2127e47a06865fee59dd0453cad7cc844cda9d5a62ac1a5a51b7c86d3
-  languageName: node
-  linkType: hard
-
-"p-locate@npm:^6.0.0":
-  version: 6.0.0
-  resolution: "p-locate@npm:6.0.0"
-  dependencies:
-    p-limit: ^4.0.0
-  checksum: 2bfe5234efa5e7a4e74b30a5479a193fdd9236f8f6b4d2f3f69e3d286d9a7d7ab0c118a2a50142efcf4e41625def635bd9332d6cbf9cc65d85eb0718c579ab38
   languageName: node
   linkType: hard
 
@@ -11774,13 +11729,6 @@ __metadata:
   version: 4.0.0
   resolution: "path-exists@npm:4.0.0"
   checksum: 505807199dfb7c50737b057dd8d351b82c033029ab94cb10a657609e00c1bc53b951cfdbccab8de04c5584d5eff31128ce6afd3db79281874a5ef2adbba55ed1
-  languageName: node
-  linkType: hard
-
-"path-exists@npm:^5.0.0":
-  version: 5.0.0
-  resolution: "path-exists@npm:5.0.0"
-  checksum: 8ca842868cab09423994596eb2c5ec2a971c17d1a3cb36dbf060592c730c725cd524b9067d7d2a1e031fef9ba7bd2ac6dc5ec9fb92aa693265f7be3987045254
   languageName: node
   linkType: hard
 
@@ -11896,33 +11844,6 @@ __metadata:
   dependencies:
     find-up: ^4.0.0
   checksum: 9863e3f35132bf99ae1636d31ff1e1e3501251d480336edb1c211133c8d58906bed80f154a1d723652df1fda91e01c7442c2eeaf9dc83157c7ae89087e43c8d6
-  languageName: node
-  linkType: hard
-
-"pkg-dir@npm:^5.0.0":
-  version: 5.0.0
-  resolution: "pkg-dir@npm:5.0.0"
-  dependencies:
-    find-up: ^5.0.0
-  checksum: b167bb8dac7bbf22b1d5e30ec223e6b064b84b63010c9d49384619a36734caf95ed23ad23d4f9bd975e8e8082b60a83395f43a89bb192df53a7c25a38ecb57d9
-  languageName: node
-  linkType: hard
-
-"pkg-dir@npm:^7.0.0":
-  version: 7.0.0
-  resolution: "pkg-dir@npm:7.0.0"
-  dependencies:
-    find-up: ^6.3.0
-  checksum: 94298b20a446bfbbd66604474de8a0cdd3b8d251225170970f15d9646f633e056c80520dd5b4c1d1050c9fed8f6a9e5054b141c93806439452efe72e57562c03
-  languageName: node
-  linkType: hard
-
-"pkg-up@npm:^3.1.0":
-  version: 3.1.0
-  resolution: "pkg-up@npm:3.1.0"
-  dependencies:
-    find-up: ^3.0.0
-  checksum: 5bac346b7c7c903613c057ae3ab722f320716199d753f4a7d053d38f2b5955460f3e6ab73b4762c62fd3e947f58e04f1343e92089e7bb6091c90877406fcd8c8
   languageName: node
   linkType: hard
 
@@ -14817,12 +14738,5 @@ __metadata:
   version: 0.1.0
   resolution: "yocto-queue@npm:0.1.0"
   checksum: f77b3d8d00310def622123df93d4ee654fc6a0096182af8bd60679ddcdfb3474c56c6c7190817c84a2785648cdee9d721c0154eb45698c62176c322fb46fc700
-  languageName: node
-  linkType: hard
-
-"yocto-queue@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "yocto-queue@npm:1.0.0"
-  checksum: 2cac84540f65c64ccc1683c267edce396b26b1e931aa429660aefac8fbe0188167b7aee815a3c22fa59a28a58d898d1a2b1825048f834d8d629f4c2a5d443801
   languageName: node
   linkType: hard

@@ -1,7 +1,7 @@
 import { info } from "@rnx-kit/console";
+import { findPackageDir } from "@rnx-kit/tools-node/package";
 import fs from "fs";
 import * as path from "path";
-import pkgDir from "pkg-dir";
 import { readMetafile } from "./compare";
 import { generateGraph, getWhyFileInBundle } from "./duplicates";
 import type {
@@ -40,7 +40,8 @@ export function transform(
   graph?: Graph
 ): WebpackStats | null {
   const metafile = readMetafile(metafilePath);
-  const projectRoot = pkgDir.sync(path.dirname(metafilePath)) || process.cwd();
+  const projectRoot =
+    findPackageDir(path.dirname(metafilePath)) || process.cwd();
   if (!graph) graph = generateGraph(metafile);
   const { inputs, outputs } = metafile;
   const webpack: WebpackStats = {

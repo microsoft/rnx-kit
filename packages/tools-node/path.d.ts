@@ -1,1 +1,1 @@
-export { normalizePath } from "./lib/path";
+export { findUp, normalizePath } from "./lib/path";
