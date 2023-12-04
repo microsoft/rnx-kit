@@ -9,7 +9,14 @@ repository = package['repository']
 repo_dir = repository['directory']
 
 new_arch_enabled = ENV['RCT_NEW_ARCH_ENABLED'] == '1'
-preprocessor_definitions = ['FOLLY_NO_CONFIG=1', 'FOLLY_MOBILE=1', 'FOLLY_USE_LIBCPP=1']
+preprocessor_definitions = [
+  'FOLLY_CFG_NO_COROUTINES=1',
+  'FOLLY_HAVE_CLOCK_GETTIME=1',
+  'FOLLY_HAVE_PTHREAD=1',
+  'FOLLY_MOBILE=1',
+  'FOLLY_NO_CONFIG=1',
+  'FOLLY_USE_LIBCPP=1',
+]
 if new_arch_enabled
   preprocessor_definitions << 'RCT_NEW_ARCH_ENABLED=1'
   preprocessor_definitions << 'USE_FABRIC=1'
@@ -42,7 +49,7 @@ Pod::Spec.new do |s|
   end
 
   s.pod_target_xcconfig = {
-    'CLANG_CXX_LANGUAGE_STANDARD' => 'gnu++17',
+    'CLANG_CXX_LANGUAGE_STANDARD' => 'gnu++20',
     'DEFINES_MODULE' => 'YES',
     'GCC_PREPROCESSOR_DEFINITIONS' => preprocessor_definitions,
     'HEADER_SEARCH_PATHS' => [
