@@ -1,9 +1,6 @@
-import { pickValues } from "@rnx-kit/tools-language/properties";
-import findUp from "find-up";
 import * as fs from "fs";
 import * as path from "path";
-import pkgDir from "pkg-dir";
-import pkgUp from "pkg-up";
+import { findUp } from "./path";
 
 /**
  * Components of a package reference.
@@ -134,7 +131,7 @@ export function writePackage(
  * @returns Path to `package.json`, or `undefined` if not found.
  */
 export function findPackage(startDir?: string): string | undefined {
-  return pkgUp.sync({ cwd: startDir ? startDir : process.cwd() }) ?? undefined;
+  return findUp("package.json", { startDir });
 }
 
 /**
@@ -148,7 +145,8 @@ export function findPackage(startDir?: string): string | undefined {
  * @returns Path to `package.json`, or `undefined` if not found.
  */
 export function findPackageDir(startDir?: string): string | undefined {
-  return pkgDir.sync(startDir ? startDir : process.cwd()) ?? undefined;
+  const manifest = findUp("package.json", { startDir });
+  return manifest && path.dirname(manifest);
 }
 
 /**
@@ -190,13 +188,10 @@ export function findPackageDependencyDir(
 ): string | undefined {
   const pkgName =
     typeof ref === "string" ? ref : path.join(ref.scope ?? "", ref.name);
-  const packageDir = findUp.sync(path.join("node_modules", pkgName), {
-    ...pickValues(
-      options ?? {},
-      ["startDir", "allowSymlinks"],
-      ["cwd", "allowSymlinks"]
-    ),
+  const packageDir = findUp(path.join("node_modules", pkgName), {
+    startDir: options?.startDir,
     type: "directory",
+    allowSymlinks: options?.allowSymlinks,
   });
   if (!packageDir || !options?.resolveSymlinks) {
     return packageDir;

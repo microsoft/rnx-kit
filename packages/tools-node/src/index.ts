@@ -22,4 +22,4 @@ export type {
   PackageRef,
 } from "./package";
 
-export { normalizePath } from "./path";
+export { findUp, normalizePath } from "./path";
