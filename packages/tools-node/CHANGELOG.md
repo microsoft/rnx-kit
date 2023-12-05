@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/tools-node
 
+## 2.1.1
+
+### Patch Changes
+
+- 2ee99d42: Make `@rnx-kit/tools-node` free of third party dependencies
+
 ## 2.1.0
 
 ### Minor Changes
