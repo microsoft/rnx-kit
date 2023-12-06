@@ -3,13 +3,10 @@
 Thank you for your interest in this project! We welcome all contributions and
 suggestions!
 
-You can
-[open a new issue](https://github.com/microsoft/rnx-kit/issues/new/choose) to
-report a bug, share an idea, or request a feature. If you're more hands-on, you
-can [submit a pull-request](https://github.com/microsoft/rnx-kit/pulls).
+You can [open a new issue][] to report a bug, share an idea, or request a
+feature. If you're more hands-on, you can [submit a pull request][].
 
-As a contributor, you're expected to follow the
-[code of conduct](https://github.com/microsoft/rnx-kit/blob/main/CODE_OF_CONDUCT.md).
+As a contributor, you're expected to follow the [code of conduct][].
 
 ## Contributor License Agreement
 
@@ -31,20 +28,18 @@ to do this once across all repos using our CLA.
 ### Optional
 
 - **Android**:
-  - [Android Studio](https://developer.android.com/studio) 4.2 or later
-    - Android SDK Platform 29
-    - Android SDK Build-Tools 30.0.3
+  - [Android Studio](https://developer.android.com/studio)
+    - Android SDK Platform 34
+    - Android SDK Build-Tools 33.0.1
     - To install the required SDKs, go into **Preferences** ❭ **Appearance &
       Behavior** ❭ **System Settings** ❭ **Android SDK**.
 - **iOS/macOS**:
-  - [Xcode](https://apps.apple.com/app/xcode/id497799835?mt=12) 12 or later
+  - [Xcode](https://apps.apple.com/app/xcode/id497799835)
   - [CocoaPods](https://cocoapods.org/)
 - **Windows**:
-  - Ensure that
-    [Developer Mode](https://docs.microsoft.com/en-us/windows/uwp/get-started/enable-your-device-for-development)
-    is turned on in Windows Settings app
-  - Install development dependencies as described in the
-    [React Native for Windows documentation](https://microsoft.github.io/react-native-windows/docs/rnw-dependencies)
+  - Ensure that [Developer Mode][] is turned on in Windows Settings app
+  - Install development dependencies as described in the [React Native for
+    Windows documentation][]
 
 ## Build
 
@@ -66,7 +61,7 @@ yarn build
 Otherwise, you can specify which package to build, e.g. `@rnx-kit/cli`:
 
 ```sh
-yarn build-scope cli
+yarn build-scope @rnx-kit/cli
 ```
 
 Alternatively, you can navigate to the package folder and run:
@@ -92,6 +87,14 @@ current working directory.
 | `yarn lint`                 | Lints **all** packages in the repository              | Lints the **current** package only                  |
 | `yarn test`                 | Tests **all** packages in the repository              | Tests the **current** package only                  |
 
+## Style Guide
+
+Most files are formatted with [Prettier][]. We also use [ESLint][] to lint all
+JavaScript code.
+
+You can trigger formatting by running `yarn format`, and linting with
+`yarn lint`.
+
 ## Adding a New Package
 
 To ensure that there is consistency and shared practices across the monorepo, we
@@ -112,32 +115,90 @@ package in the `incubator` folder — files will be tweaked as necessary.
 Each package in this monorepo contains a change log. The log is built from
 change descriptions submitted with each PR.
 
-```
-$ yarn change
+```sh
+yarn change
 ```
 
-This launches [Changesets](https://github.com/atlassian/changesets#readme),
-which collects and records information about your change.
+This launches [Changesets][], which collects and records information about your
+change.
 
 Follow the prompts and describe the changes you are making to each package. This
 information is written in files under `/.changeset`. Our CI loop uses these
 files to bump package versions and update package change logs.
 
-> Note that you only need one change log entry per feature/fix. You don't need
-> to create new entries if you're addressing PR feedback.
+> [!NOTE]
+>
+> You only need one change log entry per feature/fix. You don't need to create
+> new entries if you're addressing PR feedback.
 
 ## Releases
 
-Our release process is fully automated by
-[Changesets](https://github.com/atlassian/changesets#readme).
+Our release process is fully automated by [Changesets][].
 
-When a PR is merged, our CI loop uses `Changesets` to version-bump each changed
-package and publish it to `npm`.
+When a PR is merged, our CI loop uses Changesets to version-bump each changed
+package and publish it to npm.
 
-## Style Guide
+## General Maintenance
 
-Most files are formatted with [Prettier](https://prettier.io/). We also use
-[ESLint](https://eslint.org/) to lint all JavaScript code.
+We use [Renovate][] to keep dependencies up to date. They are currently
+scheduled to run [every Monday morning][]. You can also manually trigger updates
+via the [Dependency Dashboard][].
 
-You can trigger formatting by running `yarn format`, and linting with
-`yarn lint`.
+### Direct Dependencies
+
+- **Patch bumps:** As long as the CI is green, these should be good to merge
+  without having to touch `package.json`. The only thing to watch out for is
+  whether duplicates are introduced in `yarn.lock`:
+  - Sometimes, running `yarn dedupe` is enough to get rid of duplicates.
+  - Other times, we have to look at the dependency chain and dedupe by bumping
+    one of the dependees.
+  - As a last resort, and only if one of the dependees are using an
+    unnecessarily strict version range, we can add a `resolutions` entry in
+    `package.json`.
+- **Minor bumps:** Semantically, minor bumps should only include additions and
+  not break anything. Check the change log to be sure. Otherwise, see the notes
+  on patch bumps.
+- **Major bumps:** In general, we only do major bumps manually. This is to
+  ensure that we aren't unnecessarily adding more dependencies on the consumer
+  side or make things more complicated to maintain. An example of us holding
+  back is [`chalk`][]; we are stuck on 4.x until `@react-native-community/cli`
+  migrates to ESM.
+
+### Development Dependencies
+
+Consumers never see these so we can be less conservative, especially when it
+comes to major bumps. Otherwise, everything mentioned above still applies.
+
+### Android Dependencies:
+
+Always check the change log for potentially breaking changes as they typically
+do not follow semantic versioning. In particular, be on the lookout for changes
+to:
+
+- Minimum target version
+- Android SDK version
+- Kotlin version
+
+If the bump contains potentially breaking changes, consider whether we need to
+gate them behind a version check. For example, we only use
+`androidx.activity:activity-ktx:1.17.2` when on Kotlin 1.8 or higher
+([see `build.gradle`](https://github.com/microsoft/rnx-kit/blob/%40rnx-kit/react-native-test-app-msal%402.1.7/incubator/react-native-test-app-msal/android/build.gradle#L173)).
+
+<!-- References -->
+
+[Changesets]: https://github.com/atlassian/changesets#readme
+[Dependency Dashboard]: https://github.com/microsoft/rnx-kit/issues/1680
+[Developer Mode]:
+  https://docs.microsoft.com/en-us/windows/uwp/get-started/enable-your-device-for-development
+[ESLint]: https://eslint.org
+[Prettier]: https://prettier.io
+[React Native for Windows documentation]:
+  https://microsoft.github.io/react-native-windows/docs/rnw-dependencies
+[Renovate]: https://docs.renovatebot.com
+[`chalk`]: https://github.com/chalk/chalk#readme
+[code of conduct]:
+  https://github.com/microsoft/rnx-kit/blob/main/CODE_OF_CONDUCT.md
+[every Monday morning]:
+  https://github.com/microsoft/rnx-kit/blob/main/.github/renovate.json
+[open a new issue]: https://github.com/microsoft/rnx-kit/issues/new/choose
+[submit a pull request]: https://github.com/microsoft/rnx-kit/pulls

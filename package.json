@@ -74,22 +74,5 @@
       "scripts"
     ]
   },
-  "prettier": {
-    "plugins": [
-      "prettier-plugin-organize-imports"
-    ],
-    "trailingComma": "es5",
-    "overrides": [
-      {
-        "files": [
-          "*.md",
-          "*.mdx"
-        ],
-        "options": {
-          "organizeImportsSkipDestructiveCodeActions": true,
-          "proseWrap": "always"
-        }
-      }
-    ]
-  }
+  "prettier": "./.github/prettierrc.json"
 }
