@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/align-deps
 
+## 2.3.1
+
+### Patch Changes
+
+- e5048f7e: `metro-react-native-babel-transformer` was renamed to `@react-native/metro-babel-transformer`
+
 ## 2.3.0
 
 ### Minor Changes
