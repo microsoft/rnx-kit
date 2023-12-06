@@ -169,7 +169,7 @@ via the [Dependency Dashboard][].
 Consumers never see these so we can be less conservative, especially when it
 comes to major bumps. Otherwise, everything mentioned above still applies.
 
-### Android Dependencies:
+### Android Dependencies
 
 Always check the change log for potentially breaking changes as they typically
 do not follow semantic versioning. In particular, be on the lookout for changes
