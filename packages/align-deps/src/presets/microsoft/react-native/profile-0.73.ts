@@ -81,8 +81,8 @@ export const profile: Profile = {
     devOnly: true,
   },
   "metro-react-native-babel-transformer": {
-    name: "metro-react-native-babel-transformer",
-    version: "^0.80.0",
+    name: "@react-native/metro-babel-transformer",
+    version: "^0.73.0",
     devOnly: true,
   },
   "metro-resolver": {

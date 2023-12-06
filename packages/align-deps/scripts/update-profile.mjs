@@ -162,11 +162,17 @@ function generateFromTemplate({
     nextVersionCoerced.minor - 1
   }`;
 
-  const useOldBabelPresetName = semverCompare(nextVersionCoerced, "0.73.0") < 0;
-  const babelPresetName = useOldBabelPresetName
+  const useOldBabelNames = semverCompare(nextVersionCoerced, "0.73.0") < 0;
+  const babelPresetName = useOldBabelNames
     ? "metro-react-native-babel-preset"
     : "@react-native/babel-preset";
-  const babelPresetVersion = useOldBabelPresetName
+  const babelPresetVersion = useOldBabelNames
+    ? metroVersion
+    : targetVersion + ".0";
+  const babelTransformerName = useOldBabelNames
+    ? "metro-react-native-babel-transformer"
+    : "@react-native/metro-babel-transformer";
+  const babelTransformerVersion = useOldBabelNames
     ? metroVersion
     : targetVersion + ".0";
 
@@ -253,8 +259,8 @@ export const profile: Profile = {
     devOnly: true,
   },
   "metro-react-native-babel-transformer": {
-    name: "metro-react-native-babel-transformer",
-    version: "^${metroVersion}",
+    name: "${babelTransformerName}",
+    version: "^${babelTransformerVersion}",
     devOnly: true,
   },
   "metro-resolver": {
