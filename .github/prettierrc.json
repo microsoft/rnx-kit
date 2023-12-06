@@ -1,0 +1,14 @@
+{
+  "plugins": ["prettier-plugin-organize-imports"],
+  "trailingComma": "es5",
+  "endOfLine": "auto",
+  "overrides": [
+    {
+      "files": ["*.md", "*.mdx"],
+      "options": {
+        "organizeImportsSkipDestructiveCodeActions": true,
+        "proseWrap": "always"
+      }
+    }
+  ]
+}
