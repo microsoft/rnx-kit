@@ -1,12 +1,6 @@
 #import "RNXTurboModuleAdapter.h"
 
-#include <folly/Portability.h>
-#if FOLLY_HAS_COROUTINES
-// TODO: `FOLLY_CFG_NO_COROUTINES` was added in 0.73. We can drop this block
-// when we drop support for 0.72:
-// https://github.com/facebook/react-native/commit/17154a661fe06ed25bf599f47bd4193eba011971
-#define FOLLY_HAS_COROUTINES 0
-#endif
+#include "FollyConfig.h"
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wcomma"
 #import <cxxreact/JSExecutor.h>
@@ -90,7 +84,8 @@
 
 // MARK: - Private
 
-- (std::unique_ptr<facebook::react::JSExecutorFactory>)initJsExecutorFactoryWithBridge:(RCTBridge *)bridge
+- (std::unique_ptr<facebook::react::JSExecutorFactory>)initJsExecutorFactoryWithBridge:
+    (RCTBridge *)bridge
 {
 #if USE_RUNTIME_SCHEDULER
     _runtimeScheduler =
