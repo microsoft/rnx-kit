@@ -1,5 +1,11 @@
 # @rnx-kit/react-native-host
 
+## 0.3.1
+
+### Patch Changes
+
+- 91a9ffe5: Fix New Arch not building because `folly::coro` was unintentionally enabled
+
 ## 0.3.0
 
 ### Minor Changes
