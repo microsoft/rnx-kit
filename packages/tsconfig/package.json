@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/tsconfig",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Base TypeScript configs for working with Node",
   "keywords": [
     "node",
