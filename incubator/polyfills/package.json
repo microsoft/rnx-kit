@@ -46,6 +46,7 @@
     "@rnx-kit/eslint-config": "*",
     "@rnx-kit/jest-preset": "*",
     "@rnx-kit/scripts": "*",
+    "@rnx-kit/tsconfig": "*",
     "@types/babel__core": "^7.0.0",
     "@types/babel__helper-plugin-utils": "^7.0.0",
     "@types/babel__template": "^7.0.0",

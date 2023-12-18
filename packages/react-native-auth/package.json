@@ -39,6 +39,7 @@
     "@react-native/metro-config": "^0.72.0",
     "@rnx-kit/eslint-config": "*",
     "@rnx-kit/scripts": "*",
+    "@rnx-kit/tsconfig": "*",
     "eslint": "^8.23.0",
     "prettier": "^3.0.0",
     "react": "18.2.0",

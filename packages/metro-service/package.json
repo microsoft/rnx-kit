@@ -53,6 +53,7 @@
     "@rnx-kit/eslint-config": "*",
     "@rnx-kit/jest-preset": "*",
     "@rnx-kit/scripts": "*",
+    "@rnx-kit/tsconfig": "*",
     "@types/node": "^20.0.0",
     "@types/node-fetch": "^2.6.5",
     "eslint": "^8.23.0",

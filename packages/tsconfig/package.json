@@ -1,0 +1,40 @@
+{
+  "name": "@rnx-kit/tsconfig",
+  "version": "0.0.1",
+  "description": "Base TypeScript configs for working with Node",
+  "keywords": [
+    "node",
+    "tsconfig",
+    "typescript"
+  ],
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/tsconfig#readme",
+  "license": "MIT",
+  "files": [
+    "tsconfig.esm.json",
+    "tsconfig.json"
+  ],
+  "main": "tsconfig.json",
+  "exports": {
+    ".": {
+      "default": "./tsconfig.json"
+    },
+    "./tsconfig.esm.json": {
+      "default": "./tsconfig.esm.json"
+    },
+    "./tsconfig.json": {
+      "default": "./tsconfig.json"
+    },
+    "./package.json": "./package.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "packages/tsconfig"
+  },
+  "scripts": {
+    "format": "prettier --write --log-level error package.json tsconfig.esm.json tsconfig.json"
+  },
+  "devDependencies": {
+    "prettier": "^3.0.0"
+  }
+}

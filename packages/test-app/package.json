@@ -53,6 +53,7 @@
     "@rnx-kit/react-native-test-app-msal": "workspace:*",
     "@rnx-kit/scripts": "workspace:*",
     "@rnx-kit/third-party-notices": "workspace:*",
+    "@rnx-kit/tsconfig": "workspace:*",
     "@types/react": "^18.0.0",
     "eslint": "^8.23.0",
     "jest": "^29.2.1",

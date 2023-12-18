@@ -67,6 +67,7 @@
     "@rnx-kit/eslint-config": "*",
     "@rnx-kit/jest-preset": "*",
     "@rnx-kit/scripts": "*",
+    "@rnx-kit/tsconfig": "*",
     "@types/connect": "^3.4.36",
     "@types/fs-extra": "^9.0.0",
     "@types/jest": "^29.2.1",

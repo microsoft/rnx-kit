@@ -28,6 +28,7 @@
   },
   "devDependencies": {
     "@rnx-kit/scripts": "*",
+    "@rnx-kit/tsconfig": "*",
     "prettier": "^3.0.0"
   }
 }

@@ -32,6 +32,7 @@
     "@rnx-kit/jest-preset": "*",
     "@rnx-kit/metro-serializer": "*",
     "@rnx-kit/scripts": "*",
+    "@rnx-kit/tsconfig": "*",
     "@types/jest": "^29.2.1",
     "@types/node": "^20.0.0",
     "eslint": "^8.23.0",
