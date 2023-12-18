@@ -1,6 +1,7 @@
 #import "RNXFabricAdapter.h"
 
 #ifdef USE_FABRIC
+#include "FollyConfig.h"
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wcomma"
 #pragma clang diagnostic ignored "-Wdocumentation"
