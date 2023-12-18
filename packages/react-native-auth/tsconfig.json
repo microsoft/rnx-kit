@@ -1,5 +1,5 @@
 {
-  "extends": "@rnx-kit/scripts/tsconfig-shared.json",
+  "extends": "@rnx-kit/tsconfig/tsconfig.json",
   "compilerOptions": {
     "checkJs": false
   },

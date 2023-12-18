@@ -32,6 +32,7 @@
     "@rnx-kit/eslint-config": "*",
     "@rnx-kit/jest-preset": "*",
     "@rnx-kit/scripts": "*",
+    "@rnx-kit/tsconfig": "*",
     "eslint": "^8.23.0",
     "jest": "^29.2.1",
     "prettier": "^3.0.0",

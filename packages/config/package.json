@@ -43,6 +43,7 @@
     "@rnx-kit/metro-serializer-esbuild": "*",
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tools-react-native": "*",
+    "@rnx-kit/tsconfig": "*",
     "@types/node": "^20.0.0",
     "@types/semver": "^7.0.0",
     "eslint": "^8.23.0",

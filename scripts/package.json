@@ -26,6 +26,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^8.33.0",
+    "@rnx-kit/tsconfig": "workspace:*",
     "@types/jest": "^29.2.1",
     "@types/node": "^20.0.0",
     "@types/yargs": "^16.0.0"

@@ -40,6 +40,7 @@
     "@rnx-kit/eslint-config": "*",
     "@rnx-kit/jest-preset": "*",
     "@rnx-kit/scripts": "*",
+    "@rnx-kit/tsconfig": "*",
     "@types/node": "^20.0.0",
     "@types/semver": "^7.0.0",
     "eslint": "^8.23.0",

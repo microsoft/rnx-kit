@@ -45,6 +45,7 @@
     "@rnx-kit/babel-plugin-import-path-remapper": "*",
     "@rnx-kit/eslint-config": "*",
     "@rnx-kit/scripts": "*",
+    "@rnx-kit/tsconfig": "*",
     "@types/babel__core": "^7.0.0",
     "@types/jest": "^29.2.1",
     "@types/node": "^20.0.0",
