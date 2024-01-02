@@ -3215,14 +3215,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@react-native-windows/cli@npm:0.72.3":
-  version: 0.72.3
-  resolution: "@react-native-windows/cli@npm:0.72.3"
+"@react-native-windows/cli@npm:0.72.4":
+  version: 0.72.4
+  resolution: "@react-native-windows/cli@npm:0.72.4"
   dependencies:
-    "@react-native-windows/codegen": 0.72.2
-    "@react-native-windows/fs": 0.72.0
-    "@react-native-windows/package-utils": 0.72.0
-    "@react-native-windows/telemetry": 0.72.1
+    "@react-native-windows/codegen": 0.72.3
+    "@react-native-windows/fs": 0.72.1
+    "@react-native-windows/package-utils": 0.72.1
+    "@react-native-windows/telemetry": 0.72.2
     "@xmldom/xmldom": ^0.7.7
     chalk: ^4.1.0
     cli-spinners: ^2.2.0
@@ -3242,15 +3242,15 @@ __metadata:
     xpath: ^0.0.27
   peerDependencies:
     react-native: "*"
-  checksum: 7ebf1ad24988f8ff436eb4ea1a9bf5884e3854bfe6a8778f8d12ebb234ea3a8c2b4b032e94696af9481c8a9eb83a653f26b5c87faea2c7cc2bf490b825ba3aed
+  checksum: 8ca3ed59f9cac729139dccec1ade1e5481f32128e34f51fc8bcaba7b77f3778dba7d0a22bcb93fa60171c23825a68dbecd81189db080bbda8ca09636d5789f8a
   languageName: node
   linkType: hard
 
-"@react-native-windows/codegen@npm:0.72.2":
-  version: 0.72.2
-  resolution: "@react-native-windows/codegen@npm:0.72.2"
+"@react-native-windows/codegen@npm:0.72.3":
+  version: 0.72.3
+  resolution: "@react-native-windows/codegen@npm:0.72.3"
   dependencies:
-    "@react-native-windows/fs": 0.72.0
+    "@react-native-windows/fs": 0.72.1
     chalk: ^4.1.0
     globby: ^11.0.4
     mustache: ^4.0.1
@@ -3260,46 +3260,46 @@ __metadata:
     react-native: "*"
   bin:
     react-native-windows-codegen: bin.js
-  checksum: 7103a1af12305d755afc5208cd438861c97971b053ee0d01565a0d4d9ef3d4b766bf83d92bc751ce99caa037346f8e3c2b0592e93be966f1592f13ef4e8e7ee8
+  checksum: 094644acd92dc1c3a8f7bc8d0614ed1764c0ff08c0107224613a301b1ab948eace96fae8bc22798a7564ccb3c31034dc8205418b9b17a60de3b23aa0bbfb0858
   languageName: node
   linkType: hard
 
-"@react-native-windows/find-repo-root@npm:0.72.0":
-  version: 0.72.0
-  resolution: "@react-native-windows/find-repo-root@npm:0.72.0"
+"@react-native-windows/find-repo-root@npm:0.72.1":
+  version: 0.72.1
+  resolution: "@react-native-windows/find-repo-root@npm:0.72.1"
   dependencies:
-    "@react-native-windows/fs": 0.72.0
+    "@react-native-windows/fs": 0.72.1
     find-up: ^4.1.0
-  checksum: 48e90f27bfb772c982e69189a02f07776d2f0ff1e67f449bfceef0e26e88d45cc5fab9c854de7e75989291bb08c49821e6572f053200fe88ab041d977fbd2f3b
+  checksum: 8430eb7ba480fb3bf54d540a6f50b872961afc5e0b12e2da73ef55c1f6ae2ba86f6ea5ded482b43f3d3bbb04b64e9403b1eca7cf46bae0d5cb12e6619ec32ff9
   languageName: node
   linkType: hard
 
-"@react-native-windows/fs@npm:0.72.0":
-  version: 0.72.0
-  resolution: "@react-native-windows/fs@npm:0.72.0"
+"@react-native-windows/fs@npm:0.72.1":
+  version: 0.72.1
+  resolution: "@react-native-windows/fs@npm:0.72.1"
   dependencies:
     graceful-fs: ^4.2.8
-  checksum: e7d3506ed82072e4ddd3ff279f1979bfd0cba8b1bd9b52fd5bea1394783ba0a991fc9a5190ab5b5e1621d273f414ea2fa839e0b6c9a86e73c298d787ddb06455
+  checksum: cbeb9315a56328c2148cbc5fee353381c0b2c1f606121cc0d069edd94fce78900a0f1b9611d1994238824863e441739edf5160d0798db6b1e0a73084734d8dcd
   languageName: node
   linkType: hard
 
-"@react-native-windows/package-utils@npm:0.72.0":
-  version: 0.72.0
-  resolution: "@react-native-windows/package-utils@npm:0.72.0"
+"@react-native-windows/package-utils@npm:0.72.1":
+  version: 0.72.1
+  resolution: "@react-native-windows/package-utils@npm:0.72.1"
   dependencies:
-    "@react-native-windows/find-repo-root": 0.72.0
-    "@react-native-windows/fs": 0.72.0
+    "@react-native-windows/find-repo-root": 0.72.1
+    "@react-native-windows/fs": 0.72.1
     get-monorepo-packages: ^1.2.0
     lodash: ^4.17.15
-  checksum: 0a3bf98b7f153193ff59b93c2d8f4d0c0f349a4f72624c5e45bbc285126cd85710deb95a203e60151754d5fc473f2ba8a4e185f4242172da249b5b9931f431c6
+  checksum: fc0f774f3d413eedc7ac86b92c88c8324345a688817740804f226c9401fc3dc171f273d0031b18bc35427a1bc2a7ffa8aeb84d0370b4c1e4cc35a6ef310a60d0
   languageName: node
   linkType: hard
 
-"@react-native-windows/telemetry@npm:0.72.1":
-  version: 0.72.1
-  resolution: "@react-native-windows/telemetry@npm:0.72.1"
+"@react-native-windows/telemetry@npm:0.72.2":
+  version: 0.72.2
+  resolution: "@react-native-windows/telemetry@npm:0.72.2"
   dependencies:
-    "@react-native-windows/fs": 0.72.0
+    "@react-native-windows/fs": 0.72.1
     "@xmldom/xmldom": ^0.7.7
     applicationinsights: ^2.3.1
     ci-info: ^3.2.0
@@ -3307,7 +3307,7 @@ __metadata:
     lodash: ^4.17.21
     os-locale: ^5.0.0
     xpath: ^0.0.27
-  checksum: 6263dd8aa73aa10ab4d3f568f5ebaee77e2b26559ad54877561e226dd95121db5a8e0b736fe7baead0611a43451d6ca1a51eb42d2a4727d2622041c61bd50a3c
+  checksum: fbbb2db836fa1f35ae75ebafcd33cd29ae5833ac757eb025f709437dac0a668094437bcdf301760ae8aea3369b5a1ade52718ae853d3bcce1abdadf958c85212
   languageName: node
   linkType: hard
 
@@ -12317,15 +12317,15 @@ __metadata:
   linkType: hard
 
 "react-native-windows@npm:^0.72.0":
-  version: 0.72.20
-  resolution: "react-native-windows@npm:0.72.20"
+  version: 0.72.22
+  resolution: "react-native-windows@npm:0.72.22"
   dependencies:
     "@babel/runtime": ^7.0.0
     "@jest/create-cache-key-function": ^29.2.1
     "@react-native-community/cli": 11.3.7
     "@react-native-community/cli-platform-android": 11.3.7
     "@react-native-community/cli-platform-ios": 11.3.7
-    "@react-native-windows/cli": 0.72.3
+    "@react-native-windows/cli": 0.72.4
     "@react-native/assets": 1.0.0
     "@react-native/assets-registry": ^0.72.0
     "@react-native/codegen": ^0.72.7
@@ -12363,7 +12363,7 @@ __metadata:
   peerDependencies:
     react: 18.2.0
     react-native: ^0.72.6
-  checksum: cc32656288163db43e7770095faff2465f47d3cdc01b8a141008a00e8afdf9347b71770c864948f05cbd91bc3ea80f4e4d019ac02e56130d9e7f517b3eced26e
+  checksum: a70b51bcf5ad593ee5530a95bc9979e29be94d141647bc2b6c097b211aa85cc65a32ad3c09d6d7ef63c1969a518dfc27e05763e2e9a4de119b8f1f6f969d85ad
   languageName: node
   linkType: hard
 
