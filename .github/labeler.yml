@@ -1,27 +1,45 @@
 "chore":
-  - .github/**/*
-  - .gitignore
-  - .npmrc
-  - .yarnrc
-  - package.json
-  - scripts/**/*
+  - changed-files:
+    - any-glob-to-any-file:
+      - .github/**/*
+      - .gitignore
+      - .npmrc
+      - .yarnrc
+      - package.json
+      - scripts/**/*
 "feature: align-deps":
-  - packages/align-deps/**/*
+  - changed-files:
+    - any-glob-to-any-file:
+      - packages/align-deps/**/*
 "feature: cli":
-  - packages/cli/**/*
-  - packages/config/**/*
+  - changed-files:
+    - any-glob-to-any-file:
+      - packages/cli/**/*
+      - packages/config/**/*
 "feature: eslint":
-  - packages/eslint-*/**/*
+  - changed-files:
+    - any-glob-to-any-file:
+      - packages/eslint-*/**/*
 "feature: jest":
-  - packages/jest-*/**/*
+  - changed-files:
+    - any-glob-to-any-file:
+      - packages/jest-*/**/*
 "feature: metro":
-  - packages/babel-plugin-import-path-remapper/**/*
-  - packages/babel-preset-metro-react-native/**/*
-  - packages/metro-*/**/*
-  - packages/typescript-service/**/*
+  - changed-files:
+    - any-glob-to-any-file:
+      - packages/babel-plugin-import-path-remapper/**/*
+      - packages/babel-preset-metro-react-native/**/*
+      - packages/metro-*/**/*
+      - packages/typescript-service/**/*
 "feature: sdk":
-  - packages/react-native-*/**/*
+  - changed-files:
+    - any-glob-to-any-file:
+      - packages/react-native-*/**/*
 "feature: third party notices":
-  - packages/third-party-notices/**/*
+  - changed-files:
+    - any-glob-to-any-file:
+      - packages/third-party-notices/**/*
 "feature: webapis":
-  - "incubator/@react-native-webapis/**/*"
+  - changed-files:
+    - any-glob-to-any-file:
+      - "incubator/@react-native-webapis/**/*"
