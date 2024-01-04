@@ -112,6 +112,10 @@ export const profile: Profile = {
     name: "@react-native-community/netinfo",
     version: "^11.0.1",
   },
+  "safe-area": {
+    name: "react-native-safe-area-context",
+    version: "^4.8.2",
+  },
   storage: {
     name: "@react-native-async-storage/async-storage",
     version: "^1.21.0",

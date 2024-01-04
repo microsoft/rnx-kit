@@ -110,7 +110,7 @@ export const profile: Profile = {
   },
   "safe-area": {
     name: "react-native-safe-area-context",
-    version: "^4.5.3",
+    version: ">=4.5.3 <4.8",
   },
   screens: {
     name: "react-native-screens",
