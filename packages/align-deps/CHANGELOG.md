@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/align-deps
 
+## 2.3.2
+
+### Patch Changes
+
+- 21ded4c: Ensure `react-native-safe-area-context` works with New Arch enabled on both 0.72 and 0.73
+
 ## 2.3.1
 
 ### Patch Changes
