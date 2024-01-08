@@ -3049,7 +3049,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-community/cli-platform-android@npm:^11.3.6":
+"@react-native-community/cli-platform-android@npm:^11.3.10":
   version: 11.3.10
   resolution: "@react-native-community/cli-platform-android@npm:11.3.10"
   dependencies:
@@ -3062,7 +3062,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-community/cli-platform-ios@npm:^11.3.6":
+"@react-native-community/cli-platform-ios@npm:^11.3.10":
   version: 11.3.10
   resolution: "@react-native-community/cli-platform-ios@npm:11.3.10"
   dependencies:
@@ -3138,7 +3138,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-community/cli@npm:^11.3.6":
+"@react-native-community/cli@npm:^11.3.10":
   version: 11.3.10
   resolution: "@react-native-community/cli@npm:11.3.10"
   dependencies:
@@ -3338,17 +3338,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native/codegen@npm:^0.72.7":
-  version: 0.72.7
-  resolution: "@react-native/codegen@npm:0.72.7"
+"@react-native/codegen@npm:^0.72.7, @react-native/codegen@npm:^0.72.8":
+  version: 0.72.8
+  resolution: "@react-native/codegen@npm:0.72.8"
   dependencies:
     "@babel/parser": ^7.20.0
     flow-parser: ^0.206.0
+    glob: ^7.1.1
+    invariant: ^2.2.4
     jscodeshift: ^0.14.0
+    mkdirp: ^0.5.1
     nullthrows: ^1.1.1
   peerDependencies:
     "@babel/preset-env": ^7.1.6
-  checksum: 7793a9da9eec18a5c68af37ad0e25000ed7f111086223bc85b08e52c79229266d5affc9e6f9cb14348e7921f0d1b96267ff63801d95bc23c55f54b57c0a9c510
+  checksum: c031f199cb50f44010faaec96190bfd6a3abb376349c599cad85fa4f202c21d644b54ab6f530d2d0a915f086078f45d1082e2753ed4e4f80d256852ef1d081f9
   languageName: node
   linkType: hard
 
@@ -6844,6 +6847,17 @@ __metadata:
     invariant: "*"
     prop-types: "*"
   checksum: bba96622e196f650e782963598a2868a9c89b32e88fba1555fe1308d324eb387ab2a1f16235162b7bccc1900e8f43b7f8eae4f149a37f10cdf52e071990a7c9a
+  languageName: node
+  linkType: hard
+
+"deprecated-react-native-prop-types@npm:^4.2.3":
+  version: 4.2.3
+  resolution: "deprecated-react-native-prop-types@npm:4.2.3"
+  dependencies:
+    "@react-native/normalize-colors": <0.73.0
+    invariant: ^2.2.4
+    prop-types: ^15.8.1
+  checksum: 294752f9f15733b66473022d8258a14aac850e4a3db7e802ef189a09871236f5a110f8fe588468ae1df92f24641ae29de05943074dc54da02a5e4262935f913d
   languageName: node
   linkType: hard
 
@@ -12175,9 +12189,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-macos@npm:0.72.7":
-  version: 0.72.7
-  resolution: "react-native-macos@npm:0.72.7"
+"react-native-macos@npm:0.72.12":
+  version: 0.72.12
+  resolution: "react-native-macos@npm:0.72.12"
   dependencies:
     "@jest/create-cache-key-function": ^29.2.1
     "@react-native-community/cli": 11.3.7
@@ -12219,13 +12233,13 @@ __metadata:
     react: 18.2.0
   bin:
     react-native-macos: cli.js
-  checksum: 4e198a11534dfe640e3e11761e063def9f37d90cd8e60e406287f7ddd9d40d1b9e48e437e6baec1b518a51e7143f2d6db9f0d85b22f833e31d3729ba4f73962e
+  checksum: 5fff2f95051a3874b10e5912225bbd4aba4882c67b2df895ccb37a06dace7cce06bdc80cb861b80028017e23a4ef874f49ef45495a778a35a41dec1f8415f632
   languageName: node
   linkType: hard
 
-"react-native-macos@patch:react-native-macos@npm%3A0.72.7#./.yarn/patches/react-native-macos-npm-0.72.7-e19b4d7895.patch::locator=rnx-kit%40workspace%3A.":
-  version: 0.72.7
-  resolution: "react-native-macos@patch:react-native-macos@npm%3A0.72.7#./.yarn/patches/react-native-macos-npm-0.72.7-e19b4d7895.patch::version=0.72.7&hash=6adeb9&locator=rnx-kit%40workspace%3A."
+"react-native-macos@patch:react-native-macos@npm%3A0.72.12#./.yarn/patches/react-native-macos-npm-0.72.12-61bf1f8441.patch::locator=rnx-kit%40workspace%3A.":
+  version: 0.72.12
+  resolution: "react-native-macos@patch:react-native-macos@npm%3A0.72.12#./.yarn/patches/react-native-macos-npm-0.72.12-61bf1f8441.patch::version=0.72.12&hash=bbd813&locator=rnx-kit%40workspace%3A."
   dependencies:
     "@jest/create-cache-key-function": ^29.2.1
     "@react-native-community/cli": 11.3.7
@@ -12267,7 +12281,7 @@ __metadata:
     react: 18.2.0
   bin:
     react-native-macos: cli.js
-  checksum: 796e29a9ebeb67355ff423fa078db0978d26c3f9587891d460b2528c85683b9867397fbce9477e256ee81fc9d39a056a349ea8dd15848db3a4958529a145bb48
+  checksum: 55e59d46b43d8f44f72b8ee584c8651f66e64dd3e04deabe48bf1505ba84b563337e0d2eee208d2a5d9e8d1bcac952cd21df5019b264735f576a0cdca69b2b79
   languageName: node
   linkType: hard
 
@@ -12357,24 +12371,25 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native@npm:0.72.6":
-  version: 0.72.6
-  resolution: "react-native@npm:0.72.6"
+"react-native@npm:0.72.8":
+  version: 0.72.8
+  resolution: "react-native@npm:0.72.8"
   dependencies:
     "@jest/create-cache-key-function": ^29.2.1
-    "@react-native-community/cli": 11.3.7
-    "@react-native-community/cli-platform-android": 11.3.7
-    "@react-native-community/cli-platform-ios": 11.3.7
+    "@react-native-community/cli": 11.3.10
+    "@react-native-community/cli-platform-android": 11.3.10
+    "@react-native-community/cli-platform-ios": 11.3.10
     "@react-native/assets-registry": ^0.72.0
-    "@react-native/codegen": ^0.72.7
+    "@react-native/codegen": ^0.72.8
     "@react-native/gradle-plugin": ^0.72.11
     "@react-native/js-polyfills": ^0.72.1
     "@react-native/normalize-colors": ^0.72.0
     "@react-native/virtualized-lists": ^0.72.8
     abort-controller: ^3.0.0
     anser: ^1.4.9
+    ansi-regex: ^5.0.0
     base64-js: ^1.1.2
-    deprecated-react-native-prop-types: 4.1.0
+    deprecated-react-native-prop-types: ^4.2.3
     event-target-shim: ^5.0.1
     flow-enums-runtime: ^0.0.5
     invariant: ^2.2.4
@@ -12401,28 +12416,29 @@ __metadata:
     react: 18.2.0
   bin:
     react-native: cli.js
-  checksum: 3cf0af092c0d6b9b6e67795664e324136f6d1a41c6a889737fb612e5ddb93d0537c890fe733e751fe3bbc139cbb4f9f6d9eff4467e8d8dc67194ac8b382fa168
+  checksum: ee4583d0aa65cb4fb0f614de3c4dbbe46d8046659e7209243dd855f7d7a2e7f28f07d4de3d81cc5a4b590294dd408eb954280bef087a02d7fc616ae85885c2a6
   languageName: node
   linkType: hard
 
-"react-native@patch:react-native@npm%3A0.72.6#./.yarn/patches/react-native-npm-0.72.6-9d6fdd645f.patch::locator=rnx-kit%40workspace%3A.":
-  version: 0.72.6
-  resolution: "react-native@patch:react-native@npm%3A0.72.6#./.yarn/patches/react-native-npm-0.72.6-9d6fdd645f.patch::version=0.72.6&hash=6adeb9&locator=rnx-kit%40workspace%3A."
+"react-native@patch:react-native@npm%3A0.72.8#./.yarn/patches/react-native-npm-0.72.8-5af30d9693.patch::locator=rnx-kit%40workspace%3A.":
+  version: 0.72.8
+  resolution: "react-native@patch:react-native@npm%3A0.72.8#./.yarn/patches/react-native-npm-0.72.8-5af30d9693.patch::version=0.72.8&hash=922032&locator=rnx-kit%40workspace%3A."
   dependencies:
     "@jest/create-cache-key-function": ^29.2.1
-    "@react-native-community/cli": 11.3.7
-    "@react-native-community/cli-platform-android": 11.3.7
-    "@react-native-community/cli-platform-ios": 11.3.7
+    "@react-native-community/cli": 11.3.10
+    "@react-native-community/cli-platform-android": 11.3.10
+    "@react-native-community/cli-platform-ios": 11.3.10
     "@react-native/assets-registry": ^0.72.0
-    "@react-native/codegen": ^0.72.7
+    "@react-native/codegen": ^0.72.8
     "@react-native/gradle-plugin": ^0.72.11
     "@react-native/js-polyfills": ^0.72.1
     "@react-native/normalize-colors": ^0.72.0
     "@react-native/virtualized-lists": ^0.72.8
     abort-controller: ^3.0.0
     anser: ^1.4.9
+    ansi-regex: ^5.0.0
     base64-js: ^1.1.2
-    deprecated-react-native-prop-types: 4.1.0
+    deprecated-react-native-prop-types: ^4.2.3
     event-target-shim: ^5.0.1
     flow-enums-runtime: ^0.0.5
     invariant: ^2.2.4
@@ -12449,7 +12465,7 @@ __metadata:
     react: 18.2.0
   bin:
     react-native: cli.js
-  checksum: 97b8eb62e62a6260c3b06b595e5086347d8c1e8786ffcc979986f5d19f00ffda9c3bae03715abd06765273fc4e1e17c81efe3f871ffd43f2c94de432ce0bc6f0
+  checksum: 02636f065e95c447366882ba0c9238d479418a87111ceae2a25a92a77ae8cb4e4e2acfa14811e635d876e48c462ec3521990e0dae016cc7faa067503b5bdf95b
   languageName: node
   linkType: hard
 
