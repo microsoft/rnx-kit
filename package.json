@@ -38,7 +38,7 @@
     "@types/jest": "^29.2.1",
     "@types/node": "^20.0.0",
     "eslint": "^8.23.0",
-    "metro": "^0.76.5",
+    "metro": "^0.80.0",
     "nx": "~17.2.0",
     "prettier": "^3.0.0",
     "prettier-plugin-organize-imports": "^3.0.0",
@@ -51,20 +51,18 @@
   "resolutions": {
     "@microsoft/eslint-plugin-sdl/eslint-plugin-react": "^7.33.0",
     "@microsoft/eslint-plugin-sdl/eslint-plugin-security": "^1.4.0",
-    "@react-native-community/cli": "^11.3.10",
-    "@react-native-community/cli-platform-android": "^11.3.10",
-    "@react-native-community/cli-platform-ios": "^11.3.10",
+    "@react-native-community/cli": "^12.3.0",
+    "@react-native-community/cli-clean": "^12.3.0",
+    "@react-native-community/cli-platform-android": "^12.3.0",
+    "@react-native-community/cli-platform-ios": "^12.3.0",
+    "@react-native-community/cli-server-api": "^12.3.2",
+    "@react-native-community/cli-tools": "^12.3.2",
+    "@react-native-community/cli-types": "^12.3.0",
     "@rnx-kit/react-native-host": "workspace:*",
     "@vue/compiler-sfc": "link:./incubator/ignore",
-    "depcheck/@babel/parser": "~7.23.0",
-    "depcheck/@babel/traverse": "~7.23.0",
-    "deprecated-react-native-prop-types/@react-native/normalize-colors": "^0.72.0",
     "nx/glob": "^7.1.4",
     "nx/minimatch": "^3.0.5",
-    "nx/semver": "^7.3.5",
-    "react-native-macos@^0.72.0": "patch:react-native-macos@npm%3A0.72.12#./.yarn/patches/react-native-macos-npm-0.72.12-61bf1f8441.patch",
-    "react-native-windows/metro-source-map": "^0.76.8",
-    "react-native@^0.72.0": "patch:react-native@npm%3A0.72.8#./.yarn/patches/react-native-npm-0.72.8-5af30d9693.patch"
+    "nx/semver": "^7.3.5"
   },
   "workspaces": {
     "packages": [

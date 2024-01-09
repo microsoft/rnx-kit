@@ -3,6 +3,7 @@ const {
   makeMetroConfig,
   resolveUniqueModule,
 } = require("@rnx-kit/metro-config");
+const path = require("node:path");
 const { MetroSerializer, esbuildTransformerConfig } = require(".");
 
 // Metro will pick up mocks if we don't exclude them
@@ -51,10 +52,9 @@ module.exports = makeMetroConfig({
     blockList,
   },
   serializer: {
-    customSerializer: MetroSerializer([], {
-      minify: false,
-    }),
+    customSerializer: MetroSerializer([], { minify: false }),
     getPolyfills: () => [],
   },
   transformer: esbuildTransformerConfig,
+  watchFolders: [path.resolve("../../node_modules/.store")],
 });

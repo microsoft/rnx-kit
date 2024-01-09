@@ -8,7 +8,7 @@ cli({
     "microsoft/react-native",
     new URL("align-deps-preset.cjs", import.meta.url).pathname,
   ],
-  requirements: ["react-native@0.72"],
+  requirements: ["react-native@0.73"],
   write: process.argv.includes("--write"),
   "exclude-packages": ["@rnx-kit/build", "@rnx-kit/metro-plugin-typescript"],
 });
