@@ -1,6 +1,7 @@
 import type { HermesOptions } from "@rnx-kit/config";
 import { error, info } from "@rnx-kit/console";
 import { findPackageDependencyDir } from "@rnx-kit/tools-node/package";
+import { requireModuleFromMetro } from "@rnx-kit/tools-react-native/metro";
 import { spawnSync } from "child_process";
 import * as fs from "fs";
 import * as os from "os";
@@ -57,10 +58,6 @@ function getOutput(args: string[]): string | null {
   return null;
 }
 
-function isSourceMapFlag(flag: string): boolean {
-  return flag === "-source-map" || flag.startsWith("-source-map=");
-}
-
 export function emitBytecode(
   input: string,
   sourcemap: string | undefined,
@@ -90,15 +87,28 @@ export function emitBytecode(
     args.push("-out", output);
   }
 
-  if (sourcemap && !args.some(isSourceMapFlag)) {
-    args.push("-source-map", sourcemap);
-  }
-
   args.push(input);
 
   info("Emitting bytecode to:", output);
   const result = spawnSync(cmd, args, { stdio: "inherit" });
   if (result.status !== 0) {
     throw result.error;
+  }
+
+  if (sourcemap && args.includes("-output-source-map")) {
+    const outputMap = output + ".map";
+    info(`Combining source maps: ${sourcemap} + ${outputMap}`);
+
+    const options = { encoding: "utf-8" } as const;
+    const packagerSourcemap = JSON.parse(fs.readFileSync(sourcemap, options));
+    const compilerSourcemap = JSON.parse(fs.readFileSync(outputMap, options));
+
+    // `composeSourceMaps` was introduced in 0.56 — see
+    // https://github.com/facebook/metro/commit/6017085bdad96ca5cec39d50038eb5622ce1097b
+    // @ts-expect-error Property 'composeSourceMaps' does not exist
+    const { composeSourceMaps } = requireModuleFromMetro("metro-source-map");
+
+    const composed = composeSourceMaps([packagerSourcemap, compilerSourcemap]);
+    fs.writeFileSync(outputMap, JSON.stringify(composed));
   }
 }

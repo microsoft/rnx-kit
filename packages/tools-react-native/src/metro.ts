@@ -10,7 +10,8 @@ type MetroImport =
   | typeof import("metro/src/shared/output/bundle")
   | typeof import("metro-config")
   | typeof import("metro-core")
-  | typeof import("metro-resolver");
+  | typeof import("metro-resolver")
+  | typeof import("metro-source-map");
 
 type MetroModule =
   | "metro"
@@ -19,7 +20,8 @@ type MetroModule =
   | "metro/src/shared/output/bundle"
   | "metro-config"
   | "metro-core"
-  | "metro-resolver";
+  | "metro-resolver"
+  | "metro-source-map";
 
 function resolveFrom(name: string, startDir: string): string | undefined {
   return findPackageDependencyDir(name, {
@@ -109,6 +111,11 @@ export function requireModuleFromMetro(
   moduleName: "metro-resolver",
   fromDir?: string
 ): typeof import("metro-resolver");
+
+export function requireModuleFromMetro(
+  moduleName: "metro-source-map",
+  fromDir?: string
+): typeof import("metro-source-map");
 
 /**
  * Imports specified module starting from the installation directory of the
