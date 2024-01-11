@@ -12,28 +12,26 @@
 
 #if __has_include(<React/RCTAppSetupUtils.h>)  // <0.72
 #import <React/RCTAppSetupUtils.h>
-#define USE_RUNTIME_SCHEDULER 0
 #else
 #import <React-RCTAppDelegate/RCTAppSetupUtils.h>
 #import <React/RCTSurfacePresenterBridgeAdapter.h>
 
 // We still get into this path because react-native-macos 0.71 picked up some
-// 0.72 bits. AFAICT, `RCTLegacyInteropComponents.h` is a new addition in 0.72
-// in both react-native and react-native-macos.
-#if __has_include(<React-RCTAppDelegate/RCTLegacyInteropComponents.h>)
+// 0.72 bits. AFAICT, `SchedulerPriorityUtils.h` is a new addition in 0.72 in
+// both react-native and react-native-macos.
+#if __has_include(<react/renderer/runtimescheduler/SchedulerPriorityUtils.h>)
+#if __has_include(<React-RCTAppDelegate/RCTLegacyInteropComponents.h>)  // <0.74
 #import <React-RCTAppDelegate/RCTLegacyInteropComponents.h>
+#define MANUALLY_REGISTER_LEGACY_COMPONENTS 1
+#endif  // __has_include(<React-RCTAppDelegate/RCTLegacyInteropComponents.h>)
 #import <React/RCTLegacyViewManagerInteropComponentView.h>
 #import <react/renderer/runtimescheduler/RuntimeScheduler.h>
 #import <react/renderer/runtimescheduler/RuntimeSchedulerCallInvoker.h>
 #if __has_include(<React/RCTRuntimeExecutorFromBridge.h>)
 #import <React/RCTRuntimeExecutorFromBridge.h>
 #endif  // __has_include(<React/RCTRuntimeExecutorFromBridge.h>)
-#define SUPPORTS_LEGACY_COMPONENTS 1
 #define USE_RUNTIME_SCHEDULER 1
-#else
-#define SUPPORTS_LEGACY_COMPONENTS 0
-#define USE_RUNTIME_SCHEDULER 0
-#endif  // __has_include(<React-RCTAppDelegate/RCTLegacyInteropComponents.h>)
+#endif  // __has_include(<react/renderer/runtimescheduler/SchedulerPriorityUtils.h>)
 
 #endif  // __has_include(<React/RCTAppSetupUtils.h>)
 
@@ -52,7 +50,11 @@
     (RCTBridge *)bridge
 {
 #if USE_TURBOMODULE
-    [self registerLegacyViewManagers];
+#if MANUALLY_REGISTER_LEGACY_COMPONENTS
+    for (NSString *legacyComponent in [RCTLegacyInteropComponents legacyInteropComponents]) {
+        [RCTLegacyViewManagerInteropComponentView supportLegacyViewManagerWithName:legacyComponent];
+    }
+#endif  // MANUALLY_REGISTER_LEGACY_COMPONENTS
     // jsExecutorFactoryForBridge: (USE_TURBOMODULE=1)
     return [self initJsExecutorFactoryWithBridge:bridge];
 #else
@@ -102,15 +104,6 @@
                                                               jsInvoker:bridge.jsCallInvoker];
     return RCTAppSetupDefaultJsExecutorFactory(bridge, _turboModuleManager);
 #endif  // USE_RUNTIME_SCHEDULER
-}
-
-- (void)registerLegacyViewManagers
-{
-#if SUPPORTS_LEGACY_COMPONENTS
-    for (NSString *legacyComponent in [RCTLegacyInteropComponents legacyInteropComponents]) {
-        [RCTLegacyViewManagerInteropComponentView supportLegacyViewManagerWithName:legacyComponent];
-    }
-#endif  // SUPPORTS_LEGACY_COMPONENTS
 }
 
 #endif  // USE_TURBOMODULE
