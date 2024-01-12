@@ -14,6 +14,12 @@ export const bannedPackages: ExcludedPackage[] = [
       "This package was renamed to '@react-native-clipboard/clipboard' in 1.6.0. The new package is recommended in 0.64.",
   },
   {
+    name: "@react-native-community/eslint-config",
+    version: "*",
+    reason:
+      "As of 'react-native' 0.72, you should use '@react-native/eslint-config' instead. Alternatively, if you're looking for an ESLint 9.x compatible config, try '@rnx-kit/eslint-plugin'.",
+  },
+  {
     name: "@react-native-community/masked-view",
     version: "*",
     reason:
