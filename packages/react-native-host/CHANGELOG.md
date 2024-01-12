@@ -1,5 +1,11 @@
 # @rnx-kit/react-native-host
 
+## 0.3.2
+
+### Patch Changes
+
+- 476ebe8: Handle refactorings in 0.74
+
 ## 0.3.1
 
 ### Patch Changes
