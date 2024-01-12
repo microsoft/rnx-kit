@@ -8,7 +8,7 @@ version = package['version']
 repository = package['repository']
 repo_dir = repository['directory']
 
-new_arch_enabled = ENV['RCT_NEW_ARCH_ENABLED'] == '1' && ENV['USE_NEW_ARCH'] != '0'
+new_arch_enabled = ENV['RCT_NEW_ARCH_ENABLED'] == '1'
 preprocessor_definitions = [
   'FOLLY_CFG_NO_COROUTINES=1',
   'FOLLY_HAVE_CLOCK_GETTIME=1',
@@ -20,7 +20,6 @@ preprocessor_definitions = [
 if new_arch_enabled
   preprocessor_definitions << 'RCT_NEW_ARCH_ENABLED=1'
   preprocessor_definitions << 'USE_FABRIC=1'
-  preprocessor_definitions << 'USE_TURBOMODULE=1'
 end
 
 Pod::Spec.new do |s|
