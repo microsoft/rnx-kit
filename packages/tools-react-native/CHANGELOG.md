@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/tools-react-native
 
+## 1.3.5
+
+### Patch Changes
+
+- afe49c6: Allow importing `metro-source-map` via `metro`
+
 ## 1.3.4
 
 ### Patch Changes

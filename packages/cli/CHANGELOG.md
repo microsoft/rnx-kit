@@ -1,5 +1,15 @@
 # Change Log - @rnx-kit/cli
 
+## 0.16.22
+
+### Patch Changes
+
+- afe49c6: Automatically compose source maps of the JS and Hermes bytecode bundles
+- Updated dependencies [afe49c6]
+- Updated dependencies [8083856]
+  - @rnx-kit/tools-react-native@1.3.5
+  - @rnx-kit/align-deps@2.3.3
+
 ## 0.16.21
 
 ### Patch Changes
