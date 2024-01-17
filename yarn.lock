@@ -3406,7 +3406,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rnx-kit/align-deps@^2.2.2, @rnx-kit/align-deps@workspace:packages/align-deps":
+"@rnx-kit/align-deps@^2.3.3, @rnx-kit/align-deps@workspace:packages/align-deps":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/align-deps@workspace:packages/align-deps"
   dependencies:
@@ -3597,7 +3597,7 @@ __metadata:
     "@babel/preset-env": ^7.20.0
     "@react-native-community/cli-clean": ^11.0.0
     "@react-native-community/cli-types": ^11.0.0
-    "@rnx-kit/align-deps": ^2.2.2
+    "@rnx-kit/align-deps": ^2.3.3
     "@rnx-kit/config": ^0.6.6
     "@rnx-kit/console": ^1.0.11
     "@rnx-kit/eslint-config": "*"
@@ -3612,7 +3612,7 @@ __metadata:
     "@rnx-kit/third-party-notices": ^1.3.4
     "@rnx-kit/tools-language": ^2.0.0
     "@rnx-kit/tools-node": ^2.1.1
-    "@rnx-kit/tools-react-native": ^1.3.4
+    "@rnx-kit/tools-react-native": ^1.3.5
     "@rnx-kit/tsconfig": "*"
     "@types/connect": ^3.4.36
     "@types/fs-extra": ^9.0.0
@@ -4370,7 +4370,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rnx-kit/tools-react-native@*, @rnx-kit/tools-react-native@^1.3.2, @rnx-kit/tools-react-native@^1.3.4, @rnx-kit/tools-react-native@workspace:packages/tools-react-native":
+"@rnx-kit/tools-react-native@*, @rnx-kit/tools-react-native@^1.3.2, @rnx-kit/tools-react-native@^1.3.4, @rnx-kit/tools-react-native@^1.3.5, @rnx-kit/tools-react-native@workspace:packages/tools-react-native":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/tools-react-native@workspace:packages/tools-react-native"
   dependencies:
