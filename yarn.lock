@@ -4386,6 +4386,7 @@ __metadata:
     metro-config: ^0.76.5
     metro-core: ^0.76.5
     metro-resolver: ^0.76.5
+    metro-source-map: ^0.76.5
     prettier: ^3.0.0
     typescript: ^5.0.0
   languageName: unknown
@@ -10638,7 +10639,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"metro-source-map@npm:0.76.8, metro-source-map@npm:^0.76.8":
+"metro-source-map@npm:0.76.8, metro-source-map@npm:^0.76.5, metro-source-map@npm:^0.76.8":
   version: 0.76.8
   resolution: "metro-source-map@npm:0.76.8"
   dependencies:
