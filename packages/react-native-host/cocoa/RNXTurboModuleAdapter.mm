@@ -6,7 +6,7 @@
 #import <cxxreact/JSExecutor.h>
 #pragma clang diagnostic pop
 
-#if USE_TURBOMODULE
+#if USE_FABRIC
 #import <React/CoreModulesPlugins.h>
 #import <ReactCommon/RCTTurboModuleManager.h>
 
@@ -35,12 +35,12 @@
 
 #endif  // __has_include(<React/RCTAppSetupUtils.h>)
 
-#endif  // USE_TURBOMODULE
+#endif  // USE_FABRIC
 
 @implementation RNXTurboModuleAdapter {
-#if USE_TURBOMODULE
+#if USE_FABRIC
     RCTTurboModuleManager *_turboModuleManager;
-#endif  // USE_TURBOMODULE
+#endif  // USE_FABRIC
 #if USE_RUNTIME_SCHEDULER
     std::shared_ptr<facebook::react::RuntimeScheduler> _runtimeScheduler;
 #endif  // USE_RUNTIME_SCHEDULER
@@ -49,21 +49,21 @@
 - (std::unique_ptr<facebook::react::JSExecutorFactory>)jsExecutorFactoryForBridge:
     (RCTBridge *)bridge
 {
-#if USE_TURBOMODULE
+#if USE_FABRIC
 #if MANUALLY_REGISTER_LEGACY_COMPONENTS
     for (NSString *legacyComponent in [RCTLegacyInteropComponents legacyInteropComponents]) {
         [RCTLegacyViewManagerInteropComponentView supportLegacyViewManagerWithName:legacyComponent];
     }
 #endif  // MANUALLY_REGISTER_LEGACY_COMPONENTS
-    // jsExecutorFactoryForBridge: (USE_TURBOMODULE=1)
+    // jsExecutorFactoryForBridge: (USE_FABRIC=1)
     return [self initJsExecutorFactoryWithBridge:bridge];
 #else
-    // jsExecutorFactoryForBridge: (USE_TURBOMODULE=0)
+    // jsExecutorFactoryForBridge: (USE_FABRIC=0)
     return nullptr;
-#endif  // USE_TURBOMODULE
+#endif  // USE_FABRIC
 }
 
-#if USE_TURBOMODULE
+#if USE_FABRIC
 
 // MARK: - RCTTurboModuleManagerDelegate details
 
@@ -106,6 +106,6 @@
 #endif  // USE_RUNTIME_SCHEDULER
 }
 
-#endif  // USE_TURBOMODULE
+#endif  // USE_FABRIC
 
 @end

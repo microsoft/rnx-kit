@@ -53,7 +53,7 @@
         }
 
         _config = config;
-#if USE_FABRIC || USE_TURBOMODULE
+#if USE_FABRIC
         _turboModuleAdapter = [[RNXTurboModuleAdapter alloc] init];
 #endif
         _isShuttingDown = [[NSLock alloc] init];
@@ -144,13 +144,13 @@
 - (std::unique_ptr<facebook::react::JSExecutorFactory>)jsExecutorFactoryForBridge:
     (RCTBridge *)bridge
 {
-#if USE_TURBOMODULE
-    // jsExecutorFactoryForBridge: (USE_TURBOMODULE=1)
+#if USE_FABRIC
+    // jsExecutorFactoryForBridge: (USE_FABRIC=1)
     return [_turboModuleAdapter jsExecutorFactoryForBridge:bridge];
 #else
-    // jsExecutorFactoryForBridge: (USE_TURBOMODULE=0)
+    // jsExecutorFactoryForBridge: (USE_FABRIC=0)
     return nullptr;
-#endif  // USE_TURBOMODULE
+#endif  // USE_FABRIC
 }
 
 // MARK: - Private
