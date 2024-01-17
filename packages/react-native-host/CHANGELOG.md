@@ -1,5 +1,11 @@
 # @rnx-kit/react-native-host
 
+## 0.4.0
+
+### Minor Changes
+
+- 7215f80: Merged `USE_TURBOMODULE` with `USE_FABRIC`. If your config plugins were previously using `USE_TURBOMODULE`, please switch to `USE_FABRIC`.
+
 ## 0.3.2
 
 ### Patch Changes

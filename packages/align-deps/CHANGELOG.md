@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/align-deps
 
+## 2.3.3
+
+### Patch Changes
+
+- 8083856: Tell users to migrate from `@react-native-community/eslint-config` to `@react-native/eslint-config`
+
 ## 2.3.2
 
 ### Patch Changes
