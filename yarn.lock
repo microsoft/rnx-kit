@@ -4305,7 +4305,7 @@ __metadata:
     react: 18.2.0
     react-native: ^0.72.0
     react-native-macos: ^0.72.0
-    react-native-test-app: ^2.5.5
+    react-native-test-app: ^3.0.0
     react-native-windows: ^0.72.0
     react-test-renderer: 18.2.0
     typescript: ^5.0.0
@@ -10888,7 +10888,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"minimist@npm:^1.2.0, minimist@npm:^1.2.6, minimist@npm:^1.2.8":
+"minimist@npm:^1.2.0, minimist@npm:^1.2.6":
   version: 1.2.8
   resolution: "minimist@npm:1.2.8"
   checksum: 75a6d645fb122dad29c06a7597bddea977258957ed88d7a6df59b5cd3fe4a527e253e9bbf2e783e4b73657f9098b96a5fe96ab8a113655d4109108577ecf85b0
@@ -12285,25 +12285,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-test-app@npm:^2.5.5":
-  version: 2.5.35
-  resolution: "react-native-test-app@npm:2.5.35"
+"react-native-test-app@npm:^3.0.0":
+  version: 3.0.9
+  resolution: "react-native-test-app@npm:3.0.9"
   dependencies:
-    "@rnx-kit/react-native-host": ^0.2.9
+    "@rnx-kit/react-native-host": ^0.4.0
     ajv: ^8.0.0
     chalk: ^4.1.0
     cliui: ^8.0.0
     fast-xml-parser: ^4.0.0
-    minimist: ^1.2.8
     prompts: ^2.4.0
     semver: ^7.3.5
     uuid: ^8.3.2
   peerDependencies:
     "@expo/config-plugins": ">=5.0"
     react: 17.0.1 - 18.2
-    react-native: ^0.0.0-0 || 0.64 - 0.73 || 1000.0.0
-    react-native-macos: ^0.0.0-0 || 0.64 || 0.66 || 0.68 || 0.71 - 0.73
-    react-native-windows: ^0.0.0-0 || 0.64 - 0.73
+    react-native: ^0.0.0-0 || 0.66 - 0.73 || 1000.0.0
+    react-native-macos: ^0.0.0-0 || 0.66 || 0.68 || 0.71 - 0.73
+    react-native-windows: ^0.0.0-0 || 0.66 - 0.73
   peerDependenciesMeta:
     "@expo/config-plugins":
       optional: true
@@ -12316,7 +12315,7 @@ __metadata:
     init: scripts/init.js
     init-test-app: scripts/init.js
     install-windows-test-app: windows/test-app.js
-  checksum: 7c76bf12b728b8dffb96c7adaae751fc52d855084731b3b1cb2c2e41ee9daf7db0aa14defb76dd1e4741583c2413d3bc89fb6e495f15bfb6bee062eb4fd7a3a3
+  checksum: 8b26dce8855fde2f380c6697162b2b1ef137f214e3569c25da18ef1c5998f467008df3e3fdf2b6f302f08c81b424aa19f39463083eb5fb2e011f4d04ee6b0ae5
   languageName: node
   linkType: hard
 
