@@ -390,11 +390,11 @@ PODS:
     - React-jsi (= 0.72.8)
     - React-logger (= 0.72.8)
     - React-perflogger (= 0.72.8)
-  - ReactNativeHost (0.3.1):
+  - ReactNativeHost (0.4.0):
     - React-Core
     - React-cxxreact
     - ReactCommon/turbomodule/core
-  - ReactTestApp-DevSupport (2.5.34):
+  - ReactTestApp-DevSupport (3.0.9):
     - React-Core
     - React-jsi
   - ReactTestApp-MSAL (2.1.7):
@@ -445,7 +445,7 @@ DEPENDENCIES:
   - React-runtimescheduler (from `../node_modules/react-native/ReactCommon/react/renderer/runtimescheduler`)
   - React-utils (from `../node_modules/react-native/ReactCommon/react/utils`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
-  - "ReactNativeHost (from `../../../node_modules/.store/react-native-test-app-virtual-dc47fad505/node_modules/react-native-test-app/node_modules/@rnx-kit/react-native-host`)"
+  - "ReactNativeHost (from `../../../node_modules/.store/react-native-test-app-virtual-ca5c45e20f/node_modules/react-native-test-app/node_modules/@rnx-kit/react-native-host`)"
   - ReactTestApp-DevSupport (from `../node_modules/react-native-test-app`)
   - "ReactTestApp-MSAL (from `../node_modules/@rnx-kit/react-native-test-app-msal`)"
   - ReactTestApp-Resources (from `..`)
@@ -534,7 +534,7 @@ EXTERNAL SOURCES:
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
   ReactNativeHost:
-    :path: "../../../node_modules/.store/react-native-test-app-virtual-dc47fad505/node_modules/react-native-test-app/node_modules/@rnx-kit/react-native-host"
+    :path: "../../../node_modules/.store/react-native-test-app-virtual-ca5c45e20f/node_modules/react-native-test-app/node_modules/@rnx-kit/react-native-host"
   ReactTestApp-DevSupport:
     :path: "../node_modules/react-native-test-app"
   ReactTestApp-MSAL:
@@ -586,14 +586,14 @@ SPEC CHECKSUMS:
   React-runtimescheduler: 8b86ce0ad4bfdc548ccbbf66808536ddb3c5330c
   React-utils: 96f4588532614099a6d67a2b7c5912e1a35d6403
   ReactCommon: 51f5967b52c51868fa20850c53557616e9a86945
-  ReactNativeHost: 60ee30b89d14716f0e10f7c09313f1cdef855a52
-  ReactTestApp-DevSupport: 633054c342809fcfcff96db4e1d26ac3c143681b
+  ReactNativeHost: e17481b59ed2f3a1c65db1e83f03c1abf9afcd14
+  ReactTestApp-DevSupport: 042b9bc922ee2787ad87b2a677a8fa93665f1daf
   ReactTestApp-MSAL: 9d917ca1097f71e53e845466df0e40c6d5b6259a
-  ReactTestApp-Resources: 4b819f4d440477a0470146af1cd05299f19b33f8
+  ReactTestApp-Resources: ecfced6249be8a1d032cc75c6339538214e2bab1
   RNXAuth: a249af0cf1c935a41c95aaf8e5c7df11836bbfbf
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   Yoga: 11d7931afb89721f39cf553a78767b81c7fbea1f
 
-PODFILE CHECKSUM: dd29237d4e768f3b9fb1e70a6e7a5974125f94c6
+PODFILE CHECKSUM: bc95f332f052a1a60f3189dcf09da29b8caa090c
 
 COCOAPODS: 1.14.2
