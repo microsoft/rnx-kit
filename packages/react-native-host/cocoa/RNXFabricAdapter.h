@@ -1,9 +1,11 @@
 #import <Foundation/Foundation.h>
 
 @class RCTBridge;
+@class RCTSurfacePresenterBridgeAdapter;
 
 NS_ASSUME_NONNULL_BEGIN
 
-NSObject *RNXInstallSurfacePresenterBridgeAdapter(RCTBridge *bridge);
+RCTSurfacePresenterBridgeAdapter *_Nullable RNXInstallSurfacePresenterBridgeAdapter(
+    RCTBridge *bridge);
 
 NS_ASSUME_NONNULL_END

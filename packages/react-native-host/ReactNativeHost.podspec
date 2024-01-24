@@ -16,10 +16,12 @@ preprocessor_definitions = [
   'FOLLY_MOBILE=1',
   'FOLLY_NO_CONFIG=1',
   'FOLLY_USE_LIBCPP=1',
+  "USE_HERMES=#{ENV['USE_HERMES'] || '0'}",
 ]
 if new_arch_enabled
   preprocessor_definitions << 'RCT_NEW_ARCH_ENABLED=1'
   preprocessor_definitions << 'USE_FABRIC=1'
+  preprocessor_definitions << 'USE_BRIDGELESS=1' if ENV['USE_BRIDGELESS'] == '1'
 end
 
 Pod::Spec.new do |s|

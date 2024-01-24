@@ -41,9 +41,10 @@
                                                              moduleName:moduleName
                                                       initialProperties:initialProperties];
 #else
-    RCTFabricSurface *surface = [[RCTFabricSurface alloc] initWithBridge:self.bridge
-                                                              moduleName:moduleName
-                                                       initialProperties:initialProperties];
+    RCTFabricSurface *surface =
+        [[RCTFabricSurface alloc] initWithSurfacePresenter:self.surfacePresenter
+                                                moduleName:moduleName
+                                         initialProperties:initialProperties];
     return [[RCTSurfaceHostingProxyRootView alloc] initWithSurface:surface];
 #endif  // __has_include(<React/RCTFabricSurfaceHostingProxyRootView.h>)
 #else

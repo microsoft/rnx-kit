@@ -1,6 +1,6 @@
 #import "RNXFabricAdapter.h"
 
-#ifdef USE_FABRIC
+#if USE_FABRIC && !USE_BRIDGELESS
 #include "FollyConfig.h"
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wcomma"
@@ -9,11 +9,11 @@
 #import <React/RCTSurfacePresenterBridgeAdapter.h>
 #import <react/config/ReactNativeConfig.h>
 #pragma clang diagnostic pop
-#endif  // USE_FABRIC
+#endif  // USE_FABRIC && !USE_BRIDGELESS
 
-NSObject *RNXInstallSurfacePresenterBridgeAdapter(RCTBridge *bridge)
+RCTSurfacePresenterBridgeAdapter *RNXInstallSurfacePresenterBridgeAdapter(RCTBridge *bridge)
 {
-#ifdef USE_FABRIC
+#if USE_FABRIC && !USE_BRIDGELESS
     auto contextContainer = std::make_shared<facebook::react::ContextContainer const>();
     auto reactNativeConfig = std::make_shared<facebook::react::EmptyReactNativeConfig const>();
     contextContainer->insert("ReactNativeConfig", reactNativeConfig);
@@ -24,5 +24,5 @@ NSObject *RNXInstallSurfacePresenterBridgeAdapter(RCTBridge *bridge)
     return bridgeAdapter;
 #else
     return nil;
-#endif  // USE_FABRIC
+#endif  // USE_FABRIC && !USE_BRIDGELESS
 }

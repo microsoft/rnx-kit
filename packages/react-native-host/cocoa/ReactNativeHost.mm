@@ -11,22 +11,32 @@
 #import <React/RCTCxxBridgeDelegate.h>
 #import <React/RCTDevLoadingViewSetEnabled.h>
 #import <React/RCTUtils.h>
+#import <react/config/ReactNativeConfig.h>
 
+#import "RNXBridgelessHeaders.h"
 #import "RNXFabricAdapter.h"
 #import "RNXHostConfig.h"
 #import "RNXHostReleaser.h"
 #import "RNXTurboModuleAdapter.h"
 
+using ReactNativeConfig = facebook::react::EmptyReactNativeConfig const;
+
+#if USE_BRIDGELESS
+@interface ReactNativeHost () <RCTContextContainerHandling>
+#else
 @interface ReactNativeHost () <RCTCxxBridgeDelegate>
+#endif  // USE_BRIDGELESS
 @end
 
 @implementation ReactNativeHost {
     __weak id<RNXHostConfig> _config;
     RNXTurboModuleAdapter *_turboModuleAdapter;
-    NSObject *_surfacePresenterBridgeAdapter;
+    RCTSurfacePresenterBridgeAdapter *_surfacePresenterBridgeAdapter;
     RCTBridge *_bridge;
+    RCTHost *_reactHost;
     NSLock *_isShuttingDown;
     RNXHostReleaser *_hostReleaser;
+    std::shared_ptr<ReactNativeConfig> _reactNativeConfig;
 }
 
 - (instancetype)initWithConfig:(id<RNXHostConfig>)config
@@ -53,9 +63,7 @@
         }
 
         _config = config;
-#if USE_FABRIC
-        _turboModuleAdapter = [[RNXTurboModuleAdapter alloc] init];
-#endif
+        [self enableTurboModule];
         _isShuttingDown = [[NSLock alloc] init];
 
         if ([config respondsToSelector:@selector(shouldReleaseBridgeWhenBackgrounded)] &&
@@ -63,13 +71,16 @@
             _hostReleaser = [[RNXHostReleaser alloc] initWithHost:self];
         }
 
-        (void)self.bridge;  // Initialize the bridge now
+        [self initializeReactHost];
     }
     return self;
 }
 
 - (RCTBridge *)bridge
 {
+#if USE_BRIDGELESS
+    return nil;
+#else
     if (![_isShuttingDown tryLock]) {
         NSAssert(NO, @"Tried to access the bridge while shutting down");
         return nil;
@@ -86,6 +97,18 @@
     } @finally {
         [_isShuttingDown unlock];
     }
+#endif  // USE_BRIDGELESS
+}
+
+- (RCTSurfacePresenter *)surfacePresenter
+{
+#if USE_BRIDGELESS
+    return [_reactHost getSurfacePresenter];
+#elif USE_FABRIC
+    return [_surfacePresenterBridgeAdapter surfacePresenter];
+#else
+    return nil;
+#endif
 }
 
 - (void)shutdown
@@ -106,7 +129,7 @@
         [moduleClass respondsToSelector:@selector(requiresMainQueueSetup)] &&
         [moduleClass requiresMainQueueSetup];
     if (requiresMainQueueSetup && !RCTIsMainQueue()) {
-        __weak id weakSelf = self;
+        __weak __typeof(self) weakSelf = self;
         dispatch_async(dispatch_get_main_queue(), ^{
           [weakSelf usingModule:moduleClass block:block];
         });
@@ -139,6 +162,18 @@
                : @[];
 }
 
+#if USE_BRIDGELESS
+
+// MARK: - RCTContextContainerHandling details
+
+- (void)didCreateContextContainer:
+    (std::shared_ptr<facebook::react::ContextContainer>)contextContainer
+{
+    contextContainer->insert("ReactNativeConfig", _reactNativeConfig);
+}
+
+#else  // USE_BRIDGELESS
+
 // MARK: - RCTCxxBridgeDelegate details
 
 - (std::unique_ptr<facebook::react::JSExecutorFactory>)jsExecutorFactoryForBridge:
@@ -153,6 +188,61 @@
 #endif  // USE_FABRIC
 }
 
+#endif  // USE_BRIDGELESS
+
 // MARK: - Private
+
+- (void)enableTurboModule
+{
+#if USE_FABRIC
+    _turboModuleAdapter = [[RNXTurboModuleAdapter alloc] init];
+    RCTEnableTurboModule(true);
+#endif
+}
+
+- (void)initializeReactHost
+{
+#if USE_BRIDGELESS
+    // Bridgeless mode is enabled if it was turned on with a build flag, unless
+    // `isBridgelessEnabled` is explicitly implemented and returns false.
+    if ([_config respondsToSelector:@selector(isBridgelessEnabled)] &&
+        ![_config isBridgelessEnabled]) {
+        (void)self.bridge;  // Initialize the bridge now
+        return;
+    }
+
+    RCTSetUseNativeViewConfigsInBridgelessMode(YES);
+    RCTEnableTurboModuleInterop(YES);
+    RCTEnableTurboModuleInteropBridgeProxy(YES);
+
+    _reactNativeConfig = std::make_shared<ReactNativeConfig>();
+    std::weak_ptr<ReactNativeConfig> reactNativeConfig{_reactNativeConfig};
+
+    SharedJSRuntimeFactory (^jsEngineProvider)() = ^SharedJSRuntimeFactory {
+#if USE_HERMES
+      auto config = reactNativeConfig.lock();
+      NSAssert(config, @"Expected nonnull ReactNativeConfig instance");
+      return std::make_shared<facebook::react::RCTHermesInstance>(config, nullptr);
+#else
+      return std::make_shared<facebook::react::RCTJscInstance>();
+#endif  // USE_HERMES
+    };
+
+    _reactHost = [[RCTHost alloc] initWithBundleURL:[self sourceURLForBridge:nil]
+                                       hostDelegate:nil
+                         turboModuleManagerDelegate:_turboModuleAdapter
+                                   jsEngineProvider:jsEngineProvider];
+
+    __weak __typeof(self) weakSelf = self;
+    [_reactHost setBundleURLProvider:^NSURL *() {
+      return [weakSelf sourceURLForBridge:nil];
+    }];
+
+    [_reactHost setContextContainerHandler:self];
+    [_reactHost start];
+#else
+    (void)self.bridge;
+#endif  // USE_BRIDGELESS
+}
 
 @end
