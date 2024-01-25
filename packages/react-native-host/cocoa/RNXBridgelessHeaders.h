@@ -21,6 +21,7 @@ using SharedJSRuntimeFactory = std::shared_ptr<facebook::react::JSRuntimeFactory
 #elif USE_FABRIC
 
 #import <React/RCTSurfacePresenterBridgeAdapter.h>
+#import <react/config/ReactNativeConfig.h>
 
 @class RCTHost;
 
@@ -28,5 +29,12 @@ using SharedJSRuntimeFactory = std::shared_ptr<facebook::react::JSRuntimeFactory
 
 @class RCTHost;
 @class RCTSurfacePresenterBridgeAdapter;
+
+namespace facebook::react
+{
+    class EmptyReactNativeConfig
+    {
+    };
+}  // namespace facebook::react
 
 #endif  // USE_BRIDGELESS

@@ -12,17 +12,6 @@
 #import <React/RCTDevLoadingViewSetEnabled.h>
 #import <React/RCTUtils.h>
 
-#if __has_include(<react/config/ReactNativeConfig.h>)
-#import <react/config/ReactNativeConfig.h>
-#else
-namespace facebook::react
-{
-    class EmptyReactNativeConfig
-    {
-    };
-}  // namespace facebook::react
-#endif  // __has_include(<react/config/ReactNativeConfig.h>)
-
 #import "RNXBridgelessHeaders.h"
 #import "RNXFabricAdapter.h"
 #import "RNXHostConfig.h"
