@@ -89,6 +89,6 @@ parameter which may be necessary in case Github API rate-limits your requests.
 
 Instructions to create a GitHub ‘personal access token’:
 
-1. Visit the [token settings page](https://github.com/settings/tokens).
+1. Visit the [token settings page](https://github.com/settings/tokens/new?description=rnx-kit%20changelog%20generator&scopes=public_repo).
 1. Generate a new token and **only** give it the `public_repo` scope.
 1. Store this token somewhere secure for future usage.
