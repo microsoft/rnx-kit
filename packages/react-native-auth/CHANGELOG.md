@@ -4,7 +4,7 @@
 
 ### Patch Changes
 
-- 4e8793d: fix(rnx-native-auth): make Android error type from native work
+- 4e8793d: Fix Android error type not being serialized correctly
 
 ## 0.2.4
 
