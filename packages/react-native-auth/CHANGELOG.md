@@ -1,5 +1,11 @@
 # @rnx-kit/react-native-auth
 
+## 0.2.5
+
+### Patch Changes
+
+- 4e8793d: Fix Android error type not being serialized correctly
+
 ## 0.2.4
 
 ### Patch Changes
