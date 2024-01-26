@@ -1,5 +1,11 @@
 # @rnx-kit/react-native-auth
 
+## 0.2.5
+
+### Patch Changes
+
+- 4e8793d: fix(rnx-native-auth): make Android error type from native work
+
 ## 0.2.4
 
 ### Patch Changes
