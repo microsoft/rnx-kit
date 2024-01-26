@@ -79,7 +79,7 @@ abstract class ReactNativeAuthModule(context: ReactApplicationContext?) :
             when {
                 error != null -> promise.reject(error.type.type, error.toWritableMap())
                 result == null -> promise.reject(
-                    AuthErrorType.UNKNOWN.toString(),
+                    AuthErrorType.UNKNOWN.type,
                     AuthError.unknown().toWritableMap()
                 )
                 else -> promise.resolve(result.toWritableMap())
@@ -102,7 +102,7 @@ abstract class ReactNativeAuthModule(context: ReactApplicationContext?) :
             when {
                 error != null -> promise.reject(error.type.type, error.toWritableMap())
                 result == null -> promise.reject(
-                    AuthErrorType.UNKNOWN.toString(),
+                    AuthErrorType.UNKNOWN.type,
                     AuthError.unknown().toWritableMap()
                 )
                 else -> promise.resolve(result.toWritableMap())
