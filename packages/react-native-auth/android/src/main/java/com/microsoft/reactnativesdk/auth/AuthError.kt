@@ -32,7 +32,7 @@ data class AuthError(
 
     fun toWritableMap(): WritableMap {
         return Arguments.createMap().also { map ->
-            map.putString("type", type.toString())
+            map.putString("type", type.type)
             map.putString("correlationId", correlationId)
             message?.let {
                 map.putString("message", it)
