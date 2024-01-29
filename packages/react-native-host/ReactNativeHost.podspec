@@ -33,6 +33,7 @@ Pod::Spec.new do |s|
 
   s.ios.deployment_target = '13.0'
   s.osx.deployment_target = '10.15'
+  s.visionos.deployment_target = '1.0'
 
   s.dependency 'React-Core'
   s.dependency 'React-cxxreact'
