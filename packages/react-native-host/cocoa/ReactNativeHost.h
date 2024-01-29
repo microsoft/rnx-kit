@@ -4,8 +4,6 @@
 
 #import "RNXHostConfig.h"
 
-@class RCTSurfacePresenter;
-
 #if TARGET_OS_OSX
 @class NSView;
 typedef NSView RNXView;
@@ -23,11 +21,6 @@ NS_ASSUME_NONNULL_BEGIN
 ///
 /// - Note: This is not forwards compatible and will be removed in the future.
 @property (nonatomic, readonly, nullable) RCTBridge *bridge;
-
-/// Returns the current ``RCTSurfacePresenter`` instance.
-///
-/// - Note: Returns `nil` if New Architecture is not enabled.
-@property (nonatomic, readonly, nullable) RCTSurfacePresenter *surfacePresenter;
 
 - (instancetype)init NS_UNAVAILABLE;
 

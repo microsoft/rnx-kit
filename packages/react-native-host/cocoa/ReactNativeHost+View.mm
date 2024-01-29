@@ -1,4 +1,4 @@
-#import "ReactNativeHost.h"
+#import "ReactNativeHost+Private.h"
 
 #ifdef USE_FABRIC
 #if __has_include(<React/RCTFabricSurfaceHostingProxyRootView.h>)
