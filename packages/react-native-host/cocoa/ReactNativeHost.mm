@@ -18,6 +18,8 @@
 #import "RNXHostReleaser.h"
 #import "RNXTurboModuleAdapter.h"
 
+@class RCTSurfacePresenter;
+
 using ReactNativeConfig = facebook::react::EmptyReactNativeConfig const;
 
 #if USE_BRIDGELESS
