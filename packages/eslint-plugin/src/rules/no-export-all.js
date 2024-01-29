@@ -159,7 +159,6 @@ function toRuleContext(context) {
       ...(context.options && context.options[0]),
     },
     filename: context.filename || context.getFilename(),
-    // @ts-expect-error Types have not yet been updated to include this field
     languageOptions: context.languageOptions,
     parserOptions: context.parserOptions,
     parserPath: context.parserPath,
