@@ -5,11 +5,11 @@ import { TurboModuleRegistry } from "react-native";
 // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
 export interface Spec extends TurboModule {
   length: () => number;
-  key: Storage["key"];
-  getItem: Storage["getItem"];
-  setItem: Storage["setItem"];
-  removeItem: Storage["removeItem"];
-  clear: Storage["clear"];
+  key(index: number): string | null;
+  getItem(key: string): string | null;
+  setItem(key: string, value: string): boolean; // can't use `void` because sync methods must return something
+  removeItem(key: string): boolean; // can't use `void` because sync methods must return something
+  clear(): boolean; // can't use `void` because sync methods must return something
 }
 
 export const NativeWebStorage =

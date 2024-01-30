@@ -1,5 +1,7 @@
 #import "RNWWebStorage.h"
 
+#import "RNWWebStorage+TurboModule.h"
+
 @implementation RNWWebStorage
 
 RCT_EXPORT_MODULE(RNWWebStorage)
@@ -32,7 +34,7 @@ RCT_EXPORT_SYNCHRONOUS_TYPED_METHOD(NSNumber *, length)
 }
 
 // clang-format off
-RCT_EXPORT_SYNCHRONOUS_TYPED_METHOD(NSString *, key:(NSNumber *)index)
+RCT_EXPORT_SYNCHRONOUS_TYPED_METHOD(NSString *, key:(double)index)
 // clang-format on
 {
     // The order of the elements in `NSUserDefaults` is not defined.
@@ -48,27 +50,37 @@ RCT_EXPORT_SYNCHRONOUS_TYPED_METHOD(NSString *, getItem:(NSString *)key)
 }
 
 // clang-format off
-RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(setItem:(NSString *)key value:(NSString *)value)
+RCT_EXPORT_SYNCHRONOUS_TYPED_METHOD(NSNumber *, setItem:(NSString *)key value:(NSString *)value)
 // clang-format on
 {
     [[self userDefaults] setObject:value forKey:key];
-    return nil;
+    return @NO;
 }
 
 // clang-format off
-RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(removeItem:(NSString *)key)
+RCT_EXPORT_SYNCHRONOUS_TYPED_METHOD(NSNumber *, removeItem:(NSString *)key)
 // clang-format on
 {
     [[self userDefaults] removeObjectForKey:key];
-    return nil;
+    return @NO;
 }
 
 // clang-format off
-RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(clear)
+RCT_EXPORT_SYNCHRONOUS_TYPED_METHOD(NSNumber *, clear)
 // clang-format on
 {
     [[self userDefaults] removePersistentDomainForName:[self appDomain]];
-    return nil;
+    return @NO;
 }
+
+#if RNW_USE_NEW_ARCH
+
+- (std::shared_ptr<facebook::react::TurboModule>)getTurboModule:
+    (const facebook::react::ObjCTurboModule::InitParams &)params
+{
+    return std::make_shared<facebook::react::NativeWebStorageSpecJSI>(params);
+}
+
+#endif  // RNW_USE_NEW_ARCH
 
 @end

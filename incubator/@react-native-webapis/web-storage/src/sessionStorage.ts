@@ -33,7 +33,10 @@ export function makeSessionStorage() {
       writable: false,
     },
     setItem: {
-      value: (key: string, value: string) => store.set(key, value),
+      value: (key: string, value: string) => {
+        store.set(key, value);
+        return false;
+      },
       writable: false,
     },
     removeItem: {
@@ -41,7 +44,10 @@ export function makeSessionStorage() {
       writable: false,
     },
     clear: {
-      value: () => store.clear(),
+      value: () => {
+        store.clear();
+        return false;
+      },
       writable: false,
     },
   };

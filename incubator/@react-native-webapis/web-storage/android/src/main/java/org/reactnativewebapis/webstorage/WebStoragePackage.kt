@@ -5,9 +5,10 @@ import com.facebook.react.bridge.NativeModule
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.module.model.ReactModuleInfo
 import com.facebook.react.module.model.ReactModuleInfoProvider
+import com.facebook.react.turbomodule.core.interfaces.TurboModule
 
 class WebStoragePackage : TurboReactPackage() {
-    override fun getModule(name: String?, reactContext: ReactApplicationContext?): NativeModule {
+    override fun getModule(name: String, reactContext: ReactApplicationContext): NativeModule {
         return when (name) {
             WebStorageModule.NAME -> WebStorageModule(reactContext)
             else -> throw IllegalArgumentException("No module named '$name'")
@@ -22,7 +23,7 @@ class WebStoragePackage : TurboReactPackage() {
             false,
             false,
             false,
-            false
+            TurboModule::class.java.isAssignableFrom(WebStorageModule::class.java)
         )
         mapOf(info.name() to info).toMutableMap()
     }
