@@ -162,14 +162,16 @@ npx yarn-deduplicate
 ```
 
 By default, it will try to dedupe to the highest version. In our example,
-however, we want to keep using 0.21.x. For that, we can use the `fewer` strategy
-instead:
+however, we want to keep using 0.21.x. We should also limit the number of
+packages that get deduped to make it easier to review later. `yarn-deduplicate`
+provides many options, but we'll be using the `fewer` strategy and the
+`--scopes` flag to only target `@fluentui-react-native` packages:
 
 ```sh
-npx yarn-deduplicate --strategy fewer --packages @fluentui-react-native/text
+npx yarn-deduplicate --strategy fewer --scopes @fluentui-react-native
 ```
 
-You can read more about `yarn-deduplicate` here:
+You can read more about `yarn-deduplicate` and available options here:
 https://github.com/scinos/yarn-deduplicate#readme
 
 If you're using modern Yarn or other package managers, check out their built-in
