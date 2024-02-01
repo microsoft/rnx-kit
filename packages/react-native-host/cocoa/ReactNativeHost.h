@@ -17,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// Hosts a React Native instance.
 @interface ReactNativeHost : NSObject <RCTBridgeDelegate>
 
-/// Returns the current `RCTBridge` instance.
+/// Returns the current ``RCTBridge`` instance.
 ///
 /// - Note: This is not forwards compatible and will be removed in the future.
 @property (nonatomic, readonly, nullable) RCTBridge *bridge;

@@ -10,6 +10,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @optional
 
+/// Returns whether the new initialization layer is enabled.
+@property (nonatomic, readonly) BOOL isBridgelessEnabled;
+
 /// Returns whether the loading view should be visible while loading JavaScript.
 @property (nonatomic, readonly) BOOL isDevLoadingViewEnabled;
 
