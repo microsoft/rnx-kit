@@ -1,5 +1,11 @@
 # @rnx-kit/react-native-host
 
+## 0.4.1
+
+### Patch Changes
+
+- c856f87: Add visionOS support
+
 ## 0.4.0
 
 ### Minor Changes

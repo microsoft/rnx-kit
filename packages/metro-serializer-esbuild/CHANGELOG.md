@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-serializer-esbuild
 
+## 0.1.34
+
+### Patch Changes
+
+- 80d3829: Bump esbuild to v0.20.0
+
 ## 0.1.33
 
 ### Patch Changes
