@@ -36,14 +36,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Set up toolchain
-        uses: microsoft/react-native-test-app/.github/actions/setup-toolchain@2.5.35
+        uses: microsoft/react-native-test-app/.github/actions/setup-toolchain@3.1.0
         with:
           platform: android
           cache-npm-dependencies: ${{ github.event.inputs.packageManager }}
       - name: Install npm dependencies
         run: ${{ github.event.inputs.packageManager }} install
       - name: Build Android app
-        uses: gradle/gradle-build-action@v2.11.1
+        uses: gradle/actions/setup-gradle@v3
         with:
           gradle-version: wrapper
           arguments: --no-daemon clean assembleDebug
@@ -58,7 +58,7 @@ jobs:
   build-ios:
     name: Build iOS
     if: ${{ github.event.inputs.platform == 'ios' }}
-    runs-on: macos-12
+    runs-on: macos-14
     env:
       CERTIFICATE_FILE: build-certificate.p12
       KEYCHAIN_FILE: app-signing.keychain-db
@@ -68,7 +68,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Set up toolchain
-        uses: microsoft/react-native-test-app/.github/actions/setup-toolchain@2.5.35
+        uses: microsoft/react-native-test-app/.github/actions/setup-toolchain@3.1.0
         with:
           platform: ios
           project-root: ${{ github.event.inputs.projectRoot }}
@@ -117,12 +117,12 @@ jobs:
   build-macos:
     name: Build macOS
     if: ${{ github.event.inputs.platform == 'macos' }}
-    runs-on: macos-12
+    runs-on: macos-14
     steps:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Set up toolchain
-        uses: microsoft/react-native-test-app/.github/actions/setup-toolchain@2.5.35
+        uses: microsoft/react-native-test-app/.github/actions/setup-toolchain@3.1.0
         with:
           platform: macos
           project-root: ${{ github.event.inputs.projectRoot }}
@@ -156,7 +156,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Set up toolchain
-        uses: microsoft/react-native-test-app/.github/actions/setup-toolchain@2.5.35
+        uses: microsoft/react-native-test-app/.github/actions/setup-toolchain@3.1.0
         with:
           platform: windows
           cache-npm-dependencies: ${{ github.event.inputs.packageManager }}
