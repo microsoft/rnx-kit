@@ -1,5 +1,11 @@
 # @rnx-kit/build
 
+## 0.6.2
+
+### Patch Changes
+
+- 892faa8: Update GitHub actions
+
 ## 0.6.1
 
 ### Patch Changes
