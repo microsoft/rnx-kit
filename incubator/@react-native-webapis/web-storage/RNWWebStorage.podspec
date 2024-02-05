@@ -15,6 +15,7 @@ Pod::Spec.new do |s|
 
   s.ios.deployment_target = '13.0'
   s.osx.deployment_target = '10.15'
+  s.visionos.deployment_target = '1.0'
 
   s.dependency 'React-Core'
 
@@ -23,8 +24,10 @@ Pod::Spec.new do |s|
   # Include both package and repository relative paths to allow the podspec to
   # be consumed from both a local path, and as a podspec outside a spec
   # repository.
-  s.source_files         = 'ios/*.{h,m}',                              # :path
-                           "#{repository['directory']}/ios/*.{h,m}"    # :podspec
-  s.public_header_files  = 'ios/*.h',                                  # :path
-                           "#{repository['directory']}/ios/*.h"        # :podspec
+  s.source_files         = 'ios/*.{h,m,mm}',                              # :path
+                           "#{repository['directory']}/ios/*.{h,m,mm}"    # :podspec
+  s.public_header_files  = 'ios/*.h',                                     # :path
+                           "#{repository['directory']}/ios/*.h"           # :podspec
+
+  install_modules_dependencies(s) if defined?(install_modules_dependencies)
 end

@@ -8,7 +8,7 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule
 import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.bridge.ReactModuleWithSpec
 
-class WebStorageModule(context: ReactApplicationContext?) :
+class WebStorageModule(context: ReactApplicationContext) :
     ReactContextBaseJavaModule(context), ReactModuleWithSpec {
 
     companion object {
