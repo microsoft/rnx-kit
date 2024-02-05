@@ -1,5 +1,11 @@
 # @react-native-webapis/web-storage
 
+## 0.1.2
+
+### Patch Changes
+
+- 0119e74: Add support for New Architecture
+
 ## 0.1.1
 
 ### Patch Changes
