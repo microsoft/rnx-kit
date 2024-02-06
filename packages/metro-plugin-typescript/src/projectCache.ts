@@ -139,9 +139,7 @@ export function createProjectCache(
     Object.values(projects).forEach((projectsByPlatform) => {
       const info = projectsByPlatform[platform];
       if (info) {
-        if (info.tsproject) {
-          info.tsproject.dispose();
-        }
+        info.tsproject?.dispose();
         delete projectsByPlatform[platform];
       }
     });

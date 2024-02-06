@@ -16,8 +16,9 @@
     "ios/*",
     "lib/*",
     "macos/*",
-    "windows/*",
-    "react-native.config.js"
+    "react-native.config.js",
+    "src/*",
+    "windows/*"
   ],
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
