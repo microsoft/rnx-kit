@@ -1,5 +1,11 @@
 # @react-native-webapis/web-storage
 
+## 0.1.3
+
+### Patch Changes
+
+- f079264: Include `.ts` files needed by codegen
+
 ## 0.1.2
 
 ### Patch Changes

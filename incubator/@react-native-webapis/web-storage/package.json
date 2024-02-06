@@ -1,6 +1,6 @@
 {
   "name": "@react-native-webapis/web-storage",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "EXPERIMENTAL - USE WITH CAUTION - Web Storage API for React Native",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/incubator/@react-native-webapis/web-storage#readme",
   "license": "MIT",
