@@ -1,5 +1,13 @@
 # Change Log - @rnx-kit/react-native-test-app-msal
 
+## 2.1.8
+
+### Patch Changes
+
+- c1c0f7a: Fix build issues with React Native 0.73
+- Updated dependencies [c1c0f7a]
+  - @rnx-kit/react-native-auth@0.2.6
+
 ## 2.1.7
 
 ### Patch Changes
