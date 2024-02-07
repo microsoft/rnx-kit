@@ -14071,9 +14071,9 @@ __metadata:
   linkType: hard
 
 "type-fest@npm:^4.0.0":
-  version: 4.10.1
-  resolution: "type-fest@npm:4.10.1"
-  checksum: 93fa506a81c963d4a4efcf72daa730d7720366fd26cde38c2be816122d46dddebaf4faa91ab89f8b19482d1bbdf8c497858e11d451602eafc9ea9ab08aee7327
+  version: 4.10.2
+  resolution: "type-fest@npm:4.10.2"
+  checksum: ef75736d51c10a885f955c07aed8f46103a8c9ae93742a75fbbdf023dd0e7169c524ebef292f37de19806051fb1bdd96c4098a0101c5f869f80db73bcb484bb1
   languageName: node
   linkType: hard
 
