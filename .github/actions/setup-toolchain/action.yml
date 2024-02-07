@@ -48,7 +48,6 @@ runs:
       uses: actions/setup-node@v4.0.1
       with:
         node-version: ${{ inputs.node-version }}
-        cache: ${{ inputs.node-cache }}
     - name: Set up JDK
       if: ${{ inputs.jdk-version != 0 }}
       uses: actions/setup-java@v4.0.0
