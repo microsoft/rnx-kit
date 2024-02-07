@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-resolver-symlinks
 
+## 0.1.35
+
+### Patch Changes
+
+- c1c0f7a: `experimental_retryResolvingFromDisk` works with Metro 0.80
+
 ## 0.1.34
 
 ### Patch Changes
