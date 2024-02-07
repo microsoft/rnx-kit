@@ -96,7 +96,7 @@ jobs:
       - name: Setup the toolchain
         uses: ./.github/actions/setup-toolchain
         with:
-          jdk-version: 11
+          jdk-version: 17
       - name: Install package dependencies
         run: |
           yarn
