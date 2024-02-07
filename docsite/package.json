@@ -27,7 +27,7 @@
   "engines": {
     "node": ">=18.12"
   },
-  "packageManager": "yarn@4.1.0",
+  "packageManager": "yarn@4.0.2",
   "browserslist": {
     "production": [
       ">0.5%",
