@@ -38,7 +38,7 @@ describe("metro-serializer-esbuild", () => {
         bundleOutput: ".test-output.jsbundle",
         dev,
         platform: "ios",
-        resetCache: false,
+        resetCache: true,
         resetGlobalCache: false,
         sourcemapOutput,
         sourcemapUseAbsolutePath: true,
@@ -46,9 +46,7 @@ describe("metro-serializer-esbuild", () => {
       },
       {
         root,
-        reactNativePath: path.dirname(
-          require.resolve("react-native/package.json")
-        ),
+        reactNativePath: path.resolve(root, "node_modules", "react-native"),
         dependencies: {},
         commands: [],
         healthChecks: [],

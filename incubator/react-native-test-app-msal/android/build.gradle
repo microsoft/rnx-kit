@@ -56,7 +56,9 @@ buildscript {
 
     dependencies {
         def androidPluginVersion = getExtProp("androidPluginVersion", "7.2.2")
-        classpath("com.android.tools.build:gradle:${androidPluginVersion}")
+        if (androidPluginVersion) {
+            classpath("com.android.tools.build:gradle:${androidPluginVersion}")
+        }
 
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
     }

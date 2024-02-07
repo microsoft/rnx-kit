@@ -49,7 +49,7 @@ jobs:
     name: "Build"
     strategy:
       matrix:
-        node-version: [16, 18, 20]
+        node-version: [18, 20]
         os: [ubuntu-22.04, windows-2022]
     runs-on: ${{ matrix.os }}
     steps:
@@ -96,7 +96,7 @@ jobs:
       - name: Setup the toolchain
         uses: ./.github/actions/setup-toolchain
         with:
-          jdk-version: 11
+          jdk-version: 17
       - name: Install package dependencies
         run: |
           yarn
