@@ -17,7 +17,7 @@ jobs:
         uses: ./.github/actions/setup-toolchain
       - name: Ensure rnx-kit packages come from our repository
         run: |
-          if grep 'rnx-kit.*@npm' yarn.lock; then
+          if grep 'resolution: "@rnx-kit.*@npm' yarn.lock; then
             exit 1
           fi
       - name: Deduplicate packages

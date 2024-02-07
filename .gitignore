@@ -15,8 +15,9 @@
 .ccache/*
 !.ccache/ccache.conf
 .gradle/
-.nx/cache
 .idea/
+.nx/cache
+.watchman-cookie-*
 .xcode.env*
 .yarn/*
 !.yarn/patches/
