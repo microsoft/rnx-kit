@@ -137,7 +137,7 @@ Defaults to `hermes0.7.0`.
 When enabled, includes Fabric-enabled version of React. You can save some bytes
 by disabling this if you haven't migrated to Fabric yet.
 
-Defaults to `false`.
+Defaults to `true`.
 
 ### `drop`
 

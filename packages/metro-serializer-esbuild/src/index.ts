@@ -155,7 +155,7 @@ export function MetroSerializer(
           // that we pass to `esbuild.build()` below. Since it doesn't work for
           // some reason, we'll filter them out here instead.
           if (
-            buildOptions?.fabric !== true &&
+            buildOptions?.fabric === false &&
             args.path.endsWith("ReactFabric-prod.js")
           ) {
             return { contents: "" };
