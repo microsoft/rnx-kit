@@ -67,13 +67,13 @@
 
 // MARK: - RCTTurboModuleManagerDelegate details
 
-- (Class)getModuleClassFromName:(const char *)name
+- (Class)getModuleClassFromName:(char const *)name
 {
     return RCTCoreModulesClassProvider(name);
 }
 
 - (std::shared_ptr<facebook::react::TurboModule>)
-    getTurboModule:(const std::string &)name
+    getTurboModule:(std::string const &)name
          jsInvoker:(std::shared_ptr<facebook::react::CallInvoker>)jsInvoker
 {
     return nullptr;
