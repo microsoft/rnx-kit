@@ -114,7 +114,7 @@ export const profile: Profile = {
   },
   screens: {
     name: "react-native-screens",
-    version: "^3.21.0",
+    version: ">=3.21.0 <3.28.0",
   },
   storage: {
     name: "@react-native-async-storage/async-storage",

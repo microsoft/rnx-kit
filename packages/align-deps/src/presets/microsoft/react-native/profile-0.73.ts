@@ -116,6 +116,10 @@ export const profile: Profile = {
     name: "react-native-safe-area-context",
     version: "^4.8.2",
   },
+  screens: {
+    name: "react-native-screens",
+    version: "^3.28.0",
+  },
   storage: {
     name: "@react-native-async-storage/async-storage",
     version: "^1.21.0",
