@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-serializer-esbuild
 
+## 0.1.35
+
+### Patch Changes
+
+- bb5ecf0: Include `ReactFabric-prod.js` by default
+
 ## 0.1.34
 
 ### Patch Changes

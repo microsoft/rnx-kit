@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/align-deps
 
+## 2.3.4
+
+### Patch Changes
+
+- 8dcfd1e: Ensure `react-native-screens` works with New Arch enabled on both 0.72 and 0.73
+
 ## 2.3.3
 
 ### Patch Changes
