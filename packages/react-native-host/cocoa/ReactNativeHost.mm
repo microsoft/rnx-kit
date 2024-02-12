@@ -126,7 +126,7 @@ using ReactNativeConfig = facebook::react::EmptyReactNativeConfig const;
 
 - (void)usingModule:(Class)moduleClass block:(void (^)(id<RCTBridgeModule> _Nullable))block
 {
-    const BOOL requiresMainQueueSetup =
+    BOOL const requiresMainQueueSetup =
         [moduleClass respondsToSelector:@selector(requiresMainQueueSetup)] &&
         [moduleClass requiresMainQueueSetup];
     if (requiresMainQueueSetup && !RCTIsMainQueue()) {
