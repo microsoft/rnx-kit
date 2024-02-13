@@ -70,13 +70,9 @@ android {
         abortOnError false
     }
     sourceSets {
-        main {
-            if (enableNewArchitecture) {
-                java.srcDirs += ['src/newarch/java']
-            } else {
-                java.srcDirs += ['src/oldarch/java']
-            }
-        }
+        main.java.srcDirs += [
+            enableNewArchitecture ? "src/newarch/java" : "src/oldarch/java"
+        ]
     }
 }
 

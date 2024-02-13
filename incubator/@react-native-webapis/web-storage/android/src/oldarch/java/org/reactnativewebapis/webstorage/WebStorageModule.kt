@@ -6,10 +6,8 @@ import androidx.core.content.edit
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactContextBaseJavaModule
 import com.facebook.react.bridge.ReactMethod
-import com.facebook.react.bridge.ReactModuleWithSpec
 
-class WebStorageModule(context: ReactApplicationContext) :
-    ReactContextBaseJavaModule(context), ReactModuleWithSpec {
+class WebStorageModule(context: ReactApplicationContext) : ReactContextBaseJavaModule(context) {
 
     companion object {
         const val NAME = "RNWWebStorage"
@@ -29,7 +27,7 @@ class WebStorageModule(context: ReactApplicationContext) :
     }
 
     @ReactMethod(isBlockingSynchronousMethod = true)
-    fun key(index: Int): String? {
+    fun key(@Suppress("UNUSED_PARAMETER") index: Int): String? {
         // The order of the elements in `SharedPreferences` is not defined.
         // https://developer.android.com/reference/android/content/SharedPreferences#getAll()
         return null
