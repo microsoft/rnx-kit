@@ -1,5 +1,11 @@
 # @react-native-webapis/web-storage
 
+## 0.2.0
+
+### Minor Changes
+
+- b77e3eb: Fix old arch code being included when new arch is enabled. Also had to bump `react-native` requirement because changes in `@react-native/codegen` 0.72 are not backwards-compatible with 0.71.
+
 ## 0.1.3
 
 ### Patch Changes
