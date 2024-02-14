@@ -163,8 +163,9 @@ async function watchWorkflowRun(
         const job = activeJobs.find((job) => job.status !== "completed");
         if (job) {
           const { started_at, steps } = job;
-          currentStep = steps?.find((step) => step.status !== "completed")
-            ?.name;
+          currentStep = steps?.find(
+            (step) => step.status !== "completed"
+          )?.name;
           jobStartedAt = started_at;
           params.headers = { "if-none-match": result.headers.etag };
         } else {
