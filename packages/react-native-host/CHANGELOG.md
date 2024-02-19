@@ -1,5 +1,11 @@
 # @rnx-kit/react-native-host
 
+## 0.4.4
+
+### Patch Changes
+
+- 9fe163f: Implement `usingModule:block:` for bridgeless mode
+
 ## 0.4.3
 
 ### Patch Changes

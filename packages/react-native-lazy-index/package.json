@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/react-native-lazy-index",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Hermes/RAM bundle friendly index.js with on-demand loaded modules",
   "keywords": [
     "babel",
