@@ -35,7 +35,7 @@
     "test": "rnx-kit-scripts test"
   },
   "dependencies": {
-    "babel-plugin-codegen": "^4.0.0"
+    "babel-plugin-codegen": "^4.1.5"
   },
   "peerDependencies": {
     "react-native": ">=0.59"
