@@ -1,6 +1,9 @@
 #if __has_include(<RNWWebStorageSpec/RNWWebStorageSpec.h>)
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wnullability-completeness"
 #include <RNWWebStorageSpec/RNWWebStorageSpec.h>
+#pragma clang diagnostic pop
 
 #define RNW_USE_NEW_ARCH 1
 
