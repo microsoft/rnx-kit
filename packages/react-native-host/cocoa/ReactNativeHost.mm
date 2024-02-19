@@ -79,9 +79,10 @@ using ReactNativeConfig = facebook::react::EmptyReactNativeConfig const;
 
 - (RCTBridge *)bridge
 {
-#if USE_BRIDGELESS
-    return nil;
-#else
+    if (self.isBridgelessEnabled) {
+        return nil;
+    }
+
     if (![_isShuttingDown tryLock]) {
         NSAssert(NO, @"Tried to access the bridge while shutting down");
         return nil;
@@ -98,7 +99,6 @@ using ReactNativeConfig = facebook::react::EmptyReactNativeConfig const;
     } @finally {
         [_isShuttingDown unlock];
     }
-#endif  // USE_BRIDGELESS
 }
 
 - (RCTSurfacePresenter *)surfacePresenter
@@ -137,8 +137,15 @@ using ReactNativeConfig = facebook::react::EmptyReactNativeConfig const;
         return;
     }
 
-    id<RCTBridgeModule> bridgeModule = [self.bridge moduleForClass:moduleClass];
-    block(bridgeModule);
+    if (!self.isBridgelessEnabled) {
+        block([self.bridge moduleForClass:moduleClass]);
+        return;
+    }
+
+#if USE_BRIDGELESS
+    const char *moduleName = RCTBridgeModuleNameForClass(moduleClass).UTF8String;
+    block([[_reactHost getModuleRegistry] moduleForName:moduleName]);
+#endif  // USE_BRIDGELESS
 }
 
 // MARK: - RCTBridgeDelegate details
@@ -193,6 +200,18 @@ using ReactNativeConfig = facebook::react::EmptyReactNativeConfig const;
 
 // MARK: - Private
 
+- (BOOL)isBridgelessEnabled
+{
+#if USE_BRIDGELESS
+    // Bridgeless mode is enabled if it was turned on with a build flag, unless
+    // `isBridgelessEnabled` is explicitly implemented and returns false.
+    return ![_config respondsToSelector:@selector(isBridgelessEnabled)] ||
+           [_config isBridgelessEnabled];
+#else
+    return NO;
+#endif  // USE_BRIDGELESS
+}
+
 - (void)enableTurboModule
 {
 #if USE_FABRIC
@@ -203,15 +222,12 @@ using ReactNativeConfig = facebook::react::EmptyReactNativeConfig const;
 
 - (void)initializeReactHost
 {
-#if USE_BRIDGELESS
-    // Bridgeless mode is enabled if it was turned on with a build flag, unless
-    // `isBridgelessEnabled` is explicitly implemented and returns false.
-    if ([_config respondsToSelector:@selector(isBridgelessEnabled)] &&
-        ![_config isBridgelessEnabled]) {
+    if (!self.isBridgelessEnabled) {
         (void)self.bridge;  // Initialize the bridge now
         return;
     }
 
+#if USE_BRIDGELESS
     RCTSetUseNativeViewConfigsInBridgelessMode(YES);
     RCTEnableTurboModuleInterop(YES);
     RCTEnableTurboModuleInteropBridgeProxy(YES);
@@ -241,8 +257,6 @@ using ReactNativeConfig = facebook::react::EmptyReactNativeConfig const;
 
     [_reactHost setContextContainerHandler:self];
     [_reactHost start];
-#else
-    (void)self.bridge;
 #endif  // USE_BRIDGELESS
 }
 
