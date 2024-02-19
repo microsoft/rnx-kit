@@ -1,5 +1,11 @@
 # @rnx-kit/react-native-lazy-index
 
+## 3.0.1
+
+### Patch Changes
+
+- 18f82d6: Fix "Preset requires a filename to be set" error when an older version of `babel-plugin-codegen` is used
+
 ## 3.0.0
 
 ### Major Changes

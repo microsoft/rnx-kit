@@ -1,5 +1,11 @@
 # @react-native-webapis/web-storage
 
+## 0.2.1
+
+### Patch Changes
+
+- 71f526a: Ignore nullability warnings in generated specs
+
 ## 0.2.0
 
 ### Minor Changes
