@@ -137,15 +137,15 @@ using ReactNativeConfig = facebook::react::EmptyReactNativeConfig const;
         return;
     }
 
-#if USE_BRIDGELESS
-    if (self.isBridgelessEnabled) {
-        const char *moduleName = RCTBridgeModuleNameForClass(moduleClass).UTF8String;
-        block([[_reactHost getModuleRegistry] moduleForName:moduleName]);
+    if (!self.isBridgelessEnabled) {
+        block([self.bridge moduleForClass:moduleClass]);
         return;
     }
-#endif  // USE_BRIDGELESS
 
-    block([self.bridge moduleForClass:moduleClass]);
+#if USE_BRIDGELESS
+    const char *moduleName = RCTBridgeModuleNameForClass(moduleClass).UTF8String;
+    block([[_reactHost getModuleRegistry] moduleForName:moduleName]);
+#endif  // USE_BRIDGELESS
 }
 
 // MARK: - RCTBridgeDelegate details
