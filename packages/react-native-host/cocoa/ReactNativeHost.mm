@@ -137,7 +137,12 @@ using ReactNativeConfig = facebook::react::EmptyReactNativeConfig const;
         return;
     }
 
+#if USE_BRIDGELESS
+    const char *moduleName = RCTBridgeModuleNameForClass(moduleClass).UTF8String;
+    id<RCTBridgeModule> bridgeModule = [[_reactHost getModuleRegistry] moduleForName:moduleName];
+#else
     id<RCTBridgeModule> bridgeModule = [self.bridge moduleForClass:moduleClass];
+#endif  // USE_BRIDGELESS
     block(bridgeModule);
 }
 
