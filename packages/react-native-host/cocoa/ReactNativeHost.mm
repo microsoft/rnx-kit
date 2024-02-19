@@ -140,13 +140,12 @@ using ReactNativeConfig = facebook::react::EmptyReactNativeConfig const;
 #if USE_BRIDGELESS
     if (self.isBridgelessEnabled) {
         const char *moduleName = RCTBridgeModuleNameForClass(moduleClass).UTF8String;
-        id<RCTBridgeModule> bridgeModule = [[_reactHost getModuleRegistry] moduleForName:moduleName];
-        block(bridgeModule);
+        block([[_reactHost getModuleRegistry] moduleForName:moduleName]);
+        return;
     }
 #endif  // USE_BRIDGELESS
 
-    id<RCTBridgeModule> bridgeModule = [self.bridge moduleForClass:moduleClass];
-    block(bridgeModule);
+    block([self.bridge moduleForClass:moduleClass]);
 }
 
 // MARK: - RCTBridgeDelegate details
@@ -206,7 +205,8 @@ using ReactNativeConfig = facebook::react::EmptyReactNativeConfig const;
 #if USE_BRIDGELESS
     // Bridgeless mode is enabled if it was turned on with a build flag, unless
     // `isBridgelessEnabled` is explicitly implemented and returns false.
-    return ![_config respondsToSelector:@selector(isBridgelessEnabled)] || [_config isBridgelessEnabled];
+    return ![_config respondsToSelector:@selector(isBridgelessEnabled)] ||
+           [_config isBridgelessEnabled];
 #else
     return NO;
 #endif  // USE_BRIDGELESS
