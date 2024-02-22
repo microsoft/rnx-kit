@@ -15,7 +15,20 @@ import { makeSetVersionCommand } from "./commands/setVersion";
 import { defaultConfig } from "./config";
 import { printError, printInfo } from "./errors";
 import { isString } from "./helpers";
-import type { Args, Command } from "./types";
+import type { Args, Command, DiffMode } from "./types";
+
+function validateDiffMode(mode: string | undefined): DiffMode {
+  switch (mode) {
+    case "allow-exact-version":
+    case "strict":
+      return mode;
+    default:
+      if (mode) {
+        warn("Unknown diff mode:", mode);
+      }
+      return "strict";
+  }
+}
 
 export const cliOptions = {
   "exclude-packages": {
@@ -75,6 +88,12 @@ export const cliOptions = {
     default: false,
     description: "Writes changes to the specified 'package.json'.",
     type: "boolean",
+  },
+  "diff-mode": {
+    default: "strict",
+    description:
+      "Determines the diff mode that align-deps uses to check version declarations in 'package.json'. Valid values are 'strict', meaning only strict equality with capability requirements (usually a range) are allowed and 'allow-exact-version' which allows versions that are within the required range, making it possible to declare exact versions.",
+    choices: ["strict", "allow-exact-version"],
   },
 };
 
@@ -169,6 +188,7 @@ async function makeCommand(args: Args): Promise<Command | undefined> {
     "set-version": setVersion,
     verbose,
     write,
+    "diff-mode": diffMode,
   } = args;
 
   const options = {
@@ -180,6 +200,7 @@ async function makeCommand(args: Args): Promise<Command | undefined> {
     write,
     excludePackages: excludePackages?.toString()?.split(","),
     requirements: requirements?.toString()?.split(","),
+    diffMode: validateDiffMode(diffMode),
   };
 
   if (typeof init !== "undefined") {

@@ -25,6 +25,7 @@ export function rnxAlignDeps(
     verbose: Boolean(args.verbose),
     write: Boolean(args.write),
     packages: argv,
+    "diff-mode": String(args.diffMode),
   });
 }
 
@@ -73,6 +74,10 @@ export const rnxAlignDepsCommand = {
     {
       name: "--write",
       description: cliOptions.write.description,
+    },
+    {
+      name: `--diff-mode [${cliOptions["diff-mode"].choices?.join("|")}]`,
+      description: cliOptions["diff-mode"].description,
     },
   ],
 };

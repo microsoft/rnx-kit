@@ -19,6 +19,8 @@ export type Changes = {
   capabilities: { type: "unmanaged"; dependency: string; capability: string }[];
 };
 
+export type DiffMode = "strict" | "allow-exact-version";
+
 export type Options = {
   presets: string[];
   loose: boolean;
@@ -28,6 +30,7 @@ export type Options = {
   write: boolean;
   excludePackages?: string[];
   requirements?: string[];
+  diffMode?: DiffMode;
 };
 
 export type Args = Pick<Options, "loose" | "verbose" | "write"> & {
@@ -39,6 +42,7 @@ export type Args = Pick<Options, "loose" | "verbose" | "write"> & {
   packages?: (string | number)[];
   presets?: string | number;
   requirements?: string | number;
+  "diff-mode"?: string;
 };
 
 export type DependencyType = "direct" | "development" | "peer";

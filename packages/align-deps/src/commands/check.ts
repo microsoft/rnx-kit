@@ -84,7 +84,7 @@ export function checkPackageManifest(
     kitType
   );
 
-  const allChanges = diff(manifest, updatedManifest);
+  const allChanges = diff(manifest, updatedManifest, options.diffMode);
   if (allChanges) {
     if (options.write) {
       // The config object may be passed to other commands, so we need to

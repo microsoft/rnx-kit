@@ -11,6 +11,7 @@ const defaultOptions = {
   noUnmanaged: false,
   verbose: false,
   write: false,
+  diffMode: "strict",
 };
 
 describe("initializeConfig()", () => {

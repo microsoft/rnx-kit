@@ -12,6 +12,7 @@ const defaultOptions = {
   noUnmanaged: false,
   verbose: false,
   write: true,
+  allowExactVersion: false,
 };
 
 function fixturePath(name: string) {

@@ -450,6 +450,7 @@ describe("checkPackageManifestUnconfigured()", () => {
     noUnmanaged: false,
     verbose: false,
     write: false,
+    diffMode: "strict",
   };
 
   beforeEach(() => {

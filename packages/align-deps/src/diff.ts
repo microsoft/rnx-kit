@@ -1,10 +1,14 @@
 import type { PackageManifest } from "@rnx-kit/tools-node/package";
 import { dependencySections } from "./helpers";
+import semverSatisfies from "semver/functions/satisfies";
 import type { Changes } from "./types";
+
+export type DiffMode = "strict" | "allow-exact-version";
 
 export function diff(
   manifest: PackageManifest,
-  updatedManifest: PackageManifest
+  updatedManifest: PackageManifest,
+  mode: DiffMode = "strict"
 ): Changes | undefined {
   const allChanges: Changes = {
     dependencies: [],
@@ -13,6 +17,7 @@ export function diff(
     capabilities: [],
   };
 
+  const allowExactVersion = mode === "allow-exact-version";
   const numChanges = dependencySections.reduce((count, section) => {
     const changes = allChanges[section];
     const currentDeps = manifest[section] ?? {};
@@ -23,7 +28,9 @@ export function diff(
       if (!current) {
         changes.push({ type: "added", dependency, target });
       } else if (current !== target) {
-        changes.push({ type: "changed", dependency, target, current });
+        if (!allowExactVersion || !semverSatisfies(current, target)) {
+          changes.push({ type: "changed", dependency, target, current });
+        }
       }
     }
 
