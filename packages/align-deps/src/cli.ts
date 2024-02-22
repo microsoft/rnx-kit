@@ -76,6 +76,12 @@ export const cliOptions = {
     description: "Writes changes to the specified 'package.json'.",
     type: "boolean",
   },
+  "diff-mode": {
+    default: "strict",
+    description:
+      "Determines the diff mode that align-deps uses to check version declarations in 'package.json'. Valid values are 'strict', meaning only strict equality with capability requirements (usually a range) are allowed and 'allow-exact-version' which allows versions that are within the required range, making it possible to declare exact versions.",
+    choices: ["strict", "allow-exact-version"],
+  },
 };
 
 async function getManifests(
@@ -169,6 +175,7 @@ async function makeCommand(args: Args): Promise<Command | undefined> {
     "set-version": setVersion,
     verbose,
     write,
+    "diff-mode": diffMode,
   } = args;
 
   const options = {
@@ -180,6 +187,7 @@ async function makeCommand(args: Args): Promise<Command | undefined> {
     write,
     excludePackages: excludePackages?.toString()?.split(","),
     requirements: requirements?.toString()?.split(","),
+    diffMode,
   };
 
   if (typeof init !== "undefined") {
