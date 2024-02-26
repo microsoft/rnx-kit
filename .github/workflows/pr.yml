@@ -15,15 +15,15 @@ jobs:
           fetch-depth: 0
       - name: Setup the toolchain
         uses: ./.github/actions/setup-toolchain
-      - name: Ensure rnx-kit packages come from our repository
-        run: |
-          node scripts/lint-lockfile.js
       - name: Deduplicate packages
         run: |
           yarn dedupe --check
       - name: Install package dependencies
         run: |
           yarn
+      - name: Ensure rnx-kit packages come from our repository
+        run: |
+          node scripts/lint-lockfile.js
       - name: Check for change files
         run: |
           yarn change:check --since origin/${{ github.base_ref }}
