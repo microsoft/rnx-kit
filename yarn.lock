@@ -4329,12 +4329,14 @@ __metadata:
     "@eslint/js": "npm:^8.33.0"
     "@rnx-kit/tsconfig": "workspace:*"
     "@types/jest": "npm:^29.2.1"
+    "@types/js-yaml": "npm:^4.0.5"
     "@types/node": "npm:^20.0.0"
     "@types/yargs": "npm:^16.0.0"
     depcheck: "npm:^1.0.0"
     esbuild: "npm:^0.20.0"
     eslint: "npm:^8.23.0"
     jest: "npm:^29.2.1"
+    js-yaml: "npm:^4.1.0"
     markdown-table: "npm:^3.0.0"
     prettier: "npm:^3.0.0"
     typedoc: "npm:^0.25.0"
@@ -4814,6 +4816,13 @@ __metadata:
     expect: "npm:^29.0.0"
     pretty-format: "npm:^29.0.0"
   checksum: 10c0/25fc8e4c611fa6c4421e631432e9f0a6865a8cb07c9815ec9ac90d630271cad773b2ee5fe08066f7b95bebd18bb967f8ce05d018ee9ab0430f9dfd1d84665b6f
+  languageName: node
+  linkType: hard
+
+"@types/js-yaml@npm:^4.0.5":
+  version: 4.0.9
+  resolution: "@types/js-yaml@npm:4.0.9"
+  checksum: 10c0/24de857aa8d61526bbfbbaa383aa538283ad17363fcd5bb5148e2c7f604547db36646440e739d78241ed008702a8920665d1add5618687b6743858fae00da211
   languageName: node
   linkType: hard
 
