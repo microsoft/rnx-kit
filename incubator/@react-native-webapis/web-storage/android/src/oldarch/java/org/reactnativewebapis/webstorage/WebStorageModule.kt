@@ -10,6 +10,7 @@ import com.facebook.react.bridge.ReactMethod
 class WebStorageModule(context: ReactApplicationContext) : ReactContextBaseJavaModule(context) {
 
     companion object {
+        const val IS_TURBO_MODULE = false
         const val NAME = "RNWWebStorage"
     }
 
