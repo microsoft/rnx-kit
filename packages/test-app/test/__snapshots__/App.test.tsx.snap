@@ -1,0 +1,412 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<RCTSafeAreaView
+  style={
+    {
+      "backgroundColor": "#F3F3F3",
+      "flex": 1,
+    }
+  }
+>
+  <RCTScrollView
+    contentInsetAdjustmentBehavior="automatic"
+    onLayout={[Function]}
+    style={
+      {
+        "backgroundColor": "#F3F3F3",
+        "flex": 1,
+      }
+    }
+  >
+    <View>
+      <View
+        accessibilityIgnoresInvertColors={true}
+        style={
+          [
+            {
+              "paddingBottom": 40,
+              "paddingHorizontal": 32,
+              "paddingTop": 96,
+            },
+            {
+              "backgroundColor": "#F3F3F3",
+            },
+          ]
+        }
+      >
+        <Image
+          accessibilityRole="image"
+          source={
+            {
+              "testUri": "../Libraries/NewAppScreen/components/logo.png",
+            }
+          }
+          style={
+            [
+              {
+                "bottom": 0,
+                "left": 0,
+                "position": "absolute",
+                "right": 0,
+                "top": 0,
+              },
+              {
+                "height": undefined,
+                "width": undefined,
+              },
+              {
+                "marginBottom": -192,
+                "marginLeft": -128,
+                "opacity": 0.2,
+                "overflow": "visible",
+                "resizeMode": "cover",
+              },
+            ]
+          }
+          testID="new-app-screen-header"
+        />
+        <Text
+          style={
+            [
+              {
+                "fontSize": 40,
+                "fontWeight": "700",
+                "textAlign": "center",
+              },
+              {
+                "color": "#000",
+              },
+            ]
+          }
+        >
+          Welcome to
+          
+
+          React Native
+        </Text>
+      </View>
+      <View
+        style={
+          {
+            "backgroundColor": "#FFF",
+            "borderRadius": 8,
+            "margin": 16,
+          }
+        }
+      >
+        <View
+          style={
+            {
+              "alignItems": "center",
+              "flexDirection": "row",
+              "paddingHorizontal": 16,
+            }
+          }
+        >
+          <Text
+            style={
+              {
+                "color": "#000",
+                "flex": 1,
+                "fontSize": 18,
+                "marginVertical": 12,
+              }
+            }
+          >
+            window.localStorage
+          </Text>
+          <Text
+            style={
+              {
+                "color": "#444",
+                "fontSize": 18,
+                "textAlign": "right",
+              }
+            }
+            testID="window.localstorage-value"
+          >
+            Error
+          </Text>
+        </View>
+        <View
+          style={
+            {
+              "backgroundColor": "#DAE1E7",
+              "height": 0.5,
+              "marginStart": 16,
+            }
+          }
+        />
+        <View
+          accessibilityState={
+            {
+              "busy": undefined,
+              "checked": undefined,
+              "disabled": undefined,
+              "expanded": undefined,
+              "selected": undefined,
+            }
+          }
+          accessibilityValue={
+            {
+              "max": undefined,
+              "min": undefined,
+              "now": undefined,
+              "text": undefined,
+            }
+          }
+          accessible={true}
+          collapsable={false}
+          focusable={true}
+          onBlur={[Function]}
+          onClick={[Function]}
+          onFocus={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          style={
+            {
+              "alignItems": "center",
+              "flexDirection": "row",
+              "paddingHorizontal": 16,
+            }
+          }
+        >
+          <Text
+            style={
+              {
+                "color": "#000",
+                "flex": 1,
+                "fontSize": 18,
+                "marginVertical": 12,
+              }
+            }
+          >
+            Acquire Token
+          </Text>
+        </View>
+      </View>
+      <View
+        style={
+          {
+            "backgroundColor": "#FFF",
+            "borderRadius": 8,
+            "margin": 16,
+          }
+        }
+      >
+        <View
+          style={
+            {
+              "alignItems": "center",
+              "flexDirection": "row",
+              "paddingHorizontal": 16,
+            }
+          }
+        >
+          <Text
+            style={
+              {
+                "color": "#000",
+                "flex": 1,
+                "fontSize": 18,
+                "marginVertical": 12,
+              }
+            }
+          >
+            React Native
+          </Text>
+          <Text
+            style={
+              {
+                "color": "#444",
+                "fontSize": 18,
+                "textAlign": "right",
+              }
+            }
+            testID="react-native-value"
+          >
+            0.73.5
+          </Text>
+        </View>
+        <View
+          style={
+            {
+              "backgroundColor": "#DAE1E7",
+              "height": 0.5,
+              "marginStart": 16,
+            }
+          }
+        />
+        <View
+          style={
+            {
+              "alignItems": "center",
+              "flexDirection": "row",
+              "paddingHorizontal": 16,
+            }
+          }
+        >
+          <Text
+            style={
+              {
+                "color": "#000",
+                "flex": 1,
+                "fontSize": 18,
+                "marginVertical": 12,
+              }
+            }
+          >
+            Hermes
+          </Text>
+          <Text
+            style={
+              {
+                "color": "#444",
+                "fontSize": 18,
+                "textAlign": "right",
+              }
+            }
+            testID="hermes-value"
+          >
+            Off
+          </Text>
+        </View>
+        <View
+          style={
+            {
+              "backgroundColor": "#DAE1E7",
+              "height": 0.5,
+              "marginStart": 16,
+            }
+          }
+        />
+        <View
+          style={
+            {
+              "alignItems": "center",
+              "flexDirection": "row",
+              "paddingHorizontal": 16,
+            }
+          }
+        >
+          <Text
+            style={
+              {
+                "color": "#000",
+                "flex": 1,
+                "fontSize": 18,
+                "marginVertical": 12,
+              }
+            }
+          >
+            Fabric
+          </Text>
+          <Text
+            style={
+              {
+                "color": "#444",
+                "fontSize": 18,
+                "textAlign": "right",
+              }
+            }
+            testID="fabric-value"
+          >
+            Off
+          </Text>
+        </View>
+        <View
+          style={
+            {
+              "backgroundColor": "#DAE1E7",
+              "height": 0.5,
+              "marginStart": 16,
+            }
+          }
+        />
+        <View
+          style={
+            {
+              "alignItems": "center",
+              "flexDirection": "row",
+              "paddingHorizontal": 16,
+            }
+          }
+        >
+          <Text
+            style={
+              {
+                "color": "#000",
+                "flex": 1,
+                "fontSize": 18,
+                "marginVertical": 12,
+              }
+            }
+          >
+            Concurrent React
+          </Text>
+          <Text
+            style={
+              {
+                "color": "#444",
+                "fontSize": 18,
+                "textAlign": "right",
+              }
+            }
+            testID="concurrent-react-value"
+          >
+            Off
+          </Text>
+        </View>
+        <View
+          style={
+            {
+              "backgroundColor": "#DAE1E7",
+              "height": 0.5,
+              "marginStart": 16,
+            }
+          }
+        />
+        <View
+          style={
+            {
+              "alignItems": "center",
+              "flexDirection": "row",
+              "paddingHorizontal": 16,
+            }
+          }
+        >
+          <Text
+            style={
+              {
+                "color": "#000",
+                "flex": 1,
+                "fontSize": 18,
+                "marginVertical": 12,
+              }
+            }
+          >
+            Bridgeless
+          </Text>
+          <Text
+            style={
+              {
+                "color": "#444",
+                "fontSize": 18,
+                "textAlign": "right",
+              }
+            }
+            testID="bridgeless-value"
+          >
+            Off
+          </Text>
+        </View>
+      </View>
+    </View>
+  </RCTScrollView>
+</RCTSafeAreaView>
+`;

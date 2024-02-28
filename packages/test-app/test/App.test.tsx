@@ -1,7 +1,8 @@
+import { render, screen } from "@testing-library/react-native";
 import * as React from "react";
-import TestRenderer from "react-test-renderer";
 import { App } from "../src/App";
 
 it("renders correctly", () => {
-  TestRenderer.create(<App />);
+  render(<App />);
+  expect(screen.toJSON()).toMatchSnapshot();
 });
