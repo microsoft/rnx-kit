@@ -104,7 +104,9 @@ using ReactNativeConfig = facebook::react::EmptyReactNativeConfig const;
 - (RCTSurfacePresenter *)surfacePresenter
 {
 #if USE_BRIDGELESS
-    return [_reactHost getSurfacePresenter];
+    return [_reactHost respondsToSelector:@selector(surfacePresenter)]
+               ? _reactHost.surfacePresenter
+               : [_reactHost getSurfacePresenter];
 #elif USE_FABRIC
     return [_surfacePresenterBridgeAdapter surfacePresenter];
 #else
@@ -144,7 +146,10 @@ using ReactNativeConfig = facebook::react::EmptyReactNativeConfig const;
 
 #if USE_BRIDGELESS
     const char *moduleName = RCTBridgeModuleNameForClass(moduleClass).UTF8String;
-    block([[_reactHost getModuleRegistry] moduleForName:moduleName]);
+    RCTModuleRegistry *moduleRegistry = [_reactHost respondsToSelector:@selector(moduleRegistry)]
+                                            ? _reactHost.moduleRegistry
+                                            : [_reactHost getModuleRegistry];
+    block([moduleRegistry moduleForName:moduleName]);
 #endif  // USE_BRIDGELESS
 }
 

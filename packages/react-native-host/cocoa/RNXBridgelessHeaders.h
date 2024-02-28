@@ -18,6 +18,15 @@ using SharedJSRuntimeFactory = std::shared_ptr<facebook::react::JSEngineInstance
 using SharedJSRuntimeFactory = std::shared_ptr<facebook::react::JSRuntimeFactory>;
 #endif  // __has_include(<react/runtime/JSEngineInstance.h>)
 
+// For details, see
+// https://github.com/facebook/react-native/commit/c3b0a8f1626939cf5c7b3864a5acf9d3dad26fb3
+@interface RCTHost (Compatibility)
+@property (nonatomic, readonly) RCTModuleRegistry *moduleRegistry;      // Introduced in 0.74
+@property (nonatomic, readonly) RCTSurfacePresenter *surfacePresenter;  // Introduced in 0.74
+- (RCTModuleRegistry *)getModuleRegistry;      // Deprecated in 0.74, and removed in 0.75
+- (RCTSurfacePresenter *)getSurfacePresenter;  // Deprecated in 0.74, and removed in 0.75
+@end
+
 #elif USE_FABRIC
 
 #import <React/RCTSurfacePresenterBridgeAdapter.h>
