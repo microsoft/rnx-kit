@@ -3,8 +3,8 @@ import React, { useEffect, useState } from "react";
 import { Pressable, Text } from "react-native";
 import manifest from "../app.json";
 import { Feature } from "./Feature";
-import { Separator } from "./Separator";
 import { Home } from "./Home";
+import { Separator } from "./Separator";
 import { useStyles } from "./styles";
 
 type ButtonProps = {
