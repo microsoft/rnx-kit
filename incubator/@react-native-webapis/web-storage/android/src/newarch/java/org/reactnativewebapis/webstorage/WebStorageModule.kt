@@ -8,6 +8,7 @@ import com.facebook.react.bridge.ReactApplicationContext
 class WebStorageModule(context: ReactApplicationContext) : NativeWebStorageSpec(context) {
 
     companion object {
+        const val IS_TURBO_MODULE = true
         const val NAME = NativeWebStorageSpec.NAME
     }
 

@@ -5,7 +5,6 @@ import com.facebook.react.bridge.NativeModule
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.module.model.ReactModuleInfo
 import com.facebook.react.module.model.ReactModuleInfoProvider
-import com.facebook.react.turbomodule.core.interfaces.TurboModule
 
 class WebStoragePackage : TurboReactPackage() {
     override fun getModule(name: String, reactContext: ReactApplicationContext): NativeModule {
@@ -23,7 +22,7 @@ class WebStoragePackage : TurboReactPackage() {
             false,
             false,
             false,
-            TurboModule::class.java.isAssignableFrom(WebStorageModule::class.java)
+            WebStorageModule.IS_TURBO_MODULE
         )
         mapOf(info.name() to info).toMutableMap()
     }
