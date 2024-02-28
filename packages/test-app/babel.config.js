@@ -5,6 +5,7 @@ module.exports = {
       { useTransformReactJSXExperimental: true },
     ],
   ],
+  plugins: [[require("@rnx-kit/polyfills")]],
   overrides: [
     {
       plugins: [

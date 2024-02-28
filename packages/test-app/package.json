@@ -25,6 +25,7 @@
     "start": "react-native rnx-start"
   },
   "dependencies": {
+    "@react-native-webapis/web-storage": "workspace:*",
     "react": "18.2.0",
     "react-native": "^0.73.0",
     "react-native-macos": "^0.73.0",
@@ -49,6 +50,7 @@
     "@rnx-kit/metro-resolver-symlinks": "workspace:*",
     "@rnx-kit/metro-serializer": "workspace:*",
     "@rnx-kit/metro-serializer-esbuild": "workspace:*",
+    "@rnx-kit/polyfills": "workspace:*",
     "@rnx-kit/react-native-auth": "workspace:*",
     "@rnx-kit/react-native-host": "workspace:*",
     "@rnx-kit/react-native-test-app-msal": "workspace:*",

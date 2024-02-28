@@ -3176,7 +3176,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@react-native-webapis/web-storage@workspace:incubator/@react-native-webapis/web-storage":
+"@react-native-webapis/web-storage@workspace:*, @react-native-webapis/web-storage@workspace:incubator/@react-native-webapis/web-storage":
   version: 0.0.0-use.local
   resolution: "@react-native-webapis/web-storage@workspace:incubator/@react-native-webapis/web-storage"
   dependencies:
@@ -3385,13 +3385,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native/community-cli-plugin@npm:0.73.16, @react-native/community-cli-plugin@npm:^0.73.10":
-  version: 0.73.16
-  resolution: "@react-native/community-cli-plugin@npm:0.73.16"
+"@react-native/community-cli-plugin@npm:0.73.17, @react-native/community-cli-plugin@npm:^0.73.10":
+  version: 0.73.17
+  resolution: "@react-native/community-cli-plugin@npm:0.73.17"
   dependencies:
-    "@react-native-community/cli-server-api": 12.3.2
-    "@react-native-community/cli-tools": 12.3.2
-    "@react-native/dev-middleware": 0.73.7
+    "@react-native-community/cli-server-api": 12.3.6
+    "@react-native-community/cli-tools": 12.3.6
+    "@react-native/dev-middleware": 0.73.8
     "@react-native/metro-babel-transformer": 0.73.15
     chalk: ^4.0.0
     execa: ^5.1.1
@@ -3400,7 +3400,7 @@ __metadata:
     metro-core: ^0.80.3
     node-fetch: ^2.2.0
     readline: ^1.3.0
-  checksum: 584657d3a85cd078cfc1cd811e2b4e363710d9e98e2546718e018e7f6e3248b463b498fb4d6595eebe6328b53d08f9ef4e85189307a5cfa887346b6c7beae289
+  checksum: e5b39194657d8d9e1cd35711df9fea3b28a00dcf09443490f0afa2f28995bcdc62a711d4975f0894a925f56285cc9219bf271a8be7042a6f37f94e769a00220b
   languageName: node
   linkType: hard
 
@@ -3411,9 +3411,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native/dev-middleware@npm:0.73.7":
-  version: 0.73.7
-  resolution: "@react-native/dev-middleware@npm:0.73.7"
+"@react-native/dev-middleware@npm:0.73.8":
+  version: 0.73.8
+  resolution: "@react-native/dev-middleware@npm:0.73.8"
   dependencies:
     "@isaacs/ttlcache": ^1.4.1
     "@react-native/debugger-frontend": 0.73.3
@@ -3425,7 +3425,8 @@ __metadata:
     open: ^7.0.3
     serve-static: ^1.13.1
     temp-dir: ^2.0.0
-  checksum: fd22acc763282c0cec8776cf1604a063b016b96fce0922c1f6690cd6df1cfde4540f3df3364721a13d12777e84bfc218a2a3b71f9965ee6be6bfad51c5a0d07e
+    ws: ^6.2.2
+  checksum: 1b05cd4f36c341ba41ea98360f330ccc78dba0eb3d03099af8e410d2d66ae43dd7a1422165dd26f9d06e6de23ca249b64f8687b9f16d1b165356e004158e587b
   languageName: node
   linkType: hard
 
@@ -4178,7 +4179,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rnx-kit/polyfills@workspace:incubator/polyfills":
+"@rnx-kit/polyfills@workspace:*, @rnx-kit/polyfills@workspace:incubator/polyfills":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/polyfills@workspace:incubator/polyfills"
   dependencies:
@@ -4370,6 +4371,7 @@ __metadata:
     "@babel/preset-env": ^7.20.0
     "@babel/runtime": ^7.20.0
     "@jridgewell/trace-mapping": ^0.3.18
+    "@react-native-webapis/web-storage": "workspace:*"
     "@react-native/babel-preset": ^0.73.0
     "@react-native/metro-config": ^0.73.0
     "@rnx-kit/babel-preset-metro-react-native": "workspace:*"
@@ -4382,6 +4384,7 @@ __metadata:
     "@rnx-kit/metro-resolver-symlinks": "workspace:*"
     "@rnx-kit/metro-serializer": "workspace:*"
     "@rnx-kit/metro-serializer-esbuild": "workspace:*"
+    "@rnx-kit/polyfills": "workspace:*"
     "@rnx-kit/react-native-auth": "workspace:*"
     "@rnx-kit/react-native-host": "workspace:*"
     "@rnx-kit/react-native-test-app-msal": "workspace:*"
@@ -12431,16 +12434,16 @@ __metadata:
   linkType: hard
 
 "react-native@npm:^0.73.0":
-  version: 0.73.4
-  resolution: "react-native@npm:0.73.4"
+  version: 0.73.5
+  resolution: "react-native@npm:0.73.5"
   dependencies:
     "@jest/create-cache-key-function": ^29.6.3
-    "@react-native-community/cli": 12.3.2
-    "@react-native-community/cli-platform-android": 12.3.2
-    "@react-native-community/cli-platform-ios": 12.3.2
+    "@react-native-community/cli": 12.3.6
+    "@react-native-community/cli-platform-android": 12.3.6
+    "@react-native-community/cli-platform-ios": 12.3.6
     "@react-native/assets-registry": 0.73.1
     "@react-native/codegen": 0.73.3
-    "@react-native/community-cli-plugin": 0.73.16
+    "@react-native/community-cli-plugin": 0.73.17
     "@react-native/gradle-plugin": 0.73.4
     "@react-native/js-polyfills": 0.73.1
     "@react-native/normalize-colors": 0.73.2
@@ -12476,7 +12479,7 @@ __metadata:
     react: 18.2.0
   bin:
     react-native: cli.js
-  checksum: 651e6ba615d64a4a4063bcab018794aad3b6e41e485718c10a1c628197ed1a7024f866b04458fa4535477c03d9f2e512cfaefae36dfae1e11f6cc3a37b8df6fa
+  checksum: 107037a28b37e5d8883e8d7553d48e15d802ecf2b3ecee834f79c5dd653761ac23506a08c3a48f357bf872fb0857078ae31d226623a8742e530b065fed5d9d47
   languageName: node
   linkType: hard
 

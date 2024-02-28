@@ -1,7 +1,9 @@
-export function getHermesVersion() {
+export function getHermesVersion(): string | undefined {
   return (
-    // @ts-expect-error `HermesInternal` is set when on Hermes
-    global.HermesInternal?.getRuntimeProperties?.()["OSS Release Version"] ??
-    false
+    "HermesInternal" in global &&
+    HermesInternal &&
+    "getRuntimeProperties" in HermesInternal &&
+    typeof HermesInternal.getRuntimeProperties === "function" &&
+    HermesInternal.getRuntimeProperties()["OSS Release Version"]
   );
 }
