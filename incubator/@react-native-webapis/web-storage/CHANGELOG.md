@@ -1,5 +1,11 @@
 # @react-native-webapis/web-storage
 
+## 0.2.2
+
+### Patch Changes
+
+- 22420d7: Migrate away from `com.facebook.react.turbomodule.core.interfaces.TurboModule` as it has been moved/renamed in 0.74 and will break TurboModule detection
+
 ## 0.2.1
 
 ### Patch Changes
