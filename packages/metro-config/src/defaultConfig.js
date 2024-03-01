@@ -1,7 +1,7 @@
 // @ts-check
+const { findUp } = require("@rnx-kit/tools-node/path");
 const { requireModuleFromMetro } = require("@rnx-kit/tools-react-native/metro");
 const fs = require("fs");
-const path = require("path");
 
 /**
  * @typedef {import("metro-config").MetroConfig} MetroConfig;
@@ -104,8 +104,12 @@ function outOfTreePlatformResolver(implementations, projectRoot) {
  * @returns {MetroConfig[]}
  */
 function getDefaultConfig(projectRoot) {
+  const pkgJson = findUp("package.json", { startDir: projectRoot });
+  if (!pkgJson) {
+    return [];
+  }
+
   try {
-    const pkgJson = path.join(projectRoot, "package.json");
     const manifest = fs.readFileSync(pkgJson, { encoding: "utf-8" });
     if (manifest.includes("@react-native/metro-config")) {
       const metroConfigPath = require.resolve("@react-native/metro-config", {
