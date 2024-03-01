@@ -109,9 +109,9 @@ function getDefaultConfig(projectRoot) {
     return [];
   }
 
-  try {
-    const manifest = fs.readFileSync(pkgJson, { encoding: "utf-8" });
-    if (manifest.includes("@react-native/metro-config")) {
+  const manifest = fs.readFileSync(pkgJson, { encoding: "utf-8" });
+  if (manifest.includes("@react-native/metro-config")) {
+    try {
       const metroConfigPath = require.resolve("@react-native/metro-config", {
         paths: [projectRoot],
       });
@@ -133,10 +133,11 @@ function getDefaultConfig(projectRoot) {
       };
 
       return [defaultConfig];
+    } catch (_) {
+      // Ignore
     }
-  } catch (_) {
-    // Ignore
   }
+
   return [];
 }
 
