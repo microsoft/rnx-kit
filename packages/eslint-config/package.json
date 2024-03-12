@@ -18,12 +18,12 @@
     "format": "prettier --write --log-level error README.md index.js package.json"
   },
   "dependencies": {
-    "@eslint/eslintrc": "^2.1.2",
-    "@eslint/js": "^8.33.0",
+    "@eslint/eslintrc": "^2.1.4",
+    "@eslint/js": "^8.56.0",
     "@rnx-kit/eslint-plugin": "workspace:*"
   },
   "peerDependencies": {
-    "eslint": ">=6.0.0"
+    "eslint": ">=8.56.0"
   },
   "devDependencies": {
     "prettier": "^3.0.0"

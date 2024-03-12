@@ -65,7 +65,7 @@ const profile = {
   },
   eslint: {
     name: "eslint",
-    version: "^8.23.0",
+    version: "^8.56.0",
     devOnly: true,
   },
   "find-up": {
