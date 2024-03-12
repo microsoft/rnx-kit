@@ -2151,7 +2151,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@eslint/eslintrc@npm:^2.1.2, @eslint/eslintrc@npm:^2.1.4":
+"@eslint/eslintrc@npm:^2.1.4":
   version: 2.1.4
   resolution: "@eslint/eslintrc@npm:2.1.4"
   dependencies:
@@ -2168,7 +2168,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@eslint/js@npm:8.57.0, @eslint/js@npm:^8.33.0":
+"@eslint/js@npm:8.57.0, @eslint/js@npm:^8.33.0, @eslint/js@npm:^8.56.0":
   version: 8.57.0
   resolution: "@eslint/js@npm:8.57.0"
   checksum: 315dc65b0e9893e2bff139bddace7ea601ad77ed47b4550e73da8c9c2d2766c7a575c3cddf17ef85b8fd6a36ff34f91729d0dcca56e73ca887c10df91a41b0bb
@@ -3844,12 +3844,12 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/eslint-config@workspace:packages/eslint-config"
   dependencies:
-    "@eslint/eslintrc": ^2.1.2
-    "@eslint/js": ^8.33.0
+    "@eslint/eslintrc": ^2.1.4
+    "@eslint/js": ^8.56.0
     "@rnx-kit/eslint-plugin": "workspace:*"
     prettier: ^3.0.0
   peerDependencies:
-    eslint: ">=6.0.0"
+    eslint: ">=8.56.0"
   languageName: unknown
   linkType: soft
 
@@ -3857,8 +3857,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/eslint-plugin@workspace:packages/eslint-plugin"
   dependencies:
-    "@eslint/eslintrc": ^2.1.2
-    "@eslint/js": ^8.33.0
+    "@eslint/eslintrc": ^2.1.4
+    "@eslint/js": ^8.56.0
     "@microsoft/eslint-plugin-sdl": ^0.2.0
     "@react-native/eslint-plugin": ^0.74.0
     "@rnx-kit/eslint-config": "*"

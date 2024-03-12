@@ -39,8 +39,8 @@
     "test": "rnx-kit-scripts test"
   },
   "dependencies": {
-    "@eslint/eslintrc": "^2.1.2",
-    "@eslint/js": "^8.33.0",
+    "@eslint/eslintrc": "^2.1.4",
+    "@eslint/js": "^8.56.0",
     "@react-native/eslint-plugin": "^0.74.0",
     "@typescript-eslint/eslint-plugin": "^7.0.0",
     "@typescript-eslint/parser": "^7.0.0",
