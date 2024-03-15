@@ -1050,14 +1050,14 @@ PODS:
     - React-jsi (= 0.73.5)
     - React-logger (= 0.73.5)
     - React-perflogger (= 0.73.5)
-  - ReactNativeHost (0.4.4):
+  - ReactNativeHost (0.4.5):
     - React-Core
     - React-cxxreact
     - React-RCTAppDelegate
     - React-RCTFabric
     - ReactCommon/turbomodule/core
     - Yoga
-  - ReactTestApp-DevSupport (3.2.5):
+  - ReactTestApp-DevSupport (3.3.5):
     - React-Core
     - React-jsi
   - ReactTestApp-MSAL (2.1.8):
@@ -1140,7 +1140,7 @@ DEPENDENCIES:
   - React-runtimescheduler (from `../node_modules/react-native/ReactCommon/react/renderer/runtimescheduler`)
   - React-utils (from `../node_modules/react-native/ReactCommon/react/utils`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
-  - "ReactNativeHost (from `../../../node_modules/.store/react-native-test-app-virtual-0e21c93062/node_modules/react-native-test-app/node_modules/@rnx-kit/react-native-host`)"
+  - "ReactNativeHost (from `../../../node_modules/.store/react-native-test-app-virtual-cdbc93cd17/node_modules/@rnx-kit/react-native-host`)"
   - ReactTestApp-DevSupport (from `../node_modules/react-native-test-app`)
   - "ReactTestApp-MSAL (from `../node_modules/@rnx-kit/react-native-test-app-msal`)"
   - ReactTestApp-Resources (from `..`)
@@ -1252,7 +1252,7 @@ EXTERNAL SOURCES:
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
   ReactNativeHost:
-    :path: "../../../node_modules/.store/react-native-test-app-virtual-0e21c93062/node_modules/react-native-test-app/node_modules/@rnx-kit/react-native-host"
+    :path: "../../../node_modules/.store/react-native-test-app-virtual-cdbc93cd17/node_modules/@rnx-kit/react-native-host"
   ReactTestApp-DevSupport:
     :path: "../node_modules/react-native-test-app"
   ReactTestApp-MSAL:
@@ -1317,10 +1317,10 @@ SPEC CHECKSUMS:
   React-runtimescheduler: 7b558337d22a47a270b5c99d8016b5ab743b3035
   React-utils: 987a4526a2fc0acdfaf87888adfe0bf9d0452066
   ReactCommon: dcc87812d79ce368cc41b7cf49fb624cf3c22b6b
-  ReactNativeHost: ea3fff430ebf9c057071a5dff4ef7a75ce8857e3
-  ReactTestApp-DevSupport: 300a04c076acd40b00a1f2160fb1229854934040
+  ReactNativeHost: b2b9c6771473629a28db45c6295d789d553f8512
+  ReactTestApp-DevSupport: 7996b78090b3d5e2e2a49b8ab7fdd84ff91be30f
   ReactTestApp-MSAL: f41794214b301ab1e969a95112e276acc7204a7a
-  ReactTestApp-Resources: ecfced6249be8a1d032cc75c6339538214e2bab1
+  ReactTestApp-Resources: a4cc1f968cd26bdbd18ee0bfbd0ab8dd0ea90101
   RNWWebStorage: 6dca525e55525aa59b6f81d7330d5727d8f0ad5c
   RNXAuth: da888a17b9a0f54908f6daa8b2e020d3585f91cc
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17

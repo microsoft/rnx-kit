@@ -91,7 +91,7 @@ const profile = {
   },
   "test-app": {
     name: "react-native-test-app",
-    version: "^3.0.0",
+    version: "^3.3.5",
     devOnly: true,
   },
   typescript: {
