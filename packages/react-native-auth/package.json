@@ -10,7 +10,9 @@
   },
   "files": [
     "RNXAuth.podspec",
-    "android/{build.gradle,gradle.properties,src}",
+    "android/build.gradle",
+    "android/gradle.properties",
+    "android/src",
     "ios",
     "lib"
   ],

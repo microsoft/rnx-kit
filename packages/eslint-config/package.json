@@ -5,6 +5,10 @@
   "description": "Shareable ESLint config for @rnx-kit",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/eslint-config#readme",
   "license": "MIT",
+  "author": {
+    "name": "Microsoft Open Source",
+    "email": "microsoftopensource@users.noreply.github.com"
+  },
   "files": [
     "index.js"
   ],

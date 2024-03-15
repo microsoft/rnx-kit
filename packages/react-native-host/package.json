@@ -10,8 +10,10 @@
   },
   "files": [
     "ReactNativeHost.podspec",
-    "android/",
-    "cocoa/"
+    "android/build.gradle",
+    "android/gradle.properties",
+    "android/src",
+    "cocoa"
   ],
   "repository": {
     "type": "git",

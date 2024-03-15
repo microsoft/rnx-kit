@@ -95,7 +95,7 @@ describe("license", () => {
     expect(JSON.parse(licenseText)).toEqual({
       packages: [
         {
-          copyright: "No copyright notice",
+          copyright: "Microsoft Open Source",
           license: "MIT",
           name: "@rnx-kit/console",
           version: "1.2.3-fixedVersionForTesting",
@@ -108,7 +108,7 @@ describe("license", () => {
           version: "1.2.3-fixedVersionForTesting",
         },
         {
-          copyright: "No copyright notice",
+          copyright: "Microsoft Open Source",
           license: "Unlicensed",
           name: "private-package",
           version: "1.0.0",

@@ -4,9 +4,14 @@
   "description": "Library and tool to build a third party notices file based on a js bundle's source map",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/third-party-notices#readme",
   "license": "MIT",
+  "author": {
+    "name": "Microsoft Open Source",
+    "email": "microsoftopensource@users.noreply.github.com"
+  },
   "files": [
     "bin",
-    "lib"
+    "lib/**/*.d.ts",
+    "lib/**/*.js"
   ],
   "main": "lib/index.js",
   "types": "lib/index.d.ts",

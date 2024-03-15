@@ -9,6 +9,10 @@
   ],
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/tsconfig#readme",
   "license": "MIT",
+  "author": {
+    "name": "Microsoft Open Source",
+    "email": "microsoftopensource@users.noreply.github.com"
+  },
   "files": [
     "tsconfig.esm.json",
     "tsconfig.json"

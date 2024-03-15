@@ -4,9 +4,14 @@
   "description": "Simple console logger",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/console#readme",
   "license": "MIT",
+  "author": {
+    "name": "Microsoft Open Source",
+    "email": "microsoftopensource@users.noreply.github.com"
+  },
   "files": [
-    "lib/*",
-    "src/*"
+    "lib/**/*.d.ts",
+    "lib/**/*.js",
+    "src"
   ],
   "main": "lib/index.js",
   "types": "lib/index.d.ts",

@@ -4,6 +4,10 @@
   "description": "Metro resolver with support for symlinks",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/metro-resolver-symlinks#readme",
   "license": "MIT",
+  "author": {
+    "name": "Microsoft Open Source",
+    "email": "microsoftopensource@users.noreply.github.com"
+  },
   "files": [
     "lib/**/*.d.ts",
     "lib/**/*.js"

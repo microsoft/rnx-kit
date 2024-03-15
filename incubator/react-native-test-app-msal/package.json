@@ -8,6 +8,13 @@
     "name": "Microsoft Open Source",
     "email": "microsoftopensource@users.noreply.github.com"
   },
+  "files": [
+    "ReactTestApp-MSAL.podspec",
+    "android/build.gradle",
+    "android/gradle.properties",
+    "android/src",
+    "ios"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/microsoft/rnx-kit",

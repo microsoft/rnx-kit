@@ -5,6 +5,10 @@
   "description": "EXPERIMENTAL - USE WITH CAUTION - Generate a markdown-formatted list of changes between two version of react-native",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/incubator/rn-changelog-generator#readme",
   "license": "MIT",
+  "author": {
+    "name": "Microsoft Open Source",
+    "email": "microsoftopensource@users.noreply.github.com"
+  },
   "files": [
     "lib/**/*.d.ts",
     "lib/index.js"

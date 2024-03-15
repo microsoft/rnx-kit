@@ -4,6 +4,10 @@
   "description": "Manage dependencies within a repository and across many repositories",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/align-deps#readme",
   "license": "MIT",
+  "author": {
+    "name": "Microsoft Open Source",
+    "email": "microsoftopensource@users.noreply.github.com"
+  },
   "files": [
     "lib/**/*.d.ts",
     "lib/index.js"

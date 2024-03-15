@@ -4,9 +4,13 @@
   "description": "Jest preset for React Native code bases",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/jest-preset#readme",
   "license": "MIT",
+  "author": {
+    "name": "Microsoft Open Source",
+    "email": "microsoftopensource@users.noreply.github.com"
+  },
   "files": [
     "jest-preset.js",
-    "src/*.js"
+    "src"
   ],
   "main": "src/index.js",
   "repository": {
