@@ -1,5 +1,5 @@
-import os from "os";
-import path from "path";
+import * as os from "node:os";
+import * as path from "node:path";
 import jestPreset from "../src/index";
 
 function setFixture(name: string): void {
@@ -22,14 +22,16 @@ describe("jest-preset", () => {
     },
     moduleNameMapper: {},
     setupFiles: [
-      expect.stringContaining(path.join(reactNativePath, "jest", "setup.js")),
+      expect.stringMatching(
+        /[/\\]react-native.*?[/\\]package[/\\]jest[/\\]setup\.js$/
+      ),
     ],
-    testEnvironment: expect.stringContaining(
-      path.join(reactNativePath, "jest", "react-native-env.js")
+    testEnvironment: expect.stringMatching(
+      /[/\\]react-native.*?[/\\]package[/\\]jest[/\\]react-native-env\.js$/
     ),
     transform: {
-      "\\.(bmp|gif|jpg|jpeg|mp4|png|psd|svg|webp)$": expect.stringContaining(
-        path.join(reactNativePath, "jest", "assetFileTransformer.js")
+      "\\.(bmp|gif|jpg|jpeg|mp4|png|psd|svg|webp)$": expect.stringMatching(
+        /[/\\]react-native.*?[/\\]package[/\\]jest[/\\]assetFileTransformer\.js$/
       ),
       "\\.[jt]sx?$": "babel-jest",
     },
@@ -160,10 +162,10 @@ describe("jest-preset", () => {
             {
               presets: [
                 [
-                  expect.stringMatching(/[/\\]@babel[/\\]preset-env/),
+                  expect.stringMatching(/[/\\]@babel-preset-env/),
                   { targets: { node: "current" } },
                 ],
-                expect.stringMatching(/[/\\]@babel[/\\]preset-typescript/),
+                expect.stringMatching(/[/\\]@babel-preset-typescript/),
               ],
             },
           ],
