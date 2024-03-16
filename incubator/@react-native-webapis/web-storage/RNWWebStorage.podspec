@@ -28,6 +28,12 @@ Pod::Spec.new do |s|
                            "#{repository['directory']}/ios/*.{h,m,mm}"    # :podspec
   s.public_header_files  = 'ios/*.h',                                     # :path
                            "#{repository['directory']}/ios/*.h"           # :podspec
+  s.resource_bundles = {
+    "#{s.name}" => [
+      'ios/PrivacyInfo.xcprivacy',                              # :path
+      "#{repository['directory']}/ios/PrivacyInfo.xcprivacy"    # :podspec
+    ]
+  }
 
   install_modules_dependencies(s) if defined?(install_modules_dependencies)
 end

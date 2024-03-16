@@ -1321,7 +1321,7 @@ SPEC CHECKSUMS:
   ReactTestApp-DevSupport: 7996b78090b3d5e2e2a49b8ab7fdd84ff91be30f
   ReactTestApp-MSAL: f41794214b301ab1e969a95112e276acc7204a7a
   ReactTestApp-Resources: a4cc1f968cd26bdbd18ee0bfbd0ab8dd0ea90101
-  RNWWebStorage: 6dca525e55525aa59b6f81d7330d5727d8f0ad5c
+  RNWWebStorage: d94fb5551bfcd36a60235243951a8f1947054d1e
   RNXAuth: da888a17b9a0f54908f6daa8b2e020d3585f91cc
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   Yoga: a716eea57d0d3430219c0a5a233e1e93ee931eb7
