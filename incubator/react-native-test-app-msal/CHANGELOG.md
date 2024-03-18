@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/react-native-test-app-msal
 
+## 2.1.9
+
+### Patch Changes
+
+- b962503: Removed unused files from the published package
+
 ## 2.1.8
 
 ### Patch Changes

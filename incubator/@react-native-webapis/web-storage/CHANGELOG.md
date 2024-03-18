@@ -1,5 +1,11 @@
 # @react-native-webapis/web-storage
 
+## 0.2.3
+
+### Patch Changes
+
+- f7e6b9e: Added privacy manifest as required by Apple for app submissions
+
 ## 0.2.2
 
 ### Patch Changes
