@@ -5481,13 +5481,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"arg@npm:^5.0.2":
-  version: 5.0.2
-  resolution: "arg@npm:5.0.2"
-  checksum: 10c0/ccaf86f4e05d342af6666c569f844bec426595c567d32a8289715087825c2ca7edd8a3d204e4d2fb2aa4602e09a57d0c13ea8c9eea75aac3dbb4af5514e6800e
-  languageName: node
-  linkType: hard
-
 "argparse@npm:^1.0.7":
   version: 1.0.10
   resolution: "argparse@npm:1.0.10"
@@ -8776,13 +8769,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"hyperdyperid@npm:^1.2.0":
-  version: 1.2.0
-  resolution: "hyperdyperid@npm:1.2.0"
-  checksum: 10c0/885ba3177c7181d315a856ee9c0005ff8eb5dcb1ce9e9d61be70987895d934d84686c37c981cceeb53216d4c9c15c1cc25f1804e84cc6a74a16993c5d7fd0893
-  languageName: node
-  linkType: hard
-
 "iconv-lite@npm:^0.4.24":
   version: 0.4.24
   resolution: "iconv-lite@npm:0.4.24"
@@ -10007,28 +9993,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"json-joy@npm:^9.2.0":
-  version: 9.4.0
-  resolution: "json-joy@npm:9.4.0"
-  dependencies:
-    arg: "npm:^5.0.2"
-    hyperdyperid: "npm:^1.2.0"
-  peerDependencies:
-    quill-delta: ^5
-    rxjs: 7
-    tslib: 2
-  bin:
-    json-pack: bin/json-pack.js
-    json-pack-test: bin/json-pack-test.js
-    json-patch: bin/json-patch.js
-    json-patch-test: bin/json-patch-test.js
-    json-pointer: bin/json-pointer.js
-    json-pointer-test: bin/json-pointer-test.js
-    json-unpack: bin/json-unpack.js
-  checksum: 10c0/81dfb8adcb318d7c2902d9d40a83f7a5a87d789b889fb7ed8db955e74d09203048e24df07e8b1ffe098654bf8c8e8686e4176677e5459b1e06a500f1c039a8e3
-  languageName: node
-  linkType: hard
-
 "json-parse-better-errors@npm:^1.0.1":
   version: 1.0.2
   resolution: "json-parse-better-errors@npm:1.0.2"
@@ -10547,14 +10511,11 @@ __metadata:
   linkType: hard
 
 "memfs@npm:^4.0.0":
-  version: 4.6.0
-  resolution: "memfs@npm:4.6.0"
+  version: 4.7.7
+  resolution: "memfs@npm:4.7.7"
   dependencies:
-    json-joy: "npm:^9.2.0"
-    thingies: "npm:^1.11.1"
-  peerDependencies:
-    tslib: 2
-  checksum: 10c0/370a70ff9156aaf5a75bfeca265d66b08795bf736c5ad0c1a597e489864d4f031f424b320ef3f331a99f0fa36ad90688ab28859b7c647ee3b473d4ee1fdd8d95
+    tslib: "npm:^2.0.0"
+  checksum: 10c0/d5926b84ad50e5d36b3351a65e1736b7c0aae364498f0aa736deae4245e1bcaf33b5df2f13f84db687a2331da56e6aefd8e10af387969c977adfdb028ad11638
   languageName: node
   linkType: hard
 
@@ -13890,15 +13851,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"thingies@npm:^1.11.1":
-  version: 1.12.0
-  resolution: "thingies@npm:1.12.0"
-  peerDependencies:
-    tslib: ^2
-  checksum: 10c0/d21518fd69cb406e1fdab8331000c2163df0fab39080039d1c9bfd901cc15b8dede45110fb4801dbc4a88f57bac60cab514019edb585c7a90c018623acf4effd
-  languageName: node
-  linkType: hard
-
 "throat@npm:^5.0.0":
   version: 5.0.0
   resolution: "throat@npm:5.0.0"
@@ -14012,10 +13964,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tslib@npm:^2.0.1, tslib@npm:^2.1.0, tslib@npm:^2.2.0, tslib@npm:^2.3.0, tslib@npm:^2.4.0":
-  version: 2.5.0
-  resolution: "tslib@npm:2.5.0"
-  checksum: 10c0/e32fc99cc730dd514e53c44e668d76016e738f0bcc726aad5dbd2d335cf19b87a95a9b1e4f0a9993e370f1d702b5e471cdd4acabcac428a3099d496b9af2021e
+"tslib@npm:^2.0.0, tslib@npm:^2.0.1, tslib@npm:^2.1.0, tslib@npm:^2.2.0, tslib@npm:^2.3.0, tslib@npm:^2.4.0":
+  version: 2.6.2
+  resolution: "tslib@npm:2.6.2"
+  checksum: 10c0/e03a8a4271152c8b26604ed45535954c0a45296e32445b4b87f8a5abdb2421f40b59b4ca437c4346af0f28179780d604094eb64546bee2019d903d01c6c19bdb
   languageName: node
   linkType: hard
 
