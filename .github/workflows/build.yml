@@ -32,8 +32,8 @@ jobs:
       - name: Create release PR or publish to npm
         uses: changesets/action@v1
         with:
-          publish: yarn publish:changesets
-          version: yarn version:changesets
+          publish: npm run publish:changesets
+          version: npm run version:changesets
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
