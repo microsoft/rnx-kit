@@ -61,7 +61,7 @@ describe("Project", () => {
   test("validateFile succeeds when given a valid source file", () => {
     const project = createProject();
     expect(project.validateFile(path.join(fixturePath, "a.ts"))).toBe(true);
-    expect(mockDiagnosticWriter.print).not.toBeCalled();
+    expect(mockDiagnosticWriter.print).not.toHaveBeenCalled();
   });
 
   test("validateFile fails when given an invalid source file", () => {
@@ -69,20 +69,20 @@ describe("Project", () => {
     const fileName = path.join(fixturePath, "c.ts");
     const result = project.validateFile(fileName);
     expect(result).toBe(false);
-    expect(mockDiagnosticWriter.print).toBeCalledTimes(1);
+    expect(mockDiagnosticWriter.print).toHaveBeenCalledTimes(1);
   });
 
   test("validate reports errors from all source files", () => {
     const project = createProject();
     expect(project.validate()).toBe(false);
-    expect(mockDiagnosticWriter.print).toBeCalledTimes(1);
+    expect(mockDiagnosticWriter.print).toHaveBeenCalledTimes(1);
   });
 
   test("validate succeeds after removing a source file with errors", () => {
     const project = createProject();
     project.removeFile(path.join(fixturePath, "c.ts"));
     expect(project.validate()).toBe(true);
-    expect(mockDiagnosticWriter.print).not.toBeCalled();
+    expect(mockDiagnosticWriter.print).not.toHaveBeenCalled();
   });
 
   test("validate succeeds after replacing a source file with errors", () => {
@@ -92,7 +92,7 @@ describe("Project", () => {
     );
     project.setFile(path.join(fixturePath, "c.ts"), snapshot);
     expect(project.validate()).toBe(true);
-    expect(mockDiagnosticWriter.print).not.toBeCalled();
+    expect(mockDiagnosticWriter.print).not.toHaveBeenCalled();
   });
 
   test("validate succeeds after removing and re-adding a source file", () => {
@@ -102,7 +102,7 @@ describe("Project", () => {
 
     project.setFile(path.join(fixturePath, "b.ts"));
     expect(project.validate()).toBe(true);
-    expect(mockDiagnosticWriter.print).not.toBeCalled();
+    expect(mockDiagnosticWriter.print).not.toHaveBeenCalled();
   });
 
   test("emitFile successfully writes a transpiled javascript file", () => {

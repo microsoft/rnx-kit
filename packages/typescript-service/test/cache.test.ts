@@ -95,7 +95,7 @@ describe("ProjectFileCache", () => {
   test("getSnapshot returns undefined for a file that is not in the cache", () => {
     const cache = new ProjectFileCache(fileNames);
     expect(cache.getSnapshot("not-in-cache")).toBeUndefined();
-    expect(fs.readFileSync).not.toBeCalled();
+    expect(fs.readFileSync).not.toHaveBeenCalled();
   });
 });
 

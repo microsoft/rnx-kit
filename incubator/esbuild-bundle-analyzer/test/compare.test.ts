@@ -19,7 +19,7 @@ describe("compare()", () => {
     const candidate = path.join(fixturePath, "empty_meta.json");
     compare(baseline, candidate);
 
-    expect(consoleSpy).toBeCalledTimes(1);
+    expect(consoleSpy).toHaveBeenCalledTimes(1);
   });
 
   test("throws if metafile path is invalid", () => {

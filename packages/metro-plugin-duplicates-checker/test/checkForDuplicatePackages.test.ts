@@ -70,15 +70,15 @@ describe("printModules()", () => {
 
   test("prints all versions and locations of a package", () => {
     printModule(testModuleMap["fbjs"]);
-    expect(consoleWarnSpy).toBeCalledTimes(2);
+    expect(consoleWarnSpy).toHaveBeenCalledTimes(2);
     consoleWarnSpy.mockReset();
 
     printModule(testModuleMap["metro"]);
-    expect(consoleWarnSpy).toBeCalledTimes(2);
+    expect(consoleWarnSpy).toHaveBeenCalledTimes(2);
     consoleWarnSpy.mockReset();
 
     printModule(testModuleMap["react-native"]);
-    expect(consoleWarnSpy).toBeCalledTimes(1);
+    expect(consoleWarnSpy).toHaveBeenCalledTimes(1);
     consoleWarnSpy.mockReset();
   });
 });
@@ -124,8 +124,8 @@ describe("detectDuplicatePackages()", () => {
 
   test("prints the duplicated packages", () => {
     detectDuplicatePackages(testModuleMap, defaultOptions);
-    expect(consoleErrorSpy).toBeCalledTimes(2);
-    expect(consoleWarnSpy).toBeCalledTimes(4);
+    expect(consoleErrorSpy).toHaveBeenCalledTimes(2);
+    expect(consoleWarnSpy).toHaveBeenCalledTimes(4);
   });
 });
 
@@ -161,8 +161,8 @@ describe("checkForDuplicateDependencies()", () => {
       banned: 0,
       duplicates: 1,
     });
-    expect(consoleErrorSpy).toBeCalledTimes(1);
-    expect(consoleWarnSpy).toBeCalledTimes(2);
+    expect(consoleErrorSpy).toHaveBeenCalledTimes(1);
+    expect(consoleWarnSpy).toHaveBeenCalledTimes(2);
   });
 });
 

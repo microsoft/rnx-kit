@@ -84,7 +84,7 @@ function getAndroidResourceIdentifier(asset) {
 
 function getBasePath(asset) {
   const basePath = asset.httpServerLocation;
-  return basePath.startsWith('/') ? basePath.substr(1) : basePath;
+  return basePath.startsWith('/') ? basePath.slice(1) : basePath;
 }
 
 module.exports = {

@@ -23,7 +23,7 @@ describe("analyze()", () => {
 
   test("print analysis information", () => {
     analyze(metafilePath, false, "");
-    expect(consoleSpy).toBeCalledTimes(1);
+    expect(consoleSpy).toHaveBeenCalledTimes(1);
   });
 
   test("writes analysis information as JSON", () => {

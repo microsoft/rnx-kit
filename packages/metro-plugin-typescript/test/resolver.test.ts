@@ -84,7 +84,7 @@ describe("Resolver", () => {
       } as unknown as typeof ts
     );
 
-    expect(mockResolveTypeReferenceDirective).toBeCalled();
+    expect(mockResolveTypeReferenceDirective).toHaveBeenCalled();
     const calls = mockResolveTypeReferenceDirective.mock.calls;
     // 1st param: name
     expect(calls[0][0]).toEqual("type-ref");
