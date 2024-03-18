@@ -19,6 +19,9 @@ jobs:
         uses: ./.github/actions/setup-toolchain
       - name: Install package dependencies
         run: |
+          # `npm pack` fails in pnpm mode when using npm 9+ (bundled with Node 18+)
+          # because of symlinks. See: https://github.com/npm/cli/issues/5007
+          yarn config set nodeLinker node-modules
           yarn
       - name: Build and test packages
         run: |

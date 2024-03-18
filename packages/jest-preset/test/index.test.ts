@@ -7,7 +7,10 @@ function setFixture(name: string): void {
 }
 
 describe("jest-preset", () => {
-  const reactNativePath = path.sep + path.join("node_modules", "react-native");
+  const isPnpmMode = require
+    .resolve("react-native/package.json")
+    .includes(".store");
+
   const reactNativeMacOSPath =
     path.sep + path.join("__fixtures__", "react-native-macos");
   const reactNativeMultiPlatformPath =
@@ -23,15 +26,21 @@ describe("jest-preset", () => {
     moduleNameMapper: {},
     setupFiles: [
       expect.stringMatching(
-        /[/\\]react-native.*?[/\\]package[/\\]jest[/\\]setup\.js$/
+        isPnpmMode
+          ? /[/\\]react-native.*?[/\\]package[/\\]jest[/\\]setup\.js$/
+          : /[/\\]react-native.*?[/\\]jest[/\\]setup\.js$/
       ),
     ],
     testEnvironment: expect.stringMatching(
-      /[/\\]react-native.*?[/\\]package[/\\]jest[/\\]react-native-env\.js$/
+      isPnpmMode
+        ? /[/\\]react-native.*?[/\\]package[/\\]jest[/\\]react-native-env\.js$/
+        : /[/\\]react-native.*?[/\\]jest[/\\]react-native-env\.js$/
     ),
     transform: {
       "\\.(bmp|gif|jpg|jpeg|mp4|png|psd|svg|webp)$": expect.stringMatching(
-        /[/\\]react-native.*?[/\\]package[/\\]jest[/\\]assetFileTransformer\.js$/
+        isPnpmMode
+          ? /[/\\]react-native.*?[/\\]package[/\\]jest[/\\]assetFileTransformer\.js$/
+          : /[/\\]react-native.*?[/\\]jest[/\\]assetFileTransformer\.js$/
       ),
       "\\.[jt]sx?$": "babel-jest",
     },
@@ -141,7 +150,7 @@ describe("jest-preset", () => {
         : "/";
     process.chdir(root);
 
-    expect(() => jestPreset()).toThrowError(
+    expect(() => jestPreset()).toThrow(
       "Failed to resolve current package root"
     );
 
@@ -162,10 +171,18 @@ describe("jest-preset", () => {
             {
               presets: [
                 [
-                  expect.stringMatching(/[/\\]@babel-preset-env/),
+                  expect.stringMatching(
+                    isPnpmMode
+                      ? /[/\\]@babel-preset-env/
+                      : /[/\\]@babel[/\\]preset-env/
+                  ),
                   { targets: { node: "current" } },
                 ],
-                expect.stringMatching(/[/\\]@babel-preset-typescript/),
+                expect.stringMatching(
+                  isPnpmMode
+                    ? /[/\\]@babel-preset-typescript/
+                    : /[/\\]@babel[/\\]preset-typescript/
+                ),
               ],
             },
           ],
@@ -209,7 +226,7 @@ describe("jest-preset", () => {
 
   test("throws if an unknown platform is targeted", () => {
     const targetPlatform = "nextstep";
-    expect(() => jestPreset(targetPlatform)).toThrowError(
+    expect(() => jestPreset(targetPlatform)).toThrow(
       `'${targetPlatform}' was not found`
     );
   });

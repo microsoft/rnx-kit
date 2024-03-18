@@ -46,7 +46,9 @@ describe("metro-serializer-esbuild", () => {
       },
       {
         root,
-        reactNativePath: path.resolve(root, "node_modules", "react-native"),
+        reactNativePath: path.dirname(
+          require.resolve("react-native/package.json")
+        ),
         dependencies: {},
         commands: [],
         healthChecks: [],

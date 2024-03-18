@@ -3,6 +3,7 @@ const {
   makeMetroConfig,
   resolveUniqueModule,
 } = require("@rnx-kit/metro-config");
+const fs = require("node:fs");
 const path = require("node:path");
 const { MetroSerializer, esbuildTransformerConfig } = require(".");
 
@@ -56,5 +57,9 @@ module.exports = makeMetroConfig({
     getPolyfills: () => [],
   },
   transformer: esbuildTransformerConfig,
-  watchFolders: [path.resolve("../../node_modules/.store")],
+  watchFolders: [
+    fs.existsSync("../../node_modules/.store")
+      ? path.resolve("../../node_modules/.store")
+      : path.resolve("../../node_modules"),
+  ],
 });

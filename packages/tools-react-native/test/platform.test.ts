@@ -72,7 +72,7 @@ describe("React Native > Platform", () => {
   });
 
   test("parsePlatform() throws on failure", () => {
-    expect(() => parsePlatform("invalid")).toThrowError();
+    expect(() => parsePlatform("invalid")).toThrow();
   });
 
   test("platformExtensions() returns extensions", () => {

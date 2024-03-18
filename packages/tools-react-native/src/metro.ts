@@ -2,6 +2,7 @@ import {
   findPackageDependencyDir,
   readPackage,
 } from "@rnx-kit/tools-node/package";
+import * as fs from "fs";
 
 type MetroImport =
   | typeof import("metro")
@@ -41,11 +42,17 @@ export function findMetroPath(projectRoot = process.cwd()): string | undefined {
     return undefined;
   }
 
-  // `metro` dependency was moved to `@react-native/community-cli-plugin` in 0.73
-  // https://github.com/facebook/react-native/commit/fdcb94ad1310af6613cfb2a2c3f22f200bfa1c86
-  const cliPluginDir = resolveFrom("@react-native/community-cli-plugin", rnDir);
-  if (cliPluginDir) {
-    return resolveFrom("metro", cliPluginDir);
+  const pkg = fs.readFileSync(`${rnDir}/package.json`, { encoding: "utf-8" });
+  if (pkg.includes("@react-native/community-cli-plugin")) {
+    // `metro` dependency was moved to `@react-native/community-cli-plugin` in 0.73
+    // https://github.com/facebook/react-native/commit/fdcb94ad1310af6613cfb2a2c3f22f200bfa1c86
+    const cliPluginDir = resolveFrom(
+      "@react-native/community-cli-plugin",
+      rnDir
+    );
+    if (cliPluginDir) {
+      return resolveFrom("metro", cliPluginDir);
+    }
   }
 
   const cliDir = resolveFrom("@react-native-community/cli", rnDir);
