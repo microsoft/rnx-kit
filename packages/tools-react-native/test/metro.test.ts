@@ -43,7 +43,7 @@ describe("requireModuleFromMetro", () => {
   test("throws if `metro-resolver` cannot be found", () => {
     const cwd = process.cwd();
     const root = cwd.substring(0, cwd.indexOf(path.sep) + 1);
-    expect(() => getMetroResolver(root)(context, "", null)).toThrowError(
+    expect(() => getMetroResolver(root)(context, "", null)).toThrow(
       "Cannot find module"
     );
   });

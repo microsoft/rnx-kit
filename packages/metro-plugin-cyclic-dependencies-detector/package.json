@@ -4,8 +4,13 @@
   "description": "Cyclic dependencies detector for Metro",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/metro-plugin-cyclic-dependencies-detector#readme",
   "license": "MIT",
+  "author": {
+    "name": "Microsoft Open Source",
+    "email": "microsoftopensource@users.noreply.github.com"
+  },
   "files": [
-    "lib/*"
+    "lib/**/*.d.ts",
+    "lib/**/*.js"
   ],
   "main": "lib/index.js",
   "types": "lib/index.d.ts",

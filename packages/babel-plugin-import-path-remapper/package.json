@@ -4,8 +4,12 @@
   "description": "Babel plugin for remapping 'lib/' imports to 'src/'",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/babel-plugin-import-path-remapper#readme",
   "license": "MIT",
+  "author": {
+    "name": "Microsoft Open Source",
+    "email": "microsoftopensource@users.noreply.github.com"
+  },
   "files": [
-    "src/*"
+    "src"
   ],
   "main": "src/index.js",
   "repository": {

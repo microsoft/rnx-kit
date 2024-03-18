@@ -9,7 +9,8 @@
     "email": "microsoftopensource@users.noreply.github.com"
   },
   "files": [
-    "lib/*"
+    "lib/**/*.d.ts",
+    "lib/**/*.js"
   ],
   "type": "module",
   "exports": {

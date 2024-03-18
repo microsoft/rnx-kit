@@ -2,6 +2,10 @@ import { spawnSync } from "node:child_process";
 import * as fs from "node:fs";
 import * as path from "node:path";
 
+const defaultAuthor = {
+  name: "Microsoft Open Source",
+  email: "microsoftopensource@users.noreply.github.com",
+};
 const ignoredLocations = [".", "packages/test-app", "scripts"];
 const options = { encoding: "utf-8" };
 
@@ -28,12 +32,20 @@ fs.readFile("package.json", options, (err, data) => {
       }
 
       const manifest = JSON.parse(data);
-      const { homepage, repository } = manifest;
+      const { author, homepage, repository } = manifest;
 
       const readmeUrl = `${origin.url}/tree/main/${location}#readme`;
       if (homepage !== readmeUrl) {
         needsUpdate = true;
         manifest.homepage = readmeUrl;
+      }
+
+      if (
+        author?.name !== defaultAuthor.name ||
+        author?.email !== defaultAuthor.email
+      ) {
+        needsUpdate = true;
+        manifest.author = defaultAuthor;
       }
 
       if (

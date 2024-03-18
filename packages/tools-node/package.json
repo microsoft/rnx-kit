@@ -4,15 +4,20 @@
   "description": "A collection of supplemental NodeJS functions and types",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/tools-node#readme",
   "license": "MIT",
+  "author": {
+    "name": "Microsoft Open Source",
+    "email": "microsoftopensource@users.noreply.github.com"
+  },
   "files": [
-    "lib/*",
+    "lib/**/*.d.ts",
+    "lib/**/*.js",
     "module.d.ts",
     "module.js",
     "package.d.ts",
     "package.js",
     "path.d.ts",
     "path.js",
-    "src/*"
+    "src"
   ],
   "main": "lib/index.js",
   "types": "lib/index.d.ts",

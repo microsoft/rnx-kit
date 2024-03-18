@@ -10,9 +10,10 @@
     "email": "microsoftopensource@users.noreply.github.com"
   },
   "files": [
-    "lib/**/*.{d.ts,js}",
-    "scripts/*",
-    "workflows/*"
+    "lib/**/*.d.ts",
+    "lib/**/*.js",
+    "scripts",
+    "workflows"
   ],
   "type": "module",
   "exports": {

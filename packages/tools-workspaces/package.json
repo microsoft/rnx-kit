@@ -9,8 +9,9 @@
     "email": "microsoftopensource@users.noreply.github.com"
   },
   "files": [
-    "lib/*",
-    "src/*"
+    "lib/**/*.d.ts",
+    "lib/**/*.js",
+    "src"
   ],
   "main": "lib/index.js",
   "types": "lib/index.d.ts",

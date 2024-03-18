@@ -4,13 +4,18 @@
   "description": "A collection of supplemental react-native functions and types",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/tools-react-native#readme",
   "license": "MIT",
+  "author": {
+    "name": "Microsoft Open Source",
+    "email": "microsoftopensource@users.noreply.github.com"
+  },
   "files": [
-    "lib/*",
+    "lib/**/*.d.ts",
+    "lib/**/*.js",
     "metro.d.ts",
     "metro.js",
     "platform.d.ts",
     "platform.js",
-    "src/*"
+    "src"
   ],
   "main": "lib/index.js",
   "types": "lib/index.d.ts",

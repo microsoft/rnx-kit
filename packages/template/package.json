@@ -10,7 +10,8 @@
     "email": "microsoftopensource@users.noreply.github.com"
   },
   "files": [
-    "lib/*"
+    "lib/**/*.d.ts",
+    "lib/**/*.js"
   ],
   "main": "lib/index.js",
   "types": "lib/index.d.ts",

@@ -4,6 +4,16 @@
   "description": "Command-line interface for working with kit packages in your repo",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/cli#readme",
   "license": "MIT",
+  "author": {
+    "name": "Microsoft Open Source",
+    "email": "microsoftopensource@users.noreply.github.com"
+  },
+  "files": [
+    "lib/**/*.d.ts",
+    "lib/**/*.js",
+    "react-native.config.js",
+    "src"
+  ],
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "exports": {

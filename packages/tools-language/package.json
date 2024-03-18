@@ -4,11 +4,16 @@
   "description": "A collection of supplemental JavaScript functions and types",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/tools-language#readme",
   "license": "MIT",
+  "author": {
+    "name": "Microsoft Open Source",
+    "email": "microsoftopensource@users.noreply.github.com"
+  },
   "files": [
-    "lib/*",
+    "lib/**/*.d.ts",
+    "lib/**/*.js",
     "properties.d.ts",
     "properties.js",
-    "src/*"
+    "src"
   ],
   "main": "lib/index.js",
   "types": "lib/index.d.ts",

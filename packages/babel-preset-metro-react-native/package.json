@@ -4,8 +4,12 @@
   "description": "Babel preset for React Native applications",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/babel-preset-metro-react-native#readme",
   "license": "MIT",
+  "author": {
+    "name": "Microsoft Open Source",
+    "email": "microsoftopensource@users.noreply.github.com"
+  },
   "files": [
-    "src/*"
+    "src"
   ],
   "main": "src/index.js",
   "repository": {
