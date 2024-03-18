@@ -49,15 +49,15 @@ describe("Node > Package", () => {
 
   test("parsePackageRef(undefined) throws an Error", () => {
     // @ts-expect-error Argument of type 'undefined' is not assignable to parameter of type 'string'
-    expect(() => parsePackageRef(undefined)).toThrowError();
+    expect(() => parsePackageRef(undefined)).toThrow();
   });
 
   test("parsePackageRef(@babel/) throws an Error", () => {
-    expect(() => parsePackageRef("@babel/")).toThrowError();
+    expect(() => parsePackageRef("@babel/")).toThrow();
   });
 
   test("parsePackageRef(@/core) throws an Error", () => {
-    expect(() => parsePackageRef("@/core")).toThrowError();
+    expect(() => parsePackageRef("@/core")).toThrow();
   });
 
   test("readPackage() loads package.json when given its containing directory", () => {

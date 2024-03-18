@@ -25,7 +25,7 @@ describe("CLI > Bundle > Kit Config > getTargetPlatforms", () => {
   });
 
   test("throws when no override or target platform is given", () => {
-    expect(() => getTargetPlatforms()).toThrowError();
+    expect(() => getTargetPlatforms()).toThrow();
   });
 });
 

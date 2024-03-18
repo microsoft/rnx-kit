@@ -58,9 +58,7 @@ describe("buildManifestProfile()", () => {
   test("throws if requirements cannot be satisfied", () => {
     expect(() =>
       buildManifestProfile("package.json", makeConfig(["react-native@1000.0"]))
-    ).toThrowError(
-      "No profiles could satisfy requirements: react-native@1000.0"
-    );
+    ).toThrow("No profiles could satisfy requirements: react-native@1000.0");
   });
 
   test("throws if dev requirements cannot be satisfied", () => {
@@ -72,9 +70,7 @@ describe("buildManifestProfile()", () => {
           production: ["react-native@0.69 || 0.70"],
         })
       )
-    ).toThrowError(
-      "No profiles could satisfy requirements: react-native@1000.0"
-    );
+    ).toThrow("No profiles could satisfy requirements: react-native@1000.0");
   });
 
   test("throws if prod requirements cannot be satisfied", () => {
@@ -86,9 +82,7 @@ describe("buildManifestProfile()", () => {
           production: ["react-native@1000.0"],
         })
       )
-    ).toThrowError(
-      "No profiles could satisfy requirements: react-native@1000.0"
-    );
+    ).toThrow("No profiles could satisfy requirements: react-native@1000.0");
   });
 });
 
@@ -337,7 +331,7 @@ describe("checkPackageManifestUnconfigured()", () => {
     );
     expect(result).toBe("success");
     expect(didWrite).toBe(false);
-    expect(consoleErrorSpy).not.toBeCalled();
+    expect(consoleErrorSpy).not.toHaveBeenCalled();
   });
 
   test("returns non-zero exit code when there are violations", () => {
@@ -359,7 +353,7 @@ describe("checkPackageManifestUnconfigured()", () => {
     );
     expect(result).not.toBe("success");
     expect(didWrite).toBe(false);
-    expect(consoleErrorSpy).toBeCalledTimes(1);
+    expect(consoleErrorSpy).toHaveBeenCalledTimes(1);
   });
 
   test("returns exit code 0 when writing", () => {
@@ -381,7 +375,7 @@ describe("checkPackageManifestUnconfigured()", () => {
     );
     expect(result).toBe("success");
     expect(didWrite).toBe(true);
-    expect(consoleErrorSpy).not.toBeCalled();
+    expect(consoleErrorSpy).not.toHaveBeenCalled();
   });
 
   test("excludes specified packages", () => {
@@ -403,7 +397,7 @@ describe("checkPackageManifestUnconfigured()", () => {
     );
     expect(result).toBe("success");
     expect(didWrite).toBe(false);
-    expect(consoleErrorSpy).not.toBeCalled();
+    expect(consoleErrorSpy).not.toHaveBeenCalled();
   });
 
   test("uses package-specific custom profiles", () => {
@@ -450,7 +444,7 @@ describe("checkPackageManifestUnconfigured()", () => {
     );
 
     expect(result).toBe("success");
-    expect(consoleErrorSpy).not.toBeCalled();
+    expect(consoleErrorSpy).not.toHaveBeenCalled();
     expect(manifest).toEqual({
       ...inputManifest,
       devDependencies: {

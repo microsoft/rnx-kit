@@ -27,16 +27,16 @@ describe("getDependencyPolyfills", () => {
       ),
     ]);
 
-    expect(consoleErrorSpy).toBeCalledTimes(3);
-    expect(consoleErrorSpy).toBeCalledWith(
+    expect(consoleErrorSpy).toHaveBeenCalledTimes(3);
+    expect(consoleErrorSpy).toHaveBeenCalledWith(
       "error",
       expect.stringMatching(/^invalid-polyfill-boolean: invalid polyfill path/)
     );
-    expect(consoleErrorSpy).toBeCalledWith(
+    expect(consoleErrorSpy).toHaveBeenCalledWith(
       "error",
       expect.stringMatching(/^invalid-polyfill-boundary: invalid polyfill path/)
     );
-    expect(consoleErrorSpy).toBeCalledWith(
+    expect(consoleErrorSpy).toHaveBeenCalledWith(
       "error",
       expect.stringMatching(/^invalid-polyfill-missing: no such polyfill/)
     );

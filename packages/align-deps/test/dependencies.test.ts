@@ -58,7 +58,7 @@ describe("visitDependencies()", () => {
     );
     expect(visited.size).toBe(0);
 
-    expect(consoleWarnSpy).not.toBeCalled();
+    expect(consoleWarnSpy).not.toHaveBeenCalled();
   });
 
   test("traverse transitive dependencies", () => {
@@ -84,7 +84,7 @@ describe("visitDependencies()", () => {
       "t-800",
     ]);
 
-    expect(consoleWarnSpy).not.toBeCalled();
+    expect(consoleWarnSpy).not.toHaveBeenCalled();
   });
 
   test("skips unresolved packages", () => {
@@ -102,7 +102,7 @@ describe("visitDependencies()", () => {
     );
 
     expect(visited.length).toBe(0);
-    expect(consoleWarnSpy).toBeCalledTimes(1);
+    expect(consoleWarnSpy).toHaveBeenCalledTimes(1);
   });
 });
 
@@ -141,8 +141,8 @@ describe("gatherRequirements()", () => {
       "webview",
     ]);
 
-    expect(consoleErrorSpy).not.toBeCalled();
-    expect(consoleWarnSpy).not.toBeCalled();
+    expect(consoleErrorSpy).not.toHaveBeenCalled();
+    expect(consoleWarnSpy).not.toHaveBeenCalled();
   });
 
   test("gather requirements from all dependencies with custom profiles", () => {
@@ -187,8 +187,8 @@ describe("gatherRequirements()", () => {
       "webview",
     ]);
 
-    expect(consoleErrorSpy).not.toBeCalled();
-    expect(consoleWarnSpy).not.toBeCalled();
+    expect(consoleErrorSpy).not.toHaveBeenCalled();
+    expect(consoleWarnSpy).not.toHaveBeenCalled();
   });
 
   test("throws if no profiles can satisfy requirements of dependencies", () => {
@@ -202,13 +202,13 @@ describe("gatherRequirements()", () => {
         [],
         defaultOptions
       )
-    ).toThrowError("No profiles could satisfy all requirements");
+    ).toThrow("No profiles could satisfy all requirements");
 
-    expect(consoleErrorSpy).toBeCalledWith(
+    expect(consoleErrorSpy).toHaveBeenCalledWith(
       "error",
       expect.stringContaining("No profiles could satisfy all requirements")
     );
-    expect(consoleWarnSpy).not.toBeCalled();
+    expect(consoleWarnSpy).not.toHaveBeenCalled();
   });
 
   test("does not throw if no profiles can satisfy requirement of dependencies in loose mode", () => {
@@ -224,8 +224,8 @@ describe("gatherRequirements()", () => {
       )
     ).not.toThrow();
 
-    expect(consoleErrorSpy).not.toBeCalled();
-    expect(consoleWarnSpy).toBeCalledWith(
+    expect(consoleErrorSpy).not.toHaveBeenCalled();
+    expect(consoleWarnSpy).toHaveBeenCalledWith(
       "warn",
       expect.stringContaining("No profiles could satisfy all requirements")
     );

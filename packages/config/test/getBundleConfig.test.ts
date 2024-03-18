@@ -30,7 +30,7 @@ describe("getBundleConfig()", () => {
   test("fails when the bundle property is set to true (no longer supported)", () => {
     expect(() =>
       getBundleConfig({ bundle: true as unknown as BundleConfig })
-    ).toThrowError(
+    ).toThrow(
       /The rnx-kit configuration property 'bundle' no longer supports boolean values./i
     );
   });
@@ -64,7 +64,7 @@ describe("getBundleConfig()", () => {
       getBundleConfig({
         bundle: { experimental_treeShake: true } as BundleConfig,
       })
-    ).toThrowError(
+    ).toThrow(
       /The bundle configuration property 'experimental_treeShake' is no longer supported. Use 'treeShake' instead./i
     );
   });
@@ -74,7 +74,7 @@ describe("getBundleConfig()", () => {
       getBundleConfig({
         bundle: { entryPath: "x" } as BundleConfig,
       })
-    ).toThrowError(
+    ).toThrow(
       /The bundle configuration property 'entryPath' is no longer supported. Use 'entryFile' instead./i
     );
   });
@@ -84,7 +84,7 @@ describe("getBundleConfig()", () => {
       getBundleConfig({
         bundle: { sourceMapPath: "x" } as BundleConfig,
       })
-    ).toThrowError(
+    ).toThrow(
       /The bundle configuration property 'sourceMapPath' is no longer supported. Use 'sourcemapOutput' instead./i
     );
   });
@@ -94,7 +94,7 @@ describe("getBundleConfig()", () => {
       getBundleConfig({
         bundle: { sourceMapSourceRootPath: "x" } as BundleConfig,
       })
-    ).toThrowError(
+    ).toThrow(
       /The bundle configuration property 'sourceMapSourceRootPath' is no longer supported. Use 'sourcemapSourcesRoot' instead./i
     );
   });
@@ -104,7 +104,7 @@ describe("getBundleConfig()", () => {
       getBundleConfig({
         bundle: { distPath: "x" } as BundleConfig,
       })
-    ).toThrowError(
+    ).toThrow(
       /The bundle configuration property 'distPath' is no longer supported./i
     );
   });
@@ -114,7 +114,7 @@ describe("getBundleConfig()", () => {
       getBundleConfig({
         bundle: { bundlePrefix: "x" } as BundleConfig,
       })
-    ).toThrowError(
+    ).toThrow(
       /The bundle configuration property 'bundlePrefix' is no longer supported./i
     );
   });

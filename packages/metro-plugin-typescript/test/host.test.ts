@@ -54,7 +54,7 @@ describe("Host (TypeScript >=4.7 <5.0)", () => {
       undefined
     );
 
-    expect(resolveModuleNames).toBeCalledTimes(1);
+    expect(resolveModuleNames).toHaveBeenCalledTimes(1);
 
     host.resolveTypeReferenceDirectives?.(
       ["type-reference"],
@@ -64,7 +64,7 @@ describe("Host (TypeScript >=4.7 <5.0)", () => {
       undefined
     );
 
-    expect(resolveTypeReferenceDirectives).toBeCalledTimes(1);
+    expect(resolveTypeReferenceDirectives).toHaveBeenCalledTimes(1);
   });
 
   test("empty extension is added to the end of the platform file extension list", () => {
@@ -80,7 +80,7 @@ describe("Host (TypeScript >=4.7 <5.0)", () => {
       undefined
     );
 
-    expect(resolveModuleNames).toBeCalledTimes(1);
+    expect(resolveModuleNames).toHaveBeenCalledTimes(1);
     // 1st argument: ResolverContext
     expect((resolveModuleNames as jest.Mock).mock.calls[0][0]).toEqual(
       expect.objectContaining({
@@ -112,7 +112,7 @@ describe("Host (TypeScript >=5.0)", () => {
       undefined
     );
 
-    expect(resolveModuleNameLiterals).toBeCalledTimes(1);
+    expect(resolveModuleNameLiterals).toHaveBeenCalledTimes(1);
 
     host.resolveTypeReferenceDirectiveReferences?.(
       ["type-reference"],
@@ -123,7 +123,7 @@ describe("Host (TypeScript >=5.0)", () => {
       undefined
     );
 
-    expect(resolveTypeReferenceDirectiveReferences).toBeCalledTimes(1);
+    expect(resolveTypeReferenceDirectiveReferences).toHaveBeenCalledTimes(1);
   });
 
   test("empty extension is added to the end of the platform file extension list", () => {
@@ -139,7 +139,7 @@ describe("Host (TypeScript >=5.0)", () => {
       undefined
     );
 
-    expect(resolveModuleNameLiterals).toBeCalledTimes(1);
+    expect(resolveModuleNameLiterals).toHaveBeenCalledTimes(1);
 
     // 1st argument: ResolverContext
     expect((resolveModuleNameLiterals as jest.Mock).mock.calls[0][0]).toEqual(

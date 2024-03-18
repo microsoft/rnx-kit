@@ -34,15 +34,15 @@ describe("@rnx-kit/babel-plugin-import-path-remapper", () => {
   });
 
   test("throws if no test function is specified", () => {
-    expect(() => transform("", {})).toThrowError(
+    expect(() => transform("", {})).toThrow(
       "Expected option `test` to be a function"
     );
   });
 
   test("throws if remap is not a function", () => {
-    expect(() =>
-      transform("", { test: isRNXKit, remap: "error" })
-    ).toThrowError("Expected option `remap` to be undefined or a function");
+    expect(() => transform("", { test: isRNXKit, remap: "error" })).toThrow(
+      "Expected option `remap` to be undefined or a function"
+    );
   });
 
   test("leaves unmatched import/export statements", () => {

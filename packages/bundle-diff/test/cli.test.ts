@@ -45,12 +45,12 @@ describe("cli()", () => {
 
   test("outputs nothing if there are no differences", () => {
     cli("a", "a");
-    expect(consoleSpy).not.toBeCalled();
+    expect(consoleSpy).not.toHaveBeenCalled();
   });
 
   test("outputs the difference", () => {
     cli("a", "b");
-    expect(consoleSpy).toBeCalledWith(
+    expect(consoleSpy).toHaveBeenCalledWith(
       [
         "     +106    added  /~/node_modules/@babel/runtime/helpers/arrayWithHoles.js",
         "      +96    added  /~/node_modules/lodash-es/_realNames.js",

@@ -43,8 +43,8 @@ describe("Testing extractAndSymbolicateErrorStack", () => {
       isConfigFileValid as jest.MockedFunction<typeof isConfigFileValid>
     ).mockReturnValue(false);
     extractAndSymbolicateErrorStack(errorFilePath, configFilePath);
-    expect(isConfigFileValidSpy).toBeCalled();
-    expect(symbolicateBufferSpy).not.toBeCalled();
+    expect(isConfigFileValidSpy).toHaveBeenCalled();
+    expect(symbolicateBufferSpy).not.toHaveBeenCalled();
   });
 
   it("should not call symbolicateBufferSpy if error contains no matches to configs", () => {
@@ -58,8 +58,8 @@ describe("Testing extractAndSymbolicateErrorStack", () => {
       .mockReturnValueOnce(JSON.stringify(mockConfigFile))
       .mockReturnValueOnce(errorFile);
     extractAndSymbolicateErrorStack(errorFilePath, configFilePath);
-    expect(symbolicateBufferSpy).not.toBeCalled();
-    expect(logSpy).toBeCalledTimes(1);
+    expect(symbolicateBufferSpy).not.toHaveBeenCalled();
+    expect(logSpy).toHaveBeenCalledTimes(1);
   });
 
   it("should call symbolicateBufferSpy if error contains matches to configs", () => {
@@ -73,8 +73,8 @@ describe("Testing extractAndSymbolicateErrorStack", () => {
       .mockReturnValueOnce(JSON.stringify(mockConfigFile))
       .mockReturnValueOnce(errorFile);
     extractAndSymbolicateErrorStack(errorFilePath, configFilePath);
-    expect(symbolicateBufferSpy).toBeCalledTimes(2);
-    expect(logSpy).toBeCalledTimes(1);
+    expect(symbolicateBufferSpy).toHaveBeenCalledTimes(2);
+    expect(logSpy).toHaveBeenCalledTimes(1);
   });
 
   it("should group lines with same bundleIdentifier and call symbolicateBufferSpy for them", () => {
@@ -89,7 +89,7 @@ describe("Testing extractAndSymbolicateErrorStack", () => {
       .mockReturnValueOnce(JSON.stringify(mockConfigFile))
       .mockReturnValueOnce(errorFile);
     extractAndSymbolicateErrorStack(errorFilePath, configFilePath);
-    expect(symbolicateBufferSpy).toBeCalledTimes(3);
-    expect(logSpy).toBeCalledTimes(2);
+    expect(symbolicateBufferSpy).toHaveBeenCalledTimes(3);
+    expect(logSpy).toHaveBeenCalledTimes(2);
   });
 });

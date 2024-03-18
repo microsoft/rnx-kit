@@ -121,7 +121,7 @@ describe("resolveCapabilities()", () => {
       [testAppName]: [profile_0_64["test-app"]],
     });
 
-    expect(consoleWarnSpy).not.toBeCalled();
+    expect(consoleWarnSpy).not.toHaveBeenCalled();
   });
 
   test("dedupes package versions", () => {
@@ -136,7 +136,7 @@ describe("resolveCapabilities()", () => {
       [name]: [profile_0_62["webview"], profile_0_64["webview"]],
     });
 
-    expect(consoleWarnSpy).not.toBeCalled();
+    expect(consoleWarnSpy).not.toHaveBeenCalled();
   });
 
   test("ignores missing/unknown capabilities", () => {
@@ -152,7 +152,7 @@ describe("resolveCapabilities()", () => {
 
     const { name } = profile_0_64["svg"];
     expect(packages).toEqual({ [name]: [profile_0_64["svg"]] });
-    expect(consoleWarnSpy).toBeCalledTimes(1);
+    expect(consoleWarnSpy).toHaveBeenCalledTimes(1);
   });
 
   test("resolves custom capabilities", () => {
@@ -206,7 +206,7 @@ describe("resolveCapabilities()", () => {
       ],
     });
 
-    expect(consoleWarnSpy).not.toBeCalled();
+    expect(consoleWarnSpy).not.toHaveBeenCalled();
   });
 
   test("resolves meta packages", () => {

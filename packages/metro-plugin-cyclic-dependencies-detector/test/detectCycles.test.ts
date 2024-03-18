@@ -68,8 +68,8 @@ describe("detectCycles()", () => {
 
   test("prints nothing if all is fine", () => {
     detectCycles(entryPoint, graphWithNoCycles(), {});
-    expect(consoleWarnSpy).not.toBeCalled();
-    expect(consoleErrorSpy).not.toBeCalled();
+    expect(consoleWarnSpy).not.toHaveBeenCalled();
+    expect(consoleErrorSpy).not.toHaveBeenCalled();
   });
 
   test("prints if cycles are found in `node_modules`", () => {
@@ -77,14 +77,14 @@ describe("detectCycles()", () => {
       includeNodeModules: true,
       throwOnError: false,
     });
-    expect(consoleWarnSpy).toBeCalledTimes(5);
-    expect(consoleErrorSpy).toBeCalledTimes(1);
+    expect(consoleWarnSpy).toHaveBeenCalledTimes(5);
+    expect(consoleErrorSpy).toHaveBeenCalledTimes(1);
   });
 
   test("prints import paths causing a cycle", () => {
     detectCycles(entryPoint, graphWithCycles(), { throwOnError: false });
-    expect(consoleWarnSpy).toBeCalledTimes(4);
-    expect(consoleErrorSpy).toBeCalledTimes(1);
+    expect(consoleWarnSpy).toHaveBeenCalledTimes(4);
+    expect(consoleErrorSpy).toHaveBeenCalledTimes(1);
   });
 
   test("prints import paths causing a cycle, including `node_modules`", () => {
@@ -92,8 +92,8 @@ describe("detectCycles()", () => {
       includeNodeModules: true,
       throwOnError: false,
     });
-    expect(consoleWarnSpy).toBeCalledTimes(9);
-    expect(consoleErrorSpy).toBeCalledTimes(1);
+    expect(consoleWarnSpy).toHaveBeenCalledTimes(9);
+    expect(consoleErrorSpy).toHaveBeenCalledTimes(1);
   });
 
   test("prints import paths causing a cycle with 0 context", () => {
@@ -101,8 +101,8 @@ describe("detectCycles()", () => {
       linesOfContext: 0,
       throwOnError: false,
     });
-    expect(consoleWarnSpy).toBeCalledTimes(3);
-    expect(consoleErrorSpy).toBeCalledTimes(1);
+    expect(consoleWarnSpy).toHaveBeenCalledTimes(3);
+    expect(consoleErrorSpy).toHaveBeenCalledTimes(1);
   });
 
   test("prints import paths causing a cycle with 0 context, including `node_modules`", () => {
@@ -111,8 +111,8 @@ describe("detectCycles()", () => {
       linesOfContext: 0,
       throwOnError: false,
     });
-    expect(consoleWarnSpy).toBeCalledTimes(7);
-    expect(consoleErrorSpy).toBeCalledTimes(1);
+    expect(consoleWarnSpy).toHaveBeenCalledTimes(7);
+    expect(consoleErrorSpy).toHaveBeenCalledTimes(1);
   });
 
   test("prints import paths causing a cycle with more context", () => {
@@ -120,8 +120,8 @@ describe("detectCycles()", () => {
       linesOfContext: 10,
       throwOnError: false,
     });
-    expect(consoleWarnSpy).toBeCalledTimes(4);
-    expect(consoleErrorSpy).toBeCalledTimes(1);
+    expect(consoleWarnSpy).toHaveBeenCalledTimes(4);
+    expect(consoleErrorSpy).toHaveBeenCalledTimes(1);
   });
 
   test("prints import paths causing a cycle with more context, including `node_modules`", () => {
@@ -130,15 +130,15 @@ describe("detectCycles()", () => {
       linesOfContext: 10,
       throwOnError: false,
     });
-    expect(consoleWarnSpy).toBeCalledTimes(9);
-    expect(consoleErrorSpy).toBeCalledTimes(1);
+    expect(consoleWarnSpy).toHaveBeenCalledTimes(9);
+    expect(consoleErrorSpy).toHaveBeenCalledTimes(1);
   });
 
   test("throws on cycle detection by default", () => {
     expect(() => detectCycles(entryPoint, graphWithCycles(), {})).toThrow(
       "Import cycles detected"
     );
-    expect(consoleWarnSpy).toBeCalledTimes(4);
-    expect(consoleErrorSpy).not.toBeCalled();
+    expect(consoleWarnSpy).toHaveBeenCalledTimes(4);
+    expect(consoleErrorSpy).not.toHaveBeenCalled();
   });
 });

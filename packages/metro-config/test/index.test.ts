@@ -139,7 +139,7 @@ describe("@rnx-kit/metro-config", () => {
     expect(resolveUniqueModule("jest", process.cwd())).toBeDefined();
 
     const packageName = "this-package-does-not-exist";
-    expect(() => resolveUniqueModule(packageName, process.cwd())).toThrowError(
+    expect(() => resolveUniqueModule(packageName, process.cwd())).toThrow(
       `Cannot find module '${packageName}'`
     );
   });

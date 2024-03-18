@@ -51,7 +51,7 @@ describe("outputWhyDuplicateInBundle()", () => {
     const paths = getWhyDuplicatesInBundle(metafile, graph);
     outputWhyDuplicateInBundle(paths, "");
 
-    expect(consoleSpy).toBeCalledTimes(0);
+    expect(consoleSpy).toHaveBeenCalledTimes(0);
     expect(paths).toEqual([]);
   });
 
@@ -62,7 +62,7 @@ describe("outputWhyDuplicateInBundle()", () => {
     const paths = getWhyDuplicatesInBundle(metafile, graph);
     outputWhyDuplicateInBundle(paths, "");
 
-    expect(consoleSpy).toBeCalledTimes(109);
+    expect(consoleSpy).toHaveBeenCalledTimes(109);
     expect(paths).not.toEqual([]);
   });
 
@@ -76,7 +76,7 @@ describe("outputWhyDuplicateInBundle()", () => {
 
   test("prints analysis information", () => {
     output(statsData);
-    expect(consoleSpy).toBeCalledTimes(1);
+    expect(consoleSpy).toHaveBeenCalledTimes(1);
   });
 
   test("prints the difference", () => {
@@ -89,12 +89,12 @@ describe("outputWhyDuplicateInBundle()", () => {
     const candidateStats = stats(candidate);
 
     outputDiffToConsole(baselineStats, candidateStats);
-    expect(consoleSpy).toBeCalledTimes(1);
+    expect(consoleSpy).toHaveBeenCalledTimes(1);
 
     outputDiffToConsole(candidateStats, baselineStats);
-    expect(consoleSpy).toBeCalledTimes(2);
+    expect(consoleSpy).toHaveBeenCalledTimes(2);
 
     outputDiffToConsole(baselineStats, baselineStats);
-    expect(consoleSpy).toBeCalledTimes(3);
+    expect(consoleSpy).toHaveBeenCalledTimes(3);
   });
 });
