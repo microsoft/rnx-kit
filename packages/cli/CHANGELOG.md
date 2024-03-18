@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/cli
 
+## 0.16.23
+
+### Patch Changes
+
+- b962503: Removed unused files from the published package
+
 ## 0.16.22
 
 ### Patch Changes
