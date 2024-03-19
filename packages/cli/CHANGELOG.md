@@ -1,5 +1,13 @@
 # Change Log - @rnx-kit/cli
 
+## 0.16.24
+
+### Patch Changes
+
+- 26e34b7: align-deps: Added a flag, `--no-unmanaged`, to make unmanaged capabilities errors
+- Updated dependencies [26e34b7]
+  - @rnx-kit/align-deps@2.4.0
+
 ## 0.16.23
 
 ### Patch Changes
