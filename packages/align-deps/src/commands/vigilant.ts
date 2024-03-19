@@ -266,7 +266,7 @@ export function inspect(
  */
 export function checkPackageManifestUnconfigured(
   manifestPath: string,
-  { excludePackages, write }: Options,
+  { excludePackages, noUnmanaged, write }: Options,
   config: AlignDepsConfig,
   logError = error
 ): ErrorCode {
@@ -281,17 +281,18 @@ export function checkPackageManifestUnconfigured(
     manifestProfile,
     write
   );
-
-  if (
+  const hasUnmanagedDeps =
     config.alignDeps.capabilities.length > 0 &&
-    unmanagedDependencies.length > 0
-  ) {
+    unmanagedDependencies.length > 0;
+
+  if (hasUnmanagedDeps) {
+    const log = noUnmanaged ? logError : warn;
     const dependencies = unmanagedDependencies
       .map(([name, capability]) => {
         return `\t  - ${name} can be managed by '${capability}'`;
       })
       .join("\n");
-    warn(
+    log(
       `${manifestPath}: Found dependencies that are currently missing from capabilities:\n${dependencies}`
     );
     info(
@@ -309,6 +310,10 @@ export function checkPackageManifestUnconfigured(
       logError(violations);
       return "unsatisfied";
     }
+  }
+
+  if (noUnmanaged && hasUnmanagedDeps) {
+    return "unmanaged-capabilities";
   }
 
   return "success";

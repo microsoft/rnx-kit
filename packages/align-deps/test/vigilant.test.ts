@@ -1,3 +1,4 @@
+import type { Capability } from "@rnx-kit/config";
 import {
   buildManifestProfile,
   checkPackageManifestUnconfigured,
@@ -13,14 +14,15 @@ function makeConfig(
   manifest: AlignDepsConfig["manifest"] = {
     name: "@rnx-kit/align-deps",
     version: "1.0.0-test",
-  }
+  },
+  capabilities: Capability[] = []
 ): AlignDepsConfig {
   return {
     kitType: "library" as const,
     alignDeps: {
       presets: ["microsoft/react-native"],
       requirements,
-      capabilities: [],
+      capabilities,
     },
     manifest,
   };
@@ -296,6 +298,7 @@ describe("checkPackageManifestUnconfigured()", () => {
     presets: defaultConfig.presets,
     loose: false,
     migrateConfig: false,
+    noUnmanaged: false,
     verbose: false,
     write: false,
   };
@@ -398,6 +401,60 @@ describe("checkPackageManifestUnconfigured()", () => {
     expect(result).toBe("success");
     expect(didWrite).toBe(false);
     expect(consoleErrorSpy).not.toHaveBeenCalled();
+  });
+
+  test("returns non-zero exit code when there are unmanaged capabilities", () => {
+    let didWrite = false;
+    fs.__setMockFileWriter(() => {
+      didWrite = true;
+    });
+
+    const result = checkPackageManifestUnconfigured(
+      "package.json",
+      { ...defaultOptions, noUnmanaged: true },
+      makeConfig(
+        ["react-native@0.73"],
+        {
+          name: "@rnx-kit/align-deps",
+          version: "1.0.0",
+          dependencies: {
+            "react-native": "^0.73.0",
+            "react-native-test-app": "^2.5.34",
+          },
+        },
+        ["core"]
+      ),
+    );
+    expect(result).toBe("unmanaged-capabilities");
+    expect(didWrite).toBe(false);
+    expect(consoleErrorSpy).toHaveBeenCalledTimes(1);
+  });
+
+  test("returns non-zero exit code when writing with unmanaged capabilities", () => {
+    let didWrite = false;
+    fs.__setMockFileWriter(() => {
+      didWrite = true;
+    });
+
+    const result = checkPackageManifestUnconfigured(
+      "package.json",
+      { ...defaultOptions, noUnmanaged: true, write: true },
+      makeConfig(
+        ["react-native@0.73"],
+        {
+          name: "@rnx-kit/align-deps",
+          version: "1.0.0",
+          dependencies: {
+            "react-native": "1000.0.0",
+            "react-native-test-app": "^2.5.34",
+          },
+        },
+        ["test-app"]
+      ),
+    );
+    expect(result).toBe("unmanaged-capabilities");
+    expect(didWrite).toBe(true);
+    expect(consoleErrorSpy).toHaveBeenCalledTimes(1);
   });
 
   test("uses package-specific custom profiles", () => {

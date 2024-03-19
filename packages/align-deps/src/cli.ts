@@ -42,6 +42,12 @@ export const cliOptions = {
       "Determines whether align-deps should try to update the config in 'package.json'.",
     type: "boolean",
   },
+  "no-unmanaged": {
+    default: false,
+    description:
+      "Determines whether align-deps should treat unmanaged capabilities as errors.",
+    type: "boolean",
+  },
   presets: {
     description:
       "Comma-separated list of presets. This can be names to built-in presets, or paths to external presets.",
@@ -157,6 +163,7 @@ async function makeCommand(args: Args): Promise<Command | undefined> {
     init,
     loose,
     "migrate-config": migrateConfig,
+    "no-unmanaged": noUnmanaged,
     presets,
     requirements,
     "set-version": setVersion,
@@ -168,6 +175,7 @@ async function makeCommand(args: Args): Promise<Command | undefined> {
     presets: presets?.toString()?.split(",") ?? defaultConfig.presets,
     loose,
     migrateConfig,
+    noUnmanaged,
     verbose,
     write,
     excludePackages: excludePackages?.toString()?.split(","),

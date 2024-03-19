@@ -100,6 +100,20 @@ cumbersome to manually add all capabilities yourself. You can run this tool with
 `--init`, and it will try to add a sensible configuration based on what is
 currently defined in the specified `package.json`.
 
+### `--loose`
+
+Determines how strict the React Native version requirement should be. Useful for
+apps that depend on a newer React Native version than their dependencies declare
+support for.
+
+Default: `false`
+
+### `--no-unmanaged`
+
+Whether unmanaged capabilities should be treated as errors.
+
+Default: `false`
+
 ### `--presets`
 
 Comma-separated list of presets. This can be names to built-in presets, or paths
@@ -170,9 +184,17 @@ If the version numbers are omitted, an _interactive prompt_ will appear.
 > made. As such, this flag will fail if changes are needed before making any
 > modifications.
 
+### `--verbose`
+
+Specify to increase logging verbosity.
+
+Default: `false`
+
 ### `--write`
 
 Writes all proposed changes to the specified `package.json`.
+
+Default: `false`
 
 ## Configure
 

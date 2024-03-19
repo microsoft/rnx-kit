@@ -11,6 +11,7 @@ const defaultOptions = {
   presets: defaultConfig.presets,
   loose: false,
   migrateConfig: false,
+  noUnmanaged: false,
   verbose: false,
   write: false,
 };
@@ -26,6 +27,7 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
 
   const consoleLogSpy = jest.spyOn(global.console, "log");
   const consoleWarnSpy = jest.spyOn(global.console, "warn");
+  const consoleErrorSpy = jest.spyOn(global.console, "error");
 
   const mockManifest = {
     name: "@rnx-kit/align-deps",
@@ -49,6 +51,7 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
     rnxKitConfig.__setMockConfig();
     consoleLogSpy.mockReset();
     consoleWarnSpy.mockReset();
+    consoleErrorSpy.mockReset();
   });
 
   afterAll(() => {
@@ -60,6 +63,7 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
     expect(result).toBe("invalid-manifest");
     expect(consoleLogSpy).not.toHaveBeenCalled();
     expect(consoleWarnSpy).not.toHaveBeenCalled();
+    expect(consoleErrorSpy).not.toHaveBeenCalled();
   });
 
   test("returns early if 'rnx-kit' is missing from the manifest", () => {
@@ -73,6 +77,7 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
     expect(result).toBe("not-configured");
     expect(consoleLogSpy).not.toHaveBeenCalled();
     expect(consoleWarnSpy).toHaveBeenCalled();
+    expect(consoleErrorSpy).not.toHaveBeenCalled();
   });
 
   test("prints warnings when detecting bad packages", () => {
@@ -95,6 +100,7 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
     expect(result).toBe("success");
     expect(consoleLogSpy).not.toHaveBeenCalled();
     expect(consoleWarnSpy).toHaveBeenCalled();
+    expect(consoleErrorSpy).not.toHaveBeenCalled();
   });
 
   test("prints warnings when detecting bad packages (with version range)", () => {
@@ -111,6 +117,7 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
     expect(result).toBe("success");
     expect(consoleLogSpy).not.toHaveBeenCalled();
     expect(consoleWarnSpy).toHaveBeenCalled();
+    expect(consoleErrorSpy).not.toHaveBeenCalled();
   });
 
   test("returns early if no capabilities are defined", () => {
@@ -124,6 +131,7 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
     expect(result).toBe("success");
     expect(consoleLogSpy).not.toHaveBeenCalled();
     expect(consoleWarnSpy).not.toHaveBeenCalled();
+    expect(consoleErrorSpy).not.toHaveBeenCalled();
   });
 
   test("returns if no changes are needed", () => {
@@ -150,6 +158,7 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
     expect(result).toBe("success");
     expect(consoleLogSpy).not.toHaveBeenCalled();
     expect(consoleWarnSpy).not.toHaveBeenCalled();
+    expect(consoleErrorSpy).not.toHaveBeenCalled();
   });
 
   test("prints additional information with `--verbose`", () => {
@@ -179,6 +188,7 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
     expect(result).toBe("success");
     expect(consoleLogSpy).toHaveBeenCalled();
     expect(consoleWarnSpy).not.toHaveBeenCalled();
+    expect(consoleErrorSpy).not.toHaveBeenCalled();
   });
 
   test("returns if no changes are needed (write: true)", () => {
@@ -209,6 +219,7 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
     expect(didWriteToPath).toBe(false);
     expect(consoleLogSpy).not.toHaveBeenCalled();
     expect(consoleWarnSpy).not.toHaveBeenCalled();
+    expect(consoleErrorSpy).not.toHaveBeenCalled();
   });
 
   test("returns error code if changes are needed", () => {
@@ -239,6 +250,7 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
     expect(result).not.toBe("success");
     expect(consoleLogSpy).not.toHaveBeenCalled();
     expect(consoleWarnSpy).not.toHaveBeenCalled();
+    expect(consoleErrorSpy).not.toHaveBeenCalled();
   });
 
   test("writes changes back to 'package.json'", () => {
@@ -259,6 +271,7 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
     expect(didWriteToPath).toBe("package.json");
     expect(consoleLogSpy).not.toHaveBeenCalled();
     expect(consoleWarnSpy).not.toHaveBeenCalled();
+    expect(consoleErrorSpy).not.toHaveBeenCalled();
   });
 
   test("preserves indentation in 'package.json'", () => {
@@ -279,6 +292,7 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
     expect(output).toMatchSnapshot();
     expect(consoleLogSpy).not.toHaveBeenCalled();
     expect(consoleWarnSpy).not.toHaveBeenCalled();
+    expect(consoleErrorSpy).not.toHaveBeenCalled();
   });
 
   test("returns appropriate error code if package is excluded", () => {
@@ -298,6 +312,7 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
     expect(result).toBe("excluded");
     expect(consoleLogSpy).not.toHaveBeenCalled();
     expect(consoleWarnSpy).not.toHaveBeenCalled();
+    expect(consoleErrorSpy).not.toHaveBeenCalled();
   });
 
   test("uses minimum supported version as development version", () => {
@@ -324,6 +339,7 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
     expect(result).toBe("success");
     expect(consoleLogSpy).not.toHaveBeenCalled();
     expect(consoleWarnSpy).not.toHaveBeenCalled();
+    expect(consoleErrorSpy).not.toHaveBeenCalled();
   });
 
   test("uses declared development version", () => {
@@ -353,6 +369,7 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
     expect(result).toBe("success");
     expect(consoleLogSpy).not.toHaveBeenCalled();
     expect(consoleWarnSpy).not.toHaveBeenCalled();
+    expect(consoleErrorSpy).not.toHaveBeenCalled();
   });
 
   test("handles development version ranges", () => {
@@ -382,6 +399,7 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
     expect(result).toBe("success");
     expect(consoleLogSpy).not.toHaveBeenCalled();
     expect(consoleWarnSpy).not.toHaveBeenCalled();
+    expect(consoleErrorSpy).not.toHaveBeenCalled();
   });
 });
 
