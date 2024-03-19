@@ -8,6 +8,7 @@ const defaultOptions = {
   presets: defaultConfig.presets,
   loose: false,
   migrateConfig: false,
+  noUnmanaged: false,
   verbose: false,
   write: false,
 };
@@ -190,13 +191,25 @@ describe("initializeConfig()", () => {
 describe("makeInitializeCommand()", () => {
   const options = { ...defaultOptions, presets: [] };
 
+  const consoleErrorSpy = jest.spyOn(global.console, "error");
+
+  beforeEach(() => {
+    consoleErrorSpy.mockReset();
+  });
+
+  afterAll(() => {
+    jest.clearAllMocks();
+  });
+
   test("returns undefined for invalid kit types", () => {
     const command = makeInitializeCommand("random", options);
     expect(command).toBeUndefined();
+    expect(consoleErrorSpy).toHaveBeenCalledTimes(1);
   });
 
   test("returns command for kit types", () => {
     expect(makeInitializeCommand("app", options)).toBeDefined();
     expect(makeInitializeCommand("library", options)).toBeDefined();
+    expect(consoleErrorSpy).not.toHaveBeenCalled();
   });
 });

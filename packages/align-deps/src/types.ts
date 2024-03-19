@@ -22,6 +22,7 @@ export type Options = {
   presets: string[];
   loose: boolean;
   migrateConfig: boolean;
+  noUnmanaged: boolean;
   verbose: boolean;
   write: boolean;
   excludePackages?: string[];
@@ -31,6 +32,7 @@ export type Options = {
 export type Args = Pick<Options, "loose" | "verbose" | "write"> & {
   "exclude-packages"?: string | number;
   "migrate-config": boolean;
+  "no-unmanaged": boolean;
   "set-version"?: string | number;
   init?: string;
   packages?: (string | number)[];
@@ -48,6 +50,7 @@ export type ErrorCode =
   | "invalid-manifest"
   | "missing-react-native"
   | "not-configured"
+  | "unmanaged-capabilities"
   | "unsatisfied";
 
 export type Command = (manifest: string) => ErrorCode;
