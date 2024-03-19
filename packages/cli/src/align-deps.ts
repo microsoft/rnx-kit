@@ -21,6 +21,7 @@ export function rnxAlignDeps(
     ...pickValues(args, Object.values(optionsMap), Object.keys(optionsMap)),
     loose: Boolean(args.loose),
     "migrate-config": Boolean(args.migrateConfig),
+    "no-unmanaged": Boolean(args.noUnmanaged),
     verbose: Boolean(args.verbose),
     write: Boolean(args.write),
     packages: argv,
@@ -48,6 +49,10 @@ export const rnxAlignDepsCommand = {
     {
       name: "--migrate-config",
       description: cliOptions["migrate-config"].description,
+    },
+    {
+      name: "--no-unmanaged",
+      description: cliOptions["no-unmanaged"].description,
     },
     {
       name: "--presets [presets]",
