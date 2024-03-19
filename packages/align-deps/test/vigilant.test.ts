@@ -423,7 +423,7 @@ describe("checkPackageManifestUnconfigured()", () => {
           },
         },
         ["core"]
-      ),
+      )
     );
     expect(result).toBe("unmanaged-capabilities");
     expect(didWrite).toBe(false);
@@ -450,7 +450,7 @@ describe("checkPackageManifestUnconfigured()", () => {
           },
         },
         ["test-app"]
-      ),
+      )
     );
     expect(result).toBe("unmanaged-capabilities");
     expect(didWrite).toBe(true);
