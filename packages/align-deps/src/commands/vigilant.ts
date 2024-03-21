@@ -1,5 +1,5 @@
-import type { Capability } from "@rnx-kit/config";
-import { error, info, warn } from "@rnx-kit/console";
+import type { Capability, KitConfig } from "@rnx-kit/config";
+import { error, warn } from "@rnx-kit/console";
 import { keysOf } from "@rnx-kit/tools-language/properties";
 import type { PackageManifest } from "@rnx-kit/tools-node/package";
 import * as path from "path";
@@ -10,7 +10,7 @@ import {
   resolveCapabilitiesUnchecked,
 } from "../capabilities";
 import { stringify } from "../diff";
-import { modifyManifest } from "../helpers";
+import { dependencySections, modifyManifest } from "../helpers";
 import { updateDependencies } from "../manifest";
 import { ensurePreset, filterPreset, mergePresets } from "../preset";
 import type {
@@ -24,9 +24,9 @@ import type {
 } from "../types";
 
 type Report = {
-  changes: Changes;
-  changesCount: number;
-  unmanagedDependencies: [string, string][];
+  errors: Changes;
+  errorCount: number;
+  warnings: Changes["capabilities"];
 };
 
 function getAllCapabilities(preset: Preset): Capability[] {
@@ -190,24 +190,25 @@ const buildManifestProfileCached = ((): typeof buildManifestProfile => {
  *
  * @param manifest The package manifest
  * @param profile The desired profile to compare against
- * @param write Whether misaligned dependencies should be updated
+ * @param options Whether misaligned dependencies should be updated
  * @returns A list of misaligned dependencies
  */
 export function inspect(
   manifest: PackageManifest,
   profile: ManifestProfile,
-  write: boolean
+  { noUnmanaged, write }: Pick<Options, "noUnmanaged" | "write">
 ): Report {
-  const allChanges: Report["changes"] = {
+  const errors: Report["errors"] = {
     dependencies: [],
     peerDependencies: [],
     devDependencies: [],
+    capabilities: [],
   };
-  const capabilities: Record<string, string> = {};
+  const extraCapabilities: Record<string, string> = {};
 
   const { unmanagedCapabilities } = profile;
 
-  const changesCount = keysOf(allChanges).reduce((count, section) => {
+  const changesCount = dependencySections.reduce((count, section) => {
     const dependencies = manifest[section];
     if (!dependencies) {
       return count;
@@ -216,7 +217,7 @@ export function inspect(
     const isMisaligned =
       section === "peerDependencies" ? isMisalignedPeer : isMisalignedDirect;
     const desiredDependencies = profile[section];
-    const changes = allChanges[section];
+    const changes = errors[section];
 
     for (const name of Object.keys(dependencies)) {
       if (name in desiredDependencies) {
@@ -236,7 +237,7 @@ export function inspect(
 
         const capability = unmanagedCapabilities[name];
         if (capability) {
-          capabilities[name] = capability;
+          extraCapabilities[name] = capability;
         }
       }
     }
@@ -244,10 +245,32 @@ export function inspect(
     return count + changes.length;
   }, 0);
 
+  // If `--no-unmanaged`, treat unmanaged dependencies as errors if the package
+  // also declares `rnx-kit.alignDeps.capabilities`.
+  const warnings: Changes["capabilities"] = [];
+  const config = manifest["rnx-kit"]?.["alignDeps"] as KitConfig["alignDeps"];
+  if (Array.isArray(config?.capabilities)) {
+    const entries = noUnmanaged ? errors.capabilities : warnings;
+    entries.push(
+      ...Object.entries(extraCapabilities).map(([dependency, capability]) => ({
+        type: "unmanaged" as const,
+        dependency,
+        capability,
+      }))
+    );
+
+    if (write) {
+      const capabilities = config.capabilities;
+      for (const { capability } of errors.capabilities) {
+        capabilities.push(capability as Capability);
+      }
+    }
+  }
+
   return {
-    changes: allChanges,
-    changesCount,
-    unmanagedDependencies: Object.entries(capabilities),
+    errors: errors,
+    errorCount: changesCount + errors.capabilities.length,
+    warnings,
   };
 }
 
@@ -266,54 +289,40 @@ export function inspect(
  */
 export function checkPackageManifestUnconfigured(
   manifestPath: string,
-  { excludePackages, noUnmanaged, write }: Options,
+  options: Options,
   config: AlignDepsConfig,
   logError = error
 ): ErrorCode {
+  const { excludePackages, write } = options;
   if (excludePackages?.includes(config.manifest.name)) {
     return "success";
   }
 
   const manifestProfile = buildManifestProfileCached(manifestPath, config);
   const { manifest } = config;
-  const { changes, changesCount, unmanagedDependencies } = inspect(
+  const { errors, errorCount, warnings } = inspect(
     manifest,
     manifestProfile,
-    write
+    options
   );
-  const hasUnmanagedDeps =
-    config.alignDeps.capabilities.length > 0 &&
-    unmanagedDependencies.length > 0;
 
-  if (hasUnmanagedDeps) {
-    const log = noUnmanaged ? logError : warn;
-    const dependencies = unmanagedDependencies
-      .map(([name, capability]) => {
-        return `\t  - ${name} can be managed by '${capability}'`;
-      })
-      .join("\n");
-    log(
-      `${manifestPath}: Found dependencies that are currently missing from capabilities:\n${dependencies}`
-    );
-    info(
-      "Note: Capabilities will never be added automatically, even with '--write'."
-    );
+  if (warnings.length > 0) {
+    const violations = stringify({ capabilities: warnings }, [
+      `${manifestPath}: Found dependencies that are currently missing from capabilities:`,
+    ]);
+    warn(violations);
   }
 
-  if (changesCount > 0) {
+  if (errorCount > 0) {
     if (write) {
       modifyManifest(manifestPath, manifest);
     } else {
-      const violations = stringify(changes, [
-        `${manifestPath}: Found ${changesCount} violation(s) outside of capabilities.`,
+      const violations = stringify(errors, [
+        `${manifestPath}: Found ${errorCount} violation(s) outside of capabilities.`,
       ]);
       logError(violations);
       return "unsatisfied";
     }
-  }
-
-  if (noUnmanaged && hasUnmanagedDeps) {
-    return "unmanaged-capabilities";
   }
 
   return "success";

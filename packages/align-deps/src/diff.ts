@@ -1,5 +1,5 @@
-import { keysOf } from "@rnx-kit/tools-language";
 import type { PackageManifest } from "@rnx-kit/tools-node/package";
+import { dependencySections } from "./helpers";
 import type { Changes } from "./types";
 
 export function diff(
@@ -10,9 +10,10 @@ export function diff(
     dependencies: [],
     peerDependencies: [],
     devDependencies: [],
+    capabilities: [],
   };
 
-  const numChanges = keysOf(allChanges).reduce((count, section) => {
+  const numChanges = dependencySections.reduce((count, section) => {
     const changes = allChanges[section];
     const currentDeps = manifest[section] ?? {};
     const updatedDeps = updatedManifest[section] ?? {};
@@ -38,7 +39,10 @@ export function diff(
   return numChanges > 0 ? allChanges : undefined;
 }
 
-export function stringify(allChanges: Changes, output: string[] = []): string {
+export function stringify(
+  allChanges: Partial<Changes>,
+  output: string[] = []
+): string {
   const prefix = "\t  - ";
 
   for (const [section, changes] of Object.entries(allChanges)) {
@@ -57,6 +61,11 @@ export function stringify(allChanges: Changes, output: string[] = []): string {
             break;
           case "removed":
             output.push(`${prefix}${dependency} should be removed`);
+            break;
+          case "unmanaged":
+            output.push(
+              `${prefix}${dependency} can be managed by '${change.capability}'`
+            );
             break;
         }
       }

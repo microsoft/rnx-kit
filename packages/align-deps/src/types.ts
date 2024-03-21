@@ -16,6 +16,7 @@ export type Changes = {
   dependencies: Change[];
   peerDependencies: Change[];
   devDependencies: Change[];
+  capabilities: { type: "unmanaged"; dependency: string; capability: string }[];
 };
 
 export type Options = {
@@ -50,7 +51,6 @@ export type ErrorCode =
   | "invalid-manifest"
   | "missing-react-native"
   | "not-configured"
-  | "unmanaged-capabilities"
   | "unsatisfied";
 
 export type Command = (manifest: string) => ErrorCode;
