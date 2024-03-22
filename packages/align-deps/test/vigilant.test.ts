@@ -559,7 +559,7 @@ describe("checkPackageManifestUnconfigured()", () => {
     });
 
     const result = checkPackageManifestUnconfigured(
-      "test-app/package.json",
+      "package.json",
       { ...defaultOptions, noUnmanaged: true },
       makeConfig(["react-native@0.73"], {
         name: "@rnx-kit/align-deps",
@@ -587,7 +587,7 @@ describe("checkPackageManifestUnconfigured()", () => {
     });
 
     const result = checkPackageManifestUnconfigured(
-      "test-app/package.json",
+      "package.json",
       { ...defaultOptions, noUnmanaged: true, write: true },
       makeConfig(["react-native@0.73"], {
         name: "@rnx-kit/align-deps",
