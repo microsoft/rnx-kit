@@ -208,7 +208,7 @@ export function inspect(
 
   const { unmanagedCapabilities } = profile;
 
-  const changesCount = dependencySections.reduce((count, section) => {
+  const errorCount = dependencySections.reduce((count, section) => {
     const dependencies = manifest[section];
     if (!dependencies) {
       return count;
@@ -268,8 +268,8 @@ export function inspect(
   }
 
   return {
-    errors: errors,
-    errorCount: changesCount + errors.capabilities.length,
+    errors,
+    errorCount: errorCount + errors.capabilities.length,
     warnings,
   };
 }
