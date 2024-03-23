@@ -38,7 +38,7 @@ Or follow the
 [Getting started guide](https://microsoft.github.io/rnx-kit/docs/guides/getting-started)
 for an easy introduction to our dependency management tool.
 
-If you want to use only a specific tool, you can refer to its `README`` for
+If you want to use only a specific tool, you can refer to its `README` for
 details; they are all easily readable in the
 [Tools section](https://microsoft.github.io/rnx-kit/docs/tools/overview) of the
 documentation.
