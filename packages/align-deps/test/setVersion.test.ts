@@ -38,6 +38,7 @@ describe("makeSetVersionCommand()", () => {
     noUnmanaged: false,
     verbose: false,
     write: false,
+    diffMode: "strict",
   };
 
   afterEach(() => {

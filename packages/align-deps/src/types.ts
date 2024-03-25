@@ -27,6 +27,7 @@ export type Options = {
   write: boolean;
   excludePackages?: string[];
   requirements?: string[];
+  diffMode?: string;
 };
 
 export type Args = Pick<Options, "loose" | "verbose" | "write"> & {
@@ -38,6 +39,7 @@ export type Args = Pick<Options, "loose" | "verbose" | "write"> & {
   packages?: (string | number)[];
   presets?: string | number;
   requirements?: string | number;
+  "diff-mode"?: string;
 };
 
 export type DependencyType = "direct" | "development" | "peer";
