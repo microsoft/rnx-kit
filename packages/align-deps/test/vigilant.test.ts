@@ -1,4 +1,3 @@
-import type { Capability } from "@rnx-kit/config";
 import {
   buildManifestProfile,
   checkPackageManifestUnconfigured,
@@ -14,15 +13,14 @@ function makeConfig(
   manifest: AlignDepsConfig["manifest"] = {
     name: "@rnx-kit/align-deps",
     version: "1.0.0-test",
-  },
-  capabilities: Capability[] = []
+  }
 ): AlignDepsConfig {
   return {
     kitType: "library" as const,
     alignDeps: {
       presets: ["microsoft/react-native"],
       requirements,
-      capabilities,
+      capabilities: [],
     },
     manifest,
   };
@@ -93,13 +91,13 @@ describe("inspect()", () => {
     name: "@rnx-kit/align-deps",
     version: "1.0.0",
     dependencies: {
-      "react-native": "^0.63.2",
+      "react-native": "^0.73.6",
     },
     peerDependencies: {
-      "react-native": "^0.63 || ^0.64",
+      "react-native": "^0.72 || ^0.73",
     },
     devDependencies: {
-      "react-native": "^0.63.2",
+      "react-native": "^0.73.6",
     },
     unmanagedCapabilities: {
       "react-native": "core",
@@ -111,30 +109,42 @@ describe("inspect()", () => {
       name: "@rnx-kit/align-deps",
       version: "1.0.0",
     };
-    expect(inspect(manifest, mockManifestProfile, false)).toEqual({
-      changes: {
+    expect(
+      inspect(manifest, mockManifestProfile, {
+        noUnmanaged: false,
+        write: false,
+      })
+    ).toEqual({
+      errors: {
         dependencies: [],
         peerDependencies: [],
         devDependencies: [],
+        capabilities: [],
       },
-      changesCount: 0,
-      unmanagedDependencies: [],
+      errorCount: 0,
+      warnings: [],
     });
-    expect(inspect(manifest, mockManifestProfile, true)).toEqual({
-      changes: {
+    expect(
+      inspect(manifest, mockManifestProfile, {
+        noUnmanaged: false,
+        write: true,
+      })
+    ).toEqual({
+      errors: {
         dependencies: [],
         peerDependencies: [],
         devDependencies: [],
+        capabilities: [],
       },
-      changesCount: 0,
-      unmanagedDependencies: [],
+      errorCount: 0,
+      warnings: [],
     });
   });
 
   test("ignores unmanaged dependencies", () => {
     const dependencies = {
       "@babel/core": "^7.0.0",
-      "react-native": "0.63.2",
+      "react-native": "0.73.6",
     };
     const manifest = {
       name: "@rnx-kit/align-deps",
@@ -143,7 +153,7 @@ describe("inspect()", () => {
     };
 
     const expected = {
-      changes: {
+      errors: {
         dependencies: [
           {
             type: "changed",
@@ -154,12 +164,18 @@ describe("inspect()", () => {
         ],
         peerDependencies: [],
         devDependencies: [],
+        capabilities: [],
       },
-      changesCount: 1,
-      unmanagedDependencies: [["react-native", "core"]],
+      errorCount: 1,
+      warnings: [],
     };
 
-    expect(inspect(manifest, mockManifestProfile, false)).toEqual(expected);
+    expect(
+      inspect(manifest, mockManifestProfile, {
+        noUnmanaged: false,
+        write: false,
+      })
+    ).toEqual(expected);
     expect(manifest.dependencies).toEqual(dependencies);
   });
 
@@ -171,15 +187,15 @@ describe("inspect()", () => {
         "@babel/core": "^7.0.0",
       },
       peerDependencies: {
-        "react-native": "0.63.2",
+        "react-native": "0.73.6",
       },
       devDependencies: {
-        "react-native": "0.63.2",
+        "react-native": "0.73.6",
       },
     };
 
     const expected = {
-      changes: {
+      errors: {
         dependencies: [],
         peerDependencies: [
           {
@@ -197,18 +213,24 @@ describe("inspect()", () => {
             current: manifest.devDependencies["react-native"],
           },
         ],
+        capabilities: [],
       },
-      changesCount: 2,
-      unmanagedDependencies: [["react-native", "core"]],
+      errorCount: 2,
+      warnings: [],
     };
 
-    expect(inspect(manifest, mockManifestProfile, false)).toEqual(expected);
+    expect(
+      inspect(manifest, mockManifestProfile, {
+        noUnmanaged: false,
+        write: false,
+      })
+    ).toEqual(expected);
   });
 
   test("modifies the manifest when `write: true`", () => {
     const dependencies = {
       "@babel/core": "^7.0.0",
-      "react-native": "0.63.2",
+      "react-native": "0.73.6",
     };
     const manifest = {
       name: "@rnx-kit/align-deps",
@@ -217,7 +239,7 @@ describe("inspect()", () => {
     };
 
     const expected = {
-      changes: {
+      errors: {
         dependencies: [
           {
             type: "changed",
@@ -228,12 +250,18 @@ describe("inspect()", () => {
         ],
         peerDependencies: [],
         devDependencies: [],
+        capabilities: [],
       },
-      changesCount: 1,
-      unmanagedDependencies: [["react-native", "core"]],
+      errorCount: 1,
+      warnings: [],
     };
 
-    expect(inspect(manifest, mockManifestProfile, true)).toEqual(expected);
+    expect(
+      inspect(manifest, mockManifestProfile, {
+        noUnmanaged: false,
+        write: true,
+      })
+    ).toEqual(expected);
     expect(manifest.dependencies).not.toEqual(dependencies);
   });
 
@@ -268,7 +296,7 @@ describe("inspect()", () => {
       },
     };
     const expected = {
-      changes: {
+      errors: {
         dependencies: [
           {
             type: "changed",
@@ -279,12 +307,133 @@ describe("inspect()", () => {
         ],
         peerDependencies: [],
         devDependencies: [],
+        capabilities: [],
       },
-      changesCount: 1,
-      unmanagedDependencies: [["react", "react"]],
+      errorCount: 1,
+      warnings: [],
     };
 
-    expect(inspect(manifest, profile, false)).toEqual(expected);
+    expect(
+      inspect(manifest, profile, { noUnmanaged: false, write: false })
+    ).toEqual(expected);
+  });
+
+  test("warns about unmanaged dependencies", () => {
+    const dependencies = {
+      "react-native": "^0.73.6",
+    };
+    const manifest = {
+      name: "@rnx-kit/align-deps",
+      version: "1.0.0",
+      dependencies,
+      "rnx-kit": {
+        kitType: "app",
+        alignDeps: {
+          capabilities: [],
+        },
+      },
+    };
+
+    expect(
+      inspect(manifest, mockManifestProfile, {
+        noUnmanaged: false,
+        write: false,
+      })
+    ).toEqual({
+      errors: {
+        dependencies: [],
+        peerDependencies: [],
+        devDependencies: [],
+        capabilities: [],
+      },
+      errorCount: 0,
+      warnings: [
+        {
+          type: "unmanaged",
+          dependency: "react-native",
+          capability: "core",
+        },
+      ],
+    });
+  });
+
+  test("treats unmanaged dependencies as errors", () => {
+    const dependencies = {
+      "react-native": "^0.73.6",
+    };
+    const manifest = {
+      name: "@rnx-kit/align-deps",
+      version: "1.0.0",
+      dependencies,
+      "rnx-kit": {
+        kitType: "app",
+        alignDeps: {
+          capabilities: [],
+        },
+      },
+    };
+
+    expect(
+      inspect(manifest, mockManifestProfile, {
+        noUnmanaged: true,
+        write: false,
+      })
+    ).toEqual({
+      errors: {
+        dependencies: [],
+        peerDependencies: [],
+        devDependencies: [],
+        capabilities: [
+          {
+            type: "unmanaged",
+            dependency: "react-native",
+            capability: "core",
+          },
+        ],
+      },
+      errorCount: 1,
+      warnings: [],
+    });
+  });
+
+  test("writes capabilities if `--no-unamaged` is specified", () => {
+    const dependencies = {
+      "react-native": "^0.73.6",
+    };
+    const manifest = {
+      name: "@rnx-kit/align-deps",
+      version: "1.0.0",
+      dependencies,
+      "rnx-kit": {
+        kitType: "app",
+        alignDeps: {
+          capabilities: [],
+        },
+      },
+    };
+
+    expect(
+      inspect(manifest, mockManifestProfile, {
+        noUnmanaged: true,
+        write: true,
+      })
+    ).toEqual({
+      errors: {
+        dependencies: [],
+        peerDependencies: [],
+        devDependencies: [],
+        capabilities: [
+          {
+            type: "unmanaged",
+            dependency: "react-native",
+            capability: "core",
+          },
+        ],
+      },
+      errorCount: 1,
+      warnings: [],
+    });
+    expect(manifest["rnx-kit"].alignDeps.capabilities).toEqual(["core"]);
   });
 });
 
@@ -412,20 +561,21 @@ describe("checkPackageManifestUnconfigured()", () => {
     const result = checkPackageManifestUnconfigured(
       "package.json",
       { ...defaultOptions, noUnmanaged: true },
-      makeConfig(
-        ["react-native@0.73"],
-        {
-          name: "@rnx-kit/align-deps",
-          version: "1.0.0",
-          dependencies: {
-            "react-native": "^0.73.0",
-            "react-native-test-app": "^2.5.34",
+      makeConfig(["react-native@0.73"], {
+        name: "@rnx-kit/align-deps",
+        version: "1.0.0",
+        dependencies: {
+          "react-native": "^0.73.0",
+          "react-native-test-app": "^2.5.34",
+        },
+        "rnx-kit": {
+          alignDeps: {
+            capabilities: ["core"],
           },
         },
-        ["core"]
-      )
+      })
     );
-    expect(result).toBe("unmanaged-capabilities");
+    expect(result).toBe("unsatisfied");
     expect(didWrite).toBe(false);
     expect(consoleErrorSpy).toHaveBeenCalledTimes(1);
   });
@@ -439,22 +589,23 @@ describe("checkPackageManifestUnconfigured()", () => {
     const result = checkPackageManifestUnconfigured(
       "package.json",
       { ...defaultOptions, noUnmanaged: true, write: true },
-      makeConfig(
-        ["react-native@0.73"],
-        {
-          name: "@rnx-kit/align-deps",
-          version: "1.0.0",
-          dependencies: {
-            "react-native": "1000.0.0",
-            "react-native-test-app": "^2.5.34",
+      makeConfig(["react-native@0.73"], {
+        name: "@rnx-kit/align-deps",
+        version: "1.0.0",
+        dependencies: {
+          "react-native": "^0.73.0",
+          "react-native-test-app": "^2.5.34",
+        },
+        "rnx-kit": {
+          alignDeps: {
+            capabilities: ["core"],
           },
         },
-        ["test-app"]
-      )
+      })
     );
-    expect(result).toBe("unmanaged-capabilities");
+    expect(result).toBe("success");
     expect(didWrite).toBe(true);
-    expect(consoleErrorSpy).toHaveBeenCalledTimes(1);
+    expect(consoleErrorSpy).toHaveBeenCalledTimes(0);
   });
 
   test("uses package-specific custom profiles", () => {

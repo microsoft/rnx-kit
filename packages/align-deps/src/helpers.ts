@@ -4,6 +4,12 @@ import detectIndent from "detect-indent";
 import fs from "fs";
 import semverValidRange from "semver/ranges/valid";
 
+export const dependencySections = [
+  "dependencies",
+  "peerDependencies",
+  "devDependencies",
+] as const;
+
 export function compare<T>(lhs: T, rhs: T): -1 | 0 | 1 {
   if (lhs === rhs) {
     return 0;
@@ -59,8 +65,7 @@ export function modifyManifest(
 }
 
 export function omitEmptySections(manifest: PackageManifest): PackageManifest {
-  const sections = ["dependencies", "peerDependencies", "devDependencies"];
-  for (const sectionName of sections) {
+  for (const sectionName of dependencySections) {
     const section = manifest[sectionName];
     if (typeof section === "object" && Object.keys(section).length === 0) {
       delete manifest[sectionName];
