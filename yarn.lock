@@ -3869,7 +3869,7 @@ __metadata:
     "@typescript-eslint/types": "npm:^7.0.0"
     enhanced-resolve: "npm:^5.8.3"
     eslint: "npm:^8.56.0"
-    eslint-plugin-node: "npm:11.1.0"
+    eslint-plugin-n: "npm:14.0.0"
     eslint-plugin-react: "npm:^7.33.0"
     eslint-plugin-react-hooks: "npm:^4.6.0"
     jest: "npm:^29.2.1"
@@ -7631,6 +7631,35 @@ __metadata:
   languageName: node
   linkType: hard
 
+"eslint-plugin-es@npm:^4.1.0":
+  version: 4.1.0
+  resolution: "eslint-plugin-es@npm:4.1.0"
+  dependencies:
+    eslint-utils: "npm:^2.0.0"
+    regexpp: "npm:^3.0.0"
+  peerDependencies:
+    eslint: ">=4.19.1"
+  checksum: 10c0/5e1212d0c5b31b114f8a2ae51b7d79cbb6ec361f46e0f4ae56c4158e9adb6265e01ea75369c2f1515b7bfb80dc327eb7aefe84077e92e7d7d629dd15a5f92ace
+  languageName: node
+  linkType: hard
+
+"eslint-plugin-n@npm:14.0.0":
+  version: 14.0.0
+  resolution: "eslint-plugin-n@npm:14.0.0"
+  dependencies:
+    eslint-plugin-es: "npm:^4.1.0"
+    eslint-utils: "npm:^3.0.0"
+    ignore: "npm:^5.1.1"
+    is-core-module: "npm:^2.3.0"
+    minimatch: "npm:^3.0.4"
+    resolve: "npm:^1.10.1"
+    semver: "npm:^6.1.0"
+  peerDependencies:
+    eslint: ">=7.0.0"
+  checksum: 10c0/861c5f2e47275fa1e5859d03fb8a7e83abb2285610554d57f8acd80fddbe8a77f56ee45a6952497ae1f3fa76aebbde2bba10c7ccb9c96fe766856503da0faff8
+  languageName: node
+  linkType: hard
+
 "eslint-plugin-node@npm:11.1.0":
   version: 11.1.0
   resolution: "eslint-plugin-node@npm:11.1.0"
@@ -7712,10 +7741,28 @@ __metadata:
   languageName: node
   linkType: hard
 
+"eslint-utils@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "eslint-utils@npm:3.0.0"
+  dependencies:
+    eslint-visitor-keys: "npm:^2.0.0"
+  peerDependencies:
+    eslint: ">=5"
+  checksum: 10c0/45aa2b63667a8d9b474c98c28af908d0a592bed1a4568f3145cd49fb5d9510f545327ec95561625290313fe126e6d7bdfe3fdbdb6f432689fab6b9497d3bfb52
+  languageName: node
+  linkType: hard
+
 "eslint-visitor-keys@npm:^1.1.0":
   version: 1.3.0
   resolution: "eslint-visitor-keys@npm:1.3.0"
   checksum: 10c0/10c91fdbbe36810dd4308e57f9a8bc7177188b2a70247e54e3af1fa05ebc66414ae6fd4ce3c6c6821591f43a556e9037bc6b071122e099b5f8b7d2f76df553e3
+  languageName: node
+  linkType: hard
+
+"eslint-visitor-keys@npm:^2.0.0":
+  version: 2.1.0
+  resolution: "eslint-visitor-keys@npm:2.1.0"
+  checksum: 10c0/9f0e3a2db751d84067d15977ac4b4472efd6b303e369e6ff241a99feac04da758f46d5add022c33d06b53596038dbae4b4aceb27c7e68b8dfc1055b35e495787
   languageName: node
   linkType: hard
 
@@ -9096,7 +9143,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"is-core-module@npm:^2.12.0, is-core-module@npm:^2.13.0":
+"is-core-module@npm:^2.12.0, is-core-module@npm:^2.13.0, is-core-module@npm:^2.3.0":
   version: 2.13.1
   resolution: "is-core-module@npm:2.13.1"
   dependencies:
