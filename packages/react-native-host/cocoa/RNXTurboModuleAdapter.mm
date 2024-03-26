@@ -13,23 +13,36 @@
 #if __has_include(<React/RCTAppSetupUtils.h>)  // <0.72
 #import <React/RCTAppSetupUtils.h>
 #else
+
+#if __has_include(<React-RCTAppDelegate/RCTAppSetupUtils.h>)
 #import <React-RCTAppDelegate/RCTAppSetupUtils.h>
+#elif __has_include(<React_RCTAppDelegate/RCTAppSetupUtils.h>)  // use_frameworks!
+#import <React_RCTAppDelegate/RCTAppSetupUtils.h>
+#endif  // __has_include(<React-RCTAppDelegate/RCTAppSetupUtils.h>)
+
 #import <React/RCTSurfacePresenterBridgeAdapter.h>
 
 // We still get into this path because react-native-macos 0.71 picked up some
 // 0.72 bits. AFAICT, `SchedulerPriorityUtils.h` is a new addition in 0.72 in
 // both react-native and react-native-macos.
 #if __has_include(<react/renderer/runtimescheduler/SchedulerPriorityUtils.h>)
+
 #if __has_include(<React-RCTAppDelegate/RCTLegacyInteropComponents.h>)  // <0.74
 #import <React-RCTAppDelegate/RCTLegacyInteropComponents.h>
 #define MANUALLY_REGISTER_LEGACY_COMPONENTS 1
+#elif __has_include(<React_RCTAppDelegate/RCTLegacyInteropComponents.h>)  // use_frameworks!
+#import <React_RCTAppDelegate/RCTLegacyInteropComponents.h>
+#define MANUALLY_REGISTER_LEGACY_COMPONENTS 1
 #endif  // __has_include(<React-RCTAppDelegate/RCTLegacyInteropComponents.h>)
+
 #import <React/RCTLegacyViewManagerInteropComponentView.h>
 #import <react/renderer/runtimescheduler/RuntimeScheduler.h>
 #import <react/renderer/runtimescheduler/RuntimeSchedulerCallInvoker.h>
+
 #if __has_include(<React/RCTRuntimeExecutorFromBridge.h>)
 #import <React/RCTRuntimeExecutorFromBridge.h>
 #endif  // __has_include(<React/RCTRuntimeExecutorFromBridge.h>)
+
 #define USE_RUNTIME_SCHEDULER 1
 #endif  // __has_include(<react/renderer/runtimescheduler/SchedulerPriorityUtils.h>)
 

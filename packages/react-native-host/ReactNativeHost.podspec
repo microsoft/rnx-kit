@@ -10,12 +10,7 @@ repo_dir = repository['directory']
 
 new_arch_enabled = ENV['RCT_NEW_ARCH_ENABLED'] == '1'
 preprocessor_definitions = [
-  'FOLLY_CFG_NO_COROUTINES=1',
-  'FOLLY_HAVE_CLOCK_GETTIME=1',
-  'FOLLY_HAVE_PTHREAD=1',
-  'FOLLY_MOBILE=1',
-  'FOLLY_NO_CONFIG=1',
-  'FOLLY_USE_LIBCPP=1',
+  '$(inherit)',
   "USE_HERMES=#{ENV['USE_HERMES'] || '0'}",
 ]
 if new_arch_enabled
@@ -51,17 +46,13 @@ Pod::Spec.new do |s|
   end
 
   s.pod_target_xcconfig = {
-    'CLANG_CXX_LANGUAGE_STANDARD' => 'gnu++20',
+    'CLANG_CXX_LANGUAGE_STANDARD' => 'c++20',
     'DEFINES_MODULE' => 'YES',
     'GCC_PREPROCESSOR_DEFINITIONS' => preprocessor_definitions,
     'HEADER_SEARCH_PATHS' => [
-      '$(PODS_ROOT)/boost',
-      '$(PODS_ROOT)/boost-for-react-native',
-      '$(PODS_ROOT)/RCT-Folly',
-      '$(PODS_ROOT)/DoubleConversion',
       '$(PODS_ROOT)/Headers/Private/React-Core',
-      '$(PODS_ROOT)/Headers/Private/Yoga',
-    ],
+      '$(PODS_CONFIGURATION_BUILD_DIR)/React-runtimescheduler/React_runtimescheduler.framework/Headers',
+    ].join(' '),
   }
 
   # Include both package and repository relative paths to allow the podspec to
@@ -71,4 +62,6 @@ Pod::Spec.new do |s|
                            "#{repo_dir}/#{source_files}"         # :podspec
   s.public_header_files  = public_header_files,                  # :path
                            "#{repo_dir}/#{public_header_files}"  # :podspec
+
+  install_modules_dependencies(s)
 end
