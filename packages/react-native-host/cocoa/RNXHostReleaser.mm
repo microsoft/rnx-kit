@@ -34,9 +34,9 @@
 #if !TARGET_OS_OSX
     // This may initialize `RCTAccessibilityManager` and must therefore be run
     // on the main queue.
-    __weak typeof(self) weakSelf = self;
+    __weak __typeof(self) weakSelf = self;
     RCTExecuteOnMainQueue(^{
-      typeof(self) strongSelf = weakSelf;
+      __typeof(self) strongSelf = weakSelf;
       if (strongSelf == nil) {
           return;
       }
@@ -50,7 +50,7 @@
       RCTExecuteOnUIManagerQueue(^{
         [manager addUIBlock:^(RCTUIManager *uiManager,
                               NSDictionary<NSNumber *, UIView *> *viewRegistry) {
-          typeof(self) strongSelf = weakSelf;
+          __typeof(self) strongSelf = weakSelf;
           if (strongSelf == nil) {
               return;
           }
