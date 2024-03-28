@@ -1,5 +1,11 @@
 # @rnx-kit/react-native-host
 
+## 0.4.6
+
+### Patch Changes
+
+- f849c5a: Fixed building with `use_frameworks!`
+
 ## 0.4.5
 
 ### Patch Changes
