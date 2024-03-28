@@ -1,5 +1,11 @@
 # @react-native-webapis/web-storage
 
+## 0.2.4
+
+### Patch Changes
+
+- 341a40d: `NSPrivacyCollectedDataTypes` needs to be present even if we don't collect any data
+
 ## 0.2.3
 
 ### Patch Changes

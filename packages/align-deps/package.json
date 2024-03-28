@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/align-deps",
-  "version": "2.4.0",
+  "version": "2.4.1",
   "description": "Manage dependencies within a repository and across many repositories",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/align-deps#readme",
   "license": "MIT",
