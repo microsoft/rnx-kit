@@ -53,16 +53,18 @@ For example, if you previously had something like this:
 @end
 
 // AppDelegate.m
-@implementation AppDelegate
+@implementation AppDelegate {
+    RCTBridge *_bridge;
+}
 
 - (BOOL)application:(UIApplication *)application
     didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     ...
 
-    RCTBridge *bridge = [[RCTBridge alloc] initWithDelegate:self
-                                              launchOptions:launchOptions];
-    RCTRootView *rootView = [[RCTRootView alloc] initWithBridge:bridge
+    _bridge = [[RCTBridge alloc] initWithDelegate:self
+                                    launchOptions:launchOptions];
+    RCTRootView *rootView = [[RCTRootView alloc] initWithBridge:_bridge
                                                      moduleName:moduleName
                                               initialProperties:initialProperties];
 
@@ -83,16 +85,18 @@ You should instead have:
 @end
 
 // AppDelegate.m
-@implementation AppDelegate
+@implementation AppDelegate {
+    ReactNativeHost *_host;
+}
 
 - (BOOL)application:(UIApplication *)application
     didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     ...
 
-    ReactNativeHost *host = [[ReactNativeHost alloc] initWithConfig:self];
-    UIView *rootView = [host viewWithModuleName:moduleName
-                              initialProperties:initialProperties];
+    _host = [[ReactNativeHost alloc] initWithConfig:self];
+    UIView *rootView = [_host viewWithModuleName:moduleName
+                               initialProperties:initialProperties];
 
     ...
 }
