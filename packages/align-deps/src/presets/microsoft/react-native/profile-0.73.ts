@@ -110,7 +110,7 @@ export const profile: Profile = {
   },
   netinfo: {
     name: "@react-native-community/netinfo",
-    version: "^11.0.1",
+    version: "^11.3.1",
   },
   "safe-area": {
     name: "react-native-safe-area-context",
