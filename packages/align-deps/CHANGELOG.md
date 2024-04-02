@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/align-deps
 
+## 2.4.1
+
+### Patch Changes
+
+- e7ad713: `--write` should add capabilities when used with `--no-unmanaged`
+
 ## 2.4.0
 
 ### Minor Changes

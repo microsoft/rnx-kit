@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/console
 
+## 1.0.13
+
+### Patch Changes
+
+- ff4fe4c: Inline the colors we use and drop `chalk`
+
 ## 1.0.12
 
 ### Patch Changes

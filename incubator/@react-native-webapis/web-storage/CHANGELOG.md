@@ -1,5 +1,12 @@
 # @react-native-webapis/web-storage
 
+## 0.2.4
+
+### Patch Changes
+
+- 341a40d: `NSPrivacyCollectedDataTypes` needs to be present even if we don't collect any data
+- b6610b5: Fixed build errors when targeting canary builds of `react-native-windows`
+
 ## 0.2.3
 
 ### Patch Changes

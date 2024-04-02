@@ -1,5 +1,13 @@
 # Change Log - @rnx-kit/babel-preset-metro-react-native
 
+## 1.1.7
+
+### Patch Changes
+
+- 6dd0e03: Deprecate `looseClassTransform`
+- Updated dependencies [ff4fe4c]
+  - @rnx-kit/console@1.0.13
+
 ## 1.1.6
 
 ### Patch Changes
