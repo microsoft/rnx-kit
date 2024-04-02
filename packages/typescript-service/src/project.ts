@@ -1,4 +1,3 @@
-import chalk from "chalk";
 import ts from "typescript";
 import { ExternalFileCache, ProjectFileCache } from "./cache";
 import type { DiagnosticWriter } from "./diagnostics";
@@ -41,9 +40,9 @@ export class Project {
       //getCancellationToken?(): HostCancellationToken;
       getCurrentDirectory: () => process.cwd(),
       getDefaultLibFileName: (o) => ts.getDefaultLibFilePath(o),
-      log: (s: string): void => console.log(chalk.cyanBright(s)),
-      trace: (s: string): void => console.log(chalk.greenBright(s)),
-      error: (s: string): void => console.error(chalk.redBright(s)),
+      //log: (s: string): void;
+      //trace: (s: string): void;
+      //error: (s: string): void;
       //useCaseSensitiveFileNames?(): boolean;
 
       /*
