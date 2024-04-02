@@ -24,6 +24,7 @@
     "test": "NODE_OPTIONS=--experimental-vm-modules rnx-kit-scripts test"
   },
   "dependencies": {
+    "@rnx-kit/console": "^1.0.12",
     "babel-plugin-const-enum": "^1.0.0"
   },
   "peerDependencies": {
