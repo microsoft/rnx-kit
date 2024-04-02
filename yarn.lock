@@ -3758,7 +3758,6 @@ __metadata:
     "@rnx-kit/tsconfig": "npm:*"
     "@types/jest": "npm:^29.2.1"
     "@types/node": "npm:^20.0.0"
-    chalk: "npm:^4.1.0"
     eslint: "npm:^8.56.0"
     jest: "npm:^29.2.1"
     prettier: "npm:^3.0.0"

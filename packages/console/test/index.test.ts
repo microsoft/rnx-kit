@@ -1,7 +1,5 @@
 import { error, info, warn } from "../src/index";
 
-jest.mock("chalk");
-
 describe("console", () => {
   const consoleErrorSpy = jest.spyOn(global.console, "error");
   const consoleLogSpy = jest.spyOn(global.console, "log");

@@ -34,9 +34,6 @@
     "lint": "rnx-kit-scripts lint",
     "test": "rnx-kit-scripts test"
   },
-  "dependencies": {
-    "chalk": "^4.1.0"
-  },
   "devDependencies": {
     "@rnx-kit/eslint-config": "*",
     "@rnx-kit/jest-preset": "*",
