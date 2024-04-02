@@ -1,8 +1,7 @@
 // https://github.com/react-native-community/cli/blob/716555851b442a83a1bf5e0db27b6226318c9a69/packages/cli-plugin-metro/src/commands/bundle/buildBundle.ts
 
-import { error, info } from "@rnx-kit/console";
+import { bold, error, info } from "@rnx-kit/console";
 import { requireModuleFromMetro } from "@rnx-kit/tools-react-native/metro";
-import chalk from "chalk";
 import * as fs from "fs";
 import type { ConfigT } from "metro-config";
 import type { BundleOptions, OutputOptions } from "metro/src/shared/types";
@@ -91,13 +90,13 @@ export async function bundle(
   if (config.resolver.platforms.indexOf(args.platform) === -1) {
     error(
       `Invalid platform ${
-        args.platform ? `"${chalk.bold(args.platform)}" ` : ""
+        args.platform ? `"${bold(args.platform)}" ` : ""
       }selected.`
     );
 
     info(
       `Available platforms are: ${config.resolver.platforms
-        .map((x) => `"${chalk.bold(x)}"`)
+        .map((x) => `"${bold(x)}"`)
         .join(
           ", "
         )}. If you are trying to bundle for an out-of-tree platform, it may not be installed.`
