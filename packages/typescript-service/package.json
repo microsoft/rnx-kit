@@ -26,8 +26,7 @@
     "test": "rnx-kit-scripts test"
   },
   "dependencies": {
-    "@rnx-kit/tools-node": "^2.0.0",
-    "chalk": "^4.1.0"
+    "@rnx-kit/tools-node": "^2.0.0"
   },
   "peerDependencies": {
     "typescript": ">=4.0"
