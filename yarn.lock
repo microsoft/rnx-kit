@@ -3549,6 +3549,7 @@ __metadata:
     "@babel/core": "npm:^7.20.0"
     "@babel/plugin-transform-typescript": "npm:^7.20.0"
     "@rnx-kit/babel-plugin-import-path-remapper": "npm:*"
+    "@rnx-kit/console": "npm:^1.0.12"
     "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"

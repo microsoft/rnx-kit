@@ -26,6 +26,25 @@
  */
 
 /**
+ * Converts version string to a number.
+ * @param {string} version
+ * @returns {number}
+ */
+function parseVersion(version) {
+  const [major, minor = 0] = version.split(".");
+  return Number(major) * 1000 + Number(minor);
+}
+
+/**
+ * Returns whether Babel implements compiler assumptions.
+ * @param {ConfigAPI | undefined} api
+ * @returns {boolean}
+ */
+function hasCompilerAssumptions(api) {
+  return Boolean(api?.version && parseVersion(api.version) >= 7013);
+}
+
+/**
  * Returns plugin for transforming `const enum` if necessary.
  *
  * @babel/plugin-transform-typescript doesn't support `const enum`s until 7.15.
@@ -36,8 +55,7 @@ function constEnumPlugin() {
     const {
       version,
     } = require("@babel/plugin-transform-typescript/package.json");
-    const { [0]: major, [1]: minor } = version.split(".");
-    if (Number(major) * 1000 + Number(minor) >= 7015) {
+    if (parseVersion(version) >= 7015) {
       return [];
     }
   } catch (_) {
@@ -136,7 +154,7 @@ function overridesFor(transformProfile, env) {
  * @type {(api?: ConfigAPI, opts?: PresetOptions) => TransformOptions}
  */
 module.exports = (
-  _,
+  api,
   {
     additionalPlugins,
     looseClassTransform,
@@ -164,6 +182,12 @@ module.exports = (
   });
 
   if (looseClassTransform) {
+    if (hasCompilerAssumptions(api)) {
+      const { warn } = require("@rnx-kit/console");
+      warn(
+        "`looseClassTransform` is deprecated — consider migrating to the top level assumptions for more granular control (see https://babeljs.io/docs/babel-plugin-transform-classes#loose)"
+      );
+    }
     const pluginClasses = require.resolve("@babel/plugin-transform-classes", {
       paths: [babelPreset],
     });
