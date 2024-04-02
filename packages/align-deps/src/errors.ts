@@ -1,5 +1,4 @@
-import { error, info } from "@rnx-kit/console";
-import chalk from "chalk";
+import { bold, error, info } from "@rnx-kit/console";
 import type { ErrorCode } from "./types";
 
 export function isError<T>(config: T | ErrorCode): config is ErrorCode {
@@ -50,6 +49,6 @@ export function printError(manifestPath: string, code: ErrorCode): void {
 }
 
 export function printInfo(): void {
-  const url = chalk.bold("https://aka.ms/align-deps");
+  const url = bold("https://aka.ms/align-deps");
   info(`Visit ${url} for more information about align-deps.`);
 }

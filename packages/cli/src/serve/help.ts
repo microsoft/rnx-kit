@@ -1,5 +1,5 @@
+import { dim } from "@rnx-kit/console";
 import type { MetroTerminal } from "@rnx-kit/metro-service";
-import chalk from "chalk";
 
 type HelpOptions = {
   hasDebugger: boolean;
@@ -41,7 +41,6 @@ export function makeHelp(
   const labelWidth = menuItems.reduce(maxColumnWidth(1), 0);
   const separator = `┠${"─".repeat(labelWidth + keyWidth + margin + 1)}`;
 
-  const dim = chalk.dim;
   const lines = menuItems.map((item) => {
     if (!item) {
       return separator;
