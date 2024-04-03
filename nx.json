@@ -1,7 +1,5 @@
 {
-  "affected": {
-    "defaultBase": "main"
-  },
+  "defaultBase": "main",
   "namedInputs": {
     "default": ["{projectRoot}/**/*", "sharedGlobals"],
     "sharedGlobals": [
