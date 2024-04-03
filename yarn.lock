@@ -10461,11 +10461,11 @@ __metadata:
   linkType: hard
 
 "memfs@npm:^4.0.0":
-  version: 4.7.7
-  resolution: "memfs@npm:4.7.7"
+  version: 4.8.1
+  resolution: "memfs@npm:4.8.1"
   dependencies:
     tslib: "npm:^2.0.0"
-  checksum: 10c0/d5926b84ad50e5d36b3351a65e1736b7c0aae364498f0aa736deae4245e1bcaf33b5df2f13f84db687a2331da56e6aefd8e10af387969c977adfdb028ad11638
+  checksum: 10c0/08d24ef25bf158b6e59b20ca4d414a161018c5c34a54b725bd6df0a9a196d67155ea8f990915d3869ef8ebb0acb5d1eeda78d4ff5a87e435cdbe3a353d8c97e5
   languageName: node
   linkType: hard
 
