@@ -66,7 +66,6 @@
     "metro": "^0.80.0",
     "metro-config": "^0.80.0",
     "metro-core": "^0.80.0",
-    "metro-react-native-babel-transformer": "^0.76.5",
     "metro-resolver": "^0.80.0",
     "metro-runtime": "^0.80.0",
     "prettier": "^3.0.0",
