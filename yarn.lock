@@ -3555,6 +3555,7 @@ __metadata:
   dependencies:
     "@babel/core": "npm:^7.20.0"
     "@babel/plugin-transform-typescript": "npm:^7.20.0"
+    "@babel/runtime": "npm:^7.20.0"
     "@rnx-kit/babel-plugin-import-path-remapper": "npm:*"
     "@rnx-kit/console": "npm:^1.0.13"
     "@rnx-kit/eslint-config": "npm:*"
@@ -3570,8 +3571,9 @@ __metadata:
     prettier: "npm:^3.0.0"
     typescript: "npm:^5.0.0"
   peerDependencies:
-    "@babel/core": ^7.0.0
-    "@babel/plugin-transform-typescript": ^7.0.0
+    "@babel/core": ^7.20.0
+    "@babel/plugin-transform-typescript": ^7.20.0
+    "@babel/runtime": ^7.20.0
     "@react-native/babel-preset": "*"
     metro-react-native-babel-preset: "*"
   peerDependenciesMeta:
