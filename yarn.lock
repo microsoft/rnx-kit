@@ -2840,14 +2840,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@octokit/plugin-rest-endpoint-methods@npm:^11.0.0":
-  version: 11.0.1
-  resolution: "@octokit/plugin-rest-endpoint-methods@npm:11.0.1"
+"@octokit/plugin-rest-endpoint-methods@npm:^12.0.0":
+  version: 12.1.0
+  resolution: "@octokit/plugin-rest-endpoint-methods@npm:12.1.0"
   dependencies:
-    "@octokit/types": "npm:^12.6.0"
+    "@octokit/types": "npm:^13.0.0"
   peerDependencies:
     "@octokit/core": ">=6"
-  checksum: 10c0/148376dc0c6e3556ad08eef75b3e4a009cfd65bd7dc89473eca9f16ca2235f890ee5403aaf6bfb4204df3b807740995629ae29b55ac8812790659b24935a589d
+  checksum: 10c0/f419f763b2dd946177007e3c65e0917fe0cebe16241d647f8984ec327d3215487fd3ff45e74c78e1bfcf233fe6f4ab7fcb026ee11d38b094b56398af66462a3e
   languageName: node
   linkType: hard
 
@@ -2872,7 +2872,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@octokit/types@npm:^12.0.0, @octokit/types@npm:^12.6.0":
+"@octokit/types@npm:^12.0.0":
   version: 12.6.0
   resolution: "@octokit/types@npm:12.6.0"
   dependencies:
@@ -3618,7 +3618,7 @@ __metadata:
   resolution: "@rnx-kit/build@workspace:incubator/build"
   dependencies:
     "@octokit/core": "npm:^6.0.0"
-    "@octokit/plugin-rest-endpoint-methods": "npm:^11.0.0"
+    "@octokit/plugin-rest-endpoint-methods": "npm:^12.0.0"
     "@octokit/request-error": "npm:^6.0.0"
     "@rnx-kit/config": "npm:^0.6.0"
     "@rnx-kit/eslint-config": "npm:*"
