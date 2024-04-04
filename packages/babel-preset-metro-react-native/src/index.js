@@ -1,6 +1,7 @@
 /* jshint esversion: 8, node: true */
 // @ts-check
 "use strict";
+const path = require("path");
 
 /**
  * @typedef {import("@babel/core").ConfigAPI} ConfigAPI
@@ -36,12 +37,74 @@ function parseVersion(version) {
 }
 
 /**
+ * @param {string} id
+ * @param {Required<TransformOptions>["overrides"]} overrides
+ * @param {string} startDir
+ * @return {PluginItem | undefined}
+ */
+function findBabelPlugin(id, overrides, startDir) {
+  const plugin = require(require.resolve(id, { paths: [startDir] }));
+  for (const override of overrides) {
+    const entry = override.plugins?.find((p) => {
+      return Array.isArray(p) ? p[0] === plugin : p === plugin;
+    });
+    if (entry) {
+      return entry;
+    }
+  }
+  return undefined;
+}
+
+/**
  * Returns whether Babel implements compiler assumptions.
  * @param {ConfigAPI | undefined} api
  * @returns {boolean}
  */
 function hasCompilerAssumptions(api) {
   return Boolean(api?.version && parseVersion(api.version) >= 7013);
+}
+
+/**
+ * Configures `@babel/plugin-transform-classes` to emit less code for classes.
+ * Useful if you're using TypeScript and want to avoid additional checks.
+ * @param {Required<TransformOptions>} preset
+ * @param {string} babelPreset
+ * @param {ConfigAPI | undefined} api
+ */
+function configurePluginTransformClasses(preset, babelPreset, api) {
+  if (hasCompilerAssumptions(api)) {
+    const { warn } = require("@rnx-kit/console");
+    warn(
+      "`looseClassTransform` is deprecated — consider migrating to the top level assumptions for more granular control (see https://babeljs.io/docs/babel-plugin-transform-classes#loose)"
+    );
+  }
+
+  const plugin = findBabelPlugin(
+    "@babel/plugin-transform-classes",
+    preset.overrides,
+    babelPreset
+  );
+  if (Array.isArray(plugin)) {
+    plugin[1] = { loose: true };
+  }
+}
+
+/**
+ * Configures `@babel/plugin-transform-runtime` to ensure it works in a pnpm
+ * environment.
+ * @param {Required<TransformOptions>} preset
+ * @param {string} babelPreset
+ */
+function configurePluginTransformRuntime(preset, babelPreset) {
+  const plugin = findBabelPlugin(
+    "@babel/plugin-transform-runtime",
+    preset.overrides,
+    babelPreset
+  );
+  if (Array.isArray(plugin)) {
+    const runtime = require.resolve("@babel/runtime/package.json");
+    plugin[1].absoluteRuntime = path.dirname(runtime);
+  }
 }
 
 /**
@@ -67,7 +130,6 @@ function constEnumPlugin() {
 
 function loadPreset(projectRoot = process.cwd()) {
   const fs = require("fs");
-  const path = require("path");
 
   const manifestPath = path.join(projectRoot, "package.json");
   const manifest = fs.readFileSync(manifestPath, { encoding: "utf-8" });
@@ -182,18 +244,10 @@ module.exports = (
   });
 
   if (looseClassTransform) {
-    if (hasCompilerAssumptions(api)) {
-      const { warn } = require("@rnx-kit/console");
-      warn(
-        "`looseClassTransform` is deprecated — consider migrating to the top level assumptions for more granular control (see https://babeljs.io/docs/babel-plugin-transform-classes#loose)"
-      );
-    }
-    const pluginClasses = require.resolve("@babel/plugin-transform-classes", {
-      paths: [babelPreset],
-    });
-    overrides.push({
-      plugins: [[pluginClasses, { loose: true }]],
-    });
+    configurePluginTransformClasses(metroPreset, babelPreset, api);
+  }
+  if (options?.enableBabelRuntime !== false) {
+    configurePluginTransformRuntime(metroPreset, babelPreset);
   }
 
   return metroPreset;
