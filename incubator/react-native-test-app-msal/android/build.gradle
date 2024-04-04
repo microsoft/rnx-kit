@@ -179,7 +179,7 @@ dependencies {
     }
 
     implementation "com.google.android.material:material:1.11.0"
-    implementation "com.microsoft.identity.client:msal:5.2.0"
+    implementation "com.microsoft.identity.client:msal:5.2.1"
 
     //noinspection GradleDynamicVersion
     implementation "com.facebook.react:react-native:+"
