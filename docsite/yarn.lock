@@ -2468,7 +2468,7 @@ __metadata:
     "@docusaurus/core": "npm:^3.0.0"
     "@docusaurus/preset-classic": "npm:^3.0.0"
     "@tsconfig/docusaurus": "npm:^2.0.1"
-    clsx: "npm:^1.2.1"
+    clsx: "npm:^2.0.0"
     prism-react-renderer: "npm:^2.1.0"
     react: "npm:18.2.0"
     react-dom: "npm:18.2.0"
@@ -4153,13 +4153,6 @@ __metadata:
     kind-of: "npm:^6.0.2"
     shallow-clone: "npm:^3.0.0"
   checksum: 10c0/637753615aa24adf0f2d505947a1bb75e63964309034a1cf56ba4b1f30af155201edd38d26ffe26911adaae267a3c138b344a4947d39f5fc1b6d6108125aa758
-  languageName: node
-  linkType: hard
-
-"clsx@npm:^1.2.1":
-  version: 1.2.1
-  resolution: "clsx@npm:1.2.1"
-  checksum: 10c0/34dead8bee24f5e96f6e7937d711978380647e936a22e76380290e35486afd8634966ce300fc4b74a32f3762c7d4c0303f442c3e259f4ce02374eb0c82834f27
   languageName: node
   linkType: hard
 

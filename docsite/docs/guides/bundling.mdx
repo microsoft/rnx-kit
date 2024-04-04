@@ -214,9 +214,9 @@ for a complete list of configuration properties.
 
 Do the same thing for your `rnx-start` command, but only if you added
 command-line parameters. Use the
-[ServerConfig schema](/docs/tools/config#serverconfig-inherits-bundlerplugins)
-as a reference. If you don't needing any `ServerConfig`, the server will use
-bundler defaults so you end up serving the same way you bundle.
+[ServerConfig schema](/docs/tools/config#serverconfig) as a reference. If you
+don't needing any `ServerConfig`, the server will use bundler defaults so you
+end up serving the same way you bundle.
 
 ## Beyond the Command-Line
 
@@ -243,7 +243,7 @@ you're used to, right in the Metro output:
 
 TypeScript validation is **on** by default. You can configure it by passing
 options with the `@rnx-kit/metro-plugin-typescript` entry in
-[plugins](/docs/tools/config#bundlerplugins) configuration property.
+[plugins](/docs/tools/config#bundleparameters) configuration property.
 
 ```diff title=package.json
  {
@@ -265,7 +265,7 @@ Tree shaking makes your app bundle smaller by eliminating unused code.
 Sometimes, a LOT smaller. :chart_with_downwards_trend:
 
 Tree shaking is _off_ by default. You can control it with the
-[treeShake](/docs/tools/config#bundlerplugins) configuration property.
+[treeShake](/docs/tools/config#bundleparameters) configuration property.
 
 ```json title=package.json
 {
@@ -295,7 +295,7 @@ the duplicated package has global state.
 
 Duplicate detection is **on** by default. You can configure it by passing
 options with the `@rnx-kit/metro-plugin-duplicates-checker` entry in
-[plugins](/docs/tools/config#bundlerplugins) configuration property.
+[plugins](/docs/tools/config#bundleparameters) configuration property.
 
 ```diff title=package.json
  {
@@ -328,7 +328,7 @@ A cycle in your dependency graph will look somthing like this: `logger` requires
 Cycles can be bad news. Detecting them is **on** by default. You can configure
 it by passing options with the
 `@rnx-kit/metro-plugin-cyclic-dependencies-detector` entry in
-[plugins](/docs/tools/config#bundlerplugins) configuration property.
+[plugins](/docs/tools/config#bundleparameters) configuration property.
 
 ```diff title=package.json
  {
