@@ -7,12 +7,12 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-rayon = "1.7.0"
-swc_common = "0.31.21"
-swc_ecma_parser = "0.137.15"
-swc_ecma_visit = "0.93.7"
-swc_ecmascript = "0.231.40"
-walkdir = "2.3.3"
+rayon = "1.10.0"
+swc_common = "0.33.22"
+swc_ecma_parser = "0.143.12"
+swc_ecma_visit = "0.98.7"
+swc_ecmascript = "0.239.21"
+walkdir = "2.5.0"
 
 [profile.release]
 # Tell `rustc` to optimize for small code size.
