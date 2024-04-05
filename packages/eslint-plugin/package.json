@@ -46,11 +46,10 @@
     "@eslint/eslintrc": "^2.1.4",
     "@eslint/js": "^8.56.0",
     "@react-native/eslint-plugin": "^0.74.0",
-    "@typescript-eslint/eslint-plugin": "^7.0.0",
-    "@typescript-eslint/parser": "^7.0.0",
     "enhanced-resolve": "^5.8.3",
     "eslint-plugin-react": "^7.33.0",
-    "eslint-plugin-react-hooks": "^4.6.0"
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "typescript-eslint": "^7.5.0"
   },
   "peerDependencies": {
     "eslint": ">=8.56.0"
@@ -67,6 +66,7 @@
     "@types/estree": "*",
     "@types/jest": "^29.2.1",
     "@types/node": "^20.0.0",
+    "@typescript-eslint/parser": "^7.0.0",
     "@typescript-eslint/types": "^7.0.0",
     "eslint": "^8.56.0",
     "eslint-plugin-node": "11.1.0",
