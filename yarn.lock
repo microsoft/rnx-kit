@@ -3706,7 +3706,7 @@ __metadata:
     metro-babel-transformer: "npm:^0.80.0"
     metro-config: "npm:^0.80.0"
     node-fetch: "npm:^2.6.7"
-    ora: "npm:^8.0.0"
+    ora: "npm:^5.4.1"
     prettier: "npm:^3.0.0"
     qrcode: "npm:^1.5.0"
     react: "npm:18.2.0"
