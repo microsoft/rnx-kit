@@ -48,7 +48,7 @@
     "env-paths": "^3.0.0",
     "fast-xml-parser": "^4.0.0",
     "node-fetch": "^3.3.2",
-    "ora": "^7.0.1",
+    "ora": "^8.0.0",
     "qrcode": "^1.5.0",
     "yargs": "^16.0.0"
   },
