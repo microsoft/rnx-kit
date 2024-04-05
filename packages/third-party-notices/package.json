@@ -32,7 +32,7 @@
   "dependencies": {
     "@rnx-kit/console": "^1.0.11",
     "@rnx-kit/tools-node": "^2.0.0",
-    "spdx-expression-parse": "^3.0.1",
+    "spdx-expression-parse": "^4.0.0",
     "yargs": "^16.0.0"
   },
   "devDependencies": {
