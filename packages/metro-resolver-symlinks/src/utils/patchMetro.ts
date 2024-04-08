@@ -138,7 +138,7 @@ export function patchMetro(options: Options): void {
         }
 
         const stat = fs.lstatSync(filePath);
-        return filePath + '|' + stat.mtime.toISOString();
+        return filePath + "|" + stat.mtime.toISOString();
       }
 
       throw e;
