@@ -587,13 +587,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"azure-devops-node-api@npm:^12.0":
-  version: 12.5.0
-  resolution: "azure-devops-node-api@npm:12.5.0"
+"azure-devops-node-api@npm:^13.0.0":
+  version: 13.0.0
+  resolution: "azure-devops-node-api@npm:13.0.0"
   dependencies:
     tunnel: "npm:0.0.6"
     typed-rest-client: "npm:^1.8.4"
-  checksum: 10c0/c0b9ce30456d90056aefac88239770def2430a22d37c1518a036d170612fda647cc7da17d5dca35b9632a5e486b6acb3593f8cd40d574bbebac317a2b9031159
+  checksum: 10c0/c74414e67ceb910c9e709bbd8cbe62fd99b2c0c28153d6610f705887ebecd438478b3736350b3dc59c0638ba7730c09b9b8255e8c443ab802ff53b20ccdceaea
   languageName: node
   linkType: hard
 
@@ -2930,7 +2930,7 @@ __metadata:
     "@octokit/plugin-rest-endpoint-methods": "npm:^11.0"
     "@rnx-kit/tsconfig": "npm:^1.0"
     "@types/node": "npm:^20.0"
-    azure-devops-node-api: "npm:^12.0"
+    azure-devops-node-api: "npm:^13.0.0"
     codecov: "npm:^3.0"
     eslint: "npm:^8.56"
     parse-diff: "npm:^0.11"
