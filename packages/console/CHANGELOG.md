@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/console
 
+## 1.1.0
+
+### Minor Changes
+
+- 1209e09: Added `bold` and `dim`
+
 ## 1.0.13
 
 ### Patch Changes

@@ -1,5 +1,16 @@
 # Change Log - @rnx-kit/cli
 
+## 0.16.25
+
+### Patch Changes
+
+- 1209e09: Use colors from `@rnx-kit/console` and drop `chalk`
+- Updated dependencies [1209e09]
+- Updated dependencies [1209e09]
+  - @rnx-kit/metro-service@3.1.6
+  - @rnx-kit/align-deps@2.4.2
+  - @rnx-kit/console@1.1.0
+
 ## 0.16.24
 
 ### Patch Changes

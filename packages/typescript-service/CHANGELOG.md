@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/typescript-service
 
+## 1.5.8
+
+### Patch Changes
+
+- f84302d: Unset unused loggers
+
 ## 1.5.7
 
 ### Patch Changes
