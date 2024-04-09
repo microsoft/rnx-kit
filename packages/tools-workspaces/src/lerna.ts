@@ -44,7 +44,9 @@ export async function findWorkspacePackages(
 
 export function findWorkspacePackagesSync(configFile: string): string[] {
   const { packages, useWorkspaces } = readJSONSync(configFile);
-  if (!useWorkspaces) {
+  // `useWorkspaces` was deprecated: https://github.com/lerna/lerna/releases/tag/7.0.0
+  // respect Lerna `packages` property
+  if (packages && useWorkspaces !== true) {
     return findPackagesSync(packages, path.dirname(configFile));
   }
 
