@@ -64,6 +64,32 @@ function makeFindPackages<R>(
   };
 }
 
+function makeGetImplementation<R>(
+  require: (id: string) => R
+): (sentinel: string) => R {
+  return (sentinel) => {
+    switch (path.basename(sentinel)) {
+      case BUN_LOCKB: // fallthrough — logic defining workspaces config is the same as for npm and yarn
+      case PACKAGE_LOCK_JSON: // fallthrough — logic defining workspaces config is the same for npm and yarn
+      case YARN_LOCK:
+        return require("./yarn");
+
+      case LERNA_JSON:
+        return require("./lerna");
+
+      case PNPM_WORKSPACE_YAML:
+        return require("./pnpm");
+
+      case RUSH_JSON:
+        return require("./rush");
+    }
+
+    throw new Error(
+      `This should not happen - did we forget to add a switch case for '${sentinel}'?`
+    );
+  };
+}
+
 export const findPackages = makeFindPackages(
   fg,
   Promise.resolve([]),
@@ -75,49 +101,12 @@ export const findPackagesSync = makeFindPackages(fg.sync, [], dirnameAll);
 export const findSentinel = makeFindSentinel(findUp);
 export const findSentinelSync = makeFindSentinel(findUp.sync);
 
-export function getImplementation(sentinel: string): Promise<PackageManager> {
-  switch (path.basename(sentinel)) {
-    case BUN_LOCKB: // fallthrough — logic defining workspaces config is the same as for npm and yarn
-    case PACKAGE_LOCK_JSON: // fallthrough — logic defining workspaces config is the same for npm and yarn
-    case YARN_LOCK:
-      return import("./yarn");
+export const getImplementation = makeGetImplementation<Promise<PackageManager>>(
+  (id: string) => import(id)
+);
 
-    case LERNA_JSON:
-      return import("./lerna");
-
-    case PNPM_WORKSPACE_YAML:
-      return import("./pnpm");
-
-    case RUSH_JSON:
-      return import("./rush");
-  }
-
-  throw new Error(
-    `This should not happen - did we forget to add a switch case for '${sentinel}'?`
-  );
-}
-
-export function getImplementationSync(sentinel: string): PackageManager {
-  switch (path.basename(sentinel)) {
-    case BUN_LOCKB: // fallthrough — logic defining workspaces config is the same as for npm and yarn
-    case PACKAGE_LOCK_JSON: // fallthrough — logic defining workspaces config is the same for npm and yarn
-    case YARN_LOCK:
-      return require("./yarn");
-
-    case LERNA_JSON:
-      return require("./lerna");
-
-    case PNPM_WORKSPACE_YAML:
-      return require("./pnpm");
-
-    case RUSH_JSON:
-      return require("./rush");
-  }
-
-  throw new Error(
-    `This should not happen - did we forget to add a switch case for '${sentinel}'?`
-  );
-}
+export const getImplementationSync =
+  makeGetImplementation<PackageManager>(require);
 
 export async function readJSON(path: string) {
   const json = await readFile(path, { encoding: "utf-8" });
