@@ -1,5 +1,13 @@
 # Change Log - @rnx-kit/metro-service
 
+## 3.1.6
+
+### Patch Changes
+
+- 1209e09: Use colors from `@rnx-kit/console` and drop `chalk`
+- Updated dependencies [1209e09]
+  - @rnx-kit/console@1.1.0
+
 ## 3.1.5
 
 ### Patch Changes

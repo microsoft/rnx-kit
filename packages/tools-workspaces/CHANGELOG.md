@@ -1,5 +1,11 @@
 # @rnx-kit/tools-workspaces
 
+## 0.1.6
+
+### Patch Changes
+
+- edc19a4: fix findWorkspacePackagesSync lerna 7+ incompatibility
+
 ## 0.1.5
 
 ### Patch Changes

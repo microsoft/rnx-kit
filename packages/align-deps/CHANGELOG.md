@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/align-deps
 
+## 2.4.2
+
+### Patch Changes
+
+- 1209e09: Use colors from `@rnx-kit/console` and drop `chalk`
+
 ## 2.4.1
 
 ### Patch Changes

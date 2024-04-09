@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/tools-workspaces",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "A collection of tools for working with workspaces",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/tools-workspaces#readme",
   "license": "MIT",

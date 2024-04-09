@@ -1,5 +1,13 @@
 # Change Log - @rnx-kit/babel-preset-metro-react-native
 
+## 1.1.8
+
+### Patch Changes
+
+- b9f259a: Ensure `@babel/runtime` can be found in a pnpm environment
+- Updated dependencies [1209e09]
+  - @rnx-kit/console@1.1.0
+
 ## 1.1.7
 
 ### Patch Changes
