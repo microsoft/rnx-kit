@@ -250,12 +250,26 @@ using ReactNativeConfig = facebook::react::EmptyReactNativeConfig const;
 #endif  // USE_HERMES
     };
 
-    _reactHost = [[RCTHost alloc] initWithBundleURL:[self sourceURLForBridge:nil]
-                                       hostDelegate:nil
-                         turboModuleManagerDelegate:_turboModuleAdapter
-                                   jsEngineProvider:jsEngineProvider];
-
     __weak __typeof(self) weakSelf = self;
+    if ([RCTHost instancesRespondToSelector:@selector
+                 (initWithBundleURLProvider:
+                               hostDelegate:turboModuleManagerDelegate:jsEngineProvider
+                                           :launchOptions:)]) {
+        _reactHost = [[RCTHost alloc]
+             initWithBundleURLProvider:^{
+               return [weakSelf sourceURLForBridge:nil];
+             }
+                          hostDelegate:nil
+            turboModuleManagerDelegate:_turboModuleAdapter
+                      jsEngineProvider:jsEngineProvider
+                         launchOptions:nil];
+    } else {
+        _reactHost = [[RCTHost alloc] initWithBundleURL:[self sourceURLForBridge:nil]
+                                           hostDelegate:nil
+                             turboModuleManagerDelegate:_turboModuleAdapter
+                                       jsEngineProvider:jsEngineProvider];
+    }
+
     [_reactHost setBundleURLProvider:^NSURL *() {
       return [weakSelf sourceURLForBridge:nil];
     }];
