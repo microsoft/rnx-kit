@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-resolver-symlinks
 
+## 0.1.36
+
+### Patch Changes
+
+- 487d867: Ensure hash uniqueness when `experimental_retryResolvingFromDisk` is enabled
+
 ## 0.1.35
 
 ### Patch Changes
