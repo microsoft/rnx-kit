@@ -1,5 +1,11 @@
 # @rnx-kit/react-native-host
 
+## 0.4.7
+
+### Patch Changes
+
+- 9f51524: Handle `launchOptions` being added to `RCTHost` initializer in 0.74 (see https://github.com/facebook/react-native/pull/43757)
+
 ## 0.4.6
 
 ### Patch Changes

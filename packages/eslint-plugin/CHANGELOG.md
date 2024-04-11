@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/eslint-plugin
 
+## 0.7.1
+
+### Patch Changes
+
+- 576f29a: Migrate to `typescript-eslint`
+
 ## 0.7.0
 
 ### Minor Changes
