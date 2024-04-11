@@ -23,6 +23,21 @@ using SharedJSRuntimeFactory = std::shared_ptr<facebook::react::JSRuntimeFactory
 @interface RCTHost (Compatibility)
 @property (nonatomic, readonly) RCTModuleRegistry *moduleRegistry;      // Introduced in 0.74
 @property (nonatomic, readonly) RCTSurfacePresenter *surfacePresenter;  // Introduced in 0.74
+
+// Introduced in 0.74
+- (instancetype)initWithBundleURLProvider:(RCTHostBundleURLProvider)provider
+                             hostDelegate:(id<RCTHostDelegate>)hostDelegate
+               turboModuleManagerDelegate:
+                   (id<RCTTurboModuleManagerDelegate>)turboModuleManagerDelegate
+                         jsEngineProvider:(RCTHostJSEngineProvider)jsEngineProvider
+                            launchOptions:(nullable NSDictionary *)launchOptions;
+
+// Deprecated in 0.74
+- (instancetype)initWithBundleURL:(NSURL *)bundleURL
+                     hostDelegate:(id<RCTHostDelegate>)hostDelegate
+       turboModuleManagerDelegate:(id<RCTTurboModuleManagerDelegate>)turboModuleManagerDelegate
+                 jsEngineProvider:(RCTHostJSEngineProvider)jsEngineProvider;
+
 - (RCTModuleRegistry *)getModuleRegistry;      // Deprecated in 0.74, and removed in 0.75
 - (RCTSurfacePresenter *)getSurfacePresenter;  // Deprecated in 0.74, and removed in 0.75
 @end

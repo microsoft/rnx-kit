@@ -24,8 +24,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)init NS_UNAVAILABLE;
 
-- (instancetype)initWithConfig:(id<RNXHostConfig>)config NS_DESIGNATED_INITIALIZER
-    NS_SWIFT_NAME(init(_:));
+- (instancetype)initWithConfig:(id<RNXHostConfig>)config NS_SWIFT_NAME(init(_:));
+
+- (instancetype)initWithConfig:(id<RNXHostConfig>)config
+                 launchOptions:(nullable NSDictionary *)launchOptions NS_DESIGNATED_INITIALIZER
+    NS_SWIFT_NAME(init(_:launchOptions:));
 
 - (void)shutdown;
 

@@ -31,6 +31,7 @@ using ReactNativeConfig = facebook::react::EmptyReactNativeConfig const;
 
 @implementation ReactNativeHost {
     __weak id<RNXHostConfig> _config;
+    NSDictionary *_launchOptions;
     RNXTurboModuleAdapter *_turboModuleAdapter;
     RCTSurfacePresenterBridgeAdapter *_surfacePresenterBridgeAdapter;
     RCTBridge *_bridge;
@@ -41,6 +42,11 @@ using ReactNativeConfig = facebook::react::EmptyReactNativeConfig const;
 }
 
 - (instancetype)initWithConfig:(id<RNXHostConfig>)config
+{
+    return [self initWithConfig:config launchOptions:nil];
+}
+
+- (instancetype)initWithConfig:(id<RNXHostConfig>)config launchOptions:(NSDictionary *)launchOptions
 {
     if (self = [super init]) {
         if ([config respondsToSelector:@selector(isDevLoadingViewEnabled)]) {
@@ -64,6 +70,7 @@ using ReactNativeConfig = facebook::react::EmptyReactNativeConfig const;
         }
 
         _config = config;
+        _launchOptions = launchOptions;
         [self enableTurboModule];
         _isShuttingDown = [[NSLock alloc] init];
 
@@ -90,7 +97,7 @@ using ReactNativeConfig = facebook::react::EmptyReactNativeConfig const;
 
     @try {
         if (_bridge == nil) {
-            _bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:nil];
+            _bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:_launchOptions];
             _surfacePresenterBridgeAdapter = RNXInstallSurfacePresenterBridgeAdapter(_bridge);
             [_hostReleaser setBridge:_bridge];
         }
@@ -250,12 +257,26 @@ using ReactNativeConfig = facebook::react::EmptyReactNativeConfig const;
 #endif  // USE_HERMES
     };
 
-    _reactHost = [[RCTHost alloc] initWithBundleURL:[self sourceURLForBridge:nil]
-                                       hostDelegate:nil
-                         turboModuleManagerDelegate:_turboModuleAdapter
-                                   jsEngineProvider:jsEngineProvider];
-
     __weak __typeof(self) weakSelf = self;
+    if ([RCTHost instancesRespondToSelector:@selector
+                 (initWithBundleURLProvider:
+                               hostDelegate:turboModuleManagerDelegate:jsEngineProvider
+                                           :launchOptions:)]) {
+        _reactHost = [[RCTHost alloc]
+             initWithBundleURLProvider:^{
+               return [weakSelf sourceURLForBridge:nil];
+             }
+                          hostDelegate:nil
+            turboModuleManagerDelegate:_turboModuleAdapter
+                      jsEngineProvider:jsEngineProvider
+                         launchOptions:_launchOptions];
+    } else {
+        _reactHost = [[RCTHost alloc] initWithBundleURL:[self sourceURLForBridge:nil]
+                                           hostDelegate:nil
+                             turboModuleManagerDelegate:_turboModuleAdapter
+                                       jsEngineProvider:jsEngineProvider];
+    }
+
     [_reactHost setBundleURLProvider:^NSURL *() {
       return [weakSelf sourceURLForBridge:nil];
     }];
