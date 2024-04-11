@@ -10,6 +10,7 @@ module.exports = {
   configs: {
     recommended: require("./configs/recommended"),
     strict: require("./configs/strict"),
+    stylistic: require("typescript-eslint").configs.stylistic,
   },
   rules: require("./rules").rules,
 };

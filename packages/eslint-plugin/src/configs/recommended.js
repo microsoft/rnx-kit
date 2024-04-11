@@ -3,6 +3,7 @@
 
 const { FlatCompat } = require("@eslint/eslintrc");
 const js = require("@eslint/js");
+const tseslint = require("typescript-eslint");
 
 const compat = new FlatCompat({
   baseDirectory: __dirname,
@@ -22,18 +23,14 @@ function isInstalled(spec) {
 }
 
 const usesReact = isInstalled("react");
-const configs = ["plugin:@typescript-eslint/recommended"];
-if (usesReact) {
-  configs.push("plugin:react-hooks/recommended", "plugin:react/recommended");
-}
+const reactConfigs = usesReact
+  ? compat.extends("plugin:react-hooks/recommended", "plugin:react/recommended")
+  : [];
 
 module.exports = [
-  ...compat.extends(...configs),
+  ...tseslint.configs.recommended,
+  ...reactConfigs,
   {
-    languageOptions: {
-      // @ts-expect-error No declaration file for module
-      parser: require("@typescript-eslint/parser"),
-    },
     plugins: {
       // @ts-expect-error No declaration file for module
       "@react-native": require("@react-native/eslint-plugin"),

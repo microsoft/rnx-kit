@@ -11,10 +11,8 @@ const compat = new FlatCompat({
 
 module.exports = [
   ...rnx.configs.strict,
-  ...compat.extends(
-    "plugin:@microsoft/sdl/required",
-    "plugin:@typescript-eslint/stylistic"
-  ),
+  ...rnx.configs.stylistic,
+  ...compat.extends("plugin:@microsoft/sdl/required"),
   {
     rules: {
       "@typescript-eslint/consistent-type-definitions": ["error", "type"],

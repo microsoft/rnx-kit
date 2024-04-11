@@ -3859,7 +3859,6 @@ __metadata:
     "@types/estree": "npm:*"
     "@types/jest": "npm:^29.2.1"
     "@types/node": "npm:^20.0.0"
-    "@typescript-eslint/eslint-plugin": "npm:^7.0.0"
     "@typescript-eslint/parser": "npm:^7.0.0"
     "@typescript-eslint/types": "npm:^7.0.0"
     enhanced-resolve: "npm:^5.8.3"
@@ -3870,6 +3869,7 @@ __metadata:
     jest: "npm:^29.2.1"
     prettier: "npm:^3.0.0"
     typescript: "npm:^5.0.0"
+    typescript-eslint: "npm:^7.5.0"
   peerDependencies:
     eslint: ">=8.56.0"
   languageName: unknown
@@ -4921,7 +4921,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript-eslint/eslint-plugin@npm:^7.0.0":
+"@typescript-eslint/eslint-plugin@npm:7.5.0":
   version: 7.5.0
   resolution: "@typescript-eslint/eslint-plugin@npm:7.5.0"
   dependencies:
@@ -4946,7 +4946,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript-eslint/parser@npm:^7.0.0":
+"@typescript-eslint/parser@npm:7.5.0, @typescript-eslint/parser@npm:^7.0.0":
   version: 7.5.0
   resolution: "@typescript-eslint/parser@npm:7.5.0"
   dependencies:
@@ -13840,6 +13840,22 @@ __metadata:
   bin:
     typedoc: bin/typedoc
   checksum: 10c0/35157a90954ed67243bc1ad430781de381431959c62e24f8a8688c4ebae62c2ee11d404002dfd43a0df3bf96721d94fce928423fe1f91f1ed40c99f29c5276aa
+  languageName: node
+  linkType: hard
+
+"typescript-eslint@npm:^7.5.0":
+  version: 7.5.0
+  resolution: "typescript-eslint@npm:7.5.0"
+  dependencies:
+    "@typescript-eslint/eslint-plugin": "npm:7.5.0"
+    "@typescript-eslint/parser": "npm:7.5.0"
+    "@typescript-eslint/utils": "npm:7.5.0"
+  peerDependencies:
+    eslint: ^8.56.0
+  peerDependenciesMeta:
+    typescript:
+      optional: true
+  checksum: 10c0/5b40508de65bf8398e006dd7e0cd83962720ffad6b4854a7fa5e5be00d67fd4a0e2fc37592c54e29847d8b4d38cf9aecb8a25dc8b7f3203eca232fe5dfe962df
   languageName: node
   linkType: hard
 
