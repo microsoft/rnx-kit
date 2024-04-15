@@ -4128,7 +4128,7 @@ __metadata:
     "@types/node": "npm:^20.0.0"
     "@types/node-fetch": "npm:^2.6.5"
     eslint: "npm:^8.56.0"
-    flow-remove-types: "npm:~2.232.0"
+    flow-remove-types: "npm:~2.233.0"
     jest: "npm:^29.2.1"
     metro: "npm:^0.80.0"
     metro-config: "npm:^0.80.0"
@@ -7938,9 +7938,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"flow-remove-types@npm:~2.232.0":
-  version: 2.232.0
-  resolution: "flow-remove-types@npm:2.232.0"
+"flow-remove-types@npm:~2.233.0":
+  version: 2.233.0
+  resolution: "flow-remove-types@npm:2.233.0"
   dependencies:
     hermes-parser: "npm:0.20.1"
     pirates: "npm:^3.0.2"
@@ -7948,7 +7948,7 @@ __metadata:
   bin:
     flow-node: flow-node
     flow-remove-types: flow-remove-types
-  checksum: 10c0/777f07d5cf8872208fc88cf35cdbf746bc06f37df7c4bb5a920ee7e1412b7f7c254098c3702b22d6fe66e99237e7abc1870132e9d662aa2e038b1aa934ef25fa
+  checksum: 10c0/64dea9b497d4ec84286744440e9d560468ce63fd66a6a18ab6241e87a0ff009580a452f4eee35bd8684a40c03ad305f208764f1741b9372a96fd5c23662451ad
   languageName: node
   linkType: hard
 
