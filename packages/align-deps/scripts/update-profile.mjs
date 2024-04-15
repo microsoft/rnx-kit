@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 // @ts-check
 
-import { markdownTable } from "markdown-table";
 import * as fs from "node:fs";
 import * as path from "node:path";
 import { URL } from "node:url";
@@ -23,6 +22,13 @@ import semverCompare from "semver/functions/compare.js";
  *   dependencies?: Record<string, string>;
  *   peerDependencies?: Record<string, string>;
  * }} PackageInfo
+ *
+ * @typedef {{
+ *   Name: string;
+ *   Version: string;
+ *   Latest: string;
+ *   Homepage?: string;
+ * }} TableRow
  */
 
 /**
@@ -470,11 +476,15 @@ async function main({
 
   const ignoredCapabilities = [
     "babel-preset-react-native",
+    "community/cli",
+    "community/cli-android",
+    "community/cli-ios",
     "core",
     "core-android",
     "core-ios",
     "core-macos",
     "core-windows",
+    "core/metro-config",
     "hermes",
     "metro",
     "metro-config",
@@ -487,40 +497,34 @@ async function main({
     "react-test-renderer",
   ];
 
-  /** @type {Record<string, PackageInfo>} */
-  const delta = {};
+  /** @type {[string, TableRow][]} */
+  const delta = [];
   await Promise.all(
     Object.entries(latestProfile)
-      .filter(([capability]) => {
-        return !ignoredCapabilities.includes(capability);
-      })
+      .filter(([capability]) => !ignoredCapabilities.includes(capability))
       .map(async ([capability, pkg]) => {
         await fetchPackageInfo(pkg).then((info) => {
           if (info) {
-            delta[capability] = info;
+            const { name, version, latest, modified, homepage } = info;
+            delta.push([
+              capability,
+              {
+                Name: name,
+                Version: version,
+                Latest: version.endsWith(latest)
+                  ? "="
+                  : `${latest} (${modified.split("T")[0]})`,
+                Homepage: homepage,
+              },
+            ]);
           }
         });
       })
   );
 
-  const table = markdownTable([
-    ["Capability", "Name", "Version", "Latest", "Homepage"],
-    ...Object.keys(delta)
-      .sort()
-      .map((capability) => {
-        const { name, version, latest, modified, homepage } = delta[capability];
-        return [
-          capability,
-          name,
-          version,
-          version.endsWith(latest)
-            ? "="
-            : `${latest} (${modified.split("T")[0]})`,
-          homepage,
-        ];
-      }),
-  ]);
-  console.log(table);
+  const collator = new Intl.Collator();
+  delta.sort((lhs, rhs) => collator.compare(lhs[0], rhs[0]));
+  console.table(Object.fromEntries(delta));
 }
 
 const options = (() => {
