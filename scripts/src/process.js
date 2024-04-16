@@ -37,6 +37,10 @@ export function execute(command, ...args) {
       // Nx is only installed at workspace root — adjust `cwd` accordingly.
       cwd: isRunningNx(command, args) ? findWorkspaceRoot() : process.cwd(),
       stdio: "inherit",
+      // As of Node 20.12.2, it is no longer allowed to spawn a process with
+      // `.bat` or `.cmd` without shell (see
+      // https://nodejs.org/en/blog/release/v20.12.2).
+      shell: command.endsWith(".bat") || command.endsWith(".cmd"),
     };
     spawn(command, args, options).on("close", (code) => {
       if (code === 0) {
