@@ -100,6 +100,10 @@ export const profile: Profile = {
     name: "react-native-reanimated",
     version: "^3.6.0",
   },
+  "datetime-picker": {
+    name: "@react-native-community/datetimepicker",
+    version: "^7.7.0",
+  },
   gestures: {
     name: "react-native-gesture-handler",
     version: "^2.14.0",
