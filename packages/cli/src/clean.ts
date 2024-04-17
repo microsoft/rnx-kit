@@ -174,6 +174,7 @@ function execute(command: string, args: string[], cwd: string): Promise<void> {
     const process = spawn(command, args, {
       cwd,
       stdio: ["inherit", null, null],
+      shell: command.endsWith(".bat") || command.endsWith(".cmd"),
     });
 
     const stderr: Buffer[] = [];
