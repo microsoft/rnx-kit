@@ -1,5 +1,13 @@
 # Change Log - @rnx-kit/cli
 
+## 0.16.26
+
+### Patch Changes
+
+- 6364676: Fix `EINVAL` error when running `clean` on Windows with Node 18.20.2+ or 20.12.2+
+- Updated dependencies [4b8a674]
+  - @rnx-kit/align-deps@2.4.3
+
 ## 0.16.25
 
 ### Patch Changes
