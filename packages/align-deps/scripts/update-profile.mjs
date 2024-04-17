@@ -217,6 +217,11 @@ export const profile: Profile = {
     version: "^${targetVersion}.0",
     capabilities: ["react"],
   },
+  "core-visionos": {
+    name: "@callstack/react-native-visionos",
+    version: "^${targetVersion}.0",
+    capabilities: ["react"],
+  },
   "core-windows": {
     name: "react-native-windows",
     version: "^${targetVersion}.0",

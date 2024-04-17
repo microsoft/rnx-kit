@@ -197,6 +197,7 @@
         "core-android",
         "core-ios",
         "core-macos",
+        "core-visionos",
         "core-windows",
         "core/testing",
         "babel-preset-react-native",
