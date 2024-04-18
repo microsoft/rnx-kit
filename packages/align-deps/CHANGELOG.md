@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/align-deps
 
+## 2.4.4
+
+### Patch Changes
+
+- e93f8d9: Update `profile-0.73` to recommend visionOS compatible versions
+
 ## 2.4.3
 
 ### Patch Changes
