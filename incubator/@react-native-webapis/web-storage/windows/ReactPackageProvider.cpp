@@ -14,6 +14,10 @@ namespace winrt::ReactNativeWebStorage::implementation
 
     void ReactPackageProvider::CreatePackage(IReactPackageBuilder const &packageBuilder) noexcept
     {
+#ifdef USE_FABRIC
+        AddAttributedModules(packageBuilder, true);
+#else
         AddAttributedModules(packageBuilder, false);
+#endif  // USE_FABRIC
     }
 }  // namespace winrt::ReactNativeWebStorage::implementation
