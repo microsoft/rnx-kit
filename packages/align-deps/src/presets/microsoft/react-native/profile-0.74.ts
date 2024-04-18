@@ -96,10 +96,6 @@ export const profile: Profile = {
     devOnly: true,
   },
 
-  "datetime-picker": {
-    name: "@react-native-community/datetimepicker",
-    version: "^7.6.4",
-  },
   netinfo: {
     name: "@react-native-community/netinfo",
     version: "^11.3.1",

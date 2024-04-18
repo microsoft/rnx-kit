@@ -100,6 +100,10 @@ export const profile: Profile = {
     name: "react-native-reanimated",
     version: "^3.6.0",
   },
+  "datetime-picker": {
+    name: "@react-native-community/datetimepicker",
+    version: "^7.7.0",
+  },
   gestures: {
     name: "react-native-gesture-handler",
     version: "^2.14.0",
@@ -115,7 +119,7 @@ export const profile: Profile = {
   },
   netinfo: {
     name: "@react-native-community/netinfo",
-    version: "^11.0.1",
+    version: "^11.3.0",
   },
   "safe-area": {
     name: "react-native-safe-area-context",
@@ -127,11 +131,11 @@ export const profile: Profile = {
   },
   storage: {
     name: "@react-native-async-storage/async-storage",
-    version: "^1.21.0",
+    version: "^1.22.0",
   },
   svg: {
     name: "react-native-svg",
-    version: "^14.0.0",
+    version: "^15.0.0",
   },
   "test-app": {
     name: "react-native-test-app",
@@ -141,5 +145,9 @@ export const profile: Profile = {
   webview: {
     name: "react-native-webview",
     version: "^13.7.2",
+  },
+  clipboard: {
+    name: "@react-native-clipboard/clipboard",
+    version: "^1.14.0",
   },
 };
