@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.res.Resources.NotFoundException
 import com.microsoft.identity.client.AcquireTokenParameters
+import com.microsoft.identity.client.AcquireTokenSilentParameters
 import com.microsoft.identity.client.AuthenticationCallback
 import com.microsoft.identity.client.IAuthenticationResult
 import com.microsoft.identity.client.IMultipleAccountPublicClientApplication
@@ -19,14 +20,13 @@ class TokenBroker private constructor(context: Context) {
         const val EMPTY_GUID = "00000000-0000-0000-0000-000000000000"
 
         @Volatile
-        private var INSTANCE: TokenBroker? = null
+        private var instance: TokenBroker? = null
 
-        fun getInstance(context: Context): TokenBroker =
-            INSTANCE ?: synchronized(this) {
-                INSTANCE ?: TokenBroker(context).also {
-                    INSTANCE = it
-                }
+        fun getInstance(context: Context): TokenBroker = instance ?: synchronized(this) {
+            instance ?: TokenBroker(context).also {
+                instance = it
             }
+        }
     }
 
     var selectedAccount: Account? = null
@@ -152,7 +152,13 @@ class TokenBroker private constructor(context: Context) {
 
         val authority = multiAccountApp.configuration.defaultAuthority.authorityURL.toString()
         try {
-            val result = multiAccountApp.acquireTokenSilent(scopes, account, authority)
+            val result = multiAccountApp.acquireTokenSilent(
+                AcquireTokenSilentParameters.Builder()
+                    .forAccount(account)
+                    .fromAuthority(authority)
+                    .withScopes(scopes.toList())
+                    .build()
+            )
             val redirectUri = multiAccountApp.configuration.redirectUri
             onTokenAcquired(AuthResult(result, redirectUri), null)
         } catch (_: UiRequiredException) {
