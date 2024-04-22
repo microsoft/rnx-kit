@@ -52,11 +52,11 @@
     "parse-diff": "^0.11"
   },
   "devDependencies": {
-    "@eslint/js": "^8.56",
+    "@eslint/js": "^9.0.0",
     "@rnx-kit/tsconfig": "^1.0",
     "@types/node": "^20.0",
     "codecov": "^3.0",
-    "eslint": "^8.56",
+    "eslint": "^9.0.0",
     "prettier": "^3.0",
     "semantic-release": "^23.0",
     "typescript": "^5.0"

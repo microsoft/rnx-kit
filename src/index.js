@@ -49,7 +49,7 @@ export default async function suggest(diff, options = {}) {
         options.message ||
         "Changes were made (e.g. by formatters, linters, etc.) in the following files:",
     });
-  } catch (_) {
+  } catch {
     process.exit(1);
   }
 }
