@@ -76,7 +76,7 @@ class MicrosoftAccountsActivity : AppCompatActivity() {
 
         val sharedPreferences = getPreferences(MODE_PRIVATE)
 
-        val selectedAccountObserver = Observer<Account> { account ->
+        val selectedAccountObserver = Observer<Account?> { account ->
             withTokenBroker { tokenBroker ->
                 if (tokenBroker.selectedAccount == account) {
                     return@withTokenBroker
