@@ -1,5 +1,11 @@
 # @react-native-webapis/web-storage
 
+## 0.2.5
+
+### Patch Changes
+
+- 3c55156: Add TurboModule support on Windows
+
 ## 0.2.4
 
 ### Patch Changes
