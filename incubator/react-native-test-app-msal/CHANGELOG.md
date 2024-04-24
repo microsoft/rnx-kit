@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/react-native-test-app-msal
 
+## 3.0.1
+
+### Patch Changes
+
+- af82a1f: Migrate away from deprecated `acquireTokenSilent(Array<(out) String!>, IAccount, String): IAuthenticationResult!`
+
 ## 3.0.0
 
 ### Major Changes
