@@ -195,7 +195,7 @@ export async function launchEmulator(
  * Returns the emulator or physical device with the specified name.
  *
  * @remarks
- * If an emulator is found, it is also booted.
+ * If an emulator is found, it is also booted if necessary.
  */
 export async function selectDevice(
   emulatorName: string | undefined,
