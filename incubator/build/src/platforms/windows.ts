@@ -1,10 +1,10 @@
+import { retry } from "@rnx-kit/tools-shell/async";
+import { makeCommand } from "@rnx-kit/tools-shell/command";
 import { XMLParser } from "fast-xml-parser";
 import * as fs from "node:fs";
 import * as os from "node:os";
 import * as path from "node:path";
 import type { Ora } from "ora";
-import { retry } from "../async.js";
-import { makeCommand } from "../command.js";
 import type { BuildParams } from "../types.js";
 
 type PackageInfo = {

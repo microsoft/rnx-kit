@@ -1,5 +1,5 @@
+import { once } from "@rnx-kit/tools-shell/async";
 import ora from "ora";
-import { once } from "./async.js";
 import { deleteBranch, pushCurrentChanges } from "./git.js";
 import type {
   BuildParams,

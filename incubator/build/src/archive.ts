@@ -1,6 +1,10 @@
+import {
+  ensure,
+  makeCommand,
+  makeCommandSync,
+} from "@rnx-kit/tools-shell/command";
 import * as os from "node:os";
 import * as path from "node:path";
-import { ensure, makeCommand, makeCommandSync } from "./command.js";
 
 export const extract: (filename: string) => Promise<string> = (() => {
   switch (os.platform()) {

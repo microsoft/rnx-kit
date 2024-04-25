@@ -1,0 +1,56 @@
+{
+  "private": true,
+  "name": "@rnx-kit/tools-shell",
+  "version": "0.0.1",
+  "description": "A collection of functions for writing shell scripts",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/tools-shell#readme",
+  "license": "MIT",
+  "author": {
+    "name": "Microsoft Open Source",
+    "email": "microsoftopensource@users.noreply.github.com"
+  },
+  "files": [
+    "lib/**/*.d.ts",
+    "lib/**/*.js",
+    "src"
+  ],
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "typescript": "./src/index.ts",
+      "default": "./lib/index.js"
+    },
+    "./async": {
+      "types": "./lib/async.d.ts",
+      "typescript": "./src/async.ts",
+      "default": "./lib/async.js"
+    },
+    "./command": {
+      "types": "./lib/command.d.ts",
+      "typescript": "./src/command.ts",
+      "default": "./lib/command.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "packages/tools-shell"
+  },
+  "scripts": {
+    "build": "rnx-kit-scripts build",
+    "format": "rnx-kit-scripts format",
+    "lint": "rnx-kit-scripts lint",
+    "update-readme": "rnx-kit-scripts update-api-readme"
+  },
+  "devDependencies": {
+    "@rnx-kit/eslint-config": "*",
+    "@rnx-kit/scripts": "*",
+    "@rnx-kit/tsconfig": "*",
+    "@types/node": "^20.0.0",
+    "eslint": "^8.56.0",
+    "prettier": "^3.0.0",
+    "typescript": "^5.0.0"
+  }
+}

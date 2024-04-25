@@ -1,7 +1,7 @@
+import { makeCommand } from "@rnx-kit/tools-shell/command";
 import * as os from "node:os";
 import type { Ora } from "ora";
 import { untar } from "../archive.js";
-import { makeCommand } from "../command.js";
 import type { BuildParams } from "../types.js";
 
 export const open = makeCommand("open");

@@ -1,7 +1,13 @@
+/**
+ * Sleep for a specified numer of milliseconds.
+ */
 export function idle(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+/**
+ * Wraps the function, making sure it only gets called once.
+ */
 export function once<R>(func: () => R): () => R {
   let result: R | undefined;
   return () => {
@@ -12,6 +18,10 @@ export function once<R>(func: () => R): () => R {
   };
 }
 
+/**
+ * Calls the specified function, retrying up to specified number of times as
+ * long as the result is `null`.
+ */
 export async function retry<R>(
   func: () => Promise<R | null>,
   retries: number,
@@ -25,6 +35,10 @@ export async function retry<R>(
   return result;
 }
 
+/**
+ * Calls the specified function, retrying up to specified number of times as
+ * long as the function throws.
+ */
 export async function withRetry<R>(
   func: () => Promise<R>,
   retries: number,
