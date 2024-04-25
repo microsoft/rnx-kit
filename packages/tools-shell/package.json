@@ -1,4 +1,5 @@
 {
+  "private": true,
   "name": "@rnx-kit/tools-shell",
   "version": "0.0.1",
   "description": "A collection of functions for writing shell scripts",
