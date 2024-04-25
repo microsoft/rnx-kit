@@ -2,12 +2,12 @@ import { Octokit } from "@octokit/core";
 import type { RestEndpointMethodTypes } from "@octokit/plugin-rest-endpoint-methods";
 import { restEndpointMethods } from "@octokit/plugin-rest-endpoint-methods";
 import { RequestError } from "@octokit/request-error";
+import { idle, once, withRetry } from "@rnx-kit/tools-shell/async";
 import fetch from "node-fetch";
 import * as fs from "node:fs";
 import * as path from "node:path";
 import * as readline from "node:readline";
 import type { Ora } from "ora";
-import { idle, once, withRetry } from "../async.js";
 import {
   BUILD_ID,
   MAX_ATTEMPTS,

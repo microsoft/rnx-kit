@@ -1,9 +1,13 @@
+import { idle, retry } from "@rnx-kit/tools-shell/async";
+import {
+  ensure,
+  makeCommand,
+  makeCommandSync,
+} from "@rnx-kit/tools-shell/command";
 import { spawn } from "node:child_process";
 import * as fs from "node:fs";
 import * as path from "node:path";
 import type { Ora } from "ora";
-import { idle, retry } from "../async.js";
-import { ensure, makeCommand, makeCommandSync } from "../command.js";
 import { MAX_ATTEMPTS } from "../constants.js";
 import type { BuildParams } from "../types.js";
 import { latestVersion } from "../version.js";

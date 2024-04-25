@@ -1,15 +1,15 @@
-import * as os from "node:os";
-import * as path from "node:path";
-import * as readline from "node:readline";
-import type { Ora } from "ora";
-import { untar } from "../archive.js";
-import { retry } from "../async.js";
+import { retry } from "@rnx-kit/tools-shell/async";
 import {
   ensure,
   ensureInstalled,
   makeCommand,
   makeCommandSync,
-} from "../command.js";
+} from "@rnx-kit/tools-shell/command";
+import * as os from "node:os";
+import * as path from "node:path";
+import * as readline from "node:readline";
+import type { Ora } from "ora";
+import { untar } from "../archive.js";
 import type { BuildParams, DeviceType, JSObject } from "../types.js";
 import { open } from "./macos.js";
 
