@@ -1,4 +1,3 @@
-import { makeCommand } from "@rnx-kit/tools-shell/command";
 import { install, start } from "@rnx-kit/tools-windows";
 import * as os from "node:os";
 import type { Ora } from "ora";
