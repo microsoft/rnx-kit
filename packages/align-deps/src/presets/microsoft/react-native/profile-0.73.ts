@@ -102,7 +102,7 @@ export const profile: Profile = {
   },
   "datetime-picker": {
     name: "@react-native-community/datetimepicker",
-    version: "^7.7.0",
+    version: "^8.0.0",
   },
   gestures: {
     name: "react-native-gesture-handler",
