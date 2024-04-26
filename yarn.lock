@@ -3642,6 +3642,7 @@ __metadata:
     "@rnx-kit/tools-android": "npm:^0.0.1"
     "@rnx-kit/tools-node": "npm:^2.1.1"
     "@rnx-kit/tools-shell": "npm:^0.0.1"
+    "@rnx-kit/tools-windows": "npm:^0.0.1"
     "@rnx-kit/tsconfig": "npm:*"
     "@types/jest": "npm:^29.2.1"
     "@types/node": "npm:^20.0.0"
@@ -3649,7 +3650,6 @@ __metadata:
     "@types/yargs": "npm:^16.0.0"
     env-paths: "npm:^3.0.0"
     eslint: "npm:^8.56.0"
-    fast-xml-parser: "npm:^4.0.0"
     jest: "npm:^29.2.1"
     node-fetch: "npm:^3.3.2"
     ora: "npm:^8.0.0"
@@ -4510,6 +4510,22 @@ __metadata:
     "@rnx-kit/tsconfig": "npm:*"
     "@types/node": "npm:^20.0.0"
     eslint: "npm:^8.56.0"
+    prettier: "npm:^3.0.0"
+    typescript: "npm:^5.0.0"
+  languageName: unknown
+  linkType: soft
+
+"@rnx-kit/tools-windows@npm:^0.0.1, @rnx-kit/tools-windows@workspace:packages/tools-windows":
+  version: 0.0.0-use.local
+  resolution: "@rnx-kit/tools-windows@workspace:packages/tools-windows"
+  dependencies:
+    "@rnx-kit/eslint-config": "npm:*"
+    "@rnx-kit/scripts": "npm:*"
+    "@rnx-kit/tools-shell": "npm:^0.0.1"
+    "@rnx-kit/tsconfig": "npm:*"
+    "@types/node": "npm:^20.0.0"
+    eslint: "npm:^8.56.0"
+    fast-xml-parser: "npm:^4.0.0"
     prettier: "npm:^3.0.0"
     typescript: "npm:^5.0.0"
   languageName: unknown
