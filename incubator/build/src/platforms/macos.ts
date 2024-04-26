@@ -1,10 +1,8 @@
-import { makeCommand } from "@rnx-kit/tools-shell/command";
+import { open } from "@rnx-kit/tools-apple/macos";
 import * as os from "node:os";
 import type { Ora } from "ora";
 import { untar } from "../archive.js";
 import type { BuildParams } from "../types.js";
-
-export const open = makeCommand("open");
 
 export async function deploy(
   archive: string,
