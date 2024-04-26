@@ -3639,6 +3639,7 @@ __metadata:
     "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/jest-preset": "npm:*"
     "@rnx-kit/scripts": "npm:*"
+    "@rnx-kit/tools-android": "npm:^0.0.1"
     "@rnx-kit/tools-node": "npm:^2.1.1"
     "@rnx-kit/tools-shell": "npm:^0.0.1"
     "@rnx-kit/tsconfig": "npm:*"
@@ -4428,6 +4429,21 @@ __metadata:
     yargs: "npm:^16.0.0"
   bin:
     build-tpn: ./lib/build-tpn.js
+  languageName: unknown
+  linkType: soft
+
+"@rnx-kit/tools-android@npm:^0.0.1, @rnx-kit/tools-android@workspace:packages/tools-android":
+  version: 0.0.0-use.local
+  resolution: "@rnx-kit/tools-android@workspace:packages/tools-android"
+  dependencies:
+    "@rnx-kit/eslint-config": "npm:*"
+    "@rnx-kit/scripts": "npm:*"
+    "@rnx-kit/tools-shell": "npm:^0.0.1"
+    "@rnx-kit/tsconfig": "npm:*"
+    "@types/node": "npm:^20.0.0"
+    eslint: "npm:^8.56.0"
+    prettier: "npm:^3.0.0"
+    typescript: "npm:^5.0.0"
   languageName: unknown
   linkType: soft
 

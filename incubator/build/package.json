@@ -44,6 +44,7 @@
     "@octokit/plugin-rest-endpoint-methods": "^12.0.0",
     "@octokit/request-error": "^6.0.0",
     "@rnx-kit/config": "^0.6.0",
+    "@rnx-kit/tools-android": "^0.0.1",
     "@rnx-kit/tools-node": "^2.1.1",
     "@rnx-kit/tools-shell": "^0.0.1",
     "env-paths": "^3.0.0",
