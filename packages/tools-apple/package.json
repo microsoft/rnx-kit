@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/tools-apple",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "A collection of functions for deploying apps on iOS or macOS",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/tools-apple#readme",
   "license": "MIT",
@@ -49,7 +49,7 @@
     "update-readme": "rnx-kit-scripts update-api-readme"
   },
   "dependencies": {
-    "@rnx-kit/tools-shell": "^0.0.1"
+    "@rnx-kit/tools-shell": "^0.1.0"
   },
   "devDependencies": {
     "@rnx-kit/eslint-config": "*",

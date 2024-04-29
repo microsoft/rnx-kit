@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/align-deps
 
+## 2.4.5
+
+### Patch Changes
+
+- 468292f: Recommend `datetime-picker` version compatible with new architecture and visionOS
+
 ## 2.4.4
 
 ### Patch Changes

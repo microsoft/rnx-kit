@@ -1,5 +1,22 @@
 # @rnx-kit/build
 
+## 0.6.3
+
+### Patch Changes
+
+- de64a75: Use `@rnx-kit/tools-windows`
+- caa6c26: Use `@rnx-kit/tools-android`
+- 8c242dc: Use `@rnx-kit/tools-shell`
+- d3f91da: Use `@rnx-kit/tools-apple`
+- Updated dependencies [8c242dc]
+- Updated dependencies [de64a75]
+- Updated dependencies [d3f91da]
+- Updated dependencies [caa6c26]
+  - @rnx-kit/tools-shell@0.1.0
+  - @rnx-kit/tools-windows@0.1.0
+  - @rnx-kit/tools-apple@0.1.0
+  - @rnx-kit/tools-android@0.1.0
+
 ## 0.6.2
 
 ### Patch Changes
