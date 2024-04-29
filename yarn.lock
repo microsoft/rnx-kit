@@ -2804,8 +2804,8 @@ __metadata:
   linkType: hard
 
 "@octokit/core@npm:^6.0.0":
-  version: 6.1.1
-  resolution: "@octokit/core@npm:6.1.1"
+  version: 6.1.2
+  resolution: "@octokit/core@npm:6.1.2"
   dependencies:
     "@octokit/auth-token": "npm:^5.0.0"
     "@octokit/graphql": "npm:^8.0.0"
@@ -2814,7 +2814,7 @@ __metadata:
     "@octokit/types": "npm:^13.0.0"
     before-after-hook: "npm:^3.0.2"
     universal-user-agent: "npm:^7.0.0"
-  checksum: 10c0/c842b55bfd7da133ab2cf32123b5e9b24ecb87496cb5c282f9d33e76e2feddf97373a87b06282dd23c78d04c3c76dfc289d52d1d7714133d0c860d30d6d207e8
+  checksum: 10c0/f73be16a8013f69197b7744de75537d869f3a2061dda25dcde746d23b87f305bbdc7adbfe044ab0755eec32e6d54d61c73f4ca788d214eba8e88648a3133733e
   languageName: node
   linkType: hard
 
@@ -2865,11 +2865,11 @@ __metadata:
   linkType: hard
 
 "@octokit/request-error@npm:^6.0.0, @octokit/request-error@npm:^6.0.1":
-  version: 6.1.0
-  resolution: "@octokit/request-error@npm:6.1.0"
+  version: 6.1.1
+  resolution: "@octokit/request-error@npm:6.1.1"
   dependencies:
     "@octokit/types": "npm:^13.0.0"
-  checksum: 10c0/3b45a754b8767e3493ca39361c2835f15c1906b49bda7e708a2871323e063ceb8453a5b11b1db71c194a1956b5f158d620604a437a84e993ae05b3ecc60dba0c
+  checksum: 10c0/55b61da0b2dc05d64862f6ca34ee4eed25b82a30d32da77f8fa11e90b30d0cd454817802e47263e8a171e215ccc41e2e2a9668baa6eed0d686aeac0aabc4cb4a
   languageName: node
   linkType: hard
 
