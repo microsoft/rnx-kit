@@ -3639,11 +3639,11 @@ __metadata:
     "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/jest-preset": "npm:*"
     "@rnx-kit/scripts": "npm:*"
-    "@rnx-kit/tools-android": "npm:^0.0.1"
-    "@rnx-kit/tools-apple": "npm:^0.0.1"
+    "@rnx-kit/tools-android": "npm:^0.1.0"
+    "@rnx-kit/tools-apple": "npm:^0.1.0"
     "@rnx-kit/tools-node": "npm:^2.1.1"
-    "@rnx-kit/tools-shell": "npm:^0.0.1"
-    "@rnx-kit/tools-windows": "npm:^0.0.1"
+    "@rnx-kit/tools-shell": "npm:^0.1.0"
+    "@rnx-kit/tools-windows": "npm:^0.1.0"
     "@rnx-kit/tsconfig": "npm:*"
     "@types/jest": "npm:^29.2.1"
     "@types/node": "npm:^20.0.0"
@@ -4433,13 +4433,13 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rnx-kit/tools-android@npm:^0.0.1, @rnx-kit/tools-android@workspace:packages/tools-android":
+"@rnx-kit/tools-android@npm:^0.1.0, @rnx-kit/tools-android@workspace:packages/tools-android":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/tools-android@workspace:packages/tools-android"
   dependencies:
     "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/scripts": "npm:*"
-    "@rnx-kit/tools-shell": "npm:^0.0.1"
+    "@rnx-kit/tools-shell": "npm:^0.1.0"
     "@rnx-kit/tsconfig": "npm:*"
     "@types/node": "npm:^20.0.0"
     eslint: "npm:^8.56.0"
@@ -4448,13 +4448,13 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rnx-kit/tools-apple@npm:^0.0.1, @rnx-kit/tools-apple@workspace:packages/tools-apple":
+"@rnx-kit/tools-apple@npm:^0.1.0, @rnx-kit/tools-apple@workspace:packages/tools-apple":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/tools-apple@workspace:packages/tools-apple"
   dependencies:
     "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/scripts": "npm:*"
-    "@rnx-kit/tools-shell": "npm:^0.0.1"
+    "@rnx-kit/tools-shell": "npm:^0.1.0"
     "@rnx-kit/tsconfig": "npm:*"
     "@types/node": "npm:^20.0.0"
     eslint: "npm:^8.56.0"
@@ -4517,7 +4517,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rnx-kit/tools-shell@npm:^0.0.1, @rnx-kit/tools-shell@workspace:packages/tools-shell":
+"@rnx-kit/tools-shell@npm:^0.1.0, @rnx-kit/tools-shell@workspace:packages/tools-shell":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/tools-shell@workspace:packages/tools-shell"
   dependencies:
@@ -4531,13 +4531,13 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rnx-kit/tools-windows@npm:^0.0.1, @rnx-kit/tools-windows@workspace:packages/tools-windows":
+"@rnx-kit/tools-windows@npm:^0.1.0, @rnx-kit/tools-windows@workspace:packages/tools-windows":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/tools-windows@workspace:packages/tools-windows"
   dependencies:
     "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/scripts": "npm:*"
-    "@rnx-kit/tools-shell": "npm:^0.0.1"
+    "@rnx-kit/tools-shell": "npm:^0.1.0"
     "@rnx-kit/tsconfig": "npm:*"
     "@types/node": "npm:^20.0.0"
     eslint: "npm:^8.56.0"
