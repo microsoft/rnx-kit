@@ -4,7 +4,7 @@
 
 ### Patch Changes
 
-- 468292f: Recommend datetime-picker version compatible with new architecure & visionOS
+- 468292f: Recommend `datetime-picker` version compatible with new architecture and visionOS
 
 ## 2.4.4
 
