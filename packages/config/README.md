@@ -11,7 +11,7 @@ configuration data and use it as tool input.
 
 ## Schema
 
-Package configuration is under the top-level `rnx-kit` entry in package.hson. It
+Package configuration is under the top-level `rnx-kit` entry in package.json. It
 is of type `KitConfig`.
 
 ### `KitConfig`
