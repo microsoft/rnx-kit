@@ -13,7 +13,8 @@
     "android/build.gradle",
     "android/gradle.properties",
     "android/src",
-    "cocoa"
+    "cocoa",
+    "react-native.config.js"
   ],
   "repository": {
     "type": "git",
