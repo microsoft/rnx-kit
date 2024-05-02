@@ -1,5 +1,11 @@
 # @rnx-kit/build
 
+## 0.6.4
+
+### Patch Changes
+
+- f1f70fb: Using `gradle/actions/setup-gradle` to execute Gradle is deprecated (see https://github.com/gradle/actions/blob/v3/docs/deprecation-upgrade-guide.md#using-the-action-to-execute-gradle-via-the-arguments-parameter-is-deprecated)
+
 ## 0.6.3
 
 ### Patch Changes
