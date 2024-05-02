@@ -1,5 +1,11 @@
 # @rnx-kit/react-native-host
 
+## 0.4.8
+
+### Patch Changes
+
+- f174719: Prevent unintentional autolinking
+
 ## 0.4.7
 
 ### Patch Changes
