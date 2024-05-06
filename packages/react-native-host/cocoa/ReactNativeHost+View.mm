@@ -7,8 +7,11 @@
 #import <React/RCTFabricSurface.h>
 #import <React/RCTSurfaceHostingProxyRootView.h>
 #endif  // __has_include(<React/RCTFabricSurfaceHostingProxyRootView.h>)
+#ifdef USE_BRIDGELESS
+#import <ReactCommon/RCTHost.h>
+#endif  // USE_BRIDGELESS
 static NSString *const kReactConcurrentRoot = @"concurrentRoot";
-#else
+#else  // USE_FABRIC
 #import <React/RCTRootView.h>
 #endif  // USE_FABRIC
 
@@ -53,6 +56,13 @@ static NSString *const kReactConcurrentRoot = @"concurrentRoot";
     return [[RCTFabricSurfaceHostingProxyRootView alloc] initWithBridge:self.bridge
                                                              moduleName:moduleName
                                                       initialProperties:initialProps];
+#elif USE_BRIDGELESS
+    RCTFabricSurface *surface = [self.reactHost createSurfaceWithModuleName:moduleName
+                                                          initialProperties:initialProps];
+    RCTSurfaceSizeMeasureMode sizeMeasureMode =
+        RCTSurfaceSizeMeasureModeWidthExact | RCTSurfaceSizeMeasureModeHeightExact;
+    return [[RCTSurfaceHostingProxyRootView alloc] initWithSurface:surface
+                                                   sizeMeasureMode:sizeMeasureMode];
 #else
     RCTFabricSurface *surface =
         [[RCTFabricSurface alloc] initWithSurfacePresenter:self.surfacePresenter

@@ -108,6 +108,11 @@ using ReactNativeConfig = facebook::react::EmptyReactNativeConfig const;
     }
 }
 
+- (RCTHost *)reactHost
+{
+    return _reactHost;
+}
+
 - (RCTSurfacePresenter *)surfacePresenter
 {
 #if USE_BRIDGELESS
