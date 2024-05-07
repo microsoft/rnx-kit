@@ -1,5 +1,11 @@
 # @rnx-kit/react-native-host
 
+## 0.4.9
+
+### Patch Changes
+
+- 76f92c1: Fix `SurfaceRegistryBinding::startSurface` failed on startup with New Architecture
+
 ## 0.4.8
 
 ### Patch Changes
