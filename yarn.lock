@@ -2621,6 +2621,38 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@jsonjoy.com/base64@npm:^1.1.1":
+  version: 1.1.1
+  resolution: "@jsonjoy.com/base64@npm:1.1.1"
+  peerDependencies:
+    tslib: 2
+  checksum: 10c0/be8d0eb6fe5bf9c4b068949fc9839d6b6b325dcc6a961996a3f64eedb4c8ee8c5073fc834c2c71587890df4e0481dd3ea3a8d948da3d6c7a44b32951b23dc484
+  languageName: node
+  linkType: hard
+
+"@jsonjoy.com/json-pack@npm:^1.0.3":
+  version: 1.0.3
+  resolution: "@jsonjoy.com/json-pack@npm:1.0.3"
+  dependencies:
+    "@jsonjoy.com/base64": "npm:^1.1.1"
+    "@jsonjoy.com/util": "npm:^1.1.2"
+    hyperdyperid: "npm:^1.2.0"
+    thingies: "npm:^1.20.0"
+  peerDependencies:
+    tslib: 2
+  checksum: 10c0/523f3d8df424bf339aa31045275f835985aa9ab27f4defeff4fc644ffd3219dc75011b51634a9ca15bc3fcb2e14c51f7b0d3d97cf4affc145d0d1aad5700900c
+  languageName: node
+  linkType: hard
+
+"@jsonjoy.com/util@npm:^1.1.2":
+  version: 1.1.2
+  resolution: "@jsonjoy.com/util@npm:1.1.2"
+  peerDependencies:
+    tslib: 2
+  checksum: 10c0/e9054e8208d75496ec5b5ed6a9a3c8431b8ec378820169c25c86ea4636ff4ae66f9fcc7bed6678c0ee7c0c6452ff0137b3339d9e4829957f3f31656e5b0176a3
+  languageName: node
+  linkType: hard
+
 "@manypkg/find-root@npm:^1.1.0":
   version: 1.1.0
   resolution: "@manypkg/find-root@npm:1.1.0"
@@ -8636,6 +8668,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"hyperdyperid@npm:^1.2.0":
+  version: 1.2.0
+  resolution: "hyperdyperid@npm:1.2.0"
+  checksum: 10c0/885ba3177c7181d315a856ee9c0005ff8eb5dcb1ce9e9d61be70987895d934d84686c37c981cceeb53216d4c9c15c1cc25f1804e84cc6a74a16993c5d7fd0893
+  languageName: node
+  linkType: hard
+
 "iconv-lite@npm:^0.4.24":
   version: 0.4.24
   resolution: "iconv-lite@npm:0.4.24"
@@ -10349,11 +10388,14 @@ __metadata:
   linkType: hard
 
 "memfs@npm:^4.0.0":
-  version: 4.8.2
-  resolution: "memfs@npm:4.8.2"
+  version: 4.9.2
+  resolution: "memfs@npm:4.9.2"
   dependencies:
+    "@jsonjoy.com/json-pack": "npm:^1.0.3"
+    "@jsonjoy.com/util": "npm:^1.1.2"
+    sonic-forest: "npm:^1.0.0"
     tslib: "npm:^2.0.0"
-  checksum: 10c0/8880e7ebfb3aa26abe42b245dd87ba1d20de96713fdcc4d71dcc1dc4cddeba45e1f3f5da5571c2db179c657a09e38e0003f45eead3aa3e669a237559a0e70000
+  checksum: 10c0/2a5a2c3c2a8a70fa79e0becedc9323a620e43eef20418e128de216f586e96891cf25a51d4d37c7fdd900214de05c13749afcf2658d23a9574720759a7119c2a0
   languageName: node
   linkType: hard
 
@@ -13134,6 +13176,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"sonic-forest@npm:^1.0.0":
+  version: 1.0.2
+  resolution: "sonic-forest@npm:1.0.2"
+  dependencies:
+    tree-dump: "npm:^1.0.0"
+  peerDependencies:
+    tslib: 2
+  checksum: 10c0/d18c50eb67ccc3acf2f9677899531432cf082dbdbe4f7fab72dbaa418ebbee61472bc7c56139772d61ecf594d1606931af69a8b30ed2ff7d9cd526215b955b65
+  languageName: node
+  linkType: hard
+
 "source-map-support@npm:0.5.13":
   version: 0.5.13
   resolution: "source-map-support@npm:0.5.13"
@@ -13657,6 +13710,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"thingies@npm:^1.20.0":
+  version: 1.21.0
+  resolution: "thingies@npm:1.21.0"
+  peerDependencies:
+    tslib: ^2
+  checksum: 10c0/7570ee855aecb73185a672ecf3eb1c287a6512bf5476449388433b2d4debcf78100bc8bfd439b0edd38d2bc3bfb8341de5ce85b8557dec66d0f27b962c9a8bc1
+  languageName: node
+  linkType: hard
+
 "throat@npm:^5.0.0":
   version: 5.0.0
   resolution: "throat@npm:5.0.0"
@@ -13733,6 +13795,15 @@ __metadata:
   version: 0.0.3
   resolution: "tr46@npm:0.0.3"
   checksum: 10c0/047cb209a6b60c742f05c9d3ace8fa510bff609995c129a37ace03476a9b12db4dbf975e74600830ef0796e18882b2381fb5fb1f6b4f96b832c374de3ab91a11
+  languageName: node
+  linkType: hard
+
+"tree-dump@npm:^1.0.0":
+  version: 1.0.1
+  resolution: "tree-dump@npm:1.0.1"
+  peerDependencies:
+    tslib: 2
+  checksum: 10c0/1d87a85f694089a489aa4dab21d25896ea5ab1c21e142928fc89507ab3c74a3ac21bca8d26dc102a9c16349d479be85b629233c17548178185720e4efd469126
   languageName: node
   linkType: hard
 
