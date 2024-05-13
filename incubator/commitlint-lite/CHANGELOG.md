@@ -1,5 +1,11 @@
 # @rnx-kit/commitlint-lite
 
+## 1.0.1
+
+### Patch Changes
+
+- e5f8d5f: Use `process.stdin` instead of `process.openStdin`
+
 ## 1.0.0
 
 ### Major Changes
