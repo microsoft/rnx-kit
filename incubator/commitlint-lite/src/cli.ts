@@ -1,14 +1,11 @@
 #!/usr/bin/env node
-
 import { COMMIT_TYPES, MAX_LINE_LENGTH } from "./constants.js";
 import { lint } from "./index.js";
 
-const data: string[] = [];
-const stdin = process.openStdin();
-stdin.setEncoding("utf8");
-stdin.on("data", (chunk) => data.push(chunk));
-stdin.on("end", () => {
-  const message = data.join("").trim();
+const data: Buffer[] = [];
+process.stdin.on("data", (chunk) => data.push(chunk));
+process.stdin.on("end", () => {
+  const message = Buffer.concat(data).toString("utf-8").trim();
   const issues = lint(message);
   if (issues.length > 0) {
     process.exitCode = issues.length;
