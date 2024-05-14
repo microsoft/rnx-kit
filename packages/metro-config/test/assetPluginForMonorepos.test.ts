@@ -28,7 +28,7 @@ describe("@rnx-kit/metro-config/assetPluginForMonorepos", () => {
 
   test("unescapes `..` in URLs", () => {
     Object.entries(cases).forEach(([output, input]) => {
-      const middleware: Middleware = (req) => {
+      const middleware: Middleware = (req: Middleware) => {
         expect(req).toEqual(expect.objectContaining({ url: output }));
         return middleware;
       };
