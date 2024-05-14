@@ -1,10 +1,7 @@
 {
   "extends": "@rnx-kit/tsconfig/tsconfig.json",
   "compilerOptions": {
-    "declarationDir": "./",
-    "declarationMap": false,
-    "emitDeclarationOnly": true
+    "noEmit": true
   },
-  "exclude": [],
-  "include": ["src/**/*.js", "test/**/*.js"]
+  "include": ["src/**/*.js", "test/**/*.test.ts"]
 }
