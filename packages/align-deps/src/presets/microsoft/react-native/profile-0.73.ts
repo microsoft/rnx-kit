@@ -144,7 +144,7 @@ export const profile: Profile = {
   },
   webview: {
     name: "react-native-webview",
-    version: "^13.7.2",
+    version: "^13.10.0",
   },
   clipboard: {
     name: "@react-native-clipboard/clipboard",
