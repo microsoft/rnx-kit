@@ -1,8 +1,7 @@
 {
   "extends": "@rnx-kit/tsconfig/tsconfig.json",
   "compilerOptions": {
-    "noEmit": true,
-    "sourceMap": false
+    "noEmit": true
   },
   "include": ["src/**/*.js", "test/**/*.test.ts"]
 }
