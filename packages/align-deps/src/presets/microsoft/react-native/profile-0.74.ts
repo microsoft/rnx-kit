@@ -116,8 +116,4 @@ export const profile: Profile = {
     name: "react-native-test-app",
     version: "^3.5.0",
   },
-  webview: {
-    name: "react-native-webview",
-    version: "^13.8.4",
-  },
 };
