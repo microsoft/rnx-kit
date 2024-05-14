@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/align-deps
 
+## 2.4.6
+
+### Patch Changes
+
+- 917af0f: Update the `react-native-webview` recommended version to the one that supports visionOS, and includes fixes for building with the new architecture on macOS and Windows
+
 ## 2.4.5
 
 ### Patch Changes
