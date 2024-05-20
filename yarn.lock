@@ -3487,9 +3487,9 @@ __metadata:
   linkType: hard
 
 "@react-native/eslint-plugin@npm:^0.74.0":
-  version: 0.74.81
-  resolution: "@react-native/eslint-plugin@npm:0.74.81"
-  checksum: 10c0/5f6e2bc0c20f7fcd276a736eb72c4093dae509bbdc06f6fbe96109b0dff14a72b3b2b621c8221ac1bb7c2268f8f523582e9632b9827c0cb859f062e8f349bf5e
+  version: 0.74.83
+  resolution: "@react-native/eslint-plugin@npm:0.74.83"
+  checksum: 10c0/139ed006dbeaf86ec4f5aaee27912f99e4e3a9328c53c33b4f9494668454ad7d3ab412c4f7d33cf0c402b46971b757519c64186932c80649545a19a07aa4b273
   languageName: node
   linkType: hard
 
