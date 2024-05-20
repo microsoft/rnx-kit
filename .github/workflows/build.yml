@@ -30,10 +30,6 @@ jobs:
         env:
           NODE_V8_COVERAGE: coverage
         run: yarn test
-      - name: Upload coverage report
-        env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-        run: yarn codecov --token="$CODECOV_TOKEN" --disable=gcov
   review:
     permissions:
       issues: write

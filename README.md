@@ -1,7 +1,6 @@
 # suggestion-bot
 
 [![build](https://github.com/tido64/suggestion-bot/actions/workflows/build.yml/badge.svg)](https://github.com/tido64/suggestion-bot/actions/workflows/build.yml)
-[![codecov](https://codecov.io/gh/tido64/suggestion-bot/branch/trunk/graph/badge.svg)](https://codecov.io/gh/tido64/suggestion-bot)
 [![npm version](https://img.shields.io/npm/v/suggestion-bot)](https://www.npmjs.com/package/suggestion-bot)
 
 `suggestion-bot` submits code reviews with suggestions based on your diffs.
