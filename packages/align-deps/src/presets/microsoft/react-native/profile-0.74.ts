@@ -34,7 +34,7 @@ export const profile: Profile = {
     capabilities: ["react"],
   },
   "core-visionos": {
-    name: "#meta",
+    name: "@callstack/react-native-visionos",
     version: "^0.74.0",
     capabilities: ["react"],
   },
