@@ -41,7 +41,7 @@
   },
   "dependencies": {
     "@octokit/core": "^6.0.0",
-    "@octokit/plugin-rest-endpoint-methods": "^12.0.0",
+    "@octokit/plugin-rest-endpoint-methods": "^13.0.0",
     "@octokit/request-error": "^6.0.0",
     "@rnx-kit/config": "^0.6.0",
     "@rnx-kit/tools-android": "^0.1.0",
