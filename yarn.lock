@@ -3260,9 +3260,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@react-native-windows/cli@npm:0.73.3":
-  version: 0.73.3
-  resolution: "@react-native-windows/cli@npm:0.73.3"
+"@react-native-windows/cli@npm:0.73.4":
+  version: 0.73.4
+  resolution: "@react-native-windows/cli@npm:0.73.4"
   dependencies:
     "@react-native-windows/codegen": "npm:0.73.1"
     "@react-native-windows/fs": "npm:0.73.1"
@@ -3287,7 +3287,7 @@ __metadata:
     xpath: "npm:^0.0.27"
   peerDependencies:
     react-native: "*"
-  checksum: 10c0/568c1f78539b50d3466d664802fede98bee37a55dfb3839b3f70eb8b038561f7df1c9a102a8120d74b05270dfbc308a3fbc605de8cb473d534e5fd6cc34cdcc6
+  checksum: 10c0/cbf3bbadc984d1776ec189d87a8d97b787d2205f27ba4713bfaebe53cec176472f8fe3e611fd762a9d48198f852c4d6e6ac8c3a8bd93faa429b78cff23bf5421
   languageName: node
   linkType: hard
 
@@ -12190,15 +12190,15 @@ __metadata:
   linkType: hard
 
 "react-native-windows@npm:^0.73.0":
-  version: 0.73.12
-  resolution: "react-native-windows@npm:0.73.12"
+  version: 0.73.14
+  resolution: "react-native-windows@npm:0.73.14"
   dependencies:
     "@babel/runtime": "npm:^7.0.0"
     "@jest/create-cache-key-function": "npm:^29.6.3"
     "@react-native-community/cli": "npm:12.3.6"
     "@react-native-community/cli-platform-android": "npm:12.3.6"
     "@react-native-community/cli-platform-ios": "npm:12.3.6"
-    "@react-native-windows/cli": "npm:0.73.3"
+    "@react-native-windows/cli": "npm:0.73.4"
     "@react-native/assets-registry": "npm:0.73.1"
     "@react-native/codegen": "npm:0.73.3"
     "@react-native/community-cli-plugin": "npm:0.73.17"
@@ -12237,13 +12237,13 @@ __metadata:
   peerDependencies:
     react: 18.2.0
     react-native: ^0.73.0
-  checksum: 10c0/9a9f6ebf06f894c4c34577e671c421a8141bff8552c2859740f6002ee92fb8f90be48ac1fd7b7095f2bd0dd704aa5e8ef47aa878daa8f694badd5744d2251326
+  checksum: 10c0/f4f1c5a020321bdd2ee6b23a3c2df96de0261c3e6c1ccb36083e88b500dc35b69d70d4d5c7cc181f6e872dc55931ab69bfeaa0ea399e270db6ae7377eb79596f
   languageName: node
   linkType: hard
 
 "react-native@npm:^0.73.0":
-  version: 0.73.7
-  resolution: "react-native@npm:0.73.7"
+  version: 0.73.8
+  resolution: "react-native@npm:0.73.8"
   dependencies:
     "@jest/create-cache-key-function": "npm:^29.6.3"
     "@react-native-community/cli": "npm:12.3.6"
@@ -12287,7 +12287,7 @@ __metadata:
     react: 18.2.0
   bin:
     react-native: cli.js
-  checksum: 10c0/0968ee39defc3f0a8832650cfbeeaf0fcd23839cd364ea5e013883b03db74aae0852c33b78af9006f12698678195e9e3409005790bdb315b14da160c8d3d8835
+  checksum: 10c0/12a8e1033724ae2d8181fcc38c9a90f9eeaa2d340a1fba64fcdc6a2e30586ec6d9f4bd3ced07c54dd334804eff6952b224016bd426c0c17a9783729972515629
   languageName: node
   linkType: hard
 
