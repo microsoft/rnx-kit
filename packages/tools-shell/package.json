@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/tools-shell",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A collection of functions for writing shell scripts",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/tools-shell#readme",
   "license": "MIT",
