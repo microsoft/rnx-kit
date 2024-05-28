@@ -67,7 +67,7 @@ const table = markdownTable([
         const pkg = preset[profileVersion][capability];
         if ("version" in pkg) {
           const { name, version } = pkg;
-          return `${name}@${version.replace("<", "&lt;").replace(">", "&gt;")}`;
+          return `${name}@${version.replaceAll("<", "&lt;").replaceAll(">", "&gt;")}`;
         } else if (pkg.capabilities.length > 0) {
           return `Meta package for installing ${pkg.capabilities
             .map((name) => `\`${name}\``)
