@@ -1,6 +1,9 @@
+import { deepEqual, equal, throws } from "node:assert/strict";
 import * as fs from "node:fs";
 import * as os from "node:os";
 import * as path from "node:path";
+import { afterEach, before, beforeEach, describe, it } from "node:test";
+import { fileURLToPath } from "node:url";
 import type { PackageManifest } from "../src/package";
 import {
   findPackage,
@@ -12,12 +15,12 @@ import {
 } from "../src/package";
 
 describe("Node > Package", () => {
-  const fixtureDir = path.resolve(__dirname, "__fixtures__");
+  const fixtureDir = fileURLToPath(new URL("__fixtures__", import.meta.url));
   const tempDir = fs.realpathSync(os.tmpdir());
 
-  beforeAll(() => {
-    expect(fs.existsSync(fixtureDir)).toBe(true);
-    expect(fs.existsSync(tempDir)).toBe(true);
+  before(() => {
+    equal(fs.existsSync(fixtureDir), true);
+    equal(fs.existsSync(tempDir), true);
   });
 
   let testTempDir: string;
@@ -32,89 +35,89 @@ describe("Node > Package", () => {
     fs.rmSync(testTempDir, { maxRetries: 5, recursive: true });
   });
 
-  test("parsePackageRef(react-native) returns an unscoped reference", () => {
-    expect(parsePackageRef("react-native")).toEqual({ name: "react-native" });
+  it("parsePackageRef(react-native) returns an unscoped reference", () => {
+    deepEqual(parsePackageRef("react-native"), { name: "react-native" });
   });
 
-  test("parsePackageRef(@babel/core) returns a scoped reference", () => {
-    expect(parsePackageRef("@babel/core")).toEqual({
+  it("parsePackageRef(@babel/core) returns a scoped reference", () => {
+    deepEqual(parsePackageRef("@babel/core"), {
       scope: "@babel",
       name: "core",
     });
   });
 
-  test("parsePackageRef(@alias) is allowed", () => {
-    expect(parsePackageRef("@alias")).toEqual({ name: "@alias" });
+  it("parsePackageRef(@alias) is allowed", () => {
+    deepEqual(parsePackageRef("@alias"), { name: "@alias" });
   });
 
-  test("parsePackageRef(undefined) throws an Error", () => {
+  it("parsePackageRef(undefined) throws an Error", () => {
     // @ts-expect-error Argument of type 'undefined' is not assignable to parameter of type 'string'
-    expect(() => parsePackageRef(undefined)).toThrow();
+    throws(() => parsePackageRef(undefined));
   });
 
-  test("parsePackageRef(@babel/) throws an Error", () => {
-    expect(() => parsePackageRef("@babel/")).toThrow();
+  it("parsePackageRef(@babel/) throws an Error", () => {
+    throws(() => parsePackageRef("@babel/"));
   });
 
-  test("parsePackageRef(@/core) throws an Error", () => {
-    expect(() => parsePackageRef("@/core")).toThrow();
+  it("parsePackageRef(@/core) throws an Error", () => {
+    throws(() => parsePackageRef("@/core"));
   });
 
-  test("readPackage() loads package.json when given its containing directory", () => {
+  it("readPackage() loads package.json when given its containing directory", () => {
     const manifest = readPackage(fixtureDir);
-    expect(manifest.name).toEqual("test-package");
-    expect(manifest.version).toEqual("4.5.1");
+    equal(manifest.name, "test-package");
+    equal(manifest.version, "4.5.1");
   });
 
-  test("readPackage() loads package.json when given a full path to it", () => {
+  it("readPackage() loads package.json when given a full path to it", () => {
     const manifest = readPackage(path.join(fixtureDir, "package.json"));
-    expect(manifest.name).toEqual("test-package");
-    expect(manifest.version).toEqual("4.5.1");
+    equal(manifest.name, "test-package");
+    equal(manifest.version, "4.5.1");
   });
 
-  test("writePackage() writes package.json when given a containing directory", () => {
+  it("writePackage() writes package.json when given a containing directory", () => {
     const pkgPath = path.join(testTempDir, "package.json");
     const manifest: PackageManifest = {
       name: "package name",
       version: "1.0.0",
     };
-    expect(fs.existsSync(pkgPath)).toBe(false);
+    equal(fs.existsSync(pkgPath), false);
     writePackage(testTempDir, manifest);
-    expect(fs.existsSync(pkgPath)).toBe(true);
+    equal(fs.existsSync(pkgPath), true);
   });
 
-  test("writePackage() writes package.json when given a full path to it", () => {
+  it("writePackage() writes package.json when given a full path to it", () => {
     const pkgPath = path.join(testTempDir, "package.json");
     const manifest: PackageManifest = {
       name: "package name",
       version: "1.0.0",
     };
-    expect(fs.existsSync(pkgPath)).toBe(false);
+    equal(fs.existsSync(pkgPath), false);
     writePackage(pkgPath, manifest);
-    expect(fs.existsSync(pkgPath)).toBe(true);
+    equal(fs.existsSync(pkgPath), true);
   });
 
-  test("findPackage() returns the nearest package.json file", () => {
+  it("findPackage() returns the nearest package.json file", () => {
     const pkgFile = findPackage(fixtureDir);
-    expect(pkgFile).toEqual(path.join(fixtureDir, "package.json"));
+    equal(pkgFile, path.join(fixtureDir, "package.json"));
   });
 
-  test("findPackage() return undefined when it does not find anything", () => {
+  it("findPackage() return undefined when it does not find anything", () => {
     const pkgFile = findPackage(testTempDir);
-    expect(pkgFile).toBeUndefined();
+    equal(pkgFile, undefined);
   });
 
-  test("findPackageDir() returns the parent directory of the nearest package.json file", () => {
+  it("findPackageDir() returns the parent directory of the nearest package.json file", () => {
     const pkgDir = findPackageDir(fixtureDir);
-    expect(pkgDir).toEqual(fixtureDir);
+    equal(pkgDir, fixtureDir);
   });
 
-  test("findPackageDir() returns undefined when it does not find anything", () => {
+  it("findPackageDir() returns undefined when it does not find anything", () => {
     const pkgDir = findPackageDir(testTempDir);
-    expect(pkgDir).toBeUndefined();
+    equal(pkgDir, undefined);
   });
 
-  test("findPackageDependencyDir() returns the package directory", () => {
+  it("findPackageDependencyDir() returns the package directory", () => {
     const pkgDir = findPackageDependencyDir(
       {
         scope: "@babel",
@@ -124,66 +127,71 @@ describe("Node > Package", () => {
         startDir: fixtureDir,
       }
     );
-    expect(pkgDir).toEqual(
-      path.join(fixtureDir, "node_modules", "@babel", "core")
-    );
+    equal(pkgDir, path.join(fixtureDir, "node_modules", "@babel", "core"));
   });
 
-  test("findPackageDependencyDir() accepts strings", () => {
+  it("findPackageDependencyDir() accepts strings", () => {
     const pkgDir = findPackageDependencyDir("@babel/core", {
       startDir: fixtureDir,
     });
-    expect(pkgDir).toEqual(
-      path.join(fixtureDir, "node_modules", "@babel/core")
-    );
+    equal(pkgDir, path.join(fixtureDir, "node_modules", "@babel/core"));
   });
 
-  test("findPackageDependencyDir() finds a symlink package dir by default", () => {
-    const coreLinkedPath = path.join(
-      fixtureDir,
-      "node_modules",
-      "@babel",
-      "core-linked"
-    );
-    expect(fs.lstatSync(coreLinkedPath).isSymbolicLink()).toBeTruthy();
+  it(
+    "findPackageDependencyDir() finds a symlink package dir by default",
+    { skip: process.platform === "win32" },
+    () => {
+      const coreLinkedPath = path.join(
+        fixtureDir,
+        "node_modules",
+        "@babel",
+        "core-linked"
+      );
+      equal(fs.lstatSync(coreLinkedPath).isSymbolicLink(), true);
 
-    const pkgDir = findPackageDependencyDir(
-      {
-        scope: "@babel",
-        name: "core-linked",
-      },
-      {
-        startDir: fixtureDir,
-      }
-    );
-    expect(pkgDir).toEqual(
-      path.join(fixtureDir, "node_modules", "@babel", "core-linked")
-    );
-  });
+      const pkgDir = findPackageDependencyDir(
+        {
+          scope: "@babel",
+          name: "core-linked",
+        },
+        {
+          startDir: fixtureDir,
+        }
+      );
+      equal(
+        pkgDir,
+        path.join(fixtureDir, "node_modules", "@babel", "core-linked")
+      );
+    }
+  );
 
-  test("findPackageDependencyDir() finds nothing when a symlink is the only valid result but allowSymlinks is false", () => {
-    const coreLinkedPath = path.join(
-      fixtureDir,
-      "node_modules",
-      "@babel",
-      "core-linked"
-    );
-    expect(fs.lstatSync(coreLinkedPath).isSymbolicLink()).toBeTruthy();
+  it(
+    "findPackageDependencyDir() finds nothing when a symlink is the only valid result but allowSymlinks is false",
+    { skip: process.platform === "win32" },
+    () => {
+      const coreLinkedPath = path.join(
+        fixtureDir,
+        "node_modules",
+        "@babel",
+        "core-linked"
+      );
+      equal(fs.lstatSync(coreLinkedPath).isSymbolicLink(), true);
 
-    const pkgDir = findPackageDependencyDir(
-      {
-        scope: "@babel",
-        name: "core-linked",
-      },
-      {
-        startDir: fixtureDir,
-        allowSymlinks: false,
-      }
-    );
-    expect(pkgDir).toBeUndefined();
-  });
+      const pkgDir = findPackageDependencyDir(
+        {
+          scope: "@babel",
+          name: "core-linked",
+        },
+        {
+          startDir: fixtureDir,
+          allowSymlinks: false,
+        }
+      );
+      equal(pkgDir, undefined);
+    }
+  );
 
-  test("findPackageDependencyDir() returns undefined when it does not find anything", () => {
+  it("findPackageDependencyDir() returns undefined when it does not find anything", () => {
     const pkgDir = findPackageDependencyDir(
       {
         name: "does-not-exist",
@@ -192,6 +200,6 @@ describe("Node > Package", () => {
         startDir: fixtureDir,
       }
     );
-    expect(pkgDir).toBeUndefined();
+    equal(pkgDir, undefined);
   });
 });
