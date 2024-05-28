@@ -1,6 +1,5 @@
-import crypto from "crypto";
-import fse from "fs";
-
+import * as crypto from "crypto";
+import * as fs from "fs";
 import { log } from "./logger";
 
 export function compareFiles(
@@ -10,8 +9,8 @@ export function compareFiles(
   callbackOnError: (result: string) => void
 ) {
   try {
-    const hash1 = crypto.createHash("md5");
-    const stream1 = fse.createReadStream(path1);
+    const hash1 = crypto.createHash("sha256");
+    const stream1 = fs.createReadStream(path1);
 
     stream1.on("data", (data) => {
       hash1.update(data);
@@ -20,8 +19,8 @@ export function compareFiles(
     stream1.on("end", () => {
       const hash1Digest = hash1.digest("base64");
 
-      const hash2 = crypto.createHash("md5");
-      const stream2 = fse.createReadStream(path2);
+      const hash2 = crypto.createHash("sha256");
+      const stream2 = fs.createReadStream(path2);
 
       stream2.on("data", (data) => {
         hash2.update(data);
