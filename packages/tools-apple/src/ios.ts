@@ -170,7 +170,9 @@ export async function selectDevice(
   const device = deviceName
     ? devices.find(({ simulator, name }) => simulator && name === deviceName)
     : devices.reverse().find(({ simulator, available, modelName }) => {
-        return simulator && available && /^iPhone \d\d$/.test(modelName);
+        return (
+          simulator && available && /^iPhone \d\d(?: Pro)?$/.test(modelName)
+        );
       });
   if (!device) {
     const foundDevices = devices
