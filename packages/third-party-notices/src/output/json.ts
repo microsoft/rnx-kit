@@ -45,7 +45,7 @@ export function createLicenseJSON(
           };
 
           if (fullLicenseText) {
-            info.text = licenseText?.replace(/\r\n|\r|\n/g, "\\n").trim();
+            info.text = licenseText?.replace(/\r\n|\r|\n/g, "\n").trim();
           }
 
           return info;
