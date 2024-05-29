@@ -1,5 +1,5 @@
 import { findPackage, readPackage } from "@rnx-kit/tools-node/package";
-import type { License } from "../types";
+import type { License, LicenseJSONInfo } from "../types";
 
 function getPackageAuthor(modulePath: string): string | undefined {
   const pkgFile = findPackage(modulePath);
@@ -26,20 +26,33 @@ function parseCopyright(
   return m[0].trim();
 }
 
-export function createLicenseJSON(licenses: License[]): string {
-  return JSON.stringify({
-    packages: licenses.map(
-      ({ name, path: modulePath, version, license, licenseText }) => {
-        if (!license) {
-          throw new Error(`No license for ${name}`);
+export function createLicenseJSON(
+  licenses: License[],
+  fullLicenseText?: boolean
+): string {
+  return JSON.stringify(
+    {
+      packages: licenses.map(
+        ({ name, path: modulePath, version, license, licenseText }) => {
+          if (!license) {
+            throw new Error(`No license for ${name}`);
+          }
+          const info: LicenseJSONInfo = {
+            name,
+            version,
+            license,
+            copyright: parseCopyright(modulePath, licenseText),
+          };
+
+          if (fullLicenseText) {
+            info.text = licenseText?.replace(/\r\n|\r|\n/g, "\\n").trim();
+          }
+
+          return info;
         }
-        return {
-          name,
-          version,
-          license,
-          copyright: parseCopyright(modulePath, licenseText),
-        };
-      }
-    ),
-  });
+      ),
+    },
+    null,
+    2
+  );
 }

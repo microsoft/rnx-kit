@@ -116,4 +116,35 @@ describe("license", () => {
       ],
     });
   });
+
+  test("createLicenseJSON with fullLicenseText", async () => {
+    const licenses = await getSampleLicenseData();
+
+    const licenseText = createLicenseJSON(licenses, true);
+
+    expect(JSON.parse(licenseText)).toEqual({
+      packages: [
+        {
+          copyright: "Microsoft Open Source",
+          license: "MIT",
+          name: "@rnx-kit/console",
+          version: "1.2.3-fixedVersionForTesting",
+        },
+        {
+          copyright:
+            "Copyright 2010 James Halliday (mail@substack.net); Modified work Copyright 2014 Contributors (ben@npmjs.com)",
+          license: "MIT",
+          name: "yargs",
+          version: "1.2.3-fixedVersionForTesting",
+          text: 'MIT License\\n\\nCopyright 2010 James Halliday (mail@substack.net); Modified work Copyright 2014 Contributors (ben@npmjs.com)\\n\\nPermission is hereby granted, free of charge, to any person obtaining a copy\\nof this software and associated documentation files (the "Software"), to deal\\nin the Software without restriction, including without limitation the rights\\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\\ncopies of the Software, and to permit persons to whom the Software is\\nfurnished to do so, subject to the following conditions:\\n\\nThe above copyright notice and this permission notice shall be included in\\nall copies or substantial portions of the Software.\\n\\nTHE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN\\nTHE SOFTWARE.\\n',
+        },
+        {
+          copyright: "Microsoft Open Source",
+          license: "Unlicensed",
+          name: "private-package",
+          version: "1.0.0",
+        },
+      ],
+    });
+  });
 });

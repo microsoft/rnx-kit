@@ -16,10 +16,6 @@ output file.
 
 This package works for npm, yarn and pnpm package layouts formats.
 
-At the moment this package only supports webpack based bundles, there is nothing
-preventing adding metro support, the current customers of this module are
-basedon webpack at the moment.
-
 ## Usage
 
 ### Commandline
@@ -49,6 +45,7 @@ Options:
                     licence file.                                        [array]
   --additionalText  A list of lines to append at the end of the generated
                     licence file.                                        [array]
+  --fullLicenseText  Include full license text in the JSON output      [boolean]
 ```
 
 ### As a library
