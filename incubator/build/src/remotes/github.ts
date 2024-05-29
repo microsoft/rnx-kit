@@ -1,3 +1,4 @@
+import { createOAuthDeviceAuth } from "@octokit/auth-oauth-device";
 import { Octokit } from "@octokit/core";
 import type { RestEndpointMethodTypes } from "@octokit/plugin-rest-endpoint-methods";
 import { restEndpointMethods } from "@octokit/plugin-rest-endpoint-methods";
@@ -34,15 +35,21 @@ const POLL_INTERVAL = 1000;
 
 const workflowRunCache: Record<string, number> = {};
 
-const octokit = once(() => {
+function createOctokitClient(auth?: unknown) {
+  if (!auth || typeof auth !== "string") {
+    throw new Error(`A GitHub access token is required`);
+  }
+
   const RestClient = Octokit.plugin(restEndpointMethods);
   return new RestClient({
-    auth: getPersonalAccessToken(),
+    auth,
     // Use `node-fetch` only if Node doesn't implement Fetch API:
     // https://github.com/octokit/request.js/blob/v8.1.1/src/fetch-wrapper.ts#L28-L31
     request: "fetch" in globalThis ? undefined : { fetch },
   });
-});
+}
+
+let octokit = once(createOctokitClient);
 
 async function downloadArtifact(
   runId: WorkflowRunId,
@@ -82,18 +89,53 @@ async function downloadArtifact(
   return filename;
 }
 
-function getPersonalAccessToken(): string | undefined {
-  if (process.env.GITHUB_TOKEN) {
-    return process.env.GITHUB_TOKEN;
+async function getPersonalAccessToken(
+  logger: Ora,
+  forceRefresh?: "force-refresh"
+): Promise<string> {
+  const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
+  if (GITHUB_TOKEN) {
+    return GITHUB_TOKEN;
   }
 
-  if (!fs.existsSync(USER_CONFIG_FILE)) {
-    return undefined;
+  const config: UserConfig = (() => {
+    if (fs.existsSync(USER_CONFIG_FILE)) {
+      const content = fs.readFileSync(USER_CONFIG_FILE, { encoding: "utf-8" });
+      return JSON.parse(content);
+    }
+    return {};
+  })();
+  const githubToken = config.github?.token;
+  if (forceRefresh !== "force-refresh" && githubToken) {
+    return githubToken;
   }
 
-  const content = fs.readFileSync(USER_CONFIG_FILE, { encoding: "utf-8" });
-  const config: UserConfig = JSON.parse(content);
-  return config?.github?.token;
+  const auth = createOAuthDeviceAuth({
+    clientType: "oauth-app",
+    clientId: "Ov23litJ0KvI5TF8gZiE", // TODO: Register app under an org
+    scopes: ["repo"],
+    onVerification: (verification) => {
+      logger.info(
+        "@rnx-kit/build requires your permission to dispatch builds on GitHub"
+      );
+      logger.info(
+        `Open '${verification.verification_uri}' and enter code: ${verification.user_code}`
+      );
+    },
+  });
+
+  const { token } = await auth({ type: "oauth" });
+  if (config.github) {
+    config.github.token = token;
+  } else {
+    config.github = { token };
+  }
+  fs.writeFile(
+    USER_CONFIG_FILE,
+    JSON.stringify(config, undefined, 2) + "\n",
+    () => 0
+  );
+  return token;
 }
 
 async function getWorkflowRunId(
@@ -120,9 +162,9 @@ async function getWorkflowRunId(
 
 async function watchWorkflowRun(
   runId: WorkflowRunId,
-  spinner: Ora
+  logger: Ora
 ): Promise<string | null> {
-  spinner.start("Starting build");
+  logger.start("Starting build");
 
   const max = Math.max;
   const now = Date.now;
@@ -174,13 +216,13 @@ async function watchWorkflowRun(
             const elapsed = elapsedTime(started_at, completed_at);
             switch (conclusion) {
               case "failure":
-                spinner.fail(`${name} failed (${elapsed})`);
+                logger.fail(`${name} failed (${elapsed})`);
                 break;
               case "success":
-                spinner.succeed(`${name} succeeded (${elapsed})`);
+                logger.succeed(`${name} succeeded (${elapsed})`);
                 break;
               default:
-                spinner.fail(`${name} ${conclusion} (${elapsed})`);
+                logger.fail(`${name} ${conclusion} (${elapsed})`);
                 break;
             }
             return conclusion || result;
@@ -199,7 +241,7 @@ async function watchWorkflowRun(
       continue;
     }
 
-    spinner.text = `${currentStep} (${elapsedTime(jobStartedAt)})`;
+    logger.text = `${currentStep} (${elapsedTime(jobStartedAt)})`;
     idleTime = max(100, POLL_INTERVAL - (now() - start));
   }
 
@@ -255,39 +297,37 @@ export async function install(): Promise<number> {
     return 1;
   }
 
-  if (!getPersonalAccessToken()) {
-    const exampleConfig: UserConfig = {
-      github: { token: "github_pat_0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ" },
-    };
-    const example = JSON.stringify(exampleConfig);
-    console.error(
-      "Missing personal access token for GitHub.\n\nPlease create a " +
-        "fine-grained personal access token, and save it in " +
-        `'${USER_CONFIG_FILE}' like below:\n\n\t${example}\n\nThe ` +
-        "token must have `action:write` permission. When creating a new " +
-        "fine-grained personal access token, under 'Repository permissions', " +
-        "make sure 'Actions' is set to 'Read and write'.\n\n" +
-        "For how to create a personal access token, see: " +
-        "https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token"
-    );
-    return 1;
-  }
-
   return 0;
 }
 
 export async function build(
   { owner, repo, ref }: Context,
   inputs: BuildParams,
-  spinner: Ora
+  logger: Ora
 ): Promise<string | null> {
-  await octokit().rest.actions.createWorkflowDispatch({
+  const dispatchParams = {
     owner,
     repo,
     workflow_id: WORKFLOW_ID,
     ref,
     inputs,
-  });
+  };
+  try {
+    const token = await getPersonalAccessToken(logger);
+    await octokit(token).rest.actions.createWorkflowDispatch(dispatchParams);
+  } catch (e) {
+    if (e instanceof RequestError && e.status === 401) {
+      logger.info("Access token has expired");
+
+      // Reset to force the creation of a new Octokit client
+      octokit = once(createOctokitClient);
+
+      const token = await getPersonalAccessToken(logger, "force-refresh");
+      await octokit(token).rest.actions.createWorkflowDispatch(dispatchParams);
+    } else {
+      throw e;
+    }
+  }
 
   const workflowRunId = await getWorkflowRunId({
     owner,
@@ -300,11 +340,11 @@ export async function build(
   });
   workflowRunCache[ref] = workflowRunId.run_id;
 
-  spinner.succeed(
+  logger.succeed(
     `Build queued: https://github.com/${owner}/${repo}/actions/runs/${workflowRunId.run_id}`
   );
 
-  const conclusion = await watchWorkflowRun(workflowRunId, spinner);
+  const conclusion = await watchWorkflowRun(workflowRunId, logger);
   delete workflowRunCache[ref];
   if (conclusion !== "success") {
     return null;
@@ -314,9 +354,9 @@ export async function build(
     return inputs.distribution;
   }
 
-  spinner.start("Downloading build artifact");
+  logger.start("Downloading build artifact");
   const artifactFile = await downloadArtifact(workflowRunId, inputs);
-  spinner.succeed(`Build artifact saved to ${artifactFile}`);
+  logger.succeed(`Build artifact saved to ${artifactFile}`);
 
   return artifactFile;
 }
