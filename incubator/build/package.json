@@ -21,6 +21,9 @@
       "types": "./lib/index.d.ts",
       "import": "./lib/index.js"
     },
+    "./scripts/build-apple": {
+      "require": "./scripts/build-apple.sh"
+    },
     "./package.json": "./package.json"
   },
   "bin": {

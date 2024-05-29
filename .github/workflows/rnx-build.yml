@@ -83,21 +83,21 @@ jobs:
           BUILD_PROVISION_PROFILE_BASE64: ${{ secrets.BUILD_PROVISION_PROFILE_BASE64 }}
           KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
           P12_PASSWORD: ${{ secrets.P12_PASSWORD }}
-        run: npx --prefix . rnx-build-apple install-certificate
+        run: /bin/bash $(node --print 'require.resolve("@rnx-kit/build/scripts/build-apple")') install-certificate
       - name: Build iOS app
-        run: npx --prefix . rnx-build-apple build-ios --scheme ${{ github.event.inputs.scheme }} --device-type ${{ github.event.inputs.deviceType }} --archs ${{ github.event.inputs.architecture }}
+        run: /bin/bash $(node --print 'require.resolve("@rnx-kit/build/scripts/build-apple")') build-ios --scheme ${{ github.event.inputs.scheme }} --device-type ${{ github.event.inputs.deviceType }} --archs ${{ github.event.inputs.architecture }}
         working-directory: ${{ github.event.inputs.projectRoot }}/ios
       - name: Remove Apple signing certificate and provisioning profile
         # Always run this job step, even if previous ones fail. See also
         # https://docs.github.com/en/actions/deployment/deploying-xcode-applications/installing-an-apple-certificate-on-macos-runners-for-xcode-development#required-clean-up-on-self-hosted-runners
         if: ${{ always() && github.event.inputs.deviceType == 'device' }}
-        run: npx --prefix . rnx-build-apple uninstall-certificate
+        run: /bin/bash $(node --print 'require.resolve("@rnx-kit/build/scripts/build-apple")') uninstall-certificate
       - name: Prepare build artifact
         id: prepare-build-artifact
         run: |
           if [[ ${{ github.event.inputs.distribution }} == 'local' ]]; then
             app=$(find ${XCARCHIVE_FILE}/Products/Applications -maxdepth 1 -name '*.app' -type d | head -1)
-            npx --prefix . rnx-build-apple archive ios-artifact.tar "${app}"
+            /bin/bash $(node --print 'require.resolve("@rnx-kit/build/scripts/build-apple")') archive ios-artifact.tar "${app}"
             echo 'filename=ios-artifact.tar' >> $GITHUB_OUTPUT
           else
             xcodebuild -exportArchive -archivePath ${XCARCHIVE_FILE} -exportPath export -exportOptionsPlist ExportOptions.plist 2>&1
@@ -131,13 +131,13 @@ jobs:
         run: pod install --project-directory=macos --verbose
         working-directory: ${{ github.event.inputs.projectRoot }}
       - name: Build macOS app
-        run: npx --prefix . rnx-build-apple build-macos --scheme ${{ github.event.inputs.scheme }}
+        run: /bin/bash $(node --print 'require.resolve("@rnx-kit/build/scripts/build-apple")') build-macos --scheme ${{ github.event.inputs.scheme }}
         working-directory: ${{ github.event.inputs.projectRoot }}/macos
       - name: Prepare build artifact
         run: |
           output_path=DerivedData/Build/Products
           app=$(find ${output_path} -maxdepth 2 -name '*.app' -type d | head -1)
-          npx --prefix . rnx-build-apple archive macos-artifact.tar "${app}"
+          /bin/bash $(node --print 'require.resolve("@rnx-kit/build/scripts/build-apple")') archive macos-artifact.tar "${app}"
         working-directory: ${{ github.event.inputs.projectRoot }}/macos
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
