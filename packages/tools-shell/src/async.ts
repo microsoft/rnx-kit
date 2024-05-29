@@ -8,11 +8,13 @@ export function idle(ms: number): Promise<void> {
 /**
  * Wraps the function, making sure it only gets called once.
  */
-export function once<R>(func: () => R): () => R {
+export function once<R>(
+  func: (...args: unknown[]) => R
+): (...args: unknown[]) => R {
   let result: R | undefined;
-  return () => {
+  return (...args) => {
     if (!result) {
-      result = func();
+      result = func(...args);
     }
     return result;
   };
