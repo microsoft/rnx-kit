@@ -1,5 +1,11 @@
 # @rnx-kit/tools-shell
 
+## 0.1.3
+
+### Patch Changes
+
+- b9d7ad1: Fix inverted check in `once`
+
 ## 0.1.2
 
 ### Patch Changes
