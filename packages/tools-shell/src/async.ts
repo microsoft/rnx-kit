@@ -13,7 +13,7 @@ export function once<R>(
 ): (...args: unknown[]) => NonNullable<R> {
   let result: NonNullable<R>;
   return (...args) => {
-    if (result != null) {
+    if (result == null) {
       result = func(...args);
     }
     return result;
