@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/patcher-rnmacos",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "experimental": true,
   "description": "EXPERIMENTAL - USE WITH CAUTION - A tool to generate patches and apply them to a codebase",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/incubator/patcher-rnmacos#readme",

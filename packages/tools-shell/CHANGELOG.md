@@ -1,5 +1,11 @@
 # @rnx-kit/tools-shell
 
+## 0.1.2
+
+### Patch Changes
+
+- 9ddb5f8: Allow `once` functions to take arguments
+
 ## 0.1.1
 
 ### Patch Changes

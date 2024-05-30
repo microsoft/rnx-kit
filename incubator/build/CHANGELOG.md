@@ -1,10 +1,22 @@
 # @rnx-kit/build
 
+## 0.6.5
+
+### Patch Changes
+
+- 0f4868a: Fix `rnx-build-apple` not being resolved correctly in pnpm setups
+- Updated dependencies [dddf041]
+- Updated dependencies [9ddb5f8]
+  - @rnx-kit/tools-apple@0.1.1
+  - @rnx-kit/tools-shell@0.1.2
+
 ## 0.6.4
 
 ### Patch Changes
 
-- f1f70fb: Using `gradle/actions/setup-gradle` to execute Gradle is deprecated (see https://github.com/gradle/actions/blob/v3/docs/deprecation-upgrade-guide.md#using-the-action-to-execute-gradle-via-the-arguments-parameter-is-deprecated)
+- f1f70fb: Using `gradle/actions/setup-gradle` to execute Gradle is deprecated
+  (see
+  https://github.com/gradle/actions/blob/v3/docs/deprecation-upgrade-guide.md#using-the-action-to-execute-gradle-via-the-arguments-parameter-is-deprecated)
 
 ## 0.6.3
 
@@ -41,9 +53,12 @@
 
 ### Minor Changes
 
-- 9c863db0: Bumped `@octokit/core` to 5.0, and dropped support for Node 14 and 16.
+- 9c863db0: Bumped `@octokit/core` to 5.0, and dropped support for Node 14
+  and 16.
 
-  Testing shows that at least Node 16 still works if you import `node-fetch`, so technically, if your setup does not enforce Node version, you can still use this package.
+  Testing shows that at least Node 16 still works if you import `node-fetch`, so
+  technically, if your setup does not enforce Node version, you can still use
+  this package.
 
 ### Patch Changes
 
@@ -59,15 +74,18 @@
 
 ### Patch Changes
 
-- f713d3be: GitHub: Fix job ending prematurely when it takes longer than usual to start up (proper)
-- 23b3b066: iOS/macOS: Explicitly disable sanitizers since they might be enabled by inherited flags
+- f713d3be: GitHub: Fix job ending prematurely when it takes longer than usual
+  to start up (proper)
+- 23b3b066: iOS/macOS: Explicitly disable sanitizers since they might be enabled
+  by inherited flags
 
 ## 0.4.3
 
 ### Patch Changes
 
 - 3db04bdc: Use `xcdevice` instead of `xtrace` to find devices
-- 4171d6a3: GitHub: Fix job ending prematurely when it takes longer than usual to start up
+- 4171d6a3: GitHub: Fix job ending prematurely when it takes longer than usual
+  to start up
 - 9be09c3d: Use version number instead of SHA now that a new RNTA release is out
 - 4171d6a3: Use `setup-toolchain` action from `react-native-test-app`
 
@@ -88,7 +106,8 @@
 
 ### Minor Changes
 
-- 8f66b73b: Firebase: Authenticating with `--token` is deprecated. A service account is now required for authentication.
+- 8f66b73b: Firebase: Authenticating with `--token` is deprecated. A service
+  account is now required for authentication.
 
 ## 0.3.3
 
@@ -117,7 +136,8 @@
 
 ### Patch Changes
 
-- a99b7969: Added support for distributing builds via [Firebase App Distribution](https://firebase.google.com/products/app-distribution)
+- a99b7969: Added support for distributing builds via
+  [Firebase App Distribution](https://firebase.google.com/products/app-distribution)
 
 ## 0.2.0
 
@@ -148,13 +168,19 @@
 ### Patch Changes
 
 - 565b3082: iOS: Prompt user for device rather than failing
-- bbd004e5: Use bsdtar to extract ZIP files. Note that if we're inside Git Bash shell on Windows, we should use UnZip instead as GNU Tar does not support ZIP.
+- bbd004e5: Use bsdtar to extract ZIP files. Note that if we're inside Git Bash
+  shell on Windows, we should use UnZip instead as GNU Tar does not support ZIP.
 - 76b6fb70: Windows: Replace Windows 11 only solution with proper code signing
 - ddb7f40f: iOS: Added ability to launch on device
-- 8e619211: Added elapsed time to remote build job, and reduced job polling frequency to avoid hitting the hourly rate limit.
+- 8e619211: Added elapsed time to remote build job, and reduced job polling
+  frequency to avoid hitting the hourly rate limit.
 - aa0a4fcd: Better handling of multiple attached Android devices
 - 80614647: Error on unknown arguments
-- b4af4f6b: Improved handling of iOS device selection. Builds for physical devices differ from simulator ones, meaning we should pick the right device when deploying the app. Note that this does not quite add the capability to deploy to physical devices just yet. We still need to figure out how to deal with developer certificates.
+- b4af4f6b: Improved handling of iOS device selection. Builds for physical
+  devices differ from simulator ones, meaning we should pick the right device
+  when deploying the app. Note that this does not quite add the capability to
+  deploy to physical devices just yet. We still need to figure out how to deal
+  with developer certificates.
 
   This change also fixes an issue with corrupted artifacts.
 
