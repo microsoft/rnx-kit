@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/third-party-notices
 
+## 1.4.0
+
+### Minor Changes
+
+- 758cc29: Add full license text and format the JSON output
+
 ## 1.3.4
 
 ### Patch Changes
@@ -100,7 +106,8 @@ Mon, 01 Nov 2021 13:46:13 GMT
 
 ### Patches
 
-- Normalize main and types fields across all packages which use them. (afoxman@microsoft.com)
+- Normalize main and types fields across all packages which use them.
+  (afoxman@microsoft.com)
 - Bump @rnx-kit/console to v1.0.6
 - Bump @rnx-kit/tools-node to v1.2.1
 
@@ -145,7 +152,8 @@ Fri, 03 Sep 2021 12:18:30 GMT
 
 ### Patches
 
-- Bump @rnx-kit/third-party-notices to v1.2.3 (4123478+tido64@users.noreply.github.com)
+- Bump @rnx-kit/third-party-notices to v1.2.3
+  (4123478+tido64@users.noreply.github.com)
 
 ## 1.2.2
 
@@ -153,7 +161,8 @@ Tue, 31 Aug 2021 06:43:13 GMT
 
 ### Patches
 
-- Bump @rnx-kit/third-party-notices to v1.2.2 (4123478+tido64@users.noreply.github.com)
+- Bump @rnx-kit/third-party-notices to v1.2.2
+  (4123478+tido64@users.noreply.github.com)
 
 ## 1.2.1
 
@@ -161,7 +170,8 @@ Fri, 27 Aug 2021 18:41:43 GMT
 
 ### Patches
 
-- Bump @rnx-kit/third-party-notices to v1.2.1 (4123478+tido64@users.noreply.github.com)
+- Bump @rnx-kit/third-party-notices to v1.2.1
+  (4123478+tido64@users.noreply.github.com)
 
 ## 1.2.0
 
@@ -193,7 +203,8 @@ Sat, 21 Aug 2021 08:22:48 GMT
 
 ### Patches
 
-- Integrate tools package and other common libraries throughout monorepo, removing custom code. (afoxman@microsoft.com)
+- Integrate tools package and other common libraries throughout monorepo,
+  removing custom code. (afoxman@microsoft.com)
 - Bump @rnx-kit/third-party-notices to v1.1.2 (afoxman@microsoft.com)
 
 ## 1.1.1
@@ -202,7 +213,8 @@ Wed, 04 Aug 2021 10:08:23 GMT
 
 ### Patches
 
-- Bump @rnx-kit/third-party-notices to v1.1.1 (4123478+tido64@users.noreply.github.com)
+- Bump @rnx-kit/third-party-notices to v1.1.1
+  (4123478+tido64@users.noreply.github.com)
 
 ## 1.1.0
 
@@ -218,7 +230,8 @@ Thu, 29 Jul 2021 19:42:04 GMT
 
 ### Patches
 
-- Bump @rnx-kit/third-party-notices to v1.0.3 (4123478+tido64@users.noreply.github.com)
+- Bump @rnx-kit/third-party-notices to v1.0.3
+  (4123478+tido64@users.noreply.github.com)
 
 ## 1.0.2
 

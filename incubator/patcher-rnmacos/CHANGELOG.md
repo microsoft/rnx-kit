@@ -1,5 +1,11 @@
 # @rnx-kit/patcher-rnmacos
 
+## 0.1.4
+
+### Patch Changes
+
+- 0179568: Replace MD5 with SHA-256 to comply with Microsoft SDL standards
+
 ## 0.1.3
 
 ### Patch Changes
