@@ -9,11 +9,11 @@ export function idle(ms: number): Promise<void> {
  * Wraps the function, making sure it only gets called once.
  */
 export function once<R>(
-  func: (...args: unknown[]) => R
-): (...args: unknown[]) => R {
-  let result: R | undefined;
+  func: (...args: unknown[]) => NonNullable<R>
+): (...args: unknown[]) => NonNullable<R> {
+  let result: NonNullable<R>;
   return (...args) => {
-    if (!result) {
+    if (result != null) {
       result = func(...args);
     }
     return result;
