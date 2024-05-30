@@ -1,5 +1,5 @@
 ---
-"@rnx-kit/build": minor
+"@rnx-kit/build": patch
 ---
 
 Implement
