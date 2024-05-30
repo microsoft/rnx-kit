@@ -3660,7 +3660,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rnx-kit/build@npm:*, @rnx-kit/build@workspace:incubator/build":
+"@rnx-kit/build@npm:*, @rnx-kit/build@workspace:*, @rnx-kit/build@workspace:incubator/build":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/build@workspace:incubator/build"
   dependencies:
@@ -4408,6 +4408,7 @@ __metadata:
     "@react-native/babel-preset": "npm:^0.73.0"
     "@react-native/metro-config": "npm:^0.73.0"
     "@rnx-kit/babel-preset-metro-react-native": "workspace:*"
+    "@rnx-kit/build": "workspace:*"
     "@rnx-kit/cli": "workspace:*"
     "@rnx-kit/eslint-config": "workspace:*"
     "@rnx-kit/jest-preset": "workspace:*"

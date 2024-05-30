@@ -41,6 +41,7 @@
     "@react-native/babel-preset": "^0.73.0",
     "@react-native/metro-config": "^0.73.0",
     "@rnx-kit/babel-preset-metro-react-native": "workspace:*",
+    "@rnx-kit/build": "workspace:*",
     "@rnx-kit/cli": "workspace:*",
     "@rnx-kit/eslint-config": "workspace:*",
     "@rnx-kit/jest-preset": "workspace:*",
