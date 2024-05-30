@@ -17,7 +17,8 @@
   "exports": {
     ".": {
       "types": "./lib/index.d.ts",
-      "import": "./lib/index.js"
+      "import": "./lib/index.js",
+      "node": "./lib/index.js"
     },
     "./package.json": "./package.json"
   },
