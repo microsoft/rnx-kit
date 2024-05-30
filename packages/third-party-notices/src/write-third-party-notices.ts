@@ -37,8 +37,14 @@ export async function writeThirdPartyNotices(
   options: WriteThirdPartyNoticesOptions
 ): Promise<void> {
   const fileOptions = { encoding: "utf-8" } as const;
-  const { additionalText, json, outputFile, preambleText, sourceMapFile } =
-    options;
+  const {
+    additionalText,
+    json,
+    outputFile,
+    preambleText,
+    sourceMapFile,
+    fullLicenseText,
+  } = options;
 
   // Parse source map file
   const sourceMapJson = fs.readFileSync(sourceMapFile, fileOptions);
@@ -53,7 +59,7 @@ export async function writeThirdPartyNotices(
   );
   const licenses = await extractLicenses(moduleNameToPathMap);
   const outputText = json
-    ? createLicenseJSON(licenses)
+    ? createLicenseJSON(licenses, fullLicenseText)
     : createLicenseFileContents(licenses, preambleText, additionalText);
 
   if (outputFile) {
@@ -67,12 +73,13 @@ export async function writeThirdPartyNoticesFromMap(
   options: WriteThirdPartyNoticesOptions,
   moduleNameToPathMap: Map<string, string>
 ): Promise<void> {
-  const { additionalText, json, preambleText, sourceMapFile } = options;
+  const { additionalText, json, preambleText, sourceMapFile, fullLicenseText } =
+    options;
   let { outputFile } = options;
 
   const licenses = await extractLicenses(moduleNameToPathMap);
   const outputText = json
-    ? createLicenseJSON(licenses)
+    ? createLicenseJSON(licenses, fullLicenseText)
     : createLicenseFileContents(licenses, preambleText, additionalText);
 
   if (!outputFile) {

@@ -13,6 +13,14 @@ export type License = ModuleNamePathPair & {
   noticeText?: string;
 };
 
+export type LicenseJSONInfo = {
+  name: string;
+  version: string;
+  license: string;
+  copyright: string;
+  text?: string;
+};
+
 export type SourceMap = {
   sources: string[];
   sections?: SourceSection[];
@@ -31,4 +39,5 @@ export type WriteThirdPartyNoticesOptions = {
   ignoreModules?: string[];
   preambleText?: string[];
   additionalText?: string[];
+  fullLicenseText?: boolean;
 };

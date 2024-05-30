@@ -52,6 +52,12 @@ function getArgs(): WriteThirdPartyNoticesOptions {
       describe:
         "A list of lines to append at the end of the generated license file.",
     },
+    fullLicenseText: {
+      type: "boolean",
+      describe: "Include full license text in the JSON output",
+      default: false,
+      implies: "json",
+    },
   }).argv;
 
   const writeTpnArgs: WriteThirdPartyNoticesOptions = argv;

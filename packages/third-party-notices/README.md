@@ -16,10 +16,6 @@ output file.
 
 This package works for npm, yarn and pnpm package layouts formats.
 
-At the moment this package only supports webpack based bundles, there is nothing
-preventing adding metro support, the current customers of this module are
-basedon webpack at the moment.
-
 ## Usage
 
 ### Commandline
@@ -32,23 +28,25 @@ npx @rnx-kit/third-party-notices \
 
 ```
 Options:
-  --help            Show help                                          [boolean]
-  --version         Show version number                                [boolean]
-  --rootPath        The root of the repo where to start resolving modules from.
+  --help             Show help                                         [boolean]
+  --version          Show version number                               [boolean]
+  --rootPath         The root of the repo where to start resolving modules from.
                                                              [string] [required]
-  --sourceMapFile   The sourceMap file to generate licence contents for.
+  --sourceMapFile    The sourceMap file to generate license contents for.
                                                              [string] [required]
-  --outputFile      The output file to write the licence file to.       [string]
-  --json            Output license information as a JSON
+  --json             Output license information as a JSON
                                                       [boolean] [default: false]
-  --ignoreScopes    Npm scopes to ignore and not emit licence information for
+  --outputFile       The output file to write the license file to.      [string]
+  --ignoreScopes     Npm scopes to ignore and not emit license information for
                                                                          [array]
-  --ignoreModules   Modules (js packages) to not emit licence information for
+  --ignoreModules    Modules (js packages) to not emit license information for
                                                                          [array]
-  --preambleText    A list of lines to prepend at the start of the generated
-                    licence file.                                        [array]
-  --additionalText  A list of lines to append at the end of the generated
-                    licence file.                                        [array]
+  --preambleText     A list of lines to prepend at the start of the generated
+                     license file.                                       [array]
+  --additionalText   A list of lines to append at the end of the generated
+                     license file.                                       [array]
+  --fullLicenseText  Include full license text in the JSON output
+                                                      [boolean] [default: false]
 ```
 
 ### As a library
