@@ -43,6 +43,7 @@
     "test": "rnx-kit-scripts test"
   },
   "dependencies": {
+    "@octokit/auth-oauth-device": "^7.1.1",
     "@octokit/core": "^6.0.0",
     "@octokit/plugin-rest-endpoint-methods": "^13.0.0",
     "@octokit/request-error": "^6.0.0",
