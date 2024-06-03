@@ -1,19 +1,20 @@
 import type { TransformProfile } from "metro-babel-transformer";
 
-export function parseBoolean(val: string): boolean {
-  if (val === "false") {
-    return false;
+export function asBoolean(value: string): boolean {
+  switch (value) {
+    case "false":
+      return false;
+    case "true":
+      return true;
+    default:
+      throw new Error(
+        "Invalid boolean value '" + value + "' — must be true or false"
+      );
   }
-  if (val === "true") {
-    return true;
-  }
-  throw new Error(
-    "Invalid boolean value '" + val + "' -- must be true or false"
-  );
 }
 
-export function parseInt(value: string): number {
-  return global.parseInt(value, 10);
+export function asNumber(value: string): number {
+  return Number(value);
 }
 
 export function parseTransformProfile(val: string): TransformProfile {

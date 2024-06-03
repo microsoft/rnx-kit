@@ -1,6 +1,6 @@
 import type { Config as CLIConfig } from "@react-native-community/cli-types";
 import { writeThirdPartyNotices } from "@rnx-kit/third-party-notices";
-import { parseBoolean } from "./parsers";
+import { asBoolean } from "./parsers";
 
 type CliThirdPartyNoticesOptions = {
   rootPath: string;
@@ -59,7 +59,7 @@ export const rnxWriteThirdPartyNoticesCommand = {
       name: "--json",
       description: "Format the 3rd-party notice file as JSON instead of text.",
       default: false,
-      parse: parseBoolean,
+      parse: asBoolean,
     },
     {
       name: "--output-file [file]",

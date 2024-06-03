@@ -4,10 +4,7 @@ export function latestVersion(versions: string[]): string {
 
   for (const version of versions) {
     const [major, minor, patch] = version.split(".");
-    const value =
-      parseInt(major, 10) * 10000 +
-      parseInt(minor, 10) * 100 +
-      parseInt(patch, 10);
+    const value = Number(major) * 10000 + Number(minor) * 100 + Number(patch);
     if (maxValue < value) {
       latestVersion = version;
       maxValue = value;

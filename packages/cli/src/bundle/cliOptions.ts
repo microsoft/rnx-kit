@@ -1,5 +1,5 @@
 import { parsePlatform } from "@rnx-kit/tools-react-native/platform";
-import { parseBoolean, parseTransformProfile } from "../parsers";
+import { asBoolean, asNumber, parseTransformProfile } from "../parsers";
 
 export const commonBundleCommandOptions = [
   {
@@ -22,13 +22,13 @@ export const commonBundleCommandOptions = [
     name: "--dev [boolean]",
     description: "If false, warnings are disabled and the bundle is minified.",
     default: true,
-    parse: parseBoolean,
+    parse: asBoolean,
   },
   {
     name: "--minify [boolean]",
     description:
       "Controls whether or not the bundle is minified. Disabling minification is useful for test builds.",
-    parse: parseBoolean,
+    parse: asBoolean,
   },
   {
     name: "--bundle-output [string]",
@@ -44,7 +44,7 @@ export const commonBundleCommandOptions = [
     name: "--max-workers [number]",
     description:
       "Specifies the maximum number of parallel worker threads to use for transforming files. This defaults to the number of cores available on your machine.",
-    parse: parseInt,
+    parse: asNumber,
   },
   {
     name: "--sourcemap-output [string]",

@@ -24,7 +24,7 @@ export { rnxAlignDeps, rnxAlignDepsCommand } from "./align-deps";
 export { rnxBundle, rnxBundleCommand } from "./bundle";
 export { rnxClean, rnxCleanCommand } from "./clean";
 export { copyProjectAssets, rnxCopyAssetsCommand } from "./copy-assets";
-export { parseBoolean, parseInt, parseTransformProfile } from "./parsers";
+export { asBoolean, asNumber, parseTransformProfile } from "./parsers";
 export { rnxRamBundle, rnxRamBundleCommand } from "./ram-bundle";
 export { rnxStart, rnxStartCommand } from "./start";
 export { rnxTest, rnxTestCommand } from "./test";

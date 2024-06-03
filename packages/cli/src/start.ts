@@ -12,6 +12,7 @@ import type { Middleware } from "metro-config";
 import type Server from "metro/src/Server";
 import * as path from "path";
 import { customizeMetroConfig } from "./metro-config";
+import { asNumber } from "./parsers";
 import { requireExternal } from "./serve/external";
 import { makeHelp } from "./serve/help";
 import { attachKeyHandlers } from "./serve/keyboard";
@@ -234,7 +235,7 @@ export const rnxStartCommand = {
       name: "--port [number]",
       description:
         "Host port to use when listening for incoming server requests.",
-      parse: parseInt,
+      parse: asNumber,
       default: 8081,
     },
     {
@@ -272,7 +273,7 @@ export const rnxStartCommand = {
       name: "--max-workers [number]",
       description:
         "Specifies the maximum number of parallel worker threads to use for transforming files. This defaults to the number of cores available on your machine.",
-      parse: parseInt,
+      parse: asNumber,
     },
     {
       name: "--reset-cache",
