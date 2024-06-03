@@ -1,5 +1,14 @@
 # @rnx-kit/build
 
+## 0.6.6
+
+### Patch Changes
+
+- dc52291: Implement
+  [OAuth device flow](https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/authorizing-oauth-apps#device-flow)
+- Updated dependencies [bad9c1e]
+  - @rnx-kit/config@0.6.7
+
 ## 0.6.5
 
 ### Patch Changes
