@@ -227,5 +227,8 @@
       }
     }
   },
-  "prettier": "./.github/prettierrc.json"
+  "prettier": "./.github/prettierrc.json",
+  "rnx-kit": {
+    "profiles": "./yarn-align-deps.config.js"
+  }
 }
