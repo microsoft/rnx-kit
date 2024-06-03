@@ -27,7 +27,7 @@ function parseCopyright(
       return packageAuthor;
     }
 
-    if (licenseURLs.length > 0) {
+    if (licenseURLs && licenseURLs.length > 0) {
       return `${license} (${licenseURLs.join(" ")})`;
     }
 
