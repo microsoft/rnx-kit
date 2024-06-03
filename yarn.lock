@@ -3682,7 +3682,7 @@ __metadata:
     "@octokit/core": "npm:^6.0.0"
     "@octokit/plugin-rest-endpoint-methods": "npm:^13.0.0"
     "@octokit/request-error": "npm:^6.0.0"
-    "@rnx-kit/config": "npm:^0.6.0"
+    "@rnx-kit/config": "npm:^0.6.7"
     "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/jest-preset": "npm:*"
     "@rnx-kit/scripts": "npm:*"
@@ -3806,7 +3806,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rnx-kit/config@npm:*, @rnx-kit/config@npm:^0.6.0, @rnx-kit/config@npm:^0.6.3, @rnx-kit/config@npm:^0.6.6, @rnx-kit/config@workspace:packages/config":
+"@rnx-kit/config@npm:*, @rnx-kit/config@npm:^0.6.3, @rnx-kit/config@npm:^0.6.6, @rnx-kit/config@npm:^0.6.7, @rnx-kit/config@workspace:packages/config":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/config@workspace:packages/config"
   dependencies:
