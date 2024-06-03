@@ -1,24 +1,25 @@
 {
   "private": true,
-  "name": "@rnx-kit/template",
-  "version": "0.0.2",
-  "description": "Template folder to use as baseline for new packages in rnx-kit",
-  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/template#readme",
+  "name": "@rnx-kit/yarn-plugin-dynamic-extensions",
+  "version": "0.0.1",
+  "description": "EXPERIMENTAL - USE WITH CAUTION - yarn-plugin-dynamic-extensions",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/incubator/yarn-plugin-dynamic-extensions#readme",
   "license": "MIT",
   "author": {
     "name": "Microsoft Open Source",
     "email": "microsoftopensource@users.noreply.github.com"
   },
   "files": [
-    "lib/**/*.d.ts",
-    "lib/**/*.js"
+    "index.js"
   ],
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
+  "main": "index.js",
+  "exports": {
+    ".": "./index.js"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/microsoft/rnx-kit",
-    "directory": "packages/template"
+    "directory": "incubator/yarn-plugin-dynamic-extensions"
   },
   "engines": {
     "node": ">=18.12"
@@ -31,15 +32,12 @@
   },
   "devDependencies": {
     "@rnx-kit/eslint-config": "*",
-    "@rnx-kit/jest-preset": "*",
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*",
+    "@yarnpkg/core": "^4.0.0",
     "eslint": "^9.0.0",
-    "jest": "^29.2.1",
     "prettier": "^3.0.0",
     "typescript": "^5.0.0"
   },
-  "jest": {
-    "preset": "@rnx-kit/jest-preset/private"
-  }
+  "experimental": true
 }

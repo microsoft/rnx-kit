@@ -4838,6 +4838,20 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@rnx-kit/yarn-plugin-dynamic-extensions@workspace:incubator/yarn-plugin-dynamic-extensions":
+  version: 0.0.0-use.local
+  resolution: "@rnx-kit/yarn-plugin-dynamic-extensions@workspace:incubator/yarn-plugin-dynamic-extensions"
+  dependencies:
+    "@rnx-kit/eslint-config": "npm:*"
+    "@rnx-kit/scripts": "npm:*"
+    "@rnx-kit/tsconfig": "npm:*"
+    "@yarnpkg/core": "npm:^4.0.0"
+    eslint: "npm:^9.0.0"
+    prettier: "npm:^3.0.0"
+    typescript: "npm:^5.0.0"
+  languageName: unknown
+  linkType: soft
+
 "@shikijs/engine-oniguruma@npm:^1.25.1":
   version: 1.26.1
   resolution: "@shikijs/engine-oniguruma@npm:1.26.1"
@@ -5564,7 +5578,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@yarnpkg/core@npm:^4.1.6, @yarnpkg/core@npm:^4.2.0":
+"@yarnpkg/core@npm:^4.0.0, @yarnpkg/core@npm:^4.1.6, @yarnpkg/core@npm:^4.2.0":
   version: 4.2.0
   resolution: "@yarnpkg/core@npm:4.2.0"
   dependencies:
