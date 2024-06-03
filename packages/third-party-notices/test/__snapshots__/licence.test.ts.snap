@@ -7,6 +7,12 @@ MIT (https://spdx.org/licenses/MIT.html)
 
 ========================================================================
 
+metro-source-map 1.2.3-fixedVersionForTesting
+--
+MIT (https://spdx.org/licenses/MIT.html)
+
+========================================================================
+
 yargs 1.2.3-fixedVersionForTesting
 --
 MIT License
@@ -43,6 +49,12 @@ Preamble 2
 ========================================================================
 
 @rnx-kit/console 1.2.3-fixedVersionForTesting
+--
+MIT (https://spdx.org/licenses/MIT.html)
+
+========================================================================
+
+metro-source-map 1.2.3-fixedVersionForTesting
 --
 MIT (https://spdx.org/licenses/MIT.html)
 
