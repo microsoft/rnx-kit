@@ -16,11 +16,22 @@ function getPackageAuthor(modulePath: string): string | undefined {
 
 function parseCopyright(
   modulePath: string,
-  licenseText: string | undefined
+  licenseText: string | undefined,
+  license: string | undefined,
+  licenseURLs: string[]
 ): string {
   const m = licenseText?.match(/^Copyright .*$/m);
   if (!m) {
-    return getPackageAuthor(modulePath) || "No copyright notice";
+    const packageAuthor = getPackageAuthor(modulePath);
+    if (packageAuthor) {
+      return packageAuthor;
+    }
+
+    if (licenseURLs.length > 0) {
+      return `${license} (${licenseURLs.join(" ")})`;
+    }
+
+    return "No copyright notice";
   }
 
   return m[0].trim();
@@ -33,7 +44,14 @@ export function createLicenseJSON(
   return JSON.stringify(
     {
       packages: licenses.map(
-        ({ name, path: modulePath, version, license, licenseText }) => {
+        ({
+          name,
+          path: modulePath,
+          version,
+          license,
+          licenseText,
+          licenseURLs,
+        }) => {
           if (!license) {
             throw new Error(`No license for ${name}`);
           }
@@ -41,7 +59,12 @@ export function createLicenseJSON(
             name,
             version,
             license,
-            copyright: parseCopyright(modulePath, licenseText),
+            copyright: parseCopyright(
+              modulePath,
+              licenseText,
+              license,
+              licenseURLs
+            ),
           };
 
           if (fullLicenseText) {

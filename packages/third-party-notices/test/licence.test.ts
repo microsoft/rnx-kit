@@ -9,12 +9,18 @@ const rnxConsoleDir = path.dirname(
 );
 const yargsDir = path.dirname(require.resolve("yargs/package.json"));
 
+const metroSourceMapDir = path.dirname(
+  require.resolve("metro-source-map/package.json")
+);
+
 async function getSampleLicenseData(): Promise<License[]> {
   const map = new Map([
     // License data in package.json
     ["@rnx-kit/console", rnxConsoleDir],
     // License data package.json and LICENCE file
     ["yargs", yargsDir],
+    // No license data
+    ["metro-source-map", metroSourceMapDir],
   ]);
 
   const licenses = await extractLicenses(map);
@@ -47,6 +53,13 @@ describe("license", () => {
         name: "@rnx-kit/console",
         path: rnxConsoleDir,
         version: "1.2.3-fixedVersionForTesting",
+      },
+      {
+        name: "metro-source-map",
+        path: metroSourceMapDir,
+        version: "1.2.3-fixedVersionForTesting",
+        licenseURLs: ["https://spdx.org/licenses/MIT.html"],
+        license: "MIT",
       },
       {
         license: "MIT",
@@ -101,6 +114,12 @@ describe("license", () => {
           version: "1.2.3-fixedVersionForTesting",
         },
         {
+          name: "metro-source-map",
+          version: "1.2.3-fixedVersionForTesting",
+          license: "MIT",
+          copyright: "MIT (https://spdx.org/licenses/MIT.html)",
+        },
+        {
           copyright:
             "Copyright 2010 James Halliday (mail@substack.net); Modified work Copyright 2014 Contributors (ben@npmjs.com)",
           license: "MIT",
@@ -132,6 +151,12 @@ describe("license", () => {
           license: "MIT",
           name: "@rnx-kit/console",
           version: "1.2.3-fixedVersionForTesting",
+        },
+        {
+          name: "metro-source-map",
+          version: "1.2.3-fixedVersionForTesting",
+          license: "MIT",
+          copyright: "MIT (https://spdx.org/licenses/MIT.html)",
         },
         {
           copyright:
