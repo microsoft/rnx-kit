@@ -1,4 +1,5 @@
 import type { TransformProfile } from "metro-babel-transformer";
+import * as path from "path";
 
 export function asBoolean(value: string): boolean {
   switch (value) {
@@ -15,6 +16,10 @@ export function asBoolean(value: string): boolean {
 
 export function asNumber(value: string): number {
   return Number(value);
+}
+
+export function asResolvedPath(value: string): string {
+  return path.resolve(value);
 }
 
 export function asStringArray(value: string): string[] {

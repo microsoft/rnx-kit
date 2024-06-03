@@ -12,7 +12,7 @@ import type { Middleware } from "metro-config";
 import type Server from "metro/src/Server";
 import * as path from "path";
 import { customizeMetroConfig } from "./metro-config";
-import { asNumber, asStringArray } from "./parsers";
+import { asNumber, asResolvedPath, asStringArray } from "./parsers";
 import { requireExternal } from "./serve/external";
 import { makeHelp } from "./serve/help";
 import { attachKeyHandlers } from "./serve/keyboard";
@@ -248,14 +248,13 @@ export const rnxStartCommand = {
       name: "--projectRoot [path]",
       description:
         "Path to the root of your react-native project. The bundle server uses this root path to resolve all web requests.",
-      parse: (val: string) => path.resolve(val),
+      parse: asResolvedPath,
     },
     {
       name: "--watchFolders [paths]",
       description:
         "Additional folders which will be added to the file-watch list. Comma-separated. By default, Metro watches all project files.",
-      parse: (val: string) =>
-        asStringArray(val).map((folder) => path.resolve(folder)),
+      parse: (val: string) => asStringArray(val).map(asResolvedPath),
     },
     {
       name: "--assetPlugins [list]",
@@ -302,7 +301,7 @@ export const rnxStartCommand = {
     {
       name: "--config [string]",
       description: "Path to the Metro configuration file.",
-      parse: (val: string) => path.resolve(val),
+      parse: asResolvedPath,
     },
     {
       name: "--no-interactive",
