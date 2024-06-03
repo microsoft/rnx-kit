@@ -12,7 +12,7 @@ import type { Middleware } from "metro-config";
 import type Server from "metro/src/Server";
 import * as path from "path";
 import { customizeMetroConfig } from "./metro-config";
-import { asNumber } from "./parsers";
+import { asNumber, asStringArray } from "./parsers";
 import { requireExternal } from "./serve/external";
 import { makeHelp } from "./serve/help";
 import { attachKeyHandlers } from "./serve/keyboard";
@@ -255,19 +255,19 @@ export const rnxStartCommand = {
       description:
         "Additional folders which will be added to the file-watch list. Comma-separated. By default, Metro watches all project files.",
       parse: (val: string) =>
-        val.split(",").map((folder) => path.resolve(folder)),
+        asStringArray(val).map((folder) => path.resolve(folder)),
     },
     {
       name: "--assetPlugins [list]",
       description:
         "Additional asset plugins to be used by the Metro Babel transformer. Comma-separated list containing plugin module names or absolute paths to plugin packages.",
-      parse: (val: string) => val.split(","),
+      parse: asStringArray,
     },
     {
       name: "--sourceExts [list]",
       description:
         "Additional source-file extensions to include when generating bundles. Comma-separated list, excluding the leading dot.",
-      parse: (val: string) => val.split(","),
+      parse: asStringArray,
     },
     {
       name: "--max-workers [number]",

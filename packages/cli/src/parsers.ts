@@ -17,6 +17,10 @@ export function asNumber(value: string): number {
   return Number(value);
 }
 
+export function asStringArray(value: string): string[] {
+  return value.split(",");
+}
+
 export function parseTransformProfile(val: string): TransformProfile {
   const allowedProfiles: TransformProfile[] = [
     "hermes-stable",
