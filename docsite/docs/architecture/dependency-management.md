@@ -217,12 +217,13 @@ directly to a package:
 `dep-check` also defines a set of **core** capabilities. These are capabilities
 that provide platform support, and are currently defined in the below table:
 
-| Capability   | Platform | Package              |
-| :----------- | :------- | :------------------- |
-| core-android | Android  | react-native         |
-| core-ios     | iOS      | react-native         |
-| core-macos   | macOS    | react-native-macos   |
-| core-windows | Windows  | react-native-windows |
+| Capability    | Platform | Package                          |
+| :------------ | :------- | :------------------------------- |
+| core-android  | Android  | react-native                     |
+| core-ios      | iOS      | react-native                     |
+| core-macos    | macOS    | react-native-macos               |
+| core-visionos | visionOS | @callstack/react-native-visionos |
+| core-windows  | Windows  | react-native-windows             |
 
 With generic names, we are more resilient against module renames since we can
 recommend the old name in one version, and the new name in the next. We could

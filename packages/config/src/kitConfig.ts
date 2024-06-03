@@ -9,6 +9,7 @@ export type Capability =
   | "core-android"
   | "core-ios"
   | "core-macos"
+  | "core-visionos"
   | "core-windows"
   | "core/metro-config"
   | "animation"

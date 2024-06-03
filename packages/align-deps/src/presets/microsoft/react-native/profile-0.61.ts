@@ -33,6 +33,10 @@ export const profile: Profile = {
     version: "^0.61.0",
     capabilities: ["react"],
   },
+  "core-visionos": {
+    name: "#meta",
+    capabilities: ["react"],
+  },
   "core-windows": {
     name: "react-native-windows",
     version: "^0.61.0",

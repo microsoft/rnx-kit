@@ -88,6 +88,7 @@ Meta capabilities let you group capabilities together:
       "core-android",
       "core-ios",
       "core-macos",
+      "core-visionos",
       "core-windows",
     ],
   },
@@ -114,6 +115,7 @@ package require?
         "core-android",
         "core-ios",
         "core-macos",
+        "core-visionos",
         "core-windows",
         "react",
         "test-app"
