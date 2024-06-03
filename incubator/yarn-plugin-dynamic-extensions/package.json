@@ -34,10 +34,7 @@
     "@rnx-kit/eslint-config": "*",
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*",
-    "@yarnpkg/core": "^4.0.0",
-    "eslint": "^9.0.0",
-    "prettier": "^3.0.0",
-    "typescript": "^5.0.0"
+    "@yarnpkg/core": "^4.0.0"
   },
   "experimental": true
 }

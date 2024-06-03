@@ -105,6 +105,7 @@
       "swiftlint"
     ],
     "ignoreDependencies": [
+      "@rnx-kit/jest-preset",
       "@types/*",
       "eslint",
       "jest",
@@ -228,5 +229,8 @@
       }
     }
   },
-  "prettier": "./.github/prettierrc.json"
+  "prettier": "./.github/prettierrc.json",
+  "rnx-kit": {
+    "packageExtensions": "./scripts/dependencies.config.js"
+  }
 }
