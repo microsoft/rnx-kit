@@ -74,14 +74,11 @@
     "@rnx-kit/tools-filesystem": "*",
     "@rnx-kit/tsconfig": "*",
     "@types/node": "^20.0.0",
-    "eslint": "^9.0.0",
     "metro": "^0.81.0",
     "metro-config": "^0.81.0",
     "metro-core": "^0.81.0",
     "metro-resolver": "^0.81.0",
-    "metro-source-map": "^0.81.0",
-    "prettier": "^3.0.0",
-    "typescript": "^5.0.0"
+    "metro-source-map": "^0.81.0"
   },
   "engines": {
     "node": ">=16.17"
