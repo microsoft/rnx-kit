@@ -1,5 +1,12 @@
 # Change Log - @rnx-kit/third-party-notices
 
+## 1.4.1
+
+### Patch Changes
+
+- 25f3a9e: Use licenseURL as placeholder if no copyright or package author is
+  found
+
 ## 1.4.0
 
 ### Minor Changes

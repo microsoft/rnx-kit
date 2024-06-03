@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/config
 
+## 0.6.7
+
+### Patch Changes
+
+- bad9c1e: Add core-visionos capability
+
 ## 0.6.6
 
 ### Patch Changes
@@ -19,7 +25,8 @@
 
 ### Patch Changes
 
-- c9eafa48: Add new capability, `core/metro-config`, for `@react-native/metro-config`
+- c9eafa48: Add new capability, `core/metro-config`, for
+  `@react-native/metro-config`
 
 ## 0.6.3
 
@@ -70,8 +77,8 @@
   well-known names used in @react-native-community/cli. This change will ripple
   outward to @rnx-kit/cli as well.
 
-  In doing this, we'll be making it easier for developers to migrate to using our
-  config/cli combination, and our cli will become a "drop in" replacement
+  In doing this, we'll be making it easier for developers to migrate to using
+  our config/cli combination, and our cli will become a "drop in" replacement
   @react-native-community/cli. The longer-term goal is to upstream our work into
   the community CLI, but until it is proven and accepted, we will continue to
   maintain our wrapper commands.
@@ -145,7 +152,10 @@
 
 ### Patch Changes
 
-- e352f4c: Transition tree shaking from experimental to production. Deprecate experimental config/cmdline props, while still supporting them for this major version. They will be removed on the next major version bump. Update documentation and tests.
+- e352f4c: Transition tree shaking from experimental to production. Deprecate
+  experimental config/cmdline props, while still supporting them for this major
+  version. They will be removed on the next major version bump. Update
+  documentation and tests.
 
 ## 0.4.23
 
@@ -181,7 +191,8 @@ Mon, 08 Nov 2021 10:20:15 GMT
 
 ### Patches
 
-- Default value for `projectRoot` overrides value in Metro config (4123478+tido64@users.noreply.github.com)
+- Default value for `projectRoot` overrides value in Metro config
+  (4123478+tido64@users.noreply.github.com)
 
 ## 0.4.18
 
@@ -213,7 +224,8 @@ Mon, 01 Nov 2021 13:46:12 GMT
 
 ### Patches
 
-- Normalize main and types fields across all packages which use them. (afoxman@microsoft.com)
+- Normalize main and types fields across all packages which use them.
+  (afoxman@microsoft.com)
 - Bump @rnx-kit/console to v1.0.6
 
 ## 0.4.13
@@ -246,7 +258,8 @@ Wed, 29 Sep 2021 11:02:41 GMT
 
 ### Patches
 
-- add jest, add meta for core testing, stabilize core with react capability (lsciandra@microsoft.com)
+- add jest, add meta for core testing, stabilize core with react capability
+  (lsciandra@microsoft.com)
 
 ## 0.4.9
 
@@ -278,7 +291,8 @@ Tue, 31 Aug 2021 10:50:41 GMT
 
 ### Patches
 
-- Warn when `reactNativeDevVersion` is set and `kitType` is `app` (4123478+tido64@users.noreply.github.com)
+- Warn when `reactNativeDevVersion` is set and `kitType` is `app`
+  (4123478+tido64@users.noreply.github.com)
 
 ## 0.4.5
 
@@ -318,7 +332,8 @@ Sat, 21 Aug 2021 08:22:48 GMT
 
 ### Patches
 
-- Integrate tools package and other common libraries throughout monorepo, removing custom code. (afoxman@microsoft.com)
+- Integrate tools package and other common libraries throughout monorepo,
+  removing custom code. (afoxman@microsoft.com)
 - Bump @rnx-kit/config to v0.4.1 (afoxman@microsoft.com)
 
 ## 0.4.0
@@ -327,7 +342,8 @@ Fri, 06 Aug 2021 22:07:45 GMT
 
 ### Minor changes
 
-- Add server config types, functions and tests to kit config. (afoxman@microsoft.com)
+- Add server config types, functions and tests to kit config.
+  (afoxman@microsoft.com)
 
 ## 0.3.5
 
@@ -335,7 +351,10 @@ Fri, 06 Aug 2021 18:05:53 GMT
 
 ### Patches
 
-- Refactor config types, pulling out bundler runtime parameters. This does not impact the package API, but is important for the upcoming Metro server work. Add tests for the bundle definition code. Move existing tests into their own directory, and update jest config and snapshots. (afoxman@microsoft.com)
+- Refactor config types, pulling out bundler runtime parameters. This does not
+  impact the package API, but is important for the upcoming Metro server work.
+  Add tests for the bundle definition code. Move existing tests into their own
+  directory, and update jest config and snapshots. (afoxman@microsoft.com)
 
 ## 0.3.4
 
@@ -359,7 +378,11 @@ Mon, 26 Jul 2021 15:59:59 GMT
 
 ### Patches
 
-- Add 'core' as an alias for react-native for out-of-tree platform packages that have a dependency on `react-native` core code, and not the Android/iOS specific bits. Currently, one would have to add a random capability that resolves to `react-native`, e.g. `core-android`, despite the capability not really being used. (4123478+tido64@users.noreply.github.com)
+- Add 'core' as an alias for react-native for out-of-tree platform packages that
+  have a dependency on `react-native` core code, and not the Android/iOS
+  specific bits. Currently, one would have to add a random capability that
+  resolves to `react-native`, e.g. `core-android`, despite the capability not
+  really being used. (4123478+tido64@users.noreply.github.com)
 
 ## 0.3.1
 
@@ -367,7 +390,8 @@ Mon, 12 Jul 2021 17:30:15 GMT
 
 ### Patches
 
-- Added flag for enabling experimental tree shake (4123478+tido64@users.noreply.github.com)
+- Added flag for enabling experimental tree shake
+  (4123478+tido64@users.noreply.github.com)
 
 ## 0.3.0
 
@@ -383,7 +407,8 @@ Fri, 04 Jun 2021 12:36:37 GMT
 
 ### Patches
 
-- Fixed error when React Native dev version is a range (4123478+tido64@users.noreply.github.com)
+- Fixed error when React Native dev version is a range
+  (4123478+tido64@users.noreply.github.com)
 
 ## 0.2.8
 
@@ -439,7 +464,8 @@ Fri, 09 Apr 2021 21:41:43 GMT
 
 ### Patches
 
-- Fix return type of getBundleDefinition() and getBundlePlatformDefinition() (4123478+tido64@users.noreply.github.com)
+- Fix return type of getBundleDefinition() and getBundlePlatformDefinition()
+  (4123478+tido64@users.noreply.github.com)
 
 ## 0.2.1
 
@@ -447,7 +473,8 @@ Thu, 11 Mar 2021 22:58:41 GMT
 
 ### Patches
 
-- Add pass-through params to rnx-bundle, giving the caller control over all aspects of metro bundling. (afoxman@microsoft.com)
+- Add pass-through params to rnx-bundle, giving the caller control over all
+  aspects of metro bundling. (afoxman@microsoft.com)
 
 ## 0.2.0
 
@@ -455,7 +482,8 @@ Wed, 10 Mar 2021 18:05:17 GMT
 
 ### Minor changes
 
-- Change CLI args from camelCase to kebab-case. Add win32 as a platform. (afoxman@microsoft.com)
+- Change CLI args from camelCase to kebab-case. Add win32 as a platform.
+  (afoxman@microsoft.com)
 
 ## 0.1.2
 
@@ -463,7 +491,9 @@ Mon, 22 Feb 2021 10:50:46 GMT
 
 ### Patches
 
-- Add strictNullChecks and noImplicitAny to the shared tsconfig. Remove from metro-config. Fix code to meet more strict type checks. (afoxman@microsoft.com)
+- Add strictNullChecks and noImplicitAny to the shared tsconfig. Remove from
+  metro-config. Fix code to meet more strict type checks.
+  (afoxman@microsoft.com)
 
 ## 0.1.1
 
@@ -471,7 +501,9 @@ Fri, 19 Feb 2021 19:58:00 GMT
 
 ### Patches
 
-- Create a CLI package which self-registers with @react-native-community/cli. Add bundling commands 'rnx-bundle' and 'rnx-start' which invoke metro. Move bundle code from build system to CLI package. (afoxman@microsoft.com)
+- Create a CLI package which self-registers with @react-native-community/cli.
+  Add bundling commands 'rnx-bundle' and 'rnx-start' which invoke metro. Move
+  bundle code from build system to CLI package. (afoxman@microsoft.com)
 
 ## 0.1.0
 
@@ -487,7 +519,10 @@ Tue, 16 Feb 2021 19:03:38 GMT
 
 ### Patches
 
-- Move typescript settings from tscTask to tsconfig.json. Remove the use of baseUrl and paths, which we don't need. Fix path in fast-install script. Update test-app-mobile dependencies and move all source files into an 'src' directory. (afoxman@microsoft.com)
+- Move typescript settings from tscTask to tsconfig.json. Remove the use of
+  baseUrl and paths, which we don't need. Fix path in fast-install script.
+  Update test-app-mobile dependencies and move all source files into an 'src'
+  directory. (afoxman@microsoft.com)
 
 ## 0.0.2
 

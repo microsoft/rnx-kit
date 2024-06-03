@@ -1,16 +1,25 @@
 # Change Log - @rnx-kit/align-deps
 
+## 2.4.7
+
+### Patch Changes
+
+- bad9c1e: Add core-visionos capability
+
 ## 2.4.6
 
 ### Patch Changes
 
-- 917af0f: Update the `react-native-webview` recommended version to the one that supports visionOS, and includes fixes for building with the new architecture on macOS and Windows
+- 917af0f: Update the `react-native-webview` recommended version to the one that
+  supports visionOS, and includes fixes for building with the new architecture
+  on macOS and Windows
 
 ## 2.4.5
 
 ### Patch Changes
 
-- 468292f: Recommend `datetime-picker` version compatible with new architecture and visionOS
+- 468292f: Recommend `datetime-picker` version compatible with new architecture
+  and visionOS
 
 ## 2.4.4
 
@@ -46,25 +55,29 @@
 
 ### Patch Changes
 
-- 8dcfd1e: Ensure `react-native-screens` works with New Arch enabled on both 0.72 and 0.73
+- 8dcfd1e: Ensure `react-native-screens` works with New Arch enabled on both
+  0.72 and 0.73
 
 ## 2.3.3
 
 ### Patch Changes
 
-- 8083856: Tell users to migrate from `@react-native-community/eslint-config` to `@react-native/eslint-config`
+- 8083856: Tell users to migrate from `@react-native-community/eslint-config` to
+  `@react-native/eslint-config`
 
 ## 2.3.2
 
 ### Patch Changes
 
-- 21ded4c: Ensure `react-native-safe-area-context` works with New Arch enabled on both 0.72 and 0.73
+- 21ded4c: Ensure `react-native-safe-area-context` works with New Arch enabled
+  on both 0.72 and 0.73
 
 ## 2.3.1
 
 ### Patch Changes
 
-- e5048f7e: `metro-react-native-babel-transformer` was renamed to `@react-native/metro-babel-transformer`
+- e5048f7e: `metro-react-native-babel-transformer` was renamed to
+  `@react-native/metro-babel-transformer`
 
 ## 2.3.0
 
@@ -112,8 +125,12 @@
 
 ### Minor Changes
 
-- 162b1dd5: When in vigilant mode, also suggest capabilities that can be added. This is only warning as there are legitimate reasons to not have dependencies managed by align-deps. For instance, the maintainers of AsyncStorage would not want to use the `storage` capability.
-- 162b1dd5: The output format of regular and vigilant mode has been changed to be more legible and more consistent with each other.
+- 162b1dd5: When in vigilant mode, also suggest capabilities that can be added.
+  This is only warning as there are legitimate reasons to not have dependencies
+  managed by align-deps. For instance, the maintainers of AsyncStorage would not
+  want to use the `storage` capability.
+- 162b1dd5: The output format of regular and vigilant mode has been changed to
+  be more legible and more consistent with each other.
 
 ## 2.1.4
 
@@ -125,13 +142,15 @@
 
 ### Patch Changes
 
-- ea68e9b3: Fix `--write` not writing all reported misalignments when in "vigilant" mode
+- ea68e9b3: Fix `--write` not writing all reported misalignments when in
+  "vigilant" mode
 
 ## 2.1.2
 
 ### Patch Changes
 
-- 8198e0b8: Always run the unconfigured check following the configured one when in "vigilant" mode
+- 8198e0b8: Always run the unconfigured check following the configured one when
+  in "vigilant" mode
 
 ## 2.1.1
 
@@ -178,20 +197,25 @@
 
   ### Bug Fixes
 
-  - Improved error messages: Messages should now contain the offending `package.json` and/or the profile causing issues.
+  - Improved error messages: Messages should now contain the offending
+    `package.json` and/or the profile causing issues.
   - Diff output has been reduced to only include the relevant sections.
 
   ### BREAKING CHANGES
 
   - A new config schema was introduced in this release
-    - The old config will still work, but you are advised to migrate as soon as possible
+    - The old config will still work, but you are advised to migrate as soon as
+      possible
     - The tool will help you migrate your config
-    - For more details, read the RFC: https://github.com/microsoft/rnx-kit/blob/rfcs/text/0001-dep-check-v2.md#summary
+    - For more details, read the RFC:
+      https://github.com/microsoft/rnx-kit/blob/rfcs/text/0001-dep-check-v2.md#summary
   - Because of the new config schema, a couple of flags had to be replaced:
-    - `--custom-profiles my-preset` is replaced with `--presets microsoft/react-native,my-preset`
+    - `--custom-profiles my-preset` is replaced with
+      `--presets microsoft/react-native,my-preset`
     - `--vigilant 0.70` is replaced with `--requirements react-native@0.70`
   - Apps that used to declare multiple react-native versions will now fail
-  - Capabilities that are declared at the root of the preset are no longer supported
+  - Capabilities that are declared at the root of the preset are no longer
+    supported
 
 ## 1.13.1
 
@@ -250,7 +274,8 @@
 
 ### Patch Changes
 
-- 37245c33: Introducing `@rnx-kit/tools-workspaces`, a collection of tools for working with workspaces.
+- 37245c33: Introducing `@rnx-kit/tools-workspaces`, a collection of tools for
+  working with workspaces.
 
 ## 1.12.17
 
@@ -262,13 +287,15 @@
 
 ### Patch Changes
 
-- 1edb9acd: Fix dep-check failing to visit dependencies in a repository using pnpm or pnpm-like solutions
+- 1edb9acd: Fix dep-check failing to visit dependencies in a repository using
+  pnpm or pnpm-like solutions
 
 ## 1.12.15
 
 ### Patch Changes
 
-- 4b777cf9: Bumps `@react-navigation/native` and `@react-navigation/stack` to 6.0.8 and 6.2.0 respectively for 0.66.
+- 4b777cf9: Bumps `@react-navigation/native` and `@react-navigation/stack` to
+  6.0.8 and 6.2.0 respectively for 0.66.
 
 ## 1.12.14
 
@@ -286,7 +313,8 @@
 
 ### Patch Changes
 
-- 3ee09f6: Fix Rush workspaces not being detected when set up as a post-install step
+- 3ee09f6: Fix Rush workspaces not being detected when set up as a post-install
+  step
 
 ## 1.12.11
 
@@ -312,7 +340,8 @@
 
 ### Patch Changes
 
-- 4a2bd9a: react-native-lazy-index was renamed to @rnx-kit/react-native-lazy-index
+- 4a2bd9a: react-native-lazy-index was renamed to
+  @rnx-kit/react-native-lazy-index
 
 ## 1.12.7
 
@@ -325,13 +354,15 @@
 ### Patch Changes
 
 - a4988f1: Explicitly declare support for Node 12+
-- 89af18f: Fix dev version being set regardless of whether a package was configured when running in `--vigilant` mode
+- 89af18f: Fix dev version being set regardless of whether a package was
+  configured when running in `--vigilant` mode
 
 ## 1.12.5
 
 ### Patch Changes
 
-- 3b43647: Keep version ranges defined in `peerDependencies` if they are a superset
+- 3b43647: Keep version ranges defined in `peerDependencies` if they are a
+  superset
 - 6bddfc6: Fix dev version not being set correctly in `--vigilant` mode
 
 ## 1.12.4
@@ -358,7 +389,8 @@
 
 ### Patch Changes
 
-- 55106b7: Bump react-native-test-app to 1.0.6 to fix Gradle running out of heap space during the lint task on some machines.
+- 55106b7: Bump react-native-test-app to 1.0.6 to fix Gradle running out of heap
+  space during the lint task on some machines.
 
 ## 1.12.0
 
@@ -368,14 +400,17 @@
 
 ### Patch Changes
 
-- 868be32: Bump react-native-test-app to 0.11.4 to support react-native-macos 0.66
+- 868be32: Bump react-native-test-app to 0.11.4 to support react-native-macos
+  0.66
 - d10f4b0: Use react-native-test-app 1.0 from react-native 0.66+
 
 ## 1.11.0
 
 ### Minor Changes
 
-- ca8c634: dep-check should pick up `customProfiles` when running in `--vigilant` mode to allow individual packages to use different profiles without having to re-declare which React Native versions they support.
+- ca8c634: dep-check should pick up `customProfiles` when running in
+  `--vigilant` mode to allow individual packages to use different profiles
+  without having to re-declare which React Native versions they support.
 
 ### Patch Changes
 
@@ -398,7 +433,8 @@
 
 ### Minor Changes
 
-- 32b681b: All dependencies of all packages, including configured ones, should be checked when `--vigilant` is specified.
+- 32b681b: All dependencies of all packages, including configured ones, should
+  be checked when `--vigilant` is specified.
 
 ## 1.9.6
 
@@ -432,7 +468,8 @@ Tue, 16 Nov 2021 14:33:15 GMT
 
 ### Patches
 
-- Bump netinfo to fix autolinking on Windows (4123478+tido64@users.noreply.github.com)
+- Bump netinfo to fix autolinking on Windows
+  (4123478+tido64@users.noreply.github.com)
 
 ## 1.9.2
 
@@ -440,7 +477,8 @@ Mon, 15 Nov 2021 12:33:07 GMT
 
 ### Patches
 
-- Bump clipboard for react-native update fixes (4123478+tido64@users.noreply.github.com)
+- Bump clipboard for react-native update fixes
+  (4123478+tido64@users.noreply.github.com)
 
 ## 1.9.1
 
@@ -456,7 +494,8 @@ Thu, 11 Nov 2021 17:49:21 GMT
 
 ### Minor changes
 
-- Bundle dep-check to avoid conflicting dependencies, and to make the installation footprint smaller. (4123478+tido64@users.noreply.github.com)
+- Bundle dep-check to avoid conflicting dependencies, and to make the
+  installation footprint smaller. (4123478+tido64@users.noreply.github.com)
 
 ## 1.8.18
 
@@ -526,7 +565,8 @@ Fri, 29 Oct 2021 14:13:32 GMT
 
 ### Patches
 
-- Recommend react-native-reanimated@^2.2.4 for 0.67 (4123478+tido64@users.noreply.github.com)
+- Recommend react-native-reanimated@^2.2.4 for 0.67
+  (4123478+tido64@users.noreply.github.com)
 
 ## 1.8.11
 
@@ -567,7 +607,8 @@ Tue, 26 Oct 2021 17:22:16 GMT
 
 ### Patches
 
-- Bumped react-native-reanimated for 0.66, and added profile for 0.67 (4123478+tido64@users.noreply.github.com)
+- Bumped react-native-reanimated for 0.66, and added profile for 0.67
+  (4123478+tido64@users.noreply.github.com)
 
 ## 1.8.7
 
@@ -583,7 +624,8 @@ Wed, 29 Sep 2021 11:02:41 GMT
 
 ### Patches
 
-- add jest, add meta for core testing, stabilize core with react capability (lsciandra@microsoft.com)
+- add jest, add meta for core testing, stabilize core with react capability
+  (lsciandra@microsoft.com)
 - Bump @rnx-kit/config to v0.4.10
 
 ## 1.8.5
@@ -618,7 +660,8 @@ Tue, 14 Sep 2021 15:28:16 GMT
 
 ### Patches
 
-- Bump async-storage to 1.15.8. It contains fixes for building Android on react-native 0.65. (4123478+tido64@users.noreply.github.com)
+- Bump async-storage to 1.15.8. It contains fixes for building Android on
+  react-native 0.65. (4123478+tido64@users.noreply.github.com)
 
 ## 1.8.1
 
@@ -626,7 +669,8 @@ Mon, 13 Sep 2021 17:38:26 GMT
 
 ### Patches
 
-- Updated profile 0.65 with latest versions. Added a preliminary profile for 0.66. (4123478+tido64@users.noreply.github.com)
+- Updated profile 0.65 with latest versions. Added a preliminary profile for
+  0.66. (4123478+tido64@users.noreply.github.com)
 
 ## 1.8.0
 
@@ -634,7 +678,8 @@ Wed, 08 Sep 2021 07:04:15 GMT
 
 ### Minor changes
 
-- Add support for dependencies and meta packages (4123478+tido64@users.noreply.github.com)
+- Add support for dependencies and meta packages
+  (4123478+tido64@users.noreply.github.com)
 
 ## 1.7.11
 
@@ -651,7 +696,8 @@ Mon, 06 Sep 2021 06:57:59 GMT
 
 ### Patches
 
-- When upgrading profile version, also remove `reactNativeDevVersion` if `kitType` is `app` (4123478+tido64@users.noreply.github.com)
+- When upgrading profile version, also remove `reactNativeDevVersion` if
+  `kitType` is `app` (4123478+tido64@users.noreply.github.com)
 
 ## 1.7.9
 
@@ -659,7 +705,8 @@ Fri, 03 Sep 2021 12:18:30 GMT
 
 ### Patches
 
-- Preserve the indentation when modifying `package.json` (4123478+tido64@users.noreply.github.com)
+- Preserve the indentation when modifying `package.json`
+  (4123478+tido64@users.noreply.github.com)
 - Bump @rnx-kit/dep-check to v1.7.9 (4123478+tido64@users.noreply.github.com)
 
 ## 1.7.8
@@ -668,7 +715,8 @@ Fri, 03 Sep 2021 09:49:28 GMT
 
 ### Patches
 
-- Fix broken `--init` due to loose and init being mutually exclusive, but `--loose` has a default value. (4123478+tido64@users.noreply.github.com)
+- Fix broken `--init` due to loose and init being mutually exclusive, but
+  `--loose` has a default value. (4123478+tido64@users.noreply.github.com)
 
 ## 1.7.7
 
@@ -717,7 +765,8 @@ Sat, 21 Aug 2021 08:22:48 GMT
 
 ### Patches
 
-- Integrate tools package and other common libraries throughout monorepo, removing custom code. (afoxman@microsoft.com)
+- Integrate tools package and other common libraries throughout monorepo,
+  removing custom code. (afoxman@microsoft.com)
 - Bump @rnx-kit/dep-check to v1.7.2 (afoxman@microsoft.com)
 
 ## 1.7.1
@@ -726,7 +775,8 @@ Thu, 19 Aug 2021 07:59:20 GMT
 
 ### Patches
 
-- Fix error messages accumulating when gathering requirements (4123478+tido64@users.noreply.github.com)
+- Fix error messages accumulating when gathering requirements
+  (4123478+tido64@users.noreply.github.com)
 
 ## 1.7.0
 
@@ -734,7 +784,9 @@ Wed, 18 Aug 2021 14:54:20 GMT
 
 ### Minor changes
 
-- Allow apps to depend on a newer version of React Native than their dependencies declare support for via the `--loose` flag. (4123478+tido64@users.noreply.github.com)
+- Allow apps to depend on a newer version of React Native than their
+  dependencies declare support for via the `--loose` flag.
+  (4123478+tido64@users.noreply.github.com)
 
 ## 1.6.0
 
@@ -742,7 +794,8 @@ Tue, 17 Aug 2021 09:36:56 GMT
 
 ### Minor changes
 
-- Add command for setting react-native version (4123478+tido64@users.noreply.github.com)
+- Add command for setting react-native version
+  (4123478+tido64@users.noreply.github.com)
 
 ## 1.5.21
 
@@ -750,7 +803,8 @@ Fri, 13 Aug 2021 13:30:40 GMT
 
 ### Patches
 
-- Correct hermes-engine version for react-native 0.65 (4123478+tido64@users.noreply.github.com)
+- Correct hermes-engine version for react-native 0.65
+  (4123478+tido64@users.noreply.github.com)
 
 ## 1.5.20
 
@@ -790,7 +844,11 @@ Mon, 26 Jul 2021 15:59:59 GMT
 
 ### Patches
 
-- Add 'core' as an alias for react-native for out-of-tree platform packages that have a dependency on `react-native` core code, and not the Android/iOS specific bits. Currently, one would have to add a random capability that resolves to `react-native`, e.g. `core-android`, despite the capability not really being used. (4123478+tido64@users.noreply.github.com)
+- Add 'core' as an alias for react-native for out-of-tree platform packages that
+  have a dependency on `react-native` core code, and not the Android/iOS
+  specific bits. Currently, one would have to add a random capability that
+  resolves to `react-native`, e.g. `core-android`, despite the capability not
+  really being used. (4123478+tido64@users.noreply.github.com)
 - Bump @rnx-kit/dep-check to v1.5.16 (4123478+tido64@users.noreply.github.com)
 
 ## 1.5.15
@@ -815,7 +873,8 @@ Mon, 12 Jul 2021 08:34:12 GMT
 
 ### Patches
 
-- Added link to documentation in output (4123478+tido64@users.noreply.github.com)
+- Added link to documentation in output
+  (4123478+tido64@users.noreply.github.com)
 
 ## 1.5.12
 
@@ -871,7 +930,8 @@ Tue, 22 Jun 2021 15:04:23 GMT
 
 ### Patches
 
-- Bumped chalk to 4.1.0, and workspace-tools to 0.16.2 (4123478+tido64@users.noreply.github.com)
+- Bumped chalk to 4.1.0, and workspace-tools to 0.16.2
+  (4123478+tido64@users.noreply.github.com)
 
 ## 1.5.5
 
@@ -879,7 +939,8 @@ Mon, 21 Jun 2021 17:32:05 GMT
 
 ### Patches
 
-- Promote @react-native-masked-view/masked-view over @react-native-community/masked-view (4123478+tido64@users.noreply.github.com)
+- Promote @react-native-masked-view/masked-view over
+  @react-native-community/masked-view (4123478+tido64@users.noreply.github.com)
 
 ## 1.5.4
 
@@ -887,7 +948,11 @@ Mon, 21 Jun 2021 11:43:28 GMT
 
 ### Patches
 
-- Warn about renamed packages: `@react-native-community/async-storage` -> `@react-native-async-storage/async-storage` and `@react-native-community/masked-view` -> `@react-native-masked-view/masked-view` (4123478+tido64@users.noreply.github.com)
+- Warn about renamed packages: `@react-native-community/async-storage` ->
+  `@react-native-async-storage/async-storage` and
+  `@react-native-community/masked-view` ->
+  `@react-native-masked-view/masked-view`
+  (4123478+tido64@users.noreply.github.com)
 
 ## 1.5.3
 
@@ -903,7 +968,8 @@ Fri, 04 Jun 2021 12:36:37 GMT
 
 ### Patches
 
-- Fixed older yargs versions not ignoring flags with default values when looking for conflicts (4123478+tido64@users.noreply.github.com)
+- Fixed older yargs versions not ignoring flags with default values when looking
+  for conflicts (4123478+tido64@users.noreply.github.com)
 
 ## 1.5.1
 
@@ -911,7 +977,8 @@ Fri, 04 Jun 2021 09:02:33 GMT
 
 ### Patches
 
-- Added --exclude-packages to vigilant mode (4123478+tido64@users.noreply.github.com)
+- Added --exclude-packages to vigilant mode
+  (4123478+tido64@users.noreply.github.com)
 
 ## 1.5.0
 
@@ -919,7 +986,8 @@ Wed, 02 Jun 2021 17:08:58 GMT
 
 ### Minor changes
 
-- Add --vigilant flag for zero-config mode (4123478+tido64@users.noreply.github.com)
+- Add --vigilant flag for zero-config mode
+  (4123478+tido64@users.noreply.github.com)
 
 ## 1.4.2
 
@@ -927,7 +995,8 @@ Thu, 27 May 2021 06:09:59 GMT
 
 ### Patches
 
-- Fix 'devOnly' being ignored in custom profiles (4123478+tido64@users.noreply.github.com)
+- Fix 'devOnly' being ignored in custom profiles
+  (4123478+tido64@users.noreply.github.com)
 
 ## 1.4.1
 
@@ -963,7 +1032,9 @@ Thu, 20 May 2021 15:24:25 GMT
 
 ### Patches
 
-- Bump react-native-test-app to 0.5.9 to address an issue with linters complaining about an old version of Dagger being used. (4123478+tido64@users.noreply.github.com)
+- Bump react-native-test-app to 0.5.9 to address an issue with linters
+  complaining about an old version of Dagger being used.
+  (4123478+tido64@users.noreply.github.com)
 
 ## 1.2.1
 
@@ -979,7 +1050,8 @@ Sat, 15 May 2021 09:02:22 GMT
 
 ### Minor changes
 
-- Added command for initializing a configuration (4123478+tido64@users.noreply.github.com)
+- Added command for initializing a configuration
+  (4123478+tido64@users.noreply.github.com)
 
 ## 1.1.10
 
@@ -987,7 +1059,8 @@ Sat, 15 May 2021 08:55:08 GMT
 
 ### Patches
 
-- Print instructions when changes are needed. (4123478+tido64@users.noreply.github.com)
+- Print instructions when changes are needed.
+  (4123478+tido64@users.noreply.github.com)
 
 ## 1.1.9
 
@@ -995,7 +1068,8 @@ Sat, 15 May 2021 08:49:14 GMT
 
 ### Patches
 
-- Exclude dev-only capabilities from requirements (4123478+tido64@users.noreply.github.com)
+- Exclude dev-only capabilities from requirements
+  (4123478+tido64@users.noreply.github.com)
 
 ## 1.1.8
 
@@ -1003,7 +1077,8 @@ Wed, 12 May 2021 11:52:17 GMT
 
 ### Patches
 
-- Avoid installing unnecessary core capabilities (4123478+tido64@users.noreply.github.com)
+- Avoid installing unnecessary core capabilities
+  (4123478+tido64@users.noreply.github.com)
 
 ## 1.1.7
 
@@ -1011,7 +1086,8 @@ Tue, 11 May 2021 15:41:12 GMT
 
 ### Patches
 
-- Bump react-native-test-app for Xcode 12.5 fixes (4123478+tido64@users.noreply.github.com)
+- Bump react-native-test-app for Xcode 12.5 fixes
+  (4123478+tido64@users.noreply.github.com)
 
 ## 1.1.6
 
@@ -1019,8 +1095,10 @@ Tue, 11 May 2021 15:28:18 GMT
 
 ### Patches
 
-- Allow dev-only dependencies should always be added (4123478+tido64@users.noreply.github.com)
-- Rollback @react-navigation/native as 5.9.6 doesn't exist (4123478+tido64@users.noreply.github.com)
+- Allow dev-only dependencies should always be added
+  (4123478+tido64@users.noreply.github.com)
+- Rollback @react-navigation/native as 5.9.6 doesn't exist
+  (4123478+tido64@users.noreply.github.com)
 
 ## 1.1.5
 
@@ -1028,7 +1106,8 @@ Mon, 10 May 2021 21:58:48 GMT
 
 ### Patches
 
-- Allow direct dependency on react-native-test-app (4123478+tido64@users.noreply.github.com)
+- Allow direct dependency on react-native-test-app
+  (4123478+tido64@users.noreply.github.com)
 
 ## 1.1.4
 
@@ -1036,7 +1115,8 @@ Mon, 10 May 2021 14:10:30 GMT
 
 ### Patches
 
-- Libraries should not re-declare transitive dependencies (4123478+tido64@users.noreply.github.com)
+- Libraries should not re-declare transitive dependencies
+  (4123478+tido64@users.noreply.github.com)
 
 ## 1.1.3
 
@@ -1044,7 +1124,8 @@ Sat, 08 May 2021 20:35:26 GMT
 
 ### Patches
 
-- Fix a crash in react-native-lazy-index when non-JS files are read (4123478+tido64@users.noreply.github.com)
+- Fix a crash in react-native-lazy-index when non-JS files are read
+  (4123478+tido64@users.noreply.github.com)
 
 ## 1.1.2
 
@@ -1060,7 +1141,8 @@ Wed, 05 May 2021 20:55:03 GMT
 
 ### Patches
 
-- Bump react-native to address build issues with Xcode 12.5 (4123478+tido64@users.noreply.github.com)
+- Bump react-native to address build issues with Xcode 12.5
+  (4123478+tido64@users.noreply.github.com)
 
 ## 1.1.0
 
@@ -1088,7 +1170,8 @@ Wed, 28 Apr 2021 16:03:56 GMT
 
 ### Patches
 
-- Expose cli for cli related integrations (4123478+tido64@users.noreply.github.com)
+- Expose cli for cli related integrations
+  (4123478+tido64@users.noreply.github.com)
 
 ## 1.0.1
 
