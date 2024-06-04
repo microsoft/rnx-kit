@@ -1,11 +1,13 @@
-import type { DistributionPlugin, Platform } from "@rnx-kit/build";
-import { renderQRCode } from "@rnx-kit/build";
+import { renderQRCode } from "@rnx-kit/build/qrcode";
+import type { Platform, PluginInterface } from "@rnx-kit/build/types";
 
-type FirebaseConfig = {
+type FirebaseConfig = Partial<{
   appId: string | Partial<Record<Platform, string>>;
-};
+}>;
 
-function validateConfig(config: Partial<FirebaseConfig>): void {
+function validateConfig(
+  config: FirebaseConfig | undefined
+): config is FirebaseConfig {
   if (!config) {
     throw new Error("Missing Firebase configuration");
   }
@@ -29,12 +31,17 @@ function validateConfig(config: Partial<FirebaseConfig>): void {
   } else if (typeof appId !== "string") {
     throw new Error(`Invalid Firebase app id: ${appId}`);
   }
+
+  return true;
 }
 
-// `export default` required for plugin interface
-// eslint-disable-next-line no-restricted-exports
-export default function (config: Partial<FirebaseConfig>): DistributionPlugin {
-  validateConfig(config);
+export const distribution: PluginInterface["distribution"] = (
+  config?: FirebaseConfig
+) => {
+  if (!validateConfig(config)) {
+    throw new Error("Invalid Firebase config");
+  }
+
   return {
     deploy: (_context, _artifact, spinner) => {
       /**
@@ -56,4 +63,4 @@ export default function (config: Partial<FirebaseConfig>): DistributionPlugin {
       return Promise.resolve(`firebase:${appId}`);
     },
   };
-}
+};

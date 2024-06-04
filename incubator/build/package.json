@@ -21,6 +21,17 @@
       "types": "./lib/index.d.ts",
       "import": "./lib/index.js"
     },
+    "./git": {
+      "types": "./lib/git.d.ts",
+      "import": "./lib/git.js"
+    },
+    "./qrcode": {
+      "types": "./lib/qrcode.d.ts",
+      "import": "./lib/qrcode.js"
+    },
+    "./types": {
+      "types": "./lib/types.d.ts"
+    },
     "./scripts/build-apple": {
       "require": "./scripts/build-apple.sh"
     },

@@ -1,6 +1,11 @@
 import { getKitConfig } from "@rnx-kit/config";
 import { createRequire } from "node:module";
-import type { Deployment, DistributionPlugin, JSObject } from "./types.js";
+import type {
+  Deployment,
+  DistributionPlugin,
+  JSObject,
+  PluginInterface,
+} from "./types.js";
 
 type Plugin = [string, JSObject];
 
@@ -19,8 +24,11 @@ function loadPlugin(
     const require = createRequire(import.meta.url);
     const modulePath = require.resolve(plugin, { paths: [projectRoot] });
     return import(modulePath).then((module) => {
-      const plugin = module.default || module;
-      return plugin(pluginConfig);
+      const plugin: PluginInterface = module.default || module;
+      if (!plugin.distribution) {
+        throw new Error(`'${plugin}' is not a valid distribution plugin`);
+      }
+      return plugin.distribution(pluginConfig);
     });
   }
 
