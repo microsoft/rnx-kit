@@ -1,10 +1,11 @@
+// @ts-check
 // a script that takes a string as value and copies the folder packages/template
 // to a new folder with the name of the value
 
 import * as fs from "node:fs/promises";
 import * as path from "node:path";
 import { URL, fileURLToPath } from "node:url";
-import yargs from "yargs";
+import { parseArgs } from "node:util";
 
 const EXPERIMENTAL_BANNER =
   "🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧\n\n### THIS TOOL IS EXPERIMENTAL — USE WITH CAUTION\n\n🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧";
@@ -12,16 +13,11 @@ const USAGE_TOKEN_START = "<!-- usage start -->";
 const USAGE_TOKEN_END = "<!-- usage end -->";
 const WARNING_BANNER_TOKEN = "<!-- experimental-warning -->";
 
-async function main(argv) {
-  if (!fs.cp) {
-    console.error("Please use Node 16.13 or higher");
-    return 1;
-  }
-
-  // this is less than ideal, but the only way to make positional working with v16 of yargs
-  const projectName = argv["_"][0];
-  const experimental = argv.experimental;
-
+/**
+ * @param {string} projectName
+ * @param {{ experimental?: boolean; }} options
+ */
+async function main(projectName, { experimental }) {
   // do some quick sanitization
   const cleanProjectName = projectName.replace(/[|&;$%@"<>()+,]/g, "");
 
@@ -101,15 +97,29 @@ async function main(argv) {
   return 0;
 }
 
-const argv = yargs(process.argv.slice(2))
-  .usage("Usage: new-package <name> --experimental")
-  .example(
-    "new-package my-package --experimental",
-    "Create a new package named my-package"
-  )
-  .demandCommand(1)
-  .string("name")
-  .boolean("experimental")
-  .default("experimental", false).argv;
-
-main(argv).then((exitCode) => (process.exitCode = exitCode));
+if (!fs.cp) {
+  console.error("Please use Node 16.13 or higher");
+  process.exitCode = 1;
+} else {
+  const { values, positionals } = parseArgs({
+    args: process.argv.slice(2),
+    options: {
+      experimental: {
+        description: "Whether the package is experimental",
+        type: "boolean",
+        default: false,
+      },
+    },
+    strict: true,
+    allowPositionals: true,
+    tokens: false,
+  });
+  if (positionals.length === 0) {
+    console.log("Usage: new-package [--experimental] <name>");
+    process.exitCode = 1;
+  } else {
+    main(positionals[0], values).then(
+      (exitCode) => (process.exitCode = exitCode)
+    );
+  }
+}
