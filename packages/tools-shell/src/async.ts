@@ -1,8 +1,10 @@
+import * as timers from "node:timers/promises";
+
 /**
  * Sleep for a specified numer of milliseconds.
  */
 export function idle(ms: number): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, ms));
+  return timers.setTimeout(ms);
 }
 
 /**
