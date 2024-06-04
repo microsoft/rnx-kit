@@ -1,10 +1,17 @@
 # Change Log - @rnx-kit/cli
 
+## 0.16.27
+
+### Patch Changes
+
+- f2cf5df: Fix error when specifying port
+
 ## 0.16.26
 
 ### Patch Changes
 
-- 6364676: Fix `EINVAL` error when running `clean` on Windows with Node 18.20.2+ or 20.12.2+
+- 6364676: Fix `EINVAL` error when running `clean` on Windows with Node 18.20.2+
+  or 20.12.2+
 - Updated dependencies [4b8a674]
   - @rnx-kit/align-deps@2.4.3
 
@@ -23,7 +30,8 @@
 
 ### Patch Changes
 
-- 26e34b7: align-deps: Added a flag, `--no-unmanaged`, to make unmanaged capabilities errors
+- 26e34b7: align-deps: Added a flag, `--no-unmanaged`, to make unmanaged
+  capabilities errors
 - Updated dependencies [26e34b7]
   - @rnx-kit/align-deps@2.4.0
 
@@ -37,7 +45,8 @@
 
 ### Patch Changes
 
-- afe49c6: Automatically compose source maps of the JS and Hermes bytecode bundles
+- afe49c6: Automatically compose source maps of the JS and Hermes bytecode
+  bundles
 - Updated dependencies [afe49c6]
 - Updated dependencies [8083856]
   - @rnx-kit/tools-react-native@1.3.5
@@ -69,7 +78,8 @@
 
 ### Patch Changes
 
-- 2885f73c: Ensure correct Metro dependencies are used by traversing the dependency chain starting from `react-native`
+- 2885f73c: Ensure correct Metro dependencies are used by traversing the
+  dependency chain starting from `react-native`
 - Updated dependencies [2885f73c]
   - @rnx-kit/metro-serializer-esbuild@0.1.31
   - @rnx-kit/metro-serializer@1.0.13
@@ -89,8 +99,10 @@
 
 ### Patch Changes
 
-- 55756581: Resolve correct `@react-native-community/cli-clean` instance through `react-native`
-- b231d457: Synced latest changes from upstream: https://github.com/facebook/react-native/commit/982f6f99d43b21b3a81d3388591934d6f83afa63
+- 55756581: Resolve correct `@react-native-community/cli-clean` instance through
+  `react-native`
+- b231d457: Synced latest changes from upstream:
+  https://github.com/facebook/react-native/commit/982f6f99d43b21b3a81d3388591934d6f83afa63
 - Updated dependencies [55756581]
 - Updated dependencies [55756581]
   - @rnx-kit/tools-node@2.1.0
@@ -100,7 +112,8 @@
 
 ### Patch Changes
 
-- 8ba65d6f: Use `node-fetch` only as fallback when current Node version doesn't implement Fetch API
+- 8ba65d6f: Use `node-fetch` only as fallback when current Node version doesn't
+  implement Fetch API
 - Updated dependencies [c9e7641b]
 - Updated dependencies [8ba65d6f]
   - @rnx-kit/metro-service@3.1.3
@@ -109,7 +122,8 @@
 
 ### Patch Changes
 
-- 39f0a3b2: Fix help message not showing on startup (and add preliminary support for 0.73)
+- 39f0a3b2: Fix help message not showing on startup (and add preliminary support
+  for 0.73)
 - d9f6c50a: Ensure dependencies are correctly declared
 - Updated dependencies [39f0a3b2]
 - Updated dependencies [52e032e2]
@@ -127,7 +141,9 @@
 
 ### Patch Changes
 
-- 39deedd8: Bump dependencies to handle `@react-native-community/cli-plugin-metro` -> `@react-native/community-cli-plugin`
+- 39deedd8: Bump dependencies to handle
+  `@react-native-community/cli-plugin-metro` ->
+  `@react-native/community-cli-plugin`
 - Updated dependencies [d8f53ed7]
 - Updated dependencies [7f152115]
 - Updated dependencies [1bc772cc]
@@ -158,7 +174,8 @@
 
 ### Patch Changes
 
-- 0b842c78: Fix `rnx-test` command not accepting any arguments when using Jest 29.2+
+- 0b842c78: Fix `rnx-test` command not accepting any arguments when using Jest
+  29.2+
 
 ## 0.16.9
 
@@ -227,13 +244,15 @@
 
 ### Patch Changes
 
-- 341d2847: Resolve `@react-native-community/cli-server-api` starting from `react-native` to avoid relying on hoisting
+- 341d2847: Resolve `@react-native-community/cli-server-api` starting from
+  `react-native` to avoid relying on hoisting
 
 ## 0.16.1
 
 ### Patch Changes
 
-- 8b761802: Increase supported version range of `@react-native-community/cli-server-api`
+- 8b761802: Increase supported version range of
+  `@react-native-community/cli-server-api`
 - Updated dependencies [20d81d18]
   - @rnx-kit/third-party-notices@1.3.0
 
@@ -302,7 +321,8 @@
 
 ### Patch Changes
 
-- 496a6f4a: Add `keysOf` to `@rnx-kit/tools-language`, a type-safe wrapper around `Object.keys`
+- 496a6f4a: Add `keysOf` to `@rnx-kit/tools-language`, a type-safe wrapper
+  around `Object.keys`
 - Updated dependencies [34b83032]
 - Updated dependencies [bdeda331]
 - Updated dependencies [496a6f4a]
@@ -360,7 +380,8 @@
 
 ### Patch Changes
 
-- 80333120: Fixed tree shaking not being enabled unless `--tree-shake` is specified
+- 80333120: Fixed tree shaking not being enabled unless `--tree-shake` is
+  specified
 
 ## 0.14.0
 
@@ -371,11 +392,11 @@
   ## Command-Line: align parameter names with @react-native-community/cli
 
   Add, rename, and remove command-line parameters in @rnx-kit/cli to fully align
-  with the well-known names used in @react-native-community/cli. This change will
-  pairs with similar changes in @rnx-kit/config.
+  with the well-known names used in @react-native-community/cli. This change
+  will pairs with similar changes in @rnx-kit/config.
 
-  In doing this, we'll be making it easier for developers to migrate to using our
-  config/cli combination, and our cli will become a "drop in" replacement
+  In doing this, we'll be making it easier for developers to migrate to using
+  our config/cli combination, and our cli will become a "drop in" replacement
   @react-native-community/cli. The longer-term goal is to upstream our work into
   the community CLI, but until it is proven and accepted, we will continue to
   maintain our wrapper commands.
@@ -410,8 +431,8 @@
   ## Zero configuration required
 
   The bundler and bundle-server no longer require rnx-kit configuration to run.
-  This makes it possible to "upgrade" to @rnx-kit/cli by only changing the command
-  name:
+  This makes it possible to "upgrade" to @rnx-kit/cli by only changing the
+  command name:
 
   - `react-native bundle` -> `react-native rnx-bundle`
   - `react-native start` -> `react-native rnx-start`
@@ -433,13 +454,13 @@
   - --sourcemap-use-absolute-path / sourcemapUseAbsolutePath: `false` (bundling
     only)
 
-  **NOTE**: Defaults are only used when the corresponding fields are missing from
-  both configuration and the command-line.
+  **NOTE**: Defaults are only used when the corresponding fields are missing
+  from both configuration and the command-line.
 
-  In addition to these defaults, `rnx-start` will use `bundle` configuration when
-  `server` configuration is not present, ensuring that by default, you are serving
-  the same way you are bundling. If both both are missing, then the above baseline
-  defaults are used.
+  In addition to these defaults, `rnx-start` will use `bundle` configuration
+  when `server` configuration is not present, ensuring that by default, you are
+  serving the same way you are bundling. If both both are missing, then the
+  above baseline defaults are used.
 
   ## `rnx-bundle`: source-map changes
 
@@ -482,7 +503,8 @@
 
 ### Patch Changes
 
-- 20e4518: When doing typescript validation during bundling, ignore non-TS projects rather than failing.
+- 20e4518: When doing typescript validation during bundling, ignore non-TS
+  projects rather than failing.
 
 ## 0.12.4
 
@@ -501,7 +523,10 @@
 
 ### Patch Changes
 
-- e352f4c: Transition tree shaking from experimental to production. Deprecate experimental config/cmdline props, while still supporting them for this major version. They will be removed on the next major version bump. Update documentation and tests.
+- e352f4c: Transition tree shaking from experimental to production. Deprecate
+  experimental config/cmdline props, while still supporting them for this major
+  version. They will be removed on the next major version bump. Update
+  documentation and tests.
 - 32eab87: Avoid `fs/promises` to be compatible with Node 12
 
 ## 0.12.1
@@ -514,7 +539,10 @@
 
 ### Minor Changes
 
-- d9e63f0: Add a command, `rnx-copy-assets`, to copy assets that are not referenced from JS. Usually, Metro copies imported assets for you, but sometimes you need additional files if they are only accessed from native modules.
+- d9e63f0: Add a command, `rnx-copy-assets`, to copy assets that are not
+  referenced from JS. Usually, Metro copies imported assets for you, but
+  sometimes you need additional files if they are only accessed from native
+  modules.
 
 ### Patch Changes
 
@@ -525,7 +553,8 @@
 
 ### Patch Changes
 
-- b1dfbe3: `rnx-clean` has been upstreamed to `@react-native-community/cli`. Print a warning if `cli-clean` can be found.
+- b1dfbe3: `rnx-clean` has been upstreamed to `@react-native-community/cli`.
+  Print a warning if `cli-clean` can be found.
 
 ## 0.11.1
 
@@ -537,7 +566,8 @@
 
 ### Minor Changes
 
-- 2036ac7: Added Generic rnxClean script.This is responsible for clearing all react native related caches.
+- 2036ac7: Added Generic rnxClean script.This is responsible for clearing all
+  react native related caches.
 
 ### Patch Changes
 
@@ -545,7 +575,8 @@
 - 6f659dd: Use `os.tmpdir()` instead of relying on an environment variable
 - 6f659dd: Integrate `ora` to make the output of `rnx-clean` prettier
 - 6f659dd: `pod cache clean` only needs to be run once
-- c15102f: Fix "watchman::CommandValidationError: failed to validate command: unknown command watchman-del-all" when running `rnx-clean`
+- c15102f: Fix "watchman::CommandValidationError: failed to validate command:
+  unknown command watchman-del-all" when running `rnx-clean`
 - Updated dependencies [f385a26]
 - Updated dependencies [868be32]
 - Updated dependencies [d10f4b0]
@@ -555,7 +586,9 @@
 
 ### Minor Changes
 
-- fa7ef12: Added command to show QR code. This QR code can be scanned in React Native Test App to load the bundle from the dev server, eliminating the need to manually configure the bundler address.
+- fa7ef12: Added command to show QR code. This QR code can be scanned in React
+  Native Test App to load the bundle from the dev server, eliminating the need
+  to manually configure the bundler address.
 
 ### Patch Changes
 
@@ -581,13 +614,16 @@
 
 ### Patch Changes
 
-- 51bc530: Scope Metro type-checking to files that TypeScript views as source code (ignore transpiled files).
+- 51bc530: Scope Metro type-checking to files that TypeScript views as source
+  code (ignore transpiled files).
 
 ## 0.9.55
 
 ### Patch Changes
 
-- d4c21eb: Update the CLI to support type-checking across many projects in a monorepo. Further, when bundling, fail on type errors. On serving, print type errors but continue without failure.
+- d4c21eb: Update the CLI to support type-checking across many projects in a
+  monorepo. Further, when bundling, fail on type errors. On serving, print type
+  errors but continue without failure.
 
 ## 0.9.54
 
@@ -678,7 +714,9 @@ Tue, 09 Nov 2021 21:11:31 GMT
 
 ### Patches
 
-- Update the CLI's Metro/TS integration to use the new, generalized resolver in @rnx-kit/typescript-react-native-resolver. Remove the unneeded "default" resolver. (afoxman@microsoft.com)
+- Update the CLI's Metro/TS integration to use the new, generalized resolver in
+  @rnx-kit/typescript-react-native-resolver. Remove the unneeded "default"
+  resolver. (afoxman@microsoft.com)
 - Bump @rnx-kit/typescript-react-native-resolver to v0.1.0
 - Bump @rnx-kit/typescript-service to v1.5.0
 
@@ -688,7 +726,8 @@ Mon, 08 Nov 2021 10:20:15 GMT
 
 ### Patches
 
-- Default value for `projectRoot` overrides value in Metro config (4123478+tido64@users.noreply.github.com)
+- Default value for `projectRoot` overrides value in Metro config
+  (4123478+tido64@users.noreply.github.com)
 - Bump @rnx-kit/config to v0.4.19
 - Bump @rnx-kit/dep-check to v1.8.18
 
@@ -758,7 +797,8 @@ Mon, 01 Nov 2021 15:07:43 GMT
 
 ### Patches
 
-- Update the CLI, adjusting it to use the new typescript-service package. (afoxman@microsoft.com)
+- Update the CLI, adjusting it to use the new typescript-service package.
+  (afoxman@microsoft.com)
 - Bump @rnx-kit/typescript-service to v1.4.0
 
 ## 0.9.41
@@ -767,7 +807,8 @@ Mon, 01 Nov 2021 13:46:12 GMT
 
 ### Patches
 
-- Normalize main and types fields across all packages which use them. (afoxman@microsoft.com)
+- Normalize main and types fields across all packages which use them.
+  (afoxman@microsoft.com)
 - Bump @rnx-kit/config to v0.4.15
 - Bump @rnx-kit/console to v1.0.6
 - Bump @rnx-kit/dep-check to v1.8.14
@@ -931,7 +972,8 @@ Mon, 13 Sep 2021 18:43:23 GMT
 
 ### Patches
 
-- Fix plugins cannot be disabled when bundling/serving (4123478+tido64@users.noreply.github.com)
+- Fix plugins cannot be disabled when bundling/serving
+  (4123478+tido64@users.noreply.github.com)
 
 ## 0.9.27
 
@@ -1019,7 +1061,12 @@ Wed, 25 Aug 2021 08:31:56 GMT
 
 ### Patches
 
-- Make `@react-native-community/cli-server-api` optional. We want to prevent cli from installing an extra copy, and also not require the user to explicitly add it to their dependencies. Since we're running inside `@react-native-community/cli`, it is reasonable to assume that this package will be installed. And if it isn't, we need to update our code anyway. (4123478+tido64@users.noreply.github.com)
+- Make `@react-native-community/cli-server-api` optional. We want to prevent cli
+  from installing an extra copy, and also not require the user to explicitly add
+  it to their dependencies. Since we're running inside
+  `@react-native-community/cli`, it is reasonable to assume that this package
+  will be installed. And if it isn't, we need to update our code anyway.
+  (4123478+tido64@users.noreply.github.com)
 
 ## 0.9.16
 
@@ -1027,7 +1074,9 @@ Wed, 25 Aug 2021 07:32:57 GMT
 
 ### Patches
 
-- Create a new type to encapsulate everything needed for bundling. Use this as the main type for driving metro bundle runs in the rnxBundle loop. (afoxman@microsoft.com)
+- Create a new type to encapsulate everything needed for bundling. Use this as
+  the main type for driving metro bundle runs in the rnxBundle loop.
+  (afoxman@microsoft.com)
 - Bump @rnx-kit/cli to v0.9.16 (afoxman@microsoft.com)
 
 ## 0.9.15
@@ -1036,7 +1085,9 @@ Tue, 24 Aug 2021 09:20:39 GMT
 
 ### Patches
 
-- Combine all kit config retrieval under getKitBundleConfigs. Move "apply overrides" out of the config loop. When applying overrides, do it across all kit bundle configs, not just one at a time. (afoxman@microsoft.com)
+- Combine all kit config retrieval under getKitBundleConfigs. Move "apply
+  overrides" out of the config loop. When applying overrides, do it across all
+  kit bundle configs, not just one at a time. (afoxman@microsoft.com)
 
 ## 0.9.14
 
@@ -1044,7 +1095,10 @@ Tue, 24 Aug 2021 08:15:03 GMT
 
 ### Patches
 
-- Create type KitBundleConfig which combines a platform and its bundle configuration. Update rnxBundle to build a set of these, and apply command-line overrides to each one. Add/update related tests. (afoxman@microsoft.com)
+- Create type KitBundleConfig which combines a platform and its bundle
+  configuration. Update rnxBundle to build a set of these, and apply
+  command-line overrides to each one. Add/update related tests.
+  (afoxman@microsoft.com)
 
 ## 0.9.13
 
@@ -1068,7 +1122,8 @@ Mon, 23 Aug 2021 17:40:48 GMT
 
 ### Patches
 
-- Update serializer hook to do full TypeScript validation with platform override support as well as module-name substitution support (afoxman@microsoft.com)
+- Update serializer hook to do full TypeScript validation with platform override
+  support as well as module-name substitution support (afoxman@microsoft.com)
 - Bump @rnx-kit/cli to v0.9.11 (afoxman@microsoft.com)
 
 ## 0.9.10
@@ -1085,7 +1140,8 @@ Mon, 23 Aug 2021 08:49:21 GMT
 
 ### Patches
 
-- `--experimental-tree-shake` shouldn't need extra config (4123478+tido64@users.noreply.github.com)
+- `--experimental-tree-shake` shouldn't need extra config
+  (4123478+tido64@users.noreply.github.com)
 
 ## 0.9.8
 
@@ -1093,7 +1149,8 @@ Sat, 21 Aug 2021 08:22:48 GMT
 
 ### Patches
 
-- Integrate tools package and other common libraries throughout monorepo, removing custom code. (afoxman@microsoft.com)
+- Integrate tools package and other common libraries throughout monorepo,
+  removing custom code. (afoxman@microsoft.com)
 - Bump @rnx-kit/cli to v0.9.8 (afoxman@microsoft.com)
 
 ## 0.9.7
@@ -1102,7 +1159,8 @@ Fri, 20 Aug 2021 09:36:58 GMT
 
 ### Patches
 
-- Fix `--experimental-tree-shake` not being applied correctly (4123478+tido64@users.noreply.github.com)
+- Fix `--experimental-tree-shake` not being applied correctly
+  (4123478+tido64@users.noreply.github.com)
 - Bump @rnx-kit/cli to v0.9.7 (4123478+tido64@users.noreply.github.com)
 
 ## 0.9.6
@@ -1119,7 +1177,9 @@ Wed, 18 Aug 2021 14:54:20 GMT
 
 ### Patches
 
-- Allow apps to depend on a newer version of React Native than their dependencies declare support for via the `--loose` flag. (4123478+tido64@users.noreply.github.com)
+- Allow apps to depend on a newer version of React Native than their
+  dependencies declare support for via the `--loose` flag.
+  (4123478+tido64@users.noreply.github.com)
 - Bump @rnx-kit/cli to v0.9.5 (4123478+tido64@users.noreply.github.com)
 
 ## 0.9.4
@@ -1136,7 +1196,8 @@ Tue, 17 Aug 2021 09:36:56 GMT
 
 ### Patches
 
-- Fix arguments not being properly forwarded to dep-check (4123478+tido64@users.noreply.github.com)
+- Fix arguments not being properly forwarded to dep-check
+  (4123478+tido64@users.noreply.github.com)
 - Bump @rnx-kit/cli to v0.9.3 (4123478+tido64@users.noreply.github.com)
 
 ## 0.9.2
@@ -1170,7 +1231,13 @@ Fri, 06 Aug 2021 18:23:09 GMT
 
 ### Minor changes
 
-- Refactor bundle command, moving kit and metro config logic to separate files. Add failure when no target platform is given. Remove command-line props which have no effect. Remove Metro config validation as it isn't workable with all the props we override. Update Metro hook function to track one TS project per platform. Fix Metro hook function: incorrectly using modified to delete file from TS project. Change @rnx-kit dependencies to semver ranges. (afoxman@microsoft.com)
+- Refactor bundle command, moving kit and metro config logic to separate files.
+  Add failure when no target platform is given. Remove command-line props which
+  have no effect. Remove Metro config validation as it isn't workable with all
+  the props we override. Update Metro hook function to track one TS project per
+  platform. Fix Metro hook function: incorrectly using modified to delete file
+  from TS project. Change @rnx-kit dependencies to semver ranges.
+  (afoxman@microsoft.com)
 
 ## 0.7.1
 
@@ -1203,7 +1270,8 @@ Mon, 02 Aug 2021 11:18:46 GMT
 
 ### Patches
 
-- jest-cli allows passing argv directly to run() (4123478+tido64@users.noreply.github.com)
+- jest-cli allows passing argv directly to run()
+  (4123478+tido64@users.noreply.github.com)
 - Bump @rnx-kit/cli to v0.6.7 (4123478+tido64@users.noreply.github.com)
 
 ## 0.6.6
@@ -1212,7 +1280,8 @@ Fri, 30 Jul 2021 18:00:51 GMT
 
 ### Patches
 
-- Add JSON output format to `rnx-write-third-party-notices` (4123478+tido64@users.noreply.github.com)
+- Add JSON output format to `rnx-write-third-party-notices`
+  (4123478+tido64@users.noreply.github.com)
 - Bump @rnx-kit/cli to v0.6.6 (4123478+tido64@users.noreply.github.com)
 
 ## 0.6.5
@@ -1221,7 +1290,8 @@ Thu, 29 Jul 2021 19:42:04 GMT
 
 ### Patches
 
-- Add `rnx-test` command for running Jest with React Native platform awareness (4123478+tido64@users.noreply.github.com)
+- Add `rnx-test` command for running Jest with React Native platform awareness
+  (4123478+tido64@users.noreply.github.com)
 - Bump @rnx-kit/cli to v0.6.5 (4123478+tido64@users.noreply.github.com)
 
 ## 0.6.4
@@ -1406,7 +1476,8 @@ Fri, 04 Jun 2021 09:02:33 GMT
 
 ### Patches
 
-- dep-check: Added --exclude-packages to vigilant mode (4123478+tido64@users.noreply.github.com)
+- dep-check: Added --exclude-packages to vigilant mode
+  (4123478+tido64@users.noreply.github.com)
 
 ## 0.5.18
 
@@ -1414,7 +1485,8 @@ Wed, 02 Jun 2021 17:08:58 GMT
 
 ### Patches
 
-- Forward --init, --vigilant, --custom-profiles flags dep-check (4123478+tido64@users.noreply.github.com)
+- Forward --init, --vigilant, --custom-profiles flags dep-check
+  (4123478+tido64@users.noreply.github.com)
 
 ## 0.5.17
 
@@ -1462,7 +1534,8 @@ Tue, 18 May 2021 18:41:27 GMT
 
 ### Patches
 
-- Removed unused react-native dependency (4123478+tido64@users.noreply.github.com)
+- Removed unused react-native dependency
+  (4123478+tido64@users.noreply.github.com)
 
 ## 0.5.11
 
@@ -1478,7 +1551,8 @@ Sat, 15 May 2021 09:02:22 GMT
 
 ### Patches
 
-- dep-check: Added command for initializing a configuration (4123478+tido64@users.noreply.github.com)
+- dep-check: Added command for initializing a configuration
+  (4123478+tido64@users.noreply.github.com)
 
 ## 0.5.9
 
@@ -1510,7 +1584,8 @@ Tue, 11 May 2021 17:21:45 GMT
 
 ### Patches
 
-- Fix a bug in handling the optional source map parameter. (afoxman@microsoft.com)
+- Fix a bug in handling the optional source map parameter.
+  (afoxman@microsoft.com)
 
 ## 0.5.5
 
@@ -1643,7 +1718,8 @@ Fri, 09 Apr 2021 21:41:43 GMT
 
 ### Patches
 
-- Remove default values that are no longer needed (4123478+tido64@users.noreply.github.com)
+- Remove default values that are no longer needed
+  (4123478+tido64@users.noreply.github.com)
 
 ## 0.2.1
 
@@ -1651,7 +1727,8 @@ Fri, 09 Apr 2021 08:27:05 GMT
 
 ### Patches
 
-- Exit with code if an error was encountered (4123478+tido64@users.noreply.github.com)
+- Exit with code if an error was encountered
+  (4123478+tido64@users.noreply.github.com)
 
 ## 0.2.0
 
@@ -1659,7 +1736,8 @@ Thu, 11 Mar 2021 22:58:41 GMT
 
 ### Minor changes
 
-- Add pass-through params to rnx-bundle, giving the caller control over all aspects of metro bundling. (afoxman@microsoft.com)
+- Add pass-through params to rnx-bundle, giving the caller control over all
+  aspects of metro bundling. (afoxman@microsoft.com)
 
 ### Patches
 
@@ -1671,7 +1749,8 @@ Wed, 10 Mar 2021 18:05:17 GMT
 
 ### Minor changes
 
-- Change CLI args from camelCase to kebab-case. Add win32 as a platform. (afoxman@microsoft.com)
+- Change CLI args from camelCase to kebab-case. Add win32 as a platform.
+  (afoxman@microsoft.com)
 
 ### Patches
 
@@ -1683,7 +1762,8 @@ Mon, 08 Mar 2021 10:59:59 GMT
 
 ### Patches
 
-- Manually bump version number to unblock publishing (4123478+tido64@users.noreply.github.com)
+- Manually bump version number to unblock publishing
+  (4123478+tido64@users.noreply.github.com)
 
 ## 0.0.3
 
@@ -1691,7 +1771,9 @@ Mon, 22 Feb 2021 10:50:46 GMT
 
 ### Patches
 
-- Add strictNullChecks and noImplicitAny to the shared tsconfig. Remove from metro-config. Fix code to meet more strict type checks. (afoxman@microsoft.com)
+- Add strictNullChecks and noImplicitAny to the shared tsconfig. Remove from
+  metro-config. Fix code to meet more strict type checks.
+  (afoxman@microsoft.com)
 
 ## 0.0.2
 
@@ -1699,4 +1781,6 @@ Fri, 19 Feb 2021 19:58:00 GMT
 
 ### Patches
 
-- Create a CLI package which self-registers with @react-native-community/cli. Add bundling commands 'rnx-bundle' and 'rnx-start' which invoke metro. Move bundle code from build system to CLI package. (afoxman@microsoft.com)
+- Create a CLI package which self-registers with @react-native-community/cli.
+  Add bundling commands 'rnx-bundle' and 'rnx-start' which invoke metro. Move
+  bundle code from build system to CLI package. (afoxman@microsoft.com)
