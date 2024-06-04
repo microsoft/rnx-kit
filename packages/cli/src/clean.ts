@@ -4,6 +4,7 @@ import * as fs from "fs-extra";
 import ora from "ora";
 import * as os from "os";
 import * as path from "path";
+import { asResolvedPath } from "./parsers";
 import { requireExternal } from "./serve/external";
 
 type Args = {
@@ -211,7 +212,7 @@ export const rnxCleanCommand = {
       name: "--project-root <path>",
       description: "Root path to your React Native project",
       default: process.cwd(),
-      parse: (val: string) => path.resolve(val),
+      parse: asResolvedPath,
     },
     {
       name: "--verify",

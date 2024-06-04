@@ -9,7 +9,7 @@ import {
   overridableCommonBundleOptions,
 } from "./bundle/overrides";
 import type { CLICommonBundleOptions } from "./bundle/types";
-import { parseBoolean } from "./parsers";
+import { asBoolean } from "./parsers";
 
 type CLIBundleOptions = CLICommonBundleOptions & {
   treeShake?: boolean;
@@ -63,7 +63,7 @@ export const rnxBundleCommand = {
       name: "--tree-shake [boolean]",
       description:
         "Enable tree shaking to remove unused code and reduce the bundle size.",
-      parse: parseBoolean,
+      parse: asBoolean,
     },
   ],
 };

@@ -12,6 +12,7 @@ import type { Middleware } from "metro-config";
 import type Server from "metro/src/Server";
 import * as path from "path";
 import { customizeMetroConfig } from "./metro-config";
+import { asNumber, asResolvedPath, asStringArray } from "./parsers";
 import { requireExternal } from "./serve/external";
 import { makeHelp } from "./serve/help";
 import { attachKeyHandlers } from "./serve/keyboard";
@@ -234,7 +235,7 @@ export const rnxStartCommand = {
       name: "--port [number]",
       description:
         "Host port to use when listening for incoming server requests.",
-      parse: parseInt,
+      parse: asNumber,
       default: 8081,
     },
     {
@@ -247,32 +248,31 @@ export const rnxStartCommand = {
       name: "--projectRoot [path]",
       description:
         "Path to the root of your react-native project. The bundle server uses this root path to resolve all web requests.",
-      parse: (val: string) => path.resolve(val),
+      parse: asResolvedPath,
     },
     {
       name: "--watchFolders [paths]",
       description:
         "Additional folders which will be added to the file-watch list. Comma-separated. By default, Metro watches all project files.",
-      parse: (val: string) =>
-        val.split(",").map((folder) => path.resolve(folder)),
+      parse: (val: string) => asStringArray(val).map(asResolvedPath),
     },
     {
       name: "--assetPlugins [list]",
       description:
         "Additional asset plugins to be used by the Metro Babel transformer. Comma-separated list containing plugin module names or absolute paths to plugin packages.",
-      parse: (val: string) => val.split(","),
+      parse: asStringArray,
     },
     {
       name: "--sourceExts [list]",
       description:
         "Additional source-file extensions to include when generating bundles. Comma-separated list, excluding the leading dot.",
-      parse: (val: string) => val.split(","),
+      parse: asStringArray,
     },
     {
       name: "--max-workers [number]",
       description:
         "Specifies the maximum number of parallel worker threads to use for transforming files. This defaults to the number of cores available on your machine.",
-      parse: parseInt,
+      parse: asNumber,
     },
     {
       name: "--reset-cache",
@@ -301,7 +301,7 @@ export const rnxStartCommand = {
     {
       name: "--config [string]",
       description: "Path to the Metro configuration file.",
-      parse: (val: string) => path.resolve(val),
+      parse: asResolvedPath,
     },
     {
       name: "--no-interactive",
