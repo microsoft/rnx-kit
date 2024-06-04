@@ -1,6 +1,9 @@
-import fs from "fs";
-import os from "os";
-import path from "path";
+import { deepEqual, equal } from "node:assert/strict";
+import * as fs from "node:fs";
+import * as os from "node:os";
+import * as path from "node:path";
+import { before, describe, it } from "node:test";
+import { URL, fileURLToPath } from "node:url";
 import {
   getPackageModuleRefFromModulePath,
   isFileModuleRef,
@@ -9,65 +12,65 @@ import {
 } from "../src/module";
 
 describe("Node > Module", () => {
-  const fixtureDir = path.resolve(__dirname, "__fixtures__");
+  const fixtureDir = fileURLToPath(new URL("__fixtures__", import.meta.url));
 
-  beforeAll(() => {
-    expect(fs.existsSync(fixtureDir)).toBe(true);
+  before(() => {
+    equal(fs.existsSync(fixtureDir), true);
   });
 
-  test("parseModuleRef('react-native')", () => {
-    expect(parseModuleRef("react-native")).toEqual({
+  it("parseModuleRef('react-native')", () => {
+    deepEqual(parseModuleRef("react-native"), {
       name: "react-native",
     });
   });
 
-  test("parseModuleRef('react-native/Libraries/Promise')", () => {
-    expect(parseModuleRef("react-native/Libraries/Promise")).toEqual({
+  it("parseModuleRef('react-native/Libraries/Promise')", () => {
+    deepEqual(parseModuleRef("react-native/Libraries/Promise"), {
       name: "react-native",
       path: "Libraries/Promise",
     });
   });
 
-  test("parseModuleRef('@babel/core')", () => {
-    expect(parseModuleRef("@babel/core")).toEqual({
+  it("parseModuleRef('@babel/core')", () => {
+    deepEqual(parseModuleRef("@babel/core"), {
       scope: "@babel",
       name: "core",
     });
   });
 
-  test("parseModuleRef('@babel/core/parse')", () => {
-    expect(parseModuleRef("@babel/core/parse")).toEqual({
+  it("parseModuleRef('@babel/core/parse')", () => {
+    deepEqual(parseModuleRef("@babel/core/parse"), {
       scope: "@babel",
       name: "core",
       path: "parse",
     });
   });
 
-  test("parseModuleRef('@types/babel__core')", () => {
-    expect(parseModuleRef("@types/babel__core")).toEqual({
+  it("parseModuleRef('@types/babel__core')", () => {
+    deepEqual(parseModuleRef("@types/babel__core"), {
       scope: "@types",
       name: "babel__core",
     });
   });
 
-  test("parseModuleRef('./parser')", () => {
-    expect(parseModuleRef("./parser")).toEqual({
+  it("parseModuleRef('./parser')", () => {
+    deepEqual(parseModuleRef("./parser"), {
       path: "./parser",
     });
   });
 
-  test("parseModuleRef('../../src/parser')", () => {
-    expect(parseModuleRef("../../src/parser")).toEqual({
+  it("parseModuleRef('../../src/parser')", () => {
+    deepEqual(parseModuleRef("../../src/parser"), {
       path: "../../src/parser",
     });
   });
 
-  test("parseModuleRef('/absolute/path/src/parser')", () => {
-    expect(parseModuleRef("/absolute/path/src/parser")).toEqual({
+  it("parseModuleRef('/absolute/path/src/parser')", () => {
+    deepEqual(parseModuleRef("/absolute/path/src/parser"), {
       path: "/absolute/path/src/parser",
     });
     if (os.platform() === "win32") {
-      expect(parseModuleRef("C:/absolute/path/src/parser")).toEqual({
+      deepEqual(parseModuleRef("C:/absolute/path/src/parser"), {
         path: "C:/absolute/path/src/parser",
       });
     }
@@ -86,39 +89,40 @@ describe("Node > Module", () => {
     "/repos/rnx-kit/package/tools/parser",
   ];
 
-  test("isPackageModuleRef() returns true for package-based refs", () => {
+  it("isPackageModuleRef() returns true for package-based refs", () => {
     for (const r of packageModuleRefs) {
-      expect(isPackageModuleRef(parseModuleRef(r))).toBe(true);
+      equal(isPackageModuleRef(parseModuleRef(r)), true);
     }
   });
 
-  test("isPackageModuleRef() returns false for file-based refs", () => {
+  it("isPackageModuleRef() returns false for file-based refs", () => {
     for (const r of fileModuleRefs) {
-      expect(isPackageModuleRef(parseModuleRef(r))).toBe(false);
+      equal(isPackageModuleRef(parseModuleRef(r)), false);
     }
   });
 
-  test("isFileModuleRef() returns true for file-based refs", () => {
+  it("isFileModuleRef() returns true for file-based refs", () => {
     for (const r of fileModuleRefs) {
-      expect(isFileModuleRef(parseModuleRef(r))).toBe(true);
+      equal(isFileModuleRef(parseModuleRef(r)), true);
     }
   });
 
-  test("isFileModuleRef() returns false for package-based refs", () => {
+  it("isFileModuleRef() returns false for package-based refs", () => {
     for (const r of packageModuleRefs) {
-      expect(isFileModuleRef(parseModuleRef(r))).toBe(false);
+      equal(isFileModuleRef(parseModuleRef(r)), false);
     }
   });
 
-  test("getPackageModuleRefFromModulePath() returns a valid ref when given a path to a scoped module", () => {
-    expect(
+  it("getPackageModuleRefFromModulePath() returns a valid ref when given a path to a scoped module", () => {
+    deepEqual(
       getPackageModuleRefFromModulePath(
         path.join(fixtureDir, "node_modules", "@babel", "core", "foo")
-      )
-    ).toEqual({
-      scope: "@babel",
-      name: "core",
-      path: "foo",
-    });
+      ),
+      {
+        scope: "@babel",
+        name: "core",
+        path: "foo",
+      }
+    );
   });
 });
