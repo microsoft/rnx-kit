@@ -19,6 +19,7 @@ export function rnxAlignDeps(
 ): void {
   cli({
     ...pickValues(args, Object.values(optionsMap), Object.keys(optionsMap)),
+    "diff-mode": args.diffMode?.toString(),
     loose: Boolean(args.loose),
     "migrate-config": Boolean(args.migrateConfig),
     "no-unmanaged": Boolean(args.noUnmanaged),
@@ -34,6 +35,10 @@ export const rnxAlignDepsCommand = {
     "Manage dependencies within a repository and across many repositories",
   func: rnxAlignDeps,
   options: [
+    {
+      name: `--diff-mode [${cliOptions["diff-mode"].choices.join("|")}]`,
+      description: cliOptions["diff-mode"].description,
+    },
     {
       name: "--exclude-packages [packages]",
       description: cliOptions["exclude-packages"].description,

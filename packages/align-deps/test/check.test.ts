@@ -401,6 +401,77 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
     expect(consoleWarnSpy).not.toHaveBeenCalled();
     expect(consoleErrorSpy).not.toHaveBeenCalled();
   });
+
+  test("allows exact versions", () => {
+    const mods = /^[^\d]*/;
+    fs.__setMockContent({
+      ...mockManifest,
+      peerDependencies: {
+        react: react_v68_v69_v70,
+        "react-native": v68_v69_v70,
+      },
+      devDependencies: {
+        react: packageVersion(profile_0_69, "react").replace(mods, ""),
+        "react-native": packageVersion(profile_0_69, "core").replace(mods, ""),
+      },
+    });
+    rnxKitConfig.__setMockConfig({
+      alignDeps: {
+        requirements: {
+          development: ["react-native@0.69"],
+          production: ["react-native@0.68 || 0.69 || 0.70"],
+        },
+        capabilities: ["core-ios"],
+      },
+    });
+
+    const result = checkPackageManifest("package.json", {
+      ...defaultOptions,
+      diffMode: "allow-subset",
+    });
+
+    expect(result).toBe("success");
+    expect(consoleLogSpy).not.toHaveBeenCalled();
+    expect(consoleWarnSpy).not.toHaveBeenCalled();
+    expect(consoleErrorSpy).not.toHaveBeenCalled();
+  });
+
+  test("allows version range subsets", () => {
+    const patch = /\.\d*$/;
+    fs.__setMockContent({
+      ...mockManifest,
+      peerDependencies: {
+        react: react_v68_v69_v70,
+        "react-native": v68_v69_v70,
+      },
+      devDependencies: {
+        react: packageVersion(profile_0_69, "react"),
+        "react-native": packageVersion(profile_0_69, "core").replace(
+          patch,
+          ".9999"
+        ),
+      },
+    });
+    rnxKitConfig.__setMockConfig({
+      alignDeps: {
+        requirements: {
+          development: ["react-native@0.69"],
+          production: ["react-native@0.68 || 0.69 || 0.70"],
+        },
+        capabilities: ["core-ios"],
+      },
+    });
+
+    const result = checkPackageManifest("package.json", {
+      ...defaultOptions,
+      diffMode: "allow-subset",
+    });
+
+    expect(result).toBe("success");
+    expect(consoleLogSpy).not.toHaveBeenCalled();
+    expect(consoleWarnSpy).not.toHaveBeenCalled();
+    expect(consoleErrorSpy).not.toHaveBeenCalled();
+  });
 });
 
 describe("checkPackageManifest({ kitType: 'library' }) (backwards compatibility)", () => {

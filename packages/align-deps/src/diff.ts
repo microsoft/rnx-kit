@@ -1,10 +1,16 @@
 import type { PackageManifest } from "@rnx-kit/tools-node/package";
+import semverRangeSubset from "semver/ranges/subset";
 import { dependencySections } from "./helpers";
-import type { Changes } from "./types";
+import type { Changes, Options } from "./types";
+
+function isStrictlyEqual(version: string, range: string) {
+  return version === range;
+}
 
 export function diff(
   manifest: PackageManifest,
-  updatedManifest: PackageManifest
+  updatedManifest: PackageManifest,
+  { diffMode }: Pick<Options, "diffMode">
 ): Changes | undefined {
   const allChanges: Changes = {
     dependencies: [],
@@ -12,6 +18,9 @@ export function diff(
     devDependencies: [],
     capabilities: [],
   };
+
+  const satisfies =
+    diffMode === "allow-subset" ? semverRangeSubset : isStrictlyEqual;
 
   const numChanges = dependencySections.reduce((count, section) => {
     const changes = allChanges[section];
@@ -22,7 +31,7 @@ export function diff(
       const current = currentDeps[dependency];
       if (!current) {
         changes.push({ type: "added", dependency, target });
-      } else if (current !== target) {
+      } else if (!satisfies(current, target)) {
         changes.push({ type: "changed", dependency, target, current });
       }
     }
