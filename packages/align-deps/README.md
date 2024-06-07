@@ -84,11 +84,35 @@ Examples:
   yarn rnx-align-deps --set-version
   ```
 
+### `--diff-mode`
+
+Sets the algorithm used to determine if versions differ.
+
+Valid values:
+
+- `strict` — version strings must be equal
+- `allow-subset` — allow ranges that are entirely contained by the target
+  version range
+  - **OK:** `0.74.0` is a subset of `^0.74.0`
+  - **OK:** `^0.74.0` is a subset of `^0.74.0`
+  - **OK:** `^0.74.2` is a subset of `^0.74.0`
+  - **NOT OK:** `^0.74.0` is **not** a subset of `0.74.0`
+
+> [!WARNING]
+>
+> While algorithms other than `strict` allow you to use exact version or version
+> range subsets, they will also increase the risk of introducing duplicate
+> packages within your repository. You will have to be more vigilant and rely on
+> tooling (such as [`yarn dedupe`](https://yarnpkg.com/cli/dedupe)) to reduce
+> the risk.
+
+Default: `strict`
+
 ### `--exclude-packages`
 
 Comma-separated list of package names to exclude from inspection.
 
-> #### Note
+> [!NOTE]
 >
 > `--exclude-packages` will only exclude packages that do not have a
 > configuration. Packages that have a configuration, will still be checked.
@@ -142,7 +166,7 @@ For a more complete example, have a look at the
 
 See [Presets](#presets) for more details.
 
-> #### Note
+> [!NOTE]
 >
 > This flag is only be considered when a package is not configured. The presets
 > specified in the [configuration](#configure) will always take precedence.
@@ -178,7 +202,7 @@ example, `--set-version 0.70,0.69` will set the following values:
 
 If the version numbers are omitted, an _interactive prompt_ will appear.
 
-> #### Note
+> [!NOTE]
 >
 > A `rnx-align-deps --write` run will be invoked right after changes have been
 > made. As such, this flag will fail if changes are needed before making any

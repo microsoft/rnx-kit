@@ -19,6 +19,8 @@ export type Changes = {
   capabilities: { type: "unmanaged"; dependency: string; capability: string }[];
 };
 
+export type DiffMode = "strict" | "allow-subset";
+
 export type Options = {
   presets: string[];
   loose: boolean;
@@ -26,11 +28,13 @@ export type Options = {
   noUnmanaged: boolean;
   verbose: boolean;
   write: boolean;
+  diffMode?: DiffMode;
   excludePackages?: string[];
   requirements?: string[];
 };
 
 export type Args = Pick<Options, "loose" | "verbose" | "write"> & {
+  "diff-mode"?: string;
   "exclude-packages"?: string | number;
   "migrate-config": boolean;
   "no-unmanaged": boolean;

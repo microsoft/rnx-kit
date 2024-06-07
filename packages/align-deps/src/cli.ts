@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { error } from "@rnx-kit/console";
+import { error, warn } from "@rnx-kit/console";
 import { hasProperty } from "@rnx-kit/tools-language/properties";
 import { findPackageDir } from "@rnx-kit/tools-node/package";
 import {
@@ -15,9 +15,15 @@ import { makeSetVersionCommand } from "./commands/setVersion";
 import { defaultConfig } from "./config";
 import { printError, printInfo } from "./errors";
 import { isString } from "./helpers";
-import type { Args, Command } from "./types";
+import type { Args, Command, DiffMode } from "./types";
 
 export const cliOptions = {
+  "diff-mode": {
+    default: "strict",
+    description:
+      "Sets the algorithm used to determine if versions differ. Valid values are 'strict' (version strings must be equal) and 'allow-subset' (allow version ranges that are a subset).",
+    choices: ["strict", "allow-subset"],
+  },
   "exclude-packages": {
     description:
       "Comma-separated list of package names to exclude from inspection.",
@@ -148,6 +154,19 @@ function reportConflicts(conflicts: [string, string][], args: Args): boolean {
   }, false);
 }
 
+function validateDiffMode(mode: string | undefined): DiffMode {
+  switch (mode) {
+    case "allow-subset":
+    case "strict":
+      return mode;
+    default:
+      if (mode) {
+        warn("Unknown diff mode:", mode);
+      }
+      return "strict";
+  }
+}
+
 async function makeCommand(args: Args): Promise<Command | undefined> {
   const conflicts: [string, string][] = [
     ["init", "set-version"],
@@ -159,6 +178,7 @@ async function makeCommand(args: Args): Promise<Command | undefined> {
   }
 
   const {
+    "diff-mode": diffMode,
     "exclude-packages": excludePackages,
     init,
     loose,
@@ -178,6 +198,7 @@ async function makeCommand(args: Args): Promise<Command | undefined> {
     noUnmanaged,
     verbose,
     write,
+    diffMode: validateDiffMode(diffMode),
     excludePackages: excludePackages?.toString()?.split(","),
     requirements: requirements?.toString()?.split(","),
   };
