@@ -1,5 +1,13 @@
 # Change Log - @rnx-kit/cli
 
+## 0.16.28
+
+### Patch Changes
+
+- 9a2775d: Allow exact and version range subsets with `--diff-mode allow-subset`
+- Updated dependencies [9a2775d]
+  - @rnx-kit/align-deps@2.5.0
+
 ## 0.16.27
 
 ### Patch Changes

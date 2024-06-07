@@ -1,5 +1,17 @@
 # @rnx-kit/build-plugin-firebase
 
+## 3.0.0
+
+### Major Changes
+
+- 9ffe944: Redefine plugin interface so that one plugin can serve multiple
+  purposes
+
+### Patch Changes
+
+- Updated dependencies [9ffe944]
+  - @rnx-kit/build@0.7.0
+
 ## 2.0.0
 
 ### Patch Changes

@@ -1,5 +1,12 @@
 # @rnx-kit/build
 
+## 0.7.0
+
+### Minor Changes
+
+- 9ffe944: Redefine plugin interface so that one plugin can serve multiple
+  purposes
+
 ## 0.6.6
 
 ### Patch Changes
