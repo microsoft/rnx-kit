@@ -3,13 +3,13 @@
 exports[`license createLicenseFileContents 1`] = `
 "@rnx-kit/console 1.2.3-fixedVersionForTesting
 --
-MIT (https://spdx.org/licenses/MIT.html)
+Copyright Microsoft Open Source; licensed under MIT (https://spdx.org/licenses/MIT.html)
 
 ========================================================================
 
 metro-source-map 1.2.3-fixedVersionForTesting
 --
-MIT (https://spdx.org/licenses/MIT.html)
+Licensed under MIT (https://spdx.org/licenses/MIT.html)
 
 ========================================================================
 
@@ -50,13 +50,13 @@ Preamble 2
 
 @rnx-kit/console 1.2.3-fixedVersionForTesting
 --
-MIT (https://spdx.org/licenses/MIT.html)
+Copyright Microsoft Open Source; licensed under MIT (https://spdx.org/licenses/MIT.html)
 
 ========================================================================
 
 metro-source-map 1.2.3-fixedVersionForTesting
 --
-MIT (https://spdx.org/licenses/MIT.html)
+Licensed under MIT (https://spdx.org/licenses/MIT.html)
 
 ========================================================================
 
