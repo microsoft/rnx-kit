@@ -21,7 +21,7 @@ export const cliOptions = {
   "diff-mode": {
     default: "strict",
     description:
-      "Determines what align-deps should do when versions differ. Valid values are 'strict' (version strings must be equal) and 'allow-subset' (allow version ranges that are a subset).",
+      "Sets the algorithm used to determine if versions differ. Valid values are 'strict' (version strings must be equal) and 'allow-subset' (allow version ranges that are a subset).",
     choices: ["strict", "allow-subset"],
   },
   "exclude-packages": {
