@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/third-party-notices
 
+## 1.4.2
+
+### Patch Changes
+
+- dfbdeb7: Display attribution info if no license info is found
+
 ## 1.4.1
 
 ### Patch Changes

@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/third-party-notices",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "description": "Library and tool to build a third party notices file based on a js bundle's source map",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/third-party-notices#readme",
   "license": "MIT",
