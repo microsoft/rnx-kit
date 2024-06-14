@@ -1,6 +1,6 @@
 import useBaseUrl from "@docusaurus/useBaseUrl";
-import React from "react";
 import clsx from "clsx";
+import React from "react";
 import styles from "./Image.module.css";
 
 export interface ImageProps {
@@ -10,13 +10,13 @@ export interface ImageProps {
   [key: string]: string | number | boolean | symbol | JSX.Element[];
 }
 
-export default function Image(props: ImageProps): JSX.Element {
-  const children = props.children;
-  const invertable = Boolean(props.invertable);
-
-  const imageProps = { ...props, src: useBaseUrl(props.src) };
-  delete imageProps.children;
-  delete imageProps.invertable;
+export default function Image({
+  children,
+  invertable,
+  src,
+  ...props
+}: ImageProps): JSX.Element {
+  const imageProps = { ...props, src: useBaseUrl(src) };
 
   if (children) {
     return (

@@ -19,3 +19,7 @@ html[data-theme="dark"] .imageInvertable {
   padding-left: 5px;
   line-height: normal;
 }
+
+.text p {
+  margin: auto;
+}
