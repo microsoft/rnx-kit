@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunk_rnx_kit_docsite=self.webpackChunk_rnx_kit_docsite||[]).push([[2909],{4033:t=>{t.exports=JSON.parse('{"permalink":"/rnx-kit/blog/tags/launch","page":1,"postsPerPage":10,"totalPages":1,"totalCount":1,"blogDescription":"Blog","blogTitle":"Blog"}')}}]);

@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunk_rnx_kit_docsite=self.webpackChunk_rnx_kit_docsite||[]).push([[2373],{1091:s=>{s.exports=JSON.parse('{"label":"social","permalink":"/rnx-kit/blog/tags/social","allTagsPath":"/rnx-kit/blog/tags","count":1,"unlisted":false}')}}]);
