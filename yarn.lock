@@ -3307,8 +3307,18 @@ __metadata:
     react-native: "npm:^0.73.0"
     typescript: "npm:^5.0.0"
   peerDependencies:
+    "@callstack/react-native-visionos": ">=0.73"
     react: ">=18.2.0"
-    react-native: ">=0.72.0-0"
+    react-native: ">=0.72"
+    react-native-macos: ">=0.72"
+    react-native-windows: ">=0.72"
+  peerDependenciesMeta:
+    "@callstack/react-native-visionos":
+      optional: true
+    react-native-macos:
+      optional: true
+    react-native-windows:
+      optional: true
   languageName: unknown
   linkType: soft
 
