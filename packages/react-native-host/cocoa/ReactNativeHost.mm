@@ -59,12 +59,12 @@ using ReactNativeConfig = facebook::react::EmptyReactNativeConfig const;
             _hostReleaser = [[RNXHostReleaser alloc] initWithHost:self];
         }
 
-#if USE_BRIDGELESS
+#ifdef USE_FEATURE_FLAGS
         if (self.isBridgelessEnabled) {
             facebook::react::ReactNativeFeatureFlags::override(
                 std::make_unique<RNXBridgelessFeatureFlags>());
         }
-#endif  // USE_BRIDGELESS
+#endif  // USE_FEATURE_FLAGS
 
         if ([config respondsToSelector:@selector(isDevLoadingViewEnabled)]) {
             RCTDevLoadingViewSetEnabled([config isDevLoadingViewEnabled]);

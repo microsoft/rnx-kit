@@ -11,8 +11,12 @@
 #endif  // USE_HERMES
 
 #import <react/config/ReactNativeConfig.h>
+
+#if __has_include(<react/featureflags/ReactNativeFeatureFlags.h>)
 #import <react/featureflags/ReactNativeFeatureFlags.h>
 #import <react/featureflags/ReactNativeFeatureFlagsDefaults.h>
+#define USE_FEATURE_FLAGS
+#endif  // __has_include(<react/featureflags/ReactNativeFeatureFlags.h>)
 
 #if __has_include(<react/runtime/JSEngineInstance.h>)
 using SharedJSRuntimeFactory = std::shared_ptr<facebook::react::JSEngineInstance>;
@@ -44,6 +48,7 @@ using SharedJSRuntimeFactory = std::shared_ptr<facebook::react::JSRuntimeFactory
 - (RCTSurfacePresenter *)getSurfacePresenter;  // Deprecated in 0.74, and removed in 0.75
 @end
 
+#ifdef USE_FEATURE_FLAGS
 // https://github.com/facebook/react-native/blob/0.74-stable/packages/react-native/Libraries/AppDelegate/RCTAppDelegate.mm#L272-L286
 class RNXBridgelessFeatureFlags : public facebook::react::ReactNativeFeatureFlagsDefaults
 {
@@ -63,6 +68,7 @@ public:
         return true;
     }
 };
+#endif  // USE_FEATURE_FLAGS
 
 #elif USE_FABRIC
 
