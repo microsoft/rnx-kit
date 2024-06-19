@@ -49,6 +49,23 @@ using ReactNativeConfig = facebook::react::EmptyReactNativeConfig const;
 - (instancetype)initWithConfig:(id<RNXHostConfig>)config launchOptions:(NSDictionary *)launchOptions
 {
     if (self = [super init]) {
+        _config = config;
+        _launchOptions = launchOptions;
+        [self enableTurboModule];
+        _isShuttingDown = [[NSLock alloc] init];
+
+        if ([config respondsToSelector:@selector(shouldReleaseBridgeWhenBackgrounded)] &&
+            [config shouldReleaseBridgeWhenBackgrounded]) {
+            _hostReleaser = [[RNXHostReleaser alloc] initWithHost:self];
+        }
+
+#ifdef USE_FEATURE_FLAGS
+        if (self.isBridgelessEnabled) {
+            facebook::react::ReactNativeFeatureFlags::override(
+                std::make_unique<RNXBridgelessFeatureFlags>());
+        }
+#endif  // USE_FEATURE_FLAGS
+
         if ([config respondsToSelector:@selector(isDevLoadingViewEnabled)]) {
             RCTDevLoadingViewSetEnabled([config isDevLoadingViewEnabled]);
         }
@@ -67,16 +84,6 @@ using ReactNativeConfig = facebook::react::EmptyReactNativeConfig const;
             RCTSetFatalHandler(^(NSError *error) {
               [config onFatalError:error];
             });
-        }
-
-        _config = config;
-        _launchOptions = launchOptions;
-        [self enableTurboModule];
-        _isShuttingDown = [[NSLock alloc] init];
-
-        if ([config respondsToSelector:@selector(shouldReleaseBridgeWhenBackgrounded)] &&
-            [config shouldReleaseBridgeWhenBackgrounded]) {
-            _hostReleaser = [[RNXHostReleaser alloc] initWithHost:self];
         }
 
         [self initializeReactHost];
