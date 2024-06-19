@@ -1,5 +1,12 @@
 # @react-native-webapis/web-storage
 
+## 0.2.6
+
+### Patch Changes
+
+- 0465cca: Fix missing `react-native-macos` and `-windows` under peer
+  dependencies
+
 ## 0.2.5
 
 ### Patch Changes
@@ -10,8 +17,10 @@
 
 ### Patch Changes
 
-- 341a40d: `NSPrivacyCollectedDataTypes` needs to be present even if we don't collect any data
-- b6610b5: Fixed build errors when targeting canary builds of `react-native-windows`
+- 341a40d: `NSPrivacyCollectedDataTypes` needs to be present even if we don't
+  collect any data
+- b6610b5: Fixed build errors when targeting canary builds of
+  `react-native-windows`
 
 ## 0.2.3
 
@@ -23,7 +32,9 @@
 
 ### Patch Changes
 
-- 22420d7: Migrate away from `com.facebook.react.turbomodule.core.interfaces.TurboModule` as it has been moved/renamed in 0.74 and will break TurboModule detection
+- 22420d7: Migrate away from
+  `com.facebook.react.turbomodule.core.interfaces.TurboModule` as it has been
+  moved/renamed in 0.74 and will break TurboModule detection
 
 ## 0.2.1
 
@@ -35,7 +46,9 @@
 
 ### Minor Changes
 
-- b77e3eb: Fix old arch code being included when new arch is enabled. Also had to bump `react-native` requirement because changes in `@react-native/codegen` 0.72 are not backwards-compatible with 0.71.
+- b77e3eb: Fix old arch code being included when new arch is enabled. Also had
+  to bump `react-native` requirement because changes in `@react-native/codegen`
+  0.72 are not backwards-compatible with 0.71.
 
 ## 0.1.3
 

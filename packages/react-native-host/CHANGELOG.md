@@ -1,10 +1,17 @@
 # @rnx-kit/react-native-host
 
+## 0.4.10
+
+### Patch Changes
+
+- 99bcb24: Override feature flags for bridgeless mode
+
 ## 0.4.9
 
 ### Patch Changes
 
-- 76f92c1: Fix `SurfaceRegistryBinding::startSurface` failed on startup with New Architecture
+- 76f92c1: Fix `SurfaceRegistryBinding::startSurface` failed on startup with New
+  Architecture
 
 ## 0.4.8
 
@@ -16,7 +23,8 @@
 
 ### Patch Changes
 
-- 9f51524: Handle `launchOptions` being added to `RCTHost` initializer in 0.74 (see https://github.com/facebook/react-native/pull/43757)
+- 9f51524: Handle `launchOptions` being added to `RCTHost` initializer in 0.74
+  (see https://github.com/facebook/react-native/pull/43757)
 
 ## 0.4.6
 
@@ -28,7 +36,11 @@
 
 ### Patch Changes
 
-- b4b5698: Implemented an `RCTHost` compatibility layer for deprecated methods, `-getModuleRegistry` and `-getSurfacePresenter`, and their replacements, `-moduleRegistry` and `-surfacePresenter` (see https://github.com/facebook/react-native/commit/c3b0a8f1626939cf5c7b3864a5acf9d3dad26fb3 for details)
+- b4b5698: Implemented an `RCTHost` compatibility layer for deprecated methods,
+  `-getModuleRegistry` and `-getSurfacePresenter`, and their replacements,
+  `-moduleRegistry` and `-surfacePresenter` (see
+  https://github.com/facebook/react-native/commit/c3b0a8f1626939cf5c7b3864a5acf9d3dad26fb3
+  for details)
 
 ## 0.4.4
 
@@ -42,8 +54,7 @@
 
 - e02e503: Enable `concurrentRoot` by default when New Architecture is enabled.
 
-  Having `concurrentRoot` disabled when Fabric is enabled is not
-  recommended:
+  Having `concurrentRoot` disabled when Fabric is enabled is not recommended:
   https://github.com/facebook/react-native/commit/7eaabfb174b14a30c30c7017195e8110348e5f44
 
   As of 0.74, it won't be possible to opt-out:
@@ -57,7 +68,8 @@
 
   Bridgeless mode can now be enabled by setting the environment variable
   `USE_BRIDGELESS=1`. This build flag will enable bridgeless bits, but you can
-  still disable it at runtime by implementing `RNXHostConfig.isBridgelessEnabled`.
+  still disable it at runtime by implementing
+  `RNXHostConfig.isBridgelessEnabled`.
 
   See the full announcement here:
   https://reactnative.dev/blog/2023/12/06/0.73-debugging-improvements-stable-symlinks#new-architecture-updates
@@ -72,7 +84,8 @@
 
 ### Minor Changes
 
-- 7215f80: Merged `USE_TURBOMODULE` with `USE_FABRIC`. If your config plugins were previously using `USE_TURBOMODULE`, please switch to `USE_FABRIC`.
+- 7215f80: Merged `USE_TURBOMODULE` with `USE_FABRIC`. If your config plugins
+  were previously using `USE_TURBOMODULE`, please switch to `USE_FABRIC`.
 
 ## 0.3.2
 
@@ -84,7 +97,8 @@
 
 ### Patch Changes
 
-- 91a9ffe5: Fix New Arch not building because `folly::coro` was unintentionally enabled
+- 91a9ffe5: Fix New Arch not building because `folly::coro` was unintentionally
+  enabled
 
 ## 0.3.0
 
@@ -105,7 +119,8 @@
 
 ### Patch Changes
 
-- 504a691b: Remove unused bridge events. `RCTBridge` may go away in the future and should not be exposed to users.
+- 504a691b: Remove unused bridge events. `RCTBridge` may go away in the future
+  and should not be exposed to users.
 - 537d6f74: Describe react-native-host API in README
 
 ## 0.2.7
@@ -118,19 +133,22 @@
 
 ### Patch Changes
 
-- 32c5ee3e: Make headers from `ReactCommon/turbomodule/core` available to config plugins
+- 32c5ee3e: Make headers from `ReactCommon/turbomodule/core` available to config
+  plugins
 
 ## 0.2.5
 
 ### Patch Changes
 
-- 405dcfea: Fix 0.72 + New Architecture not being able to find `RCTAppSetupUtils.h`
+- 405dcfea: Fix 0.72 + New Architecture not being able to find
+  `RCTAppSetupUtils.h`
 
 ## 0.2.4
 
 ### Patch Changes
 
-- 8d8fc112: Fixed Xcode not being able to find a number of headers when targeting react-native 0.64
+- 8d8fc112: Fixed Xcode not being able to find a number of headers when
+  targeting react-native 0.64
 
 ## 0.2.3
 
@@ -155,7 +173,8 @@
 ### Minor Changes
 
 - b6edbc1f: Add support for New Architecture
-- a402fd33: Add ability to release the bridge if it is unused when the app is backgrounded
+- a402fd33: Add ability to release the bridge if it is unused when the app is
+  backgrounded
 - a402fd33: Add bridge lifecycle event callbacks
 
 ## 0.1.0
