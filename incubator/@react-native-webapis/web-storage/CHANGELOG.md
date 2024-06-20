@@ -1,5 +1,12 @@
 # @react-native-webapis/web-storage
 
+## 0.2.7
+
+### Patch Changes
+
+- 386ddce: Workaround for autolinking not including macOS or Windows as target
+  platforms (see https://github.com/react-native-community/cli/issues/2419)
+
 ## 0.2.6
 
 ### Patch Changes
