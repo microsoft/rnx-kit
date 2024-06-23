@@ -10448,14 +10448,14 @@ __metadata:
   linkType: hard
 
 "memfs@npm:^4.0.0":
-  version: 4.9.2
-  resolution: "memfs@npm:4.9.2"
+  version: 4.9.3
+  resolution: "memfs@npm:4.9.3"
   dependencies:
     "@jsonjoy.com/json-pack": "npm:^1.0.3"
     "@jsonjoy.com/util": "npm:^1.1.2"
-    sonic-forest: "npm:^1.0.0"
+    tree-dump: "npm:^1.0.1"
     tslib: "npm:^2.0.0"
-  checksum: 10c0/2a5a2c3c2a8a70fa79e0becedc9323a620e43eef20418e128de216f586e96891cf25a51d4d37c7fdd900214de05c13749afcf2658d23a9574720759a7119c2a0
+  checksum: 10c0/a59537537716653b6cf5287c5a23b3bbb6466aa2e596aa4710279564521d1b23f2fde403e20a91003dac89cb804d17fabee005bd95dab10943d9e4f62f47db09
   languageName: node
   linkType: hard
 
@@ -13251,17 +13251,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sonic-forest@npm:^1.0.0":
-  version: 1.0.2
-  resolution: "sonic-forest@npm:1.0.2"
-  dependencies:
-    tree-dump: "npm:^1.0.0"
-  peerDependencies:
-    tslib: 2
-  checksum: 10c0/d18c50eb67ccc3acf2f9677899531432cf082dbdbe4f7fab72dbaa418ebbee61472bc7c56139772d61ecf594d1606931af69a8b30ed2ff7d9cd526215b955b65
-  languageName: node
-  linkType: hard
-
 "source-map-support@npm:0.5.13":
   version: 0.5.13
   resolution: "source-map-support@npm:0.5.13"
@@ -13891,7 +13880,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tree-dump@npm:^1.0.0":
+"tree-dump@npm:^1.0.1":
   version: 1.0.1
   resolution: "tree-dump@npm:1.0.1"
   peerDependencies:
