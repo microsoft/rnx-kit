@@ -12181,8 +12181,8 @@ __metadata:
   linkType: hard
 
 "react-native-macos@npm:^0.73.0":
-  version: 0.73.26
-  resolution: "react-native-macos@npm:0.73.26"
+  version: 0.73.32
+  resolution: "react-native-macos@npm:0.73.32"
   dependencies:
     "@jest/create-cache-key-function": "npm:^29.6.3"
     "@react-native-community/cli": "npm:12.3.6"
@@ -12226,7 +12226,7 @@ __metadata:
     react: 18.2.0
   bin:
     react-native-macos: cli.js
-  checksum: 10c0/88fcb2aa29732ff4c3af5c69e2fc1bd1322d345e2cbfb9e5826bbc45ff4fa1627c79096fb00ccd3d9cbd10cad7388084495307cb62b56c3117d0142b540e5141
+  checksum: 10c0/40e5e9623743aa1caeded6ac3dd5167ec920c7da58cdd187d3522e2fbb2d2f1a8b0208b3126acf2a10f875693ec801e522e8058fdacce2e63648afeef88ab6ab
   languageName: node
   linkType: hard
 
@@ -12267,8 +12267,8 @@ __metadata:
   linkType: hard
 
 "react-native-windows@npm:^0.73.0":
-  version: 0.73.14
-  resolution: "react-native-windows@npm:0.73.14"
+  version: 0.73.15
+  resolution: "react-native-windows@npm:0.73.15"
   dependencies:
     "@babel/runtime": "npm:^7.0.0"
     "@jest/create-cache-key-function": "npm:^29.6.3"
@@ -12314,7 +12314,7 @@ __metadata:
   peerDependencies:
     react: 18.2.0
     react-native: ^0.73.0
-  checksum: 10c0/f4f1c5a020321bdd2ee6b23a3c2df96de0261c3e6c1ccb36083e88b500dc35b69d70d4d5c7cc181f6e872dc55931ab69bfeaa0ea399e270db6ae7377eb79596f
+  checksum: 10c0/f0ebb9d6bb83e3afb406558cef15527b0857e83dbd68a01b79e3481f71c14d07d8e925e9006df8eb4d7f70632af75d931c4e3164a7e8b419d0f82167fd6c0a8c
   languageName: node
   linkType: hard
 
