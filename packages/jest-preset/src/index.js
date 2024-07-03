@@ -108,7 +108,8 @@ function getTargetPlatform(defaultPlatform, searchPaths) {
     );
   })();
 
-  const platforms = loadConfig.length == 1 ? loadConfig({}).platforms : loadConfig().platforms;
+  const platforms =
+    loadConfig.length == 1 ? loadConfig({}).platforms : loadConfig().platforms;
 
   const targetPlatformConfig = platforms[defaultPlatform];
   if (!targetPlatformConfig) {
