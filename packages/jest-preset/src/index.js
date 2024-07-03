@@ -96,7 +96,7 @@ function getTargetPlatform(defaultPlatform, searchPaths) {
     return getReactNativePlatformPath();
   }
 
-  /** @type {() => CLIConfig} */
+  /** @type {(config?: object) => CLIConfig} */
   const loadConfig = (() => {
     const rnCliPath = resolveDependencyChain([
       "react-native",
@@ -108,7 +108,7 @@ function getTargetPlatform(defaultPlatform, searchPaths) {
     );
   })();
 
-  const { platforms } = loadConfig();
+  const { platforms } = loadConfig({});
   const targetPlatformConfig = platforms[defaultPlatform];
   if (!targetPlatformConfig) {
     const availablePlatforms = Object.keys(platforms).join(", ");
