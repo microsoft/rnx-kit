@@ -96,7 +96,7 @@ function getTargetPlatform(defaultPlatform, searchPaths) {
     return getReactNativePlatformPath();
   }
 
-  /** @type {(config?:  {projectRoot?: string;selectedPlatform?: string;}) => CLIConfig} */
+  /** @type {(config?: {projectRoot?: string; selectedPlatform?: string; }) => CLIConfig} */
   const loadConfig = (() => {
     const rnCliPath = resolveDependencyChain([
       "react-native",
