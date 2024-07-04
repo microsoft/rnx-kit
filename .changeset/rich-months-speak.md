@@ -1,5 +1,5 @@
 ---
-"@rnx-kit/jest-preset": minor
+"@rnx-kit/jest-preset": patch
 ---
 
-fixes jest-preset calling new loadConfig from @react-native-community/cli-config
+Support new `loadConfig` signature from `@react-native-community/cli-config`
