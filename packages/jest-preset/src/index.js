@@ -96,7 +96,7 @@ function getTargetPlatform(defaultPlatform, searchPaths) {
     return getReactNativePlatformPath();
   }
 
-  /** @type {() => CLIConfig} */
+  /** @type {(config?: {projectRoot?: string; selectedPlatform?: string; }) => CLIConfig} */
   const loadConfig = (() => {
     const rnCliPath = resolveDependencyChain([
       "react-native",
@@ -108,7 +108,11 @@ function getTargetPlatform(defaultPlatform, searchPaths) {
     );
   })();
 
-  const { platforms } = loadConfig();
+  // .length on a function returns the number of formal parameters.
+  // fixes https://github.com/react-native-community/cli/pull/2379 changing the number of parameters.
+  const platforms =
+    loadConfig.length == 1 ? loadConfig({}).platforms : loadConfig().platforms;
+
   const targetPlatformConfig = platforms[defaultPlatform];
   if (!targetPlatformConfig) {
     const availablePlatforms = Object.keys(platforms).join(", ");
