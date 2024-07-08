@@ -3324,11 +3324,11 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@react-native-windows/cli@npm:0.73.4":
-  version: 0.73.4
-  resolution: "@react-native-windows/cli@npm:0.73.4"
+"@react-native-windows/cli@npm:0.73.5":
+  version: 0.73.5
+  resolution: "@react-native-windows/cli@npm:0.73.5"
   dependencies:
-    "@react-native-windows/codegen": "npm:0.73.1"
+    "@react-native-windows/codegen": "npm:0.73.2"
     "@react-native-windows/fs": "npm:0.73.1"
     "@react-native-windows/package-utils": "npm:0.73.1"
     "@react-native-windows/telemetry": "npm:0.73.2"
@@ -3351,17 +3351,17 @@ __metadata:
     xpath: "npm:^0.0.27"
   peerDependencies:
     react-native: "*"
-  checksum: 10c0/cbf3bbadc984d1776ec189d87a8d97b787d2205f27ba4713bfaebe53cec176472f8fe3e611fd762a9d48198f852c4d6e6ac8c3a8bd93faa429b78cff23bf5421
+  checksum: 10c0/804d998a518165c74568533a3f585de38d8542781e6ddae1083a5e468bf5c462c7626ad8e6d99404514a2f0f72b7e5e350ccfbe83b4308aab9665c29d301c8cb
   languageName: node
   linkType: hard
 
-"@react-native-windows/codegen@npm:0.73.1":
-  version: 0.73.1
-  resolution: "@react-native-windows/codegen@npm:0.73.1"
+"@react-native-windows/codegen@npm:0.73.2":
+  version: 0.73.2
+  resolution: "@react-native-windows/codegen@npm:0.73.2"
   dependencies:
     "@react-native-windows/fs": "npm:0.73.1"
     chalk: "npm:^4.1.0"
-    globby: "npm:^11.0.4"
+    globby: "npm:^11.1.0"
     mustache: "npm:^4.0.1"
     source-map-support: "npm:^0.5.19"
     yargs: "npm:^16.2.0"
@@ -3369,7 +3369,7 @@ __metadata:
     react-native: "*"
   bin:
     react-native-windows-codegen: bin.js
-  checksum: 10c0/16f92e41ca075212c6786bc5156aeba0db33076195e4734e4718f414527138692cc921c638f3b993d63b8f055bfabfc588b818a992e27c20a1d56afc4518e14f
+  checksum: 10c0/314dd2a938aef3dcbb10f31d582ce21df5950016ac3b8bc869bed0a17160c47b48777390da1e6a947065663ddf521800d2d88b38a3ef1c19242d7b5ca14e90a8
   languageName: node
   linkType: hard
 
@@ -8445,7 +8445,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"globby@npm:^11.0.0, globby@npm:^11.0.4, globby@npm:^11.1.0":
+"globby@npm:^11.0.0, globby@npm:^11.1.0":
   version: 11.1.0
   resolution: "globby@npm:11.1.0"
   dependencies:
@@ -12181,8 +12181,8 @@ __metadata:
   linkType: hard
 
 "react-native-macos@npm:^0.73.0":
-  version: 0.73.26
-  resolution: "react-native-macos@npm:0.73.26"
+  version: 0.73.32
+  resolution: "react-native-macos@npm:0.73.32"
   dependencies:
     "@jest/create-cache-key-function": "npm:^29.6.3"
     "@react-native-community/cli": "npm:12.3.6"
@@ -12226,7 +12226,7 @@ __metadata:
     react: 18.2.0
   bin:
     react-native-macos: cli.js
-  checksum: 10c0/88fcb2aa29732ff4c3af5c69e2fc1bd1322d345e2cbfb9e5826bbc45ff4fa1627c79096fb00ccd3d9cbd10cad7388084495307cb62b56c3117d0142b540e5141
+  checksum: 10c0/40e5e9623743aa1caeded6ac3dd5167ec920c7da58cdd187d3522e2fbb2d2f1a8b0208b3126acf2a10f875693ec801e522e8058fdacce2e63648afeef88ab6ab
   languageName: node
   linkType: hard
 
@@ -12267,15 +12267,15 @@ __metadata:
   linkType: hard
 
 "react-native-windows@npm:^0.73.0":
-  version: 0.73.14
-  resolution: "react-native-windows@npm:0.73.14"
+  version: 0.73.16
+  resolution: "react-native-windows@npm:0.73.16"
   dependencies:
     "@babel/runtime": "npm:^7.0.0"
     "@jest/create-cache-key-function": "npm:^29.6.3"
     "@react-native-community/cli": "npm:12.3.6"
     "@react-native-community/cli-platform-android": "npm:12.3.6"
     "@react-native-community/cli-platform-ios": "npm:12.3.6"
-    "@react-native-windows/cli": "npm:0.73.4"
+    "@react-native-windows/cli": "npm:0.73.5"
     "@react-native/assets-registry": "npm:0.73.1"
     "@react-native/codegen": "npm:0.73.3"
     "@react-native/community-cli-plugin": "npm:0.73.17"
@@ -12314,7 +12314,7 @@ __metadata:
   peerDependencies:
     react: 18.2.0
     react-native: ^0.73.0
-  checksum: 10c0/f4f1c5a020321bdd2ee6b23a3c2df96de0261c3e6c1ccb36083e88b500dc35b69d70d4d5c7cc181f6e872dc55931ab69bfeaa0ea399e270db6ae7377eb79596f
+  checksum: 10c0/07184b023f76133f9671844a658553c90fda424d4202acf08637bf42f3f596a541a3f717662b83a09c1b06de5a725c0c66b6aee58616c74ed3a57a74c8215221
   languageName: node
   linkType: hard
 
