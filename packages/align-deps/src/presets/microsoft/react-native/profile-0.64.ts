@@ -191,7 +191,7 @@ export const profile: Profile = {
   },
   svg: {
     name: "react-native-svg",
-    version: "^12.1.1",
+    version: "^12.3.0",
   },
   webview: {
     name: "react-native-webview",

@@ -119,10 +119,6 @@ export const profile: Profile = {
     name: "@react-native-async-storage/async-storage",
     version: "^1.17.3",
   },
-  svg: {
-    name: "react-native-svg",
-    version: "^12.3.0",
-  },
   "test-app": {
     name: "react-native-test-app",
     version: "^1.3.5",
