@@ -12235,8 +12235,8 @@ __metadata:
   linkType: hard
 
 "react-native-test-app@npm:^3.3.5":
-  version: 3.7.5
-  resolution: "react-native-test-app@npm:3.7.5"
+  version: 3.8.7
+  resolution: "react-native-test-app@npm:3.8.7"
   dependencies:
     "@rnx-kit/react-native-host": "npm:^0.4.9"
     ajv: "npm:^8.0.0"
@@ -12248,7 +12248,7 @@ __metadata:
   peerDependencies:
     "@callstack/react-native-visionos": 0.73 - 0.74
     "@expo/config-plugins": ">=5.0"
-    react: 17.0.1 - 18.2
+    react: 17.0.1 - 18.3
     react-native: 0.66 - 0.74 || >=0.75.0-0 <0.75.0
     react-native-macos: ^0.0.0-0 || 0.66 || 0.68 || 0.71 - 0.73
     react-native-windows: ^0.0.0-0 || 0.66 - 0.74
@@ -12266,7 +12266,7 @@ __metadata:
     init: scripts/init.mjs
     init-test-app: scripts/init.mjs
     install-windows-test-app: windows/test-app.mjs
-  checksum: 10c0/9f6b1ce0533fad8a2b2c34f73b9f6e07f8a5fd26d80a4660b415c553b51501af79aff19f8181265b35361778ce98bf6ad058192e2610e8945639304a80ca30b6
+  checksum: 10c0/4ee36ca5ca62c19c18a5518924a6ac48ea5eb204abecc4260f88ffbd675958c57007622b5c92345e147634774536a6056ecf0d5c52cbded5a4f5ed257694f6eb
   languageName: node
   linkType: hard
 
