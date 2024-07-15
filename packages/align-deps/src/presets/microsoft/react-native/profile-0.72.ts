@@ -108,6 +108,10 @@ export const profile: Profile = {
     name: "react-native-gesture-handler",
     version: "^2.12.0",
   },
+  popover: {
+    name: "react-native-popover-view",
+    version: "^5.1.8",
+  },
   "safe-area": {
     name: "react-native-safe-area-context",
     version: ">=4.5.3 <4.8",
