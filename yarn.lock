@@ -2940,13 +2940,13 @@ __metadata:
   linkType: hard
 
 "@octokit/plugin-rest-endpoint-methods@npm:^13.0.0":
-  version: 13.2.1
-  resolution: "@octokit/plugin-rest-endpoint-methods@npm:13.2.1"
+  version: 13.2.4
+  resolution: "@octokit/plugin-rest-endpoint-methods@npm:13.2.4"
   dependencies:
     "@octokit/types": "npm:^13.5.0"
   peerDependencies:
     "@octokit/core": ">=6"
-  checksum: 10c0/95148cb7512c9c59fcffbf31f9b89852d946abb7c1c5499023f3c52fb2a071a97ab04c2140701957ab6ce39360cf0c4d2d8a3aded6869b0e686d9ce0ac031534
+  checksum: 10c0/7a63b37bb1eb9972e3cc2cf6e6b53ad5c14152767420a7f9ec4ccf2557b411fd0df442cf98866fa09ebbd39f1e69b688730feaf3cfd4056713e73a33c40ed04f
   languageName: node
   linkType: hard
 
