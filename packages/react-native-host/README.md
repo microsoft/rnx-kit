@@ -26,12 +26,32 @@ npm add --save-dev @rnx-kit/react-native-host
 
 ### iOS/macOS
 
-> To see a working example how to use this library for iOS/macOS, please refer
-> to
-> [react-native-test-app](https://github.com/microsoft/react-native-test-app/tree/trunk/ios/ReactTestApp).
+> [!NOTE]
+>
+> For a working example how to use this library for iOS/macOS, see
+> [react-native-test-app](https://github.com/microsoft/react-native-test-app/commit/241ddaf83e74f5d53a9144bcfd52f8f948425fcb#diff-8c45578b4f5841935bf037692cf65041333e9415552dcde4ac6c77bac00cd1b5).
 
-[Autolinking](https://github.com/react-native-community/cli/blob/10.x/docs/autolinking.md)
-should make this module available to your app project.
+To avoid accidental autolinking, `@rnx-kit/react-native-host` must be manually
+linked. In your `Podfile`, add the following line:
+
+```rb
+pod 'ReactNativeHost', :path => '../node_modules/@rnx-kit/react-native-host'
+```
+
+Adjust the path accordingly to your project setup. If you prefer a more dynamic
+approach, you can also try using this script:
+
+```rb
+proj_dir = Pathname.new(__dir__)
+proj_dir = proj_dir.parent until
+  File.exist?("#{proj_dir}/node_modules/@rnx-kit/react-native-host/ReactNativeHost.podspec") ||
+  proj_dir.expand_path.to_s == '/'
+
+pod 'ReactNativeHost', :path => "#{proj_dir}/node_modules/@rnx-kit/react-native-host"
+```
+
+Run `pod install` at least once to make sure it gets added to your project. Then
+make the following changes:
 
 - Replace instances of `RCTBridgeDelegate` with `RNXHostConfig`. The latter is a
   superset and is backwards compatible.
