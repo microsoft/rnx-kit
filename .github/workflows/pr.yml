@@ -43,6 +43,10 @@ jobs:
         run: |
           cp incubator/build/workflows/github.yml .github/workflows/rnx-build.yml
           git diff --exit-code
+      - name: Ensure READMEs are up-to-date
+        run: |
+          yarn update-readme
+          git diff --exit-code
   build:
     name: "Build"
     strategy:
@@ -66,11 +70,6 @@ jobs:
       - name: Build and test packages
         run: |
           yarn build:ci --base origin/${{ github.base_ref }}
-      - name: Ensure READMEs are up-to-date
-        if: ${{ matrix.node-version == 18 && runner.os == 'Linux' }}
-        run: |
-          yarn update-readme
-          git diff --exit-code
       - name: Bundle packages
         run: |
           yarn bundle:ci --base origin/${{ github.base_ref }}
