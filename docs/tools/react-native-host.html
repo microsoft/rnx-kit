@@ -13,7 +13,7 @@
 
 
 <link rel="search" type="application/opensearchdescription+xml" title="React Native Developer Tools" href="/rnx-kit/opensearch.xml"><link rel="stylesheet" href="/rnx-kit/assets/css/styles.bf3c9245.css">
-<script src="/rnx-kit/assets/js/runtime~main.582cac77.js" defer="defer"></script>
+<script src="/rnx-kit/assets/js/runtime~main.14465cf8.js" defer="defer"></script>
 <script src="/rnx-kit/assets/js/main.7516fcf4.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
@@ -30,12 +30,18 @@ simple way to enable split bundles and service delivery.</p>
 <h2 class="anchor anchorWithStickyNavbar_LWe7" id="usage">Usage<a class="hash-link" aria-label="Direct link to Usage" title="Direct link to Usage" href="/rnx-kit/docs/tools/react-native-host#usage">​</a></h2>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="iosmacos">iOS/macOS<a class="hash-link" aria-label="Direct link to iOS/macOS" title="Direct link to iOS/macOS" href="/rnx-kit/docs/tools/react-native-host#iosmacos">​</a></h3>
 <blockquote>
-<p>To see a working example how to use this library for iOS/macOS, please refer
-to
-<a href="https://github.com/microsoft/react-native-test-app/tree/trunk/ios/ReactTestApp" target="_blank" rel="noopener noreferrer">react-native-test-app</a>.</p>
+<p>[!NOTE]</p>
+<p>For a working example how to use this library for iOS/macOS, see
+<a href="https://github.com/microsoft/react-native-test-app/commit/241ddaf83e74f5d53a9144bcfd52f8f948425fcb#diff-8c45578b4f5841935bf037692cf65041333e9415552dcde4ac6c77bac00cd1b5" target="_blank" rel="noopener noreferrer">react-native-test-app</a>.</p>
 </blockquote>
-<p><a href="https://github.com/react-native-community/cli/blob/10.x/docs/autolinking.md" target="_blank" rel="noopener noreferrer">Autolinking</a>
-should make this module available to your app project.</p>
+<p>To avoid accidental autolinking, <code>@rnx-kit/react-native-host</code> must be manually
+linked. In your <code>Podfile</code>, add the following line:</p>
+<div class="language-rb codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:rgb(28, 30, 33);--prism-background-color:#ffffff"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-rb codeBlock_bY9V thin-scrollbar" style="color:rgb(28, 30, 33);background-color:#ffffff"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:rgb(28, 30, 33)"><span class="token plain">pod &#x27;ReactNativeHost&#x27;, :path =&gt; &#x27;../node_modules/@rnx-kit/react-native-host&#x27;</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<p>Adjust the path accordingly to your project setup. If you prefer a more dynamic
+approach, you can also try using this script:</p>
+<div class="language-rb codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:rgb(28, 30, 33);--prism-background-color:#ffffff"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-rb codeBlock_bY9V thin-scrollbar" style="color:rgb(28, 30, 33);background-color:#ffffff"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:rgb(28, 30, 33)"><span class="token plain">proj_dir = Pathname.new(__dir__)</span><br></span><span class="token-line" style="color:rgb(28, 30, 33)"><span class="token plain">proj_dir = proj_dir.parent until</span><br></span><span class="token-line" style="color:rgb(28, 30, 33)"><span class="token plain">  File.exist?(&quot;#{proj_dir}/node_modules/@rnx-kit/react-native-host/ReactNativeHost.podspec&quot;) ||</span><br></span><span class="token-line" style="color:rgb(28, 30, 33)"><span class="token plain">  proj_dir.expand_path.to_s == &#x27;/&#x27;</span><br></span><span class="token-line" style="color:rgb(28, 30, 33)"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:rgb(28, 30, 33)"><span class="token plain">pod &#x27;ReactNativeHost&#x27;, :path =&gt; &quot;#{proj_dir}/node_modules/@rnx-kit/react-native-host&quot;</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<p>Run <code>pod install</code> at least once to make sure it gets added to your project. Then
+make the following changes:</p>
 <ul>
 <li>Replace instances of <code>RCTBridgeDelegate</code> with <code>RNXHostConfig</code>. The latter is a
 superset and is backwards compatible.</li>
