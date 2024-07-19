@@ -2,6 +2,7 @@
 
 import * as fs from "node:fs";
 import * as path from "node:path";
+import ts from "typescript";
 
 /**
  * @typedef {import("typedoc").JSONOutput.Comment} Comment
@@ -53,6 +54,11 @@ function isCommented(source, identifier, comment) {
 async function parse(typedoc) {
   const app = await typedoc.Application.bootstrap(
     {
+      compilerOptions: {
+        module: ts.ModuleKind.ES2022,
+        moduleResolution: ts.ModuleResolutionKind.Bundler,
+        customConditions: ["typescript"],
+      },
       entryPoints: ["src/index.ts"],
       excludeInternal: true,
     },

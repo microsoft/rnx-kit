@@ -37,9 +37,6 @@
     "test": {
       "dependsOn": ["build"],
       "cache": true
-    },
-    "update-readme": {
-      "dependsOn": ["build"]
     }
   },
   "tasksRunnerOptions": {
