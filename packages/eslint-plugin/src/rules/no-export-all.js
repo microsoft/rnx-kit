@@ -105,6 +105,11 @@ const resolveFrom =
       const resolve = require("enhanced-resolve").create.sync({
         extensions: [".ts", ".tsx", ".js", ".jsx"],
         mainFields: ["module", "main"],
+
+        // Add `require` to handle packages that are missing `default`
+        // conditional. See
+        // https://github.com/webpack/enhanced-resolve/issues/313
+        conditionNames: ["typescript", "import", "require", "node"],
       });
 
       return (fromDir, moduleId) => {
