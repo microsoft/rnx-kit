@@ -11515,14 +11515,14 @@ __metadata:
   linkType: hard
 
 "package-json@npm:^10.0.0":
-  version: 10.0.0
-  resolution: "package-json@npm:10.0.0"
+  version: 10.0.1
+  resolution: "package-json@npm:10.0.1"
   dependencies:
     ky: "npm:^1.2.0"
     registry-auth-token: "npm:^5.0.2"
     registry-url: "npm:^6.0.1"
     semver: "npm:^7.6.0"
-  checksum: 10c0/54e30f6ddbe4fea9ae41d1d938ba033a5c5b1528c473b5155a69d673adcbb575b94f1ade6adaed1d0b2c1429649d7395edd71564d2a3b1dbff73d31675731e85
+  checksum: 10c0/4a55648d820496326730a7b149fd3fd8382e96f3d6def5ec687f46b75063894acf06b21f79832b40bb094c821d97f532cb0f009f85c4102d0084b488d4f492d3
   languageName: node
   linkType: hard
 
