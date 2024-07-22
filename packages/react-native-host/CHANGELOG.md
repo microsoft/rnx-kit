@@ -1,5 +1,11 @@
 # @rnx-kit/react-native-host
 
+## 0.4.11
+
+### Patch Changes
+
+- 7c32438: Bump esbuild to 0.21.x
+
 ## 0.4.10
 
 ### Patch Changes
