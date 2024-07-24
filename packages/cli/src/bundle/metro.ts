@@ -2,7 +2,7 @@ import { info } from "@rnx-kit/console";
 import type { BundleArgs as MetroBundleArgs } from "@rnx-kit/metro-service";
 import { bundle } from "@rnx-kit/metro-service";
 import type { ConfigT } from "metro-config";
-import * as path from "path";
+import * as path from "node:path";
 import { ensureDir } from "../helpers/filesystem";
 import { customizeMetroConfig } from "../helpers/metro-config";
 import type { CliPlatformBundleConfig } from "./types";

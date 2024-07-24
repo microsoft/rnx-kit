@@ -3,10 +3,10 @@ import type { HermesOptions } from "@rnx-kit/config";
 import { error, info } from "@rnx-kit/console";
 import { findPackageDependencyDir } from "@rnx-kit/tools-node/package";
 import { requireModuleFromMetro } from "@rnx-kit/tools-react-native/metro";
-import { spawnSync } from "child_process";
-import * as fs from "fs";
-import * as os from "os";
-import * as path from "path";
+import { spawnSync } from "node:child_process";
+import * as fs from "node:fs";
+import * as os from "node:os";
+import * as path from "node:path";
 
 function hermesBinaryInDir(hermesc: string): string | null {
   switch (os.platform()) {

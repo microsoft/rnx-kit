@@ -1,4 +1,5 @@
-import * as path from "path";
+import { mockFS } from "@rnx-kit/tools-filesystem/mocks";
+import * as path from "node:path";
 import { copyAssets, gatherConfigs, versionOf } from "../../src/copy-assets";
 
 const options = {
@@ -15,41 +16,28 @@ const context = {
     version: "0.0.0-dev",
   },
   options,
+  reactNativePath: require.resolve("react-native"),
 };
 
 describe("copyAssets", () => {
-  const fs = require("fs-extra");
-
-  function findFiles() {
-    return Object.entries(fs.__toJSON());
-  }
-
-  function mockFiles(files: Record<string, string> = {}) {
-    fs.__setMockFiles(files);
-  }
-
-  afterEach(() => {
-    mockFiles();
-  });
-
-  afterAll(() => {
-    jest.clearAllMocks();
-  });
+  const mkdirOptions = JSON.stringify({ recursive: true, mode: 0o755 });
 
   test("returns early if there is nothing to copy", async () => {
-    await copyAssets(context, "test", {});
-    expect(findFiles()).toEqual([]);
+    const files = {};
+    await copyAssets(context, "test", {}, mockFS(files));
+    expect(Object.keys(files)).toEqual([]);
   });
 
   test("copies assets", async () => {
     const filename = "arnolds-greatest-movies.md";
     const content = "all of them";
-    mockFiles({ [filename]: content });
+    const files = { [filename]: content };
 
-    await copyAssets(context, "test", { assets: [filename] });
+    await copyAssets(context, "test", { assets: [filename] }, mockFS(files));
 
-    expect(findFiles()).toEqual([
+    expect(Object.entries(files)).toEqual([
       [expect.stringContaining(filename), content],
+      [expect.stringMatching(`dist[/\\\\]assets[/\\\\]test$`), mkdirOptions],
       [
         expect.stringMatching(
           `dist[/\\\\]assets[/\\\\]test[/\\\\]${filename}$`
@@ -62,12 +50,13 @@ describe("copyAssets", () => {
   test("copies strings", async () => {
     const filename = "arnolds-greatest-lines.md";
     const content = "all of them";
-    mockFiles({ [filename]: content });
+    const files = { [filename]: content };
 
-    await copyAssets(context, "test", { strings: [filename] });
+    await copyAssets(context, "test", { strings: [filename] }, mockFS(files));
 
-    expect(findFiles()).toEqual([
+    expect(Object.entries(files)).toEqual([
       [expect.stringContaining(filename), content],
+      [expect.stringMatching(`dist[/\\\\]strings[/\\\\]test$`), mkdirOptions],
       [
         expect.stringMatching(
           `dist[/\\\\]strings[/\\\\]test[/\\\\]${filename}$`
@@ -80,12 +69,13 @@ describe("copyAssets", () => {
   test("copies Xcode asset catalogs", async () => {
     const filename = "arnolds-greatest-assets.xcassets";
     const content = "all of them";
-    mockFiles({ [filename]: content });
+    const files = { [filename]: content };
 
-    await copyAssets(context, "test", { xcassets: [filename] });
+    await copyAssets(context, "test", { xcassets: [filename] }, mockFS(files));
 
-    expect(findFiles()).toEqual([
+    expect(Object.entries(files)).toEqual([
       [expect.stringContaining(filename), content],
+      ["xcassets", mkdirOptions],
       [expect.stringMatching(`xcassets[/\\\\]${filename}$`), content],
     ]);
   });
@@ -93,15 +83,18 @@ describe("copyAssets", () => {
   test("does not copy Xcode asset catalogs if destination path is unset", async () => {
     const filename = "arnolds-greatest-assets.xcassets";
     const content = "all of them";
-    mockFiles({ [filename]: content });
+    const files = { [filename]: content };
 
     await copyAssets(
       { ...context, options: { ...options, xcassetsDest: undefined } },
       "test",
-      { xcassets: [filename] }
+      { xcassets: [filename] },
+      mockFS(files)
     );
 
-    expect(findFiles()).toEqual([[expect.stringContaining(filename), content]]);
+    expect(Object.entries(files)).toEqual([
+      [expect.stringContaining(filename), content],
+    ]);
   });
 });
 

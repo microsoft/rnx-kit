@@ -1,5 +1,5 @@
 import type { TransformProfile } from "metro-babel-transformer";
-import * as path from "path";
+import * as path from "node:path";
 
 export function asBoolean(value: string): boolean {
   switch (value) {
