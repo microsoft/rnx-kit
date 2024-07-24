@@ -16,7 +16,7 @@
   },
   "targetDefaults": {
     "build": {
-      "dependsOn": ["^build"],
+      "dependsOn": ["^build", "clean", "depcheck", "lint"],
       "cache": true
     },
     "build:ci": {
