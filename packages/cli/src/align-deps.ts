@@ -13,7 +13,7 @@ const optionsMap: Partial<Record<keyof typeof cliOptions, string>> = {
 };
 
 export function rnxAlignDeps(
-  argv: string[],
+  _argv: string[],
   _config: CLIConfig,
   args: CLIArgs
 ): void {
@@ -25,7 +25,6 @@ export function rnxAlignDeps(
     "no-unmanaged": Boolean(args.noUnmanaged),
     verbose: Boolean(args.verbose),
     write: Boolean(args.write),
-    packages: argv,
   });
 }
 
