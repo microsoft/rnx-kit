@@ -22,7 +22,7 @@ type Options = {
     | ((config: CLIConfig) => string | boolean | number);
 };
 
-const COMMAND_NAME = "rnx-test";
+const COMMAND_NAMES = ["rnx-test", "test"];
 const JEST_CLI = ["jest", "jest-cli"];
 
 export function rnxTest(
@@ -40,7 +40,9 @@ export function rnxTest(
     }
   })();
 
-  const commandIndex = process.argv.indexOf(COMMAND_NAME);
+  const commandIndex = process.argv.findIndex((arg) =>
+    COMMAND_NAMES.includes(arg)
+  );
   if (commandIndex < 0) {
     throw new Error("Failed to parse command arguments");
   }
@@ -124,7 +126,7 @@ export function jestOptions(): Options[] {
 }
 
 export const rnxTestCommand = {
-  name: COMMAND_NAME,
+  name: COMMAND_NAMES[0],
   description: "Test runner for React Native apps",
   func: rnxTest,
   options: [

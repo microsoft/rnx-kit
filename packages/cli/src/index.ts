@@ -1,3 +1,4 @@
+import type { Command } from "@react-native-community/cli-types";
 import { rnxAlignDepsCommand } from "./align-deps";
 import { rnxBundleCommand } from "./bundle";
 import { rnxCleanCommand } from "./clean";
@@ -17,7 +18,7 @@ export const reactNativeConfig = {
     rnxTestCommand,
     rnxWriteThirdPartyNoticesCommand,
     rnxCleanCommand,
-  ],
+  ] as Command<false>[],
 };
 
 export { rnxAlignDeps, rnxAlignDepsCommand } from "./align-deps";
