@@ -2,19 +2,12 @@
 
 /**
  * @typedef {(args?: import("yargs").Arguments, rawArgs?: string[]) => Promise<void>} Command
+ * @typedef {import("node:child_process").SpawnOptions} SpawnOptions
  */
 
-import { spawn } from "node:child_process";
+import * as child_process from "node:child_process";
 import * as os from "node:os";
-import * as path from "node:path";
-import { require } from "./require.js";
-
-function findWorkspaceRoot(options = { paths: [process.cwd()] }) {
-  const scriptsDir = path.dirname(
-    require.resolve("@rnx-kit/scripts/package.json", options)
-  );
-  return path.dirname(scriptsDir);
-}
+import { URL, fileURLToPath } from "node:url";
 
 /**
  * @param {string} command
@@ -25,30 +18,46 @@ function isRunningNx(command, args) {
   return command.startsWith("yarn") && args[0] === "nx";
 }
 
+function workspaceRoot() {
+  return fileURLToPath(new URL("../../", import.meta.url));
+}
+
 /**
  * @param {string} command
- * @param {...string} args
+ * @param {string[]} args
+ * @param {SpawnOptions=} options
  * @returns {Promise<void>}
  */
-export function execute(command, ...args) {
+export function spawn(command, args, options) {
   return new Promise((resolve, reject) => {
-    /** @type {import("node:child_process").SpawnOptions} */
-    const options = {
-      // Nx is only installed at workspace root — adjust `cwd` accordingly.
-      cwd: isRunningNx(command, args) ? findWorkspaceRoot() : process.cwd(),
+    /** @type {SpawnOptions} */
+    const opts = {
+      ...options,
       stdio: "inherit",
       // As of Node 20.12.2, it is no longer allowed to spawn a process with
       // `.bat` or `.cmd` without shell (see
       // https://nodejs.org/en/blog/release/v20.12.2).
       shell: command.endsWith(".bat") || command.endsWith(".cmd"),
     };
-    spawn(command, args, options).on("close", (code) => {
+    child_process.spawn(command, args, opts).on("close", (code) => {
       if (code === 0) {
         resolve();
       } else {
         reject();
       }
     });
+  });
+}
+
+/**
+ * @param {string} command
+ * @param {...string} args
+ * @returns {Promise<void>}
+ */
+export function execute(command, ...args) {
+  return spawn(command, args, {
+    // Nx is only installed at workspace root — adjust `cwd` accordingly.
+    cwd: isRunningNx(command, args) ? workspaceRoot() : process.cwd(),
   });
 }
 
