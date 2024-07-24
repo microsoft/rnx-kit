@@ -1,10 +1,7 @@
 // @ts-check
 
 import * as fs from "node:fs";
-import { runScript, sequence } from "../process.js";
-import { clean } from "./clean.js";
-import { depcheck } from "./depcheck.js";
-import { lint } from "./lint.js";
+import { runScript } from "../process.js";
 
 /** @type {import("../process.js").Command} */
 export async function build(_args, rawArgs = []) {
@@ -15,7 +12,5 @@ export async function build(_args, rawArgs = []) {
     return runScript("nx", "build", name);
   }
 
-  await sequence(clean, depcheck, lint, () =>
-    runScript("tsc", "--outDir", "lib", ...rawArgs)
-  );
+  await runScript("tsc", "--outDir", "lib", ...rawArgs);
 }
