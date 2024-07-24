@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/cli
 
+## 0.16.29
+
+### Patch Changes
+
+- 3cf6abd: Fix `rnx-align-deps` not working
+
 ## 0.16.28
 
 ### Patch Changes
