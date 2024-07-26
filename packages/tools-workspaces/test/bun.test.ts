@@ -1,3 +1,6 @@
+import { equal, match } from "node:assert/strict";
+import { afterEach, describe, it } from "node:test";
+import { findSentinel, findSentinelSync } from "../src/common";
 import {
   findWorkspacePackages,
   findWorkspacePackagesSync,
@@ -6,27 +9,51 @@ import {
 } from "../src/index";
 import { setFixture, unsetFixture } from "./helper";
 
+describe("findSentinel", () => {
+  afterEach(() => {
+    unsetFixture();
+  });
+
+  it("returns sentinel for Bun", async () => {
+    setFixture("bun");
+    match((await findSentinel()) ?? "", /[/\\]bun.lockb$/);
+  });
+
+  it("returns sentinel for Bun (sync)", () => {
+    setFixture("bun");
+    match(findSentinelSync() ?? "", /[/\\]bun.lockb$/);
+  });
+});
+
 describe("findWorkspacePackages", () => {
   const packages = [
-    expect.stringMatching(/__fixtures__[/\\]bun[/\\]packages[/\\]conan$/),
-    expect.stringMatching(/__fixtures__[/\\]bun[/\\]packages[/\\]dutch$/),
-    expect.stringMatching(/__fixtures__[/\\]bun[/\\]packages[/\\]john$/),
-    expect.stringMatching(/__fixtures__[/\\]bun[/\\]packages[/\\]quaid$/),
-    expect.stringMatching(/__fixtures__[/\\]bun[/\\]packages[/\\]t-800$/),
+    /__fixtures__[/\\]bun[/\\]packages[/\\]conan$/,
+    /__fixtures__[/\\]bun[/\\]packages[/\\]dutch$/,
+    /__fixtures__[/\\]bun[/\\]packages[/\\]john$/,
+    /__fixtures__[/\\]bun[/\\]packages[/\\]quaid$/,
+    /__fixtures__[/\\]bun[/\\]packages[/\\]t-800$/,
   ];
 
   afterEach(() => {
     unsetFixture();
   });
 
-  test("returns packages for Bun workspaces", async () => {
+  it("returns packages for Bun workspaces", async () => {
     setFixture("bun");
-    expect((await findWorkspacePackages()).sort()).toEqual(packages);
+
+    const result = (await findWorkspacePackages()).sort();
+    for (let i = 0; i < result.length; ++i) {
+      match(result[i], packages[i]);
+    }
   });
 
-  test("returns packages for Bun workspaces (sync)", () => {
+  it("returns packages for Bun workspaces (sync)", () => {
     setFixture("bun");
-    expect(findWorkspacePackagesSync().sort()).toEqual(packages);
+
+    const result = findWorkspacePackagesSync().sort();
+    for (let i = 0; i < result.length; ++i) {
+      match(result[i], packages[i]);
+    }
   });
 });
 
@@ -35,13 +62,13 @@ describe("findWorkspaceRoot", () => {
     unsetFixture();
   });
 
-  test("returns workspace root for Bun workspaces", async () => {
+  it("returns workspace root for Bun workspaces", async () => {
     const root = setFixture("bun");
-    expect(await findWorkspaceRoot()).toBe(root);
+    equal(await findWorkspaceRoot(), root);
   });
 
-  test("returns workspace root for Bun workspaces (sync)", () => {
+  it("returns workspace root for Bun workspaces (sync)", () => {
     const root = setFixture("bun");
-    expect(findWorkspaceRootSync()).toBe(root);
+    equal(findWorkspaceRootSync(), root);
   });
 });

@@ -1,34 +1,34 @@
+import { deepEqual, equal } from "node:assert/strict";
+import { describe, it } from "node:test";
 import { error, info, warn } from "../src/index";
 
 describe("console", () => {
-  const consoleErrorSpy = jest.spyOn(global.console, "error");
-  const consoleLogSpy = jest.spyOn(global.console, "log");
-  const consoleWarnSpy = jest.spyOn(global.console, "warn");
-
   const args = ["string", 0, true];
 
-  beforeEach(() => {
-    consoleErrorSpy.mockReset();
-    consoleLogSpy.mockReset();
-    consoleWarnSpy.mockReset();
-  });
+  it("prints error messages", (t) => {
+    const errorMock = t.mock.method(console, "error", () => null);
 
-  afterAll(() => {
-    jest.clearAllMocks();
-  });
-
-  test("prints error messages", () => {
     error(...args);
-    expect(consoleErrorSpy).toHaveBeenCalledWith("error", ...args);
+
+    equal(errorMock.mock.calls.length, 1);
+    deepEqual(errorMock.mock.calls[0].arguments, ["error", ...args]);
   });
 
-  test("prints info messages", () => {
+  it("prints info messages", (t) => {
+    const infoMock = t.mock.method(console, "log", () => null);
+
     info(...args);
-    expect(consoleLogSpy).toHaveBeenCalledWith("info", ...args);
+
+    equal(infoMock.mock.calls.length, 1);
+    deepEqual(infoMock.mock.calls[0].arguments, ["info", ...args]);
   });
 
-  test("prints warning messages", () => {
+  it("prints warning messages", (t) => {
+    const warnMock = t.mock.method(console, "warn", () => null);
+
     warn(...args);
-    expect(consoleWarnSpy).toHaveBeenCalledWith("warn", ...args);
+
+    equal(warnMock.mock.calls.length, 1);
+    deepEqual(warnMock.mock.calls[0].arguments, ["warn", ...args]);
   });
 });

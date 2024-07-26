@@ -1,3 +1,6 @@
+import { equal, match } from "node:assert/strict";
+import { afterEach, describe, it } from "node:test";
+import { findSentinel, findSentinelSync } from "../src/common";
 import {
   findWorkspacePackages,
   findWorkspacePackagesSync,
@@ -6,27 +9,51 @@ import {
 } from "../src/index";
 import { setFixture, unsetFixture } from "./helper";
 
+describe("findSentinel", () => {
+  afterEach(() => {
+    unsetFixture();
+  });
+
+  it("returns sentinel for Yarn", async () => {
+    setFixture("yarn");
+    match((await findSentinel()) ?? "", /[/\\]yarn.lock$/);
+  });
+
+  it("returns sentinel for Yarn (sync)", () => {
+    setFixture("yarn");
+    match(findSentinelSync() ?? "", /[/\\]yarn.lock$/);
+  });
+});
+
 describe("findWorkspacePackages", () => {
   const packages = [
-    expect.stringMatching(/__fixtures__[/\\]yarn[/\\]packages[/\\]conan$/),
-    expect.stringMatching(/__fixtures__[/\\]yarn[/\\]packages[/\\]dutch$/),
-    expect.stringMatching(/__fixtures__[/\\]yarn[/\\]packages[/\\]john$/),
-    expect.stringMatching(/__fixtures__[/\\]yarn[/\\]packages[/\\]quaid$/),
-    expect.stringMatching(/__fixtures__[/\\]yarn[/\\]packages[/\\]t-800$/),
+    /__fixtures__[/\\]yarn[/\\]packages[/\\]conan$/,
+    /__fixtures__[/\\]yarn[/\\]packages[/\\]dutch$/,
+    /__fixtures__[/\\]yarn[/\\]packages[/\\]john$/,
+    /__fixtures__[/\\]yarn[/\\]packages[/\\]quaid$/,
+    /__fixtures__[/\\]yarn[/\\]packages[/\\]t-800$/,
   ];
 
   afterEach(() => {
     unsetFixture();
   });
 
-  test("returns packages for Yarn workspaces", async () => {
+  it("returns packages for Yarn workspaces", async () => {
     setFixture("yarn");
-    expect((await findWorkspacePackages()).sort()).toEqual(packages);
+
+    const result = (await findWorkspacePackages()).sort();
+    for (let i = 0; i < result.length; ++i) {
+      match(result[i], packages[i]);
+    }
   });
 
-  test("returns packages for Yarn workspaces (sync)", () => {
+  it("returns packages for Yarn workspaces (sync)", () => {
     setFixture("yarn");
-    expect(findWorkspacePackagesSync().sort()).toEqual(packages);
+
+    const result = findWorkspacePackagesSync().sort();
+    for (let i = 0; i < result.length; ++i) {
+      match(result[i], packages[i]);
+    }
   });
 });
 
@@ -35,13 +62,13 @@ describe("findWorkspaceRoot", () => {
     unsetFixture();
   });
 
-  test("returns workspace root for Yarn workspaces", async () => {
+  it("returns workspace root for Yarn workspaces", async () => {
     const root = setFixture("yarn");
-    expect(await findWorkspaceRoot()).toBe(root);
+    equal(await findWorkspaceRoot(), root);
   });
 
-  test("returns workspace root for Yarn workspaces (sync)", () => {
+  it("returns workspace root for Yarn workspaces (sync)", () => {
     const root = setFixture("yarn");
-    expect(findWorkspaceRootSync()).toBe(root);
+    equal(findWorkspaceRootSync(), root);
   });
 });

@@ -1,5 +1,7 @@
+import { deepEqual, equal, match, ok, throws } from "node:assert/strict";
 import * as fs from "node:fs";
 import * as path from "node:path";
+import { afterEach, describe, it } from "node:test";
 import { enhanceMiddleware } from "../src/assetPluginForMonorepos";
 import {
   defaultWatchFolders,
@@ -27,38 +29,32 @@ describe("@rnx-kit/metro-config", () => {
 
   afterEach(() => process.chdir(currentWorkingDir));
 
-  test("defaultWatchFolders() returns an empty list outside a monorepo", () => {
+  it("defaultWatchFolders() returns an empty list outside a monorepo", () => {
     setFixture("app-repo");
-    expect(defaultWatchFolders().length).toBe(0);
+    equal(defaultWatchFolders().length, 0);
   });
 
-  test("defaultWatchFolders() returns packages in a monorepo", () => {
+  it("defaultWatchFolders() returns packages in a monorepo", () => {
     setFixture("awesome-repo/packages/t-800");
+
+    const expected = [
+      /__fixtures__[/\\]awesome-repo[/\\]node_modules$/,
+      /__fixtures__[/\\]awesome-repo[/\\]packages[/\\]conan$/,
+      /__fixtures__[/\\]awesome-repo[/\\]packages[/\\]dutch$/,
+      /__fixtures__[/\\]awesome-repo[/\\]packages[/\\]john$/,
+      /__fixtures__[/\\]awesome-repo[/\\]packages[/\\]quaid$/,
+      /__fixtures__[/\\]awesome-repo[/\\]packages[/\\]t-800$/,
+    ];
     const folders = defaultWatchFolders()
       .map((path) => path.replace(/\\/g, "/"))
       .sort();
 
-    expect(folders).toEqual([
-      expect.stringMatching(/__fixtures__[/\\]awesome-repo[/\\]node_modules$/),
-      expect.stringMatching(
-        /__fixtures__[/\\]awesome-repo[/\\]packages[/\\]conan$/
-      ),
-      expect.stringMatching(
-        /__fixtures__[/\\]awesome-repo[/\\]packages[/\\]dutch$/
-      ),
-      expect.stringMatching(
-        /__fixtures__[/\\]awesome-repo[/\\]packages[/\\]john$/
-      ),
-      expect.stringMatching(
-        /__fixtures__[/\\]awesome-repo[/\\]packages[/\\]quaid$/
-      ),
-      expect.stringMatching(
-        /__fixtures__[/\\]awesome-repo[/\\]packages[/\\]t-800$/
-      ),
-    ]);
+    for (let i = 0; i < folders.length; ++i) {
+      match(folders[i], expected[i]);
+    }
   });
 
-  test("resolveUniqueModule() ignores symlinks", () => {
+  it("resolveUniqueModule() ignores symlinks", () => {
     const repo = fixturePath("awesome-repo");
     const packageCopy = path.join(
       repo,
@@ -77,17 +73,15 @@ describe("@rnx-kit/metro-config", () => {
 
     setFixture("awesome-repo/packages/t-800");
 
-    expect(
-      fs.lstatSync("node_modules/react-native").isSymbolicLink()
-    ).toBeTruthy();
+    ok(fs.lstatSync("node_modules/react-native").isSymbolicLink());
 
     const [reactNativePath, exclude] = resolveUniqueModule("react-native");
-    expect(reactNativePath).toBe(path.dirname(projectCopy));
-    expect(exclude.test(packageCopy)).toBeTruthy();
-    expect(exclude.test(projectCopy)).toBeFalsy();
+    equal(reactNativePath, path.dirname(projectCopy));
+    ok(exclude.test(packageCopy));
+    ok(!exclude.test(projectCopy));
   });
 
-  test("resolveUniqueModule() handles nested dependencies", () => {
+  it("resolveUniqueModule() handles nested dependencies", () => {
     const repo = fixturePath("awesome-repo");
     const packageRnCopy = path.join(
       repo,
@@ -125,35 +119,37 @@ describe("@rnx-kit/metro-config", () => {
 
     const [reactNativePath, excludeReactNative] =
       resolveUniqueModule("react-native");
-    expect(reactNativePath).toBe(path.dirname(packageRnCopy));
-    expect(excludeReactNative.test(packageRnCopy)).toBeFalsy();
-    expect(excludeReactNative.test(projectRnCopy)).toBeTruthy();
+    equal(reactNativePath, path.dirname(packageRnCopy));
+    ok(!excludeReactNative.test(packageRnCopy));
+    ok(excludeReactNative.test(projectRnCopy));
 
     const [matrixPath, excludeMatrix] = resolveUniqueModule("@commando/matrix");
-    expect(matrixPath).toBe(path.dirname(packageMatrixCopy));
-    expect(excludeMatrix.test(packageMatrixCopy)).toBeFalsy();
-    expect(excludeMatrix.test(projectMatrixCopy)).toBeTruthy();
+    equal(matrixPath, path.dirname(packageMatrixCopy));
+    ok(!excludeMatrix.test(packageMatrixCopy));
+    ok(excludeMatrix.test(projectMatrixCopy));
   });
 
-  test("resolveUniqueModule() throws if a package is not found", () => {
-    expect(resolveUniqueModule("jest", process.cwd())).toBeDefined();
+  it("resolveUniqueModule() throws if a package is not found", () => {
+    ok(resolveUniqueModule("eslint", process.cwd()));
 
     const packageName = "this-package-does-not-exist";
-    expect(() => resolveUniqueModule(packageName, process.cwd())).toThrow(
-      `Cannot find module '${packageName}'`
+    throws(
+      () => resolveUniqueModule(packageName, process.cwd()),
+      new Error(`Cannot find module '${packageName}'`)
     );
   });
 
-  test("resolveUniqueModule() escapes characters clashing with regex tokens", () => {
+  it("resolveUniqueModule() escapes characters clashing with regex tokens", () => {
     const repo = fixturePath("pnpm-repo");
     const [rnPath, rnExclude] = resolveUniqueModule("react-native", repo);
-    expect(rnPath).toMatch(
+    match(
+      rnPath,
       /__fixtures__[/\\]pnpm-repo[/\\]node_modules[/\\]\.pnpm[/\\]github\.com\+facebook\+react-native@72e1eda0736d34d027e4d4b1c3cace529ab5dcf3_react@17\.0\.2[/\\]node_modules[/\\]react-native$/
     );
-    expect(rnExclude.test(path.join(rnPath, "package.json"))).toBeFalsy();
+    ok(!rnExclude.test(path.join(rnPath, "package.json")));
   });
 
-  test("exclusionList() ignores extra copies of react and react-native", () => {
+  it("exclusionList() ignores extra copies of react and react-native", () => {
     const repo = fixturePath("awesome-repo");
     const reactCopy = path.join(repo, "node_modules", "react", "package.json");
     const packageCopy = path.join(
@@ -175,31 +171,31 @@ describe("@rnx-kit/metro-config", () => {
     // exclude all but the repo's copy.
     setFixture("awesome-repo/packages/conan");
     const conanExclude = exclusionList();
-    expect(conanExclude.test(reactCopy)).toBeFalsy();
-    expect(conanExclude.test(packageCopy)).toBeTruthy();
-    expect(conanExclude.test(projectCopy)).toBeFalsy();
-    expect(
+    ok(!conanExclude.test(reactCopy));
+    ok(conanExclude.test(packageCopy));
+    ok(!conanExclude.test(projectCopy));
+    ok(
       conanExclude.test(
         path.join("conan", "windows", ".vs", "conan", "v16", "Browse.VC.db")
       )
-    ).toBeTruthy();
-    expect(conanExclude.test("Test.ProjectImports.zip")).toBeTruthy();
+    );
+    ok(conanExclude.test("Test.ProjectImports.zip"));
 
     // John has a local copy of react-native and should ignore all other copies.
     setFixture("awesome-repo/packages/john");
     const johnExclude = exclusionList();
-    expect(johnExclude.test(reactCopy)).toBeFalsy();
-    expect(johnExclude.test(packageCopy)).toBeFalsy();
-    expect(johnExclude.test(projectCopy)).toBeTruthy();
-    expect(
+    ok(!johnExclude.test(reactCopy));
+    ok(!johnExclude.test(packageCopy));
+    ok(johnExclude.test(projectCopy));
+    ok(
       johnExclude.test(
         path.join("john", "windows", ".vs", "conan", "v16", "Browse.VC.db")
       )
-    ).toBeTruthy();
-    expect(johnExclude.test("Test.ProjectImports.zip")).toBeTruthy();
+    );
+    ok(johnExclude.test("Test.ProjectImports.zip"));
   });
 
-  test("exclusionList() returns additional exclusions", () => {
+  it("exclusionList() returns additional exclusions", () => {
     const repo = fixturePath("awesome-repo");
     const reactCopy = path.join(repo, "node_modules", "react", "package.json");
     const packageCopy = path.join(
@@ -219,30 +215,25 @@ describe("@rnx-kit/metro-config", () => {
 
     setFixture("awesome-repo/packages/conan");
     const conanExclude = exclusionList([/.*[/\\]__fixtures__[/\\].*/]);
-    expect(conanExclude.test(reactCopy)).toBeTruthy();
-    expect(conanExclude.test(packageCopy)).toBeTruthy();
-    expect(conanExclude.test(projectCopy)).toBeTruthy();
-    expect(
+    ok(conanExclude.test(reactCopy));
+    ok(conanExclude.test(packageCopy));
+    ok(conanExclude.test(projectCopy));
+    ok(
       conanExclude.test(
         path.join("conan", "windows", ".vs", "conan", "v16", "Browse.VC.db")
       )
-    ).toBeTruthy();
-    expect(conanExclude.test("Test.ProjectImports.zip")).toBeTruthy();
+    );
+    ok(conanExclude.test("Test.ProjectImports.zip"));
   });
 });
 
 describe("makeMetroConfig", () => {
   const projectRoot = path.resolve("../test-app");
-  const consoleWarnSpy = jest.spyOn(require("@rnx-kit/console"), "warn");
 
-  afterEach(() => {
-    consoleWarnSpy.mockReset();
-  });
-
-  test("returns a default Metro config", async () => {
+  it("returns a default Metro config", async () => {
     const config = makeMetroConfig({ projectRoot });
 
-    expect(Object.keys(config).sort()).toEqual([
+    deepEqual(Object.keys(config).sort(), [
       "cacheStores",
       "cacheVersion",
       "maxWorkers",
@@ -279,7 +270,7 @@ describe("makeMetroConfig", () => {
       fail("Expected `config.watchFolders` to be an array");
     }
 
-    expect(Object.keys(config.resolver.extraNodeModules)).toEqual([
+    deepEqual(Object.keys(config.resolver.extraNodeModules), [
       "react",
       "react-native",
       "react-native-macos",
@@ -288,11 +279,11 @@ describe("makeMetroConfig", () => {
     ]);
 
     const blockList = exclusionList([], projectRoot).source;
-    expect(config.resolver.blacklistRE.source).toBe(blockList);
-    expect(config.resolver.blockList.source).toBe(blockList);
+    equal(config.resolver.blacklistRE.source, blockList);
+    equal(config.resolver.blockList.source, blockList);
 
-    expect(config.server.enhanceMiddleware).toBe(enhanceMiddleware);
-    expect(config.transformer.assetPlugins).toEqual([]);
+    equal(config.server.enhanceMiddleware, enhanceMiddleware);
+    deepEqual(config.transformer.assetPlugins, []);
 
     const opts = { dev: false, hot: false };
     const transformerOptions = await config.transformer.getTransformOptions(
@@ -300,21 +291,21 @@ describe("makeMetroConfig", () => {
       opts,
       () => Promise.resolve([])
     );
-    expect(transformerOptions?.transform).toEqual({
+    deepEqual(transformerOptions?.transform, {
       experimentalImportSupport: false,
       inlineRequires: false,
     });
 
-    expect(config.watchFolders.length).toBeGreaterThan(0);
+    ok(config.watchFolders.length > 0);
   });
 
-  test("merges Metro configs", async () => {
+  it("merges Metro configs", async () => {
     const config = makeMetroConfig({
       projectRoot,
       resetCache: true,
     });
 
-    expect(Object.keys(config).sort()).toEqual([
+    deepEqual(Object.keys(config).sort(), [
       "cacheStores",
       "cacheVersion",
       "maxWorkers",
@@ -333,8 +324,8 @@ describe("makeMetroConfig", () => {
       "watcher",
     ]);
 
-    expect(config.projectRoot).toBe(projectRoot);
-    expect(config.resetCache).toBeTruthy();
+    equal(config.projectRoot, projectRoot);
+    ok(config.resetCache);
 
     if (!config.resolver) {
       fail("Expected `config.resolver` to be defined");
@@ -354,7 +345,7 @@ describe("makeMetroConfig", () => {
       fail("Expected `config.watchFolders` to be an array");
     }
 
-    expect(Object.keys(config.resolver.extraNodeModules)).toEqual([
+    deepEqual(Object.keys(config.resolver.extraNodeModules), [
       "react",
       "react-native",
       "react-native-macos",
@@ -363,11 +354,11 @@ describe("makeMetroConfig", () => {
     ]);
 
     const blockList = exclusionList([], projectRoot).source;
-    expect(config.resolver.blacklistRE.source).toBe(blockList);
-    expect(config.resolver.blockList.source).toBe(blockList);
+    equal(config.resolver.blacklistRE.source, blockList);
+    equal(config.resolver.blockList.source, blockList);
 
-    expect(config.server.enhanceMiddleware).toBe(enhanceMiddleware);
-    expect(config.transformer.assetPlugins).toEqual([]);
+    equal(config.server.enhanceMiddleware, enhanceMiddleware);
+    deepEqual(config.transformer.assetPlugins, []);
 
     const opts = { dev: false, hot: false };
     const transformerOptions = await config.transformer.getTransformOptions(
@@ -375,15 +366,15 @@ describe("makeMetroConfig", () => {
       opts,
       () => Promise.resolve([])
     );
-    expect(transformerOptions?.transform).toEqual({
+    deepEqual(transformerOptions?.transform, {
       experimentalImportSupport: false,
       inlineRequires: false,
     });
 
-    expect(config.watchFolders.length).toBeGreaterThan(0);
+    ok(config.watchFolders.length > 0);
   });
 
-  test("merges `extraNodeModules`", () => {
+  it("merges `extraNodeModules`", () => {
     const config = makeMetroConfig({
       projectRoot,
       resolver: {
@@ -399,7 +390,7 @@ describe("makeMetroConfig", () => {
       fail("Expected config.resolver.extraNodeModules to be set");
     }
 
-    expect(Object.keys(extraNodeModules).sort()).toEqual([
+    deepEqual(Object.keys(extraNodeModules).sort(), [
       "@babel/runtime",
       "my-awesome-package",
       "react",
@@ -408,11 +399,11 @@ describe("makeMetroConfig", () => {
       "react-native-windows",
     ]);
 
-    expect(extraNodeModules["my-awesome-package"]).toBe("/skynet");
-    expect(extraNodeModules["react-native"]).toBe("/skynet");
+    equal(extraNodeModules["my-awesome-package"], "/skynet");
+    equal(extraNodeModules["react-native"], "/skynet");
   });
 
-  test("sets both `blacklistRE` and `blockList`", () => {
+  it("sets both `blacklistRE` and `blockList`", () => {
     const configWithBlacklist = makeMetroConfig({
       resolver: {
         blacklistRE: /.*/,
@@ -420,8 +411,8 @@ describe("makeMetroConfig", () => {
     });
     const blacklistRE = configWithBlacklist.resolver?.blacklistRE;
 
-    expect(blacklistRE).not.toBeUndefined();
-    expect(blacklistRE).toBe(configWithBlacklist.resolver?.blockList);
+    ok(blacklistRE);
+    equal(blacklistRE, configWithBlacklist.resolver?.blockList);
 
     const configWithBlockList = makeMetroConfig({
       resolver: {
@@ -430,7 +421,7 @@ describe("makeMetroConfig", () => {
     });
     const blockList = configWithBlockList.resolver?.blockList;
 
-    expect(blockList).not.toBeUndefined();
-    expect(blockList).toBe(configWithBlockList.resolver?.blacklistRE);
+    ok(blockList);
+    equal(blockList, configWithBlockList.resolver?.blacklistRE);
   });
 });

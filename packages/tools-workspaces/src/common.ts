@@ -27,12 +27,13 @@ export const WORKSPACE_ROOT_SENTINELS = [
   BUN_LOCKB,
 ];
 
+const isTesting = Boolean(process.env.NODE_TEST_CONTEXT);
+
 function dirnameAll(paths: string[]): string[] {
   return paths.map((p) => path.dirname(p));
 }
 
 function makeFindSentinel<R>(finder: (name: string[]) => R) {
-  const isTesting = Boolean(process.env.JEST_WORKER_ID);
   let result: R | undefined;
   return () => {
     if (isTesting || !result) {

@@ -1,3 +1,6 @@
+import { equal, match } from "node:assert/strict";
+import { afterEach, describe, it } from "node:test";
+import { findSentinel, findSentinelSync } from "../src/common";
 import {
   findWorkspacePackages,
   findWorkspacePackagesSync,
@@ -6,65 +9,83 @@ import {
 } from "../src/index";
 import { setFixture, unsetFixture } from "./helper";
 
+describe("findSentinel", () => {
+  afterEach(() => {
+    unsetFixture();
+  });
+
+  it("returns sentinel for Lerna", async () => {
+    setFixture("lerna-packages");
+    match((await findSentinel()) ?? "", /[/\\]lerna.json$/);
+
+    setFixture("lerna-workspaces");
+    match((await findSentinel()) ?? "", /[/\\]lerna.json$/);
+  });
+
+  it("returns sentinel for Lerna (sync)", () => {
+    setFixture("lerna-packages");
+    match(findSentinelSync() ?? "", /[/\\]lerna.json$/);
+
+    setFixture("lerna-workspaces");
+    match(findSentinelSync() ?? "", /[/\\]lerna.json$/);
+  });
+});
+
 describe("findWorkspacePackages", () => {
   const packagesPackages = [
-    expect.stringMatching(
-      /__fixtures__[/\\]lerna-packages[/\\]packages[/\\]conan$/
-    ),
-    expect.stringMatching(
-      /__fixtures__[/\\]lerna-packages[/\\]packages[/\\]dutch$/
-    ),
-    expect.stringMatching(
-      /__fixtures__[/\\]lerna-packages[/\\]packages[/\\]john$/
-    ),
-    expect.stringMatching(
-      /__fixtures__[/\\]lerna-packages[/\\]packages[/\\]quaid$/
-    ),
-    expect.stringMatching(
-      /__fixtures__[/\\]lerna-packages[/\\]packages[/\\]t-800$/
-    ),
+    /__fixtures__[/\\]lerna-packages[/\\]packages[/\\]conan$/,
+    /__fixtures__[/\\]lerna-packages[/\\]packages[/\\]dutch$/,
+    /__fixtures__[/\\]lerna-packages[/\\]packages[/\\]john$/,
+    /__fixtures__[/\\]lerna-packages[/\\]packages[/\\]quaid$/,
+    /__fixtures__[/\\]lerna-packages[/\\]packages[/\\]t-800$/,
   ];
 
   const workspacesPackages = [
-    expect.stringMatching(
-      /__fixtures__[/\\]lerna-workspaces[/\\]packages[/\\]conan$/
-    ),
-    expect.stringMatching(
-      /__fixtures__[/\\]lerna-workspaces[/\\]packages[/\\]dutch$/
-    ),
-    expect.stringMatching(
-      /__fixtures__[/\\]lerna-workspaces[/\\]packages[/\\]john$/
-    ),
-    expect.stringMatching(
-      /__fixtures__[/\\]lerna-workspaces[/\\]packages[/\\]quaid$/
-    ),
-    expect.stringMatching(
-      /__fixtures__[/\\]lerna-workspaces[/\\]packages[/\\]t-800$/
-    ),
+    /__fixtures__[/\\]lerna-workspaces[/\\]packages[/\\]conan$/,
+    /__fixtures__[/\\]lerna-workspaces[/\\]packages[/\\]dutch$/,
+    /__fixtures__[/\\]lerna-workspaces[/\\]packages[/\\]john$/,
+    /__fixtures__[/\\]lerna-workspaces[/\\]packages[/\\]quaid$/,
+    /__fixtures__[/\\]lerna-workspaces[/\\]packages[/\\]t-800$/,
   ];
 
   afterEach(() => {
     unsetFixture();
   });
 
-  test("returns packages for Lerna workspaces", async () => {
+  it("returns packages for Lerna workspaces", async () => {
     setFixture("lerna-packages");
-    expect((await findWorkspacePackages()).sort()).toEqual(packagesPackages);
+
+    const result = (await findWorkspacePackages()).sort();
+    for (let i = 0; i < result.length; ++i) {
+      match(result[i], packagesPackages[i]);
+    }
   });
 
-  test("returns packages for Lerna workspaces (sync)", () => {
+  it("returns packages for Lerna workspaces (sync)", () => {
     setFixture("lerna-packages");
-    expect(findWorkspacePackagesSync().sort()).toEqual(packagesPackages);
+
+    const result = findWorkspacePackagesSync().sort();
+    for (let i = 0; i < result.length; ++i) {
+      match(result[i], packagesPackages[i]);
+    }
   });
 
-  test("returns packages for delegated workspaces", async () => {
+  it("returns packages for delegated workspaces", async () => {
     setFixture("lerna-workspaces");
-    expect((await findWorkspacePackages()).sort()).toEqual(workspacesPackages);
+
+    const result = (await findWorkspacePackages()).sort();
+    for (let i = 0; i < result.length; ++i) {
+      match(result[i], workspacesPackages[i]);
+    }
   });
 
-  test("returns packages for delegated workspaces (sync)", () => {
+  it("returns packages for delegated workspaces (sync)", () => {
     setFixture("lerna-workspaces");
-    expect(findWorkspacePackagesSync().sort()).toEqual(workspacesPackages);
+
+    const result = findWorkspacePackagesSync().sort();
+    for (let i = 0; i < result.length; ++i) {
+      match(result[i], workspacesPackages[i]);
+    }
   });
 });
 
@@ -73,23 +94,23 @@ describe("findWorkspaceRoot", () => {
     unsetFixture();
   });
 
-  test("returns workspace root for Lerna workspaces", async () => {
+  it("returns workspace root for Lerna workspaces", async () => {
     const root = setFixture("lerna-packages");
-    expect(await findWorkspaceRoot()).toBe(root);
+    equal(await findWorkspaceRoot(), root);
   });
 
-  test("returns workspace root for Lerna workspaces (sync)", () => {
+  it("returns workspace root for Lerna workspaces (sync)", () => {
     const root = setFixture("lerna-packages");
-    expect(findWorkspaceRootSync()).toBe(root);
+    equal(findWorkspaceRootSync(), root);
   });
 
-  test("returns workspace root for delegated workspaces", async () => {
+  it("returns workspace root for delegated workspaces", async () => {
     const root = setFixture("lerna-workspaces");
-    expect(await findWorkspaceRoot()).toBe(root);
+    equal(await findWorkspaceRoot(), root);
   });
 
-  test("returns workspace root for delegated workspaces (sync)", () => {
+  it("returns workspace root for delegated workspaces (sync)", () => {
     const root = setFixture("lerna-workspaces");
-    expect(findWorkspaceRootSync()).toBe(root);
+    equal(findWorkspaceRootSync(), root);
   });
 });

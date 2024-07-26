@@ -1,3 +1,6 @@
+import { equal, match } from "node:assert/strict";
+import { afterEach, describe, it } from "node:test";
+import { findSentinel, findSentinelSync } from "../src/common";
 import {
   findWorkspacePackages,
   findWorkspacePackagesSync,
@@ -6,27 +9,51 @@ import {
 } from "../src/index";
 import { setFixture, unsetFixture } from "./helper";
 
+describe("findSentinel", () => {
+  afterEach(() => {
+    unsetFixture();
+  });
+
+  it("returns sentinel for pnpm", async () => {
+    setFixture("pnpm");
+    match((await findSentinel()) ?? "", /[/\\]pnpm-workspace.yaml$/);
+  });
+
+  it("returns sentinel for pnpm (sync)", () => {
+    setFixture("pnpm");
+    match(findSentinelSync() ?? "", /[/\\]pnpm-workspace.yaml$/);
+  });
+});
+
 describe("findWorkspacePackages", () => {
   const packages = [
-    expect.stringMatching(/__fixtures__[/\\]pnpm[/\\]packages[/\\]conan$/),
-    expect.stringMatching(/__fixtures__[/\\]pnpm[/\\]packages[/\\]dutch$/),
-    expect.stringMatching(/__fixtures__[/\\]pnpm[/\\]packages[/\\]john$/),
-    expect.stringMatching(/__fixtures__[/\\]pnpm[/\\]packages[/\\]quaid$/),
-    expect.stringMatching(/__fixtures__[/\\]pnpm[/\\]packages[/\\]t-800$/),
+    /__fixtures__[/\\]pnpm[/\\]packages[/\\]conan$/,
+    /__fixtures__[/\\]pnpm[/\\]packages[/\\]dutch$/,
+    /__fixtures__[/\\]pnpm[/\\]packages[/\\]john$/,
+    /__fixtures__[/\\]pnpm[/\\]packages[/\\]quaid$/,
+    /__fixtures__[/\\]pnpm[/\\]packages[/\\]t-800$/,
   ];
 
   afterEach(() => {
     unsetFixture();
   });
 
-  test("returns packages for pnpm workspaces", async () => {
+  it("returns packages for pnpm workspaces", async () => {
     setFixture("pnpm");
-    expect((await findWorkspacePackages()).sort()).toEqual(packages);
+
+    const result = (await findWorkspacePackages()).sort();
+    for (let i = 0; i < result.length; ++i) {
+      match(result[i], packages[i]);
+    }
   });
 
-  test("returns packages for pnpm workspaces (sync)", () => {
+  it("returns packages for pnpm workspaces (sync)", () => {
     setFixture("pnpm");
-    expect(findWorkspacePackagesSync().sort()).toEqual(packages);
+
+    const result = findWorkspacePackagesSync().sort();
+    for (let i = 0; i < result.length; ++i) {
+      match(result[i], packages[i]);
+    }
   });
 });
 
@@ -35,13 +62,13 @@ describe("findWorkspaceRoot", () => {
     unsetFixture();
   });
 
-  test("returns workspace root for pnpm workspaces", async () => {
+  it("returns workspace root for pnpm workspaces", async () => {
     const root = setFixture("pnpm");
-    expect(await findWorkspaceRoot()).toBe(root);
+    equal(await findWorkspaceRoot(), root);
   });
 
-  test("returns workspace root for pnpm workspaces (sync)", async () => {
+  it("returns workspace root for pnpm workspaces (sync)", async () => {
     const root = setFixture("pnpm");
-    expect(findWorkspaceRootSync()).toBe(root);
+    equal(findWorkspaceRootSync(), root);
   });
 });
