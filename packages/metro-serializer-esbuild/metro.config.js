@@ -1,9 +1,4 @@
-const {
-  exclusionList,
-  makeMetroConfig,
-  resolveUniqueModule,
-} = require("@rnx-kit/metro-config");
-const fs = require("node:fs");
+const { exclusionList, makeMetroConfig } = require("@rnx-kit/metro-config");
 const path = require("node:path");
 const { MetroSerializer, esbuildTransformerConfig } = require(".");
 
@@ -12,43 +7,41 @@ const blockList = exclusionList([/.*__fixtures__.*package.json/]);
 
 // We can't install dependencies for our test fixtures so we need to resolve
 // them here to help Metro find them.
-function resolveFixtureDependencies() {
-  const [fluentUtils] = resolveUniqueModule("@fluentui/utilities");
-  const [fluentDomUtils] = resolveUniqueModule(
-    "@fluentui/dom-utilities",
-    fluentUtils
-  );
-  const [fluentMergeStyles] = resolveUniqueModule(
-    "@fluentui/merge-styles",
-    fluentUtils
-  );
-  const [fluentSetVersion] = resolveUniqueModule(
-    "@fluentui/set-version",
-    fluentUtils
-  );
-  const [lodash] = resolveUniqueModule("lodash-es");
-  const [metroRuntime] = resolveUniqueModule(
-    "metro-runtime",
-    require.resolve("metro/package.json")
-  );
-  const [tslib] = resolveUniqueModule("tslib", fluentUtils);
+const extraNodeModules = (() => {
+  const fluentUtils = require
+    .resolve("@fluentui/utilities")
+    .replace("lib-commonjs", "lib");
+  const fromFluentUtils = { paths: [fluentUtils] };
+  const resolveFromFluent = (name) =>
+    require.resolve(name, fromFluentUtils).replace("lib-commonjs", "lib");
+
+  const fromMetro = { paths: [require.resolve("metro/package.json")] };
+
   return {
-    "@fluentui/dom-utilities": fluentDomUtils,
-    "@fluentui/merge-styles": fluentMergeStyles,
-    "@fluentui/set-version": fluentSetVersion,
+    "@fluentui/dom-utilities": resolveFromFluent("@fluentui/dom-utilities"),
+    "@fluentui/merge-styles": resolveFromFluent("@fluentui/merge-styles"),
+    "@fluentui/set-version": resolveFromFluent("@fluentui/set-version"),
     "@fluentui/utilities": fluentUtils,
-    "lodash-es": lodash,
-    "metro-runtime": metroRuntime,
-    tslib,
+    "lodash-es": require.resolve("lodash-es"),
+    "metro-runtime/src/modules/asyncRequire.js": require.resolve(
+      "metro-runtime/src/modules/asyncRequire.js",
+      fromMetro
+    ),
+    "metro-runtime/src/polyfills/require.js": require.resolve(
+      "metro-runtime/src/polyfills/require.js",
+      fromMetro
+    ),
+    react: require.resolve("react"),
+    tslib: require.resolve("tslib", fromFluentUtils),
   };
-}
+})();
 
 module.exports = makeMetroConfig({
   reporter: { update: () => undefined },
   resetCache: true,
   resolver: {
     resolverMainFields: ["react-native", "module", "browser", "main"],
-    extraNodeModules: resolveFixtureDependencies(),
+    extraNodeModules,
     blacklistRE: blockList,
     blockList,
   },
@@ -57,9 +50,5 @@ module.exports = makeMetroConfig({
     getPolyfills: () => [],
   },
   transformer: esbuildTransformerConfig,
-  watchFolders: [
-    fs.existsSync("../../node_modules/.store")
-      ? path.resolve("../../node_modules/.store")
-      : path.resolve("../../node_modules"),
-  ],
+  watchFolders: Object.values(extraNodeModules).map((dir) => path.dirname(dir)),
 });

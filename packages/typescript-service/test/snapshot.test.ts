@@ -1,5 +1,7 @@
-import fs from "fs";
-import path from "path";
+import { equal } from "node:assert/strict";
+import * as fs from "node:fs";
+import * as path from "node:path";
+import { describe, it } from "node:test";
 import ts from "typescript";
 import { VersionedSnapshot } from "../src/snapshot";
 
@@ -10,29 +12,34 @@ describe("VersionedSnapshot", () => {
     "sample-snapshot-file.js"
   );
 
-  test("initial version is 1", () => {
+  it("initial version is 1", () => {
     const snapshot = new VersionedSnapshot(sampleSnapshotFileName);
-    expect(snapshot.getVersion()).toEqual("1");
+
+    equal(snapshot.getVersion(), "1");
   });
 
-  test("snapshot content matches the given file", () => {
+  it("snapshot content matches the given file", () => {
     const snapshot = new VersionedSnapshot(sampleSnapshotFileName);
     const s = snapshot.getSnapshot();
-    expect(s.getText(0, s.getLength())).toEqual(
+
+    equal(
+      s.getText(0, s.getLength()),
       fs.readFileSync(sampleSnapshotFileName, "utf8")
     );
   });
 
-  test("updated snapshot has version 2", () => {
+  it("updated snapshot has version 2", () => {
     const snapshot = new VersionedSnapshot(sampleSnapshotFileName);
     snapshot.update();
-    expect(snapshot.getVersion()).toEqual("2");
+
+    equal(snapshot.getVersion(), "2");
   });
 
-  test("updated snapshot content matches the given string passed to the update call", () => {
+  it("updated snapshot content matches the given string passed to the update call", () => {
     const snapshot = new VersionedSnapshot(sampleSnapshotFileName);
     snapshot.update(ts.ScriptSnapshot.fromString("snapshot content abc 123"));
     const s = snapshot.getSnapshot();
-    expect(s.getText(0, s.getLength())).toEqual("snapshot content abc 123");
+
+    equal(s.getText(0, s.getLength()), "snapshot content abc 123");
   });
 });

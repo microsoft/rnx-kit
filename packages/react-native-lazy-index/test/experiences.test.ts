@@ -1,3 +1,5 @@
+import { deepEqual, ok, throws } from "node:assert/strict";
+import { afterEach, describe, it } from "node:test";
 import { getFlightedModule, parseExperiences } from "../src/experiences";
 
 describe("parseExperiences()", () => {
@@ -5,19 +7,17 @@ describe("parseExperiences()", () => {
     process.env.RN_LAZY_INDEX_FLIGHTS = "";
   });
 
-  test("missing experiences section", () => {
+  it("handles missing experiences section", () => {
     const result = () => parseExperiences(undefined);
-    expect(result).toThrow(Error);
-    expect(result).toThrow("Invalid experiences map; got 'undefined'");
+    throws(result, new Error("Invalid experiences map; got 'undefined'"));
   });
 
-  test("invalid experiences section", () => {
+  it("handles invalid experiences section", () => {
     const result = () => parseExperiences("MyAwesomeApp");
-    expect(result).toThrow(Error);
-    expect(result).toThrow("Invalid experiences map; got 'string'");
+    throws(result, new Error("Invalid experiences map; got 'string'"));
   });
 
-  test("object experiences section", () => {
+  it("parses object experiences section", () => {
     const experiences = {
       SomeFeature: "@awesome-app/some-feature",
       "callable:AnotherFeature": "@awesome-app/another-feature",
@@ -26,7 +26,7 @@ describe("parseExperiences()", () => {
       ExtraFeature: 5,
     };
     const result = parseExperiences(experiences);
-    expect(result).toEqual({
+    deepEqual(result, {
       AnotherFeature: {
         moduleId: "@awesome-app/another-feature",
         type: "callable",
@@ -46,7 +46,7 @@ describe("parseExperiences()", () => {
     });
   });
 
-  test("single flighted experiences", () => {
+  it("supports single flighted experiences", () => {
     const experiences = {
       SomeFeature: "@awesome-app/some-feature",
       "callable:AnotherFeature": "@awesome-app/another-feature",
@@ -56,7 +56,7 @@ describe("parseExperiences()", () => {
       },
     };
     let result = parseExperiences(experiences);
-    expect(result).toEqual({
+    deepEqual(result, {
       AnotherFeature: {
         moduleId: "@awesome-app/another-feature",
         type: "callable",
@@ -69,7 +69,7 @@ describe("parseExperiences()", () => {
 
     process.env.RN_LAZY_INDEX_FLIGHTS = "FinalFeature";
     result = parseExperiences(experiences);
-    expect(result).toEqual({
+    deepEqual(result, {
       AnotherFeature: {
         moduleId: "@awesome-app/another-feature",
         type: "callable",
@@ -85,7 +85,7 @@ describe("parseExperiences()", () => {
     });
   });
 
-  test("multiple flighted experiences", () => {
+  it("supports multiple flighted experiences", () => {
     const experiences = {
       SomeFeature: {
         module: "@awesome-app/some-feature",
@@ -102,7 +102,7 @@ describe("parseExperiences()", () => {
       },
     };
     let result = parseExperiences(experiences);
-    expect(result).toEqual({
+    deepEqual(result, {
       AnotherFeature: {
         moduleId: "@awesome-app/another-feature",
         type: "callable",
@@ -111,7 +111,7 @@ describe("parseExperiences()", () => {
 
     process.env.RN_LAZY_INDEX_FLIGHTS = "SomeFeature,FinalFeature";
     result = parseExperiences(experiences);
-    expect(result).toEqual({
+    deepEqual(result, {
       AnotherFeature: {
         moduleId: "@awesome-app/another-feature",
         type: "callable",
@@ -128,7 +128,7 @@ describe("parseExperiences()", () => {
 
     process.env.RN_LAZY_INDEX_FLIGHTS = "SomeFeature,FinalFeature,ThirdFeature";
     result = parseExperiences(experiences);
-    expect(result).toEqual({
+    deepEqual(result, {
       AnotherFeature: {
         moduleId: "@awesome-app/another-feature",
         type: "callable",
@@ -150,61 +150,62 @@ describe("parseExperiences()", () => {
 });
 
 describe("getFlight()", () => {
-  test("empty flight object", () => {
+  it("handles empty flight object", () => {
     const emptyFlight = {};
     const result = getFlightedModule(emptyFlight);
-    expect(result).toBeUndefined();
+    ok(!result);
   });
 
-  test("missing fields", () => {
+  it("handles missing fields", () => {
     const noModule = { flights: ["SomeFeature"] };
-    expect(getFlightedModule(noModule)).toBeUndefined();
+    ok(!getFlightedModule(noModule));
 
     const noFlight = { module: "@awesome-app/some-feature" };
-    expect(getFlightedModule(noFlight)).toBeUndefined();
+    ok(!getFlightedModule(noFlight));
   });
 
-  test("wrong field type", () => {
+  it("handles wrong field type", () => {
     const flightsString = { flights: "SomeFeature" };
-    expect(getFlightedModule(flightsString)).toBeUndefined();
+    ok(!getFlightedModule(flightsString));
 
     const moduleArray = { module: ["@awesome-app/some-feature"] };
-    expect(getFlightedModule(moduleArray)).toBeUndefined();
+    ok(!getFlightedModule(moduleArray));
 
     const flightsObject = { flights: { val: "SomeFeature" } };
-    expect(getFlightedModule(flightsObject)).toBeUndefined();
+    ok(!getFlightedModule(flightsObject));
 
     const moduleObject = { module: { val: "@awesome-app/some-feature" } };
-    expect(getFlightedModule(moduleObject)).toBeUndefined();
+    ok(!getFlightedModule(moduleObject));
 
     const flightsInt = { flights: 1 };
-    expect(getFlightedModule(flightsInt)).toBeUndefined();
+    ok(!getFlightedModule(flightsInt));
 
     const moduleInt = { module: 1 };
-    expect(getFlightedModule(moduleInt)).toBeUndefined();
+    ok(!getFlightedModule(moduleInt));
 
     const invalidModuleValidFlights = {
       module: ["@awesome-app/some-feature"],
       flights: ["SomeFeature"],
     };
-    expect(getFlightedModule(invalidModuleValidFlights)).toBeUndefined();
+    ok(!getFlightedModule(invalidModuleValidFlights));
 
     const invalidFlightsValidModule = {
       module: "@awesome-app/some-feature",
       flights: "SomeFeature",
     };
-    expect(getFlightedModule(invalidFlightsValidModule)).toBeUndefined();
+    ok(!getFlightedModule(invalidFlightsValidModule));
   });
 
-  test("valid flight object", () => {
-    expect(
+  it("parses valid flight object", () => {
+    deepEqual(
       getFlightedModule({
         module: "@awesome-app/some-feature",
         flights: ["SomeFeature"],
-      })
-    ).toEqual({
-      module: "@awesome-app/some-feature",
-      flights: ["SomeFeature"],
-    });
+      }),
+      {
+        module: "@awesome-app/some-feature",
+        flights: ["SomeFeature"],
+      }
+    );
   });
 });

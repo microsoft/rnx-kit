@@ -1,13 +1,21 @@
-import { equal, ok } from "node:assert/strict";
-import { describe, it } from "node:test";
 import { idle, once, retry, withRetry } from "../src/async";
 
 describe("async", () => {
+  beforeEach(() => {
+    jest.useFakeTimers({ now: 0 });
+  });
+
+  afterAll(() => {
+    jest.useRealTimers();
+  });
+
   it("idle() does not return until specified time has elapsed", async () => {
     const start = Date.now();
-    await idle(1000);
-    const end = Date.now();
-    ok(end - start >= 1000);
+    idle(1000);
+
+    await jest.runAllTimersAsync();
+
+    expect(Date.now() - start).toBe(1000);
   });
 
   it("once() functions are only called once", () => {
@@ -16,69 +24,74 @@ describe("async", () => {
     incrementOnce();
     incrementOnce();
     incrementOnce();
-    equal(count, 1);
+
+    expect(count).toBe(1);
   });
 
   it("retry() with exponential backoff", async () => {
     const times: number[] = [];
     let start = Date.now();
 
-    await retry(async () => {
+    retry(async () => {
       times.push(Date.now() - start);
       start = Date.now();
       return null;
     }, 4);
 
-    equal(times.length, 4);
-    ok(times[0] < 100);
-    ok(times[1] >= 1000 && times[0] < 2000);
-    ok(times[2] >= 2000 && times[0] < 4000);
-    ok(times[3] >= 4000 && times[0] < 8000);
+    await jest.runAllTimersAsync();
+
+    expect(times.length).toBe(4);
+    expect(times[0]).toBe(0);
+    expect(times[1]).toBe(1000);
+    expect(times[2]).toBe(2000);
+    expect(times[3]).toBe(4000);
   });
 
   it("retry() returns early with result", async () => {
     let count = 0;
 
-    const result = await retry(async () => {
+    const result = retry(async () => {
       return ++count === 2 ? "done" : null;
     }, 5);
 
-    equal(count, 2);
-    equal(result, "done");
+    await jest.runAllTimersAsync();
+
+    expect(count).toBe(2);
+    expect(await result).toBe("done");
   });
 
   it("withRetry() with exponential backoff", async () => {
     const times: number[] = [];
 
-    try {
-      let start = Date.now();
-      await withRetry(async () => {
-        times.push(Date.now() - start);
-        start = Date.now();
-        throw new Error();
-      }, 4);
-    } catch (_) {
-      // ignore
-    }
+    let start = Date.now();
+    withRetry(async () => {
+      times.push(Date.now() - start);
+      start = Date.now();
+      throw new Error();
+    }, 4).catch(() => null);
 
-    equal(times.length, 4);
-    ok(times[0] < 100);
-    ok(times[1] >= 1000 && times[0] < 2000);
-    ok(times[2] >= 2000 && times[0] < 4000);
-    ok(times[3] >= 4000 && times[0] < 8000);
+    await jest.runAllTimersAsync();
+
+    expect(times.length).toBe(4);
+    expect(times[0]).toBe(0);
+    expect(times[1]).toBe(1000);
+    expect(times[2]).toBe(2000);
+    expect(times[3]).toBe(4000);
   });
 
   it("withRetry() returns early with result", async () => {
     let count = 0;
 
-    const result = await withRetry(async () => {
+    const result = withRetry(async () => {
       if (++count === 2) {
         return "done";
       }
       throw new Error();
     }, 5);
 
-    equal(count, 2);
-    equal(result, "done");
+    await jest.runAllTimersAsync();
+
+    expect(count).toBe(2);
+    expect(await result).toBe("done");
   });
 });

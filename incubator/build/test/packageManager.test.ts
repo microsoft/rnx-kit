@@ -1,9 +1,12 @@
+import { equal, ok } from "node:assert/strict";
 import * as os from "node:os";
-import * as path from "node:path";
+import { afterEach, describe, it } from "node:test";
+import { URL, fileURLToPath } from "node:url";
 import { detectPackageManager } from "../src/packageManager";
 
 function changeToFixtureDir(fixture: string) {
-  process.chdir(path.join(__dirname, "__fixtures__", fixture + "-project"));
+  const url = new URL(`__fixtures__/${fixture}-project`, import.meta.url);
+  process.chdir(fileURLToPath(url));
 }
 
 function changeToRootDir() {
@@ -11,22 +14,22 @@ function changeToRootDir() {
   process.chdir(root);
 }
 
-describe("detectPackageManager", () => {
+describe("detectPackageManager()", () => {
   const cwd = process.cwd();
 
   afterEach(() => {
     process.chdir(cwd);
   });
 
-  test("returns `undefined` when it fails to detect package manager", () => {
+  it("returns `undefined` when it fails to detect package manager", () => {
     changeToRootDir();
-    expect(detectPackageManager()).toBeUndefined();
+    ok(!detectPackageManager());
   });
 
   for (const pm of ["npm", "pnpm", "yarn"]) {
-    test(`detects ${pm}`, () => {
+    it(`detects ${pm}`, () => {
       changeToFixtureDir(pm);
-      expect(detectPackageManager()).toBe(pm);
+      equal(detectPackageManager(), pm);
     });
   }
 });

@@ -1,3 +1,5 @@
+import { deepEqual, equal, throws } from "node:assert/strict";
+import { describe, it } from "node:test";
 import type { CyclicDependencies } from "../src/detectCycles";
 import { detectCycles, traverseDependencies } from "../src/detectCycles";
 import {
@@ -6,6 +8,9 @@ import {
   graphWithNoCycles,
   repoRoot,
 } from "./testData";
+
+// eslint-disable-next-line @typescript-eslint/no-empty-function
+function noop() {}
 
 function stripRepoRootFromPaths(
   cyclicDependencies: CyclicDependencies
@@ -23,122 +28,164 @@ function stripRepoRootFromPaths(
 }
 
 describe("traverseDependencies()", () => {
-  test("returns nothing if there are no cycles", () => {
+  it("returns nothing if there are no cycles", () => {
     const cyclicDependencies = traverseDependencies(
       entryPoint,
       graphWithNoCycles().dependencies,
       {}
     );
-    expect(cyclicDependencies).toEqual({});
+    deepEqual(cyclicDependencies, {});
   });
 
-  test("returns import paths causing a cycle", () => {
+  it("returns import paths causing a cycle", () => {
     const cyclicDependencies = traverseDependencies(
       entryPoint,
       graphWithCycles().dependencies,
       {}
     );
-    expect(stripRepoRootFromPaths(cyclicDependencies)).toMatchSnapshot();
+
+    deepEqual(stripRepoRootFromPaths(cyclicDependencies), {
+      "/~/packages/test-app/lib/src/App.js": [
+        "/~/packages/test-app/lib/src/index.js",
+        "/~/packages/test-app/lib/src/App.js",
+        "/~/packages/test-app/lib/src/cyclicExample.js",
+      ],
+    });
   });
 
-  test("returns cycles in `node_modules`", () => {
+  it("returns cycles in `node_modules`", () => {
     const cyclicDependencies = traverseDependencies(
       entryPoint,
       graphWithCycles().dependencies,
       { includeNodeModules: true }
     );
-    expect(stripRepoRootFromPaths(cyclicDependencies)).toMatchSnapshot();
+
+    deepEqual(stripRepoRootFromPaths(cyclicDependencies), {
+      "/~/node_modules/react-native/index.js": [
+        "/~/packages/test-app/lib/src/index.js",
+        "/~/node_modules/react-native/index.js",
+        "/~/node_modules/react-native/Libraries/ReactNative/AppRegistry.js",
+        "/~/node_modules/react-native/Libraries/LogBox/LogBoxInspectorContainer.js",
+      ],
+      "/~/packages/test-app/lib/src/App.js": [
+        "/~/packages/test-app/lib/src/index.js",
+        "/~/packages/test-app/lib/src/App.js",
+        "/~/packages/test-app/lib/src/cyclicExample.js",
+      ],
+    });
   });
 });
 
 describe("detectCycles()", () => {
-  const consoleErrorSpy = jest.spyOn(global.console, "error");
-  const consoleLogSpy = jest.spyOn(global.console, "log");
-  const consoleWarnSpy = jest.spyOn(global.console, "warn");
+  it("prints nothing if all is fine", (t) => {
+    const warnMock = t.mock.method(console, "warn", noop);
+    const errorMock = t.mock.method(console, "error", noop);
 
-  beforeEach(() => {
-    consoleErrorSpy.mockReset();
-    consoleLogSpy.mockReset();
-    consoleWarnSpy.mockReset();
-  });
-
-  afterAll(() => {
-    jest.clearAllMocks();
-  });
-
-  test("prints nothing if all is fine", () => {
     detectCycles(entryPoint, graphWithNoCycles(), {});
-    expect(consoleWarnSpy).not.toHaveBeenCalled();
-    expect(consoleErrorSpy).not.toHaveBeenCalled();
+
+    equal(warnMock.mock.calls.length, 0);
+    equal(errorMock.mock.calls.length, 0);
   });
 
-  test("prints if cycles are found in `node_modules`", () => {
+  it("prints if cycles are found in `node_modules`", (t) => {
+    const warnMock = t.mock.method(console, "warn", noop);
+    const errorMock = t.mock.method(console, "error", noop);
+
     detectCycles(entryPoint, graphWithNoCycles(), {
       includeNodeModules: true,
       throwOnError: false,
     });
-    expect(consoleWarnSpy).toHaveBeenCalledTimes(5);
-    expect(consoleErrorSpy).toHaveBeenCalledTimes(1);
+
+    equal(warnMock.mock.calls.length, 5);
+    equal(errorMock.mock.calls.length, 1);
   });
 
-  test("prints import paths causing a cycle", () => {
+  it("prints import paths causing a cycle", (t) => {
+    const warnMock = t.mock.method(console, "warn", noop);
+    const errorMock = t.mock.method(console, "error", noop);
+
     detectCycles(entryPoint, graphWithCycles(), { throwOnError: false });
-    expect(consoleWarnSpy).toHaveBeenCalledTimes(4);
-    expect(consoleErrorSpy).toHaveBeenCalledTimes(1);
+
+    equal(warnMock.mock.calls.length, 4);
+    equal(errorMock.mock.calls.length, 1);
   });
 
-  test("prints import paths causing a cycle, including `node_modules`", () => {
+  it("prints import paths causing a cycle, including `node_modules`", (t) => {
+    const warnMock = t.mock.method(console, "warn", noop);
+    const errorMock = t.mock.method(console, "error", noop);
+
     detectCycles(entryPoint, graphWithCycles(), {
       includeNodeModules: true,
       throwOnError: false,
     });
-    expect(consoleWarnSpy).toHaveBeenCalledTimes(9);
-    expect(consoleErrorSpy).toHaveBeenCalledTimes(1);
+
+    equal(warnMock.mock.calls.length, 9);
+    equal(errorMock.mock.calls.length, 1);
   });
 
-  test("prints import paths causing a cycle with 0 context", () => {
+  it("prints import paths causing a cycle with 0 context", (t) => {
+    const warnMock = t.mock.method(console, "warn", noop);
+    const errorMock = t.mock.method(console, "error", noop);
+
     detectCycles(entryPoint, graphWithCycles(), {
       linesOfContext: 0,
       throwOnError: false,
     });
-    expect(consoleWarnSpy).toHaveBeenCalledTimes(3);
-    expect(consoleErrorSpy).toHaveBeenCalledTimes(1);
+
+    equal(warnMock.mock.calls.length, 3);
+    equal(errorMock.mock.calls.length, 1);
   });
 
-  test("prints import paths causing a cycle with 0 context, including `node_modules`", () => {
+  it("prints import paths causing a cycle with 0 context, including `node_modules`", (t) => {
+    const warnMock = t.mock.method(console, "warn", noop);
+    const errorMock = t.mock.method(console, "error", noop);
+
     detectCycles(entryPoint, graphWithCycles(), {
       includeNodeModules: true,
       linesOfContext: 0,
       throwOnError: false,
     });
-    expect(consoleWarnSpy).toHaveBeenCalledTimes(7);
-    expect(consoleErrorSpy).toHaveBeenCalledTimes(1);
+
+    equal(warnMock.mock.calls.length, 7);
+    equal(errorMock.mock.calls.length, 1);
   });
 
-  test("prints import paths causing a cycle with more context", () => {
+  it("prints import paths causing a cycle with more context", (t) => {
+    const warnMock = t.mock.method(console, "warn", noop);
+    const errorMock = t.mock.method(console, "error", noop);
+
     detectCycles(entryPoint, graphWithCycles(), {
       linesOfContext: 10,
       throwOnError: false,
     });
-    expect(consoleWarnSpy).toHaveBeenCalledTimes(4);
-    expect(consoleErrorSpy).toHaveBeenCalledTimes(1);
+
+    equal(warnMock.mock.calls.length, 4);
+    equal(errorMock.mock.calls.length, 1);
   });
 
-  test("prints import paths causing a cycle with more context, including `node_modules`", () => {
+  it("prints import paths causing a cycle with more context, including `node_modules`", (t) => {
+    const warnMock = t.mock.method(console, "warn", noop);
+    const errorMock = t.mock.method(console, "error", noop);
+
     detectCycles(entryPoint, graphWithCycles(), {
       includeNodeModules: true,
       linesOfContext: 10,
       throwOnError: false,
     });
-    expect(consoleWarnSpy).toHaveBeenCalledTimes(9);
-    expect(consoleErrorSpy).toHaveBeenCalledTimes(1);
+
+    equal(warnMock.mock.calls.length, 9);
+    equal(errorMock.mock.calls.length, 1);
   });
 
-  test("throws on cycle detection by default", () => {
-    expect(() => detectCycles(entryPoint, graphWithCycles(), {})).toThrow(
-      "Import cycles detected"
+  it("throws on cycle detection by default", (t) => {
+    const warnMock = t.mock.method(console, "warn", noop);
+    const errorMock = t.mock.method(console, "error", noop);
+
+    throws(
+      () => detectCycles(entryPoint, graphWithCycles(), {}),
+      new Error("Import cycles detected")
     );
-    expect(consoleWarnSpy).toHaveBeenCalledTimes(4);
-    expect(consoleErrorSpy).not.toHaveBeenCalled();
+    equal(warnMock.mock.calls.length, 4);
+    equal(errorMock.mock.calls.length, 0);
   });
 });

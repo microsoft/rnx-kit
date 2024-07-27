@@ -19,7 +19,7 @@ module.exports = makeMetroConfig({
       internal: path.resolve(__dirname, "src", "internal"),
       ...(useAuthMock
         ? {
-            "@rnx-kit/react-native-auth": require("path").join(
+            "@rnx-kit/react-native-auth": path.join(
               __dirname,
               "test",
               "__mocks__",

@@ -1,51 +1,49 @@
-import path from "path";
+import { deepEqual, equal, ok } from "node:assert/strict";
+import * as path from "node:path";
+import { describe, it } from "node:test";
 import ts from "typescript";
 import { findConfigFile, readConfigFile } from "../src/config";
 
 const fixturePath = path.join(process.cwd(), "test", "__fixtures__");
 
-describe("findConfigFile", () => {
-  test("returns undefined when a config file was not found", () => {
-    expect(
-      findConfigFile(fixturePath, "invalid-config-file-name")
-    ).toBeUndefined();
+describe("findConfigFile()", () => {
+  it("returns undefined when a config file was not found", () => {
+    ok(!findConfigFile(fixturePath, "invalid-config-file-name"));
   });
 
-  test("returns the path to the found config file", () => {
+  it("returns the path to the found config file", () => {
     const configFileName = findConfigFile(fixturePath, "valid-tsconfig.json");
-    expect(typeof configFileName).toBe("string");
-    expect(configFileName).toBeTruthy();
+
+    equal(typeof configFileName, "string");
+    ok(configFileName);
   });
 });
 
-describe("readConfigFile", () => {
-  afterEach(() => {
-    jest.resetAllMocks();
-  });
-
-  test("returns an error when the config file is invalid", () => {
+describe("readConfigFile()", () => {
+  it("returns an error when the config file is invalid", () => {
     const configFileName = path.join(fixturePath, "invalid-tsconfig.json");
     const config = readConfigFile(configFileName);
-    expect(config?.errors.length).toBeGreaterThan(0);
+
+    ok(config?.errors.length ?? 0 > 0);
   });
 
-  test("returns a valid config", () => {
+  it("returns a valid config", () => {
     const configFileName = path.join(fixturePath, "valid-tsconfig.json");
     const config = readConfigFile(configFileName);
-    expect(config?.options.target).toEqual(ts.ScriptTarget.ES2015);
-    expect(config?.options.module).toEqual(ts.ModuleKind.CommonJS);
+
+    equal(config?.options.target, ts.ScriptTarget.ES2015);
+    equal(config?.options.module, ts.ModuleKind.CommonJS);
   });
 
-  test("applies optionsToExtend to the config", () => {
+  it("applies optionsToExtend to the config", () => {
     const configFileName = path.join(fixturePath, "valid-tsconfig.json");
-    const optionsToExtend: ts.CompilerOptions = {
-      types: ["abc", "def"],
-    };
+    const optionsToExtend: ts.CompilerOptions = { types: ["abc", "def"] };
     const config = readConfigFile(configFileName, optionsToExtend);
-    expect(config?.options.types).toEqual(optionsToExtend.types);
+
+    deepEqual(config?.options.types, optionsToExtend.types);
   });
 
-  test("applies watchOptionsToExtend to the config", () => {
+  it("applies watchOptionsToExtend to the config", () => {
     const configFileName = path.join(fixturePath, "valid-tsconfig.json");
     const watchOptionsToExtend: ts.WatchOptions = {
       excludeFiles: ["abc", "def"],
@@ -55,7 +53,9 @@ describe("readConfigFile", () => {
       undefined,
       watchOptionsToExtend
     );
-    expect(config?.watchOptions?.excludeFiles).toEqual(
+
+    deepEqual(
+      config?.watchOptions?.excludeFiles,
       watchOptionsToExtend.excludeFiles
     );
   });

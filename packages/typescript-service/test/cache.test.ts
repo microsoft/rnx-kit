@@ -1,123 +1,146 @@
-import fs from "fs";
+import { deepEqual, equal, ok } from "node:assert/strict";
+import type * as nodefs from "node:fs";
+import { describe, it } from "node:test";
 import ts from "typescript";
 import { ExternalFileCache, ProjectFileCache } from "../src/cache";
 
-jest.mock("fs");
+function mockFS(obj: unknown) {
+  return obj as typeof nodefs;
+}
 
 describe("ProjectFileCache", () => {
   const fileNames = ["index.ts", "overthruster.ts"];
   const snapshot = ts.ScriptSnapshot.fromString("Test snapshot");
 
-  afterEach(() => {
-    jest.resetAllMocks();
-  });
-
-  test("has returns true when file is in the cache", () => {
+  it("has() returns true when a file is in the cache", () => {
     const cache = new ProjectFileCache(fileNames);
-    expect(cache.has(fileNames[0])).toBe(true);
+
+    ok(cache.has(fileNames[0]));
   });
 
-  test("has returns false when file is not in the cache", () => {
+  it("has() returns false when a file is not in the cache", () => {
     const cache = new ProjectFileCache(fileNames);
-    expect(cache.has("not a real file name")).toBe(false);
+
+    ok(!cache.has("not a real file name"));
   });
 
-  test("set creates a new entry when the file is not in the cache", () => {
+  it("set() creates a new entry when a file is not in the cache", () => {
     const cache = new ProjectFileCache(fileNames);
     cache.set("new-file.ts", snapshot);
-    expect(cache.has("new-file.ts")).toBe(true);
-    expect(cache.getVersion("new-file.ts")).toEqual("1");
-    expect(cache.getSnapshot("new-file.ts")).toBe(snapshot);
+
+    ok(cache.has("new-file.ts"));
+    equal(cache.getVersion("new-file.ts"), "1");
+    equal(cache.getSnapshot("new-file.ts"), snapshot);
   });
 
-  test("set updates an existing entry when the file is already in the cache", () => {
+  it("set() updates an existing entry when a file is already in the cache", () => {
     const cache = new ProjectFileCache(fileNames);
     cache.set(fileNames[0], snapshot);
-    expect(cache.has(fileNames[0])).toBe(true);
-    expect(cache.getVersion(fileNames[0])).toEqual("2");
-    expect(cache.getSnapshot(fileNames[0])).toBe(snapshot);
+
+    ok(cache.has(fileNames[0]));
+    equal(cache.getVersion(fileNames[0]), "2");
+    equal(cache.getSnapshot(fileNames[0]), snapshot);
   });
 
-  test("remove takes an existing entry out of the cache", () => {
+  it("remove() takes an existing entry out of the cache", () => {
     const cache = new ProjectFileCache(fileNames);
     cache.remove(fileNames[0]);
-    expect(cache.has(fileNames[0])).toBe(false);
+
+    ok(!cache.has(fileNames[0]));
   });
 
-  test("removeAll empties the cache", () => {
+  it("removeAll() empties the cache", () => {
     const cache = new ProjectFileCache(fileNames);
-    expect(Array.isArray(cache.getFileNames())).toBe(true);
-    expect(cache.getFileNames().length).toBeGreaterThan(0);
+
+    ok(Array.isArray(cache.getFileNames()));
+    ok(cache.getFileNames().length > 0);
+
     cache.removeAll();
-    expect(cache.getFileNames().length).toBe(0);
+
+    equal(cache.getFileNames().length, 0);
   });
 
-  test("getFileNames returns initial list of files", () => {
+  it("getFileNames() returns initial list of files", () => {
     const cache = new ProjectFileCache(fileNames);
-    expect(Array.isArray(cache.getFileNames())).toBe(true);
-    expect(cache.getFileNames().length).toBe(fileNames.length);
-    expect(cache.getFileNames()).toEqual(fileNames);
+
+    ok(Array.isArray(cache.getFileNames()));
+    equal(cache.getFileNames().length, fileNames.length);
+    deepEqual(cache.getFileNames(), fileNames);
   });
 
-  test("getFileNames includes added files", () => {
+  it("getFileNames() includes added files", () => {
     const cache = new ProjectFileCache(fileNames);
     cache.set("foo.ts");
-    expect(cache.getFileNames()).toEqual(expect.arrayContaining(["foo.ts"]));
+
+    ok(cache.getFileNames().includes("foo.ts"));
   });
 
-  test("getFileNames does not include removed files", () => {
+  it("getFileNames() does not include removed files", () => {
     const cache = new ProjectFileCache(fileNames);
     cache.remove("overthruster.ts");
-    expect(cache.getFileNames()).not.toEqual(
-      expect.arrayContaining(["overthruster.ts"])
-    );
+
+    ok(!cache.getFileNames().includes("overthruster.ts"));
   });
 
-  test("getVersion returns a value for a file that is in the cache", () => {
+  it("getVersion() returns a value for a file that is in the cache", () => {
     const cache = new ProjectFileCache(fileNames);
     const v = cache.getVersion(fileNames[0]);
-    expect(typeof v).toBe("string");
-    expect(v).toBeTruthy();
+
+    equal(typeof v, "string");
+    ok(v);
   });
 
-  test("getVersion returns undefined for a file that is not in the cache", () => {
+  it("getVersion() returns undefined for a file that is not in the cache", () => {
     const cache = new ProjectFileCache(fileNames);
-    expect(cache.getVersion("not-in-cache")).toBeUndefined();
+
+    ok(!cache.getVersion("not-in-cache"));
   });
 
-  test("getSnapshot returns a value for a file that is in the cache", () => {
-    fs.readFileSync.mockReturnValue("file contents");
-    const cache = new ProjectFileCache(fileNames);
+  it("getSnapshot() returns a value for a file that is in the cache", () => {
+    const fs = mockFS({ readFileSync: () => "file contents" });
+    const cache = new ProjectFileCache(fileNames, fs);
     const s = cache.getSnapshot(fileNames[0]);
-    expect(s.getText(0, s.getLength())).toEqual("file contents");
+
+    equal(s?.getText(0, s?.getLength()), "file contents");
   });
 
-  test("getSnapshot returns undefined for a file that is not in the cache", () => {
-    const cache = new ProjectFileCache(fileNames);
-    expect(cache.getSnapshot("not-in-cache")).toBeUndefined();
-    expect(fs.readFileSync).not.toHaveBeenCalled();
+  it("getSnapshot() returns undefined for a file that is not in the cache", () => {
+    let readFileCount = 0;
+    const fs = mockFS({ readFileSync: () => ++readFileCount });
+
+    const cache = new ProjectFileCache(fileNames, fs);
+
+    ok(!cache.getSnapshot("not-in-cache"));
+    equal(readFileCount, 0);
   });
 });
 
-describe("ExternalFileCache", () => {
-  afterEach(() => {
-    jest.resetAllMocks();
+describe("ExternalFileCache.getSnapShot()", () => {
+  it("returns the contents of the given file", () => {
+    const fs = mockFS({ readFileSync: () => "external file contents" });
+
+    const cache = new ExternalFileCache(fs);
+    const s = cache.getSnapshot("abc.ts");
+
+    equal(s.getText(0, s.getLength()), "external file contents");
   });
 
-  test("getSnapshot returns the contents of the given file", () => {
-    fs.readFileSync.mockReturnValue("external file contents");
-    const cache = new ExternalFileCache();
-    const s = cache.getSnapshot("abc.ts");
-    expect(s.getText(0, s.getLength())).toEqual("external file contents");
-  });
+  it("caches the contents of the given file, returning it on subsequent calls", () => {
+    let readFileCount = 0;
+    const fs = mockFS({
+      readFileSync: () =>
+        readFileCount++ === 0
+          ? "original file contents"
+          : "the external file has changed",
+    });
 
-  test("getSnapshot caches the contents of the given file, returning it on subsequent calls", () => {
-    fs.readFileSync.mockReturnValueOnce("original file contents");
-    fs.readFileSync.mockReturnValueOnce("the external file has changed");
-    const cache = new ExternalFileCache();
+    const cache = new ExternalFileCache(fs);
     const s = cache.getSnapshot("abc.ts");
-    expect(s.getText(0, s.getLength())).toEqual("original file contents");
+
+    equal(s.getText(0, s.getLength()), "original file contents");
+
     const s2 = cache.getSnapshot("abc.ts");
-    expect(s2).toBe(s);
+
+    equal(s2, s);
   });
 });
