@@ -1,8 +1,7 @@
-import * as os from "node:os";
+import { ok, throws } from "node:assert/strict";
 import * as path from "node:path";
+import { describe, it } from "node:test";
 import { requireModuleFromMetro } from "../src/metro";
-
-const nixOnlyTest = os.platform() === "win32" ? test.skip : test;
 
 describe("requireModuleFromMetro", () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -12,11 +11,11 @@ describe("requireModuleFromMetro", () => {
     return requireModuleFromMetro("metro-resolver", fromDir).resolve;
   }
 
-  test("returns `metro-resolver` installed by `react-native`", () => {
+  it("returns `metro-resolver` installed by `react-native`", () => {
     const p = path.join(__dirname, "__fixtures__", "metro-resolver-duplicates");
 
-    expect(getMetroResolver(p)(context, "", null)).toEqual(
-      expect.stringContaining(
+    ok(
+      getMetroResolver(p)(context, "", null).includes(
         path.join(
           "metro-resolver-duplicates",
           "node_modules",
@@ -30,20 +29,26 @@ describe("requireModuleFromMetro", () => {
   });
 
   // The symlinks under `pnpm` don't work on Windows
-  nixOnlyTest("returns `metro-resolver` from a central storage", () => {
-    const p = path.join(__dirname, "__fixtures__", "pnpm");
+  it(
+    "returns `metro-resolver` from a central storage",
+    { skip: process.platform === "win32" },
+    () => {
+      const p = path.join(__dirname, "__fixtures__", "pnpm");
 
-    expect(getMetroResolver(p)(context, "", null)).toEqual(
-      expect.stringContaining(
-        path.join("pnpm", "node_modules", ".pnpm", "metro-resolver")
-      )
-    );
-  });
+      ok(
+        getMetroResolver(p)(context, "", null).includes(
+          path.join("pnpm", "node_modules", ".pnpm", "metro-resolver")
+        )
+      );
+    }
+  );
 
-  test("throws if `metro-resolver` cannot be found", () => {
+  it("throws if `metro-resolver` cannot be found", () => {
     const cwd = process.cwd();
     const root = cwd.substring(0, cwd.indexOf(path.sep) + 1);
-    expect(() => getMetroResolver(root)(context, "", null)).toThrow(
+
+    throws(
+      () => getMetroResolver(root)(context, "", null),
       "Cannot find module"
     );
   });

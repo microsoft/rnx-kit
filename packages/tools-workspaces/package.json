@@ -43,19 +43,14 @@
   },
   "devDependencies": {
     "@rnx-kit/eslint-config": "*",
-    "@rnx-kit/jest-preset": "*",
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*",
     "@types/node": "^20.0.0",
     "eslint": "^8.56.0",
-    "jest": "^29.2.1",
     "prettier": "^3.0.0",
     "typescript": "^5.0.0"
   },
   "engines": {
     "node": ">=14.15"
-  },
-  "jest": {
-    "preset": "@rnx-kit/jest-preset/private"
   }
 }

@@ -1,3 +1,6 @@
+import { equal, match } from "node:assert/strict";
+import { afterEach, describe, it } from "node:test";
+import { findSentinel, findSentinelSync } from "../src/common";
 import {
   findWorkspacePackages,
   findWorkspacePackagesSync,
@@ -6,27 +9,51 @@ import {
 } from "../src/index";
 import { setFixture, unsetFixture } from "./helper";
 
+describe("findSentinel", () => {
+  afterEach(() => {
+    unsetFixture();
+  });
+
+  it("returns sentinel for Rush", async () => {
+    setFixture("rush");
+    match((await findSentinel()) ?? "", /[/\\]rush.json$/);
+  });
+
+  it("returns sentinel for Rush (sync)", () => {
+    setFixture("rush");
+    match(findSentinelSync() ?? "", /[/\\]rush.json$/);
+  });
+});
+
 describe("findWorkspacePackages", () => {
   const packages = [
-    expect.stringMatching(/__fixtures__[/\\]rush[/\\]packages[/\\]conan$/),
-    expect.stringMatching(/__fixtures__[/\\]rush[/\\]packages[/\\]dutch$/),
-    expect.stringMatching(/__fixtures__[/\\]rush[/\\]packages[/\\]john$/),
-    expect.stringMatching(/__fixtures__[/\\]rush[/\\]packages[/\\]quaid$/),
-    expect.stringMatching(/__fixtures__[/\\]rush[/\\]packages[/\\]t-800$/),
+    /__fixtures__[/\\]rush[/\\]packages[/\\]conan$/,
+    /__fixtures__[/\\]rush[/\\]packages[/\\]dutch$/,
+    /__fixtures__[/\\]rush[/\\]packages[/\\]john$/,
+    /__fixtures__[/\\]rush[/\\]packages[/\\]quaid$/,
+    /__fixtures__[/\\]rush[/\\]packages[/\\]t-800$/,
   ];
 
   afterEach(() => {
     unsetFixture();
   });
 
-  test("returns packages for Rush workspaces", async () => {
+  it("returns packages for Rush workspaces", async () => {
     setFixture("rush");
-    expect((await findWorkspacePackages()).sort()).toEqual(packages);
+
+    const result = (await findWorkspacePackages()).sort();
+    for (let i = 0; i < result.length; ++i) {
+      match(result[i], packages[i]);
+    }
   });
 
-  test("returns packages for Rush workspaces (sync)", () => {
+  it("returns packages for Rush workspaces (sync)", () => {
     setFixture("rush");
-    expect(findWorkspacePackagesSync().sort()).toEqual(packages);
+
+    const result = findWorkspacePackagesSync().sort();
+    for (let i = 0; i < result.length; ++i) {
+      match(result[i], packages[i]);
+    }
   });
 });
 
@@ -35,13 +62,13 @@ describe("findWorkspaceRoot", () => {
     unsetFixture();
   });
 
-  test("returns workspace root for Rush workspaces", async () => {
+  it("returns workspace root for Rush workspaces", async () => {
     const root = setFixture("rush");
-    expect(await findWorkspaceRoot()).toBe(root);
+    equal(await findWorkspaceRoot(), root);
   });
 
-  test("returns workspace root for Rush workspaces (sync)", () => {
+  it("returns workspace root for Rush workspaces (sync)", () => {
     const root = setFixture("rush");
-    expect(findWorkspaceRootSync()).toBe(root);
+    equal(findWorkspaceRootSync(), root);
   });
 });

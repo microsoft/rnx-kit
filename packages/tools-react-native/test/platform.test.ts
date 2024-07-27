@@ -1,4 +1,6 @@
-import * as path from "path";
+import { deepEqual, equal, throws } from "node:assert/strict";
+import * as path from "node:path";
+import { describe, it } from "node:test";
 import {
   expandPlatformExtensions,
   getAvailablePlatformsUncached,
@@ -7,8 +9,8 @@ import {
 } from "../src/platform";
 
 describe("React Native > Platform", () => {
-  test("expandPlatformExtensions() expands returns all platform extensions", () => {
-    expect(expandPlatformExtensions("ios", [".ts", ".tsx"])).toEqual([
+  it("expandPlatformExtensions() expands returns all platform extensions", () => {
+    deepEqual(expandPlatformExtensions("ios", [".ts", ".tsx"]), [
       ".ios.ts",
       ".ios.tsx",
       ".native.ts",
@@ -16,7 +18,7 @@ describe("React Native > Platform", () => {
       ".ts",
       ".tsx",
     ]);
-    expect(expandPlatformExtensions("windows", [".ts", ".tsx"])).toEqual([
+    deepEqual(expandPlatformExtensions("windows", [".ts", ".tsx"]), [
       ".windows.ts",
       ".windows.tsx",
       ".win.ts",
@@ -28,9 +30,9 @@ describe("React Native > Platform", () => {
     ]);
   });
 
-  test("getAvailablePlatformsUncached() returns available platforms", () => {
+  it("getAvailablePlatformsUncached() returns available platforms", () => {
     const fixture = path.join(__dirname, "__fixtures__", "available-platforms");
-    expect(getAvailablePlatformsUncached(fixture)).toEqual({
+    deepEqual(getAvailablePlatformsUncached(fixture), {
       android: "",
       ios: "",
       macos: "react-native-macos",
@@ -39,7 +41,7 @@ describe("React Native > Platform", () => {
     });
   });
 
-  test("getAvailablePlatformsUncached() finds package root", () => {
+  it("getAvailablePlatformsUncached() finds package root", () => {
     const fixture = path.join(
       __dirname,
       "__fixtures__",
@@ -47,7 +49,7 @@ describe("React Native > Platform", () => {
       "node_modules",
       "react-native"
     );
-    expect(getAvailablePlatformsUncached(fixture)).toEqual({
+    deepEqual(getAvailablePlatformsUncached(fixture), {
       android: "",
       ios: "",
       macos: "react-native-macos",
@@ -56,30 +58,30 @@ describe("React Native > Platform", () => {
     });
   });
 
-  test("getAvailablePlatformsUncached() handles 'missing' package root", () => {
-    expect(getAvailablePlatformsUncached()).toEqual({
+  it("getAvailablePlatformsUncached() handles 'missing' package root", () => {
+    deepEqual(getAvailablePlatformsUncached(), {
       android: "",
       ios: "",
     });
   });
 
-  test("parsePlatform() succeeds for all known platforms", () => {
-    expect(parsePlatform("ios")).toEqual("ios");
-    expect(parsePlatform("android")).toEqual("android");
-    expect(parsePlatform("windows")).toEqual("windows");
-    expect(parsePlatform("win32")).toEqual("win32");
-    expect(parsePlatform("macos")).toEqual("macos");
+  it("parsePlatform() succeeds for all known platforms", () => {
+    equal(parsePlatform("ios"), "ios");
+    equal(parsePlatform("android"), "android");
+    equal(parsePlatform("windows"), "windows");
+    equal(parsePlatform("win32"), "win32");
+    equal(parsePlatform("macos"), "macos");
   });
 
-  test("parsePlatform() throws on failure", () => {
-    expect(() => parsePlatform("invalid")).toThrow();
+  it("parsePlatform() throws on failure", () => {
+    throws(() => parsePlatform("invalid"));
   });
 
-  test("platformExtensions() returns extensions", () => {
-    expect(platformExtensions("android")).toEqual(["android", "native"]);
-    expect(platformExtensions("ios")).toEqual(["ios", "native"]);
-    expect(platformExtensions("macos")).toEqual(["macos", "native"]);
-    expect(platformExtensions("win32")).toEqual(["win32", "win", "native"]);
-    expect(platformExtensions("windows")).toEqual(["windows", "win", "native"]);
+  it("platformExtensions() returns extensions", () => {
+    deepEqual(platformExtensions("android"), ["android", "native"]);
+    deepEqual(platformExtensions("ios"), ["ios", "native"]);
+    deepEqual(platformExtensions("macos"), ["macos", "native"]);
+    deepEqual(platformExtensions("win32"), ["win32", "win", "native"]);
+    deepEqual(platformExtensions("windows"), ["windows", "win", "native"]);
   });
 });

@@ -1,3 +1,6 @@
+import { equal, match } from "node:assert/strict";
+import { afterEach, describe, it } from "node:test";
+import { findSentinel, findSentinelSync } from "../src/common";
 import {
   findWorkspacePackages,
   findWorkspacePackagesSync,
@@ -6,27 +9,51 @@ import {
 } from "../src/index";
 import { setFixture, unsetFixture } from "./helper";
 
+describe("findSentinel", () => {
+  afterEach(() => {
+    unsetFixture();
+  });
+
+  it("returns sentinel for npm", async () => {
+    setFixture("npm");
+    match((await findSentinel()) ?? "", /[/\\]package-lock.json$/);
+  });
+
+  it("returns sentinel for npm (sync)", () => {
+    setFixture("npm");
+    match(findSentinelSync() ?? "", /[/\\]package-lock.json$/);
+  });
+});
+
 describe("findWorkspacePackages", () => {
   const packages = [
-    expect.stringMatching(/__fixtures__[/\\]npm[/\\]packages[/\\]conan$/),
-    expect.stringMatching(/__fixtures__[/\\]npm[/\\]packages[/\\]dutch$/),
-    expect.stringMatching(/__fixtures__[/\\]npm[/\\]packages[/\\]john$/),
-    expect.stringMatching(/__fixtures__[/\\]npm[/\\]packages[/\\]quaid$/),
-    expect.stringMatching(/__fixtures__[/\\]npm[/\\]packages[/\\]t-800$/),
+    /__fixtures__[/\\]npm[/\\]packages[/\\]conan$/,
+    /__fixtures__[/\\]npm[/\\]packages[/\\]dutch$/,
+    /__fixtures__[/\\]npm[/\\]packages[/\\]john$/,
+    /__fixtures__[/\\]npm[/\\]packages[/\\]quaid$/,
+    /__fixtures__[/\\]npm[/\\]packages[/\\]t-800$/,
   ];
 
   afterEach(() => {
     unsetFixture();
   });
 
-  test("returns packages for npm workspaces", async () => {
+  it("returns packages for npm workspaces", async () => {
     setFixture("npm");
-    expect((await findWorkspacePackages()).sort()).toEqual(packages);
+
+    const result = (await findWorkspacePackages()).sort();
+    for (let i = 0; i < result.length; ++i) {
+      match(result[i], packages[i]);
+    }
   });
 
-  test("returns packages for npm workspaces (sync)", () => {
+  it("returns packages for npm workspaces (sync)", () => {
     setFixture("npm");
-    expect(findWorkspacePackagesSync().sort()).toEqual(packages);
+
+    const result = findWorkspacePackagesSync().sort();
+    for (let i = 0; i < result.length; ++i) {
+      match(result[i], packages[i]);
+    }
   });
 });
 
@@ -35,13 +62,13 @@ describe("findWorkspaceRoot", () => {
     unsetFixture();
   });
 
-  test("returns workspace root for npm workspaces", async () => {
+  it("returns workspace root for npm workspaces", async () => {
     const root = setFixture("npm");
-    expect(await findWorkspaceRoot()).toBe(root);
+    equal(await findWorkspaceRoot(), root);
   });
 
-  test("returns workspace root for npm workspaces (sync)", () => {
+  it("returns workspace root for npm workspaces (sync)", () => {
     const root = setFixture("npm");
-    expect(findWorkspaceRootSync()).toBe(root);
+    equal(findWorkspaceRootSync(), root);
   });
 });
