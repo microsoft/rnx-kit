@@ -1,8 +1,8 @@
-import type { IncomingMessage, ServerResponse } from "http";
 import type { AssetData } from "metro";
 import type { Middleware } from "metro-config";
 import type Server from "metro/src/Server";
 import { equal } from "node:assert/strict";
+import type { IncomingMessage, ServerResponse } from "node:http";
 import { describe, it } from "node:test";
 
 describe("@rnx-kit/metro-config/assetPluginForMonorepos", () => {
@@ -27,7 +27,7 @@ describe("@rnx-kit/metro-config/assetPluginForMonorepos", () => {
   it("unescapes `..` in URLs", () => {
     Object.entries(cases).forEach(([output, input]) => {
       const middleware: Middleware = (req: Middleware) => {
-        equal(req.url, output);
+        equal("url" in req && req.url, output);
         return middleware;
       };
       const server = {
