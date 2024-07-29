@@ -4625,7 +4625,7 @@ __metadata:
     "@rnx-kit/tsconfig": "npm:*"
     "@types/node": "npm:^20.0.0"
     eslint: "npm:^8.56.0"
-    fast-xml-parser: "npm:^4.0.0"
+    fast-xml-parser: "npm:^4.4.1"
     prettier: "npm:^3.0.0"
     typescript: "npm:^5.0.0"
   languageName: unknown
@@ -7756,6 +7756,17 @@ __metadata:
   bin:
     fxparser: src/cli/cli.js
   checksum: 10c0/ce32fad713471a40bea67959894168f297a5dd0aba64b89a2abc71a4fec0b1ae1d49c2dd8d8719ca8beeedf477824358c8a486b360b9f3ef12abc2e355d11318
+  languageName: node
+  linkType: hard
+
+"fast-xml-parser@npm:^4.4.1":
+  version: 4.4.1
+  resolution: "fast-xml-parser@npm:4.4.1"
+  dependencies:
+    strnum: "npm:^1.0.5"
+  bin:
+    fxparser: src/cli/cli.js
+  checksum: 10c0/7f334841fe41bfb0bf5d920904ccad09cefc4b5e61eaf4c225bf1e1bb69ee77ef2147d8942f783ee8249e154d1ca8a858e10bda78a5d78b8bed3f48dcee9bf33
   languageName: node
   linkType: hard
 
