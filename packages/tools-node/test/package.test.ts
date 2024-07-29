@@ -1,4 +1,4 @@
-import { deepEqual, equal, throws } from "node:assert/strict";
+import { deepEqual, equal, ok, throws } from "node:assert/strict";
 import * as fs from "node:fs";
 import * as os from "node:os";
 import * as path from "node:path";
@@ -19,8 +19,8 @@ describe("Node > Package", () => {
   const tempDir = fs.realpathSync(os.tmpdir());
 
   before(() => {
-    equal(fs.existsSync(fixtureDir), true);
-    equal(fs.existsSync(tempDir), true);
+    ok(fs.existsSync(fixtureDir));
+    ok(fs.existsSync(tempDir));
   });
 
   let testTempDir: string;
@@ -81,9 +81,9 @@ describe("Node > Package", () => {
       name: "package name",
       version: "1.0.0",
     };
-    equal(fs.existsSync(pkgPath), false);
+    ok(!fs.existsSync(pkgPath));
     writePackage(testTempDir, manifest);
-    equal(fs.existsSync(pkgPath), true);
+    ok(fs.existsSync(pkgPath));
   });
 
   it("writePackage() writes package.json when given a full path to it", () => {
@@ -92,9 +92,9 @@ describe("Node > Package", () => {
       name: "package name",
       version: "1.0.0",
     };
-    equal(fs.existsSync(pkgPath), false);
+    ok(!fs.existsSync(pkgPath));
     writePackage(pkgPath, manifest);
-    equal(fs.existsSync(pkgPath), true);
+    ok(fs.existsSync(pkgPath));
   });
 
   it("findPackage() returns the nearest package.json file", () => {
@@ -147,7 +147,7 @@ describe("Node > Package", () => {
         "@babel",
         "core-linked"
       );
-      equal(fs.lstatSync(coreLinkedPath).isSymbolicLink(), true);
+      ok(fs.lstatSync(coreLinkedPath).isSymbolicLink());
 
       const pkgDir = findPackageDependencyDir(
         {
@@ -175,7 +175,7 @@ describe("Node > Package", () => {
         "@babel",
         "core-linked"
       );
-      equal(fs.lstatSync(coreLinkedPath).isSymbolicLink(), true);
+      ok(fs.lstatSync(coreLinkedPath).isSymbolicLink());
 
       const pkgDir = findPackageDependencyDir(
         {

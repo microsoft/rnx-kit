@@ -1,4 +1,4 @@
-import { deepEqual, equal } from "node:assert/strict";
+import { deepEqual, equal, ok } from "node:assert/strict";
 import { describe, it } from "node:test";
 import { hasProperty, pickValues } from "../src/properties";
 
@@ -63,25 +63,25 @@ describe("Language > Props > pickValues", () => {
 
 describe("Language > Props > hasProperty", () => {
   it("returns false for primitives", () => {
-    equal(hasProperty("string", "0"), false);
-    equal(hasProperty(0, "0"), false);
-    equal(hasProperty(true, "0"), false);
-    equal(hasProperty(null, "0"), false);
-    equal(hasProperty(undefined, "0"), false);
+    ok(!hasProperty("string", "0"));
+    ok(!hasProperty(0, "0"));
+    ok(!hasProperty(true, "0"));
+    ok(!hasProperty(null, "0"));
+    ok(!hasProperty(undefined, "0"));
   });
 
   it("returns true for objects with specified property", () => {
     const testObj = { message: "code", code: 0 };
-    equal(hasProperty(testObj, "code"), true);
-    equal(hasProperty(testObj, "message"), true);
-    equal(hasProperty(testObj, "stack"), false);
+    ok(hasProperty(testObj, "code"));
+    ok(hasProperty(testObj, "message"));
+    ok(!hasProperty(testObj, "stack"));
   });
 
   it("returns true for objects with inherited property", () => {
     const testProto = { message: "code", code: 0 };
     const testObj = Object.create(testProto);
-    equal(hasProperty(testObj, "code"), true);
-    equal(hasProperty(testObj, "message"), true);
-    equal(hasProperty(testObj, "stack"), false);
+    ok(hasProperty(testObj, "code"));
+    ok(hasProperty(testObj, "message"));
+    ok(!hasProperty(testObj, "stack"));
   });
 });

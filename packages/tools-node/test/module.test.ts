@@ -1,4 +1,4 @@
-import { deepEqual, equal } from "node:assert/strict";
+import { deepEqual, ok } from "node:assert/strict";
 import * as fs from "node:fs";
 import * as os from "node:os";
 import * as path from "node:path";
@@ -15,7 +15,7 @@ describe("Node > Module", () => {
   const fixtureDir = fileURLToPath(new URL("__fixtures__", import.meta.url));
 
   before(() => {
-    equal(fs.existsSync(fixtureDir), true);
+    ok(fs.existsSync(fixtureDir));
   });
 
   it("parseModuleRef('react-native')", () => {
@@ -91,25 +91,25 @@ describe("Node > Module", () => {
 
   it("isPackageModuleRef() returns true for package-based refs", () => {
     for (const r of packageModuleRefs) {
-      equal(isPackageModuleRef(parseModuleRef(r)), true);
+      ok(isPackageModuleRef(parseModuleRef(r)));
     }
   });
 
   it("isPackageModuleRef() returns false for file-based refs", () => {
     for (const r of fileModuleRefs) {
-      equal(isPackageModuleRef(parseModuleRef(r)), false);
+      ok(!isPackageModuleRef(parseModuleRef(r)));
     }
   });
 
   it("isFileModuleRef() returns true for file-based refs", () => {
     for (const r of fileModuleRefs) {
-      equal(isFileModuleRef(parseModuleRef(r)), true);
+      ok(isFileModuleRef(parseModuleRef(r)));
     }
   });
 
   it("isFileModuleRef() returns false for package-based refs", () => {
     for (const r of packageModuleRefs) {
-      equal(isFileModuleRef(parseModuleRef(r)), false);
+      ok(!isFileModuleRef(parseModuleRef(r)));
     }
   });
 
