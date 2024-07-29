@@ -1,4 +1,4 @@
-import { equal } from "node:assert/strict";
+import { equal, ok } from "node:assert/strict";
 import { describe, it } from "node:test";
 import { idle, once, retry, withRetry } from "../src/async";
 
@@ -7,7 +7,7 @@ describe("async", () => {
     const start = Date.now();
     await idle(1000);
     const end = Date.now();
-    equal(end - start >= 1000, true);
+    ok(end - start >= 1000);
   });
 
   it("once() functions are only called once", () => {
@@ -30,10 +30,10 @@ describe("async", () => {
     }, 4);
 
     equal(times.length, 4);
-    equal(times[0] < 100, true);
-    equal(times[1] >= 1000 && times[0] < 2000, true);
-    equal(times[2] >= 2000 && times[0] < 4000, true);
-    equal(times[3] >= 4000 && times[0] < 8000, true);
+    ok(times[0] < 100);
+    ok(times[1] >= 1000 && times[0] < 2000);
+    ok(times[2] >= 2000 && times[0] < 4000);
+    ok(times[3] >= 4000 && times[0] < 8000);
   });
 
   it("retry() returns early with result", async () => {
@@ -62,10 +62,10 @@ describe("async", () => {
     }
 
     equal(times.length, 4);
-    equal(times[0] < 100, true);
-    equal(times[1] >= 1000 && times[0] < 2000, true);
-    equal(times[2] >= 2000 && times[0] < 4000, true);
-    equal(times[3] >= 4000 && times[0] < 8000, true);
+    ok(times[0] < 100);
+    ok(times[1] >= 1000 && times[0] < 2000);
+    ok(times[2] >= 2000 && times[0] < 4000);
+    ok(times[3] >= 4000 && times[0] < 8000);
   });
 
   it("withRetry() returns early with result", async () => {
