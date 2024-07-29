@@ -1024,7 +1024,7 @@ PODS:
     - React-Core
     - React-cxxreact
     - ReactCommon/turbomodule/core
-  - ReactTestApp-DevSupport (3.8.7):
+  - ReactTestApp-DevSupport (3.8.13):
     - React-Core
     - React-jsi
   - ReactTestApp-MSAL (3.0.1):
@@ -1090,7 +1090,7 @@ DEPENDENCIES:
   - React-runtimescheduler (from `../node_modules/react-native-macos/ReactCommon/react/renderer/runtimescheduler`)
   - React-utils (from `../node_modules/react-native-macos/ReactCommon/react/utils`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native-macos/ReactCommon`)
-  - "ReactNativeHost (from `../../../node_modules/.store/react-native-test-app-virtual-9a7e10354e/node_modules/@rnx-kit/react-native-host`)"
+  - "ReactNativeHost (from `../../../node_modules/.store/react-native-test-app-virtual-d3ab410d7f/node_modules/@rnx-kit/react-native-host`)"
   - ReactTestApp-DevSupport (from `../node_modules/react-native-test-app`)
   - "ReactTestApp-MSAL (from `../node_modules/@rnx-kit/react-native-test-app-msal`)"
   - ReactTestApp-Resources (from `..`)
@@ -1199,7 +1199,7 @@ EXTERNAL SOURCES:
   ReactCommon:
     :path: "../node_modules/react-native-macos/ReactCommon"
   ReactNativeHost:
-    :path: "../../../node_modules/.store/react-native-test-app-virtual-9a7e10354e/node_modules/@rnx-kit/react-native-host"
+    :path: "../../../node_modules/.store/react-native-test-app-virtual-d3ab410d7f/node_modules/@rnx-kit/react-native-host"
   ReactTestApp-DevSupport:
     :path: "../node_modules/react-native-test-app"
   ReactTestApp-MSAL:
@@ -1265,7 +1265,7 @@ SPEC CHECKSUMS:
   React-utils: 52afeb88f90c5a40fa42a145df7877595302f6cf
   ReactCommon: ddcf7d2e41fbb7d047c169f7c56364e69f5036a8
   ReactNativeHost: 02d9df701ce3f7b6560f95315df4bab38b660f58
-  ReactTestApp-DevSupport: 33a7ae9bf22161f359629a9607f5ef27e9c91fd0
+  ReactTestApp-DevSupport: 3e70f318cd4976282a93e3648a558294b8251854
   ReactTestApp-MSAL: 624c5f59bc1d79265d2dd3d91c9a6e9116c92c7e
   ReactTestApp-Resources: 23ebf203a76bfaa5b08de3118ae3daa2baa25478
   RNWWebStorage: 13da272b965c7233d1c0c167f2306f97722323a1
