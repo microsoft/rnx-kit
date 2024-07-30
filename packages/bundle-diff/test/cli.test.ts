@@ -1,56 +1,71 @@
+import { equal } from "node:assert/strict";
+import type * as nodefs from "node:fs";
+import { describe, it } from "node:test";
 import { cli, numDigits, numDigitsStringLength, withSign } from "../src/cli";
-
-jest.mock("fs");
+import { aSourceMap, bSourceMap } from "./mockSourceMaps";
 
 describe("numDigits()", () => {
-  test("returns number of digits in a number", () => {
-    expect(numDigits(1000)).toBe(4);
-    expect(numDigits(100)).toBe(3);
-    expect(numDigits(10)).toBe(2);
-    expect(numDigits(0)).toBe(1);
-    expect(numDigits(-10)).toBe(2);
-    expect(numDigits(-100)).toBe(3);
-    expect(numDigits(-1000)).toBe(4);
-    expect(numDigits(NaN)).toBe(withSign(NaN).length);
+  it("returns number of digits in a number", () => {
+    equal(numDigits(1000), 4);
+    equal(numDigits(100), 3);
+    equal(numDigits(10), 2);
+    equal(numDigits(0), 1);
+    equal(numDigits(-10), 2);
+    equal(numDigits(-100), 3);
+    equal(numDigits(-1000), 4);
+    equal(numDigits(NaN), withSign(NaN).length);
   });
 });
 
 describe("withSign()", () => {
-  test("returns number string with a sign", () => {
-    expect(withSign(0)).toBe("±0");
-    expect(withSign(1)).toBe("+1");
-    expect(withSign(-1)).toBe("-1");
-    expect(withSign(NaN)).toBe("unknown");
+  it("returns number string with a sign", () => {
+    equal(withSign(0), "±0");
+    equal(withSign(1), "+1");
+    equal(withSign(-1), "-1");
+    equal(withSign(NaN), "unknown");
   });
 });
 
 describe("numDigitsStringLength()", () => {
-  test("returns number of digits needed to represent a string's length", () => {
-    expect(numDigitsStringLength("@rnx/bundle-diff")).toBe(2);
-    expect(numDigitsStringLength("")).toBe(1);
-    expect(numDigitsStringLength(null)).toBe(withSign(NaN).length);
+  it("returns number of digits needed to represent a string's length", () => {
+    equal(numDigitsStringLength("@rnx/bundle-diff"), 2);
+    equal(numDigitsStringLength(""), 1);
+    equal(numDigitsStringLength(null), withSign(NaN).length);
   });
 });
 
 describe("cli()", () => {
-  const consoleSpy = jest.spyOn(global.console, "log");
+  const fsMock = {
+    readFileSync: (path: string) => {
+      switch (path) {
+        case "a":
+          return JSON.stringify(aSourceMap);
 
-  beforeEach(() => {
-    consoleSpy.mockReset();
+        case "b":
+          return JSON.stringify(bSourceMap);
+
+        default:
+          throw new Error(`Unexpected read: ${path}`);
+      }
+    },
+  } as typeof nodefs;
+
+  it("outputs nothing if there are no differences", (t) => {
+    const logMock = t.mock.method(console, "log", () => null);
+
+    cli("a", "a", fsMock);
+
+    equal(logMock.mock.calls.length, 0);
   });
 
-  afterAll(() => {
-    jest.clearAllMocks();
-  });
+  it("outputs the difference", (t) => {
+    const logMock = t.mock.method(console, "log", () => null);
 
-  test("outputs nothing if there are no differences", () => {
-    cli("a", "a");
-    expect(consoleSpy).not.toHaveBeenCalled();
-  });
+    cli("a", "b", fsMock);
 
-  test("outputs the difference", () => {
-    cli("a", "b");
-    expect(consoleSpy).toHaveBeenCalledWith(
+    equal(logMock.mock.calls.length, 1);
+    equal(
+      logMock.mock.calls[0].arguments[0],
       [
         "     +106    added  /~/node_modules/@babel/runtime/helpers/arrayWithHoles.js",
         "      +96    added  /~/node_modules/lodash-es/_realNames.js",

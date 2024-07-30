@@ -3756,13 +3756,10 @@ __metadata:
   resolution: "@rnx-kit/bundle-diff@workspace:packages/bundle-diff"
   dependencies:
     "@rnx-kit/eslint-config": "npm:*"
-    "@rnx-kit/jest-preset": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
-    "@types/jest": "npm:^29.2.1"
     "@types/node": "npm:^20.0.0"
     eslint: "npm:^8.56.0"
-    jest: "npm:^29.2.1"
     prettier: "npm:^3.0.0"
     typescript: "npm:^5.0.0"
   bin:
