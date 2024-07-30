@@ -1,12 +1,14 @@
+import { equal } from "node:assert/strict";
+import { describe, it } from "node:test";
 import { latestVersion } from "../src/version";
 
-describe("latestVersion", () => {
-  test("returns 0.0.0 if no versions are passed", () => {
-    expect(latestVersion([])).toBe("0.0.0");
+describe("latestVersion()", () => {
+  it("returns 0.0.0 if no versions are passed", () => {
+    equal(latestVersion([]), "0.0.0");
   });
 
-  test("returns latest version", () => {
-    expect(latestVersion(["0.0.1", "0.0.2", "0.0.10"])).toBe("0.0.10");
-    expect(latestVersion(["0.0.10", "0.0.2", "0.0.1"])).toBe("0.0.10");
+  it("returns latest version", () => {
+    equal(latestVersion(["0.0.1", "0.0.2", "0.0.10"]), "0.0.10");
+    equal(latestVersion(["0.0.10", "0.0.2", "0.0.1"]), "0.0.10");
   });
 });

@@ -1,85 +1,72 @@
+import { equal, match, notEqual } from "node:assert/strict";
 import * as os from "node:os";
 import * as path from "node:path";
+import { describe, it } from "node:test";
 import { getDependencyPolyfills, resolvePath } from "../src/dependency";
 
-describe("getDependencyPolyfills", () => {
-  const consoleErrorSpy = jest.spyOn(global.console, "error");
+describe("getDependencyPolyfills()", () => {
+  it("collects polyfills from included valid packages", (t) => {
+    const errorMock = t.mock.method(console, "error", () => null);
 
-  beforeEach(() => {
-    consoleErrorSpy.mockReset();
-  });
+    const context = { projectRoot: path.join(__dirname, "__fixtures__") };
+    const polyfills = getDependencyPolyfills(context).sort();
 
-  afterAll(() => {
-    jest.clearAllMocks();
-  });
-
-  test("collects polyfills from included valid packages", () => {
-    const context = {
-      projectRoot: path.join(__dirname, "__fixtures__"),
-    };
-
-    expect(getDependencyPolyfills(context).sort()).toEqual([
-      expect.stringMatching(
-        /[/\\]node_modules[/\\]@react-native-webapis[/\\]battery-status[/\\]polyfill.js$/
-      ),
-      expect.stringMatching(
-        /[/\\]node_modules[/\\]@react-native-webapis[/\\]gamepad[/\\]polyfill.js$/
-      ),
-    ]);
-
-    expect(consoleErrorSpy).toHaveBeenCalledTimes(3);
-    expect(consoleErrorSpy).toHaveBeenCalledWith(
-      "error",
-      expect.stringMatching(/^invalid-polyfill-boolean: invalid polyfill path/)
+    equal(polyfills.length, 2);
+    match(
+      polyfills[0],
+      /[/\\]node_modules[/\\]@react-native-webapis[/\\]battery-status[/\\]polyfill.js$/
     );
-    expect(consoleErrorSpy).toHaveBeenCalledWith(
-      "error",
-      expect.stringMatching(/^invalid-polyfill-boundary: invalid polyfill path/)
+    match(
+      polyfills[1],
+      /[/\\]node_modules[/\\]@react-native-webapis[/\\]gamepad[/\\]polyfill.js$/
     );
-    expect(consoleErrorSpy).toHaveBeenCalledWith(
-      "error",
-      expect.stringMatching(/^invalid-polyfill-missing: no such polyfill/)
+
+    const calls = errorMock.mock.calls;
+
+    equal(calls.length, 3);
+    match(
+      calls[0].arguments[1],
+      /^invalid-polyfill-boolean: invalid polyfill path/
     );
+    match(
+      calls[1].arguments[1],
+      /^invalid-polyfill-boundary: invalid polyfill path/
+    );
+    match(calls[2].arguments[1], /^invalid-polyfill-missing: no such polyfill/);
   });
 });
 
-describe("resolvePath", () => {
-  test("rejects invalid paths", () => {
-    expect(resolvePath(__dirname, "")).toBe(null);
-    expect(resolvePath(__dirname, [])).toBe(null);
-    expect(resolvePath(__dirname, false)).toBe(null);
-    expect(resolvePath(__dirname, null)).toBe(null);
-    expect(resolvePath(__dirname, undefined)).toBe(null);
+describe("resolvePath()", () => {
+  it("rejects invalid paths", () => {
+    equal(resolvePath(__dirname, ""), null);
+    equal(resolvePath(__dirname, []), null);
+    equal(resolvePath(__dirname, false), null);
+    equal(resolvePath(__dirname, null), null);
+    equal(resolvePath(__dirname, undefined), null);
   });
 
-  test("rejects paths outside the package boundary", () => {
-    expect(resolvePath(__dirname, "/bin/sh")).toBe(null);
+  it("rejects paths outside the package boundary", () => {
+    equal(resolvePath(__dirname, "/bin/sh"), null);
 
-    expect(resolvePath(__dirname, "../../bin/sh")).toBe(null);
-    expect(resolvePath(__dirname, "../bin/sh")).toBe(null);
-    expect(resolvePath(__dirname, "./../bin/sh")).toBe(null);
+    equal(resolvePath(__dirname, "../../bin/sh"), null);
+    equal(resolvePath(__dirname, "../bin/sh"), null);
+    equal(resolvePath(__dirname, "./../bin/sh"), null);
 
     if (os.platform() === "win32") {
       const p = "C:\\Windows\\System32\\cmd.exe";
-      expect(resolvePath(__dirname, p)).toBe(null);
-      expect(resolvePath(__dirname, p.toLowerCase())).toBe(null);
+      equal(resolvePath(__dirname, p), null);
+      equal(resolvePath(__dirname, p.toLowerCase()), null);
 
-      expect(resolvePath(__dirname, "..\\..\\Windows\\System32\\cmd.exe")).toBe(
-        null
-      );
-      expect(resolvePath(__dirname, "..\\Windows\\System32\\cmd.exe")).toBe(
-        null
-      );
-      expect(resolvePath(__dirname, ".\\..\\Windows\\System32\\cmd.exe")).toBe(
-        null
-      );
+      equal(resolvePath(__dirname, "..\\..\\Windows\\System32\\cmd.exe"), null);
+      equal(resolvePath(__dirname, "..\\Windows\\System32\\cmd.exe"), null);
+      equal(resolvePath(__dirname, ".\\..\\Windows\\System32\\cmd.exe"), null);
     }
   });
 
-  test("accepts paths inside the package boundary", () => {
-    expect(resolvePath(__dirname, "./index.js")).not.toBe(null);
-    expect(resolvePath(__dirname, "./lib/index.js")).not.toBe(null);
-    expect(resolvePath(__dirname, "index.js")).not.toBe(null);
-    expect(resolvePath(__dirname, "lib/index.js")).not.toBe(null);
+  it("accepts paths inside the package boundary", () => {
+    notEqual(resolvePath(__dirname, "./index.js"), null);
+    notEqual(resolvePath(__dirname, "./lib/index.js"), null);
+    notEqual(resolvePath(__dirname, "index.js"), null);
+    notEqual(resolvePath(__dirname, "lib/index.js"), null);
   });
 });

@@ -1,11 +1,14 @@
 import { normalizePath } from "@rnx-kit/tools-node";
+import * as nodefs from "fs";
 import type ts from "typescript";
 import { VersionedSnapshot } from "./snapshot";
 
 export class ProjectFileCache {
   private files = new Map<string, VersionedSnapshot>();
+  private filesystem: typeof nodefs;
 
-  constructor(fileNames: string[]) {
+  constructor(fileNames: string[], fs = nodefs) {
+    this.filesystem = fs;
     fileNames.forEach((fileName) => this.set(fileName));
   }
 
@@ -18,7 +21,10 @@ export class ProjectFileCache {
     const normalized = normalizePath(fileName);
     const file = this.files.get(normalized);
     if (!file) {
-      this.files.set(normalized, new VersionedSnapshot(normalized, snapshot));
+      this.files.set(
+        normalized,
+        new VersionedSnapshot(normalized, snapshot, this.filesystem)
+      );
     } else {
       file.update(snapshot);
     }
@@ -51,13 +57,18 @@ export class ProjectFileCache {
 // TODO: the files in this list need to be watched. on change/delete, remove from this list and let the file be re-cached on demand
 export class ExternalFileCache {
   private files = new Map<string, VersionedSnapshot>();
+  private filesystem: typeof nodefs;
+
+  constructor(fs = nodefs) {
+    this.filesystem = fs;
+  }
 
   getSnapshot(fileName: string): ts.IScriptSnapshot {
     const normalized = normalizePath(fileName);
 
     let file = this.files.get(normalized);
     if (!file) {
-      file = new VersionedSnapshot(normalized);
+      file = new VersionedSnapshot(normalized, undefined, this.filesystem);
       this.files.set(normalized, file);
     }
 

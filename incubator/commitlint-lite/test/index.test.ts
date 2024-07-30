@@ -1,34 +1,36 @@
+import { deepEqual } from "node:assert/strict";
+import { describe, it } from "node:test";
 import { MAX_LINE_LENGTH } from "../src/constants";
 import { lint } from "../src/index";
 
 describe("Lint commit message", () => {
   it("should fail non-conforming messages", () => {
-    expect(lint("")).toEqual(["empty"]);
-    expect(lint("fix")).toEqual(["format"]);
-    expect(lint("foo:")).toEqual(["type", "title"]);
-    expect(lint("Fix:")).toEqual(["type-case", "title"]);
-    expect(lint("fix:")).toEqual(["title"]);
-    expect(lint("fix: ")).toEqual(["title"]);
-    expect(lint("fix():")).toEqual(["scope", "title"]);
-    expect(lint("fix(): ")).toEqual(["scope", "title"]);
-    expect(lint("fix(Scope): ")).toEqual(["scope-case", "title"]);
-    expect(lint("fix:title")).toEqual(["space-after-colon"]);
-    expect(lint("fix: title\nbody")).toEqual(["paragraph"]);
-    expect(lint("fix():title\nbody")).toEqual([
+    deepEqual(lint(""), ["empty"]);
+    deepEqual(lint("fix"), ["format"]);
+    deepEqual(lint("foo:"), ["type", "title"]);
+    deepEqual(lint("Fix:"), ["type-case", "title"]);
+    deepEqual(lint("fix:"), ["title"]);
+    deepEqual(lint("fix: "), ["title"]);
+    deepEqual(lint("fix():"), ["scope", "title"]);
+    deepEqual(lint("fix(): "), ["scope", "title"]);
+    deepEqual(lint("fix(Scope): "), ["scope-case", "title"]);
+    deepEqual(lint("fix:title"), ["space-after-colon"]);
+    deepEqual(lint("fix: title\nbody"), ["paragraph"]);
+    deepEqual(lint("fix():title\nbody"), [
       "scope",
       "space-after-colon",
       "paragraph",
     ]);
-    expect(lint(`fix: title\n\n${"x".repeat(MAX_LINE_LENGTH + 1)}`)).toEqual([
+    deepEqual(lint(`fix: title\n\n${"x".repeat(MAX_LINE_LENGTH + 1)}`), [
       "body-line-length",
     ]);
   });
 
   it("should pass conforming messages", () => {
-    expect(lint("fix: title\n\nbody")).toEqual([]);
-    expect(lint("fix(scope): title\n\nbody")).toEqual([]);
-    expect(lint("fix!: title\n\nbody")).toEqual([]);
-    expect(lint("fix(scope)!: title\n\nbody")).toEqual([]);
-    expect(lint(`fix: title\n\n${"x".repeat(MAX_LINE_LENGTH)}`)).toEqual([]);
+    deepEqual(lint("fix: title\n\nbody"), []);
+    deepEqual(lint("fix(scope): title\n\nbody"), []);
+    deepEqual(lint("fix!: title\n\nbody"), []);
+    deepEqual(lint("fix(scope)!: title\n\nbody"), []);
+    deepEqual(lint(`fix: title\n\n${"x".repeat(MAX_LINE_LENGTH)}`), []);
   });
 });

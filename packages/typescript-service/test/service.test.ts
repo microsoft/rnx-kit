@@ -1,33 +1,15 @@
+import { ok } from "node:assert/strict";
+import { describe, it } from "node:test";
 import type ts from "typescript";
+import { Project } from "../src/project";
 import { Service } from "../src/service";
-const diagnostic = require("../src/diagnostics");
 
-jest.mock("../src/diagnostics", () => {
-  return {
-    ...jest.requireActual("../src/diagnostics"),
-    createDiagnosticWriter: jest.fn(),
-  };
-});
-
-const mockDiagnosticWriter = {
-  format: jest.fn(),
-  print: jest.fn(),
-};
-
-describe("Service", () => {
-  beforeEach(() => {
-    diagnostic.createDiagnosticWriter.mockReturnValue(mockDiagnosticWriter);
-  });
-
-  afterEach(() => {
-    jest.resetAllMocks();
-  });
-
-  test("openProject() returns a valid object", () => {
+describe("Service.openProject()", () => {
+  it("returns a valid object", () => {
     const service = new Service();
     const config = { fileNames: [] } as unknown as ts.ParsedCommandLine;
     const project = service.openProject(config);
-    expect(project).toBeTruthy();
-    expect(typeof project).toBe("object");
+
+    ok(project instanceof Project);
   });
 });

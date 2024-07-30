@@ -1,9 +1,11 @@
+import { equal, fail, ok } from "node:assert/strict";
 import * as path from "node:path";
+import { describe, it } from "node:test";
 import { getAssetDestPathAndroid } from "../../src/asset/android";
 import { makeAsset } from "./helper";
 
 describe("getAssetDestPathAndroid", () => {
-  test("should use the right destination folder", () => {
+  it("should use the right destination folder", () => {
     const asset = makeAsset({
       name: "icon",
       type: "png",
@@ -15,9 +17,7 @@ describe("getAssetDestPathAndroid", () => {
       location: string
     ) => {
       if (!getAssetDestPathAndroid(asset, scale).startsWith(location)) {
-        throw new Error(
-          `asset for scale ${scale} should start with path '${location}'`
-        );
+        fail(`asset for scale ${scale} should start with path '${location}'`);
       }
     };
 
@@ -28,48 +28,51 @@ describe("getAssetDestPathAndroid", () => {
     expectDestPathForScaleToStartWith(4, "drawable-xxxhdpi");
   });
 
-  test("should lowercase path", () => {
+  it("should lowercase path", () => {
     const asset = makeAsset({
       name: "Icon",
       type: "png",
       httpServerLocation: "/assets/App/Test",
     });
 
-    expect(getAssetDestPathAndroid(asset, 1)).toBe(
+    equal(
+      getAssetDestPathAndroid(asset, 1),
       path.normalize("drawable-mdpi/app_test_icon.png")
     );
   });
 
-  test("should remove `assets/` prefix", () => {
+  it("should remove `assets/` prefix", () => {
     const asset = makeAsset({
       name: "icon",
       type: "png",
       httpServerLocation: "/assets/RKJSModules/Apps/AndroidSample/Assets",
     });
 
-    expect(getAssetDestPathAndroid(asset, 1).startsWith("assets_")).toBeFalsy();
+    ok(!getAssetDestPathAndroid(asset, 1).startsWith("assets_"));
   });
 
-  test("should put non-drawable resources to `raw/`", () => {
+  it("should put non-drawable resources to `raw/`", () => {
     const asset = makeAsset({
       name: "video",
       type: "mp4",
       httpServerLocation: "/assets/app/test",
     });
 
-    expect(getAssetDestPathAndroid(asset, 1)).toBe(
+    equal(
+      getAssetDestPathAndroid(asset, 1),
       path.normalize("raw/app_test_video.mp4")
     );
   });
 
-  test("should handle assets with a relative path outside of root", () => {
+  it("should handle assets with a relative path outside of root", () => {
     const asset = makeAsset({
       name: "icon",
       type: "png",
       httpServerLocation: "/assets/../../test",
     });
 
-    expect(getAssetDestPathAndroid(asset, 1)).toBe(
+    equal(
+      getAssetDestPathAndroid(asset, 1),
       path.normalize("drawable-mdpi/__test_icon.png")
     );
   });

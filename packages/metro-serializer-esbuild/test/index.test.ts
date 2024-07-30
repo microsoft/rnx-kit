@@ -2,7 +2,9 @@ import type { Config } from "@react-native-community/cli-types";
 import type { BundleArgs } from "@rnx-kit/metro-service";
 import { bundle, loadMetroConfig } from "@rnx-kit/metro-service";
 import type Bundle from "metro/src/shared/output/bundle";
+import { deepEqual, ok } from "node:assert/strict";
 import * as path from "node:path";
+import { describe, it } from "node:test";
 
 async function buildBundle(
   args: BundleArgs,
@@ -19,10 +21,6 @@ async function buildBundle(
 }
 
 describe("metro-serializer-esbuild", () => {
-  jest.setTimeout(90000);
-
-  const consoleWarnSpy = jest.spyOn(global.console, "warn");
-
   const root = path.dirname(__dirname);
 
   async function bundle(
@@ -67,17 +65,9 @@ describe("metro-serializer-esbuild", () => {
     return result.split("\n");
   }
 
-  beforeEach(() => {
-    consoleWarnSpy.mockReset();
-  });
-
-  afterAll(() => {
-    consoleWarnSpy.mockRestore();
-  });
-
-  test("removes unused code", async () => {
+  it("removes unused code", async () => {
     const result = await bundle("test/__fixtures__/direct.ts");
-    expect(result).toEqual([
+    deepEqual(result, [
       '"use strict";',
       "(() => {",
       "  // virtual:metro:__rnx_prelude__",
@@ -95,9 +85,9 @@ describe("metro-serializer-esbuild", () => {
     ]);
   });
 
-  test("removes unused code (export *)", async () => {
+  it("removes unused code (export *)", async () => {
     const result = await bundle("test/__fixtures__/exportAll.ts");
-    expect(result).toEqual([
+    deepEqual(result, [
       '"use strict";',
       "(() => {",
       "  // virtual:metro:__rnx_prelude__",
@@ -115,9 +105,9 @@ describe("metro-serializer-esbuild", () => {
     ]);
   });
 
-  test("removes unused code (nested export *)", async () => {
+  it("removes unused code (nested export *)", async () => {
     const result = await bundle("test/__fixtures__/nestedExportAll.ts");
-    expect(result).toEqual([
+    deepEqual(result, [
       '"use strict";',
       "(() => {",
       "  // virtual:metro:__rnx_prelude__",
@@ -135,9 +125,9 @@ describe("metro-serializer-esbuild", () => {
     ]);
   });
 
-  test("removes unused code (import *)", async () => {
+  it("removes unused code (import *)", async () => {
     const result = await bundle("test/__fixtures__/importAll.ts");
-    expect(result).toEqual([
+    deepEqual(result, [
       '"use strict";',
       "(() => {",
       "  // virtual:metro:__rnx_prelude__",
@@ -155,9 +145,9 @@ describe("metro-serializer-esbuild", () => {
     ]);
   });
 
-  test("removes unused code (import * <- export *)", async () => {
+  it("removes unused code (import * <- export *)", async () => {
     const result = await bundle("test/__fixtures__/importExportAll.ts");
-    expect(result).toEqual([
+    deepEqual(result, [
       '"use strict";',
       "(() => {",
       "  // virtual:metro:__rnx_prelude__",
@@ -175,10 +165,10 @@ describe("metro-serializer-esbuild", () => {
     ]);
   });
 
-  test("tree-shakes lodash-es", async () => {
+  it("tree-shakes lodash-es", async () => {
     const _head = require.resolve("lodash-es/head.js", { paths: ["."] });
     const result = await bundle("test/__fixtures__/lodash-es.ts");
-    expect(result).toEqual([
+    deepEqual(result, [
       '"use strict";',
       "(() => {",
       "  // virtual:metro:__rnx_prelude__",
@@ -197,7 +187,7 @@ describe("metro-serializer-esbuild", () => {
     ]);
   });
 
-  test("handles `sideEffects` array", async () => {
+  it("handles `sideEffects` array", async () => {
     const importResolve = (spec: string, parent = ".") => {
       const m = require.resolve(spec, { paths: [parent] });
       return path
@@ -213,7 +203,7 @@ describe("metro-serializer-esbuild", () => {
     );
 
     const result = await bundle("test/__fixtures__/sideEffectsArray.ts");
-    expect(result).toEqual([
+    deepEqual(result, [
       '"use strict";',
       "(() => {",
       "  var __getOwnPropNames = Object.getOwnPropertyNames;",
@@ -285,13 +275,13 @@ describe("metro-serializer-esbuild", () => {
     ]);
   });
 
-  test("adds sourceMappingURL comment", async () => {
+  it("adds sourceMappingURL comment", async () => {
     const result = await bundle(
       "test/__fixtures__/direct.ts",
       false,
       ".test-output.jsbundle.map"
     );
-    expect(result).toEqual([
+    deepEqual(result, [
       '"use strict";',
       "(() => {",
       "  // virtual:metro:__rnx_prelude__",
@@ -310,10 +300,12 @@ describe("metro-serializer-esbuild", () => {
     ]);
   });
 
-  test("is disabled when `dev: true`", async () => {
+  it("is disabled when `dev: true`", async () => {
     const result = await bundle("test/__fixtures__/direct.ts", true);
-    expect(result[0]).toMatch(
-      "var __BUNDLE_START_TIME__=this.nativePerformanceNow?nativePerformanceNow():Date.now(),__DEV__=true,process=this.process||{},__METRO_GLOBAL_PREFIX__=''"
+    ok(
+      result[0].startsWith(
+        "var __BUNDLE_START_TIME__=this.nativePerformanceNow?nativePerformanceNow():Date.now(),__DEV__=true,process=this.process||{},__METRO_GLOBAL_PREFIX__=''"
+      )
     );
   });
 });

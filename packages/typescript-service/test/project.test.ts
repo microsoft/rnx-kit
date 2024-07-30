@@ -1,6 +1,9 @@
+import { equal, ok } from "node:assert/strict";
 import * as fs from "node:fs";
 import * as os from "node:os";
 import * as path from "node:path";
+import type { TestContext } from "node:test";
+import { afterEach, beforeEach, describe, it } from "node:test";
 import ts from "typescript";
 import { findConfigFile, readConfigFile } from "../src/config";
 import type { DiagnosticWriter } from "../src/diagnostics";
@@ -10,26 +13,18 @@ describe("Project", () => {
   const fixturePath = path.join(process.cwd(), "test", "__fixtures__");
   const tempDir = fs.realpathSync(os.tmpdir());
 
-  const mockDiagnosticWriter: DiagnosticWriter = {
-    format: jest.fn(),
-    print: jest.fn(),
-  };
   const documentRegistry = ts.createDocumentRegistry();
 
   let testTempDir: string;
 
-  beforeEach(() => {
-    testTempDir = fs.mkdtempSync(
-      path.join(tempDir, "rnx-kit-typescript-service-project-test-")
-    );
-  });
+  function createMockDiagnosticWriter(t: TestContext) {
+    return { format: t.mock.fn(), print: t.mock.fn() };
+  }
 
-  afterEach(() => {
-    jest.resetAllMocks();
-    fs.rmSync(testTempDir, { maxRetries: 5, recursive: true });
-  });
-
-  function createProject(fileName = "valid-tsconfig.json"): Project {
+  function createProject(
+    diagnosticWriter: unknown,
+    fileName = "valid-tsconfig.json"
+  ): Project {
     const configFileName = findConfigFile(fixturePath, fileName);
     if (!configFileName) {
       fail();
@@ -44,96 +39,128 @@ describe("Project", () => {
     cmdLine.options.sourceMap = true;
     cmdLine.options.declaration = true;
     cmdLine.options.declarationMap = true;
-    const project = new Project(
+
+    return new Project(
       documentRegistry,
-      mockDiagnosticWriter,
+      diagnosticWriter as DiagnosticWriter,
       cmdLine
     );
-    return project;
   }
 
-  test("getConfig returns the project config", () => {
-    const project = createProject();
-    expect(project.getCommandLine()).toBeTruthy();
-    expect(typeof project.getCommandLine()).toBe("object");
+  beforeEach(() => {
+    testTempDir = fs.mkdtempSync(
+      path.join(tempDir, "rnx-kit-typescript-service-project-test-")
+    );
   });
 
-  test("validateFile succeeds when given a valid source file", () => {
-    const project = createProject();
-    expect(project.validateFile(path.join(fixturePath, "a.ts"))).toBe(true);
-    expect(mockDiagnosticWriter.print).not.toHaveBeenCalled();
+  afterEach(() => {
+    fs.rmSync(testTempDir, { maxRetries: 5, recursive: true });
   });
 
-  test("validateFile fails when given an invalid source file", () => {
-    const project = createProject();
-    const fileName = path.join(fixturePath, "c.ts");
-    const result = project.validateFile(fileName);
-    expect(result).toBe(false);
-    expect(mockDiagnosticWriter.print).toHaveBeenCalledTimes(1);
+  it("getConfig() returns the project config", (t) => {
+    const mockDiagnosticWriter = createMockDiagnosticWriter(t);
+    const project = createProject(mockDiagnosticWriter);
+
+    ok(project.getCommandLine());
+    equal(typeof project.getCommandLine(), "object");
   });
 
-  test("validate reports errors from all source files", () => {
-    const project = createProject();
-    expect(project.validate()).toBe(false);
-    expect(mockDiagnosticWriter.print).toHaveBeenCalledTimes(1);
+  it("validateFile() succeeds when given a valid source file", (t) => {
+    const mockDiagnosticWriter = createMockDiagnosticWriter(t);
+    const project = createProject(mockDiagnosticWriter);
+
+    ok(project.validateFile(path.join(fixturePath, "a.ts")));
+    equal(mockDiagnosticWriter.print.mock.calls.length, 0);
   });
 
-  test("validate succeeds after removing a source file with errors", () => {
-    const project = createProject();
+  it("validateFile() fails when given an invalid source file", (t) => {
+    const mockDiagnosticWriter = createMockDiagnosticWriter(t);
+    const project = createProject(mockDiagnosticWriter);
+    const result = project.validateFile(path.join(fixturePath, "c.ts"));
+
+    ok(!result);
+    equal(mockDiagnosticWriter.print.mock.calls.length, 1);
+  });
+
+  it("validate() reports errors from all source files", (t) => {
+    const mockDiagnosticWriter = createMockDiagnosticWriter(t);
+    const project = createProject(mockDiagnosticWriter);
+
+    ok(!project.validate());
+    equal(mockDiagnosticWriter.print.mock.calls.length, 1);
+  });
+
+  it("validate() succeeds after removing a source file with errors", (t) => {
+    const mockDiagnosticWriter = createMockDiagnosticWriter(t);
+    const project = createProject(mockDiagnosticWriter);
     project.removeFile(path.join(fixturePath, "c.ts"));
-    expect(project.validate()).toBe(true);
-    expect(mockDiagnosticWriter.print).not.toHaveBeenCalled();
+
+    ok(project.validate());
+    equal(mockDiagnosticWriter.print.mock.calls.length, 0);
   });
 
-  test("validate succeeds after replacing a source file with errors", () => {
-    const project = createProject();
+  it("validate() succeeds after replacing a source file with errors", (t) => {
+    const mockDiagnosticWriter = createMockDiagnosticWriter(t);
+    const project = createProject(mockDiagnosticWriter);
     const snapshot = ts.ScriptSnapshot.fromString(
       "export function c() { return 'c'; }"
     );
     project.setFile(path.join(fixturePath, "c.ts"), snapshot);
-    expect(project.validate()).toBe(true);
-    expect(mockDiagnosticWriter.print).not.toHaveBeenCalled();
+
+    ok(project.validate());
+    equal(mockDiagnosticWriter.print.mock.calls.length, 0);
   });
 
-  test("validate succeeds after removing and re-adding a source file", () => {
-    const project = createProject();
+  it("validate() succeeds after removing and re-adding a source file", (t) => {
+    const mockDiagnosticWriter = createMockDiagnosticWriter(t);
+    const project = createProject(mockDiagnosticWriter);
     project.removeFile(path.join(fixturePath, "b.ts"));
     project.removeFile(path.join(fixturePath, "c.ts"));
-
     project.setFile(path.join(fixturePath, "b.ts"));
-    expect(project.validate()).toBe(true);
-    expect(mockDiagnosticWriter.print).not.toHaveBeenCalled();
+
+    ok(project.validate());
+    equal(mockDiagnosticWriter.print.mock.calls.length, 0);
   });
 
-  test("emitFile successfully writes a transpiled javascript file", () => {
-    const project = createProject();
-    expect(project.emitFile(path.join(fixturePath, "a.ts"))).toBe(true);
-    expect(fs.existsSync(path.join(testTempDir, "a.js"))).toBe(true);
+  it("emitFile() successfully writes a transpiled javascript file", (t) => {
+    const mockDiagnosticWriter = createMockDiagnosticWriter(t);
+    const project = createProject(mockDiagnosticWriter);
+
+    ok(project.emitFile(path.join(fixturePath, "a.ts")));
+    ok(fs.existsSync(path.join(testTempDir, "a.js")));
   });
 
-  test("emitFile successfully writes a typescript declaration file", () => {
-    const project = createProject();
-    expect(project.emitFile(path.join(fixturePath, "a.ts"))).toBe(true);
-    expect(fs.existsSync(path.join(testTempDir, "a.d.ts"))).toBe(true);
+  it("emitFile() successfully writes a typescript declaration file", (t) => {
+    const mockDiagnosticWriter = createMockDiagnosticWriter(t);
+    const project = createProject(mockDiagnosticWriter);
+
+    ok(project.emitFile(path.join(fixturePath, "a.ts")));
+    ok(fs.existsSync(path.join(testTempDir, "a.d.ts")));
   });
 
-  test("emitFile successfully writes a sourcemap file", () => {
-    const project = createProject();
-    expect(project.emitFile(path.join(fixturePath, "a.ts"))).toBe(true);
-    expect(fs.existsSync(path.join(testTempDir, "a.js.map"))).toBe(true);
+  it("emitFile() successfully writes a sourcemap file", (t) => {
+    const mockDiagnosticWriter = createMockDiagnosticWriter(t);
+    const project = createProject(mockDiagnosticWriter);
+
+    ok(project.emitFile(path.join(fixturePath, "a.ts")));
+    ok(fs.existsSync(path.join(testTempDir, "a.js.map")));
   });
 
-  test("emitFile successfully writes a declaration sourcemap file", () => {
-    const project = createProject();
-    expect(project.emitFile(path.join(fixturePath, "a.ts"))).toBe(true);
-    expect(fs.existsSync(path.join(testTempDir, "a.d.ts.map"))).toBe(true);
+  it("emitFile() successfully writes a declaration sourcemap file", (t) => {
+    const mockDiagnosticWriter = createMockDiagnosticWriter(t);
+    const project = createProject(mockDiagnosticWriter);
+
+    ok(project.emitFile(path.join(fixturePath, "a.ts")));
+    ok(fs.existsSync(path.join(testTempDir, "a.d.ts.map")));
   });
 
-  test("emit successfully transpiles all project files", () => {
-    const project = createProject();
-    expect(project.emit()).toBe(true);
-    expect(fs.existsSync(path.join(testTempDir, "a.js"))).toBe(true);
-    expect(fs.existsSync(path.join(testTempDir, "b.js"))).toBe(true);
-    expect(fs.existsSync(path.join(testTempDir, "c.js"))).toBe(true);
+  it("emit() successfully transpiles all project files", (t) => {
+    const mockDiagnosticWriter = createMockDiagnosticWriter(t);
+    const project = createProject(mockDiagnosticWriter);
+
+    ok(project.emit());
+    ok(fs.existsSync(path.join(testTempDir, "a.js")));
+    ok(fs.existsSync(path.join(testTempDir, "b.js")));
+    ok(fs.existsSync(path.join(testTempDir, "c.js")));
   });
 });

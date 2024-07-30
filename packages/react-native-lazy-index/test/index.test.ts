@@ -1,4 +1,6 @@
 import type { BabelFileResult } from "@babel/core";
+import { equal, ok } from "node:assert/strict";
+import { afterEach, describe, it } from "node:test";
 
 describe("react-native-lazy-index", () => {
   const babel = require("@babel/core");
@@ -65,10 +67,11 @@ AppRegistry.registerComponent("FinalFeature", () => {
 
   afterEach(() => process.chdir(currentWorkingDir));
 
-  test("wraps AppRegistry.registerComponent calls", () => {
+  it("wraps AppRegistry.registerComponent calls", () => {
     const result = transformFixture("AppRegistry");
-    expect(result).toBeTruthy();
-    expect(result?.code).toBe(
+    ok(result);
+    equal(
+      result?.code,
       `
 const {
   AppRegistry
@@ -85,10 +88,11 @@ AppRegistry.registerComponent("Component-02", () => {
     );
   });
 
-  test("wraps BatchedBridge.registerCallableModule calls", () => {
+  it("wraps BatchedBridge.registerCallableModule calls", () => {
     const result = transformFixture("BatchedBridge");
-    expect(result).toBeTruthy();
-    expect(result?.code).toBe(
+    ok(result);
+    equal(
+      result?.code,
       `
 const BatchedBridge = require("react-native/Libraries/BatchedBridge/BatchedBridge");
 BatchedBridge.registerLazyCallableModule("Module-01", () => {
@@ -103,13 +107,13 @@ BatchedBridge.registerLazyCallableModule("Module-02", () => {
     );
   });
 
-  test("wraps components declared in `package.json`", () => {
+  it("wraps components declared in `package.json`", () => {
     const result = transformFixture("MyAwesomeApp");
-    expect(result).toBeTruthy();
-    expect(result?.code).toBe(snapshotMyAwesomeApp);
+    ok(result);
+    equal(result?.code, snapshotMyAwesomeApp);
   });
 
-  test("wraps components declared inline", () => {
+  it("wraps components declared inline", () => {
     const result = transformFixture({
       "callable:YetAnotherFeature": "@awesome-app/yet-another-feature",
       "callable:YetAnotherFeatureLazy": "@awesome-app/yet-another-feature",
@@ -117,7 +121,7 @@ BatchedBridge.registerLazyCallableModule("Module-02", () => {
       SomeFeature: "@awesome-app/some-feature",
       FinalFeature: "@awesome-app/final-feature",
     });
-    expect(result).toBeTruthy();
-    expect(result?.code).toBe(snapshotMyAwesomeApp);
+    ok(result);
+    equal(result?.code, snapshotMyAwesomeApp);
   });
 });

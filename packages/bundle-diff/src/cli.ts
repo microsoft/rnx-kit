@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import fs from "fs";
+import * as nodefs from "fs";
 import { diff } from "./diff";
 
 export function withSign(n: number): string {
@@ -30,7 +30,7 @@ export function numDigitsStringLength(content: string | null): number {
   return numDigits(content?.length ?? NaN);
 }
 
-export function cli(aSourceMap: string, bSourceMap: string): void {
+export function cli(aSourceMap: string, bSourceMap: string, fs = nodefs): void {
   const a = JSON.parse(fs.readFileSync(aSourceMap, { encoding: "utf-8" }));
   const b = JSON.parse(fs.readFileSync(bSourceMap, { encoding: "utf-8" }));
 
