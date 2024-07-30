@@ -3857,14 +3857,14 @@ __metadata:
   resolution: "@rnx-kit/config@workspace:packages/config"
   dependencies:
     "@rnx-kit/console": "npm:^1.0.12"
-    "@rnx-kit/eslint-config": "workspace:*"
-    "@rnx-kit/metro-plugin-cyclic-dependencies-detector": "workspace:*"
-    "@rnx-kit/metro-plugin-duplicates-checker": "workspace:*"
-    "@rnx-kit/metro-serializer-esbuild": "workspace:*"
-    "@rnx-kit/scripts": "workspace:*"
+    "@rnx-kit/eslint-config": "npm:*"
+    "@rnx-kit/metro-plugin-cyclic-dependencies-detector": "npm:*"
+    "@rnx-kit/metro-plugin-duplicates-checker": "npm:*"
+    "@rnx-kit/metro-serializer-esbuild": "npm:*"
+    "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tools-node": "npm:^2.0.1"
-    "@rnx-kit/tools-react-native": "workspace:*"
-    "@rnx-kit/tsconfig": "workspace:*"
+    "@rnx-kit/tools-react-native": "npm:*"
+    "@rnx-kit/tsconfig": "npm:*"
     "@types/node": "npm:^20.0.0"
     "@types/semver": "npm:^7.0.0"
     eslint: "npm:^8.56.0"
@@ -4048,7 +4048,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rnx-kit/metro-plugin-cyclic-dependencies-detector@npm:^1.1.1, @rnx-kit/metro-plugin-cyclic-dependencies-detector@npm:^1.1.2, @rnx-kit/metro-plugin-cyclic-dependencies-detector@workspace:*, @rnx-kit/metro-plugin-cyclic-dependencies-detector@workspace:packages/metro-plugin-cyclic-dependencies-detector":
+"@rnx-kit/metro-plugin-cyclic-dependencies-detector@npm:*, @rnx-kit/metro-plugin-cyclic-dependencies-detector@npm:^1.1.1, @rnx-kit/metro-plugin-cyclic-dependencies-detector@npm:^1.1.2, @rnx-kit/metro-plugin-cyclic-dependencies-detector@workspace:*, @rnx-kit/metro-plugin-cyclic-dependencies-detector@workspace:packages/metro-plugin-cyclic-dependencies-detector":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/metro-plugin-cyclic-dependencies-detector@workspace:packages/metro-plugin-cyclic-dependencies-detector"
   dependencies:
@@ -4069,7 +4069,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rnx-kit/metro-plugin-duplicates-checker@npm:^2.1.1, @rnx-kit/metro-plugin-duplicates-checker@npm:^2.1.2, @rnx-kit/metro-plugin-duplicates-checker@workspace:*, @rnx-kit/metro-plugin-duplicates-checker@workspace:packages/metro-plugin-duplicates-checker":
+"@rnx-kit/metro-plugin-duplicates-checker@npm:*, @rnx-kit/metro-plugin-duplicates-checker@npm:^2.1.1, @rnx-kit/metro-plugin-duplicates-checker@npm:^2.1.2, @rnx-kit/metro-plugin-duplicates-checker@workspace:*, @rnx-kit/metro-plugin-duplicates-checker@workspace:packages/metro-plugin-duplicates-checker":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/metro-plugin-duplicates-checker@workspace:packages/metro-plugin-duplicates-checker"
   dependencies:
@@ -4140,7 +4140,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rnx-kit/metro-serializer-esbuild@npm:^0.1.31, @rnx-kit/metro-serializer-esbuild@workspace:*, @rnx-kit/metro-serializer-esbuild@workspace:packages/metro-serializer-esbuild":
+"@rnx-kit/metro-serializer-esbuild@npm:*, @rnx-kit/metro-serializer-esbuild@npm:^0.1.31, @rnx-kit/metro-serializer-esbuild@workspace:*, @rnx-kit/metro-serializer-esbuild@workspace:packages/metro-serializer-esbuild":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/metro-serializer-esbuild@workspace:packages/metro-serializer-esbuild"
   dependencies:
@@ -4579,7 +4579,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rnx-kit/tools-react-native@npm:^1.3.2, @rnx-kit/tools-react-native@npm:^1.3.4, @rnx-kit/tools-react-native@npm:^1.3.5, @rnx-kit/tools-react-native@workspace:*, @rnx-kit/tools-react-native@workspace:packages/tools-react-native":
+"@rnx-kit/tools-react-native@npm:*, @rnx-kit/tools-react-native@npm:^1.3.2, @rnx-kit/tools-react-native@npm:^1.3.4, @rnx-kit/tools-react-native@npm:^1.3.5, @rnx-kit/tools-react-native@workspace:packages/tools-react-native":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/tools-react-native@workspace:packages/tools-react-native"
   dependencies:
