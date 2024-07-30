@@ -3858,7 +3858,6 @@ __metadata:
   dependencies:
     "@rnx-kit/console": "npm:^1.0.12"
     "@rnx-kit/eslint-config": "npm:*"
-    "@rnx-kit/jest-preset": "npm:*"
     "@rnx-kit/metro-plugin-cyclic-dependencies-detector": "npm:*"
     "@rnx-kit/metro-plugin-duplicates-checker": "npm:*"
     "@rnx-kit/metro-serializer-esbuild": "npm:*"
@@ -3869,7 +3868,6 @@ __metadata:
     "@types/node": "npm:^20.0.0"
     "@types/semver": "npm:^7.0.0"
     eslint: "npm:^8.56.0"
-    jest: "npm:^29.2.1"
     metro: "npm:^0.80.0"
     prettier: "npm:^3.0.0"
     semver: "npm:^7.0.0"

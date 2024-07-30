@@ -1,46 +1,81 @@
-import path from "path";
+import { deepEqual, ok } from "node:assert/strict";
+import { afterEach, describe, it } from "node:test";
+import { URL, fileURLToPath } from "node:url";
 import { getKitConfig } from "../src/getKitConfig";
 
 describe("getKitConfig()", () => {
   const currentWorkingDir = process.cwd();
 
-  function fixturePath(): string {
-    return path.join(currentWorkingDir, "test", "__fixtures__");
-  }
-
   function packagePath(name: string): string {
-    return path.join(fixturePath(), "node_modules", name);
+    const url = new URL(`__fixtures__/node_modules/${name}`, import.meta.url);
+    return fileURLToPath(url);
   }
 
   afterEach(() => process.chdir(currentWorkingDir));
 
-  test("returns undefined for an unconfigured package when using the current working directory", () => {
+  it("returns undefined for an unconfigured package when using the current working directory", () => {
     process.chdir(packagePath("kit-test-unconfigured"));
-    expect(getKitConfig()).toBeUndefined();
+
+    ok(!getKitConfig());
   });
 
-  test("returns undefined for an unconfigured package when using an explicit working directory", () => {
-    expect(
-      getKitConfig({ cwd: packagePath("kit-test-unconfigured") })
-    ).toBeUndefined();
+  it("returns undefined for an unconfigured package when using an explicit working directory", () => {
+    ok(!getKitConfig({ cwd: packagePath("kit-test-unconfigured") }));
   });
 
-  test("returns undefined for an unconfigured package when using a module name", () => {
-    expect(getKitConfig({ module: "kit-test-unconfigured" })).toBeUndefined();
+  it("returns undefined for an unconfigured package when using a module name", () => {
+    const options = { module: "kit-test-unconfigured", cwd: packagePath(".") };
+    ok(!getKitConfig(options));
   });
 
-  test("returns rnx-kit configuration when using the current working directory", () => {
+  it("returns rnx-kit configuration when using the current working directory", () => {
     process.chdir(packagePath("kit-test-configured"));
-    expect(getKitConfig()).toMatchSnapshot();
+
+    deepEqual(getKitConfig(), {
+      bundle: {
+        bundleOutput: "./app.bundle",
+        entryFile: "./core-entry.js",
+        id: "core",
+        platforms: {
+          android: {
+            assetsDest: "./build-out/res",
+          },
+        },
+        targets: ["ios", "android", "macos", "windows"],
+      },
+    });
   });
 
-  test("returns rnx-kit configuration when using an explicit working directory", () => {
-    expect(
-      getKitConfig({ cwd: packagePath("kit-test-configured") })
-    ).toMatchSnapshot();
+  it("returns rnx-kit configuration when using an explicit working directory", () => {
+    deepEqual(getKitConfig({ cwd: packagePath("kit-test-configured") }), {
+      bundle: {
+        bundleOutput: "./app.bundle",
+        entryFile: "./core-entry.js",
+        id: "core",
+        platforms: {
+          android: {
+            assetsDest: "./build-out/res",
+          },
+        },
+        targets: ["ios", "android", "macos", "windows"],
+      },
+    });
   });
 
-  test("returns rnx-kit configuration when using a module name", () => {
-    expect(getKitConfig({ module: "kit-test-configured" })).toMatchSnapshot();
+  it("returns rnx-kit configuration when using a module name", () => {
+    const options = { module: "kit-test-configured", cwd: packagePath(".") };
+    deepEqual(getKitConfig(options), {
+      bundle: {
+        bundleOutput: "./app.bundle",
+        entryFile: "./core-entry.js",
+        id: "core",
+        platforms: {
+          android: {
+            assetsDest: "./build-out/res",
+          },
+        },
+        targets: ["ios", "android", "macos", "windows"],
+      },
+    });
   });
 });
