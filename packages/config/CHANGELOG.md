@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/config
 
+## 0.6.8
+
+### Patch Changes
+
+- 0c5a9d0: Fix modules not being resolved from correct path
+
 ## 0.6.7
 
 ### Patch Changes
