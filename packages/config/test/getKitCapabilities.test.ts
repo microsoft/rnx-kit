@@ -1,145 +1,165 @@
+import { deepEqual, doesNotThrow, equal, throws } from "node:assert/strict";
+import { describe, it } from "node:test";
 import { getKitCapabilities } from "../src/getKitCapabilities";
 
 describe("getKitCapabilities()", () => {
-  const consoleWarnSpy = jest.spyOn(global.console, "warn");
+  it("throws when supported React Native versions is invalid", (t) => {
+    const warnMock = t.mock.method(console, "warn", () => null);
 
-  afterEach(() => {
-    consoleWarnSpy.mockReset();
+    throws(() => getKitCapabilities({}));
+    throws(() => getKitCapabilities({ reactNativeVersion: "" }));
+
+    doesNotThrow(() => getKitCapabilities({ reactNativeVersion: "0" }));
+    doesNotThrow(() => getKitCapabilities({ reactNativeVersion: "0.64" }));
+    doesNotThrow(() => getKitCapabilities({ reactNativeVersion: "0.64.0" }));
+    equal(warnMock.mock.calls.length, 0);
   });
 
-  test("throws when supported React Native versions is invalid", () => {
-    expect(() => getKitCapabilities({})).toThrow();
-    expect(() => getKitCapabilities({ reactNativeVersion: "" })).toThrow();
+  it("throws when React Native dev version does not satisfy supported versions", (t) => {
+    const warnMock = t.mock.method(console, "warn", () => null);
 
-    expect(() => getKitCapabilities({ reactNativeVersion: "0" })).not.toThrow();
-    expect(() =>
-      getKitCapabilities({ reactNativeVersion: "0.64" })
-    ).not.toThrow();
-    expect(() =>
-      getKitCapabilities({ reactNativeVersion: "0.64.0" })
-    ).not.toThrow();
-    expect(consoleWarnSpy).not.toHaveBeenCalled();
-  });
-
-  test("throws when React Native dev version does not satisfy supported versions", () => {
-    expect(() =>
+    throws(() =>
       getKitCapabilities({
         reactNativeVersion: "0.64.0",
         reactNativeDevVersion: "0",
       })
-    ).toThrow();
+    );
 
-    expect(() =>
+    throws(() =>
       getKitCapabilities({
         reactNativeVersion: "0.64.0",
         reactNativeDevVersion: "0.64",
       })
-    ).toThrow();
+    );
 
-    expect(
+    equal(
       getKitCapabilities({
         reactNativeVersion: "0.64.0",
         reactNativeDevVersion: "0.64.0",
-      }).reactNativeVersion
-    ).toBe("0.64.0");
+      }).reactNativeVersion,
+      "0.64.0"
+    );
 
-    expect(() =>
+    throws(() =>
       getKitCapabilities({
         reactNativeVersion: "^0.63 || ^0.64",
         reactNativeDevVersion: "0.62.2",
       })
-    ).toThrow();
+    );
 
-    expect(
+    equal(
       getKitCapabilities({
         reactNativeVersion: "^0.63 || ^0.64",
         reactNativeDevVersion: "0.64.0",
-      }).reactNativeVersion
-    ).toBe("^0.63 || ^0.64");
+      }).reactNativeVersion,
+      "^0.63 || ^0.64"
+    );
 
-    expect(consoleWarnSpy).not.toHaveBeenCalled();
+    equal(warnMock.mock.calls.length, 0);
   });
 
-  test("returns declared React Native dev version", () => {
-    expect(
+  it("returns declared React Native dev version", (t) => {
+    const warnMock = t.mock.method(console, "warn", () => null);
+
+    equal(
       getKitCapabilities({
         reactNativeVersion: "^0.63 || ^0.64",
         reactNativeDevVersion: "0.64.0",
-      }).reactNativeDevVersion
-    ).toBe("0.64.0");
-    expect(
+      }).reactNativeDevVersion,
+      "0.64.0"
+    );
+    equal(
       getKitCapabilities({
         reactNativeVersion: "^0.63 || ^0.64",
         reactNativeDevVersion: "^0.64.0",
-      }).reactNativeDevVersion
-    ).toBe("^0.64.0");
-    expect(consoleWarnSpy).not.toHaveBeenCalled();
+      }).reactNativeDevVersion,
+      "^0.64.0"
+    );
+    equal(warnMock.mock.calls.length, 0);
   });
 
-  test("returns minimum supported React Native version as dev version when unspecified", () => {
-    expect(
+  it("returns minimum supported React Native version as dev version when unspecified", (t) => {
+    const warnMock = t.mock.method(console, "warn", () => null);
+
+    equal(
       getKitCapabilities({
         reactNativeVersion: "0.64.0",
-      }).reactNativeDevVersion
-    ).toBe("0.64.0");
+      }).reactNativeDevVersion,
+      "0.64.0"
+    );
 
-    expect(
+    equal(
       getKitCapabilities({
         reactNativeVersion: "^0.63 || ^0.64",
-      }).reactNativeDevVersion
-    ).toBe("0.63.0");
+      }).reactNativeDevVersion,
+      "0.63.0"
+    );
 
-    expect(
+    equal(
       getKitCapabilities({
         reactNativeVersion: "^0.63.4 || ^0.64.0",
-      }).reactNativeDevVersion
-    ).toBe("0.63.4");
+      }).reactNativeDevVersion,
+      "0.63.4"
+    );
 
-    expect(consoleWarnSpy).not.toHaveBeenCalled();
+    equal(warnMock.mock.calls.length, 0);
   });
 
-  test("returns 'library' when 'kitType' is undefined", () => {
-    expect(getKitCapabilities({ reactNativeVersion: "0.64.0" }).kitType).toBe(
+  it("returns 'library' when 'kitType' is undefined", (t) => {
+    const warnMock = t.mock.method(console, "warn", () => null);
+
+    equal(
+      getKitCapabilities({ reactNativeVersion: "0.64.0" }).kitType,
       "library"
     );
 
-    expect(
+    equal(
       getKitCapabilities({ reactNativeVersion: "0.64.0", kitType: "library" })
-        .kitType
-    ).toBe("library");
+        .kitType,
+      "library"
+    );
 
-    expect(
+    equal(
       getKitCapabilities({ reactNativeVersion: "0.64.0", kitType: "app" })
-        .kitType
-    ).toBe("app");
+        .kitType,
+      "app"
+    );
 
-    expect(consoleWarnSpy).not.toHaveBeenCalled();
+    equal(warnMock.mock.calls.length, 0);
   });
 
-  test("returns empty array when 'capabilities' is undefined", () => {
-    expect(
-      getKitCapabilities({ reactNativeVersion: "0.64.0" }).capabilities
-    ).toEqual([]);
+  it("returns empty array when 'capabilities' is undefined", (t) => {
+    const warnMock = t.mock.method(console, "warn", () => null);
 
-    expect(
+    deepEqual(
+      getKitCapabilities({ reactNativeVersion: "0.64.0" }).capabilities,
+      []
+    );
+
+    deepEqual(
       getKitCapabilities({
         reactNativeVersion: "0.64.0",
         capabilities: ["core-ios"],
-      }).capabilities
-    ).toEqual(["core-ios"]);
+      }).capabilities,
+      ["core-ios"]
+    );
 
-    expect(consoleWarnSpy).not.toHaveBeenCalled();
+    equal(warnMock.mock.calls.length, 0);
   });
 
-  test("warns when 'reactNativeDevVersion' is set and 'kitType' is 'app'", () => {
+  it("warns when 'reactNativeDevVersion' is set and 'kitType' is 'app'", (t) => {
+    const warnMock = t.mock.method(console, "warn", () => null);
+
     getKitCapabilities({
       reactNativeVersion: "^0.64",
       reactNativeDevVersion: "0.64.2",
       kitType: "app",
       capabilities: ["core-ios"],
     });
-    expect(consoleWarnSpy).toHaveBeenCalledWith(
-      expect.stringContaining("warn"),
+
+    equal(warnMock.mock.calls.length, 1);
+    equal(
+      warnMock.mock.calls[0].arguments[1],
       "'reactNativeDevVersion' is not used when 'kitType' is 'app'"
     );
   });

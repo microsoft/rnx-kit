@@ -26,10 +26,13 @@ export type GetKitConfigOptions = {
 export function getKitConfig(
   options: GetKitConfigOptions = {}
 ): KitConfig | undefined {
+  const cwd = options.cwd || process.cwd();
   // find the package dir that holds the rnx-kit configuration
   const packageDir = options.module
-    ? path.dirname(require.resolve(options.module + "/package.json"))
-    : options.cwd || process.cwd();
+    ? path.dirname(
+        require.resolve(options.module + "/package.json", { paths: [cwd] })
+      )
+    : cwd;
 
   // try to read package.json
   try {

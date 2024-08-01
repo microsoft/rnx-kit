@@ -1,3 +1,5 @@
+import { deepEqual, equal, ok, throws } from "node:assert/strict";
+import { describe, it } from "node:test";
 import type { BundleConfig } from "../src/bundleConfig";
 import {
   getBundleConfig,
@@ -19,103 +21,104 @@ const kitConfig: KitConfig = {
 };
 
 describe("getBundleConfig()", () => {
-  test("returns undefined when the bundle property is not set", () => {
-    expect(getBundleConfig({})).toBeUndefined();
+  it("returns undefined when the bundle property is not set", () => {
+    ok(!getBundleConfig({}));
   });
 
-  test("returns undefined when the bundle property is set to undefined", () => {
-    expect(getBundleConfig({ bundle: undefined })).toBeUndefined();
+  it("returns undefined when the bundle property is set to undefined", () => {
+    ok(!getBundleConfig({ bundle: undefined }));
   });
 
-  test("fails when the bundle property is set to true (no longer supported)", () => {
-    expect(() =>
-      getBundleConfig({ bundle: true as unknown as BundleConfig })
-    ).toThrow(
-      /The rnx-kit configuration property 'bundle' no longer supports boolean values./i
+  it("fails when the bundle property is set to true (no longer supported)", () => {
+    throws(
+      () => getBundleConfig({ bundle: true as unknown as BundleConfig }),
+      new Error(
+        "The rnx-kit configuration property 'bundle' no longer supports boolean values. Bundling is always enabled with sensible defaults. You should remove the 'bundle' property to make use of the defaults, or specify the bundle configuration as an object."
+      )
     );
   });
 
-  test("returns the bundle config associated with the given id", () => {
+  it("returns the bundle config associated with the given id", () => {
     const d = getBundleConfig(kitConfig, "123abc");
-    expect(d?.id).toEqual("123abc");
-    expect(Array.isArray(d?.targets)).toBe(true);
-    expect(d?.targets?.length).toBe(3);
-    expect(d?.targets).toEqual(["ios", "android", "windows"]);
+    equal(d?.id, "123abc");
+    ok(Array.isArray(d?.targets));
+    equal(d?.targets?.length, 3);
+    deepEqual(d?.targets, ["ios", "android", "windows"]);
   });
 
-  test("returns undefined when the bundle id is not found", () => {
-    expect(getBundleConfig(kitConfig, "does-not-exist")).toBeUndefined();
+  it("returns undefined when the bundle id is not found", () => {
+    ok(!getBundleConfig(kitConfig, "does-not-exist"));
   });
 
-  test("returns undefined when trying to find the first bundle and none are defined in config", () => {
-    expect(getBundleConfig({ bundle: [] })).toBeUndefined();
+  it("returns undefined when trying to find the first bundle and none are defined in config", () => {
+    ok(!getBundleConfig({ bundle: [] }));
   });
 
-  test("returns the first bundle definition when an id is not given", () => {
+  it("returns the first bundle definition when an id is not given", () => {
     const d = getBundleConfig(kitConfig);
-    expect(d?.id).toEqual("8");
-    expect(Array.isArray(d?.targets)).toBe(true);
-    expect(d?.targets.length).toBe(1);
-    expect(d?.targets).toEqual(["windows"]);
+    equal(d?.id, "8");
+    ok(Array.isArray(d?.targets));
+    equal(d?.targets?.length, 1);
+    deepEqual(d?.targets, ["windows"]);
   });
 
-  test("fails when bundle config contains renamed property experimental_treeShake", () => {
-    expect(() =>
-      getBundleConfig({
-        bundle: { experimental_treeShake: true } as BundleConfig,
-      })
-    ).toThrow(
-      /The bundle configuration property 'experimental_treeShake' is no longer supported. Use 'treeShake' instead./i
+  it("fails when bundle config contains renamed property experimental_treeShake", () => {
+    throws(
+      () =>
+        getBundleConfig({
+          bundle: { experimental_treeShake: true } as BundleConfig,
+        }),
+      new Error(
+        "The bundle configuration property 'experimental_treeShake' is no longer supported. Use 'treeShake' instead."
+      )
     );
   });
 
-  test("fails when bundle config contains renamed property entryPath", () => {
-    expect(() =>
-      getBundleConfig({
-        bundle: { entryPath: "x" } as BundleConfig,
-      })
-    ).toThrow(
-      /The bundle configuration property 'entryPath' is no longer supported. Use 'entryFile' instead./i
+  it("fails when bundle config contains renamed property entryPath", () => {
+    throws(
+      () => getBundleConfig({ bundle: { entryPath: "x" } as BundleConfig }),
+      new Error(
+        "The bundle configuration property 'entryPath' is no longer supported. Use 'entryFile' instead."
+      )
     );
   });
 
-  test("fails when bundle config contains renamed property sourceMapPath", () => {
-    expect(() =>
-      getBundleConfig({
-        bundle: { sourceMapPath: "x" } as BundleConfig,
-      })
-    ).toThrow(
-      /The bundle configuration property 'sourceMapPath' is no longer supported. Use 'sourcemapOutput' instead./i
+  it("fails when bundle config contains renamed property sourceMapPath", () => {
+    throws(
+      () => getBundleConfig({ bundle: { sourceMapPath: "x" } as BundleConfig }),
+      new Error(
+        "The bundle configuration property 'sourceMapPath' is no longer supported. Use 'sourcemapOutput' instead."
+      )
     );
   });
 
-  test("fails when bundle config contains renamed property sourceMapSourceRootPath", () => {
-    expect(() =>
-      getBundleConfig({
-        bundle: { sourceMapSourceRootPath: "x" } as BundleConfig,
-      })
-    ).toThrow(
-      /The bundle configuration property 'sourceMapSourceRootPath' is no longer supported. Use 'sourcemapSourcesRoot' instead./i
+  it("fails when bundle config contains renamed property sourceMapSourceRootPath", () => {
+    throws(
+      () =>
+        getBundleConfig({
+          bundle: { sourceMapSourceRootPath: "x" } as BundleConfig,
+        }),
+      new Error(
+        "The bundle configuration property 'sourceMapSourceRootPath' is no longer supported. Use 'sourcemapSourcesRoot' instead."
+      )
     );
   });
 
-  test("fails when bundle config contains defunct property distPath", () => {
-    expect(() =>
-      getBundleConfig({
-        bundle: { distPath: "x" } as BundleConfig,
-      })
-    ).toThrow(
-      /The bundle configuration property 'distPath' is no longer supported./i
+  it("fails when bundle config contains defunct property distPath", () => {
+    throws(
+      () => getBundleConfig({ bundle: { distPath: "x" } as BundleConfig }),
+      new Error(
+        "The bundle configuration property 'distPath' is no longer supported. You can control the bundle path and source-map path using 'bundleOutput' and 'sourcemapOutput', respectively."
+      )
     );
   });
 
-  test("fails when bundle config contains defunct property bundlePrefix", () => {
-    expect(() =>
-      getBundleConfig({
-        bundle: { bundlePrefix: "x" } as BundleConfig,
-      })
-    ).toThrow(
-      /The bundle configuration property 'bundlePrefix' is no longer supported./i
+  it("fails when bundle config contains defunct property bundlePrefix", () => {
+    throws(
+      () => getBundleConfig({ bundle: { bundlePrefix: "x" } as BundleConfig }),
+      new Error(
+        "The bundle configuration property 'bundlePrefix' is no longer supported. You can control the bundle file name using 'bundleOutput'."
+      )
     );
   });
 });
@@ -135,18 +138,18 @@ const bundleConfig: BundleConfig = {
 };
 
 describe("getBundlePlatformConfig()", () => {
-  test("returns the input bundle config when no platform overrides exist", () => {
+  it("returns the input bundle config when no platform overrides exist", () => {
     const d = getPlatformBundleConfig(bundleConfigWithoutPlatforms, "android");
-    expect(d).toBe(bundleConfigWithoutPlatforms);
+    equal(d, bundleConfigWithoutPlatforms);
   });
 
-  test("returns the input bundle config when the given platform doesn't have any overrides", () => {
+  it("returns the input bundle config when the given platform doesn't have any overrides", () => {
     const d = getPlatformBundleConfig(bundleConfig, "android");
-    expect(d).toBe(bundleConfig);
+    equal(d, bundleConfig);
   });
 
-  test("returns the a platform-specific bundle config", () => {
+  it("returns the a platform-specific bundle config", () => {
     const d = getPlatformBundleConfig(bundleConfig, "ios");
-    expect(d.bundleOutput).toEqual("main.ios.jsbundle");
+    equal(d.bundleOutput, "main.ios.jsbundle");
   });
 });
