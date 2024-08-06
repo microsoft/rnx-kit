@@ -3773,7 +3773,6 @@ __metadata:
   dependencies:
     "@babel/core": "npm:^7.20.0"
     "@babel/preset-env": "npm:^7.20.0"
-    "@react-native-community/cli-clean": "npm:^12.3.0"
     "@react-native-community/cli-types": "npm:^12.3.0"
     "@rnx-kit/align-deps": "npm:^2.5.0"
     "@rnx-kit/config": "npm:^0.6.6"

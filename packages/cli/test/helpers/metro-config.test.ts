@@ -1,7 +1,7 @@
 import CyclicDependencies from "@rnx-kit/metro-plugin-cyclic-dependencies-detector";
 import DuplicateDependencies from "@rnx-kit/metro-plugin-duplicates-checker";
 import type { InputConfigT } from "metro-config";
-import { customizeMetroConfig } from "../src/metro-config";
+import { customizeMetroConfig } from "../../src/helpers/metro-config";
 
 function mockPlugin(moduleName: string) {
   const state: { timesCalled: number; options?: Record<string, unknown> } = {

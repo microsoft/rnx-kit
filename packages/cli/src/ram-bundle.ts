@@ -65,14 +65,14 @@ export async function rnxRamBundle(
 export const rnxRamBundleCommand = {
   name: "rnx-ram-bundle",
   description:
-    "Bundle your rnx-kit package in the RAM bundle format for offline use. See https://aka.ms/rnx-kit.",
+    "[Deprecated] Bundle your JavaScript in the RAM bundle format for offline use",
   func: rnxRamBundle,
   options: [
     ...commonBundleCommandOptions,
     {
       name: "--indexed-ram-bundle",
       description:
-        'Force the "Indexed RAM" bundle file format, even when targeting Android.',
+        'Force the "Indexed RAM" bundle file format, even when targeting Android',
     },
   ],
 };

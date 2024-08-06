@@ -1,3 +1,4 @@
+import type { Config as CLIConfig } from "@react-native-community/cli-types";
 import type { HermesOptions } from "@rnx-kit/config";
 import { error, info } from "@rnx-kit/console";
 import { findPackageDependencyDir } from "@rnx-kit/tools-node/package";
@@ -20,15 +21,9 @@ function hermesBinaryInDir(hermesc: string): string | null {
   }
 }
 
-function findHermesBinary() {
+function findHermesBinary({ reactNativePath }: CLIConfig) {
   const locations = [
-    () => {
-      const rnPath = findPackageDependencyDir("react-native");
-      if (!rnPath) {
-        throw new Error("Cannot find module 'react-native'");
-      }
-      return path.join(rnPath, "sdks", "hermesc");
-    },
+    () => path.join(reactNativePath, "sdks", "hermesc"),
     () => findPackageDependencyDir("hermes-engine"),
   ];
 
@@ -59,11 +54,12 @@ function getOutput(args: string[]): string | null {
 }
 
 export function emitBytecode(
+  cliConfig: CLIConfig,
   input: string,
   sourcemap: string | undefined,
   options: HermesOptions
 ): void {
-  const cmd = options.command || findHermesBinary();
+  const cmd = options.command || findHermesBinary(cliConfig);
   if (!cmd) {
     error("No Hermes compiler was found");
     return;

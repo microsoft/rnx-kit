@@ -35,15 +35,15 @@ export const rnxAlignDepsCommand = {
   func: rnxAlignDeps,
   options: [
     {
-      name: `--diff-mode [${cliOptions["diff-mode"].choices.join("|")}]`,
+      name: `--diff-mode <${cliOptions["diff-mode"].choices.join("|")}>`,
       description: cliOptions["diff-mode"].description,
     },
     {
-      name: "--exclude-packages [packages]",
+      name: "--exclude-packages <packages>",
       description: cliOptions["exclude-packages"].description,
     },
     {
-      name: `--init [${cliOptions.init.choices?.join("|")}]`,
+      name: `--init <${cliOptions.init.choices?.join("|")}>`,
       description: cliOptions.init.description,
     },
     {
@@ -59,11 +59,11 @@ export const rnxAlignDepsCommand = {
       description: cliOptions["no-unmanaged"].description,
     },
     {
-      name: "--presets [presets]",
+      name: "--presets <presets>",
       description: cliOptions.presets.description,
     },
     {
-      name: "--requirements [requirements]",
+      name: "--requirements <requirements>",
       description: cliOptions.requirements.description,
     },
     {

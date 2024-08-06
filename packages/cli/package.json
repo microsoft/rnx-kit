@@ -11,8 +11,7 @@
   "files": [
     "lib/**/*.d.ts",
     "lib/**/*.js",
-    "react-native.config.js",
-    "src"
+    "react-native.config.js"
   ],
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -21,8 +20,8 @@
       "types": "./lib/index.d.ts",
       "default": "./lib/index.js"
     },
-    "./package.json": "./package.json",
-    "./react-native.config.js": "./react-native.config.js"
+    "./react-native.config.js": "./react-native.config.js",
+    "./package.json": "./package.json"
   },
   "repository": {
     "type": "git",
@@ -71,7 +70,6 @@
   "devDependencies": {
     "@babel/core": "^7.20.0",
     "@babel/preset-env": "^7.20.0",
-    "@react-native-community/cli-clean": "^12.3.0",
     "@react-native-community/cli-types": "^12.3.0",
     "@rnx-kit/eslint-config": "*",
     "@rnx-kit/jest-preset": "*",

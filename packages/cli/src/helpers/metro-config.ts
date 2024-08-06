@@ -11,7 +11,7 @@ import {
 } from "@rnx-kit/metro-serializer-esbuild";
 import type { ConfigT, SerializerConfigT } from "metro-config";
 import type { WritableDeep } from "type-fest";
-import { getDefaultBundlerPlugins } from "./bundle/defaultPlugins";
+import { getDefaultBundlerPlugins } from "../bundle/defaultPlugins";
 
 type MetroExtraParams = Pick<
   BundleParameters,

@@ -1,11 +1,11 @@
 import type { Config as CLIConfig } from "@react-native-community/cli-types";
 import { spawn } from "child_process";
-import * as fs from "fs-extra";
+import { existsSync as fileExists } from "fs";
+import * as fs from "fs/promises";
 import ora from "ora";
 import * as os from "os";
 import * as path from "path";
-import { asResolvedPath } from "./parsers";
-import { requireExternal } from "./serve/external";
+import { asResolvedPath } from "./helpers/parsers";
 
 type Args = {
   include?: string;
@@ -22,26 +22,36 @@ type CLICommand = Record<string, Task[]>;
 
 export async function rnxClean(
   _argv: string[],
-  _config: CLIConfig,
+  { root = process.cwd() }: CLIConfig,
   cliOptions: Args
 ): Promise<void> {
-  const projectRoot = cliOptions.projectRoot ?? process.cwd();
-  if (!fs.existsSync(projectRoot)) {
-    throw new Error(`Invalid path provided! ${projectRoot}`);
-  }
-
-  const spinner = ora();
-  try {
-    requireExternal("@react-native-community/cli-clean");
-    spinner.warn(
-      "`rnx-clean` has been upstreamed to `@react-native-community/cli`. Please use `npx react-native clean` instead."
-    );
-  } catch (_) {
-    // Ignore
+  if (!fileExists(root)) {
+    throw new Error(`Invalid project root: ${root}`);
   }
 
   const npm = os.platform() === "win32" ? "npm.cmd" : "npm";
   const yarn = os.platform() === "win32" ? "yarn.cmd" : "yarn";
+
+  const execute = (command: string, args: string[], cwd = root) => {
+    return new Promise<void>((resolve, reject) => {
+      const process = spawn(command, args, {
+        cwd,
+        stdio: ["ignore", "pipe", "pipe"],
+        shell: command.endsWith(".bat") || command.endsWith(".cmd"),
+      });
+
+      process.on("error", (e) => {
+        const code = "code" in e ? e.code : "errno" in e ? e.errno : "1";
+        reject(`${e.message} (code: ${code})`);
+      });
+
+      process.on("close", (code) => {
+        if (code === 0) {
+          resolve();
+        }
+      });
+    });
+  };
 
   const COMMANDS: CLICommand = {
     android: [
@@ -52,7 +62,7 @@ export async function rnxClean(
             os.platform() === "win32"
               ? ["android/gradlew.bat", "gradlew.bat"]
               : ["android/gradlew", "gradlew"];
-          const gradlew = findPath(projectRoot, candidates);
+          const gradlew = findPath(root, candidates);
           if (gradlew) {
             const script = path.basename(gradlew);
             return execute(
@@ -69,7 +79,7 @@ export async function rnxClean(
     cocoapods: [
       {
         label: "Clean CocoaPods cache",
-        action: () => execute("pod", ["cache", "clean", "--all"], projectRoot),
+        action: () => execute("pod", ["cache", "clean", "--all"]),
       },
     ],
     metro: [
@@ -89,13 +99,13 @@ export async function rnxClean(
     npm: [
       {
         label: "Remove node_modules",
-        action: () => cleanDir(`${projectRoot}/node_modules`),
+        action: () => cleanDir(`${root}/node_modules`),
       },
       ...(cliOptions.verify
         ? [
             {
               label: "Verify npm cache",
-              action: () => execute(npm, ["cache", "verify"], projectRoot),
+              action: () => execute(npm, ["cache", "verify"]),
             },
           ]
         : []),
@@ -104,32 +114,26 @@ export async function rnxClean(
       {
         label: "Stop Watchman",
         action: () =>
-          execute(
-            os.platform() === "win32" ? "tskill" : "killall",
-            ["watchman"],
-            projectRoot
-          ),
+          execute(os.platform() === "win32" ? "tskill" : "killall", [
+            "watchman",
+          ]),
       },
       {
         label: "Delete Watchman cache",
-        action: () => execute("watchman", ["watch-del-all"], projectRoot),
+        action: () => execute("watchman", ["watch-del-all"]),
       },
     ],
     yarn: [
       {
         label: "Clean Yarn cache",
-        action: () => execute(yarn, ["cache", "clean"], projectRoot),
+        action: () => execute(yarn, ["cache", "clean"]),
       },
     ],
   };
 
-  const categories = cliOptions.include?.split(",") ?? [
-    "metro",
-    "npm",
-    "watchman",
-    "yarn",
-  ];
+  const categories = cliOptions.include?.split(",") ?? ["metro", "watchman"];
 
+  const spinner = ora();
   for (const category of categories) {
     const commands = COMMANDS[category];
     if (!commands) {
@@ -151,50 +155,23 @@ export async function rnxClean(
 }
 
 function cleanDir(path: string): Promise<void> {
-  if (!fs.existsSync(path)) {
+  if (!fileExists(path)) {
     return Promise.resolve();
   }
 
-  return fs.rmdir(path, { maxRetries: 3, recursive: true });
+  return fs.rm(path, { maxRetries: 3, recursive: true });
 }
 
 function findPath(startPath: string, files: string[]): string | undefined {
   // TODO: Find project files via `@react-native-community/cli`
   for (const file of files) {
     const filename = path.resolve(startPath, file);
-    if (fs.existsSync(filename)) {
+    if (fileExists(filename)) {
       return filename;
     }
   }
 
   return undefined;
-}
-
-function execute(command: string, args: string[], cwd: string): Promise<void> {
-  return new Promise((resolve, reject) => {
-    const process = spawn(command, args, {
-      cwd,
-      stdio: ["inherit", null, null],
-      shell: command.endsWith(".bat") || command.endsWith(".cmd"),
-    });
-
-    const stderr: Buffer[] = [];
-    process.stderr.on("data", (data) => {
-      stderr.push(data);
-    });
-
-    process.on("close", (code, signal) => {
-      if (code === 0) {
-        resolve();
-      } else if (stderr) {
-        reject(Buffer.concat(stderr).toString().trimEnd());
-      } else if (signal) {
-        reject(`Failed with signal ${signal}`);
-      } else {
-        reject(`Failed with exit code ${code}`);
-      }
-    });
-  });
 }
 
 export const rnxCleanCommand = {
@@ -203,10 +180,9 @@ export const rnxCleanCommand = {
   description: "Clears React Native project related caches",
   options: [
     {
-      name: "--include [android,cocoapods,metro,npm,watchman,yarn]",
-      description:
-        "Comma-separated flag of caches to clear, e.g. `npm,yarn`. When not specified, only non-platform specific caches are cleared.",
-      default: "metro,npm,watchman,yarn",
+      name: "--include <android,cocoapods,metro,npm,watchman,yarn>",
+      description: "Comma-separated flag of caches to clear e.g., `npm,yarn`",
+      default: "metro,watchman",
     },
     {
       name: "--project-root <path>",

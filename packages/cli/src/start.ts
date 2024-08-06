@@ -11,9 +11,9 @@ import type { ReportableEvent, Reporter, RunServerOptions } from "metro";
 import type { Middleware } from "metro-config";
 import type Server from "metro/src/Server";
 import * as path from "path";
-import { customizeMetroConfig } from "./metro-config";
-import { asNumber, asResolvedPath, asStringArray } from "./parsers";
-import { requireExternal } from "./serve/external";
+import { requireExternal } from "./helpers/externals";
+import { customizeMetroConfig } from "./helpers/metro-config";
+import { asNumber, asResolvedPath, asStringArray } from "./helpers/parsers";
 import { makeHelp } from "./serve/help";
 import { attachKeyHandlers } from "./serve/keyboard";
 import { getKitServerConfig } from "./serve/kit-config";
@@ -37,7 +37,9 @@ export async function rnxStart(
   const serverConfig = getKitServerConfig(args);
 
   const { createDevServerMiddleware, indexPageMiddleware } = requireExternal(
-    "@react-native-community/cli-server-api"
+    "@react-native-community/cli-server-api",
+    ctx.root,
+    ctx.reactNativePath
   );
 
   // interactive mode requires raw access to stdin
@@ -108,7 +110,9 @@ export async function rnxStart(
     try {
       // https://github.com/facebook/react-native/blob/7888338295476f4d4f00733309e54b8d22318e1e/packages/community-cli-plugin/src/commands/start/runServer.js#L115
       const { createDevMiddleware } = requireExternal(
-        "@react-native/dev-middleware"
+        "@react-native/dev-middleware",
+        ctx.root,
+        ctx.reactNativePath
       );
       return createDevMiddleware({
         projectRoot,
@@ -228,89 +232,88 @@ export async function rnxStart(
 export const rnxStartCommand = {
   name: "rnx-start",
   func: rnxStart,
-  description:
-    "Start a bundle-server to host your react-native experience during development",
+  description: "Start a React Native development server",
   options: [
     {
-      name: "--port [number]",
+      name: "--port <number>",
       description:
-        "Host port to use when listening for incoming server requests.",
+        "Host port to use when listening for incoming server requests",
       parse: asNumber,
       default: 8081,
     },
     {
-      name: "--host [string]",
+      name: "--host <string>",
       description:
-        "Host name or address to bind when listening for incoming server requests. When not given, requests from all addresses are accepted.",
+        "Host name or address to bind when listening for incoming server requests; when not specified, requests from all addresses are accepted",
       default: "",
     },
     {
-      name: "--projectRoot [path]",
+      name: "--project-root <path>",
       description:
-        "Path to the root of your react-native project. The bundle server uses this root path to resolve all web requests.",
+        "Path to the root of your react-native project; the bundle server uses this path to resolve all web requests",
       parse: asResolvedPath,
     },
     {
-      name: "--watchFolders [paths]",
+      name: "--watch-folders <paths>",
       description:
-        "Additional folders which will be added to the file-watch list. Comma-separated. By default, Metro watches all project files.",
+        "Additional folders which will be added to the watched files list, comma-separated; by default, Metro watches all project files",
       parse: (val: string) => asStringArray(val).map(asResolvedPath),
     },
     {
-      name: "--assetPlugins [list]",
+      name: "--asset-plugins <list>",
       description:
-        "Additional asset plugins to be used by the Metro Babel transformer. Comma-separated list containing plugin module names or absolute paths to plugin packages.",
+        "Additional asset plugins to be used by Metro's Babel transformer; comma-separated list containing plugin module names or absolute paths to plugin packages",
       parse: asStringArray,
     },
     {
-      name: "--sourceExts [list]",
+      name: "--source-exts <list>",
       description:
-        "Additional source-file extensions to include when generating bundles. Comma-separated list, excluding the leading dot.",
+        "Additional source file extensions to include when generating bundles; comma-separated list, excluding the leading dot",
       parse: asStringArray,
     },
     {
-      name: "--max-workers [number]",
+      name: "--max-workers <number>",
       description:
-        "Specifies the maximum number of parallel worker threads to use for transforming files. This defaults to the number of cores available on your machine.",
+        "Specifies the maximum number of parallel worker threads to use for transforming files; defaults to the number of cores available on your machine",
       parse: asNumber,
     },
     {
       name: "--reset-cache",
-      description: "Reset the Metro cache.",
+      description: "Reset the Metro cache",
     },
     {
-      name: "--custom-log-reporter-path [string]",
+      name: "--custom-log-reporter-path <string>",
       description:
-        "Path to a JavaScript file which exports a Metro 'TerminalReporter' function. This replaces the default reporter, which writes all messages to the Metro console.",
+        "Path to a JavaScript file which exports a Metro 'TerminalReporter' function; replaces the default reporter that writes all messages to the Metro console",
     },
     {
       name: "--https",
       description:
-        "Use a secure (https) web server. When not specified, an insecure (http) web server is used.",
+        "Use a secure (https) web server; when not specified, an insecure (http) web server is used",
     },
     {
-      name: "--key [path]",
+      name: "--key <path>",
       description:
-        "Path to a custom SSL private key file to use for secure (https) communication.",
+        "Path to a custom SSL private key file to use for secure (https) communication",
     },
     {
-      name: "--cert [path]",
+      name: "--cert <path>",
       description:
-        "Path to a custom SSL certificate file to use for secure (https) communication.",
+        "Path to a custom SSL certificate file to use for secure (https) communication",
     },
     {
-      name: "--config [string]",
-      description: "Path to the Metro configuration file.",
+      name: "--config <string>",
+      description: "Path to the Metro configuration file",
       parse: asResolvedPath,
     },
     {
       name: "--no-interactive",
-      description: "Disables interactive mode.",
+      description: "Disables interactive mode",
     },
     {
-      name: "--id [string]",
+      name: "--id <string>",
       description:
-        "Specify which bundle configuration to use if server configuration is missing.",
+        "Specify which bundle configuration to use if server configuration is missing",
     },
   ],
 };

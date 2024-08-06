@@ -3,7 +3,7 @@ import {
   asNumber,
   asResolvedPath,
   asStringArray,
-} from "../src/parsers";
+} from "../src/helpers/parsers";
 import { rnxStartCommand } from "../src/start";
 
 describe("rnx-start", () => {
@@ -12,9 +12,9 @@ describe("rnx-start", () => {
     for (const { name, parse } of rnxStartCommand.options) {
       if (name.endsWith("[boolean]")) {
         expect(parse).toBe(asBoolean);
-      } else if (name.endsWith("[list]")) {
+      } else if (name.endsWith("<list>")) {
         expect(parse).toBe(asStringArray);
-      } else if (name.endsWith("[number]")) {
+      } else if (name.endsWith("<number>")) {
         expect(parse).toBe(asNumber);
       } else if (needsResolvedPaths.some((flag) => name.startsWith(flag))) {
         expect(parse).toBe(asResolvedPath);
