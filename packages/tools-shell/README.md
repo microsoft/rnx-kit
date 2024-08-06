@@ -12,8 +12,8 @@ categories:
 import * as tools from "@rnx-kit/tools-shell";
 
 // Alternatively...
-import * as asyncTools from "@rnx-kit/tools-node/async";
-import * as commandTools from "@rnx-kit/tools-node/command";
+import * as asyncTools from "@rnx-kit/tools-shell/async";
+import * as commandTools from "@rnx-kit/tools-shell/command";
 ```
 
 <!-- The following table can be updated by running `yarn update-readme` -->

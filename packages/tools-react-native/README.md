@@ -24,14 +24,17 @@ import * as platformTools from "@rnx-kit/tools-react-native/platform";
 | -------- | ------------ | ----------------------------------------- |
 | platform | AllPlatforms | List of supported react-native platforms. |
 
-| Category | Function                                               | Description                                                                                     |
-| -------- | ------------------------------------------------------ | ----------------------------------------------------------------------------------------------- |
-| metro    | `findMetroPath(projectRoot)`                           | Finds the installation path of Metro.                                                           |
-| metro    | `getMetroVersion(projectRoot)`                         | Returns Metro version number.                                                                   |
-| platform | `expandPlatformExtensions(platform, extensions)`       | Returns a list of extensions that should be tried for the target platform in prioritized order. |
-| platform | `getAvailablePlatforms(startDir)`                      | Returns a map of available React Native platforms. The result is cached.                        |
-| platform | `getAvailablePlatformsUncached(startDir, platformMap)` | Returns a map of available React Native platforms. The result is NOT cached.                    |
-| platform | `parsePlatform(val)`                                   | Parse a string to ensure it maps to a valid react-native platform.                              |
-| platform | `platformExtensions(platform)`                         | Returns file extensions that can be mapped to the target platform.                              |
+| Category | Function                                               | Description                                                                                                                       |
+| -------- | ------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------- |
+| context  | `loadContext(root)`                                    | Equivalent to calling `loadConfig()` from `@react-native-community/cli`, but the result is cached for faster subsequent accesses. |
+| context  | `resolveCommunityCLI(root, reactNativePath)`           | Finds path to `@react-native-community/cli`.                                                                                      |
+| metro    | `findMetroPath(projectRoot)`                           | Finds the installation path of Metro.                                                                                             |
+| metro    | `getMetroVersion(projectRoot)`                         | Returns Metro version number.                                                                                                     |
+| metro    | `requireModuleFromMetro(moduleName, fromDir)`          | Imports specified module starting from the installation directory of the currently used `metro` version.                          |
+| platform | `expandPlatformExtensions(platform, extensions)`       | Returns a list of extensions that should be tried for the target platform in prioritized order.                                   |
+| platform | `getAvailablePlatforms(startDir)`                      | Returns a map of available React Native platforms. The result is cached.                                                          |
+| platform | `getAvailablePlatformsUncached(startDir, platformMap)` | Returns a map of available React Native platforms. The result is NOT cached.                                                      |
+| platform | `parsePlatform(val)`                                   | Parse a string to ensure it maps to a valid react-native platform.                                                                |
+| platform | `platformExtensions(platform)`                         | Returns file extensions that can be mapped to the target platform.                                                                |
 
 <!-- @rnx-kit/api end -->

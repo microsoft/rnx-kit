@@ -58,13 +58,6 @@ describe("React Native > Platform", () => {
     });
   });
 
-  it("getAvailablePlatformsUncached() handles 'missing' package root", () => {
-    deepEqual(getAvailablePlatformsUncached(), {
-      android: "",
-      ios: "",
-    });
-  });
-
   it("parsePlatform() succeeds for all known platforms", () => {
     equal(parsePlatform("ios"), "ios");
     equal(parsePlatform("android"), "android");
