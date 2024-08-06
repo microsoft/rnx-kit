@@ -178,19 +178,23 @@ export async function updateApiReadme() {
       }
       case typedoc.ReflectionKind.Function: {
         const source = getBaseName(sources);
-        signatures?.forEach(({ name, comment, parameters }) => {
-          if (isCommented(source, name, comment)) {
-            exportedFunctions.push([
-              source,
-              Array.isArray(parameters)
-                ? `\`${name}(${parameters
-                    .map((p) => (p.flags.isRest ? `...${p.name}` : p.name))
-                    .join(", ")})\``
-                : `\`${name}()\``,
-              renderSummary(comment.summary),
-            ]);
+        if (signatures) {
+          for (let i = signatures.length - 1; i >= 0; --i) {
+            const { name, comment, parameters } = signatures[i];
+            if (isCommented(source, name, comment)) {
+              exportedFunctions.push([
+                source,
+                Array.isArray(parameters)
+                  ? `\`${name}(${parameters
+                      .map((p) => (p.flags.isRest ? `...${p.name}` : p.name))
+                      .join(", ")})\``
+                  : `\`${name}()\``,
+                renderSummary(comment.summary),
+              ]);
+              break;
+            }
           }
-        });
+        }
         break;
       }
       default:

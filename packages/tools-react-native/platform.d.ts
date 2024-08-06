@@ -1,7 +1,6 @@
 export {
   expandPlatformExtensions,
   getAvailablePlatforms,
-  getAvailablePlatformsUncached,
   parsePlatform,
   platformExtensions,
 } from "./lib/platform";

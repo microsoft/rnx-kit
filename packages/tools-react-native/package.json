@@ -11,6 +11,10 @@
   "files": [
     "lib/**/*.d.ts",
     "lib/**/*.js",
+    "cache.d.ts",
+    "cache.js",
+    "context.d.ts",
+    "context.js",
     "metro.d.ts",
     "metro.js",
     "platform.d.ts",
@@ -24,6 +28,16 @@
       "types": "./lib/index.d.ts",
       "typescript": "./src/index.ts",
       "default": "./lib/index.js"
+    },
+    "./cache": {
+      "types": "./lib/cache.d.ts",
+      "typescript": "./src/cache.ts",
+      "default": "./lib/cache.js"
+    },
+    "./context": {
+      "types": "./lib/context.d.ts",
+      "typescript": "./src/context.ts",
+      "default": "./lib/context.js"
     },
     "./metro": {
       "types": "./lib/metro.d.ts",
@@ -53,8 +67,11 @@
     "@rnx-kit/tools-node": "^2.0.1"
   },
   "devDependencies": {
+    "@react-native-community/cli": "^12.1.1",
+    "@react-native-community/cli-types": "^12.3.0",
     "@rnx-kit/eslint-config": "*",
     "@rnx-kit/scripts": "*",
+    "@rnx-kit/tools-filesystem": "*",
     "@rnx-kit/tsconfig": "*",
     "@types/node": "^20.0.0",
     "eslint": "^8.56.0",

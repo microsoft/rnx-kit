@@ -1,9 +1,7 @@
 import { deepEqual, equal, throws } from "node:assert/strict";
-import * as path from "node:path";
 import { describe, it } from "node:test";
 import {
   expandPlatformExtensions,
-  getAvailablePlatformsUncached,
   parsePlatform,
   platformExtensions,
 } from "../src/platform";
@@ -28,41 +26,6 @@ describe("React Native > Platform", () => {
       ".ts",
       ".tsx",
     ]);
-  });
-
-  it("getAvailablePlatformsUncached() returns available platforms", () => {
-    const fixture = path.join(__dirname, "__fixtures__", "available-platforms");
-    deepEqual(getAvailablePlatformsUncached(fixture), {
-      android: "",
-      ios: "",
-      macos: "react-native-macos",
-      win32: "@office-iss/react-native-win32",
-      windows: "react-native-windows",
-    });
-  });
-
-  it("getAvailablePlatformsUncached() finds package root", () => {
-    const fixture = path.join(
-      __dirname,
-      "__fixtures__",
-      "available-platforms",
-      "node_modules",
-      "react-native"
-    );
-    deepEqual(getAvailablePlatformsUncached(fixture), {
-      android: "",
-      ios: "",
-      macos: "react-native-macos",
-      win32: "@office-iss/react-native-win32",
-      windows: "react-native-windows",
-    });
-  });
-
-  it("getAvailablePlatformsUncached() handles 'missing' package root", () => {
-    deepEqual(getAvailablePlatformsUncached(), {
-      android: "",
-      ios: "",
-    });
   });
 
   it("parsePlatform() succeeds for all known platforms", () => {
