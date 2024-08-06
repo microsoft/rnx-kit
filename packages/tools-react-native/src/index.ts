@@ -7,6 +7,7 @@ export {
 export {
   expandPlatformExtensions,
   getAvailablePlatforms,
+  getAvailablePlatformsUncached,
   parsePlatform,
   platformExtensions,
 } from "./platform";

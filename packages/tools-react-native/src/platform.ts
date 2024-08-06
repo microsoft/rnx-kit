@@ -36,20 +36,33 @@ export const getAvailablePlatforms = (() => {
   let platformMap: Record<string, string> | undefined = undefined;
   return (startDir = process.cwd()) => {
     if (!platformMap) {
-      platformMap = { android: "", ios: "" };
-      const { platforms } = loadContext(startDir);
-      if (typeof platforms === "object" && platforms) {
-        for (const [name, info] of Object.entries(platforms)) {
-          const { npmPackageName } = info;
-          if (npmPackageName) {
-            platformMap[name] = npmPackageName;
-          }
-        }
-      }
+      platformMap = getAvailablePlatformsUncached(startDir);
     }
     return platformMap;
   };
 })();
+
+/**
+ * Returns a map of available React Native platforms. The result is NOT cached.
+ * @param startDir The directory to look for react-native platforms from
+ * @param platformMap A platform-to-npm-package map of known packages
+ * @returns A platform-to-npm-package map, excluding "core" platforms.
+ */
+export function getAvailablePlatformsUncached(
+  startDir = process.cwd(),
+  platformMap: Record<string, string> = { android: "", ios: "" }
+) {
+  const { platforms } = loadContext(startDir);
+  if (typeof platforms === "object" && platforms) {
+    for (const [name, info] of Object.entries(platforms)) {
+      const { npmPackageName } = info;
+      if (npmPackageName) {
+        platformMap[name] = npmPackageName;
+      }
+    }
+  }
+  return platformMap;
+}
 
 /**
  * Returns file extensions that can be mapped to the target platform.
