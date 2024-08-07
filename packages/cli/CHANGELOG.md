@@ -1,5 +1,13 @@
 # Change Log - @rnx-kit/cli
 
+## 0.16.30
+
+### Patch Changes
+
+- 6703a66: Minor cleanups in preparation for bigger changes in the near future
+- Updated dependencies [9b5d21b]
+  - @rnx-kit/tools-react-native@1.4.0
+
 ## 0.16.29
 
 ### Patch Changes
