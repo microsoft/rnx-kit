@@ -8,21 +8,19 @@ type FindUpOptions = {
   startDir?: string;
   stopAt?: string;
   allowSymlinks?: boolean;
+  resolveSymlinks?: boolean;
 };
 
-function exists(name: string, type: FileType, stat: fs.StatSyncFn): boolean {
-  try {
-    const stats = stat(name, { throwIfNoEntry: false });
-    switch (type) {
-      case "file":
-        return Boolean(stats?.isFile());
-      case "directory":
-        return Boolean(stats?.isDirectory());
-    }
-  } catch (_) {
-    // ignore
+function exists(
+  stats: fs.Stats | undefined,
+  type: FileType
+): stats is fs.Stats {
+  switch (type) {
+    case "file":
+      return Boolean(stats?.isFile());
+    case "directory":
+      return Boolean(stats?.isDirectory());
   }
-  return false;
 }
 
 /**
@@ -37,6 +35,7 @@ export function findUp(
     startDir = process.cwd(),
     stopAt,
     allowSymlinks = true,
+    resolveSymlinks = false,
   }: FindUpOptions = {}
 ): string | undefined {
   const stat = allowSymlinks ? fs.statSync : fs.lstatSync;
@@ -48,8 +47,15 @@ export function findUp(
   while (directory && directory !== stopAt && directory !== root) {
     for (const name of names) {
       const p = path.isAbsolute(name) ? name : path.join(directory, name);
-      if (exists(p, type, stat)) {
-        return p;
+      try {
+        const stats = stat(p, { throwIfNoEntry: false });
+        if (exists(stats, type)) {
+          return allowSymlinks && resolveSymlinks && stats.isSymbolicLink()
+            ? path.resolve(path.dirname(p), fs.readlinkSync(p))
+            : p;
+        }
+      } catch (_) {
+        // ignore
       }
     }
 

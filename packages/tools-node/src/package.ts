@@ -184,22 +184,20 @@ export type FindPackageDependencyOptions = {
  */
 export function findPackageDependencyDir(
   ref: string | PackageRef,
-  options?: FindPackageDependencyOptions
+  {
+    startDir,
+    allowSymlinks,
+    resolveSymlinks,
+  }: FindPackageDependencyOptions = {}
 ): string | undefined {
   const pkgName =
     typeof ref === "string" ? ref : path.join(ref.scope ?? "", ref.name);
-  const packageDir = findUp(path.join("node_modules", pkgName), {
-    startDir: options?.startDir,
+  return findUp(path.join("node_modules", pkgName), {
     type: "directory",
-    allowSymlinks: options?.allowSymlinks,
+    startDir,
+    allowSymlinks,
+    resolveSymlinks,
   });
-  if (!packageDir || !options?.resolveSymlinks) {
-    return packageDir;
-  }
-
-  return fs.lstatSync(packageDir).isSymbolicLink()
-    ? path.resolve(path.dirname(packageDir), fs.readlinkSync(packageDir))
-    : packageDir;
 }
 
 /**
