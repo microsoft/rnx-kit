@@ -1,16 +1,16 @@
 import type { Config as CLIConfig } from "@react-native-community/cli-types";
-import { spawn } from "child_process";
-import { existsSync as fileExists } from "fs";
-import * as fs from "fs/promises";
+import { spawn } from "node:child_process";
+import { existsSync as fileExists } from "node:fs";
+import * as fs from "node:fs/promises";
+import * as os from "node:os";
+import * as path from "node:path";
 import ora from "ora";
-import * as os from "os";
-import * as path from "path";
 import { asResolvedPath } from "./helpers/parsers";
 
 type Args = {
   include?: string;
   projectRoot?: string;
-  verify?: boolean;
+  verifyCache?: boolean;
 };
 
 type Task = {
@@ -101,7 +101,7 @@ export async function rnxClean(
         label: "Remove node_modules",
         action: () => cleanDir(`${root}/node_modules`),
       },
-      ...(cliOptions.verify
+      ...(cliOptions.verifyCache
         ? [
             {
               label: "Verify npm cache",
@@ -191,7 +191,7 @@ export const rnxCleanCommand = {
       parse: asResolvedPath,
     },
     {
-      name: "--verify",
+      name: "--verify-cache",
       description: "Whether to verify the integrity of the cache",
       default: false,
     },
