@@ -47,39 +47,39 @@ export const rnxWriteThirdPartyNoticesCommand = {
     {
       name: "--root-path <path>",
       description:
-        "The root of the repo. This is the starting point for finding each module in the source map dependency graph.",
+        "The root of the repo — the starting point for finding each module in the source map dependency graph",
     },
     {
       name: "--source-map-file <file>",
       description:
-        "The source map file associated with the package's entry file. This source map eventually leads to all package dependencies and their licenses.",
+        "The source map file associated with the package's entry file — this source map eventually leads to all package dependencies and their licenses",
     },
     {
       name: "--json",
-      description: "Format the 3rd-party notice file as JSON instead of text.",
+      description: "Format the 3rd-party notice file as JSON instead of text",
       default: false,
     },
     {
-      name: "--output-file [file]",
-      description: "The path to use when writing the 3rd-party notice file.",
+      name: "--output-file <file>",
+      description: "The path to use when writing the 3rd-party notice file",
     },
     {
-      name: "--ignore-scopes [string]",
+      name: "--ignore-scopes <string>",
       description:
-        "Comma-separated list of `npm` scopes to ignore when traversing the source map dependency graph.",
+        "Comma-separated list of npm scopes to ignore when traversing the source map dependency graph",
     },
     {
-      name: "--ignore-modules [string]",
+      name: "--ignore-modules <string>",
       description:
-        "Comma-separated list of modules to ignore when traversing the source map dependency graph.",
+        "Comma-separated list of modules to ignore when traversing the source map dependency graph",
     },
     {
-      name: "--preamble-text [string]",
-      description: "A string to prepend to the start of the 3rd-party notice.",
+      name: "--preamble-text <string>",
+      description: "A string to prepend to the start of the 3rd-party notice",
     },
     {
-      name: "--additional-text [path]",
-      description: "A string to append to the end of the 3rd-party notice.",
+      name: "--additional-text <string>",
+      description: "A string to append to the end of the 3rd-party notice",
     },
   ],
 };

@@ -9,7 +9,7 @@ import {
   overridableCommonBundleOptions,
 } from "./bundle/overrides";
 import type { CLICommonBundleOptions } from "./bundle/types";
-import { asBoolean } from "./parsers";
+import { asBoolean } from "./helpers/parsers";
 
 type CLIBundleOptions = CLICommonBundleOptions & {
   treeShake?: boolean;
@@ -44,6 +44,7 @@ export async function rnxBundle(
     const { bundleOutput, hermes, sourcemapOutput } = bundleConfig;
     if (hermes) {
       emitBytecode(
+        cliConfig,
         bundleOutput,
         sourcemapOutput,
         hermes === true ? {} : hermes
@@ -54,15 +55,14 @@ export async function rnxBundle(
 
 export const rnxBundleCommand = {
   name: "rnx-bundle",
-  description:
-    "Bundle your rnx-kit package for offline use. See https://aka.ms/rnx-kit.",
+  description: "Bundle your JavaScript for offline use",
   func: rnxBundle,
   options: [
     ...commonBundleCommandOptions,
     {
       name: "--tree-shake [boolean]",
       description:
-        "Enable tree shaking to remove unused code and reduce the bundle size.",
+        "Enable tree shaking to remove unused code and reduce the bundle size",
       parse: asBoolean,
     },
   ],

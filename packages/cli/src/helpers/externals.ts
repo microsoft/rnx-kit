@@ -1,16 +1,14 @@
 import { resolveDependencyChain } from "@rnx-kit/tools-node/package";
-import type { CliServerApi, CoreDevMiddleware } from "./types";
-
-type CliClean = typeof import("@react-native-community/cli-clean");
+import { resolveCommunityCLI } from "@rnx-kit/tools-react-native/context";
+import type { CliServerApi, CoreDevMiddleware } from "../serve/types";
 
 type ExternalModule =
-  | "@react-native-community/cli-clean"
   | "@react-native-community/cli-server-api"
   | "@react-native/dev-middleware";
 
-function friendlyRequire<T>(...modules: string[]): T {
+function friendlyRequire<T>(modules: string[], startDir: string): T {
   try {
-    const modulePath = resolveDependencyChain(modules);
+    const modulePath = resolveDependencyChain(modules, startDir);
     return require(modulePath) as T;
   } catch (_) {
     const module = modules[modules.length - 1];
@@ -25,38 +23,35 @@ function friendlyRequire<T>(...modules: string[]): T {
 }
 
 export function requireExternal(
-  module: "@react-native-community/cli-clean"
-): CliClean;
-
-export function requireExternal(
-  module: "@react-native-community/cli-server-api"
+  module: "@react-native-community/cli-server-api",
+  projectRoot: string,
+  reactNativePath: string
 ): CliServerApi;
 
 export function requireExternal(
-  module: "@react-native/dev-middleware"
+  module: "@react-native/dev-middleware",
+  projectRoot: string,
+  reactNativePath: string
 ): CoreDevMiddleware;
 
 export function requireExternal(
-  module: ExternalModule
-): CliClean | CliServerApi | CoreDevMiddleware {
+  module: ExternalModule,
+  projectRoot: string,
+  reactNativePath: string
+): CliServerApi | CoreDevMiddleware {
   switch (module) {
-    case "@react-native-community/cli-clean":
-      return friendlyRequire<CliClean>(
-        "react-native",
-        "@react-native-community/cli",
-        "@react-native-community/cli-clean"
-      );
     case "@react-native-community/cli-server-api":
       return friendlyRequire<CliServerApi>(
-        "react-native",
-        "@react-native-community/cli",
-        "@react-native-community/cli-server-api"
+        [
+          "@react-native-community/cli",
+          "@react-native-community/cli-server-api",
+        ],
+        resolveCommunityCLI(projectRoot, reactNativePath)
       );
     case "@react-native/dev-middleware":
       return friendlyRequire<CoreDevMiddleware>(
-        "react-native",
-        "@react-native/community-cli-plugin",
-        "@react-native/dev-middleware"
+        ["@react-native/community-cli-plugin", "@react-native/dev-middleware"],
+        reactNativePath
       );
   }
 }

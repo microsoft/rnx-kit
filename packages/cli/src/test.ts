@@ -4,10 +4,11 @@ import {
   findPackageDir,
   resolveDependencyChain,
 } from "@rnx-kit/tools-node/package";
+import type { AllPlatforms } from "@rnx-kit/tools-react-native/platform";
 import { parsePlatform } from "@rnx-kit/tools-react-native/platform";
 
 type Args = {
-  platform: "android" | "ios" | "macos" | "windows" | "win32";
+  platform: AllPlatforms;
 };
 
 type Options = {
@@ -128,7 +129,7 @@ export const rnxTestCommand = {
   func: rnxTest,
   options: [
     {
-      name: "--platform [android|ios|macos|windows|win32]",
+      name: "--platform <android|ios|macos|windows|win32>",
       description: "Platform to target",
       parse: parsePlatform,
     },

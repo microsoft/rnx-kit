@@ -3,7 +3,7 @@ import { loadContext } from "./context";
 /**
  * List of supported react-native platforms.
  */
-export type AllPlatforms = "ios" | "android" | "windows" | "win32" | "macos";
+export type AllPlatforms = "android" | "ios" | "macos" | "win32" | "windows";
 
 /**
  * Returns a list of extensions that should be tried for the target platform in

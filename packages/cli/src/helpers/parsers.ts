@@ -8,9 +8,7 @@ export function asBoolean(value: string): boolean {
     case "true":
       return true;
     default:
-      throw new Error(
-        "Invalid boolean value '" + value + "' — must be true or false"
-      );
+      throw new Error(`Expected 'true' or 'false; got '${value}'`);
   }
 }
 
@@ -26,19 +24,20 @@ export function asStringArray(value: string): string[] {
   return value.split(",");
 }
 
-export function parseTransformProfile(val: string): TransformProfile {
-  const allowedProfiles: TransformProfile[] = [
-    "hermes-stable",
-    "hermes-canary",
-    "default",
-  ];
-  if (val in allowedProfiles) {
-    return val as TransformProfile;
+export function asTransformProfile(val: string): TransformProfile {
+  switch (val) {
+    case "hermes-stable":
+    case "hermes-canary":
+    case "default":
+      return val;
+
+    default: {
+      const profiles: TransformProfile[] = [
+        "hermes-stable",
+        "hermes-canary",
+        "default",
+      ];
+      throw new Error(`Expected '${profiles.join("', '")}'; got ${val}`);
+    }
   }
-  throw new Error(
-    "Invalid transform profile '" +
-      val +
-      "' -- must be one of " +
-      allowedProfiles.join(", ")
-  );
 }

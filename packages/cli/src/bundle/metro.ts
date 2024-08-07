@@ -1,15 +1,11 @@
 import { info } from "@rnx-kit/console";
 import type { BundleArgs as MetroBundleArgs } from "@rnx-kit/metro-service";
 import { bundle } from "@rnx-kit/metro-service";
-import * as fs from "fs";
 import type { ConfigT } from "metro-config";
 import * as path from "path";
-import { customizeMetroConfig } from "../metro-config";
+import { ensureDir } from "../helpers/filesystem";
+import { customizeMetroConfig } from "../helpers/metro-config";
 import type { CliPlatformBundleConfig } from "./types";
-
-function ensureDir(p: string): void {
-  fs.mkdirSync(p, { recursive: true, mode: 0o755 });
-}
 
 /**
  * Run the Metro bundler.
