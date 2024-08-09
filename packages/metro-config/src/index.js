@@ -7,8 +7,10 @@ const {
 } = require("@rnx-kit/tools-react-native/metro");
 const fs = require("fs");
 const path = require("path");
+const { applyExpoWorkarounds, isExpoConfig } = require("./expoConfig");
 
 /**
+ * @typedef {import("metro-config").InputConfigT} InputConfigT;
  * @typedef {import("metro-config").MetroConfig} MetroConfig;
  */
 
@@ -261,11 +263,11 @@ module.exports = {
 
   /**
    * Helper function for configuring Metro.
-   * @param {MetroConfig=} customConfig
+   * @param {MetroConfig=} inputConfig
    * @returns {MetroConfig}
    */
-  makeMetroConfig: (customConfig = {}) => {
-    const projectRoot = customConfig.projectRoot || process.cwd();
+  makeMetroConfig: (inputConfig = {}) => {
+    const projectRoot = inputConfig.projectRoot || process.cwd();
 
     const { mergeConfig } = requireModuleFromMetro("metro-config", projectRoot);
     const { enhanceMiddleware } = require("./assetPluginForMonorepos");
@@ -273,9 +275,10 @@ module.exports = {
 
     const blockList = exclusionList([], projectRoot);
     const customBlockList =
-      customConfig.resolver &&
-      (customConfig.resolver.blockList || customConfig.resolver.blacklistRE);
+      inputConfig.resolver &&
+      (inputConfig.resolver.blockList || inputConfig.resolver.blacklistRE);
 
+    /** @type {InputConfigT[]} */
     const [defaultConfig, ...configs] = [
       ...getDefaultConfig(projectRoot),
       {
@@ -295,12 +298,12 @@ module.exports = {
             },
           }),
         },
-        watchFolders: customConfig.watchFolders ?? defaultWatchFolders(),
+        watchFolders: inputConfig.watchFolders ?? defaultWatchFolders(),
       },
       {
-        ...customConfig,
+        ...inputConfig,
         resolver: {
-          ...customConfig.resolver,
+          ...inputConfig.resolver,
           ...(customBlockList
             ? {
                 // Metro introduced `blockList` in 0.60, but still prefers
@@ -317,13 +320,17 @@ module.exports = {
              * @see exclusionList for further information.
              */
             ...resolveUniqueModules(UNIQUE_MODULES, projectRoot),
-            ...(customConfig.resolver
-              ? customConfig.resolver.extraNodeModules
-              : {}),
+            ...inputConfig.resolver?.extraNodeModules,
           },
         },
       },
     ];
+
+    const userConfig = configs[configs.length - 1];
+    if (isExpoConfig(userConfig)) {
+      applyExpoWorkarounds(userConfig, defaultConfig);
+    }
+
     return mergeConfig(defaultConfig, ...configs);
   },
 };
