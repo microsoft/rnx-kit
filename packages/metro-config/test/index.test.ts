@@ -405,6 +405,7 @@ describe("makeMetroConfig", () => {
 
   it("sets both `blacklistRE` and `blockList`", () => {
     const configWithBlacklist = makeMetroConfig({
+      projectRoot,
       resolver: {
         blacklistRE: /.*/,
       },
@@ -415,6 +416,7 @@ describe("makeMetroConfig", () => {
     equal(blacklistRE, configWithBlacklist.resolver?.blockList);
 
     const configWithBlockList = makeMetroConfig({
+      projectRoot,
       resolver: {
         blockList: /.*/,
       },
