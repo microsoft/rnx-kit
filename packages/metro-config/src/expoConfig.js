@@ -35,13 +35,13 @@ function isExpoConfig(config) {
 function applyExpoWorkarounds(config, defaultConfig) {
   // Expo's default config is based on Metro's default config, and Metro's
   // default config sets some fields (like `resolveRequest`) to `null`, which
-  // then overwrites our fields.
+  // then overwrites our fields:
   // https://github.com/facebook/metro/blob/v0.80.10/packages/metro-config/src/defaults/index.js#L51
   if (config.resolver?.resolveRequest === null) {
     delete config.resolver.resolveRequest;
   }
 
-  // Expo _always_ sets to `getModulesRunBeforeMainModule`.
+  // Expo _always_ sets `getModulesRunBeforeMainModule`:
   // https://github.com/expo/expo/blob/sdk-51/packages/%40expo/metro-config/src/ExpoMetroConfig.ts#L207
   const getModulesRunBeforeMainModule =
     config.serializer?.getModulesRunBeforeMainModule;
