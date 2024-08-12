@@ -1,16 +1,26 @@
 # Change Log - @rnx-kit/react-native-test-app-msal
 
+## 3.0.2
+
+### Patch Changes
+
+- 5fe3ce8: Bumped `com.google.android.material:material` to 1.12.0
+- bb65748: Bumped `androidx.activity:activity-ktx` to 1.9.1
+- 4b2251e: Bumped `com.microsoft.identity.client:msal` to 5.4.2
+
 ## 3.0.1
 
 ### Patch Changes
 
-- af82a1f: Migrate away from deprecated `acquireTokenSilent(Array<(out) String!>, IAccount, String): IAuthenticationResult!`
+- af82a1f: Migrate away from deprecated
+  `acquireTokenSilent(Array<(out) String!>, IAccount, String): IAuthenticationResult!`
 
 ## 3.0.0
 
 ### Major Changes
 
-- 28fc3f6: Minimum `compileSdkVersion` is now 34, as required by `com.microsoft.identity.client:msal` v5
+- 28fc3f6: Minimum `compileSdkVersion` is now 34, as required by
+  `com.microsoft.identity.client:msal` v5
 
 ## 2.1.9
 
@@ -42,14 +52,16 @@
 
 ### Patch Changes
 
-- 4079b5bc: Implement `initWithHost:` introduced in `react-native-test-app` 2.5.11
+- 4079b5bc: Implement `initWithHost:` introduced in `react-native-test-app`
+  2.5.11
 
 ## 2.1.4
 
 ### Patch Changes
 
 - 3c97f6f9: Bump `com.microsoft.identity.client:msal` to v4.6.1
-- 525a764e: Use `androidx.activity:activity-ktx` 1.7.2 if Kotlin version is 1.8 or greater
+- 525a764e: Use `androidx.activity:activity-ktx` 1.7.2 if Kotlin version is 1.8
+  or greater
 
 ## 2.1.3
 
@@ -98,7 +110,8 @@
 
 ### Major Changes
 
-- afd170e6: Add acquireTokenWithResource to Auth API, rename acquireToken to acquireTokenWithScopes
+- afd170e6: Add acquireTokenWithResource to Auth API, rename acquireToken to
+  acquireTokenWithScopes
 
 ### Patch Changes
 
@@ -115,7 +128,8 @@
 
 ### Patch Changes
 
-- 203f327c: Depend on an explicit version of Kotlin Android plugin using the [plugins DSL](https://docs.gradle.org/current/userguide/plugins.html#sec:plugins_block)
+- 203f327c: Depend on an explicit version of Kotlin Android plugin using the
+  [plugins DSL](https://docs.gradle.org/current/userguide/plugins.html#sec:plugins_block)
 - Updated dependencies [203f327c]
   - @rnx-kit/react-native-auth@0.1.4
 
@@ -139,8 +153,11 @@
 
 ### Patch Changes
 
-- 8c62b6a: Fixed `msal_config.json` being generated before the `:app:clean` task is run, causing MSAL to throw an exception on initialisation because of the missing configuration file.
-- 521505c: Throw if `msal_config.json` is missing, otherwise Android will throw a cryptic/generic exception that's hard to debug.
+- 8c62b6a: Fixed `msal_config.json` being generated before the `:app:clean` task
+  is run, causing MSAL to throw an exception on initialisation because of the
+  missing configuration file.
+- 521505c: Throw if `msal_config.json` is missing, otherwise Android will throw
+  a cryptic/generic exception that's hard to debug.
 
 ## 1.0.0
 
@@ -162,7 +179,8 @@ Mon, 22 Nov 2021 12:15:07 GMT
 
 ### Minor changes
 
-- Refactored auth callback to make it simpler to add properties to the result. (4123478+tido64@users.noreply.github.com)
+- Refactored auth callback to make it simpler to add properties to the result.
+  (4123478+tido64@users.noreply.github.com)
 
 ## 0.1.0
 
@@ -170,4 +188,5 @@ Wed, 03 Nov 2021 18:15:39 GMT
 
 ### Minor changes
 
-- MSAL module for react-native-test-app (4123478+tido64@users.noreply.github.com)
+- MSAL module for react-native-test-app
+  (4123478+tido64@users.noreply.github.com)

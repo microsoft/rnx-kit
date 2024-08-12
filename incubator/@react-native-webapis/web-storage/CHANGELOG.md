@@ -1,5 +1,11 @@
 # @react-native-webapis/web-storage
 
+## 0.2.8
+
+### Patch Changes
+
+- 855fa90: Bumped `androidx.core:core-ktx` to 1.13.1
+
 ## 0.2.7
 
 ### Patch Changes
