@@ -36,7 +36,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Set up toolchain
-        uses: microsoft/react-native-test-app/.github/actions/setup-toolchain@3.7.2
+        uses: microsoft/react-native-test-app/.github/actions/setup-toolchain@3.9.0
         with:
           platform: android
           cache-npm-dependencies: ${{ github.event.inputs.packageManager }}
@@ -66,7 +66,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Set up toolchain
-        uses: microsoft/react-native-test-app/.github/actions/setup-toolchain@3.7.2
+        uses: microsoft/react-native-test-app/.github/actions/setup-toolchain@3.9.0
         with:
           platform: ios
           project-root: ${{ github.event.inputs.projectRoot }}
@@ -120,7 +120,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Set up toolchain
-        uses: microsoft/react-native-test-app/.github/actions/setup-toolchain@3.7.2
+        uses: microsoft/react-native-test-app/.github/actions/setup-toolchain@3.9.0
         with:
           platform: macos
           project-root: ${{ github.event.inputs.projectRoot }}
@@ -154,7 +154,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Set up toolchain
-        uses: microsoft/react-native-test-app/.github/actions/setup-toolchain@3.7.2
+        uses: microsoft/react-native-test-app/.github/actions/setup-toolchain@3.9.0
         with:
           platform: windows
           cache-npm-dependencies: ${{ github.event.inputs.packageManager }}
