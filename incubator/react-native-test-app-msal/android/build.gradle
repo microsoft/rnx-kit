@@ -173,7 +173,7 @@ android {
 dependencies {
     def kotlinVersionNumber = toVersionNumber(kotlinVersion)
     if (kotlinVersionNumber >= 10800) {
-        implementation "androidx.activity:activity-ktx:1.8.2"
+        implementation "androidx.activity:activity-ktx:1.9.1"
     } else {
         implementation(["androidx.activity", "activity-ktx", "1.6.1"].join(":"))
     }
