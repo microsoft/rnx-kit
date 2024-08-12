@@ -1,5 +1,15 @@
 # Change Log - @rnx-kit/cli
 
+## 0.16.30
+
+### Patch Changes
+
+- 6703a66: Minor cleanups in preparation for bigger changes in the near future
+- Updated dependencies [9b5d21b]
+- Updated dependencies [2d09aef]
+  - @rnx-kit/tools-react-native@1.4.0
+  - @rnx-kit/metro-serializer-esbuild@0.1.36
+
 ## 0.16.29
 
 ### Patch Changes

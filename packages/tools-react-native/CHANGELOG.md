@@ -1,5 +1,12 @@
 # Change Log - @rnx-kit/tools-react-native
 
+## 1.4.0
+
+### Minor Changes
+
+- 9b5d21b: Added caching layer on top of `@react-native-community/cli`'s
+  `loadConfig()`
+
 ## 1.3.5
 
 ### Patch Changes
@@ -10,7 +17,8 @@
 
 ### Patch Changes
 
-- 2885f73c: Ensure correct Metro dependencies are used by traversing the dependency chain starting from `react-native`
+- 2885f73c: Ensure correct Metro dependencies are used by traversing the
+  dependency chain starting from `react-native`
 
 ## 1.3.3
 
@@ -24,7 +32,8 @@
 
 ### Patch Changes
 
-- 1bc772cc: Find `metro` via the new `@react-native/community-cli-plugin` package
+- 1bc772cc: Find `metro` via the new `@react-native/community-cli-plugin`
+  package
 
 ## 1.3.1
 
@@ -37,13 +46,15 @@
 
 ### Minor Changes
 
-- 75b98095: Added functions for finding the installation path of Metro, and for retrieving its version
+- 75b98095: Added functions for finding the installation path of Metro, and for
+  retrieving its version
 
 ## 1.2.3
 
 ### Patch Changes
 
-- 53df63dd: `extensions` argument of `expandPlatformExtensions` should be readonly
+- 53df63dd: `extensions` argument of `expandPlatformExtensions` should be
+  readonly
 
 ## 1.2.2
 
@@ -55,7 +66,8 @@
 
 ### Patch Changes
 
-- 3232fdd: Fix `ERR_PACKAGE_PATH_NOT_EXPORTED` when importing packages using the `exports` field
+- 3232fdd: Fix `ERR_PACKAGE_PATH_NOT_EXPORTED` when importing packages using the
+  `exports` field
 
 ## 1.2.0
 
@@ -75,7 +87,8 @@ Mon, 01 Nov 2021 13:46:13 GMT
 
 ### Patches
 
-- Normalize main and types fields across all packages which use them. (afoxman@microsoft.com)
+- Normalize main and types fields across all packages which use them.
+  (afoxman@microsoft.com)
 
 ## 1.0.1
 
