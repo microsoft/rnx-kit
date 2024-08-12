@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/metro-serializer-esbuild",
-  "version": "0.1.35",
+  "version": "0.1.36",
   "description": "esbuild serializer for Metro",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/metro-serializer-esbuild#readme",
   "license": "MIT",
@@ -28,7 +28,7 @@
   "dependencies": {
     "@rnx-kit/console": "^1.0.11",
     "@rnx-kit/tools-node": "^2.0.0",
-    "@rnx-kit/tools-react-native": "^1.3.4",
+    "@rnx-kit/tools-react-native": "^1.4.0",
     "esbuild": "^0.23.0",
     "esbuild-plugin-lodash": "^1.2.0",
     "fast-glob": "^3.2.7"

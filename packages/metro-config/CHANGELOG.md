@@ -1,5 +1,15 @@
 # Change Log - @rnx-kit/metro-config
 
+## 1.3.16
+
+### Patch Changes
+
+- f0a85ac: Let users know if they're missing `@react-native/metro-config` when
+  on React Native 0.72+
+- f0a85ac: Workaround for Expo unintentionally overwriting our Metro config
+- Updated dependencies [9b5d21b]
+  - @rnx-kit/tools-react-native@1.4.0
+
 ## 1.3.15
 
 ### Patch Changes
@@ -10,7 +20,8 @@
 
 ### Patch Changes
 
-- b7a3e823: Resolve out-of-tree platform packages to help Metro find them in pnpm setups
+- b7a3e823: Resolve out-of-tree platform packages to help Metro find them in
+  pnpm setups
 
 ## 1.3.13
 
@@ -23,19 +34,22 @@
 ### Patch Changes
 
 - ab32e46f: Remove unused dependencies and update the README
-- a5ec943a: Fix `@react-native/metro-config` not being resolved correctly in a pnpm setup
+- a5ec943a: Fix `@react-native/metro-config` not being resolved correctly in a
+  pnpm setup
 
 ## 1.3.11
 
 ### Patch Changes
 
-- a399bcbe: `@rnx-kit/babel-preset-metro-react-native` has a peer dependency on `@babel/core` so we need to forward it
+- a399bcbe: `@rnx-kit/babel-preset-metro-react-native` has a peer dependency on
+  `@babel/core` so we need to forward it
 
 ## 1.3.10
 
 ### Patch Changes
 
-- 2885f73c: Ensure correct Metro dependencies are used by traversing the dependency chain starting from `react-native`
+- 2885f73c: Ensure correct Metro dependencies are used by traversing the
+  dependency chain starting from `react-native`
 - Updated dependencies [2885f73c]
   - @rnx-kit/tools-react-native@1.3.4
 
@@ -98,7 +112,8 @@
 
 ### Patch Changes
 
-- e0d01e30: Remove `module` from `resolverMainFields` as Metro currently does not support it and causes confusion when bundling fails.
+- e0d01e30: Remove `module` from `resolverMainFields` as Metro currently does
+  not support it and causes confusion when bundling fails.
 
 ## 1.3.0
 
@@ -116,7 +131,8 @@
 
 ### Patch Changes
 
-- a9296175: Verify `server.enhanceMiddleware` is only set if `transformer.assetPlugins` includes the asset plugin.
+- a9296175: Verify `server.enhanceMiddleware` is only set if
+  `transformer.assetPlugins` includes the asset plugin.
 
 ## 1.2.37
 
@@ -156,32 +172,37 @@
 
 ### Patch Changes
 
-- 77b9f0d9: Fix `resolveUniqueModule` not resolving symlinks that are relative paths
+- 77b9f0d9: Fix `resolveUniqueModule` not resolving symlinks that are relative
+  paths
 
 ## 1.2.31
 
 ### Patch Changes
 
-- 3ee09f6: Fix Rush workspaces not being detected when set up as a post-install step
+- 3ee09f6: Fix Rush workspaces not being detected when set up as a post-install
+  step
 
 ## 1.2.30
 
 ### Patch Changes
 
-- d1df99c: Add a helper function that returns both the path to a specified package and a regex pattern that excludes other copies of it.
+- d1df99c: Add a helper function that returns both the path to a specified
+  package and a regex pattern that excludes other copies of it.
 
 ## 1.2.29
 
 ### Patch Changes
 
-- 0e703fe: Metro introduced `blockList` in 0.60, but still prefers `blacklistRE` if it is also set.
+- 0e703fe: Metro introduced `blockList` in 0.60, but still prefers `blacklistRE`
+  if it is also set.
 
 ## 1.2.28
 
 ### Patch Changes
 
 - 0eb8b8b: Bump workspace-tools to 0.18.2 for performance improvements
-- 8ffd299: Ignore .tlog files to avoid crashing the dev server while building the Windows app
+- 8ffd299: Ignore .tlog files to avoid crashing the dev server while building
+  the Windows app
 
 ## 1.2.27
 
@@ -301,7 +322,8 @@ Thu, 16 Sep 2021 10:10:39 GMT
 
 ### Patches
 
-- Bump @rnx-kit/metro-config to v1.2.14 (4123478+tido64@users.noreply.github.com)
+- Bump @rnx-kit/metro-config to v1.2.14
+  (4123478+tido64@users.noreply.github.com)
 
 ## 1.2.13
 
@@ -309,8 +331,10 @@ Wed, 08 Sep 2021 06:42:50 GMT
 
 ### Patches
 
-- Wrong module may be resolved because we're ignoring symlinks (4123478+tido64@users.noreply.github.com)
-- Bump @rnx-kit/metro-config to v1.2.13 (4123478+tido64@users.noreply.github.com)
+- Wrong module may be resolved because we're ignoring symlinks
+  (4123478+tido64@users.noreply.github.com)
+- Bump @rnx-kit/metro-config to v1.2.13
+  (4123478+tido64@users.noreply.github.com)
 
 ## 1.2.12
 
@@ -318,7 +342,8 @@ Fri, 03 Sep 2021 12:18:30 GMT
 
 ### Patches
 
-- Bump @rnx-kit/metro-config to v1.2.12 (4123478+tido64@users.noreply.github.com)
+- Bump @rnx-kit/metro-config to v1.2.12
+  (4123478+tido64@users.noreply.github.com)
 
 ## 1.2.11
 
@@ -326,7 +351,8 @@ Tue, 31 Aug 2021 06:43:13 GMT
 
 ### Patches
 
-- Bump @rnx-kit/metro-config to v1.2.11 (4123478+tido64@users.noreply.github.com)
+- Bump @rnx-kit/metro-config to v1.2.11
+  (4123478+tido64@users.noreply.github.com)
 
 ## 1.2.10
 
@@ -334,7 +360,8 @@ Tue, 31 Aug 2021 06:21:44 GMT
 
 ### Patches
 
-- Fix assets not resolving correctly in monorepos (4123478+tido64@users.noreply.github.com)
+- Fix assets not resolving correctly in monorepos
+  (4123478+tido64@users.noreply.github.com)
 
 ## 1.2.9
 
@@ -366,7 +393,8 @@ Sat, 21 Aug 2021 08:22:48 GMT
 
 ### Patches
 
-- Integrate tools package and other common libraries throughout monorepo, removing custom code. (afoxman@microsoft.com)
+- Integrate tools package and other common libraries throughout monorepo,
+  removing custom code. (afoxman@microsoft.com)
 - Bump @rnx-kit/metro-config to v1.2.6 (afoxman@microsoft.com)
 
 ## 1.2.5
@@ -391,7 +419,8 @@ Thu, 22 Jul 2021 09:12:14 GMT
 
 ### Patches
 
-- Prevent Metro from watching temporary files generated by Visual Studio (4123478+tido64@users.noreply.github.com)
+- Prevent Metro from watching temporary files generated by Visual Studio
+  (4123478+tido64@users.noreply.github.com)
 
 ## 1.2.2
 
@@ -407,7 +436,8 @@ Tue, 22 Jun 2021 15:04:23 GMT
 
 ### Patches
 
-- Bumped find-up to 5.0, and workspace-tools to 0.16.2 (4123478+tido64@users.noreply.github.com)
+- Bumped find-up to 5.0, and workspace-tools to 0.16.2
+  (4123478+tido64@users.noreply.github.com)
 
 ## 1.2.0
 
@@ -415,7 +445,8 @@ Thu, 20 May 2021 06:03:39 GMT
 
 ### Minor changes
 
-- Added support for Lerna, pnpm, Rush workspaces (4123478+tido64@users.noreply.github.com)
+- Added support for Lerna, pnpm, Rush workspaces
+  (4123478+tido64@users.noreply.github.com)
 
 ## 1.1.4
 
@@ -423,7 +454,8 @@ Tue, 18 May 2021 19:20:51 GMT
 
 ### Patches
 
-- Bump @rnx-kit/babel-preset-metro-react-native to v1.0.3 (4123478+tido64@users.noreply.github.com)
+- Bump @rnx-kit/babel-preset-metro-react-native to v1.0.3
+  (4123478+tido64@users.noreply.github.com)
 
 ## 1.1.3
 
@@ -431,7 +463,8 @@ Fri, 16 Apr 2021 12:03:52 GMT
 
 ### Patches
 
-- Bump @rnx-kit/babel-preset-metro-react-native to v1.0.2 (4123478+tido64@users.noreply.github.com)
+- Bump @rnx-kit/babel-preset-metro-react-native to v1.0.2
+  (4123478+tido64@users.noreply.github.com)
 
 ## 1.1.2
 
@@ -447,7 +480,8 @@ Thu, 11 Mar 2021 22:51:12 GMT
 
 ### Patches
 
-- Fix fail to resolve react-native on Windows (4123478+tido64@users.noreply.github.com)
+- Fix fail to resolve react-native on Windows
+  (4123478+tido64@users.noreply.github.com)
 
 ## 1.1.0
 
@@ -455,7 +489,8 @@ Thu, 11 Mar 2021 15:31:28 GMT
 
 ### Minor changes
 
-- Removes makeBabelConfig() for @rnx-kit/babel-preset-metro-react-native (4123478+tido64@users.noreply.github.com)
+- Removes makeBabelConfig() for @rnx-kit/babel-preset-metro-react-native
+  (4123478+tido64@users.noreply.github.com)
 
 ## 1.0.4
 
@@ -463,7 +498,8 @@ Tue, 09 Mar 2021 08:21:51 GMT
 
 ### Patches
 
-- Exclusion rules should ignore symlinks (4123478+tido64@users.noreply.github.com)
+- Exclusion rules should ignore symlinks
+  (4123478+tido64@users.noreply.github.com)
 
 ## 1.0.3
 
@@ -471,7 +507,8 @@ Mon, 08 Mar 2021 10:59:59 GMT
 
 ### Patches
 
-- Fix sibling packages resolving to wrong react-native copy (4123478+tido64@users.noreply.github.com)
+- Fix sibling packages resolving to wrong react-native copy
+  (4123478+tido64@users.noreply.github.com)
 
 ## 1.0.2
 
@@ -479,7 +516,8 @@ Thu, 18 Feb 2021 09:33:32 GMT
 
 ### Patches
 
-- Ignore hoisted react-native if a local copy exists (4123478+tido64@users.noreply.github.com)
+- Ignore hoisted react-native if a local copy exists
+  (4123478+tido64@users.noreply.github.com)
 
 ## 1.0.1
 
@@ -487,7 +525,8 @@ Tue, 16 Feb 2021 09:27:59 GMT
 
 ### Patches
 
-- Publish babel-plugin-import-path-remapper separately (4123478+tido64@users.noreply.github.com)
+- Publish babel-plugin-import-path-remapper separately
+  (4123478+tido64@users.noreply.github.com)
 
 ## 1.0.0
 
@@ -495,4 +534,5 @@ Mon, 25 Jan 2021 07:42:30 GMT
 
 ### Patches
 
-- Replace scope option for a test function (4123478+tido64@users.noreply.github.com)
+- Replace scope option for a test function
+  (4123478+tido64@users.noreply.github.com)
