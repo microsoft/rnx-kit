@@ -41,6 +41,20 @@ module.exports = makeMetroConfig({
 `makeMetroConfig` takes a Metro config as parameter. The config is augmented
 with additional fields to make sure it works smoothly in a monorepo.
 
+### Expo
+
+`@rnx-kit/metro-config` can be used with Expo. Pass its default config to
+`makeMetroConfig` like below:
+
+```js
+// metro.config.js
+const { getDefaultConfig } = require("@expo/metro-config");
+const { makeMetroConfig } = require("@rnx-kit/metro-config");
+
+const config = getDefaultConfig(__dirname);
+module.exports = makeMetroConfig(config);
+```
+
 ## Known Limitations
 
 While Metro is the de-facto standard, it lacks a few features that would make it
