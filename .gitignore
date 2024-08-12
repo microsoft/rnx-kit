@@ -16,6 +16,7 @@
 !.ccache/ccache.conf
 .gradle/
 .nx/cache
+.nx/workspace-data
 .idea/
 .xcode.env*
 .yarn/*
