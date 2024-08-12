@@ -7,6 +7,7 @@ import ts from "typescript";
 /**
  * @typedef {import("typedoc").JSONOutput.Comment} Comment
  * @typedef {import("typedoc").JSONOutput.CommentDisplayPart} CommentDisplayPart
+ * @typedef {import("typedoc").JSONOutput.ParameterReflection} ParameterReflection
  * @typedef {import("typedoc").JSONOutput.SourceReference} SourceReference
  */
 
@@ -107,6 +108,25 @@ function renderSummary(parts) {
 }
 
 /**
+ * @param {string} source
+ * @param {string} name
+ * @param {ParameterReflection[] | undefined} parameters
+ * @param {Comment} comment
+ * @returns {[string, string, string]}
+ */
+function makeFunctionEntry(source, name, parameters, comment) {
+  return [
+    source,
+    Array.isArray(parameters)
+      ? `\`${name}(${parameters
+          .map((p) => (p.flags.isRest ? `...${p.name}` : p.name))
+          .join(", ")})\``
+      : `\`${name}()\``,
+    renderSummary(comment.summary),
+  ];
+}
+
+/**
  * @param {[string, string, string][]} exportedTypes
  * @param {[string, string, string][]} exportedFunctions
  */
@@ -176,29 +196,34 @@ export async function updateApiReadme() {
         }
         break;
       }
+
       case typedoc.ReflectionKind.Function: {
+        if (!signatures) {
+          break;
+        }
+
         const source = getBaseName(sources);
-        if (signatures) {
+        if (isCommented(source, name, comment)) {
+          const { parameters } = signatures[signatures.length - 1];
+          const fn = makeFunctionEntry(source, name, parameters, comment);
+          exportedFunctions.push(fn);
+          break;
+        } else {
           for (let i = signatures.length - 1; i >= 0; --i) {
-            const { name, comment, parameters } = signatures[i];
+            const { comment, parameters } = signatures[i];
             if (isCommented(source, name, comment)) {
-              exportedFunctions.push([
-                source,
-                Array.isArray(parameters)
-                  ? `\`${name}(${parameters
-                      .map((p) => (p.flags.isRest ? `...${p.name}` : p.name))
-                      .join(", ")})\``
-                  : `\`${name}()\``,
-                renderSummary(comment.summary),
-              ]);
+              const fn = makeFunctionEntry(source, name, parameters, comment);
+              exportedFunctions.push(fn);
               break;
             }
           }
         }
         break;
       }
+
       default:
         console.warn("Unknown kind:", name);
+        break;
     }
   }
 
