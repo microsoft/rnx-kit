@@ -30,7 +30,7 @@ describe("applyExpoWorkarounds()", () => {
 
     ok("resolveRequest" in config.resolver);
 
-    applyExpoWorkarounds(config as MetroConfig, {});
+    applyExpoWorkarounds(config as unknown as MetroConfig, {});
 
     ok(!("resolveRequest" in config.resolver));
   });
