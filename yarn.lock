@@ -12059,8 +12059,8 @@ __metadata:
   linkType: hard
 
 "react-native-test-app@npm:^3.3.5":
-  version: 3.8.13
-  resolution: "react-native-test-app@npm:3.8.13"
+  version: 3.9.0
+  resolution: "react-native-test-app@npm:3.9.0"
   dependencies:
     "@rnx-kit/react-native-host": "npm:^0.4.11"
     ajv: "npm:^8.0.0"
@@ -12068,14 +12068,14 @@ __metadata:
     fast-xml-parser: "npm:^4.0.0"
     prompts: "npm:^2.4.0"
     semver: "npm:^7.3.5"
-    uuid: "npm:^9.0.0"
+    uuid: "npm:^10.0.0"
   peerDependencies:
-    "@callstack/react-native-visionos": 0.73 - 0.74
+    "@callstack/react-native-visionos": 0.73 - 0.75
     "@expo/config-plugins": ">=5.0"
-    react: 17.0.1 - 18.3
-    react-native: 0.66 - 0.74 || >=0.75.0-0 <0.75.0
+    react: 17.0.1 - 19.0
+    react-native: 0.66 - 0.75 || >=0.76.0-0 <0.76.0
     react-native-macos: ^0.0.0-0 || 0.66 || 0.68 || 0.71 - 0.73
-    react-native-windows: ^0.0.0-0 || 0.66 - 0.74
+    react-native-windows: ^0.0.0-0 || 0.66 - 0.75
   peerDependenciesMeta:
     "@callstack/react-native-visionos":
       optional: true
@@ -12090,7 +12090,7 @@ __metadata:
     init: scripts/init.mjs
     init-test-app: scripts/init.mjs
     install-windows-test-app: windows/test-app.mjs
-  checksum: 10c0/f1aa229828d6f4c7111265bb8cfe8b6f76ab8d2154e2fde8cb826b3cc3a04e263685659c8d0cfb7244698b297116561cab4482b84eba769f8ef0aaca31a96df7
+  checksum: 10c0/4aa6170efc8fa1e6fefd0948224f9767274c6def305b7255356613bb5ad195fab70645e103d78eea09ccadc1ac60154d23e9654015875ac1d3ae2ddd9c089bcb
   languageName: node
   linkType: hard
 
@@ -14007,6 +14007,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"uuid@npm:^10.0.0":
+  version: 10.0.0
+  resolution: "uuid@npm:10.0.0"
+  bin:
+    uuid: dist/bin/uuid
+  checksum: 10c0/eab18c27fe4ab9fb9709a5d5f40119b45f2ec8314f8d4cf12ce27e4c6f4ffa4a6321dc7db6c515068fa373c075b49691ba969f0010bf37f44c37ca40cd6bf7fe
+  languageName: node
+  linkType: hard
+
 "uuid@npm:^3.3.2":
   version: 3.4.0
   resolution: "uuid@npm:3.4.0"
@@ -14022,15 +14031,6 @@ __metadata:
   bin:
     uuid: dist/bin/uuid
   checksum: 10c0/bcbb807a917d374a49f475fae2e87fdca7da5e5530820ef53f65ba1d12131bd81a92ecf259cc7ce317cbe0f289e7d79fdfebcef9bfa3087c8c8a2fa304c9be54
-  languageName: node
-  linkType: hard
-
-"uuid@npm:^9.0.0":
-  version: 9.0.1
-  resolution: "uuid@npm:9.0.1"
-  bin:
-    uuid: dist/bin/uuid
-  checksum: 10c0/1607dd32ac7fc22f2d8f77051e6a64845c9bce5cd3dd8aa0070c074ec73e666a1f63c7b4e0f4bf2bc8b9d59dc85a15e17807446d9d2b17c8485fbc2147b27f9b
   languageName: node
   linkType: hard
 

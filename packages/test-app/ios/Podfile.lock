@@ -1071,7 +1071,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - ReactTestApp-DevSupport (3.8.13):
+  - ReactTestApp-DevSupport (3.9.0):
     - React-Core
     - React-jsi
   - ReactTestApp-MSAL (3.0.1):
@@ -1154,7 +1154,7 @@ DEPENDENCIES:
   - React-runtimescheduler (from `../node_modules/react-native/ReactCommon/react/renderer/runtimescheduler`)
   - React-utils (from `../node_modules/react-native/ReactCommon/react/utils`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
-  - "ReactNativeHost (from `../../../node_modules/.store/react-native-test-app-virtual-d3ab410d7f/node_modules/@rnx-kit/react-native-host`)"
+  - "ReactNativeHost (from `../../../node_modules/.store/react-native-test-app-virtual-85c7bc4400/node_modules/@rnx-kit/react-native-host`)"
   - ReactTestApp-DevSupport (from `../node_modules/react-native-test-app`)
   - "ReactTestApp-MSAL (from `../node_modules/@rnx-kit/react-native-test-app-msal`)"
   - ReactTestApp-Resources (from `..`)
@@ -1266,7 +1266,7 @@ EXTERNAL SOURCES:
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
   ReactNativeHost:
-    :path: "../../../node_modules/.store/react-native-test-app-virtual-d3ab410d7f/node_modules/@rnx-kit/react-native-host"
+    :path: "../../../node_modules/.store/react-native-test-app-virtual-85c7bc4400/node_modules/@rnx-kit/react-native-host"
   ReactTestApp-DevSupport:
     :path: "../node_modules/react-native-test-app"
   ReactTestApp-MSAL:
@@ -1332,7 +1332,7 @@ SPEC CHECKSUMS:
   React-utils: 4cc2ba652f5df1c8f0461d4ae9e3ee474c1354ea
   ReactCommon: 512222a2c036e9a7d1489d4c888aac178dfb0f3c
   ReactNativeHost: e4ed60295a58c717ff826de791da42e55f8aafb4
-  ReactTestApp-DevSupport: 3e70f318cd4976282a93e3648a558294b8251854
+  ReactTestApp-DevSupport: f781365c3ae6377dcfa2affe319ae66e0fb20777
   ReactTestApp-MSAL: 624c5f59bc1d79265d2dd3d91c9a6e9116c92c7e
   ReactTestApp-Resources: a4cc1f968cd26bdbd18ee0bfbd0ab8dd0ea90101
   RNWWebStorage: 2322d230be43532a0d2bd376a8148f8e926a4b59
