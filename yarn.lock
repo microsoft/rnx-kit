@@ -11755,20 +11755,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier-plugin-organize-imports@npm:^3.0.0":
-  version: 3.2.4
-  resolution: "prettier-plugin-organize-imports@npm:3.2.4"
+"prettier-plugin-organize-imports@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "prettier-plugin-organize-imports@npm:4.0.0"
   peerDependencies:
-    "@volar/vue-language-plugin-pug": ^1.0.4
-    "@volar/vue-typescript": ^1.0.4
+    "@vue/language-plugin-pug": ^2.0.24
     prettier: ">=2.0"
     typescript: ">=2.9"
+    vue-tsc: ^2.0.24
   peerDependenciesMeta:
-    "@volar/vue-language-plugin-pug":
+    "@vue/language-plugin-pug":
       optional: true
-    "@volar/vue-typescript":
+    vue-tsc:
       optional: true
-  checksum: 10c0/c20afa9b379106839a273d53c83fef70920e8ae86939d4890a06c63da19440de411568793e716bafcdd96e5ba8e34233f2944ea53ecd6ac18ba1ec0fa05bb58b
+  checksum: 10c0/6c3c2a0680540c2c27d8e0e47c7cb69d374e47534c467877a99031defa087d52a4fc972156321dadbadc10b2eb90d67398110a0be65f5b3c9db93b85a546d8f7
   languageName: node
   linkType: hard
 
@@ -12660,7 +12660,7 @@ __metadata:
     metro: "npm:^0.80.0"
     nx: "npm:~18.3.0"
     prettier: "npm:^3.0.0"
-    prettier-plugin-organize-imports: "npm:^3.0.0"
+    prettier-plugin-organize-imports: "npm:^4.0.0"
     typescript: "npm:^5.0.0"
   languageName: unknown
   linkType: soft
