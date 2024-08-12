@@ -1,7 +1,10 @@
 // @ts-check
+const {
+  readPackage,
+  findPackageDependencyDir,
+} = require("@rnx-kit/tools-node/package");
 const { findUp } = require("@rnx-kit/tools-node/path");
 const { requireModuleFromMetro } = require("@rnx-kit/tools-react-native/metro");
-const fs = require("fs");
 
 /**
  * @typedef {import("metro-config").MetroConfig} MetroConfig;
@@ -37,6 +40,33 @@ function getPreludeModules(availablePlatforms, projectRoot) {
     }
   }
   return Array.from(mainModules);
+}
+
+/**
+ * Returns whether we need to build a complete Metro config.
+ *
+ * This is a requirement starting with 0.72 as `@react-native-community/cli`
+ * will no longer provide defaults.
+ *
+ * @param {string} projectRoot
+ * @returns {boolean}
+ */
+function needsFullConfig(projectRoot) {
+  const options = { startDir: projectRoot };
+  const pkgJson = findUp("package.json", options);
+  if (!pkgJson) {
+    return false;
+  }
+
+  const rnDir = findPackageDependencyDir("react-native", options);
+  if (!rnDir) {
+    return false;
+  }
+
+  const { version } = readPackage(rnDir);
+  const [major, minor = 0] = version.split(".");
+  const v = Number(major) * 1000 + Number(minor);
+  return v === 0 || v >= 72;
 }
 
 /**
@@ -95,6 +125,22 @@ function outOfTreePlatformResolver(implementations, projectRoot) {
 }
 
 /**
+ * Tries to resolve `@react-native/metro-config` from specified directory.
+ * @param {string} fromDir
+ * @returns {string}
+ */
+function resolveMetroConfig(fromDir) {
+  const options = { paths: [fromDir] };
+  try {
+    return require.resolve("@react-native/metro-config", options);
+  } catch (_) {
+    throw new Error(
+      "Cannot find module '@react-native/metro-config'; as of React Native 0.72, it is required for configuring Metro correctly"
+    );
+  }
+}
+
+/**
  * Returns default Metro config.
  *
  * Starting with `react-native` 0.72, we need to build a complete Metro config
@@ -104,41 +150,30 @@ function outOfTreePlatformResolver(implementations, projectRoot) {
  * @returns {MetroConfig[]}
  */
 function getDefaultConfig(projectRoot) {
-  const pkgJson = findUp("package.json", { startDir: projectRoot });
-  if (!pkgJson) {
+  if (!needsFullConfig(projectRoot)) {
     return [];
   }
 
-  const manifest = fs.readFileSync(pkgJson, { encoding: "utf-8" });
-  if (manifest.includes("@react-native/metro-config")) {
-    try {
-      const metroConfigPath = require.resolve("@react-native/metro-config", {
-        paths: [projectRoot],
-      });
-      const { getDefaultConfig } = require(metroConfigPath);
-      const { getAvailablePlatforms } = require("@rnx-kit/tools-react-native");
+  const metroConfigPath = resolveMetroConfig(projectRoot);
 
-      const defaultConfig = getDefaultConfig(projectRoot);
+  const { getDefaultConfig } = require(metroConfigPath);
+  const { getAvailablePlatforms } = require("@rnx-kit/tools-react-native");
 
-      const availablePlatforms = getAvailablePlatforms(projectRoot);
-      defaultConfig.resolver.platforms = Object.keys(availablePlatforms);
-      defaultConfig.resolver.resolveRequest = outOfTreePlatformResolver(
-        availablePlatforms,
-        projectRoot
-      );
+  const defaultConfig = getDefaultConfig(projectRoot);
 
-      const preludeModules = getPreludeModules(availablePlatforms, projectRoot);
-      defaultConfig.serializer.getModulesRunBeforeMainModule = () => {
-        return preludeModules;
-      };
+  const availablePlatforms = getAvailablePlatforms(projectRoot);
+  defaultConfig.resolver.platforms = Object.keys(availablePlatforms);
+  defaultConfig.resolver.resolveRequest = outOfTreePlatformResolver(
+    availablePlatforms,
+    projectRoot
+  );
 
-      return [defaultConfig];
-    } catch (_) {
-      // Ignore
-    }
-  }
+  const preludeModules = getPreludeModules(availablePlatforms, projectRoot);
+  defaultConfig.serializer.getModulesRunBeforeMainModule = () => {
+    return preludeModules;
+  };
 
-  return [];
+  return [defaultConfig];
 }
 
 exports.getDefaultConfig = getDefaultConfig;
