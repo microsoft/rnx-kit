@@ -1,8 +1,7 @@
 import { info } from "@rnx-kit/console";
 import type { MetroTerminal } from "@rnx-kit/metro-service";
-import nodeFetch from "node-fetch";
+import readline from "node:readline";
 import qrcode from "qrcode";
-import readline from "readline";
 import type { DevServerMiddleware } from "./types";
 
 type Options = {
@@ -44,9 +43,7 @@ export function attachKeyHandlers({
 
         case "j": {
           info("Opening debugger...");
-          // TODO: Remove `node-fetch` when we drop support for Node 16
-          const ftch = "fetch" in globalThis ? fetch : nodeFetch;
-          ftch(devServerUrl + "/open-debugger", { method: "POST" });
+          fetch(devServerUrl + "/open-debugger", { method: "POST" });
           break;
         }
 

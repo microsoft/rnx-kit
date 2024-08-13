@@ -1,8 +1,8 @@
 import type * as logger from "@rnx-kit/console";
 import type { Server as Middleware } from "connect";
-import type { Server as HttpServer } from "http";
-import type { Server as HttpsServer } from "https";
 import type { RunServerOptions } from "metro";
+import type { Server as HttpServer } from "node:http";
+import type { Server as HttpsServer } from "node:https";
 
 // https://github.com/react-native-community/cli/blob/11.x/packages/cli-server-api/src/index.ts#L32
 type MiddlewareOptions = {

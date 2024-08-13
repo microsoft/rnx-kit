@@ -1,4 +1,4 @@
-import * as path from "path";
+import * as path from "node:path";
 import { assembleAarBundle } from "../../src/copy-assets";
 
 jest.mock("child_process");
@@ -7,7 +7,6 @@ jest.unmock("@rnx-kit/console");
 
 describe("assembleAarBundle", () => {
   const fs = require("fs");
-  const fsx = require("fs-extra");
 
   const consoleWarnSpy = jest.spyOn(global.console, "warn");
   const spawnSyncSpy = jest.spyOn(require("child_process"), "spawnSync");
@@ -25,17 +24,17 @@ describe("assembleAarBundle", () => {
       version: "0.0.0-dev",
     },
     options,
+    reactNativePath: require.resolve("react-native"),
   };
 
   const dummyManifest = JSON.stringify({ version: "0.0.0-dev" });
 
   function findFiles() {
-    return Object.entries(fsx.__toJSON());
+    return Object.entries(fs.__toJSON());
   }
 
   function mockFiles(files: Record<string, string> = {}) {
     fs.__setMockFiles(files);
-    fsx.__setMockFiles(files);
   }
 
   afterEach(() => {

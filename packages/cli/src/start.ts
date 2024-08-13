@@ -10,7 +10,7 @@ import {
 import type { ReportableEvent, Reporter, RunServerOptions } from "metro";
 import type { Middleware } from "metro-config";
 import type Server from "metro/src/Server";
-import * as path from "path";
+import * as path from "node:path";
 import { requireExternal } from "./helpers/externals";
 import { customizeMetroConfig } from "./helpers/metro-config";
 import { asNumber, asResolvedPath, asStringArray } from "./helpers/parsers";
