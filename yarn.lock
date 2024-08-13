@@ -4286,7 +4286,7 @@ __metadata:
     "@types/node": "npm:^20.0.0"
     "@types/node-fetch": "npm:^2.6.5"
     eslint: "npm:^8.56.0"
-    flow-remove-types: "npm:~2.235.0"
+    flow-remove-types: "npm:~2.243.0"
     metro: "npm:^0.80.3"
     metro-config: "npm:^0.80.3"
     metro-core: "npm:^0.80.3"
@@ -8058,17 +8058,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"flow-remove-types@npm:~2.235.0":
-  version: 2.235.1
-  resolution: "flow-remove-types@npm:2.235.1"
+"flow-remove-types@npm:~2.243.0":
+  version: 2.243.0
+  resolution: "flow-remove-types@npm:2.243.0"
   dependencies:
-    hermes-parser: "npm:0.20.1"
+    hermes-parser: "npm:0.23.0"
     pirates: "npm:^3.0.2"
     vlq: "npm:^0.2.1"
   bin:
     flow-node: flow-node
     flow-remove-types: flow-remove-types
-  checksum: 10c0/28237b1b3add1c142db8df49b17dfc646be1f7c4b6833c408f5a13ff6785a9f620f7a49180cb1236816d54cb1e8bfb4d105960403ab92a376534d47386b14f00
+  checksum: 10c0/4e6135f6b172db0e7f85258998180a40320932d9d46fc38f6d537436242de738332ccaf539f4f270990cd88bfb2b89d7c44ba20063e2abb98cc3e45c222b635c
   languageName: node
   linkType: hard
 
@@ -8567,13 +8567,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"hermes-estree@npm:0.20.1":
-  version: 0.20.1
-  resolution: "hermes-estree@npm:0.20.1"
-  checksum: 10c0/86cfb395970f50fdac09ad9784a86b65c7187d02b5f99f0f0321d936aa9ec52d1e07aef02c21b18b649abdec5f6acc02eb6275edf7d33b4d3d23e3fa0af85c41
-  languageName: node
-  linkType: hard
-
 "hermes-estree@npm:0.23.0":
   version: 0.23.0
   resolution: "hermes-estree@npm:0.23.0"
@@ -8587,15 +8580,6 @@ __metadata:
   dependencies:
     hermes-estree: "npm:0.19.1"
   checksum: 10c0/940ccef90673b8e905016332d2660ae00ad747e2d32c694a52dce4ea220835dc1bae299554a7a8eeccb449561065bd97f3690363c087fbf69ad7cbff2deeec35
-  languageName: node
-  linkType: hard
-
-"hermes-parser@npm:0.20.1":
-  version: 0.20.1
-  resolution: "hermes-parser@npm:0.20.1"
-  dependencies:
-    hermes-estree: "npm:0.20.1"
-  checksum: 10c0/b93746028feac7d1dccd54f8b420e8f7d6e0adf9ff0bdbdf9bb1f327198da91ca7f893af62fba99ac9a57bfd5f15dcb90cca40cf4e1a090a6ea8ab2160a02f86
   languageName: node
   linkType: hard
 

@@ -60,7 +60,7 @@
     "@types/node": "^20.0.0",
     "@types/node-fetch": "^2.6.5",
     "eslint": "^8.56.0",
-    "flow-remove-types": "~2.235.0",
+    "flow-remove-types": "~2.243.0",
     "metro": "^0.80.3",
     "metro-config": "^0.80.3",
     "metro-core": "^0.80.3",
