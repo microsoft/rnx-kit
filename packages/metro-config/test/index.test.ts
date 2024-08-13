@@ -273,7 +273,6 @@ describe("makeMetroConfig", () => {
     deepEqual(Object.keys(config.resolver.extraNodeModules), [
       "react",
       "react-native",
-      "react-native-macos",
       "react-native-windows",
       "@babel/runtime",
     ]);
@@ -348,7 +347,6 @@ describe("makeMetroConfig", () => {
     deepEqual(Object.keys(config.resolver.extraNodeModules), [
       "react",
       "react-native",
-      "react-native-macos",
       "react-native-windows",
       "@babel/runtime",
     ]);
@@ -395,7 +393,6 @@ describe("makeMetroConfig", () => {
       "my-awesome-package",
       "react",
       "react-native",
-      "react-native-macos",
       "react-native-windows",
     ]);
 

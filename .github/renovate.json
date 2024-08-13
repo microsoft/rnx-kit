@@ -5,7 +5,7 @@
     {
       "groupName": "@react-native-community/cli",
       "matchPackagePrefixes": ["@react-native-community/cli"],
-      "allowedVersions": "^12.0.0"
+      "allowedVersions": "^13.0.0"
     },
     {
       "groupName": "Android",
@@ -75,7 +75,7 @@
         "react-native-macos",
         "react-native-windows"
       ],
-      "allowedVersions": "^0.73.0"
+      "allowedVersions": "^0.74.0"
     }
   ],
   "postUpdateOptions": ["yarnDedupeHighest"],

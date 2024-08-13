@@ -105,6 +105,10 @@ export const profile: Profile = {
     name: "react-native-reanimated",
     version: "^3.6.0",
   },
+  clipboard: {
+    name: "@react-native-clipboard/clipboard",
+    version: "^1.14.0",
+  },
   "datetime-picker": {
     name: "@react-native-community/datetimepicker",
     version: "^8.0.0",
@@ -150,9 +154,5 @@ export const profile: Profile = {
   webview: {
     name: "react-native-webview",
     version: "^13.10.0",
-  },
-  clipboard: {
-    name: "@react-native-clipboard/clipboard",
-    version: "^1.14.0",
   },
 };

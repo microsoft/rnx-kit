@@ -52,7 +52,7 @@
     "@types/babel__template": "^7.0.0",
     "@types/node": "^20.0.0",
     "eslint": "^8.56.0",
-    "metro-config": "^0.80.0",
+    "metro-config": "^0.80.3",
     "prettier": "^3.0.0",
     "typescript": "^5.0.0"
   },
@@ -60,7 +60,7 @@
     "alignDeps": {
       "requirements": {
         "development": [
-          "react-native@0.73"
+          "react-native@0.74"
         ],
         "production": [
           "react-native@>=0.72 <1.0"

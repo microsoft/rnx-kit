@@ -230,7 +230,7 @@ exports[`renders correctly 1`] = `
             }
             testID="react-native-value"
           >
-            0.73.8
+            0.74.5
           </Text>
         </View>
         <View
