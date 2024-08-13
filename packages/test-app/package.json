@@ -27,9 +27,8 @@
   "dependencies": {
     "@react-native-webapis/web-storage": "workspace:*",
     "react": "18.2.0",
-    "react-native": "^0.73.0",
-    "react-native-macos": "^0.73.0",
-    "react-native-windows": "^0.73.0"
+    "react-native": "^0.74.0",
+    "react-native-windows": "^0.74.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
@@ -38,8 +37,8 @@
     "@babel/preset-env": "^7.20.0",
     "@babel/runtime": "^7.20.0",
     "@jridgewell/trace-mapping": "^0.3.18",
-    "@react-native/babel-preset": "^0.73.0",
-    "@react-native/metro-config": "^0.73.0",
+    "@react-native/babel-preset": "^0.74.0",
+    "@react-native/metro-config": "^0.74.0",
     "@rnx-kit/babel-preset-metro-react-native": "workspace:*",
     "@rnx-kit/build": "workspace:*",
     "@rnx-kit/cli": "workspace:*",
@@ -118,10 +117,6 @@
             "bundleOutput": "dist/main.ios.jsbundle",
             "sourcemapOutput": "dist/main.ios.jsbundle.map"
           },
-          "macos": {
-            "bundleOutput": "dist/main.macos.jsbundle",
-            "sourcemapOutput": "dist/main.macos.jsbundle.map"
-          },
           "windows": {
             "bundleOutput": "dist/main.windows.bundle",
             "sourcemapOutput": "dist/main.windows.bundle.map"
@@ -161,10 +156,6 @@
             "bundleOutput": "dist/main+esbuild.ios.jsbundle",
             "sourcemapOutput": "dist/main+esbuild.ios.jsbundle.map"
           },
-          "macos": {
-            "bundleOutput": "dist/main+esbuild.macos.jsbundle",
-            "sourcemapOutput": "dist/main+esbuild.macos.jsbundle.map"
-          },
           "windows": {
             "bundleOutput": "dist/main+esbuild.windows.bundle",
             "sourcemapOutput": "dist/main+esbuild.windows.bundle.map"
@@ -192,12 +183,11 @@
         "@rnx-kit/scripts/align-deps-preset.cjs"
       ],
       "requirements": [
-        "react-native@0.73"
+        "react-native@0.74"
       ],
       "capabilities": [
         "core-android",
         "core-ios",
-        "core-macos",
         "core-windows",
         "core/testing",
         "babel-preset-react-native",
