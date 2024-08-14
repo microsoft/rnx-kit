@@ -27,9 +27,6 @@
     "url": "https://github.com/microsoft/rnx-kit",
     "directory": "incubator/@react-native-webapis/web-storage"
   },
-  "engines": {
-    "node": ">=14.15"
-  },
   "scripts": {
     "build": "rnx-kit-scripts build",
     "format": "rnx-kit-scripts format",
@@ -69,6 +66,9 @@
     "react-native-macos": "^0.74.0",
     "react-native-windows": "^0.74.0",
     "typescript": "^5.0.0"
+  },
+  "engines": {
+    "node": ">=16.17"
   },
   "codegenConfig": {
     "name": "RNWWebStorageSpec",
