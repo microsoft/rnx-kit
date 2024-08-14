@@ -1145,7 +1145,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - ReactTestApp-DevSupport (3.9.0):
+  - ReactTestApp-DevSupport (3.9.2):
     - React-Core
     - React-jsi
   - ReactTestApp-MSAL (3.0.2):
@@ -1233,7 +1233,7 @@ DEPENDENCIES:
   - React-runtimescheduler (from `../node_modules/react-native/ReactCommon/react/renderer/runtimescheduler`)
   - React-utils (from `../node_modules/react-native/ReactCommon/react/utils`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
-  - "ReactNativeHost (from `../../../node_modules/.store/react-native-test-app-virtual-85c7bc4400/node_modules/@rnx-kit/react-native-host`)"
+  - "ReactNativeHost (from `../../../node_modules/.store/react-native-test-app-virtual-d979642baf/node_modules/@rnx-kit/react-native-host`)"
   - ReactTestApp-DevSupport (from `../node_modules/react-native-test-app`)
   - "ReactTestApp-MSAL (from `../node_modules/@rnx-kit/react-native-test-app-msal`)"
   - ReactTestApp-Resources (from `..`)
@@ -1350,7 +1350,7 @@ EXTERNAL SOURCES:
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
   ReactNativeHost:
-    :path: "../../../node_modules/.store/react-native-test-app-virtual-85c7bc4400/node_modules/@rnx-kit/react-native-host"
+    :path: "../../../node_modules/.store/react-native-test-app-virtual-d979642baf/node_modules/@rnx-kit/react-native-host"
   ReactTestApp-DevSupport:
     :path: "../node_modules/react-native-test-app"
   ReactTestApp-MSAL:
@@ -1418,7 +1418,7 @@ SPEC CHECKSUMS:
   React-utils: b4b4a8bdd58632a9ec314071fbd4a642d984718e
   ReactCommon: bfd464c8f774a0acb93cf2a45afa80b763431f1b
   ReactNativeHost: 8eb3df83140fa4c06c56d50185e821191b47d4b6
-  ReactTestApp-DevSupport: f781365c3ae6377dcfa2affe319ae66e0fb20777
+  ReactTestApp-DevSupport: cbe23c1d1999516afa35e9758ef400b6bd3f7046
   ReactTestApp-MSAL: 174e769896f8be52ba0259b7a5054daa6645e370
   ReactTestApp-Resources: a4cc1f968cd26bdbd18ee0bfbd0ab8dd0ea90101
   RNWWebStorage: beca48a32a3dc43fe7138d51c47880a43e97aa65

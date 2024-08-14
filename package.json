@@ -27,7 +27,7 @@
     "lint": "nx run-many --target lint",
     "new-package": "node scripts/new-package.js",
     "publish:changesets": "changeset publish",
-    "rnx-align-deps": "yarn workspace @rnx-kit/align-deps bundle && scripts/rnx-align-deps.js",
+    "rnx-align-deps": "tsx --conditions typescript scripts/rnx-align-deps.js",
     "show-affected": "nx show projects --affected",
     "test": "nx run-many --targets build,test --output-style stream",
     "update-readme": "nx run-many --target update-readme",
@@ -42,6 +42,7 @@
     "nx": "~19.5.0",
     "prettier": "^3.0.0",
     "prettier-plugin-organize-imports": "^4.0.0",
+    "tsx": "^4.15.0",
     "typescript": "^5.0.0"
   },
   "engines": {
