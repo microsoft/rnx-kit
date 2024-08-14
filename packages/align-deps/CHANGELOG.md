@@ -1,5 +1,13 @@
 # Change Log - @rnx-kit/align-deps
 
+## 2.5.2
+
+### Patch Changes
+
+- 51da1cf: Bump `react-native-test-app` to properly support `react-native-macos`
+  0.74
+- d21adb8: Correctly mark `react-native-test-app` as dev-only
+
 ## 2.5.1
 
 ### Patch Changes

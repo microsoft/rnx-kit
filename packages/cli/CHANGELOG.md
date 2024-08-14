@@ -1,5 +1,18 @@
 # Change Log - @rnx-kit/cli
 
+## 0.17.0
+
+### Minor Changes
+
+- 96a34d4: Introduce standalone `rnx-cli`. The minimum required Node version has
+  also been bumped to 16.17.
+
+### Patch Changes
+
+- Updated dependencies [51da1cf]
+- Updated dependencies [d21adb8]
+  - @rnx-kit/align-deps@2.5.2
+
 ## 0.16.30
 
 ### Patch Changes
