@@ -1,4 +1,4 @@
-#!/usr/bin/env node --import tsx
+#!/usr/bin/env -S yarn tsx --conditions typescript
 
 import { markdownTable } from "markdown-table";
 import * as fs from "node:fs";

@@ -105,9 +105,4 @@ export const profile: Profile = {
     name: "react-native-screens",
     version: "^3.34.0",
   },
-  "test-app": {
-    name: "react-native-test-app",
-    version: "^3.8.15",
-    devOnly: true,
-  },
 };
