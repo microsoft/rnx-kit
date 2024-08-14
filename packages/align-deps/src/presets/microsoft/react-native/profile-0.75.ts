@@ -4,7 +4,7 @@ import { profile as profile_0_74 } from "./profile-0.74";
 const reactNative: Package = {
   name: "react-native",
   version: "^0.75.0",
-  capabilities: ["react", "core/metro-config"],
+  capabilities: ["react", "core/metro-config", "community/cli"],
 };
 
 export const profile: Profile = {

@@ -52,8 +52,8 @@
     }
   },
   "devDependencies": {
-    "@react-native-community/cli-types": "^13.6.4",
-    "@react-native/assets-registry": "^0.74.0",
+    "@react-native-community/cli-types": "^14.0.0",
+    "@react-native/assets-registry": "^0.75.0",
     "@rnx-kit/eslint-config": "*",
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*",

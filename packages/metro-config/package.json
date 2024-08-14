@@ -51,8 +51,8 @@
     "metro-config": "^0.80.3",
     "metro-resolver": "^0.80.3",
     "prettier": "^3.0.0",
-    "react": "18.2.0",
-    "react-native": "^0.74.0",
+    "react": "^18.2.0",
+    "react-native": "^0.75.0",
     "type-fest": "^4.0.0",
     "typescript": "^5.0.0"
   },

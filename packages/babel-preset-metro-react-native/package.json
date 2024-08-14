@@ -49,7 +49,7 @@
     "@babel/core": "^7.20.0",
     "@babel/plugin-transform-typescript": "^7.20.0",
     "@babel/runtime": "^7.20.0",
-    "@react-native/babel-preset": "^0.74.0",
+    "@react-native/babel-preset": "^0.75.0",
     "@rnx-kit/babel-plugin-import-path-remapper": "*",
     "@rnx-kit/eslint-config": "*",
     "@rnx-kit/scripts": "*",

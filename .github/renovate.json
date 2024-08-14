@@ -5,7 +5,7 @@
     {
       "groupName": "@react-native-community/cli",
       "matchPackagePrefixes": ["@react-native-community/cli"],
-      "allowedVersions": "^13.0.0"
+      "allowedVersions": "^14.0.0"
     },
     {
       "groupName": "Android",
@@ -65,6 +65,7 @@
         "@react-native/community-cli-plugin",
         "@react-native/debugger-frontend",
         "@react-native/dev-middleware",
+        "@react-native/eslint-plugin",
         "@react-native/gradle-plugin",
         "@react-native/js-polyfills",
         "@react-native/metro-babel-transformer",
@@ -75,7 +76,7 @@
         "react-native-macos",
         "react-native-windows"
       ],
-      "allowedVersions": "^0.74.0"
+      "allowedVersions": "^0.75.0"
     }
   ],
   "postUpdateOptions": ["yarnDedupeHighest"],

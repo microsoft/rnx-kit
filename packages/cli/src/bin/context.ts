@@ -81,6 +81,7 @@ export function loadContext(userCommand: string, root = process.cwd()): Config {
       get dependencies(): Config["dependencies"] {
         throw new Error("Unexpected access to `dependencies`");
       },
+      assets: [],
       commands: coreCommands,
       get healthChecks(): Config["healthChecks"] {
         throw new Error("Unexpected access to `healthChecks`");
