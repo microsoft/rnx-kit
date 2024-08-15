@@ -61,8 +61,15 @@ export function loadContext(root = process.cwd()): Config {
     }
   }
 
-  const rncli = resolveCommunityCLI(root);
-  const { loadConfig } = require(rncli);
+  // TODO: `loadConfig` is publicly exported as of 7.0. We can drop one
+  // resolution once 0.68+ becomes minimum supported version.
+  const rncliConfig = require(
+    require.resolve("@react-native-community/cli-config", {
+      paths: [resolveCommunityCLI(root)],
+    })
+  );
+  const loadConfig = rncliConfig.default ?? rncliConfig;
+
   const config: Config =
     loadConfig.length === 1
       ? loadConfig({ projectRoot: root })
