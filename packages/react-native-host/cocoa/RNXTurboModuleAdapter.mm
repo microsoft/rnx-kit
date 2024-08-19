@@ -48,6 +48,10 @@
 
 #endif  // __has_include(<React/RCTAppSetupUtils.h>)
 
+#if __has_include(<react/nativemodule/defaults/DefaultTurboModules.h>)  // >= 0.75
+#import <react/nativemodule/defaults/DefaultTurboModules.h>
+#endif
+
 #endif  // USE_FABRIC
 
 @implementation RNXTurboModuleAdapter {
@@ -89,7 +93,11 @@
     getTurboModule:(std::string const &)name
          jsInvoker:(std::shared_ptr<facebook::react::CallInvoker>)jsInvoker
 {
+#if __has_include(<react/nativemodule/defaults/DefaultTurboModules.h>)  // >= 0.75
+    return facebook::react::DefaultTurboModules::getTurboModule(name, jsInvoker);
+#else
     return nullptr;
+#endif  // __has_include(<react/nativemodule/defaults/DefaultTurboModules.h>)
 }
 
 - (id<RCTTurboModule>)getModuleInstanceFromClass:(Class)moduleClass
