@@ -30,9 +30,9 @@
   },
   "dependencies": {
     "@react-native-webapis/web-storage": "workspace:*",
-    "react": "18.2.0",
-    "react-native": "^0.74.0",
-    "react-native-windows": "^0.74.0"
+    "react": "^18.2.0",
+    "react-native": "^0.75.0",
+    "react-native-windows": "^0.75.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
@@ -41,8 +41,11 @@
     "@babel/preset-env": "^7.20.0",
     "@babel/runtime": "^7.20.0",
     "@jridgewell/trace-mapping": "^0.3.18",
-    "@react-native/babel-preset": "^0.74.0",
-    "@react-native/metro-config": "^0.74.0",
+    "@react-native-community/cli": "^14.0.0",
+    "@react-native-community/cli-platform-android": "^14.0.0",
+    "@react-native-community/cli-platform-ios": "^14.0.0",
+    "@react-native/babel-preset": "^0.75.0",
+    "@react-native/metro-config": "^0.75.0",
     "@rnx-kit/babel-preset-metro-react-native": "workspace:*",
     "@rnx-kit/build": "workspace:*",
     "@rnx-kit/cli": "workspace:*",
@@ -67,7 +70,7 @@
     "jest": "^29.2.1",
     "prettier": "^3.0.0",
     "react-native-test-app": "^3.9.2",
-    "react-test-renderer": "18.2.0",
+    "react-test-renderer": "^18.2.0",
     "typescript": "^5.0.0"
   },
   "depcheck": {
@@ -187,7 +190,7 @@
         "@rnx-kit/scripts/align-deps-preset.cjs"
       ],
       "requirements": [
-        "react-native@0.74"
+        "react-native@0.75"
       ],
       "capabilities": [
         "core-android",

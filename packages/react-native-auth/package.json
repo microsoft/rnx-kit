@@ -38,14 +38,17 @@
   "devDependencies": {
     "@babel/core": "^7.20.0",
     "@babel/preset-env": "^7.20.0",
-    "@react-native/metro-config": "^0.74.0",
+    "@react-native-community/cli": "^14.0.0",
+    "@react-native-community/cli-platform-android": "^14.0.0",
+    "@react-native-community/cli-platform-ios": "^14.0.0",
+    "@react-native/metro-config": "^0.75.0",
     "@rnx-kit/eslint-config": "*",
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*",
     "eslint": "^8.56.0",
     "prettier": "^3.0.0",
-    "react": "18.2.0",
-    "react-native": "^0.74.0",
+    "react": "^18.2.0",
+    "react-native": "^0.75.0",
     "typescript": "^5.0.0"
   },
   "rnx-kit": {
@@ -55,7 +58,7 @@
       ],
       "requirements": {
         "development": [
-          "react-native@0.74"
+          "react-native@0.75"
         ],
         "production": [
           "react-native@>=0.62 <1.0"
