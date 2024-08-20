@@ -63,6 +63,7 @@ export function loadContext(root = process.cwd()): Config {
 
   const rncli = resolveCommunityCLI(root);
   const { loadConfig } = require(rncli);
+
   const config: Config =
     loadConfig.length === 1
       ? loadConfig({ projectRoot: root })

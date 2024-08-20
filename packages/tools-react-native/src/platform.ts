@@ -1,3 +1,6 @@
+import { findPackageDependencyDir } from "@rnx-kit/tools-node/package";
+import * as fs from "fs";
+import * as path from "path";
 import { loadContext } from "./context";
 
 /**
@@ -28,6 +31,72 @@ export function expandPlatformExtensions(
 }
 
 /**
+ * Returns a map of available React Native platforms.
+ *
+ * Note: This is used only when `@react-native-community/cli-config` is not
+ * available. This function will be dropped when 0.68 is no longer supported.
+ *
+ * @param startDir The directory to look for react-native platforms from
+ * @param platformMap A platform-to-npm-package map of known packages
+ * @returns A platform-to-npm-package map, excluding "core" platforms.
+ */
+function getAvailablePlatformsCompat(
+  startDir = process.cwd(),
+  platformMap: Record<string, string> = { android: "", ios: "" }
+) {
+  const packageJson = path.join(startDir, "package.json");
+  if (!fs.existsSync(packageJson)) {
+    const parent = path.dirname(startDir);
+    return parent === startDir
+      ? platformMap
+      : getAvailablePlatformsUncached(path.dirname(startDir), platformMap);
+  }
+
+  const options = { startDir };
+  const { dependencies, peerDependencies, devDependencies } = JSON.parse(
+    fs.readFileSync(packageJson, { encoding: "utf-8" })
+  );
+
+  const packages = new Set<string>(
+    dependencies ? Object.keys(dependencies) : []
+  );
+  if (peerDependencies) {
+    Object.keys(peerDependencies).forEach((pkg) => packages.add(pkg));
+  }
+  if (devDependencies) {
+    Object.keys(devDependencies).forEach((pkg) => packages.add(pkg));
+  }
+
+  packages.forEach((pkgName) => {
+    const pkgPath = findPackageDependencyDir(pkgName, options);
+    if (!pkgPath) {
+      return;
+    }
+
+    const configPath = path.join(pkgPath, "react-native.config.js");
+    if (fs.existsSync(configPath)) {
+      try {
+        const { platforms } = require(configPath);
+        if (platforms) {
+          Object.keys(platforms).forEach((platform) => {
+            if (typeof platformMap[platform] === "undefined") {
+              const { npmPackageName } = platforms[platform];
+              if (npmPackageName) {
+                platformMap[platform] = npmPackageName;
+              }
+            }
+          });
+        }
+      } catch (_) {
+        // ignore
+      }
+    }
+  });
+
+  return platformMap;
+}
+
+/**
  * Returns a map of available React Native platforms. The result is cached.
  * @param startDir The directory to look for react-native platforms from
  * @returns A platform-to-npm-package map, excluding "core" platforms.
@@ -36,7 +105,14 @@ export const getAvailablePlatforms = (() => {
   let platformMap: Record<string, string> | undefined = undefined;
   return (startDir = process.cwd()) => {
     if (!platformMap) {
-      platformMap = getAvailablePlatformsUncached(startDir);
+      try {
+        platformMap = getAvailablePlatformsUncached(startDir);
+      } catch (_) {
+        // This only happens when `@react-native-community/cli-config` is not
+        // available. This path may be dropped when 0.68 is no longer
+        // supported.
+        platformMap = getAvailablePlatformsCompat(startDir);
+      }
     }
     return platformMap;
   };
