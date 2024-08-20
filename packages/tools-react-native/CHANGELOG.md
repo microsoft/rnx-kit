@@ -1,5 +1,12 @@
 # Change Log - @rnx-kit/tools-react-native
 
+## 1.4.1
+
+### Patch Changes
+
+- bfe2ab1: Fix crash when using `@react-native-community/cli` versions older
+  than 7.x
+
 ## 1.4.0
 
 ### Minor Changes

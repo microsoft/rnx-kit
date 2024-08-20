@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/react-native-test-app-msal",
-  "version": "3.0.2",
+  "version": "3.0.3",
   "description": "Microsoft Authentication Library (MSAL) module for react-native-test-app",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/incubator/react-native-test-app-msal#readme",
   "license": "MIT",
