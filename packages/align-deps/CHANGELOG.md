@@ -1,5 +1,12 @@
 # Change Log - @rnx-kit/align-deps
 
+## 2.5.3
+
+### Patch Changes
+
+- 70f5fdd: `@react-native-community/cli` must be a direct dependency starting
+  with 0.75
+
 ## 2.5.2
 
 ### Patch Changes
