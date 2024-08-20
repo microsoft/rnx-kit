@@ -1,5 +1,15 @@
 # Change Log - @rnx-kit/cli
 
+## 0.17.1
+
+### Patch Changes
+
+- bfe2ab1: Fix crash when using `@react-native-community/cli` versions older
+  than 7.x
+- Updated dependencies [bfe2ab1]
+  - @rnx-kit/metro-serializer-esbuild@0.1.38
+  - @rnx-kit/tools-react-native@1.4.1
+
 ## 0.17.0
 
 ### Minor Changes

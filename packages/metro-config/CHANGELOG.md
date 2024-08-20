@@ -1,5 +1,14 @@
 # Change Log - @rnx-kit/metro-config
 
+## 1.3.17
+
+### Patch Changes
+
+- bfe2ab1: Fix crash when using `@react-native-community/cli` versions older
+  than 7.x
+- Updated dependencies [bfe2ab1]
+  - @rnx-kit/tools-react-native@1.4.1
+
 ## 1.3.16
 
 ### Patch Changes

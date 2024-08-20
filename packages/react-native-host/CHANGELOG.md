@@ -1,5 +1,11 @@
 # @rnx-kit/react-native-host
 
+## 0.4.12
+
+### Patch Changes
+
+- 1eaa3bf: Fixed `setImmediate` not being called on 0.75
+
 ## 0.4.11
 
 ### Patch Changes
