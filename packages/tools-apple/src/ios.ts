@@ -1,10 +1,21 @@
 import { retry } from "@rnx-kit/tools-shell/async";
 import { ensure, makeCommand } from "@rnx-kit/tools-shell/command";
 import * as readline from "node:readline";
-import type { Device, DeviceType, Logger, Simulator } from "./types.js";
+import { open } from "./macos.js";
+import type {
+  BuildParams,
+  Device,
+  DeviceType,
+  Logger,
+  Simulator,
+} from "./types.js";
 import { parsePlist, xcrun } from "./xcode.js";
 
 export const iosDeploy = makeCommand("ios-deploy");
+
+function ensureSimulatorAppIsOpen() {
+  return open("-a", "Simulator");
+}
 
 /**
  * Returns a list of available iOS simulators.
@@ -63,7 +74,15 @@ export async function bootSimulator(
     const device = pickSimulator(simulators);
     return device?.state === "Booted" || null;
   }, 4);
-  return result ? null : new Error("Timed out waiting for the simulator");
+  if (!result) {
+    return new Error("Timed out waiting for the simulator");
+  }
+
+  // Make sure `Simulator.app` is foregrounded. `simctl boot` may only start the
+  // background process.
+  await ensureSimulatorAppIsOpen();
+
+  return null;
 }
 
 /**
@@ -80,6 +99,33 @@ export async function install(
 
   const { stderr, status } = await install();
   return status === 0 ? null : new Error(stderr);
+}
+
+/**
+ * Adds iOS specific build flags.
+ */
+export function iosSpecificBuildFlags(
+  params: BuildParams,
+  args: string[]
+): string[] {
+  if (params.platform === "ios") {
+    const { destination, archs } = params;
+    if (destination === "device") {
+      args.push("-sdk", "iphoneos", "-destination", "generic/platform=iOS");
+    } else {
+      if (archs) {
+        args.push(`ARCHS=${archs}`);
+      }
+      args.push(
+        "-sdk",
+        "iphonesimulator",
+        "-destination",
+        "generic/platform=iOS Simulator",
+        "CODE_SIGNING_ALLOWED=NO"
+      );
+    }
+  }
+  return args;
 }
 
 /**
@@ -211,6 +257,8 @@ export async function selectDevice(
           logger.succeed(`Booted ${name} simulator`);
         } else {
           logger.info(`${name} simulator has already been booted`);
+          await ensureSimulatorAppIsOpen();
+
         }
         return device;
       }

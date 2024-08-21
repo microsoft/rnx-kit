@@ -47,3 +47,21 @@ export type Simulator = {
   dataPath: string;
   availabilityError?: string;
 };
+
+export type BuildConfiguration = "Debug" | "Release";
+
+export type BuildParams =
+  | {
+      platform: "ios";
+      scheme?: string;
+      destination?: DeviceType;
+      configuration?: BuildConfiguration;
+      archs?: string;
+      isBuiltRemotely?: boolean;
+    }
+  | {
+      platform: "macos";
+      scheme?: string;
+      configuration?: BuildConfiguration;
+      isBuiltRemotely?: boolean;
+    };

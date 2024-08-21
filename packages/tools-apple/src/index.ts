@@ -8,5 +8,16 @@ export {
   selectDevice,
 } from "./ios.js";
 export { open } from "./macos.js";
-export type { Device, DeviceType, Simulator } from "./types.js";
-export { getDeveloperDirectory, parsePlist, xcrun } from "./xcode.js";
+export type {
+  BuildConfiguration,
+  BuildParams,
+  Device,
+  DeviceType,
+  Simulator,
+} from "./types.js";
+export {
+  getDeveloperDirectory,
+  parsePlist,
+  xcodebuild,
+  xcrun,
+} from "./xcode.js";

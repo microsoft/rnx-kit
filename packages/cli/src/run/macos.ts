@@ -1,0 +1,38 @@
+import type { Config } from "@react-native-community/cli-types";
+import * as path from "node:path";
+import ora from "ora";
+import type { InputParams } from "../build/apple";
+import { getBuildSettings } from "../build/apple";
+import { buildMacOS } from "../build/macos";
+
+export async function runMacOS(config: Config, buildParams: InputParams) {
+  const logger = ora();
+
+  const result = await buildMacOS(config, buildParams, logger);
+  if (!result || typeof result !== "object") {
+    return;
+  }
+
+  logger.start("Launching app...");
+
+  const settings = await getBuildSettings(result);
+  if (!settings) {
+    logger.fail("Failed to launch app: Could not get build settings");
+    process.exitCode = 1;
+    return;
+  }
+
+  const { FULL_PRODUCT_NAME, TARGET_BUILD_DIR } = settings.buildSettings;
+  const appPath = path.join(TARGET_BUILD_DIR, FULL_PRODUCT_NAME);
+
+  logger.text = `Launching '${FULL_PRODUCT_NAME}'...`;
+
+  const { open } = await import("@rnx-kit/tools-apple");
+  const { stderr, status } = await open(appPath);
+  if (status !== 0) {
+    logger.fail(`Failed to launch app: ${stderr}`);
+    process.exitCode = status ?? 1;
+  } else {
+    logger.succeed(`Launched '${FULL_PRODUCT_NAME}'`);
+  }
+}
