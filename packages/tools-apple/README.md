@@ -25,5 +25,6 @@ import * as tools from "@rnx-kit/tools-apple";
 | ios      | `selectDevice(deviceName, deviceType, logger)` | Returns the simulator or physical device with the specified name.            |
 | xcode    | `getDeveloperDirectory()`                      | Returns the path to the active developer directory.                          |
 | xcode    | `parsePlist(app)`                              | Parses and returns the information property list of specified bundle.        |
+| xcode    | `xcodebuild(xcworkspace, params, log)`         | Builds the specified `.xcworkspace`.                                         |
 
 <!-- @rnx-kit/api end -->

@@ -1,5 +1,32 @@
-import type { BuildParams } from "@rnx-kit/tools-apple" with { "resolution-mode": "import" };
 import type { Ora } from "ora";
+
+// Copy of types from `@rnx-kit/tools-apple`. If Jest wasn't such a pain to
+// configure, we would have added an `import type` at the top instead:
+//
+//     import type { BuildParams } from "@rnx-kit/tools-apple" with { "resolution-mode": "import" };
+//
+// But Jest doesn't like import attributes and it doesn't matter if we add
+// `@babel/plugin-syntax-import-attributes` in the config.
+//
+// TOOD: Remove the `DeviceType`, `BuildConfiguration` and `BuildParams` when we
+// can migrate away from Jest in this package.
+type DeviceType = "device" | "emulator" | "simulator";
+type BuildConfiguration = "Debug" | "Release";
+type BuildParams =
+  | {
+      platform: "ios";
+      scheme?: string;
+      destination?: DeviceType;
+      configuration?: BuildConfiguration;
+      archs?: string;
+      isBuiltRemotely?: boolean;
+    }
+  | {
+      platform: "macos";
+      scheme?: string;
+      configuration?: BuildConfiguration;
+      isBuiltRemotely?: boolean;
+    };
 
 export type BuildArgs = {
   xcworkspace: string;
