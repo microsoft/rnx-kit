@@ -52,7 +52,8 @@
     "typescript-eslint": "^7.5.0"
   },
   "peerDependencies": {
-    "eslint": ">=8.56.0"
+    "eslint": ">=8.56.0",
+    "typescript": "^5.0.0"
   },
   "devDependencies": {
     "@microsoft/eslint-plugin-sdl": "^0.2.0",
