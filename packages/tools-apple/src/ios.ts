@@ -69,12 +69,12 @@ export async function bootSimulator(
     return new Error(stderr);
   }
 
-  const result = await retry(async () => {
+  const booted = await retry(async () => {
     const simulators = await getAvailableSimulators(udid);
     const device = pickSimulator(simulators);
     return device?.state === "Booted" || null;
   }, 4);
-  if (!result) {
+  if (!booted) {
     return new Error("Timed out waiting for the simulator");
   }
 
@@ -258,7 +258,6 @@ export async function selectDevice(
         } else {
           logger.info(`${name} simulator has already been booted`);
           await ensureSimulatorAppIsOpen();
-
         }
         return device;
       }

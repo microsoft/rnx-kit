@@ -73,7 +73,7 @@ export function xcodebuild(
       args.push("-scheme", schemes[0]);
     } else {
       log("No schemes were found; leaving it to Xcode to figure things out");
-      log("If this is wrong, specify another scheme with `--scheme`");
+      log("If this is wrong, specify a scheme with `--scheme`");
     }
   }
 
