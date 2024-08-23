@@ -55,6 +55,11 @@
     "eslint": ">=8.56.0",
     "typescript": "^5.0.0"
   },
+  "peerDependenciesMeta": {
+    "typescript": {
+      "optional": true
+    }
+  },
   "devDependencies": {
     "@microsoft/eslint-plugin-sdl": "^0.2.0",
     "@rnx-kit/eslint-config": "*",
