@@ -1,7 +1,37 @@
 import type { Config } from "@react-native-community/cli-types";
-import type { InputParams } from "./build/apple";
+import { InvalidArgumentError } from "commander";
+import type {
+  BuildConfiguration,
+  DeviceType,
+  InputParams,
+} from "./build/apple";
 import { buildIOS } from "./build/ios";
 import { buildMacOS } from "./build/macos";
+
+function asConfiguration(configuration: string): BuildConfiguration {
+  switch (configuration) {
+    case "Debug":
+    case "Release":
+      return configuration;
+
+    default:
+      throw new InvalidArgumentError("Expected 'Debug' or 'Release'.");
+  }
+}
+
+function asDestination(destination: string): DeviceType {
+  switch (destination) {
+    case "device":
+    case "emulator":
+    case "simulator":
+      return destination;
+
+    default:
+      throw new InvalidArgumentError(
+        "Expected 'device', 'emulator', or 'simulator'."
+      );
+  }
+}
 
 export function rnxBuild(
   _argv: string[],
@@ -32,23 +62,27 @@ export const rnxBuildCommand = {
       description: "Target platform",
     },
     {
+      name: "--workspace <string>",
+      description:
+        "Path, relative to project root, of the Xcode workspace to build (macOS only)",
+    },
+    {
       name: "--scheme <string>",
       description: "Name of scheme to build",
     },
     {
-      name: "--destination <string>",
-      description: "'device' or 'simulator'",
-      default: "simulator",
-    },
-    {
       name: "--configuration <string>",
-      description: "'Debug' or 'Release'",
+      description:
+        "Build configuration for building the app; 'Debug' or 'Release'",
       default: "Debug",
+      parse: asConfiguration,
     },
     {
-      name: "--workspace <string>",
+      name: "--destination <string>",
       description:
-        "Path, relative to project root, of the Xcode workspace to build (macOS only)",
+        "Destination of the built app; 'device', 'emulator', or 'simulator'",
+      default: "simulator",
+      parse: asDestination,
     },
   ],
 };

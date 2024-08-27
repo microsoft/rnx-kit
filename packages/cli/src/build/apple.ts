@@ -10,8 +10,8 @@ import type { Ora } from "ora";
 //
 // TOOD: Remove the `DeviceType`, `BuildConfiguration` and `BuildParams` when we
 // can migrate away from Jest in this package.
-type DeviceType = "device" | "emulator" | "simulator";
-type BuildConfiguration = "Debug" | "Release";
+export type DeviceType = "device" | "emulator" | "simulator";
+export type BuildConfiguration = "Debug" | "Release";
 type BuildParams =
   | {
       platform: "ios";
@@ -35,7 +35,10 @@ export type BuildArgs = {
 
 export type BuildResult = BuildArgs | number | null;
 
-export type InputParams = BuildParams & { workspace?: string };
+export type InputParams = BuildParams & {
+  device?: string;
+  workspace?: string;
+};
 
 export function runBuild(
   xcworkspace: string,

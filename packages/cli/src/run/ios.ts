@@ -22,9 +22,10 @@ export async function runIOS(config: Config, buildParams: InputParams) {
     "@rnx-kit/tools-apple"
   );
 
+  const { destination = "simulator", device: deviceName } = buildParams;
   const [settings, device] = await Promise.all([
     getBuildSettings(result.xcworkspace, result.args),
-    selectDevice(undefined, buildParams.destination ?? "simulator", logger),
+    selectDevice(deviceName, destination, logger),
   ]);
 
   if (!settings) {

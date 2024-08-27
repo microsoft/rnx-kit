@@ -27,5 +27,11 @@ export const rnxRunCommand = {
   description:
     "Build and run your native app for testing in emulator/simulator or on device",
   func: rnxRun,
-  options: rnxBuildCommand.options,
+  options: [
+    ...rnxBuildCommand.options,
+    {
+      name: "--device <string>",
+      description: "The name of the device to launch the app in",
+    },
+  ],
 };
