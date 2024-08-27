@@ -16,6 +16,7 @@ const blockList = exclusionList([
 module.exports = makeMetroConfig({
   resolver: {
     extraNodeModules: {
+      "@/hermes": path.resolve(__dirname, "src", "internal", "hermes.ts"),
       internal: path.resolve(__dirname, "src", "internal"),
       ...(useAuthMock
         ? {

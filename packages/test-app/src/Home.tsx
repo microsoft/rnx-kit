@@ -1,13 +1,13 @@
 // Both `internal` imports are used to verify that `metro-resolver-symlinks`
 // resolves them correctly when `experimental_retryResolvingFromDisk` is
 // enabled.
+import { getHermesVersion } from "@/hermes";
 import {
   getReactNativeVersion,
   isBridgeless,
   isFabricInstance,
   isRemoteDebuggingAvailable,
 } from "internal";
-import { getHermesVersion } from "internal/hermes";
 import type { PropsWithChildren } from "react";
 import React, { useCallback, useState } from "react";
 import type { NativeSyntheticEvent } from "react-native";

@@ -4,8 +4,8 @@
     "checkJs": false,
     "noEmit": true,
     "paths": {
-      "internal": ["./src/internal"],
-      "internal/*": ["./src/internal/*"]
+      "@/*": ["./src/internal/*"],
+      "internal": ["./src/internal"]
     }
   },
   "include": ["src"]
