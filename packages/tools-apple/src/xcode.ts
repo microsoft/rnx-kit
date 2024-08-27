@@ -4,7 +4,7 @@ import * as path from "node:path";
 import { iosSpecificBuildFlags } from "./ios.js";
 import { macosSpecificBuildFlags } from "./macos.js";
 import { findSchemes } from "./scheme.js";
-import type { BuildParams, BuildSettings, JSObject } from "./types.js";
+import type { BuildParams, BuildSettings, Device, JSObject } from "./types.js";
 
 export const xcrun = makeCommand("xcrun");
 
@@ -55,6 +55,28 @@ export async function getBuildSettings(
   return buildSettings.find(
     ({ buildSettings }) => buildSettings.WRAPPER_EXTENSION === "app"
   );
+}
+
+/**
+ * Returns device platform identifier for specified platform and destination.
+ */
+export function getDevicePlatformIdentifier(
+  buildParams: BuildParams
+): Device["platform"] {
+  switch (buildParams.platform) {
+    case "ios":
+      return buildParams.destination === "device"
+        ? "com.apple.platform.iphoneos"
+        : "com.apple.platform.iphonesimulator";
+
+    case "macos":
+      return "com.apple.platform.macosx";
+
+    case "visionos":
+      return buildParams.destination === "device"
+        ? "com.apple.platform.xros"
+        : "com.apple.platform.xrsimulator";
+  }
 }
 
 /**

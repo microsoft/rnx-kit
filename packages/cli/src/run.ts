@@ -11,6 +11,7 @@ export function rnxRun(
 ) {
   switch (buildParams.platform) {
     case "ios":
+    case "visionos":
       return runIOS(config, buildParams);
     case "macos":
       return runMacOS(config, buildParams);

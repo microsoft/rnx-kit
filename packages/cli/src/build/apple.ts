@@ -14,7 +14,7 @@ export type DeviceType = "device" | "emulator" | "simulator";
 export type BuildConfiguration = "Debug" | "Release";
 type BuildParams =
   | {
-      platform: "ios";
+      platform: "ios" | "visionos";
       scheme?: string;
       destination?: DeviceType;
       configuration?: BuildConfiguration;

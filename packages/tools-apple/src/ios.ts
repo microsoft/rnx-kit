@@ -11,6 +11,11 @@ import type {
 } from "./types.js";
 import { parsePlist, xcrun } from "./xcode.js";
 
+const DEFAULT_SIMS: Record<string, RegExp> = {
+  "com.apple.platform.iphonesimulator": /^iPhone \d\d(?: Pro)?$/,
+  "com.apple.platform.xrsimulator": /^Apple Vision Pro/,
+};
+
 const XCODE_SDKS = {
   ios: {
     device: {
@@ -20,16 +25,6 @@ const XCODE_SDKS = {
     simulator: {
       sdk: "iphonesimulator",
       destination: "generic/platform=iOS Simulator",
-    },
-  },
-  tvos: {
-    device: {
-      sdk: "appletvos",
-      destination: "generic/platform=tvOS",
-    },
-    simulator: {
-      sdk: "appletvsimulator",
-      destination: "generic/platform=tvOS Simulator",
     },
   },
   visionos: {
@@ -116,6 +111,24 @@ export async function bootSimulator(
   await ensureSimulatorAppIsOpen();
 
   return null;
+}
+
+function findSimulator(
+  devices: Device[],
+  deviceName: string | undefined,
+  platformIdentifier: string
+) {
+  if (deviceName) {
+    return devices.find(
+      ({ simulator, name }) => simulator && name === deviceName
+    );
+  }
+
+  const defaultSimulator =
+    DEFAULT_SIMS[platformIdentifier || "com.apple.platform.iphonesimulator"];
+  return devices.reverse().find(({ simulator, available, modelName }) => {
+    return simulator && available && defaultSimulator.test(modelName);
+  });
 }
 
 /**
@@ -215,17 +228,22 @@ export async function launch(
  * If a simulator is found, it is also booted if necessary
  */
 export async function selectDevice(
-  deviceName: string | undefined,
+  deviceNameOrPlatformIdentifier: string | undefined,
   deviceType: DeviceType,
   logger: Logger
 ): Promise<Device | null> {
   const devices = await getDevices();
 
+  const [deviceName, platformIdentifier]: [string | undefined, string] =
+    deviceNameOrPlatformIdentifier?.startsWith("com.apple.platform.")
+      ? [undefined, deviceNameOrPlatformIdentifier]
+      : [deviceNameOrPlatformIdentifier, "com.apple.platform.iphoneos"];
+
   if (deviceType === "device") {
     const search: (device: Device) => boolean = deviceName
       ? ({ simulator, name }) => !simulator && name === deviceName
       : ({ simulator, platform }) =>
-          !simulator && platform === "com.apple.platform.iphoneos";
+          !simulator && platform === platformIdentifier;
     const physicalDevice = devices.find(search);
     if (!physicalDevice) {
       // Device detection can sometimes be flaky. Prompt the user to make sure
@@ -250,13 +268,7 @@ export async function selectDevice(
     return physicalDevice;
   }
 
-  const device = deviceName
-    ? devices.find(({ simulator, name }) => simulator && name === deviceName)
-    : devices.reverse().find(({ simulator, available, modelName }) => {
-        return (
-          simulator && available && /^iPhone \d\d(?: Pro)?$/.test(modelName)
-        );
-      });
+  const device = findSimulator(devices, deviceName, platformIdentifier);
   if (!device) {
     const foundDevices = devices
       .reduce<string[]>((list, device) => {
@@ -271,7 +283,7 @@ export async function selectDevice(
     const message = [
       deviceName
         ? `Failed to find ${deviceName} simulator:`
-        : "Failed to find an iPhone simulator:",
+        : "Failed to find a simulator:",
       ...foundDevices,
     ].join("\n\t- ");
     logger.fail(message);

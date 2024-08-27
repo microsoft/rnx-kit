@@ -19,6 +19,7 @@ export type {
 export {
   getBuildSettings,
   getDeveloperDirectory,
+  getDevicePlatformIdentifier,
   parsePlist,
   xcodebuild,
   xcrun,

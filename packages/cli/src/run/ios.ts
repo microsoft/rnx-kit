@@ -5,8 +5,9 @@ import type { InputParams } from "../build/apple";
 import { buildIOS } from "../build/ios";
 
 export async function runIOS(config: Config, buildParams: InputParams) {
-  if (buildParams.platform !== "ios") {
-    throw new Error("Expected iOS build configuration");
+  const { platform } = buildParams;
+  if (platform !== "ios" && platform !== "visionos") {
+    throw new Error("Expected iOS/visionOS build configuration");
   }
 
   const logger = ora();
@@ -18,14 +19,21 @@ export async function runIOS(config: Config, buildParams: InputParams) {
 
   logger.start("Preparing to launch app...");
 
-  const { getBuildSettings, install, launch, selectDevice } = await import(
-    "@rnx-kit/tools-apple"
-  );
+  const {
+    getBuildSettings,
+    getDevicePlatformIdentifier,
+    install,
+    launch,
+    selectDevice,
+  } = await import("@rnx-kit/tools-apple");
 
   const { destination = "simulator", device: deviceName } = buildParams;
+  const deviceOrPlatformIdentifier =
+    deviceName ?? getDevicePlatformIdentifier(buildParams);
+
   const [settings, device] = await Promise.all([
     getBuildSettings(result.xcworkspace, result.args),
-    selectDevice(deviceName, destination, logger),
+    selectDevice(deviceOrPlatformIdentifier, destination, logger),
   ]);
 
   if (!settings) {

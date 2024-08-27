@@ -40,6 +40,7 @@ export function rnxBuild(
 ) {
   switch (buildParams.platform) {
     case "ios":
+    case "visionos":
       return buildIOS(config, buildParams);
     case "macos":
       return buildMacOS(config, buildParams);

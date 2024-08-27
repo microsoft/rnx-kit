@@ -9,9 +9,11 @@ export function buildIOS(
   buildParams: InputParams,
   logger = ora()
 ): Promise<BuildResult> {
-  const { sourceDir, xcodeProject } = config.project.ios ?? {};
+  const { platform } = buildParams;
+  const { sourceDir, xcodeProject } = config.project[platform] ?? {};
   if (!sourceDir || !xcodeProject) {
-    logger.fail("No iOS project was found");
+    const root = platform.substring(0, platform.length - 2);
+    logger.fail(`No ${root}OS project was found`);
     process.exitCode = 1;
     return Promise.resolve(1);
   }
