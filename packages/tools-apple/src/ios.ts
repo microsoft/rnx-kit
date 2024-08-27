@@ -11,6 +11,39 @@ import type {
 } from "./types.js";
 import { parsePlist, xcrun } from "./xcode.js";
 
+const XCODE_SDKS = {
+  ios: {
+    device: {
+      sdk: "iphoneos",
+      destination: "generic/platform=iOS",
+    },
+    simulator: {
+      sdk: "iphonesimulator",
+      destination: "generic/platform=iOS Simulator",
+    },
+  },
+  tvos: {
+    device: {
+      sdk: "appletvos",
+      destination: "generic/platform=tvOS",
+    },
+    simulator: {
+      sdk: "appletvsimulator",
+      destination: "generic/platform=tvOS Simulator",
+    },
+  },
+  visionos: {
+    device: {
+      sdk: "xros",
+      destination: "generic/platform=visionOS",
+    },
+    simulator: {
+      sdk: "xrsimulator",
+      destination: "generic/platform=visionOS Simulator",
+    },
+  },
+};
+
 export const iosDeploy = makeCommand("ios-deploy");
 
 function ensureSimulatorAppIsOpen() {
@@ -108,21 +141,25 @@ export function iosSpecificBuildFlags(
   params: BuildParams,
   args: string[]
 ): string[] {
-  if (params.platform === "ios") {
+  const { platform } = params;
+  if (platform === "ios" || platform === "visionos") {
+    const sdks = XCODE_SDKS[platform];
     const { destination, archs } = params;
     if (destination === "device") {
-      args.push("-sdk", "iphoneos", "-destination", "generic/platform=iOS");
+      const { sdk, destination } = sdks.device;
+      args.push("-sdk", sdk, "-destination", destination);
     } else {
+      const { sdk, destination } = sdks.simulator;
+      args.push(
+        "-sdk",
+        sdk,
+        "-destination",
+        destination,
+        "CODE_SIGNING_ALLOWED=NO"
+      );
       if (archs) {
         args.push(`ARCHS=${archs}`);
       }
-      args.push(
-        "-sdk",
-        "iphonesimulator",
-        "-destination",
-        "generic/platform=iOS Simulator",
-        "CODE_SIGNING_ALLOWED=NO"
-      );
     }
   }
   return args;

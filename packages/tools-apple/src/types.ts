@@ -52,7 +52,7 @@ export type BuildConfiguration = "Debug" | "Release";
 
 export type BuildParams =
   | {
-      platform: "ios";
+      platform: "ios" | "visionos";
       scheme?: string;
       destination?: DeviceType;
       configuration?: BuildConfiguration;
