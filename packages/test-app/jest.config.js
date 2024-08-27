@@ -10,6 +10,7 @@ function isPnpmMode() {
 const config = {
   preset: "@rnx-kit/jest-preset/private",
   moduleNameMapper: {
+    "^@/(.*)$": "<rootDir>/src/internal/$1",
     "^internal(.*)$": "<rootDir>/src/internal$1",
   },
 };
