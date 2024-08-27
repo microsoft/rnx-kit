@@ -4,7 +4,7 @@ import * as path from "node:path";
 import { iosSpecificBuildFlags } from "./ios.js";
 import { macosSpecificBuildFlags } from "./macos.js";
 import { findSchemes } from "./scheme.js";
-import type { BuildParams, JSObject } from "./types.js";
+import type { BuildParams, BuildSettings, JSObject } from "./types.js";
 
 export const xcrun = makeCommand("xcrun");
 
@@ -23,6 +23,38 @@ function remoteSpecificBuildFlags(
     );
   }
   return args;
+}
+
+/**
+ * Returns build settings for specified Xcode workspace and the parameters used
+ * to build it.
+ */
+export async function getBuildSettings(
+  xcworkspace: string,
+  params: string[]
+): Promise<BuildSettings | undefined> {
+  const reusedFlags = ["-scheme", "-configuration", "-sdk", "-derivedDataPath"];
+
+  const buildSettingsArgs = ["-workspace", xcworkspace];
+  for (const flag of reusedFlags) {
+    const i = params.lastIndexOf(flag);
+    if (i >= 0) {
+      buildSettingsArgs.push(params[i], params[i + 1]);
+    }
+  }
+
+  buildSettingsArgs.push("-showBuildSettings", "-json");
+
+  const xcodebuild = makeCommand("xcodebuild");
+  const { status, stdout } = await xcodebuild(...buildSettingsArgs);
+  if (status !== 0) {
+    return undefined;
+  }
+
+  const buildSettings: BuildSettings[] = JSON.parse(stdout);
+  return buildSettings.find(
+    ({ buildSettings }) => buildSettings.WRAPPER_EXTENSION === "app"
+  );
 }
 
 /**

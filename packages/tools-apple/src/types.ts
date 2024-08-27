@@ -65,3 +65,15 @@ export type BuildParams =
       configuration?: BuildConfiguration;
       isBuiltRemotely?: boolean;
     };
+
+export type BuildSettings = {
+  action: string;
+  buildSettings: {
+    EXECUTABLE_FOLDER_PATH: string;
+    FULL_PRODUCT_NAME: string;
+    PRODUCT_BUNDLE_IDENTIFIER: string;
+    TARGET_BUILD_DIR: string;
+    WRAPPER_EXTENSION?: string;
+  };
+  target: string;
+};

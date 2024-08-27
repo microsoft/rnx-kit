@@ -3824,7 +3824,6 @@ __metadata:
     "@rnx-kit/tools-language": "npm:^2.0.0"
     "@rnx-kit/tools-node": "npm:^2.1.1"
     "@rnx-kit/tools-react-native": "npm:^1.4.1"
-    "@rnx-kit/tools-shell": "npm:^0.1.2"
     "@rnx-kit/tsconfig": "npm:*"
     "@types/connect": "npm:^3.4.36"
     "@types/jest": "npm:^29.2.1"

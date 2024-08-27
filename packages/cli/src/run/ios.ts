@@ -2,7 +2,6 @@ import type { Config } from "@react-native-community/cli-types";
 import * as path from "node:path";
 import ora from "ora";
 import type { InputParams } from "../build/apple";
-import { getBuildSettings } from "../build/apple";
 import { buildIOS } from "../build/ios";
 
 export async function runIOS(config: Config, buildParams: InputParams) {
@@ -19,12 +18,12 @@ export async function runIOS(config: Config, buildParams: InputParams) {
 
   logger.start("Preparing to launch app...");
 
-  const { install, launch, selectDevice } = await import(
+  const { getBuildSettings, install, launch, selectDevice } = await import(
     "@rnx-kit/tools-apple"
   );
 
   const [settings, device] = await Promise.all([
-    getBuildSettings(result),
+    getBuildSettings(result.xcworkspace, result.args),
     selectDevice(undefined, buildParams.destination ?? "simulator", logger),
   ]);
 
