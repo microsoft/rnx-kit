@@ -17,6 +17,7 @@
   "dependencies": {
     "@docusaurus/core": "^3.0.0",
     "@docusaurus/preset-classic": "^3.0.0",
+    "@mdx-js/react": "^3.0.0",
     "@tsconfig/docusaurus": "^2.0.1",
     "clsx": "^2.0.0",
     "prettier": "^3.0.0",
@@ -25,10 +26,16 @@
     "react-dom": "18.3.1",
     "typescript": "^5.0.0"
   },
+  "devDependencies": {
+    "@types/react": "*"
+  },
   "engines": {
     "node": ">=18.12"
   },
   "packageManager": "yarn@4.4.0",
+  "resolutions": {
+    "@pnpm/network.ca-file/graceful-fs": "^4.2.10"
+  },
   "browserslist": {
     "production": [
       ">0.5%",
