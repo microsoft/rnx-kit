@@ -29,8 +29,10 @@
 /packages/*/*.LICENSE.txt
 /packages/*/*/rnx-build/
 /packages/*/dist/
+/packages/*/ios/DerivedData/
 /packages/*/ios/build/
 /packages/*/lib/
+/packages/*/macos/DerivedData/
 /packages/*/macos/build/
 /packages/template/CHANGELOG.md
 /scripts/bin/
