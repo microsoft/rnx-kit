@@ -33,6 +33,19 @@ function asDestination(destination: string): DeviceType {
   }
 }
 
+function asSupportedPlatform(platform: string): InputParams["platform"] {
+  switch (platform) {
+    case "ios":
+    case "macos":
+    case "visionos":
+      return platform;
+    default:
+      throw new InvalidArgumentError(
+        "Supported platforms: 'ios', 'macos', 'visionos'."
+      );
+  }
+}
+
 export function rnxBuild(
   _argv: string[],
   config: Config,
@@ -44,11 +57,6 @@ export function rnxBuild(
       return buildIOS(config, buildParams);
     case "macos":
       return buildMacOS(config, buildParams);
-    default:
-      // @ts-expect-error Safe guard against user input
-      console.error(`Unsupported platform: ${buildParams.platform}`);
-      process.exitCode = 1;
-      return Promise.resolve();
   }
 }
 
@@ -61,6 +69,7 @@ export const rnxBuildCommand = {
     {
       name: "--platform <string>",
       description: "Target platform",
+      parse: asSupportedPlatform,
     },
     {
       name: "--workspace <string>",
