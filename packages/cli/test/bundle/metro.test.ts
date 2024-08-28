@@ -1,13 +1,14 @@
+import { mockFS } from "@rnx-kit/tools-filesystem/mocks";
 import { metroBundle } from "../../src/bundle/metro";
 import type { CliPlatformBundleConfig } from "../../src/bundle/types";
 
-jest.mock("fs");
-
-describe("CLI > Bundle > Metro > metroBundle", () => {
+describe("bundle/metro/metroBundle()", () => {
   const { getDefaultConfig } = require("metro-config");
 
+  const bundle = jest.fn(() => Promise.resolve());
+
   afterEach(() => {
-    jest.resetAllMocks();
+    bundle.mockReset();
   });
 
   const bundleConfigNoPlugins: CliPlatformBundleConfig = {
@@ -37,39 +38,65 @@ describe("CLI > Bundle > Metro > metroBundle", () => {
 
   it("does not use a custom serializer when all plugins are disabled", async () => {
     const metroConfig = await getDefaultConfig();
+
     expect(metroConfig.serializer.customSerializer).toBeFalsy();
-    await metroBundle(metroConfig, bundleConfigNoPlugins, dev, minify);
+
+    await metroBundle(
+      metroConfig,
+      bundleConfigNoPlugins,
+      dev,
+      minify,
+      bundle,
+      mockFS({})
+    );
+
     expect(metroConfig.serializer.customSerializer).toBeFalsy();
   });
 
   it("uses a custom serializer when at least one plugin is enabled", async () => {
     const metroConfig = await getDefaultConfig();
+
     expect(metroConfig.serializer.customSerializer).toBeFalsy();
-    await metroBundle(metroConfig, bundleConfig, dev, minify);
+
+    await metroBundle(
+      metroConfig,
+      bundleConfig,
+      dev,
+      minify,
+      bundle,
+      mockFS({})
+    );
+
     expect(metroConfig.serializer.customSerializer).toBeTruthy();
   });
 
   it("creates directories for the bundle, the source map, and assets", async () => {
-    await metroBundle(await getDefaultConfig(), bundleConfig, dev, minify);
-
-    const fs = require("fs");
-    expect(Object.keys(fs.__toJSON())).toEqual(
-      expect.arrayContaining([
-        expect.stringContaining("/packages/cli/dist"),
-        expect.stringContaining("/packages/cli/map"),
-        expect.stringContaining("/packages/cli/src"),
-      ])
+    const files = {};
+    const metroConfig = await getDefaultConfig();
+    await metroBundle(
+      metroConfig,
+      bundleConfig,
+      dev,
+      minify,
+      bundle,
+      mockFS(files)
     );
+
+    expect(Object.keys(files)).toEqual(["src", "map", "dist"]);
   });
 
   it("invokes the Metro bundler using all input parameters", async () => {
-    const metroService = require("@rnx-kit/metro-service");
-    const mockBundle = metroService.bundle;
+    await metroBundle(
+      await getDefaultConfig(),
+      bundleConfig,
+      dev,
+      minify,
+      bundle,
+      mockFS({})
+    );
 
-    await metroBundle(await getDefaultConfig(), bundleConfig, dev, minify);
-
-    expect(mockBundle).toHaveBeenCalledTimes(1);
-    expect(mockBundle.mock.calls[0][0]).toEqual({
+    expect(bundle).toHaveBeenCalledTimes(1);
+    expect(bundle.mock.calls[0][0]).toEqual({
       ...bundleConfig,
       dev,
       minify,

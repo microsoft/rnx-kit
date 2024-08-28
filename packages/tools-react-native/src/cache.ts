@@ -7,7 +7,7 @@ import * as path from "path";
 const HASH_ALGO = "sha256";
 const UTF8 = { encoding: "utf-8" as const };
 
-function ensureDir(p: string, fs = nodefs): void {
+function ensureDir(p: string, /** @internal */ fs = nodefs): void {
   fs.mkdirSync(p, { recursive: true, mode: 0o755 });
 }
 
@@ -28,7 +28,7 @@ function updateHash(
   files: string[],
   projectRoot: string,
   mode: "all" | "first-only",
-  fs = nodefs
+  /** @internal */ fs = nodefs
 ) {
   const options = { startDir: projectRoot };
   for (const file of files) {
@@ -61,7 +61,7 @@ export function getCurrentState(projectRoot: string): string {
 
 export function getSavedState(
   projectRoot: string,
-  fs = nodefs
+  /** @internal */ fs = nodefs
 ): string | false {
   const stateFile = cacheStatePath(projectRoot);
   return fs.existsSync(stateFile) && fs.readFileSync(stateFile, UTF8);
@@ -69,7 +69,7 @@ export function getSavedState(
 
 export function loadConfigFromCache(
   projectRoot: string,
-  fs = nodefs
+  /** @internal */ fs = nodefs
 ): Config | null {
   const cacheFile = configCachePath(projectRoot);
   if (!fs.existsSync(cacheFile)) {
@@ -84,7 +84,7 @@ export function saveConfigToCache(
   projectRoot: string,
   state: string,
   config: Config,
-  fs = nodefs
+  /** @internal */ fs = nodefs
 ): void {
   const data = JSON.stringify(config);
 

@@ -11,7 +11,6 @@ import type { AllPlatforms } from "@rnx-kit/tools-react-native";
 import { parsePlatform } from "@rnx-kit/tools-react-native";
 import type { SpawnSyncOptions } from "child_process";
 import { spawnSync } from "child_process";
-import * as fs from "fs";
 import * as nodefs from "fs";
 import * as os from "os";
 import * as path from "path";
@@ -71,7 +70,7 @@ const defaultAndroidConfig: Required<Required<AndroidArchive>["android"]> = {
   kotlinVersion: "1.7.22",
 };
 
-function cloneFile(src: string, dest: string) {
+function cloneFile(src: string, dest: string, fs = nodefs) {
   return fs.promises.copyFile(src, dest, fs.constants.COPYFILE_FICLONE);
 }
 
@@ -86,7 +85,10 @@ function ensureOption(options: Options, opt: string, flag = opt) {
   }
 }
 
-function findGradleProject(projectRoot: string): string | undefined {
+function findGradleProject(
+  projectRoot: string,
+  fs = nodefs
+): string | undefined {
   if (fs.existsSync(path.join(projectRoot, "android", "build.gradle"))) {
     return path.join(projectRoot, "android");
   }
@@ -106,28 +108,29 @@ function isAssetsConfig(config: unknown): config is AssetsConfig {
   return typeof config === "object" && config !== null && "getAssets" in config;
 }
 
-export function versionOf(pkgName: string): string {
-  const packageDir = findPackageDependencyDir(pkgName);
+export function versionOf(pkgName: string, fs = nodefs): string {
+  const packageDir = findPackageDependencyDir(pkgName, undefined, fs);
   if (!packageDir) {
     throw new Error(`Could not find module '${pkgName}'`);
   }
 
-  const { version } = readPackage(packageDir);
+  const { version } = readPackage(packageDir, fs);
   return version;
 }
 
 function getAndroidPaths(
   context: Context,
   packageName: string,
-  { targetName, version, output }: AndroidArchive
+  { targetName, version, output }: AndroidArchive,
+  fs = nodefs
 ) {
-  const projectRoot = findPackageDependencyDir(packageName);
+  const projectRoot = findPackageDependencyDir(packageName, undefined, fs);
   if (!projectRoot) {
     throw new Error(`Could not find module '${packageName}'`);
   }
 
   const gradleFriendlyName = targetName || gradleTargetName(packageName);
-  const aarVersion = version || versionOf(packageName);
+  const aarVersion = version || versionOf(packageName, fs);
 
   switch (packageName) {
     case "hermes-engine":
@@ -139,7 +142,7 @@ function getAndroidPaths(
         destination: path.join(
           context.options.assetsDest,
           "aar",
-          `hermes-release-${versionOf(packageName)}.aar`
+          `hermes-release-${versionOf(packageName, fs)}.aar`
         ),
       };
 
@@ -157,7 +160,7 @@ function getAndroidPaths(
       };
 
     default: {
-      const androidProject = findGradleProject(projectRoot);
+      const androidProject = findGradleProject(projectRoot, fs);
       return {
         targetName: gradleFriendlyName,
         version: aarVersion,
@@ -193,14 +196,15 @@ function run(command: string, args: string[], options: SpawnSyncOptions) {
 export async function assembleAarBundle(
   context: Context,
   packageName: string,
-  { aar }: NativeAssets
+  { aar }: NativeAssets,
+  fs = nodefs
 ): Promise<void> {
   if (!aar) {
     return;
   }
 
   const wrapper = os.platform() === "win32" ? "gradlew.bat" : "gradlew";
-  const gradlew = findUp(wrapper);
+  const gradlew = findUp(wrapper, undefined, fs);
   if (!gradlew) {
     warn(`Skipped \`${packageName}\`: cannot find \`${wrapper}\``);
     return;
@@ -209,7 +213,8 @@ export async function assembleAarBundle(
   const { targetName, version, androidProject, output } = getAndroidPaths(
     context,
     packageName,
-    aar
+    aar,
+    fs
   );
   if (!androidProject || !output) {
     warn(`Skipped \`${packageName}\`: cannot find \`build.gradle\``);
@@ -219,7 +224,7 @@ export async function assembleAarBundle(
   const { env: customEnv, dependencies, android } = aar;
   const env = {
     NODE_MODULES_PATH: path.join(process.cwd(), "node_modules"),
-    REACT_NATIVE_VERSION: versionOf("react-native"),
+    REACT_NATIVE_VERSION: versionOf("react-native", fs),
     ...process.env,
     ...customEnv,
   };
@@ -239,7 +244,8 @@ export async function assembleAarBundle(
         const { targetName, output, destination } = getAndroidPaths(
           context,
           dependencyName,
-          aar
+          aar,
+          fs
         );
         if (output) {
           if (!fs.existsSync(output)) {
@@ -336,7 +342,9 @@ export async function assembleAarBundle(
     run(gradlew, targets, { cwd: buildDir, stdio: "inherit", env });
   }
 
-  await Promise.all(targetsToCopy.map(([src, dest]) => cloneFile(src, dest)));
+  await Promise.all(
+    targetsToCopy.map(([src, dest]) => cloneFile(src, dest, fs))
+  );
 }
 
 function copyFiles(
@@ -372,10 +380,10 @@ export async function copyAssets(
   await Promise.all(tasks);
 }
 
-export async function gatherConfigs({
-  projectRoot,
-  manifest,
-}: Context): Promise<Record<string, AssetsConfig | null> | undefined> {
+export async function gatherConfigs(
+  { projectRoot, manifest }: Context,
+  fs = nodefs
+): Promise<Record<string, AssetsConfig | null> | undefined> {
   const { dependencies, devDependencies } = manifest;
   const packages = [...keysOf(dependencies), ...keysOf(devDependencies)];
   if (packages.length === 0) {
@@ -472,11 +480,12 @@ export async function gatherConfigs({
  */
 export async function copyProjectAssets(
   options: Options,
-  { root: projectRoot, reactNativePath }: CLIConfig
+  { root: projectRoot, reactNativePath }: CLIConfig,
+  fs = nodefs
 ): Promise<void> {
   const manifest = readPackage(projectRoot);
   const context = { projectRoot, manifest, options, reactNativePath };
-  const assetConfigs = await gatherConfigs(context);
+  const assetConfigs = await gatherConfigs(context, fs);
   if (!assetConfigs) {
     return;
   }
@@ -496,10 +505,10 @@ export async function copyProjectAssets(
     const assets = await getAssets(context);
     if (options.bundleAar && assets.aar) {
       info(`Assembling "${packageName}"`);
-      await assembleAarBundle(context, packageName, assets);
+      await assembleAarBundle(context, packageName, assets, fs);
     } else {
       info(`Copying assets for "${packageName}"`);
-      await copyAssets(context, packageName, assets);
+      await copyAssets(context, packageName, assets, fs);
     }
   }
 
@@ -510,14 +519,15 @@ export async function copyProjectAssets(
       const { output, destination } = getAndroidPaths(
         context,
         dependencyName,
-        dummyAar
+        dummyAar,
+        fs
       );
       if (
         output &&
         (!fs.existsSync(destination) || fs.statSync(destination).isDirectory())
       ) {
         info(`Copying Android Archive of "${dependencyName}"`);
-        copyTasks.push(cloneFile(output, destination));
+        copyTasks.push(cloneFile(output, destination, fs));
       }
     }
     await Promise.all(copyTasks);
@@ -531,7 +541,7 @@ export const rnxCopyAssetsCommand = {
   func: (_argv: string[], config: CLIConfig, options: Options) => {
     ensureOption(options, "platform");
     ensureOption(options, "assetsDest", "assets-dest");
-    return copyProjectAssets(options, config);
+    return copyProjectAssets(options, config, nodefs);
   },
   options: [
     {

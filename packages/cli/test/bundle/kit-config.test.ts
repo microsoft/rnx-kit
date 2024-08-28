@@ -1,13 +1,13 @@
+import type { KitConfig } from "@rnx-kit/config";
 import {
   getCliPlatformBundleConfigs,
   getTargetPlatforms,
 } from "../../src/bundle/kit-config";
 
-const rnxKitConfig = require("@rnx-kit/config");
-
-describe("CLI > Bundle > Kit Config > getTargetPlatforms", () => {
+describe("bundle/kit-config/getTargetPlatforms()", () => {
   test("returns the override platform", () => {
     const platforms = getTargetPlatforms("ios", ["android", "ios", "windows"]);
+
     expect(Array.isArray(platforms)).toBe(true);
     expect(platforms.length).toBe(1);
     expect(platforms).toEqual(["ios"]);
@@ -29,7 +29,7 @@ describe("CLI > Bundle > Kit Config > getTargetPlatforms", () => {
   });
 });
 
-describe("CLI > Bundle > Kit Config > getCliPlatformBundleConfigs", () => {
+describe("bundle/kit-config/getCliPlatformBundleConfigs()", () => {
   const defaultConfig = {
     entryFile: "index.js",
     sourcemapUseAbsolutePath: false,
@@ -65,12 +65,9 @@ describe("CLI > Bundle > Kit Config > getCliPlatformBundleConfigs", () => {
     platform: "windows",
   };
 
-  beforeEach(() => {
-    rnxKitConfig.__setMockConfig(undefined);
-  });
-
   test("returns defaults for iOS when package has no config", () => {
     const configs = getCliPlatformBundleConfigs(undefined, "ios");
+
     expect(Array.isArray(configs)).toBe(true);
     expect(configs.length).toBe(1);
     expect(configs[0]).toEqual(defaultConfigIOS);
@@ -78,6 +75,7 @@ describe("CLI > Bundle > Kit Config > getCliPlatformBundleConfigs", () => {
 
   test("returns defaults for MacOS when package has no config", () => {
     const configs = getCliPlatformBundleConfigs(undefined, "macos");
+
     expect(Array.isArray(configs)).toBe(true);
     expect(configs.length).toBe(1);
     expect(configs[0]).toEqual(defaultConfigMacOS);
@@ -85,6 +83,7 @@ describe("CLI > Bundle > Kit Config > getCliPlatformBundleConfigs", () => {
 
   test("returns defaults for Android when package has no config", () => {
     const configs = getCliPlatformBundleConfigs(undefined, "android");
+
     expect(Array.isArray(configs)).toBe(true);
     expect(configs.length).toBe(1);
     expect(configs[0]).toEqual(defaultConfigAndroid);
@@ -92,12 +91,13 @@ describe("CLI > Bundle > Kit Config > getCliPlatformBundleConfigs", () => {
 
   test("returns defaults for Windows when package has no config", () => {
     const configs = getCliPlatformBundleConfigs(undefined, "windows");
+
     expect(Array.isArray(configs)).toBe(true);
     expect(configs.length).toBe(1);
     expect(configs[0]).toEqual(defaultConfigWindows);
   });
 
-  const testConfig = {
+  const testConfig: KitConfig = {
     bundle: {
       entryFile: "entry.js",
       typescriptValidation: false,
@@ -107,8 +107,12 @@ describe("CLI > Bundle > Kit Config > getCliPlatformBundleConfigs", () => {
   };
 
   test("returns config with defaults for all target platforms", () => {
-    rnxKitConfig.__setMockConfig(testConfig);
-    const configs = getCliPlatformBundleConfigs();
+    const configs = getCliPlatformBundleConfigs(
+      undefined,
+      undefined,
+      testConfig
+    );
+
     expect(Array.isArray(configs)).toBe(true);
     expect(configs.length).toBe(4);
     expect(configs[0]).toEqual({ ...defaultConfigIOS, ...testConfig.bundle });
@@ -123,7 +127,7 @@ describe("CLI > Bundle > Kit Config > getCliPlatformBundleConfigs", () => {
     });
   });
 
-  const testMultiConfig = {
+  const testMultiConfig: KitConfig = {
     bundle: [
       {
         id: "first",
@@ -137,24 +141,32 @@ describe("CLI > Bundle > Kit Config > getCliPlatformBundleConfigs", () => {
   };
 
   test("returns the first config when no id is given", () => {
-    rnxKitConfig.__setMockConfig(testMultiConfig);
-    const configs = getCliPlatformBundleConfigs(undefined, "ios");
+    const configs = getCliPlatformBundleConfigs(
+      undefined,
+      "ios",
+      testMultiConfig
+    );
+
     expect(Array.isArray(configs)).toBe(true);
     expect(configs.length).toBe(1);
     expect(configs[0]).toEqual({
       ...defaultConfigIOS,
-      ...testMultiConfig.bundle[0],
+      ...testMultiConfig.bundle?.[0],
     });
   });
 
   test("returns the selected config when an id is given", () => {
-    rnxKitConfig.__setMockConfig(testMultiConfig);
-    const configs = getCliPlatformBundleConfigs("second", "android");
+    const configs = getCliPlatformBundleConfigs(
+      "second",
+      "android",
+      testMultiConfig
+    );
+
     expect(Array.isArray(configs)).toBe(true);
     expect(configs.length).toBe(1);
     expect(configs[0]).toEqual({
       ...defaultConfigAndroid,
-      ...testMultiConfig.bundle[1],
+      ...testMultiConfig.bundle?.[1],
     });
   });
 });

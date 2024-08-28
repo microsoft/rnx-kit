@@ -4,7 +4,7 @@ import {
 } from "../../src/bundle/overrides";
 import type { CliPlatformBundleConfig } from "../../src/bundle/types";
 
-describe("CLI > Bundle > Overrides > applyBundleConfigOverrides", () => {
+describe("bundle/overrides/applyBundleConfigOverrides()", () => {
   const config: CliPlatformBundleConfig = {
     entryFile: "src/index.js",
     bundleOutput: "main.jsbundle",

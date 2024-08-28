@@ -1,4 +1,4 @@
-import * as fs from "fs";
+import * as nodefs from "fs";
 import * as path from "path";
 
 type FileType = "file" | "directory";
@@ -10,7 +10,11 @@ type FindUpOptions = {
   allowSymlinks?: boolean;
 };
 
-function exists(name: string, type: FileType, stat: fs.StatSyncFn): boolean {
+function exists(
+  name: string,
+  type: FileType,
+  stat: nodefs.StatSyncFn
+): boolean {
   try {
     const stats = stat(name, { throwIfNoEntry: false });
     switch (type) {
@@ -37,7 +41,8 @@ export function findUp(
     startDir = process.cwd(),
     stopAt,
     allowSymlinks = true,
-  }: FindUpOptions = {}
+  }: FindUpOptions = {},
+  /** @internal */ fs = nodefs
 ): string | undefined {
   const stat = allowSymlinks ? fs.statSync : fs.lstatSync;
   let directory = path.resolve(startDir);

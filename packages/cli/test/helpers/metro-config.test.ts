@@ -48,7 +48,7 @@ function toMock(module: unknown): ReturnType<typeof mockPlugin> {
   return module as ReturnType<typeof mockPlugin>;
 }
 
-describe("cli/metro-config/customizeMetroConfig", () => {
+describe("cli/metro-config/customizeMetroConfig()", () => {
   afterEach(() => {
     toMock(CyclicDependencies).mockClear();
     toMock(DuplicateDependencies).mockClear();

@@ -1,4 +1,4 @@
-import * as fs from "fs";
+import * as nodefs from "fs";
 import * as path from "path";
 import { findUp } from "./path";
 
@@ -95,7 +95,10 @@ function resolvePackagePath(pkgPath: string): string {
  * @param pkgPath Either a path directly to the target `package.json` file, or the directory containing it.
  * @returns Package manifest
  */
-export function readPackage(pkgPath: string): PackageManifest {
+export function readPackage(
+  pkgPath: string,
+  /** @internal */ fs = nodefs
+): PackageManifest {
   const pkgFile = resolvePackagePath(pkgPath);
   return JSON.parse(fs.readFileSync(pkgFile, "utf-8"));
 }
@@ -110,7 +113,8 @@ export function readPackage(pkgPath: string): PackageManifest {
 export function writePackage(
   pkgPath: string,
   manifest: PackageManifest,
-  space = "  "
+  space = "  ",
+  /** @internal */ fs = nodefs
 ): void {
   const pkgFile = resolvePackagePath(pkgPath);
   fs.writeFileSync(
@@ -130,8 +134,11 @@ export function writePackage(
  * @param startDir Optional starting directory for the search. If not given, the current directory is used.
  * @returns Path to `package.json`, or `undefined` if not found.
  */
-export function findPackage(startDir?: string): string | undefined {
-  return findUp("package.json", { startDir });
+export function findPackage(
+  startDir?: string,
+  /** @internal */ fs = nodefs
+): string | undefined {
+  return findUp("package.json", { startDir }, fs);
 }
 
 /**
@@ -144,8 +151,11 @@ export function findPackage(startDir?: string): string | undefined {
  * @param startDir Optional starting directory for the search. If not given, the current directory is used.
  * @returns Path to `package.json`, or `undefined` if not found.
  */
-export function findPackageDir(startDir?: string): string | undefined {
-  const manifest = findUp("package.json", { startDir });
+export function findPackageDir(
+  startDir?: string,
+  /** @internal */ fs = nodefs
+): string | undefined {
+  const manifest = findUp("package.json", { startDir }, fs);
   return manifest && path.dirname(manifest);
 }
 
@@ -184,15 +194,20 @@ export type FindPackageDependencyOptions = {
  */
 export function findPackageDependencyDir(
   ref: string | PackageRef,
-  options?: FindPackageDependencyOptions
+  options?: FindPackageDependencyOptions,
+  /** @internal */ fs = nodefs
 ): string | undefined {
   const pkgName =
     typeof ref === "string" ? ref : path.join(ref.scope ?? "", ref.name);
-  const packageDir = findUp(path.join("node_modules", pkgName), {
-    startDir: options?.startDir,
-    type: "directory",
-    allowSymlinks: options?.allowSymlinks,
-  });
+  const packageDir = findUp(
+    path.join("node_modules", pkgName),
+    {
+      startDir: options?.startDir,
+      type: "directory",
+      allowSymlinks: options?.allowSymlinks,
+    },
+    fs
+  );
   if (!packageDir || !options?.resolveSymlinks) {
     return packageDir;
   }
