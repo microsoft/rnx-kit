@@ -1,10 +1,20 @@
 # @rnx-kit/metro-plugin-typescript
 
+## 0.4.5
+
+### Patch Changes
+
+- a6a3149: Allow empty scope in package names
+- Updated dependencies [a6a3149]
+  - @rnx-kit/tools-node@2.1.2
+
 ## 0.4.4
 
 ### Patch Changes
 
-- 1c2725b8: Implemented replacements for `resolveModuleNames` and `resolveTypeReferenceDirectives` deprecated in TypeScript 5.0 (https://github.com/microsoft/TypeScript/commit/9e845d224859950fb263dec43f8fa1f7334e52da)
+- 1c2725b8: Implemented replacements for `resolveModuleNames` and
+  `resolveTypeReferenceDirectives` deprecated in TypeScript 5.0
+  (https://github.com/microsoft/TypeScript/commit/9e845d224859950fb263dec43f8fa1f7334e52da)
 - Updated dependencies [1bc772cc]
 - Updated dependencies [1c2725b8]
   - @rnx-kit/tools-react-native@1.3.2
@@ -90,10 +100,11 @@
 
 ### Minor Changes
 
-- f01bdef6: Add a new TypeScript module resolver for React Native projects which uses the
-  `moduleSuffixes` compiler option. All resolution is delegated to TypeScript,
-  rather than @rnx-kit/typescript-react-native-resolver, since TypeScript's
-  resolvers are more feature-rich and in sync with the node ecosystem.
+- f01bdef6: Add a new TypeScript module resolver for React Native projects which
+  uses the `moduleSuffixes` compiler option. All resolution is delegated to
+  TypeScript, rather than @rnx-kit/typescript-react-native-resolver, since
+  TypeScript's resolvers are more feature-rich and in sync with the node
+  ecosystem.
 
 ### Patch Changes
 

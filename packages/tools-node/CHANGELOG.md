@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/tools-node
 
+## 2.1.2
+
+### Patch Changes
+
+- a6a3149: Allow empty scope in package names
+
 ## 2.1.1
 
 ### Patch Changes
@@ -41,7 +47,8 @@
 
 ### Minor Changes
 
-- 1edb9acd: Added a flag, `resolveSymlinks`, to `findPackageDependencyDir` to make it return fully resolved symlinks
+- 1edb9acd: Added a flag, `resolveSymlinks`, to `findPackageDependencyDir` to
+  make it return fully resolved symlinks
 
 ## 1.2.7
 
@@ -95,7 +102,8 @@ Mon, 01 Nov 2021 13:46:13 GMT
 
 ### Patches
 
-- Normalize main and types fields across all packages which use them. (afoxman@microsoft.com)
+- Normalize main and types fields across all packages which use them.
+  (afoxman@microsoft.com)
 - Bump @rnx-kit/tools-language to v1.2.1
 
 ## 1.2.0
@@ -104,7 +112,8 @@ Sat, 30 Oct 2021 07:50:51 GMT
 
 ### Minor changes
 
-- Add new language and node functions to the tools packages. (afoxman@microsoft.com)
+- Add new language and node functions to the tools packages.
+  (afoxman@microsoft.com)
 - Bump @rnx-kit/tools-language to v1.2.0
 
 ## 1.1.6
@@ -153,7 +162,8 @@ Fri, 27 Aug 2021 18:41:43 GMT
 
 ### Patches
 
-- Fix Windows absolute paths not being handled correctly (4123478+tido64@users.noreply.github.com)
+- Fix Windows absolute paths not being handled correctly
+  (4123478+tido64@users.noreply.github.com)
 
 ## 1.1.0
 
@@ -161,7 +171,8 @@ Wed, 25 Aug 2021 08:52:48 GMT
 
 ### Minor changes
 
-- Add a method to create a directory, including parent directories. (afoxman@microsoft.com)
+- Add a method to create a directory, including parent directories.
+  (afoxman@microsoft.com)
 
 ## 1.0.2
 
