@@ -1,5 +1,16 @@
 # Change Log - @rnx-kit/cli
 
+## 0.17.2
+
+### Patch Changes
+
+- ba1a1fd: Added experimental commands for building and running iOS/macOS apps.
+  These need more testing, preferably outside of rnx-kit, and as such, will not
+  be publicly available. But if you are willing to keep patches, there are ways
+  to access them.
+- Updated dependencies [ba1a1fd]
+  - @rnx-kit/tools-apple@0.1.2
+
 ## 0.17.1
 
 ### Patch Changes

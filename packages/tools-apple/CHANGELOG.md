@@ -1,5 +1,11 @@
 # @rnx-kit/tools-apple
 
+## 0.1.2
+
+### Patch Changes
+
+- ba1a1fd: Added primitives for building 'build' and 'run' commands
+
 ## 0.1.1
 
 ### Patch Changes
