@@ -1,5 +1,12 @@
 # Change Log - @rnx-kit/cli
 
+## 0.17.3
+
+### Patch Changes
+
+- 4783503: `projectDir` is only set in recent versions of
+  `@react-native-community/cli`
+
 ## 0.17.2
 
 ### Patch Changes
