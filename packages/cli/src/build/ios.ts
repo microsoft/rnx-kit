@@ -13,7 +13,9 @@ export function buildIOS(
   const { sourceDir, xcodeProject } = config.project[platform] ?? {};
   if (!sourceDir || !xcodeProject) {
     const root = platform.substring(0, platform.length - 2);
-    logger.fail(`No ${root}OS project was found`);
+    logger.fail(
+      `No ${root}OS project was found; did you forget to run 'pod install'?`
+    );
     process.exitCode = 1;
     return Promise.resolve(1);
   }
@@ -27,6 +29,8 @@ export function buildIOS(
     return Promise.resolve(1);
   }
 
-  const xcworkspace = path.resolve(sourceDir, projectDir, name);
+  const xcworkspace = projectDir
+    ? path.resolve(sourceDir, projectDir, name)
+    : path.resolve(sourceDir, name);
   return runBuild(xcworkspace, buildParams, logger);
 }

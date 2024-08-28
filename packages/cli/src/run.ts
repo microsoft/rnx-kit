@@ -15,11 +15,6 @@ export function rnxRun(
       return runIOS(config, buildParams);
     case "macos":
       return runMacOS(config, buildParams);
-    default:
-      // @ts-expect-error Safe guard against user input
-      console.error(`Unsupported platform: ${buildParams.platform}`);
-      process.exitCode = 1;
-      return Promise.resolve();
   }
 }
 
