@@ -50,6 +50,10 @@ describe("Node > Package", () => {
     deepEqual(parsePackageRef("@alias"), { name: "@alias" });
   });
 
+  it("parsePackageRef(@/core) is allowed", () => {
+    deepEqual(parsePackageRef("@/core"), { scope: "@", name: "core" });
+  });
+
   it("parsePackageRef(undefined) throws an Error", () => {
     // @ts-expect-error Argument of type 'undefined' is not assignable to parameter of type 'string'
     throws(() => parsePackageRef(undefined));
@@ -57,10 +61,6 @@ describe("Node > Package", () => {
 
   it("parsePackageRef(@babel/) throws an Error", () => {
     throws(() => parsePackageRef("@babel/"));
-  });
-
-  it("parsePackageRef(@/core) throws an Error", () => {
-    throws(() => parsePackageRef("@/core"));
   });
 
   it("readPackage() loads package.json when given its containing directory", () => {
