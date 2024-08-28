@@ -33,6 +33,9 @@
     "node": ">=18.12"
   },
   "packageManager": "yarn@4.4.0",
+  "resolutions": {
+    "@pnpm/network.ca-file/graceful-fs": "^4.2.10"
+  },
   "browserslist": {
     "production": [
       ">0.5%",
