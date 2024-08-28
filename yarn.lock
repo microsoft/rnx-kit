@@ -3819,7 +3819,7 @@ __metadata:
     "@rnx-kit/metro-service": "npm:^3.1.6"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/third-party-notices": "npm:^1.3.4"
-    "@rnx-kit/tools-apple": "npm:^0.1.1"
+    "@rnx-kit/tools-apple": "npm:^0.1.2"
     "@rnx-kit/tools-filesystem": "npm:*"
     "@rnx-kit/tools-language": "npm:^2.0.0"
     "@rnx-kit/tools-node": "npm:^2.1.1"
@@ -4551,7 +4551,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rnx-kit/tools-apple@npm:^0.1.1, @rnx-kit/tools-apple@workspace:packages/tools-apple":
+"@rnx-kit/tools-apple@npm:^0.1.1, @rnx-kit/tools-apple@npm:^0.1.2, @rnx-kit/tools-apple@workspace:packages/tools-apple":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/tools-apple@workspace:packages/tools-apple"
   dependencies:
