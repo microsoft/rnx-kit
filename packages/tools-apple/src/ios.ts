@@ -1,10 +1,49 @@
 import { retry } from "@rnx-kit/tools-shell/async";
 import { ensure, makeCommand } from "@rnx-kit/tools-shell/command";
 import * as readline from "node:readline";
-import type { Device, DeviceType, Logger, Simulator } from "./types.js";
+import { open } from "./macos.js";
+import type {
+  BuildParams,
+  Device,
+  DeviceType,
+  Logger,
+  Simulator,
+} from "./types.js";
 import { parsePlist, xcrun } from "./xcode.js";
 
+const DEFAULT_SIMS: Record<string, RegExp> = {
+  "com.apple.platform.iphonesimulator": /^iPhone \d\d(?: Pro)?$/,
+  "com.apple.platform.xrsimulator": /^Apple Vision Pro/,
+};
+
+const XCODE_SDKS = {
+  ios: {
+    device: {
+      sdk: "iphoneos",
+      destination: "generic/platform=iOS",
+    },
+    simulator: {
+      sdk: "iphonesimulator",
+      destination: "generic/platform=iOS Simulator",
+    },
+  },
+  visionos: {
+    device: {
+      sdk: "xros",
+      destination: "generic/platform=visionOS",
+    },
+    simulator: {
+      sdk: "xrsimulator",
+      destination: "generic/platform=visionOS Simulator",
+    },
+  },
+};
+
 export const iosDeploy = makeCommand("ios-deploy");
+
+function ensureSimulatorAppIsOpen() {
+  return open("-a", "Simulator");
+}
 
 /**
  * Returns a list of available iOS simulators.
@@ -58,12 +97,38 @@ export async function bootSimulator(
     return new Error(stderr);
   }
 
-  const result = await retry(async () => {
+  const booted = await retry(async () => {
     const simulators = await getAvailableSimulators(udid);
     const device = pickSimulator(simulators);
     return device?.state === "Booted" || null;
   }, 4);
-  return result ? null : new Error("Timed out waiting for the simulator");
+  if (!booted) {
+    return new Error("Timed out waiting for the simulator");
+  }
+
+  // Make sure `Simulator.app` is foregrounded. `simctl boot` may only start the
+  // background process.
+  await ensureSimulatorAppIsOpen();
+
+  return null;
+}
+
+function findSimulator(
+  devices: Device[],
+  deviceName: string | undefined,
+  platformIdentifier: string
+) {
+  if (deviceName) {
+    return devices.find(
+      ({ simulator, name }) => simulator && name === deviceName
+    );
+  }
+
+  const defaultSimulator =
+    DEFAULT_SIMS[platformIdentifier || "com.apple.platform.iphonesimulator"];
+  return devices.reverse().find(({ simulator, available, modelName }) => {
+    return simulator && available && defaultSimulator.test(modelName);
+  });
 }
 
 /**
@@ -80,6 +145,37 @@ export async function install(
 
   const { stderr, status } = await install();
   return status === 0 ? null : new Error(stderr);
+}
+
+/**
+ * Adds iOS specific build flags.
+ */
+export function iosSpecificBuildFlags(
+  params: BuildParams,
+  args: string[]
+): string[] {
+  const { platform } = params;
+  if (platform === "ios" || platform === "visionos") {
+    const sdks = XCODE_SDKS[platform];
+    const { destination, archs } = params;
+    if (destination === "device") {
+      const { sdk, destination } = sdks.device;
+      args.push("-sdk", sdk, "-destination", destination);
+    } else {
+      const { sdk, destination } = sdks.simulator;
+      args.push(
+        "-sdk",
+        sdk,
+        "-destination",
+        destination,
+        "CODE_SIGNING_ALLOWED=NO"
+      );
+      if (archs) {
+        args.push(`ARCHS=${archs}`);
+      }
+    }
+  }
+  return args;
 }
 
 /**
@@ -132,17 +228,22 @@ export async function launch(
  * If a simulator is found, it is also booted if necessary
  */
 export async function selectDevice(
-  deviceName: string | undefined,
+  deviceNameOrPlatformIdentifier: string | undefined,
   deviceType: DeviceType,
   logger: Logger
 ): Promise<Device | null> {
   const devices = await getDevices();
 
+  const [deviceName, platformIdentifier]: [string | undefined, string] =
+    deviceNameOrPlatformIdentifier?.startsWith("com.apple.platform.")
+      ? [undefined, deviceNameOrPlatformIdentifier]
+      : [deviceNameOrPlatformIdentifier, "com.apple.platform.iphoneos"];
+
   if (deviceType === "device") {
     const search: (device: Device) => boolean = deviceName
       ? ({ simulator, name }) => !simulator && name === deviceName
       : ({ simulator, platform }) =>
-          !simulator && platform === "com.apple.platform.iphoneos";
+          !simulator && platform === platformIdentifier;
     const physicalDevice = devices.find(search);
     if (!physicalDevice) {
       // Device detection can sometimes be flaky. Prompt the user to make sure
@@ -167,13 +268,7 @@ export async function selectDevice(
     return physicalDevice;
   }
 
-  const device = deviceName
-    ? devices.find(({ simulator, name }) => simulator && name === deviceName)
-    : devices.reverse().find(({ simulator, available, modelName }) => {
-        return (
-          simulator && available && /^iPhone \d\d(?: Pro)?$/.test(modelName)
-        );
-      });
+  const device = findSimulator(devices, deviceName, platformIdentifier);
   if (!device) {
     const foundDevices = devices
       .reduce<string[]>((list, device) => {
@@ -188,7 +283,7 @@ export async function selectDevice(
     const message = [
       deviceName
         ? `Failed to find ${deviceName} simulator:`
-        : "Failed to find an iPhone simulator:",
+        : "Failed to find a simulator:",
       ...foundDevices,
     ].join("\n\t- ");
     logger.fail(message);
@@ -211,6 +306,7 @@ export async function selectDevice(
           logger.succeed(`Booted ${name} simulator`);
         } else {
           logger.info(`${name} simulator has already been booted`);
+          await ensureSimulatorAppIsOpen();
         }
         return device;
       }

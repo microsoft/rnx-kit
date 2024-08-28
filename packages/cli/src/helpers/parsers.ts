@@ -1,3 +1,4 @@
+import { InvalidArgumentError } from "commander";
 import type { TransformProfile } from "metro-babel-transformer";
 import * as path from "node:path";
 
@@ -8,7 +9,7 @@ export function asBoolean(value: string): boolean {
     case "true":
       return true;
     default:
-      throw new Error(`Expected 'true' or 'false; got '${value}'`);
+      throw new InvalidArgumentError(`Expected 'true' or 'false'.`);
   }
 }
 
@@ -37,7 +38,7 @@ export function asTransformProfile(val: string): TransformProfile {
         "hermes-canary",
         "default",
       ];
-      throw new Error(`Expected '${profiles.join("', '")}'; got ${val}`);
+      throw new InvalidArgumentError(`Expected '${profiles.join("', '")}'.`);
     }
   }
 }
