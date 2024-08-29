@@ -1,7 +1,7 @@
 import { rnxBundleCommand } from "../src/bundle";
 import { asBoolean, asNumber, asStringArray } from "../src/helpers/parsers";
 
-describe("rnx-clean", () => {
+describe("rnx-bundle", () => {
   it("correctly parses cli arguments", () => {
     for (const { name, parse } of rnxBundleCommand.options) {
       if (name.endsWith("[boolean]")) {

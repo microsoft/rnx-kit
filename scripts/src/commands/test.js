@@ -4,9 +4,8 @@ import { execute, runScript } from "../process.js";
 
 /** @type {import("../process.js").Command} */
 export async function test(_args, rawArgs = []) {
-  const manifest = await fs.readFile(process.cwd() + "/package.json", {
-    encoding: "utf-8",
-  });
+  const options = /** @type {const} */ ({ encoding: "utf-8" });
+  const manifest = await fs.readFile(process.cwd() + "/package.json", options);
   if (manifest.includes('"jest"')) {
     await runScript("jest", "--passWithNoTests", ...rawArgs);
   } else {

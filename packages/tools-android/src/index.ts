@@ -243,6 +243,9 @@ export async function selectDevice(
 
 /**
  * Starts the specified activity on specified emulator or physical device.
+ * @param options
+ * @param packageName
+ * @param activityName
  */
 export function start(
   { serial }: DeviceInfo,

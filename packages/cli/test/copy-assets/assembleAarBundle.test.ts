@@ -1,15 +1,14 @@
+import { mockFS } from "@rnx-kit/tools-filesystem/mocks";
+import * as child_process from "node:child_process";
 import * as path from "node:path";
 import { assembleAarBundle } from "../../src/copy-assets";
 
-jest.mock("child_process");
-jest.mock("fs");
+jest.mock("node:child_process");
 jest.unmock("@rnx-kit/console");
 
-describe("assembleAarBundle", () => {
-  const fs = require("fs");
-
+describe("copy-assets/assembleAarBundle()", () => {
   const consoleWarnSpy = jest.spyOn(global.console, "warn");
-  const spawnSyncSpy = jest.spyOn(require("child_process"), "spawnSync");
+  const spawnSyncSpy = jest.spyOn(child_process, "spawnSync");
 
   const options = {
     platform: "android" as const,
@@ -27,19 +26,38 @@ describe("assembleAarBundle", () => {
     reactNativePath: require.resolve("react-native"),
   };
 
+  const cwd = process.cwd();
   const dummyManifest = JSON.stringify({ version: "0.0.0-dev" });
-
-  function findFiles() {
-    return Object.entries(fs.__toJSON());
-  }
-
-  function mockFiles(files: Record<string, string> = {}) {
-    fs.__setMockFiles(files);
-  }
+  const gradleWrapper = path.join(
+    cwd,
+    process.platform === "win32" ? "gradlew.bat" : "gradlew"
+  );
+  const authDir = path.join(
+    cwd,
+    "node_modules",
+    "@rnx-kit",
+    "react-native-auth"
+  );
+  const authBuildArtifact = path.join(
+    authDir,
+    "android",
+    "build",
+    "outputs",
+    "aar",
+    "rnx-kit_react-native-auth-release.aar"
+  );
+  const authBuildGradle = path.join(authDir, "android", "build.gradle");
+  const authManifest = path.join(authDir, "package.json");
+  const rnManifest = path.join(
+    cwd,
+    "node_modules",
+    "react-native",
+    "package.json"
+  );
 
   afterEach(() => {
-    mockFiles();
     consoleWarnSpy.mockReset();
+    spawnSyncSpy.mockReset();
   });
 
   afterAll(() => {
@@ -47,85 +65,87 @@ describe("assembleAarBundle", () => {
   });
 
   test("returns early if there is nothing to assemble", async () => {
-    mockFiles({
-      gradlew: "",
-      "gradlew.bat": "",
-    });
+    const files = { [gradleWrapper]: "" };
 
-    await assembleAarBundle(context, context.manifest.name, {});
+    await assembleAarBundle(context, context.manifest.name, {}, mockFS(files));
 
     expect(consoleWarnSpy).not.toHaveBeenCalled();
-    expect(findFiles()).toEqual([
-      [expect.stringMatching(/[/\\]gradlew$/), ""],
-      [expect.stringMatching(/[/\\]gradlew.bat$/), ""],
-    ]);
+    expect(Object.entries(files)).toEqual([[gradleWrapper, ""]]);
   });
 
   test("returns early if Gradle wrapper cannot be found", async () => {
-    await assembleAarBundle(context, context.manifest.name, { aar: {} });
+    const files = {};
+
+    await assembleAarBundle(
+      context,
+      context.manifest.name,
+      { aar: {} },
+      mockFS(files)
+    );
 
     expect(consoleWarnSpy).toHaveBeenCalledWith(
       expect.anything(),
       expect.stringMatching(/cannot find `gradlew(.bat)?`$/)
     );
     expect(spawnSyncSpy).not.toHaveBeenCalled();
-    expect(findFiles()).toEqual([]);
+    expect(Object.entries(files)).toEqual([]);
   });
 
   test("throws if target package cannot be found", async () => {
-    mockFiles({
-      gradlew: "",
-      "gradlew.bat": "",
-    });
+    const files = { [gradleWrapper]: "" };
 
     expect(
-      assembleAarBundle(context, context.manifest.name, { aar: {} })
+      assembleAarBundle(
+        context,
+        context.manifest.name,
+        { aar: {} },
+        mockFS(files)
+      )
     ).rejects.toThrow();
-    expect(findFiles()).toEqual([
-      [expect.stringMatching(/[/\\]gradlew$/), ""],
-      [expect.stringMatching(/[/\\]gradlew.bat$/), ""],
-    ]);
+    expect(Object.entries(files)).toEqual([[gradleWrapper, ""]]);
   });
 
   test("returns early if Gradle project cannot be found", async () => {
-    mockFiles({
-      gradlew: "",
-      "gradlew.bat": "",
-      "node_modules/@rnx-kit/react-native-auth/package.json": dummyManifest,
-    });
+    const files = {
+      [gradleWrapper]: "",
+      [authManifest]: dummyManifest,
+    };
 
-    await assembleAarBundle(context, "@rnx-kit/react-native-auth", { aar: {} });
+    await assembleAarBundle(
+      context,
+      "@rnx-kit/react-native-auth",
+      { aar: {} },
+      mockFS(files)
+    );
 
     expect(consoleWarnSpy).toHaveBeenCalledWith(
       expect.anything(),
       expect.stringMatching(/cannot find `build.gradle`/)
     );
     expect(spawnSyncSpy).not.toHaveBeenCalled();
-    expect(findFiles()).toEqual([
-      [expect.stringMatching(/[/\\]gradlew$/), ""],
-      [expect.stringMatching(/[/\\]gradlew.bat$/), ""],
-      [
-        expect.stringMatching(
-          /[/\\]node_modules[/\\]@rnx-kit[/\\]react-native-auth[/\\]package.json$/
-        ),
-        dummyManifest,
-      ],
+    expect(Object.entries(files)).toEqual([
+      [gradleWrapper, ""],
+      [authManifest, dummyManifest],
     ]);
   });
 
   test("generates Android project if necessary", async () => {
-    mockFiles({
-      gradlew: "",
-      "gradlew.bat": "",
-      "node_modules/@rnx-kit/react-native-auth/android/build.gradle":
-        "build.gradle",
-      "node_modules/@rnx-kit/react-native-auth/android/build/outputs/aar/rnx-kit_react-native-auth-release.aar":
-        "rnx-kit_react-native-auth-release.aar",
-      "node_modules/@rnx-kit/react-native-auth/package.json": dummyManifest,
-      "node_modules/react-native/package.json": dummyManifest,
-    });
+    child_process.spawnSync.mockReturnValue({ status: 0 });
 
-    await assembleAarBundle(context, "@rnx-kit/react-native-auth", { aar: {} });
+    const files = {
+      [gradleWrapper]: "",
+      [authBuildGradle]: path.basename(authBuildGradle),
+      [authBuildArtifact]: path.basename(authBuildArtifact),
+      [authManifest]: dummyManifest,
+      [rnManifest]: dummyManifest,
+    };
+
+    await assembleAarBundle(
+      context,
+      "@rnx-kit/react-native-auth",
+      { aar: {} },
+      mockFS(files)
+    );
 
     expect(consoleWarnSpy).not.toHaveBeenCalled();
     expect(spawnSyncSpy).toHaveBeenCalledWith(
@@ -137,33 +157,12 @@ describe("assembleAarBundle", () => {
         ),
       })
     );
-    expect(findFiles()).toEqual([
-      [expect.stringMatching(/[/\\]gradlew$/), ""],
-      [expect.stringMatching(/[/\\]gradlew.bat$/), ""],
-      [
-        expect.stringMatching(
-          /[/\\]node_modules[/\\]@rnx-kit[/\\]react-native-auth[/\\]android[/\\]build.gradle$/
-        ),
-        "build.gradle",
-      ],
-      [
-        expect.stringMatching(
-          /[/\\]node_modules[/\\]@rnx-kit[/\\]react-native-auth[/\\]android[/\\]build[/\\]outputs[/\\]aar[/\\]rnx-kit_react-native-auth-release.aar$/
-        ),
-        "rnx-kit_react-native-auth-release.aar",
-      ],
-      [
-        expect.stringMatching(
-          /[/\\]node_modules[/\\]@rnx-kit[/\\]react-native-auth[/\\]package.json$/
-        ),
-        dummyManifest,
-      ],
-      [
-        expect.stringMatching(
-          /[/\\]node_modules[/\\]react-native[/\\]package.json$/
-        ),
-        dummyManifest,
-      ],
+    expect(Object.entries(files)).toEqual([
+      [gradleWrapper, ""],
+      [authBuildGradle, path.basename(authBuildGradle)],
+      [authBuildArtifact, path.basename(authBuildArtifact)],
+      [authManifest, dummyManifest],
+      [rnManifest, dummyManifest],
       [
         expect.stringMatching(
           /[/\\]node_modules[/\\].rnx-gradle-build[/\\]rnx-kit_react-native-auth[/\\]build.gradle$/
@@ -186,28 +185,32 @@ describe("assembleAarBundle", () => {
       ],
       [
         expect.stringMatching(
-          /[/\\]dist[/\\]aar[/\\]rnx-kit_react-native-auth-0.0.0-dev.aar$/
+          /dist[/\\]aar[/\\]rnx-kit_react-native-auth-0.0.0-dev.aar$/
         ),
-        "rnx-kit_react-native-auth-release.aar",
+        path.basename(authBuildArtifact),
       ],
     ]);
   });
 
   test("assembles Android archive using existing project", async () => {
-    mockFiles({
-      gradlew: "",
-      "gradlew.bat": "",
-      "node_modules/@rnx-kit/react-native-auth/android/build.gradle":
-        "build.gradle",
-      "node_modules/@rnx-kit/react-native-auth/android/build/outputs/aar/rnx-kit_react-native-auth-release.aar":
-        "rnx-kit_react-native-auth-release.aar",
-      "node_modules/@rnx-kit/react-native-auth/android/settings.gradle":
-        "settings.gradle",
-      "node_modules/@rnx-kit/react-native-auth/package.json": dummyManifest,
-      "node_modules/react-native/package.json": dummyManifest,
-    });
+    child_process.spawnSync.mockReturnValue({ status: 0 });
 
-    await assembleAarBundle(context, "@rnx-kit/react-native-auth", { aar: {} });
+    const authSettingsGradle = path.join(authDir, "android", "settings.gradle");
+    const files = {
+      [gradleWrapper]: "",
+      [authBuildGradle]: path.basename(authBuildGradle),
+      [authBuildArtifact]: path.basename(authBuildArtifact),
+      [authSettingsGradle]: path.basename(authSettingsGradle),
+      [authManifest]: dummyManifest,
+      [rnManifest]: dummyManifest,
+    };
+
+    await assembleAarBundle(
+      context,
+      "@rnx-kit/react-native-auth",
+      { aar: {} },
+      mockFS(files)
+    );
 
     expect(consoleWarnSpy).not.toHaveBeenCalled();
     expect(spawnSyncSpy).toHaveBeenCalledWith(
@@ -219,72 +222,50 @@ describe("assembleAarBundle", () => {
         ),
       })
     );
-    expect(findFiles()).toEqual([
-      [expect.stringMatching(/[/\\]gradlew$/), ""],
-      [expect.stringMatching(/[/\\]gradlew.bat$/), ""],
+    expect(Object.entries(files)).toEqual([
+      [gradleWrapper, ""],
+      [authBuildGradle, path.basename(authBuildGradle)],
+      [authBuildArtifact, path.basename(authBuildArtifact)],
+      [authSettingsGradle, path.basename(authSettingsGradle)],
+      [authManifest, dummyManifest],
+      [rnManifest, dummyManifest],
       [
         expect.stringMatching(
-          /[/\\]node_modules[/\\]@rnx-kit[/\\]react-native-auth[/\\]android[/\\]build.gradle$/
+          /dist[/\\]aar[/\\]rnx-kit_react-native-auth-0.0.0-dev.aar$/
         ),
-        "build.gradle",
-      ],
-      [
-        expect.stringMatching(
-          /[/\\]node_modules[/\\]@rnx-kit[/\\]react-native-auth[/\\]android[/\\]build[/\\]outputs[/\\]aar[/\\]rnx-kit_react-native-auth-release.aar$/
-        ),
-        "rnx-kit_react-native-auth-release.aar",
-      ],
-      [
-        expect.stringMatching(
-          /[/\\]node_modules[/\\]@rnx-kit[/\\]react-native-auth[/\\]android[/\\]settings.gradle$/
-        ),
-        "settings.gradle",
-      ],
-      [
-        expect.stringMatching(
-          /[/\\]node_modules[/\\]@rnx-kit[/\\]react-native-auth[/\\]package.json$/
-        ),
-        dummyManifest,
-      ],
-      [
-        expect.stringMatching(
-          /[/\\]node_modules[/\\]react-native[/\\]package.json$/
-        ),
-        dummyManifest,
-      ],
-      [
-        expect.stringMatching(
-          /[/\\]dist[/\\]aar[/\\]rnx-kit_react-native-auth-0.0.0-dev.aar$/
-        ),
-        "rnx-kit_react-native-auth-release.aar",
+        path.basename(authBuildArtifact),
       ],
     ]);
   });
 
   test("allows the generated Android project to be configured", async () => {
-    mockFiles({
-      gradlew: "",
-      "gradlew.bat": "",
-      "node_modules/@rnx-kit/react-native-auth/android/build.gradle":
-        "build.gradle",
-      "node_modules/@rnx-kit/react-native-auth/android/build/outputs/aar/rnx-kit_react-native-auth-release.aar":
-        "rnx-kit_react-native-auth-release.aar",
-      "node_modules/@rnx-kit/react-native-auth/package.json": dummyManifest,
-      "node_modules/react-native/package.json": dummyManifest,
-    });
+    child_process.spawnSync.mockReturnValue({ status: 0 });
 
-    await assembleAarBundle(context, "@rnx-kit/react-native-auth", {
-      aar: {
-        android: {
-          androidPluginVersion: "7.1.3",
-          compileSdkVersion: 31,
-          defaultConfig: {
-            minSdkVersion: 26,
-            targetSdkVersion: 30,
+    const files = {
+      [gradleWrapper]: "",
+      [authBuildGradle]: path.basename(authBuildGradle),
+      [authBuildArtifact]: path.basename(authBuildArtifact),
+      [authManifest]: dummyManifest,
+      [rnManifest]: dummyManifest,
+    };
+
+    await assembleAarBundle(
+      context,
+      "@rnx-kit/react-native-auth",
+      {
+        aar: {
+          android: {
+            androidPluginVersion: "7.1.3",
+            compileSdkVersion: 31,
+            defaultConfig: {
+              minSdkVersion: 26,
+              targetSdkVersion: 30,
+            },
           },
         },
       },
-    });
+      mockFS(files)
+    );
 
     expect(consoleWarnSpy).not.toHaveBeenCalled();
     expect(spawnSyncSpy).toHaveBeenCalledWith(
@@ -296,7 +277,7 @@ describe("assembleAarBundle", () => {
         ),
       })
     );
-    expect(findFiles()).toEqual(
+    expect(Object.entries(files)).toEqual(
       expect.arrayContaining([
         [
           expect.stringMatching(

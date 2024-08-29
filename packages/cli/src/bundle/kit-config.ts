@@ -53,9 +53,9 @@ function getDefaultBundleParameters(platform: string) {
  */
 export function getCliPlatformBundleConfigs(
   id?: string,
-  overridePlatform?: AllPlatforms
+  overridePlatform?: AllPlatforms,
+  kitConfig = getKitConfig()
 ): CliPlatformBundleConfig[] {
-  const kitConfig = getKitConfig();
   const maybeBundleConfig = kitConfig
     ? getBundleConfig(kitConfig, id)
     : undefined;

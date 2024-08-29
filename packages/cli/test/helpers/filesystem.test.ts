@@ -1,6 +1,6 @@
 import { ensureDir } from "../../src/helpers/filesystem";
 
-describe("ensureDir()", () => {
+describe("helpers/filesystem/ensureDir()", () => {
   it("passes the correct options to `fs.mkdir`", () => {
     let options = {};
     const fsMock = {

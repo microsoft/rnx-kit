@@ -8,7 +8,7 @@ jest.mock("@rnx-kit/tools-react-native/context", () => ({
   },
 }));
 
-describe("getCoreCommands()", () => {
+describe("bin/context/getCoreCommands()", () => {
   it("strips `rnx-` prefix from all commands", () => {
     const coreCommands = getCoreCommands();
     for (let i = 0; i < coreCommands.length; ++i) {
@@ -24,7 +24,7 @@ describe("getCoreCommands()", () => {
   });
 });
 
-describe("uniquify()", () => {
+describe("bin/context/uniquify()", () => {
   function makeCommand(name: string, description: string): Command<false> {
     return { name, description } as Command<false>;
   }
@@ -48,7 +48,7 @@ describe("uniquify()", () => {
   });
 });
 
-describe("loadContext()", () => {
+describe("bin/context/loadContext()", () => {
   afterAll(() => {
     jest.resetAllMocks();
   });

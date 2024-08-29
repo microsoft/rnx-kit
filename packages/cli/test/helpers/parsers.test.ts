@@ -5,7 +5,7 @@ import {
   asTransformProfile,
 } from "../../src/helpers/parsers";
 
-describe("asBoolean()", () => {
+describe("helpers/parsers/asBoolean()", () => {
   it("returns boolean for string", () => {
     expect(asBoolean("false")).toBe(false);
     expect(asBoolean("true")).toBe(true);
@@ -24,7 +24,7 @@ describe("asBoolean()", () => {
   });
 });
 
-describe("asNumber()", () => {
+describe("helpers/parsers/asNumber()", () => {
   it("returns the numerical representation of number", () => {
     expect(asNumber("0")).toBe(0);
     expect(asNumber("1")).toBe(1);
@@ -37,7 +37,7 @@ describe("asNumber()", () => {
   });
 });
 
-describe("asStringArray()", () => {
+describe("helpers/parsers/asStringArray()", () => {
   it("splits a string by ','", () => {
     expect(asStringArray("")).toStrictEqual([""]);
     expect(asStringArray(",")).toStrictEqual(["", ""]);
@@ -46,7 +46,7 @@ describe("asStringArray()", () => {
   });
 });
 
-describe("asTransformProfile()", () => {
+describe("helpers/parsers/asTransformProfile()", () => {
   it("returns the profile if valid", () => {
     expect(asTransformProfile("hermes-stable")).toBe("hermes-stable");
     expect(asTransformProfile("hermes-canary")).toBe("hermes-canary");

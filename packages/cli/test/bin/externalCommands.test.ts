@@ -9,7 +9,7 @@ function mockContext(context: unknown = {}): Config {
   return context as Config;
 }
 
-describe("findExternalCommands()", () => {
+describe("bin/externalCommands/findExternalCommands()", () => {
   afterAll(() => {
     jest.resetAllMocks();
   });

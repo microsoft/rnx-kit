@@ -19,7 +19,7 @@ const context = {
   reactNativePath: require.resolve("react-native"),
 };
 
-describe("copyAssets", () => {
+describe("copy-assets/copyAssets()", () => {
   const mkdirOptions = JSON.stringify({ recursive: true, mode: 0o755 });
 
   test("returns early if there is nothing to copy", async () => {
@@ -98,13 +98,13 @@ describe("copyAssets", () => {
   });
 });
 
-describe("gatherConfigs", () => {
+describe("copy-assets/gatherConfigs()", () => {
   test("returns early if there is nothing to copy", async () => {
     expect(await gatherConfigs(context)).toBeUndefined();
   });
 });
 
-describe("versionOf", () => {
+describe("copy-assets/versionOf()", () => {
   test("returns the version of specified package", () => {
     expect(versionOf("@rnx-kit/tools-node")).toMatch(/^\d+[.\d]+$/);
   });
