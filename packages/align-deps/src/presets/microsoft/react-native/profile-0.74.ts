@@ -101,6 +101,10 @@ export const profile: Profile = {
     devOnly: true,
   },
 
+  animation: {
+    name: "react-native-reanimated",
+    version: "^3.9.0",
+  },
   gestures: {
     name: "react-native-gesture-handler",
     version: "^2.18.1",
@@ -119,7 +123,7 @@ export const profile: Profile = {
   },
   storage: {
     name: "@react-native-async-storage/async-storage",
-    version: "^1.22.3",
+    version: "^2.0.0",
   },
   svg: {
     name: "react-native-svg",
