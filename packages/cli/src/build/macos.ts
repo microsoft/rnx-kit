@@ -2,8 +2,9 @@ import type { Config } from "@react-native-community/cli-types";
 import * as fs from "node:fs";
 import * as path from "node:path";
 import ora from "ora";
-import type { BuildResult, InputParams } from "./apple";
+import type { BuildResult } from "./apple";
 import { runBuild } from "./apple";
+import type { AppleInputParams } from "./types";
 
 function findXcodeWorkspaces(searchDir: string) {
   return fs.existsSync(searchDir)
@@ -13,7 +14,7 @@ function findXcodeWorkspaces(searchDir: string) {
 
 export function buildMacOS(
   _config: Config,
-  { workspace, ...buildParams }: InputParams,
+  { workspace, ...buildParams }: AppleInputParams,
   logger = ora()
 ): Promise<BuildResult> {
   if (workspace) {

@@ -1,8 +1,8 @@
 import type { Config } from "@react-native-community/cli-types";
 import * as path from "node:path";
 import ora from "ora";
-import type { InputParams } from "../build/apple";
 import { buildIOS } from "../build/ios";
+import type { InputParams } from "../build/types";
 
 export async function runIOS(config: Config, buildParams: InputParams) {
   const { platform } = buildParams;
@@ -17,7 +17,7 @@ export async function runIOS(config: Config, buildParams: InputParams) {
     return;
   }
 
-  logger.start("Preparing to launch app...");
+  logger.start("Preparing to launch app");
 
   const {
     getBuildSettings,
@@ -52,7 +52,7 @@ export async function runIOS(config: Config, buildParams: InputParams) {
     settings.buildSettings;
   const app = path.join(TARGET_BUILD_DIR, EXECUTABLE_FOLDER_PATH);
 
-  logger.start(`Installing '${FULL_PRODUCT_NAME}' on ${device.name}...`);
+  logger.start(`Installing '${FULL_PRODUCT_NAME}' on ${device.name}`);
 
   const installError = await install(device, app);
   if (installError) {

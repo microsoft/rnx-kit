@@ -50,6 +50,7 @@
     "@rnx-kit/metro-serializer-esbuild": "^0.1.38",
     "@rnx-kit/metro-service": "^3.1.6",
     "@rnx-kit/third-party-notices": "^1.3.4",
+    "@rnx-kit/tools-android": "^0.1.0",
     "@rnx-kit/tools-apple": "^0.1.2",
     "@rnx-kit/tools-language": "^2.0.0",
     "@rnx-kit/tools-node": "^2.1.1",

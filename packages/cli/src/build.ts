@@ -1,12 +1,13 @@
 import type { Config } from "@react-native-community/cli-types";
 import { InvalidArgumentError } from "commander";
+import { buildAndroid } from "./build/android";
+import { buildIOS } from "./build/ios";
+import { buildMacOS } from "./build/macos";
 import type {
   BuildConfiguration,
   DeviceType,
   InputParams,
-} from "./build/apple";
-import { buildIOS } from "./build/ios";
-import { buildMacOS } from "./build/macos";
+} from "./build/types";
 
 function asConfiguration(configuration: string): BuildConfiguration {
   switch (configuration) {
@@ -35,13 +36,14 @@ function asDestination(destination: string): DeviceType {
 
 function asSupportedPlatform(platform: string): InputParams["platform"] {
   switch (platform) {
+    case "android":
     case "ios":
     case "macos":
     case "visionos":
       return platform;
     default:
       throw new InvalidArgumentError(
-        "Supported platforms: 'ios', 'macos', 'visionos'."
+        "Supported platforms: 'android', 'ios', 'macos', 'visionos'."
       );
   }
 }
@@ -52,9 +54,13 @@ export function rnxBuild(
   buildParams: InputParams
 ) {
   switch (buildParams.platform) {
+    case "android":
+      return buildAndroid(config, buildParams);
+
     case "ios":
     case "visionos":
       return buildIOS(config, buildParams);
+
     case "macos":
       return buildMacOS(config, buildParams);
   }
@@ -78,7 +84,7 @@ export const rnxBuildCommand = {
     },
     {
       name: "--scheme <string>",
-      description: "Name of scheme to build",
+      description: "Name of scheme to build (Apple platforms only)",
     },
     {
       name: "--configuration <string>",
