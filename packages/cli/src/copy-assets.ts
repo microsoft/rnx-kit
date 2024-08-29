@@ -9,11 +9,11 @@ import {
 import { findUp } from "@rnx-kit/tools-node/path";
 import type { AllPlatforms } from "@rnx-kit/tools-react-native";
 import { parsePlatform } from "@rnx-kit/tools-react-native";
-import type { SpawnSyncOptions } from "child_process";
-import { spawnSync } from "child_process";
-import * as nodefs from "fs";
-import * as os from "os";
-import * as path from "path";
+import type { SpawnSyncOptions } from "node:child_process";
+import { spawnSync } from "node:child_process";
+import * as nodefs from "node:fs";
+import * as os from "node:os";
+import * as path from "node:path";
 import { ensureDir } from "./helpers/filesystem";
 
 export type AndroidArchive = {
