@@ -11,7 +11,10 @@ import {
   getSavedState,
   saveConfigToCache,
 } from "@rnx-kit/tools-react-native/cache";
-import { resolveCommunityCLI } from "@rnx-kit/tools-react-native/context";
+import {
+  loadContext,
+  resolveCommunityCLI,
+} from "@rnx-kit/tools-react-native/context";
 import { reactNativeConfig } from "../index";
 
 type Command = BaseCommand<false> | BaseCommand<true>;
@@ -53,7 +56,10 @@ export function uniquify(commands: Command[]): Command[] {
   return Object.values(uniqueCommands);
 }
 
-export function loadContext(userCommand: string, root = process.cwd()): Config {
+export function loadContextForCommand(
+  userCommand: string,
+  root = process.cwd()
+): Config {
   // The fast path avoids traversing project dependencies because we know what
   // information our commands depend on.
   const coreCommands = getCoreCommands();
@@ -90,7 +96,8 @@ export function loadContext(userCommand: string, root = process.cwd()): Config {
         throw new Error("Unexpected access to `platforms`");
       },
       get project(): Config["project"] {
-        throw new Error("Unexpected access to `project`");
+        // Used by the build command
+        return loadContext(root).project;
       },
     };
   }
