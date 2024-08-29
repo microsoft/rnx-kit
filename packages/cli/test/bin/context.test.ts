@@ -1,5 +1,9 @@
 import type { Command } from "@react-native-community/cli-types";
-import { getCoreCommands, loadContext, uniquify } from "../../src/bin/context";
+import {
+  getCoreCommands,
+  loadContextForCommand,
+  uniquify,
+} from "../../src/bin/context";
 import { reactNativeConfig } from "../../src/index";
 
 jest.mock("@rnx-kit/tools-react-native/context", () => ({
@@ -48,19 +52,19 @@ describe("bin/context/uniquify()", () => {
   });
 });
 
-describe("bin/context/loadContext()", () => {
+describe("bin/context/loadContextForCommand()", () => {
   afterAll(() => {
     jest.resetAllMocks();
   });
 
   it("uses fast code path for rnx commands", () => {
     for (const { name } of getCoreCommands()) {
-      expect(() => loadContext(name)).not.toThrow();
+      expect(() => loadContextForCommand(name)).not.toThrow();
     }
   });
 
   it("uses full code path for other commands", () => {
-    expect(() => loadContext("run-android")).toThrow();
-    expect(() => loadContext("run-ios")).toThrow();
+    expect(() => loadContextForCommand("run-android")).toThrow();
+    expect(() => loadContextForCommand("run-ios")).toThrow();
   });
 });
