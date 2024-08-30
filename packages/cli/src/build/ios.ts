@@ -1,12 +1,13 @@
 import type { Config } from "@react-native-community/cli-types";
 import * as path from "node:path";
 import ora from "ora";
-import type { BuildResult, InputParams } from "./apple";
+import type { BuildResult } from "./apple";
 import { runBuild } from "./apple";
+import type { AppleInputParams } from "./types";
 
 export function buildIOS(
   config: Config,
-  buildParams: InputParams,
+  buildParams: AppleInputParams,
   logger = ora()
 ): Promise<BuildResult> {
   const { platform } = buildParams;

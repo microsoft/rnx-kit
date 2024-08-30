@@ -1,32 +1,5 @@
 import type { Ora } from "ora";
-
-// Copy of types from `@rnx-kit/tools-apple`. If Jest wasn't such a pain to
-// configure, we would have added an `import type` at the top instead:
-//
-//     import type { BuildParams } from "@rnx-kit/tools-apple" with { "resolution-mode": "import" };
-//
-// But Jest doesn't like import attributes and it doesn't matter if we add
-// `@babel/plugin-syntax-import-attributes` in the config.
-//
-// TOOD: Remove the `DeviceType`, `BuildConfiguration` and `BuildParams` when we
-// can migrate away from Jest in this package.
-export type DeviceType = "device" | "emulator" | "simulator";
-export type BuildConfiguration = "Debug" | "Release";
-type BuildParams =
-  | {
-      platform: "ios" | "visionos";
-      scheme?: string;
-      destination?: DeviceType;
-      configuration?: BuildConfiguration;
-      archs?: string;
-      isBuiltRemotely?: boolean;
-    }
-  | {
-      platform: "macos";
-      scheme?: string;
-      configuration?: BuildConfiguration;
-      isBuiltRemotely?: boolean;
-    };
+import type { AppleBuildParams } from "./types";
 
 export type BuildArgs = {
   xcworkspace: string;
@@ -35,19 +8,14 @@ export type BuildArgs = {
 
 export type BuildResult = BuildArgs | number | null;
 
-export type InputParams = BuildParams & {
-  device?: string;
-  workspace?: string;
-};
-
 export function runBuild(
   xcworkspace: string,
-  buildParams: BuildParams,
+  buildParams: AppleBuildParams,
   logger: Ora
 ): Promise<BuildResult> {
   return import("@rnx-kit/tools-apple").then(({ xcodebuild }) => {
     return new Promise<BuildResult>((resolve) => {
-      logger.start("Building...");
+      logger.start("Building");
 
       const errors: Buffer[] = [];
       const proc = xcodebuild(xcworkspace, buildParams, (text) => {

@@ -1,10 +1,10 @@
 import type { Config } from "@react-native-community/cli-types";
 import * as path from "node:path";
 import ora from "ora";
-import type { InputParams } from "../build/apple";
 import { buildMacOS } from "../build/macos";
+import type { AppleInputParams } from "../build/types";
 
-export async function runMacOS(config: Config, buildParams: InputParams) {
+export async function runMacOS(config: Config, buildParams: AppleInputParams) {
   const logger = ora();
 
   const result = await buildMacOS(config, buildParams, logger);
@@ -14,7 +14,7 @@ export async function runMacOS(config: Config, buildParams: InputParams) {
 
   const { getBuildSettings, open } = await import("@rnx-kit/tools-apple");
 
-  logger.start("Launching app...");
+  logger.start("Launching app");
 
   const settings = await getBuildSettings(result.xcworkspace, result.args);
   if (!settings) {
@@ -26,7 +26,7 @@ export async function runMacOS(config: Config, buildParams: InputParams) {
   const { FULL_PRODUCT_NAME, TARGET_BUILD_DIR } = settings.buildSettings;
   const appPath = path.join(TARGET_BUILD_DIR, FULL_PRODUCT_NAME);
 
-  logger.text = `Launching '${FULL_PRODUCT_NAME}'...`;
+  logger.text = `Launching '${FULL_PRODUCT_NAME}'`;
 
   const { stderr, status } = await open(appPath);
   if (status !== 0) {
