@@ -188,7 +188,7 @@ import { profile as profile_${currentVersionVarName} } from "./profile-${current
 const reactNative: Package = {
   name: "react-native",
   version: "^${targetVersion}.0",
-  capabilities: ["react", "core/metro-config"],
+  capabilities: ["react", "core/metro-config", "community/cli"],
 };
 
 export const profile: Profile = {

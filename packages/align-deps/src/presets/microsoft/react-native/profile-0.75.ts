@@ -101,8 +101,16 @@ export const profile: Profile = {
     devOnly: true,
   },
 
+  animation: {
+    name: "react-native-reanimated",
+    version: "^3.15.0",
+  },
   screens: {
     name: "react-native-screens",
     version: "^3.34.0",
+  },
+  svg: {
+    name: "react-native-svg",
+    version: "^15.6.0",
   },
 };
