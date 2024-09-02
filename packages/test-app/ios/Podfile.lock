@@ -1478,7 +1478,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - ReactTestApp-DevSupport (3.9.2):
+  - ReactTestApp-DevSupport (3.9.7):
     - React-Core
     - React-jsi
   - ReactTestApp-MSAL (3.0.3):
@@ -1574,7 +1574,7 @@ DEPENDENCIES:
   - React-utils (from `../node_modules/react-native/ReactCommon/react/utils`)
   - ReactCodegen (from `build/generated/ios`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
-  - "ReactNativeHost (from `../../../node_modules/.store/react-native-test-app-virtual-d979642baf/node_modules/@rnx-kit/react-native-host`)"
+  - "ReactNativeHost (from `../../../node_modules/.store/react-native-test-app-virtual-db35ce319e/node_modules/@rnx-kit/react-native-host`)"
   - ReactTestApp-DevSupport (from `../node_modules/react-native-test-app`)
   - "ReactTestApp-MSAL (from `../node_modules/@rnx-kit/react-native-test-app-msal`)"
   - ReactTestApp-Resources (from `..`)
@@ -1707,7 +1707,7 @@ EXTERNAL SOURCES:
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
   ReactNativeHost:
-    :path: "../../../node_modules/.store/react-native-test-app-virtual-d979642baf/node_modules/@rnx-kit/react-native-host"
+    :path: "../../../node_modules/.store/react-native-test-app-virtual-db35ce319e/node_modules/@rnx-kit/react-native-host"
   ReactTestApp-DevSupport:
     :path: "../node_modules/react-native-test-app"
   ReactTestApp-MSAL:
@@ -1783,7 +1783,7 @@ SPEC CHECKSUMS:
   ReactCodegen: f8ed6f835a2fffe2a3666dfbce5ff1b120f24982
   ReactCommon: a33f215e2ca23410f8f44b0a94ab93120882e5e5
   ReactNativeHost: 1648deef337f0967092821c3c4b860eacc55f473
-  ReactTestApp-DevSupport: cbe23c1d1999516afa35e9758ef400b6bd3f7046
+  ReactTestApp-DevSupport: 74676edd899013becce4eaecc5eabba1fc51e26e
   ReactTestApp-MSAL: 9d7c1ba83a38c0c314546f3396c22f9ae7550312
   ReactTestApp-Resources: a4cc1f968cd26bdbd18ee0bfbd0ab8dd0ea90101
   RNWWebStorage: 7fa0c2bd3aba2d3e17cb92983bda1cad8ba4fe4c
