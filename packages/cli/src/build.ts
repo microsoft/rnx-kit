@@ -73,7 +73,7 @@ export const rnxBuildCommand = {
   func: rnxBuild,
   options: [
     {
-      name: "--platform <string>",
+      name: "-p, --platform <string>",
       description: "Target platform",
       parse: asSupportedPlatform,
     },

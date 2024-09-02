@@ -31,7 +31,7 @@ export const rnxRunCommand = {
   options: [
     ...rnxBuildCommand.options,
     {
-      name: "--device <string>",
+      name: "-d, --device <string>",
       description: "The name of the device to launch the app in",
     },
   ],

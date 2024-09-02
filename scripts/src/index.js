@@ -2,8 +2,6 @@
 // @ts-check
 
 import yargs from "yargs";
-import { buildAndroid } from "./commands/build-android.js";
-import { buildIOS } from "./commands/build-ios.js";
 import { build } from "./commands/build.js";
 import { bundle } from "./commands/bundle.js";
 import { clean } from "./commands/clean.js";
@@ -39,14 +37,6 @@ init({
   build: {
     description: "Builds the current package",
     command: build,
-  },
-  "build-ios": {
-    description: "Builds an iOS app within the current package",
-    command: buildIOS,
-  },
-  "build-android": {
-    description: "Builds an Android app within the current package",
-    command: buildAndroid,
   },
   bundle: {
     description: "Bundles the current package",
