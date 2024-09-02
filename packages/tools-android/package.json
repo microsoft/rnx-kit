@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/tools-android",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A collection of functions for deploying apps on Android",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/tools-android#readme",
   "license": "MIT",
