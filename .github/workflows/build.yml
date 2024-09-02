@@ -8,7 +8,7 @@ jobs:
     permissions:
       contents: write # create Git tags
     if: ${{ github.repository == 'microsoft/rnx-kit' }}
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -42,7 +42,7 @@ jobs:
     permissions:
       contents: write # deploy to GitHub Pages (peaceiris/actions-gh-pages)
     needs: build_and_publish
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout
         uses: actions/checkout@v4

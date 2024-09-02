@@ -31,7 +31,7 @@ jobs:
   build-android:
     name: Build Android
     if: ${{ github.event.inputs.platform == 'android' }}
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -191,7 +191,7 @@ jobs:
   distribute:
     name: Distribute build
     needs: [build-android, build-ios]
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     if: ${{ github.event.inputs.distribution != 'local' && !cancelled() && !failure() }} # `success()` excludes skipped jobs
     steps:
       - name: Download build artifact

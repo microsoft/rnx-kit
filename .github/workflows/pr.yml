@@ -7,7 +7,7 @@ concurrency:
 jobs:
   review:
     name: "Review"
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -53,7 +53,7 @@ jobs:
     strategy:
       matrix:
         node-version: [18, 20]
-        os: [ubuntu-22.04, windows-2022]
+        os: [ubuntu-24.04, windows-2022]
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout
@@ -84,7 +84,7 @@ jobs:
         shell: bash
   build-android-test-app:
     name: "Build Android"
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -144,7 +144,7 @@ jobs:
         working-directory: packages/test-app
   build-website:
     name: "Build the website"
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout
         uses: actions/checkout@v4
