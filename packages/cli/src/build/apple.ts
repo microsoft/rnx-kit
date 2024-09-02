@@ -1,5 +1,6 @@
 import type { Ora } from "ora";
 import type { AppleBuildParams } from "./types";
+import { watch } from "./watcher";
 
 export type BuildArgs = {
   xcworkspace: string;
@@ -15,28 +16,11 @@ export function runBuild(
 ): Promise<BuildResult> {
   return import("@rnx-kit/tools-apple").then(({ xcodebuild }) => {
     return new Promise<BuildResult>((resolve) => {
-      logger.start("Building");
-
-      const errors: Buffer[] = [];
-      const proc = xcodebuild(xcworkspace, buildParams, (text) => {
-        const current = logger.text;
+      const onSuccess = () => resolve({ xcworkspace, args: build.spawnargs });
+      const build = xcodebuild(xcworkspace, buildParams, (text) => {
         logger.info(text);
-        logger.start(current);
       });
-
-      proc.stdout.on("data", () => (logger.text += "."));
-      proc.stderr.on("data", (data) => errors.push(data));
-
-      proc.on("close", (code) => {
-        if (code === 0) {
-          logger.succeed("Build succeeded");
-          resolve({ xcworkspace, args: proc.spawnargs });
-        } else {
-          logger.fail(Buffer.concat(errors).toString());
-          process.exitCode = code ?? 1;
-          resolve(code);
-        }
-      });
+      watch(build, logger, onSuccess, resolve);
     });
   });
 }
