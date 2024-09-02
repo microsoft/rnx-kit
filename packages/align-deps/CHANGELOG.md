@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/align-deps
 
+## 2.5.4
+
+### Patch Changes
+
+- 03e22c7: Update dependencies for 0.74, 0.75
+
 ## 2.5.3
 
 ### Patch Changes

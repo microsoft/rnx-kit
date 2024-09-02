@@ -1,5 +1,18 @@
 # Change Log - @rnx-kit/cli
 
+## 0.17.4
+
+### Patch Changes
+
+- c2023a7: Added Android support to the experimental commands for building and
+  running apps. Again, this still needs more testing and will not be publicly
+  available yet.
+- 923c91f: Provide additional context for the `build` command
+- Updated dependencies [03e22c7]
+- Updated dependencies [c2023a7]
+  - @rnx-kit/align-deps@2.5.4
+  - @rnx-kit/tools-android@0.1.1
+
 ## 0.17.3
 
 ### Patch Changes
