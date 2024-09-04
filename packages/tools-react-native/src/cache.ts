@@ -67,6 +67,14 @@ export function getSavedState(
   return fs.existsSync(stateFile) && fs.readFileSync(stateFile, UTF8);
 }
 
+export function invalidateState(
+  projectRoot: string,
+  /** @internal */ fs = nodefs
+) {
+  fs.rmSync(configCachePath(projectRoot));
+  fs.rmSync(cacheStatePath(projectRoot));
+}
+
 export function loadConfigFromCache(
   projectRoot: string,
   /** @internal */ fs = nodefs

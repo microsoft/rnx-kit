@@ -1,4 +1,5 @@
 import type { Config } from "@react-native-community/cli-types";
+import { invalidateState } from "@rnx-kit/tools-react-native/cache";
 import * as fs from "node:fs";
 import * as path from "node:path";
 import ora from "ora";
@@ -24,10 +25,11 @@ export function buildMacOS(
   const sourceDir = "macos";
   const workspaces = findXcodeWorkspaces(sourceDir);
   if (workspaces.length === 0) {
+    invalidateState(process.cwd());
+    process.exitCode = 1;
     logger.fail(
       "No Xcode workspaces were found; specify an Xcode workspace with `--workspace`"
     );
-    process.exitCode = 1;
     return Promise.resolve(1);
   }
 
