@@ -1,4 +1,5 @@
 import type { Config } from "@react-native-community/cli-types";
+import { invalidateState } from "@rnx-kit/tools-react-native/cache";
 import ora from "ora";
 import type { AndroidBuildParams } from "./types";
 import { watch } from "./watcher";
@@ -12,8 +13,9 @@ export function buildAndroid(
 ): Promise<BuildResult> {
   const { sourceDir } = config.project.android ?? {};
   if (!sourceDir) {
-    logger.fail("No Android project was found");
+    invalidateState();
     process.exitCode = 1;
+    logger.fail("No Android project was found");
     return Promise.resolve(null);
   }
 
