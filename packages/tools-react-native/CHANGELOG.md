@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/tools-react-native
 
+## 1.4.2
+
+### Patch Changes
+
+- 29859ab: Fix context cache not taking `pod install` state into account
+
 ## 1.4.1
 
 ### Patch Changes
