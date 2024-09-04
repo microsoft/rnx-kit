@@ -25,7 +25,7 @@ export function buildMacOS(
   const sourceDir = "macos";
   const workspaces = findXcodeWorkspaces(sourceDir);
   if (workspaces.length === 0) {
-    invalidateState(process.cwd());
+    invalidateState();
     process.exitCode = 1;
     logger.fail(
       "No Xcode workspaces were found; specify an Xcode workspace with `--workspace`"

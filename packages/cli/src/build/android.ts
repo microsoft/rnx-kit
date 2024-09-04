@@ -13,7 +13,7 @@ export function buildAndroid(
 ): Promise<BuildResult> {
   const { sourceDir } = config.project.android ?? {};
   if (!sourceDir) {
-    invalidateState(process.cwd());
+    invalidateState();
     process.exitCode = 1;
     logger.fail("No Android project was found");
     return Promise.resolve(null);

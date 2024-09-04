@@ -68,7 +68,7 @@ export function getSavedState(
 }
 
 export function invalidateState(
-  projectRoot: string,
+  projectRoot = process.cwd(),
   /** @internal */ fs = nodefs
 ) {
   fs.rmSync(configCachePath(projectRoot));
