@@ -10,8 +10,8 @@
   "scripts": {
     "android": "rnx run-android --no-packager --appId com.msft.identity.client.sample.local",
     "build": "rnx align-deps && rnx-kit-scripts build",
-    "build:android": "rnx-kit-scripts build-android clean build",
-    "build:ios": "rnx-kit-scripts build-ios -w SampleCrossApp -s ReactTestApp",
+    "build:android": "rnx build --platform android",
+    "build:ios": "rnx build --platform ios",
     "bundle": "rnx bundle",
     "bundle+esbuild": "rnx bundle --id esbuild",
     "bundle:android": "rnx bundle --platform android",

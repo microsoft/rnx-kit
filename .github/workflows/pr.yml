@@ -104,6 +104,10 @@ jobs:
           if [[ "$(yarn show-affected --base origin/${{ github.base_ref }})" = *"@rnx-kit/test-app"* ]]; then
             echo 'android=true' >> $GITHUB_OUTPUT
           fi
+      - name: Build @rnx-kit/cli
+        if: ${{ steps.affected-projects.outputs.android != '' }}
+        run: |
+          yarn nx build @rnx-kit/cli
       - name: Build Android app
         if: ${{ steps.affected-projects.outputs.android != '' }}
         run: |
@@ -131,6 +135,10 @@ jobs:
           if [[ "$(yarn show-affected --base origin/${{ github.base_ref }})" = *"@rnx-kit/test-app"* ]]; then
             echo 'ios=true' >> $GITHUB_OUTPUT
           fi
+      - name: Build @rnx-kit/cli
+        if: ${{ steps.affected-projects.outputs.ios != '' }}
+        run: |
+          yarn nx build @rnx-kit/cli
       - name: Install Pods
         uses: microsoft/react-native-test-app/.github/actions/cocoapods@trunk
         if: ${{ steps.affected-projects.outputs.ios != '' }}

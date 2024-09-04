@@ -1,9 +1,11 @@
 import type { Command } from "@react-native-community/cli-types";
 import { rnxAlignDepsCommand } from "./align-deps";
+import { rnxBuildCommand } from "./build";
 import { rnxBundleCommand } from "./bundle";
 import { rnxCleanCommand } from "./clean";
 import { rnxCopyAssetsCommand } from "./copy-assets";
 import { rnxRamBundleCommand } from "./ram-bundle";
+import { rnxRunCommand } from "./run";
 import { rnxStartCommand } from "./start";
 import { rnxTestCommand } from "./test";
 import { rnxWriteThirdPartyNoticesCommand } from "./write-third-party-notices";
@@ -13,6 +15,8 @@ export const reactNativeConfig = {
     rnxBundleCommand,
     rnxRamBundleCommand,
     rnxStartCommand,
+    rnxBuildCommand,
+    rnxRunCommand,
     rnxCopyAssetsCommand,
     rnxAlignDepsCommand,
     rnxTestCommand,
