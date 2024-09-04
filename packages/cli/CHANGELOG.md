@@ -1,5 +1,12 @@
 # Change Log - @rnx-kit/cli
 
+## 0.17.5
+
+### Patch Changes
+
+- a05bdf1: `build` and `run` commands are now available for public use
+- 4aa8e55: Print the command being invoked during build
+
 ## 0.17.4
 
 ### Patch Changes
