@@ -31,23 +31,15 @@ export const alignDepsCommand = {
       const { description } = options;
 
       if ("choices" in options) {
-        return {
-          name: `--${flag} <${options.choices.join("|")}>`,
-          description,
-        };
+        const choices = options.choices.join(" | ");
+        return { name: `--${flag} <${choices}>`, description };
       }
 
       if ("argsString" in options) {
-        return {
-          name: `--${flag} ${options.argsString}`,
-          description,
-        };
+        return { name: `--${flag} ${options.argsString}`, description };
       }
 
-      return {
-        name: `--${flag}`,
-        description,
-      };
+      return { name: `--${flag}`, description };
     });
   },
 };
