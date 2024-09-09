@@ -3648,6 +3648,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/align-deps@workspace:packages/align-deps"
   dependencies:
+    "@react-native-community/cli-types": "npm:^14.0.0"
     "@rnx-kit/config": "npm:*"
     "@rnx-kit/console": "npm:*"
     "@rnx-kit/eslint-config": "npm:*"
