@@ -5,6 +5,7 @@ import {
   writeThirdPartyNoticesFromMap,
 } from "./write-third-party-notices";
 
+export { writeThirdPartyNoticesCommand } from "./commander";
 export { writeThirdPartyNotices } from "./write-third-party-notices";
 
 export function ThirdPartyNotices(

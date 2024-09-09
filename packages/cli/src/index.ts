@@ -1,5 +1,6 @@
 import type { Command } from "@react-native-community/cli-types";
 import { alignDepsCommand } from "@rnx-kit/align-deps";
+import { writeThirdPartyNoticesCommand } from "@rnx-kit/third-party-notices";
 import { rnxBuildCommand } from "./build";
 import { rnxBundleCommand } from "./bundle";
 import { rnxCleanCommand } from "./clean";
@@ -8,7 +9,6 @@ import { rnxRamBundleCommand } from "./ram-bundle";
 import { rnxRunCommand } from "./run";
 import { rnxStartCommand } from "./start";
 import { rnxTestCommand } from "./test";
-import { rnxWriteThirdPartyNoticesCommand } from "./write-third-party-notices";
 
 export const reactNativeConfig = {
   commands: [
@@ -20,7 +20,7 @@ export const reactNativeConfig = {
     rnxCopyAssetsCommand,
     alignDepsCommand,
     rnxTestCommand,
-    rnxWriteThirdPartyNoticesCommand,
+    writeThirdPartyNoticesCommand,
     rnxCleanCommand,
   ] as Command<false>[],
 };
@@ -28,6 +28,10 @@ export const reactNativeConfig = {
 // @rnx-kit/align-deps
 export const rnxAlignDeps = alignDepsCommand.func;
 export const rnxAlignDepsCommand = alignDepsCommand;
+
+// @rnx-kit/third-party-notices
+export const rnxWriteThirdPartyNotices = writeThirdPartyNoticesCommand.func;
+export const rnxWriteThirdPartyNoticesCommand = writeThirdPartyNoticesCommand;
 
 export { rnxBuild, rnxBuildCommand } from "./build";
 export { rnxBundle, rnxBundleCommand } from "./bundle";
@@ -37,7 +41,3 @@ export { rnxRamBundle, rnxRamBundleCommand } from "./ram-bundle";
 export { rnxRun, rnxRunCommand } from "./run";
 export { rnxStart, rnxStartCommand } from "./start";
 export { rnxTest, rnxTestCommand } from "./test";
-export {
-  rnxWriteThirdPartyNotices,
-  rnxWriteThirdPartyNoticesCommand,
-} from "./write-third-party-notices";

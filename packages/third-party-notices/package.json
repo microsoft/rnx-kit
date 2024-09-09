@@ -36,6 +36,7 @@
     "yargs": "^16.0.0"
   },
   "devDependencies": {
+    "@react-native-community/cli-types": "^14.0.0",
     "@rnx-kit/eslint-config": "*",
     "@rnx-kit/jest-preset": "*",
     "@rnx-kit/metro-serializer": "*",
