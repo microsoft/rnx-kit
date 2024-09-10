@@ -104,7 +104,7 @@ function renderSummary(parts) {
   const comment = result.join("");
   const paragraph = comment.indexOf("\n\n");
   const summary = paragraph > 0 ? comment.substring(0, paragraph) : comment;
-  return summary.replace(/\n/g, " ");
+  return summary.replaceAll("\n", " ");
 }
 
 /**

@@ -90,7 +90,7 @@ function normalizePath(p: string): string {
 
   const { root } = path.parse(p);
   const m = root.toLowerCase().match(/([a-z]+)/);
-  return m ? `/${m[1]}/${p.substring(root.length)}`.replace(/\\/g, "/") : p;
+  return m ? `/${m[1]}/${p.substring(root.length)}`.replaceAll("\\", "/") : p;
 }
 
 /**

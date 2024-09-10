@@ -38,7 +38,7 @@ export function readConfigFile(
   // to posix path separators. This all happens internally to TS and seems
   // like a regression. The workaround is to convert to posix separators,
   // even on Windows, since they are supported across all platforms.
-  const configFileNamePosix = configFileName.replace(/\\/g, "/");
+  const configFileNamePosix = configFileName.replaceAll("\\", "/");
 
   return ts.getParsedCommandLineOfConfigFile(
     configFileNamePosix,

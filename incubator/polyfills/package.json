@@ -19,9 +19,6 @@
     "url": "https://github.com/microsoft/rnx-kit",
     "directory": "incubator/polyfills"
   },
-  "engines": {
-    "node": ">=14.15"
-  },
   "scripts": {
     "build": "rnx-kit-scripts build",
     "format": "rnx-kit-scripts format",
@@ -55,6 +52,9 @@
     "metro-config": "^0.80.3",
     "prettier": "^3.0.0",
     "typescript": "^5.0.0"
+  },
+  "engines": {
+    "node": ">=16.17"
   },
   "rnx-kit": {
     "alignDeps": {

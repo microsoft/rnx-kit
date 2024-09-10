@@ -108,7 +108,9 @@ function resolveUniqueModule(packageName, searchStartDir) {
   // - path/to/node_modules/prop-types
   const owningDir = path.dirname(result.slice(0, -packageName.length));
   const escapedPath = owningDir.replace(/[+.\\]/g, "\\$&");
-  const escapedPackageName = path.normalize(packageName).replace(/\\/g, "\\\\");
+  const escapedPackageName = path
+    .normalize(packageName)
+    .replaceAll("\\", "\\\\");
 
   const exclusionRE = new RegExp(
     `(?<!${escapedPath})\\${path.sep}node_modules\\${path.sep}${escapedPackageName}\\${path.sep}.*`

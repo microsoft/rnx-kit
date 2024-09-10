@@ -75,7 +75,7 @@
     "typescript": "^5.0.0"
   },
   "engines": {
-    "node": ">=12.13"
+    "node": ">=16.17"
   },
   "depcheck": {
     "ignoreMatches": [

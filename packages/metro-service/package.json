@@ -26,9 +26,6 @@
     "lint": "rnx-kit-scripts lint",
     "test": "rnx-kit-scripts test"
   },
-  "engines": {
-    "node": ">=12.13"
-  },
   "dependencies": {
     "@rnx-kit/console": "^1.1.0",
     "@rnx-kit/tools-node": "^2.1.0",
@@ -68,5 +65,8 @@
     "metro-runtime": "^0.80.3",
     "prettier": "^3.0.0",
     "typescript": "^5.0.0"
+  },
+  "engines": {
+    "node": ">=16.17"
   }
 }

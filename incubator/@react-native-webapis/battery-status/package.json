@@ -26,9 +26,6 @@
     "url": "https://github.com/microsoft/rnx-kit",
     "directory": "incubator/@react-native-webapis/battery-status"
   },
-  "engines": {
-    "node": ">=14.15"
-  },
   "scripts": {
     "build": "rnx-kit-scripts build",
     "format": "rnx-kit-scripts format",
@@ -52,6 +49,9 @@
     "react": "^18.2.0",
     "react-native": "^0.75.0",
     "typescript": "^5.0.0"
+  },
+  "engines": {
+    "node": ">=16.17"
   },
   "experimental": true
 }

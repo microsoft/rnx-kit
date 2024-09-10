@@ -64,6 +64,9 @@
       "react"
     ]
   },
+  "engines": {
+    "node": ">=16.17"
+  },
   "jest": {
     "preset": "./private/jest-preset.js"
   }
