@@ -100,9 +100,7 @@ describe("jest-preset", () => {
       "\\.[jt]sx?$": [
         "babel-jest",
         {
-          presets: [
-            require.resolve("@react-native/babel-preset/src/index.js"),
-          ],
+          presets: [require.resolve("@react-native/babel-preset/src/index.js")],
         },
       ],
     },
@@ -131,9 +129,7 @@ describe("jest-preset", () => {
       "\\.[jt]sx?$": [
         "babel-jest",
         {
-          presets: [
-            require.resolve("@react-native/babel-preset/src/index.js"),
-          ],
+          presets: [require.resolve("@react-native/babel-preset/src/index.js")],
         },
       ],
     },
