@@ -1,5 +1,12 @@
 # Change Log - @rnx-kit/jest-preset
 
+## 0.1.18
+
+### Patch Changes
+
+- 44e8dab: Look for `@react-native/babel-preset` before falling back to
+  `metro-react-native-babel-preset`
+
 ## 0.1.17
 
 ### Patch Changes
