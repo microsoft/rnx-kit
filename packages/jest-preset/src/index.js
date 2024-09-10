@@ -148,6 +148,8 @@ function babelPresets(targetPlatform, searchPaths) {
   }
 
   try {
+    // TODO: Remove `metro-react-native-babel-preset` branch when we drop
+    // support for 0.72
     return [require.resolve("@react-native/babel-preset", searchPaths)];
   } catch (_) {
     return ["module:metro-react-native-babel-preset"];
