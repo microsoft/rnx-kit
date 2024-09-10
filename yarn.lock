@@ -3644,7 +3644,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rnx-kit/align-deps@npm:^2.5.4, @rnx-kit/align-deps@workspace:packages/align-deps":
+"@rnx-kit/align-deps@npm:^2.5.5, @rnx-kit/align-deps@workspace:packages/align-deps":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/align-deps@workspace:packages/align-deps"
   dependencies:
@@ -3807,7 +3807,7 @@ __metadata:
     "@babel/core": "npm:^7.20.0"
     "@babel/preset-env": "npm:^7.20.0"
     "@react-native-community/cli-types": "npm:^14.0.0"
-    "@rnx-kit/align-deps": "npm:^2.5.4"
+    "@rnx-kit/align-deps": "npm:^2.5.5"
     "@rnx-kit/config": "npm:^0.6.6"
     "@rnx-kit/console": "npm:^1.1.0"
     "@rnx-kit/eslint-config": "npm:*"
