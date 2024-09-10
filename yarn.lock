@@ -4018,6 +4018,7 @@ __metadata:
     "@eslint/js": "npm:^8.33.0"
     "@jest/types": "npm:^29.2.1"
     "@react-native-community/cli-types": "npm:^14.0.0"
+    "@react-native/babel-preset": "npm:^0.75.0"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
     "@types/jest": "npm:^29.2.1"

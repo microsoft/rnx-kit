@@ -42,6 +42,7 @@
     "@eslint/js": "^8.33.0",
     "@jest/types": "^29.2.1",
     "@react-native-community/cli-types": "^14.0.0",
+    "@react-native/babel-preset": "^0.75.0",
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*",
     "@types/jest": "^29.2.1",
