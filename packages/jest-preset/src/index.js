@@ -136,18 +136,22 @@ function getTargetPlatform(defaultPlatform, searchPaths) {
 /**
  * Returns Babel presets for React Native.
  * @param {string | undefined} targetPlatform
+ * @param {{ paths: string[] }} searchPaths
  * @returns {(string | TransformerConfig)[]}
  */
-function babelPresets(targetPlatform) {
-  return targetPlatform
-    ? ["module:metro-react-native-babel-preset"]
-    : [
-        [
-          require.resolve("@babel/preset-env"),
-          { targets: { node: "current" } },
-        ],
-        require.resolve("@babel/preset-typescript"),
-      ];
+function babelPresets(targetPlatform, searchPaths) {
+  if (!targetPlatform) {
+    return [
+      [require.resolve("@babel/preset-env"), { targets: { node: "current" } }],
+      require.resolve("@babel/preset-typescript"),
+    ];
+  }
+
+  try {
+    return [require.resolve("@react-native/babel-preset", searchPaths)];
+  } catch (_) {
+    return ["module:metro-react-native-babel-preset"];
+  }
 }
 
 /**
@@ -274,7 +278,10 @@ module.exports = (
     transform: {
       "\\.[jt]sx?$": testEnvironment
         ? "babel-jest"
-        : ["babel-jest", { presets: babelPresets(targetPlatform) }],
+        : [
+            "babel-jest",
+            { presets: babelPresets(targetPlatform, searchPaths) },
+          ],
       ...transformRules(targetPlatform, platformPath, searchPaths),
       ...userTransform,
     },
