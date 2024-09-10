@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/jest-preset",
-  "version": "0.1.17",
+  "version": "0.1.18",
   "description": "Jest preset for React Native code bases",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/jest-preset#readme",
   "license": "MIT",
@@ -42,6 +42,7 @@
     "@eslint/js": "^8.33.0",
     "@jest/types": "^29.2.1",
     "@react-native-community/cli-types": "^14.0.0",
+    "@react-native/babel-preset": "^0.75.0",
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*",
     "@types/jest": "^29.2.1",

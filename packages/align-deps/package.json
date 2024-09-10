@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/align-deps",
-  "version": "2.5.4",
+  "version": "2.5.5",
   "description": "Manage dependencies within a repository and across many repositories",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/align-deps#readme",
   "license": "MIT",
@@ -32,6 +32,7 @@
     "update-readme": "node scripts/update-readme.mjs"
   },
   "devDependencies": {
+    "@react-native-community/cli-types": "^14.0.0",
     "@rnx-kit/config": "*",
     "@rnx-kit/console": "*",
     "@rnx-kit/eslint-config": "*",

@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/align-deps
 
+## 2.5.5
+
+### Patch Changes
+
+- cf2e9e7: Moved Commander config from `@rnx-kit/cli` to `@rnx-kit/align-deps`
+
 ## 2.5.4
 
 ### Patch Changes
