@@ -46,7 +46,7 @@ describe("@rnx-kit/metro-config", () => {
       /__fixtures__[/\\]awesome-repo[/\\]packages[/\\]t-800$/,
     ];
     const folders = defaultWatchFolders()
-      .map((path) => path.replace(/\\/g, "/"))
+      .map((path) => path.replaceAll("\\", "/"))
       .sort();
 
     for (let i = 0; i < folders.length; ++i) {

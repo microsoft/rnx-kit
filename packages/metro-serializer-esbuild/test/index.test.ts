@@ -174,7 +174,7 @@ describe("metro-serializer-esbuild", () => {
       "  // virtual:metro:__rnx_prelude__",
       '  var global = new Function("return this;")();',
       "",
-      `  // ${path.relative(root, _head).replace(/[\\]/g, "/")}`,
+      `  // ${path.relative(root, _head).replaceAll("\\", "/")}`,
       "  function head(array) {",
       "    return array && array.length ? array[0] : void 0;",
       "  }",
@@ -192,7 +192,7 @@ describe("metro-serializer-esbuild", () => {
       const m = require.resolve(spec, { paths: [parent] });
       return path
         .relative(root, m)
-        .replace(/[\\]/g, "/")
+        .replaceAll("\\", "/")
         .replace("/lib-commonjs/", "/lib/");
     };
 

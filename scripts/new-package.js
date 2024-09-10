@@ -87,7 +87,7 @@ async function main(projectName, { experimental }) {
   const readmePath = path.join(newProjectDir, "README.md");
   fs.readFile(readmePath, { encoding: "utf-8" }).then((readme) => {
     const updatedReadme = readme
-      .replace(/template/g, cleanProjectName)
+      .replaceAll("template", cleanProjectName)
       .replace(WARNING_BANNER_TOKEN, experimental ? EXPERIMENTAL_BANNER : "")
       .replace(new RegExp(`${USAGE_TOKEN_START}([^]+)${USAGE_TOKEN_END}`), "");
 

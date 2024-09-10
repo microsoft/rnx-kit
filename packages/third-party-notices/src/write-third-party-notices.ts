@@ -104,7 +104,7 @@ export async function getCurrentPackageId(
 
 // helper functions
 export function normalizePath(p: string, currentPackageId?: string): string {
-  let result = p.replace(/webpack:\/\/\//g, "");
+  let result = p.replaceAll("webpack:///", "");
   if (currentPackageId) {
     result = result.replace(
       new RegExp(`webpack://${currentPackageId}/`, "g"),

@@ -17,7 +17,7 @@ type ModuleInfo = {
 export type ModuleMap = Record<string, Record<string, Set<string>>>;
 
 export function normalizePath(p: string): string {
-  return p.replace(/webpack:\/\/\//g, "").replace(/[\\]+/g, "/");
+  return p.replaceAll("webpack:///", "").replace(/[\\]+/g, "/");
 }
 
 export function resolveModule(source: string): ModuleInfo {

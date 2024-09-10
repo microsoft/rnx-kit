@@ -22,8 +22,8 @@
  * @returns {AssetData}
  */
 function assetPlugin(assetData) {
-  assetData.httpServerLocation = assetData.httpServerLocation.replace(
-    /\.\.\//g,
+  assetData.httpServerLocation = assetData.httpServerLocation.replaceAll(
+    "../",
     "@@/"
   );
   return assetData;
@@ -66,7 +66,7 @@ function enhanceMiddleware(middleware, server) {
   return (req, res, next) => {
     const { url } = req;
     if (url && url.startsWith("/assets/")) {
-      req.url = url.replace(/@@\//g, "../");
+      req.url = url.replaceAll("@@/", "../");
     }
     // @ts-ignore Type differs depending on Node version
     return middleware(req, res, next);

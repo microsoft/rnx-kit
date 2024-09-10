@@ -72,5 +72,5 @@ export function findUp(
  * @returns Normalized path
  */
 export function normalizePath(p: string): string {
-  return p.replace(/\\/g, "/");
+  return p.replaceAll("\\", "/");
 }
