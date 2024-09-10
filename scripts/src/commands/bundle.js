@@ -36,17 +36,18 @@ export async function bundle(options) {
   const esbuild = await import("esbuild");
   await esbuild.build({
     bundle: true,
-    conditions: ["typescript"],
-    entryPoints: ["src/index.ts"],
+    outfile: main,
     external: [
       ...(dependencies ? Object.keys(dependencies) : []),
       ...(peerDependencies ? Object.keys(peerDependencies) : []),
       "./package.json",
     ],
-    minify: Boolean(minify),
-    outfile: main,
-    platform: targetPlatform,
+    conditions: ["typescript"],
     banner:
       targetPlatform === "node" ? { js: "#!/usr/bin/env node" } : undefined,
+    entryPoints: ["src/index.ts"],
+    target: targetPlatform === "node" ? "node16.17.0" : "es2021",
+    platform: targetPlatform,
+    minify: Boolean(minify),
   });
 }
