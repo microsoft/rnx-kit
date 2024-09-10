@@ -1,35 +1,46 @@
+// @ts-check
 import { spawnSync } from "node:child_process";
 import * as fs from "node:fs/promises";
 import * as path from "node:path";
 
-const DEFAULT_AUTHOR = {
-  name: "Microsoft Open Source",
-  email: "microsoftopensource@users.noreply.github.com",
-};
-
-const MIN_NODE_VERSION = ">=16.17";
-const MIN_NODE_VERSION_NUM = 16017;
-
 const IGNORED_LOCATIONS = [".", "packages/test-app", "scripts"];
 
-const options = { encoding: "utf-8" };
+const options = /** @type {const} */ ({ encoding: "utf-8" });
 
-function satisfiesMinNodeVersion(version) {
+/**
+ * @param {string | undefined} version
+ * @returns {number}
+ */
+function numberFromVersion(version) {
   if (!version) {
-    return false;
+    return 0;
   }
 
   const m = version.match(/(\d+)\.(\d+)/);
   if (!m) {
-    return false;
+    return 0;
   }
 
   const [, major, minor] = m;
-  return Number(major) * 1000 + Number(minor) >= MIN_NODE_VERSION_NUM;
+  return Number(major) * 1000 + Number(minor);
+}
+
+/**
+ * @param {string | undefined} version
+ * @param {number} range
+ * @returns {boolean}
+ */
+function versionGreaterThanOrEqualTo(version, range) {
+  return numberFromVersion(version) >= range;
 }
 
 fs.readFile("package.json", options).then((data) => {
-  const { repository: origin } = JSON.parse(data);
+  const {
+    author: defaultAuthor,
+    repository: origin,
+    engines: { node: nodeVersionRange },
+  } = JSON.parse(data);
+  const minNodeVersion = numberFromVersion(nodeVersionRange);
 
   const yarn = spawnSync("yarn", ["workspaces", "list", "--json"], options);
   const workspaces = yarn.stdout.trim().split("\n");
@@ -54,11 +65,11 @@ fs.readFile("package.json", options).then((data) => {
     }
 
     if (
-      author?.name !== DEFAULT_AUTHOR.name ||
-      author?.email !== DEFAULT_AUTHOR.email
+      author?.name !== defaultAuthor.name ||
+      author?.email !== defaultAuthor.email
     ) {
       needsUpdate = true;
-      manifest.author = DEFAULT_AUTHOR;
+      manifest.author = defaultAuthor;
     }
 
     if (
@@ -73,11 +84,11 @@ fs.readFile("package.json", options).then((data) => {
       };
     }
 
-    if (!satisfiesMinNodeVersion(engines?.node)) {
+    if (!versionGreaterThanOrEqualTo(engines?.node, minNodeVersion)) {
       needsUpdate = true;
       manifest.engines = {
         ...engines,
-        node: MIN_NODE_VERSION,
+        node: nodeVersionRange,
       };
     }
 
