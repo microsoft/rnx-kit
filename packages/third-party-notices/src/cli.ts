@@ -4,79 +4,100 @@ import * as yargs from "yargs";
 import type { WriteThirdPartyNoticesOptions } from "./types";
 import { writeThirdPartyNotices } from "./write-third-party-notices";
 
-function fail(message: string): never {
+export const cliOptions = {
+  "root-path": {
+    type: "string",
+    description: "The root of the repo to start resolving modules from",
+    demandOption: true,
+    default: process.cwd(),
+    argsString: "<path>",
+  },
+  "source-map-file": {
+    type: "string",
+    description: "The source map file to generate license contents for",
+    demandOption: true,
+    argsString: "<path>",
+  },
+  json: {
+    type: "boolean",
+    description: "Output license information as a JSON",
+    default: false,
+  },
+  "output-file": {
+    type: "string",
+    description: "The output file to write the license file to",
+    argsString: "<path>",
+  },
+  "ignore-scopes": {
+    string: true,
+    array: true,
+    description: "npm scopes to ignore and not emit license information for",
+    argsString: "<string>",
+  },
+  "ignore-modules": {
+    string: true,
+    array: true,
+    description: "Modules (JS packages) to not emit license information for",
+    argsString: "<string>",
+  },
+  "preamble-text": {
+    string: true,
+    array: true,
+    description:
+      "A list of lines to prepend at the start of the generated license file",
+    argsString: "<string>",
+  },
+  "additional-text": {
+    string: true,
+    array: true,
+    description:
+      "A list of lines to append at the end of the generated license file",
+    argsString: "<string>",
+  },
+  "full-license-text": {
+    type: "boolean",
+    description: "Include full license text in the JSON output",
+    default: false,
+    implies: "json",
+  },
+} as const;
+
+function fail(message: string): void {
   error(message);
-  process.exit(1);
+  process.exitCode = 1;
 }
 
-function getArgs(): WriteThirdPartyNoticesOptions {
-  const argv = yargs.options({
-    rootPath: {
-      type: "string",
-      describe: "The root of the repo where to start resolving modules from.",
-      require: true,
-    },
-    sourceMapFile: {
-      type: "string",
-      describe: "The sourceMap file to generate license contents for.",
-      require: true,
-    },
-    json: {
-      type: "boolean",
-      describe: "Output license information as a JSON",
-      default: false,
-    },
-    outputFile: {
-      type: "string",
-      describe: "The output file to write the license file to.",
-    },
-    ignoreScopes: {
-      string: true,
-      array: true,
-      describe: "Npm scopes to ignore and not emit license information for",
-    },
-    ignoreModules: {
-      string: true,
-      array: true,
-      describe: "Modules (js packages) to not emit license information for ",
-    },
-    preambleText: {
-      string: true,
-      array: true,
-      describe:
-        "A list of lines to prepend at the start of the generated license file.",
-    },
-    additionalText: {
-      string: true,
-      array: true,
-      describe:
-        "A list of lines to append at the end of the generated license file.",
-    },
-    fullLicenseText: {
-      type: "boolean",
-      describe: "Include full license text in the JSON output",
-      default: false,
-      implies: "json",
-    },
-  }).argv;
-
-  const writeTpnArgs: WriteThirdPartyNoticesOptions = argv;
-
-  if (!writeTpnArgs.outputFile) {
-    writeTpnArgs.outputFile =
-      writeTpnArgs.sourceMapFile?.substring(
+function parseArgs(): WriteThirdPartyNoticesOptions {
+  const {
+    "root-path": rootPath,
+    "source-map-file": sourceMapFile,
+    json,
+    "output-file": outputFile,
+    "ignore-scopes": ignoreScopes,
+    "ignore-modules": ignoreModules,
+    "preamble-text": preambleText,
+    "additional-text": additionalText,
+    "full-license-text": fullLicenseText,
+  } = yargs.options(cliOptions).argv;
+  return {
+    rootPath,
+    sourceMapFile,
+    json,
+    outputFile:
+      outputFile ||
+      sourceMapFile.substring(
         0,
-        writeTpnArgs.sourceMapFile.length -
-          path.extname(writeTpnArgs.sourceMapFile).length
-      ) + ".tpn";
-  }
-
-  return writeTpnArgs;
+        sourceMapFile.length - path.extname(sourceMapFile).length
+      ) + ".tpn",
+    ignoreScopes,
+    ignoreModules,
+    preambleText,
+    additionalText,
+    fullLicenseText,
+  };
 }
 
-async function main(): Promise<void> {
-  const writeTpnArgs = getArgs();
-  await writeThirdPartyNotices(writeTpnArgs);
+if (require.main === module) {
+  const writeTpnArgs = parseArgs();
+  writeThirdPartyNotices(writeTpnArgs).catch(fail);
 }
-
-main().catch((err: string) => fail(err));

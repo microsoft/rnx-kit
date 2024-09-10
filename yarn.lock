@@ -4517,6 +4517,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/third-party-notices@workspace:packages/third-party-notices"
   dependencies:
+    "@react-native-community/cli-types": "npm:^14.0.0"
     "@rnx-kit/console": "npm:^1.0.11"
     "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/jest-preset": "npm:*"
