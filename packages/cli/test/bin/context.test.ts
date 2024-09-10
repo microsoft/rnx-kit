@@ -22,7 +22,7 @@ describe("bin/context/getCoreCommands()", () => {
       expect(modified).not.toBe(original);
       expect(modified.name.startsWith("rnx-")).toBe(false);
       expect(modified.description).toBe(original.description);
-      expect(modified.options).toBe(original.options);
+      expect(modified.options).toEqual(original.options);
       expect(modified.func).toBe(original.func);
     }
   });

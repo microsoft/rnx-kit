@@ -1,5 +1,5 @@
 import type { Command } from "@react-native-community/cli-types";
-import { rnxAlignDepsCommand } from "./align-deps";
+import { alignDepsCommand } from "@rnx-kit/align-deps";
 import { rnxBuildCommand } from "./build";
 import { rnxBundleCommand } from "./bundle";
 import { rnxCleanCommand } from "./clean";
@@ -18,14 +18,17 @@ export const reactNativeConfig = {
     rnxBuildCommand,
     rnxRunCommand,
     rnxCopyAssetsCommand,
-    rnxAlignDepsCommand,
+    alignDepsCommand,
     rnxTestCommand,
     rnxWriteThirdPartyNoticesCommand,
     rnxCleanCommand,
   ] as Command<false>[],
 };
 
-export { rnxAlignDeps, rnxAlignDepsCommand } from "./align-deps";
+// @rnx-kit/align-deps
+export const rnxAlignDeps = alignDepsCommand.func;
+export const rnxAlignDepsCommand = alignDepsCommand;
+
 export { rnxBuild, rnxBuildCommand } from "./build";
 export { rnxBundle, rnxBundleCommand } from "./bundle";
 export { rnxClean, rnxCleanCommand } from "./clean";

@@ -17,6 +17,9 @@ import { printError, printInfo } from "./errors";
 import { isString } from "./helpers";
 import type { Args, Command, DiffMode } from "./types";
 
+export const description =
+  "Manage dependencies within a repository and across many repositories";
+
 export const cliOptions = {
   "diff-mode": {
     default: "strict",
@@ -29,6 +32,7 @@ export const cliOptions = {
       "Comma-separated list of package names to exclude from inspection.",
     type: "string",
     requiresArg: true,
+    argsString: "<packages>", // Used by Commander
   },
   init: {
     description:
@@ -59,18 +63,21 @@ export const cliOptions = {
       "Comma-separated list of presets. This can be names to built-in presets, or paths to external presets.",
     type: "string",
     requiresArg: true,
+    argsString: "<presets>", // Used by Commander
   },
   requirements: {
     description:
       "Comma-separated list of requirements to apply if a package is not configured for align-deps.",
     type: "string",
     requiresArg: true,
+    argsString: "<requirements>", // Used by Commander
   },
   "set-version": {
     description:
       "Sets `react-native` requirements for any configured package. There is an interactive prompt if no value is provided. The value should be a comma-separated list of `react-native` versions to set, where the first number specifies the development version. Example: `0.70,0.69`",
     type: "string",
     conflicts: ["init", "requirements"],
+    argsString: "[versions]", // Used by Commander
   },
   verbose: {
     default: false,
@@ -260,10 +267,6 @@ export async function cli({ packages, ...args }: Args): Promise<void> {
 }
 
 if (require.main === module) {
-  require("yargs").usage(
-    "$0 [packages...]",
-    "Manage dependencies within a repository and across many repositories",
-    cliOptions,
-    cli
-  ).argv;
+  const yargs = require("yargs");
+  yargs.usage("$0 [packages...]", description, cliOptions, cli).argv;
 }
