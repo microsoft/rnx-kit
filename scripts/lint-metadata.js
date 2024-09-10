@@ -25,7 +25,7 @@ function satisfiesMinNodeVersion(version) {
   }
 
   const [, major, minor] = m;
-  return (Number(major) * 1000 + Number(minor)) >= MIN_NODE_VERSION_NUM;
+  return Number(major) * 1000 + Number(minor) >= MIN_NODE_VERSION_NUM;
 }
 
 fs.readFile("package.json", options).then((data) => {
