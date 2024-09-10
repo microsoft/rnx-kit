@@ -21,9 +21,6 @@
     "url": "https://github.com/microsoft/rnx-kit",
     "directory": "incubator/patcher-rnmacos"
   },
-  "engines": {
-    "node": ">=14.15"
-  },
   "scripts": {
     "prepare": "echo '⚠️ patcher-rnmacos is EXPERIMENTAL - USE WITH CAUTION  ⚠️'",
     "build": "rnx-kit-scripts build",
@@ -49,6 +46,9 @@
     "fs-extra": "^10.0.0",
     "istextorbinary": "^3.3.0",
     "winston": "^3.2.1"
+  },
+  "engines": {
+    "node": ">=16.17"
   },
   "jest": {
     "preset": "@rnx-kit/jest-preset/private"

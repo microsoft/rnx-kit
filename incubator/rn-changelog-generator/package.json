@@ -21,9 +21,6 @@
     "url": "https://github.com/microsoft/rnx-kit",
     "directory": "incubator/rn-changelog-generator"
   },
-  "engines": {
-    "node": ">=14.15"
-  },
   "scripts": {
     "prepare": "echo '⚠️ rn-changelog-generator is EXPERIMENTAL - USE WITH CAUTION  ⚠️'",
     "build": "rnx-kit-scripts build",
@@ -48,6 +45,9 @@
     "prettier": "^3.0.0",
     "typescript": "^5.0.0",
     "yargs": "^16.0.0"
+  },
+  "engines": {
+    "node": ">=16.17"
   },
   "jest": {
     "preset": "@rnx-kit/jest-preset/private"

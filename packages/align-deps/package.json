@@ -57,7 +57,7 @@
     "yargs": "^16.0.0"
   },
   "engines": {
-    "node": ">=12.13"
+    "node": ">=16.17"
   },
   "jest": {
     "preset": "@rnx-kit/jest-preset/private"

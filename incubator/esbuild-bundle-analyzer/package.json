@@ -22,9 +22,6 @@
     "url": "https://github.com/microsoft/rnx-kit",
     "directory": "incubator/esbuild-bundle-analyzer"
   },
-  "engines": {
-    "node": ">=14.15"
-  },
   "scripts": {
     "prepare": "echo '⚠️  esbuild-bundle-analyzer is EXPERIMENTAL - USE WITH CAUTION  ⚠️'",
     "build": "rnx-kit-scripts build",
@@ -52,6 +49,9 @@
     "jest": "^29.2.1",
     "prettier": "^3.0.0",
     "typescript": "^5.0.0"
+  },
+  "engines": {
+    "node": ">=16.17"
   },
   "jest": {
     "preset": "@rnx-kit/jest-preset/private"

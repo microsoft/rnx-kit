@@ -20,7 +20,8 @@
     "forceConsistentCasingInFileNames": true,
     "isolatedModules": true,
     "jsx": "react",
-    "target": "ES2019",
+    "lib": ["ES2021"],
+    "target": "ES2021",
     "pretty": true,
     "skipLibCheck": true,
     "skipDefaultLibCheck": true

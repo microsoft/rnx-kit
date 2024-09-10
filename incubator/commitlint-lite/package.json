@@ -42,7 +42,7 @@
     "typescript": "^5.0.0"
   },
   "engines": {
-    "node": ">=14.18"
+    "node": ">=16.17"
   },
   "experimental": true
 }

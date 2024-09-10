@@ -34,5 +34,8 @@
     "@rnx-kit/react-native-auth": {
       "optional": true
     }
+  },
+  "engines": {
+    "node": ">=16.17"
   }
 }

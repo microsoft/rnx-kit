@@ -1,4 +1,7 @@
 {
   "extends": "@rnx-kit/tsconfig/tsconfig.json",
+  "compilerOptions": {
+    "lib": ["ES2021", "DOM"]
+  },
   "include": ["src"]
 }

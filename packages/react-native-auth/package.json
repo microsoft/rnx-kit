@@ -51,6 +51,9 @@
     "react-native": "^0.75.0",
     "typescript": "^5.0.0"
   },
+  "engines": {
+    "node": ">=16.17"
+  },
   "rnx-kit": {
     "alignDeps": {
       "presets": [
