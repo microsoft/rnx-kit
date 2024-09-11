@@ -7,10 +7,16 @@ export function watch(
   onSuccess: () => void,
   onFail: (exitCode: number | null) => void
 ) {
-  subproc.stdout.on("data", () => (logger.text += "."));
-
   const errors: Buffer[] = [];
-  subproc.stderr.on("data", (data) => errors.push(data));
+
+  const isCI = Boolean(process.env.CI);
+  if (isCI) {
+    subproc.stdout.on("data", (chunk) => process.stdout.write(chunk));
+    subproc.stderr.on("data", (chunk) => process.stderr.write(chunk));
+  } else {
+    subproc.stdout.on("data", () => (logger.text += "."));
+    subproc.stderr.on("data", (data) => errors.push(data));
+  }
 
   subproc.on("close", (code) => {
     if (code === 0) {
