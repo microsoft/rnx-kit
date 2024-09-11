@@ -1455,7 +1455,7 @@ PODS:
     - React-logger (= 0.75.2)
     - React-perflogger (= 0.75.2)
     - React-utils (= 0.75.2)
-  - ReactNativeHost (0.4.12):
+  - ReactNativeHost (0.5.0):
     - DoubleConversion
     - glog
     - RCT-Folly (= 2024.01.01.00)
@@ -1481,10 +1481,10 @@ PODS:
   - ReactTestApp-DevSupport (3.9.7):
     - React-Core
     - React-jsi
-  - ReactTestApp-MSAL (3.0.3):
+  - ReactTestApp-MSAL (4.0.0):
     - MSAL
   - ReactTestApp-Resources (1.0.0-dev)
-  - RNWWebStorage (0.2.8):
+  - RNWWebStorage (0.3.0):
     - DoubleConversion
     - glog
     - RCT-Folly (= 2024.01.01.00)
@@ -1505,7 +1505,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNXAuth (0.2.6):
+  - RNXAuth (0.3.0):
     - React-Core
   - SocketRocket (0.7.0)
   - Yoga (0.0.0)
@@ -1782,12 +1782,12 @@ SPEC CHECKSUMS:
   React-utils: 87f64cff8c1fe244bf688a7a48395a70eb61a509
   ReactCodegen: f8ed6f835a2fffe2a3666dfbce5ff1b120f24982
   ReactCommon: a33f215e2ca23410f8f44b0a94ab93120882e5e5
-  ReactNativeHost: 1648deef337f0967092821c3c4b860eacc55f473
+  ReactNativeHost: a3cd2bc15b6deac7439318607ce5637d8a93a117
   ReactTestApp-DevSupport: 74676edd899013becce4eaecc5eabba1fc51e26e
-  ReactTestApp-MSAL: 9d7c1ba83a38c0c314546f3396c22f9ae7550312
+  ReactTestApp-MSAL: a7ac8e821fce95fc4e27cd91cf2a931b277ffef3
   ReactTestApp-Resources: a4cc1f968cd26bdbd18ee0bfbd0ab8dd0ea90101
-  RNWWebStorage: 7fa0c2bd3aba2d3e17cb92983bda1cad8ba4fe4c
-  RNXAuth: da888a17b9a0f54908f6daa8b2e020d3585f91cc
+  RNWWebStorage: 39af6c7aa24a9360372280338e0f5900630779a2
+  RNXAuth: 7716515bc74149d226d798138f2d76af9f34427f
   SocketRocket: abac6f5de4d4d62d24e11868d7a2f427e0ef940d
   Yoga: a1d7895431387402a674fd0d1c04ec85e87909b8
 

@@ -148,7 +148,7 @@ jobs:
       - name: Build iOS app
         if: ${{ steps.affected-projects.outputs.ios != '' }}
         run: |
-          yarn build:ios
+          yarn build:ios | xcbeautify
         working-directory: packages/test-app
   build-website:
     name: "Build the website"
