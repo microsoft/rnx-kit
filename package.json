@@ -2,10 +2,11 @@
   "private": true,
   "name": "rnx-kit",
   "version": "0.0.0",
-  "description": "",
-  "keywords": [],
   "license": "MIT",
-  "author": "Jason Morse <jasonmo@microsoft.com>",
+  "author": {
+    "name": "Microsoft Open Source",
+    "email": "microsoftopensource@users.noreply.github.com"
+  },
   "main": "index.js",
   "repository": {
     "type": "git",
@@ -46,7 +47,7 @@
     "typescript": "^5.0.0"
   },
   "engines": {
-    "node": ">=16.13"
+    "node": ">=16.17"
   },
   "packageManager": "yarn@4.4.0",
   "resolutions": {
