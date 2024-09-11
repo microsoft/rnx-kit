@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/babel-plugin-import-path-remapper",
-  "version": "1.1.4",
+  "version": "2.0.0",
   "description": "Babel plugin for remapping 'lib/' imports to 'src/'",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/babel-plugin-import-path-remapper#readme",
   "license": "MIT",
@@ -26,7 +26,7 @@
   "dependencies": {
     "@babel/core": "^7.0.0",
     "@babel/helper-plugin-utils": "^7.0.0",
-    "@rnx-kit/tools-node": "^2.0.1"
+    "@rnx-kit/tools-node": "^3.0.0"
   },
   "devDependencies": {
     "@rnx-kit/eslint-config": "*",

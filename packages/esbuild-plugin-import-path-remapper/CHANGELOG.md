@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/esbuild-plugin-import-path-remapper
 
+## 3.0.0
+
+### Major Changes
+
+- 3afb5fa: Bump minimum Node version to 16.17
+
 ## 2.0.0
 
 ### Major Changes
@@ -18,7 +24,8 @@ Mon, 01 Nov 2021 13:46:12 GMT
 
 ### Patches
 
-- Normalize main and types fields across all packages which use them. (afoxman@microsoft.com)
+- Normalize main and types fields across all packages which use them.
+  (afoxman@microsoft.com)
 
 ## 1.1.0
 
@@ -34,4 +41,5 @@ Mon, 23 Aug 2021 17:18:07 GMT
 
 ### Minor changes
 
-- Added esbuild plugin for mapping lib/ imports to src/ (sverre.johansen@gmail.com)
+- Added esbuild plugin for mapping lib/ imports to src/
+  (sverre.johansen@gmail.com)

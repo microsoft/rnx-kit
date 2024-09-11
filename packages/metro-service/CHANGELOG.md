@@ -1,5 +1,18 @@
 # Change Log - @rnx-kit/metro-service
 
+## 4.0.0
+
+### Major Changes
+
+- 3afb5fa: Bump minimum Node version to 16.17
+
+### Patch Changes
+
+- Updated dependencies [3afb5fa]
+  - @rnx-kit/tools-react-native@2.0.0
+  - @rnx-kit/tools-node@3.0.0
+  - @rnx-kit/console@2.0.0
+
 ## 3.1.6
 
 ### Patch Changes
@@ -12,7 +25,8 @@
 
 ### Patch Changes
 
-- 2885f73c: Ensure correct Metro dependencies are used by traversing the dependency chain starting from `react-native`
+- 2885f73c: Ensure correct Metro dependencies are used by traversing the
+  dependency chain starting from `react-native`
 - Updated dependencies [2885f73c]
   - @rnx-kit/tools-react-native@1.3.4
 
@@ -20,7 +34,8 @@
 
 ### Patch Changes
 
-- 55756581: Resolve correct `@react-native-community/cli-plugin-metro` instance through `react-native`
+- 55756581: Resolve correct `@react-native-community/cli-plugin-metro` instance
+  through `react-native`
 - Updated dependencies [55756581]
   - @rnx-kit/tools-node@2.1.0
 
@@ -29,20 +44,23 @@
 ### Patch Changes
 
 - c9e7641b: Reuse code from `@react-native/assets-registry`
-- 8ba65d6f: Use `node-fetch` only as fallback when current Node version doesn't implement Fetch API
+- 8ba65d6f: Use `node-fetch` only as fallback when current Node version doesn't
+  implement Fetch API
 
 ## 3.1.2
 
 ### Patch Changes
 
-- 39f0a3b2: Fix help message not showing on startup (and add preliminary support for 0.73)
+- 39f0a3b2: Fix help message not showing on startup (and add preliminary support
+  for 0.73)
 - d9f6c50a: Ensure dependencies are correctly declared
 
 ## 3.1.1
 
 ### Patch Changes
 
-- 11e8e546: Use `@react-native/metro-config` to determine whether we need `getDefaultConfig` to load Metro config
+- 11e8e546: Use `@react-native/metro-config` to determine whether we need
+  `getDefaultConfig` to load Metro config
 
 ## 3.1.0
 
@@ -53,14 +71,14 @@
 ### Patch Changes
 
 - 18c757ba: Resolve npmPackageName from project root not local paths
-- 513efaab: `@react-native-community/cli-plugin-metro` has been deprecated. Sync to the
-  latest changes and don't depend on it for bundling.
+- 513efaab: `@react-native-community/cli-plugin-metro` has been deprecated. Sync
+  to the latest changes and don't depend on it for bundling.
 
   `@react-native-community/cli-plugin-metro` is being moved into the
   `react-native` repository. In the process, it was renamed and its API surface
-  has been reduced to the bare minimum. `buildBundleWithConfig`, which we need to
-  pass our custom config to the bundler, has also been axed. For more details, see
-  https://github.com/facebook/react-native/pull/38795.
+  has been reduced to the bare minimum. `buildBundleWithConfig`, which we need
+  to pass our custom config to the bundler, has also been axed. For more
+  details, see https://github.com/facebook/react-native/pull/38795.
 
 - 6da44cd3: Warn if `projectRoot` may be misconfigured
 
@@ -115,13 +133,13 @@
 - e2535866: # Breaking Changes
 
   This version transitions from using our own internal bundling wrapper to the
-  official bundling API in `@react-native-community/cli-plugin-metro`, when it is
-  available.
+  official bundling API in `@react-native-community/cli-plugin-metro`, when it
+  is available.
 
   Our wrapper is a little different than the official code, in that it does not
-  honor the `sourcemapUseAbsolutePath` flag. So this change also adds support for
-  that flag in our wrapper, making it fully compatible and interchangeable with
-  the official bundling API.
+  honor the `sourcemapUseAbsolutePath` flag. So this change also adds support
+  for that flag in our wrapper, making it fully compatible and interchangeable
+  with the official bundling API.
 
   This is a breaking change because, when `sourcemapUseAbsolutePath` is `false`,
   `sourcemapOutput` is stripped of any path info, leaving only the name of the
@@ -179,7 +197,8 @@ Mon, 01 Nov 2021 13:46:13 GMT
 
 ### Patches
 
-- Normalize main and types fields across all packages which use them. (afoxman@microsoft.com)
+- Normalize main and types fields across all packages which use them.
+  (afoxman@microsoft.com)
 - Bump @rnx-kit/tools-language to v1.2.1
 
 ## 1.1.7
@@ -221,7 +240,8 @@ Tue, 31 Aug 2021 06:43:13 GMT
 ### Patches
 
 - Stricter handling of errors (4123478+tido64@users.noreply.github.com)
-- Bump @rnx-kit/metro-service to v1.1.3 (4123478+tido64@users.noreply.github.com)
+- Bump @rnx-kit/metro-service to v1.1.3
+  (4123478+tido64@users.noreply.github.com)
 
 ## 1.1.2
 
@@ -237,7 +257,8 @@ Sat, 21 Aug 2021 08:22:48 GMT
 
 ### Patches
 
-- Integrate tools package and other common libraries throughout monorepo, removing custom code. (afoxman@microsoft.com)
+- Integrate tools package and other common libraries throughout monorepo,
+  removing custom code. (afoxman@microsoft.com)
 - Bump @rnx-kit/metro-service to v1.1.1 (afoxman@microsoft.com)
 
 ## 1.1.0
@@ -246,7 +267,10 @@ Fri, 06 Aug 2021 17:50:49 GMT
 
 ### Minor changes
 
-- Remove props that have no effect from bundle API. Update loadMetroConfig to support more overrides. Export Metro's runServer API as startServer. Export createTerminal API which instantiates a new Metro terminal and terminal reporter. (afoxman@microsoft.com)
+- Remove props that have no effect from bundle API. Update loadMetroConfig to
+  support more overrides. Export Metro's runServer API as startServer. Export
+  createTerminal API which instantiates a new Metro terminal and terminal
+  reporter. (afoxman@microsoft.com)
 
 ## 1.0.6
 
@@ -254,7 +278,8 @@ Wed, 04 Aug 2021 10:08:23 GMT
 
 ### Patches
 
-- Bump @rnx-kit/metro-service to v1.0.6 (4123478+tido64@users.noreply.github.com)
+- Bump @rnx-kit/metro-service to v1.0.6
+  (4123478+tido64@users.noreply.github.com)
 
 ## 1.0.5
 
@@ -262,7 +287,8 @@ Thu, 29 Jul 2021 19:42:04 GMT
 
 ### Patches
 
-- Bump @rnx-kit/metro-service to v1.0.5 (4123478+tido64@users.noreply.github.com)
+- Bump @rnx-kit/metro-service to v1.0.5
+  (4123478+tido64@users.noreply.github.com)
 
 ## 1.0.4
 
@@ -278,7 +304,10 @@ Tue, 13 Jul 2021 17:31:45 GMT
 
 ### Patches
 
-- Remove dependency on mkdirp, and use nodejs "fs" instead. Add a tolerance when finding a matching scale factor for android. Move "throw" statement into scale search routine, so that it always returns a real value (or throws). Add tests. (afoxman@microsoft.com)
+- Remove dependency on mkdirp, and use nodejs "fs" instead. Add a tolerance when
+  finding a matching scale factor for android. Move "throw" statement into scale
+  search routine, so that it always returns a real value (or throws). Add tests.
+  (afoxman@microsoft.com)
 
 ## 1.0.2
 
@@ -286,7 +315,8 @@ Tue, 29 Jun 2021 06:01:48 GMT
 
 ### Patches
 
-- Add a metro-service package for interacting with metro at an API level, rather than through its command-line interface. (afoxman@microsoft.com)
+- Add a metro-service package for interacting with metro at an API level, rather
+  than through its command-line interface. (afoxman@microsoft.com)
 
 ## 1.0.1
 
@@ -294,4 +324,5 @@ Mon, 28 Jun 2021 08:19:07 GMT
 
 ### Patches
 
-- Add a metro-service package for interacting with metro at an API level, rather than through its command-line interface. (afoxman@microsoft.com)
+- Add a metro-service package for interacting with metro at an API level, rather
+  than through its command-line interface. (afoxman@microsoft.com)

@@ -1,5 +1,35 @@
 # Change Log - @rnx-kit/cli
 
+## 0.18.0
+
+### Minor Changes
+
+- 46cf8a7: Moved Commander config from `@rnx-kit/cli` to
+  `@rnx-kit/third-party-notices` and resynced all flags. Unfortunately, this
+  means that if you were using the `rnx-write-third-party-notices` command
+  before, you might have to adjust your flags when upgrading to this version.
+
+### Patch Changes
+
+- bd7e888: Bump the whole suite of @rnx dependencies
+- Updated dependencies [46cf8a7]
+- Updated dependencies [3afb5fa]
+  - @rnx-kit/third-party-notices@2.0.0
+  - @rnx-kit/metro-plugin-cyclic-dependencies-detector@2.0.0
+  - @rnx-kit/metro-plugin-duplicates-checker@3.0.0
+  - @rnx-kit/tools-react-native@2.0.0
+  - @rnx-kit/metro-serializer@2.0.0
+  - @rnx-kit/tools-language@3.0.0
+  - @rnx-kit/metro-service@4.0.0
+  - @rnx-kit/align-deps@3.0.0
+  - @rnx-kit/tools-node@3.0.0
+  - @rnx-kit/console@2.0.0
+  - @rnx-kit/metro-serializer-esbuild@0.2.0
+  - @rnx-kit/metro-plugin-typescript@0.5.0
+  - @rnx-kit/tools-android@0.2.0
+  - @rnx-kit/tools-apple@0.2.0
+  - @rnx-kit/config@0.7.0
+
 ## 0.17.7
 
 ### Patch Changes

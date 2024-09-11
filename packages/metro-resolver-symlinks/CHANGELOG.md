@@ -1,10 +1,24 @@
 # Change Log - @rnx-kit/metro-resolver-symlinks
 
+## 0.2.0
+
+### Minor Changes
+
+- 3afb5fa: Bump minimum Node version to 16.17
+
+### Patch Changes
+
+- Updated dependencies [3afb5fa]
+  - @rnx-kit/tools-react-native@2.0.0
+  - @rnx-kit/tools-node@3.0.0
+  - @rnx-kit/console@2.0.0
+
 ## 0.1.36
 
 ### Patch Changes
 
-- 487d867: Ensure hash uniqueness when `experimental_retryResolvingFromDisk` is enabled
+- 487d867: Ensure hash uniqueness when `experimental_retryResolvingFromDisk` is
+  enabled
 
 ## 0.1.35
 
@@ -16,7 +30,8 @@
 
 ### Patch Changes
 
-- 2885f73c: Ensure correct Metro dependencies are used by traversing the dependency chain starting from `react-native`
+- 2885f73c: Ensure correct Metro dependencies are used by traversing the
+  dependency chain starting from `react-native`
 - Updated dependencies [2885f73c]
   - @rnx-kit/tools-react-native@1.3.4
 
@@ -24,7 +39,8 @@
 
 ### Patch Changes
 
-- 3c65642e: Print the path to the Metro instance that will be monkey patched if `experimental_retryResolvingFromDisk` is enabled
+- 3c65642e: Print the path to the Metro instance that will be monkey patched if
+  `experimental_retryResolvingFromDisk` is enabled
 - Updated dependencies [55756581]
   - @rnx-kit/tools-node@2.1.0
 
@@ -32,7 +48,8 @@
 
 ### Patch Changes
 
-- 6ec78905: Fix handling of asset files when `experimental_retryResolvingFromDisk` is enabled
+- 6ec78905: Fix handling of asset files when
+  `experimental_retryResolvingFromDisk` is enabled
 
 ## 0.1.31
 
@@ -46,7 +63,8 @@
 
 ### Patch Changes
 
-- 259bc617: Fix `extraNodeModules` not resolving correctly when `experimental_retryResolvingFromDisk` is enabled
+- 259bc617: Fix `extraNodeModules` not resolving correctly when
+  `experimental_retryResolvingFromDisk` is enabled
 
 ## 0.1.29
 
@@ -66,7 +84,8 @@
 
 ### Patch Changes
 
-- 9c0c87b9: Add support for the experimental `unstable_enablePackageExports` flag in 0.75.1
+- 9c0c87b9: Add support for the experimental `unstable_enablePackageExports`
+  flag in 0.75.1
 
 ## 0.1.26
 
@@ -78,7 +97,8 @@
 
 ### Patch Changes
 
-- fa2c3b29: When `experimental_retryResolvingFromDisk` is enabled, don't parse exports maps as they currently take precedence over the `react-native` field.
+- fa2c3b29: When `experimental_retryResolvingFromDisk` is enabled, don't parse
+  exports maps as they currently take precedence over the `react-native` field.
 
 ## 0.1.24
 
@@ -90,7 +110,8 @@
 
 ### Patch Changes
 
-- 80e6557d: Add an experimental option for retrying module resolution from disk if not found in Haste map
+- 80e6557d: Add an experimental option for retrying module resolution from disk
+  if not found in Haste map
 
 ## 0.1.22
 
@@ -148,7 +169,8 @@
 ### Patch Changes
 
 - 1a2cf67: - Refactored resolvers to conform to a single interface
-  - Added a utility for remapping import paths (akin to babel-plugin-import-path-remapper)
+  - Added a utility for remapping import paths (akin to
+    babel-plugin-import-path-remapper)
   - Updated README
 - Updated dependencies [1a2cf67]
   - @rnx-kit/tools-react-native@1.1.0
@@ -199,7 +221,8 @@ Mon, 01 Nov 2021 13:46:13 GMT
 
 ### Patches
 
-- Normalize main and types fields across all packages which use them. (afoxman@microsoft.com)
+- Normalize main and types fields across all packages which use them.
+  (afoxman@microsoft.com)
 - Bump @rnx-kit/tools-node to v1.2.1
 
 ## 0.1.8
@@ -240,7 +263,8 @@ Tue, 21 Sep 2021 16:12:12 GMT
 
 ### Patches
 
-- Fix type information not being generated correctly (4123478+tido64@users.noreply.github.com)
+- Fix type information not being generated correctly
+  (4123478+tido64@users.noreply.github.com)
 
 ## 0.1.3
 
@@ -248,8 +272,10 @@ Wed, 08 Sep 2021 06:42:50 GMT
 
 ### Patches
 
-- Fixed wrong resolved path when module is in a path within origin module path (4123478+tido64@users.noreply.github.com)
-- Bump @rnx-kit/metro-resolver-symlinks to v0.1.3 (4123478+tido64@users.noreply.github.com)
+- Fixed wrong resolved path when module is in a path within origin module path
+  (4123478+tido64@users.noreply.github.com)
+- Bump @rnx-kit/metro-resolver-symlinks to v0.1.3
+  (4123478+tido64@users.noreply.github.com)
 
 ## 0.1.2
 
@@ -257,7 +283,8 @@ Fri, 03 Sep 2021 12:18:30 GMT
 
 ### Patches
 
-- Bump @rnx-kit/metro-resolver-symlinks to v0.1.2 (4123478+tido64@users.noreply.github.com)
+- Bump @rnx-kit/metro-resolver-symlinks to v0.1.2
+  (4123478+tido64@users.noreply.github.com)
 
 ## 0.1.1
 
@@ -265,7 +292,8 @@ Tue, 31 Aug 2021 06:43:13 GMT
 
 ### Patches
 
-- Bump @rnx-kit/metro-resolver-symlinks to v0.1.1 (4123478+tido64@users.noreply.github.com)
+- Bump @rnx-kit/metro-resolver-symlinks to v0.1.1
+  (4123478+tido64@users.noreply.github.com)
 
 ## 0.1.0
 
@@ -273,5 +301,7 @@ Fri, 27 Aug 2021 18:41:43 GMT
 
 ### Minor changes
 
-- @rnx-kit/metro-resolver-symlinks is a Metro resolver with support for symlinks (4123478+tido64@users.noreply.github.com)
-- Bump @rnx-kit/metro-resolver-symlinks to v0.1.0 (4123478+tido64@users.noreply.github.com)
+- @rnx-kit/metro-resolver-symlinks is a Metro resolver with support for symlinks
+  (4123478+tido64@users.noreply.github.com)
+- Bump @rnx-kit/metro-resolver-symlinks to v0.1.0
+  (4123478+tido64@users.noreply.github.com)

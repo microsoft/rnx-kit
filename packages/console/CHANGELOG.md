@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/console
 
+## 2.0.0
+
+### Major Changes
+
+- 3afb5fa: Bump minimum Node version to 16.17
+
 ## 1.1.0
 
 ### Minor Changes
@@ -24,7 +30,8 @@ Mon, 01 Nov 2021 13:46:12 GMT
 
 ### Patches
 
-- Normalize main and types fields across all packages which use them. (afoxman@microsoft.com)
+- Normalize main and types fields across all packages which use them.
+  (afoxman@microsoft.com)
 
 ## 1.0.2
 

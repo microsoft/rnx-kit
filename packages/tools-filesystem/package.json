@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "@rnx-kit/tools-filesystem",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "A collection of functions for manipulating the filesystem",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/tools-filesystem#readme",
   "license": "MIT",

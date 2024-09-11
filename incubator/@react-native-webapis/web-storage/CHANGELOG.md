@@ -1,5 +1,11 @@
 # @react-native-webapis/web-storage
 
+## 0.3.0
+
+### Minor Changes
+
+- 3afb5fa: Bump minimum Node version to 16.17
+
 ## 0.2.8
 
 ### Patch Changes

@@ -1,5 +1,12 @@
 # @rnx-kit/eslint-config
 
+## 0.0.4
+
+### Patch Changes
+
+- Updated dependencies [3afb5fa]
+  - @rnx-kit/eslint-plugin@0.8.0
+
 ## 0.0.3
 
 ### Patch Changes

@@ -1,5 +1,16 @@
 # Change Log - @rnx-kit/babel-preset-metro-react-native
 
+## 2.0.0
+
+### Major Changes
+
+- 3afb5fa: Bump minimum Node version to 16.17
+
+### Patch Changes
+
+- Updated dependencies [3afb5fa]
+  - @rnx-kit/console@2.0.0
+
 ## 1.1.8
 
 ### Patch Changes
@@ -26,7 +37,8 @@
 
 ### Patch Changes
 
-- cca1727d: Use `@react-native/babel-preset` when it's specified in `package.json`
+- cca1727d: Use `@react-native/babel-preset` when it's specified in
+  `package.json`
 
 ## 1.1.4
 
@@ -50,7 +62,8 @@
 
 ### Patch Changes
 
-- f80cff5a: Use `esbuild` transform profile when `metro-serializer-esbuild` is used
+- f80cff5a: Use `esbuild` transform profile when `metro-serializer-esbuild` is
+  used
 
 ## 1.1.0
 
@@ -64,7 +77,8 @@ Tue, 21 Sep 2021 13:01:58 GMT
 
 ### Patches
 
-- Add `esbuild` transform profile for use with `metro-serializer-esbuild` (4123478+tido64@users.noreply.github.com)
+- Add `esbuild` transform profile for use with `metro-serializer-esbuild`
+  (4123478+tido64@users.noreply.github.com)
 
 ## 1.0.5
 
@@ -72,7 +86,8 @@ Thu, 16 Sep 2021 10:10:39 GMT
 
 ### Patches
 
-- Bump @rnx-kit/babel-preset-metro-react-native to v1.0.5 (4123478+tido64@users.noreply.github.com)
+- Bump @rnx-kit/babel-preset-metro-react-native to v1.0.5
+  (4123478+tido64@users.noreply.github.com)
 
 ## 1.0.4
 
@@ -80,7 +95,8 @@ Mon, 16 Aug 2021 14:17:13 GMT
 
 ### Patches
 
-- Add support for @babel/plugin-transform-typescript 7.15 (4123478+tido64@users.noreply.github.com)
+- Add support for @babel/plugin-transform-typescript 7.15
+  (4123478+tido64@users.noreply.github.com)
 
 ## 1.0.3
 
@@ -112,4 +128,5 @@ Thu, 11 Mar 2021 15:17:06 GMT
 
 ### Minor changes
 
-- Introduce Babel preset for React Native applications (4123478+tido64@users.noreply.github.com)
+- Introduce Babel preset for React Native applications
+  (4123478+tido64@users.noreply.github.com)

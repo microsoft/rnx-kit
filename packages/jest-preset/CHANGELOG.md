@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/jest-preset
 
+## 0.2.0
+
+### Minor Changes
+
+- 3afb5fa: Bump minimum Node version to 16.17
+
 ## 0.1.18
 
 ### Patch Changes
