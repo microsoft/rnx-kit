@@ -1,5 +1,18 @@
 # Change Log - @rnx-kit/metro-config
 
+## 2.0.0
+
+### Major Changes
+
+- 3afb5fa: Bump minimum Node version to 16.17
+
+### Patch Changes
+
+- Updated dependencies [3afb5fa]
+  - @rnx-kit/tools-react-native@2.0.0
+  - @rnx-kit/tools-node@3.0.0
+  - @rnx-kit/tools-workspaces@0.2.0
+
 ## 1.3.17
 
 ### Patch Changes

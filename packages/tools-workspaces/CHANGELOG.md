@@ -1,5 +1,11 @@
 # @rnx-kit/tools-workspaces
 
+## 0.2.0
+
+### Minor Changes
+
+- 3afb5fa: Bump minimum Node version to 16.17
+
 ## 0.1.6
 
 ### Patch Changes
@@ -41,4 +47,5 @@
 
 ### Minor Changes
 
-- 37245c33: Introducing `@rnx-kit/tools-workspaces`, a collection of tools for working with workspaces.
+- 37245c33: Introducing `@rnx-kit/tools-workspaces`, a collection of tools for
+  working with workspaces.

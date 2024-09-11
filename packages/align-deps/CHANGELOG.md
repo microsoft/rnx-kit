@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/align-deps
 
+## 3.0.0
+
+### Major Changes
+
+- 3afb5fa: Bump minimum Node version to 16.17
+
 ## 2.5.5
 
 ### Patch Changes

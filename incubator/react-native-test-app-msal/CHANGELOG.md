@@ -1,5 +1,16 @@
 # Change Log - @rnx-kit/react-native-test-app-msal
 
+## 4.0.0
+
+### Major Changes
+
+- 3afb5fa: Bump minimum Node version to 16.17
+
+### Patch Changes
+
+- Updated dependencies [3afb5fa]
+  - @rnx-kit/react-native-auth@0.3.0
+
 ## 3.0.3
 
 ### Patch Changes

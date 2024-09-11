@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/esbuild-bundle-analyzer",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "EXPERIMENTAL - USE WITH CAUTION - A tool for analyzing an esbuild bundle/metafile",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/incubator/esbuild-bundle-analyzer#readme",
   "license": "MIT",
@@ -30,10 +30,10 @@
     "test": "rnx-kit-scripts test --silent"
   },
   "dependencies": {
-    "@rnx-kit/console": "^1.0.11",
-    "@rnx-kit/metro-plugin-cyclic-dependencies-detector": "^1.1.2",
-    "@rnx-kit/metro-plugin-duplicates-checker": "^2.1.2",
-    "@rnx-kit/tools-node": "^2.1.1",
+    "@rnx-kit/console": "^2.0.0",
+    "@rnx-kit/metro-plugin-cyclic-dependencies-detector": "^2.0.0",
+    "@rnx-kit/metro-plugin-duplicates-checker": "^3.0.0",
+    "@rnx-kit/tools-node": "^3.0.0",
     "chalk": "^4.1.0",
     "yargs": "^16.0.0"
   },

@@ -1,5 +1,11 @@
 # @rnx-kit/react-native-host
 
+## 0.5.0
+
+### Minor Changes
+
+- 3afb5fa: Bump minimum Node version to 16.17
+
 ## 0.4.12
 
 ### Patch Changes

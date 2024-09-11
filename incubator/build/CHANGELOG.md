@@ -1,5 +1,17 @@
 # @rnx-kit/build
 
+## 0.7.1
+
+### Patch Changes
+
+- Updated dependencies [3afb5fa]
+  - @rnx-kit/tools-node@3.0.0
+  - @rnx-kit/tools-android@0.2.0
+  - @rnx-kit/tools-windows@0.2.0
+  - @rnx-kit/tools-apple@0.2.0
+  - @rnx-kit/tools-shell@0.2.0
+  - @rnx-kit/config@0.7.0
+
 ## 0.7.0
 
 ### Minor Changes

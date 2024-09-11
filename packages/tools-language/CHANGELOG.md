@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/tools-language
 
+## 3.0.0
+
+### Major Changes
+
+- 3afb5fa: Bump minimum Node version to 16.17
+
 ## 2.0.1
 
 ### Patch Changes
@@ -28,7 +34,8 @@
 
 ### Minor Changes
 
-- 496a6f4a: Add `keysOf` to `@rnx-kit/tools-language`, a type-safe wrapper around `Object.keys`
+- 496a6f4a: Add `keysOf` to `@rnx-kit/tools-language`, a type-safe wrapper
+  around `Object.keys`
 
 ## 1.3.1
 
@@ -48,7 +55,8 @@ Mon, 01 Nov 2021 13:46:13 GMT
 
 ### Patches
 
-- Normalize main and types fields across all packages which use them. (afoxman@microsoft.com)
+- Normalize main and types fields across all packages which use them.
+  (afoxman@microsoft.com)
 
 ## 1.2.0
 
@@ -56,7 +64,8 @@ Sat, 30 Oct 2021 07:50:51 GMT
 
 ### Minor changes
 
-- Add new language and node functions to the tools packages. (afoxman@microsoft.com)
+- Add new language and node functions to the tools packages.
+  (afoxman@microsoft.com)
 
 ## 1.1.1
 
@@ -72,7 +81,8 @@ Wed, 25 Aug 2021 07:32:57 GMT
 
 ### Minor changes
 
-- Add two new functions for extended objects and their types. (afoxman@microsoft.com)
+- Add two new functions for extended objects and their types.
+  (afoxman@microsoft.com)
 
 ## 1.0.1
 

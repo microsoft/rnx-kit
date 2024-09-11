@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/rn-changelog-generator
 
+## 0.5.0
+
+### Minor Changes
+
+- 3afb5fa: Bump minimum Node version to 16.17
+
 ## 0.4.1
 
 ### Patch Changes
@@ -10,7 +16,8 @@
 
 ### Minor Changes
 
-- 3fa093e8: Adding validation command to verify if a commit follows a React Native changelog
+- 3fa093e8: Adding validation command to verify if a commit follows a React
+  Native changelog
 
 ## 0.3.2
 
@@ -28,13 +35,15 @@
 
 ### Minor Changes
 
-- 37b980b: prepend the newly generated changelog to the supplied --changelog file
+- 37b980b: prepend the newly generated changelog to the supplied --changelog
+  file
 
 ## 0.2.0
 
 ### Minor Changes
 
-- e136a30: Add `single` command to see changelog message and dimensions for a single commit
+- e136a30: Add `single` command to see changelog message and dimensions for a
+  single commit
 
 ## 0.1.0
 

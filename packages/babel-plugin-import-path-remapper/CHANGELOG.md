@@ -1,5 +1,16 @@
 # Change Log - @rnx-kit/babel-plugin-import-path-remapper
 
+## 2.0.0
+
+### Major Changes
+
+- 3afb5fa: Bump minimum Node version to 16.17
+
+### Patch Changes
+
+- Updated dependencies [3afb5fa]
+  - @rnx-kit/tools-node@3.0.0
+
 ## 1.1.4
 
 ### Patch Changes
@@ -127,7 +138,8 @@ Thu, 16 Sep 2021 10:10:39 GMT
 
 ### Patches
 
-- Fixed all `lib` components in a path being incorrectly replaced (4123478+tido64@users.noreply.github.com)
+- Fixed all `lib` components in a path being incorrectly replaced
+  (4123478+tido64@users.noreply.github.com)
 
 ## 1.0.0
 
@@ -135,4 +147,5 @@ Tue, 16 Feb 2021 09:27:59 GMT
 
 ### Minor changes
 
-- Babel plugin for remapping 'lib/' imports to 'src/' (4123478+tido64@users.noreply.github.com)
+- Babel plugin for remapping 'lib/' imports to 'src/'
+  (4123478+tido64@users.noreply.github.com)

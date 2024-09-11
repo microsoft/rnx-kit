@@ -1,5 +1,11 @@
 # @rnx-kit/react-native-auth
 
+## 0.3.0
+
+### Minor Changes
+
+- 3afb5fa: Bump minimum Node version to 16.17
+
 ## 0.2.6
 
 ### Patch Changes
@@ -40,7 +46,8 @@
 
 ### Minor Changes
 
-- afd170e6: Add acquireTokenWithResource to Auth API, rename acquireToken to acquireTokenWithScopes
+- afd170e6: Add acquireTokenWithResource to Auth API, rename acquireToken to
+  acquireTokenWithScopes
 
 ## 0.1.6
 
@@ -58,7 +65,8 @@
 
 ### Patch Changes
 
-- 203f327c: Depend on an explicit version of Kotlin Android plugin using the [plugins DSL](https://docs.gradle.org/current/userguide/plugins.html#sec:plugins_block)
+- 203f327c: Depend on an explicit version of Kotlin Android plugin using the
+  [plugins DSL](https://docs.gradle.org/current/userguide/plugins.html#sec:plugins_block)
 
 ## 0.1.3
 
@@ -77,10 +85,13 @@
 ### Patch Changes
 
 - c064bb21: Update tag format in `.podspec` to point to correct commits
-- c064bb21: Include both package and repository relative paths to allow the podspec to be consumed from both a local path, and as a podspec outside a spec repository.
+- c064bb21: Include both package and repository relative paths to allow the
+  podspec to be consumed from both a local path, and as a podspec outside a spec
+  repository.
 
 ## 0.1.0
 
 ### Minor Changes
 
-- 6507cb5: `@rnx-kit/react-native-auth` provides a cross-app uniform API for user authentication
+- 6507cb5: `@rnx-kit/react-native-auth` provides a cross-app uniform API for
+  user authentication

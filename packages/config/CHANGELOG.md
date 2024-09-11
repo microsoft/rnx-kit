@@ -1,5 +1,17 @@
 # Change Log - @rnx-kit/config
 
+## 0.7.0
+
+### Minor Changes
+
+- 3afb5fa: Bump minimum Node version to 16.17
+
+### Patch Changes
+
+- Updated dependencies [3afb5fa]
+  - @rnx-kit/tools-node@3.0.0
+  - @rnx-kit/console@2.0.0
+
 ## 0.6.8
 
 ### Patch Changes
