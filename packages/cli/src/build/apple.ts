@@ -16,10 +16,9 @@ export function runBuild(
 ): Promise<BuildResult> {
   return import("@rnx-kit/tools-apple").then(({ xcodebuild }) => {
     return new Promise<BuildResult>((resolve) => {
+      const log = (message: string) => logger.info(message);
+      const build = xcodebuild(xcworkspace, buildParams, log);
       const onSuccess = () => resolve({ xcworkspace, args: build.spawnargs });
-      const build = xcodebuild(xcworkspace, buildParams, (text) => {
-        logger.info(text);
-      });
       watch(build, logger, onSuccess, resolve);
     });
   });
