@@ -20,9 +20,7 @@ export function buildAndroid(
   }
 
   return import("@rnx-kit/tools-android").then(({ assemble }) => {
-    return new Promise<BuildResult>((resolve) => {
-      const gradle = assemble(sourceDir, buildParams);
-      watch(gradle, logger, () => resolve(sourceDir), resolve);
-    });
+    const gradle = assemble(sourceDir, buildParams);
+    return watch(gradle, logger, () => sourceDir);
   });
 }

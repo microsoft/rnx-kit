@@ -15,11 +15,8 @@ export function runBuild(
   logger: Ora
 ): Promise<BuildResult> {
   return import("@rnx-kit/tools-apple").then(({ xcodebuild }) => {
-    return new Promise<BuildResult>((resolve) => {
-      const log = (message: string) => logger.info(message);
-      const build = xcodebuild(xcworkspace, buildParams, log);
-      const onSuccess = () => resolve({ xcworkspace, args: build.spawnargs });
-      watch(build, logger, onSuccess, resolve);
-    });
+    const log = (message: string) => logger.info(message);
+    const build = xcodebuild(xcworkspace, buildParams, log);
+    return watch(build, logger, () => ({ xcworkspace, args: build.spawnargs }));
   });
 }
