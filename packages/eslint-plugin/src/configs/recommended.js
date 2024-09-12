@@ -35,6 +35,9 @@ module.exports = [
       // @ts-expect-error No declaration file for module
       "@react-native": require("@react-native/eslint-plugin"),
       "@rnx-kit": require("../rules"),
+      n: require("eslint-plugin-n"),
+      // @ts-expect-error No declaration file for module
+      security: require("eslint-plugin-security"),
     },
     rules: {
       "@react-native/platform-colors": "error",
@@ -54,6 +57,8 @@ module.exports = [
         },
       ],
       "@typescript-eslint/no-var-requires": "off",
+      "n/no-deprecated-api": "error",
+      "security/detect-pseudoRandomBytes": "error",
       ...(usesReact ? { "react/prop-types": "off" } : {}),
     },
     settings: {
