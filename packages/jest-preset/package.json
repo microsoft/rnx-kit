@@ -54,16 +54,6 @@
     "react-native": "^0.75.0",
     "typescript": "^5.0.0"
   },
-  "depcheck": {
-    "ignoreMatches": [
-      "@babel/core",
-      "@babel/preset-env",
-      "@babel/preset-typescript",
-      "@jest/types",
-      "@react-native-community/cli-types",
-      "react"
-    ]
-  },
   "engines": {
     "node": ">=16.17"
   },

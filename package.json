@@ -23,7 +23,6 @@
     "change:check": "changeset status",
     "clean": "git clean -dfqx --exclude=.yarn/cache",
     "clear-cache": "nx clear-cache",
-    "depcheck": "nx run-many --target depcheck",
     "format": "nx run-many --target format",
     "lint": "nx run-many --target lint",
     "new-package": "node scripts/new-package.js",
@@ -39,6 +38,7 @@
     "@types/jest": "^29.2.1",
     "@types/node": "^20.0.0",
     "eslint": "^8.56.0",
+    "knip": "^5.30.2",
     "metro": "^0.80.3",
     "nx": "~19.5.0",
     "prettier": "^3.0.0",
@@ -76,6 +76,146 @@
       "packages/*",
       "scripts"
     ]
+  },
+  "knip": {
+    "include": [
+      "dependencies"
+    ],
+    "exclude": [
+      "optionalPeerDependencies",
+      "unlisted"
+    ],
+    "ignore": [
+      ".github/workflows/pr.yml",
+      ".github/workflows/rnx-build.yml"
+    ],
+    "ignoreBinaries": [
+      "clang-format",
+      "ktlint",
+      "rnx-kit-scripts",
+      "swiftformat",
+      "swiftlint"
+    ],
+    "ignoreDependencies": [
+      "@types/*",
+      "eslint",
+      "jest",
+      "prettier",
+      "prettier-plugin-organize-imports"
+    ],
+    "workspaces": {
+      ".": {
+        "ignoreDependencies": [
+          "metro"
+        ]
+      },
+      "incubator/@react-native-webapis/{battery-status,web-storage}": {
+        "ignoreDependencies": [
+          "@babel/core",
+          "@babel/preset-env"
+        ]
+      },
+      "packages/babel-preset-metro-react-native": {
+        "ignoreDependencies": [
+          "@rnx-kit/babel-plugin-import-path-remapper"
+        ]
+      },
+      "packages/cli": {
+        "entry": [
+          "scripts/**/*.ts",
+          "src/index.ts",
+          "test/**/*.test.ts"
+        ],
+        "ignoreDependencies": [
+          "@babel/core",
+          "@babel/preset-env",
+          "tsx"
+        ]
+      },
+      "packages/eslint-plugin": {
+        "ignoreDependencies": [
+          "@microsoft/eslint-plugin-sdl",
+          "eslint-plugin-node",
+          "eslint-plugin-react",
+          "eslint-plugin-react-hooks"
+        ]
+      },
+      "packages/jest-preset": {
+        "ignoreDependencies": [
+          "react",
+          "react-native"
+        ]
+      },
+      "packages/metro-config": {
+        "ignoreDependencies": [
+          "@babel/core",
+          "@babel/preset-env"
+        ]
+      },
+      "packages/metro-plugin-duplicates-checker": {
+        "entry": [
+          "src/index.ts",
+          "test/__mocks__/**/*.js"
+        ]
+      },
+      "packages/metro-serializer-esbuild": {
+        "entry": [
+          "metro.config.js",
+          "scripts/**/*.ts",
+          "src/index.ts",
+          "test/**/*.test.ts"
+        ],
+        "ignoreDependencies": [
+          "@babel/preset-env",
+          "@fluentui/utilities"
+        ]
+      },
+      "packages/react-native-auth": {
+        "ignoreDependencies": [
+          "@babel/core",
+          "@babel/preset-env",
+          "@react-native-community/cli",
+          "@react-native-community/cli-platform-android",
+          "@react-native-community/cli-platform-ios",
+          "@react-native/metro-config"
+        ]
+      },
+      "packages/react-native-lazy-index": {
+        "entry": [
+          "src/index.js",
+          "test/**/*.test.ts"
+        ],
+        "ignoreDependencies": [
+          "babel-plugin-codegen"
+        ]
+      },
+      "packages/test-app": {
+        "entry": [
+          "index.js",
+          "metro.config.js",
+          "test/**/*.mjs"
+        ],
+        "ignoreBinaries": [
+          "rnx"
+        ],
+        "ignoreDependencies": [
+          "@babel/preset-env",
+          "@react-native-community/cli",
+          "@react-native-community/cli-platform-android",
+          "@react-native-community/cli-platform-ios",
+          "@react-native-webapis/web-storage",
+          "@rnx-kit/*",
+          "react-native-test-app",
+          "react-native-windows"
+        ]
+      },
+      "packages/tools-react-native": {
+        "entry": [
+          "src/index.ts",
+          "test/**/*.test.ts"
+        ]
+      }
+    }
   },
   "prettier": "./.github/prettierrc.json"
 }

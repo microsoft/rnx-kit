@@ -58,13 +58,5 @@
   },
   "engines": {
     "node": ">=16.17"
-  },
-  "depcheck": {
-    "ignoreMatches": [
-      "@babel/core",
-      "@babel/preset-env",
-      "metro-resolver",
-      "type-fest"
-    ]
   }
 }

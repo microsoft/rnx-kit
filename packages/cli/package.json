@@ -34,7 +34,6 @@
   },
   "scripts": {
     "build": "rnx-kit-scripts build",
-    "depcheck": "rnx-kit-scripts depcheck",
     "format": "rnx-kit-scripts format",
     "lint": "rnx-kit-scripts lint",
     "test": "rnx-kit-scripts test"
@@ -99,11 +98,6 @@
   },
   "engines": {
     "node": ">=16.17"
-  },
-  "depcheck": {
-    "ignoreMatches": [
-      "connect"
-    ]
   },
   "jest": {
     "preset": "@rnx-kit/jest-preset/private"

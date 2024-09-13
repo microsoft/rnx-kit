@@ -61,10 +61,5 @@
   },
   "engines": {
     "node": ">=16.17"
-  },
-  "depcheck": {
-    "ignoreMatches": [
-      "@babel/preset-env"
-    ]
   }
 }

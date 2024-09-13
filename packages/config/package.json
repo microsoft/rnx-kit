@@ -30,7 +30,6 @@
   },
   "scripts": {
     "build": "rnx-kit-scripts build",
-    "depcheck": "rnx-kit-scripts depcheck",
     "format": "rnx-kit-scripts format",
     "lint": "rnx-kit-scripts lint",
     "test": "rnx-kit-scripts test"

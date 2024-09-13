@@ -5,7 +5,6 @@ import yargs from "yargs";
 import { build } from "./commands/build.js";
 import { bundle } from "./commands/bundle.js";
 import { clean } from "./commands/clean.js";
-import { depcheck } from "./commands/depcheck.js";
 import { format } from "./commands/format.js";
 import { lint } from "./commands/lint.js";
 import { test } from "./commands/test.js";
@@ -45,10 +44,6 @@ init({
   clean: {
     description: "Removes build and test artifacts",
     command: clean,
-  },
-  depcheck: {
-    description: "Scans package for unused or missing dependencies",
-    command: depcheck,
   },
   format: {
     description: "Formats source files",

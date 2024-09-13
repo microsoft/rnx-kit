@@ -5,7 +5,15 @@ module.exports = {
       { useTransformReactJSXExperimental: true },
     ],
   ],
-  plugins: [[require("@rnx-kit/polyfills")]],
+  plugins: (() => {
+    try {
+      // Some plugins, like `@rnx-kit/polyfills`, may not have been built yet
+      // when linters are running, for instance when we're running Knip.
+      return [[require("@rnx-kit/polyfills")]];
+    } catch (_) {
+      return [];
+    }
+  })(),
   overrides: [
     {
       plugins: [
