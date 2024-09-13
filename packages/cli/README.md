@@ -116,51 +116,6 @@ dependencies.
 
 <!-- @rnx-kit/cli/bundle end -->
 
-## `rnx-cli config`
-
-Routes to
-[`react-native config`](https://github.com/react-native-community/cli/blob/main/packages/cli-config#readme).
-
-## `rnx-cli doctor`
-
-Routes to
-[`react-native doctor`](https://github.com/react-native-community/cli/blob/main/packages/cli-doctor#readme).
-
-## `rnx-cli info`
-
-Routes to
-[`react-native info`](https://github.com/react-native-community/cli/blob/main/packages/cli-doctor#info).
-
-## `rnx-cli build-android`
-
-Routes to
-[`react-native build-android`](https://github.com/react-native-community/cli/blob/main/packages/cli-platform-android#build-android).
-
-## `rnx-cli build-ios`
-
-Routes to
-[`react-native build-ios`](https://github.com/react-native-community/cli/blob/main/packages/cli-platform-ios#build-ios).
-
-## `rnx-cli log-android`
-
-Routes to
-[`react-native log-android`](https://github.com/react-native-community/cli/blob/main/packages/cli-platform-android#log-android).
-
-## `rnx-cli log-ios`
-
-Routes to
-[`react-native log-ios`](https://github.com/react-native-community/cli/blob/main/packages/cli-platform-ios#log-ios).
-
-## `rnx-cli run-android`
-
-Routes to
-[`react-native run-android`](https://github.com/react-native-community/cli/blob/main/packages/cli-platform-android#run-android).
-
-## `rnx-cli run-ios`
-
-Routes to
-[`react-native run-ios`](https://github.com/react-native-community/cli/blob/main/packages/cli-platform-ios#run-ios).
-
 ## `rnx-cli start`
 
 Start a bundle server for a package using [Metro][]. The bundle server uses
@@ -235,6 +190,59 @@ from the bundle configuration (or its [defaults](#bundle-defaults)).
 
 <!-- @rnx-kit/cli/start end -->
 
+## `rnx-cli build`
+
+Builds the native bits in your project.
+
+```sh
+yarn rnx-cli build [options]
+```
+
+<!-- @rnx-kit/cli/build start -->
+
+| Option                         | Description                                                                  |
+| ------------------------------ | ---------------------------------------------------------------------------- |
+| -p, --platform &lt;string&gt;  | Target platform                                                              |
+| --workspace &lt;string&gt;     | Path, relative to project root, of the Xcode workspace to build (macOS only) |
+| --scheme &lt;string&gt;        | Name of scheme to build (Apple platforms only)                               |
+| --configuration &lt;string&gt; | Build configuration for building the app; 'Debug' or 'Release'               |
+| --destination &lt;string&gt;   | Destination of the built app; 'device', 'emulator', or 'simulator'           |
+
+<!-- @rnx-kit/cli/build end -->
+
+### Example Commands
+
+```sh
+yarn rnx-cli build -p ios
+```
+
+## `rnx-cli run`
+
+Launches the native app (building it first if necessary).
+
+```sh
+yarn rnx-cli run [options]
+```
+
+<!-- @rnx-kit/cli/run start -->
+
+| Option                         | Description                                                                  |
+| ------------------------------ | ---------------------------------------------------------------------------- |
+| -p, --platform &lt;string&gt;  | Target platform                                                              |
+| --workspace &lt;string&gt;     | Path, relative to project root, of the Xcode workspace to build (macOS only) |
+| --scheme &lt;string&gt;        | Name of scheme to build (Apple platforms only)                               |
+| --configuration &lt;string&gt; | Build configuration for building the app; 'Debug' or 'Release'               |
+| --destination &lt;string&gt;   | Destination of the built app; 'device', 'emulator', or 'simulator'           |
+| -d, --device &lt;string&gt;    | The name of the device to launch the app in                                  |
+
+<!-- @rnx-kit/cli/run end -->
+
+### Example Commands
+
+```sh
+yarn rnx-cli run -p ios
+```
+
 ## `rnx-cli align-deps`
 
 Manage dependencies within a repository and across many repositories.
@@ -281,18 +289,42 @@ yarn rnx-cli write-third-party-notices [options]
 
 <!-- @rnx-kit/cli/write-third-party-notices start -->
 
-| Option                           | Description                                                                                                                                    |
-| -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| --root-path &lt;path&gt;         | The root of the repo — the starting point for finding each module in the source map dependency graph                                           |
-| --source-map-file &lt;file&gt;   | The source map file associated with the package's entry file — this source map eventually leads to all package dependencies and their licenses |
-| --json                           | Format the 3rd-party notice file as JSON instead of text                                                                                       |
-| --output-file &lt;file&gt;       | The path to use when writing the 3rd-party notice file                                                                                         |
-| --ignore-scopes &lt;string&gt;   | Comma-separated list of npm scopes to ignore when traversing the source map dependency graph                                                   |
-| --ignore-modules &lt;string&gt;  | Comma-separated list of modules to ignore when traversing the source map dependency graph                                                      |
-| --preamble-text &lt;string&gt;   | A string to prepend to the start of the 3rd-party notice                                                                                       |
-| --additional-text &lt;string&gt; | A string to append to the end of the 3rd-party notice                                                                                          |
+| Option                           | Description                                                           |
+| -------------------------------- | --------------------------------------------------------------------- |
+| --root-path &lt;path&gt;         | The root of the repo to start resolving modules from                  |
+| --source-map-file &lt;path&gt;   | The source map file to generate license contents for                  |
+| --json                           | Output license information as a JSON                                  |
+| --output-file &lt;path&gt;       | The output file to write the license file to                          |
+| --ignore-scopes &lt;string&gt;   | npm scopes to ignore and not emit license information for             |
+| --ignore-modules &lt;string&gt;  | Modules (JS packages) to not emit license information for             |
+| --preamble-text &lt;string&gt;   | A list of lines to prepend at the start of the generated license file |
+| --additional-text &lt;string&gt; | A list of lines to append at the end of the generated license file    |
+| --full-license-text              | Include full license text in the JSON output                          |
 
 <!-- @rnx-kit/cli/write-third-party-notices end -->
+
+## Other Commands
+
+The following commands route to `@react-native-community/cli`:
+
+- `rnx-cli build-android` →
+  [`react-native build-android`](https://github.com/react-native-community/cli/blob/main/packages/cli-platform-android#build-android)
+- `rnx-cli build-ios` →
+  [`react-native build-ios`](https://github.com/react-native-community/cli/blob/main/packages/cli-platform-ios#build-ios)
+- `rnx-cli config` →
+  [`react-native config`](https://github.com/react-native-community/cli/blob/main/packages/cli-config#readme)
+- `rnx-cli doctor` →
+  [`react-native doctor`](https://github.com/react-native-community/cli/blob/main/packages/cli-doctor#readme)
+- `rnx-cli info` →
+  [`react-native info`](https://github.com/react-native-community/cli/blob/main/packages/cli-doctor#info)
+- `rnx-cli log-android` →
+  [`react-native log-android`](https://github.com/react-native-community/cli/blob/main/packages/cli-platform-android#log-android)
+- `rnx-cli log-ios` →
+  [`react-native log-ios`](https://github.com/react-native-community/cli/blob/main/packages/cli-platform-ios#log-ios)
+- `rnx-cli run-android` →
+  [`react-native run-android`](https://github.com/react-native-community/cli/blob/main/packages/cli-platform-android#run-android)
+- `rnx-cli run-ios` →
+  [`react-native run-ios`](https://github.com/react-native-community/cli/blob/main/packages/cli-platform-ios#run-ios)
 
 <!-- References -->
 
