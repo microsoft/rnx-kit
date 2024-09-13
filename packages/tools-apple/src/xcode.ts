@@ -109,7 +109,7 @@ export async function parsePlist(app: string): Promise<Error | JSObject> {
 export function xcodebuild(
   xcworkspace: string,
   params: BuildParams,
-  log = console.log
+  log: (message: string) => void = console.log
 ) {
   const args = ["-workspace", xcworkspace];
 

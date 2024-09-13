@@ -1,14 +1,33 @@
 import type { Command } from "@react-native-community/cli-types";
 import { alignDepsCommand } from "@rnx-kit/align-deps";
 import { writeThirdPartyNoticesCommand } from "@rnx-kit/third-party-notices";
-import { rnxBuildCommand } from "./build";
-import { rnxBundleCommand } from "./bundle";
-import { rnxCleanCommand } from "./clean";
-import { rnxCopyAssetsCommand } from "./copy-assets";
-import { rnxRamBundleCommand } from "./ram-bundle";
-import { rnxRunCommand } from "./run";
-import { rnxStartCommand } from "./start";
-import { rnxTestCommand } from "./test";
+import { rnxBuild, rnxBuildCommand } from "./build";
+import { rnxBundle, rnxBundleCommand } from "./bundle";
+import { rnxClean, rnxCleanCommand } from "./clean";
+import { copyProjectAssets, rnxCopyAssetsCommand } from "./copy-assets";
+import { rnxRamBundle, rnxRamBundleCommand } from "./ram-bundle";
+import { rnxRun, rnxRunCommand } from "./run";
+import { rnxStart, rnxStartCommand } from "./start";
+import { rnxTest, rnxTestCommand } from "./test";
+
+export {
+  copyProjectAssets,
+  rnxBuild,
+  rnxBuildCommand,
+  rnxBundle,
+  rnxBundleCommand,
+  rnxClean,
+  rnxCleanCommand,
+  rnxCopyAssetsCommand,
+  rnxRamBundle,
+  rnxRamBundleCommand,
+  rnxRun,
+  rnxRunCommand,
+  rnxStart,
+  rnxStartCommand,
+  rnxTest,
+  rnxTestCommand,
+};
 
 export const reactNativeConfig = {
   commands: [
@@ -32,12 +51,3 @@ export const rnxAlignDepsCommand = alignDepsCommand;
 // @rnx-kit/third-party-notices
 export const rnxWriteThirdPartyNotices = writeThirdPartyNoticesCommand.func;
 export const rnxWriteThirdPartyNoticesCommand = writeThirdPartyNoticesCommand;
-
-export { rnxBuild, rnxBuildCommand } from "./build";
-export { rnxBundle, rnxBundleCommand } from "./bundle";
-export { rnxClean, rnxCleanCommand } from "./clean";
-export { copyProjectAssets, rnxCopyAssetsCommand } from "./copy-assets";
-export { rnxRamBundle, rnxRamBundleCommand } from "./ram-bundle";
-export { rnxRun, rnxRunCommand } from "./run";
-export { rnxStart, rnxStartCommand } from "./start";
-export { rnxTest, rnxTestCommand } from "./test";
