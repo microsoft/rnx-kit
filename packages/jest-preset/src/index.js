@@ -173,6 +173,20 @@ function haste(defaultPlatform) {
     : undefined;
 }
 
+function jsxBabelJestOptions() {
+  try {
+    // Only add `babel-plugin-syntax-hermes-parser` if it's present:
+    // https://github.com/facebook/react-native/pull/46462
+    const hermesParser = resolveDependencyChain([
+      "react-native",
+      "babel-plugin-syntax-hermes-parser",
+    ]);
+    return { plugins: [hermesParser] };
+  } catch (_) {
+    return {};
+  }
+}
+
 /**
  * Returns module name mappers for React Native.
  * @param {string | undefined} reactNativePlatformPath
@@ -278,7 +292,8 @@ module.exports = (
     setupFiles: setupFiles(targetPlatform, platformPath, searchPaths),
     testEnvironment,
     transform: {
-      "\\.[jt]sx?$": testEnvironment
+      "\\.jsx?$": ["babel-jest", jsxBabelJestOptions()],
+      "\\.tsx?$": testEnvironment
         ? "babel-jest"
         : [
             "babel-jest",
