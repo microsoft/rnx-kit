@@ -133,6 +133,20 @@ function getTargetPlatform(defaultPlatform, searchPaths) {
   ];
 }
 
+function babelPlugins() {
+  try {
+    // Only add `babel-plugin-syntax-hermes-parser` if it's present:
+    // https://github.com/facebook/react-native/pull/46462
+    const hermesParser = resolveDependencyChain([
+      "react-native",
+      "babel-plugin-syntax-hermes-parser",
+    ]);
+    return [hermesParser];
+  } catch (_) {
+    return undefined;
+  }
+}
+
 /**
  * Returns Babel presets for React Native.
  * @param {string | undefined} targetPlatform
@@ -171,20 +185,6 @@ function haste(defaultPlatform) {
             : [defaultPlatform, "native"],
       }
     : undefined;
-}
-
-function jsxBabelJestOptions() {
-  try {
-    // Only add `babel-plugin-syntax-hermes-parser` if it's present:
-    // https://github.com/facebook/react-native/pull/46462
-    const hermesParser = resolveDependencyChain([
-      "react-native",
-      "babel-plugin-syntax-hermes-parser",
-    ]);
-    return { plugins: [hermesParser] };
-  } catch (_) {
-    return {};
-  }
 }
 
 /**
@@ -292,12 +292,14 @@ module.exports = (
     setupFiles: setupFiles(targetPlatform, platformPath, searchPaths),
     testEnvironment,
     transform: {
-      "\\.jsx?$": ["babel-jest", jsxBabelJestOptions()],
-      "\\.tsx?$": testEnvironment
-        ? "babel-jest"
+      "\\.[jt]sx?$": testEnvironment
+        ? ["babel-jest", { plugins: babelPlugins() }]
         : [
             "babel-jest",
-            { presets: babelPresets(targetPlatform, searchPaths) },
+            {
+              presets: babelPresets(targetPlatform, searchPaths),
+              plugins: babelPlugins(),
+            },
           ],
       ...transformRules(targetPlatform, platformPath, searchPaths),
       ...userTransform,
