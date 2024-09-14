@@ -42,7 +42,7 @@ describe("jest-preset", () => {
           ? /[/\\]react-native.*?[/\\]package[/\\]jest[/\\]assetFileTransformer\.js$/
           : /[/\\]react-native.*?[/\\]jest[/\\]assetFileTransformer\.js$/
       ),
-      "\\.[jt]sx?$": "babel-jest",
+      "\\.[jt]sx?$": ["babel-jest", { plugins: undefined }],
     },
   };
 
@@ -69,7 +69,7 @@ describe("jest-preset", () => {
       "\\.(bmp|gif|jpg|jpeg|mp4|png|psd|svg|webp)$": expect.stringContaining(
         path.join(reactNativeMacOSPath, "jest", "assetFileTransformer.js")
       ),
-      "\\.[jt]sx?$": "babel-jest",
+      "\\.[jt]sx?$": ["babel-jest", { plugins: undefined }],
     },
   });
 
