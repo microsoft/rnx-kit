@@ -9,7 +9,7 @@ type ResolvedDependencies = {
   unresolvedCapabilities: Record<string, string[]>;
 };
 
-const ProvidesMeta = Symbol("provides");
+const PROVIDES_SYMKEY = "provides";
 
 /**
  * Returns the list of capabilities used in the specified package manifest.
@@ -49,7 +49,7 @@ export function capabilitiesFor(
 export function capabilityProvidedBy(
   pkg: MetaPackage | Package
 ): string | undefined {
-  return pkg[ProvidesMeta];
+  return pkg[Symbol.for(PROVIDES_SYMKEY)];
 }
 
 export function isMetaPackage(pkg: MetaPackage | Package): pkg is MetaPackage {
@@ -82,7 +82,7 @@ function resolveCapability(
     return;
   }
 
-  pkg[ProvidesMeta] = capability;
+  pkg[Symbol.for(PROVIDES_SYMKEY)] = capability;
 
   pkg.capabilities?.forEach((capability) =>
     resolveCapability(

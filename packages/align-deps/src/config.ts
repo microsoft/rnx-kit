@@ -1,4 +1,4 @@
-import type { KitConfig } from "@rnx-kit/config";
+import type { Capability, KitConfig } from "@rnx-kit/config";
 import { getKitCapabilities, getKitConfig } from "@rnx-kit/config";
 import { error, warn } from "@rnx-kit/console";
 import type { PackageManifest } from "@rnx-kit/tools-node/package";
@@ -13,6 +13,8 @@ import type {
 } from "./types";
 
 type ConfigResult = AlignDepsConfig | LegacyCheckConfig | ErrorCode;
+
+const ILLEGAL_CAPABILITIES = ["__proto__", "constructor", "prototype"];
 
 export const defaultConfig: AlignDepsConfig["alignDeps"] = {
   presets: ["microsoft/react-native"],
@@ -61,6 +63,12 @@ export function isPackageManifest(
     "name" in manifest &&
     "version" in manifest
   );
+}
+
+export function sanitizeCapabilities(
+  capabilities?: Capability[]
+): Capability[] {
+  return capabilities?.filter((c) => !ILLEGAL_CAPABILITIES.includes(c)) ?? [];
 }
 
 /**
@@ -121,6 +129,7 @@ export function loadConfig(
       alignDeps: {
         ...defaultConfig,
         ...alignDeps,
+        capabilities: sanitizeCapabilities(alignDeps.capabilities),
       },
       ...config,
       manifest,
@@ -139,7 +148,7 @@ export function loadConfig(
       kitType,
       reactNativeVersion,
       ...(config.reactNativeDevVersion ? { reactNativeDevVersion } : undefined),
-      capabilities,
+      capabilities: sanitizeCapabilities(capabilities),
       customProfiles,
       manifest,
     };

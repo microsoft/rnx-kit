@@ -9,7 +9,7 @@ export async function format() {
     "--write",
     "--log-level",
     "error",
-    "**/*.{js,json,jsx,md,ts,tsx,yml}",
+    "**/*.{js,json,jsx,md,mjs,ts,tsx,yml}",
     "!{CODE_OF_CONDUCT,SECURITY}.md",
     "!**/{__fixtures__,lib}/**",
     "!**/CHANGELOG.*"
