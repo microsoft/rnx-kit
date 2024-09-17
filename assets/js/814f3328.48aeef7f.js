@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunk_rnx_kit_docsite=self.webpackChunk_rnx_kit_docsite||[]).push([[7472],{5513:e=>{e.exports=JSON.parse('{"title":"Recent posts","items":[{"title":"React Native Developer Tools","permalink":"/rnx-kit/blog/react-native-developer-tools","unlisted":false,"date":"2022-05-04T00:00:00.000Z"}]}')}}]);

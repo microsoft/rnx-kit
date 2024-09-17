@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunk_rnx_kit_docsite=self.webpackChunk_rnx_kit_docsite||[]).push([[1903],{1912:t=>{t.exports=JSON.parse('{"blogBasePath":"/rnx-kit/blog","blogTitle":"Blog","authorsListPath":"/rnx-kit/blog/authors"}')}}]);
