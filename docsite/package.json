@@ -3,31 +3,34 @@
   "name": "@rnx-kit/docsite",
   "version": "0.0.0",
   "scripts": {
-    "docusaurus": "docusaurus",
-    "start": "docusaurus start",
     "build": "docusaurus build",
-    "swizzle": "docusaurus swizzle",
-    "deploy": "docusaurus deploy",
     "clear": "docusaurus clear",
+    "deploy": "docusaurus deploy",
+    "docusaurus": "docusaurus",
+    "format": "prettier --write --log-level error $(git ls-files '*.[jt]s' '*.md' '*.mdx' '*.tsx')",
     "serve": "docusaurus serve",
-    "write-translations": "docusaurus write-translations",
+    "start": "docusaurus start",
+    "swizzle": "docusaurus swizzle",
+    "typecheck": "tsc",
     "write-heading-ids": "docusaurus write-heading-ids",
-    "typecheck": "tsc"
+    "write-translations": "docusaurus write-translations"
   },
   "dependencies": {
-    "@docusaurus/core": "^3.0.0",
-    "@docusaurus/preset-classic": "^3.0.0",
+    "@docusaurus/core": "^3.5.0",
+    "@docusaurus/preset-classic": "^3.5.0",
     "@mdx-js/react": "^3.0.0",
-    "@tsconfig/docusaurus": "^2.0.1",
     "clsx": "^2.0.0",
-    "prettier": "^3.0.0",
+    "docusaurus-lunr-search": "^3.5.0",
     "prism-react-renderer": "^2.3.0",
     "react": "18.3.1",
-    "react-dom": "18.3.1",
-    "typescript": "^5.0.0"
+    "react-dom": "18.3.1"
   },
   "devDependencies": {
-    "@types/react": "*"
+    "@tsconfig/docusaurus": "^2.0.1",
+    "@types/react": "^18.3",
+    "prettier": "^3.0.0",
+    "prettier-plugin-organize-imports": "^4.0.0",
+    "typescript": "^5.0.0"
   },
   "engines": {
     "node": ">=18.12"
@@ -47,5 +50,6 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "prettier": "../.github/prettierrc.json"
 }

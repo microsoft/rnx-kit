@@ -43,9 +43,10 @@ terminal, and fits nicely into CI loops and package script blocks.
 
 The CLI is controlled by command-line parameters and
 [package configuration](https://github.com/microsoft/rnx-kit/tree/main/packages/config).
-Command-line parameters always override default values. Package configuration is optional but
-recommended. Configuration is how a package tells the CLI about itself. For
-example, a package can describe the options and paths to use during bundling.
+Command-line parameters always override default values. Package configuration is
+optional but recommended. Configuration is how a package tells the CLI about
+itself. For example, a package can describe the options and paths to use during
+bundling.
 
 ```json title='Example configuration in package.json'
 {

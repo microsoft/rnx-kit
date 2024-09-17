@@ -22,82 +22,21 @@ const title1 = "React Native";
 const title2 = "Developer Tools";
 
 /** @type {import('@docusaurus/types').Config} */
-const config = {
+module.exports = {
   title: title1 + " " + title2,
-  tagline: "Tools to boost your productivity. By and for the community.",
   url: "https://" + organizationName + ".github.io",
   baseUrl: "/" + projectName + "/",
-  onBrokenLinks: "throw",
-  onBrokenMarkdownLinks: "warn",
   favicon: "img/favicon.ico",
+  trailingSlash: false,
+  tagline: "Tools to boost your productivity. By and for the community.",
   organizationName,
   projectName,
   deploymentBranch: "gh-pages",
-  trailingSlash: false,
-
-  customFields: {
-    title1,
-    title2,
-  },
-
-  presets: [
-    [
-      "classic",
-      /** @type {import('@docusaurus/preset-classic').Options} */
-      ({
-        docs: {
-          breadcrumbs: false,
-          sidebarPath: require.resolve("./sidebars.js"),
-          sidebarCollapsed: false,
-          editUrl: docsiteUrl + "/",
-        },
-        theme: {
-          customCss: require.resolve("./src/css/custom.css"),
-        },
-        gtag: {
-          trackingID: "G-ZT44H2DNEQ",
-          anonymizeIP: true,
-        },
-      }),
-    ],
-  ],
-
+  onBrokenLinks: "throw",
+  onBrokenMarkdownLinks: "warn",
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
-      algolia: {
-        // ------------
-        //
-        // Docusaurus's Algolia plugin properties
-        //
-        appId: "47BE8NTWGA",
-        apiKey: "db4f13fdceb9b39d4ddb0b3746ecb99e",
-        indexName: "rnx-kit",
-        contextualSearch: true,
-
-        // Optional: Specify domains where the navigation should occur through window.location instead on history.push. Useful when our Algolia config crawls multiple documentation sites and we want to navigate with window.location.href to them.
-        //externalUrlRegex: "external\\.com|domain\\.com",
-
-        // Optional: path for search page that enabled by default (`false` to disable it)
-        searchPagePath: "search",
-
-        // ----------
-        //
-        // Algolia search parameters
-        // Reference: https://www.algolia.com/doc/api-reference/search-api-parameters
-        //
-        // ** These are all OPTIONAL **
-        //
-        searchParameters: {},
-
-        // ----------
-        //
-        // Algolia DocSearch API properties
-        // Reference: https://docsearch.algolia.com/docs/api
-        //
-        // ** All properties are OPTIONAL, and should be listed below here **
-        //
-      },
       navbar: {
         title: projectName,
         logo: {
@@ -163,6 +102,26 @@ const config = {
         darkTheme: darkCodeTheme,
       },
     }),
+  plugins: [require.resolve("docusaurus-lunr-search")],
+  presets: [
+    [
+      "@docusaurus/preset-classic",
+      /** @type {import('@docusaurus/preset-classic').Options} */
+      ({
+        docs: {
+          breadcrumbs: false,
+          sidebarPath: require.resolve("./sidebars.js"),
+          sidebarCollapsed: false,
+          editUrl: docsiteUrl + "/",
+        },
+        theme: {
+          customCss: require.resolve("./src/css/custom.css"),
+        },
+      }),
+    ],
+  ],
+  customFields: {
+    title1,
+    title2,
+  },
 };
-
-module.exports = config;
