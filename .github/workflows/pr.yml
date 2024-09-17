@@ -32,21 +32,24 @@ jobs:
         run: |
           yarn format
           git diff --exit-code
-      - name: Report dependency problems
-        run: |
-          yarn rnx-align-deps --write
-          git diff --exit-code
       - name: Report package metadata inconsistencies
         run: |
           node scripts/lint-metadata.js
           git diff --exit-code
-      - name: Report @rnx-kit/build workflow inconsistencies
+      - name: Report dependency misalignments
         run: |
-          cp incubator/build/workflows/github.yml .github/workflows/rnx-build.yml
+          yarn rnx-align-deps --write
           git diff --exit-code
+      - name: Report unused dependencies
+        run: |
+          yarn knip
       - name: Ensure READMEs are up-to-date
         run: |
           yarn update-readme
+          git diff --exit-code
+      - name: Report @rnx-kit/build workflow inconsistencies
+        run: |
+          cp incubator/build/workflows/github.yml .github/workflows/rnx-build.yml
           git diff --exit-code
   build:
     name: "Build"

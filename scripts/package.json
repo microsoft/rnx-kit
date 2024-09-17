@@ -9,12 +9,10 @@
   "type": "module",
   "scripts": {
     "build": "rnx-kit-scripts build",
-    "depcheck": "rnx-kit-scripts depcheck",
     "format": "rnx-kit-scripts format",
     "lint": "rnx-kit-scripts lint"
   },
   "dependencies": {
-    "depcheck": "^1.0.0",
     "esbuild": "^0.23.0",
     "eslint": "^8.56.0",
     "fast-glob": "^3.2.7",
@@ -34,10 +32,5 @@
     "@types/js-yaml": "^4.0.5",
     "@types/node": "^20.0.0",
     "@types/yargs": "^16.0.0"
-  },
-  "depcheck": {
-    "ignoreMatches": [
-      "tsx"
-    ]
   }
 }

@@ -66,12 +66,6 @@
   "engines": {
     "node": ">=16.17"
   },
-  "depcheck": {
-    "ignoreMatches": [
-      "@babel/plugin-transform-classes",
-      "@rnx-kit/babel-plugin-import-path-remapper"
-    ]
-  },
   "jest": {
     "roots": [
       "test"

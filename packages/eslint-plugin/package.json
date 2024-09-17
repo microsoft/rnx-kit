@@ -77,17 +77,6 @@
   "engines": {
     "node": ">=16.17"
   },
-  "depcheck": {
-    "ignoreMatches": [
-      "@microsoft/eslint-plugin-sdl",
-      "@react-native/eslint-plugin",
-      "@typescript-eslint/eslint-plugin",
-      "@typescript-eslint/types",
-      "eslint-plugin-node",
-      "eslint-plugin-react",
-      "eslint-plugin-react-hooks"
-    ]
-  },
   "jest": {
     "preset": "@rnx-kit/jest-preset/private"
   }

@@ -18,7 +18,6 @@
     "bundle:ios": "rnx bundle --platform ios",
     "bundle:macos": "rnx bundle --platform macos",
     "bundle:windows": "rnx bundle --platform windows",
-    "depcheck": "rnx-kit-scripts depcheck",
     "format": "rnx-kit-scripts format",
     "ios": "rnx run-ios --no-packager",
     "lint": "rnx-kit-scripts lint",
@@ -72,11 +71,6 @@
     "react-native-test-app": "^3.9.2",
     "react-test-renderer": "^18.2.0",
     "typescript": "^5.0.0"
-  },
-  "depcheck": {
-    "ignoreMatches": [
-      "internal"
-    ]
   },
   "rnx-kit": {
     "kitType": "app",

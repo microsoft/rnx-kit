@@ -40,11 +40,6 @@
   "engines": {
     "node": ">=16.17"
   },
-  "depcheck": {
-    "ignorePatterns": [
-      "/test/__fixtures__/*"
-    ]
-  },
   "jest": {
     "preset": "@rnx-kit/jest-preset/private"
   }
