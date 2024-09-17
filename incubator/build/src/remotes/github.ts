@@ -4,6 +4,7 @@ import type { RestEndpointMethodTypes } from "@octokit/plugin-rest-endpoint-meth
 import { restEndpointMethods } from "@octokit/plugin-rest-endpoint-methods";
 import { RequestError } from "@octokit/request-error";
 import { idle, once, withRetry } from "@rnx-kit/tools-shell/async";
+import parseGitURL from "git-url-parse";
 import fetch from "node-fetch";
 import * as fs from "node:fs";
 import * as path from "node:path";
@@ -254,18 +255,16 @@ async function watchWorkflowRun(
  * @returns Name and owner of repository if upstream is GitHub; otherwise `undefined`
  */
 export function getRepositoryInfo(
-  upstream = "origin"
+  upstream = "origin",
+  remoteUrl = getRemoteUrl(upstream)
 ): RepositoryInfo | undefined {
-  const remoteUrl = getRemoteUrl(upstream).split(/[/:]/).slice(-3);
-  if (remoteUrl.length !== 3 || !remoteUrl[0].endsWith("github.com")) {
+  const gitUrl = parseGitURL(remoteUrl);
+  if (gitUrl.source !== "github.com") {
     return undefined;
   }
 
-  const repo = remoteUrl[2];
-  return {
-    owner: remoteUrl[1],
-    repo: repo.endsWith(".git") ? repo.substring(0, repo.length - 4) : repo,
-  };
+  const { owner, name: repo } = gitUrl;
+  return { owner, repo };
 }
 
 export async function install(): Promise<number> {
