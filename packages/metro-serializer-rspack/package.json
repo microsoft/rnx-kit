@@ -1,0 +1,57 @@
+{
+  "name": "@rnx-kit/metro-serializer-rspack",
+  "version": "0.2.0",
+  "description": "Rspack serializer for Metro",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/metro-serializer-rspack#readme",
+  "license": "MIT",
+  "author": {
+    "name": "Microsoft Open Source",
+    "email": "microsoftopensource@users.noreply.github.com"
+  },
+  "files": [
+    "lib/**/*.d.ts",
+    "lib/**/*.js"
+  ],
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "packages/metro-serializer-rspack"
+  },
+  "scripts": {
+    "build": "rnx-kit-scripts build",
+    "format": "rnx-kit-scripts format",
+    "lint": "rnx-kit-scripts lint",
+    "test": "rnx-kit-scripts test"
+  },
+  "dependencies": {
+    "@rnx-kit/console": "^2.0.0",
+    "@rnx-kit/tools-react-native": "^2.0.0",
+    "@rspack/core": "^1.0.0",
+    "@swc/helpers": "^0.5.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.20.0",
+    "@babel/preset-env": "^7.20.0",
+    "@react-native/babel-preset": "^0.75.0",
+    "@react-native/metro-config": "^0.75.0",
+    "@rnx-kit/babel-plugin-import-path-remapper": "*",
+    "@rnx-kit/babel-preset-metro-react-native": "*",
+    "@rnx-kit/eslint-config": "*",
+    "@rnx-kit/metro-config": "*",
+    "@rnx-kit/metro-serializer": "*",
+    "@rnx-kit/scripts": "*",
+    "@rnx-kit/tsconfig": "*",
+    "@types/node": "^20.0.0",
+    "eslint": "^8.56.0",
+    "metro": "^0.80.3",
+    "metro-config": "^0.80.3",
+    "metro-transform-worker": "^0.80.0",
+    "prettier": "^3.0.0",
+    "typescript": "^5.0.0"
+  },
+  "engines": {
+    "node": ">=16.17"
+  }
+}

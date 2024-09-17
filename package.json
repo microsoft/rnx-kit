@@ -175,13 +175,22 @@
       "packages/metro-serializer-esbuild": {
         "entry": [
           "metro.config.js",
-          "scripts/**/*.ts",
           "src/index.ts",
           "test/**/*.test.ts"
         ],
         "ignoreDependencies": [
           "@babel/preset-env",
           "@fluentui/utilities"
+        ]
+      },
+      "packages/metro-serializer-rspack": {
+        "entry": [
+          "metro.config.js",
+          "src/*.ts",
+          "test/**/*.test.ts"
+        ],
+        "ignoreDependencies": [
+          "@babel/preset-env"
         ]
       },
       "packages/react-native-auth": {
