@@ -1,8 +1,10 @@
+import type { Capability } from "@rnx-kit/config";
 import type { PackageManifest } from "@rnx-kit/tools-node/package";
 import {
   containsValidPresets,
   findEmptyRequirements,
   isPackageManifest,
+  sanitizeCapabilities,
 } from "../src/config";
 
 jest.mock("@rnx-kit/config");
@@ -91,7 +93,7 @@ describe("findEmptyRequirements()", () => {
 });
 
 describe("isPackageManifest()", () => {
-  test("isPackageManifest() returns true when the object is a PackageManifest", () => {
+  test("returns true when the object is a PackageManifest", () => {
     const manifest: PackageManifest = {
       name: "package name",
       version: "1.0.0",
@@ -99,11 +101,29 @@ describe("isPackageManifest()", () => {
     expect(isPackageManifest(manifest)).toBe(true);
   });
 
-  test("isPackageManifest() returns false when the object is not a PackageManifest", () => {
+  test("returns false when the object is not a PackageManifest", () => {
     expect(isPackageManifest(undefined)).toBe(false);
     expect(isPackageManifest({})).toBe(false);
     expect(isPackageManifest("hello")).toBe(false);
     expect(isPackageManifest({ name: "name but no version" })).toBe(false);
     expect(isPackageManifest({ version: "version but no name" })).toBe(false);
+  });
+});
+
+describe("sanitizeCapabilities()", () => {
+  test("removes illegal names", () => {
+    const capabilities = [
+      "__proto__",
+      "constructor",
+      "prototype",
+      "core",
+    ] as Capability[];
+
+    expect(sanitizeCapabilities(capabilities)).toEqual(["core"]);
+  });
+
+  test("handles empty array", () => {
+    expect(sanitizeCapabilities(undefined)).toEqual([]);
+    expect(sanitizeCapabilities([])).toEqual([]);
   });
 });

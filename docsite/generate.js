@@ -3,8 +3,8 @@ const fs = require("node:fs");
 const path = require("node:path");
 
 const badges = [
-  "https://github.com/microsoft/rnx-kit/actions/workflows",
-  "https://img.shields.io",
+  "https://github\\.com/microsoft/rnx-kit/actions/workflows",
+  "https://img\\.shields\\.io",
 ].map((s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"));
 
 const badgesRE = new RegExp(
