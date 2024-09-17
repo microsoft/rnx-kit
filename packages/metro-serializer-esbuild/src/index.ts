@@ -289,7 +289,7 @@ export function MetroSerializer(
             return undefined;
           }
 
-          // The following features should be safe to enable if we take into
+          // `arrow` and `generator` should be safe to enable if we take into
           // consideration that Hermes does not support classes. They were
           // disabled in esbuild 0.14.49 after the feature compatibility table
           // generator was fixed (see
@@ -297,6 +297,7 @@ export function MetroSerializer(
           return {
             arrow: true,
             generator: true,
+            "template-literal": true, // Used heavily by `styled-components`
           };
         })(),
         write: false,

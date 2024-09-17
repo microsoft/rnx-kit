@@ -48,6 +48,7 @@ describe("metro-serializer-esbuild", () => {
           require.resolve("react-native/package.json")
         ),
         dependencies: {},
+        assets: [],
         commands: [],
         healthChecks: [],
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -307,5 +308,19 @@ describe("metro-serializer-esbuild", () => {
         "var __BUNDLE_START_TIME__=this.nativePerformanceNow?nativePerformanceNow():Date.now(),__DEV__=true,process=this.process||{},__METRO_GLOBAL_PREFIX__=''"
       )
     );
+  });
+
+  it("preserves template literals", async () => {
+    const result = await bundle("test/__fixtures__/templateLiterals.ts");
+    deepEqual(result, [
+      "(() => {",
+      "  // virtual:metro:__rnx_prelude__",
+      '  var global = new Function("return this;")();',
+      "",
+      "  // test/__fixtures__/templateLiterals.ts",
+      "  console.log`Hello`;",
+      "})();",
+      "",
+    ]);
   });
 });
