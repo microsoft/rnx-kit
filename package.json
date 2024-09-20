@@ -109,10 +109,18 @@
           "metro"
         ]
       },
-      "incubator/@react-native-webapis/{battery-status,web-storage}": {
+      "incubator/@react-native-webapis/battery-status": {
         "ignoreDependencies": [
           "@babel/core",
           "@babel/preset-env"
+        ]
+      },
+      "incubator/@react-native-webapis/web-storage": {
+        "ignoreDependencies": [
+          "@babel/core",
+          "@babel/preset-env",
+          "react-native-macos",
+          "react-native-windows"
         ]
       },
       "packages/babel-preset-metro-react-native": {
