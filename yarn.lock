@@ -3269,6 +3269,23 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@react-native-mac/virtualized-lists@npm:0.75.0":
+  version: 0.75.0
+  resolution: "@react-native-mac/virtualized-lists@npm:0.75.0"
+  dependencies:
+    invariant: "npm:^2.2.4"
+    nullthrows: "npm:^1.1.1"
+  peerDependencies:
+    "@types/react": ^18.2.6
+    react: "*"
+    react-native: "*"
+  peerDependenciesMeta:
+    "@types/react":
+      optional: true
+  checksum: 10c0/c2db25aef4f9d7c27bab5d100b43b22f26bf3babe2e85abd5a86ef7bd7e3c2acb183fed5bb95c18eafa5ab99529bcd1d1b59518d967d863f088c806f36f64cb1
+  languageName: node
+  linkType: hard
+
 "@react-native-webapis/battery-status@workspace:incubator/@react-native-webapis/battery-status":
   version: 0.0.0-use.local
   resolution: "@react-native-webapis/battery-status@workspace:incubator/@react-native-webapis/battery-status"
@@ -3304,6 +3321,8 @@ __metadata:
     prettier: "npm:^3.0.0"
     react: "npm:^18.2.0"
     react-native: "npm:^0.75.0"
+    react-native-macos: "npm:^0.75.0"
+    react-native-windows: "npm:^0.75.0"
     typescript: "npm:^5.0.0"
   peerDependencies:
     "@callstack/react-native-visionos": ">=0.73"
@@ -12070,6 +12089,60 @@ __metadata:
   version: 17.0.2
   resolution: "react-is@npm:17.0.2"
   checksum: 10c0/2bdb6b93fbb1820b024b496042cce405c57e2f85e777c9aabd55f9b26d145408f9f74f5934676ffdc46f3dcff656d78413a6e43968e7b3f92eea35b3052e9053
+  languageName: node
+  linkType: hard
+
+"react-native-macos@npm:^0.75.0":
+  version: 0.75.2
+  resolution: "react-native-macos@npm:0.75.2"
+  dependencies:
+    "@jest/create-cache-key-function": "npm:^29.6.3"
+    "@react-native-community/cli": "npm:14.0.0"
+    "@react-native-community/cli-platform-android": "npm:14.0.0"
+    "@react-native-community/cli-platform-ios": "npm:14.0.0"
+    "@react-native-mac/virtualized-lists": "npm:0.75.0"
+    "@react-native/assets-registry": "npm:0.75.2"
+    "@react-native/codegen": "npm:0.75.2"
+    "@react-native/community-cli-plugin": "npm:0.75.2"
+    "@react-native/gradle-plugin": "npm:0.75.2"
+    "@react-native/js-polyfills": "npm:0.75.2"
+    "@react-native/normalize-colors": "npm:0.75.2"
+    abort-controller: "npm:^3.0.0"
+    anser: "npm:^1.4.9"
+    ansi-regex: "npm:^5.0.0"
+    base64-js: "npm:^1.5.1"
+    chalk: "npm:^4.0.0"
+    event-target-shim: "npm:^5.0.1"
+    flow-enums-runtime: "npm:^0.0.6"
+    glob: "npm:^7.1.1"
+    invariant: "npm:^2.2.4"
+    jest-environment-node: "npm:^29.6.3"
+    jsc-android: "npm:^250231.0.0"
+    memoize-one: "npm:^5.0.0"
+    metro-runtime: "npm:^0.80.3"
+    metro-source-map: "npm:^0.80.3"
+    mkdirp: "npm:^0.5.1"
+    nullthrows: "npm:^1.1.1"
+    pretty-format: "npm:^26.5.2"
+    promise: "npm:^8.3.0"
+    react-devtools-core: "npm:^5.3.1"
+    react-refresh: "npm:^0.14.0"
+    regenerator-runtime: "npm:^0.13.2"
+    scheduler: "npm:0.24.0-canary-efb381bbf-20230505"
+    semver: "npm:^7.1.3"
+    stacktrace-parser: "npm:^0.1.10"
+    whatwg-fetch: "npm:^3.0.0"
+    ws: "npm:^6.2.3"
+    yargs: "npm:^17.6.2"
+  peerDependencies:
+    "@types/react": ^18.2.6
+    react: ^18.2.0
+  peerDependenciesMeta:
+    "@types/react":
+      optional: true
+  bin:
+    react-native: cli.js
+  checksum: 10c0/ea11bb7f15eec55c86662b58265bc43b2212745aabcc4e2296a9ae14fddbdf8be34d051a446c366483e8e4671fcc852a337957e392b45e01583a298071b3fbc3
   languageName: node
   linkType: hard
 
