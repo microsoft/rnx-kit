@@ -7,7 +7,6 @@ import * as fs from "fs";
 import type { SerializerConfigT } from "metro-config";
 import * as path from "path";
 import { getModulePath, getSideEffects, isImporting, outputOf } from "./module";
-import { polyfillAsyncIteratorSymbol } from "./polyfills";
 import { absolutizeSourceMap } from "./sourceMap";
 import { assertVersion } from "./version";
 
@@ -214,17 +213,6 @@ export function MetroSerializer(
                 ...options.runBeforeMainModule
                   .filter((value) => dependencies.has(value))
                   .map((value) => `require("${escapePath(value)}");`),
-
-                /**
-                 * Starting with 0.18.8, esbuild lowers async generator
-                 * functions. The polyfill assumes that `Symbol.asyncIterator`
-                 * is defined, which may not always be the case. For instance,
-                 * Hermes currently does not support AsyncIterator.
-                 *
-                 * @see https://github.com/evanw/esbuild/pull/3194
-                 * @see https://github.com/facebook/hermes/issues/820
-                 */
-                polyfillAsyncIteratorSymbol(esbuild, target),
               ].join("\n"),
             };
           }
