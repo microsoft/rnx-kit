@@ -61,13 +61,19 @@
     "@react-native-community/cli-types": "^14.0.0",
     "@rnx-kit/react-native-host": "workspace:*",
     "@vue/compiler-sfc": "link:./incubator/ignore",
-    "react-native-windows/@react-native/assets-registry": "^0.75.1",
-    "react-native-windows/@react-native/codegen": "^0.75.1",
-    "react-native-windows/@react-native/community-cli-plugin": "^0.75.1",
-    "react-native-windows/@react-native/gradle-plugin": "^0.75.1",
-    "react-native-windows/@react-native/js-polyfills": "^0.75.1",
-    "react-native-windows/@react-native/normalize-colors": "^0.75.1",
-    "react-native-windows/@react-native/virtualized-lists": "^0.75.1"
+    "react-native-macos/@react-native/assets-registry": "^0.75.0",
+    "react-native-macos/@react-native/codegen": "^0.75.0",
+    "react-native-macos/@react-native/community-cli-plugin": "^0.75.0",
+    "react-native-macos/@react-native/gradle-plugin": "^0.75.0",
+    "react-native-macos/@react-native/js-polyfills": "^0.75.0",
+    "react-native-macos/@react-native/normalize-colors": "^0.75.0",
+    "react-native-windows/@react-native/assets-registry": "^0.75.0",
+    "react-native-windows/@react-native/codegen": "^0.75.0",
+    "react-native-windows/@react-native/community-cli-plugin": "^0.75.0",
+    "react-native-windows/@react-native/gradle-plugin": "^0.75.0",
+    "react-native-windows/@react-native/js-polyfills": "^0.75.0",
+    "react-native-windows/@react-native/normalize-colors": "^0.75.0",
+    "react-native-windows/@react-native/virtualized-lists": "^0.75.0"
   },
   "workspaces": {
     "packages": [
