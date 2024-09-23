@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/align-deps
 
+## 3.0.1
+
+### Patch Changes
+
+- 04b2f32: Sanitize input capabilities
+
 ## 3.0.0
 
 ### Major Changes

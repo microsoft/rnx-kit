@@ -1,5 +1,14 @@
 # Change Log - @rnx-kit/metro-service
 
+## 4.0.1
+
+### Patch Changes
+
+- 2fc25d4: RAM bundle is deprecated and was removed in 0.75. This command may
+  stop working altogether in the future.
+
+  For more details, see https://github.com/facebook/react-native/pull/43292.
+
 ## 4.0.0
 
 ### Major Changes
