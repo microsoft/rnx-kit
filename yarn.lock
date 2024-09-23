@@ -3651,7 +3651,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rnx-kit/align-deps@npm:^3.0.0, @rnx-kit/align-deps@workspace:packages/align-deps":
+"@rnx-kit/align-deps@npm:^3.0.1, @rnx-kit/align-deps@workspace:packages/align-deps":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/align-deps@workspace:packages/align-deps"
   dependencies:
@@ -3816,7 +3816,7 @@ __metadata:
     "@babel/core": "npm:^7.20.0"
     "@babel/preset-env": "npm:^7.20.0"
     "@react-native-community/cli-types": "npm:^14.0.0"
-    "@rnx-kit/align-deps": "npm:^3.0.0"
+    "@rnx-kit/align-deps": "npm:^3.0.1"
     "@rnx-kit/config": "npm:^0.7.0"
     "@rnx-kit/console": "npm:^2.0.0"
     "@rnx-kit/eslint-config": "npm:*"
@@ -3825,8 +3825,8 @@ __metadata:
     "@rnx-kit/metro-plugin-duplicates-checker": "npm:^3.0.0"
     "@rnx-kit/metro-plugin-typescript": "npm:^0.5.0"
     "@rnx-kit/metro-serializer": "npm:^2.0.0"
-    "@rnx-kit/metro-serializer-esbuild": "npm:^0.2.0"
-    "@rnx-kit/metro-service": "npm:^4.0.0"
+    "@rnx-kit/metro-serializer-esbuild": "npm:^0.2.1"
+    "@rnx-kit/metro-service": "npm:^4.0.1"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/third-party-notices": "npm:^2.0.0"
     "@rnx-kit/tools-android": "npm:^0.2.0"
@@ -4169,7 +4169,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rnx-kit/metro-serializer-esbuild@npm:*, @rnx-kit/metro-serializer-esbuild@npm:^0.2.0, @rnx-kit/metro-serializer-esbuild@workspace:*, @rnx-kit/metro-serializer-esbuild@workspace:packages/metro-serializer-esbuild":
+"@rnx-kit/metro-serializer-esbuild@npm:*, @rnx-kit/metro-serializer-esbuild@npm:^0.2.1, @rnx-kit/metro-serializer-esbuild@workspace:*, @rnx-kit/metro-serializer-esbuild@workspace:packages/metro-serializer-esbuild":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/metro-serializer-esbuild@workspace:packages/metro-serializer-esbuild"
   dependencies:
@@ -4226,7 +4226,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rnx-kit/metro-service@npm:*, @rnx-kit/metro-service@npm:^4.0.0, @rnx-kit/metro-service@workspace:packages/metro-service":
+"@rnx-kit/metro-service@npm:*, @rnx-kit/metro-service@npm:^4.0.1, @rnx-kit/metro-service@workspace:packages/metro-service":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/metro-service@workspace:packages/metro-service"
   dependencies:

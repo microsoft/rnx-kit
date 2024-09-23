@@ -1,5 +1,18 @@
 # Change Log - @rnx-kit/cli
 
+## 0.18.1
+
+### Patch Changes
+
+- b6a18d9: Always write output when on CI
+- Updated dependencies [2fc25d4]
+- Updated dependencies [325beb9]
+- Updated dependencies [20f6de0]
+- Updated dependencies [04b2f32]
+  - @rnx-kit/metro-service@4.0.1
+  - @rnx-kit/metro-serializer-esbuild@0.2.1
+  - @rnx-kit/align-deps@3.0.1
+
 ## 0.18.0
 
 ### Minor Changes

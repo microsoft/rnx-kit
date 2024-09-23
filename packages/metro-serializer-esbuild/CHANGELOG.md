@@ -1,5 +1,14 @@
 # Change Log - @rnx-kit/metro-serializer-esbuild
 
+## 0.2.1
+
+### Patch Changes
+
+- 325beb9: Removed unused polyfill for `Symbol.asyncIterator`
+- 20f6de0: Do not lower template literals. Template literals are partially
+  supported by Hermes for most of the use cases we care about (e.g.,
+  `styled-components`).
+
 ## 0.2.0
 
 ### Minor Changes

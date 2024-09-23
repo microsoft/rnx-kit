@@ -1,5 +1,11 @@
 # @rnx-kit/build
 
+## 0.7.2
+
+### Patch Changes
+
+- c4056df: Properly parse Git URLs
+
 ## 0.7.1
 
 ### Patch Changes
