@@ -14,9 +14,21 @@ export function runBuild(
   buildParams: AppleBuildParams,
   logger: Ora
 ): Promise<BuildResult> {
-  return import("@rnx-kit/tools-apple").then(({ xcodebuild }) => {
-    const log = (message: string) => logger.info(message);
-    const build = xcodebuild(xcworkspace, buildParams, log);
-    return watch(build, logger, () => ({ xcworkspace, args: build.spawnargs }));
-  });
+  return import("@rnx-kit/tools-apple").then(
+    ({ checkPodsManifestLock, xcodebuild }) => {
+      if (!checkPodsManifestLock(xcworkspace)) {
+        logger.fail(
+          "CocoaPods sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation."
+        );
+        return Promise.resolve(1);
+      }
+
+      const log = (message: string) => logger.info(message);
+      const build = xcodebuild(xcworkspace, buildParams, log);
+      return watch(build, logger, () => ({
+        xcworkspace,
+        args: build.spawnargs,
+      }));
+    }
+  );
 }

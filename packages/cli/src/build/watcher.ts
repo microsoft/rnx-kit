@@ -25,7 +25,7 @@ export function watch<T>(
         logger.succeed("Build succeeded");
         resolve(onSuccess());
       } else {
-        logger.fail(Buffer.concat(errors).toString());
+        logger.fail(Buffer.concat(errors).toString().trim());
         process.exitCode = code ?? 1;
         resolve(code);
       }

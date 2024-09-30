@@ -20,6 +20,11 @@
       "typescript": "./src/index.ts",
       "default": "./lib/index.js"
     },
+    "./cocoapods": {
+      "types": "./lib/cocoapods.d.ts",
+      "typescript": "./src/cocoapods.ts",
+      "default": "./lib/cocoapods.js"
+    },
     "./ios": {
       "types": "./lib/ios.d.ts",
       "typescript": "./src/ios.ts",
