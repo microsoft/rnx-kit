@@ -138,6 +138,10 @@ jobs:
           if [[ "$(yarn show-affected --base origin/${{ github.base_ref }})" = *"@rnx-kit/test-app"* ]]; then
             echo 'ios=true' >> $GITHUB_OUTPUT
           fi
+      - name: Install Ccache
+        if: ${{ steps.affected-projects.outputs.ios != '' }}
+        run: |
+          brew install ccache
       - name: Build @rnx-kit/cli
         if: ${{ steps.affected-projects.outputs.ios != '' }}
         run: |
@@ -151,7 +155,10 @@ jobs:
       - name: Build iOS app
         if: ${{ steps.affected-projects.outputs.ios != '' }}
         run: |
-          yarn build:ios | xcbeautify
+          export CCACHE_DIR="$(git rev-parse --show-toplevel)/.ccache"
+          ccache --zero-stats 1> /dev/null
+          yarn build:ios --ccache-dir "$CCACHE_DIR" --ccache-home /opt/homebrew/opt/ccache | xcbeautify
+          ccache --show-stats --verbose
         working-directory: packages/test-app
   build-website:
     name: "Build the website"

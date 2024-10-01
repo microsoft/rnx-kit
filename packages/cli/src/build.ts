@@ -1,6 +1,7 @@
 import type { Config } from "@react-native-community/cli-types";
 import { InvalidArgumentError } from "commander";
 import { buildAndroid } from "./build/android";
+import { setCcacheDir, setCcacheHome } from "./build/ccache";
 import { buildIOS } from "./build/ios";
 import { buildMacOS } from "./build/macos";
 import type {
@@ -99,6 +100,16 @@ export const rnxBuildCommand = {
         "Destination of the built app; 'device', 'emulator', or 'simulator'",
       default: "simulator",
       parse: asDestination,
+    },
+    {
+      name: "--ccache-dir <string>",
+      description: "Path to Ccache config",
+      parse: setCcacheDir,
+    },
+    {
+      name: "--ccache-home <string>",
+      description: "Path to Ccache installation",
+      parse: setCcacheHome,
     },
   ],
 };
