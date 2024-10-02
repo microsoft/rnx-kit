@@ -1,3 +1,4 @@
+export { checkPodsManifestLock } from "./cocoapods.js";
 export {
   bootSimulator,
   getAvailableSimulators,
