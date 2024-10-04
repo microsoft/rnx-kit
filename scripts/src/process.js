@@ -28,7 +28,7 @@ function workspaceRoot() {
  * @param {SpawnOptions=} options
  * @returns {Promise<void>}
  */
-export function spawn(command, args, options) {
+function spawn(command, args, options) {
   return new Promise((resolve, reject) => {
     /** @type {SpawnOptions} */
     const opts = {
@@ -69,15 +69,4 @@ export function execute(command, ...args) {
 export function runScript(command, ...args) {
   const yarn = os.platform() === "win32" ? "yarn.cmd" : "yarn";
   return execute(yarn, command, ...args);
-}
-
-/**
- * @param {...(() => Promise<void>)} scripts
- * @returns {Promise<void>}
- */
-export function sequence(...scripts) {
-  return scripts.reduce(
-    (result, script) => result.then(() => script()),
-    Promise.resolve()
-  );
 }

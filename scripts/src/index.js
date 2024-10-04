@@ -16,8 +16,7 @@ import { updateApiReadme } from "./commands/updateApiReadme.js";
  */
 function init(commands) {
   const parser = yargs(process.argv.slice(2));
-  Object.keys(commands).forEach((name) => {
-    const { description, command } = commands[name];
+  for (const [name, { description, command }] of Object.entries(commands)) {
     parser.command(name, description, {}, async (args) => {
       try {
         await command(args, process.argv.slice(3));
@@ -28,7 +27,7 @@ function init(commands) {
         process.exitCode = 1;
       }
     });
-  });
+  }
   return parser.help().demandCommand().argv;
 }
 
