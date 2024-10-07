@@ -1,5 +1,14 @@
 # Change Log - @rnx-kit/cli
 
+## 0.18.2
+
+### Patch Changes
+
+- 4b6ba94: Add Ccache support
+- cc857ea: Check Pods Manifest.lock earlier
+- Updated dependencies [cc857ea]
+  - @rnx-kit/tools-apple@0.2.1
+
 ## 0.18.1
 
 ### Patch Changes

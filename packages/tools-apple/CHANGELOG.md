@@ -1,5 +1,12 @@
 # @rnx-kit/tools-apple
 
+## 0.2.1
+
+### Patch Changes
+
+- cc857ea: Added a new function, `checkPodsManifestLock`, for checking whether
+  the CocoaPods sandbox is in sync with its `Podfile.lock`
+
 ## 0.2.0
 
 ### Minor Changes

@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/eslint-plugin
 
+## 0.8.1
+
+### Patch Changes
+
+- 55a4b5e: Bumped `@react-native/eslint-plugin` to 0.75
+
 ## 0.8.0
 
 ### Minor Changes

@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/tools-apple",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "A collection of functions for deploying apps on iOS or macOS",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/tools-apple#readme",
   "license": "MIT",
