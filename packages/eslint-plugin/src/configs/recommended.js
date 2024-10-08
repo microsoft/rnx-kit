@@ -2,7 +2,16 @@
 "use strict";
 
 const { FlatCompat } = require("@eslint/eslintrc");
-const js = require("@eslint/js");
+const js = (() => {
+  const path = require("node:path");
+  try {
+    const eslint = path.dirname(require.resolve("eslint/package.json"));
+    const eslintjs = require.resolve("@eslint/js", { paths: [eslint] });
+    return require(eslintjs);
+  } catch (_) {
+    return require("@eslint/js");
+  }
+})();
 const tseslint = require("typescript-eslint");
 
 const compat = new FlatCompat({
