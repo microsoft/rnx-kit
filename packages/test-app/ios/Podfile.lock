@@ -1484,7 +1484,7 @@ PODS:
   - ReactTestApp-MSAL (4.0.0):
     - MSAL
   - ReactTestApp-Resources (1.0.0-dev)
-  - RNWWebStorage (0.3.0):
+  - RNWWebStorage (0.3.1):
     - DoubleConversion
     - glog
     - RCT-Folly (= 2024.01.01.00)
@@ -1786,7 +1786,7 @@ SPEC CHECKSUMS:
   ReactTestApp-DevSupport: 74676edd899013becce4eaecc5eabba1fc51e26e
   ReactTestApp-MSAL: a7ac8e821fce95fc4e27cd91cf2a931b277ffef3
   ReactTestApp-Resources: a4cc1f968cd26bdbd18ee0bfbd0ab8dd0ea90101
-  RNWWebStorage: 39af6c7aa24a9360372280338e0f5900630779a2
+  RNWWebStorage: 16ea67c1467a5b91c2859c490bec800f001adf78
   RNXAuth: 7716515bc74149d226d798138f2d76af9f34427f
   SocketRocket: abac6f5de4d4d62d24e11868d7a2f427e0ef940d
   Yoga: 4ef80d96a5534f0e01b3055f17d1e19a9fc61b63
