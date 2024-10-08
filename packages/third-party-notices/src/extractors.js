@@ -125,7 +125,7 @@ function _getSpdxLicenseInformation(license, moduleName) {
     if (tree.right) {
       licenses = licenses.concat(_getSpdxLicenseInformation(tree.right));
     }
-  } catch (e) {
+  } catch (_) {
     if (license.toUpperCase() !== "UNLICENSED") {
       console.warn(
         `WARNING: Unable to parse license "${license}" in ${moduleName}`

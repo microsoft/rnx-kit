@@ -152,7 +152,7 @@ export function loadConfig(
       customProfiles,
       manifest,
     };
-  } catch (e) {
+  } catch (_) {
     return "invalid-configuration";
   }
 }

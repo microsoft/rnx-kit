@@ -16,5 +16,5 @@ function listFiles(...patterns) {
 /** @type {import("../process.js").Command} */
 export async function lint(_args, rawArgs = ["--no-warn-ignored"]) {
   const files = listFiles("*.cjs", "*.js", "*.jsx", "*.mjs", "*.ts", "*.tsx");
-  await runScript("eslint", ...files, ...rawArgs);
+  await runScript("eslint", "--no-warn-ignored", ...files, ...rawArgs);
 }

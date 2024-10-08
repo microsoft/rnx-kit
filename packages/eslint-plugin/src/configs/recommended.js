@@ -51,14 +51,19 @@ module.exports = [
       "@rnx-kit/no-export-all": "warn",
       "@typescript-eslint/consistent-type-imports": [
         "error",
-        {
-          disallowTypeAnnotations: false,
-        },
+        { disallowTypeAnnotations: false },
       ],
+      "@typescript-eslint/no-require-imports": "off",
+      "@typescript-eslint/no-unused-expressions": "off", // Catches valid expressions like template literals
       "@typescript-eslint/no-unused-vars": [
         "error",
         {
+          args: "all",
           argsIgnorePattern: "^_",
+          caughtErrors: "all",
+          caughtErrorsIgnorePattern: "^_",
+          destructuredArrayIgnorePattern: "^_",
+          varsIgnorePattern: "^_",
           ignoreRestSiblings: true,
         },
       ],
