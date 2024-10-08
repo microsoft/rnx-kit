@@ -59,7 +59,7 @@ export async function isDevServerRunning(
       statusResponse.headers.get("X-React-Native-Project-Root") === projectRoot
       ? "already_running"
       : "in_use";
-  } catch (e) {
+  } catch (_) {
     return "unknown";
   }
 }

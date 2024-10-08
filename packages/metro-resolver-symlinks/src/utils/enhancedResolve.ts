@@ -96,7 +96,7 @@ function resolveAsset(
           filePaths: assets,
         };
       }
-    } catch (e) {
+    } catch (_) {
       //
     }
   }

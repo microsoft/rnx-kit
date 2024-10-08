@@ -93,7 +93,7 @@ export function applyPatchEmbedded({
         dryRun: false,
       }
     );
-  } catch (e) {
+  } catch (_) {
     try {
       executeEffects(
         reverse ? patch : reversePatch(patch),
