@@ -251,7 +251,7 @@ function exclusionList(additionalExclusions = [], projectRoot = process.cwd()) {
     /.*\/(\.vs|\.vscode|Pods)\/.*/,
 
     // Ignore unrelated file changes
-    /.*\.(apk|appx|bak|bat|binlog|c|cache|cc|class|cpp|cs|dex|dll|env|exe|flat|gz|h|hpp|jar|lock|m|mm|modulemap|o|obj|pch|pdb|plist|pbxproj|sh|so|tflite|tgz|tlog|xcconfig|xcscheme|xcworkspacedata|zip)$/,
+    /.*\.(a|apk|appx|bak|bat|binlog|bundle|c|cache|cc|class|cpp|cs|dex|dll|env|exe|flat|gz|h|hpp|jar|lock|m|mm|modulemap|noindex|o|obj|pch|pdb|plist|pbxproj|sh|so|tflite|tgz|tlog|xcconfig|xcscheme|xcworkspacedata|zip)$/,
 
     ...additionalExclusions,
   ]);
