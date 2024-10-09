@@ -1,5 +1,12 @@
 # Change Log - @rnx-kit/eslint-plugin
 
+## 0.8.2
+
+### Patch Changes
+
+- 05c6b97: Bumped `typescript-eslint` to 8.0
+- d091088: Avoid dupes of `@eslint/js`
+
 ## 0.8.1
 
 ### Patch Changes
