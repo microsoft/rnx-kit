@@ -65,3 +65,8 @@ jobs:
           publish_dir: ./docsite/build
           user_name: github-actions[bot]
           user_email: 41898282+github-actions[bot]@users.noreply.github.com
+            - name: Appium Server Action
+  # You may pin to the exact commit or the version.
+  # uses: moatazeldebsy/Appium-Server-GitHub-Action@83ca930a0d803c6760a15e5394e0f3ba1abad75c
+  uses: moatazeldebsy/Appium-Server-GitHub-Action@V1.0.7
+          
