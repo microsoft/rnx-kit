@@ -225,7 +225,16 @@ export async function rnxStart(
   // in interactive mode, listen for keyboard events from stdin and bind
   // them to specific actions.
   if (interactive) {
-    attachKeyHandlers({ devServerUrl, help, messageSocketEndpoint, terminal });
+    attachKeyHandlers(serverInstance, {
+      devServerUrl,
+      help,
+      messageSocketEndpoint,
+      metroTerminal: {
+        terminal,
+        reporter: terminalReporter,
+      },
+      reactNativePath: ctx.reactNativePath,
+    });
   }
 }
 
