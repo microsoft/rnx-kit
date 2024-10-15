@@ -29,5 +29,6 @@ import * as commandTools from "@rnx-kit/tools-shell/command";
 | command  | `ensureInstalled(check, message)`   | Throws if the provided command fails.                                                                   |
 | command  | `makeCommand(command, userOptions)` | Creates an async function for calling the specified command.                                            |
 | command  | `makeCommandSync(command)`          | Creates a synchronous function for calling the specified command.                                       |
+| untar    | `untar(archive)`                    | Invokes `tar xf`.                                                                                       |
 
 <!-- @rnx-kit/api end -->
