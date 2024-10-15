@@ -7,7 +7,7 @@ type FirebaseConfig = Partial<{
 
 function validateConfig(
   config: FirebaseConfig | undefined
-): config is FirebaseConfig {
+): asserts config is FirebaseConfig {
   if (!config) {
     throw new Error("Missing Firebase configuration");
   }
@@ -31,16 +31,12 @@ function validateConfig(
   } else if (typeof appId !== "string") {
     throw new Error(`Invalid Firebase app id: ${appId}`);
   }
-
-  return true;
 }
 
 export const distribution: PluginInterface["distribution"] = (
   config?: FirebaseConfig
 ) => {
-  if (!validateConfig(config)) {
-    throw new Error("Invalid Firebase config");
-  }
+  validateConfig(config);
 
   return {
     deploy: (_context, _artifact, spinner) => {

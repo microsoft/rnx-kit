@@ -30,6 +30,11 @@
       "typescript": "./src/command.ts",
       "default": "./lib/command.js"
     },
+    "./untar": {
+      "types": "./lib/untar.d.ts",
+      "typescript": "./src/untar.ts",
+      "default": "./lib/untar.js"
+    },
     "./package.json": "./package.json"
   },
   "repository": {

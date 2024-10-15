@@ -5,3 +5,4 @@ export {
   makeCommand,
   makeCommandSync,
 } from "./command.js";
+export { untar } from "./untar.js";
