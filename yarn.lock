@@ -4066,12 +4066,10 @@ __metadata:
     "@rnx-kit/tsconfig": "npm:*"
     "@rnx-kit/typescript-service": "npm:^2.0.0"
     "@types/node": "npm:^20.0.0"
-    "@types/semver": "npm:^7.0.0"
     eslint: "npm:^8.56.0"
     jest: "npm:^29.2.1"
     metro: "npm:^0.80.3"
     prettier: "npm:^3.0.0"
-    semver: "npm:^7.0.0"
     typescript: "npm:>=4.7.0"
   languageName: unknown
   linkType: soft
