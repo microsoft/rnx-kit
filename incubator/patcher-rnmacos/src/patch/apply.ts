@@ -129,7 +129,6 @@ function applyPatch(
 
   for (const hunk of hunks) {
     let fuzzingOffset = 0;
-    // eslint-disable-next-line no-constant-condition
     while (true) {
       const modifications = evaluateHunk(hunk, fileLines, fuzzingOffset);
       if (modifications) {

@@ -1,21 +1,23 @@
-const { FlatCompat } = require("@eslint/eslintrc");
-const js = require("@eslint/js");
+const sdl = require("@microsoft/eslint-plugin-sdl");
 const rnx = require("@rnx-kit/eslint-plugin");
 
-const compat = new FlatCompat({
-  // Use `@rnx-kit/eslint-plugin` as base directory to ensure we get the same
-  // plugin instances
-  baseDirectory: require.resolve("@rnx-kit/eslint-plugin/package.json"),
-  recommendedConfig: js.configs.recommended,
-});
-
+/**
+ * Note that we don't directly use `sdl.configs.required` because:
+ *
+ *   1. It includes rules for Angular and Electron
+ *   2. Its `react` preset conflicts with our direct use of `eslint-plugin-react`
+ *
+ * https://github.com/microsoft/eslint-plugin-sdl/blob/957996315c80fdadcd1a9f7bb76fc4663d33ef1e/lib/index.js#L47-L54
+ */
 module.exports = [
+  ...sdl.configs.common,
+  ...sdl.configs.node,
   ...rnx.configs.strict,
   ...rnx.configs.stylistic,
-  ...compat.extends("plugin:@microsoft/sdl/required"),
   {
     rules: {
       "@typescript-eslint/consistent-type-definitions": ["error", "type"],
+      ...sdl.configs.react[0].rules,
     },
   },
 ];

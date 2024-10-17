@@ -46,7 +46,7 @@
     "@rnx-kit/tsconfig": "*",
     "@types/babel__core": "^7.0.0",
     "@types/connect": "^3.4.36",
-    "eslint": "^8.56.0",
+    "eslint": "^9.0.0",
     "metro": "^0.80.3",
     "metro-config": "^0.80.3",
     "metro-resolver": "^0.80.3",

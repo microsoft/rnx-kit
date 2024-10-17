@@ -1,23 +1,8 @@
 // @ts-check
 "use strict";
 
-const { FlatCompat } = require("@eslint/eslintrc");
-const js = (() => {
-  const path = require("node:path");
-  try {
-    const eslint = path.dirname(require.resolve("eslint/package.json"));
-    const eslintjs = require.resolve("@eslint/js", { paths: [eslint] });
-    return require(eslintjs);
-  } catch (_) {
-    return require("@eslint/js");
-  }
-})();
 const tseslint = require("typescript-eslint");
-
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-  recommendedConfig: js.configs.recommended,
-});
+const eslint = require("./eslint");
 
 /**
  * @param {string} spec
@@ -32,11 +17,10 @@ function isInstalled(spec) {
 }
 
 const usesReact = isInstalled("react");
-const reactConfigs = usesReact
-  ? compat.extends("plugin:react-hooks/recommended", "plugin:react/recommended")
-  : [];
+const reactConfigs = usesReact ? require("./react") : [];
 
 module.exports = [
+  eslint.configs.recommended,
   ...tseslint.configs.recommended,
   ...reactConfigs,
   {
@@ -68,6 +52,7 @@ module.exports = [
         },
       ],
       "@typescript-eslint/no-var-requires": "off",
+      "no-undef": "off",
       ...(usesReact ? { "react/prop-types": "off" } : {}),
     },
     settings: {
