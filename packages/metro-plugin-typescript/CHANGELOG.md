@@ -1,5 +1,11 @@
 # @rnx-kit/metro-plugin-typescript
 
+## 0.5.1
+
+### Patch Changes
+
+- d430f99: Fix beta versions of TypeScript failing version check
+
 ## 0.5.0
 
 ### Minor Changes
