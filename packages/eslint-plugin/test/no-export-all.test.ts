@@ -117,12 +117,10 @@ describe("disallows `export *`", () => {
       {
         code: "export * from 'recall';",
         errors: 1,
-        output: "export * from 'recall';",
       },
       {
         code: "export * from 'this-package-does-not-exist';",
         errors: 1,
-        output: "export * from 'this-package-does-not-exist';",
       },
       {
         code: "export * from 'types';",
