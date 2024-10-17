@@ -22,8 +22,8 @@
     "format": "prettier --write --log-level error README.md index.js package.json"
   },
   "dependencies": {
-    "@eslint/eslintrc": "^2.1.4",
-    "@eslint/js": "^8.56.0",
+    "@eslint/eslintrc": "^3.0.0",
+    "@eslint/js": "^9.0.0",
     "@rnx-kit/eslint-plugin": "workspace:*"
   },
   "peerDependencies": {

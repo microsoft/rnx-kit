@@ -49,7 +49,7 @@
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*",
     "@types/node": "^20.0.0",
-    "eslint": "^8.56.0",
+    "eslint": "^9.0.0",
     "lodash-es": "^4.17.21",
     "metro": "^0.80.3",
     "metro-config": "^0.80.3",
