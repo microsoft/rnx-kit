@@ -16,14 +16,14 @@ function isInstalled(spec) {
   }
 }
 
-const usesReact = isInstalled("react");
-const reactConfigs = usesReact ? require("./react") : [];
+const reactConfigs = isInstalled("react") ? require("./react") : [];
 
 module.exports = [
   eslint.configs.recommended,
   ...tseslint.configs.recommended,
   ...reactConfigs,
   {
+    name: "rnx-kit/recommended",
     plugins: {
       // @ts-expect-error No declaration file for module
       "@react-native": require("@react-native/eslint-plugin"),
@@ -53,12 +53,6 @@ module.exports = [
       ],
       "@typescript-eslint/no-var-requires": "off",
       "no-undef": "off",
-      ...(usesReact ? { "react/prop-types": "off" } : {}),
-    },
-    settings: {
-      react: {
-        version: "detect",
-      },
     },
   },
 ];
