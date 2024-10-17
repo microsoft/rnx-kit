@@ -13,4 +13,15 @@ const compat = new FlatCompat({
 module.exports = [
   ...compat.extends("plugin:react-hooks/recommended"),
   react.configs.flat.recommended,
+  {
+    name: "rnx-kit/react",
+    rules: {
+      "react/prop-types": "off",
+    },
+    settings: {
+      react: {
+        version: "detect",
+      },
+    },
+  },
 ];
