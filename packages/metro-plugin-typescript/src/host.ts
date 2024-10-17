@@ -1,7 +1,6 @@
 import { getAvailablePlatforms } from "@rnx-kit/tools-react-native";
 import type { AllPlatforms } from "@rnx-kit/tools-react-native/platform";
 import { platformExtensions } from "@rnx-kit/tools-react-native/platform";
-import semverSatisfies from "semver/functions/satisfies";
 import ts from "typescript";
 import {
   resolveModuleNameLiterals,
@@ -10,6 +9,7 @@ import {
   resolveTypeReferenceDirectives,
 } from "./resolver";
 import type { ResolverContext } from "./types";
+import { greaterThanOrEqualTo } from "./version";
 
 const DEFAULT_PACKAGE_NAME = "react-native";
 
@@ -68,7 +68,7 @@ export function createEnhanceLanguageServiceHost(
    * is available. We use this to configure the built-in module resolver for
    * React Native projects.
    */
-  if (!semverSatisfies(tsVersion, ">=4.7.0")) {
+  if (!greaterThanOrEqualTo(tsVersion, "4.7.0")) {
     throw new Error("TypeScript >=4.7 is required");
   }
 
@@ -93,7 +93,7 @@ export function createEnhanceLanguageServiceHost(
       ),
     };
 
-    if (semverSatisfies(tsVersion, ">=5.0")) {
+    if (greaterThanOrEqualTo(tsVersion, "5.0.0")) {
       host.resolveModuleNameLiterals = (...args) =>
         resolveModuleNameLiterals(context, ...args);
       host.resolveTypeReferenceDirectiveReferences = (...args) =>

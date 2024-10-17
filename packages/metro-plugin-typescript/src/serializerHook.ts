@@ -4,17 +4,17 @@ import { normalizePath } from "@rnx-kit/tools-node/path";
 import { getMetroVersion } from "@rnx-kit/tools-react-native/metro";
 import type { AllPlatforms } from "@rnx-kit/tools-react-native/platform";
 import type { Project } from "@rnx-kit/typescript-service";
-import * as semver from "semver";
 import { createProjectCache } from "./projectCache";
 import type { SerializerHook } from "./types";
+import { greaterThanOrEqualTo } from "./version";
 
-function checkMetroVersion(requiredVersion: string): string | undefined {
+function requireMetroVersion(requiredVersion: string): string | undefined {
   const version = getMetroVersion();
   if (!version) {
     return `Metro version ${requiredVersion} is required`;
   }
 
-  if (!semver.satisfies(version, requiredVersion)) {
+  if (!greaterThanOrEqualTo(version, requiredVersion)) {
     return `Metro version ${requiredVersion} is required; got ${version}`;
   }
 
@@ -43,7 +43,7 @@ export function TypeScriptPlugin(
   // TypeScript plugin requires the `transformOptions` property that was added
   // in 0.66.1. If the version is older, disable the plugin. See
   // https://github.com/facebook/metro/commit/57106d273690bbcad0a795b337e43252edbc1091
-  const unsupportedMetroVersion = checkMetroVersion(">=0.66.1");
+  const unsupportedMetroVersion = requireMetroVersion("0.66.1");
   if (unsupportedMetroVersion) {
     warn(`TypeScriptPlugin disabled: ${unsupportedMetroVersion}`);
     return () => void 0;
