@@ -1,5 +1,12 @@
 # Change Log - @rnx-kit/eslint-plugin
 
+## 0.8.3
+
+### Patch Changes
+
+- 57013d2: Bumped `eslint-plugin-react` and `eslint-plugin-react-hooks` to
+  better support ESLint 9.x
+
 ## 0.8.2
 
 ### Patch Changes
