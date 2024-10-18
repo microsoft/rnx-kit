@@ -1,5 +1,12 @@
 # Change Log - @rnx-kit/eslint-plugin
 
+## 0.8.4
+
+### Patch Changes
+
+- ca0052f: Inline recommended `react-hooks` rules so we no longer have to depend
+  on `@eslint/eslintrc`
+
 ## 0.8.3
 
 ### Patch Changes
