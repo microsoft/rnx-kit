@@ -2147,7 +2147,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@eslint/eslintrc@npm:^3.0.0, @eslint/eslintrc@npm:^3.1.0":
+"@eslint/eslintrc@npm:^3.1.0":
   version: 3.1.0
   resolution: "@eslint/eslintrc@npm:3.1.0"
   dependencies:
@@ -3951,14 +3951,12 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/eslint-plugin@workspace:packages/eslint-plugin"
   dependencies:
-    "@eslint/eslintrc": "npm:^3.0.0"
     "@react-native/eslint-plugin": "npm:^0.75.0"
     "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/jest-preset": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
     "@types/eslint": "npm:^9.0.0"
-    "@types/eslint__eslintrc": "npm:^2.1.1"
     "@types/eslint__js": "npm:^8.0.0"
     "@types/estree": "npm:*"
     "@types/jest": "npm:^29.2.1"
@@ -4863,15 +4861,6 @@ __metadata:
     "@types/estree": "npm:*"
     "@types/json-schema": "npm:*"
   checksum: 10c0/69ba24fee600d1e4c5abe0df086c1a4d798abf13792d8cfab912d76817fe1a894359a1518557d21237fbaf6eda93c5ab9309143dee4c59ef54336d1b3570420e
-  languageName: node
-  linkType: hard
-
-"@types/eslint__eslintrc@npm:^2.1.1":
-  version: 2.1.2
-  resolution: "@types/eslint__eslintrc@npm:2.1.2"
-  dependencies:
-    "@types/eslint": "npm:*"
-  checksum: 10c0/ccbeb74886fbbee1b016ed9c920ad932cb0b970c42eec4cea27e04c2640d5a92c20e44d4610de73551c4c8f658963a769ddc9fd75eac72edf33f035129600637
   languageName: node
   linkType: hard
 
