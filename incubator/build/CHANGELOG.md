@@ -1,5 +1,11 @@
 # @rnx-kit/build
 
+## 0.7.3
+
+### Patch Changes
+
+- 419f2ae: Make `@rnx-kit/build` public
+
 ## 0.7.2
 
 ### Patch Changes
