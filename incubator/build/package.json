@@ -1,5 +1,4 @@
 {
-  "private": true,
   "name": "@rnx-kit/build",
   "version": "0.7.2",
   "description": "EXPERIMENTAL - USE WITH CAUTION - @rnx-kit/build builds your app in the cloud",
@@ -21,13 +20,33 @@
       "types": "./lib/index.d.ts",
       "import": "./lib/index.js"
     },
+    "./build": {
+      "types": "./lib/build.d.ts",
+      "import": "./lib/build.js"
+    },
+    "./constants": {
+      "types": "./lib/constants.d.ts",
+      "import": "./lib/constants.js"
+    },
+    "./distribution": {
+      "types": "./lib/distribution.d.ts",
+      "import": "./lib/distribution.js"
+    },
     "./git": {
       "types": "./lib/git.d.ts",
       "import": "./lib/git.js"
     },
+    "./packageManager": {
+      "types": "./lib/packageManager.d.ts",
+      "import": "./lib/packageManager.js"
+    },
     "./qrcode": {
       "types": "./lib/qrcode.d.ts",
       "import": "./lib/qrcode.js"
+    },
+    "./remotes": {
+      "types": "./lib/remotes.d.ts",
+      "import": "./lib/remotes.js"
     },
     "./types": {
       "types": "./lib/types.d.ts"
