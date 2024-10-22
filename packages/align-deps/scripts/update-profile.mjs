@@ -1,9 +1,11 @@
 #!/usr/bin/env node
 // @ts-check
 
+import { untar } from "@rnx-kit/tools-shell";
 import * as fs from "node:fs";
+import * as https from "node:https";
 import * as path from "node:path";
-import { URL } from "node:url";
+import { URL, fileURLToPath } from "node:url";
 import packageJson from "package-json";
 import semverCoerce from "semver/functions/coerce.js";
 import semverCompare from "semver/functions/compare.js";
@@ -19,6 +21,7 @@ import semverCompare from "semver/functions/compare.js";
  *   latest: string;
  *   modified: string;
  *   homepage?: string;
+ *   tarball: string;
  *   dependencies?: Record<string, string>;
  *   peerDependencies?: Record<string, string>;
  * }} PackageInfo
@@ -59,6 +62,7 @@ async function fetchPackageInfo(pkg, targetVersion = "latest") {
   const {
     version: latest,
     homepage,
+    dist: { tarball },
     dependencies,
     peerDependencies,
     time,
@@ -76,6 +80,7 @@ async function fetchPackageInfo(pkg, targetVersion = "latest") {
     homepage,
     dependencies: Optional(dependencies),
     peerDependencies: Optional(peerDependencies),
+    tarball,
   };
 }
 
@@ -193,6 +198,11 @@ const reactNative: Package = {
 
 export const profile: Profile = {
   ...profile_${currentVersionVarName},
+
+  /*********
+   * React *
+   *********/
+
   react: {
     name: "react",
     version: "${reactVersion}",
@@ -208,6 +218,10 @@ export const profile: Profile = {
     capabilities: ["react"],
     devOnly: true,
   },
+
+  /********
+   * Core *
+   ********/
 
   core: reactNative,
   "core-android": reactNative,
@@ -232,6 +246,10 @@ export const profile: Profile = {
     version: "^${targetVersion}.0",
     devOnly: true,
   },
+
+  /*********
+   * Tools *
+   *********/
 
   "babel-preset-react-native": {
     name: "${babelPresetName}",
@@ -284,6 +302,10 @@ export const profile: Profile = {
     version: "^${metroVersion}",
     devOnly: true,
   },
+
+  /*********************
+   * Community Modules *
+   *********************/
 };
 `;
 }
@@ -294,93 +316,115 @@ export const profile: Profile = {
  * @returns {Promise<string>}
  */
 async function getCurrentMetroVersion(dependencies) {
-  const metroVersionDependencyChains = [
-    // 0.73+
-    ["@react-native/community-cli-plugin"],
-    // 0.65 - 0.72
-    ["@react-native-community/cli", "@react-native-community/cli-plugin-metro"],
-  ];
+  const chain = ["react-native", "@react-native/community-cli-plugin"];
+  const deps = await chain.reduce(
+    (p, packageName) =>
+      p.then(async (dependencies) => {
+        if (!dependencies) {
+          return undefined;
+        }
 
-  for (const chain of metroVersionDependencyChains) {
-    const deps = await chain.reduce(
-      (p, packageName) =>
-        p.then(async (dependencies) => {
-          if (!dependencies) {
-            return undefined;
-          }
-
-          try {
+        try {
+          const packageInfo = await packageJson(packageName, {
+            version: getPackageVersion(packageName, dependencies),
+            fullMetadata: true,
+          });
+          return Optional(packageInfo.dependencies);
+        } catch (e) {
+          if (e.code === "ETARGET" || e.name === "VersionNotFoundError") {
+            // Some packages, such as `@react-native-community/cli`, are still
+            // in alpha or beta while react-native is in pre-release. Try
+            // again with the `next` tag.
             const packageInfo = await packageJson(packageName, {
-              version: getPackageVersion(packageName, dependencies),
+              version: "next",
               fullMetadata: true,
             });
             return Optional(packageInfo.dependencies);
-          } catch (e) {
-            if (e.code === "ETARGET" || e.name === "VersionNotFoundError") {
-              // Some packages, such as `@react-native-community/cli`, are still
-              // in alpha or beta while react-native is in pre-release. Try
-              // again with the `next` tag.
-              const packageInfo = await packageJson(packageName, {
-                version: "next",
-                fullMetadata: true,
-              });
-              return Optional(packageInfo.dependencies);
-            } else {
-              return undefined;
-            }
+          } else {
+            return undefined;
           }
-        }),
-      Promise.resolve(Optional(dependencies))
-    );
+        }
+      }),
+    Promise.resolve(Optional(dependencies))
+  );
 
-    if (deps) {
-      return getPackageVersion("metro", deps);
-    }
+  if (!deps) {
+    throw new Error("Failed to get 'metro' version");
   }
 
-  throw new Error("Failed to get 'metro' version");
+  return getPackageVersion("metro", deps);
 }
 
 /**
  * Fetches package versions for specified react-native version.
  * @param {string} preset
  * @param {string} targetVersion
- * @param {Profile} latestProfile
  * @returns {Promise<string | undefined>}
  */
-async function makeProfile(preset, targetVersion, latestProfile) {
-  const reactNativeInfo = await fetchPackageInfo(
-    latestProfile["core"],
-    `^${targetVersion}.0-0`
-  );
-  if (!reactNativeInfo) {
-    throw new Error(`Failed to get manifest of 'react-native@${targetVersion}`);
-  }
-
-  const { dependencies, peerDependencies } = reactNativeInfo;
-  if (!dependencies) {
+async function makeProfile(preset, targetVersion) {
+  const templatePkg = {
+    name: "@react-native-community/template",
+    version: "0.0.0",
+  };
+  const template = await fetchPackageInfo(templatePkg, `^${targetVersion}.0-0`);
+  if (!template) {
     throw new Error(
-      `Failed to get dependencies of 'react-native@${targetVersion}`
+      `Failed to get manifest of '${templatePkg.name}@${targetVersion}`
     );
   }
-  if (!peerDependencies) {
+
+  const { tarball } = template;
+  const templateDir = await new Promise((resolve, reject) => {
+    https
+      .get(tarball, (res) => {
+        const tmpUrl = new URL("../node_modules/.tmp", import.meta.url);
+        fs.mkdirSync(tmpUrl, { recursive: true });
+
+        const tmpDir = fileURLToPath(tmpUrl);
+        const dest = path.join(fileURLToPath(tmpUrl), path.basename(tarball));
+        const fh = fs.createWriteStream(dest);
+        res.pipe(fh);
+        fh.on("finish", () => {
+          fh.close();
+          untar(dest);
+          resolve(path.join(tmpDir, "package"));
+        });
+      })
+      .on("error", (err) => reject(err));
+  });
+
+  const manifestPath = path.join(templateDir, "template", "package.json");
+  const manifest = JSON.parse(
+    fs.readFileSync(manifestPath, { encoding: "utf-8" })
+  );
+
+  const { dependencies, devDependencies } = manifest;
+  if (!dependencies) {
     throw new Error(
-      `Failed to get peer dependencies of 'react-native@${targetVersion}`
+      `Failed to get dependencies of '${templatePkg.name}@${targetVersion}`
+    );
+  }
+  if (!devDependencies) {
+    throw new Error(
+      `Failed to get dev dependencies of '${templatePkg.name}@${targetVersion}`
     );
   }
 
   return generateFromTemplate({
     preset,
     targetVersion,
-    reactVersion: getPackageVersion("react", peerDependencies),
-    cliVersion: getPackageVersion("@react-native-community/cli", dependencies),
+    reactVersion: getPackageVersion("react", dependencies),
+    cliVersion: getPackageVersion(
+      "@react-native-community/cli",
+      devDependencies
+    ),
     cliAndroidVersion: getPackageVersion(
       "@react-native-community/cli-platform-android",
-      dependencies
+      devDependencies
     ),
     cliIOSVersion: getPackageVersion(
       "@react-native-community/cli-platform-ios",
-      dependencies
+      devDependencies
     ),
     metroVersion: await getCurrentMetroVersion(dependencies),
   });
@@ -409,8 +453,6 @@ async function main({
       .reverse()
   );
 
-  const latestProfile = preset[allVersions[0]];
-
   if (targetVersion) {
     if (!force && preset[targetVersion]) {
       console.error(
@@ -420,11 +462,7 @@ async function main({
     }
 
     try {
-      const newProfile = await makeProfile(
-        presetName,
-        targetVersion,
-        latestProfile
-      );
+      const newProfile = await makeProfile(presetName, targetVersion);
       if (newProfile) {
         const [dst, presetFile] = getProfilePath(presetName, targetVersion);
         fs.writeFile(dst, newProfile, () => {
@@ -505,7 +543,7 @@ async function main({
   /** @type {[string, TableRow][]} */
   const delta = [];
   await Promise.all(
-    Object.entries(latestProfile)
+    Object.entries(preset[allVersions[0]])
       .filter(([capability]) => !ignoredCapabilities.includes(capability))
       .map(async ([capability, pkg]) => {
         await fetchPackageInfo(pkg).then((info) => {
