@@ -1,5 +1,11 @@
 # @rnx-kit/tools-shell
 
+## 0.2.1
+
+### Patch Changes
+
+- dd8389b: Added function for extracting tar files
+
 ## 0.2.0
 
 ### Minor Changes
