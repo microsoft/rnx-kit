@@ -3633,6 +3633,7 @@ __metadata:
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tools-language": "npm:*"
     "@rnx-kit/tools-node": "npm:*"
+    "@rnx-kit/tools-shell": "npm:*"
     "@rnx-kit/tools-workspaces": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
     "@types/jest": "npm:^29.2.1"
@@ -4298,8 +4299,8 @@ __metadata:
     react-native: "npm:^0.75.0"
     typescript: "npm:^5.0.0"
   peerDependencies:
-    react: 16.11.0 || 16.13.1 || 17.0.1 || 17.0.2 || 18.0.0 || 18.1.0 || 18.2.0 || ^18.2.0
-    react-native: ^0.62.3 || ^0.63.2 || ^0.64.2 || ^0.65.0 || ^0.66.0 || ^0.67.0 || ^0.68.0 || ^0.69.0 || ^0.70.0 || ^0.71.0 || ^0.72.0 || ^0.73.0 || ^0.74.0 || ^0.75.0
+    react: 16.11.0 || 16.13.1 || 17.0.1 || 17.0.2 || 18.0.0 || 18.1.0 || 18.2.0 || ^18.2.0 || 18.3.1
+    react-native: ^0.62.3 || ^0.63.2 || ^0.64.2 || ^0.65.0 || ^0.66.0 || ^0.67.0 || ^0.68.0 || ^0.69.0 || ^0.70.0 || ^0.71.0 || ^0.72.0 || ^0.73.0 || ^0.74.0 || ^0.75.0 || ^0.76.0
   languageName: unknown
   linkType: soft
 
@@ -4606,7 +4607,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rnx-kit/tools-shell@npm:^0.2.0, @rnx-kit/tools-shell@workspace:packages/tools-shell":
+"@rnx-kit/tools-shell@npm:*, @rnx-kit/tools-shell@npm:^0.2.0, @rnx-kit/tools-shell@workspace:packages/tools-shell":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/tools-shell@workspace:packages/tools-shell"
   dependencies:
