@@ -282,6 +282,7 @@ describe("makeMetroConfig", () => {
     equal(config.resolver.blockList.source, blockList);
 
     equal(config.server.enhanceMiddleware, enhanceMiddleware);
+    // @ts-expect-error Types broke in Metro 0.81
     deepEqual(config.transformer.assetPlugins, []);
 
     const opts = { dev: false, hot: false };
@@ -356,6 +357,7 @@ describe("makeMetroConfig", () => {
     equal(config.resolver.blockList.source, blockList);
 
     equal(config.server.enhanceMiddleware, enhanceMiddleware);
+    // @ts-expect-error Types broke in Metro 0.81
     deepEqual(config.transformer.assetPlugins, []);
 
     const opts = { dev: false, hot: false };
