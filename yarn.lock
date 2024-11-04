@@ -3147,6 +3147,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@react-native-community/cli-platform-apple@npm:14.0.0":
+  version: 14.0.0
+  resolution: "@react-native-community/cli-platform-apple@npm:14.0.0"
+  dependencies:
+    "@react-native-community/cli-tools": "npm:14.0.0"
+    chalk: "npm:^4.1.2"
+    execa: "npm:^5.0.0"
+    fast-glob: "npm:^3.3.2"
+    fast-xml-parser: "npm:^4.2.4"
+    ora: "npm:^5.4.1"
+  checksum: 10c0/057e3f4d366fc8e93895f6ac5f5790b8304bb38cbc340b44bd275a14e9e262f5c91b3c72cfb67b9509ac597759f7ba6bca69a9452a343035cbc9c02d5702696d
+  languageName: node
+  linkType: hard
+
 "@react-native-community/cli-platform-apple@npm:14.1.1":
   version: 14.1.1
   resolution: "@react-native-community/cli-platform-apple@npm:14.1.1"
@@ -7756,7 +7770,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fast-xml-parser@npm:^4.0.0, fast-xml-parser@npm:^4.4.1":
+"fast-xml-parser@npm:^4.0.0, fast-xml-parser@npm:^4.2.4, fast-xml-parser@npm:^4.4.1":
   version: 4.5.0
   resolution: "fast-xml-parser@npm:4.5.0"
   dependencies:
@@ -12025,12 +12039,13 @@ __metadata:
   linkType: hard
 
 "react-native-macos@npm:^0.75.0":
-  version: 0.75.9
-  resolution: "react-native-macos@npm:0.75.9"
+  version: 0.75.13
+  resolution: "react-native-macos@npm:0.75.13"
   dependencies:
     "@jest/create-cache-key-function": "npm:^29.6.3"
     "@react-native-community/cli": "npm:14.0.0"
     "@react-native-community/cli-platform-android": "npm:14.0.0"
+    "@react-native-community/cli-platform-apple": "npm:14.0.0"
     "@react-native-community/cli-platform-ios": "npm:14.0.0"
     "@react-native-mac/virtualized-lists": "npm:0.75.0"
     "@react-native/assets-registry": "npm:0.75.2"
@@ -12074,7 +12089,7 @@ __metadata:
       optional: true
   bin:
     react-native: cli.js
-  checksum: 10c0/4f9efad26f37e26dadc516971197e3d5582af0440a2360ece2e32dc9bb204d342db2b1959bdd6c390f604f907d275159e1e8585d5cdd1958e371bf3448073389
+  checksum: 10c0/b03a19c418440686a91076a9283931d48bfcbf0826655f4dfef1c96190ab9a9ad07e2eda358207f780fbb780f210aae8a62c3d7778057596f475c686cfada19f
   languageName: node
   linkType: hard
 
