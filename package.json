@@ -55,6 +55,7 @@
     "@microsoft/eslint-plugin-sdl/eslint-plugin-security": "^1.4.0",
     "@react-native-community/cli": "^14.0.0",
     "@react-native-community/cli-platform-android": "^14.0.0",
+    "@react-native-community/cli-platform-apple": "^14.0.0",
     "@react-native-community/cli-platform-ios": "^14.0.0",
     "@react-native-community/cli-server-api": "^14.0.0",
     "@react-native-community/cli-tools": "^14.0.0",

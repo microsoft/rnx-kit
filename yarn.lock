@@ -3147,21 +3147,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-community/cli-platform-apple@npm:14.0.0":
-  version: 14.0.0
-  resolution: "@react-native-community/cli-platform-apple@npm:14.0.0"
-  dependencies:
-    "@react-native-community/cli-tools": "npm:14.0.0"
-    chalk: "npm:^4.1.2"
-    execa: "npm:^5.0.0"
-    fast-glob: "npm:^3.3.2"
-    fast-xml-parser: "npm:^4.2.4"
-    ora: "npm:^5.4.1"
-  checksum: 10c0/057e3f4d366fc8e93895f6ac5f5790b8304bb38cbc340b44bd275a14e9e262f5c91b3c72cfb67b9509ac597759f7ba6bca69a9452a343035cbc9c02d5702696d
-  languageName: node
-  linkType: hard
-
-"@react-native-community/cli-platform-apple@npm:14.1.1":
+"@react-native-community/cli-platform-apple@npm:^14.0.0":
   version: 14.1.1
   resolution: "@react-native-community/cli-platform-apple@npm:14.1.1"
   dependencies:
@@ -7770,7 +7756,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fast-xml-parser@npm:^4.0.0, fast-xml-parser@npm:^4.2.4, fast-xml-parser@npm:^4.4.1":
+"fast-xml-parser@npm:^4.0.0, fast-xml-parser@npm:^4.4.1":
   version: 4.5.0
   resolution: "fast-xml-parser@npm:4.5.0"
   dependencies:
