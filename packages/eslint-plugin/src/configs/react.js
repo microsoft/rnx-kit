@@ -6,7 +6,11 @@ const react = require("eslint-plugin-react");
 const reactHooks = require("eslint-plugin-react-hooks");
 
 module.exports = [
-  react.configs.flat.recommended,
+  react.configs.flat?.recommended ?? {
+    plugins: { react },
+    rules: react.configs.recommended.rules,
+    languageOptions: { parserOptions: react.configs.recommended.parserOptions },
+  },
   {
     name: "rnx-kit/react",
     plugins: {
