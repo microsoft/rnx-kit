@@ -1,10 +1,6 @@
 #import "RNXTurboModuleAdapter.h"
 
 #include "FollyConfig.h"
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wcomma"
-#import <cxxreact/JSExecutor.h>
-#pragma clang diagnostic pop
 
 #if USE_FABRIC
 #import <React/CoreModulesPlugins.h>

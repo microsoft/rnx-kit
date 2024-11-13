@@ -1,10 +1,6 @@
 #import "ReactNativeHost.h"
 
 #include "FollyConfig.h"
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wcomma"
-#import <cxxreact/JSExecutor.h>
-#pragma clang diagnostic pop
 
 #import <React/RCTBridge.h>
 #import <React/RCTBundleURLProvider.h>
