@@ -1,5 +1,12 @@
 # @rnx-kit/react-native-host
 
+## 0.5.1
+
+### Patch Changes
+
+- b763270: Remove unused header (and maybe fix building with statically linked
+  frameworks)
+
 ## 0.5.0
 
 ### Minor Changes
