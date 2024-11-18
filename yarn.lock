@@ -3311,14 +3311,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@react-native-windows/cli@npm:0.75.4":
-  version: 0.75.4
-  resolution: "@react-native-windows/cli@npm:0.75.4"
+"@react-native-windows/cli@npm:0.75.6":
+  version: 0.75.6
+  resolution: "@react-native-windows/cli@npm:0.75.6"
   dependencies:
-    "@react-native-windows/codegen": "npm:0.75.2"
-    "@react-native-windows/fs": "npm:0.75.0"
-    "@react-native-windows/package-utils": "npm:0.75.0"
-    "@react-native-windows/telemetry": "npm:0.75.1"
+    "@react-native-windows/codegen": "npm:0.75.4"
+    "@react-native-windows/fs": "npm:0.75.2"
+    "@react-native-windows/package-utils": "npm:0.75.2"
+    "@react-native-windows/telemetry": "npm:0.75.3"
     "@xmldom/xmldom": "npm:^0.7.7"
     chalk: "npm:^4.1.0"
     cli-spinners: "npm:^2.2.0"
@@ -3338,15 +3338,15 @@ __metadata:
     xpath: "npm:^0.0.27"
   peerDependencies:
     react-native: "*"
-  checksum: 10c0/95ff332d2077412268cd8bfd2aaf9591f6bc73cc76d215698d7deb3a5f24bbd33a34782e5bc461e53a48b71c7c76c328c9ba92c37e06bf6c1fa5842be7b9d471
+  checksum: 10c0/d5f2ecf8550b5a6fbd91dc8e34b58febf0dc5caccdd832e8a32d334389088ca12054e2417ed9949c48e989b65aae20621c51dd3af036bf408e52141612cdffd4
   languageName: node
   linkType: hard
 
-"@react-native-windows/codegen@npm:0.75.2":
-  version: 0.75.2
-  resolution: "@react-native-windows/codegen@npm:0.75.2"
+"@react-native-windows/codegen@npm:0.75.4":
+  version: 0.75.4
+  resolution: "@react-native-windows/codegen@npm:0.75.4"
   dependencies:
-    "@react-native-windows/fs": "npm:0.75.0"
+    "@react-native-windows/fs": "npm:0.75.2"
     chalk: "npm:^4.1.0"
     globby: "npm:^11.1.0"
     mustache: "npm:^4.0.1"
@@ -3356,47 +3356,47 @@ __metadata:
     react-native: "*"
   bin:
     react-native-windows-codegen: bin.js
-  checksum: 10c0/f594707a5f2b431a2a89536cf8bde78bc81897b48b5b47205bc2ab6547c812b243660c2ae797ead4ea0ac078924577e828102a8d7db095b785a72426322f0050
+  checksum: 10c0/4a48ae525d07a7c0c372fb65ced50588a7d097001a3ecc281d38eb76903df37078dfa756ce0e387a3897e66f61a0f0652706ca11d3dd13f5e761fb21ee889035
   languageName: node
   linkType: hard
 
-"@react-native-windows/find-repo-root@npm:0.75.0":
-  version: 0.75.0
-  resolution: "@react-native-windows/find-repo-root@npm:0.75.0"
+"@react-native-windows/find-repo-root@npm:0.75.2":
+  version: 0.75.2
+  resolution: "@react-native-windows/find-repo-root@npm:0.75.2"
   dependencies:
-    "@react-native-windows/fs": "npm:0.75.0"
+    "@react-native-windows/fs": "npm:0.75.2"
     find-up: "npm:^4.1.0"
-  checksum: 10c0/adb91416f5dabf6532169a003e09d0482c8df3ed0a9b79d72fbe344cebf0c0ec670091c6c208151de14db6868318632c9befb4010488a195fbb301e7a30e23fa
+  checksum: 10c0/1677f5fa1a788bb4557b29a315e48f1b7d4c3aa070754d4c78ac68a656e5d04def9a7c85dfed8aa2f63d94b661224a7cd6f234e91a47d73d3c7064358678cb95
   languageName: node
   linkType: hard
 
-"@react-native-windows/fs@npm:0.75.0":
-  version: 0.75.0
-  resolution: "@react-native-windows/fs@npm:0.75.0"
+"@react-native-windows/fs@npm:0.75.2":
+  version: 0.75.2
+  resolution: "@react-native-windows/fs@npm:0.75.2"
   dependencies:
     graceful-fs: "npm:^4.2.8"
-  checksum: 10c0/bb0ff01099585ee202b56a3802d48263f39084d73ea34529938ae0434c112440c45f72dc5b6f8bde682e4f97bc9872eb2540831abf09e007a3eb8891ffb3f389
+  checksum: 10c0/8e1f51b268c5cf60201665ac2245dad975a57ba1269ea76dc2bc9ae3027bca753933a14c1d8487c03410434a14d7b6718102b25479488732f3c467f4ff97f97c
   languageName: node
   linkType: hard
 
-"@react-native-windows/package-utils@npm:0.75.0":
-  version: 0.75.0
-  resolution: "@react-native-windows/package-utils@npm:0.75.0"
+"@react-native-windows/package-utils@npm:0.75.2":
+  version: 0.75.2
+  resolution: "@react-native-windows/package-utils@npm:0.75.2"
   dependencies:
-    "@react-native-windows/find-repo-root": "npm:0.75.0"
-    "@react-native-windows/fs": "npm:0.75.0"
+    "@react-native-windows/find-repo-root": "npm:0.75.2"
+    "@react-native-windows/fs": "npm:0.75.2"
     get-monorepo-packages: "npm:^1.2.0"
     lodash: "npm:^4.17.15"
-  checksum: 10c0/cd7ccee449294d34e0159cf7fa629edb3a0b4438313bd698e48b88f4a1033843373444cc1305983e9136b3e56a96702f17db3ed6f2b8ad9cea7d98b04a45fc26
+  checksum: 10c0/f410eb5409c08bc7c44b1d0613da15738304a13df857ce8782928b085442ac8249d50614a4580e2650c39f4159354a0fbc0fa258c3a801381f8e2429273b2a24
   languageName: node
   linkType: hard
 
-"@react-native-windows/telemetry@npm:0.75.1":
-  version: 0.75.1
-  resolution: "@react-native-windows/telemetry@npm:0.75.1"
+"@react-native-windows/telemetry@npm:0.75.3":
+  version: 0.75.3
+  resolution: "@react-native-windows/telemetry@npm:0.75.3"
   dependencies:
     "@azure/core-auth": "npm:1.5.0"
-    "@react-native-windows/fs": "npm:0.75.0"
+    "@react-native-windows/fs": "npm:0.75.2"
     "@xmldom/xmldom": "npm:^0.7.7"
     applicationinsights: "npm:2.9.1"
     ci-info: "npm:^3.2.0"
@@ -3404,7 +3404,7 @@ __metadata:
     lodash: "npm:^4.17.21"
     os-locale: "npm:^5.0.0"
     xpath: "npm:^0.0.27"
-  checksum: 10c0/a69201306c2204d1cee239f3926116b5d8a5b33b5de43a53faf8495e5b4445b4597ded269ced12631337b74ab42df9895c28e93da097539316384959970b573f
+  checksum: 10c0/2caf72a13db08ed964d744ca173f1be973718de4a68bf0138dac6ff0ecd4ebc59ed53cb44fef6a2fbcb3cb2d0bc5972e89197e72cdec156c6a93bcd0cace6444
   languageName: node
   linkType: hard
 
@@ -12118,15 +12118,15 @@ __metadata:
   linkType: hard
 
 "react-native-windows@npm:^0.75.0":
-  version: 0.75.6
-  resolution: "react-native-windows@npm:0.75.6"
+  version: 0.75.9
+  resolution: "react-native-windows@npm:0.75.9"
   dependencies:
     "@babel/runtime": "npm:^7.0.0"
     "@jest/create-cache-key-function": "npm:^29.6.3"
     "@react-native-community/cli": "npm:14.1.0"
     "@react-native-community/cli-platform-android": "npm:14.1.0"
     "@react-native-community/cli-platform-ios": "npm:14.1.0"
-    "@react-native-windows/cli": "npm:0.75.4"
+    "@react-native-windows/cli": "npm:0.75.6"
     "@react-native/assets": "npm:1.0.0"
     "@react-native/assets-registry": "npm:0.75.3"
     "@react-native/codegen": "npm:0.75.3"
@@ -12169,7 +12169,7 @@ __metadata:
     "@types/react": ^18.2.6
     react: ^18.2.0
     react-native: ^0.75.3
-  checksum: 10c0/f2010e01deafbaaf763b451d730eed2c05847d530310ee11e0792d38745223aa36f77c3edfa43bb60c5813bfbd62c85346e6697dbb1b77c8cb1418f336b7861d
+  checksum: 10c0/b2e1c4407ed23277f2649c4f6172e0525e3770a22b7b1d781a04b4ef77a5ac8076d56f7e100e4ea9aa4c791d51441cfcce47f5e2e8d98e02483f59950891fac1
   languageName: node
   linkType: hard
 
