@@ -1,3 +1,4 @@
+import type { loadConfig } from "@react-native-community/cli";
 import type { Config } from "@react-native-community/cli-types";
 import {
   findPackageDependencyDir,
@@ -34,6 +35,24 @@ function findStartDir(root: string, reactNativePath = ""): string {
   return toNumber(version) < RN_CLI_DECOUPLED ? reactNative : root;
 }
 
+function getConfigOrState(projectRoot: string): Config | string {
+  const state = getCurrentState(projectRoot);
+  if (state === getSavedState(projectRoot)) {
+    const config = loadConfigFromCache(projectRoot);
+    if (config) {
+      return config;
+    }
+  }
+
+  return state;
+}
+
+function makeLoadConfigOptions(fn: typeof loadConfig, projectRoot: string) {
+  return fn.length === 1
+    ? { projectRoot }
+    : (projectRoot as unknown as { projectRoot: string });
+}
+
 /**
  * Finds path to `@react-native-community/cli`.
  * @param root Project root
@@ -50,26 +69,49 @@ export function resolveCommunityCLI(
 /**
  * Equivalent to calling `loadConfig()` from `@react-native-community/cli`, but
  * the result is cached for faster subsequent accesses.
- * @param root Project root; defaults to current working directory
+ * @param projectRoot Project root; defaults to current working directory
  */
-export function loadContext(root = process.cwd()): Config {
-  const state = getCurrentState(root);
-  if (state === getSavedState(root)) {
-    const config = loadConfigFromCache(root);
-    if (config) {
-      return config;
-    }
+export function loadContext(projectRoot = process.cwd()): Config {
+  const state = getConfigOrState(projectRoot);
+  if (typeof state !== "string") {
+    return state;
   }
 
-  const rncli = resolveCommunityCLI(root);
+  const rncli = resolveCommunityCLI(projectRoot);
   const { loadConfig } = require(rncli);
 
-  const config: Config =
-    loadConfig.length === 1
-      ? loadConfig({ projectRoot: root })
-      : loadConfig(root);
+  const options = makeLoadConfigOptions(loadConfig, projectRoot);
+  const config = loadConfig(options);
+  saveConfigToCache(projectRoot, state, config);
+  return config;
+}
 
-  saveConfigToCache(root, state, config);
+/**
+ * Equivalent to calling `loadConfigAsync()` (with fallback to `loadConfig()`)
+ * from `@react-native-community/cli`, but the result is cached for faster
+ * subsequent accesses.
+ * @param projectRoot Project root; defaults to current working directory
+ */
+export async function loadContextAsync(
+  projectRoot = process.cwd()
+): Promise<Config> {
+  const state = getConfigOrState(projectRoot);
+  if (typeof state !== "string") {
+    return state;
+  }
 
+  const rncli = resolveCommunityCLI(projectRoot);
+  const { loadConfig, loadConfigAsync } = require(rncli);
+
+  const options = makeLoadConfigOptions(loadConfig, projectRoot);
+
+  if (!loadConfigAsync) {
+    const config = loadConfig(options);
+    saveConfigToCache(projectRoot, state, config);
+    return config;
+  }
+
+  const config = await loadConfigAsync(options);
+  saveConfigToCache(projectRoot, state, config);
   return config;
 }
