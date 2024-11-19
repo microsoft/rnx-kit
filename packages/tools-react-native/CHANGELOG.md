@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/tools-react-native
 
+## 2.0.1
+
+### Patch Changes
+
+- 1ae018a: Add support for loading ESM config files
+
 ## 2.0.0
 
 ### Major Changes
