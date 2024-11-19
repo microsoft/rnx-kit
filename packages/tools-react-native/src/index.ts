@@ -1,4 +1,4 @@
-export { loadContext, resolveCommunityCLI } from "./context";
+export { loadContext, loadContextAsync, resolveCommunityCLI } from "./context";
 export {
   findMetroPath,
   getMetroVersion,
