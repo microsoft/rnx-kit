@@ -1,1 +1,5 @@
-export { loadContext, resolveCommunityCLI } from "./lib/context";
+export {
+  loadContext,
+  loadContextAsync,
+  resolveCommunityCLI,
+} from "./lib/context";
