@@ -64,6 +64,11 @@ export type KitType = "app" | "library";
  */
 export type KitConfig = {
   /**
+   * Load base config from file or module.
+   */
+  extends?: string;
+
+  /**
    * Whether this kit is an "app" or a "library".
    * @default "library"
    */
@@ -72,6 +77,7 @@ export type KitConfig = {
   /**
    * Supported versions of React Native. Must be parseable by
    * [node-semver](https://github.com/npm/node-semver).
+   * @deprecated Use `alignDeps.requirements.production` instead.
    */
   reactNativeVersion?: string;
 
@@ -80,6 +86,7 @@ export type KitConfig = {
    * [node-semver](https://github.com/npm/node-semver). If omitted, the minimum
    * supported version will be used.
    * @default minVersion(reactNativeVersion)
+   * @deprecated Use `alignDeps.requirements.development` instead.
    */
   reactNativeDevVersion?: string;
 
@@ -118,6 +125,7 @@ export type KitConfig = {
   /**
    * Capabilities used by the kit.
    * @default []
+   * @deprecated Use `alignDeps.capabilities` instead.
    */
   capabilities?: Capability[];
 
@@ -143,6 +151,8 @@ export type KitConfig = {
    *
    * For a more complete example, please take a look at the default profiles:
    * https://github.com/microsoft/rnx-kit/blob/769e9fa290929effd5111884f1637c21326b5a95/packages/dep-check/src/profiles.ts#L11
+   *
+   * @deprecated Use `alignDeps.presets` instead.
    */
   customProfiles?: string;
 };
