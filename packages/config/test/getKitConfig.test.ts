@@ -26,7 +26,7 @@ describe("getKitConfig()", () => {
     return fileURLToPath(url);
   }
 
-  function optionsFor(fixture: string): GetKitConfigOptions {
+  function optionsFor(fixture: string): Required<GetKitConfigOptions> {
     return { module: fixture, cwd: packagePath(".") };
   }
 
