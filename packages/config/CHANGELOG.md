@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/config
 
+## 0.7.1
+
+### Patch Changes
+
+- abca638: Add support for `extends` field
+
 ## 0.7.0
 
 ### Minor Changes
