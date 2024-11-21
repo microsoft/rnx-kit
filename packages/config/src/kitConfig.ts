@@ -70,25 +70,9 @@ export type KitConfig = {
 
   /**
    * Whether this kit is an "app" or a "library".
-   * @default "library"
+   * @defaultValue `"library"`
    */
   kitType?: KitType;
-
-  /**
-   * Supported versions of React Native. Must be parseable by
-   * [node-semver](https://github.com/npm/node-semver).
-   * @deprecated Use `alignDeps.requirements.production` instead.
-   */
-  reactNativeVersion?: string;
-
-  /**
-   * The version of React Native to use for development. Must be parseable by
-   * [node-semver](https://github.com/npm/node-semver). If omitted, the minimum
-   * supported version will be used.
-   * @default minVersion(reactNativeVersion)
-   * @deprecated Use `alignDeps.requirements.development` instead.
-   */
-  reactNativeDevVersion?: string;
 
   /**
    * Configures how `align-deps` should align dependencies for this package.
@@ -96,7 +80,7 @@ export type KitConfig = {
   alignDeps?: {
     /**
      * Presets to use for aligning dependencies.
-     * @default ["microsoft/react-native"]
+     * @defaultValue `["microsoft/react-native"]`
      */
     presets?: string[];
 
@@ -107,7 +91,7 @@ export type KitConfig = {
 
     /**
      * Capabilities used by the kit.
-     * @default []
+     * @defaultValue `[]`
      */
     capabilities?: Capability[];
   };
@@ -123,8 +107,24 @@ export type KitConfig = {
   server?: ServerConfig;
 
   /**
+   * Supported versions of React Native. Must be parseable by
+   * [node-semver](https://github.com/npm/node-semver).
+   * @deprecated Use `alignDeps.requirements.production` instead.
+   */
+  reactNativeVersion?: string;
+
+  /**
+   * The version of React Native to use for development. Must be parseable by
+   * [node-semver](https://github.com/npm/node-semver). If omitted, the minimum
+   * supported version will be used.
+   * @defaultValue minVersion(reactNativeVersion)
+   * @deprecated Use `alignDeps.requirements.development` instead.
+   */
+  reactNativeDevVersion?: string;
+
+  /**
    * Capabilities used by the kit.
-   * @default []
+   * @defaultValue `[]`
    * @deprecated Use `alignDeps.capabilities` instead.
    */
   capabilities?: Capability[];

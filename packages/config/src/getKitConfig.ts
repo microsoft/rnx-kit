@@ -1,5 +1,8 @@
 import type { PackageManifest } from "@rnx-kit/tools-node/package";
-import { readPackage } from "@rnx-kit/tools-node/package";
+import {
+  findPackageDependencyDir,
+  readPackage,
+} from "@rnx-kit/tools-node/package";
 import merge from "lodash.merge";
 import * as fs from "node:fs";
 import * as path from "node:path";
@@ -21,13 +24,15 @@ export type GetKitConfigOptions = {
   cwd?: string;
 };
 
-function findPackageDir({ module, cwd = process.cwd() }: GetKitConfigOptions) {
+function findPackageDir({
+  module,
+  cwd = process.cwd(),
+}: GetKitConfigOptions): string {
   if (!module) {
     return cwd;
   }
 
-  const p = require.resolve(module + "/package.json", { paths: [cwd] });
-  return path.dirname(p);
+  return findPackageDependencyDir(module, { startDir: cwd }) ?? cwd;
 }
 
 function loadBaseConfig(
@@ -43,7 +48,9 @@ function loadBaseConfig(
   const spec = fs.existsSync(baseConfigPath)
     ? baseConfigPath
     : require.resolve(base, { paths: [packageDir] });
-  return merge(require(spec), config);
+  const mergedConfig = merge(require(spec), config);
+  delete mergedConfig["extends"];
+  return mergedConfig;
 }
 
 /**
