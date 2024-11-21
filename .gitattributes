@@ -1,3 +1,4 @@
-*                  text=auto
-*.pbxproj          -text
-/.yarn/releases/*  binary
+*                        text=auto
+**/test/__fixtures__/**  linguist-generated=false
+*.pbxproj                -text
+/.yarn/releases/*        binary
