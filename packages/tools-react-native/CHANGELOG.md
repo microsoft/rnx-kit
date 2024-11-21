@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/tools-react-native
 
+## 2.0.2
+
+### Patch Changes
+
+- 0b73195: Add missing `loadContextAsync` to exported types
+
 ## 2.0.1
 
 ### Patch Changes
