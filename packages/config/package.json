@@ -37,6 +37,7 @@
   "dependencies": {
     "@rnx-kit/console": "^2.0.0",
     "@rnx-kit/tools-node": "^3.0.0",
+    "lodash.merge": "^4.6.2",
     "semver": "^7.0.0"
   },
   "devDependencies": {
@@ -47,6 +48,7 @@
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tools-react-native": "*",
     "@rnx-kit/tsconfig": "*",
+    "@types/lodash.merge": "^4.6.9",
     "@types/node": "^20.0.0",
     "@types/semver": "^7.0.0",
     "eslint": "^9.0.0",
