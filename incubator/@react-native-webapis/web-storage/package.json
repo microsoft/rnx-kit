@@ -35,11 +35,11 @@
     "lint:kt": "ktlint --relative 'android/src/**/*.kt'"
   },
   "peerDependencies": {
-    "@callstack/react-native-visionos": ">=0.73",
+    "@callstack/react-native-visionos": ">=0.74",
     "react": ">=18.2.0",
-    "react-native": ">=0.72",
-    "react-native-macos": ">=0.72",
-    "react-native-windows": ">=0.72"
+    "react-native": ">=0.74",
+    "react-native-macos": ">=0.74",
+    "react-native-windows": ">=0.74"
   },
   "peerDependenciesMeta": {
     "@callstack/react-native-visionos": {
