@@ -11,17 +11,26 @@ import {
   getSavedState,
   saveConfigToCache,
 } from "@rnx-kit/tools-react-native/cache";
-import {
-  loadContext,
-  resolveCommunityCLI,
-} from "@rnx-kit/tools-react-native/context";
+import { resolveCommunityCLI } from "@rnx-kit/tools-react-native/context";
 import { reactNativeConfig } from "../index";
 
 type Command = BaseCommand<false> | BaseCommand<true>;
 type Commands = Record<string, Command>;
 type Config = BaseConfig & { __rnxFastPath?: true; commands: Command[] };
 
+const RNX_FAST_PATH = "__rnxFastPath";
 const RNX_PREFIX = "rnx-";
+
+function canUseFastPath(userCommand: string): boolean {
+  const cmd = RNX_PREFIX + userCommand;
+  for (const command of reactNativeConfig.commands) {
+    if (command.name === cmd) {
+      return !(RNX_FAST_PATH in command) || command[RNX_FAST_PATH] !== false;
+    }
+  }
+
+  return false;
+}
 
 function findReactNativePath(root: string, resolveSymlinks = false) {
   const dir = findPackageDependencyDir("react-native", {
@@ -32,14 +41,6 @@ function findReactNativePath(root: string, resolveSymlinks = false) {
     throw new Error("Unable to resolve module 'react-native'");
   }
   return dir;
-}
-
-export function getCoreCommands() {
-  const start = RNX_PREFIX.length;
-  return reactNativeConfig.commands.map((command) => ({
-    ...command,
-    name: command.name.substring(start),
-  }));
 }
 
 export function uniquify(commands: Command[]): Command[] {
@@ -56,19 +57,29 @@ export function uniquify(commands: Command[]): Command[] {
   return Object.values(uniqueCommands);
 }
 
-export function loadContextForCommand(
+async function loadContextWithCLI(root: string) {
+  const rncli = resolveCommunityCLI(root);
+  const { loadConfig, loadConfigAsync } = require(rncli);
+
+  if (!loadConfigAsync) {
+    const options = loadConfig.length === 1 ? { projectRoot: root } : root;
+    return loadConfig(options);
+  }
+
+  return await loadConfigAsync({ projectRoot: root });
+}
+
+export async function loadContextForCommand(
   userCommand: string,
   root = process.cwd()
-): Config {
+): Promise<Config> {
   // The fast path avoids traversing project dependencies because we know what
   // information our commands depend on.
-  const coreCommands = getCoreCommands();
-  const useFastPath = coreCommands.some(({ name }) => name === userCommand);
-  if (useFastPath) {
+  if (canUseFastPath(userCommand)) {
     let reactNativePath: string;
     let reactNativeVersion: string;
     return {
-      __rnxFastPath: true,
+      [RNX_FAST_PATH]: true,
       root,
       get reactNativePath() {
         if (!reactNativePath) {
@@ -88,7 +99,13 @@ export function loadContextForCommand(
         throw new Error("Unexpected access to `dependencies`");
       },
       assets: [],
-      commands: coreCommands,
+      get commands(): Config["commands"] {
+        const start = RNX_PREFIX.length;
+        return reactNativeConfig.commands.map((command) => ({
+          ...command,
+          name: command.name.substring(start),
+        }));
+      },
       get healthChecks(): Config["healthChecks"] {
         throw new Error("Unexpected access to `healthChecks`");
       },
@@ -96,18 +113,12 @@ export function loadContextForCommand(
         throw new Error("Unexpected access to `platforms`");
       },
       get project(): Config["project"] {
-        // Used by the build command
-        return loadContext(root).project;
+        throw new Error("Unexpected access to `project`");
       },
     };
   }
 
-  const rncli = resolveCommunityCLI(root);
-  const { loadConfig } = require(rncli);
-  const config =
-    loadConfig.length === 1
-      ? loadConfig({ projectRoot: root })
-      : loadConfig(root);
+  const config = await loadContextWithCLI(root);
 
   // We will always load from disk because functions cannot be serialized.
   // However, we should refresh the cache if needed.

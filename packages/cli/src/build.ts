@@ -68,6 +68,9 @@ export function rnxBuild(
 }
 
 export const rnxBuildCommand = {
+  // The build command requires the `project` field, which currently requires
+  // loading the full config.
+  __rnxFastPath: false,
   name: "rnx-build",
   description:
     "Build your native app for testing in emulator/simulator or on device",
