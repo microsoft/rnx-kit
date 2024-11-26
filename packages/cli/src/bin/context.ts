@@ -13,13 +13,11 @@ import {
 } from "@rnx-kit/tools-react-native/cache";
 import { resolveCommunityCLI } from "@rnx-kit/tools-react-native/context";
 import { reactNativeConfig } from "../index";
+import { RNX_FAST_PATH, RNX_PREFIX } from "./constants";
 
 type Command = BaseCommand<false> | BaseCommand<true>;
 type Commands = Record<string, Command>;
-type Config = BaseConfig & { __rnxFastPath?: true; commands: Command[] };
-
-const RNX_FAST_PATH = "__rnxFastPath";
-const RNX_PREFIX = "rnx-";
+type Config = BaseConfig & { [RNX_FAST_PATH]?: true; commands: Command[] };
 
 function canUseFastPath(userCommand: string): boolean {
   const cmd = RNX_PREFIX + userCommand;

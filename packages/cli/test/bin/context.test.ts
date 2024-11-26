@@ -1,4 +1,5 @@
 import type { Command } from "@react-native-community/cli-types";
+import { RNX_PREFIX } from "../../src/bin/constants";
 import { loadContextForCommand, uniquify } from "../../src/bin/context";
 import { reactNativeConfig } from "../../src/index";
 
@@ -55,7 +56,7 @@ describe("bin/context/loadContextForCommand()", () => {
       const original = reactNativeConfig.commands[i];
 
       expect(modified).not.toBe(original);
-      expect(modified.name.startsWith("rnx-")).toBe(false);
+      expect(modified.name.startsWith(RNX_PREFIX)).toBe(false);
       expect(modified.description).toBe(original.description);
       expect(modified.options).toEqual(original.options);
       expect(modified.func).toBe(original.func);

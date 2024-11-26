@@ -1,5 +1,6 @@
 import type { Config } from "@react-native-community/cli-types";
 import { InvalidArgumentError } from "commander";
+import { RNX_FAST_PATH } from "./bin/constants";
 import { buildAndroid } from "./build/android";
 import { setCcacheDir, setCcacheHome } from "./build/ccache";
 import { buildIOS } from "./build/ios";
@@ -70,7 +71,7 @@ export function rnxBuild(
 export const rnxBuildCommand = {
   // The build command requires the `project` field, which currently requires
   // loading the full config.
-  __rnxFastPath: false,
+  [RNX_FAST_PATH]: false,
   name: "rnx-build",
   description:
     "Build your native app for testing in emulator/simulator or on device",
