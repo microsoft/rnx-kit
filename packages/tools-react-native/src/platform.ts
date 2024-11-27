@@ -68,7 +68,7 @@ export function getAvailablePlatformsUncached(
       return;
     }
 
-    const manifest = readReactNativeConfig(pkgPath);
+    const manifest = readReactNativeConfig(pkgPath, startDir);
     if (!manifest) {
       return;
     }

@@ -127,18 +127,20 @@ export async function loadContextAsync(
 }
 
 export function readReactNativeConfig(
-  packageDir: string
+  packageDir: string,
+  cwd = process.cwd()
 ): Record<string, unknown> | undefined {
   for (const configFile of REACT_NATIVE_CONFIG_FILES) {
     const configPath = path.join(packageDir, configFile);
     if (fs.existsSync(configPath)) {
-      const { error, stdout } = spawnSync(process.argv0, [
+      const args = [
         "--no-warnings",
         "--eval",
         `import("${configPath}").then((config) => console.log(JSON.stringify(config.default ?? config)));`,
-      ]);
-
-      return error ? undefined : JSON.parse(stdout.toString().trim());
+      ];
+      const { stdout } = spawnSync(process.argv0, args, { cwd });
+      const json = stdout.toString().trim();
+      return json ? JSON.parse(json) : undefined;
     }
   }
 
