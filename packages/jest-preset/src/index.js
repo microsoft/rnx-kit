@@ -1,5 +1,11 @@
+const {
+  readReactNativeConfig,
+} = require("@rnx-kit/tools-react-native/context");
+const {
+  getAvailablePlatforms,
+} = require("@rnx-kit/tools-react-native/platform");
 const findUp = require("find-up");
-const path = require("path");
+const path = require("node:path");
 
 /**
  * @typedef {import("@jest/types").Config.HasteConfig} HasteConfig
@@ -8,24 +14,6 @@ const path = require("path");
  * @typedef {import("@react-native-community/cli-types").Config} CLIConfig
  * @typedef {[string | undefined, string | undefined]} PlatformPath
  */
-
-/**
- * Resolve the path to a dependency given a chain of dependencies leading up to
- * it.
- *
- * Note: This is a copy of the function in `@rnx-kit/tools-node` to avoid
- * circular dependency.
- *
- * @param {string[]} chain Chain of dependencies leading up to the target dependency.
- * @param {string=} startDir Optional starting directory for the search. If not given, the current directory is used.
- * @returns Path to the final dependency's directory.
- */
-function resolveDependencyChain(chain, startDir = process.cwd()) {
-  return chain.reduce((startDir, module) => {
-    const p = require.resolve(`${module}/package.json`, { paths: [startDir] });
-    return path.dirname(p);
-  }, startDir);
-}
 
 /**
  * Returns the current package directory.
@@ -47,15 +35,13 @@ function getReactNativePlatformPath(rootDir = getPackageDirectory()) {
     throw new Error("Failed to resolve current package root");
   }
 
-  const fs = require("fs");
-
-  const rnConfigPath = path.join(rootDir, "react-native.config.js");
-  if (!fs.existsSync(rnConfigPath)) {
+  const config = readReactNativeConfig(rootDir);
+  if (!config) {
     return [undefined, undefined];
   }
 
-  const { platforms, reactNativePath } = require(rnConfigPath);
-  if (reactNativePath) {
+  const { platforms, reactNativePath } = config;
+  if (reactNativePath && typeof reactNativePath === "string") {
     const resolvedPath = /^\.?\.[/\\]/.test(reactNativePath)
       ? path.resolve(rootDir, reactNativePath)
       : path.dirname(
@@ -68,15 +54,16 @@ function getReactNativePlatformPath(rootDir = getPackageDirectory()) {
     }
   }
 
-  if (platforms) {
-    const names = Object.keys(platforms).filter(
-      (name) => typeof platforms[name].npmPackageName === "string"
+  if (platforms && typeof platforms === "object") {
+    const names = Object.entries(platforms).filter(
+      ([, info]) => typeof info.npmPackageName === "string"
     );
     if (names.length > 1) {
-      console.warn(`Multiple platforms found; picking the first one: ${names}`);
+      const found = names.map(([key]) => key).join(", ");
+      console.warn(`Multiple platforms found; picking the first one: ${found}`);
     }
 
-    return [names[0], rootDir];
+    return [names[0][0], rootDir];
   }
 
   console.warn("No platforms found");
@@ -96,25 +83,9 @@ function getTargetPlatform(defaultPlatform, searchPaths) {
     return getReactNativePlatformPath();
   }
 
-  /** @type {(config?: {projectRoot?: string; selectedPlatform?: string; }) => CLIConfig} */
-  const loadConfig = (() => {
-    const rnCliPath = resolveDependencyChain([
-      "react-native",
-      "@react-native-community/cli",
-    ]);
-    return (
-      require(rnCliPath).loadConfig ||
-      require(`${rnCliPath}/build/tools/config`).default
-    );
-  })();
-
-  // .length on a function returns the number of formal parameters.
-  // fixes https://github.com/react-native-community/cli/pull/2379 changing the number of parameters.
-  const platforms =
-    loadConfig.length == 1 ? loadConfig({}).platforms : loadConfig().platforms;
-
-  const targetPlatformConfig = platforms[defaultPlatform];
-  if (!targetPlatformConfig) {
+  const platforms = getAvailablePlatforms(searchPaths.paths[0]);
+  const npmPackageName = platforms[defaultPlatform];
+  if (typeof npmPackageName !== "string") {
     const availablePlatforms = Object.keys(platforms).join(", ");
     throw new Error(
       `'${defaultPlatform}' was not found among available platforms: ${availablePlatforms}`
@@ -122,7 +93,6 @@ function getTargetPlatform(defaultPlatform, searchPaths) {
   }
 
   // `npmPackageName` is unset if target platform is in core.
-  const { npmPackageName } = targetPlatformConfig;
   return [
     defaultPlatform,
     npmPackageName
