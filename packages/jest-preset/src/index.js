@@ -1,9 +1,3 @@
-const {
-  readReactNativeConfig,
-} = require("@rnx-kit/tools-react-native/context");
-const {
-  getAvailablePlatforms,
-} = require("@rnx-kit/tools-react-native/platform");
 const findUp = require("find-up");
 const path = require("node:path");
 
@@ -34,6 +28,19 @@ function getReactNativePlatformPath(rootDir = getPackageDirectory()) {
   if (!rootDir) {
     throw new Error("Failed to resolve current package root");
   }
+
+  // This should only throw because we haven't built `tools-react-native` yet,
+  // which can happen if we're running repo-wide tools (like Knip).
+  const readReactNativeConfig = (() => {
+    try {
+      const {
+        readReactNativeConfig,
+      } = require("@rnx-kit/tools-react-native/context");
+      return readReactNativeConfig;
+    } catch (_) {
+      return () => undefined;
+    }
+  })();
 
   const config = readReactNativeConfig(rootDir);
   if (!config) {
@@ -82,6 +89,10 @@ function getTargetPlatform(defaultPlatform, searchPaths) {
     // platform package.
     return getReactNativePlatformPath();
   }
+
+  const {
+    getAvailablePlatforms,
+  } = require("@rnx-kit/tools-react-native/platform");
 
   const platforms = getAvailablePlatforms(searchPaths.paths[0]);
   const npmPackageName = platforms[defaultPlatform];

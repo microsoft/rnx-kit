@@ -147,11 +147,6 @@
           "tsx"
         ]
       },
-      "packages/eslint-plugin": {
-        "ignoreDependencies": [
-          "eslint-plugin-react-hooks"
-        ]
-      },
       "packages/jest-preset": {
         "ignoreDependencies": [
           "react",
