@@ -1,5 +1,6 @@
 import type { Command, Config } from "@react-native-community/cli-types";
 import { resolveCommunityCLI } from "@rnx-kit/tools-react-native/context";
+import { RNX_FAST_PATH } from "./constants";
 
 function tryImport(module: string, fromDir: string) {
   try {
@@ -11,7 +12,7 @@ function tryImport(module: string, fromDir: string) {
 }
 
 export function findExternalCommands(config: Config): Command[] {
-  if ("__rnxFastPath" in config) {
+  if (RNX_FAST_PATH in config) {
     // Fast path means we don't need to do anything here
     return [];
   }

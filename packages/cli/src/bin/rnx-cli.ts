@@ -3,10 +3,10 @@ import * as path from "node:path";
 import { loadContextForCommand } from "./context";
 import { findExternalCommands } from "./externalCommands";
 
-export function main() {
+export async function main() {
   const [, , userCommand] = process.argv;
 
-  const context = loadContextForCommand(userCommand);
+  const context = await loadContextForCommand(userCommand);
   const allCommands = context.commands.concat(findExternalCommands(context));
   const program = new Command(path.basename(__filename, ".js"));
 

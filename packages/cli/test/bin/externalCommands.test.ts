@@ -1,4 +1,5 @@
 import type { Config } from "@react-native-community/cli-types";
+import { RNX_FAST_PATH } from "../../src/bin/constants";
 import { findExternalCommands } from "../../src/bin/externalCommands";
 
 jest.mock("@rnx-kit/tools-react-native/context", () => ({
@@ -15,7 +16,7 @@ describe("bin/externalCommands/findExternalCommands()", () => {
   });
 
   it("returns immediately on fast path", () => {
-    const context = mockContext({ __rnxFastPath: true });
+    const context = mockContext({ [RNX_FAST_PATH]: true });
 
     expect(findExternalCommands(context)).toEqual([]);
   });

@@ -4,6 +4,7 @@ import { reactNativeConfig } from "../src/index";
 describe("react-native.config.js", () => {
   it("should still act as a plugin to `@react-native-community/cli`", () => {
     const { status, stdout } = spawnSync(process.argv0, [
+      "--no-warnings",
       "--print",
       `JSON.stringify(require("./react-native.config.js"))`,
     ]);

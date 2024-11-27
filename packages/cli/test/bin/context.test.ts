@@ -1,9 +1,6 @@
 import type { Command } from "@react-native-community/cli-types";
-import {
-  getCoreCommands,
-  loadContextForCommand,
-  uniquify,
-} from "../../src/bin/context";
+import { RNX_PREFIX } from "../../src/bin/constants";
+import { loadContextForCommand, uniquify } from "../../src/bin/context";
 import { reactNativeConfig } from "../../src/index";
 
 jest.mock("@rnx-kit/tools-react-native/context", () => ({
@@ -11,22 +8,6 @@ jest.mock("@rnx-kit/tools-react-native/context", () => ({
     throw new Error("Expected fast path");
   },
 }));
-
-describe("bin/context/getCoreCommands()", () => {
-  it("strips `rnx-` prefix from all commands", () => {
-    const coreCommands = getCoreCommands();
-    for (let i = 0; i < coreCommands.length; ++i) {
-      const modified = coreCommands[i];
-      const original = reactNativeConfig.commands[i];
-
-      expect(modified).not.toBe(original);
-      expect(modified.name.startsWith("rnx-")).toBe(false);
-      expect(modified.description).toBe(original.description);
-      expect(modified.options).toEqual(original.options);
-      expect(modified.func).toBe(original.func);
-    }
-  });
-});
 
 describe("bin/context/uniquify()", () => {
   function makeCommand(name: string, description: string): Command<false> {
@@ -57,14 +38,28 @@ describe("bin/context/loadContextForCommand()", () => {
     jest.resetAllMocks();
   });
 
-  it("uses fast code path for rnx commands", () => {
-    for (const { name } of getCoreCommands()) {
-      expect(() => loadContextForCommand(name)).not.toThrow();
-    }
+  it("uses full code path for other commands", async () => {
+    const fastPath = "Expected fast path";
+
+    const runAndroid = loadContextForCommand("run-android");
+    const runIOS = loadContextForCommand("run-ios");
+
+    await expect(runAndroid).rejects.toThrow(fastPath);
+    await expect(runIOS).rejects.toThrow(fastPath);
   });
 
-  it("uses full code path for other commands", () => {
-    expect(() => loadContextForCommand("run-android")).toThrow();
-    expect(() => loadContextForCommand("run-ios")).toThrow();
+  it("strips `rnx-` prefix from all commands", async () => {
+    const { commands } = await loadContextForCommand("start");
+
+    for (let i = 0; i < commands.length; ++i) {
+      const modified = commands[i];
+      const original = reactNativeConfig.commands[i];
+
+      expect(modified).not.toBe(original);
+      expect(modified.name.startsWith(RNX_PREFIX)).toBe(false);
+      expect(modified.description).toBe(original.description);
+      expect(modified.options).toEqual(original.options);
+      expect(modified.func).toBe(original.func);
+    }
   });
 });
