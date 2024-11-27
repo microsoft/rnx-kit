@@ -1,5 +1,12 @@
 # @react-native-webapis/battery-status
 
+## 0.3.0
+
+### Minor Changes
+
+- dd56196: Migrate away from deprecated `TurboReactPackage`. This is a
+  requirement for supporting 0.77 and above.
+
 ## 0.2.0
 
 ### Minor Changes
