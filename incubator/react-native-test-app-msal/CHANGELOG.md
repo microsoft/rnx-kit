@@ -1,5 +1,12 @@
 # Change Log - @rnx-kit/react-native-test-app-msal
 
+## 5.0.0
+
+### Major Changes
+
+- dd56196: Migrate away from deprecated `TurboReactPackage`. This is a
+  requirement for supporting 0.77 and above.
+
 ## 4.0.0
 
 ### Major Changes

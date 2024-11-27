@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/cli
 
+## 0.18.3
+
+### Patch Changes
+
+- b0c6cae: Add support for ESM config files
+
 ## 0.18.2
 
 ### Patch Changes

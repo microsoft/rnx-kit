@@ -1,5 +1,12 @@
 # @react-native-webapis/web-storage
 
+## 0.4.0
+
+### Minor Changes
+
+- dd56196: Migrate away from deprecated `TurboReactPackage`. This is a
+  requirement for supporting 0.77 and above.
+
 ## 0.3.1
 
 ### Patch Changes
