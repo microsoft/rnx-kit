@@ -11,7 +11,8 @@ import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.bridge.ReactModuleWithSpec
 
 class BatteryStatusModule(context: ReactApplicationContext?) :
-    ReactContextBaseJavaModule(context), ReactModuleWithSpec {
+    ReactContextBaseJavaModule(context),
+    ReactModuleWithSpec {
 
     companion object {
         const val NAME = "RNWBatteryStatus"
@@ -34,14 +35,11 @@ class BatteryStatusModule(context: ReactApplicationContext?) :
     }
 }
 
-fun BatteryManager.getBatteryLevel(): Double {
-    return getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY) / 100.0
-}
+fun BatteryManager.getBatteryLevel(): Double =
+    getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY) / 100.0
 
-fun BatteryManager.getChargingTime(): Int {
-    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-        (computeChargeTimeRemaining() / 1000).toInt()
-    } else {
-        -1
-    }
+fun BatteryManager.getChargingTime(): Int = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+    (computeChargeTimeRemaining() / 1000).toInt()
+} else {
+    -1
 }

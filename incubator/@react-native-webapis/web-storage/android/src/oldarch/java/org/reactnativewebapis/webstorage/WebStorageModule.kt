@@ -23,9 +23,7 @@ class WebStorageModule(context: ReactApplicationContext) : ReactContextBaseJavaM
     override fun getName(): String = NAME
 
     @ReactMethod(isBlockingSynchronousMethod = true)
-    fun length(): Int {
-        return sharedPreferences.all.size
-    }
+    fun length(): Int = sharedPreferences.all.size
 
     @ReactMethod(isBlockingSynchronousMethod = true)
     fun key(@Suppress("UNUSED_PARAMETER") index: Int): String? {
@@ -35,9 +33,7 @@ class WebStorageModule(context: ReactApplicationContext) : ReactContextBaseJavaM
     }
 
     @ReactMethod(isBlockingSynchronousMethod = true)
-    fun getItem(key: String): String? {
-        return sharedPreferences.getString(key, null)
-    }
+    fun getItem(key: String): String? = sharedPreferences.getString(key, null)
 
     @ReactMethod(isBlockingSynchronousMethod = true)
     fun setItem(key: String, value: String) {

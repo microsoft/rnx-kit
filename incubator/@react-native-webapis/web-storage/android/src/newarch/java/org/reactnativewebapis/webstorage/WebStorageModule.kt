@@ -18,9 +18,7 @@ class WebStorageModule(context: ReactApplicationContext) : NativeWebStorageSpec(
             MODE_PRIVATE
         )
 
-    override fun length(): Double {
-        return sharedPreferences.all.size.toDouble()
-    }
+    override fun length(): Double = sharedPreferences.all.size.toDouble()
 
     override fun key(index: Double): String? {
         // The order of the elements in `SharedPreferences` is not defined.
@@ -28,9 +26,7 @@ class WebStorageModule(context: ReactApplicationContext) : NativeWebStorageSpec(
         return null
     }
 
-    override fun getItem(key: String): String? {
-        return sharedPreferences.getString(key, null)
-    }
+    override fun getItem(key: String): String? = sharedPreferences.getString(key, null)
 
     override fun setItem(key: String, value: String): Boolean {
         sharedPreferences.edit { putString(key, value) }
