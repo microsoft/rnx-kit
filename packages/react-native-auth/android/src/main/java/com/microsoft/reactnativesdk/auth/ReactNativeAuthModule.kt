@@ -43,7 +43,6 @@ abstract class ReactNativeAuthModule(context: ReactApplicationContext?) :
             false,
             false,
             false,
-            false,
             false
         )
     }
