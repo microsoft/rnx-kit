@@ -19,7 +19,7 @@ class MsalPackage : BaseReactPackage() {
         }
     }
 
-    override fun getReactModuleInfoProvider(): ReactModuleInfoProvider = ReactModuleInfoProvider {
+    override fun getReactModuleInfoProvider() = ReactModuleInfoProvider {
         val info = ReactNativeAuthModuleProvider.info()
         if (info == null) {
             mapOf()

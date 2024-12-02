@@ -13,16 +13,15 @@ class BatteryStatusPackage : BaseReactPackage() {
             else -> throw IllegalArgumentException("No module named '$name'")
         }
 
-    override fun getReactModuleInfoProvider(): ReactModuleInfoProvider = ReactModuleInfoProvider {
+    override fun getReactModuleInfoProvider() = ReactModuleInfoProvider {
         val info = ReactModuleInfo(
             BatteryStatusModule.NAME,
             BatteryStatusModule::class.java.name,
             false,
             false,
             false,
-            false,
             false
         )
-        mapOf(info.name() to info).toMutableMap()
+        mapOf(BatteryStatusModule.NAME to info).toMutableMap()
     }
 }

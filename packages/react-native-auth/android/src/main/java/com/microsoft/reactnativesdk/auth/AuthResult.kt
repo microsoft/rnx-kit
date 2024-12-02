@@ -13,13 +13,11 @@ data class AuthResult(
     val expirationTime: Int,
     val redirectUri: String? = null
 ) {
-    fun toWritableMap(): WritableMap {
-        return Arguments.createMap().also { map ->
-            map.putString("accessToken", accessToken)
-            map.putInt("expirationTime", expirationTime)
-            redirectUri?.let {
-                map.putString("redirectUri", redirectUri)
-            }
+    fun toWritableMap(): WritableMap = Arguments.createMap().also { map ->
+        map.putString("accessToken", accessToken)
+        map.putInt("expirationTime", expirationTime)
+        redirectUri?.let {
+            map.putString("redirectUri", redirectUri)
         }
     }
 }

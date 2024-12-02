@@ -32,7 +32,8 @@ typealias OnTokenAcquired = (result: AuthResult?, error: AuthError?) -> Unit
  * ```
  */
 abstract class ReactNativeAuthModule(context: ReactApplicationContext?) :
-    ReactContextBaseJavaModule(context), ReactModuleWithSpec {
+    ReactContextBaseJavaModule(context),
+    ReactModuleWithSpec {
 
     companion object {
         const val NAME = "RNXAuth"
@@ -40,7 +41,6 @@ abstract class ReactNativeAuthModule(context: ReactApplicationContext?) :
         fun <T> moduleInfo(klass: Class<T>): ReactModuleInfo = ReactModuleInfo(
             NAME,
             klass.name,
-            false,
             false,
             false,
             false,

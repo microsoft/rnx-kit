@@ -13,16 +13,15 @@ class WebStoragePackage : BaseReactPackage() {
             else -> throw IllegalArgumentException("No module named '$name'")
         }
 
-    override fun getReactModuleInfoProvider(): ReactModuleInfoProvider = ReactModuleInfoProvider {
+    override fun getReactModuleInfoProvider() = ReactModuleInfoProvider {
         val info = ReactModuleInfo(
             WebStorageModule.NAME,
             WebStorageModule::class.java.name,
             false,
             false,
             false,
-            false,
             WebStorageModule.IS_TURBO_MODULE
         )
-        mapOf(info.name() to info).toMutableMap()
+        mapOf(WebStorageModule.NAME to info).toMutableMap()
     }
 }
