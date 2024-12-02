@@ -1,5 +1,11 @@
 # @react-native-webapis/web-storage
 
+## 0.4.1
+
+### Patch Changes
+
+- c88c843: Migrate away from deprecated `ReactModuleInfo` constructor
+
 ## 0.4.0
 
 ### Minor Changes
