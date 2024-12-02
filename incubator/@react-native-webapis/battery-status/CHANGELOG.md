@@ -1,5 +1,11 @@
 # @react-native-webapis/battery-status
 
+## 0.3.1
+
+### Patch Changes
+
+- c88c843: Migrate away from deprecated `ReactModuleInfo` constructor
+
 ## 0.3.0
 
 ### Minor Changes

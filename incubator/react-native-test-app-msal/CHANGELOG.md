@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/react-native-test-app-msal
 
+## 5.0.1
+
+### Patch Changes
+
+- c88c843: Migrate away from deprecated `ReactModuleInfo` constructor
+
 ## 5.0.0
 
 ### Major Changes
