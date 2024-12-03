@@ -1,5 +1,13 @@
 # Change Log - @rnx-kit/jest-preset
 
+## 0.2.1
+
+### Patch Changes
+
+- cc2556c: Support ESM config files
+- Updated dependencies [cc2556c]
+  - @rnx-kit/tools-react-native@2.0.3
+
 ## 0.2.0
 
 ### Minor Changes

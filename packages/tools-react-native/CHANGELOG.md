@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/tools-react-native
 
+## 2.0.3
+
+### Patch Changes
+
+- cc2556c: Decouple `getAvailablePlatforms()` from `@react-native-community/cli`
+
 ## 2.0.2
 
 ### Patch Changes

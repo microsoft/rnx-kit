@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/cli",
-  "version": "0.18.3",
+  "version": "0.18.4",
   "description": "Command-line interface for working with kit packages in your repo",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/cli#readme",
   "license": "MIT",
@@ -53,7 +53,7 @@
     "@rnx-kit/tools-apple": "^0.2.1",
     "@rnx-kit/tools-language": "^3.0.0",
     "@rnx-kit/tools-node": "^3.0.0",
-    "@rnx-kit/tools-react-native": "^2.0.0",
+    "@rnx-kit/tools-react-native": "^2.0.3",
     "commander": "^11.1.0",
     "ora": "^5.4.1",
     "qrcode": "^1.5.0"

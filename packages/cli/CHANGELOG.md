@@ -1,5 +1,14 @@
 # Change Log - @rnx-kit/cli
 
+## 0.18.4
+
+### Patch Changes
+
+- 42fa275: Add ability to clean Xcode Simulator cache. Fixes issues with
+  `launchd_sim` crashing or not responding when trying to boot a simulator.
+- Updated dependencies [cc2556c]
+  - @rnx-kit/tools-react-native@2.0.3
+
 ## 0.18.3
 
 ### Patch Changes
