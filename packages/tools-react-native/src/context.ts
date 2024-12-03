@@ -4,6 +4,9 @@ import {
   findPackageDependencyDir,
   readPackage,
 } from "@rnx-kit/tools-node/package";
+import { spawnSync } from "node:child_process";
+import * as fs from "node:fs";
+import * as path from "node:path";
 import {
   getCurrentState,
   getSavedState,
@@ -14,6 +17,13 @@ import {
 // As of 0.76, `@react-native-community/cli` is no longer a dependency of
 // `react-native`. Consumers have to take a direct dependency on CLI instead.
 const RN_CLI_DECOUPLED = 76;
+
+export const REACT_NATIVE_CONFIG_FILES = [
+  "react-native.config.ts",
+  "react-native.config.mjs",
+  "react-native.config.cjs",
+  "react-native.config.js",
+];
 
 function toNumber(version: string): number {
   const [major, minor = 0] = version.split(".");
@@ -114,4 +124,36 @@ export async function loadContextAsync(
   const config = await loadConfigAsync(options);
   saveConfigToCache(projectRoot, state, config);
   return config;
+}
+
+export function readReactNativeConfig(
+  packageDir: string,
+  cwd = process.cwd()
+): Record<string, unknown> | undefined {
+  for (const configFile of REACT_NATIVE_CONFIG_FILES) {
+    const configPath = path.join(packageDir, configFile);
+    if (fs.existsSync(configPath)) {
+      const url =
+        process.platform === "win32"
+          ? `file://${configPath.replaceAll("\\", "/")}`
+          : configPath;
+      const args = [
+        "--no-warnings",
+        "--eval",
+        `import("${url}").then((config) => console.log(JSON.stringify(config.default ?? config)));`,
+      ];
+
+      const { stderr, stdout } = spawnSync(process.argv0, args, { cwd });
+
+      const errors = stderr?.toString().trim();
+      if (errors) {
+        console.error(`${configPath}: ${errors}`);
+      }
+
+      const json = stdout?.toString().trim();
+      return json ? JSON.parse(json) : undefined;
+    }
+  }
+
+  return undefined;
 }

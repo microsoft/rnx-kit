@@ -3956,7 +3956,6 @@ __metadata:
   dependencies:
     "@react-native/eslint-plugin": "npm:^0.75.0"
     "@rnx-kit/eslint-config": "npm:*"
-    "@rnx-kit/jest-preset": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
     "@types/eslint": "npm:^9.0.0"
@@ -3997,6 +3996,7 @@ __metadata:
     "@react-native-community/cli-types": "npm:^14.0.0"
     "@react-native/babel-preset": "npm:^0.75.0"
     "@rnx-kit/scripts": "npm:*"
+    "@rnx-kit/tools-react-native": "npm:^2.0.2"
     "@rnx-kit/tsconfig": "npm:*"
     "@types/jest": "npm:^29.2.1"
     "@types/node": "npm:^20.0.0"
@@ -4586,7 +4586,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rnx-kit/tools-react-native@npm:*, @rnx-kit/tools-react-native@npm:^2.0.0, @rnx-kit/tools-react-native@workspace:packages/tools-react-native":
+"@rnx-kit/tools-react-native@npm:*, @rnx-kit/tools-react-native@npm:^2.0.0, @rnx-kit/tools-react-native@npm:^2.0.2, @rnx-kit/tools-react-native@workspace:packages/tools-react-native":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/tools-react-native@workspace:packages/tools-react-native"
   dependencies:

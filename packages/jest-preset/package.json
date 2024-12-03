@@ -28,6 +28,7 @@
     "@babel/core": "^7.0.0",
     "@babel/preset-env": "^7.0.0",
     "@babel/preset-typescript": "^7.0.0",
+    "@rnx-kit/tools-react-native": "^2.0.2",
     "find-up": "^5.0.0"
   },
   "peerDependencies": {

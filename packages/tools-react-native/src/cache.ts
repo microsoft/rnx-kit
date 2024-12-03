@@ -1,8 +1,9 @@
 import type { Config } from "@react-native-community/cli-types";
 import { findUp } from "@rnx-kit/tools-node/path";
-import * as crypto from "crypto";
-import * as nodefs from "fs";
-import * as path from "path";
+import * as crypto from "node:crypto";
+import * as nodefs from "node:fs";
+import * as path from "node:path";
+import { REACT_NATIVE_CONFIG_FILES } from "./context";
 
 const HASH_ALGO = "sha256";
 const UTF8 = { encoding: "utf-8" as const };
@@ -45,7 +46,7 @@ function updateHash(
 export function getCurrentState(projectRoot: string): string {
   const sha2 = crypto.createHash(HASH_ALGO);
 
-  const configFiles = ["package.json", "react-native.config.js"];
+  const configFiles = ["package.json", ...REACT_NATIVE_CONFIG_FILES];
   updateHash(sha2, configFiles, projectRoot, "all");
 
   const lockfiles = [

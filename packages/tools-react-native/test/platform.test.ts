@@ -46,8 +46,7 @@ describe("React Native > Platform", () => {
       __dirname,
       "__fixtures__",
       "available-platforms",
-      "node_modules",
-      "react-native"
+      "node_modules"
     );
     deepEqual(getAvailablePlatformsUncached(fixture), {
       android: "",

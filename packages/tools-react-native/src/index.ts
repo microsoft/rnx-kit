@@ -1,4 +1,9 @@
-export { loadContext, loadContextAsync, resolveCommunityCLI } from "./context";
+export {
+  loadContext,
+  loadContextAsync,
+  readReactNativeConfig,
+  resolveCommunityCLI,
+} from "./context";
 export {
   findMetroPath,
   getMetroVersion,

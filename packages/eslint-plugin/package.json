@@ -54,7 +54,6 @@
   },
   "devDependencies": {
     "@rnx-kit/eslint-config": "*",
-    "@rnx-kit/jest-preset": "*",
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*",
     "@types/eslint": "^9.0.0",
@@ -73,6 +72,6 @@
     "node": ">=16.17"
   },
   "jest": {
-    "preset": "@rnx-kit/jest-preset/private"
+    "preset": "../jest-preset/private/jest-preset.js"
   }
 }
