@@ -123,6 +123,13 @@ export async function rnxClean(
         action: () => execute("watchman", ["watch-del-all"]),
       },
     ],
+    xcode: [
+      {
+        label: "Clean Xcode Simulator cache",
+        action: () =>
+          cleanDir(`${os.homedir()}/Library/Developer/CoreSimulator/Caches`),
+      },
+    ],
     yarn: [
       {
         label: "Clean Yarn cache",
@@ -180,7 +187,7 @@ export const rnxCleanCommand = {
   description: "Clears React Native project related caches",
   options: [
     {
-      name: "--include <android,cocoapods,metro,npm,watchman,yarn>",
+      name: "--include <android,cocoapods,metro,npm,watchman,xcode,yarn>",
       description: "Comma-separated flag of caches to clear e.g., `npm,yarn`",
       default: "metro,watchman",
     },
