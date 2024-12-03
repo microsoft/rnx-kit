@@ -133,13 +133,24 @@ export function readReactNativeConfig(
   for (const configFile of REACT_NATIVE_CONFIG_FILES) {
     const configPath = path.join(packageDir, configFile);
     if (fs.existsSync(configPath)) {
+      const url =
+        process.platform === "win32"
+          ? `file://${configPath.replaceAll("\\", "/")}`
+          : configPath;
       const args = [
         "--no-warnings",
         "--eval",
-        `import("${configPath}").then((config) => console.log(JSON.stringify(config.default ?? config)));`,
+        `import("${url}").then((config) => console.log(JSON.stringify(config.default ?? config)));`,
       ];
-      const { stdout } = spawnSync(process.argv0, args, { cwd });
-      const json = stdout.toString().trim();
+
+      const { stderr, stdout } = spawnSync(process.argv0, args, { cwd });
+
+      const errors = stderr?.toString().trim();
+      if (errors) {
+        console.error(`${configPath}: ${errors}`);
+      }
+
+      const json = stdout?.toString().trim();
       return json ? JSON.parse(json) : undefined;
     }
   }
