@@ -2699,15 +2699,15 @@ __metadata:
   linkType: hard
 
 "@microsoft/eslint-plugin-sdl@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "@microsoft/eslint-plugin-sdl@npm:1.0.0"
+  version: 1.0.1
+  resolution: "@microsoft/eslint-plugin-sdl@npm:1.0.1"
   dependencies:
     eslint-plugin-n: "npm:17.10.3"
     eslint-plugin-react: "npm:7.35.2"
     eslint-plugin-security: "npm:1.4.0"
   peerDependencies:
     eslint: ^9
-  checksum: 10c0/3ba090ecdd08b5c4ec3e5520d9b4ff908b5ffdef0c2609349a5efa322b02b962df60f20abd8688254d76456e54ca1860c4f7699fb7e33d6befe1b8b65d83d613
+  checksum: 10c0/2b4ea413380007abc14317163fe7224730ee067559bdd1d3b1428a56ba4eb4fb3fd5f21bd6c41f2572ec65a996ddeff6d690fdfa2cb436a8a70cd42af6b3efe6
   languageName: node
   linkType: hard
 
