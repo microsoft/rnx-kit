@@ -248,7 +248,9 @@ using ReactNativeConfig = facebook::react::EmptyReactNativeConfig const;
     }
 
 #if USE_BRIDGELESS
+#ifndef USE_UNIFIED_FEATURE_FLAGS
     RCTSetUseNativeViewConfigsInBridgelessMode(YES);
+#endif
     RCTEnableTurboModuleInterop(YES);
     RCTEnableTurboModuleInteropBridgeProxy(YES);
 
