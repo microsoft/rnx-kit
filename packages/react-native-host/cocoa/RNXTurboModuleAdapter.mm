@@ -98,7 +98,11 @@
 
 - (id<RCTTurboModule>)getModuleInstanceFromClass:(Class)moduleClass
 {
+#if __has_include(<React-RCTAppDelegate/RCTDependencyProvider.h>) || __has_include(<React_RCTAppDelegate/RCTDependencyProvider.h>)
+    return RCTAppSetupDefaultModuleFromClass(moduleClass, nil);
+#else
     return RCTAppSetupDefaultModuleFromClass(moduleClass);
+#endif  // __has_include(<React-RCTAppDelegate/RCTArchConfiguratorProtocol.h>)
 }
 
 // MARK: - Private

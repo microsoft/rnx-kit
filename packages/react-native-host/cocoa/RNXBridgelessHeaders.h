@@ -49,10 +49,36 @@ using SharedJSRuntimeFactory = std::shared_ptr<facebook::react::JSRuntimeFactory
 @end
 
 #ifdef USE_FEATURE_FLAGS
+#if __has_include(<React-RCTAppDelegate/RCTArchConfiguratorProtocol.h>) || __has_include(<React_RCTAppDelegate/RCTArchConfiguratorProtocol.h>)
+#define USE_UNIFIED_FEATURE_FLAGS 1
+#endif  // __has_include(<React-RCTAppDelegate/RCTArchConfiguratorProtocol.h>)
+
 // https://github.com/facebook/react-native/blob/0.74-stable/packages/react-native/Libraries/AppDelegate/RCTAppDelegate.mm#L272-L286
 class RNXBridgelessFeatureFlags : public facebook::react::ReactNativeFeatureFlagsDefaults
 {
 public:
+#ifdef USE_UNIFIED_FEATURE_FLAGS  // >= 0.77
+    bool enableBridgelessArchitecture() override
+    {
+        return true;
+    }
+    bool enableFabricRenderer() override
+    {
+        return true;
+    }
+    bool useTurboModules() override
+    {
+        return true;
+    }
+    bool useNativeViewConfigsInBridgelessMode() override
+    {
+        return true;
+    }
+    bool enableFixForViewCommandRace() override
+    {
+        return true;
+    }
+#else   // < 0.77
     bool useModernRuntimeScheduler() override
     {
         return true;
@@ -67,6 +93,7 @@ public:
     {
         return true;
     }
+#endif  // USE_UNIFIED_FEATURE_FLAGS
 };
 #endif  // USE_FEATURE_FLAGS
 
