@@ -1,5 +1,11 @@
 # @rnx-kit/react-native-host
 
+## 0.5.2
+
+### Patch Changes
+
+- 582dabc: Updated feature flags and other build fixes for 0.77
+
 ## 0.5.1
 
 ### Patch Changes
