@@ -1,49 +1,49 @@
 {
-  "extends": ["config:base", "schedule:earlyMondays"],
+  "extends": ["config:recommended", "schedule:earlyMondays"],
   "addLabels": ["dependencies"],
   "packageRules": [
     {
       "groupName": "@react-native-community/cli",
-      "matchPackagePrefixes": ["@react-native-community/cli"],
-      "allowedVersions": "^14.0.0"
+      "allowedVersions": "^14.0.0",
+      "matchPackageNames": ["@react-native-community/cli{/,}**"]
     },
     {
       "groupName": "Android",
       "matchDatasources": ["maven"],
-      "matchPackagePrefixes": ["com.android."]
+      "matchPackageNames": ["com.android.{/,}**"]
     },
     {
       "groupName": "ESLint",
-      "matchSourceUrlPrefixes": ["https://github.com/eslint/eslint"]
+      "matchSourceUrls": ["https://github.com/eslint/eslint{/,}**"]
     },
     {
       "groupName": "Jest",
-      "matchSourceUrlPrefixes": ["https://github.com/facebook/jest"],
-      "allowedVersions": "^29.0.0"
+      "allowedVersions": "^29.0.0",
+      "matchSourceUrls": ["https://github.com/facebook/jest{/,}**"]
     },
     {
       "groupName": "Kotlin",
       "matchDatasources": ["maven"],
-      "matchPackagePrefixes": ["org.jetbrains.kotlin"]
+      "matchPackageNames": ["org.jetbrains.kotlin{/,}**"]
     },
     {
       "groupName": "Metro",
-      "matchSourceUrlPrefixes": ["https://github.com/facebook/metro"],
-      "allowedVersions": "^0.80.0"
+      "allowedVersions": "^0.80.0",
+      "matchSourceUrls": ["https://github.com/facebook/metro{/,}**"]
     },
     {
       "groupName": "Moshi",
       "matchDatasources": ["maven"],
-      "matchPackagePrefixes": ["com.squareup.moshi"]
+      "matchPackageNames": ["com.squareup.moshi{/,}**"]
     },
     {
       "groupName": "Octokit",
-      "matchSourceUrlPrefixes": ["https://github.com/octokit/"]
+      "matchSourceUrls": ["https://github.com/octokit/{/,}**"]
     },
     {
       "groupName": "TypeScript type definitions",
       "matchDatasources": ["npm"],
-      "matchPackagePrefixes": ["@types/"]
+      "matchPackageNames": ["@types/{/,}**"]
     },
     {
       "matchPackageNames": [
@@ -81,6 +81,6 @@
   ],
   "postUpdateOptions": ["yarnDedupeHighest"],
   "rangeStrategy": "update-lockfile",
-  "stabilityDays": 7,
+  "minimumReleaseAge": "7 days",
   "timezone": "Europe/Oslo"
 }
