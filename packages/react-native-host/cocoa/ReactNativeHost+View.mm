@@ -59,10 +59,7 @@ static NSString *const kReactConcurrentRoot = @"concurrentRoot";
 #elif USE_BRIDGELESS
     RCTFabricSurface *surface = [self.reactHost createSurfaceWithModuleName:moduleName
                                                           initialProperties:initialProps];
-    RCTSurfaceSizeMeasureMode sizeMeasureMode =
-        RCTSurfaceSizeMeasureModeWidthExact | RCTSurfaceSizeMeasureModeHeightExact;
-    return [[RCTSurfaceHostingProxyRootView alloc] initWithSurface:surface
-                                                   sizeMeasureMode:sizeMeasureMode];
+    return [[RCTSurfaceHostingProxyRootView alloc] initWithSurface:surface];
 #else
     RCTFabricSurface *surface =
         [[RCTFabricSurface alloc] initWithSurfacePresenter:self.surfacePresenter
