@@ -485,12 +485,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^20.0":
-  version: 20.17.9
-  resolution: "@types/node@npm:20.17.9"
+"@types/node@npm:^22.0.0":
+  version: 22.10.2
+  resolution: "@types/node@npm:22.10.2"
   dependencies:
-    undici-types: "npm:~6.19.2"
-  checksum: 10c0/1c37c3618407d56b76301578edabcb4c6a7ef093d0811c50fc4df8df68fc546797a294cafac0e50789f4e0e485cd1d6871964d8e6222fd420658bdae89c1fb4a
+    undici-types: "npm:~6.20.0"
+  checksum: 10c0/2c7b71a040f1ef5320938eca8ebc946e6905caa9bbf3d5665d9b3774a8d15ea9fab1582b849a6d28c7fc80756a62c5666bc66b69f42f4d5dafd1ccb193cdb4ac
   languageName: node
   linkType: hard
 
@@ -2873,7 +2873,7 @@ __metadata:
     "@octokit/core": "npm:^6.0"
     "@octokit/plugin-rest-endpoint-methods": "npm:^13.0"
     "@rnx-kit/tsconfig": "npm:^2.0.0"
-    "@types/node": "npm:^20.0"
+    "@types/node": "npm:^22.0.0"
     azure-devops-node-api: "npm:^13.0.0"
     eslint: "npm:^9.0.0"
     parse-diff: "npm:^0.11"
@@ -3076,10 +3076,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"undici-types@npm:~6.19.2":
-  version: 6.19.8
-  resolution: "undici-types@npm:6.19.8"
-  checksum: 10c0/078afa5990fba110f6824823ace86073b4638f1d5112ee26e790155f481f2a868cc3e0615505b6f4282bdf74a3d8caad715fd809e870c2bb0704e3ea6082f344
+"undici-types@npm:~6.20.0":
+  version: 6.20.0
+  resolution: "undici-types@npm:6.20.0"
+  checksum: 10c0/68e659a98898d6a836a9a59e6adf14a5d799707f5ea629433e025ac90d239f75e408e2e5ff086afc3cace26f8b26ee52155293564593fbb4a2f666af57fc59bf
   languageName: node
   linkType: hard
 
