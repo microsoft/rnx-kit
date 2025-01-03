@@ -1,5 +1,11 @@
 # @react-native-webapis/web-storage
 
+## 0.4.2
+
+### Patch Changes
+
+- f0469e3: Make sure `key()` returns `null` if the index does not exist
+
 ## 0.4.1
 
 ### Patch Changes
