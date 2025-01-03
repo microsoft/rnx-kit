@@ -9706,19 +9706,16 @@ __metadata:
   linkType: hard
 
 "prettier-plugin-organize-imports@npm:^4.0.0":
-  version: 4.0.0
-  resolution: "prettier-plugin-organize-imports@npm:4.0.0"
+  version: 4.1.0
+  resolution: "prettier-plugin-organize-imports@npm:4.1.0"
   peerDependencies:
-    "@vue/language-plugin-pug": ^2.0.24
     prettier: ">=2.0"
     typescript: ">=2.9"
-    vue-tsc: ^2.0.24
+    vue-tsc: ^2.1.0
   peerDependenciesMeta:
-    "@vue/language-plugin-pug":
-      optional: true
     vue-tsc:
       optional: true
-  checksum: 10c0/6c3c2a0680540c2c27d8e0e47c7cb69d374e47534c467877a99031defa087d52a4fc972156321dadbadc10b2eb90d67398110a0be65f5b3c9db93b85a546d8f7
+  checksum: 10c0/fb2d6d415bac96b65a77ea7de9f708e8613436aeb9d82bbe63edeb312fd1362c0d3c57319bd4cc4adfc8b9964fb6c205cbbf8efd9546931b0f9874c0ae624a6a
   languageName: node
   linkType: hard
 
