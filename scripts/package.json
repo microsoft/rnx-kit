@@ -21,7 +21,7 @@
     "markdown-table": "^3.0.0",
     "prettier": "^3.0.0",
     "tsx": "^4.15.0",
-    "typedoc": "^0.26.0",
+    "typedoc": "^0.27.0",
     "typescript": "^5.0.0",
     "yargs": "^16.0.0"
   },
