@@ -331,7 +331,11 @@ function extractExports(context, moduleId, depth) {
             } else {
               const set = node.exportKind === "type" ? types : exports;
               node.specifiers.forEach((spec) => {
-                const name = spec.exported.name;
+                const exported = spec.exported;
+                const name =
+                  exported.type === "Identifier"
+                    ? exported.name
+                    : exported.value;
                 if (name !== "default") {
                   set.add(name);
                 }
