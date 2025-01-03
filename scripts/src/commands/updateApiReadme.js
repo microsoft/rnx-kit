@@ -173,7 +173,7 @@ async function updateReadme(exportedTypes, exportedFunctions) {
 }
 
 export async function updateApiReadme() {
-  const { default: typedoc } = await import("typedoc");
+  const typedoc = await import("typedoc");
 
   const project = await parse(typedoc);
   const children = project?.children;
