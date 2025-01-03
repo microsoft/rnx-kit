@@ -221,6 +221,11 @@
           "src/index.ts",
           "test/**/*.test.ts"
         ]
+      },
+      "scripts": {
+        "ignoreDependencies": [
+          "@rnx-kit/tsconfig"
+        ]
       }
     }
   },
