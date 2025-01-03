@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/eslint-plugin
 
+## 0.8.5
+
+### Patch Changes
+
+- 65fa41a: Handle case where exported specifier is a string literal
+
 ## 0.8.4
 
 ### Patch Changes
