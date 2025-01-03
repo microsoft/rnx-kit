@@ -156,5 +156,5 @@ export type BundleConfig = BundleParameters & {
    * Platform-specific overrides for bundling. Any parameter not listed in an override gets
    * its value from the shared bundle configuration, or falls back to defaults.
    */
-  platforms?: { [K in AllPlatforms]?: BundleParameters };
+  platforms?: Partial<Record<AllPlatforms, BundleParameters>>;
 };
