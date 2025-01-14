@@ -21,7 +21,7 @@ export function makeSessionStorage() {
         for (let k = 0; k < index; ++k) {
           res = iter.next();
         }
-        return res.value;
+        return res.value ?? null;
       },
       writable: false,
     },
