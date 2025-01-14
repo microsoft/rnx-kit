@@ -43,6 +43,7 @@
     "nx": "patch:nx@npm%3A20.3.3#~/.yarn/patches/nx-npm-20.3.3-84b801f64d.patch",
     "prettier": "^3.0.0",
     "prettier-plugin-organize-imports": "^4.0.0",
+    "suggestion-bot": "^3.0.0",
     "tsx": "^4.15.0",
     "typescript": "^5.0.0"
   },
