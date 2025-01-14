@@ -1,7 +1,2 @@
-import { TypeScriptPlugin } from "./serializerHook";
-
-export { TypeScriptPlugin };
-
-// `export default` required for plugin interface
-// eslint-disable-next-line no-restricted-exports
-export default TypeScriptPlugin;
+export { getPackageInfo } from "./packageInfo";
+export type { PackageInfo } from "./types";
