@@ -1,7 +1,11 @@
 import type { BundleConfig } from "@rnx-kit/config";
 import type { PackageManifest } from "@rnx-kit/tools-node";
 import type { AllPlatforms } from "@rnx-kit/tools-react-native";
-import type { PackageInfo } from "./types";
+import {
+  getPlatformPackageName,
+  platformValues,
+} from "@rnx-kit/tools-react-native";
+import type { BuildInfo } from "./types";
 
 import { getKitConfigFromPackageJson } from "@rnx-kit/config";
 import { findPackage, readPackage } from "@rnx-kit/tools-node";
@@ -36,28 +40,22 @@ function loadTypescriptConfig(
  */
 function findReactNativePlatformsFromDeps(
   manifest: PackageManifest,
-  foundPlatforms: { [key in AllPlatforms]?: boolean }
+  foundPlatforms: Record<AllPlatforms, boolean>
 ) {
-  const deps = [
-    manifest.dependencies,
-    manifest.devDependencies,
-    manifest.peerDependencies,
-  ];
-  deps.forEach((dep) => {
-    if (dep) {
-      if (dep["react-native"]) {
-        foundPlatforms.android = true;
-        foundPlatforms.ios = true;
-      }
-      if (dep["react-native-windows"]) {
-        foundPlatforms.windows = true;
-      }
-      if (dep["react-native-macos"]) {
-        foundPlatforms.macos = true;
-      }
-      if (dep["@office-iss/react-native-win32"]) {
-        foundPlatforms.win32 = true;
-      }
+  // merge dependencies together, we only care about existence not version
+  const deps = {
+    ...manifest.dependencies,
+    ...manifest.devDependencies,
+    ...manifest.peerDependencies,
+  };
+
+  // create a mapping of platform to package name
+  const allPlatforms = platformValues();
+  const allPackages = allPlatforms.map((p) => getPlatformPackageName(p));
+
+  allPlatforms.forEach((platform, index) => {
+    if (deps[allPackages[index]]) {
+      foundPlatforms[platform] = true;
     }
   });
 }
@@ -69,15 +67,9 @@ function findReactNativePlatformsFromDeps(
  */
 function findReactNativePlatformsFromBundleConfig(
   config: BundleConfig,
-  foundPlatforms: { [key in AllPlatforms]?: boolean }
+  foundPlatforms: Record<AllPlatforms, boolean>
 ) {
-  const allPlatforms: AllPlatforms[] = [
-    "android",
-    "ios",
-    "windows",
-    "macos",
-    "win32",
-  ];
+  const allPlatforms = platformValues();
   if (config.platforms && typeof config.platforms === "object") {
     allPlatforms.forEach((platform) => {
       if (config.platforms![platform]) {
@@ -85,23 +77,27 @@ function findReactNativePlatformsFromBundleConfig(
       }
     });
   }
-  const targets =
-    config.targets && Array.isArray(config.targets) ? config.targets : [];
+  const targets = Array.isArray(config.targets) ? config.targets : [];
   targets.forEach((target) => {
-    if (
-      typeof target === "string" &&
-      allPlatforms.find((platform) => platform === target)
-    ) {
+    if (typeof target === "string" && allPlatforms.includes(target)) {
       foundPlatforms[target] = true;
     }
   });
 }
 
+/**
+ * This determines supported react native platforms for a package. For module packages it will key off of the presence of
+ * react-native in the dependencies. For app packages it will key off of the bundle configuration.
+ *
+ * @param manifest parsed package jsos, used for checking dependencies
+ * @param packageRoot root path of the package
+ * @returns an array of react-native platforms that the package supports
+ */
 function getReactNativePlatforms(
   manifest: PackageManifest,
   packageRoot: string
 ): AllPlatforms[] | undefined {
-  const foundPlatforms: { [key in AllPlatforms]?: boolean } = {};
+  const foundPlatforms: Record<string, boolean> = {};
 
   const rnxKit = manifest["rnx-kit"];
   if (
@@ -119,7 +115,6 @@ function getReactNativePlatforms(
         findReactNativePlatformsFromBundleConfig(bundleConfig, foundPlatforms);
       }
     });
-    findReactNativePlatformsFromBundleConfig(kitConfig, foundPlatforms);
   } else {
     // for all other packages, determine available platforms based on dependencies
     findReactNativePlatformsFromDeps(manifest, foundPlatforms);
@@ -128,10 +123,10 @@ function getReactNativePlatforms(
   return platforms.length > 0 ? platforms : undefined;
 }
 
-export function getPackageInfo(
+export function getTypescriptBuildInfo(
   startDir: string = process.cwd(),
   loadPlatforms = true
-): PackageInfo {
+): BuildInfo {
   // load the base package json
   const pkgJsonPath = findPackage(startDir);
   if (!pkgJsonPath) {

@@ -1,7 +1,7 @@
 import type { AllPlatforms } from "@rnx-kit/tools-react-native/platform";
 import type ts from "typescript";
 
-export type PackageInfo = {
+export type BuildInfo = {
   // name of the package
   name: string;
 

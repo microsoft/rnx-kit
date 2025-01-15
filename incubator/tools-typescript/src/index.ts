@@ -1,2 +1,2 @@
-export { getPackageInfo } from "./packageInfo";
-export type { PackageInfo } from "./types";
+export { getTypescriptBuildInfo } from "./buildInfo";
+export type { BuildInfo } from "./types";
