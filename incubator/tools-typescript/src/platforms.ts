@@ -1,37 +1,15 @@
-import type { BundleConfig } from "@rnx-kit/config";
-import type { PackageManifest } from "@rnx-kit/tools-node";
-import type { AllPlatforms } from "@rnx-kit/tools-react-native";
 import {
+  type BundleConfig,
+  getKitConfigFromPackageJson,
+} from "@rnx-kit/config";
+import type { PackageManifest } from "@rnx-kit/tools-node";
+import {
+  type AllPlatforms,
   getPlatformPackageName,
+  platformExtensions,
   platformValues,
 } from "@rnx-kit/tools-react-native";
-import type { BuildInfo } from "./types";
-
-import { getKitConfigFromPackageJson } from "@rnx-kit/config";
-import { findPackage, readPackage } from "@rnx-kit/tools-node";
-import { readConfigFile } from "@rnx-kit/typescript-service";
-
-import path from "path";
-import ts from "typescript";
-
-/**
- * Load the tsconfig.json file for the package
- * @param pkgRoot - the root directory of the package
- * @returns the parsed tsconfig.json file, if found
- */
-function loadTypescriptConfig(
-  pkgRoot: string
-): ts.ParsedCommandLine | undefined {
-  const configPath = ts.findConfigFile(
-    pkgRoot,
-    ts.sys.fileExists,
-    "tsconfig.json"
-  );
-  if (configPath) {
-    return readConfigFile(configPath);
-  }
-  return undefined;
-}
+import type { BuildTaskOptions } from "./build";
 
 /**
  * See if any of the react-native platform dependencies are present in the given dependencies object
@@ -93,7 +71,7 @@ function findReactNativePlatformsFromBundleConfig(
  * @param packageRoot root path of the package
  * @returns an array of react-native platforms that the package supports
  */
-function getReactNativePlatforms(
+export function detectReactNativePlatforms(
   manifest: PackageManifest,
   packageRoot: string
 ): AllPlatforms[] | undefined {
@@ -123,26 +101,112 @@ function getReactNativePlatforms(
   return platforms.length > 0 ? platforms : undefined;
 }
 
-export function getTypescriptBuildInfo(
-  startDir: string = process.cwd(),
-  loadPlatforms = true
-): BuildInfo {
-  // load the base package json
-  const pkgJsonPath = findPackage(startDir);
-  if (!pkgJsonPath) {
-    throw new Error("Unable to find package.json");
+/**
+ * Parse a file path to get base path and platform extension, if one exists.
+ */
+function splitFileName(file: string): [string, string | number] {
+  const match = /^(.*?)(?:\.([a-zA-Z0-9]*))?\.[jt]sx?$/.exec(file);
+  return match ? [match[1], match[2]] : [file, baseKey];
+}
+
+type FileEntry = { file: string; status: "found" | "built" | "checked" };
+type FileCollection = Record<string | number, FileEntry>;
+type ExtensionLookup = Record<string, (string | number)[]>;
+const baseKey = 0;
+
+/**
+ * add an entry to the appropriate task array and mark the entry as built or checked
+ */
+function addFileEntryToTask(
+  entry: FileEntry,
+  task: BuildTaskOptions,
+  checkOnly: boolean
+) {
+  if (entry.status === "found" && !checkOnly) {
+    task.build!.push(entry.file);
+    entry.status = "built";
+  } else {
+    task.check!.push(entry.file);
+    entry.status = "checked";
   }
-  const manifest = readPackage(pkgJsonPath);
-  const root = path.dirname(pkgJsonPath);
+}
 
-  // find and load the typescript config file
-  const tsconfig = loadTypescriptConfig(root);
+/**
+ * Take a collection of files will the same base name and all platform extensions and add them
+ * to the appropriate tasks with as little overlap as possible. Everything should get type-checked
+ * at least once and built once (unless checkOnly is true)
+ */
+function addFileCollectionToTasks(
+  files: FileCollection,
+  tasks: BuildTaskOptions[],
+  extensionLookup: ExtensionLookup,
+  checkOnly: boolean
+) {
+  // iterate through the tasks and pick files
+  for (const task of tasks) {
+    const platform = task.platform!;
+    const extensions = extensionLookup[platform];
+    for (const ext of extensions) {
+      if (files[ext]) {
+        addFileEntryToTask(files[ext], task, checkOnly);
+        break;
+      }
+    }
+  }
+  // add any remaining files to the base task
+  for (const key in files) {
+    const entry = files[key];
+    if (
+      entry.status === "found" ||
+      (!checkOnly && entry.status === "checked")
+    ) {
+      addFileEntryToTask(entry, tasks[0], checkOnly);
+    }
+  }
+}
 
-  // determine available react-native platforms if requested
-  const platforms = loadPlatforms
-    ? getReactNativePlatforms(manifest, root)
-    : undefined;
+function splitFilesToTasks(
+  files: string[],
+  tasks: BuildTaskOptions[],
+  extensionLookup: ExtensionLookup,
+  checkOnly: boolean
+) {
+  let fileCollection: FileCollection = {};
+  let lastBase: string | undefined = undefined;
+  files.forEach((file) => {
+    const [base, ext] = splitFileName(file);
+    if (base === lastBase) {
+      fileCollection[ext] = { file, status: "found" };
+    } else {
+      addFileCollectionToTasks(
+        fileCollection,
+        tasks,
+        extensionLookup,
+        checkOnly
+      );
+      lastBase = base;
+      fileCollection = {};
+    }
+  });
+  addFileCollectionToTasks(fileCollection, tasks, extensionLookup, checkOnly);
+}
 
-  // return the package info
-  return { name: manifest.name, root, tsconfig, platforms };
+export function multiplexForPlatforms(
+  files: string[],
+  base: BuildTaskOptions,
+  checkOnly: boolean,
+  platforms?: AllPlatforms[]
+): BuildTaskOptions[] {
+  if (!platforms || platforms.length === 0) {
+    return [base];
+  }
+  const extensions: ExtensionLookup = {};
+  const tasks: BuildTaskOptions[] = [];
+  platforms.forEach((platform) => {
+    extensions[platform] = platformExtensions(platform);
+    extensions[platform].push(baseKey);
+    tasks.push({ ...base, platform, build: [], check: [] });
+  });
+  splitFilesToTasks(files, tasks, extensions, checkOnly);
+  return tasks;
 }

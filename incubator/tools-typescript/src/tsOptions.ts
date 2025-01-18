@@ -1,5 +1,18 @@
 import ts from "typescript";
 
+function versionNumber(version: string): number {
+  const [major, minor = 0, patch = 0] = version.split("-")[0].split(".");
+  return Number(major) * 1000000 + Number(minor) * 1000 + Number(patch);
+}
+
+function greaterThanOrEqualTo(lhs: string, rhs: string): boolean {
+  return versionNumber(lhs) >= versionNumber(rhs);
+}
+
+export function requireTypescriptVersion(version: string): boolean {
+  return greaterThanOrEqualTo(ts.version, version);
+}
+
 const toTarget: Record<string, ts.ScriptTarget> = {
   es3: ts.ScriptTarget.ES3,
   es5: ts.ScriptTarget.ES5,
@@ -34,14 +47,12 @@ function convertToType<T>(
 }
 
 export function sanitizeOptions(
-  options: ts.CompilerOptions,
-  extra?: ts.CompilerOptions
+  options: ts.CompilerOptions
 ): ts.CompilerOptions {
-  const module = extra?.module || options.module || ts.ModuleKind.CommonJS;
-  const target = extra?.target || options.target || ts.ScriptTarget.ES2015;
+  const module = options.module || ts.ModuleKind.CommonJS;
+  const target = options.target || ts.ScriptTarget.ES2015;
   return {
     ...options,
-    ...extra,
     module: convertToType(toModule, module),
     target: convertToType(toTarget, target),
   };
