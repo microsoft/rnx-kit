@@ -104,91 +104,86 @@ export function detectReactNativePlatforms(
 /**
  * Parse a file path to get base path and platform extension, if one exists.
  */
-function splitFileName(file: string): [string, string | number] {
+export function splitFileNameAndSuffix(
+  file: string
+): [string, string | undefined] {
   const match = /^(.*?)(?:\.([a-zA-Z0-9]*))?\.[jt]sx?$/.exec(file);
-  return match ? [match[1], match[2]] : [file, baseKey];
+  return match ? [match[1], match[2]] : [file, undefined];
 }
 
-type FileEntry = { file: string; status: "found" | "built" | "checked" };
-type FileCollection = Record<string | number, FileEntry>;
-type ExtensionLookup = Record<string, (string | number)[]>;
-const baseKey = 0;
+type FoundSuffixes = Record<string, boolean>;
+type FileEntry = {
+  file: string;
+  suffix?: string;
+  allSuffixes: FoundSuffixes;
+  built?: boolean;
+};
 
 /**
- * add an entry to the appropriate task array and mark the entry as built or checked
+ * @returns true if this file is the best match for this platform. if file.android.ts and file.ts exist
+ * for the android platform it will only return true for file.android.ts, for ios it will return true for file.ts
  */
-function addFileEntryToTask(
-  entry: FileEntry,
-  task: BuildTaskOptions,
-  checkOnly: boolean
-) {
-  if (entry.status === "found" && !checkOnly) {
-    task.build!.push(entry.file);
-    entry.status = "built";
-  } else {
-    task.check!.push(entry.file);
-    entry.status = "checked";
-  }
+function isBestMatch(entry: FileEntry, suffixes: string[]): boolean {
+  const { allSuffixes, suffix } = entry;
+  // best suffix will be the first found one in the list or undefined if the base file
+  const bestSuffix = allSuffixes && suffixes.find((s) => allSuffixes[s]);
+
+  // it's the best match if the strings match or if they are both undefined
+  return suffix === bestSuffix;
 }
 
 /**
- * Take a collection of files will the same base name and all platform extensions and add them
- * to the appropriate tasks with as little overlap as possible. Everything should get type-checked
- * at least once and built once (unless checkOnly is true)
+ * Parse the list of files, splitting out suffixes, and create a suffix lookup shared by files with the same
+ * base file name. This is used to determine the best match for a platform.
+ * @returns a match array of FileEntry structures
  */
-function addFileCollectionToTasks(
-  files: FileCollection,
-  tasks: BuildTaskOptions[],
-  extensionLookup: ExtensionLookup,
-  checkOnly: boolean
-) {
-  // iterate through the tasks and pick files
-  for (const task of tasks) {
-    const platform = task.platform!;
-    const extensions = extensionLookup[platform];
-    for (const ext of extensions) {
-      if (files[ext]) {
-        addFileEntryToTask(files[ext], task, checkOnly);
-        break;
-      }
-    }
-  }
-  // add any remaining files to the base task
-  for (const key in files) {
-    const entry = files[key];
-    if (
-      entry.status === "found" ||
-      (!checkOnly && entry.status === "checked")
-    ) {
-      addFileEntryToTask(entry, tasks[0], checkOnly);
-    }
-  }
-}
+function processFileList(files: string[]): FileEntry[] {
+  const lookup = new Map<string, FoundSuffixes>();
 
-function splitFilesToTasks(
-  files: string[],
-  tasks: BuildTaskOptions[],
-  extensionLookup: ExtensionLookup,
-  checkOnly: boolean
-) {
-  let fileCollection: FileCollection = {};
-  let lastBase: string | undefined = undefined;
-  files.forEach((file) => {
-    const [base, ext] = splitFileName(file);
-    if (base === lastBase) {
-      fileCollection[ext] = { file, status: "found" };
-    } else {
-      addFileCollectionToTasks(
-        fileCollection,
-        tasks,
-        extensionLookup,
-        checkOnly
-      );
-      lastBase = base;
-      fileCollection = {};
+  const ensureSuffixes = (base: string) => {
+    return lookup.get(base) || lookup.set(base, {}).get(base)!;
+  };
+
+  return files.map((file) => {
+    const [base, suffix] = splitFileNameAndSuffix(file);
+    const allSuffixes = ensureSuffixes(base);
+    if (suffix) {
+      allSuffixes[suffix] = true;
     }
+    return { file, suffix, allSuffixes };
   });
-  addFileCollectionToTasks(fileCollection, tasks, extensionLookup, checkOnly);
+}
+
+/**
+ * Given the parsed file entries, go through adding the files to the task based on the platform.
+ * @param files processed file entry list
+ * @param defaultTask is this the task which should build any unbuilt files
+ * @param task task to add files to
+ */
+function addFilesToTask(
+  files: FileEntry[],
+  defaultTask: boolean,
+  task: BuildTaskOptions
+) {
+  // if we are in checkOnly mode then task.build will be null and we will fall back to the check array
+  const pushToBuild = (file: string) => {
+    if (task.build) {
+      task.build.push(file);
+    } else {
+      task.check!.push(file);
+    }
+  };
+
+  const suffixes = platformExtensions(task.platform!);
+  for (const entry of files) {
+    const bestMatch = isBestMatch(entry, suffixes);
+    if (!entry.built && (bestMatch || defaultTask)) {
+      pushToBuild(entry.file);
+      entry.built = true;
+    } else if (bestMatch) {
+      task.check!.push(entry.file);
+    }
+  }
 }
 
 export function multiplexForPlatforms(
@@ -197,16 +192,23 @@ export function multiplexForPlatforms(
   checkOnly: boolean,
   platforms?: AllPlatforms[]
 ): BuildTaskOptions[] {
+  // no platforms then we have nothing to do
   if (!platforms || platforms.length === 0) {
     return [base];
   }
-  const extensions: ExtensionLookup = {};
-  const tasks: BuildTaskOptions[] = [];
-  platforms.forEach((platform) => {
-    extensions[platform] = platformExtensions(platform);
-    extensions[platform].push(baseKey);
-    tasks.push({ ...base, platform, build: [], check: [] });
+
+  // set up the tasks for each platform, build array is undefined in checkOnly mode
+  const tasks: BuildTaskOptions[] = platforms.map((platform) => {
+    return { ...base, platform, build: checkOnly ? undefined : [], check: [] };
   });
-  splitFilesToTasks(files, tasks, extensions, checkOnly);
+
+  // parse the files into file entries with suffixes already split out
+  const entries = processFileList(files);
+
+  // now iterate through the tasks in reverse order setting the default task as last
+  for (let i = tasks.length - 1; i >= 0; i--) {
+    addFilesToTask(entries, i === 0, tasks[i]);
+  }
+
   return tasks;
 }
