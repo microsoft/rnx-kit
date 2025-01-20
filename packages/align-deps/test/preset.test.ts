@@ -9,6 +9,7 @@ import { profile as profile_0_73 } from "../src/presets/microsoft/react-native/p
 import { profile as profile_0_74 } from "../src/presets/microsoft/react-native/profile-0.74";
 import { profile as profile_0_75 } from "../src/presets/microsoft/react-native/profile-0.75";
 import { profile as profile_0_76 } from "../src/presets/microsoft/react-native/profile-0.76";
+import { profile as profile_0_77 } from "../src/presets/microsoft/react-native/profile-0.77";
 
 describe("filterPreset()", () => {
   test("returns no profiles if requirements cannot be satisfied", () => {
@@ -41,6 +42,7 @@ describe("filterPreset()", () => {
       "0.74": profile_0_74,
       "0.75": profile_0_75,
       "0.76": profile_0_76,
+      "0.77": profile_0_77,
     });
   });
 
@@ -55,6 +57,7 @@ describe("filterPreset()", () => {
       "0.74": profile_0_74,
       "0.75": profile_0_75,
       "0.76": profile_0_76,
+      "0.77": profile_0_77,
     });
   });
 
