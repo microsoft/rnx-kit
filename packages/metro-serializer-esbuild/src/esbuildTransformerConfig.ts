@@ -23,7 +23,6 @@ export const esbuildTransformerConfig: Partial<TransformerConfigT> = {
   /**
    * Minifying is unnecessary as esbuild will take care of it.
    */
-  // @ts-expect-error Types broke in Metro 0.81
   minifierPath: require.resolve("./minify"),
 
   /**
