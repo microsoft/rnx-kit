@@ -13,11 +13,6 @@ PODS:
     - fmt (= 9.1.0)
     - glog
     - RCT-Folly/Default (= 2024.01.01.00)
-  - RCT-Folly/Default (2024.01.01.00):
-    - boost
-    - DoubleConversion
-    - fmt (= 9.1.0)
-    - glog
   - RCT-Folly/Fabric (2024.01.01.00):
     - boost
     - DoubleConversion
@@ -1478,7 +1473,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - ReactTestApp-DevSupport (4.0.7):
+  - ReactTestApp-DevSupport (4.0.9):
     - React-Core
     - React-jsi
   - ReactTestApp-MSAL (5.0.1):
@@ -1574,7 +1569,7 @@ DEPENDENCIES:
   - React-utils (from `../node_modules/react-native/ReactCommon/react/utils`)
   - ReactCodegen (from `build/generated/ios`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
-  - "ReactNativeHost (from `../../../node_modules/.store/react-native-test-app-virtual-104e221482/node_modules/@rnx-kit/react-native-host`)"
+  - "ReactNativeHost (from `../../../node_modules/.store/react-native-test-app-virtual-3ec982f824/node_modules/@rnx-kit/react-native-host`)"
   - ReactTestApp-DevSupport (from `../node_modules/react-native-test-app`)
   - "ReactTestApp-MSAL (from `../node_modules/@rnx-kit/react-native-test-app-msal`)"
   - ReactTestApp-Resources (from `..`)
@@ -1707,7 +1702,7 @@ EXTERNAL SOURCES:
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
   ReactNativeHost:
-    :path: "../../../node_modules/.store/react-native-test-app-virtual-104e221482/node_modules/@rnx-kit/react-native-host"
+    :path: "../../../node_modules/.store/react-native-test-app-virtual-3ec982f824/node_modules/@rnx-kit/react-native-host"
   ReactTestApp-DevSupport:
     :path: "../node_modules/react-native-test-app"
   ReactTestApp-MSAL:
@@ -1722,13 +1717,13 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  boost: 4cb898d0bf20404aab1850c656dcea009429d6c1
-  DoubleConversion: 76ab83afb40bddeeee456813d9c04f67f78771b5
+  boost: 1dca942403ed9342f98334bf4c3621f011aa7946
+  DoubleConversion: f16ae600a246532c4020132d54af21d0ddb2a385
   FBLazyVector: 430e10366de01d1e3d57374500b1b150fe482e6d
-  fmt: 4c2741a687cc09f0634a2e2c72a838b99f1ff120
-  glog: 69ef571f3de08433d766d614c73a9838a06bf7eb
+  fmt: 10c6e61f4be25dc963c36bd73fc7b1705fe975be
+  glog: 08b301085f15bcbb6ff8632a8ebaf239aae04e6a
   MSAL: 75402959845e55146583efbf37ff4ad90b408630
-  RCT-Folly: 34124ae2e667a0e5f0ea378db071d27548124321
+  RCT-Folly: 84578c8756030547307e4572ab1947de1685c599
   RCTDeprecation: 726d24248aeab6d7180dac71a936bbca6a994ed1
   RCTRequired: a94e7febda6db0345d207e854323c37e3a31d93b
   RCTTypeSafety: 28e24a6e44f5cbf912c66dde6ab7e07d1059a205
@@ -1783,7 +1778,7 @@ SPEC CHECKSUMS:
   ReactCodegen: 6115e376793e0d3d5006889773df47607dde1918
   ReactCommon: 7d4342b3f8c0ed7e0ac14ae4da79d1fc5e650e0c
   ReactNativeHost: 8474de088a9569717439270e2f95093cf056eb81
-  ReactTestApp-DevSupport: 70f97738e515b343de22d105e8b102c3f73ddc50
+  ReactTestApp-DevSupport: 66f5c681e1dace4fa01723706b4a1491657a8623
   ReactTestApp-MSAL: 90d3923624b7a11b06c113bcaa3ffc964e1c9422
   ReactTestApp-Resources: 70da1d78d943a1fdff6362ce3f778e5b4560c95a
   RNWWebStorage: 7538400bd67057b5dc522e5824b7ec0f4d4d2e22
