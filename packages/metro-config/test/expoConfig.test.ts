@@ -9,7 +9,6 @@ describe("isExpoConfig()", () => {
     ok(!isExpoConfig({}));
     ok(
       !isExpoConfig({
-        // @ts-expect-error Types broke in Metro 0.81
         transformer: { babelTransformerPath: "metro-babel-transformer" },
       })
     );
@@ -20,7 +19,6 @@ describe("isExpoConfig()", () => {
         transformer: { _expoRelativeProjectRoot: null },
       } as MetroConfig)
     );
-    // @ts-expect-error Types broke in Metro 0.81
     ok(isExpoConfig({ transformer: { babelTransformerPath: "@expo" } }));
     ok(isExpoConfig({ transformerPath: "@expo" }));
   });

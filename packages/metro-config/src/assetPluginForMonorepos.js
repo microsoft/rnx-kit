@@ -41,7 +41,6 @@ function assetPlugin(assetData) {
  */
 function injectAssetPlugin(server) {
   const config = server._config;
-  // @ts-expect-error Types broke in Metro 0.81
   if (!config || !Array.isArray(config.transformer.assetPlugins)) {
     console.warn(
       "'@rnx-kit/metro-config' was unable to install the asset plugin for " +
@@ -52,7 +51,6 @@ function injectAssetPlugin(server) {
     return;
   }
 
-  // @ts-expect-error Types broke in Metro 0.81
   config.transformer.assetPlugins.push(__filename);
 }
 

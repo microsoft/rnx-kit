@@ -17,7 +17,6 @@ function isExpoConfig(config) {
   if (transformer) {
     if (
       "_expoRelativeProjectRoot" in transformer ||
-      // @ts-expect-error Types broke in Metro 0.81
       transformer.babelTransformerPath?.includes("@expo")
     ) {
       return true;
