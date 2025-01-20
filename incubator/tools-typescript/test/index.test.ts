@@ -33,7 +33,7 @@ describe("Command line options", () => {
   });
 
   it("should find platform options with multiple entries", () => {
-    const args = ["--platforms=android|ios|macos"];
+    const args = ["--platforms=android,ios,macos"];
     const options = extractOptions(args);
     expect(options.platforms).toEqual(["android", "ios", "macos"]);
   });
@@ -52,7 +52,7 @@ describe("Command line options", () => {
   });
 
   it("should error on invalid platform specified", () => {
-    const args = ["--platforms=android|ios|invalid|windows"];
+    const args = ["--platforms=android,ios,invalid,windows"];
     expect(() => extractOptions(args)).toThrow("process.exit(1)");
   });
 
@@ -72,7 +72,7 @@ describe("Command line options", () => {
   it("should extract options from arg array leaving typescript options", () => {
     const args = [
       "--noCheck",
-      "--platforms=android|ios",
+      "--platforms=android,ios",
       "--noTypecheck",
       "--noEmit",
       "--outDir",

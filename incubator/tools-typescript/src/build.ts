@@ -7,6 +7,7 @@ import type ts from "typescript";
 import { BatchWriter } from "./files";
 import { createHostEnhancer } from "./host";
 import { multiplexForPlatforms } from "./platforms";
+import type { Tracer } from "./tracer";
 import type { ToolCmdLineOptions } from "./types";
 
 // wrap all running commands in a single service
@@ -28,7 +29,8 @@ export type BuildTaskOptions = {
 
 export async function buildTask(
   cmdLine: ts.ParsedCommandLine,
-  options: BuildTaskOptions
+  options: BuildTaskOptions,
+  tracer: Tracer
 ) {
   const { platform, writer } = options;
 
@@ -48,16 +50,21 @@ export async function buildTask(
 
   // figure out the list of files to build and run through them
   const build = options.build || noEmit ? [] : cmdLine.fileNames;
-  build.forEach((file) => project.emitFile(file));
+  tracer.time(`emit ${build.length} files: ${platform}`, () => {
+    build.forEach((file) => project.emitFile(file));
+  });
 
   // figure out the list of files to type-check and run through them
   const check = options.check || noEmit ? cmdLine.fileNames : [];
-  check.forEach((file) => project.validateFile(file));
+  tracer.time(`validate ${check.length} files: ${platform}`, () => {
+    check.forEach((file) => project.validateFile(file));
+  });
 }
 
 export function createBuildTasks(
   cmdLine: ts.ParsedCommandLine,
-  options: ToolCmdLineOptions
+  options: ToolCmdLineOptions,
+  tracer: Tracer
 ): Promise<void>[] {
   const { asyncWrites, noTypecheck, platforms } = options;
   const promises: Promise<void>[] = [];
@@ -65,7 +72,9 @@ export function createBuildTasks(
 
   if (noTypecheck) {
     // this forces the build to only emit files, it also disables multiplexing across platforms
-    promises.push(buildTask(cmdLine, { writer, build: cmdLine.fileNames }));
+    promises.push(
+      buildTask(cmdLine, { writer, build: cmdLine.fileNames }, tracer)
+    );
   } else {
     const base: BuildTaskOptions = { writer };
     const tasks = multiplexForPlatforms(
@@ -74,7 +83,7 @@ export function createBuildTasks(
       !!cmdLine.options.noEmit,
       platforms
     );
-    tasks.forEach((task) => promises.push(buildTask(cmdLine, task)));
+    tasks.forEach((task) => promises.push(buildTask(cmdLine, task, tracer)));
   }
 
   if (writer) {

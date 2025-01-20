@@ -1,3 +1,4 @@
+import type { Tracer } from "./tracer";
 import type { ToolCmdLineOptions } from "./types";
 
 import { findPackage, readPackage } from "@rnx-kit/tools-node";
@@ -8,6 +9,8 @@ import ts from "typescript";
 import { createBuildTasks } from "./build";
 import { detectReactNativePlatforms } from "./platforms";
 import { sanitizeOptions } from "./tsOptions";
+
+let instanceCount = 1;
 
 /**
  * Load the tsconfig.json file for the package
@@ -37,7 +40,8 @@ function loadTypescriptConfig(
 
 export async function runBuild(
   options: ToolCmdLineOptions,
-  tsOptions: ts.CompilerOptions
+  tsOptions: ts.CompilerOptions,
+  tracer: Tracer
 ) {
   // load the base package json
   const pkgJsonPath = findPackage();
@@ -46,6 +50,7 @@ export async function runBuild(
   }
   const manifest = readPackage(pkgJsonPath);
   const root = path.dirname(pkgJsonPath);
+  tracer.setName(`ts-tool: ${manifest.name}`);
 
   // load/detect the platforms
   if (!options.platforms && options.detectPlatforms) {
@@ -54,16 +59,20 @@ export async function runBuild(
 
   // find and load the typescript config file
   const parsedCmdLine = loadTypescriptConfig(root, tsOptions);
+  tracer.log(
+    `building for platforms: ${options.platforms?.join(", ")} instance: ${instanceCount++}`
+  );
 
   // create the set of tasks to run then resolve all the tasks
-  const tasks = createBuildTasks(parsedCmdLine, options);
+  const tasks = createBuildTasks(parsedCmdLine, options, tracer);
   return Promise.all(tasks);
 }
 
 export async function runBuildCmdline(
   options: ToolCmdLineOptions,
-  args: string[]
+  args: string[],
+  tracer: Tracer
 ) {
   const tsOptions = args.length > 0 ? ts.parseCommandLine(args).options : {};
-  return await runBuild(options, tsOptions);
+  return await runBuild(options, tsOptions, tracer);
 }

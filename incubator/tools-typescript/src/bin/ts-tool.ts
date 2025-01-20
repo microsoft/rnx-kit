@@ -1,5 +1,6 @@
 import { parsePlatformValue } from "@rnx-kit/tools-react-native";
 import { runBuildCmdline } from "../command";
+import { Tracer } from "../tracer";
 import type { ToolCmdLineOptions } from "../types";
 
 type CmdLineOption = {
@@ -11,7 +12,7 @@ type CmdLineOption = {
 const commandOptions: { [key in keyof ToolCmdLineOptions]: CmdLineOption } = {
   platforms: {
     param: "array",
-    desc: "Build one or more platforms for react-native. Example: --platforms=android|ios",
+    desc: "Build one or more platforms for react-native. Example: --platforms=android,ios",
     validate: validatePlatforms,
   },
   detectPlatforms: {
@@ -22,6 +23,12 @@ const commandOptions: { [key in keyof ToolCmdLineOptions]: CmdLineOption } = {
   },
   asyncWrites: {
     desc: "Write out files asynchronously.",
+  },
+  verbose: {
+    desc: "Provide verbose logging output.",
+  },
+  trace: {
+    desc: "Provide detailed trace output.",
   },
   help: {
     desc: "Provide usage information.",
@@ -84,7 +91,7 @@ export function extractOptions(args: string[]): ToolCmdLineOptions {
         if (param === "boolean") {
           results[name] = paramVal ? paramVal.toLowerCase() === "true" : true;
         } else if (paramVal) {
-          results[name] = param === "array" ? paramVal.split("|") : paramVal;
+          results[name] = param === "array" ? paramVal.split(",") : paramVal;
           if (validate) {
             validate(results[name]);
           }
@@ -101,16 +108,26 @@ export function extractOptions(args: string[]): ToolCmdLineOptions {
   return results as ToolCmdLineOptions;
 }
 
-/**
- * Handle the cli options for the build command and run the build.
- */
-export async function main() {
-  const args = process.argv.slice(2);
+export async function runWithCmdlineArgs(args: string[]) {
   const options = extractOptions(args);
   if (options.help) {
     outputHelp();
     return;
   }
+  const tracer = new Tracer(!!options.verbose, !!options.trace);
+  return await tracer
+    .timeAsync("build in", async () => {
+      return await runBuildCmdline(options, args, tracer);
+    })
+    .then(() => {
+      tracer.reportTimers();
+    });
+}
 
-  return await runBuildCmdline(options, args);
+/**
+ * Handle the cli options for the build command and run the build.
+ */
+export async function main() {
+  const args = process.argv.slice(2);
+  return await runWithCmdlineArgs(args);
 }

@@ -4642,6 +4642,8 @@ __metadata:
     jest: "npm:^29.2.1"
     prettier: "npm:^3.0.0"
     typescript: "npm:^5.0.0"
+  bin:
+    ts-tool: lib/bin/ts-tool.js
   languageName: unknown
   linkType: soft
 

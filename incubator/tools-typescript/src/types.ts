@@ -27,6 +27,16 @@ export type ToolCmdLineOptions = {
   asyncWrites?: boolean;
 
   /**
+   * Provide verbose logging output
+   */
+  verbose?: boolean;
+
+  /**
+   * Provide detailed trace output
+   */
+  trace?: boolean;
+
+  /**
    * Print out a help message.
    */
   help?: boolean;
