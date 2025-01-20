@@ -12163,8 +12163,8 @@ __metadata:
   linkType: hard
 
 "react-native-test-app@npm:^4.0.0":
-  version: 4.0.7
-  resolution: "react-native-test-app@npm:4.0.7"
+  version: 4.0.9
+  resolution: "react-native-test-app@npm:4.0.9"
   dependencies:
     "@rnx-kit/react-native-host": "npm:^0.5.2"
     "@rnx-kit/tools-react-native": "npm:^2.0.2"
@@ -12173,12 +12173,12 @@ __metadata:
     fast-xml-parser: "npm:^4.0.0"
     prompts: "npm:^2.4.0"
     semver: "npm:^7.3.5"
-    uuid: "npm:^10.0.0"
+    uuid: "npm:^11.0.0"
   peerDependencies:
-    "@callstack/react-native-visionos": 0.73 - 0.76
+    "@callstack/react-native-visionos": 0.73 - 0.77
     "@expo/config-plugins": ">=5.0"
     react: 18.1 - 19.0
-    react-native: 0.70 - 0.76 || >=0.77.0-0 <0.77.0
+    react-native: 0.70 - 0.77 || >=0.78.0-0 <0.78.0
     react-native-macos: ^0.0.0-0 || 0.71 - 0.76
     react-native-windows: ^0.0.0-0 || 0.70 - 0.76
   peerDependenciesMeta:
@@ -12195,7 +12195,7 @@ __metadata:
     init: scripts/init.mjs
     init-test-app: scripts/init.mjs
     install-windows-test-app: windows/test-app.mjs
-  checksum: 10c0/cd23c8f27b0593e4d107e2ac13b3b8d5b816802787cd6080c91a7336e44a0f57f45923e0d7084afa2b8a5b366309c30e406befb7f485e09007641eeb8094c6c7
+  checksum: 10c0/3dab0356ce8bba7d71578a6bf923833deec249375a924a0d1e866db217c3fbeec07897b2765f948d07c1a3483acf928bb45cb7b36e67a27d12db3eb336b5bafa
   languageName: node
   linkType: hard
 
@@ -14141,12 +14141,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"uuid@npm:^10.0.0":
-  version: 10.0.0
-  resolution: "uuid@npm:10.0.0"
+"uuid@npm:^11.0.0":
+  version: 11.0.5
+  resolution: "uuid@npm:11.0.5"
   bin:
-    uuid: dist/bin/uuid
-  checksum: 10c0/eab18c27fe4ab9fb9709a5d5f40119b45f2ec8314f8d4cf12ce27e4c6f4ffa4a6321dc7db6c515068fa373c075b49691ba969f0010bf37f44c37ca40cd6bf7fe
+    uuid: dist/esm/bin/uuid
+  checksum: 10c0/6f59f0c605e02c14515401084ca124b9cb462b4dcac866916a49862bcf831874508a308588c23a7718269226ad11a92da29b39d761ad2b86e736623e3a33b6e7
   languageName: node
   linkType: hard
 
