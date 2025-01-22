@@ -114,6 +114,7 @@ export async function runWithCmdlineArgs(args: string[]) {
     outputHelp();
     return;
   }
+  options.rootDir = process.cwd();
   const tracer = new Tracer(!!options.verbose, !!options.trace);
   return await tracer
     .timeAsync("build in", async () => {

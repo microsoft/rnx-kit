@@ -11,7 +11,8 @@ export function createHostEnhancer(options: HostEnhancementOptions) {
   return (host: ts.LanguageServiceHost) => {
     const { writer } = options;
     if (writer) {
-      host.writeFile = writer.writeFile;
+      host.writeFile = (file: string, content: string) =>
+        writer.writeFile(file, content);
     }
   };
 }

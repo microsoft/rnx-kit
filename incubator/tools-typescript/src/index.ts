@@ -1,4 +1,5 @@
 // base functionality
+export { runWithCmdlineArgs } from "./bin/ts-tool";
 export { runBuild, runBuildCmdline } from "./command";
 export type { ToolCmdLineOptions } from "./types";
 

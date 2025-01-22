@@ -24,11 +24,12 @@ jest.mock("fs", () => ({
   promises: {
     writeFile: mockWriteFile,
   },
+  mkdirSync: jest.fn(),
 }));
 
 describe("BatchWriter", () => {
   const throttler = new Throttler(2, 2);
-  const writer = new BatchWriter(throttler);
+  const writer = new BatchWriter("rootDir", throttler);
 
   it("should write files in batches", async () => {
     resetFileStats();

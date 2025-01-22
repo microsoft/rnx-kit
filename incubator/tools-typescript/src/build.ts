@@ -68,7 +68,7 @@ export function createBuildTasks(
 ): Promise<void>[] {
   const { asyncWrites, noTypecheck, platforms } = options;
   const promises: Promise<void>[] = [];
-  const writer = asyncWrites ? new BatchWriter() : undefined;
+  const writer = asyncWrites ? new BatchWriter(options.rootDir!) : undefined;
 
   if (noTypecheck) {
     // this forces the build to only emit files, it also disables multiplexing across platforms

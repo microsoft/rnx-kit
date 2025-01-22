@@ -1,4 +1,5 @@
 import fs from "fs";
+import path from "path";
 
 /**
  * A simple throttler that limits the number of concurrent operations.
@@ -70,7 +71,7 @@ export class Throttler {
 }
 
 // create a throttler which will ensure that no more than 20 files are written at once, across all batches
-const globalThrottler = new Throttler(20);
+const globalThrottler = new Throttler(100);
 
 /**
  * A helper that groups a set of asynchronous file writes into a batch that can be waited on.
@@ -81,14 +82,17 @@ export class BatchWriter {
   private next: number;
   private active: Record<number, Promise<void>>;
   private throttler: Throttler;
+  private cwd: string;
+  private dirs = new Set<string>();
 
   /**
    * @param throttler optional Throttler to use, primarily used for testing
    */
-  constructor(throttler?: Throttler) {
+  constructor(wd: string, throttler?: Throttler) {
     this.next = 0;
     this.active = {};
     this.throttler = throttler || globalThrottler;
+    this.cwd = wd;
   }
 
   /**
@@ -97,8 +101,14 @@ export class BatchWriter {
    * @param content file content
    */
   writeFile(name: string, content: string) {
+    const filePath = path.isAbsolute(name) ? name : path.join(this.cwd, name);
+    const dir = path.dirname(filePath);
+    if (!this.dirs.has(dir)) {
+      fs.mkdirSync(dir, { recursive: true, mode: 0o755 });
+      this.dirs.add(dir);
+    }
     const current = this.next++;
-    const fn = () => fs.promises.writeFile(name, content);
+    const fn = () => fs.promises.writeFile(filePath, content);
     this.active[current] = this.throttler.run(fn).then(() => {
       delete this.active[current];
     });

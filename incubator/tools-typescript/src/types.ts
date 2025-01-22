@@ -1,16 +1,20 @@
 import type { AllPlatforms } from "@rnx-kit/tools-react-native/platform";
+import type ts from "typescript";
 
 export type ToolCmdLineOptions = {
   /**
+   * Root directory for the package
+   */
+  rootDir?: string;
+
+  /**
    * Tells the tool to build one or more platforms for react-native.
-   * Example: --platforms=android|ios
    */
   platforms?: AllPlatforms[];
 
   /**
    * The tool will attempt to detect the platforms to build based on what it can determine
    * from various configurations and dependencies.
-   * Usage --detectPlatforms
    */
   detectPlatforms?: boolean;
 
@@ -22,7 +26,7 @@ export type ToolCmdLineOptions = {
   noTypecheck?: boolean;
 
   /**
-   * Write out files asynchronously.
+   * Write out files asynchronously. Experimental feature.
    */
   asyncWrites?: boolean;
 
@@ -37,7 +41,12 @@ export type ToolCmdLineOptions = {
   trace?: boolean;
 
   /**
-   * Print out a help message.
+   * Additional typescript options
    */
-  help?: boolean;
+  options?: ts.CompilerOptions;
+
+  /**
+   * Raw command line arguments to pass along to Typescript
+   */
+  args?: string[];
 };

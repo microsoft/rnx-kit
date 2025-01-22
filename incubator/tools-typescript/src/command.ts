@@ -1,4 +1,4 @@
-import type { Tracer } from "./tracer";
+import { Tracer } from "./tracer";
 import type { ToolCmdLineOptions } from "./types";
 
 import { findPackage, readPackage } from "@rnx-kit/tools-node";
@@ -41,15 +41,18 @@ function loadTypescriptConfig(
 export async function runBuild(
   options: ToolCmdLineOptions,
   tsOptions: ts.CompilerOptions,
-  tracer: Tracer
+  tracer?: Tracer
 ) {
   // load the base package json
-  const pkgJsonPath = findPackage();
+  tracer = tracer ?? new Tracer(!!options.verbose, !!options.trace);
+
+  const pkgJsonPath = findPackage(options.rootDir);
   if (!pkgJsonPath) {
     throw new Error("Unable to find package.json");
   }
   const manifest = readPackage(pkgJsonPath);
   const root = path.dirname(pkgJsonPath);
+  options.rootDir = root;
   tracer.setName(`ts-tool: ${manifest.name}`);
 
   // load/detect the platforms
@@ -71,7 +74,7 @@ export async function runBuild(
 export async function runBuildCmdline(
   options: ToolCmdLineOptions,
   args: string[],
-  tracer: Tracer
+  tracer?: Tracer
 ) {
   const tsOptions = args.length > 0 ? ts.parseCommandLine(args).options : {};
   return await runBuild(options, tsOptions, tracer);

@@ -2,6 +2,7 @@
 
 import * as fs from "node:fs";
 import { runScript } from "../process.js";
+//import { tsbuild } from "./tsbuild.js";
 
 /** @type {import("../process.js").Command} */
 export async function build(_args, rawArgs = []) {
@@ -11,6 +12,8 @@ export async function build(_args, rawArgs = []) {
     const { name } = JSON.parse(manifest);
     return runScript("nx", "build", name);
   }
+
+  //return tsbuild(_args, ["--outDir", "dist", ...rawArgs]);
 
   await runScript("tsc", "--outDir", "lib", ...rawArgs);
 }
