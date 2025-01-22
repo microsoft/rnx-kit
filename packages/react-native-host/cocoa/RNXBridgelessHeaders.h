@@ -10,7 +10,10 @@
 #import <ReactCommon/RCTJscInstance.h>
 #endif  // USE_HERMES
 
+#if __has_include(<react/config/ReactNativeConfig.h>)
 #import <react/config/ReactNativeConfig.h>
+#define USE_REACT_NATIVE_CONFIG
+#endif  // __has_include(<react/config/ReactNativeConfig.h>)
 
 #if __has_include(<react/featureflags/ReactNativeFeatureFlags.h>)
 #import <react/featureflags/ReactNativeFeatureFlags.h>
