@@ -13,7 +13,12 @@ export {
   expandPlatformExtensions,
   getAvailablePlatforms,
   getAvailablePlatformsUncached,
+  getModuleSuffixes,
+  getPlatformPackageName,
+  getPlatformsForPackage,
   parsePlatform,
+  parsePlatformValue,
   platformExtensions,
+  platformValues,
 } from "./platform";
 export type { AllPlatforms } from "./platform";
