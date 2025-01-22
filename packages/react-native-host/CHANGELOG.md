@@ -1,5 +1,11 @@
 # @rnx-kit/react-native-host
 
+## 0.5.3
+
+### Patch Changes
+
+- fda8cda: Build fixes for 0.78
+
 ## 0.5.2
 
 ### Patch Changes
