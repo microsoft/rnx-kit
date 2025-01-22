@@ -6,7 +6,13 @@ import { readReactNativeConfig } from "./context";
 /**
  * List of supported react-native platforms.
  */
-export type AllPlatforms = "android" | "ios" | "macos" | "win32" | "windows";
+export type AllPlatforms =
+  | "android"
+  | "ios"
+  | "macos"
+  | "win32"
+  | "windows"
+  | "visionos";
 
 // Possible values for AllPlatforms
 const allValues: AllPlatforms[] = [
@@ -15,6 +21,7 @@ const allValues: AllPlatforms[] = [
   "macos",
   "win32",
   "windows",
+  "visionos",
 ];
 
 /**
@@ -199,6 +206,7 @@ const platformToPackage: Record<AllPlatforms, string> = {
   macos: "react-native-macos",
   win32: "@office-iss/react-native-win32",
   windows: "react-native-windows",
+  visionos: "@callstack/react-native-visionos",
 };
 
 /**
