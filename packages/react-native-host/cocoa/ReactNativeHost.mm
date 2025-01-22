@@ -16,7 +16,9 @@
 
 @class RCTSurfacePresenter;
 
+#ifdef USE_REACT_NATIVE_CONFIG
 using ReactNativeConfig = facebook::react::EmptyReactNativeConfig const;
+#endif  // USE_REACT_NATIVE_CONFIG
 
 #if USE_BRIDGELESS
 @interface ReactNativeHost () <RCTContextContainerHandling>
@@ -34,7 +36,9 @@ using ReactNativeConfig = facebook::react::EmptyReactNativeConfig const;
     RCTHost *_reactHost;
     NSLock *_isShuttingDown;
     RNXHostReleaser *_hostReleaser;
+#ifdef USE_REACT_NATIVE_CONFIG
     std::shared_ptr<ReactNativeConfig> _reactNativeConfig;
+#endif  // USE_REACT_NATIVE_CONFIG
 }
 
 - (instancetype)initWithConfig:(id<RNXHostConfig>)config
@@ -197,7 +201,9 @@ using ReactNativeConfig = facebook::react::EmptyReactNativeConfig const;
 - (void)didCreateContextContainer:
     (std::shared_ptr<facebook::react::ContextContainer>)contextContainer
 {
+#ifdef USE_REACT_NATIVE_CONFIG
     contextContainer->insert("ReactNativeConfig", _reactNativeConfig);
+#endif  // USE_REACT_NATIVE_CONFIG
 }
 
 #else  // USE_BRIDGELESS
@@ -254,15 +260,21 @@ using ReactNativeConfig = facebook::react::EmptyReactNativeConfig const;
     RCTEnableTurboModuleInterop(YES);
     RCTEnableTurboModuleInteropBridgeProxy(YES);
 
+#ifdef USE_REACT_NATIVE_CONFIG
     _reactNativeConfig = std::make_shared<ReactNativeConfig>();
     std::weak_ptr<ReactNativeConfig> reactNativeConfig{_reactNativeConfig};
+#endif  // USE_REACT_NATIVE_CONFIG
 
     SharedJSRuntimeFactory (^jsEngineProvider)() = ^SharedJSRuntimeFactory {
 #if USE_HERMES
+#ifdef USE_REACT_NATIVE_CONFIG
       auto config = reactNativeConfig.lock();
       NSAssert(config, @"Expected nonnull ReactNativeConfig instance");
       return std::make_shared<facebook::react::RCTHermesInstance>(config, nullptr);
 #else
+      return std::make_shared<facebook::react::RCTHermesInstance>(nullptr, false);
+#endif  // USE_REACT_NATIVE_CONFIG
+#else  // USE_HERMES
       return std::make_shared<facebook::react::RCTJscInstance>();
 #endif  // USE_HERMES
     };
