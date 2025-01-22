@@ -8,7 +8,6 @@ import { clean } from "./commands/clean.js";
 import { format } from "./commands/format.js";
 import { lint } from "./commands/lint.js";
 import { test } from "./commands/test.js";
-import { tsbuild } from "./commands/tsbuild.js";
 import { updateApiReadme } from "./commands/updateApiReadme.js";
 
 /**
@@ -56,10 +55,6 @@ init({
   test: {
     description: "Runs tests",
     command: test,
-  },
-  tsbuild: {
-    description: "Builds the current package using custom ts tool",
-    command: tsbuild,
   },
   "update-api-readme": {
     description: "Updates the API tables in README.md",

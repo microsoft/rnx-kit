@@ -25,7 +25,6 @@
 !.yarn/releases/
 /incubator/*/dist/
 /incubator/*/lib/
-/incubator/*/lib-test/
 /incubator/@react-native-webapis/*/lib/
 /packages/*/*.LICENSE.txt
 /packages/*/*/rnx-build/
@@ -33,7 +32,6 @@
 /packages/*/ios/DerivedData/
 /packages/*/ios/build/
 /packages/*/lib/
-/packages/*/lib-test/
 /packages/*/macos/DerivedData/
 /packages/*/macos/build/
 /packages/template/CHANGELOG.md
