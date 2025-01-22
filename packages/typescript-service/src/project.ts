@@ -10,6 +10,7 @@ export class Project {
   private externalFiles: ExternalFileCache;
 
   private languageService: ts.LanguageService;
+  private writeFile: (fileName: string, content: string) => void;
 
   constructor(
     documentRegistry: ts.DocumentRegistry,
@@ -93,6 +94,8 @@ export class Project {
     if (enhanceLanguageServiceHost) {
       enhanceLanguageServiceHost(languageServiceHost);
     }
+    // if someone replaces writeFile when they enhance the language service host, use that for writing
+    this.writeFile = languageServiceHost.writeFile || ts.sys.writeFile;
 
     this.languageService = ts.createLanguageService(
       languageServiceHost,
@@ -157,7 +160,7 @@ export class Project {
       return false;
     }
     output.outputFiles.forEach((o) => {
-      ts.sys.writeFile(o.name, o.text);
+      this.writeFile(o.name, o.text);
     });
     return true;
   }
