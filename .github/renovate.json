@@ -4,7 +4,7 @@
   "packageRules": [
     {
       "groupName": "@react-native-community/cli",
-      "allowedVersions": "^14.0.0",
+      "allowedVersions": "^15.0.0",
       "matchPackageNames": ["@react-native-community/cli{/,}**"]
     },
     {
@@ -28,7 +28,7 @@
     },
     {
       "groupName": "Metro",
-      "allowedVersions": "^0.80.0",
+      "allowedVersions": "^0.81.0",
       "matchSourceUrls": ["https://github.com/facebook/metro{/,}**"]
     },
     {
@@ -76,7 +76,7 @@
         "react-native-macos",
         "react-native-windows"
       ],
-      "allowedVersions": "^0.75.0"
+      "allowedVersions": "^0.76.0"
     }
   ],
   "postUpdateOptions": ["yarnDedupeHighest"],

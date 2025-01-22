@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/eslint-plugin",
-  "version": "0.8.5",
+  "version": "0.8.6",
   "description": "A set of ESLint rules for React developers",
   "keywords": [
     "eslint",
@@ -43,7 +43,7 @@
     "test": "rnx-kit-scripts test"
   },
   "dependencies": {
-    "@react-native/eslint-plugin": "^0.75.0",
+    "@react-native/eslint-plugin": "^0.76.0",
     "enhanced-resolve": "^5.8.3",
     "eslint-plugin-react": "^7.35.2",
     "eslint-plugin-react-hooks": "^5.0.0",

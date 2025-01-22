@@ -12,7 +12,29 @@ function makeContext(
   const context = {
     originModulePath: "",
     doesFileExist: fs.existsSync,
+    fileSystemLookup: (absoluteOrProjectRelativePath: string) => {
+      if (!fs.existsSync(absoluteOrProjectRelativePath)) {
+        return { exists: false };
+      }
+
+      const stat = fs.statSync(absoluteOrProjectRelativePath);
+      return {
+        exists: true,
+        type: stat.isFile() ? "f" : "d",
+        realPath: path.resolve(absoluteOrProjectRelativePath),
+      };
+    },
+    getPackage: (packageJsonPath: string) => {
+      const json = fs.readFileSync(packageJsonPath, { encoding: "utf-8" });
+      return JSON.parse(json);
+    },
+    getPackageForModule: (absoluteModulePath: string) => {
+      if (!absoluteModulePath) {
+        return null;
+      }
+    },
     isAssetFile: () => false,
+    mainFields: ["react-native", "browser", "main"],
     nodeModulesPaths: [".", "..", "../.."],
     redirectModulePath: (modulePath: string) => modulePath,
     resolveRequest,
@@ -29,25 +51,27 @@ describe("makeResolver", () => {
   });
 
   test("returns `react-native` with Metro <0.68", () => {
-    process.chdir(useFixture("duplicates"));
+    const fixture = useFixture("duplicates");
+    process.chdir(fixture);
 
     const resolveRequest = makeResolver();
     const context = makeContext(resolveRequest);
 
     expect(resolveRequest(context, "react-native", "ios")).toEqual({
-      filePath: path.join("node_modules", "react-native"),
+      filePath: path.join(fixture, "node_modules", "react-native", "index.js"),
       type: "sourceFile",
     });
   });
 
   test("returns `react-native` with Metro >=0.68", () => {
-    process.chdir(useFixture("duplicates"));
+    const fixture = useFixture("duplicates");
+    process.chdir(fixture);
 
     const resolveRequest = makeResolver();
     const context = makeContext(resolve, true);
 
     expect(resolveRequest(context, "react-native", "ios")).toEqual({
-      filePath: path.join("node_modules", "react-native"),
+      filePath: path.join(fixture, "node_modules", "react-native", "index.js"),
       type: "sourceFile",
     });
   });
