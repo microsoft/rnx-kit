@@ -14,8 +14,6 @@ export {
   getAvailablePlatforms,
   getAvailablePlatformsUncached,
   getModuleSuffixes,
-  getPlatformPackageName,
-  getPlatformsForPackage,
   parsePlatform,
   parsePlatformValue,
   platformExtensions,

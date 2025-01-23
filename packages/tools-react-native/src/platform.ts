@@ -187,7 +187,7 @@ export function parsePlatformValue(val: string): AllPlatforms | undefined {
 export function parsePlatform(val: string): AllPlatforms {
   const platform = parsePlatformValue(val);
   if (!platform) {
-    throw new Error(`Invalid platform '${val}'`);
+    throw new Error(`Unknown platform '${val}'`);
   }
   return platform;
 }
@@ -197,30 +197,4 @@ export function parsePlatform(val: string): AllPlatforms {
  */
 export function platformValues(): readonly AllPlatforms[] {
   return allValues;
-}
-
-// Map of platform to npm package name
-const platformToPackage: Record<AllPlatforms, string> = {
-  android: "react-native",
-  ios: "react-native",
-  macos: "react-native-macos",
-  win32: "@office-iss/react-native-win32",
-  windows: "react-native-windows",
-  visionos: "@callstack/react-native-visionos",
-};
-
-/**
- * @returns The react-native package name for the given platform
- */
-export function getPlatformPackageName(platform: AllPlatforms): string {
-  return platformToPackage[platform];
-}
-
-/**
- * @returns The list of packages supported by the given react-native package name
- */
-export function getPlatformsForPackage(packageName: string): AllPlatforms[] {
-  return Object.entries(platformToPackage)
-    .filter(([, pkg]) => pkg === packageName)
-    .map(([platform]) => platform as AllPlatforms);
 }
