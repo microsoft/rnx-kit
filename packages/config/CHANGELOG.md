@@ -1,5 +1,12 @@
 # Change Log - @rnx-kit/config
 
+## 0.7.2
+
+### Patch Changes
+
+- 0727cf9: Add helper to load the kit config from an already parsed package.json
+  file
+
 ## 0.7.1
 
 ### Patch Changes
