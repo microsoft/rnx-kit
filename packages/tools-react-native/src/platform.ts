@@ -6,7 +6,23 @@ import { readReactNativeConfig } from "./context";
 /**
  * List of supported react-native platforms.
  */
-export type AllPlatforms = "android" | "ios" | "macos" | "win32" | "windows";
+export type AllPlatforms =
+  | "android"
+  | "ios"
+  | "macos"
+  | "win32"
+  | "windows"
+  | "visionos";
+
+// Possible values for AllPlatforms
+const allValues: AllPlatforms[] = [
+  "android",
+  "ios",
+  "macos",
+  "win32",
+  "windows",
+  "visionos",
+];
 
 /**
  * Returns a list of extensions that should be tried for the target platform in
@@ -28,6 +44,25 @@ export function expandPlatformExtensions(
 
   expanded.push(...extensions);
   return expanded;
+}
+
+/**
+ * Get the module suffixes array for a given platform, suitable for use with TypeScript's moduleSuffixes setting
+ * in the form of ['.ios', '.native', ''] or ['.windows', '.win', '.native', ''] or similar
+ *
+ * @param platform platform to get module suffixes for
+ * @param appendEmpty finish the suffixes with an empty entry, required for typescript usage
+ * @returns an array of suffixes to try to match a module to in order of priority
+ */
+export function getModuleSuffixes(
+  platform: AllPlatforms,
+  appendEmpty = true
+): string[] {
+  const extensions = platformExtensions(platform).map((ext) => `.${ext}`);
+  if (appendEmpty) {
+    extensions.push("");
+  }
+  return extensions;
 }
 
 /**
@@ -135,21 +170,31 @@ export function platformExtensions(platform: string): string[] {
 }
 
 /**
+ * @returns the given string as a platform value or undefined if it is not a valid platform.
+ */
+export function tryParsePlatform(val: string): AllPlatforms | undefined {
+  return allValues.includes(val as AllPlatforms)
+    ? (val as AllPlatforms)
+    : undefined;
+}
+
+/**
  * Parse a string to ensure it maps to a valid react-native platform.
  *
  * @param val Input string
  * @returns React-native platform name. Throws `Error` on failure.
  */
 export function parsePlatform(val: string): AllPlatforms {
-  switch (val) {
-    case "android":
-    case "ios":
-    case "macos":
-    case "win32":
-    case "windows":
-      return val;
-
-    default:
-      throw new Error("Invalid platform '" + val + "'");
+  const platform = tryParsePlatform(val);
+  if (!platform) {
+    throw new Error(`Unknown platform '${val}'`);
   }
+  return platform;
+}
+
+/**
+ * @returns List of all supported react-native platforms.
+ */
+export function platformValues(): readonly AllPlatforms[] {
+  return allValues;
 }
