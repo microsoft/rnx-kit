@@ -172,7 +172,7 @@ export function platformExtensions(platform: string): string[] {
 /**
  * @returns the given string as a platform value or undefined if it is not a valid platform.
  */
-export function parsePlatformValue(val: string): AllPlatforms | undefined {
+export function tryParsePlatform(val: string): AllPlatforms | undefined {
   return allValues.includes(val as AllPlatforms)
     ? (val as AllPlatforms)
     : undefined;
@@ -185,7 +185,7 @@ export function parsePlatformValue(val: string): AllPlatforms | undefined {
  * @returns React-native platform name. Throws `Error` on failure.
  */
 export function parsePlatform(val: string): AllPlatforms {
-  const platform = parsePlatformValue(val);
+  const platform = tryParsePlatform(val);
   if (!platform) {
     throw new Error(`Unknown platform '${val}'`);
   }
