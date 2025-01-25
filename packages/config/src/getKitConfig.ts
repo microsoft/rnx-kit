@@ -69,3 +69,16 @@ export function getKitConfig(
     return undefined;
   }
 }
+
+/**
+ * Helper for loading the KitConfig for cases where the package.json has already been loaded for other reasons.
+ * @param packageJson The loaded and parsed package.json file for this package.
+ * @param packageDir The directory containing the package.json file.
+ * @returns The rnx-kit configuration for this package, merged with any base configuration.
+ */
+export function getKitConfigFromPackageManifest(
+  packageJson: PackageManifest,
+  packageDir: string
+): KitConfig | undefined {
+  return loadBaseConfig(packageJson["rnx-kit"], packageDir);
+}
