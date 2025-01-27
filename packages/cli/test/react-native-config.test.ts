@@ -3,10 +3,12 @@ import { reactNativeConfig } from "../src/index";
 
 describe("react-native.config.js", () => {
   it("should still act as a plugin to `@react-native-community/cli`", () => {
+    // We're using `--eval` instead of `--print` here because Node 22.x seems
+    // to be truncating the output.
     const { status, stdout } = spawnSync(process.argv0, [
       "--no-warnings",
-      "--print",
-      `JSON.stringify(require("./react-native.config.js"))`,
+      "--eval",
+      `console.log(JSON.stringify(require("./react-native.config.js")))`,
     ]);
 
     expect(status).toBe(0);
