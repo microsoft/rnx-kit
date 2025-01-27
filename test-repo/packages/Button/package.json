@@ -1,0 +1,81 @@
+{
+  "name": "rnx-test-repo-button",
+  "version": "0.39.2",
+  "private": true,
+  "description": "A copy of the fluentui-react-native button for testing",
+  "main": "src/index.ts",
+  "module": "src/index.ts",
+  "typings": "lib/index.d.ts",
+  "onPublish": {
+    "main": "lib-commonjs/index.js",
+    "module": "lib/index.js"
+  },
+  "scripts": {
+    "build": "rnx-test-scripts build",
+    "clean": "rnx-test-scripts clean",
+    "lint": "rnx-test-scripts eslint",
+    "test": "rnx-test-scripts jest"
+  },
+  "dependencies": {
+    "@fluentui-react-native/adapters": "0.13.0",
+    "@fluentui-react-native/experimental-activity-indicator": "0.10.1",
+    "@fluentui-react-native/experimental-shadow": "0.6.2",
+    "@fluentui-react-native/framework": "0.14.0",
+    "@fluentui-react-native/icon": "0.21.6",
+    "@fluentui-react-native/interactive-hooks": "0.27.2",
+    "@fluentui-react-native/pressable": "0.12.2",
+    "@fluentui-react-native/styling-utils": "0.7.0",
+    "rnx-test-repo-text": "workspace:*",
+    "@fluentui-react-native/theme-tokens": "0.27.0",
+    "@fluentui-react-native/theme-types": "0.39.0",
+    "@fluentui-react-native/theming-utils": "0.26.0",
+    "@fluentui-react-native/tokens": "0.23.0",
+    "@fluentui-react-native/use-styling": "0.13.0",
+    "@uifabricshared/foundation-composable": "0.13.0",
+    "@uifabricshared/foundation-compose": "1.15.0",
+    "@uifabricshared/foundation-settings": "0.15.0",
+    "tslib": "^2.3.1"
+  },
+  "devDependencies": {
+    "rnx-test-repo-scripts": "workspace:*",
+    "@react-native/babel-preset": "^0.76.0",
+    "@react-native/metro-config": "^0.76.0",
+    "react": "18.3.1",
+    "react-native": "^0.76.0"
+  },
+  "peerDependencies": {
+    "react": "18.3.1",
+    "react-native": "^0.76.0",
+    "react-native-macos": "^0.76.0",
+    "react-native-svg": "^15.8.0",
+    "react-native-windows": "^0.76.0"
+  },
+  "author": "",
+  "license": "MIT",
+  "sideEffects": false,
+  "rnx-kit": {
+    "kitType": "library",
+    "alignDeps": {
+      "presets": [
+        "microsoft/react-native"
+      ],
+      "requirements": [
+        "react-native@0.76"
+      ],
+      "capabilities": [
+        "core",
+        "core-android",
+        "core-ios",
+        "react"
+      ]
+    }
+  },
+  "peerDependenciesMeta": {
+    "react-native-macos": {
+      "optional": true
+    },
+    "react-native-windows": {
+      "optional": true
+    }
+  }
+}

@@ -1,0 +1,86 @@
+{
+  "private": true,
+  "name": "rnx-kit-test-repo",
+  "version": "0.0.0",
+  "license": "MIT",
+  "author": {
+    "name": "Microsoft Open Source",
+    "email": "microsoftopensource@users.noreply.github.com"
+  },
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit"
+  },
+  "scripts": {
+    "build": "nx run-many --target build",
+    "build:ci": "nx affected --targets build,test",
+    "build:ci:all": "nx run-many --targets build,test",
+    "build-scope": "nx build",
+    "bundle": "nx run-many --target bundle",
+    "bundle:ci": "nx affected --target bundle",
+    "change": "changeset add",
+    "change:check": "changeset status",
+    "clean": "git clean -dfqx --exclude=.yarn/cache",
+    "clear-cache": "nx clear-cache",
+    "format": "nx run-many --target format",
+    "lint": "nx run-many --target lint",
+    "new-package": "node scripts/new-package.js",
+    "publish:changesets": "changeset publish",
+    "rnx-align-deps": "tsx --conditions typescript scripts/rnx-align-deps.js",
+    "show-affected": "nx show projects --affected",
+    "test": "nx run-many --targets build,test --output-style stream",
+    "update-readme": "nx run-many --target update-readme",
+    "version:changesets": "changeset version && yarn install --mode update-lockfile"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.22.0",
+    "@types/jest": "^29.2.1",
+    "@types/node": "^20.0.0",
+    "eslint": "^9.0.0",
+    "knip": "^5.30.2",
+    "lage": "^2.12.10",
+    "metro": "^0.81.0",
+    "prettier": "^3.0.0",
+    "prettier-plugin-organize-imports": "^4.0.0",
+    "tsx": "^4.15.0",
+    "typescript": "^5.0.0"
+  },
+  "engines": {
+    "node": ">=16.17"
+  },
+  "packageManager": "yarn@4.6.0",
+  "resolutions": {
+    "@microsoft/eslint-plugin-sdl/eslint-plugin-react": "^7.35.2",
+    "@microsoft/eslint-plugin-sdl/eslint-plugin-security": "^1.4.0",
+    "@react-native-community/cli": "^15.0.0",
+    "@react-native-community/cli-platform-android": "^15.0.0",
+    "@react-native-community/cli-platform-apple": "^15.0.0",
+    "@react-native-community/cli-platform-ios": "^15.0.0",
+    "@react-native-community/cli-server-api": "^15.0.0",
+    "@react-native-community/cli-tools": "^15.0.0",
+    "@react-native-community/cli-types": "^15.0.0",
+    "@rnx-kit/react-native-host": "workspace:*",
+    "@vue/compiler-sfc": "link:./incubator/ignore",
+    "react-native-macos/@react-native/assets-registry": "^0.76.0",
+    "react-native-macos/@react-native/codegen": "^0.76.0",
+    "react-native-macos/@react-native/community-cli-plugin": "^0.76.0",
+    "react-native-macos/@react-native/gradle-plugin": "^0.76.0",
+    "react-native-macos/@react-native/js-polyfills": "^0.76.0",
+    "react-native-macos/@react-native/normalize-colors": "^0.76.0",
+    "react-native-windows/@react-native/assets-registry": "^0.76.0",
+    "react-native-windows/@react-native/codegen": "^0.76.0",
+    "react-native-windows/@react-native/community-cli-plugin": "^0.76.0",
+    "react-native-windows/@react-native/gradle-plugin": "^0.76.0",
+    "react-native-windows/@react-native/js-polyfills": "^0.76.0",
+    "react-native-windows/@react-native/normalize-colors": "^0.76.0",
+    "react-native-windows/@react-native/virtualized-lists": "^0.76.0"
+  },
+  "workspaces": {
+    "packages": [
+      "packages/*",
+      "scripts"
+    ]
+  },
+  "prettier": "../.github/prettierrc.json"
+}

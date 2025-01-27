@@ -1,0 +1,90 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Text component tests Text all props 1`] = `
+<Text
+  ellipsizeMode="tail"
+  numberOfLines={0}
+  style={
+    {
+      "color": "#323130",
+      "fontFamily": "Segoe UI",
+      "fontSize": 14,
+      "fontStyle": undefined,
+      "fontWeight": "400",
+      "letterSpacing": undefined,
+      "lineHeight": undefined,
+      "margin": 0,
+      "textAlign": undefined,
+      "textDecorationLine": undefined,
+    }
+  }
+>
+  All props
+</Text>
+`;
+
+exports[`Text component tests Text all tokens 1`] = `
+<Text
+  ellipsizeMode="tail"
+  numberOfLines={0}
+  style={
+    {
+      "color": "#323130",
+      "fontFamily": "Wingdings",
+      "fontSize": 20,
+      "fontStyle": undefined,
+      "fontWeight": "900",
+      "letterSpacing": undefined,
+      "lineHeight": undefined,
+      "margin": 0,
+      "textAlign": undefined,
+      "textDecorationLine": undefined,
+    }
+  }
+>
+  All tokens
+</Text>
+`;
+
+exports[`Text component tests Text default 1`] = `
+<Text
+  ellipsizeMode="tail"
+  numberOfLines={0}
+  style={
+    {
+      "color": "#323130",
+      "fontFamily": "Segoe UI",
+      "fontSize": 13,
+      "fontStyle": undefined,
+      "fontWeight": "400",
+      "letterSpacing": undefined,
+      "lineHeight": undefined,
+      "margin": 0,
+      "textAlign": undefined,
+      "textDecorationLine": undefined,
+    }
+  }
+>
+  Text default
+</Text>
+`;
+
+exports[`Text component tests Text variants render correctly with style 1`] = `
+<Text
+  ellipsizeMode="tail"
+  numberOfLines={0}
+  style={
+    {
+      "color": "blue",
+      "fontFamily": "Segoe UI",
+      "fontSize": 60,
+      "fontWeight": "600",
+      "margin": 0,
+      "marginBottom": 8,
+      "marginTop": 4,
+    }
+  }
+>
+  Header Text
+</Text>
+`;

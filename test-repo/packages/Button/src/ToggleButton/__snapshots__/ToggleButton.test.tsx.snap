@@ -1,0 +1,85 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ToggleButton default 1`] = `
+<View
+  accessibilityActions={
+    [
+      {
+        "name": "Toggle",
+      },
+    ]
+  }
+  accessibilityLabel="Default Button"
+  accessibilityRole="button"
+  accessibilityState={
+    {
+      "busy": undefined,
+      "checked": undefined,
+      "disabled": false,
+      "expanded": undefined,
+      "selected": undefined,
+    }
+  }
+  accessibilityValue={
+    {
+      "max": undefined,
+      "min": undefined,
+      "now": undefined,
+      "text": undefined,
+    }
+  }
+  accessible={true}
+  collapsable={false}
+  enableFocusRing={true}
+  focusable={true}
+  onAccessibilityAction={[Function]}
+  onBlur={[Function]}
+  onClick={[Function]}
+  onFocus={[Function]}
+  onLayout={[Function]}
+  onResponderGrant={[Function]}
+  onResponderMove={[Function]}
+  onResponderRelease={[Function]}
+  onResponderTerminate={[Function]}
+  onResponderTerminationRequest={[Function]}
+  onStartShouldSetResponder={[Function]}
+  style={
+    {
+      "alignItems": "center",
+      "alignSelf": "flex-start",
+      "backgroundColor": "#0f6cbd",
+      "borderColor": "#0f6cbd",
+      "borderRadius": 8,
+      "borderWidth": 1,
+      "display": "flex",
+      "flexDirection": "row",
+      "justifyContent": "center",
+      "minHeight": 40,
+      "minWidth": 96,
+      "paddingHorizontal": 12,
+      "width": undefined,
+    }
+  }
+>
+  <Text
+    accessible={false}
+    ellipsizeMode="tail"
+    numberOfLines={0}
+    style={
+      {
+        "color": "#ffffff",
+        "fontFamily": "System",
+        "fontSize": 12,
+        "fontWeight": "600",
+        "margin": 0,
+        "marginBottom": 0,
+        "marginEnd": 0,
+        "marginStart": 0,
+        "marginTop": 0,
+      }
+    }
+  >
+    Default Button
+  </Text>
+</View>
+`;
