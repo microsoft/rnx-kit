@@ -9,7 +9,7 @@ import {
   platformExtensions,
   platformValues,
 } from "@rnx-kit/tools-react-native";
-import type { BuildTaskOptions } from "./build";
+import type { BuildTaskOptions } from "./task";
 
 /**
  * See if any of the react-native platform dependencies are present in the given dependencies object

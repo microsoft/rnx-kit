@@ -107,10 +107,6 @@ export class Project {
     return this.cmdLine;
   }
 
-  getLanguageService(): ts.LanguageService {
-    return this.languageService;
-  }
-
   private getFileDiagnostics(fileName: string): ts.Diagnostic[] {
     const diagnostics: ts.Diagnostic[] = [];
     Array.prototype.push.apply(

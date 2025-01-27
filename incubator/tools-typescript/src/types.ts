@@ -1,33 +1,20 @@
 import type { AllPlatforms } from "@rnx-kit/tools-react-native/platform";
 import type ts from "typescript";
 
-export type ToolCmdLineOptions = {
-  /**
-   * Root directory for the package
-   */
-  rootDir?: string;
+export type BuildOptions = {
+  /** Target directory for the build, should correspond to the package root */
+  target?: string;
 
-  /**
-   * Tells the tool to build one or more platforms for react-native.
-   */
+  /** Which react-native platforms should be targeted (if any). */
   platforms?: AllPlatforms[];
 
-  /**
-   * The tool will attempt to detect the platforms to build based on what it can determine
-   * from various configurations and dependencies.
-   */
+  /** Attempt to auto-detect the react-native platforms to target. */
   detectPlatforms?: boolean;
 
-  /**
-   * Only emit files and do not type-check them. This will also disable multiplexing the build
-   * for multiple platforms. Useful if your project is building files twice for multiple module
-   * types.
-   */
+  /** Only emit files, this will also disable multiplexing the build for multiple platforms. */
   noTypecheck?: boolean;
 
-  /**
-   * Write out files asynchronously. Experimental feature.
-   */
+  /** Write out files asynchronously. Experimental feature. */
   asyncWrites?: boolean;
 
   /**
@@ -49,4 +36,17 @@ export type ToolCmdLineOptions = {
    * Raw command line arguments to pass along to Typescript
    */
   args?: string[];
+};
+
+/**
+ * Additional context attached to the build options to pass along to build tasks
+ */
+export type BuildContext = BuildOptions & {
+  // parsed command line for this build
+  cmdLine: ts.ParsedCommandLine;
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  log(...args: any[]): void;
+  time(label: string, fn: () => void): void;
+  timeAsync(label: string, fn: () => Promise<void>): Promise<void>;
 };

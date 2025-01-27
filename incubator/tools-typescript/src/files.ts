@@ -1,5 +1,5 @@
-import fs from "fs";
-import path from "path";
+import fs from "node:fs";
+import path from "node:path";
 
 /**
  * A simple throttler that limits the number of concurrent operations.
@@ -70,8 +70,8 @@ export class Throttler {
   }
 }
 
-// create a throttler which will ensure that no more than 20 files are written at once, across all batches
-const globalThrottler = new Throttler(100);
+// create a throttler which will ensure that no more than 40 files are written at once, across all batches
+const globalThrottler = new Throttler(40);
 
 /**
  * A helper that groups a set of asynchronous file writes into a batch that can be waited on.

@@ -49,11 +49,14 @@ function convertToType<T>(
 export function sanitizeOptions(
   options: ts.CompilerOptions
 ): ts.CompilerOptions {
-  const module = options.module || ts.ModuleKind.CommonJS;
-  const target = options.target || ts.ScriptTarget.ES2015;
-  return {
-    ...options,
-    module: convertToType(toModule, module),
-    target: convertToType(toTarget, target),
-  };
+  if (options.module || options.target) {
+    options = { ...options };
+    if (options.module) {
+      options.module = convertToType(toModule, options.module);
+    }
+    if (options.target) {
+      options.target = convertToType(toTarget, options.target);
+    }
+  }
+  return options;
 }

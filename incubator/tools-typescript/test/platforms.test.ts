@@ -1,11 +1,11 @@
 import type { KitConfig } from "@rnx-kit/config";
 import type { PackageManifest } from "@rnx-kit/tools-node";
-import { type BuildTaskOptions } from "../src/build";
 import {
   detectReactNativePlatforms,
   multiplexForPlatforms,
   splitFileNameAndSuffix,
 } from "../src/platforms";
+import { type BuildTaskOptions } from "../src/task";
 
 const baseManifest: PackageManifest = {
   name: "test-package",

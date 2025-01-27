@@ -1,93 +1,93 @@
-import {
-  type AllPlatforms,
-  getModuleSuffixes,
-} from "@rnx-kit/tools-react-native";
-import { Service } from "@rnx-kit/typescript-service";
-import type ts from "typescript";
-import { BatchWriter } from "./files";
-import { createHostEnhancer } from "./host";
-import { multiplexForPlatforms } from "./platforms";
-import type { Tracer } from "./tracer";
-import type { ToolCmdLineOptions } from "./types";
+import { Tracer } from "./tracer";
+import type { BuildContext, BuildOptions } from "./types";
 
-// wrap all running commands in a single service
-const service = new Service();
+import { findPackage, readPackage } from "@rnx-kit/tools-node";
+import { readConfigFile } from "@rnx-kit/typescript-service";
 
-export type BuildTaskOptions = {
-  // platform for this build
-  platform?: AllPlatforms;
+import path from "node:path";
+import ts from "typescript";
+import { detectReactNativePlatforms } from "./platforms";
+import { createBuildTasks } from "./task";
+import { sanitizeOptions } from "./tsoptions";
 
-  // override files to only build the specified files
-  build?: string[];
+let instanceCount = 1;
 
-  // override files to only type-check the specified files
-  check?: string[];
+/**
+ * Load the tsconfig.json file for the package
+ * @param pkgRoot the root directory of the package
+ * @param args the command line arguments to be passed to typescript
+ * @returns the parsed tsconfig.json file, if found
+ */
+function loadTypescriptConfig(
+  pkgRoot: string,
+  options: ts.CompilerOptions = {}
+): ts.ParsedCommandLine {
+  // find the tsconfig.json, overriding with project if it is set
+  const configPath =
+    options.project ??
+    ts.findConfigFile(pkgRoot, ts.sys.fileExists, "tsconfig.json");
 
-  // optional async file writer to write the files for this build
-  writer?: BatchWriter;
-};
+  // now load the config, mixing in the command line options
+  const config = configPath
+    ? readConfigFile(configPath, sanitizeOptions(options))
+    : undefined;
 
-export async function buildTask(
-  cmdLine: ts.ParsedCommandLine,
-  options: BuildTaskOptions,
-  tracer: Tracer
-) {
-  const { platform, writer } = options;
-
-  // add module suffixes to options if platform is set
-  const moduleSuffixes = platform && getModuleSuffixes(platform);
-  if (moduleSuffixes) {
-    cmdLine = { ...cmdLine, options: { ...cmdLine.options, moduleSuffixes } };
+  if (!config) {
+    throw new Error("Unable to find tsconfig.json");
   }
-
-  // set up the project we will use for the build
-  const project = service.openProject(
-    cmdLine,
-    createHostEnhancer({ platform, writer })
-  );
-
-  const noEmit = cmdLine.options.noEmit;
-
-  // figure out the list of files to build and run through them
-  const build = options.build || noEmit ? [] : cmdLine.fileNames;
-  tracer.time(`emit ${build.length} files: ${platform}`, () => {
-    build.forEach((file) => project.emitFile(file));
-  });
-
-  // figure out the list of files to type-check and run through them
-  const check = options.check || noEmit ? cmdLine.fileNames : [];
-  tracer.time(`validate ${check.length} files: ${platform}`, () => {
-    check.forEach((file) => project.validateFile(file));
-  });
+  return config;
 }
 
-export function createBuildTasks(
+function createBuildContext(
+  options: BuildOptions,
   cmdLine: ts.ParsedCommandLine,
-  options: ToolCmdLineOptions,
   tracer: Tracer
-): Promise<void>[] {
-  const { asyncWrites, noTypecheck, platforms } = options;
-  const promises: Promise<void>[] = [];
-  const writer = asyncWrites ? new BatchWriter(options.rootDir!) : undefined;
+): BuildContext {
+  return {
+    ...options,
+    cmdLine,
+    log: tracer.log.bind(tracer),
+    time: tracer.time.bind(tracer),
+    timeAsync: tracer.timeAsync.bind(tracer),
+  };
+}
 
-  if (noTypecheck) {
-    // this forces the build to only emit files, it also disables multiplexing across platforms
-    promises.push(
-      buildTask(cmdLine, { writer, build: cmdLine.fileNames }, tracer)
-    );
-  } else {
-    const base: BuildTaskOptions = { writer };
-    const tasks = multiplexForPlatforms(
-      cmdLine.fileNames,
-      base,
-      !!cmdLine.options.noEmit,
-      platforms
-    );
-    tasks.forEach((task) => promises.push(buildTask(cmdLine, task, tracer)));
+/**
+ * Execute a build (or just typechecking) for the given package
+ * @param options - options for the build
+ */
+export async function buildTypescript(options: BuildOptions) {
+  // load the base package json
+  const pkgJsonPath = findPackage(options.target);
+  if (!pkgJsonPath) {
+    throw new Error("Unable to find package.json for " + options.target);
+  }
+  const manifest = readPackage(pkgJsonPath);
+  const root = path.dirname(pkgJsonPath);
+  options.target = root;
+  const tracer = new Tracer(manifest.name, !!options.verbose, !!options.trace);
+
+  // set up the typescript options and load the config file
+  const mergedOptions = {
+    ...options.options,
+    ...ts.parseCommandLine(options.args || []).options,
+  };
+  const parsedCmdLine = loadTypescriptConfig(root, mergedOptions);
+
+  // load/detect the platforms
+  if (!options.platforms && options.detectPlatforms) {
+    options.platforms = detectReactNativePlatforms(manifest, root);
   }
 
-  if (writer) {
-    promises.push(writer.finish());
-  }
-  return promises;
+  tracer.log(
+    `building platforms: ${options.platforms?.join(", ")} instance: ${instanceCount++}`
+  );
+
+  // turn the parsed command line and options into a build context
+  const context = createBuildContext(options, parsedCmdLine, tracer);
+
+  // create the set of tasks to run then resolve all the tasks
+  return await Promise.all(createBuildTasks(context)).then(() =>
+    tracer.finish()
+  );
 }

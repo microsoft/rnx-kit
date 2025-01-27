@@ -1,35 +1,31 @@
+type TimerEntry = { count: number; time: number };
+
 export class Tracer {
-  private logEnabled: boolean;
-  private traceEnabled: boolean;
-  private name = "";
+  private logging: boolean;
+  private tracing: boolean;
 
-  constructor(log: boolean, trace: boolean) {
-    this.logEnabled = log;
-    this.traceEnabled = trace;
-  }
+  private startTime = performance.now();
+  private name: string;
 
-  isLogging(): boolean {
-    return this.logEnabled;
-  }
+  private timers: Record<string, TimerEntry> = {};
 
-  isTracing(): boolean {
-    return this.traceEnabled;
-  }
-
-  setName(name: string): void {
+  constructor(name: string, log: boolean, trace: boolean) {
     this.name = name;
+    this.logging = log;
+    this.tracing = trace;
   }
 
-  log(message: string): void {
-    if (this.logEnabled) {
-      console.log(`${this.name}: ${message}`);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  log(...args: any[]) {
+    if (this.logging) {
+      console.log(`${this.name}: `, ...args);
     }
   }
 
   time(category: string, fn: () => void): void {
     const start = performance.now();
     fn();
-    if (this.traceEnabled) {
+    if (this.tracing) {
       this.finishTimer(category, performance.now() - start);
     }
   }
@@ -40,29 +36,32 @@ export class Tracer {
   ): Promise<void> {
     const start = performance.now();
     await fn();
-    if (this.traceEnabled) {
+    if (this.tracing) {
       this.finishTimer(category, performance.now() - start);
     }
   }
 
-  reportTimers(): void {
+  finish(): void {
     for (const category in this.timers) {
       const { count, time } = this.timers[category];
       const categoryName = category.padEnd(20);
       console.log(
-        `${this.name}: ${categoryName}: ${time.toFixed(2)}ms with ${count} calls`
+        `${this.name}: ${categoryName}: Time: ${time.toFixed(2)}ms Calls: ${count}`
       );
     }
+    this.log(
+      `Finished build (${(performance.now() - this.startTime).toFixed(2)}ms)`
+    );
   }
 
-  private timers: Record<string, { count: number; time: number }> = {};
+  private ensureTimerEntry(category: string): TimerEntry {
+    this.timers[category] = this.timers[category] || { count: 0, time: 0 };
+    return this.timers[category];
+  }
 
   private finishTimer(category: string, time: number): void {
-    if (this.timers[category]) {
-      this.timers[category].count++;
-      this.timers[category].time += time;
-    } else {
-      this.timers[category] = { count: 1, time };
-    }
+    const entry = this.ensureTimerEntry(category);
+    entry.count++;
+    entry.time += time;
   }
 }
