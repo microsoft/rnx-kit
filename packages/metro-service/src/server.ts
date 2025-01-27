@@ -1,6 +1,6 @@
 import { requireModuleFromMetro } from "@rnx-kit/tools-react-native/metro";
 import type { runServer } from "metro";
-import net from "net";
+import net from "node:net";
 import { ensureBabelConfig } from "./babel";
 
 type ServerStatus = "not_running" | "already_running" | "in_use" | "unknown";
@@ -11,8 +11,9 @@ function getFetchImpl(): (url: string | URL) => Promise<Response> {
   }
 
   // TODO: Remove `node-fetch` when we drop support for Node 16
-  // @ts-expect-error To be removed when Node 16 is no longer supported
-  return (...args) => import("node-fetch").then(({ default: fetch }) => fetch(...args));
+  return (...args) =>
+    // @ts-expect-error To be removed when Node 16 is no longer supported
+    import("node-fetch").then(({ default: fetch }) => fetch(...args));
 }
 
 /**
