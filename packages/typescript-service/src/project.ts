@@ -94,7 +94,7 @@ export class Project {
     if (enhanceLanguageServiceHost) {
       enhanceLanguageServiceHost(languageServiceHost);
     }
-    // if someone replaces writeFile when they enhance the language service host, we should use that
+    // if someone replaces writeFile when they enhance the language service host, use that for writing
     this.writeFile = languageServiceHost.writeFile || ts.sys.writeFile;
 
     this.languageService = ts.createLanguageService(

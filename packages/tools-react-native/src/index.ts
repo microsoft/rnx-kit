@@ -14,11 +14,9 @@ export {
   getAvailablePlatforms,
   getAvailablePlatformsUncached,
   getModuleSuffixes,
-  getPlatformPackageName,
-  getPlatformsForPackage,
   parsePlatform,
-  parsePlatformValue,
   platformExtensions,
   platformValues,
+  tryParsePlatform,
 } from "./platform";
 export type { AllPlatforms } from "./platform";

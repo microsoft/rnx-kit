@@ -39,14 +39,6 @@
       "cache": true
     }
   },
-  "tasksRunnerOptions": {
-    "default": {
-      "runner": "./scripts/nx-tasks-runner.cjs",
-      "options": {
-        "parallel": 0
-      }
-    }
-  },
   "pluginsConfig": {
     "@nx/js": {
       "analyzeSourceFiles": false

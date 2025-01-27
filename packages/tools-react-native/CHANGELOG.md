@@ -1,5 +1,12 @@
 # Change Log - @rnx-kit/tools-react-native
 
+## 2.0.4
+
+### Patch Changes
+
+- 1b0e033: Add additional platform helpers for react-native related to platform
+  names and suffixes
+
 ## 2.0.3
 
 ### Patch Changes

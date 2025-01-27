@@ -6,10 +6,32 @@ import { readReactNativeConfig } from "./context";
 /**
  * List of supported react-native platforms.
  */
-export type AllPlatforms = "android" | "ios" | "macos" | "win32" | "windows";
+export type AllPlatforms =
+  | "android"
+  | "ios"
+  | "macos"
+  | "win32"
+  | "windows"
+  | "visionos";
 
 // Possible values for AllPlatforms
-const allValues: AllPlatforms[] = ["android", "ios", "macos", "win32", "windows"];
+const allValues: AllPlatforms[] = [
+  "android",
+  "ios",
+  "macos",
+  "win32",
+  "windows",
+  "visionos",
+];
+
+// Possible values for AllPlatforms
+const allValues: AllPlatforms[] = [
+  "android",
+  "ios",
+  "macos",
+  "win32",
+  "windows",
+];
 
 /**
  * Returns a list of extensions that should be tried for the target platform in
@@ -41,7 +63,10 @@ export function expandPlatformExtensions(
  * @param appendEmpty finish the suffixes with an empty entry, required for typescript usage
  * @returns an array of suffixes to try to match a module to in order of priority
  */
-export function getModuleSuffixes(platform: AllPlatforms, appendEmpty = true): string[] {
+export function getModuleSuffixes(
+  platform: AllPlatforms,
+  appendEmpty = true
+): string[] {
   const extensions = platformExtensions(platform).map((ext) => `.${ext}`);
   if (appendEmpty) {
     extensions.push("");
@@ -156,8 +181,10 @@ export function platformExtensions(platform: string): string[] {
 /**
  * @returns the given string as a platform value or undefined if it is not a valid platform.
  */
-export function parsePlatformValue(val: string): AllPlatforms | undefined {
-  return allValues.includes(val as AllPlatforms) ? (val as AllPlatforms) : undefined;
+export function tryParsePlatform(val: string): AllPlatforms | undefined {
+  return allValues.includes(val as AllPlatforms)
+    ? (val as AllPlatforms)
+    : undefined;
 }
 
 /**
@@ -167,9 +194,9 @@ export function parsePlatformValue(val: string): AllPlatforms | undefined {
  * @returns React-native platform name. Throws `Error` on failure.
  */
 export function parsePlatform(val: string): AllPlatforms {
-  const platform = parsePlatformValue(val);
+  const platform = tryParsePlatform(val);
   if (!platform) {
-    throw new Error(`Invalid platform '${val}'`);
+    throw new Error(`Unknown platform '${val}'`);
   }
   return platform;
 }
@@ -179,29 +206,4 @@ export function parsePlatform(val: string): AllPlatforms {
  */
 export function platformValues(): readonly AllPlatforms[] {
   return allValues;
-}
-
-// Map of platform to npm package name
-const platformToPackage: Record<AllPlatforms, string> = {
-  android: "react-native",
-  ios: "react-native",
-  macos: "react-native-macos",
-  win32: "@office-iss/react-native-win32",
-  windows: "react-native-windows",
-};
-
-/**
- * @returns The react-native package name for the given platform
- */
-export function getPlatformPackageName(platform: AllPlatforms): string {
-  return platformToPackage[platform];
-}
-
-/**
- * @returns The list of packages supported by the given react-native package name
- */
-export function getPlatformsForPackage(packageName: string): AllPlatforms[] {
-  return Object.entries(platformToPackage)
-    .filter(([, pkg]) => pkg === packageName)
-    .map(([platform]) => platform as AllPlatforms);
 }

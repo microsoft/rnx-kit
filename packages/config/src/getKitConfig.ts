@@ -76,7 +76,7 @@ export function getKitConfig(
  * @param packageDir The directory containing the package.json file.
  * @returns The rnx-kit configuration for this package, merged with any base configuration.
  */
-export function getKitConfigFromPackageJson(
+export function getKitConfigFromPackageManifest(
   packageJson: PackageManifest,
   packageDir: string
 ): KitConfig | undefined {

@@ -1,0 +1,23 @@
+diff --git a/src/tasks-runner/default-tasks-runner.js b/src/tasks-runner/default-tasks-runner.js
+index 56630f64624b0340fa59fc7e912f7a07a909bd1e..bc5d3f5adcf1519184b9ed54747e9858eeec41ba 100644
+--- a/src/tasks-runner/default-tasks-runner.js
++++ b/src/tasks-runner/default-tasks-runner.js
+@@ -54,16 +54,8 @@ class RemoteCacheV2 {
+ }
+ exports.RemoteCacheV2 = RemoteCacheV2;
+ const defaultTasksRunner = async (tasks, options, context) => {
+-    if (options['parallel'] === 'false' ||
+-        options['parallel'] === false) {
+-        options['parallel'] = 1;
+-    }
+-    else if (options['parallel'] === 'true' ||
+-        options['parallel'] === true ||
+-        options['parallel'] === undefined ||
+-        options['parallel'] === '') {
+-        options['parallel'] = Number(options['maxParallel'] || 3);
+-    }
++    const threads = require("os").availableParallelism();
++    options['parallel'] = process.env["CI"] ? threads : threads - 1;
+     await options.lifeCycle.startCommand();
+     try {
+         return await runAllTasks(tasks, options, context);
