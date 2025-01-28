@@ -161,6 +161,7 @@ const baseContext: BuildContext = {
   },
 
   cmdLine: { fileNames: mockFiles, options: {} } as ts.ParsedCommandLine,
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   log: () => {},
   time: (_label, fn) => fn(),
   timeAsync: async (_label, fn) => await fn(),

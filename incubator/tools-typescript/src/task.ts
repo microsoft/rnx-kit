@@ -37,10 +37,15 @@ export async function buildTask(context: BuildContext) {
       createHostEnhancer({ platform, writer })
     );
 
+    // log(context);
+
     // figure out the what files we are building and type-checking
+    /*
     const noEmit = cmdLine.options.noEmit;
     const build = context.build || noEmit ? [] : cmdLine.fileNames;
     const check = context.check || noEmit ? cmdLine.fileNames : [];
+    */
+    const { build = [], check = [] } = context;
     log(
       `Build task: platform: ${platform ?? "none"} (build:${build.length}, check:${check.length}), suffixes: `,
       cmdLine.options.moduleSuffixes

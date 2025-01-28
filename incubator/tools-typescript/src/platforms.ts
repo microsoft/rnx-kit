@@ -171,7 +171,7 @@ function addFilesToContext(
     }
   }
   // update the file names used to create the typescript project
-  //context.cmdLine.fileNames = fileNames;
+  context.cmdLine.fileNames = fileNames;
 }
 
 function copyParsedCmdLine(
