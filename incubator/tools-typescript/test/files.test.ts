@@ -1,3 +1,5 @@
+import { BatchWriter, Throttler } from "../src/files";
+
 const fileStats = { active: 0, maxActive: 0, written: 0 };
 
 function mockWriteFile(_name: string, _content: string) {
@@ -12,26 +14,25 @@ function mockWriteFile(_name: string, _content: string) {
   });
 }
 
-function resetFileStats() {
-  fileStats.active = 0;
-  fileStats.maxActive = 0;
-  fileStats.written = 0;
-}
-
-jest.mock("fs", () => ({
+jest.mock("node:fs", () => ({
+  mkdirSync: jest.fn(),
   promises: {
     writeFile: mockWriteFile,
   },
 }));
-
-import { BatchWriter, Throttler } from "../src/files";
 
 describe("BatchWriter", () => {
   const throttler = new Throttler(2, 2);
   const writer = new BatchWriter("rootDir", throttler);
 
   beforeEach(() => {
-    resetFileStats();
+    fileStats.active = 0;
+    fileStats.maxActive = 0;
+    fileStats.written = 0;
+  });
+
+  afterEach(() => {
+    //jest.spyOn(promises, "writeFile").mockRestore();
   });
 
   it("should write files in batches", async () => {
