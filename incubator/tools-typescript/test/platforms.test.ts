@@ -1,11 +1,14 @@
 import type { KitConfig } from "@rnx-kit/config";
 import type { PackageManifest } from "@rnx-kit/tools-node";
+import type ts from "typescript";
 import {
-  detectReactNativePlatforms,
+  isBestMatch,
+  loadPkgPlatformInfo,
   multiplexForPlatforms,
   splitFileNameAndSuffix,
+  type FileEntry,
 } from "../src/platforms";
-import { type BuildTaskOptions } from "../src/task";
+import type { BuildContext } from "../src/types";
 
 const baseManifest: PackageManifest = {
   name: "test-package",
@@ -15,26 +18,7 @@ const baseManifest: PackageManifest = {
   peerDependencies: {},
 };
 
-describe("detectReactNativePlatforms", () => {
-  it("should detect platforms from react-native dependency", () => {
-    const manifest: PackageManifest = {
-      ...baseManifest,
-      dependencies: { "react-native": "0.74.4" },
-    };
-    const platforms = detectReactNativePlatforms(manifest, process.cwd());
-    expect(platforms).toEqual(["android", "ios"]);
-  });
-
-  it("should detect platforms from react-native-windows peer dependency", () => {
-    const manifest: PackageManifest = {
-      ...baseManifest,
-      devDependencies: { "react-native": "0.74.4" },
-      peerDependencies: { "react-native-windows": "0.74.4" },
-    };
-    const platforms = detectReactNativePlatforms(manifest, process.cwd());
-    expect(platforms).toEqual(["android", "ios", "windows"]);
-  });
-
+describe("loadReactNativePlatforms", () => {
   it("should detect platforms from bundle targets", () => {
     const kitConfig: KitConfig = {
       kitType: "app",
@@ -46,8 +30,8 @@ describe("detectReactNativePlatforms", () => {
       ...baseManifest,
       "rnx-kit": kitConfig,
     };
-    const platforms = detectReactNativePlatforms(manifest, process.cwd());
-    expect(platforms).toEqual(["android", "ios", "windows"]);
+    const platforms = loadPkgPlatformInfo(process.cwd(), manifest);
+    expect(Object.keys(platforms)).toEqual(["android", "ios", "windows"]);
   });
 
   it("should detect platforms from multiple bundle targets", () => {
@@ -70,8 +54,35 @@ describe("detectReactNativePlatforms", () => {
       ...baseManifest,
       "rnx-kit": kitConfig,
     };
-    const platforms = detectReactNativePlatforms(manifest, process.cwd());
-    expect(platforms).toEqual(["android", "ios"]);
+    const platforms = loadPkgPlatformInfo(process.cwd(), manifest);
+    expect(Object.keys(platforms)).toEqual(["android", "ios"]);
+  });
+});
+
+describe("isBestMatch", () => {
+  it("should return true if the platform is an exact match", () => {
+    const entry: FileEntry = {
+      file: "unreferenced",
+      allSuffixes: { android: true, native: true },
+    };
+    const suffixes = ["android", "native", ""];
+    expect(isBestMatch({ ...entry, suffix: "android" }, suffixes)).toBe(true);
+    expect(isBestMatch({ ...entry, suffix: "native" }, suffixes)).toBe(false);
+    expect(isBestMatch({ ...entry, suffix: "" }, suffixes)).toBe(false);
+    expect(isBestMatch({ ...entry, suffix: "ios" }, suffixes)).toBe(false);
+    expect(isBestMatch({ ...entry, suffix: undefined }, suffixes)).toBe(false);
+  });
+
+  it("should return true for suffixes in the middle of the list", () => {
+    const entry: FileEntry = {
+      file: "unreferenced",
+      allSuffixes: { android: true, native: true },
+    };
+    const suffixes = ["ios", "native", ""];
+    expect(isBestMatch({ ...entry, suffix: "native" }, suffixes)).toBe(true);
+    expect(isBestMatch({ ...entry, suffix: "" }, suffixes)).toBe(false);
+    expect(isBestMatch({ ...entry, suffix: "android" }, suffixes)).toBe(false);
+    expect(isBestMatch({ ...entry, suffix: undefined }, suffixes)).toBe(false);
   });
 });
 
@@ -107,7 +118,7 @@ describe("splitFileNameAndSuffix", () => {
   });
 });
 
-function allFilesBuilt(files: string[], tasks: BuildTaskOptions[]): boolean {
+function allFilesBuilt(files: string[], tasks: BuildContext[]): boolean {
   const built: Record<string, boolean> = {};
   tasks.forEach((task) => {
     task.build?.forEach((file) => (built[file] = true));
@@ -138,70 +149,79 @@ const mockFiles = [
   "src/ux.android.tsx",
 ];
 
+const baseContext: BuildContext = {
+  platformInfo: {
+    android: { pkgName: "react-native", suffixes: ["android", "native", ""] },
+    ios: { pkgName: "react-native", suffixes: ["ios", "native", ""] },
+    windows: {
+      pkgName: "react-native-windows",
+      suffixes: ["windows", "win", "native", ""],
+    },
+    macos: { pkgName: "react-native-macos", suffixes: ["macos", "native", ""] },
+  },
+
+  cmdLine: { fileNames: mockFiles, options: {} } as ts.ParsedCommandLine,
+  log: () => {},
+  time: (_label, fn) => fn(),
+  timeAsync: async (_label, fn) => await fn(),
+};
+
 describe("multiplexForPlatforms", () => {
   it("should return the existing task if no platforms are specified", async () => {
-    const task: BuildTaskOptions = { build: mockFiles };
-    const tasks = multiplexForPlatforms(mockFiles, task, false);
+    const task = baseContext;
+    const tasks = multiplexForPlatforms(task);
     expect(tasks).toHaveLength(1);
     expect(allFilesBuilt(mockFiles, tasks)).toBe(true);
     expect(tasks[0]).toBe(task);
   });
 
   it("should work with a single platform", () => {
-    const tasks = multiplexForPlatforms(mockFiles, {}, false, ["android"]);
-    expect(tasks).toHaveLength(1);
-    expect(tasks[0]).toEqual({
-      build: mockFiles,
-      check: [],
+    const task = {
+      ...baseContext,
       platform: "android",
-    });
-    expect(allFilesBuilt(mockFiles, tasks)).toBe(true);
-  });
-
-  it("should work with a single platform in check only mode", () => {
-    const tasks = multiplexForPlatforms(mockFiles, {}, true, ["ios"]);
+      platforms: ["android"],
+    } as BuildContext;
+    const tasks = multiplexForPlatforms(task);
     expect(tasks).toHaveLength(1);
-    expect(tasks[0]).toEqual({
-      check: mockFiles,
-      platform: "ios",
-    });
+    expect(tasks[0].build).toEqual(mockFiles);
+    expect(tasks[0].check).toEqual([]);
+    expect(tasks[0].platform).toBe("android");
+    expect(allFilesBuilt(mockFiles, tasks)).toBe(true);
   });
 
   it("should work with multiple platforms", () => {
-    const tasks = multiplexForPlatforms(mockFiles, {}, false, [
-      "android",
-      "ios",
-    ]);
+    const task = {
+      ...baseContext,
+      platforms: ["android", "ios"],
+    } as BuildContext;
+    const tasks = multiplexForPlatforms(task);
     expect(tasks).toHaveLength(2);
     expect(allFilesBuilt(mockFiles, tasks)).toBe(true);
 
-    expect(tasks[0]).toEqual({
-      build: [
-        "src/file1.ts",
-        "src/file1.android.ts",
-        "src/file1.windows.ts",
-        "src/file1.macos.ts",
-        "src/file1.foo.ts",
-        "src/file2.ts",
-        "src/file2.win32.ts",
-        "src/ux.windows.tsx",
-        "src/ux.macos.tsx",
-        "src/ux.tsx",
-        "src/ux.android.tsx",
-      ],
-      check: ["src/index.ts"],
-      platform: "android",
-    });
+    expect(tasks[0].build).toEqual([
+      "src/file1.ts",
+      "src/file1.android.ts",
+      "src/file1.windows.ts",
+      "src/file1.macos.ts",
+      "src/file1.foo.ts",
+      "src/file2.ts",
+      "src/file2.win32.ts",
+      "src/ux.windows.tsx",
+      "src/ux.macos.tsx",
+      "src/ux.tsx",
+      "src/ux.android.tsx",
+    ]);
+    expect(tasks[0].check).toEqual(["src/index.ts"]),
+      expect(tasks[0].platform).toEqual("android");
 
-    expect(tasks[1]).toEqual({
-      build: [
-        "src/file1.native.ts",
-        "src/file2.ios.ts",
-        "src/index.ts",
-        "src/ux.ios.tsx",
-      ],
-      check: [],
-      platform: "ios",
-    });
+    expect(tasks[1].build).toEqual([
+      "src/file1.native.ts",
+      "src/file2.ios.ts",
+      "src/index.ts",
+      "src/ux.ios.tsx",
+    ]);
+
+    expect(tasks[1].check).toEqual([]);
+    expect(tasks[1].platform).toEqual("ios");
   });
 });

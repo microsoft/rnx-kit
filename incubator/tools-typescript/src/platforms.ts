@@ -1,104 +1,86 @@
 import {
-  type BundleConfig,
-  getKitConfigFromPackageJson,
+  getKitConfigFromPackageManifest,
+  type KitConfig,
 } from "@rnx-kit/config";
 import type { PackageManifest } from "@rnx-kit/tools-node";
 import {
-  type AllPlatforms,
-  getPlatformPackageName,
+  getAvailablePlatforms,
   platformExtensions,
-  platformValues,
 } from "@rnx-kit/tools-react-native";
-import type { BuildTaskOptions } from "./task";
+import type ts from "typescript";
+import type { BuildContext, PlatformInfo } from "./types";
+
+// quick helper for converting a value to an array
+function coerceArray<T>(value: T | T[] | undefined): T[] {
+  return value ? (Array.isArray(value) ? value : [value]) : [];
+}
 
 /**
- * See if any of the react-native platform dependencies are present in the given dependencies object
- * @param deps - an object containing the package's dependencies, can be one of [peer|dev]dependencies
- * @param foundPlatforms - adds any react-native platform dependencies to the foundPlatforms object
+ * @returns a PlatformInfo with a package name and the module suffixes set
  */
-function findReactNativePlatformsFromDeps(
-  manifest: PackageManifest,
-  foundPlatforms: Record<AllPlatforms, boolean>
-) {
-  // merge dependencies together, we only care about existence not version
-  const deps = {
-    ...manifest.dependencies,
-    ...manifest.devDependencies,
-    ...manifest.peerDependencies,
+function createPlatformInfo(platform: string, npmName?: string): PlatformInfo {
+  // a list of built-in platforms to use as a fallback
+  const fallbackPackages: Record<string, string> = {
+    android: "react-native",
+    ios: "react-native",
+    macos: "react-native-macos",
+    win32: "@office-iss/react-native-win32",
+    windows: "react-native-windows",
+    visionos: "@callstack/react-native-visionos",
   };
-
-  // create a mapping of platform to package name
-  const allPlatforms = platformValues();
-  const allPackages = allPlatforms.map((p) => getPlatformPackageName(p));
-
-  allPlatforms.forEach((platform, index) => {
-    if (deps[allPackages[index]]) {
-      foundPlatforms[platform] = true;
-    }
-  });
+  return {
+    pkgName: npmName || fallbackPackages[platform] || "",
+    suffixes: platformExtensions(platform).concat(""),
+  };
 }
 
 /**
- * Extract applicable platform from config.targets or config.platforms
- * @param config bundle config for the resolved rnx-kit configuration
- * @param foundPlatforms platform map to update with the platforms found in the bundle config
- */
-function findReactNativePlatformsFromBundleConfig(
-  config: BundleConfig,
-  foundPlatforms: Record<AllPlatforms, boolean>
-) {
-  const allPlatforms = platformValues();
-  if (config.platforms && typeof config.platforms === "object") {
-    allPlatforms.forEach((platform) => {
-      if (config.platforms![platform]) {
-        foundPlatforms[platform] = true;
-      }
-    });
-  }
-  const targets = Array.isArray(config.targets) ? config.targets : [];
-  targets.forEach((target) => {
-    if (typeof target === "string" && allPlatforms.includes(target)) {
-      foundPlatforms[target] = true;
-    }
-  });
-}
-
-/**
- * This determines supported react native platforms for a package. For module packages it will key off of the presence of
- * react-native in the dependencies. For app packages it will key off of the bundle configuration.
- *
- * @param manifest parsed package jsos, used for checking dependencies
- * @param packageRoot root path of the package
+ * This determines supported react native platforms for a package given the bundle config if it is marked as an app
  * @returns an array of react-native platforms that the package supports
  */
-export function detectReactNativePlatforms(
-  manifest: PackageManifest,
-  packageRoot: string
-): AllPlatforms[] | undefined {
+export function platformsFromKitConfig(
+  kitConfig: KitConfig | undefined
+): string[] | undefined {
   const foundPlatforms: Record<string, boolean> = {};
-
-  const rnxKit = manifest["rnx-kit"];
-  if (
-    rnxKit &&
-    typeof rnxKit.kitType === "string" &&
-    rnxKit.kitType === "app"
-  ) {
+  if (kitConfig && kitConfig.kitType === "app") {
     // for packages marked as an 'app', determine available platforms based on the bundle configuration
-    const kitConfig = getKitConfigFromPackageJson(manifest, packageRoot) || {};
-    const bundleConfigs = Array.isArray(kitConfig.bundle)
-      ? kitConfig.bundle
-      : [kitConfig.bundle];
-    bundleConfigs.forEach((bundleConfig) => {
-      if (bundleConfig && typeof bundleConfig === "object") {
-        findReactNativePlatformsFromBundleConfig(bundleConfig, foundPlatforms);
+    coerceArray(kitConfig.bundle).forEach((bundleConfig) => {
+      const { platforms, targets } = bundleConfig || {};
+      if (platforms) {
+        for (const platform in platforms) {
+          foundPlatforms[platform] = true;
+        }
       }
+      coerceArray(targets).forEach((target) => {
+        foundPlatforms[target] = true;
+      });
     });
-  } else {
-    // for all other packages, determine available platforms based on dependencies
-    findReactNativePlatformsFromDeps(manifest, foundPlatforms);
   }
-  const platforms = Object.keys(foundPlatforms) as AllPlatforms[];
+  const platforms = Object.keys(foundPlatforms);
   return platforms.length > 0 ? platforms : undefined;
+}
+
+export function loadPkgPlatformInfo(
+  pkgRoot: string,
+  manifest: PackageManifest,
+  platformOverride?: string[]
+): Record<string, PlatformInfo> {
+  // load the available platforms for the package from the react-native config files (and dependencies)
+  const available = getAvailablePlatforms(pkgRoot);
+
+  // the platforms are set specifically, found in the kit config, or equal all available platforms
+  const platforms =
+    platformOverride ||
+    platformsFromKitConfig(
+      getKitConfigFromPackageManifest(manifest, pkgRoot)
+    ) ||
+    Object.keys(available);
+  const result: Record<string, PlatformInfo> = {};
+
+  for (const platform of platforms) {
+    result[platform] = createPlatformInfo(platform, available[platform]);
+  }
+  return result;
 }
 
 /**
@@ -111,8 +93,8 @@ export function splitFileNameAndSuffix(
   return match ? [match[1], match[2]] : [file, undefined];
 }
 
-type FoundSuffixes = Record<string, boolean>;
-type FileEntry = {
+export type FoundSuffixes = Record<string, boolean>;
+export type FileEntry = {
   file: string;
   suffix?: string;
   allSuffixes: FoundSuffixes;
@@ -123,7 +105,7 @@ type FileEntry = {
  * @returns true if this file is the best match for this platform. if file.android.ts and file.ts exist
  * for the android platform it will only return true for file.android.ts, for ios it will return true for file.ts
  */
-function isBestMatch(entry: FileEntry, suffixes: string[]): boolean {
+export function isBestMatch(entry: FileEntry, suffixes: string[]): boolean {
   const { allSuffixes, suffix } = entry;
   // best suffix will be the first found one in the list or undefined if the base file
   const bestSuffix = allSuffixes && suffixes.find((s) => allSuffixes[s]);
@@ -158,56 +140,83 @@ function processFileList(files: string[]): FileEntry[] {
  * Given the parsed file entries, go through adding the files to the task based on the platform.
  * @param files processed file entry list
  * @param defaultTask is this the task which should build any unbuilt files
- * @param task task to add files to
+ * @param context task to add files to
  */
-function addFilesToTask(
+function addFilesToContext(
   files: FileEntry[],
   defaultTask: boolean,
-  task: BuildTaskOptions
+  context: BuildContext
 ) {
+  const fileNames: string[] = [];
+  const { platform, platformInfo } = context;
+
   // if we are in checkOnly mode then task.build will be null and we will fall back to the check array
-  const pushToBuild = (file: string) => {
-    if (task.build) {
-      task.build.push(file);
+  const pushToBuild = (file: string, checkOnly: boolean) => {
+    if (context.build && !checkOnly) {
+      context.build.push(file);
     } else {
-      task.check!.push(file);
+      context.check!.push(file);
     }
+    fileNames.push(file);
   };
 
-  const suffixes = platformExtensions(task.platform!);
+  const suffixes = platformInfo[platform!]!.suffixes;
   for (const entry of files) {
     const bestMatch = isBestMatch(entry, suffixes);
     if (!entry.built && (bestMatch || defaultTask)) {
-      pushToBuild(entry.file);
+      pushToBuild(entry.file, false);
       entry.built = true;
     } else if (bestMatch) {
-      task.check!.push(entry.file);
+      pushToBuild(entry.file, true);
     }
   }
+  // update the file names used to create the typescript project
+  //context.cmdLine.fileNames = fileNames;
 }
 
-export function multiplexForPlatforms(
-  files: string[],
-  base: BuildTaskOptions,
-  checkOnly: boolean,
-  platforms?: AllPlatforms[]
-): BuildTaskOptions[] {
+function copyParsedCmdLine(
+  cmdLine: ts.ParsedCommandLine
+): ts.ParsedCommandLine {
+  return {
+    ...cmdLine,
+    options: { ...cmdLine.options },
+    fileNames: [...cmdLine.fileNames],
+  };
+}
+
+/**
+ * Take the generic build context and create one for each platform, setting up the files to build for each platform.
+ * @param context starting build context with the information about how the command was set up
+ * @returns one or more build contexts, one for each platform
+ */
+export function multiplexForPlatforms(context: BuildContext): BuildContext[] {
+  const { platforms, cmdLine } = context;
+  const checkOnly = !!cmdLine.options.noEmit;
   // no platforms then we have nothing to do
-  if (!platforms || platforms.length === 0) {
-    return [base];
+  if (!platforms || platforms.length <= 1) {
+    context.platform = platforms?.[0];
+    context.check = checkOnly ? cmdLine.fileNames : [];
+    context.build = checkOnly ? [] : cmdLine.fileNames;
+    return [context];
   }
 
   // set up the tasks for each platform, build array is undefined in checkOnly mode
-  const tasks: BuildTaskOptions[] = platforms.map((platform) => {
-    return { ...base, platform, build: checkOnly ? undefined : [], check: [] };
+  const tasks: BuildContext[] = platforms.map((platform) => {
+    return {
+      ...context,
+      cmdLine: copyParsedCmdLine(cmdLine),
+      platform,
+      build: checkOnly ? undefined : [],
+      check: [],
+    };
   });
 
   // parse the files into file entries with suffixes already split out
-  const entries = processFileList(files);
+  const entries = processFileList(cmdLine.fileNames);
 
   // now iterate through the tasks in reverse order setting the default task as last
   for (let i = tasks.length - 1; i >= 0; i--) {
-    addFilesToTask(entries, i === 0, tasks[i]);
+    addFilesToContext(entries, i === 0, tasks[i]);
   }
 
   return tasks;

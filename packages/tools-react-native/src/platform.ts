@@ -24,15 +24,6 @@ const allValues: AllPlatforms[] = [
   "visionos",
 ];
 
-// Possible values for AllPlatforms
-const allValues: AllPlatforms[] = [
-  "android",
-  "ios",
-  "macos",
-  "win32",
-  "windows",
-];
-
 /**
  * Returns a list of extensions that should be tried for the target platform in
  * prioritized order.

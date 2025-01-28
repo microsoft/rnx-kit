@@ -1,7 +1,3 @@
-import {
-  type AllPlatforms,
-  getModuleSuffixes,
-} from "@rnx-kit/tools-react-native";
 import { Service } from "@rnx-kit/typescript-service";
 import { BatchWriter } from "./files";
 import { createHostEnhancer } from "./host";
@@ -9,51 +5,45 @@ import { multiplexForPlatforms } from "./platforms";
 import type { BuildContext } from "./types";
 
 // wrap all running commands in a single service
-const service = new Service();
+const serviceCache: Record<string, Service> = {};
 
-export type BuildTaskOptions = {
-  // platform for this build
-  platform?: AllPlatforms;
+function getService(platform?: string): Service {
+  platform = platform || "none";
+  if (!serviceCache[platform]) {
+    serviceCache[platform] = new Service();
+  }
+  return serviceCache[platform];
+}
 
-  // override files to only build the specified files
-  build?: string[];
-
-  // override files to only type-check the specified files
-  check?: string[];
-
-  // optional async file writer to write the files for this build
-  writer?: BatchWriter;
-};
-
-export async function buildTask(
-  context: BuildContext,
-  options: BuildTaskOptions
-) {
-  const { platform, writer } = options;
-  const { time, log } = context;
-  let { cmdLine } = context;
-
-  // log the platform we are building for
+/**
+ * Execute the build for the given context
+ * @param context information about this build
+ */
+export async function buildTask(context: BuildContext) {
+  const { cmdLine, platform, writer, time, log } = context;
 
   // add module suffixes to options if platform is set
-  const moduleSuffixes = platform && getModuleSuffixes(platform);
+  const moduleSuffixes =
+    platform &&
+    context.platformInfo[platform].suffixes.map((suffix) => `.${suffix}`);
   if (moduleSuffixes) {
-    cmdLine = { ...cmdLine, options: { ...cmdLine.options, moduleSuffixes } };
+    cmdLine.options.moduleSuffixes = moduleSuffixes;
   }
 
   time(`build platform: ${platform ?? "none"}`, () => {
     // set up the project we will use for the build
-    const project = service.openProject(
+    const project = getService(platform).openProject(
       cmdLine,
       createHostEnhancer({ platform, writer })
     );
 
     // figure out the what files we are building and type-checking
     const noEmit = cmdLine.options.noEmit;
-    const build = options.build || noEmit ? [] : cmdLine.fileNames;
-    const check = options.check || noEmit ? cmdLine.fileNames : [];
+    const build = context.build || noEmit ? [] : cmdLine.fileNames;
+    const check = context.check || noEmit ? cmdLine.fileNames : [];
     log(
-      `Build task: platform: ${platform ?? "none"} (build:${build.length}, check:${check.length})`
+      `Build task: platform: ${platform ?? "none"} (build:${build.length}, check:${check.length}), suffixes: `,
+      cmdLine.options.moduleSuffixes
     );
 
     // emit files that need to be built
@@ -68,27 +58,23 @@ export async function buildTask(
   });
 }
 
+/**
+ * Create the build tasks for the given build directive
+ * @param context context with the basic options loaded
+ * @returns one or more promises which can be waited on for build completion
+ */
 export function createBuildTasks(context: BuildContext): Promise<void>[] {
-  const { asyncWrites, noTypecheck, platforms, cmdLine, target } = context;
+  const { asyncWrites, target } = context;
   const promises: Promise<void>[] = [];
-  const writer = asyncWrites ? new BatchWriter(target!) : undefined;
-
-  if (noTypecheck) {
-    // this forces the build to only emit files, it also disables multiplexing across platforms
-    promises.push(buildTask(context, { writer, build: cmdLine.fileNames }));
-  } else {
-    const base: BuildTaskOptions = { writer };
-    const tasks = multiplexForPlatforms(
-      cmdLine.fileNames,
-      base,
-      !!cmdLine.options.noEmit,
-      platforms
-    );
-    tasks.forEach((task) => promises.push(buildTask(context, task)));
+  if (asyncWrites) {
+    context.writer = new BatchWriter(target!);
   }
 
-  if (writer) {
-    promises.push(writer.finish());
+  const tasks = multiplexForPlatforms(context);
+  tasks.forEach((taskContext) => promises.push(buildTask(taskContext)));
+
+  if (context.writer) {
+    promises.push(context.writer.finish());
   }
   return promises;
 }

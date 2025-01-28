@@ -1,18 +1,16 @@
 import type { AllPlatforms } from "@rnx-kit/tools-react-native/platform";
 import type ts from "typescript";
+import type { BatchWriter } from "./files";
 
 export type BuildOptions = {
   /** Target directory for the build, should correspond to the package root */
   target?: string;
 
-  /** Which react-native platforms should be targeted (if any). */
+  /** Is this build for react-native, will attempt to detect platforms if set. */
+  reactNative?: boolean;
+
+  /** Which react-native platforms should be targeted (if any). Overrides auto-detection */
   platforms?: AllPlatforms[];
-
-  /** Attempt to auto-detect the react-native platforms to target. */
-  detectPlatforms?: boolean;
-
-  /** Only emit files, this will also disable multiplexing the build for multiple platforms. */
-  noTypecheck?: boolean;
 
   /** Write out files asynchronously. Experimental feature. */
   asyncWrites?: boolean;
@@ -39,6 +37,14 @@ export type BuildOptions = {
 };
 
 /**
+ * Information about each available platform
+ */
+export type PlatformInfo = {
+  pkgName: string;
+  suffixes: string[];
+};
+
+/**
  * Additional context attached to the build options to pass along to build tasks
  */
 export type BuildContext = BuildOptions & {
@@ -49,4 +55,17 @@ export type BuildContext = BuildOptions & {
   log(...args: any[]): void;
   time(label: string, fn: () => void): void;
   timeAsync(label: string, fn: () => Promise<void>): Promise<void>;
+
+  // resolved information about the platforms to target
+  platformInfo: Record<string, PlatformInfo>;
+
+  // the focused platform for this build
+  platform?: AllPlatforms;
+
+  // list of files to build & type-check
+  build?: string[];
+  check?: string[];
+
+  // async file writer to write the files for this build
+  writer?: BatchWriter;
 };

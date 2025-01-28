@@ -1,14 +1,14 @@
 import { Tracer } from "./tracer";
-import type { BuildContext, BuildOptions } from "./types";
+import type { BuildOptions, PlatformInfo } from "./types";
 
 import { findPackage, readPackage } from "@rnx-kit/tools-node";
 import { readConfigFile } from "@rnx-kit/typescript-service";
 
+import type { AllPlatforms } from "@rnx-kit/tools-react-native";
 import path from "node:path";
 import ts from "typescript";
-import { detectReactNativePlatforms } from "./platforms";
+import { loadPkgPlatformInfo } from "./platforms";
 import { createBuildTasks } from "./task";
-import { sanitizeOptions } from "./tsoptions";
 
 let instanceCount = 1;
 
@@ -29,27 +29,14 @@ function loadTypescriptConfig(
 
   // now load the config, mixing in the command line options
   const config = configPath
-    ? readConfigFile(configPath, sanitizeOptions(options))
+    ? //  ? readConfigFile(configPath, sanitizeOptions(options))
+      readConfigFile(configPath, options)
     : undefined;
 
   if (!config) {
     throw new Error("Unable to find tsconfig.json");
   }
   return config;
-}
-
-function createBuildContext(
-  options: BuildOptions,
-  cmdLine: ts.ParsedCommandLine,
-  tracer: Tracer
-): BuildContext {
-  return {
-    ...options,
-    cmdLine,
-    log: tracer.log.bind(tracer),
-    time: tracer.time.bind(tracer),
-    timeAsync: tracer.timeAsync.bind(tracer),
-  };
 }
 
 /**
@@ -72,11 +59,16 @@ export async function buildTypescript(options: BuildOptions) {
     ...options.options,
     ...ts.parseCommandLine(options.args || []).options,
   };
-  const parsedCmdLine = loadTypescriptConfig(root, mergedOptions);
+  const cmdLine = loadTypescriptConfig(root, mergedOptions);
 
   // load/detect the platforms
-  if (!options.platforms && options.detectPlatforms) {
-    options.platforms = detectReactNativePlatforms(manifest, root);
+  let platformInfo: Record<string, PlatformInfo> = {};
+  if (options.platforms || options.reactNative) {
+    platformInfo = loadPkgPlatformInfo(root, manifest, options.platforms);
+    const platforms = Object.keys(platformInfo);
+    tracer.log(platformInfo);
+    options.platforms =
+      platforms.length > 0 ? (platforms as AllPlatforms[]) : undefined;
   }
 
   tracer.log(
@@ -84,7 +76,14 @@ export async function buildTypescript(options: BuildOptions) {
   );
 
   // turn the parsed command line and options into a build context
-  const context = createBuildContext(options, parsedCmdLine, tracer);
+  const context = {
+    ...options,
+    cmdLine,
+    platformInfo,
+    log: tracer.log.bind(tracer),
+    time: tracer.time.bind(tracer),
+    timeAsync: tracer.timeAsync.bind(tracer),
+  };
 
   // create the set of tasks to run then resolve all the tasks
   return await Promise.all(createBuildTasks(context)).then(() =>
