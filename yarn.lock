@@ -12592,7 +12592,6 @@ __metadata:
     prettier: "npm:^3.0.0"
     prettier-plugin-organize-imports: "npm:^4.0.0"
     suggestion-bot: "npm:^3.0.0"
-    tsx: "npm:^4.15.0"
     typescript: "npm:^5.0.0"
   languageName: unknown
   linkType: soft
