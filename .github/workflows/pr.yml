@@ -7,6 +7,9 @@ concurrency:
 jobs:
   review:
     name: "Review"
+    permissions:
+      issues: write # comment on PRs (suggestion-bot)
+      pull-requests: write # create code reviews (suggestion-bot)
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout
@@ -15,6 +18,8 @@ jobs:
           fetch-depth: 0
       - name: Setup the toolchain
         uses: ./.github/actions/setup-toolchain
+        with:
+          node-version: 22
       - name: Deduplicate packages
         run: |
           yarn dedupe --check
@@ -31,14 +36,23 @@ jobs:
       - name: Report formatting problems
         run: |
           yarn format
+          if [[ -n "$GITHUB_TOKEN" ]]; then
+            git diff | yarn suggestion-bot
+          fi
           git diff --exit-code
       - name: Report package metadata inconsistencies
         run: |
           node scripts/lint-metadata.js
+          if [[ -n "$GITHUB_TOKEN" ]]; then
+            git diff | yarn suggestion-bot
+          fi
           git diff --exit-code
       - name: Report dependency misalignments
         run: |
           yarn rnx-align-deps --write
+          if [[ -n "$GITHUB_TOKEN" ]]; then
+            git diff | yarn suggestion-bot
+          fi
           git diff --exit-code
       - name: Report unused dependencies
         run: |
@@ -46,16 +60,22 @@ jobs:
       - name: Ensure READMEs are up-to-date
         run: |
           yarn update-readme
+          if [[ -n "$GITHUB_TOKEN" ]]; then
+            git diff | yarn suggestion-bot
+          fi
           git diff --exit-code
       - name: Report @rnx-kit/build workflow inconsistencies
         run: |
           cp incubator/build/workflows/github.yml .github/workflows/rnx-build.yml
+          if [[ -n "$GITHUB_TOKEN" ]]; then
+            git diff | yarn suggestion-bot
+          fi
           git diff --exit-code
   build:
     name: "Build"
     strategy:
       matrix:
-        node-version: [18, 20]
+        node-version: [20, 22]
         os: [ubuntu-24.04, windows-2022]
     runs-on: ${{ matrix.os }}
     steps:

@@ -1,8 +1,8 @@
-#!/usr/bin/env -S yarn tsx --conditions typescript
+#!/usr/bin/env node
 
 import { URL, fileURLToPath } from "node:url";
 // Directly import align-deps to avoid circular dependency
-import { cli } from "../packages/align-deps/src/cli.js";
+import { cli } from "../packages/align-deps/lib/index.js";
 
 cli({
   presets: [
