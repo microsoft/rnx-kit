@@ -8,7 +8,7 @@ import {
   platformExtensions,
 } from "@rnx-kit/tools-react-native";
 import type ts from "typescript";
-import type { BuildContext, PlatformInfo } from "./types";
+import type { BuildContext, ParsedFileName, PlatformInfo } from "./types";
 
 // quick helper for converting a value to an array
 function coerceArray<T>(value: T | T[] | undefined): T[] {
@@ -29,6 +29,7 @@ function createPlatformInfo(platform: string, npmName?: string): PlatformInfo {
     visionos: "@callstack/react-native-visionos",
   };
   return {
+    name: platform,
     pkgName: npmName || fallbackPackages[platform] || "",
     suffixes: platformExtensions(platform).concat(""),
   };
@@ -84,13 +85,18 @@ export function loadPkgPlatformInfo(
 }
 
 /**
- * Parse a file path to get base path and platform extension, if one exists.
+ * Take a file path and return the base file name, the platform extension if one exists, and the file extension.
+ * @param file file path to parse
+ * @returns an object with the base file name, the platform extension if one exists, and the file extension
  */
-export function splitFileNameAndSuffix(
-  file: string
-): [string, string | undefined] {
-  const match = /^(.*?)(?:\.([a-zA-Z0-9]*))?\.[jt]sx?$/.exec(file);
-  return match ? [match[1], match[2]] : [file, undefined];
+export function parseFileDetails(file: string): ParsedFileName {
+  const match =
+    /^(.*?)(?:\.([a-zA-Z0-9]*))?\.([a-zA-Z0-9]*)$/.exec(file) ?? new Array(3);
+  return {
+    base: match[1] || file,
+    suffix: match[2] || undefined,
+    ext: match[3] || "",
+  };
 }
 
 export type FoundSuffixes = Record<string, boolean>;
@@ -111,7 +117,7 @@ export function isBestMatch(entry: FileEntry, suffixes: string[]): boolean {
   const bestSuffix = allSuffixes && suffixes.find((s) => allSuffixes[s]);
 
   // it's the best match if the strings match or if they are both undefined
-  return suffix === bestSuffix;
+  return suffix === bestSuffix || (!suffix && !bestSuffix);
 }
 
 /**
@@ -127,7 +133,7 @@ function processFileList(files: string[]): FileEntry[] {
   };
 
   return files.map((file) => {
-    const [base, suffix] = splitFileNameAndSuffix(file);
+    const { base, suffix } = parseFileDetails(file);
     const allSuffixes = ensureSuffixes(base);
     if (suffix) {
       allSuffixes[suffix] = true;
@@ -148,7 +154,8 @@ function addFilesToContext(
   context: BuildContext
 ) {
   const fileNames: string[] = [];
-  const { platform, platformInfo } = context;
+
+  const { suffixes } = context.platform || {};
 
   // if we are in checkOnly mode then task.build will be null and we will fall back to the check array
   const pushToBuild = (file: string, checkOnly: boolean) => {
@@ -160,9 +167,8 @@ function addFilesToContext(
     fileNames.push(file);
   };
 
-  const suffixes = platformInfo[platform!]!.suffixes;
   for (const entry of files) {
-    const bestMatch = isBestMatch(entry, suffixes);
+    const bestMatch = isBestMatch(entry, suffixes!);
     if (!entry.built && (bestMatch || defaultTask)) {
       pushToBuild(entry.file, false);
       entry.built = true;
@@ -189,8 +195,11 @@ function copyParsedCmdLine(
  * @param context starting build context with the information about how the command was set up
  * @returns one or more build contexts, one for each platform
  */
-export function multiplexForPlatforms(context: BuildContext): BuildContext[] {
-  const { platforms, cmdLine } = context;
+export function multiplexForPlatforms(
+  context: BuildContext,
+  platforms?: PlatformInfo[]
+): BuildContext[] {
+  const { cmdLine, reporter, writer, root } = context;
   const checkOnly = !!cmdLine.options.noEmit;
   // no platforms then we have nothing to do
   if (!platforms || platforms.length <= 1) {
@@ -203,11 +212,13 @@ export function multiplexForPlatforms(context: BuildContext): BuildContext[] {
   // set up the tasks for each platform, build array is undefined in checkOnly mode
   const tasks: BuildContext[] = platforms.map((platform) => {
     return {
-      ...context,
+      root,
       cmdLine: copyParsedCmdLine(cmdLine),
       platform,
       build: checkOnly ? undefined : [],
       check: [],
+      reporter: reporter.createSubReporter(platform.name),
+      writer,
     };
   });
 

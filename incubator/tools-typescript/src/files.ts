@@ -118,6 +118,11 @@ export class BatchWriter {
    * Wait for all active writes to complete for this group of files
    */
   async finish() {
-    await Promise.all(Object.values(this.active));
+    try {
+      await Promise.all(Object.values(this.active));
+    } catch {
+      return false;
+    }
+    return true;
   }
 }

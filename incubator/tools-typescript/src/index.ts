@@ -1,8 +1,8 @@
 // base functionality
 export { buildTypescript } from "./build";
-export type { BuildOptions, PlatformInfo } from "./types";
+export type { BuildOptions, PlatformInfo, Reporter } from "./types";
 
 // utility functions
 export { BatchWriter, Throttler } from "./files";
-export { loadPkgPlatformInfo, splitFileNameAndSuffix } from "./platforms";
-export { sanitizeOptions } from "./tsoptions";
+export { loadPkgPlatformInfo, parseFileDetails } from "./platforms";
+export { createReporter } from "./reporter";

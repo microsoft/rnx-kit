@@ -1,66 +1,40 @@
-import { Service } from "@rnx-kit/typescript-service";
 import { BatchWriter } from "./files";
-import { createHostEnhancer } from "./host";
+import { openProject } from "./host";
 import { multiplexForPlatforms } from "./platforms";
-import type { BuildContext } from "./types";
-
-// wrap all running commands in a single service
-const serviceCache: Record<string, Service> = {};
-
-function getService(platform?: string): Service {
-  platform = platform || "none";
-  if (!serviceCache[platform]) {
-    serviceCache[platform] = new Service();
-  }
-  return serviceCache[platform];
-}
+import type { BuildContext, BuildOptions } from "./types";
 
 /**
  * Execute the build for the given context
  * @param context information about this build
  */
-export async function buildTask(context: BuildContext) {
-  const { cmdLine, platform, writer, time, log } = context;
+export async function buildTask(context: BuildContext): Promise<boolean> {
+  const { time, log, error, succeeded } = context.reporter;
 
-  // add module suffixes to options if platform is set
-  const moduleSuffixes =
-    platform &&
-    context.platformInfo[platform].suffixes.map((suffix) => `.${suffix}`);
-  if (moduleSuffixes) {
-    cmdLine.options.moduleSuffixes = moduleSuffixes;
+  try {
+    time(`Execute build}`, () => {
+      // set up the project we will use for the build
+      const project = openProject(context);
+
+      const { build = [], check = [] } = context;
+      log(
+        `Building ${build.length} files, type-checking ${check.length} files`
+      );
+
+      // emit files that need to be built
+      time(`emit: ${build.length} files`, () => {
+        build.forEach((file) => project.emitFile(file));
+      });
+
+      // check files that need to be type-checked
+      time(`validate: ${check.length} files`, () => {
+        check.forEach((file) => project.validateFile(file));
+      });
+    });
+  } catch (e) {
+    error(e);
   }
-
-  time(`build platform: ${platform ?? "none"}`, () => {
-    // set up the project we will use for the build
-    const project = getService(platform).openProject(
-      cmdLine,
-      createHostEnhancer({ platform, writer })
-    );
-
-    // log(context);
-
-    // figure out the what files we are building and type-checking
-    /*
-    const noEmit = cmdLine.options.noEmit;
-    const build = context.build || noEmit ? [] : cmdLine.fileNames;
-    const check = context.check || noEmit ? cmdLine.fileNames : [];
-    */
-    const { build = [], check = [] } = context;
-    log(
-      `Build task: platform: ${platform ?? "none"} (build:${build.length}, check:${check.length}), suffixes: `,
-      cmdLine.options.moduleSuffixes
-    );
-
-    // emit files that need to be built
-    time(`emit ${build.length} files, platform: ${platform}`, () => {
-      build.forEach((file) => project.emitFile(file));
-    });
-
-    // check files that need to be type-checked
-    time(`validate ${check.length} files, platform: ${platform}`, () => {
-      check.forEach((file) => project.validateFile(file));
-    });
-  });
+  // return successfully only if there are no errors
+  return succeeded(!!context.platform);
 }
 
 /**
@@ -68,9 +42,12 @@ export async function buildTask(context: BuildContext) {
  * @param context context with the basic options loaded
  * @returns one or more promises which can be waited on for build completion
  */
-export function createBuildTasks(context: BuildContext): Promise<void>[] {
-  const { asyncWrites, target } = context;
-  const promises: Promise<void>[] = [];
+export function createBuildTasks(
+  options: BuildOptions,
+  context: BuildContext
+): Promise<boolean>[] {
+  const { asyncWrites, target } = options;
+  const promises: Promise<boolean>[] = [];
   if (asyncWrites) {
     context.writer = new BatchWriter(target!);
   }

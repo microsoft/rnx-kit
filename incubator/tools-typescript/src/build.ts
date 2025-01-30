@@ -1,5 +1,5 @@
-import { Tracer } from "./tracer";
-import type { BuildOptions, PlatformInfo } from "./types";
+import { createReporter } from "./reporter";
+import type { BuildContext, BuildOptions, PlatformInfo } from "./types";
 
 import { findPackage, readPackage } from "@rnx-kit/tools-node";
 import { readConfigFile } from "@rnx-kit/typescript-service";
@@ -43,7 +43,7 @@ function loadTypescriptConfig(
  * Execute a build (or just typechecking) for the given package
  * @param options - options for the build
  */
-export async function buildTypescript(options: BuildOptions) {
+export async function buildTypescript(options: BuildOptions): Promise<boolean> {
   // load the base package json
   const pkgJsonPath = findPackage(options.target);
   if (!pkgJsonPath) {
@@ -51,8 +51,11 @@ export async function buildTypescript(options: BuildOptions) {
   }
   const manifest = readPackage(pkgJsonPath);
   const root = path.dirname(pkgJsonPath);
-  options.target = root;
-  const tracer = new Tracer(manifest.name, !!options.verbose, !!options.trace);
+  const reporter = createReporter(
+    manifest.name,
+    options.verbose,
+    options.trace
+  );
 
   // set up the typescript options and load the config file
   const mergedOptions = {
@@ -66,27 +69,27 @@ export async function buildTypescript(options: BuildOptions) {
   if (options.platforms || options.reactNative) {
     platformInfo = loadPkgPlatformInfo(root, manifest, options.platforms);
     const platforms = Object.keys(platformInfo);
-    tracer.log(platformInfo);
+    reporter.log(platformInfo);
     options.platforms =
       platforms.length > 0 ? (platforms as AllPlatforms[]) : undefined;
   }
 
-  tracer.log(
+  if (options.verbose && options.platforms) {
+    reporter.log(`Executing for platforms: ${options.platforms.join(", ")}`);
+  }
+
+  reporter.log(
     `building platforms: ${options.platforms?.join(", ")} instance: ${instanceCount++}`
   );
 
   // turn the parsed command line and options into a build context
-  const context = {
-    ...options,
+  const context: BuildContext = {
     cmdLine,
-    platformInfo,
-    log: tracer.log.bind(tracer),
-    time: tracer.time.bind(tracer),
-    timeAsync: tracer.timeAsync.bind(tracer),
+    root,
+    reporter,
   };
 
   // create the set of tasks to run then resolve all the tasks
-  return await Promise.all(createBuildTasks(context)).then(() =>
-    tracer.finish()
-  );
+  const results = await Promise.all(createBuildTasks(options, context));
+  return reporter.succeeded(true) && results.every((r) => r);
 }

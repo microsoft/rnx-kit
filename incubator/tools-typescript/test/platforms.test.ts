@@ -5,10 +5,11 @@ import {
   isBestMatch,
   loadPkgPlatformInfo,
   multiplexForPlatforms,
-  splitFileNameAndSuffix,
+  parseFileDetails,
   type FileEntry,
 } from "../src/platforms";
-import type { BuildContext } from "../src/types";
+import { createReporter } from "../src/reporter";
+import type { BuildContext, PlatformInfo } from "../src/types";
 
 const baseManifest: PackageManifest = {
   name: "test-package",
@@ -84,37 +85,54 @@ describe("isBestMatch", () => {
     expect(isBestMatch({ ...entry, suffix: "android" }, suffixes)).toBe(false);
     expect(isBestMatch({ ...entry, suffix: undefined }, suffixes)).toBe(false);
   });
+
+  it("should find the no-suffix option if it is the best match", () => {
+    const entry: FileEntry = {
+      file: "unreferenced",
+      allSuffixes: { android: true, win32: true, ios: true, visionos: true },
+    };
+    const suffixes = ["macos", "native", ""];
+    expect(isBestMatch({ ...entry, suffix: "" }, suffixes)).toBe(true);
+    expect(isBestMatch({ ...entry, suffix: "android" }, suffixes)).toBe(false);
+    expect(isBestMatch({ ...entry, suffix: "ios" }, suffixes)).toBe(false);
+    expect(isBestMatch({ ...entry, suffix: undefined }, suffixes)).toBe(true);
+  });
 });
 
-describe("splitFileNameAndSuffix", () => {
-  it("should split a file name with no suffix and return one term", () => {
-    const [name, suffix] = splitFileNameAndSuffix("src/file1.ts");
-    expect(name).toBe("src/file1");
+describe("parseFileDetails", () => {
+  it("should parse a file with no suffix", () => {
+    const { base, suffix, ext } = parseFileDetails("src/file1.ts");
+    expect(base).toBe("src/file1");
     expect(suffix).toBe(undefined);
+    expect(ext).toBe("ts");
   });
 
-  it("should extract a suffix correctly with both .ts and .tsx extensions", () => {
-    const [name, suffix] = splitFileNameAndSuffix("src/ux.android.tsx");
-    expect(name).toBe("src/ux");
+  it("should parse a file with a suffix", () => {
+    const { base, suffix, ext } = parseFileDetails("src/file1.android.ts");
+    expect(base).toBe("src/file1");
     expect(suffix).toBe("android");
-    const [name2, suffix2] = splitFileNameAndSuffix("src/myfile.ios.ts");
-    expect(name2).toBe("src/myfile");
-    expect(suffix2).toBe("ios");
+    expect(ext).toBe("ts");
   });
 
-  it("should work with js and jsx extensions", () => {
-    const [name, suffix] = splitFileNameAndSuffix("src/ux.android.jsx");
-    expect(name).toBe("src/ux");
+  it("should parse a file with a suffix and a different extension", () => {
+    const { base, suffix, ext } = parseFileDetails("src/file1.visionos.tsx");
+    expect(base).toBe("src/file1");
+    expect(suffix).toBe("visionos");
+    expect(ext).toBe("tsx");
+  });
+
+  it("should parse a file with a suffix and a different extension", () => {
+    const { base, suffix, ext } = parseFileDetails("src/file1.android.bogus");
+    expect(base).toBe("src/file1");
     expect(suffix).toBe("android");
-    const [name2, suffix2] = splitFileNameAndSuffix("src/myfile.ios.js");
-    expect(name2).toBe("src/myfile");
-    expect(suffix2).toBe("ios");
+    expect(ext).toBe("bogus");
   });
 
-  it("should return the last suffix if multiple exist", () => {
-    const [name, suffix] = splitFileNameAndSuffix("src/file1.android.ios.ts");
-    expect(name).toBe("src/file1.android");
-    expect(suffix).toBe("ios");
+  it("should parse a file with no extension", () => {
+    const { base, suffix, ext } = parseFileDetails("src/file1");
+    expect(base).toBe("src/file1");
+    expect(suffix).toBe(undefined);
+    expect(ext).toBe("");
   });
 });
 
@@ -149,22 +167,33 @@ const mockFiles = [
   "src/ux.android.tsx",
 ];
 
-const baseContext: BuildContext = {
-  platformInfo: {
-    android: { pkgName: "react-native", suffixes: ["android", "native", ""] },
-    ios: { pkgName: "react-native", suffixes: ["ios", "native", ""] },
-    windows: {
-      pkgName: "react-native-windows",
-      suffixes: ["windows", "win", "native", ""],
-    },
-    macos: { pkgName: "react-native-macos", suffixes: ["macos", "native", ""] },
+const allPlatforms: Record<string, PlatformInfo> = {
+  android: {
+    name: "android",
+    pkgName: "react-native",
+    suffixes: ["android", "native", ""],
   },
+  ios: {
+    name: "ios",
+    pkgName: "react-native",
+    suffixes: ["ios", "native", ""],
+  },
+  windows: {
+    name: "windows",
+    pkgName: "react-native-windows",
+    suffixes: ["windows", "win", "native", ""],
+  },
+  macos: {
+    name: "macos",
+    pkgName: "react-native-macos",
+    suffixes: ["macos", "native", ""],
+  },
+};
 
+const baseContext: BuildContext = {
+  root: "/src/myPkg",
+  reporter: createReporter("mock-reporter"),
   cmdLine: { fileNames: mockFiles, options: {} } as ts.ParsedCommandLine,
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  log: () => {},
-  time: (_label, fn) => fn(),
-  timeAsync: async (_label, fn) => await fn(),
 };
 
 describe("multiplexForPlatforms", () => {
@@ -179,23 +208,23 @@ describe("multiplexForPlatforms", () => {
   it("should work with a single platform", () => {
     const task = {
       ...baseContext,
-      platform: "android",
-      platforms: ["android"],
     } as BuildContext;
-    const tasks = multiplexForPlatforms(task);
+    const tasks = multiplexForPlatforms(task, [allPlatforms["android"]]);
     expect(tasks).toHaveLength(1);
     expect(tasks[0].build).toEqual(mockFiles);
     expect(tasks[0].check).toEqual([]);
-    expect(tasks[0].platform).toBe("android");
+    expect(tasks[0].platform!.name).toBe("android");
     expect(allFilesBuilt(mockFiles, tasks)).toBe(true);
   });
 
   it("should work with multiple platforms", () => {
     const task = {
       ...baseContext,
-      platforms: ["android", "ios"],
     } as BuildContext;
-    const tasks = multiplexForPlatforms(task);
+    const tasks = multiplexForPlatforms(task, [
+      allPlatforms["android"],
+      allPlatforms["ios"],
+    ]);
     expect(tasks).toHaveLength(2);
     expect(allFilesBuilt(mockFiles, tasks)).toBe(true);
 
@@ -213,7 +242,7 @@ describe("multiplexForPlatforms", () => {
       "src/ux.android.tsx",
     ]);
     expect(tasks[0].check).toEqual(["src/index.ts"]),
-      expect(tasks[0].platform).toEqual("android");
+      expect(tasks[0].platform!.name).toEqual("android");
 
     expect(tasks[1].build).toEqual([
       "src/file1.native.ts",
@@ -223,6 +252,6 @@ describe("multiplexForPlatforms", () => {
     ]);
 
     expect(tasks[1].check).toEqual([]);
-    expect(tasks[1].platform).toEqual("ios");
+    expect(tasks[1].platform!.name).toEqual("ios");
   });
 });

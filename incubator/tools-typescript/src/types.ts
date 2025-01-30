@@ -26,6 +26,11 @@ export type BuildOptions = {
   trace?: boolean;
 
   /**
+   * Remap react-native imports to the appropriate platform package
+   */
+  remapReactNative?: boolean;
+
+  /**
    * Additional typescript options
    */
   options?: ts.CompilerOptions;
@@ -40,32 +45,73 @@ export type BuildOptions = {
  * Information about each available platform
  */
 export type PlatformInfo = {
+  /* android, ios, macos, windows, etc. */
+  name: string;
+  /* react-native, react-native-macos, etc. */
   pkgName: string;
+  /* platform specific suffixes + an empty string. e.g.: ['android', 'native', ''] */
   suffixes: string[];
+  /* remap react-native imports to the appropriate platform package for this platform */
+  remapReactNative?: boolean;
 };
+
+/**
+ * Interface for capturing logging information
+ */
+export type Logger = {
+  log(...args: unknown[]): void;
+  warn(...args: unknown[]): void;
+  error(...args: unknown[]): void;
+  trace(...args: unknown[]): void;
+};
+
+/**
+ * Interface for capturing timing information
+ */
+export type Timer = {
+  time<T>(label: string, fn: () => T): T;
+  timeAsync<T>(label: string, fn: () => Promise<T>): Promise<T>;
+  results(): Record<string, { count: number; time: number }>;
+};
+
+export type Reporter = Logger &
+  Timer & {
+    // reports true if no errors have been reported
+    succeeded(report?: boolean): boolean;
+
+    // name this reporter was created with
+    createSubReporter(tag: string): Reporter;
+  };
 
 /**
  * Additional context attached to the build options to pass along to build tasks
  */
-export type BuildContext = BuildOptions & {
+export type BuildContext = {
+  // root path for the project
+  root: string;
+
   // parsed command line for this build
   cmdLine: ts.ParsedCommandLine;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  log(...args: any[]): void;
-  time(label: string, fn: () => void): void;
-  timeAsync(label: string, fn: () => Promise<void>): Promise<void>;
-
-  // resolved information about the platforms to target
-  platformInfo: Record<string, PlatformInfo>;
-
-  // the focused platform for this build
-  platform?: AllPlatforms;
+  // platform info for this build
+  platform?: PlatformInfo;
 
   // list of files to build & type-check
   build?: string[];
   check?: string[];
 
+  // logging functions
+  reporter: Reporter;
+
   // async file writer to write the files for this build
   writer?: BatchWriter;
+};
+
+export type ParsedFileName = {
+  // base file name
+  base: string;
+  // platform specific suffix, if it exists
+  suffix?: string;
+  // file extension
+  ext: string;
 };
