@@ -25,7 +25,6 @@
     "@fluentui-react-native/interactive-hooks": "0.27.2",
     "@fluentui-react-native/pressable": "0.12.2",
     "@fluentui-react-native/styling-utils": "0.7.0",
-    "rnx-test-repo-text": "workspace:*",
     "@fluentui-react-native/theme-tokens": "0.27.0",
     "@fluentui-react-native/theme-types": "0.39.0",
     "@fluentui-react-native/theming-utils": "0.26.0",
@@ -34,14 +33,15 @@
     "@uifabricshared/foundation-composable": "0.13.0",
     "@uifabricshared/foundation-compose": "1.15.0",
     "@uifabricshared/foundation-settings": "0.15.0",
+    "rnx-test-repo-text": "workspace:*",
     "tslib": "^2.3.1"
   },
   "devDependencies": {
-    "rnx-test-repo-scripts": "workspace:*",
     "@react-native/babel-preset": "^0.76.0",
     "@react-native/metro-config": "^0.76.0",
     "react": "18.3.1",
-    "react-native": "^0.76.0"
+    "react-native": "^0.76.0",
+    "rnx-test-repo-scripts": "workspace:*"
   },
   "peerDependencies": {
     "react": "18.3.1",

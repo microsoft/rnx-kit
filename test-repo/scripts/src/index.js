@@ -8,7 +8,6 @@ import { clean } from "./commands/clean.js";
 import { format } from "./commands/format.js";
 import { lint } from "./commands/lint.js";
 import { test } from "./commands/test.js";
-import { updateApiReadme } from "./commands/updateApiReadme.js";
 
 /**
  * @param {Record<string, { description: string; command: import("./process.js").Command }>} commands
@@ -55,9 +54,5 @@ init({
   test: {
     description: "Runs tests",
     command: test,
-  },
-  "update-api-readme": {
-    description: "Updates the API tables in README.md",
-    command: updateApiReadme,
   },
 });

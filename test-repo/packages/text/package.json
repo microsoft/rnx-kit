@@ -30,11 +30,11 @@
     "@uifabricshared/foundation-compose": "1.15.0"
   },
   "devDependencies": {
-    "rnx-test-repo-scripts": "workspace:*",
     "@react-native/babel-preset": "^0.73.0",
     "@react-native/metro-config": "^0.73.0",
     "react": "18.3.1",
-    "react-native": "^0.76.0"
+    "react-native": "^0.76.0",
+    "rnx-test-repo-scripts": "workspace:*"
   },
   "peerDependencies": {
     "react": "18.3.1",

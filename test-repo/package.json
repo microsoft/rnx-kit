@@ -13,28 +13,13 @@
     "url": "https://github.com/microsoft/rnx-kit"
   },
   "scripts": {
-    "build": "nx run-many --target build",
-    "build:ci": "nx affected --targets build,test",
-    "build:ci:all": "nx run-many --targets build,test",
-    "build-scope": "nx build",
-    "bundle": "nx run-many --target bundle",
-    "bundle:ci": "nx affected --target bundle",
-    "change": "changeset add",
-    "change:check": "changeset status",
-    "clean": "git clean -dfqx --exclude=.yarn/cache",
-    "clear-cache": "nx clear-cache",
-    "format": "nx run-many --target format",
-    "lint": "nx run-many --target lint",
-    "new-package": "node scripts/new-package.js",
-    "publish:changesets": "changeset publish",
-    "rnx-align-deps": "tsx --conditions typescript scripts/rnx-align-deps.js",
-    "show-affected": "nx show projects --affected",
-    "test": "nx run-many --targets build,test --output-style stream",
-    "update-readme": "nx run-many --target update-readme",
-    "version:changesets": "changeset version && yarn install --mode update-lockfile"
+    "build": "lage build",
+    "lint": "lage lint",
+    "test": "lage test"
   },
   "devDependencies": {
     "@changesets/cli": "^2.22.0",
+    "@rnx-kit/align-deps": "^3.0.3",
     "@types/jest": "^29.2.1",
     "@types/node": "^20.0.0",
     "eslint": "^9.0.0",
