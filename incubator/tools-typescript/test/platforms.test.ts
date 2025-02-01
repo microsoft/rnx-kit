@@ -5,7 +5,7 @@ import {
   isBestMatch,
   loadPkgPlatformInfo,
   multiplexForPlatforms,
-  parseFileDetails,
+  parseSourceFileDetails,
   type FileEntry,
 } from "../src/platforms";
 import { createReporter } from "../src/reporter";
@@ -64,75 +64,114 @@ describe("isBestMatch", () => {
   it("should return true if the platform is an exact match", () => {
     const entry: FileEntry = {
       file: "unreferenced",
-      allSuffixes: { android: true, native: true },
+      allSuffixes: {
+        [".android"]: true,
+        [".native"]: true,
+      },
     };
-    const suffixes = ["android", "native", ""];
-    expect(isBestMatch({ ...entry, suffix: "android" }, suffixes)).toBe(true);
-    expect(isBestMatch({ ...entry, suffix: "native" }, suffixes)).toBe(false);
+    const suffixes = [".android", ".native", "."];
+    expect(isBestMatch({ ...entry, suffix: ".android" }, suffixes)).toBe(true);
+    expect(isBestMatch({ ...entry, suffix: ".native" }, suffixes)).toBe(false);
     expect(isBestMatch({ ...entry, suffix: "" }, suffixes)).toBe(false);
-    expect(isBestMatch({ ...entry, suffix: "ios" }, suffixes)).toBe(false);
+    expect(isBestMatch({ ...entry, suffix: ".ios" }, suffixes)).toBe(false);
     expect(isBestMatch({ ...entry, suffix: undefined }, suffixes)).toBe(false);
   });
 
   it("should return true for suffixes in the middle of the list", () => {
     const entry: FileEntry = {
       file: "unreferenced",
-      allSuffixes: { android: true, native: true },
+      allSuffixes: { [".android"]: true, [".native"]: true },
     };
-    const suffixes = ["ios", "native", ""];
-    expect(isBestMatch({ ...entry, suffix: "native" }, suffixes)).toBe(true);
+    const suffixes = [".ios", ".native", "."];
+    expect(isBestMatch({ ...entry, suffix: ".native" }, suffixes)).toBe(true);
     expect(isBestMatch({ ...entry, suffix: "" }, suffixes)).toBe(false);
-    expect(isBestMatch({ ...entry, suffix: "android" }, suffixes)).toBe(false);
+    expect(isBestMatch({ ...entry, suffix: ".android" }, suffixes)).toBe(false);
     expect(isBestMatch({ ...entry, suffix: undefined }, suffixes)).toBe(false);
   });
 
   it("should find the no-suffix option if it is the best match", () => {
     const entry: FileEntry = {
       file: "unreferenced",
-      allSuffixes: { android: true, win32: true, ios: true, visionos: true },
+      allSuffixes: {
+        [".android"]: true,
+        [".win32"]: true,
+        [".ios"]: true,
+        [".visionos"]: true,
+      },
     };
-    const suffixes = ["macos", "native", ""];
+    const suffixes = [".macos", ".native", "."];
     expect(isBestMatch({ ...entry, suffix: "" }, suffixes)).toBe(true);
-    expect(isBestMatch({ ...entry, suffix: "android" }, suffixes)).toBe(false);
-    expect(isBestMatch({ ...entry, suffix: "ios" }, suffixes)).toBe(false);
+    expect(isBestMatch({ ...entry, suffix: ".android" }, suffixes)).toBe(false);
+    expect(isBestMatch({ ...entry, suffix: ".ios" }, suffixes)).toBe(false);
     expect(isBestMatch({ ...entry, suffix: undefined }, suffixes)).toBe(true);
   });
 });
 
-describe("parseFileDetails", () => {
+describe("parseSourceFileDetails", () => {
   it("should parse a file with no suffix", () => {
-    const { base, suffix, ext } = parseFileDetails("src/file1.ts");
+    const { base, suffix, ext } = parseSourceFileDetails("src/file1.ts");
     expect(base).toBe("src/file1");
     expect(suffix).toBe(undefined);
-    expect(ext).toBe("ts");
+    expect(ext).toBe(".ts");
   });
 
   it("should parse a file with a suffix", () => {
-    const { base, suffix, ext } = parseFileDetails("src/file1.android.ts");
+    const { base, suffix, ext } = parseSourceFileDetails(
+      "src/file1.android.ts"
+    );
     expect(base).toBe("src/file1");
-    expect(suffix).toBe("android");
-    expect(ext).toBe("ts");
+    expect(suffix).toBe(".android");
+    expect(ext).toBe(".ts");
   });
 
   it("should parse a file with a suffix and a different extension", () => {
-    const { base, suffix, ext } = parseFileDetails("src/file1.visionos.tsx");
+    const { base, suffix, ext } = parseSourceFileDetails(
+      "src/file1.visionos.tsx"
+    );
     expect(base).toBe("src/file1");
-    expect(suffix).toBe("visionos");
-    expect(ext).toBe("tsx");
+    expect(suffix).toBe(".visionos");
+    expect(ext).toBe(".tsx");
   });
 
-  it("should parse a file with a suffix and a different extension", () => {
-    const { base, suffix, ext } = parseFileDetails("src/file1.android.bogus");
+  it("should treat an unsupported extension as a suffixn", () => {
+    const { base, suffix, ext } = parseSourceFileDetails("src/file1.bogus");
     expect(base).toBe("src/file1");
-    expect(suffix).toBe("android");
-    expect(ext).toBe("bogus");
+    expect(suffix).toBe(".bogus");
+    expect(ext).toBe(undefined);
   });
 
   it("should parse a file with no extension", () => {
-    const { base, suffix, ext } = parseFileDetails("src/file1");
+    const { base, suffix, ext } = parseSourceFileDetails("src/file1");
     expect(base).toBe("src/file1");
     expect(suffix).toBe(undefined);
-    expect(ext).toBe("");
+    expect(ext).toBe(undefined);
+  });
+
+  it("should parse a suffix with no extension", () => {
+    const { base, suffix, ext } = parseSourceFileDetails("./src/file1.android");
+    expect(base).toBe("./src/file1");
+    expect(suffix).toBe(".android");
+    expect(ext).toBe(undefined);
+  });
+
+  it("should ignore the module suffix if requested", () => {
+    const { base, suffix, ext } = parseSourceFileDetails(
+      "src/file1.android.ts",
+      true
+    );
+    expect(base).toBe("src/file1.android");
+    expect(suffix).toBe(undefined);
+    expect(ext).toBe(".ts");
+  });
+
+  it("should ignore the suffix on a file with no extension", () => {
+    const { base, suffix, ext } = parseSourceFileDetails(
+      "./src/file1.types",
+      true
+    );
+    expect(base).toBe("./src/file1.types");
+    expect(suffix).toBe(undefined);
+    expect(ext).toBe(undefined);
   });
 });
 
@@ -171,22 +210,22 @@ const allPlatforms: Record<string, PlatformInfo> = {
   android: {
     name: "android",
     pkgName: "react-native",
-    suffixes: ["android", "native", ""],
+    suffixes: [".android", ".native", "."],
   },
   ios: {
     name: "ios",
     pkgName: "react-native",
-    suffixes: ["ios", "native", ""],
+    suffixes: [".ios", ".native", "."],
   },
   windows: {
     name: "windows",
     pkgName: "react-native-windows",
-    suffixes: ["windows", "win", "native", ""],
+    suffixes: [".windows", ".win", ".native", "."],
   },
   macos: {
     name: "macos",
     pkgName: "react-native-macos",
-    suffixes: ["macos", "native", ""],
+    suffixes: [".macos", ".native", "."],
   },
 };
 

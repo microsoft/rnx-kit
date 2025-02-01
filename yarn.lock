@@ -4586,6 +4586,8 @@ __metadata:
     jest: "npm:^29.2.1"
     prettier: "npm:^3.0.0"
     typescript: "npm:^5.0.0"
+  peerDependencies:
+    typescript: ">=4.7.0"
   languageName: unknown
   linkType: soft
 

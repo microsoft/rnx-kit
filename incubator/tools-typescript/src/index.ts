@@ -4,5 +4,5 @@ export type { BuildOptions, PlatformInfo, Reporter } from "./types";
 
 // utility functions
 export { BatchWriter, Throttler } from "./files";
-export { loadPkgPlatformInfo, parseFileDetails } from "./platforms";
+export { loadPkgPlatformInfo, parseSourceFileDetails } from "./platforms";
 export { createReporter } from "./reporter";

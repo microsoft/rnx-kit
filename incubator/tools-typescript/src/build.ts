@@ -10,8 +10,6 @@ import ts from "typescript";
 import { loadPkgPlatformInfo } from "./platforms";
 import { createBuildTasks } from "./task";
 
-let instanceCount = 1;
-
 /**
  * Load the tsconfig.json file for the package
  * @param pkgRoot the root directory of the package
@@ -43,7 +41,7 @@ function loadTypescriptConfig(
  * Execute a build (or just typechecking) for the given package
  * @param options - options for the build
  */
-export async function buildTypescript(options: BuildOptions): Promise<boolean> {
+export async function buildTypescript(options: BuildOptions) {
   // load the base package json
   const pkgJsonPath = findPackage(options.target);
   if (!pkgJsonPath) {
@@ -65,22 +63,30 @@ export async function buildTypescript(options: BuildOptions): Promise<boolean> {
   const cmdLine = loadTypescriptConfig(root, mergedOptions);
 
   // load/detect the platforms
-  let platformInfo: Record<string, PlatformInfo> = {};
+  let targetPlatforms: PlatformInfo[] | undefined = undefined;
   if (options.platforms || options.reactNative) {
-    platformInfo = loadPkgPlatformInfo(root, manifest, options.platforms);
+    const platformInfo = loadPkgPlatformInfo(root, manifest, options.platforms);
     const platforms = Object.keys(platformInfo);
-    reporter.log(platformInfo);
-    options.platforms =
-      platforms.length > 0 ? (platforms as AllPlatforms[]) : undefined;
+    if (platforms.length > 0) {
+      options.platforms = platforms as AllPlatforms[];
+      targetPlatforms = platforms.map((name) => platformInfo[name]);
+    }
   }
 
-  if (options.verbose && options.platforms) {
-    reporter.log(`Executing for platforms: ${options.platforms.join(", ")}`);
+  if (options.verbose) {
+    const module = cmdLine.options.module;
+    const moduleStr =
+      module === ts.ModuleKind.CommonJS
+        ? "cjs"
+        : module === ts.ModuleKind.ESNext
+          ? "esm"
+          : "none";
+    const output = cmdLine.options.noEmit ? "noEmit" : cmdLine.options.outDir;
+    const platforms = options.platforms
+      ? ` [${options.platforms.join(", ")}]`
+      : "";
+    reporter.log(`Starting build (${moduleStr} -> ${output})${platforms}`);
   }
-
-  reporter.log(
-    `building platforms: ${options.platforms?.join(", ")} instance: ${instanceCount++}`
-  );
 
   // turn the parsed command line and options into a build context
   const context: BuildContext = {
@@ -90,6 +96,9 @@ export async function buildTypescript(options: BuildOptions): Promise<boolean> {
   };
 
   // create the set of tasks to run then resolve all the tasks
-  const results = await Promise.all(createBuildTasks(options, context));
-  return reporter.succeeded(true) && results.every((r) => r);
+  await Promise.all(createBuildTasks(options, context, targetPlatforms)).catch(
+    () => {
+      throw new Error(`${manifest.name}: Build failed`);
+    }
+  );
 }

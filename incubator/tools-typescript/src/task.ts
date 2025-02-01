@@ -1,40 +1,51 @@
 import { BatchWriter } from "./files";
 import { openProject } from "./host";
 import { multiplexForPlatforms } from "./platforms";
-import type { BuildContext, BuildOptions } from "./types";
+import type { BuildContext, BuildOptions, PlatformInfo } from "./types";
 
 /**
  * Execute the build for the given context
  * @param context information about this build
  */
-export async function buildTask(context: BuildContext): Promise<boolean> {
-  const { time, log, error, succeeded } = context.reporter;
+export async function buildTask(context: BuildContext) {
+  const reporter = context.reporter;
 
-  try {
-    time(`Execute build}`, () => {
-      // set up the project we will use for the build
-      const project = openProject(context);
+  reporter.time(`Finished build`, () => {
+    // set up the project we will use for the build
+    const project = openProject(context);
 
-      const { build = [], check = [] } = context;
-      log(
-        `Building ${build.length} files, type-checking ${check.length} files`
-      );
+    const { build = [], check = [] } = context;
+    reporter.log(
+      `Building ${build.length} files, type-checking ${check.length} files`
+    );
 
-      // emit files that need to be built
-      time(`emit: ${build.length} files`, () => {
-        build.forEach((file) => project.emitFile(file));
+    // emit files that need to be built
+    if (build.length > 0) {
+      reporter.time(`emit: ${build.length} files`, () => {
+        build.forEach((file) => {
+          if (!project.emitFile(file)) {
+            reporter.error(`unable to build ${file}`);
+          }
+        });
       });
+    }
 
-      // check files that need to be type-checked
-      time(`validate: ${check.length} files`, () => {
-        check.forEach((file) => project.validateFile(file));
+    // check files that need to be type-checked
+    if (check.length > 0) {
+      reporter.time(`validate: ${check.length} files`, () => {
+        check.forEach((file) => {
+          if (!project.validateFile(file)) {
+            reporter.error(`type errors in ${file}`);
+          }
+        });
       });
-    });
-  } catch (e) {
-    error(e);
+    }
+  });
+
+  reporter.report();
+  if (reporter.errors() > 0) {
+    throw new Error("Build failed");
   }
-  // return successfully only if there are no errors
-  return succeeded(!!context.platform);
 }
 
 /**
@@ -44,15 +55,16 @@ export async function buildTask(context: BuildContext): Promise<boolean> {
  */
 export function createBuildTasks(
   options: BuildOptions,
-  context: BuildContext
-): Promise<boolean>[] {
+  context: BuildContext,
+  platforms?: PlatformInfo[]
+): Promise<void>[] {
   const { asyncWrites, target } = options;
-  const promises: Promise<boolean>[] = [];
+  const promises: Promise<void>[] = [];
   if (asyncWrites) {
     context.writer = new BatchWriter(target!);
   }
 
-  const tasks = multiplexForPlatforms(context);
+  const tasks = multiplexForPlatforms(context, platforms);
   tasks.forEach((taskContext) => promises.push(buildTask(taskContext)));
 
   if (context.writer) {

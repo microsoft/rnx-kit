@@ -31,7 +31,9 @@ function createPlatformInfo(platform: string, npmName?: string): PlatformInfo {
   return {
     name: platform,
     pkgName: npmName || fallbackPackages[platform] || "",
-    suffixes: platformExtensions(platform).concat(""),
+    suffixes: platformExtensions(platform)
+      .concat("")
+      .map((s) => `.${s}`),
   };
 }
 
@@ -87,16 +89,39 @@ export function loadPkgPlatformInfo(
 /**
  * Take a file path and return the base file name, the platform extension if one exists, and the file extension.
  * @param file file path to parse
+ * @param withSuffix parse the potential module suffix from the file name as well
  * @returns an object with the base file name, the platform extension if one exists, and the file extension
  */
-export function parseFileDetails(file: string): ParsedFileName {
-  const match =
-    /^(.*?)(?:\.([a-zA-Z0-9]*))?\.([a-zA-Z0-9]*)$/.exec(file) ?? new Array(3);
-  return {
-    base: match[1] || file,
-    suffix: match[2] || undefined,
-    ext: match[3] || "",
-  };
+export function parseSourceFileDetails(
+  file: string,
+  ignoreSuffix?: boolean
+): ParsedFileName {
+  // valid last extensions, will manually check for .d.ts and .d.tsx
+  const validExtensions = [".js", ".jsx", ".ts", ".tsx", ".json"];
+  const match = /^(.*?)(\.[^./\\]+)?(\.[^./\\]+)?(\.[^./\\]+)?$/
+    .exec(file)
+    ?.slice(1)
+    .filter((s) => s);
+
+  const result: ParsedFileName = { base: file };
+  if (match && match.length > 1) {
+    if (validExtensions.includes(match[match.length - 1])) {
+      result.ext = match.pop();
+      if (
+        match.length > 1 &&
+        match[match.length - 1] === ".d" &&
+        result.ext?.startsWith(".ts")
+      ) {
+        result.ext = match.pop() + result.ext;
+      }
+    }
+    // if there is an extra term treat it as the suffix
+    if (match.length > 1 && !ignoreSuffix) {
+      result.suffix = match.pop();
+    }
+    result.base = match.join("");
+  }
+  return result;
 }
 
 export type FoundSuffixes = Record<string, boolean>;
@@ -133,7 +158,7 @@ function processFileList(files: string[]): FileEntry[] {
   };
 
   return files.map((file) => {
-    const { base, suffix } = parseFileDetails(file);
+    const { base, suffix } = parseSourceFileDetails(file);
     const allSuffixes = ensureSuffixes(base);
     if (suffix) {
       allSuffixes[suffix] = true;
@@ -202,7 +227,7 @@ export function multiplexForPlatforms(
   const { cmdLine, reporter, writer, root } = context;
   const checkOnly = !!cmdLine.options.noEmit;
   // no platforms then we have nothing to do
-  if (!platforms || platforms.length <= 1) {
+  if (!platforms || platforms.length === 0) {
     context.platform = platforms?.[0];
     context.check = checkOnly ? cmdLine.fileNames : [];
     context.build = checkOnly ? [] : cmdLine.fileNames;

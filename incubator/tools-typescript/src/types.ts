@@ -49,7 +49,7 @@ export type PlatformInfo = {
   name: string;
   /* react-native, react-native-macos, etc. */
   pkgName: string;
-  /* platform specific suffixes + an empty string. e.g.: ['android', 'native', ''] */
+  /* platform specific suffixes + a no suffix entry. e.g.: ['.android', '.native', '.'] */
   suffixes: string[];
   /* remap react-native imports to the appropriate platform package for this platform */
   remapReactNative?: boolean;
@@ -77,7 +77,10 @@ export type Timer = {
 export type Reporter = Logger &
   Timer & {
     // reports true if no errors have been reported
-    succeeded(report?: boolean): boolean;
+    report(): void;
+
+    // how many errors were encountered
+    errors(): number;
 
     // name this reporter was created with
     createSubReporter(tag: string): Reporter;
@@ -110,8 +113,8 @@ export type BuildContext = {
 export type ParsedFileName = {
   // base file name
   base: string;
-  // platform specific suffix, if it exists
+  // suffix occurring before the extension, if it exists, in the form of .android .ios etc.
   suffix?: string;
-  // file extension
-  ext: string;
+  // file extension with . included such as .ts .js or .json
+  ext?: string;
 };

@@ -58,8 +58,7 @@ export function getNullTimer(): Timer {
 export function createReporter(
   name: string,
   logging?: boolean,
-  tracing?: boolean,
-  parent?: Reporter
+  tracing?: boolean
 ): Reporter {
   const timer = tracing ? getTimer() : getNullTimer();
   let errors = 0;
@@ -72,11 +71,11 @@ export function createReporter(
   };
   const error = (...args: unknown[]) => {
     errors++;
-    parent ? parent.error(...args) : console.error(...args);
+    console.error(...args);
   };
   const trace = (...args: unknown[]) => {
     // eslint-disable-next-line @typescript-eslint/no-empty-function
-    tracing ? console.trace(`${name}:`, ...args) : () => {};
+    tracing ? console.log(`${name}:`, ...args) : () => {};
   };
 
   // create the reporter we will return
@@ -86,18 +85,17 @@ export function createReporter(
     warn,
     error,
     trace,
-    succeeded: (reportOut?: boolean) => {
-      if (reportOut) {
-        const results = timer.results() || {};
-        for (const label in results) {
-          const { count, time } = results[label];
-          trace(`${label}: time: ${time.toFixed(2)}ms, calls: ${count}`);
-        }
+    report: () => {
+      const results = timer.results() || {};
+      for (const label in results) {
+        const { count, time } = results[label];
+        trace(`${label}: time: ${time.toFixed(2)}ms, calls: ${count}`);
       }
-      return errors === 0;
     },
-    createSubReporter: (tag: string) =>
-      createReporter(`${name} (${tag})`, logging, tracing, reporter),
+    errors: () => errors,
+  } as Reporter;
+  reporter.createSubReporter = (tag: string) => {
+    return createReporter(`${name} (${tag})`, logging, tracing);
   };
   return reporter;
 }

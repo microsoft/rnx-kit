@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
+import type { Reporter } from "./types";
 
 /**
  * A simple throttler that limits the number of concurrent operations.
@@ -79,20 +80,21 @@ const globalThrottler = new Throttler(40);
  * This also uses a Throttler to limit the number of concurrent writes across all BatchWriters.
  */
 export class BatchWriter {
-  private next: number;
-  private active: Record<number, Promise<void>>;
+  private next = 0;
+  private errors = 0;
+  private active: Record<number, Promise<void>> = {};
   private throttler: Throttler;
   private cwd: string;
   private dirs = new Set<string>();
+  private reporter: Reporter | undefined;
 
   /**
    * @param throttler optional Throttler to use, primarily used for testing
    */
-  constructor(wd: string, throttler?: Throttler) {
-    this.next = 0;
-    this.active = {};
+  constructor(wd: string, throttler?: Throttler, reporter?: Reporter) {
     this.throttler = throttler || globalThrottler;
     this.cwd = wd;
+    this.reporter = reporter;
   }
 
   /**
@@ -108,7 +110,11 @@ export class BatchWriter {
       this.dirs.add(dir);
     }
     const current = this.next++;
-    const fn = () => fs.promises.writeFile(filePath, content);
+    const fn = () =>
+      fs.promises.writeFile(filePath, content).catch((e) => {
+        this.reporter?.error(`Error writing ${filePath}`, e);
+        this.errors++;
+      });
     this.active[current] = this.throttler.run(fn).then(() => {
       delete this.active[current];
     });
@@ -118,11 +124,15 @@ export class BatchWriter {
    * Wait for all active writes to complete for this group of files
    */
   async finish() {
-    try {
-      await Promise.all(Object.values(this.active));
-    } catch {
-      return false;
-    }
-    return true;
+    await Promise.all(Object.values(this.active)).then(
+      () => {
+        this.reporter?.log(`Finished writing ${this.next} files`);
+      },
+      () => {
+        this.reporter?.error(
+          `Errors writing ${this.errors} out of ${this.next} files`
+        );
+      }
+    );
   }
 }
