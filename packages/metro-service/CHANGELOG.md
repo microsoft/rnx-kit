@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-service
 
+## 4.0.2
+
+### Patch Changes
+
+- 66d9673: Lazy-load `node-fetch` to avoid `punycode` warning
+
 ## 4.0.1
 
 ### Patch Changes
