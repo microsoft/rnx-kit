@@ -54,14 +54,21 @@ npm add --save-dev @rnx-kit/tools-typescript
 <!-- The following table can be updated by running `yarn update-readme` -->
 <!-- @rnx-kit/api start -->
 
-| Category | Type Name    | Description                               |
-| -------- | ------------ | ----------------------------------------- |
-| types    | PlatformInfo | Information about each available platform |
+| Category | Type Name      | Description                                                                                                                                                                                                                |
+| -------- | -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| types    | AsyncThrottler | Interface for capping the max number of async operations that happen at any given time. This allows for multiple AsyncWriter instances to be used in parallel while still limiting the max number of concurrent operations |
+| types    | AsyncWriter    | Interface for handling async file writing. There is a synchronous write function then a finish function that will wait for all writes to complete                                                                          |
+| types    | BuildOptions   | Options that control how the buildTypescript command should be configured                                                                                                                                                  |
+| types    | PlatformInfo   | Information about each available platform                                                                                                                                                                                  |
+| types    | Reporter       | Interface for reporting logging and timing information                                                                                                                                                                     |
 
-| Category  | Function                                     | Description                                                                                                   |
-| --------- | -------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
-| build     | `buildTypescript(options)`                   | Execute a build (or just typechecking) for the given package                                                  |
-| platforms | `parseSourceFileDetails(file, ignoreSuffix)` | Take a file path and return the base file name, the platform extension if one exists, and the file extension. |
-| reporter  | `createReporter(name, logging, tracing)`     | Create a reporter that can log, time, and report errors                                                       |
+| Category  | Function                                                   | Description                                                                                                                                                                                                                            |
+| --------- | ---------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| build     | `buildTypescript(options)`                                 | Execute a build (or just typechecking) for the given package. This can be configured with standard typescript options, but can also be directed to split builds to build and type-check multiple platforms as efficiently as possible. |
+| files     | `createAsyncThrottler(maxActive, rebalanceAt)`             | Creates an AsyncThrottler that can be used to limit the number of concurrent operations that happen at any given time.                                                                                                                 |
+| files     | `createAsyncWriter(root, throttler, reporter)`             | Create an AsyncWriter that can be used to write files asynchronously and wait on the results                                                                                                                                           |
+| platforms | `loadPkgPlatformInfo(pkgRoot, manifest, platformOverride)` | Load platform info for available platforms for a given package                                                                                                                                                                         |
+| platforms | `parseSourceFileDetails(file, ignoreSuffix)`               | Take a file path and return the base file name, the platform extension if one exists, and the file extension.                                                                                                                          |
+| reporter  | `createReporter(name, logging, tracing)`                   | Create a reporter that can log, time, and report errors                                                                                                                                                                                |
 
 <!-- @rnx-kit/api end -->

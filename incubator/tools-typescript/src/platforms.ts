@@ -63,6 +63,14 @@ export function platformsFromKitConfig(
   return platforms.length > 0 ? platforms : undefined;
 }
 
+/**
+ * Load platform info for available platforms for a given package
+ *
+ * @param pkgRoot the root directory of the package
+ * @param manifest the loaded package manifest
+ * @param platformOverride override platform detection with a specific set of platforms
+ * @returns a map of platform name to PlatformInfo
+ */
 export function loadPkgPlatformInfo(
   pkgRoot: string,
   manifest: PackageManifest,
@@ -88,8 +96,9 @@ export function loadPkgPlatformInfo(
 
 /**
  * Take a file path and return the base file name, the platform extension if one exists, and the file extension.
- * @param file file path to parse
- * @param withSuffix parse the potential module suffix from the file name as well
+ *
+ * @param file file path to parse, can be a source file or a module reference
+ * @param ignoreSuffix don't split out the module suffix, leaving it attached to the base
  * @returns an object with the base file name, the platform extension if one exists, and the file extension
  */
 export function parseSourceFileDetails(

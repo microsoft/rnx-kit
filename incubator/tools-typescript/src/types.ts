@@ -1,7 +1,9 @@
 import type { AllPlatforms } from "@rnx-kit/tools-react-native/platform";
 import type ts from "typescript";
-import type { BatchWriter } from "./files";
 
+/**
+ * Options that control how the buildTypescript command should be configured
+ */
 export type BuildOptions = {
   /** Target directory for the build, should correspond to the package root */
   target?: string;
@@ -74,6 +76,9 @@ export type Timer = {
   results(): Record<string, { count: number; time: number }>;
 };
 
+/**
+ * Interface for reporting logging and timing information
+ */
 export type Reporter = Logger &
   Timer & {
     // reports true if no errors have been reported
@@ -87,7 +92,29 @@ export type Reporter = Logger &
   };
 
 /**
- * Additional context attached to the build options to pass along to build tasks
+ * Interface for capping the max number of async operations that happen at any given
+ * time. This allows for multiple AsyncWriter instances to be used in parallel while
+ * still limiting the max number of concurrent operations
+ */
+export type AsyncThrottler = {
+  // run a function asynchronously, throttling to the number of concurrent operations
+  run: (fn: () => Promise<void>) => Promise<void>;
+};
+
+/**
+ * Interface for handling async file writing. There is a synchronous write function
+ * then a finish function that will wait for all writes to complete
+ */
+export type AsyncWriter = {
+  // write file implementation, should return synchronously
+  writeFile: (fileName: string, data: string) => void;
+
+  // finish writing all files, should return a promise that resolves when all writes are complete
+  finish: () => Promise<void>;
+};
+
+/**
+ * Context for setting up build tasks or for opening typescript projects
  */
 export type BuildContext = {
   // root path for the project
@@ -107,9 +134,12 @@ export type BuildContext = {
   reporter: Reporter;
 
   // async file writer to write the files for this build
-  writer?: BatchWriter;
+  writer?: AsyncWriter;
 };
 
+/**
+ * Results of parsing a file name
+ */
 export type ParsedFileName = {
   // base file name
   base: string;

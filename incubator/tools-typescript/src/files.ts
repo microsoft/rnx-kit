@@ -1,11 +1,11 @@
 import fs from "node:fs";
 import path from "node:path";
-import type { Reporter } from "./types";
+import type { AsyncThrottler, AsyncWriter, Reporter } from "./types";
 
 /**
  * A simple throttler that limits the number of concurrent operations.
  */
-export class Throttler {
+class Throttler implements AsyncThrottler {
   private first = 0;
   private last = 0;
   private pending: (() => Promise<void>)[] = [];
@@ -71,19 +71,34 @@ export class Throttler {
   }
 }
 
+/**
+ * Creates an AsyncThrottler that can be used to limit the number of concurrent operations that
+ * happen at any given time.
+ *
+ * @param maxActive max number of concurrent operations to run at once
+ * @param rebalanceAt the queue is implemented using an array with first/last. This is the offset point where the array should be shifted back to 0.
+ * @returns an AsyncThrottler implementation
+ */
+export function createAsyncThrottler(
+  maxActive: number,
+  rebalanceAt?: number
+): AsyncThrottler {
+  return new Throttler(maxActive, rebalanceAt);
+}
+
 // create a throttler which will ensure that no more than 40 files are written at once, across all batches
-const globalThrottler = new Throttler(40);
+const globalThrottler = createAsyncThrottler(40);
 
 /**
  * A helper that groups a set of asynchronous file writes into a batch that can be waited on.
  *
  * This also uses a Throttler to limit the number of concurrent writes across all BatchWriters.
  */
-export class BatchWriter {
+class BatchWriter implements AsyncWriter {
   private next = 0;
   private errors = 0;
   private active: Record<number, Promise<void>> = {};
-  private throttler: Throttler;
+  private throttler: AsyncThrottler;
   private cwd: string;
   private dirs = new Set<string>();
   private reporter: Reporter | undefined;
@@ -91,7 +106,7 @@ export class BatchWriter {
   /**
    * @param throttler optional Throttler to use, primarily used for testing
    */
-  constructor(wd: string, throttler?: Throttler, reporter?: Reporter) {
+  constructor(wd: string, throttler?: AsyncThrottler, reporter?: Reporter) {
     this.throttler = throttler || globalThrottler;
     this.cwd = wd;
     this.reporter = reporter;
@@ -135,4 +150,20 @@ export class BatchWriter {
       }
     );
   }
+}
+
+/**
+ * Create an AsyncWriter that can be used to write files asynchronously and wait on the results
+ *
+ * @param root root path for the files when they are relative
+ * @param throttler optional throttler to link multiple writers together
+ * @param reporter optional reporter to report output
+ * @returns an AsyncWriter implementation
+ */
+export function createAsyncWriter(
+  root: string,
+  throttler?: AsyncThrottler,
+  reporter?: Reporter
+): AsyncWriter {
+  return new BatchWriter(root, throttler, reporter);
 }

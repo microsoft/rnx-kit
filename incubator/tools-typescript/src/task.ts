@@ -1,4 +1,4 @@
-import { BatchWriter } from "./files";
+import { createAsyncWriter } from "./files";
 import { openProject } from "./host";
 import { multiplexForPlatforms } from "./platforms";
 import type { BuildContext, BuildOptions, PlatformInfo } from "./types";
@@ -61,7 +61,7 @@ export function createBuildTasks(
   const { asyncWrites, target } = options;
   const promises: Promise<void>[] = [];
   if (asyncWrites) {
-    context.writer = new BatchWriter(target!);
+    context.writer = createAsyncWriter(target!);
   }
 
   const tasks = multiplexForPlatforms(context, platforms);

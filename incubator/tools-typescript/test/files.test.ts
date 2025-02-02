@@ -1,4 +1,4 @@
-import { BatchWriter, Throttler } from "../src/files";
+import { createAsyncThrottler, createAsyncWriter } from "../src/files";
 
 const fileStats = { active: 0, maxActive: 0, written: 0 };
 
@@ -22,8 +22,8 @@ jest.mock("node:fs", () => ({
 }));
 
 describe("BatchWriter", () => {
-  const throttler = new Throttler(2, 2);
-  const writer = new BatchWriter("rootDir", throttler);
+  const throttler = createAsyncThrottler(2, 2);
+  const writer = createAsyncWriter("rootDir", throttler);
 
   beforeEach(() => {
     fileStats.active = 0;

@@ -38,7 +38,10 @@ function loadTypescriptConfig(
 }
 
 /**
- * Execute a build (or just typechecking) for the given package
+ * Execute a build (or just typechecking) for the given package. This can be configured
+ * with standard typescript options, but can also be directed to split builds to build
+ * and type-check multiple platforms as efficiently as possible.
+ *
  * @param options - options for the build
  */
 export async function buildTypescript(options: BuildOptions) {

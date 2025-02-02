@@ -51,8 +51,8 @@ export function getNullTimer(): Timer {
 /**
  * Create a reporter that can log, time, and report errors
  * @param name tag that will be prepended to all log/trace messages
- * @param log turn on logging, otherwise log calls will do nothing
- * @param trace turn on tracing and timing.
+ * @param logging turn on logging, otherwise log calls will do nothing
+ * @param tracing turn on tracing and timing.
  * @returns
  */
 export function createReporter(
