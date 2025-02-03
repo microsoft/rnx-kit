@@ -26,15 +26,9 @@ export type FileModuleRef = {
 
 /**
  * Parse a module reference into either a package module reference or a file
- * module reference. If there are any sub-modules, they are trimmed.
+ * module reference. If there are any sub-paths, they are returned in paths.
  *
- * For module references:
- * - '@scope/package' -> { scope: '@scope', name: 'package' }
- * - '@scope/package/index' -> { scope: '@scope', name: 'package' }, /index is stripped
- * For file references:
- * - './index' -> { path: './index' }
- *
- * @param moduleRef Module reference
+ * @param r Module reference
  * @return Module components
  */
 export function parseModuleRef(r: string): PackageModuleRef | FileModuleRef {
