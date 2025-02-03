@@ -1,6 +1,7 @@
 // base functionality
 export { buildTypescript } from "./build";
-export type { createAsyncThrottler, createAsyncWriter } from "./files";
+export { createAsyncThrottler, createAsyncWriter } from "./files";
+export { openProject } from "./host";
 export { loadPkgPlatformInfo, parseSourceFileDetails } from "./platforms";
 export { createReporter } from "./reporter";
 export type {

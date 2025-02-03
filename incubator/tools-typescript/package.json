@@ -26,8 +26,7 @@
     "build": "rnx-kit-scripts build",
     "format": "rnx-kit-scripts format",
     "lint": "rnx-kit-scripts lint",
-    "test": "rnx-kit-scripts test",
-    "update-readme": "rnx-kit-scripts update-api-readme"
+    "test": "rnx-kit-scripts test"
   },
   "dependencies": {
     "@rnx-kit/config": "^0.7.0",

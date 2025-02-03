@@ -114,9 +114,9 @@ export type AsyncWriter = {
 };
 
 /**
- * Context for setting up build tasks or for opening typescript projects
+ * Context for opening a typescript project using the typescript-service package
  */
-export type BuildContext = {
+export type ProjectContext = {
   // root path for the project
   root: string;
 
@@ -126,15 +126,20 @@ export type BuildContext = {
   // platform info for this build
   platform?: PlatformInfo;
 
-  // list of files to build & type-check
-  build?: string[];
-  check?: string[];
-
   // logging functions
   reporter: Reporter;
 
   // async file writer to write the files for this build
   writer?: AsyncWriter;
+};
+
+/**
+ * Context for setting up build tasks or for opening typescript projects
+ */
+export type BuildContext = ProjectContext & {
+  // list of files to build & type-check
+  build?: string[];
+  check?: string[];
 };
 
 /**

@@ -5,7 +5,7 @@ import {
   getTsTypeRefCache,
   resolveModuleNames,
 } from "./resolver";
-import type { BuildContext, PlatformInfo } from "./types";
+import type { PlatformInfo, ProjectContext } from "./types";
 
 const platformHosts: Record<string, PlatformHost> = {};
 
@@ -21,7 +21,14 @@ export function getPlatformHost(platformInfo?: PlatformInfo): PlatformHost {
   return platformHosts[key];
 }
 
-export function openProject(context: BuildContext): Project {
+/**
+ * Open a typescript project for the given context. Can handle react-native specific
+ * projects and will share cache information where possible given the configuration
+ *
+ * @param context information that drives the configuration of this typescript project
+ * @returns an initialized typescript project
+ */
+export function openProject(context: ProjectContext): Project {
   return getPlatformHost(context.platform).createProject(context);
 }
 
@@ -40,13 +47,13 @@ export class PlatformHost {
     }
   }
 
-  createProject(context: BuildContext): Project {
+  createProject(context: ProjectContext): Project {
     // create the host enhancer and open the project
     const enhancer = this.createHostEnhancer(context);
     return this.service.openProject(context.cmdLine, enhancer);
   }
 
-  private createHostEnhancer(context: BuildContext) {
+  private createHostEnhancer(context: ProjectContext) {
     const { reporter, cmdLine, writer, root } = context;
     const options = cmdLine.options;
 
