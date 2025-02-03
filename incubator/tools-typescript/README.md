@@ -1,5 +1,3 @@
-<!-- We recommend an empty change log entry for a new package: `yarn change --empty` -->
-
 # @rnx-kit/tools-typescript
 
 [![Build](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml/badge.svg)](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml)
@@ -18,7 +16,7 @@ resolution strategies (among other things). The compilation and type-checking
 are still done by typescript but this drives some convenient custom
 configurations.
 
-In particular the `buildTypescript` command can do things like:
+In particular the `buildTypeScript` command can do things like:
 
 - multiplex a build in a directory, to build for multiple react-native platforms
   at the same time. The files will be split such that the minimal build can be
@@ -58,13 +56,13 @@ npm add --save-dev @rnx-kit/tools-typescript
 | -------- | -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | types    | AsyncThrottler | Interface for capping the max number of async operations that happen at any given time. This allows for multiple AsyncWriter instances to be used in parallel while still limiting the max number of concurrent operations |
 | types    | AsyncWriter    | Interface for handling async file writing. There is a synchronous write function then a finish function that will wait for all writes to complete                                                                          |
-| types    | BuildOptions   | Options that control how the buildTypescript command should be configured                                                                                                                                                  |
+| types    | BuildOptions   | Options that control how the buildTypeScript command should be configured                                                                                                                                                  |
 | types    | PlatformInfo   | Information about each available platform                                                                                                                                                                                  |
 | types    | Reporter       | Interface for reporting logging and timing information                                                                                                                                                                     |
 
 | Category  | Function                                                   | Description                                                                                                                                                                                                                            |
 | --------- | ---------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| build     | `buildTypescript(options)`                                 | Execute a build (or just typechecking) for the given package. This can be configured with standard typescript options, but can also be directed to split builds to build and type-check multiple platforms as efficiently as possible. |
+| build     | `buildTypeScript(options)`                                 | Execute a build (or just typechecking) for the given package. This can be configured with standard typescript options, but can also be directed to split builds to build and type-check multiple platforms as efficiently as possible. |
 | files     | `createAsyncThrottler(maxActive, rebalanceAt)`             | Creates an AsyncThrottler that can be used to limit the number of concurrent operations that happen at any given time.                                                                                                                 |
 | files     | `createAsyncWriter(root, throttler, reporter)`             | Create an AsyncWriter that can be used to write files asynchronously and wait on the results                                                                                                                                           |
 | host      | `openProject(context)`                                     | Open a typescript project for the given context. Can handle react-native specific projects and will share cache information where possible given the configuration                                                                     |

@@ -1,5 +1,5 @@
 ---
-"@rnx-kit/tools-typescript": patch
+"@rnx-kit/tools-typescript": minor
 ---
 
 Initial creation of an experimental typescript build tool

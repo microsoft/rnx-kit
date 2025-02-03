@@ -22,22 +22,22 @@ export async function buildTask(context: BuildContext) {
     // emit files that need to be built
     if (build.length > 0) {
       reporter.time(`emit: ${build.length} files`, () => {
-        build.forEach((file) => {
+        for (const file of build) {
           if (!project.emitFile(file)) {
             reporter.error(`unable to build ${file}`);
           }
-        });
+        }
       });
     }
 
     // check files that need to be type-checked
     if (check.length > 0) {
       reporter.time(`validate: ${check.length} files`, () => {
-        check.forEach((file) => {
+        for (const file of check) {
           if (!project.validateFile(file)) {
             reporter.error(`type errors in ${file}`);
           }
-        });
+        }
       });
     }
   });
@@ -59,13 +59,12 @@ export function createBuildTasks(
   platforms?: PlatformInfo[]
 ): Promise<void>[] {
   const { asyncWrites, target } = options;
-  const promises: Promise<void>[] = [];
   if (asyncWrites) {
     context.writer = createAsyncWriter(target!);
   }
 
   const tasks = multiplexForPlatforms(context, platforms);
-  tasks.forEach((taskContext) => promises.push(buildTask(taskContext)));
+  const promises = tasks.map((taskContext) => buildTask(taskContext));
 
   if (context.writer) {
     promises.push(context.writer.finish());

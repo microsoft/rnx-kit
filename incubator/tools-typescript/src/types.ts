@@ -2,7 +2,7 @@ import type { AllPlatforms } from "@rnx-kit/tools-react-native/platform";
 import type ts from "typescript";
 
 /**
- * Options that control how the buildTypescript command should be configured
+ * Options that control how the buildTypeScript command should be configured
  */
 export type BuildOptions = {
   /** Target directory for the build, should correspond to the package root */

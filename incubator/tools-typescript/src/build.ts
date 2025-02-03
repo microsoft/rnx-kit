@@ -1,14 +1,12 @@
-import { createReporter } from "./reporter";
-import type { BuildContext, BuildOptions, PlatformInfo } from "./types";
-
 import { findPackage, readPackage } from "@rnx-kit/tools-node";
-import { readConfigFile } from "@rnx-kit/typescript-service";
-
 import type { AllPlatforms } from "@rnx-kit/tools-react-native";
+import { findConfigFile, readConfigFile } from "@rnx-kit/typescript-service";
 import path from "node:path";
 import ts from "typescript";
 import { loadPkgPlatformInfo } from "./platforms";
+import { createReporter } from "./reporter";
 import { createBuildTasks } from "./task";
+import type { BuildContext, BuildOptions, PlatformInfo } from "./types";
 
 /**
  * Load the tsconfig.json file for the package
@@ -22,8 +20,7 @@ function loadTypescriptConfig(
 ): ts.ParsedCommandLine {
   // find the tsconfig.json, overriding with project if it is set
   const configPath =
-    options.project ??
-    ts.findConfigFile(pkgRoot, ts.sys.fileExists, "tsconfig.json");
+    options.project ?? findConfigFile(pkgRoot, "tsconfig.json");
 
   // now load the config, mixing in the command line options
   const config = configPath
@@ -44,7 +41,7 @@ function loadTypescriptConfig(
  *
  * @param options - options for the build
  */
-export async function buildTypescript(options: BuildOptions) {
+export async function buildTypeScript(options: BuildOptions) {
   // load the base package json
   const pkgJsonPath = findPackage(options.target);
   if (!pkgJsonPath) {
