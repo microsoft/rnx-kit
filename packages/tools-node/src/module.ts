@@ -1,6 +1,11 @@
 import path from "path";
 import type { PackageRef } from "./package";
-import { findPackageDir, parsePackageRef, readPackage } from "./package";
+import {
+  destructureModuleRef,
+  findPackageDir,
+  parsePackageRef,
+  readPackage,
+} from "./package";
 
 /**
  * Module reference relative to a package, such as `react-native` or
@@ -21,7 +26,13 @@ export type FileModuleRef = {
 
 /**
  * Parse a module reference into either a package module reference or a file
- * module reference.
+ * module reference. If there are any sub-modules, they are trimmed.
+ *
+ * For module references:
+ * - '@scope/package' -> { scope: '@scope', name: 'package' }
+ * - '@scope/package/index' -> { scope: '@scope', name: 'package' }, /index is stripped
+ * For file references:
+ * - './index' -> { path: './index' }
  *
  * @param moduleRef Module reference
  * @return Module components
@@ -33,18 +44,7 @@ export function parseModuleRef(r: string): PackageModuleRef | FileModuleRef {
     };
   }
 
-  const ref: PackageModuleRef = parsePackageRef(r);
-
-  const indexPath = ref.name.indexOf("/");
-  if (indexPath >= 0) {
-    const p = ref.name.substring(indexPath + 1);
-    if (p) {
-      ref.path = p;
-    }
-    ref.name = ref.name.substring(0, indexPath);
-  }
-
-  return ref;
+  return destructureModuleRef(r);
 }
 
 /**

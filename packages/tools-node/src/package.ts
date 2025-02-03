@@ -11,6 +11,44 @@ export type PackageRef = {
 };
 
 /**
+ * Module reference with the package name and optional sub-module path included as path
+ */
+export type DestructuredModuleRef = PackageRef & {
+  path?: string;
+};
+
+/**
+ * Destructure a module reference into its component par
+ * @param r module reference to destructure
+ * @returns either a destructured module reference or undefined if it is a file reference
+ */
+export function destructureModuleRef(r: string): DestructuredModuleRef {
+  const match = r && /^([^/]+)?(\/[^/]+)?(\/.+[^/])?$/.exec(r);
+  if (match) {
+    // get an array of the match groups, with the leading '/' trimmed from each group
+    const parsed = match
+      .slice(1)
+      .filter((s) => s)
+      .map((s) => (s.startsWith("/") ? s.slice(1) : s));
+
+    // pick out the scope, name, and any remaining path
+    const scope = parsed[0].startsWith("@") ? parsed.shift() : undefined;
+    const name = parsed.length > 0 ? parsed.shift() : undefined;
+    const path = parsed.length > 0 ? parsed.join("/") : undefined;
+
+    // return the destructured module reference, if a scope or name is found
+    if (name || scope) {
+      return {
+        name: name || scope!,
+        ...(scope && name && { scope }),
+        ...(path && { path }),
+      };
+    }
+  }
+  throw new Error(`Invalid package reference: "${r}"`);
+}
+
+/**
  * Parse a package reference string. An example reference is the `name`
  * property found in `package.json`.
  *
@@ -18,28 +56,9 @@ export type PackageRef = {
  * @returns Parsed package reference object
  */
 export function parsePackageRef(r: string): PackageRef {
-  if (r.startsWith("@")) {
-    // If `/` is not found, the reference could be a path alias.
-    const indexSeparator = r.indexOf("/");
-    if (indexSeparator >= 0) {
-      // The separator must have at least 1 character following it, before the
-      // end of the string. Note that the scope may be an empty string.
-      // TypeScript does not place any restrictions on import re-mappings.
-      if (indexSeparator + 1 >= r.length) {
-        throw new Error(`Invalid package reference: ${r}`);
-      }
-
-      return {
-        scope: r.substring(0, indexSeparator),
-        name: r.substring(indexSeparator + 1),
-      };
-    }
-  }
-
-  if (!r) {
-    throw new Error(`Invalid package reference: "${r}"`);
-  }
-  return { name: r };
+  const { scope, name, path } = destructureModuleRef(r);
+  const fullName = path ? `${name}/${path}` : name;
+  return { name: fullName, ...(scope && { scope }) };
 }
 
 /**
