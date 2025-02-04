@@ -1,3 +1,4 @@
+import { type PackageModuleRef, parseModuleRef } from "@rnx-kit/tools-node";
 import fs from "node:fs";
 import path from "node:path";
 import ts from "typescript";
@@ -225,11 +226,11 @@ export function remapModuleName(
   remap?: Record<string, string>
 ): string {
   if (remap) {
-    const match = /^(@[^/]+\/)?([^/]+)(\/.*)?$/.exec(module);
-    if (match && match[2]) {
-      const pkg = match[1] ? match[1] + match[2] : match[2];
-      const trailing = match[3] || "";
-      return (remap[pkg] || pkg) + trailing;
+    const { scope, name, path } = parseModuleRef(module) as PackageModuleRef;
+    const pkg = scope ? `${scope}/${name}` : name;
+    if (remap[pkg]) {
+      const trailing = path ? "/" + path : "";
+      return remap[pkg] + trailing;
     }
   }
   return module;

@@ -14,7 +14,7 @@ import type { BuildContext, BuildOptions, PlatformInfo } from "./types";
  * @param args the command line arguments to be passed to typescript
  * @returns the parsed tsconfig.json file, if found
  */
-function loadTypescriptConfig(
+function loadTypeScriptConfig(
   pkgRoot: string,
   options: ts.CompilerOptions = {}
 ): ts.ParsedCommandLine {
@@ -22,14 +22,15 @@ function loadTypescriptConfig(
   const configPath =
     options.project ?? findConfigFile(pkgRoot, "tsconfig.json");
 
+  if (!configPath) {
+    throw new Error("Unable to find tsconfig.json");
+  }
+
   // now load the config, mixing in the command line options
-  const config = configPath
-    ? //  ? readConfigFile(configPath, sanitizeOptions(options))
-      readConfigFile(configPath, options)
-    : undefined;
+  const config = readConfigFile(configPath, options);
 
   if (!config) {
-    throw new Error("Unable to find tsconfig.json");
+    throw new Error(`Unable to parse 'tsconfig.json': ${pkgRoot}`);
   }
   return config;
 }
@@ -60,7 +61,7 @@ export async function buildTypeScript(options: BuildOptions) {
     ...options.options,
     ...ts.parseCommandLine(options.args || []).options,
   };
-  const cmdLine = loadTypescriptConfig(root, mergedOptions);
+  const cmdLine = loadTypeScriptConfig(root, mergedOptions);
 
   // load/detect the platforms
   let targetPlatforms: PlatformInfo[] | undefined = undefined;
