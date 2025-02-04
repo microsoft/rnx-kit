@@ -17,32 +17,46 @@ export type DestructuredModuleRef = PackageRef & {
   path?: string;
 };
 
+function getModuleRefParts(
+  ref: string,
+  found: string[] = [],
+  requested = 2,
+  startPos = 0
+): string[] {
+  if (startPos < ref.length) {
+    if (requested > 1) {
+      const splitAt = ref.indexOf("/", startPos);
+      if (splitAt >= 0) {
+        requested += startPos === 0 && ref[0] === "@" ? 1 : 0;
+        found.push(ref.slice(startPos, splitAt));
+        return getModuleRefParts(ref, found, requested - 1, splitAt + 1);
+      }
+    }
+    found.push(ref.slice(startPos));
+  }
+  return found;
+}
+
 /**
  * Destructure a module reference into its component par
  * @param r module reference to destructure
  * @returns either a destructured module reference or undefined if it is a file reference
  */
 export function destructureModuleRef(r: string): DestructuredModuleRef {
-  const match = r && /^([^/]+)?(\/[^/]+)?(\/.+[^/])?$/.exec(r);
-  if (match) {
-    // get an array of the match groups, with the leading '/' trimmed from each group
-    const parsed = match
-      .slice(1)
-      .filter((s) => s)
-      .map((s) => (s.startsWith("/") ? s.slice(1) : s));
-
-    // pick out the scope, name, and any remaining path
-    const scope = parsed[0].startsWith("@") ? parsed.shift() : undefined;
-    const name = parsed.length > 0 ? parsed.shift() : undefined;
-    const path = parsed.length > 0 ? parsed.join("/") : undefined;
-
-    // return the destructured module reference, if a scope or name is found
-    if (name || scope) {
-      return {
-        name: name || scope!,
-        ...(scope && name && { scope }),
-        ...(path && { path }),
-      };
+  if (r && !r.endsWith("/")) {
+    const parts = getModuleRefParts(r);
+    if (parts.length > 0) {
+      // if we only have one term the first term will be treated as the name, even if it is a scope
+      if (parts.length === 1) {
+        return { name: parts[0] };
+      }
+      // otherwise split the parts and return them
+      const scope = parts[0].startsWith("@") ? parts.shift() : undefined;
+      const name = parts.shift();
+      const path = parts.shift();
+      if (name) {
+        return { name, ...(scope && { scope }), ...(path && { path }) };
+      }
     }
   }
   throw new Error(`Invalid package reference: "${r}"`);
