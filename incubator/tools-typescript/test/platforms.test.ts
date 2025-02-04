@@ -64,11 +64,9 @@ describe("isBestMatch", () => {
   it("should return true if the platform is an exact match", () => {
     const entry: FileEntry = {
       file: "unreferenced",
-      allSuffixes: {
-        [".android"]: true,
-        [".native"]: true,
-      },
+      allSuffixes: new Set([".android", ".native"]),
     };
+
     const suffixes = [".android", ".native", "."];
     expect(isBestMatch({ ...entry, suffix: ".android" }, suffixes)).toBe(true);
     expect(isBestMatch({ ...entry, suffix: ".native" }, suffixes)).toBe(false);
@@ -80,7 +78,7 @@ describe("isBestMatch", () => {
   it("should return true for suffixes in the middle of the list", () => {
     const entry: FileEntry = {
       file: "unreferenced",
-      allSuffixes: { [".android"]: true, [".native"]: true },
+      allSuffixes: new Set([".android", ".native"]),
     };
     const suffixes = [".ios", ".native", "."];
     expect(isBestMatch({ ...entry, suffix: ".native" }, suffixes)).toBe(true);
@@ -92,12 +90,7 @@ describe("isBestMatch", () => {
   it("should find the no-suffix option if it is the best match", () => {
     const entry: FileEntry = {
       file: "unreferenced",
-      allSuffixes: {
-        [".android"]: true,
-        [".win32"]: true,
-        [".ios"]: true,
-        [".visionos"]: true,
-      },
+      allSuffixes: new Set([".android", "win32", "ios", "visionos"]),
     };
     const suffixes = [".macos", ".native", "."];
     expect(isBestMatch({ ...entry, suffix: "" }, suffixes)).toBe(true);

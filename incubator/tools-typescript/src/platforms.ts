@@ -47,22 +47,22 @@ function createPlatformInfo(platform: string, npmName?: string): PlatformInfo {
 export function platformsFromKitConfig(
   kitConfig: KitConfig | undefined
 ): string[] | undefined {
-  const foundPlatforms: Record<string, boolean> = {};
+  const found = new Set<string>();
   if (kitConfig?.kitType === "app") {
     // for packages marked as an 'app', determine available platforms based on the bundle configuration
     for (const bundleConfig of coerceArray(kitConfig.bundle)) {
       const { platforms, targets } = bundleConfig || {};
       if (platforms) {
         for (const platform in platforms) {
-          foundPlatforms[platform] = true;
+          found.add(platform);
         }
       }
       for (const target of coerceArray(targets)) {
-        foundPlatforms[target] = true;
+        found.add(target);
       }
     }
   }
-  return platforms.size > 0 ? Array.from(platforms) : undefined;
+  return found.size > 0 ? Array.from(found) : undefined;
 }
 
 /**
@@ -135,7 +135,7 @@ export function parseSourceFileDetails(
   return result;
 }
 
-export type FoundSuffixes = Record<string, boolean>;
+export type FoundSuffixes = Set<string>;
 export type FileEntry = {
   file: string;
   suffix?: string;
@@ -150,7 +150,7 @@ export type FileEntry = {
 export function isBestMatch(entry: FileEntry, suffixes: string[]): boolean {
   const { allSuffixes, suffix } = entry;
   // best suffix will be the first found one in the list or undefined if the base file
-  const bestSuffix = allSuffixes && suffixes.find((s) => allSuffixes[s]);
+  const bestSuffix = allSuffixes && suffixes.find((s) => allSuffixes.has(s));
 
   // it's the best match if the strings match or if they are both undefined
   return suffix === bestSuffix || (!suffix && !bestSuffix);
@@ -165,14 +165,14 @@ function processFileList(files: string[]): FileEntry[] {
   const lookup = new Map<string, FoundSuffixes>();
 
   const ensureSuffixes = (base: string) => {
-    return lookup.get(base) || lookup.set(base, {}).get(base)!;
+    return lookup.get(base) || lookup.set(base, new Set<string>()).get(base)!;
   };
 
   return files.map((file) => {
     const { base, suffix } = parseSourceFileDetails(file);
     const allSuffixes = ensureSuffixes(base);
     if (suffix) {
-      allSuffixes[suffix] = true;
+      allSuffixes.add(suffix);
     }
     return { file, suffix, allSuffixes };
   });

@@ -100,6 +100,6 @@ export async function buildTypeScript(options: BuildOptions) {
   try {
     await Promise.all(createBuildTasks(options, context, targetPlatforms));
   } catch (e) {
-    throw new Error(`${manifest.name}: Build failed`, { cause: e });
+    throw new Error(`${manifest.name}: Build failed. ${e}`);
   }
 }
