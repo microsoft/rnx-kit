@@ -7,7 +7,6 @@ import type { AsyncThrottler, AsyncWriter, Reporter } from "./types";
  */
 class Throttler implements AsyncThrottler {
   private first = 0;
-  private last = 0;
   private pending: (() => Promise<void>)[] = [];
 
   private active = 0;
@@ -30,9 +29,11 @@ class Throttler implements AsyncThrottler {
    */
   run(fn: () => Promise<void>): Promise<void> {
     if (this.active < this.maxActive) {
+      // if below the active threshold run the function immediately
       this.active++;
       return fn().finally(() => this.runFinished());
     } else {
+      // otherwise wrap it in a promise that will run when the queue clears
       return new Promise((resolve, reject) => {
         this.addPending(() =>
           fn()
@@ -43,22 +44,23 @@ class Throttler implements AsyncThrottler {
     }
   }
 
-  private runFinished() {
+  private async runFinished() {
     this.active--;
-    this.processNextPending();
+    return this.processNextPending();
   }
 
   private addPending(p: () => Promise<void>) {
-    this.pending[this.last++] = p;
+    this.pending.push(p);
   }
 
-  private processNextPending() {
+  private async processNextPending() {
     this.rebalanceQueue();
-    if (this.first < this.last) {
+    if (this.first < this.pending.length) {
       const next = this.pending[this.first++];
       this.active++;
-      next().then(() => this.runFinished());
+      return next(); //.then(() => this.runFinished());
     }
+    return Promise.resolve();
   }
 
   /** shift the queue to start at 0 again, just hygiene so it doesn't grow unbounded */
@@ -66,7 +68,6 @@ class Throttler implements AsyncThrottler {
     if (this.first > this.rebalanceAt) {
       this.pending = this.pending.copyWithin(0, this.first);
       this.pending.length -= this.first;
-      this.last -= this.first;
       this.first = 0;
     }
   }
@@ -97,7 +98,7 @@ const globalThrottler = createAsyncThrottler(40);
  */
 class BatchWriter implements AsyncWriter {
   private next = 0;
-  private errors = 0;
+  private errors: Error[] = [];
   private active: Record<number, Promise<void>> = {};
   private throttler: AsyncThrottler;
   private cwd: string;
@@ -129,7 +130,7 @@ class BatchWriter implements AsyncWriter {
     const fn = () =>
       fs.promises.writeFile(filePath, content).catch((e) => {
         this.reporter?.error(`Error writing ${filePath}`, e);
-        this.errors++;
+        this.errors.push(e);
       });
     this.active[current] = this.throttler.run(fn).then(() => {
       delete this.active[current];
@@ -140,16 +141,17 @@ class BatchWriter implements AsyncWriter {
    * Wait for all active writes to complete for this group of files
    */
   async finish() {
-    await Promise.all(Object.values(this.active)).then(
-      () => {
-        this.reporter?.log(`Finished writing ${this.next} files`);
-      },
-      () => {
-        this.reporter?.error(
-          `Errors writing ${this.errors} out of ${this.next} files`
+    await Promise.all(Object.values(this.active)).then(() => {
+      if (this.errors.length > 0) {
+        this.reporter?.error(`Errors writing ${this.errors.length} files`);
+        return Promise.reject(
+          this.errors.length > 1 ? this.errors : this.errors[0]
         );
+      } else {
+        this.reporter?.log(`Finished writing ${this.next} files`);
+        return Promise.resolve();
       }
-    );
+    });
   }
 }
 
