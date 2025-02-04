@@ -65,18 +65,16 @@ export function createReporter(
 
   // set up the logging functions
   const warn = (...args: unknown[]) => console.warn(`${name}:`, ...args);
-  const log = (...args: unknown[]) => {
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    logging ? console.log(`${name}:`, ...args) : () => {};
-  };
+  const log = logging
+    ? (...args: unknown[]) => { console.log(`${name}:`, ...args); }
+    : () => undefined;
   const error = (...args: unknown[]) => {
     errors++;
     console.error(...args);
   };
-  const trace = (...args: unknown[]) => {
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    tracing ? console.log(`${name}:`, ...args) : () => {};
-  };
+  const trace = tracing
+    ? (...args: unknown[]) => { console.log(`${name}:`, ...args); }
+    : () => undefined;
 
   // create the reporter we will return
   const reporter = {

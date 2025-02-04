@@ -150,8 +150,9 @@ export function resolveModuleNames(
 
     // find the first unchecked or found value, if it is found return it
     const first = entries.find((e) => !e.resolved || e.resolved.resolvedModule);
-    if (first && first.resolved?.resolvedModule) {
-      return first.resolved.resolvedModule;
+    const resolvedModule = first?.resolved?.resolvedModule;
+    if (resolvedModule) {
+      return resolvedModule;
     }
 
     // ensure the base entry has been resolved, this will be used to do file lookups

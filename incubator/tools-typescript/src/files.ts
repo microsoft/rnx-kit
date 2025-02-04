@@ -64,7 +64,8 @@ class Throttler implements AsyncThrottler {
   /** shift the queue to start at 0 again, just hygiene so it doesn't grow unbounded */
   private rebalanceQueue() {
     if (this.first > this.rebalanceAt) {
-      this.pending = this.pending.slice(this.first);
+      this.pending = this.pending.copyWithin(0, this.first);
+      this.pending.length -= this.first;
       this.last -= this.first;
       this.first = 0;
     }
