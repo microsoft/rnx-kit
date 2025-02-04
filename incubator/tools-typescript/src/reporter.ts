@@ -1,3 +1,10 @@
+import {
+  bold,
+  error as consoleError,
+  warn as consoleWarn,
+  dim,
+  info,
+} from "@rnx-kit/console";
 import type { Reporter, Timer } from "./types";
 
 /**
@@ -60,23 +67,24 @@ export function createReporter(
   logging?: boolean,
   tracing?: boolean
 ): Reporter {
+  name = bold(name);
   const timer = tracing ? getTimer() : getNullTimer();
   let errors = 0;
 
   // set up the logging functions
-  const warn = (...args: unknown[]) => console.warn(`${name}:`, ...args);
+  const warn = (...args: unknown[]) => consoleWarn(`${name}:`, ...args);
   const log = logging
     ? (...args: unknown[]) => {
-        console.log(`${name}:`, ...args);
+        info(`${name}:`, ...args);
       }
     : () => undefined;
   const error = (...args: unknown[]) => {
     errors++;
-    console.error(...args);
+    consoleError(...args);
   };
   const trace = tracing
     ? (...args: unknown[]) => {
-        console.log(`${name}:`, ...args);
+        info(`${name}:`, ...args);
       }
     : () => undefined;
 
@@ -91,13 +99,15 @@ export function createReporter(
       const results = timer.results() || {};
       for (const label in results) {
         const { count, time } = results[label];
-        trace(`${label}: time: ${time.toFixed(2)}ms, calls: ${count}`);
+        trace(
+          `${label}: time: ${bold(time.toFixed(2))}ms, calls: ${bold(count.toString())}`
+        );
       }
     },
     errors: () => errors,
   } as Reporter;
   reporter.createSubReporter = (tag: string) => {
-    return createReporter(`${name} (${tag})`, logging, tracing);
+    return createReporter(`${name} (${dim(tag)})`, logging, tracing);
   };
   return reporter;
 }

@@ -4575,6 +4575,7 @@ __metadata:
   resolution: "@rnx-kit/tools-typescript@workspace:incubator/tools-typescript"
   dependencies:
     "@rnx-kit/config": "npm:^0.7.0"
+    "@rnx-kit/console": "npm:^2.0.0"
     "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/jest-preset": "npm:*"
     "@rnx-kit/scripts": "npm:*"

@@ -30,6 +30,7 @@
   },
   "dependencies": {
     "@rnx-kit/config": "^0.7.0",
+    "@rnx-kit/console": "^2.0.0",
     "@rnx-kit/tools-node": "^3.0.0",
     "@rnx-kit/tools-react-native": "^2.0.0",
     "@rnx-kit/typescript-service": "^2.0.0"
