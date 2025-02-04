@@ -114,8 +114,8 @@ export function parseFileReference(
   let base = file;
 
   if (extensions.has(ext)) {
-    if (ext === ".ts" || ext === ".tsx") {
-      const dtsExt = ".d" + ext;
+    if (ext === ".ts") {
+      const dtsExt = ".d.ts";
       if (extensions.has(dtsExt) && file.endsWith(dtsExt)) {
         ext = dtsExt;
       }
@@ -150,7 +150,6 @@ const sourceExtensions = new Set([
   ".ts",
   ".tsx",
   ".d.ts",
-  ".d.tsx",
   ".json",
 ]);
 
