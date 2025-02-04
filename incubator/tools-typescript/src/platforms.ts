@@ -12,7 +12,10 @@ import type { BuildContext, ParsedFileName, PlatformInfo } from "./types";
 
 // quick helper for converting a value to an array
 function coerceArray<T>(value: T | T[] | undefined): T[] {
-  return value ? (Array.isArray(value) ? value : [value]) : [];
+  if (!value) {
+    return [];
+  }
+  return Array.isArray(value) ? value : [value];
 }
 
 /**
@@ -45,22 +48,21 @@ export function platformsFromKitConfig(
   kitConfig: KitConfig | undefined
 ): string[] | undefined {
   const foundPlatforms: Record<string, boolean> = {};
-  if (kitConfig && kitConfig.kitType === "app") {
+  if (kitConfig?.kitType === "app") {
     // for packages marked as an 'app', determine available platforms based on the bundle configuration
-    coerceArray(kitConfig.bundle).forEach((bundleConfig) => {
+    for (const bundleConfig of coerceArray(kitConfig.bundle)) {
       const { platforms, targets } = bundleConfig || {};
       if (platforms) {
         for (const platform in platforms) {
           foundPlatforms[platform] = true;
         }
       }
-      coerceArray(targets).forEach((target) => {
+      for (const target of coerceArray(targets)) {
         foundPlatforms[target] = true;
-      });
-    });
+      }
+    }
   }
-  const platforms = Object.keys(foundPlatforms);
-  return platforms.length > 0 ? platforms : undefined;
+  return platforms.size > 0 ? Array.from(platforms) : undefined;
 }
 
 /**
@@ -234,7 +236,7 @@ export function multiplexForPlatforms(
   platforms?: PlatformInfo[]
 ): BuildContext[] {
   const { cmdLine, reporter, writer, root } = context;
-  const checkOnly = !!cmdLine.options.noEmit;
+  const checkOnly = Boolean(cmdLine.options.noEmit);
   // no platforms then we have nothing to do
   if (!platforms || platforms.length === 0) {
     context.platform = platforms?.[0];

@@ -96,9 +96,9 @@ export async function buildTypeScript(options: BuildOptions) {
   };
 
   // create the set of tasks to run then resolve all the tasks
-  await Promise.all(createBuildTasks(options, context, targetPlatforms)).catch(
-    () => {
-      throw new Error(`${manifest.name}: Build failed`);
-    }
-  );
+  try {
+    await Promise.all(createBuildTasks(options, context, targetPlatforms));
+  } catch (e) {
+    throw new Error(`${manifest.name}: Build failed`, { cause: e });
+  }
 }
