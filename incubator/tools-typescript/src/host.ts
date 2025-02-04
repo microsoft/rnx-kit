@@ -13,10 +13,11 @@ const platformHosts: Record<string, PlatformHost> = {};
  * Get the platform host for a given platform, will be cached for that platform
  * @returns platform specific host implementation
  */
-export function getPlatformHost(platformInfo?: PlatformInfo): PlatformHost {
-  const platformName = platformInfo?.name ?? "none";
-  const remap = platformInfo?.remapReactNative;
-  const key = platformName + remap ? "-remap" : "";
+export function getPlatformHost(
+  platformInfo: Partial<PlatformInfo> = {}
+): PlatformHost {
+  const { name = "", remapReactNative } = platformInfo;
+  const key = name + remapReactNative ? "-remap" : "";
   platformHosts[key] ??= new PlatformHost(platformInfo);
   return platformHosts[key];
 }
@@ -38,7 +39,7 @@ export class PlatformHost {
   private service = new Service();
   private newResolvers = ts.versionMajorMinor >= "5.0";
 
-  constructor(platform: PlatformInfo = { name: "" } as PlatformInfo) {
+  constructor(platform: Partial<PlatformInfo>) {
     this.suffixes = platform.suffixes;
     const { remapReactNative, pkgName } = platform;
 
@@ -47,13 +48,27 @@ export class PlatformHost {
     }
   }
 
+  /**
+   * @param context project settings used to create the Project
+   * @returns a Project initialized with as much caching as possible
+   */
   createProject(context: ProjectContext): Project {
     // create the host enhancer and open the project
     const enhancer = this.createHostEnhancer(context);
     return this.service.openProject(context.cmdLine, enhancer);
   }
 
-  private createHostEnhancer(context: ProjectContext) {
+  /**
+   * The language service host interface is what allows us to hook various parts of the typescript build.
+   * The typescript-service package provides a default implementation of this interface, but this does the work
+   * to modify it for react-native projects
+   *
+   * @param context project context used to create the host enhancer
+   * @returns a function which will be called by the Project upon intialization that will modify the host
+   */
+  private createHostEnhancer(
+    context: ProjectContext
+  ): (host: ts.LanguageServiceHost) => void {
     const { reporter, cmdLine, writer, root } = context;
     const options = cmdLine.options;
 

@@ -3,7 +3,7 @@ import type { AllPlatforms } from "@rnx-kit/tools-react-native";
 import { findConfigFile, readConfigFile } from "@rnx-kit/typescript-service";
 import path from "node:path";
 import ts from "typescript";
-import { loadPkgPlatformInfo } from "./platforms";
+import { loadPackagePlatformInfo } from "./platforms";
 import { createReporter } from "./reporter";
 import { createBuildTasks } from "./task";
 import type { BuildContext, BuildOptions, PlatformInfo } from "./types";
@@ -66,7 +66,11 @@ export async function buildTypeScript(options: BuildOptions) {
   // load/detect the platforms
   let targetPlatforms: PlatformInfo[] | undefined = undefined;
   if (options.platforms || options.reactNative) {
-    const platformInfo = loadPkgPlatformInfo(root, manifest, options.platforms);
+    const platformInfo = loadPackagePlatformInfo(
+      root,
+      manifest,
+      options.platforms
+    );
     const platforms = Object.keys(platformInfo);
     if (platforms.length > 0) {
       options.platforms = platforms as AllPlatforms[];
@@ -94,6 +98,8 @@ export async function buildTypeScript(options: BuildOptions) {
     cmdLine,
     root,
     reporter,
+    build: [],
+    check: [],
   };
 
   // create the set of tasks to run then resolve all the tasks

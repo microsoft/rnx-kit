@@ -2,7 +2,7 @@ import { type PackageModuleRef, parseModuleRef } from "@rnx-kit/tools-node";
 import fs from "node:fs";
 import path from "node:path";
 import ts from "typescript";
-import { parseSourceFileDetails } from "./platforms";
+import { parseSourceFileReference } from "./platforms";
 
 /**
  * Map of file resolution lookups, this is global as it remembers module resolutions for
@@ -156,7 +156,10 @@ export function resolveModuleNames(
     }
 
     // ensure the base entry has been resolved, this will be used to do file lookups
-    let result = entries.pop()!;
+    let result = entries.pop();
+    if (!result) {
+      return undefined;
+    }
     if (!result.resolved) {
       const module = result.module;
       result.resolved = resolver(module, file, redirected);
@@ -166,7 +169,7 @@ export function resolveModuleNames(
     // if entries still exist in the array see if files exist for those variants
     const baseFile = result.resolved.resolvedModule?.resolvedFileName;
     if (baseFile && entries.length > 0) {
-      const { base, ext } = parseSourceFileDetails(baseFile, true);
+      const { base, ext } = parseSourceFileReference(baseFile, true);
 
       // if there is no extension this isn't a source file to try a different lookup for
       if (ext) {
@@ -205,14 +208,11 @@ export function resolveModuleNames(
 export function getFilesToSearch(
   fileRef: string,
   suffixes?: string[]
-): [string, ...string[]] {
+): string[] {
   if (suffixes && suffixes.length > 0) {
     // split off the extension if it exists, then add the suffixes to try
-    const { base, ext = "" } = parseSourceFileDetails(fileRef, true);
-    return suffixes.map((s) => (s !== "." ? `${base}${s}${ext}` : fileRef)) as [
-      string,
-      ...string[],
-    ];
+    const { base, ext = "" } = parseSourceFileReference(fileRef, true);
+    return suffixes.map((s) => (s !== "." ? `${base}${s}${ext}` : fileRef));
   }
   return [fileRef];
 }
@@ -248,7 +248,7 @@ export function getModuleLookups(
   fileOrModule: string,
   suffixes?: string[],
   remap?: Record<string, string>
-): [string, ...string[]] {
+): string[] {
   if (fileOrModule.startsWith("./") || path.isAbsolute(fileOrModule)) {
     return getFilesToSearch(fileOrModule, suffixes);
   }

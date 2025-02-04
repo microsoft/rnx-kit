@@ -40,7 +40,7 @@ export function getNullTimer(): Timer {
       return fn();
     },
     async timeAsync<T>(_s: string, fn: () => Promise<T>): Promise<T> {
-      return await fn();
+      return fn();
     },
     results() {
       return {};
@@ -66,14 +66,18 @@ export function createReporter(
   // set up the logging functions
   const warn = (...args: unknown[]) => console.warn(`${name}:`, ...args);
   const log = logging
-    ? (...args: unknown[]) => { console.log(`${name}:`, ...args); }
+    ? (...args: unknown[]) => {
+        console.log(`${name}:`, ...args);
+      }
     : () => undefined;
   const error = (...args: unknown[]) => {
     errors++;
     console.error(...args);
   };
   const trace = tracing
-    ? (...args: unknown[]) => { console.log(`${name}:`, ...args); }
+    ? (...args: unknown[]) => {
+        console.log(`${name}:`, ...args);
+      }
     : () => undefined;
 
   // create the reporter we will return

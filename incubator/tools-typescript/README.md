@@ -35,6 +35,12 @@ typescript itself is particularly restrictive with module resolution. This
 addresses the ability to build react-native better right now, but also creates a
 framework for experimenting with different resolvers.
 
+## Things to do
+
+- Look at watch mode behavior, add invalidation for caching layers
+- Look at routing host creation in metro-plugin-typescript through here
+- Evaluate alternative resolvers
+
 ## Installation
 
 ```sh

@@ -143,13 +143,14 @@ export type BuildContext = ProjectContext & {
 };
 
 /**
- * Results of parsing a file name
+ * Results of parsing a file name or file reference, suffix and extension will be set
+ * to empty strings if they don't exist
  */
-export type ParsedFileName = {
+export type ParsedFileReference = {
   // base file name
   base: string;
   // suffix occurring before the extension, if it exists, in the form of .android .ios etc.
-  suffix?: string;
+  suffix: string;
   // file extension with . included such as .ts .js or .json
-  ext?: string;
+  ext: string;
 };

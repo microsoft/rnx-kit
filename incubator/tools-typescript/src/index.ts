@@ -2,12 +2,16 @@
 export { buildTypeScript } from "./build";
 export { createAsyncThrottler, createAsyncWriter } from "./files";
 export { openProject } from "./host";
-export { loadPkgPlatformInfo, parseSourceFileDetails } from "./platforms";
+export {
+  loadPackagePlatformInfo,
+  parseSourceFileReference as parseSourceFileDetails,
+} from "./platforms";
 export { createReporter } from "./reporter";
 export type {
   AsyncThrottler,
   AsyncWriter,
   BuildOptions,
+  ParsedFileReference,
   PlatformInfo,
   Reporter,
 } from "./types";

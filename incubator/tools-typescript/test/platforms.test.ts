@@ -3,9 +3,9 @@ import type { PackageManifest } from "@rnx-kit/tools-node";
 import type ts from "typescript";
 import {
   isBestMatch,
-  loadPkgPlatformInfo,
+  loadPackagePlatformInfo,
   multiplexForPlatforms,
-  parseSourceFileDetails,
+  parseSourceFileReference,
   type FileEntry,
 } from "../src/platforms";
 import { createReporter } from "../src/reporter";
@@ -31,7 +31,7 @@ describe("loadReactNativePlatforms", () => {
       ...baseManifest,
       "rnx-kit": kitConfig,
     };
-    const platforms = loadPkgPlatformInfo(process.cwd(), manifest);
+    const platforms = loadPackagePlatformInfo(process.cwd(), manifest);
     expect(Object.keys(platforms)).toEqual(["android", "ios", "windows"]);
   });
 
@@ -55,7 +55,7 @@ describe("loadReactNativePlatforms", () => {
       ...baseManifest,
       "rnx-kit": kitConfig,
     };
-    const platforms = loadPkgPlatformInfo(process.cwd(), manifest);
+    const platforms = loadPackagePlatformInfo(process.cwd(), manifest);
     expect(Object.keys(platforms)).toEqual(["android", "ios"]);
   });
 });
@@ -102,14 +102,14 @@ describe("isBestMatch", () => {
 
 describe("parseSourceFileDetails", () => {
   it("should parse a file with no suffix", () => {
-    const { base, suffix, ext } = parseSourceFileDetails("src/file1.ts");
+    const { base, suffix, ext } = parseSourceFileReference("src/file1.ts");
     expect(base).toBe("src/file1");
-    expect(suffix).toBe(undefined);
+    expect(suffix).toBe("");
     expect(ext).toBe(".ts");
   });
 
   it("should parse a file with a suffix", () => {
-    const { base, suffix, ext } = parseSourceFileDetails(
+    const { base, suffix, ext } = parseSourceFileReference(
       "src/file1.android.ts"
     );
     expect(base).toBe("src/file1");
@@ -118,7 +118,7 @@ describe("parseSourceFileDetails", () => {
   });
 
   it("should parse a file with a suffix and a different extension", () => {
-    const { base, suffix, ext } = parseSourceFileDetails(
+    const { base, suffix, ext } = parseSourceFileReference(
       "src/file1.visionos.tsx"
     );
     expect(base).toBe("src/file1");
@@ -127,44 +127,46 @@ describe("parseSourceFileDetails", () => {
   });
 
   it("should treat an unsupported extension as a suffixn", () => {
-    const { base, suffix, ext } = parseSourceFileDetails("src/file1.bogus");
+    const { base, suffix, ext } = parseSourceFileReference("src/file1.bogus");
     expect(base).toBe("src/file1");
     expect(suffix).toBe(".bogus");
-    expect(ext).toBe(undefined);
+    expect(ext).toBe("");
   });
 
   it("should parse a file with no extension", () => {
-    const { base, suffix, ext } = parseSourceFileDetails("src/file1");
+    const { base, suffix, ext } = parseSourceFileReference("src/file1");
     expect(base).toBe("src/file1");
-    expect(suffix).toBe(undefined);
-    expect(ext).toBe(undefined);
+    expect(suffix).toBe("");
+    expect(ext).toBe("");
   });
 
   it("should parse a suffix with no extension", () => {
-    const { base, suffix, ext } = parseSourceFileDetails("./src/file1.android");
+    const { base, suffix, ext } = parseSourceFileReference(
+      "./src/file1.android"
+    );
     expect(base).toBe("./src/file1");
     expect(suffix).toBe(".android");
-    expect(ext).toBe(undefined);
+    expect(ext).toBe("");
   });
 
   it("should ignore the module suffix if requested", () => {
-    const { base, suffix, ext } = parseSourceFileDetails(
+    const { base, suffix, ext } = parseSourceFileReference(
       "src/file1.android.ts",
       true
     );
     expect(base).toBe("src/file1.android");
-    expect(suffix).toBe(undefined);
+    expect(suffix).toBe("");
     expect(ext).toBe(".ts");
   });
 
   it("should ignore the suffix on a file with no extension", () => {
-    const { base, suffix, ext } = parseSourceFileDetails(
+    const { base, suffix, ext } = parseSourceFileReference(
       "./src/file1.types",
       true
     );
     expect(base).toBe("./src/file1.types");
-    expect(suffix).toBe(undefined);
-    expect(ext).toBe(undefined);
+    expect(suffix).toBe("");
+    expect(ext).toBe("");
   });
 });
 

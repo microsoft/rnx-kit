@@ -7,8 +7,9 @@ import {
   getAvailablePlatforms,
   platformExtensions,
 } from "@rnx-kit/tools-react-native";
+import path from "node:path";
 import type ts from "typescript";
-import type { BuildContext, ParsedFileName, PlatformInfo } from "./types";
+import type { BuildContext, ParsedFileReference, PlatformInfo } from "./types";
 
 // quick helper for converting a value to an array
 function coerceArray<T>(value: T | T[] | undefined): T[] {
@@ -18,22 +19,29 @@ function coerceArray<T>(value: T | T[] | undefined): T[] {
   return Array.isArray(value) ? value : [value];
 }
 
+// a list of built-in platforms to use as a fallback
+const fallbackPackages: Record<string, string> = {
+  android: "react-native",
+  ios: "react-native",
+  macos: "react-native-macos",
+  win32: "@office-iss/react-native-win32",
+  windows: "react-native-windows",
+  visionos: "@callstack/react-native-visionos",
+};
+
 /**
  * @returns a PlatformInfo with a package name and the module suffixes set
  */
 function createPlatformInfo(platform: string, npmName?: string): PlatformInfo {
-  // a list of built-in platforms to use as a fallback
-  const fallbackPackages: Record<string, string> = {
-    android: "react-native",
-    ios: "react-native",
-    macos: "react-native-macos",
-    win32: "@office-iss/react-native-win32",
-    windows: "react-native-windows",
-    visionos: "@callstack/react-native-visionos",
-  };
+  const pkgName = npmName || fallbackPackages[platform];
+  if (!pkgName) {
+    throw new Error(
+      `Unable to determine package name for platform ${platform}`
+    );
+  }
   return {
     name: platform,
-    pkgName: npmName || fallbackPackages[platform] || "",
+    pkgName: npmName || fallbackPackages[platform],
     suffixes: platformExtensions(platform)
       .concat("")
       .map((s) => `.${s}`),
@@ -73,7 +81,7 @@ export function platformsFromKitConfig(
  * @param platformOverride override platform detection with a specific set of platforms
  * @returns a map of platform name to PlatformInfo
  */
-export function loadPkgPlatformInfo(
+export function loadPackagePlatformInfo(
   pkgRoot: string,
   manifest: PackageManifest,
   platformOverride?: string[]
@@ -96,50 +104,74 @@ export function loadPkgPlatformInfo(
   return result;
 }
 
+export function parseFileReference(
+  file: string,
+  extensions: Set<string>,
+  ignoreSuffix?: boolean
+): ParsedFileReference {
+  let ext = path.extname(file);
+  let suffix = "";
+  let base = file;
+
+  if (extensions.has(ext)) {
+    if (ext === ".ts" || ext === ".tsx") {
+      const dtsExt = ".d" + ext;
+      if (extensions.has(dtsExt) && file.endsWith(dtsExt)) {
+        ext = dtsExt;
+      }
+    }
+    base = base.slice(0, -ext.length);
+    suffix = path.extname(base);
+  } else {
+    suffix = ext;
+    ext = "";
+  }
+
+  if (suffix && !ignoreSuffix) {
+    base = base.slice(0, -suffix.length);
+  } else {
+    suffix = "";
+  }
+
+  return { base, ext, suffix };
+}
+
+/**
+ * Standard source file extensions. The reason this is a discrete list rather than allowing all extensions
+ * is that the references being parsed can be in ./folder/file.js or ./folder/file format, depending on how they
+ * are declared. We want to parse both and don't want to accidentally treat ./folder/file.types as having an
+ * extension of .types
+ */
+const sourceExtensions = new Set([
+  ".js",
+  ".jsx",
+  ".cjs",
+  ".mjs",
+  ".ts",
+  ".tsx",
+  ".d.ts",
+  ".d.tsx",
+  ".json",
+]);
+
 /**
  * Take a file path and return the base file name, the platform extension if one exists, and the file extension.
  *
- * @param file file path to parse, can be a source file or a module reference
+ * @param file file path to parse, can be a source file (./src/foo.js) or a module style reference (./src/foo)
  * @param ignoreSuffix don't split out the module suffix, leaving it attached to the base
  * @returns an object with the base file name, the platform extension if one exists, and the file extension
  */
-export function parseSourceFileDetails(
+export function parseSourceFileReference(
   file: string,
   ignoreSuffix?: boolean
-): ParsedFileName {
-  // valid last extensions, will manually check for .d.ts and .d.tsx
-  const validExtensions = [".js", ".jsx", ".ts", ".tsx", ".json"];
-  const match = /^(.*?)(\.[^./\\]+)?(\.[^./\\]+)?(\.[^./\\]+)?$/
-    .exec(file)
-    ?.slice(1)
-    .filter((s) => s);
-
-  const result: ParsedFileName = { base: file };
-  if (match && match.length > 1) {
-    if (validExtensions.includes(match[match.length - 1])) {
-      result.ext = match.pop();
-      if (
-        match.length > 1 &&
-        match[match.length - 1] === ".d" &&
-        result.ext?.startsWith(".ts")
-      ) {
-        result.ext = match.pop() + result.ext;
-      }
-    }
-    // if there is an extra term treat it as the suffix
-    if (match.length > 1 && !ignoreSuffix) {
-      result.suffix = match.pop();
-    }
-    result.base = match.join("");
-  }
-  return result;
+): ParsedFileReference {
+  return parseFileReference(file, sourceExtensions, ignoreSuffix);
 }
 
-export type FoundSuffixes = Set<string>;
 export type FileEntry = {
   file: string;
   suffix?: string;
-  allSuffixes: FoundSuffixes;
+  allSuffixes: Set<string>;
   built?: boolean;
 };
 
@@ -162,14 +194,14 @@ export function isBestMatch(entry: FileEntry, suffixes: string[]): boolean {
  * @returns a match array of FileEntry structures
  */
 function processFileList(files: string[]): FileEntry[] {
-  const lookup = new Map<string, FoundSuffixes>();
+  const lookup = new Map<string, Set<string>>();
 
   const ensureSuffixes = (base: string) => {
     return lookup.get(base) || lookup.set(base, new Set<string>()).get(base)!;
   };
 
   return files.map((file) => {
-    const { base, suffix } = parseSourceFileDetails(file);
+    const { base, suffix } = parseSourceFileReference(file);
     const allSuffixes = ensureSuffixes(base);
     if (suffix) {
       allSuffixes.add(suffix);
@@ -181,31 +213,31 @@ function processFileList(files: string[]): FileEntry[] {
 /**
  * Given the parsed file entries, go through adding the files to the task based on the platform.
  * @param files processed file entry list
- * @param defaultTask is this the task which should build any unbuilt files
+ * @param isDefaultTask is this the task which should build any unbuilt files
  * @param context task to add files to
  */
 function addFilesToContext(
   files: FileEntry[],
-  defaultTask: boolean,
+  isDefaultTask: boolean,
   context: BuildContext
 ) {
   const fileNames: string[] = [];
 
-  const { suffixes } = context.platform || {};
+  const { suffixes = [] } = context.platform || {};
 
   // if we are in checkOnly mode then task.build will be null and we will fall back to the check array
   const pushToBuild = (file: string, checkOnly: boolean) => {
     if (context.build && !checkOnly) {
       context.build.push(file);
     } else {
-      context.check!.push(file);
+      context.check?.push(file);
     }
     fileNames.push(file);
   };
 
   for (const entry of files) {
-    const bestMatch = isBestMatch(entry, suffixes!);
-    if (!entry.built && (bestMatch || defaultTask)) {
+    const bestMatch = isBestMatch(entry, suffixes);
+    if (!entry.built && (bestMatch || isDefaultTask)) {
       pushToBuild(entry.file, false);
       entry.built = true;
     } else if (bestMatch) {
@@ -239,7 +271,7 @@ export function multiplexForPlatforms(
   const checkOnly = Boolean(cmdLine.options.noEmit);
   // no platforms then we have nothing to do
   if (!platforms || platforms.length === 0) {
-    context.platform = platforms?.[0];
+    context.platform = undefined;
     context.check = checkOnly ? cmdLine.fileNames : [];
     context.build = checkOnly ? [] : cmdLine.fileNames;
     return [context];
