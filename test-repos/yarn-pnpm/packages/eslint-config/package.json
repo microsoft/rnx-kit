@@ -1,0 +1,38 @@
+{
+  "name": "@rnx-repo-yarn-pnpm/eslint-config",
+  "version": "0.0.10",
+  "private": true,
+  "description": "Shareable ESLint config for @rnx-repo-yarn-pnpm",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/eslint-config#readme",
+  "license": "MIT",
+  "author": {
+    "name": "Microsoft Open Source",
+    "email": "microsoftopensource@users.noreply.github.com"
+  },
+  "files": [
+    "index.js"
+  ],
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "packages/eslint-config"
+  },
+  "scripts": {
+    "format": "prettier --write --log-level error README.md index.js package.json"
+  },
+  "dependencies": {
+    "@microsoft/eslint-plugin-sdl": "^1.0.0",
+    "@rnx-kit/eslint-plugin": "^0.8.6"
+  },
+  "peerDependencies": {
+    "eslint": "^9.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^9.0.0",
+    "prettier": "^3.0.0"
+  },
+  "engines": {
+    "node": ">=16.17"
+  }
+}

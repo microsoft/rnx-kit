@@ -1,0 +1,8 @@
+*.sln
+.vs/
+ARM/
+ARM64/
+NuGet.Config
+packages/
+x64/
+x86/

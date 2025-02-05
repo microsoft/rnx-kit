@@ -1,0 +1,11 @@
+platform :macos, '11.0'
+
+require_relative '../node_modules/react-native-test-app/macos/test_app'
+
+workspace 'SampleCrossApp.xcworkspace'
+
+use_test_app! do |target|
+  target.app do
+    pod 'MSAL', :modular_headers => true
+  end
+end
