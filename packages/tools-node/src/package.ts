@@ -55,7 +55,7 @@ export function destructureModuleRef(r: string): DestructuredModuleRef {
       const name = parts.shift();
       const path = parts.shift();
       if (name) {
-        return { name, ...(scope && { scope }), ...(path && { path }) };
+        return { name, scope, path };
       }
     }
   }
@@ -72,7 +72,7 @@ export function destructureModuleRef(r: string): DestructuredModuleRef {
 export function parsePackageRef(r: string): PackageRef {
   const { scope, name, path } = destructureModuleRef(r);
   const fullName = path ? `${name}/${path}` : name;
-  return { name: fullName, ...(scope && { scope }) };
+  return { name: fullName, scope };
 }
 
 /**

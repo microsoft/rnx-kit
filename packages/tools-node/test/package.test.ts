@@ -36,7 +36,10 @@ describe("Node > Package", () => {
   });
 
   it("parsePackageRef(react-native) returns an unscoped reference", () => {
-    deepEqual(parsePackageRef("react-native"), { name: "react-native" });
+    deepEqual(parsePackageRef("react-native"), {
+      name: "react-native",
+      scope: undefined,
+    });
   });
 
   it("parsePackageRef(@babel/core) returns a scoped reference", () => {
@@ -47,7 +50,7 @@ describe("Node > Package", () => {
   });
 
   it("parsePackageRef(@alias) is allowed", () => {
-    deepEqual(parsePackageRef("@alias"), { name: "@alias" });
+    deepEqual(parsePackageRef("@alias"), { name: "@alias", scope: undefined });
   });
 
   it("parsePackageRef(@/core) is allowed", () => {
