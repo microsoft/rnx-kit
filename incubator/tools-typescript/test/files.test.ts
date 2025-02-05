@@ -19,6 +19,10 @@ function mockWriteFile(_name: string, _content: string) {
   });
 }
 
+function awaitableTimeout(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 jest.mock("node:fs", () => ({
   mkdirSync: jest.fn(),
   promises: {
@@ -69,5 +73,45 @@ describe("BatchWriter", () => {
     expect(fileStats.active).toBe(0);
     expect(fileStats.written).toBe(4);
     expect(fileStats.maxActive).toBe(2);
+  });
+
+  it("should restart the queue", async () => {
+    const writer = createAsyncWriter("rootDir", throttler);
+    writer.writeFile("file1.txt", "content1");
+    writer.writeFile("file2.txt", "content2");
+    await awaitableTimeout(30);
+    expect(fileStats.active).toBe(0);
+    expect(fileStats.written).toBe(2);
+    writer.writeFile("file3.txt", "content3");
+    writer.writeFile("file4.txt", "content4");
+    writer.writeFile("file5.txt", "content5");
+    await writer.finish();
+
+    expect(fileStats.active).toBe(0);
+    expect(fileStats.written).toBe(5);
+    expect(fileStats.maxActive).toBe(2);
+  });
+
+  it("should return when nothing is written", async () => {
+    const writer = createAsyncWriter("rootDir", throttler);
+    await writer.finish();
+    expect(fileStats.active).toBe(0);
+    expect(fileStats.written).toBe(0);
+    expect(fileStats.maxActive).toBe(0);
+  });
+
+  it("should be able to write and have finish called twice", async () => {
+    const writer = createAsyncWriter("rootDir", throttler);
+    writer.writeFile("file1.txt", "content1");
+    writer.writeFile("file2.txt", "content2");
+    await writer.finish();
+    expect(fileStats.active).toBe(0);
+    expect(fileStats.written).toBe(2);
+    writer.writeFile("file3.txt", "content3");
+    writer.writeFile("file4.txt", "content4");
+    writer.writeFile("file5.txt", "content5");
+    await writer.finish();
+    expect(fileStats.active).toBe(0);
+    expect(fileStats.written).toBe(5);
   });
 });

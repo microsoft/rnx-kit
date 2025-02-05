@@ -1,3 +1,4 @@
+import { EventEmitter, once } from "node:events";
 import fs from "node:fs";
 import path from "node:path";
 import type { AsyncThrottler, AsyncWriter, Reporter } from "./types";
@@ -97,13 +98,15 @@ const globalThrottler = createAsyncThrottler(40);
  * This also uses a Throttler to limit the number of concurrent writes across all BatchWriters.
  */
 class BatchWriter implements AsyncWriter {
-  private next = 0;
   private errors: Error[] = [];
-  private active: Record<number, Promise<void>> = {};
+  private queued = 0;
+  private written = 0;
   private throttler: AsyncThrottler;
   private cwd: string;
   private dirs = new Set<string>();
   private reporter: Reporter | undefined;
+  private emitter = new EventEmitter();
+  static mkdirOptions = { recursive: true, mode: 0o755 };
 
   /**
    * @param throttler optional Throttler to use, primarily used for testing
@@ -115,6 +118,17 @@ class BatchWriter implements AsyncWriter {
   }
 
   /**
+   * Single instance for each writer so a new function isn't created on each file write
+   */
+  private writeFinished = () => {
+    this.written++;
+    if (this.queued === this.written) {
+      // send done, will go into the ether if no listeners are attached
+      this.emitter.emit("done");
+    }
+  };
+
+  /**
    * Write a file asynchronously, adding it to the batch
    * @param name file name
    * @param content file content
@@ -123,35 +137,51 @@ class BatchWriter implements AsyncWriter {
     const filePath = path.isAbsolute(name) ? name : path.join(this.cwd, name);
     const dir = path.dirname(filePath);
     if (!this.dirs.has(dir)) {
-      fs.mkdirSync(dir, { recursive: true, mode: 0o755 });
+      fs.mkdirSync(dir, BatchWriter.mkdirOptions);
       this.dirs.add(dir);
     }
-    const current = this.next++;
+    this.queued++;
     const fn = () =>
       fs.promises.writeFile(filePath, content).catch((e) => {
         this.reporter?.error(`Error writing ${filePath}`, e);
         this.errors.push(e);
       });
-    this.active[current] = this.throttler.run(fn).then(() => {
-      delete this.active[current];
-    });
+    this.throttler.run(fn).then(this.writeFinished);
+  }
+
+  /**
+   * Clear the state of the writer, allows reuse after finish
+   */
+  private initializeState() {
+    this.queued = 0;
+    this.written = 0;
+    this.errors = [];
   }
 
   /**
    * Wait for all active writes to complete for this group of files
    */
   async finish() {
-    await Promise.all(Object.values(this.active)).then(() => {
-      if (this.errors.length > 0) {
-        this.reporter?.error(`Errors writing ${this.errors.length} files`);
-        return Promise.reject(
-          this.errors.length > 1 ? this.errors : this.errors[0]
-        );
+    // we will finish things up on the done event
+    const onFinish = once(this.emitter, "done").then(() => {
+      const { errors, written } = this;
+      this.initializeState();
+
+      if (errors.length > 0) {
+        this.reporter?.error(`Errors writing ${errors.length} files`);
+        return Promise.reject(errors.length > 1 ? errors : errors[0]);
       } else {
-        this.reporter?.log(`Finished writing ${this.next} files`);
+        this.reporter?.log(`Finished writing ${written} files`);
         return Promise.resolve();
       }
     });
+
+    // if the queue never started write emit the done event so that we don't wait forever
+    if (this.queued === 0) {
+      this.emitter.emit("done");
+    }
+    // now wait on the done event
+    await onFinish;
   }
 }
 
