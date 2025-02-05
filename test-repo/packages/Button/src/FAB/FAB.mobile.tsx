@@ -4,8 +4,12 @@ import * as React from "react";
 import { Platform, Pressable, View } from "react-native";
 
 import { Shadow } from "@fluentui-react-native/experimental-shadow";
-import type { UseSlots } from "@fluentui-react-native/framework";
-import { compose, mergeProps } from "@fluentui-react-native/framework";
+import {
+  type UseSlots,
+  compose,
+  mergeProps,
+  withSlots,
+} from "@fluentui-react-native/framework";
 import { Icon, createIconProps } from "@fluentui-react-native/icon";
 import type { IPressableState } from "@fluentui-react-native/interactive-hooks";
 import { TextV1 as Text } from "rnx-test-repo-text";
@@ -29,15 +33,15 @@ const buttonLookup = (
   state: IPressableState,
   userProps: FABProps
 ): boolean => {
-  return (
+  return Boolean(
     layer === userProps["appearance"] ||
-    state[layer] ||
-    userProps[layer] ||
-    layer === userProps["size"] ||
-    (!userProps["size"] && layer === "large") ||
-    (layer === "hasContent" &&
-      !userProps.iconOnly &&
-      (userProps.showContent == undefined ? true : userProps.showContent))
+      state[layer as keyof IPressableState] ||
+      userProps[layer as keyof FABProps] ||
+      layer === userProps["size"] ||
+      (!userProps["size"] && layer === "large") ||
+      (layer === "hasContent" &&
+        !userProps.iconOnly &&
+        (userProps.showContent == undefined ? true : userProps.showContent))
   );
 };
 
@@ -113,9 +117,9 @@ export const FAB = compose<FABType>({
       const hasShadow = Platform.OS === "ios";
       const hasRipple = Platform.OS === "android";
 
-      if (hasShadow) {
+      if (hasShadow && Slots.shadow) {
         return <Slots.shadow>{buttonContentWithRoot}</Slots.shadow>;
-      } else if (hasRipple) {
+      } else if (hasRipple && Slots.rippleContainer) {
         const [outerStyleProps, innerStyleProps] =
           extractOuterStylePropsAndroid(mergedProps.style);
         return (
