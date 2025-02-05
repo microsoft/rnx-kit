@@ -1,5 +1,12 @@
 # Change Log - @rnx-kit/typescript-service
 
+## 2.0.1
+
+### Patch Changes
+
+- d60608a: Projects should use the writeFile set in the LanguageServiceHost to
+  write files if it is overridden.
+
 ## 2.0.0
 
 ### Major Changes

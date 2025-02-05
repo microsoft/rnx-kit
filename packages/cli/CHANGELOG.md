@@ -1,5 +1,13 @@
 # Change Log - @rnx-kit/cli
 
+## 0.18.5
+
+### Patch Changes
+
+- 79e2abd: Support multiple debug targets
+- Updated dependencies [66d9673]
+  - @rnx-kit/metro-service@4.0.2
+
 ## 0.18.4
 
 ### Patch Changes

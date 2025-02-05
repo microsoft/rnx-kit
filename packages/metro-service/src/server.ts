@@ -1,10 +1,20 @@
 import { requireModuleFromMetro } from "@rnx-kit/tools-react-native/metro";
 import type { runServer } from "metro";
-import net from "net";
-import nodeFetch from "node-fetch";
+import net from "node:net";
 import { ensureBabelConfig } from "./babel";
 
 type ServerStatus = "not_running" | "already_running" | "in_use" | "unknown";
+
+function getFetchImpl(): (url: string | URL) => Promise<Response> {
+  if ("fetch" in globalThis) {
+    return fetch;
+  }
+
+  // TODO: Remove `node-fetch` when we drop support for Node 16
+  return (...args) =>
+    // @ts-expect-error To be removed when Node 16 is no longer supported
+    import("node-fetch").then(({ default: fetch }) => fetch(...args));
+}
 
 /**
  * Returns whether the specified host:port is occupied.
@@ -49,8 +59,7 @@ export async function isDevServerRunning(
       return "not_running";
     }
 
-    // TODO: Remove `node-fetch` when we drop support for Node 16
-    const ftch = "fetch" in globalThis ? fetch : nodeFetch;
+    const ftch = getFetchImpl();
     const statusUrl = `${scheme}://${host || "localhost"}:${port}/status`;
     const statusResponse = await ftch(statusUrl);
     const body = await statusResponse.text();

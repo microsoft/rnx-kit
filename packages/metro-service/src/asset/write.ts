@@ -1,18 +1,16 @@
 // https://github.com/react-native-community/cli/blob/716555851b442a83a1bf5e0db27b6226318c9a69/packages/cli-plugin-metro/src/commands/bundle/saveAssets.ts
 
 import { info, warn } from "@rnx-kit/console";
-import * as fs from "fs";
-import * as path from "path";
+import * as fs from "node:fs";
+import * as path from "node:path";
 import { filterPlatformAssetScales } from "./filter";
 import type { AssetData, SaveAssetsPlugin } from "./types";
 
-function copy(
-  src: string,
-  dest: string,
-  callback: (error: NodeJS.ErrnoException) => void
-): void {
+type CopyCallback = (error?: NodeJS.ErrnoException) => void;
+
+function copy(src: string, dest: string, callback: CopyCallback): void {
   const destDir = path.dirname(dest);
-  fs.mkdir(destDir, { recursive: true }, (err?) => {
+  fs.mkdir(destDir, { recursive: true }, (err) => {
     if (err) {
       callback(err);
       return;
@@ -31,7 +29,7 @@ function copyAll(filesToCopy: Record<string, string>) {
 
   info(`Copying ${queue.length} asset files`);
   return new Promise<void>((resolve, reject) => {
-    const copyNext = (error?: NodeJS.ErrnoException) => {
+    const copyNext: CopyCallback = (error) => {
       if (error) {
         reject(error);
         return;
