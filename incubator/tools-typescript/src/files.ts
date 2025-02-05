@@ -23,6 +23,9 @@ class Throttler implements AsyncThrottler {
     this.rebalanceAt = rebalanceAt;
   }
 
+  // function to call when an async operation finishes, captures this for passing to .finally
+  private onFinished = () => this.runFinished();
+
   /**
    * Run the given function, immediately if we have space, otherwise queue it and run it when the queue clears
    * @param fn function that returns a promise
@@ -32,14 +35,12 @@ class Throttler implements AsyncThrottler {
     if (this.active < this.maxActive) {
       // if below the active threshold run the function immediately
       this.active++;
-      return fn().finally(() => this.runFinished());
+      return fn().finally(this.onFinished);
     } else {
       // otherwise wrap it in a promise that will run when the queue clears
       return new Promise((resolve, reject) => {
         this.addPending(() =>
-          fn()
-            .finally(() => this.runFinished())
-            .then(resolve, reject)
+          fn().finally(this.onFinished).then(resolve, reject)
         );
       });
     }
