@@ -1,8 +1,8 @@
-import type { Theme } from '@fluentui-react-native/framework';
-import { globalTokens } from '@fluentui-react-native/theme-tokens';
-import type { TokenSettings } from '@fluentui-react-native/use-styling';
+import type { Theme } from "@fluentui-react-native/framework";
+import { globalTokens } from "@fluentui-react-native/theme-tokens";
+import type { TokenSettings } from "@fluentui-react-native/use-styling";
 
-import type { FABTokens } from './FAB.types';
+import type { FABTokens } from "./FAB.types";
 
 export const defaultFABTokens: TokenSettings<FABTokens, Theme> = (t: Theme) =>
   ({
@@ -43,9 +43,9 @@ export const defaultFABTokens: TokenSettings<FABTokens, Theme> = (t: Theme) =>
       hasContent: {
         borderRadius: globalTokens.corner.radiusCircular,
         iconSize: 24,
-        fontSize: t.typography.variants.body1Strong.size,
-        fontFamily: t.typography.variants.body1Strong.face,
-        fontWeight: t.typography.variants.body1Strong.weight,
+        fontSize: t.typography.variants.body1Strong!.size,
+        fontFamily: t.typography.variants.body1Strong!.face,
+        fontWeight: t.typography.variants.body1Strong!.weight,
         minHeight: 56,
         minWidth: 56,
         paddingStart: globalTokens.size160,
@@ -65,9 +65,9 @@ export const defaultFABTokens: TokenSettings<FABTokens, Theme> = (t: Theme) =>
       hasContent: {
         borderRadius: globalTokens.corner.radiusCircular,
         iconSize: 20,
-        fontSize: t.typography.variants.body2Strong.size,
-        fontFamily: t.typography.variants.body2Strong.face,
-        fontWeight: t.typography.variants.body2Strong.weight,
+        fontSize: t.typography.variants.body2Strong!.size,
+        fontFamily: t.typography.variants.body2Strong!.face,
+        fontWeight: t.typography.variants.body2Strong!.weight,
         minHeight: 44,
         minWidth: 44,
         paddingHorizontal: globalTokens.size120,
@@ -76,4 +76,4 @@ export const defaultFABTokens: TokenSettings<FABTokens, Theme> = (t: Theme) =>
         spacingIconContentBefore: globalTokens.size80,
       },
     },
-  } as FABTokens);
+  }) as FABTokens;

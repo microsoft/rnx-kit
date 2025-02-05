@@ -1,11 +1,16 @@
 /** @jsxRuntime classic */
 /** @jsx withSlots */
-import * as React from "react";
+import React from "react";
 import { Platform, Pressable, View } from "react-native";
 
 import { ActivityIndicator } from "@fluentui-react-native/experimental-activity-indicator";
 import type { UseSlots } from "@fluentui-react-native/framework";
-import { compose, memoize, mergeProps } from "@fluentui-react-native/framework";
+import {
+  compose,
+  memoize,
+  mergeProps,
+  withSlots,
+} from "@fluentui-react-native/framework";
 import { Icon, createIconProps } from "@fluentui-react-native/icon";
 import type { IPressableState } from "@fluentui-react-native/interactive-hooks";
 import { TextV1 as Text } from "rnx-test-repo-text";
@@ -33,22 +38,22 @@ export const buttonLookup = (
   state: IPressableState,
   userProps: ButtonProps
 ): boolean => {
-  return (
-    state[layer] ||
-    userProps[layer] ||
-    layer === getPlatformSpecificAppearance(userProps["appearance"]) ||
-    layer === userProps["size"] ||
-    (!userProps["size"] && layer === getDefaultSize()) ||
-    layer === userProps["shape"] ||
-    (!userProps["shape"] && layer === "rounded") ||
-    (layer === "hovered" && state[layer] && !userProps.loading) ||
-    (layer === "hasContent" && !userProps.iconOnly) ||
-    (layer === "hasIconAfter" &&
-      (userProps.icon || userProps.loading) &&
-      userProps.iconPosition === "after") ||
-    (layer === "hasIconBefore" &&
-      (userProps.icon || userProps.loading) &&
-      (!userProps.iconPosition || userProps.iconPosition === "before"))
+  return Boolean(
+    state[layer as keyof IPressableState] ||
+      userProps[layer as keyof ButtonProps] ||
+      layer === getPlatformSpecificAppearance(userProps["appearance"]!) ||
+      layer === userProps["size"] ||
+      (!userProps["size"] && layer === getDefaultSize()) ||
+      layer === userProps["shape"] ||
+      (!userProps["shape"] && layer === "rounded") ||
+      (layer === "hovered" && state[layer] && !userProps.loading) ||
+      (layer === "hasContent" && !userProps.iconOnly) ||
+      (layer === "hasIconAfter" &&
+        (userProps.icon || userProps.loading) &&
+        userProps.iconPosition === "after") ||
+      (layer === "hasIconBefore" &&
+        (userProps.icon || userProps.loading) &&
+        (!userProps.iconPosition || userProps.iconPosition === "before"))
   );
 };
 
@@ -57,15 +62,15 @@ export const Button = compose<ButtonType>({
   ...stylingSettings,
   slots: {
     root: Pressable,
-    rippleContainer: Platform.OS === "android" && View,
-    focusInnerBorder: Platform.OS === ("win32" as any) && View,
+    rippleContainer: Platform.OS === "android" && (View as any),
+    focusInnerBorder: Platform.OS === ("win32" as any) && (View as any),
     icon: Icon,
     content: Text,
   },
   useRender: (userProps: ButtonProps, useSlots: UseSlots<ButtonType>) => {
     const button = useButton(userProps);
 
-    const iconProps = createIconProps(userProps.icon);
+    const iconProps = createIconProps(userProps.icon!);
     // grab the styled slots
     const Slots = useSlots(userProps, (layer) =>
       buttonLookup(layer, button.state, userProps)
@@ -123,7 +128,7 @@ export const Button = compose<ButtonType>({
       );
 
       const hasRipple = Platform.OS === "android";
-      if (hasRipple) {
+      if (hasRipple && Slots.rippleContainer) {
         const [outerStyleProps, innerStyleProps] =
           extractOuterStylePropsAndroid(mergedProps.style);
         return (
@@ -145,7 +150,8 @@ export const Button = compose<ButtonType>({
             {button.state.focused &&
               !!button.state.measuredHeight &&
               !!button.state.measuredWidth &&
-              button.state.shouldUseTwoToneFocusBorder && (
+              button.state.shouldUseTwoToneFocusBorder &&
+              Slots.focusInnerBorder && (
                 <Slots.focusInnerBorder
                   style={getFocusBorderStyle(
                     button.state.measuredHeight,

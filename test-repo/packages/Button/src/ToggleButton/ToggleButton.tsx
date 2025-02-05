@@ -4,8 +4,12 @@ import * as React from "react";
 import { Platform, Pressable, View } from "react-native";
 
 import { ActivityIndicator } from "@fluentui-react-native/experimental-activity-indicator";
-import type { UseSlots } from "@fluentui-react-native/framework";
-import { compose, mergeProps } from "@fluentui-react-native/framework";
+import {
+  type UseSlots,
+  compose,
+  mergeProps,
+  withSlots,
+} from "@fluentui-react-native/framework";
 import { Icon, createIconProps } from "@fluentui-react-native/icon";
 import { TextV1 as Text } from "rnx-test-repo-text";
 
@@ -22,13 +26,13 @@ export const ToggleButton = compose<ToggleButtonType>({
     root: Pressable,
     icon: Icon,
     content: Text,
-    focusInnerBorder: Platform.OS === ("win32" as any) && View,
+    focusInnerBorder: (Platform.OS === ("win32" as any) && View) || undefined,
   },
   useRender: (
     userProps: ToggleButtonProps,
     useSlots: UseSlots<ToggleButtonType>
   ) => {
-    const iconProps = createIconProps(userProps.icon);
+    const iconProps = createIconProps(userProps.icon!);
     const toggleButton = useToggleButton(userProps);
 
     // grab the styled slots
@@ -87,7 +91,8 @@ export const ToggleButton = compose<ToggleButtonType>({
           {toggleButton.state.focused &&
             !!toggleButton.state.measuredHeight &&
             !!toggleButton.state.measuredWidth &&
-            toggleButton.state.shouldUseTwoToneFocusBorder && (
+            toggleButton.state.shouldUseTwoToneFocusBorder &&
+            Slots.focusInnerBorder && (
               <Slots.focusInnerBorder
                 style={getFocusBorderStyle(
                   toggleButton.state.measuredHeight,

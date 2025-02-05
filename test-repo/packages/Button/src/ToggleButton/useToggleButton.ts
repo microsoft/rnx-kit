@@ -1,34 +1,51 @@
-import * as React from 'react';
-import type { AccessibilityState } from 'react-native';
+import * as React from "react";
+import type {
+  AccessibilityActionEvent,
+  AccessibilityState,
+} from "react-native";
 
-import { memoize } from '@fluentui-react-native/framework';
-import { useAsToggleWithEvent } from '@fluentui-react-native/interactive-hooks';
+import { memoize } from "@fluentui-react-native/framework";
+import { useAsToggleWithEvent } from "@fluentui-react-native/interactive-hooks";
 
-import type { ToggleButtonProps, ToggleButtonInfo } from './ToggleButton.types';
-import { useButton } from '../useButton';
+import { useButton } from "../useButton";
+import type { ToggleButtonInfo, ToggleButtonProps } from "./ToggleButton.types";
 
-const defaultAccessibilityActions = [{ name: 'Toggle' }];
+const defaultAccessibilityActions = [{ name: "Toggle" }];
 
 export const useToggleButton = (props: ToggleButtonProps): ToggleButtonInfo => {
-  const { accessibilityActions, accessibilityState, defaultChecked, checked, onAccessibilityAction, onClick, ...rest } = props;
+  const {
+    accessibilityActions,
+    accessibilityState,
+    defaultChecked,
+    checked,
+    onAccessibilityAction,
+    onClick,
+    ...rest
+  } = props;
   // Warns defaultChecked and checked being mutually exclusive.
   if (defaultChecked != undefined && checked != undefined) {
-    console.warn('defaultChecked and checked are mutually exclusive to one another. Use one or the other.');
+    console.warn(
+      "defaultChecked and checked are mutually exclusive to one another. Use one or the other."
+    );
   }
-  const [checkedValue, toggle] = useAsToggleWithEvent(defaultChecked, checked, onClick);
+  const [checkedValue, toggle] = useAsToggleWithEvent(
+    defaultChecked,
+    checked,
+    onClick
+  );
   const accessibilityActionsProp = accessibilityActions
     ? [...defaultAccessibilityActions, ...accessibilityActions]
     : defaultAccessibilityActions;
   const onAccessibilityActionProp = React.useCallback(
-    (event) => {
+    (event: AccessibilityActionEvent) => {
       switch (event.nativeEvent.actionName) {
-        case 'Toggle':
+        case "Toggle":
           toggle(event);
           break;
       }
       onAccessibilityAction && onAccessibilityAction(event);
     },
-    [toggle, onAccessibilityAction],
+    [toggle, onAccessibilityAction]
   );
 
   const button = useButton({
@@ -46,7 +63,10 @@ export const useToggleButton = (props: ToggleButtonProps): ToggleButtonInfo => {
 };
 
 const getAccessibilityState = memoize(getAccessibilityStateWorker);
-function getAccessibilityStateWorker(toggled: boolean, accessibilityState?: AccessibilityState) {
+function getAccessibilityStateWorker(
+  toggled: boolean,
+  accessibilityState?: AccessibilityState
+) {
   if (accessibilityState) {
     return { checked: toggled, ...accessibilityState };
   }

@@ -5,7 +5,11 @@ import { Platform, Pressable, View } from "react-native";
 
 import { ActivityIndicator } from "@fluentui-react-native/experimental-activity-indicator";
 import type { UseSlots } from "@fluentui-react-native/framework";
-import { compose, mergeProps } from "@fluentui-react-native/framework";
+import {
+  compose,
+  mergeProps,
+  withSlots,
+} from "@fluentui-react-native/framework";
 import { Icon, createIconProps } from "@fluentui-react-native/icon";
 import { TextV1 as Text } from "rnx-test-repo-text";
 
@@ -27,14 +31,14 @@ export const CompoundButton = compose<CompoundButtonType>({
     content: Text,
     secondaryContent: Text,
     contentContainer: View,
-    focusInnerBorder: Platform.OS === ("win32" as any) && View,
+    focusInnerBorder: Platform.OS === ("win32" as any) ? View : undefined,
   },
   useRender: (
     userProps: CompoundButtonProps,
     useSlots: UseSlots<CompoundButtonType>
   ) => {
     const button = useButton(userProps);
-    const iconProps = createIconProps(userProps.icon);
+    const iconProps = createIconProps(userProps.icon!);
 
     // grab the styled slots
     const Slots = useSlots(userProps, (layer) =>
@@ -104,7 +108,8 @@ export const CompoundButton = compose<CompoundButtonType>({
           {button.state.focused &&
             !!button.state.measuredHeight &&
             !!button.state.measuredWidth &&
-            button.state.shouldUseTwoToneFocusBorder && (
+            button.state.shouldUseTwoToneFocusBorder &&
+            Slots.focusInnerBorder && (
               <Slots.focusInnerBorder
                 style={getFocusBorderStyle(
                   button.state.measuredHeight,
