@@ -1,5 +1,12 @@
 # Change Log - @rnx-kit/tools-node
 
+## 3.0.1
+
+### Patch Changes
+
+- 8b3d041: add a full module destructuring function, route other routines to use
+  this new function.
+
 ## 3.0.0
 
 ### Major Changes
