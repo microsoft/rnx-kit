@@ -7,6 +7,7 @@ export {
 export type { FileModuleRef, PackageModuleRef } from "./module";
 
 export {
+  destructureModuleRef,
   findPackage,
   findPackageDependencyDir,
   findPackageDir,
@@ -16,6 +17,7 @@ export {
   writePackage,
 } from "./package";
 export type {
+  DestructuredModuleRef,
   FindPackageDependencyOptions,
   PackageManifest,
   PackagePerson,
