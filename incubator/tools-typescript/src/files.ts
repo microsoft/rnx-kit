@@ -58,7 +58,7 @@ class Throttler implements AsyncThrottler {
     if (this.first < this.pending.length) {
       const next = this.pending[this.first++];
       this.active++;
-      return next(); //.then(() => this.runFinished());
+      return next();
     }
     return Promise.resolve();
   }

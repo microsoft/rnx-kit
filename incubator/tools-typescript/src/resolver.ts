@@ -44,11 +44,19 @@ const rootCaches = new Map<
   }
 >();
 
+/**
+ * @returns the cache for this project root
+ */
 function getRootCache(root: string) {
   if (!rootCaches.has(root)) {
     rootCaches.set(root, {});
   }
   return rootCaches.get(root)!;
+}
+
+/** Quick identity function to not create a new function every time */
+function identity<T>(x: T): T {
+  return x;
 }
 
 /**
@@ -59,7 +67,7 @@ export function getTsModuleCache(root: string) {
   const rootCache = getRootCache(root);
   rootCache.moduleCache ??= ts.createModuleResolutionCache(
     root,
-    (x) => x,
+    identity,
     undefined,
     rootCache.packageJsonCache
   );
@@ -77,7 +85,7 @@ export function getTsTypeRefCache(root: string) {
   return (rootCache.typeRefCache ??=
     ts.createTypeReferenceDirectiveResolutionCache(
       root,
-      (x) => x,
+      identity,
       undefined,
       rootCache.packageJsonCache
     ));
