@@ -1,0 +1,4 @@
+{
+  "extends": "@rnx-kit/tsconfig/tsconfig.json",
+  "include": ["src"]
+}
