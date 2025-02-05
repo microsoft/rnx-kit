@@ -4516,7 +4516,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rnx-kit/tools-node@npm:*, @rnx-kit/tools-node@npm:^3.0.0, @rnx-kit/tools-node@workspace:packages/tools-node":
+"@rnx-kit/tools-node@npm:*, @rnx-kit/tools-node@npm:^3.0.0, @rnx-kit/tools-node@npm:^3.0.1, @rnx-kit/tools-node@workspace:packages/tools-node":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/tools-node@workspace:packages/tools-node"
   dependencies:
@@ -4579,7 +4579,7 @@ __metadata:
     "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/jest-preset": "npm:*"
     "@rnx-kit/scripts": "npm:*"
-    "@rnx-kit/tools-node": "npm:^3.0.0"
+    "@rnx-kit/tools-node": "npm:^3.0.1"
     "@rnx-kit/tools-react-native": "npm:^2.0.0"
     "@rnx-kit/tsconfig": "npm:*"
     "@rnx-kit/typescript-service": "npm:^2.0.0"
