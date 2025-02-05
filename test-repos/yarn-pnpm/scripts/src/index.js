@@ -7,6 +7,7 @@ import { bundle } from "./commands/bundle.js";
 import { clean } from "./commands/clean.js";
 import { format } from "./commands/format.js";
 import { lint } from "./commands/lint.js";
+import { rnx } from "./commands/rnx.js";
 import { test } from "./commands/test.js";
 
 /**
@@ -50,6 +51,10 @@ init({
   lint: {
     description: "Lints source files",
     command: lint,
+  },
+  rnx: {
+    description: "Runs the rnx-cli",
+    command: rnx,
   },
   test: {
     description: "Runs tests",

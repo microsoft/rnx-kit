@@ -10,7 +10,8 @@
   "scripts": {
     "build": "tsc",
     "format": "rnx-test-repo-scripts format",
-    "lint": "eslint ./src/**/*.js"
+    "lint": "eslint ./src/**/*.js",
+    "rnx": "rnx-test-scripts rnx"
   },
   "dependencies": {
     "esbuild": "^0.23.0",
