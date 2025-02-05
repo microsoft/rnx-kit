@@ -2152,7 +2152,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fluentui-react-native/default-theme@npm:0.26.2":
+"@fluentui-react-native/default-theme@npm:0.26.2, @fluentui-react-native/default-theme@npm:^0.26.0":
   version: 0.26.2
   resolution: "@fluentui-react-native/default-theme@npm:0.26.2"
   dependencies:
@@ -4431,6 +4431,9 @@ __metadata:
     "@babel/plugin-transform-react-jsx-source": "npm:^7.20.0"
     "@babel/preset-env": "npm:^7.20.0"
     "@babel/runtime": "npm:^7.20.0"
+    "@fluentui-react-native/apple-theme": "npm:^0.28.0"
+    "@fluentui-react-native/default-theme": "npm:^0.26.0"
+    "@fluentui-react-native/theme": "npm:^0.11.0"
     "@jridgewell/trace-mapping": "npm:^0.3.18"
     "@react-native-community/cli": "npm:^15.0.0"
     "@react-native-community/cli-platform-android": "npm:^15.0.0"

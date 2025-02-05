@@ -1,29 +1,12 @@
 import { acquireTokenWithScopes } from "@rnx-kit/react-native-auth";
 import React, { useEffect, useState } from "react";
-import { Pressable, Text } from "react-native";
 import manifest from "../app.json";
-import { Feature } from "./Feature";
-import { Home } from "./Home";
-import { Separator } from "./Separator";
-import { useStyles } from "./styles";
+import { Feature, Home, Separator } from "@rnx-repo-yarn-pnpm/test-app-shared";
+import { Button } from "@rnx-repo-yarn-pnpm/button";
+import { createTheme } from "./createTheme";
+import { ThemeProvider } from "@fluentui-react-native/theme";
 
-type ButtonProps = {
-  children: string;
-  onPress: () => void;
-};
-
-function Button({ children, onPress }: ButtonProps) {
-  const styles = useStyles();
-  return (
-    <Pressable
-      android_ripple={styles.buttonRipple}
-      style={styles.groupItemContainer}
-      onPress={onPress}
-    >
-      <Text style={styles.groupItemLabel}>{children}</Text>
-    </Pressable>
-  );
-}
+const theme = createTheme();
 
 function useLocalStorageStatus() {
   const [localValue, setLocalValue] = useState("Checking");
@@ -56,10 +39,12 @@ export function App({ concurrentRoot }: { concurrentRoot?: boolean }) {
     }
   }, []);
   return (
-    <Home concurrentRoot={concurrentRoot}>
-      <Feature value={localStorageStatus}>window.localStorage</Feature>
-      <Separator />
-      <Button onPress={startAcquireToken}>Acquire Token</Button>
-    </Home>
+    <ThemeProvider theme={theme}>
+      <Home concurrentRoot={concurrentRoot}>
+        <Feature value={localStorageStatus}>window.localStorage</Feature>
+        <Separator />
+        <Button onClick={startAcquireToken}>Acquire Token</Button>
+      </Home>
+    </ThemeProvider>
   );
 }
