@@ -6,7 +6,7 @@ import { Pressable } from "react-native";
 import type { UseSlots } from "@fluentui-react-native/framework";
 import { compose } from "@fluentui-react-native/framework";
 import { Icon } from "@fluentui-react-native/icon";
-import { TextV1 as Text } from "rnx-test-repo-text";
+import { TextV1 as Text } from "@rnx-repo-yarn-pnpm/text";
 
 import type { FABProps, FABType } from "./FAB.types";
 import { fabName } from "./FAB.types";

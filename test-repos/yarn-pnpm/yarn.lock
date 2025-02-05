@@ -4004,7 +4004,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rnx-repo-yarn-pnpm/button@workspace:packages/Button":
+"@rnx-repo-yarn-pnpm/button@workspace:*, @rnx-repo-yarn-pnpm/button@workspace:packages/Button":
   version: 0.0.0-use.local
   resolution: "@rnx-repo-yarn-pnpm/button@workspace:packages/Button"
   dependencies:
@@ -4026,6 +4026,7 @@ __metadata:
     "@react-native-community/cli-platform-ios": "npm:^15.0.0"
     "@react-native/babel-preset": "npm:^0.76.0"
     "@react-native/metro-config": "npm:^0.76.0"
+    "@rnx-repo-yarn-pnpm/eslint-config": "workspace:*"
     "@rnx-repo-yarn-pnpm/scripts": "workspace:*"
     "@rnx-repo-yarn-pnpm/text": "workspace:*"
     "@types/node": "npm:^20.0.0"
@@ -4053,6 +4054,19 @@ __metadata:
       optional: true
     react-native-windows:
       optional: true
+  languageName: unknown
+  linkType: soft
+
+"@rnx-repo-yarn-pnpm/eslint-config@workspace:*, @rnx-repo-yarn-pnpm/eslint-config@workspace:packages/eslint-config":
+  version: 0.0.0-use.local
+  resolution: "@rnx-repo-yarn-pnpm/eslint-config@workspace:packages/eslint-config"
+  dependencies:
+    "@microsoft/eslint-plugin-sdl": "npm:^1.0.0"
+    "@rnx-kit/eslint-plugin": "npm:^0.8.6"
+    eslint: "npm:^9.0.0"
+    prettier: "npm:^3.0.0"
+  peerDependencies:
+    eslint: ^9.0.0
   languageName: unknown
   linkType: soft
 
@@ -4115,6 +4129,8 @@ __metadata:
     "@rnx-kit/react-native-host": "npm:^0.5.3"
     "@rnx-kit/react-native-test-app-msal": "npm:^5.0.1"
     "@rnx-kit/third-party-notices": "npm:^2.0.0"
+    "@rnx-repo-yarn-pnpm/button": "workspace:*"
+    "@rnx-repo-yarn-pnpm/eslint-config": "workspace:*"
     "@rnx-repo-yarn-pnpm/scripts": "workspace:*"
     "@rnx-repo-yarn-pnpm/test-app-shared": "workspace:*"
     "@testing-library/react-native": "npm:^12.4.3"
@@ -4161,6 +4177,8 @@ __metadata:
     "@rnx-kit/react-native-host": "npm:^0.5.3"
     "@rnx-kit/react-native-test-app-msal": "npm:^5.0.1"
     "@rnx-kit/third-party-notices": "npm:^2.0.0"
+    "@rnx-repo-yarn-pnpm/button": "workspace:*"
+    "@rnx-repo-yarn-pnpm/eslint-config": "workspace:*"
     "@rnx-repo-yarn-pnpm/scripts": "workspace:*"
     "@rnx-repo-yarn-pnpm/test-app-shared": "workspace:*"
     "@testing-library/react-native": "npm:^12.4.3"
@@ -4197,6 +4215,7 @@ __metadata:
     "@rnx-kit/react-native-host": "npm:^0.5.3"
     "@rnx-kit/react-native-test-app-msal": "npm:^5.0.1"
     "@rnx-kit/third-party-notices": "npm:^2.0.0"
+    "@rnx-repo-yarn-pnpm/eslint-config": "workspace:*"
     "@rnx-repo-yarn-pnpm/scripts": "workspace:*"
     "@testing-library/react-native": "npm:^12.4.3"
     "@types/react": "npm:^18.0.0"
@@ -4229,6 +4248,7 @@ __metadata:
     "@react-native-community/cli-platform-ios": "npm:^15.0.0"
     "@react-native/babel-preset": "npm:^0.76.0"
     "@react-native/metro-config": "npm:^0.76.0"
+    "@rnx-repo-yarn-pnpm/eslint-config": "workspace:*"
     "@rnx-repo-yarn-pnpm/scripts": "workspace:*"
     "@types/node": "npm:^20.0.0"
     "@types/react": "npm:^18.0.0"

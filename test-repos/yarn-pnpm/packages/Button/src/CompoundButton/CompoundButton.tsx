@@ -11,7 +11,7 @@ import {
   withSlots,
 } from "@fluentui-react-native/framework";
 import { Icon, createIconProps } from "@fluentui-react-native/icon";
-import { TextV1 as Text } from "rnx-test-repo-text";
+import { TextV1 as Text } from "@rnx-repo-yarn-pnpm/text";
 
 import { buttonLookup, getFocusBorderStyle } from "../Button";
 import { useButton } from "../useButton";

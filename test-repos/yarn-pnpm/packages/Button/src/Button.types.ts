@@ -17,7 +17,7 @@ import type {
   IShadowTokens,
   LayoutTokens,
 } from "@fluentui-react-native/tokens";
-import type { TextProps } from "rnx-test-repo-text";
+import type { TextProps } from "@rnx-repo-yarn-pnpm/text";
 
 export const buttonName = "Button";
 export type ButtonSize = "small" | "medium" | "large";

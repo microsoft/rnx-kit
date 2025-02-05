@@ -1,7 +1,7 @@
 import type { ColorValue, ViewProps } from "react-native";
 
 import type { FontTokens } from "@fluentui-react-native/tokens";
-import type { TextProps } from "rnx-test-repo-text";
+import type { TextProps } from "@rnx-repo-yarn-pnpm/text";
 
 import type {
   ButtonProps,

@@ -35,6 +35,7 @@
     "@rnx-kit/react-native-host": "^0.5.3",
     "@rnx-kit/react-native-test-app-msal": "^5.0.1",
     "@rnx-kit/third-party-notices": "^2.0.0",
+    "@rnx-repo-yarn-pnpm/eslint-config": "workspace:*",
     "@rnx-repo-yarn-pnpm/scripts": "workspace:*",
     "@testing-library/react-native": "^12.4.3",
     "@types/react": "^18.0.0",

@@ -1,5 +1,5 @@
 {
-  "extends": "@rnx-kit/tsconfig/tsconfig.json",
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
     "checkJs": false,
     "noEmit": true,
