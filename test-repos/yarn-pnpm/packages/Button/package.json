@@ -3,12 +3,14 @@
   "version": "0.39.2",
   "private": true,
   "description": "A copy of the fluentui-react-native button for testing",
-  "main": "src/index.ts",
-  "module": "src/index.ts",
+  "module": "lib/index.js",
   "typings": "lib/index.d.ts",
-  "onPublish": {
-    "main": "lib-commonjs/index.js",
-    "module": "lib/index.js"
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "import": "./lib/index.js"
+    },
+    "./package.json": "./package.json"
   },
   "scripts": {
     "build": "rnx-test-scripts build",

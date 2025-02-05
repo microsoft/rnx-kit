@@ -2,7 +2,7 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "checkJs": false,
-    "noEmit": true,
+    "outDir": "lib",
     "paths": {
       "@/*": ["./src/internal/*"],
       "internal": ["./src/internal"]

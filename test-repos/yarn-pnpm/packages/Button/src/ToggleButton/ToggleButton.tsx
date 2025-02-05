@@ -11,7 +11,7 @@ import {
   withSlots,
 } from "@fluentui-react-native/framework";
 import { Icon, createIconProps } from "@fluentui-react-native/icon";
-import { TextV1 as Text } from "@rnx-repo-yarn-pnpm/text";
+import { Text } from "@rnx-repo-yarn-pnpm/text";
 
 import { buttonLookup, getFocusBorderStyle } from "../Button";
 import { stylingSettings } from "./ToggleButton.styling";
@@ -36,7 +36,7 @@ export const ToggleButton = compose<ToggleButtonType>({
     const toggleButton = useToggleButton(userProps);
 
     // grab the styled slots
-    const Slots = useSlots(userProps, (layer) =>
+    const Slots = useSlots(userProps, (layer: string) =>
       buttonLookup(layer, toggleButton.state, userProps)
     );
 

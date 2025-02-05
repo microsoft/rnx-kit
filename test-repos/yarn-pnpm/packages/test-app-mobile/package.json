@@ -24,6 +24,9 @@
     "windows": "rnx run-windows --no-packager --sln windows/SampleCrossApp.sln"
   },
   "dependencies": {
+    "@fluentui-react-native/android-theme": "^0.25.0",
+    "@fluentui-react-native/apple-theme": "^0.28.0",
+    "@fluentui-react-native/theme": "^0.11.0",
     "@react-native-webapis/web-storage": "^0.4.2",
     "@rnx-repo-yarn-pnpm/button": "workspace:*",
     "@rnx-repo-yarn-pnpm/test-app-shared": "workspace:*",

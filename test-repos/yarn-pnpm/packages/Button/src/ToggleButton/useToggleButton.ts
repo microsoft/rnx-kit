@@ -1,6 +1,5 @@
 import * as React from "react";
 import type {
-  AccessibilityActionEvent,
   AccessibilityState,
 } from "react-native";
 
@@ -37,7 +36,7 @@ export const useToggleButton = (props: ToggleButtonProps): ToggleButtonInfo => {
     ? [...defaultAccessibilityActions, ...accessibilityActions]
     : defaultAccessibilityActions;
   const onAccessibilityActionProp = React.useCallback(
-    (event: AccessibilityActionEvent) => {
+    (event: any) => {
       switch (event.nativeEvent.actionName) {
         case "Toggle":
           toggle(event);

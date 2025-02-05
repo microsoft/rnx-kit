@@ -1,5 +1,5 @@
-export { Button as ButtonV1 } from "./Button";
-export { buttonName as buttonNameV1 } from "./Button.types";
+export { Button } from "./Button";
+export { buttonName } from "./Button.types";
 export type {
   ButtonAppearance,
   ButtonCoreProps,

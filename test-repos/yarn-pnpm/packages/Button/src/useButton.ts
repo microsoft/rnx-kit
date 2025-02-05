@@ -1,5 +1,4 @@
 import * as React from "react";
-import type { LayoutChangeEvent } from "react-native";
 import { Platform } from "react-native";
 
 import { useFluentTheme } from "@fluentui-react-native/framework";
@@ -88,7 +87,7 @@ export const useButton = (props: ButtonProps): ButtonInfo => {
 
   const hasTogglePattern =
     props.accessibilityActions &&
-    !!props.accessibilityActions.find((action) => action.name === "Toggle");
+    !!props.accessibilityActions.find((action: { name: string; }) => action.name === "Toggle");
 
   const theme = useFluentTheme();
   const shouldUseTwoToneFocusBorder =
@@ -102,7 +101,7 @@ export const useButton = (props: ButtonProps): ButtonInfo => {
     undefined
   );
   const onLayoutInner = React.useCallback(
-    (e: LayoutChangeEvent) => {
+    (e: any) => {
       // Only run when shouldUseTwoToneFocusBorder so that state update doesn't
       // affect platforms that don't need it.
       if (shouldUseTwoToneFocusBorder) {

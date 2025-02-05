@@ -12,7 +12,7 @@ import {
 } from "@fluentui-react-native/framework";
 import { Icon, createIconProps } from "@fluentui-react-native/icon";
 import type { IPressableState } from "@fluentui-react-native/interactive-hooks";
-import { TextV1 as Text } from "@rnx-repo-yarn-pnpm/text";
+import { Text } from "@rnx-repo-yarn-pnpm/text";
 
 import { extractOuterStylePropsAndroid } from "../ExtractStyle.android";
 import { useButton } from "../useButton";
@@ -62,7 +62,7 @@ export const FAB = compose<FABType>({
     const button = useButton(rest);
 
     // grab the styled slots
-    const Slots = useSlots(userProps, (layer) =>
+    const Slots = useSlots(userProps, (layer: string) =>
       buttonLookup(layer, button.state, userProps)
     );
 

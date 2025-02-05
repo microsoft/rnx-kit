@@ -3,9 +3,14 @@
   "name": "@rnx-repo-yarn-pnpm/test-app-shared",
   "version": "0.1.0",
   "private": true,
-  "bin": {
-    "rnx": "../cli/bin/rnx-cli.cjs",
-    "rnx.reason": "Workaround for Node not being able to find `rnx-cli` because of Yarn virtual packages"
+  "module": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "import": "./lib/index.js"
+    },
+    "./package.json": "./package.json"
   },
   "scripts": {
     "build": "rnx-test-scripts build",

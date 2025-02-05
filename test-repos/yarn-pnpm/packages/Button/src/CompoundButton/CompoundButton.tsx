@@ -11,7 +11,7 @@ import {
   withSlots,
 } from "@fluentui-react-native/framework";
 import { Icon, createIconProps } from "@fluentui-react-native/icon";
-import { TextV1 as Text } from "@rnx-repo-yarn-pnpm/text";
+import { Text } from "@rnx-repo-yarn-pnpm/text";
 
 import { buttonLookup, getFocusBorderStyle } from "../Button";
 import { useButton } from "../useButton";
@@ -41,7 +41,7 @@ export const CompoundButton = compose<CompoundButtonType>({
     const iconProps = createIconProps(userProps.icon!);
 
     // grab the styled slots
-    const Slots = useSlots(userProps, (layer) =>
+    const Slots = useSlots(userProps, (layer: string) =>
       buttonLookup(layer, button.state, userProps)
     );
 

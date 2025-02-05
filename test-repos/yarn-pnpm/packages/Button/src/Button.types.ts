@@ -25,12 +25,7 @@ export type ButtonAppearance = "primary" | "subtle" | "accent" | "outline";
 export type ButtonShape = "rounded" | "circular" | "square";
 
 // Core Props/Tokens are shared between FAB and Buttons
-export interface ButtonCoreTokens
-  extends LayoutTokens,
-    FontTokens,
-    IBorderTokens,
-    IShadowTokens,
-    IColorTokens {
+export type ButtonCoreTokens = LayoutTokens & FontTokens & IBorderTokens & IShadowTokens & IColorTokens & {
   /**
    * The icon color.
    */
@@ -84,7 +79,7 @@ export interface ButtonCoreTokens
   borderInnerStyle?: ViewStyle["borderStyle"];
 }
 
-export interface ButtonTokens extends ButtonCoreTokens {
+export type ButtonTokens = ButtonCoreTokens & {
   /**
    * States that can be applied to a button.
    */
@@ -107,8 +102,7 @@ export interface ButtonTokens extends ButtonCoreTokens {
   hasIconAfter?: ButtonTokens;
 }
 
-export interface ButtonCoreProps
-  extends Omit<PressablePropsExtended, "onPress"> {
+export type ButtonCoreProps = Omit<PressablePropsExtended, "onPress"> & {
   /*
    * Source URL or name of the icon to show on the Button.
    */
@@ -136,7 +130,7 @@ export interface ButtonCoreProps
   tooltip?: string;
 }
 
-export interface ButtonProps extends ButtonCoreProps {
+export type ButtonProps = ButtonCoreProps & {
   /**
    * A button can have its content and borders styled for greater emphasis or to be subtle.
    * - 'primary' or 'accent': Emphasizes the button as a primary action. 'Accent' added to support Mobile platform naming convention, maps to 'primary'.
@@ -183,7 +177,7 @@ export interface ButtonProps extends ButtonCoreProps {
   loading?: boolean;
 }
 
-interface ButtonState extends PressableState {
+type ButtonState = PressableState & {
   measuredHeight?: number;
   measuredWidth?: number;
 
@@ -191,12 +185,13 @@ interface ButtonState extends PressableState {
   shouldUseTwoToneFocusBorder?: boolean;
 }
 
-export interface ButtonInfo {
+export type ButtonInfo = {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   props: ButtonProps & React.ComponentPropsWithRef<any>;
   state: ButtonState;
 }
 
-export interface ButtonSlotProps {
+export type ButtonSlotProps = {
   root: React.PropsWithRef<PressablePropsExtended>;
   rippleContainer?: IViewProps; // Android only
   focusInnerBorder?: IViewProps; // Win32 only
@@ -204,7 +199,7 @@ export interface ButtonSlotProps {
   content: TextProps;
 }
 
-export interface ButtonType {
+export type ButtonType = {
   props: ButtonProps;
   tokens: ButtonTokens;
   slotProps: ButtonSlotProps;

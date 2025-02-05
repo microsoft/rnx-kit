@@ -11,7 +11,7 @@ import type {
 
 export const compoundButtonName = "CompoundButton";
 
-export interface CompoundButtonTokens extends ButtonTokens {
+export type CompoundButtonTokens = ButtonTokens & {
   /**
    * Font of the second line of text on the button.
    */
@@ -38,19 +38,19 @@ export interface CompoundButtonTokens extends ButtonTokens {
   hasContent?: CompoundButtonTokens;
 }
 
-export interface CompoundButtonProps extends ButtonProps {
+export type CompoundButtonProps = ButtonProps & {
   /**
    * Second line of text that describes the action this button takes.
    */
   secondaryContent?: string;
 }
 
-export interface CompoundButtonSlotProps extends ButtonSlotProps {
+export type CompoundButtonSlotProps = ButtonSlotProps & {
   contentContainer: ViewProps;
   secondaryContent: TextProps;
 }
 
-export interface CompoundButtonType {
+export type CompoundButtonType = {
   props: CompoundButtonProps;
   tokens: CompoundButtonTokens;
   slotProps: CompoundButtonSlotProps;

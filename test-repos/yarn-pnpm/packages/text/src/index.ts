@@ -1,4 +1,4 @@
-export { Text as TextV1 } from './Text';
+export { Text } from './Text';
 export type { TextProps, TextTokens } from './Text.types';
 export { textName as textNameV1 } from './Text.types';
 export {
@@ -21,7 +21,3 @@ export {
   Display,
 } from './Variants';
 
-/* deprecated */
-export { textName } from './deprecated/Text.types';
-export type { ITextProps, ITextType } from './deprecated/Text.types';
-export { Text } from './deprecated/Text';
