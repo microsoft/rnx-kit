@@ -3,10 +3,6 @@
   "name": "@rnx-repo-yarn-pnpm/test-app-mobile",
   "version": "0.1.0",
   "private": true,
-  "bin": {
-    "rnx": "@rnx-kit/cli",
-    "rnx.reason": "Workaround for Node not being able to find `rnx-cli` because of Yarn virtual packages"
-  },
   "scripts": {
     "android": "rnx-test-scripts rnx run-android --no-packager --appId com.msft.identity.client.sample.local",
     "build": "rnx-test-scripts build",
