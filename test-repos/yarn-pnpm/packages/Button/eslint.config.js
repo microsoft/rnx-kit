@@ -1,1 +1,1 @@
-module.exports = require("@rnx-kit/eslint-config");
+module.exports = require("../../scripts/eslint.config");

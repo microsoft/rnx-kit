@@ -1,6 +1,6 @@
 {
   "private": true,
-  "name": "rnx-test-repo-scripts",
+  "name": "@rnx-repo-yarn-pnpm/scripts",
   "version": "0.0.0",
   "main": "src/index.js",
   "bin": {

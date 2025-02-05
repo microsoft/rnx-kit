@@ -1,0 +1,13 @@
+{
+  "extends": "@rnx-kit/tsconfig/tsconfig.json",
+  "compilerOptions": {
+    "checkJs": false,
+    "noEmit": true,
+    "paths": {
+      "@/*": ["./src/internal/*"],
+      "internal": ["./src/internal"]
+    },
+    "lib": ["ES2021", "DOM"]
+  },
+  "include": ["src"]
+}

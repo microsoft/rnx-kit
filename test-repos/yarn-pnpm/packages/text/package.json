@@ -1,5 +1,5 @@
 {
-  "name": "rnx-test-repo-text",
+  "name": "@rnx-repo-yarn-pnpm/text",
   "version": "0.24.2",
   "private": true,
   "description": "Copy of @fluentui-react-native/text for testing",
@@ -35,6 +35,7 @@
     "@react-native-community/cli-platform-ios": "^15.0.0",
     "@react-native/babel-preset": "^0.76.0",
     "@react-native/metro-config": "^0.76.0",
+    "@rnx-repo-yarn-pnpm/scripts": "workspace:*",
     "@types/node": "^20.0.0",
     "@types/react": "^18.0.0",
     "eslint": "^9.0.0",
@@ -43,7 +44,6 @@
     "react-native": "^0.76.0",
     "react-native-macos": "^0.76.0",
     "react-native-windows": "^0.76.0",
-    "rnx-test-repo-scripts": "workspace:*",
     "typescript": "^5.0.0"
   },
   "peerDependencies": {

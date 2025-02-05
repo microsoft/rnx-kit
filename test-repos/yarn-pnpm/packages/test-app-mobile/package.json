@@ -1,0 +1,186 @@
+{
+  "$schema": "https://raw.githubusercontent.com/microsoft/rnx-kit/main/packages/config/schema.json",
+  "name": "@rnx-repo-yarn-pnpm/test-app-mobile",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "android": "rnx run-android --no-packager --appId com.msft.identity.client.sample.local",
+    "build": "rnx align-deps && rnx-kit-scripts build",
+    "build:android": "rnx build --platform android",
+    "build:ios": "rnx build --platform ios",
+    "bundle": "rnx bundle",
+    "bundle+esbuild": "rnx bundle --id esbuild",
+    "bundle:android": "rnx bundle --platform android",
+    "bundle:ios": "rnx bundle --platform ios",
+    "bundle:macos": "rnx bundle --platform macos",
+    "bundle:windows": "rnx bundle --platform windows",
+    "format": "rnx-kit-scripts format",
+    "ios": "rnx run-ios --no-packager",
+    "lint": "rnx-kit-scripts lint",
+    "macos": "rnx run-macos --scheme ReactTestApp --no-packager",
+    "ram-bundle": "rnx ram-bundle",
+    "start": "rnx start",
+    "test": "rnx test --platform ios --cache false",
+    "windows": "rnx run-windows --no-packager --sln windows/SampleCrossApp.sln"
+  },
+  "dependencies": {
+    "@react-native-webapis/web-storage": "^0.4.2",
+    "@rnx-repo-yarn-pnpm/test-app-shared": "workspace:*",
+    "react": "18.3.1",
+    "react-native": "^0.76.0",
+    "react-native-windows": "^0.76.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.20.0",
+    "@babel/plugin-transform-react-jsx": "^7.20.0",
+    "@babel/plugin-transform-react-jsx-source": "^7.20.0",
+    "@babel/preset-env": "^7.20.0",
+    "@babel/runtime": "^7.20.0",
+    "@jridgewell/trace-mapping": "^0.3.18",
+    "@react-native-community/cli": "^15.0.0",
+    "@react-native-community/cli-platform-android": "^15.0.0",
+    "@react-native-community/cli-platform-ios": "^15.0.0",
+    "@react-native/babel-preset": "^0.76.0",
+    "@react-native/metro-config": "^0.76.0",
+    "@rnx-kit/babel-preset-metro-react-native": "^2.0.0",
+    "@rnx-kit/cli": "^0.18.5",
+    "@rnx-kit/jest-preset": "^0.2.1",
+    "@rnx-kit/metro-config": "^2.0.1",
+    "@rnx-kit/metro-plugin-cyclic-dependencies-detector": "^2.0.0",
+    "@rnx-kit/metro-plugin-duplicates-checker": "^3.0.0",
+    "@rnx-kit/metro-resolver-symlinks": "^0.2.1",
+    "@rnx-kit/metro-serializer": "^2.0.0",
+    "@rnx-kit/metro-serializer-esbuild": "^0.2.1",
+    "@rnx-kit/polyfills": "^0.2.0",
+    "@rnx-kit/react-native-auth": "^0.3.0",
+    "@rnx-kit/react-native-host": "^0.5.3",
+    "@rnx-kit/react-native-test-app-msal": "^5.0.1",
+    "@rnx-kit/third-party-notices": "^2.0.0",
+    "@rnx-repo-yarn-pnpm/scripts": "workspace:*",
+    "@testing-library/react-native": "^12.4.3",
+    "@types/react": "^18.0.0",
+    "eslint": "^9.0.0",
+    "jest": "^29.2.1",
+    "prettier": "^3.0.0",
+    "react-native-test-app": "^4.0.0",
+    "react-test-renderer": "18.3.1",
+    "typescript": "^5.0.0"
+  },
+  "rnx-kit": {
+    "kitType": "app",
+    "build": {
+      "distribution": [
+        "@rnx-kit/build-plugin-firebase",
+        {
+          "appId": {
+            "android": "1:1234567890:android:0a1b2c3d4e5f67890",
+            "ios": "1:1234567890:android:0a1b2c3d4e5f67890"
+          }
+        }
+      ]
+    },
+    "bundle": [
+      {
+        "id": "main",
+        "entryFile": "src/index.ts",
+        "assetsDest": "dist",
+        "treeShake": false,
+        "plugins": [
+          "@rnx-kit/metro-plugin-cyclic-dependencies-detector",
+          [
+            "@rnx-kit/metro-plugin-duplicates-checker",
+            {
+              "ignoredModules": [
+                "react-is"
+              ]
+            }
+          ],
+          "@rnx-kit/metro-plugin-typescript"
+        ],
+        "targets": [
+          "android",
+          "ios"
+        ],
+        "platforms": {
+          "android": {
+            "bundleOutput": "dist/main.android.bundle",
+            "sourcemapOutput": "dist/main.android.bundle.map",
+            "assetsDest": "dist/res"
+          },
+          "ios": {
+            "bundleOutput": "dist/main.ios.jsbundle",
+            "sourcemapOutput": "dist/main.ios.jsbundle.map"
+          }
+        }
+      },
+      {
+        "id": "esbuild",
+        "entryFile": "src/index.ts",
+        "assetsDest": "dist",
+        "treeShake": true,
+        "plugins": [
+          "@rnx-kit/metro-plugin-cyclic-dependencies-detector",
+          [
+            "@rnx-kit/metro-plugin-duplicates-checker",
+            {
+              "ignoredModules": [
+                "react-is"
+              ]
+            }
+          ],
+          "@rnx-kit/metro-plugin-typescript",
+          "@rnx-kit/third-party-notices"
+        ],
+        "targets": [
+          "android",
+          "ios"
+        ],
+        "platforms": {
+          "android": {
+            "bundleOutput": "dist/main+esbuild.android.bundle",
+            "sourcemapOutput": "dist/main+esbuild.android.bundle.map",
+            "assetsDest": "dist/res"
+          },
+          "ios": {
+            "bundleOutput": "dist/main+esbuild.ios.jsbundle",
+            "sourcemapOutput": "dist/main+esbuild.ios.jsbundle.map"
+          }
+        }
+      }
+    ],
+    "server": {
+      "plugins": [
+        "@rnx-kit/metro-plugin-cyclic-dependencies-detector",
+        [
+          "@rnx-kit/metro-plugin-duplicates-checker",
+          {
+            "ignoredModules": [
+              "react-is"
+            ]
+          }
+        ],
+        "@rnx-kit/metro-plugin-typescript"
+      ]
+    },
+    "alignDeps": {
+      "presets": [
+        "microsoft/react-native",
+        "@rnx-kit/scripts/align-deps-preset.cjs"
+      ],
+      "requirements": [
+        "react-native@0.76"
+      ],
+      "capabilities": [
+        "core-android",
+        "core-ios",
+        "core/testing",
+        "babel-preset-react-native",
+        "eslint",
+        "prettier",
+        "react",
+        "test-app",
+        "typescript"
+      ]
+    }
+  }
+}
