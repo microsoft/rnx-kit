@@ -1,32 +1,34 @@
-import {
+import type {
   Descriptor,
-  LinkType,
   Locator,
-  Manifest,
   MinimalResolveOptions,
   Package,
   ResolveOptions,
   Resolver,
-  structUtils,
 } from "@yarnpkg/core";
-import { stringifyIdent } from "@yarnpkg/core/lib/structUtils";
-import { CONFIG_DEFAULT, CONFIG_KEY, RANGE_PROTOCOL } from "./constants";
-import { loadConfigFile } from "./finder";
-import { DefinitionFinder } from "./types";
+import {
+  makeDescriptor,
+  makeLocator,
+  stringifyIdent,
+} from "@yarnpkg/core/structUtils";
+import { trace } from "./logging";
+import { getProtocol, getSettings } from "./options";
+import { type DefinitionFinder } from "./types";
 
 /**
  * The resolver implements the logic for the external: protocol.
  */
 export class ExternalResolver implements Resolver {
+  static protocol = getProtocol();
   private finder: DefinitionFinder | undefined = undefined;
+  private report: ResolveOptions["report"] | undefined = undefined;
 
+  /**
+   * Ensure a finder is created if it is not already present, then return it
+   */
   private getFinder(opts: MinimalResolveOptions) {
     if (!this.finder) {
-      let configPath = opts.project.configuration.get(CONFIG_KEY) as string;
-      if (!configPath || typeof configPath !== "string") {
-        configPath = CONFIG_DEFAULT;
-      }
-      this.finder = loadConfigFile(configPath);
+      this.finder = getSettings(opts.project).finder;
     }
     return this.finder;
   }
@@ -41,6 +43,10 @@ export class ExternalResolver implements Resolver {
     _descriptor: Descriptor,
     _opts: MinimalResolveOptions
   ): Record<string, Descriptor> {
+    trace(
+      `getResolutionDependencies called for ${stringifyIdent(_descriptor)}`,
+      true
+    );
     return {};
   }
   /**
@@ -55,7 +61,12 @@ export class ExternalResolver implements Resolver {
     descriptor: Descriptor,
     _opts: MinimalResolveOptions
   ): boolean {
-    return descriptor.range.startsWith(RANGE_PROTOCOL);
+    const found = descriptor.range.startsWith(ExternalResolver.protocol);
+    trace(
+      `supportsDescriptor called for ${stringifyIdent(descriptor)} : ${descriptor.range}`,
+      true
+    );
+    return found;
   }
 
   /**
@@ -67,7 +78,12 @@ export class ExternalResolver implements Resolver {
    * @param opts The resolution options.
    */
   supportsLocator(locator: Locator, _opts: MinimalResolveOptions): boolean {
-    return locator.reference.startsWith(RANGE_PROTOCOL);
+    const found = locator.reference.startsWith(ExternalResolver.protocol);
+    trace(
+      `UNEXPECTED: supportsLocator called for ${stringifyIdent(locator)}`,
+      true
+    );
+    return found;
   }
 
   /**
@@ -88,7 +104,10 @@ export class ExternalResolver implements Resolver {
     _locator: Locator,
     _opts: MinimalResolveOptions
   ): boolean {
-    // Usually false for protocols that transform themselves to something else
+    /**
+     * Usually false for protocols that transform themselves to something else. This is not expected to
+     * be called as this resolver transforms the external protocol to npm: or portal:
+     */
     return false;
   }
 
@@ -113,6 +132,7 @@ export class ExternalResolver implements Resolver {
     fromLocator: Locator,
     opts: MinimalResolveOptions
   ): Descriptor {
+    // get/ensure the finder function to look up the possible external dependency
     const finder = this.getFinder(opts);
 
     // look up the package information from the finder
@@ -120,20 +140,26 @@ export class ExternalResolver implements Resolver {
     const info = finder(pkgName);
 
     if (!info) {
+      // if no package information was found, throw an error as this isn't a supported external workspace
       throw Error(
-        `Unknown external workspace "${pkgName}:${RANGE_PROTOCOL}" included by "${stringifyIdent(fromLocator)}"`
+        `Unknown external workspace "${pkgName}:${ExternalResolver.protocol}" included by "${stringifyIdent(fromLocator)}"`
       );
     }
 
     if (info.path) {
-      // If the package is local, we want to return a descriptor that will
-      // be transformed into a locator by the portal: protocol.
-      // This is what Yarn's own workspace resolver does.
-      return structUtils.makeDescriptor(descriptor, `portal:${info.path}`);
+      // If the package is found on the local filesystem, transform to a portal: resolver to link to the local package root
+      trace(
+        `bindDescriptor transforming ${pkgName} to "portal:${info.path}"`,
+        true
+      );
+      return makeDescriptor(descriptor, `portal:${info.path}`);
     } else {
-      // If the package is not local, we want to return a descriptor that
-      // will be transformed into a locator by the npm semver fallback.
-      return structUtils.makeDescriptor(descriptor, info.version);
+      // If it doesn't exist locally, transform to an npm: resolver to fetch from the registry
+      trace(
+        `bindDescriptor transforming ${pkgName} to "npm:${info.version}"`,
+        true
+      );
+      return makeDescriptor(descriptor, `npm:${info.version}`);
     }
   }
 
@@ -157,7 +183,8 @@ export class ExternalResolver implements Resolver {
     _dependencies: Record<string, Package>,
     _opts: ResolveOptions
   ) {
-    return [structUtils.makeLocator(descriptor, descriptor.range)];
+    trace(`getCandidates called for ${stringifyIdent(descriptor)}`, true);
+    return [makeLocator(descriptor, descriptor.range)];
   }
 
   /**
@@ -190,6 +217,8 @@ export class ExternalResolver implements Resolver {
     locators: Array<Locator>,
     opts: ResolveOptions
   ) {
+    this.report ??= opts.report;
+    trace(`getSatisfying called for ${stringifyIdent(descriptor)}`, true);
     const [locator] = await this.getCandidates(descriptor, dependencies, opts);
 
     return {
@@ -207,17 +236,18 @@ export class ExternalResolver implements Resolver {
    * @param locator The source locator.
    * @param opts The resolution options.
    */
-  async resolve(locator: Locator, _opts: ResolveOptions) {
+  async resolve(locator: Locator, opts: ResolveOptions) {
+    this.report ??= opts.report;
+    trace(`Resolving external locator ${stringifyIdent(locator)}`, true);
     // For a purely transforming protocol, you can just return an empty Manifest
-    const manifest = new Manifest();
     return {
       ...locator,
-      ...manifest,
       name: locator.name,
       version: "0.0.0",
       languageName: "unknown",
-      linkType: LinkType.SOFT,
       conditions: null,
     } as Package;
+    // linkType: LinkType.SOFT,
+    //  ...manifest,
   }
 }

@@ -1,7 +1,18 @@
+import { deepEqual, ok } from "node:assert/strict";
 import fs from "node:fs";
 import path from "node:path";
+<<<<<<< HEAD
 import { createFinderFromJs, tryJsonLoad } from "../src/finder";
 import { PackageDefinition } from "../src/types";
+=======
+import { describe, it } from "node:test";
+import {
+  createFinderFromJs,
+  createFinderFromJson,
+  parseJsonPath,
+} from "../src/finder";
+import type { PackageDefinition } from "../src/types";
+>>>>>>> 64c0e4eb (changes to make the plugin work in the test repo)
 
 const fixtureContext: Record<string, PackageDefinition> = {
   package1: {
@@ -14,28 +25,35 @@ const fixtureContext: Record<string, PackageDefinition> = {
   },
 };
 
-describe("tryJsonLoad", () => {
+describe("createFinderFromJson", () => {
   it("should return a finder function for keys at the root", () => {
-    const finder = tryJsonLoad("./test/__fixtures__/root.json");
-    expect(finder).toBeInstanceOf(Function);
-    expect(finder!("package1")).toEqual(fixtureContext.package1);
-    expect(finder!("package2")).toEqual(fixtureContext.package2);
+    const { jsonPath, keysPath } = parseJsonPath(
+      "./test/__fixtures__/root.json"
+    );
+    const finder = createFinderFromJson(jsonPath!, keysPath);
+    ok(finder instanceof Function);
+    deepEqual(finder!("package1"), fixtureContext.package1);
+    deepEqual(finder!("package2"), fixtureContext.package2);
   });
 
   it("should return a finder function for keys embedded in package.json", () => {
-    const finder = tryJsonLoad(
+    const { jsonPath, keysPath } = parseJsonPath(
       "./test/__fixtures__/package.json/external-workspaces"
     );
-    expect(finder).toBeInstanceOf(Function);
-    expect(finder!("package1")).toEqual(fixtureContext.package1);
-    expect(finder!("package2")).toEqual(fixtureContext.package2);
+    const finder = createFinderFromJson(jsonPath!, keysPath);
+    ok(finder instanceof Function);
+    deepEqual(finder!("package1"), fixtureContext.package1);
+    deepEqual(finder!("package2"), fixtureContext.package2);
   });
 
   it("should return a finder function with nested keys", () => {
-    const finder = tryJsonLoad("./test/__fixtures__/nested.json/key1/key2");
-    expect(finder).toBeInstanceOf(Function);
-    expect(finder!("package1")).toEqual(fixtureContext.package1);
-    expect(finder!("package2")).toEqual(fixtureContext.package2);
+    const { jsonPath, keysPath } = parseJsonPath(
+      "./test/__fixtures__/nested.json/key1/key2"
+    );
+    const finder = createFinderFromJson(jsonPath!, keysPath);
+    ok(finder instanceof Function);
+    deepEqual(finder!("package1"), fixtureContext.package1);
+    deepEqual(finder!("package2"), fixtureContext.package2);
   });
 });
 
@@ -45,11 +63,11 @@ describe("createFinderFromJs", () => {
       process.cwd(),
       "./test/__fixtures__/js-test.js"
     );
-    expect(fs.existsSync(jsPath)).toBe(true);
+    ok(fs.existsSync(jsPath));
     const finder = createFinderFromJs(jsPath);
-    expect(finder).toBeInstanceOf(Function);
-    expect(finder!("package1")).toEqual(fixtureContext.package1);
-    expect(finder!("package2")).toEqual(fixtureContext.package2);
+    ok(finder instanceof Function);
+    deepEqual(finder!("package1"), fixtureContext.package1);
+    deepEqual(finder!("package2"), fixtureContext.package2);
   });
 
   it("should return a finder function for a cjs file", () => {
@@ -57,10 +75,10 @@ describe("createFinderFromJs", () => {
       process.cwd(),
       "./test/__fixtures__/cjs-test.cjs"
     );
-    expect(fs.existsSync(jsPath)).toBe(true);
+    ok(fs.existsSync(jsPath));
     const finder = createFinderFromJs(jsPath);
-    expect(finder).toBeInstanceOf(Function);
-    expect(finder!("package1")).toEqual(fixtureContext.package1);
-    expect(finder!("package2")).toEqual(fixtureContext.package2);
+    ok(finder instanceof Function);
+    deepEqual(finder!("package1"), fixtureContext.package1);
+    deepEqual(finder!("package2"), fixtureContext.package2);
   });
 });

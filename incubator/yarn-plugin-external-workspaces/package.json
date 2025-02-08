@@ -13,8 +13,7 @@
     "lib/**/*.d.ts",
     "lib/**/*.js"
   ],
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
+  "main": "./src/index.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/microsoft/rnx-kit",
@@ -24,7 +23,9 @@
     "node": ">=16.17"
   },
   "scripts": {
-    "build": "rnx-kit-scripts build",
+    "build": "rnx-kit-scripts build --noEmit",
+    "bundle": "builder build plugin",
+    "bundle:dev": "builder build plugin --no-minify",
     "format": "rnx-kit-scripts format",
     "lint": "rnx-kit-scripts lint",
     "test": "rnx-kit-scripts test"
@@ -35,14 +36,13 @@
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*",
     "@types/node": "^20.0.0",
-    "@yarnpkg/core": "^4.0.0",
+    "@yarnpkg/builder": "^4.2.0",
+    "@yarnpkg/cli": "^4.4.1",
+    "@yarnpkg/core": "^4.1.2",
     "eslint": "^9.0.0",
-    "jest": "^29.2.1",
     "prettier": "^3.0.0",
+    "tslib": "^2.6.1",
     "typescript": "^5.0.0"
-  },
-  "jest": {
-    "preset": "@rnx-kit/jest-preset/private"
   },
   "experimental": true
 }

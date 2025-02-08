@@ -1,6 +1,30 @@
 import fs from "node:fs";
 import path from "node:path";
-import { PackageDefinition, type DefinitionFinder } from "./types";
+import { trace } from "./logging";
+import type { DefinitionFinder, PackageDefinition } from "./types";
+
+const jsonExt = ".json";
+const nullFinder = (_pkgName: string) => null;
+
+export function parseJsonPath(configPath: string): {
+  jsonPath?: string;
+  keysPath?: string;
+} {
+  const jsonIndex = configPath.indexOf(jsonExt);
+  if (jsonIndex > 0) {
+    // slice the string into ./filename.json and any characters after .json
+    const jsonEndIndex = jsonIndex + jsonExt.length;
+    const jsonPath = configPath.slice(0, jsonEndIndex);
+    // strip off the character after .json as well so we can split on / to get the keys
+    const keysPath =
+      configPath.length > jsonEndIndex + 1
+        ? configPath.slice(jsonEndIndex + 1)
+        : "";
+
+    return { jsonPath, keysPath };
+  }
+  return {};
+}
 
 /**
  * Attempt to load a definition finder from the specified config file path. This looks to see if the configPath
@@ -14,27 +38,26 @@ import { PackageDefinition, type DefinitionFinder } from "./types";
  * @param configPath the path to the config file
  * @returns a definition finder function if successful, or null if it is not specified
  */
-export function tryJsonLoad(configPath: string): DefinitionFinder | null {
-  const jsonIndex = configPath.indexOf(".json");
-  if (jsonIndex > 0) {
-    // slice the string into ./filename.json and any characters after .json
-    const jsonPath = configPath.slice(0, jsonIndex + 5);
-    // strip off the character after .json as well so we can split on / to get the keys
-    const keysPath =
-      configPath.length > jsonIndex + 6 ? configPath.slice(jsonIndex + 6) : "";
+export function createFinderFromJson(
+  jsonPath: string,
+  keysPath?: string
+): DefinitionFinder | undefined {
+  if (fs.existsSync(jsonPath)) {
     const keys = keysPath ? keysPath.split("/") : [];
     let deps = JSON.parse(fs.readFileSync(jsonPath, "utf8"));
+
     for (const key of keys) {
       deps = deps[key];
       if (!deps) {
         // return a null finder to indicate that no entries were found but it was a json file
-        return (_pkgName: string) => null;
+        return nullFinder;
       }
     }
+    trace(`Loaded the finder from the json file ${jsonPath}`);
     // otherwise return a finder function that will return the package definition
     return (pkgName: string) => deps[pkgName] ?? null;
   }
-  return null;
+  return nullFinder;
 }
 
 /**
@@ -42,6 +65,10 @@ export function tryJsonLoad(configPath: string): DefinitionFinder | null {
  */
 export function createFinderFromJs(jsPath: string): DefinitionFinder {
   const config = require(jsPath);
+  if (!config) {
+    throw new Error(`Unable to load config from ${jsPath}`);
+  }
+  trace(`Creating a finder from: ${jsPath}`);
   return config.default;
 }
 
@@ -75,10 +102,16 @@ function createValidatingFinder(
 
     // if a result was found, validate the path or null it out if no local file exists
     if (result && result.path) {
-      result.path = path.resolve(basePath, result.path);
+      if (!path.isAbsolute(result.path)) {
+        result.path = path.resolve(basePath, result.path);
+      }
+
       // if no package.json file is found on disk for this package, clear the path
       if (!fs.existsSync(path.join(result.path, "package.json"))) {
+        trace(`finder: ${pkgName} not found at ${result.path}`);
         result.path = undefined;
+      } else {
+        trace(`finder: ${pkgName} found at ${result.path}`);
       }
     }
 
@@ -96,13 +129,18 @@ function createValidatingFinder(
  * @returns a finder function which will lookup package definitions, checking whether they are local along the way
  */
 export function loadConfigFile(configPath: string): DefinitionFinder {
-  configPath = path.resolve(configPath);
-  const basePath = path.dirname(configPath);
-  // try to load it from json
-  let baseFinder = tryJsonLoad(configPath);
+  configPath = path.resolve(process.cwd(), configPath);
 
-  // otherwise see if it is a js file that can be loaded
-  if (!baseFinder) {
+  const { jsonPath, keysPath } = parseJsonPath(configPath);
+  const basePath = path.dirname(jsonPath ? jsonPath : configPath);
+
+  let baseFinder: DefinitionFinder | undefined = undefined;
+
+  if (jsonPath) {
+    // try to load it from json if the config path referenced a json file
+    baseFinder = createFinderFromJson(jsonPath, keysPath);
+  } else {
+    // otherwise see if it is a js file that can be loaded
     const extension = path.extname(configPath).toLowerCase();
     if (extension === ".js" || extension === ".cjs") {
       baseFinder = createFinderFromJs(configPath);
