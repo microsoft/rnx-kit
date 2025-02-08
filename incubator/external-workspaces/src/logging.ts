@@ -17,7 +17,7 @@ export function enableLogging() {
 /**
  * @param msg write the message to the log file if tracing is enabled
  */
-export function trace(msg: string, writeNow?: boolean) {
+export function trace(msg: string, writeNow: boolean = true) {
   if (tracingEnabled) {
     const delta = (performance.now() - START_TIME).toFixed(2);
     logs.push(`[${delta}ms] ${msg}`);

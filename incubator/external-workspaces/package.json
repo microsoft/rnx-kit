@@ -1,37 +1,35 @@
 {
   "private": true,
-  "name": "@rnx-kit/yarn-plugin-external-workspaces",
+  "name": "@rnx-kit/external-workspaces",
   "version": "0.0.1",
-  "description": "EXPERIMENTAL - USE WITH CAUTION - yarn-plugin-external-workspaces",
+  "description": "EXPERIMENTAL - USE WITH CAUTION - @rnx-kit/external-workspaces",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/incubator/yarn-plugin-external-workspaces#readme",
   "license": "MIT",
   "author": {
     "name": "Microsoft Open Source",
     "email": "microsoftopensource@users.noreply.github.com"
   },
+  "main": "lib/index.js",
+  "exports": {
+    ".": "./lib/index.js"
+  },
   "files": [
     "lib/**/*.d.ts",
     "lib/**/*.js"
   ],
-  "main": "./src/index.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/microsoft/rnx-kit",
     "directory": "incubator/yarn-plugin-external-workspaces"
   },
   "engines": {
-    "node": ">=16.17"
+    "node": ">=18.12"
   },
   "scripts": {
-    "build": "rnx-kit-scripts build --noEmit",
-    "bundle": "builder build plugin",
-    "bundle:dev": "builder build plugin --no-minify",
+    "build": "rnx-kit-scripts build",
     "format": "rnx-kit-scripts format",
     "lint": "rnx-kit-scripts lint",
     "test": "rnx-kit-scripts test"
-  },
-  "dependencies": {
-    "@rnx-kit/external-workspaces": "*"
   },
   "devDependencies": {
     "@rnx-kit/eslint-config": "*",
@@ -39,8 +37,6 @@
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*",
     "@types/node": "^20.0.0",
-    "@yarnpkg/builder": "^4.2.0",
-    "@yarnpkg/cli": "^4.4.1",
     "@yarnpkg/core": "^4.1.2",
     "eslint": "^9.0.0",
     "prettier": "^3.0.0",

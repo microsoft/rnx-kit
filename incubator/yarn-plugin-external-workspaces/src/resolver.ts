@@ -1,3 +1,9 @@
+import {
+  getProtocol,
+  getSettings,
+  trace,
+  type DefinitionFinder,
+} from "@rnx-kit/external-workspaces";
 import type {
   Descriptor,
   Locator,
@@ -11,9 +17,6 @@ import {
   makeLocator,
   stringifyIdent,
 } from "@yarnpkg/core/structUtils";
-import { trace } from "./logging";
-import { getProtocol, getSettings } from "./options";
-import { type DefinitionFinder } from "./types";
 
 /**
  * The resolver implements the logic for the external: protocol.
