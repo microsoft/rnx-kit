@@ -11,7 +11,10 @@
   },
   "main": "lib/index.js",
   "exports": {
-    ".": "./lib/index.js"
+    ".": "./lib/index.js",
+    "./options": "./lib/options.js",
+    "./logging": "./lib/logging.js",
+    "./types": "./lib/index.d.ts"
   },
   "files": [
     "lib/**/*.d.ts",
@@ -30,6 +33,9 @@
     "format": "rnx-kit-scripts format",
     "lint": "rnx-kit-scripts lint",
     "test": "rnx-kit-scripts test"
+  },
+  "dependencies": {
+    "@rnx-kit/tools-workspaces": "*"
   },
   "devDependencies": {
     "@rnx-kit/eslint-config": "*",

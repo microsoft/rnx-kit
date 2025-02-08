@@ -85,6 +85,10 @@ const configSettings: ConfigurationOptions = {
   },
 };
 
+export function getConfigurationOptions(): ConfigurationOptions {
+  return configSettings;
+}
+
 function coerceString(value: unknown, fallback: string): string {
   return value && typeof value === "string" ? value : fallback;
 }
@@ -123,7 +127,7 @@ function loadSettingsFromConfiguration(
  * @param project the yarn Project to get the configuration from
  * @returns fully loaded plugin settings, only loaded once, cached afterwards
  */
-export function getSettings(project: Project): Settings {
+export function getSettingsFromProject(project: Project): Settings {
   if (!settings) {
     const configSettings = loadSettingsFromConfiguration(project.configuration);
 

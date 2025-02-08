@@ -1,9 +1,9 @@
+import { trace } from "@rnx-kit/external-workspaces/logging";
 import {
   getProtocol,
-  getSettings,
-  trace,
-  type DefinitionFinder,
-} from "@rnx-kit/external-workspaces";
+  getSettingsFromProject,
+} from "@rnx-kit/external-workspaces/options";
+import type { DefinitionFinder } from "@rnx-kit/external-workspaces/types";
 import type {
   Descriptor,
   Locator,
@@ -31,7 +31,7 @@ export class ExternalResolver implements Resolver {
    */
   private getFinder(opts: MinimalResolveOptions) {
     if (!this.finder) {
-      this.finder = getSettings(opts.project).finder;
+      this.finder = getSettingsFromProject(opts.project).finder;
     }
     return this.finder;
   }
