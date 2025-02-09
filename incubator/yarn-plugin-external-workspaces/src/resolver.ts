@@ -47,8 +47,7 @@ export class ExternalResolver implements Resolver {
     _opts: MinimalResolveOptions
   ): Record<string, Descriptor> {
     trace(
-      `getResolutionDependencies called for ${stringifyIdent(_descriptor)}`,
-      true
+      `UNEXPECTED: getResolutionDependencies called for ${stringifyIdent(_descriptor)}`
     );
     return {};
   }
@@ -66,8 +65,7 @@ export class ExternalResolver implements Resolver {
   ): boolean {
     const found = descriptor.range.startsWith(ExternalResolver.protocol);
     trace(
-      `supportsDescriptor called for ${stringifyIdent(descriptor)} : ${descriptor.range}`,
-      true
+      `supportsDescriptor called for ${stringifyIdent(descriptor)} : ${descriptor.range}`
     );
     return found;
   }
@@ -82,10 +80,7 @@ export class ExternalResolver implements Resolver {
    */
   supportsLocator(locator: Locator, _opts: MinimalResolveOptions): boolean {
     const found = locator.reference.startsWith(ExternalResolver.protocol);
-    trace(
-      `UNEXPECTED: supportsLocator called for ${stringifyIdent(locator)}`,
-      true
-    );
+    trace(`UNEXPECTED: supportsLocator called for ${stringifyIdent(locator)}`);
     return found;
   }
 
@@ -151,17 +146,11 @@ export class ExternalResolver implements Resolver {
 
     if (info.path) {
       // If the package is found on the local filesystem, transform to a portal: resolver to link to the local package root
-      trace(
-        `bindDescriptor transforming ${pkgName} to "portal:${info.path}"`,
-        true
-      );
+      trace(`bindDescriptor transforming ${pkgName} to "portal:${info.path}"`);
       return makeDescriptor(descriptor, `portal:${info.path}`);
     } else {
       // If it doesn't exist locally, transform to an npm: resolver to fetch from the registry
-      trace(
-        `bindDescriptor transforming ${pkgName} to "npm:${info.version}"`,
-        true
-      );
+      trace(`bindDescriptor transforming ${pkgName} to "npm:${info.version}"`);
       return makeDescriptor(descriptor, `npm:${info.version}`);
     }
   }
@@ -186,7 +175,7 @@ export class ExternalResolver implements Resolver {
     _dependencies: Record<string, Package>,
     _opts: ResolveOptions
   ) {
-    trace(`getCandidates called for ${stringifyIdent(descriptor)}`, true);
+    trace(`UNEXPECTED: getCandidates called for ${stringifyIdent(descriptor)}`);
     return [makeLocator(descriptor, descriptor.range)];
   }
 
@@ -221,7 +210,9 @@ export class ExternalResolver implements Resolver {
     opts: ResolveOptions
   ) {
     this.report ??= opts.report;
-    trace(`getSatisfying called for ${stringifyIdent(descriptor)}`, true);
+    trace(
+      `UNEXPECTEDP: getSatisfying called for ${stringifyIdent(descriptor)}`
+    );
     const [locator] = await this.getCandidates(descriptor, dependencies, opts);
 
     return {
@@ -241,7 +232,7 @@ export class ExternalResolver implements Resolver {
    */
   async resolve(locator: Locator, opts: ResolveOptions) {
     this.report ??= opts.report;
-    trace(`Resolving external locator ${stringifyIdent(locator)}`, true);
+    trace(`UNEXPECTED: Resolving external locator ${stringifyIdent(locator)}`);
     // For a purely transforming protocol, you can just return an empty Manifest
     return {
       ...locator,

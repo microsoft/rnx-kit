@@ -3,7 +3,7 @@ import { exec } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
 import { loadConfigFile } from "./finder";
-import { Settings, getConfigurationOptions } from "./options";
+import { type Settings, getConfigurationOptions } from "./options";
 
 export const workspaceRoot = findWorkspaceRootSync();
 export const isYarn =
@@ -32,10 +32,15 @@ export async function getYarnOption(
   });
 }
 
+let repoSettings: Settings | undefined = undefined;
+
 /**
  * @returns the settings for the current repo, loaded using the node environment rather than the yarn plugin environment
  */
 export async function getSettingsFromRepo(): Promise<Settings> {
+  if (repoSettings) {
+    return repoSettings;
+  }
   if (!workspaceRoot) {
     throw new Error("No workspace root found");
   }
@@ -51,9 +56,9 @@ export async function getSettingsFromRepo(): Promise<Settings> {
     configPathFromYarn ?? configPathEntry.options.default
   );
 
-  return {
+  return (repoSettings = {
     configPath,
     enableLogging: false,
     finder: loadConfigFile(configPath),
-  };
+  });
 }

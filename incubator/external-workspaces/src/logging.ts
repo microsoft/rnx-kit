@@ -7,7 +7,6 @@ const LOG_PATH = path.join(process.cwd(), "plugin-external-workspaces.log");
 const START_TIME = performance.now();
 
 let tracingEnabled = false;
-const logs: string[] = [];
 
 export function enableLogging() {
   tracingEnabled = true;
@@ -17,21 +16,11 @@ export function enableLogging() {
 /**
  * @param msg write the message to the log file if tracing is enabled
  */
-export function trace(msg: string, writeNow: boolean = true) {
+export function trace(msg: string) {
   if (tracingEnabled) {
     const delta = (performance.now() - START_TIME).toFixed(2);
-    logs.push(`[${delta}ms] ${msg}`);
-    if (writeNow) {
-      writeLogs();
-    }
-  }
-}
-
-export function writeLogs() {
-  if (logs.length > 0) {
     const logStream = fs.createWriteStream(LOG_PATH, { flags: "a" });
-    logStream.write(logs.join("\n") + "\n");
+    logStream.write(`[${delta}ms] ${msg}\n`);
     logStream.close();
-    logs.length = 0;
   }
 }
