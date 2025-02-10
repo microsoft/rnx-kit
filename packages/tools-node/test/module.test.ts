@@ -28,6 +28,7 @@ describe("Node > Module", () => {
     deepEqual(parseModuleRef("react-native/Libraries/Promise"), {
       name: "react-native",
       path: "Libraries/Promise",
+      scope: undefined,
     });
   });
 
@@ -35,6 +36,7 @@ describe("Node > Module", () => {
     deepEqual(parseModuleRef("@babel/core"), {
       scope: "@babel",
       name: "core",
+      path: undefined,
     });
   });
 
@@ -50,6 +52,7 @@ describe("Node > Module", () => {
     deepEqual(parseModuleRef("@types/babel__core"), {
       scope: "@types",
       name: "babel__core",
+      path: undefined,
     });
   });
 
