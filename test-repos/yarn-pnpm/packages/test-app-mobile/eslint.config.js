@@ -1,1 +1,1 @@
-module.exports = require("@rnx-repo-yarn-pnpm/eslint-config");
+module.exports = require("@rnx-kit/eslint-config");

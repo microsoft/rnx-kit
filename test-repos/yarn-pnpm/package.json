@@ -45,6 +45,8 @@
     "@react-native-community/cli-server-api": "^15.0.0",
     "@react-native-community/cli-tools": "^15.0.0",
     "@react-native-community/cli-types": "^15.0.0",
+    "@rnx-kit/eslint-config": "portal:../../packages/eslint-config",
+    "@rnx-kit/eslint-plugin": "portal:../../packages/eslint-plugin",
     "@rnx-kit/react-native-host": "^0.5.3",
     "@vue/compiler-sfc": "link:./incubator/ignore",
     "react-native-macos/@react-native/assets-registry": "^0.76.0",
