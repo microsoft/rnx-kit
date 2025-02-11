@@ -29,6 +29,8 @@
   "devDependencies": {
     "@eslint/js": "^9.0.0",
     "@rnx-kit/align-deps": "^3.0.3",
+    "@rnx-kit/eslint-config": "*",
+    "@rnx-kit/eslint-plugin": "0.8.6",
     "@rnx-kit/tsconfig": "^2.0.0",
     "@types/jest": "^29.2.1",
     "@types/js-yaml": "^4.0.5",

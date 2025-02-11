@@ -106,7 +106,7 @@ export const Text = compressible<TextProps, TextTokens>(
       fontSize: globalTokens.font[
         ("size" + size) as keyof typeof globalTokens.font
       ] as number,
-      fontWeight: globalTokens.font.weight[weight!] as FontWeightValue,
+      fontWeight: weight ? globalTokens.font.weight[weight as keyof typeof globalTokens.font.weight] as FontWeightValue : undefined,
       // leave it undefined for tokens to be set by user
       fontStyle: italic ? "italic" : undefined,
       textAlign: textAlign,
@@ -170,6 +170,7 @@ export const Text = compressible<TextProps, TextTokens>(
     };
 
     // return a continuation function that allows this text to be compressed
+    // eslint-disable-next-line react/display-name
     return (extra: TextProps, children: React.ReactNode) => {
       const mergedProps = {
         ...rest,
@@ -179,6 +180,7 @@ export const Text = compressible<TextProps, TextTokens>(
         ...maxFontSizeScaleAdjustment,
         onPress,
         numberOfLines: numberOfLines ?? (truncate || !wrap ? 1 : 0),
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         style: mergeStyles(tokenStyle, props.style as any, extra?.style as any),
       };
 
@@ -202,4 +204,5 @@ export const Text = compressible<TextProps, TextTokens>(
 );
 Text.displayName = textName;
 
+// eslint-disable-next-line no-restricted-exports
 export default Text;

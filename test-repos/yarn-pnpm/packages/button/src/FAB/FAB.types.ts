@@ -7,11 +7,11 @@ export const fabName = 'FAB';
 export type FABSize = 'small' | 'large';
 export type FABAppearance = 'primary' | 'subtle' | 'accent';
 
-export interface FABSlotProps extends ButtonSlotProps {
+export type FABSlotProps = {
   shadow?: ShadowProps;
-}
+} & ButtonSlotProps
 
-export interface FABProps extends ButtonCoreProps {
+export type FABProps = {
   /**
    * A FAB can have its content and borders styled for greater emphasis or to be subtle.
    * - 'primary' or 'accent': Emphasizes the button as a primary action.
@@ -37,9 +37,9 @@ export interface FABProps extends ButtonCoreProps {
    * @default 'large'
    */
   size?: FABSize;
-}
+} & ButtonCoreProps
 
-export interface FABTokens extends Omit<ButtonCoreTokens, 'spacingIconContentAfter'> {
+export type FABTokens = {
   /**
    * States that can be applied to FAB.
    */
@@ -50,9 +50,9 @@ export interface FABTokens extends Omit<ButtonCoreTokens, 'spacingIconContentAft
   large?: FABTokens;
   small?: FABTokens;
   hasContent?: FABTokens;
-}
+} & Omit<ButtonCoreTokens, 'spacingIconContentAfter'>
 
-export interface FABType {
+export type FABType = {
   props: FABProps;
   tokens: FABTokens;
   slotProps: FABSlotProps;

@@ -10,7 +10,7 @@
     "bundle:macos": "rnx-test-scripts rnx bundle --platform macos",
     "bundle:windows": "rnx-test-scripts rnx bundle --platform windows",
     "format": "rnx-test-scripts rnx-test-scripts format",
-    "lint": "rnx-test-scripts rnx-test-scripts lint",
+    "lint": "rnx-test-scripts lint",
     "macos": "rnx-test-scripts rnx run-macos --scheme ReactTestApp --no-packager",
     "ram-bundle": "rnx-test-scripts rnx ram-bundle",
     "start": "rnx-test-scripts rnx start",

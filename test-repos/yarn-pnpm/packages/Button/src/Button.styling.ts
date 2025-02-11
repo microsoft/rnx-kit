@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { ColorValue } from "react-native";
 import { Platform } from "react-native";
 

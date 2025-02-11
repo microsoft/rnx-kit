@@ -31,6 +31,7 @@ export const CompoundButton = compose<CompoundButtonType>({
     content: Text,
     secondaryContent: Text,
     contentContainer: View,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     focusInnerBorder: Platform.OS === ("win32" as any) ? View : undefined,
   },
   useRender: (

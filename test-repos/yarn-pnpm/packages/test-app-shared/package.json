@@ -15,7 +15,7 @@
   "scripts": {
     "build": "rnx-test-scripts build",
     "clean": "rnx-test-scripts clean",
-    "lint": "rnx-test-scripts eslint",
+    "lint": "rnx-test-scripts lint",
     "test": "rnx-test-scripts jest"
   },
   "dependencies": {

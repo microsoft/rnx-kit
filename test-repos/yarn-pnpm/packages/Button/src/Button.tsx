@@ -62,7 +62,9 @@ export const Button = compose<ButtonType>({
   ...stylingSettings,
   slots: {
     root: Pressable,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     rippleContainer: Platform.OS === "android" && (View as any),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     focusInnerBorder: Platform.OS === ("win32" as any) && (View as any),
     icon: Icon,
     content: Text,

@@ -26,6 +26,7 @@ export const ToggleButton = compose<ToggleButtonType>({
     root: Pressable,
     icon: Icon,
     content: Text,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     focusInnerBorder: (Platform.OS === ("win32" as any) && View) || undefined,
   },
   useRender: (

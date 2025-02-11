@@ -36,6 +36,7 @@ export const useToggleButton = (props: ToggleButtonProps): ToggleButtonInfo => {
     ? [...defaultAccessibilityActions, ...accessibilityActions]
     : defaultAccessibilityActions;
   const onAccessibilityActionProp = React.useCallback(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (event: any) => {
       switch (event.nativeEvent.actionName) {
         case "Toggle":

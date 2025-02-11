@@ -14,8 +14,8 @@ import { URL, fileURLToPath } from "node:url";
  * @param {string[]} args
  * @returns {boolean}
  */
-function isRunningNx(command, args) {
-  return command.startsWith("yarn") && args[0] === "nx";
+function isRunningLage(command, args) {
+  return command.startsWith("yarn") && args[0] === "lage";
 }
 
 function workspaceRoot() {
@@ -57,7 +57,7 @@ function spawn(command, args, options) {
 export function execute(command, ...args) {
   return spawn(command, args, {
     // Nx is only installed at workspace root — adjust `cwd` accordingly.
-    cwd: isRunningNx(command, args) ? workspaceRoot() : process.cwd(),
+    cwd: isRunningLage(command, args) ? workspaceRoot() : process.cwd(),
   });
 }
 

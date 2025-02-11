@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Text } from './Text';
 
 export const Caption1 = Text.customize({
