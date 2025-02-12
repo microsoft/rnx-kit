@@ -74,7 +74,8 @@
     "react-native-windows/@react-native/gradle-plugin": "^0.76.0",
     "react-native-windows/@react-native/js-polyfills": "^0.76.0",
     "react-native-windows/@react-native/normalize-colors": "^0.76.0",
-    "react-native-windows/@react-native/virtualized-lists": "^0.76.0"
+    "react-native-windows/@react-native/virtualized-lists": "^0.76.0",
+    "tsx/esbuild": "^0.25.0"
   },
   "workspaces": {
     "packages": [
