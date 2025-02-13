@@ -1,5 +1,13 @@
 # Change Log - @rnx-kit/metro-serializer-esbuild
 
+## 0.2.2
+
+### Patch Changes
+
+- bb5b7ba: Bump esbuild to 0.25.x
+- Updated dependencies [b195e69]
+  - @rnx-kit/tools-node@3.0.2
+
 ## 0.2.1
 
 ### Patch Changes
