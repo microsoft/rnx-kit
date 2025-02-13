@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/tools-node
 
+## 3.0.2
+
+### Patch Changes
+
+- b195e69: Allow module references with a trailing slash
+
 ## 3.0.1
 
 ### Patch Changes
