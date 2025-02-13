@@ -43,13 +43,14 @@ function getModuleRefParts(
  * @returns either a destructured module reference or undefined if it is a file reference
  */
 export function destructureModuleRef(r: string): DestructuredModuleRef {
-  if (r && !r.endsWith("/")) {
+  if (r) {
     const parts = getModuleRefParts(r);
     if (parts.length > 0) {
       // if we only have one term the first term will be treated as the name, even if it is a scope
       if (parts.length === 1) {
         return { name: parts[0] };
       }
+
       // otherwise split the parts and return them
       const scope = parts[0].startsWith("@") ? parts.shift() : undefined;
       const name = parts.shift();
@@ -59,6 +60,7 @@ export function destructureModuleRef(r: string): DestructuredModuleRef {
       }
     }
   }
+
   throw new Error(`Invalid package reference: "${r}"`);
 }
 
