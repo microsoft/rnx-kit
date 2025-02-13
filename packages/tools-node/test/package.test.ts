@@ -50,7 +50,10 @@ describe("Node > Package", () => {
   });
 
   it("parsePackageRef() allows trailing /", () => {
-    deepEqual(parsePackageRef("process/"), { name: "process", scope: undefined });
+    deepEqual(parsePackageRef("process/"), {
+      name: "process",
+      scope: undefined,
+    });
   });
 
   it("parsePackageRef(@alias) is allowed", () => {
