@@ -3905,8 +3905,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/eslint-plugin@workspace:packages/eslint-plugin"
   dependencies:
+    "@microsoft/eslint-plugin-sdl": "npm:^1.0.0"
     "@react-native/eslint-plugin": "npm:^0.76.0"
-    "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
     "@types/eslint": "npm:^9.0.0"
