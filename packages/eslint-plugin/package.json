@@ -53,7 +53,7 @@
     "eslint": ">=8.57.0"
   },
   "devDependencies": {
-    "@rnx-kit/eslint-config": "*",
+    "@microsoft/eslint-plugin-sdl": "^1.0.0",
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*",
     "@types/eslint": "^9.0.0",
