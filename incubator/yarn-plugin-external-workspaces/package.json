@@ -20,12 +20,11 @@
     "directory": "incubator/yarn-plugin-external-workspaces"
   },
   "engines": {
-    "node": ">=16.17"
+    "node": ">=18.12"
   },
   "scripts": {
-    "build": "rnx-kit-scripts build --noEmit",
-    "bundle": "builder build plugin",
-    "bundle:dev": "builder build plugin --no-minify",
+    "build": "rnx-kit-scripts build",
+    "bundle": "rnx-kit-scripts bundle-plugin",
     "format": "rnx-kit-scripts format",
     "lint": "rnx-kit-scripts lint",
     "test": "rnx-kit-scripts test"
@@ -38,8 +37,7 @@
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*",
     "@types/node": "^20.0.0",
-    "@yarnpkg/builder": "^4.2.0",
-    "@yarnpkg/core": "^4.1.2",
+    "@yarnpkg/core": "^4.2.0",
     "eslint": "^9.0.0",
     "prettier": "^3.0.0",
     "typescript": "^5.0.0"

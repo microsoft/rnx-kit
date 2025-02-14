@@ -40,7 +40,6 @@ type ConfigurationOptions = {
 type ConfigurationEntryValue<T> =
   T extends ConfigurationEntry<infer U> ? U : never;
 
-// eslint-disable-next-line @typescript-eslint/consistent-indexed-object-style
 type ConfigurationSettings = {
   [key in keyof ConfigurationOptions]: ConfigurationEntryValue<
     ConfigurationOptions[key]

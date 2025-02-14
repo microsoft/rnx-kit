@@ -1,10 +1,6 @@
 import { deepEqual, ok } from "node:assert/strict";
 import fs from "node:fs";
 import path from "node:path";
-<<<<<<< HEAD
-import { createFinderFromJs, tryJsonLoad } from "../src/finder";
-import { PackageDefinition } from "../src/types";
-=======
 import { describe, it } from "node:test";
 import {
   createFinderFromJs,
@@ -12,7 +8,6 @@ import {
   parseJsonPath,
 } from "../src/finder";
 import type { PackageDefinition } from "../src/types";
->>>>>>> 64c0e4eb (changes to make the plugin work in the test repo)
 
 const fixtureContext: Record<string, PackageDefinition> = {
   package1: {

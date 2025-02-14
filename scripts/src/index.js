@@ -3,6 +3,7 @@
 
 import yargs from "yargs";
 import { build } from "./commands/build.js";
+import { bundlePlugin } from "./commands/bundle-plugin.js";
 import { bundle } from "./commands/bundle.js";
 import { clean } from "./commands/clean.js";
 import { format } from "./commands/format.js";
@@ -39,6 +40,11 @@ init({
   bundle: {
     description: "Bundles the current package",
     command: bundle,
+  },
+  "bundle-plugin": {
+    description:
+      "Bundles the current package as a yarn plugin using the yarn builder tool",
+    command: bundlePlugin,
   },
   clean: {
     description: "Removes build and test artifacts",

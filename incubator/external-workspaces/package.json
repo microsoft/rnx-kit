@@ -42,7 +42,7 @@
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*",
     "@types/node": "^20.0.0",
-    "@yarnpkg/core": "^4.1.2",
+    "@yarnpkg/core": "^4.2.0",
     "eslint": "^9.0.0",
     "prettier": "^3.0.0",
     "typescript": "^5.0.0"

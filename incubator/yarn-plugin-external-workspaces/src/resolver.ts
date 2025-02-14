@@ -12,11 +12,9 @@ import type {
   ResolveOptions,
   Resolver,
 } from "@yarnpkg/core";
-import {
-  makeDescriptor,
-  makeLocator,
-  stringifyIdent,
-} from "@yarnpkg/core/structUtils";
+import { structUtils } from "@yarnpkg/core";
+
+const { makeDescriptor, makeLocator, stringifyIdent } = structUtils;
 
 /**
  * The resolver implements the logic for the external: protocol.
@@ -206,7 +204,7 @@ export class ExternalResolver implements Resolver {
   async getSatisfying(
     descriptor: Descriptor,
     dependencies: Record<string, Package>,
-    locators: Array<Locator>,
+    locators: Locator[],
     opts: ResolveOptions
   ) {
     this.report ??= opts.report;

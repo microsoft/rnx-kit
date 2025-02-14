@@ -17,4 +17,5 @@ const plugin: Plugin = {
   resolvers: [ExternalResolver],
 };
 
+// eslint-disable-next-line no-restricted-exports
 export default plugin;
