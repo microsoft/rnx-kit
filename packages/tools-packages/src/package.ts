@@ -50,12 +50,12 @@ class PackageInfoCache {
 
   /**
    * @param name the package to load, only valid for workspaces
-   * @param cacheOnly Just check to see if it has been loaded, don't load the workspaces
+   * @param loadWorkspacesIfNotFound do the expensive workspace load if not found
    * @returns a package info object for the workspace (if it exists)
    */
-  getWorkspace(name: string, cacheOnly?: boolean) {
+  getWorkspace(name: string, loadWorkspacesIfNotFound?: boolean) {
     const cachedResult = this.byName.get(name);
-    if (cachedResult || cacheOnly) {
+    if (cachedResult || !loadWorkspacesIfNotFound) {
       return cachedResult;
     }
 
@@ -119,14 +119,14 @@ export function getPackageInfoFromPath(pkgPath: string): PackageInfo {
  * Load the package info by name, loading the project workspaces if necessary
  *
  * @param name name of the package to load
- * @param cacheOnly only check if the package is in the cache, don't load workspaces if not
+ * @param loadWorkspacesIfNotFound if the package is not in the cache load the workspaces (potentially expensive)
  * @returns the package info for the package
  */
 export function getPackageInfoFromWorkspaces(
   name: string,
-  cacheOnly?: boolean
+  loadWorkspacesIfNotFound?: boolean
 ) {
-  return ensureCache().getWorkspace(name, cacheOnly);
+  return ensureCache().getWorkspace(name, loadWorkspacesIfNotFound);
 }
 
 /**
