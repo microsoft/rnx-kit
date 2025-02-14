@@ -3,14 +3,14 @@ import {
   findPackageDependencyDir,
   readPackage,
 } from "@rnx-kit/tools-node/package";
+import merge from "lodash.merge";
+import * as fs from "node:fs";
+import * as path from "node:path";
 import {
   type PackageInfo,
   createPackageInfoAccessor,
   getPackageInfoFromPath,
-} from "@rnx-kit/tools-package";
-import merge from "lodash.merge";
-import * as fs from "node:fs";
-import * as path from "node:path";
+} from "../../tools-packages/lib";
 import type { KitConfig } from "./kitConfig";
 
 /**

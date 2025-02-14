@@ -37,7 +37,7 @@
   "dependencies": {
     "@rnx-kit/console": "^2.0.0",
     "@rnx-kit/tools-node": "^3.0.0",
-    "@rnx-kit/tools-package": "^0.0.1",
+    "@rnx-kit/tools-packages": "^0.0.1",
     "lodash.merge": "^4.6.2",
     "semver": "^7.0.0"
   },

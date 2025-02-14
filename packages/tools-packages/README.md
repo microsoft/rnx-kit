@@ -1,11 +1,9 @@
 <!-- We recommend an empty change log entry for a new package: `yarn change --empty` -->
 
-# @rnx-kit/tools-package
+# @rnx-kit/tools-packages
 
 [![Build](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml/badge.svg)](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml)
-[![npm version](https://img.shields.io/npm/v/@rnx-kit/tools-package)](https://www.npmjs.com/package/@rnx-kit/tools-package)
-
-
+[![npm version](https://img.shields.io/npm/v/@rnx-kit/tools-packages)](https://www.npmjs.com/package/@rnx-kit/tools-packages)
 
 This is a sample folder to use as base for generating new packages for
 `rnx-kit`.
@@ -29,5 +27,3 @@ npm add --save-dev @rnx-kit/tools-package
 ```
 
 ## Usage
-
-

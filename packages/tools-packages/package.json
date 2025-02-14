@@ -1,7 +1,7 @@
 {
-  "name": "@rnx-kit/tools-package",
+  "name": "@rnx-kit/tools-packages",
   "version": "0.0.1",
-  "description": "tools-package",
+  "description": "tools-packages",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/tools-package#readme",
   "license": "MIT",
   "author": {
@@ -17,7 +17,7 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/microsoft/rnx-kit",
-    "directory": "packages/tools-package"
+    "directory": "packages/tools-packages"
   },
   "engines": {
     "node": ">=16.17"
@@ -29,7 +29,6 @@
     "test": "rnx-kit-scripts test"
   },
   "dependencies": {
-    "@rnx-kit/config": "^0.7.2",
     "@rnx-kit/tools-node": "^3.0.0",
     "@rnx-kit/tools-workspaces": "^0.2.0"
   },
