@@ -30,7 +30,7 @@
     "test": "rnx-kit-scripts test"
   },
   "dependencies": {
-    "@rnx-kit/external-workspaces": "*"
+    "@rnx-kit/tools-workspaces": "*"
   },
   "devDependencies": {
     "@rnx-kit/eslint-config": "*",
