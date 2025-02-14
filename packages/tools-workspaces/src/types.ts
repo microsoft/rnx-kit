@@ -4,7 +4,7 @@
  */
 export type WorkspacesInfo = {
   /** root folder for the workspaces */
-  getRoot: () => string | undefined;
+  getRoot: () => string;
 
   /** find all package directories synchronously */
   findPackagesSync: () => string[];

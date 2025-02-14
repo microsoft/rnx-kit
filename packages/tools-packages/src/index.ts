@@ -1,3 +1,13 @@
-export { createPackageInfoAccessor, getPackageInfoFromPath } from "./package";
-export { getTsConfigPath } from "./tsconfig";
-export type { PackageInfo, PackageInfoAccessor } from "./types";
+export {
+  createPackageValueAccessors,
+  createPackageValueLoader,
+} from "./accessors";
+export {
+  getPackageInfoFromPath,
+  getPackageInfoFromWorkspaces,
+} from "./package";
+export type {
+  GetPackageValue,
+  PackageInfo,
+  PackageValueAccessors,
+} from "./types";

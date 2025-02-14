@@ -52,12 +52,18 @@ export function findWorkspaceRootSync(): string | undefined {
   return sentinel && path.dirname(sentinel);
 }
 
-export async function getWorkspacesInfo(): Promise<WorkspacesInfo | undefined> {
+export async function getWorkspacesInfo(): Promise<WorkspacesInfo> {
   const sentinel = await findSentinel();
-  return sentinel ? new WorkspacesInfoImpl(sentinel) : undefined;
+  if (!sentinel) {
+    throw new Error("Could not find the root of the workspaces");
+  }
+  return new WorkspacesInfoImpl(sentinel);
 }
 
-export function getWorkspacesInfoSync(): WorkspacesInfo | undefined {
+export function getWorkspacesInfoSync(): WorkspacesInfo {
   const sentinel = findSentinelSync();
-  return sentinel ? new WorkspacesInfoImpl(sentinel) : undefined;
+  if (!sentinel) {
+    throw new Error("Could not find the root of the workspaces");
+  }
+  return new WorkspacesInfoImpl(sentinel);
 }

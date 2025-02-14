@@ -22,6 +22,15 @@ export type PackageInfo = {
 };
 
 /**
- * Accessor function that can be created for looking up information associated with a package.
+ * Typed accessors for retrieving values from the package info
  */
-export type PackageInfoAccessor<T> = (pkgInfo: PackageInfo) => T;
+export type GetPackageValue<T> = (pkgInfo: PackageInfo) => T;
+
+/**
+ * Set of accessor functions that can be retrieved for a specific symbol
+ */
+export type PackageValueAccessors<T> = {
+  get: GetPackageValue<T>;
+  has: (pkgInfo: PackageInfo) => boolean;
+  set: (pkgInfo: PackageInfo, value: T) => void;
+};

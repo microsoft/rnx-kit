@@ -8,7 +8,7 @@ import * as fs from "node:fs";
 import * as path from "node:path";
 import {
   type PackageInfo,
-  createPackageInfoAccessor,
+  createPackageValueLoader,
   getPackageInfoFromPath,
 } from "../../tools-packages/lib";
 import type { KitConfig } from "./kitConfig";
@@ -37,12 +37,10 @@ function loadConfigFromPackageInfo(
   return loadBaseConfig(packageJson["rnx-kit"], pkgInfo.root);
 }
 
-// unique symbol for storing the kit config in the package info
-const kitConfigKey = Symbol("kitConfig");
-
-export const getKitConfigFromPackageInfo = createPackageInfoAccessor<
-  KitConfig | undefined
->(kitConfigKey, loadConfigFromPackageInfo);
+export const getKitConfigFromPackageInfo = createPackageValueLoader(
+  "kitConfig",
+  loadConfigFromPackageInfo
+);
 
 function findPackageDir({
   module,
