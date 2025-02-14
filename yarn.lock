@@ -3817,6 +3817,7 @@ __metadata:
     "@rnx-kit/metro-serializer-esbuild": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tools-node": "npm:^3.0.0"
+    "@rnx-kit/tools-package": "npm:^0.0.1"
     "@rnx-kit/tools-react-native": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
     "@types/lodash.merge": "npm:^4.6.9"
@@ -4537,7 +4538,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rnx-kit/tools-package@workspace:packages/tools-package":
+"@rnx-kit/tools-package@npm:^0.0.1, @rnx-kit/tools-package@workspace:packages/tools-package":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/tools-package@workspace:packages/tools-package"
   dependencies:

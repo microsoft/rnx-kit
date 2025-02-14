@@ -3,6 +3,11 @@ import {
   findPackageDependencyDir,
   readPackage,
 } from "@rnx-kit/tools-node/package";
+import {
+  type PackageInfo,
+  createPackageInfoAccessor,
+  getPackageInfoFromPath,
+} from "@rnx-kit/tools-package";
 import merge from "lodash.merge";
 import * as fs from "node:fs";
 import * as path from "node:path";
@@ -24,6 +29,21 @@ export type GetKitConfigOptions = {
   cwd?: string;
 };
 
+// loader function for the package info accessor, used when it isn't already cached
+function loadConfigFromPackageInfo(
+  pkgInfo: PackageInfo
+): KitConfig | undefined {
+  const packageJson = pkgInfo.manifest;
+  return loadBaseConfig(packageJson["rnx-kit"], pkgInfo.root);
+}
+
+// unique symbol for storing the kit config in the package info
+const kitConfigKey = Symbol("kitConfig");
+
+export const getKitConfigFromPackageInfo = createPackageInfoAccessor<
+  KitConfig | undefined
+>(kitConfigKey, loadConfigFromPackageInfo);
+
 function findPackageDir({
   module,
   cwd = process.cwd(),
@@ -40,7 +60,8 @@ function loadBaseConfig(
   packageDir: string
 ): PackageManifest["rnx-kit"] {
   const base = config?.extends;
-  if (typeof base !== "string") {
+  // no base config or no config at all just return immediately
+  if (typeof base !== "string" || !config) {
     return config;
   }
 
@@ -48,7 +69,18 @@ function loadBaseConfig(
   const spec = fs.existsSync(baseConfigPath)
     ? baseConfigPath
     : require.resolve(base, { paths: [packageDir] });
-  const mergedConfig = merge(require(spec), config);
+
+  let baseConfig: KitConfig | undefined = undefined;
+  if (path.basename(spec).toLowerCase() === "package.json") {
+    // if the reference is to a package.json file, load the config from the package info
+    const pkgInfo = getPackageInfoFromPath(spec);
+    baseConfig = getKitConfigFromPackageInfo(pkgInfo);
+  } else {
+    // otherwise require the file directly
+    baseConfig = require(spec);
+  }
+
+  const mergedConfig = baseConfig ? merge(baseConfig, config) : config;
   delete mergedConfig["extends"];
   return mergedConfig;
 }

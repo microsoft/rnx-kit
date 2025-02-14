@@ -1,5 +1,5 @@
 import { getWorkspacesInfoSync } from "@rnx-kit/tools-workspaces";
-import { PackageInfo } from "./types";
+import type { PackageInfo } from "./types";
 
 let cache: PackageInfoCache | undefined = undefined;
 
