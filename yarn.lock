@@ -4543,7 +4543,6 @@ __metadata:
   resolution: "@rnx-kit/tools-packages@workspace:packages/tools-packages"
   dependencies:
     "@rnx-kit/eslint-config": "npm:*"
-    "@rnx-kit/jest-preset": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tools-node": "npm:^3.0.0"
     "@rnx-kit/tools-workspaces": "npm:^0.2.0"
