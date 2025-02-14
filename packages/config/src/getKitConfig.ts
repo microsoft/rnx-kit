@@ -3,14 +3,14 @@ import {
   findPackageDependencyDir,
   readPackage,
 } from "@rnx-kit/tools-node/package";
-import merge from "lodash.merge";
-import * as fs from "node:fs";
-import * as path from "node:path";
 import {
   type PackageInfo,
   createPackageValueLoader,
   getPackageInfoFromPath,
 } from "@rnx-kit/tools-packages";
+import merge from "lodash.merge";
+import * as fs from "node:fs";
+import * as path from "node:path";
 import type { KitConfig } from "./kitConfig";
 
 /**
@@ -30,11 +30,9 @@ export type GetKitConfigOptions = {
 };
 
 // loader function for the package info accessor, used when it isn't already cached
-function loadConfigFromPackageInfo(
-  pkgInfo: PackageInfo
-): KitConfig | undefined {
+function loadConfigFromPackageInfo(pkgInfo: PackageInfo): KitConfig {
   const packageJson = pkgInfo.manifest;
-  return loadBaseConfig(packageJson["rnx-kit"], pkgInfo.root);
+  return loadBaseConfig(packageJson["rnx-kit"], pkgInfo.root) || {};
 }
 
 export const getKitConfigFromPackageInfo = createPackageValueLoader(
@@ -67,7 +65,7 @@ function loadBaseConfig(
     ? baseConfigPath
     : require.resolve(base, { paths: [packageDir] });
 
-  let baseConfig: KitConfig | undefined = undefined;
+  let baseConfig: KitConfig;
   if (path.basename(spec).toLowerCase() === "package.json") {
     // if the reference is to a package.json file, load the config from the package info
     const pkgInfo = getPackageInfoFromPath(spec);
@@ -77,7 +75,7 @@ function loadBaseConfig(
     baseConfig = require(spec);
   }
 
-  const mergedConfig = baseConfig ? merge(baseConfig, config) : config;
+  const mergedConfig = merge(baseConfig, config);
   delete mergedConfig["extends"];
   return mergedConfig;
 }
