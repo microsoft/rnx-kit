@@ -5,6 +5,9 @@ import {
   getImplementation,
   getImplementationSync,
 } from "./common";
+import { WorkspacesInfoImpl } from "./info";
+import type { WorkspacesInfo } from "./types";
+export type { WorkspacesInfo } from "./types";
 
 /**
  * Returns a list of all packages declared under workspaces.
@@ -47,4 +50,20 @@ export async function findWorkspaceRoot(): Promise<string | undefined> {
 export function findWorkspaceRootSync(): string | undefined {
   const sentinel = findSentinelSync();
   return sentinel && path.dirname(sentinel);
+}
+
+export async function getWorkspacesInfo(): Promise<WorkspacesInfo> {
+  const sentinel = await findSentinel();
+  if (!sentinel) {
+    throw new Error("Could not find the root of the workspaces");
+  }
+  return new WorkspacesInfoImpl(sentinel);
+}
+
+export function getWorkspacesInfoSync(): WorkspacesInfo {
+  const sentinel = findSentinelSync();
+  if (!sentinel) {
+    throw new Error("Could not find the root of the workspaces");
+  }
+  return new WorkspacesInfoImpl(sentinel);
 }

@@ -43,11 +43,20 @@ export async function findWorkspacePackages(
 }
 
 export function findWorkspacePackagesSync(configFile: string): string[] {
+  const packages = getPackageFilters(configFile);
+  if (packages) {
+    return findPackagesSync(packages, path.dirname(configFile));
+  }
+
+  return [];
+}
+
+export function getPackageFilters(configFile: string): string[] | undefined {
   const { packages, useWorkspaces } = readJSONSync(configFile);
   // `useWorkspaces` was deprecated: https://github.com/lerna/lerna/releases/tag/7.0.0
   // respect Lerna `packages` property
   if (packages && useWorkspaces !== true) {
-    return findPackagesSync(packages, path.dirname(configFile));
+    return packages;
   }
 
   const root = path.dirname(configFile);
@@ -55,10 +64,10 @@ export function findWorkspacePackagesSync(configFile: string): string[] {
   for (const sentinel of sentinels) {
     const filename = path.join(root, sentinel);
     if (fileExists(filename)) {
-      const { findWorkspacePackagesSync } = getImplementationSync(filename);
-      return findWorkspacePackagesSync(filename);
+      const { getPackageFilters } = getImplementationSync(filename);
+      return getPackageFilters(filename);
     }
   }
 
-  return [];
+  return undefined;
 }

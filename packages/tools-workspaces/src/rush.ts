@@ -28,3 +28,7 @@ export function findWorkspacePackagesSync(configFile: string): string[] {
   const project = readJSONSync(configFile);
   return parse(project, configFile);
 }
+
+export function getPackageFilters(_sentinel: string): string[] | undefined {
+  return undefined;
+}

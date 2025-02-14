@@ -18,6 +18,12 @@ export async function findWorkspacePackages(
 }
 
 export function findWorkspacePackagesSync(workspaceYaml: string): string[] {
-  const { packages } = readYamlFileSync<Workspace>(workspaceYaml);
-  return findPackagesSync(packages, path.dirname(workspaceYaml));
+  return findPackagesSync(
+    getPackageFilters(workspaceYaml),
+    path.dirname(workspaceYaml)
+  );
+}
+
+export function getPackageFilters(workspaceYaml: string): string[] | undefined {
+  return readYamlFileSync<Workspace>(workspaceYaml).packages;
 }

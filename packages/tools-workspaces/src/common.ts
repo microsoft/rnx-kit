@@ -9,6 +9,7 @@ import stripJsonComments from "strip-json-comments";
 type PackageManager = {
   findWorkspacePackages: (sentinel: string) => Promise<string[]>;
   findWorkspacePackagesSync: (sentinel: string) => string[];
+  getPackageFilters: (sentinel: string) => string[] | undefined;
 };
 
 export const BUN_LOCKB = "bun.lockb";
