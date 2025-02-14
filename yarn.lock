@@ -3806,7 +3806,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rnx-kit/config@npm:*, @rnx-kit/config@npm:^0.7.0, @rnx-kit/config@workspace:packages/config":
+"@rnx-kit/config@npm:*, @rnx-kit/config@npm:^0.7.0, @rnx-kit/config@npm:^0.7.2, @rnx-kit/config@workspace:packages/config":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/config@workspace:packages/config"
   dependencies:
@@ -4537,6 +4537,24 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@rnx-kit/tools-package@workspace:packages/tools-package":
+  version: 0.0.0-use.local
+  resolution: "@rnx-kit/tools-package@workspace:packages/tools-package"
+  dependencies:
+    "@rnx-kit/config": "npm:^0.7.2"
+    "@rnx-kit/eslint-config": "npm:*"
+    "@rnx-kit/jest-preset": "npm:*"
+    "@rnx-kit/scripts": "npm:*"
+    "@rnx-kit/tools-node": "npm:^3.0.0"
+    "@rnx-kit/tools-workspaces": "npm:^0.2.0"
+    "@rnx-kit/tsconfig": "npm:*"
+    "@types/node": "npm:^20.0.0"
+    eslint: "npm:^9.0.0"
+    prettier: "npm:^3.0.0"
+    typescript: "npm:^5.0.0"
+  languageName: unknown
+  linkType: soft
+
 "@rnx-kit/tools-react-native@npm:*, @rnx-kit/tools-react-native@npm:^2.0.0, @rnx-kit/tools-react-native@npm:^2.0.2, @rnx-kit/tools-react-native@npm:^2.0.3, @rnx-kit/tools-react-native@workspace:packages/tools-react-native":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/tools-react-native@workspace:packages/tools-react-native"
@@ -4622,10 +4640,12 @@ __metadata:
     "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
+    "@types/micromatch": "npm:^4.0.0"
     "@types/node": "npm:^20.0.0"
     eslint: "npm:^9.0.0"
     fast-glob: "npm:^3.2.7"
     find-up: "npm:^5.0.0"
+    micromatch: "npm:^4.0.0"
     prettier: "npm:^3.0.0"
     read-yaml-file: "npm:^2.1.0"
     strip-json-comments: "npm:^3.1.1"
@@ -4824,6 +4844,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/braces@npm:*":
+  version: 3.0.5
+  resolution: "@types/braces@npm:3.0.5"
+  checksum: 10c0/fff17426731376b452abf747e862f0116b80ccc68a2c8e6b56aff240048c26c983d61c456c6792dffe9df407d80c1a504bea21e8c1a56afaed1f311dfe75bc68
+  languageName: node
+  linkType: hard
+
 "@types/connect@npm:^3.4.36":
   version: 3.4.38
   resolution: "@types/connect@npm:3.4.38"
@@ -4971,6 +4998,15 @@ __metadata:
   version: 4.17.13
   resolution: "@types/lodash@npm:4.17.13"
   checksum: 10c0/c3d0b7efe7933ac0369b99f2f7bff9240d960680fdb74b41ed4bd1b3ca60cca1e31fe4046d9abbde778f941a41bc2a75eb629abf8659fa6c27b66efbbb0802a9
+  languageName: node
+  linkType: hard
+
+"@types/micromatch@npm:^4.0.0":
+  version: 4.0.9
+  resolution: "@types/micromatch@npm:4.0.9"
+  dependencies:
+    "@types/braces": "npm:*"
+  checksum: 10c0/b13d7594b4320f20729f20156c51e957d79deb15083f98a736689cd0d3e4ba83b5d125959f6edf65270a6b6db90db9cebef8168d88e1c4eedc9a18aecc0234a3
   languageName: node
   linkType: hard
 
@@ -10534,7 +10570,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"micromatch@npm:^4.0.4, micromatch@npm:^4.0.8":
+"micromatch@npm:^4.0.0, micromatch@npm:^4.0.4, micromatch@npm:^4.0.8":
   version: 4.0.8
   resolution: "micromatch@npm:4.0.8"
   dependencies:
