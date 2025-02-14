@@ -1,0 +1,11 @@
+{
+  "extends": "@rnx-kit/tsconfig/tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "experimentalDecorators": true,
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "target": "ES2021"
+  },
+  "include": ["src"]
+}
