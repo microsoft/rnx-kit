@@ -12,7 +12,7 @@
     "dist/**/*.cjs",
     "dist/**/*.cjs.map"
   ],
-  "main": "./dist/plugin-external-workspaces.cjs",
+  "main": "./dist/external-workspaces.cjs",
   "repository": {
     "type": "git",
     "url": "https://github.com/microsoft/rnx-kit",
