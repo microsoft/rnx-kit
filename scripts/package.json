@@ -13,6 +13,7 @@
     "lint": "rnx-kit-scripts lint"
   },
   "dependencies": {
+    "@yarnpkg/cli": "^4.6.0",
     "esbuild": "^0.25.0",
     "eslint": "^9.0.0",
     "fast-glob": "^3.2.7",
