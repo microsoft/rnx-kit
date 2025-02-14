@@ -3,7 +3,6 @@
 
 import yargs from "yargs";
 import { build } from "./commands/build.js";
-import { bundlePlugin } from "./commands/bundle-plugin.js";
 import { bundle } from "./commands/bundle.js";
 import { clean } from "./commands/clean.js";
 import { format } from "./commands/format.js";
@@ -12,7 +11,12 @@ import { test } from "./commands/test.js";
 import { updateApiReadme } from "./commands/updateApiReadme.js";
 
 /**
- * @param {Record<string, { description: string; command: import("./process.js").Command }>} commands
+ * @typedef { import("yargs").Options } Option
+ * @typedef { Record<string, Option> } Options
+ */
+
+/**
+ * @param {Record<string, { description: string; command: import("./process.js").Command; options?: Options }>} commands
  * @returns
  */
 function init(commands) {
@@ -39,12 +43,22 @@ init({
   },
   bundle: {
     description: "Bundles the current package",
+    options: {
+      minify: {
+        type: "boolean",
+        default: false,
+      },
+      platform: {
+        type: "string",
+        choices: ["browser", "neutral", "node", "yarn"],
+        default: "node",
+      },
+      sourceMap: {
+        type: "boolean",
+        default: false,
+      },
+    },
     command: bundle,
-  },
-  "bundle-plugin": {
-    description:
-      "Bundles the current package as a yarn plugin using the yarn builder tool",
-    command: bundlePlugin,
   },
   clean: {
     description: "Removes build and test artifacts",
