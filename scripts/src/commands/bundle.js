@@ -7,12 +7,15 @@ import * as fs from "node:fs";
  * @typedef {import("esbuild").BuildOptions} BuildOptions
  * @typedef {BuildOptions["platform"]} Platform
  * @typedef {{ node?: string }} Engines
- * @typedef {{ name: string, main: string, dependencies?: Record<string, unknown>, peerDependencies?: Record<string, unknown>, engines?: Record<string, string> }} Manifest
+ * @typedef {{ name: string, main: string, dependencies?: Record<string, string>, peerDependencies?: Record<string, string>, engines?: Record<string, string> }} Manifest
  * @typedef {{ minify?: boolean, platform?: string, sourceMap?: boolean }} BundleOptions
  * @typedef {(manifest: Manifest) => Partial<BuildOptions>} OptionPreset
  */
 
-/** @param {Manifest} manifest, @returns {Partial<BuildOptions>} */
+/**
+ * @param {Manifest} manifest
+ * @returns {Partial<BuildOptions>}
+ */
 function presetBase(manifest) {
   const { dependencies, peerDependencies } = manifest;
   return {
@@ -25,7 +28,10 @@ function presetBase(manifest) {
   };
 }
 
-/** @param {Manifest} manifest, @returns {Partial<BuildOptions>} */
+/**
+ * @param {Manifest} manifest
+ * @returns {Partial<BuildOptions>}
+ */
 function nodePreset(manifest) {
   return {
     ...presetBase(manifest),
@@ -35,7 +41,10 @@ function nodePreset(manifest) {
   };
 }
 
-/** @param {Manifest} manifest, @returns {Partial<BuildOptions>} */
+/**
+ * @param {Manifest} manifest
+ * @returns {Partial<BuildOptions>}
+ */
 function browserPreset(manifest) {
   return {
     ...presetBase(manifest),
@@ -44,7 +53,10 @@ function browserPreset(manifest) {
   };
 }
 
-/** @param {Manifest} manifest, @returns {Partial<BuildOptions>} */
+/**
+ * @param {Manifest} manifest
+ * @returns {Partial<BuildOptions>}
+ */
 function neutralPreset(manifest) {
   return {
     ...presetBase(manifest),
@@ -53,7 +65,10 @@ function neutralPreset(manifest) {
   };
 }
 
-/** @param {Manifest} manifest, @returns {Partial<BuildOptions>} */
+/**
+ * @param {Manifest} manifest
+ * @returns {Partial<BuildOptions>}
+ */
 function yarnPreset(manifest) {
   const name = manifest.name;
   return {
@@ -72,7 +87,7 @@ function yarnPreset(manifest) {
       js: [`return plugin;`, `}`, `};`].join(`\n`),
     },
     resolveExtensions: [`.tsx`, `.ts`, `.jsx`, `.mjs`, `.js`, `.css`, `.json`],
-    external: [...getDynamicLibs().keys()],
+    external: getDynamicLibs().keys(),
     platform: "node",
     target: getNodeTarget(manifest),
   };
@@ -86,7 +101,11 @@ const presets = {
   yarn: yarnPreset,
 };
 
-/** @param {unknown} platform, @param {Manifest} manifest, @returns {Partial<BuildOptions>} */
+/**
+ * @param {unknown} platform
+ * @param {Manifest} manifest
+ * @returns {Partial<BuildOptions>}
+ */
 function platformOptions(platform, manifest) {
   const platformKey =
     platform && typeof platform === "string" ? platform : "node";
@@ -94,7 +113,10 @@ function platformOptions(platform, manifest) {
   return preset(manifest);
 }
 
-/** @param {Manifest} manifest, @returns {string} */
+/**
+ * @param {Manifest} manifest
+ * @returns {string}
+ */
 function getNodeTarget(manifest) {
   const enginesNode = manifest.engines?.node;
   const match = enginesNode?.match(/(\d+)\.(\d+)/);
