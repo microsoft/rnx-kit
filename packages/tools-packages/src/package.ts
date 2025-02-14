@@ -78,10 +78,9 @@ class PackageInfoCache {
   /** return the root package path and the package.json path for a path that could be either */
   private getPackagePaths(pkgPath: string): [string, string] {
     const isPkgPath = path.basename(pkgPath).toLowerCase() === "package.json";
-    return [
-      isPkgPath ? path.dirname(pkgPath) : pkgPath,
-      isPkgPath ? pkgPath : path.join(pkgPath, "package.json"),
-    ];
+    return isPkgPath
+      ? [path.dirname(pkgPath), pkgPath]
+      : [pkgPath, path.join(pkgPath, "package.json")];
   }
 
   /** set the package info into the caches as appropriate */

@@ -1,5 +1,3 @@
-<!-- We recommend an empty change log entry for a new package: `yarn change --empty` -->
-
 # @rnx-kit/tools-packages
 
 [![Build](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml/badge.svg)](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml)

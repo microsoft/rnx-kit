@@ -10,7 +10,7 @@ import {
   type PackageInfo,
   createPackageValueLoader,
   getPackageInfoFromPath,
-} from "../../tools-packages/lib";
+} from "@rnx-kit/tools-packages";
 import type { KitConfig } from "./kitConfig";
 
 /**
@@ -58,8 +58,7 @@ function loadBaseConfig(
   packageDir: string
 ): PackageManifest["rnx-kit"] {
   const base = config?.extends;
-  // no base config or no config at all just return immediately
-  if (typeof base !== "string" || !config) {
+  if (typeof base !== "string") {
     return config;
   }
 

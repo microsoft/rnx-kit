@@ -1,5 +1,5 @@
 import micromatch from "micromatch";
-import * as path from "path";
+import * as path from "node:path";
 import {
   findPackages,
   findPackagesSync,
