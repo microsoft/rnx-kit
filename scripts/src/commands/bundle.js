@@ -12,6 +12,9 @@ import * as fs from "node:fs";
  * @typedef {(manifest: Manifest) => Partial<BuildOptions>} OptionPreset
  */
 
+const defaultTarget = "es2021";
+const defaultNodeTarget = "node16.17";
+
 /**
  * @param {Manifest} manifest
  * @returns {Partial<BuildOptions>}
@@ -49,7 +52,7 @@ function browserPreset(manifest) {
   return {
     ...presetBase(manifest),
     platform: "browser",
-    target: "es2021",
+    target: defaultTarget,
   };
 }
 
@@ -61,7 +64,7 @@ function neutralPreset(manifest) {
   return {
     ...presetBase(manifest),
     platform: "neutral",
-    target: "es2021",
+    target: defaultTarget,
   };
 }
 
@@ -87,9 +90,18 @@ function yarnPreset(manifest) {
       js: [`return plugin;`, `}`, `};`].join(`\n`),
     },
     resolveExtensions: [`.tsx`, `.ts`, `.jsx`, `.mjs`, `.js`, `.css`, `.json`],
-    external: getDynamicLibs().keys(),
+    external: [...getDynamicLibs().keys()],
     platform: "node",
     target: getNodeTarget(manifest),
+    supported: {
+      /*
+      Yarn plugin-runtime did not support builtin modules prefixed with "node:".
+      See https://github.com/yarnpkg/berry/pull/5997
+      As a solution, and for backwards compatibility, esbuild should strip these prefixes.
+      */
+      "node-colon-prefix-import": false,
+      "node-colon-prefix-require": false,
+    },
   };
 }
 
@@ -107,8 +119,7 @@ const presets = {
  * @returns {Partial<BuildOptions>}
  */
 function platformOptions(platform, manifest) {
-  const platformKey =
-    platform && typeof platform === "string" ? platform : "node";
+  const platformKey = typeof platform === "string" ? platform : "node";
   const preset = presets[platformKey] || presets.node;
   return preset(manifest);
 }
@@ -120,7 +131,7 @@ function platformOptions(platform, manifest) {
 function getNodeTarget(manifest) {
   const enginesNode = manifest.engines?.node;
   const match = enginesNode?.match(/(\d+)\.(\d+)/);
-  return match ? `node${match[1]}.${match[2]}` : "node16.17";
+  return match ? `node${match[1]}.${match[2]}` : defaultNodeTarget;
 }
 
 /**
