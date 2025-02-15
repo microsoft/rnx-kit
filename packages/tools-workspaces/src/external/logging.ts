@@ -6,21 +6,26 @@ const LOG_PATH = path.join(process.cwd(), "plugin-external-workspaces.log");
 // time when the plugin started, used for log reporting
 const START_TIME = performance.now();
 
-let tracingEnabled = false;
+const consoleMode = "console";
+let traceTo: string | undefined = undefined;
 
-export function enableLogging() {
-  tracingEnabled = true;
-  fs.writeFileSync(LOG_PATH, "");
+export function enableLogging(traceSetting?: string) {
+  traceTo = traceSetting ?? LOG_PATH;
+  if (traceTo !== consoleMode) {
+    fs.writeFileSync(traceTo, "");
+  }
 }
 
 /**
  * @param msg write the message to the log file if tracing is enabled
  */
 export function trace(msg: string) {
-  if (tracingEnabled) {
+  if (traceTo) {
     const delta = (performance.now() - START_TIME).toFixed(2);
-    const logStream = fs.createWriteStream(LOG_PATH, { flags: "a" });
-    logStream.write(`[${delta}ms] ${msg}\n`);
-    logStream.close();
+    if (traceTo === consoleMode) {
+      console.log(`[${delta}ms] ${msg}`);
+    } else {
+      fs.appendFile(LOG_PATH, `[${delta}ms] ${msg}\n`, () => null);
+    }
   }
 }

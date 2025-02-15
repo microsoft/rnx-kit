@@ -6,6 +6,18 @@ import {
   getImplementationSync,
 } from "./common";
 
+export { loadConfigFile } from "./external/finder";
+export { enableLogging, trace } from "./external/logging";
+export { getConfigurationOptions } from "./external/options";
+export { getSettingsFromRepo } from "./external/settings";
+export type {
+  ConfigurationOptions,
+  DefinitionFinder,
+  ExternalDeps,
+  PackageDefinition,
+  Settings,
+} from "./external/types";
+
 /**
  * Returns a list of all packages declared under workspaces.
  */

@@ -4082,7 +4082,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rnx-kit/external-workspaces@npm:*, @rnx-kit/external-workspaces@workspace:incubator/external-workspaces":
+"@rnx-kit/external-workspaces@workspace:incubator/external-workspaces":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/external-workspaces@workspace:incubator/external-workspaces"
   dependencies:
@@ -4836,8 +4836,8 @@ __metadata:
   resolution: "@rnx-kit/yarn-plugin-external-workspaces@workspace:incubator/yarn-plugin-external-workspaces"
   dependencies:
     "@rnx-kit/eslint-config": "npm:*"
-    "@rnx-kit/external-workspaces": "npm:*"
     "@rnx-kit/scripts": "npm:*"
+    "@rnx-kit/tools-workspaces": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
     "@types/node": "npm:^20.0.0"
     "@yarnpkg/core": "npm:^4.2.0"

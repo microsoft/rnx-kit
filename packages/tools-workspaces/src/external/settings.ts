@@ -3,7 +3,8 @@ import fs from "node:fs";
 import path from "node:path";
 import { findWorkspaceRootSync } from "../index";
 import { loadConfigFile } from "./finder";
-import { type Settings, getConfigurationOptions } from "./options";
+import { getConfigurationOptions } from "./options";
+import type { Settings } from "./types";
 
 export const workspaceRoot = findWorkspaceRootSync();
 export const isYarn =
@@ -53,12 +54,13 @@ export async function getSettingsFromRepo(): Promise<Settings> {
   const configPathFromYarn = await getYarnOption(configPathEntry.configKey);
   const configPath = path.resolve(
     workspaceRoot,
-    configPathFromYarn ?? configPathEntry.options.default
+    configPathFromYarn ?? configPathEntry.defaultValue
   );
 
   return (repoSettings = {
     configPath,
     enableLogging: false,
+    outputWorkspaces: "",
     finder: loadConfigFile(configPath),
   });
 }

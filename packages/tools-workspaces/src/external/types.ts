@@ -30,3 +30,50 @@ export type ExternalDeps = Record<string, PackageDefinition>;
  * to a .js or .cjs file instead of .json, the default export should be a function of this signature.
  */
 export type DefinitionFinder = (pkgName: string) => PackageDefinition | null;
+
+/**
+ * Settings for a single configuration option for the plugin. Can be mapped into the yarn types or otherwise
+ */
+type ConfigurationEntry<T> = {
+  /**
+   * The key used to store the setting in the yarn configuration
+   */
+  configKey: string;
+
+  /**
+   * Type of the setting
+   */
+  settingType: "string" | "boolean";
+
+  /**
+   * Description of the option
+   */
+  description: string;
+
+  /**
+   * Default value of the option
+   */
+  defaultValue: T;
+};
+
+/**
+ * The type of the configuration options for the plugin
+ */
+export type ConfigurationOptions = {
+  configPath: ConfigurationEntry<string>;
+  enableLogging: ConfigurationEntry<boolean>;
+  outputWorkspaces: ConfigurationEntry<string>;
+};
+
+// type inference helper for having strongly typed settings
+type ConfigurationEntryValue<T> =
+  T extends ConfigurationEntry<infer U> ? U : never;
+
+/**
+ * Loaded settings, just the values of the specified type for each entry + the finder function
+ */
+export type Settings = {
+  [key in keyof ConfigurationOptions]: ConfigurationEntryValue<
+    ConfigurationOptions[key]
+  >;
+} & { finder: DefinitionFinder };

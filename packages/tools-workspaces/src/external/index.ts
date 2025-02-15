@@ -1,14 +1,11 @@
 export { loadConfigFile } from "./finder";
 export { enableLogging, trace } from "./logging";
-export {
-  getConfiguration,
-  getProtocol,
-  getSettingsFromProject,
-} from "./options";
-export type { Settings } from "./options";
+export { getConfigurationOptions } from "./options";
+export { getSettingsFromRepo } from "./settings";
 export type {
+  ConfigurationOptions,
   DefinitionFinder,
   ExternalDeps,
   PackageDefinition,
+  Settings,
 } from "./types";
-export { getSettingsFromRepo } from "./workspace";
