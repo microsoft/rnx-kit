@@ -1,9 +1,4 @@
-import { trace } from "@rnx-kit/external-workspaces/logging";
-import {
-  getProtocol,
-  getSettingsFromProject,
-} from "@rnx-kit/external-workspaces/options";
-import type { DefinitionFinder } from "@rnx-kit/external-workspaces/types";
+import { trace, type DefinitionFinder } from "@rnx-kit/tools-workspaces";
 import type {
   Descriptor,
   Locator,
@@ -13,6 +8,7 @@ import type {
   Resolver,
 } from "@yarnpkg/core";
 import { structUtils } from "@yarnpkg/core";
+import { getSettingsFromProject } from "./configuration";
 
 const { makeDescriptor, makeLocator, stringifyIdent } = structUtils;
 
@@ -20,7 +16,7 @@ const { makeDescriptor, makeLocator, stringifyIdent } = structUtils;
  * The resolver implements the logic for the external: protocol.
  */
 export class ExternalResolver implements Resolver {
-  static protocol = getProtocol();
+  static protocol = "external:";
   private finder: DefinitionFinder | undefined = undefined;
   private report: ResolveOptions["report"] | undefined = undefined;
 

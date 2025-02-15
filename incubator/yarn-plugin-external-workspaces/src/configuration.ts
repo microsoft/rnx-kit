@@ -1,36 +1,59 @@
-function coerceString(value: unknown, fallback: string): string {
-  return value && typeof value === "string" ? value : fallback;
-}
+import {
+  getConfigurationOptions,
+  loadConfigFile,
+  enableLogging as turnOnLogging,
+  type ConfigurationEntry,
+  type Settings,
+} from "@rnx-kit/tools-workspaces";
+import {
+  SettingsType,
+  type Configuration,
+  type ConfigurationDefinitionMap,
+  type Project,
+} from "@yarnpkg/core";
 
-function coerceBoolean(value: unknown, _fallback: boolean): boolean {
-  return Boolean(value);
+function typeStringToSettingsType(type: string): SettingsType {
+  switch (type) {
+    case "string":
+      return SettingsType.STRING;
+    case "boolean":
+      return SettingsType.BOOLEAN;
+    default:
+      throw new Error(`Unknown type ${type}`);
+  }
 }
 
 export function getConfiguration(): Partial<ConfigurationDefinitionMap> {
+  const configSettings = getConfigurationOptions();
   return Object.fromEntries(
     Object.entries(configSettings).map(([_key, setting]) => [
       setting.configKey,
-      setting.options,
+      {
+        description: setting.description,
+        type: typeStringToSettingsType(setting.settingType),
+        default: setting.defaultValue,
+      },
     ])
   );
 }
 
-function loadSetting<T>(
-  setting: ConfigurationEntry<T>,
-  configuration: Configuration
-): T {
-  const value = configuration.get(setting.configKey);
-  return setting.coerce(value, setting.options.default);
+function getStringSetting(
+  configuration: Configuration,
+  entry: ConfigurationEntry<string>
+): string {
+  const value = configuration.get(entry.configKey);
+  return value && typeof value === "string" ? value : entry.defaultValue;
 }
 
-function loadSettingsFromConfiguration(
-  configuration: Configuration
-): ConfigurationSettings {
-  return {
-    configPath: loadSetting(configSettings.configPath, configuration),
-    enableLogging: loadSetting(configSettings.enableLogging, configuration),
-  };
+function getBooleanSetting(
+  configuration: Configuration,
+  entry: ConfigurationEntry<boolean>
+): boolean {
+  const value = configuration.get(entry.configKey);
+  return value !== undefined ? Boolean(value) : entry.defaultValue;
 }
+
+let settings: Settings | undefined = undefined;
 
 /**
  * @param project the yarn Project to get the configuration from
@@ -38,18 +61,23 @@ function loadSettingsFromConfiguration(
  */
 export function getSettingsFromProject(project: Project): Settings {
   if (!settings) {
-    const configSettings = loadSettingsFromConfiguration(project.configuration);
+    const base = getConfigurationOptions();
+    const configuration = project.configuration;
+    const configPath = getStringSetting(configuration, base.configPath);
+    const enableLogging = getBooleanSetting(configuration, base.enableLogging);
+    const outputWorkspaces = getStringSetting(
+      configuration,
+      base.outputWorkspaces
+    );
+    const finder = loadConfigFile(configPath);
 
     // turn on logging if enabled
-    if (configSettings.enableLogging) {
-      enableLogging();
+    if (enableLogging) {
+      turnOnLogging();
     }
 
-    // load the finder function from the config file and remember the result
-    settings = {
-      ...configSettings,
-      finder: loadConfigFile(configSettings.configPath),
-    };
+    // save teh settings
+    settings = { configPath, enableLogging, outputWorkspaces, finder };
   }
   return settings;
 }

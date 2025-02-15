@@ -1,5 +1,5 @@
-import { getConfiguration } from "@rnx-kit/external-workspaces/options";
 import { type Plugin } from "@yarnpkg/core";
+import { getConfiguration } from "./configuration";
 import { ExternalResolver } from "./resolver";
 
 /**

@@ -11,6 +11,7 @@ export { enableLogging, trace } from "./external/logging";
 export { getConfigurationOptions } from "./external/options";
 export { getSettingsFromRepo } from "./external/settings";
 export type {
+  ConfigurationEntry,
   ConfigurationOptions,
   DefinitionFinder,
   ExternalDeps,

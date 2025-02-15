@@ -19,8 +19,7 @@
     ".": {
       "types": "./lib/index.d.ts",
       "typescript": "./src/index.ts",
-      "default": "./lib/index.js",
-      "external": "./lib/external/index.js"
+      "default": "./lib/index.js"
     },
     "./package.json": "./package.json"
   },

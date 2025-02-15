@@ -34,7 +34,7 @@ export type DefinitionFinder = (pkgName: string) => PackageDefinition | null;
 /**
  * Settings for a single configuration option for the plugin. Can be mapped into the yarn types or otherwise
  */
-type ConfigurationEntry<T> = {
+export type ConfigurationEntry<T> = {
   /**
    * The key used to store the setting in the yarn configuration
    */
