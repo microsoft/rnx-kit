@@ -21,6 +21,18 @@ package in the cache. This might be loading the `KitConfig` parsing and
 validating a tsconfig.json file. This package doesn't need to care what is being
 stored, other packages can add their custom accessors as needed.
 
+## Installation
+
+```sh
+yarn add @rnx-kit/tools-packages --dev
+```
+
+or if you're using npm
+
+```sh
+npm add --save-dev @rnx-kit/tools-packages
+```
+
 ## Usage
 
 There are two main parts of this package, helpers for retrieving package info
@@ -43,17 +55,3 @@ and helpers for accessors.
 | `getRootPackageInfo`           | Get the package info for the root of the workspaces                                                                                                                                                                                                                                                                                                                                                                |
 | `createPackageValueLoader<T>`  | Create a function which retrieves a cached value from `PackageInfo` calling the initializer function if it hasn't been loaded yet. This creates an internal symbol for to make the access unique with the supplied friendly name to make debugging easier.                                                                                                                                                         |
 | `createPackageValueAccessors`  | Create three typed functions matching the has/get/set signature associated with a new and contained symbol. This is for accessors that may need to change over time.                                                                                                                                                                                                                                               |
-
-## Installation
-
-```sh
-yarn add @rnx-kit/tools-packages --dev
-```
-
-or if you're using npm
-
-```sh
-npm add --save-dev @rnx-kit/tools-packages
-```
-
-## Usage
