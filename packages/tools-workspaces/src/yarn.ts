@@ -26,6 +26,11 @@ export async function findWorkspacePackages(
 
 export function findWorkspacePackagesSync(lockfile: string): string[] {
   const root = path.dirname(lockfile);
+  return findPackagesSync(getPackageFilters(lockfile), root);
+}
+
+export function getPackageFilters(lockfile: string): string[] | undefined {
+  const root = path.dirname(lockfile);
   const manifest = readJSONSync(path.join(root, "package.json"));
-  return findPackagesSync(parse(manifest), root);
+  return parse(manifest);
 }

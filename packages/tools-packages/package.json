@@ -1,8 +1,8 @@
 {
-  "name": "@rnx-kit/tools-workspaces",
-  "version": "0.2.0",
-  "description": "A collection of tools for working with workspaces",
-  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/tools-workspaces#readme",
+  "name": "@rnx-kit/tools-packages",
+  "version": "0.0.1",
+  "description": "tools-packages",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/tools-packages#readme",
   "license": "MIT",
   "author": {
     "name": "Microsoft Open Source",
@@ -10,8 +10,7 @@
   },
   "files": [
     "lib/**/*.d.ts",
-    "lib/**/*.js",
-    "src"
+    "lib/**/*.js"
   ],
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -26,33 +25,28 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/microsoft/rnx-kit",
-    "directory": "packages/tools-workspaces"
+    "directory": "packages/tools-packages"
+  },
+  "engines": {
+    "node": ">=16.17"
   },
   "scripts": {
     "build": "rnx-kit-scripts build",
     "format": "rnx-kit-scripts format",
     "lint": "rnx-kit-scripts lint",
-    "test": "rnx-kit-scripts test",
-    "update-readme": "rnx-kit-scripts update-api-readme"
+    "test": "rnx-kit-scripts test"
   },
   "dependencies": {
-    "fast-glob": "^3.2.7",
-    "find-up": "^5.0.0",
-    "micromatch": "^4.0.0",
-    "read-yaml-file": "^2.1.0",
-    "strip-json-comments": "^3.1.1"
+    "@rnx-kit/tools-node": "^3.0.0",
+    "@rnx-kit/tools-workspaces": "^0.2.0"
   },
   "devDependencies": {
     "@rnx-kit/eslint-config": "*",
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*",
-    "@types/micromatch": "^4.0.0",
     "@types/node": "^20.0.0",
     "eslint": "^9.0.0",
     "prettier": "^3.0.0",
     "typescript": "^5.0.0"
-  },
-  "engines": {
-    "node": ">=16.17"
   }
 }
