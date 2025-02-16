@@ -6,30 +6,23 @@ import { loadConfigFile } from "./finder";
 import { getConfigurationOptions } from "./options";
 import type { Settings } from "./types";
 
-export const workspaceRoot = findWorkspaceRootSync();
-export const isYarn =
-  workspaceRoot && fs.existsSync(path.join(workspaceRoot, "yarn.lock"));
-
 /**
  * Get an option from the yarn config, return undefined if it doesn't exist
  * @param option key value of the option to return
  * @returns a promise that will resolve to the returned result or undefined
  */
 export async function getYarnOption(
-  option: string
+  option: string,
+  cwd: string = process.cwd()
 ): Promise<string | undefined> {
   return new Promise((resolve) => {
-    exec(
-      `yarn config get ${option}`,
-      { cwd: workspaceRoot },
-      (error, stdout, stderr) => {
-        if (error || stderr) {
-          resolve(undefined);
-        } else {
-          resolve(stdout.trim());
-        }
+    exec(`yarn config get ${option}`, { cwd }, (error, stdout, stderr) => {
+      if (error || stderr) {
+        resolve(undefined);
+      } else {
+        resolve(stdout.trim());
       }
-    );
+    });
   });
 }
 
@@ -42,16 +35,23 @@ export async function getSettingsFromRepo(): Promise<Settings> {
   if (repoSettings) {
     return repoSettings;
   }
+
+  const workspaceRoot = findWorkspaceRootSync();
   if (!workspaceRoot) {
     throw new Error("No workspace root found");
   }
 
+  const isYarn =
+    workspaceRoot && fs.existsSync(path.join(workspaceRoot, "yarn.lock"));
   if (!isYarn) {
     throw new Error("External workspaces is only supported in yarn workspaces");
   }
 
   const configPathEntry = getConfigurationOptions().configPath;
-  const configPathFromYarn = await getYarnOption(configPathEntry.configKey);
+  const configPathFromYarn = await getYarnOption(
+    configPathEntry.configKey,
+    workspaceRoot
+  );
   const configPath = path.resolve(
     workspaceRoot,
     configPathFromYarn ?? configPathEntry.defaultValue

@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/tools-node",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "description": "A collection of supplemental NodeJS functions and types",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/tools-node#readme",
   "license": "MIT",

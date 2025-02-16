@@ -49,6 +49,13 @@ describe("Node > Package", () => {
     });
   });
 
+  it("parsePackageRef() allows trailing /", () => {
+    deepEqual(parsePackageRef("process/"), {
+      name: "process",
+      scope: undefined,
+    });
+  });
+
   it("parsePackageRef(@alias) is allowed", () => {
     deepEqual(parsePackageRef("@alias"), { name: "@alias", scope: undefined });
   });
@@ -57,13 +64,13 @@ describe("Node > Package", () => {
     deepEqual(parsePackageRef("@/core"), { scope: "@", name: "core" });
   });
 
+  it("parsePackageRef(@babel/) is allowed", () => {
+    deepEqual(parsePackageRef("@babel/"), { name: "@babel", scope: undefined });
+  });
+
   it("parsePackageRef(undefined) throws an Error", () => {
     // @ts-expect-error Argument of type 'undefined' is not assignable to parameter of type 'string'
     throws(() => parsePackageRef(undefined));
-  });
-
-  it("parsePackageRef(@babel/) throws an Error", () => {
-    throws(() => parsePackageRef("@babel/"));
   });
 
   it("readPackage() loads package.json when given its containing directory", () => {

@@ -144,6 +144,7 @@ export async function bundle(options) {
   const manifest = JSON.parse(manifestFile);
 
   const esbuild = await import("esbuild");
+<<<<<<< HEAD
   await esbuild
     .build({
       ...platformOptions(platform, manifest),
@@ -160,4 +161,14 @@ export async function bundle(options) {
         console.log(`Success: ${manifest.name} bundled: ${sizeKb}kb`);
       }
     });
+=======
+  await esbuild.build({
+    ...platformOptions(platform, manifest),
+    bundle: true,
+    outfile: manifest.main,
+    entryPoints: ["src/index.ts"],
+    minify: Boolean(minify),
+    sourcemap: Boolean(sourceMap),
+  });
+>>>>>>> upstream/main
 }
