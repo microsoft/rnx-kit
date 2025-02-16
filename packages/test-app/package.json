@@ -73,6 +73,7 @@
     "typescript": "^5.0.0"
   },
   "rnx-kit": {
+    "profile": "test",
     "kitType": "app",
     "build": {
       "distribution": [
