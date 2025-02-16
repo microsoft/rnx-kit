@@ -3977,7 +3977,7 @@ __metadata:
     "@rnx-kit/metro-serializer-esbuild": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tools-node": "npm:^3.0.0"
-    "@rnx-kit/tools-packages": "npm:^0.0.1"
+    "@rnx-kit/tools-packages": "npm:^0.1.0"
     "@rnx-kit/tools-react-native": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
     "@types/lodash.merge": "npm:^4.6.9"
@@ -4699,14 +4699,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rnx-kit/tools-packages@npm:^0.0.1, @rnx-kit/tools-packages@workspace:packages/tools-packages":
+"@rnx-kit/tools-packages@npm:^0.1.0, @rnx-kit/tools-packages@workspace:packages/tools-packages":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/tools-packages@workspace:packages/tools-packages"
   dependencies:
     "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tools-node": "npm:^3.0.0"
-    "@rnx-kit/tools-workspaces": "npm:^0.2.0"
+    "@rnx-kit/tools-workspaces": "npm:^0.2.1"
     "@rnx-kit/tsconfig": "npm:*"
     "@types/node": "npm:^20.0.0"
     eslint: "npm:^9.0.0"
@@ -4793,7 +4793,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rnx-kit/tools-workspaces@npm:*, @rnx-kit/tools-workspaces@npm:^0.2.0, @rnx-kit/tools-workspaces@workspace:packages/tools-workspaces":
+"@rnx-kit/tools-workspaces@npm:*, @rnx-kit/tools-workspaces@npm:^0.2.0, @rnx-kit/tools-workspaces@npm:^0.2.1, @rnx-kit/tools-workspaces@workspace:packages/tools-workspaces":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/tools-workspaces@workspace:packages/tools-workspaces"
   dependencies:
