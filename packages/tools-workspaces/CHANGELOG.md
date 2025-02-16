@@ -1,5 +1,12 @@
 # @rnx-kit/tools-workspaces
 
+## 0.2.1
+
+### Patch Changes
+
+- 8aea83d: Create tools-packages which add some caching to loading package
+  information
+
 ## 0.2.0
 
 ### Minor Changes
