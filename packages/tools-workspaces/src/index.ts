@@ -9,6 +9,19 @@ import { WorkspacesInfoImpl } from "./info";
 import type { WorkspacesInfo } from "./types";
 export type { WorkspacesInfo } from "./types";
 
+export { loadConfigFile } from "./external/finder";
+export { enableLogging, trace } from "./external/logging";
+export { getConfigurationOptions } from "./external/options";
+export { getSettingsFromRepo } from "./external/settings";
+export type {
+  ConfigurationEntry,
+  ConfigurationOptions,
+  DefinitionFinder,
+  ExternalDeps,
+  PackageDefinition,
+  Settings,
+} from "./external/types";
+
 /**
  * Returns a list of all packages declared under workspaces.
  */

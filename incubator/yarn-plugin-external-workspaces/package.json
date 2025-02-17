@@ -1,0 +1,46 @@
+{
+  "name": "@rnx-kit/yarn-plugin-external-workspaces",
+  "version": "0.0.1",
+  "description": "EXPERIMENTAL - USE WITH CAUTION - yarn-plugin-external-workspaces",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/incubator/yarn-plugin-external-workspaces#readme",
+  "license": "MIT",
+  "author": {
+    "name": "Microsoft Open Source",
+    "email": "microsoftopensource@users.noreply.github.com"
+  },
+  "files": [
+    "dist/**/*.cjs",
+    "dist/**/*.cjs.map"
+  ],
+  "main": "./dist/external-workspaces.cjs",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "incubator/yarn-plugin-external-workspaces"
+  },
+  "engines": {
+    "node": ">=18.12"
+  },
+  "scripts": {
+    "build": "rnx-kit-scripts build",
+    "bundle": "rnx-kit-scripts bundle --platform yarn --minify --sourceMap",
+    "bundle:dev": "rnx-kit-scripts bundle --platform yarn --sourceMap",
+    "format": "rnx-kit-scripts format",
+    "lint": "rnx-kit-scripts lint",
+    "test": "rnx-kit-scripts test"
+  },
+  "dependencies": {
+    "@rnx-kit/tools-workspaces": "*"
+  },
+  "devDependencies": {
+    "@rnx-kit/eslint-config": "*",
+    "@rnx-kit/scripts": "*",
+    "@rnx-kit/tsconfig": "*",
+    "@types/node": "^20.0.0",
+    "@yarnpkg/core": "^4.2.0",
+    "eslint": "^9.0.0",
+    "prettier": "^3.0.0",
+    "typescript": "^5.0.0"
+  },
+  "experimental": true
+}

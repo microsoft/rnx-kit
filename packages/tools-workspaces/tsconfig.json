@@ -1,4 +1,7 @@
 {
   "extends": "@rnx-kit/tsconfig/tsconfig.json",
+  "compilerOptions": {
+    "module": "ESNext"
+  },
   "include": ["src"]
 }
