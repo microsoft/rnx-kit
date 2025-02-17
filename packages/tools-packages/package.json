@@ -1,8 +1,8 @@
 {
-  "name": "@rnx-kit/config",
-  "version": "0.7.3",
-  "description": "Define and query information about a kit package",
-  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/config#readme",
+  "name": "@rnx-kit/tools-packages",
+  "version": "0.1.0",
+  "description": "tools-packages",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/tools-packages#readme",
   "license": "MIT",
   "author": {
     "name": "Microsoft Open Source",
@@ -10,8 +10,7 @@
   },
   "files": [
     "lib/**/*.d.ts",
-    "lib/**/*.js",
-    "src"
+    "lib/**/*.js"
   ],
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -26,7 +25,10 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/microsoft/rnx-kit",
-    "directory": "packages/config"
+    "directory": "packages/tools-packages"
+  },
+  "engines": {
+    "node": ">=16.17"
   },
   "scripts": {
     "build": "rnx-kit-scripts build",
@@ -35,29 +37,16 @@
     "test": "rnx-kit-scripts test"
   },
   "dependencies": {
-    "@rnx-kit/console": "^2.0.0",
     "@rnx-kit/tools-node": "^3.0.0",
-    "@rnx-kit/tools-packages": "^0.1.0",
-    "lodash.merge": "^4.6.2",
-    "semver": "^7.0.0"
+    "@rnx-kit/tools-workspaces": "^0.2.1"
   },
   "devDependencies": {
     "@rnx-kit/eslint-config": "*",
-    "@rnx-kit/metro-plugin-cyclic-dependencies-detector": "*",
-    "@rnx-kit/metro-plugin-duplicates-checker": "*",
-    "@rnx-kit/metro-serializer-esbuild": "*",
     "@rnx-kit/scripts": "*",
-    "@rnx-kit/tools-react-native": "*",
     "@rnx-kit/tsconfig": "*",
-    "@types/lodash.merge": "^4.6.9",
     "@types/node": "^20.0.0",
-    "@types/semver": "^7.0.0",
     "eslint": "^9.0.0",
-    "metro": "^0.81.0",
     "prettier": "^3.0.0",
     "typescript": "^5.0.0"
-  },
-  "engines": {
-    "node": ">=16.17"
   }
 }

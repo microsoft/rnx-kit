@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/tools-workspaces",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "A collection of tools for working with workspaces",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/tools-workspaces#readme",
   "license": "MIT",
@@ -44,6 +44,7 @@
   "dependencies": {
     "fast-glob": "^3.2.7",
     "find-up": "^5.0.0",
+    "micromatch": "^4.0.0",
     "read-yaml-file": "^2.1.0",
     "strip-json-comments": "^3.1.1"
   },
@@ -51,6 +52,7 @@
     "@rnx-kit/eslint-config": "*",
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*",
+    "@types/micromatch": "^4.0.0",
     "@types/node": "^20.0.0",
     "eslint": "^9.0.0",
     "prettier": "^3.0.0",

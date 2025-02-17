@@ -1,5 +1,14 @@
 # Change Log - @rnx-kit/config
 
+## 0.7.3
+
+### Patch Changes
+
+- 8aea83d: Create tools-packages which add some caching to loading package
+  information
+- Updated dependencies [8aea83d]
+  - @rnx-kit/tools-packages@0.1.0
+
 ## 0.7.2
 
 ### Patch Changes
