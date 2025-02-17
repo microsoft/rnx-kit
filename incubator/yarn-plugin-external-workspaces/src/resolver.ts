@@ -1,4 +1,7 @@
-import { trace, type DefinitionFinder } from "@rnx-kit/tools-workspaces";
+import {
+  trace,
+  type DefinitionFinder,
+} from "@rnx-kit/tools-workspaces/external";
 import type {
   Descriptor,
   Locator,
