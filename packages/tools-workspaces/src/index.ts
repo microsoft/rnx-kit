@@ -1,6 +1,7 @@
 export { loadConfigFile } from "./external/finder";
 export { enableLogging, trace } from "./external/logging";
 export { getConfigurationOptions } from "./external/options";
+export { writeOutWorkspaces } from "./external/output";
 export { getSettingsFromRepo } from "./external/settings";
 export type {
   ConfigurationEntry,

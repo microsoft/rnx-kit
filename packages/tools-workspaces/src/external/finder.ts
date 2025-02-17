@@ -1,7 +1,11 @@
 import fs from "node:fs";
 import path from "node:path";
 import { trace } from "./logging";
-import type { DefinitionFinder, PackageDefinition } from "./types";
+import type {
+  DefinitionFinder,
+  ExternalDeps,
+  PackageDefinition,
+} from "./types";
 
 const jsonExt = ".json";
 const nullFinder = (_pkgName: string) => null;
@@ -27,6 +31,28 @@ export function parseJsonPath(configPath: string): {
 }
 
 /**
+ * @param parsedJson the parsed JSON
+ * @param keysPath the path to the keys in the JSON
+ * @returns the external dependencies or undefined if not found
+ */
+export function getDepsFromJson(
+  parsedJson: ReturnType<JSON["parse"]>,
+  keysPath?: string
+): ExternalDeps | undefined {
+  const keys = keysPath ? keysPath.split("/") : [];
+  let deps = parsedJson;
+
+  for (const key of keys) {
+    deps = deps[key];
+    if (!deps) {
+      // return undefined if no entries were found or the path doesn't exist
+      return undefined;
+    }
+  }
+  return deps;
+}
+
+/**
  * Attempt to load a definition finder from the specified config file path. This looks to see if the configPath
  * contains .json and if so it will split the string into before and after the json file, with the path after being
  * treated as a path into the .json file.
@@ -43,19 +69,15 @@ export function createFinderFromJson(
   keysPath?: string
 ): DefinitionFinder | undefined {
   if (fs.existsSync(jsonPath)) {
-    const keys = keysPath ? keysPath.split("/") : [];
-    let deps = JSON.parse(fs.readFileSync(jsonPath, "utf8"));
-
-    for (const key of keys) {
-      deps = deps[key];
-      if (!deps) {
-        // return a null finder to indicate that no entries were found but it was a json file
-        return nullFinder;
-      }
+    const deps = getDepsFromJson(
+      JSON.parse(fs.readFileSync(jsonPath, "utf8")),
+      keysPath
+    );
+    if (deps) {
+      trace(`Loaded the finder from the json file ${jsonPath}`);
+      // otherwise return a finder function that will return the package definition
+      return (pkgName: string) => deps[pkgName] ?? null;
     }
-    trace(`Loaded the finder from the json file ${jsonPath}`);
-    // otherwise return a finder function that will return the package definition
-    return (pkgName: string) => deps[pkgName] ?? null;
   }
   return nullFinder;
 }
