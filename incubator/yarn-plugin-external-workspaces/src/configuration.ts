@@ -4,7 +4,7 @@ import {
   enableLogging as turnOnLogging,
   type ConfigurationEntry,
   type Settings,
-} from "@rnx-kit/tools-workspaces";
+} from "@rnx-kit/tools-workspaces/external";
 import {
   SettingsType,
   type Configuration,

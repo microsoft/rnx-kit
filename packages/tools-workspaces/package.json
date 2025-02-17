@@ -22,6 +22,11 @@
       "external": "./lib/external/index.js",
       "default": "./lib/index.js"
     },
+    "./external": {
+      "types": "./lib/external/index.d.ts",
+      "typescript": "./src/external/index.ts",
+      "default": "./lib/external/index.js"
+    },
     "./package.json": "./package.json"
   },
   "repository": {
