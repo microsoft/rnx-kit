@@ -1,4 +1,4 @@
-export { loadConfigFile } from "./finder";
+export { loadExternalDeps as loadConfigFile } from "./finder";
 export { enableLogging, trace } from "./logging";
 export { getConfigurationOptions } from "./options";
 export { writeOutWorkspaces } from "./output";

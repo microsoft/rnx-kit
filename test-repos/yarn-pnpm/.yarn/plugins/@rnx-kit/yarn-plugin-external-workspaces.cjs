@@ -56,23 +56,26 @@ var plugin = (() => {
       var node_path_1 = __importDefault(__require("path"));
       var LOG_PATH = node_path_1.default.join(process.cwd(), "plugin-external-workspaces.log");
       var START_TIME = performance.now();
-      var tracingEnabled = false;
-      function writeToFile(msg) {
-        const logStream = node_fs_1.default.createWriteStream(LOG_PATH, { flags: "a" });
-        logStream.write(`${msg}
-`);
-        logStream.close();
-      }
-      function enableLogging() {
-        tracingEnabled = true;
-        writeToFile(`
-==== Session Started at ${(/* @__PURE__ */ new Date()).toISOString()} ====
-`);
+      var consoleMode = "console";
+      var traceTo = void 0;
+      var emptyCallback = () => null;
+      function enableLogging(traceSetting) {
+        traceTo = traceSetting ?? LOG_PATH;
+        if (traceTo !== consoleMode) {
+          node_fs_1.default.appendFile(LOG_PATH, `
+=== STARTING LOGGING SESSION: ${(/* @__PURE__ */ new Date()).toISOString()} ===
+`, emptyCallback);
+        }
       }
       function trace2(msg) {
-        if (tracingEnabled) {
+        if (traceTo) {
           const delta = (performance.now() - START_TIME).toFixed(2);
-          writeToFile(`[${delta}ms] ${msg}`);
+          if (traceTo === consoleMode) {
+            console.log(`[${delta}ms] ${msg}`);
+          } else {
+            node_fs_1.default.appendFile(LOG_PATH, `[${delta}ms] ${msg}
+`, emptyCallback);
+          }
         }
       }
     }

@@ -1,10 +1,10 @@
 import fs from "node:fs";
 import path from "node:path";
-import { trace } from "./logging";
 import type {
   DefinitionFinder,
   ExternalDeps,
   PackageDefinition,
+  TraceFunc,
 } from "./types";
 
 const jsonExt = ".json";
@@ -66,7 +66,8 @@ export function getDepsFromJson(
  */
 export function createFinderFromJson(
   jsonPath: string,
-  keysPath?: string
+  keysPath: string | undefined,
+  trace: TraceFunc
 ): DefinitionFinder | undefined {
   if (fs.existsSync(jsonPath)) {
     const deps = getDepsFromJson(
@@ -85,7 +86,10 @@ export function createFinderFromJson(
 /**
  * @returns a package definition finder provided by a JS file
  */
-export function createFinderFromJs(jsPath: string): DefinitionFinder {
+export function createFinderFromJs(
+  jsPath: string,
+  trace: TraceFunc
+): DefinitionFinder {
   const config = require(jsPath);
   if (!config) {
     throw new Error(`Unable to load config from ${jsPath}`);
@@ -107,7 +111,8 @@ export function createFinderFromJs(jsPath: string): DefinitionFinder {
  */
 function createValidatingFinder(
   finder: DefinitionFinder,
-  basePath: string
+  basePath: string,
+  trace: TraceFunc
 ): DefinitionFinder {
   const cache = new Map<string, PackageDefinition | null>();
 
@@ -150,30 +155,42 @@ function createValidatingFinder(
  * @param configPath the path to the config file
  * @returns a finder function which will lookup package definitions, checking whether they are local along the way
  */
-export function loadConfigFile(configPath: string): DefinitionFinder {
-  configPath = path.resolve(process.cwd(), configPath);
-
-  const { jsonPath, keysPath } = parseJsonPath(configPath);
-  const basePath = path.dirname(jsonPath ? jsonPath : configPath);
-
+export function loadExternalDeps(
+  externalDependencies: string | ExternalDeps | undefined,
+  cwd: string,
+  trace: TraceFunc
+): DefinitionFinder {
   let baseFinder: DefinitionFinder | undefined = undefined;
 
-  if (jsonPath) {
-    // try to load it from json if the config path referenced a json file
-    baseFinder = createFinderFromJson(jsonPath, keysPath);
-  } else {
-    // otherwise see if it is a js file that can be loaded
-    const extension = path.extname(configPath).toLowerCase();
-    if (extension === ".js" || extension === ".cjs") {
-      baseFinder = createFinderFromJs(configPath);
+  if (typeof externalDependencies === "string") {
+    // if the external dependencies is a string, then it should be a path to a config file
+    const configPath = path.resolve(cwd, externalDependencies);
+
+    const { jsonPath, keysPath } = parseJsonPath(configPath);
+    cwd = path.dirname(jsonPath ? jsonPath : configPath);
+
+    if (jsonPath) {
+      // try to load it from json if the config path referenced a json file
+      baseFinder = createFinderFromJson(jsonPath, keysPath, trace);
+    } else {
+      // otherwise see if it is a js file that can be loaded
+      const extension = path.extname(configPath).toLowerCase();
+      if (extension === ".js" || extension === ".cjs") {
+        baseFinder = createFinderFromJs(configPath, trace);
+      }
     }
-  }
-  if (!baseFinder) {
-    throw new Error(
-      `Invalid external workspace config path: ${configPath}. Supported types are .json, .js, and .cjs`
-    );
+    if (!baseFinder) {
+      throw new Error(
+        `Invalid external workspace config path: ${configPath}. Supported types are .json, .js, and .cjs`
+      );
+    }
+  } else if (typeof externalDependencies === "object") {
+    // if the external dependencies is an object, then we can use it directly
+    baseFinder = (pkgName: string) => externalDependencies[pkgName] ?? null;
   }
 
   // return the a caching/validating wrapper around the base finder
-  return createValidatingFinder(baseFinder, basePath);
+  return baseFinder
+    ? createValidatingFinder(baseFinder, cwd, trace)
+    : nullFinder;
 }

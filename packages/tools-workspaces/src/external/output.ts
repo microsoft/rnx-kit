@@ -1,8 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { getDepsFromJson, parseJsonPath } from "./finder";
-import { trace } from "./logging";
-import type { ExternalDeps, PackageDefinition } from "./types";
+import type { ExternalDeps, PackageDefinition, TraceFunc } from "./types";
 
 type PackageDefinitionWithName = PackageDefinition & { name: string };
 
@@ -48,7 +47,9 @@ function depsEqual(
  */
 export function writeOutWorkspaces(
   workspaces: ExternalDeps,
-  outputPath: string
+  outputPath: string,
+  checkOnly: boolean,
+  trace: TraceFunc
 ): void {
   const { jsonPath, keysPath } = parseJsonPath(outputPath);
   if (!jsonPath) {
@@ -71,6 +72,11 @@ export function writeOutWorkspaces(
   const parsedDeps = getDepsFromJson(parsedJson, keysPath);
   if (parsedDeps && depsEqual(newDeps, depsToArray(parsedDeps))) {
     trace(`No changes to ${jsonPath}, skipping update`);
+    return;
+  }
+
+  if (checkOnly) {
+    trace(`Changes detected in ${jsonPath}, skipping write`);
     return;
   }
 

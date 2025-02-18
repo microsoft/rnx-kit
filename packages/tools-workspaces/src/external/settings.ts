@@ -1,63 +1,73 @@
-import { exec } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
-import { loadConfigFile } from "./finder";
-import { getConfigurationOptions } from "./options";
-import type { Settings } from "./types";
+import { loadExternalDeps } from "./finder";
+import type {
+  ExternalWorkspacesConfig,
+  ExternalWorkspacesSettings,
+  TraceFunc,
+} from "./types";
 
-/**
- * Get an option from the yarn config, return undefined if it doesn't exist
- * @param option key value of the option to return
- * @returns a promise that will resolve to the returned result or undefined
- */
-export async function getYarnOption(
-  option: string,
-  cwd: string = process.cwd()
-): Promise<string | undefined> {
-  return new Promise((resolve) => {
-    exec(`yarn config get ${option}`, { cwd }, (error, stdout, stderr) => {
-      if (error || stderr) {
-        resolve(undefined);
-      } else {
-        resolve(stdout.trim());
-      }
-    });
-  });
+export const externalWorkspacesKey = "external-workspaces";
+
+const nullFunction = () => null;
+
+function writeToFile(msg: string, logPath: string) {
+  fs.appendFile(logPath, msg, nullFunction);
 }
 
-let repoSettings: Settings | undefined = undefined;
+/**
+ * @param logTo either 'console' or a path to a file to log to, or undefined for no logging
+ * @returns a function that will trace output, or a null function that will do nothing
+ */
+function createTraceFunction(logTo: string | undefined): TraceFunc {
+  if (typeof logTo === "string") {
+    const startTime = performance.now();
+    if (logTo === "console") {
+      return (msg: string) =>
+        console.log(`[${(performance.now() - startTime).toFixed(2)}ms] ${msg}`);
+    } else {
+      // ensure any directory exists
+      const dir = path.dirname(logTo);
+      if (dir && !fs.existsSync(dir)) {
+        fs.mkdirSync(dir, { recursive: true, mode: 0o755 });
+      }
+      // write out a session start message
+      writeToFile(
+        `\n==== Session Started at ${new Date().toISOString()} ====\n`,
+        logTo
+      );
+      // now return the file tracer which captures the start time and log path
+      return (msg: string) => {
+        const outputMsg = `[${(performance.now() - startTime).toFixed(2)}ms] ${msg}\n`;
+        writeToFile(outputMsg, logTo);
+      };
+    }
+  }
+  return nullFunction;
+}
+
+export function settingsFromConfig(
+  rootPath: string,
+  config: ExternalWorkspacesConfig
+): ExternalWorkspacesSettings {
+  const { logTo, externalDependencies, ...outputOptions } = config;
+  const trace = createTraceFunction(config.logTo);
+  const finder = loadExternalDeps(externalDependencies, rootPath, trace);
+  return { finder, trace, ...outputOptions };
+}
 
 /**
- * @returns the settings for the current repo, loaded using the node environment rather than the yarn plugin environment
+ * Load the settings for the current repo from the root package.json
+ * @param rootPath path to the root of the repository
  */
-export async function getSettingsFromRepo(rootPath: string): Promise<Settings> {
-  if (repoSettings) {
-    return repoSettings;
-  }
-
-  if (!rootPath) {
-    throw new Error("No workspace root specified");
-  }
-
-  const isYarn = fs.existsSync(path.join(rootPath, "yarn.lock"));
-  if (!isYarn) {
-    throw new Error("External workspaces is only supported in yarn workspaces");
-  }
-
-  const configPathEntry = getConfigurationOptions().configPath;
-  const configPathFromYarn = await getYarnOption(
-    configPathEntry.configKey,
-    rootPath
+export function getExternalWorkspacesSettings(
+  rootPath: string
+): ExternalWorkspacesSettings {
+  const rootManifest = JSON.parse(
+    fs.readFileSync(path.join(rootPath, "package.json"), "utf8")
   );
-  const configPath = path.resolve(
-    rootPath,
-    configPathFromYarn ?? configPathEntry.defaultValue
-  );
-
-  return (repoSettings = {
-    configPath,
-    enableLogging: false,
-    outputWorkspaces: "",
-    finder: loadConfigFile(configPath),
-  });
+  const config = rootManifest[
+    externalWorkspacesKey
+  ] as ExternalWorkspacesConfig;
+  return settingsFromConfig(rootPath, config || {});
 }
