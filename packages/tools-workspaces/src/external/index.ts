@@ -1,13 +1,11 @@
-export { loadExternalDeps as loadConfigFile } from "./finder";
-export { enableLogging, trace } from "./logging";
-export { getConfigurationOptions } from "./options";
+export { loadExternalDeps } from "./finder";
 export { writeOutWorkspaces } from "./output";
-export { getSettingsFromRepo } from "./settings";
+export { getExternalWorkspacesSettings, settingsFromConfig } from "./settings";
 export type {
-  ConfigurationEntry,
-  ConfigurationOptions,
   DefinitionFinder,
   ExternalDeps,
+  ExternalWorkspacesConfig,
+  ExternalWorkspacesSettings,
   PackageDefinition,
-  Settings,
+  TraceFunc,
 } from "./types";

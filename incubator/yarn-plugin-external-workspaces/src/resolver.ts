@@ -1,6 +1,7 @@
 import {
-  trace,
   type DefinitionFinder,
+  type TraceFunc,
+  getExternalWorkspacesSettings,
 } from "@rnx-kit/tools-workspaces/external";
 import type {
   Descriptor,
@@ -11,26 +12,30 @@ import type {
   Resolver,
 } from "@yarnpkg/core";
 import { structUtils } from "@yarnpkg/core";
-import { getSettingsFromProject } from "./configuration";
 
 const { makeDescriptor, makeLocator, stringifyIdent } = structUtils;
+const nullFunction = () => null;
 
 /**
  * The resolver implements the logic for the external: protocol.
  */
 export class ExternalResolver implements Resolver {
   static protocol = "external:";
-  private finder: DefinitionFinder | undefined = undefined;
+  private finder: DefinitionFinder = nullFunction;
+  private trace: TraceFunc = nullFunction;
+  private settingsLoaded = false;
   private report: ResolveOptions["report"] | undefined = undefined;
 
   /**
    * Ensure a finder is created if it is not already present, then return it
    */
-  private getFinder(opts: MinimalResolveOptions) {
-    if (!this.finder) {
-      this.finder = getSettingsFromProject(opts.project).finder;
+  private ensureSettings(opts: MinimalResolveOptions) {
+    if (!this.settingsLoaded) {
+      const settings = getExternalWorkspacesSettings(opts.project.cwd);
+      this.finder = settings.finder;
+      this.trace = settings.trace;
+      this.settingsLoaded = true;
     }
-    return this.finder;
   }
 
   /**
@@ -43,8 +48,9 @@ export class ExternalResolver implements Resolver {
     _descriptor: Descriptor,
     _opts: MinimalResolveOptions
   ): Record<string, Descriptor> {
-    trace(
-      `UNEXPECTED: getResolutionDependencies called for ${stringifyIdent(_descriptor)}`
+    this.trace(
+      `UNEXPECTED: getResolutionDependencies called for ${stringifyIdent(_descriptor)}`,
+      true
     );
     return {};
   }
@@ -58,11 +64,13 @@ export class ExternalResolver implements Resolver {
    */
   supportsDescriptor(
     descriptor: Descriptor,
-    _opts: MinimalResolveOptions
+    opts: MinimalResolveOptions
   ): boolean {
+    this.ensureSettings(opts);
     const found = descriptor.range.startsWith(ExternalResolver.protocol);
-    trace(
-      `supportsDescriptor called for ${stringifyIdent(descriptor)} : ${descriptor.range}`
+    this.trace(
+      `supportsDescriptor called for ${stringifyIdent(descriptor)} : ${descriptor.range}`,
+      true
     );
     return found;
   }
@@ -77,7 +85,10 @@ export class ExternalResolver implements Resolver {
    */
   supportsLocator(locator: Locator, _opts: MinimalResolveOptions): boolean {
     const found = locator.reference.startsWith(ExternalResolver.protocol);
-    trace(`UNEXPECTED: supportsLocator called for ${stringifyIdent(locator)}`);
+    this.trace(
+      `UNEXPECTED: supportsLocator called for ${stringifyIdent(locator)}`,
+      true
+    );
     return found;
   }
 
@@ -128,11 +139,11 @@ export class ExternalResolver implements Resolver {
     opts: MinimalResolveOptions
   ): Descriptor {
     // get/ensure the finder function to look up the possible external dependency
-    const finder = this.getFinder(opts);
+    this.ensureSettings(opts);
 
     // look up the package information from the finder
     const pkgName = stringifyIdent(descriptor);
-    const info = finder(pkgName);
+    const info = this.finder(pkgName);
 
     if (!info) {
       // if no package information was found, throw an error as this isn't a supported external workspace
@@ -143,11 +154,17 @@ export class ExternalResolver implements Resolver {
 
     if (info.path) {
       // If the package is found on the local filesystem, transform to a portal: resolver to link to the local package root
-      trace(`bindDescriptor transforming ${pkgName} to "portal:${info.path}"`);
+      this.trace(
+        `bindDescriptor transforming ${pkgName} to "portal:${info.path}"`,
+        true
+      );
       return makeDescriptor(descriptor, `portal:${info.path}`);
     } else {
       // If it doesn't exist locally, transform to an npm: resolver to fetch from the registry
-      trace(`bindDescriptor transforming ${pkgName} to "npm:${info.version}"`);
+      this.trace(
+        `bindDescriptor transforming ${pkgName} to "npm:${info.version}"`,
+        true
+      );
       return makeDescriptor(descriptor, `npm:${info.version}`);
     }
   }
@@ -172,7 +189,10 @@ export class ExternalResolver implements Resolver {
     _dependencies: Record<string, Package>,
     _opts: ResolveOptions
   ) {
-    trace(`UNEXPECTED: getCandidates called for ${stringifyIdent(descriptor)}`);
+    this.trace(
+      `UNEXPECTED: getCandidates called for ${stringifyIdent(descriptor)}`,
+      true
+    );
     return [makeLocator(descriptor, descriptor.range)];
   }
 
@@ -207,8 +227,9 @@ export class ExternalResolver implements Resolver {
     opts: ResolveOptions
   ) {
     this.report ??= opts.report;
-    trace(
-      `UNEXPECTEDP: getSatisfying called for ${stringifyIdent(descriptor)}`
+    this.trace(
+      `UNEXPECTEDP: getSatisfying called for ${stringifyIdent(descriptor)}`,
+      true
     );
     const [locator] = await this.getCandidates(descriptor, dependencies, opts);
 
@@ -229,7 +250,10 @@ export class ExternalResolver implements Resolver {
    */
   async resolve(locator: Locator, opts: ResolveOptions) {
     this.report ??= opts.report;
-    trace(`UNEXPECTED: Resolving external locator ${stringifyIdent(locator)}`);
+    this.trace(
+      `UNEXPECTED: Resolving external locator ${stringifyIdent(locator)}`,
+      true
+    );
     // For a purely transforming protocol, you can just return an empty Manifest
     return {
       ...locator,

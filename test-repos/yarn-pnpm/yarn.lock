@@ -3779,9 +3779,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-webapis/web-storage@npm:^0.4.2":
-  version: 0.4.2
-  resolution: "@react-native-webapis/web-storage@npm:0.4.2"
+"@react-native-webapis/web-storage@portal:/Users/jasonmorse/dev/rnx-test/incubator/@react-native-webapis/web-storage::locator=%40rnx-repo-yarn-pnpm%2Ftest-app-desktop%40workspace%3Apackages%2Ftest-app-desktop":
+  version: 0.0.0-use.local
+  resolution: "@react-native-webapis/web-storage@portal:/Users/jasonmorse/dev/rnx-test/incubator/@react-native-webapis/web-storage::locator=%40rnx-repo-yarn-pnpm%2Ftest-app-desktop%40workspace%3Apackages%2Ftest-app-desktop"
   peerDependencies:
     "@callstack/react-native-visionos": ">=0.74"
     react: ">=18.2.0"
@@ -3795,9 +3795,46 @@ __metadata:
       optional: true
     react-native-windows:
       optional: true
-  checksum: 10c0/d4622479f5eb9af053d5bdc2c63981d05e2ec3eb97833d006aa703bb63e958451dde6e0ca977bd517fa6440ac82bdbb86911dcd005b20642bc13936f56a26a0f
   languageName: node
-  linkType: hard
+  linkType: soft
+
+"@react-native-webapis/web-storage@portal:/Users/jasonmorse/dev/rnx-test/incubator/@react-native-webapis/web-storage::locator=%40rnx-repo-yarn-pnpm%2Ftest-app-mobile%40workspace%3Apackages%2Ftest-app-mobile":
+  version: 0.0.0-use.local
+  resolution: "@react-native-webapis/web-storage@portal:/Users/jasonmorse/dev/rnx-test/incubator/@react-native-webapis/web-storage::locator=%40rnx-repo-yarn-pnpm%2Ftest-app-mobile%40workspace%3Apackages%2Ftest-app-mobile"
+  peerDependencies:
+    "@callstack/react-native-visionos": ">=0.74"
+    react: ">=18.2.0"
+    react-native: ">=0.74"
+    react-native-macos: ">=0.74"
+    react-native-windows: ">=0.74"
+  peerDependenciesMeta:
+    "@callstack/react-native-visionos":
+      optional: true
+    react-native-macos:
+      optional: true
+    react-native-windows:
+      optional: true
+  languageName: node
+  linkType: soft
+
+"@react-native-webapis/web-storage@portal:/Users/jasonmorse/dev/rnx-test/incubator/@react-native-webapis/web-storage::locator=%40rnx-repo-yarn-pnpm%2Ftest-app-shared%40workspace%3Apackages%2Ftest-app-shared":
+  version: 0.0.0-use.local
+  resolution: "@react-native-webapis/web-storage@portal:/Users/jasonmorse/dev/rnx-test/incubator/@react-native-webapis/web-storage::locator=%40rnx-repo-yarn-pnpm%2Ftest-app-shared%40workspace%3Apackages%2Ftest-app-shared"
+  peerDependencies:
+    "@callstack/react-native-visionos": ">=0.74"
+    react: ">=18.2.0"
+    react-native: ">=0.74"
+    react-native-macos: ">=0.74"
+    react-native-windows: ">=0.74"
+  peerDependenciesMeta:
+    "@callstack/react-native-visionos":
+      optional: true
+    react-native-macos:
+      optional: true
+    react-native-windows:
+      optional: true
+  languageName: node
+  linkType: soft
 
 "@react-native-windows/cli@npm:0.76.3":
   version: 0.76.3
@@ -4113,18 +4150,41 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rnx-kit/align-deps@npm:^3.0.1, @rnx-kit/align-deps@npm:^3.0.3":
-  version: 3.0.3
-  resolution: "@rnx-kit/align-deps@npm:3.0.3"
+"@rnx-kit/align-deps@portal:/Users/jasonmorse/dev/rnx-test/packages/align-deps::locator=%40rnx-kit%2Fcli%40portal%3A%2FUsers%2Fjasonmorse%2Fdev%2Frnx-test%2Fpackages%2Fcli%3A%3Alocator%3D%2540rnx-repo-yarn-pnpm%252Ftest-app-desktop%2540workspace%253Apackages%252Ftest-app-desktop":
+  version: 0.0.0-use.local
+  resolution: "@rnx-kit/align-deps@portal:/Users/jasonmorse/dev/rnx-test/packages/align-deps::locator=%40rnx-kit%2Fcli%40portal%3A%2FUsers%2Fjasonmorse%2Fdev%2Frnx-test%2Fpackages%2Fcli%3A%3Alocator%3D%2540rnx-repo-yarn-pnpm%252Ftest-app-desktop%2540workspace%253Apackages%252Ftest-app-desktop"
   bin:
     rnx-align-deps: lib/index.js
-  checksum: 10c0/4459947e0958d363beceb268683e3771d558de157877689ac09ae48cd2d46701fdf8ab5b9f8919c9be0d2afdab38a9e8e18e740a2cf16223befd25085d920be7
   languageName: node
-  linkType: hard
+  linkType: soft
 
-"@rnx-kit/babel-preset-metro-react-native@npm:^2.0.0":
-  version: 2.0.0
-  resolution: "@rnx-kit/babel-preset-metro-react-native@npm:2.0.0"
+"@rnx-kit/align-deps@portal:/Users/jasonmorse/dev/rnx-test/packages/align-deps::locator=%40rnx-kit%2Fcli%40portal%3A%2FUsers%2Fjasonmorse%2Fdev%2Frnx-test%2Fpackages%2Fcli%3A%3Alocator%3D%2540rnx-repo-yarn-pnpm%252Ftest-app-mobile%2540workspace%253Apackages%252Ftest-app-mobile":
+  version: 0.0.0-use.local
+  resolution: "@rnx-kit/align-deps@portal:/Users/jasonmorse/dev/rnx-test/packages/align-deps::locator=%40rnx-kit%2Fcli%40portal%3A%2FUsers%2Fjasonmorse%2Fdev%2Frnx-test%2Fpackages%2Fcli%3A%3Alocator%3D%2540rnx-repo-yarn-pnpm%252Ftest-app-mobile%2540workspace%253Apackages%252Ftest-app-mobile"
+  bin:
+    rnx-align-deps: lib/index.js
+  languageName: node
+  linkType: soft
+
+"@rnx-kit/align-deps@portal:/Users/jasonmorse/dev/rnx-test/packages/align-deps::locator=%40rnx-repo-yarn-pnpm%2Fscripts%40workspace%3Ascripts":
+  version: 0.0.0-use.local
+  resolution: "@rnx-kit/align-deps@portal:/Users/jasonmorse/dev/rnx-test/packages/align-deps::locator=%40rnx-repo-yarn-pnpm%2Fscripts%40workspace%3Ascripts"
+  bin:
+    rnx-align-deps: lib/index.js
+  languageName: node
+  linkType: soft
+
+"@rnx-kit/align-deps@portal:/Users/jasonmorse/dev/rnx-test/packages/align-deps::locator=rnx-kit-test-repo%40workspace%3A.":
+  version: 0.0.0-use.local
+  resolution: "@rnx-kit/align-deps@portal:/Users/jasonmorse/dev/rnx-test/packages/align-deps::locator=rnx-kit-test-repo%40workspace%3A."
+  bin:
+    rnx-align-deps: lib/index.js
+  languageName: node
+  linkType: soft
+
+"@rnx-kit/babel-preset-metro-react-native@portal:/Users/jasonmorse/dev/rnx-test/packages/babel-preset-metro-react-native::locator=%40rnx-repo-yarn-pnpm%2Ftest-app-desktop%40workspace%3Apackages%2Ftest-app-desktop":
+  version: 0.0.0-use.local
+  resolution: "@rnx-kit/babel-preset-metro-react-native@portal:/Users/jasonmorse/dev/rnx-test/packages/babel-preset-metro-react-native::locator=%40rnx-repo-yarn-pnpm%2Ftest-app-desktop%40workspace%3Apackages%2Ftest-app-desktop"
   dependencies:
     "@rnx-kit/console": "npm:^2.0.0"
     babel-plugin-const-enum: "npm:^1.0.0"
@@ -4141,13 +4201,34 @@ __metadata:
       optional: true
     metro-react-native-babel-preset:
       optional: true
-  checksum: 10c0/8d6de76c182066059a03f24f02e7198c3c27ea5c367c953b54f56ba33cf609196d4c6d9514c48bed7c7a5e529c33ee9ca86f941bc495ee393f62abfb0f401cb0
   languageName: node
-  linkType: hard
+  linkType: soft
 
-"@rnx-kit/cli@npm:^0.18.5":
-  version: 0.18.5
-  resolution: "@rnx-kit/cli@npm:0.18.5"
+"@rnx-kit/babel-preset-metro-react-native@portal:/Users/jasonmorse/dev/rnx-test/packages/babel-preset-metro-react-native::locator=%40rnx-repo-yarn-pnpm%2Ftest-app-mobile%40workspace%3Apackages%2Ftest-app-mobile":
+  version: 0.0.0-use.local
+  resolution: "@rnx-kit/babel-preset-metro-react-native@portal:/Users/jasonmorse/dev/rnx-test/packages/babel-preset-metro-react-native::locator=%40rnx-repo-yarn-pnpm%2Ftest-app-mobile%40workspace%3Apackages%2Ftest-app-mobile"
+  dependencies:
+    "@rnx-kit/console": "npm:^2.0.0"
+    babel-plugin-const-enum: "npm:^1.0.0"
+  peerDependencies:
+    "@babel/core": ^7.20.0
+    "@babel/plugin-transform-typescript": ^7.20.0
+    "@babel/runtime": ^7.20.0
+    "@react-native/babel-preset": "*"
+    metro-react-native-babel-preset: "*"
+  peerDependenciesMeta:
+    "@babel/plugin-transform-typescript":
+      optional: true
+    "@react-native/babel-preset":
+      optional: true
+    metro-react-native-babel-preset:
+      optional: true
+  languageName: node
+  linkType: soft
+
+"@rnx-kit/cli@portal:/Users/jasonmorse/dev/rnx-test/packages/cli::locator=%40rnx-repo-yarn-pnpm%2Ftest-app-desktop%40workspace%3Apackages%2Ftest-app-desktop":
+  version: 0.0.0-use.local
+  resolution: "@rnx-kit/cli@portal:/Users/jasonmorse/dev/rnx-test/packages/cli::locator=%40rnx-repo-yarn-pnpm%2Ftest-app-desktop%40workspace%3Apackages%2Ftest-app-desktop"
   dependencies:
     "@rnx-kit/align-deps": "npm:^3.0.1"
     "@rnx-kit/config": "npm:^0.7.0"
@@ -4177,9 +4258,43 @@ __metadata:
       optional: true
   bin:
     rnx-cli: bin/rnx-cli.cjs
-  checksum: 10c0/115de9e87ad186e0973697656db6b521ee6487b1a23ea516bd8e45a605c7e7f566ae9080e5730ef9ab1d4e24f6ca0345f57081d0ef2e97e94491373920886b7f
   languageName: node
-  linkType: hard
+  linkType: soft
+
+"@rnx-kit/cli@portal:/Users/jasonmorse/dev/rnx-test/packages/cli::locator=%40rnx-repo-yarn-pnpm%2Ftest-app-mobile%40workspace%3Apackages%2Ftest-app-mobile":
+  version: 0.0.0-use.local
+  resolution: "@rnx-kit/cli@portal:/Users/jasonmorse/dev/rnx-test/packages/cli::locator=%40rnx-repo-yarn-pnpm%2Ftest-app-mobile%40workspace%3Apackages%2Ftest-app-mobile"
+  dependencies:
+    "@rnx-kit/align-deps": "npm:^3.0.1"
+    "@rnx-kit/config": "npm:^0.7.0"
+    "@rnx-kit/console": "npm:^2.0.0"
+    "@rnx-kit/metro-plugin-cyclic-dependencies-detector": "npm:^2.0.0"
+    "@rnx-kit/metro-plugin-duplicates-checker": "npm:^3.0.0"
+    "@rnx-kit/metro-plugin-typescript": "npm:^0.5.0"
+    "@rnx-kit/metro-serializer": "npm:^2.0.0"
+    "@rnx-kit/metro-serializer-esbuild": "npm:^0.2.1"
+    "@rnx-kit/metro-service": "npm:^4.0.2"
+    "@rnx-kit/third-party-notices": "npm:^2.0.0"
+    "@rnx-kit/tools-android": "npm:^0.2.0"
+    "@rnx-kit/tools-apple": "npm:^0.2.1"
+    "@rnx-kit/tools-language": "npm:^3.0.0"
+    "@rnx-kit/tools-node": "npm:^3.0.0"
+    "@rnx-kit/tools-react-native": "npm:^2.0.3"
+    commander: "npm:^11.1.0"
+    ora: "npm:^5.4.1"
+    qrcode: "npm:^1.5.0"
+  peerDependencies:
+    jest: ">=26.0"
+    react-native: ">=0.64"
+  peerDependenciesMeta:
+    jest:
+      optional: true
+    react-native:
+      optional: true
+  bin:
+    rnx-cli: bin/rnx-cli.cjs
+  languageName: node
+  linkType: soft
 
 "@rnx-kit/config@npm:^0.7.0":
   version: 0.7.2
@@ -4206,9 +4321,9 @@ __metadata:
   languageName: node
   linkType: soft
 
-"@rnx-kit/eslint-plugin@npm:*, @rnx-kit/eslint-plugin@npm:0.8.6":
-  version: 0.8.6
-  resolution: "@rnx-kit/eslint-plugin@npm:0.8.6"
+"@rnx-kit/eslint-plugin@portal:/Users/jasonmorse/dev/rnx-test/packages/eslint-plugin::locator=%40rnx-repo-yarn-pnpm%2Fbutton%40workspace%3Apackages%2Fbutton":
+  version: 0.0.0-use.local
+  resolution: "@rnx-kit/eslint-plugin@portal:/Users/jasonmorse/dev/rnx-test/packages/eslint-plugin::locator=%40rnx-repo-yarn-pnpm%2Fbutton%40workspace%3Apackages%2Fbutton"
   dependencies:
     "@react-native/eslint-plugin": "npm:^0.76.0"
     enhanced-resolve: "npm:^5.8.3"
@@ -4217,13 +4332,82 @@ __metadata:
     typescript-eslint: "npm:^8.0.0"
   peerDependencies:
     eslint: ">=8.57.0"
-  checksum: 10c0/a0a6d87ce1bc2aba8127f95994a7d2df5b7e5d303e43c280cb473542b9d18df6f71d29f70278cd2c9c6beba1e5442543a342f351217645f3f55135007f9f4341
   languageName: node
-  linkType: hard
+  linkType: soft
 
-"@rnx-kit/jest-preset@npm:^0.2.1":
-  version: 0.2.1
-  resolution: "@rnx-kit/jest-preset@npm:0.2.1"
+"@rnx-kit/eslint-plugin@portal:/Users/jasonmorse/dev/rnx-test/packages/eslint-plugin::locator=%40rnx-repo-yarn-pnpm%2Fscripts%40workspace%3Ascripts":
+  version: 0.0.0-use.local
+  resolution: "@rnx-kit/eslint-plugin@portal:/Users/jasonmorse/dev/rnx-test/packages/eslint-plugin::locator=%40rnx-repo-yarn-pnpm%2Fscripts%40workspace%3Ascripts"
+  dependencies:
+    "@react-native/eslint-plugin": "npm:^0.76.0"
+    enhanced-resolve: "npm:^5.8.3"
+    eslint-plugin-react: "npm:^7.35.2"
+    eslint-plugin-react-hooks: "npm:^5.0.0"
+    typescript-eslint: "npm:^8.0.0"
+  peerDependencies:
+    eslint: ">=8.57.0"
+  languageName: node
+  linkType: soft
+
+"@rnx-kit/eslint-plugin@portal:/Users/jasonmorse/dev/rnx-test/packages/eslint-plugin::locator=%40rnx-repo-yarn-pnpm%2Ftest-app-desktop%40workspace%3Apackages%2Ftest-app-desktop":
+  version: 0.0.0-use.local
+  resolution: "@rnx-kit/eslint-plugin@portal:/Users/jasonmorse/dev/rnx-test/packages/eslint-plugin::locator=%40rnx-repo-yarn-pnpm%2Ftest-app-desktop%40workspace%3Apackages%2Ftest-app-desktop"
+  dependencies:
+    "@react-native/eslint-plugin": "npm:^0.76.0"
+    enhanced-resolve: "npm:^5.8.3"
+    eslint-plugin-react: "npm:^7.35.2"
+    eslint-plugin-react-hooks: "npm:^5.0.0"
+    typescript-eslint: "npm:^8.0.0"
+  peerDependencies:
+    eslint: ">=8.57.0"
+  languageName: node
+  linkType: soft
+
+"@rnx-kit/eslint-plugin@portal:/Users/jasonmorse/dev/rnx-test/packages/eslint-plugin::locator=%40rnx-repo-yarn-pnpm%2Ftest-app-mobile%40workspace%3Apackages%2Ftest-app-mobile":
+  version: 0.0.0-use.local
+  resolution: "@rnx-kit/eslint-plugin@portal:/Users/jasonmorse/dev/rnx-test/packages/eslint-plugin::locator=%40rnx-repo-yarn-pnpm%2Ftest-app-mobile%40workspace%3Apackages%2Ftest-app-mobile"
+  dependencies:
+    "@react-native/eslint-plugin": "npm:^0.76.0"
+    enhanced-resolve: "npm:^5.8.3"
+    eslint-plugin-react: "npm:^7.35.2"
+    eslint-plugin-react-hooks: "npm:^5.0.0"
+    typescript-eslint: "npm:^8.0.0"
+  peerDependencies:
+    eslint: ">=8.57.0"
+  languageName: node
+  linkType: soft
+
+"@rnx-kit/eslint-plugin@portal:/Users/jasonmorse/dev/rnx-test/packages/eslint-plugin::locator=%40rnx-repo-yarn-pnpm%2Ftest-app-shared%40workspace%3Apackages%2Ftest-app-shared":
+  version: 0.0.0-use.local
+  resolution: "@rnx-kit/eslint-plugin@portal:/Users/jasonmorse/dev/rnx-test/packages/eslint-plugin::locator=%40rnx-repo-yarn-pnpm%2Ftest-app-shared%40workspace%3Apackages%2Ftest-app-shared"
+  dependencies:
+    "@react-native/eslint-plugin": "npm:^0.76.0"
+    enhanced-resolve: "npm:^5.8.3"
+    eslint-plugin-react: "npm:^7.35.2"
+    eslint-plugin-react-hooks: "npm:^5.0.0"
+    typescript-eslint: "npm:^8.0.0"
+  peerDependencies:
+    eslint: ">=8.57.0"
+  languageName: node
+  linkType: soft
+
+"@rnx-kit/eslint-plugin@portal:/Users/jasonmorse/dev/rnx-test/packages/eslint-plugin::locator=%40rnx-repo-yarn-pnpm%2Ftext%40workspace%3Apackages%2Ftext":
+  version: 0.0.0-use.local
+  resolution: "@rnx-kit/eslint-plugin@portal:/Users/jasonmorse/dev/rnx-test/packages/eslint-plugin::locator=%40rnx-repo-yarn-pnpm%2Ftext%40workspace%3Apackages%2Ftext"
+  dependencies:
+    "@react-native/eslint-plugin": "npm:^0.76.0"
+    enhanced-resolve: "npm:^5.8.3"
+    eslint-plugin-react: "npm:^7.35.2"
+    eslint-plugin-react-hooks: "npm:^5.0.0"
+    typescript-eslint: "npm:^8.0.0"
+  peerDependencies:
+    eslint: ">=8.57.0"
+  languageName: node
+  linkType: soft
+
+"@rnx-kit/jest-preset@portal:/Users/jasonmorse/dev/rnx-test/packages/jest-preset::locator=%40rnx-repo-yarn-pnpm%2Ftest-app-desktop%40workspace%3Apackages%2Ftest-app-desktop":
+  version: 0.0.0-use.local
+  resolution: "@rnx-kit/jest-preset@portal:/Users/jasonmorse/dev/rnx-test/packages/jest-preset::locator=%40rnx-repo-yarn-pnpm%2Ftest-app-desktop%40workspace%3Apackages%2Ftest-app-desktop"
   dependencies:
     "@babel/core": "npm:^7.0.0"
     "@babel/preset-env": "npm:^7.0.0"
@@ -4235,13 +4419,29 @@ __metadata:
   peerDependenciesMeta:
     react-native:
       optional: true
-  checksum: 10c0/2d5c71423e90f1361a826f56bc5ec1ec4a6e4bf7937adaebd24917842c79e1e1a71759149479a7ca22959eff671b2604d05b54223858cc7e2e38f2d564a22c7f
   languageName: node
-  linkType: hard
+  linkType: soft
 
-"@rnx-kit/metro-config@npm:^2.0.1":
-  version: 2.0.1
-  resolution: "@rnx-kit/metro-config@npm:2.0.1"
+"@rnx-kit/jest-preset@portal:/Users/jasonmorse/dev/rnx-test/packages/jest-preset::locator=%40rnx-repo-yarn-pnpm%2Ftest-app-mobile%40workspace%3Apackages%2Ftest-app-mobile":
+  version: 0.0.0-use.local
+  resolution: "@rnx-kit/jest-preset@portal:/Users/jasonmorse/dev/rnx-test/packages/jest-preset::locator=%40rnx-repo-yarn-pnpm%2Ftest-app-mobile%40workspace%3Apackages%2Ftest-app-mobile"
+  dependencies:
+    "@babel/core": "npm:^7.0.0"
+    "@babel/preset-env": "npm:^7.0.0"
+    "@babel/preset-typescript": "npm:^7.0.0"
+    "@rnx-kit/tools-react-native": "npm:^2.0.3"
+    find-up: "npm:^5.0.0"
+  peerDependencies:
+    react-native: ^0.0.0-0 || >=0.63
+  peerDependenciesMeta:
+    react-native:
+      optional: true
+  languageName: node
+  linkType: soft
+
+"@rnx-kit/metro-config@portal:/Users/jasonmorse/dev/rnx-test/packages/metro-config::locator=%40rnx-repo-yarn-pnpm%2Ftest-app-desktop%40workspace%3Apackages%2Ftest-app-desktop":
+  version: 0.0.0-use.local
+  resolution: "@rnx-kit/metro-config@portal:/Users/jasonmorse/dev/rnx-test/packages/metro-config::locator=%40rnx-repo-yarn-pnpm%2Ftest-app-desktop%40workspace%3Apackages%2Ftest-app-desktop"
   dependencies:
     "@rnx-kit/tools-node": "npm:^3.0.0"
     "@rnx-kit/tools-react-native": "npm:^2.0.0"
@@ -4253,31 +4453,105 @@ __metadata:
   peerDependenciesMeta:
     "@react-native/metro-config":
       optional: true
-  checksum: 10c0/fb90bdcec980595898a7c675dd83c81a91f08bdfea06ed1e9f8583fa69b719b089527bc0595406d65e3c70fd46c5acfbafd373183cd91e0c68cb7c81427b8d11
   languageName: node
-  linkType: hard
+  linkType: soft
 
-"@rnx-kit/metro-plugin-cyclic-dependencies-detector@npm:^2.0.0":
-  version: 2.0.0
-  resolution: "@rnx-kit/metro-plugin-cyclic-dependencies-detector@npm:2.0.0"
+"@rnx-kit/metro-config@portal:/Users/jasonmorse/dev/rnx-test/packages/metro-config::locator=%40rnx-repo-yarn-pnpm%2Ftest-app-mobile%40workspace%3Apackages%2Ftest-app-mobile":
+  version: 0.0.0-use.local
+  resolution: "@rnx-kit/metro-config@portal:/Users/jasonmorse/dev/rnx-test/packages/metro-config::locator=%40rnx-repo-yarn-pnpm%2Ftest-app-mobile%40workspace%3Apackages%2Ftest-app-mobile"
+  dependencies:
+    "@rnx-kit/tools-node": "npm:^3.0.0"
+    "@rnx-kit/tools-react-native": "npm:^2.0.0"
+    "@rnx-kit/tools-workspaces": "npm:^0.2.0"
+  peerDependencies:
+    "@react-native/metro-config": "*"
+    react: "*"
+    react-native: "*"
+  peerDependenciesMeta:
+    "@react-native/metro-config":
+      optional: true
+  languageName: node
+  linkType: soft
+
+"@rnx-kit/metro-plugin-cyclic-dependencies-detector@portal:/Users/jasonmorse/dev/rnx-test/packages/metro-plugin-cyclic-dependencies-detector::locator=%40rnx-kit%2Fcli%40portal%3A%2FUsers%2Fjasonmorse%2Fdev%2Frnx-test%2Fpackages%2Fcli%3A%3Alocator%3D%2540rnx-repo-yarn-pnpm%252Ftest-app-desktop%2540workspace%253Apackages%252Ftest-app-desktop":
+  version: 0.0.0-use.local
+  resolution: "@rnx-kit/metro-plugin-cyclic-dependencies-detector@portal:/Users/jasonmorse/dev/rnx-test/packages/metro-plugin-cyclic-dependencies-detector::locator=%40rnx-kit%2Fcli%40portal%3A%2FUsers%2Fjasonmorse%2Fdev%2Frnx-test%2Fpackages%2Fcli%3A%3Alocator%3D%2540rnx-repo-yarn-pnpm%252Ftest-app-desktop%2540workspace%253Apackages%252Ftest-app-desktop"
   dependencies:
     "@rnx-kit/console": "npm:^2.0.0"
     "@rnx-kit/tools-node": "npm:^3.0.0"
-  checksum: 10c0/8bb5748d339e1f73eaea299ce0e13972c93d7d58e871db316610dbf144814dbc815cce7ca3408274d7544b6ba3c83deb592ecf42be0be08a650f4c456a47f9d2
   languageName: node
-  linkType: hard
+  linkType: soft
 
-"@rnx-kit/metro-plugin-duplicates-checker@npm:^3.0.0":
-  version: 3.0.0
-  resolution: "@rnx-kit/metro-plugin-duplicates-checker@npm:3.0.0"
+"@rnx-kit/metro-plugin-cyclic-dependencies-detector@portal:/Users/jasonmorse/dev/rnx-test/packages/metro-plugin-cyclic-dependencies-detector::locator=%40rnx-kit%2Fcli%40portal%3A%2FUsers%2Fjasonmorse%2Fdev%2Frnx-test%2Fpackages%2Fcli%3A%3Alocator%3D%2540rnx-repo-yarn-pnpm%252Ftest-app-mobile%2540workspace%253Apackages%252Ftest-app-mobile":
+  version: 0.0.0-use.local
+  resolution: "@rnx-kit/metro-plugin-cyclic-dependencies-detector@portal:/Users/jasonmorse/dev/rnx-test/packages/metro-plugin-cyclic-dependencies-detector::locator=%40rnx-kit%2Fcli%40portal%3A%2FUsers%2Fjasonmorse%2Fdev%2Frnx-test%2Fpackages%2Fcli%3A%3Alocator%3D%2540rnx-repo-yarn-pnpm%252Ftest-app-mobile%2540workspace%253Apackages%252Ftest-app-mobile"
+  dependencies:
+    "@rnx-kit/console": "npm:^2.0.0"
+    "@rnx-kit/tools-node": "npm:^3.0.0"
+  languageName: node
+  linkType: soft
+
+"@rnx-kit/metro-plugin-cyclic-dependencies-detector@portal:/Users/jasonmorse/dev/rnx-test/packages/metro-plugin-cyclic-dependencies-detector::locator=%40rnx-repo-yarn-pnpm%2Ftest-app-desktop%40workspace%3Apackages%2Ftest-app-desktop":
+  version: 0.0.0-use.local
+  resolution: "@rnx-kit/metro-plugin-cyclic-dependencies-detector@portal:/Users/jasonmorse/dev/rnx-test/packages/metro-plugin-cyclic-dependencies-detector::locator=%40rnx-repo-yarn-pnpm%2Ftest-app-desktop%40workspace%3Apackages%2Ftest-app-desktop"
+  dependencies:
+    "@rnx-kit/console": "npm:^2.0.0"
+    "@rnx-kit/tools-node": "npm:^3.0.0"
+  languageName: node
+  linkType: soft
+
+"@rnx-kit/metro-plugin-cyclic-dependencies-detector@portal:/Users/jasonmorse/dev/rnx-test/packages/metro-plugin-cyclic-dependencies-detector::locator=%40rnx-repo-yarn-pnpm%2Ftest-app-mobile%40workspace%3Apackages%2Ftest-app-mobile":
+  version: 0.0.0-use.local
+  resolution: "@rnx-kit/metro-plugin-cyclic-dependencies-detector@portal:/Users/jasonmorse/dev/rnx-test/packages/metro-plugin-cyclic-dependencies-detector::locator=%40rnx-repo-yarn-pnpm%2Ftest-app-mobile%40workspace%3Apackages%2Ftest-app-mobile"
+  dependencies:
+    "@rnx-kit/console": "npm:^2.0.0"
+    "@rnx-kit/tools-node": "npm:^3.0.0"
+  languageName: node
+  linkType: soft
+
+"@rnx-kit/metro-plugin-duplicates-checker@portal:/Users/jasonmorse/dev/rnx-test/packages/metro-plugin-duplicates-checker::locator=%40rnx-kit%2Fcli%40portal%3A%2FUsers%2Fjasonmorse%2Fdev%2Frnx-test%2Fpackages%2Fcli%3A%3Alocator%3D%2540rnx-repo-yarn-pnpm%252Ftest-app-desktop%2540workspace%253Apackages%252Ftest-app-desktop":
+  version: 0.0.0-use.local
+  resolution: "@rnx-kit/metro-plugin-duplicates-checker@portal:/Users/jasonmorse/dev/rnx-test/packages/metro-plugin-duplicates-checker::locator=%40rnx-kit%2Fcli%40portal%3A%2FUsers%2Fjasonmorse%2Fdev%2Frnx-test%2Fpackages%2Fcli%3A%3Alocator%3D%2540rnx-repo-yarn-pnpm%252Ftest-app-desktop%2540workspace%253Apackages%252Ftest-app-desktop"
   dependencies:
     "@rnx-kit/console": "npm:^2.0.0"
     "@rnx-kit/tools-node": "npm:^3.0.0"
   bin:
     check-duplicates: lib/index.js
-  checksum: 10c0/6ea966f1bfb1f92817c679c2c7e2f067126b9467fc71e1ed9b58abef4d801323e486082fb300a5532c3f1dd4630f41f83d9691d71ad9ae5bea297759b50c0bd2
   languageName: node
-  linkType: hard
+  linkType: soft
+
+"@rnx-kit/metro-plugin-duplicates-checker@portal:/Users/jasonmorse/dev/rnx-test/packages/metro-plugin-duplicates-checker::locator=%40rnx-kit%2Fcli%40portal%3A%2FUsers%2Fjasonmorse%2Fdev%2Frnx-test%2Fpackages%2Fcli%3A%3Alocator%3D%2540rnx-repo-yarn-pnpm%252Ftest-app-mobile%2540workspace%253Apackages%252Ftest-app-mobile":
+  version: 0.0.0-use.local
+  resolution: "@rnx-kit/metro-plugin-duplicates-checker@portal:/Users/jasonmorse/dev/rnx-test/packages/metro-plugin-duplicates-checker::locator=%40rnx-kit%2Fcli%40portal%3A%2FUsers%2Fjasonmorse%2Fdev%2Frnx-test%2Fpackages%2Fcli%3A%3Alocator%3D%2540rnx-repo-yarn-pnpm%252Ftest-app-mobile%2540workspace%253Apackages%252Ftest-app-mobile"
+  dependencies:
+    "@rnx-kit/console": "npm:^2.0.0"
+    "@rnx-kit/tools-node": "npm:^3.0.0"
+  bin:
+    check-duplicates: lib/index.js
+  languageName: node
+  linkType: soft
+
+"@rnx-kit/metro-plugin-duplicates-checker@portal:/Users/jasonmorse/dev/rnx-test/packages/metro-plugin-duplicates-checker::locator=%40rnx-repo-yarn-pnpm%2Ftest-app-desktop%40workspace%3Apackages%2Ftest-app-desktop":
+  version: 0.0.0-use.local
+  resolution: "@rnx-kit/metro-plugin-duplicates-checker@portal:/Users/jasonmorse/dev/rnx-test/packages/metro-plugin-duplicates-checker::locator=%40rnx-repo-yarn-pnpm%2Ftest-app-desktop%40workspace%3Apackages%2Ftest-app-desktop"
+  dependencies:
+    "@rnx-kit/console": "npm:^2.0.0"
+    "@rnx-kit/tools-node": "npm:^3.0.0"
+  bin:
+    check-duplicates: lib/index.js
+  languageName: node
+  linkType: soft
+
+"@rnx-kit/metro-plugin-duplicates-checker@portal:/Users/jasonmorse/dev/rnx-test/packages/metro-plugin-duplicates-checker::locator=%40rnx-repo-yarn-pnpm%2Ftest-app-mobile%40workspace%3Apackages%2Ftest-app-mobile":
+  version: 0.0.0-use.local
+  resolution: "@rnx-kit/metro-plugin-duplicates-checker@portal:/Users/jasonmorse/dev/rnx-test/packages/metro-plugin-duplicates-checker::locator=%40rnx-repo-yarn-pnpm%2Ftest-app-mobile%40workspace%3Apackages%2Ftest-app-mobile"
+  dependencies:
+    "@rnx-kit/console": "npm:^2.0.0"
+    "@rnx-kit/tools-node": "npm:^3.0.0"
+  bin:
+    check-duplicates: lib/index.js
+  languageName: node
+  linkType: soft
 
 "@rnx-kit/metro-plugin-typescript@npm:^0.5.0":
   version: 0.5.1
@@ -4293,41 +4567,115 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rnx-kit/metro-resolver-symlinks@npm:^0.2.1":
-  version: 0.2.1
-  resolution: "@rnx-kit/metro-resolver-symlinks@npm:0.2.1"
+"@rnx-kit/metro-resolver-symlinks@portal:/Users/jasonmorse/dev/rnx-test/packages/metro-resolver-symlinks::locator=%40rnx-repo-yarn-pnpm%2Ftest-app-desktop%40workspace%3Apackages%2Ftest-app-desktop":
+  version: 0.0.0-use.local
+  resolution: "@rnx-kit/metro-resolver-symlinks@portal:/Users/jasonmorse/dev/rnx-test/packages/metro-resolver-symlinks::locator=%40rnx-repo-yarn-pnpm%2Ftest-app-desktop%40workspace%3Apackages%2Ftest-app-desktop"
   dependencies:
     "@rnx-kit/console": "npm:^2.0.0"
     "@rnx-kit/tools-node": "npm:^3.0.0"
     "@rnx-kit/tools-react-native": "npm:^2.0.0"
     enhanced-resolve: "npm:^5.8.3"
-  checksum: 10c0/02544d64c1991897c45d3f3d7ca822f5f20246612e52c657772bead954c0d6536bab4e92cf6bc41bf9fc529f3de1051d6c82d03fec4c5258260c7a0ef3e5010a
   languageName: node
-  linkType: hard
+  linkType: soft
 
-"@rnx-kit/metro-serializer-esbuild@npm:^0.2.1":
-  version: 0.2.1
-  resolution: "@rnx-kit/metro-serializer-esbuild@npm:0.2.1"
+"@rnx-kit/metro-resolver-symlinks@portal:/Users/jasonmorse/dev/rnx-test/packages/metro-resolver-symlinks::locator=%40rnx-repo-yarn-pnpm%2Ftest-app-mobile%40workspace%3Apackages%2Ftest-app-mobile":
+  version: 0.0.0-use.local
+  resolution: "@rnx-kit/metro-resolver-symlinks@portal:/Users/jasonmorse/dev/rnx-test/packages/metro-resolver-symlinks::locator=%40rnx-repo-yarn-pnpm%2Ftest-app-mobile%40workspace%3Apackages%2Ftest-app-mobile"
   dependencies:
     "@rnx-kit/console": "npm:^2.0.0"
     "@rnx-kit/tools-node": "npm:^3.0.0"
     "@rnx-kit/tools-react-native": "npm:^2.0.0"
-    esbuild: "npm:^0.23.0"
+    enhanced-resolve: "npm:^5.8.3"
+  languageName: node
+  linkType: soft
+
+"@rnx-kit/metro-serializer-esbuild@portal:/Users/jasonmorse/dev/rnx-test/packages/metro-serializer-esbuild::locator=%40rnx-kit%2Fcli%40portal%3A%2FUsers%2Fjasonmorse%2Fdev%2Frnx-test%2Fpackages%2Fcli%3A%3Alocator%3D%2540rnx-repo-yarn-pnpm%252Ftest-app-desktop%2540workspace%253Apackages%252Ftest-app-desktop":
+  version: 0.0.0-use.local
+  resolution: "@rnx-kit/metro-serializer-esbuild@portal:/Users/jasonmorse/dev/rnx-test/packages/metro-serializer-esbuild::locator=%40rnx-kit%2Fcli%40portal%3A%2FUsers%2Fjasonmorse%2Fdev%2Frnx-test%2Fpackages%2Fcli%3A%3Alocator%3D%2540rnx-repo-yarn-pnpm%252Ftest-app-desktop%2540workspace%253Apackages%252Ftest-app-desktop"
+  dependencies:
+    "@rnx-kit/console": "npm:^2.0.0"
+    "@rnx-kit/tools-node": "npm:^3.0.2"
+    "@rnx-kit/tools-react-native": "npm:^2.0.0"
+    esbuild: "npm:^0.25.0"
     esbuild-plugin-lodash: "npm:^1.2.0"
     fast-glob: "npm:^3.2.7"
-  checksum: 10c0/a25bd6e4263f946ecc4e8f163f3208ea35b08395fc51b2956f753f98f3d6b0165b16025ab1375bcb1db3cb2a4eb32f99d7812e31e28b8fb6e8b59c0e42722dec
   languageName: node
-  linkType: hard
+  linkType: soft
 
-"@rnx-kit/metro-serializer@npm:^2.0.0":
-  version: 2.0.0
-  resolution: "@rnx-kit/metro-serializer@npm:2.0.0"
+"@rnx-kit/metro-serializer-esbuild@portal:/Users/jasonmorse/dev/rnx-test/packages/metro-serializer-esbuild::locator=%40rnx-kit%2Fcli%40portal%3A%2FUsers%2Fjasonmorse%2Fdev%2Frnx-test%2Fpackages%2Fcli%3A%3Alocator%3D%2540rnx-repo-yarn-pnpm%252Ftest-app-mobile%2540workspace%253Apackages%252Ftest-app-mobile":
+  version: 0.0.0-use.local
+  resolution: "@rnx-kit/metro-serializer-esbuild@portal:/Users/jasonmorse/dev/rnx-test/packages/metro-serializer-esbuild::locator=%40rnx-kit%2Fcli%40portal%3A%2FUsers%2Fjasonmorse%2Fdev%2Frnx-test%2Fpackages%2Fcli%3A%3Alocator%3D%2540rnx-repo-yarn-pnpm%252Ftest-app-mobile%2540workspace%253Apackages%252Ftest-app-mobile"
+  dependencies:
+    "@rnx-kit/console": "npm:^2.0.0"
+    "@rnx-kit/tools-node": "npm:^3.0.2"
+    "@rnx-kit/tools-react-native": "npm:^2.0.0"
+    esbuild: "npm:^0.25.0"
+    esbuild-plugin-lodash: "npm:^1.2.0"
+    fast-glob: "npm:^3.2.7"
+  languageName: node
+  linkType: soft
+
+"@rnx-kit/metro-serializer-esbuild@portal:/Users/jasonmorse/dev/rnx-test/packages/metro-serializer-esbuild::locator=%40rnx-repo-yarn-pnpm%2Ftest-app-desktop%40workspace%3Apackages%2Ftest-app-desktop":
+  version: 0.0.0-use.local
+  resolution: "@rnx-kit/metro-serializer-esbuild@portal:/Users/jasonmorse/dev/rnx-test/packages/metro-serializer-esbuild::locator=%40rnx-repo-yarn-pnpm%2Ftest-app-desktop%40workspace%3Apackages%2Ftest-app-desktop"
+  dependencies:
+    "@rnx-kit/console": "npm:^2.0.0"
+    "@rnx-kit/tools-node": "npm:^3.0.2"
+    "@rnx-kit/tools-react-native": "npm:^2.0.0"
+    esbuild: "npm:^0.25.0"
+    esbuild-plugin-lodash: "npm:^1.2.0"
+    fast-glob: "npm:^3.2.7"
+  languageName: node
+  linkType: soft
+
+"@rnx-kit/metro-serializer-esbuild@portal:/Users/jasonmorse/dev/rnx-test/packages/metro-serializer-esbuild::locator=%40rnx-repo-yarn-pnpm%2Ftest-app-mobile%40workspace%3Apackages%2Ftest-app-mobile":
+  version: 0.0.0-use.local
+  resolution: "@rnx-kit/metro-serializer-esbuild@portal:/Users/jasonmorse/dev/rnx-test/packages/metro-serializer-esbuild::locator=%40rnx-repo-yarn-pnpm%2Ftest-app-mobile%40workspace%3Apackages%2Ftest-app-mobile"
+  dependencies:
+    "@rnx-kit/console": "npm:^2.0.0"
+    "@rnx-kit/tools-node": "npm:^3.0.2"
+    "@rnx-kit/tools-react-native": "npm:^2.0.0"
+    esbuild: "npm:^0.25.0"
+    esbuild-plugin-lodash: "npm:^1.2.0"
+    fast-glob: "npm:^3.2.7"
+  languageName: node
+  linkType: soft
+
+"@rnx-kit/metro-serializer@portal:/Users/jasonmorse/dev/rnx-test/packages/metro-serializer::locator=%40rnx-kit%2Fcli%40portal%3A%2FUsers%2Fjasonmorse%2Fdev%2Frnx-test%2Fpackages%2Fcli%3A%3Alocator%3D%2540rnx-repo-yarn-pnpm%252Ftest-app-desktop%2540workspace%253Apackages%252Ftest-app-desktop":
+  version: 0.0.0-use.local
+  resolution: "@rnx-kit/metro-serializer@portal:/Users/jasonmorse/dev/rnx-test/packages/metro-serializer::locator=%40rnx-kit%2Fcli%40portal%3A%2FUsers%2Fjasonmorse%2Fdev%2Frnx-test%2Fpackages%2Fcli%3A%3Alocator%3D%2540rnx-repo-yarn-pnpm%252Ftest-app-desktop%2540workspace%253Apackages%252Ftest-app-desktop"
   dependencies:
     "@rnx-kit/tools-react-native": "npm:^2.0.0"
     semver: "npm:^7.0.0"
-  checksum: 10c0/1539a646e482bf556b6240023a13e797319a2adb8d107d2781414d294c1cf2d9e992c4a11ee523c9d2ed84eb5737adace39482355175fb66b366267790a0ef95
   languageName: node
-  linkType: hard
+  linkType: soft
+
+"@rnx-kit/metro-serializer@portal:/Users/jasonmorse/dev/rnx-test/packages/metro-serializer::locator=%40rnx-kit%2Fcli%40portal%3A%2FUsers%2Fjasonmorse%2Fdev%2Frnx-test%2Fpackages%2Fcli%3A%3Alocator%3D%2540rnx-repo-yarn-pnpm%252Ftest-app-mobile%2540workspace%253Apackages%252Ftest-app-mobile":
+  version: 0.0.0-use.local
+  resolution: "@rnx-kit/metro-serializer@portal:/Users/jasonmorse/dev/rnx-test/packages/metro-serializer::locator=%40rnx-kit%2Fcli%40portal%3A%2FUsers%2Fjasonmorse%2Fdev%2Frnx-test%2Fpackages%2Fcli%3A%3Alocator%3D%2540rnx-repo-yarn-pnpm%252Ftest-app-mobile%2540workspace%253Apackages%252Ftest-app-mobile"
+  dependencies:
+    "@rnx-kit/tools-react-native": "npm:^2.0.0"
+    semver: "npm:^7.0.0"
+  languageName: node
+  linkType: soft
+
+"@rnx-kit/metro-serializer@portal:/Users/jasonmorse/dev/rnx-test/packages/metro-serializer::locator=%40rnx-repo-yarn-pnpm%2Ftest-app-desktop%40workspace%3Apackages%2Ftest-app-desktop":
+  version: 0.0.0-use.local
+  resolution: "@rnx-kit/metro-serializer@portal:/Users/jasonmorse/dev/rnx-test/packages/metro-serializer::locator=%40rnx-repo-yarn-pnpm%2Ftest-app-desktop%40workspace%3Apackages%2Ftest-app-desktop"
+  dependencies:
+    "@rnx-kit/tools-react-native": "npm:^2.0.0"
+    semver: "npm:^7.0.0"
+  languageName: node
+  linkType: soft
+
+"@rnx-kit/metro-serializer@portal:/Users/jasonmorse/dev/rnx-test/packages/metro-serializer::locator=%40rnx-repo-yarn-pnpm%2Ftest-app-mobile%40workspace%3Apackages%2Ftest-app-mobile":
+  version: 0.0.0-use.local
+  resolution: "@rnx-kit/metro-serializer@portal:/Users/jasonmorse/dev/rnx-test/packages/metro-serializer::locator=%40rnx-repo-yarn-pnpm%2Ftest-app-mobile%40workspace%3Apackages%2Ftest-app-mobile"
+  dependencies:
+    "@rnx-kit/tools-react-native": "npm:^2.0.0"
+    semver: "npm:^7.0.0"
+  languageName: node
+  linkType: soft
 
 "@rnx-kit/metro-service@npm:^4.0.2":
   version: 4.0.2
@@ -4352,9 +4700,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rnx-kit/polyfills@npm:^0.2.0":
-  version: 0.2.0
-  resolution: "@rnx-kit/polyfills@npm:0.2.0"
+"@rnx-kit/polyfills@portal:/Users/jasonmorse/dev/rnx-test/incubator/polyfills::locator=%40rnx-repo-yarn-pnpm%2Ftest-app-desktop%40workspace%3Apackages%2Ftest-app-desktop":
+  version: 0.0.0-use.local
+  resolution: "@rnx-kit/polyfills@portal:/Users/jasonmorse/dev/rnx-test/incubator/polyfills::locator=%40rnx-repo-yarn-pnpm%2Ftest-app-desktop%40workspace%3Apackages%2Ftest-app-desktop"
   dependencies:
     "@babel/core": "npm:^7.0.0"
     "@babel/helper-plugin-utils": "npm:^7.0.0"
@@ -4366,55 +4714,185 @@ __metadata:
   peerDependenciesMeta:
     "@react-native/js-polyfills":
       optional: true
-  checksum: 10c0/549d0d2766351fd2b2aeedc293becd9287b30cfb4eff1ed5aa885d5ba7419ec2cf3e51c70259a9afa52aef7eb4b3947686615145d22406c9d8178d547f9b0643
   languageName: node
-  linkType: hard
+  linkType: soft
 
-"@rnx-kit/react-native-auth@npm:^0.3.0":
-  version: 0.3.0
-  resolution: "@rnx-kit/react-native-auth@npm:0.3.0"
+"@rnx-kit/polyfills@portal:/Users/jasonmorse/dev/rnx-test/incubator/polyfills::locator=%40rnx-repo-yarn-pnpm%2Ftest-app-mobile%40workspace%3Apackages%2Ftest-app-mobile":
+  version: 0.0.0-use.local
+  resolution: "@rnx-kit/polyfills@portal:/Users/jasonmorse/dev/rnx-test/incubator/polyfills::locator=%40rnx-repo-yarn-pnpm%2Ftest-app-mobile%40workspace%3Apackages%2Ftest-app-mobile"
+  dependencies:
+    "@babel/core": "npm:^7.0.0"
+    "@babel/helper-plugin-utils": "npm:^7.0.0"
+    "@babel/template": "npm:^7.0.0"
+    "@rnx-kit/console": "npm:^2.0.0"
+    "@rnx-kit/tools-node": "npm:^3.0.0"
   peerDependencies:
-    react: 16.11.0 || 16.13.1 || 17.0.1 || 17.0.2 || 18.0.0 || 18.1.0 || 18.2.0 || ^18.2.0
-    react-native: ^0.62.3 || ^0.63.2 || ^0.64.2 || ^0.65.0 || ^0.66.0 || ^0.67.0 || ^0.68.0 || ^0.69.0 || ^0.70.0 || ^0.71.0 || ^0.72.0 || ^0.73.0 || ^0.74.0 || ^0.75.0
-  checksum: 10c0/1226a26737fb5db08abdf0775e737c571146f80d1ad5eab8e4ba67cbcc3f992c9b2e60df49b927fb8fcfc4485cc9285be387761dbc81c43a2d4caa0745e6a318
+    "@react-native/js-polyfills": "*"
+  peerDependenciesMeta:
+    "@react-native/js-polyfills":
+      optional: true
   languageName: node
-  linkType: hard
+  linkType: soft
 
-"@rnx-kit/react-native-host@npm:^0.5.3":
-  version: 0.5.3
-  resolution: "@rnx-kit/react-native-host@npm:0.5.3"
+"@rnx-kit/react-native-auth@portal:/Users/jasonmorse/dev/rnx-test/packages/react-native-auth::locator=%40rnx-repo-yarn-pnpm%2Ftest-app-desktop%40workspace%3Apackages%2Ftest-app-desktop":
+  version: 0.0.0-use.local
+  resolution: "@rnx-kit/react-native-auth@portal:/Users/jasonmorse/dev/rnx-test/packages/react-native-auth::locator=%40rnx-repo-yarn-pnpm%2Ftest-app-desktop%40workspace%3Apackages%2Ftest-app-desktop"
+  peerDependencies:
+    react: 16.11.0 || 16.13.1 || 17.0.1 || 17.0.2 || 18.0.0 || 18.1.0 || 18.2.0 || ^18.2.0 || 18.3.1
+    react-native: ^0.62.3 || ^0.63.2 || ^0.64.2 || ^0.65.0 || ^0.66.0 || ^0.67.0 || ^0.68.0 || ^0.69.0 || ^0.70.0 || ^0.71.0 || ^0.72.0 || ^0.73.0 || ^0.74.0 || ^0.75.0 || ^0.76.0 || ^0.77.0
+  languageName: node
+  linkType: soft
+
+"@rnx-kit/react-native-auth@portal:/Users/jasonmorse/dev/rnx-test/packages/react-native-auth::locator=%40rnx-repo-yarn-pnpm%2Ftest-app-mobile%40workspace%3Apackages%2Ftest-app-mobile":
+  version: 0.0.0-use.local
+  resolution: "@rnx-kit/react-native-auth@portal:/Users/jasonmorse/dev/rnx-test/packages/react-native-auth::locator=%40rnx-repo-yarn-pnpm%2Ftest-app-mobile%40workspace%3Apackages%2Ftest-app-mobile"
+  peerDependencies:
+    react: 16.11.0 || 16.13.1 || 17.0.1 || 17.0.2 || 18.0.0 || 18.1.0 || 18.2.0 || ^18.2.0 || 18.3.1
+    react-native: ^0.62.3 || ^0.63.2 || ^0.64.2 || ^0.65.0 || ^0.66.0 || ^0.67.0 || ^0.68.0 || ^0.69.0 || ^0.70.0 || ^0.71.0 || ^0.72.0 || ^0.73.0 || ^0.74.0 || ^0.75.0 || ^0.76.0 || ^0.77.0
+  languageName: node
+  linkType: soft
+
+"@rnx-kit/react-native-auth@portal:/Users/jasonmorse/dev/rnx-test/packages/react-native-auth::locator=%40rnx-repo-yarn-pnpm%2Ftest-app-shared%40workspace%3Apackages%2Ftest-app-shared":
+  version: 0.0.0-use.local
+  resolution: "@rnx-kit/react-native-auth@portal:/Users/jasonmorse/dev/rnx-test/packages/react-native-auth::locator=%40rnx-repo-yarn-pnpm%2Ftest-app-shared%40workspace%3Apackages%2Ftest-app-shared"
+  peerDependencies:
+    react: 16.11.0 || 16.13.1 || 17.0.1 || 17.0.2 || 18.0.0 || 18.1.0 || 18.2.0 || ^18.2.0 || 18.3.1
+    react-native: ^0.62.3 || ^0.63.2 || ^0.64.2 || ^0.65.0 || ^0.66.0 || ^0.67.0 || ^0.68.0 || ^0.69.0 || ^0.70.0 || ^0.71.0 || ^0.72.0 || ^0.73.0 || ^0.74.0 || ^0.75.0 || ^0.76.0 || ^0.77.0
+  languageName: node
+  linkType: soft
+
+"@rnx-kit/react-native-host@portal:/Users/jasonmorse/dev/rnx-test/packages/react-native-host::locator=%40rnx-repo-yarn-pnpm%2Ftest-app-desktop%40workspace%3Apackages%2Ftest-app-desktop":
+  version: 0.0.0-use.local
+  resolution: "@rnx-kit/react-native-host@portal:/Users/jasonmorse/dev/rnx-test/packages/react-native-host::locator=%40rnx-repo-yarn-pnpm%2Ftest-app-desktop%40workspace%3Apackages%2Ftest-app-desktop"
   peerDependencies:
     react-native: ">=0.66"
-  checksum: 10c0/8faaa30914d36bd3ec8b07c3049be45f2a65c5c887d0d0402fc0a312b8c6f6ab03dc6d90a0cc58c0f3870f2c336c608e728aa763586c0c0bd16e450d75fbecc0
   languageName: node
-  linkType: hard
+  linkType: soft
 
-"@rnx-kit/react-native-test-app-msal@npm:^5.0.1":
-  version: 5.0.1
-  resolution: "@rnx-kit/react-native-test-app-msal@npm:5.0.1"
+"@rnx-kit/react-native-host@portal:/Users/jasonmorse/dev/rnx-test/packages/react-native-host::locator=%40rnx-repo-yarn-pnpm%2Ftest-app-mobile%40workspace%3Apackages%2Ftest-app-mobile":
+  version: 0.0.0-use.local
+  resolution: "@rnx-kit/react-native-host@portal:/Users/jasonmorse/dev/rnx-test/packages/react-native-host::locator=%40rnx-repo-yarn-pnpm%2Ftest-app-mobile%40workspace%3Apackages%2Ftest-app-mobile"
+  peerDependencies:
+    react-native: ">=0.66"
+  languageName: node
+  linkType: soft
+
+"@rnx-kit/react-native-host@portal:/Users/jasonmorse/dev/rnx-test/packages/react-native-host::locator=%40rnx-repo-yarn-pnpm%2Ftest-app-shared%40workspace%3Apackages%2Ftest-app-shared":
+  version: 0.0.0-use.local
+  resolution: "@rnx-kit/react-native-host@portal:/Users/jasonmorse/dev/rnx-test/packages/react-native-host::locator=%40rnx-repo-yarn-pnpm%2Ftest-app-shared%40workspace%3Apackages%2Ftest-app-shared"
+  peerDependencies:
+    react-native: ">=0.66"
+  languageName: node
+  linkType: soft
+
+"@rnx-kit/react-native-host@portal:/Users/jasonmorse/dev/rnx-test/packages/react-native-host::locator=react-native-test-app%40npm%3A4.1.1":
+  version: 0.0.0-use.local
+  resolution: "@rnx-kit/react-native-host@portal:/Users/jasonmorse/dev/rnx-test/packages/react-native-host::locator=react-native-test-app%40npm%3A4.1.1"
+  peerDependencies:
+    react-native: ">=0.66"
+  languageName: node
+  linkType: soft
+
+"@rnx-kit/react-native-test-app-msal@portal:/Users/jasonmorse/dev/rnx-test/incubator/react-native-test-app-msal::locator=%40rnx-repo-yarn-pnpm%2Ftest-app-desktop%40workspace%3Apackages%2Ftest-app-desktop":
+  version: 0.0.0-use.local
+  resolution: "@rnx-kit/react-native-test-app-msal@portal:/Users/jasonmorse/dev/rnx-test/incubator/react-native-test-app-msal::locator=%40rnx-repo-yarn-pnpm%2Ftest-app-desktop%40workspace%3Apackages%2Ftest-app-desktop"
   peerDependencies:
     "@rnx-kit/react-native-auth": "*"
     react-native-test-app: ">=0.9.16"
   peerDependenciesMeta:
     "@rnx-kit/react-native-auth":
       optional: true
-  checksum: 10c0/75c427cddcee2e214aed087d9d0fa12ba4982c7eb78343c5f2d90f5d358ecabbe681d11962f50990f8511b690bc94d1fd876d2144e21e184ab9457c1edc74c85
   languageName: node
-  linkType: hard
+  linkType: soft
 
-"@rnx-kit/third-party-notices@npm:^2.0.0":
-  version: 2.0.0
-  resolution: "@rnx-kit/third-party-notices@npm:2.0.0"
+"@rnx-kit/react-native-test-app-msal@portal:/Users/jasonmorse/dev/rnx-test/incubator/react-native-test-app-msal::locator=%40rnx-repo-yarn-pnpm%2Ftest-app-mobile%40workspace%3Apackages%2Ftest-app-mobile":
+  version: 0.0.0-use.local
+  resolution: "@rnx-kit/react-native-test-app-msal@portal:/Users/jasonmorse/dev/rnx-test/incubator/react-native-test-app-msal::locator=%40rnx-repo-yarn-pnpm%2Ftest-app-mobile%40workspace%3Apackages%2Ftest-app-mobile"
+  peerDependencies:
+    "@rnx-kit/react-native-auth": "*"
+    react-native-test-app: ">=0.9.16"
+  peerDependenciesMeta:
+    "@rnx-kit/react-native-auth":
+      optional: true
+  languageName: node
+  linkType: soft
+
+"@rnx-kit/react-native-test-app-msal@portal:/Users/jasonmorse/dev/rnx-test/incubator/react-native-test-app-msal::locator=%40rnx-repo-yarn-pnpm%2Ftest-app-shared%40workspace%3Apackages%2Ftest-app-shared":
+  version: 0.0.0-use.local
+  resolution: "@rnx-kit/react-native-test-app-msal@portal:/Users/jasonmorse/dev/rnx-test/incubator/react-native-test-app-msal::locator=%40rnx-repo-yarn-pnpm%2Ftest-app-shared%40workspace%3Apackages%2Ftest-app-shared"
+  peerDependencies:
+    "@rnx-kit/react-native-auth": "*"
+    react-native-test-app: ">=0.9.16"
+  peerDependenciesMeta:
+    "@rnx-kit/react-native-auth":
+      optional: true
+  languageName: node
+  linkType: soft
+
+"@rnx-kit/third-party-notices@portal:/Users/jasonmorse/dev/rnx-test/packages/third-party-notices::locator=%40rnx-kit%2Fcli%40portal%3A%2FUsers%2Fjasonmorse%2Fdev%2Frnx-test%2Fpackages%2Fcli%3A%3Alocator%3D%2540rnx-repo-yarn-pnpm%252Ftest-app-desktop%2540workspace%253Apackages%252Ftest-app-desktop":
+  version: 0.0.0-use.local
+  resolution: "@rnx-kit/third-party-notices@portal:/Users/jasonmorse/dev/rnx-test/packages/third-party-notices::locator=%40rnx-kit%2Fcli%40portal%3A%2FUsers%2Fjasonmorse%2Fdev%2Frnx-test%2Fpackages%2Fcli%3A%3Alocator%3D%2540rnx-repo-yarn-pnpm%252Ftest-app-desktop%2540workspace%253Apackages%252Ftest-app-desktop"
   dependencies:
     "@rnx-kit/console": "npm:^2.0.0"
     "@rnx-kit/tools-node": "npm:^3.0.0"
     spdx-expression-parse: "npm:^4.0.0"
     yargs: "npm:^16.0.0"
   bin:
-    build-tpn: lib/build-tpn.js
-  checksum: 10c0/24514ae22b31199ecf9324db850c42e1212e24822ea28ae3cef341b3d80e1bddf07a376fb8b7959693e511906b1048819aa5d27d6063854f9dea270a5c3393ec
+    build-tpn: ./lib/build-tpn.js
   languageName: node
-  linkType: hard
+  linkType: soft
+
+"@rnx-kit/third-party-notices@portal:/Users/jasonmorse/dev/rnx-test/packages/third-party-notices::locator=%40rnx-kit%2Fcli%40portal%3A%2FUsers%2Fjasonmorse%2Fdev%2Frnx-test%2Fpackages%2Fcli%3A%3Alocator%3D%2540rnx-repo-yarn-pnpm%252Ftest-app-mobile%2540workspace%253Apackages%252Ftest-app-mobile":
+  version: 0.0.0-use.local
+  resolution: "@rnx-kit/third-party-notices@portal:/Users/jasonmorse/dev/rnx-test/packages/third-party-notices::locator=%40rnx-kit%2Fcli%40portal%3A%2FUsers%2Fjasonmorse%2Fdev%2Frnx-test%2Fpackages%2Fcli%3A%3Alocator%3D%2540rnx-repo-yarn-pnpm%252Ftest-app-mobile%2540workspace%253Apackages%252Ftest-app-mobile"
+  dependencies:
+    "@rnx-kit/console": "npm:^2.0.0"
+    "@rnx-kit/tools-node": "npm:^3.0.0"
+    spdx-expression-parse: "npm:^4.0.0"
+    yargs: "npm:^16.0.0"
+  bin:
+    build-tpn: ./lib/build-tpn.js
+  languageName: node
+  linkType: soft
+
+"@rnx-kit/third-party-notices@portal:/Users/jasonmorse/dev/rnx-test/packages/third-party-notices::locator=%40rnx-repo-yarn-pnpm%2Ftest-app-desktop%40workspace%3Apackages%2Ftest-app-desktop":
+  version: 0.0.0-use.local
+  resolution: "@rnx-kit/third-party-notices@portal:/Users/jasonmorse/dev/rnx-test/packages/third-party-notices::locator=%40rnx-repo-yarn-pnpm%2Ftest-app-desktop%40workspace%3Apackages%2Ftest-app-desktop"
+  dependencies:
+    "@rnx-kit/console": "npm:^2.0.0"
+    "@rnx-kit/tools-node": "npm:^3.0.0"
+    spdx-expression-parse: "npm:^4.0.0"
+    yargs: "npm:^16.0.0"
+  bin:
+    build-tpn: ./lib/build-tpn.js
+  languageName: node
+  linkType: soft
+
+"@rnx-kit/third-party-notices@portal:/Users/jasonmorse/dev/rnx-test/packages/third-party-notices::locator=%40rnx-repo-yarn-pnpm%2Ftest-app-mobile%40workspace%3Apackages%2Ftest-app-mobile":
+  version: 0.0.0-use.local
+  resolution: "@rnx-kit/third-party-notices@portal:/Users/jasonmorse/dev/rnx-test/packages/third-party-notices::locator=%40rnx-repo-yarn-pnpm%2Ftest-app-mobile%40workspace%3Apackages%2Ftest-app-mobile"
+  dependencies:
+    "@rnx-kit/console": "npm:^2.0.0"
+    "@rnx-kit/tools-node": "npm:^3.0.0"
+    spdx-expression-parse: "npm:^4.0.0"
+    yargs: "npm:^16.0.0"
+  bin:
+    build-tpn: ./lib/build-tpn.js
+  languageName: node
+  linkType: soft
+
+"@rnx-kit/third-party-notices@portal:/Users/jasonmorse/dev/rnx-test/packages/third-party-notices::locator=%40rnx-repo-yarn-pnpm%2Ftest-app-shared%40workspace%3Apackages%2Ftest-app-shared":
+  version: 0.0.0-use.local
+  resolution: "@rnx-kit/third-party-notices@portal:/Users/jasonmorse/dev/rnx-test/packages/third-party-notices::locator=%40rnx-repo-yarn-pnpm%2Ftest-app-shared%40workspace%3Apackages%2Ftest-app-shared"
+  dependencies:
+    "@rnx-kit/console": "npm:^2.0.0"
+    "@rnx-kit/tools-node": "npm:^3.0.0"
+    spdx-expression-parse: "npm:^4.0.0"
+    yargs: "npm:^16.0.0"
+  bin:
+    build-tpn: ./lib/build-tpn.js
+  languageName: node
+  linkType: soft
 
 "@rnx-kit/tools-android@npm:^0.2.0":
   version: 0.2.0
@@ -4449,6 +4927,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@rnx-kit/tools-node@npm:^3.0.2":
+  version: 3.0.2
+  resolution: "@rnx-kit/tools-node@npm:3.0.2"
+  checksum: 10c0/ea8cfc264e3adea18511316a7a90cacad18087561464177c5291f54fca0befe37fde88f3facbb7a102e7fa45a0816137aaa2eee30f0bcf320e35c60895e8286c
+  languageName: node
+  linkType: hard
+
 "@rnx-kit/tools-react-native@npm:^2.0.0, @rnx-kit/tools-react-native@npm:^2.0.2, @rnx-kit/tools-react-native@npm:^2.0.3":
   version: 2.0.4
   resolution: "@rnx-kit/tools-react-native@npm:2.0.4"
@@ -4477,12 +4962,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rnx-kit/tsconfig@npm:^2.0.0":
-  version: 2.0.0
-  resolution: "@rnx-kit/tsconfig@npm:2.0.0"
-  checksum: 10c0/b31353cb1a3b75d4827373887806f5495eccb9e38e9edcf111a85a3e6967256e13f18a7acfbb9eabd7bfbe04b6b5e6ac3ec0a638d31b55f9231ffd3d946c735c
+"@rnx-kit/tsconfig@portal:/Users/jasonmorse/dev/rnx-test/packages/tsconfig::locator=%40rnx-repo-yarn-pnpm%2Fscripts%40workspace%3Ascripts":
+  version: 0.0.0-use.local
+  resolution: "@rnx-kit/tsconfig@portal:/Users/jasonmorse/dev/rnx-test/packages/tsconfig::locator=%40rnx-repo-yarn-pnpm%2Fscripts%40workspace%3Ascripts"
   languageName: node
-  linkType: hard
+  linkType: soft
 
 "@rnx-kit/typescript-service@npm:^2.0.0":
   version: 2.0.1
@@ -7056,89 +7540,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"esbuild@npm:^0.23.0, esbuild@npm:~0.23.0":
-  version: 0.23.1
-  resolution: "esbuild@npm:0.23.1"
-  dependencies:
-    "@esbuild/aix-ppc64": "npm:0.23.1"
-    "@esbuild/android-arm": "npm:0.23.1"
-    "@esbuild/android-arm64": "npm:0.23.1"
-    "@esbuild/android-x64": "npm:0.23.1"
-    "@esbuild/darwin-arm64": "npm:0.23.1"
-    "@esbuild/darwin-x64": "npm:0.23.1"
-    "@esbuild/freebsd-arm64": "npm:0.23.1"
-    "@esbuild/freebsd-x64": "npm:0.23.1"
-    "@esbuild/linux-arm": "npm:0.23.1"
-    "@esbuild/linux-arm64": "npm:0.23.1"
-    "@esbuild/linux-ia32": "npm:0.23.1"
-    "@esbuild/linux-loong64": "npm:0.23.1"
-    "@esbuild/linux-mips64el": "npm:0.23.1"
-    "@esbuild/linux-ppc64": "npm:0.23.1"
-    "@esbuild/linux-riscv64": "npm:0.23.1"
-    "@esbuild/linux-s390x": "npm:0.23.1"
-    "@esbuild/linux-x64": "npm:0.23.1"
-    "@esbuild/netbsd-x64": "npm:0.23.1"
-    "@esbuild/openbsd-arm64": "npm:0.23.1"
-    "@esbuild/openbsd-x64": "npm:0.23.1"
-    "@esbuild/sunos-x64": "npm:0.23.1"
-    "@esbuild/win32-arm64": "npm:0.23.1"
-    "@esbuild/win32-ia32": "npm:0.23.1"
-    "@esbuild/win32-x64": "npm:0.23.1"
-  dependenciesMeta:
-    "@esbuild/aix-ppc64":
-      optional: true
-    "@esbuild/android-arm":
-      optional: true
-    "@esbuild/android-arm64":
-      optional: true
-    "@esbuild/android-x64":
-      optional: true
-    "@esbuild/darwin-arm64":
-      optional: true
-    "@esbuild/darwin-x64":
-      optional: true
-    "@esbuild/freebsd-arm64":
-      optional: true
-    "@esbuild/freebsd-x64":
-      optional: true
-    "@esbuild/linux-arm":
-      optional: true
-    "@esbuild/linux-arm64":
-      optional: true
-    "@esbuild/linux-ia32":
-      optional: true
-    "@esbuild/linux-loong64":
-      optional: true
-    "@esbuild/linux-mips64el":
-      optional: true
-    "@esbuild/linux-ppc64":
-      optional: true
-    "@esbuild/linux-riscv64":
-      optional: true
-    "@esbuild/linux-s390x":
-      optional: true
-    "@esbuild/linux-x64":
-      optional: true
-    "@esbuild/netbsd-x64":
-      optional: true
-    "@esbuild/openbsd-arm64":
-      optional: true
-    "@esbuild/openbsd-x64":
-      optional: true
-    "@esbuild/sunos-x64":
-      optional: true
-    "@esbuild/win32-arm64":
-      optional: true
-    "@esbuild/win32-ia32":
-      optional: true
-    "@esbuild/win32-x64":
-      optional: true
-  bin:
-    esbuild: bin/esbuild
-  checksum: 10c0/08c2ed1105cc3c5e3a24a771e35532fe6089dd24a39c10097899072cef4a99f20860e41e9294e000d86380f353b04d8c50af482483d7f69f5208481cce61eec7
-  languageName: node
-  linkType: hard
-
 "esbuild@npm:^0.25.0":
   version: 0.25.0
   resolution: "esbuild@npm:0.25.0"
@@ -7222,6 +7623,89 @@ __metadata:
   bin:
     esbuild: bin/esbuild
   checksum: 10c0/5767b72da46da3cfec51661647ec850ddbf8a8d0662771139f10ef0692a8831396a0004b2be7966cecdb08264fb16bdc16290dcecd92396fac5f12d722fa013d
+  languageName: node
+  linkType: hard
+
+"esbuild@npm:~0.23.0":
+  version: 0.23.1
+  resolution: "esbuild@npm:0.23.1"
+  dependencies:
+    "@esbuild/aix-ppc64": "npm:0.23.1"
+    "@esbuild/android-arm": "npm:0.23.1"
+    "@esbuild/android-arm64": "npm:0.23.1"
+    "@esbuild/android-x64": "npm:0.23.1"
+    "@esbuild/darwin-arm64": "npm:0.23.1"
+    "@esbuild/darwin-x64": "npm:0.23.1"
+    "@esbuild/freebsd-arm64": "npm:0.23.1"
+    "@esbuild/freebsd-x64": "npm:0.23.1"
+    "@esbuild/linux-arm": "npm:0.23.1"
+    "@esbuild/linux-arm64": "npm:0.23.1"
+    "@esbuild/linux-ia32": "npm:0.23.1"
+    "@esbuild/linux-loong64": "npm:0.23.1"
+    "@esbuild/linux-mips64el": "npm:0.23.1"
+    "@esbuild/linux-ppc64": "npm:0.23.1"
+    "@esbuild/linux-riscv64": "npm:0.23.1"
+    "@esbuild/linux-s390x": "npm:0.23.1"
+    "@esbuild/linux-x64": "npm:0.23.1"
+    "@esbuild/netbsd-x64": "npm:0.23.1"
+    "@esbuild/openbsd-arm64": "npm:0.23.1"
+    "@esbuild/openbsd-x64": "npm:0.23.1"
+    "@esbuild/sunos-x64": "npm:0.23.1"
+    "@esbuild/win32-arm64": "npm:0.23.1"
+    "@esbuild/win32-ia32": "npm:0.23.1"
+    "@esbuild/win32-x64": "npm:0.23.1"
+  dependenciesMeta:
+    "@esbuild/aix-ppc64":
+      optional: true
+    "@esbuild/android-arm":
+      optional: true
+    "@esbuild/android-arm64":
+      optional: true
+    "@esbuild/android-x64":
+      optional: true
+    "@esbuild/darwin-arm64":
+      optional: true
+    "@esbuild/darwin-x64":
+      optional: true
+    "@esbuild/freebsd-arm64":
+      optional: true
+    "@esbuild/freebsd-x64":
+      optional: true
+    "@esbuild/linux-arm":
+      optional: true
+    "@esbuild/linux-arm64":
+      optional: true
+    "@esbuild/linux-ia32":
+      optional: true
+    "@esbuild/linux-loong64":
+      optional: true
+    "@esbuild/linux-mips64el":
+      optional: true
+    "@esbuild/linux-ppc64":
+      optional: true
+    "@esbuild/linux-riscv64":
+      optional: true
+    "@esbuild/linux-s390x":
+      optional: true
+    "@esbuild/linux-x64":
+      optional: true
+    "@esbuild/netbsd-x64":
+      optional: true
+    "@esbuild/openbsd-arm64":
+      optional: true
+    "@esbuild/openbsd-x64":
+      optional: true
+    "@esbuild/sunos-x64":
+      optional: true
+    "@esbuild/win32-arm64":
+      optional: true
+    "@esbuild/win32-ia32":
+      optional: true
+    "@esbuild/win32-x64":
+      optional: true
+  bin:
+    esbuild: bin/esbuild
+  checksum: 10c0/08c2ed1105cc3c5e3a24a771e35532fe6089dd24a39c10097899072cef4a99f20860e41e9294e000d86380f353b04d8c50af482483d7f69f5208481cce61eec7
   languageName: node
   linkType: hard
 

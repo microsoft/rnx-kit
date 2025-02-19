@@ -75,7 +75,7 @@ export function createFinderFromJson(
       keysPath
     );
     if (deps) {
-      trace(`Loaded the finder from the json file ${jsonPath}`);
+      trace(`Loaded the finder from the json file ${jsonPath}`, true);
       // otherwise return a finder function that will return the package definition
       return (pkgName: string) => deps[pkgName] ?? null;
     }
@@ -94,7 +94,7 @@ export function createFinderFromJs(
   if (!config) {
     throw new Error(`Unable to load config from ${jsPath}`);
   }
-  trace(`Creating a finder from: ${jsPath}`);
+  trace(`Creating a finder from: ${jsPath}`, true);
   return config.default;
 }
 
@@ -135,10 +135,10 @@ function createValidatingFinder(
 
       // if no package.json file is found on disk for this package, clear the path
       if (!fs.existsSync(path.join(result.path, "package.json"))) {
-        trace(`finder: ${pkgName} not found at ${result.path}`);
+        trace(`finder: ${pkgName} not found at ${result.path}`, true);
         result.path = undefined;
       } else {
-        trace(`finder: ${pkgName} found at ${result.path}`);
+        trace(`finder: ${pkgName} found at ${result.path}`, true);
       }
     }
 

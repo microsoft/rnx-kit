@@ -71,7 +71,7 @@ export function writeOutWorkspaces(
 
   const parsedDeps = getDepsFromJson(parsedJson, keysPath);
   if (parsedDeps && depsEqual(newDeps, depsToArray(parsedDeps))) {
-    trace(`No changes to ${jsonPath}, skipping update`);
+    trace(`No changes to ${jsonPath}, skipping update`, true);
     return;
   }
 

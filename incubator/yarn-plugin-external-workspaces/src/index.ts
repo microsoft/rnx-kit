@@ -1,5 +1,5 @@
 import { type Plugin } from "@yarnpkg/core";
-import { getConfiguration } from "./configuration";
+import { CheckResolutions, OutputWorkspaces } from "./commands";
 import { afterAllInstalled } from "./hooks";
 import { ExternalResolver } from "./resolver";
 
@@ -7,11 +7,6 @@ import { ExternalResolver } from "./resolver";
  * The plugin definition.
  */
 const plugin: Plugin = {
-  /**
-   * Add a new configurable setting in yarn's configuration.
-   */
-  configuration: getConfiguration(),
-
   /**
    * Hook up the custom resolver
    */
@@ -23,6 +18,8 @@ const plugin: Plugin = {
   hooks: {
     afterAllInstalled,
   },
+
+  commands: [OutputWorkspaces, CheckResolutions],
 };
 
 // eslint-disable-next-line no-restricted-exports

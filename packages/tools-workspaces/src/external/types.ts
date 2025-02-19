@@ -32,35 +32,14 @@ export type ExternalDeps = Record<string, PackageDefinition>;
 export type DefinitionFinder = (pkgName: string) => PackageDefinition | null;
 
 /**
- * Trace function used to log messages if logging is enabled
+ * Trace function used to log messages if logging is enabled. If logOnly is set to true, the message will only be written to
+ * the log file and not to the console. In essence log files are equivalent to verbose mode.
  */
-export type TraceFunc = (msg: string) => void;
+export type TraceFunc = (msg: string, logOnly?: boolean) => void;
 
 /**
- * Settings for a single configuration option for the plugin. Can be mapped into the yarn types or otherwise
+ * Options for outputting the current repos workspaces to a .json file
  */
-export type ConfigurationEntry<T> = {
-  /**
-   * The key used to store the setting in the yarn configuration
-   */
-  configKey: string;
-
-  /**
-   * Type of the setting
-   */
-  settingType: "string" | "boolean";
-
-  /**
-   * Description of the option
-   */
-  description: string;
-
-  /**
-   * Default value of the option
-   */
-  defaultValue: T;
-};
-
 export type OutputWorkspacesOptions = {
   /**
    * The path to a directory where the plugin should output the current set of workspaces. The same ./path/file.json[/key1/key2] syntax
@@ -70,9 +49,10 @@ export type OutputWorkspacesOptions = {
   outputPath?: string;
 
   /**
-   * If set, the workspaces will be written out after the install step. If not set this will need to be done manually.
+   * By default, the workspaces will be written out as part of install. If this is set to true, the workspaces will only be written out
+   * when the command is invoked.
    */
-  outputAfterInstall?: boolean;
+  outputOnlyOnCommand?: boolean;
 
   /**
    * Whether to include private workspaces in the output. By default they will be skipped.
@@ -80,6 +60,9 @@ export type OutputWorkspacesOptions = {
   outputPrivateWorkspaces?: boolean;
 };
 
+/**
+ * Full configuration options for external workspaces. Stored in the root package.json under the "external-workspaces" key.
+ */
 export type ExternalWorkspacesConfig = OutputWorkspacesOptions & {
   /**
    * This setting specifies how to load the set of external dependencies. It can be of type string or ExternalDeps.
@@ -114,25 +97,3 @@ export type ExternalWorkspacesSettings = OutputWorkspacesOptions & {
    */
   trace: TraceFunc;
 };
-
-/**
- * The type of the configuration options for the plugin
- */
-export type ConfigurationOptions = {
-  configPath: ConfigurationEntry<string>;
-  enableLogging: ConfigurationEntry<boolean>;
-  outputWorkspaces: ConfigurationEntry<string>;
-};
-
-// type inference helper for having strongly typed settings
-type ConfigurationEntryValue<T> =
-  T extends ConfigurationEntry<infer U> ? U : never;
-
-/**
- * Loaded settings, just the values of the specified type for each entry + the finder function
- */
-export type Settings = {
-  [key in keyof ConfigurationOptions]: ConfigurationEntryValue<
-    ConfigurationOptions[key]
-  >;
-} & { finder: DefinitionFinder };

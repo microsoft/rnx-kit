@@ -23,8 +23,11 @@ function createTraceFunction(logTo: string | undefined): TraceFunc {
   if (typeof logTo === "string") {
     const startTime = performance.now();
     if (logTo === "console") {
-      return (msg: string) =>
-        console.log(`[${(performance.now() - startTime).toFixed(2)}ms] ${msg}`);
+      return (msg: string, logOnly?: boolean) => {
+        if (!logOnly) {
+          console.log(msg);
+        }
+      };
     } else {
       // ensure any directory exists
       const dir = path.dirname(logTo);
@@ -38,8 +41,10 @@ function createTraceFunction(logTo: string | undefined): TraceFunc {
       );
       // now return the file tracer which captures the start time and log path
       return (msg: string) => {
-        const outputMsg = `[${(performance.now() - startTime).toFixed(2)}ms] ${msg}\n`;
-        writeToFile(outputMsg, logTo);
+        writeToFile(
+          `[${(performance.now() - startTime).toFixed(2)}ms] ${msg}\n`,
+          logTo
+        );
       };
     }
   }
@@ -59,15 +64,20 @@ export function settingsFromConfig(
 /**
  * Load the settings for the current repo from the root package.json
  * @param rootPath path to the root of the repository
+ * @param defaultToConsole if true, will log to the console if no logTo is specified
  */
 export function getExternalWorkspacesSettings(
-  rootPath: string
+  rootPath: string,
+  defaultToConsole?: boolean
 ): ExternalWorkspacesSettings {
   const rootManifest = JSON.parse(
     fs.readFileSync(path.join(rootPath, "package.json"), "utf8")
   );
-  const config = rootManifest[
-    externalWorkspacesKey
-  ] as ExternalWorkspacesConfig;
-  return settingsFromConfig(rootPath, config || {});
+  const config = (rootManifest[externalWorkspacesKey] ||
+    {}) as ExternalWorkspacesConfig;
+
+  if (defaultToConsole && !config.logTo) {
+    config.logTo = "console";
+  }
+  return settingsFromConfig(rootPath, config);
 }
