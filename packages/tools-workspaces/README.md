@@ -15,17 +15,23 @@ It currently supports:
 - [Rush](https://rushjs.io/pages/configs/rush_json/)
 - [Yarn](https://yarnpkg.com/configuration/manifest#workspaces)
 
+This also contains a submodule that can be referenced via
+`import { ... } from "@rnx-kit/tools-workspaces/external"` that adds the concept
+of external workspaces. This concept is really for large scale monorepos that
+may contain multiple yarn projects within them. For more information see the
+information in `@rnx-kit/yarn-plugin-external-workspaces`.
+
 <!-- The following table can be updated by running `yarn update-readme` -->
 <!-- @rnx-kit/api start -->
 
-| Category | Type Name                | Description                                                                                                                                                                                                                                                                             |
-| -------- | ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| types    | DefinitionFinder         | Signature of the function to retrieve information about a given package. If the configuration setting routes to a .js or .cjs file instead of .json, the default export should be a function of this signature.                                                                         |
-| types    | ExternalDeps             | Format of the config file in JSON format, this is a set of package definitions where the keys are the package names. E.g.: {  "my-package": { "path": "./path/to/my-package", "version": "1.2.3" },  "my-other-package": { "path": "./path/to/my-other-package", "version": "1.2.3" } } |
-| types    | ExternalWorkspacesConfig | Full configuration options for external workspaces. Stored in the root package.json under the "external-workspaces" key.                                                                                                                                                                |
-| types    | PackageDefinition        | Data needed to resolve an external package.                                                                                                                                                                                                                                             |
-| types    | TraceFunc                | Trace function used to log messages if logging is enabled. If logOnly is set to true, the message will only be written to the log file and not to the console. In essence log files are equivalent to verbose mode.                                                                     |
-| types    | WorkspacesInfo           | Helper interface that caches results in-between calls and can test if a package is in the workspace without having to load all the packages (in most cases)                                                                                                                             |
+| Category | Type Name                | Description                                                                                                                                                                                                                                                                           |
+| -------- | ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| types    | DefinitionFinder         | Signature of the function to retrieve information about a given package. If the configuration setting routes to a .js or .cjs file instead of .json, the default export should be a function of this signature.                                                                       |
+| types    | ExternalDeps             | Format of the config file in JSON format, this is a set of package definitions where the keys are the package names. E.g.: { "my-package": { "path": "./path/to/my-package", "version": "1.2.3" }, "my-other-package": { "path": "./path/to/my-other-package", "version": "1.2.3" } } |
+| types    | ExternalWorkspacesConfig | Full configuration options for external workspaces. Stored in the root package.json under the "external-workspaces" key.                                                                                                                                                              |
+| types    | PackageDefinition        | Data needed to resolve an external package.                                                                                                                                                                                                                                           |
+| types    | TraceFunc                | Trace function used to log messages if logging is enabled. If logOnly is set to true, the message will only be written to the log file and not to the console. In essence log files are equivalent to verbose mode.                                                                   |
+| types    | WorkspacesInfo           | Helper interface that caches results in-between calls and can test if a package is in the workspace without having to load all the packages (in most cases)                                                                                                                           |
 
 | Category | Function                                                       | Description                                                                                                                                                                                                |
 | -------- | -------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |

@@ -12,11 +12,13 @@
 🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧
 
 A plugin for yarn v4, that allows multiple monorepos to reference one another
-when inside of an enterprise scale monorepo. This is particularly valuable when
-there is a way to only have a portion of the outer repo present on the user's
-machine at a given time. When the code is present locally the package resolution
-should point to the local files, when it is not present it should be routed to
-npm.
+when inside of an enterprise scale monorepo that has multiple JS project roots
+within it.
+
+In the case where the large scale monorepos support some form of project
+scoping, where the various projects may or may not be present on disk, this
+allows dynamic fallback to standard npm resolution in the case a project is not
+present. This happens without lockfile modification.
 
 ## Details
 
@@ -25,75 +27,88 @@ range protocol, looks up the references and transforms them into `portal:`
 references if they are local, or `npm:` references if they need to be
 downloaded.
 
-The list of external packages is loaded from the `externalWorkspacesConfig`
-which can point to either a .json file or a .js/.cjs file.
+## Installation
 
-The range protocol should be put in the `resolutions` entry in the root
-package.json file in the format:
+The plugin needs to be installed via yarn plugin install command. This needs to
+reference the produced bundle out of the dist folder.
 
-```json
-{
-  "resolutions": {
-    "@some-scope/some-package": "external:*"
-  }
-}
+```sh
+yarn plugin import ./path/to/my/external-workspaces.cjs
 ```
 
-### JSON Configuration
+## Usage
 
-This takes a path to a .json file which should contain a
-`Record<string, PackageDefinition>` where package definition has the following
-signature:
+### Configuration
 
-```ts
-export type PackageDefinition = {
-  /**
-   * The path to the root of the package on the local filesystem, relative to the
-   * location of the configuration file. Absolute paths will be supported but are are
-   * not recommended unless the configuration is dynamically generated.
-   */
-  path?: string;
-
-  /**
-   * The version of the package to install if it does not exist in the local file system.
-   */
-  version: string;
-};
-```
-
-Note that the .json file can have an optional key-path that denotes sub-entries
-within an existing .json file. Examples:
-
-- (default) `package.json/external-workspaces` - will look for the
-  `"external-workspaces"` key within the root package.json file
-- `../external-workspaces.json` - will look up a directory and treat the
-  specified file as being of type `Record<string, PackageDefinition>`
-- `script/myOtherConfig.json/key1/key2` - will traverse multiple keys to load
-  the workspace lookup table.
-
-### JS Configuration
-
-The js file specified in the config path will be loaded via
-`require(configPath)` and should return a function of the form:
+The configuration is loaded from the root `package.json` in the
+`external-workspaces` key and has the format:
 
 ```ts
 /**
- * Signature of the function to retrieve information about a given package. If the configuration setting routes
+ * Format for package.json : "external-workspaces"
+ */
+export type ExternalWorkspacesConfig = {
+  /**
+   * One of:
+   * - relative path to .json file - ./path/to/file.json
+   * - relative path to .json file with subkeys - ./path/to/file.json/externals
+   * - relative path to .js or .cjs file which returns a `DefinitionFinder` function
+   * - a collection of package name to { path, version } mappings
+   */
+  externalDependencies?:
+    | string
+    | Record<string, { path: string; version: string }>;
+
+  // path to a json file (with optional sub-keys) to write out workspace info
+  outputPath?: string;
+
+  // leverage the output path, but write out via the `yarn external-workspaces output` command
+  outputOnlyOnCommand?: boolean;
+
+  // include private workspaces in the output, off by default
+  outputPrivateWorkspaces?: boolean;
+
+  // Log file path or 'console' to print to console.
+  logTo?: string;
+};
+
+/**
+ * Signature of the function to retrieve information about a given package. If externalDependencies routes
  * to a .js or .cjs file instead of .json, the default export should be a function of this signature.
  */
 export type DefinitionFinder = (pkgName: string) => PackageDefinition | null;
 ```
 
-## Installation
+### Consuming External Workspaces
 
-```sh
-yarn add @rnx-kit/yarn-plugin-external-workspaces --dev
-```
+To leverage the external workspaces:
 
-or if you're using npm
+- the plugin must be able to load the set from some .json or .js file
+- the root package.json needs to have a resolutions entry for each package with
+  the version set to `"external:*"`
 
-```sh
-npm add --save-dev @rnx-kit/yarn-plugin-external-workspaces
-```
+This is the range protocol this plugin uses to intercept resolutions and
+transform them. To make this easier to manage this plugin provides a command to
+set this up automatically. To see what the command will do run:
 
-## Usage
+`yarn external-workspaces resolutions --check-only`
+
+This will load the configured external workspaces, look through this repo's
+workspaces, and add any external workspaces to the resolutions field. With
+--check-only mode it will only list the changes that will be made. Omit that to
+write out the updated resolutions in sorted order.
+
+### Producing External Workspace Definitions
+
+Setting the output path above will cause the plugin to write out the current
+workspaces for this repo to a .json file automatically on yarn install. This
+file will not be modified unless information has changed in some fashion
+(package add, delete, rename, or version change). The paths will automatically
+be relative to the target file location.
+
+Note that setting the `outputOnlyOnCommand` option will disable the automatic
+behavior. In that case this can be done manually with the following command:
+
+`yarn external-workspaces output`
+
+See the command `--help` entry for options.
