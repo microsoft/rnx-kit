@@ -4090,22 +4090,6 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rnx-kit/external-workspaces@workspace:incubator/external-workspaces":
-  version: 0.0.0-use.local
-  resolution: "@rnx-kit/external-workspaces@workspace:incubator/external-workspaces"
-  dependencies:
-    "@rnx-kit/eslint-config": "npm:*"
-    "@rnx-kit/scripts": "npm:*"
-    "@rnx-kit/tools-workspaces": "npm:*"
-    "@rnx-kit/tsconfig": "npm:*"
-    "@types/node": "npm:^20.0.0"
-    "@yarnpkg/core": "npm:^4.2.0"
-    eslint: "npm:^9.0.0"
-    prettier: "npm:^3.0.0"
-    typescript: "npm:^5.0.0"
-  languageName: unknown
-  linkType: soft
-
 "@rnx-kit/ignore@workspace:incubator/ignore":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/ignore@workspace:incubator/ignore"
