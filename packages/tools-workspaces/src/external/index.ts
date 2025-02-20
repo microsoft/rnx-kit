@@ -1,11 +1,9 @@
-export { loadExternalDeps } from "./finder";
-export { writeOutWorkspaces } from "./output";
-export { getExternalWorkspacesSettings, settingsFromConfig } from "./settings";
+export { getExternalWorkspaces } from "./settings";
 export type {
   DefinitionFinder,
   ExternalDeps,
+  ExternalWorkspaces,
   ExternalWorkspacesConfig,
-  ExternalWorkspacesSettings,
   PackageDefinition,
   TraceFunc,
 } from "./types";

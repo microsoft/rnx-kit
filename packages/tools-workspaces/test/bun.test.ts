@@ -1,6 +1,6 @@
 import { equal, match } from "node:assert/strict";
 import { afterEach, describe, it } from "node:test";
-import { findSentinel, findSentinelSync } from "../src/common";
+import { findSentinel, findSentinelSync } from "../src/implementations/common";
 import {
   findWorkspacePackages,
   findWorkspacePackagesSync,

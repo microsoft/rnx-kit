@@ -3,11 +3,10 @@
  */
 export type PackageDefinition = {
   /**
-   * The path to the root of the package on the local filesystem, relative to the
-   * location of the configuration file. Absolute paths will be supported but are are
-   * not recommended unless the configuration is dynamically generated.
+   * Relative path to the package location from wherever the definition is defined. If these are loaded from
+   * a .json file, this will be relative to the location of the .json file.
    */
-  path?: string;
+  path: string | null;
 
   /**
    * The version of the package to install if it does not exist in the local file system.
@@ -35,7 +34,7 @@ export type DefinitionFinder = (pkgName: string) => PackageDefinition | null;
  * Trace function used to log messages if logging is enabled. If logOnly is set to true, the message will only be written to
  * the log file and not to the console. In essence log files are equivalent to verbose mode.
  */
-export type TraceFunc = (msg: string, logOnly?: boolean) => void;
+export type TraceFunc = (msg: string) => void;
 
 /**
  * Options for outputting the current repos workspaces to a .json file
@@ -46,24 +45,19 @@ export type OutputWorkspacesOptions = {
    * can be used here as well to write to a subpath of the .json file. The file will not be modified if the workspaces have not changed,
    * and it will retain the prior contents not in the specified key. Workspaces within the key will be replaced.
    */
-  outputPath?: string;
+  readonly outputPath: string;
 
   /**
    * By default, the workspaces will be written out as part of install. If this is set to true, the workspaces will only be written out
    * when the command is invoked.
    */
-  outputOnlyOnCommand?: boolean;
-
-  /**
-   * Whether to include private workspaces in the output. By default they will be skipped.
-   */
-  outputPrivateWorkspaces?: boolean;
+  readonly outputOnlyOnCommand: boolean;
 };
 
 /**
  * Full configuration options for external workspaces. Stored in the root package.json under the "external-workspaces" key.
  */
-export type ExternalWorkspacesConfig = OutputWorkspacesOptions & {
+export type ExternalWorkspacesConfig = Partial<OutputWorkspacesOptions> & {
   /**
    * This setting specifies how to load the set of external dependencies. It can be of type string or ExternalDeps.
    * For strings:
@@ -84,16 +78,34 @@ export type ExternalWorkspacesConfig = OutputWorkspacesOptions & {
   logTo?: string;
 };
 
-export type ExternalWorkspacesSettings = OutputWorkspacesOptions & {
+export type ExternalWorkspaces = OutputWorkspacesOptions & {
   /**
    * Function used to look up the external workspaces config. This will include existence validation and caching when called, such that
    * when a package is queried the path entry will only be set if the package exists locally.
    */
-  finder: DefinitionFinder;
+  findPackage: DefinitionFinder;
 
   /**
-   * Tracing function, will do nothing if logging is not enabled, otherwise will write to the target output
-   * @param msg message to write to either the console or the log file
+   * Function used to output workspaces to a file.
+   */
+  outputWorkspaces(
+    workspaces: ExternalDeps,
+    outputPath?: string,
+    checkOnly?: boolean
+  ): void;
+
+  /**
+   * Trace to a log file if it is enabled, or console if 'console' is specified as the logfile
    */
   trace: TraceFunc;
+
+  /**
+   * Report out to the console, regardless of log setting
+   */
+  report: TraceFunc;
+
+  /**
+   * Root path of the repository, relative to process.cwd()
+   */
+  readonly root: string;
 };

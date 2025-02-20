@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
+import { rebasePackageDefinition } from "./dependencies";
 import type {
   DefinitionFinder,
   ExternalDeps,
@@ -75,7 +76,7 @@ export function createFinderFromJson(
       keysPath
     );
     if (deps) {
-      trace(`Loaded the finder from the json file ${jsonPath}`, true);
+      trace(`Loaded the finder from the json file ${jsonPath}`);
       // otherwise return a finder function that will return the package definition
       return (pkgName: string) => deps[pkgName] ?? null;
     }
@@ -94,7 +95,7 @@ export function createFinderFromJs(
   if (!config) {
     throw new Error(`Unable to load config from ${jsPath}`);
   }
-  trace(`Creating a finder from: ${jsPath}`, true);
+  trace(`Creating a finder from: ${jsPath}`);
   return config.default;
 }
 
@@ -111,7 +112,8 @@ export function createFinderFromJs(
  */
 function createValidatingFinder(
   finder: DefinitionFinder,
-  basePath: string,
+  rootPath: string,
+  pathDelta: string,
   trace: TraceFunc
 ): DefinitionFinder {
   const cache = new Map<string, PackageDefinition | null>();
@@ -125,20 +127,20 @@ function createValidatingFinder(
     // now call the base finder which will call the js function or read the parsed json
     const pkgDef = finder(pkgName);
     // copy the result so we don't modify the original object
-    const result = pkgDef ? { ...pkgDef } : null;
+    let result = pkgDef ? { ...pkgDef } : null;
 
     // if a result was found, validate the path or null it out if no local file exists
-    if (result && result.path) {
-      if (!path.isAbsolute(result.path)) {
-        result.path = path.resolve(basePath, result.path);
-      }
-
-      // if no package.json file is found on disk for this package, clear the path
-      if (!fs.existsSync(path.join(result.path, "package.json"))) {
-        trace(`finder: ${pkgName} not found at ${result.path}`, true);
-        result.path = undefined;
-      } else {
-        trace(`finder: ${pkgName} found at ${result.path}`, true);
+    if (result) {
+      // adjust the path to be relative to the root
+      result = rebasePackageDefinition(result, pathDelta);
+      if (result.path) {
+        // if no package.json file is found on disk for this package, clear the path
+        if (!fs.existsSync(path.join(rootPath, result.path, "package.json"))) {
+          trace(`finder: ${pkgName} not found at ${result.path}`);
+          result.path = null;
+        } else {
+          trace(`finder: ${pkgName} found at ${result.path}`);
+        }
       }
     }
 
@@ -152,22 +154,30 @@ function createValidatingFinder(
  * Create a definition finder from the specified config file. This lookup will include checking whether it is
  * a local package or not, making sure the paths are absolute, and caching results for efficiency.
  *
- * @param configPath the path to the config file
+ * @param externalDependencies the path to the config file
+ * @param root the root path of the repository
+ * @param trace the trace function to use for logging
  * @returns a finder function which will lookup package definitions, checking whether they are local along the way
  */
 export function loadExternalDeps(
   externalDependencies: string | ExternalDeps | undefined,
-  cwd: string,
+  root: string,
   trace: TraceFunc
 ): DefinitionFinder {
   let baseFinder: DefinitionFinder | undefined = undefined;
+  let pathDelta = "";
 
   if (typeof externalDependencies === "string") {
+    if (path.isAbsolute(externalDependencies)) {
+      throw new Error(
+        `Invalid external workspace config path: ${externalDependencies}. Must be relative to the root of the repository`
+      );
+    }
     // if the external dependencies is a string, then it should be a path to a config file
-    const configPath = path.resolve(cwd, externalDependencies);
+    const configPath = path.join(root, externalDependencies);
+    pathDelta = path.dirname(externalDependencies);
 
     const { jsonPath, keysPath } = parseJsonPath(configPath);
-    cwd = path.dirname(jsonPath ? jsonPath : configPath);
 
     if (jsonPath) {
       // try to load it from json if the config path referenced a json file
@@ -191,6 +201,6 @@ export function loadExternalDeps(
 
   // return the a caching/validating wrapper around the base finder
   return baseFinder
-    ? createValidatingFinder(baseFinder, cwd, trace)
+    ? createValidatingFinder(baseFinder, root, pathDelta, trace)
     : nullFinder;
 }

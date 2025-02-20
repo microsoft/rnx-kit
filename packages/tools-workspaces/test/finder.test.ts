@@ -20,12 +20,14 @@ const fixtureContext: Record<string, PackageDefinition> = {
   },
 };
 
+const trace = () => null;
+
 describe("createFinderFromJson", () => {
   it("should return a finder function for keys at the root", () => {
     const { jsonPath, keysPath } = parseJsonPath(
       "./test/__fixtures__/root.json"
     );
-    const finder = createFinderFromJson(jsonPath!, keysPath);
+    const finder = createFinderFromJson(jsonPath!, keysPath, trace);
     ok(finder instanceof Function);
     deepEqual(finder!("package1"), fixtureContext.package1);
     deepEqual(finder!("package2"), fixtureContext.package2);
@@ -35,7 +37,7 @@ describe("createFinderFromJson", () => {
     const { jsonPath, keysPath } = parseJsonPath(
       "./test/__fixtures__/package.json/external-workspaces"
     );
-    const finder = createFinderFromJson(jsonPath!, keysPath);
+    const finder = createFinderFromJson(jsonPath!, keysPath, trace);
     ok(finder instanceof Function);
     deepEqual(finder!("package1"), fixtureContext.package1);
     deepEqual(finder!("package2"), fixtureContext.package2);
@@ -45,7 +47,7 @@ describe("createFinderFromJson", () => {
     const { jsonPath, keysPath } = parseJsonPath(
       "./test/__fixtures__/nested.json/key1/key2"
     );
-    const finder = createFinderFromJson(jsonPath!, keysPath);
+    const finder = createFinderFromJson(jsonPath!, keysPath, trace);
     ok(finder instanceof Function);
     deepEqual(finder!("package1"), fixtureContext.package1);
     deepEqual(finder!("package2"), fixtureContext.package2);
@@ -59,7 +61,7 @@ describe("createFinderFromJs", () => {
       "./test/__fixtures__/js-test.js"
     );
     ok(fs.existsSync(jsPath));
-    const finder = createFinderFromJs(jsPath);
+    const finder = createFinderFromJs(jsPath, trace);
     ok(finder instanceof Function);
     deepEqual(finder!("package1"), fixtureContext.package1);
     deepEqual(finder!("package2"), fixtureContext.package2);
@@ -71,7 +73,7 @@ describe("createFinderFromJs", () => {
       "./test/__fixtures__/cjs-test.cjs"
     );
     ok(fs.existsSync(jsPath));
-    const finder = createFinderFromJs(jsPath);
+    const finder = createFinderFromJs(jsPath, trace);
     ok(finder instanceof Function);
     deepEqual(finder!("package1"), fixtureContext.package1);
     deepEqual(finder!("package2"), fixtureContext.package2);
