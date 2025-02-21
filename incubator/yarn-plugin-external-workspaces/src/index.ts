@@ -1,5 +1,6 @@
 import { type Plugin } from "@yarnpkg/core";
 import { CheckResolutions, OutputWorkspaces } from "./commands";
+import { ExternalFetcher } from "./fetcher";
 import { afterAllInstalled } from "./hooks";
 import { ExternalResolver } from "./resolver";
 
@@ -8,8 +9,9 @@ import { ExternalResolver } from "./resolver";
  */
 const plugin: Plugin = {
   /**
-   * Hook up the custom resolver
+   * Hook up the custom fetcher and resolver
    */
+  fetchers: [ExternalFetcher],
   resolvers: [ExternalResolver],
 
   /**

@@ -72,7 +72,7 @@ class ExternalWorkspacesImpl implements ExternalWorkspaces {
       }
 
       // create a relative path to rebase from relative to the root, and update the new workspaces
-      const deltaPath = path.relative(path.dirname(jsonDir), this.root);
+      const deltaPath = path.relative(jsonDir, this.root);
       const newWorkspaces = rebaseExternalDeps(workspaces, deltaPath);
 
       // load previous workspaces if they exist

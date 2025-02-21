@@ -4849,6 +4849,7 @@ __metadata:
     "@types/node": "npm:^20.0.0"
     "@yarnpkg/cli": "npm:^4.6.0"
     "@yarnpkg/core": "npm:^4.2.0"
+    "@yarnpkg/fslib": "npm:^3.1.1"
     clipanion: "npm:^4.0.0-rc.4"
     eslint: "npm:^9.0.0"
     prettier: "npm:^3.0.0"

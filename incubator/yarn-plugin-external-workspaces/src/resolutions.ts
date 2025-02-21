@@ -1,7 +1,4 @@
-import {
-  getExternalWorkspacesSettings,
-  type TraceFunc,
-} from "@rnx-kit/tools-workspaces/external";
+import { type TraceFunc } from "@rnx-kit/tools-workspaces/external";
 import {
   type Descriptor,
   type IdentHash,
@@ -11,6 +8,7 @@ import {
 import fs from "node:fs";
 import path from "node:path";
 import { ExternalResolver } from "./resolver";
+import { getSettingsForProject } from "./utilities";
 
 const protocol = ExternalResolver.protocol;
 const range = protocol + "*";
@@ -106,7 +104,7 @@ function handleFoundExternals(
  * @param checkOnly run in check-only mode where no changes are written
  */
 export function checkProjectResolutions(project: Project, checkOnly?: boolean) {
-  const { trace, finder } = getExternalWorkspacesSettings(project.cwd, true);
+  const { report, findPackage } = getSettingsForProject(project);
   const foundExternals = new Set<string>();
   const toCheck = new Set<Descriptor>();
 
@@ -116,7 +114,7 @@ export function checkProjectResolutions(project: Project, checkOnly?: boolean) {
       for (const descriptor of dependencies.values()) {
         if (project.tryWorkspaceByDescriptor(descriptor) === null) {
           const name = structUtils.stringifyIdent(descriptor);
-          const info = finder(name);
+          const info = findPackage(name);
           if (info) {
             foundExternals.add(name);
             if (!toCheck.has(descriptor)) {
@@ -149,5 +147,5 @@ export function checkProjectResolutions(project: Project, checkOnly?: boolean) {
   }
 
   // handle the found externals
-  handleFoundExternals(project.cwd, foundExternals, checkOnly, trace);
+  handleFoundExternals(project.cwd, foundExternals, checkOnly, report);
 }

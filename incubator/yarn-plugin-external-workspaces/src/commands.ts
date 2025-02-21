@@ -1,9 +1,8 @@
-import { getExternalWorkspacesSettings } from "@rnx-kit/tools-workspaces/external";
 import { BaseCommand } from "@yarnpkg/cli";
 import { Configuration, Project } from "@yarnpkg/core";
 import { Command, Option } from "clipanion";
-import { outputWorkspaces } from "./output";
 import { checkProjectResolutions } from "./resolutions";
+import { getSettingsForProject, outputWorkspaces } from "./utilities";
 
 export class OutputWorkspaces extends BaseCommand {
   static override paths = [["external-workspaces", "output"]];
@@ -56,20 +55,11 @@ export class OutputWorkspaces extends BaseCommand {
       this.context.plugins
     );
     const { project } = await Project.find(configuration, this.context.cwd);
-    const settings = getExternalWorkspacesSettings(project.cwd, true);
+    const settings = getSettingsForProject(project);
     const outputPath = this.target || settings.outputPath;
-    const includePrivate =
-      this.includePrivate || settings.outputPrivateWorkspaces;
-    const trace = settings.trace;
 
     if (outputPath) {
-      await outputWorkspaces(
-        project,
-        outputPath,
-        includePrivate,
-        this.checkOnly,
-        trace
-      );
+      await outputWorkspaces(project, settings, outputPath, this.checkOnly);
     }
   }
 }
