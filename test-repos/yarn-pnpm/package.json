@@ -86,7 +86,8 @@
     ]
   },
   "external-workspaces": {
-    "externalDependencies": "../rnx-kit.workspaces.json"
+    "externalDependencies": "../rnx-kit.workspaces.json",
+    "logTo": "console"
   },
   "prettier": "../.github/prettierrc.json"
 }

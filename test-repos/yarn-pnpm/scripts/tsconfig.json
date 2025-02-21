@@ -1,7 +1,10 @@
 {
-  "extends": "@rnx-kit/tsconfig/tsconfig.esm.json",
+  "extends": "../tsconfig.json",
   "compilerOptions": {
-    "noEmit": true
+    "noEmit": true,
+    "module": "Node16",
+    "moduleResolution": "Node16",
+    "verbatimModuleSyntax": true
   },
   "include": ["src"]
 }

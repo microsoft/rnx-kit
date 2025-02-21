@@ -4847,12 +4847,14 @@ __metadata:
     "@rnx-kit/tools-workspaces": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
     "@types/node": "npm:^20.0.0"
+    "@types/semver": "npm:^7.0.0"
     "@yarnpkg/cli": "npm:^4.6.0"
     "@yarnpkg/core": "npm:^4.2.0"
     "@yarnpkg/fslib": "npm:^3.1.1"
     clipanion: "npm:^4.0.0-rc.4"
     eslint: "npm:^9.0.0"
     prettier: "npm:^3.0.0"
+    semver: "npm:^7.0.0"
     typescript: "npm:^5.0.0"
   languageName: unknown
   linkType: soft

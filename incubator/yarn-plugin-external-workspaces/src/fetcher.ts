@@ -73,7 +73,7 @@ export class ExternalFetcher implements Fetcher {
     const localPath = npath.toPortablePath(findPackage(name)?.path || "");
 
     if (localPath) {
-      trace(`Found existing local path for ${name}: ${localPath}`);
+      trace(`Fetcher: Found existing local path for ${name}: ${localPath}`);
       const result: FetchResult = {
         packageFs: new CwdFS(localPath),
         prefixPath: PortablePath.dot,

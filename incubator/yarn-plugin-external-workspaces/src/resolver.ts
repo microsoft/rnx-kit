@@ -7,10 +7,20 @@ import type {
   ResolveOptions,
   Resolver,
 } from "@yarnpkg/core";
-import { structUtils } from "@yarnpkg/core";
-import { encodeRange, getProtocol, getSettingsForProject } from "./utilities";
+import { LinkType, Manifest, miscUtils, structUtils } from "@yarnpkg/core";
+import {
+  encodeRange,
+  getProtocol,
+  getSettingsForProject,
+  versionFromDescriptorRange,
+} from "./utilities";
 
-const { makeDescriptor, makeLocator, stringifyIdent } = structUtils;
+const { makeLocator, stringifyIdent } = structUtils;
+
+type Candidates = {
+  locator: Locator;
+  ranges: Set<string>;
+};
 
 /**
  * The resolver implements the logic for the external: protocol.
@@ -18,6 +28,7 @@ const { makeDescriptor, makeLocator, stringifyIdent } = structUtils;
 export class ExternalResolver implements Resolver {
   static protocol = getProtocol();
   private settings: ExternalWorkspaces | null = null;
+  private candidates: Record<string, Candidates> = {};
 
   /**
    * Ensure a finder is created if it is not already present, then return it
@@ -28,13 +39,41 @@ export class ExternalResolver implements Resolver {
     }
   }
 
+  private ensureLocator(descriptor: Descriptor): Locator {
+    const pkgName = stringifyIdent(descriptor);
+    const range = versionFromDescriptorRange(descriptor.range);
+    const candidate = (this.candidates[pkgName] ??= {
+      locator: makeLocator(descriptor, encodeRange(pkgName, range)),
+      ranges: new Set(),
+    });
+    candidate.ranges.add(range);
+    return candidate.locator;
+  }
+
+  /*
   private finder(pkgName: string) {
     return this.settings?.findPackage(pkgName);
   }
+  */
 
   private trace(msg: string) {
     this.settings?.trace(msg);
   }
+
+  /*
+  private findCandidates(name: string, version: string) {
+    const candidates = this.candidates[name] || [];
+    return candidates.filter((candidate) =>
+      semver.satisfies(version, candidate.range)
+    );
+  }
+
+  private saveCandidate(name: string, version: string, locator: Locator) {
+    this.candidates[name] ??= [];
+    const range = new semver.Range(version);
+    this.candidates[name].push({ locator, range });
+  }
+    */
 
   /**
    * This function must return a set of other descriptors that must be
@@ -46,9 +85,6 @@ export class ExternalResolver implements Resolver {
     _descriptor: Descriptor,
     _opts: MinimalResolveOptions
   ): Record<string, Descriptor> {
-    this.trace(
-      `UNEXPECTED: getResolutionDependencies called for ${stringifyIdent(_descriptor)}`
-    );
     return {};
   }
   /**
@@ -118,12 +154,12 @@ export class ExternalResolver implements Resolver {
    */
   bindDescriptor(
     descriptor: Descriptor,
-    fromLocator: Locator,
+    _fromLocator: Locator,
     opts: MinimalResolveOptions
   ): Descriptor {
     // get/ensure the finder function to look up the possible external dependency
     this.ensureSettings(opts);
-
+    /*
     // look up the package information from the finder
     const pkgName = stringifyIdent(descriptor);
     const info = this.finder(pkgName);
@@ -137,15 +173,19 @@ export class ExternalResolver implements Resolver {
     }
 
     // now create a new descriptor that encodes the package name in the range
-    this.trace(`Binding descriptor with '${newRange}'`);
+    this.trace(
+      `Binding '${newRange}' from: ${stringifyIdent(fromLocator)}, ref ${fromLocator.reference}`
+    );
     return makeDescriptor(descriptor, newRange);
+    */
+    return descriptor;
   }
 
   /**
    * This function will, given a descriptor, return the list of locators that
    * potentially satisfy it.
    *
-   * This transforms the descriptor into an equivalent locator in this case
+   * This transforms the descriptor into an equivalent locator in the case a match isn't found
    *
    * @param descriptor The source descriptor.
    * @param dependencies The resolution dependencies and their resolutions.
@@ -154,9 +194,31 @@ export class ExternalResolver implements Resolver {
   async getCandidates(
     descriptor: Descriptor,
     _dependencies: Record<string, Package>,
-    _opts: ResolveOptions
+    opts: ResolveOptions
   ) {
-    return [makeLocator(descriptor, descriptor.range)];
+    this.ensureSettings(opts);
+    this.trace(`Resolver: getCandidates(${stringifyIdent(descriptor)})`);
+    return [this.ensureLocator(descriptor)];
+
+    /*
+    // see if we have a cached candidate for this descriptor
+    const { name, version } = decodeRange(descriptor.range);
+    const candidates = this.findCandidates(name, version);
+
+    // if so, return the cached candidates
+    if (candidates.length > 0) {
+      this.trace(
+        `found ${candidates.length} candidates for ${name}:${version}`
+      );
+      return candidates.map((candidate) => candidate.locator);
+    }
+
+    // otherwise create a new locator and cache it
+    this.trace(`creating new candidate for ${name}:${version}`);
+    const locator = makeLocator(descriptor, descriptor.range);
+    this.saveCandidate(name, version, locator);
+    return [locator];
+    */
   }
 
   /**
@@ -189,11 +251,8 @@ export class ExternalResolver implements Resolver {
     _locators: Locator[],
     opts: ResolveOptions
   ) {
-    this.ensureSettings(opts);
-    this.trace(
-      `UNEXPECTEDP: getSatisfying called for ${stringifyIdent(descriptor)}`
-    );
     const satisfying = await this.getCandidates(descriptor, dependencies, opts);
+    this.trace(`Resolver: getSatisfying found ${satisfying.length} candidates`);
     return {
       locators: satisfying,
       sorted: false,
@@ -202,25 +261,53 @@ export class ExternalResolver implements Resolver {
 
   /**
    * This function will, given a locator, return the full package definition
-   * for the package pointed at. This shouldn't be called for a transforming protocol
+   * for the package pointed at. Note that this should only be called for packages which are
+   * locally available, for remote ones they should fall through to a different resolver/fetcher.
    *
    * @param locator The source locator.
    * @param opts The resolution options.
    */
   async resolve(locator: Locator, opts: ResolveOptions) {
     this.ensureSettings(opts);
-    this.trace(
-      `UNEXPECTED: Resolving external locator ${stringifyIdent(locator)}`
+    if (!opts.fetchOptions) {
+      throw new Error(
+        `Assertion failed: This resolver cannot be used unless a fetcher is configured`
+      );
+    }
+
+    this.trace(`Resolving ${stringifyIdent(locator)}`);
+    const packageFetch = await opts.fetchOptions.fetcher.fetch(
+      locator,
+      opts.fetchOptions
     );
-    // For a purely transforming protocol, you can just return an empty Manifest
+
+    const manifest = await miscUtils.releaseAfterUseAsync(async () => {
+      return await Manifest.find(packageFetch.prefixPath, {
+        baseFs: packageFetch.packageFs,
+      });
+    }, packageFetch.releaseFs);
+
     return {
       ...locator,
-      name: locator.name,
-      version: "0.0.0",
-      languageName: "unknown",
-      conditions: null,
-    } as Package;
-    // linkType: LinkType.SOFT,
-    //  ...manifest,
+
+      version: manifest.version || `0.0.0`,
+
+      languageName:
+        manifest.languageName ||
+        opts.project.configuration.get(`defaultLanguageName`),
+      linkType: LinkType.SOFT,
+
+      conditions: manifest.getConditions(),
+
+      dependencies: opts.project.configuration.normalizeDependencyMap(
+        manifest.dependencies
+      ),
+      peerDependencies: manifest.peerDependencies,
+
+      dependenciesMeta: manifest.dependenciesMeta,
+      peerDependenciesMeta: manifest.peerDependenciesMeta,
+
+      bin: manifest.bin,
+    };
   }
 }

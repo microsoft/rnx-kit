@@ -37,12 +37,14 @@
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*",
     "@types/node": "^20.0.0",
+    "@types/semver": "^7.0.0",
     "@yarnpkg/cli": "^4.6.0",
     "@yarnpkg/core": "^4.2.0",
     "@yarnpkg/fslib": "^3.1.1",
     "clipanion": "^4.0.0-rc.4",
     "eslint": "^9.0.0",
     "prettier": "^3.0.0",
+    "semver": "^7.0.0",
     "typescript": "^5.0.0"
   },
   "experimental": true

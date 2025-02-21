@@ -31,6 +31,11 @@ export function getSettingsForProject(project: Project) {
   return getExternalWorkspaces(toNativePath(project.cwd));
 }
 
+export function versionFromDescriptorRange(range: string): string {
+  const protocolEnd = range.indexOf(":");
+  return protocolEnd === -1 ? range : range.slice(protocolEnd + 1);
+}
+
 /**
  * @param range the range to decode, in the form of 'external:workspace-name@version'
  * @returns the decoded range, in the form of { name: 'workspace-name', version: 'version' }
@@ -51,15 +56,11 @@ export function decodeRange(range: string): { name: string; version: string } {
  * @param resolutionRange the range from resolutions, in the format of 'external:version'
  * @returns a new range with the package name injected as 'external:package-name@version'
  */
-export function encodeRange(
-  name: string,
-  resolutionRange: string
-): string | null {
+export function encodeRange(name: string, resolutionRange: string): string {
   if (resolutionRange.startsWith(protocol)) {
-    const version = resolutionRange.slice(protocol.length);
-    return `${protocol}${name}@${version}`;
+    resolutionRange = resolutionRange.slice(protocol.length);
   }
-  return null;
+  return `${protocol}${name}@${resolutionRange}`;
 }
 
 /**
