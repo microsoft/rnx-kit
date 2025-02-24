@@ -36,19 +36,38 @@ export function versionFromDescriptorRange(range: string): string {
   return protocolEnd === -1 ? range : range.slice(protocolEnd + 1);
 }
 
+export type DescriptorRangeParts = {
+  // the protocol, e.g. 'external:', empty string if no protocol
+  protocol: string;
+
+  // the version, e.g. '^1.2.3' or '*', should exist
+  version: string;
+};
+
+/**
+ * @param range the range to decode, either "protocol:version" or "version"
+ * @returns the version and protocol or an empty string for protocol if it isn't present
+ */
+export function decodeDescriptorRange(range: string): DescriptorRangeParts {
+  const protocolEnd = range.indexOf(":");
+  if (protocolEnd !== -1) {
+    return {
+      protocol: range.slice(0, protocolEnd + 1),
+      version: range.slice(protocolEnd + 1),
+    };
+  }
+  return { protocol: "", version: range };
+}
+
 /**
  * @param range the range to decode, in the form of 'external:workspace-name@version'
  * @returns the decoded range, in the form of { name: 'workspace-name', version: 'version' }
  */
-export function decodeRange(range: string): { name: string; version: string } {
-  // find the @ character after the protocol, skipping one character in case the package starts with a scope
-  const atIndex = range.indexOf("@", protocol.length + 1);
-  if (atIndex === -1) {
-    throw new Error(`Invalid range: ${range}`);
+export function decodeRange(range: string): { version: string } {
+  if (range.startsWith(protocol)) {
+    range = range.slice(protocol.length);
   }
-  const name = range.slice(protocol.length, atIndex);
-  const version = range.slice(atIndex + 1);
-  return { name, version };
+  return { version: range };
 }
 
 /**
@@ -56,11 +75,11 @@ export function decodeRange(range: string): { name: string; version: string } {
  * @param resolutionRange the range from resolutions, in the format of 'external:version'
  * @returns a new range with the package name injected as 'external:package-name@version'
  */
-export function encodeRange(name: string, resolutionRange: string): string {
+export function encodeRange(_name: string, resolutionRange: string): string {
   if (resolutionRange.startsWith(protocol)) {
     resolutionRange = resolutionRange.slice(protocol.length);
   }
-  return `${protocol}${name}@${resolutionRange}`;
+  return `${protocol}${resolutionRange}`;
 }
 
 /**

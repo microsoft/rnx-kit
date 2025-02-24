@@ -1,15 +1,21 @@
-import { type ExternalWorkspaces } from "@rnx-kit/tools-workspaces/external";
 import {
+  type ExternalWorkspaces,
+  type TraceFunc,
+} from "@rnx-kit/tools-workspaces/external";
+import {
+  structUtils,
   type Fetcher,
   type FetchOptions,
   type FetchResult,
   type Locator,
   type ResolveOptions,
   type Resolver,
-  structUtils,
 } from "@yarnpkg/core";
 import { CwdFS, npath, PortablePath } from "@yarnpkg/fslib";
+import path from "node:path";
 import { decodeRange, getProtocol, getSettingsForProject } from "./utilities";
+
+const { stringifyIdent } = structUtils;
 
 /**
  * The "fetcher" is where we decide if the local path is present or not.
@@ -50,8 +56,13 @@ export class ExternalFetcher implements Fetcher {
    * @param locator The source locator.
    * @param opts The fetch options.
    */
-  getLocalPath(_locator: Locator, _opts: FetchOptions): null {
-    // Return null so Yarn will not treat it as a pure local fetch.
+  getLocalPath(locator: Locator, opts: FetchOptions): PortablePath | null {
+    const { findPackage } = this.ensureSettings(opts);
+    const name = stringifyIdent(locator);
+    const relativePath = findPackage(name)?.path;
+    if (relativePath) {
+      return npath.toPortablePath(path.join(opts.project.cwd, relativePath));
+    }
     return null;
   }
 
@@ -68,9 +79,10 @@ export class ExternalFetcher implements Fetcher {
    * @param opts The fetch options.
    */
   async fetch(locator: Locator, opts: FetchOptions) {
-    const { name, version } = decodeRange(locator.reference);
-    const { findPackage, trace } = this.ensureSettings(opts);
-    const localPath = npath.toPortablePath(findPackage(name)?.path || "");
+    const { version } = decodeRange(locator.reference);
+    const name = stringifyIdent(locator);
+    const { trace } = this.ensureSettings(opts);
+    const localPath = this.getLocalPath(locator, opts);
 
     if (localPath) {
       trace(`Fetcher: Found existing local path for ${name}: ${localPath}`);
@@ -83,7 +95,7 @@ export class ExternalFetcher implements Fetcher {
     }
 
     // otherwise fallthrough to resolving the package + version combination
-    return await this.fetchFallback(name, version, opts);
+    return await this.fetchFallback(name, version, opts, trace);
   }
 
   /**
@@ -95,7 +107,8 @@ export class ExternalFetcher implements Fetcher {
   private async fetchFallback(
     name: string,
     version: string,
-    opts: FetchOptions
+    opts: FetchOptions,
+    trace: TraceFunc
   ) {
     // Build a generic descriptor with name (@scope/pkg) and version to allow resolution to find the locator
     const descriptor = structUtils.makeDescriptor(
@@ -123,7 +136,9 @@ export class ExternalFetcher implements Fetcher {
       throw new Error(`No candidate found on npm for "${name}" : "${version}"`);
     }
     const locator = candidates[0];
+
     // Then fetch the fallback as if it was an npm package:
+    trace(`Fetcher: falling back to generic fetch for ${name}: ${version}`);
     return await this.fetcher.fetch(locator, opts);
   }
 }

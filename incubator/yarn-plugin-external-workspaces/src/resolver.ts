@@ -9,13 +9,14 @@ import type {
 } from "@yarnpkg/core";
 import { LinkType, Manifest, miscUtils, structUtils } from "@yarnpkg/core";
 import {
+  decodeDescriptorRange,
   encodeRange,
   getProtocol,
   getSettingsForProject,
   versionFromDescriptorRange,
 } from "./utilities";
 
-const { makeLocator, stringifyIdent } = structUtils;
+const { makeLocator, stringifyIdent, makeDescriptor } = structUtils;
 
 type Candidates = {
   locator: Locator;
@@ -37,6 +38,7 @@ export class ExternalResolver implements Resolver {
     if (!this.settings) {
       this.settings = getSettingsForProject(opts.project);
     }
+    return this.settings;
   }
 
   private ensureLocator(descriptor: Descriptor): Locator {
@@ -75,6 +77,15 @@ export class ExternalResolver implements Resolver {
   }
     */
 
+  private tryExternal(descriptor: Descriptor, opts: MinimalResolveOptions) {
+    // don't coopt the workspace resolver, even if it is in the external list
+    if (!opts.project.tryWorkspaceByDescriptor(descriptor)) {
+      const pkgName = stringifyIdent(descriptor);
+      return this.ensureSettings(opts).findPackage(pkgName);
+    }
+    return false;
+  }
+
   /**
    * This function must return a set of other descriptors that must be
    * transformed into locators before the subject descriptor can be transformed
@@ -97,9 +108,21 @@ export class ExternalResolver implements Resolver {
    */
   supportsDescriptor(
     descriptor: Descriptor,
-    _opts: MinimalResolveOptions
+    opts: MinimalResolveOptions
   ): boolean {
-    return descriptor.range.startsWith(ExternalResolver.protocol);
+    const { trace } = this.ensureSettings(opts);
+    if (descriptor.range.startsWith(ExternalResolver.protocol)) {
+      return true;
+    }
+
+    if (this.tryExternal(descriptor, opts)) {
+      trace(
+        `Resolver: supports undecorated external: ${structUtils.stringifyIdent(descriptor)}`
+      );
+      return true;
+    }
+
+    return false;
   }
 
   /**
@@ -157,8 +180,17 @@ export class ExternalResolver implements Resolver {
     _fromLocator: Locator,
     opts: MinimalResolveOptions
   ): Descriptor {
-    // get/ensure the finder function to look up the possible external dependency
-    this.ensureSettings(opts);
+    // see if this is really an external workspace despite missing the protocol
+    if (
+      !descriptor.range.startsWith(ExternalResolver.protocol) &&
+      this.tryExternal(descriptor, opts)
+    ) {
+      // in this case rebind the descriptor with the protocol
+      const { version } = decodeDescriptorRange(descriptor.range);
+      const newRange = encodeRange(stringifyIdent(descriptor), version);
+      return makeDescriptor(descriptor, newRange);
+    }
+
     /*
     // look up the package information from the finder
     const pkgName = stringifyIdent(descriptor);

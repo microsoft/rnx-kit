@@ -3781,7 +3781,7 @@ __metadata:
 
 "@react-native-webapis/web-storage@external:*":
   version: 0.0.0-use.local
-  resolution: "@react-native-webapis/web-storage@external:@react-native-webapis/web-storage@*"
+  resolution: "@react-native-webapis/web-storage@external:*"
   peerDependencies:
     "@callstack/react-native-visionos": ">=0.74"
     react: ">=18.2.0"
@@ -4114,7 +4114,7 @@ __metadata:
 
 "@rnx-kit/align-deps@external:*":
   version: 0.0.0-use.local
-  resolution: "@rnx-kit/align-deps@external:@rnx-kit/align-deps@*"
+  resolution: "@rnx-kit/align-deps@external:*"
   bin:
     rnx-align-deps: lib/index.js
   languageName: node
@@ -4122,7 +4122,7 @@ __metadata:
 
 "@rnx-kit/babel-preset-metro-react-native@external:*":
   version: 0.0.0-use.local
-  resolution: "@rnx-kit/babel-preset-metro-react-native@external:@rnx-kit/babel-preset-metro-react-native@*"
+  resolution: "@rnx-kit/babel-preset-metro-react-native@external:*"
   dependencies:
     "@rnx-kit/console": "npm:^2.0.0"
     babel-plugin-const-enum: "npm:^1.0.0"
@@ -4144,7 +4144,7 @@ __metadata:
 
 "@rnx-kit/cli@external:*":
   version: 0.0.0-use.local
-  resolution: "@rnx-kit/cli@external:@rnx-kit/cli@*"
+  resolution: "@rnx-kit/cli@external:*"
   dependencies:
     "@rnx-kit/align-deps": "npm:^3.0.1"
     "@rnx-kit/config": "npm:^0.7.0"
@@ -4204,7 +4204,7 @@ __metadata:
 
 "@rnx-kit/eslint-plugin@external:*":
   version: 0.0.0-use.local
-  resolution: "@rnx-kit/eslint-plugin@external:@rnx-kit/eslint-plugin@*"
+  resolution: "@rnx-kit/eslint-plugin@external:*"
   dependencies:
     "@react-native/eslint-plugin": "npm:^0.76.0"
     enhanced-resolve: "npm:^5.8.3"
@@ -4218,7 +4218,7 @@ __metadata:
 
 "@rnx-kit/jest-preset@external:*":
   version: 0.0.0-use.local
-  resolution: "@rnx-kit/jest-preset@external:@rnx-kit/jest-preset@*"
+  resolution: "@rnx-kit/jest-preset@external:*"
   dependencies:
     "@babel/core": "npm:^7.0.0"
     "@babel/preset-env": "npm:^7.0.0"
@@ -4235,7 +4235,7 @@ __metadata:
 
 "@rnx-kit/metro-config@external:*":
   version: 0.0.0-use.local
-  resolution: "@rnx-kit/metro-config@external:@rnx-kit/metro-config@*"
+  resolution: "@rnx-kit/metro-config@external:*"
   dependencies:
     "@rnx-kit/tools-node": "npm:^3.0.0"
     "@rnx-kit/tools-react-native": "npm:^2.0.0"
@@ -4252,7 +4252,7 @@ __metadata:
 
 "@rnx-kit/metro-plugin-cyclic-dependencies-detector@external:*":
   version: 0.0.0-use.local
-  resolution: "@rnx-kit/metro-plugin-cyclic-dependencies-detector@external:@rnx-kit/metro-plugin-cyclic-dependencies-detector@*"
+  resolution: "@rnx-kit/metro-plugin-cyclic-dependencies-detector@external:*"
   dependencies:
     "@rnx-kit/console": "npm:^2.0.0"
     "@rnx-kit/tools-node": "npm:^3.0.0"
@@ -4261,7 +4261,7 @@ __metadata:
 
 "@rnx-kit/metro-plugin-duplicates-checker@external:*":
   version: 0.0.0-use.local
-  resolution: "@rnx-kit/metro-plugin-duplicates-checker@external:@rnx-kit/metro-plugin-duplicates-checker@*"
+  resolution: "@rnx-kit/metro-plugin-duplicates-checker@external:*"
   dependencies:
     "@rnx-kit/console": "npm:^2.0.0"
     "@rnx-kit/tools-node": "npm:^3.0.0"
@@ -4286,7 +4286,7 @@ __metadata:
 
 "@rnx-kit/metro-resolver-symlinks@external:*":
   version: 0.0.0-use.local
-  resolution: "@rnx-kit/metro-resolver-symlinks@external:@rnx-kit/metro-resolver-symlinks@*"
+  resolution: "@rnx-kit/metro-resolver-symlinks@external:*"
   dependencies:
     "@rnx-kit/console": "npm:^2.0.0"
     "@rnx-kit/tools-node": "npm:^3.0.0"
@@ -4297,7 +4297,7 @@ __metadata:
 
 "@rnx-kit/metro-serializer-esbuild@external:*":
   version: 0.0.0-use.local
-  resolution: "@rnx-kit/metro-serializer-esbuild@external:@rnx-kit/metro-serializer-esbuild@*"
+  resolution: "@rnx-kit/metro-serializer-esbuild@external:*"
   dependencies:
     "@rnx-kit/console": "npm:^2.0.0"
     "@rnx-kit/tools-node": "npm:^3.0.2"
@@ -4310,7 +4310,7 @@ __metadata:
 
 "@rnx-kit/metro-serializer@external:*":
   version: 0.0.0-use.local
-  resolution: "@rnx-kit/metro-serializer@external:@rnx-kit/metro-serializer@*"
+  resolution: "@rnx-kit/metro-serializer@external:*"
   dependencies:
     "@rnx-kit/tools-react-native": "npm:^2.0.0"
     semver: "npm:^7.0.0"
@@ -4342,7 +4342,7 @@ __metadata:
 
 "@rnx-kit/polyfills@external:*":
   version: 0.0.0-use.local
-  resolution: "@rnx-kit/polyfills@external:@rnx-kit/polyfills@*"
+  resolution: "@rnx-kit/polyfills@external:*"
   dependencies:
     "@babel/core": "npm:^7.0.0"
     "@babel/helper-plugin-utils": "npm:^7.0.0"
@@ -4359,7 +4359,7 @@ __metadata:
 
 "@rnx-kit/react-native-auth@external:*":
   version: 0.0.0-use.local
-  resolution: "@rnx-kit/react-native-auth@external:@rnx-kit/react-native-auth@*"
+  resolution: "@rnx-kit/react-native-auth@external:*"
   peerDependencies:
     react: 16.11.0 || 16.13.1 || 17.0.1 || 17.0.2 || 18.0.0 || 18.1.0 || 18.2.0 || ^18.2.0 || 18.3.1
     react-native: ^0.62.3 || ^0.63.2 || ^0.64.2 || ^0.65.0 || ^0.66.0 || ^0.67.0 || ^0.68.0 || ^0.69.0 || ^0.70.0 || ^0.71.0 || ^0.72.0 || ^0.73.0 || ^0.74.0 || ^0.75.0 || ^0.76.0 || ^0.77.0
@@ -4368,7 +4368,7 @@ __metadata:
 
 "@rnx-kit/react-native-host@external:*":
   version: 0.0.0-use.local
-  resolution: "@rnx-kit/react-native-host@external:@rnx-kit/react-native-host@*"
+  resolution: "@rnx-kit/react-native-host@external:*"
   peerDependencies:
     react-native: ">=0.66"
   languageName: node
@@ -4376,7 +4376,7 @@ __metadata:
 
 "@rnx-kit/react-native-test-app-msal@external:*":
   version: 0.0.0-use.local
-  resolution: "@rnx-kit/react-native-test-app-msal@external:@rnx-kit/react-native-test-app-msal@*"
+  resolution: "@rnx-kit/react-native-test-app-msal@external:*"
   peerDependencies:
     "@rnx-kit/react-native-auth": "*"
     react-native-test-app: ">=0.9.16"
@@ -4388,7 +4388,7 @@ __metadata:
 
 "@rnx-kit/third-party-notices@external:*":
   version: 0.0.0-use.local
-  resolution: "@rnx-kit/third-party-notices@external:@rnx-kit/third-party-notices@*"
+  resolution: "@rnx-kit/third-party-notices@external:*"
   dependencies:
     "@rnx-kit/console": "npm:^2.0.0"
     "@rnx-kit/tools-node": "npm:^3.0.0"

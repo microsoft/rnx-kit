@@ -78,6 +78,18 @@ export type ExternalWorkspacesConfig = Partial<OutputWorkspacesOptions> & {
   logTo?: string;
 };
 
+export type ExternalWorkspace = {
+  /**
+   * The name of the package
+   */
+  name: string;
+
+  /**
+   * Resolved path to the package root.
+   */
+  path?: string;
+};
+
 export type ExternalWorkspaces = OutputWorkspacesOptions & {
   /**
    * Function used to look up the external workspaces config. This will include existence validation and caching when called, such that
