@@ -6,7 +6,6 @@ import {
   structUtils,
   type Fetcher,
   type FetchOptions,
-  type FetchResult,
   type Locator,
   type ResolveOptions,
   type Resolver,
@@ -86,12 +85,12 @@ export class ExternalFetcher implements Fetcher {
 
     if (localPath) {
       trace(`Fetcher: Found existing local path for ${name}: ${localPath}`);
-      const result: FetchResult = {
-        packageFs: new CwdFS(localPath),
-        prefixPath: PortablePath.dot,
-        localPath: localPath,
+
+      return {
+        packageFs: new CwdFS(PortablePath.root),
+        prefixPath: localPath,
+        localPath,
       };
-      return result;
     }
 
     // otherwise fallthrough to resolving the package + version combination
