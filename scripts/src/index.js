@@ -11,7 +11,12 @@ import { test } from "./commands/test.js";
 import { updateApiReadme } from "./commands/updateApiReadme.js";
 
 /**
- * @param {Record<string, { description: string; command: import("./process.js").Command }>} commands
+ * @typedef { import("yargs").Options } Option
+ * @typedef { Record<string, Option> } Options
+ */
+
+/**
+ * @param {Record<string, { description: string; command: import("./process.js").Command; options?: Options }>} commands
  * @returns
  */
 function init(commands) {
@@ -38,6 +43,21 @@ init({
   },
   bundle: {
     description: "Bundles the current package",
+    options: {
+      minify: {
+        type: "boolean",
+        default: false,
+      },
+      platform: {
+        type: "string",
+        choices: ["browser", "neutral", "node", "yarn"],
+        default: "node",
+      },
+      sourceMap: {
+        type: "boolean",
+        default: false,
+      },
+    },
     command: bundle,
   },
   clean: {

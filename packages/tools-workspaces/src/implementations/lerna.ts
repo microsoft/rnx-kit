@@ -3,13 +3,15 @@ import * as path from "path";
 import {
   findPackages,
   findPackagesSync,
+  readJSON,
+  readJSONSync,
+} from "./common";
+import {
   getImplementation,
   getImplementationSync,
   LERNA_JSON,
-  readJSON,
-  readJSONSync,
   WORKSPACE_ROOT_SENTINELS,
-} from "./common";
+} from "./index";
 
 function filterSentinels(): string[] {
   return WORKSPACE_ROOT_SENTINELS.filter((sentinel) => sentinel !== LERNA_JSON);
