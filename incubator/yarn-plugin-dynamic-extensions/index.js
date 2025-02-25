@@ -94,22 +94,18 @@ exports.factory = (require) => ({
       }
 
       const { Project, structUtils } = require("@yarnpkg/core");
+      // @ts-expect-error Cannot find module or its corresponding type declarations
+      const { npath } = require("@yarnpkg/fslib");
 
       const { workspace } = await Project.find(configuration, projectCwd);
       if (!workspace) {
         return;
       }
 
-      // On Windows, paths are prefixed with `/`. We need to remove it because
-      // Node doesn't handle them very well by default.
-      /** @type {(p: string) => string} */
-      const normalizePath =
-        process.platform === "win32" ? (s) => s.substring(1) : (s) => s;
-
       const { manifest, project } = workspace;
       const getUserExtensions = await loadUserExtensions(
         manifest.raw,
-        normalizePath(projectCwd),
+        npath.fromPortablePath(projectCwd),
         require
       );
       if (!getUserExtensions) {
@@ -123,7 +119,7 @@ exports.factory = (require) => ({
         }
 
         /** @type {Workspace} */
-        const workspace = { cwd: normalizePath(cwd), manifest: raw };
+        const workspace = { cwd: npath.fromPortablePath(cwd), manifest: raw };
         const data = getUserExtensions(workspace);
         if (!data) {
           return;

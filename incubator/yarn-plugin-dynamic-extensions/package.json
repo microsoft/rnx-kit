@@ -1,5 +1,4 @@
 {
-  "private": true,
   "name": "@rnx-kit/yarn-plugin-dynamic-extensions",
   "version": "0.0.1",
   "description": "EXPERIMENTAL - USE WITH CAUTION - yarn-plugin-dynamic-extensions",
