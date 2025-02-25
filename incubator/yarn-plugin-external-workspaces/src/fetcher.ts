@@ -1,20 +1,12 @@
 import {
-  type ExternalWorkspaces,
-  type TraceFunc,
-} from "@rnx-kit/tools-workspaces/external";
-import {
-  structUtils,
   type Fetcher,
   type FetchOptions,
+  type FetchResult,
   type Locator,
-  type ResolveOptions,
-  type Resolver,
 } from "@yarnpkg/core";
-import { CwdFS, npath, PortablePath } from "@yarnpkg/fslib";
-import path from "node:path";
-import { decodeRange, getProtocol, getSettingsForProject } from "./utilities";
-
-const { stringifyIdent } = structUtils;
+import { CwdFS, JailFS, PortablePath, ppath } from "@yarnpkg/fslib";
+import { getWorkspaceTracker, type ExternalWorkspaceTracker } from "./tracker";
+import { getProtocol } from "./utilities";
 
 /**
  * The "fetcher" is where we decide if the local path is present or not.
@@ -23,16 +15,13 @@ const { stringifyIdent } = structUtils;
  */
 export class ExternalFetcher implements Fetcher {
   static protocol = getProtocol();
-  private settings: ExternalWorkspaces | null = null;
-  private fetcher: Fetcher | null = null;
-  private resolver: Resolver | null = null;
-  private resolveOptions: ResolveOptions | null = null;
+  private tracker: ExternalWorkspaceTracker | null = null;
 
-  private ensureSettings(opts: FetchOptions) {
-    if (!this.settings) {
-      this.settings = getSettingsForProject(opts.project);
+  private ensureTracker(opts: FetchOptions) {
+    if (!this.tracker) {
+      this.tracker = getWorkspaceTracker(opts.project);
     }
-    return this.settings;
+    return this.tracker;
   }
 
   /**
@@ -56,11 +45,9 @@ export class ExternalFetcher implements Fetcher {
    * @param opts The fetch options.
    */
   getLocalPath(locator: Locator, opts: FetchOptions): PortablePath | null {
-    const { findPackage } = this.ensureSettings(opts);
-    const name = stringifyIdent(locator);
-    const relativePath = findPackage(name)?.path;
-    if (relativePath) {
-      return npath.toPortablePath(path.join(opts.project.cwd, relativePath));
+    const workspace = this.ensureTracker(opts).tryByLocator(locator);
+    if (workspace && workspace.localPath) {
+      return workspace.localPath;
     }
     return null;
   }
@@ -78,66 +65,46 @@ export class ExternalFetcher implements Fetcher {
    * @param opts The fetch options.
    */
   async fetch(locator: Locator, opts: FetchOptions) {
-    const { version } = decodeRange(locator.reference);
-    const name = stringifyIdent(locator);
-    const { trace } = this.ensureSettings(opts);
-    const localPath = this.getLocalPath(locator, opts);
+    const tracker = this.ensureTracker(opts);
+    const workspace = tracker.tryByLocator(locator);
+    if (!workspace) {
+      throw new Error(
+        `Cannot find workspace for ${locator.name} (${locator.reference})`
+      );
+    }
 
-    if (localPath) {
-      trace(`Fetcher: Found existing local path for ${name}: ${localPath}`);
-
-      return {
+    if (workspace && workspace.localPath) {
+      const localPath = ppath.resolve(tracker.root, workspace.localPath);
+      const parentFetch: FetchResult = {
         packageFs: new CwdFS(PortablePath.root),
         prefixPath: localPath,
-        localPath,
+        localPath: localPath,
       };
+      if (workspace.target === "files") {
+        tracker.trace(
+          `Fetcher: Found existing local file path for ${workspace.name}: ${workspace.localPath}`
+        );
+        return parentFetch;
+      } else if (workspace.target === "tgz") {
+        tracker.trace(
+          `Fetcher: Linking to tarball for ${workspace.name}: ${workspace.localPath}`
+        );
+        // if the target is tgz, we need to use a jail fs and make local path relative
+        const relativePath = ppath.relative(
+          PortablePath.dot,
+          workspace.localPath
+        );
+        return {
+          packageFs: new JailFS(PortablePath.root, {
+            baseFs: parentFetch.packageFs,
+          }),
+          releaseFs: parentFetch.releaseFs,
+          prefixPath: relativePath,
+        };
+      }
     }
 
     // otherwise fallthrough to resolving the package + version combination
-    return await this.fetchFallback(name, version, opts, trace);
-  }
-
-  /**
-   * Falls back to normal non-external resolution via an undecorated package name + version descriptor
-   * @param name the package name, including scope
-   * @param version the package version string
-   * @param opts the fetch options
-   */
-  private async fetchFallback(
-    name: string,
-    version: string,
-    opts: FetchOptions,
-    trace: TraceFunc
-  ) {
-    // Build a generic descriptor with name (@scope/pkg) and version to allow resolution to find the locator
-    const descriptor = structUtils.makeDescriptor(
-      structUtils.parseIdent(name),
-      version
-    );
-
-    // Resolve + Fetch using Yarn’s normal pipeline
-    this.resolver ??= opts.project.configuration.makeResolver();
-    this.fetcher ??= opts.project.configuration.makeFetcher();
-    this.resolveOptions ??= {
-      project: opts.project,
-      resolver: this.resolver,
-      fetchOptions: opts,
-      report: opts.report,
-    };
-
-    // Actually resolve the fallback descriptor (so it picks the correct version/tarball)
-    const candidates = await this.resolver.getCandidates(
-      descriptor,
-      {},
-      this.resolveOptions
-    );
-    if (candidates.length === 0) {
-      throw new Error(`No candidate found on npm for "${name}" : "${version}"`);
-    }
-    const locator = candidates[0];
-
-    // Then fetch the fallback as if it was an npm package:
-    trace(`Fetcher: falling back to generic fetch for ${name}: ${version}`);
-    return await this.fetcher.fetch(locator, opts);
+    return await tracker.fetchFallback(workspace, opts);
   }
 }

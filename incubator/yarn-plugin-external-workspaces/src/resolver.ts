@@ -1,4 +1,3 @@
-import { type ExternalWorkspaces } from "@rnx-kit/tools-workspaces/external";
 import type {
   Descriptor,
   Locator,
@@ -8,82 +7,26 @@ import type {
   Resolver,
 } from "@yarnpkg/core";
 import { LinkType, Manifest, miscUtils, structUtils } from "@yarnpkg/core";
-import {
-  decodeDescriptorRange,
-  encodeRange,
-  getProtocol,
-  getSettingsForProject,
-  versionFromDescriptorRange,
-} from "./utilities";
+import { type ExternalWorkspaceTracker, getWorkspaceTracker } from "./tracker";
+import { decodeDescriptorRange, encodeRange, getProtocol } from "./utilities";
 
-const { makeLocator, stringifyIdent, makeDescriptor } = structUtils;
-
-type Candidates = {
-  locator: Locator;
-  ranges: Set<string>;
-};
+const { stringifyIdent, makeDescriptor } = structUtils;
 
 /**
  * The resolver implements the logic for the external: protocol.
  */
 export class ExternalResolver implements Resolver {
   static protocol = getProtocol();
-  private settings: ExternalWorkspaces | null = null;
-  private candidates: Record<string, Candidates> = {};
+  private tracker: ExternalWorkspaceTracker | null = null;
 
   /**
    * Ensure a finder is created if it is not already present, then return it
    */
-  private ensureSettings(opts: MinimalResolveOptions) {
-    if (!this.settings) {
-      this.settings = getSettingsForProject(opts.project);
+  private ensureTracker(opts: MinimalResolveOptions) {
+    if (!this.tracker) {
+      this.tracker = getWorkspaceTracker(opts.project);
     }
-    return this.settings;
-  }
-
-  private ensureLocator(descriptor: Descriptor): Locator {
-    const pkgName = stringifyIdent(descriptor);
-    const range = versionFromDescriptorRange(descriptor.range);
-    const candidate = (this.candidates[pkgName] ??= {
-      locator: makeLocator(descriptor, encodeRange(pkgName, range)),
-      ranges: new Set(),
-    });
-    candidate.ranges.add(range);
-    return candidate.locator;
-  }
-
-  /*
-  private finder(pkgName: string) {
-    return this.settings?.findPackage(pkgName);
-  }
-  */
-
-  private trace(msg: string) {
-    this.settings?.trace(msg);
-  }
-
-  /*
-  private findCandidates(name: string, version: string) {
-    const candidates = this.candidates[name] || [];
-    return candidates.filter((candidate) =>
-      semver.satisfies(version, candidate.range)
-    );
-  }
-
-  private saveCandidate(name: string, version: string, locator: Locator) {
-    this.candidates[name] ??= [];
-    const range = new semver.Range(version);
-    this.candidates[name].push({ locator, range });
-  }
-    */
-
-  private tryExternal(descriptor: Descriptor, opts: MinimalResolveOptions) {
-    // don't coopt the workspace resolver, even if it is in the external list
-    if (!opts.project.tryWorkspaceByDescriptor(descriptor)) {
-      const pkgName = stringifyIdent(descriptor);
-      return this.ensureSettings(opts).findPackage(pkgName);
-    }
-    return false;
+    return this.tracker;
   }
 
   /**
@@ -110,15 +53,12 @@ export class ExternalResolver implements Resolver {
     descriptor: Descriptor,
     opts: MinimalResolveOptions
   ): boolean {
-    const { trace } = this.ensureSettings(opts);
+    const tracker = this.ensureTracker(opts);
     if (descriptor.range.startsWith(ExternalResolver.protocol)) {
       return true;
     }
 
-    if (this.tryExternal(descriptor, opts)) {
-      trace(
-        `Resolver: supports undecorated external: ${structUtils.stringifyIdent(descriptor)}`
-      );
+    if (tracker.tryByDescriptor(descriptor)) {
       return true;
     }
 
@@ -181,35 +121,19 @@ export class ExternalResolver implements Resolver {
     opts: MinimalResolveOptions
   ): Descriptor {
     // see if this is really an external workspace despite missing the protocol
-    if (
-      !descriptor.range.startsWith(ExternalResolver.protocol) &&
-      this.tryExternal(descriptor, opts)
-    ) {
-      // in this case rebind the descriptor with the protocol
-      const { version } = decodeDescriptorRange(descriptor.range);
-      const newRange = encodeRange(stringifyIdent(descriptor), version);
-      return makeDescriptor(descriptor, newRange);
+    if (!descriptor.range.startsWith(ExternalResolver.protocol)) {
+      const tracker = this.ensureTracker(opts);
+      const workspace = tracker.tryByDescriptor(descriptor);
+      if (workspace && !workspace.blockBinding) {
+        // in this case rebind the descriptor with the protocol
+        const { version } = decodeDescriptorRange(descriptor.range);
+        const newRange = encodeRange(stringifyIdent(descriptor), version);
+        tracker.trace(
+          `Rebinding @${descriptor.scope}/${descriptor.name} to ${newRange}`
+        );
+        return makeDescriptor(descriptor, newRange);
+      }
     }
-
-    /*
-    // look up the package information from the finder
-    const pkgName = stringifyIdent(descriptor);
-    const info = this.finder(pkgName);
-    const newRange = encodeRange(pkgName, descriptor.range);
-
-    if (!info || !newRange) {
-      // if no package information was found, throw an error as this isn't a supported external workspace
-      throw Error(
-        `Unknown external workspace "${pkgName}:${ExternalResolver.protocol}" included by "${stringifyIdent(fromLocator)}"`
-      );
-    }
-
-    // now create a new descriptor that encodes the package name in the range
-    this.trace(
-      `Binding '${newRange}' from: ${stringifyIdent(fromLocator)}, ref ${fromLocator.reference}`
-    );
-    return makeDescriptor(descriptor, newRange);
-    */
     return descriptor;
   }
 
@@ -228,29 +152,7 @@ export class ExternalResolver implements Resolver {
     _dependencies: Record<string, Package>,
     opts: ResolveOptions
   ) {
-    this.ensureSettings(opts);
-    this.trace(`Resolver: getCandidates(${stringifyIdent(descriptor)})`);
-    return [this.ensureLocator(descriptor)];
-
-    /*
-    // see if we have a cached candidate for this descriptor
-    const { name, version } = decodeRange(descriptor.range);
-    const candidates = this.findCandidates(name, version);
-
-    // if so, return the cached candidates
-    if (candidates.length > 0) {
-      this.trace(
-        `found ${candidates.length} candidates for ${name}:${version}`
-      );
-      return candidates.map((candidate) => candidate.locator);
-    }
-
-    // otherwise create a new locator and cache it
-    this.trace(`creating new candidate for ${name}:${version}`);
-    const locator = makeLocator(descriptor, descriptor.range);
-    this.saveCandidate(name, version, locator);
-    return [locator];
-    */
+    return this.ensureTracker(opts).ensureLocators(descriptor);
   }
 
   /**
@@ -284,7 +186,6 @@ export class ExternalResolver implements Resolver {
     opts: ResolveOptions
   ) {
     const satisfying = await this.getCandidates(descriptor, dependencies, opts);
-    this.trace(`Resolver: getSatisfying found ${satisfying.length} candidates`);
     return {
       locators: satisfying,
       sorted: false,
@@ -300,14 +201,14 @@ export class ExternalResolver implements Resolver {
    * @param opts The resolution options.
    */
   async resolve(locator: Locator, opts: ResolveOptions) {
-    this.ensureSettings(opts);
+    const tracker = this.ensureTracker(opts);
     if (!opts.fetchOptions) {
       throw new Error(
         `Assertion failed: This resolver cannot be used unless a fetcher is configured`
       );
     }
 
-    this.trace(`Resolving ${stringifyIdent(locator)}`);
+    tracker.trace(`Resolving ${stringifyIdent(locator)}`);
     const packageFetch = await opts.fetchOptions.fetcher.fetch(
       locator,
       opts.fetchOptions
