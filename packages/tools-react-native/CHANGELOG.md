@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/tools-react-native
 
+## 2.1.0
+
+### Minor Changes
+
+- 66961be: Add support for Bun's text-based lockfile
+
 ## 2.0.4
 
 ### Patch Changes
