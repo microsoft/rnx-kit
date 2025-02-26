@@ -130,6 +130,10 @@ export const profile: Profile = {
     name: "react-native-gesture-handler",
     version: "^2.22.0",
   },
+  hooks: {
+    name: "@react-native-community/hooks",
+    version: "^100.1.0",
+  },
   popover: {
     name: "react-native-popover-view",
     version: "^6.0.1",
