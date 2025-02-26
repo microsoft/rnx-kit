@@ -14,24 +14,34 @@ describe("findSentinel", () => {
     unsetFixture();
   });
 
-  it("returns sentinel for Bun", async () => {
-    setFixture("bun");
+  it("returns sentinel for Bun (text)", async () => {
+    setFixture("bun.lock");
+    match((await findSentinel()) ?? "", /[/\\]bun.lock$/);
+  });
+
+  it("returns sentinel for Bun (text, sync)", () => {
+    setFixture("bun.lock");
+    match(findSentinelSync() ?? "", /[/\\]bun.lock$/);
+  });
+
+  it("returns sentinel for Bun (binary)", async () => {
+    setFixture("bun.lockb");
     match((await findSentinel()) ?? "", /[/\\]bun.lockb$/);
   });
 
-  it("returns sentinel for Bun (sync)", () => {
-    setFixture("bun");
+  it("returns sentinel for Bun (binary, sync)", () => {
+    setFixture("bun.lockb");
     match(findSentinelSync() ?? "", /[/\\]bun.lockb$/);
   });
 });
 
 describe("findWorkspacePackages", () => {
   const packages = [
-    /__fixtures__[/\\]bun[/\\]packages[/\\]conan$/,
-    /__fixtures__[/\\]bun[/\\]packages[/\\]dutch$/,
-    /__fixtures__[/\\]bun[/\\]packages[/\\]john$/,
-    /__fixtures__[/\\]bun[/\\]packages[/\\]quaid$/,
-    /__fixtures__[/\\]bun[/\\]packages[/\\]t-800$/,
+    /__fixtures__[/\\]bun.lock[/\\]packages[/\\]conan$/,
+    /__fixtures__[/\\]bun.lock[/\\]packages[/\\]dutch$/,
+    /__fixtures__[/\\]bun.lock[/\\]packages[/\\]john$/,
+    /__fixtures__[/\\]bun.lock[/\\]packages[/\\]quaid$/,
+    /__fixtures__[/\\]bun.lock[/\\]packages[/\\]t-800$/,
   ];
 
   afterEach(() => {
@@ -39,7 +49,7 @@ describe("findWorkspacePackages", () => {
   });
 
   it("returns packages for Bun workspaces", async () => {
-    setFixture("bun");
+    setFixture("bun.lock");
 
     const result = (await findWorkspacePackages()).sort();
     for (let i = 0; i < result.length; ++i) {
@@ -48,7 +58,7 @@ describe("findWorkspacePackages", () => {
   });
 
   it("returns packages for Bun workspaces (sync)", () => {
-    setFixture("bun");
+    setFixture("bun.lock");
 
     const result = findWorkspacePackagesSync().sort();
     for (let i = 0; i < result.length; ++i) {
@@ -63,12 +73,12 @@ describe("findWorkspaceRoot", () => {
   });
 
   it("returns workspace root for Bun workspaces", async () => {
-    const root = setFixture("bun");
+    const root = setFixture("bun.lock");
     equal(await findWorkspaceRoot(), root);
   });
 
   it("returns workspace root for Bun workspaces (sync)", () => {
-    const root = setFixture("bun");
+    const root = setFixture("bun.lock");
     equal(findWorkspaceRootSync(), root);
   });
 });

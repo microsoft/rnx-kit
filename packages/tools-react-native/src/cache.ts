@@ -53,6 +53,7 @@ export function getCurrentState(projectRoot: string): string {
     "yarn.lock",
     "package-lock.json",
     "pnpm-lock.yaml",
+    "bun.lock",
     "bun.lockb",
   ];
   updateHash(sha2, lockfiles, projectRoot, "first-only");
