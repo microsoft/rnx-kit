@@ -1,36 +1,54 @@
+// @ts-check
+
 import * as fs from "node:fs";
 import * as path from "node:path";
 import { URL } from "node:url";
 
+/**
+ * @returns {true}
+ */
 function always() {
   return true;
 }
 
+/**
+ * @param {string} filename
+ * @returns {(cwd: string) => boolean}
+ */
 function lookForFile(filename) {
   return (cwd) => fs.existsSync(path.join(cwd, filename));
 }
 
+/**
+ * @param {string} cwd
+ * @param {Record<string, unknown>} manifest
+ * @returns {boolean}
+ */
 function needsJest(cwd, manifest) {
   return "jest" in manifest || fs.existsSync(path.join(cwd, "jest.config.js"));
 }
 
-const COMMON_DEPENDENCIES = [
+const COMMON_DEPENDENCIES = /** @type {const} */ ([
+  ["@types/jest", needsJest],
   ["eslint", lookForFile("eslint.config.js")],
   ["jest", needsJest],
   ["prettier", always],
   ["typescript", lookForFile("tsconfig.json")],
-];
+]);
 
+/** @type {(name: string) => string | undefined} */
 const getDependencyVersion = (() => {
-  let deps;
+  let dependencies;
+  let devDependencies;
   return (name) => {
-    if (!deps) {
+    if (!dependencies) {
       const url = new URL("package.json", import.meta.url);
-      const manifest = fs.readFileSync(url, { encoding: "utf-8" });
-      deps = JSON.parse(manifest)["dependencies"];
+      const manifest = JSON.parse(fs.readFileSync(url, { encoding: "utf-8" }));
+      dependencies = manifest["dependencies"] ?? {};
+      devDependencies = manifest["devDependencies"] ?? {};
     }
 
-    return deps[name];
+    return devDependencies[name] || dependencies[name];
   };
 })();
 

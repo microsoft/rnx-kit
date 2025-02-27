@@ -55,7 +55,6 @@
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*",
     "@types/babel__core": "^7.0.0",
-    "@types/jest": "^29.2.1",
     "@types/node": "^20.0.0",
     "metro-react-native-babel-preset": "^0.76.5"
   },

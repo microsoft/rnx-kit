@@ -43,7 +43,6 @@
     "@rnx-kit/tools-shell": "*",
     "@rnx-kit/tools-workspaces": "*",
     "@rnx-kit/tsconfig": "*",
-    "@types/jest": "^29.2.1",
     "@types/prompts": "^2.0.0",
     "@types/semver": "^7.0.0",
     "@types/yargs": "^16.0.0",
