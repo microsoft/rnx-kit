@@ -1,12 +1,15 @@
 #import "ReactNativeHost.h"
 
+// clang-format off
+#include "FollyConfig.h"
+// clang-format on
+
 #import <React/RCTBridge.h>
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTCxxBridgeDelegate.h>
 #import <React/RCTDevLoadingViewSetEnabled.h>
 #import <React/RCTUtils.h>
 
-#include "FollyConfig.h"
 #import "RNXBridgelessHeaders.h"
 #import "RNXFabricAdapter.h"
 #import "RNXHostConfig.h"
