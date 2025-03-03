@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "@fluentui-react-native/adapters": "0.13.0",
-    "@fluentui-react-native/experimental-activity-indicator": "0.10.1",
+    "@fluentui-react-native/experimental-activity-indicator": "0.10.3",
     "@fluentui-react-native/experimental-shadow": "0.6.2",
     "@fluentui-react-native/framework": "0.14.0",
     "@fluentui-react-native/icon": "0.21.6",
