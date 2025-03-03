@@ -1,5 +1,11 @@
 # @rnx-kit/react-native-host
 
+## 0.5.4
+
+### Patch Changes
+
+- 139f2a1: Fix third party components on new arch 0.77+
+
 ## 0.5.3
 
 ### Patch Changes
