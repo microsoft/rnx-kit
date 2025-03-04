@@ -36,7 +36,9 @@ jobs:
           publish: npm run publish:changesets
           version: npm run version:changesets
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # We cannot use the GHA generated tokens because we've disabled
+          # creation of pull requests at the org level.
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
   website:
     name: "Publish website"
