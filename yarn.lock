@@ -4681,6 +4681,7 @@ __metadata:
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
     "@yarnpkg/core": "npm:^4.0.0"
+    "@yarnpkg/fslib": "npm:^3.1.1"
   languageName: unknown
   linkType: soft
 
