@@ -30,8 +30,7 @@
     "react-native": ">=0.66"
   },
   "devDependencies": {
-    "@rnx-kit/scripts": "*",
-    "prettier": "^3.0.0"
+    "@rnx-kit/scripts": "*"
   },
   "engines": {
     "node": ">=16.17"

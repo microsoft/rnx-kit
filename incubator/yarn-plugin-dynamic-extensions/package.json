@@ -1,26 +1,28 @@
 {
-  "name": "@rnx-kit/bundle-diff",
-  "version": "2.0.0",
-  "description": "Simple tool for diffing the content of two bundles",
-  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/bundle-diff#readme",
+  "name": "@rnx-kit/yarn-plugin-dynamic-extensions",
+  "version": "0.0.1",
+  "description": "EXPERIMENTAL - USE WITH CAUTION - yarn-plugin-dynamic-extensions",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/incubator/yarn-plugin-dynamic-extensions#readme",
   "license": "MIT",
   "author": {
     "name": "Microsoft Open Source",
     "email": "microsoftopensource@users.noreply.github.com"
   },
   "files": [
-    "lib/**/*.d.ts",
-    "lib/**/*.js"
+    "index.js"
   ],
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
-  "bin": {
-    "rnx-bundle-diff": "lib/cli.js"
+  "main": "index.js",
+  "exports": {
+    ".": "./index.js"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/microsoft/rnx-kit",
-    "directory": "packages/bundle-diff"
+    "directory": "incubator/yarn-plugin-dynamic-extensions"
+  },
+  "engines": {
+    "node": ">=18.12",
+    "yarn": ">=4.0"
   },
   "scripts": {
     "build": "rnx-kit-scripts build",
@@ -32,9 +34,7 @@
     "@rnx-kit/eslint-config": "*",
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*",
-    "@types/node": "^20.0.0"
+    "@yarnpkg/core": "^4.0.0"
   },
-  "engines": {
-    "node": ">=16.17"
-  }
+  "experimental": true
 }
