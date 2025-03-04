@@ -62,7 +62,6 @@ exports.factory = (require) => {
           return;
         }
 
-        // @ts-expect-error Cannot find module or its corresponding type declarations
         const { npath } = require("@yarnpkg/fslib");
 
         const root = npath.fromPortablePath(projectCwd);
