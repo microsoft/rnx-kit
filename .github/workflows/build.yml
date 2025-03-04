@@ -6,7 +6,8 @@ jobs:
   build_and_publish:
     name: "Build and publish"
     permissions:
-      contents: write # create Git tags
+      contents: write # for GH releases and Git tags (Changesets)
+      pull-requests: write # version PRs (Changesets)
     if: ${{ github.repository == 'microsoft/rnx-kit' }}
     runs-on: ubuntu-24.04
     steps:
@@ -35,7 +36,7 @@ jobs:
           publish: npm run publish:changesets
           version: npm run version:changesets
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
   website:
     name: "Publish website"
