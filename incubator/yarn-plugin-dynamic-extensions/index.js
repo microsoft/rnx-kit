@@ -23,7 +23,7 @@ exports.factory = (require) => {
     const packageExtensions = configuration.get(DYNAMIC_PACKAGE_EXTENSIONS_KEY);
     if (
       typeof packageExtensions !== "string" ||
-      packageExtensions === "false"
+      require("node:path").basename(packageExtensions) === "false"
     ) {
       return;
     }
