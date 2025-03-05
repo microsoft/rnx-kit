@@ -16,15 +16,26 @@ exports.factory = (require) => {
   const { Project, SettingsType, structUtils } = require("@yarnpkg/core");
 
   /**
+   * @param {unknown} value
+   * @returns {value is string}
+   */
+  function isEnabled(value) {
+    if (typeof value !== "string") {
+      return false;
+    }
+
+    const path = require("node:path");
+    const input = path.basename(value);
+    return !["NULL", "Null", "false", "null", "~"].includes(input);
+  }
+
+  /**
    * @param {Configuration} configuration
    * @returns {Promise<((ws: Workspace) => PackageExtensionData | undefined) | void>}
    */
   async function loadUserExtensions(configuration) {
     const packageExtensions = configuration.get(DYNAMIC_PACKAGE_EXTENSIONS_KEY);
-    if (
-      typeof packageExtensions !== "string" ||
-      require("node:path").basename(packageExtensions) === "false"
-    ) {
+    if (!isEnabled(packageExtensions)) {
       return;
     }
 
