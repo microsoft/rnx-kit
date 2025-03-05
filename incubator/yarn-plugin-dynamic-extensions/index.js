@@ -28,10 +28,11 @@ exports.factory = (require) => {
       return;
     }
 
+    const { npath } = require("@yarnpkg/fslib");
     const { pathToFileURL } = require("node:url");
 
     // On Windows, import paths must include the `file:` protocol.
-    const url = pathToFileURL(packageExtensions);
+    const url = pathToFileURL(npath.fromPortablePath(packageExtensions));
     const external = await import(url.toString());
     return external?.default ?? external;
   }
