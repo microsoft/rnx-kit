@@ -17,10 +17,9 @@ exports.factory = (require) => {
 
   /**
    * @param {Configuration} configuration
-   * @param {string} projectRoot
    * @returns {Promise<((ws: Workspace) => PackageExtensionData | undefined) | void>}
    */
-  async function loadUserExtensions(configuration, projectRoot) {
+  async function loadUserExtensions(configuration) {
     const packageExtensions = configuration.get(DYNAMIC_PACKAGE_EXTENSIONS_KEY);
     if (
       typeof packageExtensions !== "string" ||
@@ -29,11 +28,10 @@ exports.factory = (require) => {
       return;
     }
 
-    const path = require("node:path");
     const { pathToFileURL } = require("node:url");
 
     // On Windows, import paths must include the `file:` protocol.
-    const url = pathToFileURL(path.resolve(projectRoot, packageExtensions));
+    const url = pathToFileURL(packageExtensions);
     const external = await import(url.toString());
     return external?.default ?? external;
   }
@@ -41,8 +39,9 @@ exports.factory = (require) => {
   /** @type {Plugin<Hooks>["configuration"] & Record<string, unknown>} */
   const configuration = {};
   configuration[DYNAMIC_PACKAGE_EXTENSIONS_KEY] = {
-    description: "Path to module providing package extensions",
-    type: SettingsType.STRING,
+    description: "Path to the module providing package extensions",
+    type: SettingsType.ABSOLUTE_PATH,
+    default: null,
   };
 
   return {
@@ -62,13 +61,12 @@ exports.factory = (require) => {
           return;
         }
 
-        const { npath } = require("@yarnpkg/fslib");
-
-        const root = npath.fromPortablePath(projectCwd);
-        const getUserExtensions = await loadUserExtensions(configuration, root);
+        const getUserExtensions = await loadUserExtensions(configuration);
         if (!getUserExtensions) {
           return;
         }
+
+        const { npath } = require("@yarnpkg/fslib");
 
         workspace.project.workspacesByCwd.forEach(({ cwd, manifest }) => {
           const { name, version, raw } = manifest;
