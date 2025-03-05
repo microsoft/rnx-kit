@@ -2,4 +2,4 @@
 "@rnx-kit/yarn-plugin-dynamic-extensions": patch
 ---
 
-Correct config type for package extensions module path
+Allow plugin to be disabled with an empty string or null values.
