@@ -2,6 +2,7 @@
 
 /**
  * @import { Configuration, Hooks, Manifest, PackageExtensionData, Plugin } from "@yarnpkg/core";
+ * @import { PortablePath } from "@yarnpkg/fslib";
  * @typedef {{ cwd: string; manifest: Manifest["raw"]; }} Workspace;
  */
 
@@ -18,16 +19,13 @@ exports.factory = (require) => {
 
   /**
    * @param {Configuration} configuration
-   * @param {string} projectRoot
+   * @param {PortablePath} projectRoot
    * @returns {Promise<((ws: Workspace) => PackageExtensionData | undefined) | void>}
    */
   async function loadUserExtensions(configuration, projectRoot) {
     // Return if the plugin was inherited from a parent config
     const source = configuration.sources.get(DYNAMIC_PACKAGE_EXTENSIONS_KEY);
-    if (
-      typeof source !== "string" ||
-      npath.fromPortablePath(npath.dirname(source)) !== projectRoot
-    ) {
+    if (typeof source !== "string" || npath.dirname(source) !== projectRoot) {
       return;
     }
 
@@ -40,7 +38,8 @@ exports.factory = (require) => {
     const { pathToFileURL } = require("node:url");
 
     // On Windows, import paths must include the `file:` protocol.
-    const url = pathToFileURL(path.resolve(projectRoot, packageExtensions));
+    const root = npath.fromPortablePath(projectRoot);
+    const url = pathToFileURL(path.resolve(root, packageExtensions));
     const external = await import(url.toString());
     return external?.default ?? external;
   }
@@ -64,8 +63,10 @@ exports.factory = (require) => {
           return;
         }
 
-        const root = npath.fromPortablePath(projectCwd);
-        const getUserExtensions = await loadUserExtensions(configuration, root);
+        const getUserExtensions = await loadUserExtensions(
+          configuration,
+          projectCwd
+        );
         if (!getUserExtensions) {
           return;
         }
