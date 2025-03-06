@@ -2,4 +2,4 @@
 "@rnx-kit/yarn-plugin-dynamic-extensions": patch
 ---
 
-Allow plugin to be disabled with an empty string or null values.
+Don't load user extensions if the plugin was inherited from parent configs.
