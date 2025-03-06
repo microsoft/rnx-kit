@@ -83,10 +83,12 @@ public:
     {
         return true;
     }
+#if !__has_include(<React-RCTAppDelegate/RCTReactNativeFactory.h>) && !__has_include(<React_RCTAppDelegate/RCTReactNativeFactory.h>)  // 0.77
     bool enableFixForViewCommandRace() override
     {
         return true;
     }
+#endif  // 0.77
 #else   // < 0.77
     bool useModernRuntimeScheduler() override
     {
