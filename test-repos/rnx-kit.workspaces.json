@@ -100,7 +100,7 @@
     "version": "0.2.0"
   },
   "@rnx-kit/react-native-auth": {
-    "path": "../packages/react-native-auth",
+    "path": "../packages/foo/react-native-auth",
     "version": "0.3.0"
   },
   "@rnx-kit/react-native-error-trace-decorator": {

@@ -4,9 +4,10 @@ import {
   type FetchResult,
   type Locator,
 } from "@yarnpkg/core";
-import { CwdFS, JailFS, PortablePath, ppath } from "@yarnpkg/fslib";
+import { CwdFS, PortablePath, ppath } from "@yarnpkg/fslib";
 import { getWorkspaceTracker, type ExternalWorkspaceTracker } from "./tracker";
 import { getProtocol } from "./utilities";
+import { type ExternalWorkspace } from "./workspace";
 
 /**
  * The "fetcher" is where we decide if the local path is present or not.
@@ -45,8 +46,8 @@ export class ExternalFetcher implements Fetcher {
    * @param opts The fetch options.
    */
   getLocalPath(locator: Locator, opts: FetchOptions): PortablePath | null {
-    const workspace = this.ensureTracker(opts).tryByLocator(locator);
-    if (workspace && workspace.localPath) {
+    const workspace = this.ensureTracker(opts).findByLocator(locator);
+    if (workspace.localPath) {
       return workspace.localPath;
     }
     return null;
@@ -66,45 +67,39 @@ export class ExternalFetcher implements Fetcher {
    */
   async fetch(locator: Locator, opts: FetchOptions) {
     const tracker = this.ensureTracker(opts);
-    const workspace = tracker.tryByLocator(locator);
-    if (!workspace) {
-      throw new Error(
-        `Cannot find workspace for ${locator.name} (${locator.reference})`
-      );
-    }
+    const workspace = tracker.findByLocator(locator);
 
-    if (workspace && workspace.localPath) {
+    const fallbackResults = await this.fetchFallback(locator, opts, workspace);
+
+    if (workspace.localPath) {
       const localPath = ppath.resolve(tracker.root, workspace.localPath);
+      const { checksum } = fallbackResults;
+      if (!checksum) {
+        tracker.trace(
+          `Fetcher: failed to find checksum for ${workspace.prettyName}`
+        );
+      }
+
       const parentFetch: FetchResult = {
         packageFs: new CwdFS(PortablePath.root),
         prefixPath: localPath,
         localPath: localPath,
+        checksum,
       };
-      if (workspace.target === "files") {
-        tracker.trace(
-          `Fetcher: Found existing local file path for ${workspace.name}: ${workspace.localPath}`
-        );
-        return parentFetch;
-      } else if (workspace.target === "tgz") {
-        tracker.trace(
-          `Fetcher: Linking to tarball for ${workspace.name}: ${workspace.localPath}`
-        );
-        // if the target is tgz, we need to use a jail fs and make local path relative
-        const relativePath = ppath.relative(
-          PortablePath.dot,
-          workspace.localPath
-        );
-        return {
-          packageFs: new JailFS(PortablePath.root, {
-            baseFs: parentFetch.packageFs,
-          }),
-          releaseFs: parentFetch.releaseFs,
-          prefixPath: relativePath,
-        };
-      }
+      return parentFetch;
     }
 
     // otherwise fallthrough to resolving the package + version combination
-    return await tracker.fetchFallback(workspace, opts);
+    return fallbackResults;
+  }
+
+  private async fetchFallback(
+    locator: Locator,
+    opts: FetchOptions,
+    workspace: ExternalWorkspace
+  ) {
+    const fallbackLocator = workspace.toFallbackLocator(locator);
+    const fetcher = opts.fetcher;
+    return await fetcher.fetch(fallbackLocator, opts);
   }
 }

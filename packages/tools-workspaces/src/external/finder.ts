@@ -113,8 +113,7 @@ export function createFinderFromJs(
 function createValidatingFinder(
   finder: DefinitionFinder,
   rootPath: string,
-  pathDelta: string,
-  trace: TraceFunc
+  pathDelta: string
 ): DefinitionFinder {
   const cache = new Map<string, PackageDefinition | null>();
 
@@ -136,10 +135,7 @@ function createValidatingFinder(
       if (result.path) {
         // if no package.json file is found on disk for this package, clear the path
         if (!fs.existsSync(path.join(rootPath, result.path, "package.json"))) {
-          trace(`finder: ${pkgName} not found at ${result.path}`);
           result.path = null;
-        } else {
-          trace(`finder: ${pkgName} found at ${result.path}`);
         }
       }
     }
@@ -201,6 +197,6 @@ export function loadExternalDeps(
 
   // return the a caching/validating wrapper around the base finder
   return baseFinder
-    ? createValidatingFinder(baseFinder, root, pathDelta, trace)
+    ? createValidatingFinder(baseFinder, root, pathDelta)
     : nullFinder;
 }

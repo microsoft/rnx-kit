@@ -3,13 +3,28 @@ import {
   type ExternalDeps,
   type ExternalWorkspaces,
 } from "@rnx-kit/tools-workspaces/external";
-import { structUtils, type Project } from "@yarnpkg/core";
+import {
+  structUtils,
+  type Descriptor,
+  type Locator,
+  type Project,
+} from "@yarnpkg/core";
 import path from "node:path";
 
-const protocol = "external:";
+const externalProtocol = "external:";
+const fallbackProtocol = "fallback:";
+const npmProtocol = "npm:";
 
 export function getProtocol() {
-  return protocol;
+  return externalProtocol;
+}
+
+export function getFallbackProtocol() {
+  return fallbackProtocol;
+}
+
+export function supportedProtocol(protocol: string) {
+  return protocol === externalProtocol || protocol === fallbackProtocol;
 }
 
 const stringIdent = (s: string) => s;
@@ -64,8 +79,8 @@ export function decodeDescriptorRange(range: string): DescriptorRangeParts {
  * @returns the decoded range, in the form of { name: 'workspace-name', version: 'version' }
  */
 export function decodeRange(range: string): { version: string } {
-  if (range.startsWith(protocol)) {
-    range = range.slice(protocol.length);
+  if (range.startsWith(externalProtocol)) {
+    range = range.slice(externalProtocol.length);
   }
   return { version: range };
 }
@@ -76,10 +91,56 @@ export function decodeRange(range: string): { version: string } {
  * @returns a new range with the package name injected as 'external:package-name@version'
  */
 export function encodeRange(_name: string, resolutionRange: string): string {
-  if (resolutionRange.startsWith(protocol)) {
-    resolutionRange = resolutionRange.slice(protocol.length);
+  if (resolutionRange.startsWith(externalProtocol)) {
+    resolutionRange = resolutionRange.slice(externalProtocol.length);
   }
-  return `${protocol}${resolutionRange}`;
+  return `${externalProtocol}${resolutionRange}`;
+}
+
+export function coerceDescriptorTo(
+  descriptor: Descriptor,
+  newProtocol: string
+): Descriptor {
+  const { protocol, version } = decodeDescriptorRange(descriptor.range);
+  if (protocol === newProtocol) {
+    return descriptor;
+  }
+  return structUtils.makeDescriptor(descriptor, `${newProtocol}${version}`);
+}
+
+export function coerceLocatorTo(
+  locator: Locator,
+  newProtocol: string
+): Locator {
+  const { protocol, version } = decodeDescriptorRange(locator.reference);
+  if (protocol === newProtocol) {
+    return locator;
+  }
+  return structUtils.makeLocator(locator, `${newProtocol}${version}`);
+}
+
+export function toExternalDescriptor(descriptor: Descriptor): Descriptor {
+  return coerceDescriptorTo(descriptor, externalProtocol);
+}
+
+export function toExternalLocator(locator: Locator): Locator {
+  return coerceLocatorTo(locator, externalProtocol);
+}
+
+export function toNpmDescriptor(descriptor: Descriptor): Descriptor {
+  return coerceDescriptorTo(descriptor, npmProtocol);
+}
+
+export function toNpmLocator(locator: Locator): Locator {
+  return coerceLocatorTo(locator, npmProtocol);
+}
+
+export function toFallbackDescriptor(descriptor: Descriptor): Descriptor {
+  return coerceDescriptorTo(descriptor, fallbackProtocol);
+}
+
+export function toFallbackLocator(locator: Locator): Locator {
+  return coerceLocatorTo(locator, fallbackProtocol);
 }
 
 /**

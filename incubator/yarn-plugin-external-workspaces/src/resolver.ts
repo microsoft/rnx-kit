@@ -1,23 +1,28 @@
-import type {
-  Descriptor,
-  Locator,
-  MinimalResolveOptions,
-  Package,
-  ResolveOptions,
-  Resolver,
+import {
+  LinkType,
+  Manifest,
+  structUtils,
+  type Descriptor,
+  type Locator,
+  type MinimalResolveOptions,
+  type Package,
+  type ResolveOptions,
+  type Resolver,
 } from "@yarnpkg/core";
-import { LinkType, Manifest, miscUtils, structUtils } from "@yarnpkg/core";
-import { type ExternalWorkspaceTracker, getWorkspaceTracker } from "./tracker";
-import { decodeDescriptorRange, encodeRange, getProtocol } from "./utilities";
+import { getWorkspaceTracker, type ExternalWorkspaceTracker } from "./tracker";
+import { getFallbackProtocol, getProtocol } from "./utilities";
+import { type ResolverType } from "./workspace";
 
-const { stringifyIdent, makeDescriptor } = structUtils;
-
-/**
- * The resolver implements the logic for the external: protocol.
- */
-export class ExternalResolver implements Resolver {
-  static protocol = getProtocol();
+//const { stringifyIdent, makeDescriptor } = structUtils;
+class ResolverBase implements Resolver {
+  private resolverType: ResolverType;
+  private protocol: string;
   private tracker: ExternalWorkspaceTracker | null = null;
+
+  constructor(resolverType: ResolverType, protocol: string) {
+    this.resolverType = resolverType;
+    this.protocol = protocol;
+  }
 
   /**
    * Ensure a finder is created if it is not already present, then return it
@@ -30,166 +35,126 @@ export class ExternalResolver implements Resolver {
   }
 
   /**
-   * This function must return a set of other descriptors that must be
-   * transformed into locators before the subject descriptor can be transformed
-   * into a locator. This is typically only needed for transform packages, as
-   * you need to know the original resolution in order to copy it.
+   * Force resolution of a different package to happen before this package is resolved.
    */
   getResolutionDependencies(
-    _descriptor: Descriptor,
-    _opts: MinimalResolveOptions
+    descriptor: Descriptor,
+    opts: MinimalResolveOptions
   ): Record<string, Descriptor> {
-    return {};
+    const workspace = this.ensureTracker(opts).findByDescriptor(descriptor);
+    return workspace.getResolutionDependencies(descriptor, this.resolverType);
   }
+
   /**
-   * This function must return true if the specified descriptor is meant to be
-   * turned into a locator by this resolver. The other functions (except its
-   * locator counterpart) won't be called if it returns false.
-   *
-   * @param descriptor The descriptor that needs to be validated.
-   * @param opts The resolution options.
+   * Do we support these descriptors, in particular turning them into locators
    */
   supportsDescriptor(
     descriptor: Descriptor,
-    opts: MinimalResolveOptions
+    _opts: MinimalResolveOptions
   ): boolean {
-    const tracker = this.ensureTracker(opts);
-    if (descriptor.range.startsWith(ExternalResolver.protocol)) {
-      return true;
-    }
-
-    if (tracker.tryByDescriptor(descriptor)) {
-      return true;
-    }
-
-    return false;
+    return descriptor.range.startsWith(this.protocol);
   }
 
   /**
-   * This function must return true if the specified locator is meant to be
-   * turned into a package definition by this resolver. The other functions
-   * (except its locator counterpart) won't be called if it returns false.
-   *
-   * @param locator The locator that needs to be validated.
-   * @param opts The resolution options.
+   * Do we support locators of this type, effectively will this resolve
    */
   supportsLocator(locator: Locator, _opts: MinimalResolveOptions): boolean {
-    return locator.reference.startsWith(ExternalResolver.protocol);
+    return locator.reference.startsWith(this.protocol);
   }
 
   /**
-   * This function indicates whether the package definition for the specified
-   * locator must be kept between installs. You typically want to return true
-   * for all packages that are cached, but return false for all packages that
-   * hydrate packages directly from the filesystem (for example workspaces).
-   *
-   * Note that even packages returning false are stored within the lockfile!
-   * The difference is that when a new install is done, all package definitions
-   * that return false will be discarded and resolved again (their potential
-   * cache data will be kept, though).
-   *
-   * @param locator The queried package.
-   * @param opts The resolution options.
+   * Persist resolution between installs, false for places where we will pick it up from local. If this
+   * was true we would only fetch if a checksum of sorts changes.
    */
   shouldPersistResolution(
     _locator: Locator,
     _opts: MinimalResolveOptions
   ): boolean {
-    return true;
+    return false;
   }
 
   /**
-   * This function is called for each dependency present in the dependency list
-   * of a package definition. If it returns a new descriptor, this new
-   * descriptor will be used
-   *
-   * Note that `fromLocator` is not necessarily a locator that's supported by
-   * the resolver. It simply is the locator of the package that depends on the
-   * specified descriptor, regardless who owns it.
-   *
-   * The binding happening here injects the package name into the range provided in the resolutions
-   * such that the resolution:
-   * - "package-name" : "external:^1.2.3" ==> "external:package-name@^1.2.3"
-   *
-   * @param descriptor The depended descriptor.
-   * @param fromLocator The dependent locator.
-   * @param opts The resolution options.
+   * Chance to transform a descriptor to another type, has lockfile implications and actually removes this descriptor from
+   * the resolution chain in the lockfile.
    */
   bindDescriptor(
     descriptor: Descriptor,
     _fromLocator: Locator,
-    opts: MinimalResolveOptions
+    _opts: MinimalResolveOptions
   ): Descriptor {
-    // see if this is really an external workspace despite missing the protocol
-    if (!descriptor.range.startsWith(ExternalResolver.protocol)) {
-      const tracker = this.ensureTracker(opts);
-      const workspace = tracker.tryByDescriptor(descriptor);
-      if (workspace && !workspace.blockBinding) {
-        // in this case rebind the descriptor with the protocol
-        const { version } = decodeDescriptorRange(descriptor.range);
-        const newRange = encodeRange(stringifyIdent(descriptor), version);
-        tracker.trace(
-          `Rebinding @${descriptor.scope}/${descriptor.name} to ${newRange}`
-        );
-        return makeDescriptor(descriptor, newRange);
-      }
-    }
     return descriptor;
   }
 
   /**
-   * This function will, given a descriptor, return the list of locators that
-   * potentially satisfy it.
-   *
-   * This transforms the descriptor into an equivalent locator in the case a match isn't found
-   *
-   * @param descriptor The source descriptor.
-   * @param dependencies The resolution dependencies and their resolutions.
-   * @param opts The resolution options.
+   * This is the driver for turning descriptors into locators, creating them if necessary. In npm resolution it will do
+   * things like comparing semver ranges. Descriptors can have a semver range, where locators need to settle on a particular
+   * resolution and be specific.
    */
   async getCandidates(
     descriptor: Descriptor,
-    _dependencies: Record<string, Package>,
+    dependencies: Record<string, Package>,
     opts: ResolveOptions
   ) {
-    return this.ensureTracker(opts).ensureLocators(descriptor);
+    const workspace = this.ensureTracker(opts).findByDescriptor(descriptor);
+    return await workspace.getCandidates(
+      descriptor,
+      dependencies,
+      opts,
+      this.resolverType
+    );
   }
 
   /**
-   * This function will, given a descriptor and a list of locators,
-   * find out which of the locators potentially satisfy the descriptor.
-   *
-   * This function is different from `getCandidates`, as `getCandidates` will
-   * resolve the descriptor into a list of locators (potentially using the network),
-   * while `getSatisfying` will statically compute which known references potentially
-   * satisfy the target descriptor.
-   *
-   * Note that the parameter references aren't guaranteed to be supported by
-   * the resolver, so they'll probably need to be filtered beforehand.
-   *
-   * The returned array should be sorted in such a way that the preferred
-   * locators are first. This will cause the resolution algorithm to prioritize
-   * them if possible (it doesn't guarantee that they'll end up being used). If
-   * the resolver is unable to provide a definite order (for example like the
-   * `file:` protocol resolver, where ordering references would make no sense),
-   * the `sorted` field should be set to `false`.
-   *
-   * @param descriptor The target descriptor.
-   * @param dependencies The resolution dependencies and their resolutions.
-   * @param locators The candidate locators.
-   * @param opts The resolution options.
+   * Given a set of locators, usually found via getCandidates, which ones satisfy this descriptor and which one
+   * should be chosen. It returns an array but typically will select entry [0] as the best candidate, whether
+   * sorted is set or not. This locator then feeds into resolve
    */
   async getSatisfying(
     descriptor: Descriptor,
     dependencies: Record<string, Package>,
-    _locators: Locator[],
+    locators: Locator[],
     opts: ResolveOptions
   ) {
-    const satisfying = await this.getCandidates(descriptor, dependencies, opts);
-    return {
-      locators: satisfying,
-      sorted: false,
-    };
+    const workspace = this.ensureTracker(opts).findByDescriptor(descriptor);
+    return await workspace.getSatisfying(
+      descriptor,
+      dependencies,
+      locators,
+      opts,
+      this.resolverType
+    );
+  }
+
+  /**
+   * Build the full package for this locator, this is cached and used for install and also is used for
+   * lockfile generation.
+   */
+  async resolve(locator: Locator, opts: ResolveOptions): Promise<Package> {
+    const tracker = this.ensureTracker(opts);
+    const errorMsg = `UNEXPECTED: resolve called for ${structUtils.stringifyLocator(
+      locator
+    )} in ${this.resolverType} resolver`;
+    tracker.trace(errorMsg);
+    throw new Error(errorMsg);
+  }
+}
+
+export class FallbackResolver extends ResolverBase {
+  static protocol = getFallbackProtocol();
+
+  constructor() {
+    super("remote", FallbackResolver.protocol);
+  }
+}
+
+/**
+ * The resolver implements the logic for the external: protocol.
+ */
+export class ExternalResolver extends ResolverBase {
+  static protocol = getProtocol();
+
+  constructor() {
+    super("local", ExternalResolver.protocol);
   }
 
   /**
@@ -200,47 +165,15 @@ export class ExternalResolver implements Resolver {
    * @param locator The source locator.
    * @param opts The resolution options.
    */
-  async resolve(locator: Locator, opts: ResolveOptions) {
-    const tracker = this.ensureTracker(opts);
-    if (!opts.fetchOptions) {
-      throw new Error(
-        `Assertion failed: This resolver cannot be used unless a fetcher is configured`
-      );
-    }
-
-    tracker.trace(`Resolving ${stringifyIdent(locator)}`);
-    const packageFetch = await opts.fetchOptions.fetcher.fetch(
-      locator,
-      opts.fetchOptions
-    );
-
-    const manifest = await miscUtils.releaseAfterUseAsync(async () => {
-      return await Manifest.find(packageFetch.prefixPath, {
-        baseFs: packageFetch.packageFs,
-      });
-    }, packageFetch.releaseFs);
+  override async resolve(locator: Locator, opts: ResolveOptions) {
+    const emptyManifest = new Manifest();
 
     return {
+      ...emptyManifest,
       ...locator,
-
-      version: manifest.version || `0.0.0`,
-
-      languageName:
-        manifest.languageName ||
-        opts.project.configuration.get(`defaultLanguageName`),
+      version: "0.0.0",
+      languageName: opts.project.configuration.get("defaultLanguageName"),
       linkType: LinkType.SOFT,
-
-      conditions: manifest.getConditions(),
-
-      dependencies: opts.project.configuration.normalizeDependencyMap(
-        manifest.dependencies
-      ),
-      peerDependencies: manifest.peerDependencies,
-
-      dependenciesMeta: manifest.dependenciesMeta,
-      peerDependenciesMeta: manifest.peerDependenciesMeta,
-
-      bin: manifest.bin,
-    };
+    } as Package;
   }
 }
