@@ -14,6 +14,7 @@ exports.name = "@rnx-kit/yarn-plugin-dynamic-extensions";
 /** @type {(require: NodeJS.Require) => Plugin<Hooks>} */
 exports.factory = (require) => {
   const { Project, SettingsType, structUtils } = require("@yarnpkg/core");
+  const { npath } = require("@yarnpkg/fslib");
 
   /**
    * @param {Configuration} configuration
@@ -21,11 +22,12 @@ exports.factory = (require) => {
    * @returns {Promise<((ws: Workspace) => PackageExtensionData | undefined) | void>}
    */
   async function loadUserExtensions(configuration, projectRoot) {
-    const path = require("node:path");
-
     // Return if the plugin was inherited from a parent config
     const source = configuration.sources.get(DYNAMIC_PACKAGE_EXTENSIONS_KEY);
-    if (typeof source !== "string" || path.dirname(source) !== projectRoot) {
+    if (
+      typeof source !== "string" ||
+      npath.fromPortablePath(npath.dirname(source)) !== projectRoot
+    ) {
       return;
     }
 
@@ -34,6 +36,7 @@ exports.factory = (require) => {
       return;
     }
 
+    const path = require("node:path");
     const { pathToFileURL } = require("node:url");
 
     // On Windows, import paths must include the `file:` protocol.
@@ -60,8 +63,6 @@ exports.factory = (require) => {
         if (!projectCwd) {
           return;
         }
-
-        const { npath } = require("@yarnpkg/fslib");
 
         const root = npath.fromPortablePath(projectCwd);
         const getUserExtensions = await loadUserExtensions(configuration, root);
