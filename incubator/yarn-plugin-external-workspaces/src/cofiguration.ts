@@ -10,6 +10,9 @@ const providerKey = "externalWorkspacesProvider";
 const outputPathKey = "externalWorkspacesOutputPath";
 const outputOnlyOnCommandKey = "externalWorkspacesOutputOnlyOnCommand";
 
+/**
+ * Yarn configuration settings for the external workspaces plugin
+ */
 export const externalWorkspacesConfiguration = {
   [providerKey]: {
     description: `Relative path to a .json file of shape WorkspaceOutputJson or a .js file that exports a function of type DefinitionFinder as the default export`,
@@ -28,6 +31,10 @@ export const externalWorkspacesConfiguration = {
   },
 };
 
+/**
+ * @param configuration The yarn configuration to grab the settings from
+ * @returns loaded settings
+ */
 export function getPluginConfiguration(configuration: Configuration): {
   provider: PortablePath | null;
   outputPath: PortablePath | null;
@@ -45,6 +52,10 @@ export function getPluginConfiguration(configuration: Configuration): {
   return { provider, outputPath, outputOnlyOnCommand };
 }
 
+/**
+ * @param jsonPath The path to the .json file to load
+ * @returns a definition finder that will return a relative path to the file from the location fo the config file
+ */
 export function getFinderFromJsonConfig(
   jsonPath: PortablePath
 ): (pkgName: string) => PackagePaths | null {
@@ -68,6 +79,11 @@ export function getFinderFromJsonConfig(
   };
 }
 
+/**
+ * @param jsPath The path to the .js file to load
+ * @throws if the file does not exist or does not export a function as default
+ * @returns a definition finder that will return a relative path to the file from the location fo the config js file
+ */
 export function getFinderFromJsConfig(
   jsPath: PortablePath
 ): (pkgName: string) => PackagePaths | null {

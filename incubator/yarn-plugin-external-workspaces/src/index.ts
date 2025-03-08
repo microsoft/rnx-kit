@@ -9,6 +9,12 @@ import { afterAllInstalled, reduceDependency } from "./hooks";
 import { OutputWorkspaces } from "./outputCommand";
 import { ExternalResolver, FallbackResolver } from "./resolvers";
 
+export type {
+  DefinitionFinder,
+  PackagePaths,
+  WorkspaceOutputJson,
+} from "./types";
+
 /**
  * The plugin definition.
  */
