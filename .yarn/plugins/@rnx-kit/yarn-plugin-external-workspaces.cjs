@@ -121,6 +121,7 @@ var plugin = (() => {
   // src/tracker.ts
   var import_core3 = __require("@yarnpkg/core");
   var import_fslib2 = __require("@yarnpkg/fslib");
+  var import_node_fs2 = __toESM(__require("fs"));
 
   // src/utilities.ts
   var import_core2 = __require("@yarnpkg/core");
@@ -281,6 +282,8 @@ var plugin = (() => {
 
   // src/tracker.ts
   var nullFunction = (_val) => null;
+  var pkgJson = import_fslib2.npath.toPortablePath("package.json");
+  var emptyPortable = import_fslib2.npath.toPortablePath("");
   var ExternalWorkspaceTracker = class {
     constructor(project) {
       this.trace = nullFunction;
@@ -291,6 +294,7 @@ var plugin = (() => {
       this.resolver = null;
       this.fetcher = null;
       this.findPackage = nullFunction;
+      this.pathOffset = import_fslib2.npath.toPortablePath("");
       this.trace = nullFunction;
       this.report = (msg) => console.log(msg);
       this.root = project.cwd;
@@ -298,11 +302,17 @@ var plugin = (() => {
       const { provider } = getPluginConfiguration(project.configuration);
       if (provider) {
         if (provider.endsWith(".json")) {
+          this.pathOffset = this.findConfigPathOffset(provider);
           this.findPackage = getFinderFromJsonConfig(provider);
         } else if (provider.endsWith(".js") || provider.endsWith(".cjs")) {
+          this.pathOffset = this.findConfigPathOffset(provider);
           this.findPackage = getFinderFromJsConfig(provider);
         }
       }
+    }
+    findConfigPathOffset(configPath) {
+      const dirPath = import_fslib2.ppath.dirname(configPath);
+      return import_fslib2.ppath.relative(this.root, dirPath);
     }
     tryNameLookup(pkgName) {
       return this.workspaceMap.get(pkgName) || null;
@@ -312,12 +322,7 @@ var plugin = (() => {
         this.project.configuration,
         import_core3.structUtils.parseIdent(name)
       );
-      return new ExternalWorkspace(
-        name,
-        prettyName,
-        import_fslib2.npath.toPortablePath(localPath),
-        this.trace
-      );
+      return new ExternalWorkspace(name, prettyName, localPath, this.trace);
     }
     /**
      * Lookup and load a workspace for an ident, assumes that:
@@ -337,7 +342,16 @@ var plugin = (() => {
       }
       const pkgInfo = this.findPackage(pkgName);
       if (pkgInfo) {
-        workspace = this.createWorkspace(pkgName, pkgInfo.path || "");
+        let localPath = import_fslib2.npath.toPortablePath(pkgInfo.path || "");
+        if (localPath) {
+          if (!import_fslib2.ppath.isAbsolute(localPath)) {
+            localPath = import_fslib2.ppath.join(this.root, this.pathOffset, localPath);
+            if (!import_node_fs2.default.existsSync(import_fslib2.ppath.join(localPath, pkgJson))) {
+              localPath = emptyPortable;
+            }
+          }
+        }
+        workspace = this.createWorkspace(pkgName, localPath);
         this.trace(
           `Loaded external workspace ${workspace.prettyName} of type ${pkgInfo.path ? "LOCAL" : "REMOTE"}`
         );
@@ -510,7 +524,8 @@ var plugin = (() => {
   var import_core4 = __require("@yarnpkg/core");
   var import_fslib4 = __require("@yarnpkg/fslib");
   var import_clipanion = __require("clipanion");
-  var import_node_fs2 = __toESM(__require("fs"));
+  var import_node_fs3 = __toESM(__require("fs"));
+  var outputVersion = "1.0.0";
   var OutputWorkspaces = class extends import_cli.BaseCommand {
     constructor() {
       super(...arguments);
@@ -586,8 +601,8 @@ var plugin = (() => {
     const includesJson = outputPath.endsWith(".json");
     const outputDir = includesJson ? import_fslib4.ppath.dirname(outputPath) : outputPath;
     const outputFile = includesJson ? import_fslib4.ppath.basename(outputPath) : fallbackOutputFilename(project.cwd);
-    if (!checkOnly && !import_node_fs2.default.existsSync(outputDir)) {
-      import_node_fs2.default.mkdirSync(outputDir, { recursive: true });
+    if (!checkOnly && !import_node_fs3.default.existsSync(outputDir)) {
+      import_node_fs3.default.mkdirSync(outputDir, { recursive: true });
     }
     const fullPath = import_fslib4.npath.join(import_fslib4.npath.fromPortablePath(outputDir), outputFile);
     const workspaces = {};
@@ -601,19 +616,24 @@ var plugin = (() => {
     const repoPath = import_fslib4.ppath.relative(outputDir, project.cwd);
     const generated = {
       repoPath,
+      version: outputVersion,
       workspaces: sortStringRecord(workspaces)
     };
-    const parsedJson = import_node_fs2.default.existsSync(fullPath) ? JSON.parse(import_node_fs2.default.readFileSync(fullPath, "utf8")) : {};
+    const parsedJson = import_node_fs3.default.existsSync(fullPath) ? JSON.parse(import_node_fs3.default.readFileSync(fullPath, "utf8")) : {};
     const oldGenerated = parsedJson.generated || {};
     const oldRepoPath = oldGenerated.repoPath || "";
-    const changes = findDependencyChanges(oldGenerated.workspaces, workspaces);
-    if (changes || repoPath !== oldRepoPath) {
+    const changes = findDependencyChanges(
+      oldGenerated.workspaces || {},
+      workspaces
+    );
+    const hasRootChanges = repoPath !== oldRepoPath || oldGenerated.version !== outputVersion;
+    if (changes || hasRootChanges) {
       if (checkOnly) {
         reportDependencyChanges(fullPath, oldRepoPath, repoPath, changes, report);
       } else {
         parsedJson.generated = generated;
         const jsonOutput = JSON.stringify(parsedJson, null, 2);
-        import_node_fs2.default.writeFileSync(fullPath, jsonOutput);
+        import_node_fs3.default.writeFileSync(fullPath, jsonOutput);
         report(`Updated workspaces in ${fullPath}`);
       }
     }
@@ -658,8 +678,8 @@ var plugin = (() => {
   }
   function fallbackOutputFilename(root) {
     const packageJson = import_fslib4.ppath.join(root, "package.json");
-    if (import_node_fs2.default.existsSync(packageJson)) {
-      const pkg = JSON.parse(import_node_fs2.default.readFileSync(packageJson, "utf8"));
+    if (import_node_fs3.default.existsSync(packageJson)) {
+      const pkg = JSON.parse(import_node_fs3.default.readFileSync(packageJson, "utf8"));
       if (pkg.name && typeof pkg.name === "string") {
         return pkg.name.replace(/[^a-zA-Z0-9@._]/g, "-") + "-workspaces.json";
       }

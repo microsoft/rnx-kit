@@ -8,7 +8,8 @@ import {
   type Resolver,
   structUtils,
 } from "@yarnpkg/core";
-import { npath } from "@yarnpkg/fslib";
+import { npath, type PortablePath, ppath } from "@yarnpkg/fslib";
+import fs from "node:fs";
 import {
   getFinderFromJsConfig,
   getFinderFromJsonConfig,
@@ -18,6 +19,8 @@ import { type PackagePaths } from "./types";
 import { ExternalWorkspace } from "./workspace";
 
 const nullFunction = (_val: string) => null;
+const pkgJson = npath.toPortablePath("package.json");
+const emptyPortable = npath.toPortablePath("");
 
 export class ExternalWorkspaceTracker {
   trace = nullFunction;
@@ -34,6 +37,7 @@ export class ExternalWorkspaceTracker {
   private resolver: Resolver | null = null;
   private fetcher: Fetcher | null = null;
   private findPackage: (pkgName: string) => PackagePaths | null = nullFunction;
+  private pathOffset: PortablePath = npath.toPortablePath("");
 
   constructor(project: Project) {
     this.trace = nullFunction;
@@ -45,28 +49,33 @@ export class ExternalWorkspaceTracker {
     const { provider } = getPluginConfiguration(project.configuration);
     if (provider) {
       if (provider.endsWith(".json")) {
+        this.pathOffset = this.findConfigPathOffset(provider);
         this.findPackage = getFinderFromJsonConfig(provider);
       } else if (provider.endsWith(".js") || provider.endsWith(".cjs")) {
+        this.pathOffset = this.findConfigPathOffset(provider);
         this.findPackage = getFinderFromJsConfig(provider);
       }
     }
+  }
+
+  private findConfigPathOffset(configPath: PortablePath): PortablePath {
+    const dirPath = ppath.dirname(configPath);
+    return ppath.relative(this.root, dirPath);
   }
 
   private tryNameLookup(pkgName: string) {
     return this.workspaceMap.get(pkgName) || null;
   }
 
-  private createWorkspace(name: string, localPath: string): ExternalWorkspace {
+  private createWorkspace(
+    name: string,
+    localPath: PortablePath
+  ): ExternalWorkspace {
     const prettyName = structUtils.prettyIdent(
       this.project.configuration,
       structUtils.parseIdent(name)
     );
-    return new ExternalWorkspace(
-      name,
-      prettyName,
-      npath.toPortablePath(localPath),
-      this.trace
-    );
+    return new ExternalWorkspace(name, prettyName, localPath, this.trace);
   }
 
   /**
@@ -88,7 +97,18 @@ export class ExternalWorkspaceTracker {
     // now look it up in the attached external workspaces
     const pkgInfo = this.findPackage(pkgName);
     if (pkgInfo) {
-      workspace = this.createWorkspace(pkgName, pkgInfo.path || "");
+      // see if a package.json exists at the destination path
+      let localPath = npath.toPortablePath(pkgInfo.path || "");
+      if (localPath) {
+        if (!ppath.isAbsolute(localPath)) {
+          localPath = ppath.join(this.root, this.pathOffset, localPath);
+          if (!fs.existsSync(ppath.join(localPath, pkgJson))) {
+            localPath = emptyPortable;
+          }
+        }
+      }
+
+      workspace = this.createWorkspace(pkgName, localPath);
       this.trace(
         `Loaded external workspace ${workspace.prettyName} of type ${pkgInfo.path ? "LOCAL" : "REMOTE"}`
       );

@@ -6,6 +6,8 @@ import fs from "node:fs";
 import { getPluginConfiguration } from "./cofiguration";
 import { type WorkspaceOutputGeneratedContent } from "./types";
 
+const outputVersion = "1.0.0";
+
 export class OutputWorkspaces extends BaseCommand {
   static override paths = [["external-workspaces", "output"]];
 
@@ -122,6 +124,7 @@ export function outputWorkspaces(
   // create the new generated content
   const generated: WorkspaceOutputGeneratedContent = {
     repoPath,
+    version: outputVersion,
     workspaces: sortStringRecord(workspaces),
   };
 
@@ -134,8 +137,13 @@ export function outputWorkspaces(
   const oldRepoPath = oldGenerated.repoPath || "";
 
   // see what's changed
-  const changes = findDependencyChanges(oldGenerated.workspaces, workspaces);
-  if (changes || repoPath !== oldRepoPath) {
+  const changes = findDependencyChanges(
+    oldGenerated.workspaces || {},
+    workspaces
+  );
+  const hasRootChanges =
+    repoPath !== oldRepoPath || oldGenerated.version !== outputVersion;
+  if (changes || hasRootChanges) {
     if (checkOnly) {
       reportDependencyChanges(fullPath, oldRepoPath, repoPath, changes, report);
     } else {
