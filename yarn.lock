@@ -4685,6 +4685,25 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@rnx-kit/yarn-plugin-external-workspaces@workspace:incubator/yarn-plugin-external-workspaces":
+  version: 0.0.0-use.local
+  resolution: "@rnx-kit/yarn-plugin-external-workspaces@workspace:incubator/yarn-plugin-external-workspaces"
+  dependencies:
+    "@rnx-kit/eslint-config": "npm:*"
+    "@rnx-kit/scripts": "npm:*"
+    "@rnx-kit/tsconfig": "npm:*"
+    "@types/node": "npm:^20.0.0"
+    "@types/semver": "npm:^7.0.0"
+    "@yarnpkg/cli": "npm:^4.6.0"
+    "@yarnpkg/core": "npm:^4.2.0"
+    "@yarnpkg/fslib": "npm:^3.1.1"
+    clipanion: "npm:^4.0.0-rc.4"
+    eslint: "npm:^9.0.0"
+    prettier: "npm:^3.0.0"
+    typescript: "npm:^5.0.0"
+  languageName: unknown
+  linkType: soft
+
 "@shikijs/engine-oniguruma@npm:^1.25.1":
   version: 1.26.1
   resolution: "@shikijs/engine-oniguruma@npm:1.26.1"
@@ -5463,15 +5482,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@yarnpkg/fslib@npm:^3.1.2":
-  version: 3.1.2
-  resolution: "@yarnpkg/fslib@npm:3.1.2"
-  dependencies:
-    tslib: "npm:^2.4.0"
-  checksum: 10c0/fc19a2b62abfda45eabe08b05335ddbfafd27110657c1faa7b2924ecf1ff99118398e4af7706b9d78703956f99e1fba4666ec3be90174009ee94307fb5608b06
-  languageName: node
-  linkType: hard
-
 "@yarnpkg/libui@npm:^3.0.1":
   version: 3.0.1
   resolution: "@yarnpkg/libui@npm:3.0.1"
@@ -5494,19 +5504,6 @@ __metadata:
   peerDependencies:
     "@yarnpkg/fslib": ^3.1.0
   checksum: 10c0/11e12724d916584e748dc3cb364840f3763799492108b39b008301b817e43689d34a68d7ecb1cab9610cc058aa5967e5088658774ae0fbe77a18b8cdb5ad382a
-  languageName: node
-  linkType: hard
-
-"@yarnpkg/libzip@npm:^3.1.1":
-  version: 3.1.1
-  resolution: "@yarnpkg/libzip@npm:3.1.1"
-  dependencies:
-    "@types/emscripten": "npm:^1.39.6"
-    "@yarnpkg/fslib": "npm:^3.1.2"
-    tslib: "npm:^2.4.0"
-  peerDependencies:
-    "@yarnpkg/fslib": ^3.1.2
-  checksum: 10c0/819ad37fbba51f4d7f65fff02b80cd7eb94134d7f7672a8b664a0672f12e710223ff9a8adb4ca565fd6aaa3432e74e964ee71d5ed929e900657c3a9fde9a381d
   languageName: node
   linkType: hard
 
@@ -5769,23 +5766,6 @@ __metadata:
     "@yarnpkg/core": ^4.0.3
     "@yarnpkg/plugin-pack": ^4.0.0
   checksum: 10c0/41f2cdd5431a235cf51df400f1327c6277e794b5d9f10940a4aa2ef147da256c741f08ac8d9fc63f210924f6d65432059909ae785c928ab1921e2b91686c22b6
-  languageName: node
-  linkType: hard
-
-"@yarnpkg/plugin-npm@npm:^3.0.2":
-  version: 3.0.2
-  resolution: "@yarnpkg/plugin-npm@npm:3.0.2"
-  dependencies:
-    "@yarnpkg/fslib": "npm:^3.1.2"
-    enquirer: "npm:^2.3.6"
-    lodash: "npm:^4.17.15"
-    semver: "npm:^7.1.2"
-    ssri: "npm:^6.0.1"
-    tslib: "npm:^2.4.0"
-  peerDependencies:
-    "@yarnpkg/core": ^4.2.1
-    "@yarnpkg/plugin-pack": ^4.0.1
-  checksum: 10c0/d0363dcc79ac016fdfe5c60f31e89969855d5e89727ef877c5d3af8be24de8d2f21bb904c8c4d9f3edcd4ce4bca53395e243267f88076d07fa53f3f823f517ea
   languageName: node
   linkType: hard
 

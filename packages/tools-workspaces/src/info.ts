@@ -1,12 +1,10 @@
 import micromatch from "micromatch";
-import path from "node:path";
-import { getImplementationSync } from "./implementations";
+import * as path from "node:path";
 import {
   findPackages,
   findPackagesSync,
-  findSentinel,
-  findSentinelSync,
-} from "./implementations/common";
+  getImplementationSync,
+} from "./common";
 import type { WorkspacesInfo } from "./types";
 
 export class WorkspacesInfoImpl implements WorkspacesInfo {
@@ -71,20 +69,4 @@ export class WorkspacesInfoImpl implements WorkspacesInfo {
     }
     return this.findWorkspacePackages(this.sentinel);
   }
-}
-
-export async function getWorkspacesInfo(): Promise<WorkspacesInfo> {
-  const sentinel = await findSentinel();
-  if (!sentinel) {
-    throw new Error("Could not find the root of the workspaces");
-  }
-  return new WorkspacesInfoImpl(sentinel);
-}
-
-export function getWorkspacesInfoSync(): WorkspacesInfo {
-  const sentinel = findSentinelSync();
-  if (!sentinel) {
-    throw new Error("Could not find the root of the workspaces");
-  }
-  return new WorkspacesInfoImpl(sentinel);
 }

@@ -15,12 +15,6 @@ It currently supports:
 - [Rush](https://rushjs.io/pages/configs/rush_json/)
 - [Yarn](https://yarnpkg.com/configuration/manifest#workspaces)
 
-This also contains a submodule that can be referenced via
-`import { ... } from "@rnx-kit/tools-workspaces/external"` that adds the concept
-of external workspaces. This concept is really for large scale monorepos that
-may contain multiple yarn projects within them. For more information see the
-information in `@rnx-kit/yarn-plugin-external-workspaces`.
-
 <!-- The following table can be updated by running `yarn update-readme` -->
 <!-- @rnx-kit/api start -->
 
@@ -30,9 +24,9 @@ information in `@rnx-kit/yarn-plugin-external-workspaces`.
 
 | Category | Function                      | Description                                                                      |
 | -------- | ----------------------------- | -------------------------------------------------------------------------------- |
-| find     | `findWorkspacePackages()`     | Returns a list of all packages declared under workspaces.                        |
-| find     | `findWorkspacePackagesSync()` | Returns a list of all packages declared under workspaces synchronously.          |
-| find     | `findWorkspaceRoot()`         | Returns the root of the workspace; `undefined` if not a workspace.               |
-| find     | `findWorkspaceRootSync()`     | Returns the root of the workspace synchronously; `undefined` if not a workspace. |
+| -        | `findWorkspacePackages()`     | Returns a list of all packages declared under workspaces.                        |
+| -        | `findWorkspacePackagesSync()` | Returns a list of all packages declared under workspaces synchronously.          |
+| -        | `findWorkspaceRoot()`         | Returns the root of the workspace; `undefined` if not a workspace.               |
+| -        | `findWorkspaceRootSync()`     | Returns the root of the workspace synchronously; `undefined` if not a workspace. |
 
 <!-- @rnx-kit/api end -->
