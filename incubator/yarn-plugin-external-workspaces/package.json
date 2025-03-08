@@ -29,9 +29,6 @@
     "lint": "rnx-kit-scripts lint",
     "test": "rnx-kit-scripts test"
   },
-  "dependencies": {
-    "@rnx-kit/tools-workspaces": "*"
-  },
   "devDependencies": {
     "@rnx-kit/eslint-config": "*",
     "@rnx-kit/scripts": "*",

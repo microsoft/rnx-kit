@@ -1,7 +1,7 @@
 /**
  * Data needed to resolve an external package.
  */
-export type PackageDefinition = {
+export type PackagePaths = {
   /**
    * Relative path to the package location from wherever the definition is defined. If these are loaded from
    * a .json file, this will be relative to the location of the .json file.
@@ -9,9 +9,42 @@ export type PackageDefinition = {
   path: string | null;
 
   /**
-   * The version of the package to install if it does not exist in the local file system.
+   * Optional fallback target in case the package is not present on-disk. This should be in the form of a yarn
+   * hardlink protocol. e.g. "file:./path/to/package.tgz"
+   * -- NOT YET IMPLEMENTED --
    */
-  version: string;
+  fallbackPath?: string;
+};
+
+export type ExternalPackage = PackagePaths & {
+  /**
+   * The name of the package
+   */
+  name: string;
+};
+
+/**
+ * Format for the generated section of the output file for repo and workspace information.
+ */
+export type WorkspaceOutputGeneratedContent = {
+  /**
+   * Relative path from the recorded file to the root of the repository
+   */
+  repoPath: string;
+
+  /**
+   * Set of workspaces in the repository, with paths relative to the repo root in the form of:
+   * - Record<"@scope/package-name", "./path/to/package">
+   */
+  workspaces: Record<string, string>;
+};
+
+/**
+ * Format of the output file for repo and workspace information. Anything outside of the generated
+ * section will be maintained as-is.
+ */
+export type WorkspaceOutputJson = {
+  generated: WorkspaceOutputGeneratedContent;
 };
 
 /**
@@ -22,13 +55,13 @@ export type PackageDefinition = {
  *  "my-other-package": { "path": "./path/to/my-other-package", "version": "1.2.3" }
  * }
  */
-export type ExternalDeps = Record<string, PackageDefinition>;
+export type ExternalDeps = Record<string, PackagePaths>;
 
 /**
  * Signature of the function to retrieve information about a given package. If the configuration setting routes
  * to a .js or .cjs file instead of .json, the default export should be a function of this signature.
  */
-export type DefinitionFinder = (pkgName: string) => PackageDefinition | null;
+export type DefinitionFinder = (pkgName: string) => PackagePaths | null;
 
 /**
  * Trace function used to log messages if logging is enabled. If logOnly is set to true, the message will only be written to
@@ -41,9 +74,8 @@ export type TraceFunc = (msg: string) => void;
  */
 export type OutputWorkspacesOptions = {
   /**
-   * The path to a directory where the plugin should output the current set of workspaces. The same ./path/file.json[/key1/key2] syntax
-   * can be used here as well to write to a subpath of the .json file. The file will not be modified if the workspaces have not changed,
-   * and it will retain the prior contents not in the specified key. Workspaces within the key will be replaced.
+   * The path to a .json file (including the .json file name) where workspace info should be recorded. Format of the file will be
+   * maintained as-is with the exception of the generated section. See WorkspaceOutputJson above
    */
   readonly outputPath: string;
 
@@ -55,27 +87,28 @@ export type OutputWorkspacesOptions = {
 };
 
 /**
+ * Set of workspace paths in the form of { "@scope/package-name": "./path/to/package" }
+ */
+export type WorkspacePaths = Record<string, string>;
+
+/**
  * Full configuration options for external workspaces. Stored in the root package.json under the "external-workspaces" key.
  */
 export type ExternalWorkspacesConfig = Partial<OutputWorkspacesOptions> & {
   /**
-   * This setting specifies how to load the set of external dependencies. It can be of type string or ExternalDeps.
-   * For strings:
-   * - Path to a .json file in the ExternalDeps format. Optionally can have a set of keys in the form of "./path/file.json/subpath" if the
-   *   dependency entries are not at the top level of the .json file.
-   * - Path to a .js file that exports a function of type DefinitionFinder as the default export.
-   * For ExternalDeps:
-   * - A set of package definitions in the form of { "package-name": { path: "path/to/package", version: "1.2.3" } }
+   * This setting specifies how to load the set of external dependencies. It can be of type string or WorkspacePaths.
+   * - string path to a .json file in the WorkspaceOutputJson format.
+   * - string path to a .js file that exports a function of type DefinitionFinder as the default export.
+   * - A set of package definitions in the form of { "@scope/package-name": "./path/to/package" }
    *
    * If unset or empty, the plugin will not attempt to intercept any external dependencies.
    */
-  externalDependencies?: string | ExternalDeps;
+  externalDependencies?: string | WorkspacePaths;
 
   /**
-   * If set, the plugin will produce detailed output logging to the specified file. In many cases console output is captured so logs
-   * work much better sent to a file. If the value is "console" it will log to the console but this will require running in verbose mode.
+   * If enabled print out detailed logging output during operations to the console.
    */
-  logTo?: string;
+  logging?: boolean;
 };
 
 export type ExternalWorkspace = {
@@ -101,7 +134,7 @@ export type ExternalWorkspaces = OutputWorkspacesOptions & {
    * Function used to output workspaces to a file.
    */
   outputWorkspaces(
-    workspaces: ExternalDeps,
+    workspaces: Record<string, string>,
     outputPath?: string,
     checkOnly?: boolean
   ): void;

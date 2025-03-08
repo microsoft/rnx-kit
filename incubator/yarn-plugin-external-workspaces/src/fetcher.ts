@@ -1,9 +1,4 @@
-import {
-  type Fetcher,
-  type FetchOptions,
-  type FetchResult,
-  type Locator,
-} from "@yarnpkg/core";
+import { type Fetcher, type FetchOptions, type Locator } from "@yarnpkg/core";
 import { CwdFS, PortablePath, ppath } from "@yarnpkg/fslib";
 import { getWorkspaceTracker, type ExternalWorkspaceTracker } from "./tracker";
 import { getProtocol } from "./utilities";
@@ -54,13 +49,9 @@ export class ExternalFetcher implements Fetcher {
   }
 
   /**
-   * This function must return a object describing where the package manager
-   * can find the data for the specified package on disk.
-   *
-   * The return value is a more complex than a regular path (cf FetchResult)
-   * because the fetchers are allowed to return virtual paths that point to
-   * things that don't actually exist (for example directories stored within
-   * zip archives).
+   * Fetch results for locally existing packages. This is a LinkType.SOFT fetcher, though we do
+   * fall through and return the hard link style results from the fallback fetcher. This is OK as
+   * those results won't be installed.
    *
    * @param locator The source locator.
    * @param opts The fetch options.
@@ -69,30 +60,31 @@ export class ExternalFetcher implements Fetcher {
     const tracker = this.ensureTracker(opts);
     const workspace = tracker.findByLocator(locator);
 
-    const fallbackResults = await this.fetchFallback(locator, opts, workspace);
-
     if (workspace.localPath) {
       const localPath = ppath.resolve(tracker.root, workspace.localPath);
-      const { checksum } = fallbackResults;
-      if (!checksum) {
-        tracker.trace(
-          `Fetcher: failed to find checksum for ${workspace.prettyName}`
-        );
-      }
 
-      const parentFetch: FetchResult = {
+      return {
         packageFs: new CwdFS(PortablePath.root),
         prefixPath: localPath,
         localPath: localPath,
-        checksum,
       };
-      return parentFetch;
     }
 
     // otherwise fallthrough to resolving the package + version combination
-    return fallbackResults;
+    return await this.fetchFallback(locator, opts, workspace);
   }
 
+  /**
+   * Return fetch results from the fallback fetcher. This is likely the npm: fetcher but could potentially be
+   * any hardlink based fetcher, though implementing that may require not offloading the locator/candidate chaining.
+   *
+   * Trim checksum value so it isn't recorded in the lockfile for the external protocol entry
+   *
+   * @param locator source locator for this fetch operation
+   * @param opts fetch options
+   * @param workspace loaded workspace for this locator
+   * @returns results from the fallback fetcher, likely the npm: fetcher
+   */
   private async fetchFallback(
     locator: Locator,
     opts: FetchOptions,
@@ -100,6 +92,9 @@ export class ExternalFetcher implements Fetcher {
   ) {
     const fallbackLocator = workspace.toFallbackLocator(locator);
     const fetcher = opts.fetcher;
-    return await fetcher.fetch(fallbackLocator, opts);
+
+    const results = await fetcher.fetch(fallbackLocator, opts);
+    delete results.checksum;
+    return results;
   }
 }

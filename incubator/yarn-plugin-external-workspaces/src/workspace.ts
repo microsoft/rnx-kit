@@ -8,12 +8,12 @@ import { type PortablePath } from "@yarnpkg/fslib";
 import {
   coerceDescriptorTo,
   coerceLocatorTo,
-  getFallbackProtocol,
   getProtocol,
+  getRemoteProtocol,
 } from "./utilities";
 
 const localProtocol = getProtocol();
-const remoteProtocol = getFallbackProtocol();
+const remoteProtocol = getRemoteProtocol();
 const fallbackProtocol = "npm:";
 
 const protocolsLocal = [localProtocol, remoteProtocol, fallbackProtocol];
@@ -161,6 +161,10 @@ export class ExternalWorkspace {
 
   toFallbackLocator(locator: Locator) {
     return this.transformLocator(locator, this.fallbackIndex);
+  }
+
+  toLeadDescriptor(descriptor: Descriptor) {
+    return this.transformDescriptor(descriptor, 0);
   }
 
   private indexFromResolverType(resolverType: ResolverType) {

@@ -1,8 +1,4 @@
 import {
-  type ExternalWorkspaces,
-  getExternalWorkspaces,
-} from "@rnx-kit/tools-workspaces/external";
-import {
   type Descriptor,
   type Fetcher,
   type Ident,
@@ -13,15 +9,21 @@ import {
   structUtils,
 } from "@yarnpkg/core";
 import { npath } from "@yarnpkg/fslib";
-import { toNpmDescriptor } from "./utilities";
+import {
+  getFinderFromJsConfig,
+  getFinderFromJsonConfig,
+  getPluginConfiguration,
+} from "./cofiguration";
+import { type PackagePaths } from "./types";
 import { ExternalWorkspace } from "./workspace";
 
+const nullFunction = (_val: string) => null;
+
 export class ExternalWorkspaceTracker {
-  trace;
+  trace = nullFunction;
   report;
   root;
 
-  private findPackage;
   private project;
 
   private workspaceMap = new Map<string, ExternalWorkspace>();
@@ -31,13 +33,23 @@ export class ExternalWorkspaceTracker {
 
   private resolver: Resolver | null = null;
   private fetcher: Fetcher | null = null;
+  private findPackage: (pkgName: string) => PackagePaths | null = nullFunction;
 
-  constructor(settings: ExternalWorkspaces, project: Project) {
-    this.findPackage = settings.findPackage;
-    this.trace = settings.trace;
-    this.report = settings.report;
-    this.root = npath.toPortablePath(settings.root);
+  constructor(project: Project) {
+    this.trace = nullFunction;
+    this.report = (msg: string) => console.log(msg);
+    this.root = project.cwd;
     this.project = project;
+
+    // load the finder if we can, if it fails everything will be disabled
+    const { provider } = getPluginConfiguration(project.configuration);
+    if (provider) {
+      if (provider.endsWith(".json")) {
+        this.findPackage = getFinderFromJsonConfig(provider);
+      } else if (provider.endsWith(".js") || provider.endsWith(".cjs")) {
+        this.findPackage = getFinderFromJsConfig(provider);
+      }
+    }
   }
 
   private tryNameLookup(pkgName: string) {
@@ -172,10 +184,6 @@ export class ExternalWorkspaceTracker {
     this.fetcher ??= this.project.configuration.makeFetcher();
     return this.fetcher;
   }
-
-  getNpmDescriptor(descriptor: Descriptor): Descriptor {
-    return toNpmDescriptor(descriptor);
-  }
 }
 
 let workspaceTracker: ExternalWorkspaceTracker | null = null;
@@ -184,8 +192,7 @@ export function getWorkspaceTracker(
   project: Project
 ): ExternalWorkspaceTracker {
   if (!workspaceTracker) {
-    const settings = getExternalWorkspaces(npath.fromPortablePath(project.cwd));
-    workspaceTracker = new ExternalWorkspaceTracker(settings, project);
+    workspaceTracker = new ExternalWorkspaceTracker(project);
   }
   return workspaceTracker;
 }

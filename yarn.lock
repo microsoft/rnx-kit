@@ -4844,7 +4844,6 @@ __metadata:
   dependencies:
     "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/scripts": "npm:*"
-    "@rnx-kit/tools-workspaces": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
     "@types/node": "npm:^20.0.0"
     "@types/semver": "npm:^7.0.0"

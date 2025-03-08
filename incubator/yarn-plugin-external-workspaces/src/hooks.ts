@@ -2,16 +2,14 @@ import {
   type Descriptor,
   type Locator,
   type Project,
+  type Report,
   type ResolveOptions,
   type Resolver,
 } from "@yarnpkg/core";
+import { npath } from "@yarnpkg/fslib";
+import { getPluginConfiguration } from "./cofiguration";
+import { outputWorkspaces } from "./outputCommand";
 import { getWorkspaceTracker } from "./tracker";
-import {
-  getSettingsForProject,
-  outputWorkspaces,
-  toExternalDescriptor,
-  toFallbackDescriptor,
-} from "./utilities";
 
 /**
  * Post-install go through and write this project's workspaces to a file, enabled by config
@@ -20,11 +18,20 @@ import {
  * @param project the yarn Project, for configuration and grabbing workspace information
  * @param _options ignored, type not exported by @yarnpkg/core, should be InstallOptions
  */
-export function afterAllInstalled(project: Project, _options: unknown): void {
-  const settings = getSettingsForProject(project);
+export function afterAllInstalled(
+  project: Project,
+  options: { report: Report }
+): void {
+  const settings = getPluginConfiguration(project.configuration);
   // see if the outputWorkspaces setting is set to a valid json string
   if (!settings.outputOnlyOnCommand && settings.outputPath) {
-    outputWorkspaces(project, settings);
+    const report = (msg: string) => options.report.reportInfo(null, msg);
+    outputWorkspaces(
+      project,
+      npath.toPortablePath(settings.outputPath),
+      false,
+      report
+    );
   }
 }
 
@@ -52,12 +59,7 @@ export async function reduceDependency(
   const tracker = getWorkspaceTracker(project);
   const workspace = tracker.tryByDescriptor(dependency);
   if (workspace) {
-    if (workspace.localPath) {
-      tracker.trace(`Reducing ${workspace.name} to external descriptor`);
-      return toExternalDescriptor(dependency);
-    }
-    tracker.trace(`Reducing ${workspace.name} to fallback descriptor`);
-    return toFallbackDescriptor(dependency);
+    return workspace.toLeadDescriptor(dependency);
   }
   return dependency;
 }

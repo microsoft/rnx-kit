@@ -3,16 +3,841 @@
 module.exports = {
 name: "@rnx-kit/yarn-plugin-external-workspaces",
 factory: function (require) {
-"use strict";var plugin=(()=>{var Ne=Object.create;var W=Object.defineProperty;var Je=Object.getOwnPropertyDescriptor;var He=Object.getOwnPropertyNames;var Ue=Object.getPrototypeOf,qe=Object.prototype.hasOwnProperty;var l=(t=>typeof require<"u"?require:typeof Proxy<"u"?new Proxy(t,{get:(e,r)=>(typeof require<"u"?require:e)[r]}):t)(function(t){if(typeof require<"u")return require.apply(this,arguments);throw Error('Dynamic require of "'+t+'" is not supported')});var S=(t,e)=>()=>(e||t((e={exports:{}}).exports,e),e.exports),Ke=(t,e)=>{for(var r in e)W(t,r,{get:e[r],enumerable:!0})},ne=(t,e,r,o)=>{if(e&&typeof e=="object"||typeof e=="function")for(let s of He(e))!qe.call(t,s)&&s!==r&&W(t,s,{get:()=>e[s],enumerable:!(o=Je(e,s))||o.enumerable});return t};var j=(t,e,r)=>(r=t!=null?Ne(Ue(t)):{},ne(e||!t||!t.__esModule?W(r,"default",{value:t,enumerable:!0}):r,t)),ze=t=>ne(W({},"__esModule",{value:!0}),t);var Q=S(d=>{"use strict";var Ae=d&&d.__importDefault||function(t){return t&&t.__esModule?t:{default:t}};Object.defineProperty(d,"__esModule",{value:!0});d.rebasePackageDefinition=ae;d.rebaseExternalDeps=Ve;d.findDependencyChanges=Ge;d.reportDependencyChanges=Qe;d.sortStringRecord=Ye;var ie=Ae(l("path"));function ae(t,e){return{path:t.path?ie.default.posix.normalize(ie.default.join(e,t.path)):null,version:t.version}}function Ve(t,e){let r={};for(let o in t)r[o]=ae(t[o],e);return r}function Xe(t,e){return t.path===e.path&&t.version===e.version}function Ge(t,e){let r={};for(let o in e)t[o]?Xe(t[o],e[o])||(r[o]="update"):r[o]="add";for(let o in t)e[o]||(r[o]="remove");return Object.keys(r).length>0?r:null}function Qe(t,e){for(let r in t){let o=String(t[r]).padEnd(6," ");e(`${o} - ${r}`)}}function Ye(t,e){let r=Object.keys(t).sort();e??(e={});for(let o of r)e[o]=t[o];return e}});var ge=S(g=>{"use strict";var pe=g&&g.__importDefault||function(t){return t&&t.__esModule?t:{default:t}};Object.defineProperty(g,"__esModule",{value:!0});g.parseJsonPath=ue;g.getDepsFromJson=fe;g.createFinderFromJson=he;g.createFinderFromJs=de;g.loadExternalDeps=tt;var Y=pe(l("fs")),I=pe(l("path")),Ze=Q(),ce=".json",le=t=>null;function ue(t){let e=t.indexOf(ce);if(e>0){let r=e+ce.length,o=t.slice(0,r),s=t.length>r+1?t.slice(r+1):"";return{jsonPath:o,keysPath:s}}return{}}function fe(t,e){let r=e?e.split("/"):[],o=t;for(let s of r)if(o=o[s],!o)return;return o}function he(t,e,r){if(Y.default.existsSync(t)){let o=fe(JSON.parse(Y.default.readFileSync(t,"utf8")),e);if(o)return r(`Loaded the finder from the json file ${t}`),s=>o[s]??null}return le}function de(t,e){let r=l(t);if(!r)throw new Error(`Unable to load config from ${t}`);return e(`Creating a finder from: ${t}`),r.default}function et(t,e,r){let o=new Map;return s=>{if(o.has(s))return o.get(s)??null;let n=t(s),i=n?{...n}:null;return i&&(i=(0,Ze.rebasePackageDefinition)(i,r),i.path&&(Y.default.existsSync(I.default.join(e,i.path,"package.json"))||(i.path=null))),o.set(s,i),i}}function tt(t,e,r){let o,s="";if(typeof t=="string"){if(I.default.isAbsolute(t))throw new Error(`Invalid external workspace config path: ${t}. Must be relative to the root of the repository`);let n=I.default.join(e,t);s=I.default.dirname(t);let{jsonPath:i,keysPath:a}=ue(n);if(i)o=he(i,a,r);else{let p=I.default.extname(n).toLowerCase();(p===".js"||p===".cjs")&&(o=de(n,r))}if(!o)throw new Error(`Invalid external workspace config path: ${n}. Supported types are .json, .js, and .cjs`)}else typeof t=="object"&&(o=n=>t[n]??null);return o?et(o,e,s):le}});var ye=S(y=>{"use strict";var me=y&&y.__importDefault||function(t){return t&&t.__esModule?t:{default:t}};Object.defineProperty(y,"__esModule",{value:!0});y.externalWorkspacesKey=void 0;y.getExternalWorkspaces=rt;var m=me(l("fs")),x=me(l("path")),$=Q(),Z=ge(),ke=()=>null;y.externalWorkspacesKey="external-workspaces";var B=class t{constructor(e){this.startTime=performance.now(),this.root=e;let{outputOnlyOnCommand:r,outputPath:o,externalDependencies:s,logTo:n}=this.loadConfig(this.root);this.outputOnlyOnCommand=!!r,this.outputPath=o||"",this.logTo=n||"",this.trace=this.createTraceFunction(),this.report=i=>{console.log(i),this.trace(i)},this.findPackage=(0,Z.loadExternalDeps)(s,e,this.trace)}outputWorkspaces(e,r,o){if(r??(r=this.outputPath),!r){this.trace("No output path specified, skipping write");return}let{jsonPath:s,keysPath:n}=(0,Z.parseJsonPath)(x.default.join(this.root,r));if(s){let i=x.default.dirname(s);o||this.ensureDirExists(i);let a=x.default.relative(i,this.root),p=(0,$.rebaseExternalDeps)(e,a),c=m.default.existsSync(s)?JSON.parse(m.default.readFileSync(s,"utf8")):{},u=(0,Z.getDepsFromJson)(c,n)||{},f=(0,$.findDependencyChanges)(u,p);if(f)if(o)this.report(`Update needed for ${r}:`),(0,$.reportDependencyChanges)(f,this.report);else{this.report(`Updating ${r}...`);let h=n?n.split("/"):[],b=h.length>0?c:{},E=b,O=h.shift();for(;O;)(!E[O]||h.length===0)&&(E[O]={}),E=E[O],O=h.shift();(0,$.sortStringRecord)(p,E);let Me=JSON.stringify(b,null,2);m.default.writeFileSync(s,Me),this.report(`Updated ${s}`)}}}loadConfig(e){return JSON.parse(m.default.readFileSync(x.default.join(e,"package.json"),"utf8"))[t.pkgJsonKey]||{}}createTraceFunction(){if(!this.logTo)return ke;if(this.logTo==="console")return e=>this.consoleTrace(e);{let e=x.default.dirname(this.logTo);return this.ensureDirExists(e),this.fileTrace(`
-==== Session Started at ${new Date().toISOString()} ====`),r=>this.fileTrace(r)}}formatTrace(e){return`[${(performance.now()-this.startTime).toFixed(2)}ms] ${e}`}consoleTrace(e){console.log(this.formatTrace(e))}fileTrace(e){m.default.appendFile(this.logTo,this.formatTrace(e)+`
-`,ke)}ensureDirExists(e){m.default.existsSync(e)||m.default.mkdirSync(e,{recursive:!0,mode:493})}};B.pkgJsonKey="external-workspaces";var C;function rt(t){let e=x.default.resolve(t);return(!C||C.root!==e)&&(C=new B(e)),C}});var ee=S(M=>{"use strict";Object.defineProperty(M,"__esModule",{value:!0});M.getExternalWorkspaces=void 0;var ot=ye();Object.defineProperty(M,"getExternalWorkspaces",{enumerable:!0,get:function(){return ot.getExternalWorkspaces}})});var kt={};Ke(kt,{default:()=>gt});var se=l("@yarnpkg/cli"),T=l("@yarnpkg/core"),k=l("clipanion");var _e=l("@yarnpkg/core"),oe=j(l("fs")),We=j(l("path"));var F=l("@yarnpkg/core");var Ie=j(ee()),D=l("@yarnpkg/core"),K=l("@yarnpkg/fslib");var xe=j(ee()),N=l("@yarnpkg/core"),J=j(l("path")),ve="external:",we="fallback:",st="npm:";function v(){return ve}function H(){return we}var nt=t=>t;function it(t){return J.default.posix.normalize(t)}var at=process.platform==="win32"?t=>J.default.win32.normalize(t):nt;function ct(t,e){return it(J.default.relative(t,e))}function w(t){return(0,xe.getExternalWorkspaces)(at(t.cwd))}function De(t){let e=t.indexOf(":");return e!==-1?{protocol:t.slice(0,e+1),version:t.slice(e+1)}:{protocol:"",version:t}}function _(t,e){let{protocol:r,version:o}=De(t.range);return r===e?t:N.structUtils.makeDescriptor(t,`${e}${o}`)}function Pe(t,e){let{protocol:r,version:o}=De(t.reference);return r===e?t:N.structUtils.makeLocator(t,`${e}${o}`)}function Le(t){return _(t,ve)}function Fe(t){return _(t,st)}function Te(t){return _(t,we)}function U(t,e,r,o){let s={};t.workspacesByIdent.forEach(n=>{let{name:i,version:a,private:p}=n.manifest;if(i&&a&&!p){let c=N.structUtils.stringifyIdent(i);s[c]={version:a,path:ct(t.cwd,n.cwd)}}}),e.outputWorkspaces(s,r,o)}var Re=v(),be=H(),Ee="npm:",Oe=[Re,be,Ee],pt=Oe.map(t=>t.slice(0,-1)+"Dependency"),je=[be,Re,Ee],lt=je.map(t=>t.slice(0,-1)+"Dependency"),q=class{constructor(e,r,o,s){this.packages=[null,null,null];this.localIndex=0;this.remoteIndex=1;this.fallbackIndex=2;this.name=e,this.localPath=o,this.isLocal=!!o,this.prettyName=r,this.trace=s,this.protocols=this.isLocal?Oe:je,this.dependentKeys=this.isLocal?pt:lt,this.isLocal||(this.localIndex=1,this.remoteIndex=0)}getResolutionDependencies(e,r){let o=this.indexFromResolverType(r)+1;return{[this.dependentKeys[o]]:this.transformDescriptor(e,o)}}async getCandidates(e,r,o,s){let n=this.indexFromResolverType(s),[i,a]=this.getNextDependencies(r,n),p=o.resolver,c=this.transformDescriptor(e,n+1),u=await p.getCandidates(c,i,o),f=u.length>0;return f&&a&&u.push(a),(n===0||u.length===0)&&this.trace(`${this.prettyName}: getCandidates: (${s}) found ${u.length} locators from ${f?"child":"package"}`),this.transformLocators(u,this.resolverLocatorIndex(s))}async getSatisfying(e,r,o,s,n){let i=this.indexFromResolverType(n),a=i+1,[p]=this.getNextDependencies(r,i),c=this.transformDescriptor(e,a),u=this.transformLocators(o,a),h=await s.resolver.getSatisfying(c,p,u,s),b=this.resolverLocatorIndex(n);return b!==a&&(h.locators=this.transformLocators(h.locators,b)),(i===0||h.locators.length===0)&&this.trace(`${this.prettyName}: getSatisfying (${n}) found ${h.locators.length} locators from ${o.length} inputs`),h}toFallbackLocator(e){return this.transformLocator(e,this.fallbackIndex)}indexFromResolverType(e){return e==="local"?this.localIndex:this.remoteIndex}resolverLocatorIndex(e){return e==="local"?this.localIndex:this.fallbackIndex}transformDescriptor(e,r){return _(e,this.protocols[r])}transformLocator(e,r){return Pe(e,this.protocols[r])}transformLocators(e,r){return e.map(o=>this.transformLocator(o,r))}getNextDependencies(e,r){let o=r+1,s=e[this.dependentKeys[o]];s&&this.packages[o]===null&&(this.packages[o]=s);let n=this.packages[o],i={};return n&&(i[this.dependentKeys[o]]=n),[i,n]}};var re=class{constructor(e,r){this.workspaceMap=new Map;this.workspaceByIdent=new Map;this.notExternal=new Set;this.npmPackageByIdent=new Map;this.resolver=null;this.fetcher=null;this.findPackage=e.findPackage,this.trace=e.trace,this.report=e.report,this.root=K.npath.toPortablePath(e.root),this.project=r}tryNameLookup(e){return this.workspaceMap.get(e)||null}createWorkspace(e,r){let o=D.structUtils.prettyIdent(this.project.configuration,D.structUtils.parseIdent(e));return new q(e,o,K.npath.toPortablePath(r),this.trace)}tryIdentLoad(e){let r=D.structUtils.stringifyIdent(e),o=this.tryNameLookup(r);if(o)return this.workspaceByIdent.set(e.identHash,o),o;let s=this.findPackage(r);return s?(o=this.createWorkspace(r,s.path||""),this.trace(`Loaded external workspace ${o.prettyName} of type ${s.path?"LOCAL":"REMOTE"}`),this.workspaceMap.set(r,o),this.workspaceByIdent.set(e.identHash,o),o):(this.notExternal.add(e.identHash),null)}setFallbackPackage(e,r){this.npmPackageByIdent.set(e.identHash,r)}getFallbackPackage(e){return this.npmPackageByIdent.get(e.identHash)}tryByDescriptor(e){return this.workspaceByIdent.has(e.identHash)?this.workspaceByIdent.get(e.identHash):this.notExternal.has(e.identHash)||this.project.tryWorkspaceByDescriptor(e)?null:this.tryIdentLoad(e)}findByDescriptor(e){let r=this.tryByDescriptor(e);if(!r)throw new Error(`Cannot find workspace for descriptor ${D.structUtils.stringifyDescriptor(e)}`);return r}tryByLocator(e){return this.workspaceByIdent.has(e.identHash)?this.workspaceByIdent.get(e.identHash):this.notExternal.has(e.identHash)||this.project.tryWorkspaceByLocator(e)?null:this.tryIdentLoad(e)}findByLocator(e){let r=this.tryByLocator(e);if(!r)throw new Error(`Cannot find workspace for locator ${D.structUtils.stringifyLocator(e)}`);return r}getResolver(){return this.resolver??=this.project.configuration.makeResolver(),this.resolver}getFetcher(){return this.fetcher??=this.project.configuration.makeFetcher(),this.fetcher}getNpmDescriptor(e){return Fe(e)}},te=null;function P(t){if(!te){let e=(0,Ie.getExternalWorkspaces)(K.npath.fromPortablePath(t.cwd));te=new re(e,t)}return te}var z=class{constructor(e,r){this.tracker=null;this.resolverType=e,this.protocol=r}ensureTracker(e){return this.tracker||(this.tracker=P(e.project)),this.tracker}getResolutionDependencies(e,r){return this.ensureTracker(r).findByDescriptor(e).getResolutionDependencies(e,this.resolverType)}supportsDescriptor(e,r){return e.range.startsWith(this.protocol)}supportsLocator(e,r){return e.reference.startsWith(this.protocol)}shouldPersistResolution(e,r){return!1}bindDescriptor(e,r,o){return e}async getCandidates(e,r,o){return await this.ensureTracker(o).findByDescriptor(e).getCandidates(e,r,o,this.resolverType)}async getSatisfying(e,r,o,s){return await this.ensureTracker(s).findByDescriptor(e).getSatisfying(e,r,o,s,this.resolverType)}async resolve(e,r){let o=this.ensureTracker(r),s=`UNEXPECTED: resolve called for ${F.structUtils.stringifyLocator(e)} in ${this.resolverType} resolver`;throw o.trace(s),new Error(s)}},A=class t extends z{static{this.protocol=H()}constructor(){super("remote",t.protocol)}},L=class t extends z{static{this.protocol=v()}constructor(){super("local",t.protocol)}async resolve(e,r){return{...new F.Manifest,...e,version:"0.0.0",languageName:r.project.configuration.get("defaultLanguageName"),linkType:F.LinkType.SOFT}}};var Se=L.protocol,ut=Se+"*";function ft(t,e){let r=new Set(Object.keys(t).filter(n=>t[n].startsWith(Se))),o=new Set,s=new Set;for(let n of e)r.has(n)||o.add(n);for(let n of r)e.has(n)||s.add(n);return{addedExternals:o,removedExternals:s}}function ht(t,e,r,o){let s=We.default.join(t,"package.json"),n=JSON.parse(oe.default.readFileSync(s,"utf8")),i=n.resolutions||{},{addedExternals:a,removedExternals:p}=ft(i,e);if(a.size>0||p.size>0){o("Found changes to resolutions for external workspaces");for(let c of a)i[c]=ut,o(`+ external workspace: ${c}`);for(let c of p)delete i[c],o(`- external workspace: ${c}`);if(!r){o(`Updating ${s} with changes to resolutions`);let c=Object.keys(i).sort().reduce((u,f)=>(u[f]=i[f],u),{});n.resolutions=c,oe.default.writeFileSync(s,JSON.stringify(n,null,2))}}else o("No changes needed")}function $e(t,e){let{report:r,findPackage:o}=w(t),s=new Set,n=new Set,i=a=>{for(let p of a)for(let c of p.values())if(t.tryWorkspaceByDescriptor(c)===null){let u=_e.structUtils.stringifyIdent(c);o(u)&&(s.add(u),n.has(c)||n.add(c))}};t.workspacesByIdent.forEach(a=>{i([a.manifest.dependencies,a.manifest.devDependencies])});for(let a of n){let p=t.storedResolutions.get(a.descriptorHash);if(p){let c=t.storedPackages.get(p);c&&i([c.dependencies])}}ht(t.cwd,s,e,r)}var V=class extends se.BaseCommand{constructor(){super(...arguments);this.target=k.Option.String("--target","",{description:"The path to the file to output the workspaces to"});this.checkOnly=k.Option.Boolean("--check-only",!1,{description:"Check if the workspaces have changed without writing the file"});this.includePrivate=k.Option.Boolean("--include-private",!1,{description:"Include private workspaces in the output"})}static{this.paths=[["external-workspaces","output"]]}static{this.usage=k.Command.Usage({category:"External Workspaces",description:"Output current workspace information to a json file",details:`
+"use strict";
+var plugin = (() => {
+  var __create = Object.create;
+  var __defProp = Object.defineProperty;
+  var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+  var __getOwnPropNames = Object.getOwnPropertyNames;
+  var __getProtoOf = Object.getPrototypeOf;
+  var __hasOwnProp = Object.prototype.hasOwnProperty;
+  var __require = /* @__PURE__ */ ((x) => typeof require !== "undefined" ? require : typeof Proxy !== "undefined" ? new Proxy(x, {
+    get: (a, b) => (typeof require !== "undefined" ? require : a)[b]
+  }) : x)(function(x) {
+    if (typeof require !== "undefined") return require.apply(this, arguments);
+    throw Error('Dynamic require of "' + x + '" is not supported');
+  });
+  var __export = (target, all) => {
+    for (var name in all)
+      __defProp(target, name, { get: all[name], enumerable: true });
+  };
+  var __copyProps = (to, from, except, desc) => {
+    if (from && typeof from === "object" || typeof from === "function") {
+      for (let key of __getOwnPropNames(from))
+        if (!__hasOwnProp.call(to, key) && key !== except)
+          __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+    }
+    return to;
+  };
+  var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
+    // If the importer is in node compatibility mode or this is not an ESM
+    // file that has been converted to a CommonJS file using a Babel-
+    // compatible transform (i.e. "__esModule" has not been set), then set
+    // "default" to the CommonJS "module.exports" for node compatibility.
+    isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
+    mod
+  ));
+  var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+
+  // src/index.ts
+  var index_exports = {};
+  __export(index_exports, {
+    default: () => index_default
+  });
+
+  // src/cofiguration.ts
+  var import_core = __require("@yarnpkg/core");
+  var import_fslib = __require("@yarnpkg/fslib");
+  var import_node_fs = __toESM(__require("fs"));
+  var providerKey = "externalWorkspacesProvider";
+  var outputPathKey = "externalWorkspacesOutputPath";
+  var outputOnlyOnCommandKey = "externalWorkspacesOutputOnlyOnCommand";
+  var externalWorkspacesConfiguration = {
+    [providerKey]: {
+      description: `Relative path to a .json file of shape WorkspaceOutputJson or a .js file that exports a function of type DefinitionFinder as the default export`,
+      type: import_core.SettingsType.STRING,
+      default: null
+    },
+    [outputPathKey]: {
+      description: `Relative path to a .json file where workspace info should be recorded. If a directory is provided the file will pick up the name from the root package.json`,
+      type: import_core.SettingsType.STRING,
+      default: null
+    },
+    [outputOnlyOnCommandKey]: {
+      description: `Suppress writing out the workspaces on install and only write them out when the command is invoked`,
+      type: import_core.SettingsType.BOOLEAN,
+      default: false
+    }
+  };
+  function getPluginConfiguration(configuration) {
+    const provider = import_fslib.npath.toPortablePath(
+      configuration.get(providerKey) || ""
+    );
+    const outputPath = import_fslib.npath.toPortablePath(
+      configuration.get(outputPathKey) || ""
+    );
+    const outputOnlyOnCommand = Boolean(
+      configuration.get(outputOnlyOnCommandKey)
+    );
+    return { provider, outputPath, outputOnlyOnCommand };
+  }
+  function getFinderFromJsonConfig(jsonPath) {
+    if (!import_node_fs.default.existsSync(jsonPath)) {
+      throw new Error(
+        `Unable to find external workspaces definition file ${jsonPath}`
+      );
+    }
+    const generated = JSON.parse(import_node_fs.default.readFileSync(jsonPath, "utf8"))?.generated || {};
+    const { repoPath = "", workspaces = {} } = generated;
+    const toRepo = import_fslib.npath.toPortablePath(repoPath);
+    return (pkgName) => {
+      const pkgPath = workspaces[pkgName];
+      if (pkgPath) {
+        return {
+          path: import_fslib.ppath.join(toRepo, import_fslib.npath.toPortablePath(pkgPath))
+        };
+      }
+      return null;
+    };
+  }
+  function getFinderFromJsConfig(jsPath) {
+    if (!import_node_fs.default.existsSync(jsPath)) {
+      throw new Error(
+        `Unable to find external workspaces definition file ${jsPath}`
+      );
+    }
+    const finder = __require(jsPath).default;
+    if (typeof finder !== "function") {
+      throw new Error(
+        `External workspaces definition file ${jsPath} does not export a function as default`
+      );
+    }
+    return finder;
+  }
+
+  // src/fetcher.ts
+  var import_fslib3 = __require("@yarnpkg/fslib");
+
+  // src/tracker.ts
+  var import_core3 = __require("@yarnpkg/core");
+  var import_fslib2 = __require("@yarnpkg/fslib");
+
+  // src/utilities.ts
+  var import_core2 = __require("@yarnpkg/core");
+  var externalProtocol = "external:";
+  var remoteProtocol = "fallback:";
+  function getProtocol() {
+    return externalProtocol;
+  }
+  function getRemoteProtocol() {
+    return remoteProtocol;
+  }
+  function decodeDescriptorRange(range) {
+    const protocolEnd = range.indexOf(":");
+    if (protocolEnd !== -1) {
+      return {
+        protocol: range.slice(0, protocolEnd + 1),
+        version: range.slice(protocolEnd + 1)
+      };
+    }
+    return { protocol: "", version: range };
+  }
+  function coerceDescriptorTo(descriptor, newProtocol) {
+    const { protocol, version } = decodeDescriptorRange(descriptor.range);
+    if (protocol === newProtocol) {
+      return descriptor;
+    }
+    return import_core2.structUtils.makeDescriptor(descriptor, `${newProtocol}${version}`);
+  }
+  function coerceLocatorTo(locator, newProtocol) {
+    const { protocol, version } = decodeDescriptorRange(locator.reference);
+    if (protocol === newProtocol) {
+      return locator;
+    }
+    return import_core2.structUtils.makeLocator(locator, `${newProtocol}${version}`);
+  }
+
+  // src/workspace.ts
+  var localProtocol = getProtocol();
+  var remoteProtocol2 = getRemoteProtocol();
+  var fallbackProtocol = "npm:";
+  var protocolsLocal = [localProtocol, remoteProtocol2, fallbackProtocol];
+  var keysLocal = protocolsLocal.map((p) => p.slice(0, -1) + "Dependency");
+  var protocolsRemote = [remoteProtocol2, localProtocol, fallbackProtocol];
+  var keysRemote = protocolsRemote.map((p) => p.slice(0, -1) + "Dependency");
+  var ExternalWorkspace = class {
+    constructor(name, prettyName, localPath, trace) {
+      this.packages = [null, null, null];
+      this.localIndex = 0;
+      this.remoteIndex = 1;
+      this.fallbackIndex = 2;
+      this.name = name;
+      this.localPath = localPath;
+      this.isLocal = !!localPath;
+      this.prettyName = prettyName;
+      this.trace = trace;
+      this.protocols = this.isLocal ? protocolsLocal : protocolsRemote;
+      this.dependentKeys = this.isLocal ? keysLocal : keysRemote;
+      if (!this.isLocal) {
+        this.localIndex = 1;
+        this.remoteIndex = 0;
+      }
+    }
+    getResolutionDependencies(descriptor, resolverType) {
+      const childIndex = this.indexFromResolverType(resolverType) + 1;
+      return {
+        [this.dependentKeys[childIndex]]: this.transformDescriptor(
+          descriptor,
+          childIndex
+        )
+      };
+    }
+    async getCandidates(descriptor, dependencies, opts, resolverType) {
+      const index = this.indexFromResolverType(resolverType);
+      const [childDependencies, childPackage] = this.getNextDependencies(
+        dependencies,
+        index
+      );
+      const resolver = opts.resolver;
+      const childDescriptor = this.transformDescriptor(descriptor, index + 1);
+      const childLocators = await resolver.getCandidates(
+        childDescriptor,
+        childDependencies,
+        opts
+      );
+      const foundChildLocators = childLocators.length > 0;
+      if (foundChildLocators && childPackage) {
+        childLocators.push(childPackage);
+      }
+      if (index === 0 || childLocators.length === 0) {
+        this.trace(
+          `${this.prettyName}: getCandidates: (${resolverType}) found ${childLocators.length} locators from ${foundChildLocators ? "child" : "package"}`
+        );
+      }
+      return this.transformLocators(
+        childLocators,
+        this.resolverLocatorIndex(resolverType)
+      );
+    }
+    async getSatisfying(descriptor, dependencies, locators, opts, resolverType) {
+      const index = this.indexFromResolverType(resolverType);
+      const childIndex = index + 1;
+      const [childDependencies] = this.getNextDependencies(dependencies, index);
+      const childDescriptor = this.transformDescriptor(descriptor, childIndex);
+      const childLocators = this.transformLocators(locators, childIndex);
+      const resolver = opts.resolver;
+      const results = await resolver.getSatisfying(
+        childDescriptor,
+        childDependencies,
+        childLocators,
+        opts
+      );
+      const locatorIndex = this.resolverLocatorIndex(resolverType);
+      if (locatorIndex !== childIndex) {
+        results.locators = this.transformLocators(results.locators, locatorIndex);
+      }
+      if (index === 0 || results.locators.length === 0) {
+        this.trace(
+          `${this.prettyName}: getSatisfying (${resolverType}) found ${results.locators.length} locators from ${locators.length} inputs`
+        );
+      }
+      return results;
+    }
+    toFallbackLocator(locator) {
+      return this.transformLocator(locator, this.fallbackIndex);
+    }
+    toLeadDescriptor(descriptor) {
+      return this.transformDescriptor(descriptor, 0);
+    }
+    indexFromResolverType(resolverType) {
+      return resolverType === "local" ? this.localIndex : this.remoteIndex;
+    }
+    resolverLocatorIndex(resolverType) {
+      return resolverType === "local" ? this.localIndex : this.fallbackIndex;
+    }
+    transformDescriptor(descriptor, index) {
+      return coerceDescriptorTo(descriptor, this.protocols[index]);
+    }
+    transformLocator(locator, index) {
+      return coerceLocatorTo(locator, this.protocols[index]);
+    }
+    transformLocators(locators, index) {
+      return locators.map((locator) => this.transformLocator(locator, index));
+    }
+    getNextDependencies(dependencies, thisIndex) {
+      const childIndex = thisIndex + 1;
+      const nextPackage = dependencies[this.dependentKeys[childIndex]];
+      if (nextPackage && this.packages[childIndex] === null) {
+        this.packages[childIndex] = nextPackage;
+      }
+      const childPackage = this.packages[childIndex];
+      const childDependencies = {};
+      if (childPackage) {
+        childDependencies[this.dependentKeys[childIndex]] = childPackage;
+      }
+      return [childDependencies, childPackage];
+    }
+  };
+
+  // src/tracker.ts
+  var nullFunction = (_val) => null;
+  var ExternalWorkspaceTracker = class {
+    constructor(project) {
+      this.trace = nullFunction;
+      this.workspaceMap = /* @__PURE__ */ new Map();
+      this.workspaceByIdent = /* @__PURE__ */ new Map();
+      this.notExternal = /* @__PURE__ */ new Set();
+      this.npmPackageByIdent = /* @__PURE__ */ new Map();
+      this.resolver = null;
+      this.fetcher = null;
+      this.findPackage = nullFunction;
+      this.trace = nullFunction;
+      this.report = (msg) => console.log(msg);
+      this.root = project.cwd;
+      this.project = project;
+      const { provider } = getPluginConfiguration(project.configuration);
+      if (provider) {
+        if (provider.endsWith(".json")) {
+          this.findPackage = getFinderFromJsonConfig(provider);
+        } else if (provider.endsWith(".js") || provider.endsWith(".cjs")) {
+          this.findPackage = getFinderFromJsConfig(provider);
+        }
+      }
+    }
+    tryNameLookup(pkgName) {
+      return this.workspaceMap.get(pkgName) || null;
+    }
+    createWorkspace(name, localPath) {
+      const prettyName = import_core3.structUtils.prettyIdent(
+        this.project.configuration,
+        import_core3.structUtils.parseIdent(name)
+      );
+      return new ExternalWorkspace(
+        name,
+        prettyName,
+        import_fslib2.npath.toPortablePath(localPath),
+        this.trace
+      );
+    }
+    /**
+     * Lookup and load a workspace for an ident, assumes that:
+     * - it is not in our lookup caches
+     * - it is not a regular workspace
+     * - we have not looked it up before
+     *
+     * @param ident the ident to try to load if it is an external workspace
+     * @returns a loaded ExternalWorkspace or null if not found
+     */
+    tryIdentLoad(ident) {
+      const pkgName = import_core3.structUtils.stringifyIdent(ident);
+      let workspace = this.tryNameLookup(pkgName);
+      if (workspace) {
+        this.workspaceByIdent.set(ident.identHash, workspace);
+        return workspace;
+      }
+      const pkgInfo = this.findPackage(pkgName);
+      if (pkgInfo) {
+        workspace = this.createWorkspace(pkgName, pkgInfo.path || "");
+        this.trace(
+          `Loaded external workspace ${workspace.prettyName} of type ${pkgInfo.path ? "LOCAL" : "REMOTE"}`
+        );
+        this.workspaceMap.set(pkgName, workspace);
+        this.workspaceByIdent.set(ident.identHash, workspace);
+        return workspace;
+      }
+      this.notExternal.add(ident.identHash);
+      return null;
+    }
+    setFallbackPackage(descriptor, pkg) {
+      this.npmPackageByIdent.set(descriptor.identHash, pkg);
+    }
+    getFallbackPackage(descriptor) {
+      return this.npmPackageByIdent.get(descriptor.identHash);
+    }
+    /**
+     * See if the descriptor references an external workspace, trying the cache first, before doing a real lookup
+     * @param descriptor the descriptor to try to find
+     * @returns a Workspace if this is an external workspace, or null
+     */
+    tryByDescriptor(descriptor) {
+      if (this.workspaceByIdent.has(descriptor.identHash)) {
+        return this.workspaceByIdent.get(descriptor.identHash);
+      }
+      if (this.notExternal.has(descriptor.identHash) || this.project.tryWorkspaceByDescriptor(descriptor)) {
+        return null;
+      }
+      return this.tryIdentLoad(descriptor);
+    }
+    findByDescriptor(descriptor) {
+      const workspace = this.tryByDescriptor(descriptor);
+      if (!workspace) {
+        throw new Error(
+          `Cannot find workspace for descriptor ${import_core3.structUtils.stringifyDescriptor(
+            descriptor
+          )}`
+        );
+      }
+      return workspace;
+    }
+    /**
+     * See if the locator references an external workspace, trying the cache first, before doing a real lookup
+     * @param locator the descriptor to try to find
+     * @returns a Workspace if this is an external workspace, or null
+     */
+    tryByLocator(locator) {
+      if (this.workspaceByIdent.has(locator.identHash)) {
+        return this.workspaceByIdent.get(locator.identHash);
+      }
+      if (this.notExternal.has(locator.identHash) || this.project.tryWorkspaceByLocator(locator)) {
+        return null;
+      }
+      return this.tryIdentLoad(locator);
+    }
+    findByLocator(locator) {
+      const workspace = this.tryByLocator(locator);
+      if (!workspace) {
+        throw new Error(
+          `Cannot find workspace for locator ${import_core3.structUtils.stringifyLocator(
+            locator
+          )}`
+        );
+      }
+      return workspace;
+    }
+    getResolver() {
+      this.resolver ??= this.project.configuration.makeResolver();
+      return this.resolver;
+    }
+    getFetcher() {
+      this.fetcher ??= this.project.configuration.makeFetcher();
+      return this.fetcher;
+    }
+  };
+  var workspaceTracker = null;
+  function getWorkspaceTracker(project) {
+    if (!workspaceTracker) {
+      workspaceTracker = new ExternalWorkspaceTracker(project);
+    }
+    return workspaceTracker;
+  }
+
+  // src/fetcher.ts
+  var ExternalFetcher = class _ExternalFetcher {
+    constructor() {
+      this.tracker = null;
+    }
+    static {
+      this.protocol = getProtocol();
+    }
+    ensureTracker(opts) {
+      if (!this.tracker) {
+        this.tracker = getWorkspaceTracker(opts.project);
+      }
+      return this.tracker;
+    }
+    /**
+     * This function must return true if the specified locator is understood by
+     * this resolver (only its syntax is checked, it doesn't have to be valid
+     * and it's fine if the `fetch` ends up returning a 404).
+     *
+     * @param locator The locator that needs to be validated.
+     * @param opts The fetch options.
+     */
+    supports(locator, _opts) {
+      return locator.reference.startsWith(_ExternalFetcher.protocol);
+    }
+    /**
+     * This function must return the local path for the given package. The local
+     * path is the one that's used to resolve relative dependency sources, for
+     * example "file:./foo".
+     *
+     * @param locator The source locator.
+     * @param opts The fetch options.
+     */
+    getLocalPath(locator, opts) {
+      const workspace = this.ensureTracker(opts).findByLocator(locator);
+      if (workspace.localPath) {
+        return workspace.localPath;
+      }
+      return null;
+    }
+    /**
+     * Fetch results for locally existing packages. This is a LinkType.SOFT fetcher, though we do
+     * fall through and return the hard link style results from the fallback fetcher. This is OK as
+     * those results won't be installed.
+     *
+     * @param locator The source locator.
+     * @param opts The fetch options.
+     */
+    async fetch(locator, opts) {
+      const tracker = this.ensureTracker(opts);
+      const workspace = tracker.findByLocator(locator);
+      if (workspace.localPath) {
+        const localPath = import_fslib3.ppath.resolve(tracker.root, workspace.localPath);
+        return {
+          packageFs: new import_fslib3.CwdFS(import_fslib3.PortablePath.root),
+          prefixPath: localPath,
+          localPath
+        };
+      }
+      return await this.fetchFallback(locator, opts, workspace);
+    }
+    /**
+     * Return fetch results from the fallback fetcher. This is likely the npm: fetcher but could potentially be
+     * any hardlink based fetcher, though implementing that may require not offloading the locator/candidate chaining.
+     *
+     * Trim checksum value so it isn't recorded in the lockfile for the external protocol entry
+     *
+     * @param locator source locator for this fetch operation
+     * @param opts fetch options
+     * @param workspace loaded workspace for this locator
+     * @returns results from the fallback fetcher, likely the npm: fetcher
+     */
+    async fetchFallback(locator, opts, workspace) {
+      const fallbackLocator = workspace.toFallbackLocator(locator);
+      const fetcher = opts.fetcher;
+      const results = await fetcher.fetch(fallbackLocator, opts);
+      delete results.checksum;
+      return results;
+    }
+  };
+
+  // src/hooks.ts
+  var import_fslib5 = __require("@yarnpkg/fslib");
+
+  // src/outputCommand.ts
+  var import_cli = __require("@yarnpkg/cli");
+  var import_core4 = __require("@yarnpkg/core");
+  var import_fslib4 = __require("@yarnpkg/fslib");
+  var import_clipanion = __require("clipanion");
+  var import_node_fs2 = __toESM(__require("fs"));
+  var OutputWorkspaces = class extends import_cli.BaseCommand {
+    constructor() {
+      super(...arguments);
+      this.target = import_clipanion.Option.String("--target", "", {
+        description: "The path to the file to output the workspaces to"
+      });
+      this.checkOnly = import_clipanion.Option.Boolean("--check-only", false, {
+        description: "Check if the workspaces have changed without writing the file"
+      });
+      this.includePrivate = import_clipanion.Option.Boolean("--include-private", false, {
+        description: "Include private workspaces in the output"
+      });
+    }
+    static {
+      this.paths = [["external-workspaces", "output"]];
+    }
+    static {
+      this.usage = import_clipanion.Command.Usage({
+        category: "External Workspaces",
+        description: "Output current workspace information to a json file",
+        details: `
       This command will output the current set of workspaces to a json file. The file will not be modified if the workspaces have not changed.
 
       The path to the .json file can optionally have a set of keys appended to the end as a path. This will write the workspaces to a subpath of
       the file while maintaining the other contents of the file.
-    `,examples:[["Output workspaces with settings from package.json","$0 external-workspaces output"],["Output workspaces to target","$0 external-workspaces output --target ./path/to/file.json"],["Output workspaces to target with a subpath","$0 external-workspaces output --target ./path/to/file.json/key1/key2"],["Check if workspaces have changed","$0 external-workspaces output --target ./path/to/file.json --check-only"]]})}async execute(){let r=await T.Configuration.find(this.context.cwd,this.context.plugins),{project:o}=await T.Project.find(r,this.context.cwd),s=w(o),n=this.target||s.outputPath;n&&await U(o,s,n,this.checkOnly)}},X=class extends se.BaseCommand{constructor(){super(...arguments);this.checkOnly=k.Option.Boolean("--check-only",!1,{description:"Check if the resolutions are up to date without writing the file"})}static{this.paths=[["external-workspaces","resolutions"]]}static{this.usage=k.Command.Usage({category:"External Workspaces",description:"Check if the workspace resolutions are up to date",details:`
-      This command will check the current workspace resolutions against the external dependencies defined in the package.json.
-    `,examples:[["Check resolutions with settings from package.json","$0 external-workspaces resolutions"]]})}async execute(){let r=await T.Configuration.find(this.context.cwd,this.context.plugins),{project:o}=await T.Project.find(r,this.context.cwd);await $e(o,this.checkOnly)}};var R=l("@yarnpkg/fslib");var G=class t{constructor(){this.tracker=null}static{this.protocol=v()}ensureTracker(e){return this.tracker||(this.tracker=P(e.project)),this.tracker}supports(e,r){return e.reference.startsWith(t.protocol)}getLocalPath(e,r){let o=this.ensureTracker(r).findByLocator(e);return o.localPath?o.localPath:null}async fetch(e,r){let o=this.ensureTracker(r),s=o.findByLocator(e),n=await this.fetchFallback(e,r,s);if(s.localPath){let i=R.ppath.resolve(o.root,s.localPath),{checksum:a}=n;return a||o.trace(`Fetcher: failed to find checksum for ${s.prettyName}`),{packageFs:new R.CwdFS(R.PortablePath.root),prefixPath:i,localPath:i,checksum:a}}return n}async fetchFallback(e,r,o){let s=o.toFallbackLocator(e);return await r.fetcher.fetch(s,r)}};function Ce(t,e){let r=w(t);!r.outputOnlyOnCommand&&r.outputPath&&U(t,r)}async function Be(t,e,r,o,s){let n=P(e),i=n.tryByDescriptor(t);return i?i.localPath?(n.trace(`Reducing ${i.name} to external descriptor`),Le(t)):(n.trace(`Reducing ${i.name} to fallback descriptor`),Te(t)):t}var dt={fetchers:[G],resolvers:[L,A],hooks:{afterAllInstalled:Ce,reduceDependency:Be},commands:[V,X]},gt=dt;return ze(kt);})();
+    `,
+        examples: [
+          [
+            "Output workspaces with settings from package.json",
+            "$0 external-workspaces output"
+          ],
+          [
+            "Output workspaces to target",
+            "$0 external-workspaces output --target ./path/to/file.json"
+          ],
+          [
+            "Output workspaces to target with a subpath",
+            "$0 external-workspaces output --target ./path/to/file.json/key1/key2"
+          ],
+          [
+            "Check if workspaces have changed",
+            "$0 external-workspaces output --target ./path/to/file.json --check-only"
+          ]
+        ]
+      });
+    }
+    async execute() {
+      const { quiet, stdout } = this.context;
+      const report = quiet ? () => null : (msg) => stdout.write(`${msg}
+`);
+      const configuration = await import_core4.Configuration.find(
+        this.context.cwd,
+        this.context.plugins
+      );
+      const settings = getPluginConfiguration(configuration);
+      const { project } = await import_core4.Project.find(configuration, this.context.cwd);
+      const outputPath = this.target || settings.outputPath;
+      if (!outputPath) {
+        throw new import_clipanion.UsageError(
+          `No output path specified in configuration or command. Use --target to specify a path`
+        );
+      }
+      stdout.write;
+      await outputWorkspaces(
+        project,
+        import_fslib4.npath.toPortablePath(outputPath),
+        this.checkOnly,
+        report
+      );
+    }
+  };
+  function outputWorkspaces(project, outputPath, checkOnly, report) {
+    const includesJson = outputPath.endsWith(".json");
+    const outputDir = includesJson ? import_fslib4.ppath.dirname(outputPath) : outputPath;
+    const outputFile = includesJson ? import_fslib4.ppath.basename(outputPath) : fallbackOutputFilename(project.cwd);
+    if (!checkOnly && !import_node_fs2.default.existsSync(outputDir)) {
+      import_node_fs2.default.mkdirSync(outputDir, { recursive: true });
+    }
+    const fullPath = import_fslib4.npath.join(import_fslib4.npath.fromPortablePath(outputDir), outputFile);
+    const workspaces = {};
+    project.workspacesByIdent.forEach((workspace) => {
+      const { name: ident, private: isPrivate } = workspace.manifest;
+      if (ident && !isPrivate) {
+        const name = import_core4.structUtils.stringifyIdent(ident);
+        workspaces[name] = import_fslib4.ppath.relative(project.cwd, workspace.cwd);
+      }
+    });
+    const repoPath = import_fslib4.ppath.relative(outputDir, project.cwd);
+    const generated = {
+      repoPath,
+      workspaces: sortStringRecord(workspaces)
+    };
+    const parsedJson = import_node_fs2.default.existsSync(fullPath) ? JSON.parse(import_node_fs2.default.readFileSync(fullPath, "utf8")) : {};
+    const oldGenerated = parsedJson.generated || {};
+    const oldRepoPath = oldGenerated.repoPath || "";
+    const changes = findDependencyChanges(oldGenerated.workspaces, workspaces);
+    if (changes || repoPath !== oldRepoPath) {
+      if (checkOnly) {
+        reportDependencyChanges(fullPath, oldRepoPath, repoPath, changes, report);
+      } else {
+        parsedJson.generated = generated;
+        const jsonOutput = JSON.stringify(parsedJson, null, 2);
+        import_node_fs2.default.writeFileSync(fullPath, jsonOutput);
+        report(`Updated workspaces in ${fullPath}`);
+      }
+    }
+  }
+  function reportDependencyChanges(jsonPath, pathOld, pathNew, changes, report) {
+    report(`Updates needed for ${jsonPath}:`);
+    if (pathOld !== pathNew) {
+      report(`Repo path has changed from ${pathOld} to ${pathNew}`);
+    }
+    if (changes) {
+      for (const name in changes) {
+        const change = String(changes[name]).padEnd(6, " ");
+        report(`${change} - ${name}`);
+      }
+    }
+  }
+  function findDependencyChanges(oldDeps, newDeps) {
+    const changes = {};
+    for (const name in newDeps) {
+      if (oldDeps[name]) {
+        if (oldDeps[name] !== newDeps[name]) {
+          changes[name] = "update";
+        }
+      } else {
+        changes[name] = "add";
+      }
+    }
+    for (const name in oldDeps) {
+      if (!newDeps[name]) {
+        changes[name] = "remove";
+      }
+    }
+    return Object.keys(changes).length > 0 ? changes : null;
+  }
+  function sortStringRecord(toSort) {
+    const sortedKeys = Object.keys(toSort).sort();
+    const target = {};
+    for (const key of sortedKeys) {
+      target[key] = toSort[key];
+    }
+    return target;
+  }
+  function fallbackOutputFilename(root) {
+    const packageJson = import_fslib4.ppath.join(root, "package.json");
+    if (import_node_fs2.default.existsSync(packageJson)) {
+      const pkg = JSON.parse(import_node_fs2.default.readFileSync(packageJson, "utf8"));
+      if (pkg.name && typeof pkg.name === "string") {
+        return pkg.name.replace(/[^a-zA-Z0-9@._]/g, "-") + "-workspaces.json";
+      }
+    }
+    return "workspaces.json";
+  }
+
+  // src/hooks.ts
+  function afterAllInstalled(project, options) {
+    const settings = getPluginConfiguration(project.configuration);
+    if (!settings.outputOnlyOnCommand && settings.outputPath) {
+      const report = (msg) => options.report.reportInfo(null, msg);
+      outputWorkspaces(
+        project,
+        import_fslib5.npath.toPortablePath(settings.outputPath),
+        false,
+        report
+      );
+    }
+  }
+  async function reduceDependency(dependency, project, _locator, _initialDependency, _extra) {
+    const tracker = getWorkspaceTracker(project);
+    const workspace = tracker.tryByDescriptor(dependency);
+    if (workspace) {
+      return workspace.toLeadDescriptor(dependency);
+    }
+    return dependency;
+  }
+
+  // src/resolvers.ts
+  var import_core5 = __require("@yarnpkg/core");
+  var ResolverBase = class {
+    constructor(resolverType, protocol) {
+      this.tracker = null;
+      this.resolverType = resolverType;
+      this.protocol = protocol;
+    }
+    /**
+     * Ensure a finder is created if it is not already present, then return it
+     */
+    ensureTracker(opts) {
+      if (!this.tracker) {
+        this.tracker = getWorkspaceTracker(opts.project);
+      }
+      return this.tracker;
+    }
+    /**
+     * Force resolution of a different package to happen before this package is resolved.
+     */
+    getResolutionDependencies(descriptor, opts) {
+      const workspace = this.ensureTracker(opts).findByDescriptor(descriptor);
+      return workspace.getResolutionDependencies(descriptor, this.resolverType);
+    }
+    /**
+     * Do we support these descriptors, in particular turning them into locators
+     */
+    supportsDescriptor(descriptor, _opts) {
+      return descriptor.range.startsWith(this.protocol);
+    }
+    /**
+     * Do we support locators of this type, effectively will this resolve
+     */
+    supportsLocator(locator, _opts) {
+      return locator.reference.startsWith(this.protocol);
+    }
+    /**
+     * Persist resolution between installs, false for places where we will pick it up from local. If this
+     * was true we would only fetch if a checksum of sorts changes.
+     */
+    shouldPersistResolution(_locator, _opts) {
+      return false;
+    }
+    /**
+     * Chance to transform a descriptor to another type, has lockfile implications and actually removes this descriptor from
+     * the resolution chain in the lockfile.
+     */
+    bindDescriptor(descriptor, _fromLocator, _opts) {
+      return descriptor;
+    }
+    /**
+     * This is the driver for turning descriptors into locators, creating them if necessary. In npm resolution it will do
+     * things like comparing semver ranges. Descriptors can have a semver range, where locators need to settle on a particular
+     * resolution and be specific.
+     */
+    async getCandidates(descriptor, dependencies, opts) {
+      const workspace = this.ensureTracker(opts).findByDescriptor(descriptor);
+      return await workspace.getCandidates(
+        descriptor,
+        dependencies,
+        opts,
+        this.resolverType
+      );
+    }
+    /**
+     * Given a set of locators, usually found via getCandidates, which ones satisfy this descriptor and which one
+     * should be chosen. It returns an array but typically will select entry [0] as the best candidate, whether
+     * sorted is set or not. This locator then feeds into resolve
+     */
+    async getSatisfying(descriptor, dependencies, locators, opts) {
+      const workspace = this.ensureTracker(opts).findByDescriptor(descriptor);
+      return await workspace.getSatisfying(
+        descriptor,
+        dependencies,
+        locators,
+        opts,
+        this.resolverType
+      );
+    }
+    /**
+     * Build the full package for this locator, this is cached and used for install and also is used for
+     * lockfile generation.
+     */
+    async resolve(locator, opts) {
+      const tracker = this.ensureTracker(opts);
+      const errorMsg = `UNEXPECTED: resolve called for ${import_core5.structUtils.stringifyLocator(
+        locator
+      )} in ${this.resolverType} resolver`;
+      tracker.trace(errorMsg);
+      throw new Error(errorMsg);
+    }
+  };
+  var FallbackResolver = class _FallbackResolver extends ResolverBase {
+    static {
+      this.protocol = getRemoteProtocol();
+    }
+    constructor() {
+      super("remote", _FallbackResolver.protocol);
+    }
+  };
+  var ExternalResolver = class _ExternalResolver extends ResolverBase {
+    static {
+      this.protocol = getProtocol();
+    }
+    constructor() {
+      super("local", _ExternalResolver.protocol);
+    }
+    /**
+     * This function will, given a locator, return the full package definition
+     * for the package pointed at. Note that this should only be called for packages which are
+     * locally available, for remote ones they should fall through to a different resolver/fetcher.
+     *
+     * @param locator The source locator.
+     * @param opts The resolution options.
+     */
+    async resolve(locator, opts) {
+      const emptyManifest = new import_core5.Manifest();
+      return {
+        ...emptyManifest,
+        ...locator,
+        version: "0.0.0",
+        languageName: opts.project.configuration.get("defaultLanguageName"),
+        linkType: import_core5.LinkType.SOFT
+      };
+    }
+  };
+
+  // src/index.ts
+  var plugin = {
+    configuration: {
+      ...externalWorkspacesConfiguration
+    },
+    /**
+     * Hook up the custom fetcher and resolver
+     */
+    fetchers: [ExternalFetcher],
+    resolvers: [ExternalResolver, FallbackResolver],
+    /**
+     * Add a hook to write out the workspaces if requested
+     */
+    hooks: {
+      afterAllInstalled,
+      reduceDependency
+    },
+    commands: [OutputWorkspaces]
+  };
+  var index_default = plugin;
+  return __toCommonJS(index_exports);
+})();
 return plugin;
 }
 };
