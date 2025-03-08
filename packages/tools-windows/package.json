@@ -41,10 +41,7 @@
     "@rnx-kit/eslint-config": "*",
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*",
-    "@types/node": "^20.0.0",
-    "eslint": "^9.0.0",
-    "prettier": "^3.0.0",
-    "typescript": "^5.0.0"
+    "@types/node": "^20.0.0"
   },
   "engines": {
     "node": ">=16.17"

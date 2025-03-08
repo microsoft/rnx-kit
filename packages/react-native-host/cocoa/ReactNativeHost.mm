@@ -1,6 +1,8 @@
 #import "ReactNativeHost.h"
 
+// clang-format off
 #include "FollyConfig.h"
+// clang-format on
 
 #import <React/RCTBridge.h>
 #import <React/RCTBundleURLProvider.h>
@@ -26,6 +28,11 @@ using ReactNativeConfig = facebook::react::EmptyReactNativeConfig const;
 @interface ReactNativeHost () <RCTCxxBridgeDelegate>
 #endif  // USE_BRIDGELESS
 @end
+
+#ifdef USE_CODEGEN_PROVIDER
+@interface ReactNativeHost () <RCTComponentViewFactoryComponentProvider>
+@end
+#endif  // USE_CODEGEN_PROVIDER
 
 @implementation ReactNativeHost {
     __weak id<RNXHostConfig> _config;
@@ -58,6 +65,11 @@ using ReactNativeConfig = facebook::react::EmptyReactNativeConfig const;
             [config shouldReleaseBridgeWhenBackgrounded]) {
             _hostReleaser = [[RNXHostReleaser alloc] initWithHost:self];
         }
+
+#ifdef USE_CODEGEN_PROVIDER
+        [RCTComponentViewFactory currentComponentViewFactory].thirdPartyFabricComponentsProvider =
+            self;
+#endif  // USE_CODEGEN_PROVIDER
 
 #ifdef USE_FEATURE_FLAGS
         if (self.isBridgelessEnabled) {
@@ -224,6 +236,15 @@ using ReactNativeConfig = facebook::react::EmptyReactNativeConfig const;
 
 #endif  // USE_BRIDGELESS
 
+// MARK: - RCTComponentViewFactoryComponentProvider details
+
+#ifdef USE_CODEGEN_PROVIDER
+- (NSDictionary<NSString *, Class<RCTComponentViewProtocol>> *)thirdPartyFabricComponents
+{
+    return [RCTThirdPartyComponentsProvider thirdPartyFabricComponents];
+}
+#endif  // USE_CODEGEN_PROVIDER
+
 // MARK: - Private
 
 - (BOOL)isBridgelessEnabled
@@ -274,7 +295,7 @@ using ReactNativeConfig = facebook::react::EmptyReactNativeConfig const;
 #else
       return std::make_shared<facebook::react::RCTHermesInstance>(nullptr, false);
 #endif  // USE_REACT_NATIVE_CONFIG
-#else  // USE_HERMES
+#else   // USE_HERMES
       return std::make_shared<facebook::react::RCTJscInstance>();
 #endif  // USE_HERMES
     };

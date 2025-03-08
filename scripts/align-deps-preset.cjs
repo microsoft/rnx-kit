@@ -63,11 +63,6 @@ const profile = {
     version: "^0.25.0",
     devOnly: true,
   },
-  eslint: {
-    name: "eslint",
-    version: "^9.0.0",
-    devOnly: true,
-  },
   "find-up": {
     name: "find-up",
     version: "^5.0.0",
@@ -80,11 +75,6 @@ const profile = {
     name: "pkg-dir",
     version: "^5.0.0",
   },
-  prettier: {
-    name: "prettier",
-    version: "^3.0.0",
-    devOnly: true,
-  },
   semver: {
     name: "semver",
     version: "^7.0.0",
@@ -92,11 +82,6 @@ const profile = {
   "test-app": {
     name: "react-native-test-app",
     version: "^4.0.0",
-    devOnly: true,
-  },
-  typescript: {
-    name: "typescript",
-    version: "^5.0.0",
     devOnly: true,
   },
   yargs: {

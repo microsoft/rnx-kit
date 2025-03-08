@@ -1,32 +1,28 @@
 {
-  "name": "@rnx-kit/console",
-  "version": "2.0.0",
-  "description": "Simple console logger",
-  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/console#readme",
+  "name": "@rnx-kit/yarn-plugin-dynamic-extensions",
+  "version": "0.1.0",
+  "description": "EXPERIMENTAL - USE WITH CAUTION - yarn-plugin-dynamic-extensions",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/incubator/yarn-plugin-dynamic-extensions#readme",
   "license": "MIT",
   "author": {
     "name": "Microsoft Open Source",
     "email": "microsoftopensource@users.noreply.github.com"
   },
   "files": [
-    "lib/**/*.d.ts",
-    "lib/**/*.js",
-    "src"
+    "index.js"
   ],
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
+  "main": "index.js",
   "exports": {
-    ".": {
-      "types": "./lib/index.d.ts",
-      "typescript": "./src/index.ts",
-      "default": "./lib/index.js"
-    },
-    "./package.json": "./package.json"
+    ".": "./index.js"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/microsoft/rnx-kit",
-    "directory": "packages/console"
+    "directory": "incubator/yarn-plugin-dynamic-extensions"
+  },
+  "engines": {
+    "node": ">=18.12",
+    "yarn": ">=4.0"
   },
   "scripts": {
     "build": "rnx-kit-scripts build",
@@ -38,9 +34,8 @@
     "@rnx-kit/eslint-config": "*",
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*",
-    "@types/node": "^20.0.0"
+    "@yarnpkg/core": "^4.0.0",
+    "@yarnpkg/fslib": "^3.1.1"
   },
-  "engines": {
-    "node": ">=16.17"
-  }
+  "experimental": true
 }

@@ -1,5 +1,12 @@
 # Change Log - @rnx-kit/cli
 
+## 0.18.6
+
+### Patch Changes
+
+- d58075f: Fix `run` command crashing if the `build` command was not invoked
+  first
+
 ## 0.18.5
 
 ### Patch Changes

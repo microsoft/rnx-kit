@@ -21,6 +21,12 @@
 #define USE_FEATURE_FLAGS
 #endif  // __has_include(<react/featureflags/ReactNativeFeatureFlags.h>)
 
+#if __has_include(<ReactCodegen/RCTThirdPartyComponentsProvider.h>)
+#define USE_CODEGEN_PROVIDER 1
+#import <ReactCodegen/RCTThirdPartyComponentsProvider.h>
+#import <React/RCTComponentViewFactory.h>
+#endif // __has_include(<ReactCodegen/RCTThirdPartyComponentsProvider.h>)
+
 #if __has_include(<react/runtime/JSEngineInstance.h>)
 using SharedJSRuntimeFactory = std::shared_ptr<facebook::react::JSEngineInstance>;
 #else
@@ -77,10 +83,12 @@ public:
     {
         return true;
     }
+#if !__has_include(<React-RCTAppDelegate/RCTReactNativeFactory.h>) && !__has_include(<React_RCTAppDelegate/RCTReactNativeFactory.h>)  // 0.77
     bool enableFixForViewCommandRace() override
     {
         return true;
     }
+#endif  // 0.77
 #else   // < 0.77
     bool useModernRuntimeScheduler() override
     {

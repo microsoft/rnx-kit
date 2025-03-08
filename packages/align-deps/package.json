@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/align-deps",
-  "version": "3.0.3",
+  "version": "3.0.4",
   "description": "Manage dependencies within a repository and across many repositories",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/align-deps#readme",
   "license": "MIT",
@@ -43,19 +43,14 @@
     "@rnx-kit/tools-shell": "*",
     "@rnx-kit/tools-workspaces": "*",
     "@rnx-kit/tsconfig": "*",
-    "@types/jest": "^29.2.1",
     "@types/prompts": "^2.0.0",
     "@types/semver": "^7.0.0",
     "@types/yargs": "^16.0.0",
     "detect-indent": "^6.0.0",
-    "eslint": "^9.0.0",
-    "jest": "^29.2.1",
     "markdown-table": "^3.0.0",
     "package-json": "^10.0.0",
-    "prettier": "^3.0.0",
     "prompts": "^2.4.0",
     "semver": "^7.0.0",
-    "typescript": "^5.0.0",
     "yargs": "^16.0.0"
   },
   "engines": {

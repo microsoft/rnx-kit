@@ -108,6 +108,7 @@
       "swiftlint"
     ],
     "ignoreDependencies": [
+      "@rnx-kit/jest-preset",
       "@types/*",
       "eslint",
       "jest",

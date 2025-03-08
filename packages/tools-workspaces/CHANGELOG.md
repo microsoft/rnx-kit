@@ -1,5 +1,11 @@
 # @rnx-kit/tools-workspaces
 
+## 0.2.2
+
+### Patch Changes
+
+- 66961be: Add support for Bun's text-based lockfile
+
 ## 0.2.1
 
 ### Patch Changes

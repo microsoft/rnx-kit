@@ -1,5 +1,17 @@
 # @rnx-kit/react-native-host
 
+## 0.5.5
+
+### Patch Changes
+
+- 53517cf: `enableFixForViewCommandRace` was removed in 0.79
+
+## 0.5.4
+
+### Patch Changes
+
+- 139f2a1: Fix third party components on new arch 0.77+
+
 ## 0.5.3
 
 ### Patch Changes

@@ -1,0 +1,12 @@
+{
+  "extends": "@rnx-kit/tsconfig/tsconfig.esm.json",
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "allowImportingTsExtensions": true,
+    "rewriteRelativeImportExtensions": true,
+    "noEmit": true
+  },
+  "include": ["index.js"]
+}
