@@ -144,12 +144,20 @@ export async function bundle(options) {
   const manifest = JSON.parse(manifestFile);
 
   const esbuild = await import("esbuild");
-  await esbuild.build({
-    ...platformOptions(platform, manifest),
-    bundle: true,
-    outfile: manifest.main,
-    entryPoints: ["src/index.ts"],
-    minify: Boolean(minify),
-    sourcemap: Boolean(sourceMap),
-  });
+  await esbuild
+    .build({
+      ...platformOptions(platform, manifest),
+      bundle: true,
+      outfile: manifest.main,
+      entryPoints: ["src/index.ts"],
+      minify: Boolean(minify),
+      sourcemap: Boolean(sourceMap),
+    })
+    .then(() => {
+      // report success with file size of the output file
+      if (fs.existsSync(manifest.main)) {
+        const sizeKb = Math.round(fs.statSync(manifest.main).size / 1024);
+        console.log(`Success: ${manifest.name} bundled: ${sizeKb}kb`);
+      }
+    });
 }
