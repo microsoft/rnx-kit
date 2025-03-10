@@ -4701,6 +4701,8 @@ __metadata:
     eslint: "npm:^9.0.0"
     prettier: "npm:^3.0.0"
     typescript: "npm:^5.0.0"
+  bin:
+    install-external-workspaces-plugin: bin/install-plugin.cjs
   languageName: unknown
   linkType: soft
 
