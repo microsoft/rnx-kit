@@ -23,12 +23,6 @@ exports.factory = (require) => {
    * @returns {Promise<((ws: Workspace) => PackageExtensionData | undefined) | void>}
    */
   async function loadUserExtensions(configuration, projectRoot) {
-    // Return if the plugin was inherited from a parent config
-    const source = configuration.sources.get(DYNAMIC_PACKAGE_EXTENSIONS_KEY);
-    if (typeof source !== "string" || npath.dirname(source) !== projectRoot) {
-      return;
-    }
-
     const packageExtensions = configuration.get(DYNAMIC_PACKAGE_EXTENSIONS_KEY);
     if (typeof packageExtensions !== "string") {
       return;
@@ -37,8 +31,12 @@ exports.factory = (require) => {
     const path = require("node:path");
     const { pathToFileURL } = require("node:url");
 
+    // Make sure we resolve user extensions relative to the source config
+    const source = configuration.sources.get(DYNAMIC_PACKAGE_EXTENSIONS_KEY);
+    const sourceDir = source ? npath.dirname(source) : projectRoot;
+
     // On Windows, import paths must include the `file:` protocol.
-    const root = npath.fromPortablePath(projectRoot);
+    const root = npath.fromPortablePath(sourceDir);
     const url = pathToFileURL(path.resolve(root, packageExtensions));
     const external = await import(url.toString());
     return external?.default ?? external;

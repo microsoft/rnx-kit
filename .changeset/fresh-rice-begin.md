@@ -2,4 +2,4 @@
 "@rnx-kit/yarn-plugin-dynamic-extensions": patch
 ---
 
-Don't load user extensions if the plugin was inherited from parent configs.
+Load user extensions relative to the source config file.
