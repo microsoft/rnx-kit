@@ -2,6 +2,7 @@
 
 /**
  * @import { Configuration, Hooks, Manifest, PackageExtensionData, Plugin } from "@yarnpkg/core";
+ * @import { PortablePath } from "@yarnpkg/fslib";
  * @typedef {{ cwd: string; manifest: Manifest["raw"]; }} Workspace;
  */
 
@@ -14,26 +15,29 @@ exports.name = "@rnx-kit/yarn-plugin-dynamic-extensions";
 /** @type {(require: NodeJS.Require) => Plugin<Hooks>} */
 exports.factory = (require) => {
   const { Project, SettingsType, structUtils } = require("@yarnpkg/core");
+  const { npath } = require("@yarnpkg/fslib");
 
   /**
    * @param {Configuration} configuration
-   * @param {string} projectRoot
+   * @param {PortablePath} projectRoot
    * @returns {Promise<((ws: Workspace) => PackageExtensionData | undefined) | void>}
    */
   async function loadUserExtensions(configuration, projectRoot) {
     const packageExtensions = configuration.get(DYNAMIC_PACKAGE_EXTENSIONS_KEY);
-    if (
-      typeof packageExtensions !== "string" ||
-      packageExtensions === "false"
-    ) {
+    if (typeof packageExtensions !== "string") {
       return;
     }
 
     const path = require("node:path");
     const { pathToFileURL } = require("node:url");
 
+    // Make sure we resolve user extensions relative to the source config
+    const source = configuration.sources.get(DYNAMIC_PACKAGE_EXTENSIONS_KEY);
+    const sourceDir = source ? npath.dirname(source) : projectRoot;
+
     // On Windows, import paths must include the `file:` protocol.
-    const url = pathToFileURL(path.resolve(projectRoot, packageExtensions));
+    const root = npath.fromPortablePath(sourceDir);
+    const url = pathToFileURL(path.resolve(root, packageExtensions));
     const external = await import(url.toString());
     return external?.default ?? external;
   }
@@ -57,16 +61,16 @@ exports.factory = (require) => {
           return;
         }
 
-        const { workspace } = await Project.find(configuration, projectCwd);
-        if (!workspace) {
+        const getUserExtensions = await loadUserExtensions(
+          configuration,
+          projectCwd
+        );
+        if (!getUserExtensions) {
           return;
         }
 
-        const { npath } = require("@yarnpkg/fslib");
-
-        const root = npath.fromPortablePath(projectCwd);
-        const getUserExtensions = await loadUserExtensions(configuration, root);
-        if (!getUserExtensions) {
+        const { workspace } = await Project.find(configuration, projectCwd);
+        if (!workspace) {
           return;
         }
 
