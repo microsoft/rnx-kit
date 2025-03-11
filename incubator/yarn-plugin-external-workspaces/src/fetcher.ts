@@ -42,10 +42,7 @@ export class ExternalFetcher implements Fetcher {
    */
   getLocalPath(locator: Locator, opts: FetchOptions): PortablePath | null {
     const workspace = this.ensureTracker(opts).findByLocator(locator);
-    if (workspace.localPath) {
-      return workspace.localPath;
-    }
-    return null;
+    return workspace.localPath || null;
   }
 
   /**

@@ -104,7 +104,7 @@ export function outputWorkspaces(
     : fallbackOutputFilename(project.cwd);
 
   if (!checkOnly && !fs.existsSync(outputDir)) {
-    fs.mkdirSync(outputDir, { recursive: true });
+    fs.mkdirSync(outputDir, { recursive: true, mode: 0o755 });
   }
   const fullPath = npath.join(npath.fromPortablePath(outputDir), outputFile);
 

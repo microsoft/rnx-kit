@@ -58,8 +58,5 @@ export async function reduceDependency(
 ) {
   const tracker = getWorkspaceTracker(project);
   const workspace = tracker.tryByDescriptor(dependency);
-  if (workspace) {
-    return workspace.toLeadDescriptor(dependency);
-  }
-  return dependency;
+  return workspace?.toLeadDescriptor(dependency) ?? dependency;
 }

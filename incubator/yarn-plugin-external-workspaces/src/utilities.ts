@@ -43,10 +43,11 @@ export function coerceDescriptorTo(
   descriptor: Descriptor,
   newProtocol: string
 ): Descriptor {
-  const { protocol, version } = decodeDescriptorRange(descriptor.range);
-  if (protocol === newProtocol) {
+  if (descriptor.range.startsWith(newProtocol)) {
     return descriptor;
   }
+
+  const { protocol, version } = decodeDescriptorRange(descriptor.range);
   return structUtils.makeDescriptor(descriptor, `${newProtocol}${version}`);
 }
 
