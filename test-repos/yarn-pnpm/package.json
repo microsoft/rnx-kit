@@ -67,9 +67,5 @@
       "scripts"
     ]
   },
-  "external-workspaces": {
-    "externalDependencies": "../rnx-kit.workspaces.json",
-    "logTo": "console"
-  },
   "prettier": "../.github/prettierrc.json"
 }

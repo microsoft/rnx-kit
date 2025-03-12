@@ -1,9 +1,4 @@
 import { structUtils, type Descriptor, type Locator } from "@yarnpkg/core";
-import path from "node:path";
-
-export function toPortableRelativePath(from: string, to: string): string {
-  return path.posix.normalize(path.relative(from, to));
-}
 
 export type DescriptorRangeParts = {
   // the protocol, e.g. 'external:', empty string if no protocol

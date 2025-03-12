@@ -85,9 +85,6 @@
       "scripts"
     ]
   },
-  "external-workspaces": {
-    "outputPath": "./test-repos/rnx-kit.workspaces.json"
-  },
   "knip": {
     "include": [
       "dependencies"
