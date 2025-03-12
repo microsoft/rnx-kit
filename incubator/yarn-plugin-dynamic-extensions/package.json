@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/yarn-plugin-dynamic-extensions",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "EXPERIMENTAL - USE WITH CAUTION - yarn-plugin-dynamic-extensions",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/incubator/yarn-plugin-dynamic-extensions#readme",
   "license": "MIT",
