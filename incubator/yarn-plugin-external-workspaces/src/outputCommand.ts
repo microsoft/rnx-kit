@@ -71,8 +71,6 @@ export class OutputWorkspaces extends BaseCommand {
       );
     }
 
-    stdout.write;
-
     // write out the workspace info to the path as requested
     await outputWorkspaces(
       project,
@@ -101,7 +99,7 @@ export function outputWorkspaces(
   const outputDir = includesJson ? ppath.dirname(outputPath) : outputPath;
   const outputFile = includesJson
     ? ppath.basename(outputPath)
-    : fallbackOutputFilename(project.cwd);
+    : fallbackOutputFilename(project);
 
   if (!checkOnly && !fs.existsSync(outputDir)) {
     fs.mkdirSync(outputDir, { recursive: true, mode: 0o755 });
@@ -191,24 +189,28 @@ function findDependencyChanges(
   newDeps: Record<string, string>
 ): Record<string, ChangeType> | null {
   const changes: Record<string, ChangeType> = {};
+  let foundChanges = false;
 
   for (const name in newDeps) {
     if (oldDeps[name]) {
       if (oldDeps[name] !== newDeps[name]) {
         changes[name] = "update";
+        foundChanges = true;
       }
     } else {
       changes[name] = "add";
+      foundChanges = true;
     }
   }
 
   for (const name in oldDeps) {
     if (!newDeps[name]) {
       changes[name] = "remove";
+      foundChanges = true;
     }
   }
 
-  return Object.keys(changes).length > 0 ? changes : null;
+  return foundChanges ? changes : null;
 }
 
 /**
@@ -227,13 +229,14 @@ function sortStringRecord<T>(toSort: Record<string, T>): Record<string, T> {
  * @param root the root of the project
  * @returns a fallback filename, either from the package.json name or a default
  */
-function fallbackOutputFilename(root: PortablePath): string {
-  const packageJson = ppath.join(root, "package.json");
-  if (fs.existsSync(packageJson)) {
-    const pkg = JSON.parse(fs.readFileSync(packageJson, "utf8"));
-    if (pkg.name && typeof pkg.name === "string") {
-      return pkg.name.replace(/[^a-zA-Z0-9@._]/g, "-") + "-workspaces.json";
-    }
+function fallbackOutputFilename(project: Project): string {
+  const rootWorkspace = project.workspacesByCwd.get(project.cwd);
+  const rootIdent = rootWorkspace?.manifest.name;
+  if (rootIdent) {
+    const pkgNameBase = rootIdent.scope
+      ? `@${rootIdent.scope}-${rootIdent.name}`
+      : rootIdent.name;
+    return `${pkgNameBase}-workspaces.json`;
   }
   return "workspaces.json";
 }

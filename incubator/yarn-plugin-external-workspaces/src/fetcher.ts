@@ -1,16 +1,15 @@
 import { type Fetcher, type FetchOptions, type Locator } from "@yarnpkg/core";
 import { CwdFS, PortablePath, ppath } from "@yarnpkg/fslib";
 import { getWorkspaceTracker, type ExternalWorkspaceTracker } from "./tracker";
-import { getProtocol } from "./utilities";
-import { type ExternalWorkspace } from "./workspace";
+import { LOCAL_PROTOCOL, type ExternalWorkspace } from "./workspace";
 
 /**
  * The "fetcher" is where we decide if the local path is present or not.
  * If present => link it. If absent => fetch from npm. Critically, we do
  * NOT rewrite the lockfile. We always keep the same "external:..." reference.
  */
-export class ExternalFetcher implements Fetcher {
-  static protocol = getProtocol();
+export class ExternalWorkspaceFetcher implements Fetcher {
+  static protocol = LOCAL_PROTOCOL;
   private tracker: ExternalWorkspaceTracker | null = null;
 
   private ensureTracker(opts: FetchOptions) {
@@ -29,7 +28,7 @@ export class ExternalFetcher implements Fetcher {
    * @param opts The fetch options.
    */
   supports(locator: Locator, _opts: FetchOptions): boolean {
-    return locator.reference.startsWith(ExternalFetcher.protocol);
+    return locator.reference.startsWith(ExternalWorkspaceFetcher.protocol);
   }
 
   /**

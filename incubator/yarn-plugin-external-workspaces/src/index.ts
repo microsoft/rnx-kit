@@ -1,13 +1,9 @@
-import {
-  type ConfigurationDefinitionMap,
-  type ConfigurationValueMap,
-  type Plugin,
-} from "@yarnpkg/core";
+import { type Plugin } from "@yarnpkg/core";
 import { externalWorkspacesConfiguration } from "./cofiguration";
-import { ExternalFetcher } from "./fetcher";
+import { ExternalWorkspaceFetcher } from "./fetcher";
 import { afterAllInstalled, reduceDependency } from "./hooks";
 import { OutputWorkspaces } from "./outputCommand";
-import { ExternalResolver, FallbackResolver } from "./resolvers";
+import { ExternalWorkspaceResolver, RemoteFallbackResolver } from "./resolvers";
 
 export type {
   DefinitionFinder,
@@ -19,14 +15,16 @@ export type {
  * The plugin definition.
  */
 const plugin: Plugin = {
-  configuration: {
-    ...externalWorkspacesConfiguration,
-  } as Partial<ConfigurationDefinitionMap<ConfigurationValueMap>>,
+  /**
+   * Add the plugin configuration options
+   */
+  configuration: externalWorkspacesConfiguration,
+
   /**
    * Hook up the custom fetcher and resolver
    */
-  fetchers: [ExternalFetcher],
-  resolvers: [ExternalResolver, FallbackResolver],
+  fetchers: [ExternalWorkspaceFetcher],
+  resolvers: [ExternalWorkspaceResolver, RemoteFallbackResolver],
 
   /**
    * Add a hook to write out the workspaces if requested

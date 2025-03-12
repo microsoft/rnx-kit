@@ -4698,9 +4698,6 @@ __metadata:
     "@yarnpkg/core": "npm:^4.2.0"
     "@yarnpkg/fslib": "npm:^3.1.1"
     clipanion: "npm:^4.0.0-rc.4"
-    eslint: "npm:^9.0.0"
-    prettier: "npm:^3.0.0"
-    typescript: "npm:^5.0.0"
   bin:
     install-external-workspaces-plugin: bin/install-plugin.cjs
   languageName: unknown

@@ -1,17 +1,6 @@
 import { structUtils, type Descriptor, type Locator } from "@yarnpkg/core";
 import path from "node:path";
 
-const externalProtocol = "external:";
-const remoteProtocol = "fallback:";
-
-export function getProtocol() {
-  return externalProtocol;
-}
-
-export function getRemoteProtocol() {
-  return remoteProtocol;
-}
-
 export function toPortableRelativePath(from: string, to: string): string {
   return path.posix.normalize(path.relative(from, to));
 }
@@ -47,7 +36,7 @@ export function coerceDescriptorTo(
     return descriptor;
   }
 
-  const { protocol, version } = decodeDescriptorRange(descriptor.range);
+  const { version } = decodeDescriptorRange(descriptor.range);
   return structUtils.makeDescriptor(descriptor, `${newProtocol}${version}`);
 }
 

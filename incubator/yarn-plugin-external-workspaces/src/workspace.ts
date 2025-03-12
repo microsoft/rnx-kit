@@ -5,20 +5,15 @@ import {
   type ResolveOptions,
 } from "@yarnpkg/core";
 import { type PortablePath } from "@yarnpkg/fslib";
-import {
-  coerceDescriptorTo,
-  coerceLocatorTo,
-  getProtocol,
-  getRemoteProtocol,
-} from "./utilities";
+import { coerceDescriptorTo, coerceLocatorTo } from "./utilities";
 
-const localProtocol = getProtocol();
-const remoteProtocol = getRemoteProtocol();
-const fallbackProtocol = "npm:";
+export const LOCAL_PROTOCOL = "external:";
+export const REMOTE_PROTOCOL = "fallback:";
+export const FALLBACK_PROTOCOL = "npm:";
 
-const protocolsLocal = [localProtocol, remoteProtocol, fallbackProtocol];
+const protocolsLocal = [LOCAL_PROTOCOL, REMOTE_PROTOCOL, FALLBACK_PROTOCOL];
 const keysLocal = protocolsLocal.map((p) => p.slice(0, -1) + "Dependency");
-const protocolsRemote = [remoteProtocol, localProtocol, fallbackProtocol];
+const protocolsRemote = [REMOTE_PROTOCOL, LOCAL_PROTOCOL, FALLBACK_PROTOCOL];
 const keysRemote = protocolsRemote.map((p) => p.slice(0, -1) + "Dependency");
 
 type Dependencies = Record<string, Package>;

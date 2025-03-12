@@ -21,12 +21,7 @@ function installPlugin() {
     throw new Error(`Plugin not found at ${pluginPath}`);
   }
   const command = `yarn plugin import ${pluginPath}`;
-  try {
-    execSync(command, { stdio: "inherit" });
-  } catch (_error) {
-    console.error(`Failed to execute command: ${command}`);
-    process.exit(1);
-  }
+  execSync(command, { stdio: "inherit" });
 }
 
 // Execute the installation

@@ -10,8 +10,11 @@ import {
   type Resolver,
 } from "@yarnpkg/core";
 import { getWorkspaceTracker, type ExternalWorkspaceTracker } from "./tracker";
-import { getProtocol, getRemoteProtocol } from "./utilities";
-import { type ResolverType } from "./workspace";
+import {
+  LOCAL_PROTOCOL,
+  REMOTE_PROTOCOL,
+  type ResolverType,
+} from "./workspace";
 
 //const { stringifyIdent, makeDescriptor } = structUtils;
 class ResolverBase implements Resolver {
@@ -139,22 +142,22 @@ class ResolverBase implements Resolver {
   }
 }
 
-export class FallbackResolver extends ResolverBase {
-  static protocol = getRemoteProtocol();
+export class RemoteFallbackResolver extends ResolverBase {
+  static protocol = REMOTE_PROTOCOL;
 
   constructor() {
-    super("remote", FallbackResolver.protocol);
+    super("remote", RemoteFallbackResolver.protocol);
   }
 }
 
 /**
  * The resolver implements the logic for the external: protocol.
  */
-export class ExternalResolver extends ResolverBase {
-  static protocol = getProtocol();
+export class ExternalWorkspaceResolver extends ResolverBase {
+  static protocol = LOCAL_PROTOCOL;
 
   constructor() {
-    super("local", ExternalResolver.protocol);
+    super("local", ExternalWorkspaceResolver.protocol);
   }
 
   /**
