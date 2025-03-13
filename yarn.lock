@@ -4685,6 +4685,24 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@rnx-kit/yarn-plugin-external-workspaces@workspace:incubator/yarn-plugin-external-workspaces":
+  version: 0.0.0-use.local
+  resolution: "@rnx-kit/yarn-plugin-external-workspaces@workspace:incubator/yarn-plugin-external-workspaces"
+  dependencies:
+    "@rnx-kit/eslint-config": "npm:*"
+    "@rnx-kit/scripts": "npm:*"
+    "@rnx-kit/tsconfig": "npm:*"
+    "@types/node": "npm:^20.0.0"
+    "@types/semver": "npm:^7.0.0"
+    "@yarnpkg/cli": "npm:^4.6.0"
+    "@yarnpkg/core": "npm:^4.2.0"
+    "@yarnpkg/fslib": "npm:^3.1.1"
+    clipanion: "npm:^4.0.0-rc.4"
+  bin:
+    install-external-workspaces-plugin: bin/install-plugin.cjs
+  languageName: unknown
+  linkType: soft
+
 "@shikijs/engine-oniguruma@npm:^1.25.1":
   version: 1.26.1
   resolution: "@shikijs/engine-oniguruma@npm:1.26.1"
@@ -6979,7 +6997,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"clipanion@npm:^4.0.0-rc.2":
+"clipanion@npm:^4.0.0-rc.2, clipanion@npm:^4.0.0-rc.4":
   version: 4.0.0-rc.4
   resolution: "clipanion@npm:4.0.0-rc.4"
   dependencies:

@@ -152,4 +152,10 @@ export async function bundle(options) {
     minify: Boolean(minify),
     sourcemap: Boolean(sourceMap),
   });
+
+  // report success with file size of the output file
+  if (fs.existsSync(manifest.main)) {
+    const sizeKb = Math.round(fs.statSync(manifest.main).size / 1024);
+    console.log(`Success: ${manifest.name} bundled: ${sizeKb}kb`);
+  }
 }
