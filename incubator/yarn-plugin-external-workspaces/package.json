@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/yarn-plugin-external-workspaces",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "EXPERIMENTAL - USE WITH CAUTION - yarn-plugin-external-workspaces",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/incubator/yarn-plugin-external-workspaces#readme",
   "license": "MIT",
