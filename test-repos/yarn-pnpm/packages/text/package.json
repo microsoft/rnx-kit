@@ -24,12 +24,12 @@
     "directory": "packages/components/text"
   },
   "dependencies": {
-    "@fluentui-react-native/adapters": "0.13.0",
-    "@fluentui-react-native/framework": "0.14.0",
-    "@fluentui-react-native/interactive-hooks": "0.27.2",
-    "@fluentui-react-native/theme-tokens": "0.27.0",
-    "@fluentui-react-native/tokens": "0.23.0",
-    "@uifabricshared/foundation-compose": "1.15.0"
+    "@fluentui-react-native/adapters": "~0.13.0",
+    "@fluentui-react-native/framework": "~0.14.2",
+    "@fluentui-react-native/interactive-hooks": "~0.27.2",
+    "@fluentui-react-native/theme-tokens": "~0.27.0",
+    "@fluentui-react-native/tokens": "~0.23.0",
+    "@uifabricshared/foundation-compose": "~1.15.0"
   },
   "devDependencies": {
     "@react-native-community/cli": "^15.0.0",
