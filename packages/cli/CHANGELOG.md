@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/cli
 
+## 0.18.7
+
+### Patch Changes
+
+- 9d78635: Add support for React Native 0.79
+
 ## 0.18.6
 
 ### Patch Changes
