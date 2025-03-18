@@ -177,24 +177,33 @@ export async function rnxStart(
     },
   };
 
+  const unstable_extraMiddleware: Middleware[] = [];
+  if (coreDevMiddleware) {
+    unstable_extraMiddleware.push(devServer.middleware);
+    if (indexPageMiddleware) {
+      unstable_extraMiddleware.push(indexPageMiddleware);
+    }
+    unstable_extraMiddleware.push(coreDevMiddleware.middleware);
+
+    if (coreDevMiddleware.websocketEndpoints) {
+      if (websocketEndpoints) {
+        const endpoints = Object.entries(coreDevMiddleware.websocketEndpoints);
+        for (const [key, value] of endpoints) {
+          websocketEndpoints[key] = value;
+        }
+      } else {
+        websocketEndpoints = coreDevMiddleware.websocketEndpoints;
+      }
+    }
+  }
+
   const serverInstance = await startServer(metroConfig, {
     host: args.host,
     secure: args.https,
     secureCert: args.cert,
     secureKey: args.key,
-    ...(coreDevMiddleware
-      ? {
-          unstable_extraMiddleware: [
-            devServer.middleware,
-            indexPageMiddleware,
-            coreDevMiddleware.middleware,
-          ],
-          websocketEndpoints: {
-            ...websocketEndpoints,
-            ...coreDevMiddleware.websocketEndpoints,
-          },
-        }
-      : { websocketEndpoints }),
+    unstable_extraMiddleware,
+    websocketEndpoints,
   });
 
   if (hasAttachToServerFunction(devServer)) {
