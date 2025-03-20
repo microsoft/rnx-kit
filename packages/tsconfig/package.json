@@ -28,6 +28,9 @@
     "./tsconfig.json": {
       "default": "./tsconfig.json"
     },
+    "./tsconfig.node.json": {
+      "default": "./tsconfig.node.json"
+    },
     "./package.json": "./package.json"
   },
   "repository": {
