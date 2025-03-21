@@ -1,10 +1,7 @@
 {
-  "extends": "./tsconfig.json",
+  "extends": "./tsconfig.esm.json",
   "compilerOptions": {
     "erasableSyntaxOnly": true,
-    "module": "Node16",
-    "moduleResolution": "Node16",
-    "rewriteRelativeImportExtensions": true,
-    "verbatimModuleSyntax": true
+    "rewriteRelativeImportExtensions": true
   }
 }
