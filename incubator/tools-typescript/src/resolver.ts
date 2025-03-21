@@ -2,7 +2,7 @@ import { type PackageModuleRef, parseModuleRef } from "@rnx-kit/tools-node";
 import fs from "node:fs";
 import path from "node:path";
 import ts from "typescript";
-import { parseSourceFileReference } from "./platforms";
+import { parseSourceFileReference } from "./platforms.ts";
 
 /**
  * Map of file resolution lookups, this is global as it remembers module resolutions for

@@ -7,9 +7,9 @@ import {
   multiplexForPlatforms,
   parseSourceFileReference,
   type FileEntry,
-} from "../src/platforms";
-import { createReporter } from "../src/reporter";
-import type { BuildContext, PlatformInfo } from "../src/types";
+} from "../src/platforms.ts";
+import { createReporter } from "../src/reporter.ts";
+import type { BuildContext, PlatformInfo } from "../src/types.ts";
 
 const baseManifest: PackageManifest = {
   name: "test-package",

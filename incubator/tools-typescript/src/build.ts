@@ -3,10 +3,10 @@ import type { AllPlatforms } from "@rnx-kit/tools-react-native";
 import { findConfigFile, readConfigFile } from "@rnx-kit/typescript-service";
 import path from "node:path";
 import ts from "typescript";
-import { loadPackagePlatformInfo } from "./platforms";
-import { createReporter } from "./reporter";
-import { createBuildTasks } from "./task";
-import type { BuildContext, BuildOptions, PlatformInfo } from "./types";
+import { loadPackagePlatformInfo } from "./platforms.ts";
+import { createReporter } from "./reporter.ts";
+import { createBuildTasks } from "./task.ts";
+import type { BuildContext, BuildOptions, PlatformInfo } from "./types.ts";
 
 /**
  * Load the tsconfig.json file for the package

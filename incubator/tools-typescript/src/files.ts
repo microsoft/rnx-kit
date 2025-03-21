@@ -1,7 +1,7 @@
 import { EventEmitter, once } from "node:events";
 import fs from "node:fs";
 import path from "node:path";
-import type { AsyncThrottler, AsyncWriter, Reporter } from "./types";
+import type { AsyncThrottler, AsyncWriter, Reporter } from "./types.ts";
 
 /**
  * A simple throttler that limits the number of concurrent operations.

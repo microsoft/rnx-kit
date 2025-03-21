@@ -1,12 +1,12 @@
 // base functionality
-export { buildTypeScript } from "./build";
-export { createAsyncThrottler, createAsyncWriter } from "./files";
-export { openProject } from "./host";
+export { buildTypeScript } from "./build.ts";
+export { createAsyncThrottler, createAsyncWriter } from "./files.ts";
+export { openProject } from "./host.ts";
 export {
   loadPackagePlatformInfo,
   parseSourceFileReference as parseSourceFileDetails,
-} from "./platforms";
-export { createReporter } from "./reporter";
+} from "./platforms.ts";
+export { createReporter } from "./reporter.ts";
 export type {
   AsyncThrottler,
   AsyncWriter,
@@ -14,4 +14,4 @@ export type {
   ParsedFileReference,
   PlatformInfo,
   Reporter,
-} from "./types";
+} from "./types.ts";

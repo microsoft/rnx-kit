@@ -1,4 +1,4 @@
-import { createAsyncThrottler, createAsyncWriter } from "../src/files";
+import { createAsyncThrottler, createAsyncWriter } from "../src/files.ts";
 
 const fileStats = { active: 0, maxActive: 0, written: 0, failon: -1 };
 

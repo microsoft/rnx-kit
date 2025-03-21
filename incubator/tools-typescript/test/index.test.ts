@@ -1,4 +1,4 @@
-import { getNullTimer, getTimer } from "../src/reporter";
+import { getNullTimer, getTimer } from "../src/reporter.ts";
 
 let asyncCalls = 0;
 let syncCalls = 0;

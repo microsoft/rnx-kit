@@ -4,8 +4,8 @@ import {
   createResolverForTypescript,
   getTsTypeRefCache,
   resolveModuleNames,
-} from "./resolver";
-import type { PlatformInfo, ProjectContext } from "./types";
+} from "./resolver.ts";
+import type { PlatformInfo, ProjectContext } from "./types.ts";
 
 const platformHosts: Record<string, PlatformHost> = {};
 
