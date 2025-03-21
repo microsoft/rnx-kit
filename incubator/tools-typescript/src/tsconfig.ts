@@ -69,7 +69,7 @@ export function readTypeScriptConfig(
   watchOptionsToExtend?: ts.WatchOptions,
   onUnRecoverableConfigFileDiagnostic?: (diagnostic: ts.Diagnostic) => void,
   trace?: (message: string) => void
-): ts.ParsedCommandLine | undefined {
+): ts.ParsedCommandLine {
   let cmdLineBase: ts.ParsedCommandLine | undefined = undefined;
 
   // setup the config parsing host, we can use the default unless logging operations are overridden

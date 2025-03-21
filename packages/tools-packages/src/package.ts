@@ -1,4 +1,4 @@
-import { readPackage } from "@rnx-kit/tools-node";
+import { findPackage, readPackage } from "@rnx-kit/tools-node";
 import { getWorkspacesInfoSync } from "@rnx-kit/tools-workspaces";
 import path from "node:path";
 import type { PackageInfo } from "./types";
@@ -113,6 +113,19 @@ function ensureCache() {
  */
 export function getPackageInfoFromPath(pkgPath: string): PackageInfo {
   return ensureCache().getByPath(pkgPath);
+}
+
+/**
+ * Finds a package info by path, looking up the tree if necessary
+ * @param startPath the path to start looking from or undefined to start from the current working directory
+ * @returns the nearest package info from the start path
+ */
+export function findPackageInfo(startPath?: string): PackageInfo {
+  const packagePath = findPackage(startPath);
+  if (!packagePath) {
+    throw new Error(`No package.json found from ${startPath ?? process.cwd()}`);
+  }
+  return getPackageInfoFromPath(packagePath);
 }
 
 /**

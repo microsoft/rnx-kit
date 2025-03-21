@@ -1,5 +1,6 @@
 import type { KitConfig } from "@rnx-kit/config";
 import type { PackageManifest } from "@rnx-kit/tools-node";
+import type { PackageInfo } from "@rnx-kit/tools-packages";
 import type ts from "typescript";
 import {
   isBestMatch,
@@ -19,6 +20,14 @@ const baseManifest: PackageManifest = {
   peerDependencies: {},
 };
 
+function mockPackageInfo(root: string, manifest: PackageManifest) {
+  return {
+    root,
+    name: manifest.name,
+    manifest,
+  } as PackageInfo;
+}
+
 describe("loadReactNativePlatforms", () => {
   it("should detect platforms from bundle targets", () => {
     const kitConfig: KitConfig = {
@@ -31,7 +40,8 @@ describe("loadReactNativePlatforms", () => {
       ...baseManifest,
       "rnx-kit": kitConfig,
     };
-    const platforms = loadPackagePlatformInfo(process.cwd(), manifest);
+    const pkgInfo = mockPackageInfo(process.cwd(), manifest);
+    const platforms = loadPackagePlatformInfo(pkgInfo);
     expect(Object.keys(platforms)).toEqual(["android", "ios", "windows"]);
   });
 
@@ -55,7 +65,8 @@ describe("loadReactNativePlatforms", () => {
       ...baseManifest,
       "rnx-kit": kitConfig,
     };
-    const platforms = loadPackagePlatformInfo(process.cwd(), manifest);
+    const pkgInfo = mockPackageInfo(process.cwd(), manifest);
+    const platforms = loadPackagePlatformInfo(pkgInfo);
     expect(Object.keys(platforms)).toEqual(["android", "ios"]);
   });
 });
