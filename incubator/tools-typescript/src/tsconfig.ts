@@ -45,6 +45,12 @@ function getConfigFileHost(
   return host;
 }
 
+/**
+ * @param config the base config to apply changes on top of
+ * @param optionsToExtend compiler options to extend with
+ * @param watchOptionsToExtend watch options to extend with
+ * @returns a ParsedCommandLine with the changes applied. If no changes are provided, the original config is returned.
+ */
 export function mergeConfigOptions(
   config: ts.ParsedCommandLine,
   optionsToExtend?: ts.CompilerOptions,
@@ -62,6 +68,16 @@ export function mergeConfigOptions(
   return config;
 }
 
+/**
+ * @param pkgInfo the package info to read the config for
+ * @param configFileName file name or path to the config file to read, falls back to tsconfig.json
+ * @param optionsToExtend options to extend with
+ * @param watchOptionsToExtend watch options to extend with
+ * @param onUnRecoverableConfigFileDiagnostic optional callback for unrecoverable config file diagnostics
+ * @param trace optional trace function for config file parsing
+ * @returns a loaded and merged ParsedCommandLine
+ * @throws if the config file cannot be found or parsed
+ */
 export function readTypeScriptConfig(
   pkgInfo: PackageInfo,
   configFileName: string = DEFAULT_CONFIG_NAME,
