@@ -20,9 +20,7 @@
     "url": "https://github.com/microsoft/rnx-kit",
     "directory": "packages/template"
   },
-  "engines": {
-    "node": ">=18.12"
-  },
+  "engines": {},
   "scripts": {
     "build": "rnx-kit-scripts build",
     "format": "rnx-kit-scripts format",
