@@ -1,5 +1,6 @@
 // base functionality
 export { buildTypeScript } from "./build";
+export { getDiagnosticWriter } from "./diagnostics";
 export { createAsyncThrottler, createAsyncWriter } from "./files";
 export { openProject } from "./host";
 export {
