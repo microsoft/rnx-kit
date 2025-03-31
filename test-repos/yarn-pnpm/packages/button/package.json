@@ -34,7 +34,7 @@
     "@fluentui-react-native/use-styling": "~0.13.0",
     "@rnx-repo-yarn-pnpm/text": "workspace:*",
     "@uifabricshared/foundation-composable": "~0.13.0",
-    "@uifabricshared/foundation-compose": "1.15.2",
+    "@uifabricshared/foundation-compose": "~1.15.2",
     "@uifabricshared/foundation-settings": "~0.15.0",
     "tslib": "^2.3.1"
   },
