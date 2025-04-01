@@ -18,7 +18,9 @@ export function watch<T>(
       subproc.stderr.on("data", (chunk) => process.stderr.write(chunk));
     } else {
       let i = 0;
-      subproc.stdout.on("data", () => logger.text = step + ".".repeat(++i % 6));
+      subproc.stdout.on("data", () => {
+        logger.text = step + ".".repeat(++i % 6);
+      });
       subproc.stderr.on("data", (data) => errors.push(data));
     }
 
