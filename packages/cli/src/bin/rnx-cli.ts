@@ -1,7 +1,19 @@
+import type { Config } from "@react-native-community/cli-types";
 import { Command } from "commander";
 import * as path from "node:path";
 import { loadContextForCommand } from "./context";
 import { findExternalCommands } from "./externalCommands";
+
+type CommandOption = Required<Config["commands"][number]>["options"][number];
+
+function parseDefaultValue(
+  defaultValue: CommandOption["default"],
+  context: Config
+): boolean | string | string[] | undefined {
+  const value =
+    typeof defaultValue === "function" ? defaultValue(context) : defaultValue;
+  return typeof value === "number" ? value.toString() : value;
+}
 
 export async function main() {
   const [, , userCommand] = process.argv;
@@ -25,11 +37,12 @@ export async function main() {
       command.action((args, command) => func(command.args, context, args));
     }
 
-    for (const { name, description, parse, default: def } of options) {
+    for (const { name, description, parse, default: defaultValue } of options) {
+      const value = parseDefaultValue(defaultValue, context);
       if (parse) {
-        command.option(name, description ?? name, (input) => parse(input), def);
+        command.option(name, description ?? name, parse, value);
       } else {
-        command.option(name, description, def?.toString());
+        command.option(name, description, value);
       }
     }
   }

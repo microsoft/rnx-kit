@@ -7,41 +7,8 @@ const IGNORED_LOCATIONS = [".", "packages/test-app", "scripts"];
 
 const options = /** @type {const} */ ({ encoding: "utf-8" });
 
-/**
- * @param {string | undefined} version
- * @returns {number}
- */
-function numberFromVersion(version) {
-  if (!version) {
-    return 0;
-  }
-
-  const m = version.match(/(\d+)\.(\d+)/);
-  if (!m) {
-    return 0;
-  }
-
-  const [, major, minor] = m;
-  return Number(major) * 1000 + Number(minor);
-}
-
-/**
- * @param {string | undefined} version
- * @param {number} range
- * @returns {boolean}
- */
-function versionGreaterThanOrEqualTo(version, range) {
-  return numberFromVersion(version) >= range;
-}
-
 fs.readFile("package.json", options).then((data) => {
-  const {
-    author: defaultAuthor,
-    repository: origin,
-    engines: { node: nodeVersionRange },
-  } = JSON.parse(data);
-  const minNodeVersion = numberFromVersion(nodeVersionRange);
-
+  const { author: defaultAuthor, repository: origin } = JSON.parse(data);
   const yarn = spawnSync("yarn", ["workspaces", "list", "--json"], options);
   const workspaces = yarn.stdout.trim().split("\n");
 
@@ -56,7 +23,7 @@ fs.readFile("package.json", options).then((data) => {
     const pkgJsonPath = path.join(location, "package.json");
     const data = await fs.readFile(pkgJsonPath, options);
     const manifest = JSON.parse(data);
-    const { author, homepage, repository, engines } = manifest;
+    const { author, homepage, repository } = manifest;
 
     const readmeUrl = `${origin.url}/tree/main/${location}#readme`;
     if (homepage !== readmeUrl) {
@@ -81,14 +48,6 @@ fs.readFile("package.json", options).then((data) => {
       manifest.repository = {
         ...origin,
         directory: location,
-      };
-    }
-
-    if (!versionGreaterThanOrEqualTo(engines?.node, minNodeVersion)) {
-      needsUpdate = true;
-      manifest.engines = {
-        ...engines,
-        node: nodeVersionRange,
       };
     }
 
