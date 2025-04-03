@@ -25,7 +25,7 @@
     "clear-cache": "nx clear-cache",
     "format": "nx run-many --target format",
     "lint": "nx run-many --target lint",
-    "new-package": "node scripts/new-package.js",
+    "new-package": "node --experimental-transform-types --no-warnings scripts/new-package.ts",
     "publish:changesets": "changeset publish",
     "rnx-align-deps": "yarn workspace @rnx-kit/align-deps bundle && scripts/rnx-align-deps.js",
     "show-affected": "nx show projects --affected",
@@ -47,7 +47,7 @@
     "typescript": "^5.0.0"
   },
   "engines": {
-    "node": ">=16.17"
+    "node": ">=18.12"
   },
   "packageManager": "yarn@4.6.0",
   "resolutions": {

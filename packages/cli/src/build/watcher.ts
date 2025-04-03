@@ -9,6 +9,7 @@ export function watch<T>(
   onSuccess: () => T
 ) {
   return new Promise<T | ExitCode>((resolve) => {
+    const step = "Building";
     const errors: Buffer[] = [];
 
     const isCI = Boolean(process.env.CI);
@@ -16,7 +17,10 @@ export function watch<T>(
       subproc.stdout.on("data", (chunk) => process.stdout.write(chunk));
       subproc.stderr.on("data", (chunk) => process.stderr.write(chunk));
     } else {
-      subproc.stdout.on("data", () => (logger.text += "."));
+      let i = 0;
+      subproc.stdout.on("data", () => {
+        logger.text = step + ".".repeat(++i % 6);
+      });
       subproc.stderr.on("data", (data) => errors.push(data));
     }
 
@@ -32,6 +36,6 @@ export function watch<T>(
     });
 
     logger.info(`Command: ${subproc.spawnargs.join(" ")}`);
-    logger.start("Building");
+    logger.start(step);
   });
 }
