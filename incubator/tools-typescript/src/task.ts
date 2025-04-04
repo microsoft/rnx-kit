@@ -1,7 +1,7 @@
-import { createAsyncWriter } from "./files";
-import { openProject } from "./host";
-import { multiplexForPlatforms } from "./platforms";
-import type { BuildContext, BuildOptions, PlatformInfo } from "./types";
+import { createAsyncWriter } from "./files.ts";
+import { openProject } from "./host.ts";
+import { multiplexForPlatforms } from "./platforms.ts";
+import type { BuildContext, BuildOptions, PlatformInfo } from "./types.ts";
 
 /**
  * Execute the build for the given context

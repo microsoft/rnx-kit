@@ -4,7 +4,7 @@ import {
   getTsModuleCache,
   getTsTypeRefCache,
   remapModuleName,
-} from "../src/resolver";
+} from "../src/resolver.ts";
 
 const root1 = "/src/packages/my-package";
 const root2 = "\\c:\\dev\\src\\packages\\my-package";
