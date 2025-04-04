@@ -9,7 +9,11 @@ import {
 } from "@rnx-kit/tools-react-native";
 import path from "node:path";
 import type ts from "typescript";
-import type { BuildContext, ParsedFileReference, PlatformInfo } from "./types";
+import type {
+  BuildContext,
+  ParsedFileReference,
+  PlatformInfo,
+} from "./types.ts";
 
 // quick helper for converting a value to an array
 function coerceArray<T>(value: T | T[] | undefined): T[] {

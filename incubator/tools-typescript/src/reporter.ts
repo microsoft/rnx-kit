@@ -5,7 +5,7 @@ import {
   dim,
   info,
 } from "@rnx-kit/console";
-import type { Reporter, Timer } from "./types";
+import type { Reporter, Timer } from "./types.ts";
 
 /**
  * @returns a new timer object that will capture call count and timings for calls

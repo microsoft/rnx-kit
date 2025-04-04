@@ -1,11 +1,11 @@
 import { findPackageInfo } from "@rnx-kit/tools-packages";
 import type { AllPlatforms } from "@rnx-kit/tools-react-native";
 import ts from "typescript";
-import { loadPackagePlatformInfo } from "./platforms";
-import { createReporter } from "./reporter";
-import { createBuildTasks } from "./task";
-import { readTypeScriptConfig } from "./tsconfig";
-import type { BuildContext, BuildOptions, PlatformInfo } from "./types";
+import { loadPackagePlatformInfo } from "./platforms.ts";
+import { createReporter } from "./reporter.ts";
+import { createBuildTasks } from "./task.ts";
+import { readTypeScriptConfig } from "./tsconfig.ts";
+import type { BuildContext, BuildOptions, PlatformInfo } from "./types.ts";
 
 /**
  * Execute a build (or just typechecking) for the given package. This can be configured
