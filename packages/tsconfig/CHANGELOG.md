@@ -1,5 +1,11 @@
 # @rnx-kit/tsconfig
 
+## 2.0.1
+
+### Patch Changes
+
+- 961ffe2: Changes to support running typescript directly in Node 22.6+
+
 ## 2.0.0
 
 ### Major Changes

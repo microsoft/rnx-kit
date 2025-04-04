@@ -1,5 +1,12 @@
 # Change Log - @rnx-kit/cli
 
+## 0.18.8
+
+### Patch Changes
+
+- 7920f0e: Fix default values not being passed correctly
+- 85d08c4: Reduce output when building native code
+
 ## 0.18.7
 
 ### Patch Changes
