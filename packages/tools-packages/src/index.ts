@@ -3,6 +3,7 @@ export {
   createPackageValueLoader,
 } from "./accessors";
 export {
+  findPackageInfo,
   getPackageInfoFromPath,
   getPackageInfoFromWorkspaces,
 } from "./package";
