@@ -20,7 +20,7 @@
     "lib/**/*.d.ts",
     "lib/**/*.d.ts.map"
   ],
-  "main": "./dist/external-workspaces.cjs",
+  "main": "./dist/yarn-plugin-install-to.cjs",
   "repository": {
     "type": "git",
     "url": "https://github.com/microsoft/rnx-kit",
