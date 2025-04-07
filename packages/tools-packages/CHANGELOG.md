@@ -1,5 +1,11 @@
 # @rnx-kit/tools-packages
 
+## 0.1.1
+
+### Patch Changes
+
+- df24f8d: Consume @rnx-kit/tools-packages in tools-typescript
+
 ## 0.1.0
 
 ### Minor Changes
