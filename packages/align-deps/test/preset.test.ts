@@ -1,6 +1,5 @@
 import { filterPreset, parseRequirements } from "../src/preset";
 import { preset as defaultPreset } from "../src/presets/microsoft/react-native";
-import { profile as profile_0_68 } from "../src/presets/microsoft/react-native/profile-0.68";
 import { profile as profile_0_69 } from "../src/presets/microsoft/react-native/profile-0.69";
 import { profile as profile_0_70 } from "../src/presets/microsoft/react-native/profile-0.70";
 import { profile as profile_0_71 } from "../src/presets/microsoft/react-native/profile-0.71";
@@ -11,6 +10,7 @@ import { profile as profile_0_75 } from "../src/presets/microsoft/react-native/p
 import { profile as profile_0_76 } from "../src/presets/microsoft/react-native/profile-0.76";
 import { profile as profile_0_77 } from "../src/presets/microsoft/react-native/profile-0.77";
 import { profile as profile_0_78 } from "../src/presets/microsoft/react-native/profile-0.78";
+import { profile as profile_0_79 } from "../src/presets/microsoft/react-native/profile-0.79";
 
 describe("filterPreset()", () => {
   test("returns no profiles if requirements cannot be satisfied", () => {
@@ -22,29 +22,22 @@ describe("filterPreset()", () => {
   });
 
   test("returns profiles satisfying single version range", () => {
-    const profiles = filterPreset(defaultPreset, ["react-native@0.70"]);
-    expect(profiles).toEqual({ "0.70": profile_0_70 });
+    const profiles = filterPreset(defaultPreset, ["react-native@0.76"]);
+    expect(profiles).toEqual({ "0.76": profile_0_76 });
   });
 
   test("returns profiles satisfying multiple version ranges", () => {
-    const profiles = filterPreset(defaultPreset, ["react-native@0.68 || 0.70"]);
-    expect(profiles).toEqual({ "0.68": profile_0_68, "0.70": profile_0_70 });
+    const profiles = filterPreset(defaultPreset, ["react-native@0.76 || 0.79"]);
+    expect(profiles).toEqual({ "0.76": profile_0_76, "0.79": profile_0_79 });
   });
 
   test("returns profiles satisfying wide version range", () => {
-    const profiles = filterPreset(defaultPreset, ["react-native@>=0.68"]);
+    const profiles = filterPreset(defaultPreset, ["react-native@>=0.76"]);
     expect(profiles).toEqual({
-      "0.68": profile_0_68,
-      "0.69": profile_0_69,
-      "0.70": profile_0_70,
-      "0.71": profile_0_71,
-      "0.72": profile_0_72,
-      "0.73": profile_0_73,
-      "0.74": profile_0_74,
-      "0.75": profile_0_75,
       "0.76": profile_0_76,
       "0.77": profile_0_77,
       "0.78": profile_0_78,
+      "0.79": profile_0_79,
     });
   });
 
