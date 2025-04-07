@@ -3,7 +3,9 @@ import {
   Cache,
   Configuration,
   type Descriptor,
+  type DescriptorHash,
   type LocatorHash,
+  type Package,
   PackageExtensionStatus,
   Project,
   StreamReport,
@@ -17,6 +19,12 @@ type InstallOptions = {
   report: StreamReport;
   lockfileOnly?: boolean;
   immutable?: boolean;
+};
+
+type ProjectScopingOptions = {
+  project: Project;
+  accessibleLocators: Set<LocatorHash>;
+  storedResolutions: Map<DescriptorHash, LocatorHash>;
 };
 
 export class InstallTo extends BaseCommand {
@@ -85,7 +93,7 @@ export class InstallTo extends BaseCommand {
       {
         configuration,
         stdout,
-        includeLogs: this.verbose,
+        includeLogs: true,
         includeVersion: true,
       },
       async (report) => {
@@ -98,11 +106,14 @@ export class InstallTo extends BaseCommand {
             );
           }
         }
-        await partialInstall(project, configuration, workspaces, {
-          cache,
-          report,
-          immutable: true,
-        });
+        const options = { cache, report, immutable: true };
+        await partialInstall(
+          project,
+          configuration,
+          workspaces,
+          options,
+          this.verbose
+        );
       }
     );
 
@@ -128,45 +139,68 @@ function workspacesFromNames(
   return workspaces;
 }
 
+function getResolution(
+  options: ProjectScopingOptions,
+  hash: DescriptorHash
+): Package | undefined {
+  const locatorHash = options.project.storedResolutions.get(hash);
+  if (locatorHash) {
+    const newHash = !options.accessibleLocators.has(locatorHash);
+    options.storedResolutions.set(hash, locatorHash);
+    options.accessibleLocators.add(locatorHash);
+    return newHash
+      ? options.project.storedPackages.get(locatorHash)
+      : undefined;
+  }
+  return undefined;
+}
+
 function traverseDependencies(
-  project: Project,
-  found: Set<LocatorHash>,
+  options: ProjectScopingOptions,
   descriptor: Descriptor
 ) {
-  const locatorHash = project.storedResolutions.get(descriptor.descriptorHash);
-  if (locatorHash && !found.has(locatorHash)) {
-    const pkg = project.storedPackages.get(locatorHash);
-    if (pkg) {
-      found.add(pkg.locatorHash);
-      for (const [, descriptor] of pkg.dependencies) {
-        traverseDependencies(project, found, descriptor);
-      }
+  const pkg = getResolution(options, descriptor.descriptorHash);
+  if (pkg) {
+    for (const [, dependency] of pkg.dependencies) {
+      traverseDependencies(options, dependency);
     }
   }
 }
 
-function getRelevantLocators(
-  project: Project,
-  workspaces: Set<Workspace>
-): Set<LocatorHash> {
-  const locators = new Set<LocatorHash>();
+function pareDownProject(project: Project, workspaces: Set<Workspace>) {
+  const options: ProjectScopingOptions = {
+    project,
+    accessibleLocators: new Set<LocatorHash>(),
+    storedResolutions: new Map<DescriptorHash, LocatorHash>(),
+  };
+
   for (const workspace of workspaces) {
-    const manifest = workspace.manifest;
-    for (const [, descriptor] of manifest.dependencies) {
-      traverseDependencies(project, locators, descriptor);
+    const pkg = getResolution(
+      options,
+      workspace.anchoredDescriptor.descriptorHash
+    );
+
+    const dependencies = pkg
+      ? pkg.dependencies
+      : workspace.manifest.dependencies;
+    for (const [, descriptor] of dependencies) {
+      traverseDependencies(options, descriptor);
     }
-    for (const [, descriptor] of manifest.devDependencies) {
-      traverseDependencies(project, locators, descriptor);
+    for (const [, descriptor] of workspace.manifest.devDependencies) {
+      traverseDependencies(options, descriptor);
     }
   }
-  return locators;
+
+  project.accessibleLocators = options.accessibleLocators;
+  project.storedResolutions = options.storedResolutions;
 }
 
 async function partialInstall(
   project: Project,
   configuration: Configuration,
   workspaces: Set<Workspace>,
-  opts: InstallOptions
+  opts: InstallOptions,
+  verbose = false
 ): Promise<void> {
   const { report } = opts;
 
@@ -181,16 +215,14 @@ async function partialInstall(
     await project.resolveEverything(opts);
   });
 
-  const locatorsToInstall = getRelevantLocators(project, workspaces);
-  for (const hash of project.accessibleLocators) {
-    if (!locatorsToInstall.has(hash)) {
-      project.disabledLocators.add(hash);
-    }
+  const priorLocatorCount = project.accessibleLocators.size;
+  pareDownProject(project, workspaces);
+  if (verbose) {
+    report.reportInfo(
+      0,
+      `Trimming from ${priorLocatorCount} to ${project.accessibleLocators.size} locators`
+    );
   }
-  report.reportInfo(
-    0,
-    `Trimming from ${project.accessibleLocators.size} to ${locatorsToInstall.size} locators`
-  );
 
   await report.startTimerPromise(`Fetch step`, async () => {
     await project.fetchEverything(opts);
