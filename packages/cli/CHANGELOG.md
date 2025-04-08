@@ -1,5 +1,14 @@
 # Change Log - @rnx-kit/cli
 
+## 0.18.8
+
+### Patch Changes
+
+- 7920f0e: Fix default values not being passed correctly
+- 85d08c4: Reduce output when building native code
+- Updated dependencies [ad32e02]
+  - @rnx-kit/align-deps@3.0.5
+
 ## 0.18.7
 
 ### Patch Changes
