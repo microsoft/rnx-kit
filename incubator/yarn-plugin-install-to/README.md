@@ -38,9 +38,9 @@ yarn plugin import ./path/to/my/yarn-plugin-install-to.cjs
 
 Once installed the install-to command will appear in yarn --help.
 
-`> yarn install-to @my-scope/package1 @my-scope/package2`
+`yarn install-to @my-scope/package1 @my-scope/package2`
 
 Optionally if `--verbose` is specified additional information about the packages
 installed and what percent of the repository is being installed will be output.
 
-`> yarn install-to --verbose @my-scope/package1`
+`yarn install-to --verbose @my-scope/package1`

@@ -8,17 +8,10 @@
     "name": "Microsoft Open Source",
     "email": "microsoftopensource@users.noreply.github.com"
   },
-  "bin": {
-    "install-external-workspaces-plugin": "bin/install-plugin.cjs"
-  },
   "files": [
-    "bin/*.cjs",
     "dist/**/*.cjs",
     "dist/**/*.cjs.map",
-    "lib/**/*.js",
-    "lib/**/*.js.map",
-    "lib/**/*.d.ts",
-    "lib/**/*.d.ts.map"
+    "src"
   ],
   "main": "./dist/yarn-plugin-install-to.cjs",
   "repository": {
