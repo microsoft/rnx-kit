@@ -2,7 +2,7 @@
   "name": "@rnx-kit/yarn-plugin-install-to",
   "version": "0.1.0",
   "description": "EXPERIMENTAL - USE WITH CAUTION - yarn-plugin-install-to",
-  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/incubator/yarn-plugin-install-to",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/incubator/yarn-plugin-install-to#readme",
   "license": "MIT",
   "author": {
     "name": "Microsoft Open Source",
@@ -24,7 +24,7 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/microsoft/rnx-kit",
-    "directory": "incubator/yarn-plugin-external-workspaces"
+    "directory": "incubator/yarn-plugin-install-to"
   },
   "engines": {
     "node": ">=18.12"
