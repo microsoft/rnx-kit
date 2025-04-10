@@ -62,6 +62,7 @@
     "@react-native-community/cli-types": "^15.0.0",
     "@rnx-kit/react-native-host": "workspace:*",
     "@vue/compiler-sfc": "link:./incubator/ignore",
+    "eslint": "patch:eslint@npm%3A9.17.0#~/.yarn/patches/eslint-npm-9.17.0-75805166d6.patch",
     "react-native-macos/@react-native/assets-registry": "^0.76.0",
     "react-native-macos/@react-native/codegen": "^0.76.0",
     "react-native-macos/@react-native/community-cli-plugin": "^0.76.0",

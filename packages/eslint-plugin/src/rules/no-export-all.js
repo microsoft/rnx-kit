@@ -3,7 +3,7 @@
 
 /**
  * @typedef {import("@typescript-eslint/types/dist/index").TSESTree.Node} Node
- * @typedef {import("eslint").Linter.FlatConfig} FlatConfig
+ * @typedef {import("eslint").Linter.Config} Config
  * @typedef {import("eslint").Rule.RuleContext} ESLintRuleContext
  * @typedef {import("eslint").Rule.ReportFixer} ESLintReportFixer
  * @typedef {{ exports: string[], types: string[] }} NamedExports
@@ -16,7 +16,7 @@
  *     maxDepth: number;
  *   };
  *   filename: string;
- *   languageOptions: FlatConfig["languageOptions"];
+ *   languageOptions: Config["languageOptions"];
  *   parserOptions: ESLintRuleContext["parserOptions"];
  *   parserPath: ESLintRuleContext["parserPath"];
  *   sourceCode: ESLintRuleContext["sourceCode"];
