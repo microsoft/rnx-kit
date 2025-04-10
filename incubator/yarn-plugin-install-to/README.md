@@ -23,12 +23,12 @@ This replicates the core installation code in yarn's Project.install function.
 
 Internally this works by paring down the set of resolved packages to just ones
 required to install, this is what drives the set of fetchers. Then the set of
-accessibleLocators are pared down which drives the link/install behavior.
+`accessibleLocators` are pared down which drives the link/install behavior.
 
 ## Installation
 
-The plugin needs to be installed via yarn plugin install command. This needs to
-reference the produced bundle out of the dist folder.
+The plugin needs to be installed via `yarn plugin install` command. This needs
+to reference the produced bundle out of the dist folder.
 
 ```sh
 yarn plugin import ./path/to/my/yarn-plugin-install-to.cjs
@@ -36,7 +36,7 @@ yarn plugin import ./path/to/my/yarn-plugin-install-to.cjs
 
 ## Usage
 
-Once installed the install-to command will appear in yarn --help.
+Once installed the `install-to` command will appear in `yarn --help`.
 
 `yarn install-to @my-scope/package1 @my-scope/package2`
 
