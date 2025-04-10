@@ -56,6 +56,8 @@ const getDependencyVersion = (() => {
 export default function ({ cwd, manifest }) {
   let extensions = undefined;
 
+
+
   for (const [pkg, test] of COMMON_DEPENDENCIES) {
     if (test(cwd, manifest)) {
       extensions ||= { dependencies: {} };
