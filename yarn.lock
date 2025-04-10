@@ -4716,8 +4716,6 @@ __metadata:
     "@yarnpkg/cli": "npm:^4.6.0"
     "@yarnpkg/core": "npm:^4.2.0"
     clipanion: "npm:^4.0.0-rc.4"
-  bin:
-    install-external-workspaces-plugin: bin/install-plugin.cjs
   languageName: unknown
   linkType: soft
 
