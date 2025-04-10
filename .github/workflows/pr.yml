@@ -34,6 +34,8 @@ jobs:
         run: |
           yarn change:check --since origin/${{ github.base_ref }}
       - name: Report formatting problems
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           yarn format
           if [[ -n "$GITHUB_TOKEN" ]]; then
@@ -41,6 +43,8 @@ jobs:
           fi
           git diff --exit-code
       - name: Report package metadata inconsistencies
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           node scripts/lint-metadata.js
           if [[ -n "$GITHUB_TOKEN" ]]; then
@@ -48,6 +52,8 @@ jobs:
           fi
           git diff --exit-code
       - name: Report dependency misalignments
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           yarn rnx-align-deps --write
           if [[ -n "$GITHUB_TOKEN" ]]; then
@@ -58,6 +64,8 @@ jobs:
         run: |
           yarn knip
       - name: Ensure READMEs are up-to-date
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           yarn update-readme
           if [[ -n "$GITHUB_TOKEN" ]]; then
@@ -65,6 +73,8 @@ jobs:
           fi
           git diff --exit-code
       - name: Report @rnx-kit/build workflow inconsistencies
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           cp incubator/build/workflows/github.yml .github/workflows/rnx-build.yml
           if [[ -n "$GITHUB_TOKEN" ]]; then
