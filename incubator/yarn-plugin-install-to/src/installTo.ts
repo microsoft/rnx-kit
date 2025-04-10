@@ -60,6 +60,7 @@ export class InstallTo extends BaseCommand {
 
   async execute() {
     const { stdout } = this.context;
+    // setup yarn configuration, project, and cache information to run the install
     const configuration = await Configuration.find(
       this.context.cwd,
       this.context.plugins
@@ -69,6 +70,8 @@ export class InstallTo extends BaseCommand {
       this.context.cwd
     );
     const cache = await Cache.find(configuration);
+
+    // figure out the workspaces to install, will throw if invalid workspaces are encountered
     const workspaces = workspacesFromNames(this.workspaceNames, project);
 
     // need to have at least one specified workspace to install to
@@ -82,13 +85,12 @@ export class InstallTo extends BaseCommand {
       throw new WorkspaceRequiredError(project.cwd, this.context.cwd);
     }
 
+    // load the zip file in the cache to restore install state, skip resolutions as those will be run
     await project.restoreInstallState({
       restoreResolutions: false,
     });
 
-    /**
-     * Create one of yarn's stream report to wrap the output of the install process
-     */
+    // Create one of yarn's stream report to wrap the output of the install process
     const report = await StreamReport.start(
       {
         configuration,
@@ -121,13 +123,23 @@ export class InstallTo extends BaseCommand {
   }
 }
 
+/**
+ * Resolve the specified workspace names into a set of Workspace instances
+ * @returns a set of resolved workspaces
+ * @throws if any invalid workspaces are encountered
+ */
 function workspacesFromNames(
   names: string[],
   project: Project
 ): Set<Workspace> {
   const workspaces = new Set<Workspace>();
   for (const name of names) {
-    const workspace = project.getWorkspaceByIdent(structUtils.parseIdent(name));
+    const workspace = project.tryWorkspaceByIdent(structUtils.parseIdent(name));
+    if (!workspace) {
+      throw new UsageError(
+        `Unable to find workspace for ${name}. Please ensure the workspace name is correct`
+      );
+    }
     workspaces.add(workspace);
     const dependencies = workspace.getRecursiveWorkspaceDependencies();
     for (const dependency of dependencies) {
@@ -139,6 +151,12 @@ function workspacesFromNames(
   return workspaces;
 }
 
+/**
+ * Map from the descriptor, to the Package, recording the stored resolution and accessible
+ * locator along the way.
+ *
+ * @returns the Package if it was found and we have not already seen it. Undefined otherwise.
+ */
 function getResolution(
   options: ProjectScopingOptions,
   hash: DescriptorHash
@@ -155,10 +173,14 @@ function getResolution(
   return undefined;
 }
 
+/**
+ * Recursive dependency traversal function
+ */
 function traverseDependencies(
   options: ProjectScopingOptions,
   descriptor: Descriptor
 ) {
+  // traverse and record the resolutions, only returns a value if this hasn't been seen
   const pkg = getResolution(options, descriptor.descriptorHash);
   if (pkg) {
     for (const [, dependency] of pkg.dependencies) {
@@ -167,6 +189,11 @@ function traverseDependencies(
   }
 }
 
+/**
+ * Scope the storedResolutions (which drive fetch) and accessibleLocators (which drive link)
+ * to the given set of workspaces. This will traverse the dependencies of the workspaces
+ * and mark the storedResolutions and accessibleLocators as needed.
+ */
 function pareDownProject(project: Project, workspaces: Set<Workspace>) {
   const options: ProjectScopingOptions = {
     project,
@@ -175,24 +202,38 @@ function pareDownProject(project: Project, workspaces: Set<Workspace>) {
   };
 
   for (const workspace of workspaces) {
+    // add the resolution of this package to tracking lists, package may or may not be returned
     const pkg = getResolution(
       options,
       workspace.anchoredDescriptor.descriptorHash
     );
 
+    // traverse dependencies, preferrring the package but falling back to the manifest
     const dependencies = pkg?.dependencies ?? workspace.manifest.dependencies;
     for (const [, descriptor] of dependencies) {
       traverseDependencies(options, descriptor);
     }
+    // for workspace packages also traverse devDependencies
     for (const [, descriptor] of workspace.manifest.devDependencies) {
       traverseDependencies(options, descriptor);
     }
   }
 
+  // replace the values that drive fetch and link
   project.accessibleLocators = options.accessibleLocators;
   project.storedResolutions = options.storedResolutions;
 }
 
+/**
+ * Perform an install scoped to the gives set of workspaces. Follows the main parts of Project.install,
+ * skipping some of the validation steps.
+ *
+ * @param project yarn Project
+ * @param configuration yarn Configuration
+ * @param workspaces set of workspaces used for scoping
+ * @param opts install options driving the install
+ * @param verbose report out additional information
+ */
 async function partialInstall(
   project: Project,
   configuration: Configuration,
@@ -202,19 +243,29 @@ async function partialInstall(
 ): Promise<void> {
   const { report } = opts;
 
+  // load the package extensions from the configuration, this will trigger the getPackageExtensions hook
   const packageExtensions = await configuration.getPackageExtensions();
 
-  for (const extensionsByIdent of packageExtensions.values())
-    for (const [, extensionsByRange] of extensionsByIdent)
-      for (const extension of extensionsByRange)
+  // mark certain extensions inactive, replicated from Project.install
+  for (const extensionsByIdent of packageExtensions.values()) {
+    for (const [, extensionsByRange] of extensionsByIdent) {
+      for (const extension of extensionsByRange) {
         extension.status = PackageExtensionStatus.Inactive;
+      }
+    }
+  }
 
+  // run the resolution step, immutable will be set to ensure the lockfile will not be modified
   await report.startTimerPromise(`Resolution step`, async () => {
     await project.resolveEverything(opts);
   });
 
+  // grab the locator count before trimming the project
   const priorLocatorCount = project.accessibleLocators.size;
+
+  // traverse dependencies and resolutions to scope what will be fetched and installed
   pareDownProject(project, workspaces);
+
   if (verbose) {
     report.reportInfo(
       0,
@@ -222,13 +273,16 @@ async function partialInstall(
     );
   }
 
+  // run the fetch, the storedResolutions will have been scoped, reducing the number of fetchers created
   await report.startTimerPromise(`Fetch step`, async () => {
     await project.fetchEverything(opts);
   });
 
+  // run the link step, this does both install and linking, scoped via reducing project.accessibleLocators
   await report.startTimerPromise(`Link step`, async () => {
     await project.linkEverything(opts);
   });
 
+  // save the new install state in the cache.
   await project.persistInstallStateFile();
 }
