@@ -180,9 +180,7 @@ function pareDownProject(project: Project, workspaces: Set<Workspace>) {
       workspace.anchoredDescriptor.descriptorHash
     );
 
-    const dependencies = pkg
-      ? pkg.dependencies
-      : workspace.manifest.dependencies;
+    const dependencies = pkg?.dependencies ?? workspace.manifest.dependencies;
     for (const [, descriptor] of dependencies) {
       traverseDependencies(options, descriptor);
     }
