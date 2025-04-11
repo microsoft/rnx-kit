@@ -1,6 +1,29 @@
 // @ts-check
 
+import { Command } from "clipanion";
 import { runScript } from "../process.js";
+
+export class FormatCommand extends Command {
+  /**
+   * @override
+   */
+  static paths = [["format"]];
+
+  /**
+   * @override
+   */
+  static usage = Command.Usage({
+    description: "Formats the current package",
+    details: `
+      This command formats the current package using prettier.
+    `,
+    examples: [[`Format the current package`, `$0 format`]],
+  });
+
+  async execute() {
+    await format();
+  }
+}
 
 /** @type {import("../process.js").Command} */
 export async function format() {

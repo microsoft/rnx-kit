@@ -1,6 +1,31 @@
 // @ts-check
+import { Command, Option } from "clipanion";
 import * as fs from "node:fs";
 import { execute, runScript } from "../process.js";
+
+export class TestCommand extends Command {
+  /**
+   * @override
+   */
+  static paths = [["test"]];
+
+  /**
+   * @override
+   */
+  static usage = Command.Usage({
+    description: "Tests the current package",
+    details: `
+      This command tests the current package.
+    `,
+    examples: [[`Test the current package`, `$0 test`]],
+  });
+
+  args = Option.Proxy();
+
+  async execute() {
+    await test(undefined, this.args);
+  }
+}
 
 function useJest(cwd = process.cwd()) {
   const options = /** @type {const} */ ({ encoding: "utf-8" });

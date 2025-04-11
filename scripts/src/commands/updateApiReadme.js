@@ -1,5 +1,6 @@
 // @ts-check
 
+import { Command } from "clipanion";
 import * as fs from "node:fs";
 import * as path from "node:path";
 import ts from "typescript";
@@ -10,6 +11,28 @@ import ts from "typescript";
  * @typedef {import("typedoc").JSONOutput.ParameterReflection} ParameterReflection
  * @typedef {import("typedoc").JSONOutput.SourceReference} SourceReference
  */
+
+export class UpdateApiReadmeCommand extends Command {
+  /**
+   * @override
+   */
+  static paths = [["update-api-readme"]];
+
+  /**
+   * @override
+   */
+  static usage = Command.Usage({
+    description: "Updates the API README",
+    details: `
+      This command updates the API README.
+    `,
+    examples: [[`Update the API README`, `$0 update-api-readme`]],
+  });
+
+  async execute() {
+    await updateApiReadme();
+  }
+}
 
 const README = "README.md";
 const TOKEN_START = "<!-- @rnx-kit/api start -->";
