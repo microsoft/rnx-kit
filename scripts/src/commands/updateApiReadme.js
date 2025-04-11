@@ -26,7 +26,7 @@ export class UpdateApiReadmeCommand extends Command {
     details: `
       This command updates the API README.
     `,
-    examples: [[`Update the API README`, `yarn update-api-readme`]],
+    examples: [[`Update the API README`, `$0 update-api-readme`]],
   });
 
   async execute() {

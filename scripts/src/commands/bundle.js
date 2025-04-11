@@ -36,7 +36,7 @@ export class BundleCommand extends Command {
 
       Most settings will automatically be picked up based on the target platform.
     `,
-    examples: [[`Bundle the current package`, `yarn bundle`]],
+    examples: [[`Bundle the current package`, `$0 bundle`]],
   });
 
   minify = Option.Boolean(`--minify`, false, {

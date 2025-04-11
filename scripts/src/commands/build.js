@@ -18,14 +18,14 @@ export class BuildCommand extends Command {
     details: `
       If \`--dependencies\` is specified, also build the package's dependencies.
     `,
-    examples: [[`Build the current package`, `yarn build`]],
+    examples: [[`Build the current package`, `$0 build`]],
   });
 
   dependencies = Option.Boolean(`--dependencies`, false, {
     description: "Also build the package's dependencies",
   });
 
-  args = Option.Rest();
+  args = Option.Proxy();
 
   async execute() {
     if (this.dependencies) {

@@ -18,10 +18,10 @@ export class LintCommand extends Command {
     details: `
       This command lints the current package using eslint.
     `,
-    examples: [[`Lint the current package`, `yarn lint`]],
+    examples: [[`Lint the current package`, `$0 lint`]],
   });
 
-  args = Option.Rest();
+  args = Option.Proxy();
 
   async execute() {
     const args = this.args.length > 0 ? this.args : ["--no-warn-ignored"];

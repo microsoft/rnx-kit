@@ -17,7 +17,7 @@ export class FormatCommand extends Command {
     details: `
       This command formats the current package using prettier.
     `,
-    examples: [[`Format the current package`, `yarn format`]],
+    examples: [[`Format the current package`, `$0 format`]],
   });
 
   async execute() {

@@ -17,10 +17,10 @@ export class TestCommand extends Command {
     details: `
       This command tests the current package.
     `,
-    examples: [[`Test the current package`, `yarn test`]],
+    examples: [[`Test the current package`, `$0 test`]],
   });
 
-  args = Option.Rest();
+  args = Option.Proxy();
 
   async execute() {
     await test(undefined, this.args);

@@ -16,7 +16,7 @@ export class CleanCommand extends Command {
     details: `
       This command removes all build artifacts from the current package.
     `,
-    examples: [[`Clean the current package`, `yarn clean`]],
+    examples: [[`Clean the current package`, `$0 clean`]],
   });
 
   force = Option.Boolean(`--force`, true, {
