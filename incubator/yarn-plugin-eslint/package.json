@@ -1,0 +1,47 @@
+{
+  "name": "@rnx-kit/yarn-plugin-eslint",
+  "version": "0.0.1",
+  "description": "EXPERIMENTAL - USE WITH CAUTION - yarn-plugin-eslint",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/incubator/yarn-plugin-eslint#readme",
+  "license": "MIT",
+  "author": {
+    "name": "Microsoft Open Source",
+    "email": "microsoftopensource@users.noreply.github.com"
+  },
+  "files": [
+    "lib/index.js"
+  ],
+  "main": "lib/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "incubator/yarn-plugin-eslint"
+  },
+  "engines": {
+    "node": ">=18.19"
+  },
+  "scripts": {
+    "build": "rnx-kit-scripts build",
+    "bundle": "rnx-kit-scripts bundle --platform yarn --minify",
+    "format": "rnx-kit-scripts format"
+  },
+  "peerDependencies": {
+    "jiti": "*"
+  },
+  "peerDependenciesMeta": {
+    "jiti": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@eslint/compat": "^1.2.8",
+    "@rnx-kit/eslint-plugin": "*",
+    "@rnx-kit/scripts": "*",
+    "@rnx-kit/tsconfig": "*",
+    "@yarnpkg/cli": "^4.6.0",
+    "@yarnpkg/core": "^4.0.0",
+    "clipanion": "^4.0.0-rc.4",
+    "eslint-formatter-pretty": "^6.0.1"
+  },
+  "experimental": true
+}

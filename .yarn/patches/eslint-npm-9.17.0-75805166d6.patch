@@ -1,0 +1,15 @@
+diff --git a/lib/config/config-loader.js b/lib/config/config-loader.js
+index 845cd0c92861353481d3369bb09e034e90f269ea..2eaaaade1e6b4949f1e38cee1c884f70b491b2d2 100644
+--- a/lib/config/config-loader.js
++++ b/lib/config/config-loader.js
+@@ -158,7 +158,9 @@ async function loadConfigFile(filePath, allowTS) {
+      * the require cache only if the file has been changed.
+      */
+     if (importedConfigFileModificationTime.get(filePath) !== mtime) {
+-        delete require.cache[filePath];
++        if (require.cache) {
++            delete require.cache[filePath];
++        }
+     }
+ 
+     const isTS = isFileTS(filePath);

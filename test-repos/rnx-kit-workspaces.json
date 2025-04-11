@@ -48,6 +48,7 @@
       "@rnx-kit/tsconfig": "packages/tsconfig",
       "@rnx-kit/typescript-service": "packages/typescript-service",
       "@rnx-kit/yarn-plugin-dynamic-extensions": "incubator/yarn-plugin-dynamic-extensions",
+      "@rnx-kit/yarn-plugin-eslint": "incubator/yarn-plugin-eslint",
       "@rnx-kit/yarn-plugin-external-workspaces": "incubator/yarn-plugin-external-workspaces"
     }
   }
