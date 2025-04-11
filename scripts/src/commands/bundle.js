@@ -1,6 +1,7 @@
 // @ts-check
 
 import { getDynamicLibs } from "@yarnpkg/cli";
+import { Command, Option } from "clipanion";
 import * as fs from "node:fs";
 
 /**
@@ -18,6 +19,47 @@ import * as fs from "node:fs";
  * @typedef {{ minify?: boolean, platform?: string, sourceMap?: boolean }} BundleOptions
  * @typedef {(manifest: Manifest) => Partial<BuildOptions>} OptionPreset
  */
+
+export class BundleCommand extends Command {
+  /**
+   * @override
+   */
+  static paths = [["bundle"]];
+  /**
+   * @override
+   */
+  static usage = Command.Usage({
+    description: "Bundles the current package",
+    details: `
+      This command leverages esbuild to do a fast bundle of the current package. The entry point will be src/index.ts,
+      with output corresponding to the main field in package.json.
+
+      Most settings will automatically be picked up based on the target platform.
+    `,
+    examples: [[`Bundle the current package`, `yarn bundle`]],
+  });
+
+  minify = Option.Boolean(`--minify`, false, {
+    description: "Minify the bundle",
+  });
+
+  platform = Option.String(`--platform`, "node", {
+    description:
+      "Target platform to bundle for. One of browser, neutral, node, or yarn.",
+  });
+
+  sourceMap = Option.Boolean(`--source-map`, false, {
+    description: "Generate an associated source map",
+  });
+
+  async execute() {
+    await bundle({
+      minify: this.minify,
+      platform: this.platform,
+      sourceMap: this.sourceMap,
+    });
+  }
+}
 
 const defaultTarget = "es2021";
 const defaultNodeTarget = "node16.17";

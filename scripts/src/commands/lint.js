@@ -1,7 +1,33 @@
 // @ts-check
 
+import { Command, Option } from "clipanion";
 import { spawnSync } from "node:child_process";
 import { runScript } from "../process.js";
+
+export class LintCommand extends Command {
+  /**
+   * @override
+   */
+  static paths = [["lint"]];
+
+  /**
+   * @override
+   */
+  static usage = Command.Usage({
+    description: "Lints the current package",
+    details: `
+      This command lints the current package using eslint.
+    `,
+    examples: [[`Lint the current package`, `yarn lint`]],
+  });
+
+  args = Option.Rest();
+
+  async execute() {
+    const args = this.args.length > 0 ? this.args : ["--no-warn-ignored"];
+    await lint(undefined, args);
+  }
+}
 
 /**
  * @param {...string} patterns
