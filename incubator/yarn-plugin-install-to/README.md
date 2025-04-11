@@ -9,7 +9,7 @@
 
 🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧
 
-A plugin for yarn v4, that adds an "install-to" command that executes a partial
+A plugin for yarn v4, that adds an `install-to` command that executes a partial
 install based on the dependencies of one or more packages inside the monorepo.
 
 ## Details
