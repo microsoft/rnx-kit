@@ -4704,6 +4704,21 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@rnx-kit/yarn-plugin-install-to@workspace:incubator/yarn-plugin-install-to":
+  version: 0.0.0-use.local
+  resolution: "@rnx-kit/yarn-plugin-install-to@workspace:incubator/yarn-plugin-install-to"
+  dependencies:
+    "@rnx-kit/eslint-config": "npm:*"
+    "@rnx-kit/scripts": "npm:*"
+    "@rnx-kit/tsconfig": "npm:*"
+    "@types/node": "npm:^20.0.0"
+    "@types/semver": "npm:^7.0.0"
+    "@yarnpkg/cli": "npm:^4.6.0"
+    "@yarnpkg/core": "npm:^4.2.0"
+    clipanion: "npm:^4.0.0-rc.4"
+  languageName: unknown
+  linkType: soft
+
 "@shikijs/engine-oniguruma@npm:^1.27.2":
   version: 1.29.2
   resolution: "@shikijs/engine-oniguruma@npm:1.29.2"

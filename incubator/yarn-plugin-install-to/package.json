@@ -1,0 +1,44 @@
+{
+  "name": "@rnx-kit/yarn-plugin-install-to",
+  "version": "0.1.0",
+  "description": "EXPERIMENTAL - USE WITH CAUTION - yarn-plugin-install-to",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/incubator/yarn-plugin-install-to#readme",
+  "license": "MIT",
+  "author": {
+    "name": "Microsoft Open Source",
+    "email": "microsoftopensource@users.noreply.github.com"
+  },
+  "files": [
+    "dist/**/*.cjs",
+    "dist/**/*.cjs.map",
+    "src"
+  ],
+  "main": "./dist/yarn-plugin-install-to.cjs",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "incubator/yarn-plugin-install-to"
+  },
+  "engines": {
+    "node": ">=18.12"
+  },
+  "scripts": {
+    "build": "rnx-kit-scripts build",
+    "bundle": "rnx-kit-scripts bundle --platform yarn --minify --sourceMap",
+    "bundle:dev": "rnx-kit-scripts bundle --platform yarn --sourceMap",
+    "format": "rnx-kit-scripts format",
+    "lint": "rnx-kit-scripts lint",
+    "test": "rnx-kit-scripts test"
+  },
+  "devDependencies": {
+    "@rnx-kit/eslint-config": "*",
+    "@rnx-kit/scripts": "*",
+    "@rnx-kit/tsconfig": "*",
+    "@types/node": "^20.0.0",
+    "@types/semver": "^7.0.0",
+    "@yarnpkg/cli": "^4.6.0",
+    "@yarnpkg/core": "^4.2.0",
+    "clipanion": "^4.0.0-rc.4"
+  },
+  "experimental": true
+}
