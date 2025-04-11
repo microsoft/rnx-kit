@@ -7,7 +7,14 @@ import * as fs from "node:fs";
  * @typedef {import("esbuild").BuildOptions} BuildOptions
  * @typedef {BuildOptions["platform"]} Platform
  * @typedef {{ node?: string }} Engines
- * @typedef {{ name: string, main: string, dependencies?: Record<string, string>, peerDependencies?: Record<string, string>, engines?: Record<string, string> }} Manifest
+ * @typedef {{
+ *   name: string;
+ *   main: string;
+ *   dependencies?: Record<string, string>;
+ *   peerDependencies?: Record<string, string>;
+ *   peerDependenciesMeta?: Record<string, { optional: boolean; }>;
+ *   engines?: Record<string, string>;
+ * }} Manifest
  * @typedef {{ minify?: boolean, platform?: string, sourceMap?: boolean }} BundleOptions
  * @typedef {(manifest: Manifest) => Partial<BuildOptions>} OptionPreset
  */
@@ -73,7 +80,7 @@ function neutralPreset(manifest) {
  * @returns {Partial<BuildOptions>}
  */
 function yarnPreset(manifest) {
-  const name = manifest.name;
+  const { name, peerDependenciesMeta } = manifest;
   return {
     banner: {
       js: [
@@ -90,7 +97,10 @@ function yarnPreset(manifest) {
       js: [`return plugin;`, `}`, `};`].join(`\n`),
     },
     resolveExtensions: [`.tsx`, `.ts`, `.jsx`, `.mjs`, `.js`, `.css`, `.json`],
-    external: [...getDynamicLibs().keys()],
+    external: [
+      ...(peerDependenciesMeta ? Object.keys(peerDependenciesMeta) : []),
+      ...getDynamicLibs().keys(),
+    ],
     platform: "node",
     target: getNodeTarget(manifest),
     supported: {
