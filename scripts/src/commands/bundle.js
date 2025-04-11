@@ -48,7 +48,7 @@ export class BundleCommand extends Command {
       "Target platform to bundle for. One of browser, neutral, node, or yarn.",
   });
 
-  sourceMap = Option.Boolean(`--source-map`, false, {
+  sourceMap = Option.Boolean(`--sourceMap`, false, {
     description: "Generate an associated source map",
   });
 
