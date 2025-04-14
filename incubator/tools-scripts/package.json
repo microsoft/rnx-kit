@@ -16,8 +16,8 @@
   ],
   "exports": {
     ".": {
-      "import": "./lib/index.js",
-      "types": "./src/index.d.ts"
+      "import": "./src/index.js",
+      "types": "./src/types.d.ts"
     }
   },
   "main": "src/index.js",
