@@ -9,12 +9,19 @@
     "name": "Microsoft Open Source",
     "email": "microsoftopensource@users.noreply.github.com"
   },
+  "type": "module",
   "files": [
     "lib/**/*.d.ts",
     "lib/**/*.js"
   ],
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./lib/index.js",
+      "types": "./src/index.d.ts"
+    }
+  },
+  "main": "src/index.js",
+  "types": "src/index.d.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/microsoft/rnx-kit",
@@ -29,9 +36,14 @@
     "lint": "rnx-kit-scripts lint",
     "test": "rnx-kit-scripts test"
   },
+  "dependencies": {
+    "@eslint/compat": "^1.2.8",
+    "@rnx-kit/eslint-plugin": "*",
+    "clipanion": "^4.0.0-rc.4",
+    "eslint": "^9.0.0",
+    "eslint-formatter-pretty": "^6.0.1"
+  },
   "devDependencies": {
-    "@rnx-kit/eslint-config": "*",
-    "@rnx-kit/jest-preset": "*",
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*"
   },
