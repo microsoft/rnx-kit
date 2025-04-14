@@ -4409,6 +4409,7 @@ __metadata:
   resolution: "@rnx-kit/scripts@workspace:scripts"
   dependencies:
     "@eslint/js": "npm:^9.0.0"
+    "@microsoft/eslint-plugin-sdl": "npm:^1.0.0"
     "@rnx-kit/tsconfig": "workspace:*"
     "@types/jest": "npm:^29.2.1"
     "@types/js-yaml": "npm:^4.0.5"

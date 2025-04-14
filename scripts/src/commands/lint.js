@@ -2,9 +2,15 @@
 
 import { Command, Option } from "clipanion";
 import { spawnSync } from "node:child_process";
+import { createLintCommand } from "../../../incubator/tools-scripts/src/index.js";
+import config from "../../eslint.config.js";
 import { runScript } from "../process.js";
 
-export class LintCommand extends Command {
+export const LintCommand = createLintCommand(["lint"], {
+  defaultConfig: config,
+});
+
+export class LintCommand2 extends Command {
   /**
    * @override
    */

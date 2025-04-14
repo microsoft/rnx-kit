@@ -14,14 +14,8 @@
     "lib/**/*.d.ts",
     "lib/**/*.js"
   ],
-  "exports": {
-    ".": {
-      "import": "./src/index.js",
-      "types": "./src/types.d.ts"
-    }
-  },
   "main": "src/index.js",
-  "types": "src/index.d.ts",
+  "types": "src/types.d.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/microsoft/rnx-kit",

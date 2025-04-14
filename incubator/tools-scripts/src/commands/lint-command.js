@@ -1,14 +1,18 @@
-import { defaultLintOptions, lint } from "../scripts/lint.js";
+// @ts-check
+
+import { Command, Option } from "clipanion";
+import { defaultLintOptions, runLint } from "../scripts/lint.js";
+import { BaseCommand } from "./base-command.js";
 
 /**
- * @typedef {import("../scripts/lint").LintOptions} LintOptions
- * @typedef {import("clipanion").Command} Command
+ * @typedef {import("../scripts/lint.js").LintOptions} LintOptions
+ * @typedef {import("clipanion").Usage} Usage
  */
 
 /**
  * @param {string[]} paths
- * @param {LintOptions} options
- * @returns {Command.Usage}
+ * @param {Partial<LintOptions>} options
+ * @returns {Usage}
  */
 function createUsage(paths, options) {
   const cmdPath = `$0 ${paths.join(" ")}`;
@@ -23,6 +27,8 @@ function createUsage(paths, options) {
       )}`
     : `Ignore patterns will be automatically detected from .gitignore files.`;
 
+  const filePatterns = options.filePatterns || [];
+
   return Command.Usage({
     description: "Lint the current package",
     details: `
@@ -31,7 +37,7 @@ function createUsage(paths, options) {
       If a configuration file is found in the current directory, it will be used. Otherwise, ${noConfigFallback}
 
       Files can be specified directly, or if not specified will be looked up based on the default
-      file patterns: [${options.filePatterns.join(",")}. Lookup patterns can be overridden via the patterns option.
+      file patterns: [${filePatterns.join(",")}. Lookup patterns can be overridden via the patterns option.
 
       ${ignoreMessage}
     `,
@@ -52,10 +58,12 @@ function createUsage(paths, options) {
  * paths and defaults. This allows for changing the paths, or creating multiple lint commands with different defaults
  *
  * @param {string[]} paths
- * @param {Partial<LintOptions>} commandDefaults
- * @returns {class extends BaseCommand}
+ * @param {LintOptions} commandDefaults
+ * @returns {typeof BaseCommand}
  */
 export function createLintCommand(paths = ["lint"], commandDefaults = {}) {
+  const baseOptions = { ...defaultLintOptions, ...commandDefaults };
+
   // create an anonymous command class for this command
   return class extends BaseCommand {
     /**
@@ -66,7 +74,7 @@ export function createLintCommand(paths = ["lint"], commandDefaults = {}) {
     /**
      * @override
      */
-    static usage = createUsage(paths, options);
+    static usage = createUsage(paths, baseOptions);
 
     /**
      * @type {boolean}
@@ -95,13 +103,17 @@ export function createLintCommand(paths = ["lint"], commandDefaults = {}) {
     filesOrPatterns = Option.Rest();
 
     /**
-     * @returns {Promise<number>}
+     * @override
+     * @returns {Promise<void>}
      */
     async execute() {
-      const options = { ...defaultLintOptions, ...commandDefaults };
+      /**
+       * @type {LintOptions}
+       */
+      const options = { ...baseOptions };
 
       // get the cwd and root from the context
-      options.cwd = this.cwd() ?? process.cwd();
+      const cwd = this.cwd() ?? process.cwd();
       options.root = this.root();
 
       options.fix = this.fix;
@@ -115,7 +127,7 @@ export function createLintCommand(paths = ["lint"], commandDefaults = {}) {
         }
       }
 
-      return await lint(options);
+      await runLint(cwd, options);
     }
   };
 }

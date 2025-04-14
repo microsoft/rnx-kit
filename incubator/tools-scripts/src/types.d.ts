@@ -1,2 +1,2 @@
-export type { ScriptContext } from "./commands/base.d.ts";
-export type { LintOptions } from "./scripts/lint.d.ts";
+export type { ScriptContext } from "./base.js";
+export type { LintOptions } from "./scripts/lint.js";
