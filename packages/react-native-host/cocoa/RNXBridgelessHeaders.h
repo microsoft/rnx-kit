@@ -23,9 +23,9 @@
 
 #if __has_include(<ReactCodegen/RCTThirdPartyComponentsProvider.h>)
 #define USE_CODEGEN_PROVIDER 1
-#import <ReactCodegen/RCTThirdPartyComponentsProvider.h>
 #import <React/RCTComponentViewFactory.h>
-#endif // __has_include(<ReactCodegen/RCTThirdPartyComponentsProvider.h>)
+#import <ReactCodegen/RCTThirdPartyComponentsProvider.h>
+#endif  // __has_include(<ReactCodegen/RCTThirdPartyComponentsProvider.h>)
 
 #if __has_include(<react/runtime/JSEngineInstance.h>)
 using SharedJSRuntimeFactory = std::shared_ptr<facebook::react::JSEngineInstance>;
