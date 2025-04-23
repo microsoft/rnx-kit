@@ -40,7 +40,10 @@ export const externalWorkspacesConfiguration: CustomConfiguration = {
   },
 };
 
-function coercePortablePath(value: unknown, projectCwd: PortablePath | null): PortablePath {
+function coercePortablePath(
+  value: unknown,
+  projectCwd: PortablePath | null
+): PortablePath {
   const p = npath.toPortablePath(typeof value === "string" ? value : "");
   // If we have a project root, convert to an absolute path otherwise Yarn will
   // use the current working directory instead.
@@ -57,8 +60,14 @@ export function getPluginConfiguration(configuration: Configuration): {
   outputOnlyOnCommand: boolean;
 } {
   const { projectCwd } = configuration;
-  const provider = coercePortablePath(configuration.get(PROVIDER_KEY), projectCwd);
-  const outputPath = coercePortablePath(configuration.get(OUTPUT_PATH_KEY), projectCwd);
+  const provider = coercePortablePath(
+    configuration.get(PROVIDER_KEY),
+    projectCwd
+  );
+  const outputPath = coercePortablePath(
+    configuration.get(OUTPUT_PATH_KEY),
+    projectCwd
+  );
   const outputOnlyOnCommand = Boolean(configuration.get(OUTPUT_ON_COMMAND_KEY));
   return { provider, outputPath, outputOnlyOnCommand };
 }
