@@ -19,12 +19,6 @@ export async function test(_args, rawArgs = []) {
         : await import("fast-glob").then(({ default: fg }) =>
             fg.async("test/**/*.test.ts", { followSymbolicLinks: false })
           );
-    await execute(
-      process.argv0,
-      "--import",
-      import.meta.resolve("tsx"),
-      "--test",
-      ...tests
-    );
+    await execute(process.argv0, "--test", ...tests);
   }
 }

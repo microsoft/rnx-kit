@@ -4410,7 +4410,6 @@ __metadata:
     js-yaml: "npm:^4.1.0"
     markdown-table: "npm:^3.0.0"
     prettier: "npm:^3.0.0"
-    tsx: "npm:^4.15.0"
     typedoc: "npm:^0.27.0"
     typescript: "npm:^5.0.0"
     yargs: "npm:^16.0.0"
