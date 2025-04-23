@@ -14,7 +14,7 @@ import {
   getFinderFromJsConfig,
   getFinderFromJsonConfig,
   getPluginConfiguration,
-} from "./cofiguration";
+} from "./configuration";
 import { type PackagePaths } from "./types";
 import { ExternalWorkspace } from "./workspace";
 

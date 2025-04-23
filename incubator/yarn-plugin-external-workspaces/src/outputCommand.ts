@@ -3,7 +3,7 @@ import { Configuration, Project, structUtils } from "@yarnpkg/core";
 import { npath, type PortablePath, ppath } from "@yarnpkg/fslib";
 import { Command, Option, UsageError } from "clipanion";
 import fs from "node:fs";
-import { getPluginConfiguration } from "./cofiguration";
+import { getPluginConfiguration } from "./configuration";
 import { type WorkspaceOutputGeneratedContent } from "./types";
 
 const outputVersion = "1.0.0";
