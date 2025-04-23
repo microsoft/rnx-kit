@@ -96,7 +96,9 @@ export function outputWorkspaces(
 ): void {
   // ensure we have a valid filename and that the directory exists
   const includesJson = outputPath.endsWith(".json");
-  const outputDir = includesJson ? ppath.dirname(outputPath) : outputPath;
+  const outputDir = npath.fromPortablePath(
+    includesJson ? ppath.dirname(outputPath) : outputPath
+  );
   const outputFile = includesJson
     ? ppath.basename(outputPath)
     : fallbackOutputFilename(project);
@@ -104,7 +106,7 @@ export function outputWorkspaces(
   if (!checkOnly && !fs.existsSync(outputDir)) {
     fs.mkdirSync(outputDir, { recursive: true, mode: 0o755 });
   }
-  const fullPath = npath.join(npath.fromPortablePath(outputDir), outputFile);
+  const fullPath = npath.join(outputDir, outputFile);
 
   const workspaces: Record<string, string> = {};
   // iterate the workspaces and record their names and paths
@@ -117,7 +119,10 @@ export function outputWorkspaces(
   });
 
   // grab the relative path from the config to the repo root
-  const repoPath = ppath.relative(outputDir, project.cwd);
+  const repoPath = npath.relative(
+    outputDir,
+    npath.fromPortablePath(project.cwd)
+  );
 
   // create the new generated content
   const generated: WorkspaceOutputGeneratedContent = {
