@@ -6,6 +6,7 @@ import {
 } from "@yarnpkg/core";
 import { type PortablePath, npath, ppath } from "@yarnpkg/fslib";
 import fs from "node:fs";
+import path from "node:path";
 import {
   type PackagePaths,
   type WorkspaceOutputGeneratedContent,
@@ -44,10 +45,15 @@ function coercePortablePath(
   value: unknown,
   projectCwd: PortablePath | null
 ): PortablePath {
-  const p = npath.toPortablePath(typeof value === "string" ? value : "");
   // If we have a project root, convert to an absolute path otherwise Yarn will
   // use the current working directory instead.
-  return projectCwd ? ppath.join(projectCwd, p) : p;
+  const root = projectCwd ? npath.fromPortablePath(projectCwd) : "";
+
+  // Both `npath.join()` and `ppath.join()` mishandle Windows paths, which is
+  // why we convert them to strings first and use `node:path.join()` instead.
+  const p = path.join(root, typeof value === "string" ? value : "");
+
+  return npath.toPortablePath(p);
 }
 
 /**
