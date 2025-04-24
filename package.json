@@ -46,19 +46,19 @@
     "test": "node --test --experimental-test-coverage $(git ls-files 'test/*.test.js')"
   },
   "dependencies": {
-    "@octokit/core": "^6.0",
-    "@octokit/plugin-rest-endpoint-methods": "^13.0",
+    "@octokit/core": "^6.0.0",
+    "@octokit/plugin-rest-endpoint-methods": "^14.0.0",
     "azure-devops-node-api": "^13.0.0",
-    "parse-diff": "^0.11"
+    "parse-diff": "^0.11.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.0.0",
     "@rnx-kit/tsconfig": "^2.0.0",
     "@types/node": "^22.0.0",
     "eslint": "^9.0.0",
-    "prettier": "^3.0",
+    "prettier": "^3.0.0",
     "semantic-release": "^24.0.0",
-    "typescript": "^5.0"
+    "typescript": "^5.0.0"
   },
   "engines": {
     "node": ">=18.12"
