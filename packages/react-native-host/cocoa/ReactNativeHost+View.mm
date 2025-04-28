@@ -59,7 +59,7 @@ static NSString *const kReactConcurrentRoot = @"concurrentRoot";
 #elif USE_BRIDGELESS
     RCTFabricSurface *surface = [self.reactHost createSurfaceWithModuleName:moduleName
                                                           initialProperties:initialProps];
-#if __has_include(<react/renderer/components/modal/ModalHostViewUtils.h>)  // >=0.76
+#if __has_include(<react/renderer/graphics/LinearGradient.h>)  // >=0.77
     return [[RCTSurfaceHostingProxyRootView alloc] initWithSurface:surface];
 #else
     // `-initWithSurface:` implicitly calls `start` and causes race conditions.
@@ -70,8 +70,8 @@ static NSString *const kReactConcurrentRoot = @"concurrentRoot";
         RCTSurfaceSizeMeasureModeWidthExact | RCTSurfaceSizeMeasureModeHeightExact;
     return [[RCTSurfaceHostingProxyRootView alloc] initWithSurface:surface
                                                    sizeMeasureMode:sizeMeasureMode];
-#endif  // __has_include(<react/renderer/components/modal/ModalHostViewState.h>)
-#else  // __has_include(<React/RCTFabricSurfaceHostingProxyRootView.h>)
+#endif  // __has_include(<react/renderer/graphics/LinearGradient.h>)
+#else   // __has_include(<React/RCTFabricSurfaceHostingProxyRootView.h>)
     RCTFabricSurface *surface =
         [[RCTFabricSurface alloc] initWithSurfacePresenter:self.surfacePresenter
                                                 moduleName:moduleName
