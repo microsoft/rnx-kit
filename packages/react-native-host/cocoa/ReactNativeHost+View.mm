@@ -59,15 +59,19 @@ static NSString *const kReactConcurrentRoot = @"concurrentRoot";
 #elif USE_BRIDGELESS
     RCTFabricSurface *surface = [self.reactHost createSurfaceWithModuleName:moduleName
                                                           initialProperties:initialProps];
+#if __has_include(<react/renderer/components/modal/ModalHostViewUtils.h>)  // >=0.76
+    return [[RCTSurfaceHostingProxyRootView alloc] initWithSurface:surface];
+#else
     // `-initWithSurface:` implicitly calls `start` and causes race conditions.
     // This was fixed in 0.76.7, but for backwards compatibility, we should call
-    // `-initWithSurface:sizeMeasureMode` instead. For more details, see
+    // `-initWithSurface:sizeMeasureMode` when possible. For more details, see
     // https://github.com/facebook/react-native/pull/47313.
     RCTSurfaceSizeMeasureMode sizeMeasureMode =
         RCTSurfaceSizeMeasureModeWidthExact | RCTSurfaceSizeMeasureModeHeightExact;
     return [[RCTSurfaceHostingProxyRootView alloc] initWithSurface:surface
                                                    sizeMeasureMode:sizeMeasureMode];
-#else
+#endif  // __has_include(<react/renderer/components/modal/ModalHostViewState.h>)
+#else  // __has_include(<React/RCTFabricSurfaceHostingProxyRootView.h>)
     RCTFabricSurface *surface =
         [[RCTFabricSurface alloc] initWithSurfacePresenter:self.surfacePresenter
                                                 moduleName:moduleName
