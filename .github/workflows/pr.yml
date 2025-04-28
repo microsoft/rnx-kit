@@ -83,6 +83,7 @@ jobs:
           git diff --exit-code
   build:
     name: "Build"
+    permissions: {}
     strategy:
       matrix:
         node-version: [20, 22]
@@ -117,6 +118,7 @@ jobs:
         shell: bash
   build-android-test-app:
     name: "Build Android"
+    permissions: {}
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout
@@ -148,6 +150,7 @@ jobs:
         working-directory: packages/test-app
   build-ios-test-app:
     name: "Build iOS"
+    permissions: {}
     runs-on: macos-15
     steps:
       - name: Checkout
@@ -192,6 +195,7 @@ jobs:
         working-directory: packages/test-app
   build-website:
     name: "Build the website"
+    permissions: {}
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout
