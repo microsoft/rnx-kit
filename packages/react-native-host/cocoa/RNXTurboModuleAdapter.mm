@@ -53,11 +53,25 @@
 @implementation RNXTurboModuleAdapter {
 #if USE_FABRIC
     RCTTurboModuleManager *_turboModuleManager;
+    std::weak_ptr<facebook::react::CallInvoker> _jsInvoker;
 #endif  // USE_FABRIC
 #if USE_RUNTIME_SCHEDULER
     std::shared_ptr<facebook::react::RuntimeScheduler> _runtimeScheduler;
 #endif  // USE_RUNTIME_SCHEDULER
 }
+
+#if USE_FABRIC
+- (instancetype)init
+{
+    if (self = [super init]) {
+        [NSNotificationCenter.defaultCenter addObserver:self
+                                               selector:@selector(onRuntimeReady:)
+                                                   name:@"RCTInstanceDidLoadBundle"
+                                                 object:nil];
+    }
+    return self;
+}
+#endif  // USE_FABRIC
 
 - (std::unique_ptr<facebook::react::JSExecutorFactory>)jsExecutorFactoryForBridge:
     (RCTBridge *)bridge
@@ -90,6 +104,7 @@
          jsInvoker:(std::shared_ptr<facebook::react::CallInvoker>)jsInvoker
 {
 #if __has_include(<react/nativemodule/defaults/DefaultTurboModules.h>)  // >= 0.75
+    _jsInvoker = jsInvoker;
     return facebook::react::DefaultTurboModules::getTurboModule(name, jsInvoker);
 #else
     return nullptr;
@@ -125,6 +140,18 @@
                                                               jsInvoker:bridge.jsCallInvoker];
     return RCTAppSetupDefaultJsExecutorFactory(bridge, _turboModuleManager);
 #endif  // USE_RUNTIME_SCHEDULER
+}
+
+- (void)onRuntimeReady:(NSNotification *)note
+{
+    if (auto jsInvoker = _jsInvoker.lock()) {
+        jsInvoker->invokeAsync([](facebook::jsi::Runtime &runtime) {
+            NSDictionary *userInfo = @{@"runtime": [NSValue valueWithPointer:&runtime]};
+            [NSNotificationCenter.defaultCenter postNotificationName:@"ReactAppRuntimeReady"
+                                                              object:nil
+                                                            userInfo:userInfo];
+        });
+    }
 }
 
 #endif  // USE_FABRIC
