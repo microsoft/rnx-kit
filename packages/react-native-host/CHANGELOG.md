@@ -1,5 +1,12 @@
 # @rnx-kit/react-native-host
 
+## 0.5.7
+
+### Patch Changes
+
+- c2e4303: Backport fix for shadow node state not updating (see
+  https://github.com/facebook/react-native/issues/49694)
+
 ## 0.5.6
 
 ### Patch Changes
