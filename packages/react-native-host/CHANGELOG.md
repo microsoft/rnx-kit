@@ -1,5 +1,11 @@
 # @rnx-kit/react-native-host
 
+## 0.5.8
+
+### Patch Changes
+
+- 3eb57fc: Post a notification when the React runtime is ready
+
 ## 0.5.7
 
 ### Patch Changes
