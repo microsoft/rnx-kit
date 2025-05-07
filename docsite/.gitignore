@@ -8,6 +8,7 @@
 .docusaurus
 .cache-loader
 docs/contributing.md
+test-repos/
 
 # Misc
 .DS_Store

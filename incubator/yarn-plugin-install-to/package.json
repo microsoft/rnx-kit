@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/yarn-plugin-install-to",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "EXPERIMENTAL - USE WITH CAUTION - yarn-plugin-install-to",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/incubator/yarn-plugin-install-to#readme",
   "license": "MIT",

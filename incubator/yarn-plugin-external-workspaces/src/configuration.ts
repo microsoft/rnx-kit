@@ -6,6 +6,7 @@ import {
 } from "@yarnpkg/core";
 import { type PortablePath, npath, ppath } from "@yarnpkg/fslib";
 import fs from "node:fs";
+import path from "node:path";
 import {
   type PackagePaths,
   type WorkspaceOutputGeneratedContent,
@@ -40,8 +41,19 @@ export const externalWorkspacesConfiguration: CustomConfiguration = {
   },
 };
 
-function coercePortablePath(value: unknown): PortablePath {
-  return npath.toPortablePath(typeof value === "string" ? value : "");
+function coercePortablePath(
+  value: unknown,
+  projectCwd: PortablePath | null
+): PortablePath {
+  // If we have a project root, convert to an absolute path otherwise Yarn will
+  // use the current working directory instead.
+  const root = projectCwd ? npath.fromPortablePath(projectCwd) : "";
+
+  // Both `npath.join()` and `ppath.join()` mishandle Windows paths, which is
+  // why we convert them to strings first and use `node:path.join()` instead.
+  const p = path.join(root, typeof value === "string" ? value : "");
+
+  return npath.toPortablePath(p);
 }
 
 /**
@@ -53,8 +65,15 @@ export function getPluginConfiguration(configuration: Configuration): {
   outputPath: PortablePath | null;
   outputOnlyOnCommand: boolean;
 } {
-  const provider = coercePortablePath(configuration.get(PROVIDER_KEY));
-  const outputPath = coercePortablePath(configuration.get(OUTPUT_PATH_KEY));
+  const { projectCwd } = configuration;
+  const provider = coercePortablePath(
+    configuration.get(PROVIDER_KEY),
+    projectCwd
+  );
+  const outputPath = coercePortablePath(
+    configuration.get(OUTPUT_PATH_KEY),
+    projectCwd
+  );
   const outputOnlyOnCommand = Boolean(configuration.get(OUTPUT_ON_COMMAND_KEY));
   return { provider, outputPath, outputOnlyOnCommand };
 }

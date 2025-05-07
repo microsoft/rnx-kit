@@ -7,7 +7,6 @@ jobs:
     name: "Build and publish"
     permissions:
       contents: write # for GH releases and Git tags (Changesets)
-      pull-requests: write # version PRs (Changesets)
     if: ${{ github.repository == 'microsoft/rnx-kit' }}
     runs-on: ubuntu-24.04
     steps:
@@ -30,6 +29,14 @@ jobs:
       - name: Bundle packages
         run: |
           yarn bundle
+      - name: Generate token for publishing
+        uses: actions/create-github-app-token@v2
+        id: app-token
+        with:
+          app-id: ${{ vars.APP_ID }}
+          private-key: ${{ secrets.PRIVATE_KEY }}
+          permission-contents: write # for GH releases and Git tags (Changesets)
+          permission-pull-requests: write # version PRs (Changesets)
       - name: Create release PR or publish to npm
         uses: changesets/action@v1
         with:
@@ -38,7 +45,7 @@ jobs:
         env:
           # We cannot use the GHA generated tokens because we've disabled
           # creation of pull requests at the org level.
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
   website:
     name: "Publish website"

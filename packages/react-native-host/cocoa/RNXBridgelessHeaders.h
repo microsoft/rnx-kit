@@ -1,5 +1,9 @@
 #if USE_BRIDGELESS
 
+// clang-format off
+#import "RNXFeatureMacros.h"
+// clang-format on
+
 #import <React/RCTSurfacePresenterBridgeAdapter.h>
 #import <ReactCommon/RCTHost+Internal.h>
 #import <ReactCommon/RCTHost.h>
@@ -10,22 +14,19 @@
 #import <ReactCommon/RCTJscInstance.h>
 #endif  // USE_HERMES
 
-#if __has_include(<react/config/ReactNativeConfig.h>)
+#ifdef USE_REACT_NATIVE_CONFIG
 #import <react/config/ReactNativeConfig.h>
-#define USE_REACT_NATIVE_CONFIG
-#endif  // __has_include(<react/config/ReactNativeConfig.h>)
+#endif  // USE_REACT_NATIVE_CONFIG
 
-#if __has_include(<react/featureflags/ReactNativeFeatureFlags.h>)
+#ifdef USE_FEATURE_FLAGS
 #import <react/featureflags/ReactNativeFeatureFlags.h>
 #import <react/featureflags/ReactNativeFeatureFlagsDefaults.h>
-#define USE_FEATURE_FLAGS
-#endif  // __has_include(<react/featureflags/ReactNativeFeatureFlags.h>)
+#endif  // USE_FEATURE_FLAGS
 
-#if __has_include(<ReactCodegen/RCTThirdPartyComponentsProvider.h>)
-#define USE_CODEGEN_PROVIDER 1
-#import <ReactCodegen/RCTThirdPartyComponentsProvider.h>
+#ifdef USE_CODEGEN_PROVIDER
 #import <React/RCTComponentViewFactory.h>
-#endif // __has_include(<ReactCodegen/RCTThirdPartyComponentsProvider.h>)
+#import <ReactCodegen/RCTThirdPartyComponentsProvider.h>
+#endif  // USE_CODEGEN_PROVIDER
 
 #if __has_include(<react/runtime/JSEngineInstance.h>)
 using SharedJSRuntimeFactory = std::shared_ptr<facebook::react::JSEngineInstance>;
@@ -58,9 +59,6 @@ using SharedJSRuntimeFactory = std::shared_ptr<facebook::react::JSRuntimeFactory
 @end
 
 #ifdef USE_FEATURE_FLAGS
-#if __has_include(<React-RCTAppDelegate/RCTArchConfiguratorProtocol.h>) || __has_include(<React_RCTAppDelegate/RCTArchConfiguratorProtocol.h>)
-#define USE_UNIFIED_FEATURE_FLAGS 1
-#endif  // __has_include(<React-RCTAppDelegate/RCTArchConfiguratorProtocol.h>)
 
 // https://github.com/facebook/react-native/blob/0.74-stable/packages/react-native/Libraries/AppDelegate/RCTAppDelegate.mm#L272-L286
 class RNXBridgelessFeatureFlags : public facebook::react::ReactNativeFeatureFlagsDefaults
@@ -83,12 +81,22 @@ public:
     {
         return true;
     }
-#if !__has_include(<React-RCTAppDelegate/RCTReactNativeFactory.h>) && !__has_include(<React_RCTAppDelegate/RCTReactNativeFactory.h>)  // 0.77
+#if USE_VIEW_COMMAND_RACE_FIX  // 0.77
     bool enableFixForViewCommandRace() override
     {
         return true;
     }
-#endif  // 0.77
+#endif                                             // USE_VIEW_COMMAND_RACE_FIX
+#if USE_UPDATE_RUNTIME_SHADOW_NODE_REFS_ON_COMMIT  // >= 0.79
+    bool updateRuntimeShadowNodeReferencesOnCommit() override
+    {
+        return true;
+    }
+    bool useShadowNodeStateOnClone() override
+    {
+        return true;
+    }
+#endif  // USE_UPDATE_RUNTIME_SHADOW_NODE_REFS_ON_COMMIT
 #else   // < 0.77
     bool useModernRuntimeScheduler() override
     {
