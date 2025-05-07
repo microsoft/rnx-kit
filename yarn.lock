@@ -2255,6 +2255,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@eslint/config-helpers@npm:0.2.1":
+  version: 0.2.1
+  resolution: "@eslint/config-helpers@npm:0.2.1"
+  checksum: 10c0/3e829a78b0bb4f7c44384ba1df3986e5de24b7f440ad5c6bb3cfc366ded773a869ca9ee8d212b5a563ae94596c5940dea6fd2ea1ee53a84c6241ac953dcb8bb7
+  languageName: node
+  linkType: hard
+
 "@eslint/core@npm:^0.9.0":
   version: 0.9.1
   resolution: "@eslint/core@npm:0.9.1"
@@ -4610,6 +4617,7 @@ __metadata:
   resolution: "@rnx-kit/tools-scripts@workspace:incubator/tools-scripts"
   dependencies:
     "@eslint/compat": "npm:^1.2.8"
+    "@eslint/config-helpers": "npm:0.2.1"
     "@rnx-kit/eslint-plugin": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"

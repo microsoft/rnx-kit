@@ -104,7 +104,7 @@ export function createLintCommand(paths = ["lint"], commandDefaults = {}) {
 
     /**
      * @override
-     * @returns {Promise<void>}
+     * @returns {Promise<number | void>}
      */
     async execute() {
       /**
@@ -127,7 +127,7 @@ export function createLintCommand(paths = ["lint"], commandDefaults = {}) {
         }
       }
 
-      await runLint(cwd, options);
+      return await runLint(cwd, options);
     }
   };
 }

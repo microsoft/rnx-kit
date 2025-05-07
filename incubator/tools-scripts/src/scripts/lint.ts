@@ -21,7 +21,9 @@ import * as path from "node:path";
  * @property {boolean | undefined} [warnIgnored] - Ignore warnings, defaults to false
  * @property {string[] | undefined} [files] - Files to lint, if not provided files will be found using filePatterns
  * @property {string[] | undefined} [filePatterns] - File patterns used to look up files to lint. Obtained via running git ls-files
+ * @property {string[] | undefined} [globalIgnores] - Global ignore patterns to use for the lint call
  * @property {string[] | undefined} [ignorePatterns] - Ignore patterns for the lint call, if not provided ignore patterns will be determined
+ * @property {boolean | undefined} [skipGitIgnore] - Skip looking up .gitignore files in the root and the current working directory for ignore patterns
  * by looking up .gitignore files in the root and the current working directory
  * @property {string | LinterConfig | LinterConfig[] | undefined} [defaultConfig] - Default config to use if no local config is found. This can either be a path to a config file, or
  * a loaded LinterConfig object. If not provided lint will be skipped if no local config is found
@@ -32,6 +34,7 @@ import * as path from "node:path";
  */
 export const defaultLintOptions = {
   filePatterns: ["*.cjs", "*.js", "*.jsx", "*.mjs", "*.ts", "*.tsx"],
+  globalIgnores: ["**/node_modules/", ".git/"],
   warnIgnored: false,
 };
 
@@ -39,7 +42,7 @@ export const defaultLintOptions = {
  * Run eslint in the specified directory
  * @param {string} cwd
  * @param {LintOptions} options
- * @returns {Promise<void>}
+ * @returns {Promise<number | void>}
  */
 export async function runLint(cwd, options) {
   const { fix, warnIgnored } = options;
@@ -65,6 +68,7 @@ export async function runLint(cwd, options) {
   });
 
   const files = findFiles(cwd, options);
+  console.log("Linting files:", files);
   const results = await eslint.lintFiles(files);
   await ESLint.outputFixes(results);
 
@@ -72,7 +76,8 @@ export async function runLint(cwd, options) {
 
   if (output) {
     if (ESLint.getErrorResults(results).length > 0) {
-      throw new Error(output);
+      console.error(output);
+      return 1;
     }
 
     console.log(output);
@@ -112,18 +117,20 @@ export async function loadConfig(cwd, options) {
  * @returns {string[]}
  */
 export function getIgnorePatterns(cwd, options) {
+  const patterns = [...(options.globalIgnores || [])];
   if (options.ignorePatterns) {
-    return options.ignorePatterns;
+    patterns.push(...options.ignorePatterns);
   }
 
-  const patterns = [];
-  const locations = options.root ? [options.root, cwd] : [cwd];
-  for (const location of locations) {
-    const gitignore = path.join(location, ".gitignore");
-    if (fs.existsSync(gitignore)) {
-      const { ignores } = includeIgnoreFile(gitignore);
-      if (ignores) {
-        patterns.push(...ignores);
+  if (!options.skipGitIgnore) {
+    const locations = options.root ? [options.root, cwd] : [cwd];
+    for (const location of locations) {
+      const gitignore = path.join(location, ".gitignore");
+      if (fs.existsSync(gitignore)) {
+        const { ignores } = includeIgnoreFile(gitignore);
+        if (ignores) {
+          patterns.push(...ignores);
+        }
       }
     }
   }

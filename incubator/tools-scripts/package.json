@@ -32,6 +32,7 @@
   },
   "dependencies": {
     "@eslint/compat": "^1.2.8",
+    "@eslint/config-helpers": "0.2.1",
     "@rnx-kit/eslint-plugin": "*",
     "clipanion": "^4.0.0-rc.4",
     "eslint": "^9.0.0",

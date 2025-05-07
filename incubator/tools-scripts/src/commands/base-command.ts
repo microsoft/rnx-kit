@@ -28,6 +28,7 @@ export class BaseCommand extends Command {
 
   /**
    * @abstract
+   * @returns {Promise<number | void>}
    */
   async execute() {
     throw new Error("Method not implemented.");
