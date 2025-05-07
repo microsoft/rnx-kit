@@ -536,7 +536,7 @@ to add automation which guards your app against bundling errors in future PRs.
 If you use Lerna, you can run one command from the root of your repo to bundle
 all packages:
 
-<PackageRunCommand args="lerna run bundle" />
+<PackageRunCommand args="lerna run bundle" installedScript />
 
 If you're using a task runner like Nx, Lage or Gulp, you can go for a more
 sophisticated integration. The advantage being that `bundle` runs as its own

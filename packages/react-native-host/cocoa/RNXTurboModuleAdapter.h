@@ -1,17 +1,13 @@
 #include <memory>
 
 #import <Foundation/Foundation.h>
+#include <cxxreact/JSExecutor.h>
 
 #if USE_FABRIC
 #import <ReactCommon/RCTTurboModuleManager.h>
 #endif  // USE_FABRIC
 
 @class RCTBridge;
-
-namespace facebook::react
-{
-    class JSExecutorFactory;
-}  // namespace facebook::react
 
 NS_ASSUME_NONNULL_BEGIN
 

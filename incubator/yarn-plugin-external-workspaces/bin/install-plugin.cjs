@@ -6,12 +6,8 @@ const { existsSync } = require("fs");
 
 function getPluginPath() {
   // open the package.json file and get the entry for main
-  const packageJsonPath = join(__dirname, "../package.json");
-  if (!existsSync(packageJsonPath)) {
-    throw new Error(`Package.json not found at ${packageJsonPath}`);
-  }
-  const main = require(packageJsonPath).main;
-  const rootPath = dirname(packageJsonPath);
+  const { main } = require("../package.json");
+  const rootPath = dirname(require.resolve("../package.json"));
   return join(rootPath, main);
 }
 

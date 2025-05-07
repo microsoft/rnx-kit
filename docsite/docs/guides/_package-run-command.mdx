@@ -4,12 +4,12 @@ import CodeBlock from "@theme/CodeBlock";
 
 <Tabs groupId="package-manager">
   <TabItem value="yarn" label="Yarn" default>
-    <CodeBlock language="sh">yarn {props.yarnArgs || props.args}</CodeBlock>
+    <CodeBlock language="sh">yarn {props.args}</CodeBlock>
   </TabItem>
   <TabItem value="pnpm" label="pnpm">
-    <CodeBlock language="sh">pnpm {props.pnpmArgs || props.args}</CodeBlock>
+    <CodeBlock language="sh">pnpm {props.args}</CodeBlock>
   </TabItem>
   <TabItem value="npm" label="npm">
-    <CodeBlock language="sh">npx {props.npxArgs || props.args}</CodeBlock>
+    <CodeBlock language="sh">{props.installedScript ? "npx" : "npm run"} {props.args}</CodeBlock>
   </TabItem>
 </Tabs>
