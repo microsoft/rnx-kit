@@ -4618,6 +4618,7 @@ __metadata:
   dependencies:
     "@eslint/compat": "npm:^1.2.8"
     "@eslint/config-helpers": "npm:0.2.1"
+    "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/eslint-plugin": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"

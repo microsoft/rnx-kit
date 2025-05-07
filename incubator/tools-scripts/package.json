@@ -14,8 +14,13 @@
     "lib/**/*.d.ts",
     "lib/**/*.js"
   ],
-  "main": "src/index.js",
-  "types": "src/types.d.ts",
+  "exports": {
+    ".": {
+      "import": "./lib/index.js",
+      "types": "./lib/types.d.ts",
+      "default": "./lib/index.js"
+    }
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/microsoft/rnx-kit",
@@ -39,6 +44,7 @@
     "eslint-formatter-pretty": "^6.0.1"
   },
   "devDependencies": {
+    "@rnx-kit/eslint-config": "*",
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*"
   },

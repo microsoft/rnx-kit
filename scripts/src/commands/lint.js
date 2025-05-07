@@ -2,15 +2,9 @@
 
 import { Command, Option } from "clipanion";
 import { spawnSync } from "node:child_process";
-import { createLintCommand } from "../../../incubator/tools-scripts/src/index.js";
-import config from "../../eslint.config.js";
 import { runScript } from "../process.js";
 
-export const LintCommand = createLintCommand(["lint"], {
-  defaultConfig: config,
-});
-
-export class LintCommand2 extends Command {
+export class LintCommand extends Command {
   /**
    * @override
    */
@@ -31,7 +25,8 @@ export class LintCommand2 extends Command {
 
   async execute() {
     const args = this.args.length > 0 ? this.args : ["--no-warn-ignored"];
-    await lint(undefined, args);
+    const files = listFiles("*.cjs", "*.js", "*.jsx", "*.mjs", "*.ts", "*.tsx");
+    await runScript("eslint", "--no-warn-ignored", ...files, ...args);
   }
 }
 
@@ -43,10 +38,4 @@ function listFiles(...patterns) {
   const args = ["ls-files", ...patterns];
   const { stdout } = spawnSync("git", args, { encoding: "utf-8" });
   return stdout.trim().split("\n");
-}
-
-/** @type {import("../process.js").Command} */
-export async function lint(_args, rawArgs = ["--no-warn-ignored"]) {
-  const files = listFiles("*.cjs", "*.js", "*.jsx", "*.mjs", "*.ts", "*.tsx");
-  await runScript("eslint", "--no-warn-ignored", ...files, ...rawArgs);
 }

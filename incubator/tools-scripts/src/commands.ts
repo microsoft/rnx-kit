@@ -1,17 +1,14 @@
 // @ts-check
 
 import { Command } from "clipanion";
-
-/**
- * @typedef {import("./create-context.js").ScriptContext} ScriptContext
- */
+import { type ScriptContext } from "./types.ts";
 
 /**
  * @abstract
  * @class BaseCommand
  * @extends {Command<ScriptContext>}
  */
-export class BaseCommand extends Command {
+export abstract class BaseCommand extends Command<ScriptContext> {
   /**
    * @returns {string}
    */
@@ -24,13 +21,5 @@ export class BaseCommand extends Command {
    */
   root() {
     return this.context.root;
-  }
-
-  /**
-   * @abstract
-   * @returns {Promise<number | void>}
-   */
-  async execute() {
-    throw new Error("Method not implemented.");
   }
 }

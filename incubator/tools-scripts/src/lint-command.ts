@@ -1,20 +1,15 @@
 // @ts-check
 
 import { Command, Option } from "clipanion";
-import { defaultLintOptions, runLint } from "../scripts/lint.js";
-import { BaseCommand } from "./base-command.js";
-
-/**
- * @typedef {import("../scripts/lint.js").LintOptions} LintOptions
- * @typedef {import("clipanion").Usage} Usage
- */
+import { BaseCommand } from "./commands.ts";
+import { defaultLintOptions, runLint, type LintOptions } from "./lint.ts";
 
 /**
  * @param {string[]} paths
  * @param {Partial<LintOptions>} options
  * @returns {Usage}
  */
-function createUsage(paths, options) {
+function createUsage(paths: string[], options: Partial<LintOptions>) {
   const cmdPath = `$0 ${paths.join(" ")}`;
 
   const noConfigFallback = options.defaultConfig
@@ -61,7 +56,10 @@ function createUsage(paths, options) {
  * @param {LintOptions} commandDefaults
  * @returns {typeof BaseCommand}
  */
-export function createLintCommand(paths = ["lint"], commandDefaults = {}) {
+export function createLintCommand(
+  paths: string[] = ["lint"],
+  commandDefaults: LintOptions = {}
+): typeof BaseCommand {
   const baseOptions = { ...defaultLintOptions, ...commandDefaults };
 
   // create an anonymous command class for this command
@@ -69,12 +67,12 @@ export function createLintCommand(paths = ["lint"], commandDefaults = {}) {
     /**
      * @override
      */
-    static paths = [paths];
+    static override paths = [paths];
 
     /**
      * @override
      */
-    static usage = createUsage(paths, baseOptions);
+    static override usage = createUsage(paths, baseOptions);
 
     /**
      * @type {boolean}
@@ -104,7 +102,7 @@ export function createLintCommand(paths = ["lint"], commandDefaults = {}) {
 
     /**
      * @override
-     * @returns {Promise<number | void>}
+     * @returns {Promise<1 | void>}
      */
     async execute() {
       /**

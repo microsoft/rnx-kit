@@ -1,7 +1,4 @@
 {
-  "extends": "@rnx-kit/tsconfig/tsconfig.esm.json",
-  "compilerOptions": {
-    "noEmit": true
-  },
+  "extends": "@rnx-kit/tsconfig/tsconfig.esm.node.json",
   "include": ["src"]
 }

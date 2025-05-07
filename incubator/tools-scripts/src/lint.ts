@@ -1,33 +1,25 @@
 // @ts-check
 
 import { includeIgnoreFile } from "@eslint/compat";
-import { ESLint } from "eslint";
+import { ESLint, type Linter } from "eslint";
 import eslintFormatterPretty from "eslint-formatter-pretty";
 import { spawnSync } from "node:child_process";
 import * as fs from "node:fs";
 import * as path from "node:path";
 
-/**
- * @typedef {import("eslint").Linter.RulesRecord} RulesRecord
- * @typedef {import("eslint").Linter.Config<RulesRecord>} LinterConfig
- */
+type LinterConfig = Linter.Config<Linter.RulesRecord>;
 
-/**
- * @typedef LintOptions
- * @type {object}
- * @property {string | undefined} [root] - Root path of the repository, if not set the root .gitignore will not be parsed meaning
- * the ignore patterns should be set manually.
- * @property {boolean | undefined} [fix] - Automatically attempt to fix errors
- * @property {boolean | undefined} [warnIgnored] - Ignore warnings, defaults to false
- * @property {string[] | undefined} [files] - Files to lint, if not provided files will be found using filePatterns
- * @property {string[] | undefined} [filePatterns] - File patterns used to look up files to lint. Obtained via running git ls-files
- * @property {string[] | undefined} [globalIgnores] - Global ignore patterns to use for the lint call
- * @property {string[] | undefined} [ignorePatterns] - Ignore patterns for the lint call, if not provided ignore patterns will be determined
- * @property {boolean | undefined} [skipGitIgnore] - Skip looking up .gitignore files in the root and the current working directory for ignore patterns
- * by looking up .gitignore files in the root and the current working directory
- * @property {string | LinterConfig | LinterConfig[] | undefined} [defaultConfig] - Default config to use if no local config is found. This can either be a path to a config file, or
- * a loaded LinterConfig object. If not provided lint will be skipped if no local config is found
- */
+export type LintOptions = {
+  root?: string;
+  fix?: boolean;
+  warnIgnored?: boolean;
+  files?: string[];
+  filePatterns?: string[];
+  globalIgnores?: string[];
+  ignorePatterns?: string[];
+  skipGitIgnore?: boolean;
+  defaultConfig?: string | LinterConfig | LinterConfig[];
+};
 
 /**
  * @type {LintOptions}
@@ -44,7 +36,10 @@ export const defaultLintOptions = {
  * @param {LintOptions} options
  * @returns {Promise<number | void>}
  */
-export async function runLint(cwd, options) {
+export async function runLint(
+  cwd: string,
+  options: LintOptions
+): Promise<number | void> {
   const { fix, warnIgnored } = options;
 
   // load the config file values, need to have either a local config or a default to proceed
@@ -90,7 +85,12 @@ export async function runLint(cwd, options) {
  * @param {LintOptions} options
  * @returns {Promise<[string | boolean | undefined, LinterConfig | LinterConfig[] | undefined]>}
  */
-export async function loadConfig(cwd, options) {
+export async function loadConfig(
+  cwd: string,
+  options: LintOptions
+): Promise<
+  [string | boolean | undefined, LinterConfig | LinterConfig[] | undefined]
+> {
   const { defaultConfig } = options;
 
   // default to the local config in cwd if it exists
@@ -114,9 +114,8 @@ export async function loadConfig(cwd, options) {
 /**
  * @param {string} cwd
  * @param {LintOptions} options
- * @returns {string[]}
  */
-export function getIgnorePatterns(cwd, options) {
+export function getIgnorePatterns(cwd: string, options: LintOptions) {
   const patterns = [...(options.globalIgnores || [])];
   if (options.ignorePatterns) {
     patterns.push(...options.ignorePatterns);
@@ -143,7 +142,7 @@ export function getIgnorePatterns(cwd, options) {
  * @param {LintOptions} options
  * @returns {string[]}
  */
-export function findFiles(cwd, options) {
+export function findFiles(cwd: string, options: LintOptions) {
   if (options.files) {
     return options.files;
   }

@@ -2,8 +2,6 @@
 // @ts-check
 
 import { Builtins, Cli } from "clipanion";
-import { URL, fileURLToPath } from "node:url";
-import { createContext } from "../../incubator/tools-scripts/src/index.js";
 import { BuildCommand } from "./commands/build.js";
 import { BundleCommand } from "./commands/bundle.js";
 import { CleanCommand } from "./commands/clean.js";
@@ -19,8 +17,6 @@ const cli = new Cli({
   enableColors: true,
 });
 
-const rootDir = fileURLToPath(new URL("../..", import.meta.url));
-
 cli.register(BuildCommand);
 cli.register(BundleCommand);
 cli.register(CleanCommand);
@@ -33,4 +29,4 @@ cli.register(Builtins.DefinitionsCommand);
 cli.register(Builtins.HelpCommand);
 cli.register(Builtins.VersionCommand);
 
-cli.runExit(process.argv.slice(2), createContext(rootDir));
+cli.runExit(process.argv.slice(2), Cli.defaultContext);
