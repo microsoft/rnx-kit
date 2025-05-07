@@ -7,7 +7,7 @@ import {
   type Resolver,
 } from "@yarnpkg/core";
 import { npath } from "@yarnpkg/fslib";
-import { getPluginConfiguration } from "./cofiguration";
+import { getPluginConfiguration } from "./configuration";
 import { outputWorkspaces } from "./outputCommand";
 import { getWorkspaceTracker } from "./tracker";
 
