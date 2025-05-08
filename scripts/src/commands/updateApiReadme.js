@@ -1,6 +1,6 @@
 // @ts-check
 
-import { Command } from "clipanion";
+import { Command, Option } from "clipanion";
 import * as fs from "node:fs";
 import * as path from "node:path";
 import ts from "typescript";
@@ -27,6 +27,10 @@ export class UpdateApiReadmeCommand extends Command {
       This command updates the API README.
     `,
     examples: [[`Update the API README`, `$0 update-api-readme`]],
+  });
+
+  experimental = Option.Boolean("--experimental", false, {
+    description: "Run the experimental version of the command",
   });
 
   async execute() {

@@ -1,6 +1,6 @@
 // @ts-check
 
-import { Command } from "clipanion";
+import { Command, Option } from "clipanion";
 import { runScript } from "../process.js";
 
 export class FormatCommand extends Command {
@@ -18,6 +18,10 @@ export class FormatCommand extends Command {
       This command formats the current package using prettier.
     `,
     examples: [[`Format the current package`, `$0 format`]],
+  });
+
+  experimental = Option.Boolean("--experimental", false, {
+    description: "Run the experimental version of the command",
   });
 
   async execute() {

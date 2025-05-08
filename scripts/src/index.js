@@ -7,7 +7,6 @@ import { BundleCommand } from "./commands/bundle.js";
 import { CleanCommand } from "./commands/clean.js";
 import { FormatCommand } from "./commands/format.js";
 import { LintCommand } from "./commands/lint.js";
-import { ScriptTestCommand } from "./commands/script-test.js";
 import { TestCommand } from "./commands/test.js";
 import { UpdateApiReadmeCommand } from "./commands/updateApiReadme.js";
 
@@ -23,7 +22,6 @@ cli.register(BundleCommand);
 cli.register(CleanCommand);
 cli.register(FormatCommand);
 cli.register(LintCommand);
-cli.register(ScriptTestCommand);
 cli.register(TestCommand);
 cli.register(UpdateApiReadmeCommand);
 
@@ -31,4 +29,11 @@ cli.register(Builtins.DefinitionsCommand);
 cli.register(Builtins.HelpCommand);
 cli.register(Builtins.VersionCommand);
 
-cli.runExit(process.argv.slice(2), Cli.defaultContext);
+const argsBase = process.argv.slice(2);
+const args = argsBase.filter((arg) => arg !== "--experimental");
+const contextMixin = { experimental: args.length < argsBase.length };
+const context = {
+  ...Cli.defaultContext,
+  ...contextMixin,
+};
+cli.runExit(args, context);

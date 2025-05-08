@@ -3,7 +3,17 @@
 import { Command, Option } from "clipanion";
 import { spawnSync } from "node:child_process";
 import { runScript } from "../process.js";
+import { runExperimentalCli } from "./experimental/cli.js";
 
+/**
+ * @typedef {import("clipanion").BaseContext} BaseContext
+ * @typedef {BaseContext & { experimental: boolean }} ScriptContext
+ */
+
+/**
+ * @class
+ * @extends {Command<ScriptContext>}
+ */
 export class LintCommand extends Command {
   /**
    * @override
@@ -24,9 +34,16 @@ export class LintCommand extends Command {
   args = Option.Proxy();
 
   async execute() {
+    console.log(
+      `Linting with ${this.context.experimental ? "experimental" : "stable"} eslint`
+    );
+    console.log(`Proxied args: ${this.args}`);
+    if (this.context.experimental) {
+      return await runExperimentalCli();
+    }
     const args = this.args.length > 0 ? this.args : ["--no-warn-ignored"];
     const files = listFiles("*.cjs", "*.js", "*.jsx", "*.mjs", "*.ts", "*.tsx");
-    await runScript("eslint", "--no-warn-ignored", ...files, ...args);
+    return await runScript("eslint", "--no-warn-ignored", ...files, ...args);
   }
 }
 

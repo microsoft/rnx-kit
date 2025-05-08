@@ -25,6 +25,10 @@ export class BuildCommand extends Command {
     description: "Also build the package's dependencies",
   });
 
+  experimental = Option.Boolean("--experimental", false, {
+    description: "Run the experimental version of the command",
+  });
+
   args = Option.Proxy();
 
   async execute() {
