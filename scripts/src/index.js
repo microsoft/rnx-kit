@@ -7,6 +7,7 @@ import { BundleCommand } from "./commands/bundle.js";
 import { CleanCommand } from "./commands/clean.js";
 import { FormatCommand } from "./commands/format.js";
 import { LintCommand } from "./commands/lint.js";
+import { ScriptTestCommand } from "./commands/script-test.js";
 import { TestCommand } from "./commands/test.js";
 import { UpdateApiReadmeCommand } from "./commands/updateApiReadme.js";
 
@@ -22,6 +23,7 @@ cli.register(BundleCommand);
 cli.register(CleanCommand);
 cli.register(FormatCommand);
 cli.register(LintCommand);
+cli.register(ScriptTestCommand);
 cli.register(TestCommand);
 cli.register(UpdateApiReadmeCommand);
 

@@ -1,8 +1,9 @@
 // @ts-check
 
-import { Command, Option } from "clipanion";
+import { Command, Option, type CommandClass } from "clipanion";
 import { BaseCommand } from "./commands.ts";
 import { defaultLintOptions, runLint, type LintOptions } from "./lint.ts";
+import { type ScriptContext } from "./types.ts";
 
 /**
  * @param {string[]} paths
@@ -59,19 +60,12 @@ function createUsage(paths: string[], options: Partial<LintOptions>) {
 export function createLintCommand(
   paths: string[] = ["lint"],
   commandDefaults: LintOptions = {}
-): typeof BaseCommand {
+): CommandClass<ScriptContext> {
   const baseOptions = { ...defaultLintOptions, ...commandDefaults };
 
   // create an anonymous command class for this command
   return class extends BaseCommand {
-    /**
-     * @override
-     */
     static override paths = [paths];
-
-    /**
-     * @override
-     */
     static override usage = createUsage(paths, baseOptions);
 
     /**
@@ -101,7 +95,6 @@ export function createLintCommand(
     filesOrPatterns = Option.Rest();
 
     /**
-     * @override
      * @returns {Promise<1 | void>}
      */
     async execute() {
