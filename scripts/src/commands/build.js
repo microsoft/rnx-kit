@@ -1,16 +1,39 @@
 // @ts-check
 
+import { Command, Option } from "clipanion";
 import * as fs from "node:fs";
 import { runScript } from "../process.js";
 
-/** @type {import("../process.js").Command} */
-export async function build(_args, rawArgs = []) {
-  // If `--dependencies` is specified, also build the package's dependencies.
-  if (rawArgs.includes("--dependencies")) {
-    const manifest = fs.readFileSync("package.json", { encoding: "utf-8" });
-    const { name } = JSON.parse(manifest);
-    return runScript("nx", "build", name);
-  }
+export class BuildCommand extends Command {
+  /**
+   * @override
+   */
+  static paths = [["build"]];
 
-  await runScript("tsc", "--outDir", "lib", ...rawArgs);
+  /**
+   * @override
+   */
+  static usage = Command.Usage({
+    description: "Builds the current package",
+    details: `
+      If \`--dependencies\` is specified, also build the package's dependencies.
+    `,
+    examples: [[`Build the current package`, `$0 build`]],
+  });
+
+  dependencies = Option.Boolean(`--dependencies`, false, {
+    description: "Also build the package's dependencies",
+  });
+
+  args = Option.Proxy();
+
+  async execute() {
+    if (this.dependencies) {
+      const manifest = fs.readFileSync("package.json", { encoding: "utf-8" });
+      const { name } = JSON.parse(manifest);
+      return runScript("nx", "build", name);
+    }
+
+    await runScript("tsc", "--outDir", "lib", ...this.args);
+  }
 }

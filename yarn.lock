@@ -4403,6 +4403,7 @@ __metadata:
     "@types/node": "npm:^20.0.0"
     "@types/yargs": "npm:^16.0.0"
     "@yarnpkg/cli": "npm:^4.6.0"
+    clipanion: "npm:^4.0.0-rc.4"
     esbuild: "npm:^0.25.0"
     eslint: "npm:^9.0.0"
     fast-glob: "npm:^3.2.7"
