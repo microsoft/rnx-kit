@@ -118,6 +118,18 @@ export const profile: Profile = {
    * Community Modules *
    *********************/
 
+  animation: {
+    name: "react-native-reanimated",
+    version: "^3.17.5",
+  },
+  gestures: {
+    name: "react-native-gesture-handler",
+    version: "^2.26.0",
+  },
+  "safe-area": {
+    name: "react-native-safe-area-context",
+    version: "^5.4.0",
+  },
   "test-app": {
     name: "react-native-test-app",
     version: "^4.3.1",
