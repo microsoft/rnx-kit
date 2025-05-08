@@ -118,6 +118,10 @@ export const profile: Profile = {
    * Community Modules *
    *********************/
 
+  animation: {
+    name: "react-native-reanimated",
+    version: "^3.17.5",
+  },
   "test-app": {
     name: "react-native-test-app",
     version: "^4.3.1",
