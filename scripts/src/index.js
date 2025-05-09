@@ -29,4 +29,11 @@ cli.register(Builtins.DefinitionsCommand);
 cli.register(Builtins.HelpCommand);
 cli.register(Builtins.VersionCommand);
 
-cli.runExit(process.argv.slice(2), Cli.defaultContext);
+const argsBase = process.argv.slice(2);
+const args = argsBase.filter((arg) => arg !== "--experimental");
+const contextMixin = { experimental: args.length < argsBase.length };
+const context = {
+  ...Cli.defaultContext,
+  ...contextMixin,
+};
+cli.runExit(args, context);

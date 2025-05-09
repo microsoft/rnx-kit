@@ -1,34 +1,25 @@
-import js from "@eslint/js";
+import sdl from "@microsoft/eslint-plugin-sdl";
+import rnx from "../packages/eslint-plugin/src/index.js";
 
-// We keep a separate ESLint config to avoid circular dependency
+/**
+ * Note that we don't directly use `sdl.configs.required` because:
+ *
+ *   1. It includes rules for Angular and Electron
+ *   2. Its `react` preset conflicts with our direct use of `eslint-plugin-react`
+ *
+ * https://github.com/microsoft/eslint-plugin-sdl/blob/957996315c80fdadcd1a9f7bb76fc4663d33ef1e/lib/index.js#L47-L54
+ */
+
 // eslint-disable-next-line no-restricted-exports
 export default [
-  js.configs.recommended,
+  ...sdl.configs.common,
+  ...sdl.configs.node,
+  ...rnx.configs.strict,
+  ...rnx.configs.stylistic,
   {
-    languageOptions: {
-      ecmaVersion: "latest",
-      sourceType: "module",
-      globals: {
-        __dirname: "readonly",
-        console: "readonly",
-        module: "readonly",
-        process: "readonly",
-        require: "readonly",
-      },
-    },
     rules: {
-      "no-restricted-exports": [
-        "error",
-        {
-          restrictDefaultExports: {
-            direct: true,
-            named: true,
-            defaultFrom: true,
-            namedFrom: true,
-            namespaceFrom: true,
-          },
-        },
-      ],
+      "@typescript-eslint/consistent-type-definitions": ["error", "type"],
+      ...sdl.configs.react[0].rules,
     },
   },
 ];
