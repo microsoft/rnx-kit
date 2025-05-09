@@ -10,8 +10,7 @@
   "scripts": {
     "build": "rnx-kit-scripts build",
     "format": "rnx-kit-scripts format",
-    "lint": "rnx-kit-scripts lint",
-    "test-script": "rnx-kit-scripts test-script"
+    "lint": "rnx-kit-scripts lint"
   },
   "dependencies": {
     "@yarnpkg/cli": "^4.6.0",
