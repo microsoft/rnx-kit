@@ -1,5 +1,5 @@
 import * as path from "node:path";
-import { remapImportPath } from "../src/utils/remapImportPath";
+import { remapImportPath } from "../../src/remappers/remapImportPath";
 
 describe("remap-import-path", () => {
   const mockContext = {
@@ -13,7 +13,7 @@ describe("remap-import-path", () => {
   const currentWorkingDirectory = process.cwd();
 
   beforeAll(() => {
-    process.chdir(`${__dirname}/__fixtures__/remap-import-path`);
+    process.chdir(`${__dirname}/../__fixtures__/remap-import-path`);
   });
 
   afterAll(() => {

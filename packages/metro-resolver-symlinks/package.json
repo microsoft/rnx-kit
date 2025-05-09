@@ -31,13 +31,22 @@
     "@rnx-kit/tools-react-native": "^2.0.0",
     "enhanced-resolve": "^5.8.3"
   },
+  "peerDependencies": {
+    "oxc-resolver": "^9.0.0"
+  },
+  "peerDependenciesMeta": {
+    "oxc-resolver": {
+      "optional": true
+    }
+  },
   "devDependencies": {
     "@rnx-kit/eslint-config": "*",
     "@rnx-kit/jest-preset": "*",
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*",
     "@types/node": "^22.0.0",
-    "metro-resolver": "^0.81.0"
+    "metro-resolver": "^0.81.0",
+    "oxc-resolver": "^9.0.0"
   },
   "engines": {
     "node": ">=16.17"
