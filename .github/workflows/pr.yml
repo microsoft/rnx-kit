@@ -105,6 +105,9 @@ jobs:
       - name: Build and test packages
         run: |
           yarn build:ci --base origin/${{ github.base_ref }}
+      - name: Run experimental scripts
+        run: |
+          yarn lint --experimental
       - name: Bundle packages
         run: |
           yarn bundle:ci --base origin/${{ github.base_ref }}
