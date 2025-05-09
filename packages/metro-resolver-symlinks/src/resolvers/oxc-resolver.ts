@@ -24,7 +24,7 @@ const getOxcResolver = (() => {
   const resolvers: Record<string, ResolverFactory> = {};
   return (context: ResolutionContextCompat, platform = "common") => {
     if (!resolvers[platform]) {
-      const options = makeOxcResolverOptions(context, platform)
+      const options = makeOxcResolverOptions(context, platform);
       if (!firstResolver) {
         const {
           ResolverFactory,
