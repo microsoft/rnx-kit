@@ -4,7 +4,7 @@ import type { ResolutionContextCompat } from "../types";
 import { isAssetFile, resolveAsset } from "../utils/assets";
 import { getFromDir, makeEnhancedResolverConfig } from "./enhanced-resolve";
 
-function makeOxcResolverConfig(
+function makeOxcResolverOptions(
   context: ResolutionContextCompat,
   platform = "common"
 ): NapiResolveOptions {
@@ -20,15 +20,20 @@ function makeOxcResolverConfig(
 }
 
 const getOxcResolver = (() => {
+  let firstResolver: ResolverFactory;
   const resolvers: Record<string, ResolverFactory> = {};
   return (context: ResolutionContextCompat, platform = "common") => {
     if (!resolvers[platform]) {
-      const {
-        ResolverFactory,
-      }: typeof import("oxc-resolver") = require("oxc-resolver");
-      resolvers[platform] = new ResolverFactory(
-        makeOxcResolverConfig(context, platform)
-      );
+      const options = makeOxcResolverOptions(context, platform)
+      if (!firstResolver) {
+        const {
+          ResolverFactory,
+        }: typeof import("oxc-resolver") = require("oxc-resolver");
+        firstResolver = new ResolverFactory(options);
+        resolvers[platform] = firstResolver;
+      } else {
+        resolvers[platform] = firstResolver.cloneWithOptions(options);
+      }
     }
     return resolvers[platform];
   };
