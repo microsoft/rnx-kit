@@ -20,10 +20,6 @@ export class TestCommand extends Command {
     examples: [[`Test the current package`, `$0 test`]],
   });
 
-  experimental = Option.Boolean("--experimental", false, {
-    description: "Run the experimental version of the command",
-  });
-
   args = Option.Proxy();
 
   async execute() {

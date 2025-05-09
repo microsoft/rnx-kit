@@ -52,10 +52,6 @@ export class BundleCommand extends Command {
     description: "Generate an associated source map",
   });
 
-  experimental = Option.Boolean("--experimental", false, {
-    description: "Run the experimental version of the command",
-  });
-
   async execute() {
     await bundle({
       minify: this.minify,

@@ -31,10 +31,6 @@ export class CleanCommand extends Command {
     description: "Maximum number of retries",
   });
 
-  experimental = Option.Boolean("--experimental", false, {
-    description: "Run the experimental version of the command",
-  });
-
   async execute() {
     const maxRetries = this.maxRetries ? parseInt(this.maxRetries, 10) : 3;
     const options = {
