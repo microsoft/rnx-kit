@@ -1,5 +1,3 @@
-// @ts-check
-
 import { ESLint, type Linter } from "eslint";
 import eslintFormatterPretty from "eslint-formatter-pretty";
 import micromatch from "micromatch";

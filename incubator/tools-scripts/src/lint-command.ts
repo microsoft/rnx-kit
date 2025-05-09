@@ -1,5 +1,3 @@
-// @ts-check
-
 import { Command, Option, type CommandClass } from "clipanion";
 import { BaseCommand } from "./commands.ts";
 import {

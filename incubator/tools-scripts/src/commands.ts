@@ -1,5 +1,3 @@
-// @ts-check
-
 import { Command } from "clipanion";
 import { type ScriptContext } from "./types.ts";
 
