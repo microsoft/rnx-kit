@@ -29,7 +29,6 @@
     "yargs": "^16.0.0"
   },
   "devDependencies": {
-    "@eslint/js": "^9.0.0",
     "@microsoft/eslint-plugin-sdl": "^1.0.0",
     "@rnx-kit/tsconfig": "workspace:*",
     "@types/jest": "^29.2.1",

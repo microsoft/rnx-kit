@@ -2232,18 +2232,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@eslint/compat@npm:^1.2.8":
-  version: 1.2.8
-  resolution: "@eslint/compat@npm:1.2.8"
-  peerDependencies:
-    eslint: ^9.10.0
-  peerDependenciesMeta:
-    eslint:
-      optional: true
-  checksum: 10c0/1e004c6917220ff1731fdc562ada9ddcbcecc6f3ba2e4b0433fb6d8eddf2a443e009f1f9796b78128b78a0a588c723b78021319055ac6e5dda55c0ace346496b
-  languageName: node
-  linkType: hard
-
 "@eslint/config-array@npm:^0.19.0":
   version: 0.19.1
   resolution: "@eslint/config-array@npm:0.19.1"
@@ -2252,13 +2240,6 @@ __metadata:
     debug: "npm:^4.3.1"
     minimatch: "npm:^3.1.2"
   checksum: 10c0/43b01f596ddad404473beae5cf95c013d29301c72778d0f5bf8a6699939c8a9a5663dbd723b53c5f476b88b0c694f76ea145d1aa9652230d140fe1161e4a4b49
-  languageName: node
-  linkType: hard
-
-"@eslint/config-helpers@npm:0.2.1":
-  version: 0.2.1
-  resolution: "@eslint/config-helpers@npm:0.2.1"
-  checksum: 10c0/3e829a78b0bb4f7c44384ba1df3986e5de24b7f440ad5c6bb3cfc366ded773a869ca9ee8d212b5a563ae94596c5940dea6fd2ea1ee53a84c6241ac953dcb8bb7
   languageName: node
   linkType: hard
 
@@ -4028,7 +4009,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rnx-kit/eslint-plugin@npm:*, @rnx-kit/eslint-plugin@workspace:*, @rnx-kit/eslint-plugin@workspace:packages/eslint-plugin":
+"@rnx-kit/eslint-plugin@workspace:*, @rnx-kit/eslint-plugin@workspace:packages/eslint-plugin":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/eslint-plugin@workspace:packages/eslint-plugin"
   dependencies:
@@ -4415,7 +4396,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/scripts@workspace:scripts"
   dependencies:
-    "@eslint/js": "npm:^9.0.0"
     "@microsoft/eslint-plugin-sdl": "npm:^1.0.0"
     "@rnx-kit/tsconfig": "workspace:*"
     "@types/jest": "npm:^29.2.1"
@@ -4616,10 +4596,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/tools-scripts@workspace:incubator/tools-scripts"
   dependencies:
-    "@eslint/compat": "npm:^1.2.8"
-    "@eslint/config-helpers": "npm:0.2.1"
     "@rnx-kit/eslint-config": "npm:*"
-    "@rnx-kit/eslint-plugin": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
     "@types/micromatch": "npm:^4.0.0"
