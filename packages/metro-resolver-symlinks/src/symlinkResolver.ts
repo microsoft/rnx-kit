@@ -1,31 +1,18 @@
 import { requireModuleFromMetro } from "@rnx-kit/tools-react-native/metro";
 import type { CustomResolver } from "metro-resolver";
-import { applyMetroResolver, remapReactNativeModule } from "./resolver";
+import { remapImportPath } from "./remappers/remapImportPath";
+import { remapReactNativeModule } from "./remappers/remapReactNative";
+import { getResolver } from "./resolvers";
 import type { MetroResolver, Options, ResolutionContextCompat } from "./types";
-import { applyEnhancedResolver } from "./utils/enhancedResolve";
-import {
-  patchMetro,
-  shouldEnableRetryResolvingFromDisk,
-} from "./utils/patchMetro";
-import { remapImportPath } from "./utils/remapImportPath";
 
 export function makeResolver(options: Options = {}): MetroResolver {
   const { resolve: metroResolver } = requireModuleFromMetro("metro-resolver");
 
   const { remapModule = (_, moduleName, __) => moduleName } = options;
-
-  const enableRetryResolvingFromDisk =
-    shouldEnableRetryResolvingFromDisk(options);
-
-  const applyResolver = enableRetryResolvingFromDisk
-    ? applyEnhancedResolver
-    : applyMetroResolver;
-
-  if (enableRetryResolvingFromDisk) {
-    patchMetro(options);
-  }
-
   const remappers = [remapModule, remapReactNativeModule];
+
+  const applyResolver = getResolver(options);
+
   const symlinkResolver = (
     context: ResolutionContextCompat,
     moduleName: string,

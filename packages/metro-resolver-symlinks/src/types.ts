@@ -1,8 +1,19 @@
-import type { ResolutionContext } from "metro-resolver";
+import type {
+  CustomResolver,
+  Resolution,
+  ResolutionContext,
+} from "metro-resolver";
 
 type ExperimentalOptions = {
   experimental_retryResolvingFromDisk?: boolean | "force";
 };
+
+export type CallResolver = (
+  resolve: CustomResolver,
+  context: ResolutionContextCompat,
+  moduleName: string,
+  platform: string
+) => Resolution;
 
 export type MetroResolver = typeof import("metro-resolver").resolve;
 
@@ -28,4 +39,5 @@ export type ModuleResolver = (
 
 export type Options = ExperimentalOptions & {
   remapModule?: ModuleResolver;
+  resolver?: "metro" | "enhanced-resolve" | "oxc-resolver";
 };

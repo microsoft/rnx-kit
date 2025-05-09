@@ -1,8 +1,8 @@
 import { info, warn } from "@rnx-kit/console";
 import { findMetroPath } from "@rnx-kit/tools-react-native/metro";
-import * as fs from "fs";
-import * as path from "path";
-import * as url from "url";
+import * as fs from "node:fs";
+import * as path from "node:path";
+import * as url from "node:url";
 import type { Options } from "../types";
 
 function fileExists(path: string): boolean {
