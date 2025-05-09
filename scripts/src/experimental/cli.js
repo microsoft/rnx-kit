@@ -1,15 +1,12 @@
 import { URL, fileURLToPath } from "node:url";
+import { RnxCli } from "../../../incubator/tools-scripts/lib/index.js";
+import { LintCommand } from "./test-lint.js";
 
 function workspaceRoot() {
-  return fileURLToPath(new URL("../../../../", import.meta.url));
+  return fileURLToPath(new URL("../../../", import.meta.url));
 }
 
 export async function runExperimentalCli() {
-  const { RnxCli } = await import(
-    "../../../../incubator/tools-scripts/lib/index.js"
-  );
-  const { LintCommand } = await import("./test-lint.js");
-
   const cli = new RnxCli(workspaceRoot(), {
     binaryLabel: "rnx-kit-scripts experimental CLI",
     binaryName: "rnx-kit-scripts",

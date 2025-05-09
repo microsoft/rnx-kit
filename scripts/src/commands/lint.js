@@ -3,7 +3,7 @@
 import { Command, Option } from "clipanion";
 import { spawnSync } from "node:child_process";
 import { runScript } from "../process.js";
-import { runExperimentalCli } from "./experimental/cli.js";
+import { runExperimentalCommand } from "../runExperimental.js";
 
 /**
  * @typedef {import("clipanion").BaseContext} BaseContext
@@ -35,7 +35,7 @@ export class LintCommand extends Command {
 
   async execute() {
     if (this.context.experimental) {
-      return await runExperimentalCli();
+      return await runExperimentalCommand();
     }
     const args = this.args.length > 0 ? this.args : ["--no-warn-ignored"];
     const files = listFiles("*.cjs", "*.js", "*.jsx", "*.mjs", "*.ts", "*.tsx");
