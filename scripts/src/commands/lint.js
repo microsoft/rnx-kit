@@ -34,10 +34,6 @@ export class LintCommand extends Command {
   args = Option.Proxy();
 
   async execute() {
-    console.log(
-      `Linting with ${this.context.experimental ? "experimental" : "stable"} eslint`
-    );
-    console.log(`Proxied args: ${this.args}`);
     if (this.context.experimental) {
       return await runExperimentalCli();
     }

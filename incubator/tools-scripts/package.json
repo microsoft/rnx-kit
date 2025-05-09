@@ -41,12 +41,14 @@
     "@rnx-kit/eslint-plugin": "*",
     "clipanion": "^4.0.0-rc.4",
     "eslint": "^9.0.0",
-    "eslint-formatter-pretty": "^6.0.1"
+    "eslint-formatter-pretty": "^6.0.1",
+    "micromatch": "^4.0.0"
   },
   "devDependencies": {
     "@rnx-kit/eslint-config": "*",
     "@rnx-kit/scripts": "*",
-    "@rnx-kit/tsconfig": "*"
+    "@rnx-kit/tsconfig": "*",
+    "@types/micromatch": "^4.0.0"
   },
   "jest": {
     "preset": "@rnx-kit/jest-preset/private"

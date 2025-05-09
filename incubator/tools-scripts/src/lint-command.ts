@@ -2,7 +2,12 @@
 
 import { Command, Option, type CommandClass } from "clipanion";
 import { BaseCommand } from "./commands.ts";
-import { defaultLintOptions, runLint, type LintOptions } from "./lint.ts";
+import {
+  defaultLintConfig,
+  runLint,
+  type LintConfiguration,
+  type LintOptions,
+} from "./lint.ts";
 import { type ScriptContext } from "./types.ts";
 
 /**
@@ -10,10 +15,11 @@ import { type ScriptContext } from "./types.ts";
  * @param {Partial<LintOptions>} options
  * @returns {Usage}
  */
-function createUsage(paths: string[], options: Partial<LintOptions>) {
-  const cmdPath = `$0 ${paths.join(" ")}`;
+function createUsage(paths: string[][], options: Partial<LintConfiguration>) {
+  const cmdPaths = paths.map((path) => `$0 ${path.join(" ")}`);
+  const cmdPath = cmdPaths.length > 1 ? `[${cmdPaths.join("|")}]` : cmdPaths[0];
 
-  const noConfigFallback = options.defaultConfig
+  const noConfigFallback = options.fallbackConfig
     ? `linting will fall back to using the common default config.`
     : `linting will be skipped for this directory.`;
 
@@ -58,39 +64,39 @@ function createUsage(paths: string[], options: Partial<LintOptions>) {
  * @returns {typeof BaseCommand}
  */
 export function createLintCommand(
-  paths: string[] = ["lint"],
-  commandDefaults: LintOptions = {}
+  paths: string[][] = [["lint"]],
+  commandDefaults: Partial<LintOptions> = {}
 ): CommandClass<ScriptContext> {
-  const baseOptions = { ...defaultLintOptions, ...commandDefaults };
+  const baseConfig = { ...defaultLintConfig, ...commandDefaults };
 
   // create an anonymous command class for this command
   return class extends BaseCommand {
-    static override paths = [paths];
-    static override usage = createUsage(paths, baseOptions);
+    static override paths = paths;
+    static override usage = createUsage(paths, baseConfig);
 
     /**
-     * @type {boolean}
+     * Fix the found issues where possible
      */
     fix = Option.Boolean("--fix", false, {
       description: "Automatically fix problems",
     });
 
     /**
-     * @type {boolean}
+     * Ignore warnings
      */
     warnIgnored = Option.Boolean("--warnIgnored", false, {
       description: "Ignore warnings, only show errors",
     });
 
     /**
-     * @type {boolean}
+     * Treat the trailing arguments as file patterns instead of files
      */
     patterns = Option.Boolean("--patterns", false, {
       description: `Treat what comes after as file patterns to use for file matching`,
     });
 
     /**
-     * @type {string[]}
+     * either a list of files to lint, or a list of patterns to use for file matching
      */
     filesOrPatterns = Option.Rest();
 
@@ -98,17 +104,12 @@ export function createLintCommand(
      * @returns {Promise<1 | void>}
      */
     async execute() {
-      /**
-       * @type {LintOptions}
-       */
-      const options = { ...baseOptions };
-
-      // get the cwd and root from the context
-      const cwd = this.cwd() ?? process.cwd();
-      options.root = this.root();
-
-      options.fix = this.fix;
-      options.warnIgnored = this.warnIgnored;
+      const options: LintOptions = {
+        ...baseConfig,
+        cwd: this.context.cwd ?? process.cwd(),
+        fix: this.fix ?? baseConfig.fix,
+        warnIgnored: this.warnIgnored ?? baseConfig.warnIgnored,
+      };
 
       if (this.filesOrPatterns.length > 0) {
         if (this.patterns) {
@@ -118,7 +119,7 @@ export function createLintCommand(
         }
       }
 
-      return await runLint(cwd, options);
+      return await runLint(options);
     }
   };
 }

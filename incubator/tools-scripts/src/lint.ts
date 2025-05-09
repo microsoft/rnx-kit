@@ -1,30 +1,67 @@
 // @ts-check
 
-import { includeIgnoreFile } from "@eslint/compat";
 import { ESLint, type Linter } from "eslint";
 import eslintFormatterPretty from "eslint-formatter-pretty";
+import micromatch from "micromatch";
 import { spawnSync } from "node:child_process";
 import * as fs from "node:fs";
 import * as path from "node:path";
 
 type LinterConfig = Linter.Config<Linter.RulesRecord>;
 
-export type LintOptions = {
-  root?: string;
-  fix?: boolean;
-  warnIgnored?: boolean;
+export type LintTarget = {
+  /**
+   * The directory to lint
+   */
+  cwd: string;
+
+  /**
+   * Specific files to lint. If not specified, files will be found using settings in the configuration
+   */
   files?: string[];
-  filePatterns?: string[];
-  globalIgnores?: string[];
-  ignorePatterns?: string[];
-  skipGitIgnore?: boolean;
-  defaultConfig?: string | LinterConfig | LinterConfig[];
+
+  /**
+   * Automatically fix the issues as part of linting
+   * @default false
+   */
+  fix?: boolean;
 };
+
+export type LintConfiguration = {
+  /**
+   * Ignore warnings, only show errors
+   * @default false
+   */
+  warnIgnored?: boolean;
+
+  /**
+   * File patterns to use for linting. Files are found using git ls-files
+   */
+  filePatterns: string[];
+
+  /**
+   * Glob ignore patterns to use for linting, will be run against the file list before sending the
+   * files to eslint.
+   */
+  globalIgnores?: string[];
+
+  /**
+   * Ignore patterns to use for linting, will be sent to eslint
+   */
+  ignorePatterns?: string[];
+
+  /**
+   * Fallback configuration to use if no local config is found in the directory
+   */
+  fallbackConfig?: string | LinterConfig | LinterConfig[];
+};
+
+export type LintOptions = LintConfiguration & LintTarget;
 
 /**
  * @type {LintOptions}
  */
-export const defaultLintOptions = {
+export const defaultLintConfig = {
   filePatterns: ["*.cjs", "*.js", "*.jsx", "*.mjs", "*.ts", "*.tsx"],
   globalIgnores: ["**/node_modules/", ".git/"],
   warnIgnored: false,
@@ -36,21 +73,15 @@ export const defaultLintOptions = {
  * @param {LintOptions} options
  * @returns {Promise<number | void>}
  */
-export async function runLint(
-  cwd: string,
-  options: LintOptions
-): Promise<number | void> {
-  const { fix, warnIgnored } = options;
+export async function runLint(options: LintOptions): Promise<number | void> {
+  const { cwd, fix, warnIgnored, ignorePatterns = [] } = options;
 
   // load the config file values, need to have either a local config or a default to proceed
-  const [overrideConfigFile, overrideConfig] = await loadConfig(cwd, options);
+  const [overrideConfigFile, overrideConfig] = await loadConfig(options);
   if (!overrideConfigFile && !overrideConfig) {
     console.log(`No lint config file provided for ${cwd}. Skipping lint.`);
     return;
   }
-
-  // load the ignore patterns, either what was specified directly or what was found in the .gitignore files
-  const ignorePatterns = getIgnorePatterns(cwd, options);
 
   // create the eslint instance
   const eslint = new ESLint({
@@ -62,8 +93,7 @@ export async function runLint(
     overrideConfig,
   });
 
-  const files = findFiles(cwd, options);
-  console.log("Linting files:", files);
+  const files = options.files ?? findFiles(options);
   const results = await eslint.lintFiles(files);
   await ESLint.outputFixes(results);
 
@@ -81,17 +111,13 @@ export async function runLint(
 
 /**
  * load the config settings for the specified directory
- * @param {string} cwd
- * @param {LintOptions} options
- * @returns {Promise<[string | boolean | undefined, LinterConfig | LinterConfig[] | undefined]>}
  */
 export async function loadConfig(
-  cwd: string,
   options: LintOptions
 ): Promise<
   [string | boolean | undefined, LinterConfig | LinterConfig[] | undefined]
 > {
-  const { defaultConfig } = options;
+  const { fallbackConfig, cwd } = options;
 
   // default to the local config in cwd if it exists
   const eslintConfigPath = path.join(cwd, "eslint.config.js");
@@ -100,11 +126,11 @@ export async function loadConfig(
   }
 
   // fall back to defaultConfig if it is specified
-  if (defaultConfig) {
-    if (typeof defaultConfig === "string") {
-      return [defaultConfig, undefined];
+  if (fallbackConfig) {
+    if (typeof fallbackConfig === "string") {
+      return [fallbackConfig, undefined];
     }
-    return [true, defaultConfig];
+    return [true, fallbackConfig];
   }
 
   // no local, no default, return undefined
@@ -112,43 +138,18 @@ export async function loadConfig(
 }
 
 /**
- * @param {string} cwd
- * @param {LintOptions} options
+ * Use git's ls-files to find files in the specified directory matching the filePatterns
  */
-export function getIgnorePatterns(cwd: string, options: LintOptions) {
-  const patterns = [...(options.globalIgnores || [])];
-  if (options.ignorePatterns) {
-    patterns.push(...options.ignorePatterns);
-  }
+export function findFiles(options: LintOptions) {
+  const { cwd, filePatterns = [], globalIgnores = [] } = options;
 
-  if (!options.skipGitIgnore) {
-    const locations = options.root ? [options.root, cwd] : [cwd];
-    for (const location of locations) {
-      const gitignore = path.join(location, ".gitignore");
-      if (fs.existsSync(gitignore)) {
-        const { ignores } = includeIgnoreFile(gitignore);
-        if (ignores) {
-          patterns.push(...ignores);
-        }
-      }
-    }
-  }
-
-  return patterns;
-}
-
-/**
- * @param {string} cwd
- * @param {LintOptions} options
- * @returns {string[]}
- */
-export function findFiles(cwd: string, options: LintOptions) {
-  if (options.files) {
-    return options.files;
-  }
-  const filePatterns = options.filePatterns || [];
+  // use git to list the files in the directory
   const { stdout } = spawnSync("git", ["ls-files", ...filePatterns], {
     cwd,
   });
-  return stdout.toString().trim().split("\n");
+  const files = stdout.toString().trim().split("\n");
+  // filter the result if any global ignores are specified
+  return globalIgnores.length > 0
+    ? files.filter((file) => !micromatch.isMatch(file, globalIgnores))
+    : files;
 }

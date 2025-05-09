@@ -4622,9 +4622,11 @@ __metadata:
     "@rnx-kit/eslint-plugin": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
+    "@types/micromatch": "npm:^4.0.0"
     clipanion: "npm:^4.0.0-rc.4"
     eslint: "npm:^9.0.0"
     eslint-formatter-pretty: "npm:^6.0.1"
+    micromatch: "npm:^4.0.0"
   languageName: unknown
   linkType: soft
 
