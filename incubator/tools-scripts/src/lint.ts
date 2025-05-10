@@ -1,5 +1,4 @@
-import { ESLint, type Linter } from "eslint";
-import eslintFormatterPretty from "eslint-formatter-pretty";
+import type { Linter } from "eslint";
 import micromatch from "micromatch";
 import { spawnSync } from "node:child_process";
 import * as fs from "node:fs";
@@ -73,6 +72,11 @@ export const defaultLintConfig = {
  */
 export async function runLint(options: LintOptions): Promise<number | void> {
   const { cwd, fix, warnIgnored, ignorePatterns = [] } = options;
+
+  // dynamically import eslint and the pretty formatter since these are optional peer dependencies
+  const { ESLint } = await import("eslint");
+  const eslintFormatterPretty = (await import("eslint-formatter-pretty"))
+    .default;
 
   // load the config file values, need to have either a local config or a default to proceed
   const [overrideConfigFile, overrideConfig] = await loadConfig(options);

@@ -1,5 +1,4 @@
 {
-  "private": true,
   "name": "@rnx-kit/tools-scripts",
   "version": "0.0.1",
   "description": "EXPERIMENTAL - USE WITH CAUTION - tools-scripts",
@@ -36,18 +35,27 @@
   },
   "dependencies": {
     "clipanion": "^4.0.0-rc.4",
-    "eslint": "^9.0.0",
-    "eslint-formatter-pretty": "^6.0.1",
     "micromatch": "^4.0.0"
   },
   "devDependencies": {
     "@rnx-kit/eslint-config": "*",
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*",
-    "@types/micromatch": "^4.0.0"
+    "@types/micromatch": "^4.0.0",
+    "eslint": "^9.0.0",
+    "eslint-formatter-pretty": "^6.0.1"
   },
-  "jest": {
-    "preset": "@rnx-kit/jest-preset/private"
+  "peerDependencies": {
+    "eslint": "^9.0.0",
+    "eslint-formatter-pretty": "^6.0.1"
+  },
+  "peerDependenciesMeta": {
+    "eslint": {
+      "optional": true
+    },
+    "eslint-formatter-pretty": {
+      "optional": true
+    }
   },
   "experimental": true
 }

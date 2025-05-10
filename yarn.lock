@@ -4604,6 +4604,14 @@ __metadata:
     eslint: "npm:^9.0.0"
     eslint-formatter-pretty: "npm:^6.0.1"
     micromatch: "npm:^4.0.0"
+  peerDependencies:
+    eslint: ^9.0.0
+    eslint-formatter-pretty: ^6.0.1
+  peerDependenciesMeta:
+    eslint:
+      optional: true
+    eslint-formatter-pretty:
+      optional: true
   languageName: unknown
   linkType: soft
 
