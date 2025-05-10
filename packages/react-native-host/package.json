@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/react-native-host",
-  "version": "0.5.5",
+  "version": "0.5.8",
   "description": "Simplify React Native initialization",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/react-native-host#readme",
   "license": "MIT",

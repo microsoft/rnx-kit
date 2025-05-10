@@ -1,5 +1,27 @@
 # @rnx-kit/react-native-host
 
+## 0.5.8
+
+### Patch Changes
+
+- 3eb57fc: Post a notification when the React runtime is ready
+
+## 0.5.7
+
+### Patch Changes
+
+- c2e4303: Backport fix for shadow node state not updating (see
+  https://github.com/facebook/react-native/issues/49694)
+
+## 0.5.6
+
+### Patch Changes
+
+- 6880afa: Fixed `SurfaceRegistryBinding::startSurface` failing on 0.75 (and
+  older)
+- fa2feb4: Fixed invalid application of `sizeof` to an incomplete type
+  `facebook::react::JSExecutorFactory`
+
 ## 0.5.5
 
 ### Patch Changes

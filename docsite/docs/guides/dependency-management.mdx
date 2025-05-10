@@ -109,7 +109,7 @@ root of the repo, scanning all packages. This include packages which haven't
 onboarded yet. For those, `--requirements react-native@[version]` controls the
 target React Native release to use when checking compatibility.
 
-<PackageRunCommand args="rnx-align-deps --requirements react-native@0.66" />
+<PackageRunCommand args="rnx-align-deps --requirements react-native@0.66" installedScript />
 
 When a compatibility problem is found, the command fails with a non-zero exit
 code, which causes the PR loop to fail. This protects the repo from risky
@@ -186,7 +186,7 @@ info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this comm
 Fixing problems is automated, too! From your development terminal, run the same
 command with a `--write` parameter.
 
-<PackageRunCommand args="rnx-align-deps --requirements react-native@0.66 --write" />
+<PackageRunCommand args="rnx-align-deps --requirements react-native@0.66 --write" installedScript />
 
 **Review** and **test** the fixes before pushing them to your PR.
 
@@ -209,7 +209,7 @@ response.
 Run this command from the root of your repo. It uses the dependency manager to
 make the fixes automatically.
 
-<PackageRunCommand args="rnx-align-deps --write" />
+<PackageRunCommand args="rnx-align-deps --write" installedScript />
 
 **Review** and **test** the fixes before pushing them to the PR with the
 dependency manager update.
@@ -228,9 +228,9 @@ version and adjust all React Native dependencies to be compatible. Replace
 `[version]` with your target React Native version in `major.minor` format, such
 as "0.66" or "0.68".
 
-<PackageRunCommand args="rnx-align-deps --set-version [version]" />
+<PackageRunCommand args="rnx-align-deps --set-version [version]" installedScript />
 
-<PackageRunCommand args="rnx-align-deps --requirements react-native@[version] --write" />
+<PackageRunCommand args="rnx-align-deps --requirements react-native@[version] --write" installedScript />
 
 **Review** and **test** your packages thoroughly before merging these changes.
 
@@ -304,7 +304,7 @@ Next, configure each of your onboarded React Native packages to use the list.
 Now it's time to use the list. Run the dependency manager to update all of your
 packages.
 
-<PackageRunCommand args="rnx-align-deps --requirements react-native@0.66 --presets microsoft/react-native,path/to/dependency-profile.json --write" />
+<PackageRunCommand args="rnx-align-deps --requirements react-native@0.66 --presets microsoft/react-native,path/to/dependency-profile.json --write" installedScript />
 
 **Review** and **test** the changes before continuing.
 

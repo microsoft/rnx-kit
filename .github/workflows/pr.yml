@@ -83,10 +83,11 @@ jobs:
           git diff --exit-code
   build:
     name: "Build"
+    permissions: {}
     strategy:
       matrix:
         node-version: [20, 22]
-        os: [ubuntu-24.04, windows-2022]
+        os: [ubuntu-24.04, windows-2025]
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout
@@ -117,6 +118,7 @@ jobs:
         shell: bash
   build-android-test-app:
     name: "Build Android"
+    permissions: {}
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout
@@ -148,7 +150,8 @@ jobs:
         working-directory: packages/test-app
   build-ios-test-app:
     name: "Build iOS"
-    runs-on: macos-14
+    permissions: {}
+    runs-on: macos-15
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -192,6 +195,7 @@ jobs:
         working-directory: packages/test-app
   build-website:
     name: "Build the website"
+    permissions: {}
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout

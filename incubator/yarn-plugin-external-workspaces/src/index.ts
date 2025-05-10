@@ -1,5 +1,5 @@
 import { type Plugin } from "@yarnpkg/core";
-import { externalWorkspacesConfiguration } from "./cofiguration";
+import { externalWorkspacesConfiguration } from "./configuration";
 import { ExternalWorkspaceFetcher } from "./fetcher";
 import { afterAllInstalled, reduceDependency } from "./hooks";
 import { OutputWorkspaces } from "./outputCommand";
