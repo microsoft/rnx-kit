@@ -26,10 +26,10 @@ function workspaceRoot() {
  * @param {string} command
  * @param {string[]} args
  * @param {SpawnOptions=} options
- * @returns {Promise<void>}
+ * @returns {Promise<number>}
  */
 function spawn(command, args, options) {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     /** @type {SpawnOptions} */
     const opts = {
       ...options,
@@ -39,20 +39,16 @@ function spawn(command, args, options) {
       // https://nodejs.org/en/blog/release/v20.12.2).
       shell: command.endsWith(".bat") || command.endsWith(".cmd"),
     };
-    child_process.spawn(command, args, opts).on("close", (code) => {
-      if (code === 0) {
-        resolve();
-      } else {
-        reject();
-      }
-    });
+    child_process
+      .spawn(command, args, opts)
+      .on("close", (code) => resolve(code ?? -1));
   });
 }
 
 /**
  * @param {string} command
  * @param {...string} args
- * @returns {Promise<void>}
+ * @returns {Promise<number>}
  */
 export function execute(command, ...args) {
   return spawn(command, args, {
@@ -64,7 +60,7 @@ export function execute(command, ...args) {
 /**
  * @param {string} command
  * @param {...string} args
- * @returns {Promise<void>}
+ * @returns {Promise<number>}
  */
 export function runScript(command, ...args) {
   const yarn = os.platform() === "win32" ? "yarn.cmd" : "yarn";

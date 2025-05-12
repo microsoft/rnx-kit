@@ -13,20 +13,14 @@ import ts from "typescript";
  */
 
 export class UpdateApiReadmeCommand extends Command {
-  /**
-   * @override
-   */
+  /** @override */
   static paths = [["update-api-readme"]];
 
-  /**
-   * @override
-   */
+  /** @override */
   static usage = Command.Usage({
     description: "Updates the API README",
-    details: `
-      This command updates the API README.
-    `,
-    examples: [[`Update the API README`, `$0 update-api-readme`]],
+    details: "This command updates the API README.",
+    examples: [["Update the API README", "$0 update-api-readme"]],
   });
 
   async execute() {
