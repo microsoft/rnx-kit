@@ -95,7 +95,7 @@
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*",
     "@types/git-url-parse": "^9.0.0",
-    "@types/node": "^20.0.0",
+    "@types/node": "^22.0.0",
     "@types/qrcode": "^1.4.2",
     "@types/yargs": "^16.0.0"
   },

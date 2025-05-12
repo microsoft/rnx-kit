@@ -54,7 +54,7 @@
     "@rnx-kit/eslint-config": "*",
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*",
-    "@types/node": "^20.0.0",
+    "@types/node": "^22.0.0",
     "@types/node-fetch": "^2.6.5",
     "flow-remove-types": "~2.259.0",
     "metro": "^0.81.0",
