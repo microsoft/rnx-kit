@@ -35,7 +35,7 @@
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*",
     "@types/fast-levenshtein": "0.0.4",
-    "@types/node": "^20.0.0",
+    "@types/node": "^22.0.0",
     "chalk": "^4.1.0",
     "deepmerge": "^4.2.2",
     "fast-levenshtein": "^3.0.0",
