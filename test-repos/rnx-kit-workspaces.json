@@ -41,6 +41,7 @@
       "@rnx-kit/tools-node": "packages/tools-node",
       "@rnx-kit/tools-packages": "packages/tools-packages",
       "@rnx-kit/tools-react-native": "packages/tools-react-native",
+      "@rnx-kit/tools-scripts": "incubator/tools-scripts",
       "@rnx-kit/tools-shell": "packages/tools-shell",
       "@rnx-kit/tools-typescript": "incubator/tools-typescript",
       "@rnx-kit/tools-windows": "packages/tools-windows",
