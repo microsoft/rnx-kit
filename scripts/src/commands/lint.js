@@ -5,28 +5,22 @@ import { spawnSync } from "node:child_process";
 import { runScript } from "../process.js";
 
 export class LintCommand extends Command {
-  /**
-   * @override
-   */
+  /** @override */
   static paths = [["lint"]];
 
-  /**
-   * @override
-   */
+  /** @override */
   static usage = Command.Usage({
     description: "Lints the current package",
-    details: `
-      This command lints the current package using eslint.
-    `,
-    examples: [[`Lint the current package`, `$0 lint`]],
+    details: "This command lints the current package using ESLint.",
+    examples: [["Lint the current package", "$0 lint"]],
   });
 
-  args = Option.Proxy();
+  args = Option.Rest();
 
   async execute() {
-    const args = this.args.length > 0 ? this.args : ["--no-warn-ignored"];
+    const args = this.args.length > 0 ? this.args : [];
     const files = listFiles("*.cjs", "*.js", "*.jsx", "*.mjs", "*.ts", "*.tsx");
-    await runScript("eslint", "--no-warn-ignored", ...files, ...args);
+    return await runScript("eslint", "--no-warn-ignored", ...files, ...args);
   }
 }
 

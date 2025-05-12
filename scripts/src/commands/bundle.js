@@ -21,13 +21,10 @@ import * as fs from "node:fs";
  */
 
 export class BundleCommand extends Command {
-  /**
-   * @override
-   */
+  /** @override */
   static paths = [["bundle"]];
-  /**
-   * @override
-   */
+
+  /** @override */
   static usage = Command.Usage({
     description: "Bundles the current package",
     details: `
@@ -36,19 +33,19 @@ export class BundleCommand extends Command {
 
       Most settings will automatically be picked up based on the target platform.
     `,
-    examples: [[`Bundle the current package`, `$0 bundle`]],
+    examples: [["Bundle the current package", "$0 bundle"]],
   });
 
-  minify = Option.Boolean(`--minify`, false, {
+  minify = Option.Boolean("--minify", false, {
     description: "Minify the bundle",
   });
 
-  platform = Option.String(`--platform`, "node", {
+  platform = Option.String("--platform", "node", {
     description:
       "Target platform to bundle for. One of browser, neutral, node, or yarn.",
   });
 
-  sourceMap = Option.Boolean(`--sourceMap`, false, {
+  sourceMap = Option.Boolean("--sourceMap", false, {
     description: "Generate an associated source map",
   });
 
@@ -126,19 +123,19 @@ function yarnPreset(manifest) {
   return {
     banner: {
       js: [
-        `/* eslint-disable */`,
-        `//prettier-ignore`,
-        `module.exports = {`,
+        "/* eslint-disable */",
+        "//prettier-ignore",
+        "module.exports = {",
         `name: ${JSON.stringify(name)},`,
-        `factory: function (require) {`,
-      ].join(`\n`),
+        "factory: function (require) {",
+      ].join("\n"),
     },
-    globalName: `plugin`,
+    globalName: "plugin",
     format: "iife",
     footer: {
-      js: [`return plugin;`, `}`, `};`].join(`\n`),
+      js: ["return plugin;", "}", "};"].join("\n"),
     },
-    resolveExtensions: [`.tsx`, `.ts`, `.jsx`, `.mjs`, `.js`, `.css`, `.json`],
+    resolveExtensions: [".tsx", ".ts", ".jsx", ".mjs", ".js", ".css", ".json"],
     external: [
       ...(peerDependenciesMeta ? Object.keys(peerDependenciesMeta) : []),
       ...getDynamicLibs().keys(),
