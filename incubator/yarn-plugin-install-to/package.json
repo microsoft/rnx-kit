@@ -34,7 +34,7 @@
     "@rnx-kit/eslint-config": "*",
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*",
-    "@types/node": "^20.0.0",
+    "@types/node": "^22.0.0",
     "@types/semver": "^7.0.0",
     "@yarnpkg/cli": "^4.6.0",
     "@yarnpkg/core": "^4.2.0",

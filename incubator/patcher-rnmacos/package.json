@@ -35,7 +35,7 @@
     "@rnx-kit/tsconfig": "*",
     "@types/fs-extra": "^9.0.0",
     "@types/istextorbinary": "^2.3.0",
-    "@types/node": "^20.0.0"
+    "@types/node": "^22.0.0"
   },
   "dependencies": {
     "commander": "^4.1.1",

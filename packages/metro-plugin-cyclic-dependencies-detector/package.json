@@ -34,7 +34,7 @@
     "@rnx-kit/metro-serializer": "*",
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*",
-    "@types/node": "^20.0.0",
+    "@types/node": "^22.0.0",
     "metro": "^0.81.0"
   },
   "engines": {

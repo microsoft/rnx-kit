@@ -47,7 +47,7 @@
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*",
     "@types/micromatch": "^4.0.0",
-    "@types/node": "^20.0.0"
+    "@types/node": "^22.0.0"
   },
   "engines": {
     "node": ">=16.17"

@@ -30,7 +30,7 @@
     "@rnx-kit/jest-preset": "*",
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*",
-    "@types/node": "^20.0.0",
+    "@types/node": "^22.0.0",
     "esbuild": "^0.25.0"
   },
   "engines": {

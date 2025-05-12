@@ -3032,57 +3032,57 @@ __metadata:
   linkType: hard
 
 "@octokit/auth-oauth-device@npm:^7.1.1":
-  version: 7.1.1
-  resolution: "@octokit/auth-oauth-device@npm:7.1.1"
+  version: 7.1.5
+  resolution: "@octokit/auth-oauth-device@npm:7.1.5"
   dependencies:
-    "@octokit/oauth-methods": "npm:^5.0.0"
-    "@octokit/request": "npm:^9.0.0"
-    "@octokit/types": "npm:^13.0.0"
+    "@octokit/oauth-methods": "npm:^5.1.5"
+    "@octokit/request": "npm:^9.2.3"
+    "@octokit/types": "npm:^14.0.0"
     universal-user-agent: "npm:^7.0.0"
-  checksum: 10c0/77f33fceac51c4f5415b9adc2cb92ead8da6212c43ffaaff02f076504665df21f986f888a7d0605cf10c550e7dbd9aa39d9986302078e67f3889d8f32a936569
+  checksum: 10c0/f93a67473c58e8b855af15c7300a0937c9d3c6ea898e5e810f2f9762100c6cee22ae52e18c7f926b0e4c6c52573751d4c4ab6294c44116bed2d9fdde5cbdd35d
   languageName: node
   linkType: hard
 
 "@octokit/auth-token@npm:^5.0.0":
-  version: 5.1.0
-  resolution: "@octokit/auth-token@npm:5.1.0"
-  checksum: 10c0/d552000c1535936eb749c263ac2d80e0f07734f9a21e05a8885f1e90ea2e02347b35fe15deb53adfd2c5abdb56e988b6f52735cfc296748df70cf0d5402e9dd9
+  version: 5.1.2
+  resolution: "@octokit/auth-token@npm:5.1.2"
+  checksum: 10c0/bd4952571d9c559ede1f6ef8f7756900256d19df0180db04da88886a05484c7e6a4397611422e4804465a82addc8c2daa21d0bb4f450403552ee81041a4046d1
   languageName: node
   linkType: hard
 
-"@octokit/core@npm:^6.0, @octokit/core@npm:^6.0.0":
-  version: 6.1.3
-  resolution: "@octokit/core@npm:6.1.3"
+"@octokit/core@npm:^6.0.0":
+  version: 6.1.5
+  resolution: "@octokit/core@npm:6.1.5"
   dependencies:
     "@octokit/auth-token": "npm:^5.0.0"
-    "@octokit/graphql": "npm:^8.1.2"
-    "@octokit/request": "npm:^9.1.4"
-    "@octokit/request-error": "npm:^6.1.6"
-    "@octokit/types": "npm:^13.6.2"
+    "@octokit/graphql": "npm:^8.2.2"
+    "@octokit/request": "npm:^9.2.3"
+    "@octokit/request-error": "npm:^6.1.8"
+    "@octokit/types": "npm:^14.0.0"
     before-after-hook: "npm:^3.0.2"
     universal-user-agent: "npm:^7.0.0"
-  checksum: 10c0/d02506dfb2771b18d0ee620b92deb75f0458cbf92b975b04c9ad3e50b06813d4c98a598bf1a1cae5757d31166c52a1ef55c30b17f2359f30309731e264ea20d0
+  checksum: 10c0/c89ea754cc33da740fdd69fadb971b4b65c89971bba4e8ad545d3ea7aba79759ee3e195c3b72e7df78f14b8b1d392bddc56e7c385d48b5272319ea6a0246ac7c
   languageName: node
   linkType: hard
 
-"@octokit/endpoint@npm:^10.1.3":
-  version: 10.1.3
-  resolution: "@octokit/endpoint@npm:10.1.3"
+"@octokit/endpoint@npm:^10.1.4":
+  version: 10.1.4
+  resolution: "@octokit/endpoint@npm:10.1.4"
   dependencies:
-    "@octokit/types": "npm:^13.6.2"
+    "@octokit/types": "npm:^14.0.0"
     universal-user-agent: "npm:^7.0.2"
-  checksum: 10c0/096956534efee1f683b4749673c2d1673c6fbe5362b9cce553f9f4b956feaf59bde816594de72f4352f749b862d0b15bc0e2fa7fb0e198deb1fe637b5f4a8bc7
+  checksum: 10c0/bf7cca71a05dc4751df658588e32642e59c98768e7509521226b997ea4837e2d16efd35c391231c76d888226f4daf80e6a9f347dee01a69f490253654dada581
   languageName: node
   linkType: hard
 
-"@octokit/graphql@npm:^8.1.2":
-  version: 8.1.2
-  resolution: "@octokit/graphql@npm:8.1.2"
+"@octokit/graphql@npm:^8.2.2":
+  version: 8.2.2
+  resolution: "@octokit/graphql@npm:8.2.2"
   dependencies:
-    "@octokit/request": "npm:^9.1.4"
-    "@octokit/types": "npm:^13.6.2"
+    "@octokit/request": "npm:^9.2.3"
+    "@octokit/types": "npm:^14.0.0"
     universal-user-agent: "npm:^7.0.0"
-  checksum: 10c0/58f08ddbb85e334b5dc07c75ca746781484cb63e0d64edfa8205cd69a2d99c87a9279251a2d24bbdf9a3d45708474eb8d834858cd8f4959da726dbffe96e9e4e
+  checksum: 10c0/29cd5af5ed04e416d28798a11907ab861dc73c0af47f8c9c3f4183d81d2e77d88228643825538acc81e7015f78d891f84107929019a673b06a6b38ccea6a24e0
   languageName: node
   linkType: hard
 
@@ -3093,64 +3093,64 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@octokit/oauth-methods@npm:^5.0.0":
-  version: 5.1.2
-  resolution: "@octokit/oauth-methods@npm:5.1.2"
+"@octokit/oauth-methods@npm:^5.1.5":
+  version: 5.1.5
+  resolution: "@octokit/oauth-methods@npm:5.1.5"
   dependencies:
     "@octokit/oauth-authorization-url": "npm:^7.0.0"
-    "@octokit/request": "npm:^9.1.0"
-    "@octokit/request-error": "npm:^6.1.0"
-    "@octokit/types": "npm:^13.0.0"
-  checksum: 10c0/ab41396ee3d2beb7cceb922a06893a9f70825f9f5895b1ceea6337b8df7ac82d70110707879f0818557bb38cb9fc7756dfc380101b983aa214af0d3cb698aa6d
+    "@octokit/request": "npm:^9.2.3"
+    "@octokit/request-error": "npm:^6.1.8"
+    "@octokit/types": "npm:^14.0.0"
+  checksum: 10c0/2b1c5f9ef0fcdb2f19fd864303a67bdda296fcb2cc058efc51bf3fbb3cb582475a5532eab05bd7a57277607730fa4a7796431564693fffdb9c4cb2b471484a5c
   languageName: node
   linkType: hard
 
-"@octokit/openapi-types@npm:^23.0.1":
-  version: 23.0.1
-  resolution: "@octokit/openapi-types@npm:23.0.1"
-  checksum: 10c0/ab734ceb26343d9f051a59503b8cb5bdc7fec9ca044b60511b227179bec73141dd9144a6b2d68bcd737741881b136c1b7d5392da89ae2e35e39acc489e5eb4c1
+"@octokit/openapi-types@npm:^25.0.0":
+  version: 25.0.0
+  resolution: "@octokit/openapi-types@npm:25.0.0"
+  checksum: 10c0/59c9e5998e08cecec155b776c93d8f6f88ab1a812add61cc65f3de8f3744201565545eac308083d18c9fa330a4381a27bcd771a311ac0348d3590a00f333f233
   languageName: node
   linkType: hard
 
-"@octokit/plugin-rest-endpoint-methods@npm:^13.0, @octokit/plugin-rest-endpoint-methods@npm:^13.0.0":
-  version: 13.3.0
-  resolution: "@octokit/plugin-rest-endpoint-methods@npm:13.3.0"
+"@octokit/plugin-rest-endpoint-methods@npm:^14.0.0":
+  version: 14.0.0
+  resolution: "@octokit/plugin-rest-endpoint-methods@npm:14.0.0"
   dependencies:
-    "@octokit/types": "npm:^13.7.0"
+    "@octokit/types": "npm:^14.0.0"
   peerDependencies:
     "@octokit/core": ">=6"
-  checksum: 10c0/f3c7a69cdc8c3d8d2a1ba492e528fa97e836822357cca57a47f3ecbc2a04f661ea479e9debf44e063e1cdbf4ea1f4c0d5dc8295be9ce3086422c4779eba473d5
+  checksum: 10c0/c3f26c5277d4aa0c898d8fdbf84326943ea80496e6f60ae34834415384ab629e1e3702d1ed82d40c31a7370edfcb5fa9fe434b0357b302b3be309879bad1d4e6
   languageName: node
   linkType: hard
 
-"@octokit/request-error@npm:^6.0.0, @octokit/request-error@npm:^6.1.0, @octokit/request-error@npm:^6.1.6":
-  version: 6.1.7
-  resolution: "@octokit/request-error@npm:6.1.7"
+"@octokit/request-error@npm:^6.0.0, @octokit/request-error@npm:^6.1.8":
+  version: 6.1.8
+  resolution: "@octokit/request-error@npm:6.1.8"
   dependencies:
-    "@octokit/types": "npm:^13.6.2"
-  checksum: 10c0/24bd6f98b1d7b2d4062de34777b4195d3cc4dc40c3187a0321dd588291ec5e13b5760765aacdef3a73796a529d3dec0bfb820780be6ef526a3e774d13566b5b0
+    "@octokit/types": "npm:^14.0.0"
+  checksum: 10c0/02aa5bfebb5b1b9e152558b4a6f4f7dcb149b41538778ffe0fce3395fd0da5c0862311a78e94723435667581b2a58a7cefa458cf7aa19ae2948ae419276f7ee1
   languageName: node
   linkType: hard
 
-"@octokit/request@npm:^9.0.0, @octokit/request@npm:^9.1.0, @octokit/request@npm:^9.1.4":
-  version: 9.2.1
-  resolution: "@octokit/request@npm:9.2.1"
+"@octokit/request@npm:^9.2.3":
+  version: 9.2.3
+  resolution: "@octokit/request@npm:9.2.3"
   dependencies:
-    "@octokit/endpoint": "npm:^10.1.3"
-    "@octokit/request-error": "npm:^6.1.6"
-    "@octokit/types": "npm:^13.6.2"
+    "@octokit/endpoint": "npm:^10.1.4"
+    "@octokit/request-error": "npm:^6.1.8"
+    "@octokit/types": "npm:^14.0.0"
     fast-content-type-parse: "npm:^2.0.0"
     universal-user-agent: "npm:^7.0.2"
-  checksum: 10c0/4ec8ae8a9f323ecbe99abde97d21916c200a48a87be7b88407a4f15f2b4fcdc19f48fd5164d3e768a4712ef0702c06e4ff7f65dac562ec7f703eb9a532aebce2
+  checksum: 10c0/96067fc9a5f30f2faa00f08015309930561c3ea0536b543e1c91c475f965eabc81c48fc27d401681ebdb3f6c1acc5d46eaa69163ab98b0faa08be1c02ea5b684
   languageName: node
   linkType: hard
 
-"@octokit/types@npm:^13.0.0, @octokit/types@npm:^13.6.2, @octokit/types@npm:^13.7.0":
-  version: 13.7.0
-  resolution: "@octokit/types@npm:13.7.0"
+"@octokit/types@npm:^14.0.0":
+  version: 14.0.0
+  resolution: "@octokit/types@npm:14.0.0"
   dependencies:
-    "@octokit/openapi-types": "npm:^23.0.1"
-  checksum: 10c0/62ed4f00304360cc31e99a9dc97ac4f48075d1d5c09a272f09b1fd3dfcc7a6169b7fab109030319ef121b0cd880c85bdb20363f4992104e07a98bd8323beeeb5
+    "@octokit/openapi-types": "npm:^25.0.0"
+  checksum: 10c0/c82da635fe99f265dbef7bf954d45a23ca7ce9c6fc9a8478c247b5435799e5d0eab3ff42f085785ee0882b2de293cab0ab831b379c66f41d00b78412df850ba4
   languageName: node
   linkType: hard
 
@@ -3375,7 +3375,7 @@ __metadata:
     "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
-    "@types/node": "npm:^20.0.0"
+    "@types/node": "npm:^22.0.0"
     react: "npm:18.3.1"
     react-native: "npm:^0.76.0"
   peerDependencies:
@@ -3766,7 +3766,7 @@ __metadata:
     "@rnx-kit/tsconfig": "npm:*"
     "@types/babel__core": "npm:^7.0.0"
     "@types/babel__helper-plugin-utils": "npm:^7.0.0"
-    "@types/node": "npm:^20.0.0"
+    "@types/node": "npm:^22.0.0"
   languageName: unknown
   linkType: soft
 
@@ -3784,7 +3784,7 @@ __metadata:
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
     "@types/babel__core": "npm:^7.0.0"
-    "@types/node": "npm:^20.0.0"
+    "@types/node": "npm:^22.0.0"
     babel-plugin-const-enum: "npm:^1.0.0"
     metro-react-native-babel-preset: "npm:^0.76.5"
   peerDependencies:
@@ -3822,7 +3822,7 @@ __metadata:
   dependencies:
     "@octokit/auth-oauth-device": "npm:^7.1.1"
     "@octokit/core": "npm:^6.0.0"
-    "@octokit/plugin-rest-endpoint-methods": "npm:^13.0.0"
+    "@octokit/plugin-rest-endpoint-methods": "npm:^14.0.0"
     "@octokit/request-error": "npm:^6.0.0"
     "@rnx-kit/config": "npm:^0.7.0"
     "@rnx-kit/eslint-config": "npm:*"
@@ -3833,12 +3833,11 @@ __metadata:
     "@rnx-kit/tools-shell": "npm:^0.2.0"
     "@rnx-kit/tools-windows": "npm:^0.2.0"
     "@rnx-kit/tsconfig": "npm:*"
-    "@types/git-url-parse": "npm:^9.0.0"
-    "@types/node": "npm:^20.0.0"
+    "@types/node": "npm:^22.0.0"
     "@types/qrcode": "npm:^1.4.2"
     "@types/yargs": "npm:^16.0.0"
     env-paths: "npm:^3.0.0"
-    git-url-parse: "npm:^15.0.0"
+    git-url-parse: "npm:^16.0.0"
     node-fetch: "npm:^3.3.2"
     ora: "npm:^8.0.0"
     qrcode: "npm:^1.5.0"
@@ -3856,7 +3855,7 @@ __metadata:
     "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
-    "@types/node": "npm:^20.0.0"
+    "@types/node": "npm:^22.0.0"
   bin:
     rnx-bundle-diff: lib/cli.js
   languageName: unknown
@@ -3890,7 +3889,7 @@ __metadata:
     "@rnx-kit/tools-react-native": "npm:^2.0.3"
     "@rnx-kit/tsconfig": "npm:*"
     "@types/connect": "npm:^3.4.36"
-    "@types/node": "npm:^20.0.0"
+    "@types/node": "npm:^22.0.0"
     "@types/qrcode": "npm:^1.4.2"
     commander: "npm:^11.1.0"
     markdown-table: "npm:^3.0.0"
@@ -3923,7 +3922,7 @@ __metadata:
     "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
-    "@types/node": "npm:^20.0.0"
+    "@types/node": "npm:^22.0.0"
   bin:
     commitlint-lite: lib/cli.js
   languageName: unknown
@@ -3944,7 +3943,7 @@ __metadata:
     "@rnx-kit/tools-react-native": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
     "@types/lodash.merge": "npm:^4.6.9"
-    "@types/node": "npm:^20.0.0"
+    "@types/node": "npm:^22.0.0"
     "@types/semver": "npm:^7.0.0"
     lodash.merge: "npm:^4.6.2"
     metro: "npm:^0.81.0"
@@ -3959,7 +3958,7 @@ __metadata:
     "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
-    "@types/node": "npm:^20.0.0"
+    "@types/node": "npm:^22.0.0"
   languageName: unknown
   linkType: soft
 
@@ -3975,7 +3974,7 @@ __metadata:
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tools-node": "npm:^3.0.0"
     "@rnx-kit/tsconfig": "npm:*"
-    "@types/node": "npm:^20.0.0"
+    "@types/node": "npm:^22.0.0"
     "@types/yargs": "npm:^16.0.0"
     chalk: "npm:^4.1.0"
     yargs: "npm:^16.0.0"
@@ -3992,7 +3991,7 @@ __metadata:
     "@rnx-kit/jest-preset": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
-    "@types/node": "npm:^20.0.0"
+    "@types/node": "npm:^22.0.0"
     esbuild: "npm:^0.25.0"
   languageName: unknown
   linkType: soft
@@ -4020,7 +4019,7 @@ __metadata:
     "@types/eslint": "npm:^9.0.0"
     "@types/eslint__js": "npm:^8.0.0"
     "@types/estree": "npm:*"
-    "@types/node": "npm:^20.0.0"
+    "@types/node": "npm:^22.0.0"
     "@typescript-eslint/parser": "npm:^8.0.0"
     "@typescript-eslint/types": "npm:^8.0.0"
     enhanced-resolve: "npm:^5.8.3"
@@ -4052,7 +4051,7 @@ __metadata:
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tools-react-native": "npm:^2.0.3"
     "@rnx-kit/tsconfig": "npm:*"
-    "@types/node": "npm:^20.0.0"
+    "@types/node": "npm:^22.0.0"
     find-up: "npm:^5.0.0"
     react: "npm:18.3.1"
     react-native: "npm:^0.76.0"
@@ -4104,7 +4103,7 @@ __metadata:
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tools-node": "npm:^3.0.0"
     "@rnx-kit/tsconfig": "npm:*"
-    "@types/node": "npm:^20.0.0"
+    "@types/node": "npm:^22.0.0"
     metro: "npm:^0.81.0"
   languageName: unknown
   linkType: soft
@@ -4120,7 +4119,7 @@ __metadata:
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tools-node": "npm:^3.0.0"
     "@rnx-kit/tsconfig": "npm:*"
-    "@types/node": "npm:^20.0.0"
+    "@types/node": "npm:^22.0.0"
     memfs: "npm:^4.0.0"
     metro: "npm:^0.81.0"
     metro-source-map: "npm:^0.81.0"
@@ -4142,7 +4141,7 @@ __metadata:
     "@rnx-kit/tools-react-native": "npm:^2.0.0"
     "@rnx-kit/tsconfig": "npm:*"
     "@rnx-kit/typescript-service": "npm:^2.0.0"
-    "@types/node": "npm:^20.0.0"
+    "@types/node": "npm:^22.0.0"
     metro: "npm:^0.81.0"
     typescript: "npm:>=4.7.0"
   languageName: unknown
@@ -4159,7 +4158,7 @@ __metadata:
     "@rnx-kit/tools-node": "npm:^3.0.0"
     "@rnx-kit/tools-react-native": "npm:^2.0.0"
     "@rnx-kit/tsconfig": "npm:*"
-    "@types/node": "npm:^20.0.0"
+    "@types/node": "npm:^22.0.0"
     enhanced-resolve: "npm:^5.8.3"
     metro-resolver: "npm:^0.81.0"
   languageName: unknown
@@ -4186,7 +4185,7 @@ __metadata:
     "@rnx-kit/tools-node": "npm:^3.0.2"
     "@rnx-kit/tools-react-native": "npm:^2.0.0"
     "@rnx-kit/tsconfig": "npm:*"
-    "@types/node": "npm:^20.0.0"
+    "@types/node": "npm:^22.0.0"
     esbuild: "npm:^0.25.0"
     esbuild-plugin-lodash: "npm:^1.2.0"
     fast-glob: "npm:^3.2.7"
@@ -4208,7 +4207,7 @@ __metadata:
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tools-react-native": "npm:^2.0.0"
     "@rnx-kit/tsconfig": "npm:*"
-    "@types/node": "npm:^20.0.0"
+    "@types/node": "npm:^22.0.0"
     "@types/semver": "npm:^7.0.0"
     metro: "npm:^0.81.0"
     semver: "npm:^7.0.0"
@@ -4227,7 +4226,7 @@ __metadata:
     "@rnx-kit/tools-node": "npm:^3.0.0"
     "@rnx-kit/tools-react-native": "npm:^2.0.0"
     "@rnx-kit/tsconfig": "npm:*"
-    "@types/node": "npm:^20.0.0"
+    "@types/node": "npm:^22.0.0"
     "@types/node-fetch": "npm:^2.6.5"
     flow-remove-types: "npm:~2.259.0"
     metro: "npm:^0.81.0"
@@ -4260,7 +4259,7 @@ __metadata:
     "@rnx-kit/tsconfig": "npm:*"
     "@types/fs-extra": "npm:^9.0.0"
     "@types/istextorbinary": "npm:^2.3.0"
-    "@types/node": "npm:^20.0.0"
+    "@types/node": "npm:^22.0.0"
     commander: "npm:^4.1.1"
     fs-extra: "npm:^10.0.0"
     istextorbinary: "npm:^3.3.0"
@@ -4285,7 +4284,7 @@ __metadata:
     "@types/babel__core": "npm:^7.0.0"
     "@types/babel__helper-plugin-utils": "npm:^7.0.0"
     "@types/babel__template": "npm:^7.0.0"
-    "@types/node": "npm:^20.0.0"
+    "@types/node": "npm:^22.0.0"
     metro-config: "npm:^0.81.0"
   peerDependencies:
     "@react-native/js-polyfills": "*"
@@ -4325,7 +4324,7 @@ __metadata:
     "@rnx-kit/jest-preset": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
-    "@types/node": "npm:^20.0.0"
+    "@types/node": "npm:^22.0.0"
     "@types/yargs": "npm:^16.0.0"
     metro-symbolicate: "npm:^0.81.0"
     source-map: "npm:^0.5.6"
@@ -4353,7 +4352,7 @@ __metadata:
     "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
-    "@types/node": "npm:^20.0.0"
+    "@types/node": "npm:^22.0.0"
     babel-plugin-codegen: "npm:^4.1.5"
   peerDependencies:
     react-native: ">=0.59"
@@ -4381,7 +4380,7 @@ __metadata:
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
     "@types/fast-levenshtein": "npm:0.0.4"
-    "@types/node": "npm:^20.0.0"
+    "@types/node": "npm:^22.0.0"
     chalk: "npm:^4.1.0"
     deepmerge: "npm:^4.2.2"
     fast-levenshtein: "npm:^3.0.0"
@@ -4400,7 +4399,7 @@ __metadata:
     "@rnx-kit/tsconfig": "workspace:*"
     "@types/jest": "npm:^29.2.1"
     "@types/js-yaml": "npm:^4.0.5"
-    "@types/node": "npm:^20.0.0"
+    "@types/node": "npm:^22.0.0"
     "@types/yargs": "npm:^16.0.0"
     "@yarnpkg/cli": "npm:^4.6.0"
     clipanion: "npm:^4.0.0-rc.4"
@@ -4491,7 +4490,7 @@ __metadata:
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tools-node": "npm:^3.0.0"
     "@rnx-kit/tsconfig": "npm:*"
-    "@types/node": "npm:^20.0.0"
+    "@types/node": "npm:^22.0.0"
     "@types/yargs": "npm:^16.0.0"
     metro-source-map: "npm:^0.81.0"
     spdx-expression-parse: "npm:^4.0.0"
@@ -4509,7 +4508,7 @@ __metadata:
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tools-shell": "npm:^0.2.0"
     "@rnx-kit/tsconfig": "npm:*"
-    "@types/node": "npm:^20.0.0"
+    "@types/node": "npm:^22.0.0"
   languageName: unknown
   linkType: soft
 
@@ -4521,7 +4520,7 @@ __metadata:
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tools-shell": "npm:^0.2.0"
     "@rnx-kit/tsconfig": "npm:*"
-    "@types/node": "npm:^20.0.0"
+    "@types/node": "npm:^22.0.0"
     fast-xml-parser: "npm:^4.0.0"
   languageName: unknown
   linkType: soft
@@ -4533,7 +4532,7 @@ __metadata:
     "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
-    "@types/node": "npm:^20.0.0"
+    "@types/node": "npm:^22.0.0"
   languageName: unknown
   linkType: soft
 
@@ -4544,7 +4543,7 @@ __metadata:
     "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
-    "@types/node": "npm:^20.0.0"
+    "@types/node": "npm:^22.0.0"
   languageName: unknown
   linkType: soft
 
@@ -4555,7 +4554,7 @@ __metadata:
     "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
-    "@types/node": "npm:^20.0.0"
+    "@types/node": "npm:^22.0.0"
   languageName: unknown
   linkType: soft
 
@@ -4568,7 +4567,7 @@ __metadata:
     "@rnx-kit/tools-node": "npm:^3.0.0"
     "@rnx-kit/tools-workspaces": "npm:^0.2.1"
     "@rnx-kit/tsconfig": "npm:*"
-    "@types/node": "npm:^20.0.0"
+    "@types/node": "npm:^22.0.0"
   languageName: unknown
   linkType: soft
 
@@ -4583,7 +4582,7 @@ __metadata:
     "@rnx-kit/tools-filesystem": "npm:*"
     "@rnx-kit/tools-node": "npm:^3.0.0"
     "@rnx-kit/tsconfig": "npm:*"
-    "@types/node": "npm:^20.0.0"
+    "@types/node": "npm:^22.0.0"
     metro: "npm:^0.81.0"
     metro-config: "npm:^0.81.0"
     metro-core: "npm:^0.81.0"
@@ -4600,7 +4599,7 @@ __metadata:
     "@rnx-kit/jest-preset": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
-    "@types/node": "npm:^20.0.0"
+    "@types/node": "npm:^22.0.0"
   languageName: unknown
   linkType: soft
 
@@ -4631,7 +4630,7 @@ __metadata:
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tools-shell": "npm:^0.2.0"
     "@rnx-kit/tsconfig": "npm:*"
-    "@types/node": "npm:^20.0.0"
+    "@types/node": "npm:^22.0.0"
     fast-xml-parser: "npm:^4.0.0"
   languageName: unknown
   linkType: soft
@@ -4644,7 +4643,7 @@ __metadata:
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
     "@types/micromatch": "npm:^4.0.0"
-    "@types/node": "npm:^20.0.0"
+    "@types/node": "npm:^22.0.0"
     fast-glob: "npm:^3.2.7"
     find-up: "npm:^5.0.0"
     micromatch: "npm:^4.0.0"
@@ -4669,7 +4668,7 @@ __metadata:
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tools-node": "npm:^3.0.0"
     "@rnx-kit/tsconfig": "npm:*"
-    "@types/node": "npm:^20.0.0"
+    "@types/node": "npm:^22.0.0"
   peerDependencies:
     typescript: ">=4.0"
   languageName: unknown
@@ -4694,7 +4693,7 @@ __metadata:
     "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
-    "@types/node": "npm:^20.0.0"
+    "@types/node": "npm:^22.0.0"
     "@types/semver": "npm:^7.0.0"
     "@yarnpkg/cli": "npm:^4.6.0"
     "@yarnpkg/core": "npm:^4.2.0"
@@ -4712,7 +4711,7 @@ __metadata:
     "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
-    "@types/node": "npm:^20.0.0"
+    "@types/node": "npm:^22.0.0"
     "@types/semver": "npm:^7.0.0"
     "@yarnpkg/cli": "npm:^4.6.0"
     "@yarnpkg/core": "npm:^4.2.0"
@@ -4979,13 +4978,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/git-url-parse@npm:^9.0.0":
-  version: 9.0.3
-  resolution: "@types/git-url-parse@npm:9.0.3"
-  checksum: 10c0/7335a185ed33921c025428fba62d86208573001f3ec686519bda272a9dfefbf32aba2dbc5c782ca705282f3338e04a45df6548863d26b9616531d45078160b93
-  languageName: node
-  linkType: hard
-
 "@types/graceful-fs@npm:^4.1.3":
   version: 4.1.6
   resolution: "@types/graceful-fs@npm:4.1.6"
@@ -5147,12 +5139,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^20.0.0":
-  version: 20.17.30
-  resolution: "@types/node@npm:20.17.30"
+"@types/node@npm:^22.0.0":
+  version: 22.15.17
+  resolution: "@types/node@npm:22.15.17"
   dependencies:
-    undici-types: "npm:~6.19.2"
-  checksum: 10c0/649782c7822367d751472d70c948bcc50cded1a4744610f706f81cd54e1fc015523567d7e3e17f6b19e3e2797f6f23b653e898bdb4a2f21f8759ceba49976310
+    undici-types: "npm:~6.21.0"
+  checksum: 10c0/fb92aa10b628683c5b965749f955bc2322485ecb0ea6c2f4cae5f2c7537a16834607e67083a9e9281faaae8d7dee9ada8d6a5c0de9a52c17d82912ef00c0fdd4
   languageName: node
   linkType: hard
 
@@ -5160,6 +5152,13 @@ __metadata:
   version: 4.0.0
   resolution: "@types/parse-json@npm:4.0.0"
   checksum: 10c0/1d3012ab2fcdad1ba313e1d065b737578f6506c8958e2a7a5bdbdef517c7e930796cb1599ee067d5dee942fb3a764df64b5eef7e9ae98548d776e86dcffba985
+  languageName: node
+  linkType: hard
+
+"@types/parse-path@npm:^7.0.0":
+  version: 7.0.3
+  resolution: "@types/parse-path@npm:7.0.3"
+  checksum: 10c0/8344b6c7acba4e4e5a8d542f56f53c297685fa92f9b0c085d7532cc7e1b661432cecfc1c75c76cdb0d161c95679b6ecfe0573d9fef7c836962aacf604150a984
   languageName: node
   linkType: hard
 
@@ -9032,6 +9031,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"git-up@npm:^8.1.0":
+  version: 8.1.1
+  resolution: "git-up@npm:8.1.1"
+  dependencies:
+    is-ssh: "npm:^1.4.0"
+    parse-url: "npm:^9.2.0"
+  checksum: 10c0/2cc4461d8565a3f7a1ecd3d262a58ddb8df0a67f7f7d4915df2913c460b2e88ae570a6ea810700a6d22fb3b9e4bea8dd10a8eb469900ddc12e35c62208608c03
+  languageName: node
+  linkType: hard
+
 "git-url-parse@npm:^13.1.0":
   version: 13.1.1
   resolution: "git-url-parse@npm:13.1.1"
@@ -9041,12 +9050,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"git-url-parse@npm:^15.0.0":
-  version: 15.0.0
-  resolution: "git-url-parse@npm:15.0.0"
+"git-url-parse@npm:^16.0.0":
+  version: 16.1.0
+  resolution: "git-url-parse@npm:16.1.0"
   dependencies:
-    git-up: "npm:^7.0.0"
-  checksum: 10c0/1813a3ac8e97d348e46471db4710d776cc7b24a56a432339ab0c0f4f2323525a8627a1891aa80a53fd9be973191fe2902c0af8e17fb9b04f29445a83fbef3a4e
+    git-up: "npm:^8.1.0"
+  checksum: 10c0/b8f5ebcbd5b2baf9f1bb77a217376f0247c47fe1d42811ccaac3015768eebb0759a59051f758e50e70adf5c67ae059d1975bf6b750164f36bfd39138d11b940b
   languageName: node
   linkType: hard
 
@@ -12604,7 +12613,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"parse-diff@npm:^0.11":
+"parse-diff@npm:^0.11.0":
   version: 0.11.1
   resolution: "parse-diff@npm:0.11.1"
   checksum: 10c0/b8a488039f535e0ddaf1cfd4a13c2adc6d142f4e6263de6dc603f9762b59da89703a8f0dc8aacb7c7c66cdbdd2d075a57c63813fb74f66c9b8f5fe8ad2e89689
@@ -12655,6 +12664,16 @@ __metadata:
   dependencies:
     parse-path: "npm:^7.0.0"
   checksum: 10c0/68b95afdf4bbf72e57c7ab66f8757c935fff888f7e2b0f1e06098b4faa19e06b6b743bddaed5bc8df4f0c2de6fc475355d787373b2fdd40092be9e4e4b996648
+  languageName: node
+  linkType: hard
+
+"parse-url@npm:^9.2.0":
+  version: 9.2.0
+  resolution: "parse-url@npm:9.2.0"
+  dependencies:
+    "@types/parse-path": "npm:^7.0.0"
+    parse-path: "npm:^7.0.0"
+  checksum: 10c0/b8f56cdb01e76616255dff82544f4b5ab4378f6f4bac8604ed6fde03a75b0f71c547d92688386d8f22f38fad3c928c075abf69458677c6185da76c841bfd7a93
   languageName: node
   linkType: hard
 
@@ -13747,7 +13766,7 @@ __metadata:
   dependencies:
     "@changesets/cli": "npm:^2.22.0"
     "@types/jest": "npm:^29.2.1"
-    "@types/node": "npm:^20.0.0"
+    "@types/node": "npm:^22.0.0"
     eslint: "npm:^9.0.0"
     knip: "npm:^5.30.2"
     metro: "npm:^0.81.0"
@@ -14588,16 +14607,16 @@ __metadata:
   linkType: hard
 
 "suggestion-bot@npm:^3.0.0":
-  version: 3.0.2
-  resolution: "suggestion-bot@npm:3.0.2"
+  version: 3.0.3
+  resolution: "suggestion-bot@npm:3.0.3"
   dependencies:
-    "@octokit/core": "npm:^6.0"
-    "@octokit/plugin-rest-endpoint-methods": "npm:^13.0"
+    "@octokit/core": "npm:^6.0.0"
+    "@octokit/plugin-rest-endpoint-methods": "npm:^14.0.0"
     azure-devops-node-api: "npm:^13.0.0"
-    parse-diff: "npm:^0.11"
+    parse-diff: "npm:^0.11.0"
   bin:
     suggestion-bot: cli.js
-  checksum: 10c0/454a6a13bf0297a2bae3e4ab4ede76df5bbaaaa937c4478c72ec9af0eec4fced82a39f85f8e48d1bcda96b48e67070db51cd6e7c5fca6a8495a716b350769ff7
+  checksum: 10c0/7105f81a93342857afe656bc64246df115e074743fa7d70370c92258e759ec58e3de53ec30abd9f1a4d55966513af22dcd945d2f6dbf2f9a7db087ac53919f48
   languageName: node
   linkType: hard
 
@@ -15098,13 +15117,6 @@ __metadata:
   version: 5.26.5
   resolution: "undici-types@npm:5.26.5"
   checksum: 10c0/bb673d7876c2d411b6eb6c560e0c571eef4a01c1c19925175d16e3a30c4c428181fb8d7ae802a261f283e4166a0ac435e2f505743aa9e45d893f9a3df017b501
-  languageName: node
-  linkType: hard
-
-"undici-types@npm:~6.19.2":
-  version: 6.19.8
-  resolution: "undici-types@npm:6.19.8"
-  checksum: 10c0/078afa5990fba110f6824823ace86073b4638f1d5112ee26e790155f481f2a868cc3e0615505b6f4282bdf74a3d8caad715fd809e870c2bb0704e3ea6082f344
   languageName: node
   linkType: hard
 
