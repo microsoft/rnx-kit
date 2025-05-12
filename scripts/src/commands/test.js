@@ -20,7 +20,7 @@ export class TestCommand extends Command {
     examples: [["Test the current package", "$0 test"]],
   });
 
-  args = Option.Rest();
+  args = Option.Proxy();
 
   async execute() {
     if (useJest()) {

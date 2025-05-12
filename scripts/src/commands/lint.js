@@ -15,7 +15,7 @@ export class LintCommand extends Command {
     examples: [["Lint the current package", "$0 lint"]],
   });
 
-  args = Option.Rest();
+  args = Option.Proxy();
 
   async execute() {
     const args = this.args.length > 0 ? this.args : [];
