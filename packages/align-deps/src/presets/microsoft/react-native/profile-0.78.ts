@@ -85,17 +85,17 @@ export const profile: Profile = {
   },
   metro: {
     name: "metro",
-    version: "^0.81.0",
+    version: "^0.81.3",
     devOnly: true,
   },
   "metro-config": {
     name: "metro-config",
-    version: "^0.81.0",
+    version: "^0.81.3",
     devOnly: true,
   },
   "metro-core": {
     name: "metro-core",
-    version: "^0.81.0",
+    version: "^0.81.3",
     devOnly: true,
   },
   "metro-react-native-babel-transformer": {
@@ -105,12 +105,12 @@ export const profile: Profile = {
   },
   "metro-resolver": {
     name: "metro-resolver",
-    version: "^0.81.0",
+    version: "^0.81.3",
     devOnly: true,
   },
   "metro-runtime": {
     name: "metro-runtime",
-    version: "^0.81.0",
+    version: "^0.81.3",
     devOnly: true,
   },
 

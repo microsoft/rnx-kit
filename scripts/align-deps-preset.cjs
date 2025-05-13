@@ -79,11 +79,6 @@ const profile = {
     name: "semver",
     version: "^7.0.0",
   },
-  "test-app": {
-    name: "react-native-test-app",
-    version: "^4.0.0",
-    devOnly: true,
-  },
   yargs: {
     name: "yargs",
     version: dependencies.yargs,

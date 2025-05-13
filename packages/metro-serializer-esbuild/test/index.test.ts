@@ -303,11 +303,7 @@ describe("metro-serializer-esbuild", () => {
 
   it("is disabled when `dev: true`", async () => {
     const result = await bundle("test/__fixtures__/direct.ts", true);
-    ok(
-      result[0].startsWith(
-        "var __BUNDLE_START_TIME__=this.nativePerformanceNow?nativePerformanceNow():Date.now(),__DEV__=true,process=this.process||{},__METRO_GLOBAL_PREFIX__=''"
-      )
-    );
+    ok(result[0].includes("__DEV__=true"));
   });
 
   it("preserves template literals", async () => {

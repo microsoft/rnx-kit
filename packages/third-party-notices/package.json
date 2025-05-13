@@ -36,7 +36,7 @@
     "yargs": "^16.0.0"
   },
   "devDependencies": {
-    "@react-native-community/cli-types": "^15.0.0",
+    "@react-native-community/cli-types": "^15.0.1",
     "@rnx-kit/eslint-config": "*",
     "@rnx-kit/jest-preset": "*",
     "@rnx-kit/metro-serializer": "*",
@@ -44,7 +44,7 @@
     "@rnx-kit/tsconfig": "*",
     "@types/node": "^22.0.0",
     "@types/yargs": "^16.0.0",
-    "metro-source-map": "^0.81.0"
+    "metro-source-map": "^0.81.3"
   },
   "engines": {
     "node": ">=16.17"

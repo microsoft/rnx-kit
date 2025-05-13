@@ -69,18 +69,18 @@ export const profile: Profile = {
   },
   "community/cli": {
     name: "@react-native-community/cli",
-    version: "^15.0.0",
+    version: "^15.0.1",
     capabilities: ["community/cli-android", "community/cli-ios"],
     devOnly: true,
   },
   "community/cli-android": {
     name: "@react-native-community/cli-platform-android",
-    version: "^15.0.0",
+    version: "^15.0.1",
     devOnly: true,
   },
   "community/cli-ios": {
     name: "@react-native-community/cli-platform-ios",
-    version: "^15.0.0",
+    version: "^15.0.1",
     devOnly: true,
   },
   metro: {
