@@ -1,0 +1,47 @@
+{
+  "name": "@rnx-kit/reporter",
+  "version": "0.0.1",
+  "description": "EXPERIMENTAL - USE WITH CAUTION - reporter",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/incubator/reporter#readme",
+  "license": "MIT",
+  "type": "module",
+  "author": {
+    "name": "Microsoft Open Source",
+    "email": "microsoftopensource@users.noreply.github.com"
+  },
+  "files": [
+    "lib/**/*.d.ts",
+    "lib/**/*.js"
+  ],
+  "exports": {
+    ".": {
+      "import": "./lib/index.js",
+      "types": "./lib/index.d.ts",
+      "default": "./lib/index.js"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "incubator/reporter"
+  },
+  "engines": {
+    "node": ">=18.12"
+  },
+  "scripts": {
+    "build": "rnx-kit-scripts build",
+    "format": "rnx-kit-scripts format",
+    "lint": "rnx-kit-scripts lint",
+    "test": "rnx-kit-scripts test"
+  },
+  "devDependencies": {
+    "@rnx-kit/eslint-config": "*",
+    "@rnx-kit/jest-preset": "*",
+    "@rnx-kit/scripts": "*",
+    "@rnx-kit/tsconfig": "*"
+  },
+  "jest": {
+    "preset": "@rnx-kit/jest-preset/private"
+  },
+  "experimental": true
+}

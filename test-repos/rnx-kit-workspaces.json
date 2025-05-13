@@ -33,6 +33,7 @@
       "@rnx-kit/react-native-host": "packages/react-native-host",
       "@rnx-kit/react-native-lazy-index": "packages/react-native-lazy-index",
       "@rnx-kit/react-native-test-app-msal": "incubator/react-native-test-app-msal",
+      "@rnx-kit/reporter": "incubator/reporter",
       "@rnx-kit/rn-changelog-generator": "incubator/rn-changelog-generator",
       "@rnx-kit/third-party-notices": "packages/third-party-notices",
       "@rnx-kit/tools-android": "packages/tools-android",
