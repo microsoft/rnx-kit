@@ -1,3 +1,4 @@
+import type { ResolveFunction } from "enhanced-resolve";
 import type { CustomResolver, Resolution } from "metro-resolver";
 import type { ResolutionContextCompat } from "../types";
 import { isAssetFile, resolveAsset } from "../utils/assets";
@@ -7,10 +8,8 @@ import {
 } from "../utils/enhancedResolveHelpers";
 import { importResolver } from "../utils/package";
 
-type Resolver = (fromDir: string, moduleId: string) => string | false;
-
 const getEnhancedResolver = (() => {
-  const resolvers: Record<string, Resolver> = {};
+  const resolvers: Record<string, ResolveFunction> = {};
   return (context: ResolutionContextCompat, platform = "common") => {
     if (!resolvers[platform]) {
       const config = makeEnhancedResolveOptions(context, platform);
