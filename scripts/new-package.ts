@@ -5,6 +5,7 @@ import * as fs from "node:fs";
 import * as path from "node:path";
 import { URL, fileURLToPath } from "node:url";
 import { parseArgs } from "node:util";
+import { getRootEnginesField } from "./src/rootWorkspace.js";
 
 type Options = {
   experimental?: boolean;
@@ -15,15 +16,6 @@ const EXPERIMENTAL_BANNER =
 const USAGE_TOKEN_START = "<!-- usage start -->";
 const USAGE_TOKEN_END = "<!-- usage end -->";
 const WARNING_BANNER_TOKEN = "<!-- experimental-warning -->";
-
-function getRootEnginesField(): Record<string, string> {
-  const root = fs.readFileSync(new URL("../package.json", import.meta.url));
-  const manifest = JSON.parse(root.toString());
-  if (typeof manifest.engines !== "object") {
-    throw new Error("'engines' field is incorrectly configured");
-  }
-  return manifest.engines;
-}
 
 function writeTextFile(destination: string, data: unknown): void {
   const fd = fs.openSync(destination, "w");
