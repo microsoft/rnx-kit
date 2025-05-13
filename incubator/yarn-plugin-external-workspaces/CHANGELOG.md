@@ -1,5 +1,14 @@
 # @rnx-kit/yarn-plugin-external-workspaces
 
+## 0.1.2
+
+### Patch Changes
+
+- e7c7a1c: Check in the produced yarn-plugin-external-workspaces bundle and
+  reference it directly from yarnrc.yml
+- 0d27f0f: Fixed output being saved relatively to the current working directory
+  instead of the project root
+
 ## 0.1.1
 
 ### Patch Changes
