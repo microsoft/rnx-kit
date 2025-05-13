@@ -2,13 +2,17 @@ import type { CustomResolver, Resolution } from "metro-resolver";
 import type { NapiResolveOptions, ResolverFactory } from "oxc-resolver";
 import type { ResolutionContextCompat } from "../types";
 import { isAssetFile, resolveAsset } from "../utils/assets";
-import { getFromDir, makeEnhancedResolverConfig } from "./enhanced-resolve";
+import {
+  getFromDir,
+  makeEnhancedResolveOptions,
+} from "../utils/enhancedResolveHelpers";
+import { importResolver } from "../utils/package";
 
 function makeOxcResolverOptions(
   context: ResolutionContextCompat,
   platform = "common"
 ): NapiResolveOptions {
-  const { alias, ...config } = makeEnhancedResolverConfig(context, platform);
+  const { alias, ...config } = makeEnhancedResolveOptions(context, platform);
   return {
     ...config,
     alias: alias
@@ -20,19 +24,17 @@ function makeOxcResolverOptions(
 }
 
 const getOxcResolver = (() => {
-  let firstResolver: ResolverFactory;
+  let sharedResolver: ResolverFactory;
   const resolvers: Record<string, ResolverFactory> = {};
   return (context: ResolutionContextCompat, platform = "common") => {
     if (!resolvers[platform]) {
       const options = makeOxcResolverOptions(context, platform);
-      if (!firstResolver) {
-        const {
-          ResolverFactory,
-        }: typeof import("oxc-resolver") = require("oxc-resolver");
-        firstResolver = new ResolverFactory(options);
-        resolvers[platform] = firstResolver;
+      if (!sharedResolver) {
+        const { ResolverFactory } = importResolver("oxc-resolver");
+        sharedResolver = new ResolverFactory(options);
+        resolvers[platform] = sharedResolver;
       } else {
-        resolvers[platform] = firstResolver.cloneWithOptions(options);
+        resolvers[platform] = sharedResolver.cloneWithOptions(options);
       }
     }
     return resolvers[platform];
