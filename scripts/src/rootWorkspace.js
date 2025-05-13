@@ -1,5 +1,6 @@
 // @ts-check
 import * as fs from "node:fs";
+import { URL } from "node:url";
 
 /**
  * @returns {Record<string, string>}
