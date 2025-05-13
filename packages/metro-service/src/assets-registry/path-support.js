@@ -78,7 +78,7 @@ function getAndroidResourceFolderName(
 function getAndroidResourceIdentifier(asset) {
   return (getBasePath(asset) + '/' + asset.name)
     .toLowerCase()
-    .replaceAll("/", '_') // Encode folder structure in file name
+    .replace(/\//g, '_') // Encode folder structure in file name
     .replace(/([^a-z0-9_])/g, '') // Remove illegal chars
     .replace(/^assets_/, ''); // Remove "assets_" prefix
 }

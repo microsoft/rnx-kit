@@ -11,7 +11,7 @@ class MsalPackage : BaseReactPackage() {
             ?: throw IllegalArgumentException("No modules were ever registered")
 
         return when (name) {
-            info.name() -> ReactNativeAuthModuleProvider.create(reactContext)
+            info.name -> ReactNativeAuthModuleProvider.create(reactContext)
                 ?: throw IllegalStateException(
                     "ReactNativeAuthModuleProvider.create() wasn't supposed to return null"
                 )
@@ -24,7 +24,7 @@ class MsalPackage : BaseReactPackage() {
         if (info == null) {
             mapOf()
         } else {
-            mapOf(info.name() to info).toMutableMap()
+            mapOf(info.name to info).toMutableMap()
         }
     }
 }

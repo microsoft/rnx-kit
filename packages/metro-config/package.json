@@ -46,11 +46,11 @@
     "@rnx-kit/tsconfig": "*",
     "@types/babel__core": "^7.0.0",
     "@types/connect": "^3.4.36",
-    "metro": "^0.81.0",
-    "metro-config": "^0.81.0",
-    "metro-resolver": "^0.81.0",
-    "react": "18.3.1",
-    "react-native": "^0.76.0",
+    "metro": "^0.81.3",
+    "metro-config": "^0.81.3",
+    "metro-resolver": "^0.81.3",
+    "react": "19.0.0",
+    "react-native": "^0.78.0",
     "type-fest": "^4.0.0"
   },
   "engines": {
