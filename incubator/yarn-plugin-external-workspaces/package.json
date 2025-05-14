@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/yarn-plugin-external-workspaces",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "EXPERIMENTAL - USE WITH CAUTION - yarn-plugin-external-workspaces",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/incubator/yarn-plugin-external-workspaces#readme",
   "license": "MIT",
@@ -41,7 +41,7 @@
     "@rnx-kit/eslint-config": "*",
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*",
-    "@types/node": "^20.0.0",
+    "@types/node": "^22.0.0",
     "@types/semver": "^7.0.0",
     "@yarnpkg/cli": "^4.6.0",
     "@yarnpkg/core": "^4.2.0",

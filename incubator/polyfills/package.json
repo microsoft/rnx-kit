@@ -47,8 +47,8 @@
     "@types/babel__core": "^7.0.0",
     "@types/babel__helper-plugin-utils": "^7.0.0",
     "@types/babel__template": "^7.0.0",
-    "@types/node": "^20.0.0",
-    "metro-config": "^0.81.0"
+    "@types/node": "^22.0.0",
+    "metro-config": "^0.81.3"
   },
   "engines": {
     "node": ">=16.17"
@@ -57,7 +57,7 @@
     "alignDeps": {
       "requirements": {
         "development": [
-          "react-native@0.76"
+          "react-native@0.78"
         ],
         "production": [
           "react-native@>=0.72 <1.0"

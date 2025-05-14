@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-resolver-symlinks
 
+## 0.2.2
+
+### Patch Changes
+
+- 4e75884: Added experimental support for `oxc-resolver` as an option
+
 ## 0.2.1
 
 ### Patch Changes

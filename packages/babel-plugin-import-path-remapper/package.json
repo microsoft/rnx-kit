@@ -34,7 +34,7 @@
     "@rnx-kit/tsconfig": "*",
     "@types/babel__core": "^7.0.0",
     "@types/babel__helper-plugin-utils": "^7.0.0",
-    "@types/node": "^20.0.0"
+    "@types/node": "^22.0.0"
   },
   "engines": {
     "node": ">=16.17"

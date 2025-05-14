@@ -1,26 +1,9 @@
 import { isFileModuleRef, parseModuleRef } from "@rnx-kit/tools-node/module";
 import { normalizePath } from "@rnx-kit/tools-node/path";
-import { getAvailablePlatforms } from "@rnx-kit/tools-react-native/platform";
 import type { CustomResolver, Resolution } from "metro-resolver";
-import * as path from "path";
-import { resolveFrom } from "./helper";
-import type { ModuleResolver, ResolutionContextCompat } from "./types";
-
-export const remapReactNativeModule: ModuleResolver = (
-  _context,
-  moduleName,
-  platform
-) => {
-  const platformImpl = getAvailablePlatforms()[platform];
-  if (platformImpl) {
-    if (moduleName === "react-native") {
-      return platformImpl;
-    } else if (moduleName.startsWith("react-native/")) {
-      return `${platformImpl}/${moduleName.slice("react-native/".length)}`;
-    }
-  }
-  return moduleName;
-};
+import * as path from "node:path";
+import type { ModuleResolver, ResolutionContextCompat } from "../types";
+import { resolveFrom } from "../utils/package";
 
 export const resolveModulePath: ModuleResolver = (
   { extraNodeModules, originModulePath },

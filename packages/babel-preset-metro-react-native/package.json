@@ -49,13 +49,13 @@
     "@babel/core": "^7.20.0",
     "@babel/plugin-transform-typescript": "^7.20.0",
     "@babel/runtime": "^7.20.0",
-    "@react-native/babel-preset": "^0.76.0",
+    "@react-native/babel-preset": "^0.78.0",
     "@rnx-kit/babel-plugin-import-path-remapper": "*",
     "@rnx-kit/eslint-config": "*",
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*",
     "@types/babel__core": "^7.0.0",
-    "@types/node": "^20.0.0",
+    "@types/node": "^22.0.0",
     "metro-react-native-babel-preset": "^0.76.5"
   },
   "engines": {

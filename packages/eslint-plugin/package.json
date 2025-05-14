@@ -59,7 +59,7 @@
     "@types/eslint": "^9.0.0",
     "@types/eslint__js": "^8.0.0",
     "@types/estree": "*",
-    "@types/node": "^20.0.0",
+    "@types/node": "^22.0.0",
     "@typescript-eslint/parser": "^8.0.0",
     "@typescript-eslint/types": "^8.0.0"
   },

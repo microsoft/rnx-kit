@@ -114,7 +114,7 @@ abstract class ReactNativeAuthModule(context: ReactApplicationContext?) :
 fun ReadableArray.toStringArray(): Array<String> {
     val strings = mutableListOf<String>().apply {
         for (i in 0 until size()) {
-            add(getString(i))
+            getString(i)?.also { add(it) }
         }
     }
     return strings.toTypedArray()

@@ -3,6 +3,7 @@
 import { getDynamicLibs } from "@yarnpkg/cli";
 import { Command, Option } from "clipanion";
 import * as fs from "node:fs";
+import { getRootEnginesField } from "../rootWorkspace.js";
 
 /**
  * @typedef {import("esbuild").BuildOptions} BuildOptions
@@ -21,13 +22,10 @@ import * as fs from "node:fs";
  */
 
 export class BundleCommand extends Command {
-  /**
-   * @override
-   */
+  /** @override */
   static paths = [["bundle"]];
-  /**
-   * @override
-   */
+
+  /** @override */
   static usage = Command.Usage({
     description: "Bundles the current package",
     details: `
@@ -36,33 +34,52 @@ export class BundleCommand extends Command {
 
       Most settings will automatically be picked up based on the target platform.
     `,
-    examples: [[`Bundle the current package`, `$0 bundle`]],
+    examples: [["Bundle the current package", "$0 bundle"]],
   });
 
-  minify = Option.Boolean(`--minify`, false, {
+  minify = Option.Boolean("--minify", false, {
     description: "Minify the bundle",
   });
 
-  platform = Option.String(`--platform`, "node", {
+  platform = Option.String("--platform", "node", {
     description:
       "Target platform to bundle for. One of browser, neutral, node, or yarn.",
   });
 
-  sourceMap = Option.Boolean(`--sourceMap`, false, {
+  sourceMap = Option.Boolean("--sourceMap", false, {
     description: "Generate an associated source map",
   });
 
   async execute() {
-    await bundle({
+    const { name, outfile } = await bundle({
       minify: this.minify,
       platform: this.platform,
       sourceMap: this.sourceMap,
     });
+
+    // report success with file size of the output file
+    if (!process.stdin.isTTY && fs.existsSync(outfile)) {
+      const sizeKb = Math.round(fs.statSync(outfile).size / 1024);
+      this.context.stdout.write(`Success: ${name} bundled: ${sizeKb}kb\n`);
+    }
   }
 }
 
 const defaultTarget = "es2021";
-const defaultNodeTarget = "node16.17";
+
+/**
+ * @param {Manifest} manifest
+ * @returns {string}
+ */
+function getNodeTarget(manifest) {
+  const enginesNode = manifest.engines?.node ?? getRootEnginesField().node;
+  const match = enginesNode?.match(/(\d+)\.(\d+)/);
+  if (!match) {
+    throw new Error("Could not get minimum Node version");
+  }
+
+  return `node${match[1]}.${match[2]}`;
+}
 
 /**
  * @param {Manifest} manifest
@@ -126,19 +143,19 @@ function yarnPreset(manifest) {
   return {
     banner: {
       js: [
-        `/* eslint-disable */`,
-        `//prettier-ignore`,
-        `module.exports = {`,
+        "/* eslint-disable */",
+        "//prettier-ignore",
+        "module.exports = {",
         `name: ${JSON.stringify(name)},`,
-        `factory: function (require) {`,
-      ].join(`\n`),
+        "factory: function (require) {",
+      ].join("\n"),
     },
-    globalName: `plugin`,
+    globalName: "plugin",
     format: "iife",
     footer: {
-      js: [`return plugin;`, `}`, `};`].join(`\n`),
+      js: ["return plugin;", "}", "};"].join("\n"),
     },
-    resolveExtensions: [`.tsx`, `.ts`, `.jsx`, `.mjs`, `.js`, `.css`, `.json`],
+    resolveExtensions: [".tsx", ".ts", ".jsx", ".mjs", ".js", ".css", ".json"],
     external: [
       ...(peerDependenciesMeta ? Object.keys(peerDependenciesMeta) : []),
       ...getDynamicLibs().keys(),
@@ -177,37 +194,25 @@ function platformOptions(platform, manifest) {
 }
 
 /**
- * @param {Manifest} manifest
- * @returns {string}
- */
-function getNodeTarget(manifest) {
-  const enginesNode = manifest.engines?.node;
-  const match = enginesNode?.match(/(\d+)\.(\d+)/);
-  return match ? `node${match[1]}.${match[2]}` : defaultNodeTarget;
-}
-
-/**
  * @param {Record<string, unknown> | undefined} options
+ * @returns {Promise<{ name: string; outfile: string; }>}
  */
 export async function bundle(options) {
   const { minify, platform, sourceMap } = options || {};
 
   const manifestFile = fs.readFileSync("package.json", { encoding: "utf-8" });
   const manifest = JSON.parse(manifestFile);
+  const { name, main: outfile } = manifest;
 
   const esbuild = await import("esbuild");
   await esbuild.build({
     ...platformOptions(platform, manifest),
     bundle: true,
-    outfile: manifest.main,
+    outfile,
     entryPoints: ["src/index.ts"],
     minify: Boolean(minify),
     sourcemap: Boolean(sourceMap),
   });
 
-  // report success with file size of the output file
-  if (fs.existsSync(manifest.main)) {
-    const sizeKb = Math.round(fs.statSync(manifest.main).size / 1024);
-    console.log(`Success: ${manifest.name} bundled: ${sizeKb}kb`);
-  }
+  return { name, outfile };
 }

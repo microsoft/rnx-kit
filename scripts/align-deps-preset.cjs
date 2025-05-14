@@ -2,7 +2,7 @@
 
 const dependencies = {
   jest: "^29.2.1",
-  node: "^20.0.0",
+  node: "^22.0.0",
   yargs: "^16.0.0",
 };
 
@@ -78,11 +78,6 @@ const profile = {
   semver: {
     name: "semver",
     version: "^7.0.0",
-  },
-  "test-app": {
-    name: "react-native-test-app",
-    version: "^4.0.0",
-    devOnly: true,
   },
   yargs: {
     name: "yargs",

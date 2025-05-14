@@ -75,7 +75,7 @@
   "dependencies": {
     "@octokit/auth-oauth-device": "^7.1.1",
     "@octokit/core": "^6.0.0",
-    "@octokit/plugin-rest-endpoint-methods": "^13.0.0",
+    "@octokit/plugin-rest-endpoint-methods": "^14.0.0",
     "@octokit/request-error": "^6.0.0",
     "@rnx-kit/config": "^0.7.0",
     "@rnx-kit/tools-android": "^0.2.0",
@@ -84,7 +84,7 @@
     "@rnx-kit/tools-shell": "^0.2.0",
     "@rnx-kit/tools-windows": "^0.2.0",
     "env-paths": "^3.0.0",
-    "git-url-parse": "^15.0.0",
+    "git-url-parse": "^16.0.0",
     "node-fetch": "^3.3.2",
     "ora": "^8.0.0",
     "qrcode": "^1.5.0",
@@ -94,8 +94,7 @@
     "@rnx-kit/eslint-config": "*",
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*",
-    "@types/git-url-parse": "^9.0.0",
-    "@types/node": "^20.0.0",
+    "@types/node": "^22.0.0",
     "@types/qrcode": "^1.4.2",
     "@types/yargs": "^16.0.0"
   },

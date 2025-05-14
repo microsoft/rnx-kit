@@ -31,12 +31,12 @@
     "@rnx-kit/jest-preset": "*",
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*",
-    "@types/node": "^20.0.0",
+    "@types/node": "^22.0.0",
     "@types/yargs": "^16.0.0"
   },
   "dependencies": {
     "@rnx-kit/console": "^2.0.0",
-    "metro-symbolicate": "^0.81.0",
+    "metro-symbolicate": "^0.81.3",
     "source-map": "^0.5.6",
     "yargs": "^16.0.0"
   },

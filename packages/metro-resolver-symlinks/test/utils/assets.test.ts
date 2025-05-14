@@ -1,5 +1,5 @@
 import type { ResolutionContextCompat } from "../../src/types";
-import { isAssetFile } from "../../src/utils/enhancedResolve";
+import { isAssetFile } from "../../src/utils/assets";
 
 describe("isAssetFile", () => {
   test("uses `isAssetFile` if it exists", () => {

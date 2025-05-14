@@ -14,7 +14,6 @@ const cli = new Cli({
   binaryLabel: "rnx-kit scripts CLI",
   binaryName: "rnx-kit-scripts",
   binaryVersion: "0.0.0",
-  enableColors: true,
 });
 
 cli.register(BuildCommand);
@@ -29,4 +28,4 @@ cli.register(Builtins.DefinitionsCommand);
 cli.register(Builtins.HelpCommand);
 cli.register(Builtins.VersionCommand);
 
-cli.runExit(process.argv.slice(2), Cli.defaultContext);
+cli.runExit(process.argv.slice(2));

@@ -14,6 +14,7 @@
 'use strict';
 
 
+
 const assets = [];
 
 function registerAsset(asset) {
