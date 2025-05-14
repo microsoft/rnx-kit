@@ -1,8 +1,6 @@
 export type LogFunction = (message: string) => void;
-export type Timer<T> = (label: string, fn: () => T) => T;
-export type AsyncTimer<T> = (label: string, fn: () => Promise<T>) => Promise<T>;
 
-export type Reporter = {
+export type Reporter = Readonly<{
   /**
    * Equivalent to console.log
    */
@@ -42,18 +40,22 @@ export type Reporter = {
    */
   action<T>(label: string, fn: () => T): T;
   asyncAction<T>(label: string, fn: () => Promise<T>): Promise<T>;
-};
 
+  /**
+   * Formatting utilities for the reporter, used for formatting output
+   */
+  formatter: Formatter;
+}>;
+
+/**
+ * Information about a reporter, used to identify the reporter in events and filter messages
+ */
 export type ReporterInfo = {
   /**
-   * Name reporter was created with
+   * Name of the reporter, used to identify the reporter in logs
+   * and to filter messages to listeners
    */
   name: string;
-
-  /**
-   * Output name, used for writing to the console
-   */
-  outputName?: string;
 
   /**
    * Log level for this reporter, 0 for no messages, verbose for all
@@ -61,46 +63,72 @@ export type ReporterInfo = {
   logLevel: number;
 
   /**
+   * Additional context for this reporter, used if additional information such as telemetry IDs need to be
+   * passed to listeners
+   */
+  context?: string;
+};
+
+/**
+ * Options which define the behavior of the reporter.
+ */
+export type ReporterOptions = ReporterInfo & {
+  /**
+   * Standard output stream
+   */
+  stdout: NodeJS.WriteStream;
+
+  /**
+   * Standard error stream
+   */
+  stderr: NodeJS.WriteStream;
+
+  /**
    * Output messages undecorated, by default messages are decorated with the reporter name or output name
    */
   undecoratedOutput?: boolean;
+
+  /**
+   * Override formatter for the reporter
+   */
+  formatter: Formatter;
 };
 
-export type TaskInfo = {
+/**
+ * Base reporter event, included as part of all events. The source property contains the reporter that was
+ * the source of the event. The label is the event name for tasks/actions, and the message for messages.
+ */
+export type ReporterEvent = {
   /**
-   * Reporter that created this task
+   * Source reporter that created this event
    */
-  reporter: ReporterInfo;
+  source: Readonly<ReporterInfo>;
 
   /**
-   * Label for this task
+   * Event label, used as the event name
    */
   label: string;
 };
 
-export type MessageEvent = {
+/**
+ * Information about a message being logged. For these types of events the label property is contains the message.
+ *
+ * Note that the message may be formatted with colors. Use stripVTControlCharacters from node:util if these
+ * need to be removed (Node 16+: https://nodejs.org/api/util.html#util_util_stripvtcontrolcharacters_string)
+ */
+export type MessageEvent = ReporterEvent & {
   /**
    * Message type, one of log, warn, error, verbose
    */
   logType: number;
-
-  /**
-   * Message to log
-   */
-  message: string;
-
-  /**
-   * Reporter that created this message
-   */
-  reporter: ReporterInfo;
-
-  /**
-   * Task that this message is associated with, if any
-   */
-  task?: TaskInfo;
 };
 
-export type ActionAggregation = {
+/**
+ * Information about actions taken as part of task execution. Action information is only sent as part of the task
+ * completion event. During the task execution, actions are tracked and their results are aggregated. Given that
+ * these are used for high frequency operations the action codepath is optimized for performance.
+ */
+export type ActionEvent = ReporterEvent & {
   /**
    * Label for this action
    */
@@ -114,19 +142,24 @@ export type ActionAggregation = {
   /**
    * Total inclusive time across all calls
    */
-  time: number;
+  elapsed: number;
 };
 
-export type TaskEvent = TaskInfo & {
+/**
+ * Information about a task being executed. This includes the task label, the time taken for the task, and
+ * any actions that were called while this task was the active task. The error property is only set if the task failed via
+ * an exception.
+ */
+export type TaskEvent = ReporterEvent & {
   /**
    * Total time for this task
    */
-  time: number;
+  elapsed: number;
 
   /**
    * Actions that were called as part of this task, keyed by label
    */
-  actions: Record<string, ActionAggregation>;
+  actions: Record<string, ActionEvent>;
 
   /**
    * Error if the task failed via an exception
@@ -136,15 +169,14 @@ export type TaskEvent = TaskInfo & {
 
 export type ReporterListener = {
   /**
-   * Reporter filter, only messages from these reporters will be sent to the listener, if not specified will
-   * include all reporters
-   */
-  reporterFilter?: Set<string>;
-
-  /**
    * Only messages of this type or lower will be sent to the listener. 0 for no messages, verbose for all
    */
   messageLevel: number;
+
+  /**
+   * Does the listener care about this reporter, used to filter messages
+   */
+  acceptsSource(source: ReporterInfo): boolean;
 
   /**
    * Called when a message is logged
@@ -154,10 +186,29 @@ export type ReporterListener = {
   /**
    * Called when a task is started
    */
-  onTaskStarted(event: TaskInfo): void;
+  onTaskStarted(event: ReporterEvent): void;
 
   /**
    * Called when a task is completed
    */
   onTaskCompleted(event: TaskEvent): void;
+};
+
+export type Formatter = {
+  // formatting functions for types of content
+  module: (moduleName: string) => string;
+  path: (path: string) => string;
+  duration: (duration: number) => string;
+  task: (task: string) => string;
+  action: (action: string) => string;
+  reporter: (reporter: string) => string;
+
+  // formatting functions for types of logging
+  log: (text: string) => string;
+  error: (text: string) => string;
+  warn: (text: string) => string;
+  verbose: (text: string) => string;
+
+  // formatting helper for cleaning formatting
+  clean: (message: string) => string;
 };
