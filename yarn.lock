@@ -13789,7 +13789,6 @@ __metadata:
     "@types/node": "npm:^22.0.0"
     eslint: "npm:^9.0.0"
     knip: "npm:^5.30.2"
-    metro: "npm:^0.81.3"
     nx: "patch:nx@npm%3A20.3.3#~/.yarn/patches/nx-npm-20.3.3-84b801f64d.patch"
     prettier: "npm:^3.0.0"
     prettier-plugin-organize-imports: "npm:^4.0.0"
