@@ -102,6 +102,23 @@ function resolveUniqueModule(packageName, searchStartDir) {
     throw new Error(`Cannot find module '${packageName}'`);
   }
 
+  // Yarn's pnpm layout differs from pnpm:
+  // - @babel-core -> node_modules/.store/@babel-core-npm-7.27.1-0f1bf48e52/package
+  // - react-native -> node_modules/.store/react-native-virtual-3e97acc5aa/package
+  if (path.basename(result) === "package" && result.includes(".store")) {
+    const storePath = path.dirname(result);
+    const hashIndex = storePath.lastIndexOf("-") + 1;
+    const hashPart = storePath.substring(hashIndex);
+    const parent = path
+      .normalize(storePath.substring(0, hashIndex))
+      .replaceAll("\\", "\\\\")
+      .replaceAll(".", "\\.");
+    const exclusionRE = new RegExp(
+      `${parent}\\w+(?<!${hashPart})\\${path.sep}package\\${path.sep}.*`
+    );
+    return [result, exclusionRE];
+  }
+
   // Find the node_modules folder and account for cases when packages are
   // nested within workspace folders. Examples:
   // - path/to/node_modules/@babel/runtime
