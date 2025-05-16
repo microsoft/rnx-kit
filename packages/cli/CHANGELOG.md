@@ -1,5 +1,13 @@
 # Change Log - @rnx-kit/cli
 
+## 0.18.9
+
+### Patch Changes
+
+- 0f336eb: Fix `clean` command hanging when trying to stop non-existent Watchman
+- Updated dependencies [c4c2df9]
+  - @rnx-kit/align-deps@3.0.6
+
 ## 0.18.8
 
 ### Patch Changes
