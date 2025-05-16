@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-config
 
+## 2.1.0
+
+### Minor Changes
+
+- 55aa00e: Added support for Yarn's pnpm layout
+
 ## 2.0.1
 
 ### Patch Changes
