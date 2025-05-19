@@ -1,25 +1,41 @@
+export type LogType = "error" | "warn" | "info" | "trace";
+export type LogLevel = LogType | "none" | "all";
+
 export type LogFunction = (message: string) => void;
+
+/**
+ * An output option can either be a function used to write to a stream or logfile, or a string which will be
+ * used to open a logfile.
+ */
+export type OutputOption = string | LogFunction;
 
 export type Reporter = Readonly<{
   /**
-   * Equivalent to console.log
-   */
-  log: LogFunction;
-
-  /**
-   * Equivalent to console.warn
-   */
-  warn: LogFunction;
-
-  /**
-   * Equivalent to console.error
+   * Report an error, logging it to the error output and notifying any listeners
    */
   error: LogFunction;
 
   /**
-   * Only outputs logs in verbose mode
+   * Report an error to any listeners/telemetry, but don't log it to the error output
+   * @param error error to record
+   * @param rethrow if true and an error type, rethrow the error after recording it
    */
-  verbose: LogFunction;
+  recordError: (error: string | Error, rethrow?: boolean) => void;
+
+  /**
+   * Send a warning message to the error output. This is equivalent to console.warn
+   */
+  warn: LogFunction;
+
+  /**
+   * General purpose logging function, on by default. Similar in scope to console.log or console.info
+   */
+  info: LogFunction;
+
+  /**
+   * Tracing output, used for verbose logging, requires a higher log level to be enabled.
+   */
+  trace: LogFunction;
 
   /**
    * Tasks are hierarchical operations that can be timed. Each task is tracked separately and results
@@ -40,12 +56,68 @@ export type Reporter = Readonly<{
    */
   action<T>(label: string, fn: () => T): T;
   asyncAction<T>(label: string, fn: () => Promise<T>): Promise<T>;
+}>;
+
+export type OutputWriter = {
+  // write function to use for logging
+  write: LogFunction;
+
+  // don't add colors to the output, used for log files or other streams that don't support colors
+  plainText?: boolean;
+};
+
+/**
+ * Colorizer is used to colorize the output of the reporter. Override these functions to customize the colors
+ */
+export type Colorizer = {
+  // are colors enabled
+  colorsEnabled: boolean;
+
+  // colors for various parts of the output
+  packageName: (moduleName: string) => string;
+  packageScope: (moduleName: string) => string;
+  path: (path: string) => string;
+  durationNumber: (duration: string) => string;
+  durationUnit: (unit: string) => string;
+
+  task: (task: string) => string;
+  action: (action: string) => string;
+  reporter: (reporter: string) => string;
+
+  // colors for Warning: or Error: prefixes before the messages
+  errorPrefix: (text: string) => string;
+  warnPrefix: (text: string) => string;
+
+  // colors for the message text
+  msgText: (text: string, logType: LogType) => string;
+};
+
+/**
+ * The formatter formats various kinds of log output, applying colors via the colorizer
+ */
+export type Formatter = {
+  /**
+   * Formats the message prefix for all messages. Generally the format will be:
+   * `<ReporterName>: <Message>` - this routine returns the `<ReporterName>: ` portion
+   */
+  messagePrefix: (reporterName: string, colorizer: Colorizer) => string;
 
   /**
-   * Formatting utilities for the reporter, used for formatting output
+   * Format and colorize the duration that comes from the performance timer, will
+   * be in the form of `1.37ms` or `1.37s` or `1.37m`, digits will auto adjust by default
    */
-  formatter: Formatter;
-}>;
+  duration: (duration: number, colorizer: Colorizer) => string;
+
+  /**
+   * Format error and warning message prefixes, typically "Error: " or "Warning: "
+   */
+  messageTypePrefix: (messageType: LogType, colorizer: Colorizer) => string;
+
+  /**
+   * Format a package name, handling scoped packages as well as non-scoped packages
+   */
+  module: (moduleName: string, colorizer: Colorizer) => string;
+};
 
 /**
  * Information about a reporter, used to identify the reporter in events and filter messages
@@ -58,9 +130,9 @@ export type ReporterInfo = {
   name: string;
 
   /**
-   * Log level for this reporter, 0 for no messages, verbose for all
+   * Log level for this reporter
    */
-  logLevel: number;
+  logLevel: LogLevel;
 
   /**
    * Additional context for this reporter, used if additional information such as telemetry IDs need to be
@@ -74,19 +146,19 @@ export type ReporterInfo = {
  */
 export type ReporterOptions = ReporterInfo & {
   /**
-   * Standard output stream
+   * Channel to use for info/verbose/trace messages
    */
-  stdout: NodeJS.WriteStream;
+  stdOutput: OutputWriter;
 
   /**
-   * Standard error stream
+   * Channel to use for error/warn messages.
    */
-  stderr: NodeJS.WriteStream;
+  errOutput: OutputWriter;
 
   /**
-   * Output messages undecorated, by default messages are decorated with the reporter name or output name
+   * Colorizer to use for the reporter
    */
-  undecoratedOutput?: boolean;
+  colorizer: Colorizer;
 
   /**
    * Override formatter for the reporter
@@ -111,16 +183,13 @@ export type ReporterEvent = {
 };
 
 /**
- * Information about a message being logged. For these types of events the label property is contains the message.
- *
- * Note that the message may be formatted with colors. Use stripVTControlCharacters from node:util if these
- * need to be removed (Node 16+: https://nodejs.org/api/util.html#util_util_stripvtcontrolcharacters_string)
+ * Notification of an error sent to the reporter.
  */
-export type MessageEvent = ReporterEvent & {
+export type ErrorEvent = ReporterEvent & {
   /**
    * Message type, one of log, warn, error, verbose
    */
-  logType: number;
+  error: string | Error;
 };
 
 /**
@@ -169,19 +238,14 @@ export type TaskEvent = ReporterEvent & {
 
 export type ReporterListener = {
   /**
-   * Only messages of this type or lower will be sent to the listener. 0 for no messages, verbose for all
-   */
-  messageLevel: number;
-
-  /**
    * Does the listener care about this reporter, used to filter messages
    */
   acceptsSource(source: ReporterInfo): boolean;
 
   /**
-   * Called when a message is logged
+   * Notify of an error
    */
-  onMessage(event: MessageEvent): void;
+  onError(event: ErrorEvent): void;
 
   /**
    * Called when a task is started
@@ -192,23 +256,4 @@ export type ReporterListener = {
    * Called when a task is completed
    */
   onTaskCompleted(event: TaskEvent): void;
-};
-
-export type Formatter = {
-  // formatting functions for types of content
-  module: (moduleName: string) => string;
-  path: (path: string) => string;
-  duration: (duration: number) => string;
-  task: (task: string) => string;
-  action: (action: string) => string;
-  reporter: (reporter: string) => string;
-
-  // formatting functions for types of logging
-  log: (text: string) => string;
-  error: (text: string) => string;
-  warn: (text: string) => string;
-  verbose: (text: string) => string;
-
-  // formatting helper for cleaning formatting
-  clean: (message: string) => string;
 };

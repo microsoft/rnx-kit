@@ -1,11 +1,14 @@
-import {
-  LOG_ERRORS,
-  LOG_LOGS,
-  LOG_VERBOSE,
-  LOG_WARNINGS,
-} from "./constants.ts";
+import { plainTextColorizer } from "./output.ts";
+import { checkPerformanceEnv } from "./performance.ts";
 import { ReportingRoot } from "./reportingRoot.ts";
-import type { Reporter, ReporterOptions } from "./types.ts";
+import type {
+  Colorizer,
+  LogFunction,
+  LogLevel,
+  LogType,
+  Reporter,
+  ReporterOptions,
+} from "./types.ts";
 
 /**
  * @param name the name of the reporter, ideally unique within the application or it could cause confusion
@@ -14,38 +17,37 @@ import type { Reporter, ReporterOptions } from "./types.ts";
  */
 export function createReporter(
   name: string,
-  options: Partial<Omit<ReporterOptions, "name">> = {}
+  optionOverrides: Partial<Omit<ReporterOptions, "name">> = {}
 ): Reporter {
+  checkPerformanceEnv();
   const root = ReportingRoot.getInstance();
   const sourceInfo: ReporterOptions = {
     ...root.reporterDefaults,
-    ...options,
+    ...optionOverrides,
     name,
   };
-  const { logLevel, undecoratedOutput, formatter, stdout, stderr } = sourceInfo;
 
-  const stdPrefix = undecoratedOutput ? "" : `${formatter.reporter(name)}: `;
-  const errorPrefix = formatter.error(stdPrefix);
-  const warnPrefix = formatter.warn(stdPrefix);
-
-  const handleMsg = (
-    level: number,
-    msg: string,
-    prefix: string,
-    stream: NodeJS.WriteStream
-  ) => {
-    if (level >= logLevel) {
-      stream.write(`${prefix}${msg}\n`);
+  // function to notify any listeners of an error
+  const recordError = (error: string | Error, rethrow?: boolean) => {
+    root.notifyError(error, sourceInfo);
+    if (error instanceof Error && rethrow) {
+      throw error;
     }
-    root.notifyMsg(level, msg, sourceInfo);
   };
 
+  // write function for error output
+  const writeError = createWriteFunction("error", sourceInfo);
+
+  // return a reporter instance
   return {
-    error: (msg: string) => handleMsg(LOG_ERRORS, msg, errorPrefix, stderr),
-    warn: (msg: string) => handleMsg(LOG_WARNINGS, msg, warnPrefix, stderr),
-    log: (msg: string) => handleMsg(LOG_LOGS, msg, stdPrefix, stdout),
-    verbose: (msg: string) =>
-      handleMsg(LOG_VERBOSE, formatter.verbose(msg), stdPrefix, stdout),
+    error: (error: string) => {
+      recordError(error);
+      writeError(error);
+    },
+    warn: createWriteFunction("warn", sourceInfo),
+    info: createWriteFunction("info", sourceInfo),
+    trace: createWriteFunction("trace", sourceInfo),
+    recordError,
 
     // tasks are hierarchical operations that can be timed and tracked
     task: function <T>(label: string, fn: () => T) {
@@ -62,7 +64,61 @@ export function createReporter(
     asyncAction: async function <T>(label: string, fn: () => Promise<T>) {
       return await root.asyncAction<T>(label, sourceInfo, fn);
     },
-
-    formatter,
   };
+}
+
+const logTypeOrdering: LogLevel[] = [
+  "none",
+  "error",
+  "warn",
+  "info",
+  "trace",
+  "all",
+];
+function supportedLogType(logType: LogType, logLevel: LogLevel) {
+  for (const entry of logTypeOrdering) {
+    if (entry === logType) {
+      return true;
+    }
+    if (entry === logLevel) {
+      return false;
+    }
+  }
+  return false;
+}
+
+function noopWrite(_msg: string) {
+  // no-op
+}
+
+function configurateOutput(
+  logType: LogType,
+  options: ReporterOptions
+): [LogFunction, Colorizer] {
+  const output =
+    logType === "error" || logType === "warn"
+      ? options.errOutput
+      : options.stdOutput;
+  return [
+    output.write,
+    output.plainText ? plainTextColorizer : options.colorizer,
+  ];
+}
+
+function createWriteFunction(logType: LogType, options: ReporterOptions) {
+  if (supportedLogType(logType, options.logLevel)) {
+    // grab the right output stream and colorizer for that stream
+    const [write, colorizer] = configurateOutput(logType, options);
+
+    // now set up the prefixes, this can be done once and reused for all messages
+    const { formatter, name } = options;
+    // type prefix (like Warning: or Error:)
+    const prefix = `${formatter.messageTypePrefix(logType, colorizer)}${formatter.messagePrefix(name, colorizer)}`;
+    const colorMsgText = colorizer.msgText;
+
+    return (msg: string) => {
+      write(`${prefix}${colorMsgText(msg, logType)}\n`);
+    };
+  }
+  return noopWrite;
 }

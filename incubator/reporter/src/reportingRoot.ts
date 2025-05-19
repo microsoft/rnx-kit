@@ -1,12 +1,17 @@
-import { LOG_LOGS, LOG_NONE } from "./constants.ts";
-import { defaultFormatter } from "./formatter.ts";
+import {
+  createStreamWriter,
+  defaultColorizer,
+  defaultFormatter,
+} from "./output.ts";
 import type {
-  MessageEvent,
   ReporterInfo,
   ReporterListener,
   ReporterOptions,
   TaskEvent,
 } from "./types.ts";
+
+export const ROOT_REPORTER_NAME = "ProcessRoot";
+export const ROOT_SESSION_TASK_NAME = "Session";
 
 export class ReportingRoot {
   /**
@@ -25,39 +30,46 @@ export class ReportingRoot {
     return ReportingRoot.instance;
   }
 
-  // Logging options, default log level and output streams
+  // default reporter options, inherited by all reporters
   reporterDefaults: ReporterOptions = {
-    name: "",
-    logLevel: LOG_LOGS,
-    stdout: process.stdout,
-    stderr: process.stderr,
+    name: ROOT_REPORTER_NAME,
+    logLevel: "info",
+    stdOutput: createStreamWriter(process.stdout),
+    errOutput: createStreamWriter(process.stderr),
     formatter: defaultFormatter,
-    undecoratedOutput: false,
+    colorizer: defaultColorizer,
+  };
+
+  // session task, baseline task to collect all unassociated actions
+  private sessionTask: TaskEvent = {
+    label: ROOT_SESSION_TASK_NAME,
+    source: this.reporterDefaults,
+    actions: {},
+    elapsed: performance.now(),
   };
 
   // Listeners and filters
   private listeners: ReporterListener[] = [];
-  private tasks: TaskEvent[] = [];
-  private reportLogLevel = LOG_NONE;
+  private tasks: TaskEvent[] = [this.sessionTask];
 
   addListener(listener: ReporterListener) {
     this.listeners.push(listener);
-    if (listener.messageLevel > this.reportLogLevel) {
-      // remember the highest reporting level to filter out chatty messages
-      this.reportLogLevel = listener.messageLevel;
-    }
   }
 
   removeListener(listener: ReporterListener) {
     const index = this.listeners.indexOf(listener);
     if (index >= 0) {
       this.listeners.splice(index, 1);
-      // reset the report log level and recalculate it since we removed a listener
-      this.reportLogLevel = LOG_NONE;
-      for (const l of this.listeners) {
-        if (l.messageLevel > this.reportLogLevel) {
-          this.reportLogLevel = l.messageLevel;
-        }
+    }
+  }
+
+  private broadcast(
+    source: ReporterInfo,
+    fn: (listener: ReporterListener) => void
+  ) {
+    for (const listener of this.listeners) {
+      if (listener.acceptsSource(source)) {
+        fn(listener);
       }
     }
   }
@@ -65,22 +77,11 @@ export class ReportingRoot {
   /**
    * Notify any listeners about the message
    */
-  notifyMsg(logType: number, label: string, source: ReporterInfo) {
-    if (logType <= this.reportLogLevel) {
-      const msg: MessageEvent = {
-        logType,
-        label,
-        source,
-      };
-      for (const listener of this.listeners) {
-        if (
-          logType <= listener.messageLevel &&
-          listener.acceptsSource(source)
-        ) {
-          listener.onMessage(msg);
-        }
-      }
-    }
+  notifyError(error: string | Error, source: ReporterInfo) {
+    const label = typeof error === "string" ? error : error.message;
+    this.broadcast(source, (listener) => {
+      listener.onError({ label, error, source });
+    });
   }
 
   /**
@@ -88,36 +89,26 @@ export class ReportingRoot {
    */
   notifyAction(label: string, time: number, source: ReporterInfo) {
     const task = this.activeTask();
-    if (task) {
-      const actionEvent = (task.actions[`${source.name}-${task.label}`] ??= {
-        source,
-        label,
-        calls: 0,
-        elapsed: 0,
-      });
-      actionEvent.calls++;
-      actionEvent.elapsed += time;
-    }
+    const actionEvent = (task.actions[`${source.name}-${task.label}`] ??= {
+      source,
+      label,
+      calls: 0,
+      elapsed: 0,
+    });
+    actionEvent.calls++;
+    actionEvent.elapsed += time;
   }
 
   private notifyTaskStart(label: string, source: ReporterInfo) {
-    if (this.listeners.length > 0) {
-      for (const listener of this.listeners) {
-        if (listener.acceptsSource(source)) {
-          listener.onTaskStarted({ label, source });
-        }
-      }
-    }
+    this.broadcast(source, (listener) => {
+      listener.onTaskStarted({ label, source });
+    });
   }
 
   private notifyTaskEnd(task: TaskEvent) {
-    if (this.listeners.length > 0) {
-      for (const listener of this.listeners) {
-        if (listener.acceptsSource(task.source)) {
-          listener.onTaskCompleted(task);
-        }
-      }
-    }
+    this.broadcast(task.source, (listener) => {
+      listener.onTaskCompleted(task);
+    });
   }
 
   private startTask(label: string, source: ReporterInfo) {
@@ -193,11 +184,11 @@ export class ReportingRoot {
     return result;
   }
 
-  private activeTask(): TaskEvent | undefined {
+  private activeTask(): TaskEvent {
     if (this.tasks.length > 0) {
       return this.tasks[this.tasks.length - 1];
     }
-    return undefined;
+    return this.sessionTask;
   }
 }
 
