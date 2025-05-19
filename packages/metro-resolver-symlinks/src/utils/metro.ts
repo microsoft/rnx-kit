@@ -6,7 +6,16 @@ import {
 import * as fs from "node:fs";
 import * as path from "node:path";
 import * as url from "node:url";
-import type { Options } from "../types";
+import type { Options, ResolutionContextCompat } from "../types";
+
+const RETRY_FROM_DISK_FLAG = "experimental_retryResolvingFromDisk";
+
+function disableWithReason(reason: string) {
+  warn(
+    `This version of Metro ${reason}; if you still want to enable it, set it to 'force'.`
+  );
+  return false;
+}
 
 function fileExists(path: string): boolean {
   const stat = fs.statSync(path, { throwIfNoEntry: false });
@@ -20,10 +29,10 @@ function importMetroModule(path: string) {
   } catch (_) {
     throw new Error(
       `Cannot find '${modulePath}'. This probably means that ` +
-        "'experimental_retryResolvingFromDisk' is not compatible with the " +
-        "version of 'metro' that you are currently using. Please update to " +
-        "the latest version and try again. If the issue still persists after " +
-        "the update, please file a bug at " +
+        `'${RETRY_FROM_DISK_FLAG}' is not compatible with the version of ` +
+        "'metro' that you are currently using. Please update to the latest " +
+        "version and try again. If the issue still persists after the " +
+        "update, please file a bug at " +
         "https://github.com/microsoft/rnx-kit/issues."
     );
   }
@@ -41,9 +50,13 @@ const metroVersion = (() => {
   };
 })();
 
-function supportsRetryResolvingFromDisk(): boolean {
-  const v = metroVersion();
-  return v >= 64 && v <= 81;
+export function isPackageExportsEnabled({
+  unstable_enablePackageExports,
+}: Pick<ResolutionContextCompat, "unstable_enablePackageExports">): boolean {
+  // https://github.com/facebook/metro/releases/tag/v0.82.0
+  return unstable_enablePackageExports == null
+    ? metroVersion() >= 82
+    : unstable_enablePackageExports;
 }
 
 export function supportsSymlinks(): boolean {
@@ -53,18 +66,21 @@ export function supportsSymlinks(): boolean {
 
 export function shouldEnableRetryResolvingFromDisk({
   experimental_retryResolvingFromDisk,
-}: Options): boolean {
+}: Pick<Options, typeof RETRY_FROM_DISK_FLAG>): boolean {
   if (
     experimental_retryResolvingFromDisk &&
-    experimental_retryResolvingFromDisk !== "force" &&
-    !supportsRetryResolvingFromDisk()
+    experimental_retryResolvingFromDisk !== "force"
   ) {
-    warn(
-      "The version of Metro you're using has not been tested with " +
-        "`experimental_retryResolvingFromDisk`. If you still want to enable " +
-        "it, please set it to 'force'."
-    );
-    return false;
+    const v = metroVersion();
+    if (v < 64) {
+      return disableWithReason(
+        `has not been tested with '${RETRY_FROM_DISK_FLAG}'`
+      );
+    } else if (v > 81) {
+      return disableWithReason(
+        `should no longer need '${RETRY_FROM_DISK_FLAG}'`
+      );
+    }
   }
 
   return Boolean(experimental_retryResolvingFromDisk);
@@ -102,7 +118,7 @@ export function patchMetro(options: Options): void {
     return;
   }
 
-  info(`experimental_retryResolvingFromDisk: Patching '${findMetroPath()}'`);
+  info(`${RETRY_FROM_DISK_FLAG}: Patching '${findMetroPath()}'`);
 
   const DependencyGraph = importMetroModule("/src/node-haste/DependencyGraph");
 
