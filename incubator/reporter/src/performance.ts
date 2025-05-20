@@ -89,8 +89,12 @@ class PerformanceTracker {
         `${taskPrefix} Failed (${duration(event.elapsed, this.colorize)}) with error: ${event.error.message}`
       );
     } else {
+      const finishState =
+        event.state === "process-exit"
+          ? "Completed (Process Exit)"
+          : "Completed";
       this.report(
-        `${taskPrefix} Completed (${duration(event.elapsed, this.colorize)}`
+        `${taskPrefix} ${finishState} (${duration(event.elapsed, this.colorize)}`
       );
     }
   }

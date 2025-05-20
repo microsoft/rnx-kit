@@ -3,6 +3,8 @@ export type LogLevel = LogType | "none" | "all";
 
 export type LogFunction = (message: string) => void;
 
+export type TaskState = "running" | "complete" | "error" | "process-exit";
+
 /**
  * An output option can either be a function used to write to a stream or logfile, or a string which will be
  * used to open a logfile.
@@ -234,6 +236,11 @@ export type TaskEvent = ReporterEvent & {
    * Error if the task failed via an exception
    */
   error?: Error;
+
+  /**
+   * Reason this task was marked as completed
+   */
+  state: TaskState;
 };
 
 export type ReporterListener = {

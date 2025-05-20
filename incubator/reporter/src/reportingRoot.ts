@@ -46,11 +46,19 @@ export class ReportingRoot {
     source: this.reporterDefaults,
     actions: {},
     elapsed: performance.now(),
+    state: "running",
   };
 
   // Listeners and filters
   private listeners: ReporterListener[] = [];
   private tasks: TaskEvent[] = [this.sessionTask];
+
+  constructor() {
+    // Handle process exit to finish any tasks
+    process.on("exit", () => {
+      this.handleProcessExit();
+    });
+  }
 
   addListener(listener: ReporterListener) {
     this.listeners.push(listener);
@@ -117,15 +125,22 @@ export class ReportingRoot {
       source,
       actions: {},
       elapsed: performance.now(),
+      state: "running",
     };
     this.tasks.push(task);
     this.notifyTaskStart(label, source);
     return task;
   }
 
-  private finishTask(task: TaskEvent, error?: Error) {
+  private finishTask(
+    task: TaskEvent,
+    error?: Error,
+    finalState?: TaskEvent["state"]
+  ) {
     task.elapsed = performance.now() - task.elapsed;
     task.error = error;
+    task.state = finalState ?? (error ? "error" : "complete");
+
     this.notifyTaskEnd(task);
     if (task === this.activeTask()) {
       this.tasks.pop();
@@ -135,6 +150,14 @@ export class ReportingRoot {
       if (index >= 0) {
         this.tasks.splice(index, 1);
       }
+    }
+  }
+
+  private handleProcessExit() {
+    let task = this.tasks.pop();
+    while (task) {
+      this.finishTask(task, undefined, "process-exit");
+      task = this.tasks.pop();
     }
   }
 
