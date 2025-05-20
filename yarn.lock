@@ -3165,95 +3165,95 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@oxc-resolver/binding-darwin-arm64@npm:9.0.0":
-  version: 9.0.0
-  resolution: "@oxc-resolver/binding-darwin-arm64@npm:9.0.0"
+"@oxc-resolver/binding-darwin-arm64@npm:9.0.2":
+  version: 9.0.2
+  resolution: "@oxc-resolver/binding-darwin-arm64@npm:9.0.2"
   conditions: os=darwin & cpu=arm64
   languageName: node
   linkType: hard
 
-"@oxc-resolver/binding-darwin-x64@npm:9.0.0":
-  version: 9.0.0
-  resolution: "@oxc-resolver/binding-darwin-x64@npm:9.0.0"
+"@oxc-resolver/binding-darwin-x64@npm:9.0.2":
+  version: 9.0.2
+  resolution: "@oxc-resolver/binding-darwin-x64@npm:9.0.2"
   conditions: os=darwin & cpu=x64
   languageName: node
   linkType: hard
 
-"@oxc-resolver/binding-freebsd-x64@npm:9.0.0":
-  version: 9.0.0
-  resolution: "@oxc-resolver/binding-freebsd-x64@npm:9.0.0"
+"@oxc-resolver/binding-freebsd-x64@npm:9.0.2":
+  version: 9.0.2
+  resolution: "@oxc-resolver/binding-freebsd-x64@npm:9.0.2"
   conditions: os=freebsd & cpu=x64
   languageName: node
   linkType: hard
 
-"@oxc-resolver/binding-linux-arm-gnueabihf@npm:9.0.0":
-  version: 9.0.0
-  resolution: "@oxc-resolver/binding-linux-arm-gnueabihf@npm:9.0.0"
+"@oxc-resolver/binding-linux-arm-gnueabihf@npm:9.0.2":
+  version: 9.0.2
+  resolution: "@oxc-resolver/binding-linux-arm-gnueabihf@npm:9.0.2"
   conditions: os=linux & cpu=arm
   languageName: node
   linkType: hard
 
-"@oxc-resolver/binding-linux-arm64-gnu@npm:9.0.0":
-  version: 9.0.0
-  resolution: "@oxc-resolver/binding-linux-arm64-gnu@npm:9.0.0"
+"@oxc-resolver/binding-linux-arm64-gnu@npm:9.0.2":
+  version: 9.0.2
+  resolution: "@oxc-resolver/binding-linux-arm64-gnu@npm:9.0.2"
   conditions: os=linux & cpu=arm64 & libc=glibc
   languageName: node
   linkType: hard
 
-"@oxc-resolver/binding-linux-arm64-musl@npm:9.0.0":
-  version: 9.0.0
-  resolution: "@oxc-resolver/binding-linux-arm64-musl@npm:9.0.0"
+"@oxc-resolver/binding-linux-arm64-musl@npm:9.0.2":
+  version: 9.0.2
+  resolution: "@oxc-resolver/binding-linux-arm64-musl@npm:9.0.2"
   conditions: os=linux & cpu=arm64 & libc=musl
   languageName: node
   linkType: hard
 
-"@oxc-resolver/binding-linux-riscv64-gnu@npm:9.0.0":
-  version: 9.0.0
-  resolution: "@oxc-resolver/binding-linux-riscv64-gnu@npm:9.0.0"
+"@oxc-resolver/binding-linux-riscv64-gnu@npm:9.0.2":
+  version: 9.0.2
+  resolution: "@oxc-resolver/binding-linux-riscv64-gnu@npm:9.0.2"
   conditions: os=linux & cpu=riscv64 & libc=glibc
   languageName: node
   linkType: hard
 
-"@oxc-resolver/binding-linux-s390x-gnu@npm:9.0.0":
-  version: 9.0.0
-  resolution: "@oxc-resolver/binding-linux-s390x-gnu@npm:9.0.0"
+"@oxc-resolver/binding-linux-s390x-gnu@npm:9.0.2":
+  version: 9.0.2
+  resolution: "@oxc-resolver/binding-linux-s390x-gnu@npm:9.0.2"
   conditions: os=linux & cpu=s390x & libc=glibc
   languageName: node
   linkType: hard
 
-"@oxc-resolver/binding-linux-x64-gnu@npm:9.0.0":
-  version: 9.0.0
-  resolution: "@oxc-resolver/binding-linux-x64-gnu@npm:9.0.0"
+"@oxc-resolver/binding-linux-x64-gnu@npm:9.0.2":
+  version: 9.0.2
+  resolution: "@oxc-resolver/binding-linux-x64-gnu@npm:9.0.2"
   conditions: os=linux & cpu=x64 & libc=glibc
   languageName: node
   linkType: hard
 
-"@oxc-resolver/binding-linux-x64-musl@npm:9.0.0":
-  version: 9.0.0
-  resolution: "@oxc-resolver/binding-linux-x64-musl@npm:9.0.0"
+"@oxc-resolver/binding-linux-x64-musl@npm:9.0.2":
+  version: 9.0.2
+  resolution: "@oxc-resolver/binding-linux-x64-musl@npm:9.0.2"
   conditions: os=linux & cpu=x64 & libc=musl
   languageName: node
   linkType: hard
 
-"@oxc-resolver/binding-wasm32-wasi@npm:9.0.0":
-  version: 9.0.0
-  resolution: "@oxc-resolver/binding-wasm32-wasi@npm:9.0.0"
+"@oxc-resolver/binding-wasm32-wasi@npm:9.0.2":
+  version: 9.0.2
+  resolution: "@oxc-resolver/binding-wasm32-wasi@npm:9.0.2"
   dependencies:
     "@napi-rs/wasm-runtime": "npm:^0.2.9"
   conditions: cpu=wasm32
   languageName: node
   linkType: hard
 
-"@oxc-resolver/binding-win32-arm64-msvc@npm:9.0.0":
-  version: 9.0.0
-  resolution: "@oxc-resolver/binding-win32-arm64-msvc@npm:9.0.0"
+"@oxc-resolver/binding-win32-arm64-msvc@npm:9.0.2":
+  version: 9.0.2
+  resolution: "@oxc-resolver/binding-win32-arm64-msvc@npm:9.0.2"
   conditions: os=win32 & cpu=arm64
   languageName: node
   linkType: hard
 
-"@oxc-resolver/binding-win32-x64-msvc@npm:9.0.0":
-  version: 9.0.0
-  resolution: "@oxc-resolver/binding-win32-x64-msvc@npm:9.0.0"
+"@oxc-resolver/binding-win32-x64-msvc@npm:9.0.2":
+  version: 9.0.2
+  resolution: "@oxc-resolver/binding-win32-x64-msvc@npm:9.0.2"
   conditions: os=win32 & cpu=x64
   languageName: node
   linkType: hard
@@ -3840,7 +3840,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rnx-kit/align-deps@npm:^3.0.5, @rnx-kit/align-deps@workspace:packages/align-deps":
+"@rnx-kit/align-deps@npm:^3.0.6, @rnx-kit/align-deps@workspace:packages/align-deps":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/align-deps@workspace:packages/align-deps"
   dependencies:
@@ -3983,7 +3983,7 @@ __metadata:
     "@babel/core": "npm:^7.20.0"
     "@babel/preset-env": "npm:^7.20.0"
     "@react-native-community/cli-types": "npm:^15.0.1"
-    "@rnx-kit/align-deps": "npm:^3.0.5"
+    "@rnx-kit/align-deps": "npm:^3.0.6"
     "@rnx-kit/config": "npm:^0.7.0"
     "@rnx-kit/console": "npm:^2.0.0"
     "@rnx-kit/eslint-config": "npm:*"
@@ -12496,22 +12496,22 @@ __metadata:
   linkType: hard
 
 "oxc-resolver@npm:^9.0.0":
-  version: 9.0.0
-  resolution: "oxc-resolver@npm:9.0.0"
+  version: 9.0.2
+  resolution: "oxc-resolver@npm:9.0.2"
   dependencies:
-    "@oxc-resolver/binding-darwin-arm64": "npm:9.0.0"
-    "@oxc-resolver/binding-darwin-x64": "npm:9.0.0"
-    "@oxc-resolver/binding-freebsd-x64": "npm:9.0.0"
-    "@oxc-resolver/binding-linux-arm-gnueabihf": "npm:9.0.0"
-    "@oxc-resolver/binding-linux-arm64-gnu": "npm:9.0.0"
-    "@oxc-resolver/binding-linux-arm64-musl": "npm:9.0.0"
-    "@oxc-resolver/binding-linux-riscv64-gnu": "npm:9.0.0"
-    "@oxc-resolver/binding-linux-s390x-gnu": "npm:9.0.0"
-    "@oxc-resolver/binding-linux-x64-gnu": "npm:9.0.0"
-    "@oxc-resolver/binding-linux-x64-musl": "npm:9.0.0"
-    "@oxc-resolver/binding-wasm32-wasi": "npm:9.0.0"
-    "@oxc-resolver/binding-win32-arm64-msvc": "npm:9.0.0"
-    "@oxc-resolver/binding-win32-x64-msvc": "npm:9.0.0"
+    "@oxc-resolver/binding-darwin-arm64": "npm:9.0.2"
+    "@oxc-resolver/binding-darwin-x64": "npm:9.0.2"
+    "@oxc-resolver/binding-freebsd-x64": "npm:9.0.2"
+    "@oxc-resolver/binding-linux-arm-gnueabihf": "npm:9.0.2"
+    "@oxc-resolver/binding-linux-arm64-gnu": "npm:9.0.2"
+    "@oxc-resolver/binding-linux-arm64-musl": "npm:9.0.2"
+    "@oxc-resolver/binding-linux-riscv64-gnu": "npm:9.0.2"
+    "@oxc-resolver/binding-linux-s390x-gnu": "npm:9.0.2"
+    "@oxc-resolver/binding-linux-x64-gnu": "npm:9.0.2"
+    "@oxc-resolver/binding-linux-x64-musl": "npm:9.0.2"
+    "@oxc-resolver/binding-wasm32-wasi": "npm:9.0.2"
+    "@oxc-resolver/binding-win32-arm64-msvc": "npm:9.0.2"
+    "@oxc-resolver/binding-win32-x64-msvc": "npm:9.0.2"
   dependenciesMeta:
     "@oxc-resolver/binding-darwin-arm64":
       optional: true
@@ -12539,7 +12539,7 @@ __metadata:
       optional: true
     "@oxc-resolver/binding-win32-x64-msvc":
       optional: true
-  checksum: 10c0/922110c86ff2efe7709a4ae1687eff95cbbb8a3a50582b0b9ed065a4a49df2066de23d5de564f4959a0b1c98e033b64b59c7232c5738d66674aefb8b349eb98a
+  checksum: 10c0/54c9791d19a44930448d21ea79fca5b6649d69b41a8e8b0ca2d57345e871608a775b54ff92827f65177b5d856c6ce490e0ce99209d899d74de7db6be49c56a6d
   languageName: node
   linkType: hard
 
@@ -13801,7 +13801,6 @@ __metadata:
     "@types/node": "npm:^22.0.0"
     eslint: "npm:^9.0.0"
     knip: "npm:^5.30.2"
-    metro: "npm:^0.81.3"
     nx: "patch:nx@npm%3A20.3.3#~/.yarn/patches/nx-npm-20.3.3-84b801f64d.patch"
     prettier: "npm:^3.0.0"
     prettier-plugin-organize-imports: "npm:^4.0.0"

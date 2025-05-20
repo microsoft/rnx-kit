@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-resolver-symlinks
 
+## 0.2.3
+
+### Patch Changes
+
+- 52e19c1: Use Metro's symlink resolver when available
+
 ## 0.2.2
 
 ### Patch Changes

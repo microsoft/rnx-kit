@@ -1,7 +1,7 @@
 import type {
+  CustomResolutionContext,
   CustomResolver,
   Resolution,
-  ResolutionContext,
 } from "metro-resolver";
 
 type ExperimentalOptions = {
@@ -17,7 +17,7 @@ export type CallResolver = (
 
 export type MetroResolver = typeof import("metro-resolver").resolve;
 
-export type ResolutionContextCompat = ResolutionContext & {
+export type ResolutionContextCompat = CustomResolutionContext & {
   /**
    * Introduced in 0.76
    * @see {@link https://github.com/facebook/metro/commit/c6548f7ccc5b8ad59ea98f4bd7f1f5822deec0cd}

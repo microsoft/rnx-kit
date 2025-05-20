@@ -1,5 +1,11 @@
 # @rnx-kit/react-native-auth
 
+## 0.3.1
+
+### Patch Changes
+
+- c4c2df9: Build fixes for React Native 0.78+
+
 ## 0.3.0
 
 ### Minor Changes

@@ -1,5 +1,8 @@
 import { info, warn } from "@rnx-kit/console";
-import { findMetroPath } from "@rnx-kit/tools-react-native/metro";
+import {
+  findMetroPath,
+  getMetroVersion,
+} from "@rnx-kit/tools-react-native/metro";
 import * as fs from "node:fs";
 import * as path from "node:path";
 import * as url from "node:url";
@@ -7,7 +10,7 @@ import type { Options } from "../types";
 
 function fileExists(path: string): boolean {
   const stat = fs.statSync(path, { throwIfNoEntry: false });
-  return Boolean(stat && stat.isFile());
+  return Boolean(stat?.isFile());
 }
 
 function importMetroModule(path: string) {
@@ -26,11 +29,26 @@ function importMetroModule(path: string) {
   }
 }
 
+const metroVersion = (() => {
+  let version = 0;
+  return () => {
+    if (version === 0) {
+      const v = getMetroVersion();
+      const [major, minor] = v?.split(".") ?? [0, 0];
+      version = Number(major) * 1000 + Number(minor);
+    }
+    return version;
+  };
+})();
+
 function supportsRetryResolvingFromDisk(): boolean {
-  const { version } = importMetroModule("/package.json");
-  const [major, minor] = version.split(".");
-  const v = major * 1000 + minor;
+  const v = metroVersion();
   return v >= 64 && v <= 81;
+}
+
+export function supportsSymlinks(): boolean {
+  // https://github.com/facebook/metro/releases/tag/v0.81.0
+  return metroVersion() >= 81;
 }
 
 export function shouldEnableRetryResolvingFromDisk({

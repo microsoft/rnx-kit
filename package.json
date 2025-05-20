@@ -39,7 +39,6 @@
     "@types/node": "^22.0.0",
     "eslint": "^9.0.0",
     "knip": "^5.30.2",
-    "metro": "^0.81.3",
     "nx": "patch:nx@npm%3A20.3.3#~/.yarn/patches/nx-npm-20.3.3-84b801f64d.patch",
     "prettier": "^3.0.0",
     "prettier-plugin-organize-imports": "^4.0.0",
@@ -113,11 +112,6 @@
       "prettier-plugin-organize-imports"
     ],
     "workspaces": {
-      ".": {
-        "ignoreDependencies": [
-          "metro"
-        ]
-      },
       "incubator/@react-native-webapis/battery-status": {
         "ignoreDependencies": [
           "@babel/core",
