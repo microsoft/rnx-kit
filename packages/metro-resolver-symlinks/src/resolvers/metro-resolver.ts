@@ -3,6 +3,7 @@ import { normalizePath } from "@rnx-kit/tools-node/path";
 import type { CustomResolver, Resolution } from "metro-resolver";
 import * as path from "node:path";
 import type { ModuleResolver, ResolutionContextCompat } from "../types";
+import { supportsSymlinks } from "../utils/metro";
 import { resolveFrom } from "../utils/package";
 
 export const resolveModulePath: ModuleResolver = (
@@ -30,7 +31,7 @@ export const resolveModulePath: ModuleResolver = (
     : `.${path.sep}${relativePath}`;
 };
 
-export function applyMetroResolver(
+function applyMetroResolverLegacy(
   resolve: CustomResolver,
   ctx: ResolutionContextCompat,
   moduleName: string,
@@ -47,3 +48,23 @@ export function applyMetroResolver(
   // @ts-expect-error We pass 4 arguments instead of 3 to be backwards compatible
   return resolve(ctx, normalizePath(modifiedModuleName), platform, null);
 }
+
+function applyMetroResolver_0_81(
+  resolve: CustomResolver,
+  ctx: ResolutionContextCompat,
+  moduleName: string,
+  platform: string
+): Resolution {
+  // Resolve redirects before we try to resolve the module:
+  // https://github.com/facebook/metro/blob/v0.76.7/docs/Resolution.md#redirectmodulepath-string--string--false
+  const realModuleName = ctx.redirectModulePath(moduleName);
+  if (realModuleName === false) {
+    return { type: "empty" };
+  }
+
+  return resolve(ctx, realModuleName, platform);
+}
+
+export const applyMetroResolver = supportsSymlinks()
+  ? applyMetroResolver_0_81
+  : applyMetroResolverLegacy;

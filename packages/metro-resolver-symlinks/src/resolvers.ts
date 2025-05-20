@@ -3,10 +3,7 @@ import { applyEnhancedResolver } from "./resolvers/enhanced-resolve";
 import { applyMetroResolver } from "./resolvers/metro-resolver";
 import { applyOxcResolver } from "./resolvers/oxc-resolver";
 import type { CallResolver, Options } from "./types";
-import {
-  patchMetro,
-  shouldEnableRetryResolvingFromDisk,
-} from "./utils/patchMetro";
+import { patchMetro, shouldEnableRetryResolvingFromDisk } from "./utils/metro";
 
 export function getResolver(options: Options): CallResolver {
   if (shouldEnableRetryResolvingFromDisk(options)) {

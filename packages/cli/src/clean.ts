@@ -13,6 +13,8 @@ type Args = {
   verifyCache?: boolean;
 };
 
+type OnError = (code: number | null) => void;
+
 type Task = {
   label: string;
   action: () => Promise<void>;
@@ -29,10 +31,14 @@ export async function rnxClean(
     throw new Error(`Invalid project root: ${root}`);
   }
 
-  const npm = os.platform() === "win32" ? "npm.cmd" : "npm";
-  const yarn = os.platform() === "win32" ? "yarn.cmd" : "yarn";
+  const isWindows = os.platform() === "win32";
 
-  const execute = (command: string, args: string[], cwd = root) => {
+  const execute = (
+    command: string,
+    args: string[],
+    cwd = root,
+    onError?: OnError
+  ) => {
     return new Promise<void>((resolve, reject) => {
       const process = spawn(command, args, {
         cwd,
@@ -42,100 +48,127 @@ export async function rnxClean(
 
       process.on("error", (e) => {
         const code = "code" in e ? e.code : "errno" in e ? e.errno : "1";
-        reject(`${e.message} (code: ${code})`);
+        switch (code) {
+          case "ENOENT":
+            reject(`Unknown command: ${command}`);
+            break;
+          default:
+            reject(`${e.message} (code: ${code})`);
+            break;
+        }
       });
 
       process.on("close", (code) => {
         if (code === 0) {
           resolve();
+        } else if (onError) {
+          onError(code);
+          resolve();
+        } else {
+          reject(code);
         }
       });
     });
   };
 
   const COMMANDS: CLICommand = {
-    android: [
-      {
-        label: "Clean Gradle cache",
-        action: () => {
-          const candidates =
-            os.platform() === "win32"
+    get android() {
+      return [
+        {
+          label: "Clean Gradle cache",
+          action: () => {
+            const candidates = isWindows
               ? ["android/gradlew.bat", "gradlew.bat"]
               : ["android/gradlew", "gradlew"];
-          const gradlew = findPath(root, candidates);
-          if (gradlew) {
-            const script = path.basename(gradlew);
-            return execute(
-              os.platform() === "win32" ? script : `./${script}`,
-              ["clean"],
-              path.dirname(gradlew)
-            );
-          } else {
-            return Promise.resolve();
-          }
+            const gradlew = findPath(root, candidates);
+            if (gradlew) {
+              const script = path.basename(gradlew);
+              return execute(
+                isWindows ? script : `./${script}`,
+                ["clean"],
+                path.dirname(gradlew)
+              );
+            } else {
+              return Promise.resolve();
+            }
+          },
         },
-      },
-    ],
-    cocoapods: [
-      {
-        label: "Clean CocoaPods cache",
-        action: () => execute("pod", ["cache", "clean", "--all"]),
-      },
-    ],
-    metro: [
-      {
-        label: "Clean Metro cache",
-        action: () => cleanDir(`${os.tmpdir()}/metro-*`),
-      },
-      {
-        label: "Clean Haste cache",
-        action: () => cleanDir(`${os.tmpdir()}/haste-map-*`),
-      },
-      {
-        label: "Clean React Native cache",
-        action: () => cleanDir(`${os.tmpdir()}/react-*`),
-      },
-    ],
-    npm: [
-      {
-        label: "Remove node_modules",
-        action: () => cleanDir(`${root}/node_modules`),
-      },
-      ...(cliOptions.verifyCache
-        ? [
-            {
-              label: "Verify npm cache",
-              action: () => execute(npm, ["cache", "verify"]),
-            },
-          ]
-        : []),
-    ],
-    watchman: [
-      {
-        label: "Stop Watchman",
-        action: () =>
-          execute(os.platform() === "win32" ? "tskill" : "killall", [
-            "watchman",
-          ]),
-      },
-      {
-        label: "Delete Watchman cache",
-        action: () => execute("watchman", ["watch-del-all"]),
-      },
-    ],
-    xcode: [
-      {
-        label: "Clean Xcode Simulator cache",
-        action: () =>
-          cleanDir(`${os.homedir()}/Library/Developer/CoreSimulator/Caches`),
-      },
-    ],
-    yarn: [
-      {
-        label: "Clean Yarn cache",
-        action: () => execute(yarn, ["cache", "clean"]),
-      },
-    ],
+      ];
+    },
+    get cocoapods() {
+      return [
+        {
+          label: "Clean CocoaPods cache",
+          action: () => execute("pod", ["cache", "clean", "--all"]),
+        },
+      ];
+    },
+    get metro() {
+      const tmpdir = os.tmpdir();
+      return [
+        {
+          label: "Clean Metro cache",
+          action: () => cleanDir(`${tmpdir}/metro-*`),
+        },
+        {
+          label: "Clean Haste cache",
+          action: () => cleanDir(`${tmpdir}/haste-map-*`),
+        },
+        {
+          label: "Clean React Native cache",
+          action: () => cleanDir(`${tmpdir}/react-*`),
+        },
+      ];
+    },
+    get npm() {
+      const npm = isWindows ? "npm.cmd" : "npm";
+      return [
+        {
+          label: "Remove node_modules",
+          action: () => cleanDir(`${root}/node_modules`),
+        },
+        ...(cliOptions.verifyCache
+          ? [
+              {
+                label: "Verify npm cache",
+                action: () => execute(npm, ["cache", "verify"]),
+              },
+            ]
+          : []),
+      ];
+    },
+    get watchman() {
+      const kill = isWindows ? "tskill" : "killall";
+      const ignoreError = () => void 0;
+      return [
+        {
+          label: "Stop Watchman",
+          action: () => execute(kill, ["watchman"], root, ignoreError),
+        },
+        {
+          label: "Delete Watchman cache",
+          action: () => execute("watchman", ["watch-del-all"]),
+        },
+      ];
+    },
+    get xcode() {
+      return [
+        {
+          label: "Clean Xcode Simulator cache",
+          action: () =>
+            cleanDir(`${os.homedir()}/Library/Developer/CoreSimulator/Caches`),
+        },
+      ];
+    },
+    get yarn() {
+      const yarn = isWindows ? "yarn.cmd" : "yarn";
+      return [
+        {
+          label: "Clean Yarn cache",
+          action: () => execute(yarn, ["cache", "clean"]),
+        },
+      ];
+    },
   };
 
   const categories = cliOptions.include?.split(",") ?? ["metro", "watchman"];

@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/align-deps
 
+## 3.0.6
+
+### Patch Changes
+
+- c4c2df9: Bump community CLI and Metro patch versions
+
 ## 3.0.5
 
 ### Patch Changes

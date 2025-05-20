@@ -10,31 +10,31 @@ import {
   resolveUniqueModule,
 } from "../src/index";
 
-describe("@rnx-kit/metro-config", () => {
-  const currentWorkingDir = process.cwd();
+const currentWorkingDir = process.cwd();
 
-  /**
-   * Returns path to specified test fixture.
-   */
-  function fixturePath(name: string): string {
-    return path.join(currentWorkingDir, "test", "__fixtures__", name);
-  }
+/**
+ * Returns path to specified test fixture.
+ */
+function fixturePath(name: string): string {
+  return path.join(currentWorkingDir, "test", "__fixtures__", name);
+}
 
-  /**
-   * Sets current working directory to specified test fixture.
-   */
-  function setFixture(name: string): void {
-    process.chdir(fixturePath(name));
-  }
+/**
+ * Sets current working directory to specified test fixture.
+ */
+function setFixture(name: string): void {
+  process.chdir(fixturePath(name));
+}
 
+describe("defaultWatchFolders()", () => {
   afterEach(() => process.chdir(currentWorkingDir));
 
-  it("defaultWatchFolders() returns an empty list outside a monorepo", () => {
+  it("returns an empty list outside a monorepo", () => {
     setFixture("app-repo");
     equal(defaultWatchFolders().length, 0);
   });
 
-  it("defaultWatchFolders() returns packages in a monorepo", () => {
+  it("returns packages in a monorepo", () => {
     setFixture("awesome-repo/packages/t-800");
 
     const expected = [
@@ -53,8 +53,12 @@ describe("@rnx-kit/metro-config", () => {
       match(folders[i], expected[i]);
     }
   });
+});
 
-  it("resolveUniqueModule() ignores symlinks", () => {
+describe("resolveUniqueModule()", () => {
+  afterEach(() => process.chdir(currentWorkingDir));
+
+  it("ignores symlinks", () => {
     const repo = fixturePath("awesome-repo");
     const packageCopy = path.join(
       repo,
@@ -81,7 +85,7 @@ describe("@rnx-kit/metro-config", () => {
     ok(!exclude.test(projectCopy));
   });
 
-  it("resolveUniqueModule() handles nested dependencies", () => {
+  it("handles nested dependencies", () => {
     const repo = fixturePath("awesome-repo");
     const packageRnCopy = path.join(
       repo,
@@ -129,7 +133,7 @@ describe("@rnx-kit/metro-config", () => {
     ok(excludeMatrix.test(projectMatrixCopy));
   });
 
-  it("resolveUniqueModule() throws if a package is not found", () => {
+  it("throws if a package is not found", () => {
     ok(resolveUniqueModule("eslint", process.cwd()));
 
     const packageName = "this-package-does-not-exist";
@@ -139,7 +143,7 @@ describe("@rnx-kit/metro-config", () => {
     );
   });
 
-  it("resolveUniqueModule() escapes characters clashing with regex tokens", () => {
+  it("escapes characters clashing with regex tokens", () => {
     const repo = fixturePath("pnpm-repo");
     const [rnPath, rnExclude] = resolveUniqueModule("react-native", repo);
     match(
@@ -149,7 +153,32 @@ describe("@rnx-kit/metro-config", () => {
     ok(!rnExclude.test(path.join(rnPath, "package.json")));
   });
 
-  it("exclusionList() ignores extra copies of react and react-native", () => {
+  it("supports Yarn's pnpm layout", () => {
+    const repo = fixturePath("yarn-pnpm-repo");
+
+    const packages = [
+      [
+        "@babel/core",
+        /__fixtures__[/\\]yarn-pnpm-repo[/\\]node_modules[/\\]\.store[/\\]@babel-core-npm-7.27.1-0f1bf48e52[/\\]package$/,
+      ],
+      [
+        "react-native",
+        /__fixtures__[/\\]yarn-pnpm-repo[/\\]node_modules[/\\]\.store[/\\]react-native-virtual-3e97acc5aa[/\\]package$/,
+      ],
+    ] as const;
+
+    for (const [pkgName, pattern] of packages) {
+      const [pkgDir, excludePattern] = resolveUniqueModule(pkgName, repo);
+      match(pkgDir, pattern);
+      ok(!excludePattern.test(path.join(pkgDir, "package.json")));
+    }
+  });
+});
+
+describe("exclusionList()", () => {
+  afterEach(() => process.chdir(currentWorkingDir));
+
+  it("ignores extra copies of react and react-native", () => {
     const repo = fixturePath("awesome-repo");
     const reactCopy = path.join(repo, "node_modules", "react", "package.json");
     const packageCopy = path.join(
@@ -195,7 +224,7 @@ describe("@rnx-kit/metro-config", () => {
     ok(johnExclude.test("Test.ProjectImports.zip"));
   });
 
-  it("exclusionList() returns additional exclusions", () => {
+  it("returns additional exclusions", () => {
     const repo = fixturePath("awesome-repo");
     const reactCopy = path.join(repo, "node_modules", "react", "package.json");
     const packageCopy = path.join(
@@ -227,7 +256,7 @@ describe("@rnx-kit/metro-config", () => {
   });
 });
 
-describe("makeMetroConfig", () => {
+describe("makeMetroConfig()", () => {
   const projectRoot = path.resolve("../test-app");
 
   it("returns a default Metro config", async () => {
