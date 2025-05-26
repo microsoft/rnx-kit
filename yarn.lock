@@ -4127,12 +4127,12 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/eslint-plugin@workspace:packages/eslint-plugin"
   dependencies:
+    "@eslint/js": "npm:^9.0.0"
     "@microsoft/eslint-plugin-sdl": "npm:^1.0.0"
     "@react-native/eslint-plugin": "npm:^0.76.0"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
     "@types/eslint": "npm:^9.0.0"
-    "@types/eslint__js": "npm:^8.0.0"
     "@types/estree": "npm:*"
     "@types/node": "npm:^22.0.0"
     "@typescript-eslint/parser": "npm:^8.0.0"
@@ -4142,6 +4142,7 @@ __metadata:
     eslint-plugin-react-hooks: "npm:^5.0.0"
     typescript-eslint: "npm:^8.0.0"
   peerDependencies:
+    "@eslint/js": ">=8.57.0"
     eslint: ">=8.57.0"
   languageName: unknown
   linkType: soft
@@ -5057,22 +5058,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/eslint@npm:*, @types/eslint@npm:^9.0.0":
+"@types/eslint@npm:^9.0.0":
   version: 9.6.1
   resolution: "@types/eslint@npm:9.6.1"
   dependencies:
     "@types/estree": "npm:*"
     "@types/json-schema": "npm:*"
   checksum: 10c0/69ba24fee600d1e4c5abe0df086c1a4d798abf13792d8cfab912d76817fe1a894359a1518557d21237fbaf6eda93c5ab9309143dee4c59ef54336d1b3570420e
-  languageName: node
-  linkType: hard
-
-"@types/eslint__js@npm:^8.0.0":
-  version: 8.42.3
-  resolution: "@types/eslint__js@npm:8.42.3"
-  dependencies:
-    "@types/eslint": "npm:*"
-  checksum: 10c0/ccc5180b92155929a089ffb03ed62625216dcd5e46dd3197c6f82370ce8b52c7cb9df66c06b0a3017995409e023bc9eafe5a3f009e391960eacefaa1b62d9a56
   languageName: node
   linkType: hard
 
