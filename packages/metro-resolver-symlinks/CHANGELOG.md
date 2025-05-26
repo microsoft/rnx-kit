@@ -1,5 +1,12 @@
 # Change Log - @rnx-kit/metro-resolver-symlinks
 
+## 0.2.4
+
+### Patch Changes
+
+- f145c88: `experimental_retryResolvingFromDisk` should no longer be necessary
+  as of 0.82+
+
 ## 0.2.3
 
 ### Patch Changes
