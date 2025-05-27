@@ -4142,7 +4142,6 @@ __metadata:
     eslint-plugin-react-hooks: "npm:^5.0.0"
     typescript-eslint: "npm:^8.0.0"
   peerDependencies:
-    "@eslint/js": ">=8.57.0"
     eslint: ">=8.57.0"
   languageName: unknown
   linkType: soft
