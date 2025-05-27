@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/eslint-plugin
 
+## 0.8.7
+
+### Patch Changes
+
+- 62800a0: Correctly forward `@eslint/js` dependency
+
 ## 0.8.6
 
 ### Patch Changes
