@@ -50,7 +50,6 @@
     "typescript-eslint": "^8.0.0"
   },
   "peerDependencies": {
-    "@eslint/js": ">=8.57.0",
     "eslint": ">=8.57.0"
   },
   "devDependencies": {
