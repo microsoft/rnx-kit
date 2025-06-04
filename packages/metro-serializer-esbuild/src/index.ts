@@ -217,7 +217,7 @@ export function MetroSerializer(
                 /**
                  * Finally, import the entry point. This must always be last.
                  */
-                `require("${entryPoint}");`,
+                `require("${escapePath(entryPoint)}");`,
               ].join("\n"),
             };
           }

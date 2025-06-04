@@ -462,7 +462,7 @@ describe("metro-serializer-esbuild", () => {
       "  };",
       '  var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);',
       "",
-      "  // ../../node_modules/.store/@fluentui-set-version-npm-8.2.12-8e95660752/package/lib/setVersion.js",
+      `  // ${fluentSetVersion.replace("index.js", "setVersion.js")}`,
       "  function setVersion(packageName, packageVersion) {",
       '    if (typeof _win !== "undefined") {',
       "      var packages = _win.__packages__ = _win.__packages__ || {};",
