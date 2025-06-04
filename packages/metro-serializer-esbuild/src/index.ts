@@ -179,8 +179,8 @@ export function MetroSerializer(
           if (args.path === prelude) {
             return {
               /**
-               * Add all the polyfills in this file. See the `inject` option
-               * below for more details.
+               * Add all the polyfills in this file. See the `entryPoints`
+               * option below for more details.
                *
                * We must ensure that the content is ES5-friendly so esbuild
                * doesn't blow up when targeting ES5, e.g. use `var` instead of
@@ -198,7 +198,7 @@ export function MetroSerializer(
                  *
                  * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function#description
                  */
-                `export var global = new Function("return this;")();`,
+                'global = typeof globalThis !== "undefined" ? globalThis : typeof global !== "undefined" ? global : typeof window !== "undefined" ? window : new Function("return this;")();',
 
                 /** Polyfills */
                 ...preModules
@@ -213,6 +213,11 @@ export function MetroSerializer(
                 ...options.runBeforeMainModule
                   .filter((value) => dependencies.has(value))
                   .map((value) => `require("${escapePath(value)}");`),
+
+                /**
+                 * Finally, import the entry point. This must always be last.
+                 */
+                `require("${entryPoint}");`,
               ].join("\n"),
             };
           }
@@ -247,19 +252,18 @@ export function MetroSerializer(
           global: "global",
         },
         drop: buildOptions?.drop,
-        entryPoints: [entryPoint],
-        inject: [
-          /**
-           * A require call is generated and prepended to _all_ modules for each
-           * injected file. This can increase the bundle size significantly if
-           * there are many polyfills and modules. For just four polyfills (e.g.
-           * `console.js`, `error-guard.js`, `Object.es7.js`, and
-           * `InitializeCore.js`), we've seen an increase of ~180 KB in a small
-           * to medium sized app. We can work around this issue by adding all
-           * the polyfills in a single file that we inject here.
-           */
-          prelude,
-        ],
+        /**
+         * We no longer use `inject` for polyfills and `runBeforeMainModule`
+         * modules. A require call is generated and prepended to _all_ modules
+         * for each injected file. This can increase the bundle size
+         * significantly if there are many polyfills and modules. For just four
+         * polyfills (e.g. `console.js`, `error-guard.js`, `Object.es7.js`, and
+         * `InitializeCore.js`), we've seen an increase of ~180 KB in a small to
+         * medium sized app. We work around this issue by adding all the
+         * polyfills in a virtual file and make it the entry point. The virtual
+         * file then imports the actual entry point.
+         */
+        entryPoints: [prelude],
         legalComments: "none",
         logLevel: buildOptions?.logLevel ?? "error",
         metafile: Boolean(buildOptions?.analyze || buildOptions?.metafile),
