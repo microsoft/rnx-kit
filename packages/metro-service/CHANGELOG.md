@@ -1,5 +1,16 @@
 # Change Log - @rnx-kit/metro-service
 
+## 4.1.0
+
+### Minor Changes
+
+- 823c587: Added support for Metro 0.82
+
+### Patch Changes
+
+- Updated dependencies [823c587]
+  - @rnx-kit/tools-react-native@2.2.0
+
 ## 4.0.2
 
 ### Patch Changes
