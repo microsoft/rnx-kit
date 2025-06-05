@@ -1,9 +1,9 @@
 import { warn } from "@rnx-kit/console";
 import type { ConfigT } from "metro-config";
 import * as path from "path";
-import type { BundleArgs } from "./bundle";
 import { bundle } from "./bundle";
 import { requireMetroPath } from "./metro";
+import type { BundleArgs } from "./types";
 
 export function ramBundle(args: BundleArgs, config: ConfigT): Promise<void> {
   warn(

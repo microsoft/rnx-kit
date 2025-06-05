@@ -1,77 +1,14 @@
-// https://github.com/react-native-community/cli/blob/716555851b442a83a1bf5e0db27b6226318c9a69/packages/cli-plugin-metro/src/commands/bundle/buildBundle.ts
+// Source: https://github.com/facebook/react-native/blob/0.80-stable/packages/community-cli-plugin/src/commands/bundle/buildBundle.js#L64
 
 import { bold, error, info } from "@rnx-kit/console";
 import { requireModuleFromMetro } from "@rnx-kit/tools-react-native/metro";
-import * as fs from "fs";
 import type { ConfigT } from "metro-config";
-import type { BundleOptions, OutputOptions } from "metro/src/shared/types";
-import * as path from "path";
-import { saveAssets } from "./asset";
-import { saveAssetsAndroid } from "./asset/android";
-import { saveAssetsDefault } from "./asset/default";
-import { saveAssetsIOS } from "./asset/ios";
-import type { SaveAssetsPlugin } from "./asset/types";
+import * as fs from "node:fs";
+import * as path from "node:path";
 import { ensureBabelConfig } from "./babel";
+import type { BundleArgs } from "./types";
 
-export type BundleArgs = {
-  assetsDest?: string;
-  assetCatalogDest?: string;
-  entryFile: string;
-  resetCache?: boolean;
-  resetGlobalCache?: boolean;
-  transformer?: string;
-  minify?: boolean;
-  config?: string;
-  platform: string;
-  dev: boolean;
-  bundleOutput: string;
-  bundleEncoding?: OutputOptions["bundleEncoding"];
-  maxWorkers?: number;
-  sourcemapOutput?: string;
-  sourcemapSourcesRoot?: string;
-  sourcemapUseAbsolutePath: boolean;
-  verbose?: boolean;
-  unstableTransformProfile?: BundleOptions["unstable_transformProfile"];
-};
-
-type RequestOptions = {
-  entryFile: string;
-  sourceMapUrl?: string;
-  dev: boolean;
-  minify: boolean;
-  platform: string;
-  unstable_transformProfile?: BundleOptions["unstable_transformProfile"];
-};
-
-// Eventually this will be part of the rn config, but we require it on older rn versions for win32 and the cli doesn't allow extra config properties.
-// See https://github.com/react-native-community/cli/pull/2002
-function getSaveAssetsPlugin(
-  platform: string,
-  projectRoot: string
-): SaveAssetsPlugin {
-  if (platform === "win32") {
-    try {
-      const saveAssetsPlugin = require.resolve(
-        "@office-iss/react-native-win32/saveAssetPlugin",
-        { paths: [projectRoot] }
-      );
-      return require(saveAssetsPlugin);
-    } catch (_) {
-      /* empty */
-    }
-  }
-
-  switch (platform) {
-    case "ios":
-      return saveAssetsIOS;
-    case "android":
-      return saveAssetsAndroid;
-    default:
-      return saveAssetsDefault;
-  }
-}
-
-export async function bundle(
+export function bundle(
   args: BundleArgs,
   config: ConfigT,
   output = requireModuleFromMetro(
@@ -81,11 +18,6 @@ export async function bundle(
 ): Promise<void> {
   // ensure Metro can find Babel config
   ensureBabelConfig(config);
-
-  const saveAssetsPlugin = getSaveAssetsPlugin(
-    args.platform,
-    config.projectRoot
-  );
 
   if (config.resolver.platforms.indexOf(args.platform) === -1) {
     error(
@@ -114,43 +46,38 @@ export async function bundle(
     sourceMapUrl = path.basename(sourceMapUrl);
   }
 
-  const Server = requireModuleFromMetro("metro/src/Server", config.projectRoot);
+  // Ensure destination directory exists before bundling
+  const mkdirOptions = { recursive: true, mode: 0o755 } as const;
+  fs.mkdirSync(path.dirname(args.bundleOutput), mkdirOptions);
 
-  const requestOpts: RequestOptions = {
-    entryFile: args.entryFile,
-    sourceMapUrl,
-    dev: args.dev,
-    minify: args.minify !== undefined ? args.minify : !args.dev,
-    platform: args.platform,
-    unstable_transformProfile: args.unstableTransformProfile,
-  };
-  const server = new Server(config);
-
-  try {
-    const bundle = await output.build(server, requestOpts);
-
-    // Ensure destination directory exists before saving the bundle
-    const mkdirOptions = { recursive: true, mode: 0o755 } as const;
-    fs.mkdirSync(path.dirname(args.bundleOutput), mkdirOptions);
-
-    await output.save(bundle, args, info);
-
-    // Save the assets of the bundle
-    const outputAssets = await server.getAssets({
-      ...Server.DEFAULT_BUNDLE_OPTIONS,
-      ...requestOpts,
-      bundleType: "todo",
-    });
-
-    // When we're done saving bundle output and the assets, we're done.
-    return await saveAssets(
-      outputAssets,
-      args.platform,
-      args.assetsDest,
-      args.assetCatalogDest,
-      saveAssetsPlugin
+  // `runMetro` was introduced in 0.71:
+  // https://github.com/facebook/metro/commit/a0f99e136fbd2e02ab070437cee9f6e9baa36d16
+  const { runMetro } = requireModuleFromMetro("metro", config.projectRoot);
+  if (!runMetro) {
+    return import("./bundle/bundle-0.66").then(({ buildBundle }) =>
+      buildBundle(args, config, output, {
+        entryFile: args.entryFile,
+        sourceMapUrl,
+        dev: args.dev,
+        minify: args.minify != null ? args.minify : !args.dev,
+        platform: args.platform,
+        unstable_transformProfile: args.unstableTransformProfile,
+      })
     );
-  } finally {
-    server.end();
   }
+
+  return import("./bundle/bundle-0.71").then(({ buildBundle }) => {
+    const sourceMap = args.sourcemapOutput != null;
+    return buildBundle(args, config, output, {
+      dev: args.dev,
+      entryFile: args.entryFile,
+      // @ts-expect-error `inlineSourceMap` was introduced in 0.82
+      inlineSourceMap: sourceMap && !sourceMapUrl,
+      minify: args.minify != null ? args.minify : !args.dev,
+      platform: args.platform,
+      sourceMapUrl: !sourceMap ? undefined : sourceMapUrl,
+      createModuleIdFactory: config.serializer.createModuleIdFactory,
+      unstable_transformProfile: args.unstableTransformProfile,
+    });
+  });
 }

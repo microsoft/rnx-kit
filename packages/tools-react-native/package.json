@@ -13,6 +13,8 @@
     "lib/**/*.js",
     "cache.d.ts",
     "cache.js",
+    "cli.d.ts",
+    "cli.js",
     "context.d.ts",
     "context.js",
     "metro.d.ts",
@@ -33,6 +35,11 @@
       "types": "./lib/cache.d.ts",
       "typescript": "./src/cache.ts",
       "default": "./lib/cache.js"
+    },
+    "./cli": {
+      "types": "./lib/cli.d.ts",
+      "typescript": "./src/cli.ts",
+      "default": "./lib/cli.js"
     },
     "./context": {
       "types": "./lib/context.d.ts",

@@ -1,8 +1,6 @@
-import {
-  findPackageDependencyDir,
-  readPackage,
-} from "@rnx-kit/tools-node/package";
-import * as fs from "fs";
+import { readPackage } from "@rnx-kit/tools-node/package";
+import { findCommunityCliPluginPath } from "./cli";
+import { resolveFrom } from "./resolve";
 
 type MetroImport =
   | typeof import("metro")
@@ -24,13 +22,6 @@ type MetroModule =
   | "metro-resolver"
   | "metro-source-map";
 
-function resolveFrom(name: string, startDir: string): string | undefined {
-  return findPackageDependencyDir(name, {
-    startDir,
-    resolveSymlinks: true,
-  });
-}
-
 /**
  * Finds the installation path of Metro.
  * @param projectRoot The root of the project; defaults to the current working directory
@@ -42,17 +33,11 @@ export function findMetroPath(projectRoot = process.cwd()): string | undefined {
     return undefined;
   }
 
-  const pkg = fs.readFileSync(`${rnDir}/package.json`, { encoding: "utf-8" });
-  if (pkg.includes("@react-native/community-cli-plugin")) {
-    // `metro` dependency was moved to `@react-native/community-cli-plugin` in 0.73
-    // https://github.com/facebook/react-native/commit/fdcb94ad1310af6613cfb2a2c3f22f200bfa1c86
-    const cliPluginDir = resolveFrom(
-      "@react-native/community-cli-plugin",
-      rnDir
-    );
-    if (cliPluginDir) {
-      return resolveFrom("metro", cliPluginDir);
-    }
+  // `metro` dependency was moved to `@react-native/community-cli-plugin` in 0.73
+  // https://github.com/facebook/react-native/commit/fdcb94ad1310af6613cfb2a2c3f22f200bfa1c86
+  const cliPluginDir = findCommunityCliPluginPath(projectRoot, rnDir);
+  if (cliPluginDir) {
+    return resolveFrom("metro", cliPluginDir);
   }
 
   const cliDir = resolveFrom("@react-native-community/cli", rnDir);
