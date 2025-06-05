@@ -88,10 +88,6 @@ public:
     }
 #endif                                             // USE_VIEW_COMMAND_RACE_FIX
 #if USE_UPDATE_RUNTIME_SHADOW_NODE_REFS_ON_COMMIT  // >= 0.79
-    bool updateRuntimeShadowNodeReferencesOnCommit() override
-    {
-        return true;
-    }
     bool useShadowNodeStateOnClone() override
     {
         return true;
