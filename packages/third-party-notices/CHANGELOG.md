@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/third-party-notices
 
+## 2.0.1
+
+### Patch Changes
+
+- 13c5323: Handle absolute paths
+
 ## 2.0.0
 
 ### Major Changes
