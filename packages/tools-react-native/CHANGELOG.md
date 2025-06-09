@@ -1,5 +1,12 @@
 # Change Log - @rnx-kit/tools-react-native
 
+## 2.2.0
+
+### Minor Changes
+
+- 823c587: Added helper function for locating
+  `@react-native/community-cli-plugin`
+
 ## 2.1.0
 
 ### Minor Changes

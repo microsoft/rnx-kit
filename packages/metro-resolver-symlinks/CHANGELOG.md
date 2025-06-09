@@ -1,5 +1,13 @@
 # Change Log - @rnx-kit/metro-resolver-symlinks
 
+## 0.2.5
+
+### Patch Changes
+
+- 97c3a47: Fix experimental_retryResolvingFromDisk on metro 0.81
+- Updated dependencies [823c587]
+  - @rnx-kit/tools-react-native@2.2.0
+
 ## 0.2.4
 
 ### Patch Changes

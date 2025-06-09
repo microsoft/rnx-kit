@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/metro-service",
-  "version": "4.0.2",
+  "version": "4.1.0",
   "description": "Metro service for bundling and bundle-serving",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/metro-service#readme",
   "license": "MIT",
@@ -29,7 +29,7 @@
   "dependencies": {
     "@rnx-kit/console": "^2.0.0",
     "@rnx-kit/tools-node": "^3.0.0",
-    "@rnx-kit/tools-react-native": "^2.0.0",
+    "@rnx-kit/tools-react-native": "^2.2.0",
     "node-fetch": "^2.6.7"
   },
   "peerDependencies": {

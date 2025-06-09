@@ -1,5 +1,13 @@
 # Change Log - @rnx-kit/metro-serializer-esbuild
 
+## 0.2.3
+
+### Patch Changes
+
+- 13c5323: Reduce bundle size by manually injecting polyfills/preludes
+- Updated dependencies [823c587]
+  - @rnx-kit/tools-react-native@2.2.0
+
 ## 0.2.2
 
 ### Patch Changes
