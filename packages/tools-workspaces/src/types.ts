@@ -1,8 +1,12 @@
 /**
- * Helper interface that caches results in-between calls and can test if a package is in the workspace
- * without having to load all the packages (in most cases)
+ * Helper interface that caches results in-between calls and can test if a
+ * package is in the workspace without having to load all the packages (in most
+ * cases).
  */
 export type WorkspacesInfo = {
+  /** lockfile for the workspaces */
+  getLockfile: () => string;
+
   /** root folder for the workspaces */
   getRoot: () => string;
 

@@ -26,6 +26,10 @@ export class WorkspacesInfoImpl implements WorkspacesInfo {
     this.findWorkspacePackagesSync = findWorkspacePackagesSync;
   }
 
+  getLockfile() {
+    return this.sentinel;
+  }
+
   getRoot() {
     return this.root;
   }
