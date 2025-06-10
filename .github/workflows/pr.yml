@@ -28,7 +28,7 @@ jobs:
           yarn
       - name: Ensure rnx-kit packages come from our repository
         run: |
-          node scripts/lint-lockfile.js
+          yarn tsx --conditions typescript incubator/lint-lockfile/src/index.ts
       - name: Check for change files
         if: ${{ github.actor != 'microsoft-react-native-sdk[bot]' || github.head_ref != 'changeset-release/main' }}
         run: |

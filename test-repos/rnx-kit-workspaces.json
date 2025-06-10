@@ -18,6 +18,7 @@
       "@rnx-kit/esbuild-plugin-import-path-remapper": "packages/esbuild-plugin-import-path-remapper",
       "@rnx-kit/eslint-plugin": "packages/eslint-plugin",
       "@rnx-kit/jest-preset": "packages/jest-preset",
+      "@rnx-kit/lint-lockfile": "incubator/lint-lockfile",
       "@rnx-kit/metro-config": "packages/metro-config",
       "@rnx-kit/metro-plugin-cyclic-dependencies-detector": "packages/metro-plugin-cyclic-dependencies-detector",
       "@rnx-kit/metro-plugin-duplicates-checker": "packages/metro-plugin-duplicates-checker",

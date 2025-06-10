@@ -25,7 +25,7 @@
     "clear-cache": "nx clear-cache",
     "format": "nx run-many --target format",
     "lint": "nx run-many --target lint",
-    "new-package": "node --experimental-transform-types --no-warnings scripts/new-package.ts",
+    "new-package": "node --experimental-strip-types --no-warnings scripts/new-package.ts",
     "publish:changesets": "changeset publish",
     "rnx-align-deps": "yarn workspace @rnx-kit/align-deps bundle && scripts/rnx-align-deps.js",
     "show-affected": "nx show projects --affected",
@@ -43,6 +43,7 @@
     "prettier": "^3.0.0",
     "prettier-plugin-organize-imports": "^4.0.0",
     "suggestion-bot": "^3.0.0",
+    "tsx": "^4.15.0",
     "typescript": "^5.0.0"
   },
   "engines": {
