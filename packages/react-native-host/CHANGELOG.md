@@ -1,5 +1,12 @@
 # @rnx-kit/react-native-host
 
+## 0.5.9
+
+### Patch Changes
+
+- 7b26249: Fixed race condition inside Fabric. See
+  https://github.com/reactwg/react-native-releases/issues/976 for more details.
+
 ## 0.5.8
 
 ### Patch Changes
