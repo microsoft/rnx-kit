@@ -1,9 +1,13 @@
-export type LogType = "error" | "warn" | "info" | "trace";
-export type LogLevel = LogType | "none" | "all";
+import type { WriteStream } from "node:fs";
+import type { InspectOptions } from "node:util";
 
-export type LogFunction = (message: string) => void;
+export type LogLevel = "error" | "warn" | "log" | "verbose";
+
+export type LogFunction = (...args: unknown[]) => void;
+export type TextTransform = (text: string) => string;
 
 export type TaskState = "running" | "complete" | "error" | "process-exit";
+export type FinishReason = "complete" | "error" | "process-exit";
 
 /**
  * An output option can either be a function used to write to a stream or logfile, or a string which will be
@@ -18,13 +22,6 @@ export type Reporter = Readonly<{
   error: LogFunction;
 
   /**
-   * Report an error to any listeners/telemetry, but don't log it to the error output
-   * @param error error to record
-   * @param rethrow if true and an error type, rethrow the error after recording it
-   */
-  recordError: (error: string | Error, rethrow?: boolean) => void;
-
-  /**
    * Send a warning message to the error output. This is equivalent to console.warn
    */
   warn: LogFunction;
@@ -32,25 +29,31 @@ export type Reporter = Readonly<{
   /**
    * General purpose logging function, on by default. Similar in scope to console.log or console.info
    */
-  info: LogFunction;
+  log: LogFunction;
 
   /**
    * Tracing output, used for verbose logging, requires a higher log level to be enabled.
    */
-  trace: LogFunction;
+  verbose: LogFunction;
 
   /**
    * Tasks are hierarchical operations that can be timed. Each task is tracked separately and results
    * will not be aggregated. This is used for starting a big operations that may have multiple steps.
    *
-   * @param label label to use for this task
+   * A sub-reporter will be passed to the function, this can be ignored or used to report errors or
+   * launch additional tasks or actions that will be associated with this task.
+   *
+   * @param name name of this task, or more comprehensive options object
    * @param fn function to execute as a task
    */
-  task<T>(label: string, fn: () => T): T;
-  asyncTask<T>(label: string, fn: () => Promise<T>): Promise<T>;
+  task<T>(name: string | TaskOptions, fn: (reporter: Reporter) => T): T;
+  asyncTask<T>(
+    name: string | TaskOptions,
+    fn: (reporter: Reporter) => Promise<T>
+  ): Promise<T>;
 
   /**
-   * Actions are operations that can be timed within a task. Each action is tracked as part of the task
+   * Actions are operations that can be timed within a task or reporter. Each action is tracked as part of the parent
    * and results will be aggregated, with information on total time and number of calls provided.
    *
    * @param label label to use for this action
@@ -58,209 +61,197 @@ export type Reporter = Readonly<{
    */
   action<T>(label: string, fn: () => T): T;
   asyncAction<T>(label: string, fn: () => Promise<T>): Promise<T>;
+
+  /**
+   * Helper for formatting parts of the output, such as package names, paths, durations, and timestamps.
+   * Will apply colors and formatting based on the reporter's settings.
+   */
+  format: {
+    packageFull: (pkg: string) => string;
+    packageParts: (name: string, scope?: string) => string;
+    path: TextTransform;
+    duration: (time: number) => string;
+  };
+
+  /**
+   * Finish execution of the reporter or task, recording the result and sending a completion event. Things will continue to work
+   * but no further completion events will be sent.
+   *
+   * @param result result of the task or reporter, can be any type
+   * @param processExit if true, records that this was finished as the result of the process exiting.
+   */
+  finish: (result: unknown, reason?: FinishReason) => void;
+
+  /**
+   * Record additional metadata for the reporter, will be reported in events and can be used for telemetry or additional context.
+   * @param entry named entry to set
+   * @param value value which will be set, overwriting any existing value for that entry.
+   */
+  setData: (entry: string, value: unknown) => void;
 }>;
 
-export type OutputWriter = {
-  // write function to use for logging
-  write: LogFunction;
+export type FormatHelper = Reporter["format"];
 
-  // don't add colors to the output, used for log files or other streams that don't support colors
-  plainText?: boolean;
+type MessageColors = {
+  // color for any prefix, like "Error:" or "Warning:"
+  prefix: TextTransform;
+  // color for the optional label, like the task name or reporter name
+  label: TextTransform;
+  // color to apply to the overall message before output
+  text: TextTransform;
 };
 
-/**
- * Colorizer is used to colorize the output of the reporter. Override these functions to customize the colors
- */
-export type Colorizer = {
-  // are colors enabled
-  colorsEnabled: boolean;
+export type ReporterSettings = {
+  // logging settings for the reporter
+  level: LogLevel;
 
-  // colors for various parts of the output
-  packageName: (moduleName: string) => string;
-  packageScope: (moduleName: string) => string;
-  path: (path: string) => string;
-  durationNumber: (duration: string) => string;
-  durationUnit: (unit: string) => string;
+  // optional file output settings, if provided will log to a file in addition to the console
+  file?: {
+    // file path or an open write stream to log to, if a string is provided it will be opened as a write stream
+    target: string | WriteStream;
+    // log level for the file, if omitted will share the same level as the console logger
+    level?: LogLevel;
+    // write flags for the file, defaults to 'w' (write), can be 'a' (append) or others
+    writeFlags?: string;
+    // if true, the log file will support colors, otherwise it will strip them
+    colors?: boolean;
+  };
 
-  task: (task: string) => string;
-  action: (action: string) => string;
-  reporter: (reporter: string) => string;
+  // options used to serialize args to strings, this is the internal mechanism used in console.log and similar functions
+  inspectOptions: InspectOptions;
 
-  // colors for Warning: or Error: prefixes before the messages
-  errorPrefix: (text: string) => string;
-  warnPrefix: (text: string) => string;
+  // color settings for the reporter, used to format output
+  color: {
+    // settings for the message colors, keyed by log level and falling back to default
+    message: { default: MessageColors } & Record<
+      LogLevel,
+      Partial<MessageColors>
+    >;
 
-  // colors for the message text
-  msgText: (text: string, logType: LogType) => string;
+    // colors for the package name and scope
+    pkgName: TextTransform;
+    pkgScope: TextTransform;
+
+    // color to use when formatting paths
+    path: TextTransform;
+
+    // colors for times and time units
+    duration: TextTransform;
+    durationUnits: TextTransform;
+  };
+
+  prefixes: Partial<Record<LogLevel, string>>;
 };
 
-/**
- * The formatter formats various kinds of log output, applying colors via the colorizer
- */
-export type Formatter = {
-  /**
-   * Formats the message prefix for all messages. Generally the format will be:
-   * `<ReporterName>: <Message>` - this routine returns the `<ReporterName>: ` portion
-   */
-  messagePrefix: (reporterName: string, colorizer: Colorizer) => string;
+export type ColorSettings = ReporterSettings["color"];
+export type FileSettings = Required<ReporterSettings["file"]>;
 
-  /**
-   * Format and colorize the duration that comes from the performance timer, will
-   * be in the form of `1.37ms` or `1.37s` or `1.37m`, digits will auto adjust by default
-   */
-  duration: (duration: number, colorizer: Colorizer) => string;
-
-  /**
-   * Format error and warning message prefixes, typically "Error: " or "Warning: "
-   */
-  messageTypePrefix: (messageType: LogType, colorizer: Colorizer) => string;
-
-  /**
-   * Format a package name, handling scoped packages as well as non-scoped packages
-   */
-  module: (moduleName: string, colorizer: Colorizer) => string;
+export type DeepPartial<T> = {
+  [P in keyof T]?: T[P] extends object ? DeepPartial<T[P]> : T[P];
 };
 
-/**
- * Information about a reporter, used to identify the reporter in events and filter messages
- */
-export type ReporterInfo = {
+export type ReporterOptions = {
+  // package name, including scope, e.g. @my-scope/my-package
+  packageName: string;
+
+  // optional name for the reporter
+  name?: string;
+
+  // optional label for the reporter, if set will be prepended to all log output
+  label?: string;
+
+  // additional metadata that will be passed to events, useful for telemetry or additional context
+  metadata?: Record<string, unknown>;
+
+  // override settings for the reporter, merged with the defaults
+  settings?: DeepPartial<ReporterSettings>;
+};
+
+export type TaskOptions = {
+  // name, used to identify the task in logs, ideally unique, at least within the reporter's scope
+  name: string;
+
+  // optional package name, if set will be used to format the task output
+  packageName?: string;
+
+  // optional label for the task, if set will be prepended to all log output
+  label?: string;
+
+  // additional metadata for the task, will be available in task events
+  metadata?: Record<string, unknown>;
+};
+
+export type EventSource = {
+  role: "reporter" | "task";
+
   /**
-   * Name of the reporter, used to identify the reporter in logs
-   * and to filter messages to listeners
+   * Friendly name of the source reporter, used to identify the source in logs. If not set will default to the package name.
+   * If a package uses multiple reporters can be used to differentiate them.
    */
   name: string;
 
   /**
-   * Log level for this reporter
+   * Package name of the source reporter, including scope, used to identify the source in logs. '@my-scope/my-package'
    */
-  logLevel: LogLevel;
+  packageName: string;
 
   /**
-   * Additional context for this reporter, used if additional information such as telemetry IDs need to be
-   * passed to listeners
+   * Start time of the task or reporter, used to calculate elapsed time.
    */
-  context?: string;
+  startTime: number;
+
+  /**
+   * Depth of the task in the reporter hierarchy, or 0 for a reporter
+   */
+  depth: number;
+
+  /**
+   * Global depth amongst all running tasks at the time the reporter or task was started
+   */
+  globalDepth: number;
+
+  /**
+   * Parent source if this is a task, undefined if this is a reporter
+   */
+  parent?: EventSource;
+
+  /**
+   * Additional metadata that can be stored with the source reporter.
+   */
+  metadata?: Record<string, unknown>;
 };
 
-/**
- * Options which define the behavior of the reporter.
- */
-export type ReporterOptions = ReporterInfo & {
+export type ErrorEvent = {
   /**
-   * Channel to use for info/verbose/trace messages
+   * Source of the error, typically a reporter or task
    */
-  stdOutput: OutputWriter;
+  source: EventSource;
 
   /**
-   * Channel to use for error/warn messages.
+   * Arguments passed to the error, typically an error message or an Error object
    */
-  errOutput: OutputWriter;
-
-  /**
-   * Colorizer to use for the reporter
-   */
-  colorizer: Colorizer;
-
-  /**
-   * Override formatter for the reporter
-   */
-  formatter: Formatter;
+  args: unknown[];
 };
 
-/**
- * Base reporter event, included as part of all events. The source property contains the reporter that was
- * the source of the event. The label is the event name for tasks/actions, and the message for messages.
- */
-export type ReporterEvent = {
-  /**
-   * Source reporter that created this event
-   */
-  source: Readonly<ReporterInfo>;
-
-  /**
-   * Event label, used as the event name
-   */
-  label: string;
+export type ActionData = {
+  name: string; // name of the action
+  elapsed: number; // elapsed time in milliseconds
+  calls: number; // number of times the action was called
 };
 
-/**
- * Notification of an error sent to the reporter.
- */
-export type ErrorEvent = ReporterEvent & {
-  /**
-   * Message type, one of log, warn, error, verbose
-   */
-  error: string | Error;
-};
+export type CompleteEvent = EventSource & {
+  // duration in milliseconds, uses the performance counter
+  duration: number;
 
-/**
- * Information about actions taken as part of task execution. Action information is only sent as part of the task
- * completion event. During the task execution, actions are tracked and their results are aggregated. Given that
- * these are used for high frequency operations the action codepath is optimized for performance.
- */
-export type ActionEvent = ReporterEvent & {
-  /**
-   * Label for this action
-   */
-  label: string;
+  // list of actions that were executed during the task
+  actions: ActionData[];
 
-  /**
-   * Number of times this action was called
-   */
-  calls: number;
+  // any errors that occurred during the task
+  errors?: ErrorEvent[];
 
-  /**
-   * Total inclusive time across all calls
-   */
-  elapsed: number;
-};
+  // return result (or Error exception) of the task, can be any type, undefined for reporters
+  result: unknown;
 
-/**
- * Information about a task being executed. This includes the task label, the time taken for the task, and
- * any actions that were called while this task was the active task. The error property is only set if the task failed via
- * an exception.
- */
-export type TaskEvent = ReporterEvent & {
-  /**
-   * Total time for this task
-   */
-  elapsed: number;
-
-  /**
-   * Actions that were called as part of this task, keyed by label
-   */
-  actions: Record<string, ActionEvent>;
-
-  /**
-   * Error if the task failed via an exception
-   */
-  error?: Error;
-
-  /**
-   * Reason this task was marked as completed
-   */
-  state: TaskState;
-};
-
-export type ReporterListener = {
-  /**
-   * Does the listener care about this reporter, used to filter messages
-   */
-  acceptsSource(source: ReporterInfo): boolean;
-
-  /**
-   * Notify of an error
-   */
-  onError(event: ErrorEvent): void;
-
-  /**
-   * Called when a task is started
-   */
-  onTaskStarted(event: ReporterEvent): void;
-
-  /**
-   * Called when a task is completed
-   */
-  onTaskCompleted(event: TaskEvent): void;
+  // reason for finishing the task, can be 'complete', 'error', or 'process-exit'
+  reason: FinishReason;
 };

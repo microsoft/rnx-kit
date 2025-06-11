@@ -1,146 +1,206 @@
-import chalk from "chalk";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import type { Colorizer, Formatter, LogType, OutputWriter } from "./types.ts";
+import {
+  inspect,
+  stripVTControlCharacters,
+  type InspectOptions,
+} from "node:util";
+import { noChange } from "./formatting.ts";
+import type { LogLevel, ReporterSettings } from "./types.ts";
 
-// at what point do we switch from seconds to minutes in reporting durations
-const secondToMinuteCutoff = 120;
+export type WriteFunction = (msg: string) => void;
 
-// identity function to return the input value unchanged
-function identity<T>(x: T): T {
-  return x;
-}
+type AllWrites = Record<LogLevel, WriteFunction>;
+export type WriteFunctions = Pick<AllWrites, "error"> &
+  Partial<Omit<AllWrites, "error">>;
+export type OutputSettings = Pick<ReporterSettings, "level" | "file">;
+export type OutputOptions = Partial<OutputSettings>;
 
-export const plainTextColorizer: Colorizer = {
-  colorsEnabled: false,
-  packageName: identity,
-  packageScope: identity,
-  path: identity,
-  durationNumber: identity,
-  durationUnit: identity,
-  task: identity,
-  action: identity,
-  reporter: identity,
-  errorPrefix: identity,
-  warnPrefix: identity,
-  msgText: identity,
+const writeStdout: WriteFunction = process.stdout.write.bind(process.stdout);
+const writeStderr: WriteFunction = process.stderr.write.bind(process.stderr);
+
+type LevelOptions = {
+  value: number;
+  write: WriteFunction;
 };
 
-export const defaultColorizer: Colorizer = {
-  colorsEnabled: true,
-  packageScope: chalk.bold.blue,
-  packageName: chalk.bold.cyan,
-  path: chalk.blue,
-  durationNumber: chalk.green,
-  durationUnit: identity,
-  task: chalk.bold.green,
-  action: chalk.cyan,
-  reporter: chalk.bold.blue,
-  errorPrefix: chalk.red,
-  warnPrefix: chalk.yellow,
-  msgText: colorMsgText,
-};
-
-export const defaultFormatter: Formatter = {
-  messagePrefix: (name: string, colorizer: Colorizer) =>
-    `${colorizer.reporter(name)}: `,
-  duration: (duration: number, colorizer: Colorizer) => {
-    const [number, unit] = formatDuration(duration);
-    return `${colorizer.durationNumber(number)}${colorizer.durationUnit(unit)}`;
+const defaultLevel: LogLevel = "log";
+const levelOptions: Record<LogLevel, LevelOptions> = {
+  error: {
+    value: 0,
+    write: writeStderr,
   },
-  messageTypePrefix: (messageType: LogType, colorizer: Colorizer) => {
-    switch (messageType) {
-      case "error":
-        return colorizer.errorPrefix("Error: ");
-      case "warn":
-        return colorizer.warnPrefix("Warning: ");
-      default:
-        return "";
-    }
+  warn: {
+    value: 1,
+    write: writeStderr,
   },
-  module: formatModuleName,
+  log: {
+    value: 2,
+    write: writeStdout,
+  },
+  verbose: {
+    value: 3,
+    write: writeStdout,
+  },
 };
 
-/**
- * @param stream NodeJS WriteStream to write to, typically process.stdout or process.stderr
- * @param plainText override the default colorization of the output
- * @returns
- */
-export function createStreamWriter(
-  stream: NodeJS.WriteStream,
-  plainText?: boolean
-): OutputWriter {
-  return {
-    write: (msg: string) => stream.write(msg),
-    plainText,
-  };
+const nonErrorLevels: LogLevel[] = ["warn", "log", "verbose"];
+export const allLogLevels: LogLevel[] = ["error", ...nonErrorLevels];
+
+export function supportsLevel(
+  level: LogLevel,
+  optionLevel: LogLevel = defaultLevel
+): boolean {
+  const optionValue =
+    levelOptions[optionLevel]?.value ?? levelOptions.error.value;
+  return levelOptions[level].value <= optionValue;
 }
 
 /**
- * @param filePath path, including the file name, to the log file
- * @param flags flags used to open the write stream, defaults to "a" (append)
- * @returns an OutputWriter that writes to the specified file, with colorized output disabled
+ * @param previous original settings for the reporter, either defaults or parent settings
+ * @param overrides new options being applied to the reporter
+ * @returns whether or not the output settings are changing
  */
-export function createFileWriter(filePath: string, flags = "a"): OutputWriter {
-  const logPath = fileURLToPath(new URL(filePath, import.meta.url));
-  const logDir = path.dirname(logPath);
-  if (!fs.existsSync(logDir)) {
-    fs.mkdirSync(logDir, { recursive: true });
+export function outputSettingsChanging(
+  previous: OutputSettings,
+  overrides?: OutputOptions
+): boolean {
+  if (!overrides) {
+    return false;
   }
-  const writeHeader = flags === "a" && fs.existsSync(logPath);
-  const stream = fs.createWriteStream(logPath, {
-    flags,
-    encoding: "utf8",
-    autoClose: true,
-  });
-  // write out a session start message if we are opening with append mode and the file already exists
-  if (writeHeader) {
-    stream.write(
-      `<<<====== STARTING LOGGING SESSION at ${new Date().toISOString()} ======>>>\n`
-    );
-  }
-  return {
-    write: (msg: string) => stream.write(msg),
-    plainText: true,
-  };
-}
 
-/**
- * Parse a duration in milliseconds and formatting it to a string suitable for display
- * @param duration duration in milliseconds
- * @returns an tuple of the formatted numeric string and the unit (seconds or milliseconds)
- */
-export function formatDuration(duration: number): [string, string] {
-  let unit = "ms";
-  if (duration > secondToMinuteCutoff * 1000) {
-    unit = "m";
-    duration /= 60000;
-  } else if (duration > 1000) {
-    unit = "s";
-    duration /= 1000;
+  if (overrides.level && previous.level !== overrides.level) {
+    return true;
   }
-  const decimalPlaces = Math.max(0, 2 - Math.floor(Math.log10(duration)));
-  return [duration.toFixed(decimalPlaces), unit];
-}
 
-/**
- * @param moduleName the name of the module to format, splits the scope and package name and styles them differently
- * @param colorizer colors to apply to the module name parts
- */
-function formatModuleName(moduleName: string, colorizer: Colorizer) {
-  if (moduleName.startsWith("@")) {
-    const parts = moduleName.split("/");
-    if (parts.length > 1) {
-      return `${colorizer.packageScope(parts[0])}/${colorizer.packageName(parts.slice(1).join("/"))}`;
+  const oldFile = previous.file;
+  if (overrides.file && oldFile) {
+    const newFile = { ...oldFile, ...overrides.file };
+    if (
+      oldFile.target !== newFile.target ||
+      oldFile.level !== newFile.level ||
+      oldFile.writeFlags !== newFile.writeFlags ||
+      oldFile.colors !== newFile.colors
+    ) {
+      return true;
     }
   }
-  return colorizer.packageName(moduleName);
+  return false;
 }
 
-function colorMsgText(msg: string, logType: LogType): string {
-  if (logType === "trace") {
-    return chalk.dim(msg);
+/**
+ *
+ * @param settings the baseline settings for the output, passed pre-merge to see if we can use parent write functions
+ * @param options the overrides being used to create a given reporter
+ * @param parentWrites write functions associated with the settings, if any
+ * @returns a set of write functions, defined according to the settings and options provided
+ */
+export function getWriteFunctions(
+  settings: OutputSettings,
+  changed?: boolean,
+  parentWrites?: WriteFunctions
+): WriteFunctions {
+  // if there are parent writes, we can use them if they match the current settings
+  if (parentWrites && !changed) {
+    return parentWrites;
   }
+
+  // things are changing, build these again
+  const consoleWrites = getConsoleWrites(settings.level);
+  const fileWrites = getFileWrites(settings.level, settings.file);
+  return mergeWrites(consoleWrites, fileWrites);
+}
+
+function getConsoleWrites(setting: LogLevel) {
+  const results: WriteFunctions = {
+    error: levelOptions.error.write,
+  };
+  for (const level of nonErrorLevels) {
+    if (supportsLevel(level, setting)) {
+      results[level] = levelOptions[level].write;
+    }
+  }
+  return results;
+}
+
+function getFileWrites(
+  baseLevel: LogLevel,
+  fileSettings?: OutputSettings["file"]
+): Partial<WriteFunctions> {
+  const results: Partial<WriteFunctions> = {};
+  const fileStream = getFileStream(fileSettings);
+  if (fileStream) {
+    const { colors, level: settingLevel = baseLevel } = fileSettings || {};
+    const fileTransform = colors ? noChange : stripVTControlCharacters;
+    const writeFile = (msg: string) => fileStream.write(fileTransform(msg));
+    for (const level of allLogLevels) {
+      if (supportsLevel(level, settingLevel)) {
+        results[level] = writeFile;
+      }
+    }
+  }
+  return results;
+}
+
+function mergeWrites(
+  writes: WriteFunctions,
+  fileWrites: Partial<WriteFunctions>
+): WriteFunctions {
+  const results: WriteFunctions = { ...writes };
+  for (const level of allLogLevels) {
+    const write1 = writes[level];
+    const write2 = fileWrites[level];
+    if (write1 && write2) {
+      results[level] = (msg: string) => {
+        write1(msg);
+        write2(msg);
+      };
+    } else if (write1) {
+      results[level] = write1;
+    } else if (write2) {
+      results[level] = write2;
+    }
+  }
+  return results;
+}
+
+export function getFileStream(
+  settings: OutputSettings["file"]
+): fs.WriteStream | undefined {
+  if (settings?.target) {
+    const { target, writeFlags } = settings;
+    if (typeof target === "string") {
+      // if the target is a string, create a write stream, updating the settings so we don't open it twice
+      const logPath = fileURLToPath(new URL(target, import.meta.url));
+      fs.mkdirSync(path.dirname(logPath), { recursive: true });
+      settings.target = fs.createWriteStream(logPath, {
+        encoding: "utf8",
+        flags: writeFlags || "w",
+      });
+      return settings.target;
+    } else {
+      // if the target is already a write stream, return it
+      return target;
+    }
+  }
+  return undefined;
+}
+
+/**
+ * @param inspectOptions options for node:util.inspect, used to format the arguments, same as console.log
+ * @param args args list to serialize
+ * @returns a single string with arguments joined together with spaces, terminated with a newline
+ */
+export function serializeArgs(
+  inspectOptions: InspectOptions,
+  ...args: unknown[]
+): string {
+  let msg = args
+    .map((arg) =>
+      typeof arg === "string" ? arg : inspect(arg, inspectOptions)
+    )
+    .join(" ");
+  msg += "\n";
   return msg;
 }
