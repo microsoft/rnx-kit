@@ -1,6 +1,5 @@
 import fs from "node:fs";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
 import {
   inspect,
   stripVTControlCharacters,
@@ -172,7 +171,8 @@ export function getFileStream(
     const { target, writeFlags } = settings;
     if (typeof target === "string") {
       // if the target is a string, create a write stream, updating the settings so we don't open it twice
-      const logPath = fileURLToPath(new URL(target, import.meta.url));
+      // Resolve the log path relative to the current file's directory
+      const logPath = path.isAbsolute(target) ? target : path.resolve(target);
       fs.mkdirSync(path.dirname(logPath), { recursive: true });
       settings.target = fs.createWriteStream(logPath, {
         encoding: "utf8",

@@ -4,7 +4,6 @@
   "description": "EXPERIMENTAL - USE WITH CAUTION - reporter",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/incubator/reporter#readme",
   "license": "MIT",
-  "type": "module",
   "author": {
     "name": "Microsoft Open Source",
     "email": "microsoftopensource@users.noreply.github.com"
