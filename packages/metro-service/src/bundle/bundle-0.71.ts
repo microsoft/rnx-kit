@@ -1,15 +1,45 @@
 import { warn } from "@rnx-kit/console";
 import { requireModuleFromMetro } from "@rnx-kit/tools-react-native/metro";
+import type { AssetData } from "metro";
 import type { ConfigT } from "metro-config";
+import type Server from "metro/src/Server";
 import { getSaveAssetsPlugin } from "../asset/saveAssets";
 import { saveAssets } from "../asset/write";
 import type { BundleArgs, RequestOptions } from "../types";
+
+type MetroBundle = typeof import("metro/src/shared/output/bundle");
+
+type BuildOutput = Awaited<ReturnType<MetroBundle["build"]>>;
+
+type BuildOutputWithAssets = BuildOutput & {
+  assets?: ReadonlyArray<AssetData>;
+};
+
+/**
+ * Adds the `assets` property to the `BuildOutput` type.
+ * @see {@link https://github.com/facebook/metro/pull/1511}
+ */
+function withAssets(bundle: BuildOutput): BuildOutputWithAssets {
+  return bundle as unknown as BuildOutputWithAssets;
+}
+
+function getAssets(
+  metroServer: Server,
+  projectRoot: string,
+  requestOptions: RequestOptions
+): Promise<ReadonlyArray<AssetData>> {
+  const MetroServer = requireModuleFromMetro("metro/src/Server", projectRoot);
+  return metroServer.getAssets({
+    ...MetroServer.DEFAULT_BUNDLE_OPTIONS,
+    ...requestOptions,
+  });
+}
 
 // Source: https://github.com/facebook/metro/blob/v0.82.4/packages/metro/src/index.flow.js#L386
 export async function buildBundle(
   args: BundleArgs,
   config: ConfigT,
-  output: typeof import("metro/src/shared/output/bundle"),
+  output: MetroBundle,
   requestOptions: RequestOptions
 ): Promise<void> {
   const { runMetro } = requireModuleFromMetro("metro", config.projectRoot);
@@ -36,15 +66,9 @@ export async function buildBundle(
       return;
     }
 
-    const MetroServer = requireModuleFromMetro(
-      "metro/src/Server",
-      config.projectRoot
-    );
-
-    const assets = await metroServer.getAssets({
-      ...MetroServer.DEFAULT_BUNDLE_OPTIONS,
-      ...requestOptions,
-    });
+    const assets =
+      withAssets(metroBundle).assets ??
+      (await getAssets(metroServer, config.projectRoot, requestOptions));
 
     // When we're done saving bundle output and the assets, we're done.
     await saveAssets(

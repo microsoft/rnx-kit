@@ -77,6 +77,7 @@ export function bundle(
       platform: args.platform,
       sourceMapUrl: !sourceMap ? undefined : sourceMapUrl,
       createModuleIdFactory: config.serializer.createModuleIdFactory,
+      withAssets: Boolean(args.assetsDest),
       unstable_transformProfile: args.unstableTransformProfile,
     });
   });
