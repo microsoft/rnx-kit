@@ -12,7 +12,7 @@ type MetroBundle = typeof import("metro/src/shared/output/bundle");
 type BuildOutput = Awaited<ReturnType<MetroBundle["build"]>>;
 
 type BuildOutputWithAssets = BuildOutput & {
-  assets?: ReadonlyArray<AssetData>;
+  assets?: readonly AssetData[];
 };
 
 /**
@@ -27,7 +27,7 @@ function getAssets(
   metroServer: Server,
   projectRoot: string,
   requestOptions: RequestOptions
-): Promise<ReadonlyArray<AssetData>> {
+): Promise<readonly AssetData[]> {
   const MetroServer = requireModuleFromMetro("metro/src/Server", projectRoot);
   return metroServer.getAssets({
     ...MetroServer.DEFAULT_BUNDLE_OPTIONS,
