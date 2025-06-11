@@ -45,8 +45,12 @@ export async function buildBundle(
   const { runMetro } = requireModuleFromMetro("metro", config.projectRoot);
   const metroServer = await runMetro(config, { watch: false });
 
+
   try {
-    const metroBundle = await output.build(metroServer, requestOptions);
+    // @ts-expect-error Build options was introduced in 0.82
+    const metroBundle = await output.build(metroServer, requestOptions, {
+      withAssets: Boolean(args.assetsDest),
+    });
 
     const bundleOutput = args.bundleOutput;
     if (bundleOutput) {
