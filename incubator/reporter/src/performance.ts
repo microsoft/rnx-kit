@@ -1,185 +1,200 @@
-import {
-  createFileWriter,
-  createStreamWriter,
-  plainTextColorizer,
-} from "./output.ts";
-import { ReportingRoot } from "./reportingRoot.ts";
+import chalk from "chalk";
+import { onCompleteEvent, onStartEvent, ReporterImpl } from "./reporter.ts";
 import type {
-  ActionEvent,
-  Colorizer,
-  Formatter,
-  LogFunction,
-  ReporterEvent,
-  ReporterInfo,
-  ReporterListener,
-  TaskEvent,
+  ActionData,
+  CompleteEvent,
+  DeepPartial,
+  EventSource,
+  ReporterSettings,
 } from "./types.ts";
 
 export const PERF_TRACKING_ENV_KEY = "RNX_PERF_TRACKING";
 
+export type PerformanceTrackingMode =
+  | "disabled"
+  | "enabled"
+  | "verbose"
+  | "file-only";
+
 export type PerformanceTrackerOptions = {
-  sources?: Set<string>;
-  logfile?: string;
+  enabled?: boolean;
+  file?: string;
+  verbose?: boolean;
+  subProcesses?: boolean;
 };
 
 class PerformanceTracker {
-  private reporterFilter?: Set<string>;
-  private taskDepth = 0;
-  private format: Formatter;
-  private report: LogFunction;
-  private colorize: Colorizer = plainTextColorizer;
+  private reporter: ReporterImpl;
+  private verbose: boolean;
+  private clearStart: () => boolean;
+  private clearComplete: () => boolean;
 
-  private listener: ReporterListener = {
-    acceptsSource: (source: ReporterInfo) =>
-      !this.reporterFilter || this.reporterFilter.has(source.name),
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    onError: () => {},
-    onTaskStarted: (event: ReporterEvent) => this.onTaskStarted(event),
-    onTaskCompleted: (event: TaskEvent) => this.onTaskCompleted(event),
-  };
-
-  constructor(options: PerformanceTrackerOptions) {
-    this.reporterFilter = options.sources;
-
-    const root = ReportingRoot.getInstance();
-    if (options.logfile) {
-      this.report = createFileWriter(options.logfile).write;
-    } else {
-      this.report = createStreamWriter(process.stdout).write;
-      this.colorize = root.reporterDefaults.colorizer;
+  constructor(mode: PerformanceTrackingMode, file?: string, fromEnv?: boolean) {
+    this.verbose = mode === "verbose" || mode === "file-only";
+    const settings: DeepPartial<ReporterSettings> = {
+      level: this.verbose ? "verbose" : "log",
+      color: {
+        message: {
+          default: {
+            label: chalk.green.bold,
+          },
+        },
+      },
+    };
+    // set up file logging if requested, if loading from env open the stream in append mode
+    if (file) {
+      settings.file = {
+        target: file,
+        writeFlags: fromEnv ? "a" : "w",
+        level: "verbose",
+      };
     }
-    this.format = root.reporterDefaults.formatter;
-    root.addListener(this.listener);
+    // in file only mode suppress the console output
+    if (mode === "file-only") {
+      settings.level = "error";
+    }
+    // now create the reporter instance
+    this.reporter = new ReporterImpl({
+      name: "PerformanceTracker",
+      label: chalk.magenta("PERF:"),
+      packageName: "@rnx-kit/reporter",
+      settings,
+    });
+
+    this.clearStart = onStartEvent((event) => this.onTaskStarted(event));
+    this.clearComplete = onCompleteEvent((event) =>
+      this.onTaskCompleted(event)
+    );
   }
 
-  acceptsSource(source: ReporterInfo): boolean {
-    return !this.reporterFilter || this.reporterFilter.has(source.name);
+  private getName(event: EventSource) {
+    const name = event.name ? `${chalk.bold(event.name)}:` : "";
+    if (event.role === "reporter") {
+      return `${this.reporter.format.packageFull(event.packageName)}:${name}`;
+    }
+    return name;
+  }
+
+  private getLabel(event: EventSource) {
+    const prefix =
+      event.role === "reporter"
+        ? `${chalk.bold.blue("Reporter")}:`
+        : `${"+".repeat(event.globalDepth)}${chalk.bold.green("Task")}:`;
+    return `${prefix} ${this.getName(event)}`;
+  }
+
+  private getParentSource(event: EventSource) {
+    if (this.verbose && event.parent) {
+      return ` (from ${this.getName(event.parent)})`;
+    }
+    return "";
+  }
+
+  private getActionMessage(action: ActionData) {
+    const format = this.reporter.format;
+    const { elapsed, name, calls } = action;
+    return `  ${chalk.bold(name)}: ${calls} calls in ${format.duration(elapsed)}`;
   }
 
   /**
-   * Called when a task is started
+   * Called when a task is started, omitted in non-verbose mode
    */
-  onTaskStarted(event: ReporterEvent) {
-    this.report(this.taskPrefix(event) + "Started");
-    this.taskDepth++;
+  private onTaskStarted(event: EventSource) {
+    if (this.verbose) {
+      this.reporter.log(
+        this.getLabel(event),
+        `Started${this.getParentSource(event)}`
+      );
+    }
   }
 
   /**
    * Called when a task is completed
    */
-  onTaskCompleted(event: TaskEvent) {
-    const duration = this.format.duration;
-    this.taskDepth--;
-    const taskPrefix = this.taskPrefix(event);
-
-    const actions = Object.values(event.actions);
-    if (actions.length > 0) {
-      // report a header for the actions if any are present
-      this.report(`${taskPrefix} ${actions.length} action types logged:`);
-      // now report each action found
-      for (const action of actions) {
-        this.report(
-          `${this.actionPrefix(action)} calls in ${duration(action.elapsed, this.colorize)}`
-        );
+  private onTaskCompleted(event: CompleteEvent) {
+    const args: unknown[] = [this.getLabel(event)];
+    args.push(`Finished (${this.reporter.format.duration(event.duration)})`);
+    if (event.errors && event.errors.length > 0) {
+      args.push(`with ${event.errors.length} error(s)`);
+    }
+    if (event.reason === "process-exit") {
+      args.push(chalk.dim("(process exit)"));
+    } else if (event.reason === "error") {
+      if (this.verbose) {
+        args.push(chalk.red("on error:\n", event.result));
+      } else {
+        args.push(`(${chalk.red("error result")})`);
       }
     }
-    // finish with reporting the task completed
-    if (event.error) {
-      this.report(
-        `${taskPrefix} Failed (${duration(event.elapsed, this.colorize)}) with error: ${event.error.message}`
+    this.reporter.log(...args);
+    if (event.actions && event.actions.length > 0) {
+      this.reporter.log(
+        `Logged ${event.actions.length} distinct sub-operations:`
       );
-    } else {
-      const finishState =
-        event.state === "process-exit"
-          ? "Completed (Process Exit)"
-          : "Completed";
-      this.report(
-        `${taskPrefix} ${finishState} (${duration(event.elapsed, this.colorize)}`
-      );
+      for (const action of event.actions) {
+        this.reporter.log(this.getActionMessage(action));
+      }
     }
-  }
-
-  private taskPrefix(event: ReporterEvent) {
-    const source = this.colorize.reporter(event.source.name);
-    const task = this.colorize.task(event.label);
-    return `${"=".repeat(this.taskDepth)}> ${source}:${task}:`;
-  }
-
-  private actionPrefix(event: ActionEvent) {
-    const source = this.colorize.reporter(event.source.name);
-    const action = this.colorize.action(event.label);
-    const actionCount = String(event.calls).padStart(this.taskDepth + 6, " ");
-    return `${actionCount} ${source}:${action}:`;
   }
 
   finish() {
-    ReportingRoot.getInstance().removeListener(this.listener);
+    this.clearStart();
+    this.clearComplete();
   }
 }
+
+let performanceTracker: PerformanceTracker | null = null;
+let checkedEnv = false;
 
 export function enablePerformanceTracing(
-  options: PerformanceTrackerOptions = {},
-  setEnvironment = true
+  mode: PerformanceTrackingMode = "enabled",
+  file?: string
 ) {
-  const performanceReporter = new PerformanceTracker(options);
-  if (setEnvironment) {
-    process.env[PERF_TRACKING_ENV_KEY] = encodePerformanceOptions(options);
+  process.env[PERF_TRACKING_ENV_KEY] = serializePerfOptions(mode, file);
+  if (performanceTracker) {
+    performanceTracker.finish();
   }
-  return {
-    finish: () => {
-      performanceReporter.finish();
-    },
-  };
+  if (mode !== "disabled") {
+    performanceTracker = new PerformanceTracker(mode, file);
+  }
 }
 
-let checkedEnv = false;
 export function checkPerformanceEnv() {
   if (!checkedEnv) {
     checkedEnv = true;
     const env = process.env[PERF_TRACKING_ENV_KEY];
-    if (env) {
-      const options = decodePerformanceOptions(env);
-      if (options) {
-        enablePerformanceTracing(options, false);
+    if (env && typeof env === "string") {
+      const [mode, file] = decodePerformanceOptions(env);
+      if (mode !== "disabled") {
+        performanceTracker = new PerformanceTracker(mode, file, true);
       }
     }
   }
 }
 
-export const allSources = "all";
-type SerializedPerformanceTrackerOptions = {
-  sources: string;
-  logfile?: string;
-};
-
-export function encodePerformanceOptions(
-  options: PerformanceTrackerOptions
+export function serializePerfOptions(
+  mode: PerformanceTrackingMode,
+  file?: string
 ): string {
-  const serializedOptions: SerializedPerformanceTrackerOptions = {
-    sources: options.sources
-      ? Array.from(options.sources).join("|")
-      : allSources,
-  };
-  if (options.logfile) {
-    serializedOptions.logfile = options.logfile;
+  return file ? `${mode},${file}` : mode;
+}
+
+function validMode(mode: string): PerformanceTrackingMode {
+  const enabledModes = new Set(["enabled", "verbose", "file-only"]);
+  if (enabledModes.has(mode)) {
+    return mode as PerformanceTrackingMode;
   }
-  return JSON.stringify(serializedOptions);
+  return "disabled";
 }
 
 export function decodePerformanceOptions(
   serialized?: string
-): PerformanceTrackerOptions | null {
+): [PerformanceTrackingMode, string | undefined] {
   if (serialized) {
-    const serializedOptions = JSON.parse(serialized);
-    const { sources, logfile } = serializedOptions;
-    if (
-      typeof sources === "string" &&
-      (!logfile || typeof logfile === "string")
-    ) {
-      const sourcesSet =
-        sources === allSources ? undefined : new Set(sources.split("|"));
-      return { sources: sourcesSet, logfile };
-    }
+    const parts = serialized.split(",");
+    const mode = validMode(parts[0]);
+    const file = parts.length > 1 ? parts[1] : undefined;
+    return [mode, file];
   }
-  return null;
+  return ["disabled", undefined];
 }

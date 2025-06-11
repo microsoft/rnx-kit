@@ -1,18 +1,35 @@
-export {
-  defaultColorizer,
-  defaultFormatter,
-  plainTextColorizer,
-} from "./output.ts";
-export { enablePerformanceTracing } from "./performance.ts";
-export { createReporter } from "./reporter.ts";
-export { updateReportingDefaults } from "./reportingRoot.ts";
-export type {
-  Colorizer,
-  Formatter,
-  LogLevel,
-  LogType,
+import { checkPerformanceEnv } from "./performance.ts";
+import { ReporterImpl } from "./reporter.ts";
+import type {
+  DeepPartial,
   Reporter,
-  ReporterInfo,
-  ReporterListener,
   ReporterOptions,
+  ReporterSettings,
 } from "./types.ts";
+
+export { enablePerformanceTracing } from "./performance.ts";
+export { onCompleteEvent, onErrorEvent, onStartEvent } from "./reporter.ts";
+export type {
+  CompleteEvent,
+  ErrorEvent,
+  EventSource,
+  Reporter,
+  ReporterOptions,
+  ReporterSettings,
+  TaskOptions,
+} from "./types.ts";
+
+export function createReporter(options: ReporterOptions): Reporter {
+  checkPerformanceEnv();
+  return new ReporterImpl(options);
+}
+
+export function updateDefaultReporterSettings(
+  options: DeepPartial<ReporterSettings>
+): void {
+  ReporterImpl.updateDefaults(options);
+}
+
+export function disableColors(): void {
+  ReporterImpl.disableColors();
+}
