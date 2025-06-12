@@ -122,6 +122,10 @@ export const profile: Profile = {
     name: "react-native-reanimated",
     version: "^3.16.1",
   },
+  checkbox: {
+    name: "@react-native-community/checkbox",
+    version: "^0.5.20",
+  },
   gestures: {
     name: "react-native-gesture-handler",
     version: "^2.20.0",
