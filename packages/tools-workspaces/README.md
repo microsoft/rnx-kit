@@ -18,9 +18,9 @@ It currently supports:
 <!-- The following table can be updated by running `yarn update-readme` -->
 <!-- @rnx-kit/api start -->
 
-| Category | Type Name      | Description                                                                                                                                                 |
-| -------- | -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| types    | WorkspacesInfo | Helper interface that caches results in-between calls and can test if a package is in the workspace without having to load all the packages (in most cases) |
+| Category | Type Name      | Description                                                                                                                                                  |
+| -------- | -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| types    | WorkspacesInfo | Helper interface that caches results in-between calls and can test if a package is in the workspace without having to load all the packages (in most cases). |
 
 | Category | Function                      | Description                                                                      |
 | -------- | ----------------------------- | -------------------------------------------------------------------------------- |
