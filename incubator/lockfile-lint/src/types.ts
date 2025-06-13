@@ -1,11 +1,11 @@
 export type Context = {
-  packages: string[];
+  packages: readonly string[];
   report: (error: string) => void;
 };
 
 export type LockfileEntry = {
   package: string;
-  specifiers: string[];
+  specifiers: readonly string[];
   resolution: string;
 };
 
