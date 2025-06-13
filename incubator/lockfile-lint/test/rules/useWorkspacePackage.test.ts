@@ -1,6 +1,6 @@
 import { equal } from "node:assert/strict";
 import { describe, it } from "node:test";
-import { useWorkspacePackage } from "../../src/rules/useWorkspacePackage.ts";
+import { useWorkspacePackageRule } from "../../src/rules/useWorkspacePackage.ts";
 
 describe("rules:useWorkspacePackage()", () => {
   const lockfile = {
@@ -30,6 +30,8 @@ describe("rules:useWorkspacePackage()", () => {
       resolution: "1.0.0",
     },
   };
+
+  const useWorkspacePackage = useWorkspacePackageRule();
 
   it("flags packages that should have resolved locally", () => {
     const packages = ["@rnx-kit/lockfile-lint"];
