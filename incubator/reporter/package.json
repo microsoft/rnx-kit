@@ -4,6 +4,8 @@
   "description": "EXPERIMENTAL - USE WITH CAUTION - reporter",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/incubator/reporter#readme",
   "license": "MIT",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "author": {
     "name": "Microsoft Open Source",
     "email": "microsoftopensource@users.noreply.github.com"

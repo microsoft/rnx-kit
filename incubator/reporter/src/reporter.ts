@@ -1,191 +1,124 @@
-import chalk from "chalk";
-import { channel, subscribe, unsubscribe } from "node:diagnostics_channel";
-import {
-  createFormatHelper,
-  disableColorOptions,
-  mergeSettings,
-  noChange,
-} from "./formatting.ts";
-import {
-  allLogLevels,
-  getWriteFunctions,
-  outputSettingsChanging,
-  serializeArgs,
-  type WriteFunctions,
-} from "./output.ts";
+import { errorEvent, finishEvent, startEvent } from "./events.ts";
+import { getFormatting, noChange, type Formatting } from "./formatting.ts";
+import { allLogLevels } from "./levels.ts";
+import { getOutput, type Output } from "./output.ts";
 import type {
-  ActionData,
-  CompleteEvent,
-  DeepPartial,
-  ErrorEvent,
-  EventSource,
+  ColorSettings,
+  CustomData,
   FinishReason,
   FormatHelper,
   LogLevel,
   Reporter,
+  ReporterData,
   ReporterOptions,
-  ReporterSettings,
+  SessionData,
+  SessionDetails,
   TaskOptions,
+  TextTransform,
 } from "./types.ts";
 
 process.on("exit", () => {
   ReporterImpl.handleProcessExit();
 });
 
-type LogParts = {
-  prefixes: string[];
-  color: (msg: string) => string;
-};
+type PrepareArgs = (args: unknown[]) => unknown[];
 
-const errorChannelName = Symbol("rnx-reporter:errors");
-const taskStartChannelName = Symbol("rnx-reporter:tasks");
-const taskCompleteChannelName = Symbol("rnx-reporter:task-complete");
+export type InternalSessionData<T extends CustomData = CustomData> =
+  ReporterData<T> & SessionDetails;
 
-export class ReporterImpl implements Reporter {
-  static defaultSettings: ReporterSettings = {
-    level: "log",
-    inspectOptions: {
-      colors: true,
-      depth: 2,
-      compact: true,
-    },
-    color: {
-      message: {
-        default: {
-          prefix: noChange,
-          label: chalk.bold,
-          text: noChange,
-        },
-        error: {
-          prefix: chalk.red.bold,
-        },
-        warn: {
-          prefix: chalk.yellowBright.bold,
-        },
-        log: {},
-        verbose: {
-          text: chalk.dim,
-        },
-      },
-      pkgName: chalk.bold.cyan,
-      pkgScope: chalk.bold.blue,
-      path: chalk.blue,
-      duration: chalk.green,
-      durationUnits: chalk.greenBright,
-    },
-    prefixes: {
-      error: "ERROR: ⛔",
-      warn: "WARNING: ⚠️",
-    },
-  };
-
-  static updateDefaults(options: DeepPartial<ReporterSettings>) {
-    const updateWrites = outputSettingsChanging(
-      ReporterImpl.defaultSettings,
-      options
-    );
-    mergeSettings(ReporterImpl.defaultSettings, options);
-    if (updateWrites) {
-      ReporterImpl.baseWrites = getWriteFunctions(
-        ReporterImpl.defaultSettings,
-        false
-      );
-    }
-  }
-
-  static disableColors() {
-    ReporterImpl.updateDefaults(disableColorOptions);
-  }
+export class ReporterImpl<T extends CustomData = CustomData>
+  implements Reporter<T>
+{
+  private static activeReporters: ReporterImpl[] = [];
 
   static handleProcessExit() {
-    // send process exit event to active tasks
-    let task = ReporterImpl.taskStack.pop();
-    while (task) {
-      task.finish(undefined, "process-exit");
-      task = ReporterImpl.taskStack.pop();
-    }
-    // send process exit event to all reporters
-    for (const reporter of ReporterImpl.reporterList) {
-      reporter.finish(undefined, "process-exit");
+    // send process exit event to all reporters and tasks
+    while (ReporterImpl.activeReporters.length > 0) {
+      ReporterImpl.activeReporters.pop()?.finish(undefined, "process-exit");
     }
   }
 
-  private static errorChannel = channel(errorChannelName);
-  private static startChannel = channel(taskStartChannelName);
-  private static completeChannel = channel(taskCompleteChannelName);
-
-  private static baseWrites: WriteFunctions = getWriteFunctions(
-    ReporterImpl.defaultSettings,
-    false
-  );
-  private static taskStack: ReporterImpl[] = [];
-  private static reporterList: ReporterImpl[] = [];
-
-  private readonly settings: ReporterSettings;
-  private readonly writes: WriteFunctions;
-  private readonly msgParams: Record<LogLevel, LogParts>;
-  private actions: Record<string, ActionData> = {};
-
-  private source: EventSource;
-  format: FormatHelper;
-
-  constructor(options: ReporterOptions, parent?: ReporterImpl) {
-    const { label } = options;
-    const baseSettings = parent?.settings || ReporterImpl.defaultSettings;
-    const baseWrites = parent?.writes || ReporterImpl.baseWrites;
-    const outputChanging = outputSettingsChanging(
-      baseSettings,
-      options.settings
-    );
-    this.settings = mergeSettings(baseSettings, options.settings, true);
-    this.writes = getWriteFunctions(this.settings, outputChanging, baseWrites);
-    this.msgParams = this.buildLogParts(label);
-    this.source = this.initializeEventSource(options, parent?.source);
-    this.sendStartEvent();
-    if (parent) {
-      this.source.globalDepth = ReporterImpl.taskStack.length;
-      ReporterImpl.taskStack.push(this);
-    } else {
-      ReporterImpl.reporterList.push(this);
+  static removeReporter(reporter: ReporterImpl) {
+    const index = ReporterImpl.activeReporters.indexOf(reporter);
+    if (index !== -1) {
+      ReporterImpl.activeReporters.splice(index, 1);
     }
-    this.format = parent?.format || createFormatHelper(this.settings.color);
+  }
+
+  private output: Output;
+  private formatting: Formatting;
+  private prepArgs: Record<LogLevel, PrepareArgs>;
+
+  private source: InternalSessionData<T>;
+
+  constructor(options: ReporterOptions<T>, parent?: ReporterImpl<T>) {
+    const { settings, ...sourceOptions } = options;
+
+    this.output = parent?.output || getOutput(settings);
+    this.formatting = parent?.formatting || getFormatting(settings);
+
+    this.prepArgs = this.buildPrefixes(options.label);
+    const parentSource = parent?.source;
+
+    this.source = {
+      ...sourceOptions,
+      role: parentSource ? "task" : "reporter",
+      startTime: performance.now(),
+      duration: 0,
+      parent: parentSource,
+      depth: parentSource ? parentSource.depth + 1 : 0,
+    };
+
+    ReporterImpl.activeReporters.push(this);
+    if (startEvent.hasSubscribers()) {
+      startEvent.publish(this.source);
+    }
   }
 
   error(...args: unknown[]): void {
-    const { prefixes, color } = this.msgParams.error;
-    this.sendErrorEvent(args);
-    this.writes.error(color(this.serialize(...prefixes, ...args)));
+    this.onError(args);
+    this.output.error(
+      this.prepareMessage(this.colors.error.text, this.prepArgs.error(args))
+    );
   }
 
   errorRaw(...args: unknown[]): void {
-    this.sendErrorEvent(args);
-    this.writes.error(this.serialize(...args));
+    this.onError(args);
+    this.output.error(this.prepareMessage(undefined, args));
   }
 
   throwError(...args: unknown[]): never {
-    const { prefixes, color } = this.msgParams.error;
-    this.sendErrorEvent(args);
-    const msg = color(this.serialize(...prefixes, ...args));
-    this.writes.error(msg);
+    this.onError(args);
+    const msg = this.prepareMessage(
+      this.colors.error.text,
+      this.prepArgs.error(args)
+    );
+    this.output.error(msg);
     throw new Error(msg);
   }
 
   warn(...args: unknown[]): void {
-    const { prefixes, color } = this.msgParams.warn;
-    this.writes.warn?.(color(this.serialize(...prefixes, ...args)));
+    this.output.warn?.(
+      this.prepareMessage(this.colors.warn.text, this.prepArgs.warn(args))
+    );
   }
 
   log(...args: unknown[]): void {
-    const { prefixes, color } = this.msgParams.log;
-    this.writes.log?.(color(this.serialize(...prefixes, ...args)));
+    this.output.log?.(
+      this.prepareMessage(this.colors.log.text, this.prepArgs.log(args))
+    );
   }
 
   verbose(...args: unknown[]): void {
-    const { prefixes, color } = this.msgParams.verbose;
-    this.writes.verbose?.(color(this.serialize(...prefixes, ...args)));
+    this.output.verbose?.(
+      this.prepareMessage(this.colors.verbose.text, this.prepArgs.verbose(args))
+    );
   }
 
-  task<T>(label: string | TaskOptions, fn: (reporter: Reporter) => T): T {
+  task<TReturn>(
+    label: string | TaskOptions<T>,
+    fn: (reporter: Reporter<T>) => TReturn
+  ): TReturn {
     const taskReporter = this.createTask(label);
     try {
       const result = fn(taskReporter);
@@ -197,10 +130,10 @@ export class ReporterImpl implements Reporter {
     }
   }
 
-  async asyncTask<T>(
-    name: string | TaskOptions,
-    fn: (reporter: Reporter) => Promise<T>
-  ): Promise<T> {
+  async taskAsync<TReturn>(
+    name: string | TaskOptions<T>,
+    fn: (reporter: Reporter) => Promise<TReturn>
+  ): Promise<TReturn> {
     const taskReporter = this.createTask(name);
     try {
       const result = await fn(taskReporter);
@@ -212,55 +145,57 @@ export class ReporterImpl implements Reporter {
     }
   }
 
-  action<T>(label: string, fn: () => T): T {
+  time<TReturn>(label: string, fn: () => TReturn): TReturn {
     const start = performance.now();
     const result = fn();
-    this.finishAction(label, performance.now() - start);
+    this.finishOperation(label, performance.now() - start);
     return result;
   }
 
-  async asyncAction<T>(label: string, fn: () => Promise<T>): Promise<T> {
+  async timeAsync<TReturn>(
+    label: string,
+    fn: () => Promise<TReturn>
+  ): Promise<TReturn> {
     const start = performance.now();
     const result = await fn();
-    this.finishAction(label, performance.now() - start);
+    this.finishOperation(label, performance.now() - start);
     return result;
-  }
-
-  setData(entry: string, value: unknown) {
-    this.source.metadata ??= {};
-    this.source.metadata[entry] = value;
   }
 
   finish(result: unknown, reason: FinishReason = "complete") {
-    // if anyone is listening, send the complete event
-    if (ReporterImpl.completeChannel.hasSubscribers) {
-      const completeEvent: CompleteEvent = {
-        ...this.source,
-        result,
-        reason,
-        duration: performance.now() - this.source.startTime,
-        actions: Object.values(this.actions),
-      };
-      ReporterImpl.completeChannel.publish(completeEvent);
+    // record the finish state only once
+    if (!this.source.reason) {
+      this.source.reason = reason;
+      this.source.result = result;
+      this.source.duration = performance.now() - this.source.startTime;
+      // if there are event listeners send the event
+      if (finishEvent.hasSubscribers()) {
+        finishEvent.publish(this.source);
+      }
     }
 
-    // remove this reporter from the task stack or reporter list
-    if (this.source.role === "task") {
-      ReporterImpl.taskStack = ReporterImpl.taskStack.filter(
-        (task) => task.source !== this.source
-      );
-    } else {
-      ReporterImpl.reporterList = ReporterImpl.reporterList.filter(
-        (reporter) => reporter.source !== this.source
-      );
-    }
+    // remove this reporter from the active reporters list
+    ReporterImpl.removeReporter(this);
   }
 
-  private createTask(options: string | TaskOptions): ReporterImpl {
+  // get function for data
+  get data(): SessionData<T> {
+    return this.source;
+  }
+
+  get format(): FormatHelper {
+    return this.formatting.format;
+  }
+
+  get colors(): ColorSettings {
+    return this.formatting.colors;
+  }
+
+  private createTask(options: string | TaskOptions<T>): ReporterImpl<T> {
     if (typeof options === "string") {
       options = { name: options };
     }
-    return new ReporterImpl(
+    return new ReporterImpl<T>(
       {
         ...options,
         packageName: options.packageName || this.source.packageName,
@@ -269,98 +204,54 @@ export class ReporterImpl implements Reporter {
     );
   }
 
-  private sendErrorEvent(args: unknown[]): void {
-    if (ReporterImpl.errorChannel.hasSubscribers) {
-      ReporterImpl.errorChannel.publish({
+  private onError(args: unknown[]): void {
+    const errors = (this.source.errors ??= []);
+    errors.push(args);
+
+    if (errorEvent.hasSubscribers()) {
+      errorEvent.publish({
         source: this.source,
         args,
       });
     }
   }
 
-  private sendStartEvent(): void {
-    if (ReporterImpl.startChannel.hasSubscribers) {
-      ReporterImpl.startChannel.publish(this.source);
+  private finishOperation(name: string, duration: number) {
+    this.source.operations ??= {};
+    const op = (this.source.operations[name] ??= { elapsed: 0, calls: 0 });
+    op.elapsed += duration;
+    op.calls += 1;
+  }
+
+  private buildPrefixes(label?: string) {
+    // color the label if requested
+    if (label && this.colors.labels) {
+      label = this.colors.labels(label);
     }
-  }
-
-  private finishAction(name: string, duration: number) {
-    this.actions[name] ??= {
-      name,
-      elapsed: 0,
-      calls: 0,
-    };
-    this.actions[name].elapsed += duration;
-    this.actions[name].calls += 1;
-  }
-
-  private buildLogParts(label?: string) {
-    const parts: Record<LogLevel, LogParts> = {} as Record<LogLevel, LogParts>;
-    const colors = this.settings.color.message;
+    const prefixes = {} as Record<LogLevel, PrepareArgs>;
     for (const level of allLogLevels) {
-      parts[level] = {
-        color: colors[level].text || colors.default.text,
-        prefixes: [],
-      };
-      const prefix = this.settings.prefixes[level];
-      if (prefix) {
-        parts[level].prefixes.push(prefix);
+      const prefix = this.formatting.prefixes[level];
+      if (prefix || label) {
+        const colorPrefix = this.colors[level].prefix ?? noChange;
+        const prepend: unknown[] = prefix ? [colorPrefix(prefix)] : [];
+        if (label) {
+          prepend.push(label);
+        }
+        prefixes[level] = (args: unknown[]) => {
+          return prepend.concat(...args);
+        };
+      } else {
+        prefixes[level] = noChange;
       }
-      if (label) {
-        parts[level].prefixes.push(label);
-      }
     }
-    return parts;
+    return prefixes;
   }
 
-  private serialize(...args: unknown[]): string {
-    return serializeArgs(this.settings.inspectOptions, ...args);
+  private prepareMessage(
+    colorText: TextTransform | undefined,
+    args: unknown[]
+  ): string {
+    const color = colorText ?? noChange;
+    return color(this.format.serialize(args));
   }
-
-  private initializeEventSource(
-    options: ReporterOptions,
-    parentSource?: EventSource
-  ): EventSource {
-    const { name, packageName, metadata } = options;
-    return {
-      role: parentSource ? "task" : "reporter",
-      name: name || packageName,
-      packageName,
-      metadata,
-      startTime: performance.now(),
-      parent: parentSource,
-      depth: parentSource ? parentSource.depth + 1 : 0,
-      globalDepth: 0,
-    };
-  }
-}
-
-export function onStartEvent(callback: (event: EventSource) => void) {
-  const handler = (event: unknown, name: symbol | string) => {
-    if (name === taskStartChannelName) {
-      callback(event as EventSource);
-    }
-  };
-  subscribe(taskStartChannelName, handler);
-  return () => unsubscribe(taskStartChannelName, handler);
-}
-
-export function onCompleteEvent(callback: (event: CompleteEvent) => void) {
-  const handler = (event: unknown, name: symbol | string) => {
-    if (name === taskCompleteChannelName) {
-      callback(event as CompleteEvent);
-    }
-  };
-  subscribe(taskCompleteChannelName, handler);
-  return () => unsubscribe(taskCompleteChannelName, handler);
-}
-
-export function onErrorEvent(callback: (event: ErrorEvent) => void) {
-  const handler = (event: unknown, name: symbol | string) => {
-    if (name === errorChannelName) {
-      callback(event as ErrorEvent);
-    }
-  };
-  subscribe(errorChannelName, handler);
-  return () => unsubscribe(errorChannelName, handler);
 }

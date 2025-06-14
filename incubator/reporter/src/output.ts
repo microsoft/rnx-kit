@@ -1,59 +1,60 @@
 import fs from "node:fs";
 import path from "node:path";
-import {
-  inspect,
-  stripVTControlCharacters,
-  type InspectOptions,
-} from "node:util";
+import { stripVTControlCharacters } from "node:util";
 import { noChange } from "./formatting.ts";
-import type { LogLevel, ReporterSettings } from "./types.ts";
+import {
+  allLogLevels,
+  defaultLevel,
+  nonErrorLevels,
+  supportsLevel,
+  useErrorStream,
+} from "./levels.ts";
+import type { LogLevel, OutputOptions, OutputSettings } from "./types.ts";
 
 export type WriteFunction = (msg: string) => void;
 
 type AllWrites = Record<LogLevel, WriteFunction>;
 export type WriteFunctions = Pick<AllWrites, "error"> &
   Partial<Omit<AllWrites, "error">>;
-export type OutputSettings = Pick<ReporterSettings, "level" | "file">;
-export type OutputOptions = Partial<OutputSettings>;
+
+export type Output = OutputSettings & WriteFunctions;
 
 const writeStdout: WriteFunction = process.stdout.write.bind(process.stdout);
 const writeStderr: WriteFunction = process.stderr.write.bind(process.stderr);
 
-type LevelOptions = {
-  value: number;
-  write: WriteFunction;
-};
+const defaultOutput = buildOutput({ level: defaultLevel } as Output, {});
 
-const defaultLevel: LogLevel = "log";
-const levelOptions: Record<LogLevel, LevelOptions> = {
-  error: {
-    value: 0,
-    write: writeStderr,
-  },
-  warn: {
-    value: 1,
-    write: writeStderr,
-  },
-  log: {
-    value: 2,
-    write: writeStdout,
-  },
-  verbose: {
-    value: 3,
-    write: writeStdout,
-  },
-};
+export function updateOutputDefaults(overrides?: OutputOptions) {
+  // if we have overrides and they change settings regenerate the output functions
+  if (overrides && outputSettingsChanging(defaultOutput, overrides)) {
+    Object.assign(defaultOutput, getOutput(overrides));
+  }
+}
 
-const nonErrorLevels: LogLevel[] = ["warn", "log", "verbose"];
-export const allLogLevels: LogLevel[] = ["error", ...nonErrorLevels];
+export function getOutput(
+  overrides?: OutputOptions,
+  baseline: Output | undefined = defaultOutput
+): Output {
+  // if there are no overrides, return the default output
+  if (!overrides || !outputSettingsChanging(baseline, overrides)) {
+    return { ...baseline };
+  }
+  return buildOutput(defaultOutput, overrides);
+}
 
-export function supportsLevel(
-  level: LogLevel,
-  optionLevel: LogLevel = defaultLevel
-): boolean {
-  const optionValue =
-    levelOptions[optionLevel]?.value ?? levelOptions.error.value;
-  return levelOptions[level].value <= optionValue;
+function buildOutput(baseline: Output, overrides: OutputOptions) {
+  // update the settings to have the new values
+  const result = { ...baseline, ...overrides };
+  if (baseline.file && overrides.file) {
+    result.file = { ...baseline.file, ...overrides.file };
+  }
+
+  // rebuild the write functions
+  const consoleWrites = getConsoleWrites(result.level);
+  const fileWrites = getFileWrites(result.level, result.file);
+  combineWrites(result, consoleWrites, fileWrites);
+
+  return result;
 }
 
 /**
@@ -88,36 +89,13 @@ export function outputSettingsChanging(
   return false;
 }
 
-/**
- *
- * @param settings the baseline settings for the output, passed pre-merge to see if we can use parent write functions
- * @param options the overrides being used to create a given reporter
- * @param parentWrites write functions associated with the settings, if any
- * @returns a set of write functions, defined according to the settings and options provided
- */
-export function getWriteFunctions(
-  settings: OutputSettings,
-  changed?: boolean,
-  parentWrites?: WriteFunctions
-): WriteFunctions {
-  // if there are parent writes, we can use them if they match the current settings
-  if (parentWrites && !changed) {
-    return parentWrites;
-  }
-
-  // things are changing, build these again
-  const consoleWrites = getConsoleWrites(settings.level);
-  const fileWrites = getFileWrites(settings.level, settings.file);
-  return mergeWrites(consoleWrites, fileWrites);
-}
-
 function getConsoleWrites(setting: LogLevel) {
   const results: WriteFunctions = {
-    error: levelOptions.error.write,
+    error: writeStderr,
   };
   for (const level of nonErrorLevels) {
     if (supportsLevel(level, setting)) {
-      results[level] = levelOptions[level].write;
+      results[level] = useErrorStream(level) ? writeStderr : writeStdout;
     }
   }
   return results;
@@ -142,26 +120,29 @@ function getFileWrites(
   return results;
 }
 
-function mergeWrites(
+function combineWrites(
+  target: WriteFunctions,
   writes: WriteFunctions,
   fileWrites: Partial<WriteFunctions>
-): WriteFunctions {
-  const results: WriteFunctions = { ...writes };
+) {
   for (const level of allLogLevels) {
     const write1 = writes[level];
     const write2 = fileWrites[level];
     if (write1 && write2) {
-      results[level] = (msg: string) => {
+      target[level] = (msg: string) => {
         write1(msg);
         write2(msg);
       };
     } else if (write1) {
-      results[level] = write1;
+      target[level] = write1;
     } else if (write2) {
-      results[level] = write2;
+      target[level] = write2;
+    } else if (level !== "error") {
+      // if there is no write function, set it to undefined
+      target[level] = undefined;
     }
   }
-  return results;
+  return target;
 }
 
 export function getFileStream(
@@ -185,22 +166,4 @@ export function getFileStream(
     }
   }
   return undefined;
-}
-
-/**
- * @param inspectOptions options for node:util.inspect, used to format the arguments, same as console.log
- * @param args args list to serialize
- * @returns a single string with arguments joined together with spaces, terminated with a newline
- */
-export function serializeArgs(
-  inspectOptions: InspectOptions,
-  ...args: unknown[]
-): string {
-  let msg = args
-    .map((arg) =>
-      typeof arg === "string" ? arg : inspect(arg, inspectOptions)
-    )
-    .join(" ");
-  msg += "\n";
-  return msg;
 }
