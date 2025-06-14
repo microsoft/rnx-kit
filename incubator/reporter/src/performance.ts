@@ -1,12 +1,7 @@
 import chalk from "chalk";
-import { onCompleteEvent, onStartEvent, ReporterImpl } from "./reporter.ts";
-import type {
-  ActionData,
-  CompleteEvent,
-  DeepPartial,
-  EventSource,
-  ReporterSettings,
-} from "./types.ts";
+import { subscribeToFinish, subscribeToStart } from "./events.ts";
+import { ReporterImpl } from "./reporter.ts";
+import type { ReporterOptions, SessionData } from "./types.ts";
 
 export const PERF_TRACKING_ENV_KEY = "RNX_PERF_TRACKING";
 
@@ -31,14 +26,10 @@ class PerformanceTracker {
 
   constructor(mode: PerformanceTrackingMode, file?: string, fromEnv?: boolean) {
     this.verbose = mode === "verbose" || mode === "file-only";
-    const settings: DeepPartial<ReporterSettings> = {
+    const settings: ReporterOptions["settings"] = {
       level: this.verbose ? "verbose" : "log",
-      color: {
-        message: {
-          default: {
-            label: chalk.green.bold,
-          },
-        },
+      colors: {
+        labels: chalk.green.bold,
       },
     };
     // set up file logging if requested, if loading from env open the stream in append mode
@@ -61,13 +52,13 @@ class PerformanceTracker {
       settings,
     });
 
-    this.clearStart = onStartEvent((event) => this.onTaskStarted(event));
-    this.clearComplete = onCompleteEvent((event) =>
+    this.clearStart = subscribeToStart((event) => this.onTaskStarted(event));
+    this.clearComplete = subscribeToFinish((event) =>
       this.onTaskCompleted(event)
     );
   }
 
-  private getName(event: EventSource) {
+  private getName(event: SessionData) {
     const name = event.name ? `${chalk.bold(event.name)}:` : "";
     if (event.role === "reporter") {
       return `${this.reporter.format.packageFull(event.packageName)}:${name}`;
@@ -75,31 +66,25 @@ class PerformanceTracker {
     return name;
   }
 
-  private getLabel(event: EventSource) {
+  private getLabel(event: SessionData) {
     const prefix =
       event.role === "reporter"
         ? `${chalk.bold.blue("Reporter")}:`
-        : `${"+".repeat(event.globalDepth)}${chalk.bold.green("Task")}:`;
+        : `${"+".repeat(event.depth)}${chalk.bold.green("Task")}:`;
     return `${prefix} ${this.getName(event)}`;
   }
 
-  private getParentSource(event: EventSource) {
+  private getParentSource(event: SessionData) {
     if (this.verbose && event.parent) {
       return ` (from ${this.getName(event.parent)})`;
     }
     return "";
   }
 
-  private getActionMessage(action: ActionData) {
-    const format = this.reporter.format;
-    const { elapsed, name, calls } = action;
-    return `  ${chalk.bold(name)}: ${calls} calls in ${format.duration(elapsed)}`;
-  }
-
   /**
    * Called when a task is started, omitted in non-verbose mode
    */
-  private onTaskStarted(event: EventSource) {
+  private onTaskStarted(event: SessionData) {
     if (this.verbose) {
       this.reporter.log(
         this.getLabel(event),
@@ -111,7 +96,8 @@ class PerformanceTracker {
   /**
    * Called when a task is completed
    */
-  private onTaskCompleted(event: CompleteEvent) {
+  private onTaskCompleted(event: SessionData) {
+    const reporter = this.reporter;
     const args: unknown[] = [this.getLabel(event)];
     args.push(`Finished (${this.reporter.format.duration(event.duration)})`);
     if (event.errors && event.errors.length > 0) {
@@ -126,13 +112,20 @@ class PerformanceTracker {
         args.push(`(${chalk.red("error result")})`);
       }
     }
-    this.reporter.log(...args);
-    if (event.actions && event.actions.length > 0) {
-      this.reporter.log(
-        `Logged ${event.actions.length} distinct sub-operations:`
-      );
-      for (const action of event.actions) {
-        this.reporter.log(this.getActionMessage(action));
+    reporter.log(...args);
+    if (event.operations) {
+      const opKeys = Object.keys(event.operations);
+      if (opKeys.length > 0) {
+        reporter.log(`Logged ${opKeys.length} distinct sub-operations:`);
+        const duration = reporter.format.duration;
+        for (const key of opKeys) {
+          const operation = chalk.bold(key);
+          const { elapsed, calls } = event.operations[key];
+
+          reporter.log(
+            `  ${operation}: ${calls} calls in ${duration(elapsed)}`
+          );
+        }
       }
     }
   }

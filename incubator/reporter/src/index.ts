@@ -1,35 +1,31 @@
 import { checkPerformanceEnv } from "./performance.ts";
 import { ReporterImpl } from "./reporter.ts";
-import type {
-  DeepPartial,
-  Reporter,
-  ReporterOptions,
-  ReporterSettings,
-} from "./types.ts";
+import type { CustomData, Reporter, ReporterOptions } from "./types.ts";
 
+export {
+  subscribeToError,
+  subscribeToFinish,
+  subscribeToStart,
+} from "./events.ts";
+export {
+  defaultColors,
+  defaultFormat,
+  disableColors,
+  updateDefaultFormatting,
+} from "./formatting.ts";
 export { enablePerformanceTracing } from "./performance.ts";
-export { onCompleteEvent, onErrorEvent, onStartEvent } from "./reporter.ts";
 export type {
-  CompleteEvent,
   ErrorEvent,
-  EventSource,
+  LogLevel,
   Reporter,
   ReporterOptions,
-  ReporterSettings,
+  SessionData,
   TaskOptions,
 } from "./types.ts";
 
-export function createReporter(options: ReporterOptions): Reporter {
+export function createReporter<T extends CustomData = CustomData>(
+  options: ReporterOptions<T>
+): Reporter<T> {
   checkPerformanceEnv();
-  return new ReporterImpl(options);
-}
-
-export function updateDefaultReporterSettings(
-  options: DeepPartial<ReporterSettings>
-): void {
-  ReporterImpl.updateDefaults(options);
-}
-
-export function disableColors(): void {
-  ReporterImpl.disableColors();
+  return new ReporterImpl<T>(options);
 }
