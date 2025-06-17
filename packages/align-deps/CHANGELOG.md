@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/align-deps
 
+## 3.0.7
+
+### Patch Changes
+
+- 828f2c9: Added profile for 0.80
+
 ## 3.0.6
 
 ### Patch Changes
