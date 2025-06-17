@@ -1,6 +1,14 @@
-import type { Rule } from "../types.ts";
+import type { Rule, RuleBaseOptions } from "../types.ts";
 
-export function noWorkspacePackageFromNpmRule(): Rule {
+export type RuleOptions = RuleBaseOptions;
+
+export function noWorkspacePackageFromNpmRule(
+  options: RuleOptions = {}
+): void | Rule {
+  if (options.enabled === false) {
+    return;
+  }
+
   return (context, key, pkg) => {
     if (
       context.packages.includes(pkg.package) &&

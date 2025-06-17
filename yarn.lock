@@ -4041,12 +4041,13 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rnx-kit/config@npm:*, @rnx-kit/config@npm:^0.7.0, @rnx-kit/config@workspace:packages/config":
+"@rnx-kit/config@npm:*, @rnx-kit/config@npm:^0.7.0, @rnx-kit/config@npm:^0.7.3, @rnx-kit/config@workspace:packages/config":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/config@workspace:packages/config"
   dependencies:
     "@rnx-kit/console": "npm:^2.0.0"
     "@rnx-kit/eslint-config": "npm:*"
+    "@rnx-kit/lint-lockfile": "npm:*"
     "@rnx-kit/metro-plugin-cyclic-dependencies-detector": "npm:*"
     "@rnx-kit/metro-plugin-duplicates-checker": "npm:*"
     "@rnx-kit/metro-serializer-esbuild": "npm:*"
@@ -4176,10 +4177,11 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rnx-kit/lint-lockfile@workspace:incubator/lint-lockfile":
+"@rnx-kit/lint-lockfile@npm:*, @rnx-kit/lint-lockfile@workspace:incubator/lint-lockfile":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/lint-lockfile@workspace:incubator/lint-lockfile"
   dependencies:
+    "@rnx-kit/config": "npm:^0.7.3"
     "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tools-workspaces": "npm:^0.2.2"

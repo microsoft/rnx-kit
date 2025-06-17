@@ -1,3 +1,5 @@
+import type { RuleOptions as NoDuplicatesRuleOptions } from "@rnx-kit/lint-lockfile/src/rules/noDuplicates";
+import type { RuleOptions as NoWorkspacePackageFromNpmRuleOptions } from "@rnx-kit/lint-lockfile/src/rules/noWorkspacePackageFromNpm";
 import type { BundleConfig } from "./bundleConfig";
 import type { ServerConfig } from "./serverConfig";
 
@@ -155,4 +157,17 @@ export type KitConfig = {
    * @deprecated Use `alignDeps.presets` instead.
    */
   customProfiles?: string;
+
+  /**
+   * Configures rnx-kit linting tools and their rules.
+   */
+  lint?: {
+    /**
+     * Configures `@rnx-kit/lint-lockfile`.
+     */
+    lockfile?: {
+      noDuplicates?: NoDuplicatesRuleOptions;
+      noWorkspacePackageFromNpm?: NoWorkspacePackageFromNpmRuleOptions;
+    };
+  };
 };

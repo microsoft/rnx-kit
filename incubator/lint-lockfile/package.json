@@ -29,6 +29,7 @@
     "test": "rnx-kit-scripts test"
   },
   "dependencies": {
+    "@rnx-kit/config": "^0.7.3",
     "@rnx-kit/tools-workspaces": "^0.2.2",
     "js-yaml": "^4.1.0"
   },
