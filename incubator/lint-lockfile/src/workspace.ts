@@ -1,7 +1,7 @@
 import { getWorkspacesInfoSync } from "@rnx-kit/tools-workspaces";
 import * as fs from "node:fs";
 import * as path from "node:path";
-import { useWorkspacePackageRule } from "./rules/useWorkspacePackage.ts";
+import { noWorkspacePackageFromNpmRule } from "./rules/noWorkspacePackageFromNpm.ts";
 import type { Lockfile, Workspace } from "./types";
 import { loadLockfile as loadYarnLockfile } from "./yarn/lockfile.ts";
 
@@ -28,6 +28,6 @@ export function loadWorkspace(): Workspace & { packages: string[] } {
   return {
     lockfile: loadLockfile(workspaceInfo.getLockfile()),
     packages: loadWorkspacePackages(workspaceInfo.findPackagesSync()),
-    rules: [useWorkspacePackageRule()],
+    rules: [noWorkspacePackageFromNpmRule()],
   };
 }

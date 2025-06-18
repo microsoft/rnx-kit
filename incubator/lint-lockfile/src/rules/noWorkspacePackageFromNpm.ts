@@ -1,6 +1,6 @@
 import type { Rule } from "../types.ts";
 
-export function useWorkspacePackageRule(): Rule {
+export function noWorkspacePackageFromNpmRule(): Rule {
   return (context, key, pkg) => {
     if (
       context.packages.includes(pkg.package) &&
