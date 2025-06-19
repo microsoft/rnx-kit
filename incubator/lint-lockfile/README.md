@@ -61,7 +61,7 @@ example:
 
 This rule checks for duplicate packages in the lockfile. It must be configured
 to check for specific packages. For example, to check for duplicates of React
-and React Native, you can configure it like this:
+and React Native, configure it like this:
 
 ```ts
 {
@@ -100,7 +100,7 @@ You can allow multiple copies of a package by specifying a max count:
 }
 ```
 
-This rule also has built-in presets for React Native. You can enable it with
+This rule also has a built-in preset for React Native. You can enable it with
 `#react-native`:
 
 ```ts
