@@ -4182,7 +4182,7 @@ __metadata:
   dependencies:
     "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/scripts": "npm:*"
-    "@rnx-kit/tools-workspaces": "npm:^0.2.2"
+    "@rnx-kit/tools-workspaces": "npm:^0.2.3"
     "@rnx-kit/tsconfig": "npm:*"
     "@types/js-yaml": "npm:^4.0.5"
     js-yaml: "npm:^4.1.0"
@@ -4767,7 +4767,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rnx-kit/tools-workspaces@npm:*, @rnx-kit/tools-workspaces@npm:^0.2.0, @rnx-kit/tools-workspaces@npm:^0.2.1, @rnx-kit/tools-workspaces@npm:^0.2.2, @rnx-kit/tools-workspaces@workspace:packages/tools-workspaces":
+"@rnx-kit/tools-workspaces@npm:*, @rnx-kit/tools-workspaces@npm:^0.2.0, @rnx-kit/tools-workspaces@npm:^0.2.1, @rnx-kit/tools-workspaces@npm:^0.2.3, @rnx-kit/tools-workspaces@workspace:packages/tools-workspaces":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/tools-workspaces@workspace:packages/tools-workspaces"
   dependencies:

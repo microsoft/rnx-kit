@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/align-deps
 
+## 3.0.8
+
+### Patch Changes
+
+- 092f2c1: Fixed `--no-unmanaged` not being parsed correctly
+
 ## 3.0.7
 
 ### Patch Changes
