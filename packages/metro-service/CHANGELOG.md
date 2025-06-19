@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-service
 
+## 4.1.1
+
+### Patch Changes
+
+- 48eb25c: Use prepopulated `assets` if available
+
 ## 4.1.0
 
 ### Minor Changes
