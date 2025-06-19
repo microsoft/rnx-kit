@@ -1,6 +1,13 @@
+import type { NoWorkspacePackageFromNpmRuleOptions as Options } from "@rnx-kit/config/src/lint.types.ts";
 import type { Rule } from "../types.ts";
 
-export function noWorkspacePackageFromNpmRule(): Rule {
+export function noWorkspacePackageFromNpmRule(
+  options: Options = {}
+): void | Rule {
+  if (options.enabled === false) {
+    return;
+  }
+
   return (context, key, pkg) => {
     if (
       context.packages.includes(pkg.package) &&
