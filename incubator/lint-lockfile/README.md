@@ -31,8 +31,8 @@ yarn lint-lockfile
 
 ## Configuration
 
-`@rnx-kit/lint-lockfile` can be configured in your root `package.json` file.
-For example:
+`@rnx-kit/lint-lockfile` can be configured in your root `package.json` file. For
+example:
 
 ```ts
 {
