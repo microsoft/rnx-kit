@@ -1,6 +1,8 @@
-import type { RuleOptions as NoDuplicatesRuleOptions } from "@rnx-kit/lint-lockfile/src/rules/noDuplicates";
-import type { RuleOptions as NoWorkspacePackageFromNpmRuleOptions } from "@rnx-kit/lint-lockfile/src/rules/noWorkspacePackageFromNpm";
 import type { BundleConfig } from "./bundleConfig";
+import type {
+  NoDuplicatesRuleOptions,
+  NoWorkspacePackageFromNpmRuleOptions,
+} from "./lint.types";
 import type { ServerConfig } from "./serverConfig";
 
 export type MetaCapability = "core/testing";

@@ -43,7 +43,6 @@
   },
   "devDependencies": {
     "@rnx-kit/eslint-config": "*",
-    "@rnx-kit/lint-lockfile": "*",
     "@rnx-kit/metro-plugin-cyclic-dependencies-detector": "*",
     "@rnx-kit/metro-plugin-duplicates-checker": "*",
     "@rnx-kit/metro-serializer-esbuild": "*",

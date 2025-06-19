@@ -17,14 +17,6 @@ export type Rule = (
   pkg: Lockfile[string]
 ) => void;
 
-export type RuleBaseOptions = {
-  /**
-   * Whether to enable this rule.
-   * @default true
-   */
-  enabled?: boolean;
-};
-
 export type Workspace = {
   lockfile: Lockfile;
   rules: readonly Rule[];

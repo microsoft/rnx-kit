@@ -1,30 +1,5 @@
-import type { Rule, RuleBaseOptions } from "../types.ts";
-
-export type RuleOptions = {
-  /**
-   * List of packages to check for duplicates.
-   *
-   * Each package can be specified as a string or as a tuple of
-   * `[name, maxCount]`. If provided, `maxCount` indicates how many times the
-   * package can appear. Otherwise, the package can only appear once.
-   *
-   * An empty array or `undefined` disables the rule.
-   *
-   * @example
-   * ```ts
-   * "no-duplicates": {
-   *   "packages": [
-   *     "react-native", // allows only 1 instance of "react-native"
-   *     ["react", 2], // allows up to 2 instances of "react"
-   *     ["left-pad", 0], // disallows "left-pad" completely
-   *   ],
-   * }
-   * ```
-   */
-  packages: readonly (string | readonly [string, number])[];
-};
-
-type Options = RuleBaseOptions & Partial<RuleOptions>;
+import type { NoDuplicatesRuleOptions as Options } from "@rnx-kit/config/src/lint.types.ts";
+import type { Rule } from "../types.ts";
 
 type PackageCount = Record<string, number | undefined>;
 
@@ -69,7 +44,7 @@ export const PRESETS: Record<string, PackageCount> = {
 };
 
 export function createPackageMap(
-  packages: RuleOptions["packages"]
+  packages: Required<Options>["packages"]
 ): PackageCount {
   const count: PackageCount = {};
   for (const pkg of packages) {
