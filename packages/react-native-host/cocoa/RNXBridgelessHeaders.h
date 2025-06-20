@@ -60,7 +60,7 @@ using SharedJSRuntimeFactory = std::shared_ptr<facebook::react::JSRuntimeFactory
 
 #ifdef USE_FEATURE_FLAGS
 
-// https://github.com/facebook/react-native/blob/0.74-stable/packages/react-native/Libraries/AppDelegate/RCTAppDelegate.mm#L272-L286
+// https://github.com/facebook/react-native/blob/0.80-stable/packages/react-native/ReactCommon/react/featureflags/ReactNativeFeatureFlagsOverridesOSSStable.h
 class RNXBridgelessFeatureFlags : public facebook::react::ReactNativeFeatureFlagsDefaults
 {
 public:
@@ -88,10 +88,6 @@ public:
     }
 #endif                                             // USE_VIEW_COMMAND_RACE_FIX
 #if USE_UPDATE_RUNTIME_SHADOW_NODE_REFS_ON_COMMIT  // >= 0.79
-    bool updateRuntimeShadowNodeReferencesOnCommit() override
-    {
-        return true;
-    }
     bool useShadowNodeStateOnClone() override
     {
         return true;

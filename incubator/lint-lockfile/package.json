@@ -1,0 +1,42 @@
+{
+  "name": "@rnx-kit/lint-lockfile",
+  "version": "0.0.1",
+  "description": "Tool for linting lockfiles",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/incubator/lint-lockfile#readme",
+  "license": "MIT",
+  "author": {
+    "name": "Microsoft Open Source",
+    "email": "microsoftopensource@users.noreply.github.com"
+  },
+  "files": [
+    "lib/**/*.js",
+    "src/**/*.ts"
+  ],
+  "main": "src/index.ts",
+  "bin": "lib/cli.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "incubator/lint-lockfile"
+  },
+  "engines": {
+    "node": ">=18.12"
+  },
+  "scripts": {
+    "build": "rnx-kit-scripts build",
+    "format": "rnx-kit-scripts format",
+    "lint": "rnx-kit-scripts lint",
+    "test": "rnx-kit-scripts test"
+  },
+  "dependencies": {
+    "@rnx-kit/tools-workspaces": "^0.2.2",
+    "js-yaml": "^4.1.0"
+  },
+  "devDependencies": {
+    "@rnx-kit/eslint-config": "*",
+    "@rnx-kit/scripts": "*",
+    "@rnx-kit/tsconfig": "*",
+    "@types/js-yaml": "^4.0.5"
+  },
+  "experimental": true
+}

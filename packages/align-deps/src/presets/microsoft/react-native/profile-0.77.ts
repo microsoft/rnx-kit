@@ -157,6 +157,6 @@ export const profile: Profile = {
   },
   webview: {
     name: "react-native-webview",
-    version: "^13.13.1",
+    version: "^13.14.1",
   },
 };

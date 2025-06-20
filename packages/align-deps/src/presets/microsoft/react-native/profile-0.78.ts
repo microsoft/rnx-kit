@@ -126,9 +126,13 @@ export const profile: Profile = {
     name: "react-native-gesture-handler",
     version: "^2.24.0",
   },
+  "safe-area": {
+    name: "react-native-safe-area-context",
+    version: "^5.2.0",
+  },
   screens: {
     name: "react-native-screens",
-    version: "^4.9.1",
+    version: "^4.10.0",
   },
   svg: {
     name: "react-native-svg",

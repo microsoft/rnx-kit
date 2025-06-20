@@ -1,5 +1,9 @@
 import { isPackageModuleRef, parseModuleRef } from "@rnx-kit/tools-node/module";
-import { findPackage, readPackage } from "@rnx-kit/tools-node/package";
+import {
+  findPackage,
+  findPackageDir,
+  readPackage,
+} from "@rnx-kit/tools-node/package";
 import * as fs from "fs";
 import type { BasicSourceMap } from "metro-source-map";
 import * as path from "path";
@@ -142,16 +146,24 @@ export function splitSourcePath(rootPath: string, p: string): string[] {
   }
 
   const ref = parseModuleRef(absolutePath.substring(idx + modulesRoot.length));
-  if (!isPackageModuleRef(ref)) {
-    throw new Error(`Could not parse module: ${p}`);
+  if (isPackageModuleRef(ref)) {
+    return [
+      ref.scope ? `${ref.scope}/${ref.name}` : ref.name,
+      ref.path
+        ? absolutePath.substring(0, absolutePath.length - ref.path.length - 1)
+        : absolutePath,
+    ];
   }
 
-  return [
-    ref.scope ? `${ref.scope}/${ref.name}` : ref.name,
-    ref.path
-      ? absolutePath.substring(0, absolutePath.length - ref.path.length - 1)
-      : absolutePath,
-  ];
+  // This is most likely an absolute file path e.g.,
+  // `/~/node_modules/.store/react-native-virtual-3e97acc5aa/package/index.js`
+  const pkgRoot = findPackageDir(p);
+  if (pkgRoot) {
+    const manifest = readPackage(pkgRoot);
+    return [manifest.name, pkgRoot];
+  }
+
+  throw new Error(`Could not parse module: ${p}`);
 }
 
 export function parseModule(

@@ -1508,7 +1508,7 @@ PODS:
   - ReactTestApp-DevSupport (4.3.10):
     - React-Core
     - React-jsi
-  - ReactTestApp-MSAL (5.0.1):
+  - ReactTestApp-MSAL (5.0.2):
     - MSAL
   - ReactTestApp-Resources (1.0.0-dev)
   - RNWWebStorage (0.4.2):
@@ -1532,7 +1532,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNXAuth (0.3.0):
+  - RNXAuth (0.3.1):
     - React-Core
   - SocketRocket (0.7.1)
   - Yoga (0.0.0)
@@ -1763,12 +1763,12 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   boost: 7e761d76ca2ce687f7cc98e698152abd03a18f90
   DoubleConversion: cb417026b2400c8f53ae97020b2be961b59470cb
-  fast_float: 06eeec4fe712a76acc9376682e4808b05ce978b6
+  fast_float: 23278fd30b349f976d2014f4aec9e2d7bc1c3806
   FBLazyVector: e32d34492c519a2194ec9d7f5e7a79d11b73f91c
-  fmt: a40bb5bd0294ea969aaaba240a927bd33d878cdd
-  glog: eb93e2f488219332457c3c4eafd2738ddc7e80b8
+  fmt: b85d977e8fe789fd71c77123f9f4920d88c4d170
+  glog: 4d0897e15160938a2f597257740aff78251ee509
   MSAL: 1a32a1070ccf55d9641d31edd8869ea2b5a78beb
-  RCT-Folly: e78785aa9ba2ed998ea4151e314036f6c49e6d82
+  RCT-Folly: 031db300533e2dfa954cdc5a859b792d5c14ed7b
   RCTDeprecation: be794de7dc6ed8f9f7fbf525f86e7651b8b68746
   RCTRequired: a83787b092ec554c2eb6019ff3f5b8d125472b3b
   RCTTypeSafety: 48ad3c858926b1c46f46a81a58822b476e178e2c
@@ -1827,10 +1827,10 @@ SPEC CHECKSUMS:
   ReactCommon: 5008bd981a06fe63176ef815f092685ffee8f7eb
   ReactNativeHost: a541dc920fe917cb40eeb46d371b48568aa3a8a8
   ReactTestApp-DevSupport: 45d6eeb4188c286d2ebf8f77ff17ee5d66b9f9a4
-  ReactTestApp-MSAL: 90d3923624b7a11b06c113bcaa3ffc964e1c9422
+  ReactTestApp-MSAL: 473fb7d89bbfdb27c95d5238618c88728133356b
   ReactTestApp-Resources: 70da1d78d943a1fdff6362ce3f778e5b4560c95a
   RNWWebStorage: 0a5121f22dff32796a16cbd91a008659dd4ae6c4
-  RNXAuth: 2657f06d72c76bb1b4f85ba363db5e278f428165
+  RNXAuth: dcb6df2855f79d783692fa1fa58c246d36e5af89
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
   Yoga: e14bad835e12b6c7e2260fc320bd00e0f4b45add
 

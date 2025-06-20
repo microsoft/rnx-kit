@@ -37,8 +37,8 @@ const extraNodeModules = (() => {
 })();
 
 module.exports = makeMetroConfig({
-  reporter: { update: () => undefined },
-  resetCache: true,
+  cacheStores: [], // Avoids issues with deleting the cache on Windows
+  reporter: { update: () => null },
   resolver: {
     resolverMainFields: ["react-native", "module", "browser", "main"],
     extraNodeModules,
