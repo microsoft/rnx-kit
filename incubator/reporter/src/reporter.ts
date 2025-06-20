@@ -21,9 +21,16 @@ process.on("exit", () => {
 
 type PrepareMsg = (args: unknown[]) => string;
 
-export type InternalSessionData<T extends CustomData = CustomData> =
-  ReporterData<T> & SessionDetails;
+type InternalSessionData<T extends CustomData = CustomData> = ReporterData<T> &
+  SessionDetails;
 
+/**
+ * The default implementation of the Reporter interface.
+ * This class handles logging, task management, and session data tracking.
+ * It supports both synchronous and asynchronous tasks, and provides
+ * formatting and output capabilities.
+ * @internal
+ */
 export class ReporterImpl<T extends CustomData = CustomData>
   implements Reporter<T>
 {
@@ -57,8 +64,13 @@ export class ReporterImpl<T extends CustomData = CustomData>
   private output: Output;
   private formatting: Formatting;
   private prep: Record<LogLevel, PrepareMsg>;
-
   private source: InternalSessionData<T>;
+
+  // Formatting helpers
+  color: Reporter<T>["color"];
+  serializeArgs: Reporter<T>["serializeArgs"];
+  formatPackage: Reporter<T>["formatPackage"];
+  formatDuration: Reporter<T>["formatDuration"];
 
   constructor(options: ReporterOptions<T>, parent?: ReporterImpl<T>) {
     const { settings, ...sourceOptions } = options;
@@ -136,7 +148,7 @@ export class ReporterImpl<T extends CustomData = CustomData>
 
   async taskAsync<TReturn>(
     name: string | TaskOptions<T>,
-    fn: (reporter: Reporter) => Promise<TReturn>
+    fn: (reporter: Reporter<T>) => Promise<TReturn>
   ): Promise<TReturn> {
     const taskReporter = this.createTask(name);
     try {
@@ -186,14 +198,6 @@ export class ReporterImpl<T extends CustomData = CustomData>
   get data(): SessionData<T> {
     return this.source;
   }
-
-  /**
-   * Reporter Formatting helpers
-   */
-  color: Reporter<T>["color"];
-  serializeArgs: Reporter<T>["serializeArgs"];
-  formatPackage: Reporter<T>["formatPackage"];
-  formatDuration: Reporter<T>["formatDuration"];
 
   private createTask(options: string | TaskOptions<T>): ReporterImpl<T> {
     if (typeof options === "string") {

@@ -3,6 +3,7 @@ import { ReporterImpl } from "./reporter.ts";
 import type { CustomData, Reporter, ReporterOptions } from "./types.ts";
 
 export {
+  createEventHandler,
   subscribeToError,
   subscribeToFinish,
   subscribeToStart,
@@ -15,10 +16,16 @@ export {
   serializeArgs,
   updateDefaultFormatting,
 } from "./formatting.ts";
-export { enablePerformanceTracing } from "./performance.ts";
+export { updateDefaultOutput } from "./output.ts";
+export {
+  enablePerformanceTracing,
+  type PerformanceTrackingMode,
+} from "./performance.ts";
 export type {
   ErrorEvent,
+  FormattingOptions,
   LogLevel,
+  OutputOptions,
   Reporter,
   ReporterOptions,
   SessionData,

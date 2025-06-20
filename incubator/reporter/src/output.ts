@@ -11,10 +11,9 @@ import {
 } from "./levels.ts";
 import type { LogLevel, OutputOptions, OutputSettings } from "./types.ts";
 
-export type WriteFunction = (msg: string) => void;
-
+type WriteFunction = (msg: string) => void;
 type AllWrites = Record<LogLevel, WriteFunction>;
-export type WriteFunctions = Pick<AllWrites, "error"> &
+type WriteFunctions = Pick<AllWrites, "error"> &
   Partial<Omit<AllWrites, "error">>;
 
 export type Output = OutputSettings & WriteFunctions;
@@ -24,13 +23,21 @@ const writeStderr: WriteFunction = process.stderr.write.bind(process.stderr);
 
 const defaultOutput = buildOutput({ level: defaultLevel } as Output, {});
 
-export function updateOutputDefaults(overrides?: OutputOptions) {
+/**
+ * Update the output settings for all reporters which aren't overriding them in some manner
+ * @param overrides options to apply to the default output settings
+ */
+export function updateDefaultOutput(overrides?: OutputOptions) {
   // if we have overrides and they change settings regenerate the output functions
   if (overrides && outputSettingsChanging(defaultOutput, overrides)) {
     Object.assign(defaultOutput, getOutput(overrides));
   }
 }
 
+/**
+ * Given baseline output settings, return a new output object with values updated if needed.
+ * @internal
+ */
 export function getOutput(
   overrides?: OutputOptions,
   baseline: Output | undefined = defaultOutput
@@ -58,6 +65,7 @@ function buildOutput(baseline: Output, overrides: OutputOptions) {
 }
 
 /**
+ * @internal
  * @param previous original settings for the reporter, either defaults or parent settings
  * @param overrides new options being applied to the reporter
  * @returns whether or not the output settings are changing
@@ -145,6 +153,9 @@ function combineWrites(
   return target;
 }
 
+/**
+ * @internal only exported for testing purposes
+ */
 export function getFileStream(
   settings: OutputSettings["file"]
 ): fs.WriteStream | undefined {

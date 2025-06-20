@@ -102,6 +102,12 @@ function createColorFunction(settings: FormattingSettings): Reporter["color"] {
   };
 }
 
+/**
+ * @internal
+ * @param overrides new options, if any, to apply to the formatting
+ * @param baseline original formatting settings to use as a base
+ * @returns either the original formatting settings if there are no overrides, or a new formatting object with the overrides applied
+ */
 export function getFormatting(
   overrides?: FormattingOptions,
   baseline: Formatting = formattingDefault
@@ -124,6 +130,10 @@ export function getFormatting(
   return baseline;
 }
 
+/**
+ * update the default formatting settings with new options, for all reporters which aren't overriding them in some manner.
+ * @param options optional formatting options to apply, if any
+ */
 export function updateDefaultFormatting(options?: FormattingOptions) {
   const newDefault = getFormatting(options);
   if (newDefault !== formattingDefault) {
@@ -131,22 +141,42 @@ export function updateDefaultFormatting(options?: FormattingOptions) {
   }
 }
 
+/**
+ * Color the given text given the current global default formatting settings.
+ * @param text text to color
+ * @param type what type of color to apply, one of the ColorType values
+ * @returns text with the specified color applied, or unchanged if the type is "none"
+ */
 export function colorText(text: string, type: ColorType): string {
   return formattingDefault.color(text, type);
 }
 
+/**
+ * @param time duration in milliseconds to format
+ * @returns the duration formatted as a string, with the unit (ms, s, m) appended
+ */
 export function formatDuration(time: number): string {
   return formattingDefault.formatDuration(time);
 }
 
+/**
+ * @param moduleName name of the package to format, either scoped or unscoped
+ * @returns a formatted package name, with scope and package name colored appropriately
+ */
 export function formatPackage(moduleName: string): string {
   return formattingDefault.formatPackage(moduleName);
 }
 
+/**
+ * @param args list of args to serialize, using the current default inspect options
+ */
 export function serializeArgs(args: unknown[]): string {
   return formattingDefault.serializeArgs(args);
 }
 
+/**
+ * @internal
+ */
 export function createFormattingFunctions(
   settings: FormattingSettings
 ): ReporterFormatting {

@@ -61,10 +61,13 @@ export type Reporter<TData extends CustomData = CustomData> =
      * @param name name of this task, or more comprehensive options object
      * @param fn function to execute as a task
      */
-    task<T>(name: string | TaskOptions, fn: (reporter: Reporter) => T): T;
+    task<T>(
+      name: string | TaskOptions<TData>,
+      fn: (reporter: Reporter<TData>) => T
+    ): T;
     taskAsync<T>(
-      name: string | TaskOptions,
-      fn: (reporter: Reporter) => Promise<T>
+      name: string | TaskOptions<TData>,
+      fn: (reporter: Reporter<TData>) => Promise<T>
     ): Promise<T>;
 
     /**

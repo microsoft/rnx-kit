@@ -4,7 +4,7 @@ import {
   getFileStream,
   getOutput,
   outputSettingsChanging,
-  updateOutputDefaults,
+  updateDefaultOutput,
 } from "../src/output";
 import type { OutputSettings } from "../src/types";
 
@@ -16,7 +16,7 @@ describe("output", () => {
   });
 
   it("updateOutputDefaults does not throw", () => {
-    expect(() => updateOutputDefaults({ level: "warn" })).not.toThrow();
+    expect(() => updateDefaultOutput({ level: "warn" })).not.toThrow();
   });
 
   it("outputSettingsChanging detects changes", () => {

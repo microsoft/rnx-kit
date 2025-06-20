@@ -11,13 +11,6 @@ export type PerformanceTrackingMode =
   | "verbose"
   | "file-only";
 
-export type PerformanceTrackerOptions = {
-  enabled?: boolean;
-  file?: string;
-  verbose?: boolean;
-  subProcesses?: boolean;
-};
-
 class PerformanceTracker {
   private reporter: ReporterImpl;
   private verbose: boolean;
@@ -152,6 +145,9 @@ export function enablePerformanceTracing(
   }
 }
 
+/**
+ * @internal
+ */
 export function checkPerformanceEnv() {
   if (!checkedEnv) {
     checkedEnv = true;
@@ -165,6 +161,9 @@ export function checkPerformanceEnv() {
   }
 }
 
+/**
+ * @internal
+ */
 export function serializePerfOptions(
   mode: PerformanceTrackingMode,
   file?: string
@@ -180,6 +179,9 @@ function validMode(mode: string): PerformanceTrackingMode {
   return "disabled";
 }
 
+/**
+ * @internal
+ */
 export function decodePerformanceOptions(
   serialized?: string
 ): [PerformanceTrackingMode, string | undefined] {
