@@ -1,5 +1,5 @@
-import chalk from "chalk";
 import { subscribeToFinish, subscribeToStart } from "./events.ts";
+import { padString } from "./formatting.ts";
 import { ReporterImpl } from "./reporter.ts";
 import type { ReporterOptions, SessionData } from "./types.ts";
 
@@ -29,7 +29,7 @@ class PerformanceTracker {
     const settings: ReporterOptions["settings"] = {
       level: this.verbose ? "verbose" : "log",
       colors: {
-        labels: chalk.green.bold,
+        label: 163,
       },
     };
     // set up file logging if requested, if loading from env open the stream in append mode
@@ -47,7 +47,7 @@ class PerformanceTracker {
     // now create the reporter instance
     this.reporter = new ReporterImpl({
       name: "PerformanceTracker",
-      label: chalk.magenta("PERF:"),
+      label: "PERF:",
       packageName: "@rnx-kit/reporter",
       settings,
     });
@@ -59,9 +59,11 @@ class PerformanceTracker {
   }
 
   private getName(event: SessionData) {
-    const name = event.name ? `${chalk.bold(event.name)}:` : "";
+    const name = event.name
+      ? `${this.reporter.color(event.name, "highlight2")}:`
+      : "";
     if (event.role === "reporter") {
-      return `${this.reporter.format.packageFull(event.packageName)}:${name}`;
+      return `${this.reporter.formatPackage(event.packageName)}: ${name}`;
     }
     return name;
   }
@@ -69,8 +71,8 @@ class PerformanceTracker {
   private getLabel(event: SessionData) {
     const prefix =
       event.role === "reporter"
-        ? `${chalk.bold.blue("Reporter")}:`
-        : `${"+".repeat(event.depth)}${chalk.bold.green("Task")}:`;
+        ? `${this.reporter.color("Reporter", "highlight1")}:`
+        : `${"+".repeat(event.depth)}${this.reporter.color("Task", "highlight2")}:`;
     return `${prefix} ${this.getName(event)}`;
   }
 
@@ -99,33 +101,31 @@ class PerformanceTracker {
   private onTaskCompleted(event: SessionData) {
     const reporter = this.reporter;
     const args: unknown[] = [this.getLabel(event)];
-    args.push(`Finished (${this.reporter.format.duration(event.duration)})`);
+    args.push(`Finished (${this.reporter.formatDuration(event.duration)})`);
     if (event.errors && event.errors.length > 0) {
       args.push(`with ${event.errors.length} error(s)`);
     }
     if (event.reason === "process-exit") {
-      args.push(chalk.dim("(process exit)"));
+      args.push(this.reporter.color("(process exit)", "verboseText"));
     } else if (event.reason === "error") {
       if (this.verbose) {
-        args.push(chalk.red("on error:\n", event.result));
+        args.push(this.reporter.color("on error:\n", "errorPrefix"));
       } else {
-        args.push(`(${chalk.red("error result")})`);
+        args.push(`(${this.reporter.color("error result", "errorPrefix")})`);
       }
     }
+    const opKeys = Object.keys(event.operations || {});
+    if (opKeys.length > 0) {
+      args.push(`[${opKeys.length} sub-ops]`);
+    }
     reporter.log(...args);
-    if (event.operations) {
-      const opKeys = Object.keys(event.operations);
-      if (opKeys.length > 0) {
-        reporter.log(`Logged ${opKeys.length} distinct sub-operations:`);
-        const duration = reporter.format.duration;
-        for (const key of opKeys) {
-          const operation = chalk.bold(key);
-          const { elapsed, calls } = event.operations[key];
-
-          reporter.log(
-            `  ${operation}: ${calls} calls in ${duration(elapsed)}`
-          );
-        }
+    if (event.operations && opKeys.length > 0) {
+      for (const key of opKeys) {
+        const { elapsed, calls } = event.operations[key];
+        const duration = padString(reporter.formatDuration(elapsed), 7);
+        reporter.log(
+          `${" ".repeat(event.depth)}- ${duration} |${padString(String(calls), 5)} | ${this.reporter.color(key, "highlight3")}`
+        );
       }
     }
   }

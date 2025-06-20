@@ -1,12 +1,11 @@
 import { errorEvent, finishEvent, startEvent } from "./events.ts";
-import { getFormatting, noChange, type Formatting } from "./formatting.ts";
+import { getFormatting, type Formatting } from "./formatting.ts";
 import { allLogLevels } from "./levels.ts";
 import { getOutput, type Output } from "./output.ts";
 import type {
-  ColorSettings,
+  ColorType,
   CustomData,
   FinishReason,
-  FormatHelper,
   LogLevel,
   Reporter,
   ReporterData,
@@ -14,14 +13,13 @@ import type {
   SessionData,
   SessionDetails,
   TaskOptions,
-  TextTransform,
 } from "./types.ts";
 
 process.on("exit", () => {
   ReporterImpl.handleProcessExit();
 });
 
-type PrepareArgs = (args: unknown[]) => unknown[];
+type PrepareMsg = (args: unknown[]) => string;
 
 export type InternalSessionData<T extends CustomData = CustomData> =
   ReporterData<T> & SessionDetails;
@@ -30,6 +28,7 @@ export class ReporterImpl<T extends CustomData = CustomData>
   implements Reporter<T>
 {
   private static activeReporters: ReporterImpl[] = [];
+  private static processReporter: ReporterImpl | undefined = undefined;
 
   static handleProcessExit() {
     // send process exit event to all reporters and tasks
@@ -45,9 +44,19 @@ export class ReporterImpl<T extends CustomData = CustomData>
     }
   }
 
+  static globalReporter(): ReporterImpl {
+    if (!ReporterImpl.processReporter) {
+      ReporterImpl.processReporter = new ReporterImpl({
+        name: `Process: ${process.pid}`,
+        packageName: "@rnx-kit/reporter",
+      });
+    }
+    return ReporterImpl.processReporter;
+  }
+
   private output: Output;
   private formatting: Formatting;
-  private prepArgs: Record<LogLevel, PrepareArgs>;
+  private prep: Record<LogLevel, PrepareMsg>;
 
   private source: InternalSessionData<T>;
 
@@ -57,7 +66,13 @@ export class ReporterImpl<T extends CustomData = CustomData>
     this.output = parent?.output || getOutput(settings);
     this.formatting = parent?.formatting || getFormatting(settings);
 
-    this.prepArgs = this.buildPrefixes(options.label);
+    // pull in the formatting helpers
+    this.color = this.formatting.color;
+    this.serializeArgs = this.formatting.serializeArgs;
+    this.formatPackage = this.formatting.formatPackage;
+    this.formatDuration = this.formatting.formatDuration;
+
+    this.prep = this.buildMsgPrepFunctions(options.label);
     const parentSource = parent?.source;
 
     this.source = {
@@ -77,42 +92,31 @@ export class ReporterImpl<T extends CustomData = CustomData>
 
   error(...args: unknown[]): void {
     this.onError(args);
-    this.output.error(
-      this.prepareMessage(this.colors.error.text, this.prepArgs.error(args))
-    );
+    this.output.error(this.prep.error(args));
   }
 
   errorRaw(...args: unknown[]): void {
     this.onError(args);
-    this.output.error(this.prepareMessage(undefined, args));
+    this.output.error(this.serializeArgs(args));
   }
 
   throwError(...args: unknown[]): never {
     this.onError(args);
-    const msg = this.prepareMessage(
-      this.colors.error.text,
-      this.prepArgs.error(args)
-    );
+    const msg = this.prep.error(args);
     this.output.error(msg);
     throw new Error(msg);
   }
 
   warn(...args: unknown[]): void {
-    this.output.warn?.(
-      this.prepareMessage(this.colors.warn.text, this.prepArgs.warn(args))
-    );
+    this.output.warn?.(this.prep.warn(args));
   }
 
   log(...args: unknown[]): void {
-    this.output.log?.(
-      this.prepareMessage(this.colors.log.text, this.prepArgs.log(args))
-    );
+    this.output.log?.(this.prep.log(args));
   }
 
   verbose(...args: unknown[]): void {
-    this.output.verbose?.(
-      this.prepareMessage(this.colors.verbose.text, this.prepArgs.verbose(args))
-    );
+    this.output.verbose?.(this.prep.verbose(args));
   }
 
   task<TReturn>(
@@ -183,13 +187,13 @@ export class ReporterImpl<T extends CustomData = CustomData>
     return this.source;
   }
 
-  get format(): FormatHelper {
-    return this.formatting.format;
-  }
-
-  get colors(): ColorSettings {
-    return this.formatting.colors;
-  }
+  /**
+   * Reporter Formatting helpers
+   */
+  color: Reporter<T>["color"];
+  serializeArgs: Reporter<T>["serializeArgs"];
+  formatPackage: Reporter<T>["formatPackage"];
+  formatDuration: Reporter<T>["formatDuration"];
 
   private createTask(options: string | TaskOptions<T>): ReporterImpl<T> {
     if (typeof options === "string") {
@@ -223,35 +227,34 @@ export class ReporterImpl<T extends CustomData = CustomData>
     op.calls += 1;
   }
 
-  private buildPrefixes(label?: string) {
+  private buildMsgPrepFunctions(label?: string): Record<LogLevel, PrepareMsg> {
     // color the label if requested
-    if (label && this.colors.labels) {
-      label = this.colors.labels(label);
+    if (label) {
+      label = this.color(label, "label");
     }
-    const prefixes = {} as Record<LogLevel, PrepareArgs>;
+    const serialize = this.serializeArgs;
+    const colorText = this.color;
+    const prefixes = {} as Record<LogLevel, PrepareMsg>;
     for (const level of allLogLevels) {
       const prefix = this.formatting.prefixes[level];
+      const colorTextType = (level + "Text") as ColorType;
       if (prefix || label) {
-        const colorPrefix = this.colors[level].prefix ?? noChange;
-        const prepend: unknown[] = prefix ? [colorPrefix(prefix)] : [];
+        const prepend: unknown[] = [];
+        if (prefix) {
+          prepend.push(this.color(prefix, (level + "Prefix") as ColorType));
+        }
         if (label) {
           prepend.push(label);
         }
         prefixes[level] = (args: unknown[]) => {
-          return prepend.concat(...args);
+          return colorText(serialize([...prepend, ...args]), colorTextType);
         };
       } else {
-        prefixes[level] = noChange;
+        prefixes[level] = (args: unknown[]) => {
+          return colorText(serialize(args), colorTextType);
+        };
       }
     }
     return prefixes;
-  }
-
-  private prepareMessage(
-    colorText: TextTransform | undefined,
-    args: unknown[]
-  ): string {
-    const color = colorText ?? noChange;
-    return color(this.format.serialize(args));
   }
 }
