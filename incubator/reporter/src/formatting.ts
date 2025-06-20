@@ -4,22 +4,33 @@ import {
   type InspectOptions,
   stripVTControlCharacters,
 } from "node:util";
-import { allLogLevels } from "./levels.ts";
 import type {
-  ColorSettings,
-  DeepPartial,
-  FormatHelper,
+  ColorType,
+  ColorValue,
   FormattingOptions,
   FormattingSettings,
+  Reporter,
+  ReporterFormatting,
 } from "./types.ts";
 
 export function noChange<T>(arg: T) {
   return arg;
 }
 
-export type Formatting = FormattingSettings & {
-  format: FormatHelper;
-};
+export type Formatting = FormattingSettings & ReporterFormatting;
+
+/**
+ * Some ANSI 256 color values by tone for convenience, organized by hue from dark to light. Generally mid-toned so they are
+ * discernable on both light and dark backgrounds.
+ * - orange: 166, 208, 214
+ * - green: 22, 28, 34, 40, 46
+ * - cyan-blue: 24, 31, 38, 45
+ * - cyan: 37, 44, 51, 87
+ * - blue-green: 36, 43, 50 - one shift towards green from cyan
+ * - magenta: 163, 201, 207
+ * - purple: 128, 129, 135
+ * -
+ */
 
 const defaultFormatSettings: FormattingSettings = {
   inspectOptions: {
@@ -28,16 +39,18 @@ const defaultFormatSettings: FormattingSettings = {
     compact: true,
   },
   colors: {
-    error: { prefix: chalk.red.bold },
-    warn: { prefix: chalk.yellowBright.bold },
-    log: {},
-    verbose: { text: chalk.dim },
-    labels: chalk.bold,
-    pkgName: chalk.bold.cyan,
-    pkgScope: chalk.bold.blue,
-    path: chalk.blue,
-    duration: chalk.green,
-    durationUnits: chalk.greenBright,
+    duration: 34, // green bright
+    durationUnits: 145, // chalk dim setting
+    highlight1: 37, // cyan dark
+    highlight2: 38, // cyan-blue
+    highlight3: 45, // cyan-blue light
+    label: 36, // blue-green,
+    errorPrefix: "red", // chalk red value
+    package: 208, // orange light
+    path: 43, // blue-green
+    scope: 166, // orange mid
+    warnPrefix: "yellowBright", // chalk yellow bright value
+    verboseText: "dim", // chalk dim setting
   },
   prefixes: {
     error: "ERROR: ⛔",
@@ -45,109 +58,105 @@ const defaultFormatSettings: FormattingSettings = {
   },
 };
 
-const defaultFormatting: Formatting = {
+const formattingDefault: Formatting = {
   ...defaultFormatSettings,
-  format: createFormatHelper(defaultFormatSettings),
+  ...createFormattingFunctions(defaultFormatSettings),
 };
+
+function applyColorValue(text: string, value: ColorValue): string {
+  if (typeof value === "number") {
+    return chalk.ansi256(value)(text);
+  }
+  if (value.startsWith("#")) {
+    return chalk.hex(value)(text);
+  } else {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const func = (chalk as any)[value];
+    if (typeof func === "function") {
+      return func(text);
+    }
+  }
+  return text;
+}
+
+function createColorFunction(settings: FormattingSettings): Reporter["color"] {
+  const { colors: colorSetting } = settings;
+  if (settings.disableColors) {
+    return noChange;
+  }
+
+  return (text: string, colorType: ColorType) => {
+    if (colorType !== "none") {
+      const setting = colorSetting[colorType];
+      if (setting) {
+        if (Array.isArray(setting)) {
+          for (const color of setting) {
+            text = applyColorValue(text, color);
+          }
+        } else {
+          text = applyColorValue(text, setting);
+        }
+      }
+    }
+    return text;
+  };
+}
 
 export function getFormatting(
   overrides?: FormattingOptions,
-  baseline: Formatting = defaultFormatting
+  baseline: Formatting = formattingDefault
 ): Formatting {
   if (overrides) {
-    const { colors, inspectOptions, prefixes } = overrides;
-    const rebuildFormat = colors || inspectOptions;
-
-    // if settings have changed, create a new formatting object
-    if (rebuildFormat || prefixes) {
-      const result = {
-        colors: mergeColors(baseline.colors, colors),
-        inspectOptions: mergeInspectOptions(
-          baseline.inspectOptions,
-          inspectOptions
-        ),
-        prefixes: mergePrefixes(baseline.prefixes, prefixes),
-        format: baseline.format,
-      };
-      // update the format helper if needed, otherwise carry it forward
-      if (rebuildFormat) {
-        result.format = createFormatHelper(result);
-      }
-      return result;
+    const { colors, inspectOptions, prefixes } = baseline;
+    const disableColors = overrides.disableColors ?? baseline.disableColors;
+    const result = {
+      disableColors,
+      inspectOptions: { ...inspectOptions, ...overrides.inspectOptions },
+      colors: { ...colors, ...overrides.colors },
+      prefixes: { ...prefixes, ...overrides.prefixes },
+    } as Formatting;
+    if (disableColors) {
+      inspectOptions.colors = false;
     }
+    Object.assign(result, createFormattingFunctions(result));
+    return result;
   }
   return baseline;
 }
 
 export function updateDefaultFormatting(options?: FormattingOptions) {
   const newDefault = getFormatting(options);
-  if (newDefault !== defaultFormatting) {
-    defaultFormatting.colors = newDefault.colors;
-    defaultFormatting.inspectOptions = newDefault.inspectOptions;
-    defaultFormatting.prefixes = newDefault.prefixes;
-    defaultFormatting.format = newDefault.format;
+  if (newDefault !== formattingDefault) {
+    Object.assign(formattingDefault, newDefault);
   }
 }
 
-export function disableColors() {
-  const disableMsgType = { text: stripVTControlCharacters };
-  updateDefaultFormatting({
-    inspectOptions: { colors: false },
-    colors: {
-      error: disableMsgType,
-      warn: disableMsgType,
-      log: disableMsgType,
-      verbose: disableMsgType,
-    },
-  });
+export function colorText(text: string, type: ColorType): string {
+  return formattingDefault.color(text, type);
 }
 
-export function defaultColors(): Readonly<ColorSettings> {
-  return defaultFormatting.colors;
+export function formatDuration(time: number): string {
+  return formattingDefault.formatDuration(time);
 }
 
-export function defaultFormat(): Readonly<FormatHelper> {
-  return defaultFormatting.format;
+export function formatPackage(moduleName: string): string {
+  return formattingDefault.formatPackage(moduleName);
 }
 
-function mergePrefixes(
-  base: FormattingSettings["prefixes"],
-  override?: Partial<FormattingSettings["prefixes"]>
-) {
-  return override ? { ...base, ...override } : base;
+export function serializeArgs(args: unknown[]): string {
+  return formattingDefault.serializeArgs(args);
 }
 
-function mergeInspectOptions(
-  base: InspectOptions,
-  overrides?: Partial<InspectOptions>
-): InspectOptions {
-  return overrides ? { ...base, ...overrides } : base;
-}
-
-function mergeColors(
-  base: ColorSettings,
-  overrides?: DeepPartial<ColorSettings>
-): ColorSettings {
-  if (overrides) {
-    const result = { ...base, ...overrides };
-    for (const level of allLogLevels) {
-      if (overrides[level]) {
-        result[level] = { ...base[level], ...overrides[level] };
-      }
-    }
-  }
-  return base;
-}
-
-export function createFormatHelper(settings: FormattingSettings): FormatHelper {
-  const { colors, inspectOptions } = settings;
+export function createFormattingFunctions(
+  settings: FormattingSettings
+): ReporterFormatting {
+  const { inspectOptions } = settings;
+  const color = createColorFunction(settings);
   return {
-    packageFull: (pkg: string) => formatPackageName(colors, pkg),
-    packageParts: (name: string, scope?: string) =>
-      formatPackageParts(colors, name, scope),
-    path: (pathValue: string) => colors.path(pathValue),
-    duration: (time: number) => formatDuration(colors, time),
-    serialize: (args: unknown[]) => serializeArgs(inspectOptions, args),
+    color,
+    serializeArgs: (args: unknown[]) => serializeArgsImpl(inspectOptions, args),
+    formatDuration: (time: number) => formatDurationImpl(color, time),
+    formatPackage: (pkg: string) => formatPackageImpl(color, pkg),
   };
 }
 
@@ -156,15 +165,11 @@ export function createFormatHelper(settings: FormattingSettings): FormatHelper {
  * @param duration duration in milliseconds
  * @returns an tuple of the formatted numeric string and the unit (seconds or milliseconds)
  */
-export function formatDuration(
-  colors: ColorSettings,
+function formatDurationImpl(
+  color: Reporter["color"],
   duration: number,
   secondToMinuteCutoff = 120
 ): string {
-  const {
-    duration: colorTime = noChange,
-    durationUnits: timeUnits = noChange,
-  } = colors;
   let unit = "ms";
   if (duration > secondToMinuteCutoff * 1000) {
     unit = "m";
@@ -174,26 +179,19 @@ export function formatDuration(
     duration /= 1000;
   }
   const decimalPlaces = Math.max(0, 2 - Math.floor(Math.log10(duration)));
-  return `${colorTime(duration.toFixed(decimalPlaces))}${timeUnits(unit)}`;
+  return `${color(duration.toFixed(decimalPlaces), "duration")}${color(unit, "durationUnits")}`;
 }
 
-function formatPackageName(colors: ColorSettings, moduleName: string) {
+function formatPackageImpl(color: Reporter["color"], moduleName: string) {
   if (moduleName.startsWith("@")) {
     const parts = moduleName.split("/");
     if (parts.length > 1) {
-      return formatPackageParts(colors, parts.slice(1).join("/"), parts[0]);
+      const scope = parts[0];
+      const pkg = parts.slice(1).join("/");
+      return `${color(scope, "scope")}${color("/" + pkg, "package")}`;
     }
   }
-  return formatPackageParts(colors, moduleName);
-}
-
-function formatPackageParts(
-  colors: ColorSettings,
-  name: string,
-  scope?: string
-) {
-  const { pkgName = noChange, pkgScope = noChange } = colors;
-  return scope ? `${pkgScope(scope)}/${pkgName(name)}` : pkgName(name);
+  return color(moduleName, "package");
 }
 
 /**
@@ -201,7 +199,7 @@ function formatPackageParts(
  * @param args args list to serialize
  * @returns a single string with arguments joined together with spaces, terminated with a newline
  */
-export function serializeArgs(
+function serializeArgsImpl(
   inspectOptions: InspectOptions,
   args: unknown[]
 ): string {
@@ -212,4 +210,33 @@ export function serializeArgs(
     .join(" ");
   msg += "\n";
   return msg;
+}
+
+/**
+ * @param str target string to pad with spaces
+ * @param length desired length
+ * @param end pad at the end instead of the start
+ * @returns a string padded with spaces to the specified length, ignoring VT control characters
+ */
+export function padString(
+  str: string,
+  length: number,
+  align: "left" | "right" | "center" = "right"
+): string {
+  const undecorated = stripVTControlCharacters(str);
+  if (undecorated.length < length) {
+    const filler = " ".repeat(length - undecorated.length);
+    if (align === "left") {
+      return str + filler;
+    }
+    if (align === "right") {
+      return filler + str;
+    } else if (align === "center") {
+      const half = Math.floor(filler.length / 2);
+      return filler.slice(0, half) + str + filler.slice(half);
+    } else {
+      return str + filler;
+    }
+  }
+  return str;
 }

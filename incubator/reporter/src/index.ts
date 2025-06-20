@@ -8,9 +8,11 @@ export {
   subscribeToStart,
 } from "./events.ts";
 export {
-  defaultColors,
-  defaultFormat,
-  disableColors,
+  colorText,
+  formatDuration,
+  formatPackage,
+  padString,
+  serializeArgs,
   updateDefaultFormatting,
 } from "./formatting.ts";
 export { enablePerformanceTracing } from "./performance.ts";
@@ -28,4 +30,9 @@ export function createReporter<T extends CustomData = CustomData>(
 ): Reporter<T> {
   checkPerformanceEnv();
   return new ReporterImpl<T>(options);
+}
+
+export function globalReporter(): Reporter {
+  checkPerformanceEnv();
+  return ReporterImpl.globalReporter();
 }

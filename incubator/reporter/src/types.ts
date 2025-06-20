@@ -12,87 +12,109 @@ export type FinishReason = "complete" | "error" | "process-exit";
 export type CustomData = Record<string, unknown>;
 export type ErrorData = unknown[];
 
+// colors can be a string containing a hex code, a named color from chalk, or an ANSI 256 color code
+export type ColorValue = string | number;
+
+// configurable color types, these are used to format output in the reporter
+export type ColorType = ColorTypeNone | ColorTypeValues;
+
 /**
  * An output option can either be a function used to write to a stream or logfile, or a string which will be
  * used to open a logfile.
  */
 export type OutputOption = string | LogFunction;
 
-export type Reporter<TData extends CustomData = CustomData> = {
+export type Reporter<TData extends CustomData = CustomData> =
+  ReporterFormatting & {
+    /**
+     * Report an error, logging it to the error output and notifying any listeners
+     */
+    error: LogFunction;
+
+    /**
+     * Send a warning message to the error output. This is equivalent to console.warn
+     */
+    warn: LogFunction;
+
+    /**
+     * General purpose logging function, on by default. Similar in scope to console.log or console.info
+     */
+    log: LogFunction;
+
+    /**
+     * Tracing output, used for verbose logging, requires a higher log level to be enabled.
+     */
+    verbose: LogFunction;
+
+    /**
+     * Report an error and throw it, this will stop execution of the current task or reporter.
+     */
+    throwError: LogFunction;
+
+    /**
+     * Tasks are hierarchical operations that can be timed. Each task is tracked separately and results
+     * will not be aggregated. This is used for starting a big operations that may have multiple steps.
+     *
+     * A sub-reporter will be passed to the function, this can be ignored or used to report errors or
+     * launch additional tasks or actions that will be associated with this task.
+     *
+     * @param name name of this task, or more comprehensive options object
+     * @param fn function to execute as a task
+     */
+    task<T>(name: string | TaskOptions, fn: (reporter: Reporter) => T): T;
+    taskAsync<T>(
+      name: string | TaskOptions,
+      fn: (reporter: Reporter) => Promise<T>
+    ): Promise<T>;
+
+    /**
+     * Time operations that happen within the scope of a task or reporter. These calls are aggregated by name within that scope.
+     *
+     * @param label label to use for this operation
+     * @param fn function to execute as an operation
+     */
+    time<T>(label: string, fn: () => T): T;
+    timeAsync<T>(label: string, fn: () => Promise<T>): Promise<T>;
+
+    /**
+     * Finish execution of the reporter or task, recording the result and sending a completion event. Things will continue to work
+     * but no further completion events will be sent.
+     *
+     * @param result result of the task or reporter, can be any type
+     * @param processExit if true, records that this was finished as the result of the process exiting.
+     */
+    finish: (result: unknown, reason?: FinishReason) => void;
+
+    /**
+     * Data about the session, available as it is tracked
+     */
+    readonly data: SessionData<TData>;
+  };
+
+/**
+ * Formatting functions available on the reporter, these use the current settings of the reporter
+ */
+export type ReporterFormatting = {
   /**
-   * Report an error, logging it to the error output and notifying any listeners
+   * color the given text string using the given reporter color type
    */
-  error: LogFunction;
+  color: (text: string, type: ColorType) => string;
 
   /**
-   * Send a warning message to the error output. This is equivalent to console.warn
+   * Serialize arguments to a string, using the reporter's inspect options
    */
-  warn: LogFunction;
+  serializeArgs: (args: unknown[]) => string;
 
   /**
-   * General purpose logging function, on by default. Similar in scope to console.log or console.info
+   * Format a package name, including scope if present, using the reporter's color settings
    */
-  log: LogFunction;
+  formatPackage: (pkg: string) => string;
 
   /**
-   * Tracing output, used for verbose logging, requires a higher log level to be enabled.
+   * Format a duration as the reporter would, scaling the time value to a significant range, keeping the
+   * significant digits relatively low, and coloring as appropriate.
    */
-  verbose: LogFunction;
-
-  /**
-   * Report an error and throw it, this will stop execution of the current task or reporter.
-   */
-  throwError: LogFunction;
-
-  /**
-   * Tasks are hierarchical operations that can be timed. Each task is tracked separately and results
-   * will not be aggregated. This is used for starting a big operations that may have multiple steps.
-   *
-   * A sub-reporter will be passed to the function, this can be ignored or used to report errors or
-   * launch additional tasks or actions that will be associated with this task.
-   *
-   * @param name name of this task, or more comprehensive options object
-   * @param fn function to execute as a task
-   */
-  task<T>(name: string | TaskOptions, fn: (reporter: Reporter) => T): T;
-  taskAsync<T>(
-    name: string | TaskOptions,
-    fn: (reporter: Reporter) => Promise<T>
-  ): Promise<T>;
-
-  /**
-   * Time operations that happen within the scope of a task or reporter. These calls are aggregated by name within that scope.
-   *
-   * @param label label to use for this operation
-   * @param fn function to execute as an operation
-   */
-  time<T>(label: string, fn: () => T): T;
-  timeAsync<T>(label: string, fn: () => Promise<T>): Promise<T>;
-
-  /**
-   * Finish execution of the reporter or task, recording the result and sending a completion event. Things will continue to work
-   * but no further completion events will be sent.
-   *
-   * @param result result of the task or reporter, can be any type
-   * @param processExit if true, records that this was finished as the result of the process exiting.
-   */
-  finish: (result: unknown, reason?: FinishReason) => void;
-
-  /**
-   * Helper for formatting parts of the output, such as package names, paths, durations, and timestamps.
-   * Will apply colors and formatting based on the reporter's settings.
-   */
-  readonly format: FormatHelper;
-
-  /**
-   * Color settings, provided to help color input string in a standard way.
-   */
-  readonly colors: ColorSettings;
-
-  /**
-   * Data about the session, available as it is tracked
-   */
-  readonly data: SessionData<TData>;
+  formatDuration: (time: number) => string;
 };
 
 export type FormatHelper = {
@@ -121,32 +143,17 @@ export type OutputSettings = {
 };
 export type OutputOptions = Partial<OutputSettings>;
 
-export type ColorSettings = Record<
-  LogLevel,
-  { prefix?: TextTransform; text?: TextTransform }
-> & {
-  // label coloring for the reporter and tasks labels
-  labels: TextTransform;
-
-  // colors for the package name and scope
-  pkgName: TextTransform;
-  pkgScope: TextTransform;
-
-  // color to use when formatting paths
-  path: TextTransform;
-
-  // colors for times and time units
-  duration: TextTransform;
-  durationUnits: TextTransform;
-};
-export type ColorOptions = Partial<ColorSettings>;
+export type ColorSettings = Record<ColorTypeValues, ColorValue | ColorValue[]>;
 
 export type FormattingSettings = {
+  // whether colors should be disabled for the console, will override inspect options if disabled
+  disableColors?: boolean;
+
   // options used to serialize args to strings, this is the internal mechanism used in console.log and similar functions
   inspectOptions: InspectOptions;
 
   // color settings for the reporter, used to format output
-  colors: ColorSettings;
+  colors: Partial<ColorSettings>;
 
   // prefixes for each log level, used to format output
   prefixes: Partial<Record<LogLevel, string>>;
@@ -241,3 +248,24 @@ export type ErrorEvent = {
    */
   args: ErrorData;
 };
+
+export type ColorTypeNone = "none";
+
+export type ColorTypeValues =
+  | "duration"
+  | "durationUnits"
+  | "errorPrefix"
+  | "errorText"
+  | "highlight1"
+  | "highlight2"
+  | "highlight3"
+  | "label"
+  | "logPrefix"
+  | "logText"
+  | "package"
+  | "path"
+  | "scope"
+  | "verbosePrefix"
+  | "verboseText"
+  | "warnPrefix"
+  | "warnText";
