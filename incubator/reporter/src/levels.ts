@@ -32,9 +32,14 @@ export function supportsLevel(
   level: LogLevel,
   optionLevel: LogLevel = defaultLevel
 ): boolean {
-  const levelValue = Math.min(0, allLogLevels.indexOf(level));
-  const setting = Math.min(0, allLogLevels.indexOf(optionLevel));
-  return levelValue <= setting;
+  const levelValue = allLogLevels.indexOf(level);
+  const settingValue = allLogLevels.indexOf(optionLevel);
+  if (levelValue >= 0 && settingValue >= 0) {
+    // both settings valid, check precedence
+    return levelValue <= settingValue;
+  }
+  // error is always supported, otherwise return false if one of the values wasn't recognized
+  return level === "error";
 }
 
 /**
