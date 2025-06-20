@@ -4513,7 +4513,7 @@ __metadata:
     "@rnx-kit/jest-preset": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
-    chalk: "npm:^4.0.0"
+    chalk: "npm:^4.1.0"
   languageName: unknown
   linkType: soft
 
