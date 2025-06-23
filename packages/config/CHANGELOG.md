@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/config
 
+## 0.7.4
+
+### Patch Changes
+
+- 82d8250: Added config definition for `@rnx-kit/lint-lockfile`
+
 ## 0.7.3
 
 ### Patch Changes

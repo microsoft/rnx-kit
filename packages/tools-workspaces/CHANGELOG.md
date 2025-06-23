@@ -1,5 +1,11 @@
 # @rnx-kit/tools-workspaces
 
+## 0.2.3
+
+### Patch Changes
+
+- 9a65042: Added getter that returns the lockfile path
+
 ## 0.2.2
 
 ### Patch Changes

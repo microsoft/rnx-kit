@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/lint-lockfile",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Tool for linting lockfiles",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/incubator/lint-lockfile#readme",
   "license": "MIT",
@@ -29,8 +29,8 @@
     "test": "rnx-kit-scripts test"
   },
   "dependencies": {
-    "@rnx-kit/config": "^0.7.3",
-    "@rnx-kit/tools-workspaces": "^0.2.2",
+    "@rnx-kit/config": "^0.7.4",
+    "@rnx-kit/tools-workspaces": "^0.2.3",
     "js-yaml": "^4.1.0"
   },
   "devDependencies": {
