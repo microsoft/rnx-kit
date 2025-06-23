@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/config",
-  "version": "0.7.3",
+  "version": "0.7.4",
   "description": "Define and query information about a kit package",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/config#readme",
   "license": "MIT",
