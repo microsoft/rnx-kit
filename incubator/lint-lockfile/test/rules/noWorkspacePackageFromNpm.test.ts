@@ -1,8 +1,8 @@
-import { equal } from "node:assert/strict";
+import { equal, ok } from "node:assert/strict";
 import { describe, it } from "node:test";
 import { noWorkspacePackageFromNpmRule } from "../../src/rules/noWorkspacePackageFromNpm.ts";
 
-describe("rules:useWorkspacePackage()", () => {
+describe("rules:noWorkspacePackageFromNpm()", () => {
   const lockfile = {
     "@ampproject/remapping@npm:^2.2.0": {
       package: "@ampproject/remapping",
@@ -31,9 +31,15 @@ describe("rules:useWorkspacePackage()", () => {
     },
   };
 
-  const noWorkspacePackageFromNpm = noWorkspacePackageFromNpmRule();
+  it("does not create rule if disabled", () => {
+    ok(!noWorkspacePackageFromNpmRule({ enabled: false }));
+  });
 
   it("flags packages that should have resolved locally", () => {
+    const noWorkspacePackageFromNpm = noWorkspacePackageFromNpmRule();
+
+    ok(noWorkspacePackageFromNpm);
+
     const packages = ["@rnx-kit/lint-lockfile"];
 
     const cases: [keyof typeof lockfile, number][] = [

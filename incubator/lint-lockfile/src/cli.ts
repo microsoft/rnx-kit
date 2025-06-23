@@ -5,7 +5,10 @@ function main() {
 
   const errors: string[] = [];
   const context = {
-    packages: workspace.packages,
+    get packages() {
+      // Lazy load the packages to avoid unnecessary file system access
+      return workspace.packages;
+    },
     report: (e: string) => {
       errors.push(e);
     },

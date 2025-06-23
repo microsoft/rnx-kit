@@ -224,5 +224,20 @@
       }
     }
   },
-  "prettier": "./.github/prettierrc.json"
+  "prettier": "./.github/prettierrc.json",
+  "rnx-kit": {
+    "lint": {
+      "lockfile": {
+        "noDuplicates": {
+          "packages": [
+            "#react-native",
+            [
+              "react",
+              2
+            ]
+          ]
+        }
+      }
+    }
+  }
 }

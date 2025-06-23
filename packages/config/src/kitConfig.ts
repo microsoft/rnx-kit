@@ -1,4 +1,8 @@
 import type { BundleConfig } from "./bundleConfig";
+import type {
+  NoDuplicatesRuleOptions,
+  NoWorkspacePackageFromNpmRuleOptions,
+} from "./lint.types";
 import type { ServerConfig } from "./serverConfig";
 
 export type MetaCapability = "core/testing";
@@ -155,4 +159,17 @@ export type KitConfig = {
    * @deprecated Use `alignDeps.presets` instead.
    */
   customProfiles?: string;
+
+  /**
+   * Configures rnx-kit linting tools and their rules.
+   */
+  lint?: {
+    /**
+     * Configures `@rnx-kit/lint-lockfile`.
+     */
+    lockfile?: {
+      noDuplicates?: NoDuplicatesRuleOptions;
+      noWorkspacePackageFromNpm?: NoWorkspacePackageFromNpmRuleOptions;
+    };
+  };
 };
