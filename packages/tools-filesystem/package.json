@@ -1,8 +1,7 @@
 {
-  "private": true,
   "name": "@rnx-kit/tools-filesystem",
   "version": "0.1.0",
-  "description": "A collection of functions for manipulating the filesystem",
+  "description": "A collection of commonly used functions for manipulating the filesystem",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/tools-filesystem#readme",
   "license": "MIT",
   "author": {
@@ -14,7 +13,6 @@
     "lib/**/*.js",
     "src"
   ],
-  "type": "module",
   "exports": {
     ".": {
       "types": "./lib/index.d.ts",
@@ -37,7 +35,8 @@
     "build": "rnx-kit-scripts build",
     "format": "rnx-kit-scripts format",
     "lint": "rnx-kit-scripts lint",
-    "test": "rnx-kit-scripts test"
+    "test": "rnx-kit-scripts test",
+    "update-readme": "rnx-kit-scripts update-api-readme"
   },
   "devDependencies": {
     "@rnx-kit/eslint-config": "*",
@@ -46,6 +45,6 @@
     "@types/node": "^22.0.0"
   },
   "engines": {
-    "node": ">=16.17"
+    "node": ">=18.12"
   }
 }

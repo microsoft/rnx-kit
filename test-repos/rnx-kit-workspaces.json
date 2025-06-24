@@ -38,6 +38,7 @@
       "@rnx-kit/third-party-notices": "packages/third-party-notices",
       "@rnx-kit/tools-android": "packages/tools-android",
       "@rnx-kit/tools-apple": "packages/tools-apple",
+      "@rnx-kit/tools-filesystem": "packages/tools-filesystem",
       "@rnx-kit/tools-language": "packages/tools-language",
       "@rnx-kit/tools-node": "packages/tools-node",
       "@rnx-kit/tools-packages": "packages/tools-packages",
