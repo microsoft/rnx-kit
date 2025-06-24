@@ -47,14 +47,16 @@ export function writeTextFile(
 }
 
 /**
- * Writes specified data to a file, serialized in prettified JSON format.
+ * Writes specified data to a file, serialized as JSON format.
  * @param path The path to the file to write.
  * @param data The data to write to the file.
+ * @param [space=2] The number of spaces to use for indentation in the JSON output (0 to disable pretty-printing).
  */
 export function writeJSONFile(
   path: string,
   data: unknown,
+  space: string | number = 2,
   /** @internal */ fs = nodefs
 ): void {
-  writeTextFile(path, JSON.stringify(data, undefined, 2), fs);
+  writeTextFile(path, JSON.stringify(data, undefined, space), fs);
 }

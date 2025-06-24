@@ -41,7 +41,7 @@ describe("writeJSONFile()", () => {
 
     const filePath = "file.json";
 
-    writeJSONFile(filePath, CONTENT, fs);
+    writeJSONFile(filePath, CONTENT, undefined, fs);
 
     ok(fs.existsSync(filePath));
     equal(vol[filePath], JSON.stringify(CONTENT, undefined, 2) + "\n");
