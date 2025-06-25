@@ -164,8 +164,8 @@ export function getFileStream(
     if (typeof target === "string") {
       // if the target is a string, create a write stream, updating the settings so we don't open it twice
       // Resolve the log path relative to the current file's directory
-      const logPath = path.isAbsolute(target) ? target : path.resolve(target);
-      fs.mkdirSync(path.dirname(logPath), { recursive: true });
+      const logPath = path.resolve(target);
+      fs.mkdirSync(path.dirname(logPath), { recursive: true, mode: 0o755 });
       settings.target = fs.createWriteStream(logPath, {
         encoding: "utf8",
         flags: writeFlags || "w",

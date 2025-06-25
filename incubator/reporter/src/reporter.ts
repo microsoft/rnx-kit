@@ -39,8 +39,10 @@ export class ReporterImpl<T extends CustomData = CustomData>
 
   static handleProcessExit() {
     // send process exit event to all reporters and tasks
-    while (ReporterImpl.activeReporters.length > 0) {
-      ReporterImpl.activeReporters.pop()?.finish(undefined, "process-exit");
+    const activeReporters = ReporterImpl.activeReporters;
+    ReporterImpl.activeReporters = [];
+    for (const reporter of activeReporters) {
+      reporter.finish(undefined, "process-exit");
     }
   }
 
@@ -238,7 +240,7 @@ export class ReporterImpl<T extends CustomData = CustomData>
     }
     const serialize = this.serializeArgs;
     const colorText = this.color;
-    const prefixes = {} as Record<LogLevel, PrepareMsg>;
+    const prefixes: Record<LogLevel, PrepareMsg> = {};
     for (const level of allLogLevels) {
       const prefix = this.formatting.prefixes[level];
       const colorTextType = (level + "Text") as ColorType;
