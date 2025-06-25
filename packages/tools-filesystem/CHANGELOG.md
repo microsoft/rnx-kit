@@ -1,5 +1,12 @@
 # @rnx-kit/tools-filesystem
 
+## 0.1.1
+
+### Patch Changes
+
+- 5f0ecc0: Added `ensureDir`, `ensureDirForFile`, `writeJSONFile` and
+  `writeTextFile`.
+
 ## 0.1.0
 
 ### Minor Changes

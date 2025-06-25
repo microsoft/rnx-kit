@@ -1,5 +1,16 @@
 # @rnx-kit/tsconfig
 
+## 2.1.0
+
+### Minor Changes
+
+- c6873a1: Add tsconfig.node.json and tsconfig.esm.node.json to the set of
+  exported files
+
+### Patch Changes
+
+- ac7b77a: Use Node16 module resolution by default in the Node config
+
 ## 2.0.1
 
 ### Patch Changes
