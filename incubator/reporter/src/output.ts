@@ -5,8 +5,8 @@ import { noChange } from "./formatting.ts";
 import {
   defaultLevel,
   nonErrorLevels,
+  shouldUseErrorStream,
   supportsLevel,
-  useErrorStream,
 } from "./levels.ts";
 import type { LogLevel, OutputOptions, OutputSettings } from "./types.ts";
 import { allLogLevels } from "./types.ts";
@@ -103,7 +103,7 @@ function getConsoleWrites(setting: LogLevel) {
   };
   for (const level of nonErrorLevels) {
     if (supportsLevel(level, setting)) {
-      results[level] = useErrorStream(level) ? writeStderr : writeStdout;
+      results[level] = shouldUseErrorStream(level) ? writeStderr : writeStdout;
     }
   }
   return results;
