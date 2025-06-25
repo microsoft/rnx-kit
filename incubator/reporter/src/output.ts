@@ -3,13 +3,13 @@ import path from "node:path";
 import { stripVTControlCharacters } from "node:util";
 import { noChange } from "./formatting.ts";
 import {
-  allLogLevels,
   defaultLevel,
   nonErrorLevels,
   supportsLevel,
   useErrorStream,
 } from "./levels.ts";
 import type { LogLevel, OutputOptions, OutputSettings } from "./types.ts";
+import { allLogLevels } from "./types.ts";
 
 type WriteFunction = (msg: string) => void;
 type AllWrites = Record<LogLevel, WriteFunction>;

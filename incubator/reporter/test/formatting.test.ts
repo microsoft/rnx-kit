@@ -19,14 +19,14 @@ describe("formatting", () => {
   });
 
   it("getFormatting returns a formatting object and respects overrides", () => {
-    const fmt = getFormatting({ disableColors: true });
-    expect(fmt.disableColors).toBe(true);
+    const fmt = getFormatting({ inspectOptions: { colors: false } });
+    expect(fmt.inspectOptions.colors).toBe(false);
     expect(typeof fmt.color).toBe("function");
   });
 
   it("updateDefaultFormatting does not throw", () => {
     expect(() =>
-      updateDefaultFormatting({ disableColors: true })
+      updateDefaultFormatting({ inspectOptions: { colors: false } })
     ).not.toThrow();
   });
 

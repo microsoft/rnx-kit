@@ -1,6 +1,5 @@
 import { errorEvent, finishEvent, startEvent } from "./events.ts";
 import { getFormatting, type Formatting } from "./formatting.ts";
-import { allLogLevels } from "./levels.ts";
 import { getOutput, type Output } from "./output.ts";
 import type {
   ColorType,
@@ -14,6 +13,7 @@ import type {
   SessionDetails,
   TaskOptions,
 } from "./types.ts";
+import { allLogLevels } from "./types.ts";
 
 process.on("exit", () => {
   ReporterImpl.handleProcessExit();
@@ -240,7 +240,9 @@ export class ReporterImpl<T extends CustomData = CustomData>
     }
     const serialize = this.serializeArgs;
     const colorText = this.color;
-    const prefixes: Record<LogLevel, PrepareMsg> = {};
+
+    // this typecasting is necessary to ensure that the keys match the LogLevel type
+    const prefixes = {} as Record<LogLevel, PrepareMsg>;
     for (const level of allLogLevels) {
       const prefix = this.formatting.prefixes[level];
       const colorTextType = (level + "Text") as ColorType;

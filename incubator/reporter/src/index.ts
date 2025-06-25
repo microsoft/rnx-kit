@@ -21,6 +21,7 @@ export {
   enablePerformanceTracing,
   type PerformanceTrackingMode,
 } from "./performance.ts";
+export { allLogLevels } from "./types.ts";
 export type {
   ErrorEvent,
   FormattingOptions,

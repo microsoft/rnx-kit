@@ -81,10 +81,6 @@ function applyColorValue(text: string, value: ColorValue): string {
 
 function createColorFunction(settings: FormattingSettings): Reporter["color"] {
   const { colors: colorSetting } = settings;
-  if (settings.disableColors) {
-    return noChange;
-  }
-
   return (text: string, colorType: ColorType) => {
     if (colorType !== "none") {
       const setting = colorSetting[colorType];
@@ -114,16 +110,11 @@ export function getFormatting(
 ): Formatting {
   if (overrides) {
     const { colors, inspectOptions, prefixes } = baseline;
-    const disableColors = overrides.disableColors ?? baseline.disableColors;
     const result = {
-      disableColors,
       inspectOptions: { ...inspectOptions, ...overrides.inspectOptions },
       colors: { ...colors, ...overrides.colors },
       prefixes: { ...prefixes, ...overrides.prefixes },
     } as Formatting;
-    if (disableColors) {
-      inspectOptions.colors = false;
-    }
     Object.assign(result, createFormattingFunctions(result));
     return result;
   }

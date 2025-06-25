@@ -1,11 +1,11 @@
 import {
-  allLogLevels,
   asLogLevel,
   defaultLevel,
   nonErrorLevels,
   supportsLevel,
   useErrorStream,
 } from "../src/levels";
+import { allLogLevels } from "../src/types";
 
 describe("levels", () => {
   it("should export all log levels and default", () => {

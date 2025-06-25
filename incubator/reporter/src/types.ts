@@ -1,7 +1,8 @@
 import type { WriteStream } from "node:fs";
 import type { InspectOptions } from "node:util";
 
-export type LogLevel = "error" | "warn" | "log" | "verbose";
+export const allLogLevels = ["error", "warn", "log", "verbose"] as const;
+export type LogLevel = (typeof allLogLevels)[number];
 
 export type LogFunction = (...args: unknown[]) => void;
 export type TextTransform = (text: string) => string;
@@ -149,9 +150,6 @@ export type OutputOptions = Partial<OutputSettings>;
 export type ColorSettings = Record<ColorTypeValues, ColorValue | ColorValue[]>;
 
 export type FormattingSettings = {
-  // whether colors should be disabled for the console, will override inspect options if disabled
-  disableColors?: boolean;
-
   // options used to serialize args to strings, this is the internal mechanism used in console.log and similar functions
   inspectOptions: InspectOptions;
 

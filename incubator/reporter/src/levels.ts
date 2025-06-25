@@ -1,13 +1,12 @@
-import type { LogLevel } from "./types";
+import { type LogLevel, allLogLevels } from "./types";
 
 // Default log level settings
 export const defaultLevel: LogLevel = "log";
 
 // Non-error log levels, provided for ease of iteration
-export const nonErrorLevels: LogLevel[] = ["warn", "log", "verbose"];
-
-// All log levels, in order of precedence
-export const allLogLevels: LogLevel[] = ["error", ...nonErrorLevels];
+export const nonErrorLevels: LogLevel[] = allLogLevels.slice(
+  allLogLevels.indexOf("error") + 1
+);
 
 /**
  * @returns a valid log level given the input string, falling back to the default if not

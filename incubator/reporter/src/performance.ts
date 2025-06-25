@@ -4,6 +4,7 @@ import { ReporterImpl } from "./reporter.ts";
 import type { ReporterOptions, SessionData } from "./types.ts";
 
 export const PERF_TRACKING_ENV_KEY = "RNX_PERF_TRACKING";
+const reporterPackageName = require(__dirname + "/../package.json").name;
 
 export type PerformanceTrackingMode =
   | "disabled"
@@ -41,7 +42,7 @@ class PerformanceTracker {
     this.reporter = new ReporterImpl({
       name: "PerformanceTracker",
       label: "PERF:",
-      packageName: "@rnx-kit/reporter",
+      packageName: reporterPackageName,
       settings,
     });
 
