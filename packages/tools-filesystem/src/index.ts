@@ -2,8 +2,9 @@ import * as nodefs from "node:fs";
 import * as path from "node:path";
 
 const DEFAULT_ENCODING = "utf-8";
-const DEFAULT_FILE_MODE = 0o644;
-const MKDIR_P_OPTIONS = { recursive: true, mode: 0o755 } as const;
+const DEFAULT_DIR_MODE = 0o755; // rwxr-xr-x (read/write/execute for owner, read/execute for group and others)
+const DEFAULT_FILE_MODE = 0o644; // rw-r--r-- (read/write for owner, read for group and others)
+const MKDIR_P_OPTIONS = { recursive: true, mode: DEFAULT_DIR_MODE } as const;
 
 /**
  * Ensures that a directory exists, creating it if necessary.
