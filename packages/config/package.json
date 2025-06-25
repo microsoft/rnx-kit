@@ -21,6 +21,9 @@
       "typescript": "./src/index.ts",
       "default": "./lib/index.js"
     },
+    "./lint.types": {
+      "default": "./src/lint.types.ts"
+    },
     "./package.json": "./package.json"
   },
   "repository": {

@@ -1,8 +1,7 @@
 {
   "extends": "@rnx-kit/tsconfig/tsconfig.json",
   "compilerOptions": {
-    "alwaysStrict": false,
-    "lib": ["ES2021"]
+    "alwaysStrict": false
   },
   "include": ["src"]
 }
