@@ -172,11 +172,14 @@ export function serializePerfOptions(
 }
 
 function validMode(mode: string): PerformanceTrackingMode {
-  const enabledModes = new Set(["enabled", "verbose", "file-only"]);
-  if (enabledModes.has(mode)) {
-    return mode as PerformanceTrackingMode;
+  switch (mode) {
+    case "enabled":
+    case "verbose":
+    case "file-only":
+      return mode;
+    default:
+      return "disabled";
   }
-  return "disabled";
 }
 
 /**
@@ -186,10 +189,8 @@ export function decodePerformanceOptions(
   serialized?: string
 ): [PerformanceTrackingMode, string | undefined] {
   if (serialized) {
-    const parts = serialized.split(",");
-    const mode = validMode(parts[0]);
-    const file = parts.length > 1 ? parts[1] : undefined;
-    return [mode, file];
+    const [mode, file] = serialized.split(",");
+    return [validMode(mode), file];
   }
   return ["disabled", undefined];
 }
