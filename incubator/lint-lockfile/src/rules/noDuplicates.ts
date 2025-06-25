@@ -1,4 +1,4 @@
-import type { NoDuplicatesRuleOptions as Options } from "@rnx-kit/config/src/lint.types.ts";
+import type { NoDuplicatesRuleOptions as Options } from "@rnx-kit/config/lint.types";
 import type { Rule } from "../types.ts";
 
 type PackageCount = Record<string, number | undefined>;
