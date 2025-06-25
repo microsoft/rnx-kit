@@ -45,6 +45,6 @@ export function supportsLevel(
  * @returns should this level be sent to the error stream
  * @internal
  */
-export function useErrorStream(level: LogLevel): boolean {
+export function shouldUseErrorStream(level: LogLevel): boolean {
   return level === "error" || level === "warn";
 }

@@ -2,8 +2,8 @@ import {
   asLogLevel,
   defaultLevel,
   nonErrorLevels,
+  shouldUseErrorStream,
   supportsLevel,
-  useErrorStream,
 } from "../src/levels";
 import { allLogLevels } from "../src/types";
 
@@ -25,9 +25,9 @@ describe("levels", () => {
     expect(supportsLevel("verbose", "warn")).toBe(false);
   });
 
-  it("useErrorStream returns true for error/warn, false otherwise", () => {
-    expect(useErrorStream("error")).toBe(true);
-    expect(useErrorStream("warn")).toBe(true);
-    expect(useErrorStream("log")).toBe(false);
+  it("shouldUseErrorStream returns true for error/warn, false otherwise", () => {
+    expect(shouldUseErrorStream("error")).toBe(true);
+    expect(shouldUseErrorStream("warn")).toBe(true);
+    expect(shouldUseErrorStream("log")).toBe(false);
   });
 });
