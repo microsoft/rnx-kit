@@ -152,7 +152,7 @@ export function checkPerformanceEnv() {
   if (!checkedEnv) {
     checkedEnv = true;
     const env = process.env[PERF_TRACKING_ENV_KEY];
-    if (env && typeof env === "string") {
+    if (env) {
       const [mode, file] = decodePerformanceOptions(env);
       if (mode !== "disabled") {
         performanceTracker = new PerformanceTracker(mode, file, true);

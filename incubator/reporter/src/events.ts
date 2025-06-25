@@ -1,4 +1,9 @@
-import { channel, subscribe, unsubscribe } from "node:diagnostics_channel";
+import {
+  channel,
+  subscribe,
+  unsubscribe,
+  type ChannelListener,
+} from "node:diagnostics_channel";
 import type { ErrorEvent, SessionData } from "./types";
 
 /** @internal */
@@ -21,7 +26,7 @@ export function createEventHandler<T>(name: string) {
 
   return {
     subscribe: (callback: (event: T) => void) => {
-      const handler = (event: unknown, name: symbol | string) => {
+      const handler: ChannelListener = (event, name) => {
         if (name === eventName) {
           callback(event as T);
         }

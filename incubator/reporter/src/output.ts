@@ -171,7 +171,7 @@ export function getFileStream(
         flags: writeFlags || "w",
       });
       return settings.target;
-    } else {
+    } else if (target instanceof fs.WriteStream) {
       // if the target is already a write stream, return it
       return target;
     }
