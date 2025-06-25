@@ -1,5 +1,6 @@
 import type { Config as CLIConfig } from "@react-native-community/cli-types";
 import { error, info, warn } from "@rnx-kit/console";
+import { ensureDir } from "@rnx-kit/tools-filesystem";
 import { keysOf } from "@rnx-kit/tools-language/properties";
 import type { PackageManifest } from "@rnx-kit/tools-node/package";
 import {
@@ -14,7 +15,6 @@ import { spawnSync } from "node:child_process";
 import * as nodefs from "node:fs";
 import * as os from "node:os";
 import * as path from "node:path";
-import { ensureDir } from "./helpers/filesystem";
 
 export type AndroidArchive = {
   targetName?: string;
