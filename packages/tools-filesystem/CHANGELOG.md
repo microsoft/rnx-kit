@@ -1,5 +1,11 @@
 # @rnx-kit/tools-filesystem
 
+## 0.1.2
+
+### Patch Changes
+
+- 390541b: Publish 0.1.2
+
 ## 0.1.1
 
 ### Patch Changes
