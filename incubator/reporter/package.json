@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/reporter",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "EXPERIMENTAL - USE WITH CAUTION - reporter",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/incubator/reporter#readme",
   "license": "MIT",
