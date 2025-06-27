@@ -121,11 +121,6 @@ export const profile: Profile = {
     name: "@react-native-masked-view/masked-view",
     version: "^0.3.0",
   },
-  "navigation/stack": {
-    name: "@react-navigation/stack",
-    version: "^6.3.21",
-    capabilities: ["navigation/native"],
-  },
   netinfo: {
     name: "@react-native-community/netinfo",
     version: "^11.3.0",

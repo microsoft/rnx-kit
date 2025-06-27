@@ -108,6 +108,15 @@ export const profile: Profile = {
     name: "react-native-gesture-handler",
     version: "^2.12.0",
   },
+  "navigation/native": {
+    name: "@react-navigation/native",
+    version: "^7.1.14",
+  },
+  "navigation/stack": {
+    name: "@react-navigation/stack",
+    version: "^7.4.2",
+    capabilities: ["navigation/native"],
+  },
   popover: {
     name: "react-native-popover-view",
     version: "^5.1.8",
