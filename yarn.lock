@@ -13222,10 +13222,10 @@ __metadata:
   linkType: hard
 
 "react-native-test-app@npm:^4.1.4":
-  version: 4.3.10
-  resolution: "react-native-test-app@npm:4.3.10"
+  version: 4.4.0
+  resolution: "react-native-test-app@npm:4.4.0"
   dependencies:
-    "@rnx-kit/react-native-host": "npm:^0.5.8"
+    "@rnx-kit/react-native-host": "npm:^0.5.9"
     "@rnx-kit/tools-react-native": "npm:^2.1.0"
     ajv: "npm:^8.0.0"
     cliui: "npm:^8.0.0"
@@ -13237,9 +13237,9 @@ __metadata:
     "@callstack/react-native-visionos": 0.73 - 0.78
     "@expo/config-plugins": ">=5.0"
     react: 18.1 - 19.1
-    react-native: 0.70 - 0.79 || >=0.80.0-0 <0.80.0
+    react-native: 0.70 - 0.80 || >=0.81.0-0 <0.81.0
     react-native-macos: ^0.0.0-0 || 0.71 - 0.78
-    react-native-windows: ^0.0.0-0 || 0.70 - 0.78
+    react-native-windows: ^0.0.0-0 || 0.70 - 0.79
   peerDependenciesMeta:
     "@callstack/react-native-visionos":
       optional: true
@@ -13253,8 +13253,8 @@ __metadata:
     configure-test-app: scripts/configure.mjs
     init: scripts/init.mjs
     init-test-app: scripts/init.mjs
-    install-windows-test-app: windows/test-app.mjs
-  checksum: 10c0/f806371cd5af711b285855508cdb2349b1e724734c71539b6f6e247b1b526dc4d343f9f35f8b1228028c965449e8a3a30e5dd1b739848ae3ffeee4c99d1b6723
+    install-windows-test-app: windows/app.mjs
+  checksum: 10c0/6d33ea7519605494473b72e7e91ed40f149a0843d4df5d27d12ffbd7f4fc3aafbfe7b117c00b883da1ed4122a5529d2eeba21d9643390d992bda6d53c3011ad1
   languageName: node
   linkType: hard
 
