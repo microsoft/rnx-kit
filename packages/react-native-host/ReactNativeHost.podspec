@@ -11,7 +11,7 @@ repo_dir = repository['directory']
 new_arch_enabled = ENV['RCT_NEW_ARCH_ENABLED'] == '1'
 preprocessor_definitions = [
   '$(inherit)',
-  "USE_HERMES=#{ENV['USE_HERMES'] || '0'}",
+  "USE_HERMES=#{ENV['USE_HERMES'] || '1'}",
 ]
 if new_arch_enabled
   preprocessor_definitions << 'RCT_NEW_ARCH_ENABLED=1'
