@@ -370,9 +370,9 @@ __metadata:
   linkType: hard
 
 "@rnx-kit/tsconfig@npm:^2.0.0":
-  version: 2.0.1
-  resolution: "@rnx-kit/tsconfig@npm:2.0.1"
-  checksum: 10c0/28acc7c2d82be18dd3ec360222ece40981c137b6532df39ffbfdc7996af9818e6abf2a1f583923be07faf06ce8bf3a0b95c3d41680d67b05459a0d7ad4ed4235
+  version: 2.1.1
+  resolution: "@rnx-kit/tsconfig@npm:2.1.1"
+  checksum: 10c0/53aed185abd644250d95c732e44ecb66bcdf3005cc6eb854ba217346fa29cf0ea892bbd391e15050a5b553fe7dc983130add30c9aa30b1f66a0ca498d3409d94
   languageName: node
   linkType: hard
 
