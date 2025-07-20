@@ -3060,8 +3060,8 @@ __metadata:
   linkType: hard
 
 "@octokit/core@npm:^6.0.0":
-  version: 6.1.5
-  resolution: "@octokit/core@npm:6.1.5"
+  version: 6.1.6
+  resolution: "@octokit/core@npm:6.1.6"
   dependencies:
     "@octokit/auth-token": "npm:^5.0.0"
     "@octokit/graphql": "npm:^8.2.2"
@@ -3070,7 +3070,7 @@ __metadata:
     "@octokit/types": "npm:^14.0.0"
     before-after-hook: "npm:^3.0.2"
     universal-user-agent: "npm:^7.0.0"
-  checksum: 10c0/c89ea754cc33da740fdd69fadb971b4b65c89971bba4e8ad545d3ea7aba79759ee3e195c3b72e7df78f14b8b1d392bddc56e7c385d48b5272319ea6a0246ac7c
+  checksum: 10c0/72fcbafb61e3fed34bc1fd3795349a46fcc4c7e5815f2d0840c786372a9a529c0372f645b836b55f073401364938fcc202f49f887e8edbfb924fe69f533f4b86
   languageName: node
   linkType: hard
 
