@@ -56,7 +56,7 @@
     "@rnx-kit/tsconfig": "*",
     "@types/node": "^22.0.0",
     "@types/node-fetch": "^2.6.5",
-    "flow-remove-types": "~2.259.0",
+    "flow-remove-types": "~2.275.0",
     "metro": "^0.81.3",
     "metro-config": "^0.81.3",
     "metro-core": "^0.81.3",
