@@ -1,3 +1,10 @@
+#if !__has_include(<ReactCommon/RCTJscInstance.h>)
+#ifdef USE_HERMES
+#undef USE_HERMES
+#endif  // !USE_HERMES
+#define USE_HERMES 1
+#endif  // !__has_include(<ReactCommon/RCTJscInstance.h>)
+
 #if USE_BRIDGELESS
 
 #if __has_include(<react/config/ReactNativeConfig.h>)
