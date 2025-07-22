@@ -1,5 +1,11 @@
 # @rnx-kit/react-native-host
 
+## 0.5.10
+
+### Patch Changes
+
+- 9769ebd: Fix building 0.81 + Hermes
+
 ## 0.5.9
 
 ### Patch Changes
