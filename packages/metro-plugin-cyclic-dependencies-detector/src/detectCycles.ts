@@ -52,13 +52,16 @@ export function traverseDependencies(
       return;
     }
 
-    traverseDependencies(
-      dependency.absolutePath,
-      dependencies,
-      options,
-      cyclicDependencies,
-      stack
-    );
+    const { absolutePath } = dependency;
+    if (absolutePath) {
+      traverseDependencies(
+        absolutePath,
+        dependencies,
+        options,
+        cyclicDependencies,
+        stack
+      );
+    }
 
     // Performance optimization: There is no need to traverse this module again.
     dependency["__rnxCyclicDependenciesChecked"] = true;
