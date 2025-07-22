@@ -130,6 +130,15 @@ export const profile: Profile = {
     name: "react-native-gesture-handler",
     version: "^2.20.0",
   },
+  "navigation/native": {
+    name: "@react-navigation/native",
+    version: "^7.1.14",
+  },
+  "navigation/stack": {
+    name: "@react-navigation/stack",
+    version: "^7.4.2",
+    capabilities: ["navigation/native"],
+  },
   "safe-area": {
     name: "react-native-safe-area-context",
     version: "^4.12.0",
