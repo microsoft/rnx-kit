@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-plugin-cyclic-dependencies-detector
 
+## 2.0.1
+
+### Patch Changes
+
+- 1fe7638: Handle missing dependencies
+
 ## 2.0.0
 
 ### Major Changes
