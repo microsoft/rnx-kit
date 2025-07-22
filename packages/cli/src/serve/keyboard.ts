@@ -7,6 +7,10 @@ import readline from "node:readline";
 import qrcode from "qrcode";
 import type { DevServerMiddleware } from "./types";
 
+type HttpServer = Server & {
+  httpServer?: Server; // Introduced in Metro 0.83
+};
+
 type OpenDebuggerKeyboardHandler = {
   handleOpenDebugger: () => Promise<void>;
   maybeHandleTargetSelection: (key: string) => boolean;
@@ -55,7 +59,7 @@ function createOpenDebuggerKeyboardHandler({
   }
 }
 
-export function attachKeyHandlers(server: Server, params: Params) {
+export function attachKeyHandlers(server: HttpServer, params: Params) {
   const openDebuggerKeyboardHandler = createOpenDebuggerKeyboardHandler(params);
   const {
     devServerUrl,
@@ -69,8 +73,10 @@ export function attachKeyHandlers(server: Server, params: Params) {
     process.stdin.pause();
     process.stdin.setRawMode(false);
     info("Exiting...");
-    server.close();
-    server.closeAllConnections?.(); // This method was added in Node v18.2.0
+
+    const httpServer = server.httpServer ?? server;
+    httpServer.close();
+    httpServer.closeAllConnections?.(); // This method was added in Node v18.2.0
 
     // Even when we close all connections, clients may keep the server alive.
     process.exit();
