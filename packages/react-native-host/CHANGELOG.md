@@ -1,5 +1,11 @@
 # @rnx-kit/react-native-host
 
+## 0.5.11
+
+### Patch Changes
+
+- 4667e34: Fix third party Fabric components not rendering
+
 ## 0.5.10
 
 ### Patch Changes
