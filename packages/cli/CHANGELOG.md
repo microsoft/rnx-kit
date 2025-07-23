@@ -1,5 +1,13 @@
 # Change Log - @rnx-kit/cli
 
+## 0.18.10
+
+### Patch Changes
+
+- caf3b28: Fix crash when exiting Metro server in 0.83
+- Updated dependencies [6d82b98]
+  - @rnx-kit/align-deps@3.1.0
+
 ## 0.18.9
 
 ### Patch Changes
