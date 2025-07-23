@@ -7,16 +7,20 @@ import type { BuildParams } from "./types.js";
  * Invokes Gradle build.
  * @param projectDir
  * @param buildParams
+ * @param additionalArgs
  */
 export function assemble(
   projectDir: string,
-  { configuration = "Debug", archs }: BuildParams
+  { configuration = "Debug", archs }: BuildParams,
+  additionalArgs: string[] = []
 ) {
   const args = [`assemble${configuration}`];
 
   if (archs) {
     args.push(`-PreactNativeArchitectures=${archs}`);
   }
+
+  args.push(...additionalArgs);
 
   const gradlew = process.platform === "win32" ? "gradlew.bat" : "./gradlew";
   return spawn(gradlew, args, { cwd: projectDir });

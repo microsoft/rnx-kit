@@ -7,13 +7,13 @@ import { runIOS } from "./run/ios";
 import { runMacOS } from "./run/macos";
 
 export function rnxRun(
-  _argv: string[],
+  argv: string[],
   config: Config,
   buildParams: InputParams
 ) {
   switch (buildParams.platform) {
     case "android":
-      return runAndroid(config, buildParams);
+      return runAndroid(config, buildParams, argv);
 
     case "ios":
     case "visionos":
