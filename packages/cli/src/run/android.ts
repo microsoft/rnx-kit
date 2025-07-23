@@ -6,11 +6,17 @@ import type { AndroidInputParams } from "../build/types";
 
 export async function runAndroid(
   config: Config,
-  buildParams: AndroidInputParams
+  buildParams: AndroidInputParams,
+  additionalArgs: string[]
 ) {
   const logger = ora();
 
-  const projectDir = await buildAndroid(config, buildParams, logger);
+  const projectDir = await buildAndroid(
+    config,
+    buildParams,
+    additionalArgs,
+    logger
+  );
   if (typeof projectDir !== "string") {
     return;
   }

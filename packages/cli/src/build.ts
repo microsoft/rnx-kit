@@ -51,13 +51,13 @@ function asSupportedPlatform(platform: string): InputParams["platform"] {
 }
 
 export function rnxBuild(
-  _argv: string[],
+  argv: string[],
   config: Config,
   buildParams: InputParams
 ) {
   switch (buildParams.platform) {
     case "android":
-      return buildAndroid(config, buildParams);
+      return buildAndroid(config, buildParams, argv);
 
     case "ios":
     case "visionos":

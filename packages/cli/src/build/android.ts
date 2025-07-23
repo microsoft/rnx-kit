@@ -9,6 +9,7 @@ export type BuildResult = string | number | null;
 export function buildAndroid(
   config: Config,
   buildParams: AndroidBuildParams,
+  additionalArgs: string[],
   logger = ora()
 ): Promise<BuildResult> {
   const { sourceDir } = config.project.android ?? {};
@@ -20,7 +21,7 @@ export function buildAndroid(
   }
 
   return import("@rnx-kit/tools-android").then(({ assemble }) => {
-    const gradle = assemble(sourceDir, buildParams);
+    const gradle = assemble(sourceDir, buildParams, additionalArgs);
     return watch(gradle, logger, () => sourceDir);
   });
 }
