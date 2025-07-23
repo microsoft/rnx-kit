@@ -7,6 +7,7 @@ import type { BuildParams } from "./types.js";
  * Invokes Gradle build.
  * @param projectDir
  * @param buildParams
+ * @param additionalArgs
  */
 export function assemble(
   projectDir: string,
