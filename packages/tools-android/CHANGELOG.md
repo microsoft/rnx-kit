@@ -1,5 +1,11 @@
 # @rnx-kit/tools-android
 
+## 0.2.1
+
+### Patch Changes
+
+- f8ab2e2: Allow passing additional arguments to Gradle
+
 ## 0.2.0
 
 ### Minor Changes
