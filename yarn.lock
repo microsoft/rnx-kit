@@ -4001,7 +4001,7 @@ __metadata:
     "@rnx-kit/metro-service": "npm:^4.0.2"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/third-party-notices": "npm:^2.0.0"
-    "@rnx-kit/tools-android": "npm:^0.2.0"
+    "@rnx-kit/tools-android": "npm:^0.2.1"
     "@rnx-kit/tools-apple": "npm:^0.2.1"
     "@rnx-kit/tools-filesystem": "npm:^0.1.0"
     "@rnx-kit/tools-language": "npm:^3.0.0"
@@ -4652,7 +4652,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rnx-kit/tools-android@npm:^0.2.0, @rnx-kit/tools-android@workspace:packages/tools-android":
+"@rnx-kit/tools-android@npm:^0.2.0, @rnx-kit/tools-android@npm:^0.2.1, @rnx-kit/tools-android@workspace:packages/tools-android":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/tools-android@workspace:packages/tools-android"
   dependencies:
