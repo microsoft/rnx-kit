@@ -1,5 +1,13 @@
 # Change Log - @rnx-kit/cli
 
+## 0.18.11
+
+### Patch Changes
+
+- f8ab2e2: Allow passing additional arguments to Gradle
+- Updated dependencies [f8ab2e2]
+  - @rnx-kit/tools-android@0.2.1
+
 ## 0.18.10
 
 ### Patch Changes
