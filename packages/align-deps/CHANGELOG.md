@@ -1,5 +1,12 @@
 # Change Log - @rnx-kit/align-deps
 
+## 3.1.0
+
+### Minor Changes
+
+- 6d82b98: use react-navigation v7 since react-native@0.76 for better support of
+  New Arch
+
 ## 3.0.8
 
 ### Patch Changes
