@@ -48,6 +48,13 @@
 #import <react/nativemodule/defaults/DefaultTurboModules.h>
 #endif
 
+#if __has_include(<ReactAppDependencyProvider/RCTAppDependencyProvider.h>)
+#import <ReactAppDependencyProvider/RCTAppDependencyProvider.h>
+#define USE_OSS_CODEGEN 1
+#else
+#define USE_OSS_CODEGEN 0
+#endif  // __has_include(<ReactAppDependencyProvider/RCTAppDependencyProvider.h>)
+
 #endif  // USE_FABRIC
 
 @implementation RNXTurboModuleAdapter {
@@ -113,11 +120,13 @@
 
 - (id<RCTTurboModule>)getModuleInstanceFromClass:(Class)moduleClass
 {
-#if __has_include(<React-RCTAppDelegate/RCTDependencyProvider.h>) || __has_include(<React_RCTAppDelegate/RCTDependencyProvider.h>)
+#if USE_OSS_CODEGEN
+    return RCTAppSetupDefaultModuleFromClass(moduleClass, [RCTAppDependencyProvider new]);
+#elif __has_include(<React-RCTAppDelegate/RCTDependencyProvider.h>) || __has_include(<React_RCTAppDelegate/RCTDependencyProvider.h>)
     return RCTAppSetupDefaultModuleFromClass(moduleClass, nil);
 #else
     return RCTAppSetupDefaultModuleFromClass(moduleClass);
-#endif  // __has_include(<React-RCTAppDelegate/RCTArchConfiguratorProtocol.h>)
+#endif  // USE_OSS_CODEGEN
 }
 
 // MARK: - Private
