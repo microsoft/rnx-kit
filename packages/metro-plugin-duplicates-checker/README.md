@@ -27,6 +27,36 @@ The **recommended** way is to add it as a plugin in your `metro.config.js` using
  });
 ```
 
+If you are not using `@rnx-kit/metro-serializer`, you can still use the plugin
+directly in your `metro.config.js`. This is useful if you are using Expo which
+uses its own custom serializer:
+
+```js
+const { getDefaultConfig } = require("expo/metro-config");
+
+/** @type {import('expo/metro-config').MetroConfig} */
+const config = getDefaultConfig(__dirname);
+
+config.serializer.customSerializer = async (
+  entryPoint,
+  preModules,
+  graph,
+  options
+) => {
+  DuplicateDependencies({
+    // Options
+  })(entryPoint, preModules, graph, options);
+  return await config.serializer.customSerializer(
+    entryPoint,
+    preModules,
+    graph,
+    options
+  );
+};
+
+module.exports = config;
+```
+
 You can also check for duplicate packages after a bundle is created:
 
 ```js
