@@ -31,6 +31,36 @@ optionally configure it to your liking:
  });
 ```
 
+If you are not using `@rnx-kit/metro-serializer`, you can still use the plugin
+directly in your `metro.config.js`. This is useful if you are using Expo which
+uses its own custom serializer:
+
+```js
+const { getDefaultConfig } = require("expo/metro-config");
+
+/** @type {import('expo/metro-config').MetroConfig} */
+const config = getDefaultConfig(__dirname);
+
+config.serializer.customSerializer = async (
+  entryPoint,
+  preModules,
+  graph,
+  options
+) => {
+  CyclicDependencies({
+    // Options
+  })(entryPoint, preModules, graph, options);
+  return await config.serializer.customSerializer(
+    entryPoint,
+    preModules,
+    graph,
+    options
+  );
+};
+
+module.exports = config;
+```
+
 ## Options
 
 | Key                | Type    | Default | Description                                   |

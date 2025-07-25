@@ -32,3 +32,38 @@ Import and set the serializer to `serializer.customSerializer` in your
    },
  });
 ```
+
+## Expo
+
+If you are using Expo, you most likely don't want to use this serializer, since
+Expo uses its own custom serializer. For instance, to use the
+`CyclicDependencies` and `DuplicateDependencies` plugins without the serializer:
+
+```js
+const { getDefaultConfig } = require("expo/metro-config");
+
+/** @type {import('expo/metro-config').MetroConfig} */
+const config = getDefaultConfig(__dirname);
+
+config.serializer.customSerializer = async (
+  entryPoint,
+  preModules,
+  graph,
+  options
+) => {
+  CyclicDependencies({
+    // Options
+  })(entryPoint, preModules, graph, options);
+  DuplicateDependencies({
+    // Options
+  })(entryPoint, preModules, graph, options);
+  return await config.serializer.customSerializer(
+    entryPoint,
+    preModules,
+    graph,
+    options
+  );
+};
+
+module.exports = config;
+```
