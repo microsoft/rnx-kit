@@ -13,6 +13,7 @@ const currentShell = process.env.SHELL;
 
 /**
  * Starts the app with specified identifier.
+ * @function
  */
 export const start = (() => {
   const explorer = makeCommand("explorer");
