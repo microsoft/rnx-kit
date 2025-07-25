@@ -11291,14 +11291,14 @@ __metadata:
   linkType: hard
 
 "memfs@npm:^4.0.0":
-  version: 4.15.3
-  resolution: "memfs@npm:4.15.3"
+  version: 4.17.2
+  resolution: "memfs@npm:4.17.2"
   dependencies:
     "@jsonjoy.com/json-pack": "npm:^1.0.3"
     "@jsonjoy.com/util": "npm:^1.3.0"
     tree-dump: "npm:^1.0.1"
     tslib: "npm:^2.0.0"
-  checksum: 10c0/95bab707edcc86ac5acdb3ca53b420be34aa04167d0f03398b702bfadb44b72a6a27198b93593e7d9094cf911d70a0d679301fbc0e309f7ac43fa04a676b1b60
+  checksum: 10c0/9cce5886a10e590887cd63271ba6198f037e537a8ee84048cfe27f851adfc9b7fd3e5b49ac5d31fe8d9c753ffa57ac4d1f8eb4a27a3927047945bd420a4cc38a
   languageName: node
   linkType: hard
 
