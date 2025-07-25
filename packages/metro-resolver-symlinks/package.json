@@ -32,7 +32,7 @@
     "enhanced-resolve": "^5.8.3"
   },
   "peerDependencies": {
-    "oxc-resolver": "^9.0.0"
+    "oxc-resolver": "^11.0.0"
   },
   "peerDependenciesMeta": {
     "oxc-resolver": {
@@ -46,7 +46,7 @@
     "@rnx-kit/tsconfig": "*",
     "@types/node": "^22.0.0",
     "metro-resolver": "^0.81.3",
-    "oxc-resolver": "^9.0.0"
+    "oxc-resolver": "^11.0.0"
   },
   "engines": {
     "node": ">=16.17"
