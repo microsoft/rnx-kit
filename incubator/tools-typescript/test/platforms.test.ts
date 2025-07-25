@@ -286,8 +286,8 @@ describe("multiplexForPlatforms", () => {
       "src/ux.tsx",
       "src/ux.android.tsx",
     ]);
-    expect(tasks[0].check).toEqual(["src/index.ts"]),
-      expect(tasks[0].platform!.name).toEqual("android");
+    expect(tasks[0].check).toEqual(["src/index.ts"]);
+    expect(tasks[0].platform!.name).toEqual("android");
 
     expect(tasks[1].build).toEqual([
       "src/file1.native.ts",
