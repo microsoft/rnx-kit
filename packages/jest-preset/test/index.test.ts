@@ -256,8 +256,7 @@ describe("jest-preset", () => {
       "node_modules/@office-iss/react-native-win32/index.js": false,
       "node_modules/@office-iss/rex-win32/rex-win32.js": true,
       "node_modules/@react-native-community/cli/index.js": false,
-      "node_modules/@react-native-windows/virtualized-list/src/VirtualizedList.js":
-        false,
+      "node_modules/@react-native-windows/virtualized-list/src/VirtualizedList.js": false,
       "node_modules/@react-native/polyfills/index.js": false,
       "node_modules/react-native-macos/index.js": false,
       "node_modules/react-native-windows/index.js": false,
