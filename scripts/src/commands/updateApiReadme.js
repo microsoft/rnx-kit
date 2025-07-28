@@ -88,7 +88,10 @@ async function parse(typedoc) {
     throw new Error("Failed to convert project");
   }
 
-  return app.serializer.projectToObject(project, process.cwd());
+  return app.serializer.projectToObject(
+    project,
+    typedoc.normalizePath(process.cwd())
+  );
 }
 
 /**

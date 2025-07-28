@@ -140,6 +140,7 @@ export function getAvailablePlatformsUncached(
  * Returns a map of available React Native platforms. The result is cached.
  * @param startDir The directory to look for react-native platforms from
  * @returns A platform-to-npm-package map, excluding "core" platforms.
+ * @function
  */
 export const getAvailablePlatforms = (() => {
   const isTesting =
