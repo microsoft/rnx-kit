@@ -112,20 +112,83 @@
       "prettier",
       "prettier-plugin-organize-imports"
     ],
+    "metro": false,
     "workspaces": {
+      "incubator/*": {
+        "entry": [
+          "src/index.{js,ts}"
+        ],
+        "project": [
+          "src/**/*.{js,ts,tsx}"
+        ]
+      },
       "incubator/@react-native-webapis/battery-status": {
+        "entry": [
+          "src/index.ts",
+          "react-native.config.js"
+        ],
         "ignoreDependencies": [
           "@babel/core",
           "@babel/preset-env"
         ]
       },
       "incubator/@react-native-webapis/web-storage": {
+        "entry": [
+          "src/index.ts",
+          "react-native.config.js",
+          "test/**/*.test.{js,mjs,ts,tsx}"
+        ],
         "ignoreDependencies": [
           "@babel/core",
           "@babel/preset-env"
         ]
       },
+      "incubator/build": {
+        "entry": [
+          "src/{cli,index,version}.ts",
+          "test/**/*.test.ts"
+        ]
+      },
+      "incubator/commitlint-lite": {
+        "entry": [
+          "src/{cli,index}.ts",
+          "test/**/*.test.ts"
+        ]
+      },
+      "incubator/esbuild-bundle-analyzer": {
+        "entry": [
+          "src/{cli,index}.ts",
+          "test/**/*.test.ts"
+        ]
+      },
+      "incubator/ignore": {},
+      "incubator/lint-lockfile": {
+        "entry": [
+          "src/{cli,index}.ts",
+          "test/**/*.test.ts"
+        ]
+      },
+      "incubator/react-native-test-app-msal": {},
+      "incubator/yarn-plugin-dynamic-extensions": {
+        "entry": [
+          "*.js"
+        ]
+      },
+      "packages/*": {
+        "entry": [
+          "src/index.{js,ts}",
+          "test/**/*.test.{js,mjs,ts,tsx}"
+        ],
+        "project": [
+          "src/**/*.{js,ts,tsx}"
+        ]
+      },
       "packages/babel-preset-metro-react-native": {
+        "entry": [
+          "*.js",
+          "test/**/*.test.js",
+          "test/__fixtures__/**/*.ts"
+        ],
         "ignoreDependencies": [
           "@rnx-kit/babel-plugin-import-path-remapper"
         ]
@@ -133,6 +196,7 @@
       "packages/cli": {
         "entry": [
           "scripts/**/*.ts",
+          "src/bin/rnx-cli.ts",
           "src/index.ts",
           "test/**/*.test.ts"
         ],
@@ -142,13 +206,27 @@
           "tsx"
         ]
       },
+      "packages/eslint-config": {
+        "entry": [
+          "*.js"
+        ]
+      },
       "packages/jest-preset": {
+        "entry": [
+          "*.{cjs,js}",
+          "test/**/*.test.ts",
+          "test/__fixtures__/**/*.js"
+        ],
         "ignoreDependencies": [
           "react",
           "react-native"
         ]
       },
       "packages/metro-config": {
+        "entry": [
+          "src/**/*.js",
+          "test/**/*.test.ts"
+        ],
         "ignoreDependencies": [
           "@babel/core",
           "@babel/preset-env"
@@ -157,19 +235,18 @@
       "packages/metro-plugin-duplicates-checker": {
         "entry": [
           "src/index.ts",
-          "test/__mocks__/**/*.js"
+          "test/**/*.{js,ts}"
         ]
       },
       "packages/metro-serializer-esbuild": {
         "entry": [
           "metro.config.js",
-          "scripts/**/*.ts",
           "src/index.ts",
-          "test/**/*.test.ts"
+          "test/**/*.test.ts",
+          "test/__fixtures__/**/*.ts"
         ],
         "ignoreDependencies": [
-          "@babel/preset-env",
-          "@fluentui/utilities"
+          "@babel/preset-env"
         ]
       },
       "packages/react-native-auth": {
@@ -182,10 +259,16 @@
           "@react-native/metro-config"
         ]
       },
+      "packages/react-native-host": {
+        "entry": [
+          "react-native.config.js"
+        ]
+      },
       "packages/react-native-lazy-index": {
         "entry": [
-          "src/index.js",
-          "test/**/*.test.ts"
+          "*.js",
+          "test/**/*.test.ts",
+          "test/__fixtures__/**/*.js"
         ],
         "ignoreDependencies": [
           "babel-plugin-codegen"
@@ -193,9 +276,9 @@
       },
       "packages/test-app": {
         "entry": [
-          "index.js",
-          "metro.config.js",
-          "test/**/*.mjs"
+          "*.js",
+          "src/**/*.{ts,tsx}",
+          "test/**/*.{js,mjs,ts,tsx}"
         ],
         "ignoreBinaries": [
           "rnx"
@@ -206,20 +289,14 @@
           "@react-native-community/cli-platform-android",
           "@react-native-community/cli-platform-ios",
           "@react-native-webapis/web-storage",
-          "@rnx-kit/*",
-          "react-native-test-app",
-          "react-native-windows"
+          "@rnx-kit/*"
         ]
       },
-      "packages/tools-react-native": {
-        "entry": [
-          "src/index.ts",
-          "test/**/*.test.ts"
-        ]
-      },
+      "packages/tsconfig": {},
       "scripts": {
-        "ignoreDependencies": [
-          "@rnx-kit/tsconfig"
+        "entry": [
+          "*.{cjs,js}",
+          "src/**/*.js"
         ]
       }
     }
