@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-resolver-symlinks
 
+## 0.2.6
+
+### Patch Changes
+
+- a9d2290: Bump `oxc-resolver` to v11
+
 ## 0.2.5
 
 ### Patch Changes
