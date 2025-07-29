@@ -1,9 +1,0 @@
-{
-  "extends": "../../tsconfig.json",
-  "compilerOptions": {
-    "checkJs": false,
-    "noEmit": true,
-    "lib": ["ES2021", "DOM"]
-  },
-  "include": ["src"]
-}
