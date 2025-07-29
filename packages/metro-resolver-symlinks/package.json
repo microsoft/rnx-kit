@@ -45,7 +45,7 @@
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*",
     "@types/node": "^22.0.0",
-    "metro-resolver": "^0.81.3",
+    "metro-resolver": "^0.82.0",
     "oxc-resolver": "^11.0.0"
   },
   "engines": {

@@ -24,6 +24,7 @@ export async function buildBundle(
     const outputAssets = await server.getAssets({
       ...Server.DEFAULT_BUNDLE_OPTIONS,
       ...requestOpts,
+      // @ts-expect-error For compatibility with versions before 0.82
       bundleType: "todo",
     });
 

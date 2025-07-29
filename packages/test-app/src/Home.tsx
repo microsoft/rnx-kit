@@ -6,13 +6,11 @@ import {
   getReactNativeVersion,
   isBridgeless,
   isFabricInstance,
-  isRemoteDebuggingAvailable,
 } from "internal";
 import type { PropsWithChildren } from "react";
 import React, { useCallback, useState } from "react";
 import type { NativeSyntheticEvent } from "react-native";
 import {
-  NativeModules,
   SafeAreaView,
   ScrollView,
   StatusBar,
@@ -22,8 +20,6 @@ import {
 // @ts-expect-error no type definitions available
 import { version as coreVersion } from "react-native/Libraries/Core/ReactNativeVersion";
 import { Header } from "react-native/Libraries/NewAppScreen";
-// @ts-expect-error no type definitions available
-import { isAsyncDebugging } from "react-native/Libraries/Utilities/DebugEnvironment";
 import { Feature } from "./Feature";
 import { Separator } from "./Separator";
 import { useStyles } from "./styles";
@@ -47,12 +43,6 @@ function isOnOrOff(value: unknown): "Off" | "On" {
   return value ? "On" : "Off";
 }
 
-function setRemoteDebugging(value: boolean) {
-  if (isRemoteDebuggingAvailable()) {
-    NativeModules["DevSettings"].setIsDebuggingRemotely(value);
-  }
-}
-
 function useIsFabricComponent() {
   const [isFabric, setIsFabric] = useState(isBridgeless());
   const setter = useCallback(
@@ -62,22 +52,6 @@ function useIsFabricComponent() {
     [setIsFabric]
   );
   return [isFabric, setter] as const;
-}
-
-function DevMenu(): React.ReactElement | null {
-  const styles = useStyles();
-
-  if (!isRemoteDebuggingAvailable()) {
-    return null;
-  }
-
-  return (
-    <View style={styles.group}>
-      <Feature value={isAsyncDebugging} onValueChange={setRemoteDebugging}>
-        Remote Debugging
-      </Feature>
-    </View>
-  );
 }
 
 export function Home(props: HomeProps): React.ReactElement<HomeProps> {
@@ -94,7 +68,6 @@ export function Home(props: HomeProps): React.ReactElement<HomeProps> {
         style={styles.body}
       >
         <Header />
-        <DevMenu />
         <View style={styles.group}>{props.children}</View>
         <View style={styles.group}>
           <Feature value={getReactNativeVersion()}>React Native</Feature>
