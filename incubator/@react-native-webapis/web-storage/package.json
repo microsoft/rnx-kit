@@ -59,7 +59,7 @@
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*",
     "react": "19.0.0",
-    "react-native": "^0.78.0"
+    "react-native": "^0.79.0"
   },
   "engines": {
     "node": ">=16.17"
