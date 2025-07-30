@@ -43,7 +43,7 @@ export function printError(manifestPath: string, code: ErrorCode): void {
       break;
 
     case "unsatisfied":
-      error(`Re-run with '--write' to fix them.`);
+      // A helpful message should have been printed with the error
       break;
   }
 }
