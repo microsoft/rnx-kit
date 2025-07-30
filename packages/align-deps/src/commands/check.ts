@@ -92,9 +92,7 @@ export function checkPackageManifest(
       inputConfig.manifest = updatedManifest;
       modifyManifest(manifestPath, updatedManifest);
     } else {
-      const violations = stringify(allChanges, [
-        `${manifestPath}: Changes are needed to satisfy all capabilities.`,
-      ]);
+      const violations = stringify(allChanges, [manifestPath]);
       logError(violations);
       return "unsatisfied";
     }

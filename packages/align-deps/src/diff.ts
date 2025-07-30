@@ -52,33 +52,37 @@ export function stringify(
   allChanges: Partial<Changes>,
   output: string[] = []
 ): string {
-  const prefix = "\t  - ";
-
+  let totalChanges = 0;
   for (const [section, changes] of Object.entries(allChanges)) {
     if (changes.length > 0) {
-      output.push(`\tIn ${section}:`);
+      totalChanges += changes.length;
       for (const change of changes) {
         const { type, dependency } = change;
+        const prefix = `      ├── ${section}["${dependency}"]:`;
         switch (type) {
           case "added":
-            output.push(`${prefix}${dependency} "${change.target}" is missing`);
+            output.push(
+              `${prefix} dependency is missing, expected "${change.target}"`
+            );
             break;
           case "changed":
             output.push(
-              `${prefix}${dependency} "${change.current}" should be "${change.target}"`
+              `${prefix} found "${change.current}", expected "${change.target}"`
             );
             break;
           case "removed":
-            output.push(`${prefix}${dependency} should be removed`);
+            output.push(`${prefix} should be removed`);
             break;
           case "unmanaged":
-            output.push(
-              `${prefix}${dependency} can be managed by '${change.capability}'`
-            );
+            output.push(`${prefix} can be managed by '${change.capability}'`);
             break;
         }
       }
     }
+  }
+
+  if (totalChanges > 0) {
+    output.push("      └── Re-run with '--write' to fix them\n");
   }
 
   return output.join("\n");

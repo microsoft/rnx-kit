@@ -236,14 +236,13 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
       defaultOptions,
       undefined,
       (message) => {
-        expect(message)
-          .toBe(`package.json: Changes are needed to satisfy all capabilities.
-	In peerDependencies:
-	  - react "18.1.0" is missing
-	  - react-native "^0.70.0" is missing
-	In devDependencies:
-	  - react "18.1.0" is missing
-	  - react-native "^0.70.0" is missing`);
+        expect(message).toBe(`package.json
+      ├── peerDependencies["react"]: dependency is missing, expected "18.1.0"
+      ├── peerDependencies["react-native"]: dependency is missing, expected "^0.70.0"
+      ├── devDependencies["react"]: dependency is missing, expected "18.1.0"
+      ├── devDependencies["react-native"]: dependency is missing, expected "^0.70.0"
+      └── Re-run with '--write' to fix them
+`);
       }
     );
 
