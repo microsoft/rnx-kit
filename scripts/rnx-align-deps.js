@@ -11,5 +11,4 @@ cli({
   ],
   requirements: ["react-native@0.79"],
   write: process.argv.includes("--write"),
-  "exclude-packages": ["@rnx-kit/metro-plugin-typescript"],
 });

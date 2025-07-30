@@ -13,11 +13,8 @@ export function findBadPackages({
   peerDependencies,
   devDependencies,
 }: PackageManifest): ExcludedPackage[] | undefined {
-  const foundBadPackages = [
-    dependencies,
-    peerDependencies,
-    devDependencies,
-  ].reduce<Set<ExcludedPackage>>((badPackages, deps) => {
+  const badPackages = new Set<ExcludedPackage>();
+  for (const deps of [dependencies, peerDependencies, devDependencies]) {
     if (deps) {
       for (const name of Object.keys(deps)) {
         const info = isBanned(name, deps[name]);
@@ -26,7 +23,6 @@ export function findBadPackages({
         }
       }
     }
-    return badPackages;
-  }, new Set<ExcludedPackage>());
-  return foundBadPackages.size > 0 ? Array.from(foundBadPackages) : undefined;
+  }
+  return badPackages.size > 0 ? Array.from(badPackages) : undefined;
 }
