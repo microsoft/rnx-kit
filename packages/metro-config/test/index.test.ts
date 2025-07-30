@@ -302,7 +302,6 @@ describe("makeMetroConfig()", () => {
     deepEqual(Object.keys(config.resolver.extraNodeModules), [
       "react",
       "react-native",
-      "react-native-windows",
       "@babel/runtime",
     ]);
 
@@ -376,7 +375,6 @@ describe("makeMetroConfig()", () => {
     deepEqual(Object.keys(config.resolver.extraNodeModules), [
       "react",
       "react-native",
-      "react-native-windows",
       "@babel/runtime",
     ]);
 
@@ -422,7 +420,6 @@ describe("makeMetroConfig()", () => {
       "my-awesome-package",
       "react",
       "react-native",
-      "react-native-windows",
     ]);
 
     equal(extraNodeModules["my-awesome-package"], "/skynet");

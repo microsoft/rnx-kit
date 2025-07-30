@@ -19,7 +19,6 @@ import {
 } from "react-native";
 // @ts-expect-error no type definitions available
 import { version as coreVersion } from "react-native/Libraries/Core/ReactNativeVersion";
-import { Header } from "react-native/Libraries/NewAppScreen";
 import { Feature } from "./Feature";
 import { Separator } from "./Separator";
 import { useStyles } from "./styles";
@@ -67,7 +66,6 @@ export function Home(props: HomeProps): React.ReactElement<HomeProps> {
         onLayout={setIsFabric}
         style={styles.body}
       >
-        <Header />
         <View style={styles.group}>{props.children}</View>
         <View style={styles.group}>
           <Feature value={getReactNativeVersion()}>React Native</Feature>

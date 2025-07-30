@@ -4,7 +4,7 @@ exports[`renders correctly 1`] = `
 <RCTSafeAreaView
   style={
     {
-      "backgroundColor": "#F3F3F3",
+      "backgroundColor": "#f3f3f3",
       "flex": 1,
     }
   }
@@ -14,82 +14,16 @@ exports[`renders correctly 1`] = `
     onLayout={[Function]}
     style={
       {
-        "backgroundColor": "#F3F3F3",
+        "backgroundColor": "#f3f3f3",
         "flex": 1,
       }
     }
   >
     <View>
       <View
-        accessibilityIgnoresInvertColors={true}
-        style={
-          [
-            {
-              "paddingBottom": 40,
-              "paddingHorizontal": 32,
-              "paddingTop": 96,
-            },
-            {
-              "backgroundColor": "#F3F3F3",
-            },
-          ]
-        }
-      >
-        <Image
-          accessibilityRole="image"
-          source={
-            {
-              "testUri": "../Libraries/NewAppScreen/components/logo.png",
-            }
-          }
-          style={
-            [
-              {
-                "bottom": 0,
-                "left": 0,
-                "position": "absolute",
-                "right": 0,
-                "top": 0,
-              },
-              {
-                "height": undefined,
-                "width": undefined,
-              },
-              {
-                "marginBottom": -192,
-                "marginLeft": -128,
-                "opacity": 0.2,
-                "overflow": "visible",
-                "resizeMode": "cover",
-              },
-            ]
-          }
-          testID="new-app-screen-header"
-        />
-        <Text
-          style={
-            [
-              {
-                "fontSize": 40,
-                "fontWeight": "700",
-                "textAlign": "center",
-              },
-              {
-                "color": "#000",
-              },
-            ]
-          }
-        >
-          Welcome to
-          
-
-          React Native
-        </Text>
-      </View>
-      <View
         style={
           {
-            "backgroundColor": "#FFF",
+            "backgroundColor": "#fff",
             "borderRadius": 8,
             "margin": 16,
           }
@@ -119,7 +53,7 @@ exports[`renders correctly 1`] = `
           <Text
             style={
               {
-                "color": "#444",
+                "color": "#404756",
                 "fontSize": 18,
                 "textAlign": "right",
               }
@@ -132,7 +66,7 @@ exports[`renders correctly 1`] = `
         <View
           style={
             {
-              "backgroundColor": "#DAE1E7",
+              "backgroundColor": "#dae1e7",
               "height": 0.5,
               "marginStart": 16,
             }
@@ -193,7 +127,7 @@ exports[`renders correctly 1`] = `
       <View
         style={
           {
-            "backgroundColor": "#FFF",
+            "backgroundColor": "#fff",
             "borderRadius": 8,
             "margin": 16,
           }
@@ -223,20 +157,20 @@ exports[`renders correctly 1`] = `
           <Text
             style={
               {
-                "color": "#444",
+                "color": "#404756",
                 "fontSize": 18,
                 "textAlign": "right",
               }
             }
             testID="react-native-value"
           >
-            0.79.5
+            0.80.2
           </Text>
         </View>
         <View
           style={
             {
-              "backgroundColor": "#DAE1E7",
+              "backgroundColor": "#dae1e7",
               "height": 0.5,
               "marginStart": 16,
             }
@@ -266,7 +200,7 @@ exports[`renders correctly 1`] = `
           <Text
             style={
               {
-                "color": "#444",
+                "color": "#404756",
                 "fontSize": 18,
                 "textAlign": "right",
               }
@@ -279,7 +213,7 @@ exports[`renders correctly 1`] = `
         <View
           style={
             {
-              "backgroundColor": "#DAE1E7",
+              "backgroundColor": "#dae1e7",
               "height": 0.5,
               "marginStart": 16,
             }
@@ -309,7 +243,7 @@ exports[`renders correctly 1`] = `
           <Text
             style={
               {
-                "color": "#444",
+                "color": "#404756",
                 "fontSize": 18,
                 "textAlign": "right",
               }
@@ -322,7 +256,7 @@ exports[`renders correctly 1`] = `
         <View
           style={
             {
-              "backgroundColor": "#DAE1E7",
+              "backgroundColor": "#dae1e7",
               "height": 0.5,
               "marginStart": 16,
             }
@@ -352,7 +286,7 @@ exports[`renders correctly 1`] = `
           <Text
             style={
               {
-                "color": "#444",
+                "color": "#404756",
                 "fontSize": 18,
                 "textAlign": "right",
               }
@@ -365,7 +299,7 @@ exports[`renders correctly 1`] = `
         <View
           style={
             {
-              "backgroundColor": "#DAE1E7",
+              "backgroundColor": "#dae1e7",
               "height": 0.5,
               "marginStart": 16,
             }
@@ -395,7 +329,7 @@ exports[`renders correctly 1`] = `
           <Text
             style={
               {
-                "color": "#444",
+                "color": "#404756",
                 "fontSize": 18,
                 "textAlign": "right",
               }

@@ -48,17 +48,17 @@
     }
   },
   "devDependencies": {
-    "@react-native-community/cli-types": "^18.0.0",
+    "@react-native-community/cli-types": "^19.0.0",
     "@rnx-kit/eslint-config": "*",
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*",
     "@types/node": "^22.0.0",
     "@types/node-fetch": "^2.6.5",
-    "metro": "^0.82.0",
-    "metro-config": "^0.82.0",
-    "metro-core": "^0.82.0",
-    "metro-resolver": "^0.82.0",
-    "metro-runtime": "^0.82.0"
+    "metro": "^0.82.2",
+    "metro-config": "^0.82.2",
+    "metro-core": "^0.82.2",
+    "metro-resolver": "^0.82.2",
+    "metro-runtime": "^0.82.2"
   },
   "engines": {
     "node": ">=16.17"
