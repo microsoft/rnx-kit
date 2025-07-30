@@ -143,6 +143,10 @@ export const profile: Profile = {
     name: "react-native-safe-area-context",
     version: "^4.12.0",
   },
+  screens: {
+    name: "react-native-screens",
+    version: ">=4.0 <4.5",
+  },
   svg: {
     name: "react-native-svg",
     version: "^15.8.0",
