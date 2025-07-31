@@ -42,13 +42,13 @@
   "devDependencies": {
     "@eslint/js": "^9.0.0",
     "@jest/types": "^29.2.1",
-    "@react-native-community/cli-types": "^18.0.0",
-    "@react-native/babel-preset": "^0.79.0",
+    "@react-native-community/cli-types": "^19.0.0",
+    "@react-native/babel-preset": "^0.80.0",
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*",
     "@types/node": "^22.0.0",
-    "react": "19.0.0",
-    "react-native": "^0.79.0"
+    "react": "19.1.0",
+    "react-native": "^0.80.0"
   },
   "engines": {
     "node": ">=16.17"

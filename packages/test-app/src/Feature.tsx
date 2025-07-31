@@ -2,7 +2,7 @@ import React from "react";
 import { Switch, Text, View } from "react-native";
 import { useStyles } from "./styles";
 
-type FeatureProps =
+export type FeatureProps =
   | { children: string; value: string }
   | {
       children: string;
@@ -15,6 +15,14 @@ function testID(label: string): string {
   return label.toLowerCase().replace(/\s+/g, "-") + "-value";
 }
 
+function toString(value: boolean | string): string {
+  if (typeof value === "string") {
+    return value;
+  }
+
+  return value ? "On" : "Off";
+}
+
 export function Feature({
   children: label,
   value,
@@ -24,11 +32,11 @@ export function Feature({
   return (
     <View style={styles.groupItemContainer}>
       <Text style={styles.groupItemLabel}>{label}</Text>
-      {typeof value === "boolean" ? (
-        <Switch value={value} {...props} />
+      {"onValueChange" in props ? (
+        <Switch value={Boolean(value)} {...props} />
       ) : (
         <Text testID={testID(label)} style={styles.groupItemValue}>
-          {value}
+          {toString(value)}
         </Text>
       )}
     </View>
