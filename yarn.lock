@@ -3839,9 +3839,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rnx-kit/commitlint-lite@workspace:incubator/commitlint-lite":
+"@rnx-kit/commitlint-lite@workspace:packages/commitlint-lite":
   version: 0.0.0-use.local
-  resolution: "@rnx-kit/commitlint-lite@workspace:incubator/commitlint-lite"
+  resolution: "@rnx-kit/commitlint-lite@workspace:packages/commitlint-lite"
   dependencies:
     "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/scripts": "npm:*"
