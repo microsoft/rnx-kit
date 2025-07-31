@@ -15,11 +15,7 @@ type ButtonProps = {
 function Button({ children, onPress }: ButtonProps) {
   const styles = useStyles();
   return (
-    <Pressable
-      android_ripple={styles.buttonRipple}
-      style={styles.groupItemContainer}
-      onPress={onPress}
-    >
+    <Pressable style={styles.groupItemContainer} onPress={onPress}>
       <Text style={styles.groupItemLabel}>{children}</Text>
     </Pressable>
   );
