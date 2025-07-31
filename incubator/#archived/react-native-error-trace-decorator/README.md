@@ -1,4 +1,9 @@
-<!-- We recommend an empty change log entry for a new package: `yarn change --empty` -->
+> [!CAUTION]
+>
+> This package has been archived and is no longer actively maintained.
+>
+> The code is still available for reference only. It may not work with the
+> latest versions of its dependencies.
 
 # @rnx-kit/react-native-error-trace-decorator
 

@@ -4259,25 +4259,6 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rnx-kit/react-native-error-trace-decorator@workspace:incubator/react-native-error-trace-decorator":
-  version: 0.0.0-use.local
-  resolution: "@rnx-kit/react-native-error-trace-decorator@workspace:incubator/react-native-error-trace-decorator"
-  dependencies:
-    "@rnx-kit/console": "npm:^2.0.0"
-    "@rnx-kit/eslint-config": "npm:*"
-    "@rnx-kit/jest-preset": "npm:*"
-    "@rnx-kit/scripts": "npm:*"
-    "@rnx-kit/tsconfig": "npm:*"
-    "@types/node": "npm:^22.0.0"
-    "@types/yargs": "npm:^16.0.0"
-    metro-symbolicate: "npm:^0.82.2"
-    source-map: "npm:^0.5.6"
-    yargs: "npm:^16.0.0"
-  bin:
-    react-native-error-trace-decorator: lib/cli.js
-  languageName: unknown
-  linkType: soft
-
 "@rnx-kit/react-native-host@workspace:*, @rnx-kit/react-native-host@workspace:packages/react-native-host":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/react-native-host@workspace:packages/react-native-host"
@@ -11042,7 +11023,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"metro-symbolicate@npm:0.82.5, metro-symbolicate@npm:^0.82.2":
+"metro-symbolicate@npm:0.82.5":
   version: 0.82.5
   resolution: "metro-symbolicate@npm:0.82.5"
   dependencies:
