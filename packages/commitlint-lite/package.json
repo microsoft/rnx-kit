@@ -2,7 +2,7 @@
   "name": "@rnx-kit/commitlint-lite",
   "version": "2.0.0",
   "description": "Lint commit messages",
-  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/incubator/commitlint-lite#readme",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/commitlint-lite#readme",
   "license": "MIT",
   "author": {
     "name": "Microsoft Open Source",
@@ -24,7 +24,7 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/microsoft/rnx-kit",
-    "directory": "incubator/commitlint-lite"
+    "directory": "packages/commitlint-lite"
   },
   "scripts": {
     "build": "rnx-kit-scripts build",
@@ -40,6 +40,5 @@
   },
   "engines": {
     "node": ">=16.17"
-  },
-  "experimental": true
+  }
 }
