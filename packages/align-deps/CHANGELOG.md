@@ -1,5 +1,18 @@
 # Change Log - @rnx-kit/align-deps
 
+## 3.2.0
+
+### Minor Changes
+
+- 46d657f: Use react-native-screens `>=4.0 <4.5` for React Native 0.76 as 4.4.0
+  of it is the latest compatible with React Native 0.76 when using Fabric and
+  4.0.0+ is needed to work correctly with react-navigation 7.x
+
+### Patch Changes
+
+- 33a9ae1: Changed the output to make errors appear more grouped and easier to
+  read
+
 ## 3.1.0
 
 ### Minor Changes
@@ -296,13 +309,11 @@
 - fbff74c8: `dep-check` has been renamed to `align-deps`
 
   ### Bug Fixes
-
   - Improved error messages: Messages should now contain the offending
     `package.json` and/or the profile causing issues.
   - Diff output has been reduced to only include the relevant sections.
 
   ### BREAKING CHANGES
-
   - A new config schema was introduced in this release
     - The old config will still work, but you are advised to migrate as soon as
       possible
