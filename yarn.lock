@@ -5913,6 +5913,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@yarnpkg/types@npm:^4.0.0":
+  version: 4.0.1
+  resolution: "@yarnpkg/types@npm:4.0.1"
+  dependencies:
+    tslib: "npm:^2.4.0"
+  checksum: 10c0/90226789475680ba599833571dd76c0718dd5b4c5022481263ef309d6a628f6246671cd6ca86e49c966ddefa7aca6ccef82240dc1476d2cea702ea5bee2a6b72
+  languageName: node
+  linkType: hard
+
 "@zkochan/cmd-shim@npm:^5.1.0":
   version: 5.4.1
   resolution: "@zkochan/cmd-shim@npm:5.4.1"
@@ -13088,6 +13097,7 @@ __metadata:
     "@changesets/cli": "npm:^2.22.0"
     "@types/jest": "npm:^29.2.1"
     "@types/node": "npm:^22.0.0"
+    "@yarnpkg/types": "npm:^4.0.0"
     eslint: "npm:^9.0.0"
     knip: "npm:^5.30.2"
     nx: "patch:nx@npm%3A20.3.3#~/.yarn/patches/nx-npm-20.3.3-84b801f64d.patch"

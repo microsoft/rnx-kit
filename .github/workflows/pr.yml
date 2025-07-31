@@ -46,7 +46,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          node scripts/lint-metadata.js
+          yarn constraints --fix
           if [[ -n "$GITHUB_TOKEN" ]]; then
             git diff | yarn suggestion-bot
           fi

@@ -37,6 +37,7 @@
     "@changesets/cli": "^2.22.0",
     "@types/jest": "^29.2.1",
     "@types/node": "^22.0.0",
+    "@yarnpkg/types": "^4.0.0",
     "eslint": "^9.0.0",
     "knip": "^5.30.2",
     "nx": "patch:nx@npm%3A20.3.3#~/.yarn/patches/nx-npm-20.3.3-84b801f64d.patch",
