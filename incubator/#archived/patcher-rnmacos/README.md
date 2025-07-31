@@ -1,3 +1,10 @@
+> [!CAUTION]
+>
+> This package has been archived and is no longer actively maintained.
+>
+> The code is still available for reference only. It may not work with the
+> latest versions of its dependencies.
+
 # @rnx-kit/patcher-rnmacos
 
 [![Build](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml/badge.svg)](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml)
