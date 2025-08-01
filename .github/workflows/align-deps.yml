@@ -1,0 +1,53 @@
+name: "@rnx-kit/align-deps"
+on:
+  merge_group:
+  schedule:
+    # Run at 4:00, Monday through Friday
+    - cron: 0 4 * * 1-5
+  workflow_dispatch:
+jobs:
+  update:
+    name: "Update `microsoft/react-native` preset"
+    permissions: {}
+    if: ${{ github.event.pull_request.head.repo.full_name == github.repository }}
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          filter: blob:none
+      - name: Look for new React Native release candidates
+        run: |
+          yarn build --dependencies
+          yarn update-profile --release-candidate > update-profile.output.txt
+          yarn update-readme
+        working-directory: packages/align-deps
+      - name: Update local packages with the new profile
+        run: |
+          yarn rnx-align-deps --write
+          yarn install --mode update-lockfile
+      - name: Generate changeset
+        id: changeset
+        run: |
+          echo '---' > .changeset/rnx-align-deps.md
+          echo '"@rnx-kit/align-deps": patch' >> .changeset/rnx-align-deps.md
+          echo '---' >> .changeset/rnx-align-deps.md
+          echo '' >> .changeset/rnx-align-deps.md
+          head -n 1 packages/align-deps/update-profile.output.txt >> .changeset/rnx-align-deps.md
+          echo "message=$(head -n 1 packages/align-deps/update-profile.output.txt | tr '[:upper:]' '[:lower:]')" >> $GITHUB_OUTPUT
+      - name: Generate token for submitting pull requests
+        uses: actions/create-github-app-token@v2
+        id: app-token
+        with:
+          app-id: ${{ vars.APP_ID }}
+          private-key: ${{ secrets.PRIVATE_KEY }}
+          permission-contents: write
+          permission-pull-requests: write
+      - name: Create or update pull request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ steps.app-token.outputs.token }}
+          branch: rnx-align-deps/main
+          sign-commits: true
+          title: "fix(align-deps): ${{ steps.changeset.outputs.message }}"
+          body-path: packages/align-deps/update-profile.output.txt
