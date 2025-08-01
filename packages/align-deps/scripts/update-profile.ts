@@ -41,6 +41,8 @@ type TemplateParams = {
   metroVersion: string;
 };
 
+const isCI = process.env.CI != null;
+
 function ensureNonNull<T>(value: T | null | undefined): T {
   assert.ok(value != null, "Value must not be null or undefined");
   return value;
@@ -468,7 +470,9 @@ async function main({
       if (newProfile) {
         const [dst, presetFile] = getProfilePath(presetName, targetVersion);
         fs.writeFile(dst, newProfile, () => {
-          console.log(`Wrote to '${dst}'`);
+          if (!isCI) {
+            console.log(`Wrote to '${dst}'`);
+          }
 
           const profiles = fs
             .readdirSync(path.dirname(dst))
@@ -498,7 +502,9 @@ async function main({
             "",
           ].join("\n");
           fs.writeFileSync(presetFile, preset);
-          console.log(`Updated '${presetFile}'`);
+          if (!isCI) {
+            console.log(`Updated '${presetFile}'`);
+          }
         });
       }
     } catch (e) {
@@ -566,6 +572,7 @@ async function main({
   const collator = new Intl.Collator();
   delta.sort((lhs, rhs) => collator.compare(lhs[0], rhs[0]));
   if (delta.length > 0) {
+    console.log();
     console.log(
       markdownTable([
         ["Capability", "Name", "Version", "Latest", "Homepage"],
@@ -639,10 +646,15 @@ async function parseArgs(): Promise<Options> {
       );
     }
 
-    console.log("Found release candidate:", nextVersion);
-
     const { major, minor } = ensureNonNull(semverCoerce(nextVersion));
-    options.targetVersion = `${major}.${minor}`;
+    const targetVersion = `${major}.${minor}`;
+    options.targetVersion = targetVersion;
+
+    if (isCI) {
+      console.log("Add profile for", targetVersion);
+    } else {
+      console.log("Found release candidate:", nextVersion);
+    }
   }
 
   return options;
