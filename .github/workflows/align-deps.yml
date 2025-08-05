@@ -16,9 +16,15 @@ jobs:
         uses: actions/checkout@v4
         with:
           filter: blob:none
-      - name: Look for new React Native release candidates
+      - name: Install package dependencies
+        run: |
+          yarn
+      - name: "Build `@rnx-kit/align-deps`"
         run: |
           yarn build --dependencies
+        working-directory: packages/align-deps
+      - name: Look for new React Native release candidates
+        run: |
           yarn update-profile --release-candidate > update-profile.output.txt
           yarn update-readme
         working-directory: packages/align-deps
