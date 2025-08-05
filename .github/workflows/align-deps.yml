@@ -9,7 +9,7 @@ jobs:
   update:
     name: "Update `microsoft/react-native` preset"
     permissions: {}
-    if: ${{ github.event.pull_request.head.repo.full_name == github.repository }}
+    if: ${{ github.repository == 'microsoft/rnx-kit' }}
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout
