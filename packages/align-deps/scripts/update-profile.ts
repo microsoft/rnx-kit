@@ -535,7 +535,10 @@ async function main({
     "react-test-renderer",
   ];
 
-  const delta: [string, string, string, string, string | undefined][] = [];
+  const headers = pullRequest
+    ? ["Capability", "Name", "Version", "Latest"]
+    : ["Capability", "Name", "Version", "Latest", "Homepage"];
+  const delta: string[][] = [];
   await Promise.all(
     Object.entries(preset[allVersions[0]])
       .filter(([capability]) => !ignoredCapabilities.includes(capability))
@@ -543,15 +546,25 @@ async function main({
         fetchPackageInfo(pkg).then((info) => {
           if (info) {
             const { name, version, latest, modified, homepage } = info;
-            delta.push([
-              capability,
-              name,
-              version,
-              version.endsWith(latest)
-                ? "="
-                : `${latest} (${modified.split("T")[0]})`,
-              homepage,
-            ]);
+            const latestVersion = version.endsWith(latest)
+              ? "="
+              : `${latest} (${modified.split("T")[0]})`;
+            if (pullRequest) {
+              delta.push([
+                capability,
+                homepage ? `[${name}](${homepage})` : name,
+                version,
+                latestVersion,
+              ]);
+            } else {
+              delta.push([
+                capability,
+                name,
+                version,
+                latestVersion,
+                homepage ?? "n/a",
+              ]);
+            }
           }
         })
       )
@@ -561,12 +574,7 @@ async function main({
   delta.sort((lhs, rhs) => collator.compare(lhs[0], rhs[0]));
   if (delta.length > 0) {
     console.log();
-    console.log(
-      markdownTable([
-        ["Capability", "Name", "Version", "Latest", "Homepage"],
-        ...delta,
-      ])
-    );
+    console.log(markdownTable([headers, ...delta]));
   }
 }
 
