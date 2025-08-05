@@ -1,54 +1,73 @@
-#!/usr/bin/env node
-// @ts-check
+#!/usr/bin/env -S node --experimental-strip-types --no-warnings
 
 import { untar } from "@rnx-kit/tools-shell";
+import { markdownTable } from "markdown-table";
 import * as fs from "node:fs";
 import * as https from "node:https";
 import * as path from "node:path";
 import { URL, fileURLToPath } from "node:url";
+import * as util from "node:util";
 import packageJson from "package-json";
 import semverCoerce from "semver/functions/coerce.js";
 import semverCompare from "semver/functions/compare.js";
+import type { MetaPackage, Package, Preset } from "../src/types.js";
 
-/**
- * @typedef {import("../src/types").MetaPackage} MetaPackage
- * @typedef {import("../src/types").Package} Package
- * @typedef {import("../src/types").Profile} Profile
- *
- * @typedef {{
- *   name: string;
- *   version: string;
- *   latest: string;
- *   modified: string;
- *   homepage?: string;
- *   tarball: string;
- *   dependencies?: Record<string, string>;
- *   peerDependencies?: Record<string, string>;
- * }} PackageInfo
- *
- * @typedef {{
- *   Name: string;
- *   Version: string;
- *   Latest: string;
- *   Homepage?: string;
- * }} TableRow
- */
+type Options = {
+  targetVersion?: string;
+  preset: string;
+  force: boolean;
+  releaseCandidate: boolean;
+};
 
-/**
- * This wrapper is mostly for coercing TypeScript into inferring the correct
- * type.
- * @param {any} v
- * @returns {Record<string, string> | undefined}
- */
-const Optional = (v) => v;
+type PackageInfo = {
+  name: string;
+  version: string;
+  latest: string;
+  modified: string;
+  homepage?: string;
+  tarball: string;
+  dependencies?: Record<string, string>;
+  peerDependencies?: Record<string, string>;
+};
+
+type TemplateParams = {
+  preset: string;
+  targetVersion: string;
+  reactVersion: string;
+  cliVersion: string;
+  cliAndroidVersion: string;
+  cliIOSVersion: string;
+  metroVersion: string;
+};
+
+function assertFulfilled<T>(
+  result: PromiseSettledResult<T>,
+  tag: string
+): asserts result is PromiseFulfilledResult<T> {
+  if (result.status !== "fulfilled") {
+    throw new Error(
+      `Failed to get ${tag} version of 'react-native': ${result.reason}`
+    );
+  }
+}
+
+function coerceVersion(
+  version: string
+): NonNullable<ReturnType<typeof semverCoerce>> {
+  const coerced = semverCoerce(version);
+  if (!coerced) {
+    throw new Error(`Failed to coerce version: ${version}`);
+  }
+  return coerced;
+}
 
 /**
  * Fetches package manifest from npm.
- * @param {MetaPackage | Package} pkg
- * @param {string=} targetVersion
- * @returns {Promise<PackageInfo | void>}
  */
-async function fetchPackageInfo(pkg, targetVersion = "latest") {
+async function fetchPackageInfo(
+  pkg: MetaPackage | Package,
+  targetVersion = "latest"
+): Promise<PackageInfo | void> {
   if (isMetaPackage(pkg)) {
     return Promise.resolve();
   }
@@ -62,6 +81,7 @@ async function fetchPackageInfo(pkg, targetVersion = "latest") {
   const {
     version: latest,
     homepage,
+    repository,
     dist: { tarball },
     dependencies,
     peerDependencies,
@@ -77,39 +97,32 @@ async function fetchPackageInfo(pkg, targetVersion = "latest") {
     version,
     latest,
     modified: time?.[latest] ?? "?",
-    homepage,
-    dependencies: Optional(dependencies),
-    peerDependencies: Optional(peerDependencies),
+    homepage: homepage ?? repository?.url ?? repository,
+    dependencies,
+    peerDependencies,
     tarball,
   };
 }
 
-/**
- * @param {string} packageName
- * @param {Record<string, string>?} dependencies
- * @returns {string}
- */
-function getPackageVersion(packageName, dependencies) {
+function getPackageVersion(
+  packageName: string,
+  dependencies?: Record<string, string>
+): string {
   const packageVersion = dependencies?.[packageName];
   if (!packageVersion) {
     throw new Error(`Failed to get '${packageName}' version`);
   }
 
-  const coercedVersion = semverCoerce(packageVersion);
-  if (!coercedVersion) {
-    throw new Error(`Failed to coerce version: ${packageVersion}`);
-  }
-
-  return coercedVersion.version;
+  return coerceVersion(packageVersion).version;
 }
 
 /**
  * Returns the path to a profile.
- * @param {string} preset
- * @param {string} profileVersion
- * @returns {[string, string]}
  */
-function getProfilePath(preset, profileVersion) {
+function getProfilePath(
+  preset: string,
+  profileVersion: string
+): [string, string] {
   const presetDir = path.relative(
     process.cwd(),
     new URL(`../src/presets/${preset}`, import.meta.url).pathname
@@ -125,26 +138,13 @@ function getProfilePath(preset, profileVersion) {
  *
  * Note: This is a copy of the function in 'src/capabilities.ts' to avoid having
  * to compile the whole package before we can run this script.
- *
- * @param {MetaPackage | Package} pkg
- * @returns {pkg is MetaPackage}
  */
-function isMetaPackage(pkg) {
+function isMetaPackage(pkg: MetaPackage | Package): pkg is MetaPackage {
   return pkg.name === "#meta" && Array.isArray(pkg.capabilities);
 }
 
 /**
  * Generates a profile.
- * @param {{
- *   preset: string;
- *   targetVersion: string;
- *   reactVersion: string;
- *   cliVersion: string;
- *   cliAndroidVersion: string;
- *   cliIOSVersion: string;
- *   metroVersion: string;
- * }} versions
- * @returns {string}
  */
 function generateFromTemplate({
   preset,
@@ -154,24 +154,17 @@ function generateFromTemplate({
   cliAndroidVersion,
   cliIOSVersion,
   metroVersion,
-}) {
-  const nextVersionCoerced = semverCoerce(targetVersion);
-  if (!nextVersionCoerced) {
-    throw new Error(`Failed to coerce version: ${targetVersion}`);
-  }
-
-  const currentVersion = `${nextVersionCoerced.major}.${
-    nextVersionCoerced.minor - 1
-  }`;
+}: TemplateParams): string {
+  const nextVersionCoerced = coerceVersion(targetVersion);
+  const { major, minor } = nextVersionCoerced;
+  const currentVersion = `${major}.${minor - 1}`;
 
   const [currentProfile] = getProfilePath(preset, currentVersion);
   if (!fs.existsSync(currentProfile)) {
     throw new Error(`Could not find '${currentProfile}'`);
   }
 
-  const currentVersionVarName = `${nextVersionCoerced.major}_${
-    nextVersionCoerced.minor - 1
-  }`;
+  const currentVersionVarName = `${major}_${minor - 1}`;
 
   const useOldBabelNames = semverCompare(nextVersionCoerced, "0.73.0") < 0;
   const babelPresetName = useOldBabelNames
@@ -312,10 +305,10 @@ export const profile: Profile = {
 
 /**
  * Returns the current Metro version by resolving react-native's dependencies.
- * @param {Required<PackageInfo>["dependencies"]} dependencies
- * @returns {Promise<string>}
  */
-async function getCurrentMetroVersion(dependencies) {
+async function getCurrentMetroVersion(
+  dependencies: Required<PackageInfo>["dependencies"]
+): Promise<string> {
   const chain = ["react-native", "@react-native/community-cli-plugin"];
   const deps = await chain.reduce(
     (p, packageName) =>
@@ -329,7 +322,7 @@ async function getCurrentMetroVersion(dependencies) {
             version: getPackageVersion(packageName, dependencies),
             fullMetadata: true,
           });
-          return Optional(packageInfo.dependencies);
+          return packageInfo.dependencies;
         } catch (e) {
           if (e.code === "ETARGET" || e.name === "VersionNotFoundError") {
             // Some packages, such as `@react-native-community/cli`, are still
@@ -339,13 +332,13 @@ async function getCurrentMetroVersion(dependencies) {
               version: "next",
               fullMetadata: true,
             });
-            return Optional(packageInfo.dependencies);
+            return packageInfo.dependencies;
           } else {
             return undefined;
           }
         }
       }),
-    Promise.resolve(Optional(dependencies))
+    Promise.resolve(dependencies)
   );
 
   if (!deps) {
@@ -357,11 +350,11 @@ async function getCurrentMetroVersion(dependencies) {
 
 /**
  * Fetches package versions for specified react-native version.
- * @param {string} preset
- * @param {string} targetVersion
- * @returns {Promise<string | undefined>}
  */
-async function makeProfile(preset, targetVersion) {
+async function makeProfile(
+  preset: string,
+  targetVersion: string
+): Promise<string | undefined> {
   const templatePkg = {
     name: "@react-native-community/template",
     version: "0.0.0",
@@ -369,12 +362,12 @@ async function makeProfile(preset, targetVersion) {
   const template = await fetchPackageInfo(templatePkg, `^${targetVersion}.0-0`);
   if (!template) {
     throw new Error(
-      `Failed to get manifest of '${templatePkg.name}@${targetVersion}`
+      `Failed to fetch the manifest for '${templatePkg.name}@${targetVersion}`
     );
   }
 
   const { tarball } = template;
-  const templateDir = await new Promise((resolve, reject) => {
+  const templateDir = await new Promise<string>((resolve, reject) => {
     https
       .get(tarball, (res) => {
         const tmpUrl = new URL("../node_modules/.tmp", import.meta.url);
@@ -438,27 +431,24 @@ async function makeProfile(preset, targetVersion) {
  *
  * Note that this script spawns a new process for each capability in parallel.
  * It currently does not honor throttling hints of any kind.
- *
- * @param {{ preset?: string; targetVersion?: string; force?: boolean; }} options
  */
 async function main({
-  preset: presetName = "microsoft/react-native",
+  preset: presetName,
   targetVersion = "",
   force,
-}) {
-  const { preset } = await import(`../lib/presets/${presetName}.js`);
-  const allVersions = /** @type {string[]} */ (
-    Object.keys(preset)
-      .sort((lhs, rhs) => semverCompare(semverCoerce(lhs), semverCoerce(rhs)))
-      .reverse()
+}: Options): Promise<void> {
+  const { preset }: { preset: Readonly<Preset> } = await import(
+    `../lib/presets/${presetName}.js`
   );
+  const allVersions: string[] = Object.keys(preset)
+    .sort((lhs, rhs) => semverCompare(coerceVersion(lhs), coerceVersion(rhs)))
+    .reverse();
 
   if (targetVersion) {
     if (!force && preset[targetVersion]) {
-      console.error(
-        `Profile for '${targetVersion}' already exists. To overwrite it anyway, re-run with '--force'.`
+      throw new Error(
+        `A profile for '${targetVersion}' already exists. To overwrite it anyway, re-run with '--force'.`
       );
-      process.exit(1);
     }
 
     try {
@@ -501,7 +491,7 @@ async function main({
       }
     } catch (e) {
       if (e.distTags) {
-        console.error(
+        throw new Error(
           [
             e.message,
             "Available tags:",
@@ -510,10 +500,9 @@ async function main({
             ),
           ].join("\n")
         );
-      } else {
-        console.error(e);
       }
-      process.exit(1);
+
+      throw e;
     }
   }
 
@@ -540,55 +529,116 @@ async function main({
     "react-test-renderer",
   ];
 
-  /** @type {[string, TableRow][]} */
-  const delta = [];
+  const delta: [string, string, string, string, string | undefined][] = [];
   await Promise.all(
     Object.entries(preset[allVersions[0]])
       .filter(([capability]) => !ignoredCapabilities.includes(capability))
-      .map(async ([capability, pkg]) => {
-        await fetchPackageInfo(pkg).then((info) => {
+      .map(([capability, pkg]) =>
+        fetchPackageInfo(pkg).then((info) => {
           if (info) {
             const { name, version, latest, modified, homepage } = info;
             delta.push([
               capability,
-              {
-                Name: name,
-                Version: version,
-                Latest: version.endsWith(latest)
-                  ? "="
-                  : `${latest} (${modified.split("T")[0]})`,
-                Homepage: homepage,
-              },
+              name,
+              version,
+              version.endsWith(latest)
+                ? "="
+                : `${latest} (${modified.split("T")[0]})`,
+              homepage,
             ]);
           }
-        });
-      })
+        })
+      )
   );
 
   const collator = new Intl.Collator();
   delta.sort((lhs, rhs) => collator.compare(lhs[0], rhs[0]));
-  console.table(Object.fromEntries(delta));
+  if (delta.length > 0) {
+    console.log();
+    console.log(
+      markdownTable([
+        ["Capability", "Name", "Version", "Latest", "Homepage"],
+        ...delta,
+      ])
+    );
+  }
 }
 
-const options = (() => {
-  const options = {};
-  process.argv.slice(2).forEach((arg) => {
-    switch (arg) {
-      case "--force":
-        options.force = true;
-        break;
-      default:
-        if (!/^\d+\.\d+$/.test(arg)) {
-          console.error(
-            `Expected version in the format '<major>.<minor>', got: ${arg}`
-          );
-          process.exit(1);
-        }
-        options.targetVersion = arg;
-        break;
-    }
+async function parseArgs(): Promise<Options> {
+  const { values, positionals } = util.parseArgs({
+    args: process.argv.slice(2),
+    options: {
+      preset: {
+        type: "string",
+        short: "p",
+        default: "microsoft/react-native",
+      },
+      force: {
+        type: "boolean",
+        short: "f",
+        default: false,
+      },
+      "release-candidate": {
+        type: "boolean",
+        default: false,
+      },
+    },
+    strict: true,
+    allowPositionals: true,
+    tokens: false,
   });
-  return options;
-})();
 
-main(options);
+  const options: Options = {
+    preset: values.preset,
+    force: values.force,
+    releaseCandidate: values["release-candidate"],
+  };
+
+  if (positionals.length > 0) {
+    const arg = positionals[0];
+    if (options.releaseCandidate) {
+      throw new Error(
+        `Unexpected argument '${arg}'; argument conflicts with '--release-candidate'`
+      );
+    }
+    if (!/^\d+\.\d+$/.test(arg)) {
+      throw new Error(
+        `Expected version in the format '<major>.<minor>', got: ${arg}`
+      );
+    }
+
+    options.targetVersion = arg;
+  }
+
+  if (options.releaseCandidate) {
+    const [latest, next] = await Promise.allSettled([
+      packageJson("react-native", { version: "latest" }),
+      packageJson("react-native", { version: "next" }),
+    ]);
+
+    assertFulfilled(latest, "latest");
+    assertFulfilled(next, "next");
+
+    const latestVersion = latest.value.version;
+    const nextVersion = next.value.version;
+    if (semverCompare(latestVersion, nextVersion) >= 0) {
+      throw new Error(
+        `No new release candidate available since ${latestVersion}`
+      );
+    }
+
+    console.log("Found release candidate:", nextVersion);
+
+    const { major, minor } = coerceVersion(nextVersion);
+    options.targetVersion = `${major}.${minor}`;
+  }
+
+  return options;
+}
+
+parseArgs()
+  .then(main)
+  .catch((e: Error) => {
+    console.error(e.message);
+    process.exitCode = 1;
+  });
