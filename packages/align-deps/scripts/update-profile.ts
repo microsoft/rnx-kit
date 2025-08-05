@@ -16,6 +16,7 @@ type Options = {
   targetVersion?: string;
   preset: string;
   force: boolean;
+  pullRequest: boolean;
   releaseCandidate: boolean;
 };
 
@@ -436,6 +437,7 @@ async function main({
   preset: presetName,
   targetVersion = "",
   force,
+  pullRequest,
 }: Options): Promise<void> {
   const { preset }: { preset: Readonly<Preset> } = await import(
     `../lib/presets/${presetName}.js`
@@ -456,7 +458,9 @@ async function main({
       if (newProfile) {
         const [dst, presetFile] = getProfilePath(presetName, targetVersion);
         fs.writeFile(dst, newProfile, () => {
-          console.log(`Wrote to '${dst}'`);
+          if (!pullRequest) {
+            console.log(`Wrote to '${dst}'`);
+          }
 
           const profiles = fs
             .readdirSync(path.dirname(dst))
@@ -486,7 +490,9 @@ async function main({
             "",
           ].join("\n");
           fs.writeFileSync(presetFile, preset);
-          console.log(`Updated '${presetFile}'`);
+          if (!pullRequest) {
+            console.log(`Updated '${presetFile}'`);
+          }
         });
       }
     } catch (e) {
@@ -578,6 +584,10 @@ async function parseArgs(): Promise<Options> {
         short: "f",
         default: false,
       },
+      pr: {
+        type: "boolean",
+        default: process.env.CI != null,
+      },
       "release-candidate": {
         type: "boolean",
         default: false,
@@ -591,6 +601,7 @@ async function parseArgs(): Promise<Options> {
   const options: Options = {
     preset: values.preset,
     force: values.force,
+    pullRequest: values.pr,
     releaseCandidate: values["release-candidate"],
   };
 
@@ -627,10 +638,15 @@ async function parseArgs(): Promise<Options> {
       );
     }
 
-    console.log("Found release candidate:", nextVersion);
-
     const { major, minor } = coerceVersion(nextVersion);
-    options.targetVersion = `${major}.${minor}`;
+    const targetVersion = `${major}.${minor}`;
+    options.targetVersion = targetVersion;
+
+    if (options.pullRequest) {
+      console.log("Add profile for", targetVersion);
+    } else {
+      console.log("Found release candidate:", nextVersion);
+    }
   }
 
   return options;
