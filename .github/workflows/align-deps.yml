@@ -58,6 +58,7 @@ jobs:
         uses: peter-evans/create-pull-request@v7
         with:
           token: ${{ steps.app-token.outputs.token }}
+          commit-message: "fix(align-deps): ${{ steps.changeset.outputs.message }}"
           branch: rnx-align-deps/main
           sign-commits: true
           title: "fix(align-deps): ${{ steps.changeset.outputs.message }}"
