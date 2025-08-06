@@ -62,6 +62,80 @@ function coerceVersion(
   return coerced;
 }
 
+function formatModifiedDate(
+  modified: string,
+  rtf: Intl.RelativeTimeFormat
+): string {
+  const now = new Date();
+  const pastDate = new Date(modified);
+
+  // @ts-expect-error TypeScript does not recognize that `Date` supports subtraction
+  const diffInSeconds = Math.floor((pastDate - now) / 1000);
+
+  if (Math.abs(diffInSeconds) < 60) {
+    return rtf.format(diffInSeconds, "second") + " ✨";
+  }
+
+  const diffInMinutes = Math.floor(diffInSeconds / 60);
+  if (Math.abs(diffInMinutes) < 60) {
+    return rtf.format(diffInMinutes, "minute") + " ✨";
+  }
+
+  const diffInHours = Math.floor(diffInMinutes / 60);
+  if (Math.abs(diffInHours) < 24) {
+    return rtf.format(diffInHours, "hour") + " ✨";
+  }
+
+  const diffInDays = Math.floor(diffInHours / 24);
+  if (Math.abs(diffInDays) < 7) {
+    return rtf.format(diffInDays, "day") + " ✨";
+  }
+
+  const diffInWeeks = Math.floor(diffInDays / 7);
+  if (Math.abs(diffInWeeks) < 4) {
+    return rtf.format(diffInWeeks, "week");
+  }
+
+  const diffInMonths = Math.floor(diffInWeeks / 4);
+  if (Math.abs(diffInMonths) < 12) {
+    return rtf.format(diffInMonths, "month");
+  }
+
+  const diffInYears = Math.floor(diffInMonths / 12);
+  return rtf.format(diffInYears, "year") + " 🕸️";
+}
+
+function addCapabilityForDisplay(
+  table: string[][],
+  capability: string,
+  { name, version, latest, modified, homepage }: PackageInfo,
+  rtf: Intl.RelativeTimeFormat
+): void {
+  table.push([
+    capability,
+    name,
+    version,
+    latest,
+    formatModifiedDate(modified, rtf),
+    homepage ?? "n/a",
+  ]);
+}
+
+function addCapabilityForPullRequestDescription(
+  table: string[][],
+  capability: string,
+  { name, version, latest, modified, homepage }: PackageInfo,
+  rtf: Intl.RelativeTimeFormat
+): void {
+  table.push([
+    capability,
+    homepage ? `[${name}](${homepage})` : name,
+    version,
+    latest,
+    formatModifiedDate(modified, rtf),
+  ]);
+}
+
 /**
  * Fetches package manifest from npm.
  */
@@ -535,46 +609,32 @@ async function main({
     "react-test-renderer",
   ];
 
+  const rtf = new Intl.RelativeTimeFormat("en", { numeric: "auto" });
+  const addCapability = pullRequest
+    ? addCapabilityForPullRequestDescription
+    : addCapabilityForDisplay;
   const headers = pullRequest
-    ? ["Capability", "Name", "Version", "Latest"]
-    : ["Capability", "Name", "Version", "Latest", "Homepage"];
-  const delta: string[][] = [];
+    ? ["Capability", "Name", "Version", "Latest", "Modified"]
+    : ["Capability", "Name", "Version", "Latest", "Modified", "Homepage"];
+
+  const table: string[][] = [];
   await Promise.all(
     Object.entries(preset[allVersions[0]])
       .filter(([capability]) => !ignoredCapabilities.includes(capability))
       .map(([capability, pkg]) =>
         fetchPackageInfo(pkg).then((info) => {
           if (info) {
-            const { name, version, latest, modified, homepage } = info;
-            const latestVersion = version.endsWith(latest)
-              ? "="
-              : `${latest} (${modified.split("T")[0]})`;
-            if (pullRequest) {
-              delta.push([
-                capability,
-                homepage ? `[${name}](${homepage})` : name,
-                version,
-                latestVersion,
-              ]);
-            } else {
-              delta.push([
-                capability,
-                name,
-                version,
-                latestVersion,
-                homepage ?? "n/a",
-              ]);
-            }
+            addCapability(table, capability, info, rtf);
           }
         })
       )
   );
 
   const collator = new Intl.Collator();
-  delta.sort((lhs, rhs) => collator.compare(lhs[0], rhs[0]));
-  if (delta.length > 0) {
+  table.sort((lhs, rhs) => collator.compare(lhs[0], rhs[0]));
+  if (table.length > 0) {
     console.log();
-    console.log(markdownTable([headers, ...delta]));
+    console.log(markdownTable([headers, ...table]));
   }
 }
 

@@ -34,6 +34,7 @@
 /packages/*/lib/
 /packages/*/macos/DerivedData/
 /packages/*/macos/build/
+/packages/align-deps/update-profile.output.txt
 /packages/template/CHANGELOG.md
 /scripts/bin/
 /scripts/lib/
