@@ -3,17 +3,26 @@
 ## Project Overview
 
 `rnx-kit` is a collection of battle-tested React Native development tools
-created by Microsoft engineers. This is a **monorepo** using:
+created by Microsoft engineers for optimizing React Native development at scale.
+This is a **monorepo** using:
 
-- **Nx** for build orchestration and project management
-- **Yarn v4** as the package manager with workspaces
-- **TypeScript** as the primary language
+- **Nx v20.3.3** (patched) for build orchestration and project management
+- **Yarn v4.6.0** as the package manager with workspaces
+- **TypeScript v5.0+** as the primary language with strict configuration
 - **Node.js ≥18.12** runtime requirement
+
+### Core Architecture
+
+- **Nx Monorepo**: Build orchestration with automatic project dependencies
+- **Workspace Dependencies**: Internal packages use `workspace:*` references
+- **Common Build Scripts**: All packages use `@rnx-kit/scripts` for consistency
+- **Platform-Specific Tools**: Separate `tools-*` packages for iOS, Android,
+  Windows, etc.
 
 ## Repository Structure
 
 ```
-packages/        # Main published packages
+packages/        # Main published packages (@rnx-kit/* scope)
 incubator/       # Experimental/beta packages
 scripts/         # Build and maintenance scripts
 docsite/         # Docusaurus documentation site
@@ -26,6 +35,40 @@ docsite/         # Docusaurus documentation site
 - **Build Tools**: `cli`, `build` (incubator), native platform tools
 - **Development Tools**: `eslint-config`, `jest-preset`, `babel-preset-*`
 - **React Native Utilities**: `react-native-*`, `tools-*`
+
+## Build System & Development Commands
+
+### Root-Level Commands
+
+```bash
+yarn build              # Build all packages using Nx
+yarn test               # Build and test all packages
+yarn lint               # Lint all packages with ESLint
+yarn bundle             # Bundle packages for distribution
+yarn format             # Format code with Prettier
+yarn clean              # Clean build artifacts (git clean -dfqx)
+yarn new-package <name> # Create new package from template
+yarn change             # Create Changeset entry for versioning
+yarn rnx-align-deps     # Align dependencies across workspace
+yarn show-affected      # Show Nx affected projects
+```
+
+### Package-Level Commands
+
+Each package supports these scripts via `@rnx-kit/scripts`:
+
+- `yarn build` - TypeScript compilation to `lib/`
+- `yarn lint` - ESLint with `@rnx-kit/eslint-config`
+- `yarn test` - Jest tests with `@rnx-kit/jest-preset`
+- `yarn format` - Prettier formatting
+- `bundle` - Bundle for distribution (where applicable)
+
+### Nx Integration Details
+
+- **Build Dependencies**: Packages automatically depend on upstream builds
+- **Affected Builds**: Use `nx affected --targets build,test` for incremental CI
+- **Caching**: Build and test results are cached for performance
+- **Target Defaults**: Defined in `nx.json` with dependency ordering
 
 ## Development Guidelines
 
@@ -44,7 +87,7 @@ Every package follows this structure:
 
 ```
 package-name/
-├── package.json          # Standard npm package manifest
+├── package.json          # @rnx-kit/package-name scope
 ├── eslint.config.js      # Points to @rnx-kit/eslint-config
 ├── tsconfig.json         # TypeScript configuration
 ├── src/                  # Source code
@@ -58,10 +101,10 @@ package-name/
 
 All packages use `@rnx-kit/scripts` for consistent build commands:
 
-- `build`: Compile TypeScript
-- `format`: Run Prettier
-- `lint`: Run ESLint
-- `test`: Run Jest tests
+- `build`: Compile TypeScript to `lib/` with source maps
+- `format`: Run Prettier with organize imports
+- `lint`: Run ESLint with `@rnx-kit/eslint-config`
+- `test`: Run Jest tests with `@rnx-kit/jest-preset`
 - `bundle`: Bundle for distribution (where applicable)
 
 ### Nx Integration
@@ -70,6 +113,7 @@ All packages use `@rnx-kit/scripts` for consistent build commands:
 - Dependencies between packages are automatically detected
 - Build cache is enabled for performance
 - Use `nx affected` for incremental builds in CI
+- Build order handled automatically based on package dependencies
 
 ## Filing & Naming Conventions
 
@@ -101,6 +145,7 @@ All packages use `@rnx-kit/scripts` for consistent build commands:
 
 - Use `workspace:*` for internal package references
 - External deps in `devDependencies` where possible
+- Dependencies are aligned across workspace using `align-deps` tool
 - Avoid duplicate dependencies (checked by `align-deps`)
 
 ### Common Dependencies
@@ -109,7 +154,14 @@ All packages use `@rnx-kit/scripts` for consistent build commands:
 - `@rnx-kit/tools-*` for platform-specific utilities
 - React Native community packages where applicable
 
-## Testing Patterns
+### Key Development Dependencies
+
+- **ESLint**: ^9.0.0 with custom `@rnx-kit/eslint-config`
+- **Prettier**: ^3.0.0 with `prettier-plugin-organize-imports`
+- **Jest**: ^29.2.1 with `@rnx-kit/jest-preset`
+- **Changesets**: ^2.22.0 for version management
+
+### Testing Patterns
 
 ### Jest Configuration
 
@@ -117,6 +169,7 @@ All packages use `@rnx-kit/scripts` for consistent build commands:
 - Tests in `/test/` directory alongside source
 - Use `.test.ts` suffix for test files
 - Mock external dependencies appropriately
+- Test coverage tracked per package
 
 ### Test Structure
 
@@ -153,18 +206,21 @@ Each package should include:
 - TypeScript compilation to `lib/` directory
 - Type definitions (`.d.ts`) included in published packages
 - Source maps for debugging
+- Build order handled automatically by Nx based on dependencies
 
 ### Publishing
 
 - Uses Changesets for version management and publishing
 - Automated releases via GitHub Actions
 - Change logs generated from changeset descriptions
+- Semantic versioning with automated changelog generation
 
 ### Performance
 
 - Nx caching for build performance
 - Incremental builds using `nx affected`
 - Tree-shakable exports where possible
+- Build artifacts cached across CI runs
 
 ## Platform-Specific Notes
 
@@ -173,12 +229,15 @@ Each package should include:
 - Support multiple RN versions where possible
 - Handle platform differences (iOS, Android, Windows, macOS)
 - Use React Native community standards
+- Native module configuration for each platform
+- Multiple React Native version support patterns
 
 ### Metro Integration
 
 - Follow Metro plugin architecture
 - Handle both development and production builds
 - Respect Metro's transformer and serializer APIs
+- Metro plugins follow established plugin architecture patterns
 
 ### Node.js
 
