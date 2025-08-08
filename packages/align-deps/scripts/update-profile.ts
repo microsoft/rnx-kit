@@ -41,6 +41,30 @@ type TemplateParams = {
   metroVersion: string;
 };
 
+export const IGNORED_CAPABILITIES = [
+  "babel-preset-react-native",
+  "community/cli",
+  "community/cli-android",
+  "community/cli-ios",
+  "core",
+  "core-android",
+  "core-ios",
+  "core-macos",
+  "core-windows",
+  "core/metro-config",
+  "hermes",
+  "jest",
+  "metro",
+  "metro-config",
+  "metro-core",
+  "metro-react-native-babel-transformer",
+  "metro-resolver",
+  "metro-runtime",
+  "react",
+  "react-dom",
+  "react-test-renderer",
+];
+
 function assertFulfilled<T>(
   result: PromiseSettledResult<T>,
   tag: string
@@ -586,29 +610,6 @@ async function main({
     }
   }
 
-  const ignoredCapabilities = [
-    "babel-preset-react-native",
-    "community/cli",
-    "community/cli-android",
-    "community/cli-ios",
-    "core",
-    "core-android",
-    "core-ios",
-    "core-macos",
-    "core-windows",
-    "core/metro-config",
-    "hermes",
-    "metro",
-    "metro-config",
-    "metro-core",
-    "metro-react-native-babel-transformer",
-    "metro-resolver",
-    "metro-runtime",
-    "react",
-    "react-dom",
-    "react-test-renderer",
-  ];
-
   const rtf = new Intl.RelativeTimeFormat("en", { numeric: "auto" });
   const addCapability = pullRequest
     ? addCapabilityForPullRequestDescription
@@ -620,7 +621,7 @@ async function main({
   const table: string[][] = [];
   await Promise.all(
     Object.entries(preset[allVersions[0]])
-      .filter(([capability]) => !ignoredCapabilities.includes(capability))
+      .filter(([capability]) => !IGNORED_CAPABILITIES.includes(capability))
       .map(([capability, pkg]) =>
         fetchPackageInfo(pkg).then((info) => {
           if (info) {
@@ -720,9 +721,11 @@ async function parseArgs(): Promise<Options> {
   return options;
 }
 
-parseArgs()
-  .then(main)
-  .catch((e: Error) => {
-    console.error(e.message);
-    process.exitCode = 1;
-  });
+if (fileURLToPath(import.meta.url) === path.resolve(process.argv[1])) {
+  parseArgs()
+    .then(main)
+    .catch((e: Error) => {
+      console.error(e.message);
+      process.exitCode = 1;
+    });
+}
