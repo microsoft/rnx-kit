@@ -76,5 +76,6 @@
     "syncpack",
     "transpiles",
     "unconfigured"
-  ]
+  ],
+  "nxConsole.generateAiAgentRules": true
 }
