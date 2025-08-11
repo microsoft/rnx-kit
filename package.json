@@ -46,8 +46,8 @@
     "test": "node --test --experimental-test-coverage $(git ls-files 'test/*.test.js')"
   },
   "dependencies": {
-    "@octokit/core": "^6.0.0",
-    "@octokit/plugin-rest-endpoint-methods": "^14.0.0",
+    "@octokit/core": "^7.0.0",
+    "@octokit/plugin-rest-endpoint-methods": "^16.0.0",
     "azure-devops-node-api": "^15.0.0",
     "parse-diff": "^0.11.0"
   },
@@ -61,7 +61,7 @@
     "typescript": "^5.0.0"
   },
   "engines": {
-    "node": ">=18.12"
+    "node": ">=20.9"
   },
   "packageManager": "yarn@4.8.1",
   "resolutions": {
