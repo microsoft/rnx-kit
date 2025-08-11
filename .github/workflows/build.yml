@@ -16,7 +16,7 @@ jobs:
           filter: blob:none
           fetch-depth: 0
       - name: Setup the toolchain
-        uses: ./.github/actions/setup-toolchain
+        uses: microsoft/react-native-test-app/.github/actions/setup-toolchain@4.4.5
       - name: Install package dependencies
         run: |
           # `npm pack` fails in pnpm mode when using npm 9+ (bundled with Node 18+)

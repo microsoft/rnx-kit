@@ -17,7 +17,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Setup the toolchain
-        uses: ./.github/actions/setup-toolchain
+        uses: microsoft/react-native-test-app/.github/actions/setup-toolchain@4.4.5
         with:
           node-version: 22
       - name: Deduplicate packages
@@ -96,7 +96,7 @@ jobs:
           filter: blob:none
           fetch-depth: 0
       - name: Setup the toolchain
-        uses: ./.github/actions/setup-toolchain
+        uses: microsoft/react-native-test-app/.github/actions/setup-toolchain@4.4.5
         with:
           node-version: ${{ matrix.node-version }}
       - name: Install package dependencies
@@ -127,9 +127,9 @@ jobs:
           filter: blob:none
           fetch-depth: 0
       - name: Setup the toolchain
-        uses: ./.github/actions/setup-toolchain
+        uses: microsoft/react-native-test-app/.github/actions/setup-toolchain@4.4.5
         with:
-          jdk-version: 17
+          platform: android
       - name: Install package dependencies
         run: |
           yarn
@@ -159,7 +159,7 @@ jobs:
           filter: blob:none
           fetch-depth: 0
       - name: Setup the toolchain
-        uses: ./.github/actions/setup-toolchain
+        uses: microsoft/react-native-test-app/.github/actions/setup-toolchain@4.4.5
         with:
           platform: ios
       - name: Install package dependencies
@@ -201,9 +201,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Setup the toolchain
-        uses: ./.github/actions/setup-toolchain
+        uses: microsoft/react-native-test-app/.github/actions/setup-toolchain@4.4.5
         with:
-          node-cache: ""
+          cache-npm-dependencies: ""
       - name: Install package dependencies (docsite)
         run: |
           yarn
