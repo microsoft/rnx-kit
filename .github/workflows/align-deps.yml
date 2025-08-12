@@ -31,7 +31,12 @@ jobs:
       - name: Look for new React Native release candidates
         run: |
           yarn update-profile --release-candidate > update-profile.output.txt
+        working-directory: packages/align-deps
+      - name: Include additional capabilities from PR feedback
+        run: |
+          yarn update-preset
           yarn update-readme
+          yarn format
         working-directory: packages/align-deps
       - name: Update local packages with the new profile
         run: |
