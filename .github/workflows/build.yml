@@ -46,7 +46,7 @@ jobs:
           # We cannot use the GHA generated tokens because we've disabled
           # creation of pull requests at the org level.
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
   website:
     name: "Publish website"
     permissions:
