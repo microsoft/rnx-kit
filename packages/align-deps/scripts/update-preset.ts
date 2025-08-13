@@ -1,19 +1,12 @@
 #!/usr/bin/env -S node --experimental-strip-types --no-warnings
 
-import { Octokit } from "@octokit/core";
-import { restEndpointMethods } from "@octokit/plugin-rest-endpoint-methods";
 import { info } from "@rnx-kit/console";
 import * as fs from "node:fs";
 import * as recast from "recast";
 import typescript from "recast/parsers/typescript.js";
-import type { MetaPackage, Package, Preset } from "../src/types";
+import type { MetaPackage, Package } from "../src/types";
+import { createGitHubClient, fetchPullRequestFeedback } from "./github.ts";
 import { IGNORED_CAPABILITIES } from "./update-profile.ts";
-
-const MAGIC_KEYWORD = "@microsoft-react-native-sdk";
-
-function isArray<T>(a: T[] | null | undefined): a is T[] {
-  return Array.isArray(a) && a.length > 0;
-}
 
 function isExportNamedDeclaration(
   node: recast.types.namedTypes.Node
@@ -89,66 +82,8 @@ function valueLiteral(b: recast.types.builders, value: unknown) {
   }
 }
 
-async function fetchPullRequestFeedback(branch = "rnx-align-deps/main") {
-  const octokit = new (Octokit.plugin(restEndpointMethods))({});
-
-  const baseParams = {
-    owner: "microsoft",
-    repo: "rnx-kit",
-    head: `microsoft:${branch}`,
-  } as const;
-
-  const pullRequests = await octokit.rest.pulls.list({
-    ...baseParams,
-    state: "open",
-    base: "main",
-    per_page: 1,
-    page: 1,
-  });
-
-  if (!isArray(pullRequests.data)) {
-    info(`No pull requests found for '${baseParams.head}'`);
-    return;
-  }
-
-  const pr = pullRequests.data[0];
-  const reviewers = pr.requested_reviewers?.map((user) => user.id);
-  if (!isArray(reviewers)) {
-    info(`No reviewers found for pull request #${pr.number}`);
-    return;
-  }
-
-  const comments = await octokit.rest.issues.listComments({
-    ...baseParams,
-    issue_number: pr.number,
-  });
-
-  for (const comment of comments.data) {
-    if (
-      !reviewers.includes(comment.user?.id || -1) ||
-      !comment.body?.startsWith(MAGIC_KEYWORD)
-    ) {
-      continue;
-    }
-
-    const m = comment.body.match(/```json([^]*?)```/);
-    if (!m) {
-      continue;
-    }
-
-    try {
-      return JSON.parse(m[1]) as Preset;
-    } catch (e) {
-      info(`Failed to parse JSON from comment: ${e.message}`);
-      continue;
-    }
-  }
-
-  info(`No feedback found for pull request #${pr.number}`);
-}
-
 async function main() {
-  const input = await fetchPullRequestFeedback();
+  const input = await fetchPullRequestFeedback(createGitHubClient());
   if (!input) {
     return;
   }

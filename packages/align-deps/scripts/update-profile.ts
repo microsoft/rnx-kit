@@ -1,5 +1,6 @@
 #!/usr/bin/env -S node --experimental-strip-types --no-warnings
 
+import { error, info } from "@rnx-kit/console";
 import { untar } from "@rnx-kit/tools-shell";
 import { markdownTable } from "markdown-table";
 import * as fs from "node:fs";
@@ -11,6 +12,7 @@ import packageJson from "package-json";
 import semverCoerce from "semver/functions/coerce.js";
 import semverCompare from "semver/functions/compare.js";
 import type { MetaPackage, Package, Preset } from "../src/types.js";
+import { createGitHubClient, fetchPullRequests } from "./github.ts";
 
 type Options = {
   targetVersion?: string;
@@ -201,6 +203,35 @@ async function fetchPackageInfo(
     peerDependencies,
     tarball,
   };
+}
+
+async function fetchReleaseCandidateVersion() {
+  const [latest, next] = await Promise.allSettled([
+    packageJson("react-native", { version: "latest" }),
+    packageJson("react-native", { version: "next" }),
+  ]);
+
+  assertFulfilled(latest, "latest");
+  assertFulfilled(next, "next");
+
+  const latestVersion = latest.value.version;
+  const nextVersion = next.value.version;
+  if (semverCompare(latestVersion, nextVersion) < 0) {
+    return nextVersion;
+  }
+
+  // If the release candidate was recently promoted to stable, we might still
+  // have an open pull request
+  const pullRequest = await fetchPullRequests(createGitHubClient());
+  if (pullRequest.data.length > 0) {
+    const pr = pullRequest.data[0];
+    const m = pr.title.match(/add profile for (\d+\.\d+)$/);
+    if (m) {
+      return m[1];
+    }
+  }
+
+  throw new Error(`No new release candidate available since ${latestVersion}`);
 }
 
 function getPackageVersion(
@@ -557,7 +588,7 @@ async function main({
         const [dst, presetFile] = getProfilePath(presetName, targetVersion);
         fs.writeFile(dst, newProfile, () => {
           if (!pullRequest) {
-            console.log(`Wrote to '${dst}'`);
+            info(`Wrote to '${dst}'`);
           }
 
           const profiles = fs
@@ -589,7 +620,7 @@ async function main({
           ].join("\n");
           fs.writeFileSync(presetFile, preset);
           if (!pullRequest) {
-            console.log(`Updated '${presetFile}'`);
+            info(`Updated '${presetFile}'`);
           }
         });
       }
@@ -634,6 +665,8 @@ async function main({
   const collator = new Intl.Collator();
   table.sort((lhs, rhs) => collator.compare(lhs[0], rhs[0]));
   if (table.length > 0) {
+    // The following lines are used for the pull request description; do not use
+    // colors or prefixes
     console.log();
     console.log(markdownTable([headers, ...table]));
   }
@@ -691,30 +724,17 @@ async function parseArgs(): Promise<Options> {
   }
 
   if (options.releaseCandidate) {
-    const [latest, next] = await Promise.allSettled([
-      packageJson("react-native", { version: "latest" }),
-      packageJson("react-native", { version: "next" }),
-    ]);
-
-    assertFulfilled(latest, "latest");
-    assertFulfilled(next, "next");
-
-    const latestVersion = latest.value.version;
-    const nextVersion = next.value.version;
-    if (semverCompare(latestVersion, nextVersion) >= 0) {
-      throw new Error(
-        `No new release candidate available since ${latestVersion}`
-      );
-    }
-
+    const nextVersion = await fetchReleaseCandidateVersion();
     const { major, minor } = coerceVersion(nextVersion);
     const targetVersion = `${major}.${minor}`;
     options.targetVersion = targetVersion;
 
     if (options.pullRequest) {
+      // The following line is used for the pull request description; do not use
+      // colors or prefixes
       console.log("Add profile for", targetVersion);
     } else {
-      console.log("Found release candidate:", nextVersion);
+      info("Found release candidate:", nextVersion);
     }
   }
 
@@ -725,7 +745,7 @@ if (fileURLToPath(import.meta.url) === path.resolve(process.argv[1])) {
   parseArgs()
     .then(main)
     .catch((e: Error) => {
-      console.error(e.message);
+      error(e.message);
       process.exitCode = 1;
     });
 }
