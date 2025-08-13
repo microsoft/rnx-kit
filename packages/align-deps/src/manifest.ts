@@ -45,15 +45,14 @@ export function updateDependencies(
     return dependencies;
   }
 
-  const makeVersionRange = (() => {
+  const makeVersionRange: (versions: Package[]) => string = (() => {
     switch (dependencyType) {
       case "direct":
-        return (versions: Package[]) => versions[versions.length - 1].version;
+        return (versions) => versions[versions.length - 1].version;
       case "development":
-        return (versions: Package[]) => versions[0].version;
+        return (versions) => versions[0].version;
       case "peer":
-        return (versions: Package[]) =>
-          versions.map((pkg) => pkg.version).join(" || ");
+        return (versions) => versions.map((pkg) => pkg.version).join(" || ");
     }
   })();
   const shouldBeAdded = (pkg: Package) =>

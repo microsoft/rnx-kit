@@ -29,21 +29,29 @@ jobs:
           yarn build --dependencies
         working-directory: packages/align-deps
       - name: Look for new React Native release candidates
+        id: find-release-candidate
         run: |
-          yarn update-profile --release-candidate > update-profile.output.txt
+          yarn update-profile --release-candidate 1> update-profile.output.txt
+          if [[ -s update-profile.output.txt ]]; then
+            echo 'found=1' >> $GITHUB_OUTPUT
+          fi
         working-directory: packages/align-deps
+        continue-on-error: true
       - name: Include additional capabilities from PR feedback
+        if: ${{ steps.find-release-candidate.outputs.found != '' }}
         run: |
           yarn update-preset
           yarn update-readme
           yarn format
         working-directory: packages/align-deps
       - name: Update local packages with the new profile
+        if: ${{ steps.find-release-candidate.outputs.found != '' }}
         run: |
           yarn rnx-align-deps --write
           yarn install --mode update-lockfile
       - name: Generate changeset
         id: changeset
+        if: ${{ steps.find-release-candidate.outputs.found != '' }}
         run: |
           echo '---' > .changeset/rnx-align-deps.md
           echo '"@rnx-kit/align-deps": patch' >> .changeset/rnx-align-deps.md
@@ -52,14 +60,16 @@ jobs:
           head -n 1 packages/align-deps/update-profile.output.txt >> .changeset/rnx-align-deps.md
           echo "message=$(head -n 1 packages/align-deps/update-profile.output.txt | tr '[:upper:]' '[:lower:]')" >> $GITHUB_OUTPUT
       - name: Generate token for submitting pull requests
-        uses: actions/create-github-app-token@v2
         id: app-token
+        if: ${{ steps.find-release-candidate.outputs.found != '' }}
+        uses: actions/create-github-app-token@v2
         with:
           app-id: ${{ vars.APP_ID }}
           private-key: ${{ secrets.PRIVATE_KEY }}
           permission-contents: write
           permission-pull-requests: write
       - name: Create or update pull request
+        if: ${{ steps.find-release-candidate.outputs.found != '' }}
         uses: peter-evans/create-pull-request@v7
         with:
           token: ${{ steps.app-token.outputs.token }}

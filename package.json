@@ -194,6 +194,14 @@
           "@rnx-kit/babel-plugin-import-path-remapper"
         ]
       },
+      "packages/align-deps": {
+        "entry": [
+          "scripts/*",
+          "src/cli.ts",
+          "src/index.ts",
+          "test/**/*.{js,ts}"
+        ]
+      },
       "packages/cli": {
         "entry": [
           "scripts/**/*.ts",
