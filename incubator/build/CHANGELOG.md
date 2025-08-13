@@ -1,5 +1,11 @@
 # @rnx-kit/build
 
+## 0.8.0
+
+### Minor Changes
+
+- 33f8e07: Drop support for Node 18
+
 ## 0.7.3
 
 ### Patch Changes
