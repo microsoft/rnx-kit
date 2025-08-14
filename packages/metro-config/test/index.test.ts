@@ -6,6 +6,7 @@ import { enhanceMiddleware } from "../src/assetPluginForMonorepos";
 import {
   defaultWatchFolders,
   exclusionList,
+  extractUniquePartsFromYarnStoreDir,
   makeMetroConfig,
   resolveUniqueModule,
 } from "../src/index";
@@ -52,6 +53,35 @@ describe("defaultWatchFolders()", () => {
     for (let i = 0; i < folders.length; ++i) {
       match(folders[i], expected[i]);
     }
+  });
+});
+
+describe("extractUniquePartsFromYarnStoreDir()", () => {
+  it("returns version+hash from a versioned path", () => {
+    const [pre, unique] = extractUniquePartsFromYarnStoreDir(
+      "node_modules/.store/@babel-core-npm-7.27.1-0f1bf48e52"
+    );
+
+    equal(pre, "node_modules/.store/@babel-core-npm");
+    equal(unique, "7.27.1-0f1bf48e52");
+  });
+
+  it("returns version+hash from a path with prerelease number", () => {
+    const [pre, unique] = extractUniquePartsFromYarnStoreDir(
+      "node_modules/.store/@react-native-assets-registry-npm-0.81.0-rc.5-d313abaf5e"
+    );
+
+    equal(pre, "node_modules/.store/@react-native-assets-registry-npm");
+    equal(unique, "0.81.0-rc.5-d313abaf5e");
+  });
+
+  it("returns hash from a virtual path", () => {
+    const [pre, unique] = extractUniquePartsFromYarnStoreDir(
+      "node_modules/.store/react-native-virtual-3e97acc5aa"
+    );
+
+    equal(pre, "node_modules/.store/react-native-virtual");
+    equal(unique, "3e97acc5aa");
   });
 });
 
