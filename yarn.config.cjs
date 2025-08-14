@@ -3,7 +3,13 @@
 /** @type {import("@yarnpkg/types")} */
 const { defineConfig } = require("@yarnpkg/types");
 
-const IGNORED_LOCATIONS = [".", "packages/test-app", "scripts"];
+const IGNORED_LOCATIONS = [
+  ".",
+  "packages/test-app",
+  "packages/test-app-macos",
+  "packages/test-app-windows",
+  "scripts",
+];
 
 module.exports = defineConfig({
   constraints: async ({ Yarn }) => {
