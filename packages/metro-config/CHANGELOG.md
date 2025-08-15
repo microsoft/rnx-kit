@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-config
 
+## 2.1.1
+
+### Patch Changes
+
+- 4bca263: Fix duplicate packages slipping through in a Yarn + pnpm setup
+
 ## 2.1.0
 
 ### Minor Changes
