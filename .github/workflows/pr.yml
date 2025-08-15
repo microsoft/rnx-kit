@@ -112,10 +112,6 @@ jobs:
         run: |
           yarn nx affected --base origin/${{ github.base_ref }} --target bundle+esbuild
         shell: bash
-      - name: Bundle test apps with RAM bundle format
-        run: |
-          yarn nx affected --base origin/${{ github.base_ref }} --target ram-bundle
-        shell: bash
   build-android-test-app:
     name: "Build Android"
     permissions: {}
