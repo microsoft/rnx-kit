@@ -64,6 +64,30 @@ function defaultWatchFolders() {
 }
 
 /**
+ * Extracts unique parts from a Yarn store directory.
+ * @param {string} p
+ * @returns {[string, string]}
+ */
+function extractUniquePartsFromYarnStoreDir(p) {
+  const parts = p.split("-");
+  const length = parts.length;
+
+  // Example: node_modules/.store/react-native-virtual-3e97acc5aa
+  if (parts[length - 2] === "virtual") {
+    return [parts.slice(0, length - 1).join("-"), parts.slice(-1).join("-")];
+  }
+
+  // Example: node_modules/.store/@react-native-assets-registry-npm-0.81.0-rc.5-d313abaf5e
+  const index = parts.lastIndexOf("npm");
+  if (index > 0) {
+    const pos = index + 1;
+    return [parts.slice(0, pos).join("-"), parts.slice(pos).join("-")];
+  }
+
+  throw new Error(`Failed to parse Yarn store directory: ${p}`);
+}
+
+/**
  * Returns the path to specified module; `undefined` if not found.
  *
  * Note that this function resolves symlinks. This is necessary for setups that
@@ -107,14 +131,10 @@ function resolveUniqueModule(packageName, searchStartDir) {
   // - react-native -> node_modules/.store/react-native-virtual-3e97acc5aa/package
   if (path.basename(result) === "package" && result.includes(".store")) {
     const storePath = path.dirname(result);
-    const hashIndex = storePath.lastIndexOf("-") + 1;
-    const hashPart = storePath.substring(hashIndex);
-    const parent = path
-      .normalize(storePath.substring(0, hashIndex))
-      .replaceAll("\\", "\\\\")
-      .replaceAll(".", "\\.");
+    const [pre, unique] = extractUniquePartsFromYarnStoreDir(storePath);
+    const preEscaped = pre.replaceAll("\\", "\\\\").replaceAll(".", "\\.");
     const exclusionRE = new RegExp(
-      `${parent}\\w+(?<!${hashPart})\\${path.sep}package\\${path.sep}.*`
+      `${preEscaped}-[-.\\w]+(?<!${unique})\\${path.sep}package\\${path.sep}.*`
     );
     return [result, exclusionRE];
   }
@@ -278,6 +298,7 @@ module.exports = {
   defaultWatchFolders,
   excludeExtraCopiesOf,
   exclusionList,
+  extractUniquePartsFromYarnStoreDir,
   resolveUniqueModule,
 
   /**
