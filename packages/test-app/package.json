@@ -22,7 +22,6 @@
     "ios": "rnx run-ios --no-packager",
     "lint": "rnx-kit-scripts lint",
     "macos": "rnx run-macos --scheme ReactTestApp --no-packager",
-    "ram-bundle": "rnx ram-bundle",
     "start": "rnx start",
     "test": "rnx test --platform ios --cache false",
     "windows": "rnx run-windows --no-packager --sln windows/SampleCrossApp.sln"
