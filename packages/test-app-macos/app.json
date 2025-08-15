@@ -1,0 +1,24 @@
+{
+  "name": "SampleCrossApp",
+  "displayName": "SampleCrossApp",
+  "components": [
+    {
+      "appKey": "SampleCrossApp",
+      "displayName": "SampleCrossApp"
+    },
+    {
+      "appKey": "MicrosoftAccounts",
+      "displayName": "MicrosoftAccounts (iOS/macOS)"
+    }
+  ],
+  "react-native-test-app-msal": {
+    "clientId": "4b0db8c2-9f26-4417-8bde-3f0e3656f8e0",
+    "msaScopes": ["user.read"],
+    "orgScopes": ["user.read"],
+    "signatureHash": "1wIqXSqBj7w+h11ZifsnqwgyKrY=",
+    "userPrincipalName": "arnold@contoso.com"
+  },
+  "resources": {
+    "macos": ["app.json", "dist/assets", "dist/main.macos.jsbundle"]
+  }
+}
