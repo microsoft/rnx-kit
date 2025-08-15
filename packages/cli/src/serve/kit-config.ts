@@ -3,10 +3,10 @@ import { getBundleConfig, getKitConfig } from "@rnx-kit/config";
 import { pickValues } from "@rnx-kit/tools-language/properties";
 import { getDefaultBundlerPlugins } from "../bundle/defaultPlugins";
 
-type ServerConfigOverrides = {
-  projectRoot?: string;
-  assetPlugins?: string[];
-  sourceExts?: string[];
+type ServerConfigOverrides = Pick<
+  ServerConfig,
+  "projectRoot" | "assetPlugins" | "sourceExts"
+> & {
   id?: string;
 };
 

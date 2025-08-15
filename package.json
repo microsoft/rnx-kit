@@ -283,7 +283,7 @@
           "babel-plugin-codegen"
         ]
       },
-      "packages/test-app": {
+      "packages/test-app*": {
         "entry": [
           "*.js",
           "src/**/*.{ts,tsx}",

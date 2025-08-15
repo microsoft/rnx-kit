@@ -108,11 +108,11 @@ jobs:
       - name: Bundle packages
         run: |
           yarn bundle:ci --base origin/${{ github.base_ref }}
-      - name: Bundle test app with esbuild
+      - name: Bundle test apps with esbuild
         run: |
           yarn nx affected --base origin/${{ github.base_ref }} --target bundle+esbuild
         shell: bash
-      - name: Bundle test app with RAM bundle format
+      - name: Bundle test apps with RAM bundle format
         run: |
           yarn nx affected --base origin/${{ github.base_ref }} --target ram-bundle
         shell: bash
