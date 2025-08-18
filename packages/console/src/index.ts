@@ -7,6 +7,21 @@ export const supportsColor =
   process.env["NODE_ENV"] !== "test";
 
 /**
+ * These are the base color constants for Ansi16 based colors suitable to be passed into the encodeAnsi16 and
+ * encodeAnsi16Bright functions.
+ */
+export const Ansi16 = {
+  black: 0,
+  red: 1,
+  green: 2,
+  yellow: 3,
+  blue: 4,
+  magenta: 5,
+  cyan: 6,
+  white: 7,
+};
+
+/**
  * Wraps a given string with ANSI escape codes for coloring. Will be a no-op if colors are disabled in process.stdout.
  * @param s The string to colorize.
  * @param start The starting color code, either a number or raw text.
@@ -61,40 +76,17 @@ export function encodeAnsi256(s: string, color: number) {
 }
 
 /**
- * Colorizes a string using ANSI escape codes.
+ * Bold and dim functions, explicitly implemented as they are used in the log functions below and the stop code
+ * is slightly different than for color values.
  */
-export const colorize = {
-  black: (s: string) => encodeAnsi16(s, 0),
-  red: (s: string) => encodeAnsi16(s, 1),
-  green: (s: string) => encodeAnsi16(s, 2),
-  yellow: (s: string) => encodeAnsi16(s, 3),
-  blue: (s: string) => encodeAnsi16(s, 4),
-  magenta: (s: string) => encodeAnsi16(s, 5),
-  cyan: (s: string) => encodeAnsi16(s, 6),
-  white: (s: string) => encodeAnsi16(s, 7),
-  blackBright: (s: string) => encodeAnsi16Bright(s, 0),
-  redBright: (s: string) => encodeAnsi16Bright(s, 1),
-  greenBright: (s: string) => encodeAnsi16Bright(s, 2),
-  yellowBright: (s: string) => encodeAnsi16Bright(s, 3),
-  blueBright: (s: string) => encodeAnsi16Bright(s, 4),
-  magentaBright: (s: string) => encodeAnsi16Bright(s, 5),
-  cyanBright: (s: string) => encodeAnsi16Bright(s, 6),
-  whiteBright: (s: string) => encodeAnsi16Bright(s, 7),
-  bold: (s: string) => encodeColor(s, 1, 22),
-  dim: (s: string) => encodeColor(s, 2, 22),
-};
-
-/**
- * Bold and dim functions, re-exported as root functions for API consistency
- */
-export const bold = colorize.bold;
-export const dim = colorize.dim;
+export const bold = (s: string) => encodeColor(s, 1, 22);
+export const dim = (s: string) => encodeColor(s, 2, 22);
 
 type Log = typeof console.log;
 
-const errorTag = colorize.red(colorize.bold("error"));
-const infoTag = colorize.cyan(colorize.bold("info"));
-const warnTag = colorize.yellow(colorize.bold("warn"));
+const errorTag = encodeAnsi16(bold("error"), Ansi16.red);
+const infoTag = encodeAnsi16(bold("info"), Ansi16.cyan);
+const warnTag = encodeAnsi16(bold("warn"), Ansi16.yellow);
 
 /**
  * Logs an error message to the console, in a format that is consistent with the metro logging
