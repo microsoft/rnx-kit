@@ -33,7 +33,7 @@ buildscript {
 
     dependencies {
         def kotlinVersion = getExtProp("kotlinVersion", "1.7.21")
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
     }
 }
 
@@ -44,7 +44,7 @@ plugins {
 
 repositories {
     maven {
-        url("${findNodeModulesPath('react-native')}/android")
+        url = "${findNodeModulesPath('react-native')}/android"
     }
 
     google()
@@ -52,17 +52,17 @@ repositories {
 }
 
 android {
-    compileSdkVersion getExtProp("compileSdkVersion", 33)
+    compileSdkVersion = getExtProp("compileSdkVersion", 33)
     defaultConfig {
-        minSdkVersion getExtProp("minSdkVersion", 23)
-        targetSdkVersion getExtProp("targetSdkVersion", 33)
+        minSdkVersion = getExtProp("minSdkVersion", 23)
+        targetSdkVersion = getExtProp("targetSdkVersion", 33)
     }
     lintOptions {
-        abortOnError false
+        abortOnError = false
     }
 }
 
 dependencies {
     //noinspection GradleDynamicVersion
-    implementation "com.facebook.react:react-native:+"
+    implementation("com.facebook.react:react-native:+")
 }

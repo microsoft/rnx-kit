@@ -60,7 +60,7 @@ buildscript {
             classpath("com.android.tools.build:gradle:${androidPluginVersion}")
         }
 
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
     }
 }
 
@@ -71,7 +71,7 @@ plugins {
 
 repositories {
     maven {
-        url("${findNodeModulesPath('react-native')}/android")
+        url = "${findNodeModulesPath('react-native')}/android"
     }
 
     google()
@@ -79,7 +79,7 @@ repositories {
 
     // https://github.com/AzureAD/microsoft-authentication-library-for-android#step-1-declare-dependency-on-msal
     maven {
-        url "https://pkgs.dev.azure.com/MicrosoftDeviceSDK/DuoSDK-Public/_packaging/Duo-SDK-Feed/maven/v1"
+        url = "https://pkgs.dev.azure.com/MicrosoftDeviceSDK/DuoSDK-Public/_packaging/Duo-SDK-Feed/maven/v1"
     }
 }
 
@@ -98,25 +98,30 @@ android {
 
     def signatureHash = ensureProperty(config, "signatureHash")
 
-    compileSdkVersion getExtProp("compileSdkVersion", 31)
-    defaultConfig {
-        minSdkVersion getExtProp("minSdkVersion", 23)
-        targetSdkVersion getExtProp("targetSdkVersion", 29)
+    compileSdkVersion = getExtProp("compileSdkVersion", 31)
 
-        buildConfigField "String[]",
+    defaultConfig {
+        minSdkVersion = getExtProp("minSdkVersion", 23)
+        targetSdkVersion = getExtProp("targetSdkVersion", 29)
+
+        buildConfigField(
+            "String[]",
             "ReactTestAppMSAL_msaScopes",
-            "new String[]{${getStringArray(config, "msaScopes")}}"
-        buildConfigField "String[]",
+            "new String[]{${getStringArray(config, "msaScopes")}}")
+        buildConfigField(
+            "String[]",
             "ReactTestAppMSAL_orgScopes",
-            "new String[]{${getStringArray(config, "orgScopes")}}"
+            "new String[]{${getStringArray(config, "orgScopes")}}")
 
         manifestPlaceholders = [
             msalRedirectUriPath: "/$signatureHash"
         ]
     }
+
     lintOptions {
-        abortOnError false
+        abortOnError = false
     }
+
     sourceSets {
         def clientId = ensureProperty(config, "clientId")
 
@@ -173,18 +178,18 @@ android {
 dependencies {
     def kotlinVersionNumber = toVersionNumber(kotlinVersion)
     if (kotlinVersionNumber >= 10800) {
-        implementation "androidx.activity:activity-ktx:1.9.3"
+        implementation("androidx.activity:activity-ktx:1.9.3")
     } else {
         implementation(["androidx.activity", "activity-ktx", "1.6.1"].join(":"))
     }
 
-    implementation "com.google.android.material:material:1.12.0"
-    implementation "com.microsoft.identity.client:msal:5.5.0"
+    implementation("com.google.android.material:material:1.12.0")
+    implementation("com.microsoft.identity.client:msal:5.5.0")
 
     //noinspection GradleDynamicVersion
-    implementation "com.facebook.react:react-native:+"
+    implementation("com.facebook.react:react-native:+")
 
     if (rnxAuthPackage != null) {
-        implementation project(path: ":rnx-kit_react-native-auth")
+        implementation(project(path: ":rnx-kit_react-native-auth"))
     }
 }
