@@ -35,7 +35,7 @@
   "devDependencies": {
     "@octokit/core": "^7.0.0",
     "@octokit/plugin-rest-endpoint-methods": "^16.0.0",
-    "@react-native-community/cli-types": "^19.0.0",
+    "@react-native-community/cli-types": "^20.0.0",
     "@rnx-kit/config": "*",
     "@rnx-kit/console": "*",
     "@rnx-kit/eslint-config": "*",

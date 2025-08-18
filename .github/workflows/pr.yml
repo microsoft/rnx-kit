@@ -162,6 +162,7 @@ jobs:
         uses: microsoft/react-native-test-app/.github/actions/setup-toolchain@4.4.5
         with:
           platform: ios
+          xcode-developer-dir: /Applications/Xcode_16.4.app
       - name: Install package dependencies
         run: |
           yarn

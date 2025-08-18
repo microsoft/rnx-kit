@@ -5,6 +5,7 @@ import type { BuildOptions, BuildResult, Plugin } from "esbuild";
 import * as esbuild from "esbuild";
 import * as fs from "fs";
 import type { SerializerConfigT } from "metro-config";
+import type { SerializerOptions } from "metro/private/DeltaBundler/types";
 import * as path from "path";
 import { getModulePath, getSideEffects, isImporting, outputOf } from "./module";
 import { absolutizeSourceMap } from "./sourceMap";
@@ -58,7 +59,7 @@ export function MetroSerializer(
   );
   const bundleToString = require(`${metroPath}/src/lib/bundleToString`);
 
-  return (entryPoint, preModules, graph, options) => {
+  return (entryPoint, preModules, graph, options: SerializerOptions) => {
     metroPlugins.forEach((plugin) =>
       plugin(entryPoint, preModules, graph, options)
     );

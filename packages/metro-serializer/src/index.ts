@@ -14,6 +14,12 @@ export type MetroPlugin<T = MixedOutput> = (
   options: SerializerOptions<T>
 ) => void;
 
+export type Bundle = {
+  modules: readonly [number, string][];
+  post: string;
+  pre: string;
+};
+
 export type CustomSerializerResult = string | { code: string; map: string };
 
 export type CustomSerializer = (
@@ -23,6 +29,16 @@ export type CustomSerializer = (
   options: SerializerOptions
 ) => Promise<CustomSerializerResult> | CustomSerializerResult;
 
+export type TestMocks = {
+  baseJSBundle?: (
+    entryPoint: string,
+    preModules: readonly Module[],
+    graph: ReadOnlyGraph,
+    options: SerializerOptions
+  ) => Promise<Bundle> | Bundle;
+  bundleToString?: (bundle: Bundle) => CustomSerializerResult;
+};
+
 /**
  * Metro's default bundle serializer.
  *
@@ -31,12 +47,16 @@ export type CustomSerializer = (
  *
  * @see https://github.com/facebook/metro/blob/af23a1b27bcaaff2e43cb795744b003e145e78dd/packages/metro/src/Server.js#L228
  */
-export function MetroSerializer(plugins: MetroPlugin[]): CustomSerializer {
+export function MetroSerializer(
+  plugins: MetroPlugin[],
+  __mocks: TestMocks = {}
+): CustomSerializer {
   const metroPath = findMetroPath() || "metro";
-  const baseJSBundle = require(
-    `${metroPath}/src/DeltaBundler/Serializers/baseJSBundle`
-  );
-  const bundleToString = require(`${metroPath}/src/lib/bundleToString`);
+  const baseJSBundle =
+    __mocks.baseJSBundle ??
+    require(`${metroPath}/src/DeltaBundler/Serializers/baseJSBundle`);
+  const bundleToString =
+    __mocks.bundleToString ?? require(`${metroPath}/src/lib/bundleToString`);
 
   const { version } = require(`${metroPath}/package.json`);
   const shouldReturnPromise = semver.satisfies(version, ">=0.60.0");
