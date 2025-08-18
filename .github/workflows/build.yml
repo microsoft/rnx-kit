@@ -83,6 +83,9 @@ jobs:
             ${{ runner.os }}-yarn-
       - name: Install
         run: yarn
+      - name: Emit type declaration files
+        run: |
+          yarn tsc
       - name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
