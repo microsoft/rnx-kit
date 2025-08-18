@@ -56,20 +56,11 @@ export type BundlerPlugins = {
   typescriptValidation?: boolean | TypeScriptValidationOptions;
 };
 
-/**
- * Parameters controlling how a bundle is constructed.
- */
-export type BundleParameters = BundlerPlugins & {
-  /**
-   * Path to the .js file which is the entry-point for building the bundle.
-   * Either absolute, or relative to the package.
-   */
-  entryFile?: string;
-
+export type BundleOutputOptions = {
   /**
    * Path to the output bundle file. Either absolute or relative to the package.
    */
-  bundleOutput?: string;
+  bundleOutput?: OutputOptions["bundleOutput"];
 
   /**
    * Encoding scheme to use when writing the bundle file. Currently limited
@@ -83,60 +74,74 @@ export type BundleParameters = BundlerPlugins & {
    * Path to use when creating the bundle source map file.
    * Either absolute, or relative to the package.
    */
-  sourcemapOutput?: string;
+  sourcemapOutput?: OutputOptions["sourcemapOutput"];
 
   /**
    * Path to the package's source files. Used to make source-map paths relative and therefore portable.
    */
-  sourcemapSourcesRoot?: string;
+  sourcemapSourcesRoot?: OutputOptions["sourcemapSourcesRoot"];
 
   /**
    * Controls whether or not SourceMapURL is reported as a full path or just a file name.
    */
-  sourcemapUseAbsolutePath?: boolean;
-
-  /**
-   * Path where all bundle assets (strings, images, fonts, sounds, ...) are written.
-   * Either absolute, or relative to the package. If not given, assets are ignored.
-   */
-  assetsDest?: string;
+  sourcemapUseAbsolutePath?: OutputOptions["sourcemapUseAbsolutePath"];
 
   /**
    * Force the "Indexed RAM" bundle file format, even when targeting Android.
    * For more details, see https://facebook.github.io/metro/docs/bundling.
    *
    * Only applies to the `rnx-ram-bundle` command.
-   */
-  indexedRamBundle?: boolean;
-
-  /**
-   * Choose whether to enable tree shaking.
    *
-   * Note that Metro ignores custom serializers (which this feature depends on)
-   * when outputting RAM bundle format.
-   *
-   * Only applies to `rnx-bundle` command.
+   * @deprecated {@link https://github.com/facebook/react-native/pull/43292}
    */
-  treeShake?: boolean | EsbuildOptions;
-
-  /**
-   * Whether to run the Hermes compiler on the output bundle.
-   *
-   * Only applies to `rnx-bundle` command.
-   */
-  hermes?: boolean | HermesOptions;
-
-  /**
-   * List of plugins to add to the bundling process.
-   *
-   * @default [
-   *   "@rnx-kit/metro-plugin-cyclic-dependencies-detector",
-   *   "@rnx-kit/metro-plugin-duplicates-checker",
-   *   "@rnx-kit/metro-plugin-typescript"
-   * ]
-   */
-  plugins?: Plugin[];
+  indexedRamBundle?: OutputOptions["indexedRamBundle"];
 };
+
+/**
+ * Parameters controlling how a bundle is constructed.
+ */
+export type BundleParameters = BundlerPlugins &
+  BundleOutputOptions & {
+    /**
+     * Path to the .js file which is the entry-point for building the bundle.
+     * Either absolute, or relative to the package.
+     */
+    entryFile?: string;
+
+    /**
+     * Path where all bundle assets (strings, images, fonts, sounds, ...) are written.
+     * Either absolute, or relative to the package. If not given, assets are ignored.
+     */
+    assetsDest?: string;
+
+    /**
+     * Choose whether to enable tree shaking.
+     *
+     * Note that Metro ignores custom serializers (which this feature depends on)
+     * when outputting RAM bundle format.
+     *
+     * Only applies to `rnx-bundle` command.
+     */
+    treeShake?: boolean | EsbuildOptions;
+
+    /**
+     * Whether to run the Hermes compiler on the output bundle.
+     *
+     * Only applies to `rnx-bundle` command.
+     */
+    hermes?: boolean | HermesOptions;
+
+    /**
+     * List of plugins to add to the bundling process.
+     *
+     * @default [
+     *   "@rnx-kit/metro-plugin-cyclic-dependencies-detector",
+     *   "@rnx-kit/metro-plugin-duplicates-checker",
+     *   "@rnx-kit/metro-plugin-typescript"
+     * ]
+     */
+    plugins?: Plugin[];
+  };
 
 /**
  * Defines how a package is bundled. Includes shared bundling parameters with platform-specific overrides.
