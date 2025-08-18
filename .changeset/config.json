@@ -8,6 +8,8 @@
   "ignore": [
     "@rnx-kit/ignore",
     "@rnx-kit/template",
-    "@rnx-kit/test-app"
+    "@rnx-kit/test-app",
+    "@rnx-kit/test-app-macos",
+    "@rnx-kit/test-app-windows"
   ]
 }
