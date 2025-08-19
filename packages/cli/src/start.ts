@@ -7,9 +7,14 @@ import {
   makeTerminal,
   startServer,
 } from "@rnx-kit/metro-service";
-import type { ReportableEvent, Reporter, RunServerOptions } from "metro";
+import type {
+  ReportableEvent,
+  Reporter,
+  RunServerOptions,
+  RunServerResult,
+} from "metro";
 import type { Middleware } from "metro-config";
-import type Server from "metro/src/Server";
+import type Server from "metro/private/Server";
 import * as path from "node:path";
 import { requireExternal } from "./helpers/externals";
 import { customizeMetroConfig } from "./helpers/metro-config";
@@ -22,6 +27,8 @@ import type {
   DevServerMiddleware6,
   StartCommandArgs,
 } from "./serve/types";
+
+type RunServerResultCompat = RunServerResult["httpServer"] | RunServerResult;
 
 function hasAttachToServerFunction(
   devServer: DevServerMiddleware | DevServerMiddleware6
@@ -197,7 +204,7 @@ export async function rnxStart(
     }
   }
 
-  const serverInstance = await startServer(metroConfig, {
+  const result: RunServerResultCompat = await startServer(metroConfig, {
     host: args.host,
     secure: args.https,
     secureCert: args.cert,
@@ -205,6 +212,7 @@ export async function rnxStart(
     unstable_extraMiddleware,
     websocketEndpoints,
   });
+  const serverInstance = "httpServer" in result ? result.httpServer : result;
 
   if (hasAttachToServerFunction(devServer)) {
     const { messageSocket, eventsSocket } =

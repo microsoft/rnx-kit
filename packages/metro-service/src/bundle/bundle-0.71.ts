@@ -56,7 +56,6 @@ export async function buildBundle(
       const outputOptions = { bundleOutput, sourcemapOutput, dev, platform };
       await output.save(metroBundle, outputOptions, (message) =>
         config.reporter.update({
-          // @ts-expect-error `bundle_save_log` was introduced in 0.82
           type: "bundle_save_log",
           message,
         })

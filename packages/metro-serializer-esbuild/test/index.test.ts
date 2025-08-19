@@ -1,7 +1,7 @@
 import type { Config } from "@react-native-community/cli-types";
 import type { BundleArgs } from "@rnx-kit/metro-service";
 import { bundle, loadMetroConfig } from "@rnx-kit/metro-service";
-import type Bundle from "metro/src/shared/output/bundle";
+import type Bundle from "metro/private/shared/output/bundle";
 import { deepEqual, ok } from "node:assert/strict";
 import * as path from "node:path";
 import { describe, it } from "node:test";
@@ -57,7 +57,7 @@ describe("metro-serializer-esbuild", () => {
         reactNativeVersion: "",
       },
       {
-        ...require("metro/src/shared/output/bundle"),
+        ...require("metro/private/shared/output/bundle"),
         save: ({ code }) => {
           result = code;
         },
