@@ -1,5 +1,13 @@
 # Change Log - @rnx-kit/react-native-test-app-msal
 
+## 5.0.3
+
+### Patch Changes
+
+- f8ef3cb: Addressed Gradle 9.0 syntax deprecation warnings
+- Updated dependencies [f8ef3cb]
+  - @rnx-kit/react-native-auth@0.3.2
+
 ## 5.0.2
 
 ### Patch Changes
@@ -133,7 +141,6 @@
 ### Patch Changes
 
 - 1b080e9b: Bump dependencies:
-
   - `androidx.activity:activity-ktx` 1.5.1 -> 1.6.1
   - `com.google.android.material:material` 1.6.1 -> 1.7.0
   - `com.microsoft.identity.client:msal` 4.0.4 -> 4.1.3

@@ -1,5 +1,11 @@
 # @rnx-kit/react-native-auth
 
+## 0.3.2
+
+### Patch Changes
+
+- f8ef3cb: Addressed Gradle 9.0 syntax deprecation warnings
+
 ## 0.3.1
 
 ### Patch Changes
