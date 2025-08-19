@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/cli
 
+## 0.18.13
+
+### Patch Changes
+
+- dee694b: Add support for Metro 0.83
+
 ## 0.18.12
 
 ### Patch Changes
