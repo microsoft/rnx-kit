@@ -129,26 +129,14 @@ function constEnumPlugin() {
 }
 
 function loadPreset(projectRoot = process.cwd()) {
-  const fs = require("fs");
-
-  const manifestPath = path.join(projectRoot, "package.json");
-  const manifest = fs.readFileSync(manifestPath, { encoding: "utf-8" });
-  const isTesting = manifest.includes(
-    '"name": "@rnx-kit/babel-preset-metro-react-native"'
-  );
-
   const options = { paths: [projectRoot] };
-  const babelPreset =
-    manifest.includes("@react-native/babel-preset") && !isTesting
-      ? require.resolve("@react-native/babel-preset", options) // >=0.73
-      : require.resolve("metro-react-native-babel-preset", options);
-
+  const babelPreset = require.resolve("@react-native/babel-preset", options);
   const { getPreset } = require(babelPreset);
   return [getPreset, babelPreset];
 }
 
 /**
- * Returns additional options for `metro-react-native-babel-preset`.
+ * Returns additional options for `@react-native/babel-preset`.
  * @param {string | undefined} transformProfile
  * @param {string | undefined} env
  * @returns {MetroPresetOptions | undefined}
@@ -189,7 +177,7 @@ function overridesFor(transformProfile, env) {
  *
  *   ```json
  *   {
- *     "presets": ["metro-react-native-babel-preset"],
+ *     "presets": ["module:@react-native/babel-preset"],
  *     "overrides": {
  *       "plugins": [
  *         ["@babel/plugin-transform-classes", { "loose": true }]
@@ -204,14 +192,14 @@ function overridesFor(transformProfile, env) {
  *   {
  *     "plugins": [
  *       ["@babel/plugin-transform-classes", { "loose": true }],
- *       // other plugin overrides by `metro-react-native-babel-preset` here
+ *       // other plugin overrides by `@react-native/babel-preset` here
  *     ]
  *   }
  *   ```
  *
- * This means that we cannot override `metro-react-native-babel-preset` using
- * the `overrides` field. Luckily, it does export a `getPreset()` function that
- * we can call and modify the config.
+ * This means that we cannot override `@react-native/babel-preset` using the
+ * `overrides` field. Luckily, it does export a `getPreset()` function that we
+ * can call and modify the config.
  *
  * @type {(api?: ConfigAPI, opts?: PresetOptions) => TransformOptions}
  */

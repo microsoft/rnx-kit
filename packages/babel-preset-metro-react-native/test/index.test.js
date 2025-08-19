@@ -97,7 +97,7 @@ describe("@rnx-kit/babel-preset-metro-react-native", () => {
     );
   });
 
-  test("forwards options to `metro-react-native-babel-preset`", async () => {
+  test("forwards options to `@react-native/babel-preset`", async () => {
     const cwd = path.join(__dirname, "__fixtures__");
     const app = path.join(cwd, "App.ts");
 

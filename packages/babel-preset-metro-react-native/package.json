@@ -31,17 +31,10 @@
     "@babel/core": "^7.20.0",
     "@babel/plugin-transform-typescript": "^7.20.0",
     "@babel/runtime": "^7.20.0",
-    "@react-native/babel-preset": "*",
-    "metro-react-native-babel-preset": "*"
+    "@react-native/babel-preset": "*"
   },
   "peerDependenciesMeta": {
     "@babel/plugin-transform-typescript": {
-      "optional": true
-    },
-    "@react-native/babel-preset": {
-      "optional": true
-    },
-    "metro-react-native-babel-preset": {
       "optional": true
     }
   },
@@ -55,8 +48,7 @@
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*",
     "@types/babel__core": "^7.0.0",
-    "@types/node": "^22.0.0",
-    "metro-react-native-babel-preset": "^0.76.5"
+    "@types/node": "^22.0.0"
   },
   "engines": {
     "node": ">=16.17"
