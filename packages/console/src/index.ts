@@ -7,21 +7,6 @@ export const supportsColor =
   process.env["NODE_ENV"] !== "test";
 
 /**
- * These are the base color constants for Ansi16 based colors suitable to be passed into the encodeAnsi16 and
- * encodeAnsi16Bright functions.
- */
-export const Ansi16 = {
-  black: 0,
-  red: 1,
-  green: 2,
-  yellow: 3,
-  blue: 4,
-  magenta: 5,
-  cyan: 6,
-  white: 7,
-};
-
-/**
  * Wraps a given string with ANSI escape codes for coloring. Will be a no-op if colors are disabled in process.stdout.
  * @param s The string to colorize.
  * @param start The starting color code, either a number or raw text.
@@ -84,9 +69,9 @@ export const dim = (s: string) => encodeColor(s, 2, 22);
 
 type Log = typeof console.log;
 
-const errorTag = encodeAnsi16(bold("error"), Ansi16.red);
-const infoTag = encodeAnsi16(bold("info"), Ansi16.cyan);
-const warnTag = encodeAnsi16(bold("warn"), Ansi16.yellow);
+const errorTag = encodeAnsi16(bold("error"), 1);
+const infoTag = encodeAnsi16(bold("info"), 6);
+const warnTag = encodeAnsi16(bold("warn"), 3);
 
 /**
  * Logs an error message to the console, in a format that is consistent with the metro logging
