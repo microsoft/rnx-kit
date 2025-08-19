@@ -16,7 +16,7 @@ plugins. For example, to remap all paths under the `@rnx-kit` scope:
 ```js
 // babel.config.js
 module.exports = {
-  presets: ["module:metro-react-native-babel-preset"],
+  presets: ["module:@react-native/babel-preset"],
   overrides: [
     {
       test: /\.tsx?$/,

@@ -100,8 +100,8 @@ then try our plugins:
   bundle.
 - [@rnx-kit/metro-plugin-typescript-validation](https://github.com/microsoft/rnx-kit/tree/main/packages/metro-plugin-typescript-validation)
   performs type checking of the TypeScript files being bundled. The Babel plugin
-  for TypeScript that comes with `metro-react-native-babel-preset` only strips
-  the types. Normally, one would run `tsc` separately to ensure that the code is
+  for TypeScript that comes with `@react-native/babel-preset` only strips the
+  types. Normally, one would run `tsc` separately to ensure that the code is
   correct. This step can now be replaced with the plugin.
 
 You can of course also provide your own plugins.
