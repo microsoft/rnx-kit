@@ -8,8 +8,8 @@ import {
 } from "./gatherModules";
 
 export type Options = {
-  ignoredModules?: string[];
-  bannedModules?: string[];
+  ignoredModules?: readonly string[];
+  bannedModules?: readonly string[];
   throwOnError?: boolean;
 };
 
