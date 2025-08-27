@@ -1,5 +1,7 @@
 #import "RNXFabricAdapter.h"
 
+#import "RNXFeatureMacros.h"
+
 #if USE_FABRIC && !USE_BRIDGELESS
 #include "FollyConfig.h"
 #pragma clang diagnostic push

@@ -1,9 +1,18 @@
+// Force enable Hermes if JSC is not available
 #if !__has_include(<ReactCommon/RCTJscInstance.h>)
 #ifdef USE_HERMES
 #undef USE_HERMES
-#endif  // !USE_HERMES
+#endif  // USE_HERMES
 #define USE_HERMES 1
 #endif  // !__has_include(<ReactCommon/RCTJscInstance.h>)
+
+// Force enable bridgeless mode if New Architecture is enabled and requires it
+#if USE_FABRIC && !__has_include(<react/config/ReactNativeConfig.h>)
+#ifdef USE_BRIDGELESS
+#undef USE_BRIDGELESS
+#endif  // USE_BRIDGELESS
+#define USE_BRIDGELESS 1
+#endif  // USE_FABRIC && !__has_include(<react/config/ReactNativeConfig.h>)
 
 #if USE_BRIDGELESS
 
