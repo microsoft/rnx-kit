@@ -1,8 +1,6 @@
-#if USE_BRIDGELESS
-
-// clang-format off
 #import "RNXFeatureMacros.h"
-// clang-format on
+
+#if USE_BRIDGELESS
 
 #import <React/RCTSurfacePresenterBridgeAdapter.h>
 #import <ReactCommon/RCTHost+Internal.h>

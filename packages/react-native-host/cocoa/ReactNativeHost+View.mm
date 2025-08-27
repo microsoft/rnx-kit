@@ -1,4 +1,8 @@
+// clang-format off
 #import "ReactNativeHost+Private.h"
+// clang-format on
+
+#import "RNXFeatureMacros.h"
 
 #ifdef USE_FABRIC
 #if __has_include(<React/RCTFabricSurfaceHostingProxyRootView.h>)
