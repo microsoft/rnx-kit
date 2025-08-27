@@ -1,5 +1,11 @@
 # @rnx-kit/react-native-host
 
+## 0.5.12
+
+### Patch Changes
+
+- c94b658: Detect when bridgeless mode is required
+
 ## 0.5.11
 
 ### Patch Changes

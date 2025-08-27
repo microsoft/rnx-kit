@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/babel-preset-metro-react-native
 
+## 3.0.0
+
+### Major Changes
+
+- c1f7f94: Dropped support for React Native 0.72 and below
+
 ## 2.0.0
 
 ### Major Changes

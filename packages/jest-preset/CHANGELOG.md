@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/jest-preset
 
+## 0.3.0
+
+### Minor Changes
+
+- c1f7f94: Dropped support for React Native 0.72 and below
+
 ## 0.2.1
 
 ### Patch Changes
