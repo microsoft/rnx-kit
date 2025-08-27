@@ -54,7 +54,7 @@ console.log(takeDirection(Direction.Up));
 "
 `;
 
-exports[`@rnx-kit/babel-preset-metro-react-native forwards options to \`metro-react-native-babel-preset\` 1`] = `
+exports[`@rnx-kit/babel-preset-metro-react-native forwards options to \`@react-native/babel-preset\` 1`] = `
 "require("typescript/lib/remap-test/lib/lib");
 var Direction = (function (Direction) {
   Direction[(Direction["Up"] = 0)] = "Up";
