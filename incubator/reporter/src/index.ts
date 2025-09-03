@@ -1,6 +1,10 @@
-import { checkPerformanceEnv } from "./performance.ts";
-import { ReporterImpl } from "./reporter.ts";
-import type { CustomData, Reporter, ReporterOptions } from "./types.ts";
+export {
+  ansiColor,
+  encodeAnsi256,
+  encodeColor,
+  supportsColor,
+} from "./colors.ts";
+export type { AnsiColorFunctions } from "./colors.ts";
 
 export {
   createEventHandler,
@@ -8,39 +12,27 @@ export {
   subscribeToFinish,
   subscribeToStart,
 } from "./events.ts";
+
+export { createFormatter, getFormatter } from "./formatting.ts";
+export type { Formatter, FormattingOptions } from "./formatting.ts";
+
+export type { LogLevel } from "./levels.ts";
+
+export { createOutput } from "./output.ts";
+export type { CreateOutputOption, OutputConfig } from "./output.ts";
+
 export {
-  colorText,
-  formatDuration,
-  formatPackage,
-  padString,
-  serializeArgs,
-  updateDefaultFormatting,
-} from "./formatting.ts";
-export { updateDefaultOutput } from "./output.ts";
-export {
+  checkForPerfTracing,
   enablePerformanceTracing,
-  type PerformanceTrackingMode,
 } from "./performance.ts";
-export { allLogLevels } from "./types.ts";
+
+export { createReporter } from "./reporter.ts";
+
 export type {
   ErrorEvent,
-  FormattingOptions,
-  LogLevel,
-  OutputOptions,
+  OutputOption,
+  OutputWriter,
   Reporter,
   ReporterOptions,
   SessionData,
-  TaskOptions,
 } from "./types.ts";
-
-export function createReporter<T extends CustomData = CustomData>(
-  options: ReporterOptions<T>
-): Reporter<T> {
-  checkPerformanceEnv();
-  return new ReporterImpl<T>(options);
-}
-
-export function globalReporter(): Reporter {
-  checkPerformanceEnv();
-  return ReporterImpl.globalReporter();
-}

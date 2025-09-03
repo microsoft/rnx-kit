@@ -6,6 +6,7 @@
   "license": "MIT",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
+  "type": "module",
   "author": {
     "name": "Microsoft Open Source",
     "email": "microsoftopensource@users.noreply.github.com"
@@ -34,9 +35,6 @@
     "format": "rnx-kit-scripts format",
     "lint": "rnx-kit-scripts lint",
     "test": "rnx-kit-scripts test"
-  },
-  "dependencies": {
-    "chalk": "^4.1.0"
   },
   "devDependencies": {
     "@rnx-kit/eslint-config": "*",

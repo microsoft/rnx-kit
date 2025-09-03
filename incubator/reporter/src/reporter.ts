@@ -1,28 +1,70 @@
-import { errorEvent, finishEvent, startEvent } from "./events.ts";
-import { getFormatting, type Formatting } from "./formatting.ts";
-import { getOutput, type Output } from "./output.ts";
+import { inspect, type InspectOptions } from "node:util";
+import { ansiColor, dim } from "./colors.ts";
+import { errorEvent, finishEvent, onExit, startEvent } from "./events.ts";
+import {
+  DEFAULT_LOG_LEVEL,
+  LL_ERROR,
+  LL_LOG,
+  LL_VERBOSE,
+  LL_WARN,
+  type LogLevel,
+} from "./levels.ts";
+import { createOutput } from "./output.ts";
 import type {
-  ColorType,
   CustomData,
   FinishReason,
-  LogLevel,
+  LogFunction,
+  OutputOption,
+  OutputWriter,
   Reporter,
-  ReporterData,
+  ReporterInfo,
   ReporterOptions,
   SessionData,
-  SessionDetails,
-  TaskOptions,
+  TextTransform,
+  TimingCallback,
+  TimingResults,
 } from "./types.ts";
-import { allLogLevels } from "./types.ts";
 
-process.on("exit", () => {
-  ReporterImpl.handleProcessExit();
-});
+type ReporterConfig = {
+  // writer used to output log messages
+  output: OutputWriter;
 
-type PrepareMsg = (args: unknown[]) => string;
+  // inspect options that determine serialization
+  inspectOptions: InspectOptions;
 
-type InternalSessionData<T extends CustomData = CustomData> = ReporterData<T> &
-  SessionDetails;
+  // message prefixes for log types
+  logPrefix: Partial<Record<LogLevel, string>>;
+
+  // message formatting functions for log types
+  logFormat: Partial<Record<LogLevel, TextTransform>>;
+};
+
+const defaultConfiguration: ReporterConfig = {
+  output: createOutput(DEFAULT_LOG_LEVEL),
+  inspectOptions: {
+    colors: true,
+    depth: 2,
+    maxArrayLength: 100,
+    compact: true,
+  },
+  logPrefix: {
+    error: ansiColor.red("ERROR: ⛔"),
+    warn: ansiColor.yellowBright("WARNING: ⚠️"),
+  },
+  logFormat: {
+    verbose: dim,
+  },
+};
+
+/**
+ * Creates a new reporter instance.
+ * @param options The options for the reporter, either as a string (name) or as a ReporterOptions object.
+ * @returns A new Reporter instance.
+ */
+export function createReporter(options: string | ReporterOptions): Reporter {
+  const opts = typeof options === "string" ? { name: options } : options;
+  return new ReporterImpl(opts);
+}
 
 /**
  * The default implementation of the Reporter interface.
@@ -31,238 +73,219 @@ type InternalSessionData<T extends CustomData = CustomData> = ReporterData<T> &
  * formatting and output capabilities.
  * @internal
  */
-export class ReporterImpl<T extends CustomData = CustomData>
-  implements Reporter<T>
-{
-  private static activeReporters: ReporterImpl[] = [];
-  private static processReporter: ReporterImpl | undefined = undefined;
+export class ReporterImpl implements Reporter {
+  private config: ReporterConfig;
+  private session: SessionData;
+  private clearOnExit?: () => void;
 
-  static handleProcessExit() {
-    // send process exit event to all reporters and tasks
-    const activeReporters = ReporterImpl.activeReporters;
-    ReporterImpl.activeReporters = [];
-    for (const reporter of activeReporters) {
-      reporter.finish(undefined, "process-exit");
-    }
-  }
-
-  static removeReporter(reporter: ReporterImpl) {
-    const index = ReporterImpl.activeReporters.indexOf(reporter);
-    if (index !== -1) {
-      ReporterImpl.activeReporters.splice(index, 1);
-    }
-  }
-
-  static globalReporter(): ReporterImpl {
-    if (!ReporterImpl.processReporter) {
-      ReporterImpl.processReporter = new ReporterImpl({
-        name: `Process: ${process.pid}`,
-        packageName: "@rnx-kit/reporter",
-      });
-    }
-    return ReporterImpl.processReporter;
-  }
-
-  private output: Output;
-  private formatting: Formatting;
-  private prep: Record<LogLevel, PrepareMsg>;
-  private source: InternalSessionData<T>;
-
-  // Formatting helpers
-  color: Reporter<T>["color"];
-  serializeArgs: Reporter<T>["serializeArgs"];
-  formatPackage: Reporter<T>["formatPackage"];
-  formatDuration: Reporter<T>["formatDuration"];
-
-  constructor(options: ReporterOptions<T>, parent?: ReporterImpl<T>) {
-    const { settings, ...sourceOptions } = options;
-
-    this.output = parent?.output || getOutput(settings);
-    this.formatting = parent?.formatting || getFormatting(settings);
-
-    // pull in the formatting helpers
-    this.color = this.formatting.color;
-    this.serializeArgs = this.formatting.serializeArgs;
-    this.formatPackage = this.formatting.formatPackage;
-    this.formatDuration = this.formatting.formatDuration;
-
-    this.prep = this.buildMsgPrepFunctions(options.label);
-    const parentSource = parent?.source;
-
-    this.source = {
-      ...sourceOptions,
-      role: parentSource ? "task" : "reporter",
-      startTime: performance.now(),
-      duration: 0,
-      parent: parentSource,
-      depth: parentSource ? parentSource.depth + 1 : 0,
+  constructor(options: ReporterOptions, parent?: ReporterImpl) {
+    const { inspectOptions: inspect, output, logFormat, logPrefix } = options;
+    const baseConfig = parent?.config ?? defaultConfiguration;
+    this.config = {
+      output: ensureOutput(output ?? baseConfig.output),
+      inspectOptions: inspect ?? baseConfig.inspectOptions,
+      logPrefix: logPrefix ?? baseConfig.logPrefix,
+      logFormat: logFormat ?? baseConfig.logFormat,
     };
 
-    ReporterImpl.activeReporters.push(this);
+    const { name, role = "reporter", packageName, data = {} } = options;
+    this.session = {
+      name,
+      role,
+      packageName,
+      data,
+      depth: parent && role === "task" ? parent.session.depth + 1 : 0,
+      timings: initTimings(),
+      parent: parent?.session,
+      errors: [],
+      operations: {},
+    };
+
+    // register for being notified to process exit
+    this.clearOnExit = onExit(() => this.finish(undefined, "process-exit"));
+
+    // send a start event if anyone is listening
     if (startEvent.hasSubscribers()) {
-      startEvent.publish(this.source);
+      startEvent.publish(this.session);
     }
   }
 
-  error(...args: unknown[]): void {
-    this.onError(args);
-    this.output.error(this.prep.error(args));
+  error: LogFunction = this.createLogFn(LL_ERROR);
+  errorRaw: LogFunction = this.createLogFn(LL_ERROR, true);
+  warn: LogFunction = this.createLogFn(LL_WARN);
+  log: LogFunction = this.createLogFn(LL_LOG);
+  verbose: LogFunction = this.createLogFn(LL_VERBOSE);
+
+  fatalError(...args: unknown[]): never {
+    this.error(...args);
+    throw new Error(serialize(this.config.inspectOptions, ...args));
   }
 
-  errorRaw(...args: unknown[]): void {
-    this.onError(args);
-    this.output.error(this.serializeArgs(args));
-  }
-
-  throwError(...args: unknown[]): never {
-    this.onError(args);
-    const msg = this.prep.error(args);
-    this.output.error(msg);
-    throw new Error(msg);
-  }
-
-  warn(...args: unknown[]): void {
-    this.output.warn?.(this.prep.warn(args));
-  }
-
-  log(...args: unknown[]): void {
-    this.output.log?.(this.prep.log(args));
-  }
-
-  verbose(...args: unknown[]): void {
-    this.output.verbose?.(this.prep.verbose(args));
-  }
-
-  task<TReturn>(
-    label: string | TaskOptions<T>,
-    fn: (reporter: Reporter<T>) => TReturn
+  taskSync<TReturn>(
+    info: string | ReporterInfo,
+    fn: (reporter: Reporter) => TReturn,
+    cb?: TimingCallback
   ): TReturn {
-    const taskReporter = this.createTask(label);
+    const taskReporter = this.start(toTaskOptions(info));
     try {
       const result = fn(taskReporter);
-      taskReporter.finish(result, "complete");
+      taskReporter.finish(result, "complete", cb);
       return result;
     } catch (e) {
-      taskReporter.finish(e, "error");
+      taskReporter.finish(e, LL_ERROR);
       throw e;
     }
   }
 
-  async taskAsync<TReturn>(
-    name: string | TaskOptions<T>,
-    fn: (reporter: Reporter<T>) => Promise<TReturn>
+  async task<TReturn>(
+    info: string | ReporterInfo,
+    fn: (reporter: Reporter) => Promise<TReturn>,
+    cb?: TimingCallback
   ): Promise<TReturn> {
-    const taskReporter = this.createTask(name);
+    const taskReporter = this.start(toTaskOptions(info));
     try {
       const result = await fn(taskReporter);
-      taskReporter.finish(result, "complete");
+      taskReporter.finish(result, "complete", cb);
       return result;
     } catch (e) {
-      taskReporter.finish(e, "error");
+      taskReporter.finish(e, LL_ERROR, cb);
       throw e;
     }
   }
 
-  time<TReturn>(label: string, fn: () => TReturn): TReturn {
-    const start = performance.now();
-    const result = fn();
-    this.finishOperation(label, performance.now() - start);
-    return result;
-  }
-
-  async timeAsync<TReturn>(
+  measureSync<TReturn>(
     label: string,
-    fn: () => Promise<TReturn>
+    fn: () => TReturn,
+    cb?: TimingCallback
+  ): TReturn {
+    const timings = initTimings();
+    const result = fn();
+    return this.finishOperation(label, timings, result, cb);
+  }
+
+  async measure<TReturn>(
+    label: string,
+    fn: () => Promise<TReturn>,
+    cb?: TimingCallback
   ): Promise<TReturn> {
-    const start = performance.now();
+    const timings = initTimings();
     const result = await fn();
-    this.finishOperation(label, performance.now() - start);
+    return this.finishOperation(label, timings, result, cb);
+  }
+
+  start(info: ReporterInfo): Reporter {
+    return new ReporterImpl(info, this);
+  }
+
+  finish<T>(result: T, reason: FinishReason = "complete", cb?: TimingCallback) {
+    // record the finish state only once
+    if (this.clearOnExit) {
+      // record the updated session info
+      const session = this.session;
+      finishTiming(session.timings, cb);
+      session.reason = reason;
+      session.result = result;
+
+      // send the event if listeners are present
+      if (finishEvent.hasSubscribers()) {
+        finishEvent.publish(session);
+      }
+
+      // clear the on-process-exit callback, also marking that the session is finished
+      this.clearOnExit();
+    }
     return result;
   }
 
-  finish(result: unknown, reason: FinishReason = "complete") {
-    // record the finish state only once
-    if (!this.source.reason) {
-      this.source.reason = reason;
-      this.source.result = result;
-      this.source.duration = performance.now() - this.source.startTime;
-      // if there are event listeners send the event
-      if (finishEvent.hasSubscribers()) {
-        finishEvent.publish(this.source);
-      }
-    }
-
-    // remove this reporter from the active reporters list
-    ReporterImpl.removeReporter(this);
+  get data(): CustomData {
+    return this.session.data;
   }
 
-  // get function for data
-  get data(): SessionData<T> {
-    return this.source;
-  }
-
-  private createTask(options: string | TaskOptions<T>): ReporterImpl<T> {
-    if (typeof options === "string") {
-      options = { name: options };
+  private createLogFn(level: LogLevel, raw?: boolean): LogFunction {
+    const { inspectOptions, output, logPrefix, logFormat } = this.config;
+    const write = output[level];
+    if (!write) {
+      return emptyFunction;
     }
-    return new ReporterImpl<T>(
-      {
-        ...options,
-        packageName: options.packageName || this.source.packageName,
-      },
-      this
-    );
+    const prefix = raw ? undefined : logPrefix[level];
+    const format = (!raw && logFormat[level]) || identity;
+    // error functions need to send the onError event
+    if (level === "error") {
+      return (...args: unknown[]) => {
+        this.onError(args);
+        write(format(serialize(inspectOptions, prefix, ...args)));
+      };
+    }
+    // otherwise create a log function that injects prefix and formats as appropriate
+    return (...args: unknown[]) => {
+      write(format(serialize(inspectOptions, prefix, ...args)));
+    };
   }
 
   private onError(args: unknown[]): void {
-    const errors = (this.source.errors ??= []);
-    errors.push(args);
+    const session = this.session;
+    session.errors.push(args);
 
     if (errorEvent.hasSubscribers()) {
-      errorEvent.publish({
-        source: this.source,
-        args,
-      });
+      errorEvent.publish({ session, args });
     }
   }
 
-  private finishOperation(name: string, duration: number) {
-    this.source.operations ??= {};
-    const op = (this.source.operations[name] ??= { elapsed: 0, calls: 0 });
-    op.elapsed += duration;
+  private finishOperation<T>(
+    name: string,
+    timings: TimingResults,
+    result: T,
+    cb?: TimingCallback
+  ) {
+    finishTiming(timings, cb);
+    const op = (this.session.operations[name] ??= { elapsed: 0, calls: 0 });
+    op.elapsed += timings.duration;
     op.calls += 1;
+    return result;
   }
+}
 
-  private buildMsgPrepFunctions(label?: string): Record<LogLevel, PrepareMsg> {
-    // color the label if requested
-    if (label) {
-      label = this.color(label, "label");
-    }
-    const serialize = this.serializeArgs;
-    const colorText = this.color;
+function initTimings(): TimingResults {
+  return {
+    start: performance.now(),
+    end: 0,
+    duration: 0,
+  };
+}
 
-    // this typecasting is necessary to ensure that the keys match the LogLevel type
-    const prefixes = {} as Record<LogLevel, PrepareMsg>;
-    for (const level of allLogLevels) {
-      const prefix = this.formatting.prefixes[level];
-      const colorTextType = (level + "Text") as ColorType;
-      if (prefix || label) {
-        const prepend: unknown[] = [];
-        if (prefix) {
-          prepend.push(this.color(prefix, (level + "Prefix") as ColorType));
-        }
-        if (label) {
-          prepend.push(label);
-        }
-        prefixes[level] = (args: unknown[]) => {
-          return colorText(serialize([...prepend, ...args]), colorTextType);
-        };
-      } else {
-        prefixes[level] = (args: unknown[]) => {
-          return colorText(serialize(args), colorTextType);
-        };
-      }
-    }
-    return prefixes;
+function finishTiming(timing: TimingResults, cb?: TimingCallback) {
+  timing.end = performance.now();
+  timing.duration = timing.end - timing.start;
+  cb?.(timing);
+}
+
+function serialize(inspectOptions: InspectOptions, ...args: unknown[]): string {
+  return (
+    args
+      .filter((arg) => arg != null)
+      .map((arg) => inspect(arg, inspectOptions))
+      .join(" ") + "\n"
+  );
+}
+
+function toTaskOptions(options: string | ReporterInfo): ReporterInfo {
+  if (typeof options === "string") {
+    return { name: options, role: "task" };
   }
+  return options;
+}
+
+function ensureOutput(option: OutputOption): OutputWriter {
+  if (typeof option === "string") {
+    return createOutput(option as LogLevel);
+  }
+  return option;
+}
+
+function emptyFunction(): void {
+  // no-op
+}
+
+function identity<T>(arg: T): T {
+  return arg;
 }

@@ -4,7 +4,7 @@ import {
   unsubscribe,
   type ChannelListener,
 } from "node:diagnostics_channel";
-import type { ErrorEvent, SessionData } from "./types";
+import type { ErrorEvent, SessionData } from "./types.ts";
 
 /** @internal */
 export const errorEvent = createEventHandler<ErrorEvent>("rnx-reporter:errors");
@@ -64,4 +64,20 @@ export function subscribeToFinish(callback: (event: SessionData) => void) {
  */
 export function subscribeToError(callback: (event: ErrorEvent) => void) {
   return errorEvent.subscribe(callback);
+}
+
+type VoidCallback = () => void;
+
+/**
+ * Call the specified callback on process exit. The function returns a function
+ * that can be used to clear the requested callback
+ * @param cb function to call on exit
+ * @returns function to clear the exit callback
+ * @internal
+ */
+export function onExit(cb: VoidCallback): VoidCallback {
+  process.on("exit", cb);
+  return () => {
+    process.off("exit", cb);
+  };
 }

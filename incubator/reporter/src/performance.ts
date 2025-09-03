@@ -1,161 +1,118 @@
+import fs from "node:fs";
 import { subscribeToFinish, subscribeToStart } from "./events.ts";
-import { padString } from "./formatting.ts";
+import { getFormatter } from "./formatting.ts";
+import { LL_LOG, LL_VERBOSE } from "./levels.ts";
+import { createOutput, CreateOutputOption } from "./output.ts";
 import { ReporterImpl } from "./reporter.ts";
-import type { ReporterOptions, SessionData } from "./types.ts";
+import type { SessionData } from "./types.ts";
 
 export const PERF_TRACKING_ENV_KEY = "RNX_PERF_TRACKING";
-const reporterPackageName = require(__dirname + "/../package.json").name;
 
-export type PerformanceTrackingMode =
-  | "disabled"
-  | "enabled"
-  | "verbose"
-  | "file-only";
+const PERF_MODES = ["disabled", "enabled", LL_VERBOSE, "file-only"] as const;
+
+const DISABLED_MODE = PERF_MODES[0];
+const ENABLED_MODE = PERF_MODES[1];
+const VERBOSE_MODE = PERF_MODES[2];
+const FILE_ONLY_MODE = PERF_MODES[3];
+
+export type PerfTrackMode = (typeof PERF_MODES)[number];
 
 class PerformanceTracker {
   private reporter: ReporterImpl;
   private verbose: boolean;
-  private clearStart: () => boolean;
-  private clearComplete: () => boolean;
+  private formatter = getFormatter();
+  private perfTag = this.formatter.cyan("PERF:");
 
-  constructor(mode: PerformanceTrackingMode, file?: string, fromEnv?: boolean) {
-    this.verbose = mode === "verbose" || mode === "file-only";
-    const settings: ReporterOptions["settings"] = {
-      level: this.verbose ? "verbose" : "log",
-      colors: {
-        label: 163,
-      },
-    };
-    // set up file logging if requested, if loading from env open the stream in append mode
+  constructor(mode: PerfTrackMode, file?: string, fromEnv?: boolean) {
+    const fileOnly = mode === FILE_ONLY_MODE;
+    this.verbose = mode === VERBOSE_MODE || fileOnly;
+    const level = this.verbose ? LL_VERBOSE : LL_LOG;
+    const outputOptions: CreateOutputOption[] = fileOnly ? [] : [level];
+
     if (file) {
-      settings.file = {
-        target: file,
-        writeFlags: fromEnv ? "a" : "w",
-        level: "verbose",
-      };
+      const flags = fromEnv ? "a" : "w";
+      const fileStream = fs.createWriteStream(file, { flags });
+      outputOptions.push({
+        level: LL_VERBOSE,
+        outputFn: (msg: string) => fileStream.write(msg + "\n"),
+      });
     }
-    // in file only mode suppress the console output
-    if (mode === "file-only") {
-      settings.level = "error";
-    }
-    // now create the reporter instance
-    this.reporter = new ReporterImpl({
-      name: "PerformanceTracker",
-      label: "PERF:",
-      packageName: reporterPackageName,
-      settings,
-    });
 
-    this.clearStart = subscribeToStart((event) => this.onTaskStarted(event));
-    this.clearComplete = subscribeToFinish((event) =>
-      this.onTaskCompleted(event)
-    );
+    const output = createOutput(...outputOptions);
+    this.reporter = new ReporterImpl({ name: "PerfTracker", output });
+
+    subscribeToStart((event) => this.onTaskStarted(event));
+    subscribeToFinish((event) => this.onTaskCompleted(event));
   }
 
-  private getName(event: SessionData) {
-    const name = event.name
-      ? `${this.reporter.color(event.name, "highlight2")}:`
-      : "";
-    if (event.role === "reporter") {
-      return `${this.reporter.formatPackage(event.packageName)}: ${name}`;
-    }
-    return name;
+  private eventPrefix(event: SessionData) {
+    return [
+      this.perfTag,
+      `${"+".repeat(event.depth)}${this.formatter.bold(event.name)} (${event.role}):`,
+    ];
   }
 
-  private getLabel(event: SessionData) {
-    const prefix =
-      event.role === "reporter"
-        ? `${this.reporter.color("Reporter", "highlight1")}:`
-        : `${"+".repeat(event.depth)}${this.reporter.color("Task", "highlight2")}:`;
-    return `${prefix} ${this.getName(event)}`;
-  }
-
-  private getParentSource(event: SessionData) {
-    if (this.verbose && event.parent) {
-      return ` (from ${this.getName(event.parent)})`;
-    }
-    return "";
+  private opPrefix(event: SessionData) {
+    return [this.perfTag, `${" ".repeat(event.depth + 2)}-`];
   }
 
   /**
    * Called when a task is started, omitted in non-verbose mode
    */
   private onTaskStarted(event: SessionData) {
-    if (this.verbose) {
-      this.reporter.log(
-        this.getLabel(event),
-        `Started${this.getParentSource(event)}`
-      );
-    }
+    this.reporter.verbose(...this.eventPrefix(event), "Started");
   }
 
   /**
    * Called when a task is completed
    */
   private onTaskCompleted(event: SessionData) {
-    const reporter = this.reporter;
-    const args: unknown[] = [this.getLabel(event)];
-    args.push(`Finished (${this.reporter.formatDuration(event.duration)})`);
-    if (event.errors && event.errors.length > 0) {
-      args.push(`with ${event.errors.length} error(s)`);
-    }
-    if (event.reason === "process-exit") {
-      args.push(this.reporter.color("(process exit)", "verboseText"));
-    } else if (event.reason === "error") {
-      if (this.verbose) {
-        args.push(this.reporter.color("on error:\n", "errorPrefix"));
-      } else {
-        args.push(`(${this.reporter.color("error result", "errorPrefix")})`);
-      }
-    }
-    const opKeys = Object.keys(event.operations || {});
-    if (opKeys.length > 0) {
-      args.push(`[${opKeys.length} sub-ops]`);
-    }
-    reporter.log(...args);
-    if (event.operations && opKeys.length > 0) {
-      for (const key of opKeys) {
-        const { elapsed, calls } = event.operations[key];
-        const duration = padString(reporter.formatDuration(elapsed), 7);
-        reporter.log(
-          `${" ".repeat(event.depth)}- ${duration} |${padString(String(calls), 5)} | ${this.reporter.color(key, "highlight3")}`
-        );
-      }
-    }
-  }
-
-  finish() {
-    this.clearStart();
-    this.clearComplete();
+    const prefix = this.eventPrefix(event);
+    const opPrefix = this.opPrefix(event);
+    const formatter = this.formatter;
+    this.reporter.log(
+      ...prefix,
+      `Finished (${event.reason}) in [${formatter.duration(event.timings.duration)}]:`,
+      event.result
+    );
+    const ops = event.operations || {};
+    Object.keys(ops).forEach((key) => {
+      const { elapsed, calls } = ops[key];
+      const duration = formatter.pad(formatter.duration(elapsed), 7);
+      this.reporter.verbose(
+        ...opPrefix,
+        `${duration} |${formatter.pad(String(calls), 5)} calls | ${formatter.highlight3(key)}`
+      );
+    });
   }
 }
 
-let performanceTracker: PerformanceTracker | null = null;
 let checkedEnv = false;
+let performanceTracker: PerformanceTracker | undefined = undefined;
 
 export function enablePerformanceTracing(
-  mode: PerformanceTrackingMode = "enabled",
+  mode: PerfTrackMode = ENABLED_MODE,
   file?: string
 ) {
   process.env[PERF_TRACKING_ENV_KEY] = serializePerfOptions(mode, file);
-  if (performanceTracker) {
-    performanceTracker.finish();
-  }
-  if (mode !== "disabled") {
+  if (mode !== DISABLED_MODE) {
     performanceTracker = new PerformanceTracker(mode, file);
   }
 }
 
 /**
- * @internal
+ * Ensure that performance tracing is started if specified in the environment variables.
+ *
+ * This can be called multiple times safely and will do nothing unless
+ * performance tracing is enabled.
  */
-export function checkPerformanceEnv() {
-  if (!checkedEnv) {
+export function checkForPerfTracing() {
+  if (!checkedEnv && !performanceTracker) {
     checkedEnv = true;
     const env = process.env[PERF_TRACKING_ENV_KEY];
     if (env) {
       const [mode, file] = decodePerformanceOptions(env);
-      if (mode !== "disabled") {
+      if (mode !== DISABLED_MODE) {
         performanceTracker = new PerformanceTracker(mode, file, true);
       }
     }
@@ -166,21 +123,10 @@ export function checkPerformanceEnv() {
  * @internal
  */
 export function serializePerfOptions(
-  mode: PerformanceTrackingMode,
+  mode: PerfTrackMode,
   file?: string
 ): string {
   return file ? `${mode},${file}` : mode;
-}
-
-function validMode(mode: string): PerformanceTrackingMode {
-  switch (mode) {
-    case "enabled":
-    case "verbose":
-    case "file-only":
-      return mode;
-    default:
-      return "disabled";
-  }
 }
 
 /**
@@ -188,10 +134,13 @@ function validMode(mode: string): PerformanceTrackingMode {
  */
 export function decodePerformanceOptions(
   serialized?: string
-): [PerformanceTrackingMode, string | undefined] {
+): [PerfTrackMode, string | undefined] {
   if (serialized) {
-    const [mode, file] = serialized.split(",");
-    return [validMode(mode), file];
+    const [mode, file] = serialized.split(",") as [
+      PerfTrackMode,
+      string | undefined,
+    ];
+    return [PERF_MODES.includes(mode) ? mode : DISABLED_MODE, file];
   }
-  return ["disabled", undefined];
+  return [DISABLED_MODE, undefined];
 }
