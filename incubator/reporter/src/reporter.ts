@@ -1,8 +1,7 @@
 import { inspect, type InspectOptions } from "node:util";
-import { ansiColor, dim } from "./colors.ts";
+import { ansiColor } from "./colors.ts";
 import { errorEvent, finishEvent, onExit, startEvent } from "./events.ts";
 import {
-  DEFAULT_LOG_LEVEL,
   LL_ERROR,
   LL_LOG,
   LL_VERBOSE,
@@ -24,37 +23,24 @@ import type {
   TimingCallback,
   TimingResults,
 } from "./types.ts";
+import { emptyFunction, identity, lazyInit } from "./utils.ts";
 
-type ReporterConfig = {
-  // writer used to output log messages
-  output: OutputWriter;
+/** default to console output, don't create it unless it is required though */
+const defaultOutput = lazyInit<OutputWriter>(() => createOutput());
 
-  // inspect options that determine serialization
-  inspectOptions: InspectOptions;
-
-  // message prefixes for log types
-  logPrefix: Partial<Record<LogLevel, string>>;
-
-  // message formatting functions for log types
-  logFormat: Partial<Record<LogLevel, TextTransform>>;
+/** default options for using inspect to serialize */
+const defaultInspectOptions: InspectOptions = {
+  colors: true,
+  depth: 2,
+  maxArrayLength: 100,
+  compact: true,
 };
 
-const defaultConfiguration: ReporterConfig = {
-  output: createOutput(DEFAULT_LOG_LEVEL),
-  inspectOptions: {
-    colors: true,
-    depth: 2,
-    maxArrayLength: 100,
-    compact: true,
-  },
-  logPrefix: {
-    error: ansiColor.red("ERROR: ⛔"),
-    warn: ansiColor.yellowBright("WARNING: ⚠️"),
-  },
-  logFormat: {
-    verbose: dim,
-  },
-};
+/** default prefixes for log levels, lazy-init to not load color functions unless requested */
+const defaultPrefix = lazyInit<Partial<Record<LogLevel, string>>>(() => ({
+  error: ansiColor().red("ERROR: ⛔"),
+  warn: ansiColor().yellowBright("WARNING: ⚠️"),
+}));
 
 /**
  * Creates a new reporter instance.
@@ -74,19 +60,24 @@ export function createReporter(options: string | ReporterOptions): Reporter {
  * @internal
  */
 export class ReporterImpl implements Reporter {
-  private config: ReporterConfig;
+  // configuration options, either from options, a parent, or defaults
+  private output: OutputWriter;
+  private inspectOptions: InspectOptions;
+  private logPrefix: Partial<Record<LogLevel, string>>;
+  private logFormat: Partial<Record<LogLevel, TextTransform>>;
+
   private session: SessionData;
   private clearOnExit?: () => void;
 
   constructor(options: ReporterOptions, parent?: ReporterImpl) {
     const { inspectOptions: inspect, output, logFormat, logPrefix } = options;
-    const baseConfig = parent?.config ?? defaultConfiguration;
-    this.config = {
-      output: ensureOutput(output ?? baseConfig.output),
-      inspectOptions: inspect ?? baseConfig.inspectOptions,
-      logPrefix: logPrefix ?? baseConfig.logPrefix,
-      logFormat: logFormat ?? baseConfig.logFormat,
-    };
+    this.output = output
+      ? ensureOutput(output)
+      : (parent?.output ?? defaultOutput());
+    this.inspectOptions =
+      inspect ?? parent?.inspectOptions ?? defaultInspectOptions;
+    this.logFormat = logFormat ?? parent?.logFormat ?? {};
+    this.logPrefix = logPrefix ?? parent?.logPrefix ?? defaultPrefix();
 
     const { name, role = "reporter", packageName, data = {} } = options;
     this.session = {
@@ -118,7 +109,7 @@ export class ReporterImpl implements Reporter {
 
   fatalError(...args: unknown[]): never {
     this.error(...args);
-    throw new Error(serialize(this.config.inspectOptions, ...args));
+    throw new Error(serialize(this.inspectOptions, ...args));
   }
 
   taskSync<TReturn>(
@@ -202,7 +193,7 @@ export class ReporterImpl implements Reporter {
   }
 
   private createLogFn(level: LogLevel, raw?: boolean): LogFunction {
-    const { inspectOptions, output, logPrefix, logFormat } = this.config;
+    const { inspectOptions, output, logPrefix, logFormat } = this;
     const write = output[level];
     if (!write) {
       return emptyFunction;
@@ -280,12 +271,4 @@ function ensureOutput(option: OutputOption): OutputWriter {
     return createOutput(option as LogLevel);
   }
   return option;
-}
-
-function emptyFunction(): void {
-  // no-op
-}
-
-function identity<T>(arg: T): T {
-  return arg;
 }

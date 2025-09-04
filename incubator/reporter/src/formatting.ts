@@ -1,35 +1,30 @@
 import { stripVTControlCharacters } from "node:util";
-import { ansiColor, bold, dim, encodeAnsi256, encodeColor } from "./colors.ts";
+import type {
+  AnsiColorFunctions,
+  FontStyleFunctions,
+  TextTransform,
+} from "./colors.ts";
+import { ansiColor, encodeAnsi256, fontStyle } from "./colors.ts";
+import { identity, lazyInit } from "./utils.ts";
 
 type Alignment = "left" | "right" | "center";
 
-/**
- * Set of ANSI color functions, names are similar to the names used in the chalk library
- */
-const formattingDefaults = {
-  // add the ansi color values to the formatting
-  ...ansiColor,
+type StaticFormatting = AnsiColorFunctions &
+  FontStyleFunctions & {
+    /** Semantic coloring functions */
+    durationValue: TextTransform;
+    durationUnits: TextTransform;
+    highlight1: TextTransform;
+    highlight2: TextTransform;
+    highlight3: TextTransform;
+    packageName: TextTransform;
+    packageScope: TextTransform;
+    path: TextTransform;
 
-  /** Bold text */
-  bold,
-  dim,
-  italic: (s: string) => encodeColor(s, 3, 23),
-  underline: (s: string) => encodeColor(s, 4, 24),
-  strikethrough: (s: string) => encodeColor(s, 9, 29),
+    /** Pads a string, ignoring the color control characters, align defaults to "right" */
+    pad: (text: string, length: number, align?: Alignment) => string;
+  };
 
-  /**
-   * Semantic colors used by the reporter module and formatting functions
-   */
-  durationValue: (s: string) => encodeAnsi256(s, 34),
-  durationUnits: dim,
-  highlight1: (s: string) => encodeAnsi256(s, 37),
-  highlight2: (s: string) => encodeAnsi256(s, 38),
-  highlight3: (s: string) => encodeAnsi256(s, 45),
-  packageName: (s: string) => encodeAnsi256(s, 208), // orange light
-  packageScope: (s: string) => encodeAnsi256(s, 166), // orange mid
-  path: (s: string) => encodeAnsi256(s, 43), // blue-green
-};
-type StaticFormatting = typeof formattingDefaults;
 export type FormattingOptions = Partial<StaticFormatting>;
 
 export type Formatter = StaticFormatting & {
@@ -38,19 +33,31 @@ export type Formatter = StaticFormatting & {
 
   /** format a package name */
   package: (pkg: string) => string;
-
-  /** Pads a string, ignoring the color control characters, align defaults to "right" */
-  pad: (text: string, length: number, align?: Alignment) => string;
 };
 
-const defaultFormatter: Formatter = Object.assign(formattingDefaults, {
-  ...createColorBasedFormatters(formattingDefaults),
-  pad: padString,
-});
+export const getFormatter = lazyInit<Formatter>(() => {
+  const staticFormatting: StaticFormatting = {
+    /** ansi colors */
+    ...ansiColor(),
 
-export function getFormatter(): Formatter {
-  return defaultFormatter;
-}
+    /** bold, dim, italic, etc. */
+    ...fontStyle(),
+
+    /** Semantic colors used by the reporter module and formatting functions */
+    durationValue: (s) => encodeAnsi256(s, 34),
+    durationUnits: fontStyle().dim,
+    highlight1: (s) => encodeAnsi256(s, 37),
+    highlight2: (s) => encodeAnsi256(s, 38),
+    highlight3: (s) => encodeAnsi256(s, 45),
+    packageName: (s) => encodeAnsi256(s, 208), // orange light
+    packageScope: (s) => encodeAnsi256(s, 166), // orange mid
+    path: (s) => encodeAnsi256(s, 43), // blue-green
+
+    /** Add the padding utility function */
+    pad: padString,
+  };
+  return addDynamicFormatting(staticFormatting);
+});
 
 /**
  * Create a new formatter with the given settings
@@ -60,49 +67,48 @@ export function getFormatter(): Formatter {
  */
 export function createFormatter(
   settings: FormattingOptions,
-  base: Formatter = defaultFormatter
+  base: Formatter = getFormatter()
 ): Formatter {
   const patched = { ...base, ...settings };
-  return Object.assign(patched, createColorBasedFormatters(patched));
+  return addDynamicFormatting(patched);
 }
 
-/**
- * Create color-based formatters for the given colors
- * @param colors The colors to use for formatting
- * @returns A set of formatters for duration and package
- */
-function createColorBasedFormatters(
-  colors: Pick<
-    Formatter,
-    "durationUnits" | "durationValue" | "packageName" | "packageScope"
-  >
-): Pick<Formatter, "duration" | "package"> {
-  const { durationUnits, durationValue, packageName, packageScope } = colors;
-  const secondToMinuteCutoff = 120; // seconds
+function addDynamicFormatting(target: StaticFormatting): Formatter {
+  const { durationUnits, durationValue, packageName, packageScope } = target;
+  return Object.assign(target, {
+    duration: (duration: number) =>
+      formatDuration(duration, durationValue, durationUnits),
+    package: (pkg: string) => colorPackage(pkg, packageName, packageScope),
+  });
+}
 
-  return {
-    duration: (duration) => {
-      let unit = "ms";
-      if (duration > secondToMinuteCutoff * 1000) {
-        unit = "m";
-        duration /= 60000;
-      } else if (duration > 1000) {
-        unit = "s";
-        duration /= 1000;
-      }
-      const decimalPlaces = Math.max(0, 2 - Math.floor(Math.log10(duration)));
-      return `${durationValue(duration.toFixed(decimalPlaces))}${durationUnits(unit)}`;
-    },
-    package: (pkg) => {
-      const parts = pkg.split("/");
-      if (parts.length > 1) {
-        const scope = parts[0];
-        const name = parts.slice(1).join("/");
-        return `${packageScope(scope)}${packageName("/" + name)}`;
-      }
-      return packageName(pkg);
-    },
-  };
+export function formatDuration(
+  duration: number,
+  durationValue: TextTransform = identity,
+  durationUnits: TextTransform = identity
+): string {
+  let unit = "ms";
+  if (duration > 120000) {
+    unit = "m";
+    duration /= 60000;
+  } else if (duration > 1000) {
+    unit = "s";
+    duration /= 1000;
+  }
+  const decimalPlaces = Math.max(0, 2 - Math.floor(Math.log10(duration)));
+  return `${durationValue(duration.toFixed(decimalPlaces))}${durationUnits(unit)}`;
+}
+
+export function colorPackage(
+  pkg: string,
+  packageName: TextTransform = identity,
+  packageScope: TextTransform = identity
+): string {
+  const parts = pkg.split("/");
+  if (parts.length > 1) {
+    return `${packageScope(parts[0])}${packageName("/" + parts.slice(1).join("/"))}`;
+  }
+  return packageName(pkg);
 }
 
 /**

@@ -1,7 +1,8 @@
 import { WriteStream } from "node:tty";
+import { lazyInit } from "./utils.ts";
 
 // check whether the write stream supports color
-export const supportsColor =
+export const SUPPORTS_COLOR =
   WriteStream.prototype.hasColors() &&
   !process.env["NODE_TEST_CONTEXT"] &&
   process.env["NODE_ENV"] !== "test";
@@ -17,12 +18,28 @@ const ANSI_COLORS = [
   "white",
 ] as const;
 
-type AnsiColor = (typeof ANSI_COLORS)[number];
+export type TextTransform = (text: string) => string;
+export type AnsiColor = (typeof ANSI_COLORS)[number];
 
+/**
+ * Set of ANSI color functions, names are similar to the names used in the chalk library, though
+ * aligning to the ansi names, rather than remapping gray/grey.
+ */
 export type AnsiColorFunctions = Record<
   AnsiColor | `${AnsiColor}Bright`,
   (s: string) => string
 >;
+
+/**
+ * Set of font style functions, names are similar to the names used in the chalk library.
+ */
+export type FontStyleFunctions = {
+  bold: TextTransform;
+  dim: TextTransform;
+  italic: TextTransform;
+  underline: TextTransform;
+  strikethrough: TextTransform;
+};
 
 /**
  * Wraps a given string with ANSI escape codes for coloring. Will be a no-op if colors are disabled in process.stdout.
@@ -34,22 +51,32 @@ export const encodeColor: (
   s: string,
   start: string | number,
   stop: string | number
-) => string = supportsColor
+) => string = SUPPORTS_COLOR
   ? (s, start, stop) => `\u001B[${start}m${s}\u001B[${stop}m`
   : (s, _start, _stop) => s;
 
 /**
- * ANSI color functions for text formatting
+ * Set of ansi color functions, names are similar to the names used in the chalk library.
  */
-export const ansiColor: AnsiColorFunctions = Object.fromEntries(
-  ANSI_COLORS.map((color, index) => [
-    [color, (s: string) => encodeColor(s, index + 30, 39)],
-    [color + "Bright", (s: string) => encodeColor(s, index + 90, 39)],
-  ])
+export const ansiColor = lazyInit<AnsiColorFunctions>(() =>
+  Object.fromEntries(
+    ANSI_COLORS.map((color, index) => [
+      [color, (s: string) => encodeColor(s, index + 30, 39)],
+      [color + "Bright", (s: string) => encodeColor(s, index + 90, 39)],
+    ])
+  )
 );
 
-export const bold = (s: string) => encodeColor(s, 1, 22);
-export const dim = (s: string) => encodeColor(s, 2, 22);
+/**
+ * Set of font style functions, names are similar to the names used in the chalk library.
+ */
+export const fontStyle = lazyInit<FontStyleFunctions>(() => ({
+  bold: (s: string) => encodeColor(s, 1, 22),
+  dim: (s: string) => encodeColor(s, 2, 22),
+  italic: (s: string) => encodeColor(s, 3, 23),
+  underline: (s: string) => encodeColor(s, 4, 24),
+  strikethrough: (s: string) => encodeColor(s, 9, 29),
+}));
 
 /**
  * Encodes a string with ANSI 256 color codes. Note that not all terminals support 256 colors but they have automatic

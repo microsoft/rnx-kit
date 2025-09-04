@@ -2,18 +2,23 @@ import fs from "node:fs";
 import { subscribeToFinish, subscribeToStart } from "./events.ts";
 import { getFormatter } from "./formatting.ts";
 import { LL_LOG, LL_VERBOSE } from "./levels.ts";
-import { createOutput, CreateOutputOption } from "./output.ts";
+import { createOutput, mergeOutput } from "./output.ts";
 import { ReporterImpl } from "./reporter.ts";
-import type { SessionData } from "./types.ts";
+import type { OutputWriter, SessionData } from "./types.ts";
 
 export const PERF_TRACKING_ENV_KEY = "RNX_PERF_TRACKING";
 
-const PERF_MODES = ["disabled", "enabled", LL_VERBOSE, "file-only"] as const;
+const DISABLED_MODE = "disabled";
+const ENABLED_MODE = "enabled";
+const VERBOSE_MODE = LL_VERBOSE;
+const FILE_ONLY_MODE = "file-only";
 
-const DISABLED_MODE = PERF_MODES[0];
-const ENABLED_MODE = PERF_MODES[1];
-const VERBOSE_MODE = PERF_MODES[2];
-const FILE_ONLY_MODE = PERF_MODES[3];
+const PERF_MODES = [
+  DISABLED_MODE,
+  ENABLED_MODE,
+  VERBOSE_MODE,
+  FILE_ONLY_MODE,
+] as const;
 
 export type PerfTrackMode = (typeof PERF_MODES)[number];
 
@@ -24,21 +29,26 @@ class PerformanceTracker {
   private perfTag = this.formatter.cyan("PERF:");
 
   constructor(mode: PerfTrackMode, file?: string, fromEnv?: boolean) {
-    const fileOnly = mode === FILE_ONLY_MODE;
-    this.verbose = mode === VERBOSE_MODE || fileOnly;
+    this.verbose = mode === VERBOSE_MODE || mode === FILE_ONLY_MODE;
     const level = this.verbose ? LL_VERBOSE : LL_LOG;
-    const outputOptions: CreateOutputOption[] = fileOnly ? [] : [level];
+    const outputs: OutputWriter[] = [];
+
+    // create a console output unless in file only mode
+    if (mode !== FILE_ONLY_MODE) {
+      outputs.push(createOutput(level));
+    }
 
     if (file) {
       const flags = fromEnv ? "a" : "w";
       const fileStream = fs.createWriteStream(file, { flags });
-      outputOptions.push({
-        level: LL_VERBOSE,
-        outputFn: (msg: string) => fileStream.write(msg + "\n"),
-      });
+      outputs.push(
+        createOutput(LL_VERBOSE, (msg: string) => {
+          fileStream.write(msg + "\n");
+        })
+      );
     }
 
-    const output = createOutput(...outputOptions);
+    const output = mergeOutput(...outputs);
     this.reporter = new ReporterImpl({ name: "PerfTracker", output });
 
     subscribeToStart((event) => this.onTaskStarted(event));
