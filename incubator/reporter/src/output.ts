@@ -28,11 +28,16 @@ export function createOutput(
   return Object.fromEntries(
     getLevels(level).map((lvl) => [
       lvl,
-      level === LL_ERROR || level === LL_WARN ? errFn : outFn,
+      lvl === LL_ERROR || lvl === LL_WARN ? errFn : outFn,
     ])
   );
 }
 
+/**
+ * Merge multiple OutputWriter instances into one.
+ * @param outputs the OutputWriter instances to merge
+ * @returns a new OutputWriter instance that writes to all provided writers
+ */
 export function mergeOutput(...outputs: OutputWriter[]): OutputWriter {
   const mergedWrites = ALL_LOG_LEVELS.map((level) => getWrite(level, outputs));
   const result: OutputWriter = {};
@@ -44,6 +49,12 @@ export function mergeOutput(...outputs: OutputWriter[]): OutputWriter {
   return result;
 }
 
+/**
+ * Get a merged write function for a specific log level from a list of OutputWriter instances.
+ * @param level the log level to get the write function for
+ * @param outputs the OutputWriter instances to search
+ * @returns the write function for the specified log level, or undefined if not found
+ */
 function getWrite(
   level: LogLevel,
   outputs: OutputWriter[]
@@ -60,6 +71,11 @@ function getWrite(
         };
 }
 
+/**
+ * Get the log levels for a specific log level.
+ * @param level the log level to get levels for
+ * @returns an array of log levels that are equal to or more severe than the specified level
+ */
 function getLevels(level: LogLevel = DEFAULT_LOG_LEVEL): LogLevel[] {
   const index = ALL_LOG_LEVELS.indexOf(level);
   return ALL_LOG_LEVELS.slice(0, index >= 0 ? index + 1 : 1);

@@ -17,6 +17,8 @@ It also contains a performance tracker that can be enabled to dump performance
 information from execution of tasks. Enabling performance tracing will chain to
 child processes as well to handle script tracking.
 
+This also contains a compact and self-contained module for colors.
+
 ## Motivation
 
 Standardizing the reporter used in our packages allows for easier high level

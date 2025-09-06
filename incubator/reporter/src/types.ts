@@ -2,23 +2,26 @@ import type { InspectOptions } from "node:util";
 import type { LogLevel } from "./levels.ts";
 
 export type LogFunction = (...args: unknown[]) => void;
-export type OutputFunction = (msg: string) => void;
-export type TextTransform = (text: string) => string;
 
-export type TaskState = "running" | "complete" | "error" | "process-exit";
-export type FinishReason = "complete" | "error" | "process-exit";
+export type TextTransform = (text: string) => string;
 
 export type CustomData = Record<string, string | number | boolean>;
 export type ErrorData = unknown[];
 
+export type OutputFunction = (msg: string) => void;
 export type OutputWriter = Partial<Record<LogLevel, OutputFunction>>;
 
-export type TimingResults = {
-  start: number;
-  end: number;
-  duration: number;
+export type OperationTotals = {
+  elapsed: number; // total elapsed time for this operation
+  calls: number; // number of times this operation was called
+  errors: number; // number of errors that occurred during this operation
 };
-export type TimingCallback = (results: TimingResults) => void;
+
+export type ErrorResult = { error: unknown };
+export type NormalResult<T> = { value: T };
+
+export type FinishResult<T> = NormalResult<T> | ErrorResult;
+export type AnyResult<T> = Partial<NormalResult<T> & ErrorResult>;
 
 /**
  * An output option can either be a log level, which will write to the console, or a partial set of functions for
@@ -53,7 +56,7 @@ export type Reporter = {
   verbose: LogFunction;
 
   /**
-   * Report an error and throw it, this will stop execution of the current task or reporter.
+   * Log the provided message to error output, then throw an error with the same message.
    */
   fatalError: LogFunction;
 
@@ -66,32 +69,18 @@ export type Reporter = {
    *
    * @param name name of this task, or more comprehensive options object
    * @param fn function to execute as a task
-   * @param cb optional callback that will be called with the final timing results
    */
-  taskSync<T>(
-    name: string | ReporterInfo,
-    fn: (reporter: Reporter) => T,
-    cb?: TimingCallback
-  ): T;
-  task<T>(
-    name: string | ReporterInfo,
-    fn: (reporter: Reporter) => Promise<T>,
-    cb?: TimingCallback
-  ): Promise<T>;
+  task<T>(name: TaskOption, fn: (task: Reporter) => T): T;
+  task<T>(name: TaskOption, fn: (task: Reporter) => Promise<T>): Promise<T>;
 
   /**
    * Time operations that happen within the scope of a task or reporter. These calls are aggregated by name within that scope.
    *
    * @param label label to use for this operation
    * @param fn function to execute as an operation
-   * @param cb optional callback that will be called with the final timing results
    */
-  measureSync<T>(label: string, fn: () => T, cb?: TimingCallback): T;
-  measure<T>(
-    label: string,
-    fn: () => Promise<T>,
-    cb?: TimingCallback
-  ): Promise<T>;
+  measure<T>(label: string, fn: () => T): T;
+  measure<T>(label: string, fn: () => Promise<T>): Promise<T>;
 
   /**
    * Start a new reporter or task, based off of this reporter or task. If role is not set this will default to "task".
@@ -103,13 +92,11 @@ export type Reporter = {
    * but no further completion events will be sent.
    *
    * @param result result of the task or reporter, can be any type
-   * @param processExit if true, records that this was finished as the result of the process exiting.
-   * @param cb optional callback that will be called with the final timing results
    */
-  finish: <T>(result: T, reason?: FinishReason, cb?: TimingCallback) => T;
+  finish: <T>(result: T) => void;
 
   /**
-   * Data about the session, available as it is tracked
+   * Data about the session, can be used to set things like telemetry properties. This will be included in logged events.
    */
   readonly data: CustomData;
 };
@@ -124,12 +111,17 @@ export type ReporterData = {
   // package name, including scope, e.g. @my-scope/my-package
   packageName?: string;
 
+  // report start and end messages for task and measure operations when verbose logging is enabled
+  reportTimers?: boolean;
+
   // optional data section that will be added to the reporter
   data: CustomData;
 };
 
 export type ReporterInfo = Pick<ReporterData, "name"> &
   Partial<Omit<ReporterData, "name">>;
+
+export type TaskOption = string | ReporterInfo;
 
 export type ReporterConfiguration = {
   // writer used to output log messages
@@ -151,12 +143,16 @@ export type ReporterOptions = ReporterInfo &
     output?: OutputOption;
   };
 
+/**
+ * Data associated with a reporter or task session. This includes hierarchical information about
+ * parent tasks, errors that were reported, and operations that were measured.
+ */
 export type SessionData = ReporterData & {
-  // timing information
-  timings: TimingResults;
-
   // depth of the task in the reporter hierarchy, 0 for reporters, 1+ for tasks
   depth: number;
+
+  // elapsed time in milliseconds since the reporter or task was started
+  elapsed: number;
 
   // parent session data if this is a task, undefined for reporters
   parent?: SessionData;
@@ -165,19 +161,10 @@ export type SessionData = ReporterData & {
   errors: ErrorData[];
 
   // operations that were recorded during the task or reporter, can be empty if no operations were recorded
-  operations: Record<
-    string,
-    {
-      elapsed: number; // total elapsed time for this operation
-      calls: number; // number of times this operation was called
-    }
-  >;
+  operations: Record<string, OperationTotals>;
 
-  // result of the task or reporter, set when finish is called
-  result?: unknown;
-
-  // reason for finishing the task, can be 'complete', 'error', or 'process-exit', unset until finish is called
-  reason?: FinishReason;
+  // result of the task or reporter, set when finish is called. This will be undefined if finished due to process exit.
+  result?: FinishResult<unknown>;
 };
 
 export type ErrorEvent = {

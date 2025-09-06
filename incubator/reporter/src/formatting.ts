@@ -9,6 +9,9 @@ import { identity, lazyInit } from "./utils.ts";
 
 type Alignment = "left" | "right" | "center";
 
+/**
+ * Static formatting functions, these do not depend on each other
+ */
 type StaticFormatting = AnsiColorFunctions &
   FontStyleFunctions & {
     /** Semantic coloring functions */
@@ -25,8 +28,15 @@ type StaticFormatting = AnsiColorFunctions &
     pad: (text: string, length: number, align?: Alignment) => string;
   };
 
+/**
+ * Overridable formatting options, these can override any of the static formatting functions
+ */
 export type FormattingOptions = Partial<StaticFormatting>;
 
+/**
+ * A full set of formatting functions, including static formatters, and dynamic formatters
+ * which will pull values from the static formatters as needed.
+ */
 export type Formatter = StaticFormatting & {
   /** format a duration value */
   duration: (time: number) => string;
@@ -35,6 +45,10 @@ export type Formatter = StaticFormatting & {
   package: (pkg: string) => string;
 };
 
+/**
+ * Get a default formatter with colors and formatting functions all implemented. Built
+ * on demand, so it won't be created unless requested.
+ */
 export const getFormatter = lazyInit<Formatter>(() => {
   const staticFormatting: StaticFormatting = {
     /** ansi colors */
@@ -82,10 +96,19 @@ function addDynamicFormatting(target: StaticFormatting): Formatter {
   });
 }
 
+/**
+ * Format a duration value. This will pick appropriate units (ms, s, m) and format
+ * the value to a reasonable number of decimal places.
+ *
+ * @param duration duration in milliseconds
+ * @param colorValue formatting function for the duration value
+ * @param colorUnits formatting function for the duration units
+ * @returns formatted duration string
+ */
 export function formatDuration(
   duration: number,
-  durationValue: TextTransform = identity,
-  durationUnits: TextTransform = identity
+  colorValue: TextTransform = identity,
+  colorUnits: TextTransform = identity
 ): string {
   let unit = "ms";
   if (duration > 120000) {
@@ -96,9 +119,16 @@ export function formatDuration(
     duration /= 1000;
   }
   const decimalPlaces = Math.max(0, 2 - Math.floor(Math.log10(duration)));
-  return `${durationValue(duration.toFixed(decimalPlaces))}${durationUnits(unit)}`;
+  return `${colorValue(duration.toFixed(decimalPlaces))}${colorUnits(unit)}`;
 }
 
+/**
+ * Color a package name and its scope if present.
+ * @param pkg package name to color
+ * @param packageName formatting function for the package name
+ * @param packageScope formatting function for the package scope
+ * @returns colored package name
+ */
 export function colorPackage(
   pkg: string,
   packageName: TextTransform = identity,
@@ -112,6 +142,8 @@ export function colorPackage(
 }
 
 /**
+ * Pad a string to the specified length, ignoring VT control characters.
+ * Defaults to right alignment.
  * @param str target string to pad with spaces
  * @param length desired length
  * @param end pad at the end instead of the start

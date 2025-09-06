@@ -5,7 +5,11 @@ import { LL_LOG, LL_VERBOSE } from "./levels.ts";
 import { createOutput, mergeOutput } from "./output.ts";
 import { ReporterImpl } from "./reporter.ts";
 import type { OutputWriter, SessionData } from "./types.ts";
+import { isErrorResult } from "./utils.ts";
 
+/**
+ * Environment variable key used to enable performance tracking
+ */
 export const PERF_TRACKING_ENV_KEY = "RNX_PERF_TRACKING";
 
 const DISABLED_MODE = "disabled";
@@ -20,8 +24,19 @@ const PERF_MODES = [
   FILE_ONLY_MODE,
 ] as const;
 
+/**
+ * The different modes for performance tracking
+ * - disabled: performance tracking is disabled (default)
+ * - enabled: performance tracking is enabled, but only logs start and end of tasks
+ * - verbose: performance tracking is enabled, logs start and end of tasks and operations
+ * - file-only: performance tracking is enabled, logs to a file only, no console output
+ */
 export type PerfTrackMode = (typeof PERF_MODES)[number];
 
+/**
+ * Performance tracker implementation. This creates a reporter and listens for reporter events, logging
+ * performance information. It can log to the console, a file, or both.
+ */
 class PerformanceTracker {
   private reporter: ReporterImpl;
   private verbose: boolean;
@@ -55,6 +70,11 @@ class PerformanceTracker {
     subscribeToFinish((event) => this.onTaskCompleted(event));
   }
 
+  /**
+   * Get the prefix for an event log message
+   * @param event event that is starting
+   * @returns an array of strings to use as the log message prefix
+   */
   private eventPrefix(event: SessionData) {
     return [
       this.perfTag,
@@ -62,6 +82,11 @@ class PerformanceTracker {
     ];
   }
 
+  /**
+   * Get the prefix for an operation log message
+   * @param event event that is being reported
+   * @returns an array of strings to use as the log message prefix
+   */
   private opPrefix(event: SessionData) {
     return [this.perfTag, `${" ".repeat(event.depth + 2)}-`];
   }
@@ -74,15 +99,22 @@ class PerformanceTracker {
   }
 
   /**
-   * Called when a task is completed
+   * Called when a task is completed. Will log the time spent in a task. In verbose mode
+   * will also log the time spent in each operation.
    */
   private onTaskCompleted(event: SessionData) {
     const prefix = this.eventPrefix(event);
     const opPrefix = this.opPrefix(event);
     const formatter = this.formatter;
+    const reason = isErrorResult(event.result)
+      ? "error"
+      : event.result
+        ? "success"
+        : "process-exit";
+
     this.reporter.log(
       ...prefix,
-      `Finished (${event.reason}) in [${formatter.duration(event.timings.duration)}]:`,
+      `Finished (${reason}) in [${formatter.duration(event.elapsed ?? 0)}]:`,
       event.result
     );
     const ops = event.operations || {};
@@ -100,6 +132,12 @@ class PerformanceTracker {
 let checkedEnv = false;
 let performanceTracker: PerformanceTracker | undefined = undefined;
 
+/**
+ * Enable performance tracing. This will set the appropriate environment variable
+ * so that child processes will also enable performance tracing with the same settings.
+ * @param mode mode to use for performance tracking, defaults to "enabled"
+ * @param file optional file path to log performance data
+ */
 export function enablePerformanceTracing(
   mode: PerfTrackMode = ENABLED_MODE,
   file?: string
@@ -114,7 +152,9 @@ export function enablePerformanceTracing(
  * Ensure that performance tracing is started if specified in the environment variables.
  *
  * This can be called multiple times safely and will do nothing unless
- * performance tracing is enabled.
+ * performance tracing is enabled. If enabling performance tracing across child processes
+ * this should be called in your createReporter function to ensure that child processes
+ * also enable performance tracing.
  */
 export function checkForPerfTracing() {
   if (!checkedEnv && !performanceTracker) {

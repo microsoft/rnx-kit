@@ -58,8 +58,5 @@
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*"
   },
-  "jest": {
-    "preset": "@rnx-kit/jest-preset/private"
-  },
   "experimental": true
 }
