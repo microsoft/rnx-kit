@@ -63,7 +63,7 @@
   "engines": {
     "node": ">=20.9"
   },
-  "packageManager": "yarn@4.9.2",
+  "packageManager": "yarn@4.9.4",
   "resolutions": {
     "@semantic-release/npm/npm": "link:."
   },
