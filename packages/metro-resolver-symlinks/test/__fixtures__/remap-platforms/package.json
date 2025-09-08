@@ -6,5 +6,8 @@
     "react-native": "0.0.0-dev",
     "react-native-macos": "0.0.0-dev",
     "react-native-windows": "0.0.0-dev"
+  },
+  "engines": {
+    "node": "Do not install; for testing purposes only"
   }
 }
