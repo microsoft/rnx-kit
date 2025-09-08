@@ -12,5 +12,8 @@
     "invalid-polyfill-boolean": "*",
     "invalid-polyfill-boundary": "*",
     "invalid-polyfill-missing": "*"
+  },
+  "engines": {
+    "node": "Do not install; for testing purposes only"
   }
 }

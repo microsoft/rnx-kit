@@ -7,6 +7,9 @@
     "react": "18.1.0",
     "react-native": "0.70.3"
   },
+  "engines": {
+    "node": "Do not install; for testing purposes only"
+  },
   "rnx-kit": {
     "reactNativeVersion": "0.70",
     "kitType": "app",

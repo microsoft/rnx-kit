@@ -15,6 +15,9 @@ exports[`checkPackageManifest({ kitType: 'app' }) (backwards compatibility) adds
     "react-native-reanimated": "^2.10.0",
     "react-native-webview": "^11.23.0"
   },
+  "engines": {
+    "node": "Do not install; for testing purposes only"
+  },
   "rnx-kit": {
     "reactNativeVersion": "^0.70",
     "kitType": "app",
