@@ -20,7 +20,10 @@ function isArray<T>(a: T[] | null | undefined): a is T[] {
 }
 
 export function createGitHubClient(options: OctokitOptions = {}): GitHubClient {
-  return new (Octokit.plugin(restEndpointMethods))(options);
+  return new (Octokit.plugin(restEndpointMethods))({
+    auth: process.env["GITHUB_TOKEN"],
+    ...options,
+  });
 }
 
 export function fetchPullRequests(
