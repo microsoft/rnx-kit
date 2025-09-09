@@ -1,5 +1,11 @@
-import type { Rule } from "eslint";
+// @ts-check
+"use strict";
 
+/**
+ * @typedef {import("estree").Node & { const?: boolean; }} Node
+ */
+
+/** @type {import("eslint").Rule.RuleModule} */
 module.exports = {
   meta: {
     type: "problem",
@@ -13,7 +19,7 @@ module.exports = {
         "When using a forEach function call, avoid using variables outside of the scope of the function, use for (const item of array) instead",
     },
   },
-  create(context: Rule.RuleContext) {
+  create(context) {
     const sourceCode = context.sourceCode;
     return {
       CallExpression(node) {
