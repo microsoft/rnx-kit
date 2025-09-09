@@ -44,6 +44,7 @@ module.exports = [
     rules: {
       "@rnx-kit/no-const-enum": "error",
       "@rnx-kit/no-export-all": "error",
+      // Mores rules ...
     },
   },
 ];
@@ -61,6 +62,7 @@ module.exports = [
     rules: {
       "@rnx-kit/no-const-enum": "error",
       "@rnx-kit/no-export-all": "error",
+      // Mores rules ...
     },
   },
 ];
