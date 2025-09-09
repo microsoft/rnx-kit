@@ -1,4 +1,4 @@
-import { rule } from "../src/rules/forbid-foreach-with-variables-outside-of-function-scope";
+import rule from "../src/rules/forbid-foreach-with-variables-outside-of-function-scope";
 import { makeRuleTester } from "./RuleTester";
 
 describe("disallows `forEach` with variables outside of function scope", () => {

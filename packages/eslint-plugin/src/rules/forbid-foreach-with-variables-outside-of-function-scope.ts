@@ -1,6 +1,6 @@
 import type { Rule } from "eslint";
 
-export const rule: Rule.RuleModule = {
+module.exports = {
   meta: {
     type: "problem",
     messages: {
