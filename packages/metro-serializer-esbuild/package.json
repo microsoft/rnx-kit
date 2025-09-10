@@ -56,7 +56,7 @@
     "@rnx-kit/metro-service": "*",
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*",
-    "@types/node": "^22.0.0",
+    "@types/node": "^24.0.0",
     "lodash-es": "^4.17.21",
     "metro": "^0.83.1",
     "metro-config": "^0.83.1",

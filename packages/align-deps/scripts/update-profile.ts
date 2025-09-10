@@ -1,4 +1,4 @@
-#!/usr/bin/env -S node --experimental-strip-types --no-warnings
+#!/usr/bin/env -S node --no-warnings
 
 import { error, info } from "@rnx-kit/console";
 import { untar } from "@rnx-kit/tools-shell";

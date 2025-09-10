@@ -53,7 +53,7 @@
     "@rnx-kit/tools-react-native": "*",
     "@rnx-kit/tsconfig": "*",
     "@types/lodash.merge": "^4.6.9",
-    "@types/node": "^22.0.0",
+    "@types/node": "^24.0.0",
     "@types/semver": "^7.0.0",
     "metro": "^0.83.1"
   },

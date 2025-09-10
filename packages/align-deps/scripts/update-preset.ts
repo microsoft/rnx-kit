@@ -1,4 +1,4 @@
-#!/usr/bin/env -S node --experimental-strip-types --no-warnings
+#!/usr/bin/env -S node --no-warnings
 
 import { info } from "@rnx-kit/console";
 import * as fs from "node:fs";
