@@ -12,7 +12,11 @@ import packageJson from "package-json";
 import semverCoerce from "semver/functions/coerce.js";
 import semverCompare from "semver/functions/compare.js";
 import type { MetaPackage, Package, Preset } from "../src/types.js";
-import { createGitHubClient, fetchPullRequests } from "./github.ts";
+import {
+  createGitHubClient,
+  fetchPullRequests,
+  parseGitHubUrl,
+} from "./github.ts";
 
 type Options = {
   targetVersion?: string;
@@ -198,7 +202,7 @@ async function fetchPackageInfo(
     version,
     latest,
     modified: time?.[latest] ?? "?",
-    homepage: homepage ?? repository?.url ?? repository,
+    homepage: parseGitHubUrl(homepage ?? repository?.url ?? repository),
     dependencies,
     peerDependencies,
     tarball,

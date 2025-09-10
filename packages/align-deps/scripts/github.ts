@@ -87,3 +87,12 @@ export async function fetchPullRequestFeedback(
 
   info(`No feedback found for pull request #${pr.number}`);
 }
+
+export function parseGitHubUrl(url: string | undefined): string | undefined {
+  // Examples:
+  // - git+https://github.com/microsoft/rnx-kit.git
+  // - git@github.com:microsoft/rnx-kit.git
+  // - https://github.com/microsoft/rnx-kit.git
+  const m = url?.match(/github\.com[/:](.*?)(?:\.git)?$/);
+  return m ? `https://github.com/${m[1]}` : url;
+}
