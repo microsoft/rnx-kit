@@ -2,4 +2,4 @@
 "@rnx-kit/eslint-plugin": minor
 ---
 
-Port forbid-foreach-with-variables-outside-of-function-scope from outlook
+Port no-foreach-with-captured-variables from outlook
