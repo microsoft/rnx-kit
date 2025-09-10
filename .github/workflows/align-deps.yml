@@ -53,6 +53,7 @@ jobs:
         run: |
           yarn rnx-align-deps --write
           yarn install --mode update-lockfile
+          yarn dedupe --mode update-lockfile
       - name: Generate changeset
         id: changeset
         if: ${{ steps.find-release-candidate.outputs.found != '' }}
