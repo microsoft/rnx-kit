@@ -33,6 +33,7 @@ module.exports = [
       "@react-native/platform-colors": "error",
       "@rnx-kit/no-const-enum": "warn",
       "@rnx-kit/no-export-all": "warn",
+      "@rnx-kit/no-foreach-with-captured-variables": "warn",
       "@typescript-eslint/consistent-type-imports": [
         "error",
         { disallowTypeAnnotations: false },
