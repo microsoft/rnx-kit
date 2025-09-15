@@ -49,5 +49,7 @@ export const rnxAlignDeps = alignDepsCommand.func;
 export const rnxAlignDepsCommand = alignDepsCommand;
 
 // @rnx-kit/third-party-notices
-export const rnxWriteThirdPartyNotices = writeThirdPartyNoticesCommand.func;
-export const rnxWriteThirdPartyNoticesCommand = writeThirdPartyNoticesCommand;
+export const rnxWriteThirdPartyNotices: typeof writeThirdPartyNoticesCommand.func =
+  writeThirdPartyNoticesCommand.func;
+export const rnxWriteThirdPartyNoticesCommand: typeof writeThirdPartyNoticesCommand =
+  writeThirdPartyNoticesCommand;

@@ -4,8 +4,8 @@
   "version": "0.1.0",
   "private": true,
   "bin": {
-    "rnx": "../cli/bin/rnx-cli.cjs",
-    "rnx.reason": "Workaround for Node not being able to find `rnx-cli` because of Yarn virtual packages"
+    "rnx": "../cli/scripts/rnx.bin",
+    "rnx.reason": "Run `rnx-cli` without explicitly building it first"
   },
   "scripts": {
     "android": "rnx run-android --no-packager --appId com.msft.identity.client.sample.local",
