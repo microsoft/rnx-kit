@@ -1,12 +1,22 @@
 {
-  "private": true,
   "name": "@rnx-kit/scripts",
   "version": "0.0.0",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/scripts#readme",
+  "private": true,
+  "author": {
+    "name": "Microsoft Open Source",
+    "email": "microsoftopensource@users.noreply.github.com"
+  },
   "main": "src/index.js",
   "bin": {
     "rnx-kit-scripts": "src/index.js"
   },
   "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "scripts"
+  },
   "scripts": {
     "build": "rnx-kit-scripts build",
     "format": "rnx-kit-scripts format",

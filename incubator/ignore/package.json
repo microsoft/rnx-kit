@@ -20,5 +20,6 @@
   },
   "engines": {
     "node": ">=16.17"
-  }
+  },
+  "experimental": true
 }

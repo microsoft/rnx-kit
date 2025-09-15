@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "@rnx-kit/template",
-  "version": "0.0.2",
+  "version": "0.0.0",
   "description": "Template folder to use as baseline for new packages in rnx-kit",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/template#readme",
   "license": "MIT",
