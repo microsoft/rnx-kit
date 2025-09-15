@@ -5283,8 +5283,8 @@ __metadata:
     react-native-macos: "npm:^0.78.0"
     react-native-test-app: "npm:^4.1.4"
   bin:
-    rnx: ../cli/bin/rnx-cli.cjs
-    rnx.reason: Workaround for Node not being able to find `rnx-cli` because of Yarn virtual packages
+    rnx: ../cli/scripts/rnx.bin
+    rnx.reason: Run `rnx-cli` without explicitly building it first
   languageName: unknown
   linkType: soft
 
@@ -5325,8 +5325,8 @@ __metadata:
     react-native-test-app: "npm:^4.3.1"
     react-native-windows: "npm:^0.79.0"
   bin:
-    rnx: ../cli/bin/rnx-cli.cjs
-    rnx.reason: Workaround for Node not being able to find `rnx-cli` because of Yarn virtual packages
+    rnx: ../cli/scripts/rnx.bin
+    rnx.reason: Run `rnx-cli` without explicitly building it first
   languageName: unknown
   linkType: soft
 
@@ -5372,8 +5372,8 @@ __metadata:
     react-native-test-app: "npm:^4.4.6"
     react-test-renderer: "npm:19.1.0"
   bin:
-    rnx: ../cli/bin/rnx-cli.cjs
-    rnx.reason: Workaround for Node not being able to find `rnx-cli` because of Yarn virtual packages
+    rnx: ../cli/scripts/rnx.bin
+    rnx.reason: Run `rnx-cli` without explicitly building it first
   languageName: unknown
   linkType: soft
 

@@ -9,8 +9,8 @@
     "email": "microsoftopensource@users.noreply.github.com"
   },
   "bin": {
-    "rnx": "../cli/bin/rnx-cli.cjs",
-    "rnx.reason": "Workaround for Node not being able to find `rnx-cli` because of Yarn virtual packages"
+    "rnx": "../cli/scripts/rnx.bin",
+    "rnx.reason": "Run `rnx-cli` without explicitly building it first"
   },
   "repository": {
     "type": "git",
