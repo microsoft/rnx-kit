@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-serializer-esbuild
 
+## 0.2.4
+
+### Patch Changes
+
+- 3529107: Declare package exports
+
 ## 0.2.3
 
 ### Patch Changes

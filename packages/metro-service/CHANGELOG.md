@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-service
 
+## 4.1.2
+
+### Patch Changes
+
+- 3529107: Declare package exports
+
 ## 4.1.1
 
 ### Patch Changes

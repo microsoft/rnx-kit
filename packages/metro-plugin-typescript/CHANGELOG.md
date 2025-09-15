@@ -1,5 +1,13 @@
 # @rnx-kit/metro-plugin-typescript
 
+## 0.5.2
+
+### Patch Changes
+
+- 3529107: Declare package exports
+- Updated dependencies [3529107]
+  - @rnx-kit/typescript-service@2.0.2
+
 ## 0.5.1
 
 ### Patch Changes
