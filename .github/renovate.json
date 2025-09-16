@@ -1,6 +1,9 @@
 {
   "extends": ["config:recommended", "schedule:earlyMondays"],
   "addLabels": ["dependencies"],
+  "ignorePaths": [
+    "**/#archived/**",
+  ],
   "packageRules": [
     {
       "groupName": "@react-native-community/cli",
@@ -48,6 +51,7 @@
     {
       "matchPackageNames": [
         "@fluentui/utilities",
+        "@rnx-kit/{/,}**",
         "react",
         "react-dom",
         "react-test-renderer"
