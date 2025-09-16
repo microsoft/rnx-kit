@@ -1,6 +1,6 @@
+import esbuild from "esbuild";
 import { doesNotMatch, match } from "node:assert/strict";
 import { describe, it } from "node:test";
-import esbuild from "esbuild";
 import ImportPathRemapperPlugin from "../src/index";
 
 describe("@rnx-kit/esbuild-plugin-import-path-remapper", () => {
