@@ -4812,7 +4812,6 @@ __metadata:
   resolution: "@rnx-kit/esbuild-plugin-import-path-remapper@workspace:packages/esbuild-plugin-import-path-remapper"
   dependencies:
     "@rnx-kit/eslint-config": "npm:*"
-    "@rnx-kit/jest-preset": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
     "@types/node": "npm:^22.0.0"
