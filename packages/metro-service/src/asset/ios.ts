@@ -106,8 +106,8 @@ export const saveAssetsIOS: SaveAssetsPlugin = (
     }
     info("Done adding images to asset catalog");
   } else {
-    assets.forEach((asset) =>
-      addAssetToCopy(asset, ALLOWED_SCALES, getAssetDestPath)
-    );
+    for (const asset of assets) {
+      addAssetToCopy(asset, ALLOWED_SCALES, getAssetDestPath);
+    }
   }
 };

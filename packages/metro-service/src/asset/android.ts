@@ -23,7 +23,7 @@ export const saveAssetsAndroid: SaveAssetsPlugin = (
   _assetCatalogDest,
   addAssetToCopy
 ) => {
-  assets.forEach((asset) =>
-    addAssetToCopy(asset, undefined, getAssetDestPathAndroid)
-  );
+  for (const asset of assets) {
+    addAssetToCopy(asset, undefined, getAssetDestPathAndroid);
+  }
 };

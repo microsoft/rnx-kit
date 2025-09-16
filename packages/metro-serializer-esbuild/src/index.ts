@@ -60,9 +60,9 @@ export function MetroSerializer(
   const bundleToString = require(`${metroPath}/src/lib/bundleToString`);
 
   return (entryPoint, preModules, graph, options: SerializerOptions) => {
-    metroPlugins.forEach((plugin) =>
-      plugin(entryPoint, preModules, graph, options)
-    );
+    for (const plugin of metroPlugins) {
+      plugin(entryPoint, preModules, graph, options);
+    }
 
     if (options.dev) {
       const bundle = baseJSBundle(entryPoint, preModules, graph, options);
@@ -297,16 +297,18 @@ export function MetroSerializer(
       })
       .then(({ metafile, outputFiles }: BuildResult) => {
         const result = { code: "", map: "" };
-        outputFiles?.forEach(({ path: outputPath, text }) => {
-          if (outputPath === "<stdout>" || outputPath.endsWith(outfile)) {
-            result.code = text;
-          } else if (outputPath.endsWith(sourcemapfile)) {
-            result.map =
-              buildOptions?.sourceMapPaths === "absolute"
-                ? absolutizeSourceMap(outputPath, text)
-                : text;
+        if (outputFiles) {
+          for (const { path: outputPath, text } of outputFiles) {
+            if (outputPath === "<stdout>" || outputPath.endsWith(outfile)) {
+              result.code = text;
+            } else if (outputPath.endsWith(sourcemapfile)) {
+              result.map =
+                buildOptions?.sourceMapPaths === "absolute"
+                  ? absolutizeSourceMap(outputPath, text)
+                  : text;
+            }
           }
-        });
+        }
         if (metafile) {
           if (buildOptions?.analyze) {
             const options = { verbose: buildOptions.analyze === "verbose" };

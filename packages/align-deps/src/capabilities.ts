@@ -26,8 +26,12 @@ export function capabilitiesFor(
   preset: Preset
 ): Capability[] {
   const dependenciesSet = new Set<string>(Object.keys(dependencies));
-  Object.keys(peerDependencies).forEach((dep) => dependenciesSet.add(dep));
-  Object.keys(devDependencies).forEach((dep) => dependenciesSet.add(dep));
+  for (const dep of Object.keys(peerDependencies)) {
+    dependenciesSet.add(dep);
+  }
+  for (const dep of Object.keys(devDependencies)) {
+    dependenciesSet.add(dep);
+  }
 
   if (dependenciesSet.size === 0) {
     return [];
@@ -84,15 +88,17 @@ function resolveCapability(
 
   pkg[Symbol.for(PROVIDES_SYMKEY)] = capability;
 
-  pkg.capabilities?.forEach((capability) =>
-    resolveCapability(
-      capability,
-      namedProfile,
-      dependencies,
-      unresolvedCapabilities,
-      resolved
-    )
-  );
+  if (pkg.capabilities) {
+    for (const capability of pkg.capabilities) {
+      resolveCapability(
+        capability,
+        namedProfile,
+        dependencies,
+        unresolvedCapabilities,
+        resolved
+      );
+    }
+  }
 
   if (!isMetaPackage(pkg)) {
     const { name, version } = pkg;
@@ -129,14 +135,14 @@ export function resolveCapabilitiesUnchecked(
   const unresolvedCapabilities: Record<string, string[]> = {};
 
   for (const capability of capabilities) {
-    profiles.forEach((profile) => {
+    for (const profile of profiles) {
       resolveCapability(
         capability,
         profile,
         dependencies,
         unresolvedCapabilities
       );
-    });
+    }
   }
 
   return { dependencies, unresolvedCapabilities };

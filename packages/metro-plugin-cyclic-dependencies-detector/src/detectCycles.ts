@@ -90,7 +90,7 @@ export function detectCycles(
   const { linesOfContext = 1, throwOnError = true } = options;
   const cachedPaths: Record<string, string> = {};
 
-  modulePaths.forEach((modulePath) => {
+  for (const modulePath of modulePaths) {
     const currentModule = packageRelativePath(modulePath, cachedPaths);
     warn(currentModule);
 
@@ -104,7 +104,7 @@ export function detectCycles(
         warn(`${"    ".repeat(index)}└── ${requiredBy}`);
       });
     console.log();
-  });
+  }
 
   if (throwOnError) {
     throw new Error("Import cycles detected");

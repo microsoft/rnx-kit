@@ -36,9 +36,9 @@ export function visitDependencies(
     return;
   }
 
-  Object.keys(dependencies).forEach((dependency) => {
+  for (const dependency of Object.keys(dependencies)) {
     if (visited.has(dependency)) {
-      return;
+      continue;
     }
 
     visited.add(dependency);
@@ -49,14 +49,14 @@ export function visitDependencies(
     });
     if (!packageDir) {
       warn(`Unable to resolve module '${dependency}' from '${projectRoot}'`);
-      return;
+      continue;
     }
 
     visitor(dependency, packageDir);
 
     const manifest = readPackage(packageDir);
     visitDependencies(manifest, packageDir, visitor, visited);
-  });
+  }
 }
 
 /**

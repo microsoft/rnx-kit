@@ -13,7 +13,6 @@ import type {
   License,
   ModuleNamePathPair,
   SourceMap,
-  SourceSection,
   WriteThirdPartyNoticesOptions,
 } from "./types";
 
@@ -193,12 +192,12 @@ export function parseSourceMap(
   moduleNameToPath: Map<string, string>,
   sourceMap: SourceMap
 ): void {
-  sourceMap.sources.forEach((source: string) => {
-    source = normalizePath(source, currentPackageId);
+  for (const src of sourceMap.sources) {
+    const source = normalizePath(src, currentPackageId);
     if (source.includes(modulesRoot)) {
       parseModule(options, moduleNameToPath, source);
     }
-  });
+  }
 }
 
 export function extractModuleNameToPathMap(
@@ -212,14 +211,14 @@ export function extractModuleNameToPathMap(
     parseSourceMap(options, currentPackageId, moduleNameToPathMap, sourceMap);
   }
   if (sourceMap.sections) {
-    sourceMap.sections.forEach((section: SourceSection) => {
+    for (const section of sourceMap.sections) {
       parseSourceMap(
         options,
         currentPackageId,
         moduleNameToPathMap,
         section.map
       );
-    });
+    }
   }
 
   return moduleNameToPathMap;
@@ -261,12 +260,11 @@ export function gatherModulesFromSources(
 ): Map<string, string> {
   const moduleNameToPath = new Map<string, string>();
 
-  sources.forEach((source) => {
+  for (const source of sources) {
     if (source.includes("node_modules")) {
-      source = normalizePath(source);
-      parseModule(options, moduleNameToPath, source);
+      parseModule(options, moduleNameToPath, normalizePath(source));
     }
-  });
+  }
 
   return moduleNameToPath;
 }

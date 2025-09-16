@@ -38,7 +38,7 @@ describe("remap-import-path", () => {
   });
 
   test("remaps `lib/` -> `src/`", () => {
-    [
+    const cases = [
       ["./lib/index", "./lib/index"],
       ["@rnx-kit/metro-resolver-symlinks", "@rnx-kit/metro-resolver-symlinks"],
       [
@@ -54,20 +54,22 @@ describe("remap-import-path", () => {
         "@contoso/relative",
         path.join("node_modules", "@contoso", "relative", "src", "index.ts"),
       ],
-    ].forEach(([request, resolved]) => {
+    ] as const;
+    for (const [request, resolved] of cases) {
       const result = plugin(mockContext, request, "ios");
       expect(result).toEqual(expect.stringContaining(resolved));
-    });
+    }
   });
 
   test("resolves platform extensions", () => {
-    [
+    const cases = [
       ["android", "android"],
       ["ios", "ios"],
       ["macos", "native"],
       ["win32", "win"],
       ["windows", "windows"],
-    ].forEach(([platform, expected]) => {
+    ] as const;
+    for (const [platform, expected] of cases) {
       const plugin = remapImportPath({
         test: (source) => source.startsWith("@contoso/"),
       });
@@ -87,7 +89,7 @@ describe("remap-import-path", () => {
           )
         )
       );
-    });
+    }
   });
 
   test("resolves with custom main fields", () => {

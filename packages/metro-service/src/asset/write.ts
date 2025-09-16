@@ -71,23 +71,16 @@ export function saveAssets(
       filterPlatformAssetScales(allowedScales, asset.scales)
     );
 
-    asset.scales.forEach((scale: number, idx: number) => {
+    const length = asset.scales.length;
+    for (let i = 0; i < length; ++i) {
+      const scale = asset.scales[i];
       if (!validScales.has(scale)) {
         return;
       }
-      const src = asset.files[idx];
+      const src = asset.files[i];
       const dest = path.join(assetsDest, getAssetDestPath(asset, scale));
       filesToCopy[src] = dest;
-    });
-
-    asset.scales.forEach((scale, idx) => {
-      if (!validScales.has(scale)) {
-        return;
-      }
-      const src = asset.files[idx];
-      const dest = path.join(assetsDest, getAssetDestPath(asset, scale));
-      filesToCopy[src] = dest;
-    });
+    }
   };
 
   saveAssetsPlugin(
