@@ -57,7 +57,7 @@ function generateIndex(components) {
 }
 
 function readExperiencesFromManifest() {
-  const fs = require("fs");
+  const fs = require("node:fs");
   const { resolveModule } = require("./module");
 
   const manifestPath = resolveModule("./package.json");

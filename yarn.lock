@@ -4868,7 +4868,6 @@ __metadata:
     "@babel/core": "npm:^7.0.0"
     "@babel/preset-env": "npm:^7.0.0"
     "@babel/preset-typescript": "npm:^7.0.0"
-    "@eslint/js": "npm:^9.0.0"
     "@jest/types": "npm:^29.2.1"
     "@react-native-community/cli-types": "npm:^20.0.0"
     "@react-native/babel-preset": "npm:^0.81.0"
@@ -5211,7 +5210,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/scripts@workspace:scripts"
   dependencies:
-    "@eslint/js": "npm:^9.0.0"
     "@rnx-kit/tsconfig": "workspace:*"
     "@types/jest": "npm:^29.2.1"
     "@types/node": "npm:^22.0.0"
