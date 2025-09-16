@@ -40,7 +40,6 @@
     }
   },
   "devDependencies": {
-    "@eslint/js": "^9.0.0",
     "@jest/types": "^29.2.1",
     "@react-native-community/cli-types": "^20.0.0",
     "@react-native/babel-preset": "^0.81.0",

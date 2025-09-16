@@ -192,7 +192,6 @@
         "entry": [
           "scripts/*",
           "src/cli.ts",
-          "src/index.ts",
           "test/**/*.{js,ts}"
         ]
       },
@@ -237,14 +236,12 @@
       },
       "packages/metro-plugin-duplicates-checker": {
         "entry": [
-          "src/index.ts",
           "test/**/*.{js,ts}"
         ]
       },
       "packages/metro-serializer-esbuild": {
         "entry": [
           "metro.config.js",
-          "src/index.ts",
           "test/**/*.test.ts",
           "test/__fixtures__/**/*.ts"
         ],
