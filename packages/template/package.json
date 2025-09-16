@@ -29,11 +29,7 @@
   },
   "devDependencies": {
     "@rnx-kit/eslint-config": "*",
-    "@rnx-kit/jest-preset": "*",
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*"
-  },
-  "jest": {
-    "preset": "@rnx-kit/jest-preset/private"
   }
 }

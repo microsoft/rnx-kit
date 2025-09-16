@@ -5238,7 +5238,6 @@ __metadata:
   resolution: "@rnx-kit/template@workspace:packages/template"
   dependencies:
     "@rnx-kit/eslint-config": "npm:*"
-    "@rnx-kit/jest-preset": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
   languageName: unknown
