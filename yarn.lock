@@ -4980,7 +4980,7 @@ __metadata:
     "@rnx-kit/tools-node": "npm:^3.0.0"
     "@rnx-kit/tools-react-native": "npm:^2.0.0"
     "@rnx-kit/tsconfig": "npm:*"
-    "@rnx-kit/typescript-service": "npm:^2.0.0"
+    "@rnx-kit/typescript-service": "npm:^2.0.2"
     "@types/node": "npm:^22.0.0"
     metro: "npm:^0.83.1"
     typescript: "npm:>=4.7.0"
@@ -5559,7 +5559,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rnx-kit/typescript-service@npm:^2.0.0, @rnx-kit/typescript-service@workspace:packages/typescript-service":
+"@rnx-kit/typescript-service@npm:^2.0.0, @rnx-kit/typescript-service@npm:^2.0.2, @rnx-kit/typescript-service@workspace:packages/typescript-service":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/typescript-service@workspace:packages/typescript-service"
   dependencies:

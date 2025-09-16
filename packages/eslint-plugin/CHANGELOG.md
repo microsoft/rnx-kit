@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/eslint-plugin
 
+## 0.9.1
+
+### Patch Changes
+
+- a636b26: Enabled `no-foreach-with-captured-variables` as a warning
+
 ## 0.9.0
 
 ### Minor Changes

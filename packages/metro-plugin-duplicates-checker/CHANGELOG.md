@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-plugin-duplicates-checker
 
+## 3.0.2
+
+### Patch Changes
+
+- 3529107: Declare package exports
+
 ## 3.0.1
 
 ### Patch Changes

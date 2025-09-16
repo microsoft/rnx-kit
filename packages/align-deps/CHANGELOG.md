@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/align-deps
 
+## 3.2.2
+
+### Patch Changes
+
+- 3529107: Declare package exports
+
 ## 3.2.1
 
 ### Patch Changes
