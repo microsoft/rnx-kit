@@ -3,6 +3,7 @@
   "addLabels": ["dependencies"],
   "ignorePaths": [
     "**/#archived/**",
+    "**/__fixtures__/**"
   ],
   "packageRules": [
     {
