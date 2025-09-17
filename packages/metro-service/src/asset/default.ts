@@ -20,5 +20,7 @@ export const saveAssetsDefault: SaveAssetsPlugin = (
   _assetCatalogDest,
   addAssetToCopy
 ) => {
-  assets.forEach((asset) => addAssetToCopy(asset, undefined, getAssetDestPath));
+  for (const asset of assets) {
+    addAssetToCopy(asset, undefined, getAssetDestPath);
+  }
 };

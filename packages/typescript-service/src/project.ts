@@ -129,7 +129,9 @@ export class Project {
       (d) => d.category !== ts.DiagnosticCategory.Suggestion
     );
     if (Array.isArray(diagnostics) && diagnostics.length > 0) {
-      diagnostics.forEach((d) => this.diagnosticWriter.print(d));
+      for (const d of diagnostics) {
+        this.diagnosticWriter.print(d);
+      }
       return false;
     }
     return true;
@@ -159,9 +161,9 @@ export class Project {
       this.validateFile(fileName);
       return false;
     }
-    output.outputFiles.forEach((o) => {
+    for (const o of output.outputFiles) {
       this.writeFile(o.name, o.text);
-    });
+    }
     return true;
   }
 

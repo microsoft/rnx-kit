@@ -17,17 +17,18 @@ describe("printError()", () => {
   });
 
   test("prints error message for code", () => {
-    [
-      "invalid-app-requirements" as const,
-      "invalid-configuration" as const,
-      "invalid-manifest" as const,
-      "missing-react-native" as const,
-      "not-configured" as const,
-      "unsatisfied" as const,
-    ].forEach((code) => {
+    const errorCodes = [
+      "invalid-app-requirements",
+      "invalid-configuration",
+      "invalid-manifest",
+      "missing-react-native",
+      "not-configured",
+      "unsatisfied",
+    ] as const;
+    for (const code of errorCodes) {
       printError("package.json", code);
       expect(consoleErrorSpy).toHaveBeenCalled();
-    });
+    }
   });
 });
 

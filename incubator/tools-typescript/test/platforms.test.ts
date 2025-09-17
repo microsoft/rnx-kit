@@ -183,9 +183,13 @@ describe("parseSourceFileDetails", () => {
 
 function allFilesBuilt(files: string[], tasks: BuildContext[]): boolean {
   const built: Record<string, boolean> = {};
-  tasks.forEach((task) => {
-    task.build?.forEach((file) => (built[file] = true));
-  });
+  for (const task of tasks) {
+    if (task.build) {
+      for (const file of task.build) {
+        built[file] = true;
+      }
+    }
+  }
   for (const file of files) {
     if (!built[file]) {
       return false;

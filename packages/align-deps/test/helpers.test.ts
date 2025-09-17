@@ -17,7 +17,7 @@ describe("compare()", () => {
 });
 
 describe("dropPatchFromVersion()", () => {
-  [
+  const cases = [
     ["1.2.3-rc.1", "1.2"],
     ["1.2.3", "1.2"],
     ["1.2", "1.2"],
@@ -35,9 +35,10 @@ describe("dropPatchFromVersion()", () => {
     ["~0.68.1 || ^0.69.2 || >=0.70.0", "0.68 || 0.69 || >=0.70"],
     ["~1.0.1 || ^2.0.2 || >=3.0.3", "~1.0 || ^2.0 || >=3.0"],
     ["1.x || >=2.5.0 || 5.0.0 - 7.2.3", "1.x || >=2.5 || 5.0 - 7.2"],
-  ].forEach(([input, expected]) => {
+  ] as const;
+  for (const [input, expected] of cases) {
     test(`drops patch number in '${input}'`, () => {
       expect(dropPatchFromVersion(input)).toBe(expected);
     });
-  });
+  }
 });

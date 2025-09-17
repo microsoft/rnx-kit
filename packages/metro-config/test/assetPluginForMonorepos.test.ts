@@ -9,23 +9,25 @@ describe("@rnx-kit/metro-config/assetPluginForMonorepos", () => {
   const assetPlugin = require("../src/assetPluginForMonorepos");
   const { enhanceMiddleware } = assetPlugin;
 
-  const cases = {
-    "/assets/./node_modules": "/assets/./node_modules",
-    "/assets/../node_modules": "/assets/@@/node_modules",
-    "/assets/../../node_modules": "/assets/@@/@@/node_modules",
-    "/assets/node_modules/../../react-native":
+  const cases = [
+    ["/assets/./node_modules", "/assets/./node_modules"],
+    ["/assets/../node_modules", "/assets/@@/node_modules"],
+    ["/assets/../../node_modules", "/assets/@@/@@/node_modules"],
+    [
+      "/assets/node_modules/../../react-native",
       "/assets/node_modules/@@/@@/react-native",
-  };
+    ],
+  ] as const;
 
   it("escapes `..` in URLs", () => {
-    Object.entries(cases).forEach(([input, output]) => {
+    for (const [input, output] of cases) {
       const assetData = { httpServerLocation: input } as AssetData;
       equal(assetPlugin(assetData).httpServerLocation, output);
-    });
+    }
   });
 
   it("unescapes `..` in URLs", () => {
-    Object.entries(cases).forEach(([output, input]) => {
+    for (const [output, input] of cases) {
       const middleware: Middleware = (req: Middleware) => {
         equal("url" in req && req.url, output);
         return middleware;
@@ -42,6 +44,6 @@ describe("@rnx-kit/metro-config/assetPluginForMonorepos", () => {
         response,
         () => undefined
       );
-    });
+    }
   });
 });

@@ -67,7 +67,10 @@ export function MetroSerializer(
     graph: ReadOnlyGraph,
     options: SerializerOptions
   ): string | Promise<string> => {
-    plugins.forEach((plugin) => plugin(entryPoint, preModules, graph, options));
+    for (const plugin of plugins) {
+      plugin(entryPoint, preModules, graph, options);
+    }
+
     const bundle = baseJSBundle(entryPoint, preModules, graph, options);
     const bundleCode = bundleToString(bundle).code;
     return shouldReturnPromise ? Promise.resolve(bundleCode) : bundleCode;

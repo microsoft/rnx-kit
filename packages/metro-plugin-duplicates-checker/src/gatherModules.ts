@@ -56,7 +56,7 @@ export function gatherModulesFromSources(
   moduleMap: ModuleMap,
   /** @internal */ fs = nodefs
 ): ModuleMap {
-  sources.forEach((source) => {
+  for (const source of sources) {
     const normalizedPath = normalizePath(source);
     if (normalizedPath.toLowerCase().includes("node_modules/")) {
       const { name, version, absolutePath } = resolveModule(normalizedPath, fs);
@@ -68,7 +68,7 @@ export function gatherModulesFromSources(
       }
       moduleMap[name][version].add(absolutePath);
     }
-  });
+  }
   return moduleMap;
 }
 
