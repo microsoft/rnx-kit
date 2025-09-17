@@ -19,9 +19,6 @@ jobs:
         uses: microsoft/react-native-test-app/.github/actions/setup-toolchain@4.4.5
       - name: Install package dependencies
         run: |
-          # `npm pack` fails in pnpm mode when using npm 9+ (bundled with Node 18+)
-          # because of symlinks. See: https://github.com/npm/cli/issues/5007
-          yarn config set nodeLinker node-modules
           yarn
       - name: Build and test packages
         run: |
@@ -40,8 +37,8 @@ jobs:
       - name: Create release PR or publish to npm
         uses: changesets/action@v1
         with:
-          publish: npm run publish:changesets
-          version: npm run version:changesets
+          publish: yarn publish:changesets
+          version: yarn version:changesets
         env:
           # We cannot use the GHA generated tokens because we've disabled
           # creation of pull requests at the org level.
