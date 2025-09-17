@@ -74,7 +74,7 @@ exports.factory = (require) => {
           return;
         }
 
-        workspace.project.workspacesByCwd.forEach(({ cwd, manifest }) => {
+        for (const [, { cwd, manifest }] of workspace.project.workspacesByCwd) {
           const { name, version, raw } = manifest;
           if (!name || !version) {
             return;
@@ -89,7 +89,7 @@ exports.factory = (require) => {
 
           const descriptor = structUtils.makeDescriptor(name, version);
           registerPackageExtension(descriptor, data);
-        });
+        }
       },
     },
   };

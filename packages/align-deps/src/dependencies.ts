@@ -155,7 +155,7 @@ export function gatherRequirements(
   }
 
   const profiles = Object.values(preset);
-  allCapabilities.forEach((capability) => {
+  for (const capability of allCapabilities) {
     /**
      * Core capabilities are capabilities that must always be declared by the
      * hosting app and should not be included when gathering requirements.
@@ -168,7 +168,7 @@ export function gatherRequirements(
     ) {
       allCapabilities.delete(capability);
     }
-  });
+  }
 
   // Merge with app capabilities _after_ filtering out core and dev-only
   // capabilities.
