@@ -110,13 +110,13 @@ export function outputWorkspaces(
 
   const workspaces: Record<string, string> = {};
   // iterate the workspaces and record their names and paths
-  project.workspacesByIdent.forEach((workspace) => {
+  for (const [, workspace] of project.workspacesByIdent) {
     const { name: ident, private: isPrivate } = workspace.manifest;
     if (ident && !isPrivate) {
       const name = structUtils.stringifyIdent(ident);
       workspaces[name] = ppath.relative(project.cwd, workspace.cwd);
     }
-  });
+  }
 
   // grab the relative path from the config to the repo root
   const repoPath = npath.relative(

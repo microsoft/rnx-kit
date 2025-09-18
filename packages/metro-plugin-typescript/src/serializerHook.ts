@@ -108,11 +108,11 @@ export function TypeScriptPlugin(
 
       // Validate all projects which changed, printing all type errors.
       let errors = 0;
-      tsprojectsToValidate.forEach((p) => {
+      for (const p of tsprojectsToValidate) {
         if (!p.validate()) {
           errors += 1;
         }
-      });
+      }
 
       if (errors > 0 && throwOnError) {
         // Type-checking failed. Fail the Metro operation (bundling or serving).

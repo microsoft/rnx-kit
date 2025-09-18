@@ -230,13 +230,13 @@ export async function extractLicenses(
   const licenseExtractors = require("./extractors");
 
   const moduleNamePathPairs: ModuleNamePathPair[] = [];
-  moduleNameToPathMap.forEach((modulePath: string, moduleName: string) => {
+  for (const [moduleName, modulePath] of moduleNameToPathMap) {
     // If both foo and @foo/bar exist, only include the license for foo
     if (moduleName[0] === "@") {
       const parentModuleName = moduleName.split("/")[0].substring(1);
       if (moduleNameToPathMap.has(parentModuleName)) {
         moduleNameToPathMap.delete(moduleName);
-        return;
+        continue;
       }
     }
 
@@ -244,7 +244,7 @@ export async function extractLicenses(
       name: moduleName,
       path: modulePath,
     });
-  });
+  }
 
   // Extract licenses of all modules we found
   return await licenseExtractors.nodeModule(
