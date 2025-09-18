@@ -49,7 +49,7 @@ export function traverseDependencies(
 
   const moduleDependencies = dependencies.get(currentModule)?.dependencies;
   if (moduleDependencies) {
-    for (const [, dependency] of moduleDependencies) {
+    for (const dependency of moduleDependencies.values()) {
       if (dependency["__rnxCyclicDependenciesChecked"]) {
         continue;
       }

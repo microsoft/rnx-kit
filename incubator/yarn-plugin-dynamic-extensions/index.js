@@ -74,7 +74,8 @@ exports.factory = (require) => {
           return;
         }
 
-        for (const [, { cwd, manifest }] of workspace.project.workspacesByCwd) {
+        const workspaces = workspace.project.workspacesByCwd.values();
+        for (const { cwd, manifest } of workspaces) {
           const { name, version, raw } = manifest;
           if (!name || !version) {
             return;
