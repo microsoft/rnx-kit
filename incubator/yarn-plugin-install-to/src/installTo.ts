@@ -183,7 +183,7 @@ function traverseDependencies(
   // traverse and record the resolutions, only returns a value if this hasn't been seen
   const pkg = getResolution(options, descriptor.descriptorHash);
   if (pkg) {
-    for (const [, dependency] of pkg.dependencies) {
+    for (const dependency of pkg.dependencies.values()) {
       traverseDependencies(options, dependency);
     }
   }
@@ -210,11 +210,11 @@ function pareDownProject(project: Project, workspaces: Set<Workspace>) {
 
     // traverse dependencies, preferrring the package but falling back to the manifest
     const dependencies = pkg?.dependencies ?? workspace.manifest.dependencies;
-    for (const [, descriptor] of dependencies) {
+    for (const descriptor of dependencies.values()) {
       traverseDependencies(options, descriptor);
     }
     // for workspace packages also traverse devDependencies
-    for (const [, descriptor] of workspace.manifest.devDependencies) {
+    for (const descriptor of workspace.manifest.devDependencies.values()) {
       traverseDependencies(options, descriptor);
     }
   }
