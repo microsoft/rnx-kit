@@ -13,7 +13,7 @@ module.exports = makeMetroConfig({
     resolveRequest: MetroSymlinksResolver(),
     blockList: exclusionList([
       // Metro will pick up react-native-macos/-windows mocks if we don't exclude them
-      /.*__fixtures__.*/,
+      /[/\\]__fixtures__[/\\]/,
     ]),
   },
 });

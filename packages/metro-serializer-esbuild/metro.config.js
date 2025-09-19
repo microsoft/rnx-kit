@@ -3,7 +3,7 @@ const path = require("node:path");
 const { MetroSerializer, esbuildTransformerConfig } = require(".");
 
 // Metro will pick up mocks if we don't exclude them
-const blockList = exclusionList([/.*__fixtures__.*package.json/]);
+const blockList = exclusionList([/[/\\]__fixtures__[/\\].*[/\\]package.json$/]);
 
 // We can't install dependencies for our test fixtures so we need to resolve
 // them here to help Metro find them.
