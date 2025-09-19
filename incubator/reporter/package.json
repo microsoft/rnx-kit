@@ -21,21 +21,6 @@
       "import": "./lib/index.js",
       "types": "./lib/index.d.ts",
       "default": "./lib/index.js"
-    },
-    "./performance": {
-      "import": "./lib/performance.js",
-      "types": "./lib/performance.d.ts",
-      "default": "./lib/performance.js"
-    },
-    "./colors": {
-      "import": "./lib/colors.js",
-      "types": "./lib/colors.d.ts",
-      "default": "./lib/colors.js"
-    },
-    "./formatting": {
-      "import": "./lib/formatting.js",
-      "types": "./lib/formatting.d.ts",
-      "default": "./lib/formatting.js"
     }
   },
   "repository": {
