@@ -16,7 +16,13 @@ import { afterEach, beforeEach, describe, it } from "node:test";
 import { errorEvent, finishEvent, startEvent } from "../src/events.ts";
 import { createReporter } from "../src/reporter.ts";
 import { createSession } from "../src/session.ts";
-import type { Reporter, ReporterOptions, SessionData } from "../src/types.ts";
+import type {
+  ErrorResult,
+  NormalResult,
+  Reporter,
+  ReporterOptions,
+  SessionData,
+} from "../src/types.ts";
 import { type MockOutput, mockOutput, restoreOutput } from "./streams.test.ts";
 
 describe("session", () => {
@@ -32,7 +38,7 @@ describe("session", () => {
     mockReportLogs = [];
 
     // Mock createReporter function
-    mockCreateReporter = (options: ReporterOptions, parent?: SessionData) => {
+    mockCreateReporter = (options: ReporterOptions, _parent?: SessionData) => {
       return createReporter(options);
     };
   });
@@ -144,7 +150,10 @@ describe("session", () => {
 
       assert.strictEqual(result, "success");
       assert.ok(session.session.result);
-      assert.strictEqual((session.session.result as any).value, "success");
+      assert.strictEqual(
+        (session.session.result as NormalResult<string>).value,
+        "success"
+      );
       assert.ok(session.session.elapsed > 0);
     });
 
@@ -159,7 +168,7 @@ describe("session", () => {
       }, /Test error/);
 
       assert.ok(session.session.result);
-      assert.strictEqual((session.session.result as any).error, error);
+      assert.strictEqual((session.session.result as ErrorResult).error, error);
       assert.strictEqual(session.session.errors.length, 1);
       assert.strictEqual(session.session.errors[0][0], error);
     });
@@ -173,7 +182,10 @@ describe("session", () => {
 
       assert.strictEqual(result1, "first");
       assert.strictEqual(result2, "first"); // Should return first result
-      assert.strictEqual((session.session.result as any).value, "first");
+      assert.strictEqual(
+        (session.session.result as NormalResult<string>).value,
+        "first"
+      );
     });
 
     it("should call report function with finish timer message", () => {
@@ -295,7 +307,7 @@ describe("session", () => {
 
       const result = await session.task(
         { name: "named-task", packageName: "@test/task" },
-        (reporter) => {
+        () => {
           return "named-task-result";
         }
       );
@@ -307,7 +319,7 @@ describe("session", () => {
       const options: ReporterOptions = { name: "test-session" };
       const session = createSession(options, undefined, mockCreateReporter);
 
-      const result = await session.task("async-task", async (reporter) => {
+      const result = await session.task("async-task", async () => {
         await new Promise((resolve) => setTimeout(resolve, 10));
         return "async-task-result";
       });
@@ -443,6 +455,7 @@ describe("session", () => {
       const session = createSession(options, undefined, mockCreateReporter);
 
       // Use the internal behavior - when finish is called without explicit result, it's undefined
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const result = (session as any).finish();
 
       assert.strictEqual(result, undefined);

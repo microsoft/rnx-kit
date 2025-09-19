@@ -7,6 +7,7 @@ import {
   openFileWrite,
   type WriteToStream,
 } from "../src/streams.ts";
+import { emptyFunction } from "../src/utils.ts";
 
 const originalGetStream = { ...getStream };
 
@@ -231,10 +232,7 @@ describe("streams", () => {
       const mockStream = createMockStream();
       const writeFunction = getStreamWrite(mockStream);
 
-      let callbackCalled = false;
-      const callback = () => {
-        callbackCalled = true;
-      };
+      const callback = () => emptyFunction;
 
       writeFunction("test", "utf8", callback);
 
@@ -283,7 +281,7 @@ describe("streams", () => {
       }) as WriteToStream;
 
       // getConsoleWrite should set up capture on the mock stream
-      const writeFunction = getConsoleWrite("stdout", captureWrite);
+      getConsoleWrite("stdout", captureWrite);
 
       // Now get the same stream that was wrapped
       const stream = getStream.console("stdout");
@@ -306,7 +304,7 @@ describe("streams", () => {
         return true;
       }) as WriteToStream;
 
-      const writeFunction = getConsoleWrite("stderr", captureWrite);
+      getConsoleWrite("stderr", captureWrite);
 
       // Get the same stream that was wrapped
       const stream = getStream.console("stderr");
@@ -329,7 +327,7 @@ describe("streams", () => {
         return true;
       }) as WriteToStream;
 
-      const writeFunction = getConsoleWrite("stdout", captureWrite);
+      getConsoleWrite("stdout", captureWrite);
 
       // Use the wrapped stream, not the returned function
       const stream = getStream.console("stdout");
@@ -348,7 +346,7 @@ describe("streams", () => {
       };
 
       // First capture setup
-      const writeFunction = getConsoleWrite("stdout", firstCapture);
+      getConsoleWrite("stdout", firstCapture);
 
       // Get the stream that was wrapped
       const stream = getStream.console("stdout");
@@ -469,7 +467,7 @@ describe("streams", () => {
         return true;
       }) as WriteToStream;
 
-      const consoleWrite = getConsoleWrite("stderr", captureWrite);
+      getConsoleWrite("stderr", captureWrite);
       const fileWrite = openFileWrite("/test/capture.log");
 
       // Write through the stream to trigger capture
@@ -532,8 +530,10 @@ describe("streams", () => {
     it("should handle undefined/null writes gracefully", () => {
       const writeFunction = getStreamWrite(mockOut.stdout);
 
-      writeFunction(null as any);
-      writeFunction(undefined as any);
+      // @ts-expect-error Testing edge case with invalid input
+      writeFunction(null);
+      // @ts-expect-error Testing edge case with invalid input
+      writeFunction(undefined);
 
       assert.strictEqual(mockOut.stdout.calls, 2);
       assert.deepStrictEqual(mockOut.stdout.output, ["null", "undefined"]);

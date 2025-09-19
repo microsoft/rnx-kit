@@ -8,6 +8,9 @@ import {
   serialize,
 } from "../src/utils.ts";
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type TestAny = any;
+
 describe("utils", () => {
   describe("lazyInit", () => {
     it("should initialize value only once", () => {
@@ -72,17 +75,19 @@ describe("utils", () => {
 
     it("should return false for undefined/null inputs", () => {
       assert.strictEqual(isErrorResult(undefined), false);
-      assert.strictEqual(isErrorResult(null as any), false);
+      // @ts-expect-error Testing edge case with invalid input
+      assert.strictEqual(isErrorResult(null), false);
     });
 
     it("should return false for empty objects", () => {
-      assert.strictEqual(isErrorResult({} as any), false);
+      // @ts-expect-error Testing edge case with invalid input
+      assert.strictEqual(isErrorResult({}), false);
     });
 
     it("should handle mixed objects", () => {
       // Object with both error and value (should still be considered error)
       assert.strictEqual(
-        isErrorResult({ error: "error", value: "value" } as any),
+        isErrorResult({ error: "error", value: "value" }),
         true
       );
     });
@@ -91,6 +96,7 @@ describe("utils", () => {
   describe("resolveFunction", () => {
     it("should handle synchronous functions that succeed", () => {
       const syncFn = () => "sync result";
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       let finalResult: any;
 
       const result = resolveFunction(syncFn, (res): string => {
@@ -110,8 +116,10 @@ describe("utils", () => {
       const syncFn = (): never => {
         throw new Error("sync error");
       };
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       let finalResult: any;
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const result = resolveFunction(syncFn, (res): any => {
         finalResult = res;
         if ("error" in res) {
@@ -129,7 +137,7 @@ describe("utils", () => {
 
     it("should handle async functions that succeed", async () => {
       const asyncFn = async () => "async result";
-      let finalResult: any;
+      let finalResult: FinishResult<string>;
 
       const resultPromise = resolveFunction(asyncFn, (res): string => {
         finalResult = res;
@@ -144,18 +152,19 @@ describe("utils", () => {
       const result = await resultPromise;
 
       assert.strictEqual(result, "async result");
+      // @ts-expect-error Testing edge case
       assert.deepStrictEqual(finalResult, { value: "async result" });
     });
 
     it("should handle async functions that reject", async () => {
-      const asyncFn = async (): Promise<string> => {
+      const asyncFn = async (): Promise<TestAny> => {
         throw new Error("async error");
       };
-      let finalResult: any;
+      let finalResult: TestAny = undefined;
 
       const resultPromise = resolveFunction(
         asyncFn,
-        (res: FinishResult<unknown>) => {
+        (res: FinishResult<TestAny>) => {
           finalResult = res;
           if ("error" in res) {
             return res.error;
@@ -170,13 +179,14 @@ describe("utils", () => {
 
       assert(result instanceof Error);
       assert.strictEqual((result as Error).message, "async error");
+      assert(finalResult);
       assert(finalResult.error instanceof Error);
       assert.strictEqual(finalResult.error.message, "async error");
     });
 
     it("should handle functions that return resolved promises", async () => {
       const promiseFn = () => Promise.resolve("promise result");
-      let finalResult: any;
+      let finalResult: TestAny;
 
       const resultPromise = resolveFunction(promiseFn, (res): string => {
         finalResult = res;
@@ -196,9 +206,9 @@ describe("utils", () => {
 
     it("should handle functions that return rejected promises", async () => {
       const promiseFn = () => Promise.reject(new Error("promise error"));
-      let finalResult: any;
+      let finalResult: TestAny;
 
-      const resultPromise = resolveFunction(promiseFn, (res): any => {
+      const resultPromise = resolveFunction(promiseFn, (res): TestAny => {
         finalResult = res;
         if ("error" in res) {
           return res.error;
@@ -413,7 +423,7 @@ describe("utils", () => {
 
     it("should handle circular references gracefully", () => {
       const inspectOptions = { colors: false, depth: 1 };
-      const obj: any = { name: "circular" };
+      const obj: TestAny = { name: "circular" };
       obj.self = obj;
 
       const result = serialize(inspectOptions, "Circular:", obj);

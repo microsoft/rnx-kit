@@ -10,6 +10,7 @@ import {
   subscribeToStart,
 } from "../src/events.ts";
 import type { ErrorEvent, SessionData } from "../src/types.ts";
+import { emptyFunction } from "../src/utils.ts";
 
 describe("events", () => {
   describe("createEventHandler", () => {
@@ -78,7 +79,7 @@ describe("events", () => {
 
       assert.strictEqual(handler.hasSubscribers(), false);
 
-      const unsubscribe = handler.subscribe(() => {});
+      const unsubscribe = handler.subscribe(emptyFunction);
       assert.strictEqual(handler.hasSubscribers(), true);
 
       unsubscribe();
@@ -86,11 +87,11 @@ describe("events", () => {
     });
 
     it("should handle events with complex data types", () => {
-      interface TestEvent {
+      type TestEvent = {
         id: number;
         message: string;
         data?: Record<string, unknown>;
-      }
+      };
 
       const handler = createEventHandler<TestEvent>("complex-event");
       const receivedEvents: TestEvent[] = [];

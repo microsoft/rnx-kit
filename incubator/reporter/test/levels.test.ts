@@ -51,6 +51,7 @@ describe("levels", () => {
 
       // Attempting to modify should not change the array
       assert.throws(() => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (ALL_LOG_LEVELS as any).push("new-level");
       });
 
@@ -123,9 +124,12 @@ describe("levels", () => {
       const testLevel: typeof LL_ERROR = LL_ERROR;
       assert.strictEqual(testLevel, "error");
 
-      const levels: Array<
-        typeof LL_ERROR | typeof LL_WARN | typeof LL_LOG | typeof LL_VERBOSE
-      > = [LL_ERROR, LL_WARN, LL_LOG, LL_VERBOSE];
+      const levels: (
+        | typeof LL_ERROR
+        | typeof LL_WARN
+        | typeof LL_LOG
+        | typeof LL_VERBOSE
+      )[] = [LL_ERROR, LL_WARN, LL_LOG, LL_VERBOSE];
 
       assert.strictEqual(levels.length, 4);
     });

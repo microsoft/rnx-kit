@@ -1,7 +1,6 @@
-import { CascadeSettings, createCascadingReporter } from "./cascade.ts";
+import { type CascadeSettings, createCascadingReporter } from "./cascade.ts";
 import { subscribeToFinish, subscribeToStart } from "./events.ts";
 import { getFormatter } from "./formatting.ts";
-import { LL_VERBOSE } from "./levels.ts";
 import type { Reporter, SessionData } from "./types.ts";
 import { isErrorResult } from "./utils.ts";
 
@@ -9,27 +8,6 @@ import { isErrorResult } from "./utils.ts";
  * Environment variable key used to enable performance tracking
  */
 export const PERF_TRACKING_ENV_KEY = "RNX_PERF_TRACKING";
-
-const DISABLED_MODE = "disabled";
-const ENABLED_MODE = "enabled";
-const VERBOSE_MODE = LL_VERBOSE;
-const FILE_ONLY_MODE = "file-only";
-
-const PERF_MODES = [
-  DISABLED_MODE,
-  ENABLED_MODE,
-  VERBOSE_MODE,
-  FILE_ONLY_MODE,
-] as const;
-
-/**
- * The different modes for performance tracking
- * - disabled: performance tracking is disabled (default)
- * - enabled: performance tracking is enabled, but only logs start and end of tasks
- * - verbose: performance tracking is enabled, logs start and end of tasks and operations
- * - file-only: performance tracking is enabled, logs to a file only, no console output
- */
-export type PerfTrackMode = (typeof PERF_MODES)[number];
 
 /**
  * Performance tracker implementation. This creates a reporter and listens for reporter events, logging

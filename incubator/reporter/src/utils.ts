@@ -68,7 +68,7 @@ export function serialize(
  * @returns true if the value is Promise-like, false otherwise
  */
 export function isPromiseLike<T>(v: unknown): v is Promise<T> {
-  return !!v && typeof (v as any).then === "function";
+  return !!v && typeof (v as Promise<T>).then === "function";
 }
 
 /**

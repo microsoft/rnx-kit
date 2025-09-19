@@ -22,7 +22,10 @@ export function createLogger(options: LoggerOptions = {}): Logger {
   const coreLogs = Object.fromEntries(
     ALL_LOG_LEVELS.map((level) => {
       const pfx = prefixes[level];
-      return [level, createLog(outputs[level], pfx, onError)];
+      return [
+        level,
+        createLog(outputs[level], pfx, level === "error" ? onError : undefined),
+      ];
     })
   ) as Record<LogLevel, LogFunction>;
 
@@ -37,9 +40,6 @@ export function createLogger(options: LoggerOptions = {}): Logger {
   };
 }
 
-/** default to console output, don't create it unless it is required though */
-const defaultOutput = lazyInit<OutputWriter>(() => createOutput());
-
 /** default prefixes for log levels, lazy-init to not load color functions unless requested */
 const defaultPrefix = lazyInit<Partial<Record<LogLevel, string>>>(() => ({
   error: "ERROR: ⛔",
@@ -52,9 +52,7 @@ const defaultPrefix = lazyInit<Partial<Record<LogLevel, string>>>(() => ({
  * @returns The corresponding OutputWriter instance.
  * @internal
  */
-export function ensureOutput(
-  option: OutputOption = defaultOutput()
-): OutputWriter {
+export function ensureOutput(option: OutputOption = "log"): OutputWriter {
   return typeof option === "string" ? createOutput(option as LogLevel) : option;
 }
 

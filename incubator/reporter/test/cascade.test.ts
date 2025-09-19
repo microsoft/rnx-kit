@@ -13,7 +13,6 @@ import { mockOutput, type MockOutput } from "./streams.test.ts";
 describe("cascade", () => {
   const testEnvKey = "TEST_CASCADE_REPORTER";
   const originalEnv = process.env[testEnvKey];
-  let tempDir: string;
   let mockOut: MockOutput;
 
   beforeEach(() => {
@@ -94,7 +93,7 @@ describe("cascade", () => {
     });
 
     it("should return undefined functions when options have no out path", () => {
-      const [outFn, errFn] = createFileWriteFunctions({} as any);
+      const [outFn, errFn] = createFileWriteFunctions({} as { out: string });
       assert.strictEqual(outFn, undefined);
       assert.strictEqual(errFn, undefined);
     });

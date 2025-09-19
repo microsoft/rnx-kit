@@ -300,9 +300,13 @@ describe("colors", () => {
       const styles = fontStyle();
 
       // TypeScript should prevent this, but test runtime behavior
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       assert.strictEqual(colors.red(null as any), "null");
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       assert.strictEqual(colors.red(undefined as any), "undefined");
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       assert.strictEqual(styles.bold(null as any), "null");
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       assert.strictEqual(styles.bold(undefined as any), "undefined");
     });
   });

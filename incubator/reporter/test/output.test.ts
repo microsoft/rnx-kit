@@ -1,13 +1,9 @@
 import assert from "node:assert";
 import { afterEach, beforeEach, describe, it } from "node:test";
-import { ALL_LOG_LEVELS, LL_ERROR, LL_LOG, LL_VERBOSE, LL_WARN } from "../src/levels.ts";
+import { ALL_LOG_LEVELS, LL_ERROR, LL_LOG, LL_VERBOSE } from "../src/levels.ts";
 import { createOutput, mergeOutput } from "../src/output.ts";
 import type { OutputFunction, OutputWriter } from "../src/types.ts";
-import {
-  mockOutput,
-  restoreOutput,
-  type MockOutput,
-} from "./streams.test.ts";
+import { mockOutput, restoreOutput, type MockOutput } from "./streams.test.ts";
 
 describe("output", () => {
   let mockOut: MockOutput;
@@ -86,8 +82,10 @@ describe("output", () => {
     it("should use provided error function for stderr messages", () => {
       const outMessages: string[] = [];
       const errMessages: string[] = [];
-      const customOut: OutputFunction = (msg) => outMessages.push(`OUT: ${msg}`);
-      const customErr: OutputFunction = (msg) => errMessages.push(`ERR: ${msg}`);
+      const customOut: OutputFunction = (msg) =>
+        outMessages.push(`OUT: ${msg}`);
+      const customErr: OutputFunction = (msg) =>
+        errMessages.push(`ERR: ${msg}`);
 
       const output = createOutput("verbose", customOut, customErr);
 
@@ -114,7 +112,8 @@ describe("output", () => {
 
     it("should use outFn for errFn when errFn not provided", () => {
       const messages: string[] = [];
-      const customOut: OutputFunction = (msg) => messages.push(`UNIFIED: ${msg}`);
+      const customOut: OutputFunction = (msg) =>
+        messages.push(`UNIFIED: ${msg}`);
 
       const output = createOutput("verbose", customOut);
 
@@ -142,15 +141,22 @@ describe("output", () => {
 
       // Error and warn should go to stderr
       assert.strictEqual(mockOut.stderr.calls, 2);
-      assert.deepStrictEqual(mockOut.stderr.output, ["console error", "console warn"]);
+      assert.deepStrictEqual(mockOut.stderr.output, [
+        "console error",
+        "console warn",
+      ]);
 
       // Log and verbose should go to stdout
       assert.strictEqual(mockOut.stdout.calls, 2);
-      assert.deepStrictEqual(mockOut.stdout.output, ["console log", "console verbose"]);
+      assert.deepStrictEqual(mockOut.stdout.output, [
+        "console log",
+        "console verbose",
+      ]);
     });
 
     it("should handle invalid log level gracefully", () => {
       // Use an invalid log level and verify it defaults to first level
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const output = createOutput("invalid" as any);
 
       // Should only have error function (first level)
@@ -235,7 +241,11 @@ describe("output", () => {
       merged.verbose!("test verbose");
 
       assert.strictEqual(messages.length, 3);
-      assert.deepStrictEqual(messages, ["test error", "test log", "test verbose"]);
+      assert.deepStrictEqual(messages, [
+        "test error",
+        "test log",
+        "test verbose",
+      ]);
     });
 
     it("should create combined function for overlapping levels", () => {
@@ -256,13 +266,20 @@ describe("output", () => {
 
       assert.strictEqual(messages1.length, 2);
       assert.strictEqual(messages2.length, 2);
-      assert.deepStrictEqual(messages1, ["OUT1: shared error", "OUT1: shared log"]);
-      assert.deepStrictEqual(messages2, ["OUT2: shared error", "OUT2: shared log"]);
+      assert.deepStrictEqual(messages1, [
+        "OUT1: shared error",
+        "OUT1: shared log",
+      ]);
+      assert.deepStrictEqual(messages2, [
+        "OUT2: shared error",
+        "OUT2: shared log",
+      ]);
     });
 
     it("should merge with console outputs", () => {
       const customMessages: string[] = [];
-      const customOut: OutputFunction = (msg) => customMessages.push(`CUSTOM: ${msg}`);
+      const customOut: OutputFunction = (msg) =>
+        customMessages.push(`CUSTOM: ${msg}`);
 
       const consoleOutput = createOutput("log"); // Uses console
       const customOutput = createOutput("log", customOut);
@@ -274,7 +291,10 @@ describe("output", () => {
 
       // Custom output should receive messages
       assert.strictEqual(customMessages.length, 2);
-      assert.deepStrictEqual(customMessages, ["CUSTOM: test error", "CUSTOM: test log"]);
+      assert.deepStrictEqual(customMessages, [
+        "CUSTOM: test error",
+        "CUSTOM: test log",
+      ]);
 
       // Console should also receive messages
       assert.strictEqual(mockOut.stderr.calls, 1);
@@ -319,8 +339,12 @@ describe("output", () => {
       const verboseMessages: string[] = [];
       const errorMessages: string[] = [];
 
-      const verboseOutput = createOutput("verbose", (msg) => verboseMessages.push(`V: ${msg}`));
-      const errorOutput = createOutput("error", (msg) => errorMessages.push(`E: ${msg}`));
+      const verboseOutput = createOutput("verbose", (msg) =>
+        verboseMessages.push(`V: ${msg}`)
+      );
+      const errorOutput = createOutput("error", (msg) =>
+        errorMessages.push(`E: ${msg}`)
+      );
       const consoleOutput = createOutput("warn");
 
       const merged = mergeOutput(verboseOutput, errorOutput, consoleOutput);
@@ -359,7 +383,11 @@ describe("output", () => {
       // Error should be called 3 times (once for each output that supports it)
       merged.error!("multi error");
       assert.strictEqual(allMessages.length, 3);
-      assert.deepStrictEqual(allMessages, ["multi error", "multi error", "multi error"]);
+      assert.deepStrictEqual(allMessages, [
+        "multi error",
+        "multi error",
+        "multi error",
+      ]);
 
       // Warn should be called 2 times (output2 and output3)
       allMessages.length = 0;
@@ -377,6 +405,7 @@ describe("output", () => {
 
   describe("edge cases", () => {
     it("should handle undefined log level gracefully", () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const output = createOutput(undefined as any);
 
       // Should default to default log level behavior
@@ -387,6 +416,7 @@ describe("output", () => {
     });
 
     it("should handle null output functions", () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const output = createOutput("log", null as any, null as any);
 
       // Should fall back to console outputs
@@ -412,18 +442,30 @@ describe("output", () => {
       // Test with all possible log levels
       ALL_LOG_LEVELS.forEach((level) => {
         const output = createOutput(level);
-        assert.ok(output.error !== undefined, `Error should be defined for level ${level}`);
-        
+        assert.ok(
+          output.error !== undefined,
+          `Error should be defined for level ${level}`
+        );
+
         if (level !== LL_ERROR) {
-          assert.ok(output.warn !== undefined, `Warn should be defined for level ${level}`);
+          assert.ok(
+            output.warn !== undefined,
+            `Warn should be defined for level ${level}`
+          );
         }
-        
+
         if (level === LL_LOG || level === LL_VERBOSE) {
-          assert.ok(output.log !== undefined, `Log should be defined for level ${level}`);
+          assert.ok(
+            output.log !== undefined,
+            `Log should be defined for level ${level}`
+          );
         }
-        
+
         if (level === LL_VERBOSE) {
-          assert.ok(output.verbose !== undefined, `Verbose should be defined for level ${level}`);
+          assert.ok(
+            output.verbose !== undefined,
+            `Verbose should be defined for level ${level}`
+          );
         }
       });
     });
