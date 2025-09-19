@@ -1,4 +1,9 @@
-export const ALL_LOG_LEVELS = ["error", "warn", "log", "verbose"] as const;
+export const ALL_LOG_LEVELS = Object.freeze([
+  "error",
+  "warn",
+  "log",
+  "verbose",
+] as const);
 
 export const LL_ERROR = ALL_LOG_LEVELS[0];
 export const LL_WARN = ALL_LOG_LEVELS[1];

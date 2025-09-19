@@ -5,10 +5,8 @@ import {
   LL_WARN,
   type LogLevel,
 } from "./levels.ts";
+import { getConsoleWrite } from "./streams.ts";
 import type { OutputFunction, OutputWriter } from "./types.ts";
-
-const WRITE_STDOUT: OutputFunction = process.stdout.write.bind(process.stdout);
-const WRITE_STDERR: OutputFunction = process.stderr.write.bind(process.stderr);
 
 /**
  * Create a new OutputWriter instance. If no functions are specified, will create a writer for
@@ -21,14 +19,15 @@ const WRITE_STDERR: OutputFunction = process.stderr.write.bind(process.stderr);
  */
 export function createOutput(
   level: LogLevel = DEFAULT_LOG_LEVEL,
-  outFn: OutputFunction = WRITE_STDOUT,
+  outFn?: OutputFunction,
   errFn?: OutputFunction
 ): OutputWriter {
-  errFn ??= outFn === WRITE_STDOUT ? WRITE_STDERR : outFn;
+  const writeOut = outFn ?? getConsoleWrite("stdout");
+  const writeErr = errFn ?? outFn ?? getConsoleWrite("stderr");
   return Object.fromEntries(
     getLevels(level).map((lvl) => [
       lvl,
-      lvl === LL_ERROR || lvl === LL_WARN ? errFn : outFn,
+      lvl === LL_ERROR || lvl === LL_WARN ? writeErr : writeOut,
     ])
   );
 }

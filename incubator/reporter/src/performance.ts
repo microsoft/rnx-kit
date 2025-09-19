@@ -1,10 +1,8 @@
-import fs from "node:fs";
+import { CascadeSettings, createCascadingReporter } from "./cascade.ts";
 import { subscribeToFinish, subscribeToStart } from "./events.ts";
 import { getFormatter } from "./formatting.ts";
-import { LL_LOG, LL_VERBOSE } from "./levels.ts";
-import { createOutput, mergeOutput } from "./output.ts";
-import { ReporterImpl } from "./reporter.ts";
-import type { OutputWriter, SessionData } from "./types.ts";
+import { LL_VERBOSE } from "./levels.ts";
+import type { Reporter, SessionData } from "./types.ts";
 import { isErrorResult } from "./utils.ts";
 
 /**
@@ -38,34 +36,12 @@ export type PerfTrackMode = (typeof PERF_MODES)[number];
  * performance information. It can log to the console, a file, or both.
  */
 class PerformanceTracker {
-  private reporter: ReporterImpl;
-  private verbose: boolean;
+  private reporter: Reporter;
   private formatter = getFormatter();
   private perfTag = this.formatter.cyan("PERF:");
 
-  constructor(mode: PerfTrackMode, file?: string, fromEnv?: boolean) {
-    this.verbose = mode === VERBOSE_MODE || mode === FILE_ONLY_MODE;
-    const level = this.verbose ? LL_VERBOSE : LL_LOG;
-    const outputs: OutputWriter[] = [];
-
-    // create a console output unless in file only mode
-    if (mode !== FILE_ONLY_MODE) {
-      outputs.push(createOutput(level));
-    }
-
-    if (file) {
-      const flags = fromEnv ? "a" : "w";
-      const fileStream = fs.createWriteStream(file, { flags });
-      outputs.push(
-        createOutput(LL_VERBOSE, (msg: string) => {
-          fileStream.write(msg + "\n");
-        })
-      );
-    }
-
-    const output = mergeOutput(...outputs);
-    this.reporter = new ReporterImpl({ name: "PerfTracker", output });
-
+  constructor(reporter: Reporter) {
+    this.reporter = reporter;
     subscribeToStart((event) => this.onTaskStarted(event));
     subscribeToFinish((event) => this.onTaskCompleted(event));
   }
@@ -133,64 +109,20 @@ let checkedEnv = false;
 let performanceTracker: PerformanceTracker | undefined = undefined;
 
 /**
- * Enable performance tracing. This will set the appropriate environment variable
- * so that child processes will also enable performance tracing with the same settings.
- * @param mode mode to use for performance tracking, defaults to "enabled"
- * @param file optional file path to log performance data
- */
-export function enablePerformanceTracing(
-  mode: PerfTrackMode = ENABLED_MODE,
-  file?: string
-) {
-  process.env[PERF_TRACKING_ENV_KEY] = serializePerfOptions(mode, file);
-  if (mode !== DISABLED_MODE) {
-    performanceTracker = new PerformanceTracker(mode, file);
-  }
-}
-
-/**
- * Ensure that performance tracing is started if specified in the environment variables.
+ * Checks the environment to enable performance tracing if it has been enabled in this process tree.
+ * If it has not been enabled, then it will be turned on if settings are provided
+ * in the call to this function.
  *
- * This can be called multiple times safely and will do nothing unless
- * performance tracing is enabled. If enabling performance tracing across child processes
- * this should be called in your createReporter function to ensure that child processes
- * also enable performance tracing.
+ * @param settings Optional settings, used to enable performance tracing if it is not already enabled via the environment
  */
-export function checkForPerfTracing() {
+export function checkOrEnablePerfTracing(settings?: CascadeSettings) {
   if (!checkedEnv && !performanceTracker) {
     checkedEnv = true;
-    const env = process.env[PERF_TRACKING_ENV_KEY];
-    if (env) {
-      const [mode, file] = decodePerformanceOptions(env);
-      if (mode !== DISABLED_MODE) {
-        performanceTracker = new PerformanceTracker(mode, file, true);
-      }
+    const reporter = createCascadingReporter(PERF_TRACKING_ENV_KEY, settings, {
+      name: "PerfTracker",
+    });
+    if (reporter) {
+      performanceTracker = new PerformanceTracker(reporter);
     }
   }
-}
-
-/**
- * @internal
- */
-export function serializePerfOptions(
-  mode: PerfTrackMode,
-  file?: string
-): string {
-  return file ? `${mode},${file}` : mode;
-}
-
-/**
- * @internal
- */
-export function decodePerformanceOptions(
-  serialized?: string
-): [PerfTrackMode, string | undefined] {
-  if (serialized) {
-    const [mode, file] = serialized.split(",") as [
-      PerfTrackMode,
-      string | undefined,
-    ];
-    return [PERF_MODES.includes(mode) ? mode : DISABLED_MODE, file];
-  }
-  return [DISABLED_MODE, undefined];
 }

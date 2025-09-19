@@ -1,4 +1,3 @@
-import type { InspectOptions } from "node:util";
 import type { LogLevel } from "./levels.ts";
 
 export type LogFunction = (...args: unknown[]) => void;
@@ -29,7 +28,10 @@ export type AnyResult<T> = Partial<NormalResult<T> & ErrorResult>;
  */
 export type OutputOption = LogLevel | OutputWriter;
 
-export type Reporter = {
+/**
+ * A simple logging interface, similar to console with a few additions.
+ */
+export type Logger = {
   /**
    * Report an error, logging it to the error output and notifying any listeners
    */
@@ -57,12 +59,40 @@ export type Reporter = {
 
   /**
    * Log the provided message to error output, then throw an error with the same message.
+   * @throws An error with the provided message.
    */
-  fatalError: LogFunction;
+  fatalError: (...args: unknown[]) => never;
+};
+
+/**
+ * Options for configuring simple loggers
+ */
+export type LoggerOptions = {
+  /**
+   * The output option can be a log level string (e.g., "error", "warn", "info", "verbose") or an OutputWriter instance.
+   * If a string is provided, it will create an OutputWriter that logs to the console at the specified level.
+   * If not provided, it defaults to console output at the default log level.
+   */
+  output?: OutputOption;
 
   /**
+   * Optional prefixes for each log level. If not provided, default prefixes will be used for "error" and "warn" levels.
+   * Set this to an empty object to disable all prefixes.
+   */
+  prefix?: Partial<Record<LogLevel, string>>;
+
+  /**
+   * Optional callback function that is called when an error occurs during logging.
+   * @param args The arguments passed to the logger.error() method.
+   * @returns void
+   */
+  onError?: (args: unknown[]) => void;
+};
+
+export type Reporter = Logger & {
+  /**
    * Tasks are hierarchical operations that can be timed. Each task is tracked separately and results
-   * will not be aggregated. This is used for starting a big operations that may have multiple steps.
+   * will not be aggregated. This is used for starting a big operation that may have multiple steps.
    *
    * A sub-reporter will be passed to the function, this can be ignored or used to report errors or
    * launch additional tasks or actions that will be associated with this task.
@@ -89,11 +119,12 @@ export type Reporter = {
 
   /**
    * Finish execution of the reporter or task, recording the result and sending a completion event. Things will continue to work
-   * but no further completion events will be sent.
+   * but no further completion events will be sent. This will be called automatically if the reporter is created via the task method.
    *
-   * @param result result of the task or reporter, can be any type
+   * @param result result of the task or reporter, should be either a { value: T } or { error: unknown } object
+   * @returns the value of the result if not a caught error, otherwise throws the error
    */
-  finish: <T>(result: T) => void;
+  finish: <T>(result: FinishResult<T>) => T;
 
   /**
    * Data about the session, can be used to set things like telemetry properties. This will be included in logged events.
@@ -127,9 +158,6 @@ export type ReporterConfiguration = {
   // writer used to output log messages
   output: OutputWriter;
 
-  // inspect options that determine serialization
-  inspectOptions: InspectOptions;
-
   // message prefixes for log types
   logPrefix: Partial<Record<LogLevel, string>>;
 
@@ -137,11 +165,7 @@ export type ReporterConfiguration = {
   logFormat: Partial<Record<LogLevel, TextTransform>>;
 };
 
-export type ReporterOptions = ReporterInfo &
-  Partial<Omit<ReporterConfiguration, "output">> & {
-    // output options for the reporter
-    output?: OutputOption;
-  };
+export type ReporterOptions = ReporterInfo & Omit<LoggerOptions, "onError">;
 
 /**
  * Data associated with a reporter or task session. This includes hierarchical information about

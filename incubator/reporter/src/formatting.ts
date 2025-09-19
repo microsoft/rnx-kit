@@ -1,10 +1,7 @@
 import { stripVTControlCharacters } from "node:util";
-import type {
-  AnsiColorFunctions,
-  FontStyleFunctions,
-  TextTransform,
-} from "./colors.ts";
+import type { AnsiColorFunctions, FontStyleFunctions } from "./colors.ts";
 import { ansiColor, encodeAnsi256, fontStyle } from "./colors.ts";
+import type { TextTransform } from "./types.ts";
 import { identity, lazyInit } from "./utils.ts";
 
 type Alignment = "left" | "right" | "center";
@@ -111,14 +108,17 @@ export function formatDuration(
   colorUnits: TextTransform = identity
 ): string {
   let unit = "ms";
-  if (duration > 120000) {
+  if (duration >= 120000) {
     unit = "m";
     duration /= 60000;
-  } else if (duration > 1000) {
+  } else if (duration >= 1000) {
     unit = "s";
     duration /= 1000;
   }
-  const decimalPlaces = Math.max(0, 2 - Math.floor(Math.log10(duration)));
+  const decimalPlaces = Math.max(
+    0,
+    2 - Math.floor(Math.log10(duration > 1 ? duration : 1))
+  );
   return `${colorValue(duration.toFixed(decimalPlaces))}${colorUnits(unit)}`;
 }
 

@@ -1,3 +1,4 @@
+import { inspect, type InspectOptions } from "node:util";
 import type { ErrorResult, FinishResult } from "./types.ts";
 
 /**
@@ -34,6 +35,33 @@ export function identity<T>(arg: T): T {
   return arg;
 }
 
+/** default options for using inspect to serialize */
+export const inspectOptions = lazyInit<InspectOptions>(() => ({
+  colors: false,
+  depth: 1,
+  maxArrayLength: 100,
+}));
+
+/**
+ * Serializes the given arguments using the provided inspect options.
+ * @param inspectOptions The options to use for inspecting objects.
+ * @param args The arguments to serialize.
+ * @returns The serialized string representation of the arguments.
+ */
+export function serialize(
+  inspectOptions: InspectOptions,
+  ...args: unknown[]
+): string {
+  return (
+    args
+      .filter((arg) => arg != null)
+      .map((arg) =>
+        typeof arg === "object" ? inspect(arg, inspectOptions) : String(arg)
+      )
+      .join(" ") + "\n"
+  );
+}
+
 /**
  * Checks if a value is a Promise-like object.
  * @param v value to test
@@ -52,6 +80,18 @@ export function isErrorResult<T>(
   final?: FinishResult<T>
 ): final is ErrorResult {
   return Boolean(final && (final as ErrorResult).error !== undefined);
+}
+
+/**
+ * Finalizes the result of an operation, either returning the value or throwing an error.
+ * @param result the final result of an operation, either success or failure
+ * @returns the value of the result if not a caught error, otherwise throws the error
+ */
+export function finalizeResult<T>(result: FinishResult<T>): T {
+  if (isErrorResult(result)) {
+    throw result.error;
+  }
+  return result.value;
 }
 
 /**

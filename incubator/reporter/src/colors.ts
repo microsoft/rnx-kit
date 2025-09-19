@@ -1,11 +1,20 @@
 import { WriteStream } from "node:tty";
+import type { TextTransform } from "./types.ts";
 import { lazyInit } from "./utils.ts";
 
 // check whether the write stream supports color
-export const SUPPORTS_COLOR =
+let supportsColor =
   WriteStream.prototype.hasColors() &&
   !process.env["NODE_TEST_CONTEXT"] &&
   process.env["NODE_ENV"] !== "test";
+
+/**
+ * override color support for testing purposes
+ * @internal
+ */
+export function overrideColorSupport(val: boolean) {
+  supportsColor = val;
+}
 
 const ANSI_COLORS = [
   "black",
@@ -18,15 +27,15 @@ const ANSI_COLORS = [
   "white",
 ] as const;
 
-export type TextTransform = (text: string) => string;
 export type AnsiColor = (typeof ANSI_COLORS)[number];
+export type AnsiBrightColors = `${AnsiColor}Bright`;
 
 /**
  * Set of ANSI color functions, names are similar to the names used in the chalk library, though
  * aligning to the ansi names, rather than remapping gray/grey.
  */
 export type AnsiColorFunctions = Record<
-  AnsiColor | `${AnsiColor}Bright`,
+  AnsiColor | AnsiBrightColors,
   (s: string) => string
 >;
 
@@ -47,25 +56,32 @@ export type FontStyleFunctions = {
  * @param start The starting color code, either a number or raw text.
  * @param stop The stopping color code, either a number or raw text.
  */
-export const encodeColor: (
+export function encodeColor(
   s: string,
   start: string | number,
   stop: string | number
-) => string = SUPPORTS_COLOR
-  ? (s, start, stop) => `\u001B[${start}m${s}\u001B[${stop}m`
-  : (s, _start, _stop) => s;
+): string {
+  return supportsColor ? `\u001B[${start}m${s}\u001B[${stop}m` : `${s}`;
+}
 
 /**
  * Set of ansi color functions, names are similar to the names used in the chalk library.
  */
-export const ansiColor = lazyInit<AnsiColorFunctions>(() =>
-  Object.fromEntries(
+export const ansiColor = lazyInit<AnsiColorFunctions>(() => {
+  const baseColors = Object.fromEntries(
     ANSI_COLORS.map((color, index) => [
-      [color, (s: string) => encodeColor(s, index + 30, 39)],
-      [color + "Bright", (s: string) => encodeColor(s, index + 90, 39)],
+      color,
+      (s: string) => encodeColor(s, index + 30, 39),
     ])
-  )
-);
+  );
+  const ansiBright = Object.fromEntries(
+    ANSI_COLORS.map((color, index) => [
+      color + "Bright",
+      (s: string) => encodeColor(s, index + 90, 39),
+    ])
+  );
+  return { ...baseColors, ...ansiBright } as AnsiColorFunctions;
+});
 
 /**
  * Set of font style functions, names are similar to the names used in the chalk library.
