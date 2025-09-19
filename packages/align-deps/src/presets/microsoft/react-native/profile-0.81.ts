@@ -151,7 +151,7 @@ export const profile: Profile = {
 
   "test-app": {
     name: "react-native-test-app",
-    version: "^4.4.6",
+    version: "^4.4.10",
     devOnly: true,
   },
 };
