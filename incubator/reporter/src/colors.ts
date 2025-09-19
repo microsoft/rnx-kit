@@ -2,18 +2,39 @@ import { WriteStream } from "node:tty";
 import type { TextTransform } from "./types.ts";
 import { lazyInit } from "./utils.ts";
 
-// check whether the write stream supports color
-let supportsColor =
-  WriteStream.prototype.hasColors() &&
-  !process.env["NODE_TEST_CONTEXT"] &&
-  process.env["NODE_ENV"] !== "test";
+function getSystemColorSupport(): boolean {
+  if (process.env["NODE_TEST_CONTEXT"] || process.env["NODE_ENV"] === "test") {
+    return false;
+  }
+
+  // Check CI environments
+  if (process.env["CI"] && !process.env["FORCE_COLOR"]) {
+    return false;
+  }
+
+  // Check NO_COLOR standard
+  if (process.env["NO_COLOR"]) {
+    return false;
+  }
+
+  return WriteStream.prototype.hasColors();
+}
+
+export const colorSupport = lazyInit(() => {
+  const systemSupport = getSystemColorSupport();
+  return {
+    systemSupport,
+    useColor: systemSupport,
+  };
+});
 
 /**
  * override color support for testing purposes
  * @internal
  */
-export function overrideColorSupport(val: boolean) {
-  supportsColor = val;
+export function overrideColorSupport(val?: boolean) {
+  const colorSettings = colorSupport();
+  colorSettings.useColor = val ?? colorSettings.systemSupport;
 }
 
 const ANSI_COLORS = [
@@ -61,7 +82,9 @@ export function encodeColor(
   start: string | number,
   stop: string | number
 ): string {
-  return supportsColor ? `\u001B[${start}m${s}\u001B[${stop}m` : `${s}`;
+  return colorSupport().useColor
+    ? `\u001B[${start}m${s}\u001B[${stop}m`
+    : `${s}`;
 }
 
 /**

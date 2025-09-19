@@ -52,14 +52,15 @@ export function serialize(
   inspectOptions: InspectOptions,
   ...args: unknown[]
 ): string {
-  return (
-    args
-      .filter((arg) => arg != null)
-      .map((arg) =>
+  const parts: string[] = [];
+  for (const arg of args) {
+    if (arg != null) {
+      parts.push(
         typeof arg === "object" ? inspect(arg, inspectOptions) : String(arg)
-      )
-      .join(" ") + "\n"
-  );
+      );
+    }
+  }
+  return parts.join(" ") + "\n";
 }
 
 /**
