@@ -66,7 +66,9 @@ function getWrite(
     : writes.length === 1
       ? writes[0]
       : (msg: string) => {
-          writes.forEach((write) => write(msg));
+          for (const write of writes) {
+            write(msg);
+          }
         };
 }
 

@@ -72,14 +72,14 @@ class PerformanceTracker {
       event.result
     );
     const ops = event.operations || {};
-    Object.keys(ops).forEach((key) => {
+    for (const key of Object.keys(ops)) {
       const { elapsed, calls } = ops[key];
       const duration = formatter.pad(formatter.duration(elapsed), 7);
       this.reporter.verbose(
         ...opPrefix,
         `${duration} |${formatter.pad(String(calls), 5)} calls | ${formatter.highlight3(key)}`
       );
-    });
+    }
   }
 }
 
