@@ -7,7 +7,7 @@ const useAuthMock = process.env["USE_AUTH_MOCK"];
 
 const blockList = exclusionList([
   // Metro will pick up react-native-macos/-windows mocks if we don't exclude them
-  /.*__fixtures__.*/,
+  /[/\\]__fixtures__[/\\]/,
 
   // If USE_AUTH_MOCK=1, exclude the real module to enable the mock.
   ...(useAuthMock ? [/.*packages[/\\]react-native-auth.*/] : []),
