@@ -4,6 +4,7 @@ module.exports = {
   ...require("../jest-preset"),
   collectCoverage: true,
   collectCoverageFrom: ["src/**"],
+  coverageDirectory: "test/coverage",
   roots: ["test"],
   testRegex: "/test/.*\\.test\\.[jt]sx?$",
 };

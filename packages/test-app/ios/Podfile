@@ -9,7 +9,7 @@ workspace 'SampleCrossApp.xcworkspace'
 options = {
   :bridgeless_enabled => true,
   :fabric_enabled => true,
-  :hermes_enabled => false,
+  :hermes_enabled => true,
 }
 
 use_test_app! options do |target|
