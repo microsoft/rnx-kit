@@ -17,7 +17,7 @@ export function getModulePath(
   // In Metro 0.72.0, the key changed from module name to a unique key in order
   // to support features such as `require.context`. For more details, see
   // https://github.com/facebook/metro/commit/52e1a00ffb124914a95e78e9f60df1bc2e2e7bf0.
-  for (const [, value] of parent.dependencies) {
+  for (const value of parent.dependencies.values()) {
     if (value.data.name === moduleName) {
       return value.absolutePath;
     }

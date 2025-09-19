@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-serializer
 
+## 2.0.1
+
+### Patch Changes
+
+- 3529107: Declare package exports
+
 ## 2.0.0
 
 ### Major Changes

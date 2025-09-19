@@ -1,11 +1,14 @@
+import { deepEqual, equal } from "node:assert/strict";
+import { afterEach, describe, it } from "node:test";
 import type { Options } from "../src/checkForDuplicatePackages";
 import {
-  checkForDuplicateDependencies,
-  checkForDuplicatePackages,
+  checkForDuplicateDependencies as checkForDuplicateDependenciesActual,
+  checkForDuplicatePackages as checkForDuplicatePackagesActual,
   countCopies,
   detectDuplicatePackages,
   printModule,
 } from "../src/checkForDuplicatePackages";
+import * as mockfs from "./__mocks__/fs";
 import {
   bundleGraph,
   bundleGraphFS,
@@ -16,8 +19,6 @@ import {
   bundleSourceMapWithDuplicates,
   bundleSourceMapWithDuplicatesFS,
 } from "./testData";
-
-jest.mock("fs");
 
 const defaultOptions: Options = {
   ignoredModules: [],
@@ -49,139 +50,126 @@ const testModuleMap = {
   },
 };
 
+function noop() {
+  // intentionally empty
+}
+
 describe("countCopies()", () => {
-  test("returns number of copies of a package", () => {
-    expect(countCopies(testModuleMap["fbjs"])).toBe(2);
-    expect(countCopies(testModuleMap["metro"])).toBe(2);
-    expect(countCopies(testModuleMap["react-native"])).toBe(1);
+  it("returns number of copies of a package", () => {
+    equal(countCopies(testModuleMap["fbjs"]), 2);
+    equal(countCopies(testModuleMap["metro"]), 2);
+    equal(countCopies(testModuleMap["react-native"]), 1);
   });
 });
 
 describe("printModules()", () => {
-  const consoleWarnSpy = jest.spyOn(global.console, "warn");
+  it("prints all versions and locations of a package", (t) => {
+    const warnMock = t.mock.method(console, "warn", noop);
 
-  beforeEach(() => {
-    consoleWarnSpy.mockReset();
-  });
-
-  afterAll(() => {
-    jest.clearAllMocks();
-  });
-
-  test("prints all versions and locations of a package", () => {
     printModule(testModuleMap["fbjs"]);
-    expect(consoleWarnSpy).toHaveBeenCalledTimes(2);
-    consoleWarnSpy.mockReset();
+    equal(warnMock.mock.callCount(), 2);
+    warnMock.mock.resetCalls();
 
     printModule(testModuleMap["metro"]);
-    expect(consoleWarnSpy).toHaveBeenCalledTimes(2);
-    consoleWarnSpy.mockReset();
+    equal(warnMock.mock.callCount(), 2);
+    warnMock.mock.resetCalls();
 
     printModule(testModuleMap["react-native"]);
-    expect(consoleWarnSpy).toHaveBeenCalledTimes(1);
-    consoleWarnSpy.mockReset();
+    equal(warnMock.mock.callCount(), 1);
+    warnMock.mock.resetCalls();
   });
 });
 
 describe("detectDuplicatePackages()", () => {
-  const consoleErrorSpy = jest.spyOn(global.console, "error");
-  const consoleWarnSpy = jest.spyOn(global.console, "warn");
-
-  beforeEach(() => {
-    consoleErrorSpy.mockReset();
-    consoleWarnSpy.mockReset();
-  });
-
-  afterAll(() => {
-    jest.clearAllMocks();
-  });
-
-  test("returns number of duplicated packages", () => {
-    expect(detectDuplicatePackages(testModuleMap, defaultOptions)).toEqual({
+  it("returns number of duplicated packages", () => {
+    deepEqual(detectDuplicatePackages(testModuleMap, defaultOptions), {
       banned: 0,
       duplicates: 2,
     });
   });
 
-  test("ignores specified packages", () => {
-    expect(
-      detectDuplicatePackages(testModuleMap, { ignoredModules: ["fbjs"] })
-    ).toEqual({ banned: 0, duplicates: 1 });
-    expect(
+  it("ignores specified packages", () => {
+    deepEqual(
+      detectDuplicatePackages(testModuleMap, { ignoredModules: ["fbjs"] }),
+      { banned: 0, duplicates: 1 }
+    );
+    deepEqual(
       detectDuplicatePackages(testModuleMap, {
         ignoredModules: ["fbjs", "metro"],
-      })
-    ).toEqual({ banned: 0, duplicates: 0 });
+      }),
+      { banned: 0, duplicates: 0 }
+    );
   });
 
-  test("counts banned packages", () => {
-    expect(
+  it("counts banned packages", () => {
+    deepEqual(
       detectDuplicatePackages(testModuleMap, {
         bannedModules: ["react", "react-native"],
-      })
-    ).toEqual({ banned: 2, duplicates: 2 });
+      }),
+      { banned: 2, duplicates: 2 }
+    );
   });
 
-  test("prints the duplicated packages", () => {
+  it("prints the duplicated packages", (t) => {
+    const errorMock = t.mock.method(console, "error", noop);
+    const warnMock = t.mock.method(console, "warn", noop);
+
     detectDuplicatePackages(testModuleMap, defaultOptions);
-    expect(consoleErrorSpy).toHaveBeenCalledTimes(2);
-    expect(consoleWarnSpy).toHaveBeenCalledTimes(4);
+
+    equal(errorMock.mock.callCount(), 2);
+    equal(warnMock.mock.callCount(), 4);
   });
 });
 
 describe("checkForDuplicateDependencies()", () => {
-  const fs = require("fs");
+  const checkForDuplicateDependencies: typeof checkForDuplicateDependenciesActual =
+    (graph, options) =>
+      checkForDuplicateDependenciesActual(graph, options, mockfs);
 
-  const consoleErrorSpy = jest.spyOn(global.console, "error");
-  const consoleWarnSpy = jest.spyOn(global.console, "warn");
+  afterEach(() => mockfs.__setMockFiles());
 
-  beforeEach(() => {
-    consoleErrorSpy.mockReset();
-    consoleWarnSpy.mockReset();
-  });
+  it("checkForDuplicateDependencies", (t) => {
+    const errorMock = t.mock.method(console, "error", noop);
+    const warnMock = t.mock.method(console, "warn", noop);
+    mockfs.__setMockFiles(bundleGraphFS);
 
-  afterAll(() => {
-    fs.__setMockFiles();
-    jest.clearAllMocks();
-  });
-
-  test("checkForDuplicateDependencies", () => {
-    fs.__setMockFiles(bundleGraphFS);
-
-    expect(checkForDuplicateDependencies(bundleGraph)).toEqual({
+    deepEqual(checkForDuplicateDependencies(bundleGraph), {
       banned: 0,
       duplicates: 0,
     });
-    expect(consoleErrorSpy).not.toHaveBeenCalled();
-    expect(consoleWarnSpy).not.toHaveBeenCalled();
+    equal(errorMock.mock.callCount(), 0);
+    equal(warnMock.mock.callCount(), 0);
 
-    fs.__setMockFiles(bundleGraphWithDuplicatesFS);
+    mockfs.__setMockFiles(bundleGraphWithDuplicatesFS);
 
-    expect(checkForDuplicateDependencies(bundleGraphWithDuplicates)).toEqual({
+    deepEqual(checkForDuplicateDependencies(bundleGraphWithDuplicates), {
       banned: 0,
       duplicates: 1,
     });
-    expect(consoleErrorSpy).toHaveBeenCalledTimes(1);
-    expect(consoleWarnSpy).toHaveBeenCalledTimes(2);
+    equal(errorMock.mock.callCount(), 1);
+    equal(warnMock.mock.callCount(), 2);
   });
 });
 
 describe("checkForDuplicatePackages()", () => {
-  const fs = require("fs");
+  const checkForDuplicatePackages: typeof checkForDuplicatePackagesActual = (
+    sourceMap,
+    options
+  ) => checkForDuplicatePackagesActual(sourceMap, options, mockfs);
 
-  afterAll(() => fs.__setMockFiles());
+  afterEach(() => mockfs.__setMockFiles());
 
-  test("checkForDuplicatePackages", () => {
-    fs.__setMockFiles(bundleSourceMapFS);
+  it("checkForDuplicatePackages", () => {
+    mockfs.__setMockFiles(bundleSourceMapFS);
 
-    expect(checkForDuplicatePackages(bundleSourceMap)).toEqual({
+    deepEqual(checkForDuplicatePackages(bundleSourceMap), {
       banned: 0,
       duplicates: 0,
     });
 
-    fs.__setMockFiles(bundleSourceMapWithDuplicatesFS);
+    mockfs.__setMockFiles(bundleSourceMapWithDuplicatesFS);
 
-    expect(checkForDuplicatePackages(bundleSourceMapWithDuplicates)).toEqual({
+    deepEqual(checkForDuplicatePackages(bundleSourceMapWithDuplicates), {
       banned: 0,
       duplicates: 1,
     });

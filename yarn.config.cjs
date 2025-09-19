@@ -3,8 +3,6 @@
 /** @type {import("@yarnpkg/types")} */
 const { defineConfig } = require("@yarnpkg/types");
 
-const IGNORED_LOCATIONS = [".", "packages/test-app", "scripts"];
-
 module.exports = defineConfig({
   constraints: async ({ Yarn }) => {
     const root = Yarn.workspace({ cwd: "." });
@@ -15,19 +13,26 @@ module.exports = defineConfig({
     const { author, repository: origin } = root.manifest;
 
     for (const workspace of Yarn.workspaces()) {
-      if (IGNORED_LOCATIONS.includes(workspace.cwd)) {
-        continue;
+      const { private: isPrivate, experimental } = workspace.manifest;
+      if (isPrivate && !experimental) {
+        workspace.set("version", "0.0.0");
       }
 
       workspace.set("author.name", author.name);
       workspace.set("author.email", author.email);
 
-      const homepage = `${origin.url}/tree/main/${workspace.cwd}#readme`;
+      const homepage =
+        workspace === root
+          ? `${origin.url}#readme`
+          : `${origin.url}/tree/main/${workspace.cwd}#readme`;
       workspace.set("homepage", homepage);
 
       workspace.set("repository.type", origin.type);
       workspace.set("repository.url", origin.url);
-      workspace.set("repository.directory", workspace.cwd);
+
+      if (workspace !== root) {
+        workspace.set("repository.directory", workspace.cwd);
+      }
     }
   },
 });

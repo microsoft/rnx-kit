@@ -1,3 +1,4 @@
+import groovy.json.JsonSlurper
 import java.nio.file.Paths
 
 buildscript {
@@ -31,6 +32,12 @@ buildscript {
         return ((major as int) * 1000000) + ((minor as int) * 1000) + ((patch ?: 0) as int)
     }
 
+    ext.readPackageVersion = { packagePath ->
+        def packageJson = file("${packagePath}/package.json")
+        def manifest = new JsonSlurper().parseText(packageJson.text)
+        return parseVersion(manifest.version ?: "0.0.0")
+    }
+
     repositories {
         google()
         mavenCentral()
@@ -38,7 +45,7 @@ buildscript {
 
     dependencies {
         def kotlinVersion = getExtProp("kotlinVersion", "1.7.21")
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
     }
 }
 
@@ -47,10 +54,10 @@ plugins {
     id("org.jetbrains.kotlin.android")
 }
 
-def enableNewArchitecture = (project.hasProperty("react.newArchEnabled") &&
-                             project.getProperty("react.newArchEnabled") == "true") ||
-                            (project.hasProperty("newArchEnabled") &&
-                             project.getProperty("newArchEnabled") == "true")
+def reactNativePath = findNodeModulesPath("react-native")
+def enableNewArchitecture = readPackageVersion(reactNativePath) >= 82000 ||
+                            project.findProperty("react.newArchEnabled") == "true" ||
+                            project.findProperty("newArchEnabled") == "true"
 
 if (enableNewArchitecture) {
     apply(plugin: "com.facebook.react")
@@ -58,7 +65,7 @@ if (enableNewArchitecture) {
 
 repositories {
     maven {
-        url("${findNodeModulesPath('react-native')}/android")
+        url = "${reactNativePath}/android"
     }
 
     google()
@@ -66,14 +73,17 @@ repositories {
 }
 
 android {
-    compileSdkVersion getExtProp("compileSdkVersion", 33)
+    compileSdkVersion = getExtProp("compileSdkVersion", 33)
+
     defaultConfig {
-        minSdkVersion getExtProp("minSdkVersion", 23)
-        targetSdkVersion getExtProp("targetSdkVersion", 33)
+        minSdkVersion = getExtProp("minSdkVersion", 23)
+        targetSdkVersion = getExtProp("targetSdkVersion", 33)
     }
+
     lintOptions {
-        abortOnError false
+        abortOnError = false
     }
+
     sourceSets {
         main.java.srcDirs += [
             enableNewArchitecture ? "src/newarch/java" : "src/oldarch/java"
@@ -84,11 +94,10 @@ android {
 dependencies {
     def kotlinVersion = parseVersion(getExtProp("kotlinVersion", "1.7.21"))
     if (kotlinVersion >= 1008000) {
-        implementation "androidx.core:core-ktx:1.13.1"
+        implementation("androidx.core:core-ktx:1.13.1")
     } else {
         implementation(["androidx.core", "core-ktx", "1.9.0"].join(":"))
     }
 
-    //noinspection GradleDynamicVersion
-    implementation "com.facebook.react:react-native:+"
+    implementation("com.facebook.react:react-android")
 }

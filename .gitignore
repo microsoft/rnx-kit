@@ -43,5 +43,6 @@ coverage/
 local.properties
 msbuild.binlog
 node_modules/
+package-lock.json
 rnx-kit-workspaces.json
 !**/__fixtures__/**/node_modules/

@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/align-deps",
-  "version": "3.2.1",
+  "version": "3.2.2",
   "description": "Manage dependencies within a repository and across many repositories",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/align-deps#readme",
   "license": "MIT",
@@ -16,6 +16,14 @@
   "types": "lib/index.d.ts",
   "bin": {
     "rnx-align-deps": "lib/index.js"
+  },
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "typescript": "./src/index.ts",
+      "default": "./lib/index.js"
+    },
+    "./package.json": "./package.json"
   },
   "repository": {
     "type": "git",
@@ -35,7 +43,7 @@
   "devDependencies": {
     "@octokit/core": "^7.0.0",
     "@octokit/plugin-rest-endpoint-methods": "^16.0.0",
-    "@react-native-community/cli-types": "^19.0.0",
+    "@react-native-community/cli-types": "^20.0.0",
     "@rnx-kit/config": "*",
     "@rnx-kit/console": "*",
     "@rnx-kit/eslint-config": "*",

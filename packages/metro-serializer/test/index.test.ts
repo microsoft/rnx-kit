@@ -1,12 +1,11 @@
 import type { Graph, SerializerOptions } from "metro";
-import type { CustomSerializerResult } from "../src/index";
-import { MetroSerializer } from "../src/index";
-
-jest.mock("metro/src/DeltaBundler/Serializers/baseJSBundle");
-jest.mock("metro/src/lib/bundleToString");
+import { deepEqual, equal } from "node:assert/strict";
+import { describe, it } from "node:test";
+import type { CustomSerializerResult, MetroPlugin } from "../src/index";
+import { MetroSerializer as MetroSerializerActual } from "../src/index";
 
 function isPromise<T>(obj: T | Promise<T>): obj is Promise<T> {
-  return typeof obj === "object" && typeof obj["then"] === "function";
+  return obj && typeof obj === "object" && typeof obj["then"] === "function";
 }
 
 async function getBundleCode(
@@ -24,34 +23,39 @@ async function getBundleCode(
 }
 
 describe("MetroSerializer", () => {
-  const baseJSBundle = require("metro/src/DeltaBundler/Serializers/baseJSBundle");
-  baseJSBundle.mockImplementation(() => undefined);
-
-  const bundleToString = require("metro/src/lib/bundleToString");
-  bundleToString.mockImplementation(() => ({
-    code: "code",
-    map: undefined,
-  }));
+  function MetroSerializer(plugins: MetroPlugin[]) {
+    return MetroSerializerActual(plugins, {
+      baseJSBundle: () => ({
+        modules: [],
+        post: "",
+        pre: "",
+      }),
+      bundleToString: () => ({
+        code: "code",
+        map: "",
+      }),
+    });
+  }
 
   const mockGraph = {} as Graph;
   const mockOptions = {} as SerializerOptions;
 
-  test("works without plugins", async () => {
+  it("works without plugins", async () => {
     const serializer = MetroSerializer([]);
     const result = serializer("entryPoint", [], mockGraph, mockOptions);
-    expect(await getBundleCode(result)).toBe("code");
+    equal(await getBundleCode(result), "code");
   });
 
-  test("calls plugins in specified order", async () => {
-    const callOrder = [];
+  it("calls plugins in specified order", async () => {
+    const callOrder: number[] = [];
     const serializer = MetroSerializer([
       () => callOrder.push(1),
       () => callOrder.push(2),
       () => callOrder.push(3),
     ]);
     const result = serializer("entryPoint", [], mockGraph, mockOptions);
-    expect(callOrder).toEqual(callOrder.sort());
 
-    expect(await getBundleCode(result)).toBe("code");
+    deepEqual(callOrder, callOrder.sort());
+    equal(await getBundleCode(result), "code");
   });
 });

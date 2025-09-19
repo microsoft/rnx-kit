@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/metro-service",
-  "version": "4.1.1",
+  "version": "4.1.2",
   "description": "Metro service for bundling and bundle-serving",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/metro-service#readme",
   "license": "MIT",
@@ -14,6 +14,14 @@
   ],
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "typescript": "./src/index.ts",
+      "default": "./lib/index.js"
+    },
+    "./package.json": "./package.json"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/microsoft/rnx-kit",
@@ -48,17 +56,17 @@
     }
   },
   "devDependencies": {
-    "@react-native-community/cli-types": "^19.0.0",
+    "@react-native-community/cli-types": "^20.0.0",
     "@rnx-kit/eslint-config": "*",
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*",
     "@types/node": "^22.0.0",
     "@types/node-fetch": "^2.6.5",
-    "metro": "^0.82.2",
-    "metro-config": "^0.82.2",
-    "metro-core": "^0.82.2",
-    "metro-resolver": "^0.82.2",
-    "metro-runtime": "^0.82.2"
+    "metro": "^0.83.1",
+    "metro-config": "^0.83.1",
+    "metro-core": "^0.83.1",
+    "metro-resolver": "^0.83.1",
+    "metro-runtime": "^0.83.1"
   },
   "engines": {
     "node": ">=16.17"

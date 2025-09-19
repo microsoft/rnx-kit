@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/typescript-service",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "TypeScript language services with support for custom module resolution",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/typescript-service#readme",
   "license": "MIT",
@@ -14,6 +14,14 @@
   ],
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "typescript": "./src/index.ts",
+      "default": "./lib/index.js"
+    },
+    "./package.json": "./package.json"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/microsoft/rnx-kit",

@@ -1,5 +1,18 @@
 # Change Log - @rnx-kit/metro-plugin-duplicates-checker
 
+## 3.0.2
+
+### Patch Changes
+
+- 3529107: Declare package exports
+
+## 3.0.1
+
+### Patch Changes
+
+- e7e6508: `ignoredModules` and `bannedModules` options should be able to accept
+  read-only arrays
+
 ## 3.0.0
 
 ### Major Changes

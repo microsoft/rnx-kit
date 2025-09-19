@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/metro-serializer",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Metro's default JavaScript bundle serializer but with plugin support",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/metro-serializer#readme",
   "license": "MIT",
@@ -14,6 +14,14 @@
   ],
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "typescript": "./src/index.ts",
+      "default": "./lib/index.js"
+    },
+    "./package.json": "./package.json"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/microsoft/rnx-kit",
@@ -31,17 +39,13 @@
   },
   "devDependencies": {
     "@rnx-kit/eslint-config": "*",
-    "@rnx-kit/jest-preset": "*",
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*",
     "@types/node": "^22.0.0",
     "@types/semver": "^7.0.0",
-    "metro": "^0.82.2"
+    "metro": "^0.83.1"
   },
   "engines": {
     "node": ">=16.17"
-  },
-  "jest": {
-    "preset": "@rnx-kit/jest-preset/private"
   }
 }

@@ -1,10 +1,14 @@
 {
   "extends": ["config:recommended", "schedule:earlyMondays"],
   "addLabels": ["dependencies"],
+  "ignorePaths": [
+    "**/#archived/**",
+    "**/__fixtures__/**"
+  ],
   "packageRules": [
     {
       "groupName": "@react-native-community/cli",
-      "allowedVersions": "^19.0.0",
+      "allowedVersions": "^20.0.0",
       "matchPackageNames": ["@react-native-community/cli{/,}**"]
     },
     {
@@ -28,7 +32,7 @@
     },
     {
       "groupName": "Metro",
-      "allowedVersions": "^0.82.2",
+      "allowedVersions": "^0.83.1",
       "matchSourceUrls": ["https://github.com/facebook/metro{/,}**"]
     },
     {
@@ -48,6 +52,7 @@
     {
       "matchPackageNames": [
         "@fluentui/utilities",
+        "@rnx-kit/{/,}**",
         "react",
         "react-dom",
         "react-test-renderer"
@@ -76,7 +81,7 @@
         "react-native-macos",
         "react-native-windows"
       ],
-      "allowedVersions": "^0.80.0"
+      "allowedVersions": "^0.81.0"
     }
   ],
   "postUpdateOptions": ["yarnDedupeHighest"],

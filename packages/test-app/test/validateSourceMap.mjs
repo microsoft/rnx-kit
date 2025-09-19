@@ -2,8 +2,8 @@
 // @ts-check
 
 import { originalPositionFor, TraceMap } from "@jridgewell/trace-mapping";
-import * as assert from "assert";
-import * as fs from "fs";
+import * as assert from "node:assert";
+import * as fs from "node:fs";
 
 const findInSourceFile = (() => {
   /** @type {Record<string, string[]>} */
@@ -37,17 +37,18 @@ if (!bundlePath || !fs.existsSync(bundlePath)) {
 
   // TODO: This is probably not the best way to validate source maps, but I
   // couldn't find one that was up-to-date and didn't throw false positives.
-  [
+  const cases = [
     { source: "src/App.native.tsx", needle: "function App(" },
     { source: "src/App.native.tsx", needle: "function Button(" },
     { source: "src/App.native.tsx", needle: "function DevMenu(" },
     { source: "src/App.native.tsx", needle: "function Feature(" },
     { source: "src/App.native.tsx", needle: "function Separator(" },
     { source: "src/App.native.tsx", needle: "function useStyles(" },
-  ].forEach(({ source, needle }) => {
+  ];
+  for (const { source, needle } of cases) {
     assert.deepEqual(
       originalPositionFor(tracer, findInSourceFile(bundlePath, needle)),
       { source, name: null, ...findInSourceFile(source, needle) }
     );
-  });
+  }
 }

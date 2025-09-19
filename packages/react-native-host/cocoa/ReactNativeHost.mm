@@ -12,6 +12,7 @@
 
 #import "RNXBridgelessHeaders.h"
 #import "RNXFabricAdapter.h"
+#import "RNXFeatureMacros.h"
 #import "RNXHostConfig.h"
 #import "RNXHostReleaser.h"
 #import "RNXTurboModuleAdapter.h"

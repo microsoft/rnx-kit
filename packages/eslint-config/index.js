@@ -16,6 +16,7 @@ module.exports = [
   ...rnx.configs.stylistic,
   {
     rules: {
+      "@rnx-kit/no-foreach-with-captured-variables": "error",
       "@typescript-eslint/consistent-type-definitions": ["error", "type"],
       ...sdl.configs.react[0].rules,
     },

@@ -2,6 +2,7 @@
   "private": true,
   "name": "rnx-kit",
   "version": "0.0.0",
+  "homepage": "https://github.com/microsoft/rnx-kit#readme",
   "license": "MIT",
   "author": {
     "name": "Microsoft Open Source",
@@ -50,32 +51,25 @@
   "engines": {
     "node": ">=18.12"
   },
-  "packageManager": "yarn@4.6.0",
+  "packageManager": "yarn@4.9.4",
   "resolutions": {
     "@microsoft/eslint-plugin-sdl/eslint-plugin-react": "^7.35.2",
     "@microsoft/eslint-plugin-sdl/eslint-plugin-security": "^1.4.0",
-    "@react-native-community/cli": "^19.0.0",
-    "@react-native-community/cli-platform-android": "^19.0.0",
-    "@react-native-community/cli-platform-apple": "^19.0.0",
-    "@react-native-community/cli-platform-ios": "^19.0.0",
-    "@react-native-community/cli-server-api": "^19.0.0",
-    "@react-native-community/cli-tools": "^19.0.0",
-    "@react-native-community/cli-types": "^19.0.0",
     "@rnx-kit/react-native-host": "workspace:*",
     "@vue/compiler-sfc": "link:./incubator/ignore",
-    "react-native-macos/@react-native/assets-registry": "^0.80.0",
-    "react-native-macos/@react-native/codegen": "^0.80.0",
-    "react-native-macos/@react-native/community-cli-plugin": "^0.80.0",
-    "react-native-macos/@react-native/gradle-plugin": "^0.80.0",
-    "react-native-macos/@react-native/js-polyfills": "^0.80.0",
-    "react-native-macos/@react-native/normalize-colors": "^0.80.0",
-    "react-native-windows/@react-native/assets-registry": "^0.80.0",
-    "react-native-windows/@react-native/codegen": "^0.80.0",
-    "react-native-windows/@react-native/community-cli-plugin": "^0.80.0",
-    "react-native-windows/@react-native/gradle-plugin": "^0.80.0",
-    "react-native-windows/@react-native/js-polyfills": "^0.80.0",
-    "react-native-windows/@react-native/normalize-colors": "^0.80.0",
-    "react-native-windows/@react-native/virtualized-lists": "^0.80.0",
+    "react-native-macos/@react-native/assets-registry": "^0.78.0",
+    "react-native-macos/@react-native/codegen": "^0.78.0",
+    "react-native-macos/@react-native/community-cli-plugin": "^0.78.0",
+    "react-native-macos/@react-native/gradle-plugin": "^0.78.0",
+    "react-native-macos/@react-native/js-polyfills": "^0.78.0",
+    "react-native-macos/@react-native/normalize-colors": "^0.78.0",
+    "react-native-windows/@react-native/assets-registry": "^0.79.0",
+    "react-native-windows/@react-native/codegen": "^0.79.0",
+    "react-native-windows/@react-native/community-cli-plugin": "^0.79.0",
+    "react-native-windows/@react-native/gradle-plugin": "^0.79.0",
+    "react-native-windows/@react-native/js-polyfills": "^0.79.0",
+    "react-native-windows/@react-native/normalize-colors": "^0.79.0",
+    "react-native-windows/@react-native/virtualized-lists": "^0.79.0",
     "tsx/esbuild": "^0.25.0"
   },
   "workspaces": {
@@ -198,7 +192,6 @@
         "entry": [
           "scripts/*",
           "src/cli.ts",
-          "src/index.ts",
           "test/**/*.{js,ts}"
         ]
       },
@@ -243,14 +236,12 @@
       },
       "packages/metro-plugin-duplicates-checker": {
         "entry": [
-          "src/index.ts",
           "test/**/*.{js,ts}"
         ]
       },
       "packages/metro-serializer-esbuild": {
         "entry": [
           "metro.config.js",
-          "src/index.ts",
           "test/**/*.test.ts",
           "test/__fixtures__/**/*.ts"
         ],
@@ -283,7 +274,7 @@
           "babel-plugin-codegen"
         ]
       },
-      "packages/test-app": {
+      "packages/test-app*": {
         "entry": [
           "*.js",
           "src/**/*.{ts,tsx}",

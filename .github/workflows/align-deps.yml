@@ -30,6 +30,8 @@ jobs:
         working-directory: packages/align-deps
       - name: Look for new React Native release candidates
         id: find-release-candidate
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           yarn update-profile --release-candidate 1> update-profile.output.txt
           if [[ -s update-profile.output.txt ]]; then
@@ -39,6 +41,8 @@ jobs:
         continue-on-error: true
       - name: Include additional capabilities from PR feedback
         if: ${{ steps.find-release-candidate.outputs.found != '' }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           yarn update-preset
           yarn update-readme
@@ -49,6 +53,7 @@ jobs:
         run: |
           yarn rnx-align-deps --write
           yarn install --mode update-lockfile
+          yarn dedupe --mode update-lockfile
       - name: Generate changeset
         id: changeset
         if: ${{ steps.find-release-candidate.outputs.found != '' }}

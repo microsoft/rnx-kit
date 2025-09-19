@@ -31,11 +31,11 @@ describe("remapReactNativeModule", () => {
       "react-native"
     );
 
-    Object.entries(AVAILABLE_PLATFORMS).forEach(([platform, npmPackage]) => {
+    for (const [platform, npmPackage] of Object.entries(AVAILABLE_PLATFORMS)) {
       expect(remapReactNativeModule(context, "react-native", platform)).toBe(
         npmPackage
       );
-    });
+    }
   });
 
   test("remaps paths under `react-native` if platform is supported", () => {
@@ -43,10 +43,10 @@ describe("remapReactNativeModule", () => {
 
     expect(remapReactNativeModule(context, target, "nextstep")).toBe(target);
 
-    Object.entries(AVAILABLE_PLATFORMS).forEach(([platform, npmPackage]) => {
+    for (const [platform, npmPackage] of Object.entries(AVAILABLE_PLATFORMS)) {
       expect(remapReactNativeModule(context, target, platform)).toBe(
         `${npmPackage}/index`
       );
-    });
+    }
   });
 });

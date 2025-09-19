@@ -47,7 +47,7 @@ in `babel.config.js`:
  module.exports = {
    presets: [
      [
-       "module:metro-react-native-babel-preset",
+       "module:@react-native/babel-preset",
 +      {
 +        disableImportExportTransform:
 +          env === "production" && process.env["RNX_METRO_SERIALIZER_ESBUILD"],

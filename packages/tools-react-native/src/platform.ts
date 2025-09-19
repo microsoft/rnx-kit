@@ -126,12 +126,12 @@ export function getAvailablePlatformsUncached(
   recordPlatformPackage(startDir);
 
   const options = { startDir };
-  packages.forEach((pkgName) => {
+  for (const pkgName of packages) {
     const pkgPath = findPackageDependencyDir(pkgName, options);
     if (pkgPath) {
       recordPlatformPackage(pkgPath);
     }
-  });
+  }
 
   return platformMap;
 }

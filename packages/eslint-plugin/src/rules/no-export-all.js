@@ -3,7 +3,7 @@
 
 /**
  * @typedef {import("@typescript-eslint/types/dist/index").TSESTree.Node} Node
- * @typedef {import("eslint").Linter.FlatConfig} FlatConfig
+ * @typedef {import("eslint").Linter.Config} Config
  * @typedef {import("eslint").Rule.RuleContext} ESLintRuleContext
  * @typedef {import("eslint").Rule.ReportFixer} ESLintReportFixer
  * @typedef {{ exports: string[], types: string[] }} NamedExports
@@ -16,7 +16,7 @@
  *     maxDepth: number;
  *   };
  *   filename: string;
- *   languageOptions: FlatConfig["languageOptions"];
+ *   languageOptions: Config["languageOptions"];
  *   parserOptions: ESLintRuleContext["parserOptions"];
  *   parserPath: ESLintRuleContext["parserPath"];
  *   sourceCode: ESLintRuleContext["sourceCode"];
@@ -321,16 +321,16 @@ function extractExports(context, moduleId, depth) {
                 }
 
                 case "VariableDeclaration":
-                  declaration.declarations.forEach((declaration) => {
-                    if (declaration.id.type === "Identifier") {
-                      exports.add(declaration.id.name);
+                  for (const decl of declaration.declarations) {
+                    if (decl.id.type === "Identifier") {
+                      exports.add(decl.id.name);
                     }
-                  });
+                  }
                   break;
               }
             } else {
               const set = node.exportKind === "type" ? types : exports;
-              node.specifiers.forEach((spec) => {
+              for (const spec of node.specifiers) {
                 const exported = spec.exported;
                 const name =
                   exported.type === "Identifier"
@@ -339,7 +339,7 @@ function extractExports(context, moduleId, depth) {
                 if (name !== "default") {
                   set.add(name);
                 }
-              });
+              }
             }
             break;
           }
@@ -353,8 +353,12 @@ function extractExports(context, moduleId, depth) {
                 depth - 1
               );
               if (namedExports) {
-                namedExports.exports.forEach((name) => exports.add(name));
-                namedExports.types.forEach((name) => types.add(name));
+                for (const name of namedExports.exports) {
+                  exports.add(name);
+                }
+                for (const name of namedExports.types) {
+                  types.add(name);
+                }
               }
             }
             break;

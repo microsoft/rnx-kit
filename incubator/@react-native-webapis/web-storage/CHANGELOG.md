@@ -1,5 +1,12 @@
 # @react-native-webapis/web-storage
 
+## 0.4.3
+
+### Patch Changes
+
+- 8539e7b: Detect when New Architecture is always enabled
+- f8ef3cb: Addressed Gradle 9.0 syntax deprecation warnings
+
 ## 0.4.2
 
 ### Patch Changes

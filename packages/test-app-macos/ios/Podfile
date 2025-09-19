@@ -1,0 +1,1 @@
+raise 'For iOS test app, please use the project in `packages/test-app/` instead'

@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# The name of this file must end with `.bin` to be recognized by Yarn as an
+# executable script. See implementation:
+# https://github.com/yarnpkg/berry/blob/%40yarnpkg/core/4.4.3/packages/yarnpkg-core/sources/scriptUtils.ts#L607
+
+if [[ ! -f "../cli/lib/bin/rnx-cli.js" ]]; then
+  echo "@rnx-kit/cli needs to be built..."
+  yarn workspace rnx-kit build-scope @rnx-kit/test-app
+fi
+node ../cli/bin/rnx-cli.cjs $@

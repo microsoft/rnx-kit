@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/typescript-service
 
+## 2.0.2
+
+### Patch Changes
+
+- 3529107: Declare package exports
+
 ## 2.0.1
 
 ### Patch Changes

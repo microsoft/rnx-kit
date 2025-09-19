@@ -1,5 +1,17 @@
 # Change Log - @rnx-kit/eslint-plugin
 
+## 0.9.1
+
+### Patch Changes
+
+- a636b26: Enabled `no-foreach-with-captured-variables` as a warning
+
+## 0.9.0
+
+### Minor Changes
+
+- 23228ab: Port no-foreach-with-captured-variables from outlook
+
 ## 0.8.6
 
 ### Patch Changes
@@ -64,7 +76,6 @@
 
 - 1eb8c14: Bumped `@typescript-eslint/eslint-plugin` to v7. This brings the
   following breaking changes:
-
   - Update Node.js engine requirement to ^18.18.0 || >=20.0.0. This means we are
     dropping support for Node 16, 19, and Node 18 versions prior to 18.18.0.
     Note that this is the same requirement that ESLint v9 will impose.
@@ -113,7 +124,6 @@
 - 950fcf0a: Bumped typescript-eslint to v6.
 
   typescript-eslint v6 contains breaking changes! The most notable ones are:
-
   - Dropped support for Node 12 and 14.
   - Dropped support for ESLint v6.
 

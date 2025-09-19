@@ -47,25 +47,28 @@ export function traverseDependencies(
 
   stack.push(currentModule);
 
-  dependencies.get(currentModule)?.dependencies?.forEach((dependency) => {
-    if (dependency["__rnxCyclicDependenciesChecked"]) {
-      return;
-    }
+  const moduleDependencies = dependencies.get(currentModule)?.dependencies;
+  if (moduleDependencies) {
+    for (const dependency of moduleDependencies.values()) {
+      if (dependency["__rnxCyclicDependenciesChecked"]) {
+        continue;
+      }
 
-    const { absolutePath } = dependency;
-    if (absolutePath) {
-      traverseDependencies(
-        absolutePath,
-        dependencies,
-        options,
-        cyclicDependencies,
-        stack
-      );
-    }
+      const { absolutePath } = dependency;
+      if (absolutePath) {
+        traverseDependencies(
+          absolutePath,
+          dependencies,
+          options,
+          cyclicDependencies,
+          stack
+        );
+      }
 
-    // Performance optimization: There is no need to traverse this module again.
-    dependency["__rnxCyclicDependenciesChecked"] = true;
-  });
+      // Performance optimization: There is no need to traverse this module again.
+      dependency["__rnxCyclicDependenciesChecked"] = true;
+    }
+  }
 
   stack.pop();
   return cyclicDependencies;
@@ -90,21 +93,20 @@ export function detectCycles(
   const { linesOfContext = 1, throwOnError = true } = options;
   const cachedPaths: Record<string, string> = {};
 
-  modulePaths.forEach((modulePath) => {
+  for (const modulePath of modulePaths) {
     const currentModule = packageRelativePath(modulePath, cachedPaths);
     warn(currentModule);
 
     const requirePath = cyclicDependencies[modulePath];
     const start = Math.max(requirePath.indexOf(modulePath) - linesOfContext, 0);
-    requirePath
-      .slice(start)
-      .reverse()
-      .forEach((module, index) => {
-        const requiredBy = packageRelativePath(module, cachedPaths);
-        warn(`${"    ".repeat(index)}└── ${requiredBy}`);
-      });
+    const stack = requirePath.slice(start).reverse();
+    const length = stack.length;
+    for (let i = 0; i < length; ++i) {
+      const requiredBy = packageRelativePath(stack[i], cachedPaths);
+      warn(`${"    ".repeat(i)}└── ${requiredBy}`);
+    }
     console.log();
-  });
+  }
 
   if (throwOnError) {
     throw new Error("Import cycles detected");

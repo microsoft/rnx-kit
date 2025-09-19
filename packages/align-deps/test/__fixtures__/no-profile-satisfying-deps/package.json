@@ -7,6 +7,9 @@
     "react-native": "^0.64.2",
     "t-800": "1.0.0"
   },
+  "engines": {
+    "node": "Do not install; for testing purposes only"
+  },
   "rnx-kit": {
     "reactNativeVersion": "^0.64",
     "kitType": "app",

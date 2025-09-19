@@ -67,7 +67,10 @@ export function createProjectCache(
       throw new Error(`Failed to load '${configFileName}'`);
     } else if (cmdLine.errors.length > 0) {
       const writer = createDiagnosticWriter();
-      cmdLine.errors.forEach((e) => writer.print(e));
+      for (const e of cmdLine.errors) {
+        writer.print(e);
+      }
+
       throw new Error(`Failed to load '${configFileName}'`);
     }
 
@@ -136,13 +139,13 @@ export function createProjectCache(
   }
 
   function clearPlatform(platform: AllPlatforms): void {
-    Object.values(projects).forEach((projectsByPlatform) => {
+    for (const projectsByPlatform of Object.values(projects)) {
       const info = projectsByPlatform[platform];
       if (info) {
         info.tsproject?.dispose();
         delete projectsByPlatform[platform];
       }
-    });
+    }
   }
 
   return {

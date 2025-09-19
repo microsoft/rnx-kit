@@ -1,0 +1,154 @@
+{
+  "$schema": "https://raw.githubusercontent.com/microsoft/rnx-kit/main/packages/config/schema.json",
+  "name": "@rnx-kit/test-app-windows",
+  "version": "0.0.0",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/test-app-windows#readme",
+  "private": true,
+  "author": {
+    "name": "Microsoft Open Source",
+    "email": "microsoftopensource@users.noreply.github.com"
+  },
+  "bin": {
+    "rnx": "../cli/scripts/rnx.bin",
+    "rnx.reason": "Run `rnx-cli` without explicitly building it first"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "packages/test-app-windows"
+  },
+  "scripts": {
+    "build": "rnx align-deps",
+    "bundle": "rnx bundle --platform windows",
+    "bundle+esbuild": "rnx bundle --id esbuild --platform windows",
+    "format": "rnx-kit-scripts format",
+    "lint": "rnx-kit-scripts lint",
+    "start": "rnx start",
+    "windows": "rnx run-windows --no-packager --sln windows/SampleCrossApp.sln"
+  },
+  "dependencies": {
+    "@react-native-webapis/web-storage": "workspace:*",
+    "react": "19.0.0",
+    "react-native": "^0.79.0",
+    "react-native-windows": "^0.79.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.20.0",
+    "@babel/plugin-transform-react-jsx": "^7.20.0",
+    "@babel/plugin-transform-react-jsx-source": "^7.20.0",
+    "@babel/preset-env": "^7.20.0",
+    "@babel/runtime": "^7.20.0",
+    "@react-native-community/cli": "^18.0.0",
+    "@react-native-community/cli-platform-android": "^18.0.0",
+    "@react-native-community/cli-platform-ios": "^18.0.0",
+    "@react-native/babel-preset": "^0.79.0",
+    "@react-native/metro-config": "^0.79.0",
+    "@rnx-kit/babel-preset-metro-react-native": "workspace:*",
+    "@rnx-kit/build": "workspace:*",
+    "@rnx-kit/cli": "workspace:*",
+    "@rnx-kit/eslint-config": "workspace:*",
+    "@rnx-kit/metro-config": "workspace:*",
+    "@rnx-kit/metro-plugin-cyclic-dependencies-detector": "workspace:*",
+    "@rnx-kit/metro-plugin-duplicates-checker": "workspace:*",
+    "@rnx-kit/metro-resolver-symlinks": "workspace:*",
+    "@rnx-kit/metro-serializer": "workspace:*",
+    "@rnx-kit/metro-serializer-esbuild": "workspace:*",
+    "@rnx-kit/polyfills": "workspace:*",
+    "@rnx-kit/react-native-auth": "workspace:*",
+    "@rnx-kit/react-native-host": "workspace:*",
+    "@rnx-kit/scripts": "workspace:*",
+    "@rnx-kit/third-party-notices": "workspace:*",
+    "@rnx-kit/tsconfig": "workspace:*",
+    "@types/react": "^19.0.0",
+    "react-native-test-app": "^4.3.1"
+  },
+  "rnx-kit": {
+    "kitType": "app",
+    "bundle": [
+      {
+        "id": "main",
+        "entryFile": "index.js",
+        "assetsDest": "dist",
+        "treeShake": false,
+        "plugins": [
+          "@rnx-kit/metro-plugin-cyclic-dependencies-detector",
+          [
+            "@rnx-kit/metro-plugin-duplicates-checker",
+            {
+              "ignoredModules": [
+                "react-is"
+              ]
+            }
+          ],
+          "@rnx-kit/metro-plugin-typescript"
+        ],
+        "targets": [
+          "windows"
+        ],
+        "platforms": {
+          "windows": {
+            "bundleOutput": "dist/main.windows.bundle",
+            "sourcemapOutput": "dist/main.windows.bundle.map"
+          }
+        }
+      },
+      {
+        "id": "esbuild",
+        "entryFile": "index.js",
+        "assetsDest": "dist",
+        "treeShake": true,
+        "plugins": [
+          "@rnx-kit/metro-plugin-cyclic-dependencies-detector",
+          [
+            "@rnx-kit/metro-plugin-duplicates-checker",
+            {
+              "ignoredModules": [
+                "react-is"
+              ]
+            }
+          ],
+          "@rnx-kit/metro-plugin-typescript",
+          "@rnx-kit/third-party-notices"
+        ],
+        "targets": [
+          "windows"
+        ],
+        "platforms": {
+          "windows": {
+            "bundleOutput": "dist/main+esbuild.windows.bundle",
+            "sourcemapOutput": "dist/main+esbuild.windows.bundle.map"
+          }
+        }
+      }
+    ],
+    "server": {
+      "plugins": [
+        "@rnx-kit/metro-plugin-cyclic-dependencies-detector",
+        [
+          "@rnx-kit/metro-plugin-duplicates-checker",
+          {
+            "ignoredModules": [
+              "react-is"
+            ]
+          }
+        ],
+        "@rnx-kit/metro-plugin-typescript"
+      ]
+    },
+    "alignDeps": {
+      "presets": [
+        "microsoft/react-native",
+        "@rnx-kit/scripts/align-deps-preset.cjs"
+      ],
+      "requirements": [
+        "react-native@0.79"
+      ],
+      "capabilities": [
+        "core-windows",
+        "babel-preset-react-native",
+        "react",
+        "test-app"
+      ]
+    }
+  }
+}

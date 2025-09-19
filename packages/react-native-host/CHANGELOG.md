@@ -1,5 +1,17 @@
 # @rnx-kit/react-native-host
 
+## 0.5.13
+
+### Patch Changes
+
+- 8177436: Fixed headers not being found with `use_frameworks!`
+
+## 0.5.12
+
+### Patch Changes
+
+- c94b658: Detect when bridgeless mode is required
+
 ## 0.5.11
 
 ### Patch Changes

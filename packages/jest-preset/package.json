@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/jest-preset",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "Jest preset for React Native code bases",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/jest-preset#readme",
   "license": "MIT",
@@ -32,7 +32,7 @@
     "find-up": "^5.0.0"
   },
   "peerDependencies": {
-    "react-native": "^0.0.0-0 || >=0.63"
+    "react-native": "^0.0.0-0 || >=0.73"
   },
   "peerDependenciesMeta": {
     "react-native": {
@@ -40,15 +40,14 @@
     }
   },
   "devDependencies": {
-    "@eslint/js": "^9.0.0",
     "@jest/types": "^29.2.1",
-    "@react-native-community/cli-types": "^19.0.0",
-    "@react-native/babel-preset": "^0.80.0",
+    "@react-native-community/cli-types": "^20.0.0",
+    "@react-native/babel-preset": "^0.81.0",
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*",
     "@types/node": "^22.0.0",
     "react": "19.1.0",
-    "react-native": "^0.80.0"
+    "react-native": "^0.81.0"
   },
   "engines": {
     "node": ">=16.17"

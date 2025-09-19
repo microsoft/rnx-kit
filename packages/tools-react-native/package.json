@@ -74,18 +74,18 @@
     "@rnx-kit/tools-node": "^3.0.0"
   },
   "devDependencies": {
-    "@react-native-community/cli": "^19.0.0",
-    "@react-native-community/cli-types": "^19.0.0",
+    "@react-native-community/cli": "^20.0.0",
+    "@react-native-community/cli-types": "^20.0.0",
     "@rnx-kit/eslint-config": "*",
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tools-filesystem": "*",
     "@rnx-kit/tsconfig": "*",
     "@types/node": "^22.0.0",
-    "metro": "^0.82.2",
-    "metro-config": "^0.82.2",
-    "metro-core": "^0.82.2",
-    "metro-resolver": "^0.82.2",
-    "metro-source-map": "^0.82.2"
+    "metro": "^0.83.1",
+    "metro-config": "^0.83.1",
+    "metro-core": "^0.83.1",
+    "metro-resolver": "^0.83.1",
+    "metro-source-map": "^0.83.1"
   },
   "engines": {
     "node": ">=16.17"

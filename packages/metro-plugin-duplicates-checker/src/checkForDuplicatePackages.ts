@@ -1,6 +1,7 @@
 import { error, warn } from "@rnx-kit/console";
 import type { ReadOnlyGraph } from "metro";
 import type { MixedSourceMap } from "metro-source-map";
+import * as nodefs from "node:fs";
 import type { ModuleMap } from "./gatherModules";
 import {
   gatherModulesFromGraph,
@@ -8,8 +9,8 @@ import {
 } from "./gatherModules";
 
 export type Options = {
-  ignoredModules?: string[];
-  bannedModules?: string[];
+  ignoredModules?: readonly string[];
+  bannedModules?: readonly string[];
   throwOnError?: boolean;
 };
 
@@ -31,13 +32,11 @@ export function countCopies(module: ModuleMap[string]): number {
 }
 
 export function printModule(module: ModuleMap[string]): void {
-  Object.keys(module)
-    .sort()
-    .forEach((version) => {
-      Array.from(module[version])
-        .sort()
-        .forEach((p) => warn(`  ${version} ${p}`));
-    });
+  for (const version of Object.keys(module).sort()) {
+    for (const p of Array.from(module[version]).sort()) {
+      warn(`  ${version} ${p}`);
+    }
+  }
 }
 
 export function detectDuplicatePackages(
@@ -74,17 +73,22 @@ export function detectDuplicatePackages(
 
 export function checkForDuplicateDependencies(
   graph: ReadOnlyGraph,
-  options: Options = defaultOptions
+  options: Options = defaultOptions,
+  /** @internal */ fs = nodefs
 ): Result {
-  return detectDuplicatePackages(gatherModulesFromGraph(graph, {}), options);
+  return detectDuplicatePackages(
+    gatherModulesFromGraph(graph, {}, fs),
+    options
+  );
 }
 
 export function checkForDuplicatePackages(
   sourceMap: MixedSourceMap,
-  options: Options = defaultOptions
+  options: Options = defaultOptions,
+  /** @internal */ fs = nodefs
 ): Result {
   return detectDuplicatePackages(
-    gatherModulesFromSourceMap(sourceMap, {}),
+    gatherModulesFromSourceMap(sourceMap, {}, fs),
     options
   );
 }

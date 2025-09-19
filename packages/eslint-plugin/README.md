@@ -44,6 +44,7 @@ module.exports = [
     rules: {
       "@rnx-kit/no-const-enum": "error",
       "@rnx-kit/no-export-all": "error",
+      // Mores rules ...
     },
   },
 ];
@@ -61,6 +62,7 @@ module.exports = [
     rules: {
       "@rnx-kit/no-const-enum": "error",
       "@rnx-kit/no-export-all": "error",
+      // Mores rules ...
     },
   },
 ];
@@ -81,6 +83,7 @@ module.exports = [
   tree shaking:
   - [`@rnx-kit/no-const-enum`](https://github.com/microsoft/rnx-kit/blob/main/packages/eslint-plugin/src/rules/no-const-enum.js)
   - [`@rnx-kit/no-export-all`](https://github.com/microsoft/rnx-kit/blob/main/packages/eslint-plugin/src/rules/no-export-all.js)
+  - [`@rnx-kit/no-foreach-with-captured-variables`](https://github.com/microsoft/rnx-kit/blob/main/packages/eslint-plugin/src/rules/no-foreach-with-captured-variables.js)
   - [`no-restricted-exports`](https://archive.eslint.org/docs/rules/no-restricted-exports)
 
 ## Supported Rules
@@ -88,7 +91,8 @@ module.exports = [
 - ✓: Enabled with `@rnx-kit/eslint-plugin/recommended`
 - 🔧: Fixable with `--fix`
 
-|  ✓  | 🔧  | Rule                                                                                                                         | Description                                                                        |
-| :-: | :-: | :--------------------------------------------------------------------------------------------------------------------------- | :--------------------------------------------------------------------------------- |
-|  ✓  |     | [`@rnx-kit/no-const-enum`](https://github.com/microsoft/rnx-kit/blob/main/packages/eslint-plugin/src/rules/no-const-enum.js) | disallow `const enum` ([why is it bad?](https://hackmd.io/bBcd6R-1TB6Zq95PSquooQ)) |
-|  ✓  | 🔧  | [`@rnx-kit/no-export-all`](https://github.com/microsoft/rnx-kit/blob/main/packages/eslint-plugin/src/rules/no-export-all.js) | disallow `export *` ([why is it bad?](https://hackmd.io/Z021hgSGStKlYLwsqNMOcg))   |
+|  ✓  | 🔧  | Rule                                                                                                                                                                   | Description                                                                                                                                                                                                                                                                                                     |
+| :-: | :-: | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+|  ✓  |     | [`@rnx-kit/no-const-enum`](https://github.com/microsoft/rnx-kit/blob/main/packages/eslint-plugin/src/rules/no-const-enum.js)                                           | disallow `const enum` ([why is it bad?](https://hackmd.io/bBcd6R-1TB6Zq95PSquooQ))                                                                                                                                                                                                                              |
+|  ✓  | 🔧  | [`@rnx-kit/no-export-all`](https://github.com/microsoft/rnx-kit/blob/main/packages/eslint-plugin/src/rules/no-export-all.js)                                           | disallow `export *` ([why is it bad?](https://hackmd.io/Z021hgSGStKlYLwsqNMOcg))                                                                                                                                                                                                                                |
+|  ✓  |     | [`@rnx-kit/no-foreach-with-captured-variables`](https://github.com/microsoft/rnx-kit/blob/main/packages/eslint-plugin/src/rules/no-foreach-with-captured-variables.js) | disallow `forEach` with outside variables; JavaScript is not efficient when it comes to using variables defined outside of its scope, and repeatedly calling that function can lead to performance issues. By using a `for...of` loop, you can avoid these performance pitfalls and also it is easier to debug. |

@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/third-party-notices",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Library and tool to build a third party notices file based on a js bundle's source map",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/third-party-notices#readme",
   "license": "MIT",
@@ -17,6 +17,14 @@
   "types": "lib/index.d.ts",
   "bin": {
     "build-tpn": "./lib/build-tpn.js"
+  },
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "typescript": "./src/index.ts",
+      "default": "./lib/index.js"
+    },
+    "./package.json": "./package.json"
   },
   "repository": {
     "type": "git",
@@ -36,7 +44,7 @@
     "yargs": "^16.0.0"
   },
   "devDependencies": {
-    "@react-native-community/cli-types": "^19.0.0",
+    "@react-native-community/cli-types": "^20.0.0",
     "@rnx-kit/eslint-config": "*",
     "@rnx-kit/jest-preset": "*",
     "@rnx-kit/metro-serializer": "*",
@@ -44,7 +52,7 @@
     "@rnx-kit/tsconfig": "*",
     "@types/node": "^22.0.0",
     "@types/yargs": "^16.0.0",
-    "metro-source-map": "^0.82.2"
+    "metro-source-map": "^0.83.1"
   },
   "engines": {
     "node": ">=16.17"

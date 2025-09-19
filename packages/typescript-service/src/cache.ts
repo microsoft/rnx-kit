@@ -7,9 +7,11 @@ export class ProjectFileCache {
   private files = new Map<string, VersionedSnapshot>();
   private filesystem: typeof nodefs;
 
-  constructor(fileNames: string[], fs = nodefs) {
+  constructor(filenames: string[], fs = nodefs) {
     this.filesystem = fs;
-    fileNames.forEach((fileName) => this.set(fileName));
+    for (const filename of filenames) {
+      this.set(filename);
+    }
   }
 
   has(fileName: string): boolean {

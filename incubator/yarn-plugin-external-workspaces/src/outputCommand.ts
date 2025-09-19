@@ -72,7 +72,7 @@ export class OutputWorkspaces extends BaseCommand {
     }
 
     // write out the workspace info to the path as requested
-    await outputWorkspaces(
+    outputWorkspaces(
       project,
       npath.toPortablePath(outputPath),
       this.checkOnly,
@@ -110,13 +110,13 @@ export function outputWorkspaces(
 
   const workspaces: Record<string, string> = {};
   // iterate the workspaces and record their names and paths
-  project.workspacesByIdent.forEach((workspace) => {
+  for (const workspace of project.workspacesByIdent.values()) {
     const { name: ident, private: isPrivate } = workspace.manifest;
     if (ident && !isPrivate) {
       const name = structUtils.stringifyIdent(ident);
       workspaces[name] = ppath.relative(project.cwd, workspace.cwd);
     }
-  });
+  }
 
   // grab the relative path from the config to the repo root
   const repoPath = npath.relative(
@@ -197,8 +197,9 @@ function findDependencyChanges(
   let foundChanges = false;
 
   for (const name in newDeps) {
-    if (oldDeps[name]) {
-      if (oldDeps[name] !== newDeps[name]) {
+    const oldDep = oldDeps[name];
+    if (oldDep) {
+      if (oldDep !== newDeps[name]) {
         changes[name] = "update";
         foundChanges = true;
       }
@@ -222,12 +223,7 @@ function findDependencyChanges(
  * return a string record in sorted order by key
  */
 function sortStringRecord<T>(toSort: Record<string, T>): Record<string, T> {
-  const sortedKeys = Object.keys(toSort).sort();
-  const target: Record<string, T> = {};
-  for (const key of sortedKeys) {
-    target[key] = toSort[key];
-  }
-  return target;
+  return Object.fromEntries(Object.entries(toSort).sort());
 }
 
 /**

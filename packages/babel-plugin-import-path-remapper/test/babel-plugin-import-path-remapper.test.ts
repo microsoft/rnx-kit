@@ -43,7 +43,7 @@ describe("@rnx-kit/babel-plugin-import-path-remapper", () => {
   });
 
   it("leaves unmatched import/export statements", () => {
-    [
+    const cases = [
       "export const zero = () => 0;",
       `export * from "@contoso/example/lib/index";`,
       `export { a, b } from "@contoso/example/lib/index";`,
@@ -52,9 +52,10 @@ describe("@rnx-kit/babel-plugin-import-path-remapper", () => {
       `import("@contoso/example/lib/index");`,
       `require("@contoso/example/lib/index");`,
       `require("fs").readFileSync("@contoso/example/lib/index");`,
-    ].forEach((code) => {
+    ] as const;
+    for (const code of cases) {
       equal(transform(code), code);
-    });
+    }
   });
 
   it("remaps require() calls", () => {

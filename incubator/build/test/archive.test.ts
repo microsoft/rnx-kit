@@ -15,12 +15,12 @@ function find(
   result: string[] = []
 ): string[] {
   const root = dir.substring(prefix);
-  fs.readdirSync(dir, { withFileTypes: true }).forEach((file) => {
+  for (const file of fs.readdirSync(dir, { withFileTypes: true })) {
     result.push(`${root}/${file.name}`);
     if (file.isDirectory()) {
       find(`${dir}/${file.name}`, prefix, result);
     }
-  });
+  }
   return result;
 }
 
@@ -54,14 +54,16 @@ describe("archive", () => {
     "/Contents/Resources/en.lproj/Main.strings",
   ];
 
+  const MACOS_ARTIFACTS = [MACOS_ARTIFACT_APP, MACOS_ARTIFACT_TAR];
+
   afterEach(() => {
-    [MACOS_ARTIFACT_APP, MACOS_ARTIFACT_TAR].forEach((file) => {
+    for (const file of MACOS_ARTIFACTS) {
       try {
         fs.rmSync(file, { maxRetries: 3, recursive: true });
       } catch (_) {
         // noop
       }
-    });
+    }
   });
 
   it("extracts tar/zip archives", async () => {

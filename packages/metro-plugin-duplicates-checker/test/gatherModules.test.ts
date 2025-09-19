@@ -1,10 +1,13 @@
+import { deepEqual, equal, throws } from "node:assert/strict";
+import { afterEach, describe, it } from "node:test";
 import {
-  gatherModulesFromGraph,
-  gatherModulesFromSourceMap,
-  gatherModulesFromSources,
+  gatherModulesFromGraph as gatherModulesFromGraphActual,
+  gatherModulesFromSourceMap as gatherModulesFromSourceMapActual,
+  gatherModulesFromSources as gatherModulesFromSourcesActual,
   normalizePath,
-  resolveModule,
+  resolveModule as resolveModuleActual,
 } from "../src/gatherModules";
+import * as mockfs from "./__mocks__/fs";
 import {
   bundleGraph,
   bundleGraphFS,
@@ -12,54 +15,68 @@ import {
   bundleSourceMapFS,
 } from "./testData";
 
-jest.mock("fs");
-
 describe("normalizePath()", () => {
-  test("trims Webpack URLs", () => {
-    expect(normalizePath("webpack:///file")).toBe("file");
-    expect(normalizePath("webpack:////file")).toBe("/file");
+  it("trims Webpack URLs", () => {
+    equal(normalizePath("webpack:///file"), "file");
+    equal(normalizePath("webpack:////file"), "/file");
   });
 
-  test("handles Windows paths", () => {
-    expect(normalizePath("C:\\Users\\Arnold\\source\\rnx-kit")).toBe(
+  it("handles Windows paths", () => {
+    equal(
+      normalizePath("C:\\Users\\Arnold\\source\\rnx-kit"),
       "C:/Users/Arnold/source/rnx-kit"
     );
   });
 });
 
 describe("resolveModule()", () => {
-  test("throws if a package is not found", () => {
-    expect(() => resolveModule("/this-package-does-not-exist")).toThrow(
+  const resolveModule: typeof resolveModuleActual = (path) =>
+    resolveModuleActual(path, mockfs);
+
+  it("throws if a package is not found", () => {
+    throws(
+      () => resolveModule("/this-package-does-not-exist"),
       "Unable to resolve module"
     );
   });
 });
 
 describe("gatherModulesFromGraph()", () => {
-  const fs = require("fs");
+  const gatherModulesFromGraph: typeof gatherModulesFromGraphActual = (
+    graph,
+    moduleMap
+  ) => gatherModulesFromGraphActual(graph, moduleMap, mockfs);
 
-  afterAll(() => fs.__setMockFiles());
+  afterEach(() => mockfs.__setMockFiles());
 
-  test("builds module map from a basic source map", () => {
-    fs.__setMockFiles(bundleGraphFS);
+  it("builds module map from a basic source map", () => {
+    mockfs.__setMockFiles(bundleGraphFS);
 
-    const modules = gatherModulesFromGraph(bundleGraph, {});
+    const modules = gatherModulesFromGraph(bundleGraph, {}, mockfs);
 
-    expect(Object.keys(modules).sort()).toEqual(["react-native"]);
+    deepEqual(Object.keys(modules).sort(), ["react-native"]);
   });
 });
 
 describe("gatherModulesFromSourceMap()", () => {
-  const fs = require("fs");
+  const gatherModulesFromSourceMap: typeof gatherModulesFromSourceMapActual = (
+    sourceMap,
+    moduleMap
+  ) => gatherModulesFromSourceMapActual(sourceMap, moduleMap, mockfs);
 
-  afterAll(() => fs.__setMockFiles());
+  const gatherModulesFromSources: typeof gatherModulesFromSourcesActual = (
+    sources,
+    moduleMap
+  ) => gatherModulesFromSourcesActual(sources, moduleMap, mockfs);
 
-  test("builds module map from a basic source map", () => {
-    fs.__setMockFiles(bundleSourceMapFS);
+  afterEach(() => mockfs.__setMockFiles());
+
+  it("builds module map from a basic source map", () => {
+    mockfs.__setMockFiles(bundleSourceMapFS);
 
     const modules = gatherModulesFromSources(bundleSourceMap.sources, {});
 
-    expect(Object.keys(modules).sort()).toEqual([
+    deepEqual(Object.keys(modules).sort(), [
       "@babel/runtime",
       "abort-controller",
       "anser",
@@ -83,10 +100,10 @@ describe("gatherModulesFromSourceMap()", () => {
       "whatwg-fetch",
     ]);
 
-    Object.keys(modules).forEach((name) => {
-      expect(Object.keys(modules[name]).length).toBe(1);
-    });
+    for (const name of Object.keys(modules)) {
+      equal(Object.keys(modules[name]).length, 1);
+    }
 
-    expect(gatherModulesFromSourceMap(bundleSourceMap, {})).toEqual(modules);
+    deepEqual(gatherModulesFromSourceMap(bundleSourceMap, {}), modules);
   });
 });

@@ -4,9 +4,9 @@ import { resolveFrom } from "./resolve";
 
 type MetroImport =
   | typeof import("metro")
-  | typeof import("metro/src/Server").default
-  | typeof import("metro/src/lib/TerminalReporter").TerminalReporter
-  | typeof import("metro/src/shared/output/bundle")
+  | typeof import("metro/private/Server").default
+  | typeof import("metro/private/lib/TerminalReporter").TerminalReporter
+  | typeof import("metro/private/shared/output/bundle")
   | typeof import("metro-config")
   | typeof import("metro-core")
   | typeof import("metro-resolver")
@@ -77,17 +77,17 @@ export function requireModuleFromMetro(
 export function requireModuleFromMetro(
   moduleName: "metro/src/Server",
   fromDir?: string
-): typeof import("metro/src/Server").default;
+): typeof import("metro/private/Server").default;
 
 export function requireModuleFromMetro(
   moduleName: "metro/src/lib/TerminalReporter",
   fromDir?: string
-): typeof import("metro/src/lib/TerminalReporter").TerminalReporter;
+): typeof import("metro/private/lib/TerminalReporter").TerminalReporter;
 
 export function requireModuleFromMetro(
   moduleName: "metro/src/shared/output/bundle",
   fromDir?: string
-): typeof import("metro/src/shared/output/bundle");
+): typeof import("metro/private/shared/output/bundle");
 
 export function requireModuleFromMetro(
   moduleName: "metro-config",

@@ -5,6 +5,7 @@ import type { BuildOptions, BuildResult, Plugin } from "esbuild";
 import * as esbuild from "esbuild";
 import * as fs from "fs";
 import type { SerializerConfigT } from "metro-config";
+import type { SerializerOptions } from "metro/private/DeltaBundler/types";
 import * as path from "path";
 import { getModulePath, getSideEffects, isImporting, outputOf } from "./module";
 import { absolutizeSourceMap } from "./sourceMap";
@@ -58,10 +59,10 @@ export function MetroSerializer(
   );
   const bundleToString = require(`${metroPath}/src/lib/bundleToString`);
 
-  return (entryPoint, preModules, graph, options) => {
-    metroPlugins.forEach((plugin) =>
-      plugin(entryPoint, preModules, graph, options)
-    );
+  return (entryPoint, preModules, graph, options: SerializerOptions) => {
+    for (const plugin of metroPlugins) {
+      plugin(entryPoint, preModules, graph, options);
+    }
 
     if (options.dev) {
       const bundle = baseJSBundle(entryPoint, preModules, graph, options);
@@ -94,15 +95,19 @@ export function MetroSerializer(
         if (!options.dev && buildOptions?.strictMode === false) {
           const encoder = new TextEncoder();
           build.onEnd(({ outputFiles }) => {
-            outputFiles?.forEach(({ hash, path, text }, index) => {
-              const newText = text.replace(/"use strict";\s*/g, "");
-              outputFiles[index] = {
-                path,
-                contents: encoder.encode(newText),
-                hash,
-                text: newText,
-              };
-            });
+            if (outputFiles) {
+              const length = outputFiles.length;
+              for (let i = 0; i < length; ++i) {
+                const { hash, path, text } = outputFiles[i];
+                const newText = text.replace(/"use strict";\s*/g, "");
+                outputFiles[i] = {
+                  path,
+                  contents: encoder.encode(newText),
+                  hash,
+                  text: newText,
+                };
+              }
+            }
           });
         }
 
@@ -296,16 +301,18 @@ export function MetroSerializer(
       })
       .then(({ metafile, outputFiles }: BuildResult) => {
         const result = { code: "", map: "" };
-        outputFiles?.forEach(({ path: outputPath, text }) => {
-          if (outputPath === "<stdout>" || outputPath.endsWith(outfile)) {
-            result.code = text;
-          } else if (outputPath.endsWith(sourcemapfile)) {
-            result.map =
-              buildOptions?.sourceMapPaths === "absolute"
-                ? absolutizeSourceMap(outputPath, text)
-                : text;
+        if (outputFiles) {
+          for (const { path: outputPath, text } of outputFiles) {
+            if (outputPath === "<stdout>" || outputPath.endsWith(outfile)) {
+              result.code = text;
+            } else if (outputPath.endsWith(sourcemapfile)) {
+              result.map =
+                buildOptions?.sourceMapPaths === "absolute"
+                  ? absolutizeSourceMap(outputPath, text)
+                  : text;
+            }
           }
-        });
+        }
         if (metafile) {
           if (buildOptions?.analyze) {
             const options = { verbose: buildOptions.analyze === "verbose" };

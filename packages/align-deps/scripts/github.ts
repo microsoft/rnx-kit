@@ -20,7 +20,10 @@ function isArray<T>(a: T[] | null | undefined): a is T[] {
 }
 
 export function createGitHubClient(options: OctokitOptions = {}): GitHubClient {
-  return new (Octokit.plugin(restEndpointMethods))(options);
+  return new (Octokit.plugin(restEndpointMethods))({
+    auth: process.env["GITHUB_TOKEN"],
+    ...options,
+  });
 }
 
 export function fetchPullRequests(
@@ -83,4 +86,13 @@ export async function fetchPullRequestFeedback(
   }
 
   info(`No feedback found for pull request #${pr.number}`);
+}
+
+export function parseGitHubUrl(url: string | undefined): string | undefined {
+  // Examples:
+  // - git+https://github.com/microsoft/rnx-kit.git
+  // - git@github.com:microsoft/rnx-kit.git
+  // - https://github.com/microsoft/rnx-kit.git
+  const m = url?.match(/github\.com[/:](.*?)(?:\.git)?$/);
+  return m ? `https://github.com/${m[1]}` : url;
 }
