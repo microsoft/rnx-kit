@@ -81,6 +81,7 @@ jobs:
             git diff | yarn suggestion-bot
           fi
           git diff --exit-code
+    timeout-minutes: 60
   build:
     name: "Build"
     permissions: {}
@@ -112,6 +113,7 @@ jobs:
         run: |
           yarn nx affected --base origin/${{ github.base_ref }} --target bundle+esbuild
         shell: bash
+    timeout-minutes: 60
   build-android-test-app:
     name: "Build Android"
     permissions: {}
@@ -144,6 +146,7 @@ jobs:
         run: |
           yarn build:android
         working-directory: packages/test-app
+    timeout-minutes: 60
   build-ios-test-app:
     name: "Build iOS"
     permissions: {}
@@ -185,6 +188,7 @@ jobs:
         run: |
           yarn build:ios | xcbeautify
         working-directory: packages/test-app
+    timeout-minutes: 60
   build-website:
     name: "Build the website"
     permissions: {}
@@ -204,6 +208,7 @@ jobs:
         run: |
           yarn build
         working-directory: docsite
+    timeout-minutes: 60
   label:
     name: "Label"
     permissions:

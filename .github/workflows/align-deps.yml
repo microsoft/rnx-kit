@@ -83,3 +83,4 @@ jobs:
           sign-commits: true
           title: "fix(align-deps): ${{ steps.changeset.outputs.message }}"
           body-path: packages/align-deps/update-profile.output.txt
+    timeout-minutes: 15
