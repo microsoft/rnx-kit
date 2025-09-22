@@ -43,5 +43,8 @@
     "@nx/js": {
       "analyzeSourceFiles": false
     }
+  },
+  "ai": {
+    "generateAiAgentRules": true
   }
 }
