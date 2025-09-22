@@ -1,4 +1,4 @@
-import { deepEqual, equal, match, ok, throws } from "node:assert/strict";
+import { deepEqual, equal, fail, match, ok, throws } from "node:assert/strict";
 import * as fs from "node:fs";
 import * as path from "node:path";
 import { afterEach, describe, it } from "node:test";
@@ -230,28 +230,90 @@ describe("exclusionList()", () => {
     // exclude all but the repo's copy.
     setFixture("awesome-repo/packages/conan");
     const conanExclude = exclusionList();
-    ok(!conanExclude.test(reactCopy));
-    ok(conanExclude.test(packageCopy));
-    ok(!conanExclude.test(projectCopy));
+    ok(!conanExclude.some((regex) => regex.test(reactCopy)));
+    ok(conanExclude.some((regex) => regex.test(packageCopy)));
+    ok(!conanExclude.some((regex) => regex.test(projectCopy)));
     ok(
-      conanExclude.test(
-        path.join("conan", "windows", ".vs", "conan", "v16", "Browse.VC.db")
+      conanExclude.some((regex) =>
+        regex.test(
+          path.join("conan", "windows", ".vs", "conan", "v16", "Browse.VC.db")
+        )
       )
     );
-    ok(conanExclude.test("Test.ProjectImports.zip"));
+    ok(conanExclude.some((regex) => regex.test("Test.ProjectImports.zip")));
 
     // John has a local copy of react-native and should ignore all other copies.
     setFixture("awesome-repo/packages/john");
     const johnExclude = exclusionList();
-    ok(!johnExclude.test(reactCopy));
-    ok(!johnExclude.test(packageCopy));
-    ok(johnExclude.test(projectCopy));
+    ok(!johnExclude.some((regex) => regex.test(reactCopy)));
+    ok(!johnExclude.some((regex) => regex.test(packageCopy)));
+    ok(johnExclude.some((regex) => regex.test(projectCopy)));
     ok(
-      johnExclude.test(
-        path.join("john", "windows", ".vs", "conan", "v16", "Browse.VC.db")
+      johnExclude.some((regex) =>
+        regex.test(
+          path.join("john", "windows", ".vs", "john", "v16", "Browse.VC.db")
+        )
       )
     );
-    ok(johnExclude.test("Test.ProjectImports.zip"));
+    ok(johnExclude.some((regex) => regex.test("Test.ProjectImports.zip")));
+  });
+
+  it("ignores build files/folders", () => {
+    setFixture("awesome-repo/packages/conan");
+
+    const cases = [
+      "project/.vs/output",
+      "project/.vscode/output",
+      "project/Pods/output",
+      "project/__tests__/index.test.ts", // Default Metro exclusion
+      "project/app.bundle/output",
+      "project/app.noindex/output",
+      "project/file.a",
+      "project/file.apk",
+      "project/file.appx",
+      "project/file.bak",
+      "project/file.bat",
+      "project/file.binlog",
+      "project/file.c",
+      "project/file.cache",
+      "project/file.cc",
+      "project/file.class",
+      "project/file.cpp",
+      "project/file.cs",
+      "project/file.dex",
+      "project/file.dll",
+      "project/file.env",
+      "project/file.exe",
+      "project/file.flat",
+      "project/file.tar.gz",
+      "project/file.h",
+      "project/file.hpp",
+      "project/file.jar",
+      "project/file.lock",
+      "project/file.m",
+      "project/file.mm",
+      "project/file.modulemap",
+      "project/file.o",
+      "project/file.obj",
+      "project/file.pbxproj",
+      "project/file.pch",
+      "project/file.pdb",
+      "project/file.plist",
+      "project/file.sh",
+      "project/file.so",
+      "project/file.tflite",
+      "project/file.tgz",
+      "project/file.tlog",
+      "project/file.xcconfig",
+      "project/file.xcscheme",
+      "project/file.xcworkspacedata",
+      "project/file.zip",
+    ];
+    const exclusions = exclusionList();
+
+    for (const path of cases) {
+      ok(exclusions.some((regex) => regex.test(path)));
+    }
   });
 
   it("returns additional exclusions", () => {
@@ -274,15 +336,17 @@ describe("exclusionList()", () => {
 
     setFixture("awesome-repo/packages/conan");
     const conanExclude = exclusionList([/.*[/\\]__fixtures__[/\\].*/]);
-    ok(conanExclude.test(reactCopy));
-    ok(conanExclude.test(packageCopy));
-    ok(conanExclude.test(projectCopy));
+    ok(conanExclude.some((regex) => regex.test(reactCopy)));
+    ok(conanExclude.some((regex) => regex.test(packageCopy)));
+    ok(conanExclude.some((regex) => regex.test(projectCopy)));
     ok(
-      conanExclude.test(
-        path.join("conan", "windows", ".vs", "conan", "v16", "Browse.VC.db")
+      conanExclude.some((regex) =>
+        regex.test(
+          path.join("conan", "windows", ".vs", "conan", "v16", "Browse.VC.db")
+        )
       )
     );
-    ok(conanExclude.test("Test.ProjectImports.zip"));
+    ok(conanExclude.some((regex) => regex.test("Test.ProjectImports.zip")));
   });
 });
 
@@ -315,10 +379,10 @@ describe("makeMetroConfig()", () => {
       fail("Expected `config.resolver` to be defined");
     } else if (!config.resolver.extraNodeModules) {
       fail("Expected `config.resolver.extraNodeModules` to be defined");
-    } else if (!(config.resolver.blacklistRE instanceof RegExp)) {
-      fail("Expected `config.resolver.blacklistRE` to be a RegExp");
-    } else if (!(config.resolver.blockList instanceof RegExp)) {
-      fail("Expected `config.resolver.blockList` to be a RegExp");
+    } else if (!Array.isArray(config.resolver.blacklistRE)) {
+      fail("Expected `config.resolver.blacklistRE` to be a RegExp array");
+    } else if (!Array.isArray(config.resolver.blockList)) {
+      fail("Expected `config.resolver.blockList` to be a RegExp array");
     } else if (!config.server) {
       fail("Expected `config.server` to be defined");
     } else if (!config.transformer) {
@@ -335,9 +399,9 @@ describe("makeMetroConfig()", () => {
       "@babel/runtime",
     ]);
 
-    const blockList = exclusionList([], projectRoot).source;
-    equal(config.resolver.blacklistRE.source, blockList);
-    equal(config.resolver.blockList.source, blockList);
+    const blockList = exclusionList([], projectRoot);
+    deepEqual(config.resolver.blacklistRE, blockList);
+    deepEqual(config.resolver.blockList, blockList);
 
     equal(config.server.enhanceMiddleware, enhanceMiddleware);
     deepEqual(config.transformer.assetPlugins, []);
@@ -388,10 +452,10 @@ describe("makeMetroConfig()", () => {
       fail("Expected `config.resolver` to be defined");
     } else if (!config.resolver.extraNodeModules) {
       fail("Expected `config.resolver.extraNodeModules` to be defined");
-    } else if (!(config.resolver.blacklistRE instanceof RegExp)) {
-      fail("Expected `config.resolver.blacklistRE` to be a RegExp");
-    } else if (!(config.resolver.blockList instanceof RegExp)) {
-      fail("Expected `config.resolver.blockList` to be a RegExp");
+    } else if (!Array.isArray(config.resolver.blacklistRE)) {
+      fail("Expected `config.resolver.blacklistRE` to be a RegExp array");
+    } else if (!Array.isArray(config.resolver.blockList)) {
+      fail("Expected `config.resolver.blockList` to be a RegExp array");
     } else if (!config.server) {
       fail("Expected `config.server` to be defined");
     } else if (!config.transformer) {
@@ -408,9 +472,9 @@ describe("makeMetroConfig()", () => {
       "@babel/runtime",
     ]);
 
-    const blockList = exclusionList([], projectRoot).source;
-    equal(config.resolver.blacklistRE.source, blockList);
-    equal(config.resolver.blockList.source, blockList);
+    const blockList = exclusionList([], projectRoot);
+    deepEqual(config.resolver.blacklistRE, blockList);
+    deepEqual(config.resolver.blockList, blockList);
 
     equal(config.server.enhanceMiddleware, enhanceMiddleware);
     deepEqual(config.transformer.assetPlugins, []);
