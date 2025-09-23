@@ -38,6 +38,7 @@ function applyExpoWorkarounds(config, defaultConfig) {
   // then overwrites our fields:
   // https://github.com/facebook/metro/blob/v0.80.10/packages/metro-config/src/defaults/index.js#L51
   if (config.resolver?.resolveRequest === null) {
+    // @ts-expect-error The operand of a 'delete' operator cannot be a read-only property
     delete config.resolver.resolveRequest;
   }
 
@@ -49,6 +50,7 @@ function applyExpoWorkarounds(config, defaultConfig) {
     const core = /Libraries[/\\]Core[/\\]InitializeCore/;
     const prelude =
       defaultConfig.serializer?.getModulesRunBeforeMainModule?.("") ?? [];
+    // @ts-expect-error Cannot assign to 'getModulesRunBeforeMainModule' because it is a read-only property
     config.serializer.getModulesRunBeforeMainModule = (entryFilePath) => {
       const modules = prelude.slice();
       for (const m of getModulesRunBeforeMainModule(entryFilePath)) {

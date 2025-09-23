@@ -2,7 +2,7 @@ import { warn } from "@rnx-kit/console";
 import { findPackage, readPackage } from "@rnx-kit/tools-node/package";
 import type { BuildOptions } from "esbuild";
 import type { Module, ReadOnlyDependencies } from "metro";
-import * as path from "path";
+import * as path from "node:path";
 import { generateSourceMappingURL } from "./sourceMap";
 
 export function getModulePath(
