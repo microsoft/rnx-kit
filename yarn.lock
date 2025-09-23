@@ -14642,8 +14642,8 @@ __metadata:
   linkType: hard
 
 "react-native-test-app@npm:^4.1.4, react-native-test-app@npm:^4.3.1, react-native-test-app@npm:^4.4.6":
-  version: 4.4.9
-  resolution: "react-native-test-app@npm:4.4.9"
+  version: 4.4.11
+  resolution: "react-native-test-app@npm:4.4.11"
   dependencies:
     "@rnx-kit/react-native-host": "npm:^0.5.11"
     "@rnx-kit/tools-react-native": "npm:^2.1.0"
@@ -14654,7 +14654,7 @@ __metadata:
     semver: "npm:^7.3.5"
     uuid: "npm:^11.0.0"
   peerDependencies:
-    "@callstack/react-native-visionos": 0.73 - 0.78
+    "@callstack/react-native-visionos": 0.73 - 0.79
     "@expo/config-plugins": ">=5.0"
     react: 18.1 - 19.1
     react-native: 0.70 - 0.81 || >=0.82.0-0 <0.82.0
@@ -14674,7 +14674,7 @@ __metadata:
     init: scripts/init.mjs
     init-test-app: scripts/init.mjs
     install-windows-test-app: windows/app.mjs
-  checksum: 10c0/b67033963763a8f125ca691a28ad8bf9e71379407eb16511aa0ae3f5755785aa633bc624b45d4ea522bd2acbfdde40a7861d11e7be41e0a71b7fa397cb245a43
+  checksum: 10c0/ec158eddf54899f509ebdd5f4b75fcc1008e3146a498540a5c3d06b0be0454822570ad5de8260091c7556fdf82928ce2f11dbf5287c83eb4b464dd1e8431ad7c
   languageName: node
   linkType: hard
 

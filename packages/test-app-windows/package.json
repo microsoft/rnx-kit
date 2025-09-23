@@ -19,6 +19,7 @@
   },
   "scripts": {
     "build": "rnx align-deps",
+    "build:native": "rnx build --platform windows",
     "bundle": "rnx bundle --platform windows",
     "bundle+esbuild": "rnx bundle --id esbuild --platform windows",
     "format": "rnx-kit-scripts format",

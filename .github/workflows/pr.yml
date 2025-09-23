@@ -13,11 +13,11 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
       - name: Setup the toolchain
-        uses: microsoft/react-native-test-app/.github/actions/setup-toolchain@4.4.5
+        uses: microsoft/react-native-test-app/.github/actions/setup-toolchain@4.4.10
         with:
           node-version: 22
       - name: Deduplicate packages
@@ -92,12 +92,12 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           filter: blob:none
           fetch-depth: 0
       - name: Setup the toolchain
-        uses: microsoft/react-native-test-app/.github/actions/setup-toolchain@4.4.5
+        uses: microsoft/react-native-test-app/.github/actions/setup-toolchain@4.4.10
         with:
           node-version: ${{ matrix.node-version }}
       - name: Install package dependencies
@@ -120,12 +120,12 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           filter: blob:none
           fetch-depth: 0
       - name: Setup the toolchain
-        uses: microsoft/react-native-test-app/.github/actions/setup-toolchain@4.4.5
+        uses: microsoft/react-native-test-app/.github/actions/setup-toolchain@4.4.10
         with:
           platform: android
       - name: Install package dependencies
@@ -153,12 +153,12 @@ jobs:
     runs-on: macos-15
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           filter: blob:none
           fetch-depth: 0
       - name: Setup the toolchain
-        uses: microsoft/react-native-test-app/.github/actions/setup-toolchain@4.4.5
+        uses: microsoft/react-native-test-app/.github/actions/setup-toolchain@4.4.10
         with:
           platform: ios
           xcode-developer-dir: /Applications/Xcode_16.4.app
@@ -189,15 +189,96 @@ jobs:
           yarn build:ios | xcbeautify
         working-directory: packages/test-app
     timeout-minutes: 60
+  build-macos-test-app:
+    name: "Build macOS"
+    permissions: {}
+    runs-on: macos-15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          filter: blob:none
+          fetch-depth: 0
+      - name: Setup the toolchain
+        uses: microsoft/react-native-test-app/.github/actions/setup-toolchain@4.4.10
+        with:
+          platform: macos
+          xcode-developer-dir: /Applications/Xcode_16.4.app
+      - name: Install package dependencies
+        run: |
+          yarn
+      - name: Determine whether the macOS app needs to be built
+        id: affected-projects
+        run: |
+          if [[ "$(yarn show-affected --base origin/${{ github.base_ref }})" = *"@rnx-kit/test-app-macos"* ]]; then
+            echo 'macos=true' >> $GITHUB_OUTPUT
+          fi
+      - name: Build @rnx-kit/cli
+        if: ${{ steps.affected-projects.outputs.macos != '' }}
+        run: |
+          yarn nx build @rnx-kit/cli
+      - name: Install Pods
+        uses: microsoft/react-native-test-app/.github/actions/cocoapods@trunk
+        if: ${{ steps.affected-projects.outputs.macos != '' }}
+        env:
+          RCT_USE_PREBUILT_RNCORE: 1
+        with:
+          project-directory: macos
+          working-directory: packages/test-app-macos
+      - name: Build macOS app
+        if: ${{ steps.affected-projects.outputs.macos != '' }}
+        run: |
+          yarn build:native | xcbeautify
+        working-directory: packages/test-app-macos
+    timeout-minutes: 60
+  build-windows-test-app:
+    name: "Build Windows"
+    permissions: {}
+    runs-on: windows-2025
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          filter: blob:none
+          fetch-depth: 0
+      - name: Setup the toolchain
+        uses: microsoft/react-native-test-app/.github/actions/setup-toolchain@4.4.10
+        with:
+          platform: windows
+      - name: Install package dependencies
+        run: |
+          yarn
+      - name: Determine whether the Windows app needs to be built
+        id: affected-projects
+        run: |
+          if [[ "$(yarn show-affected --base origin/${{ github.base_ref }})" = *"@rnx-kit/test-app-windows"* ]]; then
+            echo 'windows=true' >> $GITHUB_OUTPUT
+          fi
+        shell: bash
+      - name: Build @rnx-kit/cli
+        if: ${{ steps.affected-projects.outputs.windows != '' }}
+        run: |
+          yarn nx build @rnx-kit/cli
+      - name: Generate Visual Studio solution
+        if: ${{ steps.affected-projects.outputs.windows != '' }}
+        run: |
+          yarn install-windows-test-app --use-nuget --msbuildprops WindowsTargetPlatformVersion=10.0.26100.0
+        working-directory: packages/test-app-windows
+      - name: Build Windows app
+        if: ${{ steps.affected-projects.outputs.windows != '' }}
+        run: |
+          yarn build:native
+        working-directory: packages/test-app-windows
+    timeout-minutes: 60
   build-website:
     name: "Build the website"
     permissions: {}
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Setup the toolchain
-        uses: microsoft/react-native-test-app/.github/actions/setup-toolchain@4.4.5
+        uses: microsoft/react-native-test-app/.github/actions/setup-toolchain@4.4.10
         with:
           cache-npm-dependencies: ""
       - name: Install package dependencies (docsite)
