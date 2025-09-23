@@ -406,7 +406,7 @@ describe("makeMetroConfig()", () => {
     equal(config.server.enhanceMiddleware, enhanceMiddleware);
     deepEqual(config.transformer.assetPlugins, []);
 
-    const opts = { dev: false, hot: false };
+    const opts = { dev: false, hot: true, platform: undefined } as const;
     const transformerOptions = await config.transformer.getTransformOptions(
       [],
       opts,
@@ -479,7 +479,7 @@ describe("makeMetroConfig()", () => {
     equal(config.server.enhanceMiddleware, enhanceMiddleware);
     deepEqual(config.transformer.assetPlugins, []);
 
-    const opts = { dev: false, hot: false };
+    const opts = { dev: false, hot: true, platform: undefined } as const;
     const transformerOptions = await config.transformer.getTransformOptions(
       [],
       opts,

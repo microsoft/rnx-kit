@@ -247,9 +247,7 @@ export function findPackageDependencyDir(
     return packageDir;
   }
 
-  return fs.lstatSync(packageDir).isSymbolicLink()
-    ? path.resolve(path.dirname(packageDir), fs.readlinkSync(packageDir))
-    : packageDir;
+  return fs.realpathSync(packageDir);
 }
 
 /**

@@ -100,9 +100,6 @@ export function emitBytecode(
     const packagerSourcemap = JSON.parse(fs.readFileSync(sourcemap, options));
     const compilerSourcemap = JSON.parse(fs.readFileSync(outputMap, options));
 
-    // `composeSourceMaps` was introduced in 0.56 — see
-    // https://github.com/facebook/metro/commit/6017085bdad96ca5cec39d50038eb5622ce1097b
-    // @ts-expect-error Property 'composeSourceMaps' does not exist
     const { composeSourceMaps } = requireModuleFromMetro("metro-source-map");
 
     const composed = composeSourceMaps([packagerSourcemap, compilerSourcemap]);

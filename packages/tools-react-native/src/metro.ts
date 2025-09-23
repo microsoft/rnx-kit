@@ -1,11 +1,40 @@
 import { readPackage } from "@rnx-kit/tools-node/package";
+import type { Module, ReadOnlyGraph, SerializerOptions } from "metro";
 import { findCommunityCliPluginPath } from "./cli";
 import { resolveFrom } from "./resolve";
 
+// https://github.com/facebook/metro/blob/v0.83.2/packages/metro-runtime/src/modules/types.js
+type Bundle = {
+  modules: readonly [number, string][];
+  post: string;
+  pre: string;
+};
+
+// https://github.com/facebook/metro/blob/v0.83.2/packages/metro-runtime/src/modules/types.js
+type BundleMetadata = {
+  pre: number;
+  post: number;
+  modules: readonly [number, number][];
+};
+
+type MetroBaseJSBundle = (
+  entryPoint: string,
+  preModules: readonly Module[],
+  graph: ReadOnlyGraph,
+  options: SerializerOptions
+) => Bundle;
+
+type MetroBundleToString = (bundle: Bundle) => {
+  code: string;
+  metadata: BundleMetadata;
+};
+
 type MetroImport =
   | typeof import("metro")
+  | /* typeof import("metro/private/DeltaBundler/Serializers/baseJSBundle") */ MetroBaseJSBundle
   | typeof import("metro/private/Server").default
   | typeof import("metro/private/lib/TerminalReporter").TerminalReporter
+  | /* typeof import("metro/private/lib/bundleToString") */ MetroBundleToString
   | typeof import("metro/private/shared/output/bundle")
   | typeof import("metro-config")
   | typeof import("metro-core")
@@ -14,20 +43,19 @@ type MetroImport =
 
 type MetroModule =
   | "metro"
+  | "metro/src/DeltaBundler/Serializers/baseJSBundle"
   | "metro/src/Server"
   | "metro/src/lib/TerminalReporter"
+  | "metro/src/lib/bundleToString"
   | "metro/src/shared/output/bundle"
   | "metro-config"
   | "metro-core"
   | "metro-resolver"
   | "metro-source-map";
 
-/**
- * Finds the installation path of Metro.
- * @param projectRoot The root of the project; defaults to the current working directory
- * @returns The path to the Metro installation; `undefined` if Metro could not be found
- */
-export function findMetroPath(projectRoot = process.cwd()): string | undefined {
+const metroPathCache: Record<string, string | undefined> = {};
+
+function findMetroPathInternal(projectRoot: string): string | undefined {
   const rnDir = resolveFrom("react-native", projectRoot);
   if (!rnDir) {
     return undefined;
@@ -53,6 +81,21 @@ export function findMetroPath(projectRoot = process.cwd()): string | undefined {
 }
 
 /**
+ * Finds the installation path of Metro.
+ * @param projectRoot The root of the project; defaults to the current working directory
+ * @returns The path to the Metro installation; `undefined` if Metro could not be found
+ */
+export function findMetroPath(projectRoot = process.cwd()): string | undefined {
+  if (projectRoot in metroPathCache) {
+    return metroPathCache[projectRoot];
+  }
+
+  const p = findMetroPathInternal(projectRoot);
+  metroPathCache[projectRoot] = p;
+  return p;
+}
+
+/**
  * Returns Metro version number.
  * @param projectRoot The root of the project; defaults to the current working directory
  * @returns Metro version number; `undefined` if Metro could not be found
@@ -75,6 +118,11 @@ export function requireModuleFromMetro(
 ): typeof import("metro");
 
 export function requireModuleFromMetro(
+  moduleName: "metro/src/DeltaBundler/Serializers/baseJSBundle",
+  fromDir?: string
+): MetroBaseJSBundle;
+
+export function requireModuleFromMetro(
   moduleName: "metro/src/Server",
   fromDir?: string
 ): typeof import("metro/private/Server").default;
@@ -83,6 +131,11 @@ export function requireModuleFromMetro(
   moduleName: "metro/src/lib/TerminalReporter",
   fromDir?: string
 ): typeof import("metro/private/lib/TerminalReporter").TerminalReporter;
+
+export function requireModuleFromMetro(
+  moduleName: "metro/src/lib/bundleToString",
+  fromDir?: string
+): MetroBundleToString;
 
 export function requireModuleFromMetro(
   moduleName: "metro/src/shared/output/bundle",
@@ -137,5 +190,6 @@ export function requireModuleFromMetro(
     );
   }
 
-  return require(modulePath);
+  const m = require(modulePath);
+  return m.default ?? m;
 }

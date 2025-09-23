@@ -1,4 +1,7 @@
-import { findMetroPath } from "@rnx-kit/tools-react-native/metro";
+import {
+  findMetroPath,
+  requireModuleFromMetro,
+} from "@rnx-kit/tools-react-native/metro";
 import type {
   MixedOutput,
   Module,
@@ -35,7 +38,7 @@ export type TestMocks = {
     preModules: readonly Module[],
     graph: ReadOnlyGraph,
     options: SerializerOptions
-  ) => Promise<Bundle> | Bundle;
+  ) => Bundle;
   bundleToString?: (bundle: Bundle) => CustomSerializerResult;
 };
 
@@ -51,14 +54,14 @@ export function MetroSerializer(
   plugins: MetroPlugin[],
   __mocks: TestMocks = {}
 ): CustomSerializer {
-  const metroPath = findMetroPath() || "metro";
   const baseJSBundle =
     __mocks.baseJSBundle ??
-    require(`${metroPath}/src/DeltaBundler/Serializers/baseJSBundle`);
+    requireModuleFromMetro("metro/src/DeltaBundler/Serializers/baseJSBundle");
   const bundleToString =
-    __mocks.bundleToString ?? require(`${metroPath}/src/lib/bundleToString`);
+    __mocks.bundleToString ??
+    requireModuleFromMetro("metro/src/lib/bundleToString");
 
-  const { version } = require(`${metroPath}/package.json`);
+  const { version } = require(`${findMetroPath() || "metro"}/package.json`);
   const shouldReturnPromise = semver.satisfies(version, ">=0.60.0");
 
   return (
@@ -72,7 +75,9 @@ export function MetroSerializer(
     }
 
     const bundle = baseJSBundle(entryPoint, preModules, graph, options);
-    const bundleCode = bundleToString(bundle).code;
+    const bundleResult = bundleToString(bundle);
+    const bundleCode =
+      typeof bundleResult === "string" ? bundleResult : bundleResult.code;
     return shouldReturnPromise ? Promise.resolve(bundleCode) : bundleCode;
   };
 }

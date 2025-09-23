@@ -1,7 +1,6 @@
 import { resolveDependencyChain } from "@rnx-kit/tools-node/package";
 import { resolveCommunityCLI } from "@rnx-kit/tools-react-native/context";
 import * as fs from "node:fs";
-import * as path from "node:path";
 import type { CliServerApi, CoreDevMiddleware } from "../serve/types";
 
 type ExternalModule =
@@ -14,9 +13,7 @@ function friendlyRequire<T>(modules: string[], startDir: string): T {
     throw new Error("At least one target module is required");
   }
 
-  const resolvedStartDir = fs.lstatSync(startDir).isSymbolicLink()
-    ? path.resolve(path.dirname(startDir), fs.readlinkSync(startDir))
-    : startDir;
+  const resolvedStartDir = fs.realpathSync(startDir);
   try {
     const finalPackageDir = resolveDependencyChain(modules, resolvedStartDir);
     const targetModule = require.resolve(target, { paths: [finalPackageDir] });
