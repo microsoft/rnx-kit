@@ -19,6 +19,7 @@
   },
   "scripts": {
     "build": "rnx align-deps",
+    "build:native": "rnx build --platform macos",
     "bundle": "rnx bundle --platform macos",
     "bundle+esbuild": "rnx bundle --id esbuild",
     "format": "rnx-kit-scripts format",
