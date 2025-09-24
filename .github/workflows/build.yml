@@ -8,27 +8,19 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v5
       - name: Set up Node.js
         uses: actions/setup-node@v5.0.0
         with:
           node-version: 22
-      - name: Checkout
-        uses: actions/checkout@v5
-      - name: Cache /.yarn/cache
-        uses: actions/cache@v4
-        with:
-          path: .yarn/cache
-          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
+          cache: yarn
+          registry-url: https://registry.npmjs.org
       - name: Install
         run: yarn
       - name: Build
-        run: |
-          yarn build
+        run: yarn build
       - name: Test
-        env:
-          NODE_V8_COVERAGE: coverage
         run: yarn test
   review:
     permissions:
@@ -36,21 +28,16 @@ jobs:
       pull-requests: write
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v5
       - name: Set up Node.js
         uses: actions/setup-node@v5.0.0
         with:
           node-version: 22
-      - name: Checkout
-        uses: actions/checkout@v5
+          cache: yarn
+          registry-url: https://registry.npmjs.org
       - name: Deduplicate packages
         run: yarn dedupe --check
-      - name: Cache /.yarn/cache
-        uses: actions/cache@v4
-        with:
-          path: .yarn/cache
-          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
       - name: Install
         run: yarn
       - name: Format
@@ -64,30 +51,31 @@ jobs:
           git diff --exit-code
   release:
     permissions:
-      contents: write
+      contents: write # create releases (semantic-release)
+      id-token: write # enable use of OIDC for trusted publishing
     needs: [build, review]
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v5
       - name: Set up Node.js
         uses: actions/setup-node@v5.0.0
         with:
           node-version: 22
-      - name: Checkout
-        uses: actions/checkout@v5
-      - name: Cache /.yarn/cache
-        uses: actions/cache@v4
-        with:
-          path: .yarn/cache
-          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
+          cache: yarn
+          registry-url: https://registry.npmjs.org
       - name: Install
         run: yarn
       - name: Emit type declaration files
+        run: yarn tsc
+      - name: Update npm if <11.5.1
+        if: ${{ github.ref == 'refs/heads/trunk' }}
         run: |
-          yarn tsc
+          if [[ "$(echo -e "11.5.1\n$(npm --version)" | sort --version-sort | head -n 1)" != "11.5.1" ]]; then
+            npm install -g npm@11.5.2
+          fi
+          echo "npm version: $(npm --version)"
       - name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: npx semantic-release
