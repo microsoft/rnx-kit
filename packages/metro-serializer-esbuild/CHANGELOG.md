@@ -1,5 +1,13 @@
 # Change Log - @rnx-kit/metro-serializer-esbuild
 
+## 0.2.5
+
+### Patch Changes
+
+- 7bf2194: Support Metro 0.83.x
+- Updated dependencies [7bf2194]
+  - @rnx-kit/tools-react-native@2.3.0
+
 ## 0.2.4
 
 ### Patch Changes
