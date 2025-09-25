@@ -65,7 +65,11 @@ function resolveCapability(
   namedProfile: [string, Profile],
   dependencies: Record<string, Package[]>,
   unresolvedCapabilities: Record<string, string[]>,
-  resolved = new Set<string>()
+  /** @internal */ resolved = new Set<string>([
+    "__proto__",
+    "constructor",
+    "prototype",
+  ])
 ): void {
   if (resolved.has(capability)) {
     return;

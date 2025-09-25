@@ -105,6 +105,17 @@ describe("resolveCapabilities()", () => {
     jest.clearAllMocks();
   });
 
+  test("ignores keywords pointing to `Object.prototype`", () => {
+    const packages = resolveCapabilities(
+      "package.json",
+      ["__proto__", "prototype", "constructor"] as unknown as Capability[],
+      { "0.64": profile_0_64 }
+    );
+
+    expect(packages).toEqual({});
+    expect(consoleWarnSpy).not.toHaveBeenCalled();
+  });
+
   test("dedupes packages", () => {
     const packages = resolveCapabilities(
       "package.json",
