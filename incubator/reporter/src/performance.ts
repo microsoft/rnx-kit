@@ -1,197 +1,106 @@
+import { type CascadeSettings, createCascadingReporter } from "./cascade.ts";
 import { subscribeToFinish, subscribeToStart } from "./events.ts";
-import { padString } from "./formatting.ts";
-import { ReporterImpl } from "./reporter.ts";
-import type { ReporterOptions, SessionData } from "./types.ts";
+import { getFormatter } from "./formatting.ts";
+import type { Reporter, SessionData } from "./types.ts";
+import { isErrorResult } from "./utils.ts";
 
+/**
+ * Environment variable key used to enable performance tracking
+ */
 export const PERF_TRACKING_ENV_KEY = "RNX_PERF_TRACKING";
-const reporterPackageName = require(__dirname + "/../package.json").name;
 
-export type PerformanceTrackingMode =
-  | "disabled"
-  | "enabled"
-  | "verbose"
-  | "file-only";
-
+/**
+ * Performance tracker implementation. This creates a reporter and listens for reporter events, logging
+ * performance information. It can log to the console, a file, or both.
+ */
 class PerformanceTracker {
-  private reporter: ReporterImpl;
-  private verbose: boolean;
-  private clearStart: () => boolean;
-  private clearComplete: () => boolean;
+  private reporter: Reporter;
+  private formatter = getFormatter();
+  private perfTag = this.formatter.cyan("PERF:");
 
-  constructor(mode: PerformanceTrackingMode, file?: string, fromEnv?: boolean) {
-    this.verbose = mode === "verbose" || mode === "file-only";
-    const settings: ReporterOptions["settings"] = {
-      level: this.verbose ? "verbose" : "log",
-      colors: {
-        label: 163,
-      },
-    };
-    // set up file logging if requested, if loading from env open the stream in append mode
-    if (file) {
-      settings.file = {
-        target: file,
-        writeFlags: fromEnv ? "a" : "w",
-        level: "verbose",
-      };
-    }
-    // in file only mode suppress the console output
-    if (mode === "file-only") {
-      settings.level = "error";
-    }
-    // now create the reporter instance
-    this.reporter = new ReporterImpl({
-      name: "PerformanceTracker",
-      label: "PERF:",
-      packageName: reporterPackageName,
-      settings,
-    });
-
-    this.clearStart = subscribeToStart((event) => this.onTaskStarted(event));
-    this.clearComplete = subscribeToFinish((event) =>
-      this.onTaskCompleted(event)
-    );
+  constructor(reporter: Reporter) {
+    this.reporter = reporter;
+    subscribeToStart((event) => this.onTaskStarted(event));
+    subscribeToFinish((event) => this.onTaskCompleted(event));
   }
 
-  private getName(event: SessionData) {
-    const name = event.name
-      ? `${this.reporter.color(event.name, "highlight2")}:`
-      : "";
-    if (event.role === "reporter") {
-      return `${this.reporter.formatPackage(event.packageName)}: ${name}`;
-    }
-    return name;
+  /**
+   * Get the prefix for an event log message
+   * @param event event that is starting
+   * @returns an array of strings to use as the log message prefix
+   */
+  private eventPrefix(event: SessionData) {
+    return [
+      this.perfTag,
+      `${"+".repeat(event.depth)}${this.formatter.bold(event.name)} (${event.role}):`,
+    ];
   }
 
-  private getLabel(event: SessionData) {
-    const prefix =
-      event.role === "reporter"
-        ? `${this.reporter.color("Reporter", "highlight1")}:`
-        : `${"+".repeat(event.depth)}${this.reporter.color("Task", "highlight2")}:`;
-    return `${prefix} ${this.getName(event)}`;
-  }
-
-  private getParentSource(event: SessionData) {
-    if (this.verbose && event.parent) {
-      return ` (from ${this.getName(event.parent)})`;
-    }
-    return "";
+  /**
+   * Get the prefix for an operation log message
+   * @param event event that is being reported
+   * @returns an array of strings to use as the log message prefix
+   */
+  private opPrefix(event: SessionData) {
+    return [this.perfTag, `${" ".repeat(event.depth + 2)}-`];
   }
 
   /**
    * Called when a task is started, omitted in non-verbose mode
    */
   private onTaskStarted(event: SessionData) {
-    if (this.verbose) {
-      this.reporter.log(
-        this.getLabel(event),
-        `Started${this.getParentSource(event)}`
-      );
-    }
+    this.reporter.verbose(...this.eventPrefix(event), "Started");
   }
 
   /**
-   * Called when a task is completed
+   * Called when a task is completed. Will log the time spent in a task. In verbose mode
+   * will also log the time spent in each operation.
    */
   private onTaskCompleted(event: SessionData) {
-    const reporter = this.reporter;
-    const args: unknown[] = [this.getLabel(event)];
-    args.push(`Finished (${this.reporter.formatDuration(event.duration)})`);
-    if (event.errors && event.errors.length > 0) {
-      args.push(`with ${event.errors.length} error(s)`);
-    }
-    if (event.reason === "process-exit") {
-      args.push(this.reporter.color("(process exit)", "verboseText"));
-    } else if (event.reason === "error") {
-      if (this.verbose) {
-        args.push(this.reporter.color("on error:\n", "errorPrefix"));
-      } else {
-        args.push(`(${this.reporter.color("error result", "errorPrefix")})`);
-      }
-    }
-    const opKeys = Object.keys(event.operations || {});
-    if (opKeys.length > 0) {
-      args.push(`[${opKeys.length} sub-ops]`);
-    }
-    reporter.log(...args);
-    if (event.operations && opKeys.length > 0) {
-      for (const key of opKeys) {
-        const { elapsed, calls } = event.operations[key];
-        const duration = padString(reporter.formatDuration(elapsed), 7);
-        reporter.log(
-          `${" ".repeat(event.depth)}- ${duration} |${padString(String(calls), 5)} | ${this.reporter.color(key, "highlight3")}`
-        );
-      }
-    }
-  }
+    const prefix = this.eventPrefix(event);
+    const opPrefix = this.opPrefix(event);
+    const formatter = this.formatter;
+    const reason = isErrorResult(event.result)
+      ? "error"
+      : event.result
+        ? "success"
+        : "process-exit";
 
-  finish() {
-    this.clearStart();
-    this.clearComplete();
+    this.reporter.log(
+      ...prefix,
+      `Finished (${reason}) in [${formatter.duration(event.elapsed ?? 0)}]:`,
+      event.result
+    );
+    const ops = event.operations || {};
+    for (const key of Object.keys(ops)) {
+      const { elapsed, calls } = ops[key];
+      const duration = formatter.pad(formatter.duration(elapsed), 7);
+      this.reporter.verbose(
+        ...opPrefix,
+        `${duration} |${formatter.pad(String(calls), 5)} calls | ${formatter.highlight3(key)}`
+      );
+    }
   }
 }
 
-let performanceTracker: PerformanceTracker | null = null;
 let checkedEnv = false;
-
-export function enablePerformanceTracing(
-  mode: PerformanceTrackingMode = "enabled",
-  file?: string
-) {
-  process.env[PERF_TRACKING_ENV_KEY] = serializePerfOptions(mode, file);
-  if (performanceTracker) {
-    performanceTracker.finish();
-  }
-  if (mode !== "disabled") {
-    performanceTracker = new PerformanceTracker(mode, file);
-  }
-}
+let performanceTracker: PerformanceTracker | undefined = undefined;
 
 /**
- * @internal
+ * Checks the environment to enable performance tracing if it has been enabled in this process tree.
+ * If it has not been enabled, then it will be turned on if settings are provided
+ * in the call to this function.
+ *
+ * @param settings Optional settings, used to enable performance tracing if it is not already enabled via the environment
  */
-export function checkPerformanceEnv() {
-  if (!checkedEnv) {
+export function checkOrEnablePerfTracing(settings?: CascadeSettings) {
+  if (!checkedEnv && !performanceTracker) {
     checkedEnv = true;
-    const env = process.env[PERF_TRACKING_ENV_KEY];
-    if (env) {
-      const [mode, file] = decodePerformanceOptions(env);
-      if (mode !== "disabled") {
-        performanceTracker = new PerformanceTracker(mode, file, true);
-      }
+    const reporter = createCascadingReporter(PERF_TRACKING_ENV_KEY, settings, {
+      name: "PerfTracker",
+    });
+    if (reporter) {
+      performanceTracker = new PerformanceTracker(reporter);
     }
   }
-}
-
-/**
- * @internal
- */
-export function serializePerfOptions(
-  mode: PerformanceTrackingMode,
-  file?: string
-): string {
-  return file ? `${mode},${file}` : mode;
-}
-
-function validMode(mode: string): PerformanceTrackingMode {
-  switch (mode) {
-    case "enabled":
-    case "verbose":
-    case "file-only":
-      return mode;
-    default:
-      return "disabled";
-  }
-}
-
-/**
- * @internal
- */
-export function decodePerformanceOptions(
-  serialized?: string
-): [PerformanceTrackingMode, string | undefined] {
-  if (serialized) {
-    const [mode, file] = serialized.split(",");
-    return [validMode(mode), file];
-  }
-  return ["disabled", undefined];
 }
