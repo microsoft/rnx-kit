@@ -11,17 +11,19 @@ export class WorkspacesInfoImpl implements WorkspacesInfo {
   private root: string;
   private packageFilter: string[] | undefined;
   private packages: string[] | undefined;
+  private sentinel: string;
   private findWorkspacePackages: (sentinal: string) => Promise<string[]>;
   private findWorkspacePackagesSync: (sentinal: string) => string[];
 
-  constructor(private sentinel: string) {
+  constructor(sentinel: string) {
     this.root = path.dirname(sentinel);
     const {
       getPackageFilters,
       findWorkspacePackages,
       findWorkspacePackagesSync,
     } = getImplementationSync(sentinel);
-    this.packageFilter = getPackageFilters(this.sentinel);
+    this.packageFilter = getPackageFilters(sentinel);
+    this.sentinel = sentinel;
     this.findWorkspacePackages = findWorkspacePackages;
     this.findWorkspacePackagesSync = findWorkspacePackagesSync;
   }

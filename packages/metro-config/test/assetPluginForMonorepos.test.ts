@@ -1,6 +1,6 @@
 import type { AssetData } from "metro";
 import type { Middleware } from "metro-config";
-import type Server from "metro/src/Server";
+import type Server from "metro/private/Server";
 import { equal } from "node:assert/strict";
 import type { IncomingMessage, ServerResponse } from "node:http";
 import { describe, it } from "node:test";

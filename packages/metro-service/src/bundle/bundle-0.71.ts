@@ -2,12 +2,12 @@ import { warn } from "@rnx-kit/console";
 import { requireModuleFromMetro } from "@rnx-kit/tools-react-native/metro";
 import type { AssetData } from "metro";
 import type { ConfigT } from "metro-config";
-import type Server from "metro/src/Server";
+import type Server from "metro/private/Server";
 import { getSaveAssetsPlugin } from "../asset/saveAssets";
 import { saveAssets } from "../asset/write";
 import type { BundleArgs, RequestOptions } from "../types";
 
-type MetroBundle = typeof import("metro/src/shared/output/bundle");
+type MetroBundle = typeof import("metro/private/shared/output/bundle");
 
 type BuildOutput = Awaited<ReturnType<MetroBundle["build"]>>;
 
@@ -56,6 +56,7 @@ export async function buildBundle(
       const outputOptions = { bundleOutput, sourcemapOutput, dev, platform };
       await output.save(metroBundle, outputOptions, (message) =>
         config.reporter.update({
+          // @ts-expect-error 'bundle_save_log' was introduced in Metro 0.81.1
           type: "bundle_save_log",
           message,
         })
