@@ -19,6 +19,7 @@ module.exports = [
           },
         },
       ],
+      "no-unneeded-ternary": "error",
     },
   },
 ];
