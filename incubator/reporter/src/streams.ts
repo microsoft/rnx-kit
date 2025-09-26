@@ -28,7 +28,7 @@ function openFileStream(filePath: string, append?: boolean) {
   // ensure the directory exists
   const dir = path.dirname(filePath);
   if (dir && !fs.existsSync(dir)) {
-    fs.mkdirSync(dir, { recursive: true });
+    fs.mkdirSync(dir, { recursive: true, mode: 0o755 });
   }
   // now create/open the stream
   return fs.createWriteStream(filePath, { flags: append ? "a" : "w" });

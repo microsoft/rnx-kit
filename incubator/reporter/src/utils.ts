@@ -8,15 +8,13 @@ import type { ErrorResult, FinishResult } from "./types.ts";
  * @internal
  */
 export function lazyInit<T>(factory: () => T): () => T {
-  return (() => {
-    let value: T | undefined;
-    return () => {
-      if (value === undefined) {
-        value = factory();
-      }
-      return value;
-    };
-  })();
+  let value: T | undefined;
+  return () => {
+    if (value === undefined) {
+      value = factory();
+    }
+    return value;
+  };
 }
 
 /**
@@ -69,7 +67,7 @@ export function serialize(
  * @returns true if the value is Promise-like, false otherwise
  */
 export function isPromiseLike<T>(v: unknown): v is Promise<T> {
-  return !!v && typeof (v as Promise<T>).then === "function";
+  return Boolean(v && typeof (v as Promise<T>).then === "function");
 }
 
 /**
@@ -80,7 +78,7 @@ export function isPromiseLike<T>(v: unknown): v is Promise<T> {
 export function isErrorResult<T>(
   final?: FinishResult<T>
 ): final is ErrorResult {
-  return Boolean(final && (final as ErrorResult).error !== undefined);
+  return Boolean(final && "error" in final);
 }
 
 /**
@@ -113,7 +111,7 @@ export function resolveFunction<T>(
   try {
     const result = fn();
     if (isPromiseLike(result)) {
-      return Promise.resolve(result).then(
+      return result.then(
         (value: T) => final({ value }),
         (error: unknown) => final({ error })
       );
