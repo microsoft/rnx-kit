@@ -1,5 +1,5 @@
 {
-  "extends": "@rnx-kit/tsconfig/tsconfig.json",
+  "extends": "@rnx-kit/tsconfig/tsconfig.node.json",
   "compilerOptions": {
     "lib": ["ES2019.Object"],
     "alwaysStrict": false

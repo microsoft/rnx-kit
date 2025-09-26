@@ -1,9 +1,9 @@
 import type { Options } from "fast-glob";
 import fg from "fast-glob";
 import findUp from "find-up";
-import { readFileSync } from "fs";
-import { readFile } from "fs/promises";
-import * as path from "path";
+import { readFileSync } from "node:fs";
+import { readFile } from "node:fs/promises";
+import * as path from "node:path";
 import stripJsonComments from "strip-json-comments";
 
 type PackageManager = {
@@ -85,16 +85,16 @@ export function getImplementation(sentinel: string): Promise<PackageManager> {
     case BUN_LOCKB: // fallthrough — logic defining workspaces config is the same as for npm and yarn
     case PACKAGE_LOCK_JSON: // fallthrough — logic defining workspaces config is the same for npm and yarn
     case YARN_LOCK:
-      return import("./yarn");
+      return import("./yarn.js");
 
     case LERNA_JSON:
-      return import("./lerna");
+      return import("./lerna.js");
 
     case PNPM_WORKSPACE_YAML:
-      return import("./pnpm");
+      return import("./pnpm.js");
 
     case RUSH_JSON:
-      return import("./rush");
+      return import("./rush.js");
   }
 
   throw new Error(

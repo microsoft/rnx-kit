@@ -9,7 +9,7 @@ import type { BundleArgs, RequestOptions } from "../types";
 export async function buildBundle(
   args: BundleArgs,
   config: ConfigT,
-  output: typeof import("metro/src/shared/output/bundle"),
+  output: typeof import("metro/private/shared/output/bundle"),
   requestOpts: RequestOptions
 ): Promise<void> {
   const Server = requireModuleFromMetro("metro/src/Server", config.projectRoot);
@@ -24,6 +24,7 @@ export async function buildBundle(
     const outputAssets = await server.getAssets({
       ...Server.DEFAULT_BUNDLE_OPTIONS,
       ...requestOpts,
+      // @ts-expect-error 'bundleType' existed in older versions of 'BundleOptions'
       bundleType: "todo",
     });
 

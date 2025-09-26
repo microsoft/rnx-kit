@@ -2,7 +2,7 @@
 "use strict";
 
 /**
- * @typedef {import("@typescript-eslint/types/dist/index").TSESTree.Node} Node
+ * @typedef {import("@typescript-eslint/types").TSESTree.Node} Node
  * @typedef {import("eslint").Linter.Config} Config
  * @typedef {import("eslint").Rule.RuleContext} ESLintRuleContext
  * @typedef {import("eslint").Rule.ReportFixer} ESLintReportFixer

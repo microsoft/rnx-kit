@@ -54,7 +54,7 @@ export function bundle(
   // https://github.com/facebook/metro/commit/a0f99e136fbd2e02ab070437cee9f6e9baa36d16
   const { runMetro } = requireModuleFromMetro("metro", config.projectRoot);
   if (!runMetro) {
-    return import("./bundle/bundle-0.66").then(({ buildBundle }) =>
+    return import("./bundle/bundle-0.66.js").then(({ buildBundle }) =>
       buildBundle(args, config, output, {
         entryFile: args.entryFile,
         sourceMapUrl,
@@ -66,7 +66,7 @@ export function bundle(
     );
   }
 
-  return import("./bundle/bundle-0.71").then(({ buildBundle }) => {
+  return import("./bundle/bundle-0.71.js").then(({ buildBundle }) => {
     const sourceMap = args.sourcemapOutput != null;
     return buildBundle(args, config, output, {
       dev: args.dev,
