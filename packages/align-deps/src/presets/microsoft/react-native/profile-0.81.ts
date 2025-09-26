@@ -151,7 +151,12 @@ export const profile: Profile = {
 
   "test-app": {
     name: "react-native-test-app",
-    version: "^4.4.6",
+    version: "^4.4.11",
     devOnly: true,
+  },
+
+  animation: {
+    name: "react-native-reanimated",
+    version: "^3.19.0",
   },
 };

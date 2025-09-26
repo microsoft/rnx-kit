@@ -63,7 +63,7 @@
     "@rnx-kit/third-party-notices": "workspace:*",
     "@rnx-kit/tsconfig": "workspace:*",
     "@types/react": "^19.0.0",
-    "react-native-test-app": "^4.1.4"
+    "react-native-test-app": "^4.3.1"
   },
   "rnx-kit": {
     "kitType": "app",
