@@ -16,7 +16,10 @@ export type StreamLike = { write: WriteToStream };
 /**
  * Signature for opening a file stream, can be overridden for testing purposes
  */
-type GetFileStream = (filePath: string, append?: boolean) => StreamLike;
+type GetFileStream = (
+  filePath: string,
+  append?: "append" | "overwrite"
+) => StreamLike;
 
 /**
  * Signature for getting a console stream, can be overridden for testing purposes
@@ -24,14 +27,19 @@ type GetFileStream = (filePath: string, append?: boolean) => StreamLike;
 type GetConsoleStream = (target: ConsoleTarget) => StreamLike;
 
 /** open a file stream, either in append or write mode */
-function openFileStream(filePath: string, append?: boolean) {
+function openFileStream(
+  filePath: string,
+  append: "append" | "overwrite" = "overwrite"
+) {
   // ensure the directory exists
   const dir = path.dirname(filePath);
   if (dir && !fs.existsSync(dir)) {
     fs.mkdirSync(dir, { recursive: true, mode: 0o755 });
   }
   // now create/open the stream
-  return fs.createWriteStream(filePath, { flags: append ? "a" : "w" });
+  return fs.createWriteStream(filePath, {
+    flags: append === "append" ? "a" : "w",
+  });
 }
 
 /** get either stdout or stderr, depending on target */
@@ -77,6 +85,7 @@ export function getStreamWrite(
   prefix?: string
 ): WriteToStream {
   return ((str, encoding, cb) => {
+    // note we only inject the prefix when it is a simple string, with complex buffer types they pass through as is
     if (prefix && typeof str === "string") {
       str = prefix + str;
     }
@@ -94,7 +103,7 @@ export function getStreamWrite(
  */
 export function openFileWrite(
   filePath: string,
-  append?: boolean,
+  append: "append" | "overwrite" = "overwrite",
   prefix?: string
 ) {
   // grab the file stream

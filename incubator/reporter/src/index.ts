@@ -14,8 +14,6 @@ export {
   subscribeToStart,
 } from "./events.ts";
 
-export type { LogLevel } from "./levels.ts";
-
 // output creation
 export { createOutput, mergeOutput } from "./output.ts";
 
@@ -49,6 +47,7 @@ export type {
   ErrorEvent,
   ErrorResult,
   FinishResult,
+  LogLevel,
   Logger,
   LoggerOptions,
   NormalResult,

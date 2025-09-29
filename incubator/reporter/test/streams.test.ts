@@ -85,9 +85,12 @@ export function mockOutput(): MockOutput {
     stream.references++;
     return stream;
   };
-  getStream.file = (filePath: string, append?: boolean) => {
+  getStream.file = (
+    filePath: string,
+    append: "append" | "overwrite" = "overwrite"
+  ) => {
     const files = mockedOutput.files;
-    const flags = append ? "a" : "w";
+    const flags = append === "append" ? "a" : "w";
     const existing = files[filePath];
     if (existing) {
       existing.references++;
@@ -159,7 +162,7 @@ describe("streams", () => {
 
       it("should create new file stream in append mode", () => {
         const filePath = "/test/path/file.log";
-        const stream = getStream.file(filePath, true);
+        const stream = getStream.file(filePath, "append");
 
         assert.ok(stream);
         assert.strictEqual(mockOut.files[filePath].flags, "a");
@@ -174,7 +177,7 @@ describe("streams", () => {
         assert.strictEqual(mockOut.files[filePath].references, 1);
 
         // Second call in append mode
-        getStream.file(filePath, true);
+        getStream.file(filePath, "append");
         assert.strictEqual(mockOut.files[filePath].flags, "a");
         assert.strictEqual(mockOut.files[filePath].references, 2);
       });
@@ -183,12 +186,12 @@ describe("streams", () => {
         const filePath = "/test/path/file.log";
 
         // First call in append mode and write some data
-        const stream1 = getStream.file(filePath, true);
+        const stream1 = getStream.file(filePath, "append");
         stream1.write("initial data");
         assert.strictEqual(mockOut.files[filePath].output.length, 1);
 
         // Second call in write mode should clear output
-        getStream.file(filePath, false);
+        getStream.file(filePath, "overwrite");
         assert.strictEqual(mockOut.files[filePath].output.length, 0);
       });
     });
@@ -289,7 +292,7 @@ describe("streams", () => {
 
     it("should open file for appending", () => {
       const filePath = "/test/append.log";
-      const writeFunction = openFileWrite(filePath, true);
+      const writeFunction = openFileWrite(filePath, "append");
 
       writeFunction("appended content");
 
@@ -301,7 +304,7 @@ describe("streams", () => {
 
     it("should open file with prefix", () => {
       const filePath = "/test/prefixed.log";
-      const writeFunction = openFileWrite(filePath, false, "[FILE] ");
+      const writeFunction = openFileWrite(filePath, "overwrite", "[FILE] ");
 
       writeFunction("prefixed content");
 
@@ -312,7 +315,7 @@ describe("streams", () => {
 
     it("should open file for appending with prefix", () => {
       const filePath = "/test/append-prefix.log";
-      const writeFunction = openFileWrite(filePath, true, "[APPEND] ");
+      const writeFunction = openFileWrite(filePath, "append", "[APPEND] ");
 
       writeFunction("appended with prefix");
 
@@ -342,7 +345,11 @@ describe("streams", () => {
   describe("integration scenarios", () => {
     it("should handle mixed console and file operations", () => {
       const consoleWrite = getConsoleWrite("stdout");
-      const fileWrite = openFileWrite("/test/mixed.log", false, "[FILE] ");
+      const fileWrite = openFileWrite(
+        "/test/mixed.log",
+        "overwrite",
+        "[FILE] "
+      );
 
       consoleWrite("console message");
       fileWrite("file message");
@@ -356,8 +363,8 @@ describe("streams", () => {
     });
 
     it("should handle multiple file streams with different modes", () => {
-      const writeFile = openFileWrite("/test/write.log", false);
-      const appendFile = openFileWrite("/test/append.log", true);
+      const writeFile = openFileWrite("/test/write.log", "overwrite");
+      const appendFile = openFileWrite("/test/append.log", "append");
 
       writeFile("write mode content");
       appendFile("append mode content");

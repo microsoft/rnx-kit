@@ -3,10 +3,9 @@ import {
   DEFAULT_LOG_LEVEL,
   LL_ERROR,
   LL_WARN,
-  type LogLevel,
 } from "./levels.ts";
 import { getConsoleWrite } from "./streams.ts";
-import type { OutputFunction, OutputWriter } from "./types.ts";
+import type { LogLevel, OutputFunction, OutputWriter } from "./types.ts";
 
 /**
  * Create a new OutputWriter instance. If no functions are specified, will create a writer for
@@ -58,9 +57,12 @@ function getWrite(
   level: LogLevel,
   outputs: OutputWriter[]
 ): OutputFunction | undefined {
-  const writes = outputs
-    .map((output) => output[level])
-    .filter((o) => o !== undefined);
+  const writes: OutputFunction[] = [];
+  for (const output of outputs) {
+    if (output[level]) {
+      writes.push(output[level]!);
+    }
+  }
   return writes.length === 0
     ? undefined
     : writes.length === 1

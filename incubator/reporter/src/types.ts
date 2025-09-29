@@ -1,5 +1,6 @@
-import type { LogLevel } from "./levels.ts";
+import type { ALL_LOG_LEVELS } from "./levels.ts";
 
+export type LogLevel = (typeof ALL_LOG_LEVELS)[number];
 export type LogFunction = (...args: unknown[]) => void;
 
 export type TextTransform = (text: string) => string;

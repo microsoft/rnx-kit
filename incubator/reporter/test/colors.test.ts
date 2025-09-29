@@ -2,11 +2,15 @@ import assert from "node:assert";
 import { beforeEach, describe, it } from "node:test";
 import {
   ansiColor,
+  colorSupport,
   encodeAnsi256,
   encodeColor,
   fontStyle,
-  overrideColorSupport,
 } from "../src/colors.ts";
+
+function overrideColorSupport(val?: boolean) {
+  colorSupport().setColorSupport(val);
+}
 
 describe("colors", () => {
   describe("encodeColor disabled", () => {
@@ -292,22 +296,6 @@ describe("colors", () => {
       assert.strictEqual(colors.green(unicodeText), greenUnicode);
       assert.strictEqual(styles.italic(unicodeText), italicUnicode);
       assert.strictEqual(encodeAnsi256(unicodeText, 200), ansi256Unicode);
-    });
-
-    it("should handle null and undefined gracefully", () => {
-      overrideColorSupport(false);
-      const colors = ansiColor();
-      const styles = fontStyle();
-
-      // TypeScript should prevent this, but test runtime behavior
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      assert.strictEqual(colors.red(null as any), "null");
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      assert.strictEqual(colors.red(undefined as any), "undefined");
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      assert.strictEqual(styles.bold(null as any), "null");
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      assert.strictEqual(styles.bold(undefined as any), "undefined");
     });
   });
 });

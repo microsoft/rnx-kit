@@ -1,14 +1,15 @@
-import { ALL_LOG_LEVELS, type LogLevel } from "./levels.ts";
+import { ALL_LOG_LEVELS } from "./levels.ts";
 import { createOutput } from "./output.ts";
 import type {
   LogFunction,
   Logger,
   LoggerOptions,
+  LogLevel,
   OutputFunction,
   OutputOption,
   OutputWriter,
 } from "./types.ts";
-import { emptyFunction, lazyInit, serialize } from "./utils.ts";
+import { emptyFunction, serialize } from "./utils.ts";
 
 /**
  * Create a logger instance with the specified options.
@@ -16,7 +17,7 @@ import { emptyFunction, lazyInit, serialize } from "./utils.ts";
 export function createLogger(options: LoggerOptions = {}): Logger {
   const { output, prefix, onError } = options;
   const outputs = ensureOutput(output);
-  const prefixes = prefix ?? defaultPrefix();
+  const prefixes = prefix ?? defaultPrefix;
 
   // create logging functions for each log level
   const coreLogs = Object.fromEntries(
@@ -41,10 +42,10 @@ export function createLogger(options: LoggerOptions = {}): Logger {
 }
 
 /** default prefixes for log levels, lazy-init to not load color functions unless requested */
-const defaultPrefix = lazyInit<Partial<Record<LogLevel, string>>>(() => ({
+const defaultPrefix: Partial<Record<LogLevel, string>> = {
   error: "ERROR: ⛔",
   warn: "WARNING: ⚠️",
-}));
+};
 
 /**
  * Ensure the output option is a valid OutputWriter.

@@ -79,7 +79,11 @@ const exitHandler = lazyInit(() => {
   const handlers = new Set<VoidCallback>();
   process.on("exit", () => {
     for (const handler of handlers) {
-      handler();
+      try {
+        handler();
+      } catch {
+        // ignore errors in exit handlers
+      }
     }
   });
   return {

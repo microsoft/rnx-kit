@@ -84,6 +84,11 @@ export function createFormatter(
   return addDynamicFormatting(patched);
 }
 
+/**
+ * Add dynamic formatting functions to the static formatting functions.
+ * @param target static formatting functions to add dynamic functions to
+ * @returns the same formatter with dynamic functions added, similar to Object.assign
+ */
 function addDynamicFormatting(target: StaticFormatting): Formatter {
   const { durationUnits, durationValue, packageName, packageScope } = target;
   return Object.assign(target, {
@@ -117,7 +122,7 @@ export function formatDuration(
   }
   const decimalPlaces = Math.max(
     0,
-    2 - Math.floor(Math.log10(duration > 1 ? duration : 1))
+    2 - Math.floor(Math.log10(Math.max(duration, 1)))
   );
   return `${colorValue(duration.toFixed(decimalPlaces))}${colorUnits(unit)}`;
 }
