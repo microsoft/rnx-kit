@@ -16,12 +16,12 @@ export type StreamLike = { write: WriteToStream };
 /**
  * Signature for opening a file stream, can be overridden for testing purposes
  */
-export type GetFileStream = (filePath: string, append?: boolean) => StreamLike;
+type GetFileStream = (filePath: string, append?: boolean) => StreamLike;
 
 /**
  * Signature for getting a console stream, can be overridden for testing purposes
  */
-export type GetConsoleStream = (target: ConsoleTarget) => StreamLike;
+type GetConsoleStream = (target: ConsoleTarget) => StreamLike;
 
 /** open a file stream, either in append or write mode */
 function openFileStream(filePath: string, append?: boolean) {
@@ -54,35 +54,12 @@ export const getStream: { file: GetFileStream; console: GetConsoleStream } = {
  * Get a write function for the specified console target. This also allows for capturing all
  * console output by providing a captureWrite function.
  *
- * In the case where captureWrite is provided, the returned function will be a direct call to
- * the console's original write function, but calls to the stream's write method will also
- * call the provided captureWrite function.
- *
- * This is useful if you want to ensure all console output is captured to a log file, even if
- * not going through the reporter/logger.
- *
  * @param target The console target to get the write function for.
- * @param captureWrite An optional write function to also call when writing to the console.
- * @param prefix An optional prefix to add to each line written to the console.
  * @returns A write function that writes to the console.
  * @internal
  */
-export function getConsoleWrite(
-  target: ConsoleTarget,
-  captureWrite?: WriteToStream
-) {
+export function getConsoleWrite(target: ConsoleTarget) {
   const stdStream = getStream.console(target);
-  if (captureWrite) {
-    // capture needs to wrap the original stream's write function
-    const writeOriginal = stdStream.write.bind(stdStream);
-    // replace the stream's write function to one that also calls captureWrite
-    stdStream.write = ((chunk, encoding, cb) => {
-      captureWrite(chunk, encoding, cb);
-      return writeOriginal(chunk, encoding, cb);
-    }) as WriteToStream;
-    // now return the direct call to the original write function
-    return writeOriginal;
-  }
   // in the non-capture case return a write function that takes the stream into account,
   // which means that it will update if someone else captures the stream
   return getStreamWrite(stdStream);

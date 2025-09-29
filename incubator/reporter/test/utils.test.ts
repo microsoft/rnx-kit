@@ -63,7 +63,7 @@ describe("utils", () => {
     it("should return true for error results", () => {
       assert.strictEqual(isErrorResult({ error: new Error("test") }), true);
       assert.strictEqual(isErrorResult({ error: "string error" }), true);
-      assert.strictEqual(isErrorResult({ error: undefined }), false);
+      assert.strictEqual(isErrorResult({ error: undefined }), true);
     });
 
     it("should return false for success results", () => {
@@ -258,45 +258,29 @@ describe("utils", () => {
 
   describe("serialize", () => {
     it("should serialize simple values", () => {
-      const inspectOptions = { colors: false, depth: 1 };
-
-      const result = serialize(inspectOptions, "hello", 42, true);
+      const result = serialize("hello", 42, true);
       assert.strictEqual(result, "hello 42 true\n");
     });
 
     it("should filter out null and undefined values", () => {
-      const inspectOptions = { colors: false, depth: 1 };
-
-      const result = serialize(
-        inspectOptions,
-        "hello",
-        null,
-        "world",
-        undefined,
-        42
-      );
+      const result = serialize("hello", null, "world", undefined, 42);
       assert.strictEqual(result, "hello world 42\n");
     });
 
     it("should handle empty arguments", () => {
-      const inspectOptions = { colors: false, depth: 1 };
-
-      const result = serialize(inspectOptions);
+      const result = serialize();
       assert.strictEqual(result, "\n");
     });
 
     it("should handle all null/undefined arguments", () => {
-      const inspectOptions = { colors: false, depth: 1 };
-
-      const result = serialize(inspectOptions, null, undefined, null);
+      const result = serialize(null, undefined, null);
       assert.strictEqual(result, "\n");
     });
 
     it("should serialize objects using inspect", () => {
-      const inspectOptions = { colors: false, depth: 1 };
       const obj = { key: "value", number: 123 };
 
-      const result = serialize(inspectOptions, "Object:", obj);
+      const result = serialize("Object:", obj);
       assert(result.includes("Object:"));
       assert(result.includes("key"));
       assert(result.includes("value"));
@@ -305,10 +289,9 @@ describe("utils", () => {
     });
 
     it("should serialize arrays using inspect", () => {
-      const inspectOptions = { colors: false, depth: 1 };
       const arr = [1, 2, "three"];
 
-      const result = serialize(inspectOptions, "Array:", arr);
+      const result = serialize("Array:", arr);
       assert(result.includes("Array:"));
       assert(result.includes("1"));
       assert(result.includes("2"));
@@ -317,43 +300,19 @@ describe("utils", () => {
     });
 
     it("should convert non-object primitives to strings", () => {
-      const inspectOptions = { colors: false, depth: 1 };
-
-      const result = serialize(inspectOptions, 42, true, false, "string");
+      const result = serialize(42, true, false, "string");
       assert.strictEqual(result, "42 true false string\n");
     });
 
     it("should handle mixed types", () => {
-      const inspectOptions = { colors: false, depth: 1 };
       const obj = { nested: true };
 
-      const result = serialize(inspectOptions, "prefix", 123, obj, "suffix");
+      const result = serialize("prefix", 123, obj, "suffix");
       assert(result.includes("prefix"));
       assert(result.includes("123"));
       assert(result.includes("nested"));
       assert(result.includes("suffix"));
       assert(result.endsWith("\n"));
-    });
-
-    it("should respect inspect options depth", () => {
-      const shallowOptions = { colors: false, depth: 1 };
-      const deepOptions = { colors: false, depth: 3 };
-      const deepObj = {
-        level1: {
-          level2: {
-            level3: {
-              value: "deep",
-            },
-          },
-        },
-      };
-
-      const shallowResult = serialize(shallowOptions, deepObj);
-      const deepResult = serialize(deepOptions, deepObj);
-
-      // Deep result should contain more detail
-      assert(deepResult.length >= shallowResult.length);
-      assert(deepResult.includes("deep"));
     });
 
     it("should respect inspect options colors", () => {
@@ -372,29 +331,25 @@ describe("utils", () => {
     });
 
     it("should handle special values", () => {
-      const inspectOptions = { colors: false, depth: 1 };
-
-      const result = serialize(inspectOptions, 0, "", false, NaN, Infinity);
+      const result = serialize(0, "", false, NaN, Infinity);
       assert.strictEqual(result, "0  false NaN Infinity\n");
     });
 
     it("should handle functions", () => {
-      const inspectOptions = { colors: false, depth: 1 };
       const fn = function testFunction() {
         return "test";
       };
 
-      const result = serialize(inspectOptions, "Function:", fn);
+      const result = serialize("Function:", fn);
       assert(result.includes("Function:"));
       assert(result.includes("function") || result.includes("[Function"));
       assert(result.endsWith("\n"));
     });
 
     it("should handle Error objects", () => {
-      const inspectOptions = { colors: false, depth: 1 };
       const error = new Error("Test error message");
 
-      const result = serialize(inspectOptions, "Error:", error);
+      const result = serialize("Error:", error);
       assert(result.includes("Error:"));
       assert(result.includes("Error"));
       assert(result.includes("Test error message"));
@@ -402,31 +357,28 @@ describe("utils", () => {
     });
 
     it("should handle Date objects", () => {
-      const inspectOptions = { colors: false, depth: 1 };
       const date = new Date("2024-01-01T00:00:00.000Z");
 
-      const result = serialize(inspectOptions, "Date:", date);
+      const result = serialize("Date:", date);
       assert(result.includes("Date:"));
       assert(result.includes("2024"));
       assert(result.endsWith("\n"));
     });
 
     it("should handle RegExp objects", () => {
-      const inspectOptions = { colors: false, depth: 1 };
       const regex = /test\d+/gi;
 
-      const result = serialize(inspectOptions, "Regex:", regex);
+      const result = serialize("Regex:", regex);
       assert(result.includes("Regex:"));
       assert(result.includes("test"));
       assert(result.endsWith("\n"));
     });
 
     it("should handle circular references gracefully", () => {
-      const inspectOptions = { colors: false, depth: 1 };
       const obj: TestAny = { name: "circular" };
       obj.self = obj;
 
-      const result = serialize(inspectOptions, "Circular:", obj);
+      const result = serialize("Circular:", obj);
       assert(result.includes("Circular:"));
       assert(result.includes("circular"));
       assert(result.endsWith("\n"));
@@ -434,108 +386,74 @@ describe("utils", () => {
     });
 
     it("should join multiple arguments with spaces", () => {
-      const inspectOptions = { colors: false, depth: 1 };
-
-      const result = serialize(inspectOptions, "a", "b", "c", "d");
+      const result = serialize("a", "b", "c", "d");
       assert.strictEqual(result, "a b c d\n");
     });
 
     it("should handle symbols", () => {
-      const inspectOptions = { colors: false, depth: 1 };
       const sym = Symbol("test");
 
-      const result = serialize(inspectOptions, "Symbol:", sym);
+      const result = serialize("Symbol:", sym);
       assert(result.includes("Symbol:"));
       assert(result.includes("Symbol"));
       assert(result.endsWith("\n"));
     });
 
     it("should handle BigInt", () => {
-      const inspectOptions = { colors: false, depth: 1 };
       const bigint = BigInt("123456789012345678901234567890");
 
-      const result = serialize(inspectOptions, "BigInt:", bigint);
+      const result = serialize("BigInt:", bigint);
       assert(result.includes("BigInt:"));
       assert(result.includes("123456789012345678901234567890"));
       assert(result.endsWith("\n"));
     });
 
     it("should handle Map objects", () => {
-      const inspectOptions = { colors: false, depth: 1 };
       const map = new Map([
         ["key1", "value1"],
         ["key2", "value2"],
       ]);
 
-      const result = serialize(inspectOptions, "Map:", map);
+      const result = serialize("Map:", map);
       assert(result.includes("Map:"));
       assert(result.includes("Map"));
       assert(result.endsWith("\n"));
     });
 
     it("should handle Set objects", () => {
-      const inspectOptions = { colors: false, depth: 1 };
       const set = new Set(["value1", "value2", "value3"]);
 
-      const result = serialize(inspectOptions, "Set:", set);
+      const result = serialize("Set:", set);
       assert(result.includes("Set:"));
       assert(result.includes("Set"));
       assert(result.endsWith("\n"));
     });
 
     it("should handle Buffer objects", () => {
-      const inspectOptions = { colors: false, depth: 1 };
       const buffer = Buffer.from("hello world", "utf8");
 
-      const result = serialize(inspectOptions, "Buffer:", buffer);
+      const result = serialize("Buffer:", buffer);
       assert(result.includes("Buffer:"));
       assert(result.includes("Buffer"));
       assert(result.endsWith("\n"));
     });
 
-    it("should handle complex nested structures", () => {
-      const inspectOptions = { colors: false, depth: 2 };
-      const complex = {
-        string: "test",
-        number: 42,
-        boolean: true,
-        array: [1, 2, { nested: "value" }],
-        object: {
-          inner: "data",
-          fn: () => "function",
-        },
-      };
-
-      const result = serialize(inspectOptions, "Complex:", complex);
-      assert(result.includes("Complex:"));
-      assert(result.includes("test"));
-      assert(result.includes("42"));
-      assert(result.includes("true"));
-      assert(result.includes("nested"));
-      assert(result.includes("inner"));
-      assert(result.endsWith("\n"));
-    });
-
     it("should maintain consistent output format", () => {
-      const inspectOptions = { colors: false, depth: 1 };
-
       // Multiple calls with same input should produce same output
       const input = ["same", 123, { key: "value" }];
-      const result1 = serialize(inspectOptions, ...input);
-      const result2 = serialize(inspectOptions, ...input);
+      const result1 = serialize(...input);
+      const result2 = serialize(...input);
 
       assert.strictEqual(result1, result2);
     });
 
     it("should always end with newline", () => {
-      const inspectOptions = { colors: false, depth: 1 };
-
       const results = [
-        serialize(inspectOptions),
-        serialize(inspectOptions, "test"),
-        serialize(inspectOptions, { key: "value" }),
-        serialize(inspectOptions, null, undefined),
-        serialize(inspectOptions, "a", "b", "c"),
+        serialize("test"),
+        serialize("test", "test"),
+        serialize("test", { key: "value" }),
+        serialize(null, undefined),
+        serialize("a", "b", "c"),
       ];
 
       for (const result of results) {

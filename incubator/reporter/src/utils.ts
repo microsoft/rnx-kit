@@ -1,4 +1,4 @@
-import { inspect, type InspectOptions } from "node:util";
+import { inspect } from "node:util";
 import type { ErrorResult, FinishResult } from "./types.ts";
 
 /**
@@ -34,11 +34,11 @@ export function identity<T>(arg: T): T {
 }
 
 /** default options for using inspect to serialize */
-export const inspectOptions = lazyInit<InspectOptions>(() => ({
+const inspectOptions = {
   colors: false,
   depth: 1,
   maxArrayLength: 100,
-}));
+};
 
 /**
  * Serializes the given arguments using the provided inspect options.
@@ -46,19 +46,20 @@ export const inspectOptions = lazyInit<InspectOptions>(() => ({
  * @param args The arguments to serialize.
  * @returns The serialized string representation of the arguments.
  */
-export function serialize(
-  inspectOptions: InspectOptions,
-  ...args: unknown[]
-): string {
-  const parts: string[] = [];
+export function serialize(...args: unknown[]): string {
+  let msg = "";
   for (const arg of args) {
+    // skip null/undefined values
     if (arg != null) {
-      parts.push(
-        typeof arg === "object" ? inspect(arg, inspectOptions) : String(arg)
-      );
+      if (msg) {
+        msg += " ";
+      }
+      msg +=
+        typeof arg === "object" ? inspect(arg, inspectOptions) : String(arg);
     }
   }
-  return parts.join(" ") + "\n";
+  msg += "\n";
+  return msg;
 }
 
 /**

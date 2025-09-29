@@ -270,111 +270,6 @@ describe("streams", () => {
       assert.strictEqual(mockOut.stdout.calls, 1);
       assert.deepStrictEqual(mockOut.stdout.output, ["message with prefix"]);
     });
-
-    it("should create write function with capture", () => {
-      const captureOutput: string[] = [];
-      let captureCalls = 0;
-      const captureWrite: WriteToStream = ((chunk) => {
-        captureCalls++;
-        captureOutput.push(chunk.toString());
-        return true;
-      }) as WriteToStream;
-
-      // getConsoleWrite should set up capture on the mock stream
-      getConsoleWrite("stdout", captureWrite);
-
-      // Now get the same stream that was wrapped
-      const stream = getStream.console("stdout");
-
-      // Writing to this stream should trigger both capture and original write
-      stream.write("captured message");
-
-      // The capture function should be called
-      assert.strictEqual(captureCalls, 1);
-      assert.deepStrictEqual(captureOutput, ["captured message"]);
-      // The original mock should receive the message once (capture calls the original)
-      assert.strictEqual(mockOut.stdout.calls, 1);
-      assert.deepStrictEqual(mockOut.stdout.output, ["captured message"]);
-    });
-
-    it("should handle multiple writes with capture", () => {
-      const captureOutput: string[] = [];
-      const captureWrite: WriteToStream = ((chunk) => {
-        captureOutput.push(chunk.toString());
-        return true;
-      }) as WriteToStream;
-
-      getConsoleWrite("stderr", captureWrite);
-
-      // Get the same stream that was wrapped
-      const stream = getStream.console("stderr");
-      stream.write("first message");
-      stream.write("second message");
-
-      assert.strictEqual(captureOutput.length, 2);
-      assert.deepStrictEqual(captureOutput, [
-        "first message",
-        "second message",
-      ]);
-      // Each write goes through capture to original, so 2 total calls
-      assert.strictEqual(mockOut.stderr.calls, 2);
-    });
-
-    it("should handle capture with simple callback", () => {
-      const captureOutput: string[] = [];
-      const captureWrite: WriteToStream = ((chunk) => {
-        captureOutput.push(chunk.toString());
-        return true;
-      }) as WriteToStream;
-
-      getConsoleWrite("stdout", captureWrite);
-
-      // Use the wrapped stream, not the returned function
-      const stream = getStream.console("stdout");
-      stream.write("message with callback");
-
-      assert.deepStrictEqual(captureOutput, ["message with callback"]);
-      assert.strictEqual(mockOut.stdout.calls, 1); // capture calls original
-      assert.deepStrictEqual(mockOut.stdout.output, ["message with callback"]);
-    });
-
-    it("should allow other code to also capture after initial setup", () => {
-      const firstCaptureOutput: string[] = [];
-      const firstCapture: WriteToStream = (chunk) => {
-        firstCaptureOutput.push(`[FIRST] ${chunk.toString()}`);
-        return true;
-      };
-
-      // First capture setup
-      getConsoleWrite("stdout", firstCapture);
-
-      // Get the stream that was wrapped
-      const stream = getStream.console("stdout");
-
-      // Someone else modifies the stream (simulating another capture layer)
-      const originalWrite = stream.write;
-      const secondCaptureOutput: string[] = [];
-      stream.write = ((chunk, encoding, cb) => {
-        secondCaptureOutput.push(`[SECOND] ${chunk.toString()}`);
-        return originalWrite.call(stream, chunk, encoding, cb);
-      }) as WriteToStream;
-
-      // Write through the stream to trigger both captures
-      stream.write("layered capture message");
-
-      // First capture should work
-      assert.deepStrictEqual(firstCaptureOutput, [
-        "[FIRST] layered capture message",
-      ]);
-      // Second capture should also work (wrapping the first)
-      assert.deepStrictEqual(secondCaptureOutput, [
-        "[SECOND] layered capture message",
-      ]);
-      // Original stream should receive the message
-      assert.ok(mockOut.stdout.calls > 0);
-    });
-
-    // Note: Capture functionality tests added after fix
   });
 
   describe("openFileWrite", () => {
@@ -446,7 +341,7 @@ describe("streams", () => {
 
   describe("integration scenarios", () => {
     it("should handle mixed console and file operations", () => {
-      const consoleWrite = getConsoleWrite("stdout", undefined);
+      const consoleWrite = getConsoleWrite("stdout");
       const fileWrite = openFileWrite("/test/mixed.log", false, "[FILE] ");
 
       consoleWrite("console message");
@@ -457,33 +352,6 @@ describe("streams", () => {
       assert.strictEqual(mockOut.files["/test/mixed.log"].calls, 1);
       assert.deepStrictEqual(mockOut.files["/test/mixed.log"].output, [
         "[FILE] file message",
-      ]);
-    });
-
-    it("should handle console capture with file writing", () => {
-      const captureOutput: string[] = [];
-      const captureWrite: WriteToStream = ((chunk) => {
-        captureOutput.push(`[CAPTURED] ${chunk.toString()}`);
-        return true;
-      }) as WriteToStream;
-
-      getConsoleWrite("stderr", captureWrite);
-      const fileWrite = openFileWrite("/test/capture.log");
-
-      // Write through the stream to trigger capture
-      const stream = getStream.console("stderr");
-      stream.write("error message");
-      fileWrite("file message");
-
-      // Should capture the console output
-      assert.deepStrictEqual(captureOutput, ["[CAPTURED] error message"]);
-      // Should write to stderr (capture calls original)
-      assert.strictEqual(mockOut.stderr.calls, 1);
-      assert.deepStrictEqual(mockOut.stderr.output, ["error message"]);
-      // Should write to file
-      assert.strictEqual(mockOut.files["/test/capture.log"].calls, 1);
-      assert.deepStrictEqual(mockOut.files["/test/capture.log"].output, [
-        "file message",
       ]);
     });
 

@@ -1,7 +1,3 @@
-// options for cascading reporters down a process tree
-export { createCascadingReporter } from "./cascade.ts";
-export type { CascadeSettings } from "./cascade.ts";
-
 // colors
 export { ansiColor, encodeAnsi256, encodeColor, fontStyle } from "./colors.ts";
 export type {
@@ -43,9 +39,6 @@ export {
   padString,
 } from "./formatting.ts";
 export type { Formatter, FormattingOptions } from "./formatting.ts";
-
-// performance monitoring
-export { checkOrEnablePerfTracing } from "./performance.ts";
 
 // session creation
 export { createSession } from "./session.ts";

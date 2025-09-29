@@ -135,9 +135,11 @@ export function colorPackage(
   packageScope: TextTransform = identity
 ): string {
   if (pkg.startsWith("@")) {
-    const parts = pkg.split("/");
-    if (parts.length > 1) {
-      return `${packageScope(parts[0])}${packageName("/" + parts.splice(0, 1).join("/"))}`;
+    const slashIndex = pkg.indexOf("/");
+    if (slashIndex > 0) {
+      return `${packageScope(pkg.slice(0, slashIndex))}${packageName(
+        pkg.slice(slashIndex)
+      )}`;
     }
   }
   return packageName(pkg);

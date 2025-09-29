@@ -8,7 +8,7 @@ import type {
   OutputOption,
   OutputWriter,
 } from "./types.ts";
-import { emptyFunction, inspectOptions, lazyInit, serialize } from "./utils.ts";
+import { emptyFunction, lazyInit, serialize } from "./utils.ts";
 
 /**
  * Create a logger instance with the specified options.
@@ -35,7 +35,7 @@ export function createLogger(options: LoggerOptions = {}): Logger {
     errorRaw: createLog(outputs.error, undefined, onError),
     fatalError: (...args: unknown[]) => {
       coreLogs.error(...args);
-      throw new Error(serialize(inspectOptions(), ...args));
+      throw new Error(serialize(...args));
     },
   };
 }
@@ -72,14 +72,10 @@ function createLog(
     return onError
       ? (...args: unknown[]) => {
           onError(args);
-          write(
-            serialize(inspectOptions(), ...(prefix ? [prefix, ...args] : args))
-          );
+          write(serialize(prefix, ...args));
         }
       : (...args: unknown[]) => {
-          write(
-            serialize(inspectOptions(), ...(prefix ? [prefix, ...args] : args))
-          );
+          write(serialize(prefix, ...args));
         };
   }
   return emptyFunction;
