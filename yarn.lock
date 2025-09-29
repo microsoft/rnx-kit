@@ -5177,7 +5177,6 @@ __metadata:
   resolution: "@rnx-kit/reporter@workspace:incubator/reporter"
   dependencies:
     "@rnx-kit/eslint-config": "npm:*"
-    "@rnx-kit/jest-preset": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
   languageName: unknown

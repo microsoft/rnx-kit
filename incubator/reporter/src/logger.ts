@@ -59,22 +59,26 @@ export function ensureOutput(option: OutputOption = "log"): OutputWriter {
 /**
  * Create a logging function for a specific log level.
  * @param write The output function to use for logging.
- * @param prefix The prefix to use for the log messages.
+ * @param userPrefix The prefix to use for the log messages. Supports functions to allow timestamp injection
  * @param onError Optional callback for handling errors during logging.
  * @returns A logging function that writes to the specified output.
  */
 function createLog(
   write?: OutputFunction,
-  prefix?: string,
+  userPrefix?: string | (() => string),
   onError?: (args: unknown[]) => void
 ): LogFunction {
   if (write) {
     return onError
       ? (...args: unknown[]) => {
+          const prefix =
+            typeof userPrefix === "function" ? userPrefix() : userPrefix;
           onError(args);
           write(serialize(prefix, ...args));
         }
       : (...args: unknown[]) => {
+          const prefix =
+            typeof userPrefix === "function" ? userPrefix() : userPrefix;
           write(serialize(prefix, ...args));
         };
   }

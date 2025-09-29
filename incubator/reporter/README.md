@@ -16,8 +16,7 @@ and errors.
 It is written as esm, side-effect free, with the functionality separated so that
 it will only bring in the portions that are used. The core logger and reporter
 functionality can be used on its own, with additional modules provided for
-colors, formatting, performance tracking, and cascading reporters through
-process trees provided.
+colors and formatting.
 
 All code is self-contained and this has no dependencies.
 
@@ -161,51 +160,6 @@ const unsubscribeError = subscribeToError((event) => {
 unsubscribeStart();
 unsubscribeFinish();
 unsubscribeError();
-```
-
-### 🌊 **Cascading Reporters**
-
-Share reporter configuration across process trees via environment variables.
-
-```typescript
-import { createCascadingReporter } from "@rnx-kit/reporter";
-
-// Parent process
-const reporter = createCascadingReporter("MY_APP_REPORTING", {
-  level: "verbose",
-  file: {
-    out: "./logs/app.log",
-    err: "./logs/errors.log",
-    capture: true, // capture all stdout/stderr
-  },
-});
-
-// Child processes automatically inherit these settings
-// and append to the same log files with PID prefixes
-```
-
-**Features:**
-
-- **Environment Inheritance**: Settings passed via environment variables
-- **File Output**: Shared log files with process ID prefixes
-- **Capture Mode**: Intercept all console output
-- **Depth Tracking**: Hierarchical process depth management
-
-### ⚡ **Performance Tracking**
-
-Built-in performance monitoring that can be enabled globally.
-
-```typescript
-import { checkOrEnablePerfTracing } from "@rnx-kit/reporter";
-
-// Enable performance tracking
-checkOrEnablePerfTracing({
-  level: "log",
-  file: { out: "./perf.log" },
-});
-
-// All reporter tasks and measurements are now tracked
-// Automatic performance reports on task completion
 ```
 
 ## Output Destinations

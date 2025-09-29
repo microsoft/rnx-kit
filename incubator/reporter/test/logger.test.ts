@@ -179,6 +179,23 @@ describe("logger", () => {
       assert.strictEqual(mockOut.stderr.output[1], "without prefix\n");
     });
 
+    it("should support dynamic prefixes", () => {
+      mockOut.clear();
+      let prefixString = "dynamic";
+      const prefix = () => prefixString;
+      const logger = createLogger({
+        output: createOutput("verbose"), // Use explicit output with mocked streams
+        prefix: { error: prefix },
+      });
+      logger.error("with prefix");
+      assert.strictEqual(mockOut.stderr.calls, 1);
+      assert.strictEqual(mockOut.stderr.output[0], "dynamic with prefix\n");
+
+      prefixString = "changed";
+      logger.error("with new prefix");
+      assert.strictEqual(mockOut.stderr.output[1], "changed with new prefix\n");
+    });
+
     it("should still trigger onError callback", () => {
       const errorCalls: unknown[][] = [];
       const onError = (args: unknown[]) => {

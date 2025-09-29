@@ -79,7 +79,7 @@ export type LoggerOptions = {
    * Optional prefixes for each log level. If not provided, default prefixes will be used for "error" and "warn" levels.
    * Set this to an empty object to disable all prefixes.
    */
-  prefix?: Partial<Record<LogLevel, string>>;
+  prefix?: Partial<Record<LogLevel, string | (() => string)>>;
 
   /**
    * Optional callback function that is called when an error occurs during logging.
@@ -159,7 +159,7 @@ export type ReporterConfiguration = {
   output: OutputWriter;
 
   // message prefixes for log types
-  logPrefix: Partial<Record<LogLevel, string>>;
+  logPrefix: Partial<Record<LogLevel, string | (() => string)>>;
 
   // message formatting functions for log types
   logFormat: Partial<Record<LogLevel, TextTransform>>;
