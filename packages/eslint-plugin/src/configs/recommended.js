@@ -54,6 +54,7 @@ module.exports = [
       ],
       "@typescript-eslint/no-var-requires": "off",
       "no-undef": "off",
+      "no-unneeded-ternary": "warn",
     },
   },
 ];
