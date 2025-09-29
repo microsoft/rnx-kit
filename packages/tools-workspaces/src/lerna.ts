@@ -1,5 +1,5 @@
-import { existsSync as fileExists } from "fs";
-import * as path from "path";
+import { existsSync as fileExists } from "node:fs";
+import * as path from "node:path";
 import {
   findPackages,
   findPackagesSync,

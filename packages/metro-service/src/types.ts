@@ -1,4 +1,4 @@
-import type { BundleOptions, OutputOptions } from "metro/src/shared/types";
+import type { BundleOptions, OutputOptions } from "metro/private/shared/types";
 
 export type BundleArgs = {
   assetsDest?: string;
