@@ -1,5 +1,12 @@
 # Change Log - @rnx-kit/eslint-plugin
 
+## 0.9.2
+
+### Patch Changes
+
+- 1d73d33: Enabled `no-unneeded-ternary` as a warning in the recommended preset,
+  and as an error in the strict preset.
+
 ## 0.9.1
 
 ### Patch Changes
