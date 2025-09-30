@@ -22,12 +22,12 @@
     "clsx": "^2.0.0",
     "docusaurus-lunr-search": "^3.5.0",
     "prism-react-renderer": "^2.3.0",
-    "react": "18.3.1",
-    "react-dom": "18.3.1"
+    "react": "~19.1.1",
+    "react-dom": "~19.1.1"
   },
   "devDependencies": {
     "@tsconfig/docusaurus": "^2.0.1",
-    "@types/react": "^18.3",
+    "@types/react": "~19.1.0",
     "prettier": "^3.0.0",
     "prettier-plugin-organize-imports": "^4.0.0",
     "typescript": "^5.0.0"
@@ -37,7 +37,10 @@
   },
   "packageManager": "yarn@4.9.4",
   "resolutions": {
-    "@pnpm/network.ca-file/graceful-fs": "^4.2.10"
+    "@docsearch/react": "link:../incubator/ignore",
+    "@pnpm/network.ca-file/graceful-fs": "^4.2.10",
+    "algoliasearch": "link:../incubator/ignore",
+    "algoliasearch-helper": "link:../incubator/ignore"
   },
   "browserslist": {
     "production": [
