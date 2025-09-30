@@ -79,7 +79,7 @@ export function createSession(
   };
 
   // call finish on process exit with an undefined result
-  unregisterOnExit = onExit(() => finish());
+  unregisterOnExit = onExit(finish);
 
   return {
     session,

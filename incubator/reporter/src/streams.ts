@@ -33,7 +33,7 @@ function openFileStream(
 ) {
   // ensure the directory exists
   const dir = path.dirname(filePath);
-  if (dir && !fs.existsSync(dir)) {
+  if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir, { recursive: true, mode: 0o755 });
   }
   // now create/open the stream

@@ -41,7 +41,6 @@ export function createLogger(options: LoggerOptions = {}): Logger {
   };
 }
 
-/** default prefixes for log levels, lazy-init to not load color functions unless requested */
 const defaultPrefix: Partial<Record<LogLevel, string>> = {
   error: "ERROR: ⛔",
   warn: "WARNING: ⚠️",
