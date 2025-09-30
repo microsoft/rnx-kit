@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
+import { stripVTControlCharacters } from "node:util";
 
 export type ConsoleTarget = Extract<keyof typeof process, "stdout" | "stderr">;
 
@@ -76,18 +77,25 @@ export function getConsoleWrite(target: ConsoleTarget) {
 /**
  * Get a write function for the specified stream.
  * @param stream the stream to write to
- * @param prefix An optional prefix to add to each line written to the stream.
+ * @param options Add prefixes or color stripping to strings
  * @returns A write function that writes to the stream.
  * @internal
  */
 export function getStreamWrite(
   stream: StreamLike,
-  prefix?: string
+  options?: { prefix?: string; stripColors?: boolean }
 ): WriteToStream {
+  const { prefix, stripColors } = options || {};
   return ((str, encoding, cb) => {
-    // note we only inject the prefix when it is a simple string, with complex buffer types they pass through as is
-    if (prefix && typeof str === "string") {
-      str = prefix + str;
+    // note non-string data includes various binary buffer types, it's indeterminate what a prefix or even what
+    // color stripping would mean in that case so only apply these to simple strings
+    if (typeof str === "string") {
+      if (prefix) {
+        str = prefix + str;
+      }
+      if (stripColors) {
+        str = stripVTControlCharacters(str);
+      }
     }
     return stream.write(str, encoding, cb);
   }) as WriteToStream;
@@ -108,5 +116,5 @@ export function openFileWrite(
 ) {
   // grab the file stream
   const stream = getStream.file(filePath, append);
-  return getStreamWrite(stream, prefix);
+  return getStreamWrite(stream, { prefix, stripColors: true });
 }

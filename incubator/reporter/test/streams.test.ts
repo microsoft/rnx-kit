@@ -212,7 +212,7 @@ describe("streams", () => {
 
     it("should create write function for stream with prefix", () => {
       const mockStream = createMockStream();
-      const writeFunction = getStreamWrite(mockStream, "[PREFIX] ");
+      const writeFunction = getStreamWrite(mockStream, { prefix: "[PREFIX] " });
 
       writeFunction("test message");
 
@@ -222,7 +222,7 @@ describe("streams", () => {
 
     it("should handle non-string input without prefix", () => {
       const mockStream = createMockStream();
-      const writeFunction = getStreamWrite(mockStream, "[PREFIX] ");
+      const writeFunction = getStreamWrite(mockStream, { prefix: "[PREFIX] " });
 
       const buffer = Buffer.from("buffer data");
       writeFunction(buffer);
@@ -393,7 +393,9 @@ describe("streams", () => {
     });
 
     it("should handle buffer writes with prefix", () => {
-      const writeFunction = getStreamWrite(mockOut.stdout, "[PREFIX] ");
+      const writeFunction = getStreamWrite(mockOut.stdout, {
+        prefix: "[PREFIX] ",
+      });
       const buffer = Buffer.from("buffer content");
 
       writeFunction(buffer);
