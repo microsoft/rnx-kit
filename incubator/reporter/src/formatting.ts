@@ -1,239 +1,158 @@
-import chalk from "chalk";
-import {
-  inspect,
-  type InspectOptions,
-  stripVTControlCharacters,
-} from "node:util";
-import type {
-  ColorType,
-  ColorValue,
-  FormattingOptions,
-  FormattingSettings,
-  Reporter,
-  ReporterFormatting,
-} from "./types.ts";
+import { stripVTControlCharacters } from "node:util";
+import type { AnsiColorFunctions, FontStyleFunctions } from "./colors.ts";
+import { ansiColor, encodeAnsi256, fontStyle } from "./colors.ts";
+import type { TextTransform } from "./types.ts";
+import { identity, lazyInit } from "./utils.ts";
 
-export function noChange<T>(arg: T) {
-  return arg;
-}
-
-export type Formatting = FormattingSettings & ReporterFormatting;
+type Alignment = "left" | "right" | "center";
 
 /**
- * Some ANSI 256 color values by tone for convenience, organized by hue from dark to light. Generally mid-toned so they are
- * discernable on both light and dark backgrounds.
- * - orange: 166, 208, 214
- * - green: 22, 28, 34, 40, 46
- * - cyan-blue: 24, 31, 38, 45
- * - cyan: 37, 44, 51, 87
- * - blue-green: 36, 43, 50 - one shift towards green from cyan
- * - magenta: 163, 201, 207
- * - purple: 128, 129, 135
- * -
+ * Static formatting functions, these do not depend on each other
  */
+type StaticFormatting = AnsiColorFunctions &
+  FontStyleFunctions & {
+    /** Semantic coloring functions */
+    durationValue: TextTransform;
+    durationUnits: TextTransform;
+    highlight1: TextTransform;
+    highlight2: TextTransform;
+    highlight3: TextTransform;
+    packageName: TextTransform;
+    packageScope: TextTransform;
+    path: TextTransform;
 
-const defaultFormatSettings: FormattingSettings = {
-  inspectOptions: {
-    colors: true,
-    depth: 2,
-    compact: true,
-  },
-  colors: {
-    duration: 34, // green bright
-    durationUnits: 145, // chalk dim setting
-    highlight1: 37, // cyan dark
-    highlight2: 38, // cyan-blue
-    highlight3: 45, // cyan-blue light
-    label: 36, // blue-green,
-    errorPrefix: "red", // chalk red value
-    package: 208, // orange light
-    path: 43, // blue-green
-    scope: 166, // orange mid
-    warnPrefix: "yellowBright", // chalk yellow bright value
-    verboseText: "dim", // chalk dim setting
-  },
-  prefixes: {
-    error: "ERROR: ⛔",
-    warn: "WARNING: ⚠️",
-  },
+    /** Pads a string, ignoring the color control characters, align defaults to "right" */
+    pad: (text: string, length: number, align?: Alignment) => string;
+  };
+
+/**
+ * Overridable formatting options, these can override any of the static formatting functions
+ */
+export type FormattingOptions = Partial<StaticFormatting>;
+
+/**
+ * A full set of formatting functions, including static formatters, and dynamic formatters
+ * which will pull values from the static formatters as needed.
+ */
+export type Formatter = StaticFormatting & {
+  /** format a duration value */
+  duration: (time: number) => string;
+
+  /** format a package name */
+  package: (pkg: string) => string;
 };
 
-const formattingDefault: Formatting = {
-  ...defaultFormatSettings,
-  ...createFormattingFunctions(defaultFormatSettings),
-};
+/**
+ * Get a default formatter with colors and formatting functions all implemented. Built
+ * on demand, so it won't be created unless requested.
+ */
+export const getFormatter = lazyInit<Formatter>(() => {
+  const staticFormatting: StaticFormatting = {
+    /** ansi colors */
+    ...ansiColor(),
 
-function applyColorValue(text: string, value: ColorValue): string {
-  if (typeof value === "number") {
-    return chalk.ansi256(value)(text);
-  }
-  if (value.startsWith("#")) {
-    return chalk.hex(value)(text);
-  } else {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const func = (chalk as any)[value];
-    if (typeof func === "function") {
-      return func(text);
-    }
-  }
-  return text;
-}
+    /** bold, dim, italic, etc. */
+    ...fontStyle(),
 
-function createColorFunction(settings: FormattingSettings): Reporter["color"] {
-  const { colors: colorSetting } = settings;
-  return (text: string, colorType: ColorType) => {
-    if (colorType !== "none") {
-      const setting = colorSetting[colorType];
-      if (setting) {
-        if (Array.isArray(setting)) {
-          for (const color of setting) {
-            text = applyColorValue(text, color);
-          }
-        } else {
-          text = applyColorValue(text, setting);
-        }
-      }
-    }
-    return text;
+    /** Semantic colors used by the reporter module and formatting functions */
+    durationValue: (s) => encodeAnsi256(s, 34),
+    durationUnits: fontStyle().dim,
+    highlight1: (s) => encodeAnsi256(s, 37),
+    highlight2: (s) => encodeAnsi256(s, 38),
+    highlight3: (s) => encodeAnsi256(s, 45),
+    packageName: (s) => encodeAnsi256(s, 208), // orange light
+    packageScope: (s) => encodeAnsi256(s, 166), // orange mid
+    path: (s) => encodeAnsi256(s, 43), // blue-green
+
+    /** Add the padding utility function */
+    pad: padString,
   };
-}
+  return addDynamicFormatting(staticFormatting);
+});
 
 /**
- * @internal
- * @param overrides new options, if any, to apply to the formatting
- * @param baseline original formatting settings to use as a base
- * @returns either the original formatting settings if there are no overrides, or a new formatting object with the overrides applied
+ * Create a new formatter with the given settings
+ * @param settings The new override values
+ * @param base The base formatter to use, will use default formatter if not provided
+ * @returns A new formatter with the updated settings
  */
-export function getFormatting(
-  overrides?: FormattingOptions,
-  baseline: Formatting = formattingDefault
-): Formatting {
-  if (overrides) {
-    const { colors, inspectOptions, prefixes } = baseline;
-    const result = {
-      inspectOptions: { ...inspectOptions, ...overrides.inspectOptions },
-      colors: { ...colors, ...overrides.colors },
-      prefixes: { ...prefixes, ...overrides.prefixes },
-    } as Formatting;
-    Object.assign(result, createFormattingFunctions(result));
-    return result;
-  }
-  return baseline;
+export function createFormatter(
+  settings: FormattingOptions,
+  base: Formatter = getFormatter()
+): Formatter {
+  const patched = { ...base, ...settings };
+  return addDynamicFormatting(patched);
 }
 
 /**
- * update the default formatting settings with new options, for all reporters which aren't overriding them in some manner.
- * @param options optional formatting options to apply, if any
+ * Add dynamic formatting functions to the static formatting functions.
+ * @param target static formatting functions to add dynamic functions to
+ * @returns the same formatter with dynamic functions added, similar to Object.assign
  */
-export function updateDefaultFormatting(options?: FormattingOptions) {
-  const newDefault = getFormatting(options);
-  if (newDefault !== formattingDefault) {
-    Object.assign(formattingDefault, newDefault);
-  }
+function addDynamicFormatting(target: StaticFormatting): Formatter {
+  const { durationUnits, durationValue, packageName, packageScope } = target;
+  return Object.assign(target, {
+    duration: (duration: number) =>
+      formatDuration(duration, durationValue, durationUnits),
+    package: (pkg: string) => colorPackage(pkg, packageName, packageScope),
+  });
 }
 
 /**
- * Color the given text given the current global default formatting settings.
- * @param text text to color
- * @param type what type of color to apply, one of the ColorType values
- * @returns text with the specified color applied, or unchanged if the type is "none"
- */
-export function colorText(text: string, type: ColorType): string {
-  return formattingDefault.color(text, type);
-}
-
-/**
- * @param time duration in milliseconds to format
- * @returns the duration formatted as a string, with the unit (ms, s, m) appended
- */
-export function formatDuration(time: number): string {
-  return formattingDefault.formatDuration(time);
-}
-
-/**
- * @param moduleName name of the package to format, either scoped or unscoped
- * @returns a formatted package name, with scope and package name colored appropriately
- */
-export function formatPackage(moduleName: string): string {
-  return formattingDefault.formatPackage(moduleName);
-}
-
-/**
- * @param args list of args to serialize, using the current default inspect options
- */
-export function serializeArgs(args: unknown[]): string {
-  return formattingDefault.serializeArgs(args);
-}
-
-/**
- * @internal
- */
-export function createFormattingFunctions(
-  settings: FormattingSettings
-): ReporterFormatting {
-  const { inspectOptions } = settings;
-  const color = createColorFunction(settings);
-  return {
-    color,
-    serializeArgs: (args: unknown[]) => serializeArgsImpl(inspectOptions, args),
-    formatDuration: (time: number) => formatDurationImpl(color, time),
-    formatPackage: (pkg: string) => formatPackageImpl(color, pkg),
-  };
-}
-
-/**
- * Parse a duration in milliseconds and formatting it to a string suitable for display
+ * Format a duration value. This will pick appropriate units (ms, s, m) and format
+ * the value to a reasonable number of decimal places.
+ *
  * @param duration duration in milliseconds
- * @returns an tuple of the formatted numeric string and the unit (seconds or milliseconds)
+ * @param colorValue formatting function for the duration value
+ * @param colorUnits formatting function for the duration units
+ * @returns formatted duration string
  */
-function formatDurationImpl(
-  color: Reporter["color"],
+export function formatDuration(
   duration: number,
-  secondToMinuteCutoff = 120
+  colorValue: TextTransform = identity,
+  colorUnits: TextTransform = identity
 ): string {
   let unit = "ms";
-  if (duration > secondToMinuteCutoff * 1000) {
+  if (duration >= 120000) {
     unit = "m";
     duration /= 60000;
-  } else if (duration > 1000) {
+  } else if (duration >= 1000) {
     unit = "s";
     duration /= 1000;
   }
-  const decimalPlaces = Math.max(0, 2 - Math.floor(Math.log10(duration)));
-  return `${color(duration.toFixed(decimalPlaces), "duration")}${color(unit, "durationUnits")}`;
+  const decimalPlaces = Math.max(
+    0,
+    2 - Math.floor(Math.log10(Math.max(duration, 1)))
+  );
+  return `${colorValue(duration.toFixed(decimalPlaces))}${colorUnits(unit)}`;
 }
 
-function formatPackageImpl(color: Reporter["color"], moduleName: string) {
-  if (moduleName.startsWith("@")) {
-    const parts = moduleName.split("/");
-    if (parts.length > 1) {
-      const scope = parts[0];
-      const pkg = parts.slice(1).join("/");
-      return `${color(scope, "scope")}${color("/" + pkg, "package")}`;
+/**
+ * Color a package name and its scope if present.
+ * @param pkg package name to color
+ * @param packageName formatting function for the package name
+ * @param packageScope formatting function for the package scope
+ * @returns colored package name
+ */
+export function colorPackage(
+  pkg: string,
+  packageName: TextTransform = identity,
+  packageScope: TextTransform = identity
+): string {
+  if (pkg.startsWith("@")) {
+    const slashIndex = pkg.indexOf("/");
+    if (slashIndex > 0) {
+      return `${packageScope(pkg.slice(0, slashIndex))}${packageName(
+        pkg.slice(slashIndex)
+      )}`;
     }
   }
-  return color(moduleName, "package");
+  return packageName(pkg);
 }
 
 /**
- * @param inspectOptions options for node:util.inspect, used to format the arguments, same as console.log
- * @param args args list to serialize
- * @returns a single string with arguments joined together with spaces, terminated with a newline
- */
-function serializeArgsImpl(
-  inspectOptions: InspectOptions,
-  args: unknown[]
-): string {
-  let msg = args
-    .map((arg) =>
-      typeof arg === "string" ? arg : inspect(arg, inspectOptions)
-    )
-    .join(" ");
-  msg += "\n";
-  return msg;
-}
-
-/**
+ * Pad a string to the specified length, ignoring VT control characters.
+ * Defaults to right alignment.
  * @param str target string to pad with spaces
  * @param length desired length
  * @param end pad at the end instead of the start
@@ -242,7 +161,7 @@ function serializeArgsImpl(
 export function padString(
   str: string,
   length: number,
-  align: "left" | "right" | "center" = "right"
+  align: Alignment = "right"
 ): string {
   const undecorated = stripVTControlCharacters(str);
   if (undecorated.length < length) {

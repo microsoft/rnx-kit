@@ -6,6 +6,8 @@
   "license": "MIT",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
+  "type": "module",
+  "sideEffects": false,
   "author": {
     "name": "Microsoft Open Source",
     "email": "microsoftopensource@users.noreply.github.com"
@@ -35,17 +37,10 @@
     "lint": "rnx-kit-scripts lint",
     "test": "rnx-kit-scripts test"
   },
-  "dependencies": {
-    "chalk": "^4.1.0"
-  },
   "devDependencies": {
     "@rnx-kit/eslint-config": "*",
-    "@rnx-kit/jest-preset": "*",
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*"
-  },
-  "jest": {
-    "preset": "@rnx-kit/jest-preset/private"
   },
   "experimental": true
 }

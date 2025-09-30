@@ -4,16 +4,23 @@ import {
   unsubscribe,
   type ChannelListener,
 } from "node:diagnostics_channel";
-import type { ErrorEvent, SessionData } from "./types";
+import type { ErrorEvent, SessionData } from "./types.ts";
+import { lazyInit } from "./utils.ts";
 
 /** @internal */
-export const errorEvent = createEventHandler<ErrorEvent>("rnx-reporter:errors");
+export const errorEvent = lazyInit(() =>
+  createEventHandler<ErrorEvent>("rnx-reporter:errors")
+);
 
 /** @internal */
-export const startEvent = createEventHandler<SessionData>("rnx-reporter:start");
+export const startEvent = lazyInit(() =>
+  createEventHandler<SessionData>("rnx-reporter:start")
+);
 
 /** @internal */
-export const finishEvent = createEventHandler<SessionData>("rnx-reporter:end");
+export const finishEvent = lazyInit(() =>
+  createEventHandler<SessionData>("rnx-reporter:end")
+);
 
 /**
  * Typed wrapper around managing events sent through node's diagnostics channel
@@ -45,7 +52,7 @@ export function createEventHandler<T>(name: string) {
  * @returns a function to unsubscribe from the event
  */
 export function subscribeToStart(callback: (event: SessionData) => void) {
-  return startEvent.subscribe(callback);
+  return startEvent().subscribe(callback);
 }
 
 /**
@@ -54,7 +61,7 @@ export function subscribeToStart(callback: (event: SessionData) => void) {
  * @returns a function to unsubscribe from the event
  */
 export function subscribeToFinish(callback: (event: SessionData) => void) {
-  return finishEvent.subscribe(callback);
+  return finishEvent().subscribe(callback);
 }
 
 /**
@@ -63,5 +70,38 @@ export function subscribeToFinish(callback: (event: SessionData) => void) {
  * @returns a function to unsubscribe from the event
  */
 export function subscribeToError(callback: (event: ErrorEvent) => void) {
-  return errorEvent.subscribe(callback);
+  return errorEvent().subscribe(callback);
+}
+
+type VoidCallback = () => void;
+
+const exitHandler = lazyInit(() => {
+  const handlers = new Set<VoidCallback>();
+  process.on("exit", () => {
+    for (const handler of handlers) {
+      try {
+        handler();
+      } catch {
+        // ignore errors in exit handlers
+      }
+    }
+  });
+  return {
+    add: (cb: VoidCallback) => handlers.add(cb),
+    remove: (cb: VoidCallback) => handlers.delete(cb),
+  };
+});
+
+/**
+ * Call the specified callback on process exit. The function returns a function
+ * that can be used to clear the requested callback
+ * @param cb function to call on exit
+ * @returns function to clear the exit callback
+ * @internal
+ */
+export function onExit(cb: VoidCallback): VoidCallback {
+  exitHandler().add(cb);
+  return () => {
+    exitHandler().remove(cb);
+  };
 }

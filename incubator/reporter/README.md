@@ -13,101 +13,270 @@ This is a common package for logging output to the console and/or logfiles,
 timing tasks and operations, and listening for events for task start, finish,
 and errors.
 
-It also contains a performance tracker that can be enabled to dump performance
-information from execution of tasks. Enabling performance tracing will chain to
-child processes as well to handle script tracking.
+It is written as esm, side-effect free, with the functionality separated so that
+it will only bring in the portions that are used. The core logger and reporter
+functionality can be used on its own, with additional modules provided for
+colors and formatting.
 
-## Motivation
+All code is self-contained and this has no dependencies.
 
-Standardizing the reporter used in our packages allows for easier high level
-perf analysis of how our tools are behaving. By adding the various events it
-also gives a common framework for people to add listeners for telemetry if
-desired.
+## Core Components
 
-## Installation
+### 🎯 **Logger (`createLogger`)**
 
-```sh
-yarn add @rnx-kit/reporter --dev
+A flexible logging system that supports multiple log levels and custom output
+destinations.
+
+```typescript
+import { createLogger } from "@rnx-kit/reporter";
+
+const logger = createLogger({
+  output: "verbose", // or custom OutputWriter
+  prefix: { error: "🚨", warn: "⚠️" },
+  onError: (args) => console.error("Error occurred:", args),
+});
+
+logger.error("Something went wrong");
+logger.warn("This is a warning");
+logger.log("General information");
+logger.verbose("Detailed debugging info:", myCustomObject);
+logger.fatalError("Critical error"); // logs and throws
 ```
 
-or if you're using npm
+**Features:**
 
-```sh
-npm add --save-dev @rnx-kit/reporter
+- **Log Levels**: `error`, `warn`, `log`, `verbose` with hierarchical filtering
+- **Custom Prefixes**: Add emoji, text, or styling to log messages
+- **Error Callbacks**: Handle errors with custom logic
+- **Multiple Outputs**: Console, files, or custom destinations
+
+### 📊 **Reporter (`createReporter`)**
+
+A hierarchical task and performance tracking system built on top of the logger.
+
+```typescript
+import { createReporter } from "@rnx-kit/reporter";
+
+const reporter = createReporter({
+  name: "build-system",
+  output: "log",
+  reportTimers: true,
+});
+
+// Hierarchical task execution
+await reporter.task("build", async (buildTask) => {
+  buildTask.log("Starting build process...");
+
+  // async functions will time and execute asynchronously
+  const result1 = await buildTask.task("compile", async (compileTask) => {
+    compileTask.log("Compiling TypeScript...");
+    // compilation logic
+  });
+
+  // sync functions will execute without yielding to the event loop
+  const result2 = buildTask.task("bundle", (bundleTask) => {
+    bundleTask.log("Creating bundle...");
+    // bundling logic
+  });
+});
+
+// Operation timing
+const result = await reporter.measure("file-processing", async () => {
+  // time-sensitive operation
+  return processFiles();
+});
 ```
 
-## Usage
+**Features:**
 
-Reporters have two roles, the base Reporter role, and a Task role. Reporters are
-effectively at the root level, whereas Tasks are parented to a reporter or
-another Task.
+- **Hierarchical Tasks**: Nested task execution with automatic timing
+- **Performance Measurement**: Track operation durations and call counts
+- **Error Tracking**: Automatic error collection and reporting
+- **Event Publishing**: Start/finish/error events via Node.js diagnostics
+  channels
 
-Reporters are created by calling
-`createReporter<T>(options: ReporterOptions<T>)` with any options specified.
+### 🎨 **Formatting & Colors**
 
-- The generic parameter sets the type of the `data` property.
-- This allows passing additional information through reporters and tasks and
-  will be surfaced in events.
+Rich text formatting with ANSI colors and semantic highlighting.
 
-The reporter interface is comprised of several parts:
+```typescript
+import { getFormatter, createFormatter } from "@rnx-kit/reporter";
 
-### Logging Functions
+const fmt = getFormatter();
 
-These include `error`, `warn`, `log`, and `verbose`. These are structured like
-the console logging functions in that they have variable parameters, which will
-be serialized into a single message string by using node's `inspect`. This is
-the same internal mechanism used by console.log, at least in the node
-implementation.
+// Basic colors
+console.log(fmt.red("Error message"));
+console.log(fmt.green("Success message"));
+console.log(fmt.blue("Info message"));
 
-- The `LogLevel` set in either the global settings, or overridden in the
-  reporter settings dictates whether anything is output from the functions.
-- `"log"` is the default level, which will enable the `error`, `warn`, and `log`
-  functions. The `verbose` function will do nothing.
-- File logging can be enabled by configuring `OutputOptions` when creating a
-  reporter or by calling `updateDefaultOutput`.
-- File logging will share the same log level as the console, unless the level is
-  set specifically in the file settings.
-- A prefix for a type of message can be set in settings. This is prepended to
-  all messages of this type. For instance the default error prefix contains
-  `"Error:"`
-- A label can be set for the reporter, which will prepend all output for all log
-  types.
+// Semantic formatting
+console.log(fmt.package("@my-scope/package-name"));
+console.log(fmt.duration(1250)); // "1.25s"
+console.log(fmt.pad("text", 10, "center")); // "   text   "
 
-An additional `throwError` function is provided which will log the error and
-then throw with that message. It will send an event for the error, and log it
-under the reporter/task.
-
-### Timing Functions
-
-The task functions wrap a function call, either async or synchronous, creating a
-new sub reporter in the Task role which is passed as a parameter. The task data
-type, output, and formatting options are inherited from the parent reporter.
-Events will be sent when the task is started and when it completes, with errors
-and sub-operation timing recorded within.
-
-```ts
-  task<T>(
-    name: string | TaskOptions<TData>,
-    fn: (reporter: Reporter<TData>) => T
-  ): T;
-  taskAsync<T>(
-    name: string | TaskOptions<TData>,
-    fn: (reporter: Reporter<TData>) => Promise<T>
-  ): Promise<T>;
+// Custom formatter
+const customFmt = createFormatter({
+  highlight1: fmt.magenta,
+  durationValue: fmt.yellowBright,
+});
 ```
 
-The `time` and `timeAsync` functions are helpers for high frequency operation
-timing. The results of these operations will be aggregated within the given
-reporter or task, and will record the total elapsed time and number of calls.
-These will be available in the complete event.
+**Features:**
 
-```ts
-  time<T>(label: string, fn: () => T): T;
-  timeAsync<T>(label: string, fn: () => Promise<T>): Promise<T>;
+- **ANSI Colors**: Full 16-color and 256-color support
+- **Font Styles**: Bold, dim, italic, underline, strikethrough
+- **Semantic Colors**: Package names, durations, highlights, paths
+- **Smart Padding**: VT control character-aware text alignment
+- **Auto-detection**: Respects terminal color capabilities
+
+### 📡 **Event System**
+
+Type-safe event handling using Node.js diagnostics channels.
+
+```typescript
+import {
+  subscribeToStart,
+  subscribeToFinish,
+  subscribeToError,
+} from "@rnx-kit/reporter";
+
+// Listen for task start events
+const unsubscribeStart = subscribeToStart((session) => {
+  console.log(`Task started: ${session.name} (depth: ${session.depth})`);
+});
+
+// Listen for task completion
+const unsubscribeFinish = subscribeToFinish((session) => {
+  console.log(`Task finished: ${session.name} in ${session.elapsed}ms`);
+  console.log(`Operations:`, session.operations);
+});
+
+// Listen for errors
+const unsubscribeError = subscribeToError((event) => {
+  console.log(`Error in ${event.session.name}:`, event.args);
+});
+
+// Cleanup when done
+unsubscribeStart();
+unsubscribeFinish();
+unsubscribeError();
 ```
 
-### Formatting Functions
+## Output Destinations
 
-These functions are part of the `ReporterFormatting` interface and provide
-helpers which will format or color text using the settings for the given
-reporter.
+### 📤 **Console Output**
+
+Default output to stdout/stderr with proper log level routing.
+
+```typescript
+import { createOutput } from "@rnx-kit/reporter";
+
+// Console output with specific log level
+const output = createOutput("warn"); // Only error and warn messages
+```
+
+### 📁 **File Output**
+
+Write logs to files with automatic directory creation.
+
+```typescript
+import { openFileWrite } from "@rnx-kit/reporter";
+
+const fileOutput = createOutput(
+  "verbose",
+  openFileWrite("./logs/app.log", true), // append mode
+  openFileWrite("./logs/errors.log", true)
+);
+```
+
+### 🔀 **Multiple Outputs**
+
+Combine multiple output destinations.
+
+```typescript
+import { mergeOutput, createOutput } from "@rnx-kit/reporter";
+
+const consoleOut = createOutput("warn");
+const fileOut = createOutput("verbose", fileWriter);
+const combined = mergeOutput(consoleOut, fileOut);
+```
+
+## Architecture Principles
+
+### 🧩 **Modular Design**
+
+Each component can be used independently:
+
+- Use just the logger for simple logging needs
+- Add the reporter for task tracking
+- Include formatting for rich output
+- Enable events for monitoring
+
+### 🎯 **Zero Dependencies**
+
+Completely self-contained with no external dependencies, using only Node.js
+built-ins.
+
+### 📏 **Type Safety**
+
+Comprehensive TypeScript definitions with full type inference and safety.
+
+### 🔄 **Side-Effect Free**
+
+ESM modules with no global state pollution - safe for library use.
+
+### ⚡ **Performance Focused**
+
+- Lazy initialization of heavy components
+- Efficient string handling
+- Minimal allocation in hot paths
+- Optional features don't impact performance when unused
+
+## Common Patterns
+
+### 🏗️ **Build Tool Integration**
+
+```typescript
+const build = createReporter({ name: "webpack-build", reportTimers: true });
+
+await build.task("compile", async (task) => {
+  const stats = await task.measure("typescript", () => compileTypeScript());
+  const bundle = await task.measure("webpack", () => runWebpack());
+  task.log(`Compilation complete: ${stats.files} files, ${bundle.size} bytes`);
+});
+```
+
+### 🧪 **Test Runner Integration**
+
+```typescript
+const test = createReporter({ name: "test-runner", output: "verbose" });
+
+for (const suite of testSuites) {
+  await test.task(suite.name, async (suiteTask) => {
+    for (const testCase of suite.tests) {
+      try {
+        await suiteTask.measure(testCase.name, () => testCase.run());
+        suiteTask.log(`✅ ${testCase.name}`);
+      } catch (error) {
+        suiteTask.error(`❌ ${testCase.name}:`, error);
+      }
+    }
+  });
+}
+```
+
+### 🚀 **CLI Application Logging**
+
+```typescript
+const app = createCascadingReporter("MY_CLI_APP", {
+  level: process.env.VERBOSE ? "verbose" : "log",
+  file: process.env.LOG_FILE ? { out: process.env.LOG_FILE } : undefined,
+});
+
+if (app) {
+  await app.task("main", async (task) => {
+    task.log("Application started");
+    // CLI logic
+  });
+}
+```
