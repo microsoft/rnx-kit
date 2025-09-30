@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/align-deps
 
+## 3.2.3
+
+### Patch Changes
+
+- b31498b: Fixed a prototype-polluting assignment vulnerability
+
 ## 3.2.2
 
 ### Patch Changes
