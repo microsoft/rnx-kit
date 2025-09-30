@@ -180,6 +180,7 @@ jobs:
         if: ${{ steps.affected-projects.outputs.ios != '' }}
         env:
           RCT_USE_PREBUILT_RNCORE: 1
+          RCT_USE_RN_DEP: 1
         with:
           project-directory: ios
           working-directory: packages/test-app
@@ -222,6 +223,7 @@ jobs:
         if: ${{ steps.affected-projects.outputs.macos != '' }}
         env:
           RCT_USE_PREBUILT_RNCORE: 1
+          RCT_USE_RN_DEP: 1
         with:
           project-directory: macos
           working-directory: packages/test-app-macos
