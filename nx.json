@@ -8,8 +8,7 @@
       "{workspaceRoot}/packages/eslint-config/*",
       "{workspaceRoot}/packages/eslint-plugin/*",
       "{workspaceRoot}/packages/jest-preset/*",
-      "{workspaceRoot}/scripts/tsconfig-esm.json",
-      "{workspaceRoot}/scripts/tsconfig-shared.json",
+      "{workspaceRoot}/packages/tsconfig/*",
       "{workspaceRoot}/yarn.lock"
     ],
     "production": ["default"]

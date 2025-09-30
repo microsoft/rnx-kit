@@ -24,7 +24,7 @@ export function makeEnhancedResolveOptions(
     // Metro's implementation is a subset of Webpack's. See:
     // - https://facebook.github.io/metro/docs/resolution
     // - https://webpack.js.org/configuration/resolve/#resolvealias
-    alias: extraNodeModules,
+    alias: extraNodeModules ?? undefined,
     aliasFields: ["browser"],
 
     // Add `require` to handle packages that are missing `default`

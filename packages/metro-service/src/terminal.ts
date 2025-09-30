@@ -1,6 +1,6 @@
 import { requireModuleFromMetro } from "@rnx-kit/tools-react-native/metro";
 import type { Terminal } from "metro-core";
-import type { TerminalReporter } from "metro/src/lib/TerminalReporter";
+import type { TerminalReporter } from "metro/private/lib/TerminalReporter";
 
 export type MetroTerminal = {
   terminal: Terminal;

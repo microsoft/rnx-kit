@@ -30,12 +30,7 @@ function createOpenDebuggerKeyboardHandler({
   metroTerminal: { reporter },
   reactNativePath,
 }: Params): OpenDebuggerKeyboardHandler {
-  const resolvedPath = fs.lstatSync(reactNativePath).isSymbolicLink()
-    ? path.resolve(
-        path.dirname(reactNativePath),
-        fs.readlinkSync(reactNativePath)
-      )
-    : reactNativePath;
+  const resolvedPath = fs.realpathSync(reactNativePath);
   try {
     // Available starting with 0.76
     const cliPlugin = require.resolve(

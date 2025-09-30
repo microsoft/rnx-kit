@@ -1,6 +1,6 @@
 import { findMetroPath } from "@rnx-kit/tools-react-native/metro";
 import type { Module } from "metro";
-import * as path from "path";
+import * as path from "node:path";
 
 const sourceMappingOptions = {
   processModuleFilter: () => true,

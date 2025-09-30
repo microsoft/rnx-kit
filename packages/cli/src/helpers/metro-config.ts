@@ -186,7 +186,7 @@ export function customizeMetroConfig(
       metroPlugins
     ) as SerializerConfigT["customSerializer"];
   } else {
-    // @ts-expect-error We don't want this set if unused
+    // We don't want this set if unused
     delete metroConfig.serializer.customSerializer;
   }
 

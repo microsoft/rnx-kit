@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/tools-react-native
 
+## 2.3.0
+
+### Minor Changes
+
+- 7bf2194: Support Metro 0.83.x
+
 ## 2.2.0
 
 ### Minor Changes
