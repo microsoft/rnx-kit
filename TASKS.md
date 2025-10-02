@@ -33,6 +33,10 @@
 - [ ] **Platform-Specific Upkeep**
   - [ ] Track upstream changes in React Native, Metro, and platform SDKs.
   - [ ] Test and maintain compatibility with Android, iOS, macOS, Windows.
+  - [ ] When new React Native release candidates are published, a PR should be
+        automatically generated to create a new `align-deps` profile for the new
+        version. This PR should be reviewed, its dependencies updated if
+        necessary, and merged before the new version is officially released.
 
 - [ ] **Documentation**
   - [ ] Update
