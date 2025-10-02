@@ -5130,8 +5130,8 @@ __metadata:
     react: "npm:19.1.0"
     react-native: "npm:^0.81.0"
   peerDependencies:
-    react: 16.11.0 || 16.13.1 || 17.0.1 || 17.0.2 || 18.0.0 || 18.1.0 || 18.2.0 || ^18.2.0 || 18.3.1 || 19.0.0 || 19.1.0
-    react-native: ^0.62.3 || ^0.63.2 || ^0.64.2 || ^0.65.0 || ^0.66.0 || ^0.67.0 || ^0.68.0 || ^0.69.0 || ^0.70.0 || ^0.71.0 || ^0.72.0 || ^0.73.0 || ^0.74.0 || ^0.75.0 || ^0.76.0 || ^0.77.0 || ^0.78.0 || ^0.79.0 || ^0.80.0 || ^0.81.0
+    react: 16.11.0 || 16.13.1 || 17.0.1 || 17.0.2 || 18.0.0 || 18.1.0 || 18.2.0 || ^18.2.0 || 18.3.1 || 19.0.0 || 19.1.0 || 19.1.1
+    react-native: ^0.62.3 || ^0.63.2 || ^0.64.2 || ^0.65.0 || ^0.66.0 || ^0.67.0 || ^0.68.0 || ^0.69.0 || ^0.70.0 || ^0.71.0 || ^0.72.0 || ^0.73.0 || ^0.74.0 || ^0.75.0 || ^0.76.0 || ^0.77.0 || ^0.78.0 || ^0.79.0 || ^0.80.0 || ^0.81.0 || ^0.82.0
   languageName: unknown
   linkType: soft
 
@@ -5274,7 +5274,7 @@ __metadata:
     react: "npm:19.0.0"
     react-native: "npm:^0.78.0"
     react-native-macos: "npm:^0.78.0"
-    react-native-test-app: "npm:^4.1.4"
+    react-native-test-app: "npm:^4.3.1"
   bin:
     rnx: ../cli/scripts/rnx.bin
     rnx.reason: Run `rnx-cli` without explicitly building it first
@@ -5315,7 +5315,7 @@ __metadata:
     "@types/react": "npm:^19.0.0"
     react: "npm:19.0.0"
     react-native: "npm:^0.79.0"
-    react-native-test-app: "npm:^4.3.1"
+    react-native-test-app: "npm:^4.4.11"
     react-native-windows: "npm:^0.79.0"
   bin:
     rnx: ../cli/scripts/rnx.bin
@@ -5362,7 +5362,7 @@ __metadata:
     jest: "npm:^29.2.1"
     react: "npm:19.1.0"
     react-native: "npm:^0.81.0"
-    react-native-test-app: "npm:^4.4.6"
+    react-native-test-app: "npm:^4.4.11"
     react-test-renderer: "npm:19.1.0"
   bin:
     rnx: ../cli/scripts/rnx.bin
@@ -14639,9 +14639,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-test-app@npm:^4.1.4, react-native-test-app@npm:^4.3.1, react-native-test-app@npm:^4.4.6":
-  version: 4.4.11
-  resolution: "react-native-test-app@npm:4.4.11"
+"react-native-test-app@npm:^4.3.1, react-native-test-app@npm:^4.4.11":
+  version: 4.4.12
+  resolution: "react-native-test-app@npm:4.4.12"
   dependencies:
     "@rnx-kit/react-native-host": "npm:^0.5.11"
     "@rnx-kit/tools-react-native": "npm:^2.1.0"
@@ -14655,7 +14655,7 @@ __metadata:
     "@callstack/react-native-visionos": 0.73 - 0.79
     "@expo/config-plugins": ">=5.0"
     react: 18.1 - 19.1
-    react-native: 0.70 - 0.81 || >=0.82.0-0 <0.82.0
+    react-native: 0.70 - 0.82 || >=0.83.0-0 <0.83.0
     react-native-macos: ^0.0.0-0 || 0.71 - 0.79
     react-native-windows: ^0.0.0-0 || 0.70 - 0.79
   peerDependenciesMeta:
@@ -14672,7 +14672,7 @@ __metadata:
     init: scripts/init.mjs
     init-test-app: scripts/init.mjs
     install-windows-test-app: windows/app.mjs
-  checksum: 10c0/ec158eddf54899f509ebdd5f4b75fcc1008e3146a498540a5c3d06b0be0454822570ad5de8260091c7556fdf82928ce2f11dbf5287c83eb4b464dd1e8431ad7c
+  checksum: 10c0/d83f1cec79d4f5629e4370b0a378846d4a995070a025328b28883873a26b5a44fe883f7e64cb482d0dd49364e3d8884a3568f81293e56fd16a0b65efee4c3591
   languageName: node
   linkType: hard
 
