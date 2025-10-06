@@ -7,7 +7,7 @@ type FeatureItem = {
   title: string;
   image: string;
   alt: string;
-  description: JSX.Element[];
+  description: React.ReactElement[];
 };
 
 const FeatureList: FeatureItem[] = [
@@ -78,7 +78,7 @@ function Feature({ title, alt, image, description }: FeatureItem) {
   );
 }
 
-export default function HomepageFeatures(): JSX.Element {
+export default function HomepageFeatures(): React.ReactElement {
   return (
     <section className={styles.features}>
       <div className="container">

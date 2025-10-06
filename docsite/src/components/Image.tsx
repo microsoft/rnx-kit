@@ -5,9 +5,9 @@ import styles from "./Image.module.css";
 
 export interface ImageProps {
   src: string;
-  children?: JSX.Element[];
+  children?: React.ReactElement[];
   invertable?: boolean;
-  [key: string]: string | number | boolean | symbol | JSX.Element[];
+  [key: string]: string | number | boolean | symbol | React.ReactElement[];
 }
 
 export default function Image({
@@ -15,7 +15,7 @@ export default function Image({
   invertable,
   src,
   ...props
-}: ImageProps): JSX.Element {
+}: ImageProps): React.ReactElement {
   const imageProps = { ...props, src: useBaseUrl(src) };
 
   if (children) {
