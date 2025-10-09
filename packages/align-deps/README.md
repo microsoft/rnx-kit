@@ -117,6 +117,15 @@ Comma-separated list of package names to exclude from inspection.
 > `--exclude-packages` will only exclude packages that do not have a
 > configuration. Packages that have a configuration, will still be checked.
 
+### `--export-catalogs <path>`
+
+Exports dependency catalogs for use with [pnpm](https://pnpm.io/catalogs) or
+[Yarn catalogs](https://yarnpkg.com/features/catalogs). The specified path must
+point to the package manager's config file.
+
+- pnpm: `pnpm-workspace.yaml`
+- Yarn: `.yarnrc.yml`
+
 ### `--init <app | library>`
 
 When integrating `@rnx-kit/align-deps` for the first time, it may be a
