@@ -36,8 +36,8 @@
     "@rnx-kit/tsconfig": "*",
     "@types/node": "^22.0.0",
     "@types/semver": "^7.0.0",
-    "@yarnpkg/cli": "^4.6.0",
-    "@yarnpkg/core": "^4.2.0",
+    "@yarnpkg/cli": "^4.10.3",
+    "@yarnpkg/core": "^4.4.4",
     "clipanion": "^4.0.0-rc.4"
   },
   "experimental": true

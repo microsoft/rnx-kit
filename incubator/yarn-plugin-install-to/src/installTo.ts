@@ -13,19 +13,7 @@ import {
   type Workspace,
 } from "@yarnpkg/core";
 import { Command, Option, UsageError } from "clipanion";
-
-type InstallOptions = {
-  cache: Cache;
-  report: StreamReport;
-  lockfileOnly?: boolean;
-  immutable?: boolean;
-};
-
-type ProjectScopingOptions = {
-  project: Project;
-  accessibleLocators: Set<LocatorHash>;
-  storedResolutions: Map<DescriptorHash, LocatorHash>;
-};
+import type { InstallOptions, ProjectScopingOptions } from "./types";
 
 export class InstallTo extends BaseCommand {
   static override paths = [["install-to"]];
