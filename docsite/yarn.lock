@@ -2945,9 +2945,9 @@ __metadata:
   linkType: hard
 
 "@tsconfig/docusaurus@npm:^2.0.1":
-  version: 2.0.3
-  resolution: "@tsconfig/docusaurus@npm:2.0.3"
-  checksum: 10c0/6e3d2739f34d479a0e3ffe3499b2fd21e955f56dca7b0226aa03e0ce24fd3f0d65a85f15586b83c1d049d9724966c3c065a1d6e778379906ae280189c5fe823b
+  version: 2.0.4
+  resolution: "@tsconfig/docusaurus@npm:2.0.4"
+  checksum: 10c0/ac062d51d046385bc8778cfacf5e52a6e7ac7f68f3a07e9c8a28d8b064ff7e8f492a9758b676d6f54b4aa3a096bc20218f68fd486fb81025842ffc6d28ab782a
   languageName: node
   linkType: hard
 
@@ -3274,16 +3274,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:*":
-  version: 19.1.6
-  resolution: "@types/react@npm:19.1.6"
-  dependencies:
-    csstype: "npm:^3.0.2"
-  checksum: 10c0/8b10b198e28997b3c57559750f8bcf5ae7b33c554b16b6f4fe2ece1d4de6a2fc8cb53e7effe08ec9cb939d2f479eb97c5e08aac2cf83b10a90164fe451cc8ea2
-  languageName: node
-  linkType: hard
-
-"@types/react@npm:~19.1.0":
+"@types/react@npm:*, @types/react@npm:~19.1.0":
   version: 19.1.16
   resolution: "@types/react@npm:19.1.16"
   dependencies:
