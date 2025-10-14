@@ -216,12 +216,14 @@ async function makeCommand(args: Args): Promise<Command | undefined> {
     write,
     diffMode: validateDiffMode(diffMode),
     excludePackages: excludePackages?.toString()?.split(","),
-    exportCatalogs,
     requirements: requirements?.toString()?.split(","),
   };
 
   if (typeof exportCatalogs === "string") {
-    return makeExportCatalogsCommand({ exportCatalogs });
+    return makeExportCatalogsCommand({
+      exportCatalogs,
+      presets: options.presets,
+    });
   }
 
   if (typeof init !== "undefined") {
