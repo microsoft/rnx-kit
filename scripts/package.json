@@ -26,14 +26,14 @@
     "@yarnpkg/cli": "^4.6.0",
     "clipanion": "^4.0.0-rc.4",
     "esbuild": "^0.25.0",
-    "eslint": "^9.0.0",
+    "eslint": "catalog:",
     "fast-glob": "^3.2.7",
     "jest": "^29.2.1",
     "markdown-table": "^3.0.0",
-    "prettier": "^3.0.0",
+    "prettier": "catalog:",
     "tsx": "^4.15.0",
     "typedoc": "^0.28.0",
-    "typescript": "^5.0.0",
+    "typescript": "catalog:",
     "yargs": "^16.0.0"
   },
   "devDependencies": {

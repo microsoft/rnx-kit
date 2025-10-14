@@ -46,9 +46,6 @@
   "scripts": {
     "format": "prettier --write --log-level error package.json tsconfig.esm.json tsconfig.json"
   },
-  "devDependencies": {
-    "prettier": "^3.0.0"
-  },
   "engines": {
     "node": ">=16.17"
   }
