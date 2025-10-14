@@ -10,6 +10,7 @@ import {
 import * as fs from "fs";
 import * as path from "path";
 import { makeCheckCommand } from "./commands/check";
+import { makeExportCatalogsCommand } from "./commands/exportCatalogs";
 import { makeInitializeCommand } from "./commands/initialize";
 import { makeSetVersionCommand } from "./commands/setVersion";
 import { defaultConfig } from "./config";
@@ -33,6 +34,11 @@ export const cliOptions = {
     type: "string",
     requiresArg: true,
     argsString: "<packages>", // Used by Commander
+  },
+  "export-catalogs": {
+    description: "Exports catalogs for use with pnpm or Yarn.",
+    type: "string",
+    conflicts: ["init", "requirements", "set-version"],
   },
   init: {
     description:
@@ -176,6 +182,8 @@ function validateDiffMode(mode: string | undefined): DiffMode {
 
 async function makeCommand(args: Args): Promise<Command | undefined> {
   const conflicts: [string, string][] = [
+    ["export-catalogs", "init"],
+    ["export-catalogs", "set-version"],
     ["init", "set-version"],
     ["init", args.write ? "write" : "no-write"],
     ["set-version", args.write ? "write" : "no-write"],
@@ -187,6 +195,7 @@ async function makeCommand(args: Args): Promise<Command | undefined> {
   const {
     "diff-mode": diffMode,
     "exclude-packages": excludePackages,
+    "export-catalogs": exportCatalogs,
     init,
     loose,
     "migrate-config": migrateConfig,
@@ -207,8 +216,13 @@ async function makeCommand(args: Args): Promise<Command | undefined> {
     write,
     diffMode: validateDiffMode(diffMode),
     excludePackages: excludePackages?.toString()?.split(","),
+    exportCatalogs,
     requirements: requirements?.toString()?.split(","),
   };
+
+  if (typeof exportCatalogs === "string") {
+    return makeExportCatalogsCommand({ exportCatalogs });
+  }
 
   if (typeof init !== "undefined") {
     return makeInitializeCommand(init, options);
@@ -228,6 +242,11 @@ export async function cli({ packages, ...args }: Args): Promise<void> {
   const command = await makeCommand(args);
   if (!command) {
     process.exitCode = 1;
+    return;
+  }
+
+  if (command.isRootCommand) {
+    process.exitCode = command() === "success" ? 0 : 1;
     return;
   }
 

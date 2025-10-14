@@ -30,12 +30,14 @@ export type Options = {
   write: boolean;
   diffMode?: DiffMode;
   excludePackages?: string[];
+  exportCatalogs?: string;
   requirements?: string[];
 };
 
 export type Args = Pick<Options, "loose" | "verbose" | "write"> & {
   "diff-mode"?: string;
   "exclude-packages"?: string | number;
+  "export-catalogs"?: string;
   "migrate-config": boolean;
   "no-unmanaged": boolean;
   "set-version"?: string | number;
@@ -57,7 +59,9 @@ export type ErrorCode =
   | "not-configured"
   | "unsatisfied";
 
-export type Command = (manifest: string) => ErrorCode;
+export type Command =
+  | (((manifest: string) => ErrorCode) & { isRootCommand?: false })
+  | ((() => ErrorCode) & { isRootCommand: true });
 
 export type MetaPackage = {
   name: "#meta";
