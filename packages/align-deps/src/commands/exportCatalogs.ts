@@ -2,14 +2,14 @@ import yaml from "js-yaml";
 import * as fs from "node:fs";
 import * as path from "node:path";
 import { isMetaPackage } from "../capabilities";
+import { mergePresets } from "../preset";
 import { preset as defaultPreset } from "../presets/microsoft/react-native";
-import type {
-  Command,
-  ErrorCode,
-  MetaPackage,
-  Options,
-  Package,
-} from "../types";
+import type { Command, ErrorCode, MetaPackage, Package } from "../types";
+
+type Args = {
+  exportCatalogs: string;
+  presets: string[];
+};
 
 type PackageDefinition = MetaPackage | Package;
 
@@ -54,7 +54,7 @@ export function exportCatalogs(dest: string, preset = defaultPreset): void {
   config.data["catalogs"] = catalogs;
 
   for (const [name, profile] of Object.entries(preset)) {
-    const catalog = catalogs[name] ?? {};
+    const catalog: Record<string, string> = {};
     catalogs[name] = catalog;
 
     for (const capability of Object.values(profile).sort(compare)) {
@@ -69,9 +69,11 @@ export function exportCatalogs(dest: string, preset = defaultPreset): void {
 
 export function makeExportCatalogsCommand({
   exportCatalogs: destination,
-}: Required<Pick<Options, "exportCatalogs">>): Command | undefined {
+  presets,
+}: Args): Command | undefined {
   const command = (): ErrorCode => {
-    exportCatalogs(destination);
+    const preset = mergePresets(presets, process.cwd());
+    exportCatalogs(destination, preset);
     return "success" as const;
   };
   command.isRootCommand = true;
