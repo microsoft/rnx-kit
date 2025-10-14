@@ -9,12 +9,12 @@
     {
       "groupName": "@react-native-community/cli",
       "allowedVersions": "^20.0.0",
-      "matchPackageNames": ["@react-native-community/cli{/,}**"]
+      "matchPackageNames": ["@react-native-community/cli**"]
     },
     {
       "groupName": "Android",
       "matchDatasources": ["maven"],
-      "matchPackageNames": ["com.android.{/,}**"]
+      "matchPackageNames": ["com.android.tools.build:**"]
     },
     {
       "groupName": "ESLint",
@@ -28,7 +28,7 @@
     {
       "groupName": "Kotlin",
       "matchDatasources": ["maven"],
-      "matchPackageNames": ["org.jetbrains.kotlin{/,}**"]
+      "matchPackageNames": ["org.jetbrains.kotlin:**"]
     },
     {
       "groupName": "Metro",
@@ -36,23 +36,18 @@
       "matchSourceUrls": ["https://github.com/facebook/metro{/,}**"]
     },
     {
-      "groupName": "Moshi",
-      "matchDatasources": ["maven"],
-      "matchPackageNames": ["com.squareup.moshi{/,}**"]
-    },
-    {
       "groupName": "Octokit",
-      "matchSourceUrls": ["https://github.com/octokit/{/,}**"]
+      "matchSourceUrls": ["https://github.com/octokit{/,}**"]
     },
     {
       "groupName": "TypeScript type definitions",
       "matchDatasources": ["npm"],
-      "matchPackageNames": ["@types/{/,}**"]
+      "matchPackageNames": ["@types/**"]
     },
     {
       "matchPackageNames": [
         "@fluentui/utilities",
-        "@rnx-kit/{/,}**",
+        "@rnx-kit/**",
         "react",
         "react-dom",
         "react-test-renderer"
@@ -63,20 +58,7 @@
       "groupName": "react-native",
       "matchPackageNames": [
         "@callstack/react-native-visionos",
-        "@react-native/assets-registry",
-        "@react-native/babel-plugin-codegen",
-        "@react-native/babel-preset",
-        "@react-native/codegen",
-        "@react-native/community-cli-plugin",
-        "@react-native/debugger-frontend",
-        "@react-native/dev-middleware",
-        "@react-native/eslint-plugin",
-        "@react-native/gradle-plugin",
-        "@react-native/js-polyfills",
-        "@react-native/metro-babel-transformer",
-        "@react-native/metro-config",
-        "@react-native/normalize-colors",
-        "@react-native/virtualized-lists",
+        "@react-native/**",
         "react-native",
         "react-native-macos",
         "react-native-windows"
