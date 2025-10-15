@@ -8,7 +8,7 @@ function isStrictlyEqual(version: string, range: string) {
   return version === range;
 }
 
-function isSubset(sub: string, dom: string) {
+export function isSubset(sub: string, dom: string) {
   // If either side is not a valid version number, fall back to strict equality
   if (!semverCoerce(sub) || !semverCoerce(dom)) {
     return isStrictlyEqual(sub, dom);
