@@ -59,5 +59,8 @@ describe("isSubset()", () => {
 
     expect(isSubset("catalog:", "catalog:")).toBe(true);
     expect(isSubset("catalog:", "catalog:name")).toBe(false);
+
+    expect(isSubset("1.0.0", "catalog:")).toBe(false);
+    expect(isSubset("catalog:", "1.0.0")).toBe(false);
   });
 });
