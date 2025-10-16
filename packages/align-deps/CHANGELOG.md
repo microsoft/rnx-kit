@@ -1,5 +1,15 @@
 # Change Log - @rnx-kit/align-deps
 
+## 3.3.0
+
+### Minor Changes
+
+- d55311e: Added command for exporting catalogs
+
+### Patch Changes
+
+- b569de1: Fixed `--mode=allow-subset` not handling `catalog:`
+
 ## 3.2.4
 
 ### Patch Changes
