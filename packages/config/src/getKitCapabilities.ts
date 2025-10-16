@@ -1,6 +1,6 @@
 import { warn } from "@rnx-kit/console";
 import semver from "semver";
-import type { KitConfig } from "./kitConfig";
+import type { KitConfig } from "./kitConfig.ts";
 
 type RequiredConfig = Required<
   Pick<

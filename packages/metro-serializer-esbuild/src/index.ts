@@ -7,11 +7,16 @@ import type { SerializerConfigT } from "metro-config";
 import type { SerializerOptions } from "metro/private/DeltaBundler/types";
 import * as fs from "node:fs";
 import * as path from "node:path";
-import { getModulePath, getSideEffects, isImporting, outputOf } from "./module";
-import { absolutizeSourceMap } from "./sourceMap";
-import { assertVersion } from "./version";
+import {
+  getModulePath,
+  getSideEffects,
+  isImporting,
+  outputOf,
+} from "./module.ts";
+import { absolutizeSourceMap } from "./sourceMap.ts";
+import { assertVersion } from "./version.ts";
 
-export { esbuildTransformerConfig } from "./esbuildTransformerConfig";
+export { esbuildTransformerConfig } from "./esbuildTransformerConfig.ts";
 
 export type Options = Pick<
   BuildOptions,

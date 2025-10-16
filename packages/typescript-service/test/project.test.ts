@@ -5,9 +5,9 @@ import * as path from "node:path";
 import type { TestContext } from "node:test";
 import { afterEach, beforeEach, describe, it } from "node:test";
 import ts from "typescript";
-import { findConfigFile, readConfigFile } from "../src/config";
-import type { DiagnosticWriter } from "../src/diagnostics";
-import { Project } from "../src/project";
+import { findConfigFile, readConfigFile } from "../src/config.ts";
+import type { DiagnosticWriter } from "../src/diagnostics.ts";
+import { Project } from "../src/project.ts";
 
 describe("Project", () => {
   const fixturePath = path.join(process.cwd(), "test", "__fixtures__");

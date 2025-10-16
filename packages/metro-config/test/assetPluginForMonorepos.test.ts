@@ -4,9 +4,9 @@ import type Server from "metro/private/Server";
 import { equal } from "node:assert/strict";
 import type { IncomingMessage, ServerResponse } from "node:http";
 import { describe, it } from "node:test";
+import assetPlugin from "../src/assetPluginForMonorepos.js";
 
 describe("@rnx-kit/metro-config/assetPluginForMonorepos", () => {
-  const assetPlugin = require("../src/assetPluginForMonorepos");
   const { enhanceMiddleware } = assetPlugin;
 
   const cases = [

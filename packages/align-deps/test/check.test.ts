@@ -1,11 +1,11 @@
-import { checkPackageManifest } from "../src/commands/check";
-import { defaultConfig } from "../src/config";
+import { checkPackageManifest as checkPackageManifestActual } from "../src/commands/check";
+import type { ConfigResult } from "../src/config";
+import { defaultConfig, loadConfig } from "../src/config";
 import { profile as profile_0_68 } from "../src/presets/microsoft/react-native/profile-0.68";
 import { profile as profile_0_69 } from "../src/presets/microsoft/react-native/profile-0.69";
 import { profile as profile_0_70 } from "../src/presets/microsoft/react-native/profile-0.70";
+import type { Options } from "../src/types";
 import { packageVersion } from "./helpers";
-
-jest.mock("fs");
 
 const defaultOptions = {
   presets: defaultConfig.presets,
@@ -21,9 +21,25 @@ const writeOptions = {
   write: true,
 };
 
+function checkPackageManifest(
+  manifestPath: string,
+  options: Options = defaultOptions,
+  _inputConfig?: ConfigResult,
+  logError?: (message: string) => void
+) {
+  const fs = require("./__mocks__/fs.js");
+  return checkPackageManifestActual(
+    manifestPath,
+    options,
+    loadConfig(manifestPath, options, fs),
+    logError,
+    fs
+  );
+}
+
 describe("checkPackageManifest({ kitType: 'library' })", () => {
   const rnxKitConfig = require("@rnx-kit/config");
-  const fs = require("fs");
+  const fs = require("./__mocks__/fs.js");
 
   const consoleLogSpy = jest.spyOn(global.console, "log");
   const consoleWarnSpy = jest.spyOn(global.console, "warn");
@@ -59,7 +75,7 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
   });
 
   test("returns error code when reading invalid manifests", () => {
-    const result = checkPackageManifest("package.json", defaultOptions);
+    const result = checkPackageManifest("package.json");
     expect(result).toBe("invalid-manifest");
     expect(consoleLogSpy).not.toHaveBeenCalled();
     expect(consoleWarnSpy).not.toHaveBeenCalled();
@@ -72,7 +88,7 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
       dependencies: { "react-native-linear-gradient": "0.0.0" },
     });
 
-    const result = checkPackageManifest("package.json", defaultOptions);
+    const result = checkPackageManifest("package.json");
 
     expect(result).toBe("not-configured");
     expect(consoleLogSpy).not.toHaveBeenCalled();
@@ -95,7 +111,7 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
       alignDeps: { requirements: ["react-native@0.70"] },
     });
 
-    const result = checkPackageManifest("package.json", defaultOptions);
+    const result = checkPackageManifest("package.json");
 
     expect(result).toBe("success");
     expect(consoleLogSpy).not.toHaveBeenCalled();
@@ -112,7 +128,7 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
       alignDeps: { requirements: ["react-native@^0.69.0 || ^0.70.0"] },
     });
 
-    const result = checkPackageManifest("package.json", defaultOptions);
+    const result = checkPackageManifest("package.json");
 
     expect(result).toBe("success");
     expect(consoleLogSpy).not.toHaveBeenCalled();
@@ -126,7 +142,7 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
       alignDeps: { requirements: ["react-native@0.70"] },
     });
 
-    const result = checkPackageManifest("package.json", defaultOptions);
+    const result = checkPackageManifest("package.json");
 
     expect(result).toBe("success");
     expect(consoleLogSpy).not.toHaveBeenCalled();
@@ -153,7 +169,7 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
       },
     });
 
-    const result = checkPackageManifest("package.json", defaultOptions);
+    const result = checkPackageManifest("package.json");
 
     expect(result).toBe("success");
     expect(consoleLogSpy).not.toHaveBeenCalled();
@@ -333,7 +349,7 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
       },
     });
 
-    const result = checkPackageManifest("package.json", defaultOptions);
+    const result = checkPackageManifest("package.json");
 
     expect(result).toBe("success");
     expect(consoleLogSpy).not.toHaveBeenCalled();
@@ -363,7 +379,7 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
       },
     });
 
-    const result = checkPackageManifest("package.json", defaultOptions);
+    const result = checkPackageManifest("package.json");
 
     expect(result).toBe("success");
     expect(consoleLogSpy).not.toHaveBeenCalled();
@@ -393,7 +409,7 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
       },
     });
 
-    const result = checkPackageManifest("package.json", defaultOptions);
+    const result = checkPackageManifest("package.json");
 
     expect(result).toBe("success");
     expect(consoleLogSpy).not.toHaveBeenCalled();
@@ -475,7 +491,7 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
 
 describe("checkPackageManifest({ kitType: 'library' }) (backwards compatibility)", () => {
   const rnxKitConfig = require("@rnx-kit/config");
-  const fs = require("fs");
+  const fs = require("./__mocks__/fs.js");
 
   const mockManifest = {
     name: "@rnx-kit/align-deps",
@@ -504,7 +520,7 @@ describe("checkPackageManifest({ kitType: 'library' }) (backwards compatibility)
   });
 
   test("returns error code when reading invalid manifests", () => {
-    const result = checkPackageManifest("package.json", defaultOptions);
+    const result = checkPackageManifest("package.json");
     expect(result).not.toBe("success");
   });
 
@@ -514,7 +530,7 @@ describe("checkPackageManifest({ kitType: 'library' }) (backwards compatibility)
       dependencies: { "react-native-linear-gradient": "0.0.0" },
     });
 
-    const result = checkPackageManifest("package.json", defaultOptions);
+    const result = checkPackageManifest("package.json");
 
     expect(result).toBe("not-configured");
   });
@@ -532,7 +548,7 @@ describe("checkPackageManifest({ kitType: 'library' }) (backwards compatibility)
     });
     rnxKitConfig.__setMockConfig({ reactNativeVersion: "0.70.0" });
 
-    const result = checkPackageManifest("package.json", defaultOptions);
+    const result = checkPackageManifest("package.json");
 
     expect(result).toBe("success");
   });
@@ -544,7 +560,7 @@ describe("checkPackageManifest({ kitType: 'library' }) (backwards compatibility)
     });
     rnxKitConfig.__setMockConfig({ reactNativeVersion: "^0.69.0 || ^0.70.0" });
 
-    const result = checkPackageManifest("package.json", defaultOptions);
+    const result = checkPackageManifest("package.json");
 
     expect(result).toBe("success");
   });
@@ -553,7 +569,7 @@ describe("checkPackageManifest({ kitType: 'library' }) (backwards compatibility)
     fs.__setMockContent(mockManifest);
     rnxKitConfig.__setMockConfig({ reactNativeVersion: "0.70.0" });
 
-    const result = checkPackageManifest("package.json", defaultOptions);
+    const result = checkPackageManifest("package.json");
 
     expect(result).toBe("success");
   });
@@ -575,7 +591,7 @@ describe("checkPackageManifest({ kitType: 'library' }) (backwards compatibility)
       capabilities: ["core-ios"],
     });
 
-    const result = checkPackageManifest("package.json", defaultOptions);
+    const result = checkPackageManifest("package.json");
 
     expect(result).toBe("success");
   });
@@ -613,7 +629,7 @@ describe("checkPackageManifest({ kitType: 'library' }) (backwards compatibility)
       capabilities: ["core-ios"],
     });
 
-    const result = checkPackageManifest("package.json", defaultOptions);
+    const result = checkPackageManifest("package.json");
 
     expect(result).toBe("unsatisfied");
   });
@@ -667,7 +683,7 @@ describe("checkPackageManifest({ kitType: 'library' }) (backwards compatibility)
       capabilities: ["core-ios"],
     });
 
-    const result = checkPackageManifest("package.json", defaultOptions);
+    const result = checkPackageManifest("package.json");
 
     expect(result).toBe("success");
   });
@@ -690,7 +706,7 @@ describe("checkPackageManifest({ kitType: 'library' }) (backwards compatibility)
       capabilities: ["core-ios"],
     });
 
-    const result = checkPackageManifest("package.json", defaultOptions);
+    const result = checkPackageManifest("package.json");
 
     expect(result).toBe("success");
   });
@@ -713,7 +729,7 @@ describe("checkPackageManifest({ kitType: 'library' }) (backwards compatibility)
       capabilities: ["core-ios"],
     });
 
-    const result = checkPackageManifest("package.json", defaultOptions);
+    const result = checkPackageManifest("package.json");
 
     expect(result).toBe("success");
   });

@@ -1,6 +1,6 @@
 import { equal } from "node:assert/strict";
 import { describe, it } from "node:test";
-import { normalizePath } from "../src/path";
+import { normalizePath } from "../src/path.ts";
 
 describe("Node > Path", () => {
   it("normalizePath() changes all backslashes to forward slashes", () => {

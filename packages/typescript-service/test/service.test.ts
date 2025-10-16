@@ -1,8 +1,8 @@
 import { ok } from "node:assert/strict";
 import { describe, it } from "node:test";
 import type ts from "typescript";
-import { Project } from "../src/project";
-import { Service } from "../src/service";
+import { Project } from "../src/project.ts";
+import { Service } from "../src/service.ts";
 
 describe("Service.openProject()", () => {
   it("returns a valid object", () => {

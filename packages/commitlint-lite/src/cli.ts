@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-import { COMMIT_TYPES, MAX_LINE_LENGTH } from "./constants.js";
-import { lint } from "./index.js";
+import { COMMIT_TYPES, MAX_LINE_LENGTH } from "./constants.ts";
+import { lint } from "./index.ts";
 
 const data: Buffer[] = [];
 process.stdin.on("data", (chunk) => data.push(chunk));

@@ -2,7 +2,7 @@ import { deepEqual, equal, ok } from "node:assert/strict";
 import type * as nodefs from "node:fs";
 import { describe, it } from "node:test";
 import ts from "typescript";
-import { ExternalFileCache, ProjectFileCache } from "../src/cache";
+import { ExternalFileCache, ProjectFileCache } from "../src/cache.ts";
 
 function mockFS(obj: unknown) {
   return obj as typeof nodefs;

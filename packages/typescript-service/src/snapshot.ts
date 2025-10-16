@@ -1,4 +1,4 @@
-import * as nodefs from "fs";
+import * as nodefs from "node:fs";
 import ts from "typescript";
 
 export class VersionedSnapshot {

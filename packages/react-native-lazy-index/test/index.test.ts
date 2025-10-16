@@ -1,11 +1,14 @@
 import type { BabelFileResult } from "@babel/core";
+import * as babel from "@babel/core";
 import { equal, ok } from "node:assert/strict";
 import { afterEach, describe, it } from "node:test";
+import { fileURLToPath } from "node:url";
+
+function fixturePath(fixture: string): string {
+  return fileURLToPath(new URL(`__fixtures__/${fixture}`, import.meta.url));
+}
 
 describe("react-native-lazy-index", () => {
-  const babel = require("@babel/core");
-  const path = require("node:path");
-
   const currentWorkingDir = process.cwd();
 
   const snapshotMyAwesomeApp = `
@@ -42,7 +45,7 @@ AppRegistry.registerComponent("FinalFeature", () => {
     fixture: string | Record<string, string>
   ): BabelFileResult | null {
     if (typeof fixture === "string") {
-      const workingDir = path.join(__dirname, "__fixtures__", fixture);
+      const workingDir = fixturePath(fixture);
       process.chdir(workingDir);
       return babel.transformSync(
         `// @codegen\nmodule.exports = require("../../../src/index")();`,

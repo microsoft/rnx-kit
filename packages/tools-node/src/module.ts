@@ -1,11 +1,11 @@
-import path from "path";
-import type { PackageRef } from "./package";
+import * as path from "node:path";
+import type { PackageRef } from "./package.ts";
 import {
   destructureModuleRef,
   findPackageDir,
   parsePackageRef,
   readPackage,
-} from "./package";
+} from "./package.ts";
 
 /**
  * Module reference relative to a package, such as `react-native` or

@@ -1,4 +1,4 @@
-import { WriteStream } from "tty";
+import { WriteStream } from "node:tty";
 
 type Color = (s: string) => string;
 type Log = typeof console.log;

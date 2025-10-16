@@ -1,6 +1,6 @@
 import { deepEqual, equal, ok } from "node:assert/strict";
 import { describe, it } from "node:test";
-import { hasProperty, pickValues } from "../src/properties";
+import { hasProperty, pickValues } from "../src/properties.ts";
 
 describe("Language > Props > pickValues", () => {
   it("returns undefined when no keys are found", () => {

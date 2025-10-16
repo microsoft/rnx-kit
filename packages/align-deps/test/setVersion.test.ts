@@ -1,18 +1,22 @@
 import type { PackageManifest } from "@rnx-kit/tools-node/package";
 import prompts from "prompts";
-import { makeSetVersionCommand } from "../src/commands/setVersion";
+import { makeSetVersionCommand as makeSetVersionCommandActual } from "../src/commands/setVersion";
 import { defaultConfig } from "../src/config";
-
-jest.mock("fs");
+import type { Options } from "../src/types";
 
 type Result = {
   didWrite: boolean;
   manifest: Record<string, unknown>;
 };
 
+function makeSetVersionCommand(versions: string | number, options: Options) {
+  const fs = require("./__mocks__/fs.js");
+  return makeSetVersionCommandActual(versions, options, fs);
+}
+
 describe("makeSetVersionCommand()", () => {
   const rnxKitConfig = require("@rnx-kit/config");
-  const fs = require("fs");
+  const fs = require("./__mocks__/fs.js");
 
   function setupMocks(manifest: PackageManifest): Result {
     fs.__setMockContent(manifest);

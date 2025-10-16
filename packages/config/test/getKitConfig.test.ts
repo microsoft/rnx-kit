@@ -1,8 +1,10 @@
 import { deepEqual, ok } from "node:assert/strict";
-import { afterEach, describe, it } from "node:test";
+import { createRequire } from "node:module";
+import * as path from "node:path";
+import { after, afterEach, before, describe, it } from "node:test";
 import { URL, fileURLToPath } from "node:url";
-import type { GetKitConfigOptions } from "../src/getKitConfig";
-import { getKitConfig } from "../src/getKitConfig";
+import type { GetKitConfigOptions } from "../src/getKitConfig.ts";
+import { getKitConfig } from "../src/getKitConfig.ts";
 
 describe("getKitConfig()", () => {
   const baseConfig = {
@@ -30,7 +32,16 @@ describe("getKitConfig()", () => {
     return { module: fixture, cwd: packagePath(".") };
   }
 
+  before(() => {
+    global.require = createRequire(path.dirname(path.dirname(import.meta.url)));
+  });
+
   afterEach(() => process.chdir(currentWorkingDir));
+
+  after(() => {
+    // @ts-expect-error Tests are run in ESM mode where `require` is not defined
+    global.require = undefined;
+  });
 
   it("returns undefined for an unconfigured package when using the current working directory", () => {
     process.chdir(packagePath("kit-test-unconfigured"));

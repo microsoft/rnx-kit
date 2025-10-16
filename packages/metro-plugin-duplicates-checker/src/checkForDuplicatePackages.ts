@@ -2,11 +2,11 @@ import { error, warn } from "@rnx-kit/console";
 import type { ReadOnlyGraph } from "metro";
 import type { MixedSourceMap } from "metro-source-map";
 import * as nodefs from "node:fs";
-import type { ModuleMap } from "./gatherModules";
+import type { ModuleMap } from "./gatherModules.ts";
 import {
   gatherModulesFromGraph,
   gatherModulesFromSourceMap,
-} from "./gatherModules";
+} from "./gatherModules.ts";
 
 export type Options = {
   ignoredModules?: readonly string[];

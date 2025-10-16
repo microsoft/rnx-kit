@@ -4,7 +4,7 @@ import {
   findPackagesSync,
   readJSON,
   readJSONSync,
-} from "./common";
+} from "./common.ts";
 
 type Manifest = {
   workspaces?: string[] | { packages: string[] };

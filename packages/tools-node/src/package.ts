@@ -1,6 +1,6 @@
-import * as nodefs from "fs";
-import * as path from "path";
-import { findUp } from "./path";
+import * as nodefs from "node:fs";
+import * as path from "node:path";
+import { findUp } from "./path.ts";
 
 /**
  * Components of a package reference.

@@ -5035,9 +5035,7 @@ __metadata:
     "@rnx-kit/tools-react-native": "npm:^2.3.0"
     "@rnx-kit/tsconfig": "npm:*"
     "@types/node": "npm:^22.0.0"
-    "@types/semver": "npm:^7.0.0"
     metro: "npm:^0.83.1"
-    semver: "npm:^7.0.0"
   languageName: unknown
   linkType: soft
 
@@ -11334,14 +11332,14 @@ __metadata:
   linkType: hard
 
 "jest-pnp-resolver@npm:^1.2.2":
-  version: 1.2.2
-  resolution: "jest-pnp-resolver@npm:1.2.2"
+  version: 1.2.3
+  resolution: "jest-pnp-resolver@npm:1.2.3"
   peerDependencies:
     jest-resolve: "*"
   peerDependenciesMeta:
     jest-resolve:
       optional: true
-  checksum: 10c0/f6ef6193f7f015830aea3a13a4fd9f53a60746bbaa2d56d18af4afd26ed1b527039c466c8d2447f68b149db8a912b9493a727f29b809ff883b8b5daec16e98ce
+  checksum: 10c0/86eec0c78449a2de733a6d3e316d49461af6a858070e113c97f75fb742a48c2396ea94150cbca44159ffd4a959f743a47a8b37a792ef6fdad2cf0a5cba973fac
   languageName: node
   linkType: hard
 

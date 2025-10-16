@@ -2,11 +2,11 @@
 
 import type { Graph, Module } from "@rnx-kit/metro-serializer";
 import type { BasicSourceMap } from "metro-source-map";
-import * as path from "node:path";
+import { URL, fileURLToPath } from "node:url";
 
 const mockModule = {} as Module;
 
-export const repoRoot = path.resolve(__dirname, "..", "..", "..");
+export const repoRoot = fileURLToPath(new URL("../../..", import.meta.url));
 
 function makeManifest(name, version = "0.0.0") {
   return JSON.stringify({ name, version });

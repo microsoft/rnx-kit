@@ -5,7 +5,7 @@ import type {
   DistributionPlugin,
   JSObject,
   PluginInterface,
-} from "./types.js";
+} from "./types.ts";
 
 type Plugin = [string, JSObject];
 
@@ -32,7 +32,7 @@ function loadPlugin(
     });
   }
 
-  return import("./distribution/local.js");
+  return import("./distribution/local.ts");
 }
 
 export function getDistribution(

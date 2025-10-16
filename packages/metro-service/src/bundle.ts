@@ -5,8 +5,8 @@ import { requireModuleFromMetro } from "@rnx-kit/tools-react-native/metro";
 import type { ConfigT } from "metro-config";
 import * as fs from "node:fs";
 import * as path from "node:path";
-import { ensureBabelConfig } from "./babel";
-import type { BundleArgs } from "./types";
+import { ensureBabelConfig } from "./babel.ts";
+import type { BundleArgs } from "./types.ts";
 
 export function bundle(
   args: BundleArgs,

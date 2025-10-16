@@ -7,8 +7,8 @@ import {
   findWorkspacePackages,
   findWorkspaceRoot,
 } from "@rnx-kit/tools-workspaces";
-import * as fs from "fs";
-import * as path from "path";
+import * as fs from "node:fs";
+import * as path from "node:path";
 import { makeCheckCommand } from "./commands/check";
 import { makeExportCatalogsCommand } from "./commands/exportCatalogs";
 import { makeInitializeCommand } from "./commands/initialize";

@@ -1,7 +1,7 @@
 import type { MetroConfig } from "metro-config";
 import { deepEqual, ok } from "node:assert/strict";
 import { describe, it } from "node:test";
-import { applyExpoWorkarounds, isExpoConfig } from "../src/expoConfig";
+import { applyExpoWorkarounds, isExpoConfig } from "../src/expoConfig.js";
 
 describe("isExpoConfig()", () => {
   it("returns true when it's likely a config comes from Expo", () => {

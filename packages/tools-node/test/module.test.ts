@@ -9,7 +9,7 @@ import {
   isFileModuleRef,
   isPackageModuleRef,
   parseModuleRef,
-} from "../src/module";
+} from "../src/module.ts";
 
 describe("Node > Module", () => {
   const fixtureDir = fileURLToPath(new URL("__fixtures__", import.meta.url));

@@ -1,6 +1,6 @@
 import { equal } from "node:assert/strict";
 import { describe, it } from "node:test";
-import { elapsedTime } from "../src/time";
+import { elapsedTime } from "../src/time.ts";
 
 describe("elapsedTime()", () => {
   const now = "1970-01-01T00:00:00Z";

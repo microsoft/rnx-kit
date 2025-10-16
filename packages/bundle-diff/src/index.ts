@@ -1,2 +1,2 @@
-export { cli } from "./cli";
-export { diff } from "./diff";
+export { cli } from "./cli.ts";
+export { diff } from "./diff.ts";

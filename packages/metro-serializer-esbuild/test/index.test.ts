@@ -3,8 +3,10 @@ import type { BundleArgs } from "@rnx-kit/metro-service";
 import { bundle, loadMetroConfig } from "@rnx-kit/metro-service";
 import type Bundle from "metro/private/shared/output/bundle";
 import { deepEqual, ok } from "node:assert/strict";
+import { createRequire } from "node:module";
 import * as path from "node:path";
-import { describe, it } from "node:test";
+import { after, before, describe, it } from "node:test";
+import { URL, fileURLToPath } from "node:url";
 
 async function buildBundle(
   args: BundleArgs,
@@ -21,7 +23,16 @@ async function buildBundle(
 }
 
 describe("metro-serializer-esbuild", () => {
-  const root = path.dirname(__dirname);
+  const root = fileURLToPath(new URL("..", import.meta.url));
+
+  before(() => {
+    global.require = createRequire(root);
+  });
+
+  after(() => {
+    // @ts-expect-error Tests are run in ESM mode where `require` is not defined
+    global.require = undefined;
+  });
 
   async function bundle(
     entryFile: string,

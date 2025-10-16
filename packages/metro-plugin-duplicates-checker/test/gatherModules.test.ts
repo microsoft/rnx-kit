@@ -6,14 +6,14 @@ import {
   gatherModulesFromSources as gatherModulesFromSourcesActual,
   normalizePath,
   resolveModule as resolveModuleActual,
-} from "../src/gatherModules";
-import * as mockfs from "./__mocks__/fs";
+} from "../src/gatherModules.ts";
+import mockfs from "./__mocks__/fs.js";
 import {
   bundleGraph,
   bundleGraphFS,
   bundleSourceMap,
   bundleSourceMapFS,
-} from "./testData";
+} from "./testData.ts";
 
 describe("normalizePath()", () => {
   it("trims Webpack URLs", () => {

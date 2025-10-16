@@ -1,7 +1,7 @@
 import type { PackageManifest } from "@rnx-kit/tools-node/package";
 import { writePackage } from "@rnx-kit/tools-node/package";
 import detectIndent from "detect-indent";
-import fs from "fs";
+import * as nodefs from "node:fs";
 import semverValidRange from "semver/ranges/valid";
 
 export const dependencySections = [
@@ -57,11 +57,12 @@ export function isString(str: unknown): str is string {
 
 export function modifyManifest(
   pkgPath: string,
-  manifest: PackageManifest
+  manifest: PackageManifest,
+  /** @internal */ fs = nodefs
 ): void {
   const content = fs.readFileSync(pkgPath, { encoding: "utf-8" });
   const indent = detectIndent(content).indent || "  ";
-  writePackage(pkgPath, manifest, indent);
+  writePackage(pkgPath, manifest, indent, fs);
 }
 
 export function omitEmptySections(manifest: PackageManifest): PackageManifest {

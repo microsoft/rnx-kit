@@ -1,7 +1,7 @@
 import { deepEqual, ok } from "node:assert/strict";
 import { describe, it } from "node:test";
-import { diff, isValidSourceMap, makeMap } from "../src/diff";
-import { aSourceMap, bSourceMap } from "./mockSourceMaps";
+import { diff, isValidSourceMap, makeMap } from "../src/diff.ts";
+import { aSourceMap, bSourceMap } from "./mockSourceMaps.ts";
 
 describe("isValidSourceMap()", () => {
   it("returns true when an object resembles a source map", () => {

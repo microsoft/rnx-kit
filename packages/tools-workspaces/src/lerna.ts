@@ -9,7 +9,7 @@ import {
   readJSON,
   readJSONSync,
   WORKSPACE_ROOT_SENTINELS,
-} from "./common";
+} from "./common.ts";
 
 function filterSentinels(): string[] {
   return WORKSPACE_ROOT_SENTINELS.filter((sentinel) => sentinel !== LERNA_JSON);

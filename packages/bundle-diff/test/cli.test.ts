@@ -1,10 +1,19 @@
 import { equal } from "node:assert/strict";
 import type * as nodefs from "node:fs";
+import { createRequire } from "node:module";
 import { describe, it } from "node:test";
-import { cli, numDigits, numDigitsStringLength, withSign } from "../src/cli";
-import { aSourceMap, bSourceMap } from "./mockSourceMaps";
+import { URL } from "node:url";
+import { aSourceMap, bSourceMap } from "./mockSourceMaps.ts";
 
-describe("numDigits()", () => {
+// These needs to be set before we import `../src/cli.ts` because they get read
+// at module initialization time.
+// @ts-expect-error Tests are run in ESM mode where `module` is not defined
+global.module = null;
+global.require = createRequire(new URL("../src/cli.ts", import.meta.url));
+
+describe("numDigits()", async () => {
+  const { numDigits, withSign } = await import("../src/cli.ts");
+
   it("returns number of digits in a number", () => {
     equal(numDigits(1000), 4);
     equal(numDigits(100), 3);
@@ -17,7 +26,9 @@ describe("numDigits()", () => {
   });
 });
 
-describe("withSign()", () => {
+describe("withSign()", async () => {
+  const { withSign } = await import("../src/cli.ts");
+
   it("returns number string with a sign", () => {
     equal(withSign(0), "±0");
     equal(withSign(1), "+1");
@@ -26,7 +37,9 @@ describe("withSign()", () => {
   });
 });
 
-describe("numDigitsStringLength()", () => {
+describe("numDigitsStringLength()", async () => {
+  const { numDigitsStringLength, withSign } = await import("../src/cli.ts");
+
   it("returns number of digits needed to represent a string's length", () => {
     equal(numDigitsStringLength("@rnx/bundle-diff"), 2);
     equal(numDigitsStringLength(""), 1);
@@ -34,7 +47,9 @@ describe("numDigitsStringLength()", () => {
   });
 });
 
-describe("cli()", () => {
+describe("cli()", async () => {
+  const { cli } = await import("../src/cli.ts");
+
   const fsMock = {
     readFileSync: (path: string) => {
       switch (path) {

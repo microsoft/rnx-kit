@@ -1,8 +1,8 @@
 import { error } from "@rnx-kit/console";
 import { readPackage } from "@rnx-kit/tools-node";
-import * as fs from "fs";
-import * as path from "path";
-import type { Context } from "./types";
+import * as fs from "node:fs";
+import * as path from "node:path";
+import type { Context } from "./types.ts";
 
 function getDependencies({ projectRoot }: Context): string[] {
   const manifest = readPackage(projectRoot);
