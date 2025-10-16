@@ -1,7 +1,7 @@
 import { findPackageDependencyDir } from "@rnx-kit/tools-node/package";
 import * as fs from "node:fs";
 import * as path from "node:path";
-import { readReactNativeConfig } from "./context";
+import { readReactNativeConfig } from "./context.ts";
 
 /**
  * List of supported react-native platforms.

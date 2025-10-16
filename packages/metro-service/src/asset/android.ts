@@ -1,11 +1,11 @@
 // https://github.com/react-native-community/cli/blob/716555851b442a83a1bf5e0db27b6226318c9a69/packages/cli-plugin-metro/src/commands/bundle/getAssetDestPathAndroid.ts
 
-import * as path from "path";
+import * as path from "node:path";
 import {
   getAndroidResourceFolderName,
   getAndroidResourceIdentifier,
-} from "../assets-registry/path-support";
-import type { PackagerAsset, SaveAssetsPlugin } from "./types";
+} from "../assets-registry/path-support.js";
+import type { PackagerAsset, SaveAssetsPlugin } from "./types.ts";
 
 export function getAssetDestPathAndroid(
   asset: PackagerAsset,

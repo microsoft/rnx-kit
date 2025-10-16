@@ -1,5 +1,5 @@
-import * as github from "./remotes/github.js";
-import type { Remote, RepositoryInfo } from "./types.js";
+import * as github from "./remotes/github.ts";
+import type { Remote, RepositoryInfo } from "./types.ts";
 
 export function getRemoteInfo(): [Remote, RepositoryInfo] {
   const githubRepo = github.getRepositoryInfo();

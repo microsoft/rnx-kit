@@ -2,18 +2,18 @@ import { findPackageDir } from "@rnx-kit/tools-node/package";
 import * as path from "node:path";
 import type { Options } from "yargs";
 import yargs from "yargs";
-import { startBuild } from "./build.js";
+import { startBuild } from "./build.ts";
 import {
   DEPLOYMENT,
   DEVICE_TYPES,
   PLATFORMS,
   USER_CONFIG_FILE,
-} from "./constants.js";
-import { getDistribution } from "./distribution.js";
-import { getRepositoryRoot } from "./git.js";
-import { detectPackageManager } from "./packageManager.js";
-import { getRemoteInfo } from "./remotes.js";
-import type { DeviceType, Platform } from "./types.js";
+} from "./constants.ts";
+import { getDistribution } from "./distribution.ts";
+import { getRepositoryRoot } from "./git.ts";
+import { detectPackageManager } from "./packageManager.ts";
+import { getRemoteInfo } from "./remotes.ts";
+import type { DeviceType, Platform } from "./types.ts";
 
 type RequiredOptionInferenceHelper<T> = Options & {
   choices: readonly T[];

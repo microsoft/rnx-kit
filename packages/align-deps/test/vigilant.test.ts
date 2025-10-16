@@ -1,12 +1,10 @@
 import {
   buildManifestProfile,
-  checkPackageManifestUnconfigured,
+  checkPackageManifestUnconfigured as checkPackageManifestUnconfiguredActual,
   inspect,
 } from "../src/commands/vigilant";
 import { defaultConfig } from "../src/config";
-import type { AlignDepsConfig } from "../src/types";
-
-jest.mock("fs");
+import type { AlignDepsConfig, Options } from "../src/types";
 
 function makeConfig(
   requirements: AlignDepsConfig["alignDeps"]["requirements"],
@@ -439,7 +437,7 @@ describe("inspect()", () => {
 
 describe("checkPackageManifestUnconfigured()", () => {
   const rnxKitConfig = require("@rnx-kit/config");
-  const fs = require("fs");
+  const fs = require("./__mocks__/fs.js");
 
   const consoleErrorSpy = jest.spyOn(global.console, "error");
 
@@ -451,6 +449,20 @@ describe("checkPackageManifestUnconfigured()", () => {
     verbose: false,
     write: false,
   };
+
+  function checkPackageManifestUnconfigured(
+    manifestPath: string,
+    options: Options = defaultOptions,
+    inputConfig: AlignDepsConfig
+  ) {
+    return checkPackageManifestUnconfiguredActual(
+      manifestPath,
+      options,
+      inputConfig,
+      undefined,
+      fs
+    );
+  }
 
   beforeEach(() => {
     consoleErrorSpy.mockReset();

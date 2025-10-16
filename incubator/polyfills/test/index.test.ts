@@ -2,6 +2,7 @@ import * as babel from "@babel/core";
 import { deepEqual, equal, fail, match } from "node:assert/strict";
 import * as path from "node:path";
 import { afterEach, describe, it } from "node:test";
+import { URL, fileURLToPath } from "node:url";
 
 describe("polyfills", () => {
   const currentWorkingDir = process.cwd();
@@ -10,7 +11,7 @@ describe("polyfills", () => {
   };
 
   function setFixture(): void {
-    process.chdir(path.join(__dirname, "__fixtures__"));
+    process.chdir(fileURLToPath(new URL("__fixtures__", import.meta.url)));
   }
 
   function transform(code: string): string | null | undefined {

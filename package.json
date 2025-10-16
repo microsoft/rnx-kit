@@ -30,7 +30,7 @@
     "publish:changesets": "changeset publish",
     "rnx-align-deps": "yarn workspace @rnx-kit/align-deps bundle && scripts/rnx-align-deps.js",
     "show-affected": "nx show projects --affected",
-    "test": "nx run-many --targets build,test --output-style stream",
+    "test": "nx run-many --targets build,test",
     "update-readme": "nx run-many --target update-readme",
     "version:changesets": "changeset version && yarn install --mode update-lockfile"
   },

@@ -1,6 +1,6 @@
 import ts from "typescript";
-import { createDiagnosticWriter } from "./diagnostics";
-import { Project } from "./project";
+import { createDiagnosticWriter } from "./diagnostics.ts";
+import { Project } from "./project.ts";
 
 export class Service {
   private documentRegistry;

@@ -1,4 +1,4 @@
-import path from "path";
+import * as path from "node:path";
 import { createLicenseJSON } from "../src/output/json";
 import { createLicenseFileContents } from "../src/output/text";
 import type { License } from "../src/types";

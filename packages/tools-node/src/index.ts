@@ -3,8 +3,8 @@ export {
   isFileModuleRef,
   isPackageModuleRef,
   parseModuleRef,
-} from "./module";
-export type { FileModuleRef, PackageModuleRef } from "./module";
+} from "./module.ts";
+export type { FileModuleRef, PackageModuleRef } from "./module.ts";
 
 export {
   destructureModuleRef,
@@ -15,13 +15,13 @@ export {
   readPackage,
   resolveDependencyChain,
   writePackage,
-} from "./package";
+} from "./package.ts";
 export type {
   DestructuredModuleRef,
   FindPackageDependencyOptions,
   PackageManifest,
   PackagePerson,
   PackageRef,
-} from "./package";
+} from "./package.ts";
 
-export { findUp, normalizePath } from "./path";
+export { findUp, normalizePath } from "./path.ts";

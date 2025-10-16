@@ -1,5 +1,5 @@
 import * as path from "node:path";
-import { readJSON, readJSONSync } from "./common";
+import { readJSON, readJSONSync } from "./common.ts";
 
 type RushProject = {
   packageName: string;

@@ -3,8 +3,8 @@
 import { info, warn } from "@rnx-kit/console";
 import * as fs from "node:fs";
 import * as path from "node:path";
-import { filterPlatformAssetScales } from "./filter";
-import type { AssetData, SaveAssetsPlugin } from "./types";
+import { filterPlatformAssetScales } from "./filter.ts";
+import type { AssetData, SaveAssetsPlugin } from "./types.ts";
 
 type CopyCallback = (error?: NodeJS.ErrnoException) => void;
 

@@ -1,5 +1,5 @@
 import { makeCommand, makeCommandSync } from "@rnx-kit/tools-shell/command";
-import { BUILD_ID } from "./constants.js";
+import { BUILD_ID } from "./constants.ts";
 
 const git = makeCommand("git");
 const gitSync = makeCommandSync("git");

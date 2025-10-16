@@ -6,7 +6,8 @@ import {
   getAvailablePlatformsUncached,
   parsePlatform,
   platformExtensions,
-} from "../src/platform";
+} from "../src/platform.ts";
+import { fixturePath } from "./fixtures.ts";
 
 describe("React Native > Platform", () => {
   it("expandPlatformExtensions() expands returns all platform extensions", () => {
@@ -31,7 +32,7 @@ describe("React Native > Platform", () => {
   });
 
   it("getAvailablePlatformsUncached() returns available platforms", () => {
-    const fixture = path.join(__dirname, "__fixtures__", "available-platforms");
+    const fixture = fixturePath("available-platforms");
     deepEqual(getAvailablePlatformsUncached(fixture), {
       android: "",
       ios: "",
@@ -43,9 +44,7 @@ describe("React Native > Platform", () => {
 
   it("getAvailablePlatformsUncached() finds package root", () => {
     const fixture = path.join(
-      __dirname,
-      "__fixtures__",
-      "available-platforms",
+      fixturePath("available-platforms"),
       "node_modules"
     );
     deepEqual(getAvailablePlatformsUncached(fixture), {

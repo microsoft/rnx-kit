@@ -3,7 +3,7 @@ import {
   default as readYamlFile,
   sync as readYamlFileSync,
 } from "read-yaml-file";
-import { findPackages, findPackagesSync } from "./common";
+import { findPackages, findPackagesSync } from "./common.ts";
 
 type Workspace = {
   packages?: string[];

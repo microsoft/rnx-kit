@@ -1,14 +1,14 @@
 import { deepEqual, equal } from "node:assert/strict";
 import { afterEach, describe, it } from "node:test";
-import type { Options } from "../src/checkForDuplicatePackages";
+import type { Options } from "../src/checkForDuplicatePackages.ts";
 import {
   checkForDuplicateDependencies as checkForDuplicateDependenciesActual,
   checkForDuplicatePackages as checkForDuplicatePackagesActual,
   countCopies,
   detectDuplicatePackages,
   printModule,
-} from "../src/checkForDuplicatePackages";
-import * as mockfs from "./__mocks__/fs";
+} from "../src/checkForDuplicatePackages.ts";
+import mockfs from "./__mocks__/fs.js";
 import {
   bundleGraph,
   bundleGraphFS,
@@ -18,7 +18,7 @@ import {
   bundleSourceMapFS,
   bundleSourceMapWithDuplicates,
   bundleSourceMapWithDuplicatesFS,
-} from "./testData";
+} from "./testData.ts";
 
 const defaultOptions: Options = {
   ignoredModules: [],

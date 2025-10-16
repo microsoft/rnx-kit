@@ -9,6 +9,7 @@ jest.mock("fs");
 
 const options: WriteThirdPartyNoticesOptions = {
   rootPath: `${absolutePathRoot}src`,
+  sourceMapFile: "",
   json: false,
 };
 

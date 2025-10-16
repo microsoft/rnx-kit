@@ -1,6 +1,7 @@
 import { error, info } from "@rnx-kit/console";
 import { readPackage } from "@rnx-kit/tools-node/package";
-import * as path from "path";
+import * as nodefs from "node:fs";
+import * as path from "node:path";
 import { migrateConfig } from "../compatibility/config";
 import { loadConfig } from "../config";
 import { diff, stringify } from "../diff";
@@ -40,7 +41,8 @@ export function checkPackageManifest(
   manifestPath: string,
   options: Options,
   inputConfig = loadConfig(manifestPath, options),
-  logError = error
+  logError = error,
+  /** @internal */ fs = nodefs
 ): ErrorCode {
   if (isError(inputConfig)) {
     return inputConfig;
@@ -90,7 +92,7 @@ export function checkPackageManifest(
       // The config object may be passed to other commands, so we need to
       // update it in-place to ensure consistency.
       inputConfig.manifest = updatedManifest;
-      modifyManifest(manifestPath, updatedManifest);
+      modifyManifest(manifestPath, updatedManifest, fs);
     } else {
       const violations = stringify(allChanges, [manifestPath]);
       logError(violations);

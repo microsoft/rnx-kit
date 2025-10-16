@@ -1,6 +1,6 @@
 import { deepEqual, equal } from "node:assert/strict";
 import { describe, it } from "node:test";
-import { error, info, warn } from "../src/index";
+import { error, info, warn } from "../src/index.ts";
 
 describe("console", () => {
   const args = ["string", 0, true];

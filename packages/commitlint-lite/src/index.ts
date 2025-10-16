@@ -1,5 +1,5 @@
-import { COMMIT_TYPES, MAX_LINE_LENGTH } from "./constants.js";
-import type { Issue } from "./types.js";
+import { COMMIT_TYPES, MAX_LINE_LENGTH } from "./constants.ts";
+import type { Issue } from "./types.ts";
 
 export function lint(message: string): Issue[] {
   if (!message) {

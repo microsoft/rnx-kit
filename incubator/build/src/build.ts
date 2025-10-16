@@ -1,12 +1,12 @@
 import { once } from "@rnx-kit/tools-shell/async";
 import ora from "ora";
-import { deleteBranch, pushCurrentChanges } from "./git.js";
+import { deleteBranch, pushCurrentChanges } from "./git.ts";
 import type {
   BuildParams,
   DistributionPlugin,
   Remote,
   RepositoryInfo,
-} from "./types.js";
+} from "./types.ts";
 
 export async function startBuild(
   remote: Remote,

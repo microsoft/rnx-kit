@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-import * as nodefs from "fs";
-import { diff } from "./diff";
+import * as nodefs from "node:fs";
+import { diff } from "./diff.ts";
 
 export function withSign(n: number): string {
   if (Number.isNaN(n)) {

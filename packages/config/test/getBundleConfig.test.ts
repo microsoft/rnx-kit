@@ -1,11 +1,11 @@
 import { deepEqual, equal, ok, throws } from "node:assert/strict";
 import { describe, it } from "node:test";
-import type { BundleConfig } from "../src/bundleConfig";
+import type { BundleConfig } from "../src/bundleConfig.ts";
 import {
   getBundleConfig,
   getPlatformBundleConfig,
-} from "../src/getBundleConfig";
-import type { KitConfig } from "../src/kitConfig";
+} from "../src/getBundleConfig.ts";
+import type { KitConfig } from "../src/kitConfig.ts";
 
 const kitConfig: KitConfig = {
   bundle: [

@@ -1,7 +1,7 @@
 import { error, warn } from "@rnx-kit/console";
 import { getPackageModuleRefFromModulePath } from "@rnx-kit/tools-node/module";
 import type { ReadOnlyDependencies, ReadOnlyGraph } from "metro";
-import * as path from "path";
+import * as path from "node:path";
 
 export type CyclicDependencies = Record<string, string[]>;
 

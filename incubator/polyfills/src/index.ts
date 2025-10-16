@@ -2,7 +2,7 @@ import type { ConfigAPI } from "@babel/core";
 import { types as t } from "@babel/core";
 import { declare } from "@babel/helper-plugin-utils";
 import babelTemplate from "@babel/template";
-import { getDependencyPolyfills } from "./dependency";
+import { getDependencyPolyfills } from "./dependency.ts";
 
 module.exports = declare((api: ConfigAPI) => {
   api.assertVersion(7);

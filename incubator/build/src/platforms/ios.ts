@@ -10,8 +10,8 @@ import { ensureInstalled } from "@rnx-kit/tools-shell/command";
 import * as os from "node:os";
 import * as path from "node:path";
 import type { Ora } from "ora";
-import { untar } from "../archive.js";
-import type { BuildParams } from "../types.js";
+import { untar } from "../archive.ts";
+import type { BuildParams } from "../types.ts";
 
 export async function deploy(
   archive: string,

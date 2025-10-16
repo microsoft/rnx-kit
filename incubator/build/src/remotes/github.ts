@@ -16,16 +16,16 @@ import {
   MAX_DOWNLOAD_ATTEMPTS,
   USER_CONFIG_FILE,
   WORKFLOW_ID,
-} from "../constants.js";
-import { ensureDir } from "../filesystem.js";
-import { getRemoteUrl, getRepositoryRoot, stage } from "../git.js";
-import { elapsedTime } from "../time.js";
+} from "../constants.ts";
+import { ensureDir } from "../filesystem.ts";
+import { getRemoteUrl, getRepositoryRoot, stage } from "../git.ts";
+import { elapsedTime } from "../time.ts";
 import type {
   BuildParams,
   Context,
   RepositoryInfo,
   UserConfig,
-} from "../types.js";
+} from "../types.ts";
 
 type WorkflowRunId =
   RestEndpointMethodTypes["actions"]["listJobsForWorkflowRun"]["parameters"];

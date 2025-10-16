@@ -7,8 +7,8 @@ import type {
   Resolution,
   ResolutionContext,
 } from "metro-resolver";
-import * as path from "path";
-import { requireMetroPath } from "./metro";
+import * as path from "node:path";
+import { requireMetroPath } from "./metro.ts";
 
 export type MetroConfigOverrides = {
   config?: string;

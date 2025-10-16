@@ -7,7 +7,7 @@ import {
   getSavedState,
   loadConfigFromCache,
   saveConfigToCache,
-} from "../src/cache";
+} from "../src/cache.ts";
 
 const config = {
   root: ".",

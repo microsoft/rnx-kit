@@ -2,7 +2,8 @@ import type { Capability, KitConfig } from "@rnx-kit/config";
 import { error, warn } from "@rnx-kit/console";
 import { keysOf } from "@rnx-kit/tools-language/properties";
 import type { PackageManifest } from "@rnx-kit/tools-node/package";
-import * as path from "path";
+import * as nodefs from "node:fs";
+import * as path from "node:path";
 import semverSubset from "semver/ranges/subset";
 import {
   capabilityProvidedBy,
@@ -291,7 +292,8 @@ export function checkPackageManifestUnconfigured(
   manifestPath: string,
   options: Options,
   config: AlignDepsConfig,
-  logError = error
+  logError = error,
+  /** @internal */ fs = nodefs
 ): ErrorCode {
   const { excludePackages, write } = options;
   if (excludePackages?.includes(config.manifest.name)) {
@@ -315,7 +317,7 @@ export function checkPackageManifestUnconfigured(
 
   if (errorCount > 0) {
     if (write) {
-      modifyManifest(manifestPath, manifest);
+      modifyManifest(manifestPath, manifest, fs);
     } else {
       const violations = stringify(errors, [
         `${manifestPath}: Found ${errorCount} violation(s) outside of capabilities.`,

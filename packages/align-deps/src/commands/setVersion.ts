@@ -1,5 +1,6 @@
 import { keysOf } from "@rnx-kit/tools-language/properties";
 import type { PackageManifest } from "@rnx-kit/tools-node/package";
+import * as nodefs from "node:fs";
 import prompts from "prompts";
 import semverCoerce from "semver/functions/coerce";
 import { transformConfig } from "../compatibility/config";
@@ -157,7 +158,8 @@ function setVersion(
  */
 export async function makeSetVersionCommand(
   versions: string | number,
-  options: Options
+  options: Options,
+  /** @internal */ fs = nodefs
 ): Promise<Command | undefined> {
   const input = await parseInput(versions);
   if (!input) {
@@ -169,18 +171,30 @@ export async function makeSetVersionCommand(
   const write = { ...options, loose: false, write: true };
 
   return (manifestPath: string) => {
-    const config = loadConfig(manifestPath, options);
+    const config = loadConfig(manifestPath, options, fs);
     if (isError(config)) {
       return config;
     }
 
-    const checkResult = checkPackageManifest(manifestPath, checkOnly, config);
+    const checkResult = checkPackageManifest(
+      manifestPath,
+      checkOnly,
+      config,
+      undefined,
+      fs
+    );
     if (checkResult !== "success") {
       return checkResult;
     }
 
     const result = setVersion(config, targetVersion, supportedVersions);
-    modifyManifest(manifestPath, result);
-    return checkPackageManifest(manifestPath, write);
+    modifyManifest(manifestPath, result, fs);
+    return checkPackageManifest(
+      manifestPath,
+      write,
+      loadConfig(manifestPath, write, fs),
+      undefined,
+      fs
+    );
   };
 }
