@@ -1,10 +1,19 @@
 import type { PackageManifest } from "@rnx-kit/tools-node/package";
+import semverCoerce from "semver/functions/coerce";
 import semverRangeSubset from "semver/ranges/subset";
 import { dependencySections } from "./helpers";
 import type { Changes, Options } from "./types";
 
 function isStrictlyEqual(version: string, range: string) {
   return version === range;
+}
+
+export function isSubset(sub: string, dom: string) {
+  // If either side is not a valid version number, fall back to strict equality
+  if (!semverCoerce(sub) || !semverCoerce(dom)) {
+    return isStrictlyEqual(sub, dom);
+  }
+  return semverRangeSubset(sub, dom);
 }
 
 export function diff(
@@ -19,8 +28,7 @@ export function diff(
     capabilities: [],
   };
 
-  const satisfies =
-    diffMode === "allow-subset" ? semverRangeSubset : isStrictlyEqual;
+  const satisfies = diffMode === "allow-subset" ? isSubset : isStrictlyEqual;
 
   const numChanges = dependencySections.reduce((count, section) => {
     const changes = allChanges[section];
