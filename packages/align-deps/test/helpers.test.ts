@@ -1,18 +1,20 @@
-import { compare, dropPatchFromVersion } from "../src/helpers";
+import { equal } from "node:assert/strict";
+import { describe, it } from "node:test";
+import { compare, dropPatchFromVersion } from "../src/helpers.ts";
 
 describe("compare()", () => {
-  test("compares values", () => {
-    expect(compare(0, 0)).toBe(0);
-    expect(compare(0, 1)).toBe(-1);
-    expect(compare(1, 0)).toBe(1);
+  it("compares values", () => {
+    equal(compare(0, 0), 0);
+    equal(compare(0, 1), -1);
+    equal(compare(1, 0), 1);
 
-    expect(compare("dutch", "dutch")).toBe(0);
-    expect(compare("dutch", "quaid")).toBe(-1);
-    expect(compare("quaid", "dutch")).toBe(1);
-    expect(compare("dutch", "dutchess")).toBe(-1);
-    expect(compare("dutchess", "dutch")).toBe(1);
+    equal(compare("dutch", "dutch"), 0);
+    equal(compare("dutch", "quaid"), -1);
+    equal(compare("quaid", "dutch"), 1);
+    equal(compare("dutch", "dutchess"), -1);
+    equal(compare("dutchess", "dutch"), 1);
 
-    expect(compare("hyphen-before-lowbar", "hyphen_before_lowbar")).toBe(-1);
+    equal(compare("hyphen-before-lowbar", "hyphen_before_lowbar"), -1);
   });
 });
 
@@ -37,8 +39,8 @@ describe("dropPatchFromVersion()", () => {
     ["1.x || >=2.5.0 || 5.0.0 - 7.2.3", "1.x || >=2.5 || 5.0 - 7.2"],
   ] as const;
   for (const [input, expected] of cases) {
-    test(`drops patch number in '${input}'`, () => {
-      expect(dropPatchFromVersion(input)).toBe(expected);
+    it(`drops patch number in '${input}'`, () => {
+      equal(dropPatchFromVersion(input), expected);
     });
   }
 });

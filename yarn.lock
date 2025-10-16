@@ -4566,7 +4566,6 @@ __metadata:
     "@rnx-kit/config": "npm:*"
     "@rnx-kit/console": "npm:*"
     "@rnx-kit/eslint-config": "npm:*"
-    "@rnx-kit/jest-preset": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tools-language": "npm:*"
     "@rnx-kit/tools-node": "npm:*"

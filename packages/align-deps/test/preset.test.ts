@@ -1,5 +1,7 @@
-import { filterPreset, parseRequirements } from "../src/preset";
-import { preset as defaultPreset } from "../src/presets/microsoft/react-native";
+import { deepEqual, ok, throws } from "node:assert/strict";
+import { describe, it } from "node:test";
+import { filterPreset, parseRequirements } from "../src/preset.ts";
+import { preset as defaultPreset } from "../src/presets/microsoft/react-native.ts";
 
 describe("filterPreset()", () => {
   function presetWith(...versions: string[]) {
@@ -8,34 +10,33 @@ describe("filterPreset()", () => {
     );
   }
 
-  test("returns no profiles if requirements cannot be satisfied", () => {
+  it("returns no profiles if requirements cannot be satisfied", () => {
     const profiles = filterPreset(defaultPreset, [
       "react@17.0",
       "react-native@>=69.0",
     ]);
-    expect(profiles).toEqual({});
+    deepEqual(profiles, {});
   });
 
-  test("returns profiles satisfying single version range", () => {
+  it("returns profiles satisfying single version range", () => {
     const profiles = filterPreset(defaultPreset, ["react-native@0.76"]);
-    expect(profiles).toEqual(presetWith("0.76"));
+    deepEqual(profiles, presetWith("0.76"));
   });
 
-  test("returns profiles satisfying multiple version ranges", () => {
+  it("returns profiles satisfying multiple version ranges", () => {
     const profiles = filterPreset(defaultPreset, ["react-native@0.76 || 0.79"]);
-    expect(profiles).toEqual(presetWith("0.76", "0.79"));
+    deepEqual(profiles, presetWith("0.76", "0.79"));
   });
 
-  test("returns profiles satisfying wide version range", () => {
+  it("returns profiles satisfying wide version range", () => {
     const profiles = filterPreset(defaultPreset, ["react-native@>=0.76 <0.81"]);
-    expect(profiles).toEqual(
-      presetWith("0.76", "0.77", "0.78", "0.79", "0.80")
-    );
+    deepEqual(profiles, presetWith("0.76", "0.77", "0.78", "0.79", "0.80"));
   });
 
-  test("returns profiles satisfying non-react-native requirements", () => {
+  it("returns profiles satisfying non-react-native requirements", () => {
     const profiles = filterPreset(defaultPreset, ["react@18"]);
-    expect(profiles).toEqual(
+    deepEqual(
+      profiles,
       presetWith(
         "0.69",
         "0.70",
@@ -50,15 +51,15 @@ describe("filterPreset()", () => {
     );
   });
 
-  test("returns profiles satisfying multiple requirements", () => {
+  it("returns profiles satisfying multiple requirements", () => {
     const profiles = filterPreset(defaultPreset, [
       "react@18",
       "react-native@<0.70",
     ]);
-    expect(profiles).toEqual(presetWith("0.69"));
+    deepEqual(profiles, presetWith("0.69"));
   });
 
-  test("ignores extra capabilities resolving to the same package", () => {
+  it("ignores extra capabilities resolving to the same package", () => {
     const presetWithExtraCapabilities = {
       ...defaultPreset,
       "0.70": {
@@ -69,34 +70,35 @@ describe("filterPreset()", () => {
     const profiles = filterPreset(presetWithExtraCapabilities, [
       "react-native@0.69",
     ]);
-    expect(profiles).toEqual(presetWith("0.69"));
+    deepEqual(profiles, presetWith("0.69"));
   });
 });
 
 describe("parseRequirements()", () => {
-  test("throws if requirement is invalid", () => {
-    expect(() => parseRequirements(["@rnx-kit/align-deps"])).toThrow(
-      "Invalid requirement"
+  it("throws if requirement is invalid", () => {
+    throws(
+      () => parseRequirements(["@rnx-kit/align-deps"]),
+      /Invalid requirement/
     );
-    expect(() => parseRequirements(["react-native"])).toThrow(
-      "Invalid requirement"
+    throws(() => parseRequirements(["react-native"]), /Invalid requirement/);
+  });
+
+  it("throws if version is invalid", () => {
+    throws(
+      () => parseRequirements(["@rnx-kit/align-deps@"]),
+      /Invalid version range/
+    );
+    throws(
+      () => parseRequirements(["@rnx-kit/align-deps@latest"]),
+      /Invalid version range/
     );
   });
 
-  test("throws if version is invalid", () => {
-    expect(() => parseRequirements(["@rnx-kit/align-deps@"])).toThrow(
-      "Invalid version range"
-    );
-    expect(() => parseRequirements(["@rnx-kit/align-deps@latest"])).toThrow(
-      "Invalid version range"
-    );
-  });
-
-  test("returns package name and version", () => {
-    expect(parseRequirements(["@rnx-kit/align-deps@1.0"])).toEqual([
+  it("returns package name and version", () => {
+    deepEqual(parseRequirements(["@rnx-kit/align-deps@1.0"]), [
       ["@rnx-kit/align-deps", "1.0"],
     ]);
-    expect(parseRequirements(["react-native@0.70"])).toEqual([
+    deepEqual(parseRequirements(["react-native@0.70"]), [
       ["react-native", "0.70"],
     ]);
   });
@@ -106,14 +108,14 @@ describe("presets should not have duplicate packages", () => {
   const allowedAliases = ["core", "core-android", "core-ios"];
 
   for (const [name, profile] of Object.entries(defaultPreset)) {
-    test(`microsoft/react-native/${name}`, () => {
+    it(`microsoft/react-native/${name}`, () => {
       const packages = new Set<string>();
       for (const [capability, pkg] of Object.entries(profile)) {
         if (pkg.name === "#meta" || allowedAliases.includes(capability)) {
           continue;
         }
 
-        expect(packages.has(pkg.name)).toBe(false);
+        ok(!packages.has(pkg.name));
         packages.add(pkg.name);
       }
     });

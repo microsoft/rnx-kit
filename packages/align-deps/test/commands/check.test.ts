@@ -1,11 +1,15 @@
-import { checkPackageManifest as checkPackageManifestActual } from "../../src/commands/check";
-import type { ConfigResult } from "../../src/config";
-import { defaultConfig, loadConfig } from "../../src/config";
-import { profile as profile_0_68 } from "../../src/presets/microsoft/react-native/profile-0.68";
-import { profile as profile_0_69 } from "../../src/presets/microsoft/react-native/profile-0.69";
-import { profile as profile_0_70 } from "../../src/presets/microsoft/react-native/profile-0.70";
-import type { Options } from "../../src/types";
-import { packageVersion } from "../helpers";
+import { equal, notEqual } from "node:assert/strict";
+import type { PathOrFileDescriptor } from "node:fs";
+import { after, before, beforeEach, describe, it } from "node:test";
+import { checkPackageManifest as checkPackageManifestActual } from "../../src/commands/check.ts";
+import type { ConfigResult } from "../../src/config.ts";
+import { defaultConfig, loadConfig } from "../../src/config.ts";
+import { profile as profile_0_68 } from "../../src/presets/microsoft/react-native/profile-0.68.ts";
+import { profile as profile_0_69 } from "../../src/presets/microsoft/react-native/profile-0.69.ts";
+import { profile as profile_0_70 } from "../../src/presets/microsoft/react-native/profile-0.70.ts";
+import type { Options } from "../../src/types.ts";
+import * as mockfs from "../__mocks__/fs.ts";
+import { defineRequire, packageVersion, undefineRequire } from "../helpers.ts";
 
 const defaultOptions = {
   presets: defaultConfig.presets,
@@ -27,7 +31,7 @@ function checkPackageManifest(
   _inputConfig?: ConfigResult,
   logError?: (message: string) => void
 ) {
-  const fs = require("../__mocks__/fs.js");
+  const fs = mockfs as unknown as typeof import("node:fs");
   return checkPackageManifestActual(
     manifestPath,
     options,
@@ -38,17 +42,12 @@ function checkPackageManifest(
 }
 
 describe("checkPackageManifest({ kitType: 'library' })", () => {
-  const rnxKitConfig = require("@rnx-kit/config");
-  const fs = require("../__mocks__/fs.js");
-
-  const consoleLogSpy = jest.spyOn(global.console, "log");
-  const consoleWarnSpy = jest.spyOn(global.console, "warn");
-  const consoleErrorSpy = jest.spyOn(global.console, "error");
-
   const mockManifest = {
     name: "@rnx-kit/align-deps",
     version: "0.0.1",
   };
+
+  const noop = () => undefined;
 
   const react_v68_v69_v70 = [
     packageVersion(profile_0_68, "react"),
@@ -62,42 +61,57 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
     packageVersion(profile_0_70, "core"),
   ].join(" || ");
 
+  function mockConsole(t: it.TestContext) {
+    return {
+      logSpy: t.mock.method(console, "log", noop),
+      warnSpy: t.mock.method(console, "warn", noop),
+      errorSpy: t.mock.method(console, "error", noop),
+    };
+  }
+
+  before(() => {
+    defineRequire("../../src/preset.ts", import.meta.url);
+  });
+
   beforeEach(() => {
-    fs.__setMockContent({});
-    rnxKitConfig.__setMockConfig();
-    consoleLogSpy.mockReset();
-    consoleWarnSpy.mockReset();
-    consoleErrorSpy.mockReset();
+    mockfs.__setMockContent({});
   });
 
-  afterAll(() => {
-    jest.clearAllMocks();
+  after(() => {
+    undefineRequire();
   });
 
-  test("returns error code when reading invalid manifests", () => {
+  it("returns error code when reading invalid manifests", (t) => {
+    const { logSpy, warnSpy, errorSpy } = mockConsole(t);
+
     const result = checkPackageManifest("package.json");
-    expect(result).toBe("invalid-manifest");
-    expect(consoleLogSpy).not.toHaveBeenCalled();
-    expect(consoleWarnSpy).not.toHaveBeenCalled();
-    expect(consoleErrorSpy).not.toHaveBeenCalled();
+
+    equal(result, "invalid-manifest");
+    equal(logSpy.mock.callCount(), 0);
+    equal(warnSpy.mock.callCount(), 0);
+    equal(errorSpy.mock.callCount(), 0);
   });
 
-  test("returns early if 'rnx-kit' is missing from the manifest", () => {
-    fs.__setMockContent({
+  it("returns early if 'rnx-kit' is missing from the manifest", (t) => {
+    const { logSpy, warnSpy, errorSpy } = mockConsole(t);
+
+    mockfs.__setMockContent({
       ...mockManifest,
       dependencies: { "react-native-linear-gradient": "0.0.0" },
     });
 
     const result = checkPackageManifest("package.json");
 
-    expect(result).toBe("not-configured");
-    expect(consoleLogSpy).not.toHaveBeenCalled();
-    expect(consoleWarnSpy).toHaveBeenCalled();
-    expect(consoleErrorSpy).not.toHaveBeenCalled();
+    equal(result, "not-configured");
+    equal(logSpy.mock.callCount(), 0);
+    equal(warnSpy.mock.callCount(), 1);
+    equal(errorSpy.mock.callCount(), 0);
   });
 
-  test("prints warnings when detecting bad packages", () => {
-    fs.__setMockContent({
+  it("prints warnings when detecting bad packages", (t) => {
+    const { logSpy, warnSpy, errorSpy } = mockConsole(t);
+
+    mockfs.__setMockContent({
       ...mockManifest,
       dependencies: { "react-native-linear-gradient": "0.0.0" },
       peerDependencies: {
@@ -106,52 +120,66 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
       devDependencies: {
         "react-native": profile_0_70["core"],
       },
-    });
-    rnxKitConfig.__setMockConfig({
-      alignDeps: { requirements: ["react-native@0.70"] },
+      "rnx-kit": {
+        alignDeps: {
+          requirements: ["react-native@0.70"],
+        },
+      },
     });
 
     const result = checkPackageManifest("package.json");
 
-    expect(result).toBe("success");
-    expect(consoleLogSpy).not.toHaveBeenCalled();
-    expect(consoleWarnSpy).toHaveBeenCalled();
-    expect(consoleErrorSpy).not.toHaveBeenCalled();
+    equal(result, "success");
+    equal(logSpy.mock.callCount(), 0);
+    equal(warnSpy.mock.callCount(), 1);
+    equal(errorSpy.mock.callCount(), 0);
   });
 
-  test("prints warnings when detecting bad packages (with version range)", () => {
-    fs.__setMockContent({
+  it("prints warnings when detecting bad packages (with version range)", (t) => {
+    const { logSpy, warnSpy, errorSpy } = mockConsole(t);
+
+    mockfs.__setMockContent({
       ...mockManifest,
       dependencies: { "react-native-linear-gradient": "0.0.0" },
-    });
-    rnxKitConfig.__setMockConfig({
-      alignDeps: { requirements: ["react-native@^0.69.0 || ^0.70.0"] },
-    });
-
-    const result = checkPackageManifest("package.json");
-
-    expect(result).toBe("success");
-    expect(consoleLogSpy).not.toHaveBeenCalled();
-    expect(consoleWarnSpy).toHaveBeenCalled();
-    expect(consoleErrorSpy).not.toHaveBeenCalled();
-  });
-
-  test("returns early if no capabilities are defined", () => {
-    fs.__setMockContent(mockManifest);
-    rnxKitConfig.__setMockConfig({
-      alignDeps: { requirements: ["react-native@0.70"] },
+      "rnx-kit": {
+        alignDeps: {
+          requirements: ["react-native@^0.69.0 || ^0.70.0"],
+        },
+      },
     });
 
     const result = checkPackageManifest("package.json");
 
-    expect(result).toBe("success");
-    expect(consoleLogSpy).not.toHaveBeenCalled();
-    expect(consoleWarnSpy).not.toHaveBeenCalled();
-    expect(consoleErrorSpy).not.toHaveBeenCalled();
+    equal(result, "success");
+    equal(logSpy.mock.callCount(), 0);
+    equal(warnSpy.mock.callCount(), 1);
+    equal(errorSpy.mock.callCount(), 0);
   });
 
-  test("returns if no changes are needed", () => {
-    fs.__setMockContent({
+  it("returns early if no capabilities are defined", (t) => {
+    const { logSpy, warnSpy, errorSpy } = mockConsole(t);
+
+    mockfs.__setMockContent({
+      ...mockManifest,
+      "rnx-kit": {
+        alignDeps: {
+          requirements: ["react-native@0.70"],
+        },
+      },
+    });
+
+    const result = checkPackageManifest("package.json");
+
+    equal(result, "success");
+    equal(logSpy.mock.callCount(), 0);
+    equal(warnSpy.mock.callCount(), 0);
+    equal(errorSpy.mock.callCount(), 0);
+  });
+
+  it("returns if no changes are needed", (t) => {
+    const { logSpy, warnSpy, errorSpy } = mockConsole(t);
+
+    mockfs.__setMockContent({
       ...mockManifest,
       peerDependencies: {
         react: packageVersion(profile_0_70, "react"),
@@ -161,24 +189,26 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
         react: packageVersion(profile_0_70, "react"),
         "react-native": packageVersion(profile_0_70, "core"),
       },
-    });
-    rnxKitConfig.__setMockConfig({
-      alignDeps: {
-        requirements: ["react-native@0.70"],
-        capabilities: ["core-ios"],
+      "rnx-kit": {
+        alignDeps: {
+          requirements: ["react-native@0.70"],
+          capabilities: ["core-ios"],
+        },
       },
     });
 
     const result = checkPackageManifest("package.json");
 
-    expect(result).toBe("success");
-    expect(consoleLogSpy).not.toHaveBeenCalled();
-    expect(consoleWarnSpy).not.toHaveBeenCalled();
-    expect(consoleErrorSpy).not.toHaveBeenCalled();
+    equal(result, "success");
+    equal(logSpy.mock.callCount(), 0);
+    equal(warnSpy.mock.callCount(), 0);
+    equal(errorSpy.mock.callCount(), 0);
   });
 
-  test("prints additional information with `--verbose`", () => {
-    fs.__setMockContent({
+  it("prints additional information with `--verbose`", (t) => {
+    const { logSpy, warnSpy, errorSpy } = mockConsole(t);
+
+    mockfs.__setMockContent({
       ...mockManifest,
       peerDependencies: {
         react: packageVersion(profile_0_70, "react"),
@@ -188,11 +218,11 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
         react: packageVersion(profile_0_70, "react"),
         "react-native": packageVersion(profile_0_70, "core"),
       },
-    });
-    rnxKitConfig.__setMockConfig({
-      alignDeps: {
-        requirements: ["react-native@0.70"],
-        capabilities: ["core-ios"],
+      "rnx-kit": {
+        alignDeps: {
+          requirements: ["react-native@0.70"],
+          capabilities: ["core-ios"],
+        },
       },
     });
 
@@ -201,16 +231,18 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
       verbose: true,
     });
 
-    expect(result).toBe("success");
-    expect(consoleLogSpy).toHaveBeenCalled();
-    expect(consoleWarnSpy).not.toHaveBeenCalled();
-    expect(consoleErrorSpy).not.toHaveBeenCalled();
+    equal(result, "success");
+    equal(logSpy.mock.callCount(), 1);
+    equal(warnSpy.mock.callCount(), 0);
+    equal(errorSpy.mock.callCount(), 0);
   });
 
-  test("returns if no changes are needed (write: true)", () => {
-    let didWriteToPath = false;
+  it("returns if no changes are needed (write: true)", (t) => {
+    const { logSpy, warnSpy, errorSpy } = mockConsole(t);
 
-    fs.__setMockContent({
+    let didWriteToPath: PathOrFileDescriptor | false = false;
+
+    mockfs.__setMockContent({
       ...mockManifest,
       peerDependencies: {
         react: packageVersion(profile_0_70, "react"),
@@ -220,30 +252,34 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
         react: packageVersion(profile_0_70, "react"),
         "react-native": packageVersion(profile_0_70, "core"),
       },
-    });
-    fs.__setMockFileWriter((p, _content) => {
-      didWriteToPath = p;
-    });
-    rnxKitConfig.__setMockConfig({
-      alignDeps: {
-        requirements: ["react-native@0.70"],
-        capabilities: ["core-ios"],
+      "rnx-kit": {
+        alignDeps: {
+          requirements: ["react-native@0.70"],
+          capabilities: ["core-ios"],
+        },
       },
     });
+    mockfs.__setMockFileWriter((p, _content) => {
+      didWriteToPath = p;
+    });
 
-    expect(checkPackageManifest("package.json", writeOptions)).toBe("success");
-    expect(didWriteToPath).toBe(false);
-    expect(consoleLogSpy).not.toHaveBeenCalled();
-    expect(consoleWarnSpy).not.toHaveBeenCalled();
-    expect(consoleErrorSpy).not.toHaveBeenCalled();
+    equal(checkPackageManifest("package.json", writeOptions), "success");
+    equal(didWriteToPath, false);
+    equal(logSpy.mock.callCount(), 0);
+    equal(warnSpy.mock.callCount(), 0);
+    equal(errorSpy.mock.callCount(), 0);
   });
 
-  test("returns error code if changes are needed", () => {
-    fs.__setMockContent(mockManifest);
-    rnxKitConfig.__setMockConfig({
-      alignDeps: {
-        requirements: ["react-native@0.70"],
-        capabilities: ["core-ios"],
+  it("returns error code if changes are needed", (t) => {
+    const { logSpy, warnSpy, errorSpy } = mockConsole(t);
+
+    mockfs.__setMockContent({
+      ...mockManifest,
+      "rnx-kit": {
+        alignDeps: {
+          requirements: ["react-native@0.70"],
+          capabilities: ["core-ios"],
+        },
       },
     });
 
@@ -252,70 +288,88 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
       defaultOptions,
       undefined,
       (message) => {
-        expect(message).toBe(`package.json
+        equal(
+          message,
+          `package.json
       ├── peerDependencies["react"]: dependency is missing, expected "18.1.0"
       ├── peerDependencies["react-native"]: dependency is missing, expected "^0.70.0"
       ├── devDependencies["react"]: dependency is missing, expected "18.1.0"
       ├── devDependencies["react-native"]: dependency is missing, expected "^0.70.0"
       └── Re-run with '--write' to fix them
-`);
+`
+        );
       }
     );
 
-    expect(result).not.toBe("success");
-    expect(consoleLogSpy).not.toHaveBeenCalled();
-    expect(consoleWarnSpy).not.toHaveBeenCalled();
-    expect(consoleErrorSpy).not.toHaveBeenCalled();
+    notEqual(result, "success");
+    equal(logSpy.mock.callCount(), 0);
+    equal(warnSpy.mock.callCount(), 0);
+    equal(errorSpy.mock.callCount(), 0);
   });
 
-  test("writes changes back to 'package.json'", () => {
-    let didWriteToPath = false;
+  it("writes changes back to 'package.json'", (t) => {
+    const { logSpy, warnSpy, errorSpy } = mockConsole(t);
 
-    fs.__setMockContent(mockManifest);
-    fs.__setMockFileWriter((p, _content) => {
+    let didWriteToPath: PathOrFileDescriptor | false = false;
+
+    mockfs.__setMockContent({
+      ...mockManifest,
+      "rnx-kit": {
+        alignDeps: {
+          requirements: ["react-native@0.70"],
+          capabilities: ["core-ios"],
+        },
+      },
+    });
+    mockfs.__setMockFileWriter((p, _content) => {
       didWriteToPath = p;
     });
-    rnxKitConfig.__setMockConfig({
-      alignDeps: {
-        requirements: ["react-native@0.70"],
-        capabilities: ["core-ios"],
-      },
-    });
 
-    expect(checkPackageManifest("package.json", writeOptions)).toBe("success");
-    expect(didWriteToPath).toBe("package.json");
-    expect(consoleLogSpy).not.toHaveBeenCalled();
-    expect(consoleWarnSpy).not.toHaveBeenCalled();
-    expect(consoleErrorSpy).not.toHaveBeenCalled();
+    equal(checkPackageManifest("package.json", writeOptions), "success");
+    equal(didWriteToPath, "package.json");
+    equal(logSpy.mock.callCount(), 0);
+    equal(warnSpy.mock.callCount(), 0);
+    equal(errorSpy.mock.callCount(), 0);
   });
 
-  test("preserves indentation in 'package.json'", () => {
+  it("preserves indentation in 'package.json'", (t) => {
+    const { logSpy, warnSpy, errorSpy } = mockConsole(t);
+
     let output = "";
 
-    fs.__setMockContent(mockManifest, "\t");
-    fs.__setMockFileWriter((_, content) => {
+    mockfs.__setMockContent(
+      {
+        ...mockManifest,
+        "rnx-kit": {
+          alignDeps: {
+            requirements: ["react-native@0.70"],
+            capabilities: ["core-ios"],
+          },
+        },
+      },
+      "\t"
+    );
+    mockfs.__setMockFileWriter((_, content) => {
       output = content;
     });
-    rnxKitConfig.__setMockConfig({
-      alignDeps: {
-        requirements: ["react-native@0.70"],
-        capabilities: ["core-ios"],
-      },
-    });
 
-    expect(checkPackageManifest("package.json", writeOptions)).toBe("success");
-    expect(output).toMatchSnapshot();
-    expect(consoleLogSpy).not.toHaveBeenCalled();
-    expect(consoleWarnSpy).not.toHaveBeenCalled();
-    expect(consoleErrorSpy).not.toHaveBeenCalled();
+    equal(checkPackageManifest("package.json", writeOptions), "success");
+    t.assert.snapshot?.(output);
+    equal(logSpy.mock.callCount(), 0);
+    equal(warnSpy.mock.callCount(), 0);
+    equal(errorSpy.mock.callCount(), 0);
   });
 
-  test("returns appropriate error code if package is excluded", () => {
-    fs.__setMockContent(mockManifest);
-    rnxKitConfig.__setMockConfig({
-      alignDeps: {
-        requirements: ["react-native@0.70"],
-        capabilities: ["core-ios"],
+  it("returns appropriate error code if package is excluded", (t) => {
+    const { logSpy, warnSpy, errorSpy } = mockConsole(t);
+
+    mockfs.__setMockContent({
+      ...mockManifest,
+      "rnx-kit": {
+        alignDeps: {
+          requirements: ["react-native@0.70"],
+          capabilities: ["core-ios"],
+        },
       },
     });
 
@@ -324,14 +378,16 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
       excludePackages: ["@rnx-kit/align-deps"],
     });
 
-    expect(result).toBe("excluded");
-    expect(consoleLogSpy).not.toHaveBeenCalled();
-    expect(consoleWarnSpy).not.toHaveBeenCalled();
-    expect(consoleErrorSpy).not.toHaveBeenCalled();
+    equal(result, "excluded");
+    equal(logSpy.mock.callCount(), 0);
+    equal(warnSpy.mock.callCount(), 0);
+    equal(errorSpy.mock.callCount(), 0);
   });
 
-  test("uses minimum supported version as development version", () => {
-    fs.__setMockContent({
+  it("uses minimum supported version as development version", (t) => {
+    const { logSpy, warnSpy, errorSpy } = mockConsole(t);
+
+    mockfs.__setMockContent({
       ...mockManifest,
       peerDependencies: {
         react: react_v68_v69_v70,
@@ -341,24 +397,26 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
         react: packageVersion(profile_0_68, "react"),
         "react-native": packageVersion(profile_0_68, "core"),
       },
-    });
-    rnxKitConfig.__setMockConfig({
-      alignDeps: {
-        requirements: ["react-native@0.68 || 0.69 || 0.70"],
-        capabilities: ["core-ios"],
+      "rnx-kit": {
+        alignDeps: {
+          requirements: ["react-native@0.68 || 0.69 || 0.70"],
+          capabilities: ["core-ios"],
+        },
       },
     });
 
     const result = checkPackageManifest("package.json");
 
-    expect(result).toBe("success");
-    expect(consoleLogSpy).not.toHaveBeenCalled();
-    expect(consoleWarnSpy).not.toHaveBeenCalled();
-    expect(consoleErrorSpy).not.toHaveBeenCalled();
+    equal(result, "success");
+    equal(logSpy.mock.callCount(), 0);
+    equal(warnSpy.mock.callCount(), 0);
+    equal(errorSpy.mock.callCount(), 0);
   });
 
-  test("uses declared development version", () => {
-    fs.__setMockContent({
+  it("uses declared development version", (t) => {
+    const { logSpy, warnSpy, errorSpy } = mockConsole(t);
+
+    mockfs.__setMockContent({
       ...mockManifest,
       peerDependencies: {
         react: react_v68_v69_v70,
@@ -368,27 +426,29 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
         react: packageVersion(profile_0_69, "react"),
         "react-native": packageVersion(profile_0_69, "core"),
       },
-    });
-    rnxKitConfig.__setMockConfig({
-      alignDeps: {
-        requirements: {
-          development: ["react-native@0.69"],
-          production: ["react-native@0.68 || 0.69 || 0.70"],
+      "rnx-kit": {
+        alignDeps: {
+          requirements: {
+            development: ["react-native@0.69"],
+            production: ["react-native@0.68 || 0.69 || 0.70"],
+          },
+          capabilities: ["core-ios"],
         },
-        capabilities: ["core-ios"],
       },
     });
 
     const result = checkPackageManifest("package.json");
 
-    expect(result).toBe("success");
-    expect(consoleLogSpy).not.toHaveBeenCalled();
-    expect(consoleWarnSpy).not.toHaveBeenCalled();
-    expect(consoleErrorSpy).not.toHaveBeenCalled();
+    equal(result, "success");
+    equal(logSpy.mock.callCount(), 0);
+    equal(warnSpy.mock.callCount(), 0);
+    equal(errorSpy.mock.callCount(), 0);
   });
 
-  test("handles development version ranges", () => {
-    fs.__setMockContent({
+  it("handles development version ranges", (t) => {
+    const { logSpy, warnSpy, errorSpy } = mockConsole(t);
+
+    mockfs.__setMockContent({
       ...mockManifest,
       peerDependencies: {
         react: react_v68_v69_v70,
@@ -398,28 +458,30 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
         react: packageVersion(profile_0_69, "react"),
         "react-native": packageVersion(profile_0_69, "core"),
       },
-    });
-    rnxKitConfig.__setMockConfig({
-      alignDeps: {
-        requirements: {
-          development: ["react-native@0.69"],
-          production: ["react-native@0.68 || 0.69 || 0.70"],
+      "rnx-kit": {
+        alignDeps: {
+          requirements: {
+            development: ["react-native@0.69"],
+            production: ["react-native@0.68 || 0.69 || 0.70"],
+          },
+          capabilities: ["core-ios"],
         },
-        capabilities: ["core-ios"],
       },
     });
 
     const result = checkPackageManifest("package.json");
 
-    expect(result).toBe("success");
-    expect(consoleLogSpy).not.toHaveBeenCalled();
-    expect(consoleWarnSpy).not.toHaveBeenCalled();
-    expect(consoleErrorSpy).not.toHaveBeenCalled();
+    equal(result, "success");
+    equal(logSpy.mock.callCount(), 0);
+    equal(warnSpy.mock.callCount(), 0);
+    equal(errorSpy.mock.callCount(), 0);
   });
 
-  test("allows exact versions", () => {
+  it("allows exact versions", (t) => {
+    const { logSpy, warnSpy, errorSpy } = mockConsole(t);
+
     const mods = /^[^\d]*/;
-    fs.__setMockContent({
+    mockfs.__setMockContent({
       ...mockManifest,
       peerDependencies: {
         react: react_v68_v69_v70,
@@ -429,14 +491,14 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
         react: packageVersion(profile_0_69, "react").replace(mods, ""),
         "react-native": packageVersion(profile_0_69, "core").replace(mods, ""),
       },
-    });
-    rnxKitConfig.__setMockConfig({
-      alignDeps: {
-        requirements: {
-          development: ["react-native@0.69"],
-          production: ["react-native@0.68 || 0.69 || 0.70"],
+      "rnx-kit": {
+        alignDeps: {
+          requirements: {
+            development: ["react-native@0.69"],
+            production: ["react-native@0.68 || 0.69 || 0.70"],
+          },
+          capabilities: ["core-ios"],
         },
-        capabilities: ["core-ios"],
       },
     });
 
@@ -445,15 +507,17 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
       diffMode: "allow-subset",
     });
 
-    expect(result).toBe("success");
-    expect(consoleLogSpy).not.toHaveBeenCalled();
-    expect(consoleWarnSpy).not.toHaveBeenCalled();
-    expect(consoleErrorSpy).not.toHaveBeenCalled();
+    equal(result, "success");
+    equal(logSpy.mock.callCount(), 0);
+    equal(warnSpy.mock.callCount(), 0);
+    equal(errorSpy.mock.callCount(), 0);
   });
 
-  test("allows version range subsets", () => {
+  it("allows version range subsets", (t) => {
+    const { logSpy, warnSpy, errorSpy } = mockConsole(t);
+
     const patch = /\.\d*$/;
-    fs.__setMockContent({
+    mockfs.__setMockContent({
       ...mockManifest,
       peerDependencies: {
         react: react_v68_v69_v70,
@@ -466,14 +530,14 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
           ".9999"
         ),
       },
-    });
-    rnxKitConfig.__setMockConfig({
-      alignDeps: {
-        requirements: {
-          development: ["react-native@0.69"],
-          production: ["react-native@0.68 || 0.69 || 0.70"],
+      "rnx-kit": {
+        alignDeps: {
+          requirements: {
+            development: ["react-native@0.69"],
+            production: ["react-native@0.68 || 0.69 || 0.70"],
+          },
+          capabilities: ["core-ios"],
         },
-        capabilities: ["core-ios"],
       },
     });
 
@@ -482,17 +546,14 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
       diffMode: "allow-subset",
     });
 
-    expect(result).toBe("success");
-    expect(consoleLogSpy).not.toHaveBeenCalled();
-    expect(consoleWarnSpy).not.toHaveBeenCalled();
-    expect(consoleErrorSpy).not.toHaveBeenCalled();
+    equal(result, "success");
+    equal(logSpy.mock.callCount(), 0);
+    equal(warnSpy.mock.callCount(), 0);
+    equal(errorSpy.mock.callCount(), 0);
   });
 });
 
 describe("checkPackageManifest({ kitType: 'library' }) (backwards compatibility)", () => {
-  const rnxKitConfig = require("@rnx-kit/config");
-  const fs = require("../__mocks__/fs.js");
-
   const mockManifest = {
     name: "@rnx-kit/align-deps",
     version: "0.0.1",
@@ -510,33 +571,37 @@ describe("checkPackageManifest({ kitType: 'library' }) (backwards compatibility)
     packageVersion(profile_0_70, "core"),
   ].join(" || ");
 
+  before(() => {
+    defineRequire("../../src/preset.ts", import.meta.url);
+  });
+
   beforeEach(() => {
-    fs.__setMockContent({});
-    rnxKitConfig.__setMockConfig();
+    mockfs.__setMockContent({});
   });
 
-  afterAll(() => {
-    jest.clearAllMocks();
+  after(() => {
+    undefineRequire();
   });
 
-  test("returns error code when reading invalid manifests", () => {
+  it("returns error code when reading invalid manifests", () => {
     const result = checkPackageManifest("package.json");
-    expect(result).not.toBe("success");
+
+    notEqual(result, "success");
   });
 
-  test("returns early if 'rnx-kit' is missing from the manifest", () => {
-    fs.__setMockContent({
+  it("returns early if 'rnx-kit' is missing from the manifest", () => {
+    mockfs.__setMockContent({
       ...mockManifest,
       dependencies: { "react-native-linear-gradient": "0.0.0" },
     });
 
     const result = checkPackageManifest("package.json");
 
-    expect(result).toBe("not-configured");
+    equal(result, "not-configured");
   });
 
-  test("prints warnings when detecting bad packages", () => {
-    fs.__setMockContent({
+  it("prints warnings when detecting bad packages", () => {
+    mockfs.__setMockContent({
       ...mockManifest,
       dependencies: { "react-native-linear-gradient": "0.0.0" },
       peerDependencies: {
@@ -545,37 +610,45 @@ describe("checkPackageManifest({ kitType: 'library' }) (backwards compatibility)
       devDependencies: {
         "react-native": profile_0_70["core"],
       },
+      "rnx-kit": {
+        reactNativeVersion: "0.70.0",
+      },
     });
-    rnxKitConfig.__setMockConfig({ reactNativeVersion: "0.70.0" });
 
     const result = checkPackageManifest("package.json");
 
-    expect(result).toBe("success");
+    equal(result, "success");
   });
 
-  test("prints warnings when detecting bad packages (with version range)", () => {
-    fs.__setMockContent({
+  it("prints warnings when detecting bad packages (with version range)", () => {
+    mockfs.__setMockContent({
       ...mockManifest,
       dependencies: { "react-native-linear-gradient": "0.0.0" },
+      "rnx-kit": {
+        reactNativeVersion: "^0.69.0 || ^0.70.0",
+      },
     });
-    rnxKitConfig.__setMockConfig({ reactNativeVersion: "^0.69.0 || ^0.70.0" });
 
     const result = checkPackageManifest("package.json");
 
-    expect(result).toBe("success");
+    equal(result, "success");
   });
 
-  test("returns early if no capabilities are defined", () => {
-    fs.__setMockContent(mockManifest);
-    rnxKitConfig.__setMockConfig({ reactNativeVersion: "0.70.0" });
+  it("returns early if no capabilities are defined", () => {
+    mockfs.__setMockContent({
+      ...mockManifest,
+      "rnx-kit": {
+        reactNativeVersion: "0.70.0",
+      },
+    });
 
     const result = checkPackageManifest("package.json");
 
-    expect(result).toBe("success");
+    equal(result, "success");
   });
 
-  test("returns if no changes are needed", () => {
-    fs.__setMockContent({
+  it("returns if no changes are needed", () => {
+    mockfs.__setMockContent({
       ...mockManifest,
       peerDependencies: {
         react: packageVersion(profile_0_70, "react"),
@@ -585,21 +658,21 @@ describe("checkPackageManifest({ kitType: 'library' }) (backwards compatibility)
         react: packageVersion(profile_0_70, "react"),
         "react-native": packageVersion(profile_0_70, "core"),
       },
-    });
-    rnxKitConfig.__setMockConfig({
-      reactNativeVersion: "0.70.0",
-      capabilities: ["core-ios"],
+      "rnx-kit": {
+        reactNativeVersion: "0.70.0",
+        capabilities: ["core-ios"],
+      },
     });
 
     const result = checkPackageManifest("package.json");
 
-    expect(result).toBe("success");
+    equal(result, "success");
   });
 
-  test("returns if no changes are needed (write: true)", () => {
+  it("returns if no changes are needed (write: true)", () => {
     let didWriteToPath = false;
 
-    fs.__setMockContent({
+    mockfs.__setMockContent({
       ...mockManifest,
       peerDependencies: {
         react: packageVersion(profile_0_70, "react"),
@@ -609,65 +682,72 @@ describe("checkPackageManifest({ kitType: 'library' }) (backwards compatibility)
         react: packageVersion(profile_0_70, "react"),
         "react-native": packageVersion(profile_0_70, "core"),
       },
+      "rnx-kit": {
+        reactNativeVersion: "0.70.0",
+        capabilities: ["core-ios"],
+      },
     });
-    fs.__setMockFileWriter((p, _content) => {
+    mockfs.__setMockFileWriter((p, _content) => {
       didWriteToPath = p;
     });
-    rnxKitConfig.__setMockConfig({
-      reactNativeVersion: "0.70.0",
-      capabilities: ["core-ios"],
-    });
 
-    expect(checkPackageManifest("package.json", writeOptions)).toBe("success");
-    expect(didWriteToPath).toBe(false);
+    equal(checkPackageManifest("package.json", writeOptions), "success");
+    equal(didWriteToPath, false);
   });
 
-  test("returns error code if changes are needed", () => {
-    fs.__setMockContent(mockManifest);
-    rnxKitConfig.__setMockConfig({
-      reactNativeVersion: "0.70.0",
-      capabilities: ["core-ios"],
+  it("returns error code if changes are needed", () => {
+    mockfs.__setMockContent({
+      ...mockManifest,
+      "rnx-kit": {
+        reactNativeVersion: "0.70.0",
+        capabilities: ["core-ios"],
+      },
     });
 
-    const result = checkPackageManifest("package.json");
-
-    expect(result).toBe("unsatisfied");
+    equal(checkPackageManifest("package.json"), "unsatisfied");
   });
 
-  test("writes changes back to 'package.json'", () => {
+  it("writes changes back to 'package.json'", () => {
     let didWriteToPath = false;
 
-    fs.__setMockContent(mockManifest);
-    fs.__setMockFileWriter((p, _content) => {
+    mockfs.__setMockContent({
+      ...mockManifest,
+      "rnx-kit": {
+        reactNativeVersion: "0.70.0",
+        capabilities: ["core-ios"],
+      },
+    });
+    mockfs.__setMockFileWriter((p, _content) => {
       didWriteToPath = p;
     });
-    rnxKitConfig.__setMockConfig({
-      reactNativeVersion: "0.70.0",
-      capabilities: ["core-ios"],
-    });
 
-    expect(checkPackageManifest("package.json", writeOptions)).toBe("success");
-    expect(didWriteToPath).toBe("package.json");
+    equal(checkPackageManifest("package.json", writeOptions), "success");
+    equal(didWriteToPath, "package.json");
   });
 
-  test("preserves indentation in 'package.json'", () => {
+  it("preserves indentation in 'package.json'", (t) => {
     let output = "";
 
-    fs.__setMockContent(mockManifest, "\t");
-    fs.__setMockFileWriter((_, content) => {
+    mockfs.__setMockContent(
+      {
+        ...mockManifest,
+        "rnx-kit": {
+          reactNativeVersion: "0.70.0",
+          capabilities: ["core-ios"],
+        },
+      },
+      "\t"
+    );
+    mockfs.__setMockFileWriter((_, content) => {
       output = content;
     });
-    rnxKitConfig.__setMockConfig({
-      reactNativeVersion: "0.70.0",
-      capabilities: ["core-ios"],
-    });
 
-    expect(checkPackageManifest("package.json", writeOptions)).toBe("success");
-    expect(output).toMatchSnapshot();
+    equal(checkPackageManifest("package.json", writeOptions), "success");
+    t.assert.snapshot?.(output);
   });
 
-  test("uses minimum supported version as development version", () => {
-    fs.__setMockContent({
+  it("uses minimum supported version as development version", () => {
+    mockfs.__setMockContent({
       ...mockManifest,
       peerDependencies: {
         react: react_v68_v69_v70,
@@ -677,19 +757,17 @@ describe("checkPackageManifest({ kitType: 'library' }) (backwards compatibility)
         react: packageVersion(profile_0_68, "react"),
         "react-native": packageVersion(profile_0_68, "core"),
       },
-    });
-    rnxKitConfig.__setMockConfig({
-      reactNativeVersion: "^0.68 || ^0.69 || ^0.70",
-      capabilities: ["core-ios"],
+      "rnx-kit": {
+        reactNativeVersion: "^0.68 || ^0.69 || ^0.70",
+        capabilities: ["core-ios"],
+      },
     });
 
-    const result = checkPackageManifest("package.json");
-
-    expect(result).toBe("success");
+    equal(checkPackageManifest("package.json"), "success");
   });
 
-  test("uses declared development version", () => {
-    fs.__setMockContent({
+  it("uses declared development version", () => {
+    mockfs.__setMockContent({
       ...mockManifest,
       peerDependencies: {
         react: react_v68_v69_v70,
@@ -699,20 +777,18 @@ describe("checkPackageManifest({ kitType: 'library' }) (backwards compatibility)
         react: packageVersion(profile_0_69, "react"),
         "react-native": packageVersion(profile_0_69, "core"),
       },
-    });
-    rnxKitConfig.__setMockConfig({
-      reactNativeVersion: "^0.68 || ^0.69 || ^0.70",
-      reactNativeDevVersion: "0.69.4",
-      capabilities: ["core-ios"],
+      "rnx-kit": {
+        reactNativeVersion: "^0.68 || ^0.69 || ^0.70",
+        reactNativeDevVersion: "0.69.4",
+        capabilities: ["core-ios"],
+      },
     });
 
-    const result = checkPackageManifest("package.json");
-
-    expect(result).toBe("success");
+    equal(checkPackageManifest("package.json"), "success");
   });
 
-  test("handles development version ranges", () => {
-    fs.__setMockContent({
+  it("handles development version ranges", () => {
+    mockfs.__setMockContent({
       ...mockManifest,
       peerDependencies: {
         react: react_v68_v69_v70,
@@ -722,15 +798,13 @@ describe("checkPackageManifest({ kitType: 'library' }) (backwards compatibility)
         react: packageVersion(profile_0_69, "react"),
         "react-native": packageVersion(profile_0_69, "core"),
       },
-    });
-    rnxKitConfig.__setMockConfig({
-      reactNativeVersion: "^0.68 || ^0.69 || ^0.70",
-      reactNativeDevVersion: "^0.69.4",
-      capabilities: ["core-ios"],
+      "rnx-kit": {
+        reactNativeVersion: "^0.68 || ^0.69 || ^0.70",
+        reactNativeDevVersion: "^0.69.4",
+        capabilities: ["core-ios"],
+      },
     });
 
-    const result = checkPackageManifest("package.json");
-
-    expect(result).toBe("success");
+    equal(checkPackageManifest("package.json"), "success");
   });
 });

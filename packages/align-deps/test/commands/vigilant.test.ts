@@ -1,10 +1,22 @@
 import {
+  deepEqual,
+  equal,
+  notDeepEqual,
+  notEqual,
+  ok,
+  throws,
+} from "node:assert/strict";
+import { after, before, beforeEach, describe, it } from "node:test";
+import { URL, fileURLToPath } from "node:url";
+import {
   buildManifestProfile,
   checkPackageManifestUnconfigured as checkPackageManifestUnconfiguredActual,
   inspect,
-} from "../../src/commands/vigilant";
-import { defaultConfig } from "../../src/config";
-import type { AlignDepsConfig, Options } from "../../src/types";
+} from "../../src/commands/vigilant.ts";
+import { defaultConfig } from "../../src/config.ts";
+import type { AlignDepsConfig, Options } from "../../src/types.ts";
+import * as mockfs from "../__mocks__/fs.ts";
+import { defineRequire, undefineRequire } from "../helpers.ts";
 
 function makeConfig(
   requirements: AlignDepsConfig["alignDeps"]["requirements"],
@@ -25,15 +37,24 @@ function makeConfig(
 }
 
 describe("buildManifestProfile()", () => {
-  test("builds a package manifest for a single profile version", () => {
+  before(() => {
+    defineRequire("../../src/preset.ts", import.meta.url);
+  });
+
+  after(() => {
+    undefineRequire();
+  });
+
+  it("builds a package manifest for a single profile version", (t) => {
     const profile = buildManifestProfile(
       "package.json",
       makeConfig(["react-native@0.70"])
     );
-    expect(profile).toMatchSnapshot();
+
+    t.assert.snapshot?.(profile);
   });
 
-  test("builds a package manifest for multiple profile versions", () => {
+  it("builds a package manifest for multiple profile versions", (t) => {
     const profile = buildManifestProfile(
       "package.json",
       makeConfig({
@@ -41,46 +62,56 @@ describe("buildManifestProfile()", () => {
         production: ["react-native@0.69 || 0.70"],
       })
     );
-    expect(profile).toMatchSnapshot();
+
+    t.assert.snapshot?.(profile);
   });
 
-  test("includes devOnly packages under `dependencies`", () => {
+  it("includes devOnly packages under `dependencies`", () => {
     const { dependencies, devDependencies, peerDependencies } =
       buildManifestProfile("package.json", makeConfig(["react-native@0.70"]));
 
-    expect("react-native-test-app" in dependencies).toBe(true);
-    expect("react-native-test-app" in peerDependencies).toBe(false);
-    expect("react-native-test-app" in devDependencies).toBe(true);
+    ok("react-native-test-app" in dependencies);
+    ok(!("react-native-test-app" in peerDependencies));
+    ok("react-native-test-app" in devDependencies);
   });
 
-  test("throws if requirements cannot be satisfied", () => {
-    expect(() =>
-      buildManifestProfile("package.json", makeConfig(["react-native@1000.0"]))
-    ).toThrow("No profiles could satisfy requirements: react-native@1000.0");
+  it("throws if requirements cannot be satisfied", () => {
+    throws(
+      () =>
+        buildManifestProfile(
+          "package.json",
+          makeConfig(["react-native@1000.0"])
+        ),
+      /No profiles could satisfy requirements: react-native@1000\.0/
+    );
   });
 
-  test("throws if dev requirements cannot be satisfied", () => {
-    expect(() =>
-      buildManifestProfile(
-        "package.json",
-        makeConfig({
-          development: ["react-native@1000.0"],
-          production: ["react-native@0.69 || 0.70"],
-        })
-      )
-    ).toThrow("No profiles could satisfy requirements: react-native@1000.0");
+  it("throws if dev requirements cannot be satisfied", () => {
+    throws(
+      () =>
+        buildManifestProfile(
+          "package.json",
+          makeConfig({
+            development: ["react-native@1000.0"],
+            production: ["react-native@0.69 || 0.70"],
+          })
+        ),
+      /No profiles could satisfy requirements: react-native@1000\.0/
+    );
   });
 
-  test("throws if prod requirements cannot be satisfied", () => {
-    expect(() =>
-      buildManifestProfile(
-        "package.json",
-        makeConfig({
-          development: ["react-native@0.70"],
-          production: ["react-native@1000.0"],
-        })
-      )
-    ).toThrow("No profiles could satisfy requirements: react-native@1000.0");
+  it("throws if prod requirements cannot be satisfied", () => {
+    throws(
+      () =>
+        buildManifestProfile(
+          "package.json",
+          makeConfig({
+            development: ["react-native@0.70"],
+            production: ["react-native@1000.0"],
+          })
+        ),
+      /No profiles could satisfy requirements: react-native@1000\.0/
+    );
   });
 });
 
@@ -102,44 +133,46 @@ describe("inspect()", () => {
     },
   };
 
-  test("handles empty dependencies", () => {
+  it("handles empty dependencies", () => {
     const manifest = {
       name: "@rnx-kit/align-deps",
       version: "1.0.0",
     };
-    expect(
+    deepEqual(
       inspect(manifest, mockManifestProfile, {
         noUnmanaged: false,
         write: false,
-      })
-    ).toEqual({
-      errors: {
-        dependencies: [],
-        peerDependencies: [],
-        devDependencies: [],
-        capabilities: [],
-      },
-      errorCount: 0,
-      warnings: [],
-    });
-    expect(
+      }),
+      {
+        errors: {
+          dependencies: [],
+          peerDependencies: [],
+          devDependencies: [],
+          capabilities: [],
+        },
+        errorCount: 0,
+        warnings: [],
+      }
+    );
+    deepEqual(
       inspect(manifest, mockManifestProfile, {
         noUnmanaged: false,
         write: true,
-      })
-    ).toEqual({
-      errors: {
-        dependencies: [],
-        peerDependencies: [],
-        devDependencies: [],
-        capabilities: [],
-      },
-      errorCount: 0,
-      warnings: [],
-    });
+      }),
+      {
+        errors: {
+          dependencies: [],
+          peerDependencies: [],
+          devDependencies: [],
+          capabilities: [],
+        },
+        errorCount: 0,
+        warnings: [],
+      }
+    );
   });
 
-  test("ignores unmanaged dependencies", () => {
+  it("ignores unmanaged dependencies", () => {
     const dependencies = {
       "@babel/core": "^7.0.0",
       "react-native": "0.73.6",
@@ -168,16 +201,17 @@ describe("inspect()", () => {
       warnings: [],
     };
 
-    expect(
+    deepEqual(
       inspect(manifest, mockManifestProfile, {
         noUnmanaged: false,
         write: false,
-      })
-    ).toEqual(expected);
-    expect(manifest.dependencies).toEqual(dependencies);
+      }),
+      expected
+    );
+    deepEqual(manifest.dependencies, dependencies);
   });
 
-  test("inspects all dependency types", () => {
+  it("inspects all dependency types", () => {
     const manifest = {
       name: "@rnx-kit/align-deps",
       version: "1.0.0",
@@ -217,15 +251,16 @@ describe("inspect()", () => {
       warnings: [],
     };
 
-    expect(
+    deepEqual(
       inspect(manifest, mockManifestProfile, {
         noUnmanaged: false,
         write: false,
-      })
-    ).toEqual(expected);
+      }),
+      expected
+    );
   });
 
-  test("modifies the manifest when `write: true`", () => {
+  it("modifies the manifest when `write: true`", () => {
     const dependencies = {
       "@babel/core": "^7.0.0",
       "react-native": "0.73.6",
@@ -254,16 +289,17 @@ describe("inspect()", () => {
       warnings: [],
     };
 
-    expect(
+    deepEqual(
       inspect(manifest, mockManifestProfile, {
         noUnmanaged: false,
         write: true,
-      })
-    ).toEqual(expected);
-    expect(manifest.dependencies).not.toEqual(dependencies);
+      }),
+      expected
+    );
+    notDeepEqual(manifest.dependencies, dependencies);
   });
 
-  test("does not rewrite peerDependencies if superset", () => {
+  it("does not rewrite peerDependencies if superset", () => {
     const manifest = {
       name: "@rnx-kit/align-deps",
       version: "1.0.0",
@@ -311,12 +347,13 @@ describe("inspect()", () => {
       warnings: [],
     };
 
-    expect(
-      inspect(manifest, profile, { noUnmanaged: false, write: false })
-    ).toEqual(expected);
+    deepEqual(
+      inspect(manifest, profile, { noUnmanaged: false, write: false }),
+      expected
+    );
   });
 
-  test("warns about unmanaged dependencies", () => {
+  it("warns about unmanaged dependencies", () => {
     const dependencies = {
       "react-native": "^0.73.6",
     };
@@ -332,30 +369,31 @@ describe("inspect()", () => {
       },
     };
 
-    expect(
+    deepEqual(
       inspect(manifest, mockManifestProfile, {
         noUnmanaged: false,
         write: false,
-      })
-    ).toEqual({
-      errors: {
-        dependencies: [],
-        peerDependencies: [],
-        devDependencies: [],
-        capabilities: [],
-      },
-      errorCount: 0,
-      warnings: [
-        {
-          type: "unmanaged",
-          dependency: "react-native",
-          capability: "core",
+      }),
+      {
+        errors: {
+          dependencies: [],
+          peerDependencies: [],
+          devDependencies: [],
+          capabilities: [],
         },
-      ],
-    });
+        errorCount: 0,
+        warnings: [
+          {
+            type: "unmanaged",
+            dependency: "react-native",
+            capability: "core",
+          },
+        ],
+      }
+    );
   });
 
-  test("treats unmanaged dependencies as errors", () => {
+  it("treats unmanaged dependencies as errors", () => {
     const dependencies = {
       "react-native": "^0.73.6",
     };
@@ -371,30 +409,31 @@ describe("inspect()", () => {
       },
     };
 
-    expect(
+    deepEqual(
       inspect(manifest, mockManifestProfile, {
         noUnmanaged: true,
         write: false,
-      })
-    ).toEqual({
-      errors: {
-        dependencies: [],
-        peerDependencies: [],
-        devDependencies: [],
-        capabilities: [
-          {
-            type: "unmanaged",
-            dependency: "react-native",
-            capability: "core",
-          },
-        ],
-      },
-      errorCount: 1,
-      warnings: [],
-    });
+      }),
+      {
+        errors: {
+          dependencies: [],
+          peerDependencies: [],
+          devDependencies: [],
+          capabilities: [
+            {
+              type: "unmanaged",
+              dependency: "react-native",
+              capability: "core",
+            },
+          ],
+        },
+        errorCount: 1,
+        warnings: [],
+      }
+    );
   });
 
-  test("writes capabilities if `--no-unamaged` is specified", () => {
+  it("writes capabilities if `--no-unamaged` is specified", () => {
     const dependencies = {
       "react-native": "^0.73.6",
     };
@@ -410,37 +449,33 @@ describe("inspect()", () => {
       },
     };
 
-    expect(
+    deepEqual(
       inspect(manifest, mockManifestProfile, {
         noUnmanaged: true,
         write: true,
-      })
-    ).toEqual({
-      errors: {
-        dependencies: [],
-        peerDependencies: [],
-        devDependencies: [],
-        capabilities: [
-          {
-            type: "unmanaged",
-            dependency: "react-native",
-            capability: "core",
-          },
-        ],
-      },
-      errorCount: 1,
-      warnings: [],
-    });
-    expect(manifest["rnx-kit"].alignDeps.capabilities).toEqual(["core"]);
+      }),
+      {
+        errors: {
+          dependencies: [],
+          peerDependencies: [],
+          devDependencies: [],
+          capabilities: [
+            {
+              type: "unmanaged",
+              dependency: "react-native",
+              capability: "core",
+            },
+          ],
+        },
+        errorCount: 1,
+        warnings: [],
+      }
+    );
+    deepEqual(manifest["rnx-kit"].alignDeps.capabilities, ["core"]);
   });
 });
 
 describe("checkPackageManifestUnconfigured()", () => {
-  const rnxKitConfig = require("@rnx-kit/config");
-  const fs = require("../__mocks__/fs.js");
-
-  const consoleErrorSpy = jest.spyOn(global.console, "error");
-
   const defaultOptions = {
     presets: defaultConfig.presets,
     loose: false,
@@ -460,25 +495,30 @@ describe("checkPackageManifestUnconfigured()", () => {
       options,
       inputConfig,
       undefined,
-      fs
+      mockfs as unknown as typeof import("node:fs")
     );
   }
 
+  before(() => {
+    defineRequire("../../src/preset.ts", import.meta.url);
+  });
+
   beforeEach(() => {
-    consoleErrorSpy.mockReset();
-    fs.__setMockContent({});
-    fs.__setMockFileWriter(() => {
+    mockfs.__setMockContent({});
+    mockfs.__setMockFileWriter(() => {
       throw new Error("mock for fs.writeFileSync is not set");
     });
   });
 
-  afterAll(() => {
-    jest.clearAllMocks();
+  after(() => {
+    undefineRequire();
   });
 
-  test("returns exit code 0 when there are no violations", () => {
+  it("returns exit code 0 when there are no violations", (t) => {
+    const errorSpy = t.mock.method(console, "error", () => undefined);
+
     let didWrite = false;
-    fs.__setMockFileWriter(() => {
+    mockfs.__setMockFileWriter(() => {
       didWrite = true;
     });
 
@@ -493,14 +533,16 @@ describe("checkPackageManifestUnconfigured()", () => {
         },
       })
     );
-    expect(result).toBe("success");
-    expect(didWrite).toBe(false);
-    expect(consoleErrorSpy).not.toHaveBeenCalled();
+    equal(result, "success");
+    ok(!didWrite);
+    equal(errorSpy.mock.callCount(), 0);
   });
 
-  test("returns non-zero exit code when there are violations", () => {
+  it("returns non-zero exit code when there are violations", (t) => {
+    const errorSpy = t.mock.method(console, "error", () => undefined);
+
     let didWrite = false;
-    fs.__setMockFileWriter(() => {
+    mockfs.__setMockFileWriter(() => {
       didWrite = true;
     });
 
@@ -515,14 +557,16 @@ describe("checkPackageManifestUnconfigured()", () => {
         },
       })
     );
-    expect(result).not.toBe("success");
-    expect(didWrite).toBe(false);
-    expect(consoleErrorSpy).toHaveBeenCalledTimes(1);
+    notEqual(result, "success");
+    ok(!didWrite);
+    equal(errorSpy.mock.callCount(), 1);
   });
 
-  test("returns exit code 0 when writing", () => {
+  it("returns exit code 0 when writing", (t) => {
+    const errorSpy = t.mock.method(console, "error", () => undefined);
+
     let didWrite = false;
-    fs.__setMockFileWriter(() => {
+    mockfs.__setMockFileWriter(() => {
       didWrite = true;
     });
 
@@ -537,14 +581,16 @@ describe("checkPackageManifestUnconfigured()", () => {
         },
       })
     );
-    expect(result).toBe("success");
-    expect(didWrite).toBe(true);
-    expect(consoleErrorSpy).not.toHaveBeenCalled();
+    equal(result, "success");
+    ok(didWrite);
+    equal(errorSpy.mock.callCount(), 0);
   });
 
-  test("excludes specified packages", () => {
+  it("excludes specified packages", (t) => {
+    const errorSpy = t.mock.method(console, "error", () => undefined);
+
     let didWrite = false;
-    fs.__setMockFileWriter(() => {
+    mockfs.__setMockFileWriter(() => {
       didWrite = true;
     });
 
@@ -559,14 +605,16 @@ describe("checkPackageManifestUnconfigured()", () => {
         },
       })
     );
-    expect(result).toBe("success");
-    expect(didWrite).toBe(false);
-    expect(consoleErrorSpy).not.toHaveBeenCalled();
+    equal(result, "success");
+    ok(!didWrite);
+    equal(errorSpy.mock.callCount(), 0);
   });
 
-  test("returns non-zero exit code when there are unmanaged capabilities", () => {
+  it("returns non-zero exit code when there are unmanaged capabilities", (t) => {
+    const errorSpy = t.mock.method(console, "error", () => undefined);
+
     let didWrite = false;
-    fs.__setMockFileWriter(() => {
+    mockfs.__setMockFileWriter(() => {
       didWrite = true;
     });
 
@@ -587,14 +635,16 @@ describe("checkPackageManifestUnconfigured()", () => {
         },
       })
     );
-    expect(result).toBe("unsatisfied");
-    expect(didWrite).toBe(false);
-    expect(consoleErrorSpy).toHaveBeenCalledTimes(1);
+    equal(result, "unsatisfied");
+    ok(!didWrite);
+    equal(errorSpy.mock.callCount(), 1);
   });
 
-  test("returns non-zero exit code when writing with unmanaged capabilities", () => {
+  it("returns non-zero exit code when writing with unmanaged capabilities", (t) => {
+    const errorSpy = t.mock.method(console, "error", () => undefined);
+
     let didWrite = false;
-    fs.__setMockFileWriter(() => {
+    mockfs.__setMockFileWriter(() => {
       didWrite = true;
     });
 
@@ -615,19 +665,25 @@ describe("checkPackageManifestUnconfigured()", () => {
         },
       })
     );
-    expect(result).toBe("success");
-    expect(didWrite).toBe(true);
-    expect(consoleErrorSpy).toHaveBeenCalledTimes(0);
+    equal(result, "success");
+    ok(didWrite);
+    equal(errorSpy.mock.callCount(), 0);
   });
 
-  test("uses package-specific custom profiles", () => {
-    const fixture = `${__dirname}/../__fixtures__/config-custom-profiles-only`;
+  it("uses package-specific custom profiles", (t) => {
+    const errorSpy = t.mock.method(console, "error", () => undefined);
+
     const kitConfig = {
       kitType: "library" as const,
       alignDeps: {
         presets: [
           "microsoft/react-native",
-          `${fixture}/packageSpecificProfiles.js`,
+          fileURLToPath(
+            new URL(
+              `../__fixtures__/config-custom-profiles-only/packageSpecificProfiles.js`,
+              import.meta.url
+            )
+          ),
         ],
         requirements: {
           development: ["react-native@0.64"],
@@ -650,10 +706,8 @@ describe("checkPackageManifestUnconfigured()", () => {
       "rnx-kit": kitConfig,
     };
 
-    rnxKitConfig.__setMockConfig(kitConfig);
-
     let manifest = undefined;
-    fs.__setMockFileWriter((_, content) => {
+    mockfs.__setMockFileWriter((_, content) => {
       manifest = JSON.parse(content);
     });
 
@@ -663,9 +717,9 @@ describe("checkPackageManifestUnconfigured()", () => {
       { ...kitConfig, manifest: inputManifest }
     );
 
-    expect(result).toBe("success");
-    expect(consoleErrorSpy).not.toHaveBeenCalled();
-    expect(manifest).toEqual({
+    equal(result, "success");
+    equal(errorSpy.mock.callCount(), 0);
+    deepEqual(manifest, {
       ...inputManifest,
       devDependencies: {
         react: "17.0.2",

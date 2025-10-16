@@ -1,17 +1,20 @@
 import type { Capability, KitConfig } from "@rnx-kit/config";
-import { getKitCapabilities, getKitConfig } from "@rnx-kit/config";
+import {
+  getKitCapabilities,
+  getKitConfigFromPackageManifest,
+} from "@rnx-kit/config";
 import { error, warn } from "@rnx-kit/console";
 import type { PackageManifest } from "@rnx-kit/tools-node/package";
 import { readPackage } from "@rnx-kit/tools-node/package";
 import * as nodefs from "node:fs";
 import * as path from "node:path";
-import { findBadPackages } from "./findBadPackages";
+import { findBadPackages } from "./findBadPackages.ts";
 import type {
   AlignDepsConfig,
   ErrorCode,
   LegacyCheckConfig,
   Options,
-} from "./types";
+} from "./types.ts";
 
 export type ConfigResult = AlignDepsConfig | LegacyCheckConfig | ErrorCode;
 
@@ -103,7 +106,7 @@ export function loadConfig(
   }
 
   const projectRoot = path.dirname(manifestPath);
-  const kitConfig = getKitConfig({ cwd: projectRoot });
+  const kitConfig = getKitConfigFromPackageManifest(manifest, projectRoot);
   if (!kitConfig) {
     return "not-configured";
   }

@@ -1,4 +1,4 @@
-import type { ExcludedPackage } from "../types";
+import type { ExcludedPackage } from "../types.ts";
 
 export const bannedPackages: ExcludedPackage[] = [
   {

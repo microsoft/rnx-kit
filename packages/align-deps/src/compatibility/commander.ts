@@ -1,6 +1,6 @@
 import type { Config } from "@react-native-community/cli-types";
 import { pickValues } from "@rnx-kit/tools-language/properties";
-import { cli, cliOptions, description } from "../cli";
+import { cli, cliOptions, description } from "../cli.ts";
 
 type InputArgs = Record<string, string | number | boolean | undefined>;
 

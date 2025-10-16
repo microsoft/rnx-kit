@@ -314,8 +314,8 @@ function generateFromTemplate({
     ? metroVersion
     : targetVersion + ".0";
 
-  return `import type { Package, Profile } from "../../../types";
-import { profile as profile_${currentVersionVarName} } from "./profile-${currentVersion}";
+  return `import type { Package, Profile } from "../../../types.ts";
+import { profile as profile_${currentVersionVarName} } from "./profile-${currentVersion}.ts";
 
 const reactNative: Package = {
   name: "react-native",

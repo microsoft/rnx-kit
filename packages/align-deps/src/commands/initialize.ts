@@ -3,12 +3,12 @@ import { error } from "@rnx-kit/console";
 import type { PackageManifest } from "@rnx-kit/tools-node/package";
 import { readPackage } from "@rnx-kit/tools-node/package";
 import * as path from "node:path";
-import semverMinVersion from "semver/ranges/min-version";
-import { capabilitiesFor } from "../capabilities";
-import { defaultConfig } from "../config";
-import { dropPatchFromVersion, modifyManifest } from "../helpers";
-import { filterPreset, mergePresets } from "../preset";
-import type { Command, Options } from "../types";
+import semverMinVersion from "semver/ranges/min-version.js";
+import { capabilitiesFor } from "../capabilities.ts";
+import { defaultConfig } from "../config.ts";
+import { dropPatchFromVersion, modifyManifest } from "../helpers.ts";
+import { filterPreset, mergePresets } from "../preset.ts";
+import type { Command, Options } from "../types.ts";
 
 function isKitType(type: string): type is KitType {
   return type === "app" || type === "library";

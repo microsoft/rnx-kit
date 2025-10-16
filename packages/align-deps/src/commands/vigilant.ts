@@ -4,16 +4,16 @@ import { keysOf } from "@rnx-kit/tools-language/properties";
 import type { PackageManifest } from "@rnx-kit/tools-node/package";
 import * as nodefs from "node:fs";
 import * as path from "node:path";
-import semverSubset from "semver/ranges/subset";
+import semverSubset from "semver/ranges/subset.js";
 import {
   capabilityProvidedBy,
   resolveCapabilities,
   resolveCapabilitiesUnchecked,
-} from "../capabilities";
-import { stringify } from "../diff";
-import { dependencySections, modifyManifest } from "../helpers";
-import { updateDependencies } from "../manifest";
-import { ensurePreset, filterPreset, mergePresets } from "../preset";
+} from "../capabilities.ts";
+import { stringify } from "../diff.ts";
+import { dependencySections, modifyManifest } from "../helpers.ts";
+import { updateDependencies } from "../manifest.ts";
+import { ensurePreset, filterPreset, mergePresets } from "../preset.ts";
 import type {
   AlignDepsConfig,
   Changes,

@@ -47,7 +47,6 @@
     "@rnx-kit/config": "*",
     "@rnx-kit/console": "*",
     "@rnx-kit/eslint-config": "*",
-    "@rnx-kit/jest-preset": "*",
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tools-language": "*",
     "@rnx-kit/tools-node": "*",
@@ -69,8 +68,5 @@
   },
   "engines": {
     "node": ">=16.17"
-  },
-  "jest": {
-    "preset": "@rnx-kit/jest-preset/private"
   }
 }
