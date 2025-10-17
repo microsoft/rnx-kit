@@ -1,9 +1,9 @@
 import { findCommunityCliPluginPath } from "@rnx-kit/tools-react-native/cli";
 import * as path from "node:path";
-import { saveAssetsAndroid } from "./android";
-import { saveAssetsDefault } from "./default";
-import { saveAssetsIOS } from "./ios";
-import type { SaveAssetsPlugin } from "./types";
+import { saveAssetsAndroid } from "./android.ts";
+import { saveAssetsDefault } from "./default.ts";
+import { saveAssetsIOS } from "./ios.ts";
+import type { SaveAssetsPlugin } from "./types.ts";
 
 // Eventually this will be part of the rn config, but we require it on older rn
 // versions for win32 and the cli doesn't allow extra config properties.

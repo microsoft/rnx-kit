@@ -3,10 +3,31 @@ import { Command, Option } from "clipanion";
 import * as fs from "node:fs";
 import { execute, runScript } from "../process.js";
 
-function useJest(cwd = process.cwd()) {
+/**
+ * @param {string} cwd
+ * @returns {string}
+ */
+function readManifest(cwd = process.cwd()) {
   const options = /** @type {const} */ ({ encoding: "utf-8" });
   const manifest = fs.readFileSync(cwd + "/package.json", options);
+  return manifest;
+}
+
+/**
+ * @param {string} manifest
+ * @param {string} cwd
+ * @returns {boolean}
+ */
+function useJest(manifest, cwd) {
   return manifest.includes('"jest"') || fs.existsSync(cwd + "/jest.config.js");
+}
+
+/**
+ * @param {string} manifest
+ * @returns {boolean}
+ */
+function useTsx(manifest) {
+  return manifest.includes('"type": "commonjs"');
 }
 
 export class TestCommand extends Command {
@@ -23,7 +44,10 @@ export class TestCommand extends Command {
   args = Option.Proxy();
 
   async execute() {
-    if (useJest()) {
+    const cwd = process.cwd();
+    const manifest = readManifest(cwd);
+
+    if (useJest(manifest, cwd)) {
       return await runScript("jest", "--passWithNoTests", ...this.args);
     }
 
@@ -33,12 +57,14 @@ export class TestCommand extends Command {
         : await import("fast-glob").then(({ default: fg }) =>
             fg.async("test/**/*.test.ts", { followSymbolicLinks: false })
           );
-    return await execute(
-      process.argv0,
-      "--import",
-      import.meta.resolve("tsx"),
-      "--test",
-      ...tests
-    );
+    return useTsx(manifest)
+      ? await execute(
+          process.argv0,
+          "--import",
+          import.meta.resolve("tsx"),
+          "--test",
+          ...tests
+        )
+      : await execute(process.argv0, "--test", ...tests);
   }
 }

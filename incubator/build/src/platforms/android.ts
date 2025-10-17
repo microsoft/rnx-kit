@@ -5,7 +5,7 @@ import {
   start,
 } from "@rnx-kit/tools-android";
 import type { Ora } from "ora";
-import type { BuildParams } from "../types.js";
+import type { BuildParams } from "../types.ts";
 
 const ANDROID_HOME = process.env.ANDROID_HOME || "";
 

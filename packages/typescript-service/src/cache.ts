@@ -1,7 +1,7 @@
 import { normalizePath } from "@rnx-kit/tools-node";
-import * as nodefs from "fs";
+import * as nodefs from "node:fs";
 import type ts from "typescript";
-import { VersionedSnapshot } from "./snapshot";
+import { VersionedSnapshot } from "./snapshot.ts";
 
 export class ProjectFileCache {
   private files = new Map<string, VersionedSnapshot>();

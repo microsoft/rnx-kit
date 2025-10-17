@@ -4,19 +4,19 @@ export type {
   BundlerPlugins,
   HermesOptions,
   TypeScriptValidationOptions,
-} from "./bundleConfig";
+} from "./bundleConfig.ts";
 
-export { getBundleConfig, getPlatformBundleConfig } from "./getBundleConfig";
+export { getBundleConfig, getPlatformBundleConfig } from "./getBundleConfig.ts";
 
-export { getKitCapabilities } from "./getKitCapabilities";
-export type { KitCapabilities } from "./getKitCapabilities";
+export { getKitCapabilities } from "./getKitCapabilities.ts";
+export type { KitCapabilities } from "./getKitCapabilities.ts";
 
 export {
   getKitConfig,
   getKitConfigFromPackageInfo,
   getKitConfigFromPackageManifest,
-} from "./getKitConfig";
-export type { GetKitConfigOptions } from "./getKitConfig";
+} from "./getKitConfig.ts";
+export type { GetKitConfigOptions } from "./getKitConfig.ts";
 
 export type {
   Capability,
@@ -25,6 +25,6 @@ export type {
   KitConfig,
   KitType,
   MetaCapability,
-} from "./kitConfig";
+} from "./kitConfig.ts";
 
-export type { ServerConfig } from "./serverConfig";
+export type { ServerConfig } from "./serverConfig.ts";

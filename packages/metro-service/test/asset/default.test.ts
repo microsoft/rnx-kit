@@ -1,8 +1,8 @@
 import { equal } from "node:assert/strict";
 import * as path from "node:path";
 import { describe, it } from "node:test";
-import { getAssetDestPath } from "../../src/asset/default";
-import { makeAsset } from "./helper";
+import { getAssetDestPath } from "../../src/asset/default.ts";
+import { makeAsset } from "./helper.ts";
 
 describe("getAssetDestPath", () => {
   it("should build correct path", () => {

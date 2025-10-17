@@ -1,6 +1,6 @@
 import ts from "typescript";
-import { ExternalFileCache, ProjectFileCache } from "./cache";
-import type { DiagnosticWriter } from "./diagnostics";
+import { ExternalFileCache, ProjectFileCache } from "./cache.ts";
+import type { DiagnosticWriter } from "./diagnostics.ts";
 
 export class Project {
   private diagnosticWriter: DiagnosticWriter;

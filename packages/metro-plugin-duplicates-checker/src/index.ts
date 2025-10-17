@@ -1,16 +1,16 @@
 import { error } from "@rnx-kit/console";
 import type { MetroPlugin } from "@rnx-kit/metro-serializer";
-import { readFile } from "fs";
 import type { MixedSourceMap } from "metro-source-map";
-import type { Options, Result } from "./checkForDuplicatePackages";
+import { readFile } from "node:fs";
+import type { Options, Result } from "./checkForDuplicatePackages.ts";
 import {
   checkForDuplicateDependencies,
   checkForDuplicatePackages,
   defaultOptions,
-} from "./checkForDuplicatePackages";
+} from "./checkForDuplicatePackages.ts";
 
-export { detectDuplicatePackages } from "./checkForDuplicatePackages";
-export { normalizePath, resolveModule } from "./gatherModules";
+export { detectDuplicatePackages } from "./checkForDuplicatePackages.ts";
+export { normalizePath, resolveModule } from "./gatherModules.ts";
 export { checkForDuplicatePackages };
 export type { Options, Result };
 

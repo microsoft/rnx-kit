@@ -1,5 +1,5 @@
 import {
-  findMetroPath,
+  getMetroVersion as getMetroVersionInternal,
   requireModuleFromMetro,
 } from "@rnx-kit/tools-react-native/metro";
 import type {
@@ -8,7 +8,6 @@ import type {
   ReadOnlyGraph,
   SerializerOptions,
 } from "metro";
-import * as semver from "semver";
 
 export type MetroPlugin<T = MixedOutput> = (
   entryPoint: string,
@@ -42,6 +41,17 @@ export type TestMocks = {
   bundleToString?: (bundle: Bundle) => CustomSerializerResult;
 };
 
+function getMetroVersion(): number {
+  const version = getMetroVersionInternal();
+  if (!version) {
+    // If Metro cannot be found, assume we're running a recent version
+    return Number.MAX_SAFE_INTEGER;
+  }
+
+  const [major, minor = 0, patch = 0] = version.split(".");
+  return Number(major) * 1_000_000 + Number(minor) * 1_000 + Number(patch);
+}
+
 /**
  * Metro's default bundle serializer.
  *
@@ -61,8 +71,7 @@ export function MetroSerializer(
     __mocks.bundleToString ??
     requireModuleFromMetro("metro/src/lib/bundleToString");
 
-  const { version } = require(`${findMetroPath() || "metro"}/package.json`);
-  const shouldReturnPromise = semver.satisfies(version, ">=0.60.0");
+  const shouldReturnPromise = getMetroVersion() >= 60000;
 
   return (
     entryPoint: string,

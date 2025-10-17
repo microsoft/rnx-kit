@@ -7,8 +7,6 @@ import {
   sanitizeCapabilities,
 } from "../src/config";
 
-jest.mock("@rnx-kit/config");
-
 describe("containsValidPresets()", () => {
   test("is valid when 'presets' is unset", () => {
     expect(containsValidPresets({})).toBe(true);

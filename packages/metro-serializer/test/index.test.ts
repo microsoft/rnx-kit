@@ -1,8 +1,8 @@
 import type { Graph, SerializerOptions } from "metro";
 import { deepEqual, equal } from "node:assert/strict";
 import { describe, it } from "node:test";
-import type { CustomSerializerResult, MetroPlugin } from "../src/index";
-import { MetroSerializer as MetroSerializerActual } from "../src/index";
+import type { CustomSerializerResult, MetroPlugin } from "../src/index.ts";
+import { MetroSerializer as MetroSerializerActual } from "../src/index.ts";
 
 function isPromise<T>(obj: T | Promise<T>): obj is Promise<T> {
   return obj && typeof obj === "object" && typeof obj["then"] === "function";

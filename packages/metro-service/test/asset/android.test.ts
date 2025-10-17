@@ -1,8 +1,8 @@
 import { equal, fail, ok } from "node:assert/strict";
 import * as path from "node:path";
 import { describe, it } from "node:test";
-import { getAssetDestPathAndroid } from "../../src/asset/android";
-import { makeAsset } from "./helper";
+import { getAssetDestPathAndroid } from "../../src/asset/android.ts";
+import { makeAsset } from "./helper.ts";
 
 describe("getAssetDestPathAndroid", () => {
   it("should use the right destination folder", () => {

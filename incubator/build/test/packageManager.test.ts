@@ -2,7 +2,7 @@ import { equal, ok } from "node:assert/strict";
 import * as os from "node:os";
 import { afterEach, describe, it } from "node:test";
 import { URL, fileURLToPath } from "node:url";
-import { detectPackageManager } from "../src/packageManager";
+import { detectPackageManager } from "../src/packageManager.ts";
 
 function changeToFixtureDir(fixture: string) {
   const url = new URL(`__fixtures__/${fixture}-project`, import.meta.url);

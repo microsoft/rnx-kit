@@ -1,5 +1,5 @@
-import * as nodefs from "fs";
-import * as path from "path";
+import * as nodefs from "node:fs";
+import * as path from "node:path";
 
 type FileType = "file" | "directory";
 

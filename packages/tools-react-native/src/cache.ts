@@ -3,7 +3,7 @@ import { findUp } from "@rnx-kit/tools-node/path";
 import * as crypto from "node:crypto";
 import * as nodefs from "node:fs";
 import * as path from "node:path";
-import { REACT_NATIVE_CONFIG_FILES } from "./context";
+import { REACT_NATIVE_CONFIG_FILES } from "./context.ts";
 
 const HASH_ALGO = "sha256";
 const UTF8 = { encoding: "utf-8" as const };

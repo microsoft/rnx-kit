@@ -12,7 +12,7 @@ import {
   getSavedState,
   loadConfigFromCache,
   saveConfigToCache,
-} from "./cache";
+} from "./cache.ts";
 
 // As of 0.76, `@react-native-community/cli` is no longer a dependency of
 // `react-native`. Consumers have to take a direct dependency on CLI instead.

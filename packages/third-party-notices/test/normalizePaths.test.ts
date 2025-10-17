@@ -1,7 +1,7 @@
 import { normalizePath } from "../src/write-third-party-notices";
 
 // this is different from the one in pathHelper due to this having to test cross platform path normalization.
-import os from "os";
+import * as os from "node:os";
 const absolutePathRoot = os.platform() === "win32" ? "o:/" : "/";
 
 describe("normalizePath", () => {

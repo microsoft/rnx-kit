@@ -4,8 +4,8 @@ import {
   findPackages,
   findPackagesSync,
   getImplementationSync,
-} from "./common";
-import type { WorkspacesInfo } from "./types";
+} from "./common.ts";
+import type { WorkspacesInfo } from "./types.ts";
 
 export class WorkspacesInfoImpl implements WorkspacesInfo {
   private root: string;

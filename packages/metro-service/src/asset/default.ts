@@ -1,5 +1,5 @@
-import path from "path";
-import type { PackagerAsset, SaveAssetsPlugin } from "./types";
+import * as path from "node:path";
+import type { PackagerAsset, SaveAssetsPlugin } from "./types.ts";
 
 export function getAssetDestPath(asset: PackagerAsset, scale: number): string {
   const suffix = scale === 1 ? "" : `@${scale}x`;

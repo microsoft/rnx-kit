@@ -2,7 +2,7 @@ import { deepEqual, equal, ok } from "node:assert/strict";
 import * as path from "node:path";
 import { describe, it } from "node:test";
 import ts from "typescript";
-import { findConfigFile, readConfigFile } from "../src/config";
+import { findConfigFile, readConfigFile } from "../src/config.ts";
 
 const fixturePath = path.join(process.cwd(), "test", "__fixtures__");
 

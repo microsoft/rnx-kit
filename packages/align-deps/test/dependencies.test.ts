@@ -1,6 +1,6 @@
 import type { PackageManifest } from "@rnx-kit/tools-node/package";
 import { readPackage } from "@rnx-kit/tools-node/package";
-import path from "path";
+import * as path from "node:path";
 import { gatherRequirements, visitDependencies } from "../src/dependencies";
 import { profile as profile_0_69 } from "../src/presets/microsoft/react-native/profile-0.69";
 import { profile as profile_0_70 } from "../src/presets/microsoft/react-native/profile-0.70";

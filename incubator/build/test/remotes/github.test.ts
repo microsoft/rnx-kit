@@ -1,6 +1,6 @@
 import { deepEqual, equal } from "node:assert/strict";
 import { describe, it } from "node:test";
-import { getRepositoryInfo } from "../../src/remotes/github";
+import { getRepositoryInfo } from "../../src/remotes/github.ts";
 
 describe("getRepositoryInfo()", () => {
   const currentInfo = {

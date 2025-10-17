@@ -1,9 +1,9 @@
-import type { BundleConfig } from "./bundleConfig";
+import type { BundleConfig } from "./bundleConfig.ts";
 import type {
   NoDuplicatesRuleOptions,
   NoWorkspacePackageFromNpmRuleOptions,
-} from "./lint.types";
-import type { ServerConfig } from "./serverConfig";
+} from "./lint.types.ts";
+import type { ServerConfig } from "./serverConfig.ts";
 
 export type MetaCapability = "core/testing";
 

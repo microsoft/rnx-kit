@@ -1,7 +1,7 @@
 import { readPackage } from "@rnx-kit/tools-node/package";
 import type { Module, ReadOnlyGraph, SerializerOptions } from "metro";
-import { findCommunityCliPluginPath } from "./cli";
-import { resolveFrom } from "./resolve";
+import { findCommunityCliPluginPath } from "./cli.ts";
+import { resolveFrom } from "./resolve.ts";
 
 // https://github.com/facebook/metro/blob/v0.83.2/packages/metro-runtime/src/modules/types.js
 type Bundle = {

@@ -1,13 +1,18 @@
 import { equal, match } from "node:assert/strict";
-import { afterEach, describe, it } from "node:test";
-import { findSentinel, findSentinelSync } from "../src/common";
+import { after, afterEach, before, describe, it } from "node:test";
+import { findSentinel, findSentinelSync } from "../src/common.ts";
 import {
   findWorkspacePackages,
   findWorkspacePackagesSync,
   findWorkspaceRoot,
   findWorkspaceRootSync,
-} from "../src/index";
-import { setFixture, unsetFixture } from "./helper";
+} from "../src/index.ts";
+import {
+  defineRequire,
+  setFixture,
+  undefineRequire,
+  unsetFixture,
+} from "./helper.ts";
 
 describe("findSentinel", () => {
   afterEach(() => {
@@ -34,9 +39,13 @@ describe("findWorkspacePackages", () => {
     /__fixtures__[/\\]yarn[/\\]packages[/\\]t-800$/,
   ];
 
+  before(defineRequire);
+
   afterEach(() => {
     unsetFixture();
   });
+
+  after(undefineRequire);
 
   it("returns packages for Yarn workspaces", async () => {
     setFixture("yarn");

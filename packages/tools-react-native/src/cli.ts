@@ -1,5 +1,5 @@
 import * as fs from "node:fs";
-import { resolveFrom } from "./resolve";
+import { resolveFrom } from "./resolve.ts";
 
 export function findCommunityCliPluginPath(
   projectRoot = process.cwd(),

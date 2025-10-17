@@ -4,7 +4,7 @@ import * as os from "node:os";
 import * as path from "node:path";
 import { afterEach, before, beforeEach, describe, it } from "node:test";
 import { fileURLToPath } from "node:url";
-import type { PackageManifest } from "../src/package";
+import type { PackageManifest } from "../src/package.ts";
 import {
   findPackage,
   findPackageDependencyDir,
@@ -12,7 +12,7 @@ import {
   parsePackageRef,
   readPackage,
   writePackage,
-} from "../src/package";
+} from "../src/package.ts";
 
 describe("Node > Package", () => {
   const fixtureDir = fileURLToPath(new URL("__fixtures__", import.meta.url));

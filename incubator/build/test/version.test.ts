@@ -1,6 +1,6 @@
 import { equal } from "node:assert/strict";
 import { describe, it } from "node:test";
-import { latestVersion } from "../src/version";
+import { latestVersion } from "../src/version.ts";
 
 describe("latestVersion()", () => {
   it("returns 0.0.0 if no versions are passed", () => {

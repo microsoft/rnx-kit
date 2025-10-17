@@ -1,4 +1,4 @@
-import type { GetPackageValue, PackageInfo } from "./types";
+import type { GetPackageValue, PackageInfo } from "./types.ts";
 
 /**
  * Helper function to create a typed accessor function for getting and storing information

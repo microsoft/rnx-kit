@@ -4,9 +4,9 @@ import {
   findPackageDir,
   readPackage,
 } from "@rnx-kit/tools-node/package";
-import * as fs from "fs";
 import type { BasicSourceMap } from "metro-source-map";
-import * as path from "path";
+import * as fs from "node:fs";
+import * as path from "node:path";
 import { createLicenseJSON } from "./output/json";
 import { createLicenseFileContents } from "./output/text";
 import type {

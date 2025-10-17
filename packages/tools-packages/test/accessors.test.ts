@@ -1,10 +1,11 @@
 import { deepEqual } from "node:assert/strict";
-import fs from "node:fs";
-import path from "node:path";
+import * as fs from "node:fs";
+import * as path from "node:path";
 import { describe, it } from "node:test";
-import { createPackageValueLoader } from "../src/accessors";
-import { getPackageInfoFromPath, getRootPackageInfo } from "../src/package";
-import type { PackageInfo } from "../src/types";
+import { fileURLToPath } from "node:url";
+import { createPackageValueLoader } from "../src/accessors.ts";
+import { getPackageInfoFromPath, getRootPackageInfo } from "../src/package.ts";
+import type { PackageInfo } from "../src/types.ts";
 
 function loadTsConfig(pkgInfo: PackageInfo) {
   const tsconfigPath = path.join(pkgInfo.root, "tsconfig.json");
@@ -21,7 +22,7 @@ describe("package value loader", () => {
   });
 
   it("returns the value when found", () => {
-    const pkgPath = path.resolve(__dirname, "../package.json");
+    const pkgPath = fileURLToPath(new URL("../package.json", import.meta.url));
     const pkgInfo = getPackageInfoFromPath(pkgPath);
     const value = getTsConfigPath(pkgInfo);
     deepEqual(value, path.join(pkgInfo.root, "tsconfig.json"));

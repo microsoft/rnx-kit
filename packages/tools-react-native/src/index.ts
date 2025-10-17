@@ -3,12 +3,12 @@ export {
   loadContextAsync,
   readReactNativeConfig,
   resolveCommunityCLI,
-} from "./context";
+} from "./context.ts";
 export {
   findMetroPath,
   getMetroVersion,
   requireModuleFromMetro,
-} from "./metro";
+} from "./metro.ts";
 export {
   expandPlatformExtensions,
   getAvailablePlatforms,
@@ -18,5 +18,5 @@ export {
   platformExtensions,
   platformValues,
   tryParsePlatform,
-} from "./platform";
-export type { AllPlatforms } from "./platform";
+} from "./platform.ts";
+export type { AllPlatforms } from "./platform.ts";

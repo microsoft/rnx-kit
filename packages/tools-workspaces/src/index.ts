@@ -4,10 +4,10 @@ import {
   findSentinelSync,
   getImplementation,
   getImplementationSync,
-} from "./common";
-import { WorkspacesInfoImpl } from "./info";
-import type { WorkspacesInfo } from "./types";
-export type { WorkspacesInfo } from "./types";
+} from "./common.ts";
+import { WorkspacesInfoImpl } from "./info.ts";
+import type { WorkspacesInfo } from "./types.ts";
+export type { WorkspacesInfo } from "./types.ts";
 
 /**
  * Returns a list of all packages declared under workspaces.

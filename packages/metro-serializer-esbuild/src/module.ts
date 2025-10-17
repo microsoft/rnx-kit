@@ -3,7 +3,7 @@ import { findPackage, readPackage } from "@rnx-kit/tools-node/package";
 import type { BuildOptions } from "esbuild";
 import type { Module, ReadOnlyDependencies } from "metro";
 import * as path from "node:path";
-import { generateSourceMappingURL } from "./sourceMap";
+import { generateSourceMappingURL } from "./sourceMap.ts";
 
 export function getModulePath(
   moduleName: string,
