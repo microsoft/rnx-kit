@@ -73,8 +73,8 @@ async function parse(typedoc) {
   const app = await typedoc.Application.bootstrap(
     {
       compilerOptions: {
-        module: ts.ModuleKind.ES2022,
-        moduleResolution: ts.ModuleResolutionKind.Bundler,
+        module: ts.server.protocol.ModuleKind.ES2022,
+        moduleResolution: ts.server.protocol.ModuleResolutionKind.Bundler,
         customConditions: ["typescript"],
       },
       entryPoints: ["src/index.ts"],
