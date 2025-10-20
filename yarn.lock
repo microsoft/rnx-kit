@@ -5198,14 +5198,14 @@ __metadata:
     "@yarnpkg/cli": "npm:^4.6.0"
     clipanion: "npm:^4.0.0-rc.4"
     esbuild: "npm:^0.25.0"
-    eslint: "npm:^9.0.0"
+    eslint: "catalog:"
     fast-glob: "npm:^3.2.7"
     jest: "npm:^29.2.1"
     markdown-table: "npm:^3.0.0"
-    prettier: "npm:^3.0.0"
+    prettier: "catalog:"
     tsx: "npm:^4.15.0"
     typedoc: "npm:^0.28.0"
-    typescript: "npm:^5.0.0"
+    typescript: "catalog:"
     yargs: "npm:^16.0.0"
   bin:
     rnx-kit-scripts: src/index.js
@@ -5532,8 +5532,6 @@ __metadata:
 "@rnx-kit/tsconfig@npm:*, @rnx-kit/tsconfig@workspace:*, @rnx-kit/tsconfig@workspace:packages/tsconfig":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/tsconfig@workspace:packages/tsconfig"
-  dependencies:
-    prettier: "npm:^3.0.0"
   languageName: unknown
   linkType: soft
 
@@ -15303,14 +15301,14 @@ __metadata:
     "@types/jest": "npm:^29.2.1"
     "@types/node": "npm:^22.0.0"
     "@yarnpkg/types": "npm:^4.0.0"
-    eslint: "npm:^9.0.0"
+    eslint: "catalog:"
     knip: "npm:^5.30.2"
     nx: "patch:nx@npm%3A20.3.3#~/.yarn/patches/nx-npm-20.3.3-84b801f64d.patch"
-    prettier: "npm:^3.0.0"
+    prettier: "catalog:"
     prettier-plugin-organize-imports: "npm:^4.0.0"
     suggestion-bot: "npm:^4.0.0"
     tsx: "npm:^4.15.0"
-    typescript: "npm:^5.0.0"
+    typescript: "catalog:"
   languageName: unknown
   linkType: soft
 

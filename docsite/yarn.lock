@@ -2708,12 +2708,12 @@ __metadata:
     "@types/react": "npm:~19.1.0"
     clsx: "npm:^2.0.0"
     docusaurus-lunr-search: "npm:^3.5.0"
-    prettier: "npm:^3.0.0"
+    prettier: "catalog:"
     prettier-plugin-organize-imports: "npm:^4.0.0"
     prism-react-renderer: "npm:^2.3.0"
     react: "npm:~19.1.1"
     react-dom: "npm:~19.1.1"
-    typescript: "npm:^5.0.0"
+    typescript: "catalog:"
   languageName: unknown
   linkType: soft
 
