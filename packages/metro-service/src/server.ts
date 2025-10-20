@@ -1,7 +1,7 @@
 import { requireModuleFromMetro } from "@rnx-kit/tools-react-native/metro";
 import type { runServer } from "metro";
-import net from "node:net";
-import { ensureBabelConfig } from "./babel";
+import * as net from "node:net";
+import { ensureBabelConfig } from "./babel.ts";
 
 type ServerStatus = "not_running" | "already_running" | "in_use" | "unknown";
 

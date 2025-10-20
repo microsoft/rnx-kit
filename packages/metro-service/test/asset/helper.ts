@@ -1,4 +1,4 @@
-import type { PackagerAsset } from "../../src/assets-registry/registry";
+import type { PackagerAsset } from "../../src/assets-registry/registry.ts";
 
 type Asset = Pick<PackagerAsset, "name" | "type" | "httpServerLocation">;
 

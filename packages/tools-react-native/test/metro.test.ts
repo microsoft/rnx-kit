@@ -1,7 +1,10 @@
 import { ok, throws } from "node:assert/strict";
+import { createRequire } from "node:module";
 import * as path from "node:path";
-import { describe, it } from "node:test";
-import { requireModuleFromMetro } from "../src/metro";
+import { after, before, describe, it } from "node:test";
+import { URL } from "node:url";
+import { requireModuleFromMetro } from "../src/metro.ts";
+import { fixturePath } from "./fixtures.ts";
 
 describe("requireModuleFromMetro", () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -11,8 +14,17 @@ describe("requireModuleFromMetro", () => {
     return requireModuleFromMetro("metro-resolver", fromDir).resolve;
   }
 
+  before(() => {
+    global.require = createRequire(new URL("../src/metro.ts", import.meta.url));
+  });
+
+  after(() => {
+    // @ts-expect-error Tests are run in ESM mode where `require` is not defined
+    global.require = undefined;
+  });
+
   it("returns `metro-resolver` installed by `react-native`", () => {
-    const p = path.join(__dirname, "__fixtures__", "metro-resolver-duplicates");
+    const p = fixturePath("metro-resolver-duplicates");
 
     ok(
       getMetroResolver(p)(context, "", null).includes(
@@ -33,7 +45,7 @@ describe("requireModuleFromMetro", () => {
     "returns `metro-resolver` from a central storage",
     { skip: process.platform === "win32" },
     () => {
-      const p = path.join(__dirname, "__fixtures__", "pnpm");
+      const p = fixturePath("pnpm");
 
       ok(
         getMetroResolver(p)(context, "", null).includes(

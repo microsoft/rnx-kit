@@ -1,14 +1,14 @@
 export {
   createPackageValueAccessors,
   createPackageValueLoader,
-} from "./accessors";
+} from "./accessors.ts";
 export {
   findPackageInfo,
   getPackageInfoFromPath,
   getPackageInfoFromWorkspaces,
-} from "./package";
+} from "./package.ts";
 export type {
   GetPackageValue,
   PackageInfo,
   PackageValueAccessors,
-} from "./types";
+} from "./types.ts";

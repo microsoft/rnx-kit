@@ -3,7 +3,7 @@ import * as fs from "node:fs";
 import * as path from "node:path";
 import { describe, it } from "node:test";
 import ts from "typescript";
-import { VersionedSnapshot } from "../src/snapshot";
+import { VersionedSnapshot } from "../src/snapshot.ts";
 
 describe("VersionedSnapshot", () => {
   const fixturePath = path.join(process.cwd(), "test", "__fixtures__");

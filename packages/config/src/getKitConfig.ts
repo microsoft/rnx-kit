@@ -11,7 +11,7 @@ import {
 import merge from "lodash.merge";
 import * as fs from "node:fs";
 import * as path from "node:path";
-import type { KitConfig } from "./kitConfig";
+import type { KitConfig } from "./kitConfig.ts";
 
 /**
  * Options for retrieving a kit config. The default is equivalent to passing

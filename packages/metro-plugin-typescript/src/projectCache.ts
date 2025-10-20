@@ -5,8 +5,8 @@ import {
   Project,
   readConfigFile,
 } from "@rnx-kit/typescript-service";
-import * as fs from "fs";
-import * as path from "path";
+import * as fs from "node:fs";
+import * as path from "node:path";
 import ts from "typescript";
 import { createEnhanceLanguageServiceHost } from "./host";
 import type { ProjectCache, ProjectInfo } from "./types";

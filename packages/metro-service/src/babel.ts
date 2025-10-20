@@ -1,7 +1,7 @@
 import { warn } from "@rnx-kit/console";
-import * as fs from "fs";
 import type { ConfigT } from "metro-config";
-import * as path from "path";
+import * as fs from "node:fs";
+import * as path from "node:path";
 
 export function ensureBabelConfig({ projectRoot }: ConfigT): void {
   // Even though Babel supports more file extensions

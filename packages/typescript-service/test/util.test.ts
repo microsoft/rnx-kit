@@ -1,6 +1,6 @@
 import { equal, ok } from "node:assert/strict";
 import { describe, it } from "node:test";
-import { getCanonicalFileName, getNewLine } from "../src/util";
+import { getCanonicalFileName, getNewLine } from "../src/util.ts";
 
 describe("Utility", () => {
   it("getCanonicalFileName() only changes upper/lower-case", () => {

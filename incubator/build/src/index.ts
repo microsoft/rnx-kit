@@ -1,15 +1,15 @@
-export { startBuild } from "./build.js";
+export { startBuild } from "./build.ts";
 export {
   DEPLOYMENT,
   DEVICE_TYPES,
   PLATFORMS,
   USER_CONFIG_FILE,
-} from "./constants.js";
-export { getDistribution } from "./distribution.js";
-export { getRemoteUrl, getRepositoryRoot, stage } from "./git.js";
-export { detectPackageManager } from "./packageManager.js";
-export { renderQRCode } from "./qrcode.js";
-export { getRemoteInfo } from "./remotes.js";
+} from "./constants.ts";
+export { getDistribution } from "./distribution.ts";
+export { getRemoteUrl, getRepositoryRoot, stage } from "./git.ts";
+export { detectPackageManager } from "./packageManager.ts";
+export { renderQRCode } from "./qrcode.ts";
+export { getRemoteInfo } from "./remotes.ts";
 export type {
   BuildParams,
   Context,
@@ -20,4 +20,4 @@ export type {
   PluginInterface,
   Remote,
   RepositoryInfo,
-} from "./types.js";
+} from "./types.ts";

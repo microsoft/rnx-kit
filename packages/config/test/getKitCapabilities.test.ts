@@ -1,6 +1,6 @@
 import { deepEqual, doesNotThrow, equal, throws } from "node:assert/strict";
 import { describe, it } from "node:test";
-import { getKitCapabilities } from "../src/getKitCapabilities";
+import { getKitCapabilities } from "../src/getKitCapabilities.ts";
 
 describe("getKitCapabilities()", () => {
   it("throws when supported React Native versions is invalid", (t) => {

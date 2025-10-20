@@ -1,5 +1,5 @@
 import ts from "typescript";
-import { createDiagnosticWriter } from "./diagnostics";
+import { createDiagnosticWriter } from "./diagnostics.ts";
 
 export function findConfigFile(
   searchPath: string,

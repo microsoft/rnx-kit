@@ -1,7 +1,7 @@
 import { deepEqual } from "node:assert/strict";
 import { describe, it } from "node:test";
-import { MAX_LINE_LENGTH } from "../src/constants";
-import { lint } from "../src/index";
+import { MAX_LINE_LENGTH } from "../src/constants.ts";
+import { lint } from "../src/index.ts";
 
 describe("Lint commit message", () => {
   it("should fail non-conforming messages", () => {

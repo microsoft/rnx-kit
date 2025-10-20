@@ -1,8 +1,8 @@
 import { open } from "@rnx-kit/tools-apple/macos";
 import * as os from "node:os";
 import type { Ora } from "ora";
-import { untar } from "../archive.js";
-import type { BuildParams } from "../types.js";
+import { untar } from "../archive.ts";
+import type { BuildParams } from "../types.ts";
 
 export async function deploy(
   archive: string,

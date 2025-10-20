@@ -1,5 +1,5 @@
 import type { AssetData } from "metro";
-import type { PackagerAsset } from "../assets-registry/registry";
+import type { PackagerAsset } from "../assets-registry/registry.ts";
 
 export type SaveAssetsPlugin = (
   assets: readonly AssetData[],

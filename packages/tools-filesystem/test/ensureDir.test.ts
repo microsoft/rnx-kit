@@ -1,7 +1,7 @@
 import { equal, ok } from "node:assert/strict";
 import { describe, it } from "node:test";
-import { ensureDir, ensureDirForFile } from "../src/index";
-import { mockFS } from "../src/mocks";
+import { ensureDir, ensureDirForFile } from "../src/index.ts";
+import { mockFS } from "../src/mocks.ts";
 
 describe("ensureDir()", () => {
   const DIR_CONTENT = JSON.stringify({ recursive: true, mode: 0o755 });

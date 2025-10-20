@@ -3,7 +3,8 @@ import { getKitCapabilities, getKitConfig } from "@rnx-kit/config";
 import { error, warn } from "@rnx-kit/console";
 import type { PackageManifest } from "@rnx-kit/tools-node/package";
 import { readPackage } from "@rnx-kit/tools-node/package";
-import * as path from "path";
+import * as nodefs from "node:fs";
+import * as path from "node:path";
 import { findBadPackages } from "./findBadPackages";
 import type {
   AlignDepsConfig,
@@ -12,7 +13,7 @@ import type {
   Options,
 } from "./types";
 
-type ConfigResult = AlignDepsConfig | LegacyCheckConfig | ErrorCode;
+export type ConfigResult = AlignDepsConfig | LegacyCheckConfig | ErrorCode;
 
 const ILLEGAL_CAPABILITIES = ["__proto__", "constructor", "prototype"];
 
@@ -79,9 +80,10 @@ export function sanitizeCapabilities(
  */
 export function loadConfig(
   manifestPath: string,
-  { excludePackages }: Pick<Options, "excludePackages">
+  { excludePackages }: Pick<Options, "excludePackages">,
+  /** @internal */ fs = nodefs
 ): ConfigResult {
-  const manifest = readPackage(manifestPath);
+  const manifest = readPackage(manifestPath, fs);
   if (!isPackageManifest(manifest)) {
     return "invalid-manifest";
   }

@@ -85,16 +85,16 @@ export function getImplementation(sentinel: string): Promise<PackageManager> {
     case BUN_LOCKB: // fallthrough — logic defining workspaces config is the same as for npm and yarn
     case PACKAGE_LOCK_JSON: // fallthrough — logic defining workspaces config is the same for npm and yarn
     case YARN_LOCK:
-      return import("./yarn.js");
+      return import("./yarn.ts");
 
     case LERNA_JSON:
-      return import("./lerna.js");
+      return import("./lerna.ts");
 
     case PNPM_WORKSPACE_YAML:
-      return import("./pnpm.js");
+      return import("./pnpm.ts");
 
     case RUSH_JSON:
-      return import("./rush.js");
+      return import("./rush.ts");
   }
 
   throw new Error(

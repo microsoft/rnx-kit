@@ -1,7 +1,7 @@
 import { equal, ok } from "node:assert/strict";
 import { describe, it } from "node:test";
-import { writeJSONFile, writeTextFile } from "../src/index";
-import { mockFS } from "../src/mocks";
+import { writeJSONFile, writeTextFile } from "../src/index.ts";
+import { mockFS } from "../src/mocks.ts";
 
 describe("writeTextFile()", () => {
   const CONTENT = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.";

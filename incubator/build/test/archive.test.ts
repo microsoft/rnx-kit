@@ -2,7 +2,7 @@ import { deepEqual, equal } from "node:assert/strict";
 import * as fs from "node:fs";
 import { afterEach, describe, it } from "node:test";
 import { URL, fileURLToPath } from "node:url";
-import { extract, untar, unzip } from "../src/archive";
+import { extract, untar, unzip } from "../src/archive.ts";
 
 function fixturePath(artifact: string): string {
   const url = new URL(`__fixtures__/${artifact}`, import.meta.url);

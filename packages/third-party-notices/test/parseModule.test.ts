@@ -6,11 +6,13 @@ jest.mock("fs");
 
 const options: WriteThirdPartyNoticesOptions = {
   rootPath: `${absolutePathRoot}src`,
+  sourceMapFile: "",
   json: false,
 };
 
 const optionsWithIgnores: WriteThirdPartyNoticesOptions = {
   rootPath: `${absolutePathRoot}src`,
+  sourceMapFile: "",
   json: false,
   ignoreModules: ["ignoredModule"],
   ignoreScopes: ["@ignoredScope"],

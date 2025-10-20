@@ -1,6 +1,6 @@
 import { deepEqual } from "node:assert/strict";
 import { describe, it } from "node:test";
-import { filterPlatformAssetScales } from "../../src/asset/filter";
+import { filterPlatformAssetScales } from "../../src/asset/filter.ts";
 
 describe("filterPlatformAssetScales", () => {
   it("removes everything but 2x and 3x for iOS", () => {

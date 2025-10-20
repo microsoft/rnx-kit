@@ -2,14 +2,8 @@ import { deepEqual, equal, fail, match, ok, throws } from "node:assert/strict";
 import * as fs from "node:fs";
 import * as path from "node:path";
 import { afterEach, describe, it } from "node:test";
-import { enhanceMiddleware } from "../src/assetPluginForMonorepos";
-import {
-  defaultWatchFolders,
-  exclusionList,
-  extractUniquePartsFromYarnStoreDir,
-  makeMetroConfig,
-  resolveUniqueModule,
-} from "../src/index";
+import { enhanceMiddleware } from "../src/assetPluginForMonorepos.js";
+import metroConfigModule from "../src/index.js";
 
 const currentWorkingDir = process.cwd();
 
@@ -28,6 +22,8 @@ function setFixture(name: string): void {
 }
 
 describe("defaultWatchFolders()", () => {
+  const { defaultWatchFolders } = metroConfigModule;
+
   afterEach(() => process.chdir(currentWorkingDir));
 
   it("returns an empty list outside a monorepo", () => {
@@ -57,6 +53,8 @@ describe("defaultWatchFolders()", () => {
 });
 
 describe("extractUniquePartsFromYarnStoreDir()", () => {
+  const { extractUniquePartsFromYarnStoreDir } = metroConfigModule;
+
   it("returns version+hash from a versioned path", () => {
     const [pre, unique] = extractUniquePartsFromYarnStoreDir(
       "node_modules/.store/@babel-core-npm-7.27.1-0f1bf48e52"
@@ -86,6 +84,8 @@ describe("extractUniquePartsFromYarnStoreDir()", () => {
 });
 
 describe("resolveUniqueModule()", () => {
+  const { resolveUniqueModule } = metroConfigModule;
+
   afterEach(() => process.chdir(currentWorkingDir));
 
   it("ignores symlinks", () => {
@@ -206,6 +206,8 @@ describe("resolveUniqueModule()", () => {
 });
 
 describe("exclusionList()", () => {
+  const { exclusionList } = metroConfigModule;
+
   afterEach(() => process.chdir(currentWorkingDir));
 
   it("ignores extra copies of react and react-native", () => {
@@ -351,6 +353,8 @@ describe("exclusionList()", () => {
 });
 
 describe("makeMetroConfig()", () => {
+  const { exclusionList, makeMetroConfig } = metroConfigModule;
+
   const projectRoot = path.resolve("../test-app");
 
   it("returns a default Metro config", async () => {

@@ -1,7 +1,7 @@
 import { install, start } from "@rnx-kit/tools-windows";
 import * as os from "node:os";
 import type { Ora } from "ora";
-import type { BuildParams } from "../types.js";
+import type { BuildParams } from "../types.ts";
 
 export async function deploy(
   app: string,

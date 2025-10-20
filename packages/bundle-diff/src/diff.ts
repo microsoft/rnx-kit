@@ -1,4 +1,4 @@
-import type { BasicSourceMap, SourceDiff } from "./types";
+import type { BasicSourceMap, SourceDiff } from "./types.ts";
 
 export function isValidSourceMap(
   obj: Partial<BasicSourceMap>

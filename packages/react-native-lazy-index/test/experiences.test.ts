@@ -1,6 +1,6 @@
 import { deepEqual, ok, throws } from "node:assert/strict";
 import { afterEach, describe, it } from "node:test";
-import { getFlightedModule, parseExperiences } from "../src/experiences";
+import { getFlightedModule, parseExperiences } from "../src/experiences.js";
 
 describe("parseExperiences()", () => {
   afterEach(() => {

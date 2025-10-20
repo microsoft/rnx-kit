@@ -1,7 +1,7 @@
 import { findPackage, readPackage } from "@rnx-kit/tools-node";
 import { getWorkspacesInfoSync } from "@rnx-kit/tools-workspaces";
-import path from "node:path";
-import type { PackageInfo } from "./types";
+import * as path from "node:path";
+import type { PackageInfo } from "./types.ts";
 
 class PackageInfoCache {
   private workspaceInfo;

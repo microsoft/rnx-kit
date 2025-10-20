@@ -1,13 +1,13 @@
 import { deepEqual, equal, throws } from "node:assert/strict";
 import { describe, it } from "node:test";
-import type { CyclicDependencies } from "../src/detectCycles";
-import { detectCycles, traverseDependencies } from "../src/detectCycles";
+import type { CyclicDependencies } from "../src/detectCycles.ts";
+import { detectCycles, traverseDependencies } from "../src/detectCycles.ts";
 import {
   entryPoint,
   graphWithCycles,
   graphWithNoCycles,
   repoRoot,
-} from "./testData";
+} from "./testData.ts";
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 function noop() {}

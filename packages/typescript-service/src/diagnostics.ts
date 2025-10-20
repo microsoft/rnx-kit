@@ -1,5 +1,5 @@
 import ts from "typescript";
-import { getCanonicalFileName, getNewLine } from "./util";
+import { getCanonicalFileName, getNewLine } from "./util.ts";
 
 export type DiagnosticWriter = {
   format: (diagnostic: ts.Diagnostic) => string;
