@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-serializer
 
+## 2.0.3
+
+### Patch Changes
+
+- 3f5f00f: Replaced `semver` dependency
+
 ## 2.0.2
 
 ### Patch Changes
