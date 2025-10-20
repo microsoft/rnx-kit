@@ -30,7 +30,6 @@ export type Options = {
   write: boolean;
   diffMode?: DiffMode;
   excludePackages?: string[];
-  exportCatalogs?: string;
   requirements?: string[];
 };
 

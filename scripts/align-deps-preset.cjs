@@ -54,10 +54,6 @@ function makeTypesEntries() {
 
 const profile = {
   ...makeTypesEntries(),
-  chalk: {
-    name: "chalk",
-    version: "^4.1.0",
-  },
   esbuild: {
     name: "esbuild",
     version: "^0.25.0",
@@ -65,14 +61,6 @@ const profile = {
   },
   "find-up": {
     name: "find-up",
-    version: "^5.0.0",
-  },
-  "jest-cli": {
-    name: "jest-cli",
-    version: dependencies.jest,
-  },
-  "pkg-dir": {
-    name: "pkg-dir",
     version: "^5.0.0",
   },
   semver: {
