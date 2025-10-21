@@ -1,5 +1,5 @@
 import yaml from "js-yaml";
-import * as fs from "node:fs";
+import * as nodefs from "node:fs";
 import * as path from "node:path";
 import { isMetaPackage } from "../capabilities";
 import { mergePresets } from "../preset";
@@ -28,12 +28,25 @@ function compare(lhs: PackageDefinition, rhs: PackageDefinition): -1 | 0 | 1 {
   return lhs.name < rhs.name ? -1 : 1;
 }
 
-function parseFile(filename: string): Config {
+function parseFile(filename: string, fs: typeof nodefs): Config {
   const content =
     fs.existsSync(filename) && fs.readFileSync(filename, { encoding: "utf-8" });
 
   const extension = path.extname(filename).toLowerCase();
   switch (extension) {
+    // Bun v1.2.14+
+    case ".json": {
+      const data = content ? JSON.parse(content) : {};
+      const preferWorkspaces = !("catalog" in data || "catalogs" in data);
+      if (preferWorkspaces && !data["workspaces"]) {
+        data["workspaces"] = {};
+      }
+      return {
+        data: preferWorkspaces ? data["workspaces"] : data,
+        serialize: () => JSON.stringify(data, null, 2) + "\n",
+      };
+    }
+
     // pnpm v9.5.0+ and Yarn v4.10.0+
     case ".yaml":
     case ".yml": {
@@ -47,8 +60,12 @@ function parseFile(filename: string): Config {
   throw new Error(`Unsupported file format: ${extension}`);
 }
 
-export function exportCatalogs(dest: string, preset = defaultPreset): void {
-  const config = parseFile(dest);
+export function exportCatalogs(
+  dest: string,
+  preset = defaultPreset,
+  fs = nodefs
+): void {
+  const config = parseFile(dest, fs);
 
   const catalogs = config.data["catalogs"] ?? {};
   config.data["catalogs"] = catalogs;

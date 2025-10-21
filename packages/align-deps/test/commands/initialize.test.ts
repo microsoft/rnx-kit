@@ -1,8 +1,8 @@
 import {
   initializeConfig,
   makeInitializeCommand,
-} from "../src/commands/initialize";
-import { defaultConfig } from "../src/config";
+} from "../../src/commands/initialize";
+import { defaultConfig } from "../../src/config";
 
 const defaultOptions = {
   presets: defaultConfig.presets,
