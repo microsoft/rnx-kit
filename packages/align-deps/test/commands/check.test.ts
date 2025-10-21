@@ -1,11 +1,11 @@
-import { checkPackageManifest as checkPackageManifestActual } from "../src/commands/check";
-import type { ConfigResult } from "../src/config";
-import { defaultConfig, loadConfig } from "../src/config";
-import { profile as profile_0_68 } from "../src/presets/microsoft/react-native/profile-0.68";
-import { profile as profile_0_69 } from "../src/presets/microsoft/react-native/profile-0.69";
-import { profile as profile_0_70 } from "../src/presets/microsoft/react-native/profile-0.70";
-import type { Options } from "../src/types";
-import { packageVersion } from "./helpers";
+import { checkPackageManifest as checkPackageManifestActual } from "../../src/commands/check";
+import type { ConfigResult } from "../../src/config";
+import { defaultConfig, loadConfig } from "../../src/config";
+import { profile as profile_0_68 } from "../../src/presets/microsoft/react-native/profile-0.68";
+import { profile as profile_0_69 } from "../../src/presets/microsoft/react-native/profile-0.69";
+import { profile as profile_0_70 } from "../../src/presets/microsoft/react-native/profile-0.70";
+import type { Options } from "../../src/types";
+import { packageVersion } from "../helpers";
 
 const defaultOptions = {
   presets: defaultConfig.presets,
@@ -27,7 +27,7 @@ function checkPackageManifest(
   _inputConfig?: ConfigResult,
   logError?: (message: string) => void
 ) {
-  const fs = require("./__mocks__/fs.js");
+  const fs = require("../__mocks__/fs.js");
   return checkPackageManifestActual(
     manifestPath,
     options,
@@ -39,7 +39,7 @@ function checkPackageManifest(
 
 describe("checkPackageManifest({ kitType: 'library' })", () => {
   const rnxKitConfig = require("@rnx-kit/config");
-  const fs = require("./__mocks__/fs.js");
+  const fs = require("../__mocks__/fs.js");
 
   const consoleLogSpy = jest.spyOn(global.console, "log");
   const consoleWarnSpy = jest.spyOn(global.console, "warn");
@@ -491,7 +491,7 @@ describe("checkPackageManifest({ kitType: 'library' })", () => {
 
 describe("checkPackageManifest({ kitType: 'library' }) (backwards compatibility)", () => {
   const rnxKitConfig = require("@rnx-kit/config");
-  const fs = require("./__mocks__/fs.js");
+  const fs = require("../__mocks__/fs.js");
 
   const mockManifest = {
     name: "@rnx-kit/align-deps",

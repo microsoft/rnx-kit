@@ -2,9 +2,9 @@ import {
   buildManifestProfile,
   checkPackageManifestUnconfigured as checkPackageManifestUnconfiguredActual,
   inspect,
-} from "../src/commands/vigilant";
-import { defaultConfig } from "../src/config";
-import type { AlignDepsConfig, Options } from "../src/types";
+} from "../../src/commands/vigilant";
+import { defaultConfig } from "../../src/config";
+import type { AlignDepsConfig, Options } from "../../src/types";
 
 function makeConfig(
   requirements: AlignDepsConfig["alignDeps"]["requirements"],
@@ -437,7 +437,7 @@ describe("inspect()", () => {
 
 describe("checkPackageManifestUnconfigured()", () => {
   const rnxKitConfig = require("@rnx-kit/config");
-  const fs = require("./__mocks__/fs.js");
+  const fs = require("../__mocks__/fs.js");
 
   const consoleErrorSpy = jest.spyOn(global.console, "error");
 
@@ -621,7 +621,7 @@ describe("checkPackageManifestUnconfigured()", () => {
   });
 
   test("uses package-specific custom profiles", () => {
-    const fixture = `${__dirname}/__fixtures__/config-custom-profiles-only`;
+    const fixture = `${__dirname}/../__fixtures__/config-custom-profiles-only`;
     const kitConfig = {
       kitType: "library" as const,
       alignDeps: {

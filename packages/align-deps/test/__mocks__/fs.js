@@ -4,13 +4,17 @@ const actualFs = jest.requireActual("fs");
 let data = "";
 
 fs.__setMockContent = (content, space = 2) => {
-  data = JSON.stringify(content, undefined, space) + "\n";
+  data =
+    typeof content === "string"
+      ? content
+      : JSON.stringify(content, undefined, space) + "\n";
 };
 
 fs.__setMockFileWriter = (writer) => {
   fs.writeFileSync = writer;
 };
 
+fs.existsSync = (...args) => Boolean(data) || actualFs.existsSync(...args);
 fs.lstatSync = (...args) => actualFs.lstatSync(...args);
 fs.readFileSync = (...args) => data || actualFs.readFileSync(...args);
 fs.realpathSync = (...args) => actualFs.realpathSync(...args);

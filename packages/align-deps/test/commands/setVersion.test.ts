@@ -1,8 +1,8 @@
 import type { PackageManifest } from "@rnx-kit/tools-node/package";
 import prompts from "prompts";
-import { makeSetVersionCommand as makeSetVersionCommandActual } from "../src/commands/setVersion";
-import { defaultConfig } from "../src/config";
-import type { Options } from "../src/types";
+import { makeSetVersionCommand as makeSetVersionCommandActual } from "../../src/commands/setVersion";
+import { defaultConfig } from "../../src/config";
+import type { Options } from "../../src/types";
 
 type Result = {
   didWrite: boolean;
@@ -10,13 +10,13 @@ type Result = {
 };
 
 function makeSetVersionCommand(versions: string | number, options: Options) {
-  const fs = require("./__mocks__/fs.js");
+  const fs = require("../__mocks__/fs.js");
   return makeSetVersionCommandActual(versions, options, fs);
 }
 
 describe("makeSetVersionCommand()", () => {
   const rnxKitConfig = require("@rnx-kit/config");
-  const fs = require("./__mocks__/fs.js");
+  const fs = require("../__mocks__/fs.js");
 
   function setupMocks(manifest: PackageManifest): Result {
     fs.__setMockContent(manifest);

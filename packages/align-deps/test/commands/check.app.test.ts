@@ -1,6 +1,6 @@
 import * as path from "node:path";
-import { checkPackageManifest as checkPackageManifestActual } from "../src/commands/check";
-import { defaultConfig } from "../src/config";
+import { checkPackageManifest as checkPackageManifestActual } from "../../src/commands/check";
+import { defaultConfig } from "../../src/config";
 
 jest.unmock("@rnx-kit/config");
 
@@ -14,7 +14,7 @@ const defaultOptions = {
 };
 
 function checkPackageManifest(manifestPath: string) {
-  const fs = require("./__mocks__/fs.js");
+  const fs = require("../__mocks__/fs.js");
   return checkPackageManifestActual(
     manifestPath,
     defaultOptions,
@@ -25,7 +25,7 @@ function checkPackageManifest(manifestPath: string) {
 }
 
 function fixturePath(name: string) {
-  return path.join(__dirname, "__fixtures__", name);
+  return path.join(__dirname, "..", "__fixtures__", name);
 }
 
 describe("checkPackageManifest({ kitType: 'app' })", () => {
@@ -42,7 +42,7 @@ describe("checkPackageManifest({ kitType: 'app' })", () => {
 });
 
 describe("checkPackageManifest({ kitType: 'app' }) (backwards compatibility)", () => {
-  const fs = require("./__mocks__/fs.js");
+  const fs = require("../__mocks__/fs.js");
 
   afterAll(() => {
     jest.clearAllMocks();
