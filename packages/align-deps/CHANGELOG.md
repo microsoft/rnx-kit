@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/align-deps
 
+## 3.3.1
+
+### Patch Changes
+
+- 691ec7d: Support Bun catalogs
+
 ## 3.3.0
 
 ### Minor Changes
