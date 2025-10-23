@@ -1,5 +1,5 @@
-import type { License, LicenseJSONInfo } from "../types";
-import { parseCopyright } from "./copyright";
+import type { License, LicenseJSONInfo } from "../types.ts";
+import { parseCopyright } from "./copyright.ts";
 
 export function createLicenseJSON(
   licenses: License[],

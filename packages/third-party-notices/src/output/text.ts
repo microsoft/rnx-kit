@@ -1,5 +1,5 @@
-import type { License } from "../types";
-import { getPackageAuthor } from "./copyright";
+import type { License } from "../types.ts";
+import { getPackageAuthor } from "./copyright.ts";
 
 const EOL = "\n";
 const SEPARATOR = `${EOL}${EOL}========================================================================${EOL}${EOL}`;

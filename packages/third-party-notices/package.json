@@ -46,7 +46,6 @@
   "devDependencies": {
     "@react-native-community/cli-types": "^20.0.0",
     "@rnx-kit/eslint-config": "*",
-    "@rnx-kit/jest-preset": "*",
     "@rnx-kit/metro-serializer": "*",
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*",
@@ -56,8 +55,5 @@
   },
   "engines": {
     "node": ">=16.17"
-  },
-  "jest": {
-    "preset": "@rnx-kit/jest-preset/private"
   }
 }

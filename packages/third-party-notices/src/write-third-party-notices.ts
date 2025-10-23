@@ -4,17 +4,17 @@ import {
   findPackageDir,
   readPackage,
 } from "@rnx-kit/tools-node/package";
-import * as fs from "fs";
 import type { BasicSourceMap } from "metro-source-map";
+import * as nodefs from "node:fs";
 import * as path from "node:path";
-import { createLicenseJSON } from "./output/json";
-import { createLicenseFileContents } from "./output/text";
+import { createLicenseJSON } from "./output/json.ts";
+import { createLicenseFileContents } from "./output/text.ts";
 import type {
   License,
   ModuleNamePathPair,
   SourceMap,
   WriteThirdPartyNoticesOptions,
-} from "./types";
+} from "./types.ts";
 
 const modulesRoot = "node_modules/";
 
@@ -37,7 +37,8 @@ const modulesRoot = "node_modules/";
  * @param options See IWriteThirdPartyNoticesOptions for more details
  */
 export async function writeThirdPartyNotices(
-  options: WriteThirdPartyNoticesOptions
+  options: WriteThirdPartyNoticesOptions,
+  /** @internal */ fs = nodefs
 ): Promise<void> {
   const fileOptions = { encoding: "utf-8" } as const;
   const {
@@ -58,7 +59,8 @@ export async function writeThirdPartyNotices(
   const moduleNameToPathMap = extractModuleNameToPathMap(
     options,
     currentPackageId,
-    sourceMap
+    sourceMap,
+    fs
   );
   const licenses = await extractLicenses(moduleNameToPathMap);
   const outputText = json
@@ -74,7 +76,8 @@ export async function writeThirdPartyNotices(
 
 export async function writeThirdPartyNoticesFromMap(
   options: WriteThirdPartyNoticesOptions,
-  moduleNameToPathMap: Map<string, string>
+  moduleNameToPathMap: Map<string, string>,
+  /** @internal */ fs = nodefs
 ): Promise<void> {
   const { additionalText, json, preambleText, sourceMapFile, fullLicenseText } =
     options;
@@ -168,7 +171,8 @@ export function splitSourcePath(rootPath: string, p: string): string[] {
 export function parseModule(
   options: WriteThirdPartyNoticesOptions,
   moduleNameToPath: Map<string, string>,
-  p: string
+  p: string,
+  /** @internal */ fs = nodefs
 ): void {
   const [moduleName, modulePath] = splitSourcePath(options.rootPath, p);
   if (
@@ -190,12 +194,13 @@ export function parseSourceMap(
   options: WriteThirdPartyNoticesOptions,
   currentPackageId: string | undefined,
   moduleNameToPath: Map<string, string>,
-  sourceMap: SourceMap
+  sourceMap: SourceMap,
+  /** @internal */ fs = nodefs
 ): void {
   for (const src of sourceMap.sources) {
     const source = normalizePath(src, currentPackageId);
     if (source.includes(modulesRoot)) {
-      parseModule(options, moduleNameToPath, source);
+      parseModule(options, moduleNameToPath, source, fs);
     }
   }
 }
@@ -203,12 +208,19 @@ export function parseSourceMap(
 export function extractModuleNameToPathMap(
   options: WriteThirdPartyNoticesOptions,
   currentPackageId: string | undefined,
-  sourceMap: SourceMap
+  sourceMap: SourceMap,
+  /** @internal */ fs = nodefs
 ): Map<string, string> {
   const moduleNameToPathMap = new Map<string, string>();
 
   if (sourceMap.sources) {
-    parseSourceMap(options, currentPackageId, moduleNameToPathMap, sourceMap);
+    parseSourceMap(
+      options,
+      currentPackageId,
+      moduleNameToPathMap,
+      sourceMap,
+      fs
+    );
   }
   if (sourceMap.sections) {
     for (const section of sourceMap.sections) {
@@ -216,7 +228,8 @@ export function extractModuleNameToPathMap(
         options,
         currentPackageId,
         moduleNameToPathMap,
-        section.map
+        section.map,
+        fs
       );
     }
   }
@@ -256,13 +269,14 @@ export async function extractLicenses(
 
 export function gatherModulesFromSources(
   sources: BasicSourceMap["sources"],
-  options: WriteThirdPartyNoticesOptions
+  options: WriteThirdPartyNoticesOptions,
+  /** @internal */ fs = nodefs
 ): Map<string, string> {
   const moduleNameToPath = new Map<string, string>();
 
   for (const source of sources) {
     if (source.includes("node_modules")) {
-      parseModule(options, moduleNameToPath, normalizePath(source));
+      parseModule(options, moduleNameToPath, normalizePath(source), fs);
     }
   }
 

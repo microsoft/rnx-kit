@@ -1,20 +1,54 @@
-import type { WriteThirdPartyNoticesOptions } from "../src/types";
+import { equal } from "node:assert/strict";
+import * as nodefs from "node:fs";
+import { describe, it } from "node:test";
+import type { SourceMap, WriteThirdPartyNoticesOptions } from "../src/types.ts";
 import {
-  extractModuleNameToPathMap,
-  parseSourceMap,
-} from "../src/write-third-party-notices";
-import { absolutePathRoot } from "./pathHelper";
-
-jest.mock("fs");
-
-const options: WriteThirdPartyNoticesOptions = {
-  rootPath: `${absolutePathRoot}src`,
-  sourceMapFile: "",
-  json: false,
-};
+  extractModuleNameToPathMap as extractModuleNameToPathMapActual,
+  parseSourceMap as parseSourceMapActual,
+} from "../src/write-third-party-notices.ts";
+import { absolutePathRoot } from "./pathHelper.ts";
 
 describe("parseModule", () => {
-  test("parseSourceMap", () => {
+  const fs = {
+    ...nodefs,
+    existsSync: (p: nodefs.PathLike) => !p.toString().includes("missing"),
+  };
+
+  const options: WriteThirdPartyNoticesOptions = {
+    rootPath: `${absolutePathRoot}src`,
+    sourceMapFile: "",
+    json: false,
+  };
+
+  function extractModuleNameToPathMap(
+    options: WriteThirdPartyNoticesOptions,
+    currentPackageId: string | undefined,
+    sourceMap: SourceMap
+  ) {
+    return extractModuleNameToPathMapActual(
+      options,
+      currentPackageId,
+      sourceMap,
+      fs
+    );
+  }
+
+  function parseSourceMap(
+    options: WriteThirdPartyNoticesOptions,
+    currentPackageId: string | undefined,
+    moduleNameToPath: Map<string, string>,
+    sourceMap: SourceMap
+  ) {
+    return parseSourceMapActual(
+      options,
+      currentPackageId,
+      moduleNameToPath,
+      sourceMap,
+      fs
+    );
+  }
+
+  it("parseSourceMap", () => {
     const sourceMap = {
       sources: [
         "node_modules/myPackage/file.js",
@@ -25,17 +59,19 @@ describe("parseModule", () => {
     const map = new Map();
     parseSourceMap(options, undefined, map, sourceMap);
 
-    expect(map.size).toBe(2);
-    expect(map.get("myPackage")).toBe(
+    equal(map.size, 2);
+    equal(
+      map.get("myPackage"),
       `${absolutePathRoot}src/node_modules/myPackage`
     );
-    expect(map.get("@scope/myOtherPackage")).toBe(
+    equal(
+      map.get("@scope/myOtherPackage"),
       `${absolutePathRoot}src/node_modules/@scope/myOtherPackage`
     );
   });
 
-  test("extractModuleNameToPathMap", () => {
-    const sourceMap = {
+  it("extractModuleNameToPathMap", () => {
+    const map = extractModuleNameToPathMap(options, undefined, {
       sources: [
         "node_modules/myPackage/file.js",
         "node_modules/myPackage/file2.js",
@@ -58,20 +94,23 @@ describe("parseModule", () => {
           },
         },
       ],
-    };
-    const map = extractModuleNameToPathMap(options, undefined, sourceMap);
+    });
 
-    expect(map.size).toBe(4);
-    expect(map.get("myPackage")).toBe(
+    equal(map.size, 4);
+    equal(
+      map.get("myPackage"),
       `${absolutePathRoot}src/node_modules/myPackage`
     );
-    expect(map.get("myPackage2")).toBe(
+    equal(
+      map.get("myPackage2"),
       `${absolutePathRoot}src/node_modules/myPackage2`
     );
-    expect(map.get("@scope/myOtherPackage")).toBe(
+    equal(
+      map.get("@scope/myOtherPackage"),
       `${absolutePathRoot}src/node_modules/@scope/myOtherPackage`
     );
-    expect(map.get("@scope2/myOtherPackage")).toBe(
+    equal(
+      map.get("@scope2/myOtherPackage"),
       `${absolutePathRoot}src/node_modules/@scope2/myOtherPackage`
     );
   });

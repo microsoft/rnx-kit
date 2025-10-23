@@ -1,7 +1,7 @@
 import type { Config } from "@react-native-community/cli-types";
-import { cliOptions } from "./cli";
-import type { WriteThirdPartyNoticesOptions } from "./types";
-import { writeThirdPartyNotices } from "./write-third-party-notices";
+import { cliOptions } from "./cli.ts";
+import type { WriteThirdPartyNoticesOptions } from "./types.ts";
+import { writeThirdPartyNotices } from "./write-third-party-notices.ts";
 
 type InputArgs = WriteThirdPartyNoticesOptions & {
   ignoreScopes?: string;
