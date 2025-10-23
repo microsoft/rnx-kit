@@ -1,8 +1,11 @@
+import { deepEqual, equal, ok } from "node:assert/strict";
+import { after, before, describe, it } from "node:test";
 import {
   initializeConfig,
   makeInitializeCommand,
-} from "../../src/commands/initialize";
-import { defaultConfig } from "../../src/config";
+} from "../../src/commands/initialize.ts";
+import { defaultConfig } from "../../src/config.ts";
+import { defineRequire, undefineRequire } from "../helpers.ts";
 
 const defaultOptions = {
   presets: defaultConfig.presets,
@@ -27,7 +30,15 @@ describe("initializeConfig()", () => {
     },
   };
 
-  test("returns early if capabilities are declared", () => {
+  before(() => {
+    defineRequire("../../src/preset.ts", import.meta.url);
+  });
+
+  after(() => {
+    undefineRequire();
+  });
+
+  it("returns early if capabilities are declared", () => {
     const result = initializeConfig(
       {
         name: "@rnx-kit/align-deps",
@@ -39,10 +50,10 @@ describe("initializeConfig()", () => {
       { ...defaultOptions, presets: [] }
     );
 
-    expect(result).toBeNull();
+    equal(result, null);
   });
 
-  test("returns early if no capabilities are found", () => {
+  it("returns early if no capabilities are found", () => {
     const result = initializeConfig(
       {
         name: "@rnx-kit/align-deps",
@@ -53,10 +64,10 @@ describe("initializeConfig()", () => {
       { ...defaultOptions, presets: [] }
     );
 
-    expect(result).toBeNull();
+    equal(result, null);
   });
 
-  test("keeps existing config", () => {
+  it("keeps existing config", () => {
     const result = initializeConfig(
       {
         name: "@rnx-kit/align-deps",
@@ -79,11 +90,11 @@ describe("initializeConfig()", () => {
       fail();
     }
 
-    expect(kitConfig["platformBundle"]).toBe(false);
-    expect(kitConfig["bundle"]).toEqual(bundle);
+    ok(!kitConfig["platformBundle"]);
+    deepEqual(kitConfig["bundle"], bundle);
   });
 
-  test('adds config with type "app"', () => {
+  it('adds config with type "app"', () => {
     const result = initializeConfig(
       {
         name: "@rnx-kit/align-deps",
@@ -109,15 +120,16 @@ describe("initializeConfig()", () => {
       fail();
     }
 
-    expect(kitConfig.bundle).toEqual(bundle);
-    expect(kitConfig.kitType).toEqual("app");
-    expect(kitConfig.alignDeps).toEqual({
+    deepEqual(kitConfig.bundle, bundle);
+    equal(kitConfig.kitType, "app");
+    deepEqual(kitConfig.alignDeps, {
+      presets: undefined,
       requirements: ["react-native@0.64"],
       capabilities: ["core", "core-android", "core-ios", "netinfo", "webview"],
     });
   });
 
-  test('adds config with type "library"', () => {
+  it('adds config with type "library"', () => {
     const result = initializeConfig(
       {
         name: "@rnx-kit/align-deps",
@@ -143,9 +155,10 @@ describe("initializeConfig()", () => {
       fail();
     }
 
-    expect(kitConfig.bundle).toEqual(bundle);
-    expect(kitConfig.kitType).toEqual("library");
-    expect(kitConfig.alignDeps).toEqual({
+    deepEqual(kitConfig.bundle, bundle);
+    equal(kitConfig.kitType, "library");
+    deepEqual(kitConfig.alignDeps, {
+      presets: undefined,
       requirements: {
         development: ["react-native@0.64"],
         production: ["react-native@0.64"],
@@ -154,7 +167,7 @@ describe("initializeConfig()", () => {
     });
   });
 
-  test("adds config with custom profiles", () => {
+  it("adds config with custom profiles", () => {
     const presets = [
       ...defaultConfig.presets,
       "@rnx-kit/scripts/align-deps-preset.cjs",
@@ -184,32 +197,33 @@ describe("initializeConfig()", () => {
       fail();
     }
 
-    expect(alignDeps["presets"]).toEqual(presets);
+    deepEqual(alignDeps["presets"], presets);
   });
 });
 
 describe("makeInitializeCommand()", () => {
   const options = { ...defaultOptions, presets: [] };
 
-  const consoleErrorSpy = jest.spyOn(global.console, "error");
-
-  beforeEach(() => {
-    consoleErrorSpy.mockReset();
+  before(() => {
+    defineRequire("../../src/preset.ts", import.meta.url);
   });
 
-  afterAll(() => {
-    jest.clearAllMocks();
+  after(() => {
+    undefineRequire();
   });
 
-  test("returns undefined for invalid kit types", () => {
-    const command = makeInitializeCommand("random", options);
-    expect(command).toBeUndefined();
-    expect(consoleErrorSpy).toHaveBeenCalledTimes(1);
+  it("returns undefined for invalid kit types", (t) => {
+    const errorSpy = t.mock.method(console, "error", () => undefined);
+
+    ok(!makeInitializeCommand("random", options));
+    equal(errorSpy.mock.callCount(), 1);
   });
 
-  test("returns command for kit types", () => {
-    expect(makeInitializeCommand("app", options)).toBeDefined();
-    expect(makeInitializeCommand("library", options)).toBeDefined();
-    expect(consoleErrorSpy).not.toHaveBeenCalled();
+  it("returns command for kit types", (t) => {
+    const errorSpy = t.mock.method(console, "error", () => undefined);
+
+    ok(makeInitializeCommand("app", options));
+    ok(makeInitializeCommand("library", options));
+    equal(errorSpy.mock.callCount(), 0);
   });
 });

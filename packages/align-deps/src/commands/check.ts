@@ -2,15 +2,15 @@ import { error, info } from "@rnx-kit/console";
 import { readPackage } from "@rnx-kit/tools-node/package";
 import * as nodefs from "node:fs";
 import * as path from "node:path";
-import { migrateConfig } from "../compatibility/config";
-import { loadConfig } from "../config";
-import { diff, stringify } from "../diff";
-import { isError } from "../errors";
-import { modifyManifest } from "../helpers";
-import { updatePackageManifest } from "../manifest";
-import { resolve } from "../preset";
-import type { Command, ErrorCode, Options } from "../types";
-import { checkPackageManifestUnconfigured } from "./vigilant";
+import { migrateConfig } from "../compatibility/config.ts";
+import { loadConfig } from "../config.ts";
+import { diff, stringify } from "../diff.ts";
+import { isError } from "../errors.ts";
+import { modifyManifest } from "../helpers.ts";
+import { updatePackageManifest } from "../manifest.ts";
+import { resolve } from "../preset.ts";
+import type { Command, ErrorCode, Options } from "../types.ts";
+import { checkPackageManifestUnconfigured } from "./vigilant.ts";
 
 /**
  * Checks the specified package manifest for misaligned dependencies.

@@ -1,8 +1,8 @@
 import type { KitConfig } from "@rnx-kit/config";
 import { warn } from "@rnx-kit/console";
-import { defaultConfig } from "../config";
-import { dropPatchFromVersion, modifyManifest } from "../helpers";
-import type { AlignDepsConfig, LegacyCheckConfig, Options } from "../types";
+import { defaultConfig } from "../config.ts";
+import { dropPatchFromVersion, modifyManifest } from "../helpers.ts";
+import type { AlignDepsConfig, LegacyCheckConfig, Options } from "../types.ts";
 
 const legacyKeys = [
   "capabilities",

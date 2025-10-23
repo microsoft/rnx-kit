@@ -1,8 +1,8 @@
 import type { PackageManifest } from "@rnx-kit/tools-node/package";
-import semverCoerce from "semver/functions/coerce";
-import semverRangeSubset from "semver/ranges/subset";
-import { dependencySections } from "./helpers";
-import type { Changes, Options } from "./types";
+import semverCoerce from "semver/functions/coerce.js";
+import semverRangeSubset from "semver/ranges/subset.js";
+import { dependencySections } from "./helpers.ts";
+import type { Changes, Options } from "./types.ts";
 
 function isStrictlyEqual(version: string, range: string) {
   return version === range;

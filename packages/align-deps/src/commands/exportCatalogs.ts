@@ -1,10 +1,10 @@
 import yaml from "js-yaml";
 import * as nodefs from "node:fs";
 import * as path from "node:path";
-import { isMetaPackage } from "../capabilities";
-import { mergePresets } from "../preset";
-import { preset as defaultPreset } from "../presets/microsoft/react-native";
-import type { Command, ErrorCode, MetaPackage, Package } from "../types";
+import { isMetaPackage } from "../capabilities.ts";
+import { mergePresets } from "../preset.ts";
+import { preset as defaultPreset } from "../presets/microsoft/react-native.ts";
+import type { Command, ErrorCode, MetaPackage, Package } from "../types.ts";
 
 type Args = {
   exportCatalogs: string;

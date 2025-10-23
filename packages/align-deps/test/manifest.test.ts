@@ -1,12 +1,14 @@
+import { deepEqual, notDeepEqual, notEqual, ok } from "node:assert/strict";
+import { describe, it } from "node:test";
 import {
   removeKeys,
   updateDependencies,
   updatePackageManifest,
-} from "../src/manifest";
-import { profile as profile_0_63 } from "../src/presets/microsoft/react-native/profile-0.63";
-import { profile as profile_0_64 } from "../src/presets/microsoft/react-native/profile-0.64";
-import type { Package } from "../src/types";
-import { packageVersion, pickPackage } from "./helpers";
+} from "../src/manifest.ts";
+import { profile as profile_0_63 } from "../src/presets/microsoft/react-native/profile-0.63.ts";
+import { profile as profile_0_64 } from "../src/presets/microsoft/react-native/profile-0.64.ts";
+import type { Package } from "../src/types.ts";
+import { packageVersion, pickPackage } from "./helpers.ts";
 
 const mockDependencies = {
   typescript: "0.0.0",
@@ -16,26 +18,28 @@ const mockDependencies = {
 };
 
 describe("removeKeys()", () => {
-  test("returns a new copy of object with specified keys removed", () => {
+  it("returns a new copy of object with specified keys removed", () => {
     const original = { x: "1", y: "2", z: "3" };
     const originalKeys = Object.keys(original);
     const modified = removeKeys(original, ["x", "z"]);
-    expect(modified).not.toBe(original);
-    expect(Object.keys(original)).toEqual(originalKeys);
-    expect(modified).toEqual({ y: original.y });
+
+    notEqual(modified, original);
+    deepEqual(Object.keys(original), originalKeys);
+    deepEqual(modified, { y: original.y });
   });
 
-  test("returns a new copy of object even if no keys are removed", () => {
+  it("returns a new copy of object even if no keys are removed", () => {
     const original = { x: "1", y: "2", z: "3" };
     const originalKeys = Object.keys(original);
     const modified = removeKeys(original, ["a", "b"]);
-    expect(modified).not.toBe(original);
-    expect(Object.keys(original)).toEqual(originalKeys);
-    expect(modified).toEqual(original);
+
+    notEqual(modified, original);
+    deepEqual(Object.keys(original), originalKeys);
+    deepEqual(modified, original);
   });
 
-  test("handles undefined objects", () => {
-    expect(removeKeys(undefined, ["x", "y"])).toBeUndefined();
+  it("handles undefined objects", () => {
+    ok(!removeKeys(undefined, ["x", "y"]));
   });
 });
 
@@ -60,13 +64,14 @@ describe("updateDependencies()", () => {
     ],
   };
 
-  test("bumps dependencies to maximum supported version", () => {
+  it("bumps dependencies to maximum supported version", () => {
     const updated = updateDependencies(
       mockDependencies,
       resolvedPackages,
       "direct"
     );
-    expect(updated).toEqual({
+
+    deepEqual(updated, {
       react: packageVersion(profile_0_64, "react"),
       "react-native": packageVersion(profile_0_64, "core"),
       "react-native-macos": packageVersion(profile_0_64, "core-macos"),
@@ -76,13 +81,14 @@ describe("updateDependencies()", () => {
     });
   });
 
-  test("bumps dependencies to minimum supported version", () => {
+  it("bumps dependencies to minimum supported version", () => {
     const updated = updateDependencies(
       mockDependencies,
       resolvedPackages,
       "development"
     );
-    expect(updated).toEqual({
+
+    deepEqual(updated, {
       react: packageVersion(profile_0_63, "react"),
       "react-native": packageVersion(profile_0_63, "core"),
       "react-native-macos": packageVersion(profile_0_63, "core-macos"),
@@ -92,13 +98,14 @@ describe("updateDependencies()", () => {
     });
   });
 
-  test("bumps dependencies to widest possible version range", () => {
+  it("bumps dependencies to widest possible version range", () => {
     const updated = updateDependencies(
       mockDependencies,
       resolvedPackages,
       "peer"
     );
-    expect(updated).toEqual({
+
+    deepEqual(updated, {
       react: `${packageVersion(profile_0_63, "react")} || ${packageVersion(
         profile_0_64,
         "react"
@@ -120,7 +127,7 @@ describe("updateDependencies()", () => {
     });
   });
 
-  test("sorts keys", () => {
+  it("sorts keys", () => {
     const updated = updateDependencies(
       mockDependencies,
       resolvedPackages,
@@ -128,14 +135,13 @@ describe("updateDependencies()", () => {
     );
     const updatedKeys = Object.keys(updated);
     const originalKeys = Object.keys(mockDependencies);
-    expect(updatedKeys).not.toEqual(originalKeys);
-    expect(updatedKeys.sort()).not.toEqual(originalKeys);
+
+    notDeepEqual(updatedKeys, originalKeys);
+    notDeepEqual(updatedKeys.sort(), originalKeys);
   });
 
-  test("sets undefined dependencies", () => {
-    expect(
-      updateDependencies(undefined, resolvedPackages, "development")
-    ).toEqual({
+  it("sets undefined dependencies", () => {
+    deepEqual(updateDependencies(undefined, resolvedPackages, "development"), {
       react: packageVersion(profile_0_63, "react"),
       "react-native": packageVersion(profile_0_63, "core"),
       "react-native-macos": packageVersion(profile_0_63, "core-macos"),
@@ -146,7 +152,7 @@ describe("updateDependencies()", () => {
 });
 
 describe("updatePackageManifest()", () => {
-  test("sets direct dependencies for apps", () => {
+  it("sets direct dependencies for apps", () => {
     const { dependencies, devDependencies, peerDependencies } =
       updatePackageManifest(
         "package.json",
@@ -162,16 +168,17 @@ describe("updatePackageManifest()", () => {
         { "0.64": profile_0_64 },
         "app"
       );
-    expect(dependencies).toEqual({
+
+    deepEqual(dependencies, {
       ...mockDependencies,
       react: packageVersion(profile_0_64, "react"),
       "react-native": packageVersion(profile_0_64, "core"),
     });
-    expect(peerDependencies).toBeUndefined();
-    expect(devDependencies).toBeUndefined();
+    ok(!peerDependencies);
+    ok(!devDependencies);
   });
 
-  test("removes dependencies from devDependencies for apps", () => {
+  it("removes dependencies from devDependencies for apps", () => {
     const { dependencies, devDependencies, peerDependencies } =
       updatePackageManifest(
         "package.json",
@@ -187,18 +194,19 @@ describe("updatePackageManifest()", () => {
         { "0.64": profile_0_64 },
         "app"
       );
-    expect(dependencies).toEqual({
+
+    deepEqual(dependencies, {
       react: packageVersion(profile_0_64, "react"),
       "react-native": packageVersion(profile_0_64, "core"),
     });
-    expect(peerDependencies).toBeUndefined();
-    expect(devDependencies).toEqual({
+    ok(!peerDependencies);
+    deepEqual(devDependencies, {
       "react-native-test-app": "0.0.0",
       typescript: "0.0.0",
     });
   });
 
-  test("removes dependencies from peerDependencies for apps", () => {
+  it("removes dependencies from peerDependencies for apps", () => {
     const { dependencies, devDependencies, peerDependencies } =
       updatePackageManifest(
         "package.json",
@@ -214,18 +222,19 @@ describe("updatePackageManifest()", () => {
         { "0.64": profile_0_64 },
         "app"
       );
-    expect(dependencies).toEqual({
+
+    deepEqual(dependencies, {
       react: packageVersion(profile_0_64, "react"),
       "react-native": packageVersion(profile_0_64, "core"),
     });
-    expect(peerDependencies).toEqual({
+    deepEqual(peerDependencies, {
       "react-native-test-app": "0.0.0",
       typescript: "0.0.0",
     });
-    expect(devDependencies).toBeUndefined();
+    ok(!devDependencies);
   });
 
-  test("sets dev/peer dependencies for libraries", () => {
+  it("sets dev/peer dependencies for libraries", () => {
     const { dependencies, devDependencies, peerDependencies } =
       updatePackageManifest(
         "package.json",
@@ -240,8 +249,9 @@ describe("updatePackageManifest()", () => {
         { "0.64": profile_0_64 },
         "library"
       );
-    expect(dependencies).toEqual({ "@rnx-kit/align-deps": "^1.0.0" });
-    expect(peerDependencies).toEqual({
+
+    deepEqual(dependencies, { "@rnx-kit/align-deps": "^1.0.0" });
+    deepEqual(peerDependencies, {
       ...mockDependencies,
       react: [
         packageVersion(profile_0_63, "react"),
@@ -252,13 +262,13 @@ describe("updatePackageManifest()", () => {
         packageVersion(profile_0_64, "core"),
       ].join(" || "),
     });
-    expect(devDependencies).toEqual({
+    deepEqual(devDependencies, {
       react: packageVersion(profile_0_64, "react"),
       "react-native": packageVersion(profile_0_64, "core"),
     });
   });
 
-  test("removes dependencies from direct dependencies for libraries", () => {
+  it("removes dependencies from direct dependencies for libraries", () => {
     const { dependencies, devDependencies, peerDependencies } =
       updatePackageManifest(
         "package.json",
@@ -277,19 +287,20 @@ describe("updatePackageManifest()", () => {
         { "0.64": profile_0_64 },
         "library"
       );
-    expect(dependencies).toEqual({ "@rnx-kit/align-deps": "^1.0.0" });
-    expect(peerDependencies).toEqual({
+
+    deepEqual(dependencies, { "@rnx-kit/align-deps": "^1.0.0" });
+    deepEqual(peerDependencies, {
       ...mockDependencies,
       react: packageVersion(profile_0_64, "react"),
       "react-native": packageVersion(profile_0_64, "core"),
     });
-    expect(devDependencies).toEqual({
+    deepEqual(devDependencies, {
       react: packageVersion(profile_0_64, "react"),
       "react-native": packageVersion(profile_0_64, "core"),
     });
   });
 
-  test("always sets dev-only dependencies", () => {
+  it("always sets dev-only dependencies", () => {
     const { dependencies, devDependencies, peerDependencies } =
       updatePackageManifest(
         "package.json",
@@ -305,13 +316,14 @@ describe("updatePackageManifest()", () => {
         { "0.64": profile_0_64 },
         "app"
       );
-    expect(dependencies).toEqual({
+
+    deepEqual(dependencies, {
       ...mockDependencies,
       react: packageVersion(profile_0_64, "react"),
       "react-native": packageVersion(profile_0_64, "core"),
     });
-    expect(peerDependencies).toBeUndefined();
-    expect(devDependencies).toEqual({
+    ok(!peerDependencies);
+    deepEqual(devDependencies, {
       "react-native-test-app": packageVersion(profile_0_64, "test-app"),
     });
   });

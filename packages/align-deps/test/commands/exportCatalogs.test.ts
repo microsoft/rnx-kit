@@ -1,10 +1,13 @@
-import { afterEach } from "node:test";
+import { equal, throws } from "node:assert/strict";
+import { createRequire } from "node:module";
+import { afterEach, describe, it } from "node:test";
 import { exportCatalogs as exportCatalogsActual } from "../../src/commands/exportCatalogs.ts";
 import type { Preset } from "../../src/types.ts";
+import * as mockfs from "../__mocks__/fs.ts";
+
+global.require = createRequire(new URL("../../src/preset.ts", import.meta.url));
 
 describe("exportCatalogs()", () => {
-  const fs = require("../__mocks__/fs.js");
-
   const preset = {
     "0.82": {
       react: {
@@ -29,35 +32,40 @@ describe("exportCatalogs()", () => {
   } as unknown as Preset;
 
   function exportCatalogs(dst: string, preset: Preset) {
+    const fs = mockfs as unknown as typeof import("node:fs");
     return exportCatalogsActual(dst, preset, fs);
   }
 
   afterEach(() => {
-    fs.__setMockContent({});
-    fs.__setMockFileWriter(undefined);
+    mockfs.__setMockContent({});
+    mockfs.__setMockFileWriter(undefined);
   });
 
   it("throws for unsupported file formats", () => {
     const output = "catalogs.bin";
 
-    expect(() => exportCatalogs(output, preset)).toThrow(
-      "Unsupported file format: .bin"
+    throws(
+      () => exportCatalogs(output, preset),
+      /Unsupported file format: .bin/
     );
   });
 
   it("supports pnpm catalogs", () => {
     const output = "catalogs.yaml";
 
-    fs.__setMockFileWriter((dst: string, content: string) => {
-      expect(dst).toBe(output);
-      expect(content).toBe(`catalogs:
+    mockfs.__setMockFileWriter((dst, content) => {
+      equal(dst, output);
+      equal(
+        content,
+        `catalogs:
   "0.82":
     react: 19.1.1
     react-native: ^0.82.0
   "1.0":
     react: 19.2.0
     react-native: ^1.0.0
-`);
+`
+      );
     });
 
     exportCatalogs(output, preset);
@@ -66,7 +74,7 @@ describe("exportCatalogs()", () => {
   it("preserves existing content in the output file", () => {
     const output = "catalogs.yaml";
 
-    fs.__setMockContent(`
+    mockfs.__setMockContent(`
 enableScripts: false
 globalFolder: .yarn/berry
 nodeLinker: pnpm
@@ -79,9 +87,11 @@ catalogs:
     react-native: ^0.82.0-0
 `);
 
-    fs.__setMockFileWriter((dst: string, content: string) => {
-      expect(dst).toBe(output);
-      expect(content).toBe(`enableScripts: false
+    mockfs.__setMockFileWriter((dst, content) => {
+      equal(dst, output);
+      equal(
+        content,
+        `enableScripts: false
 globalFolder: .yarn/berry
 nodeLinker: pnpm
 catalogs:
@@ -94,7 +104,8 @@ catalogs:
   "1.0":
     react: 19.2.0
     react-native: ^1.0.0
-`);
+`
+      );
     });
 
     exportCatalogs(output, preset);
@@ -103,7 +114,7 @@ catalogs:
   it("supports Bun catalogs (under 'workspaces')", () => {
     const output = "package.json";
 
-    fs.__setMockContent({
+    mockfs.__setMockContent({
       name: "my-monorepo",
       workspaces: {
         packages: ["packages/*"],
@@ -120,9 +131,11 @@ catalogs:
       },
     });
 
-    fs.__setMockFileWriter((dst: string, content: string) => {
-      expect(dst).toBe(output);
-      expect(content).toBe(`{
+    mockfs.__setMockFileWriter((dst, content) => {
+      equal(dst, output);
+      equal(
+        content,
+        `{
   "name": "my-monorepo",
   "workspaces": {
     "packages": [
@@ -148,7 +161,8 @@ catalogs:
     }
   }
 }
-`);
+`
+      );
     });
 
     exportCatalogs(output, preset);
@@ -157,7 +171,7 @@ catalogs:
   it("supports Bun catalogs (at the root level)", () => {
     const output = "package.json";
 
-    fs.__setMockContent({
+    mockfs.__setMockContent({
       name: "my-monorepo",
       workspaces: {
         packages: ["packages/*"],
@@ -168,9 +182,11 @@ catalogs:
       },
     });
 
-    fs.__setMockFileWriter((dst: string, content: string) => {
-      expect(dst).toBe(output);
-      expect(content).toBe(`{
+    mockfs.__setMockFileWriter((dst, content) => {
+      equal(dst, output);
+      equal(
+        content,
+        `{
   "name": "my-monorepo",
   "workspaces": {
     "packages": [
@@ -192,7 +208,8 @@ catalogs:
     }
   }
 }
-`);
+`
+      );
     });
 
     exportCatalogs(output, preset);
@@ -201,11 +218,13 @@ catalogs:
   it("prefers catalogs under 'workspaces'", () => {
     const output = "package.json";
 
-    fs.__setMockContent({ name: "my-monorepo" });
+    mockfs.__setMockContent({ name: "my-monorepo" });
 
-    fs.__setMockFileWriter((dst: string, content: string) => {
-      expect(dst).toBe(output);
-      expect(content).toBe(`{
+    mockfs.__setMockFileWriter((dst, content) => {
+      equal(dst, output);
+      equal(
+        content,
+        `{
   "name": "my-monorepo",
   "workspaces": {
     "catalogs": {
@@ -220,7 +239,8 @@ catalogs:
     }
   }
 }
-`);
+`
+      );
     });
 
     exportCatalogs(output, preset);

@@ -1,115 +1,125 @@
 import type { Capability } from "@rnx-kit/config";
 import type { PackageManifest } from "@rnx-kit/tools-node/package";
+import { deepEqual, equal, ok } from "node:assert/strict";
+import { describe, it } from "node:test";
 import {
   containsValidPresets,
   findEmptyRequirements,
   isPackageManifest,
   sanitizeCapabilities,
-} from "../src/config";
+} from "../src/config.ts";
 
 describe("containsValidPresets()", () => {
-  test("is valid when 'presets' is unset", () => {
-    expect(containsValidPresets({})).toBe(true);
+  it("is valid when 'presets' is unset", () => {
+    ok(containsValidPresets({}));
   });
 
-  test("is invalid when 'presets' is empty", () => {
-    expect(containsValidPresets({ presets: [] })).toBe(false);
+  it("is invalid when 'presets' is empty", () => {
+    ok(!containsValidPresets({ presets: [] }));
   });
 
-  test("is invalid when 'presets' is not an array", () => {
+  it("is invalid when 'presets' is not an array", () => {
     // @ts-expect-error intentionally passing an invalid type
-    expect(containsValidPresets({ presets: "[]" })).toBe(false);
+    ok(!containsValidPresets({ presets: "[]" }));
   });
 });
 
 describe("findEmptyRequirements()", () => {
-  test("is invalid when 'requirements' is unset", () => {
-    expect(findEmptyRequirements({})).toBe("requirements");
+  it("is invalid when 'requirements' is unset", () => {
+    equal(findEmptyRequirements({}), "requirements");
   });
 
-  test("is invalid when 'requirements' is empty", () => {
-    expect(findEmptyRequirements({ requirements: [] })).toBe("requirements");
+  it("is invalid when 'requirements' is empty", () => {
+    equal(findEmptyRequirements({ requirements: [] }), "requirements");
 
-    expect(
+    equal(
       // @ts-expect-error intentionally passing an invalid type
-      findEmptyRequirements({ requirements: { production: [] } })
-    ).toBe("requirements.development");
+      findEmptyRequirements({ requirements: { production: [] } }),
+      "requirements.development"
+    );
 
-    expect(
+    equal(
       findEmptyRequirements({
         requirements: { development: [], production: [] },
-      })
-    ).toBe("requirements.development");
+      }),
+      "requirements.development"
+    );
 
-    expect(
+    equal(
       findEmptyRequirements({
         // @ts-expect-error intentionally passing an invalid type
         requirements: { development: ["react-native@*"] },
-      })
-    ).toBe("requirements.production");
+      }),
+      "requirements.production"
+    );
 
-    expect(
+    equal(
       findEmptyRequirements({
         requirements: { development: ["react-native@*"], production: [] },
-      })
-    ).toBe("requirements.production");
+      }),
+      "requirements.production"
+    );
   });
 
-  test("is invalid when 'requirements' is not an array", () => {
+  it("is invalid when 'requirements' is not an array", () => {
     // @ts-expect-error intentionally passing an invalid type
-    expect(findEmptyRequirements({ requirements: "[]" })).toBe("requirements");
+    equal(findEmptyRequirements({ requirements: "[]" }), "requirements");
 
-    expect(
+    equal(
       findEmptyRequirements({
         // @ts-expect-error intentionally passing an invalid type
         requirements: { development: "[]", production: "[]" },
-      })
-    ).toBe("requirements.development");
+      }),
+      "requirements.development"
+    );
 
-    expect(
+    equal(
       findEmptyRequirements({
         // @ts-expect-error intentionally passing an invalid type
         requirements: { development: ["react-native@*"], production: "[]" },
-      })
-    ).toBe("requirements.production");
+      }),
+      "requirements.production"
+    );
   });
 
-  test("is valid when 'requirements' contains at least one requirement", () => {
-    expect(
-      findEmptyRequirements({ requirements: ["react-native@*"] })
-    ).toBeUndefined();
+  it("is valid when 'requirements' contains at least one requirement", () => {
+    equal(
+      findEmptyRequirements({ requirements: ["react-native@*"] }),
+      undefined
+    );
 
-    expect(
+    equal(
       findEmptyRequirements({
         requirements: {
           development: ["react-native@*"],
           production: ["react-native@*"],
         },
-      })
-    ).toBeUndefined();
+      }),
+      undefined
+    );
   });
 });
 
 describe("isPackageManifest()", () => {
-  test("returns true when the object is a PackageManifest", () => {
+  it("returns true when the object is a PackageManifest", () => {
     const manifest: PackageManifest = {
       name: "package name",
       version: "1.0.0",
     };
-    expect(isPackageManifest(manifest)).toBe(true);
+    ok(isPackageManifest(manifest));
   });
 
-  test("returns false when the object is not a PackageManifest", () => {
-    expect(isPackageManifest(undefined)).toBe(false);
-    expect(isPackageManifest({})).toBe(false);
-    expect(isPackageManifest("hello")).toBe(false);
-    expect(isPackageManifest({ name: "name but no version" })).toBe(false);
-    expect(isPackageManifest({ version: "version but no name" })).toBe(false);
+  it("returns false when the object is not a PackageManifest", () => {
+    ok(!isPackageManifest(undefined));
+    ok(!isPackageManifest({}));
+    ok(!isPackageManifest("hello"));
+    ok(!isPackageManifest({ name: "name but no version" }));
+    ok(!isPackageManifest({ version: "version but no name" }));
   });
 });
 
 describe("sanitizeCapabilities()", () => {
-  test("removes illegal names", () => {
+  it("removes illegal names", () => {
     const capabilities = [
       "__proto__",
       "constructor",
@@ -117,11 +127,11 @@ describe("sanitizeCapabilities()", () => {
       "core",
     ] as Capability[];
 
-    expect(sanitizeCapabilities(capabilities)).toEqual(["core"]);
+    deepEqual(sanitizeCapabilities(capabilities), ["core"]);
   });
 
-  test("handles empty array", () => {
-    expect(sanitizeCapabilities(undefined)).toEqual([]);
-    expect(sanitizeCapabilities([])).toEqual([]);
+  it("handles empty array", () => {
+    deepEqual(sanitizeCapabilities(undefined), []);
+    deepEqual(sanitizeCapabilities([]), []);
   });
 });

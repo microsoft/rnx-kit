@@ -1,8 +1,8 @@
 import type { Capability, KitType } from "@rnx-kit/config";
 import type { PackageManifest } from "@rnx-kit/tools-node/package";
-import { resolveCapabilities } from "./capabilities";
-import { compare, omitEmptySections } from "./helpers";
-import type { DependencyType, Package, Preset } from "./types";
+import { resolveCapabilities } from "./capabilities.ts";
+import { compare, omitEmptySections } from "./helpers.ts";
+import type { DependencyType, Package, Preset } from "./types.ts";
 
 function devOnlyPackages(
   packages: Record<string, Package[]>

@@ -1,10 +1,10 @@
 import type { Capability } from "@rnx-kit/config";
-import semverCoerce from "semver/functions/coerce";
-import semverSatisfies from "semver/functions/satisfies";
-import semverValidRange from "semver/ranges/valid";
-import { gatherRequirements } from "./dependencies";
-import { preset as reactNativePreset } from "./presets/microsoft/react-native";
-import type { AlignDepsConfig, Options, Preset } from "./types";
+import semverCoerce from "semver/functions/coerce.js";
+import semverSatisfies from "semver/functions/satisfies.js";
+import semverValidRange from "semver/ranges/valid.js";
+import { gatherRequirements } from "./dependencies.ts";
+import { preset as reactNativePreset } from "./presets/microsoft/react-native.ts";
+import type { AlignDepsConfig, Options, Preset } from "./types.ts";
 
 type Resolution = {
   devPreset: Preset;

@@ -1,5 +1,5 @@
-import type { Package, Profile } from "../../../types";
-import { profile as profile_0_73 } from "./profile-0.73";
+import type { Package, Profile } from "../../../types.ts";
+import { profile as profile_0_73 } from "./profile-0.73.ts";
 
 const reactNative: Package = {
   name: "react-native",

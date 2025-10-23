@@ -1,8 +1,11 @@
+import { equal } from "node:assert/strict";
 import * as path from "node:path";
-import { checkPackageManifest as checkPackageManifestActual } from "../../src/commands/check";
-import { defaultConfig } from "../../src/config";
-
-jest.unmock("@rnx-kit/config");
+import { after, before, describe, it } from "node:test";
+import { URL, fileURLToPath } from "node:url";
+import { checkPackageManifest as checkPackageManifestActual } from "../../src/commands/check.ts";
+import { defaultConfig } from "../../src/config.ts";
+import * as mockfs from "../__mocks__/fs.ts";
+import { defineRequire, undefineRequire } from "../helpers.ts";
 
 const defaultOptions = {
   presets: defaultConfig.presets,
@@ -14,21 +17,28 @@ const defaultOptions = {
 };
 
 function checkPackageManifest(manifestPath: string) {
-  const fs = require("../__mocks__/fs.js");
   return checkPackageManifestActual(
     manifestPath,
     defaultOptions,
     undefined,
     undefined,
-    fs
+    mockfs as unknown as typeof import("node:fs")
   );
 }
 
 function fixturePath(name: string) {
-  return path.join(__dirname, "..", "__fixtures__", name);
+  return fileURLToPath(new URL(`../__fixtures__/${name}`, import.meta.url));
 }
 
 describe("checkPackageManifest({ kitType: 'app' })", () => {
+  before(() => {
+    defineRequire("../../src/preset.ts", import.meta.url);
+  });
+
+  after(() => {
+    undefineRequire();
+  });
+
   it("fails if multiple profiles are returned", () => {
     const manifestPath = path.join(
       fixturePath("misconfigured-app"),
@@ -37,29 +47,31 @@ describe("checkPackageManifest({ kitType: 'app' })", () => {
 
     const result = checkPackageManifest(manifestPath);
 
-    expect(result).toBe("invalid-app-requirements");
+    equal(result, "invalid-app-requirements");
   });
 });
 
 describe("checkPackageManifest({ kitType: 'app' }) (backwards compatibility)", () => {
-  const fs = require("../__mocks__/fs.js");
-
-  afterAll(() => {
-    jest.clearAllMocks();
+  before(() => {
+    defineRequire("../../src/preset.ts", import.meta.url);
   });
 
-  it("adds required dependencies", () => {
+  after(() => {
+    undefineRequire();
+  });
+
+  it("adds required dependencies", (t) => {
     const manifestPath = path.join(fixturePath("awesome-repo"), "package.json");
 
     let destination = "";
     let updatedManifest = "";
-    fs.__setMockFileWriter((dest, content) => {
+    mockfs.__setMockFileWriter((dest, content) => {
       destination = dest;
       updatedManifest = content;
     });
 
-    expect(checkPackageManifest(manifestPath)).toBe("success");
-    expect(destination).toBe(manifestPath);
-    expect(updatedManifest).toMatchSnapshot();
+    equal(checkPackageManifest(manifestPath), "success");
+    equal(destination, manifestPath);
+    t.assert.snapshot?.(updatedManifest);
   });
 });

@@ -1,4 +1,6 @@
-import { findBadPackages } from "../src/findBadPackages";
+import { equal } from "node:assert/strict";
+import { describe, it } from "node:test";
+import { findBadPackages } from "../src/findBadPackages.ts";
 
 describe("findBadPackages()", () => {
   const dependenciesWithOneBadPackage = {
@@ -12,104 +14,115 @@ describe("findBadPackages()", () => {
     "react-native-netinfo": "0.0.0",
   };
 
-  test("finds bad packages in all dependencies", () => {
-    expect(
+  it("finds bad packages in all dependencies", () => {
+    equal(
       findBadPackages({
         name: "Test",
         version: "0.0.1",
-      })
-    ).toBeUndefined();
+      }),
+      undefined
+    );
 
-    expect(
+    equal(
       findBadPackages({
         name: "Test",
         version: "0.0.1",
         dependencies: dependenciesWithOneBadPackage,
-      })?.length
-    ).toBe(1);
+      })?.length,
+      1
+    );
 
-    expect(
+    equal(
       findBadPackages({
         name: "Test",
         version: "0.0.1",
         peerDependencies: dependenciesWithOneBadPackage,
-      })?.length
-    ).toBe(1);
+      })?.length,
+      1
+    );
 
-    expect(
+    equal(
       findBadPackages({
         name: "Test",
         version: "0.0.1",
         devDependencies: dependenciesWithOneBadPackage,
-      })?.length
-    ).toBe(1);
+      })?.length,
+      1
+    );
   });
 
-  test("dedupes bad packages", () => {
-    expect(
+  it("dedupes bad packages", () => {
+    equal(
       findBadPackages({
         name: "Test",
         version: "0.0.1",
         dependencies: dependenciesWithOneBadPackage,
         peerDependencies: dependenciesWithOneBadPackage,
-      })?.length
-    ).toBe(1);
+      })?.length,
+      1
+    );
 
-    expect(
+    equal(
       findBadPackages({
         name: "Test",
         version: "0.0.1",
         dependencies: dependenciesWithOneBadPackage,
         devDependencies: dependenciesWithOneBadPackage,
-      })?.length
-    ).toBe(1);
+      })?.length,
+      1
+    );
 
-    expect(
+    equal(
       findBadPackages({
         name: "Test",
         version: "0.0.1",
         peerDependencies: dependenciesWithOneBadPackage,
         devDependencies: dependenciesWithOneBadPackage,
-      })?.length
-    ).toBe(1);
+      })?.length,
+      1
+    );
 
-    expect(
+    equal(
       findBadPackages({
         name: "Test",
         version: "0.0.1",
         dependencies: dependenciesWithOneBadPackage,
         peerDependencies: dependenciesWithOneBadPackage,
         devDependencies: dependenciesWithOneBadPackage,
-      })?.length
-    ).toBe(1);
+      })?.length,
+      1
+    );
   });
 
-  test("finds all bad packages", () => {
-    expect(
+  it("finds all bad packages", () => {
+    equal(
       findBadPackages({
         name: "Test",
         version: "0.0.1",
         dependencies: dependenciesWithMoreBadPackages,
-      })?.length
-    ).toBe(2);
+      })?.length,
+      2
+    );
 
-    expect(
+    equal(
       findBadPackages({
         name: "Test",
         version: "0.0.1",
         dependencies: dependenciesWithOneBadPackage,
         peerDependencies: dependenciesWithMoreBadPackages,
-      })?.length
-    ).toBe(2);
+      })?.length,
+      2
+    );
 
-    expect(
+    equal(
       findBadPackages({
         name: "Test",
         version: "0.0.1",
         dependencies: dependenciesWithOneBadPackage,
         peerDependencies: dependenciesWithMoreBadPackages,
         devDependencies: dependenciesWithMoreBadPackages,
-      })?.length
-    ).toBe(2);
+      })?.length,
+      2
+    );
   });
 });

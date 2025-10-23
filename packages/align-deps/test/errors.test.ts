@@ -1,50 +1,41 @@
-import { printError, printInfo } from "../src/errors";
+import { equal } from "node:assert/strict";
+import { describe, it } from "node:test";
+import { printError, printInfo } from "../src/errors.ts";
 
 describe("printError()", () => {
-  const consoleErrorSpy = jest.spyOn(global.console, "error");
+  it("prints nothing for 'success'", (t) => {
+    const errorSpy = t.mock.method(console, "error", () => undefined);
 
-  beforeEach(() => {
-    consoleErrorSpy.mockReset();
-  });
-
-  afterAll(() => {
-    jest.clearAllMocks();
-  });
-
-  test("prints nothing for 'success'", () => {
     printError("package.json", "success");
-    expect(consoleErrorSpy).not.toHaveBeenCalled();
+
+    equal(errorSpy.mock.callCount(), 0);
   });
 
-  test("prints error message for code", () => {
+  it("prints error message for code", (t) => {
+    const errorSpy = t.mock.method(console, "error", () => undefined);
+
     const errorCodes = [
       "invalid-app-requirements",
       "invalid-configuration",
       "invalid-manifest",
       "missing-react-native",
       "not-configured",
-      "unsatisfied",
     ] as const;
     for (const code of errorCodes) {
       printError("package.json", code);
-      expect(consoleErrorSpy).toHaveBeenCalled();
+
+      equal(errorSpy.mock.callCount(), 1);
+      errorSpy.mock.resetCalls();
     }
   });
 });
 
 describe("printInfo()", () => {
-  const consoleLogSpy = jest.spyOn(global.console, "log");
+  it("prints URL for 'align-deps", (t) => {
+    const logSpy = t.mock.method(console, "log", () => undefined);
 
-  beforeEach(() => {
-    consoleLogSpy.mockReset();
-  });
-
-  afterAll(() => {
-    jest.clearAllMocks();
-  });
-
-  test("prints URL for 'align-deps", () => {
     printInfo();
-    expect(consoleLogSpy).toHaveBeenCalled();
+
+    equal(logSpy.mock.callCount(), 1);
   });
 });

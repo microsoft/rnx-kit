@@ -2,7 +2,7 @@ import type { PackageManifest } from "@rnx-kit/tools-node/package";
 import { writePackage } from "@rnx-kit/tools-node/package";
 import detectIndent from "detect-indent";
 import * as nodefs from "node:fs";
-import semverValidRange from "semver/ranges/valid";
+import semverValidRange from "semver/ranges/valid.js";
 
 export const dependencySections = [
   "dependencies",

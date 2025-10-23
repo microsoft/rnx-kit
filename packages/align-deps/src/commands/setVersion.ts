@@ -2,19 +2,19 @@ import { keysOf } from "@rnx-kit/tools-language/properties";
 import type { PackageManifest } from "@rnx-kit/tools-node/package";
 import * as nodefs from "node:fs";
 import prompts from "prompts";
-import semverCoerce from "semver/functions/coerce";
-import { transformConfig } from "../compatibility/config";
-import { defaultConfig, loadConfig } from "../config";
-import { isError } from "../errors";
-import { isString, modifyManifest } from "../helpers";
-import { preset as defaultPreset } from "../presets/microsoft/react-native";
+import semverCoerce from "semver/functions/coerce.js";
+import { transformConfig } from "../compatibility/config.ts";
+import { defaultConfig, loadConfig } from "../config.ts";
+import { isError } from "../errors.ts";
+import { isString, modifyManifest } from "../helpers.ts";
+import { preset as defaultPreset } from "../presets/microsoft/react-native.ts";
 import type {
   AlignDepsConfig,
   Command,
   LegacyCheckConfig,
   Options,
-} from "../types";
-import { checkPackageManifest } from "./check";
+} from "../types.ts";
+import { checkPackageManifest } from "./check.ts";
 
 function parseVersions(versions: string): string[] {
   return versions.split(",").map((v) => {

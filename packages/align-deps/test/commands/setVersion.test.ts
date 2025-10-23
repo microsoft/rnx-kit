@@ -1,8 +1,12 @@
 import type { PackageManifest } from "@rnx-kit/tools-node/package";
+import { deepEqual, equal, fail, ok, rejects } from "node:assert/strict";
+import { after, afterEach, before, describe, it } from "node:test";
 import prompts from "prompts";
-import { makeSetVersionCommand as makeSetVersionCommandActual } from "../../src/commands/setVersion";
-import { defaultConfig } from "../../src/config";
-import type { Options } from "../../src/types";
+import { makeSetVersionCommand as makeSetVersionCommandActual } from "../../src/commands/setVersion.ts";
+import { defaultConfig } from "../../src/config.ts";
+import type { Options } from "../../src/types.ts";
+import * as mockfs from "../__mocks__/fs.ts";
+import { defineRequire, undefineRequire } from "../helpers.ts";
 
 type Result = {
   didWrite: boolean;
@@ -10,23 +14,21 @@ type Result = {
 };
 
 function makeSetVersionCommand(versions: string | number, options: Options) {
-  const fs = require("../__mocks__/fs.js");
-  return makeSetVersionCommandActual(versions, options, fs);
+  return makeSetVersionCommandActual(
+    versions,
+    options,
+    mockfs as unknown as typeof import("node:fs")
+  );
 }
 
 describe("makeSetVersionCommand()", () => {
-  const rnxKitConfig = require("@rnx-kit/config");
-  const fs = require("../__mocks__/fs.js");
-
   function setupMocks(manifest: PackageManifest): Result {
-    fs.__setMockContent(manifest);
-    rnxKitConfig.__setMockConfig(manifest["rnx-kit"]);
+    mockfs.__setMockContent(manifest);
 
     const result: Result = { didWrite: false, manifest: {} };
-    fs.__setMockFileWriter((_: string, content: string) => {
-      const updatedManifest = JSON.parse(content);
-      fs.__setMockContent(updatedManifest);
-      rnxKitConfig.__setMockConfig(updatedManifest["rnx-kit"]);
+    mockfs.__setMockFileWriter((_, content) => {
+      const updatedManifest = JSON.parse(content.toString());
+      mockfs.__setMockContent(updatedManifest);
 
       result.didWrite = true;
       result.manifest = updatedManifest;
@@ -44,33 +46,33 @@ describe("makeSetVersionCommand()", () => {
     write: false,
   };
 
+  before(() => {
+    defineRequire("../../src/preset.ts", import.meta.url);
+  });
+
   afterEach(() => {
-    fs.__setMockContent({});
-    rnxKitConfig.__setMockConfig();
-    jest.clearAllMocks();
+    mockfs.__setMockContent({});
   });
 
-  test("rejects invalid version numbers", async () => {
-    expect(makeSetVersionCommand("latest", options)).rejects.toEqual(
-      expect.objectContaining({
-        message: expect.stringContaining(
-          "'latest' is not a valid version number"
-        ),
-      })
+  after(() => {
+    undefineRequire();
+  });
+
+  it("rejects invalid version numbers", async () => {
+    rejects(
+      makeSetVersionCommand("latest", options),
+      /'latest' is not a valid version number/
     );
   });
 
-  test("rejects unsupported `react-native` versions", async () => {
-    expect(makeSetVersionCommand("0.59", options)).rejects.toEqual(
-      expect.objectContaining({
-        message: expect.stringContaining(
-          "'0.59' is not a supported react-native version"
-        ),
-      })
+  it("rejects unsupported `react-native` versions", async () => {
+    rejects(
+      makeSetVersionCommand("0.59", options),
+      /'0.59' is not a supported react-native version/
     );
   });
 
-  test("skips unconfigured packages", async () => {
+  it("skips unconfigured packages", async () => {
     const result = setupMocks({
       name: "@rnx-kit/align-deps",
       version: "1.0.0-test",
@@ -87,11 +89,11 @@ describe("makeSetVersionCommand()", () => {
       fail();
     }
 
-    expect(command("package.json")).toBe("not-configured");
-    expect(result.didWrite).toBe(false);
+    equal(command("package.json"), "not-configured");
+    ok(!result.didWrite);
   });
 
-  test("skips partially configured packages", async () => {
+  it("skips partially configured packages", async () => {
     const result = setupMocks({
       name: "@rnx-kit/align-deps",
       version: "1.0.0-test",
@@ -114,11 +116,11 @@ describe("makeSetVersionCommand()", () => {
       fail();
     }
 
-    expect(command("package.json")).toBe("invalid-configuration");
-    expect(result.didWrite).toBe(false);
+    equal(command("package.json"), "invalid-configuration");
+    ok(!result.didWrite);
   });
 
-  test("updates `react-native` requirements", async () => {
+  it("updates `react-native` requirements", async () => {
     const result = setupMocks({
       name: "@rnx-kit/align-deps",
       version: "1.0.0-test",
@@ -147,8 +149,8 @@ describe("makeSetVersionCommand()", () => {
       fail();
     }
 
-    expect(command("package.json")).toBe("success");
-    expect(result.manifest).toEqual({
+    equal(command("package.json"), "success");
+    deepEqual(result.manifest, {
       name: "@rnx-kit/align-deps",
       version: "1.0.0-test",
       peerDependencies: {
@@ -172,7 +174,7 @@ describe("makeSetVersionCommand()", () => {
     });
   });
 
-  test("updates `react-native` requirements (backwards compatibility)", async () => {
+  it("updates `react-native` requirements (backwards compatibility)", async () => {
     const result = setupMocks({
       name: "@rnx-kit/align-deps",
       version: "1.0.0-test",
@@ -197,8 +199,8 @@ describe("makeSetVersionCommand()", () => {
       fail();
     }
 
-    expect(command("package.json")).toBe("success");
-    expect(result.manifest).toEqual({
+    equal(command("package.json"), "success");
+    deepEqual(result.manifest, {
       name: "@rnx-kit/align-deps",
       version: "1.0.0-test",
       peerDependencies: {
@@ -225,7 +227,7 @@ describe("makeSetVersionCommand()", () => {
     });
   });
 
-  test("only modifies the 'react-native' requirement", async () => {
+  it("only modifies the 'react-native' requirement", async () => {
     const result = setupMocks({
       name: "@rnx-kit/align-deps",
       version: "1.0.0-test",
@@ -250,8 +252,8 @@ describe("makeSetVersionCommand()", () => {
       fail();
     }
 
-    expect(command("package.json")).toBe("success");
-    expect(result.manifest).toEqual({
+    equal(command("package.json"), "success");
+    deepEqual(result.manifest, {
       name: "@rnx-kit/align-deps",
       version: "1.0.0-test",
       dependencies: {
@@ -271,7 +273,7 @@ describe("makeSetVersionCommand()", () => {
     });
   });
 
-  test("prompts the user if no version is specified", async () => {
+  it("prompts the user if no version is specified", async () => {
     const result = setupMocks({
       name: "@rnx-kit/align-deps",
       version: "1.0.0-test",
@@ -295,8 +297,8 @@ describe("makeSetVersionCommand()", () => {
       fail();
     }
 
-    expect(command("package.json")).toBe("success");
-    expect(result.manifest).toEqual({
+    equal(command("package.json"), "success");
+    deepEqual(result.manifest, {
       name: "@rnx-kit/align-deps",
       version: "1.0.0-test",
       dependencies: {
@@ -313,7 +315,7 @@ describe("makeSetVersionCommand()", () => {
     });
   });
 
-  test("skips the second prompt if only one version is supported", async () => {
+  it("skips the second prompt if only one version is supported", async () => {
     const result = setupMocks({
       name: "@rnx-kit/align-deps",
       version: "1.0.0-test",
@@ -337,8 +339,8 @@ describe("makeSetVersionCommand()", () => {
       fail();
     }
 
-    expect(command("package.json")).toBe("success");
-    expect(result.manifest).toEqual({
+    equal(command("package.json"), "success");
+    deepEqual(result.manifest, {
       name: "@rnx-kit/align-deps",
       version: "1.0.0-test",
       dependencies: {
@@ -355,7 +357,7 @@ describe("makeSetVersionCommand()", () => {
     });
   });
 
-  test('skips "dirty" packages', async () => {
+  it('skips "dirty" packages', async () => {
     const mockManifest = {
       name: "@rnx-kit/align-deps",
       version: "1.0.0-test",
@@ -372,7 +374,6 @@ describe("makeSetVersionCommand()", () => {
       },
     };
 
-    rnxKitConfig.__setMockConfig(mockManifest["rnx-kit"]);
     const result = setupMocks(mockManifest);
 
     prompts.inject([["0.64"]]);
@@ -382,15 +383,15 @@ describe("makeSetVersionCommand()", () => {
       fail();
     }
 
-    expect(command("package.json")).toBe("unsatisfied");
-    expect(result.didWrite).toBe(false);
+    equal(command("package.json"), "unsatisfied");
+    ok(!result.didWrite);
   });
 
-  test("exits if the user cancels during prompts", async () => {
+  it("exits if the user cancels during prompts", async () => {
     prompts.inject([undefined]);
-    expect(await makeSetVersionCommand("", options)).toBeUndefined();
+    equal(await makeSetVersionCommand("", options), undefined);
 
     prompts.inject([["0.63", "0.64"], undefined]);
-    expect(await makeSetVersionCommand("", options)).toBeUndefined();
+    equal(await makeSetVersionCommand("", options), undefined);
   });
 });

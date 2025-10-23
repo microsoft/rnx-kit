@@ -6,8 +6,8 @@ import {
   findPackageDependencyDir,
   readPackage,
 } from "@rnx-kit/tools-node/package";
-import { filterPreset } from "./preset";
-import type { Options, Preset, Profile } from "./types";
+import { filterPreset } from "./preset.ts";
+import type { Options, Preset, Profile } from "./types.ts";
 
 type Trace = {
   module: string;
