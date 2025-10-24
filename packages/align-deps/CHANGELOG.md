@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/align-deps
 
+## 3.3.2
+
+### Patch Changes
+
+- 647a678: Don't read the current package's manifest from disk twice
+
 ## 3.3.1
 
 ### Patch Changes
