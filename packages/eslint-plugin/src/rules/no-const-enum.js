@@ -15,16 +15,16 @@ module.exports = {
       recommended: true,
       url: require("../../package.json").homepage,
     },
+    messages: {
+      error:
+        "Prefer string literal unions over `const enum` to avoid bundle bloat and package boundary issues.",
+    },
   },
   create: (context) => {
     return {
       TSEnumDeclaration: (/** @type {Node} */ node) => {
         if (node.const) {
-          context.report({
-            node,
-            message:
-              "Prefer string literal unions over `const enum` to avoid bundle bloat and package boundary issues.",
-          });
+          context.report({ node, messageId: "error" });
         }
       },
     };
