@@ -1,12 +1,12 @@
 import type { MetroPlugin } from "@rnx-kit/metro-serializer";
-import type { WriteThirdPartyNoticesOptions } from "./types";
+import type { WriteThirdPartyNoticesOptions } from "./types.ts";
 import {
   gatherModulesFromSources,
   writeThirdPartyNoticesFromMap,
-} from "./write-third-party-notices";
+} from "./write-third-party-notices.ts";
 
-export { writeThirdPartyNoticesCommand } from "./commander";
-export { writeThirdPartyNotices } from "./write-third-party-notices";
+export { writeThirdPartyNoticesCommand } from "./commander.ts";
+export { writeThirdPartyNotices } from "./write-third-party-notices.ts";
 
 export function ThirdPartyNotices(
   inputOptions: Partial<WriteThirdPartyNoticesOptions>

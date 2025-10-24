@@ -1,8 +1,8 @@
 import { error } from "@rnx-kit/console";
 import * as path from "node:path";
 import * as yargs from "yargs";
-import type { WriteThirdPartyNoticesOptions } from "./types";
-import { writeThirdPartyNotices } from "./write-third-party-notices";
+import type { WriteThirdPartyNoticesOptions } from "./types.ts";
+import { writeThirdPartyNotices } from "./write-third-party-notices.ts";
 
 export const cliOptions = {
   "root-path": {

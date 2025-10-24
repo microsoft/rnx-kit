@@ -1,112 +1,108 @@
-import { splitSourcePath } from "../src/write-third-party-notices";
-import { absolutePathRoot } from "./pathHelper";
+import { equal } from "node:assert/strict";
+import { describe, it } from "node:test";
+import { splitSourcePath } from "../src/write-third-party-notices.ts";
+import { absolutePathRoot } from "./pathHelper.ts";
 
 describe("splitSourcePath", () => {
-  test("absolutePath", () => {
+  it("absolutePath", () => {
     const [moduleName, modulePath] = splitSourcePath(
       `${absolutePathRoot}src/root`,
       `${absolutePathRoot}src/root/node_modules/myPackage/myFile.js`
     );
-    expect(moduleName).toBe("myPackage");
-    expect(modulePath).toBe(
-      `${absolutePathRoot}src/root/node_modules/myPackage`
-    );
+    equal(moduleName, "myPackage");
+    equal(modulePath, `${absolutePathRoot}src/root/node_modules/myPackage`);
   });
 
-  test("nonRootAbsolutePath", () => {
+  it("nonRootAbsolutePath", () => {
     const [moduleName, modulePath] = splitSourcePath(
       `${absolutePathRoot}src/otherRoot`,
       `${absolutePathRoot}src/root/node_modules/myPackage/myFile.js`
     );
-    expect(moduleName).toBe("myPackage");
-    expect(modulePath).toBe(
-      `${absolutePathRoot}src/root/node_modules/myPackage`
-    );
+    equal(moduleName, "myPackage");
+    equal(modulePath, `${absolutePathRoot}src/root/node_modules/myPackage`);
   });
 
-  test("packageFolderWithoutFile", () => {
+  it("packageFolderWithoutFile", () => {
     const [moduleName, modulePath] = splitSourcePath(
       `${absolutePathRoot}src/root`,
       `${absolutePathRoot}src/root/node_modules/myPackage`
     );
-    expect(moduleName).toBe("myPackage");
-    expect(modulePath).toBe(
-      `${absolutePathRoot}src/root/node_modules/myPackage`
-    );
+    equal(moduleName, "myPackage");
+    equal(modulePath, `${absolutePathRoot}src/root/node_modules/myPackage`);
   });
 
-  test("packageFolderWithNestedNodeModulesFiles", () => {
+  it("packageFolderWithNestedNodeModulesFiles", () => {
     const [moduleName, modulePath] = splitSourcePath(
       `${absolutePathRoot}src/root`,
       `${absolutePathRoot}src/root/node_modules/myPackage/node_modules/nestedPackage/nestedFile.js`
     );
-    expect(moduleName).toBe("nestedPackage");
-    expect(modulePath).toBe(
+    equal(moduleName, "nestedPackage");
+    equal(
+      modulePath,
       `${absolutePathRoot}src/root/node_modules/myPackage/node_modules/nestedPackage`
     );
   });
 
-  test("packageFolderWithNestedNodeModulesFilesAndNamespaces", () => {
+  it("packageFolderWithNestedNodeModulesFilesAndNamespaces", () => {
     const [moduleName, modulePath] = splitSourcePath(
       `${absolutePathRoot}src/root`,
       `${absolutePathRoot}src/root/node_modules/@myframework/driver-utils/node_modules/@myframework/telemetry-utils/lib/config.js`
     );
-    expect(moduleName).toBe("@myframework/telemetry-utils");
-    expect(modulePath).toBe(
+    equal(moduleName, "@myframework/telemetry-utils");
+    equal(
+      modulePath,
       `${absolutePathRoot}src/root/node_modules/@myframework/driver-utils/node_modules/@myframework/telemetry-utils`
     );
   });
 
-  test("intermediateFolders", () => {
+  it("intermediateFolders", () => {
     const [moduleName, modulePath] = splitSourcePath(
       `${absolutePathRoot}src/root`,
       `${absolutePathRoot}src/root/otherSrcFolder/node_modules/myPackage/myFile.js`
     );
-    expect(moduleName).toBe("myPackage");
-    expect(modulePath).toBe(
+    equal(moduleName, "myPackage");
+    equal(
+      modulePath,
       `${absolutePathRoot}src/root/otherSrcFolder/node_modules/myPackage`
     );
   });
 
-  test("scopedPackage", () => {
+  it("scopedPackage", () => {
     const [moduleName, modulePath] = splitSourcePath(
       `${absolutePathRoot}src/root`,
       `${absolutePathRoot}src/root/node_modules/@scope/myPackage/myFile.js`
     );
-    expect(moduleName).toBe("@scope/myPackage");
-    expect(modulePath).toBe(
+    equal(moduleName, "@scope/myPackage");
+    equal(
+      modulePath,
       `${absolutePathRoot}src/root/node_modules/@scope/myPackage`
     );
   });
 
-  test("relativePaths", () => {
+  it("relativePaths", () => {
     const [moduleName, modulePath] = splitSourcePath(
       `${absolutePathRoot}src/root`,
       "node_modules/myPackage/myFile.js"
     );
-    expect(moduleName).toBe("myPackage");
-    expect(modulePath).toBe(
-      `${absolutePathRoot}src/root/node_modules/myPackage`
-    );
+    equal(moduleName, "myPackage");
+    equal(modulePath, `${absolutePathRoot}src/root/node_modules/myPackage`);
   });
 
-  test("relativePathsWithDotDot", () => {
+  it("relativePathsWithDotDot", () => {
     const [moduleName, modulePath] = splitSourcePath(
       `${absolutePathRoot}src/root`,
       `../node_modules/myPackage/myFile.js`
     );
-    expect(moduleName).toBe("myPackage");
-    expect(modulePath).toBe(`${absolutePathRoot}src/node_modules/myPackage`);
+    equal(moduleName, "myPackage");
+    equal(modulePath, `${absolutePathRoot}src/node_modules/myPackage`);
   });
 
-  test("relativePathsWithDotDotColldingOnNames", () => {
+  it("relativePathsWithDotDotColldingOnNames", () => {
     const [moduleName, modulePath] = splitSourcePath(
       `${absolutePathRoot}src/root`,
       "../node_modules/../other/node_modules/wrongPackage/../myPackage/myFile.js"
     );
-    expect(moduleName).toBe("myPackage");
-    expect(modulePath).toBe(
-      `${absolutePathRoot}src/other/node_modules/myPackage`
-    );
+    equal(moduleName, "myPackage");
+    equal(modulePath, `${absolutePathRoot}src/other/node_modules/myPackage`);
   });
 });

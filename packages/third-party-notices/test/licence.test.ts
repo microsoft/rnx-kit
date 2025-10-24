@@ -1,52 +1,68 @@
+import { deepEqual } from "node:assert/strict";
+import * as fs from "node:fs";
+import { createRequire } from "node:module";
 import * as path from "node:path";
-import { createLicenseJSON } from "../src/output/json";
-import { createLicenseFileContents } from "../src/output/text";
-import type { License } from "../src/types";
-import { extractLicenses } from "../src/write-third-party-notices";
-
-const rnxConsoleDir = path.dirname(
-  require.resolve("@rnx-kit/console/package.json")
-);
-const yargsDir = path.dirname(require.resolve("yargs/package.json"));
-
-const metroSourceMapDir = path.dirname(
-  require.resolve("metro-source-map/package.json")
-);
-
-async function getSampleLicenseData(): Promise<License[]> {
-  const map = new Map([
-    // License data in package.json
-    ["@rnx-kit/console", rnxConsoleDir],
-    // License data package.json and LICENCE file
-    ["yargs", yargsDir],
-    // No license data
-    ["metro-source-map", metroSourceMapDir],
-  ]);
-
-  const licenses = await extractLicenses(map);
-
-  // Hack versions to not depend on
-  for (const license of licenses) {
-    license.version = "1.2.3-fixedVersionForTesting";
-  }
-
-  // Private packages should be excluded from text output
-  licenses.push({
-    name: "private-package",
-    version: "1.0.0",
-    license: "Unlicensed",
-    licenseURLs: [],
-    path: ".",
-  });
-
-  return licenses;
-}
+import { after, before, describe, it } from "node:test";
+import { URL } from "node:url";
+import { createLicenseJSON } from "../src/output/json.ts";
+import { createLicenseFileContents } from "../src/output/text.ts";
+import type { License } from "../src/types.ts";
+import { extractLicenses } from "../src/write-third-party-notices.ts";
 
 describe("license", () => {
-  test("extractLicenses", async () => {
+  const require = createRequire(
+    new URL("../src/write-third-party-notices.ts", import.meta.url)
+  );
+
+  function resolveModule(moduleName: string): string {
+    return path.dirname(require.resolve(`${moduleName}/package.json`));
+  }
+
+  const rnxConsoleDir = resolveModule("@rnx-kit/console");
+  const metroSourceMapDir = resolveModule("metro-source-map");
+  const yargsDir = resolveModule("yargs");
+
+  async function getSampleLicenseData(): Promise<License[]> {
+    const map = new Map([
+      // License data in package.json
+      ["@rnx-kit/console", rnxConsoleDir],
+      // License data package.json and LICENCE file
+      ["yargs", yargsDir],
+      // No license data
+      ["metro-source-map", metroSourceMapDir],
+    ]);
+
+    const licenses = await extractLicenses(map);
+
+    // Hack versions to not depend on
+    for (const license of licenses) {
+      license.version = "1.2.3-fixedVersionForTesting";
+    }
+
+    // Private packages should be excluded from text output
+    licenses.push({
+      name: "private-package",
+      version: "1.0.0",
+      license: "Unlicensed",
+      licenseURLs: [],
+      path: ".",
+    });
+
+    return licenses;
+  }
+
+  before(() => {
+    global.require = require;
+  });
+
+  after(() => {
+    global.require = undefined;
+  });
+
+  it("extractLicenses", async () => {
     const licenses = await getSampleLicenseData();
 
-    expect(licenses).toEqual([
+    deepEqual(licenses, [
       {
         license: "MIT",
         licenseURLs: ["https://spdx.org/licenses/MIT.html"],
@@ -64,7 +80,9 @@ describe("license", () => {
       {
         license: "MIT",
         licenseFile: "LICENSE",
-        licenseText: expect.stringMatching(/^MIT License/),
+        licenseText: fs.readFileSync(path.join(yargsDir, "LICENSE"), {
+          encoding: "utf-8",
+        }),
         licenseURLs: ["https://spdx.org/licenses/MIT.html"],
         name: "yargs",
         path: yargsDir,
@@ -80,15 +98,14 @@ describe("license", () => {
     ]);
   });
 
-  test("createLicenseFileContents", async () => {
+  it("createLicenseFileContents", async (t) => {
     const licenses = await getSampleLicenseData();
-
     const licenseText = createLicenseFileContents(licenses);
 
-    expect(licenseText).toMatchSnapshot();
+    t.assert.snapshot?.(licenseText);
   });
 
-  test("createLicenseFileContentsWithWrappers", async () => {
+  it("createLicenseFileContentsWithWrappers", async (t) => {
     const licenses = await getSampleLicenseData();
 
     const licenseText = createLicenseFileContents(
@@ -97,15 +114,15 @@ describe("license", () => {
       ["additional 1\n2\r\n3\r4", "additional 2"]
     );
 
-    expect(licenseText).toMatchSnapshot();
+    t.assert.snapshot?.(licenseText);
   });
 
-  test("createLicenseJSON", async () => {
+  it("createLicenseJSON", async () => {
     const licenses = await getSampleLicenseData();
 
     const licenseText = createLicenseJSON(licenses);
 
-    expect(JSON.parse(licenseText)).toEqual({
+    deepEqual(JSON.parse(licenseText), {
       packages: [
         {
           copyright: "Microsoft Open Source",
@@ -136,7 +153,7 @@ describe("license", () => {
     });
   });
 
-  test("createLicenseJSON with fullLicenseText", async () => {
+  it("createLicenseJSON with fullLicenseText", async () => {
     const licenses = await getSampleLicenseData();
     // escape \n so JSON.parse won't transform \n into actual newlines
     const licenseText = createLicenseJSON(licenses, true).replace(
@@ -144,7 +161,7 @@ describe("license", () => {
       "\\\\n"
     );
 
-    expect(JSON.parse(licenseText)).toEqual({
+    deepEqual(JSON.parse(licenseText), {
       packages: [
         {
           copyright: "Microsoft Open Source",
