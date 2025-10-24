@@ -6,7 +6,7 @@
  * @typedef {import("eslint").Linter.Config} Config
  * @typedef {import("eslint").Rule.RuleContext} ESLintRuleContext
  * @typedef {import("eslint").Rule.ReportFixer} ESLintReportFixer
- * @typedef {{ exports: string[], types: string[] }} NamedExports
+ * @typedef {{ exports: string[]; types: string[]; }} NamedExports
  *
  * @typedef {{
  *   id: ESLintRuleContext["id"];
@@ -41,6 +41,11 @@ const DEFAULT_CONFIG = {
   eslintVisitorKeys: true,
   eslintScopeManager: true,
 };
+
+const E_EXPORT_ALL =
+  "Prefer explicit exports over `export *` to avoid name clashes, and improve tree-shakeability.";
+const E_EXPORT_ALL_EMPTY =
+  "`export *` has no effect as there are no named exports to re-export.";
 
 const NODE_ENV = process.env.NODE_ENV;
 
@@ -225,7 +230,9 @@ function parse(context, moduleId) {
     };
   } catch (e) {
     if (options.debug) {
-      console.error(e);
+      console.error(
+        `[no-export-all] Failed to parse module '${moduleId}': ${e}`
+      );
     }
   }
 
@@ -245,149 +252,139 @@ function extractExports(context, moduleId, depth) {
   }
 
   const parseResult = parse(context, moduleId);
-  if (!parseResult || !parseResult.ast) {
+  if (!parseResult?.ast) {
     return null;
   }
 
   const { ast, filename } = parseResult;
-  try {
-    /** @type {Set<string>} */
-    const exports = new Set();
-    /** @type {Set<string>} */
-    const types = new Set();
 
-    const traverser = makeTraverser();
-    traverser.traverse(ast, {
-      /** @type {(node: Node, parent: Node) => void} */
-      enter: (node, parent) => {
-        switch (node.type) {
-          case "ExportNamedDeclaration": {
-            if (parent.type === "TSModuleBlock") {
-              // The module or namespace is already exported.
-              return;
-            }
+  /** @type {Set<string>} */
+  const exports = new Set();
+  /** @type {Set<string>} */
+  const types = new Set();
 
-            const declaration = node.declaration;
-            if (declaration) {
-              switch (declaration.type) {
-                case "ClassDeclaration":
-                // fallthrough
-                case "FunctionDeclaration":
-                // fallthrough
-                case "TSDeclareFunction":
-                // fallthrough
-                case "TSImportEqualsDeclaration": {
-                  const name = declaration.id && declaration.id.name;
-                  if (name) {
-                    exports.add(name);
-                  }
-                  break;
-                }
-
-                case "TSEnumDeclaration": {
-                  const name = declaration.id && declaration.id.name;
-                  if (name) {
-                    const ex = declaration.const ? types : exports;
-                    ex.add(name);
-                  }
-                  break;
-                }
-
-                // export namespace N { ... }
-                case "TSModuleDeclaration": {
-                  switch (declaration.id.type) {
-                    case "Identifier":
-                      exports.add(declaration.id.name);
-                      break;
-                    case "Literal": {
-                      const name = declaration.id.value;
-                      if (typeof name === "string") {
-                        exports.add(name);
-                      }
-                      break;
-                    }
-                  }
-                  break;
-                }
-
-                case "TSInterfaceDeclaration":
-                // fallthrough
-                case "TSTypeAliasDeclaration": {
-                  const name = declaration.id && declaration.id.name;
-                  if (name) {
-                    types.add(name);
-                  }
-                  break;
-                }
-
-                case "VariableDeclaration":
-                  for (const decl of declaration.declarations) {
-                    if (decl.id.type === "Identifier") {
-                      exports.add(decl.id.name);
-                    }
-                  }
-                  break;
-              }
-            } else {
-              const set = node.exportKind === "type" ? types : exports;
-              for (const spec of node.specifiers) {
-                const exported = spec.exported;
-                const name =
-                  exported.type === "Identifier"
-                    ? exported.name
-                    : exported.value;
-                if (name !== "default") {
-                  set.add(name);
-                }
-              }
-            }
-            break;
+  makeTraverser().traverse(ast, {
+    /** @type {(node: Node, parent: Node) => void} */
+    enter: (node, parent) => {
+      switch (node.type) {
+        case "ExportNamedDeclaration": {
+          if (parent.type === "TSModuleBlock") {
+            // The module or namespace is already exported.
+            return;
           }
 
-          case "ExportAllDeclaration": {
-            const source = node.source && node.source.value;
-            if (source) {
-              const namedExports = extractExports(
-                { ...context, filename },
-                source,
-                depth - 1
-              );
-              if (namedExports) {
-                for (const name of namedExports.exports) {
+          const declaration = node.declaration;
+          if (declaration) {
+            switch (declaration.type) {
+              case "ClassDeclaration":
+              // fallthrough
+              case "FunctionDeclaration":
+              // fallthrough
+              case "TSDeclareFunction":
+              // fallthrough
+              case "TSImportEqualsDeclaration": {
+                const name = declaration.id && declaration.id.name;
+                if (name) {
                   exports.add(name);
                 }
-                for (const name of namedExports.types) {
+                break;
+              }
+
+              case "TSEnumDeclaration": {
+                const name = declaration.id && declaration.id.name;
+                if (name) {
+                  const ex = declaration.const ? types : exports;
+                  ex.add(name);
+                }
+                break;
+              }
+
+              // export namespace N { ... }
+              case "TSModuleDeclaration": {
+                switch (declaration.id.type) {
+                  case "Identifier":
+                    exports.add(declaration.id.name);
+                    break;
+                  case "Literal": {
+                    const name = declaration.id.value;
+                    if (typeof name === "string") {
+                      exports.add(name);
+                    }
+                    break;
+                  }
+                }
+                break;
+              }
+
+              case "TSInterfaceDeclaration":
+              // fallthrough
+              case "TSTypeAliasDeclaration": {
+                const name = declaration.id && declaration.id.name;
+                if (name) {
                   types.add(name);
                 }
+                break;
+              }
+
+              case "VariableDeclaration":
+                for (const decl of declaration.declarations) {
+                  if (decl.id.type === "Identifier") {
+                    exports.add(decl.id.name);
+                  }
+                }
+                break;
+            }
+          } else {
+            const set = node.exportKind === "type" ? types : exports;
+            for (const spec of node.specifiers) {
+              const exported = spec.exported;
+              const name =
+                exported.type === "Identifier" ? exported.name : exported.value;
+              if (name !== "default") {
+                set.add(name);
               }
             }
-            break;
           }
-
-          // Prior to v6, a `TSImportEqualsDeclaration` will have an `isExport`
-          // property instead of being wrapped in an `ExportNamedDeclaration`.
-          // See https://github.com/typescript-eslint/typescript-eslint/issues/4130
-          case "TSImportEqualsDeclaration":
-            if ("isExport" in node && node.isExport) {
-              // export import foo = require('./foo');
-              // export import Bar = Foo.Bar;
-              exports.add(node.id.name);
-            }
-            break;
+          break;
         }
-      },
-    });
-    return {
-      exports: [...exports],
-      types: [...types],
-    };
-  } catch (e) {
-    if (context.options.debug) {
-      console.error(e);
-    }
-  }
 
-  return null;
+        case "ExportAllDeclaration": {
+          const source = node.source && node.source.value;
+          if (source) {
+            const namedExports = extractExports(
+              { ...context, filename },
+              source,
+              depth - 1
+            );
+            if (namedExports) {
+              for (const name of namedExports.exports) {
+                exports.add(name);
+              }
+              for (const name of namedExports.types) {
+                types.add(name);
+              }
+            }
+          }
+          break;
+        }
+
+        // Prior to v6, a `TSImportEqualsDeclaration` will have an `isExport`
+        // property instead of being wrapped in an `ExportNamedDeclaration`.
+        // See https://github.com/typescript-eslint/typescript-eslint/issues/4130
+        case "TSImportEqualsDeclaration":
+          if ("isExport" in node && node.isExport) {
+            // export import foo = require('./foo');
+            // export import Bar = Foo.Bar;
+            exports.add(node.id.name);
+          }
+          break;
+      }
+    },
+  });
+  return {
+    exports: [...exports],
+    types: [...types],
+  };
 }
 
 /** @type {import("eslint").Rule.RuleModule} */
@@ -427,32 +424,34 @@ module.exports = {
         }
 
         const result = extractExports(ruleContext, source, maxDepth);
+        const hasNamedExports = !isEmpty(result);
+
         context.report({
           node,
-          message:
-            "Prefer explicit exports over `export *` to avoid name clashes, and improve tree-shakeability.",
-          fix: isEmpty(result)
-            ? null
-            : (fixer) => {
-                /** @type {string[]} */
-                const lines = [];
-                if (result.types.length > 0) {
-                  const uniqueTypes = result.types.filter(
-                    (type) => !result.exports.includes(type)
-                  );
-                  if (uniqueTypes.length > 0) {
-                    const types = uniqueTypes.sort().join(", ");
-                    lines.push(
-                      `export type { ${types} } from ${node.source.raw};`
-                    );
-                  }
-                }
-                if (result.exports.length > 0) {
-                  const names = result.exports.sort().join(", ");
-                  lines.push(`export { ${names} } from ${node.source.raw};`);
-                }
-                return fixer.replaceText(node, lines.join("\n"));
-              },
+          message: hasNamedExports ? E_EXPORT_ALL : E_EXPORT_ALL_EMPTY,
+          fix: (fixer) => {
+            if (!hasNamedExports) {
+              // Only remove the node if we successfully parsed the module
+              return result && fixer.remove(node);
+            }
+
+            /** @type {string[]} */
+            const lines = [];
+            if (result.types.length > 0) {
+              const uniqueTypes = result.types.filter(
+                (type) => !result.exports.includes(type)
+              );
+              if (uniqueTypes.length > 0) {
+                const types = uniqueTypes.sort().join(", ");
+                lines.push(`export type { ${types} } from ${node.source.raw};`);
+              }
+            }
+            if (result.exports.length > 0) {
+              const names = result.exports.sort().join(", ");
+              lines.push(`export { ${names} } from ${node.source.raw};`);
+            }
+            return fixer.replaceText(node, lines.join("\n"));
+          },
         });
       },
     };
