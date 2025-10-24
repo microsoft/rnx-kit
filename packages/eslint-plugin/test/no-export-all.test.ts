@@ -28,7 +28,10 @@ export type { IChopper as IChopperRe, Predator as PredatorRe };
 export { escape as escapeRe, name as nameRe };
 `,
   conquerer: "export * from 'destroyer'",
+  "default-only": "export default {};",
   destroyer: "export * from 'barbarian'",
+  "invalid-syntax": "export * from ;",
+  "no-exports": '"use strict";',
   recall: "export * from 'recall'",
   types: `
 export type Predator = { kind: "$predator" };
@@ -85,6 +88,13 @@ function lines(...strings: string[]): string {
 }
 
 describe("disallows `export *`", () => {
+  const errorExportAll = [
+    "Prefer explicit exports over `export *` to avoid name clashes, and improve tree-shakeability.",
+  ];
+  const errorExportAllEmpty = [
+    "`export *` has no effect as there are no named exports to re-export.",
+  ];
+
   const ruleTester = makeRuleTester();
 
   ruleTester.run("no-export-all", rule, {
@@ -103,7 +113,7 @@ describe("disallows `export *`", () => {
     invalid: [
       {
         code: "export * from 'chopper';",
-        errors: 1,
+        errors: errorExportAll,
         output: lines(
           "export type { IChopper, IChopperRe, Predator, PredatorRe } from 'chopper';",
           "export { Chopper, Kind, escape, escapeRe, name, nameRe } from 'chopper';"
@@ -111,20 +121,35 @@ describe("disallows `export *`", () => {
       },
       {
         code: "export * from 'conquerer';",
-        errors: 1,
+        errors: errorExportAll,
         output: "export { name } from 'conquerer';",
       },
       {
+        code: "export * from 'default-only';",
+        errors: errorExportAllEmpty,
+        output: "",
+      },
+      {
+        code: "export * from 'invalid-syntax';",
+        errors: errorExportAllEmpty,
+      },
+      {
+        code: "export * from 'no-exports';",
+        errors: errorExportAllEmpty,
+        output: "",
+      },
+      {
         code: "export * from 'recall';",
-        errors: 1,
+        errors: errorExportAllEmpty,
+        output: "",
       },
       {
         code: "export * from 'this-package-does-not-exist';",
-        errors: 1,
+        errors: errorExportAllEmpty,
       },
       {
         code: "export * from 'types';",
-        errors: 1,
+        errors: errorExportAll,
         output: lines(
           "export type { IChopper, Predator } from 'types';",
           "export { Helicopter, escape } from 'types';"
@@ -132,13 +157,13 @@ describe("disallows `export *`", () => {
       },
       {
         code: "export * from 'ts-import-equals';",
-        errors: 1,
+        errors: errorExportAll,
         output:
           "export { IChopper, bar, chopper, foo, name, notChopper } from 'ts-import-equals';",
       },
       {
         code: lines("export * from './internal';", "export * from 'types';"),
-        errors: 1,
+        errors: errorExportAll,
         output: lines(
           "export * from './internal';",
           "export type { IChopper, Predator } from 'types';",
@@ -148,18 +173,18 @@ describe("disallows `export *`", () => {
       },
       {
         code: "export * from '@fluentui/font-icons-mdl2';",
-        errors: 1,
+        errors: errorExportAll,
         output: "export type { IconNames } from '@fluentui/font-icons-mdl2';",
       },
       {
         code: "export * from '@fluentui/react-focus';",
-        errors: 1,
+        errors: errorExportAll,
         output:
           "export { FocusZoneTabbableElements } from '@fluentui/react-focus';",
       },
       {
         code: "export * from '@fluentui/style-utilities';",
-        errors: 1,
+        errors: errorExportAll,
         output: "export { ZIndexes } from '@fluentui/style-utilities';",
       },
     ],
