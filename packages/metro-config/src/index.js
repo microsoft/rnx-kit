@@ -5,8 +5,8 @@ const {
   findMetroPath,
   requireModuleFromMetro,
 } = require("@rnx-kit/tools-react-native/metro");
-const fs = require("fs");
-const path = require("path");
+const fs = require("node:fs");
+const path = require("node:path");
 const { applyExpoWorkarounds, isExpoConfig } = require("./expoConfig");
 
 /**
@@ -274,7 +274,7 @@ function exclusionList(additionalExclusions = [], projectRoot = process.cwd()) {
     /[/\\](.*?\.bundle|.*?\.noindex|\.vs|\.vscode|Pods|__tests__)[/\\]/,
 
     // Ignore unrelated file changes
-    /\.(a|apk|appx|bak|bat|binlog|c|cache|cc|class|cpp|cs|dex|dll|env|exe|flat|gz|h|hpp|jar|lock|m|mm|modulemap|o|obj|pch|pdb|plist|pbxproj|sh|so|tflite|tgz|tlog|xcconfig|xcscheme|xcworkspacedata|zip)$/,
+    /\.(a|apk|appx|bak|bat|binlog|c|cache|cc|class|cpp|cs|dex|dll|env|exe|flat|gz|h|hpp|jar|lock|m|mm|modulemap|o|obj|pch|pdb|plist|pbxproj|sh|so|tflite|tgz|tlog|wrn|xcconfig|xcscheme|xcworkspacedata|zip)$/,
 
     ...additionalExclusions,
   ];
