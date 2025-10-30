@@ -48,11 +48,11 @@ function applyExpoWorkarounds(config, defaultConfig) {
     config.serializer?.getModulesRunBeforeMainModule;
   if (getModulesRunBeforeMainModule) {
     const core = /Libraries[/\\]Core[/\\]InitializeCore/;
-    const prelude =
-      defaultConfig.serializer?.getModulesRunBeforeMainModule?.("") ?? [];
+    const getDefaultModulesRunBeforeMainModule =
+      defaultConfig.serializer?.getModulesRunBeforeMainModule ?? (() => []);
     // @ts-expect-error Cannot assign to 'getModulesRunBeforeMainModule' because it is a read-only property
     config.serializer.getModulesRunBeforeMainModule = (entryFilePath) => {
-      const modules = prelude.slice();
+      const modules = getDefaultModulesRunBeforeMainModule(entryFilePath);
       for (const m of getModulesRunBeforeMainModule(entryFilePath)) {
         if (!core.test(m)) {
           modules.push(m);

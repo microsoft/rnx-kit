@@ -306,6 +306,7 @@ describe("exclusionList()", () => {
       "project/file.tflite",
       "project/file.tgz",
       "project/file.tlog",
+      "project/file.wrn",
       "project/file.xcconfig",
       "project/file.xcscheme",
       "project/file.xcworkspacedata",
