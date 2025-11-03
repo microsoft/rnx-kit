@@ -1,5 +1,12 @@
 # Change Log - @rnx-kit/eslint-plugin
 
+## 0.9.3
+
+### Patch Changes
+
+- 1c61795: Provide a proper error message when a module tries to re-export from
+  another module containing no named exports
+
 ## 0.9.2
 
 ### Patch Changes

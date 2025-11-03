@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-config
 
+## 2.1.3
+
+### Patch Changes
+
+- 8f72d16: Delay calling `getModulesRunBeforeMainModule` until necessary
+
 ## 2.1.2
 
 ### Patch Changes
