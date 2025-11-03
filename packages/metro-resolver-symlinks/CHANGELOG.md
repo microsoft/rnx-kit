@@ -1,5 +1,12 @@
 # Change Log - @rnx-kit/metro-resolver-symlinks
 
+## 0.2.7
+
+### Patch Changes
+
+- 8b429ae: Allow `oxc-resolver` to be used with
+  `experimental_retryResolvingFromDisk`
+
 ## 0.2.6
 
 ### Patch Changes
