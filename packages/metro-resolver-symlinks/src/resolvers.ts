@@ -6,9 +6,9 @@ import type { CallResolver, Options } from "./types";
 import { patchMetro, shouldEnableRetryResolvingFromDisk } from "./utils/metro";
 
 export function getResolver(options: Options): CallResolver {
-  if (shouldEnableRetryResolvingFromDisk(options)) {
+  const retryFromDisk = shouldEnableRetryResolvingFromDisk(options);
+  if (retryFromDisk) {
     patchMetro(options);
-    return applyEnhancedResolver;
   }
 
   switch (options.resolver) {
@@ -18,6 +18,6 @@ export function getResolver(options: Options): CallResolver {
       info("Note: Oxc Resolver support is still experimental");
       return applyOxcResolver;
     default:
-      return applyMetroResolver;
+      return retryFromDisk ? applyEnhancedResolver : applyMetroResolver;
   }
 }
