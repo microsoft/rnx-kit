@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/tools-react-native
 
+## 2.3.1
+
+### Patch Changes
+
+- 34faeb6: Add `react-native-web` support
+
 ## 2.3.0
 
 ### Minor Changes

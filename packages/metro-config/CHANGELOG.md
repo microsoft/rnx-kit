@@ -1,5 +1,16 @@
 # Change Log - @rnx-kit/metro-config
 
+## 2.2.0
+
+### Minor Changes
+
+- 34faeb6: Add `react-native-web` support
+
+### Patch Changes
+
+- Updated dependencies [34faeb6]
+  - @rnx-kit/tools-react-native@2.3.1
+
 ## 2.1.3
 
 ### Patch Changes
