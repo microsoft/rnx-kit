@@ -7,6 +7,7 @@
     "react-native-codegen": "0.0.0-dev",
     "react-native-macos": "0.0.0-dev",
     "react-native-tvos": "0.0.0-dev",
+    "react-native-web": "0.0.0-dev",
     "react-native-windows": "0.0.0-dev"
   },
   "engines": {

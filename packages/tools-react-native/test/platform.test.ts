@@ -37,6 +37,7 @@ describe("React Native > Platform", () => {
       android: "",
       ios: "",
       macos: "react-native-macos",
+      web: "react-native-web",
       win32: "@office-iss/react-native-win32",
       windows: "react-native-windows",
     });
@@ -51,6 +52,7 @@ describe("React Native > Platform", () => {
       android: "",
       ios: "",
       macos: "react-native-macos",
+      web: "react-native-web",
       win32: "@office-iss/react-native-win32",
       windows: "react-native-windows",
     });
@@ -59,6 +61,7 @@ describe("React Native > Platform", () => {
   it("parsePlatform() succeeds for all known platforms", () => {
     equal(parsePlatform("ios"), "ios");
     equal(parsePlatform("android"), "android");
+    equal(parsePlatform("web"), "web");
     equal(parsePlatform("windows"), "windows");
     equal(parsePlatform("win32"), "win32");
     equal(parsePlatform("macos"), "macos");
@@ -72,6 +75,7 @@ describe("React Native > Platform", () => {
     deepEqual(platformExtensions("android"), ["android", "native"]);
     deepEqual(platformExtensions("ios"), ["ios", "native"]);
     deepEqual(platformExtensions("macos"), ["macos", "native"]);
+    deepEqual(platformExtensions("web"), ["web"]);
     deepEqual(platformExtensions("win32"), ["win32", "win", "native"]);
     deepEqual(platformExtensions("windows"), ["windows", "win", "native"]);
   });

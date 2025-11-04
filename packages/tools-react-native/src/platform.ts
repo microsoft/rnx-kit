@@ -10,18 +10,20 @@ export type AllPlatforms =
   | "android"
   | "ios"
   | "macos"
+  | "visionos"
+  | "web"
   | "win32"
-  | "windows"
-  | "visionos";
+  | "windows";
 
 // Possible values for AllPlatforms
 const allValues: AllPlatforms[] = [
   "android",
   "ios",
   "macos",
+  "visionos",
+  "web",
   "win32",
   "windows",
-  "visionos",
 ];
 
 /**
@@ -35,12 +37,13 @@ export function expandPlatformExtensions(
   platform: string,
   extensions: readonly string[]
 ): string[] {
-  const platforms = platformExtensions(platform);
+  const expanded: string[] = [];
 
-  const expanded = platforms.reduce<string[]>((expanded, platform) => {
-    expanded.push(...extensions.map((ext) => `.${platform}${ext}`));
-    return expanded;
-  }, []);
+  for (const p of platformExtensions(platform)) {
+    for (const ext of extensions) {
+      expanded.push(`.${p}${ext}`);
+    }
+  }
 
   expanded.push(...extensions);
   return expanded;
@@ -63,6 +66,37 @@ export function getModuleSuffixes(
     extensions.push("");
   }
   return extensions;
+}
+
+function recordPlatformPackage(
+  platformMap: Record<string, string>,
+  pkgPath: string | undefined,
+  startDir = pkgPath
+): boolean {
+  if (!pkgPath) {
+    return false;
+  }
+
+  const manifest = readReactNativeConfig(pkgPath, startDir);
+  if (!manifest) {
+    return false;
+  }
+
+  const { platforms } = manifest;
+  if (!platforms || typeof platforms !== "object") {
+    return false;
+  }
+
+  for (const [platform, info] of Object.entries(platforms)) {
+    if (typeof platformMap[platform] === "undefined") {
+      const { npmPackageName } = info;
+      if (npmPackageName) {
+        platformMap[platform] = npmPackageName;
+      }
+    }
+  }
+
+  return true;
 }
 
 /**
@@ -98,38 +132,20 @@ export function getAvailablePlatformsUncached(
     }
   }
 
-  const recordPlatformPackage = (pkgPath: string | undefined) => {
-    if (!pkgPath) {
-      return;
-    }
-
-    const manifest = readReactNativeConfig(pkgPath, startDir);
-    if (!manifest) {
-      return;
-    }
-
-    const { platforms } = manifest;
-    if (!platforms || typeof platforms !== "object") {
-      return;
-    }
-
-    for (const [platform, info] of Object.entries(platforms)) {
-      if (typeof platformMap[platform] === "undefined") {
-        const { npmPackageName } = info;
-        if (npmPackageName) {
-          platformMap[platform] = npmPackageName;
-        }
-      }
-    }
-  };
-
-  recordPlatformPackage(startDir);
+  recordPlatformPackage(platformMap, startDir);
 
   const options = { startDir };
   for (const pkgName of packages) {
     const pkgPath = findPackageDependencyDir(pkgName, options);
     if (pkgPath) {
-      recordPlatformPackage(pkgPath);
+      if (!recordPlatformPackage(platformMap, pkgPath, startDir)) {
+        // Ideally, `react-native-web` should have a `react-native.config.js`
+        // where it declares itself as the "web" platform. Since it doesn't, we
+        // special-case it here.
+        if (pkgName === "react-native-web") {
+          platformMap["web"] = pkgName;
+        }
+      }
     }
   }
 
@@ -162,6 +178,8 @@ export const getAvailablePlatforms = (() => {
  */
 export function platformExtensions(platform: string): string[] {
   switch (platform) {
+    case "web":
+      return [platform];
     case "win32":
     case "windows":
       return [platform, "win", "native"];
