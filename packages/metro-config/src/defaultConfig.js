@@ -99,6 +99,11 @@ function outOfTreePlatformResolver(implementations, projectRoot) {
 
   /** @type {(context: ResolutionContext, moduleName: string, platform: string) => Resolution} */
   const platformResolver = (context, moduleName, platform) => {
+    if (platform === "web") {
+      // @ts-expect-error We intentionally modify `preferNativePlatform` to support web
+      context.preferNativePlatform = false;
+    }
+
     /** @type {CustomResolver} */
     let resolve = metroResolver;
     const resolveRequest = context.resolveRequest;
@@ -147,9 +152,10 @@ function resolveMetroConfig(fromDir) {
  * as `@react-native-community/cli` will no longer provide defaults.
  *
  * @param {string} projectRoot
+ * @param {string=} platform
  * @returns {MetroConfig[]}
  */
-function getDefaultConfig(projectRoot) {
+function getDefaultConfig(projectRoot, platform) {
   if (!needsFullConfig(projectRoot)) {
     return [];
   }
@@ -172,6 +178,13 @@ function getDefaultConfig(projectRoot) {
   defaultConfig.serializer.getModulesRunBeforeMainModule = () => {
     return preludeModules;
   };
+
+  if (platform === "web") {
+    defaultConfig.transformer.assetRegistryPath = require.resolve(
+      "react-native-web/dist/modules/AssetRegistry/index.js",
+      { paths: [projectRoot] }
+    );
+  }
 
   return [defaultConfig];
 }

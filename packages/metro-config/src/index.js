@@ -10,8 +10,8 @@ const path = require("node:path");
 const { applyExpoWorkarounds, isExpoConfig } = require("./expoConfig");
 
 /**
- * @typedef {import("metro-config").InputConfigT} InputConfigT;
  * @typedef {import("metro-config").MetroConfig} MetroConfig;
+ * @typedef {MetroConfig & { platform?: string; }} InputConfig;
  */
 
 /** Packages that must be resolved to one specific copy. */
@@ -289,10 +289,10 @@ module.exports = {
 
   /**
    * Helper function for configuring Metro.
-   * @param {MetroConfig=} inputConfig
+   * @param {InputConfig=} inputConfig
    * @returns {MetroConfig}
    */
-  makeMetroConfig: (inputConfig = {}) => {
+  makeMetroConfig: ({ platform, ...inputConfig } = {}) => {
     const projectRoot = inputConfig.projectRoot || process.cwd();
 
     const { mergeConfig } = requireModuleFromMetro("metro-config", projectRoot);
@@ -304,9 +304,9 @@ module.exports = {
       inputConfig.resolver &&
       (inputConfig.resolver.blockList || inputConfig.resolver.blacklistRE);
 
-    /** @type {InputConfigT[]} */
+    /** @type {MetroConfig[]} */
     const [defaultConfig, ...configs] = [
-      ...getDefaultConfig(projectRoot),
+      ...getDefaultConfig(projectRoot, platform),
       {
         resolver: {
           resolverMainFields: ["react-native", "browser", "main"],
