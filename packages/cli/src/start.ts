@@ -58,6 +58,12 @@ export async function rnxStart(
     }
   }
 
+  // CVE-2025-11953: Ensure `host` is set to `localhost` by default, otherwise
+  // it will listen to external connections.
+  if (!args.host) {
+    args.host = "127.0.0.1";
+  }
+
   // load Metro configuration, applying overrides from the command line
   const metroConfig = await loadMetroConfig(ctx, {
     ...args,
@@ -109,7 +115,7 @@ export async function rnxStart(
 
   // create middleware -- a collection of plugins which handle incoming
   // http(s) requests, routing them to static pages or JS functions.
-  const host = args.host?.length ? args.host : "localhost";
+  const host = args.host;
   const devServerUrl = `${scheme}://${host}:${port}`;
   const devServer = createDevServerMiddleware({ host, port, watchFolders });
 
