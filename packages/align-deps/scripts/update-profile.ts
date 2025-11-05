@@ -259,7 +259,7 @@ function getProfilePath(
 ): [string, string] {
   const presetDir = path.relative(
     process.cwd(),
-    new URL(`../src/presets/${preset}`, import.meta.url).pathname
+    fileURLToPath(new URL(`../src/presets/${preset}`, import.meta.url))
   );
   return [
     path.join(presetDir, `profile-${profileVersion}.ts`),
@@ -606,10 +606,10 @@ async function main({
             });
 
           const preset = [
-            `import type { Preset } from "../../types";`,
+            `import type { Preset } from "../../types.ts";`,
             ...profiles.map(
               ([version, varName]) =>
-                `import { profile as ${varName} } from "./react-native/profile-${version}";`
+                `import { profile as ${varName} } from "./react-native/profile-${version}.ts";`
             ),
             "",
             "// Also export this by name for scripts to work around a bug where this module",
