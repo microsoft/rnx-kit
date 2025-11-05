@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-serializer-esbuild
 
+## 0.2.6
+
+### Patch Changes
+
+- cbde4c1: Don't block when writing metafile
+
 ## 0.2.5
 
 ### Patch Changes
