@@ -323,13 +323,23 @@ export function MetroSerializer(
             esbuild
               .analyzeMetafile(metafile, options)
               .then((text) => info(text));
-          }
-          if (typeof buildOptions?.metafile === "string") {
-            fs.writeFileSync(
-              path.join(path.dirname(sourcemapfile), buildOptions.metafile),
-              typeof metafile === "string" ? metafile : JSON.stringify(metafile)
-            );
+          } else {
             info("esbuild bundle size:", result.code.length);
+          }
+
+          if (typeof buildOptions?.metafile === "string") {
+            const outDir = path.dirname(sourcemapfile);
+            const out = path.join(outDir, buildOptions.metafile);
+
+            info("Writing esbuild metafile to:", out);
+
+            const metadata =
+              typeof metafile === "string"
+                ? metafile
+                : JSON.stringify(metafile);
+            fs.writeFile(out, metadata, () => {
+              info("Done writing esbuild metafile");
+            });
           }
         } else {
           info("esbuild bundle size:", result.code.length);
