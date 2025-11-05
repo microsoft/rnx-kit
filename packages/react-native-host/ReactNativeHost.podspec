@@ -10,13 +10,20 @@ repo_dir = repository['directory']
 
 new_arch_enabled = ENV['RCT_NEW_ARCH_ENABLED'] == '1'
 preprocessor_definitions = [
-  '$(inherit)',
+  '$(inherited)',
   "USE_HERMES=#{ENV['USE_HERMES'] || '0'}",
+]
+cxx_flags = [
+  '$(inherited)',
+  "-DUSE_HERMES=#{ENV['USE_HERMES'] || '0'}",
 ]
 if new_arch_enabled
   preprocessor_definitions << 'RCT_NEW_ARCH_ENABLED=1'
   preprocessor_definitions << 'USE_FABRIC=1'
   preprocessor_definitions << 'USE_BRIDGELESS=1' if ENV['USE_BRIDGELESS'] == '1'
+  cxx_flags << '-DRCT_NEW_ARCH_ENABLED=1'
+  cxx_flags << 'USE_FABRIC=1'
+  cxx_flags << 'USE_BRIDGELESS=1' if ENV['USE_BRIDGELESS'] == '1'
 end
 
 Pod::Spec.new do |s|
@@ -49,6 +56,7 @@ Pod::Spec.new do |s|
     'CLANG_CXX_LANGUAGE_STANDARD' => 'c++20',
     'DEFINES_MODULE' => 'YES',
     'GCC_PREPROCESSOR_DEFINITIONS' => preprocessor_definitions,
+    'OTHER_CPLUSPLUSFLAGS' => cxx_flags.join(' '),
     'HEADER_SEARCH_PATHS' => [
       '$(PODS_ROOT)/Headers/Private/React-Core',
       '$(PODS_CONFIGURATION_BUILD_DIR)/React-RuntimeApple/React_RuntimeApple.framework/Headers',
