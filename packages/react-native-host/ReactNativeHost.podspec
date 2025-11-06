@@ -60,7 +60,7 @@ Pod::Spec.new do |s|
     'CLANG_CXX_LANGUAGE_STANDARD' => 'c++20',
     'DEFINES_MODULE' => 'YES',
     'GCC_PREPROCESSOR_DEFINITIONS' => preprocessor_definitions,
-    'OTHER_CPLUSPLUSFLAGS' => cxx_flags.join(' '),
+    'CPP_PREPROCESSOR_DEFINITIONS' => preprocessor_definitions,
     'HEADER_SEARCH_PATHS' => [
       '$(PODS_ROOT)/Headers/Private/React-Core',
       '$(PODS_CONFIGURATION_BUILD_DIR)/React-RuntimeApple/React_RuntimeApple.framework/Headers',
