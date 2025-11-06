@@ -1,5 +1,14 @@
 # Change Log - @rnx-kit/cli
 
+## 0.18.14
+
+### Patch Changes
+
+- 2190a96: Ensure `host` is set to `localhost` by default when starting the dev
+  server, otherwise it will listen to external connections.
+- Updated dependencies [cbde4c1]
+  - @rnx-kit/metro-serializer-esbuild@0.2.6
+
 ## 0.18.13
 
 ### Patch Changes
