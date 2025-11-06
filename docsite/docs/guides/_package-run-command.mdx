@@ -11,7 +11,7 @@ import CodeBlock from "@theme/CodeBlock";
   </TabItem>
   <TabItem value="npm" label="npm">
     <CodeBlock language="sh">
-      {props.installedScript ? "npx" : "npm run"} {props.args}
+      {props.installedScript ? "npx " : "npm run "} {props.args}
     </CodeBlock>
   </TabItem>
 </Tabs>
