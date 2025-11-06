@@ -1,9 +1,10 @@
 import * as fs from "node:fs";
 import { v } from "./version.ts";
 
-export function inferBuildTarget() {
+export function inferBuildTarget(projectRoot = process.cwd()): string {
   try {
-    const react = require.resolve("react-native/package.json");
+    const options = { paths: [projectRoot] };
+    const react = require.resolve("react-native/package.json", options);
     const manifest = fs.readFileSync(react, { encoding: "utf-8" });
     const { version } = JSON.parse(manifest);
     const versionNum = v(version);
