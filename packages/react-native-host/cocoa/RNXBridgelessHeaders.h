@@ -8,8 +8,10 @@
 
 #if USE_HERMES
 #import <ReactCommon/RCTHermesInstance.h>
+#elif USE_V8
+#import <v8runtime/V8ExecutorFactory.h>
 #else
-#import <ReactCommon/RCTJscInstance.h>
+#import <React-jsc/RCTJscInstance.h>
 #endif  // USE_HERMES
 
 #ifdef USE_REACT_NATIVE_CONFIG
