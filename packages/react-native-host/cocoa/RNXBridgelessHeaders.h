@@ -10,9 +10,13 @@
 #import <ReactCommon/RCTHermesInstance.h>
 #elif USE_V8
 #import <v8runtime/V8ExecutorFactory.h>
-#else
+#elif __has_include(<React-jsc/RCTJscInstance.h>)
 #import <React-jsc/RCTJscInstance.h>
+#else
+#import <ReactCommon/RCTJscInstance.h> // RN pre 0.80
 #endif  // USE_HERMES
+
+
 
 #ifdef USE_REACT_NATIVE_CONFIG
 #import <react/config/ReactNativeConfig.h>
