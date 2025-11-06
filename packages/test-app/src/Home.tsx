@@ -60,7 +60,7 @@ export function Home(props: HomeProps): React.ReactElement<HomeProps> {
 
   return (
     <SafeAreaView style={styles.body}>
-      <StatusBar barStyle={isDarkMode ? "light-content" : "dark-content"} />
+      <StatusBar barStyle={isDarkMode ? "dark-content" : "light-content"} />
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
         onLayout={setIsFabric}
