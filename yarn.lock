@@ -5247,7 +5247,7 @@ __metadata:
     "@babel/plugin-transform-react-jsx-source": "npm:^7.20.0"
     "@babel/preset-env": "npm:^7.20.0"
     "@babel/runtime": "npm:^7.20.0"
-    "@react-native-community/cli": "npm:^15.0.1"
+    "@react-native-community/cli": "npm:^20.0.0"
     "@react-native-community/cli-platform-android": "npm:^15.0.1"
     "@react-native-community/cli-platform-ios": "npm:^15.0.1"
     "@react-native-webapis/web-storage": "workspace:*"
