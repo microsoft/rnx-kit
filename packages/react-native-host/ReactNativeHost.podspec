@@ -26,8 +26,8 @@ if new_arch_enabled
   preprocessor_definitions << 'USE_FABRIC=1'
   preprocessor_definitions << 'USE_BRIDGELESS=1' if ENV['USE_BRIDGELESS'] == '1'
   cxx_flags << '-DRCT_NEW_ARCH_ENABLED=1'
-  cxx_flags << 'USE_FABRIC=1'
-  cxx_flags << 'USE_BRIDGELESS=1' if ENV['USE_BRIDGELESS'] == '1'
+  cxx_flags << '-DUSE_FABRIC=1'
+  cxx_flags << '-DUSE_BRIDGELESS=1' if ENV['USE_BRIDGELESS'] == '1'
 end
 
 Pod::Spec.new do |s|
