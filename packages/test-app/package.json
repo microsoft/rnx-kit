@@ -18,7 +18,7 @@
     "directory": "packages/test-app"
   },
   "scripts": {
-    "android": "rnx run-android --no-packager --appId com.msft.identity.client.sample.local",
+    "android": "rnx run --platform android",
     "build": "rnx align-deps && rnx-kit-scripts build",
     "build:android": "rnx build --platform android",
     "build:ios": "rnx build --platform ios",
@@ -29,9 +29,9 @@
     "bundle:macos": "rnx bundle --platform macos",
     "bundle:windows": "rnx bundle --platform windows",
     "format": "rnx-kit-scripts format",
-    "ios": "rnx run-ios --no-packager",
+    "ios": "rnx run --platform ios",
     "lint": "rnx-kit-scripts lint",
-    "macos": "rnx run-macos --scheme ReactTestApp --no-packager",
+    "macos": "rnx run --platform macos",
     "start": "rnx start",
     "test": "rnx test --platform ios --cache false",
     "windows": "rnx run-windows --no-packager --sln windows/SampleCrossApp.sln"

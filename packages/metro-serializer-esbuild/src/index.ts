@@ -14,6 +14,7 @@ import {
   outputOf,
 } from "./module.ts";
 import { absolutizeSourceMap } from "./sourceMap.ts";
+import { inferBuildTarget } from "./targets.ts";
 import { assertVersion } from "./version.ts";
 
 export { esbuildTransformerConfig } from "./esbuildTransformerConfig.ts";
@@ -81,7 +82,7 @@ export function MetroSerializer(
     // esbuild 0.14.49, we can use the `hermes` target instead of `es5`. Note
     // that this target is somewhat conservative and may require additional
     // Babel plugins.
-    const target = buildOptions?.target ?? "hermes0.7.0";
+    const target = buildOptions?.target ?? inferBuildTarget();
 
     const { dependencies } = graph;
     const metroPlugin: Plugin = {
@@ -297,7 +298,10 @@ export function MetroSerializer(
           // https://github.com/evanw/esbuild/releases/tag/v0.14.49).
           return {
             arrow: true,
+            "default-argument": true,
+            destructuring: true,
             generator: true,
+            "rest-argument": true,
             "template-literal": true, // Used heavily by `styled-components`
           };
         })(),
