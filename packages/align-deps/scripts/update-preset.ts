@@ -57,16 +57,18 @@ function getIdentifier(node: recast.types.namedTypes.Node): string | null {
 function objectProperty(
   b: recast.types.builders,
   capability: string,
-  info: MetaPackage | Package
+  info: MetaPackage | Package,
+  comments: recast.types.namedTypes.ObjectProperty["comments"] = null
 ): recast.types.namedTypes.ObjectProperty {
-  return b.objectProperty(
-    b.stringLiteral(capability),
-    b.objectExpression(
+  return b.objectProperty.from({
+    comments,
+    key: b.stringLiteral(capability),
+    value: b.objectExpression(
       Object.entries(info).map(([key, value]) =>
         b.objectProperty(b.identifier(key), valueLiteral(b, value))
       )
-    )
-  );
+    ),
+  });
 }
 
 function valueLiteral(b: recast.types.builders, value: unknown) {
@@ -94,14 +96,16 @@ async function main() {
       throw new Error(`Profile file not found: ${profilePath}`);
     }
 
-    const content = fs.readFileSync(profilePath, "utf-8");
-    const ast = recast.parse(content, {
+    const options = {
       parser: typescript,
       lineTerminator: "\n",
       sourceFileName: profilePath,
       trailingComma: true,
       tokens: false,
-    });
+    };
+
+    const content = fs.readFileSync(profilePath, "utf-8");
+    const ast = recast.parse(content, options);
 
     const exportedProfile = ast.program.body.find(
       (node) =>
@@ -121,7 +125,8 @@ async function main() {
     for (let i = 0; i < numProperties; ++i) {
       const id = getIdentifier(properties[i]);
       if (isValidIdentifier(id) && id in modules) {
-        properties[i] = objectProperty(b, id, modules[id]);
+        const comments = properties[i].comments;
+        properties[i] = objectProperty(b, id, modules[id], comments);
         delete modules[id];
       }
     }
@@ -134,7 +139,7 @@ async function main() {
       properties.push(objectProperty(b, capability, info));
     }
 
-    fs.writeFileSync(profilePath, recast.print(ast).code, "utf-8");
+    fs.writeFileSync(profilePath, recast.print(ast, options).code, "utf-8");
     info(`Updated profile: ${profilePath}`);
   }
 }
