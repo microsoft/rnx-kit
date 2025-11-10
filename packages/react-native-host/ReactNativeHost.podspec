@@ -15,12 +15,6 @@ preprocessor_definitions = [
   "USE_THIRD_PARTY_JSC=#{ENV['USE_THIRD_PARTY_JSC'] || '0'}",
   "USE_V8=#{ENV['USE_V8'] || '0'}",
 ]
-cxx_flags = [
-  '$(inherited)',
-  "-DUSE_HERMES=#{ENV['USE_HERMES'] || '0'}",
-  "-DUSE_THIRD_PARTY_JSC=#{ENV['USE_THIRD_PARTY_JSC'] || '0'}",
-  "-DUSE_V8=#{ENV['USE_V8'] || '0'}",
-]
 if new_arch_enabled
   preprocessor_definitions << 'RCT_NEW_ARCH_ENABLED=1'
   preprocessor_definitions << 'USE_FABRIC=1'
