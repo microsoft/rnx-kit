@@ -16,8 +16,6 @@
 #import <ReactCommon/RCTJscInstance.h> // RN pre 0.80
 #endif  // USE_HERMES
 
-
-
 #ifdef USE_REACT_NATIVE_CONFIG
 #import <react/config/ReactNativeConfig.h>
 #endif  // USE_REACT_NATIVE_CONFIG
