@@ -132,7 +132,9 @@ export const profile: Profile = {
 
   /*********************
    * Community Modules *
-   *********************/ animation: {
+   *********************/
+
+  animation: {
     name: "react-native-reanimated",
     version: "^4.1.2",
   },
