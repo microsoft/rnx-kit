@@ -296,9 +296,11 @@ using ReactNativeConfig = facebook::react::EmptyReactNativeConfig const;
 #else
       return std::make_shared<facebook::react::RCTHermesInstance>(nullptr, false);
 #endif  // USE_REACT_NATIVE_CONFIG
-#else   // USE_HERMES
+#elif USE_V8
+      return std::make_shared<facebook::react::V8ExecutorFactory>();
+#else
       return std::make_shared<facebook::react::RCTJscInstance>();
-#endif  // USE_HERMES
+#endif
     };
 
     __weak __typeof(self) weakSelf = self;
