@@ -1,6 +1,6 @@
 import type { Ora } from "ora";
-import type { AppleBuildParams } from "./types";
-import { watch } from "./watcher";
+import type { AppleBuildParams } from "./types.ts";
+import { watch } from "./watcher.ts";
 
 export type BuildArgs = {
   xcworkspace: string;

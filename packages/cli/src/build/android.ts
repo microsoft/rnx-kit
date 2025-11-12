@@ -1,8 +1,8 @@
 import type { Config } from "@react-native-community/cli-types";
 import { invalidateState } from "@rnx-kit/tools-react-native/cache";
 import ora from "ora";
-import type { AndroidBuildParams } from "./types";
-import { watch } from "./watcher";
+import type { AndroidBuildParams } from "./types.ts";
+import { watch } from "./watcher.ts";
 
 export type BuildResult = string | number | null;
 
