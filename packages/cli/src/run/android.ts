@@ -1,8 +1,8 @@
 import type { Config } from "@react-native-community/cli-types";
 import * as path from "node:path";
 import ora from "ora";
-import { buildAndroid } from "../build/android";
-import type { AndroidInputParams } from "../build/types";
+import { buildAndroid } from "../build/android.ts";
+import type { AndroidInputParams } from "../build/types.ts";
 
 export async function runAndroid(
   config: Config,

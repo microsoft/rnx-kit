@@ -1,15 +1,16 @@
 import type { Config } from "@react-native-community/cli-types";
 import { InvalidArgumentError } from "commander";
-import { RNX_FAST_PATH } from "./bin/constants";
-import { buildAndroid } from "./build/android";
-import { setCcacheDir, setCcacheHome } from "./build/ccache";
-import { buildIOS } from "./build/ios";
-import { buildMacOS } from "./build/macos";
+import { RNX_FAST_PATH } from "./bin/constants.ts";
+import { buildAndroid } from "./build/android.ts";
+import { setCcacheDir, setCcacheHome } from "./build/ccache.ts";
+import { buildIOS } from "./build/ios.ts";
+import { buildMacOS } from "./build/macos.ts";
 import type {
   BuildConfiguration,
   DeviceType,
   InputParams,
-} from "./build/types";
+} from "./build/types.ts";
+import { buildWindows } from "./build/windows.ts";
 
 function asConfiguration(configuration: string): BuildConfiguration {
   switch (configuration) {
@@ -42,10 +43,11 @@ function asSupportedPlatform(platform: string): InputParams["platform"] {
     case "ios":
     case "macos":
     case "visionos":
+    case "windows":
       return platform;
     default:
       throw new InvalidArgumentError(
-        "Supported platforms: 'android', 'ios', 'macos', 'visionos'."
+        "Supported platforms: 'android', 'ios', 'macos', 'visionos', 'windows'."
       );
   }
 }
@@ -65,6 +67,9 @@ export function rnxBuild(
 
     case "macos":
       return buildMacOS(config, buildParams);
+
+    case "windows":
+      return buildWindows(config, buildParams, argv);
   }
 }
 
@@ -81,6 +86,11 @@ export const rnxBuildCommand = {
       name: "-p, --platform <string>",
       description: "Target platform",
       parse: asSupportedPlatform,
+    },
+    {
+      name: "--solution <string>",
+      description:
+        "Path, relative to project root, of the Visual Studio solution to build (Windows only)",
     },
     {
       name: "--workspace <string>",

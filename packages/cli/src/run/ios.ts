@@ -1,8 +1,8 @@
 import type { Config } from "@react-native-community/cli-types";
 import * as path from "node:path";
 import ora from "ora";
-import { buildIOS } from "../build/ios";
-import type { InputParams } from "../build/types";
+import { buildIOS } from "../build/ios.ts";
+import type { InputParams } from "../build/types.ts";
 
 export async function runIOS(config: Config, buildParams: InputParams) {
   const { platform } = buildParams;
