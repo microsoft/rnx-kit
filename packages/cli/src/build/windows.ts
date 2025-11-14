@@ -48,10 +48,10 @@ function findSolution(searchDir: string, logger: ora.Ora): string | undefined {
   }
 
   if (solutions.length > 1) {
-    logger.fail(
+    logger.info(
       `Multiple Visual Studio solutions were found; picking the first one: ${solutions.join(", ")}`
     );
-    logger.fail("If this is wrong, specify another solution with `--solution`");
+    logger.info("If this is wrong, specify another solution with `--solution`");
   }
 
   return path.join(searchDir, solutions[0]);

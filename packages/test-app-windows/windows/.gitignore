@@ -2,6 +2,7 @@
 .vs/
 ARM/
 ARM64/
+ExperimentalFeatures.props
 NuGet.Config
 packages/
 x64/

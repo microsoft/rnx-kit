@@ -25,10 +25,10 @@ function findXcodeWorkspaces(
   }
 
   if (workspaces.length > 1) {
-    logger.fail(
+    logger.info(
       `Multiple Xcode workspaces were found; picking the first one: ${workspaces.join(", ")}`
     );
-    logger.fail(
+    logger.info(
       "If this is wrong, specify another workspace with `--workspace`"
     );
   }
