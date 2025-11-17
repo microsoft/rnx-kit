@@ -1,5 +1,7 @@
 name: CI
 on: pull_request
+env:
+  NODE_OPTIONS: "--disable-proto=delete"
 concurrency:
   # Ensure single build of a pull request
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -179,6 +181,7 @@ jobs:
         uses: microsoft/react-native-test-app/.github/actions/cocoapods@trunk
         if: ${{ steps.affected-projects.outputs.ios != '' }}
         env:
+          HOMEBREW_NO_INSTALL_CLEANUP: 1
           RCT_USE_PREBUILT_RNCORE: 1
           RCT_USE_RN_DEP: 1
         with:
@@ -222,6 +225,7 @@ jobs:
         uses: microsoft/react-native-test-app/.github/actions/cocoapods@trunk
         if: ${{ steps.affected-projects.outputs.macos != '' }}
         env:
+          HOMEBREW_NO_INSTALL_CLEANUP: 1
           RCT_USE_PREBUILT_RNCORE: 1
           RCT_USE_RN_DEP: 1
         with:
