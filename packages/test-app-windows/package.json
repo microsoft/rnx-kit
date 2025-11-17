@@ -8,24 +8,20 @@
     "name": "Microsoft Open Source",
     "email": "microsoftopensource@users.noreply.github.com"
   },
-  "bin": {
-    "rnx": "../cli/scripts/rnx.bin",
-    "rnx.reason": "Run `rnx-cli` without explicitly building it first"
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/microsoft/rnx-kit",
     "directory": "packages/test-app-windows"
   },
   "scripts": {
-    "build": "rnx align-deps",
-    "build:native": "rnx build --platform windows",
-    "bundle": "rnx bundle --platform windows",
-    "bundle+esbuild": "rnx bundle --id esbuild --platform windows",
+    "build": "../cli/bin/rnx-cli.cjs align-deps",
+    "build:native": "../cli/bin/rnx-cli.cjs build --platform windows",
+    "bundle": "../cli/bin/rnx-cli.cjs bundle --platform windows",
+    "bundle+esbuild": "../cli/bin/rnx-cli.cjs bundle --id esbuild --platform windows",
     "format": "rnx-kit-scripts format",
     "lint": "rnx-kit-scripts lint",
-    "start": "rnx start",
-    "windows": "rnx run-windows --no-packager --sln windows/SampleCrossApp.sln"
+    "start": "../cli/bin/rnx-cli.cjs start",
+    "windows": "../cli/bin/rnx-cli.cjs run --platform windows"
   },
   "dependencies": {
     "@react-native-webapis/web-storage": "workspace:*",

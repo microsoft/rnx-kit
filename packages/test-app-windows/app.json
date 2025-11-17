@@ -7,10 +7,6 @@
       "displayName": "SampleCrossApp"
     }
   ],
-  "windows": {
-    "certificateKeyFile": "windows/ReactTestApp_TemporaryKey.pfx",
-    "certificateThumbprint": "868BFD0D5ED2E720FF29284233CA0B1B7E613A1B"
-  },
   "resources": {
     "windows": ["dist/assets", "dist/main.windows.bundle"]
   }

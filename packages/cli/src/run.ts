@@ -1,10 +1,11 @@
 import type { Config } from "@react-native-community/cli-types";
-import { RNX_FAST_PATH } from "./bin/constants";
-import { rnxBuildCommand } from "./build";
-import type { InputParams } from "./build/types";
-import { runAndroid } from "./run/android";
-import { runIOS } from "./run/ios";
-import { runMacOS } from "./run/macos";
+import { RNX_FAST_PATH } from "./bin/constants.ts";
+import { rnxBuildCommand } from "./build.ts";
+import type { InputParams } from "./build/types.ts";
+import { runAndroid } from "./run/android.ts";
+import { runIOS } from "./run/ios.ts";
+import { runMacOS } from "./run/macos.ts";
+import { runWindows } from "./run/windows.ts";
 
 export function rnxRun(
   argv: string[],
@@ -21,6 +22,9 @@ export function rnxRun(
 
     case "macos":
       return runMacOS(config, buildParams);
+
+    case "windows":
+      return runWindows(config, buildParams, argv);
   }
 }
 

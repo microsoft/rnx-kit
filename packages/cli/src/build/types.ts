@@ -47,4 +47,19 @@ export type AppleInputParams = AppleBuildParams & {
   workspace?: string;
 };
 
-export type InputParams = AndroidInputParams | AppleInputParams;
+export type WindowsBuildParams = {
+  platform: "windows";
+  configuration?: BuildConfiguration;
+  architecture?: "arm64" | "x64";
+  launch?: boolean;
+  deploy?: boolean;
+};
+
+export type WindowsInputParams = WindowsBuildParams & {
+  solution?: string;
+};
+
+export type InputParams =
+  | AndroidInputParams
+  | AppleInputParams
+  | WindowsInputParams;

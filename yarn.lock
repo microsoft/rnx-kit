@@ -3861,7 +3861,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@react-native-windows/cli@npm:0.79.3":
+"@react-native-windows/cli@npm:0.79.3, @react-native-windows/cli@npm:^0.79.0":
   version: 0.79.3
   resolution: "@react-native-windows/cli@npm:0.79.3"
   dependencies:
@@ -4716,6 +4716,7 @@ __metadata:
     "@babel/core": "npm:^7.20.0"
     "@babel/preset-env": "npm:^7.20.0"
     "@react-native-community/cli-types": "npm:^20.0.0"
+    "@react-native-windows/cli": "npm:^0.79.0"
     "@rnx-kit/align-deps": "npm:^3.1.0"
     "@rnx-kit/config": "npm:^0.7.0"
     "@rnx-kit/console": "npm:^2.0.0"
@@ -5318,9 +5319,6 @@ __metadata:
     react-native: "npm:^0.79.0"
     react-native-test-app: "npm:^4.4.11"
     react-native-windows: "npm:^0.79.0"
-  bin:
-    rnx: ../cli/scripts/rnx.bin
-    rnx.reason: Run `rnx-cli` without explicitly building it first
   languageName: unknown
   linkType: soft
 

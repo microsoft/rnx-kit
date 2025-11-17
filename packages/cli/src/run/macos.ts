@@ -1,8 +1,8 @@
 import type { Config } from "@react-native-community/cli-types";
 import * as path from "node:path";
 import ora from "ora";
-import { buildMacOS } from "../build/macos";
-import type { AppleInputParams } from "../build/types";
+import { buildMacOS } from "../build/macos.ts";
+import type { AppleInputParams } from "../build/types.ts";
 
 export async function runMacOS(config: Config, buildParams: AppleInputParams) {
   const logger = ora();
