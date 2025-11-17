@@ -2,6 +2,8 @@ name: Build and Publish
 on:
   push:
     branches: [main]
+env:
+  NODE_OPTIONS: "--disable-proto=delete"
 jobs:
   build_and_publish:
     name: "Build and publish"

@@ -5,6 +5,8 @@ on:
     # Run at 4:00, Monday through Friday
     - cron: 0 4 * * 1-5
   workflow_dispatch:
+env:
+  NODE_OPTIONS: "--disable-proto=throw"
 jobs:
   update:
     name: "Update `microsoft/react-native` preset"
