@@ -74,7 +74,7 @@
     "@rnx-kit/tools-node": "^3.0.0"
   },
   "devDependencies": {
-    "@react-native-community/cli": "^20.0.0",
+    "@react-native-community/cli": "^16.0.0",
     "@react-native-community/cli-types": "^20.0.0",
     "@rnx-kit/eslint-config": "*",
     "@rnx-kit/scripts": "*",

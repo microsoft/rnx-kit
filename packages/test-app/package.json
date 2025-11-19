@@ -48,7 +48,7 @@
     "@babel/preset-env": "^7.20.0",
     "@babel/runtime": "^7.20.0",
     "@jridgewell/trace-mapping": "^0.3.18",
-    "@react-native-community/cli": "^20.0.0",
+    "@react-native-community/cli": "^16.0.0",
     "@react-native-community/cli-platform-android": "^20.0.0",
     "@react-native-community/cli-platform-ios": "^20.0.0",
     "@react-native/babel-preset": "^0.81.0",
