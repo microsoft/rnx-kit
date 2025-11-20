@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-config
 
+## 2.2.1
+
+### Patch Changes
+
+- dc0f31f: Fixed crash when `react-native-web` is installed
+
 ## 2.2.0
 
 ### Minor Changes

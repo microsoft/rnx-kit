@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-serializer-esbuild
 
+## 0.2.7
+
+### Patch Changes
+
+- 51c3654: Infer build target from React Native version
+
 ## 0.2.6
 
 ### Patch Changes
