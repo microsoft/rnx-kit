@@ -1,5 +1,13 @@
 # Change Log - @rnx-kit/cli
 
+## 0.18.15
+
+### Patch Changes
+
+- db82e27: Add support for building Windows apps
+- Updated dependencies [51c3654]
+  - @rnx-kit/metro-serializer-esbuild@0.2.7
+
 ## 0.18.14
 
 ### Patch Changes
