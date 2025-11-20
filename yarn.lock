@@ -4596,7 +4596,7 @@ __metadata:
     "@types/semver": "npm:^7.0.0"
     "@types/yargs": "npm:^16.0.0"
     detect-indent: "npm:^6.0.0"
-    js-yaml: "npm:^4.1.0"
+    js-yaml: "npm:^4.1.1"
     markdown-table: "npm:^3.0.0"
     package-json: "npm:^10.0.0"
     prompts: "npm:^2.4.0"
@@ -4899,7 +4899,7 @@ __metadata:
     "@rnx-kit/tools-workspaces": "npm:^0.2.3"
     "@rnx-kit/tsconfig": "npm:*"
     "@types/js-yaml": "npm:^4.0.5"
-    js-yaml: "npm:^4.1.0"
+    js-yaml: "npm:^4.1.1"
   bin:
     lint-lockfile: lib/cli.js
   languageName: unknown
@@ -11600,7 +11600,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"js-yaml@npm:^4.0.0, js-yaml@npm:^4.1.0":
+"js-yaml@npm:^4.0.0, js-yaml@npm:^4.1.0, js-yaml@npm:^4.1.1":
   version: 4.1.1
   resolution: "js-yaml@npm:4.1.1"
   dependencies:

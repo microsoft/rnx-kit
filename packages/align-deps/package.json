@@ -58,7 +58,7 @@
     "@types/semver": "^7.0.0",
     "@types/yargs": "^16.0.0",
     "detect-indent": "^6.0.0",
-    "js-yaml": "^4.1.0",
+    "js-yaml": "^4.1.1",
     "markdown-table": "^3.0.0",
     "package-json": "^10.0.0",
     "prompts": "^2.4.0",
