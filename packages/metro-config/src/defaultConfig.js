@@ -25,18 +25,23 @@ function getPreludeModules(availablePlatforms, projectRoot) {
   const requireOptions = { paths: [projectRoot] };
   const mainModules = new Set([
     require.resolve(
-      "react-native/Libraries/Core/InitializeCore",
+      "react-native/Libraries/Core/InitializeCore.js",
       requireOptions
     ),
   ]);
   for (const moduleName of Object.values(availablePlatforms)) {
     if (moduleName) {
-      mainModules.add(
-        require.resolve(
-          `${moduleName}/Libraries/Core/InitializeCore`,
-          requireOptions
-        )
-      );
+      try {
+        mainModules.add(
+          require.resolve(
+            `${moduleName}/Libraries/Core/InitializeCore.js`,
+            requireOptions
+          )
+        );
+      } catch (_) {
+        // Not all platform implementations have `InitializeCore.js` e.g.,
+        // `react-native-web`.
+      }
     }
   }
   return Array.from(mainModules);
