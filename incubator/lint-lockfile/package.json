@@ -31,7 +31,7 @@
   "dependencies": {
     "@rnx-kit/config": "^0.7.4",
     "@rnx-kit/tools-workspaces": "^0.2.3",
-    "js-yaml": "^4.1.0"
+    "js-yaml": "^4.1.1"
   },
   "devDependencies": {
     "@rnx-kit/eslint-config": "*",
