@@ -1,5 +1,12 @@
 # @rnx-kit/lint-lockfile
 
+## 0.1.1
+
+### Patch Changes
+
+- 72a98f6: Bumped `js-yaml` to address potential prototype pollution
+- 72a98f6: Added shebang
+
 ## 0.1.0
 
 ### Minor Changes
