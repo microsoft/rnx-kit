@@ -27,7 +27,7 @@
   },
   "devDependencies": {
     "@tsconfig/docusaurus": "^2.0.1",
-    "@types/react": "~19.1.0",
+    "@types/react": "~19.2.0",
     "prettier": "catalog:",
     "prettier-plugin-organize-imports": "^4.0.0",
     "typescript": "catalog:"
