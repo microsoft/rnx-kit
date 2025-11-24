@@ -184,8 +184,17 @@ export async function rnxStart(
     update(event: ReportableEvent) {
       terminalReporter.update(event);
       reportEventDelegate?.(event);
-      if (interactive && event.type === "dep_graph_loading") {
-        help();
+      switch (event.type) {
+        case "dep_graph_loading":
+          if (interactive) {
+            help();
+          }
+          break;
+        case "server_listening":
+          logger.info(
+            `Dev server is listening on ${scheme}://${event.address}:${event.port}`
+          );
+          break;
       }
     },
   };
