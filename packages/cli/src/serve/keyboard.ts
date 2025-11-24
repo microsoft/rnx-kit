@@ -67,7 +67,7 @@ export function attachKeyHandlers(server: HttpServer, params: Params) {
     openDebuggerKeyboardHandler.dismiss();
     process.stdin.pause();
     process.stdin.setRawMode(false);
-    info("Exiting...");
+    info("Closing all connections...");
 
     const httpServer = server.httpServer ?? server;
     httpServer.close();
