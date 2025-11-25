@@ -1,5 +1,13 @@
 # Change Log - @rnx-kit/cli
 
+## 0.18.16
+
+### Patch Changes
+
+- 4142304: Log the address/port when starting dev server
+- Updated dependencies [72a98f6]
+  - @rnx-kit/align-deps@3.3.3
+
 ## 0.18.15
 
 ### Patch Changes
