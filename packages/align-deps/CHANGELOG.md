@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/align-deps
 
+## 3.3.3
+
+### Patch Changes
+
+- 72a98f6: Bumped `js-yaml` to address potential prototype pollution
+
 ## 3.3.2
 
 ### Patch Changes
