@@ -2,7 +2,6 @@
 "use strict";
 
 const react = require("eslint-plugin-react");
-// @ts-expect-error Could not find a declaration file for module
 const reactHooks = require("eslint-plugin-react-hooks");
 
 module.exports = [
@@ -11,14 +10,11 @@ module.exports = [
     rules: react.configs.recommended.rules,
     languageOptions: { parserOptions: react.configs.recommended.parserOptions },
   },
+  reactHooks.configs["recommended-latest"],
   {
     name: "rnx-kit/react",
-    plugins: {
-      "react-hooks": reactHooks,
-    },
     rules: {
       "react/prop-types": "off",
-      ...reactHooks.configs.recommended.rules,
     },
     settings: {
       react: {
