@@ -57,13 +57,27 @@
     {
       "groupName": "react-native",
       "matchPackageNames": [
-        "@callstack/react-native-visionos",
         "@react-native/**",
-        "react-native",
-        "react-native-macos",
-        "react-native-windows"
+        "react-native"
       ],
       "allowedVersions": "^0.81.0"
+    },
+    {
+      "groupName": "react-native-macos",
+      "matchPackageNames": [
+        "@callstack/react-native-visionos",
+        "@react-native-macos/**",
+        "react-native-macos"
+      ],
+      "allowedVersions": "^0.78.0"
+    },
+    {
+      "groupName": "react-native-windows",
+      "matchPackageNames": [
+        "@react-native-windows/**",
+        "react-native-windows"
+      ],
+      "allowedVersions": "^0.79.0"
     }
   ],
   "postUpdateOptions": ["yarnDedupeHighest"],
