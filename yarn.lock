@@ -3826,7 +3826,7 @@ __metadata:
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
     "@types/node": "npm:^22.0.0"
-    react: "npm:19.1.0"
+    react: "npm:19.1.2"
     react-native: "npm:^0.81.0"
   peerDependencies:
     react: ">=18.2.0"
@@ -3843,7 +3843,7 @@ __metadata:
     "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
-    react: "npm:19.1.0"
+    react: "npm:19.1.2"
     react-native: "npm:^0.81.0"
   peerDependencies:
     "@callstack/react-native-visionos": ">=0.74"
@@ -4747,7 +4747,7 @@ __metadata:
     metro-config: "npm:^0.83.1"
     ora: "npm:^5.4.1"
     qrcode: "npm:^1.5.0"
-    react: "npm:19.1.0"
+    react: "npm:19.1.2"
     react-native: "npm:^0.81.0"
     tsx: "npm:^4.15.0"
     type-fest: "npm:^4.0.0"
@@ -4879,7 +4879,7 @@ __metadata:
     "@rnx-kit/tsconfig": "npm:*"
     "@types/node": "npm:^22.0.0"
     find-up: "npm:^5.0.0"
-    react: "npm:19.1.0"
+    react: "npm:19.1.2"
     react-native: "npm:^0.81.0"
   peerDependencies:
     react-native: ^0.0.0-0 || >=0.73
@@ -4922,7 +4922,7 @@ __metadata:
     metro: "npm:^0.83.1"
     metro-config: "npm:^0.83.1"
     metro-resolver: "npm:^0.83.1"
-    react: "npm:19.1.0"
+    react: "npm:19.1.2"
     react-native: "npm:^0.81.0"
     type-fest: "npm:^4.0.0"
   peerDependencies:
@@ -5040,7 +5040,7 @@ __metadata:
     metro: "npm:^0.83.1"
     metro-config: "npm:^0.83.1"
     metro-transform-worker: "npm:^0.83.1"
-    react: "npm:19.1.0"
+    react: "npm:19.1.2"
     react-native: "npm:^0.81.0"
   languageName: unknown
   linkType: soft
@@ -5129,10 +5129,10 @@ __metadata:
     "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
-    react: "npm:19.1.0"
+    react: "npm:19.1.2"
     react-native: "npm:^0.81.0"
   peerDependencies:
-    react: 16.11.0 || 16.13.1 || 17.0.1 || 17.0.2 || 18.0.0 || 18.1.0 || 18.2.0 || ^18.2.0 || 18.3.1 || 19.0.0 || 19.1.0 || 19.1.1
+    react: 16.11.0 || 16.13.1 || 17.0.1 || 17.0.2 || 18.0.0 || 18.1.0 || 18.2.0 || ^18.2.0 || 18.3.1 || 19.0.1 || 19.1.2
     react-native: ^0.62.3 || ^0.63.2 || ^0.64.2 || ^0.65.0 || ^0.66.0 || ^0.67.0 || ^0.68.0 || ^0.69.0 || ^0.70.0 || ^0.71.0 || ^0.72.0 || ^0.73.0 || ^0.74.0 || ^0.75.0 || ^0.76.0 || ^0.77.0 || ^0.78.0 || ^0.79.0 || ^0.80.0 || ^0.81.0 || ^0.82.0
   languageName: unknown
   linkType: soft
@@ -5273,7 +5273,7 @@ __metadata:
     "@rnx-kit/third-party-notices": "workspace:*"
     "@rnx-kit/tsconfig": "workspace:*"
     "@types/react": "npm:^19.0.0"
-    react: "npm:19.0.0"
+    react: "npm:19.0.1"
     react-native: "npm:^0.78.0"
     react-native-macos: "npm:^0.78.0"
     react-native-test-app: "npm:^4.3.1"
@@ -5315,7 +5315,7 @@ __metadata:
     "@rnx-kit/third-party-notices": "workspace:*"
     "@rnx-kit/tsconfig": "workspace:*"
     "@types/react": "npm:^19.0.0"
-    react: "npm:19.0.0"
+    react: "npm:19.0.1"
     react-native: "npm:^0.79.0"
     react-native-test-app: "npm:^4.4.11"
     react-native-windows: "npm:^0.79.0"
@@ -5359,7 +5359,7 @@ __metadata:
     "@testing-library/react-native": "npm:^12.4.3"
     "@types/react": "npm:^19.0.0"
     jest: "npm:^29.2.1"
-    react: "npm:19.1.0"
+    react: "npm:19.1.2"
     react-native: "npm:^0.81.0"
     react-native-test-app: "npm:^4.4.11"
     react-test-renderer: "npm:19.1.0"
@@ -14937,17 +14937,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react@npm:19.0.0":
-  version: 19.0.0
-  resolution: "react@npm:19.0.0"
-  checksum: 10c0/9cad8f103e8e3a16d15cb18a0d8115d8bd9f9e1ce3420310aea381eb42aa0a4f812cf047bb5441349257a05fba8a291515691e3cb51267279b2d2c3253f38471
+"react@npm:19.0.1":
+  version: 19.0.1
+  resolution: "react@npm:19.0.1"
+  checksum: 10c0/bc2e2e86ea4e67235f1adb329363bf1c998b3fed0842116614cbef6ae162d0a70227eda4cfed6d28cb95b2ad8b507a0894ed9af26f7f6cd635797585be2fb16c
   languageName: node
   linkType: hard
 
-"react@npm:19.1.0":
-  version: 19.1.0
-  resolution: "react@npm:19.1.0"
-  checksum: 10c0/530fb9a62237d54137a13d2cfb67a7db6a2156faed43eecc423f4713d9b20c6f2728b026b45e28fcd72e8eadb9e9ed4b089e99f5e295d2f0ad3134251bdd3698
+"react@npm:19.1.2":
+  version: 19.1.2
+  resolution: "react@npm:19.1.2"
+  checksum: 10c0/dfbe1dee96547ad2d6d6872b6052cbd5bd7841b6f57a7d6cda62b27e1a7df31d47beecb6d11e24abaff0c5ea347459a0a3c60917b41f5a0ee0b507436b3c50a6
   languageName: node
   linkType: hard
 
