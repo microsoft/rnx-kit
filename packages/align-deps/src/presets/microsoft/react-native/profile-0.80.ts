@@ -25,7 +25,7 @@ export const profile: Profile = {
   },
   "react-test-renderer": {
     name: "react-test-renderer",
-    version: "19.1.2",
+    version: "19.1.0",
     capabilities: ["react"],
     devOnly: true,
   },
