@@ -2711,8 +2711,8 @@ __metadata:
     prettier: "catalog:"
     prettier-plugin-organize-imports: "npm:^4.0.0"
     prism-react-renderer: "npm:^2.3.0"
-    react: "npm:~19.1.1"
-    react-dom: "npm:~19.1.1"
+    react: "npm:~19.1.2"
+    react-dom: "npm:~19.1.2"
     typescript: "catalog:"
   languageName: unknown
   linkType: soft
@@ -10417,14 +10417,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-dom@npm:~19.1.1":
-  version: 19.1.1
-  resolution: "react-dom@npm:19.1.1"
+"react-dom@npm:~19.1.2":
+  version: 19.1.2
+  resolution: "react-dom@npm:19.1.2"
   dependencies:
     scheduler: "npm:^0.26.0"
   peerDependencies:
-    react: ^19.1.1
-  checksum: 10c0/8c91198510521299c56e4e8d5e3a4508b2734fb5e52f29eeac33811de64e76fe586ad32c32182e2e84e070d98df67125da346c3360013357228172dbcd20bcdd
+    react: ^19.1.2
+  checksum: 10c0/67d5f574eecd1f7a89df3c94936122d4df361d3e78ea19d5879c560439ef05f154af9b9281c1f5c92f79d13c39364bfa60136916d00bdbbccd019b8b3471de10
   languageName: node
   linkType: hard
 
@@ -10538,10 +10538,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react@npm:~19.1.1":
-  version: 19.1.1
-  resolution: "react@npm:19.1.1"
-  checksum: 10c0/8c9769a2dfd02e603af6445058325e6c8a24b47b185d0e461f66a6454765ddcaecb3f0a90184836c68bb509f3c38248359edbc42f0d07c23eb500a5c30c87b4e
+"react@npm:~19.1.2":
+  version: 19.1.2
+  resolution: "react@npm:19.1.2"
+  checksum: 10c0/dfbe1dee96547ad2d6d6872b6052cbd5bd7841b6f57a7d6cda62b27e1a7df31d47beecb6d11e24abaff0c5ea347459a0a3c60917b41f5a0ee0b507436b3c50a6
   languageName: node
   linkType: hard
 
