@@ -12,7 +12,7 @@ describe("exportCatalogs()", () => {
     "0.82": {
       react: {
         name: "react",
-        version: "19.1.1",
+        version: "19.1.2",
       },
       core: {
         name: "react-native",
@@ -22,7 +22,7 @@ describe("exportCatalogs()", () => {
     "1.0": {
       react: {
         name: "react",
-        version: "19.2.0",
+        version: "19.2.1",
       },
       core: {
         name: "react-native",
@@ -59,10 +59,10 @@ describe("exportCatalogs()", () => {
         content,
         `catalogs:
   "0.82":
-    react: 19.1.1
+    react: 19.1.2
     react-native: ^0.82.0
   "1.0":
-    react: 19.2.0
+    react: 19.2.1
     react-native: ^1.0.0
 `
       );
@@ -80,10 +80,10 @@ globalFolder: .yarn/berry
 nodeLinker: pnpm
 catalogs:
   "0.81":
-    react: 19.0.0
+    react: 19.0.1
     react-native: ^0.81.0
   "0.82":
-    react: 19.1.1
+    react: 19.1.2
     react-native: ^0.82.0-0
 `);
 
@@ -96,13 +96,13 @@ globalFolder: .yarn/berry
 nodeLinker: pnpm
 catalogs:
   "0.81":
-    react: 19.0.0
+    react: 19.0.1
     react-native: ^0.81.0
   "0.82":
-    react: 19.1.1
+    react: 19.1.2
     react-native: ^0.82.0
   "1.0":
-    react: 19.2.0
+    react: 19.2.1
     react-native: ^1.0.0
 `
       );
@@ -119,8 +119,8 @@ catalogs:
       workspaces: {
         packages: ["packages/*"],
         catalog: {
-          react: "^19.0.0",
-          "react-dom": "^19.0.0",
+          react: "^19.0.1",
+          "react-dom": "^19.0.1",
         },
         catalogs: {
           testing: {
@@ -142,8 +142,8 @@ catalogs:
       "packages/*"
     ],
     "catalog": {
-      "react": "^19.0.0",
-      "react-dom": "^19.0.0"
+      "react": "^19.0.1",
+      "react-dom": "^19.0.1"
     },
     "catalogs": {
       "testing": {
@@ -151,11 +151,11 @@ catalogs:
         "testing-library": "14.0.0"
       },
       "0.82": {
-        "react": "19.1.1",
+        "react": "19.1.2",
         "react-native": "^0.82.0"
       },
       "1.0": {
-        "react": "19.2.0",
+        "react": "19.2.1",
         "react-native": "^1.0.0"
       }
     }
@@ -177,8 +177,8 @@ catalogs:
         packages: ["packages/*"],
       },
       catalog: {
-        react: "^19.0.0",
-        "react-dom": "^19.0.0",
+        react: "^19.0.1",
+        "react-dom": "^19.0.1",
       },
     });
 
@@ -194,16 +194,16 @@ catalogs:
     ]
   },
   "catalog": {
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react": "^19.0.1",
+    "react-dom": "^19.0.1"
   },
   "catalogs": {
     "0.82": {
-      "react": "19.1.1",
+      "react": "19.1.2",
       "react-native": "^0.82.0"
     },
     "1.0": {
-      "react": "19.2.0",
+      "react": "19.2.1",
       "react-native": "^1.0.0"
     }
   }
@@ -229,11 +229,11 @@ catalogs:
   "workspaces": {
     "catalogs": {
       "0.82": {
-        "react": "19.1.1",
+        "react": "19.1.2",
         "react-native": "^0.82.0"
       },
       "1.0": {
-        "react": "19.2.0",
+        "react": "19.2.1",
         "react-native": "^1.0.0"
       }
     }

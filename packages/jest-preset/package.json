@@ -46,7 +46,7 @@
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*",
     "@types/node": "^22.0.0",
-    "react": "19.1.0",
+    "react": "19.1.2",
     "react-native": "^0.81.0"
   },
   "engines": {

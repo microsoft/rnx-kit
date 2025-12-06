@@ -16,12 +16,12 @@ export const profile: Profile = {
 
   react: {
     name: "react",
-    version: "19.1.1",
+    version: "19.1.2",
   },
 
   "react-dom": {
     name: "react-dom",
-    version: "^19.1.1",
+    version: "^19.1.2",
     capabilities: ["react"],
   },
 

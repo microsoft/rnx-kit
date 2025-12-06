@@ -29,7 +29,7 @@
   },
   "dependencies": {
     "@react-native-webapis/web-storage": "workspace:*",
-    "react": "19.0.0",
+    "react": "19.0.1",
     "react-native": "^0.78.0",
     "react-native-macos": "^0.78.0"
   },
