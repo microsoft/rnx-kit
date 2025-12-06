@@ -34,10 +34,10 @@ describe("rules:noDuplicates()", () => {
       specifiers: ["npm:1.0.0"],
       resolution: "1.0.0",
     },
-    "react@npm:19.0.0": {
+    "react@npm:19.0.1": {
       package: "react",
-      specifiers: ["npm:19.0.0"],
-      resolution: "19.0.0",
+      specifiers: ["npm:19.0.1"],
+      resolution: "19.0.1",
     },
     "react@npm:^17.0.2": {
       package: "react",

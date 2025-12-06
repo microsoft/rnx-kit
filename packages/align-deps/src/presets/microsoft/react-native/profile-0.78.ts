@@ -16,16 +16,16 @@ export const profile: Profile = {
 
   react: {
     name: "react",
-    version: "19.0.0",
+    version: "19.0.1",
   },
   "react-dom": {
     name: "react-dom",
-    version: "^19.0.0",
+    version: "^19.0.1",
     capabilities: ["react"],
   },
   "react-test-renderer": {
     name: "react-test-renderer",
-    version: "19.0.0",
+    version: "19.0.1",
     capabilities: ["react"],
     devOnly: true,
   },
