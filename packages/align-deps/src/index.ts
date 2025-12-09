@@ -1,16 +1,16 @@
-import { preset as reactNativePreset } from "./presets/microsoft/react-native";
+import { preset as reactNativePreset } from "./presets/microsoft/react-native.ts";
 
 export const presets = {
   "microsoft/react-native": reactNativePreset,
 };
 
-export { capabilitiesFor } from "./capabilities";
-export { cli, cliOptions } from "./cli";
-export { checkPackageManifest } from "./commands/check";
-export { exportCatalogs } from "./commands/exportCatalogs";
-export { checkPackageManifestUnconfigured } from "./commands/vigilant";
-export { alignDepsCommand } from "./compatibility/commander";
-export { updatePackageManifest } from "./manifest";
+export { capabilitiesFor } from "./capabilities.ts";
+export { cli, cliOptions } from "./cli.ts";
+export { checkPackageManifest } from "./commands/check.ts";
+export { exportCatalogs } from "./commands/exportCatalogs.ts";
+export { checkPackageManifestUnconfigured } from "./commands/vigilant.ts";
+export { alignDepsCommand } from "./compatibility/commander.ts";
+export { updatePackageManifest } from "./manifest.ts";
 export type {
   Args,
   Command,
@@ -22,4 +22,4 @@ export type {
   Package,
   Preset,
   Profile,
-} from "./types";
+} from "./types.ts";

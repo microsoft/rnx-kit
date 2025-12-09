@@ -22,7 +22,7 @@ import type {
   Options,
   Package,
   Preset,
-} from "../types";
+} from "../types.ts";
 
 type Report = {
   errors: Changes;

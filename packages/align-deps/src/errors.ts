@@ -1,5 +1,5 @@
 import { bold, error, info } from "@rnx-kit/console";
-import type { ErrorCode } from "./types";
+import type { ErrorCode } from "./types.ts";
 
 export function isError<T>(config: T | ErrorCode): config is ErrorCode {
   return typeof config === "string";

@@ -1,7 +1,7 @@
 import type { Capability } from "@rnx-kit/config";
 import { createRequire } from "node:module";
 import { URL } from "node:url";
-import type { Package, Profile } from "../src/types";
+import type { Package, Profile } from "../src/types.ts";
 
 export function defineRequire(path: string, base: string | URL) {
   global.require = createRequire(new URL(path, base));

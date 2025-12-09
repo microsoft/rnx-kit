@@ -1,10 +1,10 @@
-#!/usr/bin/env -S node --no-warnings
+#!/usr/bin/env -S node --no-warnings --conditions=typescript
 
 import { info } from "@rnx-kit/console";
 import * as fs from "node:fs";
 import * as recast from "recast";
 import typescript from "recast/parsers/typescript.js";
-import type { MetaPackage, Package } from "../src/types";
+import type { MetaPackage, Package } from "../src/types.ts";
 import { createGitHubClient, fetchPullRequestFeedback } from "./github.ts";
 import { IGNORED_CAPABILITIES } from "./update-profile.ts";
 

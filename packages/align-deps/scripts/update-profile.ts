@@ -1,4 +1,4 @@
-#!/usr/bin/env -S node --no-warnings
+#!/usr/bin/env -S node --no-warnings --conditions=typescript
 
 import { error, info } from "@rnx-kit/console";
 import { untar } from "@rnx-kit/tools-shell";
@@ -11,7 +11,7 @@ import * as util from "node:util";
 import packageJson from "package-json";
 import semverCoerce from "semver/functions/coerce.js";
 import semverCompare from "semver/functions/compare.js";
-import type { MetaPackage, Package, Preset } from "../src/types.js";
+import type { MetaPackage, Package, Preset } from "../src/types.ts";
 import {
   createGitHubClient,
   fetchPullRequests,
@@ -573,7 +573,7 @@ async function main({
   pullRequest,
 }: Options): Promise<void> {
   const { preset }: { preset: Readonly<Preset> } = await import(
-    `../lib/presets/${presetName}.js`
+    `../src/presets/${presetName}.ts`
   );
   const allVersions: string[] = Object.keys(preset)
     .sort((lhs, rhs) => semverCompare(coerceVersion(lhs), coerceVersion(rhs)))

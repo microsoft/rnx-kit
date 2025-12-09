@@ -1,4 +1,4 @@
-import { idle, once, retry, withRetry } from "../src/async";
+import { idle, once, retry, withRetry } from "../src/async.ts";
 
 describe("async", () => {
   beforeEach(() => {

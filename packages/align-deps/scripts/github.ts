@@ -2,7 +2,7 @@ import type { OctokitOptions } from "@octokit/core";
 import { Octokit } from "@octokit/core";
 import { restEndpointMethods } from "@octokit/plugin-rest-endpoint-methods";
 import { info } from "@rnx-kit/console";
-import type { Preset } from "../src/types";
+import type { Preset } from "../src/types.ts";
 
 type GitHubClient = Octokit & ReturnType<typeof restEndpointMethods>;
 

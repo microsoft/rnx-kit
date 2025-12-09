@@ -1,9 +1,9 @@
-#!/usr/bin/env node
-// @ts-check
+#!/usr/bin/env -S node --no-warnings --conditions=typescript
 
-import { bundle } from "@rnx-kit/scripts/src/commands/bundle.js";
+import { keysOf } from "@rnx-kit/tools-language/properties";
 import { markdownTable } from "markdown-table";
 import * as fs from "node:fs";
+import { createRequire } from "node:module";
 
 const README = "README.md";
 const TOKEN_START = "<!-- @rnx-kit/align-deps/capabilities start -->";
@@ -11,10 +11,8 @@ const TOKEN_END = "<!-- @rnx-kit/align-deps/capabilities end -->";
 
 /**
  * Returns whether specified capability is a core capability.
- * @param capability {string}
- * @returns {boolean}
  */
-function isCoreCapability(capability) {
+function isCoreCapability(capability: string): boolean {
   return capability === "core" || capability.startsWith("core-");
 }
 
@@ -22,12 +20,21 @@ function isCoreCapability(capability) {
  * Loads the `microsoft/react-native` preset.
  */
 async function loadPreset() {
-  // Ensure we always have an updated preset
-  await bundle({});
+  // `src/cli.ts` is still CommonJS, so we need to define `global.module` and
+  // `global.require` to load it properly.
+  const globalModule = global.module;
+  const globalRequire = global.require;
+  try {
+    // @ts-expect-error Defining `global.module` for compatibility with CJS
+    global.module = {};
+    global.require = createRequire(new URL("../src/cli.ts", import.meta.url));
 
-  /** @type {typeof import("../src/index.ts")} */
-  const { presets } = await import("../lib/index.js");
-  return presets["microsoft/react-native"];
+    const { presets } = await import("../src/index.ts");
+    return presets["microsoft/react-native"];
+  } finally {
+    global.module = globalModule;
+    global.require = globalRequire;
+  }
 }
 
 /**
@@ -36,7 +43,7 @@ async function loadPreset() {
  * @param rhs {string}
  * @returns {number}
  */
-function sortCoreFirst(lhs, rhs) {
+function sortCoreFirst(lhs: string, rhs: string): number {
   if (isCoreCapability(lhs)) {
     if (!isCoreCapability(rhs)) {
       return -1;
@@ -53,10 +60,8 @@ function sortCoreFirst(lhs, rhs) {
 }
 
 const preset = await loadPreset();
-const allVersions = /** @type {string[]} */ (Object.keys(preset).reverse());
-const allCapabilities = /** @type {import("@rnx-kit/config").Capability[]} */ (
-  Object.keys(preset[allVersions[0]]).sort(sortCoreFirst)
-);
+const allVersions = keysOf(preset).reverse();
+const allCapabilities = keysOf(preset[allVersions[0]]).sort(sortCoreFirst);
 
 const table = markdownTable([
   ["Capability", ...allVersions],
