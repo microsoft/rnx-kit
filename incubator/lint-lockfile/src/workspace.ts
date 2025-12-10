@@ -5,7 +5,7 @@ import * as fs from "node:fs";
 import * as path from "node:path";
 import { noDuplicatesRule } from "./rules/noDuplicates.ts";
 import { noWorkspacePackageFromNpmRule } from "./rules/noWorkspacePackageFromNpm.ts";
-import type { Lockfile, Rule, Workspace } from "./types";
+import type { Lockfile, Rule, Workspace } from "./types.ts";
 import { loadLockfile as loadYarnLockfile } from "./yarn/lockfile.ts";
 
 function loadLockfile(lockfilePath: string): Lockfile {

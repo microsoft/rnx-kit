@@ -1,4 +1,4 @@
-import type { Spec } from "./NativeWebStorage";
+import type { Spec } from "./NativeWebStorage.ts";
 
 export type StoragePolyfill = {
   _isPolyfilledBy: {

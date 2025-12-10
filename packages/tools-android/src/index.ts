@@ -1,12 +1,12 @@
-export { getPackageName, install, start } from "./apk.js";
+export { getPackageName, install, start } from "./apk.ts";
 export {
   getDevices,
   getEmulators,
   launchEmulator,
   selectDevice,
-} from "./device.js";
-export { assemble, findOutputFile } from "./gradle.js";
-export { getBuildToolsPath } from "./sdk.js";
+} from "./device.ts";
+export { assemble, findOutputFile } from "./gradle.ts";
+export { getBuildToolsPath } from "./sdk.ts";
 export type {
   BuildConfiguration,
   BuildParams,
@@ -16,4 +16,4 @@ export type {
   Logger,
   PackageInfo,
   PhysicalDeviceInfo,
-} from "./types.js";
+} from "./types.ts";

@@ -4,8 +4,8 @@ import {
   getPlatformBundleConfig,
 } from "@rnx-kit/config";
 import type { AllPlatforms } from "@rnx-kit/tools-react-native/platform";
-import { getDefaultBundlerPlugins } from "./defaultPlugins";
-import type { CliPlatformBundleConfig } from "./types";
+import { getDefaultBundlerPlugins } from "./defaultPlugins.ts";
+import type { CliPlatformBundleConfig } from "./types.ts";
 
 /**
  * Get the list of target platforms for bundling.

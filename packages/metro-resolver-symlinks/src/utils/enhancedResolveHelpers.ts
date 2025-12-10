@@ -1,7 +1,7 @@
 import { expandPlatformExtensions } from "@rnx-kit/tools-react-native/platform";
 import * as path from "node:path";
-import type { ResolutionContextCompat } from "../types";
-import { isPackageExportsEnabled } from "./metro";
+import type { ResolutionContextCompat } from "../types.ts";
+import { isPackageExportsEnabled } from "./metro.ts";
 
 export function getFromDir({
   originModulePath,

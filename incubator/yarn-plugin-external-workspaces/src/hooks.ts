@@ -7,9 +7,9 @@ import {
   type Resolver,
 } from "@yarnpkg/core";
 import { npath } from "@yarnpkg/fslib";
-import { getPluginConfiguration } from "./configuration";
-import { outputWorkspaces } from "./outputCommand";
-import { getWorkspaceTracker } from "./tracker";
+import { getPluginConfiguration } from "./configuration.ts";
+import { outputWorkspaces } from "./outputCommand.ts";
+import { getWorkspaceTracker } from "./tracker.ts";
 
 /**
  * Post-install go through and write this project's workspaces to a file, enabled by config

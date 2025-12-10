@@ -1,7 +1,10 @@
 import { type Fetcher, type FetchOptions, type Locator } from "@yarnpkg/core";
 import { CwdFS, PortablePath, ppath } from "@yarnpkg/fslib";
-import { getWorkspaceTracker, type ExternalWorkspaceTracker } from "./tracker";
-import { LOCAL_PROTOCOL, type ExternalWorkspace } from "./workspace";
+import {
+  getWorkspaceTracker,
+  type ExternalWorkspaceTracker,
+} from "./tracker.ts";
+import { LOCAL_PROTOCOL, type ExternalWorkspace } from "./workspace.ts";
 
 /**
  * The "fetcher" is where we decide if the local path is present or not.

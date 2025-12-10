@@ -3,8 +3,8 @@ import { Configuration, Project, structUtils } from "@yarnpkg/core";
 import { npath, type PortablePath, ppath } from "@yarnpkg/fslib";
 import { Command, Option, UsageError } from "clipanion";
 import fs from "node:fs";
-import { getPluginConfiguration } from "./configuration";
-import { type WorkspaceOutputGeneratedContent } from "./types";
+import { getPluginConfiguration } from "./configuration.ts";
+import { type WorkspaceOutputGeneratedContent } from "./types.ts";
 
 const outputVersion = "1.0.0";
 

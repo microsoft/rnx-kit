@@ -1,7 +1,7 @@
 import { mockFS } from "@rnx-kit/tools-filesystem/mocks";
 import * as child_process from "node:child_process";
 import * as path from "node:path";
-import { assembleAarBundle } from "../../src/copy-assets";
+import { assembleAarBundle } from "../../src/copy-assets.ts";
 
 jest.mock("node:child_process");
 jest.unmock("@rnx-kit/console");

@@ -16,17 +16,17 @@ import type {
 import type { Middleware } from "metro-config";
 import type Server from "metro/private/Server";
 import * as path from "node:path";
-import { requireExternal } from "./helpers/externals";
-import { customizeMetroConfig } from "./helpers/metro-config";
-import { asNumber, asResolvedPath, asStringArray } from "./helpers/parsers";
-import { makeHelp } from "./serve/help";
-import { attachKeyHandlers } from "./serve/keyboard";
-import { getKitServerConfig } from "./serve/kit-config";
+import { requireExternal } from "./helpers/externals.ts";
+import { customizeMetroConfig } from "./helpers/metro-config.ts";
+import { asNumber, asResolvedPath, asStringArray } from "./helpers/parsers.ts";
+import { makeHelp } from "./serve/help.ts";
+import { attachKeyHandlers } from "./serve/keyboard.ts";
+import { getKitServerConfig } from "./serve/kit-config.ts";
 import type {
   DevServerMiddleware,
   DevServerMiddleware6,
   StartCommandArgs,
-} from "./serve/types";
+} from "./serve/types.ts";
 
 type RunServerResultCompat = RunServerResult["httpServer"] | RunServerResult;
 

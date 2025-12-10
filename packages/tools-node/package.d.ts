@@ -6,10 +6,10 @@ export {
   readPackage,
   resolveDependencyChain,
   writePackage,
-} from "./lib/package";
+} from "./lib/package.js";
 export type {
   FindPackageDependencyOptions,
   PackageManifest,
   PackagePerson,
   PackageRef,
-} from "./lib/package";
+} from "./lib/package.js";

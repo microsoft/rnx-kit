@@ -1,6 +1,6 @@
 import * as path from "node:path";
-import { resolveModulePath } from "../../src/resolvers/metro-resolver";
-import { useFixture } from "../fixtures";
+import { resolveModulePath } from "../../src/resolvers/metro-resolver.ts";
+import { useFixture } from "../fixtures.ts";
 
 describe("resolveModulePath", () => {
   function makeContext(originModulePath: string) {

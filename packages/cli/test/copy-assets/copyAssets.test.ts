@@ -1,6 +1,6 @@
 import { mockFS } from "@rnx-kit/tools-filesystem/mocks";
 import * as path from "node:path";
-import { copyAssets, gatherConfigs, versionOf } from "../../src/copy-assets";
+import { copyAssets, gatherConfigs, versionOf } from "../../src/copy-assets.ts";
 
 const options = {
   platform: "ios" as const,

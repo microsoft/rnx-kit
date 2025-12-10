@@ -1,17 +1,17 @@
 import type { Config as CLIConfig } from "@react-native-community/cli-types";
 import { info } from "@rnx-kit/console";
 import { loadMetroConfig, ramBundle } from "@rnx-kit/metro-service";
-import { commonBundleCommandOptions } from "./bundle/cliOptions";
-import { getCliPlatformBundleConfigs } from "./bundle/kit-config";
-import { metroBundle } from "./bundle/metro";
+import { commonBundleCommandOptions } from "./bundle/cliOptions.ts";
+import { getCliPlatformBundleConfigs } from "./bundle/kit-config.ts";
+import { metroBundle } from "./bundle/metro.ts";
 import {
   applyBundleConfigOverrides,
   overridableCommonBundleOptions,
-} from "./bundle/overrides";
+} from "./bundle/overrides.ts";
 import type {
   CLICommonBundleOptions,
   CliPlatformBundleConfig,
-} from "./bundle/types";
+} from "./bundle/types.ts";
 
 type CLIRamBundleOptions = CLICommonBundleOptions & {
   indexedRamBundle?: boolean;

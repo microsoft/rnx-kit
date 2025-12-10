@@ -3,5 +3,5 @@ export {
   isFileModuleRef,
   isPackageModuleRef,
   parseModuleRef,
-} from "./lib/module";
-export type { FileModuleRef, PackageModuleRef } from "./lib/module";
+} from "./lib/module.js";
+export type { FileModuleRef, PackageModuleRef } from "./lib/module.js";

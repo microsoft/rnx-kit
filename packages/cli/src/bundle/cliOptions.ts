@@ -1,5 +1,5 @@
 import { parsePlatform } from "@rnx-kit/tools-react-native/platform";
-import { asBoolean, asNumber, asTransformProfile } from "../helpers/parsers";
+import { asBoolean, asNumber, asTransformProfile } from "../helpers/parsers.ts";
 
 export const commonBundleCommandOptions = [
   {

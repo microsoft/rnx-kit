@@ -1,8 +1,8 @@
 import {
   applyBundleConfigOverrides,
   overridableCommonBundleOptions,
-} from "../../src/bundle/overrides";
-import type { CliPlatformBundleConfig } from "../../src/bundle/types";
+} from "../../src/bundle/overrides.ts";
+import type { CliPlatformBundleConfig } from "../../src/bundle/types.ts";
 
 describe("bundle/overrides/applyBundleConfigOverrides()", () => {
   const config: CliPlatformBundleConfig = {

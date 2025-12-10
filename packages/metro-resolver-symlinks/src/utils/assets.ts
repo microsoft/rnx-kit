@@ -1,6 +1,6 @@
 import type { Resolution } from "metro-resolver";
 import * as path from "node:path";
-import type { ResolutionContextCompat } from "../types";
+import type { ResolutionContextCompat } from "../types.ts";
 
 /**
  * Returns whether the file at specified path is an asset.

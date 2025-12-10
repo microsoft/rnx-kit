@@ -2,4 +2,4 @@ export {
   findMetroPath,
   getMetroVersion,
   requireModuleFromMetro,
-} from "./lib/metro";
+} from "./lib/metro.js";

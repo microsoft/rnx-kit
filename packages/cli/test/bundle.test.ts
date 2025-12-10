@@ -1,5 +1,5 @@
-import { rnxBundleCommand } from "../src/bundle";
-import { asBoolean, asNumber, asStringArray } from "../src/helpers/parsers";
+import { rnxBundleCommand } from "../src/bundle.ts";
+import { asBoolean, asNumber, asStringArray } from "../src/helpers/parsers.ts";
 
 describe("rnx-bundle", () => {
   it("correctly parses cli arguments", () => {

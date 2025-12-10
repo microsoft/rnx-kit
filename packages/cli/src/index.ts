@@ -1,14 +1,14 @@
 import type { Command } from "@react-native-community/cli-types";
 import { alignDepsCommand } from "@rnx-kit/align-deps";
 import { writeThirdPartyNoticesCommand } from "@rnx-kit/third-party-notices";
-import { rnxBuild, rnxBuildCommand } from "./build";
-import { rnxBundle, rnxBundleCommand } from "./bundle";
-import { rnxClean, rnxCleanCommand } from "./clean";
-import { copyProjectAssets, rnxCopyAssetsCommand } from "./copy-assets";
-import { rnxRamBundle, rnxRamBundleCommand } from "./ram-bundle";
-import { rnxRun, rnxRunCommand } from "./run";
-import { rnxStart, rnxStartCommand } from "./start";
-import { rnxTest, rnxTestCommand } from "./test";
+import { rnxBuild, rnxBuildCommand } from "./build.ts";
+import { rnxBundle, rnxBundleCommand } from "./bundle.ts";
+import { rnxClean, rnxCleanCommand } from "./clean.ts";
+import { copyProjectAssets, rnxCopyAssetsCommand } from "./copy-assets.ts";
+import { rnxRamBundle, rnxRamBundleCommand } from "./ram-bundle.ts";
+import { rnxRun, rnxRunCommand } from "./run.ts";
+import { rnxStart, rnxStartCommand } from "./start.ts";
+import { rnxTest, rnxTestCommand } from "./test.ts";
 
 export {
   copyProjectAssets,

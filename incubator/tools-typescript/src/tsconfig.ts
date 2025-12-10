@@ -5,7 +5,7 @@ import {
 } from "@rnx-kit/tools-packages";
 import path from "node:path";
 import ts from "typescript";
-import { getDiagnosticWriter } from "./diagnostics";
+import { getDiagnosticWriter } from "./diagnostics.ts";
 
 type ConfigsByPath = Map<string, ts.ParsedCommandLine>;
 const DEFAULT_CONFIG_NAME = "tsconfig.json";

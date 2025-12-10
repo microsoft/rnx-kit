@@ -1,7 +1,7 @@
 import { resolveDependencyChain } from "@rnx-kit/tools-node/package";
 import { resolveCommunityCLI } from "@rnx-kit/tools-react-native/context";
 import * as fs from "node:fs";
-import type { CliServerApi, CoreDevMiddleware } from "../serve/types";
+import type { CliServerApi, CoreDevMiddleware } from "../serve/types.ts";
 
 type ExternalModule =
   | "@react-native-community/cli-server-api"

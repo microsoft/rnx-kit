@@ -5,7 +5,7 @@ import type { Server } from "node:http";
 import * as path from "node:path";
 import readline from "node:readline";
 import qrcode from "qrcode";
-import type { DevServerMiddleware } from "./types";
+import type { DevServerMiddleware } from "./types.ts";
 
 type HttpServer = Server & {
   httpServer?: Server; // Introduced in Metro 0.83

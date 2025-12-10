@@ -1,4 +1,4 @@
-import { jestOptions } from "../src/test";
+import { jestOptions } from "../src/test.ts";
 
 describe("rnx-test", () => {
   test("retrieves options from 'jest-cli'", () => {

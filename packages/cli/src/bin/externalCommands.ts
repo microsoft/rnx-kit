@@ -1,6 +1,6 @@
 import type { Command, Config } from "@react-native-community/cli-types";
 import { resolveCommunityCLI } from "@rnx-kit/tools-react-native/context";
-import { RNX_FAST_PATH } from "./constants";
+import { RNX_FAST_PATH } from "./constants.ts";
 
 function tryImport(module: string, fromDir: string) {
   try {

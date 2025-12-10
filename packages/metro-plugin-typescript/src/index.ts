@@ -1,4 +1,4 @@
-import { TypeScriptPlugin } from "./serializerHook";
+import { TypeScriptPlugin } from "./serializerHook.ts";
 
 export { TypeScriptPlugin };
 

@@ -1,5 +1,5 @@
-import rule from "../src/rules/no-const-enum";
-import { makeRuleTester } from "./RuleTester";
+import rule from "../src/rules/no-const-enum.js";
+import { makeRuleTester } from "./RuleTester.ts";
 
 describe("disallows `const enum`", () => {
   const ruleTester = makeRuleTester();

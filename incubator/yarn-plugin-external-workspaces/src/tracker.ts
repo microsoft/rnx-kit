@@ -14,9 +14,9 @@ import {
   getFinderFromJsConfig,
   getFinderFromJsonConfig,
   getPluginConfiguration,
-} from "./configuration";
-import { type PackagePaths } from "./types";
-import { ExternalWorkspace } from "./workspace";
+} from "./configuration.ts";
+import { type PackagePaths } from "./types.ts";
+import { ExternalWorkspace } from "./workspace.ts";
 
 const nullFunction = (_val: string) => null;
 const pkgJson = npath.toPortablePath("package.json");

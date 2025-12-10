@@ -1,6 +1,6 @@
 import * as os from "node:os";
 import * as path from "node:path";
-import jestPreset from "../src/index";
+import jestPreset from "../src/index.js";
 
 function setFixture(name: string): void {
   process.chdir(path.join(__dirname, "__fixtures__", name));

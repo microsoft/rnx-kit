@@ -1,3 +1,3 @@
-import { makeResolver } from "./symlinkResolver";
+import { makeResolver } from "./symlinkResolver.ts";
 
 module.exports = makeResolver;

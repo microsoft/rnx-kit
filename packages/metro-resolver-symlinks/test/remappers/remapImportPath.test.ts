@@ -1,5 +1,5 @@
 import * as path from "node:path";
-import { remapImportPath } from "../../src/remappers/remapImportPath";
+import { remapImportPath } from "../../src/remappers/remapImportPath.ts";
 
 describe("remap-import-path", () => {
   const mockContext = {

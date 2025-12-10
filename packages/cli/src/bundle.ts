@@ -1,15 +1,15 @@
 import type { Config as CLIConfig } from "@react-native-community/cli-types";
 import { loadMetroConfig } from "@rnx-kit/metro-service";
-import { commonBundleCommandOptions } from "./bundle/cliOptions";
-import { emitBytecode } from "./bundle/hermes";
-import { getCliPlatformBundleConfigs } from "./bundle/kit-config";
-import { metroBundle } from "./bundle/metro";
+import { commonBundleCommandOptions } from "./bundle/cliOptions.ts";
+import { emitBytecode } from "./bundle/hermes.ts";
+import { getCliPlatformBundleConfigs } from "./bundle/kit-config.ts";
+import { metroBundle } from "./bundle/metro.ts";
 import {
   applyBundleConfigOverrides,
   overridableCommonBundleOptions,
-} from "./bundle/overrides";
-import type { CLICommonBundleOptions } from "./bundle/types";
-import { asBoolean } from "./helpers/parsers";
+} from "./bundle/overrides.ts";
+import type { CLICommonBundleOptions } from "./bundle/types.ts";
+import { asBoolean } from "./helpers/parsers.ts";
 
 type CLIBundleOptions = CLICommonBundleOptions & {
   treeShake?: boolean;

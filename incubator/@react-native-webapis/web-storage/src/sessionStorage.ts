@@ -1,4 +1,4 @@
-import type { StoragePolyfill } from "./types";
+import type { StoragePolyfill } from "./types.ts";
 
 export function makeSessionStorage() {
   const store = new Map<string, string>();

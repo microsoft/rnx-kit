@@ -26,10 +26,6 @@ jobs:
       - name: Install package dependencies
         run: |
           yarn
-      - name: "Build `@rnx-kit/align-deps`"
-        run: |
-          yarn build --dependencies
-        working-directory: packages/align-deps
       - name: Look for new React Native release candidates
         id: find-release-candidate
         env:

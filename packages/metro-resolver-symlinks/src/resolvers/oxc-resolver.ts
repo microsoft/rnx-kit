@@ -1,12 +1,12 @@
 import type { CustomResolver, Resolution } from "metro-resolver";
 import type { NapiResolveOptions, ResolverFactory } from "oxc-resolver";
-import type { ResolutionContextCompat } from "../types";
-import { isAssetFile, resolveAsset } from "../utils/assets";
+import type { ResolutionContextCompat } from "../types.ts";
+import { isAssetFile, resolveAsset } from "../utils/assets.ts";
 import {
   getFromDir,
   makeEnhancedResolveOptions,
-} from "../utils/enhancedResolveHelpers";
-import { importResolver } from "../utils/package";
+} from "../utils/enhancedResolveHelpers.ts";
+import { importResolver } from "../utils/package.ts";
 
 function makeOxcResolverOptions(
   context: ResolutionContextCompat,

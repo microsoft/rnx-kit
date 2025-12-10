@@ -2,9 +2,9 @@ import { isFileModuleRef, parseModuleRef } from "@rnx-kit/tools-node/module";
 import { normalizePath } from "@rnx-kit/tools-node/path";
 import type { CustomResolver, Resolution } from "metro-resolver";
 import * as path from "node:path";
-import type { ModuleResolver, ResolutionContextCompat } from "../types";
-import { supportsSymlinks } from "../utils/metro";
-import { resolveFrom } from "../utils/package";
+import type { ModuleResolver, ResolutionContextCompat } from "../types.ts";
+import { supportsSymlinks } from "../utils/metro.ts";
+import { resolveFrom } from "../utils/package.ts";
 
 export const resolveModulePath: ModuleResolver = (
   { extraNodeModules, originModulePath },

@@ -8,8 +8,8 @@ import {
 import * as fs from "node:fs";
 import * as path from "node:path";
 import ts from "typescript";
-import { createEnhanceLanguageServiceHost } from "./host";
-import type { ProjectCache, ProjectInfo } from "./types";
+import { createEnhanceLanguageServiceHost } from "./host.ts";
+import type { ProjectCache, ProjectInfo } from "./types.ts";
 
 /**
  * Create an empty cache for holding TypeScript projects.

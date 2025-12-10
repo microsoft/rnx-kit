@@ -1,1 +1,1 @@
-export { findCommunityCliPluginPath } from "./lib/cli";
+export { findCommunityCliPluginPath } from "./lib/cli.js";

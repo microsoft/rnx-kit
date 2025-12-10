@@ -2,8 +2,8 @@ import type { CustomResolver, ResolutionContext } from "metro-resolver";
 import { resolve } from "metro-resolver";
 import * as fs from "node:fs";
 import * as path from "node:path";
-import { makeResolver } from "../src/symlinkResolver";
-import { useFixture } from "./fixtures";
+import { makeResolver } from "../src/symlinkResolver.ts";
+import { useFixture } from "./fixtures.ts";
 
 function makeContext(
   resolveRequest: CustomResolver,

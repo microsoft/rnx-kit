@@ -1,5 +1,5 @@
-import type { ResolutionContextCompat } from "../../src/types";
-import { isAssetFile } from "../../src/utils/assets";
+import type { ResolutionContextCompat } from "../../src/types.ts";
+import { isAssetFile } from "../../src/utils/assets.ts";
 
 describe("isAssetFile", () => {
   test("uses `isAssetFile` if it exists", () => {

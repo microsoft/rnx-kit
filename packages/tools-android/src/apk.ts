@@ -1,8 +1,8 @@
 import { idle } from "@rnx-kit/tools-shell/async";
 import { makeCommandSync } from "@rnx-kit/tools-shell/command";
 import * as path from "node:path";
-import { adb, getBuildToolsPath } from "./sdk.js";
-import type { DeviceInfo, PackageInfo } from "./types.js";
+import { adb, getBuildToolsPath } from "./sdk.ts";
+import type { DeviceInfo, PackageInfo } from "./types.ts";
 
 /**
  * Returns the package name and the first launchable activity of the

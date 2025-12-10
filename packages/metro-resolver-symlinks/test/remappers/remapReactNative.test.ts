@@ -1,5 +1,5 @@
-import { remapReactNativeModule } from "../../src/remappers/remapReactNative";
-import { useFixture } from "../fixtures";
+import { remapReactNativeModule } from "../../src/remappers/remapReactNative.ts";
+import { useFixture } from "../fixtures.ts";
 
 const AVAILABLE_PLATFORMS = {
   macos: "react-native-macos",

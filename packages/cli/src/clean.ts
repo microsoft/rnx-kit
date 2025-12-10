@@ -5,7 +5,7 @@ import * as fs from "node:fs/promises";
 import * as os from "node:os";
 import * as path from "node:path";
 import ora from "ora";
-import { asResolvedPath } from "./helpers/parsers";
+import { asResolvedPath } from "./helpers/parsers.ts";
 
 type Args = {
   include?: string;

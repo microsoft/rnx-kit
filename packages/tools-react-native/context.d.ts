@@ -3,4 +3,4 @@ export {
   loadContextAsync,
   readReactNativeConfig,
   resolveCommunityCLI,
-} from "./lib/context";
+} from "./lib/context.js";

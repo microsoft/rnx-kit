@@ -1,5 +1,5 @@
 import { makeCommand } from "@rnx-kit/tools-shell/command";
-import type { BuildParams } from "./types.js";
+import type { BuildParams } from "./types.ts";
 
 export const open = makeCommand("open");
 

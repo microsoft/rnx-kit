@@ -1,7 +1,7 @@
 import { spawn } from "node:child_process";
 import * as nodefs from "node:fs";
 import * as path from "node:path";
-import type { BuildParams } from "./types.js";
+import type { BuildParams } from "./types.ts";
 
 /**
  * Invokes Gradle build.

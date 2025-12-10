@@ -1,8 +1,8 @@
 import type { Config } from "@react-native-community/cli-types";
 import { Command } from "commander";
 import * as path from "node:path";
-import { loadContextForCommand } from "./context";
-import { findExternalCommands } from "./externalCommands";
+import { loadContextForCommand } from "./context.ts";
+import { findExternalCommands } from "./externalCommands.ts";
 
 type CommandOption = Required<Config["commands"][number]>["options"][number];
 

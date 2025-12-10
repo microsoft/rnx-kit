@@ -1,4 +1,4 @@
-import { greaterThanOrEqualTo } from "../src/version";
+import { greaterThanOrEqualTo } from "../src/version.ts";
 
 describe("greaterThanOrEqualTo()", () => {
   it("handles basic comparison", () => {

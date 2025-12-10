@@ -1,2 +1,2 @@
-import { app } from "./exportAllPublic";
+import { app } from "./exportAllPublic.ts";
 app();

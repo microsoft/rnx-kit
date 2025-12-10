@@ -1,5 +1,5 @@
-import { NativeWebStorage } from "./NativeWebStorage";
-import type { StoragePolyfill } from "./types";
+import { NativeWebStorage } from "./NativeWebStorage.ts";
+import type { StoragePolyfill } from "./types.ts";
 
 export function makeLocalStorage() {
   const localStorage: StoragePolyfill = {
