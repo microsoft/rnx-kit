@@ -56,7 +56,7 @@ const profile = {
   ...makeTypesEntries(),
   esbuild: {
     name: "esbuild",
-    version: "^0.25.0",
+    version: "^0.27.1",
     devOnly: true,
   },
   "find-up": {
