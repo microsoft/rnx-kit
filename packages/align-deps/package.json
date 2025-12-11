@@ -36,9 +36,9 @@
     "format": "rnx-kit-scripts format",
     "lint": "rnx-kit-scripts lint",
     "test": "rnx-kit-scripts test",
-    "update-preset": "node --experimental-strip-types --no-warnings scripts/update-preset.ts",
-    "update-profile": "node --experimental-strip-types --no-warnings scripts/update-profile.ts",
-    "update-readme": "node scripts/update-readme.mjs"
+    "update-preset": "node --no-warnings scripts/update-preset.ts",
+    "update-profile": "node --no-warnings scripts/update-profile.ts",
+    "update-readme": "node --no-warnings scripts/update-readme.mjs"
   },
   "devDependencies": {
     "@octokit/core": "^7.0.0",

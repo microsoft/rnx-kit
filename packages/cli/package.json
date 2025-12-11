@@ -82,7 +82,7 @@
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*",
     "@types/connect": "^3.4.36",
-    "@types/node": "^22.0.0",
+    "@types/node": "^24.0.0",
     "@types/qrcode": "^1.4.2",
     "markdown-table": "^3.0.0",
     "metro": "^0.83.1",

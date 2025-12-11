@@ -3825,7 +3825,7 @@ __metadata:
     "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
-    "@types/node": "npm:^22.0.0"
+    "@types/node": "npm:^24.0.0"
     react: "npm:19.1.0"
     react-native: "npm:^0.81.0"
   peerDependencies:
@@ -4620,7 +4620,7 @@ __metadata:
     "@rnx-kit/tsconfig": "npm:*"
     "@types/babel__core": "npm:^7.0.0"
     "@types/babel__helper-plugin-utils": "npm:^7.0.0"
-    "@types/node": "npm:^22.0.0"
+    "@types/node": "npm:^24.0.0"
   languageName: unknown
   linkType: soft
 
@@ -4638,7 +4638,7 @@ __metadata:
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
     "@types/babel__core": "npm:^7.0.0"
-    "@types/node": "npm:^22.0.0"
+    "@types/node": "npm:^24.0.0"
     babel-plugin-const-enum: "npm:^1.0.0"
   peerDependencies:
     "@babel/core": ^7.20.0
@@ -4681,7 +4681,7 @@ __metadata:
     "@rnx-kit/tools-shell": "npm:^0.2.0"
     "@rnx-kit/tools-windows": "npm:^0.2.0"
     "@rnx-kit/tsconfig": "npm:*"
-    "@types/node": "npm:^22.0.0"
+    "@types/node": "npm:^24.0.0"
     "@types/qrcode": "npm:^1.4.2"
     "@types/yargs": "npm:^16.0.0"
     env-paths: "npm:^3.0.0"
@@ -4703,7 +4703,7 @@ __metadata:
     "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
-    "@types/node": "npm:^22.0.0"
+    "@types/node": "npm:^24.0.0"
   bin:
     rnx-bundle-diff: lib/cli.js
   languageName: unknown
@@ -4738,7 +4738,7 @@ __metadata:
     "@rnx-kit/tools-react-native": "npm:^2.0.3"
     "@rnx-kit/tsconfig": "npm:*"
     "@types/connect": "npm:^3.4.36"
-    "@types/node": "npm:^22.0.0"
+    "@types/node": "npm:^24.0.0"
     "@types/qrcode": "npm:^1.4.2"
     commander: "npm:^11.1.0"
     markdown-table: "npm:^3.0.0"
@@ -4771,7 +4771,7 @@ __metadata:
     "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
-    "@types/node": "npm:^22.0.0"
+    "@types/node": "npm:^24.0.0"
   bin:
     commitlint-lite: lib/cli.js
   languageName: unknown
@@ -4792,7 +4792,7 @@ __metadata:
     "@rnx-kit/tools-react-native": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
     "@types/lodash.merge": "npm:^4.6.9"
-    "@types/node": "npm:^22.0.0"
+    "@types/node": "npm:^24.0.0"
     "@types/semver": "npm:^7.0.0"
     lodash.merge: "npm:^4.6.2"
     metro: "npm:^0.83.1"
@@ -4807,7 +4807,7 @@ __metadata:
     "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
-    "@types/node": "npm:^22.0.0"
+    "@types/node": "npm:^24.0.0"
   languageName: unknown
   linkType: soft
 
@@ -4818,7 +4818,7 @@ __metadata:
     "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
-    "@types/node": "npm:^22.0.0"
+    "@types/node": "npm:^24.0.0"
     esbuild: "npm:^0.25.0"
   languageName: unknown
   linkType: soft
@@ -4846,7 +4846,7 @@ __metadata:
     "@rnx-kit/tsconfig": "npm:*"
     "@types/eslint": "npm:^9.0.0"
     "@types/estree": "npm:*"
-    "@types/node": "npm:^22.0.0"
+    "@types/node": "npm:^24.0.0"
     "@typescript-eslint/parser": "npm:^8.0.0"
     "@typescript-eslint/types": "npm:^8.0.0"
     enhanced-resolve: "npm:^5.8.3"
@@ -4877,7 +4877,7 @@ __metadata:
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tools-react-native": "npm:^2.0.3"
     "@rnx-kit/tsconfig": "npm:*"
-    "@types/node": "npm:^22.0.0"
+    "@types/node": "npm:^24.0.0"
     find-up: "npm:^5.0.0"
     react: "npm:19.1.0"
     react-native: "npm:^0.81.0"
@@ -4945,7 +4945,7 @@ __metadata:
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tools-node": "npm:^3.0.0"
     "@rnx-kit/tsconfig": "npm:*"
-    "@types/node": "npm:^22.0.0"
+    "@types/node": "npm:^24.0.0"
     metro: "npm:^0.83.1"
   languageName: unknown
   linkType: soft
@@ -4960,7 +4960,7 @@ __metadata:
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tools-node": "npm:^3.0.0"
     "@rnx-kit/tsconfig": "npm:*"
-    "@types/node": "npm:^22.0.0"
+    "@types/node": "npm:^24.0.0"
     memfs: "npm:^4.0.0"
     metro: "npm:^0.83.1"
     metro-source-map: "npm:^0.83.1"
@@ -4982,7 +4982,7 @@ __metadata:
     "@rnx-kit/tools-react-native": "npm:^2.0.0"
     "@rnx-kit/tsconfig": "npm:*"
     "@rnx-kit/typescript-service": "npm:^2.0.2"
-    "@types/node": "npm:^22.0.0"
+    "@types/node": "npm:^24.0.0"
     metro: "npm:^0.83.1"
     typescript: "npm:>=4.7.0"
   languageName: unknown
@@ -4999,7 +4999,7 @@ __metadata:
     "@rnx-kit/tools-node": "npm:^3.0.0"
     "@rnx-kit/tools-react-native": "npm:^2.2.0"
     "@rnx-kit/tsconfig": "npm:*"
-    "@types/node": "npm:^22.0.0"
+    "@types/node": "npm:^24.0.0"
     enhanced-resolve: "npm:^5.8.3"
     metro-resolver: "npm:^0.83.1"
     oxc-resolver: "npm:^11.0.0"
@@ -5032,7 +5032,7 @@ __metadata:
     "@rnx-kit/tools-node": "npm:^3.0.2"
     "@rnx-kit/tools-react-native": "npm:^2.3.0"
     "@rnx-kit/tsconfig": "npm:*"
-    "@types/node": "npm:^22.0.0"
+    "@types/node": "npm:^24.0.0"
     esbuild: "npm:^0.25.0"
     esbuild-plugin-lodash: "npm:^1.2.0"
     fast-glob: "npm:^3.2.7"
@@ -5053,7 +5053,7 @@ __metadata:
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tools-react-native": "npm:^2.3.0"
     "@rnx-kit/tsconfig": "npm:*"
-    "@types/node": "npm:^22.0.0"
+    "@types/node": "npm:^24.0.0"
     metro: "npm:^0.83.1"
   languageName: unknown
   linkType: soft
@@ -5069,7 +5069,7 @@ __metadata:
     "@rnx-kit/tools-node": "npm:^3.0.0"
     "@rnx-kit/tools-react-native": "npm:^2.2.0"
     "@rnx-kit/tsconfig": "npm:*"
-    "@types/node": "npm:^22.0.0"
+    "@types/node": "npm:^24.0.0"
     "@types/node-fetch": "npm:^2.6.5"
     metro: "npm:^0.83.1"
     metro-config: "npm:^0.83.1"
@@ -5155,7 +5155,7 @@ __metadata:
     "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
-    "@types/node": "npm:^22.0.0"
+    "@types/node": "npm:^24.0.0"
     babel-plugin-codegen: "npm:^4.1.5"
   peerDependencies:
     react-native: ">=0.59"
@@ -5193,7 +5193,7 @@ __metadata:
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
     "@types/fast-levenshtein": "npm:0.0.4"
-    "@types/node": "npm:^22.0.0"
+    "@types/node": "npm:^24.0.0"
     chalk: "npm:^4.1.0"
     deepmerge: "npm:^4.2.2"
     fast-levenshtein: "npm:^3.0.0"
@@ -5210,7 +5210,7 @@ __metadata:
   dependencies:
     "@rnx-kit/tsconfig": "workspace:*"
     "@types/jest": "npm:^29.2.1"
-    "@types/node": "npm:^22.0.0"
+    "@types/node": "npm:^24.0.0"
     "@types/yargs": "npm:^16.0.0"
     "@yarnpkg/cli": "npm:^4.6.0"
     clipanion: "npm:^4.0.0-rc.4"
@@ -5380,7 +5380,7 @@ __metadata:
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tools-node": "npm:^3.0.0"
     "@rnx-kit/tsconfig": "npm:*"
-    "@types/node": "npm:^22.0.0"
+    "@types/node": "npm:^24.0.0"
     "@types/yargs": "npm:^16.0.0"
     metro-source-map: "npm:^0.83.1"
     spdx-expression-parse: "npm:^4.0.0"
@@ -5398,7 +5398,7 @@ __metadata:
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tools-shell": "npm:^0.2.0"
     "@rnx-kit/tsconfig": "npm:*"
-    "@types/node": "npm:^22.0.0"
+    "@types/node": "npm:^24.0.0"
   languageName: unknown
   linkType: soft
 
@@ -5410,7 +5410,7 @@ __metadata:
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tools-shell": "npm:^0.2.0"
     "@rnx-kit/tsconfig": "npm:*"
-    "@types/node": "npm:^22.0.0"
+    "@types/node": "npm:^24.0.0"
     fast-xml-parser: "npm:^4.0.0"
   languageName: unknown
   linkType: soft
@@ -5422,7 +5422,7 @@ __metadata:
     "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
-    "@types/node": "npm:^22.0.0"
+    "@types/node": "npm:^24.0.0"
   languageName: unknown
   linkType: soft
 
@@ -5433,7 +5433,7 @@ __metadata:
     "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
-    "@types/node": "npm:^22.0.0"
+    "@types/node": "npm:^24.0.0"
   languageName: unknown
   linkType: soft
 
@@ -5444,7 +5444,7 @@ __metadata:
     "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
-    "@types/node": "npm:^22.0.0"
+    "@types/node": "npm:^24.0.0"
   languageName: unknown
   linkType: soft
 
@@ -5457,7 +5457,7 @@ __metadata:
     "@rnx-kit/tools-node": "npm:^3.0.0"
     "@rnx-kit/tools-workspaces": "npm:^0.2.1"
     "@rnx-kit/tsconfig": "npm:*"
-    "@types/node": "npm:^22.0.0"
+    "@types/node": "npm:^24.0.0"
   languageName: unknown
   linkType: soft
 
@@ -5472,7 +5472,7 @@ __metadata:
     "@rnx-kit/tools-filesystem": "npm:*"
     "@rnx-kit/tools-node": "npm:^3.0.0"
     "@rnx-kit/tsconfig": "npm:*"
-    "@types/node": "npm:^22.0.0"
+    "@types/node": "npm:^24.0.0"
     metro: "npm:^0.83.1"
     metro-config: "npm:^0.83.1"
     metro-core: "npm:^0.83.1"
@@ -5489,7 +5489,7 @@ __metadata:
     "@rnx-kit/jest-preset": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
-    "@types/node": "npm:^22.0.0"
+    "@types/node": "npm:^24.0.0"
   languageName: unknown
   linkType: soft
 
@@ -5520,7 +5520,7 @@ __metadata:
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tools-shell": "npm:^0.2.0"
     "@rnx-kit/tsconfig": "npm:*"
-    "@types/node": "npm:^22.0.0"
+    "@types/node": "npm:^24.0.0"
     fast-xml-parser: "npm:^4.0.0"
   languageName: unknown
   linkType: soft
@@ -5533,7 +5533,7 @@ __metadata:
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
     "@types/micromatch": "npm:^4.0.0"
-    "@types/node": "npm:^22.0.0"
+    "@types/node": "npm:^24.0.0"
     fast-glob: "npm:^3.2.7"
     find-up: "npm:^5.0.0"
     micromatch: "npm:^4.0.0"
@@ -5556,7 +5556,7 @@ __metadata:
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tools-node": "npm:^3.0.0"
     "@rnx-kit/tsconfig": "npm:*"
-    "@types/node": "npm:^22.0.0"
+    "@types/node": "npm:^24.0.0"
   peerDependencies:
     typescript: ">=4.0"
   languageName: unknown
@@ -5581,7 +5581,7 @@ __metadata:
     "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
-    "@types/node": "npm:^22.0.0"
+    "@types/node": "npm:^24.0.0"
     "@types/semver": "npm:^7.0.0"
     "@yarnpkg/cli": "npm:^4.6.0"
     "@yarnpkg/core": "npm:^4.2.0"
@@ -5599,7 +5599,7 @@ __metadata:
     "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
-    "@types/node": "npm:^22.0.0"
+    "@types/node": "npm:^24.0.0"
     "@types/semver": "npm:^7.0.0"
     "@yarnpkg/cli": "npm:^4.6.0"
     "@yarnpkg/core": "npm:^4.2.0"
@@ -6064,12 +6064,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*":
-  version: 24.10.1
-  resolution: "@types/node@npm:24.10.1"
+"@types/node@npm:*, @types/node@npm:^24.0.0":
+  version: 24.10.2
+  resolution: "@types/node@npm:24.10.2"
   dependencies:
     undici-types: "npm:~7.16.0"
-  checksum: 10c0/d6bca7a78f550fbb376f236f92b405d676003a8a09a1b411f55920ef34286ee3ee51f566203920e835478784df52662b5b2af89159d9d319352e9ea21801c002
+  checksum: 10c0/560c894e1a9bf7468718ceca8cd520361fd0d3fcc0b020c2f028fc722b28b5b56aecd16736a9b753d52a14837c066cf23480a8582ead59adc63a7e4333bc976c
   languageName: node
   linkType: hard
 
@@ -15329,7 +15329,7 @@ __metadata:
   dependencies:
     "@changesets/cli": "npm:^2.22.0"
     "@types/jest": "npm:^29.2.1"
-    "@types/node": "npm:^22.0.0"
+    "@types/node": "npm:^24.0.0"
     "@yarnpkg/types": "npm:^4.0.0"
     eslint: "catalog:"
     knip: "npm:^5.30.2"

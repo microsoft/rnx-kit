@@ -58,7 +58,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4.4.0
         with:
-          node-version: "20"
+          node-version: 24
       - name: Install package dependencies
         run: |
           yarn

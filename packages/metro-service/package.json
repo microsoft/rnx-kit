@@ -60,7 +60,7 @@
     "@rnx-kit/eslint-config": "*",
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*",
-    "@types/node": "^22.0.0",
+    "@types/node": "^24.0.0",
     "@types/node-fetch": "^2.6.5",
     "metro": "^0.83.1",
     "metro-config": "^0.83.1",

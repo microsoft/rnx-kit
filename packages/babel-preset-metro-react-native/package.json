@@ -48,7 +48,7 @@
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*",
     "@types/babel__core": "^7.0.0",
-    "@types/node": "^22.0.0"
+    "@types/node": "^24.0.0"
   },
   "engines": {
     "node": ">=16.17"

@@ -44,7 +44,7 @@
     "@rnx-kit/jest-preset": "*",
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*",
-    "@types/node": "^22.0.0",
+    "@types/node": "^24.0.0",
     "metro-resolver": "^0.83.1",
     "oxc-resolver": "^11.0.0"
   },

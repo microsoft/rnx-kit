@@ -21,7 +21,7 @@ jobs:
       - name: Setup the toolchain
         uses: microsoft/react-native-test-app/.github/actions/setup-toolchain@4.4.10
         with:
-          node-version: 22
+          node-version: 24
       - name: Deduplicate packages
         run: |
           yarn dedupe --check
@@ -89,7 +89,7 @@ jobs:
     permissions: {}
     strategy:
       matrix:
-        node-version: [20, 22]
+        node-version: [22, 24]
         os: [ubuntu-24.04, windows-2025]
     runs-on: ${{ matrix.os }}
     steps:
