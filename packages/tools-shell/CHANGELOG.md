@@ -1,5 +1,12 @@
 # @rnx-kit/tools-shell
 
+## 0.2.2
+
+### Patch Changes
+
+- 8c27733: Fixed import statements so that the TypeScript code can be used
+  directly
+
 ## 0.2.1
 
 ### Patch Changes

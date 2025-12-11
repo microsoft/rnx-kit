@@ -1,5 +1,13 @@
 # Change Log - @rnx-kit/esbuild-plugin-import-path-remapper
 
+## 3.0.1
+
+### Patch Changes
+
+- c10ac78: Bumped esbuild to 0.27.1
+- ed5fe35: Fixed import statements so that the TypeScript code can be used
+  directly
+
 ## 3.0.0
 
 ### Major Changes

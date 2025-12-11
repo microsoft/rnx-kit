@@ -1,5 +1,14 @@
 # @rnx-kit/tools-apple
 
+## 0.2.2
+
+### Patch Changes
+
+- ed5fe35: Fixed import statements so that the TypeScript code can be used
+  directly
+- Updated dependencies [8c27733]
+  - @rnx-kit/tools-shell@0.2.2
+
 ## 0.2.1
 
 ### Patch Changes

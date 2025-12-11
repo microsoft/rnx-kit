@@ -1,5 +1,14 @@
 # @rnx-kit/polyfills
 
+## 0.2.1
+
+### Patch Changes
+
+- ed5fe35: Fixed import statements so that the TypeScript code can be used
+  directly
+- Updated dependencies [ed5fe35]
+  - @rnx-kit/tools-node@3.0.3
+
 ## 0.2.0
 
 ### Minor Changes

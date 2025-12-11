@@ -1,5 +1,15 @@
 # Change Log - @rnx-kit/metro-service
 
+## 4.1.3
+
+### Patch Changes
+
+- ed5fe35: Fixed import statements so that the TypeScript code can be used
+  directly
+- Updated dependencies [ed5fe35]
+  - @rnx-kit/tools-react-native@2.3.2
+  - @rnx-kit/tools-node@3.0.3
+
 ## 4.1.2
 
 ### Patch Changes

@@ -1,5 +1,16 @@
 # Change Log - @rnx-kit/metro-serializer-esbuild
 
+## 0.2.8
+
+### Patch Changes
+
+- c10ac78: Bumped esbuild to 0.27.1
+- ed5fe35: Fixed import statements so that the TypeScript code can be used
+  directly
+- Updated dependencies [ed5fe35]
+  - @rnx-kit/tools-react-native@2.3.2
+  - @rnx-kit/tools-node@3.0.3
+
 ## 0.2.7
 
 ### Patch Changes

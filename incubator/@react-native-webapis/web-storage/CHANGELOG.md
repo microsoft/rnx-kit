@@ -1,5 +1,12 @@
 # @react-native-webapis/web-storage
 
+## 0.4.4
+
+### Patch Changes
+
+- ed5fe35: Fixed import statements so that the TypeScript code can be used
+  directly
+
 ## 0.4.3
 
 ### Patch Changes
