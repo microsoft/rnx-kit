@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/eslint-plugin
 
+## 0.9.4
+
+### Patch Changes
+
+- e3883d0: Bumped `eslint-plugin-react-hooks` to 5.2.0
+
 ## 0.9.3
 
 ### Patch Changes
