@@ -9,12 +9,15 @@ import {
   type ResolveOptions,
   type Resolver,
 } from "@yarnpkg/core";
-import { getWorkspaceTracker, type ExternalWorkspaceTracker } from "./tracker";
+import {
+  getWorkspaceTracker,
+  type ExternalWorkspaceTracker,
+} from "./tracker.ts";
 import {
   LOCAL_PROTOCOL,
   REMOTE_PROTOCOL,
   type ResolverType,
-} from "./workspace";
+} from "./workspace.ts";
 
 //const { stringifyIdent, makeDescriptor } = structUtils;
 class ResolverBase implements Resolver {

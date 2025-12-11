@@ -1,5 +1,5 @@
 import { spawnSync } from "node:child_process";
-import { reactNativeConfig } from "../src/index";
+import { reactNativeConfig } from "../src/index.ts";
 
 describe("react-native.config.js", () => {
   it("should still act as a plugin to `@react-native-community/cli`", () => {

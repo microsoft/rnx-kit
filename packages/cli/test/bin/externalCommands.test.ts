@@ -1,6 +1,6 @@
 import type { Config } from "@react-native-community/cli-types";
-import { RNX_FAST_PATH } from "../../src/bin/constants";
-import { findExternalCommands } from "../../src/bin/externalCommands";
+import { RNX_FAST_PATH } from "../../src/bin/constants.ts";
+import { findExternalCommands } from "../../src/bin/externalCommands.ts";
 
 jest.mock("@rnx-kit/tools-react-native/context", () => ({
   resolveCommunityCLI: () => "/",

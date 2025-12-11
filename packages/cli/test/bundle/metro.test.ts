@@ -1,6 +1,6 @@
 import { mockFS } from "@rnx-kit/tools-filesystem/mocks";
-import { metroBundle } from "../../src/bundle/metro";
-import type { CliPlatformBundleConfig } from "../../src/bundle/types";
+import { metroBundle } from "../../src/bundle/metro.ts";
+import type { CliPlatformBundleConfig } from "../../src/bundle/types.ts";
 
 describe("bundle/metro/metroBundle()", () => {
   const { getDefaultConfig } = require("metro-config");

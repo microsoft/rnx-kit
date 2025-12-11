@@ -2,7 +2,7 @@ import type { KitConfig } from "@rnx-kit/config";
 import {
   getCliPlatformBundleConfigs,
   getTargetPlatforms,
-} from "../../src/bundle/kit-config";
+} from "../../src/bundle/kit-config.ts";
 
 describe("bundle/kit-config/getTargetPlatforms()", () => {
   test("returns the override platform", () => {

@@ -3,8 +3,8 @@ import {
   asNumber,
   asResolvedPath,
   asStringArray,
-} from "../src/helpers/parsers";
-import { rnxStartCommand } from "../src/start";
+} from "../src/helpers/parsers.ts";
+import { rnxStartCommand } from "../src/start.ts";
 
 describe("rnx-start", () => {
   it("correctly parses cli arguments", () => {

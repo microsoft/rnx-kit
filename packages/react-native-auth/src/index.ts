@@ -1,5 +1,5 @@
-import { NativeAuth, getEnforcing } from "./NativeAuth";
-import type { AccountType, AuthResult } from "./types";
+import { NativeAuth, getEnforcing } from "./NativeAuth.ts";
+import type { AccountType, AuthResult } from "./types.ts";
 
 export type {
   AccountType,
@@ -10,7 +10,7 @@ export type {
   AuthErrorType,
   AuthErrorUserInfo,
   AuthResult,
-} from "./types";
+} from "./types.ts";
 
 /**
  * Acquires a token for a resource.

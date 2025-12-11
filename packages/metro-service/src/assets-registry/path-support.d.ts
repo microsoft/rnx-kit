@@ -1,4 +1,4 @@
-import type { PackagerAsset } from "./registry";
+import type { PackagerAsset } from "./registry.ts";
 export declare function getAndroidResourceFolderName(
   asset: PackagerAsset,
   scale: number

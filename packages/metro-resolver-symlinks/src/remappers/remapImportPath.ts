@@ -6,7 +6,7 @@ import {
 import type { PackageModuleRef } from "@rnx-kit/tools-node/module";
 import { expandPlatformExtensions } from "@rnx-kit/tools-react-native/platform";
 import * as path from "node:path";
-import type { ModuleResolver, ResolutionContextCompat } from "../types";
+import type { ModuleResolver, ResolutionContextCompat } from "../types.ts";
 
 type Resolver = (fromDir: string, moduleId: string) => string;
 

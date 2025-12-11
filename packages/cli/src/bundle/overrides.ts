@@ -1,5 +1,5 @@
 import { pickValues } from "@rnx-kit/tools-language/properties";
-import type { CliPlatformBundleConfig } from "./types";
+import type { CliPlatformBundleConfig } from "./types.ts";
 
 type BundleConfigOverrides = Partial<
   Pick<

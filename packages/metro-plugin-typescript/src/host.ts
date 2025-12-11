@@ -7,9 +7,9 @@ import {
   resolveModuleNames,
   resolveTypeReferenceDirectiveReferences,
   resolveTypeReferenceDirectives,
-} from "./resolver";
-import type { ResolverContext } from "./types";
-import { greaterThanOrEqualTo } from "./version";
+} from "./resolver.ts";
+import type { ResolverContext } from "./types.ts";
+import { greaterThanOrEqualTo } from "./version.ts";
 
 const DEFAULT_PACKAGE_NAME = "react-native";
 

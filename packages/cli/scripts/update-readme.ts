@@ -1,8 +1,8 @@
-#!/usr/bin/env -S yarn tsx --conditions typescript
+#!/usr/bin/env -S node --no-warnings --conditions=typescript
 
 import { markdownTable } from "markdown-table";
 import * as fs from "node:fs";
-import { reactNativeConfig } from "../src/index.js";
+import { reactNativeConfig } from "../src/index.ts";
 
 const README = "README.md";
 const UTF8 = { encoding: "utf-8" as const };

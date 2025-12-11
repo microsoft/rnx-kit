@@ -1,2 +1,2 @@
 // eslint-disable-next-line @rnx-kit/no-export-all
-export * from "./nestedExportAllInternal";
+export * from "./nestedExportAllInternal.ts";

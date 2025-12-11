@@ -5,8 +5,8 @@ import { ensureDir } from "@rnx-kit/tools-filesystem";
 import type { ConfigT } from "metro-config";
 import * as nodefs from "node:fs";
 import * as path from "node:path";
-import { customizeMetroConfig } from "../helpers/metro-config";
-import type { CliPlatformBundleConfig } from "./types";
+import { customizeMetroConfig } from "../helpers/metro-config.ts";
+import type { CliPlatformBundleConfig } from "./types.ts";
 
 /**
  * Run the Metro bundler.

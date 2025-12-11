@@ -1,6 +1,6 @@
 import type { TurboModule } from "react-native";
 import { TurboModuleRegistry } from "react-native";
-import type { AuthResult } from "./types";
+import type { AuthResult } from "./types.ts";
 
 /**
  * We re-declare `AccountType` here as a `string` because codegen currently does

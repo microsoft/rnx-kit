@@ -1,7 +1,7 @@
 import type { ServerConfig } from "@rnx-kit/config";
 import { getBundleConfig, getKitConfig } from "@rnx-kit/config";
 import { pickValues } from "@rnx-kit/tools-language/properties";
-import { getDefaultBundlerPlugins } from "../bundle/defaultPlugins";
+import { getDefaultBundlerPlugins } from "../bundle/defaultPlugins.ts";
 
 type ServerConfigOverrides = Pick<
   ServerConfig,

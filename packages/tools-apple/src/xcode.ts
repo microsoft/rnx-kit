@@ -1,10 +1,10 @@
 import { makeCommand, makeCommandSync } from "@rnx-kit/tools-shell/command";
 import { spawn } from "node:child_process";
 import * as path from "node:path";
-import { iosSpecificBuildFlags } from "./ios.js";
-import { macosSpecificBuildFlags } from "./macos.js";
-import { findSchemes } from "./scheme.js";
-import type { BuildParams, BuildSettings, Device, JSObject } from "./types.js";
+import { iosSpecificBuildFlags } from "./ios.ts";
+import { macosSpecificBuildFlags } from "./macos.ts";
+import { findSchemes } from "./scheme.ts";
+import type { BuildParams, BuildSettings, Device, JSObject } from "./types.ts";
 
 export const xcrun = makeCommand("xcrun");
 

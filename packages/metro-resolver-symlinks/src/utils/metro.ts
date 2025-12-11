@@ -6,7 +6,7 @@ import {
 import * as fs from "node:fs";
 import * as path from "node:path";
 import * as url from "node:url";
-import type { Options, ResolutionContextCompat } from "../types";
+import type { Options, ResolutionContextCompat } from "../types.ts";
 
 const RETRY_FROM_DISK_FLAG = "experimental_retryResolvingFromDisk";
 

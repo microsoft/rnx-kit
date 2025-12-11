@@ -1,5 +1,5 @@
 import { type Plugin } from "@yarnpkg/core";
-import { InstallTo } from "./installTo";
+import { InstallTo } from "./installTo.ts";
 
 /**
  * The plugin definition.

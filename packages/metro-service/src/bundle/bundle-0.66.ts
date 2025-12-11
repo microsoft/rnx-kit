@@ -1,9 +1,9 @@
 import { info } from "@rnx-kit/console";
 import { requireModuleFromMetro } from "@rnx-kit/tools-react-native/metro";
 import type { ConfigT } from "metro-config";
-import { getSaveAssetsPlugin } from "../asset/saveAssets";
-import { saveAssets } from "../asset/write";
-import type { BundleArgs, RequestOptions } from "../types";
+import { getSaveAssetsPlugin } from "../asset/saveAssets.ts";
+import { saveAssets } from "../asset/write.ts";
+import type { BundleArgs, RequestOptions } from "../types.ts";
 
 // Source: https://github.com/facebook/react-native/blob/0.80-stable/packages/community-cli-plugin/src/commands/bundle/buildBundle.js#L113
 export async function buildBundle(

@@ -3,7 +3,7 @@ import {
   asNumber,
   asStringArray,
   asTransformProfile,
-} from "../../src/helpers/parsers";
+} from "../../src/helpers/parsers.ts";
 
 describe("helpers/parsers/asBoolean()", () => {
   it("returns boolean for string", () => {

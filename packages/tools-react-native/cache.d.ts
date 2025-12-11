@@ -3,4 +3,4 @@ export {
   getSavedState,
   loadConfigFromCache,
   saveConfigToCache,
-} from "./lib/cache";
+} from "./lib/cache.js";

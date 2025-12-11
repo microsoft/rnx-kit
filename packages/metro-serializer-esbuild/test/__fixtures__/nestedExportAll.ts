@@ -1,2 +1,2 @@
-import { app } from "./nestedExportAllPublic";
+import { app } from "./nestedExportAllPublic.ts";
 app();

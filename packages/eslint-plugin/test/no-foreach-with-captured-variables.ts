@@ -1,5 +1,5 @@
-import rule from "../src/rules/no-foreach-with-captured-variables";
-import { makeRuleTester } from "./RuleTester";
+import rule from "../src/rules/no-foreach-with-captured-variables.js";
+import { makeRuleTester } from "./RuleTester.ts";
 
 describe("disallows `forEach` with variables outside of function scope", () => {
   const ruleTester = makeRuleTester();

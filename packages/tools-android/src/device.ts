@@ -2,8 +2,8 @@ import { retry } from "@rnx-kit/tools-shell/async";
 import { ensure, makeCommand } from "@rnx-kit/tools-shell/command";
 import { spawn } from "node:child_process";
 import * as path from "node:path";
-import { adb, ANDROID_HOME } from "./sdk.js";
-import type { DeviceInfo, Logger } from "./types.js";
+import { adb, ANDROID_HOME } from "./sdk.ts";
+import type { DeviceInfo, Logger } from "./types.ts";
 
 const EMULATOR_BIN = path.join(ANDROID_HOME, "emulator", "emulator");
 const MAX_ATTEMPTS = 8;

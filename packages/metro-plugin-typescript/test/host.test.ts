@@ -1,13 +1,13 @@
 jest.mock("../src/resolver");
 
 import type ts from "typescript";
-import { createEnhanceLanguageServiceHost } from "../src/host";
+import { createEnhanceLanguageServiceHost } from "../src/host.ts";
 import {
   resolveModuleNameLiterals,
   resolveModuleNames,
   resolveTypeReferenceDirectiveReferences,
   resolveTypeReferenceDirectives,
-} from "../src/resolver";
+} from "../src/resolver.ts";
 
 //
 //  Mechanism to artificially control the TypeScript version. This is used to

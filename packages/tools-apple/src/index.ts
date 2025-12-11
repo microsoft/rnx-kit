@@ -1,4 +1,4 @@
-export { checkPodsManifestLock } from "./cocoapods.js";
+export { checkPodsManifestLock } from "./cocoapods.ts";
 export {
   bootSimulator,
   getAvailableSimulators,
@@ -7,8 +7,8 @@ export {
   iosDeploy,
   launch,
   selectDevice,
-} from "./ios.js";
-export { open } from "./macos.js";
+} from "./ios.ts";
+export { open } from "./macos.ts";
 export type {
   BuildConfiguration,
   BuildParams,
@@ -16,7 +16,7 @@ export type {
   Device,
   DeviceType,
   Simulator,
-} from "./types.js";
+} from "./types.ts";
 export {
   getBuildSettings,
   getDeveloperDirectory,
@@ -24,4 +24,4 @@ export {
   parsePlist,
   xcodebuild,
   xcrun,
-} from "./xcode.js";
+} from "./xcode.ts";

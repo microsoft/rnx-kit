@@ -3,9 +3,9 @@ import { requireModuleFromMetro } from "@rnx-kit/tools-react-native/metro";
 import type { AssetData } from "metro";
 import type { ConfigT } from "metro-config";
 import type Server from "metro/private/Server";
-import { getSaveAssetsPlugin } from "../asset/saveAssets";
-import { saveAssets } from "../asset/write";
-import type { BundleArgs, RequestOptions } from "../types";
+import { getSaveAssetsPlugin } from "../asset/saveAssets.ts";
+import { saveAssets } from "../asset/write.ts";
+import type { BundleArgs, RequestOptions } from "../types.ts";
 
 type MetroBundle = typeof import("metro/private/shared/output/bundle");
 

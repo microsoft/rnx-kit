@@ -1,5 +1,5 @@
-import rule from "../src/rules/no-export-all";
-import { makeRuleTester } from "./RuleTester";
+import rule from "../src/rules/no-export-all.js";
+import { makeRuleTester } from "./RuleTester.ts";
 
 jest.mock("fs");
 

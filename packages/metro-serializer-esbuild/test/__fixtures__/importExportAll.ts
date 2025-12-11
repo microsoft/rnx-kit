@@ -1,2 +1,2 @@
-import * as Base from "./nestedExportAllInternal";
+import * as Base from "./nestedExportAllInternal.ts";
 Base.app();

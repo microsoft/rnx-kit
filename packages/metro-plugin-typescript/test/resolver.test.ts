@@ -2,8 +2,8 @@ import type ts from "typescript";
 import {
   resolveModuleNames,
   resolveTypeReferenceDirectives,
-} from "../src/resolver";
-import type { ResolverContext } from "../src/types";
+} from "../src/resolver.ts";
+import type { ResolverContext } from "../src/types.ts";
 
 describe("Resolver", () => {
   const context: ResolverContext = {

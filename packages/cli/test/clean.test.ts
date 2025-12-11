@@ -1,10 +1,10 @@
-import { rnxCleanCommand } from "../src/clean";
+import { rnxCleanCommand } from "../src/clean.ts";
 import {
   asBoolean,
   asNumber,
   asResolvedPath,
   asStringArray,
-} from "../src/helpers/parsers";
+} from "../src/helpers/parsers.ts";
 
 describe("rnx-clean", () => {
   it("correctly parses cli arguments", () => {

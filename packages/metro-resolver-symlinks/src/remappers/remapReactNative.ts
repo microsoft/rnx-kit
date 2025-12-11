@@ -1,5 +1,5 @@
 import { getAvailablePlatforms } from "@rnx-kit/tools-react-native/platform";
-import type { ModuleResolver } from "../types";
+import type { ModuleResolver } from "../types.ts";
 
 export const remapReactNativeModule: ModuleResolver = (
   _context,

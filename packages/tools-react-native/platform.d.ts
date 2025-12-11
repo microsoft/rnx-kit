@@ -4,5 +4,5 @@ export {
   getAvailablePlatformsUncached,
   parsePlatform,
   platformExtensions,
-} from "./lib/platform";
-export type { AllPlatforms } from "./lib/platform";
+} from "./lib/platform.js";
+export type { AllPlatforms } from "./lib/platform.js";

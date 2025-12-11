@@ -5,7 +5,7 @@ import {
   type ResolveOptions,
 } from "@yarnpkg/core";
 import { type PortablePath } from "@yarnpkg/fslib";
-import { coerceDescriptorTo, coerceLocatorTo } from "./utilities";
+import { coerceDescriptorTo, coerceLocatorTo } from "./utilities.ts";
 
 export const LOCAL_PROTOCOL = "external:";
 export const REMOTE_PROTOCOL = "fallback:";

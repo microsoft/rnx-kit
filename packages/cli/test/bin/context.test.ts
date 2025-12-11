@@ -1,7 +1,7 @@
 import type { Command } from "@react-native-community/cli-types";
-import { RNX_PREFIX } from "../../src/bin/constants";
-import { loadContextForCommand, uniquify } from "../../src/bin/context";
-import { reactNativeConfig } from "../../src/index";
+import { RNX_PREFIX } from "../../src/bin/constants.ts";
+import { loadContextForCommand, uniquify } from "../../src/bin/context.ts";
+import { reactNativeConfig } from "../../src/index.ts";
 
 jest.mock("@rnx-kit/tools-react-native/context", () => ({
   resolveCommunityCLI: () => {

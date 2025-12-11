@@ -11,7 +11,7 @@ import {
   type PackagePaths,
   type WorkspaceOutputGeneratedContent,
   type WorkspaceOutputJson,
-} from "./types";
+} from "./types.ts";
 
 const PROVIDER_KEY = "externalWorkspacesProvider";
 const OUTPUT_PATH_KEY = "externalWorkspacesOutputPath";

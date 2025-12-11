@@ -200,13 +200,16 @@ yarn rnx-cli build [options]
 
 <!-- @rnx-kit/cli/build start -->
 
-| Option                         | Description                                                                  |
-| ------------------------------ | ---------------------------------------------------------------------------- |
-| -p, --platform &lt;string&gt;  | Target platform                                                              |
-| --workspace &lt;string&gt;     | Path, relative to project root, of the Xcode workspace to build (macOS only) |
-| --scheme &lt;string&gt;        | Name of scheme to build (Apple platforms only)                               |
-| --configuration &lt;string&gt; | Build configuration for building the app; 'Debug' or 'Release'               |
-| --destination &lt;string&gt;   | Destination of the built app; 'device', 'emulator', or 'simulator'           |
+| Option                         | Description                                                                           |
+| ------------------------------ | ------------------------------------------------------------------------------------- |
+| -p, --platform &lt;string&gt;  | Target platform                                                                       |
+| --solution &lt;string&gt;      | Path, relative to project root, of the Visual Studio solution to build (Windows only) |
+| --workspace &lt;string&gt;     | Path, relative to project root, of the Xcode workspace to build (macOS only)          |
+| --scheme &lt;string&gt;        | Name of scheme to build (Apple platforms only)                                        |
+| --configuration &lt;string&gt; | Build configuration for building the app; 'Debug' or 'Release'                        |
+| --destination &lt;string&gt;   | Destination of the built app; 'device', 'emulator', or 'simulator'                    |
+| --ccache-dir &lt;string&gt;    | Path to Ccache config                                                                 |
+| --ccache-home &lt;string&gt;   | Path to Ccache installation                                                           |
 
 <!-- @rnx-kit/cli/build end -->
 
@@ -226,14 +229,17 @@ yarn rnx-cli run [options]
 
 <!-- @rnx-kit/cli/run start -->
 
-| Option                         | Description                                                                  |
-| ------------------------------ | ---------------------------------------------------------------------------- |
-| -p, --platform &lt;string&gt;  | Target platform                                                              |
-| --workspace &lt;string&gt;     | Path, relative to project root, of the Xcode workspace to build (macOS only) |
-| --scheme &lt;string&gt;        | Name of scheme to build (Apple platforms only)                               |
-| --configuration &lt;string&gt; | Build configuration for building the app; 'Debug' or 'Release'               |
-| --destination &lt;string&gt;   | Destination of the built app; 'device', 'emulator', or 'simulator'           |
-| -d, --device &lt;string&gt;    | The name of the device to launch the app in                                  |
+| Option                         | Description                                                                           |
+| ------------------------------ | ------------------------------------------------------------------------------------- |
+| -p, --platform &lt;string&gt;  | Target platform                                                                       |
+| --solution &lt;string&gt;      | Path, relative to project root, of the Visual Studio solution to build (Windows only) |
+| --workspace &lt;string&gt;     | Path, relative to project root, of the Xcode workspace to build (macOS only)          |
+| --scheme &lt;string&gt;        | Name of scheme to build (Apple platforms only)                                        |
+| --configuration &lt;string&gt; | Build configuration for building the app; 'Debug' or 'Release'                        |
+| --destination &lt;string&gt;   | Destination of the built app; 'device', 'emulator', or 'simulator'                    |
+| --ccache-dir &lt;string&gt;    | Path to Ccache config                                                                 |
+| --ccache-home &lt;string&gt;   | Path to Ccache installation                                                           |
+| -d, --device &lt;string&gt;    | The name of the device to launch the app in                                           |
 
 <!-- @rnx-kit/cli/run end -->
 
@@ -263,11 +269,11 @@ yarn rnx-cli clean [options]
 
 <!-- @rnx-kit/cli/clean start -->
 
-| Option                                                      | Description                                              |
-| ----------------------------------------------------------- | -------------------------------------------------------- |
-| --include &lt;android,cocoapods,metro,npm,watchman,yarn&gt; | Comma-separated flag of caches to clear e.g., `npm,yarn` |
-| --project-root &lt;path&gt;                                 | Root path to your React Native project                   |
-| --verify-cache                                              | Whether to verify the integrity of the cache             |
+| Option                                                            | Description                                              |
+| ----------------------------------------------------------------- | -------------------------------------------------------- |
+| --include &lt;android,cocoapods,metro,npm,watchman,xcode,yarn&gt; | Comma-separated flag of caches to clear e.g., `npm,yarn` |
+| --project-root &lt;path&gt;                                       | Root path to your React Native project                   |
+| --verify-cache                                                    | Whether to verify the integrity of the cache             |
 
 <!-- @rnx-kit/cli/clean end -->
 

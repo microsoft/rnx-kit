@@ -12,8 +12,8 @@ import {
   saveConfigToCache,
 } from "@rnx-kit/tools-react-native/cache";
 import { resolveCommunityCLI } from "@rnx-kit/tools-react-native/context";
-import { reactNativeConfig } from "../index";
-import { RNX_FAST_PATH, RNX_PREFIX } from "./constants";
+import { reactNativeConfig } from "../index.ts";
+import { RNX_FAST_PATH, RNX_PREFIX } from "./constants.ts";
 
 type Command = BaseCommand<false> | BaseCommand<true>;
 type Commands = Record<string, Command>;

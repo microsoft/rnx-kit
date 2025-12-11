@@ -4,9 +4,9 @@ import { normalizePath } from "@rnx-kit/tools-node/path";
 import { getMetroVersion } from "@rnx-kit/tools-react-native/metro";
 import type { AllPlatforms } from "@rnx-kit/tools-react-native/platform";
 import type { Project } from "@rnx-kit/typescript-service";
-import { createProjectCache } from "./projectCache";
-import type { SerializerHook } from "./types";
-import { greaterThanOrEqualTo } from "./version";
+import { createProjectCache } from "./projectCache.ts";
+import type { SerializerHook } from "./types.ts";
+import { greaterThanOrEqualTo } from "./version.ts";
 
 function requireMetroVersion(requiredVersion: string): string | undefined {
   const version = getMetroVersion();

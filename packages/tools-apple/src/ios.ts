@@ -1,15 +1,15 @@
 import { retry } from "@rnx-kit/tools-shell/async";
 import { ensure, makeCommand } from "@rnx-kit/tools-shell/command";
 import * as readline from "node:readline";
-import { open } from "./macos.js";
+import { open } from "./macos.ts";
 import type {
   BuildParams,
   Device,
   DeviceType,
   Logger,
   Simulator,
-} from "./types.js";
-import { parsePlist, xcrun } from "./xcode.js";
+} from "./types.ts";
+import { parsePlist, xcrun } from "./xcode.ts";
 
 const DEFAULT_SIMS: Record<string, RegExp> = {
   "com.apple.platform.iphonesimulator": /^iPhone \d\d(?: Pro)?$/,
