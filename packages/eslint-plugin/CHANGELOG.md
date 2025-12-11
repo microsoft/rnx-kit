@@ -1,5 +1,12 @@
 # Change Log - @rnx-kit/eslint-plugin
 
+## 0.9.5
+
+### Patch Changes
+
+- ed5fe35: Fixed import statements so that the TypeScript code can be used
+  directly
+
 ## 0.9.4
 
 ### Patch Changes

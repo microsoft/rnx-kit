@@ -1,5 +1,15 @@
 # @rnx-kit/tools-typescript
 
+## 0.1.2
+
+### Patch Changes
+
+- ed5fe35: Fixed import statements so that the TypeScript code can be used
+  directly
+- Updated dependencies [ed5fe35]
+  - @rnx-kit/tools-react-native@2.3.2
+  - @rnx-kit/tools-node@3.0.3
+
 ## 0.1.1
 
 ### Patch Changes

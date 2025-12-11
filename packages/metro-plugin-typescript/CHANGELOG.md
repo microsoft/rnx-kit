@@ -1,5 +1,15 @@
 # @rnx-kit/metro-plugin-typescript
 
+## 0.5.3
+
+### Patch Changes
+
+- ed5fe35: Fixed import statements so that the TypeScript code can be used
+  directly
+- Updated dependencies [ed5fe35]
+  - @rnx-kit/tools-react-native@2.3.2
+  - @rnx-kit/tools-node@3.0.3
+
 ## 0.5.2
 
 ### Patch Changes

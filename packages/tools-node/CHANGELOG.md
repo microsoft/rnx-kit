@@ -1,5 +1,12 @@
 # Change Log - @rnx-kit/tools-node
 
+## 3.0.3
+
+### Patch Changes
+
+- ed5fe35: Fixed import statements so that the TypeScript code can be used
+  directly
+
 ## 3.0.2
 
 ### Patch Changes

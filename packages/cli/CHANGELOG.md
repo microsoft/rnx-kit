@@ -1,5 +1,22 @@
 # Change Log - @rnx-kit/cli
 
+## 0.18.17
+
+### Patch Changes
+
+- ed5fe35: Fixed import statements so that the TypeScript code can be used
+  directly
+- Updated dependencies [c10ac78]
+- Updated dependencies [ed5fe35]
+  - @rnx-kit/metro-serializer-esbuild@0.2.8
+  - @rnx-kit/metro-plugin-typescript@0.5.3
+  - @rnx-kit/tools-react-native@2.3.2
+  - @rnx-kit/tools-language@3.0.1
+  - @rnx-kit/metro-service@4.1.3
+  - @rnx-kit/tools-android@0.2.2
+  - @rnx-kit/tools-apple@0.2.2
+  - @rnx-kit/tools-node@3.0.3
+
 ## 0.18.16
 
 ### Patch Changes

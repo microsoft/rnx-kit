@@ -1,5 +1,12 @@
 # @rnx-kit/yarn-plugin-external-workspaces
 
+## 0.1.3
+
+### Patch Changes
+
+- ed5fe35: Fixed import statements so that the TypeScript code can be used
+  directly
+
 ## 0.1.2
 
 ### Patch Changes
