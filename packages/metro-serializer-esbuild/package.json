@@ -37,7 +37,7 @@
     "@rnx-kit/console": "^2.0.0",
     "@rnx-kit/tools-node": "^3.0.2",
     "@rnx-kit/tools-react-native": "^2.3.0",
-    "esbuild": "^0.25.0",
+    "esbuild": "^0.27.1",
     "esbuild-plugin-lodash": "^1.2.0",
     "fast-glob": "^3.2.7"
   },
