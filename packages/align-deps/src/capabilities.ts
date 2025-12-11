@@ -2,7 +2,7 @@ import type { Capability } from "@rnx-kit/config";
 import { warn } from "@rnx-kit/console";
 import { keysOf } from "@rnx-kit/tools-language/properties";
 import type { PackageManifest } from "@rnx-kit/tools-node/package";
-import type { MetaPackage, Package, Preset, Profile } from "./types";
+import type { MetaPackage, Package, Preset, Profile } from "./types.ts";
 
 type ResolvedDependencies = {
   dependencies: Record<string, Package[]>;

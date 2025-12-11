@@ -9,14 +9,14 @@ import {
 } from "@rnx-kit/tools-workspaces";
 import * as fs from "node:fs";
 import * as path from "node:path";
-import { makeCheckCommand } from "./commands/check";
-import { makeExportCatalogsCommand } from "./commands/exportCatalogs";
-import { makeInitializeCommand } from "./commands/initialize";
-import { makeSetVersionCommand } from "./commands/setVersion";
-import { defaultConfig } from "./config";
-import { printError, printInfo } from "./errors";
-import { isString } from "./helpers";
-import type { Args, Command, DiffMode } from "./types";
+import { makeCheckCommand } from "./commands/check.ts";
+import { makeExportCatalogsCommand } from "./commands/exportCatalogs.ts";
+import { makeInitializeCommand } from "./commands/initialize.ts";
+import { makeSetVersionCommand } from "./commands/setVersion.ts";
+import { defaultConfig } from "./config.ts";
+import { printError, printInfo } from "./errors.ts";
+import { isString } from "./helpers.ts";
+import type { Args, Command, DiffMode } from "./types.ts";
 
 export const description =
   "Manage dependencies within a repository and across many repositories";
