@@ -27,7 +27,8 @@
     "directory": "incubator/yarn-plugin-external-workspaces"
   },
   "engines": {
-    "node": ">=18.12"
+    "node": ">=18.12",
+    "yarn": ">=4.0"
   },
   "scripts": {
     "build": "rnx-kit-scripts build",
