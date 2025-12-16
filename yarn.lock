@@ -5215,7 +5215,6 @@ __metadata:
     clipanion: "npm:^4.0.0-rc.4"
     esbuild: "npm:^0.27.1"
     eslint: "catalog:"
-    fast-glob: "npm:^3.2.7"
     jest: "npm:^29.2.1"
     markdown-table: "npm:^3.0.0"
     prettier: "catalog:"
