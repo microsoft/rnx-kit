@@ -55,11 +55,7 @@ export class TestCommand extends Command {
     }
 
     const tests =
-      this.args.length > 0
-        ? this.args
-        : await import("fast-glob").then(({ default: fg }) =>
-            fg.async("test/**/*.test.ts", { followSymbolicLinks: false })
-          );
+      this.args.length > 0 ? this.args : fs.globSync("test/**/*.test.ts");
     return useTsx(manifest)
       ? await execute(
           process.argv0,
