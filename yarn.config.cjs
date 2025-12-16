@@ -2,6 +2,7 @@
 
 /** @type {import("@yarnpkg/types")} */
 const { defineConfig } = require("@yarnpkg/types");
+const { getRootEnginesField } = require("./scripts/src/rootWorkspace.js");
 
 module.exports = defineConfig({
   constraints: async ({ Yarn }) => {
@@ -13,7 +14,7 @@ module.exports = defineConfig({
     const { author, repository: origin } = root.manifest;
 
     for (const workspace of Yarn.workspaces()) {
-      const { private: isPrivate, experimental } = workspace.manifest;
+      const { name, private: isPrivate, experimental } = workspace.manifest;
       if (isPrivate && !experimental) {
         workspace.set("version", "0.0.0");
       }
@@ -32,6 +33,12 @@ module.exports = defineConfig({
 
       if (workspace !== root) {
         workspace.set("repository.directory", workspace.cwd);
+      }
+
+      if (name.startsWith("@rnx-kit/yarn-plugin-")) {
+        const engines = getRootEnginesField();
+        workspace.set("engines.node", engines.node);
+        workspace.set("engines.yarn", ">=4.0");
       }
     }
   },
