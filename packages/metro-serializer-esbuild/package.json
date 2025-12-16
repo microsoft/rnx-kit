@@ -38,8 +38,7 @@
     "@rnx-kit/tools-node": "^3.0.3",
     "@rnx-kit/tools-react-native": "^2.3.2",
     "esbuild": "^0.27.1",
-    "esbuild-plugin-lodash": "^1.2.0",
-    "fast-glob": "^3.2.7"
+    "esbuild-plugin-lodash": "^1.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
@@ -65,6 +64,6 @@
     "react-native": "^0.81.0"
   },
   "engines": {
-    "node": ">=16.17"
+    "node": ">=22.11"
   }
 }
