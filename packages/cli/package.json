@@ -93,7 +93,7 @@
     "type-fest": "^4.0.0"
   },
   "engines": {
-    "node": ">=16.17"
+    "node": ">=22.11"
   },
   "jest": {
     "preset": "@rnx-kit/jest-preset/private"
