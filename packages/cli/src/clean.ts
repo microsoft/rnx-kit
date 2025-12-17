@@ -1,4 +1,5 @@
 import type { Config as CLIConfig } from "@react-native-community/cli-types";
+import type { IOType } from "node:child_process";
 import { spawn } from "node:child_process";
 import { existsSync as fileExists } from "node:fs";
 import * as fs from "node:fs/promises";
@@ -39,12 +40,10 @@ export async function rnxClean(
     cwd = root,
     onError?: OnError
   ) => {
+    const stdio: IOType[] = ["ignore", "pipe", "pipe"];
+    const shell = command.endsWith(".bat") || command.endsWith(".cmd");
     return new Promise<void>((resolve, reject) => {
-      const process = spawn(command, args, {
-        cwd,
-        stdio: ["ignore", "pipe", "pipe"],
-        shell: command.endsWith(".bat") || command.endsWith(".cmd"),
-      });
+      const process = spawn(command, args, { cwd, stdio, shell });
 
       process.on("error", (e) => {
         const code = "code" in e ? e.code : "errno" in e ? e.errno : "1";
@@ -194,12 +193,19 @@ export async function rnxClean(
   }
 }
 
-function cleanDir(path: string): Promise<void> {
-  if (!fileExists(path)) {
-    return Promise.resolve();
+async function cleanDir(
+  path: string,
+  options = { maxRetries: 3, recursive: true }
+): Promise<void> {
+  if (fileExists(path)) {
+    await fs.rm(path, options);
+  } else if (path.includes("*")) {
+    const promises: Promise<void>[] = [];
+    for await (const file of fs.glob(path)) {
+      promises.push(fs.rm(file, options));
+    }
+    await Promise.allSettled(promises);
   }
-
-  return fs.rm(path, { maxRetries: 3, recursive: true });
 }
 
 function findPath(startPath: string, files: string[]): string | undefined {
