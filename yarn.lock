@@ -5034,7 +5034,6 @@ __metadata:
     "@types/node": "npm:^24.0.0"
     esbuild: "npm:^0.27.1"
     esbuild-plugin-lodash: "npm:^1.2.0"
-    fast-glob: "npm:^3.2.7"
     lodash-es: "npm:^4.17.21"
     metro: "npm:^0.83.1"
     metro-config: "npm:^0.83.1"

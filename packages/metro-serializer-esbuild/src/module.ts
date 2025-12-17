@@ -2,6 +2,7 @@ import { warn } from "@rnx-kit/console";
 import { findPackage, readPackage } from "@rnx-kit/tools-node/package";
 import type { BuildOptions } from "esbuild";
 import type { Module, ReadOnlyDependencies } from "metro";
+import * as fs from "node:fs";
 import * as path from "node:path";
 import { generateSourceMappingURL } from "./sourceMap.ts";
 
@@ -41,13 +42,10 @@ export const getSideEffects = (() => {
     if (!(pkgJson in pkgCache)) {
       const { sideEffects } = readPackage(pkgJson);
       if (Array.isArray(sideEffects)) {
-        const fg = require("fast-glob");
-        pkgCache[pkgJson] = fg
-          .sync(sideEffects, {
-            cwd: path.dirname(pkgJson),
-            absolute: true,
-          })
-          .map((p: string) => p.replace(/[/\\]/g, path.sep));
+        const cwd = path.dirname(pkgJson);
+        pkgCache[pkgJson] = fs
+          .globSync(sideEffects, { cwd })
+          .map((p: string) => path.join(cwd, p.replace(/[/\\]/g, path.sep)));
       } else if (typeof sideEffects === "boolean") {
         pkgCache[pkgJson] = sideEffects;
       } else {
