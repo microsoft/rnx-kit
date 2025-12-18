@@ -30,6 +30,11 @@ NS_ASSUME_NONNULL_BEGIN
 /// Handles a fatal error.
 - (void)onFatalError:(NSError *)error;
 
+// MARK: - RCTBridgeDelegate deprecated details (for backwards compatibility) [>=0.84]
+
+- (NSURL *__nullable)sourceURLForBridge:(RCTBridge *)bridge;
+- (NSArray<id<RCTBridgeModule>> *)extraModulesForBridge:(RCTBridge *)bridge;
+
 @end
 
 NS_ASSUME_NONNULL_END
