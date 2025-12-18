@@ -1,5 +1,11 @@
 # @rnx-kit/react-native-host
 
+## 0.5.15
+
+### Patch Changes
+
+- f4e3221: Re-define deprecated bridge methods for backwards compatibility
+
 ## 0.5.14
 
 ### Patch Changes
