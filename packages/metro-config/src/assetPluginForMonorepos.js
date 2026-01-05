@@ -74,6 +74,18 @@ function escapeRelativePaths(middleware, server) {
 
 /**
  * Rewrites asset URLs as a query parameter.
+ * @param {string} url
+ * @returns {string}
+ */
+function rewriteRequestWithQueryParam(url) {
+  const prefix = "/assets/../";
+  return url.startsWith(prefix)
+    ? url.replace(prefix, "/assets?unstable_path=../")
+    : url;
+}
+
+/**
+ * Rewrites asset URLs as a query parameter.
  * @param {Middleware} middleware
  * @param {Server} _server
  * @returns {NextHandleFunction}
@@ -81,8 +93,8 @@ function escapeRelativePaths(middleware, server) {
 function rewriteRelativePathsAsQueryParam(middleware, _server) {
   return (req, res, next) => {
     const { url } = req;
-    if (url?.startsWith("/assets/../")) {
-      req.url = url.replace("../", "?unstable_path=../");
+    if (url) {
+      req.url = rewriteRequestWithQueryParam(url);
     }
     return middleware(req, res, next);
   };
@@ -92,3 +104,4 @@ module.exports = assetPlugin;
 module.exports.escapeRelativePaths = escapeRelativePaths;
 module.exports.rewriteRelativePathsAsQueryParam =
   rewriteRelativePathsAsQueryParam;
+module.exports.rewriteRequestWithQueryParam = rewriteRequestWithQueryParam;

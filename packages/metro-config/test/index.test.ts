@@ -2,7 +2,10 @@ import { deepEqual, equal, fail, match, ok, throws } from "node:assert/strict";
 import * as fs from "node:fs";
 import * as path from "node:path";
 import { afterEach, describe, it } from "node:test";
-import { enhanceMiddleware } from "../src/assetPluginForMonorepos.js";
+import {
+  rewriteRelativePathsAsQueryParam,
+  rewriteRequestWithQueryParam,
+} from "../src/assetPluginForMonorepos.js";
 import metroConfigModule from "../src/index.js";
 
 const currentWorkingDir = process.cwd();
@@ -408,7 +411,8 @@ describe("makeMetroConfig()", () => {
     deepEqual(config.resolver.blacklistRE, blockList);
     deepEqual(config.resolver.blockList, blockList);
 
-    equal(config.server.enhanceMiddleware, enhanceMiddleware);
+    equal(config.server.enhanceMiddleware, rewriteRelativePathsAsQueryParam);
+    equal(config.server.rewriteRequestUrl, rewriteRequestWithQueryParam);
     deepEqual(config.transformer.assetPlugins, []);
 
     const opts = { dev: false, hot: true, platform: undefined } as const;
@@ -481,7 +485,8 @@ describe("makeMetroConfig()", () => {
     deepEqual(config.resolver.blacklistRE, blockList);
     deepEqual(config.resolver.blockList, blockList);
 
-    equal(config.server.enhanceMiddleware, enhanceMiddleware);
+    equal(config.server.enhanceMiddleware, rewriteRelativePathsAsQueryParam);
+    equal(config.server.rewriteRequestUrl, rewriteRequestWithQueryParam);
     deepEqual(config.transformer.assetPlugins, []);
 
     const opts = { dev: false, hot: true, platform: undefined } as const;

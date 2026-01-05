@@ -330,6 +330,7 @@ module.exports = {
           enhanceMiddleware: supportsAssetPathQueryParam(projectRoot)
             ? assetPlugins.rewriteRelativePathsAsQueryParam
             : assetPlugins.escapeRelativePaths,
+          rewriteRequestUrl: assetPlugins.rewriteRequestWithQueryParam,
         },
         transformer: {
           getTransformOptions: async () => ({
