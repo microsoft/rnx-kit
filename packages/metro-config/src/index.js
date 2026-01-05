@@ -3,6 +3,7 @@
 
 const {
   findMetroPath,
+  getMetroVersion,
   requireModuleFromMetro,
 } = require("@rnx-kit/tools-react-native/metro");
 const fs = require("node:fs");
@@ -280,6 +281,18 @@ function exclusionList(additionalExclusions = [], projectRoot = process.cwd()) {
   ];
 }
 
+/**
+ * Returns whether Metro supports the `unstable_path` query parameter.
+ * @param {string} projectRoot
+ * @returns {boolean}
+ */
+function supportsAssetPathQueryParam(projectRoot) {
+  // https://github.com/facebook/metro/commit/f3d1157bacc341dff82efea2f70b634141105fc0
+  const version = getMetroVersion(projectRoot) || "0.0.0";
+  const [major = 0, minor = 0] = version.split(".");
+  return Number(major) * 1000 + Number(minor) >= 67;
+}
+
 module.exports = {
   defaultWatchFolders,
   excludeExtraCopiesOf,
@@ -296,7 +309,7 @@ module.exports = {
     const projectRoot = inputConfig.projectRoot || process.cwd();
 
     const { mergeConfig } = requireModuleFromMetro("metro-config", projectRoot);
-    const { enhanceMiddleware } = require("./assetPluginForMonorepos");
+    const assetPlugins = require("./assetPluginForMonorepos");
     const { getDefaultConfig } = require("./defaultConfig");
 
     const blockList = exclusionList([], projectRoot);
@@ -314,7 +327,9 @@ module.exports = {
           blockList, // For Metro >= 0.60
         },
         server: {
-          enhanceMiddleware,
+          enhanceMiddleware: supportsAssetPathQueryParam(projectRoot)
+            ? assetPlugins.rewriteRelativePathsAsQueryParam
+            : assetPlugins.escapeRelativePaths,
         },
         transformer: {
           getTransformOptions: async () => ({

@@ -1,4 +1,5 @@
 /**
+ * @typedef {import("connect").NextHandleFunction} NextHandleFunction;
  * @typedef {import("metro").AssetData} AssetData;
  * @typedef {import("metro-config").ConfigT} ConfigT;
  * @typedef {import("metro-config").Middleware} Middleware;
@@ -55,22 +56,39 @@ function injectAssetPlugin(server) {
 }
 
 /**
- * This middleware restores `..` in asset URLs.
- *
+ * Rewrites (and restores) `..` to `@@` in asset URLs to avoid transformations.
  * @param {Middleware} middleware
  * @param {Server} server
- * @returns {import("connect").NextHandleFunction}
+ * @returns {NextHandleFunction}
  */
-function enhanceMiddleware(middleware, server) {
+function escapeRelativePaths(middleware, server) {
   injectAssetPlugin(server);
   return (req, res, next) => {
     const { url } = req;
-    if (url && url.startsWith("/assets/")) {
+    if (url?.startsWith("/assets/")) {
       req.url = url.replaceAll("@@/", "../");
     }
     return middleware(req, res, next);
   };
 }
 
+/**
+ * Rewrites asset URLs as a query parameter.
+ * @param {Middleware} middleware
+ * @param {Server} _server
+ * @returns {NextHandleFunction}
+ */
+function rewriteRelativePathsAsQueryParam(middleware, _server) {
+  return (req, res, next) => {
+    const { url } = req;
+    if (url?.startsWith("/assets/../")) {
+      req.url = url.replace("../", "?unstable_path=../");
+    }
+    return middleware(req, res, next);
+  };
+}
+
 module.exports = assetPlugin;
-module.exports.enhanceMiddleware = enhanceMiddleware;
+module.exports.escapeRelativePaths = escapeRelativePaths;
+module.exports.rewriteRelativePathsAsQueryParam =
+  rewriteRelativePathsAsQueryParam;
