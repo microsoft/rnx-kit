@@ -649,12 +649,12 @@ __metadata:
   linkType: hard
 
 "azure-devops-node-api@npm:^15.0.0":
-  version: 15.1.1
-  resolution: "azure-devops-node-api@npm:15.1.1"
+  version: 15.1.3
+  resolution: "azure-devops-node-api@npm:15.1.3"
   dependencies:
     tunnel: "npm:0.0.6"
     typed-rest-client: "npm:2.1.0"
-  checksum: 10c0/e57de52745b322523c2f0220770fcbcb692032610d240644c96914ba0f08613416b701e56dc996b52c9bf6761270148a931f694630ed171b238555e237ee002c
+  checksum: 10c0/0c4ddc6fe4e586cc13bf3ac85e6ac145e0fa675805cb3acf41237451971faf6abcae88b8700c10e8472f18e24f2c53d800cfcd92ccb0fc71b45d99c1440d4e14
   languageName: node
   linkType: hard
 
