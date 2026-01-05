@@ -1,5 +1,17 @@
 # Change Log - @rnx-kit/cli
 
+## 1.0.0
+
+### Major Changes
+
+- 579bad7: Bumped minimum Node version to 22
+
+### Patch Changes
+
+- 579bad7: Fixed Metro cache not being cleaned up
+- Updated dependencies [5e6071b]
+  - @rnx-kit/metro-serializer-esbuild@0.3.0
+
 ## 0.18.17
 
 ### Patch Changes
