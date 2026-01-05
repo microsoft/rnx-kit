@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-serializer-esbuild
 
+## 0.3.0
+
+### Minor Changes
+
+- 5e6071b: Bumped minimum Node version to 22
+
 ## 0.2.8
 
 ### Patch Changes
