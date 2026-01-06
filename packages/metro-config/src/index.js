@@ -317,6 +317,15 @@ module.exports = {
       inputConfig.resolver &&
       (inputConfig.resolver.blockList || inputConfig.resolver.blacklistRE);
 
+    const server = supportsAssetPathQueryParam(projectRoot)
+      ? {
+          enhanceMiddleware: assetPlugins.rewriteRelativePathsAsQueryParam,
+          rewriteRequestUrl: assetPlugins.rewriteRequestWithQueryParam,
+        }
+      : {
+          enhanceMiddleware: assetPlugins.escapeRelativePaths,
+        };
+
     /** @type {MetroConfig[]} */
     const [defaultConfig, ...configs] = [
       ...getDefaultConfig(projectRoot, platform),
@@ -326,12 +335,7 @@ module.exports = {
           blacklistRE: blockList, // For Metro < 0.60
           blockList, // For Metro >= 0.60
         },
-        server: {
-          enhanceMiddleware: supportsAssetPathQueryParam(projectRoot)
-            ? assetPlugins.rewriteRelativePathsAsQueryParam
-            : assetPlugins.escapeRelativePaths,
-          rewriteRequestUrl: assetPlugins.rewriteRequestWithQueryParam,
-        },
+        server,
         transformer: {
           getTransformOptions: async () => ({
             transform: {
