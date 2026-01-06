@@ -1,11 +1,8 @@
 import { deepEqual, equal, fail, match, ok, throws } from "node:assert/strict";
 import * as fs from "node:fs";
+import { createRequire } from "node:module";
 import * as path from "node:path";
-import { afterEach, describe, it } from "node:test";
-import {
-  rewriteRelativePathsAsQueryParam,
-  rewriteRequestWithQueryParam,
-} from "../src/assetPluginForMonorepos.js";
+import { after, afterEach, before, describe, it } from "node:test";
 import metroConfigModule from "../src/index.js";
 
 const currentWorkingDir = process.cwd();
@@ -357,9 +354,20 @@ describe("exclusionList()", () => {
 });
 
 describe("makeMetroConfig()", () => {
+  const globalRequire = global.require;
+
   const { exclusionList, makeMetroConfig } = metroConfigModule;
 
   const projectRoot = path.resolve("../test-app");
+
+  before(() => {
+    // @ts-expect-error Tests are run in ESM mode
+    global.require = createRequire(new URL("../src/index.js", import.meta.url));
+  });
+
+  after(() => {
+    global.require = globalRequire;
+  });
 
   it("returns a default Metro config", async () => {
     const config = makeMetroConfig({ projectRoot });
@@ -411,9 +419,9 @@ describe("makeMetroConfig()", () => {
     deepEqual(config.resolver.blacklistRE, blockList);
     deepEqual(config.resolver.blockList, blockList);
 
-    equal(config.server.enhanceMiddleware, rewriteRelativePathsAsQueryParam);
-    equal(config.server.rewriteRequestUrl, rewriteRequestWithQueryParam);
-    deepEqual(config.transformer.assetPlugins, []);
+    deepEqual(config.transformer.assetPlugins, [
+      require.resolve("../src/assetPlugins/rewriteAssetURLs.js"),
+    ]);
 
     const opts = { dev: false, hot: true, platform: undefined } as const;
     const transformerOptions = await config.transformer.getTransformOptions(
@@ -485,9 +493,9 @@ describe("makeMetroConfig()", () => {
     deepEqual(config.resolver.blacklistRE, blockList);
     deepEqual(config.resolver.blockList, blockList);
 
-    equal(config.server.enhanceMiddleware, rewriteRelativePathsAsQueryParam);
-    equal(config.server.rewriteRequestUrl, rewriteRequestWithQueryParam);
-    deepEqual(config.transformer.assetPlugins, []);
+    deepEqual(config.transformer.assetPlugins, [
+      require.resolve("../src/assetPlugins/rewriteAssetURLs.js"),
+    ]);
 
     const opts = { dev: false, hot: true, platform: undefined } as const;
     const transformerOptions = await config.transformer.getTransformOptions(

@@ -4,11 +4,12 @@ import type Server from "metro/private/Server";
 import { equal } from "node:assert/strict";
 import type { IncomingMessage, ServerResponse } from "node:http";
 import { describe, it } from "node:test";
-import assetPlugin from "../src/assetPluginForMonorepos.js";
+import {
+  enhanceMiddleware,
+  default as escapeAssetURL,
+} from "../../src/assetPlugins/escapeAssetURLs.js";
 
 describe("assetPluginForMonorepos/escapeRelativePaths", () => {
-  const { escapeRelativePaths } = assetPlugin;
-
   const cases = [
     ["/assets/./node_modules", "/assets/./node_modules"],
     ["/assets/../node_modules", "/assets/@@/node_modules"],
@@ -22,7 +23,7 @@ describe("assetPluginForMonorepos/escapeRelativePaths", () => {
   it("escapes `..` in URLs", () => {
     for (const [input, output] of cases) {
       const assetData = { httpServerLocation: input } as AssetData;
-      equal(assetPlugin(assetData).httpServerLocation, output);
+      equal(escapeAssetURL(assetData).httpServerLocation, output);
     }
   });
 
@@ -39,35 +40,11 @@ describe("assetPluginForMonorepos/escapeRelativePaths", () => {
       const incoming = { url: input } as IncomingMessage;
       const response = {} as ServerResponse;
 
-      escapeRelativePaths(middleware, server)(
+      enhanceMiddleware(middleware, server)(
         incoming,
         response,
         () => undefined
       );
-    }
-  });
-});
-
-describe("assetPluginForMonorepos/rewriteRequestWithQueryParam", () => {
-  const { rewriteRequestWithQueryParam } = assetPlugin;
-
-  const cases = [
-    ["/assets/./node_modules", "/assets/./node_modules"],
-    ["/assets/../node_modules", "/assets?unstable_path=../node_modules"],
-    ["/assets/../../node_modules", "/assets?unstable_path=../../node_modules"],
-    [
-      "/assets/node_modules/../../react-native",
-      "/assets/node_modules/../../react-native",
-    ],
-    [
-      "/assets/local/path/with/nested/assets/../../react-native",
-      "/assets/local/path/with/nested/assets/../../react-native",
-    ],
-  ] as const;
-
-  it("rewrites request URLs with relative paths", () => {
-    for (const [input, output] of cases) {
-      equal(rewriteRequestWithQueryParam(input), output);
     }
   });
 });

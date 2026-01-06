@@ -293,6 +293,50 @@ function supportsAssetPathQueryParam(projectRoot) {
   return Number(major) * 1000 + Number(minor) >= 67;
 }
 
+/**
+ * @param {string} projectRoot
+ * @param {InputConfig} inputConfig
+ * @returns {MetroConfig}
+ */
+function additionalConfig(projectRoot, inputConfig) {
+  const blockList = exclusionList([], projectRoot);
+
+  /** @type {import("type-fest").WritableDeep<MetroConfig["transformer"]>} */
+  const transformer = {
+    getTransformOptions: async () => ({
+      transform: {
+        experimentalImportSupport: false,
+        inlineRequires: false,
+      },
+    }),
+  };
+
+  /** @type {import("type-fest").Writable<MetroConfig>} */
+  const config = {
+    resolver: {
+      resolverMainFields: ["react-native", "browser", "main"],
+      blacklistRE: blockList, // For Metro < 0.60
+      blockList, // For Metro >= 0.60
+    },
+    transformer,
+    watchFolders: inputConfig.watchFolders ?? defaultWatchFolders(),
+  };
+
+  if (supportsAssetPathQueryParam(projectRoot)) {
+    transformer.assetPlugins = [
+      require.resolve("./assetPlugins/rewriteAssetURLs.js"),
+    ];
+  } else {
+    const { enhanceMiddleware } = require("./assetPlugins/escapeAssetURLs.js");
+    config.server = { enhanceMiddleware };
+    transformer.assetPlugins = [
+      require.resolve("./assetPlugins/escapeAssetURLs.js"),
+    ];
+  }
+
+  return config;
+}
+
 module.exports = {
   defaultWatchFolders,
   excludeExtraCopiesOf,
@@ -309,43 +353,16 @@ module.exports = {
     const projectRoot = inputConfig.projectRoot || process.cwd();
 
     const { mergeConfig } = requireModuleFromMetro("metro-config", projectRoot);
-    const assetPlugins = require("./assetPluginForMonorepos");
     const { getDefaultConfig } = require("./defaultConfig");
 
-    const blockList = exclusionList([], projectRoot);
     const customBlockList =
       inputConfig.resolver &&
       (inputConfig.resolver.blockList || inputConfig.resolver.blacklistRE);
 
-    const server = supportsAssetPathQueryParam(projectRoot)
-      ? {
-          enhanceMiddleware: assetPlugins.rewriteRelativePathsAsQueryParam,
-          rewriteRequestUrl: assetPlugins.rewriteRequestWithQueryParam,
-        }
-      : {
-          enhanceMiddleware: assetPlugins.escapeRelativePaths,
-        };
-
     /** @type {MetroConfig[]} */
     const [defaultConfig, ...configs] = [
       ...getDefaultConfig(projectRoot, platform),
-      {
-        resolver: {
-          resolverMainFields: ["react-native", "browser", "main"],
-          blacklistRE: blockList, // For Metro < 0.60
-          blockList, // For Metro >= 0.60
-        },
-        server,
-        transformer: {
-          getTransformOptions: async () => ({
-            transform: {
-              experimentalImportSupport: false,
-              inlineRequires: false,
-            },
-          }),
-        },
-        watchFolders: inputConfig.watchFolders ?? defaultWatchFolders(),
-      },
+      additionalConfig(projectRoot, inputConfig),
       {
         ...inputConfig,
         resolver: {
