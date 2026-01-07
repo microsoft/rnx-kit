@@ -8,7 +8,10 @@ export function getAssetDestPath(asset: PackagerAsset, scale: number): string {
     // Assets can have relative paths outside of the project root.
     // Replace `../` with `_` to make sure they don't end up outside of
     // the expected assets directory.
-    asset.httpServerLocation.substr(1).replaceAll("../", "_"),
+    asset.httpServerLocation
+      .substring(1)
+      .replace("?unstable_path=", "/")
+      .replaceAll("../", "_"),
     fileName
   );
 }

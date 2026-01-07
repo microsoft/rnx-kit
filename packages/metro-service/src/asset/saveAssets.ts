@@ -30,7 +30,17 @@ export function getSaveAssetsPlugin(
     const { default: saveAssets } = require(
       path.join(pluginPath, "dist", "commands", "bundle", "saveAssets.js")
     );
-    return saveAssets;
+    const param = "?unstable_path=";
+    return (assets, ...args) => {
+      for (const asset of assets) {
+        const { httpServerLocation } = asset;
+        if (httpServerLocation.includes(param)) {
+          // @ts-expect-error Intentionally modifying a read-only property
+          asset.httpServerLocation = httpServerLocation.replace(param, "/");
+        }
+      }
+      return saveAssets(assets, ...args);
+    };
   }
 
   switch (platform) {
