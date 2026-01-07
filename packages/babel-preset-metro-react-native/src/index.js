@@ -16,6 +16,7 @@ const path = require("path");
  *   unstable_transformProfile?: "default" | "hermes-canary" | "hermes-stable";
  *   useTransformReactJSXExperimental?: boolean;
  *   withDevTools?: boolean;
+ *   customTransformOptions?: Record<string, unknown>;
  * }} MetroPresetOptions
  *
  * @typedef {{
@@ -155,6 +156,11 @@ function overridesFor(transformProfile, env) {
     case "esbuild":
       return {
         disableImportExportTransform: true,
+        unstable_transformProfile: "hermes-stable",
+        useTransformReactJSXExperimental: true,
+        customTransformOptions: {
+          unstable_preserveClasses: true,
+        },
       };
 
     default:
