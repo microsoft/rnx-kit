@@ -154,6 +154,8 @@ function overridesFor(transformProfile, env) {
 
   switch (transformProfile) {
     case "esbuild":
+      // For future reference: TypeScript plugins cannot be removed because
+      // Babel cannot parse TypeScript syntax without them.
       return {
         disableImportExportTransform: true,
         unstable_transformProfile: "hermes-stable",
