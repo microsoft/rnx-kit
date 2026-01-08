@@ -149,6 +149,11 @@ export const profile: Profile = {
     version: "^5.4.0",
   },
 
+  screens: {
+    name: "react-native-screens",
+    version: ">=4.14.0 <4.19.0",
+  },
+
   "test-app": {
     name: "react-native-test-app",
     version: "^4.4.11",
