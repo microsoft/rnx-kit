@@ -16,6 +16,7 @@ const path = require("path");
  *   unstable_transformProfile?: "default" | "hermes-canary" | "hermes-stable";
  *   useTransformReactJSXExperimental?: boolean;
  *   withDevTools?: boolean;
+ *   customTransformOptions?: Record<string, unknown>;
  * }} MetroPresetOptions
  *
  * @typedef {{
@@ -153,8 +154,15 @@ function overridesFor(transformProfile, env) {
 
   switch (transformProfile) {
     case "esbuild":
+      // For future reference: TypeScript plugins cannot be removed because
+      // Babel cannot parse TypeScript syntax without them.
       return {
         disableImportExportTransform: true,
+        unstable_transformProfile: "hermes-stable",
+        useTransformReactJSXExperimental: true,
+        customTransformOptions: {
+          unstable_preserveClasses: true,
+        },
       };
 
     default:
