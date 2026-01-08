@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/babel-preset-metro-react-native
 
+## 3.0.1
+
+### Patch Changes
+
+- 61a7724: Reduce the number of Babel plugins when esbuild is used
+
 ## 3.0.0
 
 ### Major Changes
