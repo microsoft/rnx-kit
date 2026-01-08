@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/align-deps
 
+## 3.4.0
+
+### Minor Changes
+
+- d13f8a7: Align react-native-screens capability with the project README
+
 ## 3.3.4
 
 ### Patch Changes
