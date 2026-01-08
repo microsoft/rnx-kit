@@ -11,7 +11,10 @@ const { applyExpoWorkarounds, isExpoConfig } = require("./expoConfig");
 
 /**
  * @typedef {import("metro-config").MetroConfig} MetroConfig;
- * @typedef {MetroConfig & { platform?: string; }} InputConfig;
+ * @typedef {MetroConfig & {
+ *   platform?: string;
+ *   unstable_allowAssetsOutsideProjectRoot?: boolean;
+ * }} InputConfig;
  */
 
 /** Packages that must be resolved to one specific copy. */
@@ -280,6 +283,53 @@ function exclusionList(additionalExclusions = [], projectRoot = process.cwd()) {
   ];
 }
 
+/**
+ * @param {string} projectRoot
+ * @param {InputConfig} inputConfig
+ * @returns {MetroConfig}
+ */
+function additionalConfig(projectRoot, inputConfig) {
+  const blockList = exclusionList([], projectRoot);
+
+  /** @type {import("type-fest").WritableDeep<MetroConfig["transformer"]>} */
+  const transformer = {
+    getTransformOptions: async () => ({
+      transform: {
+        experimentalImportSupport: false,
+        inlineRequires: false,
+      },
+    }),
+  };
+
+  /** @type {import("type-fest").Writable<MetroConfig>} */
+  const config = {
+    resolver: {
+      resolverMainFields: ["react-native", "browser", "main"],
+      blacklistRE: blockList, // For Metro < 0.60
+      blockList, // For Metro >= 0.60
+    },
+    transformer,
+    watchFolders: inputConfig.watchFolders ?? defaultWatchFolders(),
+  };
+
+  if (inputConfig.unstable_allowAssetsOutsideProjectRoot) {
+    // We currently cannot enable this by default because it affects the
+    // structure of the assets folder, breaking release builds.
+    transformer.assetPlugins = [
+      require.resolve("./assetPlugins/rewriteAssetURLs.js"),
+    ];
+  } else {
+    const { restoreAssetURL } = require("./assetPlugins/escapeAssetURLs.js");
+    config.server = { rewriteRequestUrl: restoreAssetURL };
+
+    transformer.assetPlugins = [
+      require.resolve("./assetPlugins/escapeAssetURLs.js"),
+    ];
+  }
+
+  return config;
+}
+
 module.exports = {
   defaultWatchFolders,
   excludeExtraCopiesOf,
@@ -296,10 +346,8 @@ module.exports = {
     const projectRoot = inputConfig.projectRoot || process.cwd();
 
     const { mergeConfig } = requireModuleFromMetro("metro-config", projectRoot);
-    const { enhanceMiddleware } = require("./assetPluginForMonorepos");
     const { getDefaultConfig } = require("./defaultConfig");
 
-    const blockList = exclusionList([], projectRoot);
     const customBlockList =
       inputConfig.resolver &&
       (inputConfig.resolver.blockList || inputConfig.resolver.blacklistRE);
@@ -307,25 +355,7 @@ module.exports = {
     /** @type {MetroConfig[]} */
     const [defaultConfig, ...configs] = [
       ...getDefaultConfig(projectRoot, platform),
-      {
-        resolver: {
-          resolverMainFields: ["react-native", "browser", "main"],
-          blacklistRE: blockList, // For Metro < 0.60
-          blockList, // For Metro >= 0.60
-        },
-        server: {
-          enhanceMiddleware,
-        },
-        transformer: {
-          getTransformOptions: async () => ({
-            transform: {
-              experimentalImportSupport: false,
-              inlineRequires: false,
-            },
-          }),
-        },
-        watchFolders: inputConfig.watchFolders ?? defaultWatchFolders(),
-      },
+      additionalConfig(projectRoot, inputConfig),
       {
         ...inputConfig,
         resolver: {
