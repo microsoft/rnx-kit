@@ -1,12 +1,18 @@
 /**
  * @typedef {import("metro").AssetData} AssetData;
- * @typedef {import("metro-config").ConfigT} ConfigT;
- * @typedef {import("metro-config").Middleware} Middleware;
- *
- * @typedef {import("metro/private/Server").default & {
- *   _config?: ConfigT;
- * }} Server;
  */
+
+/**
+ * @param {string} str
+ * @param {string} searchValue
+ * @param {string} replaceValue
+ * @returns {string}
+ */
+function replaceString(str, searchValue, replaceValue) {
+  return str.startsWith("/assets/")
+    ? str.replaceAll(searchValue, replaceValue)
+    : str;
+}
 
 /**
  * Metro doesn't support assets in a monorepo setup. When the app requests
@@ -14,7 +20,7 @@
  * the URL will be resolved to `/node_modules/react-native/<...>` and Metro will
  * fail to resolve them. The workaround is to replace `..` with something else
  * so the URL doesn't collapse when resolved, then restore them in
- * `server.enhanceMiddleware`.
+ * `server.rewriteRequestUrl`.
  *
  * For more details, see https://github.com/facebook/metro/issues/290.
  *
@@ -22,29 +28,19 @@
  * @returns {AssetData}
  */
 function assetPlugin(assetData) {
-  assetData.httpServerLocation = assetData.httpServerLocation.replaceAll(
-    "../",
-    "@@/"
-  );
+  const url = assetData.httpServerLocation;
+  assetData.httpServerLocation = replaceString(url, "../", "@@/");
   return assetData;
 }
 
 /**
- * This middleware restores `..` in asset URLs.
- *
- * @param {Middleware} middleware
- * @param {Server} _server
- * @returns {import("connect").NextHandleFunction}
+ * Restores `..` in asset URLs.
+ * @param {string} url
+ * @returns {string}
  */
-function enhanceMiddleware(middleware, _server) {
-  return (req, res, next) => {
-    const { url } = req;
-    if (url && url.startsWith("/assets/")) {
-      req.url = url.replaceAll("@@/", "../");
-    }
-    return middleware(req, res, next);
-  };
+function restoreAssetURL(url) {
+  return replaceString(url, "@@/", "../");
 }
 
 module.exports = assetPlugin;
-module.exports.enhanceMiddleware = enhanceMiddleware;
+module.exports.restoreAssetURL = restoreAssetURL;

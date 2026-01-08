@@ -3,7 +3,7 @@ import { deepEqual } from "node:assert/strict";
 import { describe, it } from "node:test";
 import rewriteRequest from "../../src/assetPlugins/rewriteAssetURLs.js";
 
-describe("assetPluginForMonorepos/rewriteRequestWithQueryParam", () => {
+describe("assetPlugins/rewriteRequestWithQueryParam", () => {
   const cases = [
     ["/assets/./node_modules", "/assets/./node_modules"],
     ["/assets/../node_modules", "/assets?unstable_path=../node_modules"],

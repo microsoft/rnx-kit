@@ -420,7 +420,7 @@ describe("makeMetroConfig()", () => {
     deepEqual(config.resolver.blockList, blockList);
 
     deepEqual(config.transformer.assetPlugins, [
-      require.resolve("../src/assetPlugins/rewriteAssetURLs.js"),
+      require.resolve("../src/assetPlugins/escapeAssetURLs.js"),
     ]);
 
     const opts = { dev: false, hot: true, platform: undefined } as const;
@@ -494,7 +494,7 @@ describe("makeMetroConfig()", () => {
     deepEqual(config.resolver.blockList, blockList);
 
     deepEqual(config.transformer.assetPlugins, [
-      require.resolve("../src/assetPlugins/rewriteAssetURLs.js"),
+      require.resolve("../src/assetPlugins/escapeAssetURLs.js"),
     ]);
 
     const opts = { dev: false, hot: true, platform: undefined } as const;

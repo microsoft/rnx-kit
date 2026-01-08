@@ -9,7 +9,8 @@
  * fail to resolve them.
  *
  * In 0.67, they introduced a query parameter, `unstable_path`, specifically to
- * handle such cases.
+ * handle such cases. However, this isn't properly fleshed out and only works in
+ * server mode. Bundling with this plugin may cause issues with asset paths.
  *
  * For more details, see https://github.com/facebook/metro/issues/290.
  *

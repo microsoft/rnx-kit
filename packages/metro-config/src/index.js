@@ -3,7 +3,6 @@
 
 const {
   findMetroPath,
-  getMetroVersion,
   requireModuleFromMetro,
 } = require("@rnx-kit/tools-react-native/metro");
 const fs = require("node:fs");
@@ -12,7 +11,10 @@ const { applyExpoWorkarounds, isExpoConfig } = require("./expoConfig");
 
 /**
  * @typedef {import("metro-config").MetroConfig} MetroConfig;
- * @typedef {MetroConfig & { platform?: string; }} InputConfig;
+ * @typedef {MetroConfig & {
+ *   platform?: string;
+ *   unstable_allowAssetsOutsideProjectRoot?: boolean;
+ * }} InputConfig;
  */
 
 /** Packages that must be resolved to one specific copy. */
@@ -282,18 +284,6 @@ function exclusionList(additionalExclusions = [], projectRoot = process.cwd()) {
 }
 
 /**
- * Returns whether Metro supports the `unstable_path` query parameter.
- * @param {string} projectRoot
- * @returns {boolean}
- */
-function supportsAssetPathQueryParam(projectRoot) {
-  // https://github.com/facebook/metro/commit/f3d1157bacc341dff82efea2f70b634141105fc0
-  const version = getMetroVersion(projectRoot) || "0.0.0";
-  const [major = 0, minor = 0] = version.split(".");
-  return Number(major) * 1000 + Number(minor) >= 67;
-}
-
-/**
  * @param {string} projectRoot
  * @param {InputConfig} inputConfig
  * @returns {MetroConfig}
@@ -322,13 +312,16 @@ function additionalConfig(projectRoot, inputConfig) {
     watchFolders: inputConfig.watchFolders ?? defaultWatchFolders(),
   };
 
-  if (supportsAssetPathQueryParam(projectRoot)) {
+  if (inputConfig.unstable_allowAssetsOutsideProjectRoot) {
+    // We currently cannot enable this by default because it affects the
+    // structure of the assets folder, breaking release builds.
     transformer.assetPlugins = [
       require.resolve("./assetPlugins/rewriteAssetURLs.js"),
     ];
   } else {
-    const { enhanceMiddleware } = require("./assetPlugins/escapeAssetURLs.js");
-    config.server = { enhanceMiddleware };
+    const { restoreAssetURL } = require("./assetPlugins/escapeAssetURLs.js");
+    config.server = { rewriteRequestUrl: restoreAssetURL };
+
     transformer.assetPlugins = [
       require.resolve("./assetPlugins/escapeAssetURLs.js"),
     ];
