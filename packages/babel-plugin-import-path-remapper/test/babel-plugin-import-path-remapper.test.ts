@@ -1,11 +1,14 @@
+import babel from "@babel/core";
 import { equal, throws } from "node:assert/strict";
-import { afterEach, describe, it } from "node:test";
+import { createRequire } from "node:module";
+import { after, afterEach, before, describe, it } from "node:test";
+import { fileURLToPath } from "node:url";
 
 describe("@rnx-kit/babel-plugin-import-path-remapper", () => {
-  const babel = require("@babel/core");
-  const path = require("path");
-
   const currentWorkingDir = process.cwd();
+  const pluginUrl = new URL("../src/index.js", import.meta.url);
+
+  let globalRequire = global.require;
 
   /**
    * Returns whether requested source is in @rnx-kit scope.
@@ -21,14 +24,21 @@ describe("@rnx-kit/babel-plugin-import-path-remapper", () => {
     code: string,
     options: unknown | undefined = { test: isRNXKit }
   ): string | null | undefined {
-    const result = babel.transformSync(code, {
-      plugins: [[path.join(__dirname, "..", "src", "index.js"), options]],
-    });
-    return result && result.code;
+    const plugin = fileURLToPath(pluginUrl);
+    const result = babel.transformSync(code, { plugins: [[plugin, options]] });
+    return result?.code;
   }
+
+  before(() => {
+    globalRequire = createRequire(pluginUrl);
+  });
 
   afterEach(() => {
     process.chdir(currentWorkingDir);
+  });
+
+  after(() => {
+    global.require = globalRequire;
   });
 
   it("throws if no test function is specified", () => {
