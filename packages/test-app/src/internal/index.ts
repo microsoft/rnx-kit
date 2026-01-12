@@ -22,7 +22,10 @@ export function isFabricInstance<T>(
   ref: NativeSyntheticEvent<T>["currentTarget"]
 ): boolean {
   return Boolean(
-    ref["__nativeTag"] || ref["_internalInstanceHandle"]?.stateNode?.canonical
+    // @ts-expect-error — https://github.com/facebook/react-native/blob/0.72-stable/packages/react-native/Libraries/Renderer/public/ReactFabricPublicInstanceUtils.js
+    ref["__nativeTag"] ||
+      // @ts-expect-error — https://github.com/facebook/react-native/blob/0.72-stable/packages/react-native/Libraries/Renderer/public/ReactFabricPublicInstanceUtils.js
+      ref["_internalInstanceHandle"]?.stateNode?.canonical
   );
 }
 
