@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-resolver-symlinks
 
+## 0.2.9
+
+### Patch Changes
+
+- 67fe0d6: Fixed no types being exported
+
 ## 0.2.8
 
 ### Patch Changes
