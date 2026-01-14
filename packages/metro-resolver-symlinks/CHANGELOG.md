@@ -1,5 +1,12 @@
 # Change Log - @rnx-kit/metro-resolver-symlinks
 
+## 0.2.10
+
+### Patch Changes
+
+- 951fb12: Add support for metro 0.82
+- dcfadad: Synced `Server.js` patch to Metro 0.83
+
 ## 0.2.9
 
 ### Patch Changes
