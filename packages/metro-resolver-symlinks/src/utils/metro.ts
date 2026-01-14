@@ -5,7 +5,7 @@ import {
 } from "@rnx-kit/tools-react-native/metro";
 import * as fs from "node:fs";
 import * as path from "node:path";
-import * as url from "node:url";
+import { URL } from "node:url";
 import type { Options, ResolutionContextCompat } from "../types.ts";
 
 const RETRY_FROM_DISK_FLAG = "experimental_retryResolvingFromDisk";
@@ -187,6 +187,8 @@ export function patchMetro(options: Options): void {
   // We need to patch `_processSingleAssetRequest` because it calls
   // `Assets.getAsset`, and `Assets.getAsset` checks whether the asset lives
   // under one of `projectRoot` or `watchFolders`.
+  //
+  // Last synced to: https://github.com/facebook/metro/blob/v0.83.3/packages/metro/src/Server.js#L502
   const Server = importMetroModule("/src/Server");
   Server.prototype.orig__processSingleAssetRequest =
     Server.prototype._processSingleAssetRequest;
@@ -194,29 +196,30 @@ export function patchMetro(options: Options): void {
     req: { url: string },
     res: unknown
   ): Promise<void> {
-    // eslint-disable-next-line n/no-deprecated-api
-    const urlObj = url.parse(decodeURI(req.url), true);
+    if (!URL.canParse(req.url, "resolve://")) {
+      // @ts-expect-error The second parameter to Error is not yet typed
+      throw new Error("Could not parse URL", { cause: req.url });
+    }
+
+    const urlObj = new URL(req.url, "resolve://");
+
     let [, assetPath] =
-      (urlObj &&
-        urlObj.pathname &&
-        urlObj.pathname.match(/^\/assets\/(.+)$/)) ||
-      [];
-
-    if (!assetPath && urlObj && urlObj.query && urlObj.query.unstable_path) {
-      const unstable_path = Array.isArray(urlObj.query.unstable_path)
-        ? urlObj.query.unstable_path[0]
-        : urlObj.query.unstable_path;
-      const result = unstable_path.match(/^([^?]*)\??(.*)$/);
-      if (result == null) {
-        throw new Error(`Unable to parse URL: ${unstable_path}`);
+      urlObj.pathname
+        .split("/")
+        .map((segment) => decodeURIComponent(segment))
+        .join("/")
+        .match(/^\/assets\/(.+)$/) || [];
+    const unstable_path =
+      !assetPath && urlObj.searchParams.get("unstable_path");
+    if (unstable_path) {
+      const m = unstable_path.match(/^([^?]*)\??(.*)$/);
+      if (m) {
+        assetPath = m[1];
       }
-
-      const [, actualPath] = result;
-      assetPath = actualPath;
     }
 
     if (!assetPath) {
-      throw new Error(`Could not extract asset path from URL: ${req.url}`);
+      throw new Error("Could not extract asset path from URL");
     }
 
     const watchFolders = this.getWatchFolders();
