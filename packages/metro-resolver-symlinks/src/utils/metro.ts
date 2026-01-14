@@ -25,7 +25,8 @@ function fileExists(path: string): boolean {
 function importMetroModule(path: string) {
   const modulePath = findMetroPath() + path;
   try {
-    return require(modulePath).default ?? require(modulePath);
+    const mod = require(modulePath);
+    return mod.default ?? mod;
   } catch (_) {
     throw new Error(
       `Cannot find '${modulePath}'. This probably means that ` +
