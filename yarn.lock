@@ -5400,6 +5400,7 @@ __metadata:
     "@testing-library/react-native": "npm:^12.4.3"
     "@types/react": "npm:^19.0.0"
     jest: "npm:^29.2.1"
+    oxc-resolver: "npm:^11.0.0"
     react: "npm:19.1.0"
     react-native: "npm:^0.81.0"
     react-native-test-app: "npm:^4.4.11"
