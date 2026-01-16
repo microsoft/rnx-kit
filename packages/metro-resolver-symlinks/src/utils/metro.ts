@@ -93,6 +93,14 @@ function computeSha1(filePath: string): string {
   return filePath + "|" + stat.mtime.toISOString();
 }
 
+function failedToPatch(reason: string): void {
+  warn("Failed to patch Metro:", reason);
+}
+
+function isSha1Error(e: unknown): boolean {
+  return e instanceof Error && e.message.startsWith("Failed to get the SHA-1");
+}
+
 /**
  * Monkey-patches Metro to not use HasteFS as the only source for module
  * resolution.
@@ -130,6 +138,11 @@ export function patchMetro(options: Options): void {
   const DependencyGraph = importMetroModule("/src/node-haste/DependencyGraph");
 
   // Patch `_createModuleResolver` and `_doesFileExist` to use `fs.existsSync`.
+  if (!DependencyGraph.prototype._createModuleResolver) {
+    failedToPatch("cannot find DependencyGraph._createModuleResolver");
+    return;
+  }
+
   DependencyGraph.prototype.orig__createModuleResolver =
     DependencyGraph.prototype._createModuleResolver;
   DependencyGraph.prototype._createModuleResolver = function (): void {
@@ -165,7 +178,8 @@ export function patchMetro(options: Options): void {
 
   // Since we will be resolving files outside of `watchFolders`, their hashes
   // will not be found. We'll return the `filePath` as they should be unique.
-  // getSha1 was replaced with getOrComputeSha1 in metro 0.82 (https://github.com/facebook/metro/commit/e667aa3acd594d795bbab45c45107e7bc6322303)
+  // getSha1 was replaced with getOrComputeSha1 in metro 0.82
+  // (https://github.com/facebook/metro/commit/e667aa3acd594d795bbab45c45107e7bc6322303)
   if (DependencyGraph.prototype.getSha1) {
     DependencyGraph.prototype.orig_getSha1 = DependencyGraph.prototype.getSha1;
     DependencyGraph.prototype.getSha1 = function (filePath: string): string {
@@ -176,21 +190,16 @@ export function patchMetro(options: Options): void {
         // that does not exist in the Haste map.
         // In metro 0.81 (https://github.com/facebook/metro/pull/1435)
         // this was changed to a standard `Error` - so verify the message
-        if (
-          e instanceof ReferenceError ||
-          (e instanceof Error &&
-            e.message.startsWith("Failed to get the SHA-1"))
-        ) {
+        if (e instanceof ReferenceError || isSha1Error(e)) {
           return computeSha1(filePath);
         }
 
         throw e;
       }
     };
-  }
-
-  // getSha1 was replaced with getOrComputeSha1 in metro 0.82 (https://github.com/facebook/metro/commit/e667aa3acd594d795bbab45c45107e7bc6322303)
-  if (DependencyGraph.prototype.getOrComputeSha1) {
+  } else if (DependencyGraph.prototype.getOrComputeSha1) {
+    // getSha1 was replaced with getOrComputeSha1 in metro 0.82
+    // (https://github.com/facebook/metro/commit/e667aa3acd594d795bbab45c45107e7bc6322303)
     DependencyGraph.prototype.orig_getOrComputeSha1 =
       DependencyGraph.prototype.getOrComputeSha1;
     DependencyGraph.prototype.getOrComputeSha1 = async function (
@@ -199,16 +208,16 @@ export function patchMetro(options: Options): void {
       try {
         return await this.orig_getOrComputeSha1(filePath);
       } catch (e) {
-        if (
-          e instanceof Error &&
-          e.message.startsWith("Failed to get the SHA-1")
-        ) {
+        if (isSha1Error(e)) {
           return { sha1: computeSha1(filePath) };
         }
 
         throw e;
       }
     };
+  } else {
+    failedToPatch("cannot find DependencyGraph.getOrComputeSha1 or .getSha1");
+    return;
   }
 
   // We need to patch `_processSingleAssetRequest` because it calls
@@ -217,6 +226,11 @@ export function patchMetro(options: Options): void {
   //
   // Last synced to: https://github.com/facebook/metro/blob/v0.83.3/packages/metro/src/Server.js#L502
   const Server = importMetroModule("/src/Server");
+  if (!Server.prototype._processSingleAssetRequest) {
+    failedToPatch("cannot find Server._processSingleAssetRequest");
+    return;
+  }
+
   Server.prototype.orig__processSingleAssetRequest =
     Server.prototype._processSingleAssetRequest;
   Server.prototype._processSingleAssetRequest = function (

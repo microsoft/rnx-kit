@@ -63,6 +63,11 @@ const profile = {
     name: "find-up",
     version: "^5.0.0",
   },
+  "oxc-resolver": {
+    name: "oxc-resolver",
+    version: "^11.0.0",
+    devOnly: true,
+  },
   semver: {
     name: "semver",
     version: "^7.0.0",

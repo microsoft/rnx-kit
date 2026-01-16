@@ -74,6 +74,7 @@
     "@testing-library/react-native": "^12.4.3",
     "@types/react": "^19.0.0",
     "jest": "^29.2.1",
+    "oxc-resolver": "^11.0.0",
     "react-native-test-app": "^4.4.11",
     "react-test-renderer": "19.1.0"
   },
@@ -186,6 +187,7 @@
         "core-ios",
         "core/testing",
         "babel-preset-react-native",
+        "oxc-resolver",
         "react",
         "test-app"
       ]
