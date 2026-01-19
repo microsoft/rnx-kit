@@ -30,8 +30,12 @@ module.exports = makeMetroConfig({
           }
         : {}),
     },
-    resolveRequest: MetroSymlinksResolver(),
+    resolveRequest: MetroSymlinksResolver({
+      experimental_retryResolvingFromDisk: "force",
+      resolver: "oxc-resolver",
+    }),
     blacklistRE: blockList,
     blockList,
   },
+  watchFolders: [],
 });
