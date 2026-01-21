@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-resolver-symlinks
 
+## 0.2.11
+
+### Patch Changes
+
+- eb388f1: Warn if Metro cannot be patched
+
 ## 0.2.10
 
 ### Patch Changes

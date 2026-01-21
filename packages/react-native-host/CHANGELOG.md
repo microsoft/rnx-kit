@@ -1,5 +1,11 @@
 # @rnx-kit/react-native-host
 
+## 0.5.16
+
+### Patch Changes
+
+- 1f34fd1: Handle `useShadowNodeStateOnClone` being removed in 0.85
+
 ## 0.5.15
 
 ### Patch Changes
