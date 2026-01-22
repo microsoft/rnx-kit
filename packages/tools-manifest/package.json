@@ -1,0 +1,37 @@
+{
+  "name": "@rnx-kit/tools-manifest",
+  "version": "0.0.1",
+  "description": "tools-manifest",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/tools-manifest#readme",
+  "license": "MIT",
+  "author": {
+    "name": "Microsoft Open Source",
+    "email": "microsoftopensource@users.noreply.github.com"
+  },
+  "files": [
+    "lib/**/*.d.ts",
+    "lib/**/*.js"
+  ],
+  "type": "module",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "packages/tools-manifest"
+  },
+  "engines": {
+    "node": ">=18.12"
+  },
+  "scripts": {
+    "build": "rnx-kit-scripts build",
+    "format": "rnx-kit-scripts format",
+    "lint": "rnx-kit-scripts lint",
+    "test": "rnx-kit-scripts test"
+  },
+  "devDependencies": {
+    "@rnx-kit/eslint-config": "*",
+    "@rnx-kit/scripts": "*",
+    "@rnx-kit/tsconfig": "*"
+  }
+}
