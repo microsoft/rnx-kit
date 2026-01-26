@@ -6,10 +6,11 @@ import * as path from "node:path";
 import ts from "typescript";
 
 /**
- * @typedef {import("typedoc").JSONOutput.Comment} Comment
- * @typedef {import("typedoc").JSONOutput.CommentDisplayPart} CommentDisplayPart
- * @typedef {import("typedoc").JSONOutput.ParameterReflection} ParameterReflection
- * @typedef {import("typedoc").JSONOutput.SourceReference} SourceReference
+ * @import { JSONOutput } from "typedoc";
+ * @typedef {JSONOutput.Comment} Comment
+ * @typedef {JSONOutput.CommentDisplayPart} CommentDisplayPart
+ * @typedef {JSONOutput.ParameterReflection} ParameterReflection
+ * @typedef {JSONOutput.SourceReference} SourceReference
  */
 
 export class UpdateApiReadmeCommand extends Command {
@@ -67,7 +68,7 @@ function isCommented(source, identifier, comment) {
 }
 
 /**
- * @param {import("typedoc")} typedoc
+ * @param {typeof import("typedoc")} typedoc
  */
 async function parse(typedoc) {
   const app = await typedoc.Application.bootstrap(

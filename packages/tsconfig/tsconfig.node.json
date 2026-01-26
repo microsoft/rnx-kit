@@ -1,7 +1,7 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "module": "node16",
+    "module": "node18",
     "moduleResolution": "node16",
     "erasableSyntaxOnly": true,
     "rewriteRelativeImportExtensions": true
