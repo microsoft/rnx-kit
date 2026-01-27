@@ -1,4 +1,4 @@
-import { Exports, ExportsGroup, PackageManifest } from "./types.ts";
+import { ExportsGroup, PackageExports, PackageManifest } from "./types.ts";
 
 function isObject<T extends Record<string, unknown>>(
   entry: unknown
@@ -46,7 +46,7 @@ export function getExportEntry(
   exportName: string
 ): string | ExportsGroup | undefined {
   const exports = manifest.exports;
-  if (isObject<Exports>(exports)) {
+  if (isObject<PackageExports>(exports)) {
     return exports[exportName];
   }
   return undefined;

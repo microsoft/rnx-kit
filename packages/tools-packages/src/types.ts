@@ -1,14 +1,8 @@
-import type { PackageManifest } from "@rnx-kit/tools-node";
+import type { PackageData } from "@rnx-kit/tools-manifest";
 
-export type PackageInfo = {
+export type PackageInfo = PackageData & {
   /** name of the package */
   name: string;
-
-  /** full path to the package */
-  root: string;
-
-  /** Access the loaded package.json for the package */
-  manifest: PackageManifest;
 
   /** Is this a workspace package */
   workspace: boolean;

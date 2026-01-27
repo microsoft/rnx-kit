@@ -1,3 +1,4 @@
+import type { PackageManifest } from "@rnx-kit/tools-manifest";
 import * as nodefs from "node:fs";
 import * as path from "node:path";
 import { findUp } from "./path.ts";
@@ -76,40 +77,6 @@ export function parsePackageRef(r: string): PackageRef {
   const fullName = path ? `${name}/${path}` : name;
   return { name: fullName, scope };
 }
-
-/**
- * Schema for a reference to a person in `package.json`.
- */
-export type PackagePerson =
-  | string
-  | {
-      name: string;
-      email?: string;
-      url?: string;
-    };
-
-/**
- * Schema for the contents of a `package.json` manifest file.
- */
-export type PackageManifest = {
-  name: string;
-  version: string;
-  private?: boolean;
-  typings?: string;
-  types?: string;
-  scripts?: Record<string, string>;
-  dependencies?: Record<string, string>;
-  peerDependencies?: Record<string, string>;
-  devDependencies?: Record<string, string>;
-  author?: PackagePerson;
-  "rnx-kit"?: Record<string, unknown>;
-  [key: string]:
-    | string
-    | boolean
-    | string[]
-    | Record<string, unknown>
-    | undefined;
-};
 
 /**
  * Resolve a package path to a file reference by appending `package.json`, if needed.

@@ -8,14 +8,15 @@ export type ExportsGroup = {
   default?: string;
 } & Record<string, string | Record<string, string>>;
 
-export type Exports = Record<string, string | ExportsGroup>;
+export type PackageExports = Record<string, string | ExportsGroup>;
 
 export type PersonEntry = {
   name: string;
   email?: string;
   url?: string;
 };
-export type Person = string | PersonEntry;
+
+export type PackagePerson = string | PersonEntry;
 
 export type FundingEntry = string | { type: string; url: string };
 
@@ -40,9 +41,9 @@ export type PackageManifest<T extends Record<string, unknown> = {}> = {
   license?: string;
 
   /** primary author of this package */
-  author?: Person;
+  author?: PackagePerson;
   /** array of contributors */
-  contributors?: Person[];
+  contributors?: PackagePerson[];
   /** one or more places to send funding */
   funding?: FundingEntry | FundingEntry[];
   /** homepage */
@@ -68,7 +69,7 @@ export type PackageManifest<T extends Record<string, unknown> = {}> = {
   /** @deprecated Use `types` instead */
   typings?: string;
   /** exports map */
-  exports?: Exports;
+  exports?: PackageExports;
 
   // files, side effects, and bin
   files?: string[];
@@ -112,3 +113,13 @@ export type PackageManifest<T extends Record<string, unknown> = {}> = {
   /** configuration for publishing */
   publishConfig?: Record<string, unknown>;
 } & T;
+
+/**
+ * Data structure representing a package's location and manifest.
+ */
+export type PackageData<T extends PackageManifest = PackageManifest> = {
+  /** full path to the package.json file */
+  root: string;
+  /** parsed package manifest */
+  manifest: T;
+};

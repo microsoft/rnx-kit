@@ -2,7 +2,9 @@ export { getBinEntry, getEntryPoint, getExportEntry } from "./accessors.ts";
 export type {
   ExportsGroup,
   FundingEntry,
+  PackageData,
+  PackageExports,
   PackageManifest,
-  Person,
+  PackagePerson,
   PersonEntry,
 } from "./types.ts";

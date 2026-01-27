@@ -5479,7 +5479,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rnx-kit/tools-manifest@workspace:packages/tools-manifest":
+"@rnx-kit/tools-manifest@npm:*, @rnx-kit/tools-manifest@npm:^0.0.1, @rnx-kit/tools-manifest@workspace:packages/tools-manifest":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/tools-manifest@workspace:packages/tools-manifest"
   dependencies:
@@ -5495,6 +5495,7 @@ __metadata:
   dependencies:
     "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/scripts": "npm:*"
+    "@rnx-kit/tools-manifest": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
     "@types/node": "npm:^24.0.0"
   languageName: unknown
@@ -5506,6 +5507,7 @@ __metadata:
   dependencies:
     "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/scripts": "npm:*"
+    "@rnx-kit/tools-manifest": "npm:^0.0.1"
     "@rnx-kit/tools-node": "npm:^3.0.0"
     "@rnx-kit/tools-workspaces": "npm:^0.2.1"
     "@rnx-kit/tsconfig": "npm:*"

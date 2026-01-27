@@ -12,9 +12,17 @@
     "lib/**/*.d.ts",
     "lib/**/*.js"
   ],
-  "type": "module",
   "main": "lib/index.js",
+  "module": "src/index.ts",
   "types": "lib/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "typescript": "./src/index.ts",
+      "default": "./lib/index.js"
+    },
+    "./package.json": "./package.json"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/microsoft/rnx-kit",
@@ -24,7 +32,7 @@
     "node": ">=18.12"
   },
   "scripts": {
-    "build": "rnx-kit-scripts build",
+    "build": "tsc --module commonjs --moduleResolution node --outDir lib",
     "format": "rnx-kit-scripts format",
     "lint": "rnx-kit-scripts lint",
     "test": "rnx-kit-scripts test"

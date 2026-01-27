@@ -56,6 +56,9 @@
     "test": "rnx-kit-scripts test",
     "update-readme": "rnx-kit-scripts update-api-readme"
   },
+  "dependencies": {
+    "@rnx-kit/tools-manifest": "*"
+  },
   "devDependencies": {
     "@rnx-kit/eslint-config": "*",
     "@rnx-kit/scripts": "*",
