@@ -1,5 +1,12 @@
 # @react-native-webapis/web-storage
 
+## 0.4.5
+
+### Patch Changes
+
+- 0c741b7: Let `react-native-windows` handle setting
+  `WindowsTargetPlatformVersion`
+
 ## 0.4.4
 
 ### Patch Changes

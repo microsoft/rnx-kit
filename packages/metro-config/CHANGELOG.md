@@ -1,5 +1,11 @@
 # Change Log - @rnx-kit/metro-config
 
+## 2.2.3
+
+### Patch Changes
+
+- 9d886f8: Fixed asset URLs not being restored when targeting Windows
+
 ## 2.2.2
 
 ### Patch Changes
