@@ -320,7 +320,19 @@ function additionalConfig(projectRoot, inputConfig) {
     ];
   } else {
     const { restoreAssetURL } = require("./assetPlugins/escapeAssetURLs.js");
-    config.server = { rewriteRequestUrl: restoreAssetURL };
+    config.server = {
+      // Some platforms (notably Windows) still prefer `enhanceMiddleware` over
+      // `rewriteRequestUrl`. We need to set both to ensure asset URLs are
+      // properly restored.
+      enhanceMiddleware: (middleware) => {
+        /** @type {import("connect").NextHandleFunction} */
+        return (req, res, next) => {
+          req.url = restoreAssetURL(req.url ?? "");
+          return middleware(req, res, next);
+        };
+      },
+      rewriteRequestUrl: restoreAssetURL,
+    };
 
     transformer.assetPlugins = [
       require.resolve("./assetPlugins/escapeAssetURLs.js"),
