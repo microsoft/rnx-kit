@@ -238,7 +238,6 @@ export function patchMetro(options: Options): void {
     res: unknown
   ): Promise<void> {
     if (!URL.canParse(req.url, "resolve://")) {
-      // @ts-expect-error The second parameter to Error is not yet typed
       throw new Error("Could not parse URL", { cause: req.url });
     }
 

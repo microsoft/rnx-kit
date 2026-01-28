@@ -9,7 +9,6 @@
     "noUnusedParameters": true,
     "strict": true,
     "module": "CommonJS",
-    "moduleResolution": "Node",
     "resolveJsonModule": true,
     "declaration": true,
     "declarationMap": true,
@@ -20,8 +19,8 @@
     "forceConsistentCasingInFileNames": true,
     "isolatedModules": true,
     "jsx": "react",
-    "lib": ["ES2021"],
-    "target": "ES2021",
+    "lib": ["ES2022"],
+    "target": "ES2022",
     "pretty": true,
     "skipLibCheck": true,
     "skipDefaultLibCheck": true
