@@ -134,7 +134,7 @@ export const profile: Profile = {
    * Community Modules *
    *********************/ "test-app": {
     name: "react-native-test-app",
-    version: "^5.0.5",
+    version: "^5.0.10",
     devOnly: true,
   },
 };
