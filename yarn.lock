@@ -5453,7 +5453,7 @@ __metadata:
     "@rnx-kit/tools-shell": "npm:^0.2.2"
     "@rnx-kit/tsconfig": "npm:*"
     "@types/node": "npm:^24.0.0"
-    fast-xml-parser: "npm:^4.0.0"
+    fast-xml-parser: "npm:^5.3.4"
   languageName: unknown
   linkType: soft
 
@@ -5563,7 +5563,7 @@ __metadata:
     "@rnx-kit/tools-shell": "npm:^0.2.0"
     "@rnx-kit/tsconfig": "npm:*"
     "@types/node": "npm:^24.0.0"
-    fast-xml-parser: "npm:^4.0.0"
+    fast-xml-parser: "npm:^5.3.4"
   languageName: unknown
   linkType: soft
 
@@ -9577,6 +9577,17 @@ __metadata:
   bin:
     fxparser: src/cli/cli.js
   checksum: 10c0/bf9ccadacfadc95f6e3f0e7882a380a7f219cf0a6f96575149f02cb62bf44c3b7f0daee75b8ff3847bcfd7fbcb201e402c71045936c265cf6d94b141ec4e9327
+  languageName: node
+  linkType: hard
+
+"fast-xml-parser@npm:^5.3.4":
+  version: 5.3.4
+  resolution: "fast-xml-parser@npm:5.3.4"
+  dependencies:
+    strnum: "npm:^2.1.0"
+  bin:
+    fxparser: src/cli/cli.js
+  checksum: 10c0/d77866ca860ad185153e12f6ba12274d32026319ad8064e4681342b8a8e1ffad3f1f98daf04d77239fb12eb1d906ee7185fd328deda74529680e8dae0f3e9327
   languageName: node
   linkType: hard
 
@@ -16175,6 +16186,13 @@ __metadata:
   version: 1.1.2
   resolution: "strnum@npm:1.1.2"
   checksum: 10c0/a0fce2498fa3c64ce64a40dada41beb91cabe3caefa910e467dc0518ef2ebd7e4d10f8c2202a6104f1410254cae245066c0e94e2521fb4061a5cb41831952392
+  languageName: node
+  linkType: hard
+
+"strnum@npm:^2.1.0":
+  version: 2.1.2
+  resolution: "strnum@npm:2.1.2"
+  checksum: 10c0/4e04753b793540d79cd13b2c3e59e298440477bae2b853ab78d548138385193b37d766d95b63b7046475d68d44fb1fca692f0a3f72b03f4168af076c7b246df9
   languageName: node
   linkType: hard
 
