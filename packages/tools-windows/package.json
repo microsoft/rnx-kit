@@ -35,7 +35,7 @@
   },
   "dependencies": {
     "@rnx-kit/tools-shell": "^0.2.0",
-    "fast-xml-parser": "^4.0.0"
+    "fast-xml-parser": "^5.0.0"
   },
   "devDependencies": {
     "@rnx-kit/eslint-config": "*",
