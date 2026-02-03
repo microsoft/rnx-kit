@@ -55,7 +55,7 @@
     "@types/lodash.merge": "^4.6.9",
     "@types/node": "^24.0.0",
     "@types/semver": "^7.0.0",
-    "metro": "^0.83.1"
+    "metro": "^0.83.3"
   },
   "engines": {
     "node": ">=16.17"

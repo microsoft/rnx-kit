@@ -21,10 +21,19 @@ const COLORS = {
   },
 };
 
+function colorSchemeOrDefault(scheme: string): keyof typeof COLORS {
+  switch (scheme) {
+    case "dark":
+      return "dark";
+    default:
+      return "light";
+  }
+}
+
 export function useStyles() {
   const colorScheme = useColorScheme();
   return useMemo(() => {
-    const colors = COLORS[colorScheme ?? "light"];
+    const colors = COLORS[colorSchemeOrDefault(colorScheme)];
 
     const fontSize = 18;
     const groupBorderRadius = 8;
