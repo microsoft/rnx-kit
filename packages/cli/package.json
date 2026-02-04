@@ -85,11 +85,11 @@
     "@types/node": "^24.0.0",
     "@types/qrcode": "^1.4.2",
     "markdown-table": "^3.0.0",
-    "metro": "^0.83.1",
+    "metro": "^0.83.3",
     "metro-babel-transformer": "^0.83.1",
-    "metro-config": "^0.83.1",
-    "react": "19.1.0",
-    "react-native": "^0.81.0",
+    "metro-config": "^0.83.3",
+    "react": "19.2.0",
+    "react-native": "^0.83.0",
     "type-fest": "^4.0.0"
   },
   "engines": {

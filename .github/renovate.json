@@ -60,7 +60,7 @@
         "@react-native/**",
         "react-native"
       ],
-      "allowedVersions": "^0.81.0"
+      "allowedVersions": "^0.83.0"
     },
     {
       "groupName": "react-native-macos",

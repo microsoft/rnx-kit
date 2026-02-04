@@ -43,7 +43,7 @@
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*",
     "@types/node": "^24.0.0",
-    "metro": "^0.83.1"
+    "metro": "^0.83.3"
   },
   "engines": {
     "node": ">=16.17"

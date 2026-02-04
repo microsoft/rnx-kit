@@ -38,8 +38,8 @@
   },
   "dependencies": {
     "@react-native-webapis/web-storage": "workspace:*",
-    "react": "19.1.0",
-    "react-native": "^0.81.0"
+    "react": "19.2.0",
+    "react-native": "^0.83.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
@@ -51,8 +51,8 @@
     "@react-native-community/cli": "^20.0.0",
     "@react-native-community/cli-platform-android": "^20.0.0",
     "@react-native-community/cli-platform-ios": "^20.0.0",
-    "@react-native/babel-preset": "^0.81.0",
-    "@react-native/metro-config": "^0.81.0",
+    "@react-native/babel-preset": "^0.83.0",
+    "@react-native/metro-config": "^0.83.0",
     "@rnx-kit/babel-preset-metro-react-native": "workspace:*",
     "@rnx-kit/build": "workspace:*",
     "@rnx-kit/cli": "workspace:*",
@@ -75,8 +75,8 @@
     "@types/react": "^19.0.0",
     "jest": "^29.2.1",
     "oxc-resolver": "^11.0.0",
-    "react-native-test-app": "^4.4.11",
-    "react-test-renderer": "19.1.0"
+    "react-native-test-app": "^5.0.5",
+    "react-test-renderer": "19.2.0"
   },
   "rnx-kit": {
     "kitType": "app",
@@ -180,7 +180,7 @@
         "@rnx-kit/scripts/align-deps-preset.cjs"
       ],
       "requirements": [
-        "react-native@0.81"
+        "react-native@0.83"
       ],
       "capabilities": [
         "core-android",

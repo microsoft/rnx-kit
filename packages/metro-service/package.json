@@ -62,11 +62,11 @@
     "@rnx-kit/tsconfig": "*",
     "@types/node": "^24.0.0",
     "@types/node-fetch": "^2.6.5",
-    "metro": "^0.83.1",
-    "metro-config": "^0.83.1",
-    "metro-core": "^0.83.1",
-    "metro-resolver": "^0.83.1",
-    "metro-runtime": "^0.83.1"
+    "metro": "^0.83.3",
+    "metro-config": "^0.83.3",
+    "metro-core": "^0.83.3",
+    "metro-resolver": "^0.83.3",
+    "metro-runtime": "^0.83.3"
   },
   "engines": {
     "node": ">=16.17"
