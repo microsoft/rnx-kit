@@ -1,5 +1,11 @@
 # @rnx-kit/tools-windows
 
+## 0.2.1
+
+### Patch Changes
+
+- bc907ce: Bumped `fast-xml-parser` to address a security vulnerability
+
 ## 0.2.0
 
 ### Minor Changes
