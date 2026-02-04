@@ -1,5 +1,11 @@
 # @rnx-kit/tsconfig
 
+## 3.0.0
+
+### Major Changes
+
+- 09262d8: Drop support for Node 16.x
+
 ## 2.1.1
 
 ### Patch Changes

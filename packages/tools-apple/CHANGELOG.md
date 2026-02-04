@@ -1,5 +1,11 @@
 # @rnx-kit/tools-apple
 
+## 0.2.3
+
+### Patch Changes
+
+- bc907ce: Bumped `fast-xml-parser` to address a security vulnerability
+
 ## 0.2.2
 
 ### Patch Changes
