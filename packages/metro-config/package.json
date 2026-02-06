@@ -18,7 +18,7 @@
     "directory": "packages/metro-config"
   },
   "scripts": {
-    "build": "rnx-kit-scripts build",
+    "build": "rnx-kit-scripts build --with-tsc",
     "format": "rnx-kit-scripts format",
     "lint": "rnx-kit-scripts lint",
     "test": "rnx-kit-scripts test"

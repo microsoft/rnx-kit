@@ -35,6 +35,9 @@ jobs:
         if: ${{ github.actor != 'microsoft-react-native-sdk[bot]' || github.head_ref != 'changeset-release/main' }}
         run: |
           yarn change:check --since origin/${{ github.base_ref }}
+      - name: Ensure TypeScript configurations are correct
+        run: |
+          node scripts/lint-tsconfig.ts
       - name: Report formatting problems
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
