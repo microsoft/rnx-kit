@@ -67,6 +67,24 @@ function defaultWatchFolders() {
 }
 
 /**
+ * Ensures that the empty module is resolvable if there are no watch folders.
+ * @param {MetroConfig} config
+ * @returns {MetroConfig}
+ */
+function ensureEmptyModule(config) {
+  const { resolver, watchFolders } = config;
+  if (!Array.isArray(watchFolders) || watchFolders.length === 0) {
+    const emptyModulePath = resolver?.emptyModulePath;
+    if (emptyModulePath) {
+      // @ts-expect-error If there are no watch folders, Metro won't be able to
+      // resolve the empty module.
+      config.watchFolders = [path.dirname(emptyModulePath)];
+    }
+  }
+  return config;
+}
+
+/**
  * Extracts unique parts from a Yarn store directory.
  * @param {string} p
  * @returns {[string, string]}
@@ -399,6 +417,7 @@ module.exports = {
       applyExpoWorkarounds(userConfig, defaultConfig);
     }
 
-    return mergeConfig(defaultConfig, ...configs);
+    const finalConfig = mergeConfig(defaultConfig, ...configs);
+    return ensureEmptyModule(finalConfig);
   },
 };
