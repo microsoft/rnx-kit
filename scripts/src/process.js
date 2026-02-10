@@ -34,14 +34,17 @@ function spawn(command, args, options) {
     const opts = {
       ...options,
       stdio: "inherit",
-      // As of Node 20.12.2, it is no longer allowed to spawn a process with
-      // `.bat` or `.cmd` without shell (see
-      // https://nodejs.org/en/blog/release/v20.12.2).
-      shell: command.endsWith(".bat") || command.endsWith(".cmd"),
     };
-    child_process
-      .spawn(command, args, opts)
-      .on("close", (code) => resolve(code ?? -1));
+    // As of Node 20.12.2, it is no longer allowed to spawn a process with
+    // `.bat` or `.cmd` without shell (see
+    // https://nodejs.org/en/blog/release/v20.12.2).
+    // Route through `cmd.exe /c` explicitly instead of using `shell: true`
+    // to avoid DEP0190 warning about passing args with shell option.
+    const proc =
+      command.endsWith(".bat") || command.endsWith(".cmd")
+        ? child_process.spawn("cmd.exe", ["/c", command, ...args], opts)
+        : child_process.spawn(command, args, opts);
+    proc.on("close", (code) => resolve(code ?? -1));
   });
 }
 
