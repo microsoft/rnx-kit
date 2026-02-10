@@ -1,5 +1,12 @@
 # Change Log - @rnx-kit/metro-config
 
+## 2.2.4
+
+### Patch Changes
+
+- 476cf8d: Ensure the empty module can be resolved even when watch folders is an
+  empty array
+
 ## 2.2.3
 
 ### Patch Changes

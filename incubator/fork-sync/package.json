@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/fork-sync",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "EXPERIMENTAL - USE WITH CAUTION - Sync forked/vendored dependencies with upstream using AI-powered Git 3-way merge",
   "experimental": true,
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/incubator/fork-sync#readme",
