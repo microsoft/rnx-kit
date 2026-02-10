@@ -1,6 +1,9 @@
-import type { AllPlatforms } from "@rnx-kit/tools-react-native/platform";
-import type { BundleConfig, BundleParameters } from "./bundleConfig.ts";
-import type { KitConfig } from "./kitConfig.ts";
+import type {
+  AllPlatforms,
+  BundleConfig,
+  BundleParameters,
+  KitConfig,
+} from "@rnx-kit/core-types";
 
 function failOnUnsupportedProp(
   parameters: BundleParameters,

@@ -39,6 +39,7 @@
   },
   "dependencies": {
     "@rnx-kit/console": "^2.0.0",
+    "@rnx-kit/core-types": "^1.0.0",
     "@rnx-kit/tools-node": "^3.0.0",
     "@rnx-kit/tools-packages": "^0.1.0",
     "lodash.merge": "^4.6.2",
@@ -46,11 +47,7 @@
   },
   "devDependencies": {
     "@rnx-kit/eslint-config": "*",
-    "@rnx-kit/metro-plugin-cyclic-dependencies-detector": "*",
-    "@rnx-kit/metro-plugin-duplicates-checker": "*",
-    "@rnx-kit/metro-serializer-esbuild": "*",
     "@rnx-kit/scripts": "*",
-    "@rnx-kit/tools-react-native": "*",
     "@rnx-kit/tsconfig": "*",
     "@types/lodash.merge": "^4.6.9",
     "@types/node": "^24.0.0",

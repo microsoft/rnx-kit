@@ -2,9 +2,16 @@ export type {
   BundleConfig,
   BundleParameters,
   BundlerPlugins,
+  Capability,
+  DependencyVersions,
+  GetDependencyVersions,
   HermesOptions,
+  KitConfig,
+  KitType,
+  MetaCapability,
+  ServerConfig,
   TypeScriptValidationOptions,
-} from "./bundleConfig.ts";
+} from "@rnx-kit/core-types";
 
 export { getBundleConfig, getPlatformBundleConfig } from "./getBundleConfig.ts";
 
@@ -17,14 +24,3 @@ export {
   getKitConfigFromPackageManifest,
 } from "./getKitConfig.ts";
 export type { GetKitConfigOptions } from "./getKitConfig.ts";
-
-export type {
-  Capability,
-  DependencyVersions,
-  GetDependencyVersions,
-  KitConfig,
-  KitType,
-  MetaCapability,
-} from "./kitConfig.ts";
-
-export type { ServerConfig } from "./serverConfig.ts";
