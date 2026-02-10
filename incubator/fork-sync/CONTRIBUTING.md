@@ -23,8 +23,9 @@ yarn fix           # Typecheck + format + lint fix
 
 ## Publishing to a Local Verdaccio Server
 
-[Verdaccio](https://verdaccio.org/) is a lightweight private npm registry you can
-run locally to test package publishing before going to the public npm registry.
+[Verdaccio](https://verdaccio.org/) is a lightweight private npm registry you
+can run locally to test package publishing before going to the public npm
+registry.
 
 ### 1. Install and Start Verdaccio
 

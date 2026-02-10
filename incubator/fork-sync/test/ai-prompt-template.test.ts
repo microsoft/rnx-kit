@@ -8,6 +8,7 @@
  */
 
 import assert from "node:assert";
+import { existsSync } from "node:fs";
 import * as fs from "node:fs/promises";
 import * as os from "node:os";
 import * as path from "node:path";
@@ -27,6 +28,19 @@ import {
   SECTION_HUNK_RESOLUTION,
   SECTION_HUNK_VALIDATION,
 } from "../src/modules/ai-prompt-template.ts";
+
+// Find a file by walking up from startDir
+function findFileUp(fileName: string, startDir: string): string {
+  let dir = startDir;
+  for (;;) {
+    const candidate = path.join(dir, fileName);
+    if (existsSync(candidate)) return candidate;
+    const parent = path.dirname(dir);
+    if (parent === dir) break;
+    dir = parent;
+  }
+  throw new Error(`${fileName} not found starting from ${startDir}`);
+}
 
 // =============================================================================
 // parsePromptTemplate tests
@@ -156,11 +170,7 @@ test("parsePromptTemplate: return error for content without markers", () => {
 // =============================================================================
 
 test("loadPromptTemplate: load existing template file", async () => {
-  const templatePath = path.join(
-    import.meta.dirname,
-    "..",
-    "ai-merge-prompt.md"
-  );
+  const templatePath = findFileUp("ai-merge-prompt.md", import.meta.dirname);
   const result = await loadPromptTemplate(templatePath);
 
   assert.strictEqual(result.success, true);

@@ -85,14 +85,14 @@ or hits a `.git` boundary.
 }
 ```
 
-| Field | Description |
-|-------|-------------|
-| `version` | Must be `1` |
-| `aiMerge.provider` | AI provider: `"claude"` or `"copilot"` |
-| `aiMerge.model` | Model name (optional, provider-specific) |
-| `aiMerge.minConfidence` | Minimum confidence to apply a hunk: `"HIGH"`, `"MEDIUM"` (default), or `"LOW"` |
-| `dependencies[].name` | Unique name for the dependency (used in `--dep` flag) |
-| `dependencies[].localPath` | Path to the vendored copy, relative to the manifest |
+| Field                      | Description                                                                    |
+| -------------------------- | ------------------------------------------------------------------------------ |
+| `version`                  | Must be `1`                                                                    |
+| `aiMerge.provider`         | AI provider: `"claude"` or `"copilot"`                                         |
+| `aiMerge.model`            | Model name (optional, provider-specific)                                       |
+| `aiMerge.minConfidence`    | Minimum confidence to apply a hunk: `"HIGH"`, `"MEDIUM"` (default), or `"LOW"` |
+| `dependencies[].name`      | Unique name for the dependency (used in `--dep` flag)                          |
+| `dependencies[].localPath` | Path to the vendored copy, relative to the manifest                            |
 
 ### sync-config.json
 
@@ -111,19 +111,19 @@ each successful sync.
 }
 ```
 
-| Field | Description |
-|-------|-------------|
-| `repo` | Full HTTPS URL of the upstream repository |
-| `branch` | Upstream branch to track |
-| `commit` | Last synced upstream commit hash (empty string for first sync) |
-| `tag` | Tag name if synced to a tag (empty string otherwise) |
-| `lastSync` | ISO timestamp of last sync (empty string if never synced) |
+| Field      | Description                                                    |
+| ---------- | -------------------------------------------------------------- |
+| `repo`     | Full HTTPS URL of the upstream repository                      |
+| `branch`   | Upstream branch to track                                       |
+| `commit`   | Last synced upstream commit hash (empty string for first sync) |
+| `tag`      | Tag name if synced to a tag (empty string otherwise)           |
+| `lastSync` | ISO timestamp of last sync (empty string if never synced)      |
 
 ### .syncignore
 
 Place a `.syncignore` file in the dependency's local directory (e.g.,
-`deps/nodejs/.syncignore`) to exclude files and folders from sync. Uses
-standard `.gitignore` syntax.
+`deps/nodejs/.syncignore`) to exclude files and folders from sync. Uses standard
+`.gitignore` syntax.
 
 ```gitignore
 # Exclude CI/CD configs we don't need

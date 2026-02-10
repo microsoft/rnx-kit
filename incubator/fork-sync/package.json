@@ -31,8 +31,8 @@
     "fix": "tsc --noEmit && rnx-kit-scripts format && rnx-kit-scripts lint --fix",
     "format": "rnx-kit-scripts format",
     "lint": "rnx-kit-scripts lint",
-    "test": "rnx-kit-scripts test",
-    "test:all": "node --env-file=.env.integration --test test/*.test.ts"
+    "test": "tsc -p tsconfig.test.json && node --test lib-test/test/*.test.js",
+    "test:all": "tsc -p tsconfig.test.json && node --env-file=.env.integration --test lib-test/test/*.test.js"
   },
   "keywords": [
     "git",

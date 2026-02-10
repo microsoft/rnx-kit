@@ -26,6 +26,7 @@
 !.yarn/releases/
 /incubator/*/dist/
 /incubator/*/lib/
+/incubator/*/lib-test/
 /incubator/@react-native-webapis/*/lib/
 /packages/*/*.LICENSE.txt
 /packages/*/*/rnx-build/
