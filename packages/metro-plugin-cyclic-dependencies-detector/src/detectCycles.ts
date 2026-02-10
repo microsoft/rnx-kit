@@ -1,15 +1,10 @@
 import { error, warn } from "@rnx-kit/console";
+import type { CyclicDetectorOptions } from "@rnx-kit/core-types";
 import { getPackageModuleRefFromModulePath } from "@rnx-kit/tools-node/module";
 import type { ReadOnlyDependencies, ReadOnlyGraph } from "metro";
 import * as path from "node:path";
 
 export type CyclicDependencies = Record<string, string[]>;
-
-export type PluginOptions = {
-  includeNodeModules?: boolean;
-  linesOfContext?: number;
-  throwOnError?: boolean;
-};
 
 export function packageRelativePath(
   modulePath: string,
@@ -32,7 +27,7 @@ export function packageRelativePath(
 export function traverseDependencies(
   currentModule: string,
   dependencies: ReadOnlyDependencies,
-  options: PluginOptions,
+  options: CyclicDetectorOptions,
   cyclicDependencies: CyclicDependencies = {},
   stack: string[] = []
 ): CyclicDependencies {
@@ -77,7 +72,7 @@ export function traverseDependencies(
 export function detectCycles(
   entryPoint: string,
   { dependencies }: ReadOnlyGraph,
-  options: PluginOptions
+  options: CyclicDetectorOptions
 ): void {
   const cyclicDependencies = traverseDependencies(
     entryPoint,

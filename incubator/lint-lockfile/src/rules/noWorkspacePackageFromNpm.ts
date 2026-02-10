@@ -1,4 +1,4 @@
-import type { NoWorkspacePackageFromNpmRuleOptions as Options } from "@rnx-kit/config/lint.types";
+import type { NoWorkspacePackageFromNpmRuleOptions as Options } from "@rnx-kit/core-types";
 import type { Rule } from "../types.ts";
 
 export function noWorkspacePackageFromNpmRule(

@@ -1,7 +1,8 @@
 import { info, warn } from "@rnx-kit/console";
+import type { EsbuildOptions as Options } from "@rnx-kit/core-types";
 import type { MetroPlugin } from "@rnx-kit/metro-serializer";
 import { requireModuleFromMetro } from "@rnx-kit/tools-react-native/metro";
-import type { BuildOptions, BuildResult, Plugin } from "esbuild";
+import type { BuildResult, Plugin } from "esbuild";
 import * as esbuild from "esbuild";
 import type { SerializerConfigT } from "metro-config";
 import type { SerializerOptions } from "metro/private/DeltaBundler/types";
@@ -16,26 +17,9 @@ import {
 import { absolutizeSourceMap } from "./sourceMap.ts";
 import { inferBuildTarget } from "./targets.ts";
 import { assertVersion } from "./version.ts";
+export type { EsbuildOptions as Options } from "@rnx-kit/core-types";
 
 export { esbuildTransformerConfig } from "./esbuildTransformerConfig.ts";
-
-export type Options = Pick<
-  BuildOptions,
-  | "drop"
-  | "logLevel"
-  | "minify"
-  | "minifyWhitespace"
-  | "minifyIdentifiers"
-  | "minifySyntax"
-  | "pure"
-  | "target"
-> & {
-  analyze?: boolean | "verbose";
-  fabric?: boolean;
-  metafile?: string;
-  sourceMapPaths?: "absolute" | "relative";
-  strictMode?: boolean;
-};
 
 function escapePath(path: string): string {
   return path.replace(/\\+/g, "\\\\");

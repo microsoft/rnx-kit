@@ -1,4 +1,5 @@
 import { error, warn } from "@rnx-kit/console";
+import type { DuplicateDetectorOptions as Options } from "@rnx-kit/core-types";
 import type { ReadOnlyGraph } from "metro";
 import type { MixedSourceMap } from "metro-source-map";
 import * as nodefs from "node:fs";
@@ -7,12 +8,6 @@ import {
   gatherModulesFromGraph,
   gatherModulesFromSourceMap,
 } from "./gatherModules.ts";
-
-export type Options = {
-  ignoredModules?: readonly string[];
-  bannedModules?: readonly string[];
-  throwOnError?: boolean;
-};
 
 export type Result = {
   banned: number;

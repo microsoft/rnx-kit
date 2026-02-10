@@ -1,18 +1,20 @@
 import { error } from "@rnx-kit/console";
+import type { DuplicateDetectorOptions as Options } from "@rnx-kit/core-types";
 import type { MetroPlugin } from "@rnx-kit/metro-serializer";
 import type { MixedSourceMap } from "metro-source-map";
 import { readFile } from "node:fs";
-import type { Options, Result } from "./checkForDuplicatePackages.ts";
+import type { Result } from "./checkForDuplicatePackages.ts";
 import {
   checkForDuplicateDependencies,
   checkForDuplicatePackages,
   defaultOptions,
 } from "./checkForDuplicatePackages.ts";
 
+export type { DuplicateDetectorOptions as Options } from "@rnx-kit/core-types";
 export { detectDuplicatePackages } from "./checkForDuplicatePackages.ts";
+export type { Result } from "./checkForDuplicatePackages.ts";
 export { normalizePath, resolveModule } from "./gatherModules.ts";
 export { checkForDuplicatePackages };
-export type { Options, Result };
 
 export function getErrorMessage({
   banned,

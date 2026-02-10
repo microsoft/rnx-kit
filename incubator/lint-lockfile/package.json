@@ -30,6 +30,7 @@
   },
   "dependencies": {
     "@rnx-kit/config": "^0.7.4",
+    "@rnx-kit/core-types": "^1.0.0",
     "@rnx-kit/tools-workspaces": "^0.2.3",
     "js-yaml": "^4.1.1"
   },
