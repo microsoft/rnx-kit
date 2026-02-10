@@ -4,7 +4,7 @@ export type PackageInfo = {
   /** name of the package */
   name: string;
 
-  /** full path to the package */
+  /** root path of the package, effectively path.dirname of the package json path */
   root: string;
 
   /** Access the loaded package.json for the package */

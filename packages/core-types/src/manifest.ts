@@ -126,7 +126,7 @@ export type PackageManifest = {
  * Data structure representing a package's location and manifest.
  */
 export type PackageData<T extends PackageManifest = PackageManifest> = {
-  /** full path to the package.json file */
+  /** directory path of the package, effectively path.dirname of the package.json path */
   root: string;
   /** parsed package manifest */
   manifest: T;
