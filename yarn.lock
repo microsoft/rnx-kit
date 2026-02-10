@@ -4913,6 +4913,20 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@rnx-kit/fork-sync@workspace:incubator/fork-sync":
+  version: 0.0.0-use.local
+  resolution: "@rnx-kit/fork-sync@workspace:incubator/fork-sync"
+  dependencies:
+    "@rnx-kit/eslint-config": "npm:*"
+    "@rnx-kit/scripts": "npm:*"
+    "@rnx-kit/tsconfig": "npm:*"
+    "@types/node": "npm:^24.0.0"
+  bin:
+    ai-merge: lib/ai-merge.js
+    fork-sync: lib/sync.js
+  languageName: unknown
+  linkType: soft
+
 "@rnx-kit/ignore@workspace:incubator/ignore":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/ignore@workspace:incubator/ignore"
