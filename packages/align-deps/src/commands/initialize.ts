@@ -1,6 +1,5 @@
-import type { KitType } from "@rnx-kit/config";
 import { error } from "@rnx-kit/console";
-import type { PackageManifest } from "@rnx-kit/tools-node/package";
+import type { KitType, PackageManifest } from "@rnx-kit/core-types";
 import { readPackage } from "@rnx-kit/tools-node/package";
 import * as path from "node:path";
 import semverMinVersion from "semver/ranges/min-version.js";

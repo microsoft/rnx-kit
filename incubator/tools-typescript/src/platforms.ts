@@ -1,7 +1,5 @@
-import {
-  getKitConfigFromPackageManifest,
-  type KitConfig,
-} from "@rnx-kit/config";
+import { getKitConfigFromPackageManifest } from "@rnx-kit/config";
+import type { KitConfig } from "@rnx-kit/core-types";
 import type { PackageInfo } from "@rnx-kit/tools-packages";
 import {
   getAvailablePlatforms,

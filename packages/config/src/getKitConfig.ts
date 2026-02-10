@@ -1,5 +1,4 @@
-import type { KitConfig } from "@rnx-kit/core-types";
-import type { PackageManifest } from "@rnx-kit/tools-node/package";
+import type { KitConfig, PackageManifest } from "@rnx-kit/core-types";
 import {
   findPackageDependencyDir,
   readPackage,

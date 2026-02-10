@@ -1,3 +1,4 @@
+export type { AllPlatforms } from "@rnx-kit/core-types";
 export {
   loadContext,
   loadContextAsync,
@@ -19,4 +20,3 @@ export {
   platformValues,
   tryParsePlatform,
 } from "./platform.ts";
-export type { AllPlatforms } from "./platform.ts";

@@ -1,6 +1,6 @@
 import type { Config as CLIConfig } from "@react-native-community/cli-types";
-import type { HermesOptions } from "@rnx-kit/config";
 import { error, info } from "@rnx-kit/console";
+import type { HermesOptions } from "@rnx-kit/core-types";
 import { writeJSONFile } from "@rnx-kit/tools-filesystem";
 import { findPackageDependencyDir } from "@rnx-kit/tools-node/package";
 import { requireModuleFromMetro } from "@rnx-kit/tools-react-native/metro";

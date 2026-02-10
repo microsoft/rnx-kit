@@ -1,4 +1,4 @@
-import type { PackageManifest } from "@rnx-kit/tools-node/package";
+import type { PackageManifest } from "@rnx-kit/core-types";
 import { readPackage } from "@rnx-kit/tools-node/package";
 import { deepEqual, equal, match, throws } from "node:assert/strict";
 import * as path from "node:path";

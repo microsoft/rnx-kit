@@ -1,5 +1,4 @@
-import type { KitConfig } from "@rnx-kit/config";
-import type { PackageManifest } from "@rnx-kit/tools-node";
+import type { KitConfig, PackageManifest } from "@rnx-kit/core-types";
 import type { PackageInfo } from "@rnx-kit/tools-packages";
 import type ts from "typescript";
 import {

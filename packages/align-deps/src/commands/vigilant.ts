@@ -1,7 +1,10 @@
-import type { Capability, KitConfig } from "@rnx-kit/config";
 import { error, warn } from "@rnx-kit/console";
+import type {
+  Capability,
+  KitConfig,
+  PackageManifest,
+} from "@rnx-kit/core-types";
 import { keysOf } from "@rnx-kit/tools-language/properties";
-import type { PackageManifest } from "@rnx-kit/tools-node/package";
 import * as nodefs from "node:fs";
 import * as path from "node:path";
 import semverSubset from "semver/ranges/subset.js";
@@ -15,7 +18,7 @@ import { dependencySections, modifyManifest } from "../helpers.ts";
 import { updateDependencies } from "../manifest.ts";
 import { ensurePreset, filterPreset, mergePresets } from "../preset.ts";
 import type {
-  AlignDepsConfig,
+  AlignDepsOptions,
   Changes,
   ErrorCode,
   ManifestProfile,
@@ -84,7 +87,7 @@ function resolveUnmanagedCapabilities(
  */
 export function buildManifestProfile(
   manifestPath: string,
-  { kitType, alignDeps }: AlignDepsConfig
+  { kitType, alignDeps }: AlignDepsOptions
 ): ManifestProfile {
   const mergedPresets = mergePresets(
     alignDeps.presets,
@@ -291,7 +294,7 @@ export function inspect(
 export function checkPackageManifestUnconfigured(
   manifestPath: string,
   options: Options,
-  config: AlignDepsConfig,
+  config: AlignDepsOptions,
   logError = error,
   /** @internal */ fs = nodefs
 ): ErrorCode {

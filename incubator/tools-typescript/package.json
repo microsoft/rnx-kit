@@ -40,6 +40,7 @@
   "dependencies": {
     "@rnx-kit/config": "^0.7.0",
     "@rnx-kit/console": "^2.0.0",
+    "@rnx-kit/core-types": "^1.0.0",
     "@rnx-kit/tools-node": "^3.0.3",
     "@rnx-kit/tools-packages": "^0.1.1",
     "@rnx-kit/tools-react-native": "^2.3.2",

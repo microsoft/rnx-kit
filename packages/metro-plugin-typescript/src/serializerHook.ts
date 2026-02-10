@@ -1,8 +1,10 @@
-import type { TypeScriptValidationOptions } from "@rnx-kit/config";
 import { warn } from "@rnx-kit/console";
+import type {
+  AllPlatforms,
+  TypeScriptValidationOptions,
+} from "@rnx-kit/core-types";
 import { normalizePath } from "@rnx-kit/tools-node/path";
 import { getMetroVersion } from "@rnx-kit/tools-react-native/metro";
-import type { AllPlatforms } from "@rnx-kit/tools-react-native/platform";
 import type { Project } from "@rnx-kit/typescript-service";
 import { createProjectCache } from "./projectCache.ts";
 import type { SerializerHook } from "./types.ts";

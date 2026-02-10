@@ -1,5 +1,5 @@
+import type { AllPlatforms } from "@rnx-kit/core-types";
 import { findPackageDir } from "@rnx-kit/tools-node";
-import type { AllPlatforms } from "@rnx-kit/tools-react-native/platform";
 import {
   createDiagnosticWriter,
   Project,

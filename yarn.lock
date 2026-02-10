@@ -4640,6 +4640,7 @@ __metadata:
     "@react-native-community/cli-types": "npm:^20.0.0"
     "@rnx-kit/config": "npm:*"
     "@rnx-kit/console": "npm:*"
+    "@rnx-kit/core-types": "npm:^1.0.0"
     "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tools-language": "npm:*"
@@ -4776,6 +4777,7 @@ __metadata:
     "@rnx-kit/align-deps": "npm:^3.3.3"
     "@rnx-kit/config": "npm:^0.7.0"
     "@rnx-kit/console": "npm:^2.0.0"
+    "@rnx-kit/core-types": "npm:^1.0.0"
     "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/jest-preset": "npm:*"
     "@rnx-kit/metro-plugin-cyclic-dependencies-detector": "npm:^2.0.0"
@@ -5048,8 +5050,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/metro-plugin-typescript@workspace:packages/metro-plugin-typescript"
   dependencies:
-    "@rnx-kit/config": "npm:^0.7.0"
     "@rnx-kit/console": "npm:^2.0.0"
+    "@rnx-kit/core-types": "npm:^1.0.0"
     "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/jest-preset": "npm:*"
     "@rnx-kit/scripts": "npm:*"
@@ -5516,6 +5518,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/tools-node@workspace:packages/tools-node"
   dependencies:
+    "@rnx-kit/core-types": "npm:^1.0.0"
     "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
@@ -5542,6 +5545,7 @@ __metadata:
   dependencies:
     "@react-native-community/cli": "npm:^20.0.0"
     "@react-native-community/cli-types": "npm:^20.0.0"
+    "@rnx-kit/core-types": "npm:^1.0.0"
     "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tools-filesystem": "npm:*"
@@ -5574,6 +5578,7 @@ __metadata:
   dependencies:
     "@rnx-kit/config": "npm:^0.7.0"
     "@rnx-kit/console": "npm:^2.0.0"
+    "@rnx-kit/core-types": "npm:^1.0.0"
     "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/jest-preset": "npm:*"
     "@rnx-kit/scripts": "npm:*"

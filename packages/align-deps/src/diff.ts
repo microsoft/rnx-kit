@@ -1,4 +1,4 @@
-import type { PackageManifest } from "@rnx-kit/tools-node/package";
+import type { PackageManifest } from "@rnx-kit/core-types";
 import semverCoerce from "semver/functions/coerce.js";
 import semverRangeSubset from "semver/ranges/subset.js";
 import { dependencySections } from "./helpers.ts";

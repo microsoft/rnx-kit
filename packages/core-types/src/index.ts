@@ -35,6 +35,17 @@ export type {
   RuleBaseOptions,
 } from "./lint.types.ts";
 
+// export types from manifest.ts
+export type {
+  ExportsGroup,
+  FundingEntry,
+  PackageData,
+  PackageExports,
+  PackageManifest,
+  PackagePerson,
+  PersonEntry,
+} from "./manifest.ts";
+
 // export types from platforms.ts
 export { ALL_PLATFORM_VALUES } from "./platforms.ts";
 export type { AllPlatforms } from "./platforms.ts";

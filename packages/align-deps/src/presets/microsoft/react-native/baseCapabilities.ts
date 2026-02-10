@@ -1,4 +1,4 @@
-import type { MetaCapability } from "@rnx-kit/config";
+import type { MetaCapability } from "@rnx-kit/core-types";
 import type { MetaPackage } from "../../../types.ts";
 
 export const baseCapabilities: Readonly<Record<MetaCapability, MetaPackage>> = {

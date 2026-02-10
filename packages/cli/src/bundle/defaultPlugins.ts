@@ -1,4 +1,4 @@
-import type { BundleParameters } from "@rnx-kit/config";
+import type { BundleParameters } from "@rnx-kit/core-types";
 
 type DefaultPlugins = Pick<Required<BundleParameters>, "plugins" | "treeShake">;
 

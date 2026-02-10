@@ -1,4 +1,4 @@
-import type { PackageManifest } from "@rnx-kit/tools-node/package";
+import type { PackageManifest } from "@rnx-kit/core-types";
 import { writePackage } from "@rnx-kit/tools-node/package";
 import detectIndent from "detect-indent";
 import * as nodefs from "node:fs";

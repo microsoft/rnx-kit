@@ -1,30 +1,11 @@
+import type { AllPlatforms } from "@rnx-kit/core-types";
+import { ALL_PLATFORM_VALUES } from "@rnx-kit/core-types";
 import { findPackageDependencyDir } from "@rnx-kit/tools-node/package";
 import * as fs from "node:fs";
 import * as path from "node:path";
 import { readReactNativeConfig } from "./context.ts";
 
-/**
- * List of supported react-native platforms.
- */
-export type AllPlatforms =
-  | "android"
-  | "ios"
-  | "macos"
-  | "visionos"
-  | "web"
-  | "win32"
-  | "windows";
-
-// Possible values for AllPlatforms
-const allValues: AllPlatforms[] = [
-  "android",
-  "ios",
-  "macos",
-  "visionos",
-  "web",
-  "win32",
-  "windows",
-];
+export type { AllPlatforms } from "@rnx-kit/core-types";
 
 /**
  * Returns a list of extensions that should be tried for the target platform in
@@ -192,7 +173,7 @@ export function platformExtensions(platform: string): string[] {
  * @returns the given string as a platform value or undefined if it is not a valid platform.
  */
 export function tryParsePlatform(val: string): AllPlatforms | undefined {
-  return allValues.includes(val as AllPlatforms)
+  return ALL_PLATFORM_VALUES.includes(val as AllPlatforms)
     ? (val as AllPlatforms)
     : undefined;
 }
@@ -215,5 +196,5 @@ export function parsePlatform(val: string): AllPlatforms {
  * @returns List of all supported react-native platforms.
  */
 export function platformValues(): readonly AllPlatforms[] {
-  return allValues;
+  return ALL_PLATFORM_VALUES;
 }

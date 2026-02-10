@@ -1,7 +1,6 @@
-import type { Capability } from "@rnx-kit/config";
 import { getKitConfig } from "@rnx-kit/config";
 import { error, warn } from "@rnx-kit/console";
-import type { PackageManifest } from "@rnx-kit/tools-node/package";
+import type { Capability, PackageManifest } from "@rnx-kit/core-types";
 import {
   findPackageDependencyDir,
   readPackage,

@@ -1,5 +1,5 @@
+import type { AllPlatforms } from "@rnx-kit/core-types";
 import { getAvailablePlatforms } from "@rnx-kit/tools-react-native";
-import type { AllPlatforms } from "@rnx-kit/tools-react-native/platform";
 import { platformExtensions } from "@rnx-kit/tools-react-native/platform";
 import ts from "typescript";
 import {

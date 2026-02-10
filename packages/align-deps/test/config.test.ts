@@ -1,5 +1,4 @@
-import type { Capability } from "@rnx-kit/config";
-import type { PackageManifest } from "@rnx-kit/tools-node/package";
+import type { Capability, PackageManifest } from "@rnx-kit/core-types";
 import { deepEqual, equal, ok } from "node:assert/strict";
 import { describe, it } from "node:test";
 import {

@@ -1,10 +1,10 @@
-import type { Capability } from "@rnx-kit/config";
+import type { Capability } from "@rnx-kit/core-types";
 import semverCoerce from "semver/functions/coerce.js";
 import semverSatisfies from "semver/functions/satisfies.js";
 import semverValidRange from "semver/ranges/valid.js";
 import { gatherRequirements } from "./dependencies.ts";
 import { preset as reactNativePreset } from "./presets/microsoft/react-native.ts";
-import type { AlignDepsConfig, Options, Preset } from "./types.ts";
+import type { AlignDepsOptions, Options, Preset } from "./types.ts";
 
 type Resolution = {
   devPreset: Preset;
@@ -132,7 +132,7 @@ export function mergePresets(
  * @returns The resolved presets and capabilities
  */
 export function resolve(
-  { kitType, alignDeps, manifest }: AlignDepsConfig,
+  { kitType, alignDeps, manifest }: AlignDepsOptions,
   projectRoot: string,
   options: Options
 ): Resolution {

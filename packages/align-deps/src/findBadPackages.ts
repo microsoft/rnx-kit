@@ -1,4 +1,4 @@
-import type { PackageManifest } from "@rnx-kit/tools-node/package";
+import type { PackageManifest } from "@rnx-kit/core-types";
 import semverSubset from "semver/ranges/subset.js";
 import { bannedPackages } from "./presets/banned.ts";
 import type { ExcludedPackage } from "./types.ts";
