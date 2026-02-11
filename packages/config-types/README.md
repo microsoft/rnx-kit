@@ -38,14 +38,14 @@ import type {
 Configuration for an rnx-kit package, stored in the `rnx-kit` field of
 package.json.
 
-| Name      | Type                                          | Description                                                             |
-| --------- | --------------------------------------------- | ----------------------------------------------------------------------- |
-| extends   | `string \| undefined`                         | Load base config from file or module.                                   |
+| Name      | Type                                          | Description                                                               |
+| --------- | --------------------------------------------- | ------------------------------------------------------------------------- |
+| extends   | `string \| undefined`                         | Load base config from file or module.                                     |
 | kitType   | `KitType \| undefined`                        | Whether this kit is an `"app"` or a `"library"`. Defaults to `"library"`. |
-| alignDeps | `AlignDepsConfig \| undefined`                | Configures how `align-deps` should align dependencies for this package. |
-| bundle    | `BundleConfig \| BundleConfig[] \| undefined` | Specifies how the package is bundled.                                   |
-| server    | `ServerConfig \| undefined`                   | Specifies how the package's bundle server is configured.                |
-| lint      | `object \| undefined`                         | Configures rnx-kit linting tools and their rules.                       |
+| alignDeps | `AlignDepsConfig \| undefined`                | Configures how `align-deps` should align dependencies for this package.   |
+| bundle    | `BundleConfig \| BundleConfig[] \| undefined` | Specifies how the package is bundled.                                     |
+| server    | `ServerConfig \| undefined`                   | Specifies how the package's bundle server is configured.                  |
+| lint      | `object \| undefined`                         | Configures rnx-kit linting tools and their rules.                         |
 
 #### `KitType`
 
@@ -98,8 +98,8 @@ Base options shared by all lint rules.
 
 Options for the `no-duplicates` lockfile lint rule. Extends `RuleBaseOptions`.
 
-| Name     | Type                                                       | Description                               |
-| -------- | ---------------------------------------------------------- | ----------------------------------------- |
+| Name     | Type                                                            | Description                               |
+| -------- | --------------------------------------------------------------- | ----------------------------------------- |
 | packages | `readonly (string \| readonly [string, number])[] \| undefined` | List of packages to check for duplicates. |
 
 #### `NoWorkspacePackageFromNpmRuleOptions`

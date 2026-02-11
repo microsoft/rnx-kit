@@ -22,10 +22,7 @@ npm add --save-dev @rnx-kit/node-types
 ## Usage
 
 ```ts
-import type {
-  PackageManifest,
-  PackageData,
-} from "@rnx-kit/node-types";
+import type { PackageManifest, PackageData } from "@rnx-kit/node-types";
 ```
 
 ## Types

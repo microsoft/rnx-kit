@@ -51,35 +51,35 @@ platform-specific overrides.
 Parameters controlling how a bundle is constructed. Extends `BundlerPlugins` and
 `BundleOutputOptions`.
 
-| Name      | Type                        | Description                                                                |
-| --------- | --------------------------- | -------------------------------------------------------------------------- |
-| entryFile | `string \| undefined`       | Path to the entry-point .js file. Either absolute or relative to package.  |
-| assetsDest| `string \| undefined`       | Path where bundle assets are written.                                      |
-| treeShake | `boolean \| EsbuildOptions` | Enable tree shaking via esbuild.                                           |
-| hermes    | `boolean \| HermesOptions`  | Whether to run the Hermes compiler on the output bundle.                   |
-| plugins   | `Plugin[]`                  | List of plugins to add to the bundling process.                            |
+| Name       | Type                        | Description                                                               |
+| ---------- | --------------------------- | ------------------------------------------------------------------------- |
+| entryFile  | `string \| undefined`       | Path to the entry-point .js file. Either absolute or relative to package. |
+| assetsDest | `string \| undefined`       | Path where bundle assets are written.                                     |
+| treeShake  | `boolean \| EsbuildOptions` | Enable tree shaking via esbuild.                                          |
+| hermes     | `boolean \| HermesOptions`  | Whether to run the Hermes compiler on the output bundle.                  |
+| plugins    | `Plugin[]`                  | List of plugins to add to the bundling process.                           |
 
 #### `BundleOutputOptions`
 
 Output path and encoding options for a bundle, derived from Metro's
 `OutputOptions`.
 
-| Name                     | Type                  | Description                                                          |
-| ------------------------ | --------------------- | -------------------------------------------------------------------- |
-| bundleOutput             | `string \| undefined` | Path to the output bundle file.                                      |
-| bundleEncoding           | `string \| undefined` | Encoding scheme (UTF-8, UTF-16 LE, or 7-bit ASCII).                 |
-| sourcemapOutput          | `string \| undefined` | Path for the bundle source map file.                                 |
-| sourcemapSourcesRoot     | `string \| undefined` | Path to package source files for portable source-map paths.          |
-| sourcemapUseAbsolutePath | `boolean \| undefined`| Whether SourceMapURL is reported as a full path or just a file name. |
+| Name                     | Type                   | Description                                                          |
+| ------------------------ | ---------------------- | -------------------------------------------------------------------- |
+| bundleOutput             | `string \| undefined`  | Path to the output bundle file.                                      |
+| bundleEncoding           | `string \| undefined`  | Encoding scheme (UTF-8, UTF-16 LE, or 7-bit ASCII).                  |
+| sourcemapOutput          | `string \| undefined`  | Path for the bundle source map file.                                 |
+| sourcemapSourcesRoot     | `string \| undefined`  | Path to package source files for portable source-map paths.          |
+| sourcemapUseAbsolutePath | `boolean \| undefined` | Whether SourceMapURL is reported as a full path or just a file name. |
 
 #### `HermesOptions`
 
 Options for the Hermes bytecode compiler.
 
-| Name    | Type                    | Description                                        |
-| ------- | ----------------------- | -------------------------------------------------- |
-| command | `string \| undefined`   | Path to `hermesc` binary.                          |
-| flags   | `string[] \| undefined` | Arguments passed to `hermesc`.                     |
+| Name    | Type                    | Description                    |
+| ------- | ----------------------- | ------------------------------ |
+| command | `string \| undefined`   | Path to `hermesc` binary.      |
+| flags   | `string[] \| undefined` | Arguments passed to `hermesc`. |
 
 ### Server Configuration
 
@@ -114,11 +114,11 @@ Options for `@rnx-kit/metro-plugin-cyclic-dependencies-detector`.
 
 Options for `@rnx-kit/metro-plugin-duplicates-checker`.
 
-| Name           | Type                              | Description                                                 |
-| -------------- | --------------------------------- | ----------------------------------------------------------- |
-| ignoredModules | `readonly string[] \| undefined`  | List of modules to ignore when scanning for duplicates.     |
-| bannedModules  | `readonly string[] \| undefined`  | List of modules that always cause a failure.                |
-| throwOnError   | `boolean \| undefined`            | Whether to throw an exception when a duplicate is detected. |
+| Name           | Type                             | Description                                                 |
+| -------------- | -------------------------------- | ----------------------------------------------------------- |
+| ignoredModules | `readonly string[] \| undefined` | List of modules to ignore when scanning for duplicates.     |
+| bannedModules  | `readonly string[] \| undefined` | List of modules that always cause a failure.                |
+| throwOnError   | `boolean \| undefined`           | Whether to throw an exception when a duplicate is detected. |
 
 #### `EsbuildOptions`
 
