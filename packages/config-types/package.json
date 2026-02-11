@@ -2,7 +2,7 @@
   "name": "@rnx-kit/config-types",
   "version": "1.0.0",
   "description": "core types",
-  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/core-types#readme",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/config-types#readme",
   "license": "MIT",
   "author": {
     "name": "Microsoft Open Source",
@@ -15,7 +15,7 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/microsoft/rnx-kit",
-    "directory": "packages/core-types"
+    "directory": "packages/config-types"
   },
   "engines": {
     "node": ">=18.12"
