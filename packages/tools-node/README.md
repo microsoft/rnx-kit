@@ -21,15 +21,14 @@ import * as pathTools from "@rnx-kit/tools-node/path";
 <!-- The following table can be updated by running `yarn update-readme` -->
 <!-- @rnx-kit/api start -->
 
-| Category | Type Name                    | Description                                                                                                                                                                     |
-| -------- | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| module   | FileModuleRef                | Module reference rooted to a file system location, either relative to a directory, or as an absolute path. For example, `./index` or `/repos/rnx-kit/packages/tools/src/index`. |
-| module   | PackageModuleRef             | Module reference relative to a package, such as `react-native` or `@rnx-kit/tools/node/index`.                                                                                  |
-| package  | DestructuredModuleRef        | Module reference with the package name and optional sub-module path included as path                                                                                            |
-| package  | FindPackageDependencyOptions | Options which control how package dependecies are located.                                                                                                                      |
-| package  | PackageManifest              | Schema for the contents of a `package.json` manifest file.                                                                                                                      |
-| package  | PackagePerson                | Schema for a reference to a person in `package.json`.                                                                                                                           |
-| package  | PackageRef                   | Components of a package reference.                                                                                                                                              |
+| Category   | Type Name                    | Description                                                                                                                                                                     |
+| ---------- | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| manifest.d | PackageManifest              | Type definitions for package.json manifest files.                                                                                                                               |
+| module     | FileModuleRef                | Module reference rooted to a file system location, either relative to a directory, or as an absolute path. For example, `./index` or `/repos/rnx-kit/packages/tools/src/index`. |
+| module     | PackageModuleRef             | Module reference relative to a package, such as `react-native` or `@rnx-kit/tools/node/index`.                                                                                  |
+| package    | DestructuredModuleRef        | Module reference with the package name and optional sub-module path included as path                                                                                            |
+| package    | FindPackageDependencyOptions | Options which control how package dependecies are located.                                                                                                                      |
+| package    | PackageRef                   | Components of a package reference.                                                                                                                                              |
 
 | Category | Function                                        | Description                                                                                                                                         |
 | -------- | ----------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
