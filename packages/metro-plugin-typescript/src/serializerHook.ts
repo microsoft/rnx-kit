@@ -1,8 +1,8 @@
-import { warn } from "@rnx-kit/console";
 import type {
   AllPlatforms,
   TypeScriptValidationOptions,
-} from "@rnx-kit/core-types";
+} from "@rnx-kit/bundle-types";
+import { warn } from "@rnx-kit/console";
 import { normalizePath } from "@rnx-kit/tools-node/path";
 import { getMetroVersion } from "@rnx-kit/tools-react-native/metro";
 import type { Project } from "@rnx-kit/typescript-service";

@@ -1,5 +1,6 @@
+import type { Capability } from "@rnx-kit/config-types";
 import { warn } from "@rnx-kit/console";
-import type { Capability, PackageManifest } from "@rnx-kit/core-types";
+import type { PackageManifest } from "@rnx-kit/node-types";
 import { keysOf } from "@rnx-kit/tools-language/properties";
 import type { MetaPackage, Package, Preset, Profile } from "./types.ts";
 

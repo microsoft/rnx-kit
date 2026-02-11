@@ -2,8 +2,8 @@ import type {
   AlignDepsConfig,
   Capability,
   KitType,
-  PackageManifest,
-} from "@rnx-kit/core-types";
+} from "@rnx-kit/config-types";
+import type { PackageManifest } from "@rnx-kit/node-types";
 
 export type AlignDepsOptions = {
   kitType: KitType;

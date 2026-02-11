@@ -71,7 +71,7 @@
     "update-readme": "rnx-kit-scripts update-api-readme"
   },
   "dependencies": {
-    "@rnx-kit/core-types": "^1.0.0",
+    "@rnx-kit/bundle-types": "^1.0.0",
     "@rnx-kit/tools-node": "^3.0.3"
   },
   "devDependencies": {

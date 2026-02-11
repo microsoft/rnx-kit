@@ -1,4 +1,4 @@
-import type { AllPlatforms, BundleParameters } from "@rnx-kit/core-types";
+import type { AllPlatforms, BundleParameters } from "@rnx-kit/bundle-types";
 import type { BundleArgs } from "@rnx-kit/metro-service";
 import type { TransformProfile } from "metro-babel-transformer";
 

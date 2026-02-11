@@ -1,4 +1,4 @@
-import type { PackageManifest } from "@rnx-kit/core-types";
+import type { PackageManifest } from "@rnx-kit/node-types";
 import { keysOf } from "@rnx-kit/tools-language/properties";
 import * as nodefs from "node:fs";
 import prompts from "prompts";

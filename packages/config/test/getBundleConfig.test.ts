@@ -1,4 +1,5 @@
-import type { BundleConfig, KitConfig } from "@rnx-kit/core-types";
+import type { BundleConfig } from "@rnx-kit/bundle-types";
+import type { KitConfig } from "@rnx-kit/config-types";
 import { deepEqual, equal, ok, throws } from "node:assert/strict";
 import { describe, it } from "node:test";
 import {

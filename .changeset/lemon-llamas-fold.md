@@ -8,11 +8,11 @@
 "@rnx-kit/lint-lockfile": patch
 "@rnx-kit/tools-packages": patch
 "@rnx-kit/align-deps": patch
-"@rnx-kit/core-types": patch
+"@rnx-kit/config-types": patch
 "@rnx-kit/tools-node": patch
 "@rnx-kit/config": patch
 "@rnx-kit/cli": patch
 ---
 
 Move core configuration, manifest, and platform types to a new
-@rnx-kit/core-types package
+@rnx-kit/config-types package

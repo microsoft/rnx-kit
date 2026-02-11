@@ -1,6 +1,7 @@
 import type { Config as CLIConfig } from "@react-native-community/cli-types";
+import type { AllPlatforms } from "@rnx-kit/bundle-types";
 import { error, info, warn } from "@rnx-kit/console";
-import type { AllPlatforms, PackageManifest } from "@rnx-kit/core-types";
+import type { PackageManifest } from "@rnx-kit/node-types";
 import { ensureDir } from "@rnx-kit/tools-filesystem";
 import { keysOf } from "@rnx-kit/tools-language/properties";
 import {

@@ -1,4 +1,4 @@
-import type { AllPlatforms } from "@rnx-kit/core-types";
+import type { AllPlatforms } from "@rnx-kit/bundle-types";
 import type { Project } from "@rnx-kit/typescript-service";
 import type { DeltaResult, ReadOnlyGraph } from "metro";
 import type ts from "typescript";

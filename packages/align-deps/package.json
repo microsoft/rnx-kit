@@ -41,7 +41,8 @@
     "update-readme": "node --no-warnings --conditions=typescript scripts/update-readme.ts"
   },
   "dependencies": {
-    "@rnx-kit/core-types": "^1.0.0"
+    "@rnx-kit/config-types": "^1.0.0",
+    "@rnx-kit/node-types": "^1.0.0"
   },
   "devDependencies": {
     "@octokit/core": "^7.0.0",

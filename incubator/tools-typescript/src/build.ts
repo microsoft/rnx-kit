@@ -1,4 +1,4 @@
-import type { AllPlatforms } from "@rnx-kit/core-types";
+import type { AllPlatforms } from "@rnx-kit/bundle-types";
 import { findPackageInfo } from "@rnx-kit/tools-packages";
 import ts from "typescript";
 import { loadPackagePlatformInfo } from "./platforms.ts";

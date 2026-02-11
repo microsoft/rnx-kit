@@ -37,8 +37,8 @@
     "test": "rnx-kit-scripts test"
   },
   "dependencies": {
+    "@rnx-kit/bundle-types": "^1.0.0",
     "@rnx-kit/console": "^2.0.0",
-    "@rnx-kit/core-types": "^1.0.0",
     "@rnx-kit/tools-node": "^3.0.0"
   },
   "devDependencies": {

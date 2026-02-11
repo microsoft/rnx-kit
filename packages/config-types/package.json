@@ -1,5 +1,5 @@
 {
-  "name": "@rnx-kit/core-types",
+  "name": "@rnx-kit/config-types",
   "version": "1.0.0",
   "description": "core types",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/core-types#readme",
@@ -9,10 +9,8 @@
     "email": "microsoftopensource@users.noreply.github.com"
   },
   "files": [
-    "lib/**/*.d.ts",
-    "lib/**/*.js"
+    "lib/**/*.d.ts"
   ],
-  "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "repository": {
     "type": "git",
@@ -28,23 +26,12 @@
     "lint": "rnx-kit-scripts lint",
     "test": "rnx-kit-scripts test"
   },
+  "dependencies": {
+    "@rnx-kit/bundle-types": "^1.0.0"
+  },
   "devDependencies": {
     "@rnx-kit/eslint-config": "*",
     "@rnx-kit/scripts": "*",
-    "@rnx-kit/tsconfig": "*",
-    "esbuild": "^0.27.1",
-    "metro": "^0.83.3"
-  },
-  "peerDependencies": {
-    "esbuild": "^0.27.0",
-    "metro": ">=0.83.0"
-  },
-  "peerDependenciesMeta": {
-    "esbuild": {
-      "optional": true
-    },
-    "metro": {
-      "optional": true
-    }
+    "@rnx-kit/tsconfig": "*"
   }
 }

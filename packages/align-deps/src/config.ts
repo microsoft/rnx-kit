@@ -2,12 +2,9 @@ import {
   getKitCapabilities,
   getKitConfigFromPackageManifest,
 } from "@rnx-kit/config";
+import type { Capability, KitConfig } from "@rnx-kit/config-types";
 import { error, warn } from "@rnx-kit/console";
-import type {
-  Capability,
-  KitConfig,
-  PackageManifest,
-} from "@rnx-kit/core-types";
+import type { PackageManifest } from "@rnx-kit/node-types";
 import { readPackage } from "@rnx-kit/tools-node/package";
 import * as nodefs from "node:fs";
 import * as path from "node:path";

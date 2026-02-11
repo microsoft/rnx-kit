@@ -1,5 +1,5 @@
+import type { EsbuildOptions as Options } from "@rnx-kit/bundle-types";
 import { info, warn } from "@rnx-kit/console";
-import type { EsbuildOptions as Options } from "@rnx-kit/core-types";
 import type { MetroPlugin } from "@rnx-kit/metro-serializer";
 import { requireModuleFromMetro } from "@rnx-kit/tools-react-native/metro";
 import type { BuildResult, Plugin } from "esbuild";
@@ -17,7 +17,7 @@ import {
 import { absolutizeSourceMap } from "./sourceMap.ts";
 import { inferBuildTarget } from "./targets.ts";
 import { assertVersion } from "./version.ts";
-export type { EsbuildOptions as Options } from "@rnx-kit/core-types";
+export type { EsbuildOptions as Options } from "@rnx-kit/bundle-types";
 
 export { esbuildTransformerConfig } from "./esbuildTransformerConfig.ts";
 

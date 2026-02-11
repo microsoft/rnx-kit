@@ -1,5 +1,5 @@
+import type { KitConfig } from "@rnx-kit/config-types";
 import { warn } from "@rnx-kit/console";
-import type { KitConfig } from "@rnx-kit/core-types";
 import { defaultConfig } from "../config.ts";
 import { dropPatchFromVersion, modifyManifest } from "../helpers.ts";
 import type { AlignDepsOptions, LegacyCheckConfig, Options } from "../types.ts";

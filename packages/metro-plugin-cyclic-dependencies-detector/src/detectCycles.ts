@@ -1,5 +1,5 @@
+import type { CyclicDetectorOptions } from "@rnx-kit/bundle-types";
 import { error, warn } from "@rnx-kit/console";
-import type { CyclicDetectorOptions } from "@rnx-kit/core-types";
 import { getPackageModuleRefFromModulePath } from "@rnx-kit/tools-node/module";
 import type { ReadOnlyDependencies, ReadOnlyGraph } from "metro";
 import * as path from "node:path";

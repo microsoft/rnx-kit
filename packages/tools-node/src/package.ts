@@ -1,4 +1,4 @@
-import type { PackageManifest } from "@rnx-kit/core-types";
+import type { PackageManifest } from "@rnx-kit/node-types";
 import * as nodefs from "node:fs";
 import * as path from "node:path";
 import { findUp } from "./path.ts";

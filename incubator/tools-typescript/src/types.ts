@@ -1,4 +1,4 @@
-import type { AllPlatforms } from "@rnx-kit/core-types";
+import type { AllPlatforms } from "@rnx-kit/bundle-types";
 import type ts from "typescript";
 
 /**

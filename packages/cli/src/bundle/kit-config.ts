@@ -1,9 +1,9 @@
+import type { AllPlatforms } from "@rnx-kit/bundle-types";
 import {
   getBundleConfig,
   getKitConfig,
   getPlatformBundleConfig,
 } from "@rnx-kit/config";
-import type { AllPlatforms } from "@rnx-kit/core-types";
 import { getDefaultBundlerPlugins } from "./defaultPlugins.ts";
 import type { CliPlatformBundleConfig } from "./types.ts";
 

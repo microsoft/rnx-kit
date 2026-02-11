@@ -1,10 +1,9 @@
+import type { BundleConfig, ServerConfig } from "@rnx-kit/bundle-types";
 import type { AlignDepsConfig, Capability } from "./alignDeps.ts";
-import type { BundleConfig } from "./bundleConfig.ts";
 import type {
   NoDuplicatesRuleOptions,
   NoWorkspacePackageFromNpmRuleOptions,
 } from "./lint.types.ts";
-import type { ServerConfig } from "./serverConfig.ts";
 
 export type DependencyVersions = Record<string, string>;
 

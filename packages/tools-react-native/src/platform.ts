@@ -1,11 +1,11 @@
-import type { AllPlatforms } from "@rnx-kit/core-types";
-import { ALL_PLATFORM_VALUES } from "@rnx-kit/core-types";
+import type { AllPlatforms } from "@rnx-kit/bundle-types";
+import { ALL_PLATFORM_VALUES } from "@rnx-kit/bundle-types";
 import { findPackageDependencyDir } from "@rnx-kit/tools-node/package";
 import * as fs from "node:fs";
 import * as path from "node:path";
 import { readReactNativeConfig } from "./context.ts";
 
-export type { AllPlatforms } from "@rnx-kit/core-types";
+export type { AllPlatforms } from "@rnx-kit/bundle-types";
 
 /**
  * Returns a list of extensions that should be tried for the target platform in

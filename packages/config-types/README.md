@@ -1,7 +1,7 @@
-# @rnx-kit/core-types
+# @rnx-kit/config-types
 
 [![Build](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml/badge.svg)](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml)
-[![npm version](https://img.shields.io/npm/v/@rnx-kit/core-types)](https://www.npmjs.com/package/@rnx-kit/core-types)
+[![npm version](https://img.shields.io/npm/v/@rnx-kit/config-types)](https://www.npmjs.com/package/@rnx-kit/config-types)
 
 Shared TypeScript type definitions for rnx-kit packages.
 
@@ -12,13 +12,13 @@ enables type-safe integrations without pulling in implementation dependencies.
 ## Installation
 
 ```sh
-yarn add @rnx-kit/core-types --dev
+yarn add @rnx-kit/config-types --dev
 ```
 
 or if you're using npm
 
 ```sh
-npm add --save-dev @rnx-kit/core-types
+npm add --save-dev @rnx-kit/config-types
 ```
 
 ## Usage
@@ -29,7 +29,7 @@ import type {
   BundleConfig,
   AllPlatforms,
   PackageManifest,
-} from "@rnx-kit/core-types";
+} from "@rnx-kit/config-types";
 ```
 
 ## Types

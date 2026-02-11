@@ -1,6 +1,6 @@
 import type { Config as CLIConfig } from "@react-native-community/cli-types";
+import type { AllPlatforms } from "@rnx-kit/bundle-types";
 import { error } from "@rnx-kit/console";
-import type { AllPlatforms } from "@rnx-kit/core-types";
 import {
   findPackageDir,
   resolveDependencyChain,

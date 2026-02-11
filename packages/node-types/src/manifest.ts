@@ -1,4 +1,4 @@
-import type { KitConfig } from "./kitConfig";
+import type { KitConfig } from "@rnx-kit/config-types";
 
 /**
  * A group of exports

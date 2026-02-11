@@ -1,5 +1,5 @@
+import type { BundleParameters } from "@rnx-kit/bundle-types";
 import { warn } from "@rnx-kit/console";
-import type { BundleParameters } from "@rnx-kit/core-types";
 import { CyclicDependencies } from "@rnx-kit/metro-plugin-cyclic-dependencies-detector";
 import { DuplicateDependencies } from "@rnx-kit/metro-plugin-duplicates-checker";
 import { TypeScriptPlugin } from "@rnx-kit/metro-plugin-typescript";

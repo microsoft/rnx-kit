@@ -1,4 +1,4 @@
-import type { NoDuplicatesRuleOptions as Options } from "@rnx-kit/core-types";
+import type { NoDuplicatesRuleOptions as Options } from "@rnx-kit/config-types";
 import type { Rule } from "../types.ts";
 
 type PackageCount = Record<string, number | undefined>;
