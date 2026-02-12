@@ -163,6 +163,12 @@
         ]
       },
       "incubator/react-native-test-app-msal": {},
+      "incubator/tools-typescript": {
+        "entry": [
+          "src/index.ts",
+          "test/**/*.test.ts"
+        ]
+      },
       "incubator/yarn-plugin-dynamic-extensions": {
         "entry": [
           "*.js"

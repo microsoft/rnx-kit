@@ -27,8 +27,6 @@ import * as pathTools from "@rnx-kit/tools-node/path";
 | module   | PackageModuleRef             | Module reference relative to a package, such as `react-native` or `@rnx-kit/tools/node/index`.                                                                                  |
 | package  | DestructuredModuleRef        | Module reference with the package name and optional sub-module path included as path                                                                                            |
 | package  | FindPackageDependencyOptions | Options which control how package dependecies are located.                                                                                                                      |
-| package  | PackageManifest              | Schema for the contents of a `package.json` manifest file.                                                                                                                      |
-| package  | PackagePerson                | Schema for a reference to a person in `package.json`.                                                                                                                           |
 | package  | PackageRef                   | Components of a package reference.                                                                                                                                              |
 
 | Category | Function                                        | Description                                                                                                                                         |

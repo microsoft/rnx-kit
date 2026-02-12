@@ -38,7 +38,8 @@
   },
   "dependencies": {
     "@rnx-kit/tools-node": "^3.0.0",
-    "@rnx-kit/tools-workspaces": "^0.2.1"
+    "@rnx-kit/tools-workspaces": "^0.2.1",
+    "@rnx-kit/types-node": "^0.0.1"
   },
   "devDependencies": {
     "@rnx-kit/eslint-config": "*",

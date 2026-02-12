@@ -1,4 +1,3 @@
-import type { PackageManifest } from "@rnx-kit/tools-node/package";
 import {
   findPackageDependencyDir,
   readPackage,
@@ -8,10 +7,11 @@ import {
   createPackageValueLoader,
   getPackageInfoFromPath,
 } from "@rnx-kit/tools-packages";
+import type { KitConfig } from "@rnx-kit/types-kit-config";
+import type { PackageManifest } from "@rnx-kit/types-node";
 import merge from "lodash.merge";
 import * as fs from "node:fs";
 import * as path from "node:path";
-import type { KitConfig } from "./kitConfig.ts";
 
 /**
  * Options for retrieving a kit config. The default is equivalent to passing

@@ -1,4 +1,4 @@
-import type { KitConfig } from "@rnx-kit/config";
+import type { KitConfig } from "@rnx-kit/types-kit-config";
 import {
   getCliPlatformBundleConfigs,
   getTargetPlatforms,
@@ -127,7 +127,7 @@ describe("bundle/kit-config/getCliPlatformBundleConfigs()", () => {
     });
   });
 
-  const testMultiConfig: KitConfig = {
+  const testMultiConfig = {
     bundle: [
       {
         id: "first",

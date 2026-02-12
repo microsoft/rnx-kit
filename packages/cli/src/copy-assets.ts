@@ -2,14 +2,14 @@ import type { Config as CLIConfig } from "@react-native-community/cli-types";
 import { error, info, warn } from "@rnx-kit/console";
 import { ensureDir } from "@rnx-kit/tools-filesystem";
 import { keysOf } from "@rnx-kit/tools-language/properties";
-import type { PackageManifest } from "@rnx-kit/tools-node/package";
 import {
   findPackageDependencyDir,
   readPackage,
 } from "@rnx-kit/tools-node/package";
 import { findUp } from "@rnx-kit/tools-node/path";
-import type { AllPlatforms } from "@rnx-kit/tools-react-native";
 import { parsePlatform } from "@rnx-kit/tools-react-native";
+import type { AllPlatforms } from "@rnx-kit/types-bundle-config";
+import type { PackageManifest } from "@rnx-kit/types-node";
 import type { SpawnSyncOptions } from "node:child_process";
 import { spawnSync } from "node:child_process";
 import * as nodefs from "node:fs";

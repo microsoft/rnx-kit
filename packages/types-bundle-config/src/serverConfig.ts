@@ -1,4 +1,4 @@
-import type { BundlerPlugins, Plugin } from "./bundleConfig.ts";
+import type { BundlerPlugins, Plugin } from "./bundlerPlugins.ts";
 
 export type ServerConfig = BundlerPlugins & {
   /**

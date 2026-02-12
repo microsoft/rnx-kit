@@ -61,7 +61,7 @@ Parameters controlling how a bundle is constructed.
 | plugins                  | `(string \| [string, any])[]` | List of plugins to apply. If unset, it falls back to `["@rnx-kit/metro-plugin-cyclic-dependencies-detector", "@rnx-kit/metro-plugin-duplicates-checker", "@rnx-kit/metro-plugin-typescript"]`.         |
 | treeShake                | `boolean \| undefined`        | Choose whether to enable tree shaking.                                                                                                                                                                 |
 
-### `CyclicDetectorOptions`
+### `CyclicDependencyPluginOptions`
 
 | Name               | Type                   | Default | Description                                                                                                      |
 | ------------------ | ---------------------- | ------- | ---------------------------------------------------------------------------------------------------------------- |
@@ -69,7 +69,7 @@ Parameters controlling how a bundle is constructed.
 | linesOfContext     | `number \| undefined`  | 1       | When a cycle is detected, this controls the size of the module backtrace that is printed with the error message. |
 | throwOnError       | `boolean \| undefined` | `true`  | Whether or not to throw an exception when a cycle is detected.                                                   |
 
-### `DuplicateDetectorOptions`
+### `DuplicateDetectorPluginOptions`
 
 | Name           | Type                    | Default | Description                                                                                    |
 | -------------- | ----------------------- | ------- | ---------------------------------------------------------------------------------------------- |
@@ -77,7 +77,7 @@ Parameters controlling how a bundle is constructed.
 | bannedModules  | `string[] \| undefined` |         | List of modules that always cause a failure, regardless of whether or not they are duplicated. |
 | throwOnError   | `boolean \| undefined`  | `true`  | Whether or not to throw an exception when a duplicate or banned module is detected.            |
 
-### `TypeScriptValidationOptions`
+### `TypeScriptPluginOptions`
 
 | Name         | Type                   | Default | Description                                                     |
 | ------------ | ---------------------- | ------- | --------------------------------------------------------------- |

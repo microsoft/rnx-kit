@@ -20,10 +20,6 @@ import * as platformTools from "@rnx-kit/tools-react-native/platform";
 <!-- The following table can be updated by running `yarn update-readme` -->
 <!-- @rnx-kit/api start -->
 
-| Category | Type Name    | Description                               |
-| -------- | ------------ | ----------------------------------------- |
-| platform | AllPlatforms | List of supported react-native platforms. |
-
 | Category | Function                                               | Description                                                                                                                                                                                            |
 | -------- | ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | context  | `loadContext(projectRoot)`                             | Equivalent to calling `loadConfig()` from `@react-native-community/cli`, but the result is cached for faster subsequent accesses.                                                                      |

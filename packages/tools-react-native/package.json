@@ -71,7 +71,8 @@
     "update-readme": "rnx-kit-scripts update-api-readme"
   },
   "dependencies": {
-    "@rnx-kit/tools-node": "^3.0.3"
+    "@rnx-kit/tools-node": "^3.0.3",
+    "@rnx-kit/types-bundle-config": "^0.0.1"
   },
   "devDependencies": {
     "@react-native-community/cli": "^20.0.0",

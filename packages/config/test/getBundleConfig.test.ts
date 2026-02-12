@@ -1,11 +1,11 @@
+import type { BundleConfig } from "@rnx-kit/types-bundle-config";
+import type { KitConfig } from "@rnx-kit/types-kit-config";
 import { deepEqual, equal, ok, throws } from "node:assert/strict";
 import { describe, it } from "node:test";
-import type { BundleConfig } from "../src/bundleConfig.ts";
 import {
   getBundleConfig,
   getPlatformBundleConfig,
 } from "../src/getBundleConfig.ts";
-import type { KitConfig } from "../src/kitConfig.ts";
 
 const kitConfig: KitConfig = {
   bundle: [

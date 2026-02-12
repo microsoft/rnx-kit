@@ -1,9 +1,13 @@
-import type { Capability, KitConfig, KitType } from "@rnx-kit/config";
-import type { PackageManifest } from "@rnx-kit/tools-node/package";
+import type {
+  AlignDepsConfig,
+  Capability,
+  KitType,
+} from "@rnx-kit/types-kit-config";
+import type { PackageManifest } from "@rnx-kit/types-node";
 
-export type AlignDepsConfig = {
-  kitType: Required<KitConfig>["kitType"];
-  alignDeps: Required<Required<KitConfig>["alignDeps"]>;
+export type AlignDepsOptions = {
+  kitType: KitType;
+  alignDeps: Required<AlignDepsConfig>;
   manifest: PackageManifest;
 };
 

@@ -21,9 +21,6 @@
       "typescript": "./src/index.ts",
       "default": "./lib/index.js"
     },
-    "./lint.types": {
-      "default": "./src/lint.types.ts"
-    },
     "./package.json": "./package.json"
   },
   "repository": {
@@ -41,16 +38,15 @@
     "@rnx-kit/console": "^2.0.0",
     "@rnx-kit/tools-node": "^3.0.0",
     "@rnx-kit/tools-packages": "^0.1.0",
+    "@rnx-kit/types-bundle-config": "^0.0.1",
+    "@rnx-kit/types-kit-config": "^0.0.1",
+    "@rnx-kit/types-node": "^0.0.1",
     "lodash.merge": "^4.6.2",
     "semver": "^7.0.0"
   },
   "devDependencies": {
     "@rnx-kit/eslint-config": "*",
-    "@rnx-kit/metro-plugin-cyclic-dependencies-detector": "*",
-    "@rnx-kit/metro-plugin-duplicates-checker": "*",
-    "@rnx-kit/metro-serializer-esbuild": "*",
     "@rnx-kit/scripts": "*",
-    "@rnx-kit/tools-react-native": "*",
     "@rnx-kit/tsconfig": "*",
     "@types/lodash.merge": "^4.6.9",
     "@types/node": "^24.0.0",

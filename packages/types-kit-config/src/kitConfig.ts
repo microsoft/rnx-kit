@@ -1,61 +1,9 @@
-import type { BundleConfig } from "./bundleConfig.ts";
+import type { BundleConfig, ServerConfig } from "@rnx-kit/types-bundle-config";
+import type { AlignDepsConfig, Capability } from "./alignDeps.ts";
 import type {
   NoDuplicatesRuleOptions,
   NoWorkspacePackageFromNpmRuleOptions,
 } from "./lint.types.ts";
-import type { ServerConfig } from "./serverConfig.ts";
-
-export type MetaCapability = "core/testing";
-
-export type Capability =
-  | MetaCapability
-  | "core"
-  | "core-android"
-  | "core-ios"
-  | "core-macos"
-  | "core-visionos"
-  | "core-windows"
-  | "core/metro-config"
-  | "animation"
-  | "babel-preset-react-native"
-  | "base64"
-  | "checkbox"
-  | "clipboard"
-  | "community/cli"
-  | "community/cli-android"
-  | "community/cli-ios"
-  | "datetime-picker"
-  | "filesystem"
-  | "floating-action"
-  | "gestures"
-  | "hermes"
-  | "hooks"
-  | "html"
-  | "jest"
-  | "lazy-index"
-  | "masked-view"
-  | "metro"
-  | "metro-config"
-  | "metro-core"
-  | "metro-react-native-babel-transformer"
-  | "metro-resolver"
-  | "metro-runtime"
-  | "modal"
-  | "navigation/native"
-  | "navigation/stack"
-  | "netinfo"
-  | "popover"
-  | "react"
-  | "react-dom"
-  | "react-test-renderer"
-  | "safe-area"
-  | "screens"
-  | "shimmer"
-  | "sqlite"
-  | "storage"
-  | "svg"
-  | "test-app"
-  | "webview";
 
 export type DependencyVersions = Record<string, string>;
 
@@ -81,24 +29,7 @@ export type KitConfig = {
   /**
    * Configures how `align-deps` should align dependencies for this package.
    */
-  alignDeps?: {
-    /**
-     * Presets to use for aligning dependencies.
-     * @defaultValue `["microsoft/react-native"]`
-     */
-    presets?: string[];
-
-    /**
-     * Requirements for this package, e.g. `react-native@>=0.66`.
-     */
-    requirements?: string[] | { development: string[]; production: string[] };
-
-    /**
-     * Capabilities used by the kit.
-     * @defaultValue `[]`
-     */
-    capabilities?: Capability[];
-  };
+  alignDeps?: AlignDepsConfig;
 
   /**
    * Specifies how the package is bundled.
