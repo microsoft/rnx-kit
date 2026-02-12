@@ -1,4 +1,4 @@
-import type { KitConfig } from "@rnx-kit/config-types";
+import type { KitConfig } from "@rnx-kit/types-kit-config";
 
 /**
  * A group of exports
@@ -12,13 +12,13 @@ export type ExportsGroup = {
 
 export type PackageExports = Record<string, string | ExportsGroup>;
 
-export type PersonEntry = {
+export type ContributorEntry = {
   name: string;
   email?: string;
   url?: string;
 };
 
-export type PackagePerson = string | PersonEntry;
+export type PackageContributor = string | ContributorEntry;
 
 export type FundingEntry = string | { type: string; url: string };
 
@@ -43,9 +43,9 @@ export type PackageManifest = {
   license?: string;
 
   /** primary author of this package */
-  author?: PackagePerson;
+  author?: PackageContributor;
   /** array of contributors */
-  contributors?: PackagePerson[];
+  contributors?: PackageContributor[];
   /** one or more places to send funding */
   funding?: FundingEntry | FundingEntry[];
   /** homepage */

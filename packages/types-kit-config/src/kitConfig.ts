@@ -1,4 +1,4 @@
-import type { BundleConfig, ServerConfig } from "@rnx-kit/bundle-types";
+import type { BundleConfig, ServerConfig } from "@rnx-kit/types-bundle-config";
 import type { AlignDepsConfig, Capability } from "./alignDeps.ts";
 import type {
   NoDuplicatesRuleOptions,

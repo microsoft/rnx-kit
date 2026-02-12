@@ -4,7 +4,6 @@ export type {
   MetaCapability,
 } from "./alignDeps.ts";
 
-// export types from kitConfig.ts
 export type {
   DependencyVersions,
   GetDependencyVersions,
@@ -12,7 +11,6 @@ export type {
   KitType,
 } from "./kitConfig.ts";
 
-// export types from lint.types.ts
 export type {
   NoDuplicatesRuleOptions,
   NoWorkspacePackageFromNpmRuleOptions,

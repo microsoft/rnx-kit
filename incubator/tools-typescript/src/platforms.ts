@@ -1,10 +1,10 @@
 import { getKitConfigFromPackageManifest } from "@rnx-kit/config";
-import type { KitConfig } from "@rnx-kit/config-types";
 import type { PackageInfo } from "@rnx-kit/tools-packages";
 import {
   getAvailablePlatforms,
   platformExtensions,
 } from "@rnx-kit/tools-react-native";
+import type { KitConfig } from "@rnx-kit/types-kit-config";
 import path from "node:path";
 import type ts from "typescript";
 import type {

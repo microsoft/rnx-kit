@@ -67,11 +67,12 @@
     "build": "rnx-kit-scripts build",
     "format": "rnx-kit-scripts format",
     "lint": "rnx-kit-scripts lint",
-    "test": "rnx-kit-scripts test"
+    "test": "rnx-kit-scripts test",
+    "update-readme": "rnx-kit-scripts update-api-readme"
   },
   "dependencies": {
-    "@rnx-kit/bundle-types": "^1.0.0",
-    "@rnx-kit/tools-node": "^3.0.3"
+    "@rnx-kit/tools-node": "^3.0.3",
+    "@rnx-kit/types-bundle-config": "^0.0.1"
   },
   "devDependencies": {
     "@react-native-community/cli": "^20.0.0",

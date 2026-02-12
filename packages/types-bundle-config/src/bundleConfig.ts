@@ -1,24 +1,8 @@
 import type { OutputOptions } from "metro/private/shared/types";
-import type {
-  BundlerPlugins,
-  EsbuildOptions,
-  Plugin,
-} from "./bundlePlugins.ts";
-import type { AllPlatforms } from "./platforms.ts";
-
-export type HermesOptions = {
-  /**
-   * Path to `hermesc` binary. By default, `cli` will try to find it in
-   * `node_modules`.
-   */
-  command?: string;
-
-  /**
-   * List of arguments passed to `hermesc`. By default, this is
-   * `["-O", "-output-source-map", "-w"]`.
-   */
-  flags?: string[];
-};
+import type { AllPlatforms } from "./allPlatforms.ts";
+import type { BundlerPlugins, Plugin } from "./bundlerPlugins.ts";
+import type { HermesOptions } from "./hermesOptions.ts";
+import type { SerializerEsbuildOptions } from "./plugins/serializerEsbuildOptions.ts";
 
 export type BundleOutputOptions = {
   /**
@@ -86,7 +70,7 @@ export type BundleParameters = BundlerPlugins &
      *
      * Only applies to `rnx-bundle` command.
      */
-    treeShake?: boolean | EsbuildOptions;
+    treeShake?: boolean | SerializerEsbuildOptions;
 
     /**
      * Whether to run the Hermes compiler on the output bundle.

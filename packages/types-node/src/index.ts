@@ -1,10 +1,10 @@
 // export types from manifest.ts
 export type {
+  ContributorEntry,
   ExportsGroup,
   FundingEntry,
+  PackageContributor,
   PackageData,
   PackageExports,
   PackageManifest,
-  PackagePerson,
-  PersonEntry,
 } from "./manifest.ts";

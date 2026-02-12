@@ -1,4 +1,4 @@
-import type { KitConfig } from "@rnx-kit/config-types";
+import type { KitConfig } from "@rnx-kit/types-kit-config";
 import {
   getCliPlatformBundleConfigs,
   getTargetPlatforms,

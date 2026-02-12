@@ -1,4 +1,4 @@
-import type { Capability } from "@rnx-kit/config-types";
+import type { Capability } from "@rnx-kit/types-kit-config";
 import semverCoerce from "semver/functions/coerce.js";
 import semverSatisfies from "semver/functions/satisfies.js";
 import semverValidRange from "semver/ranges/valid.js";

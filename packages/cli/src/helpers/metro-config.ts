@@ -1,4 +1,3 @@
-import type { BundleParameters } from "@rnx-kit/bundle-types";
 import { warn } from "@rnx-kit/console";
 import { CyclicDependencies } from "@rnx-kit/metro-plugin-cyclic-dependencies-detector";
 import { DuplicateDependencies } from "@rnx-kit/metro-plugin-duplicates-checker";
@@ -9,6 +8,7 @@ import {
   esbuildTransformerConfig,
   MetroSerializer as MetroSerializerEsbuild,
 } from "@rnx-kit/metro-serializer-esbuild";
+import type { BundleParameters } from "@rnx-kit/types-bundle-config";
 import type { ConfigT, SerializerConfigT } from "metro-config";
 import type { WritableDeep } from "type-fest";
 import { getDefaultBundlerPlugins } from "../bundle/defaultPlugins.ts";

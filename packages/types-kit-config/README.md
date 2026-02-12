@@ -1,7 +1,7 @@
-# @rnx-kit/config-types
+# @rnx-kit/types-kit-config
 
 [![Build](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml/badge.svg)](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml)
-[![npm version](https://img.shields.io/npm/v/@rnx-kit/config-types)](https://www.npmjs.com/package/@rnx-kit/config-types)
+[![npm version](https://img.shields.io/npm/v/@rnx-kit/types-kit-config)](https://www.npmjs.com/package/@rnx-kit/types-kit-config)
 
 TypeScript type definitions for rnx-kit configuration, dependency alignment, and
 lint rules. This package exists to break circular dependencies between rnx-kit
@@ -10,13 +10,13 @@ packages that share these types.
 ## Installation
 
 ```sh
-yarn add @rnx-kit/config-types --dev
+yarn add @rnx-kit/types-kit-config --dev
 ```
 
 or if you're using npm
 
 ```sh
-npm add --save-dev @rnx-kit/config-types
+npm add --save-dev @rnx-kit/types-kit-config
 ```
 
 ## Usage
@@ -26,7 +26,7 @@ import type {
   KitConfig,
   AlignDepsConfig,
   Capability,
-} from "@rnx-kit/config-types";
+} from "@rnx-kit/types-kit-config";
 ```
 
 ## Types

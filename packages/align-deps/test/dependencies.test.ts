@@ -1,5 +1,5 @@
-import type { PackageManifest } from "@rnx-kit/node-types";
 import { readPackage } from "@rnx-kit/tools-node/package";
+import type { PackageManifest } from "@rnx-kit/types-node";
 import { deepEqual, equal, match, throws } from "node:assert/strict";
 import * as path from "node:path";
 import { afterEach, describe, it } from "node:test";

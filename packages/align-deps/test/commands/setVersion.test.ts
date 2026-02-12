@@ -1,4 +1,4 @@
-import type { PackageManifest } from "@rnx-kit/node-types";
+import type { PackageManifest } from "@rnx-kit/types-node";
 import { deepEqual, equal, fail, ok, rejects } from "node:assert/strict";
 import { after, afterEach, before, describe, it } from "node:test";
 import prompts from "prompts";

@@ -2,8 +2,8 @@ import type {
   AllPlatforms,
   BundleConfig,
   BundleParameters,
-} from "@rnx-kit/bundle-types";
-import type { KitConfig } from "@rnx-kit/config-types";
+} from "@rnx-kit/types-bundle-config";
+import type { KitConfig } from "@rnx-kit/types-kit-config";
 
 function failOnUnsupportedProp(
   parameters: BundleParameters,

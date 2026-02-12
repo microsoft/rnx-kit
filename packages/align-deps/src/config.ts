@@ -2,10 +2,10 @@ import {
   getKitCapabilities,
   getKitConfigFromPackageManifest,
 } from "@rnx-kit/config";
-import type { Capability, KitConfig } from "@rnx-kit/config-types";
 import { error, warn } from "@rnx-kit/console";
-import type { PackageManifest } from "@rnx-kit/node-types";
 import { readPackage } from "@rnx-kit/tools-node/package";
+import type { Capability, KitConfig } from "@rnx-kit/types-kit-config";
+import type { PackageManifest } from "@rnx-kit/types-node";
 import * as nodefs from "node:fs";
 import * as path from "node:path";
 import { findBadPackages } from "./findBadPackages.ts";

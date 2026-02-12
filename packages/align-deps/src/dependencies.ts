@@ -1,11 +1,11 @@
 import { getKitConfig } from "@rnx-kit/config";
-import type { Capability } from "@rnx-kit/config-types";
 import { error, warn } from "@rnx-kit/console";
-import type { PackageManifest } from "@rnx-kit/node-types";
 import {
   findPackageDependencyDir,
   readPackage,
 } from "@rnx-kit/tools-node/package";
+import type { Capability } from "@rnx-kit/types-kit-config";
+import type { PackageManifest } from "@rnx-kit/types-node";
 import { filterPreset } from "./preset.ts";
 import type { Options, Preset, Profile } from "./types.ts";
 

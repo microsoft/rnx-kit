@@ -6,7 +6,6 @@ export {
 } from "./module.ts";
 export type { FileModuleRef, PackageModuleRef } from "./module.ts";
 
-export type { PackageManifest, PackagePerson } from "@rnx-kit/node-types";
 export {
   destructureModuleRef,
   findPackage,

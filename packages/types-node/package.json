@@ -1,8 +1,8 @@
 {
-  "name": "@rnx-kit/node-types",
-  "version": "1.0.0",
+  "name": "@rnx-kit/types-node",
+  "version": "0.0.1",
   "description": "node-types",
-  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/node-types#readme",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/types-node#readme",
   "license": "MIT",
   "author": {
     "name": "Microsoft Open Source",
@@ -15,7 +15,7 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/microsoft/rnx-kit",
-    "directory": "packages/node-types"
+    "directory": "packages/types-node"
   },
   "engines": {
     "node": ">=18.12"
@@ -23,11 +23,10 @@
   "scripts": {
     "build": "rnx-kit-scripts build",
     "format": "rnx-kit-scripts format",
-    "lint": "rnx-kit-scripts lint",
-    "test": "rnx-kit-scripts test"
+    "lint": "rnx-kit-scripts lint"
   },
   "dependencies": {
-    "@rnx-kit/config-types": "^1.0.0"
+    "@rnx-kit/types-kit-config": "^0.0.1"
   },
   "devDependencies": {
     "@rnx-kit/eslint-config": "*",

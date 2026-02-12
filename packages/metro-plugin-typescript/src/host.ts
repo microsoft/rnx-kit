@@ -1,6 +1,6 @@
-import type { AllPlatforms } from "@rnx-kit/bundle-types";
 import { getAvailablePlatforms } from "@rnx-kit/tools-react-native";
 import { platformExtensions } from "@rnx-kit/tools-react-native/platform";
+import type { AllPlatforms } from "@rnx-kit/types-bundle-config";
 import ts from "typescript";
 import {
   resolveModuleNameLiterals,

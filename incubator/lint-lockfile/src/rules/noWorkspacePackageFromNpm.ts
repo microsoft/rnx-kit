@@ -1,4 +1,4 @@
-import type { NoWorkspacePackageFromNpmRuleOptions as Options } from "@rnx-kit/config-types";
+import type { NoWorkspacePackageFromNpmRuleOptions as Options } from "@rnx-kit/types-kit-config";
 import type { Rule } from "../types.ts";
 
 export function noWorkspacePackageFromNpmRule(

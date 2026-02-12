@@ -1,6 +1,6 @@
-import type { DuplicateDetectorOptions as Options } from "@rnx-kit/bundle-types";
 import { error } from "@rnx-kit/console";
 import type { MetroPlugin } from "@rnx-kit/metro-serializer";
+import type { DuplicateDetectorPluginOptions } from "@rnx-kit/types-bundle-plugin-options";
 import type { MixedSourceMap } from "metro-source-map";
 import { readFile } from "node:fs";
 import type { Result } from "./checkForDuplicatePackages.ts";
@@ -10,7 +10,6 @@ import {
   defaultOptions,
 } from "./checkForDuplicatePackages.ts";
 
-export type { DuplicateDetectorOptions as Options } from "@rnx-kit/bundle-types";
 export { detectDuplicatePackages } from "./checkForDuplicatePackages.ts";
 export type { Result } from "./checkForDuplicatePackages.ts";
 export { normalizePath, resolveModule } from "./gatherModules.ts";
@@ -36,7 +35,7 @@ export function getErrorMessage({
 
 export function checkForDuplicatePackagesInFile(
   sourceMap: string,
-  options: Options = defaultOptions
+  options: DuplicateDetectorPluginOptions = defaultOptions
 ): Promise<void> {
   return new Promise((resolve, reject) =>
     readFile(sourceMap, { encoding: "utf-8" }, (e, data) => {
@@ -64,7 +63,7 @@ export function checkForDuplicatePackagesInFile(
 }
 
 export function DuplicateDependencies(
-  pluginOptions: Options = defaultOptions
+  pluginOptions: DuplicateDetectorPluginOptions = defaultOptions
 ): MetroPlugin {
   return (_entryPoint, _preModules, graph, _options) => {
     const result = checkForDuplicateDependencies(graph, pluginOptions);

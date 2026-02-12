@@ -34,10 +34,10 @@
     "test": "rnx-kit-scripts test"
   },
   "dependencies": {
-    "@rnx-kit/bundle-types": "^1.0.0",
     "@rnx-kit/console": "^2.0.0",
     "@rnx-kit/tools-node": "^3.0.3",
     "@rnx-kit/tools-react-native": "^2.3.2",
+    "@rnx-kit/types-bundle-plugin-options": "^0.0.1",
     "esbuild": "^0.27.1",
     "esbuild-plugin-lodash": "^1.2.0"
   },

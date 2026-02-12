@@ -1,4 +1,4 @@
-import type { PackageManifest } from "@rnx-kit/tools-node";
+import type { PackageManifest } from "@rnx-kit/types-node";
 
 export type PackageInfo = {
   /** name of the package */

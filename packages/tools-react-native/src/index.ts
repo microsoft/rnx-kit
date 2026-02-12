@@ -1,4 +1,3 @@
-export type { AllPlatforms } from "@rnx-kit/bundle-types";
 export {
   loadContext,
   loadContextAsync,

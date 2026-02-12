@@ -1,8 +1,8 @@
 {
-  "name": "@rnx-kit/bundle-types",
-  "version": "1.0.0",
-  "description": "bundle-types",
-  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/bundle-types#readme",
+  "name": "@rnx-kit/types-bundle-plugin-options",
+  "version": "0.0.1",
+  "description": "Type definitions for bundle plugin options",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/types-bundle-plugin-options#readme",
   "license": "MIT",
   "author": {
     "name": "Microsoft Open Source",
@@ -17,7 +17,7 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/microsoft/rnx-kit",
-    "directory": "packages/bundle-types"
+    "directory": "packages/types-bundle-plugin-options"
   },
   "engines": {
     "node": ">=18.12"
@@ -25,8 +25,7 @@
   "scripts": {
     "build": "rnx-kit-scripts build",
     "format": "rnx-kit-scripts format",
-    "lint": "rnx-kit-scripts lint",
-    "test": "rnx-kit-scripts test"
+    "lint": "rnx-kit-scripts lint"
   },
   "devDependencies": {
     "@rnx-kit/eslint-config": "*",

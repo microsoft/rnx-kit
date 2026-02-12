@@ -1,7 +1,7 @@
-# @rnx-kit/node-types
+# @rnx-kit/types-node
 
 [![Build](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml/badge.svg)](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml)
-[![npm version](https://img.shields.io/npm/v/@rnx-kit/node-types)](https://www.npmjs.com/package/@rnx-kit/node-types)
+[![npm version](https://img.shields.io/npm/v/@rnx-kit/types-node)](https://www.npmjs.com/package/@rnx-kit/types-node)
 
 TypeScript type definitions for package.json manifests and package data
 structures. This package exists to break circular dependencies between rnx-kit
@@ -10,19 +10,19 @@ packages that share these types.
 ## Installation
 
 ```sh
-yarn add @rnx-kit/node-types --dev
+yarn add @rnx-kit/types-node --dev
 ```
 
 or if you're using npm
 
 ```sh
-npm add --save-dev @rnx-kit/node-types
+npm add --save-dev @rnx-kit/types-node
 ```
 
 ## Usage
 
 ```ts
-import type { PackageManifest, PackageData } from "@rnx-kit/node-types";
+import type { PackageManifest, PackageData } from "@rnx-kit/types-node";
 ```
 
 ## Types
@@ -33,7 +33,7 @@ import type { PackageManifest, PackageData } from "@rnx-kit/node-types";
 
 Comprehensive type definitions for `package.json` files, including all standard
 npm fields plus the `rnx-kit` configuration field (typed as `KitConfig` from
-`@rnx-kit/config-types`).
+`@rnx-kit/types-kit-config`).
 
 Covers identity and metadata (`name`, `version`, `license`, `author`), entry
 points (`main`, `module`, `types`, `exports`), dependencies, scripts, engines,

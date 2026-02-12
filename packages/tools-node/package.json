@@ -53,10 +53,11 @@
     "build": "rnx-kit-scripts build",
     "format": "rnx-kit-scripts format",
     "lint": "rnx-kit-scripts lint",
-    "test": "rnx-kit-scripts test"
+    "test": "rnx-kit-scripts test",
+    "update-readme": "rnx-kit-scripts update-api-readme"
   },
   "dependencies": {
-    "@rnx-kit/node-types": "^1.0.0"
+    "@rnx-kit/types-node": "^0.0.1"
   },
   "devDependencies": {
     "@rnx-kit/eslint-config": "*",

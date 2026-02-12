@@ -1,7 +1,7 @@
-# @rnx-kit/bundle-types
+# @rnx-kit/types-bundle-config
 
 [![Build](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml/badge.svg)](https://github.com/microsoft/rnx-kit/actions/workflows/build.yml)
-[![npm version](https://img.shields.io/npm/v/@rnx-kit/bundle-types)](https://www.npmjs.com/package/@rnx-kit/bundle-types)
+[![npm version](https://img.shields.io/npm/v/@rnx-kit/types-bundle-config)](https://www.npmjs.com/package/@rnx-kit/types-bundle-config)
 
 TypeScript type definitions for Metro bundling configuration, bundler plugins,
 server configuration, and React Native platform targets. This package exists to
@@ -10,13 +10,13 @@ break circular dependencies between rnx-kit packages that share these types.
 ## Installation
 
 ```sh
-yarn add @rnx-kit/bundle-types --dev
+yarn add @rnx-kit/types-bundle-config --dev
 ```
 
 or if you're using npm
 
 ```sh
-npm add --save-dev @rnx-kit/bundle-types
+npm add --save-dev @rnx-kit/types-bundle-config
 ```
 
 ## Usage
@@ -28,7 +28,7 @@ import type {
   ServerConfig,
   AllPlatforms,
   Plugin,
-} from "@rnx-kit/bundle-types";
+} from "@rnx-kit/types-bundle-config";
 ```
 
 ## Types
@@ -51,13 +51,13 @@ platform-specific overrides.
 Parameters controlling how a bundle is constructed. Extends `BundlerPlugins` and
 `BundleOutputOptions`.
 
-| Name       | Type                        | Description                                                               |
-| ---------- | --------------------------- | ------------------------------------------------------------------------- |
-| entryFile  | `string \| undefined`       | Path to the entry-point .js file. Either absolute or relative to package. |
-| assetsDest | `string \| undefined`       | Path where bundle assets are written.                                     |
-| treeShake  | `boolean \| EsbuildOptions` | Enable tree shaking via esbuild.                                          |
-| hermes     | `boolean \| HermesOptions`  | Whether to run the Hermes compiler on the output bundle.                  |
-| plugins    | `Plugin[]`                  | List of plugins to add to the bundling process.                           |
+| Name       | Type                                  | Description                                                               |
+| ---------- | ------------------------------------- | ------------------------------------------------------------------------- |
+| entryFile  | `string \| undefined`                 | Path to the entry-point .js file. Either absolute or relative to package. |
+| assetsDest | `string \| undefined`                 | Path where bundle assets are written.                                     |
+| treeShake  | `boolean \| SerializerEsbuildOptions` | Enable tree shaking via esbuild.                                          |
+| hermes     | `boolean \| HermesOptions`            | Whether to run the Hermes compiler on the output bundle.                  |
+| plugins    | `Plugin[]`                            | List of plugins to add to the bundling process.                           |
 
 #### `BundleOutputOptions`
 
@@ -99,48 +99,6 @@ Configuration for the Metro bundle server. Extends `BundlerPlugins`.
 #### `Plugin`
 
 A plugin is either a module name string or a tuple of `[name, options]`.
-
-#### `CyclicDetectorOptions`
-
-Options for `@rnx-kit/metro-plugin-cyclic-dependencies-detector`.
-
-| Name               | Type                   | Description                                                |
-| ------------------ | ---------------------- | ---------------------------------------------------------- |
-| includeNodeModules | `boolean \| undefined` | Include external packages from node_modules when scanning. |
-| linesOfContext     | `number \| undefined`  | Size of the module backtrace printed with error messages.  |
-| throwOnError       | `boolean \| undefined` | Whether to throw an exception when a cycle is detected.    |
-
-#### `DuplicateDetectorOptions`
-
-Options for `@rnx-kit/metro-plugin-duplicates-checker`.
-
-| Name           | Type                             | Description                                                 |
-| -------------- | -------------------------------- | ----------------------------------------------------------- |
-| ignoredModules | `readonly string[] \| undefined` | List of modules to ignore when scanning for duplicates.     |
-| bannedModules  | `readonly string[] \| undefined` | List of modules that always cause a failure.                |
-| throwOnError   | `boolean \| undefined`           | Whether to throw an exception when a duplicate is detected. |
-
-#### `EsbuildOptions`
-
-Options for `@rnx-kit/metro-serializer-esbuild` tree shaking.
-
-| Name              | Type                              | Description                                  |
-| ----------------- | --------------------------------- | -------------------------------------------- |
-| minify            | `boolean \| undefined`            | Enable all minification.                     |
-| minifyWhitespace  | `boolean \| undefined`            | Minify whitespace.                           |
-| minifyIdentifiers | `boolean \| undefined`            | Minify identifiers.                          |
-| minifySyntax      | `boolean \| undefined`            | Minify syntax.                               |
-| target            | `string \| string[] \| undefined` | Target environment for generated code.       |
-| analyze           | `boolean \| "verbose"`            | Analyze bundle composition.                  |
-| metafile          | `string \| undefined`             | Path to write esbuild metafile for analysis. |
-
-#### `TypeScriptValidationOptions`
-
-Options for TypeScript validation during bundling.
-
-| Name         | Type                   | Description                                          |
-| ------------ | ---------------------- | ---------------------------------------------------- |
-| throwOnError | `boolean \| undefined` | Whether to throw an exception when validation fails. |
 
 ### Platform Types
 

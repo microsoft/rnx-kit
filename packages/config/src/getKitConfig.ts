@@ -1,5 +1,3 @@
-import type { KitConfig } from "@rnx-kit/config-types";
-import type { PackageManifest } from "@rnx-kit/node-types";
 import {
   findPackageDependencyDir,
   readPackage,
@@ -9,6 +7,8 @@ import {
   createPackageValueLoader,
   getPackageInfoFromPath,
 } from "@rnx-kit/tools-packages";
+import type { KitConfig } from "@rnx-kit/types-kit-config";
+import type { PackageManifest } from "@rnx-kit/types-node";
 import merge from "lodash.merge";
 import * as fs from "node:fs";
 import * as path from "node:path";

@@ -1,5 +1,5 @@
-import type { PackageManifest } from "@rnx-kit/node-types";
 import { keysOf } from "@rnx-kit/tools-language/properties";
+import type { PackageManifest } from "@rnx-kit/types-node";
 import * as nodefs from "node:fs";
 import prompts from "prompts";
 import semverCoerce from "semver/functions/coerce.js";

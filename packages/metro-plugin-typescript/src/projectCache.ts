@@ -1,5 +1,5 @@
-import type { AllPlatforms } from "@rnx-kit/bundle-types";
 import { findPackageDir } from "@rnx-kit/tools-node";
+import type { AllPlatforms } from "@rnx-kit/types-bundle-config";
 import {
   createDiagnosticWriter,
   Project,

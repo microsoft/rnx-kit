@@ -1,9 +1,9 @@
 import type { Config as CLIConfig } from "@react-native-community/cli-types";
-import type { HermesOptions } from "@rnx-kit/bundle-types";
 import { error, info } from "@rnx-kit/console";
 import { writeJSONFile } from "@rnx-kit/tools-filesystem";
 import { findPackageDependencyDir } from "@rnx-kit/tools-node/package";
 import { requireModuleFromMetro } from "@rnx-kit/tools-react-native/metro";
+import type { HermesOptions } from "@rnx-kit/types-bundle-config";
 import { spawnSync } from "node:child_process";
 import * as fs from "node:fs";
 import * as os from "node:os";

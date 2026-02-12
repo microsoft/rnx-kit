@@ -1,7 +1,7 @@
-import type { EsbuildOptions as Options } from "@rnx-kit/bundle-types";
 import { info, warn } from "@rnx-kit/console";
 import type { MetroPlugin } from "@rnx-kit/metro-serializer";
 import { requireModuleFromMetro } from "@rnx-kit/tools-react-native/metro";
+import type { SerializerEsbuildOptions } from "@rnx-kit/types-bundle-plugin-options";
 import type { BuildResult, Plugin } from "esbuild";
 import * as esbuild from "esbuild";
 import type { SerializerConfigT } from "metro-config";
@@ -17,7 +17,6 @@ import {
 import { absolutizeSourceMap } from "./sourceMap.ts";
 import { inferBuildTarget } from "./targets.ts";
 import { assertVersion } from "./version.ts";
-export type { EsbuildOptions as Options } from "@rnx-kit/bundle-types";
 
 export { esbuildTransformerConfig } from "./esbuildTransformerConfig.ts";
 
@@ -36,7 +35,7 @@ function isRedundantPolyfill(modulePath: string): boolean {
  */
 export function MetroSerializer(
   metroPlugins: MetroPlugin[] = [],
-  buildOptions?: Options
+  buildOptions?: SerializerEsbuildOptions
 ): SerializerConfigT["customSerializer"] {
   assertVersion("0.66.1");
 

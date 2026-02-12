@@ -1,12 +1,11 @@
-import type { CyclicDetectorOptions as PluginOptions } from "@rnx-kit/bundle-types";
 import type { MetroPlugin } from "@rnx-kit/metro-serializer";
+import type { CyclicDependencyPluginOptions } from "@rnx-kit/types-bundle-plugin-options";
 import { detectCycles } from "./detectCycles.ts";
 
-export type { CyclicDetectorOptions as PluginOptions } from "@rnx-kit/bundle-types";
 export { packageRelativePath } from "./detectCycles.ts";
 
 export function CyclicDependencies(
-  pluginOptions: PluginOptions = {}
+  pluginOptions: CyclicDependencyPluginOptions = {}
 ): MetroPlugin {
   return (entryPoint, _preModules, graph, _options) => {
     detectCycles(entryPoint, graph, pluginOptions);

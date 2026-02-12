@@ -1,6 +1,6 @@
-import type { KitConfig } from "@rnx-kit/config-types";
-import type { PackageManifest } from "@rnx-kit/node-types";
 import type { PackageInfo } from "@rnx-kit/tools-packages";
+import type { KitConfig } from "@rnx-kit/types-kit-config";
+import type { PackageManifest } from "@rnx-kit/types-node";
 import type ts from "typescript";
 import {
   isBestMatch,

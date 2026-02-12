@@ -1,11 +1,11 @@
 import type { Config as CLIConfig } from "@react-native-community/cli-types";
-import type { AllPlatforms } from "@rnx-kit/bundle-types";
 import { error } from "@rnx-kit/console";
 import {
   findPackageDir,
   resolveDependencyChain,
 } from "@rnx-kit/tools-node/package";
 import { parsePlatform } from "@rnx-kit/tools-react-native/platform";
+import type { AllPlatforms } from "@rnx-kit/types-bundle-config";
 
 type Args = {
   platform: AllPlatforms;

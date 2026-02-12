@@ -1,5 +1,5 @@
-import type { KitConfig } from "@rnx-kit/config-types";
 import { warn } from "@rnx-kit/console";
+import type { KitConfig } from "@rnx-kit/types-kit-config";
 import semver from "semver";
 
 type RequiredConfig = Required<
