@@ -1,8 +1,8 @@
+import type { SerializerEsbuildOptions } from "@rnx-kit/types-bundle-plugin-options";
 import type { OutputOptions } from "metro/private/shared/types";
 import type { AllPlatforms } from "./allPlatforms.ts";
 import type { BundlerPlugins, Plugin } from "./bundlerPlugins.ts";
 import type { HermesOptions } from "./hermesOptions.ts";
-import type { SerializerEsbuildOptions } from "./plugins/serializerEsbuildOptions.ts";
 
 export type BundleOutputOptions = {
   /**

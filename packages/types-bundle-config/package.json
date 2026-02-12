@@ -10,10 +10,19 @@
   },
   "files": [
     "lib/**/*.d.ts",
-    "lib/**/*.js"
+    "lib/**/*.js",
+    "src"
   ],
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "typescript": "./src/index.ts",
+      "default": "./lib/index.js"
+    },
+    "./package.json": "./package.json"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/microsoft/rnx-kit",
@@ -34,17 +43,12 @@
     "@rnx-kit/eslint-config": "*",
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*",
-    "esbuild": "^0.27.1",
     "metro": "^0.83.3"
   },
   "peerDependencies": {
-    "esbuild": "^0.27.0",
     "metro": ">=0.83.0"
   },
   "peerDependenciesMeta": {
-    "esbuild": {
-      "optional": true
-    },
     "metro": {
       "optional": true
     }
