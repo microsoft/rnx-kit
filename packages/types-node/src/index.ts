@@ -1,4 +1,3 @@
-// export types from manifest.ts
 export type {
   ContributorEntry,
   ExportsGroup,
