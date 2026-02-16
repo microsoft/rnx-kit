@@ -9,14 +9,12 @@
     "email": "microsoftopensource@users.noreply.github.com"
   },
   "files": [
-    "lib/**/*.d.ts",
     "src"
   ],
-  "types": "lib/index.d.ts",
+  "types": "src/index.ts",
   "exports": {
     ".": {
-      "types": "./lib/index.d.ts",
-      "typescript": "./src/index.ts",
+      "types": "./src/index.ts",
       "default": "./src/index.ts"
     },
     "./package.json": "./package.json"

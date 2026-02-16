@@ -68,8 +68,6 @@ export type PackageManifest = {
   browser?: string;
   /** TypeScript declaration entry point */
   types?: string;
-  /** @deprecated Use `types` instead */
-  typings?: string;
   /** exports map */
   exports?: PackageExports;
 

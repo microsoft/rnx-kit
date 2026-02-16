@@ -51,8 +51,8 @@
     "@rnx-kit/jest-preset": "*",
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*",
-    "@rnx-kit/types-kit-config": "^0.0.1",
-    "@rnx-kit/types-node": "^0.0.1"
+    "@rnx-kit/types-kit-config": "*",
+    "@rnx-kit/types-node": "*"
   },
   "peerDependencies": {
     "typescript": ">=4.7.0"

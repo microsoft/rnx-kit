@@ -1,7 +1,7 @@
 {
   "extends": "@rnx-kit/tsconfig/tsconfig.node.json",
   "compilerOptions": {
-    "emitDeclarationOnly": true
+    "noEmit": true
   },
   "include": ["src"]
 }

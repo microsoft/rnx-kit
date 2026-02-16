@@ -5573,8 +5573,8 @@ __metadata:
     "@rnx-kit/tools-react-native": "npm:^2.3.2"
     "@rnx-kit/tsconfig": "npm:*"
     "@rnx-kit/types-bundle-config": "npm:^0.0.1"
-    "@rnx-kit/types-kit-config": "npm:^0.0.1"
-    "@rnx-kit/types-node": "npm:^0.0.1"
+    "@rnx-kit/types-kit-config": "npm:*"
+    "@rnx-kit/types-node": "npm:*"
     "@rnx-kit/typescript-service": "npm:^2.0.0"
   peerDependencies:
     typescript: ">=4.7.0"
@@ -5637,7 +5637,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rnx-kit/types-kit-config@npm:^0.0.1, @rnx-kit/types-kit-config@workspace:packages/types-kit-config":
+"@rnx-kit/types-kit-config@npm:*, @rnx-kit/types-kit-config@npm:^0.0.1, @rnx-kit/types-kit-config@workspace:packages/types-kit-config":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/types-kit-config@workspace:packages/types-kit-config"
   dependencies:
@@ -5664,7 +5664,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rnx-kit/types-node@npm:^0.0.1, @rnx-kit/types-node@workspace:packages/types-node":
+"@rnx-kit/types-node@npm:*, @rnx-kit/types-node@npm:^0.0.1, @rnx-kit/types-node@workspace:packages/types-node":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/types-node@workspace:packages/types-node"
   dependencies:
