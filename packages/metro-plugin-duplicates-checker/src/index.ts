@@ -1,6 +1,6 @@
 import { error } from "@rnx-kit/console";
 import type { MetroPlugin } from "@rnx-kit/metro-serializer";
-import type { DuplicateDetectorPluginOptions } from "@rnx-kit/types-bundle-plugin-options";
+import type { DuplicateDetectorPluginOptions } from "@rnx-kit/types-plugin-duplicates-checker";
 import type { MixedSourceMap } from "metro-source-map";
 import { readFile } from "node:fs";
 import type { Result } from "./checkForDuplicatePackages.ts";

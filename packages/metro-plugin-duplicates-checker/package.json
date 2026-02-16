@@ -39,7 +39,7 @@
   "dependencies": {
     "@rnx-kit/console": "^2.0.0",
     "@rnx-kit/tools-node": "^3.0.0",
-    "@rnx-kit/types-bundle-plugin-options": "^0.0.1"
+    "@rnx-kit/types-plugin-duplicates-checker": "^0.0.1"
   },
   "devDependencies": {
     "@rnx-kit/eslint-config": "*",

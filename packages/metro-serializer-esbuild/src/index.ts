@@ -1,7 +1,7 @@
 import { info, warn } from "@rnx-kit/console";
 import type { MetroPlugin } from "@rnx-kit/metro-serializer";
 import { requireModuleFromMetro } from "@rnx-kit/tools-react-native/metro";
-import type { SerializerEsbuildOptions } from "@rnx-kit/types-bundle-plugin-options";
+import type { SerializerEsbuildOptions } from "@rnx-kit/types-metro-serializer-esbuild";
 import type { BuildResult, Plugin } from "esbuild";
 import * as esbuild from "esbuild";
 import type { SerializerConfigT } from "metro-config";

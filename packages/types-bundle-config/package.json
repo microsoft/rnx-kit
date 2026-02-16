@@ -37,7 +37,10 @@
     "lint": "rnx-kit-scripts lint"
   },
   "dependencies": {
-    "@rnx-kit/types-bundle-plugin-options": "^0.0.1"
+    "@rnx-kit/types-metro-serializer-esbuild": "^0.0.1",
+    "@rnx-kit/types-plugin-cyclic-dependencies": "^0.0.1",
+    "@rnx-kit/types-plugin-duplicates-checker": "^0.0.1",
+    "@rnx-kit/types-plugin-typescript": "^0.0.1"
   },
   "devDependencies": {
     "@rnx-kit/eslint-config": "*",

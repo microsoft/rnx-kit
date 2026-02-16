@@ -1,8 +1,6 @@
-import type {
-  CyclicDependencyPluginOptions,
-  DuplicateDetectorPluginOptions,
-  TypeScriptPluginOptions,
-} from "@rnx-kit/types-bundle-plugin-options";
+import type { CyclicDependencyPluginOptions } from "@rnx-kit/types-plugin-cyclic-dependencies";
+import type { DuplicateDetectorPluginOptions } from "@rnx-kit/types-plugin-duplicates-checker";
+import type { TypeScriptPluginOptions } from "@rnx-kit/types-plugin-typescript";
 
 export type Plugin = string | [string, Record<string, unknown>];
 

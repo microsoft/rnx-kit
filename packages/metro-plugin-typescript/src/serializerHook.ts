@@ -2,7 +2,7 @@ import { warn } from "@rnx-kit/console";
 import { normalizePath } from "@rnx-kit/tools-node/path";
 import { getMetroVersion } from "@rnx-kit/tools-react-native/metro";
 import type { AllPlatforms } from "@rnx-kit/types-bundle-config";
-import type { TypeScriptPluginOptions } from "@rnx-kit/types-bundle-plugin-options";
+import type { TypeScriptPluginOptions } from "@rnx-kit/types-plugin-typescript";
 import type { Project } from "@rnx-kit/typescript-service";
 import { createProjectCache } from "./projectCache.ts";
 import type { SerializerHook } from "./types.ts";

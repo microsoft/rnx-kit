@@ -1,6 +1,6 @@
 import { error, warn } from "@rnx-kit/console";
 import { getPackageModuleRefFromModulePath } from "@rnx-kit/tools-node/module";
-import type { CyclicDependencyPluginOptions } from "@rnx-kit/types-bundle-plugin-options";
+import type { CyclicDependencyPluginOptions } from "@rnx-kit/types-plugin-cyclic-dependencies";
 import type { ReadOnlyDependencies, ReadOnlyGraph } from "metro";
 import * as path from "node:path";
 

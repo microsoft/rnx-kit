@@ -1,5 +1,5 @@
 import type { MetroPlugin } from "@rnx-kit/metro-serializer";
-import type { CyclicDependencyPluginOptions } from "@rnx-kit/types-bundle-plugin-options";
+import type { CyclicDependencyPluginOptions } from "@rnx-kit/types-plugin-cyclic-dependencies";
 import { detectCycles } from "./detectCycles.ts";
 
 export { packageRelativePath } from "./detectCycles.ts";

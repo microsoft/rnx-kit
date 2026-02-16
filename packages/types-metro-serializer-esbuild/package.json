@@ -1,8 +1,8 @@
 {
-  "name": "@rnx-kit/types-bundle-plugin-options",
+  "name": "@rnx-kit/types-metro-serializer-esbuild",
   "version": "0.0.1",
-  "description": "Type definitions for bundle plugin options",
-  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/types-bundle-plugin-options#readme",
+  "description": "Type definitions for metro serializer esbuild",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/types-metro-serializer-esbuild#readme",
   "license": "MIT",
   "author": {
     "name": "Microsoft Open Source",
@@ -24,7 +24,7 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/microsoft/rnx-kit",
-    "directory": "packages/types-bundle-plugin-options"
+    "directory": "packages/types-metro-serializer-esbuild"
   },
   "engines": {
     "node": ">=18.12"

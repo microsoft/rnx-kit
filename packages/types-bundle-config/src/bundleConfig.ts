@@ -1,4 +1,4 @@
-import type { SerializerEsbuildOptions } from "@rnx-kit/types-bundle-plugin-options";
+import type { SerializerEsbuildOptions } from "@rnx-kit/types-metro-serializer-esbuild";
 import type { OutputOptions } from "metro/private/shared/types";
 import type { AllPlatforms } from "./allPlatforms.ts";
 import type { BundlerPlugins, Plugin } from "./bundlerPlugins.ts";

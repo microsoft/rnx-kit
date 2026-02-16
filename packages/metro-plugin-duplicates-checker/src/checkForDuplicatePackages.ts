@@ -1,5 +1,5 @@
 import { error, warn } from "@rnx-kit/console";
-import type { DuplicateDetectorPluginOptions } from "@rnx-kit/types-bundle-plugin-options";
+import type { DuplicateDetectorPluginOptions } from "@rnx-kit/types-plugin-duplicates-checker";
 import type { ReadOnlyGraph } from "metro";
 import type { MixedSourceMap } from "metro-source-map";
 import * as nodefs from "node:fs";
