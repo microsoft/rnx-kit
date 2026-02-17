@@ -2,8 +2,7 @@
   "extends": "@rnx-kit/tsconfig/tsconfig.node.json",
   "compilerOptions": {
     "alwaysStrict": false,
-    "rootDir": "src",
-    "lib": ["ES2019.Object"]
+    "rootDir": "src"
   },
   "include": ["src"]
 }
