@@ -1,7 +1,7 @@
 {
   "name": "@rnx-kit/types-node",
   "version": "0.0.1",
-  "description": "node-types",
+  "description": "Type definitions for package manifests and other core node/npm types",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/types-node#readme",
   "license": "MIT",
   "author": {

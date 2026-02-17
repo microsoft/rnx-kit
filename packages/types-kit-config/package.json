@@ -1,7 +1,7 @@
 {
   "name": "@rnx-kit/types-kit-config",
   "version": "0.0.1",
-  "description": "core types",
+  "description": "Type definitions for the rnx-kit configuration",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/types-kit-config#readme",
   "license": "MIT",
   "author": {
