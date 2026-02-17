@@ -4,7 +4,7 @@
 const { name, version } = require("../package.json");
 
 /**
- * @typedef {import("eslint").Rule.RuleModule} RuleModule
+ * @import { Rule } from "eslint";
  * @typedef {{ name?: string; rules?: object }} Config
  * @type {{
  *   meta: { name: string; version: string };
@@ -13,7 +13,7 @@ const { name, version } = require("../package.json");
  *     strict: Config[];
  *     stylistic: Config[];
  *   };
- *   rules: Record<string, RuleModule>;
+ *   rules: Record<string, Rule.RuleModule>;
  * }}
  */
 module.exports = {

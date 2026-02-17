@@ -13,4 +13,4 @@ export type SaveAssetsPlugin = (
   ) => void
 ) => void;
 
-export { AssetData, PackagerAsset };
+export type { AssetData, PackagerAsset };
