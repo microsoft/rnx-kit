@@ -19,8 +19,6 @@ export {
 export type {
   DestructuredModuleRef,
   FindPackageDependencyOptions,
-  PackageManifest,
-  PackagePerson,
   PackageRef,
 } from "./package.ts";
 

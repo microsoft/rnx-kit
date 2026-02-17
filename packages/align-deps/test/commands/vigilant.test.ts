@@ -14,17 +14,17 @@ import {
   inspect,
 } from "../../src/commands/vigilant.ts";
 import { defaultConfig } from "../../src/config.ts";
-import type { AlignDepsConfig, Options } from "../../src/types.ts";
+import type { AlignDepsOptions, Options } from "../../src/types.ts";
 import * as mockfs from "../__mocks__/fs.ts";
 import { defineRequire, undefineRequire } from "../helpers.ts";
 
 function makeConfig(
-  requirements: AlignDepsConfig["alignDeps"]["requirements"],
-  manifest: AlignDepsConfig["manifest"] = {
+  requirements: AlignDepsOptions["alignDeps"]["requirements"],
+  manifest: AlignDepsOptions["manifest"] = {
     name: "@rnx-kit/align-deps",
     version: "1.0.0-test",
   }
-): AlignDepsConfig {
+): AlignDepsOptions {
   return {
     kitType: "library" as const,
     alignDeps: {
@@ -488,7 +488,7 @@ describe("checkPackageManifestUnconfigured()", () => {
   function checkPackageManifestUnconfigured(
     manifestPath: string,
     options: Options = defaultOptions,
-    inputConfig: AlignDepsConfig
+    inputConfig: AlignDepsOptions
   ) {
     return checkPackageManifestUnconfiguredActual(
       manifestPath,
@@ -708,7 +708,7 @@ describe("checkPackageManifestUnconfigured()", () => {
 
     let manifest = undefined;
     mockfs.__setMockFileWriter((_, content) => {
-      manifest = JSON.parse(content);
+      manifest = JSON.parse(content.toString());
     });
 
     const result = checkPackageManifestUnconfigured(

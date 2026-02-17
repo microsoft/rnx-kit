@@ -1,0 +1,43 @@
+{
+  "name": "@rnx-kit/types-node",
+  "version": "0.0.1",
+  "description": "Type definitions for package manifests and other core node/npm types",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/types-node#readme",
+  "license": "MIT",
+  "author": {
+    "name": "Microsoft Open Source",
+    "email": "microsoftopensource@users.noreply.github.com"
+  },
+  "files": [
+    "src"
+  ],
+  "types": "src/index.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./src/index.ts"
+    },
+    "./package.json": "./package.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "packages/types-node"
+  },
+  "engines": {
+    "node": ">=18.12"
+  },
+  "scripts": {
+    "build": "rnx-kit-scripts build",
+    "format": "rnx-kit-scripts format",
+    "lint": "rnx-kit-scripts lint"
+  },
+  "dependencies": {
+    "@rnx-kit/types-kit-config": "^0.0.1"
+  },
+  "devDependencies": {
+    "@rnx-kit/eslint-config": "*",
+    "@rnx-kit/scripts": "*",
+    "@rnx-kit/tsconfig": "*"
+  }
+}

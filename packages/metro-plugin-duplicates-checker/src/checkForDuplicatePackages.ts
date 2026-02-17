@@ -1,4 +1,5 @@
 import { error, warn } from "@rnx-kit/console";
+import type { DuplicateDetectorPluginOptions } from "@rnx-kit/types-plugin-duplicates-checker";
 import type { ReadOnlyGraph } from "metro";
 import type { MixedSourceMap } from "metro-source-map";
 import * as nodefs from "node:fs";
@@ -8,18 +9,12 @@ import {
   gatherModulesFromSourceMap,
 } from "./gatherModules.ts";
 
-export type Options = {
-  ignoredModules?: readonly string[];
-  bannedModules?: readonly string[];
-  throwOnError?: boolean;
-};
-
 export type Result = {
   banned: number;
   duplicates: number;
 };
 
-export const defaultOptions: Options = {
+export const defaultOptions: DuplicateDetectorPluginOptions = {
   ignoredModules: [],
   bannedModules: [],
   throwOnError: true,
@@ -41,7 +36,7 @@ export function printModule(module: ModuleMap[string]): void {
 
 export function detectDuplicatePackages(
   bundledModules: ModuleMap,
-  { ignoredModules = [], bannedModules = [] }: Options
+  { ignoredModules = [], bannedModules = [] }: DuplicateDetectorPluginOptions
 ): Result {
   let numBanned = 0;
   let numDupes = 0;
@@ -73,7 +68,7 @@ export function detectDuplicatePackages(
 
 export function checkForDuplicateDependencies(
   graph: ReadOnlyGraph,
-  options: Options = defaultOptions,
+  options: DuplicateDetectorPluginOptions = defaultOptions,
   /** @internal */ fs = nodefs
 ): Result {
   return detectDuplicatePackages(
@@ -84,7 +79,7 @@ export function checkForDuplicateDependencies(
 
 export function checkForDuplicatePackages(
   sourceMap: MixedSourceMap,
-  options: Options = defaultOptions,
+  options: DuplicateDetectorPluginOptions = defaultOptions,
   /** @internal */ fs = nodefs
 ): Result {
   return detectDuplicatePackages(

@@ -40,6 +40,10 @@
     "update-profile": "node --no-warnings --conditions=typescript scripts/update-profile.ts",
     "update-readme": "node --no-warnings --conditions=typescript scripts/update-readme.ts"
   },
+  "dependencies": {
+    "@rnx-kit/types-kit-config": "^0.0.1",
+    "@rnx-kit/types-node": "^0.0.1"
+  },
   "devDependencies": {
     "@octokit/core": "^7.0.0",
     "@octokit/plugin-rest-endpoint-methods": "^17.0.0",

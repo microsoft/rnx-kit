@@ -1,6 +1,8 @@
-import type { BundleParameters } from "@rnx-kit/config";
 import type { BundleArgs } from "@rnx-kit/metro-service";
-import type { AllPlatforms } from "@rnx-kit/tools-react-native/platform";
+import type {
+  AllPlatforms,
+  BundleParameters,
+} from "@rnx-kit/types-bundle-config";
 import type { TransformProfile } from "metro-babel-transformer";
 
 export type CLICommonBundleOptions = {

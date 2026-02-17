@@ -4625,6 +4625,8 @@ __metadata:
     "@rnx-kit/tools-shell": "npm:*"
     "@rnx-kit/tools-workspaces": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
+    "@rnx-kit/types-kit-config": "npm:^0.0.1"
+    "@rnx-kit/types-node": "npm:^0.0.1"
     "@types/js-yaml": "npm:^4.0.5"
     "@types/prompts": "npm:^2.0.0"
     "@types/semver": "npm:^7.0.0"
@@ -4771,6 +4773,9 @@ __metadata:
     "@rnx-kit/tools-node": "npm:^3.0.3"
     "@rnx-kit/tools-react-native": "npm:^2.3.2"
     "@rnx-kit/tsconfig": "npm:*"
+    "@rnx-kit/types-bundle-config": "npm:^0.0.1"
+    "@rnx-kit/types-kit-config": "npm:^0.0.1"
+    "@rnx-kit/types-node": "npm:^0.0.1"
     "@types/connect": "npm:^3.4.36"
     "@types/node": "npm:^24.0.0"
     "@types/qrcode": "npm:^1.4.2"
@@ -4816,14 +4821,13 @@ __metadata:
   dependencies:
     "@rnx-kit/console": "npm:^2.0.0"
     "@rnx-kit/eslint-config": "npm:*"
-    "@rnx-kit/metro-plugin-cyclic-dependencies-detector": "npm:*"
-    "@rnx-kit/metro-plugin-duplicates-checker": "npm:*"
-    "@rnx-kit/metro-serializer-esbuild": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tools-node": "npm:^3.0.0"
     "@rnx-kit/tools-packages": "npm:^0.1.0"
-    "@rnx-kit/tools-react-native": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
+    "@rnx-kit/types-bundle-config": "npm:^0.0.1"
+    "@rnx-kit/types-kit-config": "npm:^0.0.1"
+    "@rnx-kit/types-node": "npm:^0.0.1"
     "@types/lodash.merge": "npm:^4.6.9"
     "@types/node": "npm:^24.0.0"
     "@types/semver": "npm:^7.0.0"
@@ -4945,6 +4949,7 @@ __metadata:
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tools-workspaces": "npm:^0.2.3"
     "@rnx-kit/tsconfig": "npm:*"
+    "@rnx-kit/types-kit-config": "npm:^0.0.1"
     "@types/js-yaml": "npm:^4.0.5"
     js-yaml: "npm:^4.1.1"
   bin:
@@ -4982,7 +4987,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rnx-kit/metro-plugin-cyclic-dependencies-detector@npm:*, @rnx-kit/metro-plugin-cyclic-dependencies-detector@npm:^2.0.0, @rnx-kit/metro-plugin-cyclic-dependencies-detector@workspace:*, @rnx-kit/metro-plugin-cyclic-dependencies-detector@workspace:packages/metro-plugin-cyclic-dependencies-detector":
+"@rnx-kit/metro-plugin-cyclic-dependencies-detector@npm:^2.0.0, @rnx-kit/metro-plugin-cyclic-dependencies-detector@workspace:*, @rnx-kit/metro-plugin-cyclic-dependencies-detector@workspace:packages/metro-plugin-cyclic-dependencies-detector":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/metro-plugin-cyclic-dependencies-detector@workspace:packages/metro-plugin-cyclic-dependencies-detector"
   dependencies:
@@ -4992,12 +4997,13 @@ __metadata:
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tools-node": "npm:^3.0.0"
     "@rnx-kit/tsconfig": "npm:*"
+    "@rnx-kit/types-plugin-cyclic-dependencies": "npm:^0.0.1"
     "@types/node": "npm:^24.0.0"
     metro: "npm:^0.83.3"
   languageName: unknown
   linkType: soft
 
-"@rnx-kit/metro-plugin-duplicates-checker@npm:*, @rnx-kit/metro-plugin-duplicates-checker@npm:^3.0.0, @rnx-kit/metro-plugin-duplicates-checker@workspace:*, @rnx-kit/metro-plugin-duplicates-checker@workspace:packages/metro-plugin-duplicates-checker":
+"@rnx-kit/metro-plugin-duplicates-checker@npm:^3.0.0, @rnx-kit/metro-plugin-duplicates-checker@workspace:*, @rnx-kit/metro-plugin-duplicates-checker@workspace:packages/metro-plugin-duplicates-checker":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/metro-plugin-duplicates-checker@workspace:packages/metro-plugin-duplicates-checker"
   dependencies:
@@ -5007,6 +5013,7 @@ __metadata:
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tools-node": "npm:^3.0.0"
     "@rnx-kit/tsconfig": "npm:*"
+    "@rnx-kit/types-plugin-duplicates-checker": "npm:^0.0.1"
     "@types/node": "npm:^24.0.0"
     memfs: "npm:^4.0.0"
     metro: "npm:^0.83.3"
@@ -5020,7 +5027,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rnx-kit/metro-plugin-typescript@workspace:packages/metro-plugin-typescript"
   dependencies:
-    "@rnx-kit/config": "npm:^0.7.0"
     "@rnx-kit/console": "npm:^2.0.0"
     "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/jest-preset": "npm:*"
@@ -5028,6 +5034,8 @@ __metadata:
     "@rnx-kit/tools-node": "npm:^3.0.3"
     "@rnx-kit/tools-react-native": "npm:^2.3.2"
     "@rnx-kit/tsconfig": "npm:*"
+    "@rnx-kit/types-bundle-config": "npm:^0.0.1"
+    "@rnx-kit/types-plugin-typescript": "npm:^0.0.1"
     "@rnx-kit/typescript-service": "npm:^2.0.2"
     "@types/node": "npm:^24.0.0"
     metro: "npm:^0.83.3"
@@ -5058,7 +5066,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rnx-kit/metro-serializer-esbuild@npm:*, @rnx-kit/metro-serializer-esbuild@npm:^0.3.0, @rnx-kit/metro-serializer-esbuild@workspace:*, @rnx-kit/metro-serializer-esbuild@workspace:packages/metro-serializer-esbuild":
+"@rnx-kit/metro-serializer-esbuild@npm:^0.3.0, @rnx-kit/metro-serializer-esbuild@workspace:*, @rnx-kit/metro-serializer-esbuild@workspace:packages/metro-serializer-esbuild":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/metro-serializer-esbuild@workspace:packages/metro-serializer-esbuild"
   dependencies:
@@ -5079,6 +5087,7 @@ __metadata:
     "@rnx-kit/tools-node": "npm:^3.0.3"
     "@rnx-kit/tools-react-native": "npm:^2.3.2"
     "@rnx-kit/tsconfig": "npm:*"
+    "@rnx-kit/types-metro-serializer-esbuild": "npm:^0.0.1"
     "@types/node": "npm:^24.0.0"
     esbuild: "npm:^0.27.1"
     esbuild-plugin-lodash: "npm:^1.2.0"
@@ -5491,6 +5500,7 @@ __metadata:
     "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tsconfig": "npm:*"
+    "@rnx-kit/types-node": "npm:^0.0.1"
     "@types/node": "npm:^24.0.0"
   languageName: unknown
   linkType: soft
@@ -5504,11 +5514,12 @@ __metadata:
     "@rnx-kit/tools-node": "npm:^3.0.0"
     "@rnx-kit/tools-workspaces": "npm:^0.2.1"
     "@rnx-kit/tsconfig": "npm:*"
+    "@rnx-kit/types-node": "npm:^0.0.1"
     "@types/node": "npm:^24.0.0"
   languageName: unknown
   linkType: soft
 
-"@rnx-kit/tools-react-native@npm:*, @rnx-kit/tools-react-native@npm:^2.1.0, @rnx-kit/tools-react-native@npm:^2.3.0, @rnx-kit/tools-react-native@npm:^2.3.1, @rnx-kit/tools-react-native@npm:^2.3.2, @rnx-kit/tools-react-native@workspace:packages/tools-react-native":
+"@rnx-kit/tools-react-native@npm:^2.1.0, @rnx-kit/tools-react-native@npm:^2.3.0, @rnx-kit/tools-react-native@npm:^2.3.1, @rnx-kit/tools-react-native@npm:^2.3.2, @rnx-kit/tools-react-native@workspace:packages/tools-react-native":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/tools-react-native@workspace:packages/tools-react-native"
   dependencies:
@@ -5519,6 +5530,7 @@ __metadata:
     "@rnx-kit/tools-filesystem": "npm:*"
     "@rnx-kit/tools-node": "npm:^3.0.3"
     "@rnx-kit/tsconfig": "npm:*"
+    "@rnx-kit/types-bundle-config": "npm:^0.0.1"
     "@types/node": "npm:^24.0.0"
     metro: "npm:^0.83.3"
     metro-config: "npm:^0.83.3"
@@ -5553,6 +5565,9 @@ __metadata:
     "@rnx-kit/tools-packages": "npm:^0.1.1"
     "@rnx-kit/tools-react-native": "npm:^2.3.2"
     "@rnx-kit/tsconfig": "npm:*"
+    "@rnx-kit/types-bundle-config": "npm:^0.0.1"
+    "@rnx-kit/types-kit-config": "npm:*"
+    "@rnx-kit/types-node": "npm:*"
     "@rnx-kit/typescript-service": "npm:^2.0.0"
   peerDependencies:
     typescript: ">=4.7.0"
@@ -5592,6 +5607,94 @@ __metadata:
 "@rnx-kit/tsconfig@npm:*, @rnx-kit/tsconfig@workspace:*, @rnx-kit/tsconfig@workspace:packages/tsconfig":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/tsconfig@workspace:packages/tsconfig"
+  languageName: unknown
+  linkType: soft
+
+"@rnx-kit/types-bundle-config@npm:^0.0.1, @rnx-kit/types-bundle-config@workspace:packages/types-bundle-config":
+  version: 0.0.0-use.local
+  resolution: "@rnx-kit/types-bundle-config@workspace:packages/types-bundle-config"
+  dependencies:
+    "@rnx-kit/eslint-config": "npm:*"
+    "@rnx-kit/scripts": "npm:*"
+    "@rnx-kit/tsconfig": "npm:*"
+    "@rnx-kit/types-metro-serializer-esbuild": "npm:^0.0.1"
+    "@rnx-kit/types-plugin-cyclic-dependencies": "npm:^0.0.1"
+    "@rnx-kit/types-plugin-duplicates-checker": "npm:^0.0.1"
+    "@rnx-kit/types-plugin-typescript": "npm:^0.0.1"
+    metro: "npm:^0.83.3"
+  peerDependencies:
+    metro: ">=0.83.0"
+  peerDependenciesMeta:
+    metro:
+      optional: true
+  languageName: unknown
+  linkType: soft
+
+"@rnx-kit/types-kit-config@npm:*, @rnx-kit/types-kit-config@npm:^0.0.1, @rnx-kit/types-kit-config@workspace:packages/types-kit-config":
+  version: 0.0.0-use.local
+  resolution: "@rnx-kit/types-kit-config@workspace:packages/types-kit-config"
+  dependencies:
+    "@rnx-kit/eslint-config": "npm:*"
+    "@rnx-kit/scripts": "npm:*"
+    "@rnx-kit/tsconfig": "npm:*"
+    "@rnx-kit/types-bundle-config": "npm:^0.0.1"
+  languageName: unknown
+  linkType: soft
+
+"@rnx-kit/types-metro-serializer-esbuild@npm:^0.0.1, @rnx-kit/types-metro-serializer-esbuild@workspace:packages/types-metro-serializer-esbuild":
+  version: 0.0.0-use.local
+  resolution: "@rnx-kit/types-metro-serializer-esbuild@workspace:packages/types-metro-serializer-esbuild"
+  dependencies:
+    "@rnx-kit/eslint-config": "npm:*"
+    "@rnx-kit/scripts": "npm:*"
+    "@rnx-kit/tsconfig": "npm:*"
+    esbuild: "npm:^0.27.1"
+  peerDependencies:
+    esbuild: ^0.27.0
+  peerDependenciesMeta:
+    esbuild:
+      optional: true
+  languageName: unknown
+  linkType: soft
+
+"@rnx-kit/types-node@npm:*, @rnx-kit/types-node@npm:^0.0.1, @rnx-kit/types-node@workspace:packages/types-node":
+  version: 0.0.0-use.local
+  resolution: "@rnx-kit/types-node@workspace:packages/types-node"
+  dependencies:
+    "@rnx-kit/eslint-config": "npm:*"
+    "@rnx-kit/scripts": "npm:*"
+    "@rnx-kit/tsconfig": "npm:*"
+    "@rnx-kit/types-kit-config": "npm:^0.0.1"
+  languageName: unknown
+  linkType: soft
+
+"@rnx-kit/types-plugin-cyclic-dependencies@npm:^0.0.1, @rnx-kit/types-plugin-cyclic-dependencies@workspace:packages/types-plugin-cyclic-dependencies":
+  version: 0.0.0-use.local
+  resolution: "@rnx-kit/types-plugin-cyclic-dependencies@workspace:packages/types-plugin-cyclic-dependencies"
+  dependencies:
+    "@rnx-kit/eslint-config": "npm:*"
+    "@rnx-kit/scripts": "npm:*"
+    "@rnx-kit/tsconfig": "npm:*"
+  languageName: unknown
+  linkType: soft
+
+"@rnx-kit/types-plugin-duplicates-checker@npm:^0.0.1, @rnx-kit/types-plugin-duplicates-checker@workspace:packages/types-plugin-duplicates-checker":
+  version: 0.0.0-use.local
+  resolution: "@rnx-kit/types-plugin-duplicates-checker@workspace:packages/types-plugin-duplicates-checker"
+  dependencies:
+    "@rnx-kit/eslint-config": "npm:*"
+    "@rnx-kit/scripts": "npm:*"
+    "@rnx-kit/tsconfig": "npm:*"
+  languageName: unknown
+  linkType: soft
+
+"@rnx-kit/types-plugin-typescript@npm:^0.0.1, @rnx-kit/types-plugin-typescript@workspace:packages/types-plugin-typescript":
+  version: 0.0.0-use.local
+  resolution: "@rnx-kit/types-plugin-typescript@workspace:packages/types-plugin-typescript"
+  dependencies:
+    "@rnx-kit/eslint-config": "npm:*"
+    "@rnx-kit/scripts": "npm:*"
+    "@rnx-kit/tsconfig": "npm:*"
   languageName: unknown
   linkType: soft
 

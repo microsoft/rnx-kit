@@ -19,4 +19,3 @@ export {
   platformValues,
   tryParsePlatform,
 } from "./platform.ts";
-export type { AllPlatforms } from "./platform.ts";

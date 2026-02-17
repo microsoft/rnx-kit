@@ -1,4 +1,4 @@
-import type { AllPlatforms } from "@rnx-kit/tools-react-native/platform";
+import type { AllPlatforms } from "@rnx-kit/types-bundle-config";
 import type { Project } from "@rnx-kit/typescript-service";
 import type { DeltaResult, ReadOnlyGraph } from "metro";
 import type ts from "typescript";

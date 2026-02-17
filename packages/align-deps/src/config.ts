@@ -1,26 +1,26 @@
-import type { Capability, KitConfig } from "@rnx-kit/config";
 import {
   getKitCapabilities,
   getKitConfigFromPackageManifest,
 } from "@rnx-kit/config";
 import { error, warn } from "@rnx-kit/console";
-import type { PackageManifest } from "@rnx-kit/tools-node/package";
 import { readPackage } from "@rnx-kit/tools-node/package";
+import type { Capability, KitConfig } from "@rnx-kit/types-kit-config";
+import type { PackageManifest } from "@rnx-kit/types-node";
 import * as nodefs from "node:fs";
 import * as path from "node:path";
 import { findBadPackages } from "./findBadPackages.ts";
 import type {
-  AlignDepsConfig,
+  AlignDepsOptions,
   ErrorCode,
   LegacyCheckConfig,
   Options,
 } from "./types.ts";
 
-export type ConfigResult = AlignDepsConfig | LegacyCheckConfig | ErrorCode;
+export type ConfigResult = AlignDepsOptions | LegacyCheckConfig | ErrorCode;
 
 const ILLEGAL_CAPABILITIES = ["__proto__", "constructor", "prototype"];
 
-export const defaultConfig: AlignDepsConfig["alignDeps"] = {
+export const defaultConfig: AlignDepsOptions["alignDeps"] = {
   presets: ["microsoft/react-native"],
   requirements: [],
   capabilities: [],

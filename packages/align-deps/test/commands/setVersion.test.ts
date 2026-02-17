@@ -1,4 +1,4 @@
-import type { PackageManifest } from "@rnx-kit/tools-node/package";
+import type { PackageManifest } from "@rnx-kit/types-node";
 import { deepEqual, equal, fail, ok, rejects } from "node:assert/strict";
 import { after, afterEach, before, describe, it } from "node:test";
 import prompts from "prompts";
@@ -358,7 +358,7 @@ describe("makeSetVersionCommand()", () => {
   });
 
   it('skips "dirty" packages', async () => {
-    const mockManifest = {
+    const mockManifest: PackageManifest = {
       name: "@rnx-kit/align-deps",
       version: "1.0.0-test",
       dependencies: {

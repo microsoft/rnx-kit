@@ -1,60 +1,8 @@
-import type { PluginOptions as CyclicDetectorOptions } from "@rnx-kit/metro-plugin-cyclic-dependencies-detector";
-import type { Options as DuplicateDetectorOptions } from "@rnx-kit/metro-plugin-duplicates-checker";
-import type { Options as EsbuildOptions } from "@rnx-kit/metro-serializer-esbuild";
-import type { AllPlatforms } from "@rnx-kit/tools-react-native/platform";
+import type { SerializerEsbuildOptions } from "@rnx-kit/types-metro-serializer-esbuild";
 import type { OutputOptions } from "metro/private/shared/types";
-
-export type HermesOptions = {
-  /**
-   * Path to `hermesc` binary. By default, `cli` will try to find it in
-   * `node_modules`.
-   */
-  command?: string;
-
-  /**
-   * List of arguments passed to `hermesc`. By default, this is
-   * `["-O", "-output-source-map", "-w"]`.
-   */
-  flags?: string[];
-};
-
-export type TypeScriptValidationOptions = {
-  /**
-   * Controls whether an error is thrown when type-validation fails.
-   */
-  throwOnError?: boolean;
-};
-
-export type Plugin = string | [string, Record<string, unknown>];
-
-/**
- * Parameters controlling bundler plugins.
- */
-export type BundlerPlugins = {
-  /**
-   * Choose whether to detect cycles in the dependency graph. `true` uses defaults,
-   * while `CyclicDetectorOptions` lets you control the detection process.
-   *
-   * @deprecated Replaced by `plugins`
-   */
-  detectCyclicDependencies?: boolean | CyclicDetectorOptions;
-
-  /**
-   * Choose whether to detect duplicate packages in the dependency graph. `true` uses defaults,
-   * while `DuplicateDetectorOptions` lets you control the detection process.
-   *
-   * @deprecated Replaced by `plugins`
-   */
-  detectDuplicateDependencies?: boolean | DuplicateDetectorOptions;
-
-  /**
-   * Choose whether to type-check source files using TypeScript. `true` uses defaults,
-   * while `TypeScriptValidationOptions` lets you control the validation process.
-   *
-   * @deprecated Replaced by `plugins`
-   */
-  typescriptValidation?: boolean | TypeScriptValidationOptions;
-};
+import type { AllPlatforms } from "./allPlatforms.ts";
+import type { BundlerPlugins, Plugin } from "./bundlerPlugins.ts";
+import type { HermesOptions } from "./hermesOptions.ts";
 
 export type BundleOutputOptions = {
   /**
@@ -122,7 +70,7 @@ export type BundleParameters = BundlerPlugins &
      *
      * Only applies to `rnx-bundle` command.
      */
-    treeShake?: boolean | EsbuildOptions;
+    treeShake?: boolean | SerializerEsbuildOptions;
 
     /**
      * Whether to run the Hermes compiler on the output bundle.

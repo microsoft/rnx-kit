@@ -1,0 +1,59 @@
+{
+  "name": "@rnx-kit/types-bundle-config",
+  "version": "0.0.1",
+  "description": "Type definitions for bundle configuration",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/types-bundle-config#readme",
+  "license": "MIT",
+  "author": {
+    "name": "Microsoft Open Source",
+    "email": "microsoftopensource@users.noreply.github.com"
+  },
+  "files": [
+    "lib/**/*.d.ts",
+    "lib/**/*.js",
+    "src"
+  ],
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "typescript": "./src/index.ts",
+      "default": "./lib/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "packages/types-bundle-config"
+  },
+  "engines": {
+    "node": ">=18.12"
+  },
+  "scripts": {
+    "build": "rnx-kit-scripts build",
+    "format": "rnx-kit-scripts format",
+    "lint": "rnx-kit-scripts lint"
+  },
+  "dependencies": {
+    "@rnx-kit/types-metro-serializer-esbuild": "^0.0.1",
+    "@rnx-kit/types-plugin-cyclic-dependencies": "^0.0.1",
+    "@rnx-kit/types-plugin-duplicates-checker": "^0.0.1",
+    "@rnx-kit/types-plugin-typescript": "^0.0.1"
+  },
+  "devDependencies": {
+    "@rnx-kit/eslint-config": "*",
+    "@rnx-kit/scripts": "*",
+    "@rnx-kit/tsconfig": "*",
+    "metro": "^0.83.3"
+  },
+  "peerDependencies": {
+    "metro": ">=0.83.0"
+  },
+  "peerDependenciesMeta": {
+    "metro": {
+      "optional": true
+    }
+  }
+}

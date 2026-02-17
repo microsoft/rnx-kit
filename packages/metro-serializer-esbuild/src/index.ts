@@ -1,7 +1,8 @@
 import { info, warn } from "@rnx-kit/console";
 import type { MetroPlugin } from "@rnx-kit/metro-serializer";
 import { requireModuleFromMetro } from "@rnx-kit/tools-react-native/metro";
-import type { BuildOptions, BuildResult, Plugin } from "esbuild";
+import type { SerializerEsbuildOptions } from "@rnx-kit/types-metro-serializer-esbuild";
+import type { BuildResult, Plugin } from "esbuild";
 import * as esbuild from "esbuild";
 import type { SerializerConfigT } from "metro-config";
 import type { SerializerOptions } from "metro/private/DeltaBundler/types";
@@ -19,24 +20,6 @@ import { assertVersion } from "./version.ts";
 
 export { esbuildTransformerConfig } from "./esbuildTransformerConfig.ts";
 
-export type Options = Pick<
-  BuildOptions,
-  | "drop"
-  | "logLevel"
-  | "minify"
-  | "minifyWhitespace"
-  | "minifyIdentifiers"
-  | "minifySyntax"
-  | "pure"
-  | "target"
-> & {
-  analyze?: boolean | "verbose";
-  fabric?: boolean;
-  metafile?: string;
-  sourceMapPaths?: "absolute" | "relative";
-  strictMode?: boolean;
-};
-
 function escapePath(path: string): string {
   return path.replace(/\\+/g, "\\\\");
 }
@@ -52,7 +35,7 @@ function isRedundantPolyfill(modulePath: string): boolean {
  */
 export function MetroSerializer(
   metroPlugins: MetroPlugin[] = [],
-  buildOptions?: Options
+  buildOptions?: SerializerEsbuildOptions
 ): SerializerConfigT["customSerializer"] {
   assertVersion("0.66.1");
 

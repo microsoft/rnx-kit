@@ -4,8 +4,8 @@ import {
   findPackageDir,
   resolveDependencyChain,
 } from "@rnx-kit/tools-node/package";
-import type { AllPlatforms } from "@rnx-kit/tools-react-native/platform";
 import { parsePlatform } from "@rnx-kit/tools-react-native/platform";
+import type { AllPlatforms } from "@rnx-kit/types-bundle-config";
 
 type Args = {
   platform: AllPlatforms;

@@ -1,5 +1,5 @@
-import type { Capability, KitType } from "@rnx-kit/config";
-import type { PackageManifest } from "@rnx-kit/tools-node/package";
+import type { Capability, KitType } from "@rnx-kit/types-kit-config";
+import type { PackageManifest } from "@rnx-kit/types-node";
 import { resolveCapabilities } from "./capabilities.ts";
 import { compare, omitEmptySections } from "./helpers.ts";
 import type { DependencyType, Package, Preset } from "./types.ts";

@@ -1,5 +1,5 @@
 import { keysOf } from "@rnx-kit/tools-language/properties";
-import type { PackageManifest } from "@rnx-kit/tools-node/package";
+import type { PackageManifest } from "@rnx-kit/types-node";
 import * as nodefs from "node:fs";
 import prompts from "prompts";
 import semverCoerce from "semver/functions/coerce.js";
@@ -9,7 +9,7 @@ import { isError } from "../errors.ts";
 import { isString, modifyManifest } from "../helpers.ts";
 import { preset as defaultPreset } from "../presets/microsoft/react-native.ts";
 import type {
-  AlignDepsConfig,
+  AlignDepsOptions,
   Command,
   LegacyCheckConfig,
   Options,
@@ -89,7 +89,7 @@ function setRequirement(requirements: string[], versionRange: string): void {
 }
 
 function updateRequirements(
-  { requirements }: AlignDepsConfig["alignDeps"],
+  { requirements }: AlignDepsOptions["alignDeps"],
   prodVersion: string,
   devVersion = prodVersion
 ): void {
@@ -109,7 +109,7 @@ function updateRequirements(
  * @returns Updated package manifest
  */
 function setVersion(
-  config: AlignDepsConfig | LegacyCheckConfig,
+  config: AlignDepsOptions | LegacyCheckConfig,
   targetVersion: string,
   supportedVersions: string[]
 ): PackageManifest {

@@ -43,13 +43,16 @@
     "@rnx-kit/tools-node": "^3.0.3",
     "@rnx-kit/tools-packages": "^0.1.1",
     "@rnx-kit/tools-react-native": "^2.3.2",
+    "@rnx-kit/types-bundle-config": "^0.0.1",
     "@rnx-kit/typescript-service": "^2.0.0"
   },
   "devDependencies": {
     "@rnx-kit/eslint-config": "*",
     "@rnx-kit/jest-preset": "*",
     "@rnx-kit/scripts": "*",
-    "@rnx-kit/tsconfig": "*"
+    "@rnx-kit/tsconfig": "*",
+    "@rnx-kit/types-kit-config": "*",
+    "@rnx-kit/types-node": "*"
   },
   "peerDependencies": {
     "typescript": ">=4.7.0"

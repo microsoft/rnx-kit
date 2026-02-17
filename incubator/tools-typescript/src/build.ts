@@ -1,5 +1,5 @@
 import { findPackageInfo } from "@rnx-kit/tools-packages";
-import type { AllPlatforms } from "@rnx-kit/tools-react-native";
+import type { AllPlatforms } from "@rnx-kit/types-bundle-config";
 import ts from "typescript";
 import { loadPackagePlatformInfo } from "./platforms.ts";
 import { createReporter } from "./reporter.ts";

@@ -1,8 +1,8 @@
-import type { KitConfig } from "@rnx-kit/config";
 import { warn } from "@rnx-kit/console";
+import type { KitConfig } from "@rnx-kit/types-kit-config";
 import { defaultConfig } from "../config.ts";
 import { dropPatchFromVersion, modifyManifest } from "../helpers.ts";
-import type { AlignDepsConfig, LegacyCheckConfig, Options } from "../types.ts";
+import type { AlignDepsOptions, LegacyCheckConfig, Options } from "../types.ts";
 
 const legacyKeys = [
   "capabilities",
@@ -31,7 +31,7 @@ export function transformConfig({
   manifest,
   reactNativeDevVersion,
   reactNativeVersion,
-}: LegacyCheckConfig): AlignDepsConfig {
+}: LegacyCheckConfig): AlignDepsOptions {
   const devVersion = dropPatchFromVersion(
     reactNativeDevVersion || reactNativeVersion
   );
@@ -68,10 +68,10 @@ export function transformConfig({
  * @returns The config in the new schema
  */
 export function migrateConfig(
-  config: AlignDepsConfig | LegacyCheckConfig,
+  config: AlignDepsOptions | LegacyCheckConfig,
   manifestPath: string,
   { migrateConfig }: Options
-): AlignDepsConfig {
+): AlignDepsOptions {
   if ("alignDeps" in config) {
     const oldKeys = findLegacyConfigKeys(config);
     if (oldKeys.length > 0) {

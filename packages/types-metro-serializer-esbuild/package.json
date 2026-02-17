@@ -1,0 +1,49 @@
+{
+  "name": "@rnx-kit/types-metro-serializer-esbuild",
+  "version": "0.0.1",
+  "description": "Type definitions for metro serializer esbuild",
+  "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/types-metro-serializer-esbuild#readme",
+  "license": "MIT",
+  "author": {
+    "name": "Microsoft Open Source",
+    "email": "microsoftopensource@users.noreply.github.com"
+  },
+  "files": [
+    "src"
+  ],
+  "types": "src/index.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./src/index.ts"
+    },
+    "./package.json": "./package.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/rnx-kit",
+    "directory": "packages/types-metro-serializer-esbuild"
+  },
+  "engines": {
+    "node": ">=18.12"
+  },
+  "scripts": {
+    "build": "rnx-kit-scripts build",
+    "format": "rnx-kit-scripts format",
+    "lint": "rnx-kit-scripts lint"
+  },
+  "devDependencies": {
+    "@rnx-kit/eslint-config": "*",
+    "@rnx-kit/scripts": "*",
+    "@rnx-kit/tsconfig": "*",
+    "esbuild": "^0.27.1"
+  },
+  "peerDependencies": {
+    "esbuild": "^0.27.0"
+  },
+  "peerDependenciesMeta": {
+    "esbuild": {
+      "optional": true
+    }
+  }
+}

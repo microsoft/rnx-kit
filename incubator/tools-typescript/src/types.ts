@@ -1,4 +1,4 @@
-import type { AllPlatforms } from "@rnx-kit/tools-react-native/platform";
+import type { AllPlatforms } from "@rnx-kit/types-bundle-config";
 import type ts from "typescript";
 
 /**
