@@ -20,6 +20,10 @@ export class BuildCommand extends Command {
     description: "Also build the package's dependencies",
   });
 
+  withTsc = Option.Boolean("--with-tsc", false, {
+    description: "Use `tsc` instead of `tsgo` to build the package",
+  });
+
   args = Option.Rest();
 
   async execute() {
@@ -29,6 +33,7 @@ export class BuildCommand extends Command {
       return await runScript("nx", "build", name);
     }
 
-    return await runScript("tsc", "--outDir", "lib", ...this.args);
+    const tsc = this.withTsc ? "tsc" : "tsgo";
+    return await runScript(tsc, "--outDir", "lib", ...this.args);
   }
 }

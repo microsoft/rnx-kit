@@ -27,12 +27,15 @@ function needsJest(cwd, manifest) {
   return "jest" in manifest || fs.existsSync(path.join(cwd, "jest.config.js"));
 }
 
+const needsTypeScript = lookForFile("tsconfig.json");
+
 const COMMON_DEPENDENCIES = /** @type {const} */ ([
   ["@types/jest", needsJest],
+  ["@typescript/native-preview", needsTypeScript],
   ["eslint", lookForFile("eslint.config.js")],
   ["jest", needsJest],
   ["prettier", always],
-  ["typescript", lookForFile("tsconfig.json")],
+  ["typescript", needsTypeScript],
 ]);
 
 /* eslint-disable-next-line no-restricted-exports */
