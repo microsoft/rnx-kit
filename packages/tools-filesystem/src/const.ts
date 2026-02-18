@@ -8,6 +8,6 @@ export const MKDIR_P_OPTIONS = {
 } as const;
 export const BIGINT_STATS_SYNC_OPTIONS = {
   bigint: true,
-  throwIfNoEntry: true,
+  throwIfNoEntry: false,
 } as const;
 export const BIGINT_STATS_OPTIONS = { bigint: true } as const;

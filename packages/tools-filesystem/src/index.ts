@@ -14,7 +14,7 @@ export {
   ensureDirForFileSync,
   ensureDirSync,
 } from "./dirs.ts";
-export { FSEntry, toFSEntry } from "./entry.ts";
+export { FSEntry, toFSEntry, type WriteOptions } from "./entry.ts";
 export {
   readFile,
   readFileSync,

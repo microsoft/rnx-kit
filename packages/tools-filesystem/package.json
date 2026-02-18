@@ -14,7 +14,6 @@
     "src"
   ],
   "main": "lib/index.js",
-  "module": "lib/index.js",
   "types": "lib/index.d.ts",
   "exports": {
     ".": {
@@ -23,9 +22,9 @@
       "default": "./lib/index.js"
     },
     "./mocks": {
-      "types": "./lib/mocks.d.ts",
-      "typescript": "./src/mocks.ts",
-      "default": "./lib/mocks.js"
+      "types": "./lib/mockfs/index.d.ts",
+      "typescript": "./src/mockfs/index.ts",
+      "default": "./lib/mockfs/index.js"
     },
     "./package.json": "./package.json"
   },

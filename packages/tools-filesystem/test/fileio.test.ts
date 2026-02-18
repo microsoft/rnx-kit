@@ -1,0 +1,85 @@
+import { deepEqual, equal, rejects, throws } from "node:assert/strict";
+import { describe, it } from "node:test";
+import {
+  readFile,
+  readFileSync,
+  readJson,
+  readJsonSync,
+} from "../src/index.ts";
+import { mockFS } from "../src/mockfs/index.ts";
+
+describe("readFileSync()", () => {
+  it("reads file content as UTF-8 string", () => {
+    const content = "hello world";
+    const fs = mockFS({ "test.txt": content });
+    equal(readFileSync("test.txt", fs), content);
+  });
+
+  it("throws ENOENT for non-existent file", () => {
+    const fs = mockFS({});
+    throws(
+      () => readFileSync("missing.txt", fs),
+      (err: NodeJS.ErrnoException) => err.code === "ENOENT"
+    );
+  });
+});
+
+describe("readFile()", () => {
+  it("reads file content asynchronously", async () => {
+    const content = "hello world";
+    const fs = mockFS({ "test.txt": content });
+    equal(await readFile("test.txt", fs), content);
+  });
+
+  it("rejects with ENOENT for non-existent file", async () => {
+    const fs = mockFS({});
+    await rejects(
+      readFile("missing.txt", fs),
+      (err: NodeJS.ErrnoException) => err.code === "ENOENT"
+    );
+  });
+});
+
+describe("readJsonSync()", () => {
+  it("reads and parses JSON file", () => {
+    const data = { key: "value", count: 42 };
+    const fs = mockFS({ "data.json": JSON.stringify(data) });
+    deepEqual(readJsonSync("data.json", fs), data);
+  });
+
+  it("handles JSON file with BOM", () => {
+    const data = { key: "value" };
+    const fs = mockFS({ "bom.json": "\uFEFF" + JSON.stringify(data) });
+    deepEqual(readJsonSync("bom.json", fs), data);
+  });
+
+  it("throws ENOENT for non-existent file", () => {
+    const fs = mockFS({});
+    throws(
+      () => readJsonSync("missing.json", fs),
+      (err: NodeJS.ErrnoException) => err.code === "ENOENT"
+    );
+  });
+});
+
+describe("readJson()", () => {
+  it("reads and parses JSON file asynchronously", async () => {
+    const data = { items: [1, 2, 3] };
+    const fs = mockFS({ "data.json": JSON.stringify(data) });
+    deepEqual(await readJson("data.json", fs), data);
+  });
+
+  it("handles JSON file with BOM asynchronously", async () => {
+    const data = { key: "value" };
+    const fs = mockFS({ "bom.json": "\uFEFF" + JSON.stringify(data) });
+    deepEqual(await readJson("bom.json", fs), data);
+  });
+
+  it("rejects with ENOENT for non-existent file", async () => {
+    const fs = mockFS({});
+    await rejects(
+      readJson("missing.json", fs),
+      (err: NodeJS.ErrnoException) => err.code === "ENOENT"
+    );
+  });
+});

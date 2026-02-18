@@ -3,8 +3,7 @@ import { WITH_UTF8_ENCODING } from "./const.ts";
 import { parseJson, serializeJson } from "./json.ts";
 
 /**
- * Synchronously reads the content of a file as a UTF-8 string, caching the result on the FSEntry. If the content
- * has already been read and cached, it returns the cached content instead of reading from the filesystem again.
+ * Synchronously reads the content of a file as a UTF-8 string.
  *
  * @param filePath path to the file to read
  * @param fs filesystem module to use (defaults to Node's fs)
@@ -18,8 +17,7 @@ export function readFileSync(
 }
 
 /**
- * Asynchronously reads the content of a file as a UTF-8 string, caching the result on the FSEntry. If the content
- * has already been read and cached, it returns the cached content instead of reading from the filesystem again.
+ * Asynchronously reads the content of a file as a UTF-8 string.
  *
  * @param filePath path to the file to read
  * @param fs filesystem module to use (defaults to Node's fs)

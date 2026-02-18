@@ -2,11 +2,11 @@ import fs from "node:fs";
 import {
   BIGINT_STATS_OPTIONS,
   BIGINT_STATS_SYNC_OPTIONS,
-  MKDIR_P_OPTIONS,
   WITH_UTF8_ENCODING,
 } from "./const.ts";
-import { ensureDirForFileSync } from "./dirs.ts";
+import { ensureDirForFile, ensureDirForFileSync } from "./dirs.ts";
 import { parseJson, serializeJson } from "./json.ts";
+import { createEnoentError } from "./mockfs/errors.ts";
 
 export type WriteOptions = {
   /** whether to force writing the file even if the content is not marked as dirty (defaults to false) */
@@ -96,8 +96,9 @@ export class FSEntry {
    */
   set content(value: string) {
     // the first time we set the content, check if we know for sure whether a file exists at the path or not
+    // if we don't know for certain, do the ensure just in case
     this._needsDirEnsure ??=
-      this._content === undefined && this.stats == undefined;
+      this._content === undefined && this._stats == undefined;
     // mark whether the content is dirty
     this._needsWrite =
       this._needsWrite ||
@@ -152,7 +153,7 @@ export class FSEntry {
    * @returns parsed JSON content, optionally cast to type T
    */
   async readJson<T = ReturnType<typeof JSON.parse>>(): Promise<T> {
-    return this.getContent().then((content) => parseJson<T>(content));
+    return parseJson<T>(await this.getContent());
   }
 
   /**
@@ -184,7 +185,7 @@ export class FSEntry {
     const content = this.getContentToWrite(options);
     if (content !== undefined) {
       if (this._needsDirEnsure) {
-        ensureDirForFileSync(this.path);
+        ensureDirForFileSync(this.path, this._fs);
         this._needsDirEnsure = false;
       }
       this._fs.writeFileSync(this.path, content, WITH_UTF8_ENCODING);
@@ -200,14 +201,11 @@ export class FSEntry {
     const content = this.getContentToWrite(options);
     if (content !== undefined) {
       if (this._needsDirEnsure) {
-        await this._fs.promises.mkdir(this.path, MKDIR_P_OPTIONS);
+        await ensureDirForFile(this.path, this._fs);
         this._needsDirEnsure = false;
       }
-      return this._fs.promises
-        .writeFile(this.path, content, WITH_UTF8_ENCODING)
-        .then(() => {
-          this._needsWrite = false;
-        });
+      await this._fs.promises.writeFile(this.path, content, WITH_UTF8_ENCODING);
+      this._needsWrite = false;
     }
   }
 
@@ -298,16 +296,7 @@ export class FSEntry {
    */
   private requireStats(stats: fs.BigIntStats | undefined): fs.BigIntStats {
     if (stats === undefined) {
-      const err = new Error(
-        `ENOENT: no such file or directory, stat '${this.path}'`
-      ) as NodeJS.ErrnoException;
-
-      err.code = "ENOENT";
-      err.errno = -2;
-      err.syscall = "stat";
-      err.path = this.path;
-
-      throw err;
+      throw createEnoentError(this.path, "stat");
     }
     return stats;
   }

@@ -1,4 +1,4 @@
-import fs from "node:fs";
+import nodefs from "node:fs";
 import { toFSEntry, type FSEntry } from "./entry.ts";
 
 // file chunk size for comparisons and determining whether to read entire file into memory for comparisons
@@ -16,8 +16,8 @@ const CHUNK_SIZE = 128 * 1024;
  * @returns true if the stats indicate the files are the same, false if they indicate they are different, or undefined if inconclusive.
  */
 export function isSameFileFromStats(
-  stats1: fs.BigIntStats,
-  stats2: fs.BigIntStats
+  stats1: nodefs.BigIntStats,
+  stats2: nodefs.BigIntStats
 ): boolean | undefined {
   // Check if both stats refer to the same file, handles hardlinks and other ways to reference the
   // same file on disk. This is a definitive check that does not require further checks. Note that these values can
@@ -50,10 +50,11 @@ export function isSameFileFromStats(
  */
 export function filesMatchSync(
   path1: FSEntry | string,
-  path2: FSEntry | string
+  path2: FSEntry | string,
+  /** @internal */ fs: typeof nodefs = nodefs
 ): boolean {
-  const f1 = toFSEntry(path1);
-  const f2 = toFSEntry(path2);
+  const f1 = toFSEntry(path1, fs);
+  const f2 = toFSEntry(path2, fs);
 
   // do a quick stats comparison first to preempt more expensive checks if possible
   const sameFromStats = isSameFileFromStats(f1.stats, f2.stats);
@@ -72,7 +73,6 @@ export function filesMatchSync(
   let fileA: number | undefined;
   let fileB: number | undefined;
 
-  // do a synchronous byte-by-byte compare
   try {
     fileA = fs.openSync(f1.path, "r");
     fileB = fs.openSync(f2.path, "r");
@@ -80,12 +80,11 @@ export function filesMatchSync(
     const bufA = Buffer.alloc(CHUNK_SIZE);
     const bufB = Buffer.alloc(CHUNK_SIZE);
 
-    let bytesA = 0;
-    let bytesB = 0;
-
-    while (bytesA < size && bytesB < size) {
-      bytesA = fs.readSync(fileA, bufA, 0, bufA.length, null);
-      bytesB = fs.readSync(fileB, bufB, 0, bufB.length, null);
+    while (true) {
+      const bytesA = fs.readSync(fileA, bufA, 0, bufA.length, null);
+      const bytesB = fs.readSync(fileB, bufB, 0, bufB.length, null);
+      if (bytesA !== bytesB) return false;
+      if (bytesA === 0) break;
       if (
         Buffer.compare(bufA.subarray(0, bytesA), bufB.subarray(0, bytesB)) !== 0
       ) {
@@ -112,10 +111,11 @@ export function filesMatchSync(
  */
 export async function filesMatch(
   pathA: FSEntry | string,
-  pathB: FSEntry | string
+  pathB: FSEntry | string,
+  /** @internal */ fs: typeof nodefs = nodefs
 ): Promise<boolean> {
-  const f1 = toFSEntry(pathA);
-  const f2 = toFSEntry(pathB);
+  const f1 = toFSEntry(pathA, fs);
+  const f2 = toFSEntry(pathB, fs);
 
   // do a quick stats comparison first to preempt more expensive checks if possible
   const [stats1, stats2] = await Promise.all([f1.getStats(), f2.getStats()]);
