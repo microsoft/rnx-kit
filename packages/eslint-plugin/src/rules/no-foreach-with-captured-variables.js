@@ -2,10 +2,10 @@
 "use strict";
 
 /**
- * @typedef {import("estree").Node & { const?: boolean; }} Node
+ * @import { Rule } from "eslint";
  */
 
-/** @type {import("eslint").Rule.RuleModule} */
+/** @type {Rule.RuleModule} */
 module.exports = {
   meta: {
     type: "problem",

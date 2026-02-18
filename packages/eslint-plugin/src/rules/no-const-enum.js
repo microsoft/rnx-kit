@@ -2,10 +2,11 @@
 "use strict";
 
 /**
- * @typedef {import("estree").Node & { const?: boolean; }} Node
+ * @import { TSESTree } from "@typescript-eslint/types";
+ * @import { Rule } from "eslint";
  */
 
-/** @type {import("eslint").Rule.RuleModule} */
+/** @type {Rule.RuleModule} */
 module.exports = {
   meta: {
     type: "problem",
@@ -22,7 +23,7 @@ module.exports = {
   },
   create: (context) => {
     return {
-      TSEnumDeclaration: (/** @type {Node} */ node) => {
+      TSEnumDeclaration: (/** @type {TSESTree.TSEnumDeclaration} */ node) => {
         if (node.const) {
           context.report({ node, messageId: "error" });
         }

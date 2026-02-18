@@ -1,9 +1,9 @@
 import rule from "../src/rules/no-export-all.js";
 import { makeRuleTester } from "./RuleTester.ts";
 
-jest.mock("fs");
+jest.mock("node:fs", () => require("./__mocks__/fs.js"));
 
-require("fs").__setMocks({
+require("node:fs").__setMocks({
   barbarian: "export const name = 'Conan';",
   chopper: `
 export enum Kind {

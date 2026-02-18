@@ -2,28 +2,28 @@
 "use strict";
 
 /**
- * @typedef {import("@typescript-eslint/types").TSESTree.Node} Node
- * @typedef {import("eslint").Rule.RuleContext} ESLintRuleContext
- * @typedef {import("eslint").Rule.ReportFixer} ESLintReportFixer
+ * @import { TSESTree } from "@typescript-eslint/types";
+ * @import { Rule } from "eslint";
+ *
  * @typedef {{ exports: string[]; types: string[]; }} NamedExports
  *
  * @typedef {{
- *   id: ESLintRuleContext["id"];
+ *   id: Rule.RuleContext["id"];
  *   options: {
  *     debug: boolean;
  *     expand: "all" | "external-only";
  *     maxDepth: number;
  *   };
  *   filename: string;
- *   languageOptions: ESLintRuleContext["languageOptions"];
- *   parserOptions: ESLintRuleContext["languageOptions"]["parserOptions"];
- *   parserPath: ESLintRuleContext["parserPath"];
- *   sourceCode: ESLintRuleContext["sourceCode"];
+ *   languageOptions: Rule.RuleContext["languageOptions"];
+ *   parserOptions: Rule.RuleContext["languageOptions"]["parserOptions"];
+ *   parserPath: Rule.RuleContext["parserPath"];
+ *   sourceCode: Rule.RuleContext["sourceCode"];
  * }} RuleContext
  */
 
-const fs = require("fs");
-const path = require("path");
+const fs = require("node:fs");
+const path = require("node:path");
 
 const DEFAULT_CONFIG = {
   ecmaVersion: 9,
@@ -78,7 +78,7 @@ function isLikelyInProject(project, modulePath) {
 
 /**
  * Creates and returns an ES tree traverser.
- * @returns {{ traverse: (node: Node, options: {}) => void; }}
+ * @returns {{ traverse: (node: TSESTree.Node, options: {}) => void; }}
  */
 function makeTraverser() {
   const Traverser = require(
@@ -153,7 +153,7 @@ const resolveFrom =
 
 /**
  * Converts ESLint's `RuleContext` to our `RuleContext`.
- * @param {ESLintRuleContext} context
+ * @param {Rule.RuleContext} context
  * @returns {RuleContext}
  */
 function toRuleContext(context) {
@@ -178,7 +178,7 @@ function toRuleContext(context) {
  * Parses specified file and returns an AST.
  * @param {RuleContext} context
  * @param {string} moduleId
- * @returns {{ ast: Node; filename: string; } | null}
+ * @returns {{ ast: TSESTree.Node; filename: string; } | null}
  */
 function parse(context, moduleId) {
   const { filename, languageOptions, options, parserPath } = context;
@@ -261,7 +261,7 @@ function extractExports(context, moduleId, depth) {
   const types = new Set();
 
   makeTraverser().traverse(ast, {
-    /** @type {(node: Node, parent: Node) => void} */
+    /** @type {(node: TSESTree.Node, parent: TSESTree.Node) => void} */
     enter: (node, parent) => {
       switch (node.type) {
         case "ExportNamedDeclaration": {
