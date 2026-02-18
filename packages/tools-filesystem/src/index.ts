@@ -1,3 +1,4 @@
+export { filesMatch, filesMatchSync, isSameFileFromStats } from "./compare.ts";
 export {
   DEFAULT_DIR_MODE,
   DEFAULT_ENCODING,

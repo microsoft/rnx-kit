@@ -18,6 +18,15 @@ export type WriteOptions = {
 };
 
 /**
+ * Helper function to convert a string path to an FSEntry if it is not already an FSEntry
+ * @param path The path to convert to an FSEntry
+ * @returns An FSEntry instance representing the path
+ */
+export function toFSEntry(path: string | FSEntry): FSEntry {
+  return path instanceof FSEntry ? path : new FSEntry(path);
+}
+
+/**
  * FSEntry is a cached wrapper around a path on the filesystem, it allows for on-demand loading of stats and content,
  * as well as tracking whether the content has been modified and needs to be written out. It also provides convenience methods
  * for checking if the entry is a file or directory, and for writing out the content either synchronously or asynchronously.
