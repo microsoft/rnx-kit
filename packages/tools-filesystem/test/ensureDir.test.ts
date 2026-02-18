@@ -1,9 +1,9 @@
 import { equal, ok } from "node:assert/strict";
 import { describe, it } from "node:test";
-import { ensureDir, ensureDirForFile } from "../src/index.ts";
+import { ensureDirForFileSync, ensureDirSync } from "../src/index.ts";
 import { mockFS } from "../src/mocks.ts";
 
-describe("ensureDir()", () => {
+describe("ensureDirSync()", () => {
   const DIR_CONTENT = JSON.stringify({ recursive: true, mode: 0o755 });
 
   it("creates a directory", () => {
@@ -12,7 +12,7 @@ describe("ensureDir()", () => {
 
     const dir = "test/dir";
 
-    ensureDir(dir, fs);
+    ensureDirSync(dir, fs);
 
     ok(fs.existsSync(dir));
     ok(fs.lstatSync(dir).isDirectory());
@@ -25,7 +25,7 @@ describe("ensureDir()", () => {
 
     const nestedDir = "test/nested/dir";
 
-    ensureDir(nestedDir, fs);
+    ensureDirSync(nestedDir, fs);
 
     ok(fs.existsSync(nestedDir));
     ok(fs.lstatSync(nestedDir).isDirectory());
@@ -33,7 +33,7 @@ describe("ensureDir()", () => {
   });
 });
 
-describe("ensureDirForFile()", () => {
+describe("ensureDirForFileSync()", () => {
   const DIR_CONTENT = JSON.stringify({ recursive: true, mode: 0o755 });
 
   it("creates a directory", () => {
@@ -42,7 +42,7 @@ describe("ensureDirForFile()", () => {
 
     const dir = "test/dir";
 
-    ensureDirForFile(`${dir}/file`, fs);
+    ensureDirForFileSync(`${dir}/file`, fs);
 
     ok(fs.existsSync(dir));
     ok(fs.lstatSync(dir).isDirectory());
@@ -55,7 +55,7 @@ describe("ensureDirForFile()", () => {
 
     const nestedDir = "test/nested/dir";
 
-    ensureDirForFile(`${nestedDir}/file`, fs);
+    ensureDirForFileSync(`${nestedDir}/file`, fs);
 
     ok(fs.existsSync(nestedDir));
     ok(fs.lstatSync(nestedDir).isDirectory());

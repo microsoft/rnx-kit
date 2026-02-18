@@ -5471,7 +5471,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rnx-kit/tools-filesystem@npm:*, @rnx-kit/tools-filesystem@npm:^0.1.0, @rnx-kit/tools-filesystem@workspace:packages/tools-filesystem":
+"@rnx-kit/tools-filesystem@npm:^0.1.0, @rnx-kit/tools-filesystem@npm:^0.1.2, @rnx-kit/tools-filesystem@workspace:packages/tools-filesystem":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/tools-filesystem@workspace:packages/tools-filesystem"
   dependencies:
@@ -5527,7 +5527,7 @@ __metadata:
     "@react-native-community/cli-types": "npm:^20.0.0"
     "@rnx-kit/eslint-config": "npm:*"
     "@rnx-kit/scripts": "npm:*"
-    "@rnx-kit/tools-filesystem": "npm:*"
+    "@rnx-kit/tools-filesystem": "npm:^0.1.2"
     "@rnx-kit/tools-node": "npm:^3.0.3"
     "@rnx-kit/tsconfig": "npm:*"
     "@rnx-kit/types-bundle-config": "npm:^0.0.1"
