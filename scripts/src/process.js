@@ -18,7 +18,7 @@ function isRunningNx(command, args) {
   return command.startsWith("yarn") && args[0] === "nx";
 }
 
-function workspaceRoot() {
+export function workspaceRoot() {
   return fileURLToPath(new URL("../../", import.meta.url));
 }
 
