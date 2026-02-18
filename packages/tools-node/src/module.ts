@@ -3,6 +3,7 @@ import type { PackageRef } from "./package.ts";
 import {
   destructureModuleRef,
   findPackageDir,
+  mergeModulePaths,
   parsePackageRef,
   readPackage,
 } from "./package.ts";
@@ -87,4 +88,48 @@ export function getPackageModuleRefFromModulePath(
   }
 
   return undefined;
+}
+
+/**
+ * This is a helper to resolve a module path to an absolute file system path. Note that it behaves differently
+ * than a normal require.resolve in a few key ways.
+ * - if no sub-path is attached, it will return the root directory of the package, not the main entry point
+ * - if a sub-path is attached, it will resolve that path manually with respect to the package directory.
+ * - this means that the references files should include extensions and will be handled literally.
+ * - the references path within the package may not exist, but it will be contained in the package directory
+ *
+ * In essence:
+ * - it uses module resolution to find the package root directory
+ * - it uses path joining to resolve the final path
+ *
+ * This can be used as a quick helper to find package root directories, or to emulate behaviors such as typescript's
+ * tsconfig extends resolution.
+ *
+ * @param modulePath package-name[/sub-path] style module reference or relative file path to resolve
+ * @param baseDir optional base directory to resolve from, defaults to process.cwd()
+ * @returns Resolved absolute file path, or throws if resolution fails
+ */
+export function resolveModulePathDirect(
+  modulePath: string,
+  baseDir?: string
+): string {
+  baseDir ??= process.cwd();
+  // resolve relative paths with respect to the baseDir using standard node path resolution
+  if (modulePath.startsWith(".")) {
+    return path.resolve(baseDir, modulePath);
+  }
+  // for module references, parse the path into its component parts
+  const { scope, name, path: subModulePath } = destructureModuleRef(modulePath);
+
+  // resolve the path for the package.json file for this module reference, which will throw if it cannot be found
+  const pkgRef = mergeModulePaths(scope, name, "package.json");
+  const pkgPath = require.resolve(pkgRef, { paths: [baseDir] });
+
+  // resolve the package directory using require.resolve, which will use node's module resolution algorithm
+  const pkgDir = path.dirname(pkgPath);
+
+  // now return the resolved path to the module, including sub-module path if it was specified
+  return subModulePath
+    ? path.join(pkgDir, subModulePath)
+    : path.normalize(pkgDir);
 }

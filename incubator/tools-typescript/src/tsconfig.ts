@@ -1,30 +1,9 @@
-import {
-  type PackageInfo,
-  createPackageValueAccessors,
-  createPackageValueLoader,
-} from "@rnx-kit/tools-packages";
 import path from "node:path";
 import ts from "typescript";
 import { getDiagnosticWriter } from "./diagnostics.ts";
 
-type ConfigsByPath = Map<string, ts.ParsedCommandLine>;
 const DEFAULT_CONFIG_NAME = "tsconfig.json";
 const extendedConfigCache = new Map();
-
-/**
- * Create accessors to get and set the default TypeScript config for a package.
- */
-const { get: getDefaultConfig, set: setDefaultConfig } =
-  createPackageValueAccessors<ts.ParsedCommandLine>("tsconfig");
-
-/**
- * Separate the optional cache map for non-default TypeScript configs from the default config to avoid
- * creating an extra map in the most common case
- */
-const getConfigMapForPackage = createPackageValueLoader<ConfigsByPath>(
-  "tsconfigMap",
-  () => new Map()
-);
 
 /**
  * Create a base config host once time to parsing config files.
@@ -103,11 +82,29 @@ function loadConfigFileUncached(
   }
 
   // normalize the path to posix to prevent false failure messages
-  const configPathPosix = path.posix.normalize(configPath);
+  return loadTypeScriptConfig(configPath, host);
+}
 
-  // now load the config file using the provided host
+/**
+ * Helper function to load TypeScript config files without needing to define the host each time. This does no caching
+ * or special handling besides providing an extendedConfigCache to Typescript to speed up loading of extended configs.
+ *
+ * @param configPath path to a tsconfig.json file to load
+ * @param host optional host implementation if this needs to be overridden, generally safe to omit this
+ * @returns a ParsedCommandLine representing the loaded config file including resolution and merging of extends
+ */
+export function loadTypeScriptConfig(
+  configPath: string,
+  host?: ts.ParseConfigFileHost
+): ts.ParsedCommandLine {
+  // typescript wants the config path to be posix, so normalize it before loading
+  configPath = path.posix.normalize(configPath);
+
+  // ensure we have a host to load the config file with
+  host ??= getConfigFileHost();
+
   const parsedCmdLine = ts.getParsedCommandLineOfConfigFile(
-    configPathPosix,
+    configPath,
     undefined,
     host,
     extendedConfigCache,
@@ -115,13 +112,13 @@ function loadConfigFileUncached(
   );
 
   if (!parsedCmdLine) {
-    throw new Error(`Unable to parse '${configPathPosix}'`);
+    throw new Error(`Unable to parse '${configPath}'`);
   }
   return parsedCmdLine;
 }
 
 /**
- * @param pkgInfo the package info to read the config for
+ * @param rootDir the root directory to read the config for
  * @param configFileName file name or path to the config file to read, falls back to tsconfig.json
  * @param optionsToExtend options to extend with
  * @param watchOptionsToExtend watch options to extend with
@@ -131,29 +128,16 @@ function loadConfigFileUncached(
  * @throws if the config file cannot be found or parsed
  */
 export function readTypeScriptConfig(
-  pkgInfo: PackageInfo,
+  rootDir: string,
   configFileName: string = DEFAULT_CONFIG_NAME,
   optionsToExtend?: ts.CompilerOptions,
   watchOptionsToExtend?: ts.WatchOptions,
   onUnRecoverableConfigFileDiagnostic?: (diagnostic: ts.Diagnostic) => void,
   trace?: (message: string) => void
 ): ts.ParsedCommandLine {
-  const defaultConfig = configFileName === DEFAULT_CONFIG_NAME;
-  // check if we have a cached version of the config already loaded
-  let cmdLineBase: ts.ParsedCommandLine | undefined = defaultConfig
-    ? getDefaultConfig(pkgInfo)
-    : getConfigMapForPackage(pkgInfo).get(configFileName);
-
-  if (!cmdLineBase) {
-    // setup the config parsing host, we can use the default unless logging operations are overridden
-    const host = getConfigFileHost(onUnRecoverableConfigFileDiagnostic, trace);
-    cmdLineBase = loadConfigFileUncached(configFileName, pkgInfo.root, host);
-    if (defaultConfig) {
-      setDefaultConfig(pkgInfo, cmdLineBase);
-    } else {
-      getConfigMapForPackage(pkgInfo).set(configFileName, cmdLineBase);
-    }
-  }
+  // setup the config parsing host, we can use the default unless logging operations are overridden
+  const host = getConfigFileHost(onUnRecoverableConfigFileDiagnostic, trace);
+  const cmdLineBase = loadConfigFileUncached(configFileName, rootDir, host);
 
   // merge the options if needed
   return mergeConfigOptions(cmdLineBase, optionsToExtend, watchOptionsToExtend);

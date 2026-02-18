@@ -66,6 +66,15 @@ export function destructureModuleRef(r: string): DestructuredModuleRef {
 }
 
 /**
+ * Simple helper to merge two parts of a package reference, one of which may be undefined.
+ * @param parts parts of a package reference to merge together, in order
+ * @returns Merged package reference, empty string if no parts are defined
+ */
+export function mergeModulePaths(...parts: (string | undefined)[]): string {
+  return parts.filter((part) => !!part).join("/");
+}
+
+/**
  * Parse a package reference string. An example reference is the `name`
  * property found in `package.json`.
  *
@@ -74,7 +83,7 @@ export function destructureModuleRef(r: string): DestructuredModuleRef {
  */
 export function parsePackageRef(r: string): PackageRef {
   const { scope, name, path } = destructureModuleRef(r);
-  const fullName = path ? `${name}/${path}` : name;
+  const fullName = mergeModulePaths(name, path);
   return { name: fullName, scope };
 }
 

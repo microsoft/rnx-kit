@@ -8,7 +8,7 @@ export {
   parseSourceFileReference as parseSourceFileDetails,
 } from "./platforms.ts";
 export { createReporter } from "./reporter.ts";
-export { readTypeScriptConfig } from "./tsconfig.ts";
+export { loadTypeScriptConfig, readTypeScriptConfig } from "./tsconfig.ts";
 export type {
   AsyncThrottler,
   AsyncWriter,

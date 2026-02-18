@@ -5505,7 +5505,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rnx-kit/tools-packages@npm:^0.1.0, @rnx-kit/tools-packages@npm:^0.1.1, @rnx-kit/tools-packages@workspace:packages/tools-packages":
+"@rnx-kit/tools-packages@npm:^0.1.0, @rnx-kit/tools-packages@workspace:packages/tools-packages":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/tools-packages@workspace:packages/tools-packages"
   dependencies:
@@ -5562,12 +5562,11 @@ __metadata:
     "@rnx-kit/jest-preset": "npm:*"
     "@rnx-kit/scripts": "npm:*"
     "@rnx-kit/tools-node": "npm:^3.0.3"
-    "@rnx-kit/tools-packages": "npm:^0.1.1"
     "@rnx-kit/tools-react-native": "npm:^2.3.2"
     "@rnx-kit/tsconfig": "npm:*"
     "@rnx-kit/types-bundle-config": "npm:^0.0.1"
     "@rnx-kit/types-kit-config": "npm:*"
-    "@rnx-kit/types-node": "npm:*"
+    "@rnx-kit/types-node": "npm:^0.0.1"
     "@rnx-kit/typescript-service": "npm:^2.0.0"
   peerDependencies:
     typescript: ">=4.7.0"
@@ -5657,7 +5656,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rnx-kit/types-node@npm:*, @rnx-kit/types-node@npm:^0.0.1, @rnx-kit/types-node@workspace:packages/types-node":
+"@rnx-kit/types-node@npm:^0.0.1, @rnx-kit/types-node@workspace:packages/types-node":
   version: 0.0.0-use.local
   resolution: "@rnx-kit/types-node@workspace:packages/types-node"
   dependencies:

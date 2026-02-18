@@ -3,6 +3,7 @@ export {
   isFileModuleRef,
   isPackageModuleRef,
   parseModuleRef,
+  resolveModulePathDirect,
 } from "./module.ts";
 export type { FileModuleRef, PackageModuleRef } from "./module.ts";
 
@@ -11,6 +12,7 @@ export {
   findPackage,
   findPackageDependencyDir,
   findPackageDir,
+  mergeModulePaths,
   parsePackageRef,
   readPackage,
   resolveDependencyChain,

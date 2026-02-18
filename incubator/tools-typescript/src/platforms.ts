@@ -1,10 +1,10 @@
 import { getKitConfigFromPackageManifest } from "@rnx-kit/config";
-import type { PackageInfo } from "@rnx-kit/tools-packages";
 import {
   getAvailablePlatforms,
   platformExtensions,
 } from "@rnx-kit/tools-react-native";
 import type { KitConfig } from "@rnx-kit/types-kit-config";
+import type { PackageManifest } from "@rnx-kit/types-node";
 import path from "node:path";
 import type ts from "typescript";
 import type {
@@ -84,18 +84,17 @@ export function platformsFromKitConfig(
  * @returns a map of platform name to PlatformInfo
  */
 export function loadPackagePlatformInfo(
-  pkgInfo: PackageInfo,
+  root: string,
+  manifest: PackageManifest,
   platformOverride?: string[]
 ): Record<string, PlatformInfo> {
   // load the available platforms for the package from the react-native config files (and dependencies)
-  const available = getAvailablePlatforms(pkgInfo.root);
+  const available = getAvailablePlatforms(root);
 
   // the platforms are set specifically, found in the kit config, or equal all available platforms
   const platforms =
     platformOverride ||
-    platformsFromKitConfig(
-      getKitConfigFromPackageManifest(pkgInfo.manifest, pkgInfo.root)
-    ) ||
+    platformsFromKitConfig(getKitConfigFromPackageManifest(manifest, root)) ||
     Object.keys(available);
   const result: Record<string, PlatformInfo> = {};
 

@@ -1,4 +1,5 @@
 import type { AllPlatforms } from "@rnx-kit/types-bundle-config";
+import type { PackageManifest } from "@rnx-kit/types-node";
 import type ts from "typescript";
 
 /**
@@ -7,6 +8,9 @@ import type ts from "typescript";
 export type BuildOptions = {
   /** Target directory for the build, should correspond to the package root */
   target?: string;
+
+  /** Package manifest for the target package */
+  manifest?: PackageManifest;
 
   /** Is this build for react-native, will attempt to detect platforms if set. */
   reactNative?: boolean;

@@ -1,4 +1,4 @@
-import { findPackageInfo } from "@rnx-kit/tools-packages";
+import { readPackage } from "@rnx-kit/tools-node";
 import type { AllPlatforms } from "@rnx-kit/types-bundle-config";
 import ts from "typescript";
 import { loadPackagePlatformInfo } from "./platforms.ts";
@@ -16,9 +16,13 @@ import type { BuildContext, BuildOptions, PlatformInfo } from "./types.ts";
  */
 export async function buildTypeScript(options: BuildOptions) {
   // load the base package info
-  const pkgInfo = findPackageInfo(options.target);
-  const root = pkgInfo.root;
-  const reporter = createReporter(pkgInfo.name, options.verbose, options.trace);
+  const root = options.target ?? process.cwd();
+  const manifest = options.manifest ?? readPackage(root);
+  const reporter = createReporter(
+    manifest.name,
+    options.verbose,
+    options.trace
+  );
 
   // set up the typescript options and load the config file
   const mergedOptions = {
@@ -27,7 +31,7 @@ export async function buildTypeScript(options: BuildOptions) {
   };
   // load the typescript config, project is likely undefined which will fall back to tsconfig.json
   const cmdLine = readTypeScriptConfig(
-    pkgInfo,
+    root,
     mergedOptions.project,
     mergedOptions
   );
@@ -35,7 +39,11 @@ export async function buildTypeScript(options: BuildOptions) {
   // load/detect the platforms
   let targetPlatforms: PlatformInfo[] | undefined = undefined;
   if (options.platforms || options.reactNative) {
-    const platformInfo = loadPackagePlatformInfo(pkgInfo, options.platforms);
+    const platformInfo = loadPackagePlatformInfo(
+      root,
+      manifest,
+      options.platforms
+    );
     const platforms = Object.keys(platformInfo);
     if (platforms.length > 0) {
       options.platforms = platforms as AllPlatforms[];
@@ -71,6 +79,6 @@ export async function buildTypeScript(options: BuildOptions) {
   try {
     await Promise.all(createBuildTasks(options, context, targetPlatforms));
   } catch (e) {
-    throw new Error(`${pkgInfo.name}: Build failed. ${e}`);
+    throw new Error(`${manifest.name}: Build failed. ${e}`);
   }
 }
