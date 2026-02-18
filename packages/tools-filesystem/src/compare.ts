@@ -1,5 +1,5 @@
 import fs from "node:fs";
-import { toFSEntry, type FSEntry } from "./entry";
+import { toFSEntry, type FSEntry } from "./entry.ts";
 
 // file chunk size for comparisons and determining whether to read entire file into memory for comparisons
 const CHUNK_SIZE = 128 * 1024;

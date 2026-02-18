@@ -8,11 +8,14 @@
     "name": "Microsoft Open Source",
     "email": "microsoftopensource@users.noreply.github.com"
   },
+  "sideEffects": false,
   "files": [
-    "lib/**/*.d.ts",
-    "lib/**/*.js",
+    "lib",
     "src"
   ],
+  "main": "lib/index.js",
+  "module": "lib/index.js",
+  "types": "lib/index.d.ts",
   "exports": {
     ".": {
       "types": "./lib/index.d.ts",

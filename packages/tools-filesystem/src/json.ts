@@ -3,7 +3,7 @@
  * @param content file content to strip of a BOM (if present)
  * @returns either the content (if no BOM was present) or the content with the leading BOM removed
  */
-function stripBOM(content: string): string {
+export function stripBOM(content: string): string {
   // check for a UTF-8 BOM and remove it if present, since it will cause JSON.parse to fail
   if (content.charCodeAt(0) === 0xfeff) {
     return content.slice(1);

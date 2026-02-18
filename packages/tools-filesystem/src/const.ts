@@ -6,3 +6,8 @@ export const MKDIR_P_OPTIONS = {
   recursive: true,
   mode: DEFAULT_DIR_MODE,
 } as const;
+export const BIGINT_STATS_SYNC_OPTIONS = {
+  bigint: true,
+  throwIfNoEntry: true,
+} as const;
+export const BIGINT_STATS_OPTIONS = { bigint: true } as const;

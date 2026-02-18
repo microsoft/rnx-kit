@@ -1,13 +1,12 @@
 import fs from "node:fs";
-import { MKDIR_P_OPTIONS, WITH_UTF8_ENCODING } from "./const.ts";
+import {
+  BIGINT_STATS_OPTIONS,
+  BIGINT_STATS_SYNC_OPTIONS,
+  MKDIR_P_OPTIONS,
+  WITH_UTF8_ENCODING,
+} from "./const.ts";
 import { ensureDirForFileSync } from "./dirs.ts";
 import { parseJson, serializeJson } from "./json.ts";
-
-const BIGINT_STATS_SYNC_OPTIONS = {
-  bigint: true,
-  throwIfNoEntry: true,
-} as const;
-const BIGINT_STATS_OPTIONS = { bigint: true } as const;
 
 export type WriteOptions = {
   /** whether to force writing the file even if the content is not marked as dirty (defaults to false) */
@@ -22,8 +21,11 @@ export type WriteOptions = {
  * @param path The path to convert to an FSEntry
  * @returns An FSEntry instance representing the path
  */
-export function toFSEntry(path: string | FSEntry): FSEntry {
-  return path instanceof FSEntry ? path : new FSEntry(path);
+export function toFSEntry(
+  path: string | FSEntry,
+  /** @internal */ fsModule?: typeof fs
+): FSEntry {
+  return path instanceof FSEntry ? path : new FSEntry(path, fsModule);
 }
 
 /**
@@ -46,9 +48,11 @@ export class FSEntry {
   protected _contentPromise?: Promise<string>;
   protected _needsWrite?: boolean;
   protected _needsDirEnsure?: boolean;
+  protected _fs: typeof fs;
 
-  constructor(path: string) {
+  constructor(path: string, fsModule?: typeof fs) {
     this.path = path;
+    this._fs = fsModule ?? fs;
   }
 
   /**
@@ -80,7 +84,10 @@ export class FSEntry {
    * @returns the content of the file as a string
    */
   get content(): string {
-    return (this._content ??= fs.readFileSync(this.path, WITH_UTF8_ENCODING));
+    return (this._content ??= this._fs.readFileSync(
+      this.path,
+      WITH_UTF8_ENCODING
+    ));
   }
 
   /**
@@ -180,7 +187,7 @@ export class FSEntry {
         ensureDirForFileSync(this.path);
         this._needsDirEnsure = false;
       }
-      fs.writeFileSync(this.path, content, WITH_UTF8_ENCODING);
+      this._fs.writeFileSync(this.path, content, WITH_UTF8_ENCODING);
       this._needsWrite = false;
     }
   }
@@ -193,10 +200,10 @@ export class FSEntry {
     const content = this.getContentToWrite(options);
     if (content !== undefined) {
       if (this._needsDirEnsure) {
-        await fs.promises.mkdir(this.path, MKDIR_P_OPTIONS);
+        await this._fs.promises.mkdir(this.path, MKDIR_P_OPTIONS);
         this._needsDirEnsure = false;
       }
-      return fs.promises
+      return this._fs.promises
         .writeFile(this.path, content, WITH_UTF8_ENCODING)
         .then(() => {
           this._needsWrite = false;
@@ -204,6 +211,11 @@ export class FSEntry {
     }
   }
 
+  /**
+   * Get the content to write to the file, optionally adding a newline at the end.
+   * @param options - options for writing the file
+   * @returns the content to write, or undefined if no write is needed
+   */
   private getContentToWrite(options?: WriteOptions): string | undefined {
     const { force, newline } = options ?? {};
     if (this._content === undefined || (!force && !this._needsWrite)) {
@@ -214,21 +226,27 @@ export class FSEntry {
       : this._content;
   }
 
-  /** asynchronously check if the file exists, does not throw */
+  /**
+   * asynchronously check if the file exists, does not throw
+   */
   async getExists(): Promise<boolean> {
     return (this._exists ??= (await this.getStatsAsync()) !== undefined);
   }
 
-  /** asynchronously get the stats of the file, throws if the file does not exist */
+  /**
+   * asynchronously get the stats of the file, throws if the file does not exist
+   */
   async getStats(): Promise<fs.BigIntStats> {
     return this._stats ?? this.requireStats(await this.getStatsAsync());
   }
 
-  /** asynchronously get the content of the file, throws if the file does not exist */
+  /**
+   * asynchronously get the content of the file, throws if the file does not exist
+   */
   async getContent(): Promise<string> {
     return (
       this._content ??
-      (this._contentPromise ??= fs.promises
+      (this._contentPromise ??= this._fs.promises
         .readFile(this.path, WITH_UTF8_ENCODING)
         .then((content: string) => {
           this._content = content;
@@ -240,16 +258,27 @@ export class FSEntry {
     );
   }
 
+  /**
+   * Synchronously get the stats of the file, returns undefined if the file does not exist, throws for other errors
+   * @returns the stats of the file, or undefined if the file does not exist
+   */
   private getStatsSync(): fs.BigIntStats | undefined {
-    return (this._stats ??= fs.statSync(this.path, BIGINT_STATS_SYNC_OPTIONS));
+    return (this._stats ??= this._fs.statSync(
+      this.path,
+      BIGINT_STATS_SYNC_OPTIONS
+    ));
   }
 
+  /**
+   * Asynchronously get the stats of the file, returns undefined if the file does not exist, throws for other errors
+   * @returns the stats of the file, or undefined if the file does not exist
+   */
   private getStatsAsync():
     | fs.BigIntStats
     | Promise<fs.BigIntStats | undefined> {
     return (
       this._stats ??
-      (this._statsPromise ??= fs.promises
+      (this._statsPromise ??= this._fs.promises
         .stat(this.path, BIGINT_STATS_OPTIONS)
         .then((stats: fs.BigIntStats) => {
           this._stats = stats;
