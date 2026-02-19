@@ -199,7 +199,7 @@ export class FSEntry {
    */
   async writeContents(options?: WriteOptions): Promise<void> {
     const content = this.getContentToWrite(options);
-    if (content !== undefined) {
+    if (content != null) {
       if (this._needsDirEnsure) {
         await ensureDirForFile(this.path, this._fs);
         this._needsDirEnsure = false;
@@ -216,7 +216,7 @@ export class FSEntry {
    */
   private getContentToWrite(options?: WriteOptions): string | undefined {
     const { force, newline } = options ?? {};
-    if (this._content === undefined || (!force && !this._needsWrite)) {
+    if (this._content == null || (!force && !this._needsWrite)) {
       return undefined;
     }
     return newline && !this._content.endsWith("\n")
@@ -228,7 +228,7 @@ export class FSEntry {
    * asynchronously check if the file exists, does not throw
    */
   async getExists(): Promise<boolean> {
-    return (this._exists ??= (await this.getStatsAsync()) !== undefined);
+    return (this._exists ??= (await this.getStatsAsync()) != null);
   }
 
   /**
@@ -295,7 +295,7 @@ export class FSEntry {
    * stats method for an existence check, synthesize the ENOENT error in this case.
    */
   private requireStats(stats: fs.BigIntStats | undefined): fs.BigIntStats {
-    if (stats === undefined) {
+    if (stats == null) {
       throw createEnoentError(this.path, "stat");
     }
     return stats;

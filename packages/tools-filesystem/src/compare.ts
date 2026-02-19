@@ -23,8 +23,8 @@ export function isSameFileFromStats(
   // same file on disk. This is a definitive check that does not require further checks. Note that these values can
   // overflow non-BigInt stats on certain filesystems, so we need to use BigInt stats for this check.
   if (
-    stats1.ino !== undefined &&
-    stats1.dev !== undefined &&
+    stats1.ino &&
+    stats1.dev &&
     stats1.ino === stats2.ino &&
     stats1.dev === stats2.dev
   ) {
@@ -63,8 +63,7 @@ export function filesMatchSync(
   }
 
   // at this point, we know the sizes are the same, so we can use either file's size
-  const size = f1.size;
-  if (f1.contentLoaded || f2.contentLoaded || size <= CHUNK_SIZE) {
+  if (f1.contentLoaded || f2.contentLoaded || f1.size <= CHUNK_SIZE) {
     // if either file is already loaded, or if the file is small enough that reading it entirely into memory is not a big deal, then do a simple content comparison
     return f1.content === f2.content;
   }
