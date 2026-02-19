@@ -44,7 +44,16 @@
     "@rnx-kit/eslint-config": "*",
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*",
-    "@types/node": "^24.0.0"
+    "@types/node": "^24.0.0",
+    "memfs": "^4.56.10"
+  },
+  "peerDependencies": {
+    "memfs": ">=4.0.0"
+  },
+  "peerDependenciesMeta": {
+    "memfs": {
+      "optional": true
+    }
   },
   "engines": {
     "node": ">=18.12"

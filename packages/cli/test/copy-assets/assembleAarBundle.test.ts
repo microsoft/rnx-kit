@@ -1,4 +1,5 @@
-import { mockFS } from "@rnx-kit/tools-filesystem/mocks";
+import { readTextFileSync as readText } from "@rnx-kit/tools-filesystem";
+import { getMockFSFiles, mockFS } from "@rnx-kit/tools-filesystem/mocks";
 import * as child_process from "node:child_process";
 import * as path from "node:path";
 import { assembleAarBundle } from "../../src/copy-assets.ts";
@@ -65,44 +66,36 @@ describe("copy-assets/assembleAarBundle()", () => {
   });
 
   test("returns early if there is nothing to assemble", async () => {
-    const files = { [gradleWrapper]: "" };
+    const fs = mockFS({ [gradleWrapper]: "" });
 
-    await assembleAarBundle(context, context.manifest.name, {}, mockFS(files));
+    await assembleAarBundle(context, context.manifest.name, {}, fs);
 
     expect(consoleWarnSpy).not.toHaveBeenCalled();
-    expect(Object.entries(files)).toEqual([[gradleWrapper, ""]]);
+    expect(readText(gradleWrapper, fs)).toEqual("");
   });
 
   test("returns early if Gradle wrapper cannot be found", async () => {
-    const files = {};
+    const fs = mockFS();
 
-    await assembleAarBundle(
-      context,
-      context.manifest.name,
-      { aar: {} },
-      mockFS(files)
-    );
+    await assembleAarBundle(context, context.manifest.name, { aar: {} }, fs);
 
     expect(consoleWarnSpy).toHaveBeenCalledWith(
       expect.anything(),
       expect.stringMatching(/cannot find `gradlew(.bat)?`$/)
     );
     expect(spawnSyncSpy).not.toHaveBeenCalled();
-    expect(Object.entries(files)).toEqual([]);
+    expect(Object.entries(getMockFSFiles(fs))).toEqual([]);
   });
 
   test("throws if target package cannot be found", async () => {
-    const files = { [gradleWrapper]: "" };
+    const fs = mockFS({ [gradleWrapper]: "" });
 
     expect(
-      assembleAarBundle(
-        context,
-        context.manifest.name,
-        { aar: {} },
-        mockFS(files)
-      )
+      assembleAarBundle(context, context.manifest.name, { aar: {} }, fs)
     ).rejects.toThrow();
-    expect(Object.entries(files)).toEqual([[gradleWrapper, ""]]);
+    const files = getMockFSFiles(fs);
+    expect(Object.keys(files).length).toEqual(1);
+    expect(readText(gradleWrapper, fs)).toEqual("");
   });
 
   test("returns early if Gradle project cannot be found", async () => {
@@ -110,12 +103,13 @@ describe("copy-assets/assembleAarBundle()", () => {
       [gradleWrapper]: "",
       [authManifest]: dummyManifest,
     };
+    const fs = mockFS(files);
 
     await assembleAarBundle(
       context,
       "@rnx-kit/react-native-auth",
       { aar: {} },
-      mockFS(files)
+      fs
     );
 
     expect(consoleWarnSpy).toHaveBeenCalledWith(
@@ -123,29 +117,28 @@ describe("copy-assets/assembleAarBundle()", () => {
       expect.stringMatching(/cannot find `build.gradle`/)
     );
     expect(spawnSyncSpy).not.toHaveBeenCalled();
-    expect(Object.entries(files)).toEqual([
-      [gradleWrapper, ""],
-      [authManifest, dummyManifest],
-    ]);
+    expect(Object.keys(getMockFSFiles(fs)).length).toEqual(2);
   });
 
   test("generates Android project if necessary", async () => {
     child_process.spawnSync.mockReturnValue({ status: 0 });
 
-    const files = {
+    let files = {
       [gradleWrapper]: "",
       [authBuildGradle]: path.basename(authBuildGradle),
       [authBuildArtifact]: path.basename(authBuildArtifact),
       [authManifest]: dummyManifest,
       [rnManifest]: dummyManifest,
     };
+    const fs = mockFS(files);
 
     await assembleAarBundle(
       context,
       "@rnx-kit/react-native-auth",
       { aar: {} },
-      mockFS(files)
+      fs
     );
+    files = getMockFSFiles(fs);
 
     expect(consoleWarnSpy).not.toHaveBeenCalled();
     expect(spawnSyncSpy).toHaveBeenCalledWith(
@@ -196,7 +189,7 @@ describe("copy-assets/assembleAarBundle()", () => {
     child_process.spawnSync.mockReturnValue({ status: 0 });
 
     const authSettingsGradle = path.join(authDir, "android", "settings.gradle");
-    const files = {
+    let files = {
       [gradleWrapper]: "",
       [authBuildGradle]: path.basename(authBuildGradle),
       [authBuildArtifact]: path.basename(authBuildArtifact),
@@ -204,13 +197,15 @@ describe("copy-assets/assembleAarBundle()", () => {
       [authManifest]: dummyManifest,
       [rnManifest]: dummyManifest,
     };
+    const fs = mockFS(files);
 
     await assembleAarBundle(
       context,
       "@rnx-kit/react-native-auth",
       { aar: {} },
-      mockFS(files)
+      fs
     );
+    files = getMockFSFiles(fs);
 
     expect(consoleWarnSpy).not.toHaveBeenCalled();
     expect(spawnSyncSpy).toHaveBeenCalledWith(
@@ -241,13 +236,14 @@ describe("copy-assets/assembleAarBundle()", () => {
   test("allows the generated Android project to be configured", async () => {
     child_process.spawnSync.mockReturnValue({ status: 0 });
 
-    const files = {
+    let files = {
       [gradleWrapper]: "",
       [authBuildGradle]: path.basename(authBuildGradle),
       [authBuildArtifact]: path.basename(authBuildArtifact),
       [authManifest]: dummyManifest,
       [rnManifest]: dummyManifest,
     };
+    const fs = mockFS(files);
 
     await assembleAarBundle(
       context,
@@ -264,8 +260,9 @@ describe("copy-assets/assembleAarBundle()", () => {
           },
         },
       },
-      mockFS(files)
+      fs
     );
+    files = getMockFSFiles(fs);
 
     expect(consoleWarnSpy).not.toHaveBeenCalled();
     expect(spawnSyncSpy).toHaveBeenCalledWith(

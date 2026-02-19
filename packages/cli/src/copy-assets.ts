@@ -230,7 +230,7 @@ export async function assembleAarBundle(
   };
 
   const outputDir = path.join(context.options.assetsDest, "aar");
-  ensureDirSync(outputDir);
+  ensureDirSync(outputDir, fs);
 
   const dest = path.join(outputDir, `${targetName}-${version}.aar`);
 
@@ -330,7 +330,7 @@ export async function assembleAarBundle(
       "",
     ].join("\n");
 
-    ensureDirSync(buildDir);
+    ensureDirSync(buildDir, fs);
     fs.writeFileSync(path.join(buildDir, "build.gradle"), buildGradle);
     fs.writeFileSync(
       path.join(buildDir, "gradle.properties"),

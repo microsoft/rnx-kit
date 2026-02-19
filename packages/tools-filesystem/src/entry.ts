@@ -5,8 +5,9 @@ import {
   WITH_UTF8_ENCODING,
 } from "./const.ts";
 import { ensureDirForFile, ensureDirForFileSync } from "./dirs.ts";
+import { createEnoentError } from "./errors.ts";
+import { readTextFile, readTextFileSync } from "./fileio.ts";
 import { parseJSON, serializeJSON } from "./json.ts";
-import { createEnoentError } from "./mockfs/errors.ts";
 
 export type WriteOptions = {
   /** whether to force writing the file even if the content is not marked as dirty (defaults to false) */
@@ -80,19 +81,16 @@ export class FSEntry {
   }
 
   /**
-   * get the content of the file, throws if the file does not exist
+   * get the text content of the file, throws if the file does not exist
    * @returns the content of the file as a string
    */
   get content(): string {
-    return (this._content ??= this._fs.readFileSync(
-      this.path,
-      WITH_UTF8_ENCODING
-    ));
+    return (this._content ??= readTextFileSync(this.path, this._fs));
   }
 
   /**
-   * set the content of the file, setting up the values for writing
-   * @param value - the new content of the file
+   * set the text content of the file, setting up the values for writing
+   * @param value - the new text content of the file
    */
   set content(value: string) {
     // the first time we set the content, check if we know for sure whether a file exists at the path or not
@@ -109,8 +107,8 @@ export class FSEntry {
   }
 
   /**
-   * check if the content of the file is loaded without loading if it is not
-   * @returns true if the content is loaded, false otherwise
+   * check if the text content of the file is loaded without loading if it is not
+   * @returns true if the text content is loaded, false otherwise
    */
   get contentLoaded(): boolean {
     return this._content !== undefined;
@@ -252,8 +250,7 @@ export class FSEntry {
   async getContent(): Promise<string> {
     return (
       this._content ??
-      (this._contentPromise ??= this._fs.promises
-        .readFile(this.path, WITH_UTF8_ENCODING)
+      (this._contentPromise ??= readTextFile(this.path, this._fs)
         .then((content: string) => {
           this._content = content;
           return content;

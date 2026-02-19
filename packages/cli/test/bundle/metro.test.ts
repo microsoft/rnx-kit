@@ -71,18 +71,13 @@ describe("bundle/metro/metroBundle()", () => {
   });
 
   it("creates directories for the bundle, the source map, and assets", async () => {
-    const files = {};
     const metroConfig = await getDefaultConfig();
-    await metroBundle(
-      metroConfig,
-      bundleConfig,
-      dev,
-      minify,
-      bundle,
-      mockFS(files)
-    );
+    const fs = mockFS();
+    await metroBundle(metroConfig, bundleConfig, dev, minify, bundle, fs);
 
-    expect(Object.keys(files)).toEqual(["src", "map", "dist"]);
+    expect(fs.statSync("src").isDirectory()).toBe(true);
+    expect(fs.statSync("map").isDirectory()).toBe(true);
+    expect(fs.statSync("dist").isDirectory()).toBe(true);
   });
 
   it("invokes the Metro bundler using all input parameters", async () => {

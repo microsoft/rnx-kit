@@ -1,21 +1,24 @@
 import { equal, ok } from "node:assert/strict";
 import { describe, it } from "node:test";
-import { writeJSONFileSync, writeTextFileSync } from "../src/index.ts";
+import {
+  readTextFileSync,
+  writeJSONFileSync,
+  writeTextFileSync,
+} from "../src/index.ts";
 import { mockFS } from "../src/mockfs/index.ts";
 
 describe("writeTextFileSync()", () => {
   const CONTENT = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.";
 
   it("appends newline if missing", () => {
-    const vol: Record<string, string> = {};
-    const fs = mockFS(vol);
+    const fs = mockFS();
 
     const filePath = "file.txt";
 
     writeTextFileSync(filePath, CONTENT, fs);
 
     ok(fs.existsSync(filePath));
-    equal(vol[filePath], CONTENT + "\n");
+    equal(readTextFileSync(filePath, fs), CONTENT + "\n");
   });
 
   it("does not append newline if present", () => {
@@ -28,7 +31,7 @@ describe("writeTextFileSync()", () => {
     writeTextFileSync(filePath, contentWithNewline, fs);
 
     ok(fs.existsSync(filePath));
-    equal(vol[filePath], contentWithNewline);
+    equal(readTextFileSync(filePath, fs), contentWithNewline);
   });
 });
 
@@ -44,6 +47,9 @@ describe("writeJSONFileSync()", () => {
     writeJSONFileSync(filePath, CONTENT, undefined, fs);
 
     ok(fs.existsSync(filePath));
-    equal(vol[filePath], JSON.stringify(CONTENT, undefined, 2) + "\n");
+    equal(
+      readTextFileSync(filePath, fs),
+      JSON.stringify(CONTENT, undefined, 2) + "\n"
+    );
   });
 });

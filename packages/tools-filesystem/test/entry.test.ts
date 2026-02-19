@@ -1,6 +1,10 @@
 import { deepEqual, equal, ok, rejects, throws } from "node:assert/strict";
 import { describe, it } from "node:test";
-import { FSEntry, toFSEntry } from "../src/index.ts";
+import {
+  FSEntry,
+  readTextFileSync as readText,
+  toFSEntry,
+} from "../src/index.ts";
 import { mockFS } from "../src/mockfs/index.ts";
 
 describe("toFSEntry()", () => {
@@ -220,7 +224,7 @@ describe("FSEntry", () => {
       const entry = new FSEntry("data.json", fs);
       const data = { key: "new value" };
       entry.writeJsonSync(data);
-      equal(vol["data.json"], JSON.stringify(data, null, 2) + "\n");
+      equal(readText("data.json", fs), JSON.stringify(data, null, 2) + "\n");
     });
   });
 
@@ -231,7 +235,7 @@ describe("FSEntry", () => {
       const entry = new FSEntry("data.json", fs);
       const data = { key: "async value" };
       await entry.writeJson(data);
-      equal(vol["data.json"], JSON.stringify(data, null, 2) + "\n");
+      equal(readText("data.json", fs), JSON.stringify(data, null, 2) + "\n");
     });
   });
 
@@ -242,7 +246,7 @@ describe("FSEntry", () => {
       const entry = new FSEntry("test.txt", fs);
       entry.content = "modified";
       entry.writeContentsSync();
-      equal(vol["test.txt"], "modified");
+      equal(readText("test.txt", fs), "modified");
     });
 
     it("does not write when content is not dirty", () => {
@@ -251,7 +255,7 @@ describe("FSEntry", () => {
       const entry = new FSEntry("test.txt", fs);
       void entry.content;
       entry.writeContentsSync();
-      equal(vol["test.txt"], "original");
+      equal(readText("test.txt", fs), "original");
     });
 
     it("writes when force option is set", () => {
@@ -260,7 +264,7 @@ describe("FSEntry", () => {
       const entry = new FSEntry("test.txt", fs);
       void entry.content;
       entry.writeContentsSync({ force: true });
-      equal(vol["test.txt"], "original");
+      equal(readText("test.txt", fs), "original");
     });
 
     it("appends newline with newline option", () => {
@@ -269,7 +273,7 @@ describe("FSEntry", () => {
       const entry = new FSEntry("test.txt", fs);
       entry.content = "no newline";
       entry.writeContentsSync({ newline: true });
-      equal(vol["test.txt"], "no newline\n");
+      equal(readText("test.txt", fs), "no newline\n");
     });
 
     it("does not double-append newline", () => {
@@ -278,7 +282,7 @@ describe("FSEntry", () => {
       const entry = new FSEntry("test.txt", fs);
       entry.content = "has newline\n";
       entry.writeContentsSync({ newline: true });
-      equal(vol["test.txt"], "has newline\n");
+      equal(readText("test.txt", fs), "has newline\n");
     });
   });
 
@@ -289,7 +293,7 @@ describe("FSEntry", () => {
       const entry = new FSEntry("test.txt", fs);
       entry.content = "async modified";
       await entry.writeContents();
-      equal(vol["test.txt"], "async modified");
+      equal(readText("test.txt", fs), "async modified");
     });
 
     it("does not write when content is not dirty", async () => {
@@ -298,7 +302,7 @@ describe("FSEntry", () => {
       const entry = new FSEntry("test.txt", fs);
       void entry.content;
       await entry.writeContents();
-      equal(vol["test.txt"], "original");
+      equal(readText("test.txt", fs), "original");
     });
   });
 });

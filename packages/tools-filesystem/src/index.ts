@@ -20,7 +20,9 @@ export {
   readJsonSync,
   readTextFile,
   readTextFileSync,
+  writeJSONFile,
   writeJSONFileSync,
+  writeTextFile,
   writeTextFileSync,
 } from "./fileio.ts";
 export { parseJSON, serializeJSON, stripBOM } from "./json.ts";

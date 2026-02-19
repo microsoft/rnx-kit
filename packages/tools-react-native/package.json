@@ -82,6 +82,7 @@
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*",
     "@types/node": "^24.0.0",
+    "memfs": "^4.56.10",
     "metro": "^0.83.3",
     "metro-config": "^0.83.3",
     "metro-core": "^0.83.3",
