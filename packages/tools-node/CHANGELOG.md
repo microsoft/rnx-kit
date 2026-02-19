@@ -1,5 +1,14 @@
 # Change Log - @rnx-kit/tools-node
 
+## 3.0.4
+
+### Patch Changes
+
+- 31e3bc8: Split out types for bundling, kit configuration, and package
+  manifests into dedicated packages"
+- Updated dependencies [31e3bc8]
+  - @rnx-kit/types-node@1.0.0
+
 ## 3.0.3
 
 ### Patch Changes

@@ -21,4 +21,10 @@ module.exports = [
       ...sdl.configs.react[0].rules,
     },
   },
+  {
+    files: ["**/types.ts"],
+    rules: {
+      "@rnx-kit/type-definitions-only": "error",
+    },
+  },
 ];

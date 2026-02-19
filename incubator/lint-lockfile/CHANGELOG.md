@@ -1,5 +1,16 @@
 # @rnx-kit/lint-lockfile
 
+## 0.1.3
+
+### Patch Changes
+
+- 31e3bc8: Split out types for bundling, kit configuration, and package
+  manifests into dedicated packages"
+- Updated dependencies [31e3bc8]
+- Updated dependencies [31e3bc8]
+  - @rnx-kit/types-kit-config@1.0.0
+  - @rnx-kit/config@0.7.5
+
 ## 0.1.2
 
 ### Patch Changes

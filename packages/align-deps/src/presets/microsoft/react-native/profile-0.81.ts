@@ -3,7 +3,7 @@ import { profile as profile_0_80 } from "./profile-0.80.ts";
 
 const reactNative: Package = {
   name: "react-native",
-  version: "^0.81.0",
+  version: "^0.81.6",
   capabilities: ["react", "core/metro-config", "community/cli"],
 };
 
@@ -16,7 +16,7 @@ export const profile: Profile = {
 
   react: {
     name: "react",
-    version: "19.1.0",
+    version: "19.1.4",
   },
 
   "react-dom": {

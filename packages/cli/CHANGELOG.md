@@ -1,5 +1,27 @@
 # Change Log - @rnx-kit/cli
 
+## 1.0.1
+
+### Patch Changes
+
+- 31e3bc8: Split out types for bundling, kit configuration, and package
+  manifests into dedicated packages"
+- Updated dependencies [edf9426]
+- Updated dependencies [31e3bc8]
+- Updated dependencies [31e3bc8]
+- Updated dependencies [dd2a9c6]
+  - @rnx-kit/align-deps@3.4.2
+  - @rnx-kit/types-bundle-config@1.0.0
+  - @rnx-kit/types-kit-config@1.0.0
+  - @rnx-kit/types-node@1.0.0
+  - @rnx-kit/metro-plugin-cyclic-dependencies-detector@2.0.3
+  - @rnx-kit/metro-plugin-duplicates-checker@3.0.3
+  - @rnx-kit/metro-serializer-esbuild@0.3.1
+  - @rnx-kit/metro-plugin-typescript@0.5.4
+  - @rnx-kit/tools-react-native@2.3.3
+  - @rnx-kit/tools-node@3.0.4
+  - @rnx-kit/config@0.7.5
+
 ## 1.0.0
 
 ### Major Changes

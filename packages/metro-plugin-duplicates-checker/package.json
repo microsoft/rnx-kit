@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/metro-plugin-duplicates-checker",
-  "version": "3.0.2",
+  "version": "3.0.3",
   "description": "Duplicate packages checker",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/metro-plugin-duplicates-checker#readme",
   "license": "MIT",
@@ -38,8 +38,8 @@
   },
   "dependencies": {
     "@rnx-kit/console": "^2.0.0",
-    "@rnx-kit/tools-node": "^3.0.0",
-    "@rnx-kit/types-plugin-duplicates-checker": "^0.0.1"
+    "@rnx-kit/tools-node": "^3.0.4",
+    "@rnx-kit/types-plugin-duplicates-checker": "^1.0.0"
   },
   "devDependencies": {
     "@rnx-kit/eslint-config": "*",

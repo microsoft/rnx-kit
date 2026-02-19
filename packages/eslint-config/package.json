@@ -12,7 +12,15 @@
   "files": [
     "index.js"
   ],
-  "main": "index.js",
+  "exports": {
+    ".": {
+      "default": "./index.js"
+    },
+    "./types-only": {
+      "default": "./types-only.js"
+    },
+    "./package.json": "./package.json"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/microsoft/rnx-kit",
