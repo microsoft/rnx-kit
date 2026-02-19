@@ -16,8 +16,8 @@ export {
 } from "./dirs.ts";
 export { FSEntry, toFSEntry, type WriteOptions } from "./entry.ts";
 export {
-  readJson,
-  readJsonSync,
+  readJSONFile,
+  readJSONFileSync,
   readTextFile,
   readTextFileSync,
   writeJSONFile,

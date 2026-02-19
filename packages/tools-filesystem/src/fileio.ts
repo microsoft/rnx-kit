@@ -38,7 +38,7 @@ export async function readTextFile(
  * @param fs filesystem module to use (defaults to Node's fs)
  * @returns the parsed JSON object, optionally cast to type T
  */
-export function readJsonSync<T = ReturnType<typeof JSON.parse>>(
+export function readJSONFileSync<T = ReturnType<typeof JSON.parse>>(
   filePath: string,
   /** @internal */ fs = nodefs
 ): T {
@@ -53,7 +53,7 @@ export function readJsonSync<T = ReturnType<typeof JSON.parse>>(
  * @param fs the filesystem module to use (defaults to Node's fs)
  * @returns the parsed JSON object, optionally cast to type T
  */
-export async function readJson<T = ReturnType<typeof JSON.parse>>(
+export async function readJSONFile<T = ReturnType<typeof JSON.parse>>(
   filePath: string,
   /** @internal */ fs = nodefs
 ): Promise<T> {
