@@ -1,5 +1,17 @@
 # Change Log - @rnx-kit/tools-react-native
 
+## 2.3.3
+
+### Patch Changes
+
+- 31e3bc8: Split out types for bundling, kit configuration, and package
+  manifests into dedicated packages"
+- Updated dependencies [31e3bc8]
+- Updated dependencies [31e3bc8]
+- Updated dependencies [dd2a9c6]
+  - @rnx-kit/types-bundle-config@1.0.0
+  - @rnx-kit/tools-node@3.0.4
+
 ## 2.3.2
 
 ### Patch Changes

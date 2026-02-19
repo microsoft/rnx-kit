@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/types-node",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Type definitions for package manifests and other core node/npm types",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/types-node#readme",
   "license": "MIT",
@@ -33,7 +33,7 @@
     "lint": "rnx-kit-scripts lint"
   },
   "dependencies": {
-    "@rnx-kit/types-kit-config": "^0.0.1"
+    "@rnx-kit/types-kit-config": "^1.0.0"
   },
   "devDependencies": {
     "@rnx-kit/eslint-config": "*",

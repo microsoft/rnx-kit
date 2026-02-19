@@ -1,5 +1,17 @@
 # Change Log - @rnx-kit/metro-serializer-esbuild
 
+## 0.3.1
+
+### Patch Changes
+
+- 31e3bc8: Split out types for bundling, kit configuration, and package
+  manifests into dedicated packages"
+- Updated dependencies [31e3bc8]
+- Updated dependencies [31e3bc8]
+  - @rnx-kit/types-metro-serializer-esbuild@1.0.0
+  - @rnx-kit/tools-react-native@2.3.3
+  - @rnx-kit/tools-node@3.0.4
+
 ## 0.3.0
 
 ### Minor Changes

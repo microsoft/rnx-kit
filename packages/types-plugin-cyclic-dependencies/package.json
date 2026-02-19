@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/types-plugin-cyclic-dependencies",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Type definitions for cyclic dependencies plugin",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/types-plugin-cyclic-dependencies#readme",
   "license": "MIT",

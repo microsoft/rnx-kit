@@ -1,5 +1,20 @@
 # Change Log - @rnx-kit/eslint-plugin
 
+## 0.9.6
+
+### Patch Changes
+
+- d452d2b: Added rule for types only modules. Enable it like below:
+
+  ```js
+  {
+    files: ["**/types.ts"],
+    rules: {
+      "@rnx-kit/type-definitions-only": "error",
+    },
+  }
+  ```
+
 ## 0.9.5
 
 ### Patch Changes

@@ -1,5 +1,20 @@
 # Change Log - @rnx-kit/config
 
+## 0.7.5
+
+### Patch Changes
+
+- 31e3bc8: Split out types for bundling, kit configuration, and package
+  manifests into dedicated packages"
+- Updated dependencies [31e3bc8]
+- Updated dependencies [31e3bc8]
+- Updated dependencies [dd2a9c6]
+  - @rnx-kit/types-bundle-config@1.0.0
+  - @rnx-kit/types-kit-config@1.0.0
+  - @rnx-kit/types-node@1.0.0
+  - @rnx-kit/tools-packages@0.1.2
+  - @rnx-kit/tools-node@3.0.4
+
 ## 0.7.4
 
 ### Patch Changes
@@ -134,17 +149,14 @@
   be updated (which seems better than silently ignoring it).
 
   Add:
-
   - bundleOutput
   - sourcemapUseAbsolutePath
 
   Remove:
-
   - bundlePrefix
   - distPath
 
   Rename:
-
   - entryPath -> entryFile
   - sourceMapPath -> sourcemapOutput
   - sourceMapSourcesRootPath -> sourcemapSourcesRoot
