@@ -1,6 +1,6 @@
 import type { Config as CLIConfig } from "@react-native-community/cli-types";
 import { error, info } from "@rnx-kit/console";
-import { writeJSONFile } from "@rnx-kit/tools-filesystem";
+import { writeJSONFileSync } from "@rnx-kit/tools-filesystem";
 import { findPackageDependencyDir } from "@rnx-kit/tools-node/package";
 import { requireModuleFromMetro } from "@rnx-kit/tools-react-native/metro";
 import type { HermesOptions } from "@rnx-kit/types-bundle-config";
@@ -103,6 +103,6 @@ export function emitBytecode(
     const { composeSourceMaps } = requireModuleFromMetro("metro-source-map");
 
     const composed = composeSourceMaps([packagerSourcemap, compilerSourcemap]);
-    writeJSONFile(outputMap, composed, 0);
+    writeJSONFileSync(outputMap, composed, 0);
   }
 }

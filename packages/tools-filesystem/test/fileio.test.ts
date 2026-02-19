@@ -1,40 +1,40 @@
 import { deepEqual, equal, rejects, throws } from "node:assert/strict";
 import { describe, it } from "node:test";
 import {
-  readFile,
-  readFileSync,
   readJson,
   readJsonSync,
+  readTextFile,
+  readTextFileSync,
 } from "../src/index.ts";
 import { mockFS } from "../src/mockfs/index.ts";
 
-describe("readFileSync()", () => {
+describe("readTextFileSync()", () => {
   it("reads file content as UTF-8 string", () => {
     const content = "hello world";
     const fs = mockFS({ "test.txt": content });
-    equal(readFileSync("test.txt", fs), content);
+    equal(readTextFileSync("test.txt", fs), content);
   });
 
   it("throws ENOENT for non-existent file", () => {
     const fs = mockFS({});
     throws(
-      () => readFileSync("missing.txt", fs),
+      () => readTextFileSync("missing.txt", fs),
       (err: NodeJS.ErrnoException) => err.code === "ENOENT"
     );
   });
 });
 
-describe("readFile()", () => {
+describe("readTextFile()", () => {
   it("reads file content asynchronously", async () => {
     const content = "hello world";
     const fs = mockFS({ "test.txt": content });
-    equal(await readFile("test.txt", fs), content);
+    equal(await readTextFile("test.txt", fs), content);
   });
 
   it("rejects with ENOENT for non-existent file", async () => {
     const fs = mockFS({});
     await rejects(
-      readFile("missing.txt", fs),
+      readTextFile("missing.txt", fs),
       (err: NodeJS.ErrnoException) => err.code === "ENOENT"
     );
   });

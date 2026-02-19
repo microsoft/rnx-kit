@@ -1,11 +1,11 @@
-import fs from "node:fs";
+import nodefs from "node:fs";
 import {
   BIGINT_STATS_OPTIONS,
   BIGINT_STATS_SYNC_OPTIONS,
   WITH_UTF8_ENCODING,
 } from "./const.ts";
 import { ensureDirForFile, ensureDirForFileSync } from "./dirs.ts";
-import { parseJson, serializeJson } from "./json.ts";
+import { parseJSON, serializeJSON } from "./json.ts";
 import { createEnoentError } from "./mockfs/errors.ts";
 
 export type WriteOptions = {
@@ -23,7 +23,7 @@ export type WriteOptions = {
  */
 export function toFSEntry(
   path: string | FSEntry,
-  /** @internal */ fsModule?: typeof fs
+  /** @internal */ fsModule: typeof nodefs = nodefs
 ): FSEntry {
   return path instanceof FSEntry ? path : new FSEntry(path, fsModule);
 }
@@ -41,18 +41,18 @@ export class FSEntry {
   readonly path: string;
 
   // cached internal properties, loaded on demand and cached for future access
-  protected _stats?: fs.BigIntStats;
-  protected _statsPromise?: Promise<fs.BigIntStats | undefined>;
+  protected _stats?: nodefs.BigIntStats;
+  protected _statsPromise?: Promise<nodefs.BigIntStats | undefined>;
   protected _exists?: boolean;
   protected _content?: string;
   protected _contentPromise?: Promise<string>;
   protected _needsWrite?: boolean;
   protected _needsDirEnsure?: boolean;
-  protected _fs: typeof fs;
+  protected _fs: typeof nodefs;
 
-  constructor(path: string, fsModule?: typeof fs) {
+  constructor(path: string, fsModule: typeof nodefs = nodefs) {
     this.path = path;
-    this._fs = fsModule ?? fs;
+    this._fs = fsModule;
   }
 
   /**
@@ -75,7 +75,7 @@ export class FSEntry {
    * get the stats of the file, throws if the file does not exist
    * @returns the stats of the file as a BigIntStats object
    */
-  get stats(): fs.BigIntStats {
+  get stats(): nodefs.BigIntStats {
     return this._stats ?? this.requireStats(this.getStatsSync());
   }
 
@@ -141,11 +141,19 @@ export class FSEntry {
   }
 
   /**
+   * get the size of the file as a bigint
+   * @returns the size of the file in bytes as a bigint
+   */
+  get bigIntSize(): bigint {
+    return this.stats.size;
+  }
+
+  /**
    * Ensure contents are loaded and parse as JSON
    * @returns parsed JSON content, optionally cast to type T
    */
   readJsonSync<T = ReturnType<typeof JSON.parse>>(): T {
-    return parseJson<T>(this.content);
+    return parseJSON<T>(this.content);
   }
 
   /**
@@ -153,7 +161,7 @@ export class FSEntry {
    * @returns parsed JSON content, optionally cast to type T
    */
   async readJson<T = ReturnType<typeof JSON.parse>>(): Promise<T> {
-    return parseJson<T>(await this.getContent());
+    return parseJSON<T>(await this.getContent());
   }
 
   /**
@@ -162,7 +170,7 @@ export class FSEntry {
    * @param data the data to serialize to JSON and write to the file
    */
   writeJsonSync(data: unknown): void {
-    this.content = serializeJson(data);
+    this.content = serializeJSON(data);
     this.writeContentsSync();
   }
 
@@ -173,7 +181,7 @@ export class FSEntry {
    * @returns a promise that resolves when the write operation is complete
    */
   async writeJson(data: unknown): Promise<void> {
-    this.content = serializeJson(data);
+    this.content = serializeJSON(data);
     return this.writeContents();
   }
 
@@ -183,7 +191,7 @@ export class FSEntry {
    */
   writeContentsSync(options?: WriteOptions): void {
     const content = this.getContentToWrite(options);
-    if (content !== undefined) {
+    if (content != null) {
       if (this._needsDirEnsure) {
         ensureDirForFileSync(this.path, this._fs);
         this._needsDirEnsure = false;
@@ -234,7 +242,7 @@ export class FSEntry {
   /**
    * asynchronously get the stats of the file, throws if the file does not exist
    */
-  async getStats(): Promise<fs.BigIntStats> {
+  async getStats(): Promise<nodefs.BigIntStats> {
     return this._stats ?? this.requireStats(await this.getStatsAsync());
   }
 
@@ -260,7 +268,7 @@ export class FSEntry {
    * Synchronously get the stats of the file, returns undefined if the file does not exist, throws for other errors
    * @returns the stats of the file, or undefined if the file does not exist
    */
-  private getStatsSync(): fs.BigIntStats | undefined {
+  private getStatsSync(): nodefs.BigIntStats | undefined {
     return (this._stats ??= this._fs.statSync(
       this.path,
       BIGINT_STATS_SYNC_OPTIONS
@@ -272,13 +280,13 @@ export class FSEntry {
    * @returns the stats of the file, or undefined if the file does not exist
    */
   private getStatsAsync():
-    | fs.BigIntStats
-    | Promise<fs.BigIntStats | undefined> {
+    | nodefs.BigIntStats
+    | Promise<nodefs.BigIntStats | undefined> {
     return (
       this._stats ??
       (this._statsPromise ??= this._fs.promises
         .stat(this.path, BIGINT_STATS_OPTIONS)
-        .then((stats: fs.BigIntStats) => {
+        .then((stats: nodefs.BigIntStats) => {
           this._stats = stats;
           return stats;
         })
@@ -294,7 +302,9 @@ export class FSEntry {
    * Throw an error if stats are undefined. Because this was potentially obtained via the non-throwing
    * stats method for an existence check, synthesize the ENOENT error in this case.
    */
-  private requireStats(stats: fs.BigIntStats | undefined): fs.BigIntStats {
+  private requireStats(
+    stats: nodefs.BigIntStats | undefined
+  ): nodefs.BigIntStats {
     if (stats == null) {
       throw createEnoentError(this.path, "stat");
     }

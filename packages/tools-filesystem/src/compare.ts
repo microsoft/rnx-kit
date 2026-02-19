@@ -90,6 +90,10 @@ export function filesMatchSync(
         return false;
       }
     }
+  } catch {
+    // if there is an error reading the files, assume they don't match (e.g. one of the files was deleted
+    // between the time we got the stats and now)
+    return false;
   } finally {
     if (fileA !== undefined) {
       fs.closeSync(fileA);
@@ -124,8 +128,8 @@ export async function filesMatch(
   }
 
   // at this point, we know the sizes are the same, so we can use either file's size
-  const size = f1.size;
-  if (f1.contentLoaded || f2.contentLoaded || size <= CHUNK_SIZE) {
+  const size = f1.bigIntSize;
+  if (f1.contentLoaded || f2.contentLoaded || size <= BigInt(CHUNK_SIZE)) {
     // if either file is already loaded, or if the file is small enough that reading it entirely into memory is not a big deal, then do a simple content comparison
     const [content1, content2] = await Promise.all([
       f1.getContent(),

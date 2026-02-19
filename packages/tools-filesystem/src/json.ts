@@ -17,7 +17,7 @@ export function stripBOM(content: string): string {
  * @param content text content to parse as JSON, potentially with a leading UTF-8 BOM
  * @returns parsed JSON object, optionally cast to type T
  */
-export function parseJson<T = ReturnType<typeof JSON.parse>>(
+export function parseJSON<T = ReturnType<typeof JSON.parse>>(
   content: string
 ): T {
   return JSON.parse(stripBOM(content)) as T;
@@ -29,7 +29,7 @@ export function parseJson<T = ReturnType<typeof JSON.parse>>(
  * @param space the number of spaces to use for indentation in the JSON output (0 to disable pretty-printing)
  * @returns the serialized JSON string
  */
-export function serializeJson(
+export function serializeJSON(
   data: unknown,
   space: string | number = 2
 ): string {

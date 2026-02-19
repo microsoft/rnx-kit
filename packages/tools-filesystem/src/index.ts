@@ -16,11 +16,11 @@ export {
 } from "./dirs.ts";
 export { FSEntry, toFSEntry, type WriteOptions } from "./entry.ts";
 export {
-  readFile,
-  readFileSync,
   readJson,
   readJsonSync,
-  writeJSONFile,
-  writeTextFile,
+  readTextFile,
+  readTextFileSync,
+  writeJSONFileSync,
+  writeTextFileSync,
 } from "./fileio.ts";
-export { parseJson, serializeJson, stripBOM } from "./json.ts";
+export { parseJSON, serializeJSON, stripBOM } from "./json.ts";

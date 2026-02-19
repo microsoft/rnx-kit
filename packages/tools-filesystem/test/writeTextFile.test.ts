@@ -1,9 +1,9 @@
 import { equal, ok } from "node:assert/strict";
 import { describe, it } from "node:test";
-import { writeJSONFile, writeTextFile } from "../src/index.ts";
+import { writeJSONFileSync, writeTextFileSync } from "../src/index.ts";
 import { mockFS } from "../src/mockfs/index.ts";
 
-describe("writeTextFile()", () => {
+describe("writeTextFileSync()", () => {
   const CONTENT = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.";
 
   it("appends newline if missing", () => {
@@ -12,7 +12,7 @@ describe("writeTextFile()", () => {
 
     const filePath = "file.txt";
 
-    writeTextFile(filePath, CONTENT, fs);
+    writeTextFileSync(filePath, CONTENT, fs);
 
     ok(fs.existsSync(filePath));
     equal(vol[filePath], CONTENT + "\n");
@@ -25,14 +25,14 @@ describe("writeTextFile()", () => {
     const filePath = "file.txt";
     const contentWithNewline = CONTENT + "\n";
 
-    writeTextFile(filePath, contentWithNewline, fs);
+    writeTextFileSync(filePath, contentWithNewline, fs);
 
     ok(fs.existsSync(filePath));
     equal(vol[filePath], contentWithNewline);
   });
 });
 
-describe("writeJSONFile()", () => {
+describe("writeJSONFileSync()", () => {
   const CONTENT = { key: "value" };
 
   it("writes JSON with indentation", () => {
@@ -41,7 +41,7 @@ describe("writeJSONFile()", () => {
 
     const filePath = "file.json";
 
-    writeJSONFile(filePath, CONTENT, undefined, fs);
+    writeJSONFileSync(filePath, CONTENT, undefined, fs);
 
     ok(fs.existsSync(filePath));
     equal(vol[filePath], JSON.stringify(CONTENT, undefined, 2) + "\n");
