@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/types-kit-config",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Type definitions for the rnx-kit configuration",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/types-kit-config#readme",
   "license": "MIT",
@@ -33,7 +33,7 @@
     "lint": "rnx-kit-scripts lint"
   },
   "dependencies": {
-    "@rnx-kit/types-bundle-config": "^0.0.1"
+    "@rnx-kit/types-bundle-config": "^1.0.0"
   },
   "devDependencies": {
     "@rnx-kit/eslint-config": "*",

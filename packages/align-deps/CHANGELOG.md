@@ -1,5 +1,16 @@
 # Change Log - @rnx-kit/align-deps
 
+## 3.4.2
+
+### Patch Changes
+
+- edf9426: Bump `react-native` to 0.81.6 in the React Native 0.81 preset
+- 31e3bc8: Split out types for bundling, kit configuration, and package
+  manifests into dedicated packages"
+- Updated dependencies [31e3bc8]
+  - @rnx-kit/types-kit-config@1.0.0
+  - @rnx-kit/types-node@1.0.0
+
 ## 3.4.1
 
 ### Patch Changes

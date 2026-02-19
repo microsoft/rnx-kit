@@ -1,5 +1,16 @@
 # Change Log - @rnx-kit/metro-plugin-cyclic-dependencies-detector
 
+## 2.0.3
+
+### Patch Changes
+
+- 31e3bc8: Split out types for bundling, kit configuration, and package
+  manifests into dedicated packages"
+- Updated dependencies [31e3bc8]
+- Updated dependencies [31e3bc8]
+  - @rnx-kit/types-plugin-cyclic-dependencies@1.0.0
+  - @rnx-kit/tools-node@3.0.4
+
 ## 2.0.2
 
 ### Patch Changes
