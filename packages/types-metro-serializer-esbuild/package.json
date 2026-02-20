@@ -14,8 +14,7 @@
   "types": "src/index.ts",
   "exports": {
     ".": {
-      "types": "./src/index.ts",
-      "default": "./src/index.ts"
+      "types": "./src/index.ts"
     },
     "./package.json": "./package.json"
   },
@@ -37,13 +36,5 @@
     "@rnx-kit/scripts": "*",
     "@rnx-kit/tsconfig": "*",
     "esbuild": "^0.27.1"
-  },
-  "peerDependencies": {
-    "esbuild": "^0.27.0"
-  },
-  "peerDependenciesMeta": {
-    "esbuild": {
-      "optional": true
-    }
   }
 }
