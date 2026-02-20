@@ -1,6 +1,6 @@
 {
   "name": "@rnx-kit/types-metro-serializer-esbuild",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Type definitions for metro serializer esbuild",
   "homepage": "https://github.com/microsoft/rnx-kit/tree/main/packages/types-metro-serializer-esbuild#readme",
   "license": "MIT",
